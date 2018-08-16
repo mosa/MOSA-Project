@@ -105,9 +105,6 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		//context.SetInstruction(IRInstruction.GetLow64, resultLow, operand1);
-		//context.AppendInstruction(IRInstruction.ArithShiftRight32, resultHigh, resultLow, CreateConstant((byte)31));
-		//context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		private void CompareIntBranch64(Context context)
 		{
 			//Debug.Assert(context.Operand1.Is64BitInteger);

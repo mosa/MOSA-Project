@@ -115,22 +115,25 @@ namespace Mosa.Compiler.Framework.Stages
 				RemoveBranchesToDeadBlocks(block);
 			}
 
-			foreach (var block in deadBlocks)
-			{
-				RemoveDeadBlock(block);
-			}
+			//foreach (var block in deadBlocks)
+			//{
+			//	RemoveDeadBlock(block);
+			//}
 		}
 
-		protected void RemoveDeadBlock(BasicBlock block)
-		{
-			if (trace.Active) trace.Log("*** RemoveBlock: " + block);
+		//protected void RemoveDeadBlock(BasicBlock deadBlock)
+		//{
+		//	if (trace.Active) trace.Log("*** RemoveBlock: " + deadBlock);
 
-			var nextBlocks = block.NextBlocks.ToArray();
+		//	var nextBlocks = deadBlock.NextBlocks.ToArray();
 
-			EmptyBlockOfAllInstructions(block);
+		//	EmptyBlockOfAllInstructions(deadBlock);
 
-			RemoveBlockFromPhiInstructions(block, nextBlocks);
-		}
+		//	RemoveBlockFromPhiInstructions(deadBlock, nextBlocks);
+
+		//	Debug.Assert(deadBlock.NextBlocks.Count == 0);
+		//	Debug.Assert(deadBlock.PreviousBlocks.Count == 0);
+		//}
 
 		protected void RemoveBranchesToDeadBlocks(BasicBlock deadBlock)
 		{
@@ -145,7 +148,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				for (var node = previous.Last.Previous; !node.IsBlockStartInstruction; node = node.Previous)
 				{
-					if (node.IsEmpty)
+					if (node.IsEmptyOrNop)
 						continue;
 
 					if (node.BranchTargetsCount == 0)
@@ -167,6 +170,64 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 				}
 			}
+
+			CheckAndClearEmptyBlock(deadBlock);
+		}
+
+		private void CheckAndClearEmptyBlock(BasicBlock block)
+		{
+			if (block.PreviousBlocks.Count != 0 || BasicBlocks.HeadBlocks.Contains(block))
+				return;
+
+			if (trace.Active) trace.Log("*** RemoveBlock: " + block);
+
+			var nextBlocks = block.NextBlocks.ToArray();
+
+			EmptyBlockOfAllInstructions(block);
+
+			_RemoveBlockFromPhiInstructions(block, nextBlocks);
+
+			Debug.Assert(block.NextBlocks.Count == 0);
+			Debug.Assert(block.PreviousBlocks.Count == 0);
+
+			foreach (var next in nextBlocks)
+			{
+				CheckAndClearEmptyBlock(next);
+			}
+		}
+
+		protected void _RemoveBlockFromPhiInstructions(BasicBlock removedBlock, BasicBlock[] nextBlocks)
+		{
+			foreach (var next in nextBlocks)
+			{
+				for (var node = next.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+				{
+					if (node.IsEmptyOrNop)
+						continue;
+
+					if (node.Instruction != IRInstruction.Phi)
+						break;
+
+					var sourceBlocks = node.PhiBlocks;
+
+					int index = sourceBlocks.IndexOf(removedBlock);
+
+					if (index < 0)
+						continue;
+
+					sourceBlocks.RemoveAt(index);
+
+					for (int i = index; i < node.OperandCount - 1; i++)
+					{
+						node.SetOperand(i, node.GetOperand(i + 1));
+					}
+
+					node.SetOperand(node.OperandCount - 1, null);
+					node.OperandCount--;
+				}
+			}
+
+			Debug.Assert(removedBlock.NextBlocks.Count == 0);
 		}
 	}
 }

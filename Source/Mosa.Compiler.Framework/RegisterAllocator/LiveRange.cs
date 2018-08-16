@@ -29,6 +29,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public SlotIndex LastDef { get { return defPositions.Count == 0 ? null : defPositions.Values[defPositions.Count - 1]; } }
 
+		public int UseCount { get { return usePositions.Count; } }
+
+		public int DefCount { get { return defPositions.Count; } }
+
 		public bool IsDefFirst { get; }
 
 		public LiveRange(SlotIndex start, SlotIndex end, IList<SlotIndex> uses, IList<SlotIndex> defs)

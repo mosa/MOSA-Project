@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Framework
 
 			for (int index = 0; index < BasicBlocks.Count; index++)
 			{
-				for (var node = BasicBlocks[index].First; !node.IsBlockEndInstruction; node = node.Next)
+				for (var node = BasicBlocks[index].AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
 					if (node.IsEmpty)
 						continue;

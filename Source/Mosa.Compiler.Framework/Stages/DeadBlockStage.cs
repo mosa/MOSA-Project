@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {

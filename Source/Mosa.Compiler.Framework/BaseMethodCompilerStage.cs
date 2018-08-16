@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
@@ -222,18 +223,17 @@ namespace Mosa.Compiler.Framework
 			{
 				MethodCompiler.Stop();
 				NewCompilerTraceEvent(CompilerEvent.Exception, "Method: " + Method + " -> " + ex);
-
-				MethodCompiler.Compiler.AllStop = true;
+				MethodCompiler.Compiler.Stop();
 			}
 
 			SubmitTraceLogs(traceLogs);
 
 			Finish();
 
-			if (!MethodCompiler.IsStopped)
-			{
-				Debug.Assert(BasicBlocks.RuntimeValidation());
-			}
+			//if (!MethodCompiler.IsStopped)
+			//{
+			//	Debug.Assert(BasicBlocks.RuntimeValidation());
+			//}
 
 			MethodCompiler = null;
 			traceLogs = null;
@@ -406,12 +406,9 @@ namespace Mosa.Compiler.Framework
 			if (block.NextBlocks.Count != 1)
 				return false;
 
-			for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
+			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (node.IsEmpty)
-					continue;
-
-				if (node.Instruction == IRInstruction.Nop)
+				if (node.IsEmptyOrNop)
 					continue;
 
 				if (node.Instruction.FlowControl != FlowControl.UnconditionalBranch)
@@ -427,7 +424,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="block">The block.</param>
 		protected void EmptyBlockOfAllInstructions(BasicBlock block)
 		{
-			for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
+			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
 				node.Empty();
 			}
@@ -481,13 +478,13 @@ namespace Mosa.Compiler.Framework
 		{
 			foreach (var next in nextBlocks)
 			{
-				for (var node = next.First; !node.IsBlockEndInstruction; node = node.Next)
+				for (var node = next.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty)
+					if (node.IsEmptyOrNop)
 						continue;
 
 					if (node.Instruction != IRInstruction.Phi)
-						continue; // FUTURE: change to break, instead of continue
+						break;
 
 					var sourceBlocks = node.PhiBlocks;
 
@@ -519,11 +516,11 @@ namespace Mosa.Compiler.Framework
 
 				for (var node = target.First; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty)
+					if (node.IsEmptyOrNop)
 						continue;
 
 					if (node.Instruction != IRInstruction.Phi)
-						continue; // FUTURE: change to break, instead of continue
+						break;
 
 					int index = node.PhiBlocks.IndexOf(source);
 
@@ -672,7 +669,7 @@ namespace Mosa.Compiler.Framework
 			MethodCompiler.Trace.NewTraceLog(traceLog);
 		}
 
-		private void SubmitTraceLogs(IList<TraceLog> traceLogs)
+		private void SubmitTraceLogs(List<TraceLog> traceLogs)
 		{
 			if (traceLogs == null)
 				return;
@@ -1012,5 +1009,12 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion Constant Helper Methods
+
+		public void AllStopWithException(string exception)
+		{
+			MethodCompiler.Stop();
+			MethodCompiler.Compiler.Stop();
+			throw new CompilerException(exception);
+		}
 	}
 }

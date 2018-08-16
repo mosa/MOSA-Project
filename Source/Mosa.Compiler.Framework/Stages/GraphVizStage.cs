@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var block in BasicBlocks)
 			{
-				trace.Log("\t" + block);
+				//trace.Log("\t" + block);
 
 				foreach (var next in block.NextBlocks)
 				{

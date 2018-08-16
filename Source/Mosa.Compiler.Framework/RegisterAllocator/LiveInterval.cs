@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public int SpillValue { get; set; }
 
-		public int SpillCost { get { return NeverSpill ? int.MaxValue : (SpillValue / (Length + 1)); } }
+		public int SpillCost { get { return NeverSpill || TooSmallToSplit ? int.MaxValue : (SpillValue / (Length + 1)); } }
 
 		public LiveIntervalTrack LiveIntervalTrack { get; set; }
 
@@ -40,6 +40,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public bool ForceSpilled { get; set; }
 
 		public bool NeverSpill { get; set; }
+
+		public bool TooSmallToSplit { get; }
 
 		#region Short Cuts
 
@@ -105,6 +107,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			Stage = AllocationStage.Initial;
 			ForceSpilled = false;
 			NeverSpill = false;
+
+			TooSmallToSplit = IsTooSmallToSplit();
 		}
 
 		public LiveInterval(VirtualRegister virtualRegister, SlotIndex start, SlotIndex end)
@@ -128,6 +132,31 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			var mergedEnd = End > end ? End : end;
 
 			return new LiveInterval(VirtualRegister, mergedStart, mergedEnd);
+		}
+
+		private bool IsTooSmallToSplit()
+		{
+			if (LiveRange.UseCount == 1)
+			{
+				var firstUse = LiveRange.FirstUse;
+
+				Debug.Assert(firstUse != null);
+
+				if (firstUse.HalfStepBack == Start && firstUse.HalfStepForward == End)
+					return true;
+			}
+
+			//if (LiveRange.DefCount == 1)
+			//{
+			//	var firstDef = LiveRange.FirstDef;
+
+			//	Debug.Assert(firstDef != null);
+
+			//	if ((firstDef == Start) && (firstDef.HalfStepForward == End))
+			//		return true;
+			//}
+
+			return false;
 		}
 
 		public override string ToString()

@@ -136,12 +136,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 				var cil = CILInstruction.Get((OpCode)op);
 
-				UpdateCounter("CILDecodingStage.OpCode." + cil.FullName, count);
+				//UpdateCounter("CILDecodingStage.OpCode." + cil.FullName, count);
 
 				total += count;
 			}
 
-			UpdateCounter("CILDecodingStage.CILInstructions", total);
+			//UpdateCounter("CILDecodingStage.CILInstructions", total);
 
 			instruction = null;
 			block = null;

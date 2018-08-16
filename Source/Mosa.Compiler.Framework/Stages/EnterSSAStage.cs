@@ -3,6 +3,7 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.Trace;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -19,6 +20,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private Dictionary<Operand, Operand[]> ssaOperands;
 		private Dictionary<BasicBlock, SimpleFastDominance> blockAnalysis;
 		private Dictionary<Operand, List<BasicBlock>> assignments;
+		private TraceLog trace;
 
 		protected override void Initialize()
 		{
@@ -37,6 +39,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (HasProtectedRegions)
 				return;
+
+			trace = CreateTraceLog();
 
 			foreach (var headBlock in BasicBlocks.HeadBlocks)
 			{
@@ -139,10 +143,81 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		/// <param name="block">The block.</param>
 		/// <param name="dominanceAnalysis">The dominance analysis.</param>
-		private void RenameVariables(BasicBlock block, SimpleFastDominance dominanceAnalysis)
+		private void RenameVariables2(BasicBlock block, SimpleFastDominance dominanceAnalysis)
 		{
-			for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
+			if (trace.Active) trace.Log("Processing: " + block);
+
+			UpdateOperands(block);
+			UpdatePHIs(block);
+
+			// Repeat for all children of the dominance block, if any
+			var children = dominanceAnalysis.GetChildren(block);
+			if (children != null && children.Count != 0)
 			{
+				foreach (var s in children)
+				{
+					RenameVariables2(s, dominanceAnalysis);
+				}
+			}
+
+			UpdateResultOperands(block);
+		}
+
+		/// <summary>
+		/// Renames the variables.
+		/// </summary>
+		/// <param name="headBlock">The head block.</param>
+		/// <param name="dominanceAnalysis">The dominance analysis.</param>
+		private void RenameVariables(BasicBlock headBlock, SimpleFastDominance dominanceAnalysis)
+		{
+			var worklist = new Stack<BasicBlock>();
+
+			worklist.Push(headBlock);
+
+			while (worklist.Count != 0)
+			{
+				var block = worklist.Pop();
+
+				if (block != null)
+				{
+					if (trace.Active) trace.Log("Processing: " + block);
+
+					UpdateOperands(block);
+					UpdatePHIs(block);
+
+					worklist.Push(block);
+					worklist.Push(null);
+					if (trace.Active) trace.Log("  >Pushed: " + block + " (Return)");
+
+					// Repeat for all children of the dominance block, if any
+					var children = dominanceAnalysis.GetChildren(block);
+					if (children != null && children.Count > 0)
+					{
+						foreach (var s in children)
+						{
+							worklist.Push(s);
+							if (trace.Active) trace.Log("  >Pushed: " + s);
+						}
+					}
+				}
+				else
+				{
+					block = worklist.Pop();
+
+					if (trace.Active) trace.Log("Processing: " + block + " (Back)");
+					UpdateResultOperands(block);
+				}
+			}
+		}
+
+		private void UpdateOperands(BasicBlock block)
+		{
+			// Update Operands in current block
+			for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
+			{
+				if (node.IsEmptyOrNop)
+					continue;
+
 				if (node.Instruction != IRInstruction.Phi)
 				{
 					for (var i = 0; i < node.OperandCount; ++i)
@@ -159,64 +234,79 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 				}
 
-				if (!node.IsEmpty && node.Result != null && node.Result.IsVirtualRegister)
+				if (node.Result?.IsVirtualRegister == true)
 				{
 					var op = node.Result;
+
+					Debug.Assert(counts.ContainsKey(op), op + " is not in counts");
+
 					var index = counts[op];
 					node.Result = GetSSAOperand(op, index);
 					variables[op].Push(index);
 					counts[op] = index + 1;
 				}
 
-				if (!node.IsEmpty && node.Result2 != null && node.Result2.IsVirtualRegister)
+				if (node.Result2?.IsVirtualRegister == true)
 				{
 					var op = node.Result2;
+
+					Debug.Assert(counts.ContainsKey(op), op + " is not in counts");
+
 					var index = counts[op];
 					node.Result2 = GetSSAOperand(op, index);
 					variables[op].Push(index);
 					counts[op] = index + 1;
 				}
 			}
+		}
 
+		private void UpdatePHIs(BasicBlock block)
+		{
+			// Update PHIs in successor blocks
 			foreach (var s in block.NextBlocks)
 			{
 				// index does not change between this stage and PhiPlacementStage since the block list order does not change
 				var index = WhichPredecessor(s, block);
 
-				for (var context = new Context(s); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var node = s.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (context.Instruction != IRInstruction.Phi)
+					if (node.IsEmptyOrNop)
 						continue;
 
-					Debug.Assert(context.OperandCount == context.Block.PreviousBlocks.Count);
+					if (node.Instruction != IRInstruction.Phi)
+						break;
 
-					var op = context.GetOperand(index);
+					Debug.Assert(node.OperandCount == node.Block.PreviousBlocks.Count);
+
+					var op = node.GetOperand(index);
 
 					if (variables[op].Count > 0)
 					{
 						var version = variables[op].Peek();
-						context.SetOperand(index, GetSSAOperand(context.GetOperand(index), version));
+						var ssaOperand = GetSSAOperand(node.GetOperand(index), version);
+						node.SetOperand(index, ssaOperand);
 					}
 				}
 			}
+		}
 
-			var children = dominanceAnalysis.GetChildren(block);
-			foreach (var s in children)
+		private void UpdateResultOperands(BasicBlock block)
+		{
+			// Update Result Operands in current block
+			for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				RenameVariables(s, dominanceAnalysis);
-			}
+				if (node.IsEmptyOrNop || node.ResultCount == 0)
+					continue;
 
-			for (var context = new Context(block); !context.IsBlockEndInstruction; context.GotoNext())
-			{
-				if (!context.IsEmpty && context.Result != null && context.Result.IsVirtualRegister)
+				if (node.Result?.IsVirtualRegister == true)
 				{
-					var op = context.Result.SSAParent;
+					var op = node.Result.SSAParent;
 					var index = variables[op].Pop();
 				}
 
-				if (!context.IsEmpty && context.Result2 != null && context.Result2.IsVirtualRegister)
+				if (node.Result2?.IsVirtualRegister == true)
 				{
-					var op = context.Result2.SSAParent;
+					var op = node.Result2.SSAParent;
 					var index = variables[op].Pop();
 				}
 			}
@@ -248,21 +338,21 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var block in BasicBlocks)
 			{
-				for (var context = new Context(block); !context.IsBlockEndInstruction; context.GotoNext())
+				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (context.IsEmpty)
+					if (node.IsEmpty)
 						continue;
 
 					instructionCount++;
 
-					if (context.Result != null && context.Result.IsVirtualRegister)
+					if (node.Result?.IsVirtualRegister == true)
 					{
-						AddToAssignments(context.Result, block);
+						AddToAssignments(node.Result, block);
 					}
 
-					if (context.Result2 != null && context.Result2.IsVirtualRegister)
+					if (node.Result2?.IsVirtualRegister == true)
 					{
-						AddToAssignments(context.Result2, block);
+						AddToAssignments(node.Result2, block);
 					}
 				}
 			}
@@ -294,7 +384,6 @@ namespace Mosa.Compiler.Framework.Stages
 			var context = new Context(block);
 			context.AppendInstruction(IRInstruction.Phi, variable);
 
-			//var sourceBlocks = new BasicBlock[block.PreviousBlocks.Count];
 			var sourceBlocks = new List<BasicBlock>(block.PreviousBlocks.Count);
 			context.PhiBlocks = sourceBlocks;
 
@@ -306,7 +395,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.OperandCount = block.PreviousBlocks.Count;
 
-			Debug.Assert(context.OperandCount == context.Block.PreviousBlocks.Count);
+			//Debug.Assert(context.OperandCount == context.Block.PreviousBlocks.Count);
 		}
 
 		/// <summary>

@@ -1,10 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Analysis;
-using Mosa.Compiler.Framework.IR;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -15,11 +11,6 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			if (!BasicBlocks.RuntimeValidation())
-			{
-				throw new CompilerException("IRCleanupStage (start): Block Validation Error in: " + Method);
-			}
-
 			RemoveNops();
 			EmptyDeadBlocks();
 			SkipEmptyBlocks();
@@ -41,24 +32,18 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			BasicBlocks.ReorderBlocks(newBlockOrder);
-
-			if (!BasicBlocks.RuntimeValidation())
-			{
-				throw new CompilerException("IRCleanupStage: Block Validation Error in: " + Method);
-			}
-			Debug.Assert(BasicBlocks.RuntimeValidation());
 		}
 
 		private void RemoveNops()
 		{
 			foreach (var block in BasicBlocks)
 			{
-				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
+				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
 					if (node.IsEmpty)
 						continue;
 
-					if (node.Instruction == IRInstruction.Nop)
+					if (node.IsNop)
 					{
 						node.Empty();
 					}

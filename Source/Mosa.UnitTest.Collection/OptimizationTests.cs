@@ -150,6 +150,19 @@ namespace Mosa.UnitTest.Collection
 			return c;
 		}
 
+		//[MosaUnitTest]
+		public static int OptimizationTest14(int a1, int b1, int c1, int d1)
+		{
+			var a = a1;
+			var b = b1;
+			var c = c1;
+			var d = d1;
+
+			int z = (a * b) + ((c * d) + (c * d)) + (a * b);
+
+			return z;
+		}
+
 		[MosaUnitTest]
 		public static int ConditionalConstantPropagation1()
 		{

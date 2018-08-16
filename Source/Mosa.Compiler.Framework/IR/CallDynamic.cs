@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
 	/// CallDynamic
-		/// The instruction represents a method called where method address is provide by a virtual register
+	/// The instruction represents a method called where method address is provide by a virtual register
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class CallDynamic : BaseIRInstruction

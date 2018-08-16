@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -20,7 +19,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			foreach (var block in BasicBlocks)
 			{
-				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
+				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
 					if (node.IsEmpty)
 						continue;

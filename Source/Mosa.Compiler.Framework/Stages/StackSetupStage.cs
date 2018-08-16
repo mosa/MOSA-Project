@@ -27,9 +27,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (BasicBlocks.EpilogueBlock != null)
 			{
 				// Create an epilogue instruction
-				var epilogueCtx = new Context(BasicBlocks.EpilogueBlock);
-				epilogueCtx.AppendInstruction(IRInstruction.Epilogue);
-				epilogueCtx.Label = BasicBlock.EpilogueLabel;
+				var epilogue = new Context(BasicBlocks.EpilogueBlock);
+				epilogue.AppendInstruction(IRInstruction.Epilogue);
+				epilogue.Label = BasicBlock.EpilogueLabel;
 			}
 		}
 	}

@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	internal sealed class XAddLoad32 : IIntrinsicPlatformMethod
 	{
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
-		{ 
+		{
 			var location = context.Operand1;
 			var value = context.Operand2;
 			var result = context.Result;

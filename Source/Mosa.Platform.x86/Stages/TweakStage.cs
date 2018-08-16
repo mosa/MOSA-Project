@@ -54,6 +54,5 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		#endregion Visitation Methods
-
 	}
 }

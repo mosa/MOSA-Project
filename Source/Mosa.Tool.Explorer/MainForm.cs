@@ -225,6 +225,7 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.EnableInlinedMethods = cbEnableInlinedMethods.Checked;
 			Compiler.CompilerOptions.IRLongExpansion = cbEnableIRLongExpansion.Checked;
 			Compiler.CompilerOptions.InlinedIRMaximum = 12;
+			Compiler.CompilerOptions.TwoPassOptimizations = cbEnableTwoPassOptimizations.Checked;
 		}
 
 		private void CleanGUI()

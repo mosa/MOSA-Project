@@ -12,6 +12,16 @@ namespace Mosa.Compiler.Framework.CompilerStages
 	{
 		protected override void RunPostCompile()
 		{
+			if (string.IsNullOrEmpty(CompilerOptions.OutputFile))
+				return;
+
+			File.Delete(CompilerOptions.OutputFile);
+
+			if (Compiler.IsStopped)
+			{
+				return;
+			}
+
 			using (var file = new FileStream(CompilerOptions.OutputFile, FileMode.Create))
 			{
 				Linker.Emit(file);
