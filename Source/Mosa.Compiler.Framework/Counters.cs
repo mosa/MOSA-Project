@@ -21,22 +21,32 @@ namespace Mosa.Compiler.Framework
 		{
 			lock (_lock)
 			{
-				if (counters.ContainsKey(name))
-					counters[name] += count;
+				if (counters.TryGetValue(name, out int current))
+				{
+					counters.Remove(name);
+					counters.Add(name, count + current);
+				}
 				else
+				{
 					counters.Add(name, count);
+				}
 			}
 		}
 
 		public void UpdateNoLock(string name, int count)
 		{
-			if (counters.ContainsKey(name))
-				counters[name] += count;
+			if (counters.TryGetValue(name, out int current))
+			{
+				counters.Remove(name);
+				counters.Add(name, count + current);
+			}
 			else
+			{
 				counters.Add(name, count);
+			}
 		}
 
-		public IList<string> Export()
+		public List<string> Export()
 		{
 			var counts = new List<string>();
 

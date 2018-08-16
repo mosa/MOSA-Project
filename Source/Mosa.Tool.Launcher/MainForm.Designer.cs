@@ -830,7 +830,7 @@
             this.tabAdvanced.Location = new System.Drawing.Point(4, 22);
             this.tabAdvanced.Name = "tabAdvanced";
             this.tabAdvanced.Padding = new System.Windows.Forms.Padding(3);
-            this.tabAdvanced.Size = new System.Drawing.Size(653, 404);
+            this.tabAdvanced.Size = new System.Drawing.Size(655, 404);
             this.tabAdvanced.TabIndex = 4;
             this.tabAdvanced.Text = "Advanced Options";
             this.tabAdvanced.UseVisualStyleBackColor = true;
@@ -1070,7 +1070,7 @@
             this.tabFiles.Controls.Add(this.panelAdditionalFiles);
             this.tabFiles.Location = new System.Drawing.Point(4, 22);
             this.tabFiles.Name = "tabFiles";
-            this.tabFiles.Size = new System.Drawing.Size(653, 404);
+            this.tabFiles.Size = new System.Drawing.Size(655, 404);
             this.tabFiles.TabIndex = 5;
             this.tabFiles.Text = "Included Files";
             // 
@@ -1082,7 +1082,7 @@
             this.panelAdditionalFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelAdditionalFiles.Location = new System.Drawing.Point(0, 0);
             this.panelAdditionalFiles.Name = "panelAdditionalFiles";
-            this.panelAdditionalFiles.Size = new System.Drawing.Size(653, 404);
+            this.panelAdditionalFiles.Size = new System.Drawing.Size(655, 404);
             this.panelAdditionalFiles.TabIndex = 23;
             // 
             // dataGridView1
@@ -1092,13 +1092,13 @@
             this.dataGridView1.Location = new System.Drawing.Point(3, 3);
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(616, 406);
+            this.dataGridView1.Size = new System.Drawing.Size(616, 401);
             this.dataGridView1.TabIndex = 32;
             // 
             // btnRemoveFiles
             // 
             this.btnRemoveFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemoveFiles.Location = new System.Drawing.Point(625, 26);
+            this.btnRemoveFiles.Location = new System.Drawing.Point(627, 26);
             this.btnRemoveFiles.Name = "btnRemoveFiles";
             this.btnRemoveFiles.Size = new System.Drawing.Size(25, 25);
             this.btnRemoveFiles.TabIndex = 30;
@@ -1109,7 +1109,7 @@
             // btnAddFiles
             // 
             this.btnAddFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddFiles.Location = new System.Drawing.Point(625, -5);
+            this.btnAddFiles.Location = new System.Drawing.Point(627, -5);
             this.btnAddFiles.Name = "btnAddFiles";
             this.btnAddFiles.Size = new System.Drawing.Size(25, 25);
             this.btnAddFiles.TabIndex = 29;
@@ -1130,7 +1130,7 @@
             this.tabApplicationLocations.Location = new System.Drawing.Point(4, 22);
             this.tabApplicationLocations.Name = "tabApplicationLocations";
             this.tabApplicationLocations.Padding = new System.Windows.Forms.Padding(3);
-            this.tabApplicationLocations.Size = new System.Drawing.Size(653, 404);
+            this.tabApplicationLocations.Size = new System.Drawing.Size(655, 404);
             this.tabApplicationLocations.TabIndex = 3;
             this.tabApplicationLocations.Text = "Application Locations";
             this.tabApplicationLocations.UseVisualStyleBackColor = true;
@@ -1371,7 +1371,7 @@
             this.tabCounters.Location = new System.Drawing.Point(4, 22);
             this.tabCounters.Name = "tabCounters";
             this.tabCounters.Padding = new System.Windows.Forms.Padding(3);
-            this.tabCounters.Size = new System.Drawing.Size(653, 404);
+            this.tabCounters.Size = new System.Drawing.Size(655, 404);
             this.tabCounters.TabIndex = 2;
             this.tabCounters.Text = "Counters";
             this.tabCounters.UseVisualStyleBackColor = true;
@@ -1388,7 +1388,7 @@
             this.rtbCounters.Location = new System.Drawing.Point(0, 0);
             this.rtbCounters.Name = "rtbCounters";
             this.rtbCounters.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.rtbCounters.Size = new System.Drawing.Size(653, 411);
+            this.rtbCounters.Size = new System.Drawing.Size(653, 408);
             this.rtbCounters.TabIndex = 1;
             this.rtbCounters.Text = "";
             this.rtbCounters.WordWrap = false;
@@ -1402,7 +1402,7 @@
             this.tabOutput.Location = new System.Drawing.Point(4, 22);
             this.tabOutput.Name = "tabOutput";
             this.tabOutput.Padding = new System.Windows.Forms.Padding(3);
-            this.tabOutput.Size = new System.Drawing.Size(653, 404);
+            this.tabOutput.Size = new System.Drawing.Size(655, 404);
             this.tabOutput.TabIndex = 1;
             this.tabOutput.Text = "Output";
             this.tabOutput.UseVisualStyleBackColor = true;
@@ -1419,7 +1419,7 @@
             this.rtbOutput.Location = new System.Drawing.Point(3, 0);
             this.rtbOutput.Name = "rtbOutput";
             this.rtbOutput.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.rtbOutput.Size = new System.Drawing.Size(650, 416);
+            this.rtbOutput.Size = new System.Drawing.Size(650, 408);
             this.rtbOutput.TabIndex = 0;
             this.rtbOutput.Text = "";
             this.rtbOutput.WordWrap = false;

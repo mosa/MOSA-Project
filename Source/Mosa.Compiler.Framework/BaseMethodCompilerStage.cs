@@ -669,7 +669,7 @@ namespace Mosa.Compiler.Framework
 			MethodCompiler.Trace.NewTraceLog(traceLog);
 		}
 
-		private void SubmitTraceLogs(IList<TraceLog> traceLogs)
+		private void SubmitTraceLogs(List<TraceLog> traceLogs)
 		{
 			if (traceLogs == null)
 				return;
