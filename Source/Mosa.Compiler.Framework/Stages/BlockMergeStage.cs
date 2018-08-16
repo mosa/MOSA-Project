@@ -56,7 +56,7 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 
 					insertPoint.Empty();
-					insertPoint.CutFrom(next.First.Next.GoForwardToNonEmpty(), next.Last.Previous.GoBackwardsToNonEmpty());
+					insertPoint.CutFrom(next.AfterFirst.GoForwardToNonEmpty(), next.Last.Previous.GoBackwardsToNonEmpty());
 					changed = true;
 				}
 			}

@@ -16,8 +16,6 @@ namespace Mosa.Platform.x86.CompilerStages
 			CreateInterruptVectors();
 		}
 
-		#region Internal
-
 		/// <summary>
 		/// Creates the interrupt service routine (ISR) methods.
 		/// </summary>
@@ -40,7 +38,7 @@ namespace Mosa.Platform.x86.CompilerStages
 			for (int i = 0; i <= 255; i++)
 			{
 				var basicBlocks = new BasicBlocks();
-				var block = basicBlocks.CreateBlock();
+				var block = basicBlocks.CreateBlock(BasicBlock.PrologueLabel);
 				basicBlocks.AddHeadBlock(block);
 				var ctx = new Context(block);
 
@@ -63,7 +61,5 @@ namespace Mosa.Platform.x86.CompilerStages
 				Compiler.CompileMethod(interruptMethod, basicBlocks);
 			}
 		}
-
-		#endregion Internal
 	}
 }

@@ -35,7 +35,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			LiveKill = new BitArray(registerCount);
 			LiveOut = new BitArray(registerCount);
 			LiveIn = new BitArray(registerCount);
-			LiveKillNot = new BitArray(registerCount);
+
+			//LiveKillNot = new BitArray(registerCount);
 			LoopDepth = loopDepth;
 		}
 

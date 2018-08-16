@@ -87,11 +87,8 @@
     <Compile Include="Analysis\LiveVariableAnalysis\BaseLivenessAnalysisEnvironment.cs" />
     <Compile Include="Analysis\LiveVariableAnalysis\LiveRanges.cs" />
     <Compile Include="Analysis\SparseConditionalConstantPropagation.cs" />
-    <Compile Include="Analysis\NaturalBlockOrder.cs" />
     <Compile Include="Analysis\ProtectedRegion.cs" />
-    <Compile Include="Analysis\ReverseBlockOrder.cs" />
     <Compile Include="Analysis\SimpleTraceBlockOrder.cs" />
-    <Compile Include="Analysis\BaseDominanceAnalysis.cs" />
     <Compile Include="BaseCodeTransformationStage.cs" />
     <Compile Include="BaseCompilerExtension.cs" />
     <Compile Include="CIL\IRInstructions.cs" />
@@ -364,7 +361,7 @@
     <Compile Include="Intrinsics\Load32.cs" />
     <Compile Include="Intrinsics\IntrinsicsHelper.cs" />
     <Compile Include="Intrinsics\InternalsForType.cs" />
-    <Compile Include="Analysis\IBlockOrderAnalysis.cs" />
+    <Compile Include="Analysis\BaseBlockOrder.cs" />
     <Compile Include="Metadata.cs">
       <SubType>
       </SubType>
@@ -395,6 +392,7 @@
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
     <Compile Include="CompilerStages\DebugFileGenerationStage.cs" />
+    <Compile Include="Stages\DominanceOutputStage.cs" />
     <Compile Include="Stages\OptimizationRulesStage.cs" />
     <Compile Include="Stages\PlugStage.cs" />
     <Compile Include="Stages\DevirtualizeCallStage.cs" />
@@ -410,6 +408,7 @@
     <Compile Include="Stages\InlineStage.cs" />
     <Compile Include="Stages\InlineEvaluationStage.cs" />
     <Compile Include="Stages\IRCleanupStage.cs" />
+    <Compile Include="Stages\ValueNumberingStage.cs" />
     <Compile Include="Stages\SparseConditionalConstantPropagationStage.cs" />
     <Compile Include="CompilerStages\MethodExceptionLookupTableStage.cs" />
     <Compile Include="CompilerStages\MethodLookupTableStage.cs" />
@@ -418,7 +417,7 @@
     <Compile Include="CompilerStages\MapFileGenerationStage.cs" />
     <Compile Include="Stages\StopStage.cs" />
     <Compile Include="Stages\BaseEdgeSplitStage.cs" />
-    <Compile Include="Stages\EmptyBlockRemovalStage.cs" />
+    <Compile Include="Stages\DeadBlockStage.cs" />
     <Compile Include="Stages\JumpOptimizationStage.cs" />
     <Compile Include="Stages\PlatformEdgeSplitStage.cs" />
     <Compile Include="Stages\StackSetupStage.cs" />

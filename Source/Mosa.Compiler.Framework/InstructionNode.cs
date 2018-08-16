@@ -466,7 +466,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether this instance is empty.
+		/// Gets a value indicating whether this node is empty.
 		/// </summary>
 		/// <value>
 		///   <c>true</c> if this instance is empty; otherwise, <c>false</c>.
@@ -474,6 +474,28 @@ namespace Mosa.Compiler.Framework
 		public bool IsEmpty
 		{
 			get { return Instruction == null; }
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether this node is a NOP instruction.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance is nop; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsNop
+		{
+			get { return Instruction == IRInstruction.Nop; }
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether this node is empty or a NOP instruction.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance is empty or nop; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsEmptyOrNop
+		{
+			get { return Instruction == null || Instruction == IRInstruction.Nop; }
 		}
 
 		#endregion Properties
@@ -658,7 +680,7 @@ namespace Mosa.Compiler.Framework
 				case 2: Operand3 = operand; return;
 				default:
 					{
-						Operand current = GetAdditionalOperand(index);
+						var current = GetAdditionalOperand(index);
 						if (current == operand) return;
 						if (current != null)
 						{

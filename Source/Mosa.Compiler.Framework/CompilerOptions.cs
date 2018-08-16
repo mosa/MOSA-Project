@@ -63,12 +63,12 @@ namespace Mosa.Compiler.Framework
 		public bool EnableIROptimizations { get; set; }
 
 		/// <summary>
-		/// Gets or sets the debug restrict optimization by count.
+		/// Gets or sets a value indicating whether [enable value numbering].
 		/// </summary>
 		/// <value>
-		/// The debug restrict optimization by count.
+		///   <c>true</c> if [enable IR optimizations]; otherwise, <c>false</c>.
 		/// </value>
-		public int DebugRestrictOptimizationByCount { get; set; }
+		public bool EnableValueNumbering { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable conditional constant propagation].
@@ -116,7 +116,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The block order analysis.
 		/// </value>
-		public Func<IBlockOrderAnalysis> BlockOrderAnalysisFactory { get; set; }
+		public Func<BaseBlockOrder> BlockOrderAnalysisFactory { get; set; }
 
 		/// <summary>
 		/// Gets or sets the type of the elf.
@@ -260,12 +260,12 @@ namespace Mosa.Compiler.Framework
 			BlockOrderAnalysisFactory = delegate { return new LoopAwareBlockOrder(); };
 			EmitBinary = true;
 			InlinedIRMaximum = 8;
-			DebugRestrictOptimizationByCount = 0;
 			EmitSymbols = true;
 			EmitRelocations = true;
 			TwoPassOptimizations = true;
 			EnableStatistics = true;
 			IRLongExpansion = true;
+			EnableValueNumbering = true;
 		}
 	}
 }

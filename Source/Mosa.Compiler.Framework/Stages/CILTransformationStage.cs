@@ -1325,9 +1325,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (operand1 != null)
 			{
-				var setret = GetSetReturnInstruction(operand1.Type, Is32BitPlatform);
+				var setReturn = GetSetReturnInstruction(operand1.Type, Is32BitPlatform);
 
-				context.SetInstruction(setret, null, operand1);
+				context.SetInstruction(setReturn, null, operand1);
 
 				context.AppendInstruction(IRInstruction.Jmp, BasicBlocks.EpilogueBlock);
 			}
@@ -1604,7 +1604,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (typeSize <= 8)
 			{
-				context.AppendInstruction(typeSize != 8 ? (BaseIRInstruction)IRInstruction.Unbox32 : IRInstruction.Unbox64, tmp, value);
+				context.SetInstruction(typeSize != 8 ? (BaseIRInstruction)IRInstruction.Unbox32 : IRInstruction.Unbox64, tmp, value);
 			}
 			else
 			{

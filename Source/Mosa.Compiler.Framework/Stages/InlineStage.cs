@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.IR;
 using System.Collections.Generic;
@@ -29,7 +30,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// find all call sites
 			foreach (var block in BasicBlocks)
 			{
-				for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
+				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
 					if (node.IsEmpty)
 						continue;
@@ -82,6 +83,11 @@ namespace Mosa.Compiler.Framework.Stages
 					trace.Log(callee.Method.FullName);
 
 				Inline(callSiteNode, blocks);
+
+				if (!BasicBlocks.RuntimeValidation())
+				{
+					throw new CompilerException("InlineStage: Block Validation after inlining: " + invokedMethod + " into " + Method);
+				}
 			}
 
 			UpdateCounter("InlineStage.InlinedMethods", 1);
@@ -107,7 +113,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var newBlock = mapBlocks[block];
 
-				for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
+				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
 					if (node.IsEmpty)
 						continue;
@@ -222,8 +228,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			callSiteNode.SetInstruction(IRInstruction.Jmp, prologue);
-
-			//MethodCompiler.Stop();
 		}
 
 		private static void UpdateParameterInstructions(InstructionNode newNode)

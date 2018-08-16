@@ -64,7 +64,7 @@ namespace Mosa.Workspace.UnitTest.Debug
 				EnableIROptimizations = true,
 				EnableSparseConditionalConstantPropagation = true,
 				EnableInlinedMethods = true,
-				IRLongExpansion = true,
+				EnableIRLongExpansion = true,
 				TwoPassOptimizations = true,
 
 				Emulator = EmulatorType.Qemu,

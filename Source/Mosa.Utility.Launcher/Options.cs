@@ -63,35 +63,41 @@ namespace Mosa.Utility.Launcher
 		[Option("vmdk")]
 		public bool ImageFormatVMDK { set { ImageFormat = ImageFormat.VMDK; } }
 
-		[Option("emulator-memory", Default = 256U, HelpText = "Emulator memory in megabytes.")]
+		[Option("emulator-memory", HelpText = "Emulator memory in megabytes.")]
 		public uint EmulatorMemoryInMB { get; set; }
 
-		[Option("ssa", Default = true)]
+		[Option("ssa")]
 		public bool EnableSSA { get; set; }
 
-		[Option("ir", Default = true)]
+		[Option("ir")]
 		public bool EnableIROptimizations { get; set; }
 
 		[Option("optimization-ir-off")]
 		public bool IROptimizationsFalse { set { EnableIROptimizations = false; } }
 
-		[Option("sccp", Default = true)]
+		[Option("sccp")]
 		public bool EnableSparseConditionalConstantPropagation { get; set; }
 
 		[Option("optimization-sccp-off")]
 		public bool EnableSparseConditionalConstantPropagationFalse { set { EnableSparseConditionalConstantPropagation = false; } }
 
-		[Option("inline", Default = true)]
+		[Option("inline")]
 		public bool EnableInlinedMethods { get; set; }
 
 		[Option("inline-off")]
 		public bool EnableInlinedMethodsFalse { set { EnableInlinedMethods = false; } }
 
-		[Option("ir-long-expansion", Default = true)]
-		public bool IRLongExpansion { get; set; }
+		[Option("ir-long-expansion")]
+		public bool EnableIRLongExpansion { get; set; }
 
-		[Option("two-pass-optimizations", Default = true)]
+		[Option("two-pass-optimizations")]
 		public bool TwoPassOptimizations { get; set; }
+
+		[Option("value-numbering")]
+		public bool EnableValueNumbering { get; set; }
+
+		[Option("value-numbering-off")]
+		public bool ValueNumberingFalse { set { EnableValueNumbering = false; } }
 
 		public int InlinedIRMaximum { get; set; }
 
@@ -106,21 +112,22 @@ namespace Mosa.Utility.Launcher
 				EnableIROptimizations = false;
 				EnableInlinedMethods = false;
 				TwoPassOptimizations = false;
-				IRLongExpansion = false;
+				EnableIRLongExpansion = false;
 				EnableSparseConditionalConstantPropagation = false;
+				EnableValueNumbering = false;
 			}
 		}
 
 		[Option("output-nasm")]
 		public bool GenerateNASMFile { get; set; }
 
-		[Option("output-asm", Default = false)]
+		[Option("output-asm")]
 		public bool GenerateASMFile { get; set; }
 
 		[Option("output-map")]
 		public bool GenerateMapFile { get; set; }
 
-		[Option("output-debug", Default = false)]
+		[Option("output-debug")]
 		public bool GenerateDebugFile { get; set; }
 
 		[Option("linker-format")]
@@ -156,7 +163,7 @@ namespace Mosa.Utility.Launcher
 		[Option("serial-tcpserver")]
 		public bool SerialConnectionOptionTCPServer { set { SerialConnectionOption = SerialConnectionOption.TCPServer; } }
 
-		[Option("serial-connection-port", Default = 9999)]
+		[Option("serial-connection-port")]
 		public int SerialConnectionPort { get; set; }
 
 		[Option("serial-connection-host")]
@@ -233,13 +240,13 @@ namespace Mosa.Utility.Launcher
 		[Option("qemu-gdb")]
 		public bool EnableQemuGDB { get; set; }
 
-		[Option("gdb", Default = false)]
+		[Option("gdb")]
 		public bool LaunchGDB { get; set; }
 
-		[Option("gdb-port", Default = 1234)]
+		[Option("gdb-port")]
 		public int GDBPort { get; set; }
 
-		[Option("gdb-host", Default = "localhost")]
+		[Option("gdb-host")]
 		public string GDBHost { get; set; }
 
 		[Option("launch-gdb-debugger")]
@@ -326,11 +333,23 @@ namespace Mosa.Utility.Launcher
 			SerialConnectionHost = "127.0.0.1";
 			InlinedIRMaximum = 12;
 			LaunchVM = true;
-			IRLongExpansion = true;
+			EnableIRLongExpansion = true;
 			TwoPassOptimizations = true;
+			EnableValueNumbering = true;
+			LaunchGDB = false;
 			GDBPort = 1234;
 			GDBHost = "localhost";
 			HuntForCorLib = true;
+			EmulatorMemoryInMB = 256U;
+			SerialConnectionPort = 9999;
+			GenerateASMFile = false;
+			EnableSSA = true;
+			EnableIROptimizations = true;
+			EnableSparseConditionalConstantPropagation = true;
+			EnableInlinedMethods = true;
+			EnableIRLongExpansion = true;
+			TwoPassOptimizations = true;
+			EnableValueNumbering = true;
 		}
 
 		private void ReadIncludeFile(string file)

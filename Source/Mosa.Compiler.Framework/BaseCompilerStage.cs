@@ -56,17 +56,11 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Properties
 
-		#region IPipelineStage Members
-
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
 		public virtual string Name { get { return GetType().Name; } }
-
-		#endregion IPipelineStage Members
-
-		#region ICompilerStage members
 
 		public void Initialize(Compiler compiler)
 		{
@@ -78,7 +72,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Executes the pre compile phase.
+		/// Executes the pre-compile phase.
 		/// </summary>
 		public void ExecutePreCompile()
 		{
@@ -92,8 +86,6 @@ namespace Mosa.Compiler.Framework
 		{
 			RunPostCompile();
 		}
-
-		#endregion ICompilerStage members
 
 		#region Overrides
 

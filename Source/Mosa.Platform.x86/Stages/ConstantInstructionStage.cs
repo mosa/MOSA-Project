@@ -268,6 +268,7 @@ namespace Mosa.Platform.x86.Stages
 				context.SetInstruction(X86.XorConst32, context.Result, context.Operand1, context.Operand2);
 			}
 		}
+
 		#endregion Visitation Methods
 	}
 }

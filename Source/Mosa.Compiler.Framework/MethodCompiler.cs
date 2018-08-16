@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds flag that will stop method compiler
 		/// </summary>
-		private bool stop;
+		public bool IsStopped { get; private set; }
 
 		#endregion Data Members
 
@@ -216,7 +216,7 @@ namespace Mosa.Compiler.Framework
 			ThreadID = threadID;
 			PluggedMethod = compiler.PlugSystem.GetReplacement(Method);
 
-			stop = false;
+			IsStopped = false;
 
 			MethodData = compiler.CompilerData.GetCompilerMethodData(Method);
 			MethodData.Counters.Reset();
@@ -343,7 +343,7 @@ namespace Mosa.Compiler.Framework
 
 				InstructionLogger.Run(this, stage);
 
-				if (stop)
+				if (IsStopped)
 					break;
 			}
 
@@ -360,7 +360,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public void Stop()
 		{
-			stop = true;
+			IsStopped = true;
 		}
 
 		/// <summary>

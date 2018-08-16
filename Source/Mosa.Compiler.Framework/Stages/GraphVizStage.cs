@@ -6,15 +6,16 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			var trace = CreateTraceLog();
+			if (!IsTraceable())
+				return;
 
-			const char q = '"';
+			var trace = CreateTraceLog();
 
 			trace.Log("digraph blocks {");
 
 			foreach (var block in BasicBlocks)
 			{
-				trace.Log("\t" + block);
+				//trace.Log("\t" + block);
 
 				foreach (var next in block.NextBlocks)
 				{

@@ -143,6 +143,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0x000000ff));
 			}
 		}
+
 		public void Movsd(Context context)
 		{
 			Debug.Assert(context.Result.IsCPURegister);
@@ -234,6 +235,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction2(X86.XChg32, value, temporaryRegister, temporaryRegister, value);
 			}
 		}
+
 		public void Movzx16To32(Context context)
 		{
 			Debug.Assert(context.Result.IsCPURegister);
@@ -304,6 +306,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction2(X86.XChg32, result, eax, eax, result);
 			}
 		}
+
 		/// <summary>
 		/// Converts the operand1 to byte.
 		/// </summary>
@@ -339,6 +342,7 @@ namespace Mosa.Platform.x86.Stages
 
 			context.Operand3 = CreateConstant((byte)context.Operand3.ConstantUnsignedLongInteger);
 		}
+
 		#endregion Visitation Methods
 	}
 }

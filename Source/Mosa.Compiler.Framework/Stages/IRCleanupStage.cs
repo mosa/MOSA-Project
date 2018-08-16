@@ -1,19 +1,19 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.Analysis;
-using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// IR Cleanup Stage
 	/// </summary>
-	public class IRCleanupStage : EmptyBlockRemovalStage
+	public class IRCleanupStage : DeadBlockStage
 	{
 		protected override void Run()
 		{
 			RemoveNops();
-			RemoveEmptyBlocks();
+			EmptyDeadBlocks();
+			SkipEmptyBlocks();
 			OrderBlocks();
 		}
 
@@ -22,13 +22,13 @@ namespace Mosa.Compiler.Framework.Stages
 			//var blockOrderAnalysis = new SimpleTraceBlockOrder();   // faster than others
 			var blockOrderAnalysis = new LoopAwareBlockOrder();
 
-			blockOrderAnalysis.PerformAnalysis(BasicBlocks);
+			blockOrderAnalysis.Analyze(BasicBlocks);
 
 			var newBlockOrder = blockOrderAnalysis.NewBlockOrder;
 
-			if (HasProtectedRegions)
+			if (newBlockOrder.Count != BasicBlocks.Count && HasProtectedRegions)
 			{
-				newBlockOrder = AddMissingBlocks(newBlockOrder, true);
+				newBlockOrder = AddMissingBlocksIfRequired(newBlockOrder);
 			}
 
 			BasicBlocks.ReorderBlocks(newBlockOrder);
@@ -38,12 +38,12 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var block in BasicBlocks)
 			{
-				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
+				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
 					if (node.IsEmpty)
 						continue;
 
-					if (node.Instruction == IRInstruction.Nop)
+					if (node.IsNop)
 					{
 						node.Empty();
 					}

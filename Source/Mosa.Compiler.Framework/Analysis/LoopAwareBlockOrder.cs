@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Analysis
 	/// <summary>
 	/// The Loop Aware Block Ordering reorders blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
-	public sealed class LoopAwareBlockOrder : IBlockOrderAnalysis
+	public sealed class LoopAwareBlockOrder : BaseBlockOrder
 	{
 		#region Data Members
 
@@ -27,11 +27,8 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private int[] loopDepth;
 		private int[] loopIndex;
-		private BasicBlock[] blockOrder;
 
 		private HashSet<BasicBlock> orderSet;
-
-		private int orderIndex;
 
 		#endregion Data Members
 
@@ -100,24 +97,20 @@ namespace Mosa.Compiler.Framework.Analysis
 		/// <param name="basicBlocks">The basic blocks.</param>
 		public LoopAwareBlockOrder(BasicBlocks basicBlocks)
 		{
-			PerformAnalysis(basicBlocks);
+			Analyze(basicBlocks);
 		}
 
-		#region IBlockOrderAnalysis
-
-		public IList<BasicBlock> NewBlockOrder { get { return blockOrder; } }
-
-		public int GetLoopDepth(BasicBlock block)
+		public override int GetLoopDepth(BasicBlock block)
 		{
 			return loopDepth[block.Sequence];
 		}
 
-		public int GetLoopIndex(BasicBlock block)
+		public override int GetLoopIndex(BasicBlock block)
 		{
 			return loopIndex[block.Sequence];
 		}
 
-		public void PerformAnalysis(BasicBlocks basicBlocks)
+		public override void Analyze(BasicBlocks basicBlocks)
 		{
 			this.basicBlocks = basicBlocks;
 
@@ -129,8 +122,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			loopBlockIndex = new int[blockCount];
 			loopDepth = new int[blockCount];
 			loopIndex = new int[blockCount];
-			blockOrder = new BasicBlock[blockCount];
-			orderIndex = 0;
+			NewBlockOrder = new List<BasicBlock>(blockCount);
 			orderSet = new HashSet<BasicBlock>();
 
 			foreach (var head in basicBlocks.HeadBlocks)
@@ -145,8 +137,6 @@ namespace Mosa.Compiler.Framework.Analysis
 			forwardBranchesCount = null;
 			orderSet = null;
 		}
-
-		#endregion IBlockOrderAnalysis
 
 		#region Members
 
@@ -314,7 +304,7 @@ namespace Mosa.Compiler.Framework.Analysis
 					continue;
 
 				orderSet.Add(block);
-				blockOrder[orderIndex++] = block;
+				NewBlockOrder.Add(block);
 
 				foreach (var successor in block.NextBlocks)
 				{

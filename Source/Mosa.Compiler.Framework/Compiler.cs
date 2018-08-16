@@ -112,6 +112,14 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private List<BaseCompilerExtension> CompilerExtensions { get; } = new List<BaseCompilerExtension>();
 
+		/// <summary>
+		/// Gets or sets a value indicating whether [all stop].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [all stop]; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsStopped { get; private set; }
+
 		#endregion Properties
 
 		#region Static Methods
@@ -148,38 +156,42 @@ namespace Mosa.Compiler.Framework
 				(compilerOptions.EnableInlinedMethods) ? new InlineStage() : null,
 				new PromoteTemporaryVariables(),
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
-				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
-				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 
-				//(compilerOptions.EnableIROptimizations) ? new OptimizationRulesStage() : null,
+				//new DominanceOutputStage(),	// TEMP
+				//new GraphVizStage(),		// TEMP
+
+				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
+				(compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,
+				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.EnableIROptimizations) ? new IROptimizationStage() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSAStage() : null,
 				new BlockMergeStage(),
 				new IRCleanupStage(),
 				new LowerIRStage(),
 				(compilerOptions.IRLongExpansion && compilerOptions.Architecture.NativePointerSize == 4) ? new IRLongDecomposeStage() : null,
+				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
-				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 
-				//(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new OptimizationRulesStage() : null,
+				//(compilerOptions.TwoPassOptimizations && compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,
+				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new IROptimizationStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableSSA) ? new LeaveSSAStage() : null,
-				(compilerOptions.TwoPassOptimizations ) ?new BlockMergeStage():  null,
-				(compilerOptions.TwoPassOptimizations ) ?new IRCleanupStage() :  null,
+				(compilerOptions.TwoPassOptimizations) ? new BlockMergeStage():  null,
+				(compilerOptions.TwoPassOptimizations) ? new IRCleanupStage() :  null,
 				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
 				new DevirtualizeCallStage(),
 				new CallStage(),
 				new PlatformIntrinsicStage(),
 				new PlatformEdgeSplitStage(),
 				new VirtualRegisterRenameStage(),
-
-				//new StopStage(),
 				new GreedyRegisterAllocatorStage(),
 				new StackLayoutStage(),
-				new EmptyBlockRemovalStage(),
+				new DeadBlockStage(),
 				new BlockOrderingStage(),
 				new CodeGenerationStage(compilerOptions.EmitBinary),
 
+				//new StopStage(),
+				//new GraphVizStage(),
 				//new PreciseGCStage(),
 				(compilerOptions.EmitBinary) ? new ProtectedRegionLayoutStage() : null,
 			};
@@ -235,6 +247,8 @@ namespace Mosa.Compiler.Framework
 			}
 
 			Architecture.ExtendCompilerPipeline(CompilerPipeline);
+
+			IsStopped = false;
 		}
 
 		/// <summary>
@@ -336,6 +350,9 @@ namespace Mosa.Compiler.Framework
 		{
 			while (true)
 			{
+				if (IsStopped)
+					return;
+
 				var method = CompilationScheduler.GetMethodToCompile();
 
 				if (method == null)
@@ -441,6 +458,11 @@ namespace Mosa.Compiler.Framework
 			}
 
 			ExportCounters();
+		}
+
+		public void Stop()
+		{
+			IsStopped = true;
 		}
 
 		#endregion Methods

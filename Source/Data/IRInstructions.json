@@ -347,13 +347,15 @@
 			"Name": "IsInstanceOfType",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "IsInstanceOfInterfaceType",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true"
 		},
 		{
 			"Name": "Jmp",
@@ -804,19 +806,22 @@
 			"Name": "NewArray",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "NewObject",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "NewString",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "Nop",
@@ -1149,49 +1154,65 @@
 			"Name": "Box",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true",
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "Box32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true",
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "Box64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true",
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "BoxR4",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true",
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "BoxR8",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true",
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "Unbox",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true",
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "Unbox32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true",
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "Unbox64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
-			"OperandCount": 2
+			"OperandCount": 2,
+			"MemoryRead": "true",
+			"MemoryWrite": "true"
 		},
 		{
 			"Name": "To64",

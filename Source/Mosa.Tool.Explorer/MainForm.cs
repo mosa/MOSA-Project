@@ -108,7 +108,7 @@ namespace Mosa.Tool.Explorer
 
 			cbEnableBinaryCodeGeneration.Checked = !options.NoCode;
 			cbEnableSSA.Checked = !options.NoSSA;
-			cbEnableOptimizations.Checked = !options.NoIROptimizations;
+			cbEnableIROptimizations.Checked = !options.NoIROptimizations;
 			cbEnableSparseConditionalConstantPropagation.Checked = !options.NoSparse;
 
 			var files = (IList<string>)options.Files;
@@ -218,12 +218,14 @@ namespace Mosa.Tool.Explorer
 		private void SetCompilerOptions()
 		{
 			Compiler.CompilerOptions.EnableSSA = cbEnableSSA.Checked;
-			Compiler.CompilerOptions.EnableIROptimizations = cbEnableOptimizations.Checked;
+			Compiler.CompilerOptions.EnableIROptimizations = cbEnableIROptimizations.Checked;
+			Compiler.CompilerOptions.EnableValueNumbering = cbEnableValueNumbering.Checked;
 			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = cbEnableSparseConditionalConstantPropagation.Checked;
 			Compiler.CompilerOptions.EmitBinary = cbEnableBinaryCodeGeneration.Checked;
 			Compiler.CompilerOptions.EnableInlinedMethods = cbEnableInlinedMethods.Checked;
 			Compiler.CompilerOptions.IRLongExpansion = cbEnableIRLongExpansion.Checked;
 			Compiler.CompilerOptions.InlinedIRMaximum = 12;
+			Compiler.CompilerOptions.TwoPassOptimizations = cbEnableTwoPassOptimizations.Checked;
 		}
 
 		private void CleanGUI()
@@ -254,7 +256,9 @@ namespace Mosa.Tool.Explorer
 			{
 				try
 				{
-					Compiler.ExecuteThreaded();
+					Compiler.Execute();
+
+					//Compiler.ExecuteThreaded();
 				}
 				finally
 				{
