@@ -20,11 +20,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Dictionary<Operand, Operand> MapToValueNumber;
 		private BitArray Processed;
-		private TraceLog trace;
+
+		//private TraceLog trace;
 
 		private int instructionRemovalCount;
 		private int constantFoldingCount;
 		private int strengthReductionCount;
+		private int subexpressionEliminationCount;
 
 		private class Expression
 		{
@@ -42,11 +44,10 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			base.Setup();
 
-			trace = CreateTraceLog();
-
 			constantFoldingCount = 0;
 			instructionRemovalCount = 0;
 			strengthReductionCount = 0;
+			subexpressionEliminationCount = 0;
 		}
 
 		protected override void Run()
@@ -61,7 +62,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (BasicBlocks.PrologueBlock == null)
 				return;
 
-			trace = CreateTraceLog("ValueNumbering");
+			//trace = CreateTraceLog("ValueNumbering");
 
 			MapToValueNumber = new Dictionary<Operand, Operand>(MethodCompiler.VirtualRegisters.Count);
 			Expressions = new Dictionary<int, List<Expression>>();
@@ -81,6 +82,7 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("ValueNumbering.IRInstructionRemoved", instructionRemovalCount);
 			UpdateCounter("ValueNumbering.ConstantFolding", constantFoldingCount);
 			UpdateCounter("ValueNumbering.StrengthReduction", strengthReductionCount);
+			UpdateCounter("ValueNumbering.SubexpressionEliminationCount", subexpressionEliminationCount);
 
 			MapToValueNumber = null;
 			Expressions = null;
@@ -89,7 +91,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AnalysisDominance = null;
 			ReversePostOrder = null;
 
-			trace = null;
+			//trace = null;
 		}
 
 		private void ValueNumber()
@@ -141,9 +143,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ValueNumber(BasicBlock block, out List<BasicBlock> nextblocks, out List<Expression> newExpressions)
 		{
-			if (trace.Active) trace.Log("Processing Block: " + block);
+			//if (trace.Active) trace.Log("Processing Block: " + block);
 
-			Debug.Assert(!Processed.Get(block.Sequence));
+			//Debug.Assert(!Processed.Get(block.Sequence));
 
 			newExpressions = null;
 			nextblocks = null;
@@ -188,7 +190,7 @@ namespace Mosa.Compiler.Framework.Stages
 						var w = GetValueNumber(node.Operand1);
 						SetValueNumber(node.Result, w);
 
-						if (trace.Active) trace.Log("Removed Unless PHI: " + node);
+						//if (trace.Active) trace.Log("Removed Unless PHI: " + node);
 
 						node.SetInstruction(IRInstruction.Nop);
 						instructionRemovalCount++;
@@ -203,7 +205,7 @@ namespace Mosa.Compiler.Framework.Stages
 						var w = GetValueNumber(redundant);
 						SetValueNumber(node.Result, w);
 
-						if (trace.Active) trace.Log("Removed Redundant PHI: " + node);
+						//if (trace.Active) trace.Log("Removed Redundant PHI: " + node);
 
 						node.SetInstruction(IRInstruction.Nop);
 						instructionRemovalCount++;
@@ -257,13 +259,11 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 
 				// Simplify expression: constant folding & strength reduction
-				//Operand newOperand = null;
-
-				var newOperand = ConstantFoldingIntegerOperations(node);
+				var newOperand = ConstantFoldingInteger(node);
 
 				if (newOperand == null)
 				{
-					newOperand = StrengthReduction(node);
+					newOperand = StrengthReductionInteger(node);
 
 					if (newOperand != null)
 					{
@@ -293,12 +293,13 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					var w = GetValueNumber(match.ValueNumber);
 
-					if (trace.Active) trace.Log("Found Expression Match: " + node);
+					//if (trace.Active) trace.Log("Found Expression Match: " + node);
 
 					SetValueNumber(node.Result, w);
 
 					node.SetInstruction(IRInstruction.Nop);
 					instructionRemovalCount++;
+					subexpressionEliminationCount++;
 					continue;
 				}
 
@@ -312,6 +313,8 @@ namespace Mosa.Compiler.Framework.Stages
 				};
 
 				AddExpressiontoHashTable(newExpression);
+
+				Debug.Assert(FindMatch(GetExpressionsByHash(ComputeExpressionHash(node)), node) == newExpression);
 
 				(newExpressions ?? (newExpressions = new List<Expression>())).Add(newExpression);
 
@@ -346,7 +349,7 @@ namespace Mosa.Compiler.Framework.Stages
 					// Efficient!
 					nextblocks.Add(children[0]);
 
-					if (trace.Active) trace.Log("Queue Block:" + children[0]);
+					//if (trace.Active) trace.Log("Queue Block:" + children[0]);
 				}
 				else if (ReversePostOrder.Count < 32)
 				{
@@ -357,7 +360,7 @@ namespace Mosa.Compiler.Framework.Stages
 						{
 							nextblocks.Add(child);
 
-							if (trace.Active) trace.Log("Queue Block:" + child);
+							//if (trace.Active) trace.Log("Queue Block:" + child);
 						}
 					}
 				}
@@ -377,7 +380,7 @@ namespace Mosa.Compiler.Framework.Stages
 						{
 							nextblocks.Add(child);
 
-							if (trace.Active) trace.Log("Queue Block:" + child);
+							//if (trace.Active) trace.Log("Queue Block:" + child);
 						}
 					}
 				}
@@ -599,12 +602,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return redundant;
 		}
 
-		private static BaseInstruction GetMoveInteger(Operand operand)
-		{
-			return operand.Is64BitInteger ? (BaseInstruction)IRInstruction.MoveInt64 : IRInstruction.MoveInt32;
-		}
-
-		private Operand ConstantFoldingIntegerOperations(InstructionNode node)
+		public static Operand ConstantFoldingInteger(InstructionNode node)
 		{
 			if (node.OperandCount != 2 || node.ResultCount != 1)
 				return null;
@@ -749,7 +747,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return null;
 		}
 
-		private Operand StrengthReduction(InstructionNode node)
+		public static Operand StrengthReductionInteger(InstructionNode node)
 		{
 			if (node.OperandCount != 2 || node.ResultCount != 1)
 				return null;
@@ -783,11 +781,11 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				return op1;
 			}
-			else if ((instruction == IRInstruction.ShiftLeft32 || instruction == IRInstruction.ShiftRight32) && op2.ConstantUnsignedLongInteger >= 32)
+			else if ((instruction == IRInstruction.ShiftLeft32 || instruction == IRInstruction.ShiftRight32) && op2.IsResolvedConstant && op2.ConstantUnsignedLongInteger >= 32)
 			{
 				return CreateConstant(result.Type, 0);
 			}
-			else if ((instruction == IRInstruction.ShiftLeft64 || instruction == IRInstruction.ShiftRight64) && op2.ConstantUnsignedLongInteger >= 64)
+			else if ((instruction == IRInstruction.ShiftLeft64 || instruction == IRInstruction.ShiftRight64) && op2.IsResolvedConstant && op2.ConstantUnsignedLongInteger >= 64)
 			{
 				return CreateConstant(result.Type, 0);
 			}
@@ -810,6 +808,91 @@ namespace Mosa.Compiler.Framework.Stages
 			else if ((node.Instruction == IRInstruction.DivSigned32 || node.Instruction == IRInstruction.DivUnsigned32 || node.Instruction == IRInstruction.DivSigned64 || node.Instruction == IRInstruction.DivUnsigned64) && op1.IsConstantZero)
 			{
 				return CreateConstant(result.Type, 0);
+			}
+			else if ((node.Instruction == IRInstruction.DivSigned32 || node.Instruction == IRInstruction.DivUnsigned32 || node.Instruction == IRInstruction.DivSigned64 || node.Instruction == IRInstruction.DivUnsigned64) && op1 == op2)
+			{
+				return CreateConstant(result.Type, 1);
+			}
+			else if ((node.Instruction == IRInstruction.RemUnsigned32 || node.Instruction == IRInstruction.RemUnsigned64) && op2.IsConstantOne)
+			{
+				return CreateConstant(result.Type, 0);
+			}
+			else if ((instruction == IRInstruction.LogicalAnd32 || instruction == IRInstruction.LogicalAnd64) && op1 == op2)
+			{
+				return op1;
+			}
+			else if ((instruction == IRInstruction.LogicalAnd32 || instruction == IRInstruction.LogicalAnd64) && (op1.IsConstantZero || op2.IsConstantZero))
+			{
+				return CreateConstant(result.Type, 0);
+			}
+			else if (instruction == IRInstruction.LogicalAnd32 && op1.IsConstant && op1.ConstantUnsignedInteger == 0xFFFFFFFF)
+			{
+				return op2;
+			}
+			else if (instruction == IRInstruction.LogicalAnd64 && op1.IsConstant && op1.ConstantUnsignedLongInteger == 0xFFFFFFFFFFFFFFFF)
+			{
+				return op2;
+			}
+			else if (instruction == IRInstruction.LogicalAnd32 && op2.IsConstant && op2.ConstantUnsignedInteger == 0xFFFFFFFF)
+			{
+				return op1;
+			}
+			else if (instruction == IRInstruction.LogicalAnd64 && op2.IsConstant && op2.ConstantUnsignedLongInteger == 0xFFFFFFFFFFFFFFFF)
+			{
+				return op1;
+			}
+			else if ((instruction == IRInstruction.LogicalOr32 || instruction == IRInstruction.LogicalOr64) && op1 == op2)
+			{
+				return op1;
+			}
+			else if ((instruction == IRInstruction.LogicalOr32 || instruction == IRInstruction.LogicalOr64) && op1.IsConstantZero)
+			{
+				return op2;
+			}
+			else if ((instruction == IRInstruction.LogicalOr32 || instruction == IRInstruction.LogicalOr64) && op2.IsConstantZero)
+			{
+				return op1;
+			}
+			else if (instruction == IRInstruction.LogicalOr32 && op1.IsConstant && op1.ConstantUnsignedInteger == 0xFFFFFFFF)
+			{
+				return CreateConstant(result.Type, 0xFFFFFFFF);
+			}
+			else if (instruction == IRInstruction.LogicalOr64 && op1.IsConstant && op1.ConstantUnsignedLongInteger == 0xFFFFFFFFFFFFFFFF)
+			{
+				return CreateConstant(result.Type, 0xFFFFFFFFFFFFFFFF);
+			}
+			else if (instruction == IRInstruction.LogicalOr32 && op2.IsConstant && op2.ConstantUnsignedInteger == 0xFFFFFFFF)
+			{
+				return CreateConstant(result.Type, 0xFFFFFFFF);
+			}
+			else if (instruction == IRInstruction.LogicalOr64 && op2.IsConstant && op2.ConstantUnsignedLongInteger == 0xFFFFFFFFFFFFFFFF)
+			{
+				return CreateConstant(result.Type, 0xFFFFFFFFFFFFFFFF);
+			}
+			else if ((instruction == IRInstruction.LogicalXor32 || instruction == IRInstruction.LogicalXor64) && op1 == op2)
+			{
+				return CreateConstant(result.Type, 0);
+			}
+			else if ((instruction == IRInstruction.LogicalXor32 || instruction == IRInstruction.LogicalXor64) && op1.IsConstantZero)
+			{
+				return op2;
+			}
+			else if ((instruction == IRInstruction.LogicalXor32 || instruction == IRInstruction.LogicalXor64) && op2.IsConstantZero)
+			{
+				return op1;
+			}
+			else if (instruction == IRInstruction.CompareInt32x32 || instruction == IRInstruction.CompareInt64x32 || instruction == IRInstruction.CompareInt64x64)
+			{
+				var condition = node.ConditionCode;
+
+				if (op1 == op2 && (condition == ConditionCode.Equal || condition == ConditionCode.GreaterOrEqual || condition == ConditionCode.UnsignedGreaterOrEqual || condition == ConditionCode.UnsignedLessOrEqual || condition == ConditionCode.LessOrEqual))
+				{
+					return CreateConstant(result.Type, true ? 1 : 0);
+				}
+				else if (op1 == op2 && (condition == ConditionCode.NotEqual || condition == ConditionCode.GreaterThan || condition == ConditionCode.LessThan || condition == ConditionCode.UnsignedGreaterThan || condition == ConditionCode.UnsignedLessThan))
+				{
+					return CreateConstant(result.Type, false ? 1 : 0);
+				}
 			}
 
 			return null;
