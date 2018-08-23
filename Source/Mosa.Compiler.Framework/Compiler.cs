@@ -157,8 +157,8 @@ namespace Mosa.Compiler.Framework
 				new PromoteTemporaryVariables(),
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 
-				//new DominanceOutputStage(),	// TEMP
-				//new GraphVizStage(),		// TEMP
+				new DominanceOutputStage(),	// TEMP
+				new GraphVizStage(),		// TEMP
 
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,

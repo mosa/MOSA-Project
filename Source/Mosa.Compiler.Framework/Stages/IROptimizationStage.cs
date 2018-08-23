@@ -212,7 +212,7 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.SimplifyGetHigh", simplifyGetHighCount);
 			UpdateCounter("IROptimizations.RemoveUselessIntegerCompareBranch", removeUselessIntegerCompareBranchCount);
 			UpdateCounter("IROptimizations.LongConstantReduction", longConstantReductionCount);
-			UpdateCounter("IROptimizations.longPropagateCount", longPropagateCount);
+			UpdateCounter("IROptimizations.LongPropagateCount", longPropagateCount);
 			UpdateCounter("IROptimizations.LongConstantFolding", longConstantFoldingCount);
 			UpdateCounter("IROptimizations.PropagateCompoundMoveCount", propagateCompoundMoveCount);
 
