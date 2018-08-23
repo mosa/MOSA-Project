@@ -4,21 +4,25 @@ namespace Mosa.UnitTest.Collection
 {
 	public static class ConvI8Tests
 	{
+		[MosaUnitTest(Series = "I8I1")]
 		public static bool ConvI8_I1(long expect, sbyte a)
 		{
 			return expect == a;
 		}
 
+		[MosaUnitTest(Series = "I8I2")]
 		public static bool ConvI8_I2(long expect, short a)
 		{
 			return expect == a;
 		}
 
+		[MosaUnitTest(Series = "I8I4")]
 		public static bool ConvI8_I4(long expect, int a)
 		{
 			return expect == a;
 		}
 
+		[MosaUnitTest(Series = "I8I8")]
 		public static bool ConvI8_I8(long expect, long a)
 		{
 			return expect == a;

@@ -121,6 +121,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EnumTests.tt</DependentUpon>
     </Compile>
+    <Compile Include="QuickSort.cs" />
     <Compile Include="GenericMethodTests.cs" />
     <Compile Include="MosaUnitTestAttribute.cs" />
     <Compile Include="NullCheckOptimizationTests.cs" />

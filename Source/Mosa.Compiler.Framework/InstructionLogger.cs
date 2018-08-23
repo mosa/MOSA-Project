@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework.Trace
 
 			var traceLog = new TraceLog(TraceType.InstructionList, method, stage, true);
 
-			traceLog.Log(String.Format("{0} after stage {1}:", method.FullName, stage));
+			traceLog.Log($"{method.FullName} after stage {stage}:");
 			traceLog.Log();
 
 			if (basicBlocks.Count > 0)
@@ -42,11 +42,11 @@ namespace Mosa.Compiler.Framework.Trace
 					traceLog.Log(String.Format("Block #{0} - Label L_{1:X4}", block.Sequence, block.Label)
 						+ (basicBlocks.IsHeadBlock(block) ? " [Header]" : string.Empty));
 
-					traceLog.Log("  Prev: " + ListBlocks(block.PreviousBlocks));
+					traceLog.Log($"  Prev: {ListBlocks(block.PreviousBlocks)}");
 
 					LogInstructions(traceLog, block.First);
 
-					traceLog.Log("  Next: " + ListBlocks(block.NextBlocks));
+					traceLog.Log($"  Next: {ListBlocks(block.NextBlocks)}");
 
 					traceLog.Log();
 				}

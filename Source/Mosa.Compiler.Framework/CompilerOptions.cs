@@ -168,6 +168,14 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public bool EnableStatistics { get; set; }
 
+		/// <summary>
+		/// Gets or sets the trace level.
+		/// </summary>
+		/// <value>
+		/// The trace level.
+		/// </value>
+		public int TraceLevel { get; set; }
+
 		#endregion Properties
 
 		/// <summary>
@@ -252,6 +260,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public CompilerOptions()
 		{
+			TraceLevel = 0;
 			EnableSSA = true;
 			EnableIROptimizations = true;
 			EnableSparseConditionalConstantPropagation = true;

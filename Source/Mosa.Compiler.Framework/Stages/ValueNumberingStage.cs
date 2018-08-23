@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Trace;
@@ -21,7 +20,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private Dictionary<Operand, Operand> MapToValueNumber;
 		private BitArray Processed;
 
-		//private TraceLog trace;
+		private TraceLog trace;
 
 		private int instructionRemovalCount;
 		private int constantFoldingCount;
@@ -62,7 +61,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (BasicBlocks.PrologueBlock == null)
 				return;
 
-			//trace = CreateTraceLog("ValueNumbering");
+			trace = CreateTraceLog(5, "ValueNumbering");
 
 			MapToValueNumber = new Dictionary<Operand, Operand>(MethodCompiler.VirtualRegisters.Count);
 			Expressions = new Dictionary<int, List<Expression>>();
@@ -91,7 +90,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AnalysisDominance = null;
 			ReversePostOrder = null;
 
-			//trace = null;
+			trace = null;
 		}
 
 		private void ValueNumber()
@@ -112,16 +111,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (nextBlocks != null)
 					{
-						for (int i = nextBlocks.Count - 1; i >= 0; i--)
-						{
-							blockWorklist.Push(nextBlocks[i]);
-						}
-
 						if (newExpressions != null)
 						{
 							blockWorklist.Push(null);
 
 							expressionWorklist.Push(newExpressions);
+						}
+
+						for (int i = nextBlocks.Count - 1; i >= 0; i--)
+						{
+							blockWorklist.Push(nextBlocks[i]);
 						}
 					}
 				}
@@ -143,7 +142,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ValueNumber(BasicBlock block, out List<BasicBlock> nextblocks, out List<Expression> newExpressions)
 		{
-			//if (trace.Active) trace.Log("Processing Block: " + block);
+			if (trace.Active) trace.Log($"Processing Block: {block}");
 
 			//Debug.Assert(!Processed.Get(block.Sequence));
 
@@ -190,7 +189,7 @@ namespace Mosa.Compiler.Framework.Stages
 						var w = GetValueNumber(node.Operand1);
 						SetValueNumber(node.Result, w);
 
-						//if (trace.Active) trace.Log("Removed Unless PHI: " + node);
+						if (trace.Active) trace.Log($"Removed Unless PHI: {node}");
 
 						node.SetInstruction(IRInstruction.Nop);
 						instructionRemovalCount++;
@@ -205,7 +204,7 @@ namespace Mosa.Compiler.Framework.Stages
 						var w = GetValueNumber(redundant);
 						SetValueNumber(node.Result, w);
 
-						//if (trace.Active) trace.Log("Removed Redundant PHI: " + node);
+						if (trace.Active) trace.Log($"Removed Redundant PHI: {node}");
 
 						node.SetInstruction(IRInstruction.Nop);
 						instructionRemovalCount++;
@@ -293,7 +292,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					var w = GetValueNumber(match.ValueNumber);
 
-					//if (trace.Active) trace.Log("Found Expression Match: " + node);
+					if (trace.Active) trace.Log($"Found Expression Match: {node}");
 
 					SetValueNumber(node.Result, w);
 
@@ -301,6 +300,10 @@ namespace Mosa.Compiler.Framework.Stages
 					instructionRemovalCount++;
 					subexpressionEliminationCount++;
 					continue;
+				}
+				else
+				{
+					if (trace.Active) trace.Log($"No Expression Found: {node}");
 				}
 
 				var newExpression = new Expression()
@@ -312,7 +315,7 @@ namespace Mosa.Compiler.Framework.Stages
 					ValueNumber = node.Result
 				};
 
-				AddExpressiontoHashTable(newExpression);
+				AddExpressionToHashTable(newExpression);
 
 				Debug.Assert(FindMatch(GetExpressionsByHash(ComputeExpressionHash(node)), node) == newExpression);
 
@@ -329,7 +332,7 @@ namespace Mosa.Compiler.Framework.Stages
 						ValueNumber = node.Result
 					};
 
-					AddExpressiontoHashTable(newExpression2);
+					AddExpressionToHashTable(newExpression2);
 					newExpressions.Add(newExpression2);
 				}
 
@@ -435,6 +438,19 @@ namespace Mosa.Compiler.Framework.Stages
 			return list;
 		}
 
+		private static bool IsEqual(Operand operand1, Operand operand2)
+		{
+			if (operand1 == operand2)
+				return true;
+
+			if (operand1.IsResolvedConstant
+				&& operand2.IsResolvedConstant
+				&& operand1.ConstantUnsignedLongInteger == operand2.ConstantUnsignedLongInteger)
+				return true;
+
+			return false;
+		}
+
 		private static Expression FindMatch(List<Expression> expressions, InstructionNode node)
 		{
 			if (expressions == null)
@@ -443,8 +459,8 @@ namespace Mosa.Compiler.Framework.Stages
 			foreach (var expression in expressions)
 			{
 				if (node.Instruction == expression.Instruction
-					&& node.Operand1 == expression.Operand1
-					&& (node.OperandCount == 1 || (node.OperandCount == 2 && node.Operand2 == expression.Operand2)))
+					&& IsEqual(node.Operand1, expression.Operand1)
+					&& (node.OperandCount == 1 || (node.OperandCount == 2 && IsEqual(node.Operand2, expression.Operand2))))
 				{
 					return expression;
 				}
@@ -463,7 +479,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void SetValueNumber(Operand operand, Operand valueVumber)
 		{
-			//if (trace.Active) trace.Log("Set: " + operand + " => " + valueVumber);
+			if (trace.Active) trace.Log($"Set: {operand} => {valueVumber}");
 
 			MapToValueNumber[operand] = valueVumber;
 		}
@@ -504,7 +520,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return true;
 		}
 
-		private void AddExpressiontoHashTable(Expression expression)
+		private void AddExpressionToHashTable(Expression expression)
 		{
 			if (!Expressions.TryGetValue(expression.Hash, out List<Expression> list))
 			{
@@ -514,7 +530,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			list.Add(expression);
 
-			//if (trace.Active) trace.Log("Added Expression: " + expression.ValueNumber + " <= " + expression.Instruction + " " + expression.Operand1 + " " + expression.Operand2 ?? string.Empty);
+			if (trace.Active) trace.Log($"Added Expression: {expression.ValueNumber} <= {expression.Instruction} {expression.Operand1} {expression.Operand2}" ?? string.Empty);
 		}
 
 		private void RemoveExpressionFromHashTable(Expression expression)
@@ -523,7 +539,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			list.Remove(expression);
 
-			//if (trace.Active) trace.Log("Removed Expression: " + expression.ValueNumber + " <= " + expression.Instruction + " " + expression.Operand1 + " " + expression.Operand2 ?? string.Empty);
+			if (trace.Active) trace.Log($"Removed Expression: {expression.ValueNumber} <= {expression.Instruction} {expression.Operand1} {expression.Operand2}" ?? string.Empty);
 		}
 
 		private void UpdateNodeWithValueNumbers(InstructionNode node)
@@ -541,11 +557,11 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						if (operand != valueNumber)
 						{
-							//if (trace.Active) trace.Log("BEFORE: " + node);
-							//if (trace.Active) trace.Log("Replaced: " + operand + " with " + valueNumber);
+							//if (trace.Active) trace.Log($"BEFORE: {node}");
+							//if (trace.Active) trace.Log($"Replaced: {operand} with {valueNumber}");
 							node.SetOperand(i, valueNumber);
 
-							//if (trace.Active) trace.Log("AFTER: " + node);
+							if (trace.Active) trace.Log($"UPDATED: {node}");
 						}
 					}
 					else
@@ -553,9 +569,9 @@ namespace Mosa.Compiler.Framework.Stages
 						if (node.Instruction == IRInstruction.Phi)
 							continue;
 
-						//Debug.Assert(node.Instruction == IRInstruction.Phi);
+						Debug.Assert(node.Instruction == IRInstruction.Phi);
 
-						throw new CompilerException("ValueNumbering Stage: Expected PHI instruction but found instead: " + node + " for " + operand);
+						//throw new CompilerException("ValueNumbering Stage: Expected PHI instruction but found instead: " + node + " for " + operand);
 					}
 				}
 			}

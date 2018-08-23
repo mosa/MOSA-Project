@@ -226,6 +226,7 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.IRLongExpansion = cbEnableIRLongExpansion.Checked;
 			Compiler.CompilerOptions.InlinedIRMaximum = 12;
 			Compiler.CompilerOptions.TwoPassOptimizations = cbEnableTwoPassOptimizations.Checked;
+			Compiler.CompilerOptions.TraceLevel = 100;
 		}
 
 		private void CleanGUI()

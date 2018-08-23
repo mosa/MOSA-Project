@@ -150,7 +150,7 @@ namespace Mosa.UnitTest.Collection
 			return c;
 		}
 
-		//[MosaUnitTest]
+		[MosaUnitTest(0, 1, 2, 3)]
 		public static int OptimizationTest14(int a1, int b1, int c1, int d1)
 		{
 			var a = a1;
@@ -158,9 +158,28 @@ namespace Mosa.UnitTest.Collection
 			var c = c1;
 			var d = d1;
 
-			int z = (a * b) + ((c * d) + (c * d)) + (a * b);
+			int z = (a * b) + (c * d) + (c * d) + (a * b);
 
 			return z;
+		}
+
+		[MosaUnitTest(1)]
+		public static int OptimizationTest14(int j, bool b1)
+		{
+			int i = j;
+			int a = 4 * i;
+			int d;
+
+			if (b1)
+			{
+				d = 4 * i;
+			}
+			else
+			{
+				d = 0;
+			}
+
+			return d;
 		}
 
 		[MosaUnitTest]

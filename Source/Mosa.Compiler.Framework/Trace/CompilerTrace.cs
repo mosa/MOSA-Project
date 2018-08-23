@@ -10,6 +10,8 @@ namespace Mosa.Compiler.Framework.Trace
 
 		public TraceFilter TraceFilter { get; }
 
+		//public int MinTraceLevel { get; set; } = 0;
+
 		public CompilerTrace()
 		{
 			TraceListener = new DebugCompilerEventListener();
