@@ -18,5 +18,7 @@ namespace Mosa.Compiler.Framework.IR
 		}
 
 		public override bool IsMemoryWrite { get { return true; } }
+
+		public override bool IsParameterStore { get { return true; } }
 	}
 }

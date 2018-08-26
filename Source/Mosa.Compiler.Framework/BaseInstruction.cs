@@ -116,6 +116,22 @@ namespace Mosa.Compiler.Framework
 		public virtual bool IsCommutative { get { return false; } }
 
 		/// <summary>
+		/// Gets a value indicating whether this instance is parameter load.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance is parameter load; otherwise, <c>false</c>.
+		/// </value>
+		public virtual bool IsParameterLoad { get { return false; } }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance is parameter store.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance is parameter store; otherwise, <c>false</c>.
+		/// </value>
+		public virtual bool IsParameterStore { get { return false; } }
+
+		/// <summary>
 		/// Gets the name of the base instruction.
 		/// </summary>
 		/// <value>
