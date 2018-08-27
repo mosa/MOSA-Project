@@ -21,7 +21,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private Dictionary<BasicBlock, SimpleFastDominance> blockAnalysis;
 		private Dictionary<Operand, List<BasicBlock>> assignments;
 
-		//private TraceLog trace;
+		private TraceLog trace;
 
 		protected override void Initialize()
 		{
@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (HasProtectedRegions)
 				return;
 
-			//trace = CreateTraceLog();
+			trace = CreateTraceLog(6);
 
 			foreach (var headBlock in BasicBlocks.HeadBlocks)
 			{
@@ -146,7 +146,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="dominanceAnalysis">The dominance analysis.</param>
 		private void RenameVariables2(BasicBlock block, SimpleFastDominance dominanceAnalysis)
 		{
-			//if (trace.Active) trace.Log("Processing: " + block);
+			if (trace.Active) trace.Log("Processing: " + block);
 
 			UpdateOperands(block);
 			UpdatePHIs(block);
@@ -181,7 +181,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (block != null)
 				{
-					//if (trace.Active) trace.Log("Processing: " + block);
+					if (trace.Active) trace.Log("Processing: " + block);
 
 					UpdateOperands(block);
 					UpdatePHIs(block);
@@ -189,7 +189,7 @@ namespace Mosa.Compiler.Framework.Stages
 					worklist.Push(block);
 					worklist.Push(null);
 
-					//if (trace.Active) trace.Log("  >Pushed: " + block + " (Return)");
+					if (trace.Active) trace.Log("  >Pushed: " + block + " (Return)");
 
 					// Repeat for all children of the dominance block, if any
 					var children = dominanceAnalysis.GetChildren(block);
@@ -199,7 +199,7 @@ namespace Mosa.Compiler.Framework.Stages
 						{
 							worklist.Push(s);
 
-							//if (trace.Active) trace.Log("  >Pushed: " + s);
+							if (trace.Active) trace.Log("  >Pushed: " + s);
 						}
 					}
 				}
@@ -207,7 +207,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					block = worklist.Pop();
 
-					//if (trace.Active) trace.Log("Processing: " + block + " (Back)");
+					if (trace.Active) trace.Log("Processing: " + block + " (Back)");
 					UpdateResultOperands(block);
 				}
 			}

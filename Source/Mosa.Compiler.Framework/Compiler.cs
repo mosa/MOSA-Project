@@ -157,27 +157,21 @@ namespace Mosa.Compiler.Framework
 				new PromoteTemporaryVariables(),
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 
-				//new DominanceOutputStage(),	// TEMP
-				//new GraphVizStage(),		// TEMP
+				//new DominanceOutputStage(),
 
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,
 				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.EnableIROptimizations) ? new IROptimizationStage() : null,
-				(compilerOptions.EnableSSA) ? new LeaveSSAStage() : null,
-				new BlockMergeStage(),
-				new IRCleanupStage(),
+				(compilerOptions.IRLongExpansion && compilerOptions.Architecture.NativePointerSize == 4) ? new IRLongDecompositionStage() : null,
 				new LowerIRStage(),
-				(compilerOptions.IRLongExpansion && compilerOptions.Architecture.NativePointerSize == 4) ? new IRLongDecomposeStage() : null,
-				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
-				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
-
-				//(compilerOptions.TwoPassOptimizations && compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new IROptimizationStage() : null,
-				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableSSA) ? new LeaveSSAStage() : null,
-				(compilerOptions.TwoPassOptimizations) ? new BlockMergeStage():  null,
-				(compilerOptions.TwoPassOptimizations) ? new IRCleanupStage() :  null,
+				(compilerOptions.EnableSSA) ? new LeaveSSAStage() : null,
+
+				new BlockMergeStage(),
+				new IRCleanupStage(),
+
 				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
 				new DevirtualizeCallStage(),
 				new CallStage(),

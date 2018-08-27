@@ -399,7 +399,7 @@
     <Compile Include="Stages\CallStage.cs" />
     <Compile Include="Stages\BlockMergeStage.cs" />
     <Compile Include="Stages\PromoteTemporaryVariables.cs" />
-    <Compile Include="Stages\IRLongDecomposeStage.cs" />
+    <Compile Include="Stages\IRLongDecompositionStage.cs" />
     <Compile Include="Stages\LowerIRStage.cs" />
     <Compile Include="Analysis\LiveVariableAnalysis\LivenessAnalysis.cs" />
     <Compile Include="Stages\PreciseGCStage.cs" />
