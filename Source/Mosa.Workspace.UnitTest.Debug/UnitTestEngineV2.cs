@@ -160,11 +160,13 @@ namespace Mosa.Workspace.UnitTest.Debug
 							sent.Add(message);
 
 							messages.Add(message);
+
+							Console.WriteLine("Sent: " + (message.Other as UnitTest).FullMethodName);
 						}
 
 						if (messages.Count > 0)
 						{
-							Console.WriteLine("Batch Sent: " + messages.Count.ToString());
+							//Console.WriteLine("Batch Sent: " + messages.Count.ToString());
 							debugServerEngine.SendCommand2(messages);
 							messages.Clear();
 						}
@@ -218,6 +220,8 @@ namespace Mosa.Workspace.UnitTest.Debug
 			{
 				processCount++;
 				sent.Remove(response);
+
+				Console.WriteLine("Received: " + (response.Other as UnitTest).FullMethodName);
 
 				//Console.WriteLine(response.ToString());
 

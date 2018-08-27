@@ -56,7 +56,7 @@ namespace Mosa.Compiler.Framework.Analysis
 				Trace(prev);
 		}
 
-		public static IList<ProtectedRegion> CreateProtectedRegions(BasicBlocks basicBlocks, IList<MosaExceptionHandler> exceptionHandlers)
+		public static List<ProtectedRegion> CreateProtectedRegions(BasicBlocks basicBlocks, IList<MosaExceptionHandler> exceptionHandlers)
 		{
 			var protectedRegions = new List<ProtectedRegion>(exceptionHandlers.Count);
 

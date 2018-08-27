@@ -138,7 +138,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The protected regions.
 		/// </value>
-		public IList<ProtectedRegion> ProtectedRegions { get; set; }
+		public List<ProtectedRegion> ProtectedRegions { get; set; }
 
 		/// <summary>
 		/// Gets a value indicating whether [plugged method].

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// Optimization Rules Stage
+	/// EXPERIMENTAL - Optimization Rules Stage
 	/// </summary>
 	public sealed class OptimizationRulesStage : BaseMethodCompilerStage
 	{

@@ -119,6 +119,18 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Lines.AppendLine("\t\tpublic override bool HasIRUnspecifiedSideEffect { get { return true; } }");
 			}
 
+			if (node.ParameterLoad != null && node.ParameterLoad == "true")
+			{
+				Lines.AppendLine();
+				Lines.AppendLine("\t\tpublic override bool IsParameterLoad { get { return true; } }");
+			}
+
+			if (node.ParameterStore != null && node.ParameterStore == "true")
+			{
+				Lines.AppendLine();
+				Lines.AppendLine("\t\tpublic override bool IsParameterStore { get { return true; } }");
+			}
+
 			Lines.AppendLine("\t}");
 			Lines.AppendLine("}");
 		}

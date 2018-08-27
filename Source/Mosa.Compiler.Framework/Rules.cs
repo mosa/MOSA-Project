@@ -15,9 +15,20 @@ namespace Mosa.Compiler.Framework
 	{
 		public static readonly List<Rule> List = new List<Rule>() {
 			new Rule() {
+				Name = "AddConstants",
+				Type = "StrengthReduction",
+				Match = "(IR.Add32 (Const a) (Const b))",
+				Transform = "a + b",
+				Criteria = "",
+				DefaultInstructionFamily = "IR",
+				DefaultArchitectureFamily = "NA",
+				IsOptimization  = true,
+				IsTransformation  = false,
+			},
+			new Rule() {
 				Name = "MultipleBy1",
 				Type = "StrengthReduction",
-				Match = "(IR.MulUnsigned 1 x)",
+				Match = "(IR.MulUnsigned32 1 x)",
 				Transform = "x",
 				Criteria = "",
 				DefaultInstructionFamily = "IR",
@@ -28,7 +39,7 @@ namespace Mosa.Compiler.Framework
 			new Rule() {
 				Name = "MultipleBy0",
 				Type = "StrengthReduction",
-				Match = "(IR.MulUnsigned 0 x)",
+				Match = "(IR.MulUnsigned32 0 x)",
 				Transform = "0",
 				Criteria = "",
 				DefaultInstructionFamily = "IR",

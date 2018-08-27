@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// Value Numbering Stage
 	/// </summary>
-	public class ValueNumberingStage : BaseMethodCompilerStage
+	public sealed class ValueNumberingStage : BaseMethodCompilerStage
 	{
 		private SimpleFastDominance AnalysisDominance;
 		private List<BasicBlock> ReversePostOrder;
@@ -22,10 +22,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private TraceLog trace;
 
+		private BitArray ParamReadOnly;
+
 		private int instructionRemovalCount;
 		private int constantFoldingCount;
 		private int strengthReductionCount;
 		private int subexpressionEliminationCount;
+		private int parameterLoanEliminationCount;
 
 		private class Expression
 		{
@@ -47,6 +50,7 @@ namespace Mosa.Compiler.Framework.Stages
 			instructionRemovalCount = 0;
 			strengthReductionCount = 0;
 			subexpressionEliminationCount = 0;
+			parameterLoanEliminationCount = 0;
 		}
 
 		protected override void Run()
@@ -61,7 +65,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (BasicBlocks.PrologueBlock == null)
 				return;
 
-			trace = CreateTraceLog(5, "ValueNumbering");
+			trace = CreateTraceLog(5);
 
 			MapToValueNumber = new Dictionary<Operand, Operand>(MethodCompiler.VirtualRegisters.Count);
 			Expressions = new Dictionary<int, List<Expression>>();
@@ -70,6 +74,8 @@ namespace Mosa.Compiler.Framework.Stages
 			AnalysisDominance = new SimpleFastDominance(BasicBlocks, BasicBlocks.PrologueBlock);
 
 			ReversePostOrder = AnalysisDominance.GetReversePostOrder();
+
+			DetermineReadOnlyParameters();
 
 			ValueNumber();
 		}
@@ -82,6 +88,7 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("ValueNumbering.ConstantFolding", constantFoldingCount);
 			UpdateCounter("ValueNumbering.StrengthReduction", strengthReductionCount);
 			UpdateCounter("ValueNumbering.SubexpressionEliminationCount", subexpressionEliminationCount);
+			UpdateCounter("ValueNumbering.ParameterLoanEliminationCount", parameterLoanEliminationCount);
 
 			MapToValueNumber = null;
 			Expressions = null;
@@ -89,8 +96,37 @@ namespace Mosa.Compiler.Framework.Stages
 
 			AnalysisDominance = null;
 			ReversePostOrder = null;
+			ParamReadOnly = null;
 
 			trace = null;
+		}
+
+		private void DetermineReadOnlyParameters()
+		{
+			if (MethodCompiler.Parameters.Length == 0)
+				return;
+
+			ParamReadOnly = new BitArray(MethodCompiler.Parameters.Length, false);
+
+			var traceParameters = CreateTraceLog(5, "Parameters");
+
+			foreach (var operand in MethodCompiler.Parameters)
+			{
+				bool write = false;
+
+				foreach (var use in operand.Uses)
+				{
+					if (use.Instruction.IsParameterStore)
+					{
+						write = true;
+						break;
+					}
+				}
+
+				ParamReadOnly[operand.Index] = !write;
+
+				if (traceParameters.Active) traceParameters.Log(operand + ": " + (write ? "Writable" : "ReadOnly"));
+			}
 		}
 
 		private void ValueNumber()
@@ -296,6 +332,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 					SetValueNumber(node.Result, w);
 
+					if (node.Instruction.IsParameterLoad)
+						parameterLoanEliminationCount++;
+
 					node.SetInstruction(IRInstruction.Nop);
 					instructionRemovalCount++;
 					subexpressionEliminationCount++;
@@ -390,8 +429,15 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private static bool CanAssignValueNumberToExpression(InstructionNode node)
+		private bool CanAssignValueNumberToExpression(InstructionNode node)
 		{
+			if (node.Instruction.IsParameterLoad
+				&& node.Instruction != IRInstruction.LoadParamCompound
+				&& ParamReadOnly.Get(node.Operand1.Index))
+			{
+				return true;
+			}
+
 			if (node.ResultCount != 1
 				|| node.OperandCount == 0
 				|| node.OperandCount > 2
@@ -445,7 +491,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (operand1.IsResolvedConstant
 				&& operand2.IsResolvedConstant
+				&& operand1.IsInteger
+				&& operand2.IsInteger
 				&& operand1.ConstantUnsignedLongInteger == operand2.ConstantUnsignedLongInteger)
+				return true;
+
+			if (operand1.IsResolvedConstant
+				&& operand2.IsResolvedConstant
+				&& operand1.IsR
+				&& operand2.IsR
+				&& operand1.ConstantDoubleFloatingPoint == operand2.ConstantDoubleFloatingPoint)
 				return true;
 
 			return false;

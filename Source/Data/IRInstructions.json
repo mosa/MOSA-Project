@@ -510,105 +510,120 @@
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"MemoryRead": "true"
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
 		},
 		{
 			"Name": "LoadParamFloatR4",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"MemoryRead": "true"
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
 		},
 		{
 			"Name": "LoadParamFloatR8",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"MemoryRead": "true"
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
 		},
 		{
 			"Name": "LoadParamInt32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"MemoryRead": "true"
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
 		},
 		{
 			"Name": "LoadParamInt64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"MemoryRead": "true"
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
 		},
 		{
 			"Name": "LoadParamSignExtend8x32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"MemoryRead": "true"
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
 		},
 		{
 			"Name": "LoadParamSignExtend16x32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"MemoryRead": "true"
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
 		},
 		{
 			"Name": "LoadParamSignExtend8x64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"MemoryRead": "true"
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
 		},
 		{
 			"Name": "LoadParamSignExtend16x64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"MemoryRead": "true"
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
 		},
 		{
 			"Name": "LoadParamSignExtend32x64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"MemoryRead": "true"
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
 		},
 		{
 			"Name": "LoadParamZeroExtend8x32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"MemoryRead": "true"
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
 		},
 		{
 			"Name": "LoadParamZeroExtend16x32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"MemoryRead": "true"
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
 		},
 		{
 			"Name": "LoadParamZeroExtend8x64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"MemoryRead": "true"
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
 		},
 		{
 			"Name": "LoadParamZeroExtend16x64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"MemoryRead": "true"
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
 		},
 		{
 			"Name": "LoadParamZeroExtend32x64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
-			"MemoryRead": "true"
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
 		},
 		{
 			"Name": "LogicalAnd32",
@@ -1006,27 +1021,31 @@
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 2,
-			"MemoryWrite": "true"
+			"MemoryWrite": "true",
+			"ParameterStore": "true"
 		},
 		{
 			"Name": "StoreParamFloatR4",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 2,
-			"MemoryWrite": "true"
+			"MemoryWrite": "true",
+			"ParameterStore": "true"
 		},
 		{
 			"Name": "StoreParamFloatR8",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 2,
-			"MemoryWrite": "true"
+			"MemoryWrite": "true",
+			"ParameterStore": "true"
 		},
 		{
 			"Name": "StoreParamInt8",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 2,
+			"ParameterStore": "true",
 			"MemoryWrite": "true"
 		},
 		{
@@ -1034,21 +1053,24 @@
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 2,
-			"MemoryWrite": "true"
+			"MemoryWrite": "true",
+			"ParameterStore": "true"
 		},
 		{
 			"Name": "StoreParamInt32",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 2,
-			"MemoryWrite": "true"
+			"MemoryWrite": "true",
+			"ParameterStore": "true"
 		},
 		{
 			"Name": "StoreParamInt64",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 2,
-			"MemoryWrite": "true"
+			"MemoryWrite": "true",
+			"ParameterStore": "true"
 		},
 		{
 			"Name": "SubFloatR4",
