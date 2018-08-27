@@ -163,7 +163,7 @@ namespace Mosa.UnitTest.Collection
 			return z;
 		}
 
-		[MosaUnitTest(1)]
+		[MosaUnitTest(1, true)]
 		public static int OptimizationTest14(int j, bool b1)
 		{
 			int i = j;

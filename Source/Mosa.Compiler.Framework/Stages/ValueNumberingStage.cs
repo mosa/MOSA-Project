@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (BasicBlocks.PrologueBlock == null)
 				return;
 
-			trace = CreateTraceLog(5, "ValueNumbering");
+			trace = CreateTraceLog(5);
 
 			MapToValueNumber = new Dictionary<Operand, Operand>(MethodCompiler.VirtualRegisters.Count);
 			Expressions = new Dictionary<int, List<Expression>>();
@@ -108,6 +108,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			ParamReadOnly = new BitArray(MethodCompiler.Parameters.Length, false);
 
+			var traceParameters = CreateTraceLog(5, "Parameters");
+
 			foreach (var operand in MethodCompiler.Parameters)
 			{
 				bool write = false;
@@ -122,6 +124,8 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 
 				ParamReadOnly[operand.Index] = !write;
+
+				if (traceParameters.Active) traceParameters.Log(operand + ": " + (write ? "Writable" : "ReadOnly"));
 			}
 		}
 
@@ -427,12 +431,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool CanAssignValueNumberToExpression(InstructionNode node)
 		{
-			//if (node.Instruction.IsParameterLoad
-			//	&& node.Instruction != IRInstruction.LoadParamCompound
-			//	&& ParamReadOnly.Get(node.Result.Index))
-			//{
-			//	return true;
-			//}
+			if (node.Instruction.IsParameterLoad
+				&& node.Instruction != IRInstruction.LoadParamCompound
+				&& ParamReadOnly.Get(node.Operand1.Index))
+			{
+				return true;
+			}
 
 			if (node.ResultCount != 1
 				|| node.OperandCount == 0
