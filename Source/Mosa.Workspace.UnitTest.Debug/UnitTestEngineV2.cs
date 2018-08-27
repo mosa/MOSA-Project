@@ -161,7 +161,7 @@ namespace Mosa.Workspace.UnitTest.Debug
 
 							messages.Add(message);
 
-							Console.WriteLine("Sent: " + (message.Other as UnitTest).FullMethodName);
+							//Console.WriteLine("Sent: " + (message.Other as UnitTest).FullMethodName);
 						}
 
 						if (messages.Count > 0)
@@ -221,7 +221,7 @@ namespace Mosa.Workspace.UnitTest.Debug
 				processCount++;
 				sent.Remove(response);
 
-				Console.WriteLine("Received: " + (response.Other as UnitTest).FullMethodName);
+				//Console.WriteLine("Received: " + (response.Other as UnitTest).FullMethodName);
 
 				//Console.WriteLine(response.ToString());
 

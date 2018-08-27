@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -156,57 +157,6 @@ namespace Mosa.Compiler.Framework.Stages
 			newBlocks[2].AppendInstruction(IRInstruction.Jmp, target);
 		}
 
-		private void CompareIntBranch64B(Context context)
-		{
-			//Debug.Assert(context.Operand1.Is64BitInteger);
-			//Debug.Assert(context.Operand2.Is64BitInteger);
-			Debug.Assert(context.BranchTargets.Count == 1);
-
-			if (context.Block.NextBlocks.Count == 1)
-			{
-				context.SetInstruction(IRInstruction.Nop);
-				return;
-			}
-
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
-
-			var target = context.BranchTargets[0];
-
-			var branch = context.ConditionCode;
-			var branchUnsigned = context.ConditionCode.GetUnsigned();
-
-			var nextBlock = Split(context);
-			var newBlocks = CreateNewBlockContexts(3, context.Label);
-
-			UpdatePhiInstructionTargets(nextBlock.Block.NextBlocks, context.Block, newBlocks[2].Block);
-
-			var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var op1Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var op1High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-			context.SetInstruction(IRInstruction.GetLow64, op0Low, operand1);
-			context.AppendInstruction(IRInstruction.GetHigh64, op0High, operand1);
-			context.AppendInstruction(IRInstruction.GetLow64, op1Low, operand2);
-			context.AppendInstruction(IRInstruction.GetHigh64, op1High, operand2);
-
-			// Compare high (equal)
-			context.AppendInstruction(IRInstruction.CompareIntBranch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
-			context.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
-
-			// Compare high
-			newBlocks[0].AppendInstruction(IRInstruction.CompareIntBranch32, branch, null, op0High, op1High, newBlocks[2].Block);
-			newBlocks[0].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
-
-			// Compare low
-			newBlocks[1].AppendInstruction(IRInstruction.CompareIntBranch32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
-			newBlocks[1].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
-
-			// Target
-			newBlocks[2].AppendInstruction(IRInstruction.Jmp, target);
-		}
-
 		private void CompareInteger64x32(Context context)
 		{
 			Debug.Assert(context.Operand1.Is64BitInteger);
@@ -243,10 +193,80 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			CompareInteger64x32Alt(context);
+			if (MethodCompiler.IsInSSAForm)
+			{
+				CompareInteger64x32SSA(context);
+			}
+			else
+			{
+				CompareInteger64x32NonSSA(context);
+			}
 		}
 
-		private void CompareInteger64x32Alt(Context context)
+		private void CompareInteger64x32SSA(Context context)
+		{
+			Debug.Assert(context.Operand1.Is64BitInteger);
+			Debug.Assert(context.Operand2.Is64BitInteger);
+			Debug.Assert(!context.Result.Is64BitInteger);
+
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var branch = context.ConditionCode;
+			var branchUnsigned = context.ConditionCode.GetUnsigned();
+
+			var nextBlock = Split(context);
+			var newBlocks = CreateNewBlockContexts(5, context.Label);
+
+			UpdatePhiInstructionTargets(nextBlock.Block.NextBlocks, context.Block, nextBlock.Block);
+
+			var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var op1Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var op1High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			context.SetInstruction(IRInstruction.GetLow64, op0Low, operand1);
+			context.AppendInstruction(IRInstruction.GetHigh64, op0High, operand1);
+			context.AppendInstruction(IRInstruction.GetLow64, op1Low, operand2);
+			context.AppendInstruction(IRInstruction.GetHigh64, op1High, operand2);
+
+			// Compare high
+			context.AppendInstruction(IRInstruction.CompareIntBranch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
+			context.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
+
+			// Branch if check already gave results
+			if (branch == ConditionCode.Equal)
+			{
+				newBlocks[0].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
+			}
+			else
+			{
+				newBlocks[0].AppendInstruction(IRInstruction.CompareIntBranch32, branch, null, op0High, op1High, newBlocks[2].Block);
+				newBlocks[0].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
+			}
+
+			// Compare low
+			newBlocks[1].AppendInstruction(IRInstruction.CompareIntBranch32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
+			newBlocks[1].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
+
+			// Success
+			//newBlocks[2].AppendInstruction(IRInstruction.MoveInt32, resultLow, CreateConstant((uint)1));
+			newBlocks[2].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
+
+			// Failed
+			//newBlocks[3].AppendInstruction(IRInstruction.MoveInt32, resultLow, CreateConstant((uint)0));
+			newBlocks[3].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
+
+			// Exit
+			//newBlocks[4].AppendInstruction(IRInstruction.MoveInt32, result, resultLow);
+			newBlocks[4].AppendInstruction(IRInstruction.Phi, result, CreateConstant((uint)1), CreateConstant((uint)0));
+			newBlocks[4].PhiBlocks = new List<BasicBlock>(2) { newBlocks[2].Block, newBlocks[3].Block };
+			newBlocks[4].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
+		}
+
+		private void CompareInteger64x32NonSSA(Context context)
 		{
 			Debug.Assert(context.Operand1.Is64BitInteger);
 			Debug.Assert(context.Operand2.Is64BitInteger);

@@ -98,7 +98,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					node.Insert(flowNode);
 
-					if (BasicBlocks.IsHeadBlock(target))
+					if (target.IsHeadBlock)
 					{
 						BasicBlocks.RemoveHeaderBlock(target);
 					}

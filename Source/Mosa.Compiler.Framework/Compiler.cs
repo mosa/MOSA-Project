@@ -154,10 +154,15 @@ namespace Mosa.Compiler.Framework
 				new PlugStage(),
 				new UnboxValueTypeStage(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineStage() : null,
+				(compilerOptions.EnableInlinedMethods) ? new BlockMergeStage() : null,
+				(compilerOptions.EnableInlinedMethods) ? new DeadBlockStage() : null,
 				new PromoteTemporaryVariables(),
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 
 				//new DominanceOutputStage(),
+				//new StopStage(),
+				//new GraphVizStage(),
+				//new PreciseGCStage(),
 
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 				(compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,
@@ -165,8 +170,9 @@ namespace Mosa.Compiler.Framework
 				(compilerOptions.EnableIROptimizations) ? new IROptimizationStage() : null,
 				(compilerOptions.IRLongExpansion && compilerOptions.Architecture.NativePointerSize == 4) ? new IRLongDecompositionStage() : null,
 				new LowerIRStage(),
-				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
-				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new IROptimizationStage() : null,
+				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,
+				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
+				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSSA) ? new IROptimizationStage() : null,
 				(compilerOptions.EnableSSA) ? new LeaveSSAStage() : null,
 
 				new BlockMergeStage(),
@@ -184,9 +190,6 @@ namespace Mosa.Compiler.Framework
 				new BlockOrderingStage(),
 				new CodeGenerationStage(compilerOptions.EmitBinary),
 
-				//new StopStage(),
-				//new GraphVizStage(),
-				//new PreciseGCStage(),
 				(compilerOptions.EmitBinary) ? new ProtectedRegionLayoutStage() : null,
 			};
 		}

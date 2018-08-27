@@ -111,14 +111,6 @@ namespace Mosa.Compiler.Framework
 		public bool IRLongExpansion { get; set; }
 
 		/// <summary>
-		/// Gets or sets the block order analysis.
-		/// </summary>
-		/// <value>
-		/// The block order analysis.
-		/// </value>
-		public Func<BaseBlockOrder> BlockOrderAnalysisFactory { get; set; }
-
-		/// <summary>
 		/// Gets or sets the type of the elf.
 		/// </summary>
 		public LinkerFormatType LinkerFormatType { get; set; }
@@ -266,7 +258,6 @@ namespace Mosa.Compiler.Framework
 			EnableSparseConditionalConstantPropagation = true;
 			EnableInlinedMethods = false;
 			BaseAddress = 0x00400000;
-			BlockOrderAnalysisFactory = delegate { return new LoopAwareBlockOrder(); };
 			EmitBinary = true;
 			InlinedIRMaximum = 8;
 			EmitSymbols = true;

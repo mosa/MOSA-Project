@@ -13,6 +13,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			EmptyDeadBlocks();
 			SkipEmptyBlocks();
+			RemoveDeadBlocks();
 		}
 
 		protected void EmptyDeadBlocks()
@@ -74,6 +75,31 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 
 				RemoveEmptyBlockWithSingleJump(block);
+			}
+		}
+
+		public void RemoveDeadBlocks()
+		{
+			var list = new List<BasicBlock>(BasicBlocks.Count);
+
+			foreach (var block in BasicBlocks)
+			{
+				if (block.HasNextBlocks
+					|| block.HasPreviousBlocks
+					|| block.IsHandlerHeadBlock
+					|| block.IsTryHeadBlock
+					|| block.IsEpilogue
+					|| block.IsPrologue
+					|| (HasProtectedRegions && !block.IsCompilerBlock)
+					|| block.IsHeadBlock)
+				{
+					list.Add(block);
+				}
+			}
+
+			if (list.Count != BasicBlocks.Count)
+			{
+				BasicBlocks.ReorderBlocks(list);
 			}
 		}
 	}

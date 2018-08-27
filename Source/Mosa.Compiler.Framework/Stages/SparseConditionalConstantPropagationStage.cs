@@ -176,7 +176,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void CheckAndClearEmptyBlock(BasicBlock block)
 		{
-			if (block.PreviousBlocks.Count != 0 || BasicBlocks.HeadBlocks.Contains(block))
+			if (block.PreviousBlocks.Count != 0 || block.IsHeadBlock)
 				return;
 
 			if (trace.Active) trace.Log("*** RemoveBlock: " + block);

@@ -594,7 +594,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					liveGen.Set(ProgramCounter.Index, true);
 				}
 
-				if (BasicBlocks.HeadBlocks.Contains(block.BasicBlock))
+				if (block.BasicBlock.IsHeadBlock)
 				{
 					for (int s = 0; s < PhysicalRegisterCount; s++)
 					{
