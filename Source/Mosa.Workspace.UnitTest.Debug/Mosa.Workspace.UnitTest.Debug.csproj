@@ -45,6 +45,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UnitTestStatus.cs" />
     <Compile Include="UnitTestEngineV2.cs" />
     <Compile Include="UnitTestHelper.cs" />
     <Compile Include="UnitTest.cs" />

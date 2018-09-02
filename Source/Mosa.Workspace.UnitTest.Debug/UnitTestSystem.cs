@@ -28,10 +28,8 @@ namespace Mosa.Workspace.UnitTest.Debug
 			Console.WriteLine("Elapsed: " + (elapsedDiscovery / 1000.0).ToString("F2") + " secs");
 			Console.WriteLine();
 
-			Console.WriteLine("Compiling Unit Tests...");
+			Console.WriteLine("Starting Unit Test Engine...");
 			var unitTestEngine = new UnitTestEngineV2();
-			unitTestEngine.Initialize();
-			unitTestEngine.Compile();
 			var elapsedCompile = stopwatch.ElapsedMilliseconds - elapsedDiscovery;
 			Console.WriteLine("Elapsed: " + (elapsedCompile / 1000.0).ToString("F2") + " secs");
 			Console.WriteLine();
@@ -86,11 +84,11 @@ namespace Mosa.Workspace.UnitTest.Debug
 			{
 				if (e.InnerException is DivideByZeroException || e.InnerException is OverflowException)
 				{
-					unitTest.Skipped = true;
+					//unitTest.Status = UnitTestStatus.Skipped;
 				}
 				else
 				{
-					unitTest.Skipped = true;
+					unitTest.Status = UnitTestStatus.Skipped;
 				}
 			}
 		}
@@ -120,7 +118,7 @@ namespace Mosa.Workspace.UnitTest.Debug
 							FullMethodName = fullMethodName,
 							Values = paramValues,
 							UnitTestAttribute = attribute,
-							Skipped = false
+							Status = UnitTestStatus.Pending,
 						};
 
 						unitTests.Add(unitTest);

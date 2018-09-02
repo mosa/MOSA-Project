@@ -17,8 +17,8 @@ namespace Mosa.Workspace.UnitTest.Debug
 
 		public object Expected { get; set; }
 		public object Result { get; set; }
-		public bool Skipped { get; set; }
-		public bool Passed { get; set; }
+
+		public UnitTestStatus Status { get; set; }
 
 		public MosaMethod MosaMethod { get; set; }
 		public IntPtr MosaMethodAddress { get; set; }
