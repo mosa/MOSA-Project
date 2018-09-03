@@ -61,6 +61,7 @@ namespace Mosa.Compiler.Framework.CIL
 			}
 
 			context.Result = compiler.CreateVirtualRegister(resultType.GetStackType());
+			context.MosaType = resultType;
 		}
 
 		#endregion Methods

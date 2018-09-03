@@ -168,6 +168,7 @@ namespace Mosa.Compiler.Framework
 				(compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,
 				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.EnableIROptimizations) ? new IROptimizationStage() : null,
+
 				(compilerOptions.IRLongExpansion && compilerOptions.Architecture.NativePointerSize == 4) ? new IRLongDecompositionStage() : null,
 				new LowerIRStage(),
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,
@@ -178,6 +179,7 @@ namespace Mosa.Compiler.Framework
 				new BlockMergeStage(),
 				new IRCleanupStage(),
 
+				//new StopStage(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
 				new DevirtualizeCallStage(),
 				new CallStage(),

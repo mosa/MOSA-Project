@@ -3,13 +3,12 @@ using System;
 
 namespace Mosa.UnitTest.Collection
 {
-
 	public static class ConvTests 
 	{
-	<# foreach (KeyValuePair<string, string> convert in Numbers) 
-		foreach (KeyValuePair<string, string> number in NegativeIntegers) { #>
+	<# foreach (KeyValuePair<string, string> convert in Integers) 
+		foreach (KeyValuePair<string, string> number in Integers) { #>
 
-		//[MosaUnitTest(Series = "<#= convert.Value #><#= number.Value #>")]
+		[MosaUnitTest("<#= convert.Value #>", "<#= number.Value #>")]
 		public static bool Conv<#= convert.Value #><#= number.Value #>(<#= convert.Key #> expect, <#= number.Key #> a)
 		{
 			return expect == (<#= convert.Key #>)a;

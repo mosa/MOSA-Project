@@ -7,6 +7,8 @@ namespace Mosa.Workspace.UnitTest.Debug
 		private static void Main()
 		{
 			UnitTestSystem.Start();
+
+			return;
 		}
 	}
 }

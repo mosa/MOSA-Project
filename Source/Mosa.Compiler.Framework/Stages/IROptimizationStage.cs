@@ -42,7 +42,6 @@ namespace Mosa.Compiler.Framework.Stages
 		private int removeUselessIntegerCompareBranchCount = 0;
 		private int propagateConstantCount = 0;
 		private int simplifyBranchComparisonCount = 0;
-		private int simplifyExtendedMoveCount = 0;
 		private int simplifyGeneralCount = 0;
 		private int simplifyGetHighCount = 0;
 		private int simplifyGetLowCount = 0;
@@ -85,7 +84,6 @@ namespace Mosa.Compiler.Framework.Stages
 				FoldIntegerCompare,
 				RemoveUselessIntegerCompareBranch,
 				ConstantFoldIntegerCompareBranch,
-				SimplifyExtendedMoves,
 				SimplifyIntegerCompare2,
 				SimplifyIntegerCompare,
 				SimplifyAddCarryOut,
@@ -146,7 +144,6 @@ namespace Mosa.Compiler.Framework.Stages
 			constantFoldingPhiCount = 0;
 			foldIntegerCompareBranchCount = 0;
 			foldIntegerCompareCount = 0;
-			simplifyExtendedMoveCount = 0;
 			foldLoadStoreOffsetsCount = 0;
 			simplifyPhiCount = 0;
 			deadCodeEliminationPhiCount = 0;
@@ -202,7 +199,6 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateCounter("IROptimizations.DeadCodeElimination", deadCodeEliminationCount);
 			UpdateCounter("IROptimizations.DeadCodeEliminationPhi", deadCodeEliminationPhiCount);
 			UpdateCounter("IROptimizations.CombineIntegerCompareBranch", combineIntegerCompareBranchCount);
-			UpdateCounter("IROptimizations.SimplifyExtendedMove", simplifyExtendedMoveCount);
 			UpdateCounter("IROptimizations.SimplifyPhi", simplifyPhiCount);
 			UpdateCounter("IROptimizations.SimplifyIntegerCompare", simplifyIntegerCompareCount);
 			UpdateCounter("IROptimizations.SimplifyGeneral", simplifyGeneralCount);
@@ -1025,37 +1021,6 @@ namespace Mosa.Compiler.Framework.Stages
 			node2.SetInstruction(IRInstruction.Nop);
 			foldIntegerCompareCount++;
 			instructionsRemovedCount++;
-		}
-
-		private void SimplifyExtendedMoves(InstructionNode node)
-		{
-			if (!(node.Instruction == IRInstruction.SignExtend8x32
-				|| node.Instruction == IRInstruction.SignExtend16x32
-				|| node.Instruction == IRInstruction.SignExtend8x64
-				|| node.Instruction == IRInstruction.SignExtend16x64
-				|| node.Instruction == IRInstruction.SignExtend32x64
-				|| node.Instruction == IRInstruction.ZeroExtend8x32
-				|| node.Instruction == IRInstruction.ZeroExtend16x32
-				|| node.Instruction == IRInstruction.ZeroExtend8x64
-				|| node.Instruction == IRInstruction.ZeroExtend16x64
-				|| node.Instruction == IRInstruction.ZeroExtend32x64))
-				return;
-
-			if (!node.Result.IsVirtualRegister || !node.Operand1.IsVirtualRegister)
-				return;
-
-			if (!((NativePointerSize == 4 && node.Result.IsInt && (node.Operand1.IsInt || node.Operand1.IsU || node.Operand1.IsI))
-				|| (NativePointerSize == 4 && node.Operand1.IsInt && (node.Result.IsInt || node.Result.IsU || node.Result.IsI))
-				|| (NativePointerSize == 8 && node.Result.IsLong && (node.Operand1.IsLong || node.Operand1.IsU || node.Operand1.IsI))
-				|| (NativePointerSize == 8 && node.Operand1.IsLong && (node.Result.IsLong || node.Result.IsU || node.Result.IsI))))
-				return;
-
-			AddOperandUsageToWorkList(node);
-			if (trace.Active) trace.Log("*** SimplifyExtendedMove");
-			if (trace.Active) trace.Log("BEFORE:\t" + node);
-			node.SetInstruction(GetMoveInteger(node.Result), node.Result, node.Operand1);
-			simplifyExtendedMoveCount++;
-			if (trace.Active) trace.Log("AFTER: \t" + node);
 		}
 
 		private void FoldLoadStoreOffsets(InstructionNode node)

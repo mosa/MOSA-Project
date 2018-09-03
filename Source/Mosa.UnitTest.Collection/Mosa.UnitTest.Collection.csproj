@@ -62,10 +62,6 @@
     </Compile>
     <Compile Include="CharTests.cs" />
     <Compile Include="CompilerTests.cs" />
-    <Compile Include="ConvI2Tests.cs" />
-    <Compile Include="ConvI1Tests.cs" />
-    <Compile Include="ConvI4Tests.cs" />
-    <Compile Include="ConvI8Tests.cs" />
     <Compile Include="BoxingTests.cs">
       <DependentUpon>BoxingTests.tt</DependentUpon>
       <AutoGen>True</AutoGen>

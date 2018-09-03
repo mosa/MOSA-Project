@@ -47,7 +47,7 @@ namespace Mosa.Workspace.UnitTest.Debug
 		private int CompletedUnitTestCount = 0;
 		private Stopwatch StopWatch = new Stopwatch();
 
-		private long LastResponse = 0;
+		private volatile int LastResponse = 0;
 
 		private int SendOneCount = -1;
 
@@ -150,6 +150,11 @@ namespace Mosa.Workspace.UnitTest.Debug
 				{
 					lock (Queue)
 					{
+						if (Queue.Count == 0 && Pending.Count == 0)
+						{
+							LastResponse = (int)StopWatch.ElapsedMilliseconds;
+						}
+
 						if (Queue.Count > 0 || Pending.Count > 0)
 						{
 							CheckEngine();
@@ -253,6 +258,8 @@ namespace Mosa.Workspace.UnitTest.Debug
 				Starter = new Starter(Options, AppLocations, this);
 			}
 
+			Options.SerialConnectionPort++;
+
 			Process = Starter.Launch();
 
 			return Process != null || !Process.HasExited;
@@ -319,6 +326,7 @@ namespace Mosa.Workspace.UnitTest.Debug
 			{
 				if (Ready)
 				{
+					LastResponse = (int)StopWatch.ElapsedMilliseconds;
 					return true;
 				}
 
@@ -357,7 +365,6 @@ namespace Mosa.Workspace.UnitTest.Debug
 		private bool StartEngineEx()
 		{
 			Ready = false;
-			LastResponse = StopWatch.ElapsedMilliseconds - 1;
 
 			if (!LaunchVirtualMachine())
 				return false;
@@ -397,7 +404,7 @@ namespace Mosa.Workspace.UnitTest.Debug
 				}
 
 				// Has process stop responding (more than 2 seconds)? If yes, restart
-				if (LastResponse != 0 && StopWatch.ElapsedMilliseconds - LastResponse > 2000)
+				else if (LastResponse > 0 && StopWatch.ElapsedMilliseconds - LastResponse > 2000)
 				{
 					KillVirtualMachine();
 					restart = true;
@@ -448,7 +455,7 @@ namespace Mosa.Workspace.UnitTest.Debug
 
 			lock (Queue)
 			{
-				LastResponse = StopWatch.ElapsedMilliseconds;
+				LastResponse = (int)StopWatch.ElapsedMilliseconds;
 
 				CompletedUnitTestCount++;
 				Pending.Remove(response);
@@ -465,6 +472,15 @@ namespace Mosa.Workspace.UnitTest.Debug
 			if (response.Other is UnitTest unitTest)
 			{
 				UnitTestSystem.ParseResultData(unitTest, response.ResponseData);
+
+				if (Equals(unitTest.Expected, unitTest.Result))
+				{
+					unitTest.Status = UnitTestStatus.Passed;
+				}
+				else
+				{
+					unitTest.Status = UnitTestStatus.Failed;
+				}
 
 				//Console.WriteLine("RECD: " + unitTest.MethodTypeName + "." + unitTest.MethodName);
 			}
