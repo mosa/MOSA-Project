@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			var blockOrderAnalysis = CompilerOptions.BlockOrderAnalysisFactory();
+			var blockOrderAnalysis = new LoopAwareBlockOrder();
 
 			blockOrderAnalysis.Analyze(BasicBlocks);
 
@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.Stages
 			DumpTrace(blockOrderAnalysis);
 		}
 
-		private void DumpTrace(BaseBlockOrder blockOrderAnalysis)
+		private void DumpTrace(LoopAwareBlockOrder blockOrderAnalysis)
 		{
 			var trace = CreateTraceLog();
 
@@ -39,9 +39,9 @@ namespace Mosa.Compiler.Framework.Stages
 			foreach (var block in blockOrderAnalysis.NewBlockOrder)
 			{
 				if (block != null)
-					trace.Log("# " + index.ToString() + " Block " + block + " #" + block.Sequence.ToString());
+					trace.Log($"# {index.ToString()} Block {block} #{block.Sequence.ToString()}");
 				else
-					trace.Log("# " + index.ToString() + " NONE");
+					trace.Log($"# {index.ToString()} NONE");
 
 				index++;
 			}
@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework.Stages
 				int depth = blockOrderAnalysis.GetLoopDepth(block);
 				int depthindex = blockOrderAnalysis.GetLoopIndex(block);
 
-				trace.Log("Block " + block + " #" + block.Sequence.ToString() + " -> Depth: " + depth.ToString() + " Index: " + depthindex.ToString());
+				trace.Log($"Block {block} #{block.Sequence.ToString()} -> Depth: {depth.ToString()} Index: {depthindex.ToString()}");
 			}
 		}
 	}

@@ -66,6 +66,8 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 				}
 			}
+
+			MethodCompiler.IsInSSAForm = false;
 		}
 
 		protected override void Finish()

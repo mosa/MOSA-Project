@@ -180,6 +180,14 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public Operand ConstantZero { get; }
 
+		/// <summary>
+		/// Gets a value indicating whether this instance is in SSA form.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance is in SSA form; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsInSSAForm { get; set; }
+
 		#endregion Properties
 
 		#region Construction
@@ -217,6 +225,7 @@ namespace Mosa.Compiler.Framework
 			PluggedMethod = compiler.PlugSystem.GetReplacement(Method);
 
 			IsStopped = false;
+			IsInSSAForm = false;
 
 			MethodData = compiler.CompilerData.GetCompilerMethodData(Method);
 			MethodData.Counters.Reset();

@@ -133,7 +133,7 @@ namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 				var liveGen = new BitArray(IndexCount, false);
 				var liveKill = new BitArray(IndexCount, false);
 
-				if (BasicBlocks.HeadBlocks.Contains(block.BasicBlock))
+				if (block.BasicBlock.IsHeadBlock)
 				{
 					for (int s = 0; s < IndexCount; s++)
 					{

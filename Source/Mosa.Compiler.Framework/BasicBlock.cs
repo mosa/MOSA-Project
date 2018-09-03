@@ -111,6 +111,8 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsTryHeadBlock { get; internal set; }
 
+		public bool IsHeadBlock { get; internal set; }
+
 		#endregion Properties
 
 		#region Construction

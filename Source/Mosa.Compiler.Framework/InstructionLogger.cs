@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.MosaTypeSystem;
-using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -39,8 +38,7 @@ namespace Mosa.Compiler.Framework.Trace
 			{
 				foreach (var block in basicBlocks)
 				{
-					traceLog.Log(String.Format("Block #{0} - Label L_{1:X4}", block.Sequence, block.Label)
-						+ (basicBlocks.IsHeadBlock(block) ? " [Header]" : string.Empty));
+					traceLog.Log($"Block #{block.Sequence} - Label L_{block.Label:X4}" + (block.IsHeadBlock ? " [Header]" : string.Empty));
 
 					traceLog.Log($"  Prev: {ListBlocks(block.PreviousBlocks)}");
 

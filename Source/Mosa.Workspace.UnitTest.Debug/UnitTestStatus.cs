@@ -2,13 +2,12 @@
 
 namespace Mosa.Workspace.UnitTest.Debug
 {
-	internal static class Program
+	public enum UnitTestStatus
 	{
-		private static void Main()
-		{
-			UnitTestSystem.Start();
-
-			return;
-		}
+		Skipped,
+		Pending,
+		Passed,
+		Failed,
+		FailedByCrash
 	}
 }

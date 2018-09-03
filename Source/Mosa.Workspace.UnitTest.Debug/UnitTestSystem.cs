@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace Mosa.Workspace.UnitTest.Debug
 {
@@ -28,10 +29,8 @@ namespace Mosa.Workspace.UnitTest.Debug
 			Console.WriteLine("Elapsed: " + (elapsedDiscovery / 1000.0).ToString("F2") + " secs");
 			Console.WriteLine();
 
-			Console.WriteLine("Compiling Unit Tests...");
+			Console.WriteLine("Starting Unit Test Engine...");
 			var unitTestEngine = new UnitTestEngineV2();
-			unitTestEngine.Initialize();
-			unitTestEngine.Compile();
 			var elapsedCompile = stopwatch.ElapsedMilliseconds - elapsedDiscovery;
 			Console.WriteLine("Elapsed: " + (elapsedCompile / 1000.0).ToString("F2") + " secs");
 			Console.WriteLine();
@@ -51,6 +50,14 @@ namespace Mosa.Workspace.UnitTest.Debug
 			stopwatch.Stop();
 
 			Console.WriteLine("Total Elapsed: " + (stopwatch.ElapsedMilliseconds / 1000.0) + " secs");
+
+			foreach (var unitTest in unitTests)
+			{
+				if (unitTest.Status == UnitTestStatus.Passed || unitTest.Status == UnitTestStatus.Skipped)
+					continue;
+
+				Console.WriteLine(OutputUnitTestResult(unitTest));
+			}
 
 			((IDisposable)(unitTestEngine)).Dispose();
 		}
@@ -86,11 +93,11 @@ namespace Mosa.Workspace.UnitTest.Debug
 			{
 				if (e.InnerException is DivideByZeroException || e.InnerException is OverflowException)
 				{
-					unitTest.Skipped = true;
+					unitTest.Status = UnitTestStatus.Skipped;
 				}
 				else
 				{
-					unitTest.Skipped = true;
+					unitTest.Status = UnitTestStatus.Skipped;
 				}
 			}
 		}
@@ -120,7 +127,7 @@ namespace Mosa.Workspace.UnitTest.Debug
 							FullMethodName = fullMethodName,
 							Values = paramValues,
 							UnitTestAttribute = attribute,
-							Skipped = false
+							Status = UnitTestStatus.Pending,
 						};
 
 						unitTests.Add(unitTest);
@@ -548,6 +555,49 @@ namespace Mosa.Workspace.UnitTest.Debug
 			}
 
 			return null;
+		}
+
+		public static string OutputUnitTestResult(UnitTest unitTest)
+		{
+			var sb = new StringBuilder();
+
+			switch (unitTest.Status)
+			{
+				case UnitTestStatus.Failed: sb.Append("FAILED"); break;
+				case UnitTestStatus.FailedByCrash: sb.Append("CRASHED"); break;
+				case UnitTestStatus.Skipped: sb.Append("SKIPPED"); break;
+				case UnitTestStatus.Passed: sb.Append("OK"); break;
+				case UnitTestStatus.Pending: sb.Append("PENDING"); break;
+			}
+
+			sb.Append(": ");
+
+			sb.Append(unitTest.MethodName);
+
+			sb.Append("(");
+
+			foreach (var param in unitTest.Values)
+			{
+				sb.Append(param.ToString());
+				sb.Append(",");
+			}
+
+			sb.Length--;
+
+			sb.Append(")");
+
+			sb.Append($" Expected: {ObjectToString(unitTest.Expected)}");
+			sb.Append($" Result: {ObjectToString(unitTest.Result)}");
+
+			return sb.ToString();
+		}
+
+		private static string ObjectToString(object o)
+		{
+			if (o is null)
+				return "NULL";
+			else
+				return o.ToString();
 		}
 	}
 }

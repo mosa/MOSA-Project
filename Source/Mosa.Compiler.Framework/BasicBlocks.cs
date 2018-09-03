@@ -24,21 +24,6 @@ namespace Mosa.Compiler.Framework
 		private readonly Dictionary<int, BasicBlock> basicBlocksByLabel = new Dictionary<int, BasicBlock>();
 
 		/// <summary>
-		/// The head blocks
-		/// </summary>
-		private readonly List<BasicBlock> headBlocks = new List<BasicBlock>();
-
-		/// <summary>
-		/// The handler blocks
-		/// </summary>
-		private readonly List<BasicBlock> handlerHeadBlocks = new List<BasicBlock>();
-
-		/// <summary>
-		/// The try blocks
-		/// </summary>
-		private readonly List<BasicBlock> tryHeadBlocks = new List<BasicBlock>();
-
-		/// <summary>
 		/// The prologue block
 		/// </summary>
 		private BasicBlock prologueBlock = null;
@@ -106,17 +91,17 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the head blocks.
 		/// </summary>
-		public IList<BasicBlock> HeadBlocks { get { return headBlocks.AsReadOnly(); } }
+		public List<BasicBlock> HeadBlocks { get; } = new List<BasicBlock>();
 
 		/// <summary>
 		/// Gets the handler head blocks.
 		/// </summary>
-		public IList<BasicBlock> HandlerHeadBlocks { get { return handlerHeadBlocks.AsReadOnly(); } }
+		public List<BasicBlock> HandlerHeadBlocks { get; } = new List<BasicBlock>();
 
 		/// <summary>
 		/// Gets the try head blocks.
 		/// </summary>
-		public IList<BasicBlock> TryHeadBlocks { get { return tryHeadBlocks.AsReadOnly(); } }
+		public List<BasicBlock> TryHeadBlocks { get; } = new List<BasicBlock>();
 
 		/// <summary>
 		/// Gets the prologue block.
@@ -192,7 +177,8 @@ namespace Mosa.Compiler.Framework
 		/// <param name="basicBlock">The basic block.</param>
 		public void AddHeadBlock(BasicBlock basicBlock)
 		{
-			headBlocks.Add(basicBlock);
+			HeadBlocks.Add(basicBlock);
+			basicBlock.IsHeadBlock = true;
 		}
 
 		/// <summary>
@@ -201,7 +187,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="basicBlock">The basic block.</param>
 		public void AddHandlerHeadBlock(BasicBlock basicBlock)
 		{
-			handlerHeadBlocks.Add(basicBlock);
+			HandlerHeadBlocks.Add(basicBlock);
 			basicBlock.IsHandlerHeadBlock = true;
 		}
 
@@ -211,7 +197,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="basicBlock">The basic block.</param>
 		public void AddTryHeadBlock(BasicBlock basicBlock)
 		{
-			tryHeadBlocks.Add(basicBlock);
+			TryHeadBlocks.Add(basicBlock);
 			basicBlock.IsTryHeadBlock = true;
 		}
 
@@ -221,20 +207,11 @@ namespace Mosa.Compiler.Framework
 		/// <param name="basicBlock">The basic block.</param>
 		public void RemoveHeaderBlock(BasicBlock basicBlock)
 		{
-			if (headBlocks.Contains(basicBlock))
-				headBlocks.Remove(basicBlock);
-		}
-
-		/// <summary>
-		/// Determines whether [is header block] [the specified basic block].
-		/// </summary>
-		/// <param name="basicBlock">The basic block.</param>
-		/// <returns>
-		///   <c>true</c> if [is header block] [the specified basic block]; otherwise, <c>false</c>.
-		/// </returns>
-		public bool IsHeadBlock(BasicBlock basicBlock)
-		{
-			return headBlocks.Contains(basicBlock);
+			if (HeadBlocks.Contains(basicBlock))
+			{
+				HeadBlocks.Remove(basicBlock);
+				basicBlock.IsHeadBlock = false;
+			}
 		}
 
 		/// <summary>

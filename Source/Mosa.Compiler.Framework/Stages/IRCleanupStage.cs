@@ -19,8 +19,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void OrderBlocks()
 		{
-			//var blockOrderAnalysis = new SimpleTraceBlockOrder();   // faster than others
-			var blockOrderAnalysis = new LoopAwareBlockOrder();
+			//var blockOrderAnalysis = new LoopAwareBlockOrder();
+			var blockOrderAnalysis = new SimpleTraceBlockOrder();   // faster than others
 
 			blockOrderAnalysis.Analyze(BasicBlocks);
 

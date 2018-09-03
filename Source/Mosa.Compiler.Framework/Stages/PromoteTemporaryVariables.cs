@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			base.Setup();
 
-			trace = CreateTraceLog();
+			trace = CreateTraceLog(6);
 
 			temporariesPromoted = 0;
 		}

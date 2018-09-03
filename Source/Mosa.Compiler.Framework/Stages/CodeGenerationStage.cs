@@ -127,8 +127,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						if (trace.Active)
 						{
-							trace.Log(String.Format("Block #{0} - Label L_{1:X4}", block.Sequence, block.Label)
-								+ (BasicBlocks.IsHeadBlock(block) ? " [Header]" : string.Empty));
+							trace.Log($"Block #{block.Sequence} - Label L_{block.Label:X4}" + (block.IsHeadBlock ? " [Header]" : string.Empty));
 						}
 
 						continue;

@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Linker;
 using System;
 using System.Collections.Generic;
@@ -109,14 +108,6 @@ namespace Mosa.Compiler.Framework
 		///   <c>true</c> if [enable ir long operand conversion]; otherwise, <c>false</c>.
 		/// </value>
 		public bool IRLongExpansion { get; set; }
-
-		/// <summary>
-		/// Gets or sets the block order analysis.
-		/// </summary>
-		/// <value>
-		/// The block order analysis.
-		/// </value>
-		public Func<BaseBlockOrder> BlockOrderAnalysisFactory { get; set; }
 
 		/// <summary>
 		/// Gets or sets the type of the elf.
@@ -266,7 +257,6 @@ namespace Mosa.Compiler.Framework
 			EnableSparseConditionalConstantPropagation = true;
 			EnableInlinedMethods = false;
 			BaseAddress = 0x00400000;
-			BlockOrderAnalysisFactory = delegate { return new LoopAwareBlockOrder(); };
 			EmitBinary = true;
 			InlinedIRMaximum = 8;
 			EmitSymbols = true;

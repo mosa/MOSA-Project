@@ -107,7 +107,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var block in BasicBlocks)
 			{
-				if (!block.HasPreviousBlocks && !BasicBlocks.HeadBlocks.Contains(block))
+				if (!block.HasPreviousBlocks && !block.IsHeadBlock)
 				{
 					// block was targeted (probably by an leave instruction within a protected region)
 					BasicBlocks.AddHeadBlock(block);

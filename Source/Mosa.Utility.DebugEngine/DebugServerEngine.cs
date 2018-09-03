@@ -253,6 +253,9 @@ namespace Mosa.Utility.DebugEngine
 		{
 			try
 			{
+				if (stream == null)
+					return;
+
 				var bytes = stream.EndRead(ar);
 
 				for (int i = 0; i < bytes; i++)
@@ -261,6 +264,10 @@ namespace Mosa.Utility.DebugEngine
 				}
 
 				stream.BeginRead(receivedData, 0, receivedData.Length, ReadAsyncCallback, null);
+			}
+			catch (IOException ex)
+			{
+				stream = null;
 			}
 			catch
 			{
