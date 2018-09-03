@@ -1,9 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.UnitTests;
+
 namespace Mosa.TestWorld.ARMv6
 {
 	/// <summary>
-	///
+	/// Boot
 	/// </summary>
 	public static class Boot
 	{
@@ -18,7 +20,7 @@ namespace Mosa.TestWorld.ARMv6
 
 		public static void Test()
 		{
-			Mosa.UnitTest.Collection.UInt32Tests.AddU4U4(1, 2);
+			UInt32Tests.AddU4U4(1, 2);
 		}
 	}
 }

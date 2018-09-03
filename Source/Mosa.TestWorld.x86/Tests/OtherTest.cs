@@ -325,7 +325,7 @@ namespace Mosa.TestWorld.x86.Tests
 
 		public static bool BoxTestEqualsI4()
 		{
-			return Mosa.UnitTest.Collection.BoxingTests.EqualsI4(10);
+			return Mosa.UnitTests.BoxingTests.EqualsI4(10);
 		}
 	}
 

@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.UnitTest.Collection;
+using Mosa.UnitTests;
 
 namespace Mosa.TestWorld.x86.Tests
 {

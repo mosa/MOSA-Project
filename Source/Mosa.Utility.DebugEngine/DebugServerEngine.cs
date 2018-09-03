@@ -265,7 +265,7 @@ namespace Mosa.Utility.DebugEngine
 
 				stream.BeginRead(receivedData, 0, receivedData.Length, ReadAsyncCallback, null);
 			}
-			catch (IOException ex)
+			catch (IOException)
 			{
 				stream = null;
 			}
