@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{1717C7EB-06ED-434B-BA3C-E46C9644EEDF}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mosa.Utility.UnitTests</RootNamespace>
+    <AssemblyName>Mosa.Utility.UnitTests</AssemblyName>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>162</NoWarn>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <NoWarn>162</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Mosa.Utility.UnitTests.Program</StartupObject>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Numbers\B.cs" />
+    <Compile Include="Numbers\C.cs" />
+    <Compile Include="Numbers\Combinations.cs" />
+    <Compile Include="Numbers\I1.cs" />
+    <Compile Include="Numbers\I2.cs" />
+    <Compile Include="Numbers\I4.cs" />
+    <Compile Include="Numbers\I8.cs" />
+    <Compile Include="Numbers\R4.cs" />
+    <Compile Include="Numbers\R8.cs" />
+    <Compile Include="Numbers\Series.cs" />
+    <Compile Include="Numbers\Series2.cs" />
+    <Compile Include="Numbers\U1.cs" />
+    <Compile Include="Numbers\U2.cs" />
+    <Compile Include="Numbers\U4.cs" />
+    <Compile Include="Numbers\U8.cs" />
+    <Compile Include="UnitTestStatus.cs" />
+    <Compile Include="UnitTestEngine.cs" />
+    <Compile Include="UnitTestHelper.cs" />
+    <Compile Include="UnitTest.cs" />
+    <Compile Include="UnitTestSystem.cs" />
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj">
+      <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
+      <Name>Mosa.Compiler.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj">
+      <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520559}</Project>
+      <Name>Mosa.Compiler.MosaTypeSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.UnitTests\Mosa.UnitTests.csproj">
+      <Project>{067AAB6B-447A-45BA-9E0D-DFEA886B4F69}</Project>
+      <Name>Mosa.UnitTests</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj">
+      <Project>{65F7691A-B355-4D98-BB97-0B19F13E2190}</Project>
+      <Name>Mosa.Utility.BootImage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Utility.DebugEngine\Mosa.Utility.DebugEngine.csproj">
+      <Project>{5B810793-78E2-413C-AA05-FCDD12B7DB04}</Project>
+      <Name>Mosa.Utility.DebugEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj">
+      <Project>{b69c2f31-5161-47aa-9fd3-2f2f2bccf659}</Project>
+      <Name>Mosa.Utility.Launcher</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
