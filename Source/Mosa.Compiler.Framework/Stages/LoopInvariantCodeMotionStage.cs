@@ -12,15 +12,15 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 	{
+		private Counter CodeMotionCount = new Counter("LoopInvariantCodeMotionStage.CodeMotionCount");
+
 		private SimpleFastDominance AnalysisDominance;
 
 		private TraceLog trace;
 
-		private Counter codeMotionCount = new Counter("LoopInvariantCodeMotionStage.CodeMotionCount");
-
-		protected override void Setup()
+		protected override void Initialize()
 		{
-			codeMotionCount.Reset();
+			Register(CodeMotionCount);
 		}
 
 		protected override void Run()

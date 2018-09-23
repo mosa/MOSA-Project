@@ -24,11 +24,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private BitArray ParamReadOnly;
 
-		private int instructionRemovalCount;
-		private int constantFoldingCount;
-		private int strengthReductionCount;
-		private int subexpressionEliminationCount;
-		private int parameterLoanEliminationCount;
+		private Counter InstructionRemovalCount = new Counter("ValueNumbering.IRInstructionRemoved");
+		private Counter ConstantFoldingCount = new Counter("ValueNumbering.ConstantFolding");
+		private Counter StrengthReductionCount = new Counter("ValueNumbering.StrengthReduction");
+		private Counter SubexpressionEliminationCount = new Counter("ValueNumbering.SubexpressionEliminationCount");
+		private Counter ParameterLoanEliminationCount = new Counter("ValueNumbering.ParameterLoanEliminationCount");
 
 		private class Expression
 		{
@@ -42,13 +42,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Dictionary<int, List<Expression>> Expressions;
 
-		protected override void Setup()
+		protected override void Initialize()
 		{
-			constantFoldingCount = 0;
-			instructionRemovalCount = 0;
-			strengthReductionCount = 0;
-			subexpressionEliminationCount = 0;
-			parameterLoanEliminationCount = 0;
+			Register(ConstantFoldingCount);
+			Register(InstructionRemovalCount);
+			Register(StrengthReductionCount);
+			Register(SubexpressionEliminationCount);
+			Register(ParameterLoanEliminationCount);
 		}
 
 		protected override void Run()
@@ -80,12 +80,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
-			UpdateCounter("ValueNumbering.IRInstructionRemoved", instructionRemovalCount);
-			UpdateCounter("ValueNumbering.ConstantFolding", constantFoldingCount);
-			UpdateCounter("ValueNumbering.StrengthReduction", strengthReductionCount);
-			UpdateCounter("ValueNumbering.SubexpressionEliminationCount", subexpressionEliminationCount);
-			UpdateCounter("ValueNumbering.ParameterLoanEliminationCount", parameterLoanEliminationCount);
-
 			MapToValueNumber = null;
 			Expressions = null;
 			Processed = null;
@@ -224,7 +218,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (trace.Active) trace.Log($"Removed Unless PHI: {node}");
 
 						node.SetInstruction(IRInstruction.Nop);
-						instructionRemovalCount++;
+						InstructionRemovalCount++;
 						continue;
 					}
 
@@ -239,7 +233,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (trace.Active) trace.Log($"Removed Redundant PHI: {node}");
 
 						node.SetInstruction(IRInstruction.Nop);
-						instructionRemovalCount++;
+						InstructionRemovalCount++;
 						continue;
 					}
 
@@ -270,7 +264,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					SetValueNumber(node.Result, node.Operand1);
 					node.SetInstruction(IRInstruction.Nop);
-					instructionRemovalCount++;
+					InstructionRemovalCount++;
 					continue;
 				}
 
@@ -298,12 +292,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (newOperand != null)
 					{
-						strengthReductionCount++;
+						StrengthReductionCount++;
 					}
 				}
 				else
 				{
-					constantFoldingCount++;
+					ConstantFoldingCount++;
 				}
 
 				if (newOperand != null)
@@ -312,7 +306,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					SetValueNumber(node.Result, newOperand);
 					node.SetInstruction(IRInstruction.Nop);
-					instructionRemovalCount++;
+					InstructionRemovalCount++;
 					continue;
 				}
 
@@ -329,11 +323,11 @@ namespace Mosa.Compiler.Framework.Stages
 					SetValueNumber(node.Result, w);
 
 					if (node.Instruction.IsParameterLoad)
-						parameterLoanEliminationCount++;
+						ParameterLoanEliminationCount++;
 
 					node.SetInstruction(IRInstruction.Nop);
-					instructionRemovalCount++;
-					subexpressionEliminationCount++;
+					InstructionRemovalCount++;
+					SubexpressionEliminationCount++;
 					continue;
 				}
 				else
