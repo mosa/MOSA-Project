@@ -213,11 +213,6 @@ namespace Mosa.Compiler.Framework
 
 			FormattedStageName = "[" + position.ToString("00") + "] " + Name;
 
-			foreach (var counter in Counters)
-			{
-				counter.Reset();
-			}
-
 			Setup();
 		}
 
@@ -228,6 +223,11 @@ namespace Mosa.Compiler.Framework
 
 		public void Execute()
 		{
+			foreach (var counter in Counters)
+			{
+				counter.Reset();
+			}
+
 			//Run();
 
 			try
