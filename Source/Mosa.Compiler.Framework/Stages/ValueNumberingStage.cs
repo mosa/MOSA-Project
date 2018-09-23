@@ -44,8 +44,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Setup()
 		{
-			base.Setup();
-
 			constantFoldingCount = 0;
 			instructionRemovalCount = 0;
 			strengthReductionCount = 0;
@@ -82,8 +80,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
-			base.Finish();
-
 			UpdateCounter("ValueNumbering.IRInstructionRemoved", instructionRemovalCount);
 			UpdateCounter("ValueNumbering.ConstantFolding", constantFoldingCount);
 			UpdateCounter("ValueNumbering.StrengthReduction", strengthReductionCount);

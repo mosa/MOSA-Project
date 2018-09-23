@@ -16,8 +16,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Initialize()
 		{
-			base.Initialize();
-
 			objectType = TypeSystem.GetTypeByName("System", "Object");
 		}
 

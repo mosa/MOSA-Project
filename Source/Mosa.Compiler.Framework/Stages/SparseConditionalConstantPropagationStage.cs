@@ -23,8 +23,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Setup()
 		{
-			base.Setup();
-
 			trace = CreateTraceLog();
 
 			conditionalConstantPropagation = 0;
@@ -50,8 +48,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
-			base.Finish();
-
 			trace = null;
 		}
 

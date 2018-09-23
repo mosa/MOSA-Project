@@ -25,8 +25,6 @@ namespace Mosa.Platform.x86.Stages
 
 		protected override void Setup()
 		{
-			base.Setup();
-
 			trace = CreateTraceLog();
 
 			instructionsRemovedCount = 0;

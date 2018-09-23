@@ -54,8 +54,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Setup()
 		{
-			base.Setup();
-
 			Constant4 = CreateConstant(4);
 		}
 

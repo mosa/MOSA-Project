@@ -57,8 +57,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Setup()
 		{
-			base.Setup();
-
 			generatedInstructionCount = 0;
 			generatedBlockCount = 0;
 		}
@@ -95,8 +93,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
-			base.Finish();
-
 			CodeEmitter = null;
 			codeStream = null;
 		}

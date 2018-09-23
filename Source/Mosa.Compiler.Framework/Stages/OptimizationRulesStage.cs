@@ -20,8 +20,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Initialize()
 		{
-			base.Initialize();
-
 			worklist = new Stack<InstructionNode>();
 			transformRules = new List<TransformRule>();
 
@@ -46,13 +44,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		protected override void Setup()
-		{
-			base.Setup();
-
-			// TODO
-		}
-
 		protected override void Run()
 		{
 			// Method is empty - must be a plugged method
@@ -66,10 +57,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
-			base.Finish();
-
-			//UpdateCounter("IROptimizations.IRInstructionRemoved", instructionsRemovedCount);
-
 			worklist.Clear();
 			trace = null;
 		}

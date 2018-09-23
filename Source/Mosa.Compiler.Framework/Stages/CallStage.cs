@@ -19,8 +19,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Setup()
 		{
-			base.Setup();
-
 			loadInstruction = Select(IRInstruction.LoadInt32, IRInstruction.LoadInt64);
 			moveInstruction = Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64);
 		}

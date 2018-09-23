@@ -15,8 +15,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Initialize()
 		{
-			base.Initialize();
-
 			exceptionType = TypeSystem.GetTypeByName("System", "Exception");
 		}
 

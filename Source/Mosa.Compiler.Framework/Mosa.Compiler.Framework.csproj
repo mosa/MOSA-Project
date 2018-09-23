@@ -92,6 +92,7 @@
     <Compile Include="BaseCodeTransformationStage.cs" />
     <Compile Include="BaseCompilerExtension.cs" />
     <Compile Include="CIL\IRInstructions.cs" />
+    <Compile Include="Counter.cs" />
     <Compile Include="Expression\Rule.cs" />
     <Compile Include="Expression\NodeParser.cs" />
     <Compile Include="Expression\SymbolDictionary.cs" />
@@ -370,6 +371,7 @@
     <Compile Include="Platform\OpcodeEncoder.cs" />
     <Compile Include="PlugSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Basics\QuickBlockSetLookup.cs" />
     <Compile Include="RegisterAllocator\BasicRegisterAllocator.cs" />
     <Compile Include="RegisterAllocator\MoveExtended.cs" />
     <Compile Include="RegisterAllocator\Move.cs" />
@@ -393,6 +395,7 @@
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
     <Compile Include="CompilerStages\DebugFileGenerationStage.cs" />
     <Compile Include="Stages\DominanceOutputStage.cs" />
+    <Compile Include="Basics\Loop.cs" />
     <Compile Include="Stages\OptimizationRulesStage.cs" />
     <Compile Include="Stages\PlugStage.cs" />
     <Compile Include="Stages\DevirtualizeCallStage.cs" />
@@ -408,6 +411,7 @@
     <Compile Include="Stages\InlineStage.cs" />
     <Compile Include="Stages\InlineEvaluationStage.cs" />
     <Compile Include="Stages\IRCleanupStage.cs" />
+    <Compile Include="Stages\LoopInvariantCodeMotionStage.cs" />
     <Compile Include="Stages\ValueNumberingStage.cs" />
     <Compile Include="Stages\SparseConditionalConstantPropagationStage.cs" />
     <Compile Include="CompilerStages\MethodExceptionLookupTableStage.cs" />

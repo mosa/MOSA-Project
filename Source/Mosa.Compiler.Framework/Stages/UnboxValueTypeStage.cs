@@ -51,8 +51,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
-			base.Finish();
-
 			UpdateCounter("UnboxValueTypeStage.Triggered", triggered ? 1 : 0);
 		}
 

@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework
 	{
 		#region Data Members
 
-		protected int instructionCount = 0;
+		//protected int instructionCount = 0;
 
 		protected string formattedStageName;
 
@@ -169,6 +169,11 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		protected bool HasCode { get { return BasicBlocks.HeadBlocks.Count != 0; } }
 
+		/// <summary>
+		/// The counters
+		/// </summary>
+		private List<Counter> Counters = new List<Counter>();
+
 		#endregion Method Properties
 
 		#region Methods
@@ -208,7 +213,17 @@ namespace Mosa.Compiler.Framework
 
 			FormattedStageName = "[" + position.ToString("00") + "] " + Name;
 
+			foreach (var counter in Counters)
+			{
+				counter.Reset();
+			}
+
 			Setup();
+		}
+
+		protected void Register(Counter counter)
+		{
+			Counters.Add(counter);
 		}
 
 		public void Execute()
@@ -227,6 +242,11 @@ namespace Mosa.Compiler.Framework
 			}
 
 			SubmitTraceLogs(traceLogs);
+
+			foreach (var counter in Counters)
+			{
+				UpdateCounter(counter);
+			}
 
 			Finish();
 
@@ -268,7 +288,6 @@ namespace Mosa.Compiler.Framework
 
 		protected virtual void Setup()
 		{
-			instructionCount = 0;
 		}
 
 		protected virtual void Run()
@@ -700,6 +719,15 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion Trace Helper Methods
+
+		/// <summary>
+		/// Updates the counter.
+		/// </summary>
+		/// <param name="counter">The counter.</param>
+		public void UpdateCounter(Counter counter)
+		{
+			MethodData.Counters.UpdateNoLock(counter.Name, counter.Count);
+		}
 
 		/// <summary>
 		/// Updates the counter.

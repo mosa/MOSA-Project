@@ -60,8 +60,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Initialize()
 		{
-			base.Initialize();
-
 			worklist = new Stack<InstructionNode>();
 
 			transformations = CreateTransformationList();
@@ -120,8 +118,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Setup()
 		{
-			base.Setup();
-
 			instructionsRemovedCount = 0;
 			blockRemovedCount = 0;
 			constantFoldingIntegerCount = 0;
@@ -173,8 +169,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
-			base.Finish();
-
 			UpdateCounter("IROptimizations.IRInstructionRemoved", instructionsRemovedCount);
 			UpdateCounter("IROptimizations.BlockRemoved", blockRemovedCount);
 			UpdateCounter("IROptimizations.PropagateConstant", propagateConstantCount);

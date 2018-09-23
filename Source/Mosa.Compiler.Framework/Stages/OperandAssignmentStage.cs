@@ -26,8 +26,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Initialize()
 		{
-			base.Initialize();
-
 			outgoingMoves = new Dictionary<BasicBlock, List<Operand>>();
 			incomingMoves = new Dictionary<BasicBlock, List<Operand>>();
 
@@ -54,15 +52,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
-			base.Finish();
-
 			outgoingMoves.Clear();
 			incomingMoves.Clear();
 			worklist.Clear();
 			dupNodes.Clear();
 			processed = null;
-
-			//trace = null;
 		}
 
 		/// <summary>
