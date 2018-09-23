@@ -14,15 +14,15 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class CodeGenerationStage : BaseMethodCompilerStage
 	{
+		private Counter GeneratedInstructionCount = new Counter("CodeGeneration.GeneratedInstructions");
+		private Counter GeneratedBlockCount = new Counter("CodeGeneration.GeneratedBlocks");
+
 		#region Data Members
 
 		/// <summary>
 		/// Holds the stream, where code is emitted to.
 		/// </summary>
 		protected Stream codeStream;
-
-		private int generatedInstructionCount = 0;
-		private int generatedBlockCount = 0;
 
 		#endregion Data Members
 
@@ -55,10 +55,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion Construction
 
-		protected override void Setup()
+		protected override void Initialize()
 		{
-			generatedInstructionCount = 0;
-			generatedBlockCount = 0;
+			Register(GeneratedInstructionCount);
+			Register(GeneratedBlockCount);
 		}
 
 		protected override void Run()
@@ -86,9 +86,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Emit the method epilogue
 			EndGenerate();
-
-			UpdateCounter("CodeGeneration.GeneratedInstructions", generatedInstructionCount);
-			UpdateCounter("CodeGeneration.GeneratedBlocks", generatedBlockCount);
 		}
 
 		protected override void Finish()
@@ -149,7 +146,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 						baseInstruction.Emit(node, CodeEmitter);
 
-						generatedInstructionCount++;
+						GeneratedInstructionCount++;
 
 						if (trace.Active) trace.Log(node.Offset.ToString() + " - /0x" + node.Offset.ToString("X") + " : " + node);
 					}
@@ -162,7 +159,7 @@ namespace Mosa.Compiler.Framework.Stages
 				block.Last.Offset = CodeEmitter.CurrentPosition;
 
 				BlockEnd(block);
-				generatedBlockCount++;
+				GeneratedBlockCount++;
 			}
 
 			MethodCompiler.MethodData.AddLabelRegion(labelCurrent, labelStart, CodeEmitter.CurrentPosition - labelStart);

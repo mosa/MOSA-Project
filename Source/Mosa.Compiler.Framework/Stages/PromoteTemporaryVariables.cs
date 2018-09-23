@@ -11,15 +11,18 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class PromoteTemporaryVariables : BaseMethodCompilerStage
 	{
+		private Counter TemporariesPromoted = new Counter("PromoteStructToRegister.TemporariesPromoted");
+
 		private TraceLog trace;
 
-		private int temporariesPromoted = 0;
+		protected override void Initialize()
+		{
+			Register(TemporariesPromoted);
+		}
 
 		protected override void Setup()
 		{
 			trace = CreateTraceLog(6);
-
-			temporariesPromoted = 0;
 		}
 
 		protected override void Run()
@@ -33,8 +36,6 @@ namespace Mosa.Compiler.Framework.Stages
 					Promote(operand);
 				}
 			}
-
-			UpdateCounter("PromoteStructToRegister.TemporariesPromoted", temporariesPromoted);
 		}
 
 		protected bool CanPromote(Operand operand)
@@ -134,7 +135,7 @@ namespace Mosa.Compiler.Framework.Stages
 		protected void Promote(Operand operand)
 		{
 			var virtualRegister = AllocateVirtualRegister(operand.Type);
-			temporariesPromoted++;
+			TemporariesPromoted++;
 
 			if (trace.Active) trace.Log("VR: " + virtualRegister);
 

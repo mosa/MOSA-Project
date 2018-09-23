@@ -27,6 +27,11 @@ namespace Mosa.Compiler.Framework
 			Count = count;
 		}
 
+		public void Set(bool condition, int truevalue = 1, int falsevalue = 0)
+		{
+			Count = condition ? truevalue : falsevalue;
+		}
+
 		public static Counter operator ++(Counter counter)
 		{
 			counter.Count++;

@@ -243,12 +243,12 @@ namespace Mosa.Compiler.Framework
 
 			SubmitTraceLogs(traceLogs);
 
+			Finish();
+
 			foreach (var counter in Counters)
 			{
 				UpdateCounter(counter);
 			}
-
-			Finish();
 
 			//if (!MethodCompiler.IsStopped)
 			//{
@@ -727,16 +727,6 @@ namespace Mosa.Compiler.Framework
 		public void UpdateCounter(Counter counter)
 		{
 			MethodData.Counters.UpdateNoLock(counter.Name, counter.Count);
-		}
-
-		/// <summary>
-		/// Updates the counter.
-		/// </summary>
-		/// <param name="name">The name.</param>
-		/// <param name="count">The count.</param>
-		public void UpdateCounter(string name, int count)
-		{
-			MethodData.Counters.UpdateNoLock(name, count);
 		}
 
 		#region Helpers

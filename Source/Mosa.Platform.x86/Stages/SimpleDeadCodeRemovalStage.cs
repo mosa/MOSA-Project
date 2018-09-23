@@ -16,18 +16,22 @@ namespace Mosa.Platform.x86.Stages
 	{
 		private bool changed;
 		private TraceLog trace;
-		private int instructionsRemovedCount = 0;
+
+		private Counter IRInstructionRemovedCount = new Counter("X86.SimpleDeadCodeRemovalStage.IRInstructionRemoved");
 
 		protected override void PopulateVisitationDictionary()
 		{
 			// Nothing to do
 		}
 
+		protected override void Initialize()
+		{
+			Register(IRInstructionRemovedCount);
+		}
+
 		protected override void Setup()
 		{
 			trace = CreateTraceLog();
-
-			instructionsRemovedCount = 0;
 		}
 
 		protected override void Run()
@@ -89,8 +93,6 @@ namespace Mosa.Platform.x86.Stages
 					}
 				}
 			}
-
-			UpdateCounter("X86.SimpleDeadCodeRemovalStage.IRInstructionRemoved", instructionsRemovedCount);
 		}
 
 		private void RemoveUseless(InstructionNode node)
@@ -106,7 +108,7 @@ namespace Mosa.Platform.x86.Stages
 
 				node.Empty();
 				changed = true;
-				instructionsRemovedCount++;
+				IRInstructionRemovedCount++;
 			}
 		}
 
@@ -160,7 +162,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (trace.Active) trace.Log("REMOVED:\t" + node);
 			node.Empty();
-			instructionsRemovedCount++;
+			IRInstructionRemovedCount++;
 		}
 	}
 }

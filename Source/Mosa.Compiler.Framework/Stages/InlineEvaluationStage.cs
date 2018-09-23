@@ -13,7 +13,16 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		public static string InlineMethodAttribute = "System.Runtime.CompilerServices.MethodImplAttribute";
 
+		private Counter MethodCount = new Counter("InlineMethodEvaluationStage.Methods");
+		private Counter GeneratedBlocksCount = new Counter("InlineMethodEvaluationStage.GeneratedBlocks");
+
 		public const int MaximumCompileCount = 10;
+
+		protected override void Initialize()
+		{
+			Register(MethodCount);
+			Register(GeneratedBlocksCount);
+		}
 
 		protected override void Run()
 		{
@@ -143,11 +152,8 @@ namespace Mosa.Compiler.Framework.Stages
 			trace.Log("IsPlugged: " + MethodData.IsMethodImplementationReplaced.ToString());
 			trace.Log("HasAddressOfInstruction: " + MethodData.HasAddressOfInstruction.ToString());
 
-			UpdateCounter("InlineMethodEvaluationStage.Methods", 1);
-			if (MethodData.CanInline)
-			{
-				UpdateCounter("InlineMethodEvaluationStage.CanInline", 1);
-			}
+			MethodCount.Set(1);
+			GeneratedBlocksCount.Set(MethodData.CanInline);
 		}
 
 		public bool CanInline(CompilerMethodData method)
