@@ -19,8 +19,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Initialize()
 		{
-			base.Initialize();
-
 			if (TypeLayout.NativePointerSize == 4)
 				NativePatchType = PatchType.I4;
 			else

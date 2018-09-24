@@ -33,40 +33,46 @@ namespace Mosa.Utility.UnitTests.Numbers
 
 		#region B Types
 
-		public static IEnumerable<bool> B { get { return Numbers.B.Series; } }
+		public static IEnumerable<object> B
+		{
+			get { foreach (bool a in Numbers.B.Series) yield return a; }
+		}
 
 		#endregion B Types
 
 		#region C Types
 
-		public static IEnumerable<char> C { get { return Numbers.C.Series; } }
+		public static IEnumerable<object> C
+		{
+			get { foreach (char a in Numbers.C.Series) yield return a; }
+		}
 
-		public static IEnumerable<char> CNotZero
+		public static IEnumerable<object> CNotZero
 		{
 			get { foreach (char a in C) if (a != 0) yield return a; }
 		}
 
-		public static IEnumerable<char> CAboveZero
+		public static IEnumerable<object> CAboveZero
 		{
 			get { foreach (char a in C) if (a > 0) yield return a; }
 		}
 
-		public static IEnumerable<char> CBelowZero
+		public static IEnumerable<object> CBelowZero
 		{
 			get { foreach (char a in C) if (a < 0) yield return a; }
 		}
 
-		public static IEnumerable<char> CUpTo8
+		public static IEnumerable<object> CUpTo8
 		{
 			get { foreach (char a in GetUpTo(8)) yield return a; }
 		}
 
-		public static IEnumerable<char> CUpTo16
+		public static IEnumerable<object> CUpTo16
 		{
 			get { foreach (char a in GetUpTo(16)) yield return a; }
 		}
 
-		public static IEnumerable<char> CUpTo32
+		public static IEnumerable<object> CUpTo32
 		{
 			get { foreach (char a in GetUpTo(32)) yield return a; }
 		}

@@ -21,8 +21,6 @@ namespace Mosa.Compiler.Framework
 
 		protected override void Initialize()
 		{
-			base.Initialize();
-
 			visitationContexts = new ContextVisitationDelegate[MaxInstructions];
 			visitationNodes = new NodeVisitationDelegate[MaxInstructions];
 
@@ -40,7 +38,7 @@ namespace Mosa.Compiler.Framework
 					if (node.IsEmpty)
 						continue;
 
-					instructionCount++;
+					//instructionCount++;
 
 					if (node.Instruction.ID == 0)
 						continue; // no mapping

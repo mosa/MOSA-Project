@@ -40,8 +40,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Setup()
 		{
-			base.Setup();
-
 			instruction = null;
 			block = null;
 			counts = null;
@@ -120,8 +118,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
-			base.Finish();
-
 			if (counts == null)
 				return;
 
@@ -234,7 +230,8 @@ namespace Mosa.Compiler.Framework.Stages
 				cil.Decode(node, this);
 
 				prefix = (cil is PrefixInstruction);
-				instructionCount++;
+
+				//instructionCount++;
 
 				const bool addjmp = false;
 

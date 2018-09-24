@@ -21,8 +21,6 @@ namespace Mosa.Compiler.Framework
 
 		protected override void Initialize()
 		{
-			base.Initialize();
-
 			visitationDictionary = new Dictionary<BaseInstruction, Tuple<ContextVisitationDelegate, NodeVisitationDelegate>>();
 
 			PopulateVisitationDictionary();
@@ -42,7 +40,7 @@ namespace Mosa.Compiler.Framework
 					if (node.IsEmpty)
 						continue;
 
-					instructionCount++;
+					//instructionCount++;
 
 					if (visitationDictionary.TryGetValue(node.Instruction, out Tuple<ContextVisitationDelegate, NodeVisitationDelegate> visitationMethod))
 					{

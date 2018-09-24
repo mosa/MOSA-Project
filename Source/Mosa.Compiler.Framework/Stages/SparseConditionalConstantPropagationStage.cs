@@ -16,19 +16,25 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected TraceLog trace;
 
-		protected int conditionalConstantPropagation = 0;
-		protected int instructionsRemovedCount = 0;
+		private Counter ConstantCount = new Counter("ConditionalConstantPropagation.ConstantVariables");
+		private Counter ConditionalConstantPropagationCount = new Counter("ConditionalConstantPropagation.ConstantPropagations");
+		private Counter DeadBlockCount = new Counter("ConditionalConstantPropagation.DeadBlocks");
+		private Counter InstructionsRemovedCount = new Counter("ConditionalConstantPropagation.IRInstructionRemoved");
 
 		protected bool changed = false;
 
+		protected override void Initialize()
+		{
+			Register(ConstantCount);
+			Register(ConditionalConstantPropagationCount);
+			Register(DeadBlockCount);
+			Register(InstructionsRemovedCount);
+		}
+
 		protected override void Setup()
 		{
-			base.Setup();
-
 			trace = CreateTraceLog();
 
-			conditionalConstantPropagation = 0;
-			instructionsRemovedCount = 0;
 			changed = false;
 		}
 
@@ -42,16 +48,12 @@ namespace Mosa.Compiler.Framework.Stages
 			RemoveDeadBlocks(deadBlocks);
 			ReplaceVirtualRegistersWithConstants(constants);
 
-			UpdateCounter("ConditionalConstantPropagation.ConstantVariables", constants.Count);
-			UpdateCounter("ConditionalConstantPropagation.ConstantPropagations", conditionalConstantPropagation);
-			UpdateCounter("ConditionalConstantPropagation.DeadBlocks", deadBlocks.Count);
-			UpdateCounter("ConditionalConstantPropagation.IRInstructionRemoved", instructionsRemovedCount);
+			ConstantCount.Set(constants.Count);
+			DeadBlockCount.Set(DeadBlockCount.Count);
 		}
 
 		protected override void Finish()
 		{
-			base.Finish();
-
 			trace = null;
 		}
 
@@ -88,7 +90,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (trace.Active) trace.Log("*** ConditionalConstantPropagation");
 						if (trace.Active) trace.Log("BEFORE:\t" + node);
 						node.SetOperand(i, constant);
-						conditionalConstantPropagation++;
+						ConditionalConstantPropagationCount++;
 						if (trace.Active) trace.Log("AFTER: \t" + node);
 
 						changed = true;
@@ -105,7 +107,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (trace.Active) trace.Log("REMOVED:\t" + defNode);
 			defNode.SetInstruction(IRInstruction.Nop);
-			instructionsRemovedCount++;
+			InstructionsRemovedCount++;
 		}
 
 		protected void RemoveDeadBlocks(List<BasicBlock> deadBlocks)
@@ -159,7 +161,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (trace.Active) trace.Log("*** RemoveBranchesToDeadBlocks");
 						if (trace.Active) trace.Log("REMOVED:\t" + node);
 						node.SetInstruction(IRInstruction.Nop);
-						instructionsRemovedCount++;
+						InstructionsRemovedCount++;
 					}
 					else if (node.Instruction == IRInstruction.Jmp)
 					{

@@ -7,7 +7,7 @@ using System.Diagnostics;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	/// Transforms 64-bit Arith to 32-bit operations.
+	/// Transforms 64-bit arithmetic to 32-bit operations.
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.BaseTransformationStage" />
 	/// <remarks>
@@ -65,8 +65,6 @@ namespace Mosa.Platform.x86.Stages
 
 		protected override void Setup()
 		{
-			base.Setup();
-
 			Constant4 = CreateConstant(4);
 		}
 

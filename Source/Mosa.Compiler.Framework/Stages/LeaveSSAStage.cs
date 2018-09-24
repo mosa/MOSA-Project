@@ -14,11 +14,12 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		private Dictionary<Operand, Operand> finalVirtualRegisters;
 
+		private Counter InstructionCount = new Counter("LeaveSSA.IRInstructions");
+
 		protected override void Initialize()
 		{
-			base.Initialize();
-
 			finalVirtualRegisters = new Dictionary<Operand, Operand>();
+			Register(InstructionCount);
 		}
 
 		protected override void Run()
@@ -36,7 +37,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (context.IsEmpty)
 						continue;
 
-					instructionCount++;
+					InstructionCount++;
 
 					if (context.Instruction == IRInstruction.Phi)
 					{
@@ -72,10 +73,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
-			UpdateCounter("LeaveSSA.IRInstructions", instructionCount);
-
-			base.Finish();
-
 			finalVirtualRegisters.Clear();
 		}
 

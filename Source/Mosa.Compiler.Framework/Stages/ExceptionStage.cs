@@ -29,8 +29,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Initialize()
 		{
-			base.Initialize();
-
 			exceptionType = TypeSystem.GetTypeByName("System", "Exception");
 			exceptionRegister = Operand.CreateCPURegister(exceptionType, Architecture.ExceptionRegister);
 			leaveTargetRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, Architecture.LeaveTargetRegister); // TODO: Constant should be 64bit
@@ -43,8 +41,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Setup()
 		{
-			base.Setup();
-
 			exceptionVirtualRegisters.Clear();
 			leaveTargets.Clear();
 		}
@@ -85,8 +81,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
-			base.Finish();
-
 			exceptionVirtualRegisters.Clear();
 			leaveTargets.Clear();
 		}

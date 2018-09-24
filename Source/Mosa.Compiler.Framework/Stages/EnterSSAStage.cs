@@ -21,15 +21,17 @@ namespace Mosa.Compiler.Framework.Stages
 		private Dictionary<BasicBlock, SimpleFastDominance> blockAnalysis;
 		private Dictionary<Operand, List<BasicBlock>> assignments;
 
+		private Counter InstructionCount = new Counter("EnterSSA.IRInstructions");
+
 		private TraceLog trace;
 
 		protected override void Initialize()
 		{
-			base.Initialize();
-
 			ssaOperands = new Dictionary<Operand, Operand[]>();
 			blockAnalysis = new Dictionary<BasicBlock, SimpleFastDominance>();
 			assignments = new Dictionary<Operand, List<BasicBlock>>();
+
+			Register(InstructionCount);
 		}
 
 		protected override void Run()
@@ -58,10 +60,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
-			UpdateCounter("EnterSSA.IRInstructions", instructionCount);
-
-			base.Finish();
-
 			// Clean up
 			variables = null;
 			counts = null;
@@ -348,7 +346,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					instructionCount++;
+					InstructionCount++;
 
 					if (node.Result?.IsVirtualRegister == true)
 					{

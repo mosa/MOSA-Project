@@ -16,8 +16,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Setup()
 		{
-			base.Setup();
-
 			trace = CreateTraceLog();
 		}
 

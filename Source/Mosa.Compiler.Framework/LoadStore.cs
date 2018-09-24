@@ -42,23 +42,5 @@ namespace Mosa.Compiler.Framework
 				node.Operand1 = operand2;
 			}
 		}
-
-		//public static void OrderStoreOperands(InstructionNode node, BaseMethodCompiler methodCompiler)
-		//{
-		//	if (node.Operand2.IsResolvedConstant && node.Operand3.IsResolvedConstant)
-		//	{
-		//		node.Operand2 = Operand.CreateConstant(node.Operand2.ConstantUnsignedLongInteger + node.Operand3.ConstantUnsignedLongInteger, methodCompiler.TypeSystem);
-		//		node.Operand3 = methodCompiler.ConstantZero;
-		//	}
-
-		//	if (node.Operand2.IsConstant && !node.Operand3.IsConstant)
-		//	{
-		//		var operand2 = node.Operand2;
-		//		var operand3 = node.Operand3;
-
-		//		node.Operand3 = operand2;
-		//		node.Operand2 = operand3;
-		//	}
-		//}
 	}
 }
