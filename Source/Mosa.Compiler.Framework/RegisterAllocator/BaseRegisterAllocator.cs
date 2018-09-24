@@ -1274,7 +1274,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			ReplaceIntervals(liveInterval, intervals, true);
 		}
 
-		protected void ReplaceIntervals(LiveInterval replaceLiveInterval, IList<LiveInterval> newIntervals, bool addToQueue)
+		protected void ReplaceIntervals(LiveInterval replaceLiveInterval, List<LiveInterval> newIntervals, bool addToQueue)
 		{
 			CalculateSpillCosts(newIntervals);
 

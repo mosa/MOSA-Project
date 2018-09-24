@@ -276,17 +276,17 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			while (b != null)
 			{
-				b = doms[b.Sequence];
+				var c = doms[b.Sequence];
 
-				if (b == null)
-				{
+				if (c == null || c == b)
 					return false;
-				}
 
-				if (dom == b)
+				if (dom == c)
 				{
 					return true;
 				}
+
+				b = c;
 			}
 
 			return false;

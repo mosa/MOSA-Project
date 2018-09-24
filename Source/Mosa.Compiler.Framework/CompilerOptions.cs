@@ -78,6 +78,14 @@ namespace Mosa.Compiler.Framework
 		public bool EnableSparseConditionalConstantPropagation { get; set; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether [enable loop invariant code motion].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [enable loop invariant code motion]; otherwise, <c>false</c>.
+		/// </value>
+		public bool EnableLoopInvariantCodeMotion { get; set; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether [enable inlined methods].
 		/// </summary>
 		/// <value>
@@ -265,6 +273,7 @@ namespace Mosa.Compiler.Framework
 			EnableStatistics = true;
 			IRLongExpansion = true;
 			EnableValueNumbering = true;
+			EnableLoopInvariantCodeMotion = true;
 		}
 	}
 }

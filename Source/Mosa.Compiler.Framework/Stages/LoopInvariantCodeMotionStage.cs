@@ -4,6 +4,9 @@ using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Basics;
 using Mosa.Compiler.Framework.Trace;
 using System.Collections.Generic;
+using Mosa.Compiler.Common;
+using System.Collections;
+using System.Text;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -38,6 +41,10 @@ namespace Mosa.Compiler.Framework.Stages
 			trace = CreateTraceLog(5);
 
 			AnalysisDominance = new SimpleFastDominance(BasicBlocks, BasicBlocks.PrologueBlock);
+
+			var loops = FindLoops();
+
+			if (trace.Active) DumpLoops(loops);
 		}
 
 		protected override void Finish()
@@ -47,7 +54,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private List<Loop> FindLoops()
 		{
-			List<Loop> loops = null;
+			var loops = new List<Loop>();
+			var lookup = new Dictionary<BasicBlock, Loop>();
 
 			foreach (var block in BasicBlocks)
 			{
@@ -59,14 +67,83 @@ namespace Mosa.Compiler.Framework.Stages
 					// Is this a back-edge? Yes, if "block" dominates "previous"
 					if (AnalysisDominance.IsDominator(block, previous))
 					{
-						var loop = new Loop(block, previous);
-
-						(loops ?? (loops = new List<Loop>())).Add(loop);
+						if (lookup.TryGetValue(block, out Loop loop))
+						{
+							loop.AddBackEdge(previous);
+						}
+						else
+						{
+							loop = new Loop(block, previous);
+							loops.Add(loop);
+							lookup.Add(block, loop);
+						}
 					}
 				}
 			}
 
+			foreach (var loop in loops)
+			{
+				PopulateLoopNodes(loop);
+			}
+
 			return loops;
+		}
+
+		private void PopulateLoopNodes(Loop loop)
+		{
+			var worklist = new Stack<BasicBlock>();
+			var array = new BitArray(BasicBlocks.Count);
+
+			foreach (var backedge in loop.Backedges)
+			{
+				worklist.Push(backedge);
+			}
+
+			loop.AddNode(loop.Header);
+			array.Set(loop.Header.Sequence, true);
+
+			while (worklist.Count != 0)
+			{
+				var node = worklist.Pop();
+
+				if (!array.Get(node.Sequence))
+				{
+					array.Set(node.Sequence, true);
+					loop.LoopBlocks.Add(node);
+
+					foreach (var previous in node.PreviousBlocks)
+					{
+						if (previous == loop.Header)
+							continue;
+
+						worklist.Push(previous);
+					}
+				}
+			}
+		}
+
+		public void DumpLoops(List<Loop> loops)
+		{
+			foreach (var loop in loops)
+			{
+				trace.Log($"Header: {loop.Header}");
+				foreach (var backedge in loop.Backedges)
+				{
+					trace.Log($"   Backedge: {backedge}");
+				}
+
+				var sb = new StringBuilder();
+
+				foreach (var block in loop.LoopBlocks)
+				{
+					sb.Append(block);
+					sb.Append(", ");
+				}
+
+				sb.Length -= 2;
+
+				trace.Log($"   Members: {sb}");
+			}
 		}
 	}
 }
