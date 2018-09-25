@@ -248,7 +248,7 @@ namespace Mosa.UnitTests
 			return p >= 16 && q == 0;
 		}
 
-		[MosaUnitTest(Param1 = "I4")]
+		[MosaUnitTest("I4")]
 		public static int OptimizationTest20(int a)
 		{
 			if (a > 50)

@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.Helper;
 using Mosa.Compiler.Framework.Trace;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,8 +17,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private Counter BlockRemovedCount = new Counter("IROptimizations.BlockRemoved");
 		private Counter PropagateConstantCount = new Counter("IROptimizations.PropagateConstant");
 		private Counter PropagateMoveCount = new Counter("IROptimizations.PropagateMoveCount");
-		private Counter ConstantFoldingIntegerCount = new Counter("IROptimizations.ConstantFoldingInteger");
-		private Counter StrengthReductionIntegerCount = new Counter("IROptimizations.StrengthReductionInteger");
+		private Counter ConstantFoldingAndStrengthReductionCount = new Counter("IROptimizations.ConstantFoldingAndStrengthReductionCount");
 		private Counter ArithmeticSimplificationMultiplicationCount = new Counter("IROptimizations.ArithmeticSimplificationMultiplication");
 		private Counter ArithmeticSimplificationDivisionCount = new Counter("IROptimizations.ArithmeticSimplificationDivision");
 		private Counter ArithmeticSimplificationAdditionAndSubstractionCount = new Counter("IROptimizations.ArithmeticSimplificationAdditionAndSubstraction");
@@ -68,8 +68,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Register(BlockRemovedCount);
 			Register(PropagateConstantCount);
 			Register(PropagateMoveCount);
-			Register(ConstantFoldingIntegerCount);
-			Register(StrengthReductionIntegerCount);
+			Register(ConstantFoldingAndStrengthReductionCount);
 			Register(ArithmeticSimplificationMultiplicationCount);
 			Register(ArithmeticSimplificationDivisionCount);
 			Register(ArithmeticSimplificationAdditionAndSubstractionCount);
@@ -111,8 +110,7 @@ namespace Mosa.Compiler.Framework.Stages
 				PropagateMove,
 				PropagateCompoundMove,
 				DeadCodeElimination,
-				ConstantFoldingInteger,
-				StrengthReductionInteger,
+				ConstantFoldingAndStrengthReductionInteger,
 				ArithmeticSimplificationMultiplication,
 				ArithmeticSimplificationDivision,
 				ArithmeticSimplificationRemUnsignedModulus,
@@ -1860,36 +1858,20 @@ namespace Mosa.Compiler.Framework.Stages
 			SimplifyGetHighCount++;
 		}
 
-		private void ConstantFoldingInteger(InstructionNode node)
+		private void ConstantFoldingAndStrengthReductionInteger(InstructionNode node)
 		{
-			var operand = ValueNumberingStage.ConstantFoldingInteger(node);
+			var operand = BuiltInOptimizations.ConstantFoldingAndStrengthReductionInteger(node);
 
 			if (operand == null)
 				return;
 
 			AddOperandUsageToWorkList(node);
 
-			if (trace.Active) trace.Log("*** ConstantFoldingInteger");
+			if (trace.Active) trace.Log("*** ConstantFoldingAndStrengthReductionInteger");
 			if (trace.Active) trace.Log("BEFORE:\t" + node);
 			node.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, operand);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
-			ConstantFoldingIntegerCount++;
-		}
-
-		private void StrengthReductionInteger(InstructionNode node)
-		{
-			var operand = ValueNumberingStage.StrengthReductionInteger(node);
-
-			if (operand == null)
-				return;
-
-			AddOperandUsageToWorkList(node);
-
-			if (trace.Active) trace.Log("*** StrengthReductionInteger");
-			if (trace.Active) trace.Log("BEFORE:\t" + node);
-			node.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, operand);
-			if (trace.Active) trace.Log("AFTER: \t" + node);
-			StrengthReductionIntegerCount++;
+			ConstantFoldingAndStrengthReductionCount++;
 		}
 	}
 }

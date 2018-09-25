@@ -11,9 +11,8 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private readonly List<BasicBlock> included = new List<BasicBlock>();
 		private readonly List<BasicBlock> excluded = new List<BasicBlock>();
-		private readonly List<BasicBlock> final = new List<BasicBlock>();
 
-		public IList<BasicBlock> IncludedBlocks { get { return final.AsReadOnly(); } }
+		public List<BasicBlock> IncludedBlocks { get; } = new List<BasicBlock>();
 
 		public ProtectedRegion(BasicBlocks basicBlocks, MosaExceptionHandler exceptionHandler)
 		{
@@ -44,10 +43,10 @@ namespace Mosa.Compiler.Framework.Analysis
 			if (excluded.Contains(block))
 				return;
 
-			if (final.Contains(block))
+			if (IncludedBlocks.Contains(block))
 				return;
 
-			final.Add(block);
+			IncludedBlocks.Add(block);
 
 			foreach (var next in block.NextBlocks)
 				Trace(next);
