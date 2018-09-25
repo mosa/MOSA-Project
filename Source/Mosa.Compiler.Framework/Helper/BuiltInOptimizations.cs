@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework.Helper
 	{
 		public static Operand ConstantFoldingAndStrengthReductionInteger(InstructionNode node)
 		{
-			return ConstantFolding2Integer(node) ?? ConstantFolding1Integer(node) ?? StrengthReductionInteger(node);
+			return ConstantFolding2Integer(node) ?? ConstantFolding1Integer(node) ?? StrengthReductionInteger(node) ?? ConstantFolding3Integer(node);
 		}
 
 		public static Operand ConstantFolding1Integer(InstructionNode node)
@@ -231,6 +231,32 @@ namespace Mosa.Compiler.Framework.Helper
 				}
 
 				return ConstantOperand.Create(result.Type, compareResult ? 1 : 0);
+			}
+
+			return null;
+		}
+
+		public static Operand ConstantFolding3Integer(InstructionNode node)
+		{
+			if (node.OperandCount != 3 || node.ResultCount != 1)
+				return null;
+
+			if (!node.Operand1.IsResolvedConstant || !node.Operand2.IsResolvedConstant || !node.Operand3.IsResolvedConstant)
+				return null;
+
+			var instruction = node.Instruction;
+			var result = node.Result;
+			var op1 = node.Operand1;
+			var op2 = node.Operand2;
+			var op3 = node.Operand3;
+
+			if (instruction == IRInstruction.AddWithCarry32)
+			{
+				return ConstantOperand.Create(result.Type, (uint)(op1.ConstantUnsignedLongInteger + op2.ConstantUnsignedLongInteger + (op3.IsConstantZero ? 0u : 1u)));
+			}
+			else if (instruction == IRInstruction.SubWithCarry32)
+			{
+				return ConstantOperand.Create(result.Type, (uint)(op1.ConstantUnsignedLongInteger - op2.ConstantUnsignedLongInteger - (op3.IsConstantZero ? 0u : 1u)));
 			}
 
 			return null;
