@@ -1,7 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Helper;
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Trace;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -275,49 +275,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void DeadCodeElimination(InstructionNode node)
 		{
-			if (node.ResultCount == 0 || node.ResultCount > 2)
-				return;
-
-			if (!ValidateSSAForm(node.Result))
-				return;
-
-			if (node.ResultCount == 2 && !node.Result2.IsVirtualRegister)
-				return;
-
-			if (node.ResultCount == 2 && !ValidateSSAForm(node.Result2))
-				return;
-
-			if (node.Instruction == IRInstruction.CallDynamic
-				|| node.Instruction == IRInstruction.CallInterface
-				|| node.Instruction == IRInstruction.CallDirect
-				|| node.Instruction == IRInstruction.CallStatic
-				|| node.Instruction == IRInstruction.CallVirtual
-				|| node.Instruction == IRInstruction.NewObject
-				|| node.Instruction == IRInstruction.SetReturn32
-				|| node.Instruction == IRInstruction.SetReturn64
-				|| node.Instruction == IRInstruction.SetReturnR4
-				|| node.Instruction == IRInstruction.SetReturnR8
-				|| node.Instruction == IRInstruction.SetReturnCompound
-				|| node.Instruction == IRInstruction.IntrinsicMethodCall)
-				return;
-
-			if ((node.Instruction == IRInstruction.MoveInt32 || node.Instruction == IRInstruction.MoveInt64)
-				&& node.Operand1.IsVirtualRegister
-				&& node.Operand1 == node.Result)
-			{
-				if (trace.Active) trace.Log("*** DeadCodeElimination");
-				if (trace.Active) trace.Log("REMOVED:\t" + node);
-				AddOperandUsageToWorkList(node);
-				node.SetInstruction(IRInstruction.Nop);
-				InstructionsRemovedCount++;
-				DeadCodeEliminationCount++;
-				return;
-			}
-
-			if (node.Result.Uses.Count != 0)
-				return;
-
-			if (node.ResultCount == 2 && node.Result2.Uses.Count != 0)
+			if (!BuiltInOptimizations.IsDeadCode(node))
 				return;
 
 			if (trace.Active) trace.Log("*** DeadCodeElimination");
