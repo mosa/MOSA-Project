@@ -29,6 +29,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private Counter ConstantFoldingAndStrengthReductionCount = new Counter("ValueNumbering.ConstantFoldingAndStrengthReductionCount");
 		private Counter SubexpressionEliminationCount = new Counter("ValueNumbering.SubexpressionEliminationCount");
 		private Counter ParameterLoadEliminationCount = new Counter("ValueNumbering.ParameterLoadEliminationCount");
+		private Counter DeadCodeEliminationCount = new Counter("ValueNumbering.DeadCodeEliminationCount");
 
 		private class Expression
 		{
@@ -48,6 +49,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Register(InstructionRemovalCount);
 			Register(SubexpressionEliminationCount);
 			Register(ParameterLoadEliminationCount);
+			Register(DeadCodeEliminationCount);
 		}
 
 		protected override void Run()
@@ -242,6 +244,14 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 
 				UpdateNodeWithValueNumbers(node);
+
+				if (BuiltInOptimizations.IsDeadCode(node))
+				{
+					node.SetInstruction(IRInstruction.Nop);
+					DeadCodeEliminationCount++;
+					InstructionRemovalCount++;
+					continue;
+				}
 
 				if (node.Instruction == IRInstruction.MoveInt32
 					|| node.Instruction == IRInstruction.MoveInt64

@@ -413,6 +413,40 @@ namespace Mosa.Compiler.Framework.Helper
 			return null;
 		}
 
+		public static bool IsDeadCode(InstructionNode node)
+		{
+			if (node.ResultCount == 0 || node.ResultCount > 2)
+				return false;
+
+			if (!ValidateSSAForm(node.Result))
+				return false;
+
+			if (node.Result.Uses.Count != 0)
+				return false;
+
+			if (node.ResultCount == 2 && !ValidateSSAForm(node.Result2))
+				return false;
+
+			if (node.ResultCount == 2 && node.Result2.Uses.Count != 0)
+				return false;
+
+			if (node.Instruction == IRInstruction.CallDynamic
+				|| node.Instruction == IRInstruction.CallInterface
+				|| node.Instruction == IRInstruction.CallDirect
+				|| node.Instruction == IRInstruction.CallStatic
+				|| node.Instruction == IRInstruction.CallVirtual
+				|| node.Instruction == IRInstruction.NewObject
+				|| node.Instruction == IRInstruction.SetReturn32
+				|| node.Instruction == IRInstruction.SetReturn64
+				|| node.Instruction == IRInstruction.SetReturnR4
+				|| node.Instruction == IRInstruction.SetReturnR8
+				|| node.Instruction == IRInstruction.SetReturnCompound
+				|| node.Instruction == IRInstruction.IntrinsicMethodCall)
+				return false;
+
+			return true;
+		}
+
 		#region Helpers
 
 		private static uint SignExtend8x32(byte value)
@@ -438,6 +472,11 @@ namespace Mosa.Compiler.Framework.Helper
 		private static ulong SignExtend32x64(uint value)
 		{
 			return ((value & 0x80000000) == 0) ? value : (value | 0xFFFFFFFF00000000ul);
+		}
+
+		private static bool ValidateSSAForm(Operand operand)
+		{
+			return operand.Definitions.Count == 1;
 		}
 
 		#endregion Helpers
