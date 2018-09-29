@@ -253,6 +253,14 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 				}
 
+				// move constant to right for commutative operations - helpful later
+				if (node.Instruction.IsCommutative && node.Operand1.IsResolvedConstant && node.Operand2.IsVirtualRegister)
+				{
+					var operand1 = node.Operand1;
+					node.Operand1 = node.Operand2;
+					node.Operand2 = operand1;
+				}
+
 				if (node.Instruction == IRInstruction.MoveInt32
 					|| node.Instruction == IRInstruction.MoveInt64
 					|| node.Instruction == IRInstruction.MoveFloatR4

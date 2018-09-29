@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.Trace;
 
 namespace Mosa.Compiler.Framework.Helper
 {
@@ -25,7 +26,7 @@ namespace Mosa.Compiler.Framework.Helper
 
 			if (instruction == IRInstruction.GetLow64)
 			{
-				return ConstantOperand.Create(result.Type, (uint)op1.ConstantUnsignedLongInteger);
+				return ConstantOperand.Create(result.Type, (uint)op1.ConstantUnsignedLongInteger & 0xFFFFFFFF);
 			}
 			else if (instruction == IRInstruction.GetHigh64)
 			{
@@ -479,6 +480,44 @@ namespace Mosa.Compiler.Framework.Helper
 			return operand.Definitions.Count == 1;
 		}
 
+		public static BaseInstruction Select(bool is64bit, BaseInstruction instruction32, BaseInstruction instruction64)
+		{
+			return !is64bit ? instruction32 : instruction64;
+		}
+
 		#endregion Helpers
+
+		public delegate void PreOptimizeCallBack(InstructionNode node);
+
+		public static bool ConstantFoldingAndStrengthReductionInteger(InstructionNode node, bool is64Bit, PreOptimizeCallBack callback = null, TraceLog trace = null)
+		{
+			var operand = ConstantFoldingAndStrengthReductionInteger(node);
+
+			if (operand == null)
+				return false;
+
+			callback?.Invoke(node);
+
+			if (trace?.Active == true) trace.Log("*** ConstantFoldingAndStrengthReductionInteger");
+			if (trace?.Active == true) trace.Log("BEFORE:\t" + node);
+			node.SetInstruction(Select(is64Bit, IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, operand);
+			if (trace?.Active == true) trace.Log("AFTER: \t" + node);
+
+			return true;
+		}
+
+		public static bool DeadCodeElimination(InstructionNode node, PreOptimizeCallBack callback = null, TraceLog trace = null)
+		{
+			if (!IsDeadCode(node))
+				return false;
+
+			callback?.Invoke(node);
+
+			if (trace?.Active == true) trace.Log("*** DeadCodeElimination");
+			if (trace?.Active == true) trace.Log("REMOVED:\t" + node);
+			node.SetInstruction(IRInstruction.Nop);
+
+			return true;
+		}
 	}
 }
