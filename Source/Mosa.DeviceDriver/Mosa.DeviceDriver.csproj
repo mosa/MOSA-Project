@@ -104,7 +104,7 @@
     <Folder Include="PCI\Network\" />
     <Folder Include="PCI\VideoCard\" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
