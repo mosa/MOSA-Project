@@ -101,7 +101,7 @@ namespace Mosa.Workspace.FileSystem.Debug
 
 			var files = new List<IncludeFile>();
 
-			files.Add(new IncludeFile("CREDITS.TXT", GetResource("CREDITS.txt")));
+			files.Add(new IncludeFile("CREDITS.TXT", GetResource("Credits.txt")));
 			files.Add(new IncludeFile("LICENSE.TXT", GetResource("LICENSE.txt")));
 
 			foreach (var includeFile in files)
