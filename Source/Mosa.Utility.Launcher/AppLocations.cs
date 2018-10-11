@@ -40,7 +40,8 @@ namespace Mosa.Utility.Launcher
 						@"Tools\QEMU",
 						CombineParameterAndDirectory("ProgramFiles","qemu"),
 						CombineParameterAndDirectory("ProgramFiles(x86)","qemu"),
-						"/bin"
+						"/bin",
+						"/usr/bin"
 					},
 					new string[]
 					{
@@ -81,7 +82,9 @@ namespace Mosa.Utility.Launcher
 							new string[] { "bios.bin" },
 							new string[] {
 								Path.GetDirectoryName(QEMU),
-								Path.Combine(Path.GetDirectoryName(QEMU), "bios"),"/usr/share/qemu"
+								Path.Combine(Path.GetDirectoryName(QEMU), "bios"),
+								"/usr/share/qemu",
+								"/usr/share/seabios"
 							},
 							new string[]
 							{
