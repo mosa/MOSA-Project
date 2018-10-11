@@ -65,7 +65,7 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="..\..\CREDITS.txt" />
+    <EmbeddedResource Include="..\..\Credits.txt" />
     <EmbeddedResource Include="..\..\LICENSE.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
