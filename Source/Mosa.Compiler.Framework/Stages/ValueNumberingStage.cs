@@ -245,9 +245,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 				UpdateNodeWithValueNumbers(node);
 
-				if (BuiltInOptimizations.IsDeadCode(node))
+				if (BuiltInOptimizations.DeadCodeElimination(node))
 				{
-					node.SetInstruction(IRInstruction.Nop);
 					DeadCodeEliminationCount++;
 					InstructionRemovalCount++;
 					continue;

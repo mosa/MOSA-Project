@@ -270,15 +270,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void DeadCodeElimination(InstructionNode node)
 		{
-			if (!BuiltInOptimizations.IsDeadCode(node))
-				return;
-
-			if (trace.Active) trace.Log("*** DeadCodeElimination");
-			if (trace.Active) trace.Log("REMOVED:\t" + node);
-			AddOperandUsageToWorkList(node);
-			node.SetInstruction(IRInstruction.Nop);
-			InstructionsRemovedCount++;
-			DeadCodeEliminationCount++;
+			if (BuiltInOptimizations.DeadCodeElimination(node, AddOperandUsageToWorkList, trace))
+			{
+				InstructionsRemovedCount++;
+				DeadCodeEliminationCount++;
+			}
 		}
 
 		private void PropagateConstant(InstructionNode node)
@@ -1809,18 +1805,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ConstantFoldingAndStrengthReductionInteger(InstructionNode node)
 		{
-			var operand = BuiltInOptimizations.ConstantFoldingAndStrengthReductionInteger(node);
-
-			if (operand == null)
-				return;
-
-			AddOperandUsageToWorkList(node);
-
-			if (trace.Active) trace.Log("*** ConstantFoldingAndStrengthReductionInteger");
-			if (trace.Active) trace.Log("BEFORE:\t" + node);
-			node.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, operand);
-			if (trace.Active) trace.Log("AFTER: \t" + node);
-			ConstantFoldingAndStrengthReductionCount++;
+			if (BuiltInOptimizations.ConstantFoldingAndStrengthReductionInteger(node, Is64BitPlatform, AddOperandUsageToWorkList, trace))
+			{
+				ConstantFoldingAndStrengthReductionCount++;
+			}
 		}
 	}
 }

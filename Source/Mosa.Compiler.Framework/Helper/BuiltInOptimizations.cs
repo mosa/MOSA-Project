@@ -500,7 +500,7 @@ namespace Mosa.Compiler.Framework.Helper
 
 			if (trace?.Active == true) trace.Log("*** ConstantFoldingAndStrengthReductionInteger");
 			if (trace?.Active == true) trace.Log("BEFORE:\t" + node);
-			node.SetInstruction(Select(is64Bit, IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, operand);
+			node.SetInstruction(Select(is64Bit, IRInstruction.MoveInt64, IRInstruction.MoveInt32), node.Result, operand);
 			if (trace?.Active == true) trace.Log("AFTER: \t" + node);
 
 			return true;
