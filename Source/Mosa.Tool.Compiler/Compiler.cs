@@ -3,7 +3,6 @@
 using CommandLine;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace.BuiltIn;
 using System;
 using System.Collections.Generic;
@@ -60,7 +59,6 @@ namespace Mosa.Tool.Compiler
 			Console.WriteLine("MOSA AOT Compiler, Version {0}.{1} '{2}'", majorVersion, minorVersion, codeName);
 			Console.WriteLine("Copyright 2015 by the MOSA Project. Licensed under the New BSD License.");
 
-			//Console.WriteLine("Copyright 2008 by Novell. NDesk.Options is released under the MIT/X11 license.");
 			Console.WriteLine();
 			Console.WriteLine("Parsing options...");
 
@@ -186,7 +184,7 @@ namespace Mosa.Tool.Compiler
 			Console.Write("Error: ");
 			Console.WriteLine(message);
 			Console.WriteLine();
-			Console.WriteLine("Execute 'mosacl --help' for more information.");
+			Console.WriteLine("Execute 'Mosa.Tool.Compiler.exe --help' for more information.");
 			Console.WriteLine();
 		}
 
@@ -197,48 +195,9 @@ namespace Mosa.Tool.Compiler
 		{
 			Console.WriteLine(usageString);
 			Console.WriteLine();
-			Console.WriteLine("Execute 'mosacl --help' for more information.");
+			Console.WriteLine("Execute 'Mosa.Tool.Compiler.exe --help' for more information.");
 		}
 
 		#endregion Private Methods
-
-		#region Internal Methods
-
-		/// <summary>
-		/// Selects the architecture.
-		/// </summary>
-		/// <param name="architecture">The architecture.</param>
-		/// <returns></returns>
-		private static BaseArchitecture SelectArchitecture(string architecture)
-		{
-			switch (architecture.ToLower())
-			{
-				case "x86": return Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect);
-				default: throw new NotImplementCompilerException(string.Format("Unknown or unsupported Architecture {0}.", architecture));
-			}
-		}
-
-		private static Func<BaseCompilerStage> GetBootStageFactory(string format)
-		{
-			switch (format.ToLower())
-			{
-				case "multibootHeader-0.7":
-				case "mb0.7": return delegate { return new Mosa.Platform.x86.CompilerStages.Multiboot0695Stage(); };
-				default: throw new NotImplementCompilerException(string.Format("Unknown or unsupported boot format {0}.", format));
-			}
-		}
-
-		private static LinkerFormatType GetLinkerFactory(string format)
-		{
-			switch (format.ToLower())
-			{
-				case "elf": return LinkerFormatType.Elf32;
-				case "elf32": return LinkerFormatType.Elf32;
-				case "elf64": return LinkerFormatType.Elf64;
-				default: return LinkerFormatType.Elf32;
-			}
-		}
-
-		#endregion Internal Methods
 	}
 }

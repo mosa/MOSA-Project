@@ -223,6 +223,8 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(CILInstruction.Unbox_any, Unbox);
 			AddVisitation(CILInstruction.Xor, BinaryLogic);
 
+			AddVisitation(CILInstruction.PreReadOnly, PreReadOnly);
+
 			//AddVisitation(CILInstruction.Add_ovf,Add_ovf);
 			//AddVisitation(CILInstruction.Add_ovf_un,Add_ovf_un);
 			//AddVisitation(CILInstruction.Arglist,Arglist);
@@ -1634,6 +1636,11 @@ namespace Mosa.Compiler.Framework.Stages
 				context.AppendInstruction(loadInstruction, result, tmp, ConstantZero);
 				context.MosaType = type;
 			}
+		}
+
+		private void PreReadOnly(Context context)
+		{
+			context.SetInstruction(IRInstruction.Nop);
 		}
 
 		#endregion Visitation Methods

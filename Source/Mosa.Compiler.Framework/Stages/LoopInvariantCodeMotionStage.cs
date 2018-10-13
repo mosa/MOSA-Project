@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Common;
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Trace;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,6 +28,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
+			return;
+
 			if (HasProtectedRegions)
 				return;
 
@@ -44,6 +47,8 @@ namespace Mosa.Compiler.Framework.Stages
 			var loops = FindLoops();
 
 			if (trace.Active) DumpLoops(loops);
+
+			FindLoopInvariantInstructions(loops);
 		}
 
 		protected override void Finish()
@@ -123,12 +128,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 		public void DumpLoops(List<Loop> loops)
 		{
+			var loopTrace = CreateTraceLog("Loops");
+
 			foreach (var loop in loops)
 			{
-				trace.Log($"Header: {loop.Header}");
+				loopTrace.Log($"Header: {loop.Header}");
 				foreach (var backedge in loop.Backedges)
 				{
-					trace.Log($"   Backedge: {backedge}");
+					loopTrace.Log($"   Backedge: {backedge}");
 				}
 
 				var sb = new StringBuilder();
@@ -141,7 +148,132 @@ namespace Mosa.Compiler.Framework.Stages
 
 				sb.Length -= 2;
 
-				trace.Log($"   Members: {sb}");
+				loopTrace.Log($"   Members: {sb}");
+			}
+		}
+
+		private void FindLoopInvariantInstructions(List<Loop> loops)
+		{
+			foreach (var loop in loops)
+			{
+				var invariants = FindLoopInvariantInstructions(loop);
+
+				MoveToPreHeader(invariants, loop);
+			}
+		}
+
+		private List<InstructionNode> FindLoopInvariantInstructions(Loop loop)
+		{
+			var invariantsSet = new HashSet<InstructionNode>();
+			var invariantsList = new List<InstructionNode>();
+
+			bool changed = true;
+
+			if (trace.Active) trace.Log("Loop: " + loop.Header.ToString());
+
+			while (changed)
+			{
+				changed = false;
+				foreach (var block in loop.LoopBlocks)
+				{
+					for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+					{
+						if (node.IsEmpty)
+							continue;
+
+						// note - same code from ValueNumberingStage::CanAssignValueNumberToExpression()
+						if (node.ResultCount != 1
+							|| node.OperandCount == 0
+							|| node.OperandCount > 2
+							|| node.Instruction.IsMemoryWrite
+							|| node.Instruction.IsMemoryRead
+							|| node.Instruction.IsIOOperation
+							|| node.Instruction.HasUnspecifiedSideEffect
+							|| node.Instruction.VariableOperands
+							|| node.Instruction.FlowControl != FlowControl.Next
+							|| node.Instruction.IgnoreDuringCodeGeneration
+							|| node.Operand1.IsUnresolvedConstant
+							|| (node.OperandCount == 2 && node.Operand2.IsUnresolvedConstant))
+							continue;
+
+						if (invariantsSet.Contains(node))
+							continue;
+
+						// Check operand 1
+						if (!IsInvariant(node.Operand1, loop, invariantsSet))
+							continue;
+
+						// check operand 2
+						if (node.OperandCount == 2 && !IsInvariant(node.Operand2, loop, invariantsSet))
+							continue;
+
+						invariantsSet.Add(node);
+						invariantsList.Add(node);
+
+						if (trace.Active) trace.Log("  " + node.ToString());
+
+						changed = true;
+					}
+				}
+			}
+
+			return invariantsList;
+		}
+
+		private static bool IsInvariant(Operand operand, Loop loop, HashSet<InstructionNode> invariants)
+		{
+			// constant
+			if (operand.IsResolvedConstant)
+				return true;
+
+			if (operand.IsVirtualRegister && operand.Definitions.Count == 1)
+			{
+				var def = operand.Definitions[0];
+
+				// defined is invariant instruction
+				if (/*invariants != null &&*/ invariants.Contains(def))
+					return true;
+
+				// defined outside of the loop
+				if (!loop.LoopBlocks.Contains(def.Block))
+					return true;
+			}
+
+			return false;
+		}
+
+		private BasicBlock CreatePreHeader(BasicBlock target)
+		{
+			// Create pre-header block
+			var preheader = CreateNewBlock();
+
+			// TODO: need to move PHI instructions to header
+
+			foreach (var previous in target.PreviousBlocks.ToArray())
+			{
+				ReplaceBranchTargets(previous, target, preheader);
+			}
+
+			var context = new Context(preheader);
+
+			context.AppendInstruction(IRInstruction.Jmp, target);
+
+			return preheader;
+		}
+
+		private void MoveToPreHeader(List<InstructionNode> nodes, Loop loop)
+		{
+			if (loop.Header.PreviousBlocks.Count == 0)
+				return; // special case - a pre-header can not be made because the loop header is already the first block
+
+			var preheader = CreatePreHeader(loop.Header);
+
+			var at = preheader.AfterFirst;
+
+			foreach (var node in nodes)
+			{
+				at.CutFrom(node);
+				at = node;
 			}
 		}
 	}

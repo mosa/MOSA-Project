@@ -8,9 +8,9 @@ using System.IO;
 namespace Mosa.Tool.CreateBootImage
 {
 	/// <summary>
-	///
+	/// Mosa.Tool.CreateBootImage
 	/// </summary>
-	internal class Program
+	internal static class Program
 	{
 		public static BootImageOptions Parse(string filename)
 		{
@@ -49,7 +49,7 @@ namespace Mosa.Tool.CreateBootImage
 			bool valid = args.Length == 2;
 
 			if (valid)
-				valid = System.IO.File.Exists(args[0]);
+				valid = File.Exists(args[0]);
 
 			if (!valid)
 			{
@@ -66,7 +66,7 @@ namespace Mosa.Tool.CreateBootImage
 
 				if (bootImageOptions == null)
 				{
-					return -1; //Errors will be printed by the commandline library
+					return -1; //Errors will be printed by the command line library
 				}
 
 				bootImageOptions.DiskImageFileName = args[1];

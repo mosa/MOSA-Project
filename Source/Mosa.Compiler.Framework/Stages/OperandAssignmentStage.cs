@@ -159,6 +159,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void AddMoves(BasicBlock block, List<Operand> sourceOperands, List<Operand> destinationOperands)
 		{
+			// TODO: Generalize XXXX
 			var context = new Context(block.Last);
 
 			context.GotoPrevious();
