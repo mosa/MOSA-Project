@@ -91,6 +91,7 @@
     <Compile Include="Analysis\SimpleTraceBlockOrder.cs" />
     <Compile Include="BaseCodeTransformationStage.cs" />
     <Compile Include="BaseCompilerExtension.cs" />
+    <Compile Include="Helper\ConstantOperand.cs" />
     <Compile Include="CIL\IRInstructions.cs" />
     <Compile Include="Counter.cs" />
     <Compile Include="Expression\Rule.cs" />
@@ -324,6 +325,7 @@
     <Compile Include="Linker\LinkType.cs" />
     <Compile Include="Linker\PatchType.cs" />
     <Compile Include="Linker\SectionKind.cs" />
+    <Compile Include="Helper\BuiltInOptimizations.cs" />
     <Compile Include="Pipeline.cs" />
     <Compile Include="CompilerTypeData.cs" />
     <Compile Include="CompilerMethodData.cs" />
@@ -371,11 +373,11 @@
     <Compile Include="Platform\OpcodeEncoder.cs" />
     <Compile Include="PlugSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Basics\QuickBlockSetLookup.cs" />
+    <Compile Include="Common\QuickBlockSetLookup.cs" />
     <Compile Include="RegisterAllocator\BasicRegisterAllocator.cs" />
     <Compile Include="RegisterAllocator\MoveExtended.cs" />
     <Compile Include="RegisterAllocator\Move.cs" />
-    <Compile Include="OperandVisitor.cs" />
+    <Compile Include="Common\OperandVisitor.cs" />
     <Compile Include="RegisterAllocator\BaseRegisterAllocator.cs" />
     <Compile Include="RegisterAllocator\LiveRange.cs" />
     <Compile Include="RegisterAllocator\MoveHint.cs" />
@@ -395,7 +397,7 @@
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
     <Compile Include="CompilerStages\DebugFileGenerationStage.cs" />
     <Compile Include="Stages\DominanceOutputStage.cs" />
-    <Compile Include="Basics\Loop.cs" />
+    <Compile Include="Common\Loop.cs" />
     <Compile Include="Stages\OptimizationRulesStage.cs" />
     <Compile Include="Stages\PlugStage.cs" />
     <Compile Include="Stages\DevirtualizeCallStage.cs" />
@@ -625,6 +627,8 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Optimizations\" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

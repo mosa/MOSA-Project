@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework.Stages
 			ReplaceVirtualRegistersWithConstants(constants);
 
 			ConstantCount.Set(constants.Count);
-			DeadBlockCount.Set(DeadBlockCount.Count);
+			DeadBlockCount.Set(deadBlocks.Count);
 		}
 
 		protected override void Finish()

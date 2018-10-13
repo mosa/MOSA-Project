@@ -118,6 +118,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="operand">The operand.</param>
 		private void InsertCopyStatement(BasicBlock predecessor, Operand result, Operand operand)
 		{
+			// TODO: Generalize XXXX
 			var context = new Context(predecessor.Last);
 
 			context.GotoPrevious();

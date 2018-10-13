@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
+using Mosa.Compiler.Framework.Common;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
@@ -1274,7 +1275,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			ReplaceIntervals(liveInterval, intervals, true);
 		}
 
-		protected void ReplaceIntervals(LiveInterval replaceLiveInterval, IList<LiveInterval> newIntervals, bool addToQueue)
+		protected void ReplaceIntervals(LiveInterval replaceLiveInterval, List<LiveInterval> newIntervals, bool addToQueue)
 		{
 			CalculateSpillCosts(newIntervals);
 

@@ -175,6 +175,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			if (Before)
 			{
+				// TODO: Generalize XXXX
 				context.GotoPrevious();
 
 				// Note: This won't work for expanded switch statements... but we can't insert into the end of those blocks anyway

@@ -216,7 +216,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			var low = GetLowerOptimalSplitLocation(liveInterval, at);
 			var high = GetUpperOptimalSplitLocation(liveInterval, at);
 
-			IList<LiveInterval> intervals;
+			List<LiveInterval> intervals;
 
 			if (liveInterval.Start == low)
 			{

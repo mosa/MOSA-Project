@@ -588,6 +588,21 @@ namespace Mosa.Compiler.Framework
 			Insert(startNode);
 		}
 
+		public void CutFrom(InstructionNode node)
+		{
+			var cutBlock = node.Previous.Block;
+
+			node.Previous.Next = node.Next;
+			node.Next.Previous = node.Previous;
+
+			//cutBlock.DebugCheck();
+
+			node.Previous = null;
+			node.Next = null;
+
+			Insert(node);
+		}
+
 		/// <summary>
 		/// Replaces the specified node with the given node, the existing node is invalid afterwards
 		/// </summary>

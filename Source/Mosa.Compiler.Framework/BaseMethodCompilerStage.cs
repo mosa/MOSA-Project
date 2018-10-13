@@ -465,6 +465,8 @@ namespace Mosa.Compiler.Framework
 				if (node.BranchTargetsCount == 0)
 					continue;
 
+				// TODO: When non branch instruction encountered, return (fast out)
+
 				var targets = node.BranchTargets;
 
 				for (int index = 0; index < targets.Count; index++)
@@ -481,7 +483,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Debug.Assert(block.NextBlocks.Count == 1);
 
-			BasicBlock target = block.NextBlocks[0];
+			var target = block.NextBlocks[0];
 
 			foreach (var previous in block.PreviousBlocks.ToArray())
 			{
