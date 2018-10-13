@@ -132,8 +132,11 @@ namespace Mosa.Tool.CreateBootImage
 					}
 					else
 					{
+
+						var currDir = Environment.CurrentDirectory;
+						_options.IncludeFiles.Add(new IncludeFile(Path.GetFullPath(Path.Combine(currDir, path))));
 						//TODO: Handle unexpected non rooted file paths.
-						Console.WriteLine("Unexpected file path \"" + path + "\"");
+						//Console.WriteLine("Unexpected file path \"" + path + "\"");
 					}
 				}
 			}
