@@ -107,7 +107,7 @@ namespace Mosa.Tool.CreateBootImage
 		{
 			set
 			{
-				IList<string> list = (IList<string>)value;
+				var list = (IList<string>)value;
 
 				for (int x = 0; x < list.Count; x++)
 				{

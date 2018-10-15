@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (trace.Active) DumpLoops(loops);
 
-			FindLoopInvariantInstructions(loops);
+			//FindLoopInvariantInstructions(loops);
 		}
 
 		protected override void Finish()
@@ -240,21 +240,24 @@ namespace Mosa.Compiler.Framework.Stages
 			return false;
 		}
 
-		private BasicBlock CreatePreHeader(BasicBlock target)
+		private BasicBlock CreatePreHeader(Loop loop)
 		{
+			var header = loop.Header;
+
 			// Create pre-header block
 			var preheader = CreateNewBlock();
 
-			// TODO: need to move PHI instructions to header
+			var preheaderCtx = new Context(preheader);
+			preheaderCtx.AppendInstruction(IRInstruction.Jmp, header);
 
-			foreach (var previous in target.PreviousBlocks.ToArray())
+			// TODO: need to move PHI instructions to header AND update previous branch targets
+			var headerCtx = new Context(header.AfterFirst);
+
+			// TODO: not quite right
+			foreach (var previous in header.PreviousBlocks.ToArray())
 			{
-				ReplaceBranchTargets(previous, target, preheader);
+				ReplaceBranchTargets(previous, header, preheader);
 			}
-
-			var context = new Context(preheader);
-
-			context.AppendInstruction(IRInstruction.Jmp, target);
 
 			return preheader;
 		}
@@ -264,9 +267,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (loop.Header.PreviousBlocks.Count == 0)
 				return; // special case - a pre-header can not be made because the loop header is already the first block
 
-			var preheader = CreatePreHeader(loop.Header);
+			var preheader = CreatePreHeader(loop);
 
-			var at = preheader.AfterFirst;
+			var at = preheader.BeforeLast;
 
 			foreach (var node in nodes)
 			{

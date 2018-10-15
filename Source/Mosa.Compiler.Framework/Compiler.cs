@@ -169,9 +169,9 @@ namespace Mosa.Compiler.Framework
 				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.EnableIROptimizations) ? new IROptimizationStage() : null,
 
-				//new GraphVizStage(),
-				//new DominanceOutputStage(),
-				//(compilerOptions.EnableLoopInvariantCodeMotion) ? new LoopInvariantCodeMotionStage() : null,
+				new GraphVizStage(),
+				new DominanceOutputStage(),
+				(compilerOptions.EnableLoopInvariantCodeMotion) ? new LoopInvariantCodeMotionStage() : null,
 
 				(compilerOptions.IRLongExpansion && compilerOptions.Architecture.NativePointerSize == 4) ? new IRLongDecompositionStage() : null,
 				new LowerIRStage(),

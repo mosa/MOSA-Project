@@ -121,7 +121,7 @@ namespace Mosa.Compiler.Framework
 			}
 			set
 			{
-				Operand current = operand1;
+				var current = operand1;
 				if (current == value) return;
 				if (current != null)
 				{
@@ -151,7 +151,7 @@ namespace Mosa.Compiler.Framework
 			}
 			set
 			{
-				Operand current = operand2;
+				var current = operand2;
 				if (current == value) return;
 				if (current != null)
 				{
@@ -180,7 +180,7 @@ namespace Mosa.Compiler.Framework
 			}
 			set
 			{
-				Operand current = operand3;
+				var current = operand3;
 				if (current == value) return;
 				if (current != null)
 				{
@@ -249,7 +249,7 @@ namespace Mosa.Compiler.Framework
 			}
 			set
 			{
-				Operand current = result;
+				var current = result;
 				if (current != null)
 				{
 					current.Definitions.Remove(this);
@@ -277,7 +277,7 @@ namespace Mosa.Compiler.Framework
 			}
 			set
 			{
-				Operand current = result2;
+				var current = result2;
 				if (current != null)
 				{
 					current.Definitions.Remove(this);
@@ -382,7 +382,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets or sets the number of operand results
 		/// </summary>
-		public byte ResultCount
+		public int ResultCount
 		{
 			get { return (byte)((packed >> 8) & 0xF); }
 			set { packed = (packed & 0xFFFFF0FF) | ((uint)value << 8); }
@@ -1070,20 +1070,6 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public static string GetSizeString(InstructionSize size)
-		{
-			switch (size)
-			{
-				case InstructionSize.Size32: return "32";
-				case InstructionSize.Size8: return "8";
-				case InstructionSize.Size16: return "16";
-				case InstructionSize.Size64: return "64";
-				case InstructionSize.Size128: return "128";
-				case InstructionSize.Native: return string.Empty;// "Native";
-				default: return string.Empty;
-			}
-		}
-
 		#endregion Methods
 
 		#region Constructors
@@ -1098,7 +1084,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
-		public InstructionNode(BaseInstruction instruction, int operandCount, byte resultCount)
+		public InstructionNode(BaseInstruction instruction, int operandCount, int resultCount)
 		{
 			Instruction = instruction;
 			OperandCount = operandCount;
@@ -1197,6 +1183,14 @@ namespace Mosa.Compiler.Framework
 			Operand1 = operand1;
 		}
 
+		public InstructionNode(BaseInstruction instruction, Operand result, Operand operand1, Operand operand2)
+			: this(instruction, 2, 1)
+		{
+			Result = result;
+			Operand1 = operand1;
+			Operand2 = operand2;
+		}
+
 		#endregion Constructors
 
 		#region SetInstructions
@@ -1207,7 +1201,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="operandCount">The operand count.</param>
 		/// <param name="resultCount">The result count.</param>
-		public void SetInstruction(BaseInstruction instruction, int operandCount, byte resultCount)
+		public void SetInstruction(BaseInstruction instruction, int operandCount, int resultCount)
 		{
 			Debug.Assert(!IsBlockStartInstruction);
 			Debug.Assert(!IsBlockEndInstruction);
@@ -1343,7 +1337,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operands">The operands.</param>
-		public void SetInstruction(BaseInstruction instruction, Operand result, IList<Operand> operands)
+		public void SetInstruction(BaseInstruction instruction, Operand result, List<Operand> operands)
 		{
 			SetInstruction(instruction, 0, (byte)((result == null) ? 0 : 1));
 			Result = result;
@@ -1357,7 +1351,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
 		/// <param name="operands">The operands.</param>
-		public void SetInstruction(BaseInstruction instruction, Operand result, Operand operand1, IList<Operand> operands)
+		public void SetInstruction(BaseInstruction instruction, Operand result, Operand operand1, List<Operand> operands)
 		{
 			SetInstruction(instruction, result, operand1);
 			AppendOperands(operands);
@@ -1622,6 +1616,34 @@ namespace Mosa.Compiler.Framework
 			Operand2 = operand2;
 			ConditionCode = condition;
 			UpdateStatus = updateStatus;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		public void SetInstruction(SimpleInstruction instruction)
+		{
+			Debug.Assert(!IsBlockStartInstruction);
+			Debug.Assert(!IsBlockEndInstruction);
+
+			int label = Label;
+			var block = Block;
+
+			Clear();
+
+			Instruction = instruction.Instruction;
+			OperandCount = instruction.OperandCount;
+			ResultCount = instruction.ResultCount;
+			Result = instruction.Result;
+			Result2 = instruction.Result2;
+			Operand1 = instruction.Operand1;
+			Operand2 = instruction.Operand2;
+			Operand3 = instruction.Operand3;
+			Label = label;
+			Block = block;
+
+			//Block.DebugCheck();
 		}
 
 		#endregion SetInstructions

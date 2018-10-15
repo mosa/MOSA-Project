@@ -133,6 +133,7 @@ namespace Mosa.Compiler.Framework
 		/// Creates the block.
 		/// </summary>
 		/// <param name="blockLabel">The label.</param>
+		/// <param name="instructionLabel">The instruction label.</param>
 		/// <returns></returns>
 		public BasicBlock CreateBlock(int blockLabel = -1, int instructionLabel = -1)
 		{

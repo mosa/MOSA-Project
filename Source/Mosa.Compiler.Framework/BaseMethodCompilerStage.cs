@@ -172,7 +172,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The counters
 		/// </summary>
-		private List<Counter> Counters = new List<Counter>();
+		private readonly List<Counter> Counters = new List<Counter>();
 
 		#endregion Method Properties
 
