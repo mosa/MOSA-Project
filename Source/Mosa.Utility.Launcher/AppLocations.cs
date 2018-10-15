@@ -18,6 +18,8 @@ namespace Mosa.Utility.Launcher
 
 		public string BOCHS { get; set; }
 
+		public string BOCHSBIOSDirectory { get; set; }
+
 		public string VMwarePlayer { get; set; }
 
 		public string Mkisofs { get; set; }
@@ -134,13 +136,32 @@ namespace Mosa.Utility.Launcher
 						CombineParameterAndDirectory("MOSA","Bochs"),
 						@"..\Tools\Bochs",
 						@"Tools\Bochs",
-						"/bin"
+						"/bin",
+						"/usr/bin"
 					},
 					new string[]
 					{
 						@"..\packages",
 						@"..\..\packages",
 					}
+				);
+			}
+
+			if (string.IsNullOrEmpty(BOCHSBIOSDirectory))
+			{
+				BOCHSBIOSDirectory = Path.GetDirectoryName(
+					TryFind(
+						new string[] { "BIOS-bochs-latest" },
+						new string[] {
+								Path.GetDirectoryName(BOCHS),
+								"/usr/share/bochs/"
+						},
+						new string[]
+						{
+								@"..\packages",
+								@"..\..\packages",
+						}
+					)
 				);
 			}
 

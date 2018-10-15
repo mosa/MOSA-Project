@@ -127,8 +127,9 @@ namespace Mosa.Utility.Launcher
 			sb.AppendLine("cpuid: mmx=1,sep=1," + simd + "=sse4_2,apic=xapic,aes=1,movbe=1,xsave=1");
 			sb.AppendLine("boot: cdrom,disk");
 			sb.AppendLine("log: " + Quote(logfile));
-			sb.AppendLine("romimage: file=" + Quote(Path.Combine(exeDir, "BIOS-bochs-latest")));
-			sb.AppendLine("vgaromimage: file=" + Quote(Path.Combine(exeDir, "VGABIOS-lgpl-latest")));
+			sb.AppendLine("romimage: file=" + Quote(Path.Combine(AppLocations.BOCHSBIOSDirectory, "BIOS-bochs-latest")));
+			sb.AppendLine("vgaromimage: file=" + Quote(Path.Combine(AppLocations.BOCHSBIOSDirectory, "VGABIOS-lgpl-latest")));
+			sb.AppendLine("display_library: x, options=" + Quote("gui_debug"));
 
 			if (Options.ImageFormat == ImageFormat.ISO)
 			{
