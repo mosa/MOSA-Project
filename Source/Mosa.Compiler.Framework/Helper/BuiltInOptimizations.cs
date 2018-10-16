@@ -17,6 +17,8 @@ namespace Mosa.Compiler.Framework.Helper
 		public static SimpleInstruction StrengthReductionAndSimplification(InstructionNode node)
 		{
 			return ArithmeticSimplificationMultiplication(node)
+				?? ArithmeticSimplificationDivision(node)
+				?? ArithmeticSimplificationRemUnsignedModulus(node)				
 				?? PhiSimplication(node);
 		}
 
@@ -501,6 +503,73 @@ namespace Mosa.Compiler.Framework.Helper
 			}
 
 			return null;
+		}
+
+		public static SimpleInstruction ArithmeticSimplificationDivision(InstructionNode node)
+		{
+			if (!(node.Instruction == IRInstruction.DivUnsigned32
+				|| node.Instruction == IRInstruction.DivUnsigned64))
+				return null;
+
+			var result = node.Result;
+			var op1 = node.Operand1;
+			var op2 = node.Operand2;
+
+			if (!op2.IsResolvedConstant)
+				return null;
+
+			if (op2.IsConstantZero || op2.IsVirtualRegister)
+				return null;
+
+			if ((node.Instruction == IRInstruction.DivUnsigned32 || node.Instruction == IRInstruction.DivUnsigned64) && IsPowerOfTwo(op2.ConstantUnsignedLongInteger))
+			{
+				int shift = GetPowerOfTwo(op2.ConstantUnsignedLongInteger);
+
+				if (shift < 32 || (shift < 64 && result.Is64BitInteger))
+				{
+					return new SimpleInstruction()
+					{
+						Instruction = Select(result.Is64BitInteger, IRInstruction.ShiftRight32, IRInstruction.ShiftRight64),
+						Result = result,
+						Operand1 = op1,
+						Operand2 = ConstantOperand.Create(result.Type, (uint)shift)
+					};
+				}
+			}
+
+			return null;
+		}
+
+		public static SimpleInstruction ArithmeticSimplificationRemUnsignedModulus(InstructionNode node)
+		{
+			if (!(node.Instruction == IRInstruction.RemUnsigned32
+				|| node.Instruction == IRInstruction.RemUnsigned64))
+				return null;
+
+			var result = node.Result;
+			var op1 = node.Operand1;
+			var op2 = node.Operand2;
+
+			if (!op2.IsResolvedConstant)
+				return null;
+
+			if (op2.ConstantUnsignedLongInteger == 0)
+				return null;
+
+			if (!IsPowerOfTwo(op2.ConstantUnsignedLongInteger))
+				return null;
+
+			int power = GetPowerOfTwo(op2.ConstantUnsignedLongInteger);
+
+			var mask = (1 << power) - 1;
+
+			return new SimpleInstruction()
+			{
+				Instruction = Select(result.Is64BitInteger, IRInstruction.LogicalAnd32, IRInstruction.LogicalAnd64),
+				Result = result,
+				Operand1 = op1,
+				Operand2 = ConstantOperand.Create(result.Type, (uint)mask)
+			};
 		}
 
 		public static SimpleInstruction DeadCodeElimination(InstructionNode node)

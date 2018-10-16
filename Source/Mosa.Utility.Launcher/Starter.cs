@@ -229,6 +229,11 @@ namespace Mosa.Utility.Launcher
 
 			File.WriteAllText(gdbscript, sb.ToString());
 
+			AddOutput("Created configuration file: " + gdbscript);
+			AddOutput("==================");
+			AddOutput(sb.ToString());
+			AddOutput("==================");
+
 			LaunchConsoleApplication(AppLocations.GDB, arg);
 		}
 	}

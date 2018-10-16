@@ -21,17 +21,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Counter StrengthReductionAndSimplificationCount = new Counter("IROptimizations.StrengthReductionAndSimplification");
 
-		private Counter ArithmeticSimplificationMultiplicationCount = new Counter("IROptimizations.ArithmeticSimplificationMultiplication");
-		private Counter ArithmeticSimplificationDivisionCount = new Counter("IROptimizations.ArithmeticSimplificationDivision");
-		private Counter ArithmeticSimplificationAdditionAndSubstractionCount = new Counter("IROptimizations.ArithmeticSimplificationAdditionAndSubstraction");
-		private Counter ArithmeticSimplificationShiftCount = new Counter("IROptimizations.ArithmeticSimplificationShift");
-		private Counter ArithmeticSimplificationModulusCount = new Counter("IROptimizations.ArithmeticSimplificationModulus");
-		private Counter CombineAdditionAndSubstractionCount = new Counter("IROptimizations.CombineAdditionAndSubstractionCount");
+		private Counter CombineAdditionAndSubstractionCount = new Counter("IROptimizations.CombineAdditionAndSubstraction");
 		private Counter CombineMultiplicationCount = new Counter("IROptimizations.CombineMultiplication");
 		private Counter CombineDivisionCount = new Counter("IROptimizations.CombineDivision");
 		private Counter CombineLogicalOrCount = new Counter("IROptimizations.CombineLogicalOrCount");
 		private Counter CombineLogicalAndCount = new Counter("IROptimizations.CombineLogicalAndCount");
-		private Counter ConstantFoldingIntegerCompareCount = new Counter("IROptimizations.ConstantFoldingIntegerCompare");
 		private Counter ConstantFoldingPhiCount = new Counter("IROptimizations.ConstantFoldingPhi");
 		private Counter FoldIntegerCompareBranchCount = new Counter("IROptimizations.FoldIntegerCompareBranch");
 		private Counter FoldIntegerCompareCount = new Counter("IROptimizations.FoldIntegerCompare");
@@ -47,10 +41,9 @@ namespace Mosa.Compiler.Framework.Stages
 		private Counter SimplifyGetLowCount = new Counter("IROptimizations.SimplifyGetLow");
 		private Counter SimplifyGetHighCount = new Counter("IROptimizations.SimplifyGetHigh");
 		private Counter RemoveUselessIntegerCompareBranchCount = new Counter("IROptimizations.RemoveUselessIntegerCompareBranch");
-		private Counter LongConstantReductionCount = new Counter("IROptimizations.LongConstantReduction");
 		private Counter LongPropagateCount = new Counter("IROptimizations.LongPropagateCount");
 		private Counter LongConstantFoldingCount = new Counter("IROptimizations.LongConstantFolding");
-		private Counter PropagateCompoundMoveCount = new Counter("IROptimizations.PropagateCompoundMoveCount");
+		private Counter PropagateCompoundMoveCount = new Counter("IROptimizations.PropagateCompoundMove");
 		private Counter FoldIfThenElseCount = new Counter("IROptimizations.FoldIfThenElse");
 
 		private Stack<InstructionNode> worklist;
@@ -73,17 +66,11 @@ namespace Mosa.Compiler.Framework.Stages
 			Register(PropagateMoveCount);
 			Register(ConstantFoldingAndStrengthReductionCount);
 			Register(StrengthReductionAndSimplificationCount);
-			Register(ArithmeticSimplificationMultiplicationCount);
-			Register(ArithmeticSimplificationDivisionCount);
-			Register(ArithmeticSimplificationAdditionAndSubstractionCount);
-			Register(ArithmeticSimplificationShiftCount);
-			Register(ArithmeticSimplificationModulusCount);
 			Register(CombineAdditionAndSubstractionCount);
 			Register(CombineMultiplicationCount);
 			Register(CombineDivisionCount);
 			Register(CombineLogicalOrCount);
 			Register(CombineLogicalAndCount);
-			Register(ConstantFoldingIntegerCompareCount);
 			Register(ConstantFoldingPhiCount);
 			Register(FoldIntegerCompareBranchCount);
 			Register(FoldIntegerCompareCount);
@@ -99,7 +86,6 @@ namespace Mosa.Compiler.Framework.Stages
 			Register(SimplifyGetLowCount);
 			Register(SimplifyGetHighCount);
 			Register(RemoveUselessIntegerCompareBranchCount);
-			Register(LongConstantReductionCount);
 			Register(LongPropagateCount);
 			Register(LongConstantFoldingCount);
 			Register(PropagateCompoundMoveCount);
@@ -116,9 +102,6 @@ namespace Mosa.Compiler.Framework.Stages
 				DeadCodeElimination,
 				ConstantFoldingAndStrengthReductionInteger,
 				StrengthReductionAndSimplification,
-				ArithmeticSimplificationMultiplication,
-				ArithmeticSimplificationDivision,
-				ArithmeticSimplificationRemUnsignedModulus,
 				CombineIntegerCompareBranch,
 				FoldIntegerCompare,
 				RemoveUselessIntegerCompareBranch,
@@ -421,74 +404,6 @@ namespace Mosa.Compiler.Framework.Stages
 			AddOperandUsageToWorkList(node);
 			node.SetInstruction(IRInstruction.Nop);
 			InstructionsRemovedCount++;
-		}
-
-		/// <summary>
-		/// Strength reduction for multiplication when one of the constants is zero or one
-		/// </summary>
-		/// <param name="node">The node.</param>
-		private void ArithmeticSimplificationMultiplication(InstructionNode node)
-		{
-			if (!(node.Instruction == IRInstruction.MulSigned32
-				|| node.Instruction == IRInstruction.MulUnsigned32
-				|| node.Instruction == IRInstruction.MulSigned64
-				|| node.Instruction == IRInstruction.MulUnsigned64))
-				return;
-
-			var result = node.Result;
-			var op1 = node.Operand1;
-			var op2 = node.Operand2;
-
-			if (!op2.IsResolvedConstant)
-				return;
-
-			if (IsPowerOfTwo(op2.ConstantUnsignedLongInteger))
-			{
-				int shift = GetPowerOfTwo(op2.ConstantUnsignedLongInteger);
-
-				if (shift < 32 || (shift < 64 && result.Is64BitInteger))
-				{
-					AddOperandUsageToWorkList(node);
-					if (trace.Active) trace.Log("*** ArithmeticSimplificationMultiplication");
-					if (trace.Active) trace.Log("BEFORE:\t" + node);
-					node.SetInstruction(Select(result, IRInstruction.ShiftLeft32, IRInstruction.ShiftLeft64), result, op1, CreateConstant((int)shift));
-					ArithmeticSimplificationMultiplicationCount++;
-					if (trace.Active) trace.Log("AFTER: \t" + node);
-					return;
-				}
-			}
-		}
-
-		private void ArithmeticSimplificationDivision(InstructionNode node)
-		{
-			if (!(node.Instruction == IRInstruction.DivSigned32
-				|| node.Instruction == IRInstruction.DivUnsigned32
-				|| node.Instruction == IRInstruction.DivSigned64
-				|| node.Instruction == IRInstruction.DivUnsigned64))
-				return;
-
-			var result = node.Result;
-			var op1 = node.Operand1;
-			var op2 = node.Operand2;
-
-			if (op2.IsConstantZero || op2.IsVirtualRegister)
-				return;
-
-			if ((node.Instruction == IRInstruction.DivUnsigned32 || node.Instruction == IRInstruction.DivUnsigned64) && IsPowerOfTwo(op2.ConstantUnsignedLongInteger))
-			{
-				int shift = GetPowerOfTwo(op2.ConstantUnsignedLongInteger);
-
-				if (shift < 32 || (shift < 64 && result.Is64BitInteger))
-				{
-					AddOperandUsageToWorkList(node);
-					if (trace.Active) trace.Log("*** ArithmeticSimplificationDivision");
-					if (trace.Active) trace.Log("BEFORE:\t" + node);
-					node.SetInstruction(Select(result, IRInstruction.ShiftRight32, IRInstruction.ShiftLeft64), result, op1, CreateConstant((int)shift));
-					ArithmeticSimplificationDivisionCount++;
-					if (trace.Active) trace.Log("AFTER: \t" + node);
-					return;
-				}
-			}
 		}
 
 		private void RemoveUselessIntegerCompareBranch(InstructionNode node)
@@ -1273,38 +1188,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("REMOVED:\t" + node);
 			node.SetInstruction(IRInstruction.Nop);
 			DeadCodeEliminationPhiCount++;
-		}
-
-		private void ArithmeticSimplificationRemUnsignedModulus(InstructionNode node)
-		{
-			if (!(node.Instruction == IRInstruction.RemUnsigned32 || node.Instruction == IRInstruction.RemUnsigned64))
-				return;
-
-			var result = node.Result;
-			var op1 = node.Operand1;
-			var op2 = node.Operand2;
-
-			if (!op2.IsResolvedConstant)
-				return;
-
-			if (op2.ConstantUnsignedLongInteger == 0)
-				return;
-
-			if (!IsPowerOfTwo(op2.ConstantUnsignedLongInteger))
-				return;
-
-			int power = GetPowerOfTwo(op2.ConstantUnsignedLongInteger);
-
-			var mask = (1 << power) - 1;
-
-			var constant = CreateConstant(mask);
-
-			AddOperandUsageToWorkList(node);
-			if (trace.Active) trace.Log("*** ArithmeticSimplificationRemUnsignedModulus");
-			if (trace.Active) trace.Log("BEFORE:\t" + node);
-			node.SetInstruction(Select(result, IRInstruction.LogicalAnd32, IRInstruction.LogicalAnd64), result, op1, constant);
-			ArithmeticSimplificationModulusCount++;
-			if (trace.Active) trace.Log("AFTER: \t" + node);
 		}
 
 		private static bool IsPowerOfTwo(ulong n)

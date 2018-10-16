@@ -19,7 +19,7 @@ namespace Mosa.Utility.Launcher
 {
 	public class Builder : BaseLauncher
 	{
-		public IList<string> Counters { get; }
+		public List<string> Counters { get; }
 
 		public DateTime CompileStartTime { get; private set; }
 
