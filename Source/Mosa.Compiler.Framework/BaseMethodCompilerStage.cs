@@ -722,6 +722,8 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Trace Helper Methods
 
+		#region Helper Methods
+
 		/// <summary>
 		/// Updates the counter.
 		/// </summary>
@@ -730,8 +732,6 @@ namespace Mosa.Compiler.Framework
 		{
 			MethodData.Counters.UpdateNoLock(counter.Name, counter.Count);
 		}
-
-		#region Helpers
 
 		/// <summary>
 		/// Gets the size of the type.
@@ -980,7 +980,15 @@ namespace Mosa.Compiler.Framework
 			return !is64bit ? instruction32 : instruction64;
 		}
 
-		#endregion Helpers
+		public static bool IsSimpleIRMoveInstruction(BaseInstruction instruction)
+		{
+			return (instruction == IRInstruction.MoveInt32
+				|| instruction == IRInstruction.MoveInt64
+				|| instruction == IRInstruction.MoveFloatR8
+				|| instruction == IRInstruction.MoveFloatR4);
+		}
+
+		#endregion Helper Methods
 
 		#region Constant Helper Methods
 

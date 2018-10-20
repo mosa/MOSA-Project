@@ -6,20 +6,42 @@ namespace Mosa.Compiler.Framework.Helper
 {
 	public static class BuiltInOptimizations
 	{
+		public static SimpleInstruction ConstantFoldingAndStrengthReductionInteger(InstructionNode node)
+		{
+			var operand = ConstantFoldingAndStrengthReductionIntegerToOperand(node);
+
+			if (operand == null)
+				return null;
+
+			return new SimpleInstruction()
+			{
+				Instruction = GetMoveInteger(node.Result),
+				Result = node.Result,
+				Operand1 = operand
+			};
+		}
+
+		public static SimpleInstruction StrengthReduction(InstructionNode node)
+		{
+			return StrengthReductionMultiplication(node)
+				?? StrengthReductionDivision(node)
+				?? StrengthReductionRemUnsignedModulus(node);
+		}
+
+		public static SimpleInstruction Simplification(InstructionNode node)
+		{
+			return FoldIfThenElse(node)
+				?? SimplifyAddCarryOut(node)
+				?? SimplifySubCarryOut(node)
+				?? PhiSimplication(node);
+		}
+
 		public static Operand ConstantFoldingAndStrengthReductionIntegerToOperand(InstructionNode node)
 		{
 			return ConstantFolding2Integer(node)
 				?? ConstantFolding1Integer(node)
 				?? StrengthReductionInteger(node)
 				?? ConstantFolding3Integer(node);
-		}
-
-		public static SimpleInstruction StrengthReductionAndSimplification(InstructionNode node)
-		{
-			return ArithmeticSimplificationMultiplication(node)
-				?? ArithmeticSimplificationDivision(node)
-				?? ArithmeticSimplificationRemUnsignedModulus(node)				
-				?? PhiSimplication(node);
 		}
 
 		private static Operand ConstantFolding1Integer(InstructionNode node)
@@ -432,6 +454,10 @@ namespace Mosa.Compiler.Framework.Helper
 			if (!ValidateSSAForm(node.Result))
 				return false;
 
+			// special case - phi instruction references itself - this can be caused by optimizations
+			if (node.Instruction == IRInstruction.Phi && node.Result == node.Operand1)
+				return true;
+
 			if (node.Result.Uses.Count != 0)
 				return false;
 
@@ -465,13 +491,18 @@ namespace Mosa.Compiler.Framework.Helper
 
 			if (node.OperandCount == 1 && node.Result.IsInteger)
 			{
-				return new SimpleInstruction(GetMoveInteger(node.Result), node.Result, node.Operand1);
+				return new SimpleInstruction()
+				{
+					Instruction = GetMoveInteger(node.Result),
+					Result = node.Result,
+					Operand1 = node.Operand1
+				};
 			}
 
 			return null;
 		}
 
-		public static SimpleInstruction ArithmeticSimplificationMultiplication(InstructionNode node)
+		public static SimpleInstruction StrengthReductionMultiplication(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.MulSigned32
 				|| node.Instruction == IRInstruction.MulUnsigned32
@@ -505,7 +536,7 @@ namespace Mosa.Compiler.Framework.Helper
 			return null;
 		}
 
-		public static SimpleInstruction ArithmeticSimplificationDivision(InstructionNode node)
+		public static SimpleInstruction StrengthReductionDivision(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.DivUnsigned32
 				|| node.Instruction == IRInstruction.DivUnsigned64))
@@ -540,7 +571,7 @@ namespace Mosa.Compiler.Framework.Helper
 			return null;
 		}
 
-		public static SimpleInstruction ArithmeticSimplificationRemUnsignedModulus(InstructionNode node)
+		public static SimpleInstruction StrengthReductionRemUnsignedModulus(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.RemUnsigned32
 				|| node.Instruction == IRInstruction.RemUnsigned64))
@@ -583,18 +614,70 @@ namespace Mosa.Compiler.Framework.Helper
 			};
 		}
 
-		public static SimpleInstruction ConstantFoldingAndStrengthReductionInteger(InstructionNode node)
+		public static SimpleInstruction FoldIfThenElse(InstructionNode node)
 		{
-			var operand = ConstantFoldingAndStrengthReductionIntegerToOperand(node);
+			if (!(node.Instruction == IRInstruction.IfThenElse64
+				|| node.Instruction == IRInstruction.IfThenElse32))
+				return null;
 
-			if (operand == null)
+			bool result = false;
+
+			if (node.Operand2.IsVirtualRegister && node.Operand3.IsVirtualRegister && node.Operand2 == node.Operand3)
+			{
+				result = true;
+			}
+			else if (node.Operand1.IsResolvedConstant)
+			{
+				result = node.Operand1.ConstantUnsignedLongInteger != 0;
+			}
+			else if (node.Operand2.IsResolvedConstant && node.Operand3.IsResolvedConstant)
+			{
+				result = node.Operand2.ConstantUnsignedLongInteger == node.Operand3.ConstantUnsignedLongInteger;
+			}
+			else
+			{
+				return null;
+			}
+
+			return new SimpleInstruction()
+			{
+				Instruction = Select(node.Instruction == IRInstruction.IfThenElse32, IRInstruction.MoveInt32, IRInstruction.MoveInt64),
+				Result = node.Result,
+				Operand1 = result ? node.Operand2 : node.Operand3,
+			};
+		}
+
+		public static SimpleInstruction SimplifyAddCarryOut(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.AddCarryOut32)
+				return null;
+
+			if (node.Result2.Uses.Count != 0)
 				return null;
 
 			return new SimpleInstruction()
 			{
-				Instruction = GetMoveInteger(node.Result),
+				Instruction = IRInstruction.Add32,
 				Result = node.Result,
-				Operand1 = operand
+				Operand1 = node.Operand1,
+				Operand2 = node.Operand2
+			};
+		}
+
+		public static SimpleInstruction SimplifySubCarryOut(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.SubCarryOut32)
+				return null;
+
+			if (node.Result2.Uses.Count != 0)
+				return null;
+
+			return new SimpleInstruction()
+			{
+				Instruction = IRInstruction.Sub32,
+				Result = node.Result,
+				Operand1 = node.Operand1,
+				Operand2 = node.Operand2
 			};
 		}
 
@@ -649,7 +732,7 @@ namespace Mosa.Compiler.Framework.Helper
 
 		public static BaseInstruction Select(bool is64bit, BaseInstruction instruction32, BaseInstruction instruction64)
 		{
-			return !is64bit ? instruction32 : instruction64;
+			return is64bit ? instruction64 : instruction32;
 		}
 
 		private static BaseInstruction GetMoveInteger(Operand operand)

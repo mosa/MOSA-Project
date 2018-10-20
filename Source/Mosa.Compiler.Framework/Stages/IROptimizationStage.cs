@@ -18,9 +18,8 @@ namespace Mosa.Compiler.Framework.Stages
 		private Counter PropagateConstantCount = new Counter("IROptimizations.PropagateConstant");
 		private Counter PropagateMoveCount = new Counter("IROptimizations.PropagateMoveCount");
 		private Counter ConstantFoldingAndStrengthReductionCount = new Counter("IROptimizations.ConstantFoldingAndStrengthReduction");
-
 		private Counter StrengthReductionAndSimplificationCount = new Counter("IROptimizations.StrengthReductionAndSimplification");
-
+		private Counter InstructionSimplificationCount = new Counter("IROptimizations.InstructionSimplification");
 		private Counter CombineAdditionAndSubstractionCount = new Counter("IROptimizations.CombineAdditionAndSubstraction");
 		private Counter CombineMultiplicationCount = new Counter("IROptimizations.CombineMultiplication");
 		private Counter CombineDivisionCount = new Counter("IROptimizations.CombineDivision");
@@ -66,6 +65,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Register(PropagateMoveCount);
 			Register(ConstantFoldingAndStrengthReductionCount);
 			Register(StrengthReductionAndSimplificationCount);
+			Register(InstructionSimplificationCount);
 			Register(CombineAdditionAndSubstractionCount);
 			Register(CombineMultiplicationCount);
 			Register(CombineDivisionCount);
@@ -101,30 +101,26 @@ namespace Mosa.Compiler.Framework.Stages
 				PropagateCompoundMove,
 				DeadCodeElimination,
 				ConstantFoldingAndStrengthReductionInteger,
-				StrengthReductionAndSimplification,
+				StrengthReduction,
+				InstructionSimplification,
 				CombineIntegerCompareBranch,
 				FoldIntegerCompare,
 				RemoveUselessIntegerCompareBranch,
 				ConstantFoldIntegerCompareBranch,
 				SimplifyIntegerCompare2,
 				SimplifyIntegerCompare,
-				SimplifyAddCarryOut,
 				SimplifyAddCarryOut2,
 				SimplifyAddWithCarry,
-				SimplifySubCarryOut,
 				SimplifyCompareBranch,
 				SimplifyGetLow64,
 				SimplifyGetHigh64,
 				SimplifyGetLow64b,
 				SimplifyGetHigh64b,
-
-				//SimplifyPhi,
 				SimplifyPhi2,
 				SimplifyParamLoad,
 				GetHigh64Propagation,
 				GetLow64Propagation,
 				FoldGetLow64PointerConstant,
-				FoldIfThenElse,
 				FoldLoadStoreOffsets,
 				ConstantFoldingPhi,
 				DeadCodeEliminationPhi,
@@ -917,8 +913,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node.Result.IsInteger)
 				return;
 
-			Operand operand1 = node.Operand1;
-			Operand result = node.Result;
+			var operand1 = node.Operand1;
+			var result = node.Result;
 
 			foreach (var operand in node.Operands)
 			{
@@ -935,34 +931,6 @@ namespace Mosa.Compiler.Framework.Stages
 			node.SetInstruction(GetMoveInteger(result), result, operand1);
 			if (trace.Active) trace.Log("AFTER: \t" + node);
 			ConstantFoldingPhiCount++;
-		}
-
-		private void SimplifyPhi(InstructionNode node)
-		{
-			if (node.Instruction != IRInstruction.Phi)
-				return;
-
-			if (node.OperandCount != 1)
-				return;
-
-			if (!ValidateSSAForm(node.Result))
-				return;
-
-			if (trace.Active) trace.Log("*** SimplifyPhiInstruction");
-			if (trace.Active) trace.Log("BEFORE:\t" + node);
-			AddOperandUsageToWorkList(node);
-
-			if (node.Result != node.Operand1)
-			{
-				node.SetInstruction(GetMoveInteger(node.Result), node.Result, node.Operand1);
-			}
-			else
-			{
-				node.SetInstruction(IRInstruction.Nop);
-			}
-
-			if (trace.Active) trace.Log("AFTER: \t" + node);
-			SimplifyPhiCount++;
 		}
 
 		private void SimplifyPhi2(InstructionNode node)
@@ -1038,23 +1006,6 @@ namespace Mosa.Compiler.Framework.Stages
 			SimplifyIntegerCompareCount++;
 		}
 
-		private void SimplifyAddCarryOut(InstructionNode node)
-		{
-			if (node.Instruction != IRInstruction.AddCarryOut32)
-				return;
-
-			if (node.Result2.Uses.Count != 0)
-				return;
-
-			if (trace.Active) trace.Log("*** SimplifyAddCarryOut");
-			if (trace.Active) trace.Log("BEFORE:\t" + node);
-			AddOperandUsageToWorkList(node);
-
-			node.SetInstruction(IRInstruction.Add32, node.Result, node.Operand1, node.Operand2);
-			if (trace.Active) trace.Log("AFTER: \t" + node);
-			SimplifyGeneralCount++;
-		}
-
 		private void SimplifyAddCarryOut2(InstructionNode node)
 		{
 			if (node.Instruction != IRInstruction.AddCarryOut32)
@@ -1122,23 +1073,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private void SimplifySubCarryOut(InstructionNode node)
-		{
-			if (node.Instruction != IRInstruction.SubCarryOut32)
-				return;
-
-			if (node.Result2.Uses.Count != 0)
-				return;
-
-			if (trace.Active) trace.Log("*** SimplifySubCarryOut");
-			if (trace.Active) trace.Log("BEFORE:\t" + node);
-			AddOperandUsageToWorkList(node);
-
-			node.SetInstruction(IRInstruction.Sub32, node.Result, node.Operand1, node.Operand2);
-			if (trace.Active) trace.Log("AFTER: \t" + node);
-			SimplifyGeneralCount++;
-		}
-
 		private void SimplifyIntegerCompare2(InstructionNode node)
 		{
 			if (!(node.Instruction == IRInstruction.CompareInt32x32
@@ -1188,23 +1122,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (trace.Active) trace.Log("REMOVED:\t" + node);
 			node.SetInstruction(IRInstruction.Nop);
 			DeadCodeEliminationPhiCount++;
-		}
-
-		private static bool IsPowerOfTwo(ulong n)
-		{
-			return (n & (n - 1)) == 0;
-		}
-
-		private static int GetPowerOfTwo(ulong n)
-		{
-			int bits = 0;
-			while (n > 0)
-			{
-				bits++;
-				n >>= 1;
-			}
-
-			return bits - 1;
 		}
 
 		private void GetLow64Propagation(InstructionNode node)
@@ -1357,44 +1274,44 @@ namespace Mosa.Compiler.Framework.Stages
 			SimplifyParamLoadCount++;
 		}
 
-		private void FoldIfThenElse(InstructionNode node)
-		{
-			if (!(node.Instruction == IRInstruction.IfThenElse64 || node.Instruction == IRInstruction.IfThenElse32))
-				return;
+		//private void FoldIfThenElse(InstructionNode node)
+		//{
+		//	if (!(node.Instruction == IRInstruction.IfThenElse64 || node.Instruction == IRInstruction.IfThenElse32))
+		//		return;
 
-			bool simplify = false;
-			bool result = false;
+		//	bool simplify = false;
+		//	bool result = false;
 
-			if (node.Operand2.IsVirtualRegister && node.Operand3.IsVirtualRegister && node.Operand2 == node.Operand3)
-			{
-				// always true
-				simplify = true;
-				result = true;
-			}
-			else if (node.Operand1.IsResolvedConstant)
-			{
-				simplify = true;
-				result = node.Operand1.ConstantUnsignedLongInteger != 0;
-			}
-			else if (node.Operand2.IsResolvedConstant && node.Operand3.IsResolvedConstant)
-			{
-				simplify = true;
-				result = node.Operand2.ConstantUnsignedLongInteger == node.Operand3.ConstantUnsignedLongInteger;
-			}
+		//	if (node.Operand2.IsVirtualRegister && node.Operand3.IsVirtualRegister && node.Operand2 == node.Operand3)
+		//	{
+		//		// always true
+		//		simplify = true;
+		//		result = true;
+		//	}
+		//	else if (node.Operand1.IsResolvedConstant)
+		//	{
+		//		simplify = true;
+		//		result = node.Operand1.ConstantUnsignedLongInteger != 0;
+		//	}
+		//	else if (node.Operand2.IsResolvedConstant && node.Operand3.IsResolvedConstant)
+		//	{
+		//		simplify = true;
+		//		result = node.Operand2.ConstantUnsignedLongInteger == node.Operand3.ConstantUnsignedLongInteger;
+		//	}
 
-			if (simplify)
-			{
-				var move = (node.Instruction == IRInstruction.IfThenElse32) ? (BaseInstruction)IRInstruction.MoveInt32 : IRInstruction.MoveInt64;
-				var operand = result ? node.Operand2 : node.Operand3;
+		//	if (simplify)
+		//	{
+		//		var move = (node.Instruction == IRInstruction.IfThenElse32) ? (BaseInstruction)IRInstruction.MoveInt32 : IRInstruction.MoveInt64;
+		//		var operand = result ? node.Operand2 : node.Operand3;
 
-				AddOperandUsageToWorkList(node);
-				if (trace.Active) trace.Log("*** FoldIfThenElse");
-				if (trace.Active) trace.Log("BEFORE:\t" + node);
-				node.SetInstruction(move, node.Result, operand);
-				if (trace.Active) trace.Log("AFTER: \t" + node);
-				FoldIfThenElseCount++;
-			}
-		}
+		//		AddOperandUsageToWorkList(node);
+		//		if (trace.Active) trace.Log("*** FoldIfThenElse");
+		//		if (trace.Active) trace.Log("BEFORE:\t" + node);
+		//		node.SetInstruction(move, node.Result, operand);
+		//		if (trace.Active) trace.Log("AFTER: \t" + node);
+		//		FoldIfThenElseCount++;
+		//	}
+		//}
 
 		private void SimplifyCompareBranch(InstructionNode node)
 		{
@@ -1607,12 +1524,21 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private void StrengthReductionAndSimplification(InstructionNode node)
+		private void StrengthReduction(InstructionNode node)
 		{
 			Update(
 				node,
-				BuiltInOptimizations.StrengthReductionAndSimplification(node),
+				BuiltInOptimizations.StrengthReduction(node),
 				StrengthReductionAndSimplificationCount
+			);
+		}
+
+		private void InstructionSimplification(InstructionNode node)
+		{
+			Update(
+				node,
+				BuiltInOptimizations.Simplification(node),
+				InstructionSimplificationCount
 			);
 		}
 

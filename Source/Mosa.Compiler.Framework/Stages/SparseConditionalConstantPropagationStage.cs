@@ -207,6 +207,9 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmptyOrNop)
 						continue;
 
+					if (IsSimpleIRMoveInstruction(node.Instruction))
+						continue; // sometimes PHI are converted to moves
+
 					if (node.Instruction != IRInstruction.Phi)
 						break;
 

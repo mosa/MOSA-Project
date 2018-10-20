@@ -6,6 +6,7 @@ using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Trace;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -46,7 +47,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (trace.Active) DumpLoops(loops);
 
-			//FindLoopInvariantInstructions(loops);
+			FindLoopInvariantInstructions(loops);
 		}
 
 		protected override void Finish()
@@ -245,31 +246,90 @@ namespace Mosa.Compiler.Framework.Stages
 			var header = loop.Header;
 
 			// Create pre-header block
-			var preheader = CreateNewBlock();
+			var preheaderBlock = CreateNewBlock();
+			var preheader = new Context(preheaderBlock);
 
-			var preheaderCtx = new Context(preheader);
-			preheaderCtx.AppendInstruction(IRInstruction.Jmp, header);
-
-			// TODO: need to move PHI instructions to header AND update previous branch targets
-			var headerCtx = new Context(header.AfterFirst);
-
-			// TODO: not quite right
 			foreach (var previous in header.PreviousBlocks.ToArray())
 			{
-				ReplaceBranchTargets(previous, header, preheader);
+				if (!loop.Backedges.Contains(previous))
+				{
+					ReplaceBranchTargets(previous, header, preheaderBlock);
+				}
 			}
 
-			return preheader;
+			// PHIs in loop header
+			for (var node = header.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+			{
+				if (node.IsEmpty)
+					continue;
+
+				if (IsSimpleIRMoveInstruction(node.Instruction))
+					continue; // sometimes PHI are converted to moves
+
+				if (node.Instruction != IRInstruction.Phi)
+					break;
+
+				var internalSourceBlocks = new List<BasicBlock>(node.OperandCount);
+				var internalSourceOperands = new List<Operand>(node.OperandCount);
+				var externalSourceBlocks = new List<BasicBlock>(node.OperandCount);
+				var externalSourceOperands = new List<Operand>(node.OperandCount);
+
+				var transitionOperand = AllocateVirtualRegister(node.Result.Type);
+
+				internalSourceOperands.Add(transitionOperand);
+				internalSourceBlocks.Add(preheaderBlock);
+
+				for (int i = 0; i < node.PhiBlocks.Count; i++)
+				{
+					var sourceOperand = node.GetOperand(i);
+					var sourceBlock = node.PhiBlocks[i];
+
+					if (loop.Backedges.Contains(sourceBlock))
+					{
+						Debug.Assert(loop.LoopBlocks.Contains(sourceBlock));
+
+						internalSourceBlocks.Add(sourceBlock);
+						internalSourceOperands.Add(sourceOperand);
+					}
+					else
+					{
+						Debug.Assert(!loop.LoopBlocks.Contains(sourceBlock));
+
+						externalSourceBlocks.Add(sourceBlock);
+						externalSourceOperands.Add(sourceOperand);
+					}
+				}
+
+				preheader.AppendInstruction(IRInstruction.Phi, transitionOperand, externalSourceOperands);
+				preheader.PhiBlocks = externalSourceBlocks;
+
+				node.SetInstruction(IRInstruction.Phi, node.Result, internalSourceOperands);
+				node.PhiBlocks = internalSourceBlocks;
+			}
+
+			preheader.AppendInstruction(IRInstruction.Jmp, header);
+
+			return preheaderBlock;
 		}
 
 		private void MoveToPreHeader(List<InstructionNode> nodes, Loop loop)
 		{
+			if (nodes.Count == 0)
+				return;
+
 			if (loop.Header.PreviousBlocks.Count == 0)
 				return; // special case - a pre-header can not be made because the loop header is already the first block
 
 			var preheader = CreatePreHeader(loop);
 
 			var at = preheader.BeforeLast;
+
+			while (at.IsEmpty || at.Instruction != IRInstruction.Jmp)
+			{
+				at = at.Previous;
+			}
+
+			at = at.Previous;
 
 			foreach (var node in nodes)
 			{

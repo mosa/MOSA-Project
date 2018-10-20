@@ -226,7 +226,7 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 
 					// check for redundant
-					var redundant = CheckRedundant(ref node);
+					var redundant = CheckRedundant(node);
 
 					if (redundant != null)
 					{
@@ -256,7 +256,9 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 				}
 
-				newInstruction = BuiltInOptimizations.StrengthReductionAndSimplification(node);
+				newInstruction = BuiltInOptimizations.StrengthReduction(node)
+					?? BuiltInOptimizations.Simplification(node);
+
 				if (newInstruction != null)
 				{
 					node.SetInstruction(newInstruction);
@@ -656,7 +658,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private Operand CheckRedundant(ref InstructionNode node)
+		private Operand CheckRedundant(InstructionNode node)
 		{
 			Operand redundant = null;
 

@@ -1640,6 +1640,7 @@ namespace Mosa.Compiler.Framework
 			Operand1 = instruction.Operand1;
 			Operand2 = instruction.Operand2;
 			Operand3 = instruction.Operand3;
+			ConditionCode = instruction.ConditionCode;
 			Label = label;
 			Block = block;
 
