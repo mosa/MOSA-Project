@@ -37,5 +37,11 @@ namespace Mosa.Compiler.Framework
 			counter.Count++;
 			return counter;
 		}
+
+		public static Counter operator +(Counter counter, int increment)
+		{
+			counter.Count += increment;
+			return counter;
+		}
 	}
 }

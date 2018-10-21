@@ -2,12 +2,14 @@
 
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Common;
+using Mosa.Compiler.Framework.Helper;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Trace;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Linq;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -16,7 +18,9 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 	{
-		private Counter CodeMotionCount = new Counter("LoopInvariantCodeMotionStage.CodeMotionCount");
+		private Counter PreHeadersCount = new Counter("LoopInvariantCodeMotionStage.PreHeaders");
+		private Counter CodeMotionCount = new Counter("LoopInvariantCodeMotionStage.CodeMotion");
+		private Counter Methods = new Counter("LoopInvariantCodeMotionStage.Methods");
 
 		private SimpleFastDominance AnalysisDominance;
 
@@ -25,6 +29,8 @@ namespace Mosa.Compiler.Framework.Stages
 		protected override void Initialize()
 		{
 			Register(CodeMotionCount);
+			Register(PreHeadersCount);
+			Register(Methods);
 		}
 
 		protected override void Run()
@@ -45,9 +51,19 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var loops = FindLoops();
 
+			if (loops.Count == 0)
+				return;
+
 			if (trace.Active) DumpLoops(loops);
 
+			SortLoops(loops);
+
 			FindLoopInvariantInstructions(loops);
+
+			if (CodeMotionCount.Count != 0)
+			{
+				Methods++;
+			}
 		}
 
 		protected override void Finish()
@@ -149,6 +165,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 				loopTrace.Log($"   Members: {sb}");
 			}
+		}
+
+		private void SortLoops(List<Loop> loops)
+		{
+			loops.Sort((Loop p1, Loop p2) => p1.LoopBlocks.Count < p2.LoopBlocks.Count ? 0 : 1);
 		}
 
 		private void FindLoopInvariantInstructions(List<Loop> loops)
@@ -305,11 +326,25 @@ namespace Mosa.Compiler.Framework.Stages
 
 				node.SetInstruction(IRInstruction.Phi, node.Result, internalSourceOperands);
 				node.PhiBlocks = internalSourceBlocks;
+
+				OptimizePhi(preheader.Node);
+				OptimizePhi(node);
 			}
 
 			preheader.AppendInstruction(IRInstruction.Jmp, header);
 
+			PreHeadersCount++;
+
 			return preheaderBlock;
+		}
+
+		private void OptimizePhi(InstructionNode node)
+		{
+			var newInstruction = BuiltInOptimizations.PhiSimplication(node);
+			if (newInstruction != null)
+			{
+				node.SetInstruction(newInstruction);
+			}
 		}
 
 		private void MoveToPreHeader(List<InstructionNode> nodes, Loop loop)
@@ -336,6 +371,8 @@ namespace Mosa.Compiler.Framework.Stages
 				at.CutFrom(node);
 				at = node;
 			}
+
+			CodeMotionCount += nodes.Count;
 		}
 	}
 }
