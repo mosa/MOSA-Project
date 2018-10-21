@@ -396,6 +396,7 @@
     <Compile Include="RegisterAllocator\VirtualRegister.cs" />
     <Compile Include="RegisterAllocator\GreedyRegisterAllocator.cs" />
     <Compile Include="CompilerStages\DebugFileGenerationStage.cs" />
+    <Compile Include="SimpleInstruction.cs" />
     <Compile Include="Stages\DominanceOutputStage.cs" />
     <Compile Include="Common\Loop.cs" />
     <Compile Include="Stages\OptimizationRulesStage.cs" />
@@ -627,8 +628,6 @@
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Optimizations\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

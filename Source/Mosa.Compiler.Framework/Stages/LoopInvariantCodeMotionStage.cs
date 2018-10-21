@@ -2,11 +2,14 @@
 
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Common;
+using Mosa.Compiler.Framework.Helper;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Trace;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
+using System.Linq;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -15,7 +18,9 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 	{
-		private Counter CodeMotionCount = new Counter("LoopInvariantCodeMotionStage.CodeMotionCount");
+		private Counter PreHeadersCount = new Counter("LoopInvariantCodeMotionStage.PreHeaders");
+		private Counter CodeMotionCount = new Counter("LoopInvariantCodeMotionStage.CodeMotion");
+		private Counter Methods = new Counter("LoopInvariantCodeMotionStage.Methods");
 
 		private SimpleFastDominance AnalysisDominance;
 
@@ -24,6 +29,8 @@ namespace Mosa.Compiler.Framework.Stages
 		protected override void Initialize()
 		{
 			Register(CodeMotionCount);
+			Register(PreHeadersCount);
+			Register(Methods);
 		}
 
 		protected override void Run()
@@ -44,9 +51,19 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var loops = FindLoops();
 
+			if (loops.Count == 0)
+				return;
+
 			if (trace.Active) DumpLoops(loops);
 
+			SortLoops(loops);
+
 			FindLoopInvariantInstructions(loops);
+
+			if (CodeMotionCount.Count != 0)
+			{
+				Methods++;
+			}
 		}
 
 		protected override void Finish()
@@ -150,6 +167,11 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
+		private void SortLoops(List<Loop> loops)
+		{
+			loops.Sort((Loop p1, Loop p2) => p1.LoopBlocks.Count < p2.LoopBlocks.Count ? 0 : 1);
+		}
+
 		private void FindLoopInvariantInstructions(List<Loop> loops)
 		{
 			foreach (var loop in loops)
@@ -240,39 +262,117 @@ namespace Mosa.Compiler.Framework.Stages
 			return false;
 		}
 
-		private BasicBlock CreatePreHeader(BasicBlock target)
+		private BasicBlock CreatePreHeader(Loop loop)
 		{
+			var header = loop.Header;
+
 			// Create pre-header block
-			var preheader = CreateNewBlock();
+			var preheaderBlock = CreateNewBlock();
+			var preheader = new Context(preheaderBlock);
 
-			// TODO: need to move PHI instructions to header
-
-			foreach (var previous in target.PreviousBlocks.ToArray())
+			foreach (var previous in header.PreviousBlocks.ToArray())
 			{
-				ReplaceBranchTargets(previous, target, preheader);
+				if (!loop.Backedges.Contains(previous))
+				{
+					ReplaceBranchTargets(previous, header, preheaderBlock);
+				}
 			}
 
-			var context = new Context(preheader);
+			// PHIs in loop header
+			for (var node = header.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+			{
+				if (node.IsEmpty)
+					continue;
 
-			context.AppendInstruction(IRInstruction.Jmp, target);
+				if (IsSimpleIRMoveInstruction(node.Instruction))
+					continue; // sometimes PHI are converted to moves
 
-			return preheader;
+				if (node.Instruction != IRInstruction.Phi)
+					break;
+
+				var internalSourceBlocks = new List<BasicBlock>(node.OperandCount);
+				var internalSourceOperands = new List<Operand>(node.OperandCount);
+				var externalSourceBlocks = new List<BasicBlock>(node.OperandCount);
+				var externalSourceOperands = new List<Operand>(node.OperandCount);
+
+				var transitionOperand = AllocateVirtualRegister(node.Result.Type);
+
+				internalSourceOperands.Add(transitionOperand);
+				internalSourceBlocks.Add(preheaderBlock);
+
+				for (int i = 0; i < node.PhiBlocks.Count; i++)
+				{
+					var sourceOperand = node.GetOperand(i);
+					var sourceBlock = node.PhiBlocks[i];
+
+					if (loop.Backedges.Contains(sourceBlock))
+					{
+						Debug.Assert(loop.LoopBlocks.Contains(sourceBlock));
+
+						internalSourceBlocks.Add(sourceBlock);
+						internalSourceOperands.Add(sourceOperand);
+					}
+					else
+					{
+						Debug.Assert(!loop.LoopBlocks.Contains(sourceBlock));
+
+						externalSourceBlocks.Add(sourceBlock);
+						externalSourceOperands.Add(sourceOperand);
+					}
+				}
+
+				preheader.AppendInstruction(IRInstruction.Phi, transitionOperand, externalSourceOperands);
+				preheader.PhiBlocks = externalSourceBlocks;
+
+				node.SetInstruction(IRInstruction.Phi, node.Result, internalSourceOperands);
+				node.PhiBlocks = internalSourceBlocks;
+
+				OptimizePhi(preheader.Node);
+				OptimizePhi(node);
+			}
+
+			preheader.AppendInstruction(IRInstruction.Jmp, header);
+
+			PreHeadersCount++;
+
+			return preheaderBlock;
+		}
+
+		private void OptimizePhi(InstructionNode node)
+		{
+			var newInstruction = BuiltInOptimizations.PhiSimplication(node);
+			if (newInstruction != null)
+			{
+				node.SetInstruction(newInstruction);
+			}
 		}
 
 		private void MoveToPreHeader(List<InstructionNode> nodes, Loop loop)
 		{
+			if (nodes.Count == 0)
+				return;
+
 			if (loop.Header.PreviousBlocks.Count == 0)
 				return; // special case - a pre-header can not be made because the loop header is already the first block
 
-			var preheader = CreatePreHeader(loop.Header);
+			var preheader = CreatePreHeader(loop);
 
-			var at = preheader.AfterFirst;
+			var at = preheader.BeforeLast;
+
+			while (at.IsEmpty || at.Instruction != IRInstruction.Jmp)
+			{
+				at = at.Previous;
+			}
+
+			at = at.Previous;
 
 			foreach (var node in nodes)
 			{
 				at.CutFrom(node);
 				at = node;
 			}
+
+			CodeMotionCount += nodes.Count;
 		}
 	}
 }

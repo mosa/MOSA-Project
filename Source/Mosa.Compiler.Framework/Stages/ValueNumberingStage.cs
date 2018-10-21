@@ -26,10 +26,11 @@ namespace Mosa.Compiler.Framework.Stages
 		private BitArray ParamReadOnly;
 
 		private Counter InstructionRemovalCount = new Counter("ValueNumbering.IRInstructionRemoved");
-		private Counter ConstantFoldingAndStrengthReductionCount = new Counter("ValueNumbering.ConstantFoldingAndStrengthReductionCount");
-		private Counter SubexpressionEliminationCount = new Counter("ValueNumbering.SubexpressionEliminationCount");
-		private Counter ParameterLoadEliminationCount = new Counter("ValueNumbering.ParameterLoadEliminationCount");
-		private Counter DeadCodeEliminationCount = new Counter("ValueNumbering.DeadCodeEliminationCount");
+		private Counter ConstantFoldingAndStrengthReductionCount = new Counter("ValueNumbering.ConstantFoldingAndStrengthReduction");
+		private Counter SubexpressionEliminationCount = new Counter("ValueNumbering.SubexpressionElimination");
+		private Counter ParameterLoadEliminationCount = new Counter("ValueNumbering.ParameterLoadElimination");
+		private Counter DeadCodeEliminationCount = new Counter("ValueNumbering.DeadCodeElimination");
+		private Counter StrengthReductionAndSimplificationCount = new Counter("ValueNumbering.StrengthReductionAndSimplification");
 
 		private class Expression
 		{
@@ -50,6 +51,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Register(SubexpressionEliminationCount);
 			Register(ParameterLoadEliminationCount);
 			Register(DeadCodeEliminationCount);
+			Register(StrengthReductionAndSimplificationCount);
 		}
 
 		protected override void Run()
@@ -224,7 +226,7 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 
 					// check for redundant
-					var redundant = CheckRedundant(ref node);
+					var redundant = CheckRedundant(node);
 
 					if (redundant != null)
 					{
@@ -245,11 +247,22 @@ namespace Mosa.Compiler.Framework.Stages
 
 				UpdateNodeWithValueNumbers(node);
 
-				if (BuiltInOptimizations.DeadCodeElimination(node))
+				var newInstruction = BuiltInOptimizations.DeadCodeElimination(node);
+				if (newInstruction != null)
 				{
+					node.SetInstruction(newInstruction);
 					DeadCodeEliminationCount++;
 					InstructionRemovalCount++;
 					continue;
+				}
+
+				newInstruction = BuiltInOptimizations.StrengthReduction(node)
+					?? BuiltInOptimizations.Simplification(node);
+
+				if (newInstruction != null)
+				{
+					node.SetInstruction(newInstruction);
+					StrengthReductionAndSimplificationCount++;
 				}
 
 				// move constant to right for commutative operations - helpful later
@@ -300,7 +313,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 
 				// Simplify expression: constant folding & strength reduction
-				var newOperand = BuiltInOptimizations.ConstantFoldingAndStrengthReductionInteger(node);
+				var newOperand = BuiltInOptimizations.ConstantFoldingAndStrengthReductionIntegerToOperand(node);
 
 				if (newOperand != null)
 				{
@@ -645,7 +658,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private Operand CheckRedundant(ref InstructionNode node)
+		private Operand CheckRedundant(InstructionNode node)
 		{
 			Operand redundant = null;
 
