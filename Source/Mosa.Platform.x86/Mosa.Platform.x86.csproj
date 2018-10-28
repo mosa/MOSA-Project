@@ -381,6 +381,10 @@
     <Compile Include="Intrinsic\BochsDebug.cs" />
     <Compile Include="LegacyOpCode.cs" />
     <Compile Include="X86Instruction.cs" />
+    <Compile Include="Intrinsic\SetDS.cs" />
+    <Compile Include="Intrinsic\SetSS.cs" />
+    <Compile Include="Intrinsic\SetGS.cs" />
+    <Compile Include="Intrinsic\SetES.cs" />
     <Compile Include="GeneralPurposeRegister.cs">
       <SubType>Code</SubType>
     </Compile>
