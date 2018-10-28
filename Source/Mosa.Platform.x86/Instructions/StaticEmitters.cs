@@ -191,7 +191,7 @@ namespace Mosa.Platform.x86.Instructions
 				.Append2Bits(Bits.b00)                                          // 2:mod (must not be b11)
 				.Append3Bits(Bits.b010)                                         // 3:reg
 				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
-				.AppendConditionalDisplacement(!node.Operand1.IsConstantZero, node.Operand1)    // 32:displacement value
+				.AppendConditionalDisplacement(!node.Operand1.IsResolvedByLinker, node.Operand1)    // 32:displacement value
 				.GetPosition(out int patchOffset)
 				.AppendConditionalIntegerValue(node.Operand1.IsResolvedByLinker, 0); // 32:memory
 
@@ -205,8 +205,6 @@ namespace Mosa.Platform.x86.Instructions
 
 		internal static void EmitLgdt(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			Debug.Assert(node.Operand1.IsConstant);
-
 			// LGDT – Load Global Descriptor Table Register 0000 1111 : 0000 0001 : modA 010 r / m
 			var opcode = new OpcodeEncoder()
 				.AppendNibble(Bits.b0000)                                       // 4:opcode
@@ -215,8 +213,8 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendNibble(Bits.b0001)                                       // 4:opcode
 				.Append2Bits(Bits.b00)                                          // 2:mod (must not be b11)
 				.Append3Bits(Bits.b010)                                         // 3:reg
-				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
-				.AppendConditionalDisplacement(!node.Operand1.IsConstantZero, node.Operand1)    // 32:displacement value
+				.AppendRM(Bits.b101)                                            // 3:r/m (source, always b101)
+				.AppendConditionalDisplacement(!node.Operand1.IsResolvedByLinker, node.Operand1)    // 32:displacement value
 				.GetPosition(out int patchOffset)
 				.AppendConditionalIntegerValue(node.Operand1.IsResolvedByLinker, 0); // 32:memory
 
@@ -230,8 +228,6 @@ namespace Mosa.Platform.x86.Instructions
 
 		internal static void EmitLidt(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			Debug.Assert(node.Operand1.IsConstant);
-
 			// LIDT – Load Interrupt Descriptor Table Register 0000 1111 : 0000 0001 : modA 011 r/m
 			var opcode = new OpcodeEncoder()
 				.AppendNibble(Bits.b0000)                                       // 4:opcode
@@ -241,8 +237,7 @@ namespace Mosa.Platform.x86.Instructions
 				.Append2Bits(Bits.b00)                                          // 2:mod (must not be b11)
 				.Append3Bits(Bits.b011)                                         // 3:reg
 				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
-				.AppendConditionalDisplacement(!node.Operand1.IsConstantZero, node.Operand1)    // 32:displacement value
-
+				.AppendConditionalDisplacement(!node.Operand1.IsResolvedByLinker, node.Operand1)    // 32:displacement value
 				.GetPosition(out int patchOffset)
 				.AppendConditionalIntegerValue(node.Operand1.IsResolvedByLinker, 0);               // 32:memory
 
@@ -426,7 +421,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendRegister(node.Result.Register)                           // 3:register (destination)
 				.AppendRM(node.Operand1)                                        // 3:r/m (source)
 
-				.AppendConditionalDisplacement(!node.Operand2.IsConstantZero, node.Operand2)    // 8/32:displacement value
+				.AppendConditionalDisplacement(!node.Operand2.IsResolvedByLinker, node.Operand2)    // 8/32:displacement value
 				.GetPosition(out int patchOffset)
 				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker); // 32:memory
 

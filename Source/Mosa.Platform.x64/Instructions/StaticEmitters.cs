@@ -191,7 +191,7 @@ namespace Mosa.Platform.x64.Instructions
 				.Append2Bits(Bits.b00)                                          // 2:mod (must not be b11)
 				.Append3Bits(Bits.b010)                                         // 3:reg
 				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
-				.AppendConditionalDisplacement(!node.Operand1.IsConstantZero, node.Operand1)    // 32:displacement value
+				.AppendConditionalDisplacement(!node.Operand1.IsResolvedByLinker, node.Operand1)    // 32:displacement value
 				.GetPosition(out int patchOffset)
 				.AppendConditionalIntegerValue(node.Operand1.IsResolvedByLinker, 0); // 32:memory
 
@@ -216,7 +216,7 @@ namespace Mosa.Platform.x64.Instructions
 				.Append2Bits(Bits.b00)                                          // 2:mod (must not be b11)
 				.Append3Bits(Bits.b010)                                         // 3:reg
 				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
-				.AppendConditionalDisplacement(!node.Operand1.IsConstantZero, node.Operand1)    // 32:displacement value
+				.AppendConditionalDisplacement(!node.Operand1.IsResolvedByLinker, node.Operand1)    // 32:displacement value
 				.GetPosition(out int patchOffset)
 				.AppendConditionalIntegerValue(node.Operand1.IsResolvedByLinker, 0); // 32:memory
 
@@ -241,7 +241,7 @@ namespace Mosa.Platform.x64.Instructions
 				.Append2Bits(Bits.b00)                                          // 2:mod (must not be b11)
 				.Append3Bits(Bits.b011)                                         // 3:reg
 				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
-				.AppendConditionalDisplacement(!node.Operand1.IsConstantZero, node.Operand1)    // 32:displacement value
+				.AppendConditionalDisplacement(!node.Operand1.IsResolvedByLinker, node.Operand1)    // 32:displacement value
 
 				.GetPosition(out int patchOffset)
 				.AppendConditionalIntegerValue(node.Operand1.IsResolvedByLinker, 0);               // 32:memory
@@ -426,7 +426,7 @@ namespace Mosa.Platform.x64.Instructions
 				.AppendRegister(node.Result.Register)                           // 3:register (destination)
 				.AppendRM(node.Operand1)                                        // 3:r/m (source)
 
-				.AppendConditionalDisplacement(!node.Operand2.IsConstantZero, node.Operand2)    // 8/32:displacement value
+				.AppendConditionalDisplacement(!node.Operand2.IsResolvedByLinker, node.Operand2)    // 8/32:displacement value
 				.GetPosition(out int patchOffset)
 				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker); // 32:memory
 
