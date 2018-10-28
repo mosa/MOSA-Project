@@ -37,6 +37,11 @@ namespace Mosa.Kernel.x86
 			Set(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data segment
 
 			Native.Lgdt(Address.GDTTable);
+			Native.SetDS(0x10);
+			Native.SetES(0x10);
+			Native.SetFS(0x10);
+			Native.SetGS(0x10);
+			Native.SetSS(0x10);
 		}
 
 		private static void Set(uint index, uint address, uint limit, byte access, byte granularity)
