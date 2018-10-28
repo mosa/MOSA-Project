@@ -38,17 +38,19 @@ namespace Mosa.TestWorld.x86
 			Screen.Write("!");
 			Screen.Write(" ");
 
-			IDT.SetInterruptHandler(null);
-			Screen.Write('0');
-			Debugger.Setup(Serial.COM1);
-			Screen.Write('1');
-			PIC.Setup();
-			Screen.Write('2');
-			IDT.Setup();
-			Screen.Write('3');
 			Multiboot.Setup();
-			Screen.Write('4');
+			Screen.Write('0');
 			GDT.Setup();
+			Screen.Write('1');
+
+			IDT.SetInterruptHandler(null);
+			Screen.Write('2');
+			Debugger.Setup(Serial.COM1);
+
+			Screen.Write('3');
+			PIC.Setup();
+			Screen.Write('4');
+			IDT.Setup();
 			Screen.Write('5');
 			PageFrameAllocator.Setup();
 			Screen.Write('6');

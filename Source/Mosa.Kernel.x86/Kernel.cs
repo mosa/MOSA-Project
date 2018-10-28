@@ -12,6 +12,12 @@ namespace Mosa.Kernel.x86
 	{
 		public static void Setup()
 		{
+			// Initialize GDT before IDT, because IDT Entries requies a valid Segment Selector
+			// This never happend before, because on fast computers GDT.Setup() was called
+			// before a Interrupt,for example clock, got triggered.
+			Multiboot.Setup();
+			GDT.Setup();
+
 			// At this stage, allocating memory does not work, so you are only allowed to use ValueTypes or static classes.
 			IDT.SetInterruptHandler(null);
 			Panic.Setup();
@@ -22,8 +28,6 @@ namespace Mosa.Kernel.x86
 			IDT.Setup();
 
 			// Initializing the memory management
-			Multiboot.Setup();
-			GDT.Setup();
 			PageFrameAllocator.Setup();
 			PageTable.Setup();
 			VirtualPageAllocator.Setup();
