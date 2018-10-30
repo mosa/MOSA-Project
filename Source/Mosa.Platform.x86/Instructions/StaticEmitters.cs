@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using System.Diagnostics;
 
@@ -180,8 +179,6 @@ namespace Mosa.Platform.x86.Instructions
 
 		internal static void EmitInvlpg(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			Debug.Assert(node.Operand1.IsConstant);
-
 			// INVLPG – Invalidate TLB Entry 0000 1111 : 0000 0001 : mod 111 r/m
 			var opcode = new OpcodeEncoder()
 				.AppendNibble(Bits.b0000)                                       // 4:opcode

@@ -180,8 +180,6 @@ namespace Mosa.Platform.x64.Instructions
 
 		internal static void EmitInvlpg(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			Debug.Assert(node.Operand1.IsConstant);
-
 			// INVLPG – Invalidate TLB Entry 0000 1111 : 0000 0001 : mod 111 r/m
 			var opcode = new OpcodeEncoder()
 				.AppendNibble(Bits.b0000)                                       // 4:opcode
@@ -205,8 +203,6 @@ namespace Mosa.Platform.x64.Instructions
 
 		internal static void EmitLgdt(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			Debug.Assert(node.Operand1.IsConstant);
-
 			// LGDT – Load Global Descriptor Table Register 0000 1111 : 0000 0001 : modA 010 r / m
 			var opcode = new OpcodeEncoder()
 				.AppendNibble(Bits.b0000)                                       // 4:opcode
@@ -230,8 +226,6 @@ namespace Mosa.Platform.x64.Instructions
 
 		internal static void EmitLidt(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			Debug.Assert(node.Operand1.IsConstant);
-
 			// LIDT – Load Interrupt Descriptor Table Register 0000 1111 : 0000 0001 : modA 011 r/m
 			var opcode = new OpcodeEncoder()
 				.AppendNibble(Bits.b0000)                                       // 4:opcode
