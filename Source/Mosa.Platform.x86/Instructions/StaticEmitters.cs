@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using System.Diagnostics;
 
@@ -180,8 +179,6 @@ namespace Mosa.Platform.x86.Instructions
 
 		internal static void EmitInvlpg(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			Debug.Assert(node.Operand1.IsConstant);
-
 			// INVLPG – Invalidate TLB Entry 0000 1111 : 0000 0001 : mod 111 r/m
 			var opcode = new OpcodeEncoder()
 				.AppendNibble(Bits.b0000)                                       // 4:opcode
@@ -213,8 +210,8 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendNibble(Bits.b0001)                                       // 4:opcode
 				.Append2Bits(Bits.b00)                                          // 2:mod (must not be b11)
 				.Append3Bits(Bits.b010)                                         // 3:reg
-				.AppendRM(Bits.b101)                                            // 3:r/m (source, always b101)
-				.AppendConditionalDisplacement(!node.Operand1.IsResolvedByLinker, node.Operand1)    // 32:displacement value
+				.AppendRM(node.Operand1)                                        // 3:r/m (source)
+				.AppendConditionalDisplacement(!node.Operand1.IsCPURegister, node.Operand1) // 32:displacement value
 				.GetPosition(out int patchOffset)
 				.AppendConditionalIntegerValue(node.Operand1.IsResolvedByLinker, 0); // 32:memory
 
@@ -236,10 +233,10 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendNibble(Bits.b0001)                                       // 4:opcode
 				.Append2Bits(Bits.b00)                                          // 2:mod (must not be b11)
 				.Append3Bits(Bits.b011)                                         // 3:reg
-				.AppendRM(node.Operand1)                                        // 3:r/m (source, always b101)
-				.AppendConditionalDisplacement(!node.Operand1.IsResolvedByLinker, node.Operand1)    // 32:displacement value
+				.AppendRM(node.Operand1)                                        // 3:r/m (source)
+				.AppendConditionalDisplacement(!node.Operand1.IsCPURegister, node.Operand1) // 32:displacement value
 				.GetPosition(out int patchOffset)
-				.AppendConditionalIntegerValue(node.Operand1.IsResolvedByLinker, 0);               // 32:memory
+				.AppendConditionalIntegerValue(node.Operand1.IsResolvedByLinker, 0); // 32:memory
 
 			if (node.Operand1.IsResolvedByLinker)
 			{
@@ -421,7 +418,7 @@ namespace Mosa.Platform.x86.Instructions
 				.AppendRegister(node.Result.Register)                           // 3:register (destination)
 				.AppendRM(node.Operand1)                                        // 3:r/m (source)
 
-				.AppendConditionalDisplacement(!node.Operand2.IsResolvedByLinker, node.Operand2)    // 8/32:displacement value
+				.AppendConditionalDisplacement(!node.Operand2.IsConstantZero, node.Operand2)    // 8/32:displacement value
 				.GetPosition(out int patchOffset)
 				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker); // 32:memory
 

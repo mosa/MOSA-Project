@@ -11,7 +11,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	{
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
-			Helper.FoldOperand1ToConstant(context);
+			//Helper.FoldOperand1ToConstant(context);
 
 			var constantx10 = methodCompiler.CreateConstant(0x10);
 

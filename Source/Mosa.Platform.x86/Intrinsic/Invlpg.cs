@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	{
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
-			Debug.Assert(context.Operand1.IsConstant);
+			//Debug.Assert(context.Operand1.IsConstant);
 			context.SetInstruction(X86.Invlpg, null, context.Operand1);
 		}
 	}

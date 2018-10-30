@@ -3,6 +3,7 @@
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace Mosa.Kernel.x86
 {
@@ -36,7 +37,13 @@ namespace Mosa.Kernel.x86
 			Set(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code segment
 			Set(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data segment
 
-			Native.Lgdt(Address.GDTTable);
+			_Lgdt(Address.GDTTable);
+		}
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private static void _Lgdt(uint address)
+		{
+			Native.Lgdt(address);
 		}
 
 		private static void Set(uint index, uint address, uint limit, byte access, byte granularity)

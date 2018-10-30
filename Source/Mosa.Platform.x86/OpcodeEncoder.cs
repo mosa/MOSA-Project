@@ -53,17 +53,17 @@ namespace Mosa.Platform.x86
 			{
 				offset = 63 - offset;
 				if (value)
-					data1 = (data1 | (1ul << offset));
+					data1 |= 1ul << offset;
 				else
-					data1 = (data1 & ~(1ul << offset));
+					data1 &= ~(1ul << offset);
 			}
 			else
 			{
 				offset = 63 - (offset - 64);
 				if (value)
-					data2 = (data2 | (1ul << offset));
+					data2 |= 1ul << offset;
 				else
-					data2 = (data2 & ~(1ul << offset));
+					data2 &= ~(1ul << offset);
 			}
 			return this;
 		}
@@ -324,10 +324,10 @@ namespace Mosa.Platform.x86
 
 		public OpcodeEncoder AppendConditionalDisplacement(bool include, Operand displacement)
 		{
-			Debug.Assert(displacement.IsConstant);
-
 			if (!include)
 				return this;
+
+			Debug.Assert(displacement.IsConstant);
 
 			if (Is8BitDisplacement(displacement))
 				return AppendByteValue((byte)displacement.ConstantUnsignedInteger);
