@@ -3,6 +3,7 @@
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace Mosa.Kernel.x86
 {
@@ -38,7 +39,13 @@ namespace Mosa.Kernel.x86
 
 			SetTableEntries();
 
-			Native.Lidt(Address.IDTTable);
+			_Lidt(Address.IDTTable);
+		}
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private static void _Lidt(uint address)
+		{
+			Native.Lidt(address);
 			Native.Sti();
 		}
 
