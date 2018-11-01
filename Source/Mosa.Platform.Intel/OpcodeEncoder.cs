@@ -4,10 +4,11 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Platform;
+using Mosa.Platform.Intel;
 using System.Diagnostics;
 using System.IO;
 
-namespace Mosa.Platform.x86
+namespace Mosa.Platform.Intel
 {
 	public sealed class OpcodeEncoder : BaseOpcodeEncoder
 	{

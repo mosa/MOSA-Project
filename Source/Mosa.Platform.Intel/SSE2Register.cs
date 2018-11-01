@@ -3,10 +3,10 @@
 using Mosa.Compiler.Framework;
 using System;
 
-namespace Mosa.Platform.x86
+namespace Mosa.Platform.Intel
 {
 	/// <summary>
-	/// Represents an x86 SSE2 register.
+	/// Represents an x64 SSE2 register.
 	/// </summary>
 	/// <remarks>
 	/// SSE2 is used by floating point instructions for their operands. An
@@ -66,7 +66,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		private readonly int registerCode;
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region Construction
 

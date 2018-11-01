@@ -3,6 +3,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Platform.Intel;
 using System.IO;
 using System.Text;
 

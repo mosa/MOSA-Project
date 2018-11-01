@@ -75,11 +75,15 @@
       <Project>{5f30a68e-05bf-40ea-b576-5ebcde520559}</Project>
       <Name>Mosa.Compiler.MosaTypeSystem</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Platform.Intel\Mosa.Platform.Intel.csproj">
+      <Project>{17ce4f09-7cbf-49e9-84a7-178db2cbd7c9}</Project>
+      <Name>Mosa.Platform.Intel</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Architecture.cs" />
     <Compile Include="ArchitectureFeatureFlags.cs" />
-    <Compile Include="GeneralPurposeRegister.cs" />
+    <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="Instructions\Adc64.cs" />
     <Compile Include="Instructions\AdcConst64.cs" />
     <Compile Include="Instructions\Add64.cs" />
@@ -295,8 +299,8 @@
     <Compile Include="Instructions\Xor64.cs" />
     <Compile Include="Instructions\XorConst64.cs" />
     <Compile Include="LegacyOpCode.cs" />
-    <Compile Include="OpcodeEncoder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stages\AddressModeConversionStage.cs" />
     <Compile Include="X64.cs" />
     <Compile Include="X64Instruction.cs" />
     <Compile Include="X64CodeEmitter.cs" />
@@ -307,6 +311,10 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="CompilerStages\" />
+    <Folder Include="Intrinsic\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
