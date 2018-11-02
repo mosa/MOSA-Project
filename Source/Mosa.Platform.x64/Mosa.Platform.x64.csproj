@@ -301,6 +301,7 @@
     <Compile Include="LegacyOpCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stages\AddressModeConversionStage.cs" />
+    <Compile Include="Stages\IRTransformationStage.cs" />
     <Compile Include="X64.cs" />
     <Compile Include="X64Instruction.cs" />
     <Compile Include="X64CodeEmitter.cs" />

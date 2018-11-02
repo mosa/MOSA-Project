@@ -109,8 +109,8 @@ namespace Mosa.Compiler.Framework.Stages
 				ConstantFoldIntegerCompareBranch,
 				SimplifyIntegerCompare2,
 				SimplifyIntegerCompare,
-				SimplifyAddCarryOut2,
-				SimplifyAddWithCarry,
+				SimplifyAddCarryOut32B,
+				SimplifyAddWithCarry32,
 				SimplifyCompareBranch,
 				SimplifyGetLow64,
 				SimplifyGetHigh64,
@@ -1006,7 +1006,7 @@ namespace Mosa.Compiler.Framework.Stages
 			SimplifyIntegerCompareCount++;
 		}
 
-		private void SimplifyAddCarryOut2(InstructionNode node)
+		private void SimplifyAddCarryOut32B(InstructionNode node)
 		{
 			if (node.Instruction != IRInstruction.AddCarryOut32)
 				return;
@@ -1032,7 +1032,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private void SimplifyAddWithCarry(InstructionNode node)
+		private void SimplifyAddWithCarry32(InstructionNode node)
 		{
 			if (node.Instruction != IRInstruction.AddWithCarry32)
 				return;

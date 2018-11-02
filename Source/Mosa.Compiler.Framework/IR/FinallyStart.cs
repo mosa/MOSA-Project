@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class FinallyStart : BaseIRInstruction
 	{
-		public override int ID { get { return 48; } }
+		public override int ID { get { return 50; } }
 
 		public FinallyStart()
 			: base(0, 2)

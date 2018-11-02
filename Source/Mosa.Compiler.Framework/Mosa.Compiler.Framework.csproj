@@ -101,10 +101,12 @@
     <Compile Include="IR\Add32.cs" />
     <Compile Include="IR\Add64.cs" />
     <Compile Include="IR\AddCarryOut32.cs" />
+    <Compile Include="IR\AddCarryOut64.cs" />
     <Compile Include="IR\AddFloatR4.cs" />
     <Compile Include="IR\AddFloatR8.cs" />
     <Compile Include="IR\AddressOf.cs" />
     <Compile Include="IR\AddWithCarry32.cs" />
+    <Compile Include="IR\AddWithCarry64.cs" />
     <Compile Include="IR\ArithShiftRight32.cs" />
     <Compile Include="IR\ArithShiftRight64.cs" />
     <Compile Include="IR\BlockEnd.cs" />
@@ -267,9 +269,11 @@
     <Compile Include="IR\Sub32.cs" />
     <Compile Include="IR\Sub64.cs" />
     <Compile Include="IR\SubCarryOut32.cs" />
+    <Compile Include="IR\SubCarryOut64.cs" />
     <Compile Include="IR\SubFloatR4.cs" />
     <Compile Include="IR\SubFloatR8.cs" />
     <Compile Include="IR\SubWithCarry32.cs" />
+    <Compile Include="IR\SubWithCarry64.cs" />
     <Compile Include="IR\Switch.cs" />
     <Compile Include="IR\Throw.cs" />
     <Compile Include="IR\To64.cs" />

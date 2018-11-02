@@ -1,33 +1,47 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime.Plug;
+using System;
 
 namespace Mosa.Kernel.ARMv6
 {
 	/// <summary>
-	/// Kernel Memory Allocator - This is a pure HACK!
+	/// Kernel Memory Allocator
 	/// </summary>
 	public static class KernelMemory
 	{
-		static private uint _heap = 0;
-		static private uint _size = 0;
-		static private uint _used = 0;
+		static private uint heapStart = Address.GCInitialMemory;
+		static private uint heapSize = 0x02000000;
+		static private uint heapUsed = 0;
 
-		[Plug("Mosa.Runtime.ARMv6.Internal::AllocateMemory")]
-		static public uint AllocateMemory(uint size)
+		[Plug("Mosa.Runtime.GC::AllocateMemory")]
+		static unsafe private IntPtr _AllocateMemory(uint size)
 		{
-			if ((_heap == 0) || (size > (_size - _used)))
+			return AllocateMemory(size);
+		}
+
+		static public IntPtr AllocateMemory(uint size)
+		{
+			if (heapStart == 0 || (heapSize - heapUsed) < size)
 			{
 				// Go allocate memory
+				heapSize = 1024 * 1023 * 8; // 8Mb
 
-				_size = 1024 * 1024 * 64; // 64Mb
-				_heap = 0; // TODO: x86.ProcessManager.AllocateMemory(0, _size);
-				_used = 0;
+				// FIXME
+				//heapStart = VirtualPageAllocator.Reserve(heapSize);
+				heapUsed = 0;
 			}
 
-			uint at = _heap + _used;
-			_used = _used + size;
+			var at = new IntPtr(heapStart + heapUsed);
+			heapUsed += size;
 			return at;
+		}
+
+		static public void SetInitialMemory(uint address, uint size)
+		{
+			heapStart = address;
+			heapSize = size;
+			heapUsed = 0;
 		}
 	}
 }

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class TryStart : BaseIRInstruction
 	{
-		public override int ID { get { return 168; } }
+		public override int ID { get { return 172; } }
 
 		public TryStart()
 			: base(0, 0)

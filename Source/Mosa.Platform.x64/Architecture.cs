@@ -222,7 +222,9 @@ namespace Mosa.Platform.x64
 				new BaseMethodCompilerStage[]
 				{
 					//new LongOperandStage(),
-					//new IRTransformationStage(),
+					new IRTransformationStage(),
+					new StopStage(),	// Temp
+
 					//new TweakStage(),
 					//new FixedRegisterAssignmentStage(),
 					//new SimpleDeadCodeRemovalStage(),

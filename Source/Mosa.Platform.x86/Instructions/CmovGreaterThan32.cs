@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class CMovGreaterThan32 : X86Instruction
 	{
-		public override int ID { get { return 394; } }
+		public override int ID { get { return 398; } }
 
 		internal CMovGreaterThan32()
 			: base(1, 1)

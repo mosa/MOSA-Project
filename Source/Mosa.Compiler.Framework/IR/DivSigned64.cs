@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class DivSigned64 : BaseIRInstruction
 	{
-		public override int ID { get { return 39; } }
+		public override int ID { get { return 41; } }
 
 		public DivSigned64()
 			: base(2, 1)

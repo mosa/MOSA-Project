@@ -42,7 +42,21 @@
 			"Commutative": "true"
 		},
 		{
+			"Name": "AddCarryOut64",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
 			"Name": "AddWithCarry32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 3,
+			"Commutative": "false"
+		},
+		{
+			"Name": "AddWithCarry64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 3,
@@ -1104,7 +1118,21 @@
 			"Commutative": "false"
 		},
 		{
+			"Name": "SubCarryOut64",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 2,
+			"Commutative": "false"
+		},
+		{
 			"Name": "SubWithCarry32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 3,
+			"Commutative": "false"
+		},
+		{
+			"Name": "SubWithCarry64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 3,

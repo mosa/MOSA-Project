@@ -696,8 +696,6 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.MovConst32, v1, ConstantZero);
 			context.AppendInstruction2(X86.Div32, result, v2, v1, operand1, operand2);
-
-			//context.AppendInstruction(X86.Mov32, result, v1);
 		}
 
 		private void ShiftLeft32(InstructionNode node)
@@ -911,34 +909,6 @@ namespace Mosa.Platform.x86.Stages
 				case ConditionCode.GreaterOrEqual: return X86.CMovGreaterOrEqual32;
 				case ConditionCode.LessOrEqual: return X86.CMovLessOrEqual32;
 				case ConditionCode.GreaterThan: return X86.CMovGreaterThan32;
-
-				default: throw new NotSupportedException();
-			}
-		}
-
-		public static BaseInstruction GetCMovcc64(ConditionCode condition)
-		{
-			switch (condition)
-			{
-				// TODO
-				//case ConditionCode.Overflow: return X86.CMovOverflow64;
-				//case ConditionCode.NoOverflow: return X86.CMovNoOverflow64;
-				//case ConditionCode.Carry: return X86.CMovCarry64;
-				//case ConditionCode.UnsignedLessThan: return X86.CMovUnsignedLessThan64;
-				//case ConditionCode.UnsignedGreaterOrEqual: return X86.CMovUnsignedGreaterOrEqual64;
-				//case ConditionCode.NoCarry: return X86.CMovNoCarry64;
-				//case ConditionCode.Equal: return X86.CMovEqual64;
-				//case ConditionCode.Zero: return X86.CMovZero64;
-				//case ConditionCode.NotEqual: return X86.CMovNotEqual64;
-				//case ConditionCode.NotZero: return X86.CMovNotZero64;
-				//case ConditionCode.UnsignedLessOrEqual: return X86.CMovUnsignedLessOrEqual64;
-				//case ConditionCode.UnsignedGreaterThan: return X86.CMovUnsignedGreaterThan64;
-				//case ConditionCode.Signed: return X86.CMovSigned64;
-				//case ConditionCode.NotSigned: return X86.CMovNotSigned64;
-				//case ConditionCode.LessThan: return X86.CMovLessThan64;
-				//case ConditionCode.GreaterOrEqual: return X86.CMovGreaterOrEqual64;
-				//case ConditionCode.LessOrEqual: return X86.CMovLessOrEqual64;
-				//case ConditionCode.GreaterThan: return X86.CMovGreaterThan64;
 
 				default: throw new NotSupportedException();
 			}

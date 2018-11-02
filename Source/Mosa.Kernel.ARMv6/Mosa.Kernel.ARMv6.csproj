@@ -64,6 +64,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Address.cs" />
     <Compile Include="Kernel.cs" />
     <Compile Include="KernelMemory.cs" />
   </ItemGroup>

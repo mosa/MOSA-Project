@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class RemSigned32 : BaseIRInstruction
 	{
-		public override int ID { get { return 129; } }
+		public override int ID { get { return 131; } }
 
 		public RemSigned32()
 			: base(2, 1)
