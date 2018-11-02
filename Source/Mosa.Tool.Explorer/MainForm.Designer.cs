@@ -429,7 +429,7 @@
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.Padding = new System.Drawing.Point(0, 0);
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(641, 424);
+            this.tabControl1.Size = new System.Drawing.Size(639, 424);
             this.tabControl1.TabIndex = 38;
             // 
             // tbStages
@@ -443,7 +443,7 @@
             this.tbStages.Location = new System.Drawing.Point(4, 25);
             this.tbStages.Margin = new System.Windows.Forms.Padding(0);
             this.tbStages.Name = "tbStages";
-            this.tbStages.Size = new System.Drawing.Size(633, 395);
+            this.tbStages.Size = new System.Drawing.Size(631, 395);
             this.tbStages.TabIndex = 0;
             this.tbStages.Text = "Instructions";
             // 
@@ -496,7 +496,7 @@
             this.tbDebug.Location = new System.Drawing.Point(4, 25);
             this.tbDebug.Margin = new System.Windows.Forms.Padding(0);
             this.tbDebug.Name = "tbDebug";
-            this.tbDebug.Size = new System.Drawing.Size(633, 395);
+            this.tbDebug.Size = new System.Drawing.Size(631, 395);
             this.tbDebug.TabIndex = 1;
             this.tbDebug.Text = "Debug";
             // 
@@ -531,7 +531,7 @@
             this.tbMethodCounters.Controls.Add(this.rbMethodCounters);
             this.tbMethodCounters.Location = new System.Drawing.Point(4, 25);
             this.tbMethodCounters.Name = "tbMethodCounters";
-            this.tbMethodCounters.Size = new System.Drawing.Size(633, 395);
+            this.tbMethodCounters.Size = new System.Drawing.Size(631, 395);
             this.tbMethodCounters.TabIndex = 6;
             this.tbMethodCounters.Text = "Counters";
             this.tbMethodCounters.UseVisualStyleBackColor = true;
@@ -556,7 +556,7 @@
             this.tbGlobalCounters.Location = new System.Drawing.Point(4, 25);
             this.tbGlobalCounters.Name = "tbGlobalCounters";
             this.tbGlobalCounters.Padding = new System.Windows.Forms.Padding(3);
-            this.tbGlobalCounters.Size = new System.Drawing.Size(633, 395);
+            this.tbGlobalCounters.Size = new System.Drawing.Size(631, 395);
             this.tbGlobalCounters.TabIndex = 4;
             this.tbGlobalCounters.Text = "Global Counters";
             // 
@@ -580,7 +580,7 @@
             this.tbLogs.Location = new System.Drawing.Point(4, 25);
             this.tbLogs.Name = "tbLogs";
             this.tbLogs.Padding = new System.Windows.Forms.Padding(3);
-            this.tbLogs.Size = new System.Drawing.Size(633, 395);
+            this.tbLogs.Size = new System.Drawing.Size(631, 395);
             this.tbLogs.TabIndex = 3;
             this.tbLogs.Text = "Log";
             // 
@@ -604,7 +604,7 @@
             this.tbErrors.Location = new System.Drawing.Point(4, 25);
             this.tbErrors.Name = "tbErrors";
             this.tbErrors.Padding = new System.Windows.Forms.Padding(3);
-            this.tbErrors.Size = new System.Drawing.Size(633, 395);
+            this.tbErrors.Size = new System.Drawing.Size(631, 395);
             this.tbErrors.TabIndex = 2;
             this.tbErrors.Text = "Errors";
             // 
@@ -627,7 +627,7 @@
             this.tbExceptions.Location = new System.Drawing.Point(4, 25);
             this.tbExceptions.Name = "tbExceptions";
             this.tbExceptions.Padding = new System.Windows.Forms.Padding(3);
-            this.tbExceptions.Size = new System.Drawing.Size(633, 395);
+            this.tbExceptions.Size = new System.Drawing.Size(631, 395);
             this.tbExceptions.TabIndex = 5;
             this.tbExceptions.Text = "Exceptions";
             this.tbExceptions.UseVisualStyleBackColor = true;
@@ -702,6 +702,7 @@
             this.cbPlatform.FormattingEnabled = true;
             this.cbPlatform.Items.AddRange(new object[] {
             "x86",
+            "x64",
             "ARMv6"});
             this.cbPlatform.Location = new System.Drawing.Point(221, 27);
             this.cbPlatform.Name = "cbPlatform";

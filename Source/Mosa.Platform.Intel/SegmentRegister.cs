@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86
+namespace Mosa.Platform.Intel
 {
 	/// <summary>
 	/// Base class for x86 segment registers.

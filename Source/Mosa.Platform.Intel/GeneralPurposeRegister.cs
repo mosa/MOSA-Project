@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86
+namespace Mosa.Platform.Intel
 {
 	/// <summary>
 	/// Represents integral general purpose x86 registers.
@@ -110,7 +110,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		private readonly GPR gpr;
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region Construction
 

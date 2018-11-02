@@ -4,6 +4,9 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker.Elf;
+using Mosa.Compiler.Framework.Stages;
+using Mosa.Platform.Intel;
+using Mosa.Platform.x64.Stages;
 using System.Collections.Generic;
 
 namespace Mosa.Platform.x64
@@ -35,7 +38,39 @@ namespace Mosa.Platform.x64
 		/// </summary>
 		private static readonly PhysicalRegister[] Registers = new PhysicalRegister[]
 		{
-			//TODO
+			////////////////////////////////////////////////////////
+			// 32-bit general purpose registers
+			////////////////////////////////////////////////////////
+			GeneralPurposeRegister.EAX,
+			GeneralPurposeRegister.ECX,
+			GeneralPurposeRegister.EDX,
+			GeneralPurposeRegister.EBX,
+			GeneralPurposeRegister.ESP,
+			GeneralPurposeRegister.EBP,
+			GeneralPurposeRegister.ESI,
+			GeneralPurposeRegister.EDI,
+
+			////////////////////////////////////////////////////////
+			// SSE 128-bit floating point registers
+			////////////////////////////////////////////////////////
+			SSE2Register.XMM0,
+			SSE2Register.XMM1,
+			SSE2Register.XMM2,
+			SSE2Register.XMM3,
+			SSE2Register.XMM4,
+			SSE2Register.XMM5,
+			SSE2Register.XMM6,
+			SSE2Register.XMM7,
+
+			////////////////////////////////////////////////////////
+			// Segmentation Registers
+			////////////////////////////////////////////////////////
+			//SegmentRegister.CS,
+			//SegmentRegister.DS,
+			//SegmentRegister.ES,
+			//SegmentRegister.FS,
+			//SegmentRegister.GS,
+			//SegmentRegister.SS
 		};
 
 		/// <summary>
@@ -67,19 +102,19 @@ namespace Mosa.Platform.x64
 		}
 
 		/// <summary>
-		/// Retrieves the stack frame register of the x64.
+		/// Retrieves the stack frame register of the x86.
 		/// </summary>
 		public override PhysicalRegister StackFrameRegister
 		{
-			get { return null; /* GeneralPurposeRegister.EBP;*/ }
+			get { return GeneralPurposeRegister.EBP; }
 		}
 
 		/// <summary>
-		/// Retrieves the stack pointer register of the x64.
+		/// Retrieves the stack pointer register of the x86.
 		/// </summary>
 		public override PhysicalRegister StackPointerRegister
 		{
-			get { return null; /* GeneralPurposeRegister.EDX;*/ }
+			get { return GeneralPurposeRegister.ESP; }
 		}
 
 		/// <summary>
@@ -87,7 +122,7 @@ namespace Mosa.Platform.x64
 		/// </summary>
 		public override PhysicalRegister ScratchRegister
 		{
-			get { return null; /* TODO */}
+			get { return GeneralPurposeRegister.EDX; }
 		}
 
 		/// <summary>
@@ -95,7 +130,7 @@ namespace Mosa.Platform.x64
 		/// </summary>
 		public override PhysicalRegister Return32BitRegister
 		{
-			get { return null; /* TODO */}
+			get { return null; }
 		}
 
 		/// <summary>
@@ -103,7 +138,7 @@ namespace Mosa.Platform.x64
 		/// </summary>
 		public override PhysicalRegister Return64BitRegister
 		{
-			get { return null; /* TODO */}
+			get { return GeneralPurposeRegister.EAX; }
 		}
 
 		/// <summary>
@@ -111,7 +146,7 @@ namespace Mosa.Platform.x64
 		/// </summary>
 		public override PhysicalRegister ReturnFloatingPointRegister
 		{
-			get { return null; /* TODO */}
+			get { return SSE2Register.XMM0; }
 		}
 
 		/// <summary>
@@ -119,7 +154,7 @@ namespace Mosa.Platform.x64
 		/// </summary>
 		public override PhysicalRegister ExceptionRegister
 		{
-			get { return null; /* GeneralPurposeRegister.EDI;*/ }
+			get { return GeneralPurposeRegister.EDI; }
 		}
 
 		/// <summary>
@@ -127,11 +162,11 @@ namespace Mosa.Platform.x64
 		/// </summary>
 		public override PhysicalRegister LeaveTargetRegister
 		{
-			get { return null; /* GeneralPurposeRegister.EDX;*/ }
+			get { return GeneralPurposeRegister.ESI; }
 		}
 
 		/// <summary>
-		/// Retrieves the stack pointer register of the x64.
+		/// Retrieves the program counter register of the x86.
 		/// </summary>
 		public override PhysicalRegister ProgramCounter
 		{
@@ -165,9 +200,6 @@ namespace Mosa.Platform.x64
 		/// </remarks>
 		public static BaseArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
 		{
-			if (architectureFeatures == ArchitectureFeatureFlags.AutoDetect)
-				architectureFeatures = ArchitectureFeatureFlags.MMX | ArchitectureFeatureFlags.SSE | ArchitectureFeatureFlags.SSE2;
-
 			return new Architecture(architectureFeatures);
 		}
 
@@ -186,7 +218,33 @@ namespace Mosa.Platform.x64
 		/// <param name="compilerPipeline">The method compiler pipeline to extend.</param>
 		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> compilerPipeline)
 		{
-			// TODO
+			compilerPipeline.InsertAfterLast<PlatformIntrinsicStage>(
+				new BaseMethodCompilerStage[]
+				{
+					//new LongOperandStage(),
+					new IRTransformationStage(),
+					new StopStage(),	// Temp
+
+					//new TweakStage(),
+					//new FixedRegisterAssignmentStage(),
+					//new SimpleDeadCodeRemovalStage(),
+					new AddressModeConversionStage(),
+
+					//new FloatingPointStage(),
+					//new ConstantInstructionStage(),
+				});
+
+			//compilerPipeline.InsertAfterLast<StackLayoutStage>(
+			//	new BuildStackStage()
+			//);
+
+			//compilerPipeline.InsertBefore<CodeGenerationStage>(
+			//	new FinalTweakStage()
+			//);
+
+			//compilerPipeline.InsertBefore<CodeGenerationStage>(
+			//	new JumpOptimizationStage()
+			//);
 		}
 
 		/// <summary>

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class GetVirtualFunctionPtr : BaseIRInstruction
 	{
-		public override int ID { get { return 171; } }
+		public override int ID { get { return 175; } }
 
 		public GetVirtualFunctionPtr()
 			: base(2, 1)

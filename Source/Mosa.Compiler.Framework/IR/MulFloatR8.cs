@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class MulFloatR8 : BaseIRInstruction
 	{
-		public override int ID { get { return 116; } }
+		public override int ID { get { return 118; } }
 
 		public MulFloatR8()
 			: base(2, 1)

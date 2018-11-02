@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class BranchNoCarry : X86Instruction
 	{
-		public override int ID { get { return 340; } }
+		public override int ID { get { return 344; } }
 
 		internal BranchNoCarry()
 			: base(0, 0)

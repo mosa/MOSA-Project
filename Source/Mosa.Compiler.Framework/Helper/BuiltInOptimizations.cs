@@ -31,8 +31,10 @@ namespace Mosa.Compiler.Framework.Helper
 		public static SimpleInstruction Simplification(InstructionNode node)
 		{
 			return FoldIfThenElse(node)
-				?? SimplifyAddCarryOut(node)
-				?? SimplifySubCarryOut(node)
+				?? SimplifyAddCarryOut32(node)
+				?? SimplifyAddCarryOut64(node)
+				?? SimplifySubCarryOut32(node)
+				?? SimplifySubCarryOut64(node)
 				?? PhiSimplication(node);
 		}
 
@@ -647,7 +649,7 @@ namespace Mosa.Compiler.Framework.Helper
 			};
 		}
 
-		public static SimpleInstruction SimplifyAddCarryOut(InstructionNode node)
+		public static SimpleInstruction SimplifyAddCarryOut32(InstructionNode node)
 		{
 			if (node.Instruction != IRInstruction.AddCarryOut32)
 				return null;
@@ -664,7 +666,24 @@ namespace Mosa.Compiler.Framework.Helper
 			};
 		}
 
-		public static SimpleInstruction SimplifySubCarryOut(InstructionNode node)
+		public static SimpleInstruction SimplifyAddCarryOut64(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.AddCarryOut64)
+				return null;
+
+			if (node.Result2.Uses.Count != 0)
+				return null;
+
+			return new SimpleInstruction()
+			{
+				Instruction = IRInstruction.Add64,
+				Result = node.Result,
+				Operand1 = node.Operand1,
+				Operand2 = node.Operand2
+			};
+		}
+
+		public static SimpleInstruction SimplifySubCarryOut32(InstructionNode node)
 		{
 			if (node.Instruction != IRInstruction.SubCarryOut32)
 				return null;
@@ -675,6 +694,23 @@ namespace Mosa.Compiler.Framework.Helper
 			return new SimpleInstruction()
 			{
 				Instruction = IRInstruction.Sub32,
+				Result = node.Result,
+				Operand1 = node.Operand1,
+				Operand2 = node.Operand2
+			};
+		}
+
+		public static SimpleInstruction SimplifySubCarryOut64(InstructionNode node)
+		{
+			if (node.Instruction != IRInstruction.SubCarryOut64)
+				return null;
+
+			if (node.Result2.Uses.Count != 0)
+				return null;
+
+			return new SimpleInstruction()
+			{
+				Instruction = IRInstruction.Sub64,
 				Result = node.Result,
 				Operand1 = node.Operand1,
 				Operand2 = node.Operand2

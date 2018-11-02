@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class LoadSignExtend16x64 : BaseIRInstruction
 	{
-		public override int ID { get { return 69; } }
+		public override int ID { get { return 71; } }
 
 		public LoadSignExtend16x64()
 			: base(2, 1)

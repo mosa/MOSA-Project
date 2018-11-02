@@ -3,7 +3,7 @@
 namespace Mosa.Kernel.ARMv6
 {
 	/// <summary>
-	///
+	/// ARMv6 Kernal
 	/// </summary>
 	public static class Kernel
 	{

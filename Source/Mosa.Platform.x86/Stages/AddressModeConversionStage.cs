@@ -1,80 +1,35 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
 	/// Address Mode Conversion Stage
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.x86.BaseTransformationStage" />
-	public sealed class AddressModeConversionStage : BaseTransformationStage
+	/// <seealso cref="Mosa.Platform.Intel.Stages.AddressModeConversionStage" />
+	public sealed class AddressModeConversionStage : Intel.Stages.AddressModeConversionStage
 	{
-		protected override void PopulateVisitationDictionary()
+		protected override string Platform { get { return "x86"; } }
+
+		protected override bool IsThreeTwoAddressRequired(BaseInstruction instruction)
 		{
-			// Nothing to do
+			return (instruction as X86Instruction)?.ThreeTwoAddressConversion == true;
 		}
 
-		protected override void Run()
+		protected override BaseInstruction GetMoveFromType(MosaType type)
 		{
-			foreach (var block in BasicBlocks)
+			if (type.IsR4)
 			{
-				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
-				{
-					if (node.IsEmpty)
-						continue;
-
-					var instruction = node.Instruction as X86Instruction;
-
-					if (instruction?.ThreeTwoAddressConversion == true)
-					{
-						ThreeTwoAddressConversion(node);
-					}
-				}
+				return X86.Movss;
 			}
-		}
-
-		/// <summary>
-		/// Converts the given instruction from three address format to a two address format.
-		/// </summary>
-		/// <param name="node">The conversion context.</param>
-		private void ThreeTwoAddressConversion(InstructionNode node)
-		{
-			if (node.Result.IsCPURegister
-				&& node.Operand1.IsCPURegister
-				&& node.Result.Register == node.Operand1.Register)
-				return;
-
-			if (node.Result == node.Operand1)
-				return;
-
-			var result = node.Result;
-			var operand1 = node.Operand1;
-			int label = node.Label;
-
-			node.Operand1 = result;
-
-			X86Instruction move = null;
-
-			if (result.Type.IsR4)
+			else if (type.IsR8)
 			{
-				move = X86.Movss;
-			}
-			else if (result.Type.IsR8)
-			{
-				move = X86.Movsd;
-			}
-			else
-			{
-				move = X86.Mov32;
+				return X86.Movsd;
 			}
 
-			var newNode = new InstructionNode(move, result, operand1)
-			{
-				Label = label
-			};
-
-			node.Previous.Insert(newNode);
+			return X86.Mov32;
 		}
 	}
 }

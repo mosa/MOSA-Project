@@ -6,6 +6,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Compiler.Framework.Stages;
+using Mosa.Platform.Intel;
 using Mosa.Platform.x86.CompilerStages;
 using Mosa.Platform.x86.Stages;
 using System.Collections.Generic;
@@ -218,9 +219,6 @@ namespace Mosa.Platform.x86
 		/// </remarks>
 		public static BaseArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
 		{
-			if (architectureFeatures == ArchitectureFeatureFlags.AutoDetect)
-				architectureFeatures = ArchitectureFeatureFlags.MMX | ArchitectureFeatureFlags.SSE | ArchitectureFeatureFlags.SSE2 | ArchitectureFeatureFlags.SSE3 | ArchitectureFeatureFlags.SSE4;
-
 			return new Architecture(architectureFeatures);
 		}
 

@@ -78,6 +78,10 @@
       <Project>{5f30a68e-05bf-40ea-b576-5ebcde520559}</Project>
       <Name>Mosa.Compiler.MosaTypeSystem</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Platform.Intel\Mosa.Platform.Intel.csproj">
+      <Project>{17ce4f09-7cbf-49e9-84a7-178db2cbd7c9}</Project>
+      <Name>Mosa.Platform.Intel</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Architecture.cs">
@@ -341,7 +345,6 @@
     <Compile Include="Stages\FinalTweakStage.cs" />
     <Compile Include="Stages\SimpleDeadCodeRemovalStage.cs" />
     <Compile Include="Stages\AddressModeConversionStage.cs" />
-    <Compile Include="ControlRegister.cs" />
     <Compile Include="Stages\FixedRegisterAssignmentStage.cs" />
     <Compile Include="CompilerStages\InterruptVectorStage.cs" />
     <Compile Include="Intrinsic\GetEBP.cs" />
@@ -373,7 +376,6 @@
     <Compile Include="Intrinsic\Out8.cs" />
     <Compile Include="Intrinsic\Sti.cs" />
     <Compile Include="CompilerStages\MethodTableBuilderStage.cs" />
-    <Compile Include="SegmentRegister.cs" />
     <Compile Include="CompilerStages\Multiboot0695Stage.cs" />
     <Compile Include="X86.cs" />
     <Compile Include="X86CodeEmitter.cs" />
@@ -381,19 +383,12 @@
     <Compile Include="Intrinsic\BochsDebug.cs" />
     <Compile Include="LegacyOpCode.cs" />
     <Compile Include="X86Instruction.cs" />
-    <Compile Include="GeneralPurposeRegister.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Stages\IRTransformationStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Stages\LongOperandStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="SSE2Register.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="OpcodeEncoder.cs" />
     <Compile Include="X86Instructions.cs" />
   </ItemGroup>
   <ItemGroup>
