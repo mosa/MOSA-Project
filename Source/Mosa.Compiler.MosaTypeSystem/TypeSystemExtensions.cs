@@ -26,7 +26,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				case MosaTypeCode.U2:
 				case MosaTypeCode.I4:
 				case MosaTypeCode.U4:
-					return StackTypeCode.Int32;
+					return StackTypeCode.Int32; // FIXME - x64 - this is wrong on x64 platforms
 
 				case MosaTypeCode.I8:
 				case MosaTypeCode.U8:

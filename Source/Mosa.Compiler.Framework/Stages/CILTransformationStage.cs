@@ -272,7 +272,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (first.IsR)
 			{
-				var result = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+				var result = AllocateVirtualRegister(Is32BitPlatform ? TypeSystem.BuiltIn.I4 : TypeSystem.BuiltIn.I8);
 				var instruction = (first.IsR4) ? (BaseInstruction)IRInstruction.CompareFloatR4 : IRInstruction.CompareFloatR8;
 
 				context.SetInstruction(instruction, cc, result, first, second);
@@ -1991,7 +1991,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var size = GetTypeSize(arrayType.ElementType, false);
 
-			var elementOffset = AllocateVirtualRegister(TypeSystem.BuiltIn.I4); // FIXME - not compatible with 64bit
+			var elementOffset = AllocateVirtualRegister(Is32BitPlatform ? TypeSystem.BuiltIn.I4 : TypeSystem.BuiltIn.I8);
 			var elementSize = CreateConstant(size);
 
 			var context = new Context(node).InsertBefore();
@@ -2012,7 +2012,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private Operand CalculateTotalArrayOffset(InstructionNode node, Operand elementOffset)
 		{
 			var fixedOffset = CreateConstant(NativePointerSize * 3);
-			var arrayElement = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var arrayElement = AllocateVirtualRegister(Is32BitPlatform ? TypeSystem.BuiltIn.I4 : TypeSystem.BuiltIn.I8);
 
 			var context = new Context(node).InsertBefore();
 			context.AppendInstruction(Select(IRInstruction.Add32, IRInstruction.Add64), arrayElement, elementOffset, fixedOffset);
