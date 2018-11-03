@@ -1084,7 +1084,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			node.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, node.Operand1);
 
-			var symbol = linker.CreateSymbol(symbolName, SectionKind.ROData, NativeAlignment, (NativePointerSize * 3) + (stringdata.Length * 2));
+			var symbol = linker.CreateSymbol(symbolName, SectionKind.ROData, NativeAlignment, (NativePointerSize * 2) + 4 + (stringdata.Length * 2));
 			var stream = symbol.Stream;
 
 			// Type Definition and sync block
@@ -1093,7 +1093,7 @@ namespace Mosa.Compiler.Framework.Stages
 			stream.WriteZeroBytes(NativePointerSize * 2);
 
 			// String length field
-			stream.Write(BitConverter.GetBytes(stringdata.Length), 0, NativePointerSize);
+			stream.Write(BitConverter.GetBytes(stringdata.Length), 0, 4);
 
 			// String data
 			var stringData = Encoding.Unicode.GetBytes(stringdata);
