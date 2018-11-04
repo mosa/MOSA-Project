@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Msr32 : ARMv6Instruction
 	{
-		public override int ID { get { return 698; } }
+		public override int ID { get { return 724; } }
 
 		internal Msr32()
 			: base(1, 3)

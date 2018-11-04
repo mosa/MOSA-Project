@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class SarConst32 : X64Instruction
 	{
-		public override int ID { get { return 556; } }
+		public override int ID { get { return 562; } }
 
 		internal SarConst32()
 			: base(1, 2)

@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Ror32 : ARMv6Instruction
 	{
-		public override int ID { get { return 708; } }
+		public override int ID { get { return 734; } }
 
 		internal Ror32()
 			: base(1, 3)
