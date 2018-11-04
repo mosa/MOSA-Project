@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class BranchLessOrEqual : X64Instruction
 	{
-		public override int ID { get { return 570; } }
+		public override int ID { get { return 627; } }
 
 		internal BranchLessOrEqual()
 			: base(0, 0)

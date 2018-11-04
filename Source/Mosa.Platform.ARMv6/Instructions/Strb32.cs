@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Strb32 : ARMv6Instruction
 	{
-		public override int ID { get { return 660; } }
+		public override int ID { get { return 717; } }
 
 		internal Strb32()
 			: base(1, 3)
