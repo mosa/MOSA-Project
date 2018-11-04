@@ -233,7 +233,7 @@ namespace Mosa.Platform.x64
 			compilerPipeline.InsertAfterLast<PlatformIntrinsicStage>(
 				new BaseMethodCompilerStage[]
 				{
-					//new LongOperandStage(),
+					new LongOperandStage(),
 					new IRTransformationStage(),
 					new StopStage(),	// Temp
 
