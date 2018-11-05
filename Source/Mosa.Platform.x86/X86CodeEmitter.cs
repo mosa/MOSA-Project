@@ -77,7 +77,7 @@ namespace Mosa.Platform.x86
 			// Save the current position
 			long currentPosition = CodeStream.Position;
 
-			foreach (var p in patches)
+			foreach (var p in Patches)
 			{
 				if (!TryGetLabel(p.Label, out int labelPosition))
 				{

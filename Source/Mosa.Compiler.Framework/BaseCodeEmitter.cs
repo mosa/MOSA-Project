@@ -68,23 +68,25 @@ namespace Mosa.Compiler.Framework
 		protected BaseLinker Linker;
 
 		/// <summary>
+		/// Gets the name of the method.
+		/// </summary>
+		protected string MethodName;
+
+		/// <summary>
 		/// Patches we need to perform.
 		/// </summary>
-		protected readonly List<Patch> patches = new List<Patch>();
+		protected readonly List<Patch> Patches = new List<Patch>();
 
 		#endregion Data Members
 
 		#region Properties
 
 		/// <summary>
-		/// Gets the name of the method.
-		/// </summary>
-		protected string MethodName { get; private set; }
-
-		/// <summary>
 		/// List of labels that were emitted.
 		/// </summary>
 		public Dictionary<int, int> Labels { get; set; }
+
+		public OpcodeEncoderV2 OpcodeEncoder { get; set; }
 
 		#endregion Properties
 
@@ -110,6 +112,8 @@ namespace Mosa.Compiler.Framework
 			symbol.RemovePatches();
 
 			Labels = new Dictionary<int, int>();
+
+			OpcodeEncoder = new OpcodeEncoderV2(this);
 		}
 
 		/// <summary>
@@ -226,7 +230,7 @@ namespace Mosa.Compiler.Framework
 
 		protected void AddPatch(int label, int position)
 		{
-			patches.Add(new Patch(label, position));
+			Patches.Add(new Patch(label, position));
 		}
 
 		public abstract void ResolvePatches();
