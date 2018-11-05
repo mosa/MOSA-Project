@@ -22,18 +22,18 @@ namespace Mosa.Platform.x64
 		/// <param name="symbolOperand">The symbol operand.</param>
 		public void EmitCallSite(Operand symbolOperand)
 		{
-			linker.Link(
+			Linker.Link(
 				LinkType.RelativeOffset,
 				PatchType.I4,
 				SectionKind.Text,
 				MethodName,
-				(int)codeStream.Position,
+				(int)CodeStream.Position,
 				SectionKind.Text,
 				symbolOperand.Name,
 				-4
 			);
 
-			codeStream.WriteZeroBytes(4);
+			CodeStream.WriteZeroBytes(4);
 		}
 
 		/// <summary>
@@ -43,7 +43,7 @@ namespace Mosa.Platform.x64
 		/// <param name="dest">The destination label.</param>
 		public void EmitRelativeBranch(byte[] code, int dest)
 		{
-			codeStream.Write(code, 0, code.Length);
+			CodeStream.Write(code, 0, code.Length);
 			EmitRelativeBranchTarget(dest);
 		}
 
@@ -62,22 +62,22 @@ namespace Mosa.Platform.x64
 			if (TryGetLabel(label, out int position))
 			{
 				// Yes, calculate the relative offset
-				relOffset = position - ((int)codeStream.Position + 4);
+				relOffset = position - ((int)CodeStream.Position + 4);
 			}
 			else
 			{
 				// Forward jump, we can't resolve yet - store a patch
-				AddPatch(label, (int)codeStream.Position);
+				AddPatch(label, (int)CodeStream.Position);
 			}
 
 			// Emit the relative jump offset (zero if we don't know it yet!)
-			codeStream.Write(relOffset, Endianness.Little);
+			CodeStream.Write(relOffset, Endianness.Little);
 		}
 
 		public override void ResolvePatches()
 		{
 			// Save the current position
-			long currentPosition = codeStream.Position;
+			long currentPosition = CodeStream.Position;
 
 			foreach (var p in patches)
 			{
@@ -86,18 +86,18 @@ namespace Mosa.Platform.x64
 					throw new ArgumentException("Missing label while resolving patches.", "label=" + labelPosition.ToString());
 				}
 
-				codeStream.Position = p.Position;
+				CodeStream.Position = p.Position;
 
 				// Compute relative branch offset
 				int relOffset = labelPosition - ((int)p.Position + 4);
 
 				// Write relative offset to stream
 				var bytes = BitConverter.GetBytes(relOffset);
-				codeStream.Write(bytes, 0, bytes.Length);
+				CodeStream.Write(bytes, 0, bytes.Length);
 			}
 
 			// Reset the position
-			codeStream.Position = currentPosition;
+			CodeStream.Position = currentPosition;
 		}
 
 		/// <summary>
@@ -105,13 +105,13 @@ namespace Mosa.Platform.x64
 		/// </summary>
 		public void EmitFarJumpToNextInstruction()
 		{
-			codeStream.WriteByte(0xEA);
+			CodeStream.WriteByte(0xEA);
 
-			linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, (int)codeStream.Position, SectionKind.Text, MethodName, (int)codeStream.Position + 6);
+			Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, (int)CodeStream.Position, SectionKind.Text, MethodName, (int)CodeStream.Position + 6);
 
-			codeStream.WriteZeroBytes(4);
-			codeStream.WriteByte(0x08);
-			codeStream.WriteByte(0x00);
+			CodeStream.WriteZeroBytes(4);
+			CodeStream.WriteByte(0x08);
+			CodeStream.WriteByte(0x00);
 		}
 
 		#region Legacy Opcode Methods
@@ -123,7 +123,7 @@ namespace Mosa.Platform.x64
 		internal void Emit(LegacyOpCode opCode)
 		{
 			// Write the opcode
-			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
+			CodeStream.Write(opCode.Code, 0, opCode.Code.Length);
 		}
 
 		/// <summary>
@@ -134,13 +134,13 @@ namespace Mosa.Platform.x64
 		internal void Emit(LegacyOpCode opCode, Operand dest)
 		{
 			// Write the opcode
-			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
+			CodeStream.Write(opCode.Code, 0, opCode.Code.Length);
 
 			// Write the mod R/M byte
 			byte? modRM = CalculateModRM(opCode.RegField, dest, null);
 			if (modRM != null)
 			{
-				codeStream.WriteByte(modRM.Value);
+				CodeStream.WriteByte(modRM.Value);
 			}
 
 			// Add immediate bytes
@@ -159,7 +159,7 @@ namespace Mosa.Platform.x64
 		internal void Emit(LegacyOpCode opCode, Operand dest, Operand src)
 		{
 			// Write the opcode
-			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
+			CodeStream.Write(opCode.Code, 0, opCode.Code.Length);
 
 			Debug.Assert(!(dest == null && src == null));
 
@@ -167,7 +167,7 @@ namespace Mosa.Platform.x64
 			byte? modRM = CalculateModRM(opCode.RegField, dest, src);
 			if (modRM != null)
 			{
-				codeStream.WriteByte(modRM.Value);
+				CodeStream.WriteByte(modRM.Value);
 			}
 
 			// Add immediate bytes
@@ -191,7 +191,7 @@ namespace Mosa.Platform.x64
 		internal void Emit(LegacyOpCode opCode, Operand dest, Operand src, Operand third)
 		{
 			// Write the opcode
-			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
+			CodeStream.Write(opCode.Code, 0, opCode.Code.Length);
 
 			Debug.Assert(!(dest == null && src == null));
 
@@ -199,7 +199,7 @@ namespace Mosa.Platform.x64
 			byte? modRM = CalculateModRM(opCode.RegField, dest, src);
 			if (modRM != null)
 			{
-				codeStream.WriteByte(modRM.Value);
+				CodeStream.WriteByte(modRM.Value);
 			}
 
 			// Add immediate bytes
@@ -220,16 +220,16 @@ namespace Mosa.Platform.x64
 				// FIXME! remove assertion
 				Debug.Assert(displacement.Offset == 0);
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, (int)codeStream.Position, SectionKind.ROData, displacement.Name, 0);
-				codeStream.WriteZeroBytes(4);
+				Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, (int)CodeStream.Position, SectionKind.ROData, displacement.Name, 0);
+				CodeStream.WriteZeroBytes(4);
 			}
 			else if (displacement.IsStaticField)
 			{
 				Debug.Assert(displacement.IsUnresolvedConstant);
 				var section = displacement.Field.Data != null ? SectionKind.ROData : SectionKind.BSS;
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, (int)codeStream.Position, section, displacement.Field.FullName, 0);
-				codeStream.WriteZeroBytes(4);
+				Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, (int)CodeStream.Position, section, displacement.Field.FullName, 0);
+				CodeStream.WriteZeroBytes(4);
 			}
 			else if (displacement.IsSymbol)
 			{
@@ -237,26 +237,26 @@ namespace Mosa.Platform.x64
 				var section = (displacement.Method != null) ? SectionKind.Text : SectionKind.ROData;
 
 				// First try finding the symbol in the expected section
-				var symbol = linker.FindSymbol(displacement.Name, section);
+				var symbol = Linker.FindSymbol(displacement.Name, section);
 
 				// If no symbol found, look in all sections
 				if (symbol == null)
 				{
-					symbol = linker.FindSymbol(displacement.Name);
+					symbol = Linker.FindSymbol(displacement.Name);
 				}
 
 				// Otherwise create the symbol in the expected section
 				if (symbol == null)
 				{
-					symbol = linker.GetSymbol(displacement.Name, section);
+					symbol = Linker.GetSymbol(displacement.Name, section);
 				}
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, (int)codeStream.Position, symbol, 0);
-				codeStream.WriteZeroBytes(4);
+				Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, (int)CodeStream.Position, symbol, 0);
+				CodeStream.WriteZeroBytes(4);
 			}
 			else
 			{
-				codeStream.Write((int)displacement.Offset, Endianness.Little);
+				CodeStream.Write((int)displacement.Offset, Endianness.Little);
 			}
 		}
 
@@ -270,26 +270,26 @@ namespace Mosa.Platform.x64
 
 			if (op.IsStackLocal)
 			{
-				codeStream.Write((int)op.Offset, Endianness.Little);
+				CodeStream.Write((int)op.Offset, Endianness.Little);
 				return;
 			}
 
 			Debug.Assert(op.IsResolvedConstant);
 
 			if (op.IsI1)
-				codeStream.WriteByte((byte)op.ConstantSignedInteger);
+				CodeStream.WriteByte((byte)op.ConstantSignedInteger);
 			else if (op.IsU1 || op.IsBoolean)
-				codeStream.WriteByte(Convert.ToByte(op.ConstantUnsignedInteger));
+				CodeStream.WriteByte(Convert.ToByte(op.ConstantUnsignedInteger));
 			else if (op.IsU2 || op.IsChar)
-				codeStream.Write(Convert.ToUInt16(op.ConstantUnsignedInteger), Endianness.Little);
+				CodeStream.Write(Convert.ToUInt16(op.ConstantUnsignedInteger), Endianness.Little);
 			else if (op.IsI2)
-				codeStream.Write(Convert.ToInt16(op.ConstantSignedInteger), Endianness.Little);
+				CodeStream.Write(Convert.ToInt16(op.ConstantSignedInteger), Endianness.Little);
 			else if (op.IsI4 || op.IsI)
-				codeStream.Write(Convert.ToInt32(op.ConstantSignedInteger), Endianness.Little);
+				CodeStream.Write(Convert.ToInt32(op.ConstantSignedInteger), Endianness.Little);
 			else if (op.IsU4 || op.IsPointer || op.IsU || !op.IsValueType)
-				codeStream.Write(Convert.ToUInt32(op.ConstantUnsignedInteger), Endianness.Little);
+				CodeStream.Write(Convert.ToUInt32(op.ConstantUnsignedInteger), Endianness.Little);
 			else if (op.IsI8 || op.IsU8)
-				codeStream.Write(Convert.ToUInt32(op.ConstantUnsignedInteger), Endianness.Little);  // FUTURE: Remove me
+				CodeStream.Write(Convert.ToUInt32(op.ConstantUnsignedInteger), Endianness.Little);  // FUTURE: Remove me
 			else
 				throw new CompilerException();
 		}
