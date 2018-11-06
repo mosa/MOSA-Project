@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Mosa.Utility.SourceCodeGenerator
@@ -388,7 +390,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Lines.AppendLine("\t\t}");
 			}
 
-			if (node.X86LegacyOpcodeOperandOrder != null && node.X86LegacyOpcode != null && node.StaticEmitMethod == null)
+			if (node.X86LegacyOpcodeOperandOrder != null && node.X86LegacyOpcode != null && node.StaticEmitMethod == null && node.OpcodeEncoding == null)
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tinternal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)");
@@ -415,6 +417,30 @@ namespace Mosa.Utility.SourceCodeGenerator
 				{
 					Lines.AppendLine("\t\t\temitter.Emit(LegacyOpcode, " + operands + ");");
 				}
+				Lines.AppendLine("\t\t}");
+			}
+
+			if (node.OpcodeEncoding != null)
+			{
+				Lines.AppendLine();
+				Lines.AppendLine("\t\tpublic override void Emit(InstructionNode node, BaseCodeEmitter emitter)");
+				Lines.AppendLine("\t\t{");
+				if (node.VariableOperands == null || node.VariableOperands == "false")
+				{
+					Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.ResultCount == " + node.ResultCount + ");");
+					Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.OperandCount == " + node.OperandCount + ");");
+
+					if (node.X86ThreeTwoAddressConversion == null || node.X86ThreeTwoAddressConversion == "true")
+					{
+						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Result.IsCPURegister);");
+						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);");
+						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);");
+					}
+					Lines.AppendLine();
+				}
+
+				EmitEncoding((string)node.OpcodeEncoding);
+
 				Lines.AppendLine("\t\t}");
 			}
 
@@ -516,6 +542,131 @@ namespace Mosa.Utility.SourceCodeGenerator
 			}
 
 			return bytes;
+		}
+
+		private void EmitEncoding(string encoding)
+		{
+			var steps = encoding.Replace("[", string.Empty).Replace(" ", string.Empty).Split(']');
+
+			foreach (var s in steps)
+			{
+				if (string.IsNullOrWhiteSpace(s))
+					continue;
+
+				if (s.StartsWith("0x"))
+				{
+					// hex
+					string hex = s.Substring(2);
+
+					switch (hex.Length)
+					{
+						case 1:
+							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendNibble(0x" + hex + ");");
+							break;
+
+						case 2:
+							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendByte(0x" + hex + ");");
+							break;
+
+						case 3:
+							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendByte(0x" + hex.Substring(0, 2) + ");");
+							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendNibble(0x" + hex.Substring(1) + ");");
+							break;
+
+						case 4:
+							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendShort(0x" + hex + ");");
+							break;
+
+						case 5:
+							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendShort(0x" + hex.Substring(0, 4) + ");");
+							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendNibble(0x" + hex.Substring(5) + ");");
+							break;
+
+						default: throw new Exception("ERROR!");
+					}
+				}
+				else if (s.StartsWith("0b"))
+				{
+					// binary
+					string binary = s.Substring(2);
+
+					switch (binary.Length)
+					{
+						case 1:
+							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendBit(0b" + binary + ");");
+							break;
+
+						case 2:
+							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.Append2Bits(0b" + binary + ");");
+							break;
+
+						case 3:
+							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.Append3Bits(0b" + binary + ");");
+							break;
+
+						case 4:
+							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendNibble(0b" + binary + ");");
+							break;
+
+						case 5:
+							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
+							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendBit(0b" + binary.Substring(4) + ");");
+							break;
+
+						case 6:
+							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
+							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.Append2Bits(0b" + binary.Substring(4) + ");");
+							break;
+
+						case 7:
+							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
+							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.Append3Bits(0b" + binary.Substring(4) + ");");
+							break;
+
+						case 8:
+							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
+							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(4) + ");");
+							break;
+
+						default: throw new Exception("ERROR!");
+					}
+				}
+				else
+				{
+					var parts = s.Split(':');
+
+					var code = string.Empty;
+					var postcode = string.Empty;
+					var operand = string.Empty;
+
+					switch (parts[0])
+					{
+						case "reg3": code = "Append3Bits"; postcode = ".Register.RegisterCode"; break;
+						case "regx4": code = "Append1Bit"; postcode = ".Register.RegisterCode"; break;
+						case "reg4": code = "AppendNibble"; postcode = ".Register.RegisterCode"; break;
+						case "imm32": code = "Append32BitImmediate"; break;
+						case "": break;
+
+						default: throw new Exception("ERROR!");
+					}
+
+					switch (parts[1])
+					{
+						case "o1": operand = "Operand1"; break;
+						case "o2": operand = "Operand2"; break;
+						case "o3": operand = "Operand3"; break;
+						case "o4": operand = "Operand4"; break;
+						case "r": operand = "Result"; break;
+						case "r1": operand = "Result"; break;
+						case "r2": operand = "Result2"; break;
+						case "": break;
+
+						default: throw new Exception("ERROR!");
+					}
+
+					Lines.AppendLine("\t\t\temitter.OpcodeEncoder." + code + "(node." + operand + postcode + ");");
+				}
+			}
 		}
 	}
 }
