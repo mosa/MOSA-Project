@@ -77,6 +77,14 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
+		protected void AppendBitsReversed(ulong value, int size)
+		{
+			for (int i = 0; i < size; i++)
+			{
+				AppendBit((byte)((value >> i) & 1));
+			}
+		}
+
 		public void AppendByte(byte value)
 		{
 			if (BitsLength == 0)
@@ -127,7 +135,7 @@ namespace Mosa.Compiler.Framework
 			AppendBits(value, 32);
 		}
 
-		public void AppendInteger(ulong value)
+		public void AppendLong(ulong value)
 		{
 			if (BitsLength == 0)
 			{
@@ -145,18 +153,32 @@ namespace Mosa.Compiler.Framework
 			AppendBits(value, 64);
 		}
 
+		public void AppendImmediateInteger(ulong value)
+		{
+			if (BitsLength == 0)
+			{
+				Emitter.WriteByte((byte)(value));
+				Emitter.WriteByte((byte)(value >> 8));
+				Emitter.WriteByte((byte)(value >> 16));
+				Emitter.WriteByte((byte)(value >> 24));
+				return;
+			}
+
+			AppendBitsReversed(value, 32);
+		}
+
 		public void Append32BitImmediate(Operand operand)
 		{
 			Debug.Assert(operand.IsConstant);
 
 			if (operand.IsResolvedConstant)
 			{
-				AppendInteger(operand.ConstantUnsignedInteger);
+				AppendImmediateInteger(operand.ConstantUnsignedInteger);
 			}
 			else
 			{
 				Emitter.EmitLink(operand, Emitter.CurrentPosition);
-				AppendInteger(0);
+				AppendImmediateInteger(0);
 			}
 		}
 	}
