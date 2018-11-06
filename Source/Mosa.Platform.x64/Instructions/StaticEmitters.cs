@@ -262,7 +262,7 @@ namespace Mosa.Platform.x64.Instructions
 				.AppendNibble(Bits.b0000)                                       // 4:opcode
 				.AppendNibble(Bits.b1111)                                       // 4:opcode
 				.Append3Bits(Bits.b011)                                         // 3:opcode
-				.AppendBit(node.Result.Register.Width != 128)                   // 1:direction
+				.AppendBit(true)                                                // 1:direction
 				.AppendNibble(Bits.b1110)                                       // 4:opcode
 				.Append2Bits(Bits.b11)                                          // 2:opcode
 				.AppendRM(node.Operand1)                                        // 3:r/m (source)

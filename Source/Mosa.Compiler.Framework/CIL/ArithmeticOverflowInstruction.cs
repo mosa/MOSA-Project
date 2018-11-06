@@ -86,7 +86,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			base.Resolve(context, compiler);
 
-			StackTypeCode result = StackTypeCode.Unknown;
+			var result = StackTypeCode.Unknown;
 
 			switch (opcode)
 			{

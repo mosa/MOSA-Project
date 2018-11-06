@@ -13,7 +13,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Eor32 : ARMv6Instruction
 	{
-		public override int ID { get { return 627; } }
+		public override int ID { get { return 710; } }
 
 		internal Eor32()
 			: base(1, 3)

@@ -3,11 +3,13 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Platform.Intel;
 using Mosa.Platform.x64.Stages;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x64
 {
@@ -204,12 +206,22 @@ namespace Mosa.Platform.x64
 		}
 
 		/// <summary>
-		/// Extends the pre compiler pipeline with x64 specific stages.
+		/// Extends the compiler pipeline with x64 specific stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The pipeline to extend.</param>
 		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline)
 		{
-			// TODO
+			//compilerPipeline.Add(
+			//	new StartUpStage()
+			//);
+
+			//compilerPipeline.Add(
+			//	new InterruptVectorStage()
+			//);
+
+			//compilerPipeline.Add(
+			//	new SSEInitStage()
+			//);
 		}
 
 		/// <summary>
@@ -221,7 +233,7 @@ namespace Mosa.Platform.x64
 			compilerPipeline.InsertAfterLast<PlatformIntrinsicStage>(
 				new BaseMethodCompilerStage[]
 				{
-					//new LongOperandStage(),
+					new LongOperandStage(),
 					new IRTransformationStage(),
 					new StopStage(),	// Temp
 
@@ -253,10 +265,7 @@ namespace Mosa.Platform.x64
 		/// <returns></returns>
 		public override BaseCodeEmitter GetCodeEmitter()
 		{
-			// TODO
-			return null;
-
-			//return new MachineCodeEmitter();
+			return new X64CodeEmitter();
 		}
 
 		/// <summary>
@@ -267,7 +276,18 @@ namespace Mosa.Platform.x64
 		/// <param name="source">The source.</param>
 		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
 		{
-			throw new NotImplementCompilerException();
+			BaseInstruction instruction = X64.Mov64;
+
+			if (destination.IsR4)
+			{
+				instruction = X64.Movss;
+			}
+			else if (destination.IsR8)
+			{
+				instruction = X64.Movsd;
+			}
+
+			context.AppendInstruction(instruction, destination, source);
 		}
 
 		/// <summary>
@@ -280,7 +300,18 @@ namespace Mosa.Platform.x64
 		/// <exception cref="NotImplementCompilerException"></exception>
 		public override void InsertStoreInstruction(Context context, Operand destination, Operand offset, Operand value)
 		{
-			throw new NotImplementCompilerException();
+			BaseInstruction instruction = X64.MovStore32;
+
+			if (value.IsR4)
+			{
+				instruction = X64.MovssStore;
+			}
+			else if (value.IsR8)
+			{
+				instruction = X64.MovsdStore;
+			}
+
+			context.AppendInstruction(instruction, null, destination, offset, value);
 		}
 
 		/// <summary>
@@ -293,7 +324,18 @@ namespace Mosa.Platform.x64
 		/// <exception cref="NotImplementCompilerException"></exception>
 		public override void InsertLoadInstruction(Context context, Operand destination, Operand source, Operand offset)
 		{
-			throw new NotImplementCompilerException();
+			BaseInstruction instruction = X64.MovLoad32;
+
+			if (destination.IsR4)
+			{
+				instruction = X64.MovssLoad;
+			}
+			else if (destination.IsR8)
+			{
+				instruction = X64.MovsdLoad;
+			}
+
+			context.AppendInstruction(instruction, destination, source, offset);
 		}
 
 		/// <summary>
@@ -309,7 +351,44 @@ namespace Mosa.Platform.x64
 		/// <exception cref="NotImplementCompilerException"></exception>
 		public override void InsertCompoundCopy(MethodCompiler methodCompiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
 		{
-			throw new NotImplementCompilerException();
+			const int LargeAlignment = 16;
+			int alignedSize = size - (size % NativeAlignment);
+			int largeAlignedTypeSize = size - (size % LargeAlignment);
+
+			Debug.Assert(size > 0);
+
+			var srcReg = methodCompiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
+			var dstReg = methodCompiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
+
+			context.AppendInstruction(IRInstruction.UnstableObjectTracking);
+
+			context.AppendInstruction(X64.Lea64, srcReg, sourceBase, source);
+			context.AppendInstruction(X64.Lea64, dstReg, destinationBase, destination);
+
+			var tmp = methodCompiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
+			var tmpLarge = methodCompiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.R8);
+
+			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
+			{
+				// Large aligned moves allow 128bits to be copied at a time
+				var index = methodCompiler.CreateConstant((int)i);
+				context.AppendInstruction(X64.MovupsLoad, tmpLarge, srcReg, index);
+				context.AppendInstruction(X64.MovupsStore, null, dstReg, index, tmpLarge);
+			}
+			for (int i = largeAlignedTypeSize; i < alignedSize; i += 8)
+			{
+				var index = methodCompiler.CreateConstant(i);
+				context.AppendInstruction(X64.MovLoad64, tmp, srcReg, index);
+				context.AppendInstruction(X64.MovStore64, null, dstReg, index, tmp);
+			}
+			for (int i = alignedSize; i < size; i++)
+			{
+				var index = methodCompiler.CreateConstant(i);
+				context.AppendInstruction(X64.MovLoad8, tmp, srcReg, index);
+				context.AppendInstruction(X64.MovStore8, null, dstReg, index, tmp);
+			}
+
+			context.AppendInstruction(IRInstruction.StableObjectTracking);
 		}
 
 		/// <summary>
@@ -320,7 +399,20 @@ namespace Mosa.Platform.x64
 		/// <param name="source">The source.</param>
 		public override void InsertExchangeInstruction(Context context, Operand destination, Operand source)
 		{
-			throw new NotImplementCompilerException();
+			if (source.IsR4)
+			{
+				// TODO
+				throw new CompilerException("R4 not implemented in InsertExchangeInstruction method");
+			}
+			else if (source.IsR8)
+			{
+				// TODO
+				throw new CompilerException("R8 not implemented in InsertExchangeInstruction method");
+			}
+			else
+			{
+				context.AppendInstruction2(X64.XChg64, destination, source, source, destination);
+			}
 		}
 
 		/// <summary>
@@ -331,7 +423,7 @@ namespace Mosa.Platform.x64
 		/// <exception cref="NotImplementCompilerException"></exception>
 		public override void InsertJumpInstruction(Context context, BasicBlock destination)
 		{
-			throw new NotImplementCompilerException();
+			context.AppendInstruction(X64.Jmp, destination);
 		}
 
 		/// <summary>
@@ -341,8 +433,7 @@ namespace Mosa.Platform.x64
 		/// <returns></returns>
 		public override bool IsInstructionMove(BaseInstruction instruction)
 		{
-			// TODO
-			return false;
+			return instruction == X64.Mov64 || instruction == X64.Movsd || instruction == X64.Movss;
 		}
 	}
 }

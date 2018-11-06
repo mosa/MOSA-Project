@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Svc32 : ARMv6Instruction
 	{
-		public override int ID { get { return 663; } }
+		public override int ID { get { return 746; } }
 
 		internal Svc32()
 			: base(1, 3)

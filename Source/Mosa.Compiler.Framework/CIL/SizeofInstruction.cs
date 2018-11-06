@@ -35,11 +35,9 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(node, decoder);
 
-			MosaType type = (MosaType)decoder.Instruction.Operand;
+			node.MosaType = (MosaType)decoder.Instruction.Operand;
 
-			node.MosaType = type;
-
-			node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.I4);
+			node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.MethodCompiler.Architecture.Is32BitPlatform ? decoder.TypeSystem.BuiltIn.I4 : decoder.TypeSystem.BuiltIn.I8);
 		}
 
 		#endregion Methods

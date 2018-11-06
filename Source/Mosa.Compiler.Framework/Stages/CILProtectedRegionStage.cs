@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (handler.ExceptionHandlerType == ExceptionHandlerType.Finally)
 				{
 					var exceptionObject = AllocateVirtualRegister(exceptionType);
-					var finallyOperand = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+					var finallyOperand = AllocateVirtualRegister(Is32BitPlatform ? TypeSystem.BuiltIn.I4 : TypeSystem.BuiltIn.I8);
 
 					context.AppendInstruction2(IRInstruction.FinallyStart, exceptionObject, finallyOperand);
 				}

@@ -383,7 +383,7 @@ namespace Mosa.Platform.x86
 				context.AppendInstruction(X86.MovupsLoad, tmpLarge, srcReg, index);
 				context.AppendInstruction(X86.MovupsStore, null, dstReg, index, tmpLarge);
 			}
-			for (int i = largeAlignedTypeSize; i < alignedSize; i += NativeAlignment)
+			for (int i = largeAlignedTypeSize; i < alignedSize; i += 4)
 			{
 				var index = methodCompiler.CreateConstant(i);
 				context.AppendInstruction(X86.MovLoad32, tmp, srcReg, index);

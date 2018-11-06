@@ -23,26 +23,43 @@
 [github-issues-link]: https://github.com/mosa/MOSA-Project/issues
 [github-license-link]: https://raw.githubusercontent.com/mosa/MOSA-Project/master/LICENSE.txt
 
-MOSA is an open source software project aiming to create a high quality, cross-platform, optimizing .NET compiler designed specifically to support a managed operating system based on the .NET framework.
+MOSA is an open source software project that natively executes .NET applications within a virtual hypervisor or on bare metal hardware!
 
 The MOSA project consists of:
 
-* Compiler - a high quality, multithreaded, cross-platform, optimizing .NET compiler.
-* Kernel - a small, micro-kernel operating system.
-* Device Drivers Framework - a modular, device drivers framework and device drivers.
+* Compiler - a high quality, multithreaded, cross-platform, optimizing .NET compiler
+* Kernel - a small, micro-kernel operating system
+* Device Drivers Framework - a modular, device drivers framework and device drivers
+* Debugger - QEMU-based debugger
 
 Read our [Frequently Asked Questions](https://github.com/mosa/MOSA-Project/wiki/Frequently-Asked-Questions) for more information about this project.
 
 ### Current Status
 
-The MOSA compiler supports:
+The target platforms are:
 
-* almost all non-object oriented code (arithmetic, assignment, bitwise logic, bitwise shifts, boolean logic, conditional evaluation, equality testing, calling functions, increment and decrement,  member selection, object size, order relations, reference and dereference, sequencing, and subexpression grouping), 
-* basic object oriented code (such as new operator, member methods and virtual methods), 
-* basic type conversion (implicit type and explicit type conversion on primitives types and "is" and "as" operators), 
-* generic code (example, List<T>), and
-* delegates (static and non-static) and with optional parameters.
-* exception handling (try, finally, and catch code blocks)
+* Intel X86/32-bit (stable)
+* Intel X64 (in development)
+* ARM v6 (in early development)
+
+The MOSA compiler supports nearly all and object oriented non-object oriented code, including:
+
+* Generic Code (example: List<T>)
+* Delegates (static and non-static) and with optional parameters
+* Exception Handling (try, finally, and catch code blocks)
+
+The MOSA compiler seeks to provide high quality code generation using the following optimizations:
+
+* Constant Folding and Propagation 
+* Strength Reduction optimization
+* Dead Code Elimination
+* Single Static Assignment (SSA)
+* Global Value Numbering / Common Subexpession Elimination
+* Sparse Conditional Constant Propagation
+* Inlined Expansion
+* Loop-Invariant Code Motion
+* Block Reordering
+* Greedy Register Allocation
 
 ### Getting Started
 
@@ -60,9 +77,9 @@ You will also need the following prerequisites:
 
 **Windows**
 
-Install any [Visual Studio](http://www.visualstudio.com) version 2017 or newer.
+Install any [Visual Studio](http://www.visualstudio.com) version 2018 or newer. All editions are supported including the fully-featured free [Community Edition](https://www.visualstudio.com/products/visual-studio-community-vs).
 
-All editions are supported including the fully-featured free [Community Edition](https://www.visualstudio.com/products/visual-studio-community-vs).
+Note: The MOSA source code repository includes [Qemu](http://wiki.qemu.org/Main_Page) virtual emulator for Windows.
 
 The [CodeMaid](http://www.codemaid.net/) Visual Studio Extension is strongly recommended for MOSA contributors.
 
@@ -70,9 +87,7 @@ The [CodeMaid](http://www.codemaid.net/) Visual Studio Extension is strongly rec
 
 Install [Mono](http://www.mono-project.com) and [Qemu](http://wiki.qemu.org/Main_Page).
 
-The minimum supported version of Mono is 4.4, this is not in some distributions repositories and must be added manually.
-A tutorial on how to do this can be found at the following URL.
-[http://www.mono-project.com/download/#download-lin](http://www.mono-project.com/download/#download-lin)
+The minimum supported version of Mono is 5.16.
 
 If using the APT package manager you can use the following command to quickly set up QEMU and Mono
 <pre>
@@ -104,7 +119,6 @@ By default, the CoolWorld operating system demo is pre-selected. Click the "Comp
 ### Join the Discussion
 
 Join us on [Gitter chat][gitter-chat]. This is the most interactive way to connect to MOSA's development team.
-
 
 ### License
 

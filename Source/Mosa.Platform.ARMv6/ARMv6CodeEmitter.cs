@@ -35,10 +35,10 @@ namespace Mosa.Platform.ARMv6
 		/// <param name="data">The data.</param>
 		public void Write(uint data)
 		{
-			codeStream.WriteByte((byte)((data >> 24) & 0xFF));
-			codeStream.WriteByte((byte)((data >> 16) & 0xFF));
-			codeStream.WriteByte((byte)((data >> 8) & 0xFF));
-			codeStream.WriteByte((byte)(data & 0xFF));
+			CodeStream.WriteByte((byte)((data >> 24) & 0xFF));
+			CodeStream.WriteByte((byte)((data >> 16) & 0xFF));
+			CodeStream.WriteByte((byte)((data >> 8) & 0xFF));
+			CodeStream.WriteByte((byte)(data & 0xFF));
 		}
 
 		#endregion Code Generation Members

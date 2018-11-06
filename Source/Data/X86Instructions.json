@@ -46,7 +46,8 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "03",
 			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": "[0x03][0b11][reg3:r][reg3:2]"
 		},
 		{
 			"Name": "AddConst32",
@@ -63,7 +64,8 @@
 			"X86LegacyOpcode": "81",
 			"X86LegacyOpcodeOperandOrder": "r2",
 			"X86LegacyOpcodeRegField": "00",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": "[0x81][0b11][0b000][reg3:1][imm32:2]"
 		},
 		{
 			"Name": "Addsd",

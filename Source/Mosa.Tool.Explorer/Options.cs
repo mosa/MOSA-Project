@@ -1,9 +1,11 @@
-﻿using CommandLine;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using CommandLine;
 using System.Collections.Generic;
 
 namespace Mosa.Tool.Explorer
 {
-	class Options
+	internal class Options
 	{
 		[Option("inline")]
 		public bool Inline { get; set; }
@@ -25,6 +27,9 @@ namespace Mosa.Tool.Explorer
 
 		[Option("no-sparse")]
 		public bool NoSparse { get; set; }
+
+		[Option("x64")]
+		public bool X64 { get; set; }
 
 		[Value(0)]
 		public IEnumerable<string> Files { get; set; }

@@ -58,7 +58,8 @@ namespace Mosa.Tool.Explorer
 		private void Main_Load(object sender, EventArgs e)
 		{
 			Text = "MOSA Explorer v" + CompilerVersion.Version;
-			cbPlatform.SelectedIndex = 0;
+
+			//cbPlatform.SelectedIndex = 0;
 			SetStatus("Ready!");
 		}
 
@@ -110,6 +111,8 @@ namespace Mosa.Tool.Explorer
 			cbEnableSSA.Checked = !options.NoSSA;
 			cbEnableIROptimizations.Checked = !options.NoIROptimizations;
 			cbEnableSparseConditionalConstantPropagation.Checked = !options.NoSparse;
+
+			if (options.X64) cbPlatform.SelectedIndex = 1;
 
 			var files = (IList<string>)options.Files;
 			if (files.Count == 1)

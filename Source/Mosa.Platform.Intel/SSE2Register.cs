@@ -13,123 +13,50 @@ namespace Mosa.Platform.Intel
 	/// SSE2 register allows storage of double precision floating point values (64 bit)
 	/// as required by the CIL standard.
 	/// </remarks>
-	public sealed class SSE2Register : PhysicalRegister
+	public static class SSE2Register
 	{
 		#region Static data members
 
 		/// <summary>
 		/// Represents SSE2 register XMM0.
 		/// </summary>
-		public static readonly SSE2Register XMM0 = new SSE2Register(8, 0);
+		public static readonly PhysicalRegister XMM0 = new PhysicalRegister(8, 0, "XMM#0", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register XMM1.
 		/// </summary>
-		public static readonly SSE2Register XMM1 = new SSE2Register(9, 1);
+		public static readonly PhysicalRegister XMM1 = new PhysicalRegister(9, 1, "XMM#1", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register XMM2.
 		/// </summary>
-		public static readonly SSE2Register XMM2 = new SSE2Register(10, 2);
+		public static readonly PhysicalRegister XMM2 = new PhysicalRegister(10, 2, "XMM#2", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register XMM3.
 		/// </summary>
-		public static readonly SSE2Register XMM3 = new SSE2Register(11, 3);
+		public static readonly PhysicalRegister XMM3 = new PhysicalRegister(11, 3, "XMM#3", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register XMM4.
 		/// </summary>
-		public static readonly SSE2Register XMM4 = new SSE2Register(12, 4);
+		public static readonly PhysicalRegister XMM4 = new PhysicalRegister(12, 4, "XMM#4", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register XMM5.
 		/// </summary>
-		public static readonly SSE2Register XMM5 = new SSE2Register(13, 5);
+		public static readonly PhysicalRegister XMM5 = new PhysicalRegister(13, 5, "XMM#5", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register XMM6.
 		/// </summary>
-		public static readonly SSE2Register XMM6 = new SSE2Register(14, 6);
+		public static readonly PhysicalRegister XMM6 = new PhysicalRegister(14, 6, "XMM#6", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register XMM7.
 		/// </summary>
-		public static readonly SSE2Register XMM7 = new SSE2Register(15, 7);
+		public static readonly PhysicalRegister XMM7 = new PhysicalRegister(15, 7, "XMM#7", false, true);
 
 		#endregion Static data members
-
-		#region Data Members
-
-		/// <summary>
-		/// Stores the register index of this instance.
-		/// </summary>
-		private readonly int registerCode;
-
-		#endregion Data Members
-
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new SSE2Register.
-		/// </summary>
-		/// <param name="index"></param>
-		/// <param name="registerCode">The SSE2 register index of this instance.</param>
-		private SSE2Register(int index, int registerCode) :
-			base(index)
-		{
-			this.registerCode = registerCode;
-		}
-
-		#endregion Construction
-
-		#region Properties
-
-		/// <summary>
-		/// SSE2 registers do not support integer operations.
-		/// </summary>
-		public override bool IsInteger
-		{
-			get { return false; }
-		}
-
-		/// <summary>
-		/// SSE2 registers are floating point register.
-		/// </summary>
-		public override bool IsFloatingPoint
-		{
-			get { return true; }
-		}
-
-		/// <summary>
-		/// Returns the register index of this register.
-		/// </summary>
-		public override int RegisterCode
-		{
-			get { return registerCode; }
-		}
-
-		/// <summary>
-		/// Returns the width of the register.
-		/// </summary>
-		public override int Width
-		{
-			get { return 128; }
-		}
-
-		#endregion Properties
-
-		#region Methods
-
-		/// <summary>
-		/// Retrieves the SSE2 register name.
-		/// </summary>
-		/// <returns>The SSE2 register name.</returns>
-		public override string ToString()
-		{
-			return String.Format("XMM#{0}", registerCode);
-		}
-
-		#endregion Methods
 	}
 }

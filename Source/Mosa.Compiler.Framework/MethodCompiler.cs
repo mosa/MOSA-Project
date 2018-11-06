@@ -427,6 +427,8 @@ namespace Mosa.Compiler.Framework
 			}
 			else
 			{
+				//  FIXME - x64
+				//  should be either R4, R8, Object,
 				return CreateVirtualRegister(type.GetStackType());
 			}
 		}
@@ -444,14 +446,14 @@ namespace Mosa.Compiler.Framework
 			{
 				Operand operand = null;
 
-				if (!MosaTypeLayout.IsStoredOnStack(local.Type) && !local.IsPinned)
+				if (MosaTypeLayout.IsStoredOnStack(local.Type) || local.IsPinned)
 				{
-					var stacktype = local.Type.GetStackType();
-					operand = CreateVirtualRegister(stacktype);
+					operand = AddStackLocal(local.Type, local.IsPinned);
 				}
 				else
 				{
-					operand = AddStackLocal(local.Type, local.IsPinned);
+					var stacktype = local.Type.GetStackType();
+					operand = CreateVirtualRegister(stacktype);
 				}
 
 				LocalVariables[index++] = operand;

@@ -53,7 +53,8 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>..\..\bin\Mosa.Kernel.ARMv6.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <FileAlignment>4096</FileAlignment>
     <Optimize>true</Optimize>
     <OutputPath>..\..\bin\</OutputPath>
@@ -67,11 +68,13 @@
     <Compile Include="Address.cs" />
     <Compile Include="Kernel.cs" />
     <Compile Include="KernelMemory.cs" />
+    <Compile Include="Screen.cs" />
+    <Compile Include="ScreenColor.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.Runtime.ARMv6\Mosa.Runtime.ARMv6.csproj">
-      <Project>{599d1c00-7c78-4211-a958-1285c4cb76c9}</Project>
-      <Name>Mosa.Runtime.ARMv6</Name>
+    <ProjectReference Include="..\Mosa.Runtime.x64\Mosa.Runtime.x64.csproj">
+      <Project>{a47b7998-4ee8-4af8-9373-c664fdeddc61}</Project>
+      <Name>Mosa.Runtime.x64</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj">
       <Project>{77961864-db33-4189-804f-d774022c96e2}</Project>

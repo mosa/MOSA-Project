@@ -864,7 +864,7 @@ namespace Mosa.Compiler.Framework
 				return IRInstruction.StoreParamInt64;
 			else if (is32bitPlatform)
 				return IRInstruction.StoreParamInt32;
-			else if (is32bitPlatform)
+			else //if (!is32bitPlatform)
 				return IRInstruction.StoreParamInt64;
 
 			throw new NotSupportedException();

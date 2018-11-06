@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseCodeEmitter
 	{
-		#region Types
+		#region Patch Type
 
 		/// <summary>
 		/// Patch
@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework
 			/// </summary>
 			/// <param name="label">The label.</param>
 			/// <param name="position">The position.</param>
-			public Patch(int label, long position)
+			public Patch(int label, int position)
 			{
 				Label = label;
 				Position = position;
@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Framework
 			/// <summary>
 			/// The patch's position in the stream
 			/// </summary>
-			public long Position;
+			public int Position;
 
 			/// <summary>
 			/// Returns a <see cref="System.String"/> that represents this instance.
@@ -53,38 +53,40 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		#endregion Types
+		#endregion Patch Type
 
 		#region Data Members
 
 		/// <summary>
 		/// The stream used to write machine code bytes to.
 		/// </summary>
-		protected Stream codeStream;
+		protected Stream CodeStream;
 
 		/// <summary>
 		/// Holds the linker used to resolve externals.
 		/// </summary>
-		protected BaseLinker linker;
+		protected BaseLinker Linker;
+
+		/// <summary>
+		/// Gets the name of the method.
+		/// </summary>
+		protected string MethodName;
 
 		/// <summary>
 		/// Patches we need to perform.
 		/// </summary>
-		protected readonly List<Patch> patches = new List<Patch>();
+		protected readonly List<Patch> Patches = new List<Patch>();
 
 		#endregion Data Members
 
 		#region Properties
 
 		/// <summary>
-		/// Gets the name of the method.
-		/// </summary>
-		protected string MethodName { get; private set; }
-
-		/// <summary>
 		/// List of labels that were emitted.
 		/// </summary>
 		public Dictionary<int, int> Labels { get; set; }
+
+		public OpcodeEncoderV2 OpcodeEncoder { get; set; }
 
 		#endregion Properties
 
@@ -102,14 +104,16 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(linker != null);
 
 			MethodName = methodName;
-			this.linker = linker;
-			this.codeStream = codeStream;
+			Linker = linker;
+			CodeStream = codeStream;
 
 			// only necessary if method is being recompiled (due to inline optimization, for example)
 			var symbol = linker.GetSymbol(MethodName, SectionKind.Text);
 			symbol.RemovePatches();
 
 			Labels = new Dictionary<int, int>();
+
+			OpcodeEncoder = new OpcodeEncoderV2(this);
 		}
 
 		/// <summary>
@@ -130,16 +134,14 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(!Labels.ContainsKey(label));
 
 			// Add this label to the label list, so we can resolve the jump later on
-			Labels.Add(label, (int)codeStream.Position);
-
-			//Debug.WriteLine("LABEL: " + label.ToString() + " @" + codeStream.Position.ToString());
+			Labels.Add(label, (int)CodeStream.Position);
 		}
 
 		/// <summary>
 		/// Gets the current position.
 		/// </summary>
 		/// <value>The current position.</value>
-		public int CurrentPosition { get { return (int)codeStream.Position; } }
+		public int CurrentPosition { get { return (int)CodeStream.Position; } }
 
 		#endregion BaseCodeEmitter Members
 
@@ -151,7 +153,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="data">The data.</param>
 		public void WriteByte(byte data)
 		{
-			codeStream.WriteByte(data);
+			CodeStream.WriteByte(data);
 		}
 
 		/// <summary>
@@ -160,7 +162,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="data">The data.</param>
 		public void Write(byte[] data)
 		{
-			codeStream.Write(data, 0, data.Length);
+			CodeStream.Write(data, 0, data.Length);
 		}
 
 		/// <summary>
@@ -171,7 +173,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="count">The count.</param>
 		public void Write(byte[] buffer, int offset, int count)
 		{
-			codeStream.Write(buffer, offset, count);
+			CodeStream.Write(buffer, offset, count);
 		}
 
 		#endregion Code Generation Members
@@ -184,12 +186,12 @@ namespace Mosa.Compiler.Framework
 		/// <param name="opcode">The opcode.</param>
 		public void Emit(BaseOpcodeEncoder opcode)
 		{
-			opcode.WriteTo(codeStream);
+			opcode.WriteTo(CodeStream);
 		}
 
 		public void EmitLink(Operand symbolOperand, int patchOffset, int referenceOffset = 0)
 		{
-			EmitLink((int)codeStream.Position, symbolOperand, patchOffset, referenceOffset);
+			EmitLink((int)CodeStream.Position, symbolOperand, patchOffset, referenceOffset);
 		}
 
 		protected void EmitLink(int position, Operand symbolOperand, int patchOffset, int referenceOffset = 0)
@@ -198,13 +200,13 @@ namespace Mosa.Compiler.Framework
 
 			if (symbolOperand.IsLabel)
 			{
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, position, SectionKind.ROData, symbolOperand.Name, referenceOffset);
+				Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, position, SectionKind.ROData, symbolOperand.Name, referenceOffset);
 			}
 			else if (symbolOperand.IsStaticField)
 			{
 				var section = symbolOperand.Field.Data != null ? SectionKind.ROData : SectionKind.BSS;
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, position, section, symbolOperand.Field.FullName, referenceOffset);
+				Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, position, section, symbolOperand.Field.FullName, referenceOffset);
 			}
 			else if (symbolOperand.IsSymbol)
 			{
@@ -213,9 +215,9 @@ namespace Mosa.Compiler.Framework
 				// First try finding the symbol in the expected section
 				// If no symbol found, look in all sections
 				// Otherwise create the symbol in the expected section
-				var symbol = (linker.FindSymbol(symbolOperand.Name, section) ?? linker.FindSymbol(symbolOperand.Name)) ?? linker.GetSymbol(symbolOperand.Name, section);
+				var symbol = (Linker.FindSymbol(symbolOperand.Name, section) ?? Linker.FindSymbol(symbolOperand.Name)) ?? Linker.GetSymbol(symbolOperand.Name, section);
 
-				linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, position, symbol, referenceOffset);
+				Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, position, symbol, referenceOffset);
 			}
 		}
 
@@ -228,7 +230,7 @@ namespace Mosa.Compiler.Framework
 
 		protected void AddPatch(int label, int position)
 		{
-			patches.Add(new Patch(label, position));
+			Patches.Add(new Patch(label, position));
 		}
 
 		public abstract void ResolvePatches();

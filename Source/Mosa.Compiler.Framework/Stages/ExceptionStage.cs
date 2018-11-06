@@ -31,7 +31,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			exceptionType = TypeSystem.GetTypeByName("System", "Exception");
 			exceptionRegister = Operand.CreateCPURegister(exceptionType, Architecture.ExceptionRegister);
-			leaveTargetRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, Architecture.LeaveTargetRegister); // TODO: Constant should be 64bit
+			leaveTargetRegister = Operand.CreateCPURegister(Is32BitPlatform ? TypeSystem.BuiltIn.I4 : TypeSystem.BuiltIn.I8, Architecture.LeaveTargetRegister);
 
 			nullOperand = Operand.GetNullObject(TypeSystem);
 

@@ -70,11 +70,11 @@ namespace Mosa.Platform.ARMv6
 		{
 			if (node.Operand2.IsCPURegister && node.Operand3.IsShift)
 			{
-				emitter.EmitInstructionWithRegister(node.ConditionCode, opcode, node.UpdateStatus, node.Operand1.Register.Index, node.Result.Register.Index, node.Operand3.ShiftType, node.Operand2.Register.Index);
+				emitter.EmitInstructionWithRegister(node.ConditionCode, opcode, node.UpdateStatus, node.Operand1.Register.RegisterCode, node.Result.Register.RegisterCode, node.Operand3.ShiftType, node.Operand2.Register.RegisterCode);
 			}
 			else if (node.Operand2.IsConstant && node.Operand3.IsConstant)
 			{
-				emitter.EmitInstructionWithImmediate(node.ConditionCode, opcode, node.UpdateStatus, node.Operand1.Register.Index, node.Result.Register.Index, (int)node.Operand2.ConstantSignedLongInteger, (int)node.Operand3.ConstantSignedLongInteger);
+				emitter.EmitInstructionWithImmediate(node.ConditionCode, opcode, node.UpdateStatus, node.Operand1.Register.RegisterCode, node.Result.Register.RegisterCode, (int)node.Operand2.ConstantSignedLongInteger, (int)node.Operand3.ConstantSignedLongInteger);
 			}
 			else
 			{
@@ -91,11 +91,11 @@ namespace Mosa.Platform.ARMv6
 		{
 			if (!node.Operand3.IsCPURegister)
 			{
-				emitter.EmitMultiply(node.ConditionCode, node.UpdateStatus, node.Operand1.Register.Index, node.Result.Register.Index, node.Operand2.Register.Index);
+				emitter.EmitMultiply(node.ConditionCode, node.UpdateStatus, node.Operand1.Register.RegisterCode, node.Result.Register.RegisterCode, node.Operand2.Register.RegisterCode);
 			}
 			else
 			{
-				emitter.EmitMultiplyWithAccumulate(node.ConditionCode, node.UpdateStatus, node.Operand1.Register.Index, node.Result.Register.Index, node.Operand2.Register.Index, node.Operand3.Register.Index);
+				emitter.EmitMultiplyWithAccumulate(node.ConditionCode, node.UpdateStatus, node.Operand1.Register.RegisterCode, node.Result.Register.RegisterCode, node.Operand2.Register.RegisterCode, node.Operand3.Register.RegisterCode);
 			}
 		}
 

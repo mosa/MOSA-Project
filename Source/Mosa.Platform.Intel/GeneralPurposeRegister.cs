@@ -7,173 +7,50 @@ namespace Mosa.Platform.Intel
 	/// <summary>
 	/// Represents integral general purpose x86 registers.
 	/// </summary>
-	public sealed class GeneralPurposeRegister : PhysicalRegister
+	public static class GeneralPurposeRegister
 	{
-		#region Types
-
-		/// <summary>
-		/// Identifies x86 general purpose registers using their instruction encoding.
-		/// </summary>
-		private enum GPR
-		{
-			/// <summary>
-			/// The x86 EAX register instruction encoding.
-			/// </summary>
-			EAX = 0,
-
-			/// <summary>
-			/// The x86 ECX register instruction encoding.
-			/// </summary>
-			ECX = 1,
-
-			/// <summary>
-			/// The x86 EDX register instruction encoding.
-			/// </summary>
-			EDX = 2,
-
-			/// <summary>
-			/// The x86 EBX register instruction encoding.
-			/// </summary>
-			EBX = 3,
-
-			/// <summary>
-			/// The x86 ESP register instruction encoding.
-			/// </summary>
-			ESP = 4,
-
-			/// <summary>
-			/// The x86 EBP register instruction encoding.
-			/// </summary>
-			EBP = 5,
-
-			/// <summary>
-			/// The x86 ESI register instruction encoding.
-			/// </summary>
-			ESI = 6,
-
-			/// <summary>
-			/// The x86 EDI register instruction encoding.
-			/// </summary>
-			EDI = 7
-		}
-
-		#endregion Types
-
 		#region Static data members
 
 		/// <summary>
 		/// Represents the EAX register.
 		/// </summary>
-		public static readonly GeneralPurposeRegister EAX = new GeneralPurposeRegister(0, GPR.EAX);
+		public static readonly PhysicalRegister EAX = new PhysicalRegister(0, 0, "EAX", true, false);
 
 		/// <summary>
 		/// Represents the ECX register.
 		/// </summary>
-		public static readonly GeneralPurposeRegister ECX = new GeneralPurposeRegister(1, GPR.ECX);
+		public static readonly PhysicalRegister ECX = new PhysicalRegister(1, 1, "ECX", true, false);
 
 		/// <summary>
 		/// Represents the EDX register.
 		/// </summary>
-		public static readonly GeneralPurposeRegister EDX = new GeneralPurposeRegister(2, GPR.EDX);
+		public static readonly PhysicalRegister EDX = new PhysicalRegister(2, 2, "EDX", true, false);
 
 		/// <summary>
 		/// Represents the EBX register.
 		/// </summary>
-		public static readonly GeneralPurposeRegister EBX = new GeneralPurposeRegister(3, GPR.EBX);
+		public static readonly PhysicalRegister EBX = new PhysicalRegister(3, 3, "EBX", true, false);
 
 		/// <summary>
 		/// Represents the ESP register.
 		/// </summary>
-		public static readonly GeneralPurposeRegister ESP = new GeneralPurposeRegister(4, GPR.ESP);
+		public static readonly PhysicalRegister ESP = new PhysicalRegister(4, 4, "ESP", true, false);
 
 		/// <summary>
 		/// Represents the EBP register.
 		/// </summary>
-		public static readonly GeneralPurposeRegister EBP = new GeneralPurposeRegister(5, GPR.EBP);
+		public static readonly PhysicalRegister EBP = new PhysicalRegister(5, 5, "EBP", true, false);
 
 		/// <summary>
 		/// Represents the ESI register.
 		/// </summary>
-		public static readonly GeneralPurposeRegister ESI = new GeneralPurposeRegister(6, GPR.ESI);
+		public static readonly PhysicalRegister ESI = new PhysicalRegister(6, 6, "ESI", true, false);
 
 		/// <summary>
 		/// Represents the EDI register.
 		/// </summary>
-		public static readonly GeneralPurposeRegister EDI = new GeneralPurposeRegister(7, GPR.EDI);
+		public static readonly PhysicalRegister EDI = new PhysicalRegister(7, 7, "EDI", true, false);
 
 		#endregion Static data members
-
-		#region Data Members
-
-		/// <summary>
-		/// Stores the general purpose register identified by this object instance.
-		/// </summary>
-		private readonly GPR gpr;
-
-		#endregion Data Members
-
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="GeneralPurposeRegister"/>.
-		/// </summary>
-		/// <param name="index"></param>
-		/// <param name="gpr">The general purpose register index.</param>
-		private GeneralPurposeRegister(int index, GPR gpr) :
-			base(index)
-		{
-			this.gpr = gpr;
-		}
-
-		#endregion Construction
-
-		#region Properties
-
-		/// <summary>
-		/// General purpose registers support integer operations.
-		/// </summary>
-		public override bool IsInteger
-		{
-			get { return true; }
-		}
-
-		/// <summary>
-		/// General purpose register do not support floating point operations.
-		/// </summary>
-		public override bool IsFloatingPoint
-		{
-			get { return false; }
-		}
-
-		/// <summary>
-		/// Returns the index of this register.
-		/// </summary>
-		public override int RegisterCode
-		{
-			get { return (int)gpr; }
-		}
-
-		/// <summary>
-		/// Returns the width of general purpose registers in bits.
-		/// </summary>
-		public override int Width
-		{
-			get { return 32; }
-		}
-
-		#endregion Properties
-
-		#region Methods
-
-		/// <summary>
-		/// Returns the name of the general purpose register.
-		/// </summary>
-		/// <returns>The name of the general purpose register.</returns>
-		public override string ToString()
-		{
-			return gpr.ToString();
-		}
-
-		#endregion Methods
 	}
 }
