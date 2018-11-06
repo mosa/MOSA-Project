@@ -77,9 +77,7 @@ You will also need the following prerequisites:
 
 **Windows**
 
-Install any [Visual Studio](http://www.visualstudio.com) version 2018 or newer.
-
-All editions are supported including the fully-featured free [Community Edition](https://www.visualstudio.com/products/visual-studio-community-vs).
+Install any [Visual Studio](http://www.visualstudio.com) version 2018 or newer. All editions are supported including the fully-featured free [Community Edition](https://www.visualstudio.com/products/visual-studio-community-vs).
 
 Note: The MOSA source code repository includes [Qemu](http://wiki.qemu.org/Main_Page) virtual emulator for Windows.
 
@@ -121,7 +119,6 @@ By default, the CoolWorld operating system demo is pre-selected. Click the "Comp
 ### Join the Discussion
 
 Join us on [Gitter chat][gitter-chat]. This is the most interactive way to connect to MOSA's development team.
-
 
 ### License
 
