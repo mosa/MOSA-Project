@@ -23,7 +23,7 @@
 [github-issues-link]: https://github.com/mosa/MOSA-Project/issues
 [github-license-link]: https://raw.githubusercontent.com/mosa/MOSA-Project/master/LICENSE.txt
 
-MOSA is an open source software project aiming run the .NET applications on bare metal hardware or within a virtual hypervisor.
+MOSA is an open source software project that natively executes .NET applications within a virtual hypervisor or on bare metal hardware!
 
 The MOSA project consists of:
 
@@ -44,20 +44,22 @@ The target platforms are:
 
 The MOSA compiler supports nearly all and object oriented non-object oriented code, including:
 
-* generic code (example, List<T>), and
-* delegates (static and non-static) and with optional parameters.
-* exception handling (try, finally, and catch code blocks)
+* Generic Code (example: List<T>)
+* Delegates (static and non-static) and with optional parameters
+* Exception Handling (try, finally, and catch code blocks)
 
 The MOSA compiler seeks to provide high quality code generation using the following optimizations:
 
-* Constant Folding & Strength Reduction optimization
+* Constant Folding and Propagation 
+* Strength Reduction optimization
 * Dead Code Elimination
 * Single Static Assignment (SSA)
-* Value Numbering
+* Global Value Numbering / Common Subexpession Elimination
 * Sparse Conditional Constant Propagation
-* Inlined Methods
+* Inlined Expansion
 * Loop-Invariant Code Motion
-* Greedy Register Allocator
+* Block Reordering
+* Greedy Register Allocation
 
 ### Getting Started
 
@@ -75,9 +77,11 @@ You will also need the following prerequisites:
 
 **Windows**
 
-Install any [Visual Studio](http://www.visualstudio.com) version 2017 or newer.
+Install any [Visual Studio](http://www.visualstudio.com) version 2018 or newer.
 
 All editions are supported including the fully-featured free [Community Edition](https://www.visualstudio.com/products/visual-studio-community-vs).
+
+Note: The MOSA source code repository includes [Qemu](http://wiki.qemu.org/Main_Page) virtual emulator for Windows.
 
 The [CodeMaid](http://www.codemaid.net/) Visual Studio Extension is strongly recommended for MOSA contributors.
 
@@ -85,9 +89,7 @@ The [CodeMaid](http://www.codemaid.net/) Visual Studio Extension is strongly rec
 
 Install [Mono](http://www.mono-project.com) and [Qemu](http://wiki.qemu.org/Main_Page).
 
-The minimum supported version of Mono is 4.4, this is not in some distributions repositories and must be added manually.
-A tutorial on how to do this can be found at the following URL.
-[http://www.mono-project.com/download/#download-lin](http://www.mono-project.com/download/#download-lin)
+The minimum supported version of Mono is 5.16.
 
 If using the APT package manager you can use the following command to quickly set up QEMU and Mono
 <pre>
