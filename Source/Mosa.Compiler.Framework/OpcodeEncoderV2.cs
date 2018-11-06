@@ -1,4 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -142,6 +143,21 @@ namespace Mosa.Compiler.Framework
 			}
 
 			AppendBits(value, 64);
+		}
+
+		public void Append32BitImmediate(Operand operand)
+		{
+			Debug.Assert(operand.IsConstant);
+
+			if (operand.IsResolvedConstant)
+			{
+				AppendInteger(operand.ConstantUnsignedInteger);
+			}
+			else
+			{
+				Emitter.EmitLink(operand, Emitter.CurrentPosition);
+				AppendInteger(0);
+			}
 		}
 	}
 }

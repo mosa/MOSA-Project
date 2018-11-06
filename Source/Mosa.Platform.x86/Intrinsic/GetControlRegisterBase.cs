@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Platform.Intel;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -11,13 +10,13 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicPlatformMethod" />
 	internal class GetControlRegisterBase : IIntrinsicPlatformMethod
 	{
-		private readonly ControlRegister control;
+		private readonly PhysicalRegister control;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GetControlRegisterBase"/> class.
 		/// </summary>
 		/// <param name="control">The control.</param>
-		protected GetControlRegisterBase(ControlRegister control)
+		protected GetControlRegisterBase(PhysicalRegister control)
 		{
 			this.control = control;
 		}

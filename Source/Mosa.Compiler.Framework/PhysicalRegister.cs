@@ -5,21 +5,8 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Represents a machine specific abstract register.
 	/// </summary>
-	public abstract class PhysicalRegister
+	public sealed class PhysicalRegister
 	{
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="PhysicalRegister"/>.
-		/// </summary>
-		/// <param name="index">The numeric index of the register.</param>
-		protected PhysicalRegister(int index)
-		{
-			this.Index = index;
-		}
-
-		#endregion Construction
-
 		#region Properties
 
 		/// <summary>
@@ -28,24 +15,24 @@ namespace Mosa.Compiler.Framework
 		public int Index { get; }
 
 		/// <summary>
-		/// Determines if this is a floating point register.
+		/// Gets the name of the register
 		/// </summary>
-		public abstract bool IsFloatingPoint { get; }
-
-		/// <summary>
-		/// Determines if this is a integer register.
-		/// </summary>
-		public abstract bool IsInteger { get; }
+		public string Name { get; }
 
 		/// <summary>
 		/// Holds the machine specific index or code of the register.
 		/// </summary>
-		public abstract int RegisterCode { get; }
+		public int RegisterCode { get; }
 
 		/// <summary>
-		/// Returns the width of the register in bits.
+		/// Determines if this is a floating point register.
 		/// </summary>
-		public abstract int Width { get; }
+		public bool IsFloatingPoint { get; }
+
+		/// <summary>
+		/// Determines if this is a integer register.
+		/// </summary>
+		public bool IsInteger { get; }
 
 		/// <summary>
 		/// Gets a value indicating whether this register is special register that the
@@ -54,5 +41,31 @@ namespace Mosa.Compiler.Framework
 		public bool IsSpecial { get { return !(IsInteger || IsFloatingPoint); } }
 
 		#endregion Properties
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="PhysicalRegister"/>.
+		/// </summary>
+		/// <param name="index">The numeric index of the register.</param>
+		public PhysicalRegister(int index, int registerCode, string name, bool isInteger, bool isFloatPoing)
+		{
+			Index = index;
+			Name = name;
+			RegisterCode = registerCode;
+			IsInteger = isInteger;
+			IsFloatingPoint = isFloatPoing;
+		}
+
+		#endregion Construction
+
+		#region Methods
+
+		public override string ToString()
+		{
+			return Name;
+		}
+
+		#endregion Methods
 	}
 }

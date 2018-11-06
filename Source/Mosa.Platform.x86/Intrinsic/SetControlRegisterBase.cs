@@ -11,13 +11,13 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicPlatformMethod" />
 	internal class SetControlRegisterBase : IIntrinsicPlatformMethod
 	{
-		private readonly ControlRegister control;
+		private readonly PhysicalRegister control;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SetControlRegisterBase"/> class.
 		/// </summary>
 		/// <param name="control">The control.</param>
-		protected SetControlRegisterBase(ControlRegister control)
+		protected SetControlRegisterBase(PhysicalRegister control)
 		{
 			this.control = control;
 		}
