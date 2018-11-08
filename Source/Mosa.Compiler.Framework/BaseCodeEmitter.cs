@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Platform;
 using System.Collections.Generic;
@@ -194,12 +195,7 @@ namespace Mosa.Compiler.Framework
 			EmitLink((int)CodeStream.Position, patchType, symbolOperand, patchOffset, referenceOffset);
 		}
 
-		public void EmitLink(Operand symbolOperand, PatchType patchType, int patchOffset, int referenceOffset = 0)
-		{
-			EmitLink((int)CodeStream.Position, patchType, symbolOperand, patchOffset, referenceOffset);
-		}
-
-		protected void EmitLink(int position, PatchType patchType, Operand symbolOperand, int patchOffset, int referenceOffset = 0)
+		public void EmitLink(int position, PatchType patchType, Operand symbolOperand, int patchOffset, int referenceOffset = 0)
 		{
 			position += patchOffset;
 
@@ -239,5 +235,35 @@ namespace Mosa.Compiler.Framework
 		}
 
 		public abstract void ResolvePatches();
+
+		public void EmitRelative32Link(Operand symbolOperand)
+		{
+			Linker.Link(
+				LinkType.RelativeOffset,
+				PatchType.I4,
+				SectionKind.Text,
+				MethodName,
+				(int)CodeStream.Position,
+				SectionKind.Text,
+				symbolOperand.Name,
+				-4
+			);
+		}
+
+		public void EmitRelative64Link(Operand symbolOperand)
+		{
+			Linker.Link(
+				LinkType.RelativeOffset,
+				PatchType.I8,
+				SectionKind.Text,
+				MethodName,
+				(int)CodeStream.Position,
+				SectionKind.Text,
+				symbolOperand.Name,
+				-8
+			);
+
+			CodeStream.WriteZeroBytes(8);
+		}
 	}
 }

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Mosa.Utility.SourceCodeGenerator
@@ -676,7 +675,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "reg4": code = "AppendNibble"; postcode = ".Register.RegisterCode"; return;
 				case "imm32": code = "Append32BitImmediate"; return;
 				case "imm8": code = "Append8BitImmediate"; return;
-				case "call": code = "EmitCallSite"; return;
+				case "rel32": code = "EmitRelative32Link"; return;
+				case "rel64": code = "EmitRelative64Link"; return;
 				case "": return;
 
 				default: throw new Exception("ERROR!");

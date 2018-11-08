@@ -265,11 +265,11 @@
 			"FlowControl": "Call",
 			"OperandCount": 1,
 			"ResultCount": 0,
-			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86LegacyOpcode": "0xE8",
-			"X86LegacyOpcodeOperandOrder": "1",
+			"x-StaticEmitMethod": "StaticEmitters.Emit%",
+			"x-X86LegacyOpcode": "0xE8",
+			"x-X86LegacyOpcodeOperandOrder": "1",
 			"X86ThreeTwoAddressConversion": "false",
-			"x-OpcodeEncoding": "0xE8|imm32:o1"
+			"OpcodeEncoding": "0xE8|rel32:o1"
 		},
 		{
 			"Name": "CallReg",

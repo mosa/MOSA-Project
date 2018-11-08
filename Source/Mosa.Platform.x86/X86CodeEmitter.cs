@@ -15,26 +15,6 @@ namespace Mosa.Platform.x86
 	public sealed class X86CodeEmitter : BaseCodeEmitter
 	{
 		/// <summary>
-		/// Calls the specified target.
-		/// </summary>
-		/// <param name="symbolOperand">The symbol operand.</param>
-		public void EmitCallSite(Operand symbolOperand)
-		{
-			Linker.Link(
-				LinkType.RelativeOffset,
-				PatchType.I4,
-				SectionKind.Text,
-				MethodName,
-				(int)CodeStream.Position,
-				SectionKind.Text,
-				symbolOperand.Name,
-				-4
-			);
-
-			CodeStream.WriteZeroBytes(4);
-		}
-
-		/// <summary>
 		/// Emits the relative branch target.
 		/// </summary>
 		/// <param name="label">The label.</param>

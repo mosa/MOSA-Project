@@ -1,12 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
-using Mosa.Compiler.Framework.Linker;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
 	public sealed class CommonOpcodeEncoder
 	{
-		private BaseCodeEmitter Emitter;
+		private readonly BaseCodeEmitter Emitter;
 
 		private byte Bits;
 		private int BitsLength;
@@ -178,7 +177,7 @@ namespace Mosa.Compiler.Framework
 			}
 			else
 			{
-				Emitter.EmitLink(operand, Emitter.CurrentPosition);
+				Emitter.EmitLink(operand, Emitter.CurrentPosition); // FIXME
 				AppendImmediateInteger(0);
 			}
 		}
@@ -188,6 +187,30 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(operand.IsConstant);
 
 			AppendByte((byte)operand.ConstantUnsignedInteger);
+		}
+
+		public void EmitRelative32Link(Operand operand)
+		{
+			Emitter.EmitRelative32Link(operand);
+
+			Emitter.WriteByte(0);
+			Emitter.WriteByte(0);
+			Emitter.WriteByte(0);
+			Emitter.WriteByte(0);
+		}
+
+		public void EmitRelative64Link(Operand operand)
+		{
+			Emitter.EmitRelative64Link(operand);
+
+			Emitter.WriteByte(0);
+			Emitter.WriteByte(0);
+			Emitter.WriteByte(0);
+			Emitter.WriteByte(0);
+			Emitter.WriteByte(0);
+			Emitter.WriteByte(0);
+			Emitter.WriteByte(0);
+			Emitter.WriteByte(0);
 		}
 	}
 }
