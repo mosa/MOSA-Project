@@ -331,8 +331,8 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"X86LegacyOpcode": "0x3B",
-			"X86LegacyOpcodeOperandOrder": "12",
+			"old-X86LegacyOpcode": "0x3B",
+			"old-X86LegacyOpcodeOperandOrder": "12",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x3B|0b11|reg3:o1|reg3:o2"
 		},
@@ -347,10 +347,11 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"X86LegacyOpcode": "0x81",
-			"X86LegacyOpcodeOperandOrder": "12",
-			"X86LegacyOpcodeRegField": "07",
-			"X86ThreeTwoAddressConversion": "false"
+			"old-X86LegacyOpcode": "0x81",
+			"old-X86LegacyOpcodeOperandOrder": "12",
+			"old-X86LegacyOpcodeRegField": "07",
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x81|0b11|0b111|reg3:o1|imm32:o2"
 		},
 		{
 			"Name": "CmpXChgLoad32",
@@ -365,7 +366,8 @@
 			"OperandCount": 4,
 			"ResultCount": 1,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"inc-OpcodeEncoding": "0x00|0xFF|0b1011|0b0001|reg3:o1|reg3:o2"
 		},
 		{
 			"Name": "Comisd",
@@ -378,9 +380,10 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"X86LegacyOpcode": "0x66, 0x0F, 0x2F",
-			"X86LegacyOpcodeOperandOrder": "12",
-			"X86ThreeTwoAddressConversion": "false"
+			"old-X86LegacyOpcode": "0x66, 0x0F, 0x2F",
+			"old-X86LegacyOpcodeOperandOrder": "12",
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0b01100110|0b00001111|0b00101111|0b11|reg3:o1|reg3:o2"
 		},
 		{
 			"Name": "Comiss",
@@ -393,9 +396,10 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"X86LegacyOpcode": "0x66, 0x0F, 0x2F",
-			"X86LegacyOpcodeOperandOrder": "12",
-			"X86ThreeTwoAddressConversion": "false"
+			"old-X86LegacyOpcode": "0x66, 0x0F, 0x2F",
+			"old-X86LegacyOpcodeOperandOrder": "12",
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0b00001111|0b00101111|0b11|reg3:o1|reg3:o2"
 		},
 		{
 			"Name": "CpuId",
@@ -408,9 +412,10 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86LegacyOpcode": "0x0F, 0xA2",
+			"old-X86LegacyOpcode": "0x0F, 0xA2",
 			"X86LegacyOpcodeOperandOrder": " ",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0xA2"
 		},
 		{
 			"Name": "Cvtsd2ss",

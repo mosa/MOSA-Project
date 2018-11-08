@@ -652,7 +652,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "o1": return "Operand1";
 				case "o2": return "Operand2";
 				case "o3": return "Operand3";
-				case "o4": return "Operand4";
+				case "o4": return "GetOperand(3)";
 				case "r": return "Result";
 				case "r1": return "Result";
 				case "r2": return "Result2";

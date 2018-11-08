@@ -19,8 +19,6 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x3B });
-
 		public override bool IsZeroFlagUnchanged { get { return true; } }
 
 		public override bool IsZeroFlagUndefined { get { return true; } }
