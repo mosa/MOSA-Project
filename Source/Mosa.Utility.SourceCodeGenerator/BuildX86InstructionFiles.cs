@@ -546,7 +546,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		private void EmitEncoding(string encoding)
 		{
-			var steps = encoding.Replace("[", string.Empty).Replace(" ", string.Empty).Split(']');
+			var steps = encoding.Split('|');
 
 			foreach (var s in steps)
 			{
@@ -637,35 +637,49 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 					var code = string.Empty;
 					var postcode = string.Empty;
-					var operand = string.Empty;
 
-					switch (parts[0])
-					{
-						case "reg3": code = "Append3Bits"; postcode = ".Register.RegisterCode"; break;
-						case "regx4": code = "Append1Bit"; postcode = ".Register.RegisterCode"; break;
-						case "reg4": code = "AppendNibble"; postcode = ".Register.RegisterCode"; break;
-						case "imm32": code = "Append32BitImmediate"; break;
-						case "": break;
-
-						default: throw new Exception("ERROR!");
-					}
-
-					switch (parts[1])
-					{
-						case "o1": operand = "Operand1"; break;
-						case "o2": operand = "Operand2"; break;
-						case "o3": operand = "Operand3"; break;
-						case "o4": operand = "Operand4"; break;
-						case "r": operand = "Result"; break;
-						case "r1": operand = "Result"; break;
-						case "r2": operand = "Result2"; break;
-						case "": break;
-
-						default: throw new Exception("ERROR!");
-					}
+					GetCodes(parts[0], ref code, ref postcode);
+					var operand = GetOperand(parts[1]);
 
 					Lines.AppendLine("\t\t\temitter.OpcodeEncoder." + code + "(node." + operand + postcode + ");");
 				}
+			}
+		}
+
+		private static string GetOperand(string part)
+		{
+			switch (part)
+			{
+				case "o1": return "Operand1";
+				case "o2": return "Operand2";
+				case "o3": return "Operand3";
+				case "o4": return "Operand4";
+				case "r": return "Result";
+				case "r1": return "Result";
+				case "r2": return "Result2";
+				case "": return string.Empty;
+
+				//case "label":
+
+				default: throw new Exception("ERROR!");
+			}
+		}
+
+		private static void GetCodes(string part, ref string code, ref string postcode)
+		{
+			postcode = string.Empty;
+
+			switch (part)
+			{
+				case "reg3": code = "Append3Bits"; postcode = ".Register.RegisterCode"; return;
+				case "regx4": code = "Append1Bit"; postcode = ".Register.RegisterCode"; return;
+				case "reg4": code = "AppendNibble"; postcode = ".Register.RegisterCode"; return;
+				case "imm32": code = "Append32BitImmediate"; return;
+				case "imm8": code = "Append8BitImmediate"; return;
+				case "call": code = "EmitCallSite"; return;
+				case "": return;
+
+				default: throw new Exception("ERROR!");
 			}
 		}
 	}

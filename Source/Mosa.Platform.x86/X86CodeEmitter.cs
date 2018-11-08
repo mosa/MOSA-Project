@@ -35,17 +35,6 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// Emits relative branch code.
-		/// </summary>
-		/// <param name="code">The branch instruction code.</param>
-		/// <param name="dest">The destination label.</param>
-		public void EmitRelativeBranch(byte[] code, int dest)
-		{
-			CodeStream.Write(code, 0, code.Length);
-			EmitRelativeBranchTarget(dest);
-		}
-
-		/// <summary>
 		/// Emits the relative branch target.
 		/// </summary>
 		/// <param name="label">The label.</param>

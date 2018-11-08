@@ -19,8 +19,6 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		public static readonly byte[] opcode = new byte[] { 0xCC };
-
 		public override bool HasUnspecifiedSideEffect { get { return true; } }
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
@@ -28,7 +26,7 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-			emitter.Write(opcode);
+			emitter.OpcodeEncoder.AppendByte(0xCC);
 		}
 	}
 }

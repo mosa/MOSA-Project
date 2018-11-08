@@ -86,7 +86,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public Dictionary<int, int> Labels { get; set; }
 
-		public OpcodeEncoderV2 OpcodeEncoder { get; set; }
+		public CommonOpcodeEncoder OpcodeEncoder { get; set; }
 
 		#endregion Properties
 
@@ -113,7 +113,7 @@ namespace Mosa.Compiler.Framework
 
 			Labels = new Dictionary<int, int>();
 
-			OpcodeEncoder = new OpcodeEncoderV2(this);
+			OpcodeEncoder = new CommonOpcodeEncoder(this);
 		}
 
 		/// <summary>
@@ -189,24 +189,29 @@ namespace Mosa.Compiler.Framework
 			opcode.WriteTo(CodeStream);
 		}
 
-		public void EmitLink(Operand symbolOperand, int patchOffset, int referenceOffset = 0)
+		public void EmitLink(Operand symbolOperand, int patchOffset, int referenceOffset = 0, PatchType patchType = PatchType.I4) // legacy version
 		{
-			EmitLink((int)CodeStream.Position, symbolOperand, patchOffset, referenceOffset);
+			EmitLink((int)CodeStream.Position, patchType, symbolOperand, patchOffset, referenceOffset);
 		}
 
-		protected void EmitLink(int position, Operand symbolOperand, int patchOffset, int referenceOffset = 0)
+		public void EmitLink(Operand symbolOperand, PatchType patchType, int patchOffset, int referenceOffset = 0)
+		{
+			EmitLink((int)CodeStream.Position, patchType, symbolOperand, patchOffset, referenceOffset);
+		}
+
+		protected void EmitLink(int position, PatchType patchType, Operand symbolOperand, int patchOffset, int referenceOffset = 0)
 		{
 			position += patchOffset;
 
 			if (symbolOperand.IsLabel)
 			{
-				Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, position, SectionKind.ROData, symbolOperand.Name, referenceOffset);
+				Linker.Link(LinkType.AbsoluteAddress, patchType, SectionKind.Text, MethodName, position, SectionKind.ROData, symbolOperand.Name, referenceOffset);
 			}
 			else if (symbolOperand.IsStaticField)
 			{
 				var section = symbolOperand.Field.Data != null ? SectionKind.ROData : SectionKind.BSS;
 
-				Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, position, section, symbolOperand.Field.FullName, referenceOffset);
+				Linker.Link(LinkType.AbsoluteAddress, patchType, SectionKind.Text, MethodName, position, section, symbolOperand.Field.FullName, referenceOffset);
 			}
 			else if (symbolOperand.IsSymbol)
 			{
@@ -217,7 +222,7 @@ namespace Mosa.Compiler.Framework
 				// Otherwise create the symbol in the expected section
 				var symbol = (Linker.FindSymbol(symbolOperand.Name, section) ?? Linker.FindSymbol(symbolOperand.Name)) ?? Linker.GetSymbol(symbolOperand.Name, section);
 
-				Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, position, symbol, referenceOffset);
+				Linker.Link(LinkType.AbsoluteAddress, patchType, SectionKind.Text, MethodName, position, symbol, referenceOffset);
 			}
 		}
 

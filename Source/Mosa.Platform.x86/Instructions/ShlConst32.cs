@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class ShlConst32 : X86Instruction
 	{
-		public override int ID { get { return 315; } }
+		public override int ID { get { return 314; } }
 
 		internal ShlConst32()
 			: base(1, 2)

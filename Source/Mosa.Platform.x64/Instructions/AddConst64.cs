@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class AddConst64 : X64Instruction
 	{
-		public override int ID { get { return 406; } }
+		public override int ID { get { return 405; } }
 
 		internal AddConst64()
 			: base(1, 2)

@@ -13,7 +13,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Teq32 : ARMv6Instruction
 	{
-		public override int ID { get { return 750; } }
+		public override int ID { get { return 749; } }
 
 		internal Teq32()
 			: base(1, 3)

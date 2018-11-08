@@ -12,21 +12,19 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Stos : X86Instruction
 	{
-		public override int ID { get { return 325; } }
+		public override int ID { get { return 324; } }
 
 		internal Stos()
 			: base(0, 1)
 		{
 		}
 
-		public static readonly byte[] opcode = new byte[] { 0xAB };
-
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			emitter.Write(opcode);
+			emitter.OpcodeEncoder.AppendByte(0xAB);
 		}
 	}
 }

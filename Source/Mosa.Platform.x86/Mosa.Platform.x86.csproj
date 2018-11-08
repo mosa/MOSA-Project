@@ -127,7 +127,6 @@
     <Compile Include="Instructions\BtrConst32.cs" />
     <Compile Include="Instructions\Bts32.cs" />
     <Compile Include="Instructions\BtsConst32.cs" />
-    <Compile Include="Instructions\Call.cs" />
     <Compile Include="Instructions\CallReg.cs" />
     <Compile Include="Instructions\CallStatic.cs" />
     <Compile Include="Instructions\Cdq.cs" />

@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Cli : X64Instruction
 	{
-		public override int ID { get { return 430; } }
+		public override int ID { get { return 429; } }
 
 		internal Cli()
 			: base(0, 0)
