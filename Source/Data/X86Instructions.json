@@ -283,11 +283,11 @@
 			"FlowControl": "Call",
 			"OperandCount": 1,
 			"ResultCount": 0,
-			"X86LegacyOpcode": "0xFF",
-			"X86LegacyOpcodeOperandOrder": "1",
-			"X86LegacyOpcodeRegField": "02",
+			"x-X86LegacyOpcode": "0xFF",
+			"x-X86LegacyOpcodeOperandOrder": "1",
+			"x-X86LegacyOpcodeRegField": "02",
 			"X86ThreeTwoAddressConversion": "false",
-			"x-OpcodeEncoding": "0xFF|0b11|0b010|reg3:o1"
+			"OpcodeEncoding": "0xFF|0b11|0b010|reg3:o1"
 		},
 		{
 			"Name": "Cdq",
