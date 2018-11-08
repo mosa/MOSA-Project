@@ -334,7 +334,7 @@
 			"X86LegacyOpcode": "0x3B",
 			"X86LegacyOpcodeOperandOrder": "12",
 			"X86ThreeTwoAddressConversion": "false",
-			"new-OpcodeEncoding": "0x3B|0b11|reg3:o1|reg3:o2"
+			"OpcodeEncoding": "0x3B|0b11|reg3:o1|reg3:o2"
 		},
 		{
 			"Name": "CmpConst32",
