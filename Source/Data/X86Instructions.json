@@ -524,10 +524,11 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86LegacyOpcode": "0xFF",
-			"X86LegacyOpcodeOperandOrder": "r",
-			"X86LegacyOpcodeRegField": "01",
-			"X86ThreeTwoAddressConversion": "true"
+			"old-X86LegacyOpcode": "0xFF",
+			"old-X86LegacyOpcodeOperandOrder": "r",
+			"old-X86LegacyOpcodeRegField": "01",
+			"X86ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": "0xFF|0b11|0b1|reg3:r"
 		},
 		{
 			"Name": "Div32",
@@ -557,9 +558,10 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86LegacyOpcode": "0xF2, 0x0F, 0x5E",
-			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86ThreeTwoAddressConversion": "true"
+			"old-X86LegacyOpcode": "0xF2, 0x0F, 0x5E",
+			"old-X86LegacyOpcodeOperandOrder": "r2",
+			"X86ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": "0xF2|0x0F|0x5E|0b11|reg3:r|reg3:o2"
 		},
 		{
 			"Name": "Divss",
@@ -572,9 +574,10 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86LegacyOpcode": "0xF3, 0x0F, 0x5E",
-			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86ThreeTwoAddressConversion": "true"
+			"old-X86LegacyOpcode": "0xF3, 0x0F, 0x5E",
+			"old-X86LegacyOpcodeOperandOrder": "r2",
+			"X86ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": "0xF3|0x0F|0x5E|0b11|reg3:r|reg3:o2"
 		},
 		{
 			"Name": "JmpFar",
@@ -618,10 +621,11 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 2,
-			"X86LegacyOpcode": "0xF7",
-			"X86LegacyOpcodeOperandOrder": "3",
-			"X86LegacyOpcodeRegField": "07",
-			"X86ThreeTwoAddressConversion": "true"
+			"old-X86LegacyOpcode": "0xF7",
+			"old-X86LegacyOpcodeOperandOrder": "3",
+			"old-X86LegacyOpcodeRegField": "07",
+			"X86ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": "0xF7|0b11|0b111|reg3:o3"
 		},
 		{
 			"Name": "IMul32",
@@ -634,9 +638,10 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86LegacyOpcode": "0F AF",
-			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86ThreeTwoAddressConversion": "true"
+			"old-X86LegacyOpcode": "0F AF",
+			"old-X86LegacyOpcodeOperandOrder": "r2",
+			"X86ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": "0x0F|0xAF|0b11|reg3:r|reg3:o2"
 		},
 		{
 			"Name": "In8",
