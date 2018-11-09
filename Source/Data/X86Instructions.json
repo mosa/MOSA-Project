@@ -534,10 +534,11 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 2,
-			"X86LegacyOpcode": "0xF7",
-			"X86LegacyOpcodeOperandOrder": "3",
-			"X86LegacyOpcodeRegField": "06",
-			"X86ThreeTwoAddressConversion": "true"
+			"old-X86LegacyOpcode": "0xF7",
+			"old-X86LegacyOpcodeOperandOrder": "3",
+			"old-X86LegacyOpcodeRegField": "06",
+			"X86ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": "0xF7|0b11|0b110|reg3:o3"
 		},
 		{
 			"Name": "Divsd",

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using System.Diagnostics;
 using System.Text;
 
 namespace Mosa.Utility.SourceCodeGenerator
@@ -417,6 +418,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 					Lines.AppendLine("\t\t\temitter.Emit(LegacyOpcode, " + operands + ");");
 				}
 				Lines.AppendLine("\t\t}");
+
+				Helper(node);
 			}
 
 			if (node.OpcodeEncoding != null)
@@ -681,6 +684,50 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 				default: throw new Exception("ERROR!");
 			}
+		}
+
+		private static void Helper(dynamic node)
+		{
+			// node.X86LegacyOpcodeOperandOrder != null
+			// node.X86LegacyOpcode != null
+			// node.StaticEmitMethod == null
+			// node.OpcodeEncoding == null
+			// "X86LegacyOpcodeOperandOrder": "r",
+			// "X86LegacyOpcodeRegField": "01",
+
+			string op = EncodeLegacyOpcode(node);
+			op = op.Replace(", ", "|");
+			op = op + "|0b11";
+
+			if (node.X86LegacyOpcodeRegField != null)
+			{
+				var t = node.X86LegacyOpcodeRegField.Replace("0x", string.Empty);
+				var i = int.Parse(t, System.Globalization.NumberStyles.HexNumber);
+				var b = Convert.ToString(i, 2);
+				var bb = "000".Substring(4 - b.Length) + b;
+				op = op + "|0b" + bb;
+			}
+
+			if (node.X86LegacyOpcodeOperandOrder != null)
+			{
+				foreach (var c in node.X86LegacyOpcodeOperandOrder)
+				{
+					if (c == 'r')
+						op = op + "|reg3:r";
+					else if (c == '1')
+						op = op + "|reg3:o1";
+					else if (c == '2')
+						op = op + "|reg3:o2";
+					else if (c == '3')
+						op = op + "|reg3:o3";
+					else if (c == '4')
+						op = op + "|reg3:o4";
+				}
+			}
+
+			Debug.Write((string)node.Name);
+			Debug.WriteLine(":");
+			Debug.WriteLine("\"OpcodeEncoding\": \"" + op + "\"");
 		}
 	}
 }
