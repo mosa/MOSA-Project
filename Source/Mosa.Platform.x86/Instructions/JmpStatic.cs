@@ -19,8 +19,6 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xE9 });
-
 		public override FlowControl FlowControl { get { return FlowControl.UnconditionalBranch; } }
 
 		public override bool IsZeroFlagUnchanged { get { return true; } }
@@ -45,10 +43,11 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
-			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
+			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			StaticEmitters.EmitJmpStatic(node, emitter);
+			emitter.OpcodeEncoder.AppendByte(0xE9);
+			emitter.OpcodeEncoder.EmitRelative32(node.Operand1);
 		}
 	}
 }
