@@ -19,11 +19,9 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xF7 }, 0x02);
-
 		public override bool ThreeTwoAddressConversion { get { return true; } }
 
-		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
@@ -31,7 +29,10 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
 			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
-			emitter.Emit(LegacyOpcode, node.Result);
+			emitter.OpcodeEncoder.AppendByte(0xF7);
+			emitter.OpcodeEncoder.Append2Bits(0b11);
+			emitter.OpcodeEncoder.Append3Bits(0b010);
+			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 		}
 	}
 }

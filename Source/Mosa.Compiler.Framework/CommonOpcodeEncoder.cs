@@ -1,4 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+using Mosa.Compiler.Framework.Linker;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
@@ -177,7 +178,7 @@ namespace Mosa.Compiler.Framework
 			}
 			else
 			{
-				Emitter.EmitLink(operand, Emitter.CurrentPosition); // FIXME
+				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I4, operand, 0, 0);
 				AppendImmediateInteger(0);
 			}
 		}

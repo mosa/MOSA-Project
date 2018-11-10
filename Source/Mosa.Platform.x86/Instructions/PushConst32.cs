@@ -19,14 +19,13 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x68 });
-
-		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			emitter.Emit(LegacyOpcode, node.Operand1);
+			emitter.OpcodeEncoder.AppendByte(0x68);
+			emitter.OpcodeEncoder.Append32BitImmediate(node.Operand1);
 		}
 	}
 }
