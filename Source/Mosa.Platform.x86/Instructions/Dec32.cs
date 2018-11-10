@@ -12,14 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Dec32 : X86Instruction
 	{
-		public override int ID { get { return 222; } }
+		public override int ID { get { return 221; } }
 
 		internal Dec32()
 			: base(1, 1)
 		{
 		}
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xFF }, 0x01);
 
 		public override bool ThreeTwoAddressConversion { get { return true; } }
 
@@ -31,7 +29,7 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override bool IsParityFlagModified { get { return true; } }
 
-		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
@@ -39,7 +37,10 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
 			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
-			emitter.Emit(LegacyOpcode, node.Result);
+			emitter.OpcodeEncoder.AppendByte(0xFF);
+			emitter.OpcodeEncoder.Append2Bits(0b11);
+			emitter.OpcodeEncoder.AppendBit(0b1);
+			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 		}
 	}
 }

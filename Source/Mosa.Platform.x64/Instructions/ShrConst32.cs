@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class ShrConst32 : X64Instruction
 	{
-		public override int ID { get { return 582; } }
+		public override int ID { get { return 581; } }
 
 		internal ShrConst32()
 			: base(1, 2)

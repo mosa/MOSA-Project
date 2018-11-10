@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class SetByteIfLessThan : X86Instruction
 	{
-		public override int ID { get { return 375; } }
+		public override int ID { get { return 374; } }
 
 		internal SetByteIfLessThan()
 			: base(1, 0)
@@ -20,8 +20,6 @@ namespace Mosa.Platform.x86.Instructions
 		}
 
 		public override string AlternativeName { get { return "SetL"; } }
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x9C });
 
 		public override bool IsSignFlagUsed { get { return true; } }
 
@@ -32,12 +30,16 @@ namespace Mosa.Platform.x86.Instructions
 			return X86.SetByteIfGreaterOrEqual;
 		}
 
-		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-			emitter.Emit(LegacyOpcode, node.Result);
+			emitter.OpcodeEncoder.AppendByte(0x0F);
+			emitter.OpcodeEncoder.AppendByte(0x9C);
+			emitter.OpcodeEncoder.Append2Bits(0b11);
+			emitter.OpcodeEncoder.Append3Bits(0b000);
+			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class CMovNotEqual32 : X86Instruction
 	{
-		public override int ID { get { return 387; } }
+		public override int ID { get { return 386; } }
 
 		internal CMovNotEqual32()
 			: base(1, 1)
@@ -21,8 +21,6 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override string AlternativeName { get { return "CMovNE32"; } }
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x45 });
-
 		public override bool IsZeroFlagUsed { get { return true; } }
 
 		public override BaseInstruction GetOpposite()
@@ -30,12 +28,16 @@ namespace Mosa.Platform.x86.Instructions
 			return X86.CMovEqual32;
 		}
 
-		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			emitter.Emit(LegacyOpcode, node.Result, node.Operand1);
+			emitter.OpcodeEncoder.AppendByte(0x0F);
+			emitter.OpcodeEncoder.AppendByte(0x45);
+			emitter.OpcodeEncoder.Append2Bits(0b11);
+			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 		}
 	}
 }

@@ -506,12 +506,6 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.Emit(opcode);
 		}
 
-		internal static void EmitInt(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			emitter.WriteByte(0xCD);
-			emitter.WriteByte((byte)node.Operand1.ConstantUnsignedInteger);
-		}
-
 		internal static void EmitMovsx8To32(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result.IsCPURegister);
@@ -708,18 +702,6 @@ namespace Mosa.Platform.x86.Instructions
 			}
 
 			emitter.Emit(opcode);
-		}
-
-		internal static void EmitJmpStatic(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			emitter.WriteByte(0xE9);
-			(emitter as X86CodeEmitter).EmitCallSite(node.Operand1);
-		}
-
-		internal static void EmitCallStatic(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			emitter.WriteByte(0xE8);
-			(emitter as X86CodeEmitter).EmitCallSite(node.Operand1);
 		}
 
 		internal static void EmitMovLoadReg(InstructionNode node, BaseCodeEmitter emitter, InstructionSize size)

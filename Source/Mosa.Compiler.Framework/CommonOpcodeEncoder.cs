@@ -1,28 +1,29 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+using Mosa.Compiler.Framework.Linker;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
-	public class OpcodeEncoderV2
+	public sealed class CommonOpcodeEncoder
 	{
-		protected BaseCodeEmitter Emitter;
+		private readonly BaseCodeEmitter Emitter;
 
 		private byte Bits;
 		private int BitsLength;
 
-		public OpcodeEncoderV2(BaseCodeEmitter emitter)
+		public CommonOpcodeEncoder(BaseCodeEmitter emitter)
 		{
 			Emitter = emitter;
 			Reset();
 		}
 
-		protected void Reset()
+		private void Reset()
 		{
 			Bits = 0;
 			BitsLength = 0;
 		}
 
-		protected void FlushIfFull()
+		private void FlushIfFull()
 		{
 			if (BitsLength == 8)
 			{
@@ -69,7 +70,7 @@ namespace Mosa.Compiler.Framework
 			AppendBit(value & 0x1);
 		}
 
-		protected void AppendBits(ulong value, int size)
+		private void AppendBits(ulong value, int size)
 		{
 			for (int i = size - 1; i >= 0; i--)
 			{
@@ -77,7 +78,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		protected void AppendBitsReversed(ulong value, int size)
+		private void AppendBitsReversed(ulong value, int size)
 		{
 			for (int i = 0; i < size; i++)
 			{
@@ -153,7 +154,7 @@ namespace Mosa.Compiler.Framework
 			AppendBits(value, 64);
 		}
 
-		public void AppendImmediateInteger(ulong value)
+		public void AppendImmediateInteger(uint value)
 		{
 			if (BitsLength == 0)
 			{
@@ -177,9 +178,42 @@ namespace Mosa.Compiler.Framework
 			}
 			else
 			{
-				Emitter.EmitLink(operand, Emitter.CurrentPosition);
-				AppendImmediateInteger(0);
+				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I4, operand, 0, 0);
+				WriteZeroBytes(4);
 			}
+		}
+
+		public void Append8BitImmediate(Operand operand)
+		{
+			Debug.Assert(operand.IsConstant);
+
+			AppendByte((byte)operand.ConstantUnsignedInteger);
+		}
+
+		private void WriteZeroBytes(int length)
+		{
+			for (int i = 0; i < length; i++)
+			{
+				Emitter.WriteByte(0);
+			}
+		}
+
+		public void EmitRelative32(int label)
+		{
+			int offset = Emitter.EmitRelative(label, 4);
+			AppendImmediateInteger((uint)offset);
+		}
+
+		public void EmitRelative32(Operand operand)
+		{
+			Emitter.EmitRelative32(operand);
+			WriteZeroBytes(4);
+		}
+
+		public void EmitRelative64(Operand operand)
+		{
+			Emitter.EmitRelative64(operand);
+			WriteZeroBytes(8);
 		}
 	}
 }

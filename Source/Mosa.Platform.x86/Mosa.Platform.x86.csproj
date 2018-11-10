@@ -127,7 +127,6 @@
     <Compile Include="Instructions\BtrConst32.cs" />
     <Compile Include="Instructions\Bts32.cs" />
     <Compile Include="Instructions\BtsConst32.cs" />
-    <Compile Include="Instructions\Call.cs" />
     <Compile Include="Instructions\CallReg.cs" />
     <Compile Include="Instructions\CallStatic.cs" />
     <Compile Include="Instructions\Cdq.cs" />
@@ -298,7 +297,7 @@
     <Compile Include="Instructions\Ucomisd.cs" />
     <Compile Include="Instructions\Ucomiss.cs" />
     <Compile Include="Instructions\XAddLoad32.cs" />
-    <Compile Include="Instructions\Xchg32.cs" />
+    <Compile Include="Instructions\XChg32.cs" />
     <Compile Include="Instructions\XChgLoad32.cs" />
     <Compile Include="Instructions\Xor32.cs" />
     <Compile Include="Instructions\XorConst32.cs" />

@@ -12,14 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class IRetd : X86Instruction
 	{
-		public override int ID { get { return 239; } }
+		public override int ID { get { return 238; } }
 
 		internal IRetd()
 			: base(0, 0)
 		{
 		}
-
-		public static readonly byte[] opcode = new byte[] { 0xCF };
 
 		public override FlowControl FlowControl { get { return FlowControl.Return; } }
 
@@ -50,7 +48,7 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-			emitter.Write(opcode);
+			emitter.OpcodeEncoder.AppendByte(0xCF);
 		}
 	}
 }

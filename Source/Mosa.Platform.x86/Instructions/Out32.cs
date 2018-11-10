@@ -12,25 +12,23 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Out32 : X86Instruction
 	{
-		public override int ID { get { return 290; } }
+		public override int ID { get { return 289; } }
 
 		internal Out32()
 			: base(0, 2)
 		{
 		}
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xEF });
-
 		public override bool IsIOOperation { get { return true; } }
 
 		public override bool HasUnspecifiedSideEffect { get { return true; } }
 
-		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			emitter.Emit(LegacyOpcode);
+			emitter.OpcodeEncoder.AppendByte(0xEF);
 		}
 	}
 }

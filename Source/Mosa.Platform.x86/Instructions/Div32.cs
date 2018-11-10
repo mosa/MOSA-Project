@@ -12,14 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Div32 : X86Instruction
 	{
-		public override int ID { get { return 223; } }
+		public override int ID { get { return 222; } }
 
 		internal Div32()
 			: base(2, 3)
 		{
 		}
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xF7 }, 0x06);
 
 		public override bool ThreeTwoAddressConversion { get { return true; } }
 
@@ -43,7 +41,7 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override bool IsParityFlagUndefined { get { return true; } }
 
-		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 2);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 3);
@@ -51,7 +49,10 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
 			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
-			emitter.Emit(LegacyOpcode, node.Operand3);
+			emitter.OpcodeEncoder.AppendByte(0xF7);
+			emitter.OpcodeEncoder.Append2Bits(0b11);
+			emitter.OpcodeEncoder.Append3Bits(0b110);
+			emitter.OpcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);
 		}
 	}
 }

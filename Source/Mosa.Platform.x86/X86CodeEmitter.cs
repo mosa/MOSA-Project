@@ -15,37 +15,6 @@ namespace Mosa.Platform.x86
 	public sealed class X86CodeEmitter : BaseCodeEmitter
 	{
 		/// <summary>
-		/// Calls the specified target.
-		/// </summary>
-		/// <param name="symbolOperand">The symbol operand.</param>
-		public void EmitCallSite(Operand symbolOperand)
-		{
-			Linker.Link(
-				LinkType.RelativeOffset,
-				PatchType.I4,
-				SectionKind.Text,
-				MethodName,
-				(int)CodeStream.Position,
-				SectionKind.Text,
-				symbolOperand.Name,
-				-4
-			);
-
-			CodeStream.WriteZeroBytes(4);
-		}
-
-		/// <summary>
-		/// Emits relative branch code.
-		/// </summary>
-		/// <param name="code">The branch instruction code.</param>
-		/// <param name="dest">The destination label.</param>
-		public void EmitRelativeBranch(byte[] code, int dest)
-		{
-			CodeStream.Write(code, 0, code.Length);
-			EmitRelativeBranchTarget(dest);
-		}
-
-		/// <summary>
 		/// Emits the relative branch target.
 		/// </summary>
 		/// <param name="label">The label.</param>
@@ -64,7 +33,7 @@ namespace Mosa.Platform.x86
 			}
 			else
 			{
-				// Forward jump, we can't resolve yet - store a patch
+				// Forward jump, we can't resolve yet so store a patch
 				AddPatch(label, (int)CodeStream.Position);
 			}
 

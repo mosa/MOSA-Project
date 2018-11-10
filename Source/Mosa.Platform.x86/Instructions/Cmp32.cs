@@ -12,14 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Cmp32 : X86Instruction
 	{
-		public override int ID { get { return 210; } }
+		public override int ID { get { return 209; } }
 
 		internal Cmp32()
 			: base(0, 2)
 		{
 		}
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x3B });
 
 		public override bool IsZeroFlagUnchanged { get { return true; } }
 
@@ -41,12 +39,15 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override bool IsParityFlagUndefined { get { return true; } }
 
-		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			emitter.Emit(LegacyOpcode, node.Operand1, node.Operand2);
+			emitter.OpcodeEncoder.AppendByte(0x3B);
+			emitter.OpcodeEncoder.Append2Bits(0b11);
+			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+			emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
 		}
 	}
 }

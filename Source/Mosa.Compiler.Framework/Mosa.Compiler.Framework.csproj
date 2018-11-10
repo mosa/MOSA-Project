@@ -326,7 +326,7 @@
     <Compile Include="Linker\PatchType.cs" />
     <Compile Include="Linker\SectionKind.cs" />
     <Compile Include="Helper\BuiltInOptimizations.cs" />
-    <Compile Include="OpcodeEncoderV2.cs" />
+    <Compile Include="CommonOpcodeEncoder.cs" />
     <Compile Include="Pipeline.cs" />
     <Compile Include="CompilerTypeData.cs" />
     <Compile Include="CompilerMethodData.cs" />

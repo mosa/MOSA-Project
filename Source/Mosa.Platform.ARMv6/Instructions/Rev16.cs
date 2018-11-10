@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Rev16 : ARMv6Instruction
 	{
-		public override int ID { get { return 732; } }
+		public override int ID { get { return 731; } }
 
 		internal Rev16()
 			: base(1, 3)

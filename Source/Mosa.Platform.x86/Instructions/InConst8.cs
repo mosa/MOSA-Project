@@ -12,25 +12,24 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class InConst8 : X86Instruction
 	{
-		public override int ID { get { return 233; } }
+		public override int ID { get { return 232; } }
 
 		internal InConst8()
 			: base(1, 1)
 		{
 		}
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xE4 });
-
 		public override bool IsIOOperation { get { return true; } }
 
 		public override bool HasUnspecifiedSideEffect { get { return true; } }
 
-		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			emitter.Emit(LegacyOpcode, node.Operand1);
+			emitter.OpcodeEncoder.AppendByte(0xE4);
+			emitter.OpcodeEncoder.Append8BitImmediate(node.Operand1);
 		}
 	}
 }

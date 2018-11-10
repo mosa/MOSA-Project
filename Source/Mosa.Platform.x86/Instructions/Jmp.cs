@@ -12,14 +12,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Jmp : X86Instruction
 	{
-		public override int ID { get { return 240; } }
+		public override int ID { get { return 239; } }
 
 		internal Jmp()
 			: base(0, 0)
 		{
 		}
-
-		public static readonly byte[] opcode = new byte[] { 0xE9 };
 
 		public override FlowControl FlowControl { get { return FlowControl.UnconditionalBranch; } }
 
@@ -47,11 +45,9 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
-			System.Diagnostics.Debug.Assert(node.BranchTargets.Count >= 1);
-			System.Diagnostics.Debug.Assert(node.BranchTargets[0] != null);
 
-			emitter.Write(opcode);
-			(emitter as X86CodeEmitter).EmitRelativeBranchTarget(node.BranchTargets[0].Label);
+			emitter.OpcodeEncoder.AppendByte(0xE9);
+			emitter.OpcodeEncoder.EmitRelative32(node.BranchTargets[0].Label);
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Movzx8To32 : X86Instruction
 	{
-		public override int ID { get { return 276; } }
+		public override int ID { get { return 275; } }
 
 		internal Movzx8To32()
 			: base(1, 1)

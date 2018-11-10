@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class SetByteIfNotSigned : X86Instruction
 	{
-		public override int ID { get { return 372; } }
+		public override int ID { get { return 371; } }
 
 		internal SetByteIfNotSigned()
 			: base(1, 0)
@@ -21,8 +21,6 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override string AlternativeName { get { return "SetNS"; } }
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x99 });
-
 		public override bool IsSignFlagUsed { get { return true; } }
 
 		public override BaseInstruction GetOpposite()
@@ -30,12 +28,16 @@ namespace Mosa.Platform.x86.Instructions
 			return X86.SetByteIfSigned;
 		}
 
-		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-			emitter.Emit(LegacyOpcode, node.Result);
+			emitter.OpcodeEncoder.AppendByte(0x0F);
+			emitter.OpcodeEncoder.AppendByte(0x99);
+			emitter.OpcodeEncoder.Append2Bits(0b11);
+			emitter.OpcodeEncoder.Append3Bits(0b000);
+			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 		}
 	}
 }
