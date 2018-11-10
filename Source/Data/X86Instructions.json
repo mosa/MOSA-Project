@@ -2191,7 +2191,8 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x2B",
 			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": "0x2B|0b11|reg3:r|reg3:o2"
 		},
 		{
 			"Name": "SubConst32",
@@ -2204,10 +2205,11 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86LegacyOpcode": "0x81",
-			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86LegacyOpcodeRegField": "05",
-			"X86ThreeTwoAddressConversion": "true"
+			"old-X86LegacyOpcode": "0x81",
+			"old-X86LegacyOpcodeOperandOrder": "r2",
+			"old-X86LegacyOpcodeRegField": "05",
+			"X86ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": "0x81|0b11|0b101|reg3:r|imm32:o2"
 		},
 		{
 			"Name": "Subsd",
@@ -2221,9 +2223,10 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86LegacyOpcode": "F2 0F 5C",
-			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86ThreeTwoAddressConversion": "true"
+			"old-X86LegacyOpcode": "F2 0F 5C",
+			"old-X86LegacyOpcodeOperandOrder": "r2",
+			"X86ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": "0xF2|0x0F|0x5C|0b11|reg3:r|reg3:o2"
 		},
 		{
 			"Name": "Subss",
@@ -2237,9 +2240,10 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86LegacyOpcode": "F3 0F 5C",
-			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86ThreeTwoAddressConversion": "true"
+			"old-X86LegacyOpcode": "F3 0F 5C",
+			"old-X86LegacyOpcodeOperandOrder": "r2",
+			"X86ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": "0xF3|0x0F|0x5C|0b11|reg3:r|reg3:o2"
 		},
 		{
 			"Name": "Test32",
@@ -2252,9 +2256,10 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"X86LegacyOpcode": "0x85",
-			"X86LegacyOpcodeOperandOrder": "12",
-			"X86ThreeTwoAddressConversion": "false"
+			"old-X86LegacyOpcode": "0x85",
+			"old-X86LegacyOpcodeOperandOrder": "12",
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x85|0b11|reg3:o1|reg3:o2"
 		},
 		{
 			"Name": "TestConst32",
@@ -2267,10 +2272,11 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"X86LegacyOpcode": "0xF7",
-			"X86LegacyOpcodeOperandOrder": "12",
-			"X86LegacyOpcodeRegField": "00",
-			"X86ThreeTwoAddressConversion": "false"
+			"old-X86LegacyOpcode": "0xF7",
+			"old-X86LegacyOpcodeOperandOrder": "12",
+			"old-X86LegacyOpcodeRegField": "00",
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0xF7|0b11|0b000|reg3:o1|imm32:o2"
 		},
 		{
 			"Name": "Ucomisd",
@@ -2283,9 +2289,10 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"X86LegacyOpcode": "0x66, 0x0F, 0x2E",
-			"X86LegacyOpcodeOperandOrder": "12",
-			"X86ThreeTwoAddressConversion": "false"
+			"old-X86LegacyOpcode": "0x66, 0x0F, 0x2E",
+			"old-X86LegacyOpcodeOperandOrder": "12",
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x66|0x0F|0x2E|0b11|reg3:o1|reg3:o2"
 		},
 		{
 			"Name": "Ucomiss",
@@ -2298,9 +2305,10 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"X86LegacyOpcode": "0x0F, 0x2E",
-			"X86LegacyOpcodeOperandOrder": "12",
-			"X86ThreeTwoAddressConversion": "false"
+			"old-X86LegacyOpcode": "0x0F, 0x2E",
+			"old-X86LegacyOpcodeOperandOrder": "12",
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x2E|0b11|reg3:o1|reg3:o2"
 		},
 		{
 			"Name": "XAddLoad32",
@@ -2331,9 +2339,10 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 2,
-			"X86LegacyOpcode": "0x87",
-			"X86LegacyOpcodeOperandOrder": "r12",
-			"X86ThreeTwoAddressConversion": "false"
+			"old-X86LegacyOpcode": "0x87",
+			"old-X86LegacyOpcodeOperandOrder": "r12",
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x87|0b11|reg3:o2|reg3:o1"
 		},
 		{
 			"Name": "XChgLoad32",
@@ -2364,9 +2373,10 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86LegacyOpcode": "0x33",
-			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86ThreeTwoAddressConversion": "true"
+			"old-X86LegacyOpcode": "0x33",
+			"old-X86LegacyOpcodeOperandOrder": "r2",
+			"X86ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": "0x33|0b11|reg3:r|reg3:o2"
 		},
 		{
 			"Name": "XorConst32",
@@ -2380,10 +2390,11 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86LegacyOpcode": "0x81",
-			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86LegacyOpcodeRegField": "06",
-			"X86ThreeTwoAddressConversion": "true"
+			"old-X86LegacyOpcode": "0x81",
+			"old-X86LegacyOpcodeOperandOrder": "r2",
+			"old-X86LegacyOpcodeRegField": "06",
+			"X86ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": "0x81|0b11|0b110|reg3:r|imm32:o2"
 		},
 		{
 			"Name": "BranchOverflow",
