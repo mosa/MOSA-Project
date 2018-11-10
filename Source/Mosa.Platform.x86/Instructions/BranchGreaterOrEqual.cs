@@ -21,8 +21,6 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override string AlternativeName { get { return "JGE"; } }
 
-		public static readonly byte[] opcode = new byte[] { 0x0F, 0x8D };
-
 		public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
 
 		public override bool IsSignFlagUsed { get { return true; } }
@@ -38,11 +36,10 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
-			System.Diagnostics.Debug.Assert(node.BranchTargets.Count >= 1);
-			System.Diagnostics.Debug.Assert(node.BranchTargets[0] != null);
 
-			emitter.Write(opcode);
-			(emitter as X86CodeEmitter).EmitRelativeBranchTarget(node.BranchTargets[0].Label);
+			emitter.OpcodeEncoder.AppendByte(0x0F);
+			emitter.OpcodeEncoder.AppendByte(0x8D);
+			emitter.OpcodeEncoder.EmitRelative32(node.BranchTargets[0].Label);
 		}
 	}
 }

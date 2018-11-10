@@ -622,8 +622,6 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"UnspecifiedSideEffect": "true",
-			"old-X86LegacyOpcode": "0xE4",
-			"old-X86LegacyOpcodeOperandOrder": "1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xE4|imm8:o1"
 		},
@@ -640,8 +638,6 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"UnspecifiedSideEffect": "true",
-			"old-X86LegacyOpcode": "0x66, 0xE5",
-			"old-X86LegacyOpcodeOperandOrder": "1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x66|0xE4|imm8:o1"
 		},
@@ -658,8 +654,6 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"UnspecifiedSideEffect": "true",
-			"old-X86LegacyOpcode": "0xE5",
-			"old-X86LegacyOpcodeOperandOrder": "1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xE5|imm8:o1"
 		},
@@ -735,9 +729,10 @@
 			"FlowControl": "UnconditionalBranch",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86EmitBytes": "0xE9",
-			"X86EmitRelativeBranchTarget": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"old-X86EmitBytes": "0xE9",
+			"old-X86EmitRelativeBranchTarget": "true",
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0xE9|rel32:label"
 		},
 		{
 			"Name": "JmpStatic",
@@ -914,8 +909,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86LegacyOpcode": "0x0F, 0x28",
-			"X86ThreeTwoAddressConversion": "false"
+			"OpcodeEncoding": "0x0F|0x28|0b11|reg3:r|reg3:o2"
 		},
 		{
 			"Name": "MovapsLoad",
@@ -1221,8 +1215,8 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86LegacyOpcode": "0x0F, 0x10",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x10|0b11|reg3:r|reg3:o2"
 		},
 		{
 			"Name": "MovupsLoad",
@@ -1630,8 +1624,8 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86LegacyOpcode": "0x66, 0x0F, 0xEF",
-			"X86ThreeTwoAddressConversion": "true"
+			"X86ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": "0x66|0x0F|0xEF|0b11|reg3:r|reg3:o2"
 		},
 		{
 			"Name": "Rcr32",
@@ -2101,9 +2095,10 @@
 			"MemoryRead": "true",
 			"OperandCount": 3,
 			"ResultCount": 1,
+			"X86ThreeTwoAddressConversion": "false",
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86LegacyOpcode": "0x87",
-			"X86ThreeTwoAddressConversion": "false"
+			"OpcodeEncoding-ConstantBase": "0x0F|0b1100|0b0001|0b00|reg3:o3|b101|imm32:o1",
+			"OpcodeEncoding-NonConstantBase": "EmitXAddLoad32Reg"
 		},
 		{
 			"Name": "XChg32",
@@ -2133,9 +2128,10 @@
 			"MemoryRead": "true",
 			"OperandCount": 3,
 			"ResultCount": 1,
+			"X86ThreeTwoAddressConversion": "false",
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86LegacyOpcode": "0x87",
-			"X86ThreeTwoAddressConversion": "false"
+			"OpcodeEncoding-ConstantBase": "0b1000|0b0111|0b00|reg3:o3|b101|imm32:o1",
+			"OpcodeEncoding-NonConstantBase": "EmitXChgLoad32Reg"
 		},
 		{
 			"Name": "Xor32",
@@ -2181,9 +2177,8 @@
 			"LogicalOpposite": "BranchNoOverflow",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86EmitBytes": "0x0F, 0x80",
-			"X86EmitRelativeBranchTarget": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x80|rel32:label"
 		},
 		{
 			"Name": "BranchNoOverflow",
@@ -2199,9 +2194,8 @@
 			"LogicalOpposite": "BranchOverflow",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86EmitBytes": "0x0F, 0x81",
-			"X86EmitRelativeBranchTarget": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x81|rel32:label"
 		},
 		{
 			"Name": "BranchCarry",
@@ -2217,9 +2211,8 @@
 			"LogicalOpposite": "BranchNoCarry",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86EmitBytes": "0x0F, 0x82",
-			"X86EmitRelativeBranchTarget": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x82|rel32:label"
 		},
 		{
 			"Name": "BranchUnsignedLessThan",
@@ -2235,9 +2228,8 @@
 			"LogicalOpposite": "BranchUnsignedGreaterOrEqual",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86EmitBytes": "0x0F, 0x82",
-			"X86EmitRelativeBranchTarget": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x82|rel32:label"
 		},
 		{
 			"Name": "BranchUnsignedGreaterOrEqual",
@@ -2253,9 +2245,8 @@
 			"LogicalOpposite": "BranchUnsignedLessThan",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86EmitBytes": "0x0F, 0x83",
-			"X86EmitRelativeBranchTarget": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x83|rel32:label"
 		},
 		{
 			"Name": "BranchNoCarry",
@@ -2271,9 +2262,8 @@
 			"LogicalOpposite": "BranchCarry",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86EmitBytes": "0x0F, 0x83",
-			"X86EmitRelativeBranchTarget": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x83|rel32:label"
 		},
 		{
 			"Name": "BranchEqual",
@@ -2289,9 +2279,8 @@
 			"LogicalOpposite": "BranchNotEqual",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86EmitBytes": "0x0F, 0x84",
-			"X86EmitRelativeBranchTarget": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x84|rel32:label"
 		},
 		{
 			"Name": "BranchZero",
@@ -2307,9 +2296,8 @@
 			"LogicalOpposite": "BranchNotZero",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86EmitBytes": "0x0F, 0x84",
-			"X86EmitRelativeBranchTarget": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x84|rel32:label"
 		},
 		{
 			"Name": "BranchNotEqual",
@@ -2325,9 +2313,8 @@
 			"LogicalOpposite": "BranchEqual",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86EmitBytes": "0x0F, 0x85",
-			"X86EmitRelativeBranchTarget": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x85|rel32:label"
 		},
 		{
 			"Name": "BranchNotZero",
@@ -2343,9 +2330,8 @@
 			"LogicalOpposite": "BranchZero",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86EmitBytes": "0x0F, 0x85",
-			"X86EmitRelativeBranchTarget": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x85|rel32:label"
 		},
 		{
 			"Name": "BranchUnsignedLessOrEqual",
@@ -2361,9 +2347,8 @@
 			"LogicalOpposite": "BranchUnsignedGreaterThan",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86EmitBytes": "0x0F, 0x86",
-			"X86EmitRelativeBranchTarget": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x86|rel32:label"
 		},
 		{
 			"Name": "BranchUnsignedGreaterThan",
@@ -2379,9 +2364,8 @@
 			"LogicalOpposite": "BranchUnsignedLessOrEqual",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86EmitBytes": "0x0F, 0x87",
-			"X86EmitRelativeBranchTarget": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x87|rel32:label"
 		},
 		{
 			"Name": "BranchSigned",
@@ -2397,9 +2381,8 @@
 			"LogicalOpposite": "BranchNotSigned",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86EmitBytes": "0x0F, 0x88",
-			"X86EmitRelativeBranchTarget": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x88|rel32:label"
 		},
 		{
 			"Name": "BranchNotSigned",
@@ -2415,9 +2398,8 @@
 			"LogicalOpposite": "BranchSigned",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86EmitBytes": "0x0F, 0x89",
-			"X86EmitRelativeBranchTarget": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x89|rel32:label"
 		},
 		{
 			"Name": "BranchParity",
@@ -2433,9 +2415,8 @@
 			"LogicalOpposite": "BranchNoParity",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86EmitBytes": "0x0F, 0x8A",
-			"X86EmitRelativeBranchTarget": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x8A|rel32:label"
 		},
 		{
 			"Name": "BranchNoParity",
@@ -2451,9 +2432,8 @@
 			"LogicalOpposite": "BranchParity",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86EmitBytes": "0x0F, 0x8B",
-			"X86EmitRelativeBranchTarget": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x8B|rel32:label"
 		},
 		{
 			"Name": "BranchLessThan",
@@ -2469,9 +2449,8 @@
 			"LogicalOpposite": "BranchGreaterOrEqual",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86EmitBytes": "0x0F, 0x8C",
-			"X86EmitRelativeBranchTarget": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x8C|rel32:label"
 		},
 		{
 			"Name": "BranchGreaterOrEqual",
@@ -2487,9 +2466,8 @@
 			"LogicalOpposite": "BranchLessThan",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86EmitBytes": "0x0F, 0x8D",
-			"X86EmitRelativeBranchTarget": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x8D|rel32:label"
 		},
 		{
 			"Name": "BranchLessOrEqual",
@@ -2505,9 +2483,8 @@
 			"LogicalOpposite": "BranchGreaterThan",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86EmitBytes": "0x0F, 0x8E",
-			"X86EmitRelativeBranchTarget": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x8E|rel32:label"
 		},
 		{
 			"Name": "BranchGreaterThan",
@@ -2523,9 +2500,8 @@
 			"LogicalOpposite": "BranchLessOrEqual",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86EmitBytes": "0x0F, 0x8F",
-			"X86EmitRelativeBranchTarget": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x8F|rel32:label"
 		},
 		{
 			"Name": "SetByteIfOverflow",

@@ -33,7 +33,7 @@ namespace Mosa.Platform.x86
 			}
 			else
 			{
-				// Forward jump, we can't resolve yet - store a patch
+				// Forward jump, we can't resolve yet so store a patch
 				AddPatch(label, (int)CodeStream.Position);
 			}
 

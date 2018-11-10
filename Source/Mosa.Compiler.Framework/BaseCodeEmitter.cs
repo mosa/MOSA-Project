@@ -236,7 +236,7 @@ namespace Mosa.Compiler.Framework
 
 		public abstract void ResolvePatches();
 
-		public void EmitRelative32Link(Operand symbolOperand)
+		public void EmitRelative32(Operand symbolOperand)
 		{
 			Linker.Link(
 				LinkType.RelativeOffset,
@@ -250,7 +250,7 @@ namespace Mosa.Compiler.Framework
 			);
 		}
 
-		public void EmitRelative64Link(Operand symbolOperand)
+		public void EmitRelative64(Operand symbolOperand)
 		{
 			Linker.Link(
 				LinkType.RelativeOffset,
@@ -262,8 +262,22 @@ namespace Mosa.Compiler.Framework
 				symbolOperand.Name,
 				-8
 			);
+		}
 
-			CodeStream.WriteZeroBytes(8);
+		public int EmitRelative(int label, int offset)
+		{
+			if (TryGetLabel(label, out int position))
+			{
+				// Yes, calculate the relative offset
+				return position - (int)CodeStream.Position - offset;
+			}
+			else
+			{
+				// Forward jump, we can't resolve yet so store a patch
+				AddPatch(label, (int)CodeStream.Position);
+
+				return 0;
+			}
 		}
 	}
 }

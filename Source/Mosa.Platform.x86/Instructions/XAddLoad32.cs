@@ -19,8 +19,6 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x87 });
-
 		public override bool IsMemoryRead { get { return true; } }
 
 		public override bool IsZeroFlagModified { get { return true; } }

@@ -154,7 +154,7 @@ namespace Mosa.Compiler.Framework
 			AppendBits(value, 64);
 		}
 
-		public void AppendImmediateInteger(ulong value)
+		public void AppendImmediateInteger(uint value)
 		{
 			if (BitsLength == 0)
 			{
@@ -179,7 +179,7 @@ namespace Mosa.Compiler.Framework
 			else
 			{
 				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I4, operand, 0, 0);
-				AppendImmediateInteger(0);
+				WriteZeroBytes(4);
 			}
 		}
 
@@ -190,28 +190,30 @@ namespace Mosa.Compiler.Framework
 			AppendByte((byte)operand.ConstantUnsignedInteger);
 		}
 
-		public void EmitRelative32Link(Operand operand)
+		private void WriteZeroBytes(int length)
 		{
-			Emitter.EmitRelative32Link(operand);
-
-			Emitter.WriteByte(0);
-			Emitter.WriteByte(0);
-			Emitter.WriteByte(0);
-			Emitter.WriteByte(0);
+			for (int i = 0; i < length; i++)
+			{
+				Emitter.WriteByte(0);
+			}
 		}
 
-		public void EmitRelative64Link(Operand operand)
+		public void EmitRelative32(int label)
 		{
-			Emitter.EmitRelative64Link(operand);
+			int offset = Emitter.EmitRelative(label, 4);
+			AppendImmediateInteger((uint)offset);
+		}
 
-			Emitter.WriteByte(0);
-			Emitter.WriteByte(0);
-			Emitter.WriteByte(0);
-			Emitter.WriteByte(0);
-			Emitter.WriteByte(0);
-			Emitter.WriteByte(0);
-			Emitter.WriteByte(0);
-			Emitter.WriteByte(0);
+		public void EmitRelative32(Operand operand)
+		{
+			Emitter.EmitRelative32(operand);
+			WriteZeroBytes(4);
+		}
+
+		public void EmitRelative64(Operand operand)
+		{
+			Emitter.EmitRelative64(operand);
+			WriteZeroBytes(8);
 		}
 	}
 }

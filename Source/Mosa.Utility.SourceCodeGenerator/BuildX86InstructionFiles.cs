@@ -659,9 +659,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "r": return "Result";
 				case "r1": return "Result";
 				case "r2": return "Result2";
+				case "label": return "BranchTargets[0].Label";
 				case "": return string.Empty;
-
-				//case "label":
 
 				default: throw new Exception("ERROR!");
 			}
@@ -678,8 +677,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "reg4": code = "AppendNibble"; postcode = ".Register.RegisterCode"; return;
 				case "imm32": code = "Append32BitImmediate"; return;
 				case "imm8": code = "Append8BitImmediate"; return;
-				case "rel32": code = "EmitRelative32Link"; return;
-				case "rel64": code = "EmitRelative64Link"; return;
+				case "rel32": code = "EmitRelative32"; return;
+				case "rel64": code = "EmitRelative64"; return;
 				case "": return;
 
 				default: throw new Exception("ERROR!");

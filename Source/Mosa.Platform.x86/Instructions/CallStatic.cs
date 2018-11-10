@@ -47,7 +47,7 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
 			emitter.OpcodeEncoder.AppendByte(0xE8);
-			emitter.OpcodeEncoder.EmitRelative32Link(node.Operand1);
+			emitter.OpcodeEncoder.EmitRelative32(node.Operand1);
 		}
 	}
 }
