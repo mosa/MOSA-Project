@@ -21,8 +21,6 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override string AlternativeName { get { return "SetA"; } }
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x97 });
-
 		public override bool IsZeroFlagUsed { get { return true; } }
 
 		public override bool IsCarryFlagUsed { get { return true; } }
@@ -32,12 +30,16 @@ namespace Mosa.Platform.x86.Instructions
 			return X86.SetByteIfUnsignedLessOrEqual;
 		}
 
-		internal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-			emitter.Emit(LegacyOpcode, node.Result);
+			emitter.OpcodeEncoder.AppendByte(0x0F);
+			emitter.OpcodeEncoder.AppendByte(0x97);
+			emitter.OpcodeEncoder.Append2Bits(0b11);
+			emitter.OpcodeEncoder.Append3Bits(0b000);
+			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 		}
 	}
 }
