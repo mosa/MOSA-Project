@@ -12,8 +12,6 @@
 			"FlagsUsed": "C",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "13",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x13|0b11|reg3:r|reg3:o2"
 		},
@@ -28,9 +26,6 @@
 			"FlagsUsed": "C",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "81",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
-			"old-X86LegacyOpcodeRegField": "02",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x81|0b11|0b000|reg3:r|imm32:o2"
 		},
@@ -46,8 +41,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "03",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x03|0b11|reg3:r|reg3:o2"
 		},
@@ -63,9 +56,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "81",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
-			"old-X86LegacyOpcodeRegField": "00",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x81|0b11|0b000|reg3:r|imm32:o2"
 		},
@@ -81,8 +71,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "F2 0F 58",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xF2|0x0F|0x58|0b11|reg3:r|reg3:o2"
 		},
@@ -98,8 +86,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "F3 0F 58",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xF3|0x0F|0x58|0b11|reg3:r|reg3:o2"
 		},
@@ -115,8 +101,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "23",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x23|0b11|reg3:r|reg3:o2"
 		},
@@ -132,9 +116,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "81",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
-			"old-X86LegacyOpcodeRegField": "04",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x81|0b11|0b100|reg3:r|imm32:o2"
 		},
@@ -150,7 +131,6 @@
 			"OperandCount": 0,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"old-X86EmitBytes": "CC",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xCC"
 		},
@@ -165,8 +145,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0F BA",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x0F|0xBA|0b11|reg3:r|reg3:o2"
 		},
@@ -181,9 +159,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0F B3",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
-			"old-X86LegacyOpcodeRegField": "06",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x0F|0xB3|0b11|0b110|reg3:r|imm8:o2"
 		},
@@ -198,8 +173,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0F A3",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0xA3|0b11|reg3:r|reg3:o2"
 		},
@@ -214,9 +187,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0F BA",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
-			"old-X86LegacyOpcodeRegField": "04",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0xBA|0b11|0b100|reg3:r|imm8:o2"
 		},
@@ -231,8 +201,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0F BA",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x0F|0xBA|0b11|reg3:r|reg3:o2"
 		},
@@ -247,9 +215,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0F AB",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
-			"old-X86LegacyOpcodeRegField": "05",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x0F|0xAB|0b11|0b011|reg3:r|imm8:o2"
 		},
@@ -265,9 +230,6 @@
 			"FlowControl": "Call",
 			"OperandCount": 1,
 			"ResultCount": 0,
-			"x-StaticEmitMethod": "StaticEmitters.Emit%",
-			"x-X86LegacyOpcode": "0xE8",
-			"x-X86LegacyOpcodeOperandOrder": "1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xE8|rel32:o1"
 		},
@@ -283,9 +245,6 @@
 			"FlowControl": "Call",
 			"OperandCount": 1,
 			"ResultCount": 0,
-			"x-X86LegacyOpcode": "0xFF",
-			"x-X86LegacyOpcodeOperandOrder": "1",
-			"x-X86LegacyOpcodeRegField": "02",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xFF|0b11|0b010|reg3:o1"
 		},
@@ -300,7 +259,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 2,
-			"old-X86EmitBytes": "99",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x99"
 		},
@@ -316,7 +274,6 @@
 			"OperandCount": 0,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"old-X86EmitBytes": "FA",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xFA"
 		},
@@ -331,8 +288,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"old-X86LegacyOpcode": "0x3B",
-			"old-X86LegacyOpcodeOperandOrder": "12",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x3B|0b11|reg3:o1|reg3:o2"
 		},
@@ -347,9 +302,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"old-X86LegacyOpcode": "0x81",
-			"old-X86LegacyOpcodeOperandOrder": "12",
-			"old-X86LegacyOpcodeRegField": "07",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x81|0b11|0b111|reg3:o1|imm32:o2"
 		},
@@ -380,8 +332,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"old-X86LegacyOpcode": "0x66, 0x0F, 0x2F",
-			"old-X86LegacyOpcodeOperandOrder": "12",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0b01100110|0b00001111|0b00101111|0b11|reg3:o1|reg3:o2"
 		},
@@ -396,8 +346,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"old-X86LegacyOpcode": "0x66, 0x0F, 0x2F",
-			"old-X86LegacyOpcodeOperandOrder": "12",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0b00001111|0b00101111|0b11|reg3:o1|reg3:o2"
 		},
@@ -412,8 +360,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0xA2",
-			"X86LegacyOpcodeOperandOrder": " ",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0xA2"
 		},
@@ -428,8 +374,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xF2, 0x0F, 0x5A",
-			"old-X86LegacyOpcodeOperandOrder": "12",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xF2|0x0F|0x5A|0b11|reg3:o1|reg3:o2"
 		},
@@ -444,8 +388,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xF2, 0x0F, 0x2A",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xF2|0x0F|0x2A|0b11|reg3:r|reg3:o1"
 		},
@@ -460,8 +402,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xF3, 0x0F, 0x2A",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xF3|0x0F|0x2A|0b11|reg3:r|reg3:o1"
 		},
@@ -476,8 +416,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xF3, 0x0F, 0x5A",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xF3|0x0F|0x5A|0b11|reg3:r|reg3:o1"
 		},
@@ -492,8 +430,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xF2, 0x0F, 0x2C",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xF2|0x0F|0x2C|0b11|reg3:r|reg3:o1"
 		},
@@ -508,8 +444,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xF3, 0x0F, 0x2C",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xF3|0x0F|0x2C|0b11|reg3:r|reg3:o1"
 		},
@@ -524,9 +458,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xFF",
-			"old-X86LegacyOpcodeOperandOrder": "r",
-			"old-X86LegacyOpcodeRegField": "01",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xFF|0b11|0b1|reg3:r"
 		},
@@ -541,9 +472,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 2,
-			"old-X86LegacyOpcode": "0xF7",
-			"old-X86LegacyOpcodeOperandOrder": "3",
-			"old-X86LegacyOpcodeRegField": "06",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xF7|0b11|0b110|reg3:o3"
 		},
@@ -558,8 +486,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xF2, 0x0F, 0x5E",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xF2|0x0F|0x5E|0b11|reg3:r|reg3:o2"
 		},
@@ -574,8 +500,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xF3, 0x0F, 0x5E",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xF3|0x0F|0x5E|0b11|reg3:r|reg3:o2"
 		},
@@ -606,7 +530,6 @@
 			"OperandCount": 0,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"old-X86EmitBytes": "F4",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xF4"
 		},
@@ -621,9 +544,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 2,
-			"old-X86LegacyOpcode": "0xF7",
-			"old-X86LegacyOpcodeOperandOrder": "3",
-			"old-X86LegacyOpcodeRegField": "07",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xF7|0b11|0b111|reg3:o3"
 		},
@@ -638,8 +558,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0F AF",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x0F|0xAF|0b11|reg3:r|reg3:o2"
 		},
@@ -656,8 +574,6 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"UnspecifiedSideEffect": "true",
-			"old-X86LegacyOpcode": "0xEC",
-			"old-X86LegacyOpcodeOperandOrder": "",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xEC"
 		},
@@ -674,8 +590,6 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"UnspecifiedSideEffect": "true",
-			"old-X86LegacyOpcode": "0x66, 0xED",
-			"old-X86LegacyOpcodeOperandOrder": "",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x66|0xED"
 		},
@@ -692,8 +606,6 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"UnspecifiedSideEffect": "true",
-			"old-X86LegacyOpcode": "0xED",
-			"old-X86LegacyOpcodeOperandOrder": "",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xED"
 		},
@@ -710,9 +622,10 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"UnspecifiedSideEffect": "true",
-			"X86LegacyOpcode": "0xE4",
-			"X86LegacyOpcodeOperandOrder": "1",
-			"X86ThreeTwoAddressConversion": "false"
+			"old-X86LegacyOpcode": "0xE4",
+			"old-X86LegacyOpcodeOperandOrder": "1",
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0xE4|imm8:o1"
 		},
 		{
 			"Name": "InConst16",
@@ -727,9 +640,10 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"UnspecifiedSideEffect": "true",
-			"X86LegacyOpcode": "0x66, 0xE5",
-			"X86LegacyOpcodeOperandOrder": "1",
-			"X86ThreeTwoAddressConversion": "false"
+			"old-X86LegacyOpcode": "0x66, 0xE5",
+			"old-X86LegacyOpcodeOperandOrder": "1",
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x66|0xE4|imm8:o1"
 		},
 		{
 			"Name": "InConst32",
@@ -744,9 +658,10 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"UnspecifiedSideEffect": "true",
-			"X86LegacyOpcode": "0xE5",
-			"X86LegacyOpcodeOperandOrder": "1",
-			"X86ThreeTwoAddressConversion": "false"
+			"old-X86LegacyOpcode": "0xE5",
+			"old-X86LegacyOpcodeOperandOrder": "1",
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0xE5|imm8:o1"
 		},
 		{
 			"Name": "Inc32",
@@ -759,9 +674,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xFF",
-			"old-X86LegacyOpcodeOperandOrder": "r",
-			"old-X86LegacyOpcodeRegField": "00",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xFF|0b11|0b000|reg3:r"
 		},
@@ -808,7 +720,6 @@
 			"OperandCount": 0,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"old-X86EmitBytes": "CF",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xCF"
 		},
@@ -888,7 +799,6 @@
 			"OperandCount": 0,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"old-X86EmitBytes": "C9",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xC9"
 		},
@@ -934,7 +844,6 @@
 			"OperandCount": 0,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"old-X86EmitBytes": "F0",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xF0"
 		},
@@ -949,8 +858,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x8C",
-			"old-X86LegacyOpcodeOperandOrder": "1r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x8C|0b11|reg3:o1|reg3:r"
 		},
@@ -965,8 +872,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x8E",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x8E|0b11|reg3:r|reg3:o1"
 		},
@@ -981,8 +886,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x8B",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x8B|0b11|reg3:r|reg3:o1"
 		},
@@ -997,9 +900,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xC7",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
-			"old-X86LegacyOpcodeRegField": "00",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xC7|0b11|0b000|reg3:r|imm32:o1"
 		},
@@ -1044,8 +944,6 @@
 			"MemoryRead": "true",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x20",
-			"old-X86LegacyOpcodeOperandOrder": "1r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x20|0b11|reg3:o1|reg3:r"
 		},
@@ -1061,8 +959,6 @@
 			"MemoryWrite": "true",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"old-X86LegacyOpcode": "0x0F, 0x22",
-			"old-X86LegacyOpcodeOperandOrder": "12",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x22|0b11|reg3:o1|reg3:o2"
 		},
@@ -1136,8 +1032,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xF2, 0x0F, 0x10",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xF2|0x0F|0x10|0b11|reg3:r|reg3:o1"
 		},
@@ -1182,8 +1076,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xF3, 0x0F, 0x10",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xF3|0x0F|0x10|0b11|reg3:r|reg3:o1"
 		},
@@ -1429,9 +1321,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 2,
-			"old-X86LegacyOpcode": "0xF7",
-			"old-X86LegacyOpcodeOperandOrder": "2",
-			"old-X86LegacyOpcodeRegField": "04",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xF7|0b11|0b100|reg3:o2"
 		},
@@ -1447,8 +1336,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xF2, 0x0F, 0x59",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xF2|0x0F|0x59|0b11|reg3:r|reg3:o2"
 		},
@@ -1464,8 +1351,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xF3, 0x0F, 0x59",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xF3|0x0F|0x59|0b11|reg3:r|reg3:o2"
 		},
@@ -1480,7 +1365,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86EmitBytes": "F7 03",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xF7|0x03"
 		},
@@ -1495,7 +1379,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"old-X86EmitBytes": "90",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x90"
 		},
@@ -1510,9 +1393,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xF7",
-			"old-X86LegacyOpcodeOperandOrder": "r",
-			"old-X86LegacyOpcodeRegField": "02",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xF7|0b11|0b010|reg3:r"
 		},
@@ -1528,8 +1408,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0B",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x0B|0b11|reg3:r|reg3:o2"
 		},
@@ -1545,9 +1423,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x81",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
-			"old-X86LegacyOpcodeRegField": "01",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x81|0b11|0b001|reg3:r|imm32:o2"
 		},
@@ -1564,8 +1439,6 @@
 			"OperandCount": 2,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"old-X86LegacyOpcode": "0xEE",
-			"old-X86LegacyOpcodeOperandOrder": "",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xEE"
 		},
@@ -1582,8 +1455,6 @@
 			"OperandCount": 2,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"old-X86LegacyOpcode": "0xEF",
-			"old-X86LegacyOpcodeOperandOrder": "",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xEF"
 		},
@@ -1600,8 +1471,6 @@
 			"OperandCount": 2,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"old-X86LegacyOpcode": "0xEF",
-			"old-X86LegacyOpcodeOperandOrder": "",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xEF"
 		},
@@ -1618,8 +1487,6 @@
 			"OperandCount": 2,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"old-X86LegacyOpcode": "0xE6",
-			"old-X86LegacyOpcodeOperandOrder": "1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xE6|reg3:o1"
 		},
@@ -1636,8 +1503,6 @@
 			"OperandCount": 2,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"old-X86LegacyOpcode": "0xE7",
-			"old-X86LegacyOpcodeOperandOrder": "1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xE7|reg3:o1"
 		},
@@ -1654,8 +1519,6 @@
 			"OperandCount": 2,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"old-X86LegacyOpcode": "0xE7",
-			"old-X86LegacyOpcodeOperandOrder": "1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xE7|reg3:o1"
 		},
@@ -1670,7 +1533,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"old-X86EmitBytes": "F3 90",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xF3|0x90"
 		},
@@ -1712,7 +1574,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"old-X86EmitBytes": "61",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x61"
 		},
@@ -1727,9 +1588,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 0,
-			"old-X86LegacyOpcode": "0xFF",
-			"old-X86LegacyOpcodeOperandOrder": "1",
-			"old-X86LegacyOpcodeRegField": "06",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xFF|0b11|0b110|reg3:o1"
 		},
@@ -1744,8 +1602,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 0,
-			"old-X86LegacyOpcode": "0x68",
-			"old-X86LegacyOpcodeOperandOrder": "1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x68|imm32:o1"
 		},
@@ -1760,7 +1616,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"old-X86EmitBytes": "60",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x60"
 		},
@@ -1789,9 +1644,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xD3",
-			"old-X86LegacyOpcodeOperandOrder": "r",
-			"old-X86LegacyOpcodeRegField": "03",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xD3|0b11|0b011|reg3:r"
 		},
@@ -1806,9 +1658,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xC1",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
-			"old-X86LegacyOpcodeRegField": "03",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xC1|0b11|0b011|reg3:r|imm8:o2"
 		},
@@ -1823,9 +1672,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xD1",
-			"old-X86LegacyOpcodeOperandOrder": "r",
-			"old-X86LegacyOpcodeRegField": "03",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xD1|0b11|0b011|reg3:r"
 		},
@@ -1841,7 +1687,6 @@
 			"OperandCount": 0,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"old-X86EmitBytes": "F3",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xF3"
 		},
@@ -1857,7 +1702,6 @@
 			"FlowControl": "Return",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"old-X86EmitBytes": "C3",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xC3"
 		},
@@ -1872,8 +1716,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x66, 0x0F, 0x3A, 0x0B",
-			"old-X86LegacyOpcodeOperandOrder": "r12",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x66|0x0F|0x3A|0x0B|0b11|reg3:r|reg3:o1|imm8:o2"
 		},
@@ -1888,8 +1730,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x66, 0x0F, 0x3A, 0x0A",
-			"old-X86LegacyOpcodeOperandOrder": "r12",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x66|0x0F|0x3A|0x0A|0b11|reg3:r|reg3:o1|imm8:o2"
 		},
@@ -1904,9 +1744,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xD3",
-			"old-X86LegacyOpcodeOperandOrder": "r",
-			"old-X86LegacyOpcodeRegField": "07",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xD3|0b11|0b111|reg3:r"
 		},
@@ -1921,9 +1758,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xC1",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
-			"old-X86LegacyOpcodeRegField": "07",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xC1|0b11|0b111|reg3:r|imm8:o2"
 		},
@@ -1938,9 +1772,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xD1",
-			"old-X86LegacyOpcodeOperandOrder": "r",
-			"old-X86LegacyOpcodeRegField": "07",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xD1|0b11|0b111|reg3:r"
 		},
@@ -1956,8 +1787,6 @@
 			"FlagsUsed": "C",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x1B",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x1B|0b11|reg3:r|reg3:o2"
 		},
@@ -1973,9 +1802,6 @@
 			"FlagsUsed": "C",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x81",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
-			"old-X86LegacyOpcodeRegField": "03",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x81|0b11|0b011|reg3:r|imm32:o2"
 		},
@@ -1990,9 +1816,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xD3",
-			"old-X86LegacyOpcodeOperandOrder": "r",
-			"old-X86LegacyOpcodeRegField": "04",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xD3|0b11|0b100|reg3:r"
 		},
@@ -2007,9 +1830,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xC1",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
-			"old-X86LegacyOpcodeRegField": "04",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xC1|0b11|0b100|reg3:r|imm8:o2"
 		},
@@ -2024,9 +1844,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xD1",
-			"old-X86LegacyOpcodeOperandOrder": "r",
-			"old-X86LegacyOpcodeRegField": "04",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xD1|0b11|0b100|reg3:r"
 		},
@@ -2041,8 +1858,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0xA5",
-			"old-X86LegacyOpcodeOperandOrder": "2r",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x0F|0xA5|0b11|reg3:o2|reg3:r"
 		},
@@ -2057,8 +1872,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0xA4",
-			"old-X86LegacyOpcodeOperandOrder": "2r3",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x0F|0xA4|0b11|reg3:o2|reg3:r|imm8:o3"
 		},
@@ -2073,9 +1886,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xD3",
-			"old-X86LegacyOpcodeOperandOrder": "r",
-			"old-X86LegacyOpcodeRegField": "05",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xD3|0b11|0b101|reg3:r"
 		},
@@ -2090,9 +1900,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xC1",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
-			"old-X86LegacyOpcodeRegField": "05",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xC1|0b11|0b101|reg3:r|imm8:o2"
 		},
@@ -2107,9 +1914,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0xD1",
-			"old-X86LegacyOpcodeOperandOrder": "r",
-			"old-X86LegacyOpcodeRegField": "05",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xD1|0b11|0b101|reg3:r"
 		},
@@ -2124,9 +1928,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0xAD",
-			"old-X86LegacyOpcodeOperandOrder": "2r",
-			"old-X86LegacyOpcodeRegField": "04",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x0F|0xAD|0b11|reg3:o2|reg3:r"
 		},
@@ -2141,9 +1942,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0xAC",
-			"old-X86LegacyOpcodeOperandOrder": "2r3",
-			"old-X86LegacyOpcodeRegField": "04",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x0F|0xAC|0b11|0b100|reg3:o2|reg3:r|imm8:o3"
 		},
@@ -2159,7 +1957,6 @@
 			"OperandCount": 0,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"old-X86EmitBytes": "FB",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xFB"
 		},
@@ -2174,7 +1971,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 0,
-			"old-X86EmitBytes": "AB",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xAB"
 		},
@@ -2189,8 +1985,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86LegacyOpcode": "0x2B",
-			"X86LegacyOpcodeOperandOrder": "r2",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x2B|0b11|reg3:r|reg3:o2"
 		},
@@ -2205,9 +1999,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x81",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
-			"old-X86LegacyOpcodeRegField": "05",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x81|0b11|0b101|reg3:r|imm32:o2"
 		},
@@ -2223,8 +2014,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "F2 0F 5C",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xF2|0x0F|0x5C|0b11|reg3:r|reg3:o2"
 		},
@@ -2240,8 +2029,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "F3 0F 5C",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0xF3|0x0F|0x5C|0b11|reg3:r|reg3:o2"
 		},
@@ -2256,8 +2043,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"old-X86LegacyOpcode": "0x85",
-			"old-X86LegacyOpcodeOperandOrder": "12",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x85|0b11|reg3:o1|reg3:o2"
 		},
@@ -2272,9 +2057,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"old-X86LegacyOpcode": "0xF7",
-			"old-X86LegacyOpcodeOperandOrder": "12",
-			"old-X86LegacyOpcodeRegField": "00",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xF7|0b11|0b000|reg3:o1|imm32:o2"
 		},
@@ -2289,8 +2071,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"old-X86LegacyOpcode": "0x66, 0x0F, 0x2E",
-			"old-X86LegacyOpcodeOperandOrder": "12",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x66|0x0F|0x2E|0b11|reg3:o1|reg3:o2"
 		},
@@ -2305,8 +2085,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"old-X86LegacyOpcode": "0x0F, 0x2E",
-			"old-X86LegacyOpcodeOperandOrder": "12",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x2E|0b11|reg3:o1|reg3:o2"
 		},
@@ -2339,8 +2117,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 2,
-			"old-X86LegacyOpcode": "0x87",
-			"old-X86LegacyOpcodeOperandOrder": "r12",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x87|0b11|reg3:o2|reg3:o1"
 		},
@@ -2373,8 +2149,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x33",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x33|0b11|reg3:r|reg3:o2"
 		},
@@ -2390,9 +2164,6 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x81",
-			"old-X86LegacyOpcodeOperandOrder": "r2",
-			"old-X86LegacyOpcodeRegField": "06",
 			"X86ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": "0x81|0b11|0b110|reg3:r|imm32:o2"
 		},
@@ -2769,8 +2540,6 @@
 			"LogicalOpposite": "SetByteIfNoOverflow",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x90",
-			"old-X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x90|0b11|0b000|reg3:r"
 		},
@@ -2787,8 +2556,6 @@
 			"LogicalOpposite": "SetByteIfOverflow",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x91",
-			"old-X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x91|0b11|0b000|reg3:r"
 		},
@@ -2805,8 +2572,6 @@
 			"LogicalOpposite": "SetByteIfNoCarry",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x92",
-			"old-X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x92|0b11|0b000|reg3:r"
 		},
@@ -2823,8 +2588,6 @@
 			"LogicalOpposite": "SetByteIfUnsignedGreaterOrEqual",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x92",
-			"old-X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x92|0b11|0b000|reg3:r"
 		},
@@ -2841,8 +2604,6 @@
 			"LogicalOpposite": "SetByteIfUnsignedLessThan",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x93",
-			"old-X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x93|0b11|0b000|reg3:r"
 		},
@@ -2859,8 +2620,6 @@
 			"LogicalOpposite": "SetByteIfCarry",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x93",
-			"old-X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x93|0b11|0b000|reg3:r"
 		},
@@ -2877,8 +2636,6 @@
 			"LogicalOpposite": "SetByteIfNotEqual",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x94",
-			"old-X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x94|0b11|0b000|reg3:r"
 		},
@@ -2895,8 +2652,6 @@
 			"LogicalOpposite": "SetByteIfNotZero",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x94",
-			"old-X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x94|0b11|0b000|reg3:r"
 		},
@@ -2913,8 +2668,6 @@
 			"LogicalOpposite": "SetByteIfEqual",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x95",
-			"old-X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x95|0b11|0b000|reg3:r"
 		},
@@ -2931,8 +2684,6 @@
 			"LogicalOpposite": "SetByteIfZero",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x95",
-			"old-X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x95|0b11|0b000|reg3:r"
 		},
@@ -2949,8 +2700,6 @@
 			"LogicalOpposite": "SetByteIfUnsignedGreaterThan",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x96",
-			"old-X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x96|0b11|0b000|reg3:r"
 		},
@@ -2967,8 +2716,6 @@
 			"LogicalOpposite": "SetByteIfUnsignedLessOrEqual",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x97",
-			"old-X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x97|0b11|0b000|reg3:r"
 		},
@@ -2985,8 +2732,6 @@
 			"LogicalOpposite": "SetByteIfNotSigned",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x98",
-			"old-X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x98|0b11|0b000|reg3:r"
 		},
@@ -3003,8 +2748,6 @@
 			"LogicalOpposite": "SetByteIfSigned",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x99",
-			"old-X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x99|0b11|0b000|reg3:r"
 		},
@@ -3021,8 +2764,6 @@
 			"LogicalOpposite": "SetByteIfNoParity",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x9A",
-			"old-X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x9A|0b11|0b000|reg3:r"
 		},
@@ -3039,8 +2780,6 @@
 			"LogicalOpposite": "SetByteIfParity",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x9B",
-			"old-X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x9B|0b11|0b000|reg3:r"
 		},
@@ -3057,8 +2796,6 @@
 			"LogicalOpposite": "SetByteIfGreaterOrEqual",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x9C",
-			"old-X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x9C|0b11|0b000|reg3:r"
 		},
@@ -3075,8 +2812,6 @@
 			"LogicalOpposite": "SetByteIfLessThan",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x9D",
-			"old-X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x9D|0b11|0b000|reg3:r"
 		},
@@ -3093,8 +2828,6 @@
 			"LogicalOpposite": "SetByteIfGreaterThan",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x9E",
-			"old-X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x9E|0b11|0b000|reg3:r"
 		},
@@ -3111,8 +2844,6 @@
 			"LogicalOpposite": "SetByteIfLessOrEqual",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x9F",
-			"old-X86LegacyOpcodeOperandOrder": "r",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x9F|0b11|0b000|reg3:r"
 		},
@@ -3129,8 +2860,6 @@
 			"LogicalOpposite": "CMovNoOverflow32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x40",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x40|0b11|reg3:r|reg3:o1"
 		},
@@ -3147,8 +2876,6 @@
 			"LogicalOpposite": "CMovOverflow32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x41",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x41|0b11|reg3:r|reg3:o1"
 		},
@@ -3165,8 +2892,6 @@
 			"LogicalOpposite": "CMovNoCarry32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x42",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x42|0b11|reg3:r|reg3:o1"
 		},
@@ -3183,8 +2908,6 @@
 			"LogicalOpposite": "CMovUnsignedGreaterOrEqual32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x42",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x42|0b11|reg3:r|reg3:o1"
 		},
@@ -3201,8 +2924,6 @@
 			"LogicalOpposite": "CMovUnsignedLessThan32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x43",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x43|0b11|reg3:r|reg3:o1"
 		},
@@ -3219,8 +2940,6 @@
 			"LogicalOpposite": "CMovCarry32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x43",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x43|0b11|reg3:r|reg3:o1"
 		},
@@ -3237,8 +2956,6 @@
 			"LogicalOpposite": "CMovNotEqual32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x44",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x44|0b11|reg3:r|reg3:o1"
 		},
@@ -3255,8 +2972,6 @@
 			"LogicalOpposite": "CMovNotZero32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x44",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x44|0b11|reg3:r|reg3:o1"
 		},
@@ -3273,8 +2988,6 @@
 			"LogicalOpposite": "CMovEqual32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x45",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x45|0b11|reg3:r|reg3:o1"
 		},
@@ -3291,8 +3004,6 @@
 			"LogicalOpposite": "CMovZero32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x45",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x45|0b11|reg3:r|reg3:o1"
 		},
@@ -3309,8 +3020,6 @@
 			"LogicalOpposite": "CMovUnsignedGreaterThan32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x46",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x46|0b11|reg3:r|reg3:o1"
 		},
@@ -3327,8 +3036,6 @@
 			"LogicalOpposite": "CMovUnsignedLessOrEqual32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x47",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x47|0b11|reg3:r|reg3:o1"
 		},
@@ -3345,8 +3052,6 @@
 			"LogicalOpposite": "CMovNotSigned32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x48",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x48|0b11|reg3:r|reg3:o1"
 		},
@@ -3363,8 +3068,6 @@
 			"LogicalOpposite": "CMovSigned32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x49",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x49|0b11|reg3:r|reg3:o1"
 		},
@@ -3381,8 +3084,6 @@
 			"LogicalOpposite": "CMovNoParity32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x4A",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x4A|0b11|reg3:r|reg3:o1"
 		},
@@ -3399,8 +3100,6 @@
 			"LogicalOpposite": "CMovParity32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x4B",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x4B|0b11|reg3:r|reg3:o1"
 		},
@@ -3417,8 +3116,6 @@
 			"LogicalOpposite": "CMovGreaterOrEqual32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x4C",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x4C|0b11|reg3:r|reg3:o1"
 		},
@@ -3435,8 +3132,6 @@
 			"LogicalOpposite": "CMovLessThan32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x4D",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x4D|0b11|reg3:r|reg3:o1"
 		},
@@ -3453,8 +3148,6 @@
 			"LogicalOpposite": "CMovGreaterThan32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x4E",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x4E|0b11|reg3:r|reg3:o1"
 		},
@@ -3471,8 +3164,6 @@
 			"LogicalOpposite": "CMovLessOrEqual32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"old-X86LegacyOpcode": "0x0F, 0x4F",
-			"old-X86LegacyOpcodeOperandOrder": "r1",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0x0F|0x4F|0b11|reg3:r|reg3:o1"
 		}
