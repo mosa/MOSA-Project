@@ -247,28 +247,6 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.Emit(opcode);
 		}
 
-		internal static void EmitMovd(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Result.IsCPURegister);
-			Debug.Assert(node.Operand1.IsCPURegister);
-
-			// reg from mmxreg
-			// 0000 1111:0111 1110: 11 mmxreg reg
-			var opcode = new OpcodeEncoder()
-				.AppendNibble(Bits.b0110)                                       // 4:opcode
-				.AppendNibble(Bits.b0110)                                       // 4:opcode
-				.AppendNibble(Bits.b0000)                                       // 4:opcode
-				.AppendNibble(Bits.b1111)                                       // 4:opcode
-				.Append3Bits(Bits.b011)                                         // 3:opcode
-				.AppendBit(true)                                               // 1:direction
-				.AppendNibble(Bits.b1110)                                       // 4:opcode
-				.Append2Bits(Bits.b11)                                          // 2:opcode
-				.AppendRM(node.Operand1)                                        // 3:r/m (source)
-				.AppendRegister(node.Result.Register);                          // 3:register (destination)
-
-			emitter.Emit(opcode);
-		}
-
 		internal static void EmitMovsdLoad(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result.IsCPURegister);
@@ -371,36 +349,6 @@ namespace Mosa.Platform.x86.Instructions
 			{
 				emitter.EmitLink(node.Operand1, patchOffset);
 			}
-
-			emitter.Emit(opcode);
-		}
-
-		internal static void EmitPextrd(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Result.IsCPURegister);
-			Debug.Assert(node.Operand1.IsCPURegister);
-			Debug.Assert(node.Operand2.IsConstant);
-
-			// reg from xmmreg, imm8
-			// 0110 0110:0000 1111:0011 1010: 0001 0110:11 xmmreg reg: imm8
-			var opcode = new OpcodeEncoder()
-				.AppendNibble(Bits.b0110)                                       // 4:opcode
-				.AppendNibble(Bits.b0110)                                       // 4:opcode
-
-				.AppendNibble(Bits.b0000)                                       // 4:opcode
-				.AppendNibble(Bits.b1111)                                       // 4:opcode
-
-				.AppendNibble(Bits.b0011)                                       // 4:opcode
-				.AppendNibble(Bits.b1010)                                       // 4:opcode
-
-				.AppendNibble(Bits.b0001)                                       // 4:opcode
-				.AppendNibble(Bits.b0110)                                       // 4:opcode
-
-				.Append2Bits(Bits.b11)                                          // 2:opcode
-				.AppendRM(node.Operand1)                                        // 3:r/m (source)
-				.AppendRegister(node.Result.Register)                           // 3:register (destination)
-
-				.AppendByteValue((byte)node.Operand2.ConstantUnsignedInteger);  // 8:memory
 
 			emitter.Emit(opcode);
 		}
