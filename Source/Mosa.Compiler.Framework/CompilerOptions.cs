@@ -128,6 +128,11 @@ namespace Mosa.Compiler.Framework
 		public Func<BaseCompilerStage> BootStageFactory { get; set; }
 
 		/// <summary>
+		/// Adds additional sections to the Elf-File.
+		/// </summary>
+		public BaseLinker.CreateExtraSectionsDelegate CreateExtraSections { get; set; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether [emit binary].
 		/// </summary>
 		/// <value>

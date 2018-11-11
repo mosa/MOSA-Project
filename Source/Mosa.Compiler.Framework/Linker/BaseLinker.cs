@@ -15,6 +15,8 @@ namespace Mosa.Compiler.Framework.Linker
 	/// </summary>
 	public class BaseLinker
 	{
+		public delegate List<Section> CreateExtraSectionsDelegate();
+
 		public LinkerSection[] LinkerSections { get; }
 
 		public LinkerSymbol EntryPoint { get; set; }
@@ -56,7 +58,9 @@ namespace Mosa.Compiler.Framework.Linker
 			}
 		}
 
-		public BaseLinker(ulong baseAddress, Endianness endianness, MachineType machineType, bool emitSymbols, LinkerFormatType linkerFormatType)
+		public CreateExtraSectionsDelegate CreateExtraSections { get; set; }
+
+		public BaseLinker(ulong baseAddress, Endianness endianness, MachineType machineType, bool emitSymbols, LinkerFormatType linkerFormatType, CreateExtraSectionsDelegate createExtraSections)
 		{
 			LinkerSections = new LinkerSection[4];
 
@@ -65,6 +69,7 @@ namespace Mosa.Compiler.Framework.Linker
 			MachineType = machineType;
 			EmitSymbols = emitSymbols;
 			LinkerFormatType = linkerFormatType;
+			CreateExtraSections = createExtraSections;
 
 			elfLinker = new ElfLinker(this, LinkerFormatType);
 

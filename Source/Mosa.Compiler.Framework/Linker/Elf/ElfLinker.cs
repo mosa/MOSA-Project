@@ -9,6 +9,7 @@ using System.Text;
 
 namespace Mosa.Compiler.Framework.Linker.Elf
 {
+
 	public class ElfLinker
 	{
 		#region Data Members
@@ -180,7 +181,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			ResolveSectionOffset(section);
 			writer.Position = section.Offset;
 
-			section.EmitMethod?.Invoke(section);
+			section.EmitMethod?.Invoke(section, writer);
 		}
 
 		private void WriteElfHeader()
@@ -289,7 +290,18 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 				CreateRelocationSections();
 			}
 
+			if (linker.CreateExtraSections != null)
+				CreateExtraSections();
+
 			CreateSectionHeaderStringSection();
+		}
+
+		private void CreateExtraSections()
+		{
+			foreach (var section in linker.CreateExtraSections())
+			{
+				AddSection(section);
+			}
 		}
 
 		private void WriteSectionHeaders()
@@ -304,7 +316,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			}
 		}
 
-		private void WriteLinkerSection(Section section)
+		private void WriteLinkerSection(Section section, EndianAwareBinaryWriter writer)
 		{
 			writer.Position = (long)section.Offset;
 
@@ -333,7 +345,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			AddSection(sectionHeaderStringSection);
 		}
 
-		protected void WriteSectionHeaderStringSection(Section section)
+		protected void WriteSectionHeaderStringSection(Section section, EndianAwareBinaryWriter writer)
 		{
 			Debug.Assert(section == sectionHeaderStringSection);
 
@@ -370,7 +382,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			sectionHeaderStringSection.AddDependency(stringSection);
 		}
 
-		protected void WriteStringSection(Section section)
+		protected void WriteStringSection(Section section,EndianAwareBinaryWriter writer)
 		{
 			Debug.Assert(section == stringSection);
 
@@ -413,7 +425,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			sectionHeaderStringSection.AddDependency(symbolSection);
 		}
 
-		protected void WriteSymbolSection(Section section)
+		protected void WriteSymbolSection(Section section, EndianAwareBinaryWriter writer)
 		{
 			Debug.Assert(section == symbolSection);
 
@@ -498,7 +510,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			relocationSection.AddDependency(GetSection(kind));
 		}
 
-		protected void WriteRelocationSection(Section section)
+		protected void WriteRelocationSection(Section section, EndianAwareBinaryWriter writer)
 		{
 			var linkerSection = linker.LinkerSections[(int)section.Info.SectionKind];
 
@@ -507,15 +519,15 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 			if (section.Type == SectionType.Relocation)
 			{
-				EmitRelocation(linkerSection, section);
+				EmitRelocation(linkerSection, section, writer);
 			}
 			else if (section.Type == SectionType.RelocationA)
 			{
-				EmitRelocationAddend(linkerSection, section);
+				EmitRelocationAddend(linkerSection, section, writer);
 			}
 		}
 
-		protected void EmitRelocation(LinkerSection linkerSection, Section section)
+		protected void EmitRelocation(LinkerSection linkerSection, Section section, EndianAwareBinaryWriter writer)
 		{
 			int count = 0;
 			foreach (var symbol in linkerSection.Symbols)
@@ -543,7 +555,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			}
 		}
 
-		protected void EmitRelocationAddend(LinkerSection linkerSection, Section section)
+		protected void EmitRelocationAddend(LinkerSection linkerSection, Section section, EndianAwareBinaryWriter writer)
 		{
 			int count = 0;
 
