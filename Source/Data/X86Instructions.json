@@ -1161,8 +1161,9 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"OpcodeEncoding": "0x0F|0b1011|0b1110|0b11|reg3:r|reg3:o1"
+			"X86ThreeTwoAdressConversion": "false",
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"xOpcodeEncoding": "0x0F|0b1011|0b1110|0b11|reg3:r|reg3:o1"
 		},
 		{
 			"Name": "Movsx16To32",
@@ -1176,7 +1177,8 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"X86ThreeTwoAddressConversion": "false",
-			"OpcodeEncoding": "0x0F|0b1011|0b1111|0b11|reg3:r|reg3:o1"
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"xOpcodeEncoding": "0x0F|0b1011|0b1111|0b11|reg3:r|reg3:o1"
 		},
 		{
 			"Name": "MovsxLoad8",
@@ -1261,7 +1263,8 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"X86ThreeTwoAddressConversion": "false",
-			"OpcodeEncoding": "0x0F|0x10|0xb1011|0b0110|0b11|reg3:r|reg3:o1"
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"xOpcodeEncoding": "0x0F|0b1011|0b0110|0b11|reg3:r|reg3:o1"
 		},
 		{
 			"Name": "Movzx16To32",
@@ -1275,7 +1278,8 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"X86ThreeTwoAddressConversion": "false",
-			"OpcodeEncoding": "0x0F|0x10|0xb1011|0b0111|0b11|reg3:r|reg3:o1"
+			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"xOpcodeEncoding": "0x0F|0b1011|0b0111|0b11|reg3:r|reg3:o1"
 		},
 		{
 			"Name": "MovzxLoad8",
