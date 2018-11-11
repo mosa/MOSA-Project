@@ -697,11 +697,24 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 0,
-			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"UnspecifiedSideEffect": "true",
 			"X86ThreeTwoAddressConversion": "false",
-			"OpcodeEncoding-Static": "0x0F|0x01|0b00|0b010|0b101|imm32:o1",
-			"OpcodeEncoding-Register": "0x0F|0x01|0b00|0b010|reg3:o1"
+			"OpcodeEncoding": "0x0F|0x01|0b00|0b010|reg3:o1"
+		},
+		{
+			"Name": "InvlpgConst",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 0,
+			"UnspecifiedSideEffect": "true",
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x01|0b00|0b010|0b101|imm32:o1"
 		},
 		{
 			"Name": "IRetd",
@@ -731,8 +744,6 @@
 			"FlowControl": "UnconditionalBranch",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"old-X86EmitBytes": "0xE9",
-			"old-X86EmitRelativeBranchTarget": "true",
 			"X86ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": "0xE9|rel32:label"
 		},
@@ -806,11 +817,24 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 0,
-			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"UnspecifiedSideEffect": "true",
 			"X86ThreeTwoAddressConversion": "false",
-			"OpcodeEncoding-Static": "0x0F|0x01|0b00|0b010|0b101|imm32:o1",
-			"OpcodeEncoding-Register": "0x0F|0x01|0b00|0b010|reg3:o1"
+			"OpcodeEncoding": "0x0F|0x01|0b00|0b010|reg3:o1"
+		},
+		{
+			"Name": "LgdtConst",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 0,
+			"UnspecifiedSideEffect": "true",
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x01|0b00|0b010|0b101|imm32:o1"
 		},
 		{
 			"Name": "Lidt",
@@ -823,11 +847,24 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 0,
-			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"UnspecifiedSideEffect": "true",
 			"X86ThreeTwoAddressConversion": "false",
-			"OpcodeEncoding-Static": "0x0F|0x01|0b00|0b011|0b101|imm32:o1",
-			"OpcodeEncoding-Register": "0x0F|0x01|0b00|0b011|reg3:o1"
+			"OpcodeEncoding": "0x0F|0x01|0b00|0b011|reg3:o1"
+		},
+		{
+			"Name": "LidtConst",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 0,
+			"UnspecifiedSideEffect": "true",
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x01|0b00|0b011|0b101|imm32:o1"
 		},
 		{
 			"Name": "Lock",

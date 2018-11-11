@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Leave : X64Instruction
 	{
-		public override int ID { get { return 473; } }
+		public override int ID { get { return 476; } }
 
 		internal Leave()
 			: base(0, 0)

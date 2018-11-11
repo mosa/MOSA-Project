@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class CmpConst32 : X64Instruction
 	{
-		public override int ID { get { return 431; } }
+		public override int ID { get { return 434; } }
 
 		internal CmpConst32()
 			: base(0, 2)

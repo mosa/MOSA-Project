@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Wfe32 : ARMv6Instruction
 	{
-		public override int ID { get { return 753; } }
+		public override int ID { get { return 756; } }
 
 		internal Wfe32()
 			: base(1, 3)

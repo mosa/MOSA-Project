@@ -19,9 +19,12 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.Btr32, Btr32);
 			AddVisitation(X86.Bts32, Bts32);
 			AddVisitation(X86.Cmp32, Cmp32);
+			AddVisitation(X86.Invlpg, Invlpg);
 			AddVisitation(X86.In16, In16);
 			AddVisitation(X86.In32, In32);
 			AddVisitation(X86.In8, In8);
+			AddVisitation(X86.Lgdt, Lgdt);
+			AddVisitation(X86.Lidt, Lidt);
 			AddVisitation(X86.Mov32, Mov32);
 			AddVisitation(X86.Or32, Or32);
 			AddVisitation(X86.Out16, Out16);
@@ -97,6 +100,14 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
+		public void Invlpg(Context context)
+		{
+			if (context.Operand1.IsConstant)
+			{
+				context.SetInstruction(X86.InvlpgConst, null, context.Operand1);
+			}
+		}
+
 		public void In16(Context context)
 		{
 			if (context.Operand1.IsConstant)
@@ -118,6 +129,22 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand1.IsConstant)
 			{
 				context.SetInstruction(X86.InConst8, context.Result, context.Operand1);
+			}
+		}
+
+		public void Lgdt(Context context)
+		{
+			if (context.Operand1.IsConstant)
+			{
+				context.SetInstruction(X86.LgdtConst, null, context.Operand1);
+			}
+		}
+
+		public void Lidt(Context context)
+		{
+			if (context.Operand1.IsConstant)
+			{
+				context.SetInstruction(X86.LidtConst, null, context.Operand1);
 			}
 		}
 

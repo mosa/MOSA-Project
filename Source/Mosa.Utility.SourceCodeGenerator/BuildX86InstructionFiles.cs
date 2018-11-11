@@ -344,35 +344,6 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Lines.AppendLine("\t\t}");
 			}
 
-			if (node.X86EmitBytes != null)
-			{
-				Lines.AppendLine();
-				Lines.AppendLine("\t\tpublic override void Emit(InstructionNode node, BaseCodeEmitter emitter)");
-				Lines.AppendLine("\t\t{");
-
-				if (node.VariableOperands == null || node.VariableOperands == "false")
-				{
-					Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.ResultCount == " + node.ResultCount + ");");
-					Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.OperandCount == " + node.OperandCount + ");");
-
-					if (node.X86EmitRelativeBranchTarget != null || node.X86EmitRelativeBranchTarget == "true")
-					{
-						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.BranchTargets.Count >= 1);");
-						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.BranchTargets[0] != null);");
-					}
-					Lines.AppendLine();
-				}
-
-				Lines.AppendLine("\t\t\temitter.Write(opcode);");
-
-				if (node.X86EmitRelativeBranchTarget != null || node.X86EmitRelativeBranchTarget == "true")
-				{
-					Lines.AppendLine("\t\t\t(emitter as X86CodeEmitter).EmitRelativeBranchTarget(node.BranchTargets[0].Label);");
-				}
-
-				Lines.AppendLine("\t\t}");
-			}
-
 			if (node.StaticEmitMethod != null)
 			{
 				Lines.AppendLine();
@@ -388,38 +359,6 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 				Lines.AppendLine("\t\t\t" + node.StaticEmitMethod.Replace("%", node.Name) + "(node, emitter);");
 				Lines.AppendLine("\t\t}");
-			}
-
-			if (node.X86LegacyOpcodeOperandOrder != null && node.X86LegacyOpcode != null && node.StaticEmitMethod == null && node.OpcodeEncoding == null)
-			{
-				Lines.AppendLine();
-				Lines.AppendLine("\t\tinternal override void EmitLegacy(InstructionNode node, X86CodeEmitter emitter)");
-				Lines.AppendLine("\t\t{");
-				if (node.VariableOperands == null || node.VariableOperands == "false")
-				{
-					Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.ResultCount == " + node.ResultCount + ");");
-					Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.OperandCount == " + node.OperandCount + ");");
-
-					if (node.X86ThreeTwoAddressConversion == null || node.X86ThreeTwoAddressConversion == "true")
-					{
-						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Result.IsCPURegister);");
-						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);");
-						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);");
-					}
-					Lines.AppendLine();
-				}
-
-				if (operands == null)
-				{
-					Lines.AppendLine("\t\t\temitter.Emit(LegacyOpcode);");
-				}
-				else
-				{
-					Lines.AppendLine("\t\t\temitter.Emit(LegacyOpcode, " + operands + ");");
-				}
-				Lines.AppendLine("\t\t}");
-
-				Helper(node);
 			}
 
 			if (node.OpcodeEncoding != null)
@@ -685,48 +624,41 @@ namespace Mosa.Utility.SourceCodeGenerator
 			}
 		}
 
-		private static void Helper(dynamic node)
-		{
-			// node.X86LegacyOpcodeOperandOrder != null
-			// node.X86LegacyOpcode != null
-			// node.StaticEmitMethod == null
-			// node.OpcodeEncoding == null
-			// "X86LegacyOpcodeOperandOrder": "r",
-			// "X86LegacyOpcodeRegField": "01",
+		//private static void Helper(dynamic node)
+		//{
+		//	string op = EncodeLegacyOpcode(node);
+		//	op = op.Replace(", ", "|");
+		//	op = op + "|0b11";
 
-			string op = EncodeLegacyOpcode(node);
-			op = op.Replace(", ", "|");
-			op = op + "|0b11";
+		//	if (node.X86LegacyOpcodeRegField != null)
+		//	{
+		//		var t = node.X86LegacyOpcodeRegField.Replace("0x", string.Empty);
+		//		var i = int.Parse(t, System.Globalization.NumberStyles.HexNumber);
+		//		var b = Convert.ToString(i, 2);
+		//		var bb = "000".Substring(4 - b.Length) + b;
+		//		op = op + "|0b" + bb;
+		//	}
 
-			if (node.X86LegacyOpcodeRegField != null)
-			{
-				var t = node.X86LegacyOpcodeRegField.Replace("0x", string.Empty);
-				var i = int.Parse(t, System.Globalization.NumberStyles.HexNumber);
-				var b = Convert.ToString(i, 2);
-				var bb = "000".Substring(4 - b.Length) + b;
-				op = op + "|0b" + bb;
-			}
+		//	if (node.X86LegacyOpcodeOperandOrder != null)
+		//	{
+		//		foreach (var c in node.X86LegacyOpcodeOperandOrder)
+		//		{
+		//			if (c == 'r')
+		//				op = op + "|reg3:r";
+		//			else if (c == '1')
+		//				op = op + "|reg3:o1";
+		//			else if (c == '2')
+		//				op = op + "|reg3:o2";
+		//			else if (c == '3')
+		//				op = op + "|reg3:o3";
+		//			else if (c == '4')
+		//				op = op + "|reg3:o4";
+		//		}
+		//	}
 
-			if (node.X86LegacyOpcodeOperandOrder != null)
-			{
-				foreach (var c in node.X86LegacyOpcodeOperandOrder)
-				{
-					if (c == 'r')
-						op = op + "|reg3:r";
-					else if (c == '1')
-						op = op + "|reg3:o1";
-					else if (c == '2')
-						op = op + "|reg3:o2";
-					else if (c == '3')
-						op = op + "|reg3:o3";
-					else if (c == '4')
-						op = op + "|reg3:o4";
-				}
-			}
-
-			Debug.Write((string)node.Name);
-			Debug.WriteLine(":");
-			Debug.WriteLine("\"OpcodeEncoding\": \"" + op + "\"");
-		}
+		//	Debug.Write((string)node.Name);
+		//	Debug.WriteLine(":");
+		//	Debug.WriteLine("\"OpcodeEncoding\": \"" + op + "\"");
+		//}
 	}
 }

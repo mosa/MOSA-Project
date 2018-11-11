@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class SubConst32 : X64Instruction
 	{
-		public override int ID { get { return 593; } }
+		public override int ID { get { return 596; } }
 
 		internal SubConst32()
 			: base(1, 2)
