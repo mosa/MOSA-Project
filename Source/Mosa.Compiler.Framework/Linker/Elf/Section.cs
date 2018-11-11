@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using System.IO;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework.Linker.Elf
 {
@@ -10,7 +11,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 	/// </summary>
 	public class Section
 	{
-		public delegate void EmitSectionMethod(Section section);
+		public delegate void EmitSectionMethod(Section section, EndianAwareBinaryWriter writer);
 
 		public int Index { get; set; }
 
