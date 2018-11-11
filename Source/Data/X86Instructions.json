@@ -1260,8 +1260,8 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x10|0xb1011|0b0110|0b11|reg3:r|reg3:o1"
 		},
 		{
 			"Name": "Movzx16To32",
@@ -1274,8 +1274,8 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false"
+			"X86ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": "0x0F|0x10|0xb1011|0b0111|0b11|reg3:r|reg3:o1"
 		},
 		{
 			"Name": "MovzxLoad8",
