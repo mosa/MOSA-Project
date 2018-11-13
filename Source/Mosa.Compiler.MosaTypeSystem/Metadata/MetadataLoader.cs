@@ -94,10 +94,12 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				type.IsModule = typeDef.IsGlobalModuleType;
 
 				type.IsExplicitLayout = typeDef.IsExplicitLayout;
-				if (typeDef.IsExplicitLayout)
+				if (typeDef.IsValueType)
 				{
-					type.ClassSize = (int)typeDef.ClassSize;
-					type.PackingSize = typeDef.PackingSize;
+					if (typeDef.PackingSize > 0 && typeDef.PackingSize != ushort.MaxValue)
+						type.PackingSize = typeDef.PackingSize;
+					if (typeDef.ClassSize > 0 && typeDef.ClassSize != uint.MaxValue)
+						type.ClassSize = (int)typeDef.ClassSize;
 				}
 				type.TypeAttributes = (MosaTypeAttributes)typeDef.Attributes;
 				type.TypeCode = (MosaTypeCode)typeSig.ElementType;
