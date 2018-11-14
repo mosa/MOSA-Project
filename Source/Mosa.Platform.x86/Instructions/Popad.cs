@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Popad : X86Instruction
 	{
-		public override int ID { get { return 296; } }
+		public override int ID { get { return 299; } }
 
 		internal Popad()
 			: base(0, 0)

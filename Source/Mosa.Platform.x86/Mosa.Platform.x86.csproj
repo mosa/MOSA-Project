@@ -178,6 +178,7 @@
     <Compile Include="Instructions\InConst8.cs" />
     <Compile Include="Instructions\Int.cs" />
     <Compile Include="Instructions\Invlpg.cs" />
+    <Compile Include="Instructions\InvlpgConst.cs" />
     <Compile Include="Instructions\IRetd.cs" />
     <Compile Include="Instructions\Jmp.cs" />
     <Compile Include="Instructions\JmpFar.cs" />
@@ -186,7 +187,9 @@
     <Compile Include="Instructions\Lea32.cs" />
     <Compile Include="Instructions\Leave.cs" />
     <Compile Include="Instructions\Lgdt.cs" />
+    <Compile Include="Instructions\LgdtConst.cs" />
     <Compile Include="Instructions\Lidt.cs" />
+    <Compile Include="Instructions\LidtConst.cs" />
     <Compile Include="Instructions\Lock.cs" />
     <Compile Include="Instructions\Mov32.cs" />
     <Compile Include="Instructions\MovAPS.cs" />
@@ -389,6 +392,7 @@
     </Compile>
     <Compile Include="X86Instructions.cs" />
     <Compile Include="Intrinsic\Jmp.cs" />
+    <Compile Include="Intrinsic\Call.cs" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

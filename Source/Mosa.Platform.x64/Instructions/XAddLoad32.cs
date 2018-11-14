@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class XAddLoad32 : X64Instruction
 	{
-		public override int ID { get { return 604; } }
+		public override int ID { get { return 607; } }
 
 		internal XAddLoad32()
 			: base(1, 3)

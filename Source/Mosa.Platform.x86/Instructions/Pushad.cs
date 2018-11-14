@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Pushad : X86Instruction
 	{
-		public override int ID { get { return 299; } }
+		public override int ID { get { return 302; } }
 
 		internal Pushad()
 			: base(0, 0)

@@ -59,6 +59,7 @@ namespace Mosa.Platform.x86
 		public static readonly Inc32 Inc32 = new Inc32();
 		public static readonly Int Int = new Int();
 		public static readonly Invlpg Invlpg = new Invlpg();
+		public static readonly InvlpgConst InvlpgConst = new InvlpgConst();
 		public static readonly IRetd IRetd = new IRetd();
 		public static readonly Jmp Jmp = new Jmp();
 		public static readonly JmpStatic JmpStatic = new JmpStatic();
@@ -66,7 +67,9 @@ namespace Mosa.Platform.x86
 		public static readonly Lea32 Lea32 = new Lea32();
 		public static readonly Leave Leave = new Leave();
 		public static readonly Lgdt Lgdt = new Lgdt();
+		public static readonly LgdtConst LgdtConst = new LgdtConst();
 		public static readonly Lidt Lidt = new Lidt();
+		public static readonly LidtConst LidtConst = new LidtConst();
 		public static readonly Lock Lock = new Lock();
 		public static readonly MovLoadSeg32 MovLoadSeg32 = new MovLoadSeg32();
 		public static readonly MovStoreSeg32 MovStoreSeg32 = new MovStoreSeg32();

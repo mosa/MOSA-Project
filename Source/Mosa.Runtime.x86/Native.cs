@@ -24,6 +24,9 @@ namespace Mosa.Runtime.x86
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Jmp, Mosa.Platform.x86")]
 		public extern static void Jmp(uint address);
 
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Call, Mosa.Platform.x86")]
+		public extern static void Call(uint address);
+
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Sti, Mosa.Platform.x86")]
 		public extern static void Sti();
 

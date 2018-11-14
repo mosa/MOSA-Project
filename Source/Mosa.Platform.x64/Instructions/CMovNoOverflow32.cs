@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class CMovNoOverflow32 : X64Instruction
 	{
-		public override int ID { get { return 655; } }
+		public override int ID { get { return 658; } }
 
 		internal CMovNoOverflow32()
 			: base(1, 1)

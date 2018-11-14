@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class SbbConst32 : X64Instruction
 	{
-		public override int ID { get { return 567; } }
+		public override int ID { get { return 570; } }
 
 		internal SbbConst32()
 			: base(1, 2)

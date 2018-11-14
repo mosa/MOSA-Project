@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class CallStatic : X64Instruction
 	{
-		public override int ID { get { return 426; } }
+		public override int ID { get { return 429; } }
 
 		internal CallStatic()
 			: base(0, 1)
