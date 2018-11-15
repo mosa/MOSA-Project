@@ -11,7 +11,7 @@ namespace System
 	[Serializable]
 	public struct UIntPtr
 	{
-		private unsafe void* _value; // Do not rename (binary serialization)
+		private readonly unsafe void* _value; // Do not rename (binary serialization)
 
 		public static readonly UIntPtr Zero;
 

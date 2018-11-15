@@ -222,5 +222,6 @@ namespace Mosa.Platform.x86
 		public static readonly CMovGreaterOrEqual32 CMovGreaterOrEqual32 = new CMovGreaterOrEqual32();
 		public static readonly CMovLessOrEqual32 CMovLessOrEqual32 = new CMovLessOrEqual32();
 		public static readonly CMovGreaterThan32 CMovGreaterThan32 = new CMovGreaterThan32();
+		public static readonly BochsDebug BochsDebug = new BochsDebug();
 	}
 }

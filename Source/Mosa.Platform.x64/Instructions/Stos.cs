@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Stos : X64Instruction
 	{
-		public override int ID { get { return 594; } }
+		public override int ID { get { return 595; } }
 
 		internal Stos()
 			: base(0, 1)

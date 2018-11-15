@@ -12,7 +12,7 @@ namespace System
 	[Serializable]
 	public struct IntPtr
 	{
-		private unsafe void* _value; // Do not rename (binary serialization)
+		private readonly unsafe void* _value; // Do not rename (binary serialization)
 
 		[Intrinsic]
 		public static readonly IntPtr Zero;

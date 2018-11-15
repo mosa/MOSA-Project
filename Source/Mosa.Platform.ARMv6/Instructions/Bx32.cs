@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Bx32 : ARMv6Instruction
 	{
-		public override int ID { get { return 707; } }
+		public override int ID { get { return 708; } }
 
 		internal Bx32()
 			: base(1, 3)

@@ -30,7 +30,8 @@
 			"ResultCount": 1,
 			"ARMv6Emitter": "EmitDataProcessingInstruction",
 			"ARMv6Opcode": "b0100",
-			"Description": "Add"
+			"Description": "Add",
+			"Encoding": "b0000|b00|b0|b0|0x0100|b0|reg4:o1|reg4:op2|0b000000000000"
 		},
 		{
 			"Name": "Adr32",

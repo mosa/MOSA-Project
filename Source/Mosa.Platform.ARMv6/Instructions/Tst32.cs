@@ -13,7 +13,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Tst32 : ARMv6Instruction
 	{
-		public override int ID { get { return 753; } }
+		public override int ID { get { return 754; } }
 
 		internal Tst32()
 			: base(1, 3)

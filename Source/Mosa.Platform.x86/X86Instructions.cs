@@ -224,6 +224,7 @@ namespace Mosa.Platform.x86
 			X86.CMovGreaterOrEqual32,
 			X86.CMovLessOrEqual32,
 			X86.CMovGreaterThan32,
+			X86.BochsDebug,
 		};
 	}
 }
