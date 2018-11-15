@@ -455,7 +455,7 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			typeSizes.Add(type, typeSize);
+			typeSizes.Add(type, (type.ClassSize == null || type.ClassSize == -1) ? typeSize : (int)type.ClassSize);
 		}
 
 		/// <summary>
