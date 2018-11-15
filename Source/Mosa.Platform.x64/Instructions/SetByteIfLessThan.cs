@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class SetByteIfLessThan : X64Instruction
 	{
-		public override int ID { get { return 653; } }
+		public override int ID { get { return 654; } }
 
 		internal SetByteIfLessThan()
 			: base(1, 0)

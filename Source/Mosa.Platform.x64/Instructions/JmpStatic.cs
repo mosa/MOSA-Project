@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class JmpStatic : X64Instruction
 	{
-		public override int ID { get { return 472; } }
+		public override int ID { get { return 473; } }
 
 		internal JmpStatic()
 			: base(0, 1)

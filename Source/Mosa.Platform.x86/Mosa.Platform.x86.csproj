@@ -99,6 +99,7 @@
     <Compile Include="Instructions\AddSS.cs" />
     <Compile Include="Instructions\And32.cs" />
     <Compile Include="Instructions\AndConst32.cs" />
+    <Compile Include="Instructions\BochsDebug.cs" />
     <Compile Include="Instructions\BranchCarry.cs" />
     <Compile Include="Instructions\BranchEqual.cs" />
     <Compile Include="Instructions\BranchGreaterOrEqual.cs" />

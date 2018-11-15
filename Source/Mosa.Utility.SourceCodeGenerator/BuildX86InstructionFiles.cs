@@ -361,7 +361,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Lines.AppendLine("\t\t}");
 			}
 
-			if (node.OpcodeEncoding != null)
+			if (node.Encoding != null)
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override void Emit(InstructionNode node, BaseCodeEmitter emitter)");
@@ -380,7 +380,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 					Lines.AppendLine();
 				}
 
-				EmitEncoding((string)node.OpcodeEncoding);
+				EmitEncoding((string)node.Encoding);
 
 				Lines.AppendLine("\t\t}");
 			}
@@ -487,17 +487,25 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		private void EmitEncoding(string encoding)
 		{
-			var steps = encoding.Split('|');
+			EmitBits(encoding);
+		}
+
+		private void EmitCondition(string condition, bool opp = false)
+		{
+		}
+
+		private void EmitBits(string bits, int index = 0)
+		{
+			var steps = bits.Split('|');
 
 			foreach (var s in steps)
 			{
 				if (string.IsNullOrWhiteSpace(s))
 					continue;
-
-				if (s.StartsWith("0x"))
+				else if (s.StartsWith("0x") | s.StartsWith("x"))
 				{
 					// hex
-					string hex = s.Substring(2);
+					string hex = s.StartsWith("x") ? s.Substring(1) : s.Substring(2);
 
 					switch (hex.Length)
 					{
@@ -526,10 +534,16 @@ namespace Mosa.Utility.SourceCodeGenerator
 						default: throw new Exception("ERROR!");
 					}
 				}
-				else if (s.StartsWith("0b"))
+				else if (s.StartsWith("0b") | s.StartsWith("b") | s.StartsWith("0") | s.StartsWith("1"))
 				{
 					// binary
-					string binary = s.Substring(2);
+					string binary = s;
+
+					if (binary.StartsWith("0b"))
+						binary = s.Substring(2);
+
+					if (binary.StartsWith("b"))
+						binary = s.Substring(1);
 
 					switch (binary.Length)
 					{
@@ -580,7 +594,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 					var postcode = string.Empty;
 
 					GetCodes(parts[0], ref code, ref postcode);
-					var operand = GetOperand(parts[1]);
+
+					var operand = (parts.Length >= 1) ? GetOperand(parts[1]) : string.Empty;
 
 					Lines.AppendLine("\t\t\temitter.OpcodeEncoder." + code + "(node." + operand + postcode + ");");
 				}
@@ -599,6 +614,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "r1": return "Result";
 				case "r2": return "Result2";
 				case "label": return "BranchTargets[0].Label";
+				case "cond": return string.Empty; // TODO
+				case "shifter": return string.Empty; // TODO
 				case "": return string.Empty;
 
 				default: throw new Exception("ERROR!");
@@ -623,42 +640,5 @@ namespace Mosa.Utility.SourceCodeGenerator
 				default: throw new Exception("ERROR!");
 			}
 		}
-
-		//private static void Helper(dynamic node)
-		//{
-		//	string op = EncodeLegacyOpcode(node);
-		//	op = op.Replace(", ", "|");
-		//	op = op + "|0b11";
-
-		//	if (node.X86LegacyOpcodeRegField != null)
-		//	{
-		//		var t = node.X86LegacyOpcodeRegField.Replace("0x", string.Empty);
-		//		var i = int.Parse(t, System.Globalization.NumberStyles.HexNumber);
-		//		var b = Convert.ToString(i, 2);
-		//		var bb = "000".Substring(4 - b.Length) + b;
-		//		op = op + "|0b" + bb;
-		//	}
-
-		//	if (node.X86LegacyOpcodeOperandOrder != null)
-		//	{
-		//		foreach (var c in node.X86LegacyOpcodeOperandOrder)
-		//		{
-		//			if (c == 'r')
-		//				op = op + "|reg3:r";
-		//			else if (c == '1')
-		//				op = op + "|reg3:o1";
-		//			else if (c == '2')
-		//				op = op + "|reg3:o2";
-		//			else if (c == '3')
-		//				op = op + "|reg3:o3";
-		//			else if (c == '4')
-		//				op = op + "|reg3:o4";
-		//		}
-		//	}
-
-		//	Debug.Write((string)node.Name);
-		//	Debug.WriteLine(":");
-		//	Debug.WriteLine("\"OpcodeEncoding\": \"" + op + "\"");
-		//}
 	}
 }
