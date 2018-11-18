@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Adr32 : ARMv6Instruction
 	{
-		public override int ID { get { return 611; } }
+		public override int ID { get { return 609; } }
 
 		internal Adr32()
 			: base(1, 3)

@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Lgdt : X86Instruction
 	{
-		public override int ID { get { return 233; } }
+		public override int ID { get { return 232; } }
 
 		internal Lgdt()
 			: base(0, 1)
@@ -33,7 +33,6 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.OpcodeEncoder.Append2Bits(0b00);
 				emitter.OpcodeEncoder.Append3Bits(0b010);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
-				return;
 			}
 
 			if (node.Operand1.IsConstant)
@@ -44,7 +43,6 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.OpcodeEncoder.Append3Bits(0b010);
 				emitter.OpcodeEncoder.Append3Bits(0b101);
 				emitter.OpcodeEncoder.Append32BitImmediate(node.Operand1);
-				return;
 			}
 		}
 	}

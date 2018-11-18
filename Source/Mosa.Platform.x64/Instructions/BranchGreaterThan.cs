@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class BranchGreaterThan : X64Instruction
 	{
-		public override int ID { get { return 548; } }
+		public override int ID { get { return 546; } }
 
 		internal BranchGreaterThan()
 			: base(0, 0)

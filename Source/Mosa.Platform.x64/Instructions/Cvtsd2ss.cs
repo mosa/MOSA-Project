@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Cvtsd2ss : X64Instruction
 	{
-		public override int ID { get { return 393; } }
+		public override int ID { get { return 392; } }
 
 		internal Cvtsd2ss()
 			: base(1, 1)

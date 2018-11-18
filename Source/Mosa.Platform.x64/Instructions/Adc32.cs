@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Adc32 : X64Instruction
 	{
-		public override int ID { get { return 368; } }
+		public override int ID { get { return 367; } }
 
 		internal Adc32()
 			: base(1, 2)

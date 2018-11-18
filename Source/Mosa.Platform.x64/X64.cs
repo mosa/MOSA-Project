@@ -63,8 +63,7 @@ namespace Mosa.Platform.x64
 		public static readonly Invlpg Invlpg = new Invlpg();
 		public static readonly IRetd IRetd = new IRetd();
 		public static readonly Jmp Jmp = new Jmp();
-		public static readonly JmpStatic JmpStatic = new JmpStatic();
-		public static readonly JmpReg JmpReg = new JmpReg();
+		public static readonly JmpExternal JmpExternal = new JmpExternal();
 		public static readonly Lea32 Lea32 = new Lea32();
 		public static readonly Lea64 Lea64 = new Lea64();
 		public static readonly Leave Leave = new Leave();

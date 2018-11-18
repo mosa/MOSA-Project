@@ -483,7 +483,7 @@ namespace Mosa.Platform.x64.Stages
 			if (node.Operand1 == null)
 				node.ReplaceInstruction(X64.Jmp);
 			else
-				node.ReplaceInstruction(X64.JmpStatic); // FUTURE: Add IR.JumpStatic
+				node.ReplaceInstruction(X64.JmpExternal);
 		}
 
 		private void LoadCompound(Context context)

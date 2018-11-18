@@ -148,7 +148,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Lines.AppendLine("\t\tpublic override bool HasUnspecifiedSideEffect { get { return true; } }");
 			}
 
-			if (node.X86ThreeTwoAddressConversion != null && node.X86ThreeTwoAddressConversion == "true")
+			if (node.ThreeTwoAddressConversion != null && node.ThreeTwoAddressConversion == "true")
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool ThreeTwoAddressConversion { get { return true; } }");
@@ -370,7 +370,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 					Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.ResultCount == " + node.ResultCount + ");");
 					Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.OperandCount == " + node.OperandCount + ");");
 
-					if (node.X86ThreeTwoAddressConversion == null || node.X86ThreeTwoAddressConversion == "true")
+					if (node.ThreeTwoAddressConversion == null || node.ThreeTwoAddressConversion == "true")
 					{
 						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Result.IsCPURegister);");
 						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);");
@@ -394,7 +394,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 					Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.ResultCount == " + node.ResultCount + ");");
 					Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.OperandCount == " + node.OperandCount + ");");
 
-					if (node.X86ThreeTwoAddressConversion == null || node.X86ThreeTwoAddressConversion == "true")
+					if (node.ThreeTwoAddressConversion == null || node.ThreeTwoAddressConversion == "true")
 					{
 						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Result.IsCPURegister);");
 						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);");
@@ -526,9 +526,11 @@ namespace Mosa.Utility.SourceCodeGenerator
 					Lines.AppendLine();
 				}
 
+				bool end = entry.End != null && entry.End == "true";
+
 				if (!String.IsNullOrEmpty(condition))
 				{
-					EmitCondition(condition, encoding, 0, false);
+					EmitCondition(condition, encoding, end, 0, false);
 				}
 				else
 				{
@@ -537,7 +539,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			}
 		}
 
-		private void EmitCondition(string condition, string encoding, int index = 0, bool opp = false)
+		private void EmitCondition(string condition, string encoding, bool end, int index = 0, bool opp = false)
 		{
 			var tabs = "\t\t\t\t\t\t\t\t\t\t".Substring(0, index + 3);
 			Lines.Append(tabs);
@@ -551,6 +553,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				.Replace("o4.", "node.Operand4.")
 				.Replace("r.", "node.Result.")
 				.Replace("r2.", "node.Result2.")
+				.Replace("HasBranchTarget", "node.BranchTargetsCount != 0")
 				.Replace(".IsRegister", ".IsCPURegister");
 
 			if (opp)
@@ -566,8 +569,11 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 			EmitBits(encoding, index + 1);
 
-			Lines.Append(tabs);
-			Lines.AppendLine("\treturn;");
+			if (end)
+			{
+				Lines.Append(tabs);
+				Lines.AppendLine("\treturn;");
+			}
 
 			Lines.Append(tabs);
 			Lines.AppendLine("}");

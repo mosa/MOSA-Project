@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	{
 		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
-			context.SetInstruction(X86.JmpReg, null, context.Operand1);
+			context.SetInstruction(X86.JmpExternal, null, context.Operand1);
 		}
 	}
 }

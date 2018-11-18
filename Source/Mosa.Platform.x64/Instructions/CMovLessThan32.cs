@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class CMovLessThan32 : X64Instruction
 	{
-		public override int ID { get { return 585; } }
+		public override int ID { get { return 583; } }
 
 		internal CMovLessThan32()
 			: base(1, 1)

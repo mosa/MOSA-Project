@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class MovCRStore32 : X64Instruction
 	{
-		public override int ID { get { return 438; } }
+		public override int ID { get { return 436; } }
 
 		internal MovCRStore32()
 			: base(0, 2)

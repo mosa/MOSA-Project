@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Rcr32 : X86Instruction
 	{
-		public override int ID { get { return 284; } }
+		public override int ID { get { return 283; } }
 
 		internal Rcr32()
 			: base(1, 2)
@@ -41,7 +41,6 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.OpcodeEncoder.Append2Bits(0b11);
 				emitter.OpcodeEncoder.Append3Bits(0b011);
 				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-				return;
 			}
 
 			if (node.Operand2.IsConstant && node.Operand2.IsConstantOne)
@@ -60,7 +59,6 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.OpcodeEncoder.Append3Bits(0b011);
 				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append8BitImmediate(node.Operand2);
-				return;
 			}
 		}
 	}

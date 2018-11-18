@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Shrd32 : X86Instruction
 	{
-		public override int ID { get { return 294; } }
+		public override int ID { get { return 293; } }
 
 		internal Shrd32()
 			: base(1, 3)
@@ -46,7 +46,6 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.OpcodeEncoder.Append2Bits(0b11);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-				return;
 			}
 
 			if (node.Operand2.IsConstant)
@@ -58,7 +57,6 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append8BitImmediate(node.Operand3);
-				return;
 			}
 		}
 	}

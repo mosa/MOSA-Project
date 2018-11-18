@@ -4,17 +4,17 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Instructions
+namespace Mosa.Platform.x64.Instructions
 {
 	/// <summary>
-	/// JmpStatic
+	/// JmpExternal
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class JmpStatic : X86Instruction
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
+	public sealed class JmpExternal : X64Instruction
 	{
-		public override int ID { get { return 229; } }
+		public override int ID { get { return 419; } }
 
-		internal JmpStatic()
+		internal JmpExternal()
 			: base(0, 1)
 		{
 		}
@@ -40,14 +40,5 @@ namespace Mosa.Platform.x86.Instructions
 		public override bool IsParityFlagUnchanged { get { return true; } }
 
 		public override bool IsParityFlagUndefined { get { return true; } }
-
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
-
-			emitter.OpcodeEncoder.AppendByte(0xE9);
-			emitter.OpcodeEncoder.EmitRelative32(node.Operand1);
-		}
 	}
 }

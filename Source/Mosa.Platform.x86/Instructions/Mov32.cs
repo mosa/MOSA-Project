@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Mov32 : X86Instruction
 	{
-		public override int ID { get { return 238; } }
+		public override int ID { get { return 237; } }
 
 		internal Mov32()
 			: base(1, 1)
@@ -30,7 +30,6 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.OpcodeEncoder.Append2Bits(0b11);
 				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
-				return;
 			}
 
 			if (node.Operand1.IsConstant)
@@ -40,7 +39,6 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.OpcodeEncoder.Append3Bits(0b000);
 				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append32BitImmediate(node.Operand1);
-				return;
 			}
 		}
 	}

@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Sar32 : X86Instruction
 	{
-		public override int ID { get { return 289; } }
+		public override int ID { get { return 288; } }
 
 		internal Sar32()
 			: base(1, 2)
@@ -45,7 +45,6 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.OpcodeEncoder.Append2Bits(0b11);
 				emitter.OpcodeEncoder.Append3Bits(0b111);
 				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-				return;
 			}
 
 			if (node.Operand2.IsConstant && node.Operand2.IsConstantOne)
@@ -64,7 +63,6 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.OpcodeEncoder.Append3Bits(0b111);
 				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append8BitImmediate(node.Operand2);
-				return;
 			}
 		}
 	}

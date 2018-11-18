@@ -24,7 +24,7 @@
 			"FlagsUsed": "C",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o2.IsRegister",
@@ -50,7 +50,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o2.IsRegister",
@@ -76,7 +76,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -97,7 +97,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -118,7 +118,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o2.IsRegister",
@@ -144,7 +144,7 @@
 			"OperandCount": 0,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -164,16 +164,21 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
+					"Condition": "",
+					"Encoding": "0x0F",
+					"ExperimentalEncoding": ""
+				},
+				{
 					"Condition": "o2.IsRegister",
-					"Encoding": "0x0F|0xBA|11|reg3:r|reg3:o2",
+					"Encoding": "0xBA|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": ""
 				},
 				{
 					"Condition": "o2.IsConstant",
-					"Encoding": "0x0F|0xB3|11|110|reg3:r|imm8:o2",
+					"Encoding": "0xB3|11|110|reg3:r|imm8:o2",
 					"ExperimentalEncoding": ""
 				}
 			]
@@ -189,7 +194,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o2.IsRegister",
@@ -214,7 +219,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o2.IsRegister",
@@ -240,7 +245,7 @@
 			"FlowControl": "Call",
 			"OperandCount": 1,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o1.IsRegister",
@@ -265,7 +270,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 2,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -286,7 +291,7 @@
 			"OperandCount": 0,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -306,7 +311,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o2.IsRegister",
@@ -333,7 +338,7 @@
 			"OperandCount": 4,
 			"ResultCount": 1,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"xOpcodeEncoding": [
 				{
 					"Condition": "",
@@ -353,7 +358,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -373,7 +378,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -393,7 +398,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -413,7 +418,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -433,7 +438,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -453,7 +458,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -473,7 +478,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -493,7 +498,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -513,7 +518,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -533,7 +538,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -553,7 +558,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 2,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -573,7 +578,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -593,7 +598,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -615,7 +620,7 @@
 			"ResultCount": 0,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Hlt",
@@ -629,7 +634,7 @@
 			"OperandCount": 0,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -649,7 +654,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 2,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -669,7 +674,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -691,7 +696,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o1.IsRegister",
@@ -718,7 +723,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o1.IsRegister",
@@ -745,7 +750,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o1.IsRegister",
@@ -770,7 +775,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -791,7 +796,7 @@
 			"OperandCount": 1,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -812,7 +817,7 @@
 			"OperandCount": 1,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o2.IsRegister",
@@ -839,7 +844,7 @@
 			"OperandCount": 0,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -860,17 +865,17 @@
 			"FlowControl": "UnconditionalBranch",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"Condition": "HasBranchTarget",
 					"Encoding": "0xE9|rel32:label",
 					"ExperimentalEncoding": ""
 				}
 			]
 		},
 		{
-			"Name": "JmpStatic",
+			"Name": "JmpExternal",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -881,23 +886,19 @@
 			"FlowControl": "UnconditionalBranch",
 			"OperandCount": 1,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xE9|rel32:o1"
-		},
-		{
-			"Name": "JmpReg",
-			"FamilyName": "X86",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "ZCSOP",
-			"FlagsUsed": "",
-			"FlowControl": "UnconditionalBranch",
-			"OperandCount": 1,
-			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xFF|11|100|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "o1.IsRegister",
+					"Encoding": "0xFF|11|100|reg3:o1",
+					"ExperimentalEncoding": ""
+				},
+				{
+					"Condition": "o1.IsConstant",
+					"Encoding": "0xE9|rel32:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Lea32",
@@ -911,7 +912,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Leave",
@@ -925,7 +926,7 @@
 			"OperandCount": 0,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -946,7 +947,7 @@
 			"OperandCount": 1,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o1.IsRegister",
@@ -972,7 +973,7 @@
 			"OperandCount": 1,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o1.IsRegister",
@@ -998,7 +999,7 @@
 			"OperandCount": 0,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -1018,7 +1019,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -1038,7 +1039,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -1058,7 +1059,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o1.IsRegister",
@@ -1104,7 +1105,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "MovCRLoad32",
@@ -1118,7 +1119,7 @@
 			"MemoryRead": "true",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -1139,7 +1140,7 @@
 			"MemoryWrite": "true",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -1159,7 +1160,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -1181,7 +1182,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovLoad16",
@@ -1196,7 +1197,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovLoad32",
@@ -1211,7 +1212,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Movsd",
@@ -1224,8 +1225,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xF2|0x0F|0x10|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF2|0x0F|0x10|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "MovsdLoad",
@@ -1240,7 +1247,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovsdStore",
@@ -1255,7 +1262,7 @@
 			"OperandCount": 3,
 			"ResultCount": 0,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Movss",
@@ -1268,8 +1275,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xF3|0x0F|0x10|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF3|0x0F|0x10|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "MovssLoad",
@@ -1284,7 +1297,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovssStore",
@@ -1299,7 +1312,7 @@
 			"OperandCount": 3,
 			"ResultCount": 0,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovStore8",
@@ -1314,7 +1327,7 @@
 			"OperandCount": 3,
 			"ResultCount": 0,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovStore16",
@@ -1329,7 +1342,7 @@
 			"OperandCount": 3,
 			"ResultCount": 0,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovStore32",
@@ -1344,7 +1357,7 @@
 			"OperandCount": 3,
 			"ResultCount": 0,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Movsx8To32",
@@ -1357,8 +1370,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|1011|1110|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|1011|1110|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Movsx16To32",
@@ -1371,8 +1390,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|1011|1111|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|1011|1111|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "MovsxLoad8",
@@ -1413,8 +1438,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x10|11|reg3:r|reg3:o2"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x10|11|reg3:r|reg3:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "MovupsLoad",
@@ -1443,7 +1474,7 @@
 			"OperandCount": 3,
 			"ResultCount": 0,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Movzx8To32",
@@ -1456,8 +1487,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|1011|0110|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|1011|0110|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Movzx16To32",
@@ -1470,8 +1507,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|1011|0111|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|1011|0111|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "MovzxLoad8",
@@ -1513,8 +1556,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 2,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xF7|11|100|reg3:o2"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF7|11|100|reg3:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Mulsd",
@@ -1528,8 +1577,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
-			"Encoding": "0xF2|0x0F|0x59|11|reg3:r|reg3:o2"
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF2|0x0F|0x59|11|reg3:r|reg3:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Mulss",
@@ -1543,8 +1598,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
-			"Encoding": "0xF3|0x0F|0x59|11|reg3:r|reg3:o2"
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF3|0x0F|0x59|11|reg3:r|reg3:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Neg32",
@@ -1557,8 +1618,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
-			"Encoding": "0xF7|0x03"
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF7|0x03",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Nop",
@@ -1571,8 +1638,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x90"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x90",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Not32",
@@ -1585,8 +1658,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
-			"Encoding": "0xF7|11|010|reg3:r"
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF7|11|010|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Or32",
@@ -1600,7 +1679,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o2.IsRegister",
@@ -1627,7 +1706,7 @@
 			"OperandCount": 2,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o1.IsRegister",
@@ -1654,7 +1733,7 @@
 			"OperandCount": 2,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o1.IsRegister",
@@ -1681,7 +1760,7 @@
 			"OperandCount": 2,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o1.IsRegister",
@@ -1706,8 +1785,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xF3|0x90"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF3|0x90",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Pextrd",
@@ -1720,8 +1805,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0110|0110|0000|1111|0011|1010|0001|0110|11|reg3:o1|reg3:r|imm8:o2"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0110|0110|0000|1111|0011|1010|0001|0110|11|reg3:o1|reg3:r|imm8:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Pop32",
@@ -1734,8 +1825,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "01011|reg3:r"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "01011|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Popad",
@@ -1748,8 +1845,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x61"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x61",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Push32",
@@ -1762,7 +1865,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o1.IsRegister",
@@ -1787,8 +1890,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x60"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x60",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "PXor",
@@ -1801,8 +1910,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
-			"Encoding": "0x66|0x0F|0xEF|11|reg3:r|reg3:o2"
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x66|0x0F|0xEF|11|reg3:r|reg3:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Rcr32",
@@ -1815,7 +1930,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o2.IsRegister",
@@ -1825,6 +1940,7 @@
 				{
 					"Condition": "o2.IsConstant && o2.IsConstantOne",
 					"Encoding": "0xD1|11|011|reg3:r",
+					"End": "true",
 					"ExperimentalEncoding": ""
 				},
 				{
@@ -1846,8 +1962,14 @@
 			"OperandCount": 0,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "true",
-			"Encoding": "0xF3"
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF3",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Ret",
@@ -1861,8 +1983,14 @@
 			"FlowControl": "Return",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xC3"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xC3",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Roundsd",
@@ -1875,8 +2003,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
-			"Encoding": "0x66|0x0F|0x3A|0x0B|11|reg3:r|reg3:o1|imm8:o2"
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x66|0x0F|0x3A|0x0B|11|reg3:r|reg3:o1|imm8:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Roundss",
@@ -1889,8 +2023,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
-			"Encoding": "0x66|0x0F|0x3A|0x0A|11|reg3:r|reg3:o1|imm8:o2"
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x66|0x0F|0x3A|0x0A|11|reg3:r|reg3:o1|imm8:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Sar32",
@@ -1903,7 +2043,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o2.IsRegister",
@@ -1913,6 +2053,7 @@
 				{
 					"Condition": "o2.IsConstant && o2.IsConstantOne",
 					"Encoding": "0xD1|11|111|reg3:r",
+					"End": "true",
 					"ExperimentalEncoding": ""
 				},
 				{
@@ -1934,7 +2075,7 @@
 			"FlagsUsed": "C",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o2.IsRegister",
@@ -1959,7 +2100,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o2.IsRegister",
@@ -1969,6 +2110,7 @@
 				{
 					"Condition": "o2.IsConstant && o2.IsConstantOne",
 					"Encoding": "0xD1|11|100|reg3:r",
+					"End": "true",
 					"ExperimentalEncoding": ""
 				},
 				{
@@ -1989,7 +2131,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o3.IsRegister",
@@ -2014,7 +2156,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o2.IsRegister",
@@ -2024,6 +2166,7 @@
 				{
 					"Condition": "o2.IsConstant && o2.IsConstantOne",
 					"Encoding": "0xD1|11|101|reg3:r",
+					"End": "true",
 					"ExperimentalEncoding": ""
 				},
 				{
@@ -2044,7 +2187,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o2.IsRegister",
@@ -2070,8 +2213,14 @@
 			"OperandCount": 0,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xFB"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xFB",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Stos",
@@ -2084,8 +2233,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xAB"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xAB",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Sub32",
@@ -2098,7 +2253,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o2.IsRegister",
@@ -2124,8 +2279,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
-			"Encoding": "0xF2|0x0F|0x5C|11|reg3:r|reg3:o2"
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF2|0x0F|0x5C|11|reg3:r|reg3:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Subss",
@@ -2139,8 +2300,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
-			"Encoding": "0xF3|0x0F|0x5C|11|reg3:r|reg3:o2"
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF3|0x0F|0x5C|11|reg3:r|reg3:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Test32",
@@ -2153,7 +2320,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o2.IsRegister",
@@ -2178,8 +2345,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x66|0x0F|0x2E|11|reg3:o1|reg3:o2"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x66|0x0F|0x2E|11|reg3:o1|reg3:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Ucomiss",
@@ -2192,8 +2365,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x2E|11|reg3:o1|reg3:o2"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x2E|11|reg3:o1|reg3:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "XAddLoad32",
@@ -2208,7 +2387,7 @@
 			"MemoryRead": "true",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"Encoding-ConstantBase": "0x0F|1100|0001|00|reg3:o3|101|imm32:o1",
 			"Encoding-NonConstantBase": "EmitXAddLoad32Reg"
@@ -2225,8 +2404,14 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 2,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x87|11|reg3:o2|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x87|11|reg3:o2|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "XChgLoad32",
@@ -2241,7 +2426,7 @@
 			"MemoryRead": "true",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
+			"ThreeTwoAddressConversion": "false",
 			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"Encoding-ConstantBase": "1000|0111|00|reg3:o3|101|imm32:o1",
 			"Encoding-NonConstantBase": "EmitXChgLoad32Reg"
@@ -2258,7 +2443,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "o2.IsRegister",
@@ -2286,8 +2471,14 @@
 			"LogicalOpposite": "BranchNoOverflow",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x80|rel32:label"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x80|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "BranchNoOverflow",
@@ -2303,8 +2494,14 @@
 			"LogicalOpposite": "BranchOverflow",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x81|rel32:label"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x81|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "BranchCarry",
@@ -2320,8 +2517,14 @@
 			"LogicalOpposite": "BranchNoCarry",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x82|rel32:label"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x82|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "BranchUnsignedLessThan",
@@ -2337,8 +2540,14 @@
 			"LogicalOpposite": "BranchUnsignedGreaterOrEqual",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x82|rel32:label"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x82|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "BranchUnsignedGreaterOrEqual",
@@ -2354,8 +2563,14 @@
 			"LogicalOpposite": "BranchUnsignedLessThan",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x83|rel32:label"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x83|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "BranchNoCarry",
@@ -2371,8 +2586,14 @@
 			"LogicalOpposite": "BranchCarry",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x83|rel32:label"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x83|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "BranchEqual",
@@ -2388,8 +2609,14 @@
 			"LogicalOpposite": "BranchNotEqual",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x84|rel32:label"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x84|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "BranchZero",
@@ -2405,8 +2632,14 @@
 			"LogicalOpposite": "BranchNotZero",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x84|rel32:label"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x84|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "BranchNotEqual",
@@ -2422,8 +2655,14 @@
 			"LogicalOpposite": "BranchEqual",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x85|rel32:label"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x85|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "BranchNotZero",
@@ -2439,8 +2678,14 @@
 			"LogicalOpposite": "BranchZero",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x85|rel32:label"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x85|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "BranchUnsignedLessOrEqual",
@@ -2456,8 +2701,14 @@
 			"LogicalOpposite": "BranchUnsignedGreaterThan",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x86|rel32:label"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x86|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "BranchUnsignedGreaterThan",
@@ -2473,8 +2724,14 @@
 			"LogicalOpposite": "BranchUnsignedLessOrEqual",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x87|rel32:label"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x87|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "BranchSigned",
@@ -2490,8 +2747,14 @@
 			"LogicalOpposite": "BranchNotSigned",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x88|rel32:label"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x88|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "BranchNotSigned",
@@ -2507,8 +2770,14 @@
 			"LogicalOpposite": "BranchSigned",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x89|rel32:label"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x89|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "BranchParity",
@@ -2524,8 +2793,14 @@
 			"LogicalOpposite": "BranchNoParity",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x8A|rel32:label"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x8A|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "BranchNoParity",
@@ -2541,8 +2816,14 @@
 			"LogicalOpposite": "BranchParity",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x8B|rel32:label"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x8B|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "BranchLessThan",
@@ -2558,8 +2839,14 @@
 			"LogicalOpposite": "BranchGreaterOrEqual",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x8C|rel32:label"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x8C|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "BranchGreaterOrEqual",
@@ -2575,8 +2862,14 @@
 			"LogicalOpposite": "BranchLessThan",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x8D|rel32:label"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x8D|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "BranchLessOrEqual",
@@ -2592,8 +2885,14 @@
 			"LogicalOpposite": "BranchGreaterThan",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x8E|rel32:label"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x8E|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "BranchGreaterThan",
@@ -2609,8 +2908,14 @@
 			"LogicalOpposite": "BranchLessOrEqual",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x8F|rel32:label"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x8F|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "SetByteIfOverflow",
@@ -2625,8 +2930,14 @@
 			"LogicalOpposite": "SetByteIfNoOverflow",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x90|11|000|reg3:r"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x90|11|000|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "SetByteIfNoOverflow",
@@ -2641,8 +2952,14 @@
 			"LogicalOpposite": "SetByteIfOverflow",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x91|11|000|reg3:r"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x91|11|000|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "SetByteIfCarry",
@@ -2657,8 +2974,14 @@
 			"LogicalOpposite": "SetByteIfNoCarry",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x92|11|000|reg3:r"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x92|11|000|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "SetByteIfUnsignedLessThan",
@@ -2673,8 +2996,14 @@
 			"LogicalOpposite": "SetByteIfUnsignedGreaterOrEqual",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x92|11|000|reg3:r"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x92|11|000|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "SetByteIfUnsignedGreaterOrEqual",
@@ -2689,8 +3018,14 @@
 			"LogicalOpposite": "SetByteIfUnsignedLessThan",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x93|11|000|reg3:r"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x93|11|000|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "SetByteIfNoCarry",
@@ -2705,8 +3040,14 @@
 			"LogicalOpposite": "SetByteIfCarry",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x93|11|000|reg3:r"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x93|11|000|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "SetByteIfEqual",
@@ -2721,8 +3062,14 @@
 			"LogicalOpposite": "SetByteIfNotEqual",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x94|11|000|reg3:r"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x94|11|000|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "SetByteIfZero",
@@ -2737,8 +3084,14 @@
 			"LogicalOpposite": "SetByteIfNotZero",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x94|11|000|reg3:r"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x94|11|000|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "SetByteIfNotEqual",
@@ -2753,8 +3106,14 @@
 			"LogicalOpposite": "SetByteIfEqual",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x95|11|000|reg3:r"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x95|11|000|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "SetByteIfNotZero",
@@ -2769,8 +3128,14 @@
 			"LogicalOpposite": "SetByteIfZero",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x95|11|000|reg3:r"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x95|11|000|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "SetByteIfUnsignedLessOrEqual",
@@ -2785,8 +3150,14 @@
 			"LogicalOpposite": "SetByteIfUnsignedGreaterThan",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x96|11|000|reg3:r"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x96|11|000|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "SetByteIfUnsignedGreaterThan",
@@ -2801,8 +3172,14 @@
 			"LogicalOpposite": "SetByteIfUnsignedLessOrEqual",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x97|11|000|reg3:r"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x97|11|000|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "SetByteIfSigned",
@@ -2817,8 +3194,14 @@
 			"LogicalOpposite": "SetByteIfNotSigned",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x98|11|000|reg3:r"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x98|11|000|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "SetByteIfNotSigned",
@@ -2833,8 +3216,14 @@
 			"LogicalOpposite": "SetByteIfSigned",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x99|11|000|reg3:r"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x99|11|000|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "SetByteIfParity",
@@ -2849,8 +3238,14 @@
 			"LogicalOpposite": "SetByteIfNoParity",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x9A|11|000|reg3:r"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x9A|11|000|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "SetByteIfNoParity",
@@ -2865,8 +3260,14 @@
 			"LogicalOpposite": "SetByteIfParity",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x9B|11|000|reg3:r"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x9B|11|000|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "SetByteIfLessThan",
@@ -2881,8 +3282,14 @@
 			"LogicalOpposite": "SetByteIfGreaterOrEqual",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x9C|11|000|reg3:r"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x9C|11|000|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "SetByteIfGreaterOrEqual",
@@ -2897,8 +3304,14 @@
 			"LogicalOpposite": "SetByteIfLessThan",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x9D|11|000|reg3:r"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x9D|11|000|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "SetByteIfLessOrEqual",
@@ -2913,8 +3326,14 @@
 			"LogicalOpposite": "SetByteIfGreaterThan",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x9E|11|000|reg3:r"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x9E|11|000|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "SetByteIfGreaterThan",
@@ -2929,8 +3348,14 @@
 			"LogicalOpposite": "SetByteIfLessOrEqual",
 			"OperandCount": 0,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x9F|11|000|reg3:r"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x9F|11|000|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "CMovOverflow32",
@@ -2945,8 +3370,14 @@
 			"LogicalOpposite": "CMovNoOverflow32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x40|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x40|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "CMovNoOverflow32",
@@ -2961,8 +3392,14 @@
 			"LogicalOpposite": "CMovOverflow32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x41|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x41|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "CMovCarry32",
@@ -2977,8 +3414,14 @@
 			"LogicalOpposite": "CMovNoCarry32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x42|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x42|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "CMovUnsignedLessThan32",
@@ -2993,8 +3436,14 @@
 			"LogicalOpposite": "CMovUnsignedGreaterOrEqual32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x42|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x42|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "CMovUnsignedGreaterOrEqual32",
@@ -3009,8 +3458,14 @@
 			"LogicalOpposite": "CMovUnsignedLessThan32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x43|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x43|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "CMovNoCarry32",
@@ -3025,8 +3480,14 @@
 			"LogicalOpposite": "CMovCarry32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x43|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x43|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "CMovEqual32",
@@ -3041,8 +3502,14 @@
 			"LogicalOpposite": "CMovNotEqual32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x44|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x44|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "CMovZero32",
@@ -3057,8 +3524,14 @@
 			"LogicalOpposite": "CMovNotZero32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x44|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x44|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "CMovNotEqual32",
@@ -3073,8 +3546,14 @@
 			"LogicalOpposite": "CMovEqual32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x45|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x45|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "CMovNotZero32",
@@ -3089,8 +3568,14 @@
 			"LogicalOpposite": "CMovZero32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x45|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x45|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "CMovUnsignedLessOrEqual32",
@@ -3105,8 +3590,14 @@
 			"LogicalOpposite": "CMovUnsignedGreaterThan32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x46|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x46|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "CMovUnsignedGreaterThan32",
@@ -3121,8 +3612,14 @@
 			"LogicalOpposite": "CMovUnsignedLessOrEqual32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x47|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x47|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "CMovSigned32",
@@ -3137,8 +3634,14 @@
 			"LogicalOpposite": "CMovNotSigned32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x48|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x48|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "CMovNotSigned32",
@@ -3153,8 +3656,14 @@
 			"LogicalOpposite": "CMovSigned32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x49|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x49|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "CMovParity32",
@@ -3169,8 +3678,14 @@
 			"LogicalOpposite": "CMovNoParity32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x4A|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x4A|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "CMovNoParity32",
@@ -3185,8 +3700,14 @@
 			"LogicalOpposite": "CMovParity32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x4B|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x4B|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "CMovLessThan32",
@@ -3201,8 +3722,14 @@
 			"LogicalOpposite": "CMovGreaterOrEqual32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x4C|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x4C|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "CMovGreaterOrEqual32",
@@ -3217,8 +3744,14 @@
 			"LogicalOpposite": "CMovLessThan32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x4D|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x4D|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "CMovLessOrEqual32",
@@ -3233,8 +3766,14 @@
 			"LogicalOpposite": "CMovGreaterThan32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x4E|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x4E|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "CMovGreaterThan32",
@@ -3249,8 +3788,14 @@
 			"LogicalOpposite": "CMovLessOrEqual32",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x4F|11|reg3:r|reg3:o1"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x4F|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "BochsDebug",
@@ -3264,8 +3809,14 @@
 			"OperandCount": 0,
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x66|0x87|0xdb "
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x66|0x87|0xdb ",
+					"ExperimentalEncoding": ""
+				}
+			]
 		}
 	]
 }
