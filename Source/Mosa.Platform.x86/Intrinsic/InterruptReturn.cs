@@ -18,7 +18,7 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			context.SetInstruction(X86.Mov32, esp, v0);
 			context.AppendInstruction(X86.Popad);
-			context.AppendInstruction(X86.AddConst32, esp, esp, methodCompiler.CreateConstant(8));
+			context.AppendInstruction(X86.Add32, esp, esp, methodCompiler.CreateConstant(8));
 			context.AppendInstruction(X86.Sti);
 			context.AppendInstruction(X86.IRetd);
 

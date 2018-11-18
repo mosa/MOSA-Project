@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Bt32 : X86Instruction
 	{
-		public override int ID { get { return 201; } }
+		public override int ID { get { return 197; } }
 
 		internal Bt32()
 			: base(1, 2)
@@ -38,11 +38,26 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			emitter.OpcodeEncoder.AppendByte(0x0F);
-			emitter.OpcodeEncoder.AppendByte(0xA3);
-			emitter.OpcodeEncoder.Append2Bits(0b11);
-			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-			emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+			if (node.Operand2.IsCPURegister)
+			{
+				emitter.OpcodeEncoder.AppendByte(0x0F);
+				emitter.OpcodeEncoder.AppendByte(0xA3);
+				emitter.OpcodeEncoder.Append2Bits(0b11);
+				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+				return;
+			}
+
+			if (node.Operand2.IsConstant)
+			{
+				emitter.OpcodeEncoder.AppendByte(0x0F);
+				emitter.OpcodeEncoder.AppendByte(0xBA);
+				emitter.OpcodeEncoder.Append2Bits(0b11);
+				emitter.OpcodeEncoder.Append3Bits(0b100);
+				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				emitter.OpcodeEncoder.Append8BitImmediate(node.Operand2);
+				return;
+			}
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Out8 : X86Instruction
 	{
-		public override int ID { get { return 290; } }
+		public override int ID { get { return 275; } }
 
 		internal Out8()
 			: base(0, 2)
@@ -28,7 +28,18 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			emitter.OpcodeEncoder.AppendByte(0xEE);
+			if (node.Operand1.IsCPURegister)
+			{
+				emitter.OpcodeEncoder.AppendByte(0xEE);
+				return;
+			}
+
+			if (node.Operand1.IsConstant)
+			{
+				emitter.OpcodeEncoder.AppendByte(0xE6);
+				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				return;
+			}
 		}
 	}
 }

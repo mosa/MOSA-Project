@@ -31,7 +31,6 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.Shl32, Shl32);
 			AddVisitation(X86.Shld32, Shld32);
 			AddVisitation(X86.Shr32, Shr32);
-			AddVisitation(X86.ShrConst32, Shr32);
 			AddVisitation(X86.Shrd32, Shrd32);
 		}
 

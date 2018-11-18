@@ -14,7 +14,6 @@ namespace Mosa.Platform.x86.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			AddVisitation(X86.BtConst32, ConvertOperand2ToByte);
 			AddVisitation(X86.CallReg, CallReg);
 			AddVisitation(X86.Mov32, Mov32);
 			AddVisitation(X86.MovLoad16, MovLoad16);
@@ -26,7 +25,6 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.Movzx16To32, Movzx16To32);
 			AddVisitation(X86.Movzx8To32, Movzx8To32);
 			AddVisitation(X86.Nop, Nop);
-			AddVisitation(X86.SarConst32, ConvertOperand2ToByte);
 			AddVisitation(X86.SetByteIfCarry, Setcc);
 			AddVisitation(X86.SetByteIfEqual, Setcc);
 			AddVisitation(X86.SetByteIfGreaterOrEqual, Setcc);
@@ -47,10 +45,6 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.SetByteIfUnsignedLessOrEqual, Setcc);
 			AddVisitation(X86.SetByteIfUnsignedLessThan, Setcc);
 			AddVisitation(X86.SetByteIfZero, Setcc);
-			AddVisitation(X86.ShlConst32, ConvertOperand2ToByte);
-			AddVisitation(X86.ShldConst32, ConvertOperand3ToByte);
-			AddVisitation(X86.ShrConst32, ConvertOperand2ToByte);
-			AddVisitation(X86.ShrdConst32, ConvertOperand3ToByte);
 		}
 
 		#region Visitation Methods
@@ -83,22 +77,6 @@ namespace Mosa.Platform.x86.Stages
 			context.Empty();
 		}
 
-		//public void In8(Context context)
-		//{
-		//	Debug.Assert(context.Result.Register == GeneralPurposeRegister.EAX);
-
-		//	// NOTE: Other option is to use Movzx after IN instruction
-		//	context.InsertBefore().SetInstruction(X86.MovConst32, context.Result, ConstantZero);
-		//}
-
-		//public void In16(Context context)
-		//{
-		//	Debug.Assert(context.Result.Register == GeneralPurposeRegister.EAX);
-
-		//	// NOTE: Other option is to use Movzx after IN instruction
-		//	context.InsertBefore().SetInstruction(X86.MovConst32, context.Result, ConstantZero);
-		//}
-
 		public void Mov32(Context context)
 		{
 			Operand source = context.Operand1;
@@ -125,7 +103,7 @@ namespace Mosa.Platform.x86.Stages
 				Operand offset = context.Operand2;
 
 				context.SetInstruction(X86.MovLoad32, result, source, offset);
-				context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0x0000ffff));
+				context.AppendInstruction(X86.And32, result, result, CreateConstant(0x0000ffff));
 			}
 		}
 
@@ -141,7 +119,7 @@ namespace Mosa.Platform.x86.Stages
 				Operand offset = context.Operand2;
 
 				context.SetInstruction(X86.MovLoad32, result, source, offset);
-				context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0x000000ff));
+				context.AppendInstruction(X86.And32, result, result, CreateConstant(0x000000ff));
 			}
 		}
 
@@ -251,11 +229,11 @@ namespace Mosa.Platform.x86.Stages
 			if (source.Register != result.Register)
 			{
 				context.SetInstruction(X86.Mov32, result, source);
-				context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0xffff));
+				context.AppendInstruction(X86.And32, result, result, CreateConstant(0xffff));
 			}
 			else
 			{
-				context.SetInstruction(X86.AndConst32, result, result, CreateConstant(0xffff));
+				context.SetInstruction(X86.And32, result, result, CreateConstant(0xffff));
 			}
 		}
 
@@ -273,11 +251,11 @@ namespace Mosa.Platform.x86.Stages
 			if (source.Register != result.Register)
 			{
 				context.SetInstruction(X86.Mov32, result, source);
-				context.AppendInstruction(X86.AndConst32, result, result, CreateConstant(0xff));
+				context.AppendInstruction(X86.And32, result, result, CreateConstant(0xff));
 			}
 			else
 			{
-				context.SetInstruction(X86.AndConst32, result, result, CreateConstant(0xff));
+				context.SetInstruction(X86.And32, result, result, CreateConstant(0xff));
 			}
 		}
 
@@ -306,42 +284,6 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(instruction, condition, eax);
 				context.AppendInstruction2(X86.XChg32, result, eax, eax, result);
 			}
-		}
-
-		/// <summary>
-		/// Converts the operand1 to byte.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ConvertOperand1ToByte(Context context)
-		{
-			if (!context.Operand1.IsConstant || context.Operand1.IsByte)
-				return;
-
-			context.Operand1 = CreateConstant((byte)context.Operand1.ConstantUnsignedLongInteger);
-		}
-
-		/// <summary>
-		/// Converts the operand2 to byte.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ConvertOperand2ToByte(Context context)
-		{
-			if (!context.Operand2.IsConstant || context.Operand2.IsByte)
-				return;
-
-			context.Operand2 = CreateConstant((byte)context.Operand2.ConstantUnsignedLongInteger);
-		}
-
-		/// <summary>
-		/// Converts the operand3 to byte.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ConvertOperand3ToByte(Context context)
-		{
-			if (!context.Operand3.IsConstant || context.Operand3.IsByte)
-				return;
-
-			context.Operand3 = CreateConstant((byte)context.Operand3.ConstantUnsignedLongInteger);
 		}
 
 		#endregion Visitation Methods

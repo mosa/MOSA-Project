@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand ss = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I2, SegmentRegister.SS);
 
 			context.SetInstruction(X86.Lgdt, null, context.Operand1);
-			context.AppendInstruction(X86.MovConst32, eax, constantx10);
+			context.AppendInstruction(X86.Mov32, eax, constantx10);
 			context.AppendInstruction(X86.MovStoreSeg32, ds, eax);
 			context.AppendInstruction(X86.MovStoreSeg32, es, eax);
 			context.AppendInstruction(X86.MovStoreSeg32, fs, eax);

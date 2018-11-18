@@ -19,7 +19,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			var reg = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
 
 			context.SetInstruction(X86.Mov32, eax, operand);
-			context.AppendInstruction(X86.MovConst32, ecx, methodCompiler.ConstantZero);
+			context.AppendInstruction(X86.Mov32, ecx, methodCompiler.ConstantZero);
 			context.AppendInstruction(X86.CpuId, eax, eax);
 			context.AppendInstruction(X86.Mov32, result, reg);
 		}
