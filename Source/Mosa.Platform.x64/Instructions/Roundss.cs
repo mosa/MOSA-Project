@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Roundss : X64Instruction
 	{
-		public override int ID { get { return 563; } }
+		public override int ID { get { return 501; } }
 
 		internal Roundss()
 			: base(1, 2)

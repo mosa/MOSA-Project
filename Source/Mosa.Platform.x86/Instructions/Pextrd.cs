@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Pextrd : X86Instruction
 	{
-		public override int ID { get { return 297; } }
+		public override int ID { get { return 279; } }
 
 		internal Pextrd()
 			: base(1, 2)

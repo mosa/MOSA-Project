@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Stos : X86Instruction
 	{
-		public override int ID { get { return 327; } }
+		public override int ID { get { return 297; } }
 
 		internal Stos()
 			: base(0, 1)

@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class SetByteIfParity : X64Instruction
 	{
-		public override int ID { get { return 652; } }
+		public override int ID { get { return 566; } }
 
 		internal SetByteIfParity()
 			: base(1, 0)

@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class MovConst32 : X86Instruction
 	{
-		public override int ID { get { return 253; } }
+		public override int ID { get { return 240; } }
 
 		internal MovConst32()
 			: base(1, 1)

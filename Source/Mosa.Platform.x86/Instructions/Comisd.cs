@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Comisd : X86Instruction
 	{
-		public override int ID { get { return 212; } }
+		public override int ID { get { return 205; } }
 
 		internal Comisd()
 			: base(0, 2)
@@ -39,11 +39,11 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
 			emitter.OpcodeEncoder.AppendNibble(0b0110);
-			emitter.OpcodeEncoder.AppendNibble(0b0110);
+emitter.OpcodeEncoder.AppendNibble(0b0110);
 			emitter.OpcodeEncoder.AppendNibble(0b0000);
-			emitter.OpcodeEncoder.AppendNibble(0b1111);
+emitter.OpcodeEncoder.AppendNibble(0b1111);
 			emitter.OpcodeEncoder.AppendNibble(0b0010);
-			emitter.OpcodeEncoder.AppendNibble(0b1111);
+emitter.OpcodeEncoder.AppendNibble(0b1111);
 			emitter.OpcodeEncoder.Append2Bits(0b11);
 			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 			emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);

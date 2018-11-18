@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Movd : X64Instruction
 	{
-		public override int ID { get { return 495; } }
+		public override int ID { get { return 443; } }
 
 		internal Movd()
 			: base(1, 1)

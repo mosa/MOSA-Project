@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Popad : X64Instruction
 	{
-		public override int ID { get { return 549; } }
+		public override int ID { get { return 492; } }
 
 		internal Popad()
 			: base(0, 0)

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
-using System.Diagnostics;
 using System.Text;
 
 namespace Mosa.Utility.SourceCodeGenerator
@@ -385,6 +384,30 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Lines.AppendLine("\t\t}");
 			}
 
+			if (node.OpcodeEncoding != null)
+			{
+				Lines.AppendLine();
+				Lines.AppendLine("\t\tpublic override void Emit(InstructionNode node, BaseCodeEmitter emitter)");
+				Lines.AppendLine("\t\t{");
+				if (node.VariableOperands == null || node.VariableOperands == "false")
+				{
+					Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.ResultCount == " + node.ResultCount + ");");
+					Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.OperandCount == " + node.OperandCount + ");");
+
+					if (node.X86ThreeTwoAddressConversion == null || node.X86ThreeTwoAddressConversion == "true")
+					{
+						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Result.IsCPURegister);");
+						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);");
+						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);");
+					}
+					Lines.AppendLine();
+				}
+
+				CreateEncoding(node);
+
+				Lines.AppendLine("\t\t}");
+			}
+
 			Lines.AppendLine("\t}");
 			Lines.AppendLine("}");
 		}
@@ -485,18 +508,80 @@ namespace Mosa.Utility.SourceCodeGenerator
 			return bytes;
 		}
 
+		private void CreateEncoding(dynamic node)
+		{
+			bool first = true;
+
+			foreach (var entry in node.OpcodeEncoding)
+			{
+				string condition = entry.Condition;
+				string encoding = entry.Encoding;
+
+				if (first)
+				{
+					first = false;
+				}
+				else
+				{
+					Lines.AppendLine();
+				}
+
+				if (condition != null)
+				{
+					EmitCondition(condition, encoding, 0, false);
+				}
+				else
+				{
+					EmitBits(encoding, 0);
+				}
+			}
+		}
+
+		private void EmitCondition(string condition, string encoding, int index = 0, bool opp = false)
+		{
+			var tabs = "\t\t\t\t\t\t\t\t\t\t".Substring(0, index + 3);
+			Lines.Append(tabs);
+
+			var cond = condition;
+
+			// update condition
+			cond = cond.Replace("o1.", "node.Operand1.")
+				.Replace("o2.", "node.Operand2.")
+				.Replace("o3.", "node.Operand3.")
+				.Replace("o4.", "node.Operand4.")
+				.Replace("r.", "node.Result.")
+				.Replace("r2.", "node.Result2.")
+				.Replace(".IsRegister", ".IsCPURegister");
+
+			if (opp)
+			{
+				Lines.AppendLine("if (!(" + cond + "))");
+			}
+			else
+			{
+				Lines.AppendLine("if (" + cond + ")");
+			}
+			Lines.Append(tabs);
+			Lines.AppendLine("{");
+
+			EmitBits(encoding, index + 1);
+
+			Lines.Append(tabs);
+			Lines.AppendLine("\treturn;");
+
+			Lines.Append(tabs);
+			Lines.AppendLine("}");
+		}
+
 		private void EmitEncoding(string encoding)
 		{
 			EmitBits(encoding);
 		}
 
-		private void EmitCondition(string condition, bool opp = false)
-		{
-		}
-
 		private void EmitBits(string bits, int index = 0)
 		{
 			var steps = bits.Split('|');
+			var tabs = "\t\t\t\t\t\t\t\t\t\t".Substring(0, index + 3);
 
 			foreach (var s in steps)
 			{
@@ -507,28 +592,30 @@ namespace Mosa.Utility.SourceCodeGenerator
 					// hex
 					string hex = s.StartsWith("x") ? s.Substring(1) : s.Substring(2);
 
+					Lines.Append(tabs);
+
 					switch (hex.Length)
 					{
 						case 1:
-							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendNibble(0x" + hex + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0x" + hex + ");");
 							break;
 
 						case 2:
-							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendByte(0x" + hex + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.AppendByte(0x" + hex + ");");
 							break;
 
 						case 3:
-							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendByte(0x" + hex.Substring(0, 2) + ");");
-							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendNibble(0x" + hex.Substring(1) + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.AppendByte(0x" + hex.Substring(0, 2) + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0x" + hex.Substring(1) + ");");
 							break;
 
 						case 4:
-							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendShort(0x" + hex + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.AppendShort(0x" + hex + ");");
 							break;
 
 						case 5:
-							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendShort(0x" + hex.Substring(0, 4) + ");");
-							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendNibble(0x" + hex.Substring(5) + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.AppendShort(0x" + hex.Substring(0, 4) + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0x" + hex.Substring(5) + ");");
 							break;
 
 						default: throw new Exception("ERROR!");
@@ -545,42 +632,44 @@ namespace Mosa.Utility.SourceCodeGenerator
 					if (binary.StartsWith("b"))
 						binary = s.Substring(1);
 
+					Lines.Append(tabs);
+
 					switch (binary.Length)
 					{
 						case 1:
-							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendBit(0b" + binary + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.AppendBit(0b" + binary + ");");
 							break;
 
 						case 2:
-							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.Append2Bits(0b" + binary + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.Append2Bits(0b" + binary + ");");
 							break;
 
 						case 3:
-							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.Append3Bits(0b" + binary + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.Append3Bits(0b" + binary + ");");
 							break;
 
 						case 4:
-							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendNibble(0b" + binary + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary + ");");
 							break;
 
 						case 5:
-							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
-							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendBit(0b" + binary.Substring(4) + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.AppendBit(0b" + binary.Substring(4) + ");");
 							break;
 
 						case 6:
-							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
-							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.Append2Bits(0b" + binary.Substring(4) + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.Append2Bits(0b" + binary.Substring(4) + ");");
 							break;
 
 						case 7:
-							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
-							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.Append3Bits(0b" + binary.Substring(4) + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.Append3Bits(0b" + binary.Substring(4) + ");");
 							break;
 
 						case 8:
-							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
-							Lines.AppendLine("\t\t\temitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(4) + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(4) + ");");
 							break;
 
 						default: throw new Exception("ERROR!");
@@ -597,7 +686,9 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 					var operand = (parts.Length >= 1) ? GetOperand(parts[1]) : string.Empty;
 
-					Lines.AppendLine("\t\t\temitter.OpcodeEncoder." + code + "(node." + operand + postcode + ");");
+					Lines.Append(tabs);
+
+					Lines.AppendLine("emitter.OpcodeEncoder." + code + "(node." + operand + postcode + ");");
 				}
 			}
 		}
