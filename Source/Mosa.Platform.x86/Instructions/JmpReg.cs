@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class JmpReg : X86Instruction
 	{
-		public override int ID { get { return 231; } }
+		public override int ID { get { return 230; } }
 
 		internal JmpReg()
 			: base(0, 1)

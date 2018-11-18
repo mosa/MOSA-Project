@@ -29,8 +29,6 @@ namespace Mosa.Platform.x64
 			X64.Bts32,
 			X64.Bts64,
 			X64.Call,
-			X64.CallStatic,
-			X64.CallReg,
 			X64.Cdq,
 			X64.Cli,
 			X64.Cmp32,

@@ -133,7 +133,7 @@ namespace Mosa.Platform.x86.CompilerStages
 			var startUpMethod = startUpType.FindMethodByName("Initialize");
 
 			var entryPoint = Operand.CreateSymbolFromMethod(startUpMethod, TypeSystem);
-			ctx.AppendInstruction(X86.CallStatic, null, entryPoint);
+			ctx.AppendInstruction(X86.Call, null, entryPoint);
 
 			ctx.AppendInstruction(X86.Ret);
 

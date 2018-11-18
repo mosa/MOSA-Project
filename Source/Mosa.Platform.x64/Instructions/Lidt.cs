@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Lidt : X64Instruction
 	{
-		public override int ID { get { return 429; } }
+		public override int ID { get { return 426; } }
 
 		internal Lidt()
 			: base(0, 1)

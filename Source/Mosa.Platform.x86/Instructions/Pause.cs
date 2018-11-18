@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Pause : X86Instruction
 	{
-		public override int ID { get { return 278; } }
+		public override int ID { get { return 277; } }
 
 		internal Pause()
 			: base(0, 0)

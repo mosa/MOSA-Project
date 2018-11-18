@@ -526,7 +526,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 					Lines.AppendLine();
 				}
 
-				if (condition != null)
+				if (!String.IsNullOrEmpty(condition))
 				{
 					EmitCondition(condition, encoding, 0, false);
 				}

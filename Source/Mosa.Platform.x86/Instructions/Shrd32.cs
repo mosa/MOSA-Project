@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Shrd32 : X86Instruction
 	{
-		public override int ID { get { return 295; } }
+		public override int ID { get { return 294; } }
 
 		internal Shrd32()
 			: base(1, 3)

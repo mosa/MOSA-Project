@@ -77,7 +77,13 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"X86ThreeTwoAddressConversion": "true",
-			"Encoding": "0xF2|0x0F|0x58|11|reg3:r|reg3:o2"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF2|0x0F|0x58|11|reg3:r|reg3:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Addss",
@@ -92,7 +98,13 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"X86ThreeTwoAddressConversion": "true",
-			"Encoding": "0xF3|0x0F|0x58|11|reg3:r|reg3:o2"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF3|0x0F|0x58|11|reg3:r|reg3:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "And32",
@@ -133,7 +145,13 @@
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xCC"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xCC",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Btr32",
@@ -211,7 +229,7 @@
 			]
 		},
 		{
-			"Name": "CallStatic",
+			"Name": "Call",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -223,22 +241,18 @@
 			"OperandCount": 1,
 			"ResultCount": 0,
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xE8|rel32:o1"
-		},
-		{
-			"Name": "CallReg",
-			"FamilyName": "X86",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "ZCSOP",
-			"FlagsUsed": "",
-			"FlowControl": "Call",
-			"OperandCount": 1,
-			"ResultCount": 0,
-			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xFF|11|010|reg3:o1"
+			"OpcodeEncoding": [
+				{
+					"Condition": "o1.IsRegister",
+					"Encoding": "0xFF|11|010|reg3:o1",
+					"ExperimentalEncoding": ""
+				},
+				{
+					"Condition": "o1.IsConstant",
+					"Encoding": "0xE8|rel32:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Cdq",
@@ -252,7 +266,13 @@
 			"OperandCount": 1,
 			"ResultCount": 2,
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x99"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x99",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Cli",
@@ -267,7 +287,13 @@
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xFA"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xFA",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Cmp32",
@@ -308,7 +334,13 @@
 			"ResultCount": 1,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"X86ThreeTwoAddressConversion": "false",
-			"inc-Encoding": "0x00|0xFF|1011|0001|reg3:o1|reg3:o2"
+			"xOpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00|0xFF|1011|0001|reg3:o1|reg3:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Comisd",
@@ -322,7 +354,13 @@
 			"OperandCount": 2,
 			"ResultCount": 0,
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "01100110|00001111|00101111|11|reg3:o1|reg3:o2"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "01100110|00001111|00101111|11|reg3:o1|reg3:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Comiss",
@@ -336,7 +374,13 @@
 			"OperandCount": 2,
 			"ResultCount": 0,
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "00001111|00101111|11|reg3:o1|reg3:o2"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "00001111|00101111|11|reg3:o1|reg3:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "CpuId",
@@ -350,7 +394,13 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0xA2"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0xA2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Cvtsd2ss",
@@ -364,7 +414,13 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xF2|0x0F|0x5A|11|reg3:o1|reg3:o2"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF2|0x0F|0x5A|11|reg3:o1|reg3:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Cvtsi2sd",
@@ -378,7 +434,13 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xF2|0x0F|0x2A|11|reg3:r|reg3:o1"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF2|0x0F|0x2A|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Cvtsi2ss",
@@ -392,7 +454,13 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xF3|0x0F|0x2A|11|reg3:r|reg3:o1"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF3|0x0F|0x2A|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Cvtss2sd",
@@ -406,7 +474,13 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xF3|0x0F|0x5A|11|reg3:r|reg3:o1"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF3|0x0F|0x5A|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Cvttsd2si",
@@ -420,7 +494,13 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xF2|0x0F|0x2C|11|reg3:r|reg3:o1"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF2|0x0F|0x2C|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Cvttss2si",
@@ -434,7 +514,13 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xF3|0x0F|0x2C|11|reg3:r|reg3:o1"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF3|0x0F|0x2C|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Dec32",
@@ -448,7 +534,13 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"X86ThreeTwoAddressConversion": "true",
-			"Encoding": "0xFF|11|1|reg3:r"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xFF|11|1|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Div32",
@@ -462,7 +554,13 @@
 			"OperandCount": 3,
 			"ResultCount": 2,
 			"X86ThreeTwoAddressConversion": "true",
-			"Encoding": "0xF7|11|110|reg3:o3"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF7|11|110|reg3:o3",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Divsd",
@@ -476,7 +574,13 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"X86ThreeTwoAddressConversion": "true",
-			"Encoding": "0xF2|0x0F|0x5E|11|reg3:r|reg3:o2"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF2|0x0F|0x5E|11|reg3:r|reg3:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Divss",
@@ -490,7 +594,13 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"X86ThreeTwoAddressConversion": "true",
-			"Encoding": "0xF3|0x0F|0x5E|11|reg3:r|reg3:o2"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF3|0x0F|0x5E|11|reg3:r|reg3:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "JmpFar",
@@ -520,7 +630,13 @@
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xF4"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF4",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "IDiv32",
@@ -534,7 +650,13 @@
 			"OperandCount": 3,
 			"ResultCount": 2,
 			"X86ThreeTwoAddressConversion": "true",
-			"Encoding": "0xF7|11|111|reg3:o3"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF7|11|111|reg3:o3",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "IMul32",
@@ -548,7 +670,13 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"X86ThreeTwoAddressConversion": "true",
-			"Encoding": "0x0F|0xAF|11|reg3:r|reg3:o2"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0xAF|11|reg3:r|reg3:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "In8",
@@ -643,7 +771,13 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xFF|11|000|reg3:r"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xFF|11|000|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Int",
@@ -658,7 +792,13 @@
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xCD|imm8:o1"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xCD|imm8:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Invlpg",
@@ -700,7 +840,13 @@
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xCF"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xCF",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Jmp",
@@ -715,7 +861,13 @@
 			"OperandCount": 0,
 			"ResultCount": 0,
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xE9|rel32:label"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xE9|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "JmpStatic",
@@ -774,7 +926,13 @@
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xC9"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xC9",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Lgdt",
@@ -841,7 +999,13 @@
 			"ResultCount": 0,
 			"UnspecifiedSideEffect": "true",
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0xF0"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xF0",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "MovLoadSeg32",
@@ -855,7 +1019,13 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x8C|11|reg3:o1|reg3:r"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x8C|11|reg3:o1|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "MovStoreSeg32",
@@ -869,7 +1039,13 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x8E|11|reg3:r|reg3:o1"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x8E|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Mov32",
@@ -907,7 +1083,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"Encoding": "0x0F|0x28|11|reg3:r|reg3:o2"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x28|11|reg3:r|reg3:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "MovapsLoad",
@@ -937,7 +1119,13 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x20|11|reg3:o1|reg3:r"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x20|11|reg3:o1|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "MovCRStore32",
@@ -952,7 +1140,13 @@
 			"OperandCount": 2,
 			"ResultCount": 0,
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0x0F|0x22|11|reg3:o1|reg3:o2"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x0F|0x22|11|reg3:o1|reg3:o2",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Movd",
@@ -966,7 +1160,13 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"X86ThreeTwoAddressConversion": "false",
-			"Encoding": "0110|0110|0000|1111|0111|1110|11|reg3:o1|reg3:r"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0110|0110|0000|1111|0111|1110|11|reg3:o1|reg3:r",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "MovLoad8",

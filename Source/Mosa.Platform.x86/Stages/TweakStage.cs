@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			AddVisitation(X86.CallReg, CallReg);
+			AddVisitation(X86.Call, CallReg);
 			AddVisitation(X86.Cmp32, Cmp32);
 		}
 

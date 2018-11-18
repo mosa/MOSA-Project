@@ -120,8 +120,6 @@
     <Compile Include="Instructions\Bts32.cs" />
     <Compile Include="Instructions\Bts64.cs" />
     <Compile Include="Instructions\Call.cs" />
-    <Compile Include="Instructions\CallReg.cs" />
-    <Compile Include="Instructions\CallStatic.cs" />
     <Compile Include="Instructions\Cdq.cs" />
     <Compile Include="Instructions\Cli.cs" />
     <Compile Include="Instructions\CMovCarry32.cs" />

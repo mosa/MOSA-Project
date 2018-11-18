@@ -20,8 +20,7 @@ namespace Mosa.Platform.x86
 		public static readonly Btr32 Btr32 = new Btr32();
 		public static readonly Bt32 Bt32 = new Bt32();
 		public static readonly Bts32 Bts32 = new Bts32();
-		public static readonly CallStatic CallStatic = new CallStatic();
-		public static readonly CallReg CallReg = new CallReg();
+		public static readonly Call Call = new Call();
 		public static readonly Cdq Cdq = new Cdq();
 		public static readonly Cli Cli = new Cli();
 		public static readonly Cmp32 Cmp32 = new Cmp32();

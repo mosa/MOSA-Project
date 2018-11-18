@@ -13,7 +13,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Cmp32 : ARMv6Instruction
 	{
-		public override int ID { get { return 624; } }
+		public override int ID { get { return 621; } }
 
 		internal Cmp32()
 			: base(1, 3)

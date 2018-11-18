@@ -216,11 +216,11 @@ namespace Mosa.Platform.x86.Stages
 
 			if (node.Operand1.IsConstant)
 			{
-				node.ReplaceInstruction(X86.CallStatic);
+				node.ReplaceInstruction(X86.Call);
 			}
 			else if (node.Operand1.IsVirtualRegister)
 			{
-				node.ReplaceInstruction(X86.CallReg);
+				node.ReplaceInstruction(X86.Call);
 			}
 			else throw new NotSupportedException();
 		}
