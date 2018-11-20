@@ -52,12 +52,14 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.OpcodeEncoder.Append2Bits(0b11);
 				emitter.OpcodeEncoder.Append3Bits(0b010);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				return;
 			}
 
 			if (node.Operand1.IsConstant)
 			{
 				emitter.OpcodeEncoder.AppendByte(0xE8);
 				emitter.OpcodeEncoder.EmitRelative32(node.Operand1);
+				return;
 			}
 		}
 	}

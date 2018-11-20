@@ -31,12 +31,14 @@ namespace Mosa.Platform.x86.Instructions
 			if (node.Operand1.IsCPURegister)
 			{
 				emitter.OpcodeEncoder.AppendByte(0xEF);
+				return;
 			}
 
 			if (node.Operand1.IsConstant)
 			{
 				emitter.OpcodeEncoder.AppendByte(0xE7);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				return;
 			}
 		}
 	}

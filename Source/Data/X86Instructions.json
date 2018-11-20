@@ -15,13 +15,11 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"xCondition": "o2.IsRegister",
 					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0x13|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": "opcode=0x13,mod=11,reg=reg3:r,rm=reg3:op2"
 				},
 				{
-					"xCondition": "o2.IsConstant",
 					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0x81|11|000|reg3:r|imm32:o2",
 					"ExperimentalEncoding": "opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:op2"
@@ -43,13 +41,11 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"xCondition": "o2.IsRegister",
 					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0x03|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": "opcode=0x03,mod=11,reg=reg3:r,rm=reg3:op2"
 				},
 				{
-					"xCondition": "o2.IsConstant",
 					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0x81|11|000|reg3:r|imm32:o2",
 					"ExperimentalEncoding": "opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:op2"
@@ -71,7 +67,7 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF2|0x0F|0x58|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -92,7 +88,7 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF3|0x0F|0x58|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -113,13 +109,11 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"xCondition": "o2.IsRegister",
 					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0x23|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": "opcode=0x23,mod=11,reg=reg3:r,rm=reg3:op2"
 				},
 				{
-					"xCondition": "o2.IsConstant",
 					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0x81|11|100|reg3:r|imm32:o2",
 					"ExperimentalEncoding": "opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:op2"
@@ -141,7 +135,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xCC",
 					"ExperimentalEncoding": ""
 				}
@@ -161,12 +155,12 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o2.IsRegister",
+					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0x0F|0xBA|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o2.IsConstant",
+					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0x0F|0xB3|11|110|reg3:r|imm8:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -186,12 +180,12 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o2.IsRegister",
+					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0x0F|0xA3|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o2.IsConstant",
+					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0x0F|0xBA|11|100|reg3:r|imm8:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -211,12 +205,12 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o2.IsRegister",
+					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0x0F|0xBA|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o2.IsConstant",
+					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0x0F|0xAB|11|011|reg3:r|imm8:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -237,12 +231,12 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o1.IsRegister",
+					"ExperimentalCondition": "[register]",
 					"Encoding": "0xFF|11|010|reg3:o1",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o1.IsConstant",
+					"ExperimentalCondition": "[constant]",
 					"Encoding": "0xE8|rel32:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -262,7 +256,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x99",
 					"ExperimentalEncoding": ""
 				}
@@ -283,7 +277,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xFA",
 					"ExperimentalEncoding": ""
 				}
@@ -303,12 +297,12 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o2.IsRegister",
+					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0x3B|11|reg3:o1|reg3:o2",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o2.IsConstant",
+					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0x81|11|111|reg3:o1|imm32:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -330,7 +324,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"xOpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x00|0xFF|1011|0001|reg3:o1|reg3:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -350,7 +344,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "01100110|00001111|00101111|11|reg3:o1|reg3:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -370,7 +364,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "00001111|00101111|11|reg3:o1|reg3:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -390,7 +384,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0xA2",
 					"ExperimentalEncoding": ""
 				}
@@ -410,7 +404,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF2|0x0F|0x5A|11|reg3:o1|reg3:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -430,7 +424,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF2|0x0F|0x2A|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -450,7 +444,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF3|0x0F|0x2A|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -470,7 +464,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF3|0x0F|0x5A|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -490,7 +484,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF2|0x0F|0x2C|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -510,7 +504,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF3|0x0F|0x2C|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -530,7 +524,7 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xFF|11|1|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -550,7 +544,7 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF7|11|110|reg3:o3",
 					"ExperimentalEncoding": ""
 				}
@@ -570,7 +564,7 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF2|0x0F|0x5E|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -590,7 +584,7 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF3|0x0F|0x5E|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -626,7 +620,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF4",
 					"ExperimentalEncoding": ""
 				}
@@ -646,7 +640,7 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF7|11|111|reg3:o3",
 					"ExperimentalEncoding": ""
 				}
@@ -666,7 +660,7 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0xAF|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -688,12 +682,12 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o1.IsRegister",
+					"ExperimentalCondition": "[register]",
 					"Encoding": "0xEC",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o1.IsConstant",
+					"ExperimentalCondition": "[constant]",
 					"Encoding": "0xE4|imm8:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -715,12 +709,12 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o1.IsRegister",
+					"ExperimentalCondition": "[register]",
 					"Encoding": "0x66|0xED",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o1.IsConstant",
+					"ExperimentalCondition": "[constant]",
 					"Encoding": "0x66|0xE4|imm8:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -742,12 +736,12 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o1.IsRegister",
+					"ExperimentalCondition": "[register]",
 					"Encoding": "0xED",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o1.IsConstant",
+					"ExperimentalCondition": "[constant]",
 					"Encoding": "0xE5|imm8:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -767,7 +761,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xFF|11|000|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -788,7 +782,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xCD|imm8:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -809,12 +803,12 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o2.IsRegister",
+					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0x0F|0x01|00|010|reg3:o1",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o2.IsConstant",
+					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0x0F|0x01|00|010|101|imm32:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -836,7 +830,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xCF",
 					"ExperimentalEncoding": ""
 				}
@@ -857,7 +851,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "HasBranchTarget",
+					"xExperimentalCondition": "HasBranchTarget",
 					"Encoding": "0xE9|rel32:label",
 					"ExperimentalEncoding": ""
 				}
@@ -878,12 +872,12 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o1.IsRegister",
+					"ExperimentalCondition": "[register]",
 					"Encoding": "0xFF|11|100|reg3:o1",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o1.IsConstant",
+					"ExperimentalCondition": "[constant]",
 					"Encoding": "0xE9|rel32:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -904,13 +898,13 @@
 			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"xOpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "b1000|b1101"
 				},
 
 				{
 					"Comment": "ModRM.Mod",
-					"Condition": "o2.IsRegister",
+					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "11"
 				},
 				{
@@ -928,17 +922,17 @@
 
 				{
 					"Comment": "ModRM.Reg",
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "reg3:r"
 				},
 
 				{
 					"Comment": "ModRM.RM",
-					"Condition": "o1.IsRegister",
+					"ExperimentalCondition": "[register]",
 					"Encoding": "reg3:o1"
 				},
 				{
-					"Condition": "o1.IsConstant",
+					"ExperimentalCondition": "[constant]",
 					"Encoding": "b101"
 				},
 
@@ -965,7 +959,7 @@
 					"End": "true"
 				},
 				{
-					"Condition": "o2.IsConstant",
+					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "imm32:o2",
 					"End": "true"
 				}
@@ -986,7 +980,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xC9",
 					"ExperimentalEncoding": ""
 				}
@@ -1007,12 +1001,12 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o1.IsRegister",
+					"ExperimentalCondition": "[register]",
 					"Encoding": "0x0F|0x01|00|010|reg3:o1",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o1.IsConstant",
+					"ExperimentalCondition": "[constant]",
 					"Encoding": "0x0F|0x01|00|010|101|imm32:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -1033,12 +1027,12 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o1.IsRegister",
+					"ExperimentalCondition": "[register]",
 					"Encoding": "0x0F|0x01|00|011|reg3:o1",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o1.IsConstant",
+					"ExperimentalCondition": "[constant]",
 					"Encoding": "0x0F|0x01|00|011|101|imm32:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -1059,7 +1053,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF0",
 					"ExperimentalEncoding": ""
 				}
@@ -1079,7 +1073,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x8C|11|reg3:o1|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -1099,7 +1093,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x8E|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -1119,12 +1113,12 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o1.IsRegister",
+					"ExperimentalCondition": "[register]",
 					"Encoding": "0x8B|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o1.IsConstant",
+					"ExperimentalCondition": "[constant]",
 					"Encoding": "0xC7|11|000|reg3:r|imm32:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -1143,7 +1137,7 @@
 			"ResultCount": 1,
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x28|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -1179,7 +1173,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x20|11|reg3:o1|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -1200,7 +1194,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x22|11|reg3:o1|reg3:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -1220,7 +1214,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0110|0110|0000|1111|0111|1110|11|reg3:o1|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -1285,7 +1279,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF2|0x0F|0x10|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -1335,7 +1329,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF3|0x0F|0x10|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -1430,7 +1424,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|1011|1110|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -1450,7 +1444,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|1011|1111|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -1498,7 +1492,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x10|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -1547,7 +1541,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|1011|0110|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -1567,7 +1561,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|1011|0111|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -1616,7 +1610,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF7|11|100|reg3:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -1637,7 +1631,7 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF2|0x0F|0x59|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -1658,7 +1652,7 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF3|0x0F|0x59|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -1678,7 +1672,7 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF7|0x03",
 					"ExperimentalEncoding": ""
 				}
@@ -1698,7 +1692,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x90",
 					"ExperimentalEncoding": ""
 				}
@@ -1718,7 +1712,7 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF7|11|010|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -1739,12 +1733,12 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o2.IsRegister",
+					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0x0B|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o2.IsConstant",
+					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0x81|11|001|reg3:r|imm32:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -1766,12 +1760,12 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o1.IsRegister",
+					"ExperimentalCondition": "[register]",
 					"Encoding": "0xEE",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o1.IsConstant",
+					"ExperimentalCondition": "[constant]",
 					"Encoding": "0xE6|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -1793,12 +1787,12 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o1.IsRegister",
+					"ExperimentalCondition": "[register]",
 					"Encoding": "0xEF",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o1.IsConstant",
+					"ExperimentalCondition": "[constant]",
 					"Encoding": "0xE7|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -1820,12 +1814,12 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o1.IsRegister",
+					"ExperimentalCondition": "[register]",
 					"Encoding": "0xEF",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o1.IsConstant",
+					"ExperimentalCondition": "[constant]",
 					"Encoding": "0xE7|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -1845,7 +1839,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF3|0x90",
 					"ExperimentalEncoding": ""
 				}
@@ -1865,7 +1859,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0110|0110|0000|1111|0011|1010|0001|0110|11|reg3:o1|reg3:r|imm8:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -1885,7 +1879,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "01011|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -1905,7 +1899,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x61",
 					"ExperimentalEncoding": ""
 				}
@@ -1925,12 +1919,12 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o1.IsRegister",
+					"ExperimentalCondition": "[register]",
 					"Encoding": "0xFF|11|110|reg3:o1",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o1.IsConstant",
+					"ExperimentalCondition": "[constant]",
 					"Encoding": "0x68|imm32:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -1950,7 +1944,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x60",
 					"ExperimentalEncoding": ""
 				}
@@ -1970,7 +1964,7 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x66|0x0F|0xEF|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -1990,18 +1984,17 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o2.IsRegister",
+					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0xD3|11|011|reg3:r",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o2.IsConstant && o2.IsConstantOne",
+					"ExperimentalCondition": "[#register][1]",
 					"Encoding": "0xD1|11|011|reg3:r",
-					"End": "true",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o2.IsConstant",
+					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0xC1|11|011|reg3:r|imm8:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -2022,7 +2015,7 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF3",
 					"ExperimentalEncoding": ""
 				}
@@ -2043,7 +2036,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xC3",
 					"ExperimentalEncoding": ""
 				}
@@ -2063,7 +2056,7 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x66|0x0F|0x3A|0x0B|11|reg3:r|reg3:o1|imm8:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -2083,7 +2076,7 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x66|0x0F|0x3A|0x0A|11|reg3:r|reg3:o1|imm8:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -2103,18 +2096,17 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o2.IsRegister",
+					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0xD3|11|111|reg3:r",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o2.IsConstant && o2.IsConstantOne",
+					"ExperimentalCondition": "[#register][1]",
 					"Encoding": "0xD1|11|111|reg3:r",
-					"End": "true",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o2.IsConstant",
+					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0xC1|11|111|reg3:r|imm8:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -2135,12 +2127,12 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o2.IsRegister",
+					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0x1B|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o2.IsConstant",
+					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0x81|11|011|reg3:r|imm32:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -2160,18 +2152,17 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o2.IsRegister",
+					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0xD3|11|100|reg3:r",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o2.IsConstant && o2.IsConstantOne",
+					"ExperimentalCondition": "[#register][1]",
 					"Encoding": "0xD1|11|100|reg3:r",
-					"End": "true",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o2.IsConstant",
+					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0xC1|11|100|reg3:r|imm8:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -2191,12 +2182,12 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o3.IsRegister",
+					"ExperimentalCondition": "[#register][#ignore][register]",
 					"Encoding": "0x0F|0xA5|11|reg3:o2|reg3:r",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o3.IsConstant",
+					"ExperimentalCondition": "[#register][#ignore][constant]",
 					"Encoding": "0x0F|0xA4|11|reg3:o2|reg3:r|imm8:o3",
 					"ExperimentalEncoding": ""
 				}
@@ -2216,18 +2207,17 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o2.IsRegister",
+					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0xD3|11|101|reg3:r",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o2.IsConstant && o2.IsConstantOne",
+					"ExperimentalCondition": "[#register][1]",
 					"Encoding": "0xD1|11|101|reg3:r",
-					"End": "true",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o2.IsConstant",
+					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0xC1|11|101|reg3:r|imm8:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -2247,12 +2237,12 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o2.IsRegister",
+					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0x0F|0xAD|11|reg3:o2|reg3:r",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o2.IsConstant",
+					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0x0F|0xAC|11|100|reg3:o2|reg3:r|imm8:o3",
 					"ExperimentalEncoding": ""
 				}
@@ -2273,7 +2263,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xFB",
 					"ExperimentalEncoding": ""
 				}
@@ -2293,7 +2283,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xAB",
 					"ExperimentalEncoding": ""
 				}
@@ -2313,12 +2303,12 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o2.IsRegister",
+					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0x2B|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o2.IsConstant",
+					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0x81|11|101|reg3:r|imm32:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -2339,7 +2329,7 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF2|0x0F|0x5C|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -2360,7 +2350,7 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0xF3|0x0F|0x5C|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -2380,12 +2370,12 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o2.IsRegister",
+					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0x85|11|reg3:o1|reg3:o2",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o2.IsConstant",
+					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0xF7|11|000|reg3:o1|imm32:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -2405,7 +2395,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x66|0x0F|0x2E|11|reg3:o1|reg3:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -2425,7 +2415,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x2E|11|reg3:o1|reg3:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -2464,7 +2454,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x87|11|reg3:o2|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -2503,12 +2493,12 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o2.IsRegister",
+					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0x33|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": ""
 				},
 				{
-					"Condition": "o2.IsConstant",
+					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0x81|11|110|reg3:r|imm32:o2",
 					"ExperimentalEncoding": ""
 				}
@@ -2531,7 +2521,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x80|rel32:label",
 					"ExperimentalEncoding": ""
 				}
@@ -2554,7 +2544,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x81|rel32:label",
 					"ExperimentalEncoding": ""
 				}
@@ -2577,7 +2567,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x82|rel32:label",
 					"ExperimentalEncoding": ""
 				}
@@ -2600,7 +2590,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x82|rel32:label",
 					"ExperimentalEncoding": ""
 				}
@@ -2623,7 +2613,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x83|rel32:label",
 					"ExperimentalEncoding": ""
 				}
@@ -2646,7 +2636,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x83|rel32:label",
 					"ExperimentalEncoding": ""
 				}
@@ -2669,7 +2659,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x84|rel32:label",
 					"ExperimentalEncoding": ""
 				}
@@ -2692,7 +2682,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x84|rel32:label",
 					"ExperimentalEncoding": ""
 				}
@@ -2715,7 +2705,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x85|rel32:label",
 					"ExperimentalEncoding": ""
 				}
@@ -2738,7 +2728,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x85|rel32:label",
 					"ExperimentalEncoding": ""
 				}
@@ -2761,7 +2751,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x86|rel32:label",
 					"ExperimentalEncoding": ""
 				}
@@ -2784,7 +2774,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x87|rel32:label",
 					"ExperimentalEncoding": ""
 				}
@@ -2807,7 +2797,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x88|rel32:label",
 					"ExperimentalEncoding": ""
 				}
@@ -2830,7 +2820,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x89|rel32:label",
 					"ExperimentalEncoding": ""
 				}
@@ -2853,7 +2843,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x8A|rel32:label",
 					"ExperimentalEncoding": ""
 				}
@@ -2876,7 +2866,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x8B|rel32:label",
 					"ExperimentalEncoding": ""
 				}
@@ -2899,7 +2889,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x8C|rel32:label",
 					"ExperimentalEncoding": ""
 				}
@@ -2922,7 +2912,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x8D|rel32:label",
 					"ExperimentalEncoding": ""
 				}
@@ -2945,7 +2935,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x8E|rel32:label",
 					"ExperimentalEncoding": ""
 				}
@@ -2968,7 +2958,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x8F|rel32:label",
 					"ExperimentalEncoding": ""
 				}
@@ -2990,7 +2980,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x90|11|000|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -3012,7 +3002,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x91|11|000|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -3034,7 +3024,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x92|11|000|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -3056,7 +3046,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x92|11|000|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -3078,7 +3068,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x93|11|000|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -3100,7 +3090,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x93|11|000|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -3122,7 +3112,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x94|11|000|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -3144,7 +3134,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x94|11|000|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -3166,7 +3156,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x95|11|000|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -3188,7 +3178,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x95|11|000|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -3210,7 +3200,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x96|11|000|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -3232,7 +3222,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x97|11|000|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -3254,7 +3244,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x98|11|000|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -3276,7 +3266,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x99|11|000|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -3298,7 +3288,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x9A|11|000|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -3320,7 +3310,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x9B|11|000|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -3342,7 +3332,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x9C|11|000|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -3364,7 +3354,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x9D|11|000|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -3386,7 +3376,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x9E|11|000|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -3408,7 +3398,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x9F|11|000|reg3:r",
 					"ExperimentalEncoding": ""
 				}
@@ -3430,7 +3420,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x40|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -3452,7 +3442,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x41|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -3474,7 +3464,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x42|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -3496,7 +3486,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x42|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -3518,7 +3508,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x43|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -3540,7 +3530,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x43|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -3562,7 +3552,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x44|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -3584,7 +3574,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x44|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -3606,7 +3596,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x45|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -3628,7 +3618,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x45|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -3650,7 +3640,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x46|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -3672,7 +3662,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x47|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -3694,7 +3684,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x48|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -3716,7 +3706,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x49|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -3738,7 +3728,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x4A|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -3760,7 +3750,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x4B|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -3782,7 +3772,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x4C|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -3804,7 +3794,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x4D|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -3826,7 +3816,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x4E|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -3848,7 +3838,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x4F|11|reg3:r|reg3:o1",
 					"ExperimentalEncoding": ""
 				}
@@ -3869,7 +3859,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"ExperimentalCondition": "",
 					"Encoding": "0x66|0x87|0xdb ",
 					"ExperimentalEncoding": ""
 				}
