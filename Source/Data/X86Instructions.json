@@ -1,16 +1,4 @@
 {
-	"ExperimentalEncoding": [
-		"[x86]=[instruction-prefix]|[rex-prefix]|[address-prefix][operand-prefix][opcode]|[opcode2]|[opcode3]|[modrm]|[sib]|[displacement]|[immediate]",
-
-		"[modrm]=[mod]|[reg]|[rm]",
-		"[sib]=[scale]|[index]|[base]",
-		"[rex]=0100|[rex-w]|[rex-r]|[rex-x]|[rex-b]",
-
-		"[rex-w]=[rex-size]",
-		"[rex-r]=[rex-modrm-reg]",
-		"[rex-x]=[rex-sib-index]",
-		"[rex-b]=[rex-modrm-rm]|[rex-sib-base]"
-	],
 	"Instructions": [
 		{
 			"Name": "Adc32",
@@ -27,12 +15,14 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o2.IsRegister",
+					"xCondition": "o2.IsRegister",
+					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0x13|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": "opcode=0x13,mod=11,reg=reg3:r,rm=reg3:op2"
 				},
 				{
-					"Condition": "o2.IsConstant",
+					"xCondition": "o2.IsConstant",
+					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0x81|11|000|reg3:r|imm32:o2",
 					"ExperimentalEncoding": "opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:op2"
 				}
@@ -53,12 +43,14 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o2.IsRegister",
+					"xCondition": "o2.IsRegister",
+					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0x03|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": "opcode=0x03,mod=11,reg=reg3:r,rm=reg3:op2"
 				},
 				{
-					"Condition": "o2.IsConstant",
+					"xCondition": "o2.IsConstant",
+					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0x81|11|000|reg3:r|imm32:o2",
 					"ExperimentalEncoding": "opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:op2"
 				}
@@ -121,12 +113,14 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "o2.IsRegister",
+					"xCondition": "o2.IsRegister",
+					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0x23|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": "opcode=0x23,mod=11,reg=reg3:r,rm=reg3:op2"
 				},
 				{
-					"Condition": "o2.IsConstant",
+					"xCondition": "o2.IsConstant",
+					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0x81|11|100|reg3:r|imm32:o2",
 					"ExperimentalEncoding": "opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:op2"
 				}
@@ -167,18 +161,13 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
-					"Encoding": "0x0F",
-					"ExperimentalEncoding": ""
-				},
-				{
 					"Condition": "o2.IsRegister",
-					"Encoding": "0xBA|11|reg3:r|reg3:o2",
+					"Encoding": "0x0F|0xBA|11|reg3:r|reg3:o2",
 					"ExperimentalEncoding": ""
 				},
 				{
 					"Condition": "o2.IsConstant",
-					"Encoding": "0xB3|11|110|reg3:r|imm8:o2",
+					"Encoding": "0x0F|0xB3|11|110|reg3:r|imm8:o2",
 					"ExperimentalEncoding": ""
 				}
 			]
@@ -911,8 +900,76 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"ThreeTwoAddressConversion": "false"
+			"xOpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "b1000|b1101"
+				},
+
+				{
+					"Comment": "ModRM.Mod",
+					"Condition": "o2.IsRegister",
+					"Encoding": "11"
+				},
+				{
+					"Condition": "o2.IsResolvedConstant && o2.IsConstantZero",
+					"Encoding": "00"
+				},
+				{
+					"Condition": "o2.IsResolvedConstant && o2.ConstantSignedInteger >= -128 && o2.ConstantSignedInteger <= 127 && !o2.IsConstantZero",
+					"Encoding": "01"
+				},
+				{
+					"Condition": "o2.IsUnresolvedConstant || !(o2.ConstantSignedInteger >= -128 && o2.ConstantSignedInteger <= 127) && !o2.IsConstantZero",
+					"Encoding": "10"
+				},
+
+				{
+					"Comment": "ModRM.Reg",
+					"Condition": "",
+					"Encoding": "reg3:r"
+				},
+
+				{
+					"Comment": "ModRM.RM",
+					"Condition": "o1.IsRegister",
+					"Encoding": "reg3:o1"
+				},
+				{
+					"Condition": "o1.IsConstant",
+					"Encoding": "b101"
+				},
+
+				{
+					"Comment": "SIB",
+					"Condition": "o1.IsRegister && o1.RegisterCode == 4",
+					"Encoding": "00|100|100"
+				},
+
+				{
+					"Comment": "Displacement",
+					"Condition": "o1.IsRegister && o1.RegisterCode == 5 && o2.IsConstantZero",
+					"Encoding": "0x00",
+					"End": "true"
+				},
+				{
+					"Condition": "o2.IsResolvedConstant && o2.IsConstantZero",
+					"Encoding": "",
+					"End": "true"
+				},
+				{
+					"Condition": "o2.IsResolvedConstant && o2.ConstantSignedInteger >= -128 && o2.ConstantSignedInteger <= 127 && !o2.IsConstantZero",
+					"Encoding": "imm8:o2",
+					"End": "true"
+				},
+				{
+					"Condition": "o2.IsConstant",
+					"Encoding": "imm32:o2",
+					"End": "true"
+				}
+			]
 		},
 		{
 			"Name": "Leave",

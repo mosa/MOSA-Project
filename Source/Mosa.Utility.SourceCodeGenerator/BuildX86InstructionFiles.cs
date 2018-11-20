@@ -516,6 +516,9 @@ namespace Mosa.Utility.SourceCodeGenerator
 			{
 				string condition = entry.Condition;
 				string encoding = entry.Encoding;
+				string end = entry.End;
+				string comment = entry.Comment;
+				string experimentalCondition = entry.ExperimentalCondition;
 
 				if (first)
 				{
@@ -526,11 +529,22 @@ namespace Mosa.Utility.SourceCodeGenerator
 					Lines.AppendLine();
 				}
 
-				bool end = entry.End != null && entry.End == "true";
-
-				if (!String.IsNullOrEmpty(condition))
+				if (!String.IsNullOrEmpty(comment))
 				{
-					EmitCondition(condition, encoding, end, 0, false);
+					Lines.Append("\t\t\t // ");
+					Lines.AppendLine(comment);
+				}
+
+				var expression = DecodeExperimentalCondition(experimentalCondition) ?? DecodeCondition(condition) ?? string.Empty;
+
+				bool endFlag = (end != null) && end == "true";
+
+				if (!string.IsNullOrWhiteSpace(experimentalCondition))
+					endFlag = true;
+
+				if (!String.IsNullOrEmpty(expression))
+				{
+					EmitCondition(expression, encoding, endFlag, 0);
 				}
 				else
 				{
@@ -539,31 +553,134 @@ namespace Mosa.Utility.SourceCodeGenerator
 			}
 		}
 
-		private void EmitCondition(string condition, string encoding, bool end, int index = 0, bool opp = false)
+		private string DecodeExperimentalCondition(string condition)
 		{
-			var tabs = "\t\t\t\t\t\t\t\t\t\t".Substring(0, index + 3);
-			Lines.Append(tabs);
+			if (string.IsNullOrWhiteSpace(condition))
+				return null;
 
-			var cond = condition;
+			string expression = string.Empty;
+
+			var parts = condition.Split(']');
+			for (int i = 0; i < parts.Length; i++)
+			{
+				var part = parts[i];
+				var normalized = part.Replace(" ", string.Empty).TrimStart('[').ToLower();
+
+				if (string.IsNullOrWhiteSpace(normalized))
+					continue;
+
+				var subparts = normalized.Split(':');
+
+				var orexpression = string.Empty;
+
+				foreach (var subpart in subparts)
+				{
+					var operand = string.Empty;
+
+					if (string.IsNullOrEmpty(subpart))
+						continue;
+
+					if (subpart.StartsWith("#"))
+						continue;
+
+					var opp = subpart.StartsWith("!");
+
+					var subpart2 = opp ? subpart.Substring(1) : subpart;
+
+					switch (i)
+					{
+						case 0: operand = "Operand1"; break;
+						case 1: operand = "Operand2"; break;
+						case 2: operand = "Operand3"; break;
+						default: operand = "GetOperand(" + i.ToString() + ")"; break;
+					}
+
+					string cond1 = string.Empty;
+					string cond2 = string.Empty;
+					string cond3 = string.Empty;
+
+					switch (subpart2)
+					{
+						case "skip": continue;
+						case "ignore": continue;
+						case "register": cond1 = ".IsCPURegister"; break;
+						case "constant": cond1 = ".IsConstant"; break;
+						case "eax": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 0"; break;
+						case "ecx": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 1"; break;
+						case "edx": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 2"; break;
+						case "ebx": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 3"; break;
+						case "esp": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 4"; break;
+						case "ebp": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 5"; break;
+						case "esi": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 6"; break;
+						case "edi": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 7"; break;
+						case "0": cond1 = ".IsConstantZero"; break;
+						case "1": cond1 = ".IsConstantOne"; break;
+						case "signedbyte": cond1 = ".IsConstant"; cond2 = ".ConstantSignedInteger >= -128"; cond3 = ".ConstantSignedInteger <= 127"; break;
+					}
+
+					string subexpression = "node." + operand + cond1;
+
+					if (!string.IsNullOrWhiteSpace(cond3))
+					{
+						subexpression = "(" + subexpression + " && node." + operand + cond2 + " && node." + operand + cond3 + ")";
+					}
+					else if (!string.IsNullOrWhiteSpace(cond2))
+					{
+						subexpression = "(" + subexpression + " && node." + operand + cond2 + ")";
+					}
+
+					if (opp)
+					{
+						subexpression = "!" + subexpression;
+					}
+
+					if (string.IsNullOrWhiteSpace(orexpression))
+					{
+						orexpression = subexpression;
+					}
+					else
+					{
+						orexpression = orexpression + " || " + subexpression;
+					}
+				}
+
+				if (string.IsNullOrWhiteSpace(expression))
+				{
+					expression = orexpression;
+				}
+				else
+				{
+					expression = expression + " && " + orexpression;
+				}
+			}
+
+			return expression;
+		}
+
+		private string DecodeCondition(string condition)
+		{
+			if (string.IsNullOrWhiteSpace(condition))
+				return null;
 
 			// update condition
-			cond = cond.Replace("o1.", "node.Operand1.")
+			return condition.Replace("o1.", "node.Operand1.")
 				.Replace("o2.", "node.Operand2.")
 				.Replace("o3.", "node.Operand3.")
 				.Replace("o4.", "node.Operand4.")
 				.Replace("r.", "node.Result.")
 				.Replace("r2.", "node.Result2.")
 				.Replace("HasBranchTarget", "node.BranchTargetsCount != 0")
-				.Replace(".IsRegister", ".IsCPURegister");
+				.Replace(".IsRegister", ".IsCPURegister")
+				.Replace(".RegisterCode", ".Register.RegisterCode");
+		}
 
-			if (opp)
-			{
-				Lines.AppendLine("if (!(" + cond + "))");
-			}
-			else
-			{
-				Lines.AppendLine("if (" + cond + ")");
-			}
+		private void EmitCondition(string condition, string encoding, bool end, int index = 0)
+		{
+			var tabs = "\t\t\t\t\t\t\t\t\t\t".Substring(0, index + 3);
+			Lines.Append(tabs);
+
+			Lines.AppendLine("if (" + condition + ")");
+
 			Lines.Append(tabs);
 			Lines.AppendLine("{");
 
