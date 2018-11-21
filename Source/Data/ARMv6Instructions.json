@@ -1,4 +1,7 @@
 {
+	"ExperimentalEncoding": [
+		"[arm-data-processing]=[cond]|[b00]|[i]|[opcode]|[s]|[rn]|[rd]|[shifter]"
+	],
 	"Instructions": [
 		{
 			"Name": "Adc32",
@@ -14,7 +17,13 @@
 			"ResultCount": 1,
 			"ARMv6Emitter": "EmitDataProcessingInstruction",
 			"ARMv6Opcode": "b0101",
-			"Description": "Add with Carry"
+			"Description": "Add with Carry",
+			"OpcodeEncoding": [
+				{
+					"ExperimentalCondition": "[#register][register]",
+					"ExperimentalEncoding": "[arm-data-processing],cond=b0000,opcode=b0101,i=0,s=0,rn=reg3:r,rd=reg3:o2,shifter=b0000"
+				}
+			]
 		},
 		{
 			"Name": "Add32",

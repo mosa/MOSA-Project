@@ -29,7 +29,6 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.OpcodeEncoder.AppendByte(0x66);
 			emitter.OpcodeEncoder.AppendByte(0x87);
 			emitter.OpcodeEncoder.AppendByte(0xdb);
-emitter.OpcodeEncoder.AppendNibble(0xb );
 		}
 	}
 }

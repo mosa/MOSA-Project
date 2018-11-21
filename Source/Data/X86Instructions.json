@@ -1,4 +1,18 @@
 {
+	"ExperimentalEncoding": [
+		"[x86]=[instruction-prefix]|[rex-prefix]|[address-prefix]|[operand-prefix]|[opcode]|[opcode2]|[opcode3]|[modrm]|[sib]|[displacement]|[immediate]",
+		"[x64]=[instruction-prefix]|[address-prefix]|[operand-prefix]|[opcode]|[opcode2]|[opcode3]|[modrm]|[sib]|[displacement]|[immediate]",
+
+		"[modrm]=[mod]|[reg]|[rm]",
+		"[sib]=[scale]|[index]|[base]",
+
+		"[rex]=[rex.opcode]|[rex.w]|[rex.r]|[rex.x]|[rex.b]",
+		"[rex.w]=[rex.size]",
+		"[rex.r]=[rex.modrm-reg]",
+		"[rex.x]=[rex.sib-index]",
+		"[rex.b]=[rex.modrm-rm]|[rex-sib-base]",
+		"[rex-opcode]=0100"
+	],
 	"Instructions": [
 		{
 			"Name": "Adc32",
@@ -16,13 +30,11 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[#register][register]",
-					"Encoding": "0x13|11|reg3:r|reg3:o2",
-					"ExperimentalEncoding": "opcode=0x13,mod=11,reg=reg3:r,rm=reg3:op2"
+					"ExperimentalEncoding": "[x86],opcode=0x13,mod=11,reg=reg3:r,rm=reg3:o2"
 				},
 				{
 					"ExperimentalCondition": "[#register][constant]",
-					"Encoding": "0x81|11|000|reg3:r|imm32:o2",
-					"ExperimentalEncoding": "opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:op2"
+					"ExperimentalEncoding": "[x86],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:o2"
 				}
 			]
 		},
@@ -42,13 +54,11 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[#register][register]",
-					"Encoding": "0x03|11|reg3:r|reg3:o2",
-					"ExperimentalEncoding": "opcode=0x03,mod=11,reg=reg3:r,rm=reg3:op2"
+					"ExperimentalEncoding": "[x86],opcode=0x03,mod=11,reg=reg3:r,rm=reg3:o2"
 				},
 				{
 					"ExperimentalCondition": "[#register][constant]",
-					"Encoding": "0x81|11|000|reg3:r|imm32:o2",
-					"ExperimentalEncoding": "opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:op2"
+					"ExperimentalEncoding": "[x86],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:o2"
 				}
 			]
 		},
@@ -68,8 +78,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xF2|0x0F|0x58|11|reg3:r|reg3:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xF2,opcode2=0x0F,opcode3=0x58,mod=11,reg=reg3:r,rm=reg3:o2"
 				}
 			]
 		},
@@ -89,8 +98,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xF3|0x0F|0x58|11|reg3:r|reg3:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xF3,opcode2=0x0F,opcode3=0x58,mod=11,reg=reg3:r,rm=reg3:o2"
 				}
 			]
 		},
@@ -110,13 +118,11 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[#register][register]",
-					"Encoding": "0x23|11|reg3:r|reg3:o2",
-					"ExperimentalEncoding": "opcode=0x23,mod=11,reg=reg3:r,rm=reg3:op2"
+					"ExperimentalEncoding": "[x86],opcode=0x23,mod=11,reg=reg3:r,rm=reg3:o2"
 				},
 				{
 					"ExperimentalCondition": "[#register][constant]",
-					"Encoding": "0x81|11|100|reg3:r|imm32:o2",
-					"ExperimentalEncoding": "opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:op2"
+					"ExperimentalEncoding": "[x86],opcode=0x81,mod=11,reg=100,rm=reg3:r,immediate=imm32:o2"
 				}
 			]
 		},
@@ -136,8 +142,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xCC",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xCC"
 				}
 			]
 		},
@@ -278,8 +283,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xFA",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xFA"
 				}
 			]
 		},
@@ -896,6 +900,60 @@
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "false",
 			"StaticEmitMethod": "StaticEmitters.Emit%",
+			"xxOpcodeEncoding": [
+				{
+					"ExperimentalCondition": "[EBP][zero]",
+					"Encoding": "",
+					"ExperimentalEncoding": "b1000|b1101|"
+				},
+				{
+					"ExperimentalCondition": "[ESP][zero]",
+					"Encoding": "",
+					"ExperimentalEncoding": "b1000|b1101|"
+				},
+				{
+					"ExperimentalCondition": "[ESP][byte]",
+					"Encoding": "",
+					"ExperimentalEncoding": "b1000|b1101|"
+				},
+				{
+					"ExperimentalCondition": "[ESP][word]",
+					"Encoding": "",
+					"ExperimentalEncoding": "b1000|b1101|"
+				},
+				{
+					"ExperimentalCondition": "[ESP][int]",
+					"Encoding": "",
+					"ExperimentalEncoding": "b1000|b1101|"
+				},
+
+				{
+					"ExperimentalCondition": "[register][register]",
+					"Encoding": "",
+					"ExperimentalEncoding": "b1000|b1101|"
+				},
+				{
+					"ExperimentalCondition": "[register][zero]",
+					"Encoding": "",
+					"ExperimentalEncoding": ""
+				},
+				{
+					"ExperimentalCondition": "[register][byte]",
+					"Encoding": "",
+					"ExperimentalEncoding": "b1000|b1101|"
+				},
+				{
+					"ExperimentalCondition": "[register][word]",
+					"Encoding": "",
+					"ExperimentalEncoding": "b1000|b1101|"
+				},
+				{
+					"ExperimentalCondition": "[register][int]",
+					"Encoding": "",
+					"ExperimentalEncoding": "b1000|b1101|"
+				}
+
+			],
 			"xOpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
@@ -3860,7 +3918,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x66|0x87|0xdb ",
+					"Encoding": "0x66|0x87|0xdb",
 					"ExperimentalEncoding": ""
 				}
 			]

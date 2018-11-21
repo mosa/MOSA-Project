@@ -1,12 +1,15 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Mosa.Utility.SourceCodeGenerator
 {
 	public class BuildX86InstructionFiles : BuildBaseTemplate
 	{
+		private Dictionary<string, string> defaultValues = new Dictionary<string, string>();
+
 		public BuildX86InstructionFiles(string jsonFile, string destinationPath)
 			: base(jsonFile, destinationPath)
 		{
@@ -14,6 +17,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected override void Iterator()
 		{
+			ReadDefaultValues();
+
 			foreach (var entry in Entries.Instructions)
 			{
 				Lines.Clear();
@@ -22,6 +27,22 @@ namespace Mosa.Utility.SourceCodeGenerator
 				AddSourceHeader();
 				Body(entry);
 				Save();
+			}
+		}
+
+		protected void ReadDefaultValues()
+		{
+			foreach (var array in Entries.ExperimentalEncoding)
+			{
+				if (string.IsNullOrWhiteSpace(array))
+					continue;
+
+				var split = ((string)array).Split('=');
+
+				string name = split[0];
+				string value = split[1];
+
+				defaultValues.Add(name, value);
 			}
 		}
 
@@ -514,11 +535,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 			foreach (var entry in node.OpcodeEncoding)
 			{
-				string condition = entry.Condition;
-				string encoding = entry.Encoding;
 				string end = entry.End;
 				string comment = entry.Comment;
-				string experimentalCondition = entry.ExperimentalCondition;
 
 				if (first)
 				{
@@ -535,22 +553,74 @@ namespace Mosa.Utility.SourceCodeGenerator
 					Lines.AppendLine(comment);
 				}
 
-				var expression = DecodeExperimentalCondition(experimentalCondition) ?? DecodeCondition(condition) ?? string.Empty;
+				var condition = DecodeExperimentalCondition(entry.ExperimentalCondition) ?? DecodeCondition(entry.Condition) ?? string.Empty;
+				var encoding = DecodeExperimentalEncoding(entry.ExperimentalEncoding) ?? entry.Encoding;
 
 				bool endFlag = (end != null) && end == "true";
 
-				if (!string.IsNullOrWhiteSpace(experimentalCondition))
+				if (!string.IsNullOrWhiteSpace(entry.ExperimentalCondition))
 					endFlag = true;
 
-				if (!String.IsNullOrEmpty(expression))
+				if (!String.IsNullOrEmpty(condition))
 				{
-					EmitCondition(expression, encoding, endFlag, 0);
+					EmitCondition(condition, encoding, endFlag, 0);
 				}
 				else
 				{
 					EmitBits(encoding, 0);
 				}
 			}
+		}
+
+		private string DecodeExperimentalEncoding(string encoding)
+		{
+			if (string.IsNullOrWhiteSpace(encoding))
+				return null;
+
+			var instructionValues = new Dictionary<string, string>();
+			string root = string.Empty;
+
+			var parts = encoding.Split(',');
+
+			foreach (var pair in parts)
+			{
+				var split = pair.Split('=');
+
+				if (split.Length == 1 && root == string.Empty)
+				{
+					root = split[0];
+					continue;
+				}
+
+				string name = split[0];
+				string value = split[1];
+
+				instructionValues.Add(name, value);
+			}
+
+			if (!defaultValues.TryGetValue(root, out string expression))
+			{
+				expression = root;
+			}
+
+			var previous = string.Empty;
+
+			while (expression != previous)
+			{
+				previous = expression;
+
+				foreach (var valuePair in defaultValues)
+				{
+					expression = expression.Replace(valuePair.Key, valuePair.Value);
+				}
+
+				foreach (var valuePair in instructionValues)
+				{
+					expression = expression.Replace("[" + valuePair.Key + "]", valuePair.Value);
+				}
+			}
+
+			return expression;
 		}
 
 		private string DecodeExperimentalCondition(string condition)
@@ -709,6 +779,9 @@ namespace Mosa.Utility.SourceCodeGenerator
 			foreach (var s in steps)
 			{
 				if (string.IsNullOrWhiteSpace(s))
+					continue;
+
+				if (s.StartsWith("[")) // ignore these
 					continue;
 				else if (s.StartsWith("0x") | s.StartsWith("x"))
 				{
