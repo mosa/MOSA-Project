@@ -235,10 +235,6 @@ namespace Mosa.Platform.x86
 			compilerPipeline.Add(
 				new InterruptVectorStage()
 			);
-
-			compilerPipeline.Add(
-				new SSEInitStage()
-			);
 		}
 
 		/// <summary>

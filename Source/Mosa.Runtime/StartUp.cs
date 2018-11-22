@@ -8,6 +8,8 @@ namespace Mosa.Runtime
 		{
 			Stage1();
 			Stage2();
+			InitalizeProcessor1();
+			InitalizeProcessor2();
 			SetInitialMemory();
 			InitializeAssembly();
 			StartApplication();
@@ -18,6 +20,14 @@ namespace Mosa.Runtime
 		}
 
 		public static void Stage2()
+		{
+		}
+
+		public static void InitalizeProcessor1()
+		{
+		}
+
+		public static void InitalizeProcessor2()
 		{
 		}
 
