@@ -21,7 +21,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[#register][register]",
-					"ExperimentalEncoding": "[arm-data-processing],cond=b0000,opcode=b0101,i=0,s=0,rn=reg3:r,rd=reg3:o2,shifter=b0000"
+					"ExperimentalEncoding": "[arm-data-processing],cond=0000,opcode=0101,i=0,s=0,rn=reg3:r,rd=reg3:o2,shifter=0000"
 				}
 			]
 		},

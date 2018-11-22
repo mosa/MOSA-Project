@@ -2,13 +2,14 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace Mosa.Utility.SourceCodeGenerator
 {
 	public class BuildX86InstructionFiles : BuildBaseTemplate
 	{
-		private Dictionary<string, string> defaultValues = new Dictionary<string, string>();
+		private Dictionary<string, string> EncodingTemplates = new Dictionary<string, string>();
 
 		public BuildX86InstructionFiles(string jsonFile, string destinationPath)
 			: base(jsonFile, destinationPath)
@@ -17,7 +18,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected override void Iterator()
 		{
-			ReadDefaultValues();
+			ReadEncodingTemplates();
 
 			foreach (var entry in Entries.Instructions)
 			{
@@ -30,19 +31,21 @@ namespace Mosa.Utility.SourceCodeGenerator
 			}
 		}
 
-		protected void ReadDefaultValues()
+		protected void ReadEncodingTemplates()
 		{
 			foreach (var array in Entries.ExperimentalEncoding)
 			{
 				if (string.IsNullOrWhiteSpace(array))
 					continue;
 
-				var split = ((string)array).Split('=');
+				var line = (string)array;
 
-				string name = split[0];
-				string value = split[1];
+				var position = line.IndexOf('=');
 
-				defaultValues.Add(name, value);
+				string name = line.Substring(0, position);
+				string value = line.Substring(position + 1);
+
+				EncodingTemplates.Add(name, value);
 			}
 		}
 
@@ -572,55 +575,73 @@ namespace Mosa.Utility.SourceCodeGenerator
 			}
 		}
 
-		private string DecodeExperimentalEncoding(string encoding)
+		private string ReduceEncoding(string template)
 		{
-			if (string.IsNullOrWhiteSpace(encoding))
-				return null;
+			if (string.IsNullOrWhiteSpace(template))
+				return string.Empty;
 
-			var instructionValues = new Dictionary<string, string>();
-			string root = string.Empty;
+			string encoding = string.Empty;
 
-			var parts = encoding.Split(',');
+			var parts = template.Split(',');
 
-			foreach (var pair in parts)
+			foreach (var p in parts)
 			{
-				var split = pair.Split('=');
+				var part = p.Trim(' ');  // trim away spaces
 
-				if (split.Length == 1 && root == string.Empty)
+				if (string.IsNullOrWhiteSpace(part))
+					continue;
+
+				if (part.StartsWith("[") && part.Contains("|"))
 				{
-					root = split[0];
+					if (string.IsNullOrEmpty(encoding))
+						encoding = part;
+					else
+						encoding = encoding + '|' + part;
+
+					continue;
+				}
+				else if (part.StartsWith("["))
+				{
+					// template
+					string subTemplate = string.Empty;
+
+					EncodingTemplates.TryGetValue(part, out subTemplate);
+
+					if (!string.IsNullOrWhiteSpace(subTemplate))
+					{
+						if (string.IsNullOrEmpty(encoding))
+							encoding = ReduceEncoding(subTemplate);
+						else
+							encoding = encoding + '|' + ReduceEncoding(subTemplate);
+					}
 					continue;
 				}
 
-				string name = split[0];
-				string value = split[1];
-
-				instructionValues.Add(name, value);
-			}
-
-			if (!defaultValues.TryGetValue(root, out string expression))
-			{
-				expression = root;
-			}
-
-			var previous = string.Empty;
-
-			while (expression != previous)
-			{
-				previous = expression;
-
-				foreach (var valuePair in defaultValues)
+				if (parts.Length == 1)
 				{
-					expression = expression.Replace(valuePair.Key, valuePair.Value);
+					encoding = part;
 				}
-
-				foreach (var valuePair in instructionValues)
+				else
 				{
-					expression = expression.Replace("[" + valuePair.Key + "]", valuePair.Value);
+					// substitution
+					var split = part.Split('=');
+
+					encoding = encoding.Replace('[' + split[0] + ']', split[1]);
 				}
 			}
 
-			return expression;
+			Debug.Assert(!encoding.Contains("="));
+			Debug.Assert(!encoding.Contains(","));
+
+			return encoding;
+		}
+
+		private string DecodeExperimentalEncoding(string line)
+		{
+			if (string.IsNullOrWhiteSpace(line))
+				return null;
+
+			return ReduceEncoding(line);
 		}
 
 		private string DecodeExperimentalCondition(string condition)
@@ -802,6 +823,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 						case 3:
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendByte(0x" + hex.Substring(0, 2) + ");");
+							Lines.Append(tabs);
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0x" + hex.Substring(1) + ");");
 							break;
 
@@ -811,6 +833,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 						case 5:
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendShort(0x" + hex.Substring(0, 4) + ");");
+							Lines.Append(tabs);
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0x" + hex.Substring(5) + ");");
 							break;
 
@@ -850,21 +873,25 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 						case 5:
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
+							Lines.Append(tabs);
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendBit(0b" + binary.Substring(4) + ");");
 							break;
 
 						case 6:
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
+							Lines.Append(tabs);
 							Lines.AppendLine("emitter.OpcodeEncoder.Append2Bits(0b" + binary.Substring(4) + ");");
 							break;
 
 						case 7:
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
+							Lines.Append(tabs);
 							Lines.AppendLine("emitter.OpcodeEncoder.Append3Bits(0b" + binary.Substring(4) + ");");
 							break;
 
 						case 8:
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
+							Lines.Append(tabs);
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(4) + ");");
 							break;
 

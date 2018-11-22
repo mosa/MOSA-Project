@@ -1,17 +1,11 @@
 {
 	"ExperimentalEncoding": [
-		"[x86]=[instruction-prefix]|[rex-prefix]|[address-prefix]|[operand-prefix]|[opcode]|[opcode2]|[opcode3]|[modrm]|[sib]|[displacement]|[immediate]",
-		"[x64]=[instruction-prefix]|[address-prefix]|[operand-prefix]|[opcode]|[opcode2]|[opcode3]|[modrm]|[sib]|[displacement]|[immediate]",
+		"[x86]=[instruction-prefix]|[address-prefix]|[operand-prefix]|[opcode]|[opcode2]|[opcode3]|[opcode4]|[mod]|[reg]|[rm]|[scale]|[index]|[base]|[displacement]|[immediate]",
+		"[x64]=[instruction-prefix]|[rex.opcode]|[rex.w]|[rex.r]|[rex.x]|[rex.b]|[address-prefix]|[operand-prefix]|[opcode]|[opcode2]|[opcode3]|[opcode4]|[mod]|[reg]|[rm]|[scale]|[index]|[base]|[displacement]|[immediate]",
 
-		"[modrm]=[mod]|[reg]|[rm]",
-		"[sib]=[scale]|[index]|[base]",
-
-		"[rex]=[rex.opcode]|[rex.w]|[rex.r]|[rex.x]|[rex.b]",
-		"[rex.w]=[rex.size]",
-		"[rex.r]=[rex.modrm-reg]",
-		"[rex.x]=[rex.sib-index]",
-		"[rex.b]=[rex.modrm-rm]|[rex-sib-base]",
-		"[rex-opcode]=0100"
+		"[x86-branch]=[x86],opcode=0x0F,opcode2=[opcode-branch],immediate=rel32:label",
+		"[x86-setbyteif]=[x86],opcode=0x0F,opcode2=[opcode-setbyteif],mod=11,reg=000,rm=reg3:r",
+		"[x86-cmov]=[x86],opcode=0x0F,opcode2=[opcode-cmov],mod=11,reg=reg3:r,rm=reg3:o1"
 	],
 	"Instructions": [
 		{
@@ -161,13 +155,11 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[#register][register]",
-					"Encoding": "0x0F|0xBA|11|reg3:r|reg3:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0xBA,mod=11,reg=reg3:r,rm=reg3:o2"
 				},
 				{
 					"ExperimentalCondition": "[#register][constant]",
-					"Encoding": "0x0F|0xB3|11|110|reg3:r|imm8:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0xB3,mod=11,reg=110,rm=reg3:r,immediate=imm8:o2"
 				}
 			]
 		},
@@ -186,13 +178,11 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[#register][register]",
-					"Encoding": "0x0F|0xA3|11|reg3:r|reg3:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0xA3,mod=11,reg=reg3:r,rm=reg3:o2"
 				},
 				{
 					"ExperimentalCondition": "[#register][constant]",
-					"Encoding": "0x0F|0xBA|11|100|reg3:r|imm8:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0xBA,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2"
 				}
 			]
 		},
@@ -211,13 +201,11 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[#register][register]",
-					"Encoding": "0x0F|0xBA|11|reg3:r|reg3:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0xBA,mod=11,reg=reg3:r,rm=reg3:o2"
 				},
 				{
 					"ExperimentalCondition": "[#register][constant]",
-					"Encoding": "0x0F|0xAB|11|011|reg3:r|imm8:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0xAB,mod=11,reg=011,rm=reg3:r,immediate=imm8:o2"
 				}
 			]
 		},
@@ -237,13 +225,11 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[register]",
-					"Encoding": "0xFF|11|010|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xFF,mod=11,reg=010,rm=reg3:o1"
 				},
 				{
 					"ExperimentalCondition": "[constant]",
-					"Encoding": "0xE8|rel32:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xE8,immediate=rel32:o1"
 				}
 			]
 		},
@@ -262,8 +248,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x99",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x99"
 				}
 			]
 		},
@@ -302,13 +287,11 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[#register][register]",
-					"Encoding": "0x3B|11|reg3:o1|reg3:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x3B,mod=11,reg=reg3:o1,rm=reg3:o2"
 				},
 				{
 					"ExperimentalCondition": "[#register][constant]",
-					"Encoding": "0x81|11|111|reg3:o1|imm32:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x81,mod=11,reg=111,rm=reg3:o1,immediate=imm32:o2"
 				}
 			]
 		},
@@ -329,8 +312,7 @@
 			"xOpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x00|0xFF|1011|0001|reg3:o1|reg3:o2",
-					"ExperimentalEncoding": ""
+					"xxxxExperimentalEncoding": "[x86],opcode=0x00,opcode2=0xFF,opcode3=1011|0001,mod=11,reg=reg3:o1,rm=reg3:o2"
 				}
 			]
 		},
@@ -349,8 +331,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "01100110|00001111|00101111|11|reg3:o1|reg3:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=01100110,opcode2=00001111,opcode3=00101111,mod=11,reg=reg3:o1,rm=reg3:o2"
 				}
 			]
 		},
@@ -369,8 +350,8 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "00001111|00101111|11|reg3:o1|reg3:o2",
-					"ExperimentalEncoding": ""
+					"": "00001111|00101111|11|reg3:o1|reg3:o2",
+					"ExperimentalEncoding": "[x86],opcode=00001111,opcode2=00101111,mod=11,reg=reg3:o1,rm=reg3:o2"
 				}
 			]
 		},
@@ -389,8 +370,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0xA2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0xA2"
 				}
 			]
 		},
@@ -409,8 +389,8 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xF2|0x0F|0x5A|11|reg3:o1|reg3:o2",
-					"ExperimentalEncoding": ""
+					"": "0xF2|0x0F|0x5A|11|reg3:o1|reg3:o2",
+					"ExperimentalEncoding": "[x86],opcode=0xF2,opcode2=0x0F,opcode3=0x5A,mod=11,reg=reg3:o1,rm=reg3:o2"
 				}
 			]
 		},
@@ -429,8 +409,8 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xF2|0x0F|0x2A|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"": "0xF2|0x0F|0x2A|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": "[x86],opcode=0xF2,opcode2=0x0F,opcode3=0x2A,mod=11,reg=reg3:r,rm=reg3:o1"
 				}
 			]
 		},
@@ -450,7 +430,7 @@
 				{
 					"ExperimentalCondition": "",
 					"Encoding": "0xF3|0x0F|0x2A|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xF3,opcode2=0x0F,opcode3=0x2A,mod=11,reg=reg3:r,rm=reg3:o1"
 				}
 			]
 		},
@@ -469,8 +449,8 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xF3|0x0F|0x5A|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"": "0xF3|0x0F|0x5A|11|reg3:r|reg3:o1",
+					"ExperimentalEncoding": "[x86],opcode=0xF3,opcode2=0x0F,opcode3=0x5A,mod=11,reg=reg3:r,rm=reg3:o1"
 				}
 			]
 		},
@@ -490,7 +470,7 @@
 				{
 					"ExperimentalCondition": "",
 					"Encoding": "0xF2|0x0F|0x2C|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xF2,opcode2=0x0F,opcode3=0x2C,mod=11,reg=reg3:r,rm=reg3:o1"
 				}
 			]
 		},
@@ -509,8 +489,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xF3|0x0F|0x2C|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xF3,opcode2=0x0F,opcode3=0x2C,mod=11,reg=reg3:r,rm=reg3:o1"
 				}
 			]
 		},
@@ -529,8 +508,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xFF|11|1|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "0100|1|reg3:r"
 				}
 			]
 		},
@@ -549,8 +527,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xF7|11|110|reg3:o3",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xF7,mod=11,reg=110,rm=reg3:o3"
 				}
 			]
 		},
@@ -569,8 +546,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xF2|0x0F|0x5E|11|reg3:r|reg3:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xF2,opcode2=0x0F,opcode3=0x5E,mod=11,reg=reg3:r,rm=reg3:o2"
 				}
 			]
 		},
@@ -589,8 +565,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xF3|0x0F|0x5E|11|reg3:r|reg3:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xF3,opcode2=0x0F,opcode3=0x5E,mod=11,reg=reg3:r,rm=reg3:o2"
 				}
 			]
 		},
@@ -625,8 +600,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xF4",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xF4"
 				}
 			]
 		},
@@ -645,8 +619,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xF7|11|111|reg3:o3",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xF7,mod=11,reg=111,rm=reg3:o3"
 				}
 			]
 		},
@@ -665,8 +638,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0xAF|11|reg3:r|reg3:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0xAF,mod=11,reg=reg3:r,rm=reg3:o2"
 				}
 			]
 		},
@@ -687,13 +659,11 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[register]",
-					"Encoding": "0xEC",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xEC"
 				},
 				{
 					"ExperimentalCondition": "[constant]",
-					"Encoding": "0xE4|imm8:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xE4,immediate=imm8:o1"
 				}
 			]
 		},
@@ -714,13 +684,12 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[register]",
-					"Encoding": "0x66|0xED",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x66,opcode2=0xED"
 				},
 				{
 					"ExperimentalCondition": "[constant]",
 					"Encoding": "0x66|0xE4|imm8:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x66,opcode2=0xE4,immediate=imm8:o1"
 				}
 			]
 		},
@@ -741,13 +710,12 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[register]",
-					"Encoding": "0xED",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xED"
 				},
 				{
 					"ExperimentalCondition": "[constant]",
 					"Encoding": "0xE5|imm8:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xE5,immediate=imm8:o1"
 				}
 			]
 		},
@@ -766,8 +734,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xFF|11|000|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "0100|0|reg3:r"
 				}
 			]
 		},
@@ -787,8 +754,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xCD|imm8:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xCD,immediate=imm8:o1"
 				}
 			]
 		},
@@ -809,12 +775,11 @@
 				{
 					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0x0F|0x01|00|010|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=reg3:o1"
 				},
 				{
 					"ExperimentalCondition": "[#register][constant]",
-					"Encoding": "0x0F|0x01|00|010|101|imm32:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=101,immediate=imm32:o1"
 				}
 			]
 		},
@@ -835,8 +800,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xCF",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xCF"
 				}
 			]
 		},
@@ -856,8 +820,7 @@
 			"OpcodeEncoding": [
 				{
 					"xExperimentalCondition": "HasBranchTarget",
-					"Encoding": "0xE9|rel32:label",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xE9,immediate=rel32:label"
 				}
 			]
 		},
@@ -1039,8 +1002,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xC9",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xC9"
 				}
 			]
 		},
@@ -1060,13 +1022,11 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[register]",
-					"Encoding": "0x0F|0x01|00|010|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=reg3:o1"
 				},
 				{
 					"ExperimentalCondition": "[constant]",
-					"Encoding": "0x0F|0x01|00|010|101|imm32:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=101,immediate=imm32:o1"
 				}
 			]
 		},
@@ -1086,13 +1046,11 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[register]",
-					"Encoding": "0x0F|0x01|00|011|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0x01,mod=00,reg=011,rm=reg3:o1"
 				},
 				{
 					"ExperimentalCondition": "[constant]",
-					"Encoding": "0x0F|0x01|00|011|101|imm32:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0x01,mod=00,reg=011,rm=101,immediate=imm32:o1"
 				}
 			]
 		},
@@ -1112,8 +1070,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xF0",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xF0"
 				}
 			]
 		},
@@ -1132,8 +1089,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x8C|11|reg3:o1|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x8C,mod=11,reg=reg3:o1,rm=reg3:r"
 				}
 			]
 		},
@@ -1152,8 +1108,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x8E|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x8E,mod=11,reg=reg3:r,rm=reg3:o1"
 				}
 			]
 		},
@@ -1172,13 +1127,11 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[register]",
-					"Encoding": "0x8B|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x8B,mod=11,reg=reg3:r,rm=reg3:o1"
 				},
 				{
 					"ExperimentalCondition": "[constant]",
-					"Encoding": "0xC7|11|000|reg3:r|imm32:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xC7,mod=11,reg=000,rm=reg3:r,immediate=imm32:o1"
 				}
 			]
 		},
@@ -1196,8 +1149,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x28|11|reg3:r|reg3:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0x28,mod=11,reg=reg3:r,rm=reg3:o2"
 				}
 			]
 		},
@@ -1232,8 +1184,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x20|11|reg3:o1|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0x20,mod=11,reg=reg3:o1,rm=reg3:r"
 				}
 			]
 		},
@@ -1254,7 +1205,7 @@
 				{
 					"ExperimentalCondition": "",
 					"Encoding": "0x0F|0x22|11|reg3:o1|reg3:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0x22,mod=11,reg=reg3:o1,rm=reg3:o2"
 				}
 			]
 		},
@@ -1273,8 +1224,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0110|0110|0000|1111|0111|1110|11|reg3:o1|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=01100110,opcode2=00001111,opcode3=01111110,mod=11,reg=reg3:o1,rm=reg3:r"
 				}
 			]
 		},
@@ -1338,8 +1288,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xF2|0x0F|0x10|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xF2,opcode2=0x0F,opcode3=0x10,mod=11,reg=reg3:r,rm=reg3:o1"
 				}
 			]
 		},
@@ -1388,8 +1337,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xF3|0x0F|0x10|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xF3,opcode2=0x0F,opcode3=0x10,mod=11,reg=reg3:r,rm=reg3:o1"
 				}
 			]
 		},
@@ -1483,8 +1431,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|1011|1110|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=10111110,mod=11,reg=reg3:r,rm=reg3:o1"
 				}
 			]
 		},
@@ -1504,7 +1451,7 @@
 				{
 					"ExperimentalCondition": "",
 					"Encoding": "0x0F|1011|1111|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=10111111,mod=11,reg=reg3:r,rm=reg3:o1"
 				}
 			]
 		},
@@ -1551,8 +1498,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x10|11|reg3:r|reg3:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0x10,mod=11,reg=reg3:r,rm=reg3:o2"
 				}
 			]
 		},
@@ -1601,7 +1547,7 @@
 				{
 					"ExperimentalCondition": "",
 					"Encoding": "0x0F|1011|0110|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=10110110,mod=11,reg=reg3:r,rm=reg3:o1"
 				}
 			]
 		},
@@ -1620,8 +1566,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|1011|0111|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=10110111,mod=11,reg=reg3:r,rm=reg3:o1"
 				}
 			]
 		},
@@ -1669,8 +1614,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xF7|11|100|reg3:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xF7,mod=11,reg=100,rm=reg3:o2"
 				}
 			]
 		},
@@ -1690,8 +1634,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xF2|0x0F|0x59|11|reg3:r|reg3:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xF2,opcode2=0x0F,opcode3=0x59,mod=11,reg=reg3:r,rm=reg3:o2"
 				}
 			]
 		},
@@ -1711,8 +1654,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xF3|0x0F|0x59|11|reg3:r|reg3:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xF3,opcode2=0x0F,opcode3=0x59,mod=11,reg=reg3:r,rm=reg3:o2"
 				}
 			]
 		},
@@ -1731,8 +1673,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xF7|0x03",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xF7,opcode2=0x03"
 				}
 			]
 		},
@@ -1751,8 +1692,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x90",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x90"
 				}
 			]
 		},
@@ -1771,8 +1711,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xF7|11|010|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xF7,mod=11,reg=010,rm=reg3:r"
 				}
 			]
 		},
@@ -1792,13 +1731,11 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[#register][register]",
-					"Encoding": "0x0B|11|reg3:r|reg3:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0B,mod=11,reg=reg3:r,rm=reg3:o2"
 				},
 				{
 					"ExperimentalCondition": "[#register][constant]",
-					"Encoding": "0x81|11|001|reg3:r|imm32:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x81,mod=11,reg=001,rm=reg3:r,immediate=imm32:o2"
 				}
 			]
 		},
@@ -1819,13 +1756,11 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[register]",
-					"Encoding": "0xEE",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xEE"
 				},
 				{
 					"ExperimentalCondition": "[constant]",
-					"Encoding": "0xE6|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xE6,immediate=imm8:o1"
 				}
 			]
 		},
@@ -1846,13 +1781,11 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[register]",
-					"Encoding": "0xEF",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xEF"
 				},
 				{
 					"ExperimentalCondition": "[constant]",
-					"Encoding": "0xE7|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xE7,immediate=imm8:o1"
 				}
 			]
 		},
@@ -1873,13 +1806,11 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[register]",
-					"Encoding": "0xEF",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xEF"
 				},
 				{
 					"ExperimentalCondition": "[constant]",
-					"Encoding": "0xE7|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xE7,immediate=imm8:o1"
 				}
 			]
 		},
@@ -1898,8 +1829,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xF3|0x90",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xF3,opcode2=0x90"
 				}
 			]
 		},
@@ -1918,8 +1848,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0110|0110|0000|1111|0011|1010|0001|0110|11|reg3:o1|reg3:r|imm8:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=01100110,opcode2=00001111,opcode3=00111010,opcode4=00010110,mod=11,reg=reg3:o1,rm=reg3:r,immediate=imm8:o2"
 				}
 			]
 		},
@@ -1938,8 +1867,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "01011|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "01011|reg3:r"
 				}
 			]
 		},
@@ -1958,8 +1886,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x61",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x61"
 				}
 			]
 		},
@@ -1978,13 +1905,11 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[register]",
-					"Encoding": "0xFF|11|110|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xFF,mod=11,reg=110,rm=reg3:o1"
 				},
 				{
 					"ExperimentalCondition": "[constant]",
-					"Encoding": "0x68|imm32:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x68,immediate=imm32:o1"
 				}
 			]
 		},
@@ -2003,8 +1928,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x60",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x60"
 				}
 			]
 		},
@@ -2023,8 +1947,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x66|0x0F|0xEF|11|reg3:r|reg3:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x66,opcode2=0x0F,opcode3=0xEF,mod=11,reg=reg3:r,rm=reg3:o2"
 				}
 			]
 		},
@@ -2043,18 +1966,15 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[#register][register]",
-					"Encoding": "0xD3|11|011|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xD3,mod=11,reg=011,rm=reg3:r"
 				},
 				{
 					"ExperimentalCondition": "[#register][1]",
-					"Encoding": "0xD1|11|011|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xD1,mod=11,reg=011,rm=reg3:r"
 				},
 				{
 					"ExperimentalCondition": "[#register][constant]",
-					"Encoding": "0xC1|11|011|reg3:r|imm8:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xC1,mod=11,reg=011,rm=reg3:r,immediate=imm8:o2"
 				}
 			]
 		},
@@ -2074,8 +1994,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xF3",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xF3"
 				}
 			]
 		},
@@ -2095,8 +2014,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xC3",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xC3"
 				}
 			]
 		},
@@ -2115,8 +2033,8 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x66|0x0F|0x3A|0x0B|11|reg3:r|reg3:o1|imm8:o2",
-					"ExperimentalEncoding": ""
+					"xEncoding": "0x66|0x0F|0x3A|0x0B|11|reg3:r|reg3:o1|imm8:o2",
+					"ExperimentalEncoding": "[x86],opcode=0x66,opcode2=0x0F,opcode3=0x3A,opcode4=0x0B,mod=11,reg=reg3:r,rm=reg3:o1,immediate=imm8:o2"
 				}
 			]
 		},
@@ -2135,8 +2053,8 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x66|0x0F|0x3A|0x0A|11|reg3:r|reg3:o1|imm8:o2",
-					"ExperimentalEncoding": ""
+					"xEncoding": "0x66|0x0F|0x3A|0x0A|11|reg3:r|reg3:o1|imm8:o2",
+					"ExperimentalEncoding": "[x86],opcode=0x66,opcode2=0x0F,opcode3=0x3A,opcode4=0x0A,mod=11,reg=reg3:r,rm=reg3:o1,immediate=imm8:o2"
 				}
 			]
 		},
@@ -2155,18 +2073,18 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[#register][register]",
-					"Encoding": "0xD3|11|111|reg3:r",
-					"ExperimentalEncoding": ""
+					"xEncoding": "0xD3|11|111|reg3:r",
+					"ExperimentalEncoding": "[x86],opcode=0xD3,mod=11,reg=111,rm=reg3:r"
 				},
 				{
 					"ExperimentalCondition": "[#register][1]",
-					"Encoding": "0xD1|11|111|reg3:r",
-					"ExperimentalEncoding": ""
+					"xEncoding": "0xD1|11|111|reg3:r",
+					"ExperimentalEncoding": "[x86],opcode=0xD1,mod=11,reg=111,rm=reg3:r"
 				},
 				{
 					"ExperimentalCondition": "[#register][constant]",
-					"Encoding": "0xC1|11|111|reg3:r|imm8:o2",
-					"ExperimentalEncoding": ""
+					"xEncoding": "0xC1|11|111|reg3:r|imm8:o2",
+					"ExperimentalEncoding": "[x86],opcode=0xC1,mod=11,reg=111,rm=reg3:r,immediate=imm8:o2"
 				}
 			]
 		},
@@ -2186,13 +2104,13 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[#register][register]",
-					"Encoding": "0x1B|11|reg3:r|reg3:o2",
-					"ExperimentalEncoding": ""
+					"xEncoding": "0x1B|11|reg3:r|reg3:o2",
+					"ExperimentalEncoding": "[x86],opcode=0x1B,mod=11,reg=reg3:r,rm=reg3:o2"
 				},
 				{
 					"ExperimentalCondition": "[#register][constant]",
-					"Encoding": "0x81|11|011|reg3:r|imm32:o2",
-					"ExperimentalEncoding": ""
+					"xEncoding": "0x81|11|011|reg3:r|imm32:o2",
+					"ExperimentalEncoding": "[x86],opcode=0x81,mod=11,reg=011,rm=reg3:r,immediate=imm32:o2"
 				}
 			]
 		},
@@ -2212,17 +2130,17 @@
 				{
 					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0xD3|11|100|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xD3,mod=11,reg=100,rm=reg3:r"
 				},
 				{
 					"ExperimentalCondition": "[#register][1]",
 					"Encoding": "0xD1|11|100|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xD1,mod=11,reg=100,rm=reg3:r"
 				},
 				{
 					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0xC1|11|100|reg3:r|imm8:o2",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xC1,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2"
 				}
 			]
 		},
@@ -2241,13 +2159,13 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[#register][#ignore][register]",
-					"Encoding": "0x0F|0xA5|11|reg3:o2|reg3:r",
-					"ExperimentalEncoding": ""
+					"xEncoding": "0x0F|0xA5|11|reg3:o2|reg3:r",
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0xA5,mod=11,reg=reg3:o2,rm=reg3:r"
 				},
 				{
 					"ExperimentalCondition": "[#register][#ignore][constant]",
-					"Encoding": "0x0F|0xA4|11|reg3:o2|reg3:r|imm8:o3",
-					"ExperimentalEncoding": ""
+					"xEncoding": "0x0F|0xA4|11|reg3:o2|reg3:r|imm8:o3",
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0xA4,mod=11,reg=reg3:o2,rm=reg3:r,immediate=imm8:o3"
 				}
 			]
 		},
@@ -2266,18 +2184,18 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[#register][register]",
-					"Encoding": "0xD3|11|101|reg3:r",
-					"ExperimentalEncoding": ""
+					"xEncoding": "0xD3|11|101|reg3:r",
+					"ExperimentalEncoding": "[x86],opcode=0xD3,mod=11,reg=101,rm=reg3:r"
 				},
 				{
 					"ExperimentalCondition": "[#register][1]",
-					"Encoding": "0xD1|11|101|reg3:r",
-					"ExperimentalEncoding": ""
+					"xEncoding": "0xD1|11|101|reg3:r",
+					"ExperimentalEncoding": "[x86],opcode=0xD1,mod=11,reg=101,rm=reg3:r"
 				},
 				{
 					"ExperimentalCondition": "[#register][constant]",
-					"Encoding": "0xC1|11|101|reg3:r|imm8:o2",
-					"ExperimentalEncoding": ""
+					"xEncoding": "0xC1|11|101|reg3:r|imm8:o2",
+					"ExperimentalEncoding": "[x86],opcode=0xC1,mod=11,reg=101,rm=reg3:r,immediate=imm8:o2"
 				}
 			]
 		},
@@ -2297,12 +2215,12 @@
 				{
 					"ExperimentalCondition": "[#register][register]",
 					"Encoding": "0x0F|0xAD|11|reg3:o2|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0xAD,mod=11,reg=reg3:o2,rm=reg3:r"
 				},
 				{
 					"ExperimentalCondition": "[#register][constant]",
 					"Encoding": "0x0F|0xAC|11|100|reg3:o2|reg3:r|imm8:o3",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x0F,opcode2=0xAC,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2"
 				}
 			]
 		},
@@ -2322,8 +2240,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xFB",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xFB"
 				}
 			]
 		},
@@ -2342,8 +2259,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0xAB",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0xAB"
 				}
 			]
 		},
@@ -2362,13 +2278,13 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "[#register][register]",
-					"Encoding": "0x2B|11|reg3:r|reg3:o2",
-					"ExperimentalEncoding": ""
+					"xEncoding": "0x2B|11|reg3:r|reg3:o2",
+					"ExperimentalEncoding": "[x86],opcode=0x2B,mod=11,reg=reg3:r,rm=reg3:o2"
 				},
 				{
 					"ExperimentalCondition": "[#register][constant]",
-					"Encoding": "0x81|11|101|reg3:r|imm32:o2",
-					"ExperimentalEncoding": ""
+					"xEncoding": "0x81|11|101|reg3:r|imm32:o2",
+					"ExperimentalEncoding": "[x86],opcode=0x81,mod=11,reg=101,rm=reg3:r,immediate=imm32:o2"
 				}
 			]
 		},
@@ -2580,8 +2496,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x80|rel32:label",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-branch],opcode-branch=0x80"
 				}
 			]
 		},
@@ -2603,8 +2518,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x81|rel32:label",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-branch],opcode-branch=0x81"
 				}
 			]
 		},
@@ -2626,8 +2540,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x82|rel32:label",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-branch],opcode-branch=0x82"
 				}
 			]
 		},
@@ -2649,8 +2562,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x82|rel32:label",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-branch],opcode-branch=0x82"
 				}
 			]
 		},
@@ -2672,8 +2584,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x83|rel32:label",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-branch],opcode-branch=0x83"
 				}
 			]
 		},
@@ -2695,8 +2606,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x83|rel32:label",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-branch],opcode-branch=0x83"
 				}
 			]
 		},
@@ -2718,8 +2628,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x84|rel32:label",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-branch],opcode-branch=0x84"
 				}
 			]
 		},
@@ -2741,8 +2650,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x84|rel32:label",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-branch],opcode-branch=0x84"
 				}
 			]
 		},
@@ -2764,8 +2672,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x85|rel32:label",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-branch],opcode-branch=0x85"
 				}
 			]
 		},
@@ -2787,8 +2694,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x85|rel32:label",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-branch],opcode-branch=0x85"
 				}
 			]
 		},
@@ -2810,8 +2716,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x86|rel32:label",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-branch],opcode-branch=0x86"
 				}
 			]
 		},
@@ -2833,8 +2738,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x87|rel32:label",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-branch],opcode-branch=0x87"
 				}
 			]
 		},
@@ -2856,8 +2760,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x88|rel32:label",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-branch],opcode-branch=0x88"
 				}
 			]
 		},
@@ -2879,8 +2782,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x89|rel32:label",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-branch],opcode-branch=0x89"
 				}
 			]
 		},
@@ -2902,8 +2804,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x8A|rel32:label",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-branch],opcode-branch=0x8A"
 				}
 			]
 		},
@@ -2925,8 +2826,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x8B|rel32:label",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-branch],opcode-branch=0x8B"
 				}
 			]
 		},
@@ -2948,8 +2848,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x8C|rel32:label",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-branch],opcode-branch=0x8C"
 				}
 			]
 		},
@@ -2971,8 +2870,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x8D|rel32:label",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-branch],opcode-branch=0x8D"
 				}
 			]
 		},
@@ -2994,8 +2892,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x8E|rel32:label",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-branch],opcode-branch=0x8E"
 				}
 			]
 		},
@@ -3017,8 +2914,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x8F|rel32:label",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-branch],opcode-branch=0x8F"
 				}
 			]
 		},
@@ -3039,8 +2935,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x90|11|000|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-setbyteif],opcode-setbyteif=0x90"
 				}
 			]
 		},
@@ -3061,8 +2956,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x91|11|000|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-setbyteif],opcode-setbyteif=0x91"
 				}
 			]
 		},
@@ -3083,8 +2977,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x92|11|000|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-setbyteif],opcode-setbyteif=0x92"
 				}
 			]
 		},
@@ -3105,8 +2998,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x92|11|000|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-setbyteif],opcode-setbyteif=0x92"
 				}
 			]
 		},
@@ -3127,8 +3019,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x93|11|000|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-setbyteif],opcode-setbyteif=0x93"
 				}
 			]
 		},
@@ -3149,8 +3040,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x93|11|000|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-setbyteif],opcode-setbyteif=0x93"
 				}
 			]
 		},
@@ -3171,8 +3061,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x94|11|000|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-setbyteif],opcode-setbyteif=0x94"
 				}
 			]
 		},
@@ -3193,8 +3082,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x94|11|000|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-setbyteif],opcode-setbyteif=0x94"
 				}
 			]
 		},
@@ -3215,8 +3103,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x95|11|000|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-setbyteif],opcode-setbyteif=0x95"
 				}
 			]
 		},
@@ -3237,8 +3124,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x95|11|000|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-setbyteif],opcode-setbyteif=0x95"
 				}
 			]
 		},
@@ -3259,8 +3145,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x96|11|000|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-setbyteif],opcode-setbyteif=0x96"
 				}
 			]
 		},
@@ -3281,8 +3166,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x97|11|000|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-setbyteif],opcode-setbyteif=0x97"
 				}
 			]
 		},
@@ -3303,8 +3187,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x98|11|000|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-setbyteif],opcode-setbyteif=0x98"
 				}
 			]
 		},
@@ -3325,8 +3208,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x99|11|000|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-setbyteif],opcode-setbyteif=0x99"
 				}
 			]
 		},
@@ -3347,8 +3229,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x9A|11|000|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-setbyteif],opcode-setbyteif=0x9A"
 				}
 			]
 		},
@@ -3369,8 +3250,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x9B|11|000|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-setbyteif],opcode-setbyteif=0x9B"
 				}
 			]
 		},
@@ -3391,8 +3271,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x9C|11|000|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-setbyteif],opcode-setbyteif=0x9C"
 				}
 			]
 		},
@@ -3413,8 +3292,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x9D|11|000|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-setbyteif],opcode-setbyteif=0x9D"
 				}
 			]
 		},
@@ -3435,8 +3313,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x9E|11|000|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-setbyteif],opcode-setbyteif=0x9E"
 				}
 			]
 		},
@@ -3457,11 +3334,11 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x9F|11|000|reg3:r",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-setbyteif],opcode-setbyteif=0x9F"
 				}
 			]
 		},
+
 		{
 			"Name": "CMovOverflow32",
 			"AlternativeName": "CMovO32",
@@ -3479,8 +3356,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x40|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-cmov],opcode-cmov=0x40"
 				}
 			]
 		},
@@ -3501,8 +3377,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x41|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-cmov],opcode-cmov=0x41"
 				}
 			]
 		},
@@ -3523,8 +3398,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x42|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-cmov],opcode-cmov=0x42"
 				}
 			]
 		},
@@ -3545,8 +3419,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x42|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-cmov],opcode-cmov=0x42"
 				}
 			]
 		},
@@ -3567,8 +3440,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x43|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-cmov],opcode-cmov=0x43"
 				}
 			]
 		},
@@ -3589,8 +3461,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x43|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-cmov],opcode-cmov=0x43"
 				}
 			]
 		},
@@ -3611,8 +3482,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x44|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-cmov],opcode-cmov=0x44"
 				}
 			]
 		},
@@ -3633,8 +3503,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x44|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-cmov],opcode-cmov=0x44"
 				}
 			]
 		},
@@ -3655,8 +3524,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x45|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-cmov],opcode-cmov=0x45"
 				}
 			]
 		},
@@ -3677,8 +3545,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x45|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-cmov],opcode-cmov=0x45"
 				}
 			]
 		},
@@ -3699,8 +3566,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x46|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-cmov],opcode-cmov=0x46"
 				}
 			]
 		},
@@ -3721,8 +3587,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x47|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-cmov],opcode-cmov=0x47"
 				}
 			]
 		},
@@ -3743,8 +3608,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x48|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-cmov],opcode-cmov=0x48"
 				}
 			]
 		},
@@ -3765,8 +3629,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x49|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-cmov],opcode-cmov=0x49"
 				}
 			]
 		},
@@ -3787,8 +3650,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x4A|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-cmov],opcode-cmov=0x4A"
 				}
 			]
 		},
@@ -3809,8 +3671,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x4B|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-cmov],opcode-cmov=0x4B"
 				}
 			]
 		},
@@ -3831,8 +3692,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x4C|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-cmov],opcode-cmov=0x4C"
 				}
 			]
 		},
@@ -3853,8 +3713,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x4D|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-cmov],opcode-cmov=0x4D"
 				}
 			]
 		},
@@ -3875,8 +3734,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x4E|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-cmov],opcode-cmov=0x4E"
 				}
 			]
 		},
@@ -3897,8 +3755,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x0F|0x4F|11|reg3:r|reg3:o1",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86-cmov],opcode-cmov=0x4F"
 				}
 			]
 		},
@@ -3918,8 +3775,7 @@
 			"OpcodeEncoding": [
 				{
 					"ExperimentalCondition": "",
-					"Encoding": "0x66|0x87|0xdb",
-					"ExperimentalEncoding": ""
+					"ExperimentalEncoding": "[x86],opcode=0x66,opcode2=0x87,opcode3=0xdb"
 				}
 			]
 		}
