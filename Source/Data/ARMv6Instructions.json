@@ -1,5 +1,5 @@
 {
-	"ExperimentalEncoding": [
+	"Encoding": [
 		"[arm-data-processing]=[cond]|[b00]|[i]|[opcode]|[s]|[rn]|[rd]|[shifter]"
 	],
 	"Instructions": [
@@ -20,8 +20,8 @@
 			"Description": "Add with Carry",
 			"OpcodeEncoding": [
 				{
-					"ExperimentalCondition": "[#register][register]",
-					"ExperimentalEncoding": "[arm-data-processing],cond=0000,opcode=0101,i=0,s=0,rn=reg3:r,rd=reg3:o2,shifter=0000"
+					"Condition": "[#register][register]",
+					"Encoding": "[arm-data-processing],cond=0000,opcode=0101,i=0,s=0,rn=reg3:r,rd=reg3:o2,shifter=0000"
 				}
 			]
 		},

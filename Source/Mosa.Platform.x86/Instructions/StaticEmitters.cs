@@ -9,37 +9,6 @@ namespace Mosa.Platform.x86.Instructions
 {
 	public static class StaticEmitters
 	{
-		internal static void EmitCmpXChgLoad32(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Result.IsCPURegister);
-			Debug.Assert(node.Operand1.IsCPURegister);
-			Debug.Assert(node.Operand2.IsCPURegister);
-			Debug.Assert(node.GetOperand(3).IsCPURegister);
-			Debug.Assert(node.Result.Register == GeneralPurposeRegister.EAX);
-			Debug.Assert(node.Operand1.Register == GeneralPurposeRegister.EAX);
-
-			// Compare EAX with r/m32. If equal, ZF is set and r32 is loaded into r/m32.
-			// Else, clear ZF and load r/m32 into EAX.
-
-			// memory, register 0000 1111 : 1011 000w : mod reg r/m
-			var opcode = new OpcodeEncoder()
-				.AppendNibble(Bits.b0000)                                       // 4:opcode
-				.AppendNibble(Bits.b1111)                                       // 4:opcode
-				.AppendNibble(Bits.b1011)                                       // 4:opcode
-				.Append3Bits(Bits.b000)                                         // 3:opcode
-				.AppendWidthBit(true)                                           // 1:width (node.Size != InstructionSize.Size8)
-				.ModRegRMSIBDisplacement(true, node.GetOperand(3), node.Operand2, node.Operand3) // Mod-Reg-RM-?SIB-?Displacement
-				.GetPosition(out int patchOffset)
-				.AppendConditionalIntegerValue(node.Operand2.IsResolvedByLinker, 0);    // 32:memory
-
-			if (node.Operand2.IsResolvedByLinker)
-			{
-				emitter.EmitLink(node.Operand2, patchOffset);
-			}
-
-			emitter.Emit(opcode);
-		}
-
 		internal static void EmitXChgLoad32ConstantBase(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result.IsCPURegister);

@@ -33,7 +33,10 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected void ReadEncodingTemplates()
 		{
-			foreach (var array in Entries.ExperimentalEncoding)
+			if (Entries.Encoding == null)
+				return;
+
+			foreach (var array in Entries.Encoding)
 			{
 				if (string.IsNullOrWhiteSpace(array))
 					continue;
@@ -384,30 +387,6 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Lines.AppendLine("\t\t}");
 			}
 
-			if (node.Encoding != null)
-			{
-				Lines.AppendLine();
-				Lines.AppendLine("\t\tpublic override void Emit(InstructionNode node, BaseCodeEmitter emitter)");
-				Lines.AppendLine("\t\t{");
-				if (node.VariableOperands == null || node.VariableOperands == "false")
-				{
-					Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.ResultCount == " + node.ResultCount + ");");
-					Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.OperandCount == " + node.OperandCount + ");");
-
-					if (node.ThreeTwoAddressConversion == null || node.ThreeTwoAddressConversion == "true")
-					{
-						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Result.IsCPURegister);");
-						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);");
-						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);");
-					}
-					Lines.AppendLine();
-				}
-
-				EmitEncoding((string)node.Encoding);
-
-				Lines.AppendLine("\t\t}");
-			}
-
 			if (node.OpcodeEncoding != null)
 			{
 				Lines.AppendLine();
@@ -556,17 +535,12 @@ namespace Mosa.Utility.SourceCodeGenerator
 					Lines.AppendLine(comment);
 				}
 
-				var condition = DecodeExperimentalCondition(entry.ExperimentalCondition) ?? DecodeCondition(entry.Condition) ?? string.Empty;
-				var encoding = DecodeExperimentalEncoding(entry.ExperimentalEncoding) ?? entry.Encoding;
-
-				bool endFlag = (end != null) && end == "true";
-
-				if (!string.IsNullOrWhiteSpace(entry.ExperimentalCondition))
-					endFlag = true;
+				var condition = DecodeExperimentalCondition(entry.Condition) ?? string.Empty;
+				var encoding = DecodeExperimentalEncoding(entry.Encoding);
 
 				if (!String.IsNullOrEmpty(condition))
 				{
-					EmitCondition(condition, encoding, endFlag, 0);
+					EmitCondition(condition, encoding, true, 0);
 				}
 				else
 				{
