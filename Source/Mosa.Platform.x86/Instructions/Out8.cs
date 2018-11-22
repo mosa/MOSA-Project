@@ -37,7 +37,7 @@ namespace Mosa.Platform.x86.Instructions
 			if (node.Operand1.IsConstant)
 			{
 				emitter.OpcodeEncoder.AppendByte(0xE6);
-				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				emitter.OpcodeEncoder.Append8BitImmediate(node.Operand1);
 				return;
 			}
 		}

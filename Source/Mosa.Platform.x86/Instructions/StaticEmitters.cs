@@ -363,28 +363,6 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.Emit(opcode);
 		}
 
-		internal static void EmitLea32(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Result.IsCPURegister);
-
-			//Debug.Assert(node.Size == InstructionSize.Size32);
-
-			// LEA – Load Effective Address 1000 1101 : modA reg r/m
-			var opcode = new OpcodeEncoder()
-				.AppendNibble(Bits.b1000)                                       // 4:opcode
-				.AppendNibble(Bits.b1101)                                       // 3:opcode
-				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.GetPosition(out int patchOffset)
-				.AppendConditionalIntegerValue(node.Operand1.IsResolvedByLinker, 0);               // 32:memory
-
-			if (node.Operand1.IsResolvedByLinker)
-			{
-				emitter.EmitLink(node.Operand1, patchOffset);
-			}
-
-			emitter.Emit(opcode);
-		}
-
 		internal static void EmitJmpFar(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			(emitter as X86CodeEmitter).EmitFarJumpToNextInstruction();
