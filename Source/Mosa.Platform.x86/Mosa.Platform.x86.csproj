@@ -311,7 +311,6 @@
     <Compile Include="Stages\BuildStackStage.cs" />
     <Compile Include="Stages\IRSubstitutionStage.cs" />
     <Compile Include="CompilerStages\StartUpStage.cs" />
-    <Compile Include="CompilerStages\SSEInitStage.cs" />
     <Compile Include="Stages\FloatingPointStage.cs" />
     <Compile Include="Stages\FinalTweakStage.cs" />
     <Compile Include="Stages\SimpleDeadCodeRemovalStage.cs" />
