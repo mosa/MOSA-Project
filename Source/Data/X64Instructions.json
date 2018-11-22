@@ -14,7 +14,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "13",
 			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "Adc64",
@@ -46,7 +46,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "03",
 			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "Add64",
@@ -110,7 +110,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "23",
 			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "And64",
@@ -156,7 +156,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0F BA",
 			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "Btr64",
@@ -187,7 +187,7 @@
 			"UnspecifiedSideEffect": "true",
 			"X86LegacyOpcode": "0F A3",
 			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Bt64",
@@ -218,7 +218,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0F BA",
 			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "Bts64",
@@ -249,40 +249,6 @@
 			"ResultCount": 0,
 			"X64EmitBytes": "0xE8",
 			"X64EmitRelativeBranchTarget": "true",
-			"X64ThreeTwoAddressConversion": "false"
-		},
-		{
-			"Name": "CallStatic",
-			"FamilyName": "X64",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "ZCSOP",
-			"FlagsUsed": "",
-			"FlowControl": "Call",
-			"OperandCount": 1,
-			"ResultCount": 0,
-			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X64LegacyOpcode": "0xE8",
-			"X64LegacyOpcodeOperandOrder": "1",
-			"X64ThreeTwoAddressConversion": "false"
-		},
-		{
-			"Name": "CallReg",
-			"FamilyName": "X64",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "ZCSOP",
-			"FlagsUsed": "",
-			"FlowControl": "Call",
-			"OperandCount": 1,
-			"ResultCount": 0,
-			"X64LegacyOpcode": "0xFF",
-			"X64LegacyOpcodeOperandOrder": "1",
-			"X64LegacyOpcodeRegField": "02",
 			"X64ThreeTwoAddressConversion": "false"
 		},
 		{
@@ -327,7 +293,7 @@
 			"ResultCount": 0,
 			"X86LegacyOpcode": "0x3B",
 			"X86LegacyOpcodeOperandOrder": "12",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Cmp64",
@@ -357,7 +323,7 @@
 			"OperandCount": 4,
 			"ResultCount": 1,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CmpXChgLoad64",
@@ -523,7 +489,7 @@
 			"X86LegacyOpcode": "0xFF",
 			"X86LegacyOpcodeOperandOrder": "r",
 			"X86LegacyOpcodeRegField": "01",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "Dec64",
@@ -555,7 +521,7 @@
 			"X86LegacyOpcode": "0xF7",
 			"X86LegacyOpcodeOperandOrder": "3",
 			"X86LegacyOpcodeRegField": "06",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "Div64",
@@ -647,7 +613,7 @@
 			"X86LegacyOpcode": "0xF7",
 			"X86LegacyOpcodeOperandOrder": "3",
 			"X86LegacyOpcodeRegField": "07",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "IDiv64",
@@ -678,7 +644,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0F AF",
 			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "IMul64",
@@ -760,7 +726,7 @@
 			"X86LegacyOpcode": "0xFF",
 			"X86LegacyOpcodeOperandOrder": "r",
 			"X86LegacyOpcodeRegField": "00",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Inc64",
@@ -836,12 +802,17 @@
 			"FlowControl": "UnconditionalBranch",
 			"OperandCount": 0,
 			"ResultCount": 0,
-			"X64EmitBytes": "0xE9",
-			"X64EmitRelativeBranchTarget": "true",
-			"X64ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "HasBranchTarget",
+					"Encoding": "0xE9|rel32:label",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
-			"Name": "JmpStatic",
+			"Name": "JmpExternal",
 			"FamilyName": "X64",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -852,27 +823,19 @@
 			"FlowControl": "UnconditionalBranch",
 			"OperandCount": 1,
 			"ResultCount": 0,
-			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X64LegacyOpcode": "0xE9",
-			"X64LegacyOpcodeOperandOrder": "1",
-			"X64ThreeTwoAddressConversion": "false"
-		},
-		{
-			"Name": "JmpReg",
-			"FamilyName": "X64",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "ZCSOP",
-			"FlagsUsed": "",
-			"FlowControl": "UnconditionalBranch",
-			"OperandCount": 1,
-			"ResultCount": 0,
-			"X64LegacyOpcode": "0xFF",
-			"X64LegacyOpcodeOperandOrder": "1",
-			"X64LegacyOpcodeRegField": "04",
-			"X64ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "o1.IsRegister",
+					"Encoding": "0xFF|11|100|reg3:o1",
+					"ExperimentalEncoding": ""
+				},
+				{
+					"Condition": "o1.IsConstant",
+					"Encoding": "0xE9|rel32:o1",
+					"ExperimentalEncoding": ""
+				}
+			]
 		},
 		{
 			"Name": "Lea32",
@@ -886,7 +849,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Lea64",
@@ -975,7 +938,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x8C",
 			"X86LegacyOpcodeOperandOrder": "1r",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovLoadSeg64",
@@ -1005,7 +968,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x8E",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovStoreSeg64",
@@ -1035,7 +998,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x8B",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Mov64",
@@ -1095,7 +1058,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x20",
 			"X86LegacyOpcodeOperandOrder": "1r",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovCRLoad64",
@@ -1127,7 +1090,7 @@
 			"ResultCount": 0,
 			"X86LegacyOpcode": "0x0F, 0x22",
 			"X86LegacyOpcodeOperandOrder": "12",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "MovCRStore64",
@@ -1381,7 +1344,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Movsx8To64",
@@ -1409,7 +1372,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 
 		{
@@ -1523,7 +1486,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Movzx16To32",
@@ -1537,7 +1500,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Movzx8To64",
@@ -1624,7 +1587,7 @@
 			"X86LegacyOpcode": "0xF7",
 			"X86LegacyOpcodeOperandOrder": "2",
 			"X86LegacyOpcodeRegField": "04",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Mul64",
@@ -1687,7 +1650,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"X86EmitBytes": "F7 03",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "Neg64",
@@ -1731,7 +1694,7 @@
 			"X86LegacyOpcode": "0xF7",
 			"X86LegacyOpcodeOperandOrder": "r",
 			"X86LegacyOpcodeRegField": "02",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "Not64",
@@ -1763,7 +1726,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0B",
 			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "Or64",
@@ -1945,7 +1908,7 @@
 			"X86LegacyOpcode": "0xD3",
 			"X86LegacyOpcodeOperandOrder": "r",
 			"X86LegacyOpcodeRegField": "03",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "Rcr64",
@@ -2037,7 +2000,7 @@
 			"X86LegacyOpcode": "0xD3",
 			"X86LegacyOpcodeOperandOrder": "r",
 			"X86LegacyOpcodeRegField": "07",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "Sar64",
@@ -2069,7 +2032,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x1B",
 			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "Sbb64",
@@ -2101,7 +2064,7 @@
 			"X86LegacyOpcode": "0xD3",
 			"X86LegacyOpcodeOperandOrder": "r",
 			"X86LegacyOpcodeRegField": "04",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "Shl64",
@@ -2132,7 +2095,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0xA5",
 			"X86LegacyOpcodeOperandOrder": "2r",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "Shld64",
@@ -2163,7 +2126,7 @@
 			"X86LegacyOpcode": "0xD3",
 			"X86LegacyOpcodeOperandOrder": "r",
 			"X86LegacyOpcodeRegField": "05",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "Shr64",
@@ -2195,7 +2158,7 @@
 			"X86LegacyOpcode": "0x0F, 0xAD",
 			"X86LegacyOpcodeOperandOrder": "2r",
 			"X86LegacyOpcodeRegField": "04",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "Shrd64",
@@ -2255,7 +2218,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x2B",
 			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "Sub64",
@@ -2317,7 +2280,7 @@
 			"ResultCount": 0,
 			"X86LegacyOpcode": "0x85",
 			"X86LegacyOpcodeOperandOrder": "12",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "Test64",
@@ -2379,7 +2342,7 @@
 			"ResultCount": 1,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"X86LegacyOpcode": "0x87",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "XAddLoad64",
@@ -2412,7 +2375,7 @@
 			"ResultCount": 2,
 			"X86LegacyOpcode": "0x87",
 			"X86LegacyOpcodeOperandOrder": "r12",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "XChg64",
@@ -2445,7 +2408,7 @@
 			"ResultCount": 1,
 			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"X86LegacyOpcode": "0x87",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "XChgLoad64",
@@ -2478,7 +2441,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x33",
 			"X86LegacyOpcodeOperandOrder": "r2",
-			"X86ThreeTwoAddressConversion": "true"
+			"ThreeTwoAddressConversion": "true"
 		},
 		{
 			"Name": "Xor64",
@@ -3211,7 +3174,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x40",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CMovNoOverflow32",
@@ -3228,7 +3191,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x41",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CMovCarry32",
@@ -3245,7 +3208,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x42",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CMovUnsignedLessThan32",
@@ -3262,7 +3225,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x42",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CMovUnsignedGreaterOrEqual32",
@@ -3279,7 +3242,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x43",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CMovNoCarry32",
@@ -3296,7 +3259,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x43",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CMovEqual32",
@@ -3313,7 +3276,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x44",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CMovZero32",
@@ -3330,7 +3293,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x44",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CMovNotEqual32",
@@ -3347,7 +3310,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x45",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CMovNotZero32",
@@ -3364,7 +3327,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x45",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CMovUnsignedLessOrEqual32",
@@ -3381,7 +3344,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x46",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CMovUnsignedGreaterThan32",
@@ -3398,7 +3361,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x47",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CMovSigned32",
@@ -3415,7 +3378,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x48",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CMovNotSigned32",
@@ -3432,7 +3395,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x49",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CMovParity32",
@@ -3449,7 +3412,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x4A",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CMovNoParity32",
@@ -3466,7 +3429,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x4B",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CMovLessThan32",
@@ -3483,7 +3446,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x4C",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CMovGreaterOrEqual32",
@@ -3500,7 +3463,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x4D",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CMovLessOrEqual32",
@@ -3517,7 +3480,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x4E",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CMovGreaterThan32",
@@ -3534,7 +3497,7 @@
 			"ResultCount": 1,
 			"X86LegacyOpcode": "0x0F, 0x4F",
 			"X86LegacyOpcodeOperandOrder": "r1",
-			"X86ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false"
 		},
 		{
 			"Name": "CMovOverflow64",

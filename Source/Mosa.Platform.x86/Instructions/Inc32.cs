@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Inc32 : X86Instruction
 	{
-		public override int ID { get { return 225; } }
+		public override int ID { get { return 224; } }
 
 		internal Inc32()
 			: base(1, 1)
@@ -32,9 +32,8 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			emitter.OpcodeEncoder.AppendByte(0xFF);
-			emitter.OpcodeEncoder.Append2Bits(0b11);
-			emitter.OpcodeEncoder.Append3Bits(0b000);
+			emitter.OpcodeEncoder.AppendNibble(0b0100);
+			emitter.OpcodeEncoder.AppendBit(0b0);
 			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 		}
 	}

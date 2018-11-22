@@ -12,14 +12,12 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Jmp : X64Instruction
 	{
-		public override int ID { get { return 422; } }
+		public override int ID { get { return 418; } }
 
 		internal Jmp()
 			: base(0, 0)
 		{
 		}
-
-		public static readonly byte[] opcode = new byte[] { 0xE9 };
 
 		public override FlowControl FlowControl { get { return FlowControl.UnconditionalBranch; } }
 
@@ -42,16 +40,5 @@ namespace Mosa.Platform.x64.Instructions
 		public override bool IsParityFlagUnchanged { get { return true; } }
 
 		public override bool IsParityFlagUndefined { get { return true; } }
-
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
-			System.Diagnostics.Debug.Assert(node.BranchTargets.Count >= 1);
-			System.Diagnostics.Debug.Assert(node.BranchTargets[0] != null);
-
-			emitter.Write(opcode);
-			(emitter as X64CodeEmitter).EmitRelativeBranchTarget(node.BranchTargets[0].Label);
-		}
 	}
 }

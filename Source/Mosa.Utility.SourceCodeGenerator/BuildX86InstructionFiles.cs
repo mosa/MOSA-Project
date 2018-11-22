@@ -1,12 +1,16 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Text;
 
 namespace Mosa.Utility.SourceCodeGenerator
 {
 	public class BuildX86InstructionFiles : BuildBaseTemplate
 	{
+		private Dictionary<string, string> EncodingTemplates = new Dictionary<string, string>();
+
 		public BuildX86InstructionFiles(string jsonFile, string destinationPath)
 			: base(jsonFile, destinationPath)
 		{
@@ -14,6 +18,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected override void Iterator()
 		{
+			ReadEncodingTemplates();
+
 			foreach (var entry in Entries.Instructions)
 			{
 				Lines.Clear();
@@ -22,6 +28,24 @@ namespace Mosa.Utility.SourceCodeGenerator
 				AddSourceHeader();
 				Body(entry);
 				Save();
+			}
+		}
+
+		protected void ReadEncodingTemplates()
+		{
+			foreach (var array in Entries.ExperimentalEncoding)
+			{
+				if (string.IsNullOrWhiteSpace(array))
+					continue;
+
+				var line = (string)array;
+
+				var position = line.IndexOf('=');
+
+				string name = line.Substring(0, position);
+				string value = line.Substring(position + 1);
+
+				EncodingTemplates.Add(name, value);
 			}
 		}
 
@@ -148,7 +172,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Lines.AppendLine("\t\tpublic override bool HasUnspecifiedSideEffect { get { return true; } }");
 			}
 
-			if (node.X86ThreeTwoAddressConversion != null && node.X86ThreeTwoAddressConversion == "true")
+			if (node.ThreeTwoAddressConversion != null && node.ThreeTwoAddressConversion == "true")
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool ThreeTwoAddressConversion { get { return true; } }");
@@ -370,7 +394,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 					Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.ResultCount == " + node.ResultCount + ");");
 					Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.OperandCount == " + node.OperandCount + ");");
 
-					if (node.X86ThreeTwoAddressConversion == null || node.X86ThreeTwoAddressConversion == "true")
+					if (node.ThreeTwoAddressConversion == null || node.ThreeTwoAddressConversion == "true")
 					{
 						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Result.IsCPURegister);");
 						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);");
@@ -394,7 +418,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 					Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.ResultCount == " + node.ResultCount + ");");
 					Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.OperandCount == " + node.OperandCount + ");");
 
-					if (node.X86ThreeTwoAddressConversion == null || node.X86ThreeTwoAddressConversion == "true")
+					if (node.ThreeTwoAddressConversion == null || node.ThreeTwoAddressConversion == "true")
 					{
 						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Result.IsCPURegister);");
 						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);");
@@ -514,8 +538,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 			foreach (var entry in node.OpcodeEncoding)
 			{
-				string condition = entry.Condition;
-				string encoding = entry.Encoding;
+				string end = entry.End;
+				string comment = entry.Comment;
 
 				if (first)
 				{
@@ -526,9 +550,23 @@ namespace Mosa.Utility.SourceCodeGenerator
 					Lines.AppendLine();
 				}
 
-				if (condition != null)
+				if (!String.IsNullOrEmpty(comment))
 				{
-					EmitCondition(condition, encoding, 0, false);
+					Lines.Append("\t\t\t // ");
+					Lines.AppendLine(comment);
+				}
+
+				var condition = DecodeExperimentalCondition(entry.ExperimentalCondition) ?? DecodeCondition(entry.Condition) ?? string.Empty;
+				var encoding = DecodeExperimentalEncoding(entry.ExperimentalEncoding) ?? entry.Encoding;
+
+				bool endFlag = (end != null) && end == "true";
+
+				if (!string.IsNullOrWhiteSpace(entry.ExperimentalCondition))
+					endFlag = true;
+
+				if (!String.IsNullOrEmpty(condition))
+				{
+					EmitCondition(condition, encoding, endFlag, 0);
 				}
 				else
 				{
@@ -537,37 +575,218 @@ namespace Mosa.Utility.SourceCodeGenerator
 			}
 		}
 
-		private void EmitCondition(string condition, string encoding, int index = 0, bool opp = false)
+		private string ReduceEncoding(string template)
 		{
-			var tabs = "\t\t\t\t\t\t\t\t\t\t".Substring(0, index + 3);
-			Lines.Append(tabs);
+			if (string.IsNullOrWhiteSpace(template))
+				return string.Empty;
 
-			var cond = condition;
+			string encoding = string.Empty;
+
+			var parts = template.Split(',');
+
+			foreach (var p in parts)
+			{
+				var part = p.Trim(' ');  // trim away spaces
+
+				if (string.IsNullOrWhiteSpace(part))
+					continue;
+
+				if (part.StartsWith("[") && part.Contains("|"))
+				{
+					if (string.IsNullOrEmpty(encoding))
+						encoding = part;
+					else
+						encoding = encoding + '|' + part;
+
+					continue;
+				}
+				else if (part.StartsWith("["))
+				{
+					// template
+					string subTemplate = string.Empty;
+
+					EncodingTemplates.TryGetValue(part, out subTemplate);
+
+					if (!string.IsNullOrWhiteSpace(subTemplate))
+					{
+						if (string.IsNullOrEmpty(encoding))
+							encoding = ReduceEncoding(subTemplate);
+						else
+							encoding = encoding + '|' + ReduceEncoding(subTemplate);
+					}
+					continue;
+				}
+
+				if (parts.Length == 1)
+				{
+					encoding = part;
+				}
+				else
+				{
+					// substitution
+					var split = part.Split('=');
+
+					encoding = encoding.Replace('[' + split[0] + ']', split[1]);
+				}
+			}
+
+			Debug.Assert(!encoding.Contains("="));
+			Debug.Assert(!encoding.Contains(","));
+
+			return encoding;
+		}
+
+		private string DecodeExperimentalEncoding(string line)
+		{
+			if (string.IsNullOrWhiteSpace(line))
+				return null;
+
+			return ReduceEncoding(line);
+		}
+
+		private string DecodeExperimentalCondition(string condition)
+		{
+			if (string.IsNullOrWhiteSpace(condition))
+				return null;
+
+			string expression = string.Empty;
+
+			var parts = condition.Split(']');
+			for (int i = 0; i < parts.Length; i++)
+			{
+				var part = parts[i];
+				var normalized = part.Replace(" ", string.Empty).TrimStart('[').ToLower();
+
+				if (string.IsNullOrWhiteSpace(normalized))
+					continue;
+
+				var subparts = normalized.Split(':');
+
+				var orexpression = string.Empty;
+
+				foreach (var subpart in subparts)
+				{
+					var operand = string.Empty;
+
+					if (string.IsNullOrEmpty(subpart))
+						continue;
+
+					if (subpart.StartsWith("#"))
+						continue;
+
+					var opp = subpart.StartsWith("!");
+
+					var subpart2 = opp ? subpart.Substring(1) : subpart;
+
+					switch (i)
+					{
+						case 0: operand = "Operand1"; break;
+						case 1: operand = "Operand2"; break;
+						case 2: operand = "Operand3"; break;
+						default: operand = "GetOperand(" + i.ToString() + ")"; break;
+					}
+
+					string cond1 = string.Empty;
+					string cond2 = string.Empty;
+					string cond3 = string.Empty;
+
+					switch (subpart2.ToLower())
+					{
+						case "skip": continue;
+						case "ignore": continue;
+						case "register": cond1 = ".IsCPURegister"; break;
+						case "constant": cond1 = ".IsConstant"; break;
+						case "eax": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 0"; break;
+						case "ecx": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 1"; break;
+						case "edx": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 2"; break;
+						case "ebx": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 3"; break;
+						case "esp": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 4"; break;
+						case "ebp": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 5"; break;
+						case "esi": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 6"; break;
+						case "edi": cond1 = ".IsCPURegister"; cond2 = ".Register.RegisterCode == 7"; break;
+						case "zero":
+						case "0": cond1 = ".IsConstantZero"; break;
+						case "one":
+						case "1": cond1 = ".IsConstantOne"; break;
+						case "sbyte":
+						case "signedbyte": cond1 = ".IsConstant"; cond2 = ".ConstantSignedInteger >= " + sbyte.MinValue.ToString(); cond3 = ".ConstantSignedInteger <= " + sbyte.MaxValue.ToString(); break;
+						case "signedshort": cond1 = ".IsConstant"; cond2 = ".ConstantSignedInteger >= " + short.MinValue.ToString(); cond3 = ".ConstantSignedInteger <= " + short.MaxValue.ToString(); break;
+						case "signint": cond1 = ".IsConstant"; cond2 = ".ConstantSignedInteger >= " + int.MinValue.ToString(); cond3 = ".ConstantSignedInteger <= " + int.MaxValue.ToString(); break;
+					}
+
+					string subexpression = "node." + operand + cond1;
+
+					if (!string.IsNullOrWhiteSpace(cond3))
+					{
+						subexpression = "(" + subexpression + " && node." + operand + cond2 + " && node." + operand + cond3 + ")";
+					}
+					else if (!string.IsNullOrWhiteSpace(cond2))
+					{
+						subexpression = "(" + subexpression + " && node." + operand + cond2 + ")";
+					}
+
+					if (opp)
+					{
+						subexpression = "!" + subexpression;
+					}
+
+					if (string.IsNullOrWhiteSpace(orexpression))
+					{
+						orexpression = subexpression;
+					}
+					else
+					{
+						orexpression = orexpression + " || " + subexpression;
+					}
+				}
+
+				if (string.IsNullOrWhiteSpace(expression))
+				{
+					expression = orexpression;
+				}
+				else
+				{
+					expression = expression + " && " + orexpression;
+				}
+			}
+
+			return expression;
+		}
+
+		private string DecodeCondition(string condition)
+		{
+			if (string.IsNullOrWhiteSpace(condition))
+				return null;
 
 			// update condition
-			cond = cond.Replace("o1.", "node.Operand1.")
+			return condition.Replace("o1.", "node.Operand1.")
 				.Replace("o2.", "node.Operand2.")
 				.Replace("o3.", "node.Operand3.")
 				.Replace("o4.", "node.Operand4.")
 				.Replace("r.", "node.Result.")
 				.Replace("r2.", "node.Result2.")
-				.Replace(".IsRegister", ".IsCPURegister");
+				.Replace("HasBranchTarget", "node.BranchTargetsCount != 0")
+				.Replace(".IsRegister", ".IsCPURegister")
+				.Replace(".RegisterCode", ".Register.RegisterCode");
+		}
 
-			if (opp)
-			{
-				Lines.AppendLine("if (!(" + cond + "))");
-			}
-			else
-			{
-				Lines.AppendLine("if (" + cond + ")");
-			}
+		private void EmitCondition(string condition, string encoding, bool end, int index = 0)
+		{
+			var tabs = "\t\t\t\t\t\t\t\t\t\t".Substring(0, index + 3);
+			Lines.Append(tabs);
+
+			Lines.AppendLine("if (" + condition + ")");
+
 			Lines.Append(tabs);
 			Lines.AppendLine("{");
 
 			EmitBits(encoding, index + 1);
 
-			Lines.Append(tabs);
-			Lines.AppendLine("\treturn;");
+			if (end)
+			{
+				Lines.Append(tabs);
+				Lines.AppendLine("\treturn;");
+			}
 
 			Lines.Append(tabs);
 			Lines.AppendLine("}");
@@ -586,6 +805,9 @@ namespace Mosa.Utility.SourceCodeGenerator
 			foreach (var s in steps)
 			{
 				if (string.IsNullOrWhiteSpace(s))
+					continue;
+
+				if (s.StartsWith("[")) // ignore these
 					continue;
 				else if (s.StartsWith("0x") | s.StartsWith("x"))
 				{
@@ -606,6 +828,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 						case 3:
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendByte(0x" + hex.Substring(0, 2) + ");");
+							Lines.Append(tabs);
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0x" + hex.Substring(1) + ");");
 							break;
 
@@ -615,6 +838,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 						case 5:
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendShort(0x" + hex.Substring(0, 4) + ");");
+							Lines.Append(tabs);
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0x" + hex.Substring(5) + ");");
 							break;
 
@@ -654,21 +878,25 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 						case 5:
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
+							Lines.Append(tabs);
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendBit(0b" + binary.Substring(4) + ");");
 							break;
 
 						case 6:
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
+							Lines.Append(tabs);
 							Lines.AppendLine("emitter.OpcodeEncoder.Append2Bits(0b" + binary.Substring(4) + ");");
 							break;
 
 						case 7:
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
+							Lines.Append(tabs);
 							Lines.AppendLine("emitter.OpcodeEncoder.Append3Bits(0b" + binary.Substring(4) + ");");
 							break;
 
 						case 8:
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
+							Lines.Append(tabs);
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(4) + ");");
 							break;
 

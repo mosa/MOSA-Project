@@ -20,8 +20,7 @@ namespace Mosa.Platform.x86
 		public static readonly Btr32 Btr32 = new Btr32();
 		public static readonly Bt32 Bt32 = new Bt32();
 		public static readonly Bts32 Bts32 = new Bts32();
-		public static readonly CallStatic CallStatic = new CallStatic();
-		public static readonly CallReg CallReg = new CallReg();
+		public static readonly Call Call = new Call();
 		public static readonly Cdq Cdq = new Cdq();
 		public static readonly Cli Cli = new Cli();
 		public static readonly Cmp32 Cmp32 = new Cmp32();
@@ -51,8 +50,7 @@ namespace Mosa.Platform.x86
 		public static readonly Invlpg Invlpg = new Invlpg();
 		public static readonly IRetd IRetd = new IRetd();
 		public static readonly Jmp Jmp = new Jmp();
-		public static readonly JmpStatic JmpStatic = new JmpStatic();
-		public static readonly JmpReg JmpReg = new JmpReg();
+		public static readonly JmpExternal JmpExternal = new JmpExternal();
 		public static readonly Lea32 Lea32 = new Lea32();
 		public static readonly Leave Leave = new Leave();
 		public static readonly Lgdt Lgdt = new Lgdt();

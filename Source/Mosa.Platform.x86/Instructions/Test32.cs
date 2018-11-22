@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Test32 : X86Instruction
 	{
-		public override int ID { get { return 301; } }
+		public override int ID { get { return 299; } }
 
 		internal Test32()
 			: base(0, 2)
@@ -42,7 +42,7 @@ namespace Mosa.Platform.x86.Instructions
 			{
 				emitter.OpcodeEncoder.AppendByte(0x85);
 				emitter.OpcodeEncoder.Append2Bits(0b11);
-				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
 				return;
 			}

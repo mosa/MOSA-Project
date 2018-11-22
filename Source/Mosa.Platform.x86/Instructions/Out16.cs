@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Out16 : X86Instruction
 	{
-		public override int ID { get { return 276; } }
+		public override int ID { get { return 274; } }
 
 		internal Out16()
 			: base(0, 2)
@@ -37,7 +37,7 @@ namespace Mosa.Platform.x86.Instructions
 			if (node.Operand1.IsConstant)
 			{
 				emitter.OpcodeEncoder.AppendByte(0xE7);
-				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				emitter.OpcodeEncoder.Append8BitImmediate(node.Operand1);
 				return;
 			}
 		}

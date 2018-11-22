@@ -7,19 +7,19 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// JmpStatic
+	/// Call
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class JmpStatic : X86Instruction
+	public sealed class Call : X86Instruction
 	{
-		public override int ID { get { return 230; } }
+		public override int ID { get { return 199; } }
 
-		internal JmpStatic()
+		internal Call()
 			: base(0, 1)
 		{
 		}
 
-		public override FlowControl FlowControl { get { return FlowControl.UnconditionalBranch; } }
+		public override FlowControl FlowControl { get { return FlowControl.Call; } }
 
 		public override bool IsZeroFlagUnchanged { get { return true; } }
 
@@ -46,8 +46,21 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			emitter.OpcodeEncoder.AppendByte(0xE9);
-			emitter.OpcodeEncoder.EmitRelative32(node.Operand1);
+			if (node.Operand1.IsCPURegister)
+			{
+				emitter.OpcodeEncoder.AppendByte(0xFF);
+				emitter.OpcodeEncoder.Append2Bits(0b11);
+				emitter.OpcodeEncoder.Append3Bits(0b010);
+				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				return;
+			}
+
+			if (node.Operand1.IsConstant)
+			{
+				emitter.OpcodeEncoder.AppendByte(0xE8);
+				emitter.OpcodeEncoder.EmitRelative32(node.Operand1);
+				return;
+			}
 		}
 	}
 }

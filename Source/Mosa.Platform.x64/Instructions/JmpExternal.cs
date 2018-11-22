@@ -4,22 +4,22 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Instructions
+namespace Mosa.Platform.x64.Instructions
 {
 	/// <summary>
-	/// CallReg
+	/// JmpExternal
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class CallReg : X86Instruction
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
+	public sealed class JmpExternal : X64Instruction
 	{
-		public override int ID { get { return 200; } }
+		public override int ID { get { return 419; } }
 
-		internal CallReg()
+		internal JmpExternal()
 			: base(0, 1)
 		{
 		}
 
-		public override FlowControl FlowControl { get { return FlowControl.Call; } }
+		public override FlowControl FlowControl { get { return FlowControl.UnconditionalBranch; } }
 
 		public override bool IsZeroFlagUnchanged { get { return true; } }
 
@@ -40,16 +40,5 @@ namespace Mosa.Platform.x86.Instructions
 		public override bool IsParityFlagUnchanged { get { return true; } }
 
 		public override bool IsParityFlagUndefined { get { return true; } }
-
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
-
-			emitter.OpcodeEncoder.AppendByte(0xFF);
-			emitter.OpcodeEncoder.Append2Bits(0b11);
-			emitter.OpcodeEncoder.Append3Bits(0b010);
-			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
-		}
 	}
 }

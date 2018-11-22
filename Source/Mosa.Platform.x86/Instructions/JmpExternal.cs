@@ -7,14 +7,14 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// JmpReg
+	/// JmpExternal
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class JmpReg : X86Instruction
+	public sealed class JmpExternal : X86Instruction
 	{
-		public override int ID { get { return 231; } }
+		public override int ID { get { return 229; } }
 
-		internal JmpReg()
+		internal JmpExternal()
 			: base(0, 1)
 		{
 		}
@@ -46,10 +46,21 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			emitter.OpcodeEncoder.AppendByte(0xFF);
-			emitter.OpcodeEncoder.Append2Bits(0b11);
-			emitter.OpcodeEncoder.Append3Bits(0b100);
-			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+			if (node.Operand1.IsCPURegister)
+			{
+				emitter.OpcodeEncoder.AppendByte(0xFF);
+				emitter.OpcodeEncoder.Append2Bits(0b11);
+				emitter.OpcodeEncoder.Append3Bits(0b100);
+				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				return;
+			}
+
+			if (node.Operand1.IsConstant)
+			{
+				emitter.OpcodeEncoder.AppendByte(0xE9);
+				emitter.OpcodeEncoder.EmitRelative32(node.Operand1);
+				return;
+			}
 		}
 	}
 }

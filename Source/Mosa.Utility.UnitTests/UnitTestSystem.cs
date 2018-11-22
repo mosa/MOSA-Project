@@ -615,7 +615,10 @@ namespace Mosa.Utility.UnitTests
 				sb.Append(",");
 			}
 
-			sb.Length--;
+			if (unitTest.Values.Length > 0)
+			{
+				sb.Length--;
+			}
 
 			sb.Append(")");
 

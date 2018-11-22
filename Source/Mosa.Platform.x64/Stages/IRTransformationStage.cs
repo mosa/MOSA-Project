@@ -215,9 +215,9 @@ namespace Mosa.Platform.x64.Stages
 			Debug.Assert(node.Operand1 != null);
 
 			if (node.Operand1.IsConstant)
-				node.ReplaceInstruction(X64.CallStatic);
+				node.ReplaceInstruction(X64.Call);
 			else if (node.Operand1.IsVirtualRegister)
-				node.ReplaceInstruction(X64.CallReg);
+				node.ReplaceInstruction(X64.Call);
 			else throw new NotSupportedException();
 		}
 
@@ -483,7 +483,7 @@ namespace Mosa.Platform.x64.Stages
 			if (node.Operand1 == null)
 				node.ReplaceInstruction(X64.Jmp);
 			else
-				node.ReplaceInstruction(X64.JmpStatic); // FUTURE: Add IR.JumpStatic
+				node.ReplaceInstruction(X64.JmpExternal);
 		}
 
 		private void LoadCompound(Context context)

@@ -284,36 +284,6 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.Emit(opcode);
 		}
 
-		internal static void EmitPextrd(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Result.IsCPURegister);
-			Debug.Assert(node.Operand1.IsCPURegister);
-			Debug.Assert(node.Operand2.IsConstant);
-
-			// reg from xmmreg, imm8
-			// 0110 0110:0000 1111:0011 1010: 0001 0110:11 xmmreg reg: imm8
-			var opcode = new OpcodeEncoder()
-				.AppendNibble(Bits.b0110)                                       // 4:opcode
-				.AppendNibble(Bits.b0110)                                       // 4:opcode
-
-				.AppendNibble(Bits.b0000)                                       // 4:opcode
-				.AppendNibble(Bits.b1111)                                       // 4:opcode
-
-				.AppendNibble(Bits.b0011)                                       // 4:opcode
-				.AppendNibble(Bits.b1010)                                       // 4:opcode
-
-				.AppendNibble(Bits.b0001)                                       // 4:opcode
-				.AppendNibble(Bits.b0110)                                       // 4:opcode
-
-				.Append2Bits(Bits.b11)                                          // 2:opcode
-				.AppendRM(node.Operand1)                                        // 3:r/m (source)
-				.AppendRegister(node.Result.Register)                           // 3:register (destination)
-
-				.AppendByteValue((byte)node.Operand2.ConstantUnsignedInteger);  // 8:memory
-
-			emitter.Emit(opcode);
-		}
-
 		internal static void EmitMovupsLoad(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Result.IsCPURegister);
@@ -384,28 +354,6 @@ namespace Mosa.Platform.x86.Instructions
 
 				.GetPosition(out int patchOffset)
 				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker); // 32:memory
-
-			if (node.Operand1.IsResolvedByLinker)
-			{
-				emitter.EmitLink(node.Operand1, patchOffset);
-			}
-
-			emitter.Emit(opcode);
-		}
-
-		internal static void EmitLea32(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Result.IsCPURegister);
-
-			//Debug.Assert(node.Size == InstructionSize.Size32);
-
-			// LEA – Load Effective Address 1000 1101 : modA reg r/m
-			var opcode = new OpcodeEncoder()
-				.AppendNibble(Bits.b1000)                                       // 4:opcode
-				.AppendNibble(Bits.b1101)                                       // 3:opcode
-				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-				.GetPosition(out int patchOffset)
-				.AppendConditionalIntegerValue(node.Operand1.IsResolvedByLinker, 0);               // 32:memory
 
 			if (node.Operand1.IsResolvedByLinker)
 			{

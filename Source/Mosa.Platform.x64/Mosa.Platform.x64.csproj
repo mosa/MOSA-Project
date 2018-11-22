@@ -120,8 +120,6 @@
     <Compile Include="Instructions\Bts32.cs" />
     <Compile Include="Instructions\Bts64.cs" />
     <Compile Include="Instructions\Call.cs" />
-    <Compile Include="Instructions\CallReg.cs" />
-    <Compile Include="Instructions\CallStatic.cs" />
     <Compile Include="Instructions\Cdq.cs" />
     <Compile Include="Instructions\Cli.cs" />
     <Compile Include="Instructions\CMovCarry32.cs" />
@@ -199,9 +197,8 @@
     <Compile Include="Instructions\Invlpg.cs" />
     <Compile Include="Instructions\IRetd.cs" />
     <Compile Include="Instructions\Jmp.cs" />
+    <Compile Include="Instructions\JmpExternal.cs" />
     <Compile Include="Instructions\JmpFar.cs" />
-    <Compile Include="Instructions\JmpReg.cs" />
-    <Compile Include="Instructions\JmpStatic.cs" />
     <Compile Include="Instructions\Lea32.cs" />
     <Compile Include="Instructions\Lea64.cs" />
     <Compile Include="Instructions\Leave.cs" />

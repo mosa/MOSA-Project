@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			AddVisitation(X86.CallReg, CallReg);
+			AddVisitation(X86.Call, CallReg);
 			AddVisitation(X86.Mov32, Mov32);
 			AddVisitation(X86.MovLoad16, MovLoad16);
 			AddVisitation(X86.MovLoad8, MovLoad8);
@@ -73,7 +73,7 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand1.Register != before.Result.Register)
 				return;
 
-			before.SetInstruction(X86.CallReg, null, before.Operand1);
+			before.SetInstruction(X86.Call, null, before.Operand1);
 			context.Empty();
 		}
 

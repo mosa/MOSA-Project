@@ -13,7 +13,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Sub32 : ARMv6Instruction
 	{
-		public override int ID { get { return 662; } }
+		public override int ID { get { return 657; } }
 
 		internal Sub32()
 			: base(1, 3)

@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Pop32 : X86Instruction
 	{
-		public override int ID { get { return 280; } }
+		public override int ID { get { return 278; } }
 
 		internal Pop32()
 			: base(1, 0)
@@ -25,7 +25,7 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
 			emitter.OpcodeEncoder.AppendNibble(0b0101);
-emitter.OpcodeEncoder.AppendBit(0b1);
+			emitter.OpcodeEncoder.AppendBit(0b1);
 			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 		}
 	}

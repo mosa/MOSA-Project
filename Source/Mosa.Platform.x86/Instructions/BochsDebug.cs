@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class BochsDebug : X86Instruction
 	{
-		public override int ID { get { return 368; } }
+		public override int ID { get { return 366; } }
 
 		internal BochsDebug()
 			: base(0, 0)
@@ -29,7 +29,6 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.OpcodeEncoder.AppendByte(0x66);
 			emitter.OpcodeEncoder.AppendByte(0x87);
 			emitter.OpcodeEncoder.AppendByte(0xdb);
-emitter.OpcodeEncoder.AppendNibble(0xb );
 		}
 	}
 }

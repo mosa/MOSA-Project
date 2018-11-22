@@ -35,7 +35,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			// Update the frame and stack registers
 			context.AppendInstruction(X86.Mov32, ebp, ecx);
 			context.AppendInstruction(X86.Mov32, esp, ebx);
-			context.AppendInstruction(X86.JmpReg, null, eax);
+			context.AppendInstruction(X86.JmpExternal, null, eax);
 
 			// future - common code (refactor opportunity)
 			context.GotoNext();
