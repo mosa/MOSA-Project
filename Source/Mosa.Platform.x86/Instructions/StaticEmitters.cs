@@ -147,31 +147,6 @@ namespace Mosa.Platform.x86.Instructions
 			}
 		}
 
-		internal static void EmitMovsdLoad(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Result.IsCPURegister);
-
-			// mem to xmmreg1 1111 0010:0000 1111:0001 0000: mod xmmreg r/m
-			var opcode = new OpcodeEncoder()
-				.AppendNibble(Bits.b1111)                                       // 4:opcode
-				.AppendNibble(Bits.b0010)                                       // 4:opcode
-				.AppendNibble(Bits.b0000)                                       // 4:opcode
-				.AppendNibble(Bits.b1111)                                       // 4:opcode
-				.AppendNibble(Bits.b0001)                                       // 4:opcode
-				.AppendNibble(Bits.b0000)                                       // 4:opcode
-				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-
-				.GetPosition(out int patchOffset)
-				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker); // 32:memory
-
-			if (node.Operand1.IsResolvedByLinker)
-			{
-				emitter.EmitLink(node.Operand1, patchOffset);
-			}
-
-			emitter.Emit(opcode);
-		}
-
 		internal static void EmitMovsdStore(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Operand3.IsCPURegister);
@@ -188,31 +163,6 @@ namespace Mosa.Platform.x86.Instructions
 				// This opcode has a directionality bit, and it is set to 0
 				// This means we must swap around operand1 and operand3, and set offsetDestination to false
 				.ModRegRMSIBDisplacement(false, node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-
-				.GetPosition(out int patchOffset)
-				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker); // 32:memory
-
-			if (node.Operand1.IsResolvedByLinker)
-			{
-				emitter.EmitLink(node.Operand1, patchOffset);
-			}
-
-			emitter.Emit(opcode);
-		}
-
-		internal static void EmitMovssLoad(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Result.IsCPURegister);
-
-			// mem to xmmreg1 1111 0011:0000 1111:0001 0000: mod xmmreg r/m
-			var opcode = new OpcodeEncoder()
-				.AppendNibble(Bits.b1111)                                       // 4:opcode
-				.AppendNibble(Bits.b0011)                                       // 4:opcode
-				.AppendNibble(Bits.b0000)                                       // 4:opcode
-				.AppendNibble(Bits.b1111)                                       // 4:opcode
-				.AppendNibble(Bits.b0001)                                       // 4:opcode
-				.AppendNibble(Bits.b0000)                                       // 4:opcode
-				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
 
 				.GetPosition(out int patchOffset)
 				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker); // 32:memory
@@ -295,31 +245,6 @@ namespace Mosa.Platform.x86.Instructions
 				// This opcode has a directionality bit, and it is set to 0
 				// This means we must swap around operand1 and operand3, and set offsetDestination to false
 				.ModRegRMSIBDisplacement(false, node.Operand3, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
-
-				.GetPosition(out int patchOffset)
-				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker); // 32:memory
-
-			if (node.Operand1.IsResolvedByLinker)
-			{
-				emitter.EmitLink(node.Operand1, patchOffset);
-			}
-
-			emitter.Emit(opcode);
-		}
-
-		internal static void EmitMovapsLoad(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Result.IsCPURegister);
-
-			// mem to xmmreg 1111 0011:0000 1111:0101 1101: mod xmmreg r/m
-			var opcode = new OpcodeEncoder()
-				.AppendNibble(Bits.b1111)                                       // 4:opcode
-				.AppendNibble(Bits.b0011)                                       // 4:opcode
-				.AppendNibble(Bits.b0000)                                       // 4:opcode
-				.AppendNibble(Bits.b1111)                                       // 4:opcode
-				.AppendNibble(Bits.b0101)                                       // 4:opcode
-				.AppendNibble(Bits.b1101)                                       // 4:opcode
-				.ModRegRMSIBDisplacement(false, node.Result, node.Operand1, node.Operand2) // Mod-Reg-RM-?SIB-?Displacement
 
 				.GetPosition(out int patchOffset)
 				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker); // 32:memory
