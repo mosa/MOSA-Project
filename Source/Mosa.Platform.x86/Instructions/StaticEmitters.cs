@@ -203,32 +203,6 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.Emit(opcode);
 		}
 
-		internal static void EmitMovupsLoad(InstructionNode node, BaseCodeEmitter emitter)
-		{
-			Debug.Assert(node.Result.IsCPURegister);
-
-			// mem to xmmreg1 0000 1111:0001 0000: mod xmmreg r/m
-			var opcode = new OpcodeEncoder()
-				.AppendNibble(Bits.b0000)                                       // 4:opcode
-				.AppendNibble(Bits.b1111)                                       // 4:opcode
-				.AppendNibble(Bits.b0001)                                       // 4:opcode
-				.AppendNibble(Bits.b0000)                                       // 4:opcode
-				.AppendMod(true, node.Operand2)                                 // 2:mod
-				.AppendRegister(node.Result.Register)                           // 3:register (destination)
-				.AppendRM(node.Operand1)                                        // 3:r/m (source)
-
-				.AppendConditionalDisplacement(!node.Operand2.IsConstantZero, node.Operand2)    // 8/32:displacement value
-				.GetPosition(out int patchOffset)
-				.AppendConditionalPlaceholder32(node.Operand1.IsResolvedByLinker); // 32:memory
-
-			if (node.Operand1.IsResolvedByLinker)
-			{
-				emitter.EmitLink(node.Operand1, patchOffset);
-			}
-
-			emitter.Emit(opcode);
-		}
-
 		internal static void EmitMovupsStore(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			Debug.Assert(node.Operand3.IsCPURegister);

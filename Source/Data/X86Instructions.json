@@ -1072,7 +1072,6 @@
 			"MemoryRead": "true",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"xStaticEmitMethod": "StaticEmitters.Emit%",
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
@@ -1249,7 +1248,6 @@
 			"MemoryRead": "true",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"xxxStaticEmitMethod": "StaticEmitters.Emit%",
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
@@ -1337,7 +1335,6 @@
 			"MemoryRead": "true",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"xxxStaticEmitMethod": "StaticEmitters.Emit%",
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
@@ -1536,7 +1533,46 @@
 			"MemoryRead": "true",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"StaticEmitMethod": "StaticEmitters.Emit%"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero]",
+					"Encoding": "[x86],opcode=0x0F,opcode2=0x10,mod=01,reg=reg3:r,rm=001,immediate=0x00"
+				},
+				{
+					"Condition": "[ESP][zero]",
+					"Encoding": "[x86],opcode=0x0F,opcode2=0x10,mod=00,reg=reg3:r,rm=100,scale=00,index=100,base=100"
+				},
+				{
+					"Condition": "[ESP][sbyte]",
+					"Encoding": "[x86],opcode=0x0F,opcode2=0x10,mod=01,reg=reg3:r,rm=100,scale=00,index=100,base=100,immediate=imm8:o2"
+				},
+				{
+					"Condition": "[ESP][constant]",
+					"Encoding": "[x86],opcode=0x0F,opcode2=0x10,mod=10,reg=reg3:r,rm=reg3:r,immediate=imm8:o2"
+				},
+
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[x86],opcode=0x0F,opcode2=0x10,mod=00,reg=reg3:r,rm=100,scale=00,index=reg3:o2,base=reg3:o1"
+				},
+				{
+					"Condition": "[register][zero]",
+					"Encoding": "[x86],opcode=0x0F,opcode2=0x10,mod=00,reg=reg3:r,rm=reg3:o1"
+				},
+				{
+					"Condition": "[register][sbyte]",
+					"Encoding": "[x86],opcode=0x0F,opcode2=0x10,mod=01,reg=reg3:r,rm=reg3:o1,immediate=imm8:o2"
+				},
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[x86],opcode=0x0F,opcode2=0x10,mod=10,reg=reg3:r,rm=reg3:o1,immediate=imm32:o2"
+				},
+				{
+					"Condition": "[constant][zero]",
+					"Encoding": "[x86],opcode=0x0F,opcode2=0x10,mod=00,reg=reg3:r,rm=101,immediate=imm32:o1"
+				}
+			]
 		},
 		{
 			"Name": "MovupsStore",
