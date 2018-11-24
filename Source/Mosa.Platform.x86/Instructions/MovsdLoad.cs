@@ -33,7 +33,7 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.OpcodeEncoder.AppendByte(0x10);
 				emitter.OpcodeEncoder.Append2Bits(0b01);
 				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append3Bits(0b001);
+				emitter.OpcodeEncoder.Append3Bits(0b101);
 				emitter.OpcodeEncoder.AppendByte(0x00);
 				return;
 			}
@@ -74,7 +74,7 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.OpcodeEncoder.AppendByte(0x10);
 				emitter.OpcodeEncoder.Append2Bits(0b10);
 				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				emitter.OpcodeEncoder.Append3Bits(0b100);
 				emitter.OpcodeEncoder.Append8BitImmediate(node.Operand2);
 				return;
 			}

@@ -536,7 +536,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				}
 
 				var condition = DecodeExperimentalCondition(entry.Condition) ?? string.Empty;
-				var encoding = DecodeExperimentalEncoding(entry.Encoding);
+				var encoding = DecodeExperimentalEncoding(entry.Encoding, node.OpcodeEncodingAppend);
 
 				if (!String.IsNullOrEmpty(condition))
 				{
@@ -610,12 +610,19 @@ namespace Mosa.Utility.SourceCodeGenerator
 			return encoding;
 		}
 
-		private string DecodeExperimentalEncoding(string line)
+		private string DecodeExperimentalEncoding(string line, string append)
 		{
 			if (string.IsNullOrWhiteSpace(line))
 				return null;
 
-			return ReduceEncoding(line);
+			string rawEncoding = line.Trim();
+
+			if (!string.IsNullOrWhiteSpace(append))
+			{
+				rawEncoding = rawEncoding + "," + append.Trim();
+			}
+
+			return ReduceEncoding(rawEncoding);
 		}
 
 		private string DecodeExperimentalCondition(string condition)
@@ -764,11 +771,6 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 			Lines.Append(tabs);
 			Lines.AppendLine("}");
-		}
-
-		private void EmitEncoding(string encoding)
-		{
-			EmitBits(encoding);
 		}
 
 		private void EmitBits(string bits, int index = 0)
