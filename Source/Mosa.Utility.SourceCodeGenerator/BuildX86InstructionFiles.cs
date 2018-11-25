@@ -886,11 +886,11 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 					if (operand2 == null)
 					{
-						Lines.AppendLine("emitter.OpcodeEncoder." + code + "(node." + operand + postcode + ");");
+						Lines.AppendLine("emitter.OpcodeEncoder." + code + "(" + operand + postcode + ");");
 					}
 					else
 					{
-						Lines.AppendLine("emitter.OpcodeEncoder." + code + "(node." + operand + postcode + ", node." + operand2 + ");");
+						Lines.AppendLine("emitter.OpcodeEncoder." + code + "(" + operand + postcode + ", " + operand2 + ");");
 					}
 				}
 			}
@@ -900,19 +900,18 @@ namespace Mosa.Utility.SourceCodeGenerator
 		{
 			switch (part)
 			{
-				case "o1": return "Operand1";
-				case "o2": return "Operand2";
-				case "o3": return "Operand3";
-				case "o4": return "GetOperand(3)";
-				case "r": return "Result";
-				case "r1": return "Result";
-				case "r2": return "Result2";
-				case "label": return "BranchTargets[0].Label";
+				case "o1": return "node.Operand1";
+				case "o2": return "node.Operand2";
+				case "o3": return "node.Operand3";
+				case "o4": return "node.GetOperand(3)";
+				case "r": return "node.Result";
+				case "r1": return "node.Result";
+				case "r2": return "node.Result2";
+				case "label": return "node.BranchTargets[0].Label";
 				case "cond": return string.Empty; // TODO
 				case "shifter": return string.Empty; // TODO
-				case "": return string.Empty;
 
-				default: throw new Exception("ERROR!");
+				default: return part; //throw new Exception("ERROR!");
 			}
 		}
 
@@ -931,6 +930,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "imm16": code = "Append16BitImmediate"; return;
 				case "rel32": code = "EmitRelative32"; return;
 				case "rel64": code = "EmitRelative64"; return;
+				case "forward32": code = "EmitForward32"; return;
 				case "": return;
 
 				default: throw new Exception("ERROR!");

@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Instructions
 		public override int ID { get { return 217; } }
 
 		internal JmpFar()
-			: base(0, 1)
+			: base(0, 0)
 		{
 		}
 
@@ -23,10 +23,13 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
-			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
+			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-			StaticEmitters.EmitJmpFar(node, emitter);
+			emitter.OpcodeEncoder.AppendByte(0xEA);
+			emitter.OpcodeEncoder.EmitForward32(6);
+			emitter.OpcodeEncoder.AppendByte(0x08);
+			emitter.OpcodeEncoder.AppendByte(0x00);
 		}
 	}
 }

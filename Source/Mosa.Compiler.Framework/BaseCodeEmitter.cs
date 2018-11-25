@@ -204,7 +204,7 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Write Methods
 
-		#region New Code Generation Methods
+		#region Emit Methods
 
 		/// <summary>
 		/// Emits the specified opcode.
@@ -248,7 +248,12 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		#endregion New Code Generation Methods
+		public void EmitForwardLink(int offset)
+		{
+			Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, CurrentPosition, SectionKind.Text, MethodName, CurrentPosition + offset);
+		}
+
+		#endregion Emit Methods
 
 		public void EmitRelative32(Operand symbolOperand)
 		{

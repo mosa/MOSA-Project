@@ -261,7 +261,6 @@
     <Compile Include="Instructions\Shld32.cs" />
     <Compile Include="Instructions\Shr32.cs" />
     <Compile Include="Instructions\Shrd32.cs" />
-    <Compile Include="Instructions\StaticEmitters.cs" />
     <Compile Include="Instructions\Sti.cs" />
     <Compile Include="Instructions\Stos.cs" />
     <Compile Include="Instructions\Sub32.cs" />

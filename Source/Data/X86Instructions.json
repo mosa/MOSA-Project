@@ -642,11 +642,16 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 1,
+			"OperandCount": 0,
 			"ResultCount": 0,
-			"StaticEmitMethod": "StaticEmitters.Emit%",
 			"UnspecifiedSideEffect": "true",
-			"ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x86],opcode=0xEA,displacement=forward32:6,immediate=0x08|0x00"
+				}
+			]
 		},
 		{
 			"Name": "Hlt",

@@ -239,5 +239,11 @@ namespace Mosa.Compiler.Framework
 			Emitter.EmitRelative64(operand);
 			WriteZeroBytes(8);
 		}
+
+		public void EmitForward32(int offset)
+		{
+			Emitter.EmitForwardLink(offset);
+			WriteZeroBytes(4);
+		}
 	}
 }
