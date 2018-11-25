@@ -514,6 +514,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 		private void CreateEncoding(dynamic node)
 		{
 			bool first = true;
+			int count = 0;
 
 			foreach (var entry in node.OpcodeEncoding)
 			{
@@ -538,6 +539,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				var condition = DecodeExperimentalCondition(entry.Condition) ?? string.Empty;
 				var encoding = DecodeExperimentalEncoding(entry.Encoding, node.OpcodeEncodingAppend);
 
+				count++;
 				if (!String.IsNullOrEmpty(condition))
 				{
 					EmitCondition(condition, encoding, true, 0);
@@ -546,6 +548,12 @@ namespace Mosa.Utility.SourceCodeGenerator
 				{
 					EmitBits(encoding, 0);
 				}
+			}
+
+			if (count > 1)
+			{
+				Lines.AppendLine();
+				Lines.AppendLine("\t\t\tthrow new Compiler.Common.Exceptions.CompilerException(\"Invalid Opcode\");");
 			}
 		}
 
@@ -734,23 +742,6 @@ namespace Mosa.Utility.SourceCodeGenerator
 			return expression;
 		}
 
-		private string DecodeCondition(string condition)
-		{
-			if (string.IsNullOrWhiteSpace(condition))
-				return null;
-
-			// update condition
-			return condition.Replace("o1.", "node.Operand1.")
-				.Replace("o2.", "node.Operand2.")
-				.Replace("o3.", "node.Operand3.")
-				.Replace("o4.", "node.Operand4.")
-				.Replace("r.", "node.Result.")
-				.Replace("r2.", "node.Result2.")
-				.Replace("HasBranchTarget", "node.BranchTargetsCount != 0")
-				.Replace(".IsRegister", ".IsCPURegister")
-				.Replace(".RegisterCode", ".Register.RegisterCode");
-		}
-
 		private void EmitCondition(string condition, string encoding, bool end, int index = 0)
 		{
 			var tabs = "\t\t\t\t\t\t\t\t\t\t".Substring(0, index + 3);
@@ -888,11 +879,19 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 					GetCodes(parts[0], ref code, ref postcode);
 
-					var operand = (parts.Length >= 1) ? GetOperand(parts[1]) : string.Empty;
+					var operand = (parts.Length > 1) ? GetOperand(parts[1]) : string.Empty;
+					var operand2 = (parts.Length > 2) ? GetOperand(parts[2]) : null;
 
 					Lines.Append(tabs);
 
-					Lines.AppendLine("emitter.OpcodeEncoder." + code + "(node." + operand + postcode + ");");
+					if (operand2 == null)
+					{
+						Lines.AppendLine("emitter.OpcodeEncoder." + code + "(node." + operand + postcode + ");");
+					}
+					else
+					{
+						Lines.AppendLine("emitter.OpcodeEncoder." + code + "(node." + operand + postcode + ", node." + operand2 + ");");
+					}
 				}
 			}
 		}
@@ -927,6 +926,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "regx4": code = "Append1Bit"; postcode = ".Register.RegisterCode"; return;
 				case "reg4": code = "AppendNibble"; postcode = ".Register.RegisterCode"; return;
 				case "imm32": code = "Append32BitImmediate"; return;
+				case "imm32+": code = "Append32BitImmediateWithOffset"; return;
 				case "imm8": code = "Append8BitImmediate"; return;
 				case "rel32": code = "EmitRelative32"; return;
 				case "rel64": code = "EmitRelative64"; return;

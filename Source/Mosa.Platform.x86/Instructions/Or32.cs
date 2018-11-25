@@ -63,6 +63,8 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.OpcodeEncoder.Append32BitImmediate(node.Operand2);
 				return;
 			}
+
+			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 		}
 	}
 }

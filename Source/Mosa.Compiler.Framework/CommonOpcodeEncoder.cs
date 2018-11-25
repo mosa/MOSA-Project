@@ -168,6 +168,22 @@ namespace Mosa.Compiler.Framework
 			AppendBitsReversed(value, 32);
 		}
 
+		public void Append32BitImmediateWithOffset(Operand operand, Operand offset)
+		{
+			Debug.Assert(operand.IsConstant);
+			Debug.Assert(offset.IsResolvedConstant);
+
+			if (operand.IsResolvedConstant)
+			{
+				AppendImmediateInteger(operand.ConstantUnsignedInteger + offset.ConstantUnsignedInteger);
+			}
+			else
+			{
+				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I4, operand, 0, offset.ConstantSignedInteger);
+				WriteZeroBytes(4);
+			}
+		}
+
 		public void Append32BitImmediate(Operand operand)
 		{
 			Debug.Assert(operand.IsConstant);

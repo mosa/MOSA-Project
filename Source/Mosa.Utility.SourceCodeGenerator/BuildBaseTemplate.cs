@@ -50,7 +50,17 @@ namespace Mosa.Utility.SourceCodeGenerator
 		protected void Save()
 		{
 			var destination = Path.Combine(DestinationPath, DestinationFile);
-			File.WriteAllText(destination, Lines.ToString());
+			var lines = Lines.ToString();
+
+			if (File.Exists(destination))
+			{
+				var existinglines = File.ReadAllText(destination);
+
+				if (lines == existinglines)
+					return;
+			}
+
+			File.WriteAllText(destination, lines);
 		}
 
 		protected void ReadJSON()

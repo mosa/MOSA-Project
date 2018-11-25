@@ -190,12 +190,13 @@ namespace Mosa.Compiler.Framework
 			opcode.WriteTo(CodeStream);
 		}
 
+		// legacy
 		public void EmitLink(Operand symbolOperand, int patchOffset, int referenceOffset = 0, PatchType patchType = PatchType.I4) // legacy version
 		{
 			EmitLink((int)CodeStream.Position, patchType, symbolOperand, patchOffset, referenceOffset);
 		}
 
-		public void EmitLink(int position, PatchType patchType, Operand symbolOperand, int patchOffset, int referenceOffset = 0)
+		public void EmitLink(int position, PatchType patchType, Operand symbolOperand, int patchOffset, int referenceOffset)
 		{
 			position += patchOffset;
 
