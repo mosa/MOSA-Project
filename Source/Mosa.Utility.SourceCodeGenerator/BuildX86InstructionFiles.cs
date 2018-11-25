@@ -514,7 +514,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 		private void CreateEncoding(dynamic node)
 		{
 			bool first = true;
-			int count = 0;
+			bool cond = false;
 
 			foreach (var entry in node.OpcodeEncoding)
 			{
@@ -539,9 +539,9 @@ namespace Mosa.Utility.SourceCodeGenerator
 				var condition = DecodeExperimentalCondition(entry.Condition) ?? string.Empty;
 				var encoding = DecodeExperimentalEncoding(entry.Encoding, node.OpcodeEncodingAppend);
 
-				count++;
 				if (!String.IsNullOrEmpty(condition))
 				{
+					cond = true;
 					EmitCondition(condition, encoding, true, 0);
 				}
 				else
@@ -550,7 +550,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				}
 			}
 
-			if (count > 1)
+			if (cond)
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\t\tthrow new Compiler.Common.Exceptions.CompilerException(\"Invalid Opcode\");");

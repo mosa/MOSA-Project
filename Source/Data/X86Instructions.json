@@ -3207,9 +3207,45 @@
 			"OperandCount": 3,
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "false",
-			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"Encoding-ConstantBase": "0x0F|1100|0001|00|reg3:o3|101|imm32:o1",
-			"Encoding-NonConstantBase": "EmitXAddLoad32Reg"
+			"OpcodeEncodingAppend": "operand-prefix=0x0F,opcode=0xC1",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero][register]",
+					"Encoding": "[x86-common-load-ebp+zero]"
+				},
+				{
+					"Condition": "[ESP][zero][register]",
+					"Encoding": "[x86-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][register]",
+					"Encoding": "[x86-common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][register]",
+					"Encoding": "[x86-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "[x86-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero][register]",
+					"Encoding": "[x86-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][register]",
+					"Encoding": "[x86-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[x86-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][register]",
+					"Encoding": "[x86-common-load-constant+zero]"
+				}
+			]
 		},
 		{
 			"Name": "XChg32",
@@ -3245,9 +3281,45 @@
 			"OperandCount": 3,
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "false",
-			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"Encoding-ConstantBase": "1000|0111|00|reg3:o3|101|imm32:o1",
-			"Encoding-NonConstantBase": "EmitXChgLoad32Reg"
+			"OpcodeEncodingAppend": "opcode=0x87",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero][register]",
+					"Encoding": "[x86-common-load-ebp+zero]"
+				},
+				{
+					"Condition": "[ESP][zero][register]",
+					"Encoding": "[x86-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][register]",
+					"Encoding": "[x86-common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][register]",
+					"Encoding": "[x86-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "[x86-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero][register]",
+					"Encoding": "[x86-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][register]",
+					"Encoding": "[x86-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[x86-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][register]",
+					"Encoding": "[x86-common-load-constant+zero]"
+				}
+			]
 		},
 		{
 			"Name": "Xor32",
