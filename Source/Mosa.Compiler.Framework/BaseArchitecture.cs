@@ -160,12 +160,6 @@ namespace Mosa.Compiler.Framework
 		public abstract void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> compilerPipeline);
 
 		/// <summary>
-		/// Gets the code emitter.
-		/// </summary>
-		/// <returns></returns>
-		public abstract BaseCodeEmitter GetCodeEmitter();
-
-		/// <summary>
 		/// Create platform move.
 		/// </summary>
 		/// <param name="context">The context.</param>

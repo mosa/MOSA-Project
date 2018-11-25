@@ -1,6 +1,6 @@
 {
 	"Encoding": [
-		"[arm-data-processing]=[cond]|[b00]|[i]|[opcode]|[s]|[rn]|[rd]|[shifter]"
+		"[arm-data-processing]=[cond]|[00]|[i]|[opcode]|[s]|[rn]|[rd]|[shifter]"
 	],
 	"Instructions": [
 		{
@@ -15,8 +15,6 @@
 			"FlagsUsed": "C",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "EmitDataProcessingInstruction",
-			"ARMv6Opcode": "b0101",
 			"Description": "Add with Carry",
 			"OpcodeEncoding": [
 				{
@@ -37,10 +35,12 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "EmitDataProcessingInstruction",
-			"ARMv6Opcode": "b0100",
-			"Description": "Add",
-			"Encoding": "b0000|b00|b0|b0|0x0100|b0|reg4:o1|reg4:op2|0b000000000000"
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Adr32",
@@ -54,9 +54,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Form PC-relative Address"
+			"Description": "Form PC-relative Address",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "And32",
@@ -70,9 +74,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "EmitDataProcessingInstruction",
-			"ARMv6Opcode": "b0000",
-			"Description": "Bitwise AND"
+			"Description": "Bitwise AND",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Asr32",
@@ -86,9 +94,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Arithmetic Shift Right"
+			"Description": "Arithmetic Shift Right",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "B32",
@@ -102,9 +114,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Branch to target address"
+			"Description": "Branch to target address",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Bic32",
@@ -118,9 +134,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "EmitDataProcessingInstruction",
-			"ARMv6Opcode": "b1110",
-			"Description": "Bitwise Bit Clear"
+			"Description": "Bitwise Bit Clear",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Bkpt32",
@@ -134,9 +154,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Breakpoint instruction"
+			"Description": "Breakpoint instruction",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Bl32",
@@ -150,9 +174,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Call a subroutine"
+			"Description": "Call a subroutine",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Blx32",
@@ -166,9 +194,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Call a subroutine"
+			"Description": "Call a subroutine",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Bx32",
@@ -182,9 +214,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Branch to target address"
+			"Description": "Branch to target address",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Cmn32",
@@ -198,9 +234,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "EmitDataProcessingInstruction",
-			"ARMv6Opcode": "b1011",
-			"Description": "Compare Negative"
+			"Description": "Compare Negative",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Cmp32",
@@ -214,9 +254,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "EmitDataProcessingInstruction",
-			"ARMv6Opcode": "b1010",
-			"Description": "Compare"
+			"Description": "Compare",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Dmb32",
@@ -230,9 +274,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Data Memory Barrier"
+			"Description": "Data Memory Barrier",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Dsb32",
@@ -246,9 +294,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Data Synchronization Barrier"
+			"Description": "Data Synchronization Barrier",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Eor32",
@@ -262,9 +314,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "EmitDataProcessingInstruction",
-			"ARMv6Opcode": "b0001",
-			"Description": "Bitwise Exclusive OR"
+			"Description": "Bitwise Exclusive OR",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Isb32",
@@ -278,9 +334,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Instruction Synchronization Barrier"
+			"Description": "Instruction Synchronization Barrier",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Ldm32",
@@ -294,9 +354,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Load Multiple"
+			"Description": "Load Multiple",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Ldmfd32",
@@ -310,9 +374,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Load Multiple Full Descending"
+			"Description": "Load Multiple Full Descending",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Ldmia32",
@@ -326,9 +394,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Load Multiple Increment After"
+			"Description": "Load Multiple Increment After",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Ldr32",
@@ -342,9 +414,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "EmitMemoryLoad",
-			"ARMv6Opcode": "",
-			"Description": "Load 32-bit word"
+			"Description": "Load 32-bit word",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Ldrb32",
@@ -358,9 +434,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Load 8-bit unsigned byte"
+			"Description": "Load 8-bit unsigned byte",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Ldrh32",
@@ -374,9 +454,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Load 16-bit unsigned halfword"
+			"Description": "Load 16-bit unsigned halfword",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Ldrsb32",
@@ -390,9 +474,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Load 8-bit signed byte"
+			"Description": "Load 8-bit signed byte",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Ldrsh32",
@@ -406,9 +494,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Load 16-bit signed halfword"
+			"Description": "Load 16-bit signed halfword",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Lsl32",
@@ -422,9 +514,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Logical Shift Left"
+			"Description": "Logical Shift Left",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Lsr32",
@@ -438,9 +534,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Logical Shift Right"
+			"Description": "Logical Shift Right",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Mov32",
@@ -454,9 +554,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "EmitDataProcessingInstruction",
-			"ARMv6Opcode": "b1101",
-			"Description": "Copies operand to destination"
+			"Description": "Copies operand to destination",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Mrs32",
@@ -470,9 +574,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Status register access"
+			"Description": "Status register access",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Msr32",
@@ -486,9 +594,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Status register access "
+			"Description": "Status register access ",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Mul32",
@@ -502,9 +614,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "EmitMultiplyInstruction",
-			"ARMv6Opcode": "",
-			"Description": ""
+			"Description": "",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Mvn32",
@@ -518,9 +634,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "EmitDataProcessingInstruction",
-			"ARMv6Opcode": "b1111",
-			"Description": "Bitwise NOT"
+			"Description": "Bitwise NOT",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Nop32",
@@ -534,9 +654,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "No Operation"
+			"Description": "No Operation",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Orr32",
@@ -550,9 +674,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "EmitDataProcessingInstruction",
-			"ARMv6Opcode": "b1100",
-			"Description": "Bitwise OR"
+			"Description": "Bitwise OR",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Pop32",
@@ -566,9 +694,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Pop multiple registers off the stack"
+			"Description": "Pop multiple registers off the stack",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Push32",
@@ -582,9 +714,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Push multiple registers onto the stack"
+			"Description": "Push multiple registers onto the stack",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Rev32",
@@ -598,9 +734,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Byte-Reverse Word"
+			"Description": "Byte-Reverse Word",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Rev16",
@@ -614,9 +754,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Byte-Reverse Packed Halfword"
+			"Description": "Byte-Reverse Packed Halfword",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Revsh32",
@@ -630,9 +774,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Byte-Reverse Signed Halfword"
+			"Description": "Byte-Reverse Signed Halfword",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Ror32",
@@ -646,9 +794,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Rotate Right"
+			"Description": "Rotate Right",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Rsb32",
@@ -662,9 +814,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "EmitDataProcessingInstruction",
-			"ARMv6Opcode": "b0011",
-			"Description": "Reverse Subtract"
+			"Description": "Reverse Subtract",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Rsc32",
@@ -678,9 +834,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "EmitDataProcessingInstruction",
-			"ARMv6Opcode": "b0111",
-			"Description": "Reverse Subtract Carry"
+			"Description": "Reverse Subtract Carry",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Sbc32",
@@ -694,9 +854,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "EmitDataProcessingInstruction",
-			"ARMv6Opcode": "b0110",
-			"Description": "Subtract with Carry"
+			"Description": "Subtract with Carry",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Sev32",
@@ -710,9 +874,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Send Event"
+			"Description": "Send Event",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Stm32",
@@ -726,9 +894,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Store Multiple"
+			"Description": "Store Multiple",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Stmea32",
@@ -742,9 +914,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Store Multiple Empty Ascending"
+			"Description": "Store Multiple Empty Ascending",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Stmia32",
@@ -758,9 +934,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Store Multiple Increment After"
+			"Description": "Store Multiple Increment After",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Str32",
@@ -774,9 +954,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "EmitMemoryStore",
-			"ARMv6Opcode": "",
-			"Description": "Store 32-bit word"
+			"Description": "Store 32-bit word",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Strb32",
@@ -790,9 +974,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Store 8-bit byte"
+			"Description": "Store 8-bit byte",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Strh32",
@@ -806,9 +994,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Store 16-bit halfword"
+			"Description": "Store 16-bit halfword",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Sub32",
@@ -822,9 +1014,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "EmitDataProcessingInstruction",
-			"ARMv6Opcode": "b0010",
-			"Description": "Subtract"
+			"Description": "Subtract",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Svc32",
@@ -838,9 +1034,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Supervisor Call"
+			"Description": "Supervisor Call",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Swi32",
@@ -854,9 +1054,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Supervisor Call"
+			"Description": "Supervisor Call",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Sxtb32",
@@ -870,9 +1074,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Signed Extend Byte"
+			"Description": "Signed Extend Byte",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Sxth32",
@@ -886,9 +1094,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Signed Extend Halfword"
+			"Description": "Signed Extend Halfword",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Teq32",
@@ -902,9 +1114,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "EmitDataProcessingInstruction",
-			"ARMv6Opcode": "b1001",
-			"Description": "Test"
+			"Description": "Test",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Tst32",
@@ -918,9 +1134,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "EmitDataProcessingInstruction",
-			"ARMv6Opcode": "b1000",
-			"Description": "Test"
+			"Description": "Test",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Uxtb32",
@@ -934,9 +1154,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Unsigned Extend Byte"
+			"Description": "Unsigned Extend Byte",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Uxth32",
@@ -950,9 +1174,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Unsigned Extend Halfword"
+			"Description": "Unsigned Extend Halfword",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Wfe32",
@@ -966,9 +1194,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Wait for Event"
+			"Description": "Wait for Event",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Wfi32",
@@ -982,9 +1214,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Wait for Interrupt"
+			"Description": "Wait for Interrupt",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		},
 		{
 			"Name": "Yield32",
@@ -998,9 +1234,13 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"ARMv6Emitter": "",
-			"ARMv6Opcode": "",
-			"Description": "Yield"
+			"Description": "Yield",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
 		}
 	]
 }

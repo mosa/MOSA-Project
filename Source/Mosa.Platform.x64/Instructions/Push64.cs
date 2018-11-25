@@ -12,21 +12,35 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Push64 : X64Instruction
 	{
-		public override int ID { get { return 488; } }
+		public override int ID { get { return 493; } }
 
 		internal Push64()
 			: base(0, 1)
 		{
 		}
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xFF }, 0x06);
-
-		internal override void EmitLegacy(InstructionNode node, X64CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			emitter.Emit(LegacyOpcode, node.Operand1);
+			if (node.Operand1.IsCPURegister)
+			{
+				emitter.OpcodeEncoder.AppendByte(0xFF);
+				emitter.OpcodeEncoder.Append2Bits(0b11);
+				emitter.OpcodeEncoder.Append3Bits(0b110);
+				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				return;
+			}
+
+			if (node.Operand1.IsConstant)
+			{
+				emitter.OpcodeEncoder.AppendByte(0x68);
+				emitter.OpcodeEncoder.Append32BitImmediate(node.Operand1);
+				return;
+			}
+
+			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 		}
 	}
 }

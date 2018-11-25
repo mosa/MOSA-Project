@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Sub32 : X86Instruction
 	{
-		public override int ID { get { return 296; } }
+		public override int ID { get { return 295; } }
 
 		internal Sub32()
 			: base(1, 2)
@@ -57,6 +57,8 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.OpcodeEncoder.Append32BitImmediate(node.Operand2);
 				return;
 			}
+
+			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 		}
 	}
 }

@@ -12,25 +12,36 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Out16 : X64Instruction
 	{
-		public override int ID { get { return 482; } }
+		public override int ID { get { return 486; } }
 
 		internal Out16()
 			: base(0, 2)
 		{
 		}
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xEF });
-
 		public override bool IsIOOperation { get { return true; } }
 
 		public override bool HasUnspecifiedSideEffect { get { return true; } }
 
-		internal override void EmitLegacy(InstructionNode node, X64CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			emitter.Emit(LegacyOpcode);
+			if (node.Operand1.IsCPURegister)
+			{
+				emitter.OpcodeEncoder.AppendByte(0xEF);
+				return;
+			}
+
+			if (node.Operand1.IsConstant)
+			{
+				emitter.OpcodeEncoder.AppendByte(0xE7);
+				emitter.OpcodeEncoder.Append8BitImmediate(node.Operand1);
+				return;
+			}
+
+			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 		}
 	}
 }

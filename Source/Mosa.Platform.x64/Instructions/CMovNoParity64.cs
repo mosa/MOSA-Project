@@ -12,16 +12,14 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class CMovNoParity64 : X64Instruction
 	{
-		public override int ID { get { return 602; } }
+		public override int ID { get { return 605; } }
 
 		internal CMovNoParity64()
 			: base(1, 1)
 		{
 		}
 
-		public override string AlternativeName { get { return "CMovNP64"; } }
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x4B });
+		public override string AlternativeName { get { return "CMovNP"; } }
 
 		public override bool IsParityFlagUsed { get { return true; } }
 
@@ -30,12 +28,16 @@ namespace Mosa.Platform.x64.Instructions
 			return X64.CMovParity64;
 		}
 
-		internal override void EmitLegacy(InstructionNode node, X64CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			emitter.Emit(LegacyOpcode, node.Result, node.Operand1);
+			emitter.OpcodeEncoder.AppendByte(0x0F);
+			emitter.OpcodeEncoder.AppendByte(0x4B);
+			emitter.OpcodeEncoder.Append2Bits(0b11);
+			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 		}
 	}
 }

@@ -12,23 +12,25 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class MovCRStore64 : X64Instruction
 	{
-		public override int ID { get { return 437; } }
+		public override int ID { get { return 439; } }
 
 		internal MovCRStore64()
 			: base(0, 2)
 		{
 		}
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x22 });
-
 		public override bool IsMemoryWrite { get { return true; } }
 
-		internal override void EmitLegacy(InstructionNode node, X64CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			emitter.Emit(LegacyOpcode, node.Operand1, node.Operand2);
+			emitter.OpcodeEncoder.AppendByte(0x0F);
+			emitter.OpcodeEncoder.AppendByte(0x22);
+			emitter.OpcodeEncoder.Append2Bits(0b11);
+			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+			emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
 		}
 	}
 }

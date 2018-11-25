@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class SetByteIfUnsignedLessThan : X64Instruction
 	{
-		public override int ID { get { return 550; } }
+		public override int ID { get { return 553; } }
 
 		internal SetByteIfUnsignedLessThan()
 			: base(1, 0)
@@ -21,8 +21,6 @@ namespace Mosa.Platform.x64.Instructions
 
 		public override string AlternativeName { get { return "SetB"; } }
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x92 });
-
 		public override bool IsCarryFlagUsed { get { return true; } }
 
 		public override BaseInstruction GetOpposite()
@@ -30,12 +28,16 @@ namespace Mosa.Platform.x64.Instructions
 			return X64.SetByteIfUnsignedGreaterOrEqual;
 		}
 
-		internal override void EmitLegacy(InstructionNode node, X64CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-			emitter.Emit(LegacyOpcode, node.Result);
+			emitter.OpcodeEncoder.AppendByte(0x0F);
+			emitter.OpcodeEncoder.AppendByte(0x92);
+			emitter.OpcodeEncoder.Append2Bits(0b11);
+			emitter.OpcodeEncoder.Append3Bits(0b000);
+			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 		}
 	}
 }

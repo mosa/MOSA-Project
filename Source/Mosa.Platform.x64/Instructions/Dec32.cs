@@ -12,12 +12,14 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Dec32 : X64Instruction
 	{
-		public override int ID { get { return 398; } }
+		public override int ID { get { return 401; } }
 
 		internal Dec32()
 			: base(1, 1)
 		{
 		}
+
+		public override bool ThreeTwoAddressConversion { get { return true; } }
 
 		public override bool IsZeroFlagModified { get { return true; } }
 
@@ -26,5 +28,18 @@ namespace Mosa.Platform.x64.Instructions
 		public override bool IsOverflowFlagModified { get { return true; } }
 
 		public override bool IsParityFlagModified { get { return true; } }
+
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+			System.Diagnostics.Debug.Assert(node.Result.IsCPURegister);
+			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
+			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
+
+			emitter.OpcodeEncoder.AppendNibble(0b0100);
+			emitter.OpcodeEncoder.AppendBit(0b1);
+			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+		}
 	}
 }

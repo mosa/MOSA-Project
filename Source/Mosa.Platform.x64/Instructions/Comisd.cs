@@ -12,14 +12,12 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Comisd : X64Instruction
 	{
-		public override int ID { get { return 389; } }
+		public override int ID { get { return 388; } }
 
 		internal Comisd()
 			: base(0, 2)
 		{
 		}
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x66, 0x0F, 0x2F });
 
 		public override bool IsZeroFlagModified { get { return true; } }
 
@@ -35,12 +33,20 @@ namespace Mosa.Platform.x64.Instructions
 
 		public override bool IsParityFlagModified { get { return true; } }
 
-		internal override void EmitLegacy(InstructionNode node, X64CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			emitter.Emit(LegacyOpcode, node.Operand1, node.Operand2);
+			emitter.OpcodeEncoder.AppendNibble(0b0110);
+			emitter.OpcodeEncoder.AppendNibble(0b0110);
+			emitter.OpcodeEncoder.AppendNibble(0b0000);
+			emitter.OpcodeEncoder.AppendNibble(0b1111);
+			emitter.OpcodeEncoder.AppendNibble(0b0010);
+			emitter.OpcodeEncoder.AppendNibble(0b1111);
+			emitter.OpcodeEncoder.Append2Bits(0b11);
+			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+			emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
 		}
 	}
 }

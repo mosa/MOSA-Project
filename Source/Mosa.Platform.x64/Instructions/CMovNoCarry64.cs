@@ -12,16 +12,14 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class CMovNoCarry64 : X64Instruction
 	{
-		public override int ID { get { return 592; } }
+		public override int ID { get { return 595; } }
 
 		internal CMovNoCarry64()
 			: base(1, 1)
 		{
 		}
 
-		public override string AlternativeName { get { return "CMovNC64"; } }
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x43 });
+		public override string AlternativeName { get { return "CMovNC"; } }
 
 		public override bool IsCarryFlagUsed { get { return true; } }
 
@@ -30,12 +28,16 @@ namespace Mosa.Platform.x64.Instructions
 			return X64.CMovCarry64;
 		}
 
-		internal override void EmitLegacy(InstructionNode node, X64CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			emitter.Emit(LegacyOpcode, node.Result, node.Operand1);
+			emitter.OpcodeEncoder.AppendByte(0x0F);
+			emitter.OpcodeEncoder.AppendByte(0x43);
+			emitter.OpcodeEncoder.Append2Bits(0b11);
+			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 		}
 	}
 }

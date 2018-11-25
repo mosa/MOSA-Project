@@ -12,20 +12,32 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class CMovNotSigned32 : X64Instruction
 	{
-		public override int ID { get { return 580; } }
+		public override int ID { get { return 583; } }
 
 		internal CMovNotSigned32()
 			: base(1, 1)
 		{
 		}
 
-		public override string AlternativeName { get { return "CMovNS32"; } }
+		public override string AlternativeName { get { return "CMovNS"; } }
 
 		public override bool IsSignFlagUsed { get { return true; } }
 
 		public override BaseInstruction GetOpposite()
 		{
 			return X64.CMovSigned32;
+		}
+
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+
+			emitter.OpcodeEncoder.AppendByte(0x0F);
+			emitter.OpcodeEncoder.AppendByte(0x49);
+			emitter.OpcodeEncoder.Append2Bits(0b11);
+			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 		}
 	}
 }

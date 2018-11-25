@@ -12,15 +12,29 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class PXor : X64Instruction
 	{
-		public override int ID { get { return 490; } }
+		public override int ID { get { return 495; } }
 
 		internal PXor()
 			: base(1, 2)
 		{
 		}
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x66, 0x0F, 0xEF });
-
 		public override bool ThreeTwoAddressConversion { get { return true; } }
+
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+			System.Diagnostics.Debug.Assert(node.Result.IsCPURegister);
+			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
+			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
+
+			emitter.OpcodeEncoder.AppendByte(0x66);
+			emitter.OpcodeEncoder.AppendByte(0x0F);
+			emitter.OpcodeEncoder.AppendByte(0xEF);
+			emitter.OpcodeEncoder.Append2Bits(0b11);
+			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+			emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+		}
 	}
 }

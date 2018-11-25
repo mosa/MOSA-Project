@@ -30,7 +30,9 @@ namespace Mosa.Platform.x86.Stages
 						continue;
 
 					// todo: need a better way
-					if (node.Instruction == X86.MovsdLoad || node.Instruction == X86.MovssLoad)
+					if (node.Instruction == X86.MovsdLoad
+						|| node.Instruction == X86.MovssLoad
+						|| node.Instruction == X86.MovLoad32)
 						continue;
 
 					EmitFloatingPointConstants(node);

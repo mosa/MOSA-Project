@@ -79,11 +79,11 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Path.Combine(targetPath, @"Mosa.Platform.ARMv6\Instructions")
 			);
 
-			new BuildRules(
-				Path.Combine(dataPath, @"TransformRules.json"),
-				Path.Combine(targetPath, @"Mosa.Compiler.Framework\"),
-				"Rules.cs"
-			);
+			//new BuildRules(
+			//	Path.Combine(dataPath, @"TransformRules.json"),
+			//	Path.Combine(targetPath, @"Mosa.Compiler.Framework\"),
+			//	"Rules.cs"
+			//);
 		}
 	}
 }

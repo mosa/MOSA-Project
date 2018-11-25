@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class BranchLessOrEqual : X64Instruction
 	{
-		public override int ID { get { return 545; } }
+		public override int ID { get { return 548; } }
 
 		internal BranchLessOrEqual()
 			: base(0, 0)
@@ -20,8 +20,6 @@ namespace Mosa.Platform.x64.Instructions
 		}
 
 		public override string AlternativeName { get { return "JLE"; } }
-
-		public static readonly byte[] opcode = new byte[] { 0x0F, 0x8E };
 
 		public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
 
@@ -40,11 +38,10 @@ namespace Mosa.Platform.x64.Instructions
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
-			System.Diagnostics.Debug.Assert(node.BranchTargets.Count >= 1);
-			System.Diagnostics.Debug.Assert(node.BranchTargets[0] != null);
 
-			emitter.Write(opcode);
-			(emitter as X64CodeEmitter).EmitRelativeBranchTarget(node.BranchTargets[0].Label);
+			emitter.OpcodeEncoder.AppendByte(0x0F);
+			emitter.OpcodeEncoder.AppendByte(0x8E);
+			emitter.OpcodeEncoder.EmitRelative32(node.BranchTargets[0].Label);
 		}
 	}
 }

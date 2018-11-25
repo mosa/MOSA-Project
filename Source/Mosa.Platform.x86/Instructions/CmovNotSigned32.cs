@@ -12,14 +12,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class CMovNotSigned32 : X86Instruction
 	{
-		public override int ID { get { return 359; } }
+		public override int ID { get { return 358; } }
 
 		internal CMovNotSigned32()
 			: base(1, 1)
 		{
 		}
 
-		public override string AlternativeName { get { return "CMovNS32"; } }
+		public override string AlternativeName { get { return "CMovNS"; } }
 
 		public override bool IsSignFlagUsed { get { return true; } }
 

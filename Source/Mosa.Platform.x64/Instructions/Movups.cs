@@ -12,13 +12,23 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Movups : X64Instruction
 	{
-		public override int ID { get { return 460; } }
+		public override int ID { get { return 463; } }
 
 		internal Movups()
 			: base(1, 1)
 		{
 		}
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x10 });
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+
+			emitter.OpcodeEncoder.AppendByte(0x0F);
+			emitter.OpcodeEncoder.AppendByte(0x10);
+			emitter.OpcodeEncoder.Append2Bits(0b11);
+			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+			emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+		}
 	}
 }

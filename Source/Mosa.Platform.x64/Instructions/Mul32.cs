@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Mul32 : X64Instruction
 	{
-		public override int ID { get { return 470; } }
+		public override int ID { get { return 474; } }
 
 		internal Mul32()
 			: base(2, 2)
@@ -36,5 +36,16 @@ namespace Mosa.Platform.x64.Instructions
 		public override bool IsParityFlagUnchanged { get { return true; } }
 
 		public override bool IsParityFlagUndefined { get { return true; } }
+
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			System.Diagnostics.Debug.Assert(node.ResultCount == 2);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+
+			emitter.OpcodeEncoder.AppendByte(0xF7);
+			emitter.OpcodeEncoder.Append2Bits(0b11);
+			emitter.OpcodeEncoder.Append3Bits(0b100);
+			emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+		}
 	}
 }

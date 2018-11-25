@@ -12,21 +12,38 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Mov64 : X64Instruction
 	{
-		public override int ID { get { return 431; } }
+		public override int ID { get { return 433; } }
 
 		internal Mov64()
 			: base(1, 1)
 		{
 		}
 
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x8B });
-
-		internal override void EmitLegacy(InstructionNode node, X64CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			emitter.Emit(LegacyOpcode, node.Result, node.Operand1);
+			if (node.Operand1.IsCPURegister)
+			{
+				emitter.OpcodeEncoder.AppendByte(0x8B);
+				emitter.OpcodeEncoder.Append2Bits(0b11);
+				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				return;
+			}
+
+			if (node.Operand1.IsConstant)
+			{
+				emitter.OpcodeEncoder.AppendByte(0xC7);
+				emitter.OpcodeEncoder.Append2Bits(0b11);
+				emitter.OpcodeEncoder.Append3Bits(0b000);
+				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				emitter.OpcodeEncoder.Append32BitImmediate(node.Operand1);
+				return;
+			}
+
+			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 		}
 	}
 }

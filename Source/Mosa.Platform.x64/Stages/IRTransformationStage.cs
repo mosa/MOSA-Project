@@ -279,7 +279,7 @@ namespace Mosa.Platform.x64.Stages
 		private void ConvertFloatR4ToInt32(InstructionNode node)
 		{
 			Debug.Assert(node.Result.Type.IsI1 || node.Result.Type.IsI2 || node.Result.Type.IsI4);
-			node.ReplaceInstruction(X64.Cvttss2si);
+			node.ReplaceInstruction(X64.Cvttss2si32);
 		}
 
 		private void ConvertFloatR8ToFloatR4(InstructionNode node)
@@ -290,19 +290,19 @@ namespace Mosa.Platform.x64.Stages
 		private void ConvertFloatR8ToInt32(InstructionNode node)
 		{
 			Debug.Assert(node.Result.Type.IsI1 || node.Result.Type.IsI2 || node.Result.Type.IsI4);
-			node.ReplaceInstruction(X64.Cvttsd2si);
+			node.ReplaceInstruction(X64.Cvttsd2si32);
 		}
 
 		private void ConvertInt32ToFloatR4(InstructionNode node)
 		{
 			Debug.Assert(node.Result.IsR4);
-			node.ReplaceInstruction(X64.Cvtsi2ss);
+			node.ReplaceInstruction(X64.Cvtsi2ss32);
 		}
 
 		private void ConvertInt32ToFloatR8(InstructionNode node)
 		{
 			Debug.Assert(node.Result.IsR8);
-			node.ReplaceInstruction(X64.Cvtsi2sd);
+			node.ReplaceInstruction(X64.Cvtsi2sd32);
 		}
 
 		private void CopyCompound(Context context, MosaType type, Operand destinationBase, Operand destination, Operand sourceBase, Operand source)
