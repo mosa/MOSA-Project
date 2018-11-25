@@ -51,17 +51,17 @@
 		"[x86-common-store-register-register+constant]=[x86-base-store-register-register+constant],opcode=[opcode-register],value=o3,membase=o1,offset=o2",
 		"[x86-common-store-register-constant+zero]=[x86-base-store-register-constant+zero],opcode=[opcode-register],value=o3,membase=o1",
 
-		"[x86-base-store-constant-ebp+zero]=[x86],mod=01,reg=000,rm=101,displacement=0x00,immediate=imm32:[value]",
-		"[x86-base-store-constant-ebp+register]=[x86],mod=01,reg=000,rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00,immediate=imm32:[value]",
-		"[x86-base-store-constant-esp+zero]=[x86],mod=00,reg=000,rm=100,scale=00,index=100,base=100,immediate=imm32:[value]",
-		"[x86-base-store-constant-esp+sbyte]=[x86],mod=01,reg=000,rm=100,scale=00,index=100,base=100,displacement=imm8:[offset],immediate=imm32:[value]",
+		"[x86-base-store-constant-ebp+zero]=[x86],mod=01,reg=000,rm=101,displacement=0x00,immediate=imm[size]:[value]",
+		"[x86-base-store-constant-ebp+register]=[x86],mod=01,reg=000,rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00,immediate=imm[size]:[value]",
+		"[x86-base-store-constant-esp+zero]=[x86],mod=00,reg=000,rm=100,scale=00,index=100,base=100,immediate=imm[size]:[value]",
+		"[x86-base-store-constant-esp+sbyte]=[x86],mod=01,reg=000,rm=100,scale=00,index=100,base=100,displacement=imm8:[offset],immediate=imm[size]:[value]",
 		"[x86-base-store-constant-esp+constant]=[x86],mod=10,reg=000,rm=100,displacement=imm8:[offset],immediate=imm32:[value]",
-		"[x86-base-store-constant-register+register]=[x86],mod=00,reg=000,rm=100,scale=00,index=reg3:[offset],base=reg3:[membase],immediate=imm32:[value]",
-		"[x86-base-store-constant-register+zero]=[x86],mod=00,reg=000,rm=reg3:[membase],immediate=imm32:[value]",
-		"[x86-base-store-constant-register+sbyte]=[x86],mod=01,reg=000,rm=reg3:[membase],displacement=imm8:[offset],immediate=imm32:[value]",
-		"[x86-base-store-constant-register+constant]=[x86],mod=10,reg=000,rm=reg3:[membase],displacement=imm32:[offset],immediate=imm32:[value]",
-		"[x86-base-store-constant-constant+zero]=[x86],mod=00,reg=000,rm=101,displacement=imm32:[membase],immediate=imm32:[value]",
-		"[x86-base-store-constant-constant+constant]=[x86],mod=00,reg=000,rm=101,displacement=imm32+:[membase]:[offset],immediate=imm32:[value]",
+		"[x86-base-store-constant-register+register]=[x86],mod=00,reg=000,rm=100,scale=00,index=reg3:[offset],base=reg3:[membase],immediate=imm[size]:[value]",
+		"[x86-base-store-constant-register+zero]=[x86],mod=00,reg=000,rm=reg3:[membase],immediate=imm[size]:[value]",
+		"[x86-base-store-constant-register+sbyte]=[x86],mod=01,reg=000,rm=reg3:[membase],displacement=imm8:[offset],immediate=imm[size]:[value]",
+		"[x86-base-store-constant-register+constant]=[x86],mod=10,reg=000,rm=reg3:[membase],displacement=imm32:[offset],immediate=imm[size]:[value]",
+		"[x86-base-store-constant-constant+zero]=[x86],mod=00,reg=000,rm=101,displacement=imm32:[membase],immediate=imm[size]:[value]",
+		"[x86-base-store-constant-constant+constant]=[x86],mod=00,reg=000,rm=101,displacement=imm32+:[membase]:[offset],immediate=imm[size]:[value]",
 
 		"[x86-common-store-constant-ebp+zero]=[x86-base-store-constant-ebp+zero],opcode=[opcode-constant],value=o3",
 		"[x86-common-store-constant-ebp+register]=[x86-base-store-constant-ebp+register],opcode=[opcode-constant],value=o3,membase=o2",
@@ -1600,8 +1600,96 @@
 			"MemoryWrite": "true",
 			"OperandCount": 3,
 			"ResultCount": 0,
-			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "opcode-register=0x88,opcode-constant=0xC6,size=8",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero][register]",
+					"Encoding": "[x86-common-store-register-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register][register]",
+					"Encoding": "[x86-common-store-register-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero][register]",
+					"Encoding": "[x86-common-store-register-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][register]",
+					"Encoding": "[x86-common-store-register-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][register]",
+					"Encoding": "[x86-common-store-register-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "[x86-common-store-register-register+register]"
+				},
+				{
+					"Condition": "[register][zero][register]",
+					"Encoding": "[x86-common-store-register-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][register]",
+					"Encoding": "[x86-common-store-register-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[x86-common-store-register-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][register]",
+					"Encoding": "[x86-common-store-register-constant+zero]"
+				},
+
+				{
+					"Condition": "[EBP][zero][constant]",
+					"Encoding": "[x86-common-store-constant-ebp+zero]"
+				},
+				{
+					"Condition": "[EBP][register][constant]",
+					"Encoding": "[x86-common-store-constant-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero][constant]",
+					"Encoding": "[x86-common-store-constant-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][constant]",
+					"Encoding": "[x86-common-store-constant-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][constant]",
+					"Encoding": "[x86-common-store-constant-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[x86-common-store-constant-register+register]"
+				},
+				{
+					"Condition": "[register][zero][constant]",
+					"Encoding": "[x86-common-store-constant-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][constant]",
+					"Encoding": "[x86-common-store-constant-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][constant]",
+					"Encoding": "[x86-common-store-constant-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][constant]",
+					"Encoding": "[x86-common-store-constant-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant][constant]",
+					"Encoding": "[x86-common-store-constant-constant+constant]"
+				}
+			]
 		},
 		{
 			"Name": "MovStore16",
@@ -1615,8 +1703,96 @@
 			"MemoryWrite": "true",
 			"OperandCount": 3,
 			"ResultCount": 0,
-			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "operand-prefix=0x66,opcode-register=0x89,opcode-constant=0xC7,size=16",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero][register]",
+					"Encoding": "[x86-common-store-register-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register][register]",
+					"Encoding": "[x86-common-store-register-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero][register]",
+					"Encoding": "[x86-common-store-register-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][register]",
+					"Encoding": "[x86-common-store-register-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][register]",
+					"Encoding": "[x86-common-store-register-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "[x86-common-store-register-register+register]"
+				},
+				{
+					"Condition": "[register][zero][register]",
+					"Encoding": "[x86-common-store-register-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][register]",
+					"Encoding": "[x86-common-store-register-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[x86-common-store-register-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][register]",
+					"Encoding": "[x86-common-store-register-constant+zero]"
+				},
+
+				{
+					"Condition": "[EBP][zero][constant]",
+					"Encoding": "[x86-common-store-constant-ebp+zero]"
+				},
+				{
+					"Condition": "[EBP][register][constant]",
+					"Encoding": "[x86-common-store-constant-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero][constant]",
+					"Encoding": "[x86-common-store-constant-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][constant]",
+					"Encoding": "[x86-common-store-constant-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][constant]",
+					"Encoding": "[x86-common-store-constant-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[x86-common-store-constant-register+register]"
+				},
+				{
+					"Condition": "[register][zero][constant]",
+					"Encoding": "[x86-common-store-constant-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][constant]",
+					"Encoding": "[x86-common-store-constant-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][constant]",
+					"Encoding": "[x86-common-store-constant-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][constant]",
+					"Encoding": "[x86-common-store-constant-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant][constant]",
+					"Encoding": "[x86-common-store-constant-constant+constant]"
+				}
+			]
 		},
 		{
 			"Name": "MovStore32",
@@ -1631,7 +1807,7 @@
 			"OperandCount": 3,
 			"ResultCount": 0,
 			"ThreeTwoAddressConversion": "false",
-			"OpcodeEncodingAppend": "opcode-register=0x89,opcode-constant=0xC7",
+			"OpcodeEncodingAppend": "opcode-register=0x89,opcode-constant=0xC7,size=32",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[EBP][zero][register]",

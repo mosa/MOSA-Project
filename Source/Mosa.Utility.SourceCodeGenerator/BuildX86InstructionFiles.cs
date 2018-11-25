@@ -928,6 +928,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "imm32": code = "Append32BitImmediate"; return;
 				case "imm32+": code = "Append32BitImmediateWithOffset"; return;
 				case "imm8": code = "Append8BitImmediate"; return;
+				case "imm16": code = "Append16BitImmediate"; return;
 				case "rel32": code = "EmitRelative32"; return;
 				case "rel64": code = "EmitRelative64"; return;
 				case "": return;

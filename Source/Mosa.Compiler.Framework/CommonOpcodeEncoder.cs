@@ -199,6 +199,14 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
+		public void Append16BitImmediate(Operand operand)
+		{
+			Debug.Assert(operand.IsConstant);
+
+			AppendByte((byte)operand.ConstantUnsignedInteger);
+			AppendByte((byte)(operand.ConstantUnsignedInteger >> 8));
+		}
+
 		public void Append8BitImmediate(Operand operand)
 		{
 			Debug.Assert(operand.IsConstant);
