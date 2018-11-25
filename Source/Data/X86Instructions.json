@@ -18,17 +18,6 @@
 		"[x86-base-load-register+constant]=[x86],mod=10,reg=reg3:[dest],rm=reg3:[membase],immediate=imm32:[offset]",
 		"[x86-base-load-constant+zero]=[x86],mod=00,reg=reg3:[dest],rm=101,immediate=imm32:[membase]",
 
-		"[x86-base-store-register-ebp+zero]=[x86],mod=01,reg=reg3:[value],rm=101,displacement=0x00",
-		"[x86-base-store-register-ebp+register]=[x86],mod=01,reg=reg3:[value],rm=100,scale=00,index=reg3:[membase],base=101,displacement=0x00",
-		"[x86-base-store-register-esp+zero]=[x86],mod=00,reg=reg3:[value],rm=100,scale=00,index=100,base=100",
-		"[x86-base-store-register-esp+sbyte]=[x86],mod=01,reg=reg3:[value],rm=100,scale=00,index=100,base=100,displacement=imm8:[offset]",
-		"[x86-base-store-register-esp+constant]=[x86],mod=10,reg=reg3:[value],rm=100,immediate=imm8:[offset]",
-		"[x86-base-store-register-register+register]=[x86],mod=00,reg=reg3:[value],rm=100,scale=00,index=reg3:[offset],base=reg3:[membase]",
-		"[x86-base-store-register-register+zero]=[x86],mod=00,reg=reg3:[value],rm=reg3:[membase]",
-		"[x86-base-store-register-register+sbyte]=[x86],mod=01,reg=reg3:[value],rm=reg3:[membase],displacement=imm8:[offset]",
-		"[x86-base-store-register-register+constant]=[x86],mod=10,reg=reg3:[value],rm=reg3:[membase],displacement=imm32:[offset]",
-		"[x86-base-store-register-constant+zero]=[x86],mod=00,reg=reg3:[value],rm=101,displacement=imm32:[membase]",
-
 		"[x86-common-load-ebp+zero]=[x86-base-load-ebp+zero],dest=r",
 		"[x86-common-load-ebp+register]=[x86-base-load-ebp+register],dest=r,membase=o2",
 		"[x86-common-load-esp+zero]=[x86-base-load-esp+zero],dest=r",
@@ -39,6 +28,17 @@
 		"[x86-common-load-register+sbyte]=[x86-base-load-register+sbyte],dest=r,membase=o1,offset=o2",
 		"[x86-common-load-register+constant]=[x86-base-load-register+constant],dest=r,membase=o1,offset=o2",
 		"[x86-common-load-constant+zero]=[x86-base-load-constant+zero],dest=r,membase=o1",
+
+		"[x86-base-store-register-ebp+zero]=[x86],mod=01,reg=reg3:[value],rm=101,displacement=0x00",
+		"[x86-base-store-register-ebp+register]=[x86],mod=01,reg=reg3:[value],rm=100,scale=00,index=reg3:[membase],base=101,displacement=0x00",
+		"[x86-base-store-register-esp+zero]=[x86],mod=00,reg=reg3:[value],rm=100,scale=00,index=100,base=100",
+		"[x86-base-store-register-esp+sbyte]=[x86],mod=01,reg=reg3:[value],rm=100,scale=00,index=100,base=100,displacement=imm8:[offset]",
+		"[x86-base-store-register-esp+constant]=[x86],mod=10,reg=reg3:[value],rm=100,immediate=imm8:[offset]",
+		"[x86-base-store-register-register+register]=[x86],mod=00,reg=reg3:[value],rm=100,scale=00,index=reg3:[offset],base=reg3:[membase]",
+		"[x86-base-store-register-register+zero]=[x86],mod=00,reg=reg3:[value],rm=reg3:[membase]",
+		"[x86-base-store-register-register+sbyte]=[x86],mod=01,reg=reg3:[value],rm=reg3:[membase],displacement=imm8:[offset]",
+		"[x86-base-store-register-register+constant]=[x86],mod=10,reg=reg3:[value],rm=reg3:[membase],displacement=imm32:[offset]",
+		"[x86-base-store-register-constant+zero]=[x86],mod=00,reg=reg3:[value],rm=101,displacement=imm32:[membase]",
 
 		"[x86-common-store-register-ebp+zero]=[x86-base-store-register-ebp+zero],opcode=[opcode-register],value=o3",
 		"[x86-common-store-register-ebp+register]=[x86-base-store-register-ebp+register],opcode=[opcode-register],value=o3,membase=o2",
@@ -1498,8 +1498,51 @@
 			"MemoryWrite": "true",
 			"OperandCount": 3,
 			"ResultCount": 0,
-			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "operand-prefix=0xF2|0x0F,opcode-register=0x11",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero][register]",
+					"Encoding": "[x86-common-store-register-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register][register]",
+					"Encoding": "[x86-common-store-register-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero][register]",
+					"Encoding": "[x86-common-store-register-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][register]",
+					"Encoding": "[x86-common-store-register-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][register]",
+					"Encoding": "[x86-common-store-register-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "[x86-common-store-register-register+register]"
+				},
+				{
+					"Condition": "[register][zero][register]",
+					"Encoding": "[x86-common-store-register-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][register]",
+					"Encoding": "[x86-common-store-register-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[x86-common-store-register-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][register]",
+					"Encoding": "[x86-common-store-register-constant+zero]"
+				}
+			]
 		},
 		{
 			"Name": "Movss",
@@ -1585,8 +1628,51 @@
 			"MemoryWrite": "true",
 			"OperandCount": 3,
 			"ResultCount": 0,
-			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "operand-prefix=0xF3|0x0F,opcode-register=0x11",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero][register]",
+					"Encoding": "[x86-common-store-register-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register][register]",
+					"Encoding": "[x86-common-store-register-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero][register]",
+					"Encoding": "[x86-common-store-register-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][register]",
+					"Encoding": "[x86-common-store-register-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][register]",
+					"Encoding": "[x86-common-store-register-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "[x86-common-store-register-register+register]"
+				},
+				{
+					"Condition": "[register][zero][register]",
+					"Encoding": "[x86-common-store-register-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][register]",
+					"Encoding": "[x86-common-store-register-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[x86-common-store-register-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][register]",
+					"Encoding": "[x86-common-store-register-constant+zero]"
+				}
+			]
 		},
 		{
 			"Name": "MovStore8",
@@ -2135,8 +2221,51 @@
 			"MemoryWrite": "true",
 			"OperandCount": 3,
 			"ResultCount": 0,
-			"StaticEmitMethod": "StaticEmitters.Emit%",
-			"ThreeTwoAddressConversion": "false"
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "operand-prefix=0x0F,opcode-register=0x11",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero][register]",
+					"Encoding": "[x86-common-store-register-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register][register]",
+					"Encoding": "[x86-common-store-register-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero][register]",
+					"Encoding": "[x86-common-store-register-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][register]",
+					"Encoding": "[x86-common-store-register-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][register]",
+					"Encoding": "[x86-common-store-register-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "[x86-common-store-register-register+register]"
+				},
+				{
+					"Condition": "[register][zero][register]",
+					"Encoding": "[x86-common-store-register-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][register]",
+					"Encoding": "[x86-common-store-register-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[x86-common-store-register-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][register]",
+					"Encoding": "[x86-common-store-register-constant+zero]"
+				}
+			]
 		},
 		{
 			"Name": "Movzx8To32",
