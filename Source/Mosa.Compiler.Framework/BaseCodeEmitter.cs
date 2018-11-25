@@ -1,8 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Platform;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -83,6 +83,12 @@ namespace Mosa.Compiler.Framework
 		#region Properties
 
 		/// <summary>
+		/// Gets the current position.
+		/// </summary>
+		/// <value>The current position.</value>
+		public int CurrentPosition { get { return (int)CodeStream.Position; } }
+
+		/// <summary>
 		/// List of labels that were emitted.
 		/// </summary>
 		public Dictionary<int, int> Labels { get; set; }
@@ -91,7 +97,7 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Properties
 
-		#region BaseCodeEmitter Members
+		#region Members
 
 		/// <summary>
 		/// Initializes a new instance of <see cref="BaseCodeEmitter" />.
@@ -138,15 +144,45 @@ namespace Mosa.Compiler.Framework
 			Labels.Add(label, (int)CodeStream.Position);
 		}
 
-		/// <summary>
-		/// Gets the current position.
-		/// </summary>
-		/// <value>The current position.</value>
-		public int CurrentPosition { get { return (int)CodeStream.Position; } }
+		protected bool TryGetLabel(int label, out int position)
+		{
+			return Labels.TryGetValue(label, out position);
+		}
 
-		#endregion BaseCodeEmitter Members
+		protected void AddPatch(int label, int position)
+		{
+			Patches.Add(new Patch(label, position));
+		}
 
-		#region Code Generation Members
+		public virtual void ResolvePatches()
+		{
+			// Save the current position
+			long currentPosition = CodeStream.Position;
+
+			foreach (var p in Patches)
+			{
+				if (!TryGetLabel(p.Label, out int labelPosition))
+				{
+					throw new ArgumentException("Missing label while resolving patches.", "label=" + labelPosition.ToString());
+				}
+
+				CodeStream.Position = p.Position;
+
+				// Compute relative branch offset
+				int relOffset = labelPosition - (p.Position + 4);
+
+				// Write relative offset to stream
+				var bytes = BitConverter.GetBytes(relOffset);
+				CodeStream.Write(bytes, 0, bytes.Length);
+			}
+
+			// Reset the position
+			CodeStream.Position = currentPosition;
+		}
+
+		#endregion Members
+
+		#region Write Methods
 
 		/// <summary>
 		/// Writes the byte.
@@ -166,18 +202,7 @@ namespace Mosa.Compiler.Framework
 			CodeStream.Write(data, 0, data.Length);
 		}
 
-		/// <summary>
-		/// Writes the byte.
-		/// </summary>
-		/// <param name="buffer">The buffer.</param>
-		/// <param name="offset">The offset.</param>
-		/// <param name="count">The count.</param>
-		public void Write(byte[] buffer, int offset, int count)
-		{
-			CodeStream.Write(buffer, offset, count);
-		}
-
-		#endregion Code Generation Members
+		#endregion Write Methods
 
 		#region New Code Generation Methods
 
@@ -224,18 +249,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion New Code Generation Methods
-
-		protected bool TryGetLabel(int label, out int position)
-		{
-			return Labels.TryGetValue(label, out position);
-		}
-
-		protected void AddPatch(int label, int position)
-		{
-			Patches.Add(new Patch(label, position));
-		}
-
-		public abstract void ResolvePatches();
 
 		public void EmitRelative32(Operand symbolOperand)
 		{

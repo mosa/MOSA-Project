@@ -28,14 +28,6 @@ namespace Mosa.Platform.x64
 		#region Properties
 
 		/// <summary>
-		/// Gets a value indicating whether [three two address conversion].
-		/// </summary>
-		/// <value>
-		/// <c>true</c> if [three two address conversion]; otherwise, <c>false</c>.
-		/// </value>
-		public virtual bool ThreeTwoAddressConversion { get { return false; } }
-
-		/// <summary>
 		/// Gets the name of the instruction family.
 		/// </summary>
 		/// <value>
