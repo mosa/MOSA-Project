@@ -19,9 +19,15 @@ namespace Mosa.Platform.ARMv6.Instructions
 		{
 		}
 
-		protected override void Emit(InstructionNode node, ARMv6CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			EmitMemoryStore(node, emitter);
+			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 3);
+			System.Diagnostics.Debug.Assert(node.Result.IsCPURegister);
+			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
+			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
+
+			emitter.OpcodeEncoder.Append32Bits(0x00000000);
 		}
 	}
 }

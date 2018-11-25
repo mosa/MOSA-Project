@@ -151,7 +151,6 @@
     <Compile Include="Instructions\Wfi32.cs" />
     <Compile Include="Instructions\Yield32.cs" />
     <Compile Include="Stages\IRTransformationStage.cs" />
-    <Compile Include="OpcodeEncoder.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Intrinsic\" />

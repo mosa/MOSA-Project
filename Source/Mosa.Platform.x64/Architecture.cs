@@ -260,15 +260,6 @@ namespace Mosa.Platform.x64
 		}
 
 		/// <summary>
-		/// Gets the code emitter.
-		/// </summary>
-		/// <returns></returns>
-		public override BaseCodeEmitter GetCodeEmitter()
-		{
-			return new BaseCodeEmitter();
-		}
-
-		/// <summary>
 		/// Inserts the move instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>

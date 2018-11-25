@@ -122,7 +122,7 @@ namespace Mosa.Compiler.Framework
 			AppendBits(value, 24);
 		}
 
-		public void AppendInteger(uint value)
+		public void Append32Bits(uint value)
 		{
 			if (BitsLength == 0)
 			{

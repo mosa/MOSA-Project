@@ -700,6 +700,10 @@ namespace Mosa.Utility.SourceCodeGenerator
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0x" + hex.Substring(5) + ");");
 							break;
 
+						case 8:
+							Lines.AppendLine("emitter.OpcodeEncoder.Append32Bits(0x" + hex + ");");
+							break;
+
 						default: throw new Exception("ERROR!");
 					}
 				}
