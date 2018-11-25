@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Int : X64Instruction
 	{
-		public override int ID { get { return 415; } }
+		public override int ID { get { return 417; } }
 
 		internal Int()
 			: base(0, 1)
@@ -43,10 +43,11 @@ namespace Mosa.Platform.x64.Instructions
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
-			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
+			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			//StaticEmitters.EmitInt(node, emitter);
+			emitter.OpcodeEncoder.AppendByte(0xCD);
+			emitter.OpcodeEncoder.Append8BitImmediate(node.Operand1);
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class SetByteIfNoParity : X86Instruction
 	{
-		public override int ID { get { return 341; } }
+		public override int ID { get { return 340; } }
 
 		internal SetByteIfNoParity()
 			: base(1, 0)

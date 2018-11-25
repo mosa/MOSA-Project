@@ -462,7 +462,7 @@
 			]
 		},
 		{
-			"Name": "Cvtsi2sd",
+			"Name": "Cvtsi2sd32",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -482,7 +482,7 @@
 			]
 		},
 		{
-			"Name": "Cvtsi2ss",
+			"Name": "Cvtsi2ss32",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -520,7 +520,7 @@
 			]
 		},
 		{
-			"Name": "Cvttsd2si",
+			"Name": "Cvttsd2si32",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -539,7 +539,7 @@
 			]
 		},
 		{
-			"Name": "Cvttss2si",
+			"Name": "Cvttss2si32",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -2662,7 +2662,7 @@
 			]
 		},
 		{
-			"Name": "Pextrd",
+			"Name": "Pextrd32",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -2803,26 +2803,6 @@
 				{
 					"Condition": "[#register][constant]",
 					"Encoding": "[x86],opcode=0xC1,mod=11,reg=011,rm=reg3:r,immediate=imm8:o2"
-				}
-			]
-		},
-		{
-			"Name": "Rep",
-			"FamilyName": "X86",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "ZCSOP",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 0,
-			"ResultCount": 0,
-			"UnspecifiedSideEffect": "true",
-			"ThreeTwoAddressConversion": "true",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "[x86],opcode=0xF3"
 				}
 			]
 		},
@@ -4212,7 +4192,7 @@
 		},
 		{
 			"Name": "CMovOverflow32",
-			"AlternativeName": "CMovO32",
+			"AlternativeName": "CMovO",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -4233,7 +4213,7 @@
 		},
 		{
 			"Name": "CMovNoOverflow32",
-			"AlternativeName": "CMovNO32",
+			"AlternativeName": "CMovNO",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -4254,7 +4234,7 @@
 		},
 		{
 			"Name": "CMovCarry32",
-			"AlternativeName": "CMovC32",
+			"AlternativeName": "CMovC",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -4275,7 +4255,7 @@
 		},
 		{
 			"Name": "CMovUnsignedLessThan32",
-			"AlternativeName": "CMovB32",
+			"AlternativeName": "CMovB",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -4296,7 +4276,7 @@
 		},
 		{
 			"Name": "CMovUnsignedGreaterOrEqual32",
-			"AlternativeName": "CMovAE32",
+			"AlternativeName": "CMovAE",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -4317,7 +4297,7 @@
 		},
 		{
 			"Name": "CMovNoCarry32",
-			"AlternativeName": "CMovNC32",
+			"AlternativeName": "CMovNC",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -4338,7 +4318,7 @@
 		},
 		{
 			"Name": "CMovEqual32",
-			"AlternativeName": "CMovE32",
+			"AlternativeName": "CMovE",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -4359,7 +4339,7 @@
 		},
 		{
 			"Name": "CMovZero32",
-			"AlternativeName": "CMovZ32",
+			"AlternativeName": "CMovZ",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -4380,7 +4360,7 @@
 		},
 		{
 			"Name": "CMovNotEqual32",
-			"AlternativeName": "CMovNE32",
+			"AlternativeName": "CMovNE",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -4401,7 +4381,7 @@
 		},
 		{
 			"Name": "CMovNotZero32",
-			"AlternativeName": "CMovNZ32",
+			"AlternativeName": "CMovNZ",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -4422,7 +4402,7 @@
 		},
 		{
 			"Name": "CMovUnsignedLessOrEqual32",
-			"AlternativeName": "CMovBE32",
+			"AlternativeName": "CMovBE",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -4443,7 +4423,7 @@
 		},
 		{
 			"Name": "CMovUnsignedGreaterThan32",
-			"AlternativeName": "CMovA32",
+			"AlternativeName": "CMovA",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -4464,7 +4444,7 @@
 		},
 		{
 			"Name": "CMovSigned32",
-			"AlternativeName": "CMovS32",
+			"AlternativeName": "CMovS",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -4485,7 +4465,7 @@
 		},
 		{
 			"Name": "CMovNotSigned32",
-			"AlternativeName": "CMovNS32",
+			"AlternativeName": "CMovNS",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -4506,7 +4486,7 @@
 		},
 		{
 			"Name": "CMovParity32",
-			"AlternativeName": "CMovP32",
+			"AlternativeName": "CMovP",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -4527,7 +4507,7 @@
 		},
 		{
 			"Name": "CMovNoParity32",
-			"AlternativeName": "CMovNP32",
+			"AlternativeName": "CMovNP",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -4548,7 +4528,7 @@
 		},
 		{
 			"Name": "CMovLessThan32",
-			"AlternativeName": "CMovL32",
+			"AlternativeName": "CMovL",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -4569,7 +4549,7 @@
 		},
 		{
 			"Name": "CMovGreaterOrEqual32",
-			"AlternativeName": "CMovGE32",
+			"AlternativeName": "CMovGE",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -4590,7 +4570,7 @@
 		},
 		{
 			"Name": "CMovLessOrEqual32",
-			"AlternativeName": "CMovLE32",
+			"AlternativeName": "CMovLE",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -4611,7 +4591,7 @@
 		},
 		{
 			"Name": "CMovGreaterThan32",
-			"AlternativeName": "CMovG32",
+			"AlternativeName": "CMovG",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
 			"FlagsModified": "",

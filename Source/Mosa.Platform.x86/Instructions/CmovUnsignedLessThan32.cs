@@ -12,14 +12,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class CMovUnsignedLessThan32 : X86Instruction
 	{
-		public override int ID { get { return 349; } }
+		public override int ID { get { return 348; } }
 
 		internal CMovUnsignedLessThan32()
 			: base(1, 1)
 		{
 		}
 
-		public override string AlternativeName { get { return "CMovB32"; } }
+		public override string AlternativeName { get { return "CMovB"; } }
 
 		public override bool IsCarryFlagUsed { get { return true; } }
 

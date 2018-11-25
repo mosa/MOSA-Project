@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class CmpXChgLoad64 : X64Instruction
 	{
-		public override int ID { get { return 388; } }
+		public override int ID { get { return 387; } }
 
 		internal CmpXChgLoad64()
 			: base(1, 4)
@@ -43,10 +43,20 @@ namespace Mosa.Platform.x64.Instructions
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
-			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
+			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 4);
 
-			//StaticEmitters.EmitCmpXChgLoad64(node, emitter);
+			if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 0) && node.Operand2.IsCPURegister && node.Operand3.IsConstantZero && node.GetOperand(3).IsCPURegister)
+			{
+				emitter.OpcodeEncoder.AppendByte(0x0F);
+				emitter.OpcodeEncoder.AppendByte(0xB1);
+				emitter.OpcodeEncoder.Append2Bits(0b00);
+				emitter.OpcodeEncoder.Append3Bits(node.GetOperand(3).Register.RegisterCode);
+				emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+				return;
+			}
+
+			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 		}
 	}
 }

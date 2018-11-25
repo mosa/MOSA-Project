@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Base code emitter.
 	/// </summary>
-	public abstract class BaseCodeEmitter
+	public class BaseCodeEmitter
 	{
 		#region Patch Type
 
@@ -213,12 +213,6 @@ namespace Mosa.Compiler.Framework
 		public void Emit(BaseOpcodeEncoder opcode)
 		{
 			opcode.WriteTo(CodeStream);
-		}
-
-		// legacy
-		public void EmitLink(Operand symbolOperand, int patchOffset, int referenceOffset = 0, PatchType patchType = PatchType.I4) // legacy version
-		{
-			EmitLink((int)CodeStream.Position, patchType, symbolOperand, patchOffset, referenceOffset);
 		}
 
 		public void EmitLink(int position, PatchType patchType, Operand symbolOperand, int patchOffset, int referenceOffset)

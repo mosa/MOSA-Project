@@ -12,16 +12,12 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Bt64 : X64Instruction
 	{
-		public override int ID { get { return 379; } }
+		public override int ID { get { return 378; } }
 
 		internal Bt64()
 			: base(1, 2)
 		{
 		}
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0xA3 });
-
-		public override bool HasUnspecifiedSideEffect { get { return true; } }
 
 		public override bool IsCarryFlagModified { get { return true; } }
 
@@ -37,12 +33,33 @@ namespace Mosa.Platform.x64.Instructions
 
 		public override bool IsParityFlagUndefined { get { return true; } }
 
-		internal override void EmitLegacy(InstructionNode node, X64CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			emitter.Emit(LegacyOpcode, node.Result, node.Operand2);
+			if (node.Operand2.IsCPURegister)
+			{
+				emitter.OpcodeEncoder.AppendByte(0x0F);
+				emitter.OpcodeEncoder.AppendByte(0xA3);
+				emitter.OpcodeEncoder.Append2Bits(0b11);
+				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+				return;
+			}
+
+			if (node.Operand2.IsConstant)
+			{
+				emitter.OpcodeEncoder.AppendByte(0x0F);
+				emitter.OpcodeEncoder.AppendByte(0xBA);
+				emitter.OpcodeEncoder.Append2Bits(0b11);
+				emitter.OpcodeEncoder.Append3Bits(0b100);
+				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				emitter.OpcodeEncoder.Append8BitImmediate(node.Operand2);
+				return;
+			}
+
+			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 		}
 	}
 }

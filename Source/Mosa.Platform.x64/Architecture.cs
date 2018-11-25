@@ -265,7 +265,7 @@ namespace Mosa.Platform.x64
 		/// <returns></returns>
 		public override BaseCodeEmitter GetCodeEmitter()
 		{
-			return new X64CodeEmitter();
+			return new BaseCodeEmitter();
 		}
 
 		/// <summary>

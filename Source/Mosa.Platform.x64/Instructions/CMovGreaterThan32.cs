@@ -12,14 +12,14 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class CMovGreaterThan32 : X64Instruction
 	{
-		public override int ID { get { return 586; } }
+		public override int ID { get { return 589; } }
 
 		internal CMovGreaterThan32()
 			: base(1, 1)
 		{
 		}
 
-		public override string AlternativeName { get { return "CMovG32"; } }
+		public override string AlternativeName { get { return "CMovG"; } }
 
 		public override bool IsZeroFlagUsed { get { return true; } }
 
@@ -30,6 +30,18 @@ namespace Mosa.Platform.x64.Instructions
 		public override BaseInstruction GetOpposite()
 		{
 			return X64.CMovLessOrEqual32;
+		}
+
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+
+			emitter.OpcodeEncoder.AppendByte(0x0F);
+			emitter.OpcodeEncoder.AppendByte(0x4F);
+			emitter.OpcodeEncoder.Append2Bits(0b11);
+			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 		}
 	}
 }

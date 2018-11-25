@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Dmb32 : ARMv6Instruction
 	{
-		public override int ID { get { return 620; } }
+		public override int ID { get { return 624; } }
 
 		internal Dmb32()
 			: base(1, 3)

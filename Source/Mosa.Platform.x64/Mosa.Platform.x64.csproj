@@ -92,6 +92,7 @@
     <Compile Include="Instructions\Addss.cs" />
     <Compile Include="Instructions\And32.cs" />
     <Compile Include="Instructions\And64.cs" />
+    <Compile Include="Instructions\BochsDebug.cs" />
     <Compile Include="Instructions\BranchCarry.cs" />
     <Compile Include="Instructions\BranchEqual.cs" />
     <Compile Include="Instructions\BranchGreaterOrEqual.cs" />
@@ -164,19 +165,21 @@
     <Compile Include="Instructions\CMovZero64.cs" />
     <Compile Include="Instructions\Cmp32.cs" />
     <Compile Include="Instructions\Cmp64.cs" />
-    <Compile Include="Instructions\CmpConst32.cs" />
-    <Compile Include="Instructions\CmpConst64.cs" />
     <Compile Include="Instructions\CmpXChgLoad32.cs" />
     <Compile Include="Instructions\CmpXChgLoad64.cs" />
     <Compile Include="Instructions\Comisd.cs" />
     <Compile Include="Instructions\Comiss.cs" />
     <Compile Include="Instructions\CpuId.cs" />
     <Compile Include="Instructions\Cvtsd2ss.cs" />
-    <Compile Include="Instructions\Cvtsi2sd.cs" />
-    <Compile Include="Instructions\Cvtsi2ss.cs" />
+    <Compile Include="Instructions\Cvtsi2sd32.cs" />
+    <Compile Include="Instructions\Cvtsi2sd64.cs" />
+    <Compile Include="Instructions\Cvtsi2ss32.cs" />
+    <Compile Include="Instructions\Cvtsi2ss64.cs" />
     <Compile Include="Instructions\Cvtss2sd.cs" />
-    <Compile Include="Instructions\Cvttsd2si.cs" />
-    <Compile Include="Instructions\Cvttss2si.cs" />
+    <Compile Include="Instructions\Cvttsd2si32.cs" />
+    <Compile Include="Instructions\Cvttsd2si64.cs" />
+    <Compile Include="Instructions\Cvttss2si32.cs" />
+    <Compile Include="Instructions\Cvttss2si64.cs" />
     <Compile Include="Instructions\Dec32.cs" />
     <Compile Include="Instructions\Dec64.cs" />
     <Compile Include="Instructions\Div32.cs" />
@@ -198,7 +201,6 @@
     <Compile Include="Instructions\IRetd.cs" />
     <Compile Include="Instructions\Jmp.cs" />
     <Compile Include="Instructions\JmpExternal.cs" />
-    <Compile Include="Instructions\JmpFar.cs" />
     <Compile Include="Instructions\Lea32.cs" />
     <Compile Include="Instructions\Lea64.cs" />
     <Compile Include="Instructions\Leave.cs" />
@@ -234,6 +236,7 @@
     <Compile Include="Instructions\MovStoreSeg64.cs" />
     <Compile Include="Instructions\Movsx16To32.cs" />
     <Compile Include="Instructions\Movsx16To64.cs" />
+    <Compile Include="Instructions\Movsx32To64.cs" />
     <Compile Include="Instructions\Movsx8To32.cs" />
     <Compile Include="Instructions\Movsx8To64.cs" />
     <Compile Include="Instructions\MovsxLoad16.cs" />
@@ -244,6 +247,7 @@
     <Compile Include="Instructions\MovupsStore.cs" />
     <Compile Include="Instructions\Movzx16To32.cs" />
     <Compile Include="Instructions\Movzx16To64.cs" />
+    <Compile Include="Instructions\Movzx32To64.cs" />
     <Compile Include="Instructions\Movzx8To32.cs" />
     <Compile Include="Instructions\Movzx8To64.cs" />
     <Compile Include="Instructions\MovzxLoad16.cs" />
@@ -264,7 +268,8 @@
     <Compile Include="Instructions\Out32.cs" />
     <Compile Include="Instructions\Out8.cs" />
     <Compile Include="Instructions\Pause.cs" />
-    <Compile Include="Instructions\Pextrd.cs" />
+    <Compile Include="Instructions\Pextrd32.cs" />
+    <Compile Include="Instructions\Pextrd64.cs" />
     <Compile Include="Instructions\Pop64.cs" />
     <Compile Include="Instructions\Popad.cs" />
     <Compile Include="Instructions\Push64.cs" />
@@ -272,7 +277,6 @@
     <Compile Include="Instructions\PXor.cs" />
     <Compile Include="Instructions\Rcr32.cs" />
     <Compile Include="Instructions\Rcr64.cs" />
-    <Compile Include="Instructions\Rep.cs" />
     <Compile Include="Instructions\Ret.cs" />
     <Compile Include="Instructions\Roundsd.cs" />
     <Compile Include="Instructions\Roundss.cs" />
@@ -308,9 +312,7 @@
     <Compile Include="Instructions\Shr64.cs" />
     <Compile Include="Instructions\Shrd32.cs" />
     <Compile Include="Instructions\Shrd64.cs" />
-    <Compile Include="Instructions\StaticEmitters.cs" />
     <Compile Include="Instructions\Sti.cs" />
-    <Compile Include="Instructions\Stos.cs" />
     <Compile Include="Instructions\Sub32.cs" />
     <Compile Include="Instructions\Sub64.cs" />
     <Compile Include="Instructions\Subsd.cs" />
@@ -327,14 +329,12 @@
     <Compile Include="Instructions\XChgLoad64.cs" />
     <Compile Include="Instructions\Xor32.cs" />
     <Compile Include="Instructions\Xor64.cs" />
-    <Compile Include="LegacyOpCode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stages\AddressModeConversionStage.cs" />
     <Compile Include="Stages\IRTransformationStage.cs" />
     <Compile Include="Stages\LongOperandStage.cs" />
     <Compile Include="X64.cs" />
     <Compile Include="X64Instruction.cs" />
-    <Compile Include="X64CodeEmitter.cs" />
     <Compile Include="X64Instructions.cs" />
   </ItemGroup>
   <ItemGroup>

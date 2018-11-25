@@ -37,18 +37,21 @@ namespace Mosa.Platform.x64
 		public static readonly Comiss Comiss = new Comiss();
 		public static readonly CpuId CpuId = new CpuId();
 		public static readonly Cvtsd2ss Cvtsd2ss = new Cvtsd2ss();
-		public static readonly Cvtsi2sd Cvtsi2sd = new Cvtsi2sd();
-		public static readonly Cvtsi2ss Cvtsi2ss = new Cvtsi2ss();
+		public static readonly Cvtsi2sd32 Cvtsi2sd32 = new Cvtsi2sd32();
+		public static readonly Cvtsi2sd64 Cvtsi2sd64 = new Cvtsi2sd64();
+		public static readonly Cvtsi2ss32 Cvtsi2ss32 = new Cvtsi2ss32();
+		public static readonly Cvtsi2ss64 Cvtsi2ss64 = new Cvtsi2ss64();
 		public static readonly Cvtss2sd Cvtss2sd = new Cvtss2sd();
-		public static readonly Cvttsd2si Cvttsd2si = new Cvttsd2si();
-		public static readonly Cvttss2si Cvttss2si = new Cvttss2si();
+		public static readonly Cvttsd2si32 Cvttsd2si32 = new Cvttsd2si32();
+		public static readonly Cvttsd2si64 Cvttsd2si64 = new Cvttsd2si64();
+		public static readonly Cvttss2si32 Cvttss2si32 = new Cvttss2si32();
+		public static readonly Cvttss2si64 Cvttss2si64 = new Cvttss2si64();
 		public static readonly Dec32 Dec32 = new Dec32();
 		public static readonly Dec64 Dec64 = new Dec64();
 		public static readonly Div32 Div32 = new Div32();
 		public static readonly Div64 Div64 = new Div64();
 		public static readonly Divsd Divsd = new Divsd();
 		public static readonly Divss Divss = new Divss();
-		public static readonly JmpFar JmpFar = new JmpFar();
 		public static readonly Hlt Hlt = new Hlt();
 		public static readonly IDiv32 IDiv32 = new IDiv32();
 		public static readonly IDiv64 IDiv64 = new IDiv64();
@@ -101,6 +104,7 @@ namespace Mosa.Platform.x64
 		public static readonly Movsx8To64 Movsx8To64 = new Movsx8To64();
 		public static readonly Movsx16To32 Movsx16To32 = new Movsx16To32();
 		public static readonly Movsx16To64 Movsx16To64 = new Movsx16To64();
+		public static readonly Movsx32To64 Movsx32To64 = new Movsx32To64();
 		public static readonly MovsxLoad8 MovsxLoad8 = new MovsxLoad8();
 		public static readonly MovsxLoad16 MovsxLoad16 = new MovsxLoad16();
 		public static readonly MovsxLoad32 MovsxLoad32 = new MovsxLoad32();
@@ -108,9 +112,10 @@ namespace Mosa.Platform.x64
 		public static readonly MovupsLoad MovupsLoad = new MovupsLoad();
 		public static readonly MovupsStore MovupsStore = new MovupsStore();
 		public static readonly Movzx8To32 Movzx8To32 = new Movzx8To32();
-		public static readonly Movzx16To32 Movzx16To32 = new Movzx16To32();
 		public static readonly Movzx8To64 Movzx8To64 = new Movzx8To64();
+		public static readonly Movzx16To32 Movzx16To32 = new Movzx16To32();
 		public static readonly Movzx16To64 Movzx16To64 = new Movzx16To64();
+		public static readonly Movzx32To64 Movzx32To64 = new Movzx32To64();
 		public static readonly MovzxLoad8 MovzxLoad8 = new MovzxLoad8();
 		public static readonly MovzxLoad16 MovzxLoad16 = new MovzxLoad16();
 		public static readonly MovzxLoad32 MovzxLoad32 = new MovzxLoad32();
@@ -129,7 +134,8 @@ namespace Mosa.Platform.x64
 		public static readonly Out16 Out16 = new Out16();
 		public static readonly Out32 Out32 = new Out32();
 		public static readonly Pause Pause = new Pause();
-		public static readonly Pextrd Pextrd = new Pextrd();
+		public static readonly Pextrd32 Pextrd32 = new Pextrd32();
+		public static readonly Pextrd64 Pextrd64 = new Pextrd64();
 		public static readonly Pop64 Pop64 = new Pop64();
 		public static readonly Popad Popad = new Popad();
 		public static readonly Push64 Push64 = new Push64();
@@ -137,7 +143,6 @@ namespace Mosa.Platform.x64
 		public static readonly PXor PXor = new PXor();
 		public static readonly Rcr32 Rcr32 = new Rcr32();
 		public static readonly Rcr64 Rcr64 = new Rcr64();
-		public static readonly Rep Rep = new Rep();
 		public static readonly Ret Ret = new Ret();
 		public static readonly Roundsd Roundsd = new Roundsd();
 		public static readonly Roundss Roundss = new Roundss();
@@ -154,7 +159,6 @@ namespace Mosa.Platform.x64
 		public static readonly Shrd32 Shrd32 = new Shrd32();
 		public static readonly Shrd64 Shrd64 = new Shrd64();
 		public static readonly Sti Sti = new Sti();
-		public static readonly Stos Stos = new Stos();
 		public static readonly Sub32 Sub32 = new Sub32();
 		public static readonly Sub64 Sub64 = new Sub64();
 		public static readonly Subsd Subsd = new Subsd();
@@ -251,5 +255,6 @@ namespace Mosa.Platform.x64
 		public static readonly CMovGreaterOrEqual64 CMovGreaterOrEqual64 = new CMovGreaterOrEqual64();
 		public static readonly CMovLessOrEqual64 CMovLessOrEqual64 = new CMovLessOrEqual64();
 		public static readonly CMovGreaterThan64 CMovGreaterThan64 = new CMovGreaterThan64();
+		public static readonly BochsDebug BochsDebug = new BochsDebug();
 	}
 }

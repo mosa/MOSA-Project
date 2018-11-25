@@ -52,6 +52,7 @@
     <Compile Include="BuildX64.cs" />
     <Compile Include="BuildRules.cs" />
     <Compile Include="BuildX64Instructions.cs" />
+    <Compile Include="BuildCommonInstructionFiles.cs" />
     <Compile Include="BuildX86InstructionFiles.cs" />
     <Compile Include="BuildX86Instructions.cs" />
     <Compile Include="BuildX86.cs" />
