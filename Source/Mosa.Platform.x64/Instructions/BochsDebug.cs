@@ -7,15 +7,15 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x64.Instructions
 {
 	/// <summary>
-	/// JmpFar
+	/// BochsDebug
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
-	public sealed class JmpFar : X64Instruction
+	public sealed class BochsDebug : X64Instruction
 	{
-		public override int ID { get { return 404; } }
+		public override int ID { get { return 610; } }
 
-		internal JmpFar()
-			: base(0, 1)
+		internal BochsDebug()
+			: base(0, 0)
 		{
 		}
 
@@ -23,10 +23,12 @@ namespace Mosa.Platform.x64.Instructions
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
-			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
+			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-			//StaticEmitters.EmitJmpFar(node, emitter);
+			emitter.OpcodeEncoder.AppendByte(0x66);
+			emitter.OpcodeEncoder.AppendByte(0x87);
+			emitter.OpcodeEncoder.AppendByte(0xdb);
 		}
 	}
 }

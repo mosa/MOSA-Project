@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Jmp : X64Instruction
 	{
-		public override int ID { get { return 418; } }
+		public override int ID { get { return 420; } }
 
 		internal Jmp()
 			: base(0, 0)
@@ -40,5 +40,14 @@ namespace Mosa.Platform.x64.Instructions
 		public override bool IsParityFlagUnchanged { get { return true; } }
 
 		public override bool IsParityFlagUndefined { get { return true; } }
+
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
+
+			emitter.OpcodeEncoder.AppendByte(0xE9);
+			emitter.OpcodeEncoder.EmitRelative32(node.BranchTargets[0].Label);
+		}
 	}
 }

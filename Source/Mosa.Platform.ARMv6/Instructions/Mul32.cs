@@ -12,16 +12,22 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Mul32 : ARMv6Instruction
 	{
-		public override int ID { get { return 637; } }
+		public override int ID { get { return 641; } }
 
 		internal Mul32()
 			: base(1, 3)
 		{
 		}
 
-		protected override void Emit(InstructionNode node, ARMv6CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			EmitMultiplyInstruction(node, emitter);
+			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 3);
+			System.Diagnostics.Debug.Assert(node.Result.IsCPURegister);
+			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
+			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
+
+			emitter.OpcodeEncoder.Append32Bits(0x00000000);
 		}
 	}
 }

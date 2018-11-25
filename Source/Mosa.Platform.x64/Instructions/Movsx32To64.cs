@@ -4,17 +4,17 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Instructions
+namespace Mosa.Platform.x64.Instructions
 {
 	/// <summary>
-	/// Cvttss2si
+	/// Movsx32To64
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class Cvttss2si : X86Instruction
+	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
+	public sealed class Movsx32To64 : X64Instruction
 	{
-		public override int ID { get { return 212; } }
+		public override int ID { get { return 459; } }
 
-		internal Cvttss2si()
+		internal Movsx32To64()
 			: base(1, 1)
 		{
 		}
@@ -24,9 +24,9 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			emitter.OpcodeEncoder.AppendByte(0xF3);
 			emitter.OpcodeEncoder.AppendByte(0x0F);
-			emitter.OpcodeEncoder.AppendByte(0x2C);
+			emitter.OpcodeEncoder.AppendNibble(0b1011);
+			emitter.OpcodeEncoder.AppendNibble(0b1111);
 			emitter.OpcodeEncoder.Append2Bits(0b11);
 			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);

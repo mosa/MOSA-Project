@@ -12,14 +12,12 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Mul64 : X64Instruction
 	{
-		public override int ID { get { return 471; } }
+		public override int ID { get { return 475; } }
 
 		internal Mul64()
 			: base(2, 2)
 		{
 		}
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xF7 }, 0x04);
 
 		public override bool IsCommutative { get { return true; } }
 
@@ -39,12 +37,15 @@ namespace Mosa.Platform.x64.Instructions
 
 		public override bool IsParityFlagUndefined { get { return true; } }
 
-		internal override void EmitLegacy(InstructionNode node, X64CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 2);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			emitter.Emit(LegacyOpcode, node.Operand2);
+			emitter.OpcodeEncoder.AppendByte(0xF7);
+			emitter.OpcodeEncoder.Append2Bits(0b11);
+			emitter.OpcodeEncoder.Append3Bits(0b100);
+			emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
 		}
 	}
 }

@@ -20,29 +20,8 @@ namespace Mosa.Platform.ARMv6
 	/// <summary>
 	/// An ARMv6 machine code emitter.
 	/// </summary>
-	public sealed class ARMv6CodeEmitter : BaseCodeEmitter
+	public sealed class ARMv6CodeEmitter
 	{
-		#region Code Generation Members
-
-		public override void ResolvePatches()
-		{
-			// TODO: Check x86 Implementation
-		}
-
-		/// <summary>
-		/// Writes the unsigned int.
-		/// </summary>
-		/// <param name="data">The data.</param>
-		public void Write(uint data)
-		{
-			CodeStream.WriteByte((byte)((data >> 24) & 0xFF));
-			CodeStream.WriteByte((byte)((data >> 16) & 0xFF));
-			CodeStream.WriteByte((byte)((data >> 8) & 0xFF));
-			CodeStream.WriteByte((byte)(data & 0xFF));
-		}
-
-		#endregion Code Generation Members
-
 		#region Instruction Format Emitters
 
 		public static byte GetConditionCode(ConditionCode condition)
@@ -84,7 +63,7 @@ namespace Mosa.Platform.ARMv6
 			}
 		}
 
-		public void EmitBranch(ConditionCode conditionCode, int register)
+		public static uint EmitBranch(ConditionCode conditionCode, int register)
 		{
 			Debug.Assert(register <= 0xF);
 
@@ -94,10 +73,10 @@ namespace Mosa.Platform.ARMv6
 			value |= 0x12FFF10;
 			value |= (uint)register;
 
-			Write(value);
+			return value;
 		}
 
-		public void EmitBranch(ConditionCode conditionCode, int offset, bool link)
+		public static uint EmitBranch(ConditionCode conditionCode, int offset, bool link)
 		{
 			Debug.Assert(offset <= 0xFFF);
 
@@ -108,10 +87,10 @@ namespace Mosa.Platform.ARMv6
 			value |= (uint)(link ? 1 : 0 << 24);
 			value |= (uint)offset;
 
-			Write(value);
+			return value;
 		}
 
-		public void EmitInstructionWithRegister(ConditionCode conditionCode, byte opcode, bool setCondition, int firstRegister, int destinationRegister, ShiftType secondShiftType, int secondRegister)
+		public static uint EmitInstructionWithRegister(ConditionCode conditionCode, byte opcode, bool setCondition, int firstRegister, int destinationRegister, ShiftType secondShiftType, int secondRegister)
 		{
 			Debug.Assert(opcode <= 0xF);
 			Debug.Assert(destinationRegister <= 0xF);
@@ -129,10 +108,10 @@ namespace Mosa.Platform.ARMv6
 			value |= (uint)(GetShiftTypeCode(secondShiftType) << 4);
 			value |= (uint)secondRegister;
 
-			Write(value);
+			return value;
 		}
 
-		public void EmitInstructionWithImmediate(ConditionCode conditionCode, byte opcode, bool setCondition, int firstRegister, int destinationRegister, int rotate, int immediate)
+		public static uint EmitInstructionWithImmediate(ConditionCode conditionCode, byte opcode, bool setCondition, int firstRegister, int destinationRegister, int rotate, int immediate)
 		{
 			Debug.Assert(opcode <= 0xF);
 			Debug.Assert(destinationRegister <= 0xF);
@@ -151,10 +130,10 @@ namespace Mosa.Platform.ARMv6
 			value |= (uint)(rotate << 8);
 			value |= (uint)immediate;
 
-			Write(value);
+			return value;
 		}
 
-		public void EmitMultiply(ConditionCode conditionCode, bool setCondition, int firstRegister, int destinationRegister, int secondRegister)
+		public static uint EmitMultiply(ConditionCode conditionCode, bool setCondition, int firstRegister, int destinationRegister, int secondRegister)
 		{
 			Debug.Assert(destinationRegister <= 0xF);
 			Debug.Assert(secondRegister <= 0xF);
@@ -169,10 +148,10 @@ namespace Mosa.Platform.ARMv6
 			value |= Bits.b1001 << 4;
 			value |= (uint)(secondRegister << 8);
 
-			Write(value);
+			return value;
 		}
 
-		public void EmitMultiplyWithAccumulate(ConditionCode conditionCode, bool setCondition, int firstRegister, int destinationRegister, int secondRegister, int accumulateRegister)
+		public static uint EmitMultiplyWithAccumulate(ConditionCode conditionCode, bool setCondition, int firstRegister, int destinationRegister, int secondRegister, int accumulateRegister)
 		{
 			Debug.Assert(destinationRegister <= 0xF);
 			Debug.Assert(secondRegister <= 0xF);
@@ -189,10 +168,10 @@ namespace Mosa.Platform.ARMv6
 			value |= Bits.b1001 << 4;
 			value |= (uint)accumulateRegister;
 
-			Write(value);
+			return value;
 		}
 
-		public void EmitSingleDataTransfer(ConditionCode conditionCode, Indexing indexing, OffsetDirection offsetDirection, TransferSize transferSize, WriteBack writeBack, TransferType transferType, int firstRegister, int destinationRegister, uint immediate)
+		public static uint EmitSingleDataTransfer(ConditionCode conditionCode, Indexing indexing, OffsetDirection offsetDirection, TransferSize transferSize, WriteBack writeBack, TransferType transferType, int firstRegister, int destinationRegister, uint immediate)
 		{
 			Debug.Assert(destinationRegister <= 0xF);
 			Debug.Assert(firstRegister <= 0xF);
@@ -212,10 +191,10 @@ namespace Mosa.Platform.ARMv6
 			value |= (uint)(firstRegister << 16);
 			value |= immediate;
 
-			Write(value);
+			return value;
 		}
 
-		public void EmitSingleDataTransfer(ConditionCode conditionCode, Indexing indexing, OffsetDirection offsetDirection, TransferSize transferSize, WriteBack writeBack, TransferType transferType, int firstRegister, int destinationRegister, ShiftType secondShiftType, int secondRegister)
+		public static uint EmitSingleDataTransfer(ConditionCode conditionCode, Indexing indexing, OffsetDirection offsetDirection, TransferSize transferSize, WriteBack writeBack, TransferType transferType, int firstRegister, int destinationRegister, ShiftType secondShiftType, int secondRegister)
 		{
 			Debug.Assert(destinationRegister <= 0xF);
 			Debug.Assert(firstRegister <= 0xF);
@@ -236,7 +215,7 @@ namespace Mosa.Platform.ARMv6
 			value |= (uint)(GetShiftTypeCode(secondShiftType) << 4);
 			value |= (uint)secondRegister;
 
-			Write(value);
+			return value;
 		}
 
 		// TODO: Add additional instruction formats

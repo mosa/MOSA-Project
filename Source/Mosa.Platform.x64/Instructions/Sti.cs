@@ -12,14 +12,12 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Sti : X64Instruction
 	{
-		public override int ID { get { return 509; } }
+		public override int ID { get { return 513; } }
 
 		internal Sti()
 			: base(0, 0)
 		{
 		}
-
-		public static readonly byte[] opcode = new byte[] { 0xFB };
 
 		public override bool HasUnspecifiedSideEffect { get { return true; } }
 
@@ -28,7 +26,7 @@ namespace Mosa.Platform.x64.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-			emitter.Write(opcode);
+			emitter.OpcodeEncoder.AppendByte(0xFB);
 		}
 	}
 }

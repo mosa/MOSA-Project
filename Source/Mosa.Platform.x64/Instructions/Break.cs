@@ -12,14 +12,12 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Break : X64Instruction
 	{
-		public override int ID { get { return 375; } }
+		public override int ID { get { return 374; } }
 
 		internal Break()
 			: base(0, 0)
 		{
 		}
-
-		public static readonly byte[] opcode = new byte[] { 0xCC };
 
 		public override bool HasUnspecifiedSideEffect { get { return true; } }
 
@@ -28,7 +26,7 @@ namespace Mosa.Platform.x64.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-			emitter.Write(opcode);
+			emitter.OpcodeEncoder.AppendByte(0xCC);
 		}
 	}
 }

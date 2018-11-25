@@ -12,21 +12,19 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Nop : X64Instruction
 	{
-		public override int ID { get { return 476; } }
+		public override int ID { get { return 480; } }
 
 		internal Nop()
 			: base(0, 0)
 		{
 		}
 
-		public static readonly byte[] opcode = new byte[] { 0x90 };
-
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-			emitter.Write(opcode);
+			emitter.OpcodeEncoder.AppendByte(0x90);
 		}
 	}
 }

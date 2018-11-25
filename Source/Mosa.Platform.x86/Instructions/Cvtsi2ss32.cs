@@ -7,14 +7,14 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// MovConst32
+	/// Cvtsi2ss32
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class MovConst32 : X86Instruction
+	public sealed class Cvtsi2ss32 : X86Instruction
 	{
-		public override int ID { get { return 240; } }
+		public override int ID { get { return 209; } }
 
-		internal MovConst32()
+		internal Cvtsi2ss32()
 			: base(1, 1)
 		{
 		}
@@ -24,11 +24,12 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			emitter.OpcodeEncoder.AppendByte(0xC7);
+			emitter.OpcodeEncoder.AppendByte(0xF3);
+			emitter.OpcodeEncoder.AppendByte(0x0F);
+			emitter.OpcodeEncoder.AppendByte(0x2A);
 			emitter.OpcodeEncoder.Append2Bits(0b11);
-			emitter.OpcodeEncoder.Append3Bits(0b000);
 			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-			emitter.OpcodeEncoder.Append32BitImmediate(node.Operand1);
+			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 		}
 	}
 }

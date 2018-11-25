@@ -12,14 +12,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class CMovNotEqual32 : X86Instruction
 	{
-		public override int ID { get { return 354; } }
+		public override int ID { get { return 353; } }
 
 		internal CMovNotEqual32()
 			: base(1, 1)
 		{
 		}
 
-		public override string AlternativeName { get { return "CMovNE32"; } }
+		public override string AlternativeName { get { return "CMovNE"; } }
 
 		public override bool IsZeroFlagUsed { get { return true; } }
 

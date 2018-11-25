@@ -12,14 +12,12 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Inc64 : X64Instruction
 	{
-		public override int ID { get { return 414; } }
+		public override int ID { get { return 416; } }
 
 		internal Inc64()
 			: base(1, 1)
 		{
 		}
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xFF }, 0x00);
 
 		public override bool IsZeroFlagModified { get { return true; } }
 
@@ -29,12 +27,14 @@ namespace Mosa.Platform.x64.Instructions
 
 		public override bool IsParityFlagModified { get { return true; } }
 
-		internal override void EmitLegacy(InstructionNode node, X64CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			emitter.Emit(LegacyOpcode, node.Result);
+			emitter.OpcodeEncoder.AppendNibble(0b0100);
+			emitter.OpcodeEncoder.AppendBit(0b0);
+			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 		}
 	}
 }

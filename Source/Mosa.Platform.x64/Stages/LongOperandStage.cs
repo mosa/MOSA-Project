@@ -208,7 +208,7 @@ namespace Mosa.Platform.x64.Stages
 		{
 			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
 
-			context.SetInstruction(X64.Cvttss2si, resultLow, context.Operand1);
+			context.SetInstruction(X64.Cvttss2si32, resultLow, context.Operand1);
 			context.AppendInstruction(X64.Mov32, resultHigh, ConstantZero);
 		}
 
@@ -216,7 +216,7 @@ namespace Mosa.Platform.x64.Stages
 		{
 			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
 
-			context.SetInstruction(X64.Cvttsd2si, resultLow, context.Operand1);
+			context.SetInstruction(X64.Cvttsd2si32, resultLow, context.Operand1);
 			context.AppendInstruction(X64.Mov32, resultHigh, ConstantZero);
 		}
 
@@ -224,14 +224,14 @@ namespace Mosa.Platform.x64.Stages
 		{
 			SplitLongOperand(context.Result, out Operand op1Low, out Operand op1High);
 
-			context.SetInstruction(X64.Cvtsi2ss, context.Result, op1Low);
+			context.SetInstruction(X64.Cvtsi2ss32, context.Result, op1Low);
 		}
 
 		private void ConvertInt64ToFloatR8(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand op1Low, out Operand op1High);
 
-			context.SetInstruction(X64.Cvtsi2sd, context.Result, op1Low);
+			context.SetInstruction(X64.Cvtsi2sd32, context.Result, op1Low);
 		}
 
 		private void CompareIntBranch64(Context context)

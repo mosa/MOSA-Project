@@ -122,7 +122,7 @@ namespace Mosa.Compiler.Framework
 			AppendBits(value, 24);
 		}
 
-		public void AppendInteger(uint value)
+		public void Append32Bits(uint value)
 		{
 			if (BitsLength == 0)
 			{
@@ -168,6 +168,22 @@ namespace Mosa.Compiler.Framework
 			AppendBitsReversed(value, 32);
 		}
 
+		public void Append32BitImmediateWithOffset(Operand operand, Operand offset)
+		{
+			Debug.Assert(operand.IsConstant);
+			Debug.Assert(offset.IsResolvedConstant);
+
+			if (operand.IsResolvedConstant)
+			{
+				AppendImmediateInteger(operand.ConstantUnsignedInteger + offset.ConstantUnsignedInteger);
+			}
+			else
+			{
+				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I4, operand, 0, offset.ConstantSignedInteger);
+				WriteZeroBytes(4);
+			}
+		}
+
 		public void Append32BitImmediate(Operand operand)
 		{
 			Debug.Assert(operand.IsConstant);
@@ -181,6 +197,14 @@ namespace Mosa.Compiler.Framework
 				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I4, operand, 0, 0);
 				WriteZeroBytes(4);
 			}
+		}
+
+		public void Append16BitImmediate(Operand operand)
+		{
+			Debug.Assert(operand.IsConstant);
+
+			AppendByte((byte)operand.ConstantUnsignedInteger);
+			AppendByte((byte)(operand.ConstantUnsignedInteger >> 8));
 		}
 
 		public void Append8BitImmediate(Operand operand)
@@ -214,6 +238,12 @@ namespace Mosa.Compiler.Framework
 		{
 			Emitter.EmitRelative64(operand);
 			WriteZeroBytes(8);
+		}
+
+		public void EmitForward32(int offset)
+		{
+			Emitter.EmitForwardLink(offset);
+			WriteZeroBytes(4);
 		}
 	}
 }

@@ -12,14 +12,12 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Neg64 : X64Instruction
 	{
-		public override int ID { get { return 475; } }
+		public override int ID { get { return 479; } }
 
 		internal Neg64()
 			: base(1, 1)
 		{
 		}
-
-		public static readonly byte[] opcode = new byte[] { 0xF7, 0x03 };
 
 		public override bool ThreeTwoAddressConversion { get { return true; } }
 
@@ -47,8 +45,12 @@ namespace Mosa.Platform.x64.Instructions
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+			System.Diagnostics.Debug.Assert(node.Result.IsCPURegister);
+			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
+			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
-			emitter.Write(opcode);
+			emitter.OpcodeEncoder.AppendByte(0xF7);
+			emitter.OpcodeEncoder.AppendByte(0x03);
 		}
 	}
 }

@@ -12,14 +12,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class CMovParity32 : X86Instruction
 	{
-		public override int ID { get { return 360; } }
+		public override int ID { get { return 359; } }
 
 		internal CMovParity32()
 			: base(1, 1)
 		{
 		}
 
-		public override string AlternativeName { get { return "CMovP32"; } }
+		public override string AlternativeName { get { return "CMovP"; } }
 
 		public override bool IsParityFlagUsed { get { return true; } }
 

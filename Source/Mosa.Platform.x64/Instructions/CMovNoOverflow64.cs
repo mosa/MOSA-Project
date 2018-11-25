@@ -12,16 +12,14 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class CMovNoOverflow64 : X64Instruction
 	{
-		public override int ID { get { return 588; } }
+		public override int ID { get { return 591; } }
 
 		internal CMovNoOverflow64()
 			: base(1, 1)
 		{
 		}
 
-		public override string AlternativeName { get { return "CMovNO64"; } }
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0x0F, 0x41 });
+		public override string AlternativeName { get { return "CMovNO"; } }
 
 		public override bool IsOverflowFlagUsed { get { return true; } }
 
@@ -30,12 +28,16 @@ namespace Mosa.Platform.x64.Instructions
 			return X64.CMovOverflow64;
 		}
 
-		internal override void EmitLegacy(InstructionNode node, X64CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			emitter.Emit(LegacyOpcode, node.Result, node.Operand1);
+			emitter.OpcodeEncoder.AppendByte(0x0F);
+			emitter.OpcodeEncoder.AppendByte(0x41);
+			emitter.OpcodeEncoder.Append2Bits(0b11);
+			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 		}
 	}
 }

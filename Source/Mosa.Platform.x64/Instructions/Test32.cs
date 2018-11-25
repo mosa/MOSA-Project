@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Test32 : X64Instruction
 	{
-		public override int ID { get { return 515; } }
+		public override int ID { get { return 518; } }
 
 		internal Test32()
 			: base(0, 2)
@@ -32,5 +32,32 @@ namespace Mosa.Platform.x64.Instructions
 		public override bool IsOverflowFlagModified { get { return true; } }
 
 		public override bool IsParityFlagModified { get { return true; } }
+
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		{
+			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+
+			if (node.Operand2.IsCPURegister)
+			{
+				emitter.OpcodeEncoder.AppendByte(0x85);
+				emitter.OpcodeEncoder.Append2Bits(0b11);
+				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+				return;
+			}
+
+			if (node.Operand2.IsConstant)
+			{
+				emitter.OpcodeEncoder.AppendByte(0xF7);
+				emitter.OpcodeEncoder.Append2Bits(0b11);
+				emitter.OpcodeEncoder.Append3Bits(0b000);
+				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				emitter.OpcodeEncoder.Append32BitImmediate(node.Operand2);
+				return;
+			}
+
+			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
+		}
 	}
 }

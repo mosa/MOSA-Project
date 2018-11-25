@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class BranchNotSigned : X64Instruction
 	{
-		public override int ID { get { return 540; } }
+		public override int ID { get { return 543; } }
 
 		internal BranchNotSigned()
 			: base(0, 0)
@@ -20,8 +20,6 @@ namespace Mosa.Platform.x64.Instructions
 		}
 
 		public override string AlternativeName { get { return "JNS"; } }
-
-		public static readonly byte[] opcode = new byte[] { 0x0F, 0x89 };
 
 		public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
 
@@ -36,11 +34,10 @@ namespace Mosa.Platform.x64.Instructions
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
-			System.Diagnostics.Debug.Assert(node.BranchTargets.Count >= 1);
-			System.Diagnostics.Debug.Assert(node.BranchTargets[0] != null);
 
-			emitter.Write(opcode);
-			(emitter as X64CodeEmitter).EmitRelativeBranchTarget(node.BranchTargets[0].Label);
+			emitter.OpcodeEncoder.AppendByte(0x0F);
+			emitter.OpcodeEncoder.AppendByte(0x89);
+			emitter.OpcodeEncoder.EmitRelative32(node.BranchTargets[0].Label);
 		}
 	}
 }

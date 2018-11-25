@@ -12,14 +12,12 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Call : X64Instruction
 	{
-		public override int ID { get { return 382; } }
+		public override int ID { get { return 381; } }
 
 		internal Call()
-			: base(0, 0)
+			: base(0, 1)
 		{
 		}
-
-		public static readonly byte[] opcode = new byte[] { 0xE8 };
 
 		public override FlowControl FlowControl { get { return FlowControl.Call; } }
 
@@ -46,12 +44,25 @@ namespace Mosa.Platform.x64.Instructions
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
-			System.Diagnostics.Debug.Assert(node.BranchTargets.Count >= 1);
-			System.Diagnostics.Debug.Assert(node.BranchTargets[0] != null);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			emitter.Write(opcode);
-			(emitter as X64CodeEmitter).EmitRelativeBranchTarget(node.BranchTargets[0].Label);
+			if (node.Operand1.IsCPURegister)
+			{
+				emitter.OpcodeEncoder.AppendByte(0xFF);
+				emitter.OpcodeEncoder.Append2Bits(0b11);
+				emitter.OpcodeEncoder.Append3Bits(0b010);
+				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				return;
+			}
+
+			if (node.Operand1.IsConstant)
+			{
+				emitter.OpcodeEncoder.AppendByte(0xE8);
+				emitter.OpcodeEncoder.EmitRelative32(node.Operand1);
+				return;
+			}
+
+			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Pop64 : X64Instruction
 	{
-		public override int ID { get { return 486; } }
+		public override int ID { get { return 491; } }
 
 		internal Pop64()
 			: base(1, 0)
@@ -21,10 +21,12 @@ namespace Mosa.Platform.x64.Instructions
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == DefaultResultCount);
-			System.Diagnostics.Debug.Assert(node.OperandCount == DefaultOperandCount);
+			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-			//StaticEmitters.EmitPop64(node, emitter);
+			emitter.OpcodeEncoder.AppendNibble(0b0101);
+			emitter.OpcodeEncoder.AppendBit(0b1);
+			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 		}
 	}
 }

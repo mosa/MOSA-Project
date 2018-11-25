@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Shld32 : X86Instruction
 	{
-		public override int ID { get { return 291; } }
+		public override int ID { get { return 290; } }
 
 		internal Shld32()
 			: base(1, 3)
@@ -59,6 +59,8 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.OpcodeEncoder.Append8BitImmediate(node.Operand3);
 				return;
 			}
+
+			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 		}
 	}
 }

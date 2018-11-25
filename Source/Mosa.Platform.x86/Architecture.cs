@@ -273,15 +273,6 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// Gets the code emitter.
-		/// </summary>
-		/// <returns></returns>
-		public override BaseCodeEmitter GetCodeEmitter()
-		{
-			return new X86CodeEmitter();
-		}
-
-		/// <summary>
 		/// Create platform move.
 		/// </summary>
 		/// <param name="context">The context.</param>

@@ -188,7 +188,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{A406F567-5
 		Data\ARMv6Instructions.json = Data\ARMv6Instructions.json
 		IntelFormat.txt = IntelFormat.txt
 		Data\IRInstructions.json = Data\IRInstructions.json
-		Data\TransformRules.json = Data\TransformRules.json
 		Data\X64Instructions.json = Data\X64Instructions.json
 		Data\X86Instructions.json = Data\X86Instructions.json
 	EndProjectSection

@@ -12,14 +12,12 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Shr64 : X64Instruction
 	{
-		public override int ID { get { return 506; } }
+		public override int ID { get { return 510; } }
 
 		internal Shr64()
 			: base(1, 2)
 		{
 		}
-
-		public static readonly LegacyOpCode LegacyOpcode = new LegacyOpCode(new byte[] { 0xD3 }, 0x05);
 
 		public override bool ThreeTwoAddressConversion { get { return true; } }
 
@@ -33,7 +31,7 @@ namespace Mosa.Platform.x64.Instructions
 
 		public override bool IsParityFlagModified { get { return true; } }
 
-		internal override void EmitLegacy(InstructionNode node, X64CodeEmitter emitter)
+		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
@@ -41,7 +39,35 @@ namespace Mosa.Platform.x64.Instructions
 			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
 			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
-			emitter.Emit(LegacyOpcode, node.Result);
+			if (node.Operand2.IsCPURegister)
+			{
+				emitter.OpcodeEncoder.AppendByte(0xD3);
+				emitter.OpcodeEncoder.Append2Bits(0b11);
+				emitter.OpcodeEncoder.Append3Bits(0b101);
+				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				return;
+			}
+
+			if (node.Operand2.IsConstantOne)
+			{
+				emitter.OpcodeEncoder.AppendByte(0xD1);
+				emitter.OpcodeEncoder.Append2Bits(0b11);
+				emitter.OpcodeEncoder.Append3Bits(0b101);
+				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				return;
+			}
+
+			if (node.Operand2.IsConstant)
+			{
+				emitter.OpcodeEncoder.AppendByte(0xC1);
+				emitter.OpcodeEncoder.Append2Bits(0b11);
+				emitter.OpcodeEncoder.Append3Bits(0b101);
+				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				emitter.OpcodeEncoder.Append8BitImmediate(node.Operand2);
+				return;
+			}
+
+			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 		}
 	}
 }
