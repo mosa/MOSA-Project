@@ -252,6 +252,7 @@ namespace Mosa.Platform.x86
 				{
 					new LongOperandStage(),
 					new IRTransformationStage(),
+					new OptimizationStage(),
 					new TweakStage(),
 					new FixedRegisterAssignmentStage(),
 					new SimpleDeadCodeRemovalStage(),
@@ -264,8 +265,10 @@ namespace Mosa.Platform.x86
 			);
 
 			compilerPipeline.InsertBefore<CodeGenerationStage>(
-				new FinalTweakStage()
-			);
+				new BaseMethodCompilerStage[]
+				{
+					new FinalTweakStage()
+				});
 
 			compilerPipeline.InsertBefore<CodeGenerationStage>(
 				new JumpOptimizationStage()

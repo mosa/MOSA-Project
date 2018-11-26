@@ -63,9 +63,6 @@ namespace Mosa.Compiler.Framework
 		/// <param name="stage">The stage.</param>
 		public void Add(T stage)
 		{
-			if (stage == null)
-				throw new ArgumentNullException(nameof(stage));
-
 			pipeline.Add(stage);
 		}
 
@@ -77,9 +74,6 @@ namespace Mosa.Compiler.Framework
 		/// <exception cref="ArgumentNullException"></exception>
 		public void InsertAfterFirst<StageType>(T stage) where StageType : class, T
 		{
-			if (stage == null)
-				throw new ArgumentNullException(nameof(stage));
-
 			for (int i = 0; i < pipeline.Count; i++)
 			{
 				if (pipeline[i] is StageType result)
@@ -99,9 +93,6 @@ namespace Mosa.Compiler.Framework
 		/// <param name="stage">The stage.</param>
 		public void InsertAfterLast<StageType>(T stage) where StageType : class, T
 		{
-			if (stage == null)
-				throw new ArgumentNullException(nameof(stage));
-
 			for (int i = pipeline.Count - 1; i >= 0; i--)
 			{
 				if (pipeline[i] is StageType result)
@@ -122,9 +113,6 @@ namespace Mosa.Compiler.Framework
 		/// <exception cref="ArgumentNullException"><paramref name="stages"/> is <c>null</c>.</exception>
 		public void InsertAfterLast<StageType>(IEnumerable<T> stages) where StageType : class, T
 		{
-			if (stages == null)
-				throw new ArgumentNullException(nameof(stages));
-
 			for (int i = pipeline.Count - 1; i >= 0; i--)
 			{
 				if (pipeline[i] is StageType result)
@@ -144,14 +132,30 @@ namespace Mosa.Compiler.Framework
 		/// <param name="stage">The stage.</param>
 		public void InsertBefore<StageType>(T stage) where StageType : class, T
 		{
-			if (stage == null)
-				throw new ArgumentNullException(nameof(stage));
-
 			for (int i = 0; i < pipeline.Count; i++)
 			{
 				if (pipeline[i] is StageType result)
 				{
 					pipeline.Insert(i, stage);
+					return;
+				}
+			}
+
+			throw new ArgumentNullException("missing stage to insert before");
+		}
+
+		/// <summary>
+		/// Inserts the stage before StageType
+		/// </summary>
+		/// <typeparam name="StageType">The type of stage.</typeparam>
+		/// <param name="stage">The stage.</param>
+		public void InsertBefore<StageType>(IEnumerable<T> stages) where StageType : class, T
+		{
+			for (int i = 0; i < pipeline.Count; i++)
+			{
+				if (pipeline[i] is StageType result)
+				{
+					pipeline.InsertRange(i, stages);
 					return;
 				}
 			}

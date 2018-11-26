@@ -18,10 +18,6 @@ namespace Mosa.Platform.x86.Stages
 
 		#region Visitation Methods
 
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Call"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
 		public void CallReg(Context context)
 		{
 			// FIXME: Result operand should be used instead of Operand1 for the result
@@ -36,10 +32,6 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Cmp"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
 		public void Cmp32(Context context)
 		{
 			Operand left = context.Operand1;
