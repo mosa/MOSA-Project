@@ -148,7 +148,7 @@ namespace Mosa.Compiler.Framework
 		/// Inserts the stage before StageType
 		/// </summary>
 		/// <typeparam name="StageType">The type of stage.</typeparam>
-		/// <param name="stage">The stage.</param>
+		/// <param name="stages">The stages.</param>
 		public void InsertBefore<StageType>(IEnumerable<T> stages) where StageType : class, T
 		{
 			for (int i = 0; i < pipeline.Count; i++)
@@ -246,7 +246,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Finds this instance.
 		/// </summary>
-		/// <typeparam name="StageType">The type of the tage type.</typeparam>
+		/// <typeparam name="StageType">The type of the stage type.</typeparam>
 		/// <returns></returns>
 		public StageType FindFirst<StageType>() where StageType : class
 		{

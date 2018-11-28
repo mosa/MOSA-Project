@@ -103,31 +103,31 @@ namespace Mosa.Platform.x86.Stages
 				if (at.Instruction.FlowControl != FlowControl.Next)
 					return TriState.Unknown; // Flow direction changed
 
-				var x86Instruction = at.Instruction as X86Instruction;
+				var instruction = at.Instruction as X86Instruction;
 
-				if (x86Instruction == null)
+				if (instruction == null)
 					return TriState.Unknown; // Unknown IR instruction
 
-				if ((zeroModified && x86Instruction.IsZeroFlagUsed)
-					|| (carryModified && x86Instruction.IsCarryFlagUsed)
-					|| (signModified && x86Instruction.IsSignFlagUsed)
-					|| (overflowModified && x86Instruction.IsOverflowFlagUsed)
-					|| (parityModified && x86Instruction.IsParityFlagUsed))
+				if ((zeroModified && instruction.IsZeroFlagUsed)
+					|| (carryModified && instruction.IsCarryFlagUsed)
+					|| (signModified && instruction.IsSignFlagUsed)
+					|| (overflowModified && instruction.IsOverflowFlagUsed)
+					|| (parityModified && instruction.IsParityFlagUsed))
 					return TriState.Yes;
 
-				if (zeroModified && (x86Instruction.IsZeroFlagCleared || x86Instruction.IsZeroFlagSet || x86Instruction.IsZeroFlagUndefined || x86Instruction.IsZeroFlagModified))
+				if (zeroModified && (instruction.IsZeroFlagCleared || instruction.IsZeroFlagSet || instruction.IsZeroFlagUndefined || instruction.IsZeroFlagModified))
 					zeroModified = false;
 
-				if (carryModified && (x86Instruction.IsCarryFlagCleared || x86Instruction.IsCarryFlagSet || x86Instruction.IsCarryFlagUndefined || x86Instruction.IsCarryFlagModified))
+				if (carryModified && (instruction.IsCarryFlagCleared || instruction.IsCarryFlagSet || instruction.IsCarryFlagUndefined || instruction.IsCarryFlagModified))
 					carryModified = false;
 
-				if (signModified && (x86Instruction.IsSignFlagCleared || x86Instruction.IsSignFlagSet || x86Instruction.IsSignFlagUndefined || x86Instruction.IsSignFlagModified))
+				if (signModified && (instruction.IsSignFlagCleared || instruction.IsSignFlagSet || instruction.IsSignFlagUndefined || instruction.IsSignFlagModified))
 					signModified = false;
 
-				if (overflowModified && (x86Instruction.IsOverflowFlagCleared || x86Instruction.IsOverflowFlagSet || x86Instruction.IsOverflowFlagUndefined || x86Instruction.IsOverflowFlagModified))
+				if (overflowModified && (instruction.IsOverflowFlagCleared || instruction.IsOverflowFlagSet || instruction.IsOverflowFlagUndefined || instruction.IsOverflowFlagModified))
 					overflowModified = false;
 
-				if (parityModified && (x86Instruction.IsParityFlagCleared || x86Instruction.IsParityFlagSet || x86Instruction.IsParityFlagUndefined || x86Instruction.IsParityFlagModified))
+				if (parityModified && (instruction.IsParityFlagCleared || instruction.IsParityFlagSet || instruction.IsParityFlagUndefined || instruction.IsParityFlagModified))
 					parityModified = false;
 
 				if (!zeroModified && !carryModified && !signModified && !overflowModified && !parityModified)

@@ -93,7 +93,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public Dictionary<int, int> Labels { get; set; }
 
-		public CommonOpcodeEncoder OpcodeEncoder { get; set; }
+		public OpcodeEncoder OpcodeEncoder { get; set; }
 
 		#endregion Properties
 
@@ -120,7 +120,7 @@ namespace Mosa.Compiler.Framework
 
 			Labels = new Dictionary<int, int>();
 
-			OpcodeEncoder = new CommonOpcodeEncoder(this);
+			OpcodeEncoder = new OpcodeEncoder(this);
 		}
 
 		/// <summary>
