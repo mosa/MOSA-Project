@@ -135,6 +135,16 @@ namespace Mosa.Platform.x86.Instructions
 				return;
 			}
 
+			if (node.Operand1.IsConstant && node.Operand2.IsConstant)
+			{
+				emitter.OpcodeEncoder.AppendByte(0x8B);
+				emitter.OpcodeEncoder.Append2Bits(0b00);
+				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				emitter.OpcodeEncoder.Append3Bits(0b101);
+				emitter.OpcodeEncoder.Append32BitImmediate(node.Operand1);
+				return;
+			}
+
 			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 		}
 	}
