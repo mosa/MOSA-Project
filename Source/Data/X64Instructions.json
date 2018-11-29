@@ -19,6 +19,7 @@
 		"[x64-base-load-register+sbyte]=[x64],mod=01,reg=reg3:[dest],rm=reg3:[membase],immediate=imm8:[offset]",
 		"[x64-base-load-register+constant]=[x64],mod=10,reg=reg3:[dest],rm=reg3:[membase],immediate=imm32:[offset]",
 		"[x64-base-load-constant+zero]=[x64],mod=00,reg=reg3:[dest],rm=101,immediate=imm32:[membase]",
+		"[x64-base-load-constant+constant]=[x64],mod=00,reg=reg3:[dest],rm=101,immediate=imm32+:[membase]:[offset]",
 
 		"[x64-common-load-ebp+zero]=[x64-base-load-ebp+zero],dest=r",
 		"[x64-common-load-ebp+register]=[x64-base-load-ebp+register],dest=r,membase=o2",
@@ -30,6 +31,7 @@
 		"[x64-common-load-register+sbyte]=[x64-base-load-register+sbyte],dest=r,membase=o1,offset=o2",
 		"[x64-common-load-register+constant]=[x64-base-load-register+constant],dest=r,membase=o1,offset=o2",
 		"[x64-common-load-constant+zero]=[x64-base-load-constant+zero],dest=r,membase=o1",
+		"[x64-common-load-constant+constant]=[x64-base-load-constant+constant],dest=r,membase=o1,offset=o2",
 
 		"[x64-base-store-register-ebp+zero]=[x64],mod=01,reg=reg3:[value],rm=101,displacement=0x00",
 		"[x64-base-store-register-ebp+register]=[x64],mod=01,reg=reg3:[value],rm=100,scale=00,index=reg3:[membase],base=101,displacement=0x00",
@@ -1634,6 +1636,10 @@
 				{
 					"Condition": "[constant][zero]",
 					"Encoding": "[x64-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-common-load-constant+constant]"
 				}
 			]
 		},
@@ -1791,6 +1797,10 @@
 				{
 					"Condition": "[constant][zero]",
 					"Encoding": "[x64-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-common-load-constant+constant]"
 				}
 			]
 		},
@@ -1849,6 +1859,10 @@
 				{
 					"Condition": "[constant][zero]",
 					"Encoding": "[x64-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-common-load-constant+constant]"
 				}
 			]
 		},
@@ -1907,6 +1921,10 @@
 				{
 					"Condition": "[constant][zero]",
 					"Encoding": "[x64-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-common-load-constant+constant]"
 				}
 			]
 		},
@@ -1965,6 +1983,10 @@
 				{
 					"Condition": "[constant][zero]",
 					"Encoding": "[x64-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-common-load-constant+constant]"
 				}
 			]
 		},
@@ -2037,6 +2059,10 @@
 				{
 					"Condition": "[constant][zero]",
 					"Encoding": "[x64-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-common-load-constant+constant]"
 				}
 			]
 		},
@@ -2167,6 +2193,10 @@
 				{
 					"Condition": "[constant][zero]",
 					"Encoding": "[x64-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-common-load-constant+constant]"
 				}
 			]
 		},
@@ -2328,6 +2358,10 @@
 				{
 					"Condition": "[constant][constant][constant]",
 					"Encoding": "[x64-common-store-constant-constant+constant]"
+				},
+				{
+					"Condition": "[constant][constant][register]",
+					"Encoding": "[x64-common-store-constant-constant+register]"
 				}
 			]
 		},
@@ -2431,6 +2465,10 @@
 				{
 					"Condition": "[constant][constant][constant]",
 					"Encoding": "[x64-common-store-constant-constant+constant]"
+				},
+				{
+					"Condition": "[constant][constant][register]",
+					"Encoding": "[x64-common-store-constant-constant+register]"
 				}
 			]
 		},
@@ -2534,6 +2572,10 @@
 				{
 					"Condition": "[constant][constant][constant]",
 					"Encoding": "[x64-common-store-constant-constant+constant]"
+				},
+				{
+					"Condition": "[constant][constant][register]",
+					"Encoding": "[x64-common-store-constant-constant+register]"
 				}
 			]
 		},
@@ -2637,6 +2679,10 @@
 				{
 					"Condition": "[constant][constant][constant]",
 					"Encoding": "[x64-common-store-constant-constant+constant]"
+				},
+				{
+					"Condition": "[constant][constant][register]",
+					"Encoding": "[x64-common-store-constant-constant+register]"
 				}
 			]
 		},
@@ -2790,6 +2836,10 @@
 				{
 					"Condition": "[constant][zero]",
 					"Encoding": "[x64-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-common-load-constant+constant]"
 				}
 			]
 		},
@@ -2848,6 +2898,10 @@
 				{
 					"Condition": "[constant][zero]",
 					"Encoding": "[x64-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-common-load-constant+constant]"
 				}
 			]
 		},
@@ -2906,6 +2960,10 @@
 				{
 					"Condition": "[constant][zero]",
 					"Encoding": "[x64-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-common-load-constant+constant]"
 				}
 			]
 		},
@@ -2978,6 +3036,10 @@
 				{
 					"Condition": "[constant][zero]",
 					"Encoding": "[x64-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-common-load-constant+constant]"
 				}
 			]
 		},
@@ -3189,6 +3251,10 @@
 				{
 					"Condition": "[constant][zero]",
 					"Encoding": "[x64-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-common-load-constant+constant]"
 				}
 			]
 		},
@@ -3247,6 +3313,10 @@
 				{
 					"Condition": "[constant][zero]",
 					"Encoding": "[x64-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-common-load-constant+constant]"
 				}
 			]
 		},
@@ -3305,6 +3375,10 @@
 				{
 					"Condition": "[constant][zero]",
 					"Encoding": "[x64-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-common-load-constant+constant]"
 				}
 			]
 		},
@@ -4417,6 +4491,10 @@
 				{
 					"Condition": "[constant][zero][register]",
 					"Encoding": "[x64-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-common-load-constant+constant]"
 				}
 			]
 		},
@@ -4471,6 +4549,10 @@
 				{
 					"Condition": "[constant][zero][register]",
 					"Encoding": "[x64-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-common-load-constant+constant]"
 				}
 			]
 		},
@@ -4565,6 +4647,10 @@
 				{
 					"Condition": "[constant][zero][register]",
 					"Encoding": "[x64-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-common-load-constant+constant]"
 				}
 			]
 		},
@@ -4619,6 +4705,10 @@
 				{
 					"Condition": "[constant][zero][register]",
 					"Encoding": "[x64-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-common-load-constant+constant]"
 				}
 			]
 		},
