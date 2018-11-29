@@ -237,6 +237,8 @@ namespace Mosa.Platform.x86.Stages
 
 		private void CompareInt32x32(Context context)
 		{
+			OptimizeBranch(context);
+
 			var condition = context.ConditionCode;
 			var resultOperand = context.Result;
 			var operand1 = context.Operand1;
@@ -262,8 +264,35 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.CMovEqual32, result, operand2);       // false
 		}
 
+		private void OptimizeBranch(Context context)
+		{
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var condition = context.ConditionCode;
+
+			if (operand2.IsConstant || operand1.IsVirtualRegister)
+				return;
+
+			// Move constant to the right
+
+			if (condition == ConditionCode.Equal || condition == ConditionCode.NotEqual)
+			{
+				context.Operand1 = operand2;
+				context.Operand2 = operand1;
+			}
+
+			//else
+			//{
+			//	context.ConditionCode = condition.GetOpposite();
+			//	context.Operand1 = operand2;
+			//	context.Operand2 = operand1;
+			//}
+		}
+
 		private void CompareIntBranch32(Context context)
 		{
+			OptimizeBranch(context);
+
 			var target = context.BranchTargets[0];
 			var condition = context.ConditionCode;
 			var operand1 = context.Operand1;
