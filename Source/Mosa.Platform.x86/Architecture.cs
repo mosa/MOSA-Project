@@ -269,8 +269,7 @@ namespace Mosa.Platform.x86
 				new BaseMethodCompilerStage[]
 				{
 					new FinalTweakStage(),
-
-					//compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
+					compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
 				});
 
 			compilerPipeline.InsertBefore<CodeGenerationStage>(

@@ -307,6 +307,7 @@
     <Compile Include="CompilerStages\StartUpStage.cs" />
     <Compile Include="Stages\FloatingPointStage.cs" />
     <Compile Include="Stages\FinalTweakStage.cs" />
+    <Compile Include="Stages\PostOptimizationStage.cs" />
     <Compile Include="Stages\SimpleDeadCodeRemovalStage.cs" />
     <Compile Include="Stages\AddressModeConversionStage.cs" />
     <Compile Include="Stages\FixedRegisterAssignmentStage.cs" />
