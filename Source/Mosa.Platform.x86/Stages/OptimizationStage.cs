@@ -64,9 +64,9 @@ namespace Mosa.Platform.x86.Stages
 
 		#endregion Visitation Methods
 
-		private enum TriState { Yes, No, Unknown };
+		public enum TriState { Yes, No, Unknown };
 
-		private static TriState AreStatusFlagsUsed(InstructionNode start)
+		public static TriState AreStatusFlagsUsed(InstructionNode start)
 		{
 			var first = start.Instruction as X86Instruction;
 
@@ -76,16 +76,17 @@ namespace Mosa.Platform.x86.Stages
 			var overflowModified = first.IsOverflowFlagSet && !first.IsOverflowFlagUndefined;
 			var parityModified = first.IsParityFlagModified && !first.IsParityFlagUndefined;
 
+			return AreStatusFlagsUsed(start.Next, zeroModified, carryModified, signModified, overflowModified, parityModified);
+		}
+
+		public static TriState AreStatusFlagsUsed(InstructionNode start, bool zeroModified, bool carryModified, bool signModified, bool overflowModified, bool parityModified)
+		{
 			// if none are modified (or not undefined), then they can't be used later
 			if (!zeroModified && !carryModified && !signModified && !overflowModified && !parityModified)
 				return TriState.No;
 
-			var at = start;
-
-			while (true)
+			for (var at = start; ; at = at.Next)
 			{
-				at = at.Next;
-
 				if (at.IsEmptyOrNop)
 					continue;
 
