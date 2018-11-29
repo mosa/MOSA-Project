@@ -302,6 +302,7 @@
     <Compile Include="Intrinsic\SetFS.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stages\BuildStackStage.cs" />
+    <Compile Include="Stages\OptimizationStage.cs" />
     <Compile Include="Stages\IRSubstitutionStage.cs" />
     <Compile Include="CompilerStages\StartUpStage.cs" />
     <Compile Include="Stages\FloatingPointStage.cs" />
@@ -340,7 +341,6 @@
     <Compile Include="Intrinsic\Sti.cs" />
     <Compile Include="CompilerStages\MethodTableBuilderStage.cs" />
     <Compile Include="CompilerStages\Multiboot0695Stage.cs" />
-    <Compile Include="Stages\OptimizationStage.cs" />
     <Compile Include="X86.cs" />
     <Compile Include="Stages\TweakStage.cs" />
     <Compile Include="Intrinsic\BochsDebug.cs" />
