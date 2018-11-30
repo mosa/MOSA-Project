@@ -237,8 +237,6 @@ namespace Mosa.Platform.x86.Stages
 
 		private void CompareInt32x32(Context context)
 		{
-			OptimizeBranch(context);
-
 			var condition = context.ConditionCode;
 			var resultOperand = context.Result;
 			var operand1 = context.Operand1;
@@ -280,13 +278,23 @@ namespace Mosa.Platform.x86.Stages
 				context.Operand1 = operand2;
 				context.Operand2 = operand1;
 			}
+			else if (
 
-			//else
-			//{
-			//	context.ConditionCode = condition.GetOpposite();
-			//	context.Operand1 = operand2;
-			//	context.Operand2 = operand1;
-			//}
+				condition == ConditionCode.GreaterOrEqual
+				|| condition == ConditionCode.GreaterThan
+				|| condition == ConditionCode.LessOrEqual
+				|| condition == ConditionCode.LessThan
+
+				//|| condition == ConditionCode.UnsignedGreaterOrEqual
+				//|| condition == ConditionCode.UnsignedGreaterThan
+				//|| condition == ConditionCode.UnsignedLessOrEqual
+				//|| condition == ConditionCode.UnsignedLessThan
+				)
+			{
+				context.ConditionCode = condition.GetOpposite();
+				context.Operand1 = operand2;
+				context.Operand2 = operand1;
+			}
 		}
 
 		private void CompareIntBranch32(Context context)

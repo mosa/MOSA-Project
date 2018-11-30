@@ -878,7 +878,7 @@ namespace Mosa.Compiler.Framework
 			if (ConditionCode != ConditionCode.Undefined)
 			{
 				sb.Append(" [");
-				sb.Append(GetConditionString(ConditionCode));
+				sb.Append(ConditionCode.GetConditionString());
 				sb.Append("]");
 			}
 
@@ -1037,37 +1037,6 @@ namespace Mosa.Compiler.Framework
 			}
 
 			return node;
-		}
-
-		/// <summary>
-		/// Gets the condition string.
-		/// </summary>
-		/// <param name="conditioncode">The condition code.</param>
-		/// <returns></returns>
-		public static string GetConditionString(ConditionCode conditioncode)
-		{
-			switch (conditioncode)
-			{
-				case ConditionCode.Equal: return "==";
-				case ConditionCode.GreaterOrEqual: return ">=";
-				case ConditionCode.GreaterThan: return ">";
-				case ConditionCode.LessOrEqual: return "<=";
-				case ConditionCode.LessThan: return "<";
-				case ConditionCode.NotEqual: return "!=";
-				case ConditionCode.UnsignedGreaterOrEqual: return ">= (U)";
-				case ConditionCode.UnsignedGreaterThan: return "> (U)";
-				case ConditionCode.UnsignedLessOrEqual: return "<= (U)";
-				case ConditionCode.UnsignedLessThan: return "< (U)";
-				case ConditionCode.NotSigned: return "not signed";
-				case ConditionCode.Signed: return "signed";
-				case ConditionCode.Zero: return "zero";
-				case ConditionCode.NotZero: return "not zero";
-				case ConditionCode.Carry: return "carry";
-				case ConditionCode.NoCarry: return "no carry";
-				case ConditionCode.Always: return "always";
-
-				default: throw new NotSupportedException();
-			}
 		}
 
 		#endregion Methods
