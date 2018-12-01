@@ -285,10 +285,12 @@ namespace Mosa.Platform.x86.Stages
 				|| condition == ConditionCode.LessOrEqual
 				|| condition == ConditionCode.LessThan
 
+				//The following should work, but breaks a unit test.
 				//|| condition == ConditionCode.UnsignedGreaterOrEqual
-				//|| condition == ConditionCode.UnsignedGreaterThan
-				//|| condition == ConditionCode.UnsignedLessOrEqual
-				//|| condition == ConditionCode.UnsignedLessThan
+
+				|| condition == ConditionCode.UnsignedGreaterThan
+				|| condition == ConditionCode.UnsignedLessOrEqual
+				|| condition == ConditionCode.UnsignedLessThan
 				)
 			{
 				context.ConditionCode = condition.GetOpposite();
