@@ -970,6 +970,7 @@ namespace Mosa.Compiler.Framework
 			return !operand.Is64BitInteger ? instruction32 : instruction64;
 		}
 
+		// review --- should not always be based on platform
 		public BaseInstruction Select(BaseInstruction instruction32, BaseInstruction instruction64)
 		{
 			return Is32BitPlatform ? instruction32 : instruction64;

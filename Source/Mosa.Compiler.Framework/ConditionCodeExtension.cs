@@ -70,6 +70,34 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
+		public static ConditionCode GetReverse(this ConditionCode conditionCode)
+		{
+			switch (conditionCode)
+			{
+				case ConditionCode.Equal: return ConditionCode.Equal;
+				case ConditionCode.NotEqual: return ConditionCode.NotEqual;
+				case ConditionCode.GreaterOrEqual: return ConditionCode.LessOrEqual;
+				case ConditionCode.GreaterThan: return ConditionCode.LessOrEqual;
+				case ConditionCode.LessOrEqual: return ConditionCode.GreaterOrEqual;
+				case ConditionCode.LessThan: return ConditionCode.GreaterThan;
+				case ConditionCode.UnsignedGreaterOrEqual: return ConditionCode.UnsignedLessOrEqual;
+				case ConditionCode.UnsignedGreaterThan: return ConditionCode.UnsignedLessThan;
+				case ConditionCode.UnsignedLessOrEqual: return ConditionCode.UnsignedGreaterOrEqual;
+				case ConditionCode.UnsignedLessThan: return ConditionCode.UnsignedGreaterThan;
+				case ConditionCode.Signed: return ConditionCode.Signed;
+				case ConditionCode.NotSigned: return ConditionCode.NotSigned;
+				case ConditionCode.Carry: return ConditionCode.Carry;
+				case ConditionCode.NoCarry: return ConditionCode.NoCarry;
+				case ConditionCode.Overflow: return ConditionCode.Overflow;
+				case ConditionCode.NoOverflow: return ConditionCode.NoOverflow;
+				case ConditionCode.Positive: return ConditionCode.Positive;
+				case ConditionCode.Negative: return ConditionCode.Negative;
+				case ConditionCode.Always: return ConditionCode.Always;
+				case ConditionCode.Never: return ConditionCode.Never;
+				default: throw new NotSupportedException();
+			}
+		}
+
 		public static string GetConditionString(this ConditionCode conditioncode)
 		{
 			switch (conditioncode)

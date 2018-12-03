@@ -266,37 +266,14 @@ namespace Mosa.Platform.x86.Stages
 		{
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
-			var condition = context.ConditionCode;
 
 			if (operand2.IsConstant || operand1.IsVirtualRegister)
 				return;
 
 			// Move constant to the right
-
-			if (condition == ConditionCode.Equal || condition == ConditionCode.NotEqual)
-			{
-				context.Operand1 = operand2;
-				context.Operand2 = operand1;
-			}
-			else if (
-
-				condition == ConditionCode.GreaterOrEqual
-				|| condition == ConditionCode.GreaterThan
-				|| condition == ConditionCode.LessOrEqual
-				|| condition == ConditionCode.LessThan
-
-				//The following should work, but breaks a unit test.
-				//|| condition == ConditionCode.UnsignedGreaterOrEqual
-
-				|| condition == ConditionCode.UnsignedGreaterThan
-				|| condition == ConditionCode.UnsignedLessOrEqual
-				|| condition == ConditionCode.UnsignedLessThan
-				)
-			{
-				context.ConditionCode = condition.GetOpposite();
-				context.Operand1 = operand2;
-				context.Operand2 = operand1;
-			}
+			context.Operand1 = operand2;
+			context.Operand2 = operand1;
+			context.ConditionCode = context.ConditionCode.GetReverse();
 		}
 
 		private void CompareIntBranch32(Context context)
