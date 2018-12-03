@@ -264,6 +264,11 @@ namespace Mosa.Platform.x64.Instructions
 				return;
 			}
 
+			if (node.Operand1.IsConstant && node.Operand2.IsConstant && node.Operand3.IsCPURegister)
+			{
+				return;
+			}
+
 			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 		}
 	}

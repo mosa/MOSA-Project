@@ -63,10 +63,18 @@ namespace Mosa.Compiler.Framework
 		/// <param name="stage">The stage.</param>
 		public void Add(T stage)
 		{
-			if (stage == null)
-				throw new ArgumentNullException(nameof(stage));
-
 			pipeline.Add(stage);
+		}
+
+		public void AddAt(int at, IEnumerable<T> stages)
+		{
+			foreach (var stage in stages)
+			{
+				if (stage == null)
+					continue;
+
+				pipeline.Insert(at++, stage);
+			}
 		}
 
 		/// <summary>
@@ -78,7 +86,7 @@ namespace Mosa.Compiler.Framework
 		public void InsertAfterFirst<StageType>(T stage) where StageType : class, T
 		{
 			if (stage == null)
-				throw new ArgumentNullException(nameof(stage));
+				return;
 
 			for (int i = 0; i < pipeline.Count; i++)
 			{
@@ -100,7 +108,7 @@ namespace Mosa.Compiler.Framework
 		public void InsertAfterLast<StageType>(T stage) where StageType : class, T
 		{
 			if (stage == null)
-				throw new ArgumentNullException(nameof(stage));
+				return;
 
 			for (int i = pipeline.Count - 1; i >= 0; i--)
 			{
@@ -122,14 +130,11 @@ namespace Mosa.Compiler.Framework
 		/// <exception cref="ArgumentNullException"><paramref name="stages"/> is <c>null</c>.</exception>
 		public void InsertAfterLast<StageType>(IEnumerable<T> stages) where StageType : class, T
 		{
-			if (stages == null)
-				throw new ArgumentNullException(nameof(stages));
-
 			for (int i = pipeline.Count - 1; i >= 0; i--)
 			{
 				if (pipeline[i] is StageType result)
 				{
-					pipeline.InsertRange(i + 1, stages);
+					AddAt(i + 1, stages);
 					return;
 				}
 			}
@@ -145,13 +150,32 @@ namespace Mosa.Compiler.Framework
 		public void InsertBefore<StageType>(T stage) where StageType : class, T
 		{
 			if (stage == null)
-				throw new ArgumentNullException(nameof(stage));
+				return;
 
 			for (int i = 0; i < pipeline.Count; i++)
 			{
 				if (pipeline[i] is StageType result)
 				{
 					pipeline.Insert(i, stage);
+					return;
+				}
+			}
+
+			throw new ArgumentNullException("missing stage to insert before");
+		}
+
+		/// <summary>
+		/// Inserts the stage before StageType
+		/// </summary>
+		/// <typeparam name="StageType">The type of stage.</typeparam>
+		/// <param name="stages">The stages.</param>
+		public void InsertBefore<StageType>(IEnumerable<T> stages) where StageType : class, T
+		{
+			for (int i = 0; i < pipeline.Count; i++)
+			{
+				if (pipeline[i] is StageType result)
+				{
+					AddAt(i, stages);
 					return;
 				}
 			}
@@ -186,40 +210,6 @@ namespace Mosa.Compiler.Framework
 			pipeline.Clear();
 		}
 
-		/// <summary>
-		/// Removes the specified stage.
-		/// </summary>
-		/// <param name="stage">The stage.</param>
-		public void Remove(T stage)
-		{
-			if (stage == null)
-				throw new ArgumentNullException(nameof(stage));
-
-			pipeline.Remove(stage);
-		}
-
-		/// <summary>
-		/// Gets the position.
-		/// </summary>
-		/// <param name="stage">The stage.</param>
-		/// <returns></returns>
-		/// <exception cref="System.ArgumentNullException">@stage</exception>
-		public int GetPosition(T stage)
-		{
-			if (stage == null)
-			{
-				throw new ArgumentNullException(nameof(stage));
-			}
-
-			for (int i = 0; i < pipeline.Count; i++)
-			{
-				if (ReferenceEquals(pipeline[i], stage))
-					return i;
-			}
-
-			throw new ArgumentNullException("missing stage to insert before");
-		}
-
 		#endregion Methods
 
 		#region IEnumerable members
@@ -242,12 +232,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Finds this instance.
 		/// </summary>
-		/// <typeparam name="StageType">The type of the tage type.</typeparam>
+		/// <typeparam name="StageType">The type of the stage type.</typeparam>
 		/// <returns></returns>
 		public StageType FindFirst<StageType>() where StageType : class
 		{
-			StageType result = default(StageType);
-			foreach (object o in pipeline)
+			var result = default(StageType);
+			foreach (var o in pipeline)
 			{
 				result = o as StageType;
 				if (result != null)

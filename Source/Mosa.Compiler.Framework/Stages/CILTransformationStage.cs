@@ -1968,7 +1968,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Now compare length with index
 			// If index is greater than or equal to the length then jump to exception block, otherwise jump to next block
-			before.AppendInstruction(Select(IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block); // TODO: Constant should be 64bit
+			before.AppendInstruction(Select(IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block);
 			before.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
 
 			// Build exception block which is just a call to throw exception

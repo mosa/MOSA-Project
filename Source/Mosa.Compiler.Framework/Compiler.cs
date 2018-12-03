@@ -288,7 +288,7 @@ namespace Mosa.Compiler.Framework
 					extension.ExtendMethodCompilerPipeline(pipeline);
 				}
 
-				Architecture.ExtendMethodCompilerPipeline(pipeline);
+				Architecture.ExtendMethodCompilerPipeline(pipeline, CompilerOptions);
 
 				foreach (var stage in pipeline)
 				{

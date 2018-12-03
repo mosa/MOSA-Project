@@ -262,8 +262,24 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.CMovEqual32, result, operand2);       // false
 		}
 
+		private void OptimizeBranch(Context context)
+		{
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			if (operand2.IsConstant || operand1.IsVirtualRegister)
+				return;
+
+			// Move constant to the right
+			context.Operand1 = operand2;
+			context.Operand2 = operand1;
+			context.ConditionCode = context.ConditionCode.GetReverse();
+		}
+
 		private void CompareIntBranch32(Context context)
 		{
+			OptimizeBranch(context);
+
 			var target = context.BranchTargets[0];
 			var condition = context.ConditionCode;
 			var operand1 = context.Operand1;
