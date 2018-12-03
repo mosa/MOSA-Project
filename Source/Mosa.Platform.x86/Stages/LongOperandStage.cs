@@ -31,7 +31,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.ConvertInt64ToFloatR4, ConvertInt64ToFloatR4);
 			AddVisitation(IRInstruction.ConvertInt64ToFloatR8, ConvertInt64ToFloatR8);
 			AddVisitation(IRInstruction.IfThenElse64, IfThenElse64);
-			AddVisitation(IRInstruction.LoadInt64, MoveInt64);
+			AddVisitation(IRInstruction.LoadInt64, LoadInt64);
 			AddVisitation(IRInstruction.LoadParamInt64, LoadParamInt64);
 			AddVisitation(IRInstruction.LoadParamSignExtend16x64, LoadParamSignExtend16x64);
 			AddVisitation(IRInstruction.LoadParamSignExtend32x64, LoadParamSignExtend32x64);
@@ -304,7 +304,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.CMovEqual32, resultHigh, op3H);      // false
 		}
 
-		private void MoveInt64(Context context)
+		private void LoadInt64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
 

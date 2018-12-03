@@ -132,7 +132,7 @@ namespace System
 		[NonVersionable]
 		public static unsafe IntPtr operator +(IntPtr pointer, int offset)
 		{
-			return new IntPtr(pointer.ToInt32() + (uint)offset);
+			return new IntPtr(pointer.ToInt64() + (uint)offset);
 		}
 
 		[NonVersionable]

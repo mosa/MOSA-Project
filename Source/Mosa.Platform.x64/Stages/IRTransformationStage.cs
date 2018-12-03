@@ -329,13 +329,13 @@ namespace Mosa.Platform.x64.Stages
 
 		private void DivSigned32(Context context)
 		{
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
-			Operand result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var result = context.Result;
 
-			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			Operand v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			context.SetInstruction2(X64.Cdq, v1, v2, operand1);
 			context.AppendInstruction2(X64.IDiv32, v3, result, v1, v2, operand2);
@@ -343,12 +343,12 @@ namespace Mosa.Platform.x64.Stages
 
 		private void DivUnsigned32(Context context)
 		{
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
-			Operand result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var result = context.Result;
 
-			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
 			context.SetInstruction(X64.Mov32, v1, ConstantZero);
 			context.AppendInstruction2(X64.Div32, v1, v2, v1, operand1, operand2);
@@ -357,10 +357,10 @@ namespace Mosa.Platform.x64.Stages
 
 		private void FloatCompare(Context context, X64Instruction instruction)
 		{
-			Operand result = context.Result;
-			Operand left = context.Operand1;
-			Operand right = context.Operand2;
-			ConditionCode condition = context.ConditionCode;
+			var result = context.Result;
+			var left = context.Operand1;
+			var right = context.Operand2;
+			var condition = context.ConditionCode;
 
 			// normalize condition
 			switch (condition)
@@ -481,9 +481,13 @@ namespace Mosa.Platform.x64.Stages
 		private void Jmp(InstructionNode node)
 		{
 			if (node.Operand1 == null)
+			{
 				node.ReplaceInstruction(X64.Jmp);
+			}
 			else
+			{
 				node.ReplaceInstruction(X64.JmpExternal);
+			}
 		}
 
 		private void LoadCompound(Context context)
@@ -648,22 +652,14 @@ namespace Mosa.Platform.x64.Stages
 
 		private void MulSigned32(InstructionNode node)
 		{
-			Operand result = node.Result;
-			Operand operand1 = node.Operand1;
-			Operand operand2 = node.Operand2;
-
-			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			node.SetInstruction2(X64.Mul32, v1, result, operand1, operand2);
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			node.SetInstruction2(X64.Mul32, v1, node.Result, node.Operand1, node.Operand2);
 		}
 
 		private void MulUnsigned32(InstructionNode node)
 		{
-			Operand result = node.Result;
-			Operand operand1 = node.Operand1;
-			Operand operand2 = node.Operand2;
-
-			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			node.SetInstruction2(X64.Mul32, v1, result, operand1, operand2);
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			node.SetInstruction2(X64.Mul32, v1, node.Result, node.Operand1, node.Operand2);
 		}
 
 		private void Nop(InstructionNode node)
@@ -673,13 +669,13 @@ namespace Mosa.Platform.x64.Stages
 
 		private void RemSigned32(Context context)
 		{
-			Operand result = context.Result;
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
 
-			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			Operand v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			context.SetInstruction2(X64.Cdq, v1, v2, operand1);
 			context.AppendInstruction2(X64.IDiv32, result, v3, v1, v2, operand2);
@@ -687,12 +683,12 @@ namespace Mosa.Platform.x64.Stages
 
 		private void RemUnsigned32(Context context)
 		{
-			Operand result = context.Result;
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
 
-			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
 			context.SetInstruction(X64.Mov32, v1, ConstantZero);
 			context.AppendInstruction2(X64.Div32, result, v2, v1, operand1, operand2);
@@ -808,7 +804,7 @@ namespace Mosa.Platform.x64.Stages
 		private void Switch(Context context)
 		{
 			var targets = context.BranchTargets;
-			Operand operand = context.Operand1;
+			var operand = context.Operand1;
 
 			context.Empty();
 
