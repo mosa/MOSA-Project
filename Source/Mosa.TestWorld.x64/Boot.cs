@@ -4,6 +4,7 @@ using Mosa.Kernel.x64;
 using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x64;
+using Mosa.UnitTests;
 
 namespace Mosa.TestWorld.x64
 {
@@ -18,9 +19,6 @@ namespace Mosa.TestWorld.x64
 			KernelMemory.SetInitialMemory(Address.GCInitialMemory, 0x01000000);
 		}
 
-		/// <summary>
-		/// Main
-		/// </summary>
 		public static void Main()
 		{
 			Screen.Clear();
@@ -39,6 +37,11 @@ namespace Mosa.TestWorld.x64
 			{
 				Native.Hlt();
 			}
+		}
+
+		public static bool IncludeUnitTestAssembly()
+		{
+			return OptimizationTests.OptimizationTest1();
 		}
 	}
 }
