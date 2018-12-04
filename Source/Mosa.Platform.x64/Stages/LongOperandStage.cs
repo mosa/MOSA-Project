@@ -97,6 +97,21 @@ namespace Mosa.Platform.x64.Stages
 			context.AppendInstruction(X64.Movzx8To64, resultOperand, v1);
 		}
 
+		private void CompareIntBranch64(Context context)
+		{
+			OptimizeBranch(context);
+
+			var target = context.BranchTargets[0];
+			var condition = context.ConditionCode;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var branch = GetBranch(condition);
+
+			context.SetInstruction(X64.Cmp32, null, operand1, operand2);
+			context.AppendInstruction(branch, target);
+		}
+
 		private void ConvertFloatR4ToInt64(InstructionNode node)
 		{
 			node.ReplaceInstruction(X64.Cvtss2sd);
@@ -116,21 +131,6 @@ namespace Mosa.Platform.x64.Stages
 		private void ConvertInt64ToFloatR8(InstructionNode node)
 		{
 			node.SetInstruction(X64.Cvtsi2sd32, node.Result, node.Operand1);
-		}
-
-		private void CompareIntBranch64(Context context)
-		{
-			OptimizeBranch(context);
-
-			var target = context.BranchTargets[0];
-			var condition = context.ConditionCode;
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
-
-			var branch = GetBranch(condition);
-
-			context.SetInstruction(X64.Cmp32, null, operand1, operand2);
-			context.AppendInstruction(branch, target);
 		}
 
 		private void IfThenElse64(Context context)
@@ -226,14 +226,14 @@ namespace Mosa.Platform.x64.Stages
 			node.SetInstruction2(X64.Mul64, v1, node.Result, node.Operand1, node.Operand2);
 		}
 
-		private void ShiftRight64(InstructionNode node)
-		{
-			node.ReplaceInstruction(X64.Shr64);
-		}
-
 		private void ShiftLeft64(InstructionNode node)
 		{
 			node.ReplaceInstruction(X64.Shl64);
+		}
+
+		private void ShiftRight64(InstructionNode node)
+		{
+			node.ReplaceInstruction(X64.Shr64);
 		}
 
 		private void SignExtend16x64(InstructionNode node)
@@ -292,21 +292,6 @@ namespace Mosa.Platform.x64.Stages
 
 		#region Utility Methods
 
-		public static void OptimizeBranch(Context context)
-		{
-			// Note: same method as in x64
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
-
-			if (operand2.IsConstant || operand1.IsVirtualRegister)
-				return;
-
-			// Move constant to the right
-			context.Operand1 = operand2;
-			context.Operand2 = operand1;
-			context.ConditionCode = context.ConditionCode.GetReverse();
-		}
-
 		public static BaseInstruction GetBranch(ConditionCode condition)
 		{
 			switch (condition)
@@ -332,6 +317,21 @@ namespace Mosa.Platform.x64.Stages
 
 				default: throw new NotSupportedException();
 			}
+		}
+
+		public static void OptimizeBranch(Context context)
+		{
+			// Note: same method as in x64
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			if (operand2.IsConstant || operand1.IsVirtualRegister)
+				return;
+
+			// Move constant to the right
+			context.Operand1 = operand2;
+			context.Operand2 = operand1;
+			context.ConditionCode = context.ConditionCode.GetReverse();
 		}
 
 		#endregion Utility Methods

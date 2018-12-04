@@ -204,6 +204,34 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[3].AppendInstruction(X86.Jmp, nextBlock.Block);
 		}
 
+		private void CompareIntBranch64(Context context)
+		{
+			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
+			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
+
+			var target = context.BranchTargets[0];
+
+			var branch = IRTransformationStage.GetBranch(context.ConditionCode);
+			var branchUnsigned = IRTransformationStage.GetBranch(context.ConditionCode.GetUnsigned());
+
+			var nextBlock = Split(context);
+			var newBlocks = CreateNewBlockContexts(2, context.Label);
+
+			// Compare high dwords
+			context.SetInstruction(X86.Cmp32, null, op1H, op2H);
+			context.AppendInstruction(X86.BranchEqual, newBlocks[1].Block);
+			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
+
+			// Branch if check already gave results
+			newBlocks[0].AppendInstruction(branch, target);
+			newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
+
+			// Compare low dwords
+			newBlocks[1].AppendInstruction(X86.Cmp32, null, op1L, op2L);
+			newBlocks[1].AppendInstruction(branchUnsigned, target);
+			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.Block);
+		}
+
 		private void ConvertFloatR4ToInt64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
@@ -234,34 +262,6 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Cvtsi2sd32, context.Result, op1Low);
 		}
 
-		private void CompareIntBranch64(Context context)
-		{
-			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
-			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
-
-			var target = context.BranchTargets[0];
-
-			var branch = IRTransformationStage.GetBranch(context.ConditionCode);
-			var branchUnsigned = IRTransformationStage.GetBranch(context.ConditionCode.GetUnsigned());
-
-			var nextBlock = Split(context);
-			var newBlocks = CreateNewBlockContexts(2, context.Label);
-
-			// Compare high dwords
-			context.SetInstruction(X86.Cmp32, null, op1H, op2H);
-			context.AppendInstruction(X86.BranchEqual, newBlocks[1].Block);
-			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
-
-			// Branch if check already gave results
-			newBlocks[0].AppendInstruction(branch, target);
-			newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
-
-			// Compare low dwords
-			newBlocks[1].AppendInstruction(X86.Cmp32, null, op1L, op2L);
-			newBlocks[1].AppendInstruction(branchUnsigned, target);
-			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.Block);
-		}
-
 		private void ExpandMul(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
@@ -285,6 +285,20 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.IMul32, v3, v3, op1H);
 				context.AppendInstruction(X86.Add32, resultHigh, v4, v3);
 			}
+		}
+
+		private void GetHigh64(Context context)
+		{
+			SplitLongOperand(context.Operand1, out Operand op0L, out Operand op0H);
+
+			context.SetInstruction(X86.Mov32, context.Result, op0H);
+		}
+
+		private void GetLow64(Context context)
+		{
+			SplitLongOperand(context.Operand1, out Operand op0L, out Operand op0H);
+
+			context.SetInstruction(X86.Mov32, context.Result, op0L);
 		}
 
 		private void IfThenElse64(Context context)
@@ -449,27 +463,6 @@ namespace Mosa.Platform.x86.Stages
 			ExpandMul(context);
 		}
 
-		private void ShiftRight64(Context context)
-		{
-			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
-			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
-
-			var count = context.Operand2;
-
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-			context.SetInstruction(X86.Shrd32, resultLow, op1L, op1H, count);
-			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero);
-			context.AppendInstruction(X86.Shr32, v1, op1H, count);
-			context.AppendInstruction(X86.Mov32, v2, count);
-
-			// FUTURE: Optimization - TestConst32 and conditional moves are not necessary if count is a constant
-			context.AppendInstruction(X86.Test32, null, v2, CreateConstant(32));
-			context.AppendInstruction(X86.CMovNotEqual32, resultLow, v1);
-			context.AppendInstruction(X86.CMovEqual32, resultHigh, v1);
-		}
-
 		private void ShiftLeft64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
@@ -489,6 +482,27 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Test32, null, v2, CreateConstant(32));
 			context.AppendInstruction(X86.CMovNotEqual32, resultHigh, v1);
 			context.AppendInstruction(X86.CMovEqual32, resultLow, v1);
+		}
+
+		private void ShiftRight64(Context context)
+		{
+			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
+			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
+
+			var count = context.Operand2;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			context.SetInstruction(X86.Shrd32, resultLow, op1L, op1H, count);
+			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero);
+			context.AppendInstruction(X86.Shr32, v1, op1H, count);
+			context.AppendInstruction(X86.Mov32, v2, count);
+
+			// FUTURE: Optimization - TestConst32 and conditional moves are not necessary if count is a constant
+			context.AppendInstruction(X86.Test32, null, v2, CreateConstant(32));
+			context.AppendInstruction(X86.CMovNotEqual32, resultLow, v1);
+			context.AppendInstruction(X86.CMovEqual32, resultHigh, v1);
 		}
 
 		private void SignExtend16x64(Context context)
@@ -521,20 +535,6 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Movsx8To32, v1, context.Operand1);
 			context.AppendInstruction2(X86.Cdq, resultHigh, resultLow, v1);
-		}
-
-		private void GetLow64(Context context)
-		{
-			SplitLongOperand(context.Operand1, out Operand op0L, out Operand op0H);
-
-			context.SetInstruction(X86.Mov32, context.Result, op0L);
-		}
-
-		private void GetHigh64(Context context)
-		{
-			SplitLongOperand(context.Operand1, out Operand op0L, out Operand op0H);
-
-			context.SetInstruction(X86.Mov32, context.Result, op0H);
 		}
 
 		private void StoreInt64(Context context)
