@@ -23,6 +23,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.Add64, Add64);
 			AddVisitation(IRInstruction.ArithShiftRight64, ArithShiftRight64);
 			AddVisitation(IRInstruction.Call, Call);
+			AddVisitation(IRInstruction.CompareInt32x64, CompareInt32x64);
 			AddVisitation(IRInstruction.CompareInt64x32, CompareInt64x32);
 			AddVisitation(IRInstruction.CompareInt64x64, CompareInt64x64);
 			AddVisitation(IRInstruction.CompareIntBranch64, CompareIntBranch64);
@@ -150,6 +151,11 @@ namespace Mosa.Platform.x86.Stages
 					SplitLongOperand(operand, out Operand op0L, out Operand op0H);
 				}
 			}
+		}
+
+		private void CompareInt32x64(Context context)
+		{
+			CompareInt32x64(context);
 		}
 
 		private void CompareInt64x32(Context context)

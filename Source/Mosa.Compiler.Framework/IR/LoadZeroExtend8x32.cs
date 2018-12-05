@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class LoadZeroExtend8x32 : BaseIRInstruction
 	{
-		public override int ID { get { return 73; } }
+		public override int ID { get { return 74; } }
 
 		public LoadZeroExtend8x32()
 			: base(2, 1)

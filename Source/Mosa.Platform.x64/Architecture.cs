@@ -235,12 +235,13 @@ namespace Mosa.Platform.x64
 				{
 					new LongOperandStage(),
 					new IRTransformationStage(),
-					new StopStage(),	// Temp
 
-					//new TweakStage(),
+					new TweakStage(),
+
 					//new FixedRegisterAssignmentStage(),
 					//new SimpleDeadCodeRemovalStage(),
 					new AddressModeConversionStage(),
+					new StopStage(),	// Temp
 
 					//new FloatingPointStage(),
 					//new ConstantInstructionStage(),

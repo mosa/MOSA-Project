@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Out16 : X64Instruction
 	{
-		public override int ID { get { return 486; } }
+		public override int ID { get { return 491; } }
 
 		internal Out16()
 			: base(0, 2)

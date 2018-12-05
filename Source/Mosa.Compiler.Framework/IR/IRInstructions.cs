@@ -36,6 +36,7 @@ namespace Mosa.Compiler.Framework.IR
 			IRInstruction.CompareFloatR4,
 			IRInstruction.CompareFloatR8,
 			IRInstruction.CompareInt32x32,
+			IRInstruction.CompareInt32x64,
 			IRInstruction.CompareInt64x32,
 			IRInstruction.CompareInt64x64,
 			IRInstruction.CompareIntBranch32,

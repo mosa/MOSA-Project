@@ -23,6 +23,7 @@ namespace Mosa.Platform.x64.Stages
 		{
 			AddVisitation(IRInstruction.Add64, Add64);
 			AddVisitation(IRInstruction.ArithShiftRight64, ArithShiftRight64);
+			AddVisitation(IRInstruction.CompareInt32x64, CompareInt32x64);
 			AddVisitation(IRInstruction.CompareInt64x32, CompareInt64x32);
 			AddVisitation(IRInstruction.CompareInt64x64, CompareInt64x64);
 			AddVisitation(IRInstruction.CompareIntBranch64, CompareIntBranch64);
@@ -75,6 +76,11 @@ namespace Mosa.Platform.x64.Stages
 		private void ArithShiftRight64(InstructionNode node)
 		{
 			node.ReplaceInstruction(X64.Sar32);
+		}
+
+		private void CompareInt32x64(Context context)
+		{
+			CompareInt64x64(context);
 		}
 
 		private void CompareInt64x32(Context context)
