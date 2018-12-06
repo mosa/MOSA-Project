@@ -3,11 +3,11 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Platform.Intel;
-using Mosa.Platform.Intel.CompilerStages;
 using Mosa.Platform.x64.CompilerStages;
 using Mosa.Platform.x64.Stages;
 using System.Collections.Generic;
@@ -213,8 +213,15 @@ namespace Mosa.Platform.x64
 		/// <param name="compilerPipeline">The pipeline to extend.</param>
 		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline, CompilerOptions compilerOptions)
 		{
+			if (compilerOptions.MultibootSpecification == MultibootSpecification.V1)
+			{
+				compilerPipeline.InsertAfterFirst<TypeInitializerSchedulerStage>(
+					new MultibootV1Stage()
+				);
+			}
+
 			compilerPipeline.Add(
-				new StartUpStage()
+				new Intel.CompilerStages.StartUpStage()
 			);
 
 			compilerPipeline.Add(
