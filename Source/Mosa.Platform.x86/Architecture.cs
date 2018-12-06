@@ -224,7 +224,7 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// Extends the pre-compiler pipeline with x86 compiler stages.
+		/// Extends the compiler pipeline with x86 compiler stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The pipeline to extend.</param>
 		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline, CompilerOptions compilerOptions)

@@ -1,28 +1,14 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Platform.Intel;
-using System.IO;
-using System.Text;
 
 namespace Mosa.Platform.x86.CompilerStages
 {
-	/// <summary>
-	/// Writes a multiboot v0.6.95 header into the generated binary.
-	/// </summary>
-	/// <remarks>
-	/// This compiler stage writes a multiboot header into the
-	/// the data section of the binary file and also creates a multiboot
-	/// compliant entry point into the binary.<para/>
-	/// The header and entry point written by this stage is compliant with
-	/// the specification at
-	/// http://www.gnu.org/software/grub/manual/multiboot/multiboot.html.
-	/// </remarks>
 	public sealed class MultibootV1Stage : Intel.CompilerStages.MultibootV1Stage
 	{
-		protected override void RunPostCompile()
+		protected override void CreateMultibootMethod()
 		{
 			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 			var ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
@@ -60,8 +46,6 @@ namespace Mosa.Platform.x86.CompilerStages
 			ctx.AppendInstruction(X86.Ret);
 
 			Compiler.CompileMethod(multibootMethod, basicBlocks);
-
-			WriteMultibootHeader();
 		}
 	}
 }

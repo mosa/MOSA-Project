@@ -193,7 +193,7 @@ namespace Mosa.Platform.ARMv6
 		public override List<BaseInstruction> Instructions { get { return ARMv6Instructions.List; } }
 
 		/// <summary>
-		/// Extends the assembly compiler pipeline with ARMv6 specific stages.
+		/// Extends the compiler pipeline with ARMv6 specific stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The pipeline to extend.</param>
 		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline, CompilerOptions compilerOptions)
