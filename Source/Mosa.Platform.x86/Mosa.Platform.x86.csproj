@@ -339,6 +339,7 @@
     <Compile Include="Intrinsic\Nop.cs" />
     <Compile Include="Intrinsic\Out8.cs" />
     <Compile Include="Intrinsic\Sti.cs" />
+    <Compile Include="CompilerStages\MethodTableBuilderStage.cs" />
     <Compile Include="CompilerStages\MultibootV1Stage.cs" />
     <Compile Include="X86.cs" />
     <Compile Include="Stages\TweakStage.cs" />
