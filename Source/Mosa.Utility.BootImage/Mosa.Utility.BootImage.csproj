@@ -48,7 +48,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="BlockFileStreamDriver.cs" />
-    <Compile Include="BootFormat.cs" />
     <Compile Include="BootLoader.cs" />
     <Compile Include="BootImageOptions.cs" />
     <Compile Include="FileSystemFormat.cs" />

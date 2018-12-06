@@ -5,7 +5,7 @@ using Mosa.Compiler.Framework.IR;
 using Mosa.Platform.Intel;
 using System.Diagnostics;
 
-namespace Mosa.Platform.x86.Stages
+namespace Mosa.Platform.x64.Stages
 {
 	/// <summary>
 	/// Completes the stack handling after register allocation
@@ -19,15 +19,15 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		protected override void AddPrologueInstructions(Context context)
 		{
-			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
-			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
+			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, GeneralPurposeRegister.EBP);
+			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, GeneralPurposeRegister.ESP);
 
-			context.SetInstruction(X86.Push32, null, ebp);
-			context.AppendInstruction(X86.Mov32, ebp, esp);
+			context.SetInstruction(X64.Push64, null, ebp);
+			context.AppendInstruction(X64.Mov64, ebp, esp);
 
 			if (MethodCompiler.StackSize != 0)
 			{
-				context.AppendInstruction(X86.Sub32, esp, esp, CreateConstant(-MethodCompiler.StackSize));
+				context.AppendInstruction(X64.Sub64, esp, esp, CreateConstant(-MethodCompiler.StackSize));
 			}
 		}
 
@@ -37,18 +37,18 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		protected override void AddEpilogueInstructions(Context context)
 		{
-			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
-			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
+			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, GeneralPurposeRegister.EBP);
+			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, GeneralPurposeRegister.ESP);
 
 			context.Empty();
 
 			if (MethodCompiler.StackSize != 0)
 			{
-				context.AppendInstruction(X86.Add32, esp, esp, CreateConstant(-MethodCompiler.StackSize));
+				context.AppendInstruction(X64.Add64, esp, esp, CreateConstant(-MethodCompiler.StackSize));
 			}
 
-			context.AppendInstruction(X86.Pop32, ebp);
-			context.AppendInstruction(X86.Ret);
+			context.AppendInstruction(X64.Pop64, ebp);
+			context.AppendInstruction(X64.Ret);
 		}
 	}
 }

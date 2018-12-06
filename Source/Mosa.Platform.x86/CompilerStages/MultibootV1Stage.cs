@@ -20,7 +20,7 @@ namespace Mosa.Platform.x86.CompilerStages
 	/// the specification at
 	/// http://www.gnu.org/software/grub/manual/multiboot/multiboot.html.
 	/// </remarks>
-	public sealed class Multiboot0695Stage : BaseCompilerStage
+	public sealed class MultibootV1Stage : BaseCompilerStage
 	{
 		#region Constants
 

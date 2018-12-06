@@ -84,6 +84,7 @@
     <Compile Include="Architecture.cs" />
     <Compile Include="ArchitectureFeatureFlags.cs" />
     <Compile Include="BaseTransformationStage.cs" />
+    <Compile Include="CompilerStages\InterruptVectorStage.cs" />
     <Compile Include="Instructions\Adc32.cs" />
     <Compile Include="Instructions\Adc64.cs" />
     <Compile Include="Instructions\Add32.cs" />
@@ -332,6 +333,7 @@
     <Compile Include="Instructions\Xor64.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stages\AddressModeConversionStage.cs" />
+    <Compile Include="Stages\BuildStackStage.cs" />
     <Compile Include="Stages\FixedRegisterAssignmentStage.cs" />
     <Compile Include="Stages\FloatingPointStage.cs" />
     <Compile Include="Stages\IRTransformationStage.cs" />
@@ -349,7 +351,6 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="CompilerStages\" />
     <Folder Include="Intrinsic\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

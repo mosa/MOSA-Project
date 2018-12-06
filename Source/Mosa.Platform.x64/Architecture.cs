@@ -7,6 +7,8 @@ using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Platform.Intel;
+using Mosa.Platform.Intel.CompilerStages;
+using Mosa.Platform.x64.CompilerStages;
 using Mosa.Platform.x64.Stages;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -209,19 +211,15 @@ namespace Mosa.Platform.x64
 		/// Extends the compiler pipeline with x64 specific stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline)
+		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline, CompilerOptions compilerOptions)
 		{
-			//compilerPipeline.Add(
-			//	new StartUpStage()
-			//);
+			compilerPipeline.Add(
+				new StartUpStage()
+			);
 
-			//compilerPipeline.Add(
-			//	new InterruptVectorStage()
-			//);
-
-			//compilerPipeline.Add(
-			//	new SSEInitStage()
-			//);
+			compilerPipeline.Add(
+				new InterruptVectorStage()
+			);
 		}
 
 		/// <summary>
@@ -241,21 +239,22 @@ namespace Mosa.Platform.x64
 					new AddressModeConversionStage(),
 					new FloatingPointStage(),
 					new StopStage(),	// Temp
-
-					//new ConstantInstructionStage(),
 				});
 
-			//compilerPipeline.InsertAfterLast<StackLayoutStage>(
-			//	new BuildStackStage()
-			//);
+			compilerPipeline.InsertAfterLast<StackLayoutStage>(
+				new BuildStackStage()
+			);
 
 			//compilerPipeline.InsertBefore<CodeGenerationStage>(
-			//	new FinalTweakStage()
-			//);
+			//	new BaseMethodCompilerStage[]
+			//	{
+			//		new FinalTweakStage(),
+			//		compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
+			//	});
 
-			//compilerPipeline.InsertBefore<CodeGenerationStage>(
-			//	new JumpOptimizationStage()
-			//);
+			compilerPipeline.InsertBefore<CodeGenerationStage>(
+				new JumpOptimizationStage()
+			);
 		}
 
 		/// <summary>

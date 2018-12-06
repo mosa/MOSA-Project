@@ -616,7 +616,7 @@
             this.cbBootFormat.FormattingEnabled = true;
             this.cbBootFormat.ItemHeight = 23;
             this.cbBootFormat.Items.AddRange(new object[] {
-            "Multiboot v0.7"});
+            "Multiboot v1"});
             this.cbBootFormat.Location = new System.Drawing.Point(273, 47);
             this.cbBootFormat.Name = "cbBootFormat";
             this.cbBootFormat.Size = new System.Drawing.Size(127, 29);

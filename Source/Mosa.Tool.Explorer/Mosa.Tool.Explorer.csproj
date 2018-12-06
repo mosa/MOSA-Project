@@ -147,7 +147,6 @@
     <Content Include="..\..\3rdParty\app-icons\magnifier.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Mosa\Compiler\" />
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>

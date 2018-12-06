@@ -31,7 +31,16 @@ namespace Mosa.Tool.Explorer
 		[Option("x64")]
 		public bool X64 { get; set; }
 
+		[Option("x32")]
+		public bool X32 { get; set; }
+
 		[Value(0)]
 		public IEnumerable<string> Files { get; set; }
+
+		public Options()
+		{
+			X64 = false;
+			X32 = true;
+		}
 	}
 }

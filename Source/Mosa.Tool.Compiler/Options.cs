@@ -45,9 +45,6 @@ namespace Mosa.Tool.Compiler
 			}
 		}
 
-		[Option('b', "boot", HelpText = "Specify the bootable format of the produced binary [mb0.7].")]
-		public string BootFormat { set { CompilerOptions.BootStageFactory = GetBootStageFactory(value); } }
-
 		[Option('a', "architecture", HelpText = "Select one of the MOSA architectures to compile for [x86|x64|ARMv6].", Required = true)]
 		public string Architecture { set { CompilerOptions.Architecture = SelectArchitecture(value); } }
 
@@ -114,16 +111,6 @@ namespace Mosa.Tool.Compiler
 			{
 				case "x86": return Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect);
 				default: throw new NotImplementCompilerException(string.Format("Unknown or unsupported Architecture {0}.", architecture));
-			}
-		}
-
-		private static Func<BaseCompilerStage> GetBootStageFactory(string format)
-		{
-			switch (format.ToLower())
-			{
-				case "multibootHeader-0.7":
-				case "mb0.7": return delegate { return new Mosa.Platform.x86.CompilerStages.Multiboot0695Stage(); };
-				default: throw new NotImplementCompilerException(string.Format("Unknown or unsupported boot format {0}.", format));
 			}
 		}
 

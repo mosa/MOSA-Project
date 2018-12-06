@@ -150,7 +150,7 @@ namespace Mosa.Compiler.Framework
 		/// Extends the pre-compiler pipeline with architecture specific compiler stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public abstract void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline);
+		public abstract void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline, CompilerOptions compilerOptions);
 
 		/// <summary>
 		///	Requests the architecture to add architecture specific compilation stages to the pipeline. These
