@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			AddVisitation(X86.Cdq, Cdq);
+			AddVisitation(X86.Cdq32, Cdq32);
 			AddVisitation(X86.Div32, Div32);
 			AddVisitation(X86.IDiv32, IDiv32);
 			AddVisitation(X86.IMul32, IMul32);
@@ -36,7 +36,7 @@ namespace Mosa.Platform.x86.Stages
 
 		#region Visitation Methods
 
-		private void Cdq(Context context)
+		private void Cdq32(Context context)
 		{
 			if (context.Result.IsCPURegister
 				&& context.Result2.IsCPURegister
@@ -54,7 +54,7 @@ namespace Mosa.Platform.x86.Stages
 			var EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
 
 			context.SetInstruction(X86.Mov32, EAX, operand1);
-			context.AppendInstruction2(X86.Cdq, EDX, EAX, EAX);
+			context.AppendInstruction2(X86.Cdq32, EDX, EAX, EAX);
 			context.AppendInstruction(X86.Mov32, result, EDX);
 			context.AppendInstruction(X86.Mov32, result2, EAX);
 		}
@@ -277,17 +277,17 @@ namespace Mosa.Platform.x86.Stages
 
 		private void Rcr32(Context context)
 		{
-			HandleShiftOperation(context, X86.Rcr32);
+			HandleShiftOperation32(context, X86.Rcr32);
 		}
 
 		private void Sar32(Context context)
 		{
-			HandleShiftOperation(context, X86.Sar32);
+			HandleShiftOperation32(context, X86.Sar32);
 		}
 
 		private void Shl32(Context context)
 		{
-			HandleShiftOperation(context, X86.Shl32);
+			HandleShiftOperation32(context, X86.Shl32);
 		}
 
 		private void Shld32(Context context)
@@ -311,7 +311,7 @@ namespace Mosa.Platform.x86.Stages
 
 		private void Shr32(Context context)
 		{
-			HandleShiftOperation(context, X86.Shr32);
+			HandleShiftOperation32(context, X86.Shr32);
 		}
 
 		private void Shrd32(Context context)
@@ -335,9 +335,12 @@ namespace Mosa.Platform.x86.Stages
 
 		#endregion Visitation Methods
 
-		private void HandleShiftOperation(Context context, BaseInstruction instruction)
+		private void HandleShiftOperation32(Context context, BaseInstruction instruction)
 		{
-			if (context.Operand2.IsConstant || context.Operand2.IsCPURegister)
+			if (context.Operand2.IsConstant)
+				return;
+
+			if (context.Operand2.Register == GeneralPurposeRegister.ECX)
 				return;
 
 			var operand1 = context.Operand1;
@@ -347,8 +350,7 @@ namespace Mosa.Platform.x86.Stages
 			var ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
 
 			context.SetInstruction(X86.Mov32, ECX, operand2);
-			context.AppendInstruction(X86.Mov32, result, operand1);
-			context.AppendInstruction(instruction, result, result, ECX);
+			context.AppendInstruction(instruction, result, operand1, ECX);
 		}
 	}
 }

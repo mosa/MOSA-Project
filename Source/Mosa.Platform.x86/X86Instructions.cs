@@ -23,7 +23,7 @@ namespace Mosa.Platform.x86
 			X86.Bt32,
 			X86.Bts32,
 			X86.Call,
-			X86.Cdq,
+			X86.Cdq32,
 			X86.Cli,
 			X86.Cmp32,
 			X86.CmpXChgLoad32,

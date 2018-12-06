@@ -11,10 +11,10 @@ namespace Mosa.Platform.x64.Stages
 	/// <summary>
 	/// Transforms IR instructions into their appropriate X64.
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.x64.BaseTransformationStage" />
 	/// <remarks>
 	/// This transformation stage transforms IR instructions into their equivalent X86 sequences.
 	/// </remarks>
+	/// <seealso cref="Mosa.Platform.x64.BaseTransformationStage" />
 	public sealed class IRTransformationStage : BaseTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()
@@ -302,7 +302,7 @@ namespace Mosa.Platform.x64.Stages
 			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.SetInstruction2(X64.Cdq, v1, v2, operand1);
+			context.SetInstruction2(X64.Cdq32, v1, v2, operand1);
 			context.AppendInstruction2(X64.IDiv32, v3, result, v1, v2, operand2);
 		}
 
@@ -651,7 +651,7 @@ namespace Mosa.Platform.x64.Stages
 			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.SetInstruction2(X64.Cdq, v1, v2, operand1);
+			context.SetInstruction2(X64.Cdq32, v1, v2, operand1);
 			context.AppendInstruction2(X64.IDiv32, result, v3, v1, v2, operand2);
 		}
 

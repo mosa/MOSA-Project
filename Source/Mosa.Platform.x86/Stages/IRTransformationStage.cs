@@ -303,7 +303,7 @@ namespace Mosa.Platform.x86.Stages
 			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.SetInstruction2(X86.Cdq, v1, v2, operand1);
+			context.SetInstruction2(X86.Cdq32, v1, v2, operand1);
 			context.AppendInstruction2(X86.IDiv32, v3, result, v1, v2, operand2);
 		}
 
@@ -651,7 +651,7 @@ namespace Mosa.Platform.x86.Stages
 			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.SetInstruction2(X86.Cdq, v1, v2, operand1);
+			context.SetInstruction2(X86.Cdq32, v1, v2, operand1);
 			context.AppendInstruction2(X86.IDiv32, result, v3, v1, v2, operand2);
 		}
 

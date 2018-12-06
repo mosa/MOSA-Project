@@ -86,6 +86,8 @@
     <Compile Include="SegmentRegister.cs" />
     <Compile Include="SSE2Register.cs" />
     <Compile Include="Stages\AddressModeConversionStage.cs" />
+    <Compile Include="Stages\FloatingPointStage.cs" />
+    <Compile Include="Stages\SimpleDeadCodeRemovalStage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CompilerStages\" />

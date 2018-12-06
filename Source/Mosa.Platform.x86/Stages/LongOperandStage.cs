@@ -363,7 +363,7 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
 
 			context.SetInstruction(X86.MovsxLoad16, resultLow, StackFrame, lowOffset);
-			context.AppendInstruction2(X86.Cdq, resultHigh, resultLow, resultLow);
+			context.AppendInstruction2(X86.Cdq32, resultHigh, resultLow, resultLow);
 		}
 
 		private void LoadParamSignExtend32x64(Context context)
@@ -372,7 +372,7 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
 
 			context.SetInstruction(X86.MovLoad32, resultLow, StackFrame, lowOffset);
-			context.AppendInstruction2(X86.Cdq, resultHigh, resultLow, resultLow);
+			context.AppendInstruction2(X86.Cdq32, resultHigh, resultLow, resultLow);
 		}
 
 		private void LoadParamSignExtend8x64(Context context)
@@ -381,7 +381,7 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
 
 			context.SetInstruction(X86.MovsxLoad8, resultLow, StackFrame, lowOffset);
-			context.AppendInstruction2(X86.Cdq, resultHigh, resultLow, resultLow);
+			context.AppendInstruction2(X86.Cdq32, resultHigh, resultLow, resultLow);
 		}
 
 		private void LoadParamZeroExtended16x64(Context context)
@@ -520,7 +520,7 @@ namespace Mosa.Platform.x86.Stages
 			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
 			context.SetInstruction(X86.Movsx16To32, v1, context.Operand1);
-			context.AppendInstruction2(X86.Cdq, resultHigh, resultLow, v1);
+			context.AppendInstruction2(X86.Cdq32, resultHigh, resultLow, v1);
 		}
 
 		private void SignExtend32x64(Context context)
@@ -530,7 +530,7 @@ namespace Mosa.Platform.x86.Stages
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			context.SetInstruction(X86.Mov32, v1, context.Operand1);
-			context.AppendInstruction2(X86.Cdq, resultHigh, resultLow, v1);
+			context.AppendInstruction2(X86.Cdq32, resultHigh, resultLow, v1);
 		}
 
 		private void SignExtend8x64(Context context)
@@ -540,7 +540,7 @@ namespace Mosa.Platform.x86.Stages
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			context.SetInstruction(X86.Movsx8To32, v1, context.Operand1);
-			context.AppendInstruction2(X86.Cdq, resultHigh, resultLow, v1);
+			context.AppendInstruction2(X86.Cdq32, resultHigh, resultLow, v1);
 		}
 
 		private void StoreInt64(Context context)

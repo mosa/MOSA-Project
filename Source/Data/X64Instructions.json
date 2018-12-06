@@ -447,7 +447,26 @@
 			]
 		},
 		{
-			"Name": "Cdq",
+			"Name": "Cdq32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 2,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],opcode=0x99"
+				}
+			]
+		},
+		{
+			"Name": "Cdq64",
 			"FamilyName": "X64",
 			"FlagsCleared": "",
 			"FlagsModified": "",
