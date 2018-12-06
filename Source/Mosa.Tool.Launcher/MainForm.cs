@@ -170,9 +170,9 @@ namespace Mosa.Tool.Launcher
 
 			switch (cbBootFormat.SelectedIndex)
 			{
-				case 0: Options.BootFormat = BootFormat.Multiboot_0_7; break;
-				case 1: Options.BootFormat = BootFormat.Multiboot_0_7_video; break;
-				default: Options.BootFormat = BootFormat.NotSpecified; break;
+				case 0: Options.MultibootSpecification = MultibootSpecification.V1; break;
+				case 1: Options.MultibootSpecification = MultibootSpecification.V2; break;
+				default: Options.MultibootSpecification = MultibootSpecification.None; break;
 			}
 
 			switch (cbBootFileSystem.SelectedIndex)
@@ -271,10 +271,9 @@ namespace Mosa.Tool.Launcher
 				default: cbPlatform.SelectedIndex = 0; break;
 			}
 
-			switch (Options.BootFormat)
+			switch (Options.MultibootSpecification)
 			{
-				case BootFormat.Multiboot_0_7: cbBootFormat.SelectedIndex = 0; break;
-				case BootFormat.Multiboot_0_7_video: cbBootFormat.SelectedIndex = 1; break;
+				case MultibootSpecification.V1: cbBootFormat.SelectedIndex = 0; break;
 				default: cbBootFormat.SelectedIndex = 0; break;
 			}
 

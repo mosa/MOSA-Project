@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				context.AppendInstruction(IRInstruction.MoveInt64, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return64BitRegister), context.Operand1);
+				context.SetInstruction(IRInstruction.MoveInt64, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return64BitRegister), context.Operand1);
 			}
 		}
 

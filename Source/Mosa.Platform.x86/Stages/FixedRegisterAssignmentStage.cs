@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			AddVisitation(X86.Cdq, Cdq);
+			AddVisitation(X86.Cdq32, Cdq32);
 			AddVisitation(X86.Div32, Div32);
 			AddVisitation(X86.IDiv32, IDiv32);
 			AddVisitation(X86.IMul32, IMul32);
@@ -36,11 +36,7 @@ namespace Mosa.Platform.x86.Stages
 
 		#region Visitation Methods
 
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Cdq"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Cdq(Context context)
+		private void Cdq32(Context context)
 		{
 			if (context.Result.IsCPURegister
 				&& context.Result2.IsCPURegister
@@ -50,24 +46,20 @@ namespace Mosa.Platform.x86.Stages
 				&& context.Operand1.Register == GeneralPurposeRegister.EAX)
 				return;
 
-			Operand operand1 = context.Operand1;
-			Operand result = context.Result;
-			Operand result2 = context.Result2;
+			var operand1 = context.Operand1;
+			var result = context.Result;
+			var result2 = context.Result2;
 
-			Operand EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-			Operand EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+			var EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
 
 			context.SetInstruction(X86.Mov32, EAX, operand1);
-			context.AppendInstruction2(X86.Cdq, EDX, EAX, EAX);
+			context.AppendInstruction2(X86.Cdq32, EDX, EAX, EAX);
 			context.AppendInstruction(X86.Mov32, result, EDX);
 			context.AppendInstruction(X86.Mov32, result2, EAX);
 		}
 
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Div"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Div32(Context context)
+		private void Div32(Context context)
 		{
 			if (context.Result.IsCPURegister
 				&& context.Result2.IsCPURegister
@@ -78,14 +70,14 @@ namespace Mosa.Platform.x86.Stages
 				&& context.Operand2.Register == GeneralPurposeRegister.EAX)
 				return;
 
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
-			Operand operand3 = context.Operand3;
-			Operand result = context.Result;
-			Operand result2 = context.Result2;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var operand3 = context.Operand3;
+			var result = context.Result;
+			var result2 = context.Result2;
 
-			Operand EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-			Operand EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+			var EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
 
 			context.SetInstruction(X86.Mov32, EDX, operand1);
 			context.AppendInstruction(X86.Mov32, EAX, operand2);
@@ -96,7 +88,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else
 			{
-				Operand v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+				var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 				context.AppendInstruction(X86.Mov32, v3, operand3);
 				context.AppendInstruction2(X86.Div32, EDX, EAX, EDX, EAX, v3);
 			}
@@ -105,11 +97,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Mov32, result, EDX);
 		}
 
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.IDiv"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void IDiv32(Context context)
+		private void IDiv32(Context context)
 		{
 			if (context.Result.IsCPURegister
 				&& context.Result2.IsCPURegister
@@ -121,14 +109,14 @@ namespace Mosa.Platform.x86.Stages
 				&& context.Operand2.Register == GeneralPurposeRegister.EAX)
 				return;
 
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
-			Operand operand3 = context.Operand3;
-			Operand result = context.Result;
-			Operand result2 = context.Result2;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var operand3 = context.Operand3;
+			var result = context.Result;
+			var result2 = context.Result2;
 
-			Operand EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-			Operand EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+			var EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
 
 			context.SetInstruction(X86.Mov32, EDX, operand1);
 			context.AppendInstruction(X86.Mov32, EAX, operand2);
@@ -139,7 +127,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else
 			{
-				Operand v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+				var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 				context.AppendInstruction(X86.Mov32, v3, operand3);
 				context.AppendInstruction2(X86.IDiv32, EDX, EAX, EDX, EAX, v3);
 			}
@@ -148,27 +136,19 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Mov32, result, EDX);
 		}
 
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.IMul" /> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void IMul32(Context context)
+		private void IMul32(Context context)
 		{
 			if (!context.Operand2.IsConstant)
 				return;
 
-			Operand v1 = AllocateVirtualRegister(context.Operand2.Type);
-			Operand operand2 = context.Operand2;
+			var v1 = AllocateVirtualRegister(context.Operand2.Type);
+			var operand2 = context.Operand2;
 
 			context.Operand2 = v1;
 			context.InsertBefore().SetInstruction(X86.Mov32, v1, operand2);
 		}
 
-		/// <summary>
-		/// In8s the specified context.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void In8(Context context)
+		private void In16(Context context)
 		{
 			if (context.Result.IsCPURegister
 				&& context.Operand1.IsCPURegister
@@ -176,45 +156,18 @@ namespace Mosa.Platform.x86.Stages
 				&& (context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant))
 				return;
 
-			Operand result = context.Result;
-			Operand operand1 = context.Operand1;
+			var result = context.Result;
+			var operand1 = context.Operand1;
 
-			Operand EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
-			Operand EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
-
-			context.SetInstruction(X86.Mov32, EDX, operand1);
-			context.AppendInstruction(X86.In8, EAX, EDX);
-			context.AppendInstruction(X86.Mov32, result, EAX);
-		}
-
-		/// <summary>
-		/// In16s the specified context.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void In16(Context context)
-		{
-			if (context.Result.IsCPURegister
-				&& context.Operand1.IsCPURegister
-				&& context.Result.Register == GeneralPurposeRegister.EAX
-				&& (context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant))
-				return;
-
-			Operand result = context.Result;
-			Operand operand1 = context.Operand1;
-
-			Operand EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
-			Operand EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
+			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
+			var EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
 
 			context.SetInstruction(X86.Mov32, EDX, operand1);
 			context.AppendInstruction(X86.In16, EAX, EDX);
 			context.AppendInstruction(X86.Mov32, result, EAX);
 		}
 
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.In"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void In32(Context context)
+		private void In32(Context context)
 		{
 			if (context.Result.IsCPURegister
 				&& context.Operand1.IsCPURegister
@@ -222,22 +175,51 @@ namespace Mosa.Platform.x86.Stages
 				&& (context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant))
 				return;
 
-			Operand result = context.Result;
-			Operand operand1 = context.Operand1;
+			var result = context.Result;
+			var operand1 = context.Operand1;
 
-			Operand EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
-			Operand EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
+			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
+			var EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
 
 			context.SetInstruction(X86.Mov32, EDX, operand1);
 			context.AppendInstruction(X86.In32, EAX, EDX);
 			context.AppendInstruction(X86.Mov32, result, EAX);
 		}
 
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Mul"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Mul32(Context context)
+		private void In8(Context context)
+		{
+			if (context.Result.IsCPURegister
+				&& context.Operand1.IsCPURegister
+				&& context.Result.Register == GeneralPurposeRegister.EAX
+				&& (context.Operand1.Register == GeneralPurposeRegister.EDX || context.Operand1.IsConstant))
+				return;
+
+			var result = context.Result;
+			var operand1 = context.Operand1;
+
+			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, GeneralPurposeRegister.EAX);
+			var EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
+
+			context.SetInstruction(X86.Mov32, EDX, operand1);
+			context.AppendInstruction(X86.In8, EAX, EDX);
+			context.AppendInstruction(X86.Mov32, result, EAX);
+		}
+
+		private void MovStoreSeg32(Context context)
+		{
+			if (!context.Operand1.IsConstant)
+				return;
+
+			var result = context.Result;
+			var operand1 = context.Operand1;
+
+			var v1 = AllocateVirtualRegister(operand1.Type);
+
+			context.SetInstruction(X86.Mov32, v1, operand1);
+			context.AppendInstruction(X86.MovStoreSeg32, result, v1);
+		}
+
+		private void Mul32(Context context)
 		{
 			if (context.Result.IsCPURegister
 				&& context.Result2.IsCPURegister
@@ -248,13 +230,13 @@ namespace Mosa.Platform.x86.Stages
 				&& context.Operand1.Register == GeneralPurposeRegister.EAX)
 				return;
 
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
-			Operand result = context.Result;
-			Operand result2 = context.Result2;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var result = context.Result;
+			var result2 = context.Result2;
 
-			Operand EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-			Operand EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+			var EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
 
 			context.SetInstruction(X86.Mov32, EAX, operand1);
 
@@ -272,11 +254,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Mov32, result2, EAX);
 		}
 
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Out"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Out(Context context)
+		private void Out(Context context)
 		{
 			// TRANSFORM: OUT <= EDX, EAX && OUT <= imm8, EAX
 			if (context.Operand1.IsCPURegister
@@ -285,50 +263,34 @@ namespace Mosa.Platform.x86.Stages
 				&& context.Operand2.Register == GeneralPurposeRegister.EAX)
 				return;
 
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
-			BaseInstruction instruction = context.Instruction;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var instruction = context.Instruction;
 
-			Operand EAX = Operand.CreateCPURegister(operand2.Type, GeneralPurposeRegister.EAX);
-			Operand EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
+			var EAX = Operand.CreateCPURegister(operand2.Type, GeneralPurposeRegister.EAX);
+			var EDX = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
 
 			context.SetInstruction(X86.Mov32, EDX, operand1);
 			context.AppendInstruction(X86.Mov32, EAX, operand2);
 			context.AppendInstruction(instruction, null, EDX, EAX);
 		}
 
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Rcr"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Rcr32(Context context)
+		private void Rcr32(Context context)
 		{
-			HandleShiftOperation(context, X86.Rcr32);
+			HandleShiftOperation32(context, X86.Rcr32);
 		}
 
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Sar"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Sar32(Context context)
+		private void Sar32(Context context)
 		{
-			HandleShiftOperation(context, X86.Sar32);
+			HandleShiftOperation32(context, X86.Sar32);
 		}
 
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Shl"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Shl32(Context context)
+		private void Shl32(Context context)
 		{
-			HandleShiftOperation(context, X86.Shl32);
+			HandleShiftOperation32(context, X86.Shl32);
 		}
 
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Shld"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Shld32(Context context)
+		private void Shld32(Context context)
 		{
 			if (context.Operand3.IsConstant)
 				return;
@@ -336,31 +298,23 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand3.Register == GeneralPurposeRegister.ECX)
 				return;
 
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
-			Operand operand3 = context.Operand3;
-			Operand result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var operand3 = context.Operand3;
+			var result = context.Result;
 
-			Operand ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+			var ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
 
 			context.SetInstruction(X86.Mov32, ECX, operand3);
 			context.AppendInstruction(X86.Shld32, result, operand1, operand2, ECX);
 		}
 
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Shr"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Shr32(Context context)
+		private void Shr32(Context context)
 		{
-			HandleShiftOperation(context, X86.Shr32);
+			HandleShiftOperation32(context, X86.Shr32);
 		}
 
-		/// <summary>
-		/// Visitation function for <see cref="IX86Visitor.Shrd"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void Shrd32(Context context)
+		private void Shrd32(Context context)
 		{
 			if (context.Operand3.IsConstant)
 				return;
@@ -368,51 +322,35 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand3.Register == GeneralPurposeRegister.ECX)
 				return;
 
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
-			Operand operand3 = context.Operand3;
-			Operand result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var operand3 = context.Operand3;
+			var result = context.Result;
 
-			Operand ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+			var ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
 
 			context.SetInstruction(X86.Mov32, ECX, operand3);
 			context.AppendInstruction(X86.Shrd32, result, operand1, operand2, ECX);
 		}
 
-		/// <summary>
-		/// MovStoreSeg32
-		/// </summary>
-		/// <param name="context">The context.</param>
-		public void MovStoreSeg32(Context context)
-		{
-			if (!context.Operand1.IsConstant)
-				return;
-
-			Operand result = context.Result;
-			Operand operand1 = context.Operand1;
-
-			Operand v1 = AllocateVirtualRegister(operand1.Type);
-
-			context.SetInstruction(X86.Mov32, v1, operand1);
-			context.AppendInstruction(X86.MovStoreSeg32, result, v1);
-		}
-
 		#endregion Visitation Methods
 
-		private void HandleShiftOperation(Context context, BaseInstruction instruction)
+		private void HandleShiftOperation32(Context context, BaseInstruction instruction)
 		{
-			if (context.Operand2.IsConstant || context.Operand2.IsCPURegister)
+			if (context.Operand2.IsConstant)
 				return;
 
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
-			Operand result = context.Result;
+			if (context.Operand2.Register == GeneralPurposeRegister.ECX)
+				return;
 
-			Operand ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var result = context.Result;
+
+			var ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
 
 			context.SetInstruction(X86.Mov32, ECX, operand2);
-			context.AppendInstruction(X86.Mov32, result, operand1);
-			context.AppendInstruction(instruction, result, result, ECX);
+			context.AppendInstruction(instruction, result, operand1, ECX);
 		}
 	}
 }

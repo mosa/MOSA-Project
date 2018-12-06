@@ -32,6 +32,7 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly CompareFloatR4 CompareFloatR4 = new CompareFloatR4();
 		public static readonly CompareFloatR8 CompareFloatR8 = new CompareFloatR8();
 		public static readonly CompareInt32x32 CompareInt32x32 = new CompareInt32x32();
+		public static readonly CompareInt32x64 CompareInt32x64 = new CompareInt32x64();
 		public static readonly CompareInt64x32 CompareInt64x32 = new CompareInt64x32();
 		public static readonly CompareInt64x64 CompareInt64x64 = new CompareInt64x64();
 		public static readonly CompareIntBranch32 CompareIntBranch32 = new CompareIntBranch32();

@@ -67,7 +67,7 @@ namespace Mosa.Utility.UnitTests
 
 				Emulator = EmulatorType.Qemu,
 				ImageFormat = ImageFormat.IMG,
-				BootFormat = BootFormat.Multiboot_0_7,
+				MultibootSpecification = Compiler.Framework.MultibootSpecification.V1,
 				PlatformType = PlatformType.X86,
 				LinkerFormatType = LinkerFormatType.Elf32,
 				EmulatorMemoryInMB = 128,

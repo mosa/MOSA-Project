@@ -129,9 +129,9 @@ namespace Mosa.Compiler.Framework
 		public LinkerFormatType LinkerFormatType { get; set; }
 
 		/// <summary>
-		/// Gets or sets the compiler stage responsible for booting.
+		/// Gets or sets the multiboot specification.
 		/// </summary>
-		public Func<BaseCompilerStage> BootStageFactory { get; set; }
+		public MultibootSpecification MultibootSpecification { get; set; }
 
 		/// <summary>
 		/// Adds additional sections to the Elf-File.

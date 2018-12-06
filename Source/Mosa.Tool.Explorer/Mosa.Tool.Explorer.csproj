@@ -53,7 +53,7 @@
     <StartupObject>Mosa.Tool.Explorer.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>..\..\3rdParty\app-icons\magnifier.ico</ApplicationIcon>
+    <ApplicationIcon>magnifier.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommandLine, Version=2.3.0.0, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
@@ -144,10 +144,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="..\..\3rdParty\app-icons\magnifier.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Mosa\Compiler\" />
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
@@ -161,6 +157,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="magnifier.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

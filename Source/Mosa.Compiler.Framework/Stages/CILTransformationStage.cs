@@ -305,9 +305,11 @@ namespace Mosa.Compiler.Framework.Stages
 				instruction = IRInstruction.CompareFloatR8;
 			else if (result.Is64BitInteger && first.Is64BitInteger)
 				instruction = IRInstruction.CompareInt64x64;
+			else if (result.Is64BitInteger && !first.Is64BitInteger)
+				instruction = IRInstruction.CompareInt32x64;
 			else if (!result.Is64BitInteger && first.Is64BitInteger)
 				instruction = IRInstruction.CompareInt64x32;
-			else if (!first.Is64BitInteger)
+			else if (!result.Is64BitInteger && !first.Is64BitInteger)
 				instruction = IRInstruction.CompareInt32x32;
 
 			node.SetInstruction(instruction, code, result, first, second);

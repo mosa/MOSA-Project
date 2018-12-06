@@ -122,7 +122,7 @@
     <Compile Include="Instructions\Btr32.cs" />
     <Compile Include="Instructions\Bts32.cs" />
     <Compile Include="Instructions\Call.cs" />
-    <Compile Include="Instructions\Cdq.cs" />
+    <Compile Include="Instructions\Cdq32.cs" />
     <Compile Include="Instructions\Cli.cs" />
     <Compile Include="Instructions\CmovCarry32.cs" />
     <Compile Include="Instructions\CmovEqual32.cs" />
@@ -304,7 +304,6 @@
     <Compile Include="Stages\BuildStackStage.cs" />
     <Compile Include="Stages\OptimizationStage.cs" />
     <Compile Include="Stages\IRSubstitutionStage.cs" />
-    <Compile Include="CompilerStages\StartUpStage.cs" />
     <Compile Include="Stages\FloatingPointStage.cs" />
     <Compile Include="Stages\FinalTweakStage.cs" />
     <Compile Include="Stages\PostOptimizationStage.cs" />
@@ -341,7 +340,7 @@
     <Compile Include="Intrinsic\Out8.cs" />
     <Compile Include="Intrinsic\Sti.cs" />
     <Compile Include="CompilerStages\MethodTableBuilderStage.cs" />
-    <Compile Include="CompilerStages\Multiboot0695Stage.cs" />
+    <Compile Include="CompilerStages\MultibootV1Stage.cs" />
     <Compile Include="X86.cs" />
     <Compile Include="Stages\TweakStage.cs" />
     <Compile Include="Intrinsic\BochsDebug.cs" />

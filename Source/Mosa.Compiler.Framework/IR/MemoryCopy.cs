@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class MemoryCopy : BaseIRInstruction
 	{
-		public override int ID { get { return 176; } }
+		public override int ID { get { return 177; } }
 
 		public MemoryCopy()
 			: base(3, 1)

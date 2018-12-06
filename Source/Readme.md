@@ -1,4 +1,4 @@
-These 3rd party libraries are used by the MOSA Project under their respective licenses:
+These libraries are used by the MOSA Project under their respective licenses:
 
 WeiFen Luo released DockPanel Suite (WeifenLuo.WinFormsUI.Docking.dll)
 - https://github.com/dockpanelsuite/dockpanelsuite

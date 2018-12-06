@@ -126,15 +126,12 @@ namespace Mosa.Compiler.Framework
 
 		private static List<BaseCompilerStage> GetDefaultCompilerPipeline(CompilerOptions compilerOptions)
 		{
-			var bootStage = compilerOptions.BootStageFactory != null ? compilerOptions.BootStageFactory() : null;
-
 			return new List<BaseCompilerStage> {
-				bootStage,
 				new TypeInitializerSchedulerStage(),
 				new MethodLookupTableStage(),
 				new MethodExceptionLookupTableStage(),
 				new MetadataStage(),
-				(compilerOptions.OutputFile!= null && compilerOptions.EmitBinary) ? new LinkerFinalizationStage() : null,
+				(compilerOptions.OutputFile != null && compilerOptions.EmitBinary) ? new LinkerFinalizationStage() : null,
 				(compilerOptions.MapFile != null) ? new MapFileGenerationStage() : null,
 				(compilerOptions.DebugFile != null) ? new DebugFileGenerationStage() : null
 			};
@@ -246,7 +243,7 @@ namespace Mosa.Compiler.Framework
 				extension.ExtendCompilerPipeline(CompilerPipeline);
 			}
 
-			Architecture.ExtendCompilerPipeline(CompilerPipeline);
+			Architecture.ExtendCompilerPipeline(CompilerPipeline, CompilerOptions);
 
 			IsStopped = false;
 		}

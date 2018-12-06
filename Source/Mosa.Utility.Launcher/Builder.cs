@@ -86,7 +86,7 @@ namespace Mosa.Utility.Launcher
 
 				compiler.CompilerOptions.Architecture = SelectArchitecture(Options.PlatformType);
 				compiler.CompilerOptions.LinkerFormatType = Options.LinkerFormatType;
-				compiler.CompilerOptions.BootStageFactory = GetBootStageFactory(Options.BootFormat);
+				compiler.CompilerOptions.MultibootSpecification = Options.MultibootSpecification;
 
 				compiler.CompilerOptions.SetCustomOption("multiboot.video", Options.VBEVideo ? "true" : "false");
 				compiler.CompilerOptions.SetCustomOption("multiboot.width", Options.Width.ToString());
@@ -453,21 +453,6 @@ namespace Mosa.Utility.Launcher
 			{
 				case PlatformType.X86: return Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect);
 				default: throw new NotImplementCompilerException("Unknown or unsupported Architecture");
-			}
-		}
-
-		/// <summary>
-		/// Gets the boot stage factory.
-		/// </summary>
-		/// <param name="bootFormat">The boot format.</param>
-		/// <returns></returns>
-		/// <exception cref="NotImplementCompilerException"></exception>
-		private static Func<BaseCompilerStage> GetBootStageFactory(BootFormat bootFormat)
-		{
-			switch (bootFormat)
-			{
-				case BootFormat.Multiboot_0_7: return delegate { return new Mosa.Platform.x86.CompilerStages.Multiboot0695Stage(); };
-				default: return null;
 			}
 		}
 

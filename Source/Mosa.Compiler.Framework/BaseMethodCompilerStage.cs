@@ -876,49 +876,29 @@ namespace Mosa.Compiler.Framework
 				return IRInstruction.LoadParamFloatR4;
 			else if (type.IsR8)
 				return IRInstruction.LoadParamFloatR8;
+			else if (type.IsU1 || type.IsBoolean)
+				return IRInstruction.LoadParamZeroExtend8x32;
+			else if (type.IsI1)
+				return IRInstruction.LoadParamSignExtend8x32;
+			else if (type.IsU2 || type.IsChar)
+				return IRInstruction.LoadParamZeroExtend16x32;
+			else if (type.IsI2)
+				return IRInstruction.LoadParamSignExtend16x32;
+			else if (type.IsUI4)
+				return IRInstruction.LoadParamInt32;
+			else if (type.IsUI8)
+				return IRInstruction.LoadParamInt64;
+			else if (type.IsEnum && type.ElementType.IsI4)
+				return IRInstruction.LoadParamInt32;
+			else if (type.IsEnum && type.ElementType.IsU4)
+				return IRInstruction.LoadParamInt32;
+			else if (type.IsEnum && type.ElementType.IsUI8)
+				return IRInstruction.LoadParamInt64;
 
 			if (is32bitPlatform)
-			{
-				if (type.IsU1 || type.IsBoolean)
-					return IRInstruction.LoadParamZeroExtend8x32;
-				if (type.IsI1)
-					return IRInstruction.LoadParamSignExtend8x32;
-				else if (type.IsU2 || type.IsChar)
-					return IRInstruction.LoadParamZeroExtend16x32;
-				else if (type.IsI2)
-					return IRInstruction.LoadParamSignExtend16x32;
-				else if (type.IsUI4)
-					return IRInstruction.LoadParamInt32;
-				else if (type.IsUI8)
-					return IRInstruction.LoadParamInt64;
-				else if (type.IsEnum && type.ElementType.IsUI8)
-					return IRInstruction.LoadParamInt64;
-
 				return IRInstruction.LoadParamInt32;
-			}
 			else
-			{
-				if (type.IsU1 || type.IsBoolean)
-					return IRInstruction.LoadParamZeroExtend8x64;
-				if (type.IsI1)
-					return IRInstruction.LoadParamSignExtend8x64;
-				else if (type.IsU2 || type.IsChar)
-					return IRInstruction.LoadParamZeroExtend16x64;
-				else if (type.IsI2)
-					return IRInstruction.LoadParamSignExtend16x64;
-				else if (type.IsU4)
-					return IRInstruction.LoadParamZeroExtend32x64;
-				else if (type.IsI4)
-					return IRInstruction.LoadParamSignExtend32x64;
-				else if (type.IsUI8)
-					return IRInstruction.LoadParamInt64;
-				else if (type.IsEnum && type.ElementType.IsI4)
-					return IRInstruction.LoadParamSignExtend32x64;
-				else if (type.IsEnum && type.ElementType.IsU4)
-					return IRInstruction.LoadParamZeroExtend32x64;
-
 				return IRInstruction.LoadParamInt64;
-			}
 		}
 
 		public static BaseIRInstruction GetSetReturnInstruction(MosaType type, bool is32bitPlatform)
@@ -983,10 +963,10 @@ namespace Mosa.Compiler.Framework
 
 		public static bool IsSimpleIRMoveInstruction(BaseInstruction instruction)
 		{
-			return (instruction == IRInstruction.MoveInt32
+			return instruction == IRInstruction.MoveInt32
 				|| instruction == IRInstruction.MoveInt64
 				|| instruction == IRInstruction.MoveFloatR8
-				|| instruction == IRInstruction.MoveFloatR4);
+				|| instruction == IRInstruction.MoveFloatR4;
 		}
 
 		#endregion Helper Methods

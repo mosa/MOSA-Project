@@ -3,11 +3,10 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Platform.Intel;
 using System.IO;
 using System.Text;
 
-namespace Mosa.Platform.x86.CompilerStages
+namespace Mosa.Platform.Intel.CompilerStages
 {
 	/// <summary>
 	/// Writes a multiboot v0.6.95 header into the generated binary.
@@ -20,44 +19,46 @@ namespace Mosa.Platform.x86.CompilerStages
 	/// the specification at
 	/// http://www.gnu.org/software/grub/manual/multiboot/multiboot.html.
 	/// </remarks>
-	public sealed class Multiboot0695Stage : BaseCompilerStage
+	public abstract class MultibootV1Stage : BaseCompilerStage
 	{
+		protected abstract void CreateMultibootMethod();
+
 		#region Constants
 
 		/// <summary>
 		/// This address is the top of the initial kernel stack.
 		/// </summary>
-		private const uint STACK_ADDRESS = 0x00A00000 - 8;
+		protected const uint STACK_ADDRESS = 0x00A00000 - 8;
 
 		/// <summary>
 		/// Magic value in the multiboot header.
 		/// </summary>
-		private const uint HEADER_MB_MAGIC = 0x1BADB002U;
+		protected const uint HEADER_MB_MAGIC = 0x1BADB002U;
 
 		/// <summary>
 		/// Multiboot flag, which indicates that additional modules must be
 		/// loaded on page boundaries.
 		/// </summary>
-		private const uint HEADER_MB_FLAG_MODULES_PAGE_ALIGNED = 0x00000001U;
+		protected const uint HEADER_MB_FLAG_MODULES_PAGE_ALIGNED = 0x00000001U;
 
 		/// <summary>
 		/// Multiboot flag, which indicates if memory information must be
 		/// provided in the boot information structure.
 		/// </summary>
-		private const uint HEADER_MB_FLAG_MEMORY_INFO_REQUIRED = 0x00000002U;
+		protected const uint HEADER_MB_FLAG_MEMORY_INFO_REQUIRED = 0x00000002U;
 
 		/// <summary>
 		/// Multiboot flag, which indicates that the supported video mode
 		/// table must be provided in the boot information structure.
 		/// </summary>
-		private const uint HEADER_MB_FLAG_VIDEO_MODES_REQUIRED = 0x00000004U;
+		protected const uint HEADER_MB_FLAG_VIDEO_MODES_REQUIRED = 0x00000004U;
 
 		/// <summary>
 		/// Multiboot flag, which indicates a non-elf binary to boot and that
 		/// settings for the executable file should be read From the boot header
 		/// instead of the executable header.
 		/// </summary>
-		private const uint HEADER_MB_FLAG_NON_ELF_BINARY = 0x00010000U;
+		protected const uint HEADER_MB_FLAG_NON_ELF_BINARY = 0x00010000U;
 
 		#endregion Constants
 
@@ -66,12 +67,12 @@ namespace Mosa.Platform.x86.CompilerStages
 		/// <summary>
 		/// The multiboot method
 		/// </summary>
-		private MosaMethod multibootMethod;
+		protected MosaMethod multibootMethod;
 
 		/// <summary>
 		/// The multiboot header
 		/// </summary>
-		private LinkerSymbol multibootHeader;
+		protected LinkerSymbol multibootHeader;
 
 		#endregion Data Members
 
@@ -102,42 +103,7 @@ namespace Mosa.Platform.x86.CompilerStages
 
 		protected override void RunPostCompile()
 		{
-			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
-			var ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
-			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
-			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);
-
-			var multibootEAX = Operand.CreateUnmanagedSymbolPointer(MultibootEAX, TypeSystem);
-			var multibootEBX = Operand.CreateUnmanagedSymbolPointer(MultibootEBX, TypeSystem);
-
-			var stackTop = CreateConstant(STACK_ADDRESS);
-			var zero = CreateConstant(0);
-			var four = CreateConstant(4);
-
-			var basicBlocks = new BasicBlocks();
-			var block = basicBlocks.CreateBlock(BasicBlock.PrologueLabel);
-			basicBlocks.AddHeadBlock(block);
-			var ctx = new Context(block);
-
-			// Setup the stack and place the sentinel on the stack to indicate the start of the stack
-			ctx.AppendInstruction(X86.Mov32, esp, stackTop);
-			ctx.AppendInstruction(X86.Mov32, ebp, stackTop);
-			ctx.AppendInstruction(X86.MovStore32, null, esp, zero, zero);
-			ctx.AppendInstruction(X86.MovStore32, null, esp, four, zero);
-
-			// Place the multiboot address into a static field
-			ctx.AppendInstruction(X86.MovStore32, null, multibootEAX, zero, eax);
-			ctx.AppendInstruction(X86.MovStore32, null, multibootEBX, zero, ebx);
-
-			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
-			var startUpMethod = startUpType.FindMethodByName("Initialize");
-
-			var entryPoint = Operand.CreateSymbolFromMethod(startUpMethod, TypeSystem);
-			ctx.AppendInstruction(X86.Call, null, entryPoint);
-
-			ctx.AppendInstruction(X86.Ret);
-
-			Compiler.CompileMethod(multibootMethod, basicBlocks);
+			CreateMultibootMethod();
 
 			WriteMultibootHeader();
 		}
@@ -152,7 +118,7 @@ namespace Mosa.Platform.x86.CompilerStages
 		/// Writes the multiboot header.
 		/// </summary>
 		/// <param name="entryPoint">The virtualAddress of the multiboot compliant entry point.</param>
-		private void WriteMultibootHeader()
+		protected void WriteMultibootHeader()
 		{
 			// According to the multiboot specification this header must be within the first 8K of the kernel binary.
 			Linker.SetFirst(multibootHeader);

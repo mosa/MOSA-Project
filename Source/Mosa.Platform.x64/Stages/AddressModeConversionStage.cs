@@ -8,8 +8,6 @@ namespace Mosa.Platform.x64.Stages
 	/// <summary>
 	/// Address Mode Conversion Stage
 	/// </summary>
-	/// <remarks>
-	/// </remarks>
 	/// <seealso cref="Mosa.Platform.Intel.Stages.AddressModeConversionStage" />
 	public sealed class AddressModeConversionStage : Intel.Stages.AddressModeConversionStage
 	{

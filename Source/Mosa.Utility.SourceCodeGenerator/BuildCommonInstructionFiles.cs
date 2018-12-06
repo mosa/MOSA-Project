@@ -32,6 +32,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Body(entry);
 				Save();
 			}
+
+			Identifiers.InstructionGap();
 		}
 
 		protected void ReadEncodingTemplates()

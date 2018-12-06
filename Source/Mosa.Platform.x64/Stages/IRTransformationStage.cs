@@ -11,10 +11,10 @@ namespace Mosa.Platform.x64.Stages
 	/// <summary>
 	/// Transforms IR instructions into their appropriate X64.
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.x64.BaseTransformationStage" />
 	/// <remarks>
 	/// This transformation stage transforms IR instructions into their equivalent X86 sequences.
 	/// </remarks>
+	/// <seealso cref="Mosa.Platform.x64.BaseTransformationStage" />
 	public sealed class IRTransformationStage : BaseTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()
@@ -103,6 +103,25 @@ namespace Mosa.Platform.x64.Stages
 
 		#region Visitation Methods
 
+		private void Add32(InstructionNode node)
+		{
+			node.ReplaceInstruction(X64.Add32);
+		}
+
+		private void AddCarryOut32(Context context)
+		{
+			var result = context.Result;
+			var result2 = context.Result2;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			context.SetInstruction(X64.Add32, result, operand1, operand2);
+			context.AppendInstruction(X64.SetByteIfCarry, v1);
+			context.AppendInstruction(X64.Movzx8To32, result2, v1);
+		}
+
 		private void AddFloatR4(InstructionNode node)
 		{
 			Debug.Assert(node.Result.IsR4);
@@ -139,25 +158,6 @@ namespace Mosa.Platform.x64.Stages
 			}
 		}
 
-		private void Add32(InstructionNode node)
-		{
-			node.ReplaceInstruction(X64.Add32);
-		}
-
-		private void AddCarryOut32(Context context)
-		{
-			var result = context.Result;
-			var result2 = context.Result2;
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
-
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
-
-			context.SetInstruction(X64.Add32, result, operand1, operand2);
-			context.AppendInstruction(X64.SetByteIfCarry, v1);
-			context.AppendInstruction(X64.Movzx8To32, result2, v1);
-		}
-
 		private void AddWithCarry32(Context context)
 		{
 			var result = context.Result;
@@ -170,34 +170,6 @@ namespace Mosa.Platform.x64.Stages
 
 			context.SetInstruction(X64.Bt32, v1, operand3, CreateConstant((byte)0));
 			context.AppendInstruction(X64.Adc32, result, operand1, operand2);
-		}
-
-		private void SubCarryOut32(Context context)
-		{
-			var result = context.Result;
-			var result2 = context.Result2;
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
-
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
-
-			context.SetInstruction(X64.Sub32, result, operand1, operand2);
-			context.AppendInstruction(X64.SetByteIfCarry, v1);
-			context.AppendInstruction(X64.Movzx8To32, result2, v1);
-		}
-
-		private void SubWithCarry32(Context context)
-		{
-			var result = context.Result;
-			var result2 = context.Result2;
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
-			var operand3 = context.Operand3;
-
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-			context.SetInstruction(X64.Bt32, v1, operand3, CreateConstant((byte)0));
-			context.AppendInstruction(X64.Sbb32, result, operand1, operand2);
 		}
 
 		private void ArithShiftRight32(InstructionNode node)
@@ -215,9 +187,13 @@ namespace Mosa.Platform.x64.Stages
 			Debug.Assert(node.Operand1 != null);
 
 			if (node.Operand1.IsConstant)
+			{
 				node.ReplaceInstruction(X64.Call);
+			}
 			else if (node.Operand1.IsVirtualRegister)
+			{
 				node.ReplaceInstruction(X64.Call);
+			}
 			else throw new NotSupportedException();
 		}
 
@@ -246,20 +222,9 @@ namespace Mosa.Platform.x64.Stages
 			context.AppendInstruction(X64.Movzx8To32, resultOperand, v1);
 		}
 
-		private void IfThenElse32(Context context)
-		{
-			var result = context.Operand1;
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
-			var operand3 = context.Operand3;
-
-			context.SetInstruction(X64.Cmp32, null, operand1, ConstantZero);
-			context.AppendInstruction(X64.CMovNotEqual32, result, operand1);    // true
-			context.AppendInstruction(X64.CMovEqual32, result, operand2);       // false
-		}
-
 		private void CompareIntBranch32(Context context)
 		{
+			OptimizeBranch(context);
 			var target = context.BranchTargets[0];
 			var condition = context.ConditionCode;
 			var operand1 = context.Operand1;
@@ -329,26 +294,26 @@ namespace Mosa.Platform.x64.Stages
 
 		private void DivSigned32(Context context)
 		{
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
-			Operand result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var result = context.Result;
 
-			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			Operand v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.SetInstruction2(X64.Cdq, v1, v2, operand1);
+			context.SetInstruction2(X64.Cdq32, v1, v2, operand1);
 			context.AppendInstruction2(X64.IDiv32, v3, result, v1, v2, operand2);
 		}
 
 		private void DivUnsigned32(Context context)
 		{
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
-			Operand result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var result = context.Result;
 
-			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
 			context.SetInstruction(X64.Mov32, v1, ConstantZero);
 			context.AppendInstruction2(X64.Div32, v1, v2, v1, operand1, operand2);
@@ -357,10 +322,10 @@ namespace Mosa.Platform.x64.Stages
 
 		private void FloatCompare(Context context, X64Instruction instruction)
 		{
-			Operand result = context.Result;
-			Operand left = context.Operand1;
-			Operand right = context.Operand2;
-			ConditionCode condition = context.ConditionCode;
+			var result = context.Result;
+			var left = context.Operand1;
+			var right = context.Operand2;
+			var condition = context.ConditionCode;
 
 			// normalize condition
 			switch (condition)
@@ -478,12 +443,28 @@ namespace Mosa.Platform.x64.Stages
 			}
 		}
 
+		private void IfThenElse32(Context context)
+		{
+			var result = context.Operand1;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var operand3 = context.Operand3;
+
+			context.SetInstruction(X64.Cmp32, null, operand1, ConstantZero);
+			context.AppendInstruction(X64.CMovNotEqual32, result, operand1);    // true
+			context.AppendInstruction(X64.CMovEqual32, result, operand2);       // false
+		}
+
 		private void Jmp(InstructionNode node)
 		{
 			if (node.Operand1 == null)
+			{
 				node.ReplaceInstruction(X64.Jmp);
+			}
 			else
+			{
 				node.ReplaceInstruction(X64.JmpExternal);
+			}
 		}
 
 		private void LoadCompound(Context context)
@@ -559,13 +540,6 @@ namespace Mosa.Platform.x64.Stages
 			node.SetInstruction(X64.MovzxLoad8, node.Result, StackFrame, node.Operand1);
 		}
 
-		private void LoadSignExtend8x32(InstructionNode node)
-		{
-			LoadStore.OrderLoadOperands(node, MethodCompiler);
-
-			node.SetInstruction(X64.MovsxLoad8, node.Result, node.Operand1, node.Operand2);
-		}
-
 		private void LoadSignExtend16x32(InstructionNode node)
 		{
 			LoadStore.OrderLoadOperands(node, MethodCompiler);
@@ -573,11 +547,11 @@ namespace Mosa.Platform.x64.Stages
 			node.SetInstruction(X64.MovsxLoad16, node.Result, node.Operand1, node.Operand2);
 		}
 
-		private void LoadZeroExtend8x32(InstructionNode node)
+		private void LoadSignExtend8x32(InstructionNode node)
 		{
 			LoadStore.OrderLoadOperands(node, MethodCompiler);
 
-			node.SetInstruction(X64.MovzxLoad8, node.Result, node.Operand1, node.Operand2);
+			node.SetInstruction(X64.MovsxLoad8, node.Result, node.Operand1, node.Operand2);
 		}
 
 		private void LoadZeroExtend16x32(InstructionNode node)
@@ -587,6 +561,13 @@ namespace Mosa.Platform.x64.Stages
 			node.SetInstruction(X64.MovzxLoad16, node.Result, node.Operand1, node.Operand2);
 		}
 
+		private void LoadZeroExtend8x32(InstructionNode node)
+		{
+			LoadStore.OrderLoadOperands(node, MethodCompiler);
+
+			node.SetInstruction(X64.MovzxLoad8, node.Result, node.Operand1, node.Operand2);
+		}
+
 		private void LogicalAnd32(InstructionNode node)
 		{
 			node.ReplaceInstruction(X64.And32);
@@ -594,10 +575,7 @@ namespace Mosa.Platform.x64.Stages
 
 		private void LogicalNot32(Context context)
 		{
-			var dest = context.Result;
-
-			context.SetInstruction(X64.Mov32, dest, context.Operand1);
-			context.AppendInstruction(X64.Not32, dest, dest);
+			context.SetInstruction(X64.Not32, context.Result, context.Operand1);
 		}
 
 		private void LogicalOr32(InstructionNode node)
@@ -648,22 +626,14 @@ namespace Mosa.Platform.x64.Stages
 
 		private void MulSigned32(InstructionNode node)
 		{
-			Operand result = node.Result;
-			Operand operand1 = node.Operand1;
-			Operand operand2 = node.Operand2;
-
-			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			node.SetInstruction2(X64.Mul32, v1, result, operand1, operand2);
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			node.SetInstruction2(X64.Mul32, v1, node.Result, node.Operand1, node.Operand2);
 		}
 
 		private void MulUnsigned32(InstructionNode node)
 		{
-			Operand result = node.Result;
-			Operand operand1 = node.Operand1;
-			Operand operand2 = node.Operand2;
-
-			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			node.SetInstruction2(X64.Mul32, v1, result, operand1, operand2);
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			node.SetInstruction2(X64.Mul32, v1, node.Result, node.Operand1, node.Operand2);
 		}
 
 		private void Nop(InstructionNode node)
@@ -673,26 +643,26 @@ namespace Mosa.Platform.x64.Stages
 
 		private void RemSigned32(Context context)
 		{
-			Operand result = context.Result;
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
 
-			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			Operand v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.SetInstruction2(X64.Cdq, v1, v2, operand1);
+			context.SetInstruction2(X64.Cdq32, v1, v2, operand1);
 			context.AppendInstruction2(X64.IDiv32, result, v3, v1, v2, operand2);
 		}
 
 		private void RemUnsigned32(Context context)
 		{
-			Operand result = context.Result;
-			Operand operand1 = context.Operand1;
-			Operand operand2 = context.Operand2;
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
 
-			Operand v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			Operand v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
 			context.SetInstruction(X64.Mov32, v1, ConstantZero);
 			context.AppendInstruction2(X64.Div32, result, v2, v1, operand1, operand2);
@@ -708,14 +678,14 @@ namespace Mosa.Platform.x64.Stages
 			node.ReplaceInstruction(X64.Shr32);
 		}
 
-		private void SignExtend8x32(InstructionNode node)
-		{
-			node.ReplaceInstruction(X64.Movsx8To32);
-		}
-
 		private void SignExtend16x32(InstructionNode node)
 		{
 			node.ReplaceInstruction(X64.Movsx16To32);
+		}
+
+		private void SignExtend8x32(InstructionNode node)
+		{
+			node.ReplaceInstruction(X64.Movsx8To32);
 		}
 
 		private void StoreCompound(Context context)
@@ -784,6 +754,25 @@ namespace Mosa.Platform.x64.Stages
 			node.SetInstruction(X64.MovStore8, null, StackFrame, node.Operand1, node.Operand2);
 		}
 
+		private void Sub32(InstructionNode node)
+		{
+			node.ReplaceInstruction(X64.Sub32);
+		}
+
+		private void SubCarryOut32(Context context)
+		{
+			var result = context.Result;
+			var result2 = context.Result2;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			context.SetInstruction(X64.Sub32, result, operand1, operand2);
+			context.AppendInstruction(X64.SetByteIfCarry, v1);
+			context.AppendInstruction(X64.Movzx8To32, result2, v1);
+		}
+
 		private void SubFloatR4(InstructionNode node)
 		{
 			Debug.Assert(node.Result.IsR4);
@@ -800,15 +789,24 @@ namespace Mosa.Platform.x64.Stages
 			node.ReplaceInstruction(X64.Subsd);
 		}
 
-		private void Sub32(InstructionNode node)
+		private void SubWithCarry32(Context context)
 		{
-			node.ReplaceInstruction(X64.Sub32);
+			var result = context.Result;
+			var result2 = context.Result2;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var operand3 = context.Operand3;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			context.SetInstruction(X64.Bt32, v1, operand3, CreateConstant((byte)0));
+			context.AppendInstruction(X64.Sbb32, result, operand1, operand2);
 		}
 
 		private void Switch(Context context)
 		{
 			var targets = context.BranchTargets;
-			Operand operand = context.Operand1;
+			var operand = context.Operand1;
 
 			context.Empty();
 
@@ -819,14 +817,14 @@ namespace Mosa.Platform.x64.Stages
 			}
 		}
 
-		private void ZeroExtend8x32(InstructionNode node)
-		{
-			node.ReplaceInstruction(X64.Movzx8To32);
-		}
-
 		private void ZeroExtend16x32(InstructionNode node)
 		{
 			node.ReplaceInstruction(X64.Movzx16To32);
+		}
+
+		private void ZeroExtend8x32(InstructionNode node)
+		{
+			node.ReplaceInstruction(X64.Movzx8To32);
 		}
 
 		#endregion Visitation Methods
@@ -860,6 +858,33 @@ namespace Mosa.Platform.x64.Stages
 			}
 		}
 
+		public static BaseInstruction GetCMovcc64(ConditionCode condition)
+		{
+			switch (condition)
+			{
+				case ConditionCode.Overflow: return X64.CMovOverflow64;
+				case ConditionCode.NoOverflow: return X64.CMovNoOverflow64;
+				case ConditionCode.Carry: return X64.CMovCarry64;
+				case ConditionCode.UnsignedLessThan: return X64.CMovUnsignedLessThan64;
+				case ConditionCode.UnsignedGreaterOrEqual: return X64.CMovUnsignedGreaterOrEqual64;
+				case ConditionCode.NoCarry: return X64.CMovNoCarry64;
+				case ConditionCode.Equal: return X64.CMovEqual64;
+				case ConditionCode.Zero: return X64.CMovZero64;
+				case ConditionCode.NotEqual: return X64.CMovNotEqual64;
+				case ConditionCode.NotZero: return X64.CMovNotZero64;
+				case ConditionCode.UnsignedLessOrEqual: return X64.CMovUnsignedLessOrEqual64;
+				case ConditionCode.UnsignedGreaterThan: return X64.CMovUnsignedGreaterThan64;
+				case ConditionCode.Signed: return X64.CMovSigned64;
+				case ConditionCode.NotSigned: return X64.CMovNotSigned64;
+				case ConditionCode.LessThan: return X64.CMovLessThan64;
+				case ConditionCode.GreaterOrEqual: return X64.CMovGreaterOrEqual64;
+				case ConditionCode.LessOrEqual: return X64.CMovLessOrEqual64;
+				case ConditionCode.GreaterThan: return X64.CMovGreaterThan64;
+
+				default: throw new NotSupportedException();
+			}
+		}
+
 		public static BaseInstruction GetSetcc(ConditionCode condition)
 		{
 			switch (condition)
@@ -887,31 +912,18 @@ namespace Mosa.Platform.x64.Stages
 			}
 		}
 
-		public static BaseInstruction GetCMovcc64(ConditionCode condition)
+		public static void OptimizeBranch(Context context)
 		{
-			switch (condition)
-			{
-				case ConditionCode.Overflow: return X64.CMovOverflow64;
-				case ConditionCode.NoOverflow: return X64.CMovNoOverflow64;
-				case ConditionCode.Carry: return X64.CMovCarry64;
-				case ConditionCode.UnsignedLessThan: return X64.CMovUnsignedLessThan64;
-				case ConditionCode.UnsignedGreaterOrEqual: return X64.CMovUnsignedGreaterOrEqual64;
-				case ConditionCode.NoCarry: return X64.CMovNoCarry64;
-				case ConditionCode.Equal: return X64.CMovEqual64;
-				case ConditionCode.Zero: return X64.CMovZero64;
-				case ConditionCode.NotEqual: return X64.CMovNotEqual64;
-				case ConditionCode.NotZero: return X64.CMovNotZero64;
-				case ConditionCode.UnsignedLessOrEqual: return X64.CMovUnsignedLessOrEqual64;
-				case ConditionCode.UnsignedGreaterThan: return X64.CMovUnsignedGreaterThan64;
-				case ConditionCode.Signed: return X64.CMovSigned64;
-				case ConditionCode.NotSigned: return X64.CMovNotSigned64;
-				case ConditionCode.LessThan: return X64.CMovLessThan64;
-				case ConditionCode.GreaterOrEqual: return X64.CMovGreaterOrEqual64;
-				case ConditionCode.LessOrEqual: return X64.CMovLessOrEqual64;
-				case ConditionCode.GreaterThan: return X64.CMovGreaterThan64;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
 
-				default: throw new NotSupportedException();
-			}
+			if (operand2.IsConstant || operand1.IsVirtualRegister)
+				return;
+
+			// Move constant to the right
+			context.Operand1 = operand2;
+			context.Operand2 = operand1;
+			context.ConditionCode = context.ConditionCode.GetReverse();
 		}
 
 		#endregion Helper Methods

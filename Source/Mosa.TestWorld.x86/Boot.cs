@@ -21,9 +21,6 @@ namespace Mosa.TestWorld.x86
 			KernelMemory.SetInitialMemory(Address.GCInitialMemory, 0x01000000);
 		}
 
-		/// <summary>
-		/// Main
-		/// </summary>
 		public static void Main()
 		{
 			Screen.Clear();

@@ -81,7 +81,7 @@ namespace Mosa.Tool.Compiler
 				// Process boot format:
 				// Boot format only matters if it's an executable
 				// Process this only now, because input files must be known
-				if (!options.IsInputExecutable && compiler.CompilerOptions.BootStageFactory != null)
+				if (!options.IsInputExecutable)
 				{
 					Console.WriteLine("Warning: Ignoring boot format, because target is not an executable.");
 					Console.WriteLine();
@@ -148,7 +148,7 @@ namespace Mosa.Tool.Compiler
 			sb.Append(" > Input file(s): ").AppendLine(string.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
 			sb.Append(" > Architecture: ").AppendLine(compiler.CompilerOptions.Architecture.GetType().FullName);
 			sb.Append(" > Binary format: ").AppendLine(compiler.CompilerOptions.LinkerFormatType.ToString());
-			sb.Append(" > Boot format: ").AppendLine((compiler.CompilerOptions.BootStageFactory == null) ? "None" : compiler.CompilerOptions.BootStageFactory().Name);
+			sb.Append(" > Boot spec: ").AppendLine(compiler.CompilerOptions.MultibootSpecification.ToString());
 			sb.Append(" > Is executable: ").AppendLine(options.IsInputExecutable.ToString());
 			return sb.ToString();
 		}
