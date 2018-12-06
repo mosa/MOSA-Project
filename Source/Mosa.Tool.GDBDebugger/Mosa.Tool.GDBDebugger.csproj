@@ -43,7 +43,7 @@
     <StartupObject>Mosa.Tool.GDBDebugger.Program</StartupObject>
   </PropertyGroup>
   <PropertyGroup>
-    <ApplicationIcon>..\..\3rdParty\app-icons\bug.ico</ApplicationIcon>
+    <ApplicationIcon>bug.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="CommandLine, Version=2.3.0.0, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
@@ -312,6 +312,9 @@
     <EmbeddedResource Include="Views\WatchView.resx">
       <DependentUpon>WatchView.cs</DependentUpon>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="bug.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
