@@ -8,7 +8,6 @@ using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Platform.Intel;
-using Mosa.Platform.Intel.CompilerStages;
 using Mosa.Platform.x86.CompilerStages;
 using Mosa.Platform.x86.Stages;
 using System.Collections.Generic;
@@ -238,7 +237,7 @@ namespace Mosa.Platform.x86
 			}
 
 			compilerPipeline.Add(
-				new StartUpStage()
+				new Intel.CompilerStages.StartUpStage()
 			);
 
 			compilerPipeline.Add(
