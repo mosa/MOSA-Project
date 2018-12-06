@@ -159,6 +159,13 @@
 			"ResultType": "Boolean"
 		},
 		{
+			"Name": "CompareInt32x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultType": "Boolean"
+		},
+		{
 			"Name": "CompareInt64x32",
 			"FamilyName": "IR",
 			"ResultCount": 1,

@@ -3,10 +3,12 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Platform.Intel;
+using Mosa.Platform.x64.CompilerStages;
 using Mosa.Platform.x64.Stages;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -209,54 +211,57 @@ namespace Mosa.Platform.x64
 		/// Extends the compiler pipeline with x64 specific stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline)
+		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline, CompilerOptions compilerOptions)
 		{
-			//compilerPipeline.Add(
-			//	new StartUpStage()
-			//);
+			if (compilerOptions.MultibootSpecification == MultibootSpecification.V1)
+			{
+				compilerPipeline.InsertAfterFirst<TypeInitializerSchedulerStage>(
+					new MultibootV1Stage()
+				);
+			}
 
-			//compilerPipeline.Add(
-			//	new InterruptVectorStage()
-			//);
+			compilerPipeline.Add(
+				new Intel.CompilerStages.StartUpStage()
+			);
 
-			//compilerPipeline.Add(
-			//	new SSEInitStage()
-			//);
+			compilerPipeline.Add(
+				new InterruptVectorStage()
+			);
 		}
 
 		/// <summary>
-		/// Extends the method compiler pipeline with x64 specific stages.
-		/// </summary>
+		/// Extends the method compiler pipeline with x64 specific stages.</summary>
 		/// <param name="compilerPipeline">The method compiler pipeline to extend.</param>
-		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> compilerPipeline)
+		/// <param name="compilerOptions"></param>
+		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> compilerPipeline, CompilerOptions compilerOptions)
 		{
 			compilerPipeline.InsertAfterLast<PlatformIntrinsicStage>(
 				new BaseMethodCompilerStage[]
 				{
 					new LongOperandStage(),
 					new IRTransformationStage(),
-					new StopStage(),	// Temp
-
-					//new TweakStage(),
-					//new FixedRegisterAssignmentStage(),
-					//new SimpleDeadCodeRemovalStage(),
+					new TweakStage(),
+					new FixedRegisterAssignmentStage(),
+					new SimpleDeadCodeRemovalStage(),
 					new AddressModeConversionStage(),
-
-					//new FloatingPointStage(),
-					//new ConstantInstructionStage(),
+					new FloatingPointStage(),
+					new StopStage(),	// Temp
 				});
 
-			//compilerPipeline.InsertAfterLast<StackLayoutStage>(
-			//	new BuildStackStage()
-			//);
+			compilerPipeline.InsertAfterLast<StackLayoutStage>(
+				new BuildStackStage()
+			);
 
 			//compilerPipeline.InsertBefore<CodeGenerationStage>(
-			//	new FinalTweakStage()
-			//);
+			//	new BaseMethodCompilerStage[]
+			//	{
+			//		new FinalTweakStage(),
+			//		compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
+			//	});
 
-			//compilerPipeline.InsertBefore<CodeGenerationStage>(
-			//	new JumpOptimizationStage()
-			//);
+			compilerPipeline.InsertBefore<CodeGenerationStage>(
+				new JumpOptimizationStage()
+			);
 		}
 
 		/// <summary>

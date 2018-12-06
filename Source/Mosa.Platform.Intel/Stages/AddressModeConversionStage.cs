@@ -9,7 +9,7 @@ namespace Mosa.Platform.Intel.Stages
 	/// <summary>
 	/// Address Mode Conversion Stage
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.Intel.BaseTransformationStage" />
+	/// <seealso cref="Mosa.Compiler.Framework.Platform.BasePlatformTransformationStage" />
 	public abstract class AddressModeConversionStage : BasePlatformTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()

@@ -7,14 +7,14 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Cdq
+	/// Cdq32
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class Cdq : X86Instruction
+	public sealed class Cdq32 : X86Instruction
 	{
-		public override int ID { get { return 200; } }
+		public override int ID { get { return 201; } }
 
-		internal Cdq()
+		internal Cdq32()
 			: base(2, 1)
 		{
 		}

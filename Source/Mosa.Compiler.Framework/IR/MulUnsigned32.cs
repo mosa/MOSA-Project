@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class MulUnsigned32 : BaseIRInstruction
 	{
-		public override int ID { get { return 122; } }
+		public override int ID { get { return 123; } }
 
 		public MulUnsigned32()
 			: base(2, 1)

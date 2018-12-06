@@ -4,16 +4,20 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
-	public sealed class CommonOpcodeEncoder
+	public sealed class OpcodeEncoder
 	{
 		private readonly BaseCodeEmitter Emitter;
 
 		private byte Bits;
 		private int BitsLength;
 
-		public CommonOpcodeEncoder(BaseCodeEmitter emitter)
+		private bool SuppressFlag;
+		private byte SuppressValue;
+
+		public OpcodeEncoder(BaseCodeEmitter emitter)
 		{
 			Emitter = emitter;
+			SuppressFlag = false;
 			Reset();
 		}
 
@@ -23,13 +27,17 @@ namespace Mosa.Compiler.Framework
 			BitsLength = 0;
 		}
 
-		private void FlushIfFull()
+		private void WriteByte(byte b)
 		{
-			if (BitsLength == 8)
+			if (SuppressFlag)
 			{
-				Emitter.WriteByte(Bits);
-				Reset();
+				SuppressFlag = false;
+
+				if (b == SuppressValue)
+					return;
 			}
+
+			Emitter.WriteByte(b);
 		}
 
 		public void AppendBit(bool value)
@@ -41,7 +49,11 @@ namespace Mosa.Compiler.Framework
 
 			BitsLength++;
 
-			FlushIfFull();
+			if (BitsLength == 8)
+			{
+				WriteByte(Bits);
+				Reset();
+			}
 		}
 
 		public void AppendBit(int value)
@@ -90,7 +102,7 @@ namespace Mosa.Compiler.Framework
 		{
 			if (BitsLength == 0)
 			{
-				Emitter.WriteByte(value);
+				WriteByte(value);
 				return;
 			}
 
@@ -101,8 +113,8 @@ namespace Mosa.Compiler.Framework
 		{
 			if (BitsLength == 0)
 			{
-				Emitter.WriteByte((byte)(value >> 8));
-				Emitter.WriteByte((byte)(value));
+				WriteByte((byte)(value >> 8));
+				WriteByte((byte)(value));
 				return;
 			}
 
@@ -113,9 +125,9 @@ namespace Mosa.Compiler.Framework
 		{
 			if (BitsLength == 0)
 			{
-				Emitter.WriteByte((byte)(value >> 16));
-				Emitter.WriteByte((byte)(value >> 8));
-				Emitter.WriteByte((byte)(value));
+				WriteByte((byte)(value >> 16));
+				WriteByte((byte)(value >> 8));
+				WriteByte((byte)(value));
 				return;
 			}
 
@@ -126,10 +138,10 @@ namespace Mosa.Compiler.Framework
 		{
 			if (BitsLength == 0)
 			{
-				Emitter.WriteByte((byte)(value >> 24));
-				Emitter.WriteByte((byte)(value >> 16));
-				Emitter.WriteByte((byte)(value >> 8));
-				Emitter.WriteByte((byte)(value));
+				WriteByte((byte)(value >> 24));
+				WriteByte((byte)(value >> 16));
+				WriteByte((byte)(value >> 8));
+				WriteByte((byte)(value));
 				return;
 			}
 
@@ -140,14 +152,14 @@ namespace Mosa.Compiler.Framework
 		{
 			if (BitsLength == 0)
 			{
-				Emitter.WriteByte((byte)(value >> 56));
-				Emitter.WriteByte((byte)(value >> 48));
-				Emitter.WriteByte((byte)(value >> 40));
-				Emitter.WriteByte((byte)(value >> 32));
-				Emitter.WriteByte((byte)(value >> 24));
-				Emitter.WriteByte((byte)(value >> 16));
-				Emitter.WriteByte((byte)(value >> 8));
-				Emitter.WriteByte((byte)(value));
+				WriteByte((byte)(value >> 56));
+				WriteByte((byte)(value >> 48));
+				WriteByte((byte)(value >> 40));
+				WriteByte((byte)(value >> 32));
+				WriteByte((byte)(value >> 24));
+				WriteByte((byte)(value >> 16));
+				WriteByte((byte)(value >> 8));
+				WriteByte((byte)(value));
 				return;
 			}
 
@@ -158,14 +170,32 @@ namespace Mosa.Compiler.Framework
 		{
 			if (BitsLength == 0)
 			{
-				Emitter.WriteByte((byte)(value));
-				Emitter.WriteByte((byte)(value >> 8));
-				Emitter.WriteByte((byte)(value >> 16));
-				Emitter.WriteByte((byte)(value >> 24));
+				WriteByte((byte)(value));
+				WriteByte((byte)(value >> 8));
+				WriteByte((byte)(value >> 16));
+				WriteByte((byte)(value >> 24));
 				return;
 			}
 
 			AppendBitsReversed(value, 32);
+		}
+
+		public void AppendImmediateInteger(ulong value)
+		{
+			if (BitsLength == 0)
+			{
+				WriteByte((byte)(value));
+				WriteByte((byte)(value >> 8));
+				WriteByte((byte)(value >> 16));
+				WriteByte((byte)(value >> 24));
+				WriteByte((byte)(value >> 32));
+				WriteByte((byte)(value >> 40));
+				WriteByte((byte)(value >> 48));
+				WriteByte((byte)(value >> 56));
+				return;
+			}
+
+			AppendBitsReversed(value, 64);
 		}
 
 		public void Append32BitImmediateWithOffset(Operand operand, Operand offset)
@@ -199,6 +229,37 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
+		public void Append64BitImmediateWithOffset(Operand operand, Operand offset)
+		{
+			Debug.Assert(operand.IsConstant);
+			Debug.Assert(offset.IsResolvedConstant);
+
+			if (operand.IsResolvedConstant)
+			{
+				AppendImmediateInteger(operand.ConstantUnsignedLongInteger + offset.ConstantUnsignedLongInteger);
+			}
+			else
+			{
+				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I8, operand, 0, offset.ConstantSignedInteger);
+				WriteZeroBytes(8);
+			}
+		}
+
+		public void Append64BitImmediate(Operand operand)
+		{
+			Debug.Assert(operand.IsConstant);
+
+			if (operand.IsResolvedConstant)
+			{
+				AppendImmediateInteger(operand.ConstantUnsignedLongInteger);
+			}
+			else
+			{
+				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I8, operand, 0, 0);
+				WriteZeroBytes(4);
+			}
+		}
+
 		public void Append16BitImmediate(Operand operand)
 		{
 			Debug.Assert(operand.IsConstant);
@@ -218,7 +279,7 @@ namespace Mosa.Compiler.Framework
 		{
 			for (int i = 0; i < length; i++)
 			{
-				Emitter.WriteByte(0);
+				WriteByte(0);
 			}
 		}
 
@@ -244,6 +305,12 @@ namespace Mosa.Compiler.Framework
 		{
 			Emitter.EmitForwardLink(offset);
 			WriteZeroBytes(4);
+		}
+
+		public void SuppressByte(byte supressByte)
+		{
+			SuppressFlag = true;
+			SuppressValue = supressByte;
 		}
 	}
 }

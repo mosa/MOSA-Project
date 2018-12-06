@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class CompareInt64x32 : BaseIRInstruction
 	{
-		public override int ID { get { return 24; } }
+		public override int ID { get { return 25; } }
 
 		public CompareInt64x32()
 			: base(2, 1)

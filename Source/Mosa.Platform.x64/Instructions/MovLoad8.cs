@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class MovLoad8 : X64Instruction
 	{
-		public override int ID { get { return 441; } }
+		public override int ID { get { return 447; } }
 
 		internal MovLoad8()
 			: base(1, 2)
@@ -132,6 +132,16 @@ namespace Mosa.Platform.x64.Instructions
 				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append3Bits(0b101);
 				emitter.OpcodeEncoder.Append32BitImmediate(node.Operand1);
+				return;
+			}
+
+			if (node.Operand1.IsConstant && node.Operand2.IsConstant)
+			{
+				emitter.OpcodeEncoder.AppendByte(0x8A);
+				emitter.OpcodeEncoder.Append2Bits(0b00);
+				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				emitter.OpcodeEncoder.Append3Bits(0b101);
+				emitter.OpcodeEncoder.Append32BitImmediateWithOffset(node.Operand1, node.Operand2);
 				return;
 			}
 

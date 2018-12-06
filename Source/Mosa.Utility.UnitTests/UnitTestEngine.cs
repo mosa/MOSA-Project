@@ -38,6 +38,7 @@ namespace Mosa.Utility.UnitTests
 
 		private const int MaxSentQueue = 10000;
 		private const int MinSend = 2000;
+		private const int MaxErrors = 30;
 
 		private readonly Queue<DebugMessage> Queue = new Queue<DebugMessage>();
 		private readonly HashSet<DebugMessage> Pending = new HashSet<DebugMessage>();
@@ -50,6 +51,7 @@ namespace Mosa.Utility.UnitTests
 		private volatile int LastResponse = 0;
 
 		private int SendOneCount = -1;
+		private int Errors = 0;
 
 		public UnitTestEngine()
 		{
@@ -65,7 +67,7 @@ namespace Mosa.Utility.UnitTests
 
 				Emulator = EmulatorType.Qemu,
 				ImageFormat = ImageFormat.IMG,
-				BootFormat = BootFormat.Multiboot_0_7,
+				MultibootSpecification = Compiler.Framework.MultibootSpecification.V1,
 				PlatformType = PlatformType.X86,
 				LinkerFormatType = LinkerFormatType.Elf32,
 				EmulatorMemoryInMB = 128,
@@ -494,6 +496,12 @@ namespace Mosa.Utility.UnitTests
 				else
 				{
 					unitTest.Status = UnitTestStatus.Failed;
+					Errors++;
+
+					Console.WriteLine("ERROR: " + UnitTestSystem.OutputUnitTestResult(unitTest));
+
+					if (Errors == MaxErrors)
+						Aborted = true;
 				}
 
 				//Console.WriteLine("RECD: " + unitTest.MethodTypeName + "." + unitTest.MethodName);

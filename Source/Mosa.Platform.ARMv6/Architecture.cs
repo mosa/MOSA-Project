@@ -3,8 +3,8 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Framework.Linker.Elf;
+using Mosa.Compiler.Framework.Stages;
 using Mosa.Platform.ARMv6.Stages;
 using System.Collections.Generic;
 
@@ -193,10 +193,10 @@ namespace Mosa.Platform.ARMv6
 		public override List<BaseInstruction> Instructions { get { return ARMv6Instructions.List; } }
 
 		/// <summary>
-		/// Extends the assembly compiler pipeline with ARMv6 specific stages.
+		/// Extends the compiler pipeline with ARMv6 specific stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline)
+		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline, CompilerOptions compilerOptions)
 		{
 			// TODO
 		}
@@ -205,7 +205,8 @@ namespace Mosa.Platform.ARMv6
 		/// Extends the method compiler pipeline with ARMv6 specific stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The method compiler pipeline to extend.</param>
-		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> compilerPipeline)
+		/// <param name="compilerOptions">The compiler options.</param>
+		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> compilerPipeline, CompilerOptions compilerOptions)
 		{
 			compilerPipeline.InsertAfterLast<PlatformIntrinsicStage>(
 				new BaseMethodCompilerStage[]

@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class MovStore16 : X64Instruction
 	{
-		public override int ID { get { return 452; } }
+		public override int ID { get { return 458; } }
 
 		internal MovStore16()
 			: base(0, 3)
@@ -282,6 +282,11 @@ namespace Mosa.Platform.x64.Instructions
 				emitter.OpcodeEncoder.Append3Bits(0b101);
 				emitter.OpcodeEncoder.Append32BitImmediateWithOffset(node.Operand1, node.Operand2);
 				emitter.OpcodeEncoder.Append16BitImmediate(node.Operand3);
+				return;
+			}
+
+			if (node.Operand1.IsConstant && node.Operand2.IsConstant && node.Operand3.IsCPURegister)
+			{
 				return;
 			}
 

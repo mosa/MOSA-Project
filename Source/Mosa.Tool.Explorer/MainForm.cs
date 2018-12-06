@@ -104,6 +104,7 @@ namespace Mosa.Tool.Explorer
 
 			if (options.Inline)
 				cbEnableInlinedMethods.Checked = true;
+
 			if (options.InlineOff || options.ThreadingOff)
 				cbEnableInlinedMethods.Checked = false;
 
@@ -112,7 +113,11 @@ namespace Mosa.Tool.Explorer
 			cbEnableIROptimizations.Checked = !options.NoIROptimizations;
 			cbEnableSparseConditionalConstantPropagation.Checked = !options.NoSparse;
 
-			if (options.X64) cbPlatform.SelectedIndex = 1;
+			if (options.X32)
+				cbPlatform.SelectedIndex = 0;
+
+			if (options.X64)
+				cbPlatform.SelectedIndex = 1;
 
 			var files = (IList<string>)options.Files;
 			if (files.Count == 1)

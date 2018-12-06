@@ -3,7 +3,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 
 namespace Mosa.Utility.SourceCodeGenerator
 {
@@ -33,6 +32,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Body(entry);
 				Save();
 			}
+
+			Identifiers.InstructionGap();
 		}
 
 		protected void ReadEncodingTemplates()
@@ -667,7 +668,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 				if (s.StartsWith("[")) // ignore these
 					continue;
-				else if (s.StartsWith("0x") | s.StartsWith("x"))
+
+				if (s.StartsWith("0x") | s.StartsWith("x"))
 				{
 					// hex
 					string hex = s.StartsWith("x") ? s.Substring(1) : s.Substring(2);
@@ -791,6 +793,30 @@ namespace Mosa.Utility.SourceCodeGenerator
 			}
 		}
 
+		private static void GetCodes(string part, ref string code, ref string postcode)
+		{
+			postcode = string.Empty;
+
+			switch (part)
+			{
+				case "reg3": code = "Append3Bits"; postcode = ".Register.RegisterCode"; return;
+				case "regx4": code = "AppendBit("; postcode = ".Register.RegisterCode >> 3) & 0x1"; return;
+				case "reg4": code = "AppendNibble"; postcode = ".Register.RegisterCode"; return;
+				case "imm32": code = "Append32BitImmediate"; return;
+				case "imm32+": code = "Append32BitImmediateWithOffset"; return;
+				case "imm8": code = "Append8BitImmediate"; return;
+				case "imm16": code = "Append16BitImmediate"; return;
+				case "imm64": code = "Append64BitImmediate"; return;
+				case "rel32": code = "EmitRelative32"; return;
+				case "rel64": code = "EmitRelative64"; return;
+				case "forward32": code = "EmitForward32"; return;
+				case "supress8": code = "SuppressByte"; return;
+				case "": return;
+
+				default: throw new Exception("ERROR!");
+			}
+		}
+
 		private static string GetOperand(string part)
 		{
 			switch (part)
@@ -806,29 +832,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "cond": return string.Empty; // TODO
 				case "shifter": return string.Empty; // TODO
 
-				default: return part; //throw new Exception("ERROR!");
-			}
-		}
-
-		private static void GetCodes(string part, ref string code, ref string postcode)
-		{
-			postcode = string.Empty;
-
-			switch (part)
-			{
-				case "reg3": code = "Append3Bits"; postcode = ".Register.RegisterCode"; return;
-				case "regx4": code = "Append1Bit"; postcode = ".Register.RegisterCode"; return;
-				case "reg4": code = "AppendNibble"; postcode = ".Register.RegisterCode"; return;
-				case "imm32": code = "Append32BitImmediate"; return;
-				case "imm32+": code = "Append32BitImmediateWithOffset"; return;
-				case "imm8": code = "Append8BitImmediate"; return;
-				case "imm16": code = "Append16BitImmediate"; return;
-				case "rel32": code = "EmitRelative32"; return;
-				case "rel64": code = "EmitRelative64"; return;
-				case "forward32": code = "EmitForward32"; return;
-				case "": return;
-
-				default: throw new Exception("ERROR!");
+				default: return part; // pass as is
 			}
 		}
 	}

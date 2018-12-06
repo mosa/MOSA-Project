@@ -118,14 +118,20 @@ namespace Mosa.Compiler.Framework
 		public bool IRLongExpansion { get; set; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether [enable platform optimizations].</summary>
+		/// <value>
+		///   <c>true</c> if [enable platform optimizations]; otherwise, <c>false</c>.</value>
+		public bool EnablePlatformOptimizations { get; set; }
+
+		/// <summary>
 		/// Gets or sets the type of the elf.
 		/// </summary>
 		public LinkerFormatType LinkerFormatType { get; set; }
 
 		/// <summary>
-		/// Gets or sets the compiler stage responsible for booting.
+		/// Gets or sets the multiboot specification.
 		/// </summary>
-		public Func<BaseCompilerStage> BootStageFactory { get; set; }
+		public MultibootSpecification MultibootSpecification { get; set; }
 
 		/// <summary>
 		/// Adds additional sections to the Elf-File.
@@ -279,6 +285,7 @@ namespace Mosa.Compiler.Framework
 			IRLongExpansion = true;
 			EnableValueNumbering = true;
 			EnableLoopInvariantCodeMotion = true;
+			EnablePlatformOptimizations = true;
 		}
 	}
 }

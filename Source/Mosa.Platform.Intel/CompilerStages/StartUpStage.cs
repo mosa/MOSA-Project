@@ -4,7 +4,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Platform.x86.CompilerStages
+namespace Mosa.Platform.Intel.CompilerStages
 {
 	/// <summary>
 	/// Start Up Stage

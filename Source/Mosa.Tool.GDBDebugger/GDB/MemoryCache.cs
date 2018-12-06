@@ -55,7 +55,7 @@ namespace Mosa.Tool.GDBDebugger.GDB
 			var request = new Request(address, size, onMemoryRead);
 
 			var start = Alignment.AlignDown(address, BlockSize);
-			var end = Alignment.AlignUp(address + (ulong)size, BlockSize);
+			var end = Alignment.AlignUp(address + size, BlockSize);
 
 			var queries = new List<ulong>();
 
@@ -133,14 +133,14 @@ namespace Mosa.Tool.GDBDebugger.GDB
 
 				requests.Remove(request);
 
-				var data = new byte[request.Size];
-
 				// blocks start/end
 				ulong start = Alignment.AlignDown(request.Address, BlockSize);
-				ulong end = Alignment.AlignUp(request.Address + (ulong)request.Size, BlockSize);
+				ulong end = Alignment.AlignUp(request.Address + request.Size, BlockSize);
 
 				ulong requestStart = request.Address;
 				ulong requestEnd = request.Address + request.Size;
+
+				var data = new byte[request.Size];
 
 				lock (sync)
 				{
@@ -154,6 +154,9 @@ namespace Mosa.Tool.GDBDebugger.GDB
 						ulong overlapStart = Math.Max(requestStart, blockStart);
 						ulong overlapEnd = Math.Min(requestEnd, blockEnd);
 						int len = (int)(overlapEnd - overlapStart);
+
+						if (len <= 0)
+							continue;
 
 						if (requestStart > blockStart)
 						{

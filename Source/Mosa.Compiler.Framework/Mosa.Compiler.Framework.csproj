@@ -122,6 +122,7 @@
     <Compile Include="IR\CompareFloatR4.cs" />
     <Compile Include="IR\CompareFloatR8.cs" />
     <Compile Include="IR\CompareInt32x32.cs" />
+    <Compile Include="IR\CompareInt32x64.cs" />
     <Compile Include="IR\CompareInt64x32.cs" />
     <Compile Include="IR\CompareInt64x64.cs" />
     <Compile Include="IR\CompareIntBranch32.cs" />
@@ -326,7 +327,8 @@
     <Compile Include="Linker\PatchType.cs" />
     <Compile Include="Linker\SectionKind.cs" />
     <Compile Include="Helper\BuiltInOptimizations.cs" />
-    <Compile Include="CommonOpcodeEncoder.cs" />
+    <Compile Include="MultibootSpecification.cs" />
+    <Compile Include="OpcodeEncoder.cs" />
     <Compile Include="Pipeline.cs" />
     <Compile Include="CompilerTypeData.cs" />
     <Compile Include="CompilerMethodData.cs" />

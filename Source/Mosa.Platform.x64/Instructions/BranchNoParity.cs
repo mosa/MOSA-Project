@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class BranchNoParity : X64Instruction
 	{
-		public override int ID { get { return 545; } }
+		public override int ID { get { return 551; } }
 
 		internal BranchNoParity()
 			: base(0, 0)

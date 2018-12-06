@@ -2,6 +2,7 @@
 
 using CommandLine;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Utility.BootImage;
 using System;
@@ -139,11 +140,16 @@ namespace Mosa.Utility.Launcher
 		[Option("elf")]
 		public bool LinkerFormatTypeELF { set { LinkerFormatType = LinkerFormatType.Elf32; } }
 
-		[Option("boot-format")]
-		public BootFormat BootFormat { get; set; }
+		public MultibootSpecification MultibootSpecification { get; set; }
 
-		[Option("mb0.7")]
-		public bool BootFormatMultiboot07 { set { BootFormat = BootFormat.Multiboot_0_7; } }
+		[Option("multiboot-v1")]
+		public bool MultiBootV1 { set { MultibootSpecification = MultibootSpecification.V1; } }
+
+		[Option("multiboot-v2")]
+		public bool MultiBootV2 { set { MultibootSpecification = MultibootSpecification.V2; } }
+
+		[Option("multiboot-none")]
+		public bool MultiBootNone { set { MultibootSpecification = MultibootSpecification.None; } }
 
 		[Option("platform")]
 		public PlatformType PlatformType { get; set; }
@@ -324,7 +330,6 @@ namespace Mosa.Utility.Launcher
 			Paths = new List<string>();
 			DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA");
 			BootLoader = BootLoader.Syslinux_3_72; // Can't use the Default in the attribute because it would overwrite other bootloader options
-			BootFormat = BootFormat.Multiboot_0_7;
 			SerialConnectionOption = SerialConnectionOption.None;
 			Emulator = EmulatorType.Qemu;
 			ImageFormat = ImageFormat.IMG;
@@ -352,6 +357,7 @@ namespace Mosa.Utility.Launcher
 			EnableIRLongExpansion = true;
 			TwoPassOptimizations = true;
 			EnableValueNumbering = true;
+			MultibootSpecification = MultibootSpecification.V1;
 		}
 
 		private void ReadIncludeFile(string file)

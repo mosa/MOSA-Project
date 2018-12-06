@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class MovLoad32 : X86Instruction
 	{
-		public override int ID { get { return 245; } }
+		public override int ID { get { return 246; } }
 
 		internal MovLoad32()
 			: base(1, 2)
@@ -126,6 +126,16 @@ namespace Mosa.Platform.x86.Instructions
 			}
 
 			if (node.Operand1.IsConstant && node.Operand2.IsConstantZero)
+			{
+				emitter.OpcodeEncoder.AppendByte(0x8B);
+				emitter.OpcodeEncoder.Append2Bits(0b00);
+				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				emitter.OpcodeEncoder.Append3Bits(0b101);
+				emitter.OpcodeEncoder.Append32BitImmediate(node.Operand1);
+				return;
+			}
+
+			if (node.Operand1.IsConstant && node.Operand2.IsConstant)
 			{
 				emitter.OpcodeEncoder.AppendByte(0x8B);
 				emitter.OpcodeEncoder.Append2Bits(0b00);

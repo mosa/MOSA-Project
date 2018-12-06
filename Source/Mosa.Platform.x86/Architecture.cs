@@ -3,6 +3,7 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Compiler.Framework.Stages;
@@ -223,13 +224,20 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// Extends the pre-compiler pipeline with x86 compiler stages.
+		/// Extends the compiler pipeline with x86 compiler stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline)
+		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline, CompilerOptions compilerOptions)
 		{
+			if (compilerOptions.MultibootSpecification == MultibootSpecification.V1)
+			{
+				compilerPipeline.InsertAfterFirst<TypeInitializerSchedulerStage>(
+					new MultibootV1Stage()
+				);
+			}
+
 			compilerPipeline.Add(
-				new StartUpStage()
+				new Intel.CompilerStages.StartUpStage()
 			);
 
 			compilerPipeline.Add(
@@ -241,7 +249,8 @@ namespace Mosa.Platform.x86
 		/// Extends the method compiler pipeline with x86 specific stages.
 		/// </summary>
 		/// <param name="compilerPipeline">The method compiler pipeline to extend.</param>
-		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> compilerPipeline)
+		/// <param name="compilerOptions">The compiler options.</param>
+		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> compilerPipeline, CompilerOptions compilerOptions)
 		{
 			compilerPipeline.InsertBefore<LowerIRStage>(
 				new IRSubstitutionStage()
@@ -252,6 +261,7 @@ namespace Mosa.Platform.x86
 				{
 					new LongOperandStage(),
 					new IRTransformationStage(),
+					compilerOptions.EnablePlatformOptimizations ? new OptimizationStage() : null,
 					new TweakStage(),
 					new FixedRegisterAssignmentStage(),
 					new SimpleDeadCodeRemovalStage(),
@@ -264,8 +274,11 @@ namespace Mosa.Platform.x86
 			);
 
 			compilerPipeline.InsertBefore<CodeGenerationStage>(
-				new FinalTweakStage()
-			);
+				new BaseMethodCompilerStage[]
+				{
+					new FinalTweakStage(),
+					compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
+				});
 
 			compilerPipeline.InsertBefore<CodeGenerationStage>(
 				new JumpOptimizationStage()

@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Adc32 : X64Instruction
 	{
-		public override int ID { get { return 366; } }
+		public override int ID { get { return 371; } }
 
 		internal Adc32()
 			: base(1, 2)
@@ -45,6 +45,12 @@ namespace Mosa.Platform.x64.Instructions
 
 			if (node.Operand2.IsCPURegister)
 			{
+				emitter.OpcodeEncoder.SuppressByte(0x40);
+				emitter.OpcodeEncoder.AppendNibble(0b0100);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit((node.Result.Register.RegisterCode >> 3) & 0x1);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit((node.Operand2.Register.RegisterCode >> 3) & 0x1);
 				emitter.OpcodeEncoder.AppendByte(0x13);
 				emitter.OpcodeEncoder.Append2Bits(0b11);
 				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
@@ -54,6 +60,12 @@ namespace Mosa.Platform.x64.Instructions
 
 			if (node.Operand2.IsConstant)
 			{
+				emitter.OpcodeEncoder.SuppressByte(0x40);
+				emitter.OpcodeEncoder.AppendNibble(0b0100);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit((node.Result.Register.RegisterCode >> 3) & 0x1);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit(0b0);
 				emitter.OpcodeEncoder.AppendByte(0x81);
 				emitter.OpcodeEncoder.Append2Bits(0b11);
 				emitter.OpcodeEncoder.Append3Bits(0b000);
