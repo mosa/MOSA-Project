@@ -7,14 +7,14 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Subss
+	/// Sqrtss
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class Subss : X86Instruction
+	public sealed class Sqrtss : X86Instruction
 	{
-		public override int ID { get { return 300; } }
+		public override int ID { get { return 296; } }
 
-		internal Subss()
+		internal Sqrtss()
 			: base(1, 2)
 		{
 		}
@@ -33,7 +33,7 @@ namespace Mosa.Platform.x86.Instructions
 
 			emitter.OpcodeEncoder.AppendByte(0xF3);
 			emitter.OpcodeEncoder.AppendByte(0x0F);
-			emitter.OpcodeEncoder.AppendByte(0x5C);
+			emitter.OpcodeEncoder.AppendByte(0x51);
 			emitter.OpcodeEncoder.Append2Bits(0b11);
 			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 			emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);

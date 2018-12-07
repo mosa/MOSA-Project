@@ -116,6 +116,8 @@ namespace Mosa.Platform.x86
 		public static readonly Shrd32 Shrd32 = new Shrd32();
 		public static readonly Sti Sti = new Sti();
 		public static readonly Stos Stos = new Stos();
+		public static readonly Sqrtss Sqrtss = new Sqrtss();
+		public static readonly Sqrtsd Sqrtsd = new Sqrtsd();
 		public static readonly Sub32 Sub32 = new Sub32();
 		public static readonly Subsd Subsd = new Subsd();
 		public static readonly Subss Subss = new Subss();
