@@ -315,6 +315,8 @@
     <Compile Include="Instructions\Shr64.cs" />
     <Compile Include="Instructions\Shrd32.cs" />
     <Compile Include="Instructions\Shrd64.cs" />
+    <Compile Include="Instructions\Sqrtsd.cs" />
+    <Compile Include="Instructions\Sqrtss.cs" />
     <Compile Include="Instructions\Sti.cs" />
     <Compile Include="Instructions\Sub32.cs" />
     <Compile Include="Instructions\Sub64.cs" />
