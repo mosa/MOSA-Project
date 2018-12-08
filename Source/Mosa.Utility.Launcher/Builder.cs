@@ -100,6 +100,7 @@ namespace Mosa.Utility.Launcher
 				compiler.CompilerOptions.SetCustomOption("x86.irq-methods", Options.Emitx86IRQMethods ? "true" : "false");
 
 				compiler.CompilerOptions.CreateExtraSections = Options.CreateExtraSections;
+				compiler.CompilerOptions.CreateExtraProgramHeaders = Options.CreateExtraProgramHeaders;
 
 				if (Options.GenerateMapFile)
 				{

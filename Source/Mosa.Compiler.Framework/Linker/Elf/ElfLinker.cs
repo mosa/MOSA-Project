@@ -229,6 +229,19 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 				elfheader.ProgramHeaderNumber++;
 			}
+
+			if (linker.CreateExtraProgramHeaders != null)
+			{
+				foreach (var programHeader in linker.CreateExtraProgramHeaders())
+				{
+					if (programHeader.FileSize == 0)
+						continue;
+
+					programHeader.Write(linkerFormatType, writer);
+
+					elfheader.ProgramHeaderNumber++;
+				}
+			}
 		}
 
 		private void CreateSections()
@@ -382,7 +395,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			sectionHeaderStringSection.AddDependency(stringSection);
 		}
 
-		protected void WriteStringSection(Section section,EndianAwareBinaryWriter writer)
+		protected void WriteStringSection(Section section, EndianAwareBinaryWriter writer)
 		{
 			Debug.Assert(section == stringSection);
 

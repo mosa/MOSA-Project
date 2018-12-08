@@ -133,6 +133,11 @@ namespace Mosa.Compiler.Framework
 		public BaseLinker.CreateExtraSectionsDelegate CreateExtraSections { get; set; }
 
 		/// <summary>
+		/// Adds additional program headers to the Elf-File.
+		/// </summary>
+		public BaseLinker.CreateExtraProgramHeaderDelegate CreateExtraProgramHeaders { get; set; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether [emit binary].
 		/// </summary>
 		/// <value>
