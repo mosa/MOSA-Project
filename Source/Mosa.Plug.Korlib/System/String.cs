@@ -1,9 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using System.Runtime.CompilerServices;
 
-namespace Mosa.Runtime.Korlib.System
+namespace Mosa.Plug.Korlib.System
 {
 	internal static class String
 	{

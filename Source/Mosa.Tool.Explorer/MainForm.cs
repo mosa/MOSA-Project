@@ -59,7 +59,6 @@ namespace Mosa.Tool.Explorer
 		{
 			Text = "MOSA Explorer v" + CompilerVersion.Version;
 
-			//cbPlatform.SelectedIndex = 0;
 			SetStatus("Ready!");
 		}
 
@@ -78,8 +77,6 @@ namespace Mosa.Tool.Explorer
 			if (openFileDialog.ShowDialog() == DialogResult.OK)
 			{
 				LoadAssembly(openFileDialog.FileName);
-
-				//LoadAssemblyDebugInfo(openFileDialog.FileName);
 			}
 		}
 
@@ -569,6 +566,8 @@ namespace Mosa.Tool.Explorer
 
 			moduleLoader.AddPrivatePath(Path.GetDirectoryName(filename));
 			moduleLoader.LoadModuleFromFile(filename);
+			moduleLoader.LoadModuleFromFile("Mosa.Plug.Korlib.dll");
+			moduleLoader.LoadModuleFromFile("Mosa.Plug.Korlib." + platform + ".dll");
 
 			var metadata = moduleLoader.CreateMetadata();
 

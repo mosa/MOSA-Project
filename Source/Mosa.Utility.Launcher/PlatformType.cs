@@ -2,5 +2,5 @@
 
 namespace Mosa.Utility.Launcher
 {
-	public enum PlatformType { NotSpecified, X86 };
+	public enum PlatformType { NotSpecified, x86, x64 };
 }

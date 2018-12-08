@@ -1,9 +1,9 @@
 {
 	"Encoding": [
 		"[x64]=[instruction-prefix]|[address-prefix]|[operand-prefix]|[opcode]|[opcode2]|[opcode3]|[opcode4]|[mod]|[reg]|[rm]|[scale]|[index]|[base]|[displacement]|[immediate]",
-		"[x64-rex]=[instruction-prefix]|supress8:0x40|[rex.opcode]|[rex.w]|[rex.r]|[rex.x]|[rex.b]|[address-prefix]|[operand-prefix]|[opcode]|[opcode2]|[opcode3]|[opcode4]|[mod]|[reg]|[rm]|[scale]|[index]|[base]|[displacement]|[immediate],rex.opcode=0100",
-		"[x64-rex-32]=[instruction-prefix]|supress8:0x40|[rex.opcode]|[rex.w]|[rex.r]|[rex.x]|[rex.b]|[address-prefix]|[operand-prefix]|[opcode]|[opcode2]|[opcode3]|[opcode4]|[mod]|[reg]|[rm]|[scale]|[index]|[base]|[displacement]|[immediate],rex.opcode=0100,rex.w=0",
-		"[x64-rex-64]=[instruction-prefix]|supress8:0x40|[rex.opcode]|[rex.w]|[rex.r]|[rex.x]|[rex.b]|[address-prefix]|[operand-prefix]|[opcode]|[opcode2]|[opcode3]|[opcode4]|[mod]|[reg]|[rm]|[scale]|[index]|[base]|[displacement]|[immediate],rex.opcode=0100,rex.w=1",
+		"[x64-rex]=[instruction-prefix]|[address-prefix]|[operand-prefix]|supress8:0x40|[rex.opcode]|[rex.w]|[rex.r]|[rex.x]|[rex.b]|[opcode]|[opcode2]|[opcode3]|[opcode4]|[mod]|[reg]|[rm]|[scale]|[index]|[base]|[displacement]|[immediate],rex.opcode=0100",
+		"[x64-rex-32]=[instruction-prefix]|[address-prefix]|[operand-prefix]|supress8:0x40|[rex.opcode]|[rex.w]|[rex.r]|[rex.x]|[rex.b]|[opcode]|[opcode2]|[opcode3]|[opcode4]|[mod]|[reg]|[rm]|[scale]|[index]|[base]|[displacement]|[immediate],rex.opcode=0100,rex.w=0",
+		"[x64-rex-64]=[instruction-prefix]|[address-prefix]|[operand-prefix]|supress8:0x40|[rex.opcode]|[rex.w]|[rex.r]|[rex.x]|[rex.b]|[opcode]|[opcode2]|[opcode3]|[opcode4]|[mod]|[reg]|[rm]|[scale]|[index]|[base]|[displacement]|[immediate],rex.opcode=0100,rex.w=1",
 
 		"[x64-branch]=[x64],opcode=0x0F,opcode2=[opcode-branch],immediate=rel32:label",
 		"[x64-setbyteif]=[x64],opcode=0x0F,opcode2=[opcode-setbyteif],mod=11,reg=000,rm=reg3:r",
@@ -1093,11 +1093,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
-					"Encoding": "[x64],opcode=0x66,opcode2=0xED"
+					"Encoding": "[x64],operand-prefix=0x66,opcode=0xED"
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x64],opcode=0x66,opcode2=0xE4,immediate=imm8:o1"
+					"Encoding": "[x64],operand-prefix=0x66,opcode=0xE4,immediate=imm8:o1"
 				}
 			]
 		},
@@ -3851,7 +3851,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0x66,opcode2=0x0F,opcode3=0xEF,mod=11,reg=reg3:r,rm=reg3:o2"
+					"Encoding": "[x64],operand-prefix=0x66,opcode=0x0F,opcode2=0xEF,mod=11,reg=reg3:r,rm=reg3:o2"
 				}
 			]
 		},
@@ -3944,7 +3944,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0x66,opcode2=0x0F,opcode3=0x3A,opcode4=0x0B,mod=11,reg=reg3:r,rm=reg3:o1,immediate=imm8:o2"
+					"Encoding": "[x64],operand-prefix=0x66,opcode=0x0F,opcode2=0x3A,opcode3=0x0B,mod=11,reg=reg3:r,rm=reg3:o1,immediate=imm8:o2"
 				}
 			]
 		},
@@ -3963,7 +3963,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0x66,opcode2=0x0F,opcode3=0x3A,opcode4=0x0A,mod=11,reg=reg3:r,rm=reg3:o1,immediate=imm8:o2"
+					"Encoding": "[x64],operand-prefix=0x66,opcode=0x0F,opcode2=0x3A,opcode3=0x0A,mod=11,reg=reg3:r,rm=reg3:o1,immediate=imm8:o2"
 				}
 			]
 		},
@@ -4290,6 +4290,48 @@
 			]
 		},
 		{
+			"Name": "Sqrtss",
+			"Commutative": "true",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],opcode=0xF3,opcode2=0x0F,opcode3=0x51,mod=11,reg=reg3:r,rm=reg3:o2"
+				}
+			]
+		},
+
+		{
+			"Name": "Sqrtsd",
+			"Commutative": "true",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],opcode=0xF2,opcode2=0x0F,opcode3=0x51,mod=11,reg=reg3:r,rm=reg3:o2"
+				}
+			]
+		},
+
+		{
 			"Name": "Sub32",
 			"FamilyName": "X64",
 			"FlagsCleared": "",
@@ -4436,7 +4478,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0x66,opcode2=0x0F,opcode3=0x2E,mod=11,reg=reg3:o1,rm=reg3:o2"
+					"Encoding": "[x64],operand-prefix=0x66,opcode=0x0F,opcode2=0x2E,mod=11,reg=reg3:o1,rm=reg3:o2"
 				}
 			]
 		},
@@ -6495,7 +6537,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0x66,opcode2=0x87,opcode3=0xdb"
+					"Encoding": "[x64],operand-prefix=0x66,opcode=0x87,opcode2=0xdb"
 				}
 			]
 		}

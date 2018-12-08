@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package >
+	<metadata>
+		<id>Mosa.Runtime</id>
+		<version>1.0.0.1</version>
+		<title>Mosa.Runtime Library</title>
+		<authors>MOSA Project</authors>
+		<owners>MOSA Project</owners>
+		<licenseUrl>https://github.com/mosa/MOSA-Project/blob/master/LICENSE.txt</licenseUrl>
+		<projectUrl>http://www.mosa-project.org</projectUrl>
+		<iconUrl>https://raw.githubusercontent.com/tgiphil/MOSA-Project/VSIXProject/Source/Art/Mosa%20Icon.png</iconUrl>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<description>MOSA runtime libraries</description>
+		<releaseNotes></releaseNotes>
+		<copyright>Copyright © 2017</copyright>
+		<tags>MOSA Compiler</tags>
+		<dependencies>
+			<dependency id="Mosa.Korlib" version="1.0.0.1" />
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="..\..\bin\Mosa.Runtime.dll" target="lib\net45" />
+	</files>
+</package>

@@ -4,8 +4,8 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Compiler.Framework.Trace;
+using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.BootImage;
 using SharpDisasm;
 using SharpDisasm.Translators;
@@ -60,6 +60,20 @@ namespace Mosa.Utility.Launcher
 			Counters.Add(data);
 		}
 
+		private FileInfo HuntFor(string filename)
+		{
+			var directory = Hunt(filename);
+
+			if (directory == null)
+				return null;
+
+			var full = Path.Combine(directory, filename);
+
+			var file = new FileInfo(full);
+
+			return file;
+		}
+
 		public void Compile()
 		{
 			HasCompileError = true;
@@ -83,20 +97,16 @@ namespace Mosa.Utility.Launcher
 				compiler.CompilerOptions.TwoPassOptimizations = Options.TwoPassOptimizations;
 				compiler.CompilerOptions.EnableValueNumbering = Options.EnableValueNumbering;
 				compiler.CompilerOptions.OutputFile = CompiledFile;
-
 				compiler.CompilerOptions.Architecture = SelectArchitecture(Options.PlatformType);
 				compiler.CompilerOptions.LinkerFormatType = Options.LinkerFormatType;
 				compiler.CompilerOptions.MultibootSpecification = Options.MultibootSpecification;
-
 				compiler.CompilerOptions.SetCustomOption("multiboot.video", Options.VBEVideo ? "true" : "false");
 				compiler.CompilerOptions.SetCustomOption("multiboot.width", Options.Width.ToString());
 				compiler.CompilerOptions.SetCustomOption("multiboot.height", Options.Height.ToString());
 				compiler.CompilerOptions.SetCustomOption("multiboot.depth", Options.Depth.ToString());
-
 				compiler.CompilerOptions.BaseAddress = Options.BaseAddress;
 				compiler.CompilerOptions.EmitSymbols = Options.EmitSymbols;
 				compiler.CompilerOptions.EmitRelocations = Options.EmitRelocations;
-
 				compiler.CompilerOptions.SetCustomOption("x86.irq-methods", Options.Emitx86IRQMethods ? "true" : "false");
 
 				compiler.CompilerOptions.CreateExtraSections = Options.CreateExtraSections;
@@ -131,23 +141,15 @@ namespace Mosa.Utility.Launcher
 					return;
 				}
 
-				var inputFiles = new List<FileInfo>
-				{
-					new FileInfo(Options.SourceFile)
-				};
-
 				compiler.AddPath(Options.Paths);
 
-				if (Options.HuntForCorLib)
+				var inputFiles = new List<FileInfo>
 				{
-					var path = HuntForCorLibDirectory();
-
-					if (path != null)
-					{
-						OutputEvent("Hunted and found Corlib here: " + path);
-						compiler.AddPath(path);
-					}
-				}
+					new FileInfo(Options.SourceFile),
+					(Options.HuntForCorLib) ? HuntFor("mscorlib.dll") : null,
+					(Options.PlugKorlib) ? HuntFor("Mosa.Plug.Korlib.dll") : null,
+					(Options.PlugKorlib) ? HuntFor("Mosa.Plug.Korlib." + Options.PlatformType.ToString() + ".dll"): null,
+				};
 
 				compiler.Load(inputFiles);
 
@@ -451,61 +453,52 @@ namespace Mosa.Utility.Launcher
 		{
 			switch (platformType)
 			{
-				case PlatformType.X86: return Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect);
+				case PlatformType.x86: return Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect);
+				case PlatformType.x64: return Mosa.Platform.x64.Architecture.CreateArchitecture(Mosa.Platform.x64.ArchitectureFeatureFlags.AutoDetect);
 				default: throw new NotImplementCompilerException("Unknown or unsupported Architecture");
 			}
 		}
 
-		private string mscorlibFileName = "mscorlib.dll";
-
-		private bool CheckForCorLib(string directory)
+		private static bool Check(string directory, string filename)
 		{
-			return File.Exists(Path.Combine(directory, mscorlibFileName));
+			return File.Exists(Path.GetFullPath(Path.Combine(directory, filename)));
 		}
 
-		private string HuntForCorLibDirectory()
+		private string Hunt(string filename)
 		{
 			// Only hunt if it's not in any of the path directories already, or the source directory
 
 			// let's check the source directory
 			string path = Path.GetDirectoryName(Options.SourceFile);
 
-			if (CheckForCorLib(path))
-				return null;
-
-			foreach (var optPaths in Options.Paths)
-			{
-				if (CheckForCorLib(optPaths))
-					return null;
-			}
-
-			// okay -- need to hunt for it
+			if (Check(path, filename))
+				return path;
 
 			// check current directory
-			if (CheckForCorLib(Environment.CurrentDirectory))
+			if (Check(Environment.CurrentDirectory, filename))
+			{
 				return Environment.CurrentDirectory;
-
-			string result = null;
+			}
 
 			// check within packages directory in 1 or 2 directories back
 			// this is how VS organizes projects and packages
 
-			result = SearchSubdirectories(Path.Combine(Path.GetDirectoryName(Options.SourceFile), "..", "packages"));
+			var result = SearchSubdirectories(Path.Combine(Path.GetDirectoryName(Options.SourceFile), "..", "packages"), filename);
 
 			if (result != null)
 				return result;
 
-			result = SearchSubdirectories(Path.Combine(Path.GetDirectoryName(Options.SourceFile), "..", "..", "packages"));
+			result = SearchSubdirectories(Path.Combine(Path.GetDirectoryName(Options.SourceFile), "..", "..", "packages"), filename);
 
 			if (result != null)
 				return result;
 
-			result = SearchSubdirectories(Path.Combine(Environment.CurrentDirectory, "..", "packages"));
+			result = SearchSubdirectories(Path.Combine(Environment.CurrentDirectory, "..", "packages"), filename);
 
 			if (result != null)
 				return result;
 
-			result = SearchSubdirectories(Path.Combine(Environment.CurrentDirectory, "..", "..", "packages"));
+			result = SearchSubdirectories(Path.Combine(Environment.CurrentDirectory, "..", "..", "packages"), filename);
 
 			if (result != null)
 				return result;
@@ -513,11 +506,11 @@ namespace Mosa.Utility.Launcher
 			return null;
 		}
 
-		private string SearchSubdirectories(string path)
+		private static string SearchSubdirectories(string path, string filename)
 		{
 			if (Directory.Exists(path))
 			{
-				var result = Directory.GetFiles(path, mscorlibFileName, SearchOption.AllDirectories);
+				var result = Directory.GetFiles(path, filename, SearchOption.AllDirectories);
 
 				if (result?.Length >= 1)
 				{

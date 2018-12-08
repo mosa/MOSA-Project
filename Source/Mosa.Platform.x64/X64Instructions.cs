@@ -162,6 +162,8 @@ namespace Mosa.Platform.x64
 			X64.Shrd32,
 			X64.Shrd64,
 			X64.Sti,
+			X64.Sqrtss,
+			X64.Sqrtsd,
 			X64.Sub32,
 			X64.Sub64,
 			X64.Subsd,

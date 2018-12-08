@@ -87,6 +87,7 @@
             this.cbLaunchGDB = new MetroFramework.Controls.MetroCheckBox();
             this.cbEnableQemuGDB = new MetroFramework.Controls.MetroCheckBox();
             this.groupBox14 = new System.Windows.Forms.GroupBox();
+            this.cbPlugKorlib = new MetroFramework.Controls.MetroCheckBox();
             this.cbEmitx86IRQMethods = new MetroFramework.Controls.MetroCheckBox();
             this.groupBox13 = new System.Windows.Forms.GroupBox();
             this.label9 = new MetroFramework.Controls.MetroLabel();
@@ -185,7 +186,7 @@
             this.tbApplicationLocations.Margin = new System.Windows.Forms.Padding(0);
             this.tbApplicationLocations.Multiline = true;
             this.tbApplicationLocations.Name = "tbApplicationLocations";
-            this.tbApplicationLocations.SelectedIndex = 0;
+            this.tbApplicationLocations.SelectedIndex = 1;
             this.tbApplicationLocations.Size = new System.Drawing.Size(663, 430);
             this.tbApplicationLocations.Style = MetroFramework.MetroColorStyle.Blue;
             this.tbApplicationLocations.TabIndex = 22;
@@ -847,7 +848,7 @@
             this.groupBox5.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox5.Location = new System.Drawing.Point(8, 148);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(158, 112);
+            this.groupBox5.Size = new System.Drawing.Size(206, 112);
             this.groupBox5.TabIndex = 48;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Debugger:";
@@ -865,7 +866,7 @@
             "TCP Client"});
             this.cbDebugConnectionOption.Location = new System.Drawing.Point(7, 64);
             this.cbDebugConnectionOption.Name = "cbDebugConnectionOption";
-            this.cbDebugConnectionOption.Size = new System.Drawing.Size(120, 29);
+            this.cbDebugConnectionOption.Size = new System.Drawing.Size(184, 29);
             this.cbDebugConnectionOption.Style = MetroFramework.MetroColorStyle.Blue;
             this.cbDebugConnectionOption.TabIndex = 36;
             this.cbDebugConnectionOption.UseCustomBackColor = true;
@@ -954,14 +955,29 @@
             // groupBox14
             // 
             this.groupBox14.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox14.Controls.Add(this.cbPlugKorlib);
             this.groupBox14.Controls.Add(this.cbEmitx86IRQMethods);
             this.groupBox14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox14.Location = new System.Drawing.Point(432, 24);
+            this.groupBox14.Location = new System.Drawing.Point(432, 18);
             this.groupBox14.Name = "groupBox14";
-            this.groupBox14.Size = new System.Drawing.Size(206, 118);
+            this.groupBox14.Size = new System.Drawing.Size(206, 124);
             this.groupBox14.TabIndex = 43;
             this.groupBox14.TabStop = false;
             this.groupBox14.Text = "Other:";
+            // 
+            // cbPlugKorlib
+            // 
+            this.cbPlugKorlib.AutoSize = true;
+            this.cbPlugKorlib.Checked = true;
+            this.cbPlugKorlib.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbPlugKorlib.Location = new System.Drawing.Point(6, 72);
+            this.cbPlugKorlib.Name = "cbPlugKorlib";
+            this.cbPlugKorlib.Size = new System.Drawing.Size(81, 15);
+            this.cbPlugKorlib.Style = MetroFramework.MetroColorStyle.Blue;
+            this.cbPlugKorlib.TabIndex = 7;
+            this.cbPlugKorlib.Text = "Plug Korlib";
+            this.cbPlugKorlib.UseCustomBackColor = true;
+            this.cbPlugKorlib.UseSelectable = true;
             // 
             // cbEmitx86IRQMethods
             // 
@@ -1589,5 +1605,6 @@
 		private MetroFramework.Controls.MetroCheckBox cbIRLongExpansion;
 		private System.Windows.Forms.DataGridView dataGridView1;
 		private MetroFramework.Controls.MetroCheckBox cbValueNumbering;
+		private MetroFramework.Controls.MetroCheckBox cbPlugKorlib;
 	}
 }

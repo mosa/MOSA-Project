@@ -1,10 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
 using Mosa.Runtime.Plug;
+using Mosa.Runtime.x86;
 using System;
 using System.Runtime.CompilerServices;
 
-namespace Mosa.Runtime.x64.Korlib.System.Threading
+namespace Mosa.Plug.Korlib.System.Threading.x86
 {
 	public static class Monitor
 	{
@@ -14,7 +16,7 @@ namespace Mosa.Runtime.x64.Korlib.System.Threading
 		{
 			var sync = Intrinsic.GetObjectAddress(obj) + IntPtr.Size;
 
-			while (Native.CmpXChgLoad64(sync.ToInt64(), 1, 0) != 0)
+			while (Native.CmpXChgLoad32(sync.ToInt32(), 1, 0) != 0)
 			{ }
 		}
 
@@ -24,7 +26,7 @@ namespace Mosa.Runtime.x64.Korlib.System.Threading
 		{
 			var sync = Intrinsic.GetObjectAddress(obj) + IntPtr.Size;
 
-			Native.XAddLoad64(sync.ToInt64(), -1);
+			Native.XAddLoad32(sync.ToInt32(), -1);
 		}
 	}
 }

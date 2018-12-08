@@ -279,7 +279,7 @@ namespace Mosa.Runtime
 
 		#region Metadata Setup
 
-		internal static LinkedList<RuntimeAssembly> Assemblies = null;
+		public static LinkedList<RuntimeAssembly> Assemblies = null;
 
 		public static void Setup()
 		{

@@ -68,7 +68,7 @@ namespace Mosa.Utility.UnitTests
 				Emulator = EmulatorType.Qemu,
 				ImageFormat = ImageFormat.IMG,
 				MultibootSpecification = Compiler.Framework.MultibootSpecification.V1,
-				PlatformType = PlatformType.X86,
+				PlatformType = PlatformType.x86,
 				LinkerFormatType = LinkerFormatType.Elf32,
 				EmulatorMemoryInMB = 128,
 				DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA-UnitTest"),
@@ -93,6 +93,7 @@ namespace Mosa.Utility.UnitTests
 				GenerateASMFile = true,
 				GenerateMapFile = false,
 				GenerateDebugFile = false,
+				PlugKorlib = true
 			};
 
 			AppLocations = new AppLocations();

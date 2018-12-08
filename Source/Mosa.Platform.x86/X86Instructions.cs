@@ -118,6 +118,8 @@ namespace Mosa.Platform.x86
 			X86.Shrd32,
 			X86.Sti,
 			X86.Stos,
+			X86.Sqrtss,
+			X86.Sqrtsd,
 			X86.Sub32,
 			X86.Subsd,
 			X86.Subss,

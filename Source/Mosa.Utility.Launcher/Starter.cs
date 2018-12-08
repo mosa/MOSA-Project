@@ -69,7 +69,7 @@ namespace Mosa.Utility.Launcher
 		{
 			string arg = " -L " + Quote(AppLocations.QEMUBIOSDirectory);
 
-			if (Options.PlatformType == PlatformType.X86)
+			if (Options.PlatformType == PlatformType.x86)
 			{
 				arg += " -cpu qemu32,+sse4.1";
 			}

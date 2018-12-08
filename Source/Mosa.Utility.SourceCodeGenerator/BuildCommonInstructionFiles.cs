@@ -91,6 +91,12 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine("\t\t{");
 			Lines.AppendLine("\t\t}");
 
+			var FlagsUsed = node.FlagsUsed == null ? string.Empty : node.FlagsUsed.ToUpper(); // tested_f
+			var FlagsSet = node.FlagsSet == null ? string.Empty : node.FlagsSet.ToUpper(); // values_f (upper=set, lower=cleared)
+			var FlagsCleared = node.FlagsCleared == null ? string.Empty : node.FlagsCleared.ToUpper(); // above
+			var FlagsModified = node.FlagsModified == null ? string.Empty : node.FlagsModified.ToUpper(); // modif_f
+			var FlagsUndefined = node.FlagsUndefined == null ? string.Empty : node.FlagsUndefined.ToUpper(); // undef_f
+
 			if (node.AlternativeName != null)
 			{
 				Lines.AppendLine();
@@ -169,181 +175,181 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Lines.AppendLine("\t\tpublic override bool ThreeTwoAddressConversion { get { return true; } }");
 			}
 
-			if (node.FlagsUsed != null && node.FlagsUsed.Contains("Z"))
+			if (FlagsUsed.Contains("Z"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsZeroFlagUsed { get { return true; } }");
 			}
 
-			if (node.FlagsSet != null && node.FlagsSet.Contains("Z"))
+			if (FlagsSet.Contains("Z"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsZeroFlagSet { get { return true; } }");
 			}
 
-			if (node.FlagsCleared != null && node.FlagsCleared.Contains("Z"))
+			if (FlagsCleared.Contains("Z"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsZeroFlagCleared { get { return true; } }");
 			}
 
-			if (node.FlagsModified != null && (node.FlagsModified.Contains("Z") || node.FlagsSet.Contains("Z") || node.FlagsCleared.Contains("Z")))
+			if (FlagsModified.Contains("Z") || FlagsSet.Contains("Z") || FlagsCleared.Contains("Z"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsZeroFlagModified { get { return true; } }");
 			}
 
-			if (node.FlagsUndefined != null && node.FlagsUndefined.Contains("Z"))
+			if (FlagsUndefined.Contains("Z"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsZeroFlagUnchanged { get { return true; } }");
 			}
 
-			if (node.FlagsUnchanged != null && node.FlagsUndefined.Contains("Z"))
+			if (FlagsUndefined.Contains("Z"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsZeroFlagUndefined { get { return true; } }");
 			}
 
-			if (node.FlagsUsed != null && node.FlagsUsed.Contains("C"))
+			if (FlagsUsed.Contains("C"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsCarryFlagUsed { get { return true; } }");
 			}
 
-			if (node.FlagsSet != null && node.FlagsSet.Contains("C"))
+			if (FlagsSet.Contains("C"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsCarryFlagSet { get { return true; } }");
 			}
 
-			if (node.FlagsCleared != null && node.FlagsCleared.Contains("C"))
+			if (FlagsCleared.Contains("C"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsCarryFlagCleared { get { return true; } }");
 			}
 
-			if (node.FlagsModified != null && (node.FlagsModified.Contains("C") || node.FlagsSet.Contains("C") || node.FlagsCleared.Contains("C")))
+			if (FlagsModified.Contains("C") || FlagsSet.Contains("C") || FlagsCleared.Contains("C"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsCarryFlagModified { get { return true; } }");
 			}
 
-			if (node.FlagsUndefined != null && node.FlagsUndefined.Contains("C"))
+			if (FlagsUndefined.Contains("C"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsCarryFlagUnchanged { get { return true; } }");
 			}
 
-			if (node.FlagsUnchanged != null && node.FlagsUndefined.Contains("C"))
+			if (FlagsUndefined.Contains("C"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsCarryFlagUndefined { get { return true; } }");
 			}
 
-			if (node.FlagsUsed != null && node.FlagsUsed.Contains("S"))
+			if (FlagsUsed.Contains("S"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsSignFlagUsed { get { return true; } }");
 			}
 
-			if (node.FlagsSet != null && node.FlagsSet.Contains("S"))
+			if (FlagsSet.Contains("S"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsSignFlagSet { get { return true; } }");
 			}
 
-			if (node.FlagsCleared != null && node.FlagsCleared.Contains("S"))
+			if (FlagsCleared.Contains("S"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsSignFlagCleared { get { return true; } }");
 			}
 
-			if (node.FlagsModified != null && (node.FlagsModified.Contains("S") || node.FlagsSet.Contains("S") || node.FlagsCleared.Contains("S")))
+			if (FlagsModified.Contains("S") || FlagsSet.Contains("S") || FlagsCleared.Contains("S"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsSignFlagModified { get { return true; } }");
 			}
 
-			if (node.FlagsUndefined != null && node.FlagsUndefined.Contains("S"))
+			if (FlagsUndefined.Contains("S"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsSignFlagUnchanged { get { return true; } }");
 			}
 
-			if (node.FlagsUnchanged != null && node.FlagsUndefined.Contains("S"))
+			if (FlagsUndefined.Contains("S"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsSignFlagUndefined { get { return true; } }");
 			}
 
-			if (node.FlagsUsed != null && node.FlagsUsed.Contains("O"))
+			if (FlagsUsed.Contains("O"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsOverflowFlagUsed { get { return true; } }");
 			}
 
-			if (node.FlagsSet != null && node.FlagsSet.Contains("O"))
+			if (FlagsSet.Contains("O"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsOverflowFlagSet { get { return true; } }");
 			}
 
-			if (node.FlagsCleared != null && node.FlagsCleared.Contains("O"))
+			if (FlagsCleared.Contains("O"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsOverflowFlagCleared { get { return true; } }");
 			}
 
-			if (node.FlagsModified != null && (node.FlagsModified.Contains("O") || node.FlagsSet.Contains("O") || node.FlagsCleared.Contains("O")))
+			if (FlagsModified.Contains("O") || FlagsSet.Contains("O") || FlagsCleared.Contains("O"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsOverflowFlagModified { get { return true; } }");
 			}
 
-			if (node.FlagsUndefined != null && node.FlagsUndefined.Contains("O"))
+			if (FlagsUndefined.Contains("O"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsOverflowFlagUnchanged { get { return true; } }");
 			}
 
-			if (node.FlagsUnchanged != null && node.FlagsUndefined.Contains("O"))
+			if (FlagsUndefined.Contains("O"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsOverflowFlagUndefined { get { return true; } }");
 			}
 
-			if (node.FlagsUsed != null && node.FlagsUsed.Contains("P"))
+			if (FlagsUsed.Contains("P"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsParityFlagUsed { get { return true; } }");
 			}
 
-			if (node.FlagsSet != null && node.FlagsSet.Contains("P"))
+			if (FlagsSet.Contains("P"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsParityFlagSet { get { return true; } }");
 			}
 
-			if (node.FlagsCleared != null && node.FlagsCleared.Contains("P"))
+			if (FlagsCleared.Contains("P"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsParityFlagCleared { get { return true; } }");
 			}
 
-			if (node.FlagsModified != null && (node.FlagsModified.Contains("P") || node.FlagsSet.Contains("P") || node.FlagsCleared.Contains("P")))
+			if (FlagsModified.Contains("P") || FlagsSet.Contains("P") || FlagsCleared.Contains("P"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsParityFlagModified { get { return true; } }");
 			}
 
-			if (node.FlagsUndefined != null && node.FlagsUndefined.Contains("P"))
+			if (FlagsUndefined.Contains("P"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsParityFlagUnchanged { get { return true; } }");
 			}
 
-			if (node.FlagsUnchanged != null && node.FlagsUndefined.Contains("P"))
+			if (FlagsUndefined.Contains("P"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsParityFlagUndefined { get { return true; } }");
