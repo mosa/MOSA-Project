@@ -1,12 +1,13 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Plug;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace Mosa.Runtime.Korlib.System.Runtime.CompilerServices
+namespace Mosa.Plug.Korlib.System.Runtime.CompilerServices
 {
 	internal static class RuntimeHelpers
 	{

@@ -45,6 +45,9 @@ namespace Mosa.Compiler.Framework
 		{
 			foreach (var file in inputFiles)
 			{
+				if (file == null)
+					continue;
+
 				yield return file.FullName;
 			}
 		}
@@ -56,8 +59,11 @@ namespace Mosa.Compiler.Framework
 
 		public void AddPath(IEnumerable<string> paths)
 		{
-			foreach (string file in paths)
+			foreach (var file in paths)
 			{
+				if (file == null)
+					continue;
+
 				ModuleLoader.AddPrivatePath(file);
 			}
 		}
@@ -66,7 +72,7 @@ namespace Mosa.Compiler.Framework
 		{
 			ModuleLoader.AddPrivatePath(GetInputFileNames(inputFiles));
 
-			foreach (string file in GetInputFileNames(inputFiles))
+			foreach (var file in GetInputFileNames(inputFiles))
 			{
 				ModuleLoader.LoadModuleFromFile(file);
 			}

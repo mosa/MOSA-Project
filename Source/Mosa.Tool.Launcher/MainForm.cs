@@ -100,12 +100,7 @@ namespace Mosa.Tool.Launcher
 			Options.TwoPassOptimizations = cbTwoPassOptimizations.Checked;
 			Options.EnableIRLongExpansion = cbIRLongExpansion.Checked;
 			Options.EnableValueNumbering = cbValueNumbering.Checked;
-
-			if (Options.LaunchGDBDebugger)
-			{
-				Options.GenerateDebugFile = true;
-			}
-
+			Options.GenerateDebugFile = Options.LaunchGDBDebugger;
 			Options.BaseAddress = tbBaseAddress.Text.ParseHexOrInteger();
 			Options.EmitSymbols = cbEmitSymbolTable.Checked;
 			Options.EmitRelocations = cbRelocationTable.Checked;
@@ -113,7 +108,7 @@ namespace Mosa.Tool.Launcher
 
 			if (Options.VBEVideo)
 			{
-				string[] Mode = tbMode.Text.Split('x');
+				var Mode = tbMode.Text.Split('x');
 
 				if (Mode.Length == 3)
 				{
@@ -165,9 +160,6 @@ namespace Mosa.Tool.Launcher
 				default: break;
 			}
 
-			lbSource.Text = Path.GetFileName(Options.SourceFile);
-			lbSourceDirectory.Text = Path.GetDirectoryName(Options.SourceFile);
-
 			switch (cbBootFormat.SelectedIndex)
 			{
 				case 0: Options.MultibootSpecification = MultibootSpecification.V1; break;
@@ -184,7 +176,8 @@ namespace Mosa.Tool.Launcher
 
 			switch (cbPlatform.SelectedIndex)
 			{
-				case 0: Options.PlatformType = PlatformType.X86; break;
+				case 0: Options.PlatformType = PlatformType.x86; break;
+				case 1: Options.PlatformType = PlatformType.x64; break;
 				default: Options.PlatformType = PlatformType.NotSpecified; break;
 			}
 
@@ -203,6 +196,9 @@ namespace Mosa.Tool.Launcher
 			{
 				Options.IncludeFiles.Add(entry.IncludeFile);
 			}
+
+			//lbSource.Text = Path.GetFileName(Options.SourceFile);
+			//lbSourceDirectory.Text = Path.GetDirectoryName(Options.SourceFile);
 		}
 
 		private void UpdateInterfaceOptions()
@@ -267,13 +263,16 @@ namespace Mosa.Tool.Launcher
 
 			switch (Options.PlatformType)
 			{
-				case PlatformType.X86: cbPlatform.SelectedIndex = 0; break;
+				case PlatformType.x86: cbPlatform.SelectedIndex = 0; break;
+				case PlatformType.x64: cbPlatform.SelectedIndex = 1; break;
 				default: cbPlatform.SelectedIndex = 0; break;
 			}
 
 			switch (Options.MultibootSpecification)
 			{
 				case MultibootSpecification.V1: cbBootFormat.SelectedIndex = 0; break;
+
+				//case MultibootSpecification.V2: cbBootFormat.SelectedIndex = 1; break;
 				default: cbBootFormat.SelectedIndex = 0; break;
 			}
 
@@ -362,7 +361,11 @@ namespace Mosa.Tool.Launcher
 		{
 			if (openFileDialog1.ShowDialog() == DialogResult.OK)
 			{
-				Options.SourceFile = openFileDialog1.FileName;
+				var filename = openFileDialog1.FileName;
+
+				Options.SourceFile = filename;
+				Options.Paths.Clear();
+				Options.Paths.Add(Path.GetDirectoryName(filename));
 
 				lbSource.Text = Path.GetFileName(Options.SourceFile);
 				lbSourceDirectory.Text = Path.GetDirectoryName(Options.SourceFile);
@@ -371,7 +374,7 @@ namespace Mosa.Tool.Launcher
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			Text = "MOSA Explorer v" + CompilerVersion.Version;
+			Text = "MOSA Launcher v" + CompilerVersion.Version;
 			tbApplicationLocations.SelectedTab = tabOptions;
 
 			foreach (var includeFile in Options.IncludeFiles)

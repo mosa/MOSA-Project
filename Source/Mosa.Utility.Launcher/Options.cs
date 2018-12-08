@@ -270,6 +270,9 @@ namespace Mosa.Utility.Launcher
 		[Option("watch")]
 		public string WatchFile { get; set; }
 
+		[Option("plug-korlib")]
+		public bool PlugKorlib { get; set; }
+
 		public List<IncludeFile> IncludeFiles { get; set; }
 
 		public List<string> Paths { get; set; }
@@ -334,7 +337,7 @@ namespace Mosa.Utility.Launcher
 			Emulator = EmulatorType.Qemu;
 			ImageFormat = ImageFormat.IMG;
 			LinkerFormatType = LinkerFormatType.Elf32;
-			PlatformType = PlatformType.X86;
+			PlatformType = PlatformType.x86;
 			FileSystem = FileSystem.FAT16;
 			BaseAddress = 0x00400000;
 			SerialConnectionHost = "127.0.0.1";
@@ -358,6 +361,7 @@ namespace Mosa.Utility.Launcher
 			TwoPassOptimizations = true;
 			EnableValueNumbering = true;
 			MultibootSpecification = MultibootSpecification.V1;
+			PlugKorlib = true;
 		}
 
 		private void ReadIncludeFile(string file)

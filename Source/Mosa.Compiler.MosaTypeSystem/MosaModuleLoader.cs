@@ -69,6 +69,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			foreach (string path in assemblyPaths)
 			{
+				if (path == null)
+					continue;
+
 				AddPrivatePath(Path.GetDirectoryName(path));
 			}
 		}

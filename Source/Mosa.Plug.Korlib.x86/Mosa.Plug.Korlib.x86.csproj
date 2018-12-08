@@ -4,12 +4,12 @@
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{CBDEEF3C-BBE7-4655-A096-1367DE069E63}</ProjectGuid>
+    <ProjectGuid>{028BC31C-2EDC-492E-90A3-3714E38CE2CF}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Mosa.Plug.Korlib</AssemblyName>
+    <AssemblyName>Mosa.Plug.Korlib.x86</AssemblyName>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -18,7 +18,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
-    <RootNamespace>Mosa.Plug.Korlib</RootNamespace>
+    <RootNamespace>Mosa.Plug.Korlib.x86</RootNamespace>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -71,15 +71,18 @@
       <Project>{631bc4f3-e2d8-4319-814c-13904caa17ce}</Project>
       <Name>Mosa.Korlib</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Runtime.x86\Mosa.Runtime.x86.csproj">
+      <Project>{A47B7998-4EE8-4AF8-9373-C664FDEDDC65}</Project>
+      <Name>Mosa.Runtime.x86</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj">
       <Project>{77961864-db33-4189-804f-d774022c96e2}</Project>
       <Name>Mosa.Runtime</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Plug.cs" />
-    <Compile Include="System.Runtime.CompilerServices\RuntimeHelpers.cs" />
-    <Compile Include="System\String.cs" />
+    <Compile Include="System.Threading\Interlocked.cs" />
+    <Compile Include="System.Threading\Monitor.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

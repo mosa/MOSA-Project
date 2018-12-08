@@ -1,15 +1,16 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime.Plug;
+using Mosa.Runtime.x86;
 
-namespace Mosa.Runtime.x64.Korlib.System.Threading
+namespace Mosa.Plug.Korlib.System.Threading.x86
 {
 	public static class Interlocked
 	{
 		[Plug("System.Threading.Interlocked::CompareExchange")]
-		internal static long CompareExchange(ref long location1, long value, long comparand)
+		internal static int CompareExchange(ref int location1, int value, int comparand)
 		{
-			return Native.CmpXChgLoad64(ref location1, value, comparand);
+			return Native.CmpXChgLoad32(ref location1, value, comparand);
 		}
 
 		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -24,15 +25,15 @@ namespace Mosa.Runtime.x64.Korlib.System.Threading
 		//}
 
 		[Plug("System.Threading.Interlocked::Exchange")]
-		internal static long Exchange(ref long location1, long value)
+		internal static int Exchange(ref int location1, int value)
 		{
-			return Native.XChgLoad64(ref location1, value);
+			return Native.XChgLoad32(ref location1, value);
 		}
 
 		[Plug("System.Threading.Interlocked::ExchangeAdd")]
-		internal static long ExchangeAdd(ref long location1, long value)
+		internal static int ExchangeAdd(ref int location1, int value)
 		{
-			return Native.XAddLoad64(ref location1, value);
+			return Native.XAddLoad32(ref location1, value);
 		}
 	}
 }
