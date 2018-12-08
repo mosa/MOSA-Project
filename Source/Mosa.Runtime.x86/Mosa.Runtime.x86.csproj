@@ -72,11 +72,16 @@
     <Compile Include="Korlib\System.Threading\Monitor.cs" />
     <Compile Include="Korlib\System.Threading\Interlocked.cs" />
     <Compile Include="Native.cs" />
+    <Compile Include="PlugInclude.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj">
       <Project>{631bc4f3-e2d8-4319-814c-13904caa17ce}</Project>
       <Name>Mosa.Korlib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Plugin.Korlib\Mosa.Plug.Korlib.csproj">
+      <Project>{cbdeef3c-bbe7-4655-a096-1367de069e63}</Project>
+      <Name>Mosa.Plug.Korlib</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj">
       <Project>{77961864-db33-4189-804f-d774022c96e2}</Project>

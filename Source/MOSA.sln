@@ -206,6 +206,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Runtime.x64", "Mosa.Ru
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.TestWorld.x64", "Mosa.TestWorld.x64\Mosa.TestWorld.x64.csproj", "{C2D3D305-98F4-4FE6-BE30-2C5DB883E44E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugs", "Plugs", "{57A405DF-CCB3-4C9E-A88D-478E35042A84}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Plug.Korlib", "Mosa.Plugin.Korlib\Mosa.Plug.Korlib.csproj", "{CBDEEF3C-BBE7-4655-A096-1367DE069E63}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -805,6 +809,18 @@ Global
 		{C2D3D305-98F4-4FE6-BE30-2C5DB883E44E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{C2D3D305-98F4-4FE6-BE30-2C5DB883E44E}.Release|x86.ActiveCfg = Release|Any CPU
 		{C2D3D305-98F4-4FE6-BE30-2C5DB883E44E}.Release|x86.Build.0 = Release|Any CPU
+		{CBDEEF3C-BBE7-4655-A096-1367DE069E63}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CBDEEF3C-BBE7-4655-A096-1367DE069E63}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CBDEEF3C-BBE7-4655-A096-1367DE069E63}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{CBDEEF3C-BBE7-4655-A096-1367DE069E63}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{CBDEEF3C-BBE7-4655-A096-1367DE069E63}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{CBDEEF3C-BBE7-4655-A096-1367DE069E63}.Debug|x86.Build.0 = Debug|Any CPU
+		{CBDEEF3C-BBE7-4655-A096-1367DE069E63}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CBDEEF3C-BBE7-4655-A096-1367DE069E63}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CBDEEF3C-BBE7-4655-A096-1367DE069E63}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{CBDEEF3C-BBE7-4655-A096-1367DE069E63}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{CBDEEF3C-BBE7-4655-A096-1367DE069E63}.Release|x86.ActiveCfg = Release|Any CPU
+		{CBDEEF3C-BBE7-4655-A096-1367DE069E63}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -864,6 +880,7 @@ Global
 		{4CFF6607-4D83-46E6-A1D0-EF045311C982} = {FF773BDF-A20C-4A5F-BFF9-F422C2AFF3CE}
 		{A47B7998-4EE8-4AF8-9373-C664FDEDDC61} = {3C5A2C4B-FD05-42B3-B6C6-C366DF978A62}
 		{C2D3D305-98F4-4FE6-BE30-2C5DB883E44E} = {1AB7FA6A-829C-4DCF-BCA6-A27156D8DA26}
+		{CBDEEF3C-BBE7-4655-A096-1367DE069E63} = {57A405DF-CCB3-4C9E-A88D-478E35042A84}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C22A5C94-6B05-4B1B-845A-A2EA7615E093}
