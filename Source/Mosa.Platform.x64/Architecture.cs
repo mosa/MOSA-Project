@@ -240,27 +240,33 @@ namespace Mosa.Platform.x64
 				{
 					new LongOperandStage(),
 					new IRTransformationStage(),
+
+					//compilerOptions.EnablePlatformOptimizations ? new OptimizationStage() : null,
 					new TweakStage(),
 					new FixedRegisterAssignmentStage(),
 					new SimpleDeadCodeRemovalStage(),
 					new AddressModeConversionStage(),
 					new FloatingPointStage(),
-					new StopStage(),	// Temp
 				});
 
 			compilerPipeline.InsertAfterLast<StackLayoutStage>(
 				new BuildStackStage()
 			);
 
-			//compilerPipeline.InsertBefore<CodeGenerationStage>(
-			//	new BaseMethodCompilerStage[]
-			//	{
-			//		new FinalTweakStage(),
-			//		compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
-			//	});
+			compilerPipeline.InsertBefore<CodeGenerationStage>(
+				new BaseMethodCompilerStage[]
+				{
+					new FinalTweakStage(),
+
+					//compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null
+				});
 
 			compilerPipeline.InsertBefore<CodeGenerationStage>(
 				new JumpOptimizationStage()
+			);
+
+			compilerPipeline.InsertBefore<GreedyRegisterAllocatorStage>(
+				new StopStage()    // Temp
 			);
 		}
 
