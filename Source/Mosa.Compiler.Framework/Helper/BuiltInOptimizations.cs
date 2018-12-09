@@ -243,7 +243,7 @@ namespace Mosa.Compiler.Framework.Helper
 			{
 				return ConstantOperand.Create(result.Type, op2.ConstantUnsignedLongInteger << 32 | op1.ConstantUnsignedLongInteger);
 			}
-			else if (instruction == IRInstruction.CompareInt32x32 || instruction == IRInstruction.CompareInt64x32 || instruction == IRInstruction.CompareInt64x64)
+			else if (instruction == IRInstruction.CompareInt32x32 || instruction == IRInstruction.CompareInt64x32 || instruction == IRInstruction.CompareInt64x64 || instruction == IRInstruction.CompareInt32x64)
 			{
 				bool compareResult = true;
 
@@ -431,7 +431,7 @@ namespace Mosa.Compiler.Framework.Helper
 			{
 				return op1;
 			}
-			else if (instruction == IRInstruction.CompareInt32x32 || instruction == IRInstruction.CompareInt64x32 || instruction == IRInstruction.CompareInt64x64)
+			else if (instruction == IRInstruction.CompareInt32x32 || instruction == IRInstruction.CompareInt64x32 || instruction == IRInstruction.CompareInt64x64 || instruction == IRInstruction.CompareInt32x64)
 			{
 				var condition = node.ConditionCode;
 

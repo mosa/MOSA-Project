@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void SetReturn32(Context context)
 		{
-			context.SetInstruction(IRInstruction.MoveInt32, Operand.CreateCPURegister(context.Operand1.Type, Architecture.Return32BitRegister), context.Operand1);
+			context.SetInstruction(IRInstruction.MoveInt32, Operand.CreateCPURegister(context.Operand1.Type, Architecture.ReturnRegister), context.Operand1);
 		}
 
 		private void SetReturn64(Context context)
@@ -60,12 +60,12 @@ namespace Mosa.Compiler.Framework.Stages
 				var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 				var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-				context.SetInstruction(IRInstruction.GetLow64, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return32BitRegister), operand);
-				context.AppendInstruction(IRInstruction.GetHigh64, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return64BitRegister), operand);
+				context.SetInstruction(IRInstruction.GetLow64, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.ReturnRegister), operand);
+				context.AppendInstruction(IRInstruction.GetHigh64, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.ReturnHighRegister), operand);
 			}
 			else
 			{
-				context.SetInstruction(IRInstruction.MoveInt64, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return64BitRegister), context.Operand1);
+				context.SetInstruction(IRInstruction.MoveInt64, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.ReturnRegister), context.Operand1);
 			}
 		}
 
@@ -320,8 +320,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (result.Is64BitInteger && Is32BitPlatform)
 			{
-				var returnLow = Operand.CreateCPURegister(result.Type, Architecture.Return32BitRegister);
-				var returnHigh = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.Return64BitRegister);
+				var returnLow = Operand.CreateCPURegister(result.Type, Architecture.ReturnRegister);
+				var returnHigh = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.ReturnHighRegister);
 
 				context.AppendInstruction(IRInstruction.Gen, returnLow);
 				context.AppendInstruction(IRInstruction.Gen, returnHigh);
@@ -329,7 +329,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (result.IsInteger)
 			{
-				var returnLow = Operand.CreateCPURegister(result.Type, Architecture.Return32BitRegister);
+				var returnLow = Operand.CreateCPURegister(result.Type, Architecture.ReturnRegister);
 				context.AppendInstruction(IRInstruction.Gen, returnLow);
 				context.AppendInstruction(moveInstruction, result, returnLow);
 			}
@@ -353,7 +353,7 @@ namespace Mosa.Compiler.Framework.Stages
 			else
 			{
 				// note: same for integer logic (above)
-				var returnLow = Operand.CreateCPURegister(result.Type, Architecture.Return32BitRegister);
+				var returnLow = Operand.CreateCPURegister(result.Type, Architecture.ReturnRegister);
 				context.AppendInstruction(IRInstruction.Gen, returnLow);
 				context.AppendInstruction(moveInstruction, result, returnLow);
 			}
