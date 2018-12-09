@@ -5,7 +5,6 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Compiler.Pdb;
 using Mosa.Utility.GUI.Common;
 using System;
 using System.Collections.Generic;
@@ -664,47 +663,6 @@ namespace Mosa.Tool.Explorer
 			//MethodInvoker call = () => UpdateTree(method);
 
 			//Invoke(call);
-		}
-
-		protected void LoadAssemblyDebugInfo(string assemblyFileName)
-		{
-			string dbgFile = Path.ChangeExtension(assemblyFileName, "pdb");
-
-			if (!File.Exists(dbgFile))
-				return;
-
-			tbResult.AppendText("File: " + dbgFile + "\n");
-			tbResult.AppendText("======================\n");
-			using (var fileStream = new FileStream(dbgFile, FileMode.Open, FileAccess.Read, FileShare.Read))
-			{
-				using (var reader = new PdbReader(fileStream))
-				{
-					tbResult.AppendText("Global targetSymbols: \n");
-					tbResult.AppendText("======================\n");
-					foreach (var symbol in reader.GlobalSymbols)
-					{
-						tbResult.AppendText(symbol + "\n");
-					}
-
-					tbResult.AppendText("Types:\n");
-					foreach (var type in reader.Types)
-					{
-						tbResult.AppendText(type.Name + "\n");
-						tbResult.AppendText("======================\n");
-						tbResult.AppendText("Symbols:\n");
-						foreach (var symbol in type.Symbols)
-						{
-							tbResult.AppendText("\t" + symbol + "\n");
-						}
-
-						tbResult.AppendText("Lines:\n");
-						foreach (var line in type.LineNumbers)
-						{
-							tbResult.AppendText("\t" + line.ToString() + "\n");
-						}
-					}
-				}
-			}
 		}
 
 		private void DumpAllMethodStagesToolStripMenuItem_Click(object sender, EventArgs e)

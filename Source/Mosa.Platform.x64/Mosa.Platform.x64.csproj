@@ -337,6 +337,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stages\AddressModeConversionStage.cs" />
     <Compile Include="Stages\BuildStackStage.cs" />
+    <Compile Include="Stages\FinalTweakStage.cs" />
     <Compile Include="Stages\FixedRegisterAssignmentStage.cs" />
     <Compile Include="Stages\FloatingPointStage.cs" />
     <Compile Include="Stages\IRTransformationStage.cs" />

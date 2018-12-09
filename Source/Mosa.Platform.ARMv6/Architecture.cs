@@ -139,7 +139,7 @@ namespace Mosa.Platform.ARMv6
 		/// <summary>
 		/// Gets the return32 bit register.
 		/// </summary>
-		public override PhysicalRegister Return32BitRegister
+		public override PhysicalRegister ReturnRegister
 		{
 			get { return null; /* TODO */}
 		}
@@ -147,7 +147,7 @@ namespace Mosa.Platform.ARMv6
 		/// <summary>
 		/// Gets the return64 bit register.
 		/// </summary>
-		public override PhysicalRegister Return64BitRegister
+		public override PhysicalRegister ReturnHighRegister
 		{
 			get { return null; /* TODO */}
 		}

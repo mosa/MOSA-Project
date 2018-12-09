@@ -52,12 +52,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the return32 bit register.
 		/// </summary>
-		public abstract PhysicalRegister Return32BitRegister { get; }
+		public abstract PhysicalRegister ReturnRegister { get; }
 
 		/// <summary>
 		/// Gets the return64 bit register.
 		/// </summary>
-		public abstract PhysicalRegister Return64BitRegister { get; }
+		public abstract PhysicalRegister ReturnHighRegister { get; }
 
 		/// <summary>
 		/// Gets the return floating point register.

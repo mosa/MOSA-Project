@@ -132,17 +132,17 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Gets the return32 bit register.
 		/// </summary>
-		public override PhysicalRegister Return32BitRegister
+		public override PhysicalRegister ReturnRegister
 		{
-			get { return null; }
+			get { return GeneralPurposeRegister.EAX; }
 		}
 
 		/// <summary>
 		/// Gets the return64 bit register.
 		/// </summary>
-		public override PhysicalRegister Return64BitRegister
+		public override PhysicalRegister ReturnHighRegister
 		{
-			get { return GeneralPurposeRegister.EAX; }
+			get { return null; }
 		}
 
 		/// <summary>
@@ -240,28 +240,34 @@ namespace Mosa.Platform.x64
 				{
 					new LongOperandStage(),
 					new IRTransformationStage(),
+
+					//compilerOptions.EnablePlatformOptimizations ? new OptimizationStage() : null,
 					new TweakStage(),
 					new FixedRegisterAssignmentStage(),
 					new SimpleDeadCodeRemovalStage(),
 					new AddressModeConversionStage(),
 					new FloatingPointStage(),
-					new StopStage(),	// Temp
 				});
 
 			compilerPipeline.InsertAfterLast<StackLayoutStage>(
 				new BuildStackStage()
 			);
 
-			//compilerPipeline.InsertBefore<CodeGenerationStage>(
-			//	new BaseMethodCompilerStage[]
-			//	{
-			//		new FinalTweakStage(),
-			//		compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
-			//	});
+			compilerPipeline.InsertBefore<CodeGenerationStage>(
+				new BaseMethodCompilerStage[]
+				{
+					new FinalTweakStage(),
+
+					//compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null
+				});
 
 			compilerPipeline.InsertBefore<CodeGenerationStage>(
 				new JumpOptimizationStage()
 			);
+
+			//compilerPipeline.InsertBefore<GreedyRegisterAllocatorStage>(
+			//	new StopStage()    // Temp
+			//);
 		}
 
 		/// <summary>

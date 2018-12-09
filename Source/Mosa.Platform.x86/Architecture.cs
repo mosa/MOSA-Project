@@ -132,7 +132,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Gets the return32 bit register.
 		/// </summary>
-		public override PhysicalRegister Return32BitRegister
+		public override PhysicalRegister ReturnRegister
 		{
 			get { return GeneralPurposeRegister.EAX; }
 		}
@@ -140,7 +140,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Gets the return64 bit register.
 		/// </summary>
-		public override PhysicalRegister Return64BitRegister
+		public override PhysicalRegister ReturnHighRegister
 		{
 			get { return GeneralPurposeRegister.EDX; }
 		}
@@ -277,10 +277,10 @@ namespace Mosa.Platform.x86
 				new BaseMethodCompilerStage[]
 				{
 					new FinalTweakStage(),
-					compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
+					compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null
 				});
 
-			compilerPipeline.InsertBefore<CodeGenerationStage>(
+			compilerPipeline.InsertBefore<GreedyRegisterAllocatorStage>(
 				new JumpOptimizationStage()
 			);
 		}
