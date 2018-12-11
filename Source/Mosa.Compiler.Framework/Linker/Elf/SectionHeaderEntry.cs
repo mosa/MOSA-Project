@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 		public ulong Offset;
 
 		/// <summary>
-		///
+		/// Size
 		/// </summary>
 		public ulong Size;
 

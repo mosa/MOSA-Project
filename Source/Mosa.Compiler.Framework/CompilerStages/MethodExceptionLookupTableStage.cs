@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		protected void CreateMethodExceptionLookupTable()
 		{
 			// Emit assembly list
-			var methodLookupTable = Linker.CreateSymbol(Metadata.MethodExceptionLookupTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var methodLookupTable = Linker.DefineSymbol(Metadata.MethodExceptionLookupTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer = new EndianAwareBinaryWriter(methodLookupTable.Stream, Architecture.Endianness);
 
 			// 1. Number of methods

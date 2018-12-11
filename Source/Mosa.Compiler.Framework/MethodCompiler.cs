@@ -52,7 +52,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the linker used to resolve external symbols.
 		/// </summary>
-		public BaseLinker Linker { get; }
+		public MosaLinker Linker { get; }
 
 		/// <summary>
 		/// Gets the method implementation being compiled.

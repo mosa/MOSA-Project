@@ -69,12 +69,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the scheduler.
 		/// </summary>
-		public CompilationScheduler CompilationScheduler { get; private set; }
+		public CompilationScheduler CompilationScheduler { get; }
 
 		/// <summary>
 		/// Gets the linker.
 		/// </summary>
-		public BaseLinker Linker { get; private set; }
+		public MosaLinker Linker { get; }
 
 		/// <summary>
 		/// Gets the plug system.

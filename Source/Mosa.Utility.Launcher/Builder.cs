@@ -31,7 +31,7 @@ namespace Mosa.Utility.Launcher
 
 		public string ImageFile { get; private set; }
 
-		public BaseLinker Linker { get; private set; }
+		public MosaLinker Linker { get; private set; }
 
 		public TypeSystem TypeSystem { get; private set; }
 
@@ -108,9 +108,6 @@ namespace Mosa.Utility.Launcher
 				compiler.CompilerOptions.EmitSymbols = Options.EmitSymbols;
 				compiler.CompilerOptions.EmitRelocations = Options.EmitRelocations;
 				compiler.CompilerOptions.SetCustomOption("x86.irq-methods", Options.Emitx86IRQMethods ? "true" : "false");
-
-				compiler.CompilerOptions.CreateExtraSections = Options.CreateExtraSections;
-				compiler.CompilerOptions.CreateExtraProgramHeaders = Options.CreateExtraProgramHeaders;
 
 				if (Options.GenerateMapFile)
 				{

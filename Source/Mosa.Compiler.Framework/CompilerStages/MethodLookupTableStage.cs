@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		protected override void RunPostCompile()
 		{
 			// Emit assembly list
-			var methodLookupTable = Linker.CreateSymbol(Metadata.MethodLookupTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var methodLookupTable = Linker.DefineSymbol(Metadata.MethodLookupTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer = new EndianAwareBinaryWriter(methodLookupTable.Stream, Architecture.Endianness);
 
 			// 1. Number of methods

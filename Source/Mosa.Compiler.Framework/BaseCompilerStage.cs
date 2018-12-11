@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the linker
 		/// </summary>
-		protected BaseLinker Linker { get { return Compiler.Linker; } }
+		protected MosaLinker Linker { get { return Compiler.Linker; } }
 
 		/// <summary>
 		/// Holds the compiler options

@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Framework.Linker;
 using System;
 using System.IO;
 
@@ -74,10 +75,13 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		{
 			writer.WriteLine("Virtual          Offset           Length           Symbol");
 
-			foreach (var section in Linker.LinkerSections)
+			foreach (var kind in MosaLinker.SectionKinds)
 			{
-				foreach (var symbol in section.Symbols)
+				foreach (var symbol in Linker.Symbols)
 				{
+					if (symbol.SectionKind != kind)
+						continue;
+
 					writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", symbol.VirtualAddress, symbol.SectionOffset, symbol.Size, symbol.SectionKind.ToString().PadRight(7), symbol.Name);
 				}
 			}

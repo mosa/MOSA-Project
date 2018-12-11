@@ -24,7 +24,7 @@ namespace Mosa.Utility.UnitTests
 		public AppLocations AppLocations { get; set; }
 
 		public TypeSystem TypeSystem { get; internal set; }
-		public BaseLinker Linker { get; internal set; }
+		public MosaLinker Linker { get; internal set; }
 
 		protected DebugServerEngine DebugServerEngine;
 		protected Starter Starter;

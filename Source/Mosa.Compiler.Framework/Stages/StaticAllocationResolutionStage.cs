@@ -71,7 +71,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			// Allocate a linker symbol to refer to this allocation. Use the destination field name as the linker symbol name.
-			var symbolName = MethodCompiler.Linker.CreateSymbol(assignmentField.FullName + "<<$cctor", SectionKind.ROData, Architecture.NativeAlignment, typeSize);
+			var symbolName = MethodCompiler.Linker.DefineSymbol(assignmentField.FullName + "<<$cctor", SectionKind.ROData, Architecture.NativeAlignment, typeSize);
 
 			// Try to get typeDefinitionSymbol if allocatedType isn't a value type
 			string typeDefinitionSymbol = GetTypeDefinition(allocatedType);

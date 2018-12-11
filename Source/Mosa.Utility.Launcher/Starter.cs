@@ -13,7 +13,7 @@ namespace Mosa.Utility.Launcher
 	{
 		public IStarterEvent LauncherEvent { get; }
 
-		public BaseLinker Linker { get; }
+		public MosaLinker Linker { get; }
 
 		public Starter(Options options, AppLocations appLocations, IStarterEvent launcherEvent)
 			: base(options, appLocations)
@@ -21,7 +21,7 @@ namespace Mosa.Utility.Launcher
 			LauncherEvent = launcherEvent;
 		}
 
-		public Starter(Options options, AppLocations appLocations, IStarterEvent launcherEvent, BaseLinker linker)
+		public Starter(Options options, AppLocations appLocations, IStarterEvent launcherEvent, MosaLinker linker)
 			: base(options, appLocations)
 		{
 			LauncherEvent = launcherEvent;

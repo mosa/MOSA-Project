@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Platform.Intel.CompilerStages
@@ -23,7 +22,7 @@ namespace Mosa.Platform.Intel.CompilerStages
 			{
 				var startUpInitializeMethod = startUpType.FindMethodByName("Initialize");
 
-				Linker.EntryPoint = Linker.GetSymbol(startUpInitializeMethod.FullName, SectionKind.Text);
+				Linker.EntryPoint = Linker.GetSymbol(startUpInitializeMethod.FullName);
 			}
 		}
 	}

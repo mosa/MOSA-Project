@@ -119,7 +119,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the linker.
 		/// </summary>
-		protected BaseLinker Linker { get { return MethodCompiler.Linker; } }
+		protected MosaLinker Linker { get { return MethodCompiler.Linker; } }
 
 		/// <summary>
 		/// Gets the type of the platform internal runtime.

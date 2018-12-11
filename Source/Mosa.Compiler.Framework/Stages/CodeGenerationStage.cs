@@ -66,7 +66,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!EmitBinary)
 				return;
 
-			var symbol = MethodCompiler.Linker.CreateSymbol(MethodCompiler.Method.FullName, SectionKind.Text, 0, 0);
+			var symbol = MethodCompiler.Linker.DefineSymbol(MethodCompiler.Method.FullName, SectionKind.Text, 0, 0);
 			codeStream = symbol.Stream;
 
 			// Retrieve a stream to place the code into

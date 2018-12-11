@@ -110,7 +110,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				writer.WriteLine(
 					"{0}\t{1:x8}\t{2}\t{3}\t{4}\t{5}\t{6}",
 					type.ID,
-					Linker.GetSymbol(type.FullName + Metadata.TypeDefinition, SectionKind.ROData).VirtualAddress,
+					Linker.GetSymbol(type.FullName + Metadata.TypeDefinition).VirtualAddress,
 					TypeLayout.GetTypeSize(type),
 					type.FullName,
 					(type.BaseType != null) ? type.BaseType.ID : 0,
@@ -132,7 +132,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 				foreach (var method in type.Methods)
 				{
-					var symbol = Linker.GetSymbol(method.FullName, SectionKind.Text);
+					var symbol = Linker.GetSymbol(method.FullName);
 					var methodData = Compiler.CompilerData.GetCompilerMethodData(method);
 
 					writer.WriteLine(
@@ -140,7 +140,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 						method.ID,
 						symbol.VirtualAddress,
 						symbol.Size,
-						Linker.GetSymbol(method.FullName + Metadata.MethodDefinition, SectionKind.ROData).VirtualAddress,
+						Linker.GetSymbol(method.FullName + Metadata.MethodDefinition).VirtualAddress,
 						method.FullName,
 						method.Signature.ReturnType.ID,
 						methodData.LocalMethodStackSize,
@@ -197,7 +197,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 				foreach (var field in type.Fields)
 				{
-					var symbol = Linker.GetSymbol(field.FullName + Metadata.FieldDefinition, SectionKind.ROData);
+					var symbol = Linker.GetSymbol(field.FullName + Metadata.FieldDefinition);
 
 					//var datasection = (field.Data != null) ? SectionKind.ROData : SectionKind.BSS; // not used yet
 

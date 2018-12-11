@@ -66,7 +66,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the linker used to resolve externals.
 		/// </summary>
-		protected BaseLinker Linker;
+		protected Linker.MosaLinker Linker;
 
 		/// <summary>
 		/// Gets the name of the method.
@@ -105,7 +105,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="methodName">Name of the method.</param>
 		/// <param name="linker">The linker.</param>
 		/// <param name="codeStream">The stream the machine code is written to.</param>
-		public void Initialize(string methodName, BaseLinker linker, Stream codeStream)
+		public void Initialize(string methodName, Linker.MosaLinker linker, Stream codeStream)
 		{
 			Debug.Assert(codeStream != null);
 			Debug.Assert(linker != null);
@@ -115,7 +115,7 @@ namespace Mosa.Compiler.Framework
 			CodeStream = codeStream;
 
 			// only necessary if method is being recompiled (due to inline optimization, for example)
-			var symbol = linker.GetSymbol(MethodName, SectionKind.Text);
+			var symbol = linker.GetSymbol(MethodName);
 			symbol.RemovePatches();
 
 			Labels = new Dictionary<int, int>();
@@ -236,7 +236,7 @@ namespace Mosa.Compiler.Framework
 				// First try finding the symbol in the expected section
 				// If no symbol found, look in all sections
 				// Otherwise create the symbol in the expected section
-				var symbol = (Linker.FindSymbol(symbolOperand.Name, section) ?? Linker.FindSymbol(symbolOperand.Name)) ?? Linker.GetSymbol(symbolOperand.Name, section);
+				var symbol = Linker.GetSymbol(symbolOperand.Name);
 
 				Linker.Link(LinkType.AbsoluteAddress, patchType, SectionKind.Text, MethodName, position, symbol, referenceOffset);
 			}
