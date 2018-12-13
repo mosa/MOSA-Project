@@ -1090,7 +1090,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var stream = symbol.Stream;
 
 			// Type Definition and sync block
-			linker.Link(LinkType.AbsoluteAddress, PatchType.I4, symbol, 0, SectionKind.ROData, "System.String" + Metadata.TypeDefinition, 0);
+			linker.Link(LinkType.AbsoluteAddress, PatchType.I4, symbol, 0, "System.String" + Metadata.TypeDefinition, 0);
 
 			stream.WriteZeroBytes(NativePointerSize * 2);
 

@@ -17,11 +17,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 			File.Delete(CompilerOptions.OutputFile);
 
-			if (Compiler.IsStopped)
-			{
-				return;
-			}
-
 			using (var file = new FileStream(CompilerOptions.OutputFile, FileMode.Create))
 			{
 				Linker.Emit(file);

@@ -13,8 +13,6 @@ namespace Mosa.Compiler.Framework.Linker
 	/// </summary>
 	public sealed class LinkerSymbol
 	{
-		private readonly object _lock = new object();
-
 		public string Name { get; }
 
 		public SectionKind SectionKind { get; internal set; }
@@ -34,6 +32,8 @@ namespace Mosa.Compiler.Framework.Linker
 		public ulong VirtualAddress { get; internal set; }
 
 		public List<LinkRequest> LinkRequests { get; }
+
+		private readonly object _lock = new object();
 
 		internal LinkerSymbol(string name, uint alignment = 0, SectionKind kind = SectionKind.Unknown)
 		{

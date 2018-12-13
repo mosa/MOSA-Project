@@ -498,10 +498,7 @@ namespace Mosa.Utility.Launcher
 
 			result = SearchSubdirectories(Path.Combine(Environment.CurrentDirectory, "..", "..", "packages"), filename);
 
-			if (result != null)
-				return result;
-
-			return null;
+			return result ?? null;
 		}
 
 		private static string SearchSubdirectories(string path, string filename)

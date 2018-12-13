@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 					foreach (var method in methodList)
 					{
-						if (method.IsAbstract)
+						if (method.IsAbstract) // or !HasImplementation
 							continue;
 
 						count++;
@@ -72,19 +72,19 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 					foreach (var method in methodList)
 					{
-						if (method.IsAbstract)
+						if (!method.HasImplementation || method.HasOpenGenericParams || method.DeclaringType.HasOpenGenericParams)
 							continue;
 
 						// 1. Pointer to Method
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, (int)writer.Position, SectionKind.Text, method.FullName, 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, (int)writer.Position, method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						// 2. Size of Method
-						Linker.Link(LinkType.Size, NativePatchType, methodLookupTable, (int)writer.Position, SectionKind.Text, method.FullName, 0);
+						Linker.Link(LinkType.Size, NativePatchType, methodLookupTable, (int)writer.Position, method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						// 3. Pointer to Method Definition
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, (int)writer.Position, SectionKind.ROData, method.FullName + Metadata.MethodDefinition, 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, (int)writer.Position, method.FullName + Metadata.MethodDefinition, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 					}
 				}

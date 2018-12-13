@@ -91,7 +91,7 @@ namespace Mosa.Utility.UnitTests
 				ExitOnLaunch = true,
 				GenerateNASMFile = false,
 				GenerateASMFile = true,
-				GenerateMapFile = false,
+				GenerateMapFile = true,
 				GenerateDebugFile = false,
 				PlugKorlib = true
 			};

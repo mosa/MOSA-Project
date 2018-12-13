@@ -46,6 +46,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (TypeLayout.IsMethodOverridden(method))
 				return;
 
+			if (method.IsAbstract && !method.HasImplementation)
+				return;
+
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
 			var operands = node.GetOperands();

@@ -72,8 +72,8 @@ namespace Mosa.Compiler.Framework.Stages
 			// Retrieve a stream to place the code into
 
 			// HINT: We need seeking to resolve Labels.
-			Debug.Assert(codeStream.CanSeek, "Can't seek codeReader output stream2.");
-			Debug.Assert(codeStream.CanWrite, "Can't write to codeReader output stream2.");
+			Debug.Assert(codeStream.CanSeek, "Can't seek codeReader output stream.");
+			Debug.Assert(codeStream.CanWrite, "Can't write to codeReader output stream.");
 
 			if (!codeStream.CanSeek || !codeStream.CanWrite)
 				throw new NotSupportedException("Code stream2 doesn't support seeking or writing.");

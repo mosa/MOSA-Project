@@ -84,6 +84,11 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public void ExecutePostCompile()
 		{
+			if (Compiler.IsStopped)
+			{
+				return;
+			}
+
 			RunPostCompile();
 		}
 

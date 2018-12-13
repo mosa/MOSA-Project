@@ -19,7 +19,7 @@ namespace Mosa.Platform.x86
 	/// This class provides a common base class for architecture
 	/// specific operations.
 	/// </summary>
-	public class Architecture : BaseArchitecture
+	public sealed class Architecture : BaseArchitecture
 	{
 		/// <summary>
 		/// Gets the endianness of the target architecture.
@@ -64,17 +64,7 @@ namespace Mosa.Platform.x86
 			SSE2Register.XMM4,
 			SSE2Register.XMM5,
 			SSE2Register.XMM6,
-			SSE2Register.XMM7,
-
-			////////////////////////////////////////////////////////
-			// Segmentation Registers
-			////////////////////////////////////////////////////////
-			//SegmentRegister.CS,
-			//SegmentRegister.DS,
-			//SegmentRegister.ES,
-			//SegmentRegister.FS,
-			//SegmentRegister.GS,
-			//SegmentRegister.SS
+			SSE2Register.XMM7
 		};
 
 		/// <summary>
@@ -100,82 +90,52 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Retrieves the register set of the x86 platform.
 		/// </summary>
-		public override PhysicalRegister[] RegisterSet
-		{
-			get { return registers; }
-		}
+		public override PhysicalRegister[] RegisterSet { get { return registers; } }
 
 		/// <summary>
 		/// Retrieves the stack frame register of the x86.
 		/// </summary>
-		public override PhysicalRegister StackFrameRegister
-		{
-			get { return GeneralPurposeRegister.EBP; }
-		}
+		public override PhysicalRegister StackFrameRegister { get { return GeneralPurposeRegister.EBP; } }
 
 		/// <summary>
 		/// Retrieves the stack pointer register of the x86.
 		/// </summary>
-		public override PhysicalRegister StackPointerRegister
-		{
-			get { return GeneralPurposeRegister.ESP; }
-		}
+		public override PhysicalRegister StackPointerRegister { get { return GeneralPurposeRegister.ESP; } }
 
 		/// <summary>
 		/// Retrieves the scratch register of the x86.
 		/// </summary>
-		public override PhysicalRegister ScratchRegister
-		{
-			get { return GeneralPurposeRegister.EDX; }
-		}
+		public override PhysicalRegister ScratchRegister { get { return GeneralPurposeRegister.EDX; } }
 
 		/// <summary>
 		/// Gets the return32 bit register.
 		/// </summary>
-		public override PhysicalRegister Return32BitRegister
-		{
-			get { return GeneralPurposeRegister.EAX; }
-		}
+		public override PhysicalRegister Return32BitRegister { get { return GeneralPurposeRegister.EAX; } }
 
 		/// <summary>
 		/// Gets the return64 bit register.
 		/// </summary>
-		public override PhysicalRegister Return64BitRegister
-		{
-			get { return GeneralPurposeRegister.EDX; }
-		}
+		public override PhysicalRegister Return64BitRegister { get { return GeneralPurposeRegister.EDX; } }
 
 		/// <summary>
 		/// Gets the return floating point register.
 		/// </summary>
-		public override PhysicalRegister ReturnFloatingPointRegister
-		{
-			get { return SSE2Register.XMM0; }
-		}
+		public override PhysicalRegister ReturnFloatingPointRegister { get { return SSE2Register.XMM0; } }
 
 		/// <summary>
 		/// Retrieves the exception register of the architecture.
 		/// </summary>
-		public override PhysicalRegister ExceptionRegister
-		{
-			get { return GeneralPurposeRegister.EDI; }
-		}
+		public override PhysicalRegister ExceptionRegister { get { return GeneralPurposeRegister.EDI; } }
 
 		/// <summary>
 		/// Gets the finally return block register.
 		/// </summary>
-		public override PhysicalRegister LeaveTargetRegister
-		{
-			get { return GeneralPurposeRegister.ESI; }
-		}
+		public override PhysicalRegister LeaveTargetRegister { get { return GeneralPurposeRegister.ESI; } }
 
 		/// <summary>
 		/// Retrieves the program counter register of the x86.
 		/// </summary>
-		public override PhysicalRegister ProgramCounter
-		{
-			get { return null; }
-		}
+		public override PhysicalRegister ProgramCounter { get { return null; } }
 
 		/// <summary>
 		/// Gets the offset of first local.
@@ -307,6 +267,13 @@ namespace Mosa.Platform.x86
 			context.AppendInstruction(instruction, destination, source);
 		}
 
+		/// <summary>
+		/// Inserts the store instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
 		public override void InsertStoreInstruction(Context context, Operand destination, Operand offset, Operand value)
 		{
 			BaseInstruction instruction = X86.MovStore32;

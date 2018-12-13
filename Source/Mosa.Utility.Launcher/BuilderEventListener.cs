@@ -9,7 +9,7 @@ namespace Mosa.Utility.Launcher
 	internal class BuilderEventListener : ITraceListener
 	{
 		private readonly Builder builder;
-		private readonly object mylock = new object();
+		private readonly object _lock = new object();
 
 		public BuilderEventListener(Builder builder)
 		{
@@ -18,7 +18,7 @@ namespace Mosa.Utility.Launcher
 
 		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
-			lock (mylock)
+			lock (_lock)
 			{
 				if (compilerEvent == CompilerEvent.PreCompileStageStart
 					|| compilerEvent == CompilerEvent.PreCompileStageEnd

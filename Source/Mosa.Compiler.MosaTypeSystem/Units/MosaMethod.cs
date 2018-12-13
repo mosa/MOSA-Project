@@ -40,6 +40,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool HasOpenGenericParams { get; private set; }
 
+		public bool HasImplementation { get { return Code.Count != 0; } }
+
 		private List<MosaType> genericArguments;
 
 		public IList<MosaType> GenericArguments { get; private set; }
@@ -152,7 +154,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public uint MaxStack { set { method.MaxStack = value; } }
 
-			public IList<MosaInstruction> Code { get { return method.instructions; } }
+			public List<MosaInstruction> Code { get { return method.instructions; } }
 
 			public IList<MosaExceptionHandler> ExceptionBlocks { get { return method.exceptionHandlers; } }
 
