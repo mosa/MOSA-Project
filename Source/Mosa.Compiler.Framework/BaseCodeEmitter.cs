@@ -221,30 +221,21 @@ namespace Mosa.Compiler.Framework
 
 			if (symbolOperand.IsLabel)
 			{
-				Linker.Link(LinkType.AbsoluteAddress, patchType, SectionKind.Text, MethodName, position, SectionKind.ROData, symbolOperand.Name, referenceOffset);
+				Linker.Link(LinkType.AbsoluteAddress, patchType, MethodName, position, symbolOperand.Name, referenceOffset);
 			}
 			else if (symbolOperand.IsStaticField)
 			{
-				var section = symbolOperand.Field.Data != null ? SectionKind.ROData : SectionKind.BSS;
-
-				Linker.Link(LinkType.AbsoluteAddress, patchType, SectionKind.Text, MethodName, position, section, symbolOperand.Field.FullName, referenceOffset);
+				Linker.Link(LinkType.AbsoluteAddress, patchType, MethodName, position, symbolOperand.Field.FullName, referenceOffset);
 			}
 			else if (symbolOperand.IsSymbol)
 			{
-				var section = symbolOperand.Method != null ? SectionKind.Text : SectionKind.ROData;
-
-				// First try finding the symbol in the expected section
-				// If no symbol found, look in all sections
-				// Otherwise create the symbol in the expected section
-				var symbol = Linker.GetSymbol(symbolOperand.Name);
-
-				Linker.Link(LinkType.AbsoluteAddress, patchType, SectionKind.Text, MethodName, position, symbol, referenceOffset);
+				Linker.Link(LinkType.AbsoluteAddress, patchType, MethodName, position, symbolOperand.Name, referenceOffset);
 			}
 		}
 
 		public void EmitForwardLink(int offset)
 		{
-			Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, SectionKind.Text, MethodName, CurrentPosition, SectionKind.Text, MethodName, CurrentPosition + offset);
+			Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, CurrentPosition, MethodName, CurrentPosition + offset);
 		}
 
 		#endregion Emit Methods
@@ -254,10 +245,8 @@ namespace Mosa.Compiler.Framework
 			Linker.Link(
 				LinkType.RelativeOffset,
 				PatchType.I4,
-				SectionKind.Text,
 				MethodName,
 				(int)CodeStream.Position,
-				SectionKind.Text,
 				symbolOperand.Name,
 				-4
 			);
@@ -268,10 +257,8 @@ namespace Mosa.Compiler.Framework
 			Linker.Link(
 				LinkType.RelativeOffset,
 				PatchType.I8,
-				SectionKind.Text,
 				MethodName,
 				(int)CodeStream.Position,
-				SectionKind.Text,
 				symbolOperand.Name,
 				-8
 			);

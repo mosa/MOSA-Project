@@ -56,15 +56,15 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		{
 			writer.WriteLine("[Sections]");
 			writer.WriteLine("Address\tOffset\tSize\tKind\tName");
-			foreach (var section in Linker.LinkerSections)
+			foreach (var linkerSection in Linker.LinkerSections)
 			{
 				writer.WriteLine(
 					"{0:x8}\t{1}\t{2}\t{3}\t{4}",
-					section.VirtualAddress,
-					section.FileOffset,
-					section.Size,
-					section.SectionKind.ToString(),
-					section.Name);
+					linkerSection.VirtualAddress,
+					linkerSection.FileOffset,
+					linkerSection.Size,
+					linkerSection.SectionKind.ToString(),
+					linkerSection.Name);
 			}
 		}
 

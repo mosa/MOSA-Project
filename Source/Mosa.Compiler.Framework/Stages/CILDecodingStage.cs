@@ -64,7 +64,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (MethodCompiler.Method.IsLinkerGenerated)
 				return;
 
-			if (MethodCompiler.Method.Code.Count == 0)
+			if (!MethodCompiler.Method.HasImplementation)
 			{
 				if (DelegatePatcher.PatchDelegate(MethodCompiler))
 					return;

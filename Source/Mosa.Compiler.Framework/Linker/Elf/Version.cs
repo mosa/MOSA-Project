@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 		None = 0x00,
 
 		/// <summary>
-		/// Currrent version
+		/// Current version
 		/// </summary>
 		Current = 0x01,
 	}

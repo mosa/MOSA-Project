@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			if (MethodCompiler.Method.Code.Count == 0)
+			if (!MethodCompiler.Method.HasImplementation)
 				return;
 
 			//trace = CreateTraceLog();

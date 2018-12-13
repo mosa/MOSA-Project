@@ -7,22 +7,22 @@ namespace Mosa.Compiler.Framework.Linker
 	/// </summary>
 	public enum SectionKind
 	{
-		Unknown = 0,
+		Unknown = -1,
 
 		/// <summary>
 		/// Identifies the program text section.
 		/// </summary>
-		Text = 1,
+		Text = 0,
 
 		/// <summary>
 		/// Identifies the read/write data section.
 		/// </summary>
-		Data = 2,
+		Data = 1,
 
 		/// <summary>
 		/// Identifies the read-only data section.
 		/// </summary>
-		ROData = 3,
+		ROData = 2,
 
 		/// <summary>
 		/// Identifies the bss section.
@@ -30,6 +30,6 @@ namespace Mosa.Compiler.Framework.Linker
 		/// <remarks>
 		/// The .bss section is a chunk of memory initialized to zero by the loader.
 		/// </remarks>
-		BSS = 4,
+		BSS = 3,
 	}
 }

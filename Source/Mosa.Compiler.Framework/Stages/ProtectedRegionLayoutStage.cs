@@ -119,7 +119,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				// Store method table pointer of the exception object type
 				// The VES exception runtime will uses this to compare exception object types
-				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionDefinitionSymbol, (int)writer1.Position, SectionKind.ROData, exceptionType.FullName + Metadata.TypeDefinition, 0);
+				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionDefinitionSymbol, (int)writer1.Position, exceptionType.FullName + Metadata.TypeDefinition, 0);
 			}
 			else if (handlerType == ExceptionHandlerType.Filter)
 			{

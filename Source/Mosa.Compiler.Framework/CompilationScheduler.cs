@@ -75,10 +75,13 @@ namespace Mosa.Compiler.Framework
 
 		public void Schedule(MosaMethod method)
 		{
-			if (method.IsAbstract || method.HasOpenGenericParams)
+			if (method.HasOpenGenericParams)
 				return;
 
 			if (method.IsLinkerGenerated)
+				return;
+
+			if (!method.HasImplementation && method.IsAbstract)
 				return;
 
 			queue.Enqueue(method);
@@ -120,7 +123,7 @@ namespace Mosa.Compiler.Framework
 
 		public void AddToInlineQueue(CompilerMethodData methodData)
 		{
-			Debug.Assert(!methodData.Method.IsAbstract && !methodData.Method.HasOpenGenericParams);
+			Debug.Assert(!methodData.Method.HasOpenGenericParams);
 
 			//Debug.Assert(!methodData.Method.IsLinkerGenerated);
 

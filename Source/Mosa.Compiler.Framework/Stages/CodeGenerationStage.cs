@@ -22,7 +22,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Holds the stream, where code is emitted to.
 		/// </summary>
-		protected Stream codeStream;
+		protected MemoryStream codeStream;
+
+		//protected Stream codeStream;
 
 		#endregion Data Members
 
@@ -67,13 +69,16 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			var symbol = MethodCompiler.Linker.DefineSymbol(MethodCompiler.Method.FullName, SectionKind.Text, 0, 0);
-			codeStream = symbol.Stream;
+
+			codeStream = new MemoryStream();
+
+			//codeStream = symbol.Stream;
 
 			// Retrieve a stream to place the code into
 
 			// HINT: We need seeking to resolve Labels.
-			Debug.Assert(codeStream.CanSeek, "Can't seek codeReader output stream2.");
-			Debug.Assert(codeStream.CanWrite, "Can't write to codeReader output stream2.");
+			Debug.Assert(codeStream.CanSeek, "Can't seek codeReader output stream.");
+			Debug.Assert(codeStream.CanWrite, "Can't write to codeReader output stream.");
 
 			if (!codeStream.CanSeek || !codeStream.CanWrite)
 				throw new NotSupportedException("Code stream2 doesn't support seeking or writing.");
@@ -86,6 +91,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Emit the method epilogue
 			EndGenerate();
+
+			symbol.SetData(codeStream);
 		}
 
 		protected override void Finish()

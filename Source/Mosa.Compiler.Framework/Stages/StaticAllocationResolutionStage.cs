@@ -78,7 +78,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (typeDefinitionSymbol != null)
 			{
-				MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, symbolName, 0, SectionKind.ROData, typeDefinitionSymbol, 0);
+				MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, symbolName, 0, typeDefinitionSymbol, 0);
 			}
 
 			var staticAddress = Operand.CreateSymbol(assignmentField.FieldType, symbolName.Name);

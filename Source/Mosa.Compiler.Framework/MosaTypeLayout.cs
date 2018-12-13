@@ -729,7 +729,7 @@ namespace Mosa.Compiler.Framework
 
 		private void SetMethodOverridden(MosaMethod method, int slot)
 		{
-			// this method is overridden (obviousily)
+			// this method is overridden (obviously)
 			overriddenMethods.Add(method);
 
 			// Note: this method does not update other parts of the inheritance chain

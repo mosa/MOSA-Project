@@ -13,8 +13,6 @@ namespace Mosa.Compiler.Framework.Linker
 	/// </summary>
 	public sealed class LinkerSymbol
 	{
-		private readonly object _lock = new object();
-
 		public string Name { get; }
 
 		public SectionKind SectionKind { get; internal set; }
@@ -35,6 +33,8 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public List<LinkRequest> LinkRequests { get; }
 
+		private readonly object _lock = new object();
+
 		internal LinkerSymbol(string name, uint alignment = 0, SectionKind kind = SectionKind.Unknown)
 		{
 			Name = name;
@@ -45,12 +45,12 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public void SetData(MemoryStream stream)
 		{
-			Stream = stream;
+			Stream = Stream.Synchronized(stream);
 		}
 
 		public void SetData(byte[] data)
 		{
-			Stream = Stream.Synchronized(new MemoryStream(data));
+			SetData(new MemoryStream(data));
 		}
 
 		public void AddPatch(LinkRequest linkRequest)

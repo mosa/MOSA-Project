@@ -53,13 +53,13 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The compiler trace.
 		/// </value>
-		public CompilerTrace CompilerTrace { get; private set; }
+		public CompilerTrace CompilerTrace { get; }
 
 		/// <summary>
 		/// Gets the compiler options.
 		/// </summary>
 		/// <value>The compiler options.</value>
-		public CompilerOptions CompilerOptions { get; private set; }
+		public CompilerOptions CompilerOptions { get; }
 
 		/// <summary>
 		/// Gets the counters.

@@ -15,9 +15,9 @@ namespace Mosa.Compiler.Framework.Linker
 	/// </summary>
 	public sealed class MosaLinker
 	{
-		public List<LinkerSymbol> Symbols { get; }
+		public List<LinkerSymbol> Symbols { get; } = new List<LinkerSymbol>();
 
-		public LinkerSection[] LinkerSections { get; }
+		public LinkerSection[] LinkerSections { get; } = new LinkerSection[4];
 
 		public LinkerSymbol EntryPoint { get; set; }
 
@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 		private readonly ElfLinker elfLinker;
 
-		private readonly object mylock = new object();
+		private readonly object _lock = new object();
 
 		public static readonly SectionKind[] SectionKinds = new[] { SectionKind.BSS, SectionKind.Data, SectionKind.ROData, SectionKind.Text };
 
@@ -45,8 +45,6 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public MosaLinker(ulong baseAddress, Endianness endianness, MachineType machineType, bool emitSymbols, LinkerFormatType linkerFormatType)
 		{
-			LinkerSections = new LinkerSection[4];
-
 			BaseAddress = baseAddress;
 			Endianness = endianness;
 			MachineType = machineType;
@@ -71,14 +69,14 @@ namespace Mosa.Compiler.Framework.Linker
 			elfLinker.Emit(stream);
 		}
 
-		private void AddSection(LinkerSection section)
+		private void AddSection(LinkerSection linkerSection)
 		{
-			LinkerSections[(int)section.SectionKind] = section;
+			LinkerSections[(int)linkerSection.SectionKind] = linkerSection;
 		}
 
 		public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, LinkerSymbol referenceSymbol, int referenceOffset)
 		{
-			lock (mylock)
+			lock (_lock)
 			{
 				var linkRequest = new LinkRequest(linkType, patchType, patchSymbol, patchOffset, referenceSymbol, referenceOffset);
 
@@ -86,7 +84,7 @@ namespace Mosa.Compiler.Framework.Linker
 			}
 		}
 
-		public void Link(LinkType linkType, PatchType patchType, SectionKind patchKind, string patchSymbolName, int patchOffset, SectionKind referenceKind, string referenceSymbolName, int referenceOffset)
+		public void Link(LinkType linkType, PatchType patchType, string patchSymbolName, int patchOffset, string referenceSymbolName, int referenceOffset)
 		{
 			var referenceSymbol = GetSymbol(referenceSymbolName);
 			var patchObject = GetSymbol(patchSymbolName);
@@ -94,14 +92,7 @@ namespace Mosa.Compiler.Framework.Linker
 			Link(linkType, patchType, patchObject, patchOffset, referenceSymbol, referenceOffset);
 		}
 
-		public void Link(LinkType linkType, PatchType patchType, SectionKind patchKind, string patchSymbolName, int patchOffset, LinkerSymbol referenceSymbol, int referenceOffset)
-		{
-			var patchObject = GetSymbol(patchSymbolName);
-
-			Link(linkType, patchType, patchObject, patchOffset, referenceSymbol, referenceOffset);
-		}
-
-		public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, SectionKind referenceKind, string referenceSymbolName, int referenceOffset)
+		public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, string referenceSymbolName, int referenceOffset)
 		{
 			var referenceObject = GetSymbol(referenceSymbolName);
 
@@ -110,13 +101,14 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public LinkerSymbol GetSymbol(string name)
 		{
-			lock (mylock)
+			lock (_lock)
 			{
 				if (!symbolLookup.TryGetValue(name, out LinkerSymbol symbol))
 				{
 					symbol = new LinkerSymbol(name);
 
 					Symbols.Add(symbol);
+					symbolLookup.Add(name, symbol);
 				}
 
 				return symbol;
@@ -125,7 +117,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public LinkerSymbol DefineSymbol(string name, SectionKind kind, int alignment, int size)
 		{
-			lock (mylock)
+			lock (_lock)
 			{
 				uint aligned = alignment != 0 ? (uint)alignment : 1;
 
@@ -134,6 +126,7 @@ namespace Mosa.Compiler.Framework.Linker
 					symbol = new LinkerSymbol(name, aligned, kind);
 
 					Symbols.Add(symbol);
+					symbolLookup.Add(name, symbol);
 				}
 				else
 				{
@@ -143,6 +136,11 @@ namespace Mosa.Compiler.Framework.Linker
 
 				var stream = (size == 0) ? new MemoryStream() : new MemoryStream(size);
 				symbol.Stream = Stream.Synchronized(stream);
+
+				if (size != 0)
+				{
+					stream.SetLength(size);
+				}
 
 				return symbol;
 			}
@@ -165,13 +163,13 @@ namespace Mosa.Compiler.Framework.Linker
 			ulong virtualAddress = BaseAddress;
 			uint fileOffset = BaseFileOffset;
 
-			foreach (var section in LinkerSections)
+			foreach (var linkerSection in LinkerSections)
 			{
-				ResolveLayout(section, fileOffset, virtualAddress);
+				ResolveLayout(linkerSection, fileOffset, virtualAddress);
 
-				uint size = section.AlignedSize;
+				uint size = linkerSection.AlignedSize;
 
-				virtualAddress = section.VirtualAddress + size;
+				virtualAddress = linkerSection.VirtualAddress + size;
 				fileOffset += size;
 			}
 		}
@@ -231,7 +229,7 @@ namespace Mosa.Compiler.Framework.Linker
 			throw new CompilerException("unknown patch type: " + patchType.ToString());
 		}
 
-		internal void ResolveLayout(LinkerSection section, uint fileOffset, ulong virtualAddress)
+		private void ResolveLayout(LinkerSection section, uint fileOffset, ulong virtualAddress)
 		{
 			section.VirtualAddress = virtualAddress;
 			section.FileOffset = fileOffset;
@@ -289,7 +287,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 			var symbol = DefineSymbol(name, SectionKind.ROData, 0, 8);
 
-			if (!symbol.IsDataAvailable)
+			if (symbol.Size == 0)
 			{
 				symbol.SetData(data);
 			}
@@ -310,7 +308,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 			var symbol = DefineSymbol(name, SectionKind.ROData, 0, 4);
 
-			if (!symbol.IsDataAvailable)
+			if (symbol.Size == 0)
 			{
 				symbol.SetData(data);
 			}
@@ -324,7 +322,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 			var symbol = DefineSymbol(name, SectionKind.ROData, 0, 4);
 
-			if (!symbol.IsDataAvailable)
+			if (symbol.Size == 0)
 			{
 				symbol.SetData(BitConverter.GetBytes(value));
 			}
@@ -338,7 +336,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 			var symbol = DefineSymbol(name, SectionKind.ROData, 0, 8);
 
-			if (!symbol.IsDataAvailable)
+			if (symbol.Size == 0)
 			{
 				symbol.SetData(BitConverter.GetBytes(value));
 			}

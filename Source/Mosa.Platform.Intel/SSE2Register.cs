@@ -57,6 +57,46 @@ namespace Mosa.Platform.Intel
 		/// </summary>
 		public static readonly PhysicalRegister XMM7 = new PhysicalRegister(15, 7, "XMM#7", false, true);
 
+		/// <summary>
+		/// Represents SSE2 register XMM7.
+		/// </summary>
+		public static readonly PhysicalRegister XMM8 = new PhysicalRegister(24, 8, "XMM#8", false, true);
+
+		/// <summary>
+		/// Represents SSE2 register XMM7.
+		/// </summary>
+		public static readonly PhysicalRegister XMM9 = new PhysicalRegister(25, 9, "XMM#9", false, true);
+
+		/// <summary>
+		/// Represents SSE2 register XMM7.
+		/// </summary>
+		public static readonly PhysicalRegister XMM10 = new PhysicalRegister(26, 10, "XMM#10", false, true);
+
+		/// <summary>
+		/// Represents SSE2 register XMM7.
+		/// </summary>
+		public static readonly PhysicalRegister XMM11 = new PhysicalRegister(27, 11, "XMM#11", false, true);
+
+		/// <summary>
+		/// Represents SSE2 register XMM7.
+		/// </summary>
+		public static readonly PhysicalRegister XMM12 = new PhysicalRegister(28, 12, "XMM#12", false, true);
+
+		/// <summary>
+		/// Represents SSE2 register XMM7.
+		/// </summary>
+		public static readonly PhysicalRegister XMM13 = new PhysicalRegister(29, 13, "XMM#13", false, true);
+
+		/// <summary>
+		/// Represents SSE2 register XMM7.
+		/// </summary>
+		public static readonly PhysicalRegister XMM14 = new PhysicalRegister(30, 14, "XMM#14", false, true);
+
+		/// <summary>
+		/// Represents SSE2 register XMM7.
+		/// </summary>
+		public static readonly PhysicalRegister XMM15 = new PhysicalRegister(31, 15, "XMM#15", false, true);
+
 		#endregion Static data members
 	}
 }
