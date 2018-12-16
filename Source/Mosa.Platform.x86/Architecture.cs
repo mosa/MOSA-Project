@@ -280,7 +280,7 @@ namespace Mosa.Platform.x86
 					compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null
 				});
 
-			compilerPipeline.InsertBefore<GreedyRegisterAllocatorStage>(
+			compilerPipeline.InsertBefore<CodeGenerationStage>(
 				new JumpOptimizationStage()
 			);
 		}
