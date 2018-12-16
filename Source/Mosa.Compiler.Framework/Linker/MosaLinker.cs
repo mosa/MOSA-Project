@@ -287,10 +287,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 			var symbol = DefineSymbol(name, SectionKind.ROData, 0, 8);
 
-			if (symbol.Size == 0)
-			{
-				symbol.SetData(data);
-			}
+			symbol.SetData(data);
 
 			return symbol;
 		}
@@ -308,10 +305,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 			var symbol = DefineSymbol(name, SectionKind.ROData, 0, 4);
 
-			if (symbol.Size == 0)
-			{
-				symbol.SetData(data);
-			}
+			symbol.SetData(data);
 
 			return symbol;
 		}
@@ -322,10 +316,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 			var symbol = DefineSymbol(name, SectionKind.ROData, 0, 4);
 
-			if (symbol.Size == 0)
-			{
-				symbol.SetData(BitConverter.GetBytes(value));
-			}
+			symbol.SetData(BitConverter.GetBytes(value));
 
 			return symbol;
 		}
@@ -336,10 +327,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 			var symbol = DefineSymbol(name, SectionKind.ROData, 0, 8);
 
-			if (symbol.Size == 0)
-			{
-				symbol.SetData(BitConverter.GetBytes(value));
-			}
+			symbol.SetData(BitConverter.GetBytes(value));
 
 			return symbol;
 		}
