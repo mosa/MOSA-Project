@@ -13,7 +13,7 @@
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
@@ -89,8 +89,8 @@
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Instructions\Adc32.cs" />
     <Compile Include="Instructions\Add32.cs" />
-    <Compile Include="Instructions\Addsd.cs" />
-    <Compile Include="Instructions\Addss.cs" />
+    <Compile Include="Instructions\AddSD.cs" />
+    <Compile Include="Instructions\AddSS.cs" />
     <Compile Include="Instructions\And32.cs" />
     <Compile Include="Instructions\BochsDebug.cs" />
     <Compile Include="Instructions\BranchCarry.cs" />
