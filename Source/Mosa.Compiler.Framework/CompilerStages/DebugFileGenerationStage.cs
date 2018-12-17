@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Linker;
 using System.Collections.Generic;
 using System.IO;
 
@@ -21,7 +20,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		/// </summary>
 		private TextWriter writer;
 
-		private Dictionary<string, int> SourceFiles = new Dictionary<string, int>();
+		private readonly Dictionary<string, int> SourceFiles = new Dictionary<string, int>();
 
 		#endregion Data Members
 
@@ -321,8 +320,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 				foreach (var method in type.Methods)
 				{
-					int index = 0;
-
 					if (method.Code == null)
 						continue;
 

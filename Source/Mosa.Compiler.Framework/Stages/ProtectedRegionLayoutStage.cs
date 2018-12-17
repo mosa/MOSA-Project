@@ -99,7 +99,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private LinkerSymbol CreateProtectedRegionDefinition(string name, uint start, uint end, uint handler, ExceptionHandlerType handlerType, MosaType exceptionType)
 		{
 			// Emit parameter table
-			var protectedRegionDefinitionSymbol = MethodCompiler.Linker.DefineSymbol(name, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var protectedRegionDefinitionSymbol = MethodCompiler.Linker.DefineSymbol(name, SectionKind.ROData, 0/*TypeLayout.NativePointerAlignment*/, 0);
 			var writer1 = new EndianAwareBinaryWriter(protectedRegionDefinitionSymbol.Stream, Architecture.Endianness);
 
 			// 1. Offset to start

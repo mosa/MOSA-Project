@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Returns the architecture used by the compiler.
 		/// </summary>
-		public BaseArchitecture Architecture { get; private set; }
+		public BaseArchitecture Architecture { get; }
 
 		/// <summary>
 		/// Gets the pre compile pipeline.

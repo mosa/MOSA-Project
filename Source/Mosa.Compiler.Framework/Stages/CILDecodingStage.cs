@@ -61,10 +61,10 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			// No CIL decoding if this is a linker generated method
-			if (MethodCompiler.Method.IsLinkerGenerated)
+			if (Method.IsLinkerGenerated)
 				return;
 
-			if (!MethodCompiler.Method.HasImplementation)
+			if (!Method.HasImplementation)
 			{
 				if (DelegatePatcher.PatchDelegate(MethodCompiler))
 					return;

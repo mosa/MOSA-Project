@@ -5,7 +5,6 @@ using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Linker.Elf;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 
 namespace Mosa.Compiler.Framework.Linker
@@ -37,11 +36,11 @@ namespace Mosa.Compiler.Framework.Linker
 
 		private readonly ElfLinker elfLinker;
 
-		private readonly object _lock = new object();
-
-		public static readonly SectionKind[] SectionKinds = new[] { SectionKind.BSS, SectionKind.Data, SectionKind.ROData, SectionKind.Text };
+		public static readonly SectionKind[] SectionKinds = new[] { SectionKind.Text, SectionKind.Data, SectionKind.ROData, SectionKind.BSS };
 
 		private readonly Dictionary<string, LinkerSymbol> symbolLookup = new Dictionary<string, LinkerSymbol>();
+
+		private readonly object _lock = new object();
 
 		public MosaLinker(ulong baseAddress, Endianness endianness, MachineType machineType, bool emitSymbols, LinkerFormatType linkerFormatType)
 		{
@@ -285,7 +284,7 @@ namespace Mosa.Compiler.Framework.Linker
 				name += b.ToString("x");
 			}
 
-			var symbol = DefineSymbol(name, SectionKind.ROData, 0, 8);
+			var symbol = DefineSymbol(name, SectionKind.ROData, 1, 8);
 
 			symbol.SetData(data);
 
@@ -303,7 +302,7 @@ namespace Mosa.Compiler.Framework.Linker
 				name += b.ToString("x");
 			}
 
-			var symbol = DefineSymbol(name, SectionKind.ROData, 0, 4);
+			var symbol = DefineSymbol(name, SectionKind.ROData, 1, 4);
 
 			symbol.SetData(data);
 
@@ -314,7 +313,7 @@ namespace Mosa.Compiler.Framework.Linker
 		{
 			string name = "$integer$" + value.ToString("x");
 
-			var symbol = DefineSymbol(name, SectionKind.ROData, 0, 4);
+			var symbol = DefineSymbol(name, SectionKind.ROData, 1, 4);
 
 			symbol.SetData(BitConverter.GetBytes(value));
 
@@ -325,7 +324,7 @@ namespace Mosa.Compiler.Framework.Linker
 		{
 			string name = "$long$" + value.ToString("x");
 
-			var symbol = DefineSymbol(name, SectionKind.ROData, 0, 8);
+			var symbol = DefineSymbol(name, SectionKind.ROData, 1, 8);
 
 			symbol.SetData(BitConverter.GetBytes(value));
 

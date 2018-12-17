@@ -442,7 +442,7 @@ namespace System.Reflection
 		public virtual FieldInfo GetDeclaredField(string name)
 		{
 			if (name == null)
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 
 			foreach (var info in DeclaredFields)
 			{
@@ -462,7 +462,7 @@ namespace System.Reflection
 		public virtual MethodInfo GetDeclaredMethod(string name)
 		{
 			if (name == null)
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 
 			foreach (var info in DeclaredMethods)
 			{
@@ -482,7 +482,7 @@ namespace System.Reflection
 		public virtual IEnumerable<MethodInfo> GetDeclaredMethods(string name)
 		{
 			if (name == null)
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 
 			throw new NotImplementedException();
 		}
@@ -495,7 +495,7 @@ namespace System.Reflection
 		public virtual TypeInfo GetDeclaredNestedType(string name)
 		{
 			if (name == null)
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 
 			foreach (var info in DeclaredNestedTypes)
 			{
@@ -515,7 +515,7 @@ namespace System.Reflection
 		public virtual PropertyInfo GetDeclaredProperty(string name)
 		{
 			if (name == null)
-				throw new ArgumentNullException("name");
+				throw new ArgumentNullException(nameof(name));
 
 			foreach (var info in DeclaredProperties)
 			{

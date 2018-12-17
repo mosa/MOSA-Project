@@ -1092,12 +1092,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (Trace.Active) Trace.Log("  No free register available");
 
 			// No place for live interval; find live interval(s) to evict based on spill costs
-			if (PlaceLiveIntervalOnTrackAllowEvictions(liveInterval))
-			{
-				return true;
-			}
-
-			return false;
+			return PlaceLiveIntervalOnTrackAllowEvictions(liveInterval);
 		}
 
 		private void ProcessLiveInterval(LiveInterval liveInterval)

@@ -245,7 +245,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				// 15. Pointer to Methods
 				foreach (var method in methodList)
 				{
-					if (method.HasImplementation && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams)
+					if ((!(!method.HasImplementation && method.IsAbstract)) && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams)
 					{
 						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, method.FullName, 0);
 					}
@@ -255,7 +255,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				// 16. Pointer to Method Definitions
 				foreach (var method in methodList)
 				{
-					if (method.HasImplementation && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams)
+					if ((!(!method.HasImplementation && method.IsAbstract)) && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams)
 					{
 						// Create definition and get the symbol
 						var methodDefinitionSymbol = CreateMethodDefinition(method);
@@ -566,7 +566,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			var methodNameSymbol = EmitStringWithLength(method.FullName + Metadata.NameString, method.FullName);
 
 			// Emit method table
-			var methodTableSymbol = Linker.DefineSymbol(method.FullName + Metadata.MethodDefinition, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var methodTableSymbol = Linker.DefineSymbol(method.FullName + Metadata.MethodDefinition, SectionKind.ROData, TypeLayout.NativePointerAlignment, (method.Signature.Parameters.Count + 9) * TypeLayout.NativePointerSize);
 			var writer1 = new EndianAwareBinaryWriter(methodTableSymbol.Stream, Architecture.Endianness);
 
 			// 1. Pointer to Name

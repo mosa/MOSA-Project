@@ -46,7 +46,7 @@ namespace Mosa.Utility.UnitTests
 		private Thread ProcessThread;
 
 		private int CompletedUnitTestCount = 0;
-		private Stopwatch StopWatch = new Stopwatch();
+		private readonly Stopwatch StopWatch = new Stopwatch();
 
 		private volatile int LastResponse = 0;
 
@@ -527,13 +527,13 @@ namespace Mosa.Utility.UnitTests
 		{
 			Aborted = true;
 
-			if (Process != null && !Process.HasExited)
+			if (Process?.HasExited == false)
 			{
 				Process.Kill();
 				Process = null;
 			}
 
-			if (ProcessThread != null && ProcessThread.IsAlive)
+			if (ProcessThread?.IsAlive == true)
 			{
 				ProcessThread.Abort();
 				ProcessThread.Join();

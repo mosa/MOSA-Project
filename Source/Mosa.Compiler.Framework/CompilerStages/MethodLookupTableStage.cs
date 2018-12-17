@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 					foreach (var method in methodList)
 					{
-						if (method.IsAbstract) // or !HasImplementation
+						if ((!method.HasImplementation && method.IsAbstract) || method.HasOpenGenericParams || method.DeclaringType.HasOpenGenericParams)
 							continue;
 
 						count++;
@@ -72,7 +72,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 					foreach (var method in methodList)
 					{
-						if (!method.HasImplementation || method.HasOpenGenericParams || method.DeclaringType.HasOpenGenericParams)
+						if ((!method.HasImplementation && method.IsAbstract) || method.HasOpenGenericParams || method.DeclaringType.HasOpenGenericParams)
 							continue;
 
 						// 1. Pointer to Method

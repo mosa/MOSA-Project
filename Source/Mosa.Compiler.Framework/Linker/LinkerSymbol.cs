@@ -3,8 +3,6 @@
 using Mosa.Compiler.Common;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace Mosa.Compiler.Framework.Linker
 {
