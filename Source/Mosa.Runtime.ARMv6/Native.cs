@@ -11,7 +11,7 @@ namespace Mosa.Runtime.ARMv6
 	{
 		#region Intrinsic
 
-		[DllImportAttribute(@"Mosa.Platform.ARMv6.Intrinsic.Nop, Mosa.Platform.ARMv6")]
+		[DllImportAttribute("Mosa.Platform.ARMv6.Intrinsic.Nop, Mosa.Platform.ARMv6")]
 		public extern static void Nop();
 
 		#endregion Intrinsic
