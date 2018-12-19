@@ -6,7 +6,7 @@ using System.Runtime.CompilerServices;
 
 namespace Mosa.Plug.Korlib.System
 {
-	internal static class String
+	internal static class StringPlug
 	{
 		[Plug("System.String::InternalAllocateString")]
 		internal static string InternalAllocateString(int length)

@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (IsMethodPlugged)
 			{
-				var plugMethod = MethodCompiler.Compiler.PlugSystem.GetReplacement(MethodCompiler.Method);
+				var plugMethod = MethodCompiler.Compiler.PlugSystem.GetReplacement(Method);
 
 				Debug.Assert(plugMethod != null);
 

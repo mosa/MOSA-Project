@@ -7,7 +7,7 @@ using System.Runtime.CompilerServices;
 namespace System
 {
 	/// <summary>
-	///
+	/// Array
 	/// </summary>
 	public abstract class Array : ICloneable, IList, ICollection, IEnumerable, IStructuralComparable, IStructuralEquatable
 	{
@@ -173,7 +173,7 @@ namespace System
 			}
 		}
 
-		public void CopyTo(Array array, int index)
+		public void CopyTo(Array array, int arrayIndex)
 		{
 			throw new NotImplementedException();
 		}

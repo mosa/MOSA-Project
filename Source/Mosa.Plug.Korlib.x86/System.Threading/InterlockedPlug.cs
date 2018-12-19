@@ -5,7 +5,7 @@ using Mosa.Runtime.x86;
 
 namespace Mosa.Plug.Korlib.System.Threading.x86
 {
-	public static class Interlocked
+	public static class InterlockedPlug
 	{
 		[Plug("System.Threading.Interlocked::CompareExchange")]
 		internal static int CompareExchange(ref int location1, int value, int comparand)

@@ -77,8 +77,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="System.Runtime.CompilerServices\RuntimeHelpers.cs" />
-    <Compile Include="System\String.cs" />
+    <Compile Include="System.Runtime.CompilerServices\RuntimeHelpersPlug.cs" />
+    <Compile Include="System\ArrayPlug.cs" />
+    <Compile Include="System\StringPlug.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

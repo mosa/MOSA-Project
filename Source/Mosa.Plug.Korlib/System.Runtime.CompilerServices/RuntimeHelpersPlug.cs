@@ -9,7 +9,7 @@ using System.Reflection;
 
 namespace Mosa.Plug.Korlib.System.Runtime.CompilerServices
 {
-	internal static class RuntimeHelpers
+	internal static class RuntimeHelpersPlug
 	{
 		[Plug("System.Runtime.CompilerServices.RuntimeHelpers::GetHashCode")]
 		internal unsafe static int GetHashCode(Object o)

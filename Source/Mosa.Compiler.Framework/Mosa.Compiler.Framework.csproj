@@ -347,7 +347,6 @@
     <Compile Include="Intrinsics\Store32.cs" />
     <Compile Include="Intrinsics\Load8.cs" />
     <Compile Include="Intrinsics\Load64.cs" />
-    <Compile Include="Intrinsics\InternalsForArray.cs" />
     <Compile Include="MosaCompiler.cs" />
     <Compile Include="InstructionSize.cs" />
     <Compile Include="Intrinsics\GetObjectAddress.cs" />
