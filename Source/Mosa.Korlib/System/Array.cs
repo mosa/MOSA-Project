@@ -31,7 +31,7 @@ namespace System
 		}
 
 		/// <summary>
-		///
+		/// SetValue
 		/// </summary>
 		public void SetValue(object value, params int[] indices)
 		{
@@ -44,7 +44,7 @@ namespace System
 		}
 
 		/// <summary>
-		///
+		/// GetValue
 		/// </summary>
 		public object GetValue(params int[] indices)
 		{

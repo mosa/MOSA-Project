@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
 	[ReplacementTarget("System.Object::GetType")]
-	[ReplacementTarget("System.Object::MemberwiseClone")]
+	[ReplacementTarget("xSystem.Object::MemberwiseClone")]
 	public sealed class InternalsForObject : IIntrinsicInternalMethod
 	{
 		/// <summary>

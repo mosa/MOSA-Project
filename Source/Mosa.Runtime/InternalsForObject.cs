@@ -6,15 +6,12 @@ namespace Mosa.Runtime
 {
 	public static class InternalsForObject
 	{
-		public static object MemberwiseClone(object obj)
-		{
-			return null;
-		}
-
 		public static Type GetType(object obj)
 		{
 			// Get the handle of the object
-			var handle = GetTypeHandle(obj);
+			//var handle = GetTypeHandle2(obj);
+			var o = Intrinsic.GetObjectAddress(obj);
+			var handle = new RuntimeTypeHandle(Intrinsic.LoadPointer(o));
 
 			// Iterate through all the assemblies and look for the type handle
 			foreach (var assembly in Internal.Assemblies)
@@ -32,12 +29,6 @@ namespace Mosa.Runtime
 
 			// If we didn't find a match then return null
 			return null;
-		}
-
-		private static RuntimeTypeHandle GetTypeHandle(object obj)
-		{
-			var o = Intrinsic.GetObjectAddress(obj);
-			return new RuntimeTypeHandle(Intrinsic.LoadPointer(o));
 		}
 	}
 }

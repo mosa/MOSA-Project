@@ -48,9 +48,13 @@ namespace Mosa.Plug.Korlib.System.Runtime.CompilerServices
 		[Plug("System.Runtime.CompilerServices.RuntimeHelpers::GetAssemblies")]
 		internal static IEnumerable<Assembly> GetAssemblies()
 		{
-			var assemblies = new LinkedList<Assembly>();
+			var assemblies = new List<Assembly>();
+
 			foreach (var assembly in Internal.Assemblies)
-				assemblies.AddLast(assembly);
+			{
+				assemblies.Add(assembly);
+			}
+
 			return assemblies;
 		}
 

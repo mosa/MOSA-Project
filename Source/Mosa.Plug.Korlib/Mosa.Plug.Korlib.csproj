@@ -77,7 +77,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="KorlibInternal.cs" />
     <Compile Include="System.Runtime.CompilerServices\RuntimeHelpersPlug.cs" />
+    <Compile Include="System\ObjectPlug.cs" />
     <Compile Include="System\ArrayPlug.cs" />
     <Compile Include="System\StringPlug.cs" />
   </ItemGroup>

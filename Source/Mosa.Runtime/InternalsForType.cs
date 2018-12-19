@@ -9,7 +9,7 @@ namespace Mosa.Runtime
 		public static Type GetTypeImpl(string typeName, bool throwOnError)
 		{
 			if (typeName == null)
-				throw new ArgumentNullException("typeName");
+				throw new ArgumentNullException(nameof(typeName));
 
 			// Iterate through all the assemblies and look for the type name
 			foreach (var assembly in Internal.Assemblies)

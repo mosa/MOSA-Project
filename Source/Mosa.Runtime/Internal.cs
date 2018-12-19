@@ -279,11 +279,11 @@ namespace Mosa.Runtime
 
 		#region Metadata Setup
 
-		public static LinkedList<RuntimeAssembly> Assemblies = null;
+		public static List<RuntimeAssembly> Assemblies = null;
 
 		public static void Setup()
 		{
-			Assemblies = new LinkedList<RuntimeAssembly>();
+			Assemblies = new List<RuntimeAssembly>();
 
 			// Get AssemblyListTable and Assembly count
 			var assemblyListTable = Intrinsic.GetAssemblyListTable();
@@ -295,7 +295,7 @@ namespace Mosa.Runtime
 				// Get the pointer to the Assembly Metadata
 				var ptr = Intrinsic.LoadPointer(assemblyListTable, IntPtr.Size + (IntPtr.Size * i));
 
-				Assemblies.AddLast(new RuntimeAssembly(ptr));
+				Assemblies.Add(new RuntimeAssembly(ptr));
 			}
 		}
 
