@@ -1,18 +1,20 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime.Plug;
 using System;
 
-namespace Mosa.Runtime
+namespace Mosa.Plug.Korlib.System
 {
-	public static class InternalsForType
+	internal static class TypePlug
 	{
+		[Plug("System.Type::GetTypeImpl")]
 		public static Type GetTypeImpl(string typeName, bool throwOnError)
 		{
 			if (typeName == null)
 				throw new ArgumentNullException(nameof(typeName));
 
 			// Iterate through all the assemblies and look for the type name
-			foreach (var assembly in Internal.Assemblies)
+			foreach (var assembly in KorlibInternal.Assemblies)
 			{
 				foreach (var type in assembly.typeList)
 				{
@@ -31,10 +33,11 @@ namespace Mosa.Runtime
 				return null;
 		}
 
+		[Plug("System.Type::GetTypeFromHandleImpl")]
 		public static Type GetTypeFromHandleImpl(RuntimeTypeHandle handle)
 		{
 			// Iterate through all the assemblies and look for the type handle
-			foreach (var assembly in Internal.Assemblies)
+			foreach (var assembly in KorlibInternal.Assemblies)
 			{
 				foreach (var type in assembly.typeList)
 				{

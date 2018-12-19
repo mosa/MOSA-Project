@@ -77,10 +77,15 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Runtime\RuntimeAssembly.cs" />
+    <Compile Include="Runtime\RuntimeCustomAttributeData.cs" />
+    <Compile Include="Runtime\RuntimeType.cs" />
+    <Compile Include="Runtime\RuntimeTypeInfo.cs" />
     <Compile Include="KorlibInternal.cs" />
     <Compile Include="System.Runtime.CompilerServices\RuntimeHelpersPlug.cs" />
     <Compile Include="System\ObjectPlug.cs" />
     <Compile Include="System\ArrayPlug.cs" />
+    <Compile Include="System\TypePlug.cs" />
     <Compile Include="System\StringPlug.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

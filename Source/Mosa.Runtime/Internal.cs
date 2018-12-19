@@ -2,7 +2,6 @@
 
 using Mosa.Runtime.Metadata;
 using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 
 namespace Mosa.Runtime
@@ -279,24 +278,8 @@ namespace Mosa.Runtime
 
 		#region Metadata Setup
 
-		public static List<RuntimeAssembly> Assemblies = null;
-
 		public static void Setup()
 		{
-			Assemblies = new List<RuntimeAssembly>();
-
-			// Get AssemblyListTable and Assembly count
-			var assemblyListTable = Intrinsic.GetAssemblyListTable();
-			uint assemblyCount = Intrinsic.Load32(assemblyListTable);
-
-			// Loop through and populate the array
-			for (int i = 0; i < assemblyCount; i++)
-			{
-				// Get the pointer to the Assembly Metadata
-				var ptr = Intrinsic.LoadPointer(assemblyListTable, IntPtr.Size + (IntPtr.Size * i));
-
-				Assemblies.Add(new RuntimeAssembly(ptr));
-			}
 		}
 
 		#endregion Metadata Setup

@@ -350,10 +350,7 @@
     <Compile Include="MosaCompiler.cs" />
     <Compile Include="InstructionSize.cs" />
     <Compile Include="Intrinsics\GetObjectAddress.cs" />
-    <Compile Include="Intrinsics\InternalsForObject.cs" />
     <Compile Include="Intrinsics\Load32.cs" />
-    <Compile Include="Intrinsics\IntrinsicsHelper.cs" />
-    <Compile Include="Intrinsics\InternalsForType.cs" />
     <Compile Include="Analysis\BaseBlockOrder.cs" />
     <Compile Include="Metadata.cs">
       <SubType>

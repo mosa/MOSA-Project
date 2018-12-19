@@ -50,7 +50,7 @@ namespace Mosa.Plug.Korlib.System.Runtime.CompilerServices
 		{
 			var assemblies = new List<Assembly>();
 
-			foreach (var assembly in Internal.Assemblies)
+			foreach (var assembly in KorlibInternal.Assemblies)
 			{
 				assemblies.Add(assembly);
 			}

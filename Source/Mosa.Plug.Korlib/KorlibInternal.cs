@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Plug.Korlib.Runtime;
 using Mosa.Runtime;
+using Mosa.Runtime.Plug;
 using System;
 using System.Collections.Generic;
 
@@ -10,6 +12,7 @@ namespace Mosa.Plug.Korlib
 	{
 		internal static List<RuntimeAssembly> Assemblies;
 
+		[Plug("Mosa.Runtime.Internal.Setup")]
 		internal static void Setup()
 		{
 			Assemblies = new List<RuntimeAssembly>();
@@ -24,7 +27,7 @@ namespace Mosa.Plug.Korlib
 				// Get the pointer to the Assembly Metadata
 				var ptr = Intrinsic.LoadPointer(assemblyListTable, IntPtr.Size + (IntPtr.Size * i));
 
-				//Assemblies.Add(new RuntimeAssembly(ptr));
+				Assemblies.Add(new RuntimeAssembly(ptr));
 			}
 		}
 	}

@@ -1,10 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
-using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Plug;
 using System;
-using System.Reflection;
 
 namespace Mosa.Plug.Korlib.System
 {
@@ -17,29 +15,29 @@ namespace Mosa.Plug.Korlib.System
 			return null;
 		}
 
-		//		[Plug("System.Object::GetType")]
-		//		internal static Type GetType(object obj)
-		//		{
-		//			// Get the handle of the object
-		//			var handle = GetTypeHandle(obj);
+		[Plug("System.Object::GetType")]
+		internal static Type GetType(object obj)
+		{
+			// Get the handle of the object
+			var handle = GetTypeHandle(obj);
 
-		//			// Iterate through all the assemblies and look for the type handle
-		//			foreach (var assembly in Internal.Assemblies)
-		//			{
-		//				foreach (var type in assembly.typeList)
-		//				{
-		//					// If its not a match then skip
-		//					if (type.TypeHandle != handle)
-		//						continue;
+			// Iterate through all the assemblies and look for the type handle
+			foreach (var assembly in KorlibInternal.Assemblies)
+			{
+				foreach (var type in assembly.typeList)
+				{
+					// If its not a match then skip
+					if (type.TypeHandle != handle)
+						continue;
 
-		//					// If we get here then its a match so return it
-		//					return type;
-		//				}
-		//			}
+					// If we get here then its a match so return it
+					return type;
+				}
+			}
 
-		//			// If we didn't find a match then return null
-		//			return null;
-		//		}
+			// If we didn't find a match then return null
+			return null;
+		}
 
 		[Plug("System.Object::GetTypeHandle")]
 		internal static RuntimeTypeHandle GetTypeHandle(object obj)

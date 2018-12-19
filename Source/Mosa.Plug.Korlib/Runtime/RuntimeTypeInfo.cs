@@ -1,10 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime.Metadata;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace System
+namespace Mosa.Plug.Korlib.Runtime
 {
 	public sealed unsafe class RuntimeTypeInfo : TypeInfo
 	{

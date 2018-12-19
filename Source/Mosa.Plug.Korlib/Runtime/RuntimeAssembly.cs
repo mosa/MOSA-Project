@@ -1,10 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime.Metadata;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace System
+namespace Mosa.Plug.Korlib.Runtime
 {
 	public sealed unsafe class RuntimeAssembly : Assembly
 	{
@@ -14,7 +15,7 @@ namespace System
 		internal List<RuntimeTypeInfo> typeInfoList = null;
 		internal List<CustomAttributeData> customAttributesData = null;
 
-		private string fullName;
+		private readonly string fullName;
 
 		public override IEnumerable<CustomAttributeData> CustomAttributes
 		{
