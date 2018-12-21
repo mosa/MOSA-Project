@@ -4738,6 +4738,44 @@
 					"Encoding": "[x86],operand-prefix=0x66,opcode=0x87,opcode2=0xdb"
 				}
 			]
+		},
+		{
+			"Name": "RdMSR",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x86],operand-prefix=0x0F,opcode=0x32"
+				}
+			]
+		},
+		{
+			"Name": "WrMSR",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x86],operand-prefix=0x0F,opcode=0x30"
+				}
+			]
 		}
 	]
 }

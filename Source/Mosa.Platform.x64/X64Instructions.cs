@@ -261,6 +261,8 @@ namespace Mosa.Platform.x64
 			X64.CMovLessOrEqual64,
 			X64.CMovGreaterThan64,
 			X64.BochsDebug,
+			X64.RdMSR,
+			X64.WrMSR,
 		};
 	}
 }

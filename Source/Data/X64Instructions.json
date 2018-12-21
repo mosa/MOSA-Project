@@ -6540,6 +6540,44 @@
 					"Encoding": "[x64],operand-prefix=0x66,opcode=0x87,opcode2=0xdb"
 				}
 			]
+		},
+		{
+			"Name": "RdMSR",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],operand-prefix=0x0F,opcode=0x32"
+				}
+			]
+		},
+		{
+			"Name": "WrMSR",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],operand-prefix=0x0F,opcode=0x30"
+				}
+			]
 		}
 	]
 }

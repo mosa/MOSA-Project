@@ -259,5 +259,7 @@ namespace Mosa.Platform.x64
 		public static readonly CMovLessOrEqual64 CMovLessOrEqual64 = new CMovLessOrEqual64();
 		public static readonly CMovGreaterThan64 CMovGreaterThan64 = new CMovGreaterThan64();
 		public static readonly BochsDebug BochsDebug = new BochsDebug();
+		public static readonly RdMSR RdMSR = new RdMSR();
+		public static readonly WrMSR WrMSR = new WrMSR();
 	}
 }
