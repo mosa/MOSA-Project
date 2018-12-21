@@ -3,9 +3,9 @@
 		"[x86]=[instruction-prefix]|[address-prefix]|[operand-prefix]|[opcode]|[opcode2]|[opcode3]|[opcode4]|[mod]|[reg]|[rm]|[scale]|[index]|[base]|[displacement]|[immediate]",
 		"[x64]=[instruction-prefix]|[address-prefix]|[operand-prefix]|[rex.opcode]|[rex.w]|[rex.r]|[rex.x]|[rex.b]|[opcode]|[opcode2]|[opcode3]|[opcode4]|[mod]|[reg]|[rm]|[scale]|[index]|[base]|[displacement]|[immediate]",
 
-		"[x86-branch]=[x86],opcode=0x0F,opcode2=[opcode-branch],immediate=rel32:label",
-		"[x86-setbyteif]=[x86],opcode=0x0F,opcode2=[opcode-setbyteif],mod=11,reg=000,rm=reg3:r",
-		"[x86-cmov]=[x86],opcode=0x0F,opcode2=[opcode-cmov],mod=11,reg=reg3:r,rm=reg3:o1",
+		"[x86-branch]=[x86],operand-prefix=0x0F,opcode=[opcode-branch],immediate=rel32:label",
+		"[x86-setbyteif]=[x86],operand-prefix=0x0F,opcode=[opcode-setbyteif],mod=11,reg=000,rm=reg3:r",
+		"[x86-cmov]=[x86],operand-prefix=0x0F,opcode=[opcode-cmov],mod=11,reg=reg3:r,rm=reg3:o1",
 
 		"[x86-base-load-ebp+zero]=[x86],mod=01,reg=reg3:[dest],rm=101,immediate=0x00",
 		"[x86-base-load-ebp+register]=[x86],mod=01,reg=reg3:[dest],rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00",

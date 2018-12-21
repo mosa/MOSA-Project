@@ -5,9 +5,9 @@
 		"[x64-rex-32]=[instruction-prefix]|[address-prefix]|[operand-prefix]|supress8:0x40|[rex.opcode]|[rex.w]|[rex.r]|[rex.x]|[rex.b]|[opcode]|[opcode2]|[opcode3]|[opcode4]|[mod]|[reg]|[rm]|[scale]|[index]|[base]|[displacement]|[immediate],rex.opcode=0100,rex.w=0",
 		"[x64-rex-64]=[instruction-prefix]|[address-prefix]|[operand-prefix]|supress8:0x40|[rex.opcode]|[rex.w]|[rex.r]|[rex.x]|[rex.b]|[opcode]|[opcode2]|[opcode3]|[opcode4]|[mod]|[reg]|[rm]|[scale]|[index]|[base]|[displacement]|[immediate],rex.opcode=0100,rex.w=1",
 
-		"[x64-branch]=[x64],opcode=0x0F,opcode2=[opcode-branch],immediate=rel32:label",
-		"[x64-setbyteif]=[x64],opcode=0x0F,opcode2=[opcode-setbyteif],mod=11,reg=000,rm=reg3:r",
-		"[x64-cmov]=[x64],opcode=0x0F,opcode2=[opcode-cmov],mod=11,reg=reg3:r,rm=reg3:o1",
+		"[x64-branch]=[x64],operand-prefix=0x0F,opcode=[opcode-branch],immediate=rel32:label",
+		"[x64-setbyteif]=[x64],operand-prefixoperand-prefix=0x0F,opcode=[opcode-setbyteif],mod=11,reg=000,rm=reg3:r",
+		"[x64-cmov]=[x64],operand-prefix=0x0F,opcode=[opcode-cmov],mod=11,reg=reg3:r,rm=reg3:o1",
 
 		"[x64-base-load-ebp+zero]=[x64],mod=01,reg=reg3:[dest],rm=101,immediate=0x00",
 		"[x64-base-load-ebp+register]=[x64],mod=01,reg=reg3:[dest],rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00",
