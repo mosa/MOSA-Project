@@ -42,7 +42,7 @@ namespace Mosa.Plug.Korlib.System
 				foreach (var type in assembly.typeList)
 				{
 					// If its not a match then skip
-					if (type.TypeHandle != handle)
+					if (!type.TypeHandle.Equals(handle))
 						continue;
 
 					// If we get here then its a match so return it

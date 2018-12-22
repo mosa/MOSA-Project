@@ -9,21 +9,15 @@ namespace System
 	{
 		public RuntimeTypeHandle(IntPtr handle) // FIXME: hack - should be internal
 		{
-			m_ptr = handle;
+			m_type = handle;
 		}
 
-		private IntPtr m_ptr;
+		private IntPtr m_type;
 
 		/// <summary>
 		/// Gets a handle to the type represented by this instance.
 		/// </summary>
-		public IntPtr Value
-		{
-			get
-			{
-				return m_ptr;
-			}
-		}
+		public IntPtr Value { get { return m_type; } }
 
 		public bool Equals(RuntimeTypeHandle obj)
 		{
@@ -35,22 +29,33 @@ namespace System
 			if (!(obj is RuntimeTypeHandle))
 				return false;
 
-			return ((RuntimeTypeHandle)obj).m_ptr == m_ptr;
+			RuntimeTypeHandle handle = (RuntimeTypeHandle)obj;
+			return handle.m_type == m_type;
 		}
 
-		public static bool operator ==(RuntimeTypeHandle left, RuntimeTypeHandle right)
+		public static bool operator ==(RuntimeTypeHandle left, object right)
 		{
-			return left.m_ptr == right.m_ptr;
+			return left.Equals(right);
 		}
 
-		public static bool operator !=(RuntimeTypeHandle left, RuntimeTypeHandle right)
+		public static bool operator ==(object left, RuntimeTypeHandle right)
 		{
-			return !(left == right);
+			return right.Equals(left);
+		}
+
+		public static bool operator !=(RuntimeTypeHandle left, object right)
+		{
+			return !left.Equals(right);
+		}
+
+		public static bool operator !=(object left, RuntimeTypeHandle right)
+		{
+			return !right.Equals(left);
 		}
 
 		public override int GetHashCode()
 		{
-			return m_ptr.ToInt32();
+			return m_type.ToInt32();
 		}
 	}
 }

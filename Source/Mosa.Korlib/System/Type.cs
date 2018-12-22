@@ -118,7 +118,17 @@ namespace System
 			if (!(obj is Type))
 				return false;
 
-			return ((Type)obj).TypeHandle == TypeHandle;
+			return ((Type)obj).TypeHandle.Equals(TypeHandle);
+		}
+
+		public static bool operator ==(Type left, Type right)
+		{
+			return left.Equals(right);
+		}
+
+		public static bool operator !=(Type left, Type right)
+		{
+			return !left.Equals(right);
 		}
 
 		/// <summary>
@@ -128,7 +138,7 @@ namespace System
 		/// <returns>True if the underlying system type of o is the same as the underlying system type of the current Type; otherwise, False.</returns>
 		public virtual bool Equals(Type obj)
 		{
-			return obj.TypeHandle == TypeHandle;
+			return obj.TypeHandle.Equals(TypeHandle);
 		}
 
 		/// <summary>
