@@ -57,8 +57,6 @@ namespace Mosa.TestWorld.x86
 			Screen.Write('8');
 			GC.Setup();
 			Screen.Write('9');
-			Runtime.Internal.Setup();
-			Screen.Write('A');
 
 			Scheduler.Setup();
 			Screen.Write('B');

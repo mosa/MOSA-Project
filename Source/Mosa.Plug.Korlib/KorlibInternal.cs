@@ -12,7 +12,7 @@ namespace Mosa.Plug.Korlib
 	{
 		internal static List<RuntimeAssembly> Assemblies;
 
-		[Plug("Mosa.Runtime.Internal.Setup")]
+		[Plug("Mosa.Runtime.StartUp::InitializeRuntimeMetadata")]
 		internal static void Setup()
 		{
 			Assemblies = new List<RuntimeAssembly>();

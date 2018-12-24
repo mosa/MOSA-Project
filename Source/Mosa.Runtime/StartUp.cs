@@ -12,6 +12,7 @@ namespace Mosa.Runtime
 			InitalizeProcessor2();
 			SetInitialMemory();
 			InitializeAssembly();
+			InitializeRuntimeMetadata();
 			StartApplication();
 		}
 
@@ -36,6 +37,10 @@ namespace Mosa.Runtime
 		}
 
 		public static void InitializeAssembly()
+		{
+		}
+
+		public static void InitializeRuntimeMetadata()
 		{
 		}
 

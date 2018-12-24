@@ -56,11 +56,18 @@ namespace Mosa.Tool.GDBDebugger.Views
 
 			var sourceInfos = DebugSource.GetSources(method.ID);
 
-			dataGridView2.Enabled = true;
-			dataGridView2.DataSource = sourceInfos;
-			dataGridView2.Columns["MethodID"].Visible = false;
-			dataGridView2.Columns["Offset"].Visible = false;
-			dataGridView2.AutoResizeColumns();
+			if (sourceInfos == null)
+			{
+				dataGridView2.Enabled = false;
+			}
+			else
+			{
+				dataGridView2.Enabled = true;
+				dataGridView2.DataSource = sourceInfos;
+				dataGridView2.Columns["MethodID"].Visible = false;
+				dataGridView2.Columns["Offset"].Visible = false;
+				dataGridView2.AutoResizeColumns();
+			}
 		}
 	}
 }

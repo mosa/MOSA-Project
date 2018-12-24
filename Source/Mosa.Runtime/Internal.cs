@@ -2,6 +2,7 @@
 
 using Mosa.Runtime.Metadata;
 using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace Mosa.Runtime
@@ -275,14 +276,6 @@ namespace Mosa.Runtime
 		}
 
 		#endregion Virtual Machine
-
-		#region Metadata Setup
-
-		public static void Setup()
-		{
-		}
-
-		#endregion Metadata Setup
 
 		public static void ThrowIndexOutOfRangeException()
 		{

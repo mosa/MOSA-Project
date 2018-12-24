@@ -55,7 +55,10 @@ namespace Mosa.UnitTests
 		{
 			Type foundType = Type.GetType("System.Int32&");
 			Type declaringType = Type.GetType("System.Int32");
-			return (foundType != null && foundType.DeclaringType != null && foundType.DeclaringType.Equals(declaringType));
+
+			return foundType != null
+				&& foundType.DeclaringType != null
+				&& foundType.DeclaringType.Equals(declaringType);
 		}
 
 		[MosaUnitTest]

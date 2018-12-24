@@ -2,13 +2,14 @@
 
 using Mosa.Runtime.Plug;
 using System;
+using System.Diagnostics;
 
 namespace Mosa.Plug.Korlib.System
 {
 	internal static class TypePlug
 	{
-		[Plug("System.Type::GetTypeImpl")]
-		public static Type GetTypeImpl(string typeName, bool throwOnError)
+		[Plug("System.Type::GetType")]
+		public static Type GetType(string typeName, bool throwOnError)
 		{
 			if (typeName == null)
 				throw new ArgumentNullException(nameof(typeName));
@@ -33,8 +34,8 @@ namespace Mosa.Plug.Korlib.System
 				return null;
 		}
 
-		[Plug("System.Type::GetTypeFromHandleImpl")]
-		public static Type GetTypeFromHandleImpl(RuntimeTypeHandle handle)
+		[Plug("System.Type::GetTypeFromHandle")]
+		public static Type GetTypeFromHandle(RuntimeTypeHandle handle)
 		{
 			// Iterate through all the assemblies and look for the type handle
 			foreach (var assembly in KorlibInternal.Assemblies)

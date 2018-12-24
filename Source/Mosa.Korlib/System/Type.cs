@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace System
@@ -123,12 +124,17 @@ namespace System
 
 		public static bool operator ==(Type left, Type right)
 		{
+			var l = left as object;
+
+			if (l == null)
+				return false;
+
 			return left.Equals(right);
 		}
 
 		public static bool operator !=(Type left, Type right)
 		{
-			return !left.Equals(right);
+			return !(left == right);
 		}
 
 		/// <summary>
@@ -138,6 +144,13 @@ namespace System
 		/// <returns>True if the underlying system type of o is the same as the underlying system type of the current Type; otherwise, False.</returns>
 		public virtual bool Equals(Type obj)
 		{
+			var o = obj as object;
+
+			if (o == null)
+				return false;
+
+			Debug.Assert(obj.TypeHandle != null, "obj.TypeHandle != null");
+
 			return obj.TypeHandle.Equals(TypeHandle);
 		}
 
@@ -175,7 +188,7 @@ namespace System
 		/// <returns>The type with the specified name, if found; otherwise, null.</returns>
 		public static Type GetType(string typeName)
 		{
-			return Type.GetTypeImpl(typeName, false);
+			return GetType(typeName, false);
 		}
 
 		/// <summary>
@@ -184,37 +197,16 @@ namespace System
 		/// <param name="typeName">The assembly-qualified name of the type to get. See AssemblyQualifiedName. If the type is in the currently executing assembly or in Mscorlib.dll, it is sufficient to supply the type name qualified by its namespace.</param>
 		/// <param name="throwOnError">True to throw an exception if the type cannot be found; False to return null. Specifying False also suppresses some other exception conditions, but not all of them.</param>
 		/// <returns>The type with the specified name. If the type is not found, the throwOnError parameter specifies whether null is returned or an exception is thrown. In some cases, an exception is thrown regardless of the value of throwOnError.</returns>
-		public static Type GetType(string typeName, bool throwOnError)
-		{
-			return Type.GetTypeImpl(typeName, throwOnError);
-		}
-
-		/// <summary>
-		/// Gets the Type with the specified name, specifying whether to perform a case-sensitive search and whether to throw an exception if the type is not found.
-		/// </summary>
-		/// <param name="typeName">The assembly-qualified name of the type to get. See AssemblyQualifiedName. If the type is in the currently executing assembly or in Mscorlib.dll, it is sufficient to supply the type name qualified by its namespace.</param>
-		/// <param name="throwOnError">True to throw an exception if the type cannot be found; False to return null. Specifying False also suppresses some other exception conditions, but not all of them.</param>
-		/// <returns>The type with the specified name. If the type is not found, the throwOnError parameter specifies whether null is returned or an exception is thrown. In some cases, an exception is thrown regardless of the value of throwOnError.</returns>
 		[MethodImpl(MethodImplOptions.InternalCall)]
-		private static extern Type GetTypeImpl(string typeName, bool throwOnError);
+		public extern static Type GetType(string typeName, bool throwOnError);
 
 		/// <summary>
 		/// Gets the type referenced by the specified type handle.
 		/// </summary>
 		/// <param name="handle">The object that refers to the type.</param>
 		/// <returns></returns>
-		public static Type GetTypeFromHandle(RuntimeTypeHandle handle)
-		{
-			return Type.GetTypeFromHandleImpl(handle);
-		}
-
-		/// <summary>
-		/// Gets the type referenced by the specified type handle.
-		/// </summary>
-		/// <param name="handle">The object that refers to the type.</param>
-		/// <returns>The type referenced by the specified RuntimeTypeHandle, or null if the Value property of handle is null.</returns>
 		[MethodImpl(MethodImplOptions.InternalCall)]
-		private static extern Type GetTypeFromHandleImpl(RuntimeTypeHandle handle);
+		public extern static Type GetTypeFromHandle(RuntimeTypeHandle handle);
 
 		/// <summary>
 		/// When overridden in a derived class, implements the HasElementType property and determines whether the current Type encompasses or refers to another type; that is, whether the current Type is an array, a pointer, or is passed by reference.

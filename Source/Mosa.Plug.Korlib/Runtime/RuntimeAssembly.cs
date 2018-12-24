@@ -3,6 +3,7 @@
 using Mosa.Runtime.Metadata;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Reflection;
 
 namespace Mosa.Plug.Korlib.Runtime

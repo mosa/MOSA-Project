@@ -53,7 +53,7 @@ namespace Mosa.Tool.GDBDebugger
 
 		public AppLocations AppLocations { get; } = new AppLocations();
 
-		public DebugSource DebugSource { get; } = new DebugSource();
+		public DebugSource DebugSource { get; set; } = new DebugSource();
 
 		public List<BreakPoint> BreakPoints { get; } = new List<BreakPoint>();
 
@@ -161,6 +161,7 @@ namespace Mosa.Tool.GDBDebugger
 		{
 			if (Options.DebugFile != null && File.Exists(Options.DebugFile))
 			{
+				DebugSource = new DebugSource();
 				LoadDebugData.LoadDebugInfo(Options.DebugFile, DebugSource);
 			}
 		}
