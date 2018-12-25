@@ -111,11 +111,12 @@ namespace Mosa.Tool.GDBDebugger
 
 			//scriptView.Show(dockPanel, DockState.Document);
 			registersView.Show(dockPanel, DockState.DockRight);
+			stackFrameView.Show(registersView.Pane, DockAlignment.Bottom, 0.5);
 
 			sourceView.Show(dockPanel, DockState.Document);
 			sourceDataView.Show(dockPanel, DockState.Document);
 
-			stackFrameView.Show(dockPanel, DockState.DockRight);
+			//stackFrameView.Show(dockPanel, DockState.DockRight);
 
 			var memoryView = new MemoryView(this);
 			memoryView.Show(dockPanel, DockState.Document);

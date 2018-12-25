@@ -7,12 +7,12 @@ namespace System
 	/// </summary>
 	public struct RuntimeTypeHandle
 	{
+		private IntPtr m_type;
+
 		public RuntimeTypeHandle(IntPtr handle) // FIXME: hack - should be internal
 		{
 			m_type = handle;
 		}
-
-		private IntPtr m_type;
 
 		/// <summary>
 		/// Gets a handle to the type represented by this instance.
@@ -21,7 +21,7 @@ namespace System
 
 		public bool Equals(RuntimeTypeHandle obj)
 		{
-			return Equals((object)obj);
+			return obj.m_type == m_type;
 		}
 
 		public override bool Equals(object obj)
@@ -29,7 +29,8 @@ namespace System
 			if (!(obj is RuntimeTypeHandle))
 				return false;
 
-			RuntimeTypeHandle handle = (RuntimeTypeHandle)obj;
+			var handle = (RuntimeTypeHandle)obj;
+
 			return handle.m_type == m_type;
 		}
 

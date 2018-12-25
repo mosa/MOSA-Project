@@ -56,9 +56,7 @@ namespace Mosa.UnitTests
 			Type foundType = Type.GetType("System.Int32&");
 			Type declaringType = Type.GetType("System.Int32");
 
-			return foundType != null
-				&& foundType.DeclaringType != null
-				&& foundType.DeclaringType.Equals(declaringType);
+			return foundType.DeclaringType.Equals(declaringType);
 		}
 
 		[MosaUnitTest]
@@ -66,7 +64,7 @@ namespace Mosa.UnitTests
 		{
 			Type foundType = Type.GetType("System.Int32[]");
 			Type elementType = Type.GetType("System.Int32");
-			return (foundType != null && foundType.HasElementType && foundType.GetElementType().Equals(elementType));
+			return foundType.GetElementType().Equals(elementType);
 		}
 
 		[MosaUnitTest]
@@ -74,7 +72,7 @@ namespace Mosa.UnitTests
 		{
 			Type foundType = Type.GetType("Mosa.UnitTests.ReflectionTests.TestClass123");
 			var obj = (TestClass123)Activator.CreateInstance(foundType);
-			return (obj.i == 52);
+			return obj.i == 52;
 		}
 
 		private class TestClass123
