@@ -2082,9 +2082,9 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Type intrinsicType = null;
 
-			if (node.InvokeMethod.ExternMethod != null)
+			if (node.InvokeMethod.IsExternal)
 			{
-				intrinsicType = Type.GetType(node.InvokeMethod.ExternMethod);
+				intrinsicType = Type.GetType(node.InvokeMethod.ExternMethodModule);
 			}
 			else if (node.InvokeMethod.IsInternal)
 			{

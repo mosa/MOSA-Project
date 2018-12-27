@@ -64,7 +64,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public IList<MosaMethod> Overrides { get; private set; }
 
-		public string ExternMethod { get; private set; }
+		public bool IsExternal { get; private set; }
+
+		public string ExternMethodName { get; private set; }
+
+		public string ExternMethodModule { get; private set; }
 
 		internal MosaMethod()
 		{
@@ -98,11 +102,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			//return SignatureEquals(other) && this.DeclaringType.FullName == other.DeclaringType.FullName && this.Name == other.Name;
 		}
-
-		//public bool SignatureEquals(MosaMethod other)
-		//{
-		//	return SignatureComparer.Equals(this.Signature, other.Signature);
-		//}
 
 		public class Mutator : MosaUnit.MutatorBase
 		{
@@ -160,7 +159,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public IList<MosaMethod> Overrides { get { return method.overrides; } }
 
-			public string ExternMethod { set { method.ExternMethod = value; } }
+			public bool IsExternal { set { method.IsExternal = value; } }
+
+			public string ExternMethodName { set { method.ExternMethodName = value; } }
+
+			public string ExternMethodModule { set { method.ExternMethodModule = value; } }
 
 			public override void Dispose()
 			{

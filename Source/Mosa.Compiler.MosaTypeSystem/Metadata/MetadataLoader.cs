@@ -203,7 +203,9 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 			if (methodDef.HasImplMap)
 			{
-				method.ExternMethod = methodDef.ImplMap.Module.Name;
+				method.IsExternal = true;
+				method.ExternMethodModule = methodDef.ImplMap.Module.Name;
+				method.ExternMethodName = methodDef.ImplMap.Name;
 			}
 		}
 

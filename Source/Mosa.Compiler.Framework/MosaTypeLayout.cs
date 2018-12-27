@@ -673,7 +673,7 @@ namespace Mosa.Compiler.Framework
 						methodTable.Add(method);
 						methodTableOffsets.Add(method, slot);
 					}
-					else if (!method.IsInternal && method.ExternMethod == null)
+					else if (!method.IsInternal && !method.IsExternal)
 					{
 						int slot = methodTable.Count;
 						methodTable.Add(method);

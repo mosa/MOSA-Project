@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.Instruction != IRInstruction.IntrinsicMethodCall)
 						continue;
 
-					string external = node.Operand1.Method.ExternMethod;
+					string external = node.Operand1.Method.ExternMethodModule;
 
 					var intrinsicType = Type.GetType(external);
 
