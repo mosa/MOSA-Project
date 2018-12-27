@@ -117,9 +117,11 @@ namespace Mosa.Plug.Korlib.Runtime
 		public override Type GetElementType()
 		{
 			if (elementType == null)
-
+			{
 				// Element Type - Lazy load
 				elementType = Type.GetTypeFromHandle(elementTypeHandle);
+			}
+
 			return elementType;
 		}
 

@@ -125,6 +125,10 @@ namespace System
 		public static bool operator ==(Type left, Type right)
 		{
 			var l = left as object;
+			var r = right as object;
+
+			if (l == null && r == null)
+				return true;
 
 			if (l == null)
 				return false;
