@@ -26,7 +26,7 @@ namespace Mosa.UnitTests
 		public static bool FindTypeOfTest()
 		{
 			Type bootType = typeof(System.String);
-			return (bootType != null);
+			return bootType != null;
 		}
 
 		[MosaUnitTest]
@@ -47,15 +47,22 @@ namespace Mosa.UnitTests
 		public static bool TypeHandleFromObjectTest()
 		{
 			string hello = "hi";
-			return (hello.GetType() != null);
+			return hello.GetType() != null;
 		}
 
 		[MosaUnitTest]
-		public static bool DeclaringTypeTest()
+		public static bool DeclaringTypeTest1()
 		{
 			Type foundType = Type.GetType("System.Int32&");
 			Type declaringType = Type.GetType("System.Int32");
+			return foundType.DeclaringType == null;
+		}
 
+		[MosaUnitTest]
+		public static bool DeclaringTypeTest2()
+		{
+			Type foundType = Type.GetType("Mosa.UnitTests.ReflectionTests+TestClass123");
+			Type declaringType = Type.GetType("Mosa.UnitTests.ReflectionTests");
 			return foundType.DeclaringType.Equals(declaringType);
 		}
 
@@ -70,8 +77,12 @@ namespace Mosa.UnitTests
 		[MosaUnitTest]
 		public static bool TypeActivator()
 		{
-			Type foundType = Type.GetType("Mosa.UnitTests.ReflectionTests.TestClass123");
+			Type foundType = Type.GetType("Mosa.UnitTests.ReflectionTests+TestClass123");
 			var obj = (TestClass123)Activator.CreateInstance(foundType);
+
+			if (obj == null)
+				return false;
+
 			return obj.i == 52;
 		}
 

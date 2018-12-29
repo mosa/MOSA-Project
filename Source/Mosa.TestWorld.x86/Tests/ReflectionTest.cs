@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using Mosa.UnitTests;
 
 namespace Mosa.TestWorld.x86.Tests
@@ -16,7 +15,8 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.Add(ReflectionTests.FindTypeByNameTest);
 			testMethods.Add(ReflectionTests.CompareTypeHandlesTest);
 			testMethods.Add(ReflectionTests.TypeHandleFromObjectTest);
-			testMethods.Add(ReflectionTests.DeclaringTypeTest);
+			testMethods.Add(ReflectionTests.DeclaringTypeTest1);
+			testMethods.Add(ReflectionTests.DeclaringTypeTest2);
 			testMethods.Add(ReflectionTests.ElementTypeTest);
 			testMethods.Add(ReflectionTests.TypeActivator);
 		}

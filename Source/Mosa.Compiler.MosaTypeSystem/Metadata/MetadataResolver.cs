@@ -42,19 +42,29 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 						var typeDef = type.GetUnderlyingObject<UnitDesc<TypeDef, TypeSig>>().Definition;
 
 						if (typeDef.BaseType != null)
+						{
 							mosaType.BaseType = metadata.Loader.GetType(typeDef.BaseType.ToTypeSig());
+						}
 
 						if (typeDef.DeclaringType != null)
+						{
 							mosaType.DeclaringType = metadata.Loader.GetType(typeDef.DeclaringType.ToTypeSig());
+						}
 
 						if (typeDef.IsEnum)
+						{
 							mosaType.ElementType = metadata.Loader.GetType(typeDef.GetEnumUnderlyingType());
+						}
 
 						foreach (var iface in typeDef.Interfaces)
+						{
 							mosaType.Interfaces.Add(metadata.Loader.GetType(iface.Interface.ToTypeSig()));
+						}
 
 						if (typeDef.BaseType != null)
+						{
 							ResolveInterfacesInBaseTypes(mosaType, type.BaseType);
+						}
 					}
 					ResolveType(type);
 				}
