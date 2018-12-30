@@ -5,17 +5,17 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Intrinsics
 {
 	/// <summary>
-	/// GetObjectFromAddress
+	/// Load32
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
-	[ReplacementTarget("Mosa.Runtime.Intrinsic::GetObjectFromAddress")]
-	public sealed class GetObjectFromAddress : IIntrinsicInternalMethod
+	[ReplacementTarget("System.Runtime.CompilerServices.Unsafe::As")]
+	public sealed class UnsafeAs : IIntrinsicInternalMethod
 	{
 		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
-			var move = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.MoveInt32 : IRInstruction.MoveInt64;
+			var instruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.MoveInt32 : IRInstruction.MoveInt64;
 
-			context.SetInstruction(move, context.Result, context.Operand1);
+			context.SetInstruction(instruction, context.Result, context.Operand1);
 		}
 	}
 }

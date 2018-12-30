@@ -24,17 +24,11 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Gets the endianness of the target architecture.
 		/// </summary>
-		/// <value>
-		/// The endianness.
-		/// </value>
 		public override Endianness Endianness { get { return Endianness.Little; } }
 
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
-		/// <value>
-		/// The type of the elf machine.
-		/// </value>
 		public override MachineType MachineType { get { return MachineType.Intel386; } }
 
 		/// <summary>
@@ -140,33 +134,21 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Gets the offset of first local.
 		/// </summary>
-		/// <value>
-		/// The offset of first local.
-		/// </value>
 		public override int OffsetOfFirstLocal { get { return 0; } }
 
 		/// <summary>
 		/// Gets the offset of first parameter.
 		/// </summary>
-		/// <value>
-		/// The offset of first parameter.
-		/// </value>
 		public override int OffsetOfFirstParameter { get { return 8; } }
 
 		/// <summary>
 		/// Gets the name of the platform.
 		/// </summary>
-		/// <value>
-		/// The name of the platform.
-		/// </value>
 		public override string PlatformName { get { return "x86"; } }
 
 		/// <summary>
 		/// Gets the instructions.
 		/// </summary>
-		/// <value>
-		/// The instructions.
-		/// </value>
 		public override List<BaseInstruction> Instructions { get { return X86Instructions.List; } }
 
 		/// <summary>

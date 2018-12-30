@@ -23,25 +23,16 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.Instruction != IRInstruction.IntrinsicMethodCall)
 						continue;
 
-					string external = node.Operand1.Method.ExternMethodModule;
+					Architecture.PlatformIntrinsicMethods.TryGetValue(node.Operand1.Method.ExternMethodModule, out IIntrinsicMethod intrinsic);
 
-					var intrinsicType = Type.GetType(external);
-
-					if (intrinsicType == null)
-						return;
-
-					var instance = Activator.CreateInstance(intrinsicType) as IIntrinsicPlatformMethod;
-
-					if (instance == null)
+					if (intrinsic == null)
 						return;
 
 					var operands = node.GetOperands();
 					operands.RemoveAt(0);
 					node.SetInstruction(IRInstruction.IntrinsicMethodCall, node.Result, operands);
 
-					var context = new Context(node);
-
-					instance.ReplaceIntrinsicCall(context, MethodCompiler);
+					intrinsic.ReplaceIntrinsicCall(new Context(node), MethodCompiler);
 				}
 			}
 		}

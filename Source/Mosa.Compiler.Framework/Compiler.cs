@@ -84,7 +84,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the list of Intrinsic Types for internal call replacements.
 		/// </summary>
-		public Dictionary<string, Type> IntrinsicTypes { get; }
+		public Dictionary<string, IIntrinsicMethod> InternalIntrinsicMethods { get; }
 
 		/// <summary>
 		/// Gets the type of the platform internal runtime.
@@ -213,8 +213,7 @@ namespace Mosa.Compiler.Framework
 
 			methodStagePipelines = new Pipeline<BaseMethodCompilerStage>[mosaCompiler.MaxThreads];
 
-			// Create new dictionary
-			IntrinsicTypes = new Dictionary<string, Type>();
+			InternalIntrinsicMethods = new Dictionary<string, IIntrinsicMethod>();
 
 			foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
 			{
@@ -225,7 +224,7 @@ namespace Mosa.Compiler.Framework
 					for (int i = 0; i < attributes.Length; i++)
 					{
 						// Finally add the dictionary entry mapping the target string and the type
-						IntrinsicTypes.Add(attributes[i].Target, type);
+						InternalIntrinsicMethods.Add(attributes[i].Target, Activator.CreateInstance(type) as IIntrinsicMethod);
 					}
 				}
 			}

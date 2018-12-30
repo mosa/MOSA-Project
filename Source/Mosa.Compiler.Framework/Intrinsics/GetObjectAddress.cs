@@ -14,12 +14,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	[ReplacementTarget("Mosa.Runtime.Intrinsic::GetValueTypeAddress")]
 	public sealed class GetObjectAddress : IIntrinsicInternalMethod
 	{
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="methodCompiler">The method compiler.</param>
-		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			var result = context.Result;
 			var operand1 = context.Operand1;

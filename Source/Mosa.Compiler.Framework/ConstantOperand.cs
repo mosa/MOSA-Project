@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.MosaTypeSystem;
 
-namespace Mosa.Compiler.Framework.Helper
+namespace Mosa.Compiler.Framework
 {
 	internal static class ConstantOperand
 	{

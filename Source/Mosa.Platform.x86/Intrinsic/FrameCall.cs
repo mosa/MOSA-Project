@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicPlatformMethod" />
 	internal class FrameCall : IIntrinsicPlatformMethod
 	{
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			var methodAddress = context.Operand1;
 			var newESP = context.Operand2;

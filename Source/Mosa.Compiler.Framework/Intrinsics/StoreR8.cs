@@ -12,13 +12,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	[ReplacementTarget("Mosa.Runtime.Intrinsic::StoreR8")]
 	public sealed class StoreR8 : IIntrinsicInternalMethod
 	{
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="methodCompiler">The method compiler.</param>
-		/// <exception cref="CompilerException"></exception>
-		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			if (context.OperandCount == 2)
 			{

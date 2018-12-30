@@ -12,13 +12,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	[ReplacementTarget("Mosa.Runtime.Intrinsic::Load16")]
 	public sealed class Load16 : IIntrinsicInternalMethod
 	{
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="methodCompiler">The method compiler.</param>
-		/// <exception cref="CompilerException"></exception>
-		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			var instruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadZeroExtend16x32 : IRInstruction.LoadZeroExtend16x64;
 

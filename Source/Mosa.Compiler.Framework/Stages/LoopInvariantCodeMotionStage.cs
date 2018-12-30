@@ -2,14 +2,12 @@
 
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Common;
-using Mosa.Compiler.Framework.Helper;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Trace;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using System.Linq;
 
 namespace Mosa.Compiler.Framework.Stages
 {

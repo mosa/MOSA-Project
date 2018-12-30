@@ -2,7 +2,9 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Linker.Elf;
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Mosa.Compiler.Framework
 {
@@ -16,17 +18,11 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the endianness of the target architecture.
 		/// </summary>
-		/// <value>
-		/// The endianness.
-		/// </value>
 		public abstract Endianness Endianness { get; }
 
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
-		/// <value>
-		/// The type of the elf machine.
-		/// </value>
 		public abstract MachineType MachineType { get; }
 
 		/// <summary>
@@ -97,9 +93,6 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the size of the native instruction.
 		/// </summary>
-		/// <value>
-		/// The size of the native instruction.
-		/// </value>
 		public virtual InstructionSize NativeInstructionSize { get { return NativePointerSize == 4 ? InstructionSize.Size32 : InstructionSize.Size64; } }
 
 		/// <summary>
@@ -113,36 +106,38 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Is the platform is 64 bit
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if [is64 bit]; otherwise, <c>false</c>.
-		/// </value>
 		public virtual bool Is64BitPlatform { get { return NativePointerSize == 8; } }
 
 		/// <summary>
 		/// Gets the offset of first local.
 		/// </summary>
-		/// <value>
-		/// The offset of first local.
-		/// </value>
 		public virtual int OffsetOfFirstLocal { get { return 0; } }
 
 		/// <summary>
 		/// Gets the offset of first parameter.
 		/// </summary>
-		/// <value>
-		/// The offset of first parameter.
-		/// </value>
 		public virtual int OffsetOfFirstParameter { get { return NativePointerSize * 2; } }
 
 		/// <summary>
 		/// Gets the instructions.
 		/// </summary>
-		/// <value>
-		/// The instructions.
-		/// </value>
 		public virtual List<BaseInstruction> Instructions { get; }
 
+		/// <summary>
+		/// Gets the platform intrinsic methods.
+		/// </summary>
+		public Dictionary<string, IIntrinsicMethod> PlatformIntrinsicMethods { get; }
+
 		#endregion Properties
+
+		#region Constructor
+
+		public BaseArchitecture()
+		{
+			PlatformIntrinsicMethods = GetPlatformIntrinsicMethods();
+		}
+
+		#endregion Constructor
 
 		#region Methods
 
@@ -218,6 +213,21 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instruction">The instruction.</param>
 		/// <returns></returns>
 		public abstract bool IsInstructionMove(BaseInstruction instruction);
+
+		public Dictionary<string, IIntrinsicMethod> GetPlatformIntrinsicMethods()
+		{
+			var PlatformIntrinsicMethods = new Dictionary<string, IIntrinsicMethod>();
+
+			foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
+			{
+				if (type.IsClass && typeof(IIntrinsicPlatformMethod).IsAssignableFrom(type))
+				{
+					PlatformIntrinsicMethods.Add(type.FullName, Activator.CreateInstance(type) as IIntrinsicMethod);
+				}
+			}
+
+			return PlatformIntrinsicMethods;
+		}
 
 		#endregion Methods
 	}

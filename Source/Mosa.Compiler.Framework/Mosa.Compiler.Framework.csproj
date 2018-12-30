@@ -91,9 +91,11 @@
     <Compile Include="Analysis\SimpleTraceBlockOrder.cs" />
     <Compile Include="BaseCodeTransformationStage.cs" />
     <Compile Include="BaseCompilerExtension.cs" />
-    <Compile Include="Helper\ConstantOperand.cs" />
+    <Compile Include="ConstantOperand.cs" />
     <Compile Include="CIL\IRInstructions.cs" />
     <Compile Include="Counter.cs" />
+    <Compile Include="IIntrinsicMethod.cs" />
+    <Compile Include="Intrinsics\UnsafeAs.cs" />
     <Compile Include="IR\Add32.cs" />
     <Compile Include="IR\Add64.cs" />
     <Compile Include="IR\AddCarryOut32.cs" />
@@ -160,7 +162,6 @@
     <Compile Include="IR\IfThenElse64.cs" />
     <Compile Include="IR\IntrinsicMethodCall.cs" />
     <Compile Include="IR\IRInstruction.cs" />
-    <Compile Include="IR\IRInstructionList.cs" />
     <Compile Include="IR\IsInstanceOfInterfaceType.cs" />
     <Compile Include="IR\IsInstanceOfType.cs" />
     <Compile Include="IR\Jmp.cs" />
@@ -326,7 +327,7 @@
     <Compile Include="Linker\LinkType.cs" />
     <Compile Include="Linker\PatchType.cs" />
     <Compile Include="Linker\SectionKind.cs" />
-    <Compile Include="Helper\BuiltInOptimizations.cs" />
+    <Compile Include="BuiltInOptimizations.cs" />
     <Compile Include="MultibootSpecification.cs" />
     <Compile Include="OpcodeEncoder.cs" />
     <Compile Include="Pipeline.cs" />

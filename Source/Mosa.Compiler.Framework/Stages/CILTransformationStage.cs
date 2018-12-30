@@ -424,14 +424,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Call(Context context)
 		{
-			if (ProcessUnsafeAsCall(context))
-			{
-				return;
-			}
-
-			//if (ProcessExternalPlugCall(context))
-			//	return;
-
 			if (ProcessExternalCall(context.Node))
 				return;
 
@@ -488,9 +480,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Callvirt(Context context)
 		{
-			//if (ProcessExternalPlugCall(context))
-			//	return;
-
 			if (ProcessExternalCall(context.Node))
 				return;
 
@@ -585,11 +574,9 @@ namespace Mosa.Compiler.Framework.Stages
 			else if (bits == 32)
 				return 0xFFFFFFFF;
 			else if (bits == 64)
-				return 0xFFFFFFFF0FFFFFFF;
+				return 0xFFFFFFFFFFFFFFFF;
 
-			Debug.Fail("");
-
-			return 0;
+			throw new CompilerException("GetBitMask(): Invalid parameter: " + nameof(bits) + " = " + bits.ToString());
 		}
 
 		/// <summary>
@@ -658,10 +645,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Dup(InstructionNode node)
 		{
-			Debug.Fail("CIL.DUP instruction encountered"); // should never get here
-
-			// We don't need the dup anymore.
-			node.Empty();
+			throw new CompilerException("Dup(): unexpected CIL.DUP instruction");
 		}
 
 		/// <summary>
@@ -2049,23 +2033,6 @@ namespace Mosa.Compiler.Framework.Stages
 			throw new CompilerException();
 		}
 
-		private bool ProcessUnsafeAsCall(Context context)
-		{
-			if (!context.InvokeMethod.IsStatic)
-				return false;
-
-			if (context.InvokeMethod.DeclaringType.FullName != "System.Runtime.CompilerServices.Unsafe")
-				return false;
-
-			//if (!(context.InvokeMethod.Name == "As" || context.InvokeMethod.Name == "AsRef"))
-			if (context.InvokeMethod.Name != "As")
-				return false;
-
-			context.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), context.Result, context.Operand1);
-
-			return true;
-		}
-
 		/// <summary>
 		/// Processes external method calls.
 		/// </summary>
@@ -2080,46 +2047,34 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </remarks>
 		private bool ProcessExternalCall(InstructionNode node)
 		{
-			Type intrinsicType = null;
-
 			if (node.InvokeMethod.IsExternal)
 			{
-				intrinsicType = Type.GetType(node.InvokeMethod.ExternMethodModule);
+				Architecture.PlatformIntrinsicMethods.TryGetValue(node.InvokeMethod.FullName, out IIntrinsicMethod intrinsic);
+
+				if (intrinsic != null)
+				{
+					var operands = node.GetOperands();
+					operands.Insert(0, Operand.CreateSymbolFromMethod(node.InvokeMethod, TypeSystem));
+					node.SetInstruction(IRInstruction.IntrinsicMethodCall, node.Result, operands);
+
+					return true;
+				}
 			}
 			else if (node.InvokeMethod.IsInternal)
 			{
-				MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(node.InvokeMethod.FullName, out intrinsicType);
+				MethodCompiler.Compiler.InternalIntrinsicMethods.TryGetValue(node.InvokeMethod.FullName, out IIntrinsicMethod intrinsic);
 
-				if (intrinsicType == null)
+				if (intrinsic == null)
 				{
-					MethodCompiler.Compiler.IntrinsicTypes.TryGetValue(node.InvokeMethod.DeclaringType.FullName + "::" + node.InvokeMethod.Name, out intrinsicType);
+					// special case for plugging constructors
+					MethodCompiler.Compiler.InternalIntrinsicMethods.TryGetValue(node.InvokeMethod.DeclaringType.FullName + "::" + node.InvokeMethod.Name, out intrinsic);
 				}
 
-				if (intrinsicType == null)
-				{
+				if (intrinsic == null)
 					return false;
-				}
 
-				//return false;
-				//Debug.Assert(intrinsicType != null, "Method is internal but no processor found: " + node.InvokeMethod.FullName);
-			}
-
-			if (intrinsicType == null)
-				return false;
-
-			var instance = Activator.CreateInstance(intrinsicType);
-
-			if (instance is IIntrinsicInternalMethod instanceMethod)
-			{
 				var context = new Context(node);
-				instanceMethod.ReplaceIntrinsicCall(context, MethodCompiler);
-				return true;
-			}
-			else if (instance is IIntrinsicPlatformMethod)
-			{
-				var operands = node.GetOperands();
-				operands.Insert(0, Operand.CreateSymbolFromMethod(node.InvokeMethod, TypeSystem));
-				node.SetInstruction(IRInstruction.IntrinsicMethodCall, node.Result, operands);
+				intrinsic.ReplaceIntrinsicCall(context, MethodCompiler);
 
 				return true;
 			}

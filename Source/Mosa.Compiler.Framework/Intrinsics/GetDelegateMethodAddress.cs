@@ -11,12 +11,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	[ReplacementTarget("Mosa.Runtime.Intrinsic::GetDelegateMethodAddress")]
 	public sealed class GetDelegateMethodAddress : IIntrinsicInternalMethod
 	{
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="methodCompiler">The method compiler.</param>
-		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			var load = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadInt32 : IRInstruction.LoadInt64;
 

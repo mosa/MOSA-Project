@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework.IR;
 
-namespace Mosa.Compiler.Framework.Helper
+namespace Mosa.Compiler.Framework
 {
 	public static class BuiltInOptimizations
 	{

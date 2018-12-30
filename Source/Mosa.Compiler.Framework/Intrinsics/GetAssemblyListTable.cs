@@ -11,12 +11,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	[ReplacementTarget("Mosa.Runtime.Intrinsic::GetAssemblyListTable")]
 	internal class GetAssemblyListTable : IIntrinsicInternalMethod
 	{
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="methodCompiler">The method compiler.</param>
-		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			var move = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.MoveInt32 : IRInstruction.MoveInt64;
 

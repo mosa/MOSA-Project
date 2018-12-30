@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal sealed class Get32 : IIntrinsicPlatformMethod
 	{
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			Debug.Assert(context.Result.IsI4 | context.Result.IsU4);
 			context.SetInstruction(X86.MovLoad32, context.Result, context.Operand1, methodCompiler.ConstantZero);

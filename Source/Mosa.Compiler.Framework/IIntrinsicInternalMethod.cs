@@ -5,13 +5,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Interface to an intrinsic instruction
 	/// </summary>
-	internal interface IIntrinsicInternalMethod
+	public interface IIntrinsicInternalMethod : IIntrinsicMethod
 	{
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="methodCompiler">The method compiler.</param>
-		void ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler);
 	}
 }

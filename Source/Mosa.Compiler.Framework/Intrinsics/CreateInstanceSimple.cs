@@ -12,12 +12,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	[ReplacementTarget("Mosa.Runtime.Intrinsic::CreateInstanceSimple")]
 	internal class CreateInstanceSimple : IIntrinsicInternalMethod
 	{
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="methodCompiler">The method compiler.</param>
-		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
 		{
 			var ctor = context.Operand1;
 			var thisObject = context.Operand2;
