@@ -3,7 +3,7 @@
 namespace Mosa.ClassLib
 {
 	/// <summary>
-	///
+	/// Math
 	/// </summary>
 	public static class Math
 	{

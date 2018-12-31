@@ -2033,6 +2033,23 @@ namespace Mosa.Compiler.Framework.Stages
 			throw new CompilerException();
 		}
 
+		private bool ProcessUnsafeAsCall(InstructionNode node)
+		{
+			if (!node.InvokeMethod.IsStatic)
+				return false;
+
+			if (node.InvokeMethod.DeclaringType.FullName != "System.Runtime.CompilerServices.Unsafe")
+				return false;
+
+			//if (!(context.InvokeMethod.Name == "As" || context.InvokeMethod.Name == "AsRef"))
+			if (node.InvokeMethod.Name != "As")
+				return false;
+
+			node.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, node.Operand1);
+
+			return true;
+		}
+
 		/// <summary>
 		/// Processes external method calls.
 		/// </summary>
@@ -2047,6 +2064,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </remarks>
 		private bool ProcessExternalCall(InstructionNode node)
 		{
+			if (ProcessUnsafeAsCall(node))
+				return true;
+
 			if (node.InvokeMethod.IsExternal)
 			{
 				var intrinsic = Architecture.GetInstrinsicMethod(node.InvokeMethod.ExternMethodModule);
@@ -2057,6 +2077,8 @@ namespace Mosa.Compiler.Framework.Stages
 					operands.Insert(0, Operand.CreateSymbolFromMethod(node.InvokeMethod, TypeSystem));
 					node.SetInstruction(IRInstruction.IntrinsicMethodCall, node.Result, operands);
 
+					//node.Instruction = IRInstruction.IntrinsicMethodCall;
+
 					return true;
 				}
 			}
@@ -2064,12 +2086,12 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var methodName = node.InvokeMethod.DeclaringType.FullName + ":" + node.InvokeMethod.Name;
 
-				MethodCompiler.Compiler.InternalIntrinsicMethods.TryGetValue(methodName, out InstrinsicMethodDelegate intrinsic);
+				var intrinsic = MethodCompiler.Compiler.GetInstrincMethod(methodName);
 
 				if (intrinsic == null)
 				{
 					// special case for plugging constructors
-					MethodCompiler.Compiler.InternalIntrinsicMethods.TryGetValue(node.InvokeMethod.DeclaringType.FullName + "::" + node.InvokeMethod.Name, out intrinsic);
+					intrinsic = MethodCompiler.Compiler.GetInstrincMethod(node.InvokeMethod.DeclaringType.FullName + "::" + node.InvokeMethod.Name);
 				}
 
 				if (intrinsic != null)

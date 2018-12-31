@@ -22,6 +22,8 @@ namespace Mosa.Compiler.Framework
 
 		private Pipeline<BaseMethodCompilerStage>[] methodStagePipelines;
 
+		public Dictionary<string, InstrinsicMethodDelegate> internalIntrinsicMethods { get; } = new Dictionary<string, InstrinsicMethodDelegate>();
+
 		#endregion Data Members
 
 		#region Properties
@@ -81,11 +83,6 @@ namespace Mosa.Compiler.Framework
 		/// Gets the plug system.
 		/// </summary>
 		public PlugSystem PlugSystem { get; }
-
-		/// <summary>
-		/// Gets the list of Intrinsic Types for internal call replacements.
-		/// </summary>
-		public Dictionary<string, InstrinsicMethodDelegate> InternalIntrinsicMethods { get; } = new Dictionary<string, InstrinsicMethodDelegate>();
 
 		/// <summary>
 		/// Gets the type of the platform internal runtime.
@@ -229,7 +226,7 @@ namespace Mosa.Compiler.Framework
 						var d = (InstrinsicMethodDelegate)Delegate.CreateDelegate(typeof(InstrinsicMethodDelegate), method);
 
 						// Finally add the dictionary entry mapping the target name and the delegate
-						InternalIntrinsicMethods.Add(attributes[i].Target, d);
+						internalIntrinsicMethods.Add(attributes[i].Target, d);
 					}
 				}
 			}
@@ -464,6 +461,13 @@ namespace Mosa.Compiler.Framework
 		public void Stop()
 		{
 			IsStopped = true;
+		}
+
+		public InstrinsicMethodDelegate GetInstrincMethod(string name)
+		{
+			internalIntrinsicMethods.TryGetValue(name, out InstrinsicMethodDelegate value);
+
+			return value;
 		}
 
 		#endregion Methods

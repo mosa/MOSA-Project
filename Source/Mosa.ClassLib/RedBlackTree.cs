@@ -15,7 +15,7 @@ namespace Mosa.ClassLib
 		protected enum Color { Red = 1, Black = 0 };
 
 		/// <summary>
-		///
+		/// RedBlackTreeNode
 		/// </summary>
 		/// <typeparam name="X"></typeparam>
 		/// <typeparam name="Y"></typeparam>

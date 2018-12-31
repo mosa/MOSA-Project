@@ -22,12 +22,10 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.Instruction != IRInstruction.IntrinsicMethodCall)
 						continue;
 
-					var methodName = node.InvokeMethod.DeclaringType.FullName + ":" + node.InvokeMethod.Name;
-
-					var intrinsic = Architecture.GetInstrinsicMethod(node.InvokeMethod.ExternMethodModule);
+					var intrinsic = Architecture.GetInstrinsicMethod(node.Operand1.Method.ExternMethodModule);
 
 					if (intrinsic == null)
-						return;
+						continue;
 
 					var operands = node.GetOperands();
 					operands.RemoveAt(0);
