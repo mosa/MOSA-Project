@@ -42,7 +42,9 @@ namespace Mosa.Tool.Compiler
 		/// </summary>
 		public Compiler()
 		{
-			usageString = "Usage: mosacl -o outputfile --Architecture=[x86|x64|ARMv6] --format=[ELF32|ELF64] {--boot=[mb0.7]} {additional options} inputfiles";
+			usageString = @"Usage: Mosa.Tool.Compiler.exe -o outputfile --achitecture=[x86|x64|ARMv6] --format=[ELF32|ELF64] {--boot=[mb0.7]} {additional options} inputfiles.
+
+Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -a x86 --mboot v1 --x86-irq-methods --base-address 0x00500000 Mosa.HelloWorld.x86.exe mscorlib.dll Mosa.Plug.Korlib.dll Mosa.Plug.Korlib.x86.dll";
 		}
 
 		#endregion Constructors
@@ -100,6 +102,7 @@ namespace Mosa.Tool.Compiler
 			catch (Exception e)
 			{
 				ShowError(e.Message);
+				Environment.Exit(1);
 				return;
 			}
 
@@ -116,6 +119,8 @@ namespace Mosa.Tool.Compiler
 			catch (CompilerException ce)
 			{
 				ShowError(ce.Message);
+				Environment.Exit(1);
+				return;
 			}
 
 			DateTime end = DateTime.Now;
