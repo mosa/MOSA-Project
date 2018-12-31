@@ -61,12 +61,12 @@ namespace Mosa.Tool.CreateBootImage
 			get { return options.MediaLastSnapGuid.ToString(); }
 		}
 
-		[Option("filesystem",HelpText ="FileSystem [fat12|fat16|fat32]")]
+		[Option("filesystem", HelpText = "FileSystem [fat12|fat16|fat32]")]
 		public string FileSystem
 		{
 			set
 			{
-				options.FileSystem= (FileSystem)Enum.Parse(typeof(FileSystem), value, true);
+				options.FileSystem = (FileSystem)Enum.Parse(typeof(FileSystem), value, true);
 			}
 		}
 
