@@ -13,7 +13,7 @@ fi
 absfile=$(realpath $1)
 
 name=$(basename -- "$absfile")
-name="${filename%.*}"
+name="${name%.*}"
 
 cd $(dirname $0)/../../bin
 
