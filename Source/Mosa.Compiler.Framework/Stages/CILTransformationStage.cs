@@ -2033,23 +2033,6 @@ namespace Mosa.Compiler.Framework.Stages
 			throw new CompilerException();
 		}
 
-		private bool ProcessUnsafeAsCall(InstructionNode node)
-		{
-			if (!node.InvokeMethod.IsStatic)
-				return false;
-
-			if (node.InvokeMethod.DeclaringType.FullName != "System.Runtime.CompilerServices.Unsafe")
-				return false;
-
-			//if (!(context.InvokeMethod.Name == "As" || context.InvokeMethod.Name == "AsRef"))
-			if (node.InvokeMethod.Name != "As")
-				return false;
-
-			node.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, node.Operand1);
-
-			return true;
-		}
-
 		/// <summary>
 		/// Processes external method calls.
 		/// </summary>
@@ -2064,9 +2047,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </remarks>
 		private bool ProcessExternalCall(InstructionNode node)
 		{
-			if (ProcessUnsafeAsCall(node))
-				return true;
-
 			if (node.InvokeMethod.IsExternal)
 			{
 				var intrinsic = Architecture.GetInstrinsicMethod(node.InvokeMethod.ExternMethodModule);

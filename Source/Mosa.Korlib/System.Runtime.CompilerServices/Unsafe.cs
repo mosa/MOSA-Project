@@ -22,12 +22,12 @@ namespace System.Runtime.CompilerServices
 			throw new PlatformNotSupportedException();
 		}
 
-		[Intrinsic]
-		[NonVersionable]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static ref T AsRef<T>(void* source)
-		{
-			return ref Unsafe.As<byte, T>(ref *(byte*)source);
-		}
+		//[Intrinsic]
+		//[NonVersionable]
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		//public static ref T AsRef<T>(void* source)
+		//{
+		//	return ref Unsafe.As<byte, T>(ref *(byte*)source);
+		//}
 	}
 }
