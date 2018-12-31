@@ -12,17 +12,18 @@ namespace Mosa.Tool.CreateBootImage
 	/// </summary>
 	internal static class Program
 	{
-		public static BootImageOptions Parse(string filename)
-		{
-			Options options = ParseOptions(File.ReadAllText(filename).Split(new char[] { '\n', '\r', ' ' }, StringSplitOptions.RemoveEmptyEntries));
-			if (options == null)
-				return null;
 
-			return options.BootImageOptions;
+		private static string UsageString;
+
+		static Program() {
+			UsageString = @"Example: Mosa.Tool.CreateBootImage.exe -o Mosa.HelloWorld.x86.img --mbr ../Tools/syslinux/3.72/mbr.bin --boot ../Tools/syslinux/3.72/ldlinux.bin --volume-label MOSABOOT --blocks 25000 --filesystem fat16 --syslinux --img ../Tools/syslinux/3.72/ldlinux.sys ../Tools/syslinux/3.72/mboot.c32 ../Demos/syslinux.cfg Mosa.HelloWorld.x86.bin,main.exe";
 		}
 
 		private static Options ParseOptions(string[] args)
 		{
+			if (args.Length >= 2 && args[0] == "--configfile")
+				return ParseOptions(File.ReadAllText(args[1]).Split(new char[] { '\n', '\r', ' ' }, StringSplitOptions.RemoveEmptyEntries));
+
 			ParserResult<Options> result = new Parser(config => config.HelpWriter = Console.Out).ParseArguments<Options>(args);
 
 			if (result.Tag == ParserResultType.NotParsed)
@@ -46,30 +47,17 @@ namespace Mosa.Tool.CreateBootImage
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
 
-			bool valid = args.Length == 2;
-
-			if (valid)
-				valid = File.Exists(args[0]);
-
-			if (!valid)
-			{
-				Console.WriteLine("Usage: CreateBootImage <boot.config file> <image name>");
-				Console.Error.WriteLine("ERROR: Missing arguments");
-				return -1;
-			}
-
-			Console.WriteLine("Building image...");
-
 			try
 			{
-				var bootImageOptions = Parse(args[0]);
+				var bootImageOptions = ParseOptions(args)?.BootImageOptions;
 
 				if (bootImageOptions == null)
 				{
+					Console.WriteLine(UsageString);
 					return -1; //Errors will be printed by the command line library
 				}
 
-				bootImageOptions.DiskImageFileName = args[1];
+				Console.WriteLine("Building image...");
 
 				Generator.Create(bootImageOptions);
 
