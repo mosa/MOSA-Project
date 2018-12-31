@@ -8,11 +8,12 @@ using System.Diagnostics;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Representations a jump to the global interrupt handler.
+	/// IntrinsicMethods
 	/// </summary>
-	internal sealed class GetIDTJumpLocation : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:GetIDTJumpLocation")]
+		private static void GetIDTJumpLocation(Context context, MethodCompiler methodCompiler)
 		{
 			var operand = context.Operand1;
 

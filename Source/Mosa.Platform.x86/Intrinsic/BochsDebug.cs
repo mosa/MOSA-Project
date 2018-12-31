@@ -5,11 +5,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Representations the x86 BochsDebug instruction.
+	/// IntrinsicMethods
 	/// </summary>
-	internal sealed class BochsDebug : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:BochsDebug")]
+		private static void BochsDebug(Context context, MethodCompiler methodCompiler)
 		{
 			context.SetInstruction(X86.BochsDebug);
 		}

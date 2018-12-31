@@ -6,11 +6,12 @@ using System.Diagnostics;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Get32
+	/// IntrinsicMethods
 	/// </summary>
-	internal sealed class Get32 : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Get32")]
+		private static void Get32(Context context, MethodCompiler methodCompiler)
 		{
 			Debug.Assert(context.Result.IsI4 | context.Result.IsU4);
 			context.SetInstruction(X86.MovLoad32, context.Result, context.Operand1, methodCompiler.ConstantZero);

@@ -5,11 +5,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Representations the x86 Lidt instruction.
+	/// IntrinsicMethods
 	/// </summary>
-	internal sealed class Lidt : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Lidt")]
+		private static void Lidt(Context context, MethodCompiler methodCompiler)
 		{
 			//Helper.FoldOperand1ToConstant(context);
 

@@ -6,11 +6,12 @@ using Mosa.Platform.Intel;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Representations the x86 Lgdt instruction.
+	/// IntrinsicMethods
 	/// </summary>
-	internal sealed class Lgdt : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Lgdt")]
+		private static void Lgdt(Context context, MethodCompiler methodCompiler)
 		{
 			//Helper.FoldOperand1ToConstant(context);
 

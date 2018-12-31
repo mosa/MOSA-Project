@@ -5,11 +5,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Representations the x86 sti instruction.
+	/// IntrinsicMethods
 	/// </summary>
-	internal sealed class Sti : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Sti")]
+		private static void Sti(Context context, MethodCompiler methodCompiler)
 		{
 			context.SetInstruction(X86.Sti);
 		}

@@ -5,11 +5,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Representations the x86 Div instruction.
+	/// IntrinsicMethods
 	/// </summary>
-	internal sealed class Div : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Div")]
+		private static void Div(Context context, MethodCompiler methodCompiler)
 		{
 			Operand n = context.Operand1;
 			Operand d = context.Operand2;

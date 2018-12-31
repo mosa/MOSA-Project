@@ -5,11 +5,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Representations the x86 CPUID instruction.
+	/// IntrinsicMethods
 	/// </summary>
-	internal sealed class CpuId : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:CpuId")]
+		private static void CpuId(Context context, MethodCompiler methodCompiler)
 		{
 			context.SetInstruction(X86.CpuId, context.Result, context.Operand1);
 		}

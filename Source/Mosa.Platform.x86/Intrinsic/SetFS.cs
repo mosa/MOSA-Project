@@ -6,12 +6,12 @@ using Mosa.Platform.Intel;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// SetFS
+	/// IntrinsicMethods
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicPlatformMethod" />
-	internal class SetFS : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:SetFS")]
+		private static void SetFS(Context context, MethodCompiler methodCompiler)
 		{
 			context.SetInstruction(X86.MovStoreSeg32, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, SegmentRegister.FS), context.Operand1);
 		}

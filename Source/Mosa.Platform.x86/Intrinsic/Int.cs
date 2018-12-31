@@ -5,11 +5,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Representations the x86 int instruction.
+	/// IntrinsicMethods
 	/// </summary>
-	internal sealed class Int : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Int")]
+		private static void Int(Context context, MethodCompiler methodCompiler)
 		{
 			Helper.FoldOperand1ToConstant(context);
 

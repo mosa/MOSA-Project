@@ -6,11 +6,12 @@ using Mosa.Platform.Intel;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Representations a CmpXchgLoad32 Intrinsic
+	/// IntrinsicMethods
 	/// </summary>
-	internal sealed class CmpXChgLoad32 : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:CmpXChgLoad32")]
+		private static void CmpXChgLoad32(Context context, MethodCompiler methodCompiler)
 		{
 			var location = context.Operand1;
 			var value = context.Operand2;

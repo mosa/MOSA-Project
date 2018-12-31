@@ -6,11 +6,12 @@ using Mosa.Platform.Intel;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Representations the x86 CPUID instruction.
+	/// IntrinsicMethods
 	/// </summary>
-	internal sealed class CpuIdEcx : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:CpuIdEcx")]
+		private static void CpuIdEcx(Context context, MethodCompiler methodCompiler)
 		{
 			var result = context.Result;
 			var operand = context.Operand1;

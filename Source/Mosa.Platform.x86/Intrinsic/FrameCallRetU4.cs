@@ -7,12 +7,12 @@ using Mosa.Platform.Intel;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// FrameCallRetU4
+	/// IntrinsicMethods
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicPlatformMethod" />
-	internal class FrameCallRetU4 : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:FrameCallRetU4")]
+		private static void FrameCallRetU4(Context context, MethodCompiler methodCompiler)
 		{
 			var result = context.Result;
 			var methodAddress = context.Operand1;

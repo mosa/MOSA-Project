@@ -5,11 +5,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Nop
+	/// IntrinsicMethods
 	/// </summary>
-	internal class Nop : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Nop")]
+		private static void Nop(Context context, MethodCompiler methodCompiler)
 		{
 			context.SetInstruction(X86.Nop);
 		}

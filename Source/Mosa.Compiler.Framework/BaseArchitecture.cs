@@ -124,12 +124,13 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public virtual List<BaseInstruction> Instructions { get; }
 
-		/// <summary>
-		/// Gets the platform intrinsic methods.
-		/// </summary>
-		public Dictionary<string, IIntrinsicMethod> PlatformIntrinsicMethods { get; }
-
 		#endregion Properties
+
+		#region Members
+
+		protected Dictionary<string, InstrinsicMethodDelegate> PlatformIntrinsicMethods { get; }
+
+		#endregion Members
 
 		#region Constructor
 
@@ -215,19 +216,43 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public abstract bool IsInstructionMove(BaseInstruction instruction);
 
-		public Dictionary<string, IIntrinsicMethod> GetPlatformIntrinsicMethods()
+		/// <summary>
+		/// Gets the platform instrinsic method.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		public InstrinsicMethodDelegate GetInstrinsicMethod(string name)
 		{
-			var PlatformIntrinsicMethods = new Dictionary<string, IIntrinsicMethod>();
+			PlatformIntrinsicMethods.TryGetValue(name, out InstrinsicMethodDelegate value);
+
+			return value;
+		}
+
+		protected Dictionary<string, InstrinsicMethodDelegate> GetPlatformIntrinsicMethods()
+		{
+			var platformIntrinsicMethods = new Dictionary<string, InstrinsicMethodDelegate>();
 
 			foreach (var type in GetType().Assembly.GetTypes())
 			{
-				if (type.IsClass && !type.IsAbstract && typeof(IIntrinsicPlatformMethod).IsAssignableFrom(type))
+				if (!type.IsClass)
+					continue;
+
+				foreach (var method in type.GetRuntimeMethods())
 				{
-					PlatformIntrinsicMethods.Add(type.FullName, Activator.CreateInstance(type) as IIntrinsicMethod);
+					// Now get all the IntrinsicMethodAttribute attributes
+					var attributes = (IntrinsicMethodAttribute[])method.GetCustomAttributes(typeof(IntrinsicMethodAttribute), true);
+
+					for (int i = 0; i < attributes.Length; i++)
+					{
+						var d = (InstrinsicMethodDelegate)Delegate.CreateDelegate(typeof(InstrinsicMethodDelegate), method);
+
+						// Finally add the dictionary entry mapping the target name and the delegate
+						platformIntrinsicMethods.Add(attributes[i].Target, d);
+					}
 				}
 			}
 
-			return PlatformIntrinsicMethods;
+			return platformIntrinsicMethods;
 		}
 
 		#endregion Methods

@@ -5,11 +5,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// GetExceptionRegister
+	/// IntrinsicMethods
 	/// </summary>
-	internal class GetExceptionRegister : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:GetExceptionRegister")]
+		private static void GetExceptionRegister(Context context, MethodCompiler methodCompiler)
 		{
 			context.SetInstruction(X86.Mov32, context.Result, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.Object, methodCompiler.Architecture.ExceptionRegister));
 		}

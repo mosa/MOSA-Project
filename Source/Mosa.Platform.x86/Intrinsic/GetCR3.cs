@@ -1,20 +1,19 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Framework;
 using Mosa.Platform.Intel;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// GetCR3
+	/// IntrinsicMethods
 	/// </summary>
-	internal sealed class GetCR3 : GetControlRegisterBase
+	static partial class IntrinsicMethods
 	{
-		/// <summary>
-		/// Initializes a new instance of the <see cref="GetCR3"/> class.
-		/// </summary>
-		public GetCR3()
-			: base(ControlRegister.CR3)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:GetCR3")]
+		private static void GetCR3(Context context, MethodCompiler methodCompiler)
 		{
+			context.SetInstruction(X86.MovCRLoad32, context.Result, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, ControlRegister.CR3));
 		}
 	}
 }

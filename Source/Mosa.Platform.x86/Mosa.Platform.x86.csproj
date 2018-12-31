@@ -318,13 +318,11 @@
     <Compile Include="Intrinsic\GetEBP.cs" />
     <Compile Include="Intrinsic\GetMethodLookupTable.cs" />
     <Compile Include="Intrinsic\Cli.cs" />
-    <Compile Include="Intrinsic\GetControlRegisterBase.cs" />
     <Compile Include="Intrinsic\GetCR0.cs" />
     <Compile Include="Intrinsic\GetCR2.cs" />
     <Compile Include="Intrinsic\GetCR3.cs" />
     <Compile Include="Intrinsic\GetCR4.cs" />
     <Compile Include="Intrinsic\In8.cs" />
-    <Compile Include="Intrinsic\SetControlRegisterBase.cs" />
     <Compile Include="Intrinsic\SetCR0.cs" />
     <Compile Include="Intrinsic\SetCR2.cs" />
     <Compile Include="Intrinsic\SetCR3.cs" />

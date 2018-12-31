@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.IR;
-using System;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -25,7 +24,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var methodName = node.InvokeMethod.DeclaringType.FullName + ":" + node.InvokeMethod.Name;
 
-					Architecture.PlatformIntrinsicMethods.TryGetValue(node.Operand1.Method.ExternMethodModule, out IIntrinsicMethod intrinsic);
+					var intrinsic = Architecture.GetInstrinsicMethod(node.InvokeMethod.ExternMethodModule);
 
 					if (intrinsic == null)
 						return;
@@ -34,7 +33,7 @@ namespace Mosa.Compiler.Framework.Stages
 					operands.RemoveAt(0);
 					node.SetInstruction(IRInstruction.IntrinsicMethodCall, node.Result, operands);
 
-					intrinsic.ReplaceIntrinsicCall(new Context(node), MethodCompiler);
+					intrinsic(new Context(node), MethodCompiler);
 				}
 			}
 		}

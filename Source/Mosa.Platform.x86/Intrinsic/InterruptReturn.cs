@@ -6,11 +6,12 @@ using Mosa.Platform.Intel;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// FrameIRet
+	/// IntrinsicMethods
 	/// </summary>
-	internal class InterruptReturn : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:InterruptReturn")]
+		private static void InterruptReturn(Context context, MethodCompiler methodCompiler)
 		{
 			Operand v0 = context.Operand1;
 

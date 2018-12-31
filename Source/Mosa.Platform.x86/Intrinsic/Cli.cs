@@ -5,11 +5,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Representations the x86 cli instruction.
+	/// IntrinsicMethods
 	/// </summary>
-	internal sealed class Cli : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Cli")]
+		private static void Cli(Context context, MethodCompiler methodCompiler)
 		{
 			context.SetInstruction(X86.Cli);
 		}

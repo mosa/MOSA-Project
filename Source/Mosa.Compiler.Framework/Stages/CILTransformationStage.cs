@@ -2049,7 +2049,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (node.InvokeMethod.IsExternal)
 			{
-				Architecture.PlatformIntrinsicMethods.TryGetValue(node.InvokeMethod.ExternMethodModule, out IIntrinsicMethod intrinsic);
+				var intrinsic = Architecture.GetInstrinsicMethod(node.InvokeMethod.ExternMethodModule);
 
 				if (intrinsic != null)
 				{
@@ -2072,12 +2072,12 @@ namespace Mosa.Compiler.Framework.Stages
 					MethodCompiler.Compiler.InternalIntrinsicMethods.TryGetValue(node.InvokeMethod.DeclaringType.FullName + "::" + node.InvokeMethod.Name, out intrinsic);
 				}
 
-				if (intrinsic == null)
-					return false;
+				if (intrinsic != null)
+				{
+					intrinsic(new Context(node), MethodCompiler);
 
-				intrinsic(new Context(node), MethodCompiler);
-
-				return true;
+					return true;
+				}
 			}
 
 			return false;
