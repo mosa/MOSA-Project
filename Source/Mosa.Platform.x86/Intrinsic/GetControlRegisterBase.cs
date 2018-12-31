@@ -8,7 +8,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// GetControlRegisterBase
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicPlatformMethod" />
-	internal class GetControlRegisterBase : IIntrinsicPlatformMethod
+	internal abstract class GetControlRegisterBase : IIntrinsicPlatformMethod
 	{
 		private readonly PhysicalRegister control;
 

@@ -7,14 +7,13 @@ using System.Collections.Generic;
 namespace Mosa.Compiler.Framework.Intrinsics
 {
 	/// <summary>
-	/// GetObjectAddress
+	/// IntrinsicMethods
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
-	[ReplacementTarget("Mosa.Runtime.Intrinsic::GetObjectAddress")]
-	[ReplacementTarget("Mosa.Runtime.Intrinsic::GetValueTypeAddress")]
-	public sealed class GetObjectAddress : IIntrinsicInternalMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Runtime.Intrinsic:GetObjectAddress")]
+		[IntrinsicMethod("Mosa.Runtime.Intrinsic:GetValueTypeAddress")]
+		private static void GetObjectAddress(Context context, MethodCompiler methodCompiler)
 		{
 			var result = context.Result;
 			var operand1 = context.Operand1;

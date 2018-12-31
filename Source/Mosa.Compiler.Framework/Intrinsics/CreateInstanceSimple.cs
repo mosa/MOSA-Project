@@ -3,16 +3,15 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
 
-namespace Mosa.Platform.x86.Intrinsic
+namespace Mosa.Compiler.Framework.Intrinsics
 {
 	/// <summary>
-	/// CreateInstanceSimple
+	/// IntrinsicMethods
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
-	[ReplacementTarget("Mosa.Runtime.Intrinsic::CreateInstanceSimple")]
-	internal class CreateInstanceSimple : IIntrinsicInternalMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Runtime.Intrinsic:CreateInstanceSimple")]
+		private static void CreateInstanceSimple(Context context, MethodCompiler methodCompiler)
 		{
 			var ctor = context.Operand1;
 			var thisObject = context.Operand2;

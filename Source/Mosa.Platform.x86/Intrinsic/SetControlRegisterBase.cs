@@ -9,7 +9,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// SetControlRegisterBase
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicPlatformMethod" />
-	internal class SetControlRegisterBase : IIntrinsicPlatformMethod
+	internal abstract class SetControlRegisterBase : IIntrinsicPlatformMethod
 	{
 		private readonly PhysicalRegister control;
 

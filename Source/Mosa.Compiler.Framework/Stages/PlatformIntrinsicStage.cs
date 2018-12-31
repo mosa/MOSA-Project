@@ -23,6 +23,8 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.Instruction != IRInstruction.IntrinsicMethodCall)
 						continue;
 
+					var methodName = node.InvokeMethod.DeclaringType.FullName + ":" + node.InvokeMethod.Name;
+
 					Architecture.PlatformIntrinsicMethods.TryGetValue(node.Operand1.Method.ExternMethodModule, out IIntrinsicMethod intrinsic);
 
 					if (intrinsic == null)

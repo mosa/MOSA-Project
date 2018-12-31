@@ -4,6 +4,7 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Linker.Elf;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 namespace Mosa.Compiler.Framework
@@ -218,9 +219,9 @@ namespace Mosa.Compiler.Framework
 		{
 			var PlatformIntrinsicMethods = new Dictionary<string, IIntrinsicMethod>();
 
-			foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
+			foreach (var type in GetType().Assembly.GetTypes())
 			{
-				if (type.IsClass && typeof(IIntrinsicPlatformMethod).IsAssignableFrom(type))
+				if (type.IsClass && !type.IsAbstract && typeof(IIntrinsicPlatformMethod).IsAssignableFrom(type))
 				{
 					PlatformIntrinsicMethods.Add(type.FullName, Activator.CreateInstance(type) as IIntrinsicMethod);
 				}

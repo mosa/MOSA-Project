@@ -7,6 +7,7 @@ using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 
@@ -84,7 +85,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the list of Intrinsic Types for internal call replacements.
 		/// </summary>
-		public Dictionary<string, IIntrinsicMethod> InternalIntrinsicMethods { get; }
+		public Dictionary<string, InstrinsicMethodDelegate> InternalIntrinsicMethods { get; } = new Dictionary<string, InstrinsicMethodDelegate>();
 
 		/// <summary>
 		/// Gets the type of the platform internal runtime.
@@ -213,18 +214,42 @@ namespace Mosa.Compiler.Framework
 
 			methodStagePipelines = new Pipeline<BaseMethodCompilerStage>[mosaCompiler.MaxThreads];
 
-			InternalIntrinsicMethods = new Dictionary<string, IIntrinsicMethod>();
+			var methods = Assembly.GetExecutingAssembly().GetType().Assembly
+			   .GetTypes()
+			   .SelectMany(x => x.GetMethods())
+			   .Where(y => y.GetCustomAttributes().OfType<IntrinsicMethodAttribute>().Any())
+			   .ToArray();
+
+			//foreach (var method in methods)
+			//{
+			//	var d = Delegate.CreateDelegate(method.DeclaringType, method) as InstrinsicMethodDelegate;
+
+			//	// Finally add the dictionary entry mapping the target string and the type
+			//	InternalIntrinsicMethods.Add(attributes[i].Target, d);
+			//}
 
 			foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
 			{
-				if (type.IsClass && typeof(IIntrinsicInternalMethod).IsAssignableFrom(type))
+				//if (!type.IsClass)
+				//	continue;
+
+				foreach (var method in type.GetRuntimeMethods())
 				{
+					//if (type.FullName.Contains("IntrinsicMethods"))
+					//{
+					//	int i = 10;
+					//	i++;
+					//}
+
 					// Now get all the ReplacementTarget attributes
-					var attributes = (ReplacementTargetAttribute[])type.GetCustomAttributes(typeof(ReplacementTargetAttribute), true);
+					var attributes = (IntrinsicMethodAttribute[])method.GetCustomAttributes(typeof(IntrinsicMethodAttribute), true);
+
 					for (int i = 0; i < attributes.Length; i++)
 					{
+						var d = (InstrinsicMethodDelegate)Delegate.CreateDelegate(typeof(InstrinsicMethodDelegate), method);
+
 						// Finally add the dictionary entry mapping the target string and the type
-						InternalIntrinsicMethods.Add(attributes[i].Target, Activator.CreateInstance(type) as IIntrinsicMethod);
+						InternalIntrinsicMethods.Add(attributes[i].Target, d);
 					}
 				}
 			}
