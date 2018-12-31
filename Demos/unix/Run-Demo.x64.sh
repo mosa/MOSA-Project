@@ -13,17 +13,21 @@ fi
 absfile=$(realpath $1)
 
 name=$(basename -- "$absfile")
-name="${filename%.*}"
+name="${name%.*}"
 
 cd $(dirname $0)/../../bin
 
 mono Mosa.Tool.Compiler.exe \
 	-o ${name}.bin \
 	-a x64 \
+	--format elf64 \
 	--mboot v1 \
 	--x86-irq-methods \
 	--base-address 0x00500000 \
 	${absfile} \
+	mscorlib.dll \
+	Mosa.Plug.Korlib.dll \
+	Mosa.Plug.Korlib.x64.dll
 
 if [ $? -ne 0 ]
 then
