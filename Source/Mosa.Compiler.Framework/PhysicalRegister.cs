@@ -48,13 +48,13 @@ namespace Mosa.Compiler.Framework
 		/// Initializes a new instance of <see cref="PhysicalRegister"/>.
 		/// </summary>
 		/// <param name="index">The numeric index of the register.</param>
-		public PhysicalRegister(int index, int registerCode, string name, bool isInteger, bool isFloatPoing)
+		public PhysicalRegister(int index, int registerCode, string name, bool isInteger, bool isFloatingPoint)
 		{
 			Index = index;
 			Name = name;
 			RegisterCode = registerCode;
 			IsInteger = isInteger;
-			IsFloatingPoint = isFloatPoing;
+			IsFloatingPoint = isFloatingPoint;
 		}
 
 		#endregion Construction

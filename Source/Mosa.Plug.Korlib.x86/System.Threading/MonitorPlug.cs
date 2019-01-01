@@ -8,7 +8,7 @@ using System.Runtime.CompilerServices;
 
 namespace Mosa.Plug.Korlib.System.Threading.x86
 {
-	public static class Monitor
+	public static class MonitorPlug
 	{
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[Plug("System.Threading.Monitor::Enter")]

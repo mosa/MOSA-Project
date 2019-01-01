@@ -107,7 +107,7 @@ namespace Mosa.Compiler.Framework.CIL
 					case OpCode.Brfalse: return "false";
 					case OpCode.Brfalse_s: return "false";
 					case OpCode.Switch: return "switch";
-					default: throw new CompilerException("Opcode not set.");
+					default: throw new CompilerException("Opcode not set");
 				}
 			}
 		}

@@ -5,11 +5,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Representations the x86 Pause instruction.
+	/// IntrinsicMethods
 	/// </summary>
-	internal sealed class Pause : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Pause")]
+		private static void Pause(Context context, MethodCompiler methodCompiler)
 		{
 			context.SetInstruction(X86.Pause);
 		}

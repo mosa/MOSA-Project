@@ -37,9 +37,9 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private LinkerSymbol EmitStringWithLength(string name, string value)
 		{
 			// Strings are now going to be embedded objects since they are immutable
-			var symbol = Linker.CreateSymbol(name, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var symbol = Linker.DefineSymbol(name, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var stream = new EndianAwareBinaryWriter(symbol.Stream, Architecture.Endianness);
-			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, (int)stream.Position, SectionKind.ROData, "System.String" + Metadata.TypeDefinition, 0);
+			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, (int)stream.Position, "System.String" + Metadata.TypeDefinition, 0);
 			stream.WriteZeroBytes(TypeLayout.NativePointerSize * 2);
 			stream.Write(value.Length, TypeLayout.NativePointerSize);
 			stream.Write(UnicodeEncoding.Unicode.GetBytes(value));
@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private void CreateDefinitionTables()
 		{
 			// Emit assembly list
-			var assemblyListSymbol = Linker.CreateSymbol(Metadata.AssembliesTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var assemblyListSymbol = Linker.DefineSymbol(Metadata.AssembliesTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer1 = new EndianAwareBinaryWriter(assemblyListSymbol.Stream, Architecture.Endianness);
 
 			// 1. Number of Assemblies
@@ -77,7 +77,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			var assemblyNameSymbol = EmitStringWithLength(module.Assembly + Metadata.NameString, module.Assembly);
 
 			// Emit assembly table
-			var assemblyTableSymbol = Linker.CreateSymbol(module.Assembly + Metadata.AssemblyDefinition, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var assemblyTableSymbol = Linker.DefineSymbol(module.Assembly + Metadata.AssemblyDefinition, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer1 = new EndianAwareBinaryWriter(assemblyTableSymbol.Stream, Architecture.Endianness);
 
 			// 1. Pointer to Assembly Name
@@ -139,7 +139,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			var typeNameSymbol = EmitStringWithLength(type.FullName + Metadata.NameString, type.FullName);
 
 			// Emit type table
-			var typeTableSymbol = Linker.CreateSymbol(type.FullName + Metadata.TypeDefinition, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var typeTableSymbol = Linker.DefineSymbol(type.FullName + Metadata.TypeDefinition, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer1 = new EndianAwareBinaryWriter(typeTableSymbol.Stream, Architecture.Endianness);
 
 			// 1. Pointer to Name
@@ -167,31 +167,31 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			// 6. Pointer to Parent Type
 			if (type.BaseType != null)
 			{
-				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, SectionKind.ROData, type.BaseType.FullName + Metadata.TypeDefinition, 0);
+				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, type.BaseType.FullName + Metadata.TypeDefinition, 0);
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 7. Pointer to Declaring Type
 			if (type.DeclaringType != null)
 			{
-				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, SectionKind.ROData, type.DeclaringType.FullName + Metadata.TypeDefinition, 0);
+				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, type.DeclaringType.FullName + Metadata.TypeDefinition, 0);
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 8. Pointer to Element Type
 			if (type.ElementType != null)
 			{
-				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, SectionKind.ROData, type.ElementType.FullName + Metadata.TypeDefinition, 0);
+				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, type.ElementType.FullName + Metadata.TypeDefinition, 0);
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 9. Constructor that accepts no parameters, if any, for this type
 			foreach (var method in type.Methods)
 			{
-				if (!method.Name.Equals(".ctor") || !(method.Signature.Parameters.Count == 0) || method.HasOpenGenericParams)
+				if (!method.Name.Equals(".ctor") || method.Signature.Parameters.Count != 0 || method.HasOpenGenericParams)
 					continue;
 
-				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, SectionKind.ROData, method.FullName + Metadata.MethodDefinition, 0);
+				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, method.FullName + Metadata.MethodDefinition, 0);
 				break;
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
@@ -245,9 +245,9 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				// 15. Pointer to Methods
 				foreach (var method in methodList)
 				{
-					if (!method.IsAbstract)
+					if ((!(!method.HasImplementation && method.IsAbstract)) && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams)
 					{
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, SectionKind.Text, method.FullName, 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, method.FullName, 0);
 					}
 					writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 				}
@@ -255,11 +255,14 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				// 16. Pointer to Method Definitions
 				foreach (var method in methodList)
 				{
-					// Create definition and get the symbol
-					var methodDefinitionSymbol = CreateMethodDefinition(method);
+					if ((!(!method.HasImplementation && method.IsAbstract)) && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams)
+					{
+						// Create definition and get the symbol
+						var methodDefinitionSymbol = CreateMethodDefinition(method);
 
-					// Link
-					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, methodDefinitionSymbol, 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, methodDefinitionSymbol, 0);
+					}
+
 					writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 				}
 			}
@@ -279,7 +282,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		private LinkerSymbol CreateInterfaceBitmap(MosaType type, List<MosaType> interfaces)
 		{
-			var bitmap = new byte[(((TypeLayout.Interfaces.Count - 1) / 8) + 1)];
+			var bitmap = new byte[((TypeLayout.Interfaces.Count - 1) / 8) + 1];
 
 			int at = 0;
 			byte bit = 0;
@@ -298,7 +301,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				}
 			}
 
-			var symbol = Linker.CreateSymbol(type.FullName + Metadata.InterfaceBitmap, SectionKind.ROData, TypeLayout.NativePointerAlignment, bitmap.Length);
+			var symbol = Linker.DefineSymbol(type.FullName + Metadata.InterfaceBitmap, SectionKind.ROData, TypeLayout.NativePointerAlignment, bitmap.Length);
 			symbol.Stream.Write(bitmap);
 
 			// Return symbol for linker usage
@@ -308,7 +311,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private LinkerSymbol CreateInterfaceSlotTable(MosaType type, List<MosaType> interfaces)
 		{
 			// Emit interface slot table
-			var interfaceSlotTableSymbol = Linker.CreateSymbol(type.FullName + Metadata.InterfaceSlotTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var interfaceSlotTableSymbol = Linker.DefineSymbol(type.FullName + Metadata.InterfaceSlotTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer1 = new EndianAwareBinaryWriter(interfaceSlotTableSymbol.Stream, Architecture.Endianness);
 
 			var slots = new List<MosaType>(TypeLayout.Interfaces.Count);
@@ -366,7 +369,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private LinkerSymbol CreateInterfaceMethodTable(MosaType type, MosaType interfaceType)
 		{
 			// Emit interface method table
-			var interfaceMethodTableSymbol = Linker.CreateSymbol(type.FullName + Metadata.InterfaceMethodTable + interfaceType.FullName, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var interfaceMethodTableSymbol = Linker.DefineSymbol(type.FullName + Metadata.InterfaceMethodTable + interfaceType.FullName, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer1 = new EndianAwareBinaryWriter(interfaceMethodTableSymbol.Stream, Architecture.Endianness);
 
 			var interfaceMethodTable = TypeLayout.GetInterfaceTable(type, interfaceType) ?? new MosaMethod[0];
@@ -375,7 +378,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			writer1.Write((uint)interfaceMethodTable.Length, TypeLayout.NativePointerSize);
 
 			// 2. Pointer to Interface Type
-			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, interfaceMethodTableSymbol, (int)writer1.Position, SectionKind.ROData, interfaceType.FullName + Metadata.TypeDefinition, 0);
+			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, interfaceMethodTableSymbol, (int)writer1.Position, interfaceType.FullName + Metadata.TypeDefinition, 0);
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 3. Pointers to Method Definitions
@@ -400,7 +403,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private LinkerSymbol CreateFieldDefinitions(MosaType type)
 		{
 			// Emit fields table
-			var fieldsTableSymbol = Linker.CreateSymbol(type.FullName + Metadata.FieldsTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var fieldsTableSymbol = Linker.DefineSymbol(type.FullName + Metadata.FieldsTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer1 = new EndianAwareBinaryWriter(fieldsTableSymbol.Stream, Architecture.Endianness);
 
 			// 1. Number of Fields
@@ -413,7 +416,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				var fieldNameSymbol = EmitStringWithLength(field.FullName + Metadata.NameString, field.Name);
 
 				// Emit field definition
-				var fieldDefSymbol = Linker.CreateSymbol(field.FullName + Metadata.FieldDefinition, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+				var fieldDefSymbol = Linker.DefineSymbol(field.FullName + Metadata.FieldDefinition, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 				var writer2 = new EndianAwareBinaryWriter(fieldDefSymbol.Stream, Architecture.Endianness);
 
 				// 1. Name
@@ -432,14 +435,13 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				writer2.Write((uint)field.FieldAttributes, TypeLayout.NativePointerSize);
 
 				// 4. Pointer to Field Type
-				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, fieldDefSymbol, (int)writer2.Position, SectionKind.ROData, field.FieldType.FullName + Metadata.TypeDefinition, 0);
+				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, fieldDefSymbol, (int)writer2.Position, field.FieldType.FullName + Metadata.TypeDefinition, 0);
 				writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 				// 5 & 6. Offset / Address + Size
 				if (field.IsStatic && !field.IsLiteral)
 				{
-					var section = (field.Data != null) ? SectionKind.ROData : SectionKind.BSS;
-					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, fieldDefSymbol, (int)writer2.Position, section, field.FullName, 0);
+					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, fieldDefSymbol, (int)writer2.Position, field.FullName, 0);
 					writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
 					writer2.Write(field.Data?.Length ?? 0, TypeLayout.NativePointerSize);
 				}
@@ -459,9 +461,9 @@ namespace Mosa.Compiler.Framework.CompilerStages
 					int size = TypeLayout.GetFieldSize(field);
 
 					// The linker section to move this field into
-					SectionKind section = field.Data != null ? section = SectionKind.ROData : section = SectionKind.BSS;
+					var section = field.Data != null ? SectionKind.ROData : SectionKind.BSS;
 
-					var symbol = Compiler.Linker.CreateSymbol(field.FullName, section, Architecture.NativeAlignment, size);
+					var symbol = Compiler.Linker.DefineSymbol(field.FullName, section, Architecture.NativeAlignment, size);
 
 					if (field.Data != null)
 					{
@@ -485,7 +487,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private LinkerSymbol CreatePropertyDefinitions(MosaType type)
 		{
 			// Emit properties table
-			var propertiesTableSymbol = Linker.CreateSymbol(type.FullName + Metadata.PropertiesTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var propertiesTableSymbol = Linker.DefineSymbol(type.FullName + Metadata.PropertiesTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer1 = new EndianAwareBinaryWriter(propertiesTableSymbol.Stream, Architecture.Endianness);
 
 			// 1. Number of Properties
@@ -498,7 +500,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				var fieldNameSymbol = EmitStringWithLength(property.FullName + Metadata.NameString, property.Name);
 
 				// Emit property definition
-				var propertyDefSymbol = Linker.CreateSymbol(property.FullName + Metadata.PropertyDefinition, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+				var propertyDefSymbol = Linker.DefineSymbol(property.FullName + Metadata.PropertyDefinition, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 				var writer2 = new EndianAwareBinaryWriter(propertyDefSymbol.Stream, Architecture.Endianness);
 
 				// 1. Name
@@ -517,20 +519,26 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				writer1.Write((uint)property.PropertyAttributes, TypeLayout.NativePointerSize);
 
 				// 4. Pointer to Property Type
-				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, propertyDefSymbol, (int)writer2.Position, SectionKind.ROData, property.PropertyType.FullName + Metadata.TypeDefinition, 0);
+				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, propertyDefSymbol, (int)writer2.Position, property.PropertyType.FullName + Metadata.TypeDefinition, 0);
 				writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 				// If the type is a property then skip linking the methods
 				if (!type.IsInterface)
 				{
 					// 5. Pointer to Getter Method Definition
-					if (property.GetterMethod != null)
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, propertyDefSymbol, (int)writer2.Position, SectionKind.ROData, property.GetterMethod.FullName + Metadata.MethodDefinition, 0);
+					if (property.GetterMethod != null && property.GetterMethod.HasImplementation && !property.GetterMethod.HasOpenGenericParams)
+					{
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, propertyDefSymbol, (int)writer2.Position, property.GetterMethod.FullName + Metadata.MethodDefinition, 0);
+					}
+
 					writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 					// 6. Pointer to Setter Method Definition
-					if (property.SetterMethod != null)
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, propertyDefSymbol, (int)writer2.Position, SectionKind.ROData, property.SetterMethod.FullName + Metadata.MethodDefinition, 0);
+					if (property.SetterMethod != null && property.SetterMethod.HasImplementation && !property.SetterMethod.HasOpenGenericParams)
+					{
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, propertyDefSymbol, (int)writer2.Position, property.SetterMethod.FullName + Metadata.MethodDefinition, 0);
+					}
+
 					writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
 				}
 				else
@@ -558,7 +566,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			var methodNameSymbol = EmitStringWithLength(method.FullName + Metadata.NameString, method.FullName);
 
 			// Emit method table
-			var methodTableSymbol = Linker.CreateSymbol(method.FullName + Metadata.MethodDefinition, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var methodTableSymbol = Linker.DefineSymbol(method.FullName + Metadata.MethodDefinition, SectionKind.ROData, TypeLayout.NativePointerAlignment, (method.Signature.Parameters.Count + 9) * TypeLayout.NativePointerSize);
 			var writer1 = new EndianAwareBinaryWriter(methodTableSymbol.Stream, Architecture.Endianness);
 
 			// 1. Pointer to Name
@@ -582,20 +590,20 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			writer1.Write(value, TypeLayout.NativePointerSize);
 
 			// 5. Pointer to Method
-			if (!method.IsAbstract)
+			if (method.HasImplementation && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams)
 			{
-				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, (int)writer1.Position, SectionKind.Text, method.FullName, 0);
+				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, (int)writer1.Position, method.FullName, 0);
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 6. Pointer to return type
-			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, (int)writer1.Position, SectionKind.ROData, method.Signature.ReturnType.FullName + Metadata.TypeDefinition, 0);
+			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, (int)writer1.Position, method.Signature.ReturnType.FullName + Metadata.TypeDefinition, 0);
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 7. Pointer to Exception Handler Table
 			if (method.ExceptionHandlers.Count != 0)
 			{
-				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, (int)writer1.Position, SectionKind.ROData, method.FullName + Metadata.ProtectedRegionTable, 0);
+				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, (int)writer1.Position, method.FullName + Metadata.ProtectedRegionTable, 0);
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
@@ -631,7 +639,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			var parameterNameSymbol = EmitStringWithLength(parameter + Metadata.NameString, parameter.FullName);
 
 			// Emit parameter table
-			var parameterTableSymbol = Linker.CreateSymbol(parameter.FullName + Metadata.MethodDefinition, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var parameterTableSymbol = Linker.DefineSymbol(parameter.FullName + Metadata.MethodDefinition, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer1 = new EndianAwareBinaryWriter(parameterTableSymbol.Stream, Architecture.Endianness);
 
 			// 1. Pointer to Name
@@ -650,7 +658,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			writer1.Write((uint)parameter.ParameterAttributes, TypeLayout.NativePointerSize);
 
 			// 4. Pointer to Parameter Type
-			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, parameterTableSymbol, (int)writer1.Position, SectionKind.ROData, parameter.ParameterType.FullName + Metadata.TypeDefinition, 0);
+			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, parameterTableSymbol, (int)writer1.Position, parameter.ParameterType.FullName + Metadata.TypeDefinition, 0);
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// Return parameterTableSymbol for linker usage
@@ -664,7 +672,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private LinkerSymbol CreateCustomAttributesTable(MosaUnit unit)
 		{
 			// Emit custom attributes table
-			var customAttributesTableSymbol = Linker.CreateSymbol(unit.FullName + Metadata.CustomAttributesTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var customAttributesTableSymbol = Linker.DefineSymbol(unit.FullName + Metadata.CustomAttributesTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer1 = new EndianAwareBinaryWriter(customAttributesTableSymbol.Stream, Architecture.Endianness);
 
 			// 1. Number of Custom Attributes
@@ -693,15 +701,15 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		{
 			// Emit custom attribute list
 			string name = unit.FullName + ">>" + position.ToString() + ":" + ca.Constructor.DeclaringType.Name;
-			var customAttributeSymbol = Linker.CreateSymbol(name + Metadata.CustomAttribute, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var customAttributeSymbol = Linker.DefineSymbol(name + Metadata.CustomAttribute, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer1 = new EndianAwareBinaryWriter(customAttributeSymbol.Stream, Architecture.Endianness);
 
 			// 1. Pointer to Attribute Type
-			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, customAttributeSymbol, (int)writer1.Position, SectionKind.ROData, ca.Constructor.DeclaringType.FullName + Metadata.TypeDefinition, 0);
+			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, customAttributeSymbol, (int)writer1.Position, ca.Constructor.DeclaringType.FullName + Metadata.TypeDefinition, 0);
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 2. Pointer to Constructor Method Definition
-			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, customAttributeSymbol, (int)writer1.Position, SectionKind.ROData, ca.Constructor.FullName + Metadata.MethodDefinition, 0);
+			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, customAttributeSymbol, (int)writer1.Position, ca.Constructor.FullName + Metadata.MethodDefinition, 0);
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 3. Number of Arguments (Both unnamed and named)
@@ -736,7 +744,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		{
 			string nameForSymbol = name ?? count.ToString();
 			nameForSymbol = symbolName + ":" + nameForSymbol;
-			var symbol = Linker.CreateSymbol(nameForSymbol + Metadata.CustomAttributeArgument, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var symbol = Linker.DefineSymbol(nameForSymbol + Metadata.CustomAttributeArgument, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer1 = new EndianAwareBinaryWriter(symbol.Stream, Architecture.Endianness);
 
 			// 1. Pointer to name (if named)
@@ -751,7 +759,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			writer1.Write(isField, TypeLayout.NativePointerSize);
 
 			// 3. Argument Type Pointer
-			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, (int)writer1.Position, SectionKind.ROData, arg.Type.FullName + Metadata.TypeDefinition, 0);
+			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, (int)writer1.Position, arg.Type.FullName + Metadata.TypeDefinition, 0);
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 4. Argument Size
@@ -891,7 +899,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 					// Since strings are immutable, make it an object that we can just use
 					var str = (string)value;
-					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, (int)writer.Position, SectionKind.ROData, "System.String" + Metadata.TypeDefinition, 0);
+					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, (int)writer.Position, "System.String" + Metadata.TypeDefinition, 0);
 					writer.WriteZeroBytes(TypeLayout.NativePointerSize * 2);
 					writer.Write(str.Length, TypeLayout.NativePointerSize);
 					writer.Write(System.Text.Encoding.Unicode.GetBytes(str));
@@ -901,7 +909,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 					if (type.FullName == "System.Type")
 					{
 						var valueType = (MosaType)value;
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, (int)writer.Position, SectionKind.ROData, valueType.FullName + Metadata.TypeDefinition, 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, (int)writer.Position, valueType.FullName + Metadata.TypeDefinition, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 					}
 					else

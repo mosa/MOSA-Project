@@ -95,7 +95,7 @@ namespace Mosa.Utility.UnitTests
 			return failures;
 		}
 
-		private static void PrepareUnitTest(List<UnitTest> unitTests, TypeSystem typeSystem, BaseLinker linker)
+		private static void PrepareUnitTest(List<UnitTest> unitTests, TypeSystem typeSystem, MosaLinker linker)
 		{
 			int id = 0;
 
@@ -105,7 +105,7 @@ namespace Mosa.Utility.UnitTests
 			}
 		}
 
-		private static void ResolveUnitTest(TypeSystem typeSystem, BaseLinker linker, int id, UnitTest unitTest)
+		private static void ResolveUnitTest(TypeSystem typeSystem, MosaLinker linker, int id, UnitTest unitTest)
 		{
 			unitTest.UnitTestID = id;
 
@@ -317,7 +317,7 @@ namespace Mosa.Utility.UnitTests
 			unitTest.MethodName = fullMethodName.Substring(first + 1);
 		}
 
-		public static void ResolveAddress(UnitTest unitTest, BaseLinker linker)
+		public static void ResolveAddress(UnitTest unitTest, MosaLinker linker)
 		{
 			unitTest.MosaMethodAddress = GetMethodAddress(unitTest.MosaMethod, linker);
 		}
@@ -356,9 +356,9 @@ namespace Mosa.Utility.UnitTests
 			return null;
 		}
 
-		public static IntPtr GetMethodAddress(MosaMethod method, BaseLinker linker)
+		public static IntPtr GetMethodAddress(MosaMethod method, MosaLinker linker)
 		{
-			var symbol = linker.GetSymbol(method.FullName, SectionKind.Text);
+			var symbol = linker.GetSymbol(method.FullName);
 
 			return new IntPtr((long)symbol.VirtualAddress);
 		}

@@ -71,6 +71,9 @@ namespace Mosa.Tool.GDBDebugger.Views
 
 		private void btnStart_Click(object sender, EventArgs e)
 		{
+			if (GDBConnector == null)
+				return;
+
 			if (GDBConnector.IsRunning)
 				return;
 

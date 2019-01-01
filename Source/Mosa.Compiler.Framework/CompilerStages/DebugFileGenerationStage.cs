@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Linker;
 using System.Collections.Generic;
 using System.IO;
 
@@ -21,7 +20,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		/// </summary>
 		private TextWriter writer;
 
-		private Dictionary<string, int> SourceFiles = new Dictionary<string, int>();
+		private readonly Dictionary<string, int> SourceFiles = new Dictionary<string, int>();
 
 		#endregion Data Members
 
@@ -56,15 +55,15 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		{
 			writer.WriteLine("[Sections]");
 			writer.WriteLine("Address\tOffset\tSize\tKind\tName");
-			foreach (var section in Linker.LinkerSections)
+			foreach (var linkerSection in Linker.LinkerSections)
 			{
 				writer.WriteLine(
 					"{0:x8}\t{1}\t{2}\t{3}\t{4}",
-					section.VirtualAddress,
-					section.FileOffset,
-					section.Size,
-					section.SectionKind.ToString(),
-					section.Name);
+					linkerSection.VirtualAddress,
+					linkerSection.FileOffset,
+					linkerSection.Size,
+					linkerSection.SectionKind.ToString(),
+					linkerSection.Name);
 			}
 		}
 
@@ -110,7 +109,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				writer.WriteLine(
 					"{0}\t{1:x8}\t{2}\t{3}\t{4}\t{5}\t{6}",
 					type.ID,
-					Linker.GetSymbol(type.FullName + Metadata.TypeDefinition, SectionKind.ROData).VirtualAddress,
+					Linker.GetSymbol(type.FullName + Metadata.TypeDefinition).VirtualAddress,
 					TypeLayout.GetTypeSize(type),
 					type.FullName,
 					(type.BaseType != null) ? type.BaseType.ID : 0,
@@ -132,7 +131,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 				foreach (var method in type.Methods)
 				{
-					var symbol = Linker.GetSymbol(method.FullName, SectionKind.Text);
+					var symbol = Linker.GetSymbol(method.FullName);
 					var methodData = Compiler.CompilerData.GetCompilerMethodData(method);
 
 					writer.WriteLine(
@@ -140,7 +139,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 						method.ID,
 						symbol.VirtualAddress,
 						symbol.Size,
-						Linker.GetSymbol(method.FullName + Metadata.MethodDefinition, SectionKind.ROData).VirtualAddress,
+						Linker.GetSymbol(method.FullName + Metadata.MethodDefinition).VirtualAddress,
 						method.FullName,
 						method.Signature.ReturnType.ID,
 						methodData.LocalMethodStackSize,
@@ -197,7 +196,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 				foreach (var field in type.Fields)
 				{
-					var symbol = Linker.GetSymbol(field.FullName + Metadata.FieldDefinition, SectionKind.ROData);
+					var symbol = Linker.GetSymbol(field.FullName + Metadata.FieldDefinition);
 
 					//var datasection = (field.Data != null) ? SectionKind.ROData : SectionKind.BSS; // not used yet
 
@@ -321,8 +320,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 				foreach (var method in type.Methods)
 				{
-					int index = 0;
-
 					if (method.Code == null)
 						continue;
 

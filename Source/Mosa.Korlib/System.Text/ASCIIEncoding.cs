@@ -8,14 +8,14 @@ namespace System.Text
 	public class ASCIIEncoding : Encoding
 	{
 		// Decode a buffer of bytes into a string.
-		public unsafe override String GetString(byte[] bytes, int byteIndex, int byteCount)
+		public unsafe override string GetString(byte[] bytes, int byteIndex, int count)
 		{
-			if (byteCount == 0)
+			if (count == 0)
 				return String.Empty;
 
 			string result = "";
 
-			for (int index = byteIndex; index < byteIndex + byteCount; index++)
+			for (int index = byteIndex; index < byteIndex + count; index++)
 			{
 				byte b = bytes[index];
 				result += new string((b <= 0x7F) ? (char)b : '?', 1);

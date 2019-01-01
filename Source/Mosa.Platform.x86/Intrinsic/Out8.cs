@@ -5,11 +5,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Representations the x86 out instruction.
+	/// IntrinsicMethods
 	/// </summary>
-	internal sealed class Out8 : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Out8")]
+		private static void Out8(Context context, MethodCompiler methodCompiler)
 		{
 			context.SetInstruction(X86.Out8, null, context.Operand1, context.Operand2);
 		}

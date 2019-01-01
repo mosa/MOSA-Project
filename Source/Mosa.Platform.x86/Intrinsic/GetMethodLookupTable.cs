@@ -6,11 +6,12 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// GetMethodLookupTable
+	/// IntrinsicMethods
 	/// </summary>
-	internal class GetMethodLookupTable : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:GetMethodLookupTable")]
+		private static void GetMethodLookupTable(Context context, MethodCompiler methodCompiler)
 		{
 			context.SetInstruction(IRInstruction.MoveInt32, context.Result, Operand.CreateUnmanagedSymbolPointer(Metadata.MethodLookupTable, methodCompiler.TypeSystem));
 		}

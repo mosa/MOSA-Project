@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.ClassLib;
 using System.Collections.Generic;
 
 namespace Mosa.Utility.DebugEngine

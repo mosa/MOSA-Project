@@ -7,6 +7,8 @@ namespace System
 	/// </summary>
 	public class ArgumentOutOfRangeException : ArgumentException
 	{
+		//private object _actualValue;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ArgumentOutOfRangeException"/> class.
 		/// </summary>
@@ -30,5 +32,11 @@ namespace System
 		public ArgumentOutOfRangeException(string paramName, string message)
 			: base(message, paramName)
 		{ }
+
+		//public ArgumentOutOfRangeException(string paramName, object actualValue, string message)
+		//: base(message, paramName)
+		//{
+		//	_actualValue = actualValue;
+		//}
 	}
 }

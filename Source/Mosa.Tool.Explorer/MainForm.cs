@@ -109,7 +109,7 @@ namespace Mosa.Tool.Explorer
 			cbEnableIROptimizations.Checked = !options.NoIROptimizations;
 			cbEnableSparseConditionalConstantPropagation.Checked = !options.NoSparse;
 
-			if (options.X32)
+			if (options.X86)
 				cbPlatform.SelectedIndex = 0;
 
 			if (options.X64)

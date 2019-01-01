@@ -24,7 +24,7 @@ namespace Mosa.Utility.UnitTests
 		public AppLocations AppLocations { get; set; }
 
 		public TypeSystem TypeSystem { get; internal set; }
-		public BaseLinker Linker { get; internal set; }
+		public MosaLinker Linker { get; internal set; }
 
 		protected DebugServerEngine DebugServerEngine;
 		protected Starter Starter;
@@ -46,7 +46,7 @@ namespace Mosa.Utility.UnitTests
 		private Thread ProcessThread;
 
 		private int CompletedUnitTestCount = 0;
-		private Stopwatch StopWatch = new Stopwatch();
+		private readonly Stopwatch StopWatch = new Stopwatch();
 
 		private volatile int LastResponse = 0;
 
@@ -91,7 +91,7 @@ namespace Mosa.Utility.UnitTests
 				ExitOnLaunch = true,
 				GenerateNASMFile = false,
 				GenerateASMFile = true,
-				GenerateMapFile = false,
+				GenerateMapFile = true,
 				GenerateDebugFile = false,
 				PlugKorlib = true
 			};
@@ -527,13 +527,13 @@ namespace Mosa.Utility.UnitTests
 		{
 			Aborted = true;
 
-			if (Process != null && !Process.HasExited)
+			if (Process?.HasExited == false)
 			{
 				Process.Kill();
 				Process = null;
 			}
 
-			if (ProcessThread != null && ProcessThread.IsAlive)
+			if (ProcessThread?.IsAlive == true)
 			{
 				ProcessThread.Abort();
 				ProcessThread.Join();

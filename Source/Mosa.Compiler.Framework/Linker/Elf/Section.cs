@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using System.Collections.Generic;
 using System.IO;
-using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework.Linker.Elf
 {
 	/// <summary>
-	///
+	/// ELF Section
 	/// </summary>
 	public class Section
 	{

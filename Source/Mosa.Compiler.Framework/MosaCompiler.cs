@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework
 
 		public CompilationScheduler CompilationScheduler { get; private set; }
 
-		public BaseLinker Linker { get; private set; }
+		public MosaLinker Linker { get; private set; }
 
 		public List<BaseCompilerExtension> CompilerExtensions { get; } = new List<BaseCompilerExtension>();
 
@@ -109,7 +109,7 @@ namespace Mosa.Compiler.Framework
 
 		public void Initialize()
 		{
-			Linker = new BaseLinker(CompilerOptions.BaseAddress, CompilerOptions.Architecture.Endianness, CompilerOptions.Architecture.MachineType, CompilerOptions.EmitSymbols, CompilerOptions.LinkerFormatType, CompilerOptions.CreateExtraSections, CompilerOptions.CreateExtraProgramHeaders);
+			Linker = new Linker.MosaLinker(CompilerOptions.BaseAddress, CompilerOptions.Architecture.Endianness, CompilerOptions.Architecture.MachineType, CompilerOptions.EmitSymbols, CompilerOptions.LinkerFormatType);
 
 			Compiler = new Compiler(this);
 		}

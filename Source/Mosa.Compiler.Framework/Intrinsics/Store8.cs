@@ -6,19 +6,12 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Intrinsics
 {
 	/// <summary>
-	/// Store8
+	/// IntrinsicMethods
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
-	[ReplacementTarget("Mosa.Runtime.Intrinsic::Store8")]
-	public sealed class Store8 : IIntrinsicInternalMethod
+	static partial class IntrinsicMethods
 	{
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="methodCompiler">The method compiler.</param>
-		/// <exception cref="CompilerException"></exception>
-		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Runtime.Intrinsic:Store8")]
+		private static void Store8(Context context, MethodCompiler methodCompiler)
 		{
 			if (context.OperandCount == 2)
 			{

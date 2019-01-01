@@ -7,6 +7,8 @@ namespace Mosa.Compiler.Framework.Linker
 	/// </summary>
 	public enum SectionKind
 	{
+		Unknown = -1,
+
 		/// <summary>
 		/// Identifies the program text section.
 		/// </summary>

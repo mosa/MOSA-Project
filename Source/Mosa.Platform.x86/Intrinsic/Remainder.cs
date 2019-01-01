@@ -5,11 +5,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Calculates the remainder of a floating-point division. Only works with valid data.
+	/// IntrinsicMethods
 	/// </summary>
-	internal sealed class Remainder : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Remainder")]
+		private static void Remainder(Context context, MethodCompiler methodCompiler)
 		{
 			var result = context.Result;
 			var dividend = context.Operand1;

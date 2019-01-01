@@ -49,17 +49,19 @@ namespace Mosa.Compiler.Framework.CIL
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
 		/// <param name="context"></param>
-		/// <param name="compiler">The compiler.</param>
-		public override void Resolve(Context context, MethodCompiler compiler)
+		/// <param name="methodCompiler">The compiler.</param>
+		public override void Resolve(Context context, MethodCompiler methodCompiler)
 		{
-			base.Resolve(context, compiler);
+			base.Resolve(context, methodCompiler);
 
-			// Validate the operand
-			var result = typeCodes[(int)context.Operand1.Type.GetStackTypeCode()];
+			var result = typeCodes[(int)methodCompiler.Compiler.GetStackTypeCode(context.Operand1.Type)];
+
 			if (StackTypeCode.Unknown == result)
+			{
 				throw new InvalidOperationException("Invalid operand to Neg instruction [" + result + "]");
+			}
 
-			context.Result = compiler.CreateVirtualRegister(context.Operand1.Type);
+			context.Result = methodCompiler.CreateVirtualRegister(context.Operand1.Type);
 		}
 
 		#endregion Methods

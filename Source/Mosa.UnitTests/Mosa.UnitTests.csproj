@@ -181,6 +181,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="ValueTypeTests.cs" />
+    <Compile Include="ReflectionTests.cs" />
     <Compile Include="WhileTests.cs" />
     <Compile Include="StringTests.cs" />
     <Compile Include="SingleTests.cs" />

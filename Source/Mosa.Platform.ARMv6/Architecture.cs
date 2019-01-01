@@ -19,26 +19,16 @@ namespace Mosa.Platform.ARMv6
 		/// <summary>
 		/// Gets the endianness of the target architecture.
 		/// </summary>
-		/// <value>
-		/// The endianness. The ARM Architecture allows either big endian or little endian formats.
-		/// In storing data, the ARM follows the little endian convention.
-		/// </value>
 		public override Endianness Endianness { get { return Endianness.Little; } }
 
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
-		/// <value>
-		/// The type of the elf machine. As defined in ARM ELF File Format doc. page 5, EM_ARM.
-		/// </value>
 		public override MachineType MachineType { get { return MachineType.ARM; } }
 
 		/// <summary>
 		/// Gets the name of the platform.
 		/// </summary>
-		/// <value>
-		/// The name of the platform.
-		/// </value>
 		public override string PlatformName { get { return "ARMv6"; } }
 
 		/// <summary>
@@ -46,10 +36,6 @@ namespace Mosa.Platform.ARMv6
 		/// </summary>
 		/// <returns>The created architecture instance.</returns>
 		/// <param name="architectureFeatures">The features available in the architecture and code generation.</param>
-		/// <remarks>
-		/// This method creates an instance of an appropriate architecture class, which supports the specific
-		/// architecture features.
-		/// </remarks>
 		public static BaseArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
 		{
 			if (architectureFeatures == ArchitectureFeatureFlags.AutoDetect)
@@ -107,82 +93,52 @@ namespace Mosa.Platform.ARMv6
 		/// <summary>
 		/// Retrieves the register set of the ARMv6 platform.
 		/// </summary>
-		public override PhysicalRegister[] RegisterSet
-		{
-			get { return registers; }
-		}
+		public override PhysicalRegister[] RegisterSet { get { return registers; } }
 
 		/// <summary>
 		/// Retrieves the stack frame register of the ARMv6.
 		/// </summary>
-		public override PhysicalRegister StackFrameRegister
-		{
-			get { return GeneralPurposeRegister.LR; }
-		}
+		public override PhysicalRegister StackFrameRegister { get { return GeneralPurposeRegister.LR; } }
 
 		/// <summary>
 		/// Retrieves the stack pointer register of the ARMv6.
 		/// </summary>
-		public override PhysicalRegister StackPointerRegister
-		{
-			get { return GeneralPurposeRegister.SP; }
-		}
+		public override PhysicalRegister StackPointerRegister { get { return GeneralPurposeRegister.SP; } }
 
 		/// <summary>
 		/// Retrieves the scratch register of the ARMv6.
 		/// </summary>
-		public override PhysicalRegister ScratchRegister
-		{
-			get { return null; } // TODO
-		}
+		public override PhysicalRegister ScratchRegister { get { return null; /* TODO */} }
 
 		/// <summary>
-		/// Gets the return32 bit register.
+		/// Gets the return register.
 		/// </summary>
-		public override PhysicalRegister ReturnRegister
-		{
-			get { return null; /* TODO */}
-		}
+		public override PhysicalRegister ReturnRegister { get { return null; /* TODO */} }
 
 		/// <summary>
-		/// Gets the return64 bit register.
+		/// Gets the return register for the high portion of the 64bit result.
 		/// </summary>
-		public override PhysicalRegister ReturnHighRegister
-		{
-			get { return null; /* TODO */}
-		}
+		public override PhysicalRegister ReturnHighRegister { get { return null; /* TODO */} }
 
 		/// <summary>
 		/// Gets the return floating point register.
 		/// </summary>
-		public override PhysicalRegister ReturnFloatingPointRegister
-		{
-			get { return null; /* TODO */}
-		}
+		public override PhysicalRegister ReturnFloatingPointRegister { get { return null; /* TODO */} }
 
 		/// <summary>
 		/// Retrieves the exception register of the architecture.
 		/// </summary>
-		public override PhysicalRegister ExceptionRegister
-		{
-			get { return GeneralPurposeRegister.R10; }
-		}
+		public override PhysicalRegister ExceptionRegister { get { return GeneralPurposeRegister.R10; } }
 
 		/// <summary>
 		/// Gets the finally return block register.
 		/// </summary>
-		public override PhysicalRegister LeaveTargetRegister
-		{
-			get { return GeneralPurposeRegister.R9; }
-		}
+		public override PhysicalRegister LeaveTargetRegister { get { return GeneralPurposeRegister.R9; } }
 
 		/// <summary>
 		/// Retrieves the program counter register of the ARMv6.
 		/// </summary>
-		public override PhysicalRegister ProgramCounter
-		{
-			get { return GeneralPurposeRegister.PC; }
-		}
+		public override PhysicalRegister ProgramCounter { get { return GeneralPurposeRegister.PC; } }
 
 		/// <summary>
 		/// Gets the instructions.

@@ -36,11 +36,11 @@ namespace Mosa.Compiler.Framework.CIL
 
 			var token = (uint)decoder.Instruction.Operand;
 
+			string data = decoder.TypeSystem.LookupUserString(decoder.Method.Module, token);
+
 			string symbolName = "$ldstr$" + decoder.Method.Module.Name + "$" + token;
 
-			string name = decoder.TypeSystem.LookupUserString(decoder.Method.Module, token);
-
-			node.Operand1 = Operand.CreateStringSymbol(symbolName, name, decoder.TypeSystem);
+			node.Operand1 = Operand.CreateStringSymbol(symbolName, data, decoder.TypeSystem);
 
 			node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.String);
 		}

@@ -2,10 +2,11 @@
 
 using Mosa.Runtime;
 using Mosa.Runtime.Metadata;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace System
+namespace Mosa.Plug.Korlib.Runtime
 {
 	public sealed unsafe class RuntimeCustomAttributeData : CustomAttributeData
 	{

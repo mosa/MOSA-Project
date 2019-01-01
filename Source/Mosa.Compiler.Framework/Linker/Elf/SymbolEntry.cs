@@ -105,8 +105,10 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 		protected void Write64(BinaryWriter writer)
 		{
 			writer.Write(Name);
-			writer.Write(Info); // TODO
-			writer.Write(Other); // TODO
+			writer.Write((uint)Value);  // TODO
+			writer.Write((uint)Size);   // TODO
+			writer.Write(Info);
+			writer.Write(Other);
 			writer.Write((ushort)SectionHeaderTableIndex);
 			writer.Write(Value);
 			writer.Write(Size);

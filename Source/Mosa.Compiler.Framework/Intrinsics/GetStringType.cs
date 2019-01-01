@@ -5,20 +5,14 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Intrinsics
 {
 	/// <summary>
-	/// GetObjectAddress
+	/// IntrinsicMethods
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
-	[ReplacementTarget("Mosa.Runtime.Intrinsic::GetStringType")]
-	public sealed class GetStringType : IIntrinsicInternalMethod
+	static partial class IntrinsicMethods
 	{
 		private const string StringClassTypeDefinitionSymbolName = "System.String" + Metadata.TypeDefinition;
 
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="methodCompiler">The method compiler.</param>
-		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Runtime.Intrinsic:GetStringType")]
+		private static void GetStringType(Context context, MethodCompiler methodCompiler)
 		{
 			var typeDef = Operand.CreateUnmanagedSymbolPointer(StringClassTypeDefinitionSymbolName, methodCompiler.TypeSystem);
 

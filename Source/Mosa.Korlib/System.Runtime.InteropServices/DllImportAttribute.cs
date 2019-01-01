@@ -2,19 +2,22 @@
 
 namespace System.Runtime.InteropServices
 {
-	[ComVisible(true)]
 	[AttributeUsage(AttributeTargets.Method, Inherited = false)]
 	public sealed class DllImportAttribute : Attribute
 	{
-		public CallingConvention CallingConvention;
-		private string Dll;
-		public string EntryPoint;
-
-		public string Value { get { return Dll; } }
-
 		public DllImportAttribute(string dllName)
 		{
-			Dll = dllName;
+			Value = dllName;
 		}
+
+		public string Value { get; }
+
+		public string EntryPoint;
+		public bool SetLastError;
+		public bool ExactSpelling;
+		public CallingConvention CallingConvention;
+		public bool BestFitMapping;
+		public bool PreserveSig;
+		public bool ThrowOnUnmappableChar;
 	}
 }

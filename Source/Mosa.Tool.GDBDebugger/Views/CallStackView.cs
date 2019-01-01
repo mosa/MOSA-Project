@@ -2,7 +2,6 @@
 
 using Mosa.Tool.GDBDebugger.DebugData;
 using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace Mosa.Tool.GDBDebugger.Views

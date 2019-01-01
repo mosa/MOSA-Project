@@ -53,7 +53,7 @@ namespace Mosa.Tool.GDBDebugger
 
 		public AppLocations AppLocations { get; } = new AppLocations();
 
-		public DebugSource DebugSource { get; } = new DebugSource();
+		public DebugSource DebugSource { get; set; } = new DebugSource();
 
 		public List<BreakPoint> BreakPoints { get; } = new List<BreakPoint>();
 
@@ -111,11 +111,12 @@ namespace Mosa.Tool.GDBDebugger
 
 			//scriptView.Show(dockPanel, DockState.Document);
 			registersView.Show(dockPanel, DockState.DockRight);
+			stackFrameView.Show(registersView.Pane, DockAlignment.Bottom, 0.5);
 
 			sourceView.Show(dockPanel, DockState.Document);
 			sourceDataView.Show(dockPanel, DockState.Document);
 
-			stackFrameView.Show(dockPanel, DockState.DockRight);
+			//stackFrameView.Show(dockPanel, DockState.DockRight);
 
 			var memoryView = new MemoryView(this);
 			memoryView.Show(dockPanel, DockState.Document);
@@ -161,6 +162,7 @@ namespace Mosa.Tool.GDBDebugger
 		{
 			if (Options.DebugFile != null && File.Exists(Options.DebugFile))
 			{
+				DebugSource = new DebugSource();
 				LoadDebugData.LoadDebugInfo(Options.DebugFile, DebugSource);
 			}
 		}

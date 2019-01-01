@@ -1,10 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime.Metadata;
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
-namespace System
+namespace Mosa.Plug.Korlib.Runtime
 {
 	public sealed unsafe class RuntimeTypeInfo : TypeInfo
 	{
@@ -13,7 +14,7 @@ namespace System
 		private readonly Type baseType;
 		private readonly Type elementType;
 		private readonly Type asType;
-		private LinkedList<CustomAttributeData> customAttributesData = null;
+		private List<CustomAttributeData> customAttributesData = null;
 
 		internal readonly Type ValueType = typeof(ValueType);
 		internal readonly Type EnumType = typeof(Enum);
@@ -35,7 +36,7 @@ namespace System
 				if (customAttributesData == null)
 				{
 					// Custom Attributes Data - Lazy load
-					customAttributesData = new LinkedList<CustomAttributeData>();
+					customAttributesData = new List<CustomAttributeData>();
 					if (!typeDefinition.CustomAttributes.IsNull)
 					{
 						var customAttributesTable = typeDefinition.CustomAttributes;
@@ -43,7 +44,7 @@ namespace System
 						for (uint i = 0; i < customAttributesCount; i++)
 						{
 							RuntimeCustomAttributeData cad = new RuntimeCustomAttributeData(customAttributesTable.GetCustomAttribute(i));
-							customAttributesData.AddLast(cad);
+							customAttributesData.Add(cad);
 						}
 					}
 				}

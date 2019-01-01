@@ -222,6 +222,7 @@
     <Compile Include="Instructions\Pushad.cs" />
     <Compile Include="Instructions\PXor.cs" />
     <Compile Include="Instructions\Rcr32.cs" />
+    <Compile Include="Instructions\RdMSR.cs" />
     <Compile Include="Instructions\Ret.cs" />
     <Compile Include="Instructions\RoundSD.cs" />
     <Compile Include="Instructions\RoundSS.cs" />
@@ -261,6 +262,7 @@
     <Compile Include="Instructions\Test32.cs" />
     <Compile Include="Instructions\Ucomisd.cs" />
     <Compile Include="Instructions\Ucomiss.cs" />
+    <Compile Include="Instructions\WrMSR.cs" />
     <Compile Include="Instructions\XAddLoad32.cs" />
     <Compile Include="Instructions\XChg32.cs" />
     <Compile Include="Instructions\XChgLoad32.cs" />
@@ -312,13 +314,11 @@
     <Compile Include="Intrinsic\GetEBP.cs" />
     <Compile Include="Intrinsic\GetMethodLookupTable.cs" />
     <Compile Include="Intrinsic\Cli.cs" />
-    <Compile Include="Intrinsic\GetControlRegisterBase.cs" />
     <Compile Include="Intrinsic\GetCR0.cs" />
     <Compile Include="Intrinsic\GetCR2.cs" />
     <Compile Include="Intrinsic\GetCR3.cs" />
     <Compile Include="Intrinsic\GetCR4.cs" />
     <Compile Include="Intrinsic\In8.cs" />
-    <Compile Include="Intrinsic\SetControlRegisterBase.cs" />
     <Compile Include="Intrinsic\SetCR0.cs" />
     <Compile Include="Intrinsic\SetCR2.cs" />
     <Compile Include="Intrinsic\SetCR3.cs" />

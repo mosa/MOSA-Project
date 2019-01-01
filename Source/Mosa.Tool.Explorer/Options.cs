@@ -31,8 +31,8 @@ namespace Mosa.Tool.Explorer
 		[Option("x64")]
 		public bool X64 { get; set; }
 
-		[Option("x32")]
-		public bool X32 { get; set; }
+		[Option("x86")]
+		public bool X86 { get; set; }
 
 		[Value(0)]
 		public IEnumerable<string> Files { get; set; }
@@ -40,7 +40,7 @@ namespace Mosa.Tool.Explorer
 		public Options()
 		{
 			X64 = false;
-			X32 = true;
+			X86 = true;
 		}
 	}
 }

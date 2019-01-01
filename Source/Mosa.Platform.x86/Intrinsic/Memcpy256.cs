@@ -5,11 +5,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Memcpy256
+	/// IntrinsicMethods
 	/// </summary>
-	internal sealed class Memcpy256 : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Memcpy256")]
+		private static void Memcpy256(Context context, MethodCompiler methodCompiler)
 		{
 			var dest = context.Operand1;
 			var src = context.Operand2;

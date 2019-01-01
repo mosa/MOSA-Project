@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		protected void CreateMethodExceptionLookupTable()
 		{
 			// Emit assembly list
-			var methodLookupTable = Linker.CreateSymbol(Metadata.MethodExceptionLookupTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var methodLookupTable = Linker.DefineSymbol(Metadata.MethodExceptionLookupTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer = new EndianAwareBinaryWriter(methodLookupTable.Stream, Architecture.Endianness);
 
 			// 1. Number of methods
@@ -54,7 +54,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 					foreach (var method in methodList)
 					{
-						if (method.IsAbstract)
+						if (method.IsAbstract) // or !HasImplementation
 							continue;
 
 						if (method.ExceptionHandlers.Count == 0)
@@ -80,22 +80,22 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 					foreach (var method in methodList)
 					{
-						if (method.IsAbstract)
+						if ((!method.HasImplementation && method.IsAbstract) || method.HasOpenGenericParams || method.DeclaringType.HasOpenGenericParams)
 							continue;
 
 						if (method.ExceptionHandlers.Count == 0)
 							continue;
 
 						// 1. Pointer to Method
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, (int)writer.Position, SectionKind.Text, method.FullName, 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, (int)writer.Position, method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						// 2. Size of Method
-						Linker.Link(LinkType.Size, NativePatchType, methodLookupTable, (int)writer.Position, SectionKind.Text, method.FullName, 0);
+						Linker.Link(LinkType.Size, NativePatchType, methodLookupTable, (int)writer.Position, method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						// 3. Pointer to Method Definition
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, (int)writer.Position, SectionKind.ROData, method.FullName + Metadata.MethodDefinition, 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, (int)writer.Position, method.FullName + Metadata.MethodDefinition, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 					}
 				}

@@ -1,16 +1,16 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Platform.Intel;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Representations the x86 Call instruction.
+	/// IntrinsicMethods
 	/// </summary>
-	internal sealed class Call : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Call")]
+		private static void Call(Context context, MethodCompiler methodCompiler)
 		{
 			context.SetInstruction(X86.Call, null, context.Operand1);
 		}

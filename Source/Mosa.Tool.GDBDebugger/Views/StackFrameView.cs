@@ -9,18 +9,20 @@ namespace Mosa.Tool.GDBDebugger.Views
 {
 	public partial class StackFrameView : DebugDockContent
 	{
+		private const int NativeIntegerSize = 4;
+
 		private BindingList<StackEntry> stackentries = new BindingList<StackEntry>();
 
 		private class StackEntry
 		{
 			public string Offset { get; set; }
 
-			public string Address { get; set; }
-
 			public string HexValue { get; set; }
 
-			[Browsable(false)]
 			public ulong Value { get; set; }
+
+			[Browsable(false)]
+			public string Address { get; set; }
 
 			[Browsable(false)]
 			public int Index { get; set; }
@@ -63,9 +65,9 @@ namespace Mosa.Tool.GDBDebugger.Views
 				span = 512;
 
 			if (span % 4 != 0)
-				span = span + (span % 4);
+				span += (span % 4);
 
-			MemoryCache.ReadMemory(Platform.StackFrame.Value - span, (uint)span + 4, OnMemoryRead);
+			MemoryCache.ReadMemory(Platform.StackPointer.Value, (uint)span + NativeIntegerSize, OnMemoryRead);
 		}
 
 		private void OnMemoryRead(ulong address, byte[] bytes)
@@ -80,20 +82,26 @@ namespace Mosa.Tool.GDBDebugger.Views
 
 		private void UpdateDisplay(ulong address, byte[] memory)
 		{
-			uint size = 4; // fixme
+			uint size = NativeIntegerSize;
 
-			for (int i = memory.Length - 4; i > 0; i = i - (int)size)
+			for (int i = memory.Length - NativeIntegerSize; i >= 0; i -= (int)size)
 			{
+				// FIXME: for 64 bit
 				ulong value = (ulong)(memory[i] | (memory[i + 1] << 8) | (memory[i + 2] << 16) | (memory[i + 3] << 24));
 
 				var at = address + (ulong)i;
+
+				var offset = (long)(Platform.StackFrame.Value - at);
 
 				var entry = new StackEntry()
 				{
 					Address = BasePlatform.ToHex(at, size),
 					HexValue = BasePlatform.ToHex(value, size),
 					Value = value,
-					Offset = Platform.StackFrame.Name.ToUpper() + "-" + (Platform.StackFrame.Value - at).ToString().PadLeft(2, '0'),
+					Offset = Platform.StackFrame.Name.ToUpper() +
+						(offset >= 0
+						? "-" + BasePlatform.ToHex((ulong)offset, 1)
+						: "+" + BasePlatform.ToHex((ulong)-offset, 1)),
 					Index = stackentries.Count,
 				};
 

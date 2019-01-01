@@ -9,7 +9,7 @@ using System.Reflection;
 
 namespace Mosa.Plug.Korlib.System.Runtime.CompilerServices
 {
-	internal static class RuntimeHelpers
+	internal static class RuntimeHelpersPlug
 	{
 		[Plug("System.Runtime.CompilerServices.RuntimeHelpers::GetHashCode")]
 		internal unsafe static int GetHashCode(Object o)
@@ -48,9 +48,13 @@ namespace Mosa.Plug.Korlib.System.Runtime.CompilerServices
 		[Plug("System.Runtime.CompilerServices.RuntimeHelpers::GetAssemblies")]
 		internal static IEnumerable<Assembly> GetAssemblies()
 		{
-			var assemblies = new LinkedList<Assembly>();
-			foreach (var assembly in Internal.Assemblies)
-				assemblies.AddLast(assembly);
+			var assemblies = new List<Assembly>();
+
+			foreach (var assembly in KorlibInternal.Assemblies)
+			{
+				assemblies.Add(assembly);
+			}
+
 			return assemblies;
 		}
 

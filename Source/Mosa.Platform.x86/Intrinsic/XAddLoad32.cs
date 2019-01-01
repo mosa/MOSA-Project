@@ -5,11 +5,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Representations a XchgLoad32 Intrinsic
+	/// IntrinsicMethods
 	/// </summary>
-	internal sealed class XAddLoad32 : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:XAddLoad32")]
+		private static void XAddLoad32(Context context, MethodCompiler methodCompiler)
 		{
 			var location = context.Operand1;
 			var value = context.Operand2;

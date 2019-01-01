@@ -32,6 +32,8 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(X64.Shld32, Shld32);
 			AddVisitation(X64.Shr32, Shr32);
 			AddVisitation(X64.Shrd32, Shrd32);
+			AddVisitation(X64.RdMSR, RdMSR);
+			AddVisitation(X64.WrMSR, WrMSR);
 
 			AddVisitation(X64.Cdq64, Cdq64);
 			AddVisitation(X64.Div64, Div64);
@@ -567,6 +569,54 @@ namespace Mosa.Platform.x64.Stages
 
 			context.SetInstruction(X64.Mov64, ECX, operand3);
 			context.AppendInstruction(X64.Shrd64, result, operand1, operand2, ECX);
+		}
+
+		private void RdMSR(Context context)
+		{
+			if (context.Result.IsCPURegister
+				&& context.Result2.IsCPURegister
+				&& context.Operand1.IsCPURegister
+				&& context.Result.Register == GeneralPurposeRegister.EAX
+				&& context.Result2.Register == GeneralPurposeRegister.EDX
+				&& context.Operand1.Register == GeneralPurposeRegister.ECX)
+				return;
+
+			var operand1 = context.Operand1;
+			var result = context.Result;
+			var result2 = context.Result2;
+
+			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+			var EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+			var ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+
+			context.SetInstruction(X64.Mov32, ECX, operand1);
+			context.AppendInstruction2(X64.RdMSR, EAX, EDX, ECX);
+			context.AppendInstruction(X64.Mov32, result, EAX);
+			context.AppendInstruction(X64.Mov32, result2, EDX);
+		}
+
+		private void WrMSR(Context context)
+		{
+			if (context.Result.IsCPURegister
+				&& context.Result2.IsCPURegister
+				&& context.Operand1.IsCPURegister
+				&& context.Result.Register == GeneralPurposeRegister.ECX
+				&& context.Operand1.Register == GeneralPurposeRegister.EAX
+				&& context.Operand2.Register == GeneralPurposeRegister.EDX)
+				return;
+
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var result = context.Result;
+
+			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+			var EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+			var ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+
+			context.SetInstruction(X64.Mov32, EAX, operand1);
+			context.AppendInstruction(X64.Mov32, EDX, operand2);
+			context.AppendInstruction(X64.WrMSR, ECX, EAX, EDX);
+			context.AppendInstruction(X64.Mov32, result, ECX);
 		}
 
 		#endregion Visitation Methods - 64bit

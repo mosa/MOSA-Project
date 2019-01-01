@@ -67,10 +67,6 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Builders\RuntimeAssembly.cs" />
-    <Compile Include="Builders\RuntimeCustomAttributeData.cs" />
-    <Compile Include="Builders\RuntimeType.cs" />
-    <Compile Include="Builders\RuntimeTypeInfo.cs" />
     <Compile Include="Metadata\ExceptionHandlerType.cs" />
     <Compile Include="IntPtrExtension.cs" />
     <Compile Include="Metadata\CustomAttribute.cs" />
@@ -84,9 +80,6 @@
     <Compile Include="Metadata\MethodDefinition.cs" />
     <Compile Include="StartUp.cs" />
     <Compile Include="GC.cs" />
-    <Compile Include="InternalsForArray.cs" />
-    <Compile Include="InternalsForObject.cs" />
-    <Compile Include="InternalsForType.cs" />
     <Compile Include="Intrinsic.cs" />
     <Compile Include="Plug\PlugAttribute.cs" />
     <Compile Include="Internal.cs" />

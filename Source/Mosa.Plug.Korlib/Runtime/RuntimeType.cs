@@ -1,9 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime.Metadata;
+using System;
 using System.Reflection;
 
-namespace System
+namespace Mosa.Plug.Korlib.Runtime
 {
 	public sealed unsafe class RuntimeType : Type
 	{
@@ -116,9 +117,11 @@ namespace System
 		public override Type GetElementType()
 		{
 			if (elementType == null)
-
+			{
 				// Element Type - Lazy load
 				elementType = Type.GetTypeFromHandle(elementTypeHandle);
+			}
+
 			return elementType;
 		}
 

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Compiler.Framework.Trace;
 using SharpDisasm;
@@ -41,7 +40,7 @@ namespace Mosa.Tool.Explorer
 			}
 
 			// Create a byte array from the symbol stream
-			var symbol = MethodCompiler.Linker.FindSymbol(MethodCompiler.Method.FullName, SectionKind.Text);
+			var symbol = MethodCompiler.Linker.GetSymbol(MethodCompiler.Method.FullName);
 			var stream = symbol.Stream;
 			var oldPosition = stream.Position;
 			var length = (int)stream.Length;
@@ -86,7 +85,7 @@ namespace Mosa.Tool.Explorer
 			if (!trace.Active)
 				return;
 
-			var symbol = MethodCompiler.Linker.FindSymbol(MethodCompiler.Method.FullName, SectionKind.Text);
+			var symbol = MethodCompiler.Linker.GetSymbol(MethodCompiler.Method.FullName);
 
 			foreach (var request in symbol.GetLinkRequests())
 			{

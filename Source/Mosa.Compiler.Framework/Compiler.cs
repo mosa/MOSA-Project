@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Stages;
@@ -21,6 +22,8 @@ namespace Mosa.Compiler.Framework
 
 		private Pipeline<BaseMethodCompilerStage>[] methodStagePipelines;
 
+		public Dictionary<string, InstrinsicMethodDelegate> internalIntrinsicMethods { get; } = new Dictionary<string, InstrinsicMethodDelegate>();
+
 		#endregion Data Members
 
 		#region Properties
@@ -28,7 +31,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Returns the architecture used by the compiler.
 		/// </summary>
-		public BaseArchitecture Architecture { get; private set; }
+		public BaseArchitecture Architecture { get; }
 
 		/// <summary>
 		/// Gets the pre compile pipeline.
@@ -53,13 +56,13 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The compiler trace.
 		/// </value>
-		public CompilerTrace CompilerTrace { get; private set; }
+		public CompilerTrace CompilerTrace { get; }
 
 		/// <summary>
 		/// Gets the compiler options.
 		/// </summary>
 		/// <value>The compiler options.</value>
-		public CompilerOptions CompilerOptions { get; private set; }
+		public CompilerOptions CompilerOptions { get; }
 
 		/// <summary>
 		/// Gets the counters.
@@ -69,22 +72,17 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the scheduler.
 		/// </summary>
-		public CompilationScheduler CompilationScheduler { get; private set; }
+		public CompilationScheduler CompilationScheduler { get; }
 
 		/// <summary>
 		/// Gets the linker.
 		/// </summary>
-		public BaseLinker Linker { get; private set; }
+		public MosaLinker Linker { get; }
 
 		/// <summary>
 		/// Gets the plug system.
 		/// </summary>
 		public PlugSystem PlugSystem { get; }
-
-		/// <summary>
-		/// Gets the list of Intrinsic Types for internal call replacements.
-		/// </summary>
-		public Dictionary<string, Type> IntrinsicTypes { get; }
 
 		/// <summary>
 		/// Gets the type of the platform internal runtime.
@@ -213,19 +211,22 @@ namespace Mosa.Compiler.Framework
 
 			methodStagePipelines = new Pipeline<BaseMethodCompilerStage>[mosaCompiler.MaxThreads];
 
-			// Create new dictionary
-			IntrinsicTypes = new Dictionary<string, Type>();
-
 			foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
 			{
-				if (type.IsClass && typeof(IIntrinsicInternalMethod).IsAssignableFrom(type))
+				if (!type.IsClass)
+					continue;
+
+				foreach (var method in type.GetRuntimeMethods())
 				{
-					// Now get all the ReplacementTarget attributes
-					var attributes = (ReplacementTargetAttribute[])type.GetCustomAttributes(typeof(ReplacementTargetAttribute), true);
+					// Now get all the IntrinsicMethodAttribute attributes
+					var attributes = (IntrinsicMethodAttribute[])method.GetCustomAttributes(typeof(IntrinsicMethodAttribute), true);
+
 					for (int i = 0; i < attributes.Length; i++)
 					{
-						// Finally add the dictionary entry mapping the target string and the type
-						IntrinsicTypes.Add(attributes[i].Target, type);
+						var d = (InstrinsicMethodDelegate)Delegate.CreateDelegate(typeof(InstrinsicMethodDelegate), method);
+
+						// Finally add the dictionary entry mapping the target name and the delegate
+						internalIntrinsicMethods.Add(attributes[i].Target, d);
 					}
 				}
 			}
@@ -462,6 +463,13 @@ namespace Mosa.Compiler.Framework
 			IsStopped = true;
 		}
 
+		public InstrinsicMethodDelegate GetInstrincMethod(string name)
+		{
+			internalIntrinsicMethods.TryGetValue(name, out InstrinsicMethodDelegate value);
+
+			return value;
+		}
+
 		#endregion Methods
 
 		private void ExportCounters()
@@ -506,5 +514,151 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion Helper Methods
+
+		#region Type Methods
+
+		public MosaType GetTypeFromTypeCode(MosaTypeCode code)
+		{
+			switch (code)
+			{
+				case MosaTypeCode.Void: return TypeSystem.BuiltIn.Void;
+				case MosaTypeCode.Boolean: return TypeSystem.BuiltIn.Boolean;
+				case MosaTypeCode.Char: return TypeSystem.BuiltIn.Char;
+				case MosaTypeCode.I1: return TypeSystem.BuiltIn.I1;
+				case MosaTypeCode.U1: return TypeSystem.BuiltIn.U1;
+				case MosaTypeCode.I2: return TypeSystem.BuiltIn.I2;
+				case MosaTypeCode.U2: return TypeSystem.BuiltIn.U2;
+				case MosaTypeCode.I4: return TypeSystem.BuiltIn.I4;
+				case MosaTypeCode.U4: return TypeSystem.BuiltIn.U4;
+				case MosaTypeCode.I8: return TypeSystem.BuiltIn.I8;
+				case MosaTypeCode.U8: return TypeSystem.BuiltIn.U8;
+				case MosaTypeCode.R4: return TypeSystem.BuiltIn.R4;
+				case MosaTypeCode.R8: return TypeSystem.BuiltIn.R8;
+				case MosaTypeCode.I: return TypeSystem.BuiltIn.I;
+				case MosaTypeCode.U: return TypeSystem.BuiltIn.U;
+				case MosaTypeCode.String: return TypeSystem.BuiltIn.String;
+				case MosaTypeCode.TypedRef: return TypeSystem.BuiltIn.TypedRef;
+				case MosaTypeCode.Object: return TypeSystem.BuiltIn.Object;
+			}
+
+			throw new CompilerException("Can't convert type code {code} to type");
+		}
+
+		public StackTypeCode GetStackTypeCode(MosaType type)
+		{
+			switch (type.IsEnum ? type.GetEnumUnderlyingType().TypeCode : type.TypeCode)
+			{
+				case MosaTypeCode.Boolean:
+				case MosaTypeCode.Char:
+				case MosaTypeCode.I1:
+				case MosaTypeCode.U1:
+				case MosaTypeCode.I2:
+				case MosaTypeCode.U2:
+				case MosaTypeCode.I4:
+				case MosaTypeCode.U4:
+					if (Architecture.Is32BitPlatform)
+						return StackTypeCode.Int32;
+					else
+						return StackTypeCode.Int64;
+
+				case MosaTypeCode.I8:
+				case MosaTypeCode.U8:
+					return StackTypeCode.Int64;
+
+				case MosaTypeCode.R4:
+				case MosaTypeCode.R8:
+					return StackTypeCode.F;
+
+				case MosaTypeCode.I:
+				case MosaTypeCode.U:
+					if (Architecture.Is32BitPlatform)
+						return StackTypeCode.Int32;
+					else
+						return StackTypeCode.Int64;
+
+				case MosaTypeCode.ManagedPointer:
+					return StackTypeCode.ManagedPointer;
+
+				case MosaTypeCode.UnmanagedPointer:
+				case MosaTypeCode.FunctionPointer:
+					return StackTypeCode.UnmanagedPointer;
+
+				case MosaTypeCode.String:
+				case MosaTypeCode.ValueType:
+				case MosaTypeCode.ReferenceType:
+				case MosaTypeCode.Array:
+				case MosaTypeCode.Object:
+				case MosaTypeCode.SZArray:
+				case MosaTypeCode.Var:
+				case MosaTypeCode.MVar:
+					return StackTypeCode.O;
+
+				case MosaTypeCode.Void:
+					return StackTypeCode.Unknown;
+			}
+
+			throw new CompilerException($"Can't transform Type {type} to StackTypeCode");
+		}
+
+		public MosaType GetStackType(MosaType type)
+		{
+			switch (GetStackTypeCode(type))
+			{
+				case StackTypeCode.Int32:
+					return type.TypeSystem.BuiltIn.I4;
+
+				case StackTypeCode.Int64:
+					return type.TypeSystem.BuiltIn.I8;
+
+				case StackTypeCode.N:
+					return type.TypeSystem.BuiltIn.I;
+
+				case StackTypeCode.F:
+					if (type.IsR4)
+						return type.TypeSystem.BuiltIn.R4;
+					else
+						return type.TypeSystem.BuiltIn.R8;
+
+				case StackTypeCode.O:
+					return type;
+
+				case StackTypeCode.UnmanagedPointer:
+				case StackTypeCode.ManagedPointer:
+					return type;
+			}
+
+			throw new CompilerException($"Can't convert {type.FullName} to stack type");
+		}
+
+		public MosaType GetStackTypeFromCode(StackTypeCode code)
+		{
+			switch (code)
+			{
+				case StackTypeCode.Int32:
+					return TypeSystem.BuiltIn.I4;
+
+				case StackTypeCode.Int64:
+					return TypeSystem.BuiltIn.I8;
+
+				case StackTypeCode.N:
+					return TypeSystem.BuiltIn.I;
+
+				case StackTypeCode.F:
+					return TypeSystem.BuiltIn.R8;
+
+				case StackTypeCode.O:
+					return TypeSystem.BuiltIn.Object;
+
+				case StackTypeCode.UnmanagedPointer:
+					return TypeSystem.BuiltIn.Pointer;
+
+				case StackTypeCode.ManagedPointer:
+					return TypeSystem.BuiltIn.Object.ToManagedPointer();
+			}
+
+			throw new CompilerException($"Can't convert stack type code {code} to type");
+		}
+
+		#endregion Type Methods
 	}
 }

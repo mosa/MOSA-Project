@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			StackFrame = stackFrame;
 
 			VirtualRegisterCount = virtualRegisters.Count;
-			PhysicalRegisterCount = architecture.RegisterSet.Length;
+			PhysicalRegisterCount = 16; // max for all architectures
 			RegisterCount = VirtualRegisterCount + PhysicalRegisterCount;
 
 			LiveIntervalTracks = new List<LiveIntervalTrack>(PhysicalRegisterCount);
@@ -74,8 +74,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// Setup extended physical registers
 			foreach (var physicalRegister in architecture.RegisterSet)
 			{
-				Debug.Assert(physicalRegister.Index == VirtualRegisters.Count);
-				Debug.Assert(physicalRegister.Index == LiveIntervalTracks.Count);
+				//Debug.Assert(physicalRegister.Index == VirtualRegisters.Count);
+				//Debug.Assert(physicalRegister.Index == LiveIntervalTracks.Count);
 
 				bool reserved = (physicalRegister == StackFrameRegister
 					|| physicalRegister == StackPointerRegister
@@ -1092,12 +1092,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (Trace.Active) Trace.Log("  No free register available");
 
 			// No place for live interval; find live interval(s) to evict based on spill costs
-			if (PlaceLiveIntervalOnTrackAllowEvictions(liveInterval))
-			{
-				return true;
-			}
-
-			return false;
+			return PlaceLiveIntervalOnTrackAllowEvictions(liveInterval);
 		}
 
 		private void ProcessLiveInterval(LiveInterval liveInterval)

@@ -6,19 +6,12 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Intrinsics
 {
 	/// <summary>
-	/// Load8
+	/// IntrinsicMethods
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicInternalMethod" />
-	[ReplacementTarget("Mosa.Runtime.Intrinsic::Load8")]
-	public sealed class Load8 : IIntrinsicInternalMethod
+	static partial class IntrinsicMethods
 	{
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="methodCompiler">The method compiler.</param>
-		/// <exception cref="CompilerException"></exception>
-		void IIntrinsicInternalMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Runtime.Intrinsic:Load8")]
+		private static void Load8(Context context, MethodCompiler methodCompiler)
 		{
 			var instruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadZeroExtend8x32 : IRInstruction.LoadZeroExtend8x64;
 

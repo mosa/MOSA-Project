@@ -6,11 +6,12 @@ using Mosa.Platform.Intel;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Memclr256
+	/// IntrinsicMethods
 	/// </summary>
-	internal sealed class Memclr256 : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Memclr256")]
+		private static void Memclr256(Context context, MethodCompiler methodCompiler)
 		{
 			var dest = context.Operand1;
 

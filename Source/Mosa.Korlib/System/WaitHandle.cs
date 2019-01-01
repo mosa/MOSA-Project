@@ -3,7 +3,7 @@
 namespace System
 {
 	/// <summary>
-	///
+	/// WaitHandle
 	/// </summary>
 	public class WaitHandle
 	{

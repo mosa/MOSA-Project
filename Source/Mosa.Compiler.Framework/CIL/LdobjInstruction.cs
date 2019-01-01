@@ -51,9 +51,9 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(node, decoder);
 
-			MosaType type = (elementType == null)
-				? type = (MosaType)decoder.Instruction.Operand
-				: type = decoder.TypeSystem.GetTypeFromTypeCode(elementType.Value);
+			var type = (elementType == null)
+				? (MosaType)decoder.Instruction.Operand
+				: decoder.MethodCompiler.Compiler.GetTypeFromTypeCode(elementType.Value);
 
 			// Push the loaded value
 			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, type);
@@ -66,17 +66,17 @@ namespace Mosa.Compiler.Framework.CIL
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="compiler">The compiler.</param>
-		public override void Resolve(Context context, MethodCompiler compiler)
+		/// <param name="methodCompiler">The compiler.</param>
+		public override void Resolve(Context context, MethodCompiler methodCompiler)
 		{
-			base.Resolve(context, compiler);
+			base.Resolve(context, methodCompiler);
 
 			// If we're ldind.i8, fix an IL deficiency that the result may be U8
 			if (opcode == OpCode.Ldind_i8 && elementType.Value == MosaTypeCode.I8)
 			{
 				if (context.Operand1.Type.ElementType?.IsU8 == true)
 				{
-					context.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.BuiltIn.U8);
+					context.Result = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U8);
 				}
 			}
 		}

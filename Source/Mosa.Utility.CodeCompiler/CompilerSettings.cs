@@ -13,7 +13,7 @@ namespace Mosa.Utility.CodeCompiler
 		/// </summary>
 		private readonly List<string> references;
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region Construction
 

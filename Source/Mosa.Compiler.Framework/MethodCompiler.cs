@@ -15,11 +15,7 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	/// <remarks>
 	/// A method compiler is responsible for compiling a single function
-	/// of an object. There are various classes derived from BaseMethodCompiler,
-	/// which provide specific features, such as jit compilation, runtime
-	/// optimized jitting and others. BaseMethodCompiler instances are usually
-	/// created by invoking CreateMethodCompiler on a specific compiler
-	/// instance.
+	/// of an object.
 	/// </remarks>
 	public sealed class MethodCompiler
 	{
@@ -52,7 +48,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the linker used to resolve external symbols.
 		/// </summary>
-		public BaseLinker Linker { get; }
+		public MosaLinker Linker { get; }
 
 		/// <summary>
 		/// Gets the method implementation being compiled.
@@ -427,9 +423,8 @@ namespace Mosa.Compiler.Framework
 			}
 			else
 			{
-				//  FIXME - x64
-				//  should be either R4, R8, Object,
-				return CreateVirtualRegister(type.GetStackType());
+				var resultType = Compiler.GetStackType(type);
+				return CreateVirtualRegister(resultType);
 			}
 		}
 
@@ -444,19 +439,15 @@ namespace Mosa.Compiler.Framework
 			int index = 0;
 			foreach (var local in locals)
 			{
-				Operand operand = null;
-
 				if (MosaTypeLayout.IsStoredOnStack(local.Type) || local.IsPinned)
 				{
-					operand = AddStackLocal(local.Type, local.IsPinned);
+					LocalVariables[index++] = AddStackLocal(local.Type, local.IsPinned);
 				}
 				else
 				{
-					var stacktype = local.Type.GetStackType();
-					operand = CreateVirtualRegister(stacktype);
+					var stacktype = Compiler.GetStackType(local.Type);
+					LocalVariables[index++] = CreateVirtualRegister(stacktype);
 				}
-
-				LocalVariables[index++] = operand;
 			}
 		}
 

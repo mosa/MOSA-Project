@@ -6,11 +6,12 @@ using Mosa.Platform.Intel;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// AllocateStackSpace
+	/// IntrinsicMethods
 	/// </summary>
-	internal class AllocateStackSpace : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:AllocateStackSpace")]
+		private static void AllocateStackSpace(Context context, MethodCompiler methodCompiler)
 		{
 			Operand result = context.Result;
 			Operand size = context.Operand1;

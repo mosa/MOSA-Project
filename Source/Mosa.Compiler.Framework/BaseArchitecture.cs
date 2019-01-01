@@ -2,7 +2,9 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Linker.Elf;
+using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace Mosa.Compiler.Framework
 {
@@ -16,17 +18,11 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the endianness of the target architecture.
 		/// </summary>
-		/// <value>
-		/// The endianness.
-		/// </value>
 		public abstract Endianness Endianness { get; }
 
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
-		/// <value>
-		/// The type of the elf machine.
-		/// </value>
 		public abstract MachineType MachineType { get; }
 
 		/// <summary>
@@ -50,12 +46,12 @@ namespace Mosa.Compiler.Framework
 		public abstract PhysicalRegister ScratchRegister { get; }
 
 		/// <summary>
-		/// Gets the return32 bit register.
+		/// Gets the return register.
 		/// </summary>
 		public abstract PhysicalRegister ReturnRegister { get; }
 
 		/// <summary>
-		/// Gets the return64 bit register.
+		/// Gets the return register for the high portion of the 64bit result.
 		/// </summary>
 		public abstract PhysicalRegister ReturnHighRegister { get; }
 
@@ -97,9 +93,6 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the size of the native instruction.
 		/// </summary>
-		/// <value>
-		/// The size of the native instruction.
-		/// </value>
 		public virtual InstructionSize NativeInstructionSize { get { return NativePointerSize == 4 ? InstructionSize.Size32 : InstructionSize.Size64; } }
 
 		/// <summary>
@@ -113,36 +106,39 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Is the platform is 64 bit
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if [is64 bit]; otherwise, <c>false</c>.
-		/// </value>
 		public virtual bool Is64BitPlatform { get { return NativePointerSize == 8; } }
 
 		/// <summary>
 		/// Gets the offset of first local.
 		/// </summary>
-		/// <value>
-		/// The offset of first local.
-		/// </value>
 		public virtual int OffsetOfFirstLocal { get { return 0; } }
 
 		/// <summary>
 		/// Gets the offset of first parameter.
 		/// </summary>
-		/// <value>
-		/// The offset of first parameter.
-		/// </value>
 		public virtual int OffsetOfFirstParameter { get { return NativePointerSize * 2; } }
 
 		/// <summary>
 		/// Gets the instructions.
 		/// </summary>
-		/// <value>
-		/// The instructions.
-		/// </value>
 		public virtual List<BaseInstruction> Instructions { get; }
 
 		#endregion Properties
+
+		#region Members
+
+		protected Dictionary<string, InstrinsicMethodDelegate> PlatformIntrinsicMethods { get; }
+
+		#endregion Members
+
+		#region Constructor
+
+		public BaseArchitecture()
+		{
+			PlatformIntrinsicMethods = GetPlatformIntrinsicMethods();
+		}
+
+		#endregion Constructor
 
 		#region Methods
 
@@ -218,6 +214,45 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instruction">The instruction.</param>
 		/// <returns></returns>
 		public abstract bool IsInstructionMove(BaseInstruction instruction);
+
+		/// <summary>
+		/// Gets the platform intrinsic method.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		public InstrinsicMethodDelegate GetInstrinsicMethod(string name)
+		{
+			PlatformIntrinsicMethods.TryGetValue(name, out InstrinsicMethodDelegate value);
+
+			return value;
+		}
+
+		protected Dictionary<string, InstrinsicMethodDelegate> GetPlatformIntrinsicMethods()
+		{
+			var platformIntrinsicMethods = new Dictionary<string, InstrinsicMethodDelegate>();
+
+			foreach (var type in GetType().Assembly.GetTypes())
+			{
+				if (!type.IsClass)
+					continue;
+
+				foreach (var method in type.GetRuntimeMethods())
+				{
+					// Now get all the IntrinsicMethodAttribute attributes
+					var attributes = (IntrinsicMethodAttribute[])method.GetCustomAttributes(typeof(IntrinsicMethodAttribute), true);
+
+					for (int i = 0; i < attributes.Length; i++)
+					{
+						var d = (InstrinsicMethodDelegate)Delegate.CreateDelegate(typeof(InstrinsicMethodDelegate), method);
+
+						// Finally add the dictionary entry mapping the target name and the delegate
+						platformIntrinsicMethods.Add(attributes[i].Target, d);
+					}
+				}
+			}
+
+			return platformIntrinsicMethods;
+		}
 
 		#endregion Methods
 	}

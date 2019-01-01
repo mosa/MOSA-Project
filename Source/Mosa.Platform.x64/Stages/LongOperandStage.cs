@@ -70,12 +70,12 @@ namespace Mosa.Platform.x64.Stages
 
 		private void Add64(InstructionNode node)
 		{
-			node.ReplaceInstruction(X64.Add32);
+			node.ReplaceInstruction(X64.Add64);
 		}
 
 		private void ArithShiftRight64(InstructionNode node)
 		{
-			node.ReplaceInstruction(X64.Sar32);
+			node.ReplaceInstruction(X64.Sar64);
 		}
 
 		private void CompareInt32x64(Context context)
@@ -114,7 +114,7 @@ namespace Mosa.Platform.x64.Stages
 
 			var branch = GetBranch(condition);
 
-			context.SetInstruction(X64.Cmp32, null, operand1, operand2);
+			context.SetInstruction(X64.Cmp64, null, operand1, operand2);
 			context.AppendInstruction(branch, target);
 		}
 
@@ -126,17 +126,17 @@ namespace Mosa.Platform.x64.Stages
 		private void ConvertFloatR8ToInteger64(InstructionNode node)
 		{
 			Debug.Assert(node.Result.Type.IsI1 || node.Result.Type.IsI2 || node.Result.Type.IsI4);
-			node.ReplaceInstruction(X64.Cvttss2si32);
+			node.ReplaceInstruction(X64.Cvttss2si64);
 		}
 
 		private void ConvertInt64ToFloatR4(InstructionNode node)
 		{
-			node.SetInstruction(X64.Cvtsi2ss32, node.Result, node.Operand1);
+			node.SetInstruction(X64.Cvtsi2ss64, node.Result, node.Operand1);
 		}
 
 		private void ConvertInt64ToFloatR8(InstructionNode node)
 		{
-			node.SetInstruction(X64.Cvtsi2sd32, node.Result, node.Operand1);
+			node.SetInstruction(X64.Cvtsi2sd64, node.Result, node.Operand1);
 		}
 
 		private void IfThenElse64(Context context)

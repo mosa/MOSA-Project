@@ -5,6 +5,7 @@ using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
 using Mosa.TestWorld.x86.Tests;
+using System.Runtime.InteropServices;
 
 namespace Mosa.TestWorld.x86
 {
@@ -57,8 +58,6 @@ namespace Mosa.TestWorld.x86
 			Screen.Write('8');
 			GC.Setup();
 			Screen.Write('9');
-			Runtime.Internal.Setup();
-			Screen.Write('A');
 
 			Scheduler.Setup();
 			Screen.Write('B');
@@ -207,5 +206,8 @@ namespace Mosa.TestWorld.x86
 			Console.Color = col;
 			Console.BackgroundColor = back;
 		}
+
+		//[DllImportAttribute("Test.dll", EntryPoint = "TestABCImplementation")]
+		//public static extern void TestABC();
 	}
 }

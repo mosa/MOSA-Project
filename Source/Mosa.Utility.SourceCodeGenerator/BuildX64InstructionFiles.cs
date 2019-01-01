@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Text;
-
 namespace Mosa.Utility.SourceCodeGenerator
 {
 	public class BuildX64InstructionFiles : BuildCommonInstructionFiles

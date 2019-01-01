@@ -49,9 +49,9 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(node, decoder);
 
-			MosaType type = (elementType == null)
-				? type = (MosaType)decoder.Instruction.Operand
-				: type = decoder.TypeSystem.GetTypeFromTypeCode(elementType.Value);
+			var type = (elementType == null)
+				? (MosaType)decoder.Instruction.Operand
+				: decoder.MethodCompiler.Compiler.GetTypeFromTypeCode(elementType.Value);
 
 			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, type);
 		}

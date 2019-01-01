@@ -8,9 +8,13 @@ namespace Mosa.Compiler.Common
 	{
 		public static void Write(this EndianAwareBinaryWriter writer, byte[] value, int nativeSize)
 		{
-			byte[] bytesToWrite = new byte[nativeSize];
+			var bytesToWrite = new byte[nativeSize];
+
 			for (int i = 0; i < nativeSize && i < value.Length; i++)
+			{
 				bytesToWrite[i] = value[i];
+			}
+
 			writer.Write(bytesToWrite);
 		}
 

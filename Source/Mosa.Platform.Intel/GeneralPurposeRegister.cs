@@ -51,6 +51,46 @@ namespace Mosa.Platform.Intel
 		/// </summary>
 		public static readonly PhysicalRegister EDI = new PhysicalRegister(7, 7, "EDI", true, false);
 
+		/// <summary>
+		/// Represents the R8 register.
+		/// </summary>
+		public static readonly PhysicalRegister R8 = new PhysicalRegister(16, 8, "R8", true, false);
+
+		/// <summary>
+		/// Represents the R9 register.
+		/// </summary>
+		public static readonly PhysicalRegister R9 = new PhysicalRegister(17, 9, "R9", true, false);
+
+		/// <summary>
+		/// Represents the R10 register.
+		/// </summary>
+		public static readonly PhysicalRegister R10 = new PhysicalRegister(18, 10, "R10", true, false);
+
+		/// <summary>
+		/// Represents the R11 register.
+		/// </summary>
+		public static readonly PhysicalRegister R11 = new PhysicalRegister(19, 11, "R11", true, false);
+
+		/// <summary>
+		/// Represents the R12 register.
+		/// </summary>
+		public static readonly PhysicalRegister R12 = new PhysicalRegister(20, 12, "R12", true, false);
+
+		/// <summary>
+		/// Represents the R13 register.
+		/// </summary>
+		public static readonly PhysicalRegister R13 = new PhysicalRegister(21, 13, "R13", true, false);
+
+		/// <summary>
+		/// Represents the R14 register.
+		/// </summary>
+		public static readonly PhysicalRegister R14 = new PhysicalRegister(22, 14, "R14", true, false);
+
+		/// <summary>
+		/// Represents the R15 register.
+		/// </summary>
+		public static readonly PhysicalRegister R15 = new PhysicalRegister(23, 15, "R15", true, false);
+
 		#endregion Static data members
 	}
 }

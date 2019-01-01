@@ -5,12 +5,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// FrameCall
+	/// IntrinsicMethods
 	/// </summary>
-	/// <seealso cref="Mosa.Compiler.Framework.IIntrinsicPlatformMethod" />
-	internal class FrameCall : IIntrinsicPlatformMethod
+	static partial class IntrinsicMethods
 	{
-		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:FrameCall")]
+		private static void FrameCall(Context context, MethodCompiler methodCompiler)
 		{
 			var methodAddress = context.Operand1;
 			var newESP = context.Operand2;

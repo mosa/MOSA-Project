@@ -202,7 +202,11 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			method.IsSpecialName = methodDef.IsSpecialName;
 
 			if (methodDef.HasImplMap)
-				method.ExternMethod = methodDef.ImplMap.Module.Name;
+			{
+				method.IsExternal = true;
+				method.ExternMethodModule = methodDef.ImplMap.Module.Name;
+				method.ExternMethodName = methodDef.ImplMap.Name;
+			}
 		}
 
 		private void LoadProperty(MosaType declType, MosaProperty.Mutator property, PropertyDef propertyDef)

@@ -4,15 +4,17 @@ using System;
 
 namespace Mosa.Compiler.Framework
 {
+	public delegate void InstrinsicMethodDelegate(Context context, MethodCompiler methodCompiler);
+
 	/// <summary>
 	/// Used for defining targets when using intrinsic replacements
 	/// </summary>
-	[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-	public class ReplacementTargetAttribute : Attribute
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+	public class IntrinsicMethodAttribute : Attribute
 	{
 		public string Target { get; }
 
-		public ReplacementTargetAttribute(string target)
+		public IntrinsicMethodAttribute(string target)
 		{
 			Target = target;
 		}

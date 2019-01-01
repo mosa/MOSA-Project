@@ -673,7 +673,7 @@ namespace Mosa.Compiler.Framework
 						methodTable.Add(method);
 						methodTableOffsets.Add(method, slot);
 					}
-					else if (!method.IsInternal && method.ExternMethod == null)
+					else if (!method.IsInternal && !method.IsExternal)
 					{
 						int slot = methodTable.Count;
 						methodTable.Add(method);
@@ -729,7 +729,7 @@ namespace Mosa.Compiler.Framework
 
 		private void SetMethodOverridden(MosaMethod method, int slot)
 		{
-			// this method is overridden (obviousily)
+			// this method is overridden (obviously)
 			overriddenMethods.Add(method);
 
 			// Note: this method does not update other parts of the inheritance chain

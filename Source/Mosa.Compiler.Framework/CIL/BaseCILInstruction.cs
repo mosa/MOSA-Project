@@ -119,8 +119,8 @@ namespace Mosa.Compiler.Framework.CIL
 		/// Validates the specified instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="compiler">The compiler.</param>
-		public virtual void Resolve(Context context, MethodCompiler compiler)
+		/// <param name="methodCompiler">The compiler.</param>
+		public virtual void Resolve(Context context, MethodCompiler methodCompiler)
 		{
 			/* Default implementation is to do nothing */
 		}

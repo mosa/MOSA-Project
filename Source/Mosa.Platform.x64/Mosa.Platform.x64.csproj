@@ -280,6 +280,7 @@
     <Compile Include="Instructions\PXor.cs" />
     <Compile Include="Instructions\Rcr32.cs" />
     <Compile Include="Instructions\Rcr64.cs" />
+    <Compile Include="Instructions\RdMSR.cs" />
     <Compile Include="Instructions\Ret.cs" />
     <Compile Include="Instructions\Roundsd.cs" />
     <Compile Include="Instructions\Roundss.cs" />
@@ -326,6 +327,7 @@
     <Compile Include="Instructions\Test64.cs" />
     <Compile Include="Instructions\Ucomisd.cs" />
     <Compile Include="Instructions\Ucomiss.cs" />
+    <Compile Include="Instructions\WrMSR.cs" />
     <Compile Include="Instructions\XAddLoad32.cs" />
     <Compile Include="Instructions\XAddLoad64.cs" />
     <Compile Include="Instructions\XChg32.cs" />

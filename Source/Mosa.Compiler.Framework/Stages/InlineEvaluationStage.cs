@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework.Stages
 			MethodData.IsCompiled = true;
 			MethodData.HasProtectedRegions = HasProtectedRegions;
 			MethodData.IsLinkerGenerated = method.IsLinkerGenerated;
-			MethodData.IsCILDecoded = (!method.IsLinkerGenerated && method.Code.Count > 0);
+			MethodData.IsCILDecoded = (!method.IsLinkerGenerated && method.HasImplementation);
 			MethodData.HasLoops = false;
 			MethodData.IsMethodImplementationReplaced = IsMethodPlugged;
 			MethodData.HasDoNotInlineAttribute = MethodCompiler.Method.IsNoInlining;

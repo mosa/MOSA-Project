@@ -325,9 +325,6 @@ namespace Mosa.Utility.Launcher
 		[Option("hunt-corlib")]
 		public bool HuntForCorLib { get; set; }
 
-		public BaseLinker.CreateExtraSectionsDelegate CreateExtraSections { get; set; }
-		public BaseLinker.CreateExtraProgramHeaderDelegate CreateExtraProgramHeaders { get; set; }
-
 		public Options()
 		{
 			IncludeFiles = new List<IncludeFile>();

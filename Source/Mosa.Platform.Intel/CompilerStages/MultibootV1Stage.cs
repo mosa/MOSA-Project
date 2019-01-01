@@ -91,14 +91,14 @@ namespace Mosa.Platform.Intel.CompilerStages
 
 		protected override void RunPreCompile()
 		{
-			multibootHeader = Linker.CreateSymbol(MultibootHeaderSymbolName, SectionKind.Text, 1, 0x30);
+			multibootHeader = Linker.DefineSymbol(MultibootHeaderSymbolName, SectionKind.Text, 1, 0x30);
 
-			Linker.CreateSymbol(MultibootEAX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
-			Linker.CreateSymbol(MultibootEBX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
+			Linker.DefineSymbol(MultibootEAX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
+			Linker.DefineSymbol(MultibootEBX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
 
 			multibootMethod = Compiler.CreateLinkerMethod("MultibootInit");
 
-			Linker.EntryPoint = Linker.GetSymbol(multibootMethod.FullName, SectionKind.Text);
+			Linker.EntryPoint = Linker.GetSymbol(multibootMethod.FullName);
 		}
 
 		protected override void RunPostCompile()

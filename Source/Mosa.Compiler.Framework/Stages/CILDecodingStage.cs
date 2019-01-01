@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (IsMethodPlugged)
 			{
-				var plugMethod = MethodCompiler.Compiler.PlugSystem.GetReplacement(MethodCompiler.Method);
+				var plugMethod = MethodCompiler.Compiler.PlugSystem.GetReplacement(Method);
 
 				Debug.Assert(plugMethod != null);
 
@@ -61,10 +61,10 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			// No CIL decoding if this is a linker generated method
-			if (MethodCompiler.Method.IsLinkerGenerated)
+			if (Method.IsLinkerGenerated)
 				return;
 
-			if (MethodCompiler.Method.Code.Count == 0)
+			if (!Method.HasImplementation)
 			{
 				if (DelegatePatcher.PatchDelegate(MethodCompiler))
 					return;

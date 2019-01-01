@@ -19,22 +19,16 @@ namespace Mosa.Platform.x64
 	/// This class provides a common base class for architecture
 	/// specific operations.
 	/// </summary>
-	public class Architecture : BaseArchitecture
+	public sealed class Architecture : BaseArchitecture
 	{
 		/// <summary>
 		/// Gets the endianness of the target architecture.
 		/// </summary>
-		/// <value>
-		/// The endianness.
-		/// </value>
 		public override Endianness Endianness { get { return Endianness.Little; } }
 
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
-		/// <value>
-		/// The type of the elf machine.
-		/// </value>
 		public override MachineType MachineType { get { return MachineType.Intel386; } }
 
 		/// <summary>
@@ -54,6 +48,15 @@ namespace Mosa.Platform.x64
 			GeneralPurposeRegister.ESI,
 			GeneralPurposeRegister.EDI,
 
+			GeneralPurposeRegister.R8,
+			GeneralPurposeRegister.R9,
+			GeneralPurposeRegister.R10,
+			GeneralPurposeRegister.R11,
+			GeneralPurposeRegister.R12,
+			GeneralPurposeRegister.R13,
+			GeneralPurposeRegister.R14,
+			GeneralPurposeRegister.R15,
+
 			////////////////////////////////////////////////////////
 			// SSE 128-bit floating point registers
 			////////////////////////////////////////////////////////
@@ -66,15 +69,14 @@ namespace Mosa.Platform.x64
 			SSE2Register.XMM6,
 			SSE2Register.XMM7,
 
-			////////////////////////////////////////////////////////
-			// Segmentation Registers
-			////////////////////////////////////////////////////////
-			//SegmentRegister.CS,
-			//SegmentRegister.DS,
-			//SegmentRegister.ES,
-			//SegmentRegister.FS,
-			//SegmentRegister.GS,
-			//SegmentRegister.SS
+			SSE2Register.XMM8,
+			SSE2Register.XMM9,
+			SSE2Register.XMM10,
+			SSE2Register.XMM11,
+			SSE2Register.XMM12,
+			SSE2Register.XMM13,
+			SSE2Register.XMM14,
+			SSE2Register.XMM15
 		};
 
 		/// <summary>
@@ -100,97 +102,61 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Retrieves the register set of the x64 platform.
 		/// </summary>
-		public override PhysicalRegister[] RegisterSet
-		{
-			get { return Registers; }
-		}
+		public override PhysicalRegister[] RegisterSet { get { return Registers; } }
 
 		/// <summary>
 		/// Retrieves the stack frame register of the x86.
 		/// </summary>
-		public override PhysicalRegister StackFrameRegister
-		{
-			get { return GeneralPurposeRegister.EBP; }
-		}
+		public override PhysicalRegister StackFrameRegister { get { return GeneralPurposeRegister.EBP; } }
 
 		/// <summary>
 		/// Retrieves the stack pointer register of the x86.
 		/// </summary>
-		public override PhysicalRegister StackPointerRegister
-		{
-			get { return GeneralPurposeRegister.ESP; }
-		}
+		public override PhysicalRegister StackPointerRegister { get { return GeneralPurposeRegister.ESP; } }
 
 		/// <summary>
 		/// Retrieves the scratch register of the x86.
 		/// </summary>
-		public override PhysicalRegister ScratchRegister
-		{
-			get { return GeneralPurposeRegister.EDX; }
-		}
+		public override PhysicalRegister ScratchRegister { get { return GeneralPurposeRegister.EDX; } }
 
 		/// <summary>
-		/// Gets the return32 bit register.
+		/// Gets the return register.
 		/// </summary>
-		public override PhysicalRegister ReturnRegister
-		{
-			get { return GeneralPurposeRegister.EAX; }
-		}
+		public override PhysicalRegister ReturnRegister { get { return GeneralPurposeRegister.EAX; } }
 
 		/// <summary>
-		/// Gets the return64 bit register.
+		/// Gets the return register for the high portion of the 64bit result.
 		/// </summary>
-		public override PhysicalRegister ReturnHighRegister
-		{
-			get { return null; }
-		}
+		public override PhysicalRegister ReturnHighRegister { get { return null; } }
 
 		/// <summary>
 		/// Gets the return floating point register.
 		/// </summary>
-		public override PhysicalRegister ReturnFloatingPointRegister
-		{
-			get { return SSE2Register.XMM0; }
-		}
+		public override PhysicalRegister ReturnFloatingPointRegister { get { return SSE2Register.XMM0; } }
 
 		/// <summary>
 		/// Retrieves the exception register of the architecture.
 		/// </summary>
-		public override PhysicalRegister ExceptionRegister
-		{
-			get { return GeneralPurposeRegister.EDI; }
-		}
+		public override PhysicalRegister ExceptionRegister { get { return GeneralPurposeRegister.EDI; } }
 
 		/// <summary>
 		/// Gets the finally return block register.
 		/// </summary>
-		public override PhysicalRegister LeaveTargetRegister
-		{
-			get { return GeneralPurposeRegister.ESI; }
-		}
+		public override PhysicalRegister LeaveTargetRegister { get { return GeneralPurposeRegister.ESI; } }
 
 		/// <summary>
 		/// Retrieves the program counter register of the x86.
 		/// </summary>
-		public override PhysicalRegister ProgramCounter
-		{
-			get { return null; }
-		}
+		public override PhysicalRegister ProgramCounter { get { return null; } }
 
 		/// <summary>
 		/// Gets the name of the platform.
 		/// </summary>
-		/// <value>
-		/// The name of the platform.
-		/// </value>
 		public override string PlatformName { get { return "x64"; } }
 
 		/// <summary>
 		/// Gets the instructions.
 		/// </summary>
-		/// <value>
-		/// The instructions.
-		/// </value>
 		public override List<BaseInstruction> Instructions { get { return X64Instructions.List; } }
 
 		/// <summary>
@@ -198,10 +164,6 @@ namespace Mosa.Platform.x64
 		/// </summary>
 		/// <returns>The created architecture instance.</returns>
 		/// <param name="architectureFeatures">The features available in the architecture and code generation.</param>
-		/// <remarks>
-		/// This method creates an instance of an appropriate architecture class, which supports the specific
-		/// architecture features.
-		/// </remarks>
 		public static BaseArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
 		{
 			return new Architecture(architectureFeatures);
@@ -240,34 +202,28 @@ namespace Mosa.Platform.x64
 				{
 					new LongOperandStage(),
 					new IRTransformationStage(),
-
-					//compilerOptions.EnablePlatformOptimizations ? new OptimizationStage() : null,
 					new TweakStage(),
 					new FixedRegisterAssignmentStage(),
 					new SimpleDeadCodeRemovalStage(),
 					new AddressModeConversionStage(),
 					new FloatingPointStage(),
+					new StopStage(),	// Temp
 				});
 
 			compilerPipeline.InsertAfterLast<StackLayoutStage>(
 				new BuildStackStage()
 			);
 
-			compilerPipeline.InsertBefore<CodeGenerationStage>(
-				new BaseMethodCompilerStage[]
-				{
-					new FinalTweakStage(),
-
-					//compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null
-				});
+			//compilerPipeline.InsertBefore<CodeGenerationStage>(
+			//	new BaseMethodCompilerStage[]
+			//	{
+			//		new FinalTweakStage(),
+			//		compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
+			//	});
 
 			compilerPipeline.InsertBefore<CodeGenerationStage>(
 				new JumpOptimizationStage()
 			);
-
-			//compilerPipeline.InsertBefore<GreedyRegisterAllocatorStage>(
-			//	new StopStage()    // Temp
-			//);
 		}
 
 		/// <summary>
@@ -422,7 +378,6 @@ namespace Mosa.Platform.x64
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="destination">The destination.</param>
-		/// <exception cref="NotImplementCompilerException"></exception>
 		public override void InsertJumpInstruction(Context context, BasicBlock destination)
 		{
 			context.AppendInstruction(X64.Jmp, destination);
@@ -435,7 +390,7 @@ namespace Mosa.Platform.x64
 		/// <returns></returns>
 		public override bool IsInstructionMove(BaseInstruction instruction)
 		{
-			return instruction == X64.Mov64 || instruction == X64.Movsd || instruction == X64.Movss;
+			return instruction == X64.Mov64 || instruction == X64.Mov32 || instruction == X64.Movsd || instruction == X64.Movss;
 		}
 	}
 }

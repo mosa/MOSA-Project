@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -49,23 +49,27 @@ namespace Mosa.Compiler.Framework.CIL
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="compiler">The compiler.</param>
+		/// <param name="methodCompiler">The compiler.</param>
 		/// <exception cref="ArgumentNullException">context</exception>
 		/// <exception cref="InvalidOperationException">Invalid virtualLocal state for pairing (" + context.Operand1.Type.GetStackType() + ", " + context.Operand2.Type.GetStackType() + ")</exception>
-		public override void Resolve(Context context, MethodCompiler compiler)
+		public override void Resolve(Context context, MethodCompiler methodCompiler)
 		{
 			if (context == null)
 				throw new ArgumentNullException(nameof(context));
 
-			base.Resolve(context, compiler);
+			base.Resolve(context, methodCompiler);
 
-			var result = operandTable[(int)context.Operand1.Type.GetStackTypeCode()][(int)context.Operand2.Type.GetStackTypeCode()];
-			Debug.Assert(StackTypeCode.Unknown != result, "Can't shift with the given virtualLocal operands.");
+			var op1 = methodCompiler.Compiler.GetStackTypeCode(context.Operand1.Type);
+			var op2 = methodCompiler.Compiler.GetStackTypeCode(context.Operand2.Type);
+
+			var result = operandTable[(int)op1][(int)op2];
 
 			if (StackTypeCode.Unknown == result)
-				throw new InvalidOperationException("Invalid virtualLocal state for pairing (" + context.Operand1.Type.GetStackType() + ", " + context.Operand2.Type.GetStackType() + ")");
+			{
+				throw new CompilerException($"Invalid pairing ({context.Operand1.Type}, {context.Operand2.Type})");
+			}
 
-			context.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.GetStackTypeFromCode(result));
+			context.Result = methodCompiler.CreateVirtualRegister(methodCompiler.Compiler.GetStackTypeFromCode(result));
 		}
 
 		#endregion Methods

@@ -3,8 +3,6 @@
 using Mosa.Compiler.Common;
 using System.Collections.Generic;
 using System.IO;
-using System.Security.Cryptography;
-using System.Text;
 
 namespace Mosa.Compiler.Framework.Linker
 {
@@ -13,11 +11,9 @@ namespace Mosa.Compiler.Framework.Linker
 	/// </summary>
 	public sealed class LinkerSymbol
 	{
-		private readonly object _lock = new object();
-
 		public string Name { get; }
 
-		public SectionKind SectionKind { get; }
+		public SectionKind SectionKind { get; internal set; }
 
 		public Stream Stream { get; internal set; }
 
@@ -35,11 +31,9 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public List<LinkRequest> LinkRequests { get; }
 
-		public string PreHash { get; internal set; }
+		private readonly object _lock = new object();
 
-		public string PostHash { get; internal set; }
-
-		internal LinkerSymbol(string name, SectionKind kind, uint alignment)
+		internal LinkerSymbol(string name, uint alignment = 0, SectionKind kind = SectionKind.Unknown)
 		{
 			Name = name;
 			Alignment = alignment;
@@ -49,12 +43,12 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public void SetData(MemoryStream stream)
 		{
-			Stream = stream;
+			Stream = Stream.Synchronized(stream);
 		}
 
 		public void SetData(byte[] data)
 		{
-			Stream = Stream.Synchronized(new MemoryStream(data));
+			SetData(new MemoryStream(data));
 		}
 
 		public void AddPatch(LinkRequest linkRequest)
@@ -98,27 +92,6 @@ namespace Mosa.Compiler.Framework.Linker
 		public override string ToString()
 		{
 			return SectionKind.ToString() + ": " + Name;
-		}
-
-		public string ComputeMD5Hash()
-		{
-			var md5 = MD5.Create();
-
-			if (Stream == null)
-				return string.Empty;
-
-			Stream.Position = 0;
-
-			var hash = md5.ComputeHash(Stream);
-
-			var s = new StringBuilder();
-
-			for (int i = 0; i < hash.Length; i++)
-			{
-				s.Append(hash[i].ToString("X2"));
-			}
-
-			return s.ToString();
 		}
 	}
 }

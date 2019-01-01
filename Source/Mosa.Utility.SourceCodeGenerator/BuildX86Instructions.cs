@@ -1,10 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.IO;
-using System.Text;
-using System.Web.Script.Serialization;
-
 namespace Mosa.Utility.SourceCodeGenerator
 {
 	public class BuildX86Instructions : BuildBaseTemplate
