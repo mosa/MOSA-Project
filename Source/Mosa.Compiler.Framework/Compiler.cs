@@ -140,6 +140,8 @@ namespace Mosa.Compiler.Framework
 			return new List<BaseMethodCompilerStage>() {
 				new CILDecodingStage(),
 				new ExceptionPrologueStage(),
+
+				//new StopStage(),
 				new OperandAssignmentStage(),
 				new StackSetupStage(),
 				new CILProtectedRegionStage(),
@@ -571,7 +573,10 @@ namespace Mosa.Compiler.Framework
 
 				case MosaTypeCode.I:
 				case MosaTypeCode.U:
-					return StackTypeCode.N;
+					if (Architecture.Is32BitPlatform)
+						return StackTypeCode.Int32;
+					else
+						return StackTypeCode.Int64;
 
 				case MosaTypeCode.ManagedPointer:
 					return StackTypeCode.ManagedPointer;
