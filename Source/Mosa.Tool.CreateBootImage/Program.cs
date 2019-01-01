@@ -49,13 +49,17 @@ namespace Mosa.Tool.CreateBootImage
 
 			try
 			{
-				var bootImageOptions = ParseOptions(args)?.BootImageOptions;
+
+				var opt = ParseOptions(args);
+				var bootImageOptions = opt?.BootImageOptions;
 
 				if (bootImageOptions == null)
 				{
 					Console.WriteLine(UsageString);
 					return -1; //Errors will be printed by the command line library
 				}
+
+				Console.WriteLine(opt.ToString());
 
 				Console.WriteLine("Building image...");
 

@@ -25,6 +25,11 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 		/// <summary>
 		/// Intel IA-64 processor architecture
 		/// </summary>
-		IA_64 = 50
+		IA_64 = 50,
+
+		/// <summary>
+		/// Intel x86_64 processor architecture
+		/// </summary>
+		x86_64 = 62
 	}
 }

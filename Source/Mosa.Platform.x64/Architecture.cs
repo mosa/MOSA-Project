@@ -29,7 +29,7 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
-		public override MachineType MachineType { get { return MachineType.IA_64; } }
+		public override MachineType MachineType { get { return MachineType.Intel386; } }
 
 		/// <summary>
 		/// Defines the register set of the target architecture.
