@@ -225,7 +225,7 @@ namespace Mosa.Compiler.Framework.Linker
 				case PatchType.I8: return 64;
 			}
 
-			throw new CompilerException("unknown patch type: " + patchType.ToString());
+			throw new CompilerException($"unknown patch type: {patchType}");
 		}
 
 		private void ResolveLayout(LinkerSection section, uint fileOffset, ulong virtualAddress)

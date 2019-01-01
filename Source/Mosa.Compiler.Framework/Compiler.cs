@@ -542,7 +542,7 @@ namespace Mosa.Compiler.Framework
 				case MosaTypeCode.Object: return TypeSystem.BuiltIn.Object;
 			}
 
-			throw new CompilerException("Can't convert type code {code} to type.");
+			throw new CompilerException("Can't convert type code {code} to type");
 		}
 
 		public StackTypeCode GetStackTypeCode(MosaType type)
@@ -595,7 +595,7 @@ namespace Mosa.Compiler.Framework
 					return StackTypeCode.Unknown;
 			}
 
-			throw new CompilerException($"Can't transform Type {type} to StackTypeCode.");
+			throw new CompilerException($"Can't transform Type {type} to StackTypeCode");
 		}
 
 		public MosaType GetStackType(MosaType type)
@@ -625,7 +625,7 @@ namespace Mosa.Compiler.Framework
 					return type;
 			}
 
-			throw new CompilerException($"Can't convert {type.FullName} to stack type.");
+			throw new CompilerException($"Can't convert {type.FullName} to stack type");
 		}
 
 		public MosaType GetStackTypeFromCode(StackTypeCode code)
@@ -654,7 +654,7 @@ namespace Mosa.Compiler.Framework
 					return TypeSystem.BuiltIn.Object.ToManagedPointer();
 			}
 
-			throw new CompilerException("Can't convert stack type code {code} to type.");
+			throw new CompilerException($"Can't convert stack type code {code} to type");
 		}
 
 		#endregion Type Methods

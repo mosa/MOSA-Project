@@ -64,7 +64,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			if (StackTypeCode.Unknown == result)
 			{
-				throw new CompilerException("Invalid pairing (" + context.Operand1.Type.ToString() + ", " + context.Operand2.Type.ToString() + ")");
+				throw new CompilerException($"Invalid pairing ({context.Operand1.Type}, {context.Operand2.Type})");
 			}
 
 			context.Result = compiler.CreateVirtualRegister(compiler.Compiler.GetStackTypeFromCode(result));

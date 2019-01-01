@@ -576,7 +576,7 @@ namespace Mosa.Compiler.Framework.Stages
 			else if (bits == 64)
 				return 0xFFFFFFFFFFFFFFFF;
 
-			throw new CompilerException("GetBitMask(): Invalid parameter: " + nameof(bits) + " = " + bits.ToString());
+			throw new CompilerException($"GetBitMask(): Invalid parameter: {nameof(bits)} = {bits}");
 		}
 
 		/// <summary>

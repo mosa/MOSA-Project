@@ -95,7 +95,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (!BasicBlocks.RuntimeValidation())
 				{
-					throw new CompilerException("InlineStage: Block Validation after inlining: " + invokedMethod + " into " + Method);
+					throw new CompilerException($"InlineStage: Block Validation after inlining: {invokedMethod} into {Method}");
 				}
 			}
 

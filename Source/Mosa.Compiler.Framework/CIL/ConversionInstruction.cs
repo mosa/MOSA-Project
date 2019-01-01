@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework.CIL
 				case OpCode.Conv_ovf_i_un: goto case OpCode.Conv_i;
 				case OpCode.Conv_ovf_u_un: goto case OpCode.Conv_u;
 				case OpCode.Conv_r_un: resultType = compiler.TypeSystem.BuiltIn.R8; break;
-				default: throw new CompilerException("Overflow checking conversions not supported.");
+				default: throw new CompilerException("Overflow checking conversions not supported");
 			}
 
 			var result = compiler.Compiler.GetStackType(resultType);

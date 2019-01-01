@@ -98,7 +98,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			if (StackTypeCode.Unknown == result)
 			{
-				throw new CompilerException("Invalid operand types passed to " + opcode);
+				throw new CompilerException($"Invalid operand types passed to {opcode}");
 			}
 
 			context.Result = compiler.CreateVirtualRegister(compiler.Compiler.GetStackTypeFromCode(result));
