@@ -33,6 +33,7 @@ namespace Mosa.Tool.Explorer
 			{
 				case MachineType.Intel386: mode = ArchitectureMode.x86_32; break;
 				case MachineType.IA_64: mode = ArchitectureMode.x86_64; break;
+				case MachineType.x86_64: mode = ArchitectureMode.x86_64; break;
 				case MachineType.ARM:
 				default:
 					trace.Log($"Unable to disassemble binary for machine type: {Architecture.MachineType}");
