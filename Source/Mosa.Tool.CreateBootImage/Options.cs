@@ -13,37 +13,31 @@ namespace Mosa.Tool.CreateBootImage
 	{
 		private BootImageOptions options;
 
-		[Option('m', "mbr")]
+		[Option('m', "mbr", HelpText ="MBR file")]
 		public string MBRFile
 		{
 			set { options.MBROption = true; options.MBRCode = File.ReadAllBytes(value); }
 		}
 
-		[Option('b', "boot")]
+		[Option('b', "boot", HelpText ="FAT boot code file")]
 		public string BootCodeFile
 		{
 			set { options.FatBootCode = File.ReadAllBytes(value); }
 		}
 
-		[Option("vhd")]
-		public bool VHDImageFormat
+		[Option('o', "out", Required = true, HelpText ="Output disk file name")]
+		public string DiskImageFileName
 		{
-			set { options.ImageFormat = ImageFormat.VHD; }
-			get { return (options.ImageFormat == ImageFormat.VHD); }
+			set { options.DiskImageFileName = value; }
 		}
 
-		[Option("img")]
-		public bool IMGImageFormat
+		[Option("format", HelpText ="Disk image format [img|iso|vhd|vdi|vmdk]")]
+		public string ImageFormat
 		{
-			set { options.ImageFormat = ImageFormat.IMG; }
-			get { return (options.ImageFormat == ImageFormat.IMG); }
-		}
-
-		[Option("vdi")]
-		public bool VDIImageFormat
-		{
-			set { options.ImageFormat = ImageFormat.VDI; }
-			get { return (options.ImageFormat == ImageFormat.VDI); }
+			set
+			{
+				options.ImageFormat = (ImageFormat)Enum.Parse(typeof(ImageFormat), value, true);
+			}
 		}
 
 		[Option("syslinux")]
@@ -67,25 +61,13 @@ namespace Mosa.Tool.CreateBootImage
 			get { return options.MediaLastSnapGuid.ToString(); }
 		}
 
-		[Option("fat32")]
-		public bool Fat32FileSystem
+		[Option("filesystem", HelpText = "FileSystem [fat12|fat16|fat32]")]
+		public string FileSystem
 		{
-			set { options.FileSystem = FileSystem.FAT32; }
-			get { return (options.FileSystem == FileSystem.FAT32); }
-		}
-
-		[Option("fat16")]
-		public bool Fat16FileSystem
-		{
-			set { options.FileSystem = FileSystem.FAT16; }
-			get { return (options.FileSystem == FileSystem.FAT16); }
-		}
-
-		[Option("fat12")]
-		public bool Fat12FileSystem
-		{
-			set { options.FileSystem = FileSystem.FAT12; }
-			get { return (options.FileSystem == FileSystem.FAT12); }
+			set
+			{
+				options.FileSystem = (FileSystem)Enum.Parse(typeof(FileSystem), value, true);
+			}
 		}
 
 		[Option("blocks")]
@@ -95,47 +77,42 @@ namespace Mosa.Tool.CreateBootImage
 			get { return options.BlockCount; }
 		}
 
-		[Option("volume")]
+		[Option("volume-label", HelpText ="Name of the volume")]
 		public string VolumeLabel
 		{
 			set { options.VolumeLabel = value; }
 			get { return options.VolumeLabel; }
 		}
 
-		[Option("file", Separator = ',', HelpText = "A list of files which will be included in the output image file.")]
+		[Value(0, HelpText = "A list of files which will be included in the output image file.")]
 		public IEnumerable<string> RawFileList
 		{
 			set
 			{
-				var list = (IList<string>)value;
-
-				for (int x = 0; x < list.Count; x++)
+				foreach (var itm in value)
 				{
-					string path = list[x];
-					if (Path.IsPathRooted(path))
+					var ar = itm.Split(',');
+					string src = ar[0];
+					string dst = null;
+
+					if (ar.Length == 1)
 					{
-						if (x + 1 < list.Count) //Is there a next entry?
-						{
-							if (Path.IsPathRooted(list[x + 1]))
-							{
-								options.IncludeFiles.Add(new IncludeFile(path));
-							}
-							else //If the next is not rooted, it's the new name of the files
-							{
-								options.IncludeFiles.Add(new IncludeFile(path, list[++x]));
-							}
-						}
-						else
-						{
-							options.IncludeFiles.Add(new IncludeFile(path));
-						}
+						dst = Path.GetFileName(ar[0]);
 					}
-					else
+					else if (ar.Length >= 2)
+					{
+						dst = ar[1];
+					}
+
+					if (Path.IsPathRooted(src))
 					{
 						var currDir = Environment.CurrentDirectory;
-						options.IncludeFiles.Add(new IncludeFile(Path.GetFullPath(Path.Combine(currDir, path))));
+						src = Path.GetFullPath(Path.Combine(currDir, src));
 					}
+
+					options.IncludeFiles.Add(new IncludeFile(src, dst));
 				}
+
 			}
 		}
 

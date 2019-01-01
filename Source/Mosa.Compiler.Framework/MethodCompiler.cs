@@ -440,19 +440,15 @@ namespace Mosa.Compiler.Framework
 			int index = 0;
 			foreach (var local in locals)
 			{
-				Operand operand = null;
-
 				if (MosaTypeLayout.IsStoredOnStack(local.Type) || local.IsPinned)
 				{
-					operand = AddStackLocal(local.Type, local.IsPinned);
+					LocalVariables[index++] = AddStackLocal(local.Type, local.IsPinned);
 				}
 				else
 				{
 					var stacktype = local.Type.GetStackType();
-					operand = CreateVirtualRegister(stacktype);
+					LocalVariables[index++] = CreateVirtualRegister(stacktype);
 				}
-
-				LocalVariables[index++] = operand;
 			}
 		}
 

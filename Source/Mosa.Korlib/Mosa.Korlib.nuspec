@@ -17,5 +17,7 @@
 	</metadata>
 	<files>
 		<file src="..\..\bin\mscorlib.dll" target="lib\net45" />
+		<file src="..\..\bin\Mosa.Plug.Korlib.dll" target="lib\net45" />
+		<file src="..\..\bin\Mosa.Plug.Korlib.x86.dll" target="lib\net45" />
 	</files>
 </package>

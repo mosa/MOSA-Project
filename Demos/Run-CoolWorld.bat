@@ -1,1 +1,0 @@
-start ..\bin\Mosa.Tool.Launcher.exe --q --a --output-map --output-asm --output-debuginfo ..\bin\Mosa.CoolWorld.x86.exe

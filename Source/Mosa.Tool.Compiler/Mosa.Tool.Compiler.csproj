@@ -13,8 +13,7 @@
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
-    <DelaySign>false</DelaySign>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
@@ -103,6 +102,10 @@
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj">
       <Project>{de30cbe9-50f3-4a3e-bcc9-a8a36348530e}</Project>
       <Name>Mosa.Platform.x86</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj">
+      <Project>{F445DB8E-E25A-41EF-A158-C742F14E94E4}</Project>
+      <Name>Mosa.Platform.x64</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -13,7 +13,7 @@
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
@@ -83,18 +83,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Architecture.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ArchitectureFeatureFlags.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Architecture.cs" />
+    <Compile Include="ArchitectureFeatureFlags.cs" />
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Instructions\Adc32.cs" />
     <Compile Include="Instructions\Add32.cs" />
-    <Compile Include="Instructions\Addsd.cs" />
-    <Compile Include="Instructions\Addss.cs" />
+    <Compile Include="Instructions\AddSD.cs" />
+    <Compile Include="Instructions\AddSS.cs" />
     <Compile Include="Instructions\And32.cs" />
     <Compile Include="Instructions\BochsDebug.cs" />
     <Compile Include="Instructions\BranchCarry.cs" />
@@ -346,12 +342,8 @@
     <Compile Include="Stages\TweakStage.cs" />
     <Compile Include="Intrinsic\BochsDebug.cs" />
     <Compile Include="X86Instruction.cs" />
-    <Compile Include="Stages\IRTransformationStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Stages\LongOperandStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Stages\IRTransformationStage.cs" />
+    <Compile Include="Stages\LongOperandStage.cs" />
     <Compile Include="X86Instructions.cs" />
     <Compile Include="Intrinsic\Jmp.cs" />
     <Compile Include="Intrinsic\Call.cs" />
@@ -360,10 +352,4 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
 </Project>

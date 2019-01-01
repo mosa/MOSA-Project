@@ -24,17 +24,11 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Gets the endianness of the target architecture.
 		/// </summary>
-		/// <value>
-		/// The endianness.
-		/// </value>
 		public override Endianness Endianness { get { return Endianness.Little; } }
 
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
-		/// <value>
-		/// The type of the elf machine.
-		/// </value>
 		public override MachineType MachineType { get { return MachineType.IA_64; } }
 
 		/// <summary>
@@ -126,14 +120,14 @@ namespace Mosa.Platform.x64
 		public override PhysicalRegister ScratchRegister { get { return GeneralPurposeRegister.EDX; } }
 
 		/// <summary>
-		/// Gets the return32 bit register.
+		/// Gets the return register.
 		/// </summary>
-		public override PhysicalRegister Return32BitRegister { get { return null; } }
+		public override PhysicalRegister ReturnRegister { get { return GeneralPurposeRegister.EAX; } }
 
 		/// <summary>
-		/// Gets the return64 bit register.
+		/// Gets the return register for the high portion of the 64bit result.
 		/// </summary>
-		public override PhysicalRegister Return64BitRegister { get { return GeneralPurposeRegister.EAX; } }
+		public override PhysicalRegister ReturnHighRegister { get { return null; } }
 
 		/// <summary>
 		/// Gets the return floating point register.
@@ -158,17 +152,11 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Gets the name of the platform.
 		/// </summary>
-		/// <value>
-		/// The name of the platform.
-		/// </value>
 		public override string PlatformName { get { return "x64"; } }
 
 		/// <summary>
 		/// Gets the instructions.
 		/// </summary>
-		/// <value>
-		/// The instructions.
-		/// </value>
 		public override List<BaseInstruction> Instructions { get { return X64Instructions.List; } }
 
 		/// <summary>
@@ -176,10 +164,6 @@ namespace Mosa.Platform.x64
 		/// </summary>
 		/// <returns>The created architecture instance.</returns>
 		/// <param name="architectureFeatures">The features available in the architecture and code generation.</param>
-		/// <remarks>
-		/// This method creates an instance of an appropriate architecture class, which supports the specific
-		/// architecture features.
-		/// </remarks>
 		public static BaseArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
 		{
 			return new Architecture(architectureFeatures);

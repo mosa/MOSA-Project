@@ -48,6 +48,9 @@ namespace Mosa.Tool.Compiler
 		[Option('a', "architecture", HelpText = "Select one of the MOSA architectures to compile for [x86|x64|ARMv6].", Required = true)]
 		public string Architecture { set { CompilerOptions.Architecture = SelectArchitecture(value); } }
 
+		[Option("mboot", HelpText = "Select multiboot specification [v1|v2].")]
+		public string Boot { set { CompilerOptions.MultibootSpecification = GetMultibootSpecification(value); } }
+
 		[Option('f', "format", HelpText = "Select the format of the binary file to create [ELF32|ELF64].")]
 		public string LinkerFormat { set { CompilerOptions.LinkerFormatType = GetLinkerFactory(value); } }
 
@@ -64,13 +67,13 @@ namespace Mosa.Tool.Compiler
 		public bool EnableStaticAllocation { set { CompilerOptions.EnableStaticAllocations = value; } }
 
 		[Option("enable-static-alloc", HelpText = "Performs static allocations at compile time.")]
-		public bool EnableStaticAllocationTrue { set { EnableStaticAllocation = true; } }
+		public bool EnableStaticAllocationTrue { set { EnableStaticAllocation = value; } }
 
 		[Option("ssa", HelpText = "Performs single static assignments at compile time.")]
 		public bool EnableSSA { set { CompilerOptions.EnableSSA = value; } }
 
 		[Option("enable-single-static-assignment-form", HelpText = "Performs single static assignments at compile time.")]
-		public bool EnableSSATrue { set { EnableSSA = true; } }
+		public bool EnableSSATrue { set { EnableSSA = value; } }
 
 		[Option("optimize-ir", HelpText = "Performs ir-level optimizations.")]
 		public bool EnableIROptimizaion { set { CompilerOptions.EnableIROptimizations = value; } }
@@ -110,6 +113,8 @@ namespace Mosa.Tool.Compiler
 			switch (architecture.ToLower())
 			{
 				case "x86": return Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect);
+				case "x64": return Mosa.Platform.x64.Architecture.CreateArchitecture(Mosa.Platform.x64.ArchitectureFeatureFlags.AutoDetect);
+				case "armv6": return Mosa.Platform.ARMv6.Architecture.CreateArchitecture(Mosa.Platform.ARMv6.ArchitectureFeatureFlags.AutoDetect);
 				default: throw new NotImplementCompilerException(string.Format("Unknown or unsupported Architecture {0}.", architecture));
 			}
 		}
@@ -122,6 +127,16 @@ namespace Mosa.Tool.Compiler
 				case "elf32": return LinkerFormatType.Elf32;
 				case "elf64": return LinkerFormatType.Elf64;
 				default: return LinkerFormatType.Elf32;
+			}
+		}
+
+		private static MultibootSpecification GetMultibootSpecification(string format)
+		{
+			switch (format.ToLower())
+			{
+				case "v1": return Mosa.Compiler.Framework.MultibootSpecification.V1;
+				case "v2": return Mosa.Compiler.Framework.MultibootSpecification.V2;
+				default: throw new NotImplementCompilerException(string.Format("Unknown or unsupported MultibootSpecification {0}.", format));
 			}
 		}
 

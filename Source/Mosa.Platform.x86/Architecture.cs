@@ -104,12 +104,12 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Gets the return32 bit register.
 		/// </summary>
-		public override PhysicalRegister Return32BitRegister { get { return GeneralPurposeRegister.EAX; } }
+		public override PhysicalRegister ReturnRegister { get { return GeneralPurposeRegister.EAX; } }
 
 		/// <summary>
 		/// Gets the return64 bit register.
 		/// </summary>
-		public override PhysicalRegister Return64BitRegister { get { return GeneralPurposeRegister.EDX; } }
+		public override PhysicalRegister ReturnHighRegister  { get { return GeneralPurposeRegister.EDX; } }
 
 		/// <summary>
 		/// Gets the return floating point register.

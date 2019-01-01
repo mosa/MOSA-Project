@@ -1,1 +1,0 @@
-start ..\bin\Mosa.Tool.Launcher.exe --q --a --qemu --output-asm ..\bin\Mosa.HelloWorld.x86.exe

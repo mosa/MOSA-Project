@@ -47,14 +47,14 @@ namespace Mosa.Compiler.Framework
 		public abstract PhysicalRegister ScratchRegister { get; }
 
 		/// <summary>
-		/// Gets the return32 bit register.
+		/// Gets the return register.
 		/// </summary>
-		public abstract PhysicalRegister Return32BitRegister { get; }
+		public abstract PhysicalRegister ReturnRegister { get; }
 
 		/// <summary>
-		/// Gets the return64 bit register.
+		/// Gets the return register for the high portion of the 64bit result.
 		/// </summary>
-		public abstract PhysicalRegister Return64BitRegister { get; }
+		public abstract PhysicalRegister ReturnHighRegister { get; }
 
 		/// <summary>
 		/// Gets the return floating point register.
@@ -217,7 +217,7 @@ namespace Mosa.Compiler.Framework
 		public abstract bool IsInstructionMove(BaseInstruction instruction);
 
 		/// <summary>
-		/// Gets the platform instrinsic method.
+		/// Gets the platform intrinsic method.
 		/// </summary>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
