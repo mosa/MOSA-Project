@@ -424,9 +424,8 @@ namespace Mosa.Compiler.Framework
 			}
 			else
 			{
-				//  FIXME - x64
-				//  should be either R4, R8, Object,
-				return CreateVirtualRegister(type.GetStackType());
+				var resultType = Compiler.GetStackType(type);
+				return CreateVirtualRegister(resultType);
 			}
 		}
 
@@ -447,7 +446,7 @@ namespace Mosa.Compiler.Framework
 				}
 				else
 				{
-					var stacktype = local.Type.GetStackType();
+					var stacktype = Compiler.GetStackType(local.Type);
 					LocalVariables[index++] = CreateVirtualRegister(stacktype);
 				}
 			}

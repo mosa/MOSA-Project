@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 
@@ -83,12 +84,13 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			base.Resolve(context, compiler);
 
-			StackTypeCode result = StackTypeCode.Unknown;
+			var result = StackTypeCode.Unknown;
+
 			switch (opcode)
 			{
-				case OpCode.Add: result = addTable[(int)context.Operand1.Type.GetStackTypeCode()][(int)context.Operand2.Type.GetStackTypeCode()]; break;
-				case OpCode.Sub: result = subTable[(int)context.Operand1.Type.GetStackTypeCode()][(int)context.Operand2.Type.GetStackTypeCode()]; break;
-				default: result = operandTable[(int)context.Operand1.Type.GetStackTypeCode()][(int)context.Operand2.Type.GetStackTypeCode()]; break;
+				case OpCode.Add: result = addTable[(int)compiler.Compiler.GetStackTypeCode(context.Operand1.Type)][(int)compiler.Compiler.GetStackTypeCode(context.Operand2.Type)]; break;
+				case OpCode.Sub: result = subTable[(int)compiler.Compiler.GetStackTypeCode(context.Operand1.Type)][(int)compiler.Compiler.GetStackTypeCode(context.Operand2.Type)]; break;
+				default: result = operandTable[(int)compiler.Compiler.GetStackTypeCode(context.Operand1.Type)][(int)compiler.Compiler.GetStackTypeCode(context.Operand2.Type)]; break;
 			}
 
 			if (result == StackTypeCode.Unknown)
@@ -100,10 +102,12 @@ namespace Mosa.Compiler.Framework.CIL
 
 			if (StackTypeCode.UnmanagedPointer != result)
 			{
-				resultType = compiler.TypeSystem.GetStackTypeFromCode(result);
+				resultType = compiler.Compiler.GetStackTypeFromCode(result);
 
 				if (result == StackTypeCode.F && context.Operand1.Type.IsR4 && context.Operand2.Type.IsR4)
+				{
 					resultType = compiler.TypeSystem.BuiltIn.R4;
+				}
 			}
 			else
 			{
@@ -117,11 +121,9 @@ namespace Mosa.Compiler.Framework.CIL
 				}
 				else
 				{
-					throw new InvalidOperationException("Invalid operand types passed to " + opcode);
+					throw new CompilerException($"Invalid operand types passed to {opcode}");
 				}
 			}
-
-			//Debug.Assert(resultType != null, ctx.ToString());
 
 			context.Result = compiler.CreateVirtualRegister(resultType);
 		}

@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 
@@ -90,17 +91,17 @@ namespace Mosa.Compiler.Framework.CIL
 
 			switch (opcode)
 			{
-				case OpCode.Add_ovf_un: result = addovfunTable[(int)context.Operand1.Type.GetStackTypeCode()][(int)context.Operand2.Type.GetStackTypeCode()]; break;
-				case OpCode.Sub_ovf_un: result = subovfunTable[(int)context.Operand1.Type.GetStackTypeCode()][(int)context.Operand2.Type.GetStackTypeCode()]; break;
-				default: result = operandTable[(int)context.Operand1.Type.GetStackTypeCode()][(int)context.Operand2.Type.GetStackTypeCode()]; break;
+				case OpCode.Add_ovf_un: result = addovfunTable[(int)compiler.Compiler.GetStackTypeCode(context.Operand1.Type)][(int)compiler.Compiler.GetStackTypeCode(context.Operand2.Type)]; break;
+				case OpCode.Sub_ovf_un: result = subovfunTable[(int)compiler.Compiler.GetStackTypeCode(context.Operand1.Type)][(int)compiler.Compiler.GetStackTypeCode(context.Operand2.Type)]; break;
+				default: result = operandTable[(int)compiler.Compiler.GetStackTypeCode(context.Operand1.Type)][(int)compiler.Compiler.GetStackTypeCode(context.Operand2.Type)]; break;
 			}
 
 			if (StackTypeCode.Unknown == result)
 			{
-				throw new InvalidOperationException("Invalid operand types passed to " + opcode);
+				throw new CompilerException("Invalid operand types passed to " + opcode);
 			}
 
-			context.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.GetStackTypeFromCode(result));
+			context.Result = compiler.CreateVirtualRegister(compiler.Compiler.GetStackTypeFromCode(result));
 		}
 
 		#endregion Methods

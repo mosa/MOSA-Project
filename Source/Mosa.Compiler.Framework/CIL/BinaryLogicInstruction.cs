@@ -53,8 +53,8 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			base.Resolve(context, compiler);
 
-			var stackTypeForOperand1 = context.Operand1.Type.GetStackTypeCode();
-			var stackTypeForOperand2 = context.Operand2.Type.GetStackTypeCode();
+			var stackTypeForOperand1 = compiler.Compiler.GetStackTypeCode(context.Operand1.Type);
+			var stackTypeForOperand2 = compiler.Compiler.GetStackTypeCode(context.Operand2.Type);
 
 			var result = opTable[(int)stackTypeForOperand1][(int)stackTypeForOperand2];
 
@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Framework.CIL
 				throw new InvalidOperationException("Invalid virtualLocal result of instruction: " + result.ToString() + " (" + context.Operand1 + ")");
 			}
 
-			context.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.GetStackTypeFromCode(result));
+			context.Result = compiler.CreateVirtualRegister(compiler.Compiler.GetStackTypeFromCode(result));
 		}
 
 		#endregion Methods

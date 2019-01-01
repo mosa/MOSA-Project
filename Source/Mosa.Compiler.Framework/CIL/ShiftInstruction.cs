@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Diagnostics;
@@ -59,13 +60,14 @@ namespace Mosa.Compiler.Framework.CIL
 
 			base.Resolve(context, compiler);
 
-			var result = operandTable[(int)context.Operand1.Type.GetStackTypeCode()][(int)context.Operand2.Type.GetStackTypeCode()];
-			Debug.Assert(StackTypeCode.Unknown != result, "Can't shift with the given virtualLocal operands.");
+			var result = operandTable[(int)compiler.Compiler.GetStackTypeCode(context.Operand1.Type)][(int)compiler.Compiler.GetStackTypeCode(context.Operand2.Type)];
 
 			if (StackTypeCode.Unknown == result)
-				throw new InvalidOperationException("Invalid virtualLocal state for pairing (" + context.Operand1.Type.GetStackType() + ", " + context.Operand2.Type.GetStackType() + ")");
+			{
+				throw new CompilerException("Invalid pairing (" + context.Operand1.Type.ToString() + ", " + context.Operand2.Type.ToString() + ")");
+			}
 
-			context.Result = compiler.CreateVirtualRegister(compiler.TypeSystem.GetStackTypeFromCode(result));
+			context.Result = compiler.CreateVirtualRegister(compiler.Compiler.GetStackTypeFromCode(result));
 		}
 
 		#endregion Methods

@@ -281,6 +281,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				if (!field.IsStatic)
 					return field.FieldType;
 			}
+
 			return null;
 		}
 

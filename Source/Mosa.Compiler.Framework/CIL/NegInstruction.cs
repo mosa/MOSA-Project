@@ -54,10 +54,12 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			base.Resolve(context, compiler);
 
-			// Validate the operand
-			var result = typeCodes[(int)context.Operand1.Type.GetStackTypeCode()];
+			var result = typeCodes[(int)compiler.Compiler.GetStackTypeCode(context.Operand1.Type)];
+
 			if (StackTypeCode.Unknown == result)
+			{
 				throw new InvalidOperationException("Invalid operand to Neg instruction [" + result + "]");
+			}
 
 			context.Result = compiler.CreateVirtualRegister(context.Operand1.Type);
 		}

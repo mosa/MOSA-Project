@@ -542,7 +542,7 @@ namespace Mosa.Compiler.Framework
 				case MosaTypeCode.Object: return TypeSystem.BuiltIn.Object;
 			}
 
-			throw new CompilerException("Can't convert type code '" + code + "' to type.");
+			throw new CompilerException("Can't convert type code {code} to type.");
 		}
 
 		public StackTypeCode GetStackTypeCode(MosaType type)
@@ -595,7 +595,66 @@ namespace Mosa.Compiler.Framework
 					return StackTypeCode.Unknown;
 			}
 
-			throw new CompilerException(string.Format("Can't transform Type {0} to StackTypeCode.", type));
+			throw new CompilerException($"Can't transform Type {type} to StackTypeCode.");
+		}
+
+		public MosaType GetStackType(MosaType type)
+		{
+			switch (GetStackTypeCode(type))
+			{
+				case StackTypeCode.Int32:
+					return type.TypeSystem.BuiltIn.I4;
+
+				case StackTypeCode.Int64:
+					return type.TypeSystem.BuiltIn.I8;
+
+				case StackTypeCode.N:
+					return type.TypeSystem.BuiltIn.I;
+
+				case StackTypeCode.F:
+					if (type.IsR4)
+						return type.TypeSystem.BuiltIn.R4;
+					else
+						return type.TypeSystem.BuiltIn.R8;
+
+				case StackTypeCode.O:
+					return type;
+
+				case StackTypeCode.UnmanagedPointer:
+				case StackTypeCode.ManagedPointer:
+					return type;
+			}
+
+			throw new CompilerException($"Can't convert {type.FullName} to stack type.");
+		}
+
+		public MosaType GetStackTypeFromCode(StackTypeCode code)
+		{
+			switch (code)
+			{
+				case StackTypeCode.Int32:
+					return TypeSystem.BuiltIn.I4;
+
+				case StackTypeCode.Int64:
+					return TypeSystem.BuiltIn.I8;
+
+				case StackTypeCode.N:
+					return TypeSystem.BuiltIn.I;
+
+				case StackTypeCode.F:
+					return TypeSystem.BuiltIn.R8;
+
+				case StackTypeCode.O:
+					return TypeSystem.BuiltIn.Object;
+
+				case StackTypeCode.UnmanagedPointer:
+					return TypeSystem.BuiltIn.Pointer;
+
+				case StackTypeCode.ManagedPointer:
+					return TypeSystem.BuiltIn.Object.ToManagedPointer();
+			}
+
+			throw new CompilerException("Can't convert stack type code {code} to type.");
 		}
 
 		#endregion Type Methods
