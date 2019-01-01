@@ -2,8 +2,6 @@
 
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.MosaTypeSystem;
-using System;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -62,6 +60,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// Operand validation table for the sub instruction.
 		/// </summary>
 		private static readonly StackTypeCode[][] subTable = new StackTypeCode[][] {
+
 			//                    Unknown                int32                  int64                  native int             F                      ManagedPointer         UnmanagedPointer       Object
 			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown }, // Unknown
 			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Int32,   StackTypeCode.Unknown, StackTypeCode.N,       StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown }, // int32
@@ -114,14 +113,6 @@ namespace Mosa.Compiler.Framework.CIL
 
 			var op1 = methodCompiler.Compiler.GetStackTypeCode(context.Operand1.Type);
 			var op2 = methodCompiler.Compiler.GetStackTypeCode(context.Operand2.Type);
-
-			if (methodCompiler.Method.FullName.Contains("CreateString"))
-			{
-				Debug.WriteLine(methodCompiler.Method.FullName);
-				Debug.WriteLine(context.ToString());
-				Debug.WriteLine(op1);
-				Debug.WriteLine(op2);
-			}
 
 			switch (opcode)
 			{

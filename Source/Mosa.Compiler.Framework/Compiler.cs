@@ -140,8 +140,6 @@ namespace Mosa.Compiler.Framework
 			return new List<BaseMethodCompilerStage>() {
 				new CILDecodingStage(),
 				new ExceptionPrologueStage(),
-
-				//new StopStage(),
 				new OperandAssignmentStage(),
 				new StackSetupStage(),
 				new CILProtectedRegionStage(),

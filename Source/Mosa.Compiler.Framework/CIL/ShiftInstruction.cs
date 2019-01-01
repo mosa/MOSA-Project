@@ -59,7 +59,10 @@ namespace Mosa.Compiler.Framework.CIL
 
 			base.Resolve(context, methodCompiler);
 
-			var result = operandTable[(int)methodCompiler.Compiler.GetStackTypeCode(context.Operand1.Type)][(int)methodCompiler.Compiler.GetStackTypeCode(context.Operand2.Type)];
+			var op1 = methodCompiler.Compiler.GetStackTypeCode(context.Operand1.Type);
+			var op2 = methodCompiler.Compiler.GetStackTypeCode(context.Operand2.Type);
+
+			var result = operandTable[(int)op1][(int)op2];
 
 			if (StackTypeCode.Unknown == result)
 			{

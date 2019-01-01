@@ -89,11 +89,14 @@ namespace Mosa.Compiler.Framework.CIL
 
 			var result = StackTypeCode.Unknown;
 
+			var op1 = methodCompiler.Compiler.GetStackTypeCode(context.Operand1.Type);
+			var op2 = methodCompiler.Compiler.GetStackTypeCode(context.Operand2.Type);
+
 			switch (opcode)
 			{
-				case OpCode.Add_ovf_un: result = addovfunTable[(int)methodCompiler.Compiler.GetStackTypeCode(context.Operand1.Type)][(int)methodCompiler.Compiler.GetStackTypeCode(context.Operand2.Type)]; break;
-				case OpCode.Sub_ovf_un: result = subovfunTable[(int)methodCompiler.Compiler.GetStackTypeCode(context.Operand1.Type)][(int)methodCompiler.Compiler.GetStackTypeCode(context.Operand2.Type)]; break;
-				default: result = operandTable[(int)methodCompiler.Compiler.GetStackTypeCode(context.Operand1.Type)][(int)methodCompiler.Compiler.GetStackTypeCode(context.Operand2.Type)]; break;
+				case OpCode.Add_ovf_un: result = addovfunTable[(int)op1][(int)op2]; break;
+				case OpCode.Sub_ovf_un: result = subovfunTable[(int)op1][(int)op2]; break;
+				default: result = operandTable[(int)op1][(int)op2]; break;
 			}
 
 			if (StackTypeCode.Unknown == result)
