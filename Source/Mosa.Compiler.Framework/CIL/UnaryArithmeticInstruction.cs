@@ -28,13 +28,13 @@ namespace Mosa.Compiler.Framework.CIL
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="compiler">The compiler.</param>
-		public override void Resolve(Context context, MethodCompiler compiler)
+		/// <param name="methodCompiler">The compiler.</param>
+		public override void Resolve(Context context, MethodCompiler methodCompiler)
 		{
-			base.Resolve(context, compiler);
+			base.Resolve(context, methodCompiler);
 
 			// Simple result is the same type as the unary argument
-			context.Result = compiler.CreateVirtualRegister(context.Operand1.Type);
+			context.Result = methodCompiler.CreateVirtualRegister(context.Operand1.Type);
 		}
 
 		#endregion Methods Overrides

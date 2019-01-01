@@ -79,21 +79,21 @@ namespace Mosa.Compiler.Framework.CIL
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="compiler">The compiler.</param>
-		public override void Resolve(Context context, MethodCompiler compiler)
+		/// <param name="methodCompiler">The compiler.</param>
+		public override void Resolve(Context context, MethodCompiler methodCompiler)
 		{
 			if (context == null)
 				throw new ArgumentNullException(nameof(context));
 
-			base.Resolve(context, compiler);
+			base.Resolve(context, methodCompiler);
 
 			var result = StackTypeCode.Unknown;
 
 			switch (opcode)
 			{
-				case OpCode.Add_ovf_un: result = addovfunTable[(int)compiler.Compiler.GetStackTypeCode(context.Operand1.Type)][(int)compiler.Compiler.GetStackTypeCode(context.Operand2.Type)]; break;
-				case OpCode.Sub_ovf_un: result = subovfunTable[(int)compiler.Compiler.GetStackTypeCode(context.Operand1.Type)][(int)compiler.Compiler.GetStackTypeCode(context.Operand2.Type)]; break;
-				default: result = operandTable[(int)compiler.Compiler.GetStackTypeCode(context.Operand1.Type)][(int)compiler.Compiler.GetStackTypeCode(context.Operand2.Type)]; break;
+				case OpCode.Add_ovf_un: result = addovfunTable[(int)methodCompiler.Compiler.GetStackTypeCode(context.Operand1.Type)][(int)methodCompiler.Compiler.GetStackTypeCode(context.Operand2.Type)]; break;
+				case OpCode.Sub_ovf_un: result = subovfunTable[(int)methodCompiler.Compiler.GetStackTypeCode(context.Operand1.Type)][(int)methodCompiler.Compiler.GetStackTypeCode(context.Operand2.Type)]; break;
+				default: result = operandTable[(int)methodCompiler.Compiler.GetStackTypeCode(context.Operand1.Type)][(int)methodCompiler.Compiler.GetStackTypeCode(context.Operand2.Type)]; break;
 			}
 
 			if (StackTypeCode.Unknown == result)
@@ -101,7 +101,7 @@ namespace Mosa.Compiler.Framework.CIL
 				throw new CompilerException($"Invalid operand types passed to {opcode}");
 			}
 
-			context.Result = compiler.CreateVirtualRegister(compiler.Compiler.GetStackTypeFromCode(result));
+			context.Result = methodCompiler.CreateVirtualRegister(methodCompiler.Compiler.GetStackTypeFromCode(result));
 		}
 
 		#endregion Methods

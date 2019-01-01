@@ -48,13 +48,13 @@ namespace Mosa.Compiler.Framework.CIL
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="compiler">The compiler.</param>
-		public override void Resolve(Context context, MethodCompiler compiler)
+		/// <param name="methodCompiler">The compiler.</param>
+		public override void Resolve(Context context, MethodCompiler methodCompiler)
 		{
-			base.Resolve(context, compiler);
+			base.Resolve(context, methodCompiler);
 
-			var stackTypeForOperand1 = compiler.Compiler.GetStackTypeCode(context.Operand1.Type);
-			var stackTypeForOperand2 = compiler.Compiler.GetStackTypeCode(context.Operand2.Type);
+			var stackTypeForOperand1 = methodCompiler.Compiler.GetStackTypeCode(context.Operand1.Type);
+			var stackTypeForOperand2 = methodCompiler.Compiler.GetStackTypeCode(context.Operand2.Type);
 
 			var result = opTable[(int)stackTypeForOperand1][(int)stackTypeForOperand2];
 
@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Framework.CIL
 				throw new InvalidOperationException("Invalid virtualLocal result of instruction: " + result.ToString() + " (" + context.Operand1 + ")");
 			}
 
-			context.Result = compiler.CreateVirtualRegister(compiler.Compiler.GetStackTypeFromCode(result));
+			context.Result = methodCompiler.CreateVirtualRegister(methodCompiler.Compiler.GetStackTypeFromCode(result));
 		}
 
 		#endregion Methods
