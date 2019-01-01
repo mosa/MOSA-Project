@@ -119,7 +119,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			throw new CompilerException("Can't convert stack type code'" + code + "' to type.");
 		}
 
-		public static MosaType GetTypeFromTypeCode(this TypeSystem typeSystem, MosaTypeCode code)
+		public static MosaType xxGetTypeFromTypeCode(this TypeSystem typeSystem, MosaTypeCode code)
 		{
 			switch (code)
 			{

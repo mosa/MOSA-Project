@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Stages;
@@ -514,5 +515,89 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion Helper Methods
+
+		#region Type Methods
+
+		public MosaType GetTypeFromTypeCode(MosaTypeCode code)
+		{
+			switch (code)
+			{
+				case MosaTypeCode.Void: return TypeSystem.BuiltIn.Void;
+				case MosaTypeCode.Boolean: return TypeSystem.BuiltIn.Boolean;
+				case MosaTypeCode.Char: return TypeSystem.BuiltIn.Char;
+				case MosaTypeCode.I1: return TypeSystem.BuiltIn.I1;
+				case MosaTypeCode.U1: return TypeSystem.BuiltIn.U1;
+				case MosaTypeCode.I2: return TypeSystem.BuiltIn.I2;
+				case MosaTypeCode.U2: return TypeSystem.BuiltIn.U2;
+				case MosaTypeCode.I4: return TypeSystem.BuiltIn.I4;
+				case MosaTypeCode.U4: return TypeSystem.BuiltIn.U4;
+				case MosaTypeCode.I8: return TypeSystem.BuiltIn.I8;
+				case MosaTypeCode.U8: return TypeSystem.BuiltIn.U8;
+				case MosaTypeCode.R4: return TypeSystem.BuiltIn.R4;
+				case MosaTypeCode.R8: return TypeSystem.BuiltIn.R8;
+				case MosaTypeCode.I: return TypeSystem.BuiltIn.I;
+				case MosaTypeCode.U: return TypeSystem.BuiltIn.U;
+				case MosaTypeCode.String: return TypeSystem.BuiltIn.String;
+				case MosaTypeCode.TypedRef: return TypeSystem.BuiltIn.TypedRef;
+				case MosaTypeCode.Object: return TypeSystem.BuiltIn.Object;
+			}
+
+			throw new CompilerException("Can't convert type code '" + code + "' to type.");
+		}
+
+		public StackTypeCode GetStackTypeCode(MosaType type)
+		{
+			switch (type.IsEnum ? type.GetEnumUnderlyingType().TypeCode : type.TypeCode)
+			{
+				case MosaTypeCode.Boolean:
+				case MosaTypeCode.Char:
+				case MosaTypeCode.I1:
+				case MosaTypeCode.U1:
+				case MosaTypeCode.I2:
+				case MosaTypeCode.U2:
+				case MosaTypeCode.I4:
+				case MosaTypeCode.U4:
+					if (Architecture.Is32BitPlatform)
+						return StackTypeCode.Int32;
+					else
+						return StackTypeCode.Int64;
+
+				case MosaTypeCode.I8:
+				case MosaTypeCode.U8:
+					return StackTypeCode.Int64;
+
+				case MosaTypeCode.R4:
+				case MosaTypeCode.R8:
+					return StackTypeCode.F;
+
+				case MosaTypeCode.I:
+				case MosaTypeCode.U:
+					return StackTypeCode.N;
+
+				case MosaTypeCode.ManagedPointer:
+					return StackTypeCode.ManagedPointer;
+
+				case MosaTypeCode.UnmanagedPointer:
+				case MosaTypeCode.FunctionPointer:
+					return StackTypeCode.UnmanagedPointer;
+
+				case MosaTypeCode.String:
+				case MosaTypeCode.ValueType:
+				case MosaTypeCode.ReferenceType:
+				case MosaTypeCode.Array:
+				case MosaTypeCode.Object:
+				case MosaTypeCode.SZArray:
+				case MosaTypeCode.Var:
+				case MosaTypeCode.MVar:
+					return StackTypeCode.O;
+
+				case MosaTypeCode.Void:
+					return StackTypeCode.Unknown;
+			}
+
+			throw new CompilerException(string.Format("Can't transform Type {0} to StackTypeCode.", type));
+		}
+
+		#endregion Type Methods
 	}
 }

@@ -58,11 +58,9 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(node, decoder);
 
-			MosaType type = (elementType == null)
-				? type = (MosaType)decoder.Instruction.Operand
-				: type = decoder.TypeSystem.GetTypeFromTypeCode(elementType.Value);
-
-			node.MosaType = type;
+			node.MosaType = (elementType == null)
+				? (MosaType)decoder.Instruction.Operand
+				: decoder.MethodCompiler.Compiler.GetTypeFromTypeCode(elementType.Value);
 
 			// FIXME: Check the value/destinations
 		}
