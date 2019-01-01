@@ -2,7 +2,6 @@
 
 using Mosa.Runtime.Plug;
 using System;
-using System.Diagnostics;
 
 namespace Mosa.Plug.Korlib.System
 {

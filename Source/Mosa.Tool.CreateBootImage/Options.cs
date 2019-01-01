@@ -13,25 +13,25 @@ namespace Mosa.Tool.CreateBootImage
 	{
 		private BootImageOptions options;
 
-		[Option('m', "mbr", HelpText ="MBR file")]
+		[Option('m', "mbr", HelpText = "MBR file")]
 		public string MBRFile
 		{
 			set { options.MBROption = true; options.MBRCode = File.ReadAllBytes(value); }
 		}
 
-		[Option('b', "boot", HelpText ="FAT boot code file")]
+		[Option('b', "boot", HelpText = "FAT boot code file")]
 		public string BootCodeFile
 		{
 			set { options.FatBootCode = File.ReadAllBytes(value); }
 		}
 
-		[Option('o', "out", Required = true, HelpText ="Output disk file name")]
+		[Option('o', "out", Required = true, HelpText = "Output disk file name")]
 		public string DiskImageFileName
 		{
 			set { options.DiskImageFileName = value; }
 		}
 
-		[Option("format", HelpText ="Disk image format [img|iso|vhd|vdi|vmdk]")]
+		[Option("format", HelpText = "Disk image format [img|iso|vhd|vdi|vmdk]")]
 		public string ImageFormat
 		{
 			set
@@ -77,7 +77,7 @@ namespace Mosa.Tool.CreateBootImage
 			get { return options.BlockCount; }
 		}
 
-		[Option("volume-label", HelpText ="Name of the volume")]
+		[Option("volume-label", HelpText = "Name of the volume")]
 		public string VolumeLabel
 		{
 			set { options.VolumeLabel = value; }
@@ -112,7 +112,6 @@ namespace Mosa.Tool.CreateBootImage
 
 					options.IncludeFiles.Add(new IncludeFile(src, dst));
 				}
-
 			}
 		}
 

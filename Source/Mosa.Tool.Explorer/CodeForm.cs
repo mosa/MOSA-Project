@@ -2,7 +2,6 @@
 
 using Mosa.Utility.CodeCompiler;
 using System;
-using System.CodeDom.Compiler;
 using System.Windows.Forms;
 
 namespace Mosa.Tool.Explorer

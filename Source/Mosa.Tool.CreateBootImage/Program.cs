@@ -12,10 +12,10 @@ namespace Mosa.Tool.CreateBootImage
 	/// </summary>
 	internal static class Program
 	{
-
 		private static string UsageString;
 
-		static Program() {
+		static Program()
+		{
 			UsageString = @"Example: Mosa.Tool.CreateBootImage.exe -o Mosa.HelloWorld.x86.img --mbr ../Tools/syslinux/3.72/mbr.bin --boot ../Tools/syslinux/3.72/ldlinux.bin --volume-label MOSABOOT --blocks 25000 --filesystem fat16 --syslinux --img ../Tools/syslinux/3.72/ldlinux.sys ../Tools/syslinux/3.72/mboot.c32 ../Demos/syslinux.cfg Mosa.HelloWorld.x86.bin,main.exe";
 		}
 

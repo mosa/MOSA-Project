@@ -26,7 +26,7 @@ namespace Mosa.Utility.CodeCompiler
 		/// </summary>
 		private static string tempDirectory;
 
-		#endregion Data members
+		#endregion Data Members
 
 		#region Properties
 
