@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 		/// </summary>
 		public const ushort EntrySize32 = 0x20;
 
-		internal const ushort EntrySize64 = 0x28;
+		internal const ushort EntrySize64 = 0x38;
 
 		/// <summary>
 		/// This member tells what kind of segment this array element describes or how to
