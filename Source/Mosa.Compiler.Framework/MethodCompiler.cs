@@ -3,10 +3,12 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.CompilerStages;
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -139,12 +141,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets a value indicating whether [plugged method].
 		/// </summary>
-		public MosaMethod PluggedMethod { get; }
+		//public MosaMethod PluggedMethod { get; }
 
 		/// <summary>
 		/// Gets a value indicating whether this method is plugged.
 		/// </summary>
-		public bool IsMethodPlugged { get { return PluggedMethod != null; } }
+		//public bool IsMethodPlugged { get { return PluggedMethod != null; } }
 
 		/// <summary>
 		/// The labels
@@ -184,6 +186,26 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public bool IsInSSAForm { get; set; }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether this instance is execute pipeline.
+		/// </summary>
+		public bool IsExecutePipeline { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this method requires CIL decoding .
+		/// </summary>
+		public bool IsCILDecodeRequired { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this method is plugged.
+		/// </summary>
+		public bool IsMethodPlugged { get; set; }
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this instance is stack frame required.
+		/// </summary>
+		public bool IsStackFrameRequired { get; set; }
+
 		#endregion Properties
 
 		#region Construction
@@ -218,10 +240,12 @@ namespace Mosa.Compiler.Framework
 
 			LocalVariables = emptyOperandList;
 			ThreadID = threadID;
-			PluggedMethod = compiler.PlugSystem.GetReplacement(Method);
 
 			IsStopped = false;
 			IsInSSAForm = false;
+			IsExecutePipeline = true;
+			IsCILDecodeRequired = true;
+			IsStackFrameRequired = true;
 
 			MethodData = compiler.CompilerData.GetCompilerMethodData(Method);
 			MethodData.Counters.Reset();
@@ -339,6 +363,34 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public void Compile()
 		{
+			if (Method.IsCompilerGenerated)
+			{
+				IsCILDecodeRequired = false;
+				IsStackFrameRequired = false;
+			}
+
+			PlugMethod();
+
+			PatchDelegate();
+
+			ExternalMethod();
+
+			InternalMethod();
+
+			ExecutePipeline();
+
+			InitializeType();
+
+			var log = new TraceLog(TraceType.Counters, Method, string.Empty, Trace.TraceFilter.Active);
+			log.Log(MethodData.Counters.Export());
+			Trace.TraceListener.OnNewTraceLog(log);
+		}
+
+		private void ExecutePipeline()
+		{
+			if (!IsExecutePipeline)
+				return;
+
 			int position = 0;
 
 			foreach (var stage in Pipeline)
@@ -351,12 +403,77 @@ namespace Mosa.Compiler.Framework
 				if (IsStopped)
 					break;
 			}
+		}
 
-			InitializeType();
+		private void PlugMethod()
+		{
+			var plugMethod = Compiler.PlugSystem.GetReplacement(Method);
 
-			var log = new TraceLog(TraceType.Counters, Method, string.Empty, Trace.TraceFilter.Active);
-			log.Log(MethodData.Counters.Export());
-			Trace.TraceListener.OnNewTraceLog(log);
+			if (plugMethod == null)
+				return;
+
+			IsMethodPlugged = true;
+
+			Debug.Assert(plugMethod != null);
+
+			var plugSymbol = Operand.CreateSymbolFromMethod(plugMethod, TypeSystem);
+
+			var block = BasicBlocks.CreateBlock(BasicBlock.PrologueLabel);
+			BasicBlocks.AddHeadBlock(block);
+
+			var ctx = new Context(block);
+
+			ctx.AppendInstruction(IRInstruction.Jmp, null, plugSymbol);
+
+			IsCILDecodeRequired = false;
+			IsExecutePipeline = true;
+			IsStackFrameRequired = false;
+		}
+
+		private void PatchDelegate()
+		{
+			if (Method.HasImplementation)
+				return;
+
+			if (!Method.DeclaringType.IsDelegate)
+				return;
+
+			if (!DelegatePatcher.PatchDelegate(this))
+				return;
+
+			IsCILDecodeRequired = false;
+			IsExecutePipeline = true;
+		}
+
+		private void ExternalMethod()
+		{
+			if (!Method.IsExternal)
+				return;
+
+			IsCILDecodeRequired = false;
+			IsExecutePipeline = false;
+			IsStackFrameRequired = false;
+
+			//var intrinsic = Architecture.GetInstrinsicMethod(node.InvokeMethod.ExternMethodModule);
+
+			//Method.ExternMethodModule;
+			//Method.ExternMethodName;
+		}
+
+		private void InternalMethod()
+		{
+			if (!Method.IsInternal)
+				return;
+
+			IsCILDecodeRequired = false;
+			IsExecutePipeline = false;
+			IsStackFrameRequired = false;
+
+			//var methodName = Method.DeclaringType.FullName + ":" + Method.Name;
+			//var intrinsic = Compiler.GetInstrincMethod(methodName);
+
+			//Method.ExternMethodModule;
+			//Method.ExternMethodName;
 		}
 
 		/// <summary>

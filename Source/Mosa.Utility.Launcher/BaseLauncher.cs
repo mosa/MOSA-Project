@@ -9,7 +9,7 @@ namespace Mosa.Utility.Launcher
 {
 	public class BaseLauncher
 	{
-		public IList<string> Log { get; }
+		public List<string> Log { get; }
 		public Options Options { get; set; }
 
 		public AppLocations AppLocations { get; set; }

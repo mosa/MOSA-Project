@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// This stage inserts IR instructions related to protected regions.
 	/// </summary>
-	public class CILProtectedRegionStage : BaseMethodCompilerStage
+	public class ProtectedRegionStage : BaseMethodCompilerStage
 	{
 		private MosaType exceptionType;
 
@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			if (IsMethodPlugged)
+			if (!MethodCompiler.IsCILDecodeRequired)
 				return;
 
 			InsertBlockProtectInstructions();

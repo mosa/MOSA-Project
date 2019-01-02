@@ -459,12 +459,12 @@
     <Compile Include="BaseCompilerStage.cs" />
     <Compile Include="Platform\BasePlatformInstruction.cs" />
     <Compile Include="Platform\BasePlatformTransformationStage.cs" />
-    <Compile Include="Stages\CILProtectedRegionStage.cs" />
+    <Compile Include="Stages\ProtectedRegionStage.cs" />
     <Compile Include="CompilerStages\MetadataStage.cs" />
     <Compile Include="Stages\EnterSSAStage.cs" />
     <Compile Include="InstructionLogger.cs" />
     <Compile Include="Stages\LeaveSSAStage.cs" />
-    <Compile Include="Stages\OperandAssignmentStage.cs" />
+    <Compile Include="Stages\CILOperandAssignmentStage.cs" />
     <Compile Include="CompilerOptions.cs" />
     <Compile Include="Stages\StaticAllocationResolutionStage.cs" />
     <Compile Include="Stages\CILTransformationStage.cs" />

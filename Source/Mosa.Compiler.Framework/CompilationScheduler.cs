@@ -75,13 +75,13 @@ namespace Mosa.Compiler.Framework
 
 		public void Schedule(MosaMethod method)
 		{
+			if (method.IsAbstract && !method.HasImplementation)
+				return;
+
 			if (method.HasOpenGenericParams)
 				return;
 
-			if (method.IsLinkerGenerated)
-				return;
-
-			if (!method.HasImplementation && method.IsAbstract)
+			if (method.IsCompilerGenerated)
 				return;
 
 			queue.Enqueue(method);

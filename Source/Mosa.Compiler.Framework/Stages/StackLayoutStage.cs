@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			if (IsMethodPlugged)
+			if (!MethodCompiler.IsStackFrameRequired)
 				return;
 
 			// Layout stack variables

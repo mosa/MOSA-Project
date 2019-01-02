@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// Operand Assignment Stage
 	/// </summary>
-	public sealed class OperandAssignmentStage : BaseMethodCompilerStage
+	public sealed class CILOperandAssignmentStage : BaseMethodCompilerStage
 	{
 		private Queue<BasicBlock> worklist;
 		private List<InstructionNode> dupNodes;
@@ -35,6 +35,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
+			if (!MethodCompiler.IsCILDecodeRequired)
+				return;
+
 			if (!MethodCompiler.Method.HasImplementation)
 				return;
 

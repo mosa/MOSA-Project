@@ -78,7 +78,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				module.Name = "@Linker";
 				module.Assembly = "@Linker";
-				module.IsLinkerGenerated = true;
+				module.IsCompilerGenerated = true;
 			}
 			Modules.Add(LinkerModule);
 
@@ -88,7 +88,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				type.Module = LinkerModule;
 				type.Name = "Default";
-				type.IsLinkerGenerated = true;
+				type.IsCompilerGenerated = true;
 				type.TypeCode = MosaTypeCode.ReferenceType;
 			}
 			Controller.AddType(DefaultLinkerType);
@@ -163,7 +163,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				mosaMethod.IsStatic = true;
 				mosaMethod.HasThis = hasThis;
 				mosaMethod.HasExplicitThis = false;
-				mosaMethod.IsLinkerGenerated = true;
+				mosaMethod.IsCompilerGenerated = true;
 
 				return result;
 			}
@@ -182,7 +182,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				type.Module = LinkerModule;
 				type.Name = name;
-				type.IsLinkerGenerated = true;
+				type.IsCompilerGenerated = true;
 				type.TypeCode = MosaTypeCode.ReferenceType;
 			}
 			return mosaType;
