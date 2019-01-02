@@ -7,6 +7,7 @@ using Mosa.Compiler.Framework.Trace.BuiltIn;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
 namespace Mosa.Tool.Compiler
 {
@@ -79,6 +80,9 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -a x86 --mboot v1 --x
 				}
 
 				compiler.CompilerOptions = options.CompilerOptions;
+
+				Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
+				Debug.AutoFlush = true;
 
 				// Process boot format:
 				// Boot format only matters if it's an executable

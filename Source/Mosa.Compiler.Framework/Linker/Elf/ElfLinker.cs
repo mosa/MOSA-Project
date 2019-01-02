@@ -82,6 +82,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 		private Section GetSection(SectionKind sectionKind)
 		{
+			Debug.Assert(sectionKind != SectionKind.Unknown, "sectionKind != SectionKind.Unknown");
 			return GetSection(LinkerSectionNames[(int)sectionKind]);
 		}
 
@@ -415,7 +416,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 			foreach (var symbol in linker.Symbols)
 			{
-				Debug.Assert(symbol.SectionKind != SectionKind.Unknown);
+				Debug.Assert(symbol.SectionKind != SectionKind.Unknown, "symbol.SectionKind != SectionKind.Unknown");
 
 				var symbolEntry = new SymbolEntry()
 				{
