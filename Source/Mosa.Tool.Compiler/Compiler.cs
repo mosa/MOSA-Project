@@ -148,7 +148,7 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -a x86 --mboot v1 --x
 		/// <returns>A string containing the options.</returns>
 		public override string ToString()
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			sb.Append(" > Output file: ").AppendLine(compiler.CompilerOptions.OutputFile);
 			sb.Append(" > Input file(s): ").AppendLine(string.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
 			sb.Append(" > Architecture: ").AppendLine(compiler.CompilerOptions.Architecture.GetType().FullName);
@@ -165,7 +165,11 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -a x86 --mboot v1 --x
 		private void Compile()
 		{
 			compiler.CompilerTrace.TraceListener = new ConsoleEventListener();
-			compiler.Load(options.InputFiles);
+
+			compiler.CompilerOptions.AddSourceFiles(options.InputFiles);
+
+			compiler.Load();
+
 			compiler.ExecuteThreaded();
 		}
 

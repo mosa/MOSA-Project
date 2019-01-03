@@ -139,17 +139,20 @@ namespace Mosa.Utility.Launcher
 					return;
 				}
 
-				compiler.AddPath(Options.Paths);
+				compiler.CompilerOptions.AddSourceFile(Options.SourceFile);
+				compiler.CompilerOptions.AddSearchPaths(Options.Paths);
 
 				var inputFiles = new List<FileInfo>
 				{
-					new FileInfo(Options.SourceFile),
 					(Options.HuntForCorLib) ? HuntFor("mscorlib.dll") : null,
 					(Options.PlugKorlib) ? HuntFor("Mosa.Plug.Korlib.dll") : null,
 					(Options.PlugKorlib) ? HuntFor("Mosa.Plug.Korlib." + Options.PlatformType.ToString() + ".dll"): null,
 				};
 
-				compiler.Load(inputFiles);
+				compiler.CompilerOptions.AddSourceFiles(inputFiles);
+				compiler.CompilerOptions.AddSearchPaths(inputFiles);
+
+				compiler.Load();
 
 				if (Options.UseMultiThreadingCompiler)
 				{
@@ -202,7 +205,6 @@ namespace Mosa.Utility.Launcher
 			}
 			finally
 			{
-				compiler.Dispose();
 				compiler = null;
 			}
 		}
@@ -498,7 +500,7 @@ namespace Mosa.Utility.Launcher
 
 			result = SearchSubdirectories(Path.Combine(Environment.CurrentDirectory, "..", "..", "packages"), filename);
 
-			return result ?? null;
+			return result;
 		}
 
 		private static string SearchSubdirectories(string path, string filename)

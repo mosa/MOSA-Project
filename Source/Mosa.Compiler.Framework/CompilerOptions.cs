@@ -1,7 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Linker;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Mosa.Compiler.Framework
 {
@@ -17,109 +19,76 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets or sets the base address.
 		/// </summary>
-		/// <value>
-		/// The base address.
-		/// </value>
 		public ulong BaseAddress { get; set; }
 
 		/// <summary>
 		/// Gets or sets the architecture.
 		/// </summary>
-		/// <value>The architecture.</value>
 		public BaseArchitecture Architecture { get; set; }
 
 		/// <summary>
 		/// Gets or sets the output file.
 		/// </summary>
-		/// <value>The output file.</value>
 		public string OutputFile { get; set; }
 
 		/// <summary>
 		/// Gets or sets the map file.
 		/// </summary>
-		/// <value>The map file.</value>
 		public string MapFile { get; set; }
 
 		/// <summary>
 		/// Gets or sets the map file.
 		/// </summary>
-		/// <value>The map file.</value>
 		public string DebugFile { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether SSA is enabled.
 		/// </summary>
-		/// <value><c>true</c> if SSA is enabled; otherwise, <c>false</c>.</value>
 		public bool EnableSSA { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable IR optimizations].
 		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if [enable IR optimizations]; otherwise, <c>false</c>.
-		/// </value>
 		public bool EnableIROptimizations { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable value numbering].
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if [enable IR optimizations]; otherwise, <c>false</c>.
-		/// </value>
 		public bool EnableValueNumbering { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable conditional constant propagation].
 		/// </summary>
-		/// <value>
-		/// <c>true</c> if [enable conditional constant propagation]; otherwise, <c>false</c>.
-		/// </value>
 		public bool EnableSparseConditionalConstantPropagation { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable loop invariant code motion].
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if [enable loop invariant code motion]; otherwise, <c>false</c>.
-		/// </value>
 		public bool EnableLoopInvariantCodeMotion { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable inlined methods].
 		/// </summary>
-		/// <value>
-		/// <c>true</c> if [enable inlined methods]; otherwise, <c>false</c>.
-		/// </value>
 		public bool EnableInlinedMethods { get; set; }
 
 		/// <summary>
 		/// Gets or sets the maximum IR numbers for inlined optimization.
 		/// </summary>
-		/// <value>
-		/// The maximum IR numbers for inlined optimization.
-		/// </value>
 		public int InlinedIRMaximum { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether static allocations are enabled.
 		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if static allocations are enabled; otherwise, <c>false</c>.
-		/// </value>
 		public bool EnableStaticAllocations { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether [enable ir long operand conversion].
+		/// Gets or sets a value indicating whether [enable IR long operand conversion].
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if [enable ir long operand conversion]; otherwise, <c>false</c>.
-		/// </value>
 		public bool IRLongExpansion { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether [enable platform optimizations].</summary>
-		/// <value>
-		///   <c>true</c> if [enable platform optimizations]; otherwise, <c>false</c>.</value>
+		/// Gets or sets a value indicating whether [enable platform optimizations].
+		/// <summary>
 		public bool EnablePlatformOptimizations { get; set; }
 
 		/// <summary>
@@ -135,52 +104,104 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets or sets a value indicating whether [emit binary].
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if [emit binary]; otherwise, <c>false</c>.
-		/// </value>
 		public bool EmitBinary { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [emit symbols].
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if [emit symbols]; otherwise, <c>false</c>.
-		/// </value>
 		public bool EmitSymbols { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [emit relocations].
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if [emit relocations]; otherwise, <c>false</c>.
-		/// </value>
 		public bool EmitRelocations { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [aggressive optimizations].
 		/// </summary>
-		/// <value>
-		/// <c>true</c> if [aggressive optimizations]; otherwise, <c>false</c>.
-		/// </value>
 		public bool TwoPassOptimizations { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable statistics].
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if [enable statistics]; otherwise, <c>false</c>.
-		/// </value>
 		public bool EnableStatistics { get; set; }
 
 		/// <summary>
 		/// Gets or sets the trace level.
 		/// </summary>
-		/// <value>
-		/// The trace level.
-		/// </value>
 		public int TraceLevel { get; set; }
 
+		/// <summary>
+		/// Gets or sets the include paths.
+		/// </summary>
+		public List<string> SearchPaths { get; set; } = new List<string>();
+
+		/// <summary>
+		/// Gets or sets the source files.
+		/// </summary>
+		public List<string> SourceFiles { get; set; } = new List<string>();
+
 		#endregion Properties
+
+		/// <summary>
+		/// Adds the search path.
+		/// </summary>
+		/// <param name="path">The path.</param>
+		public void AddSearchPath(string path)
+		{
+			if (string.IsNullOrWhiteSpace(path))
+				return;
+
+			SearchPaths.AddIfNew(path);
+		}
+
+		/// <summary>
+		/// Adds the search paths.
+		/// </summary>
+		/// <param name="files">The files.</param>
+		public void AddSearchPaths(IEnumerable<FileInfo> files)
+		{
+			foreach (var file in files)
+			{
+				AddSearchPath(Path.GetDirectoryName(file.FullName));
+			}
+		}
+
+		/// <summary>
+		/// Adds the search paths.
+		/// </summary>
+		/// <param name="paths">The paths.</param>
+		public void AddSearchPaths(IList<string> paths)
+		{
+			foreach (var path in paths)
+			{
+				AddSearchPath(Path.GetDirectoryName(path));
+			}
+		}
+
+		/// <summary>
+		/// Adds the source file.
+		/// </summary>
+		/// <param name="path">The path.</param>
+		public void AddSourceFile(string path)
+		{
+			if (string.IsNullOrWhiteSpace(path))
+				return;
+
+			SourceFiles.AddIfNew(path);
+		}
+
+		/// <summary>
+		/// Adds the source files.
+		/// </summary>
+		/// <param name="files">The files.</param>
+		public void AddSourceFiles(IEnumerable<FileInfo> files)
+		{
+			foreach (var file in files)
+			{
+				AddSourceFile(file.FullName);
+			}
+		}
 
 		/// <summary>
 		/// Sets the custom option.

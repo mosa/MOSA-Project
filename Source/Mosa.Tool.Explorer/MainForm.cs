@@ -556,17 +556,17 @@ namespace Mosa.Tool.Explorer
 		{
 			Compiler.CompilerOptions.Architecture = GetArchitecture(platform);
 
+			Compiler.CompilerOptions.AddSearchPath(includeDirectory);
+			Compiler.CompilerOptions.AddSearchPath(Path.GetDirectoryName(filename));
+
+			Compiler.CompilerOptions.AddSourceFile(filename);
+			Compiler.CompilerOptions.AddSourceFile("Mosa.Plug.Korlib.dll");
+			Compiler.CompilerOptions.AddSourceFile("Mosa.Plug.Korlib." + platform + ".dll");
+
 			var moduleLoader = new MosaModuleLoader();
 
-			if (includeDirectory != null)
-			{
-				moduleLoader.AddPrivatePath(includeDirectory);
-			}
-
-			moduleLoader.AddPrivatePath(Path.GetDirectoryName(filename));
-			moduleLoader.LoadModuleFromFile(filename);
-			moduleLoader.LoadModuleFromFile("Mosa.Plug.Korlib.dll");
-			moduleLoader.LoadModuleFromFile("Mosa.Plug.Korlib." + platform + ".dll");
+			moduleLoader.AddSearchPaths(Compiler.CompilerOptions.SearchPaths);
+			moduleLoader.LoadModuleFromFiles(Compiler.CompilerOptions.SourceFiles);
 
 			var metadata = moduleLoader.CreateMetadata();
 

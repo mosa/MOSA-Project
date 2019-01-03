@@ -32,7 +32,7 @@ namespace Mosa.Tool.Launcher
 			}
 		}
 
-		private BindingList<IncludedEntry> includedEntries = new BindingList<IncludedEntry>();
+		private readonly BindingList<IncludedEntry> includedEntries = new BindingList<IncludedEntry>();
 
 		private class IncludedEntry
 		{
