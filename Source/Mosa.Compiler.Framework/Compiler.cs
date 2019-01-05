@@ -144,7 +144,7 @@ namespace Mosa.Compiler.Framework
 				new StackSetupStage(),
 				new ProtectedRegionStage(),
 				new ExceptionStage(),
-				new StaticAllocationResolutionStage(),
+				new CILStaticAllocationResolutionStage(),
 				new CILTransformationStage(),
 				new PlugStage(),
 				new UnboxValueTypeStage(),
