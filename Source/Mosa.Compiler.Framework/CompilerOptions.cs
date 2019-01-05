@@ -109,12 +109,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets or sets a value indicating whether [emit symbols].
 		/// </summary>
-		public bool EmitSymbols { get; set; }
+		public bool EmitAllSymbols { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [emit relocations].
 		/// </summary>
-		public bool EmitRelocations { get; set; }
+		public bool EmitStaticRelocations { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [aggressive optimizations].
@@ -293,8 +293,8 @@ namespace Mosa.Compiler.Framework
 			BaseAddress = 0x00400000;
 			EmitBinary = true;
 			InlinedIRMaximum = 8;
-			EmitSymbols = true;
-			EmitRelocations = true;
+			EmitAllSymbols = true;
+			EmitStaticRelocations = true;
 			TwoPassOptimizations = true;
 			EnableStatistics = true;
 			IRLongExpansion = true;

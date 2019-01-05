@@ -42,7 +42,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, (int)stream.Position, "System.String" + Metadata.TypeDefinition, 0);
 			stream.WriteZeroBytes(TypeLayout.NativePointerSize * 2);
 			stream.Write(value.Length, TypeLayout.NativePointerSize);
-			stream.Write(UnicodeEncoding.Unicode.GetBytes(value));
+			stream.Write(Encoding.Unicode.GetBytes(value));
 			return symbol;
 		}
 

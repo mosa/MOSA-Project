@@ -102,8 +102,8 @@ namespace Mosa.Tool.Launcher
 			Options.EnableValueNumbering = cbValueNumbering.Checked;
 			Options.GenerateDebugFile = Options.LaunchGDBDebugger;
 			Options.BaseAddress = tbBaseAddress.Text.ParseHexOrInteger();
-			Options.EmitSymbols = cbEmitSymbolTable.Checked;
-			Options.EmitRelocations = cbRelocationTable.Checked;
+			Options.EmitAllSymbols = cbEmitSymbolTable.Checked;
+			Options.EmitStaticRelocations = cbRelocationTable.Checked;
 			Options.Emitx86IRQMethods = cbEmitx86IRQMethods.Checked;
 
 			if (Options.VBEVideo)
@@ -219,8 +219,8 @@ namespace Mosa.Tool.Launcher
 			nmMemory.Value = Options.EmulatorMemoryInMB;
 			cbVBEVideo.Checked = Options.VBEVideo;
 			tbBaseAddress.Text = "0x" + Options.BaseAddress.ToString("x8");
-			cbRelocationTable.Checked = Options.EmitRelocations;
-			cbEmitSymbolTable.Checked = Options.EmitSymbols;
+			cbRelocationTable.Checked = Options.EmitStaticRelocations;
+			cbEmitSymbolTable.Checked = Options.EmitAllSymbols;
 			cbEmitx86IRQMethods.Checked = Options.Emitx86IRQMethods;
 			tbMode.Text = Options.Width + "x" + Options.Height + "x" + Options.Depth;
 			cbIRLongExpansion.Checked = Options.EnableIRLongExpansion;

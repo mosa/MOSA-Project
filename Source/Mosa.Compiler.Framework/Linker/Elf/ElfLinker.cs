@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 		private readonly List<byte> sectionHeaderStringTable = new List<byte>();
 
-		private readonly List<byte> stringTable = new List<byte>();
+		private readonly List<byte> stringTable = new List<byte>(4096);
 
 		private readonly Dictionary<LinkerSymbol, uint> symbolTableOffset = new Dictionary<LinkerSymbol, uint>();
 
@@ -227,7 +227,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 		{
 			CreateNullSection();
 
-			Section previous = nullSection;
+			var previous = nullSection;
 
 			foreach (var linkerSection in linker.LinkerSections)
 			{
@@ -275,13 +275,11 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 				previous = section;
 			}
 
-			if (linker.EmitSymbols)
-			{
-				CreateSymbolSection();
-				CreateStringSection();
+			CreateSymbolSection();
 
-				CreateRelocationSections();
-			}
+			CreateStringSection();
+
+			CreateRelocationSections();
 
 			CreateSectionHeaderStringSection();
 		}
@@ -417,9 +415,12 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			{
 				Debug.Assert(symbol.SectionKind != SectionKind.Unknown);
 
+				if (!(symbol.IsExport || linker.EmitAllSymbols))
+					continue;
+
 				var symbolEntry = new SymbolEntry()
 				{
-					Name = AddToStringTable(symbol.Name),
+					Name = AddToStringTable(symbol.ExportName ?? symbol.Name),
 					Value = symbol.VirtualAddress,
 					Size = symbol.Size,
 					SymbolBinding = SymbolBinding.Global,
@@ -447,6 +448,9 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 				foreach (var symbol in linker.Symbols)
 				{
 					if (symbol.SectionKind != kind)
+						continue;
+
+					if (!symbol.IsExport) // FUTURE: include relocations for static symbols, if option selected
 						continue;
 
 					foreach (var patch in symbol.LinkRequests)
@@ -541,6 +545,9 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 					if (patch.LinkType == LinkType.Size)
 						continue;
 
+					if (!symbol.IsExport) // FUTURE: include relocations for static symbols, if option selected
+						continue;
+
 					var relocationEntry = new RelocationEntry()
 					{
 						RelocationType = ConvertType(patch.LinkType, linker.MachineType),
@@ -571,6 +578,9 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 						continue;
 
 					if (patch.LinkType == LinkType.Size)
+						continue;
+
+					if (!symbol.IsExport) // FUTURE: include relocations for static symbols, if option selected
 						continue;
 
 					var relocationAddendEntry = new RelocationAddendEntry()

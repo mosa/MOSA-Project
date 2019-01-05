@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework
 	/// Base class of a method compiler.
 	/// </summary>
 	/// <remarks>
-	/// A method compiler is responsible for compiling a single function
+	/// A method compiler is responsible for compiling a single method
 	/// of an object.
 	/// </remarks>
 	public sealed class MethodCompiler
@@ -454,10 +454,12 @@ namespace Mosa.Compiler.Framework
 			IsExecutePipeline = false;
 			IsStackFrameRequired = false;
 
-			//var intrinsic = Architecture.GetInstrinsicMethod(node.InvokeMethod.ExternMethodModule);
+			var intrinsic = Architecture.GetInstrinsicMethod(Method.ExternMethodModule);
 
-			//Method.ExternMethodModule;
-			//Method.ExternMethodName;
+			if (intrinsic != null)
+				return;
+
+			Linker.DefineExternalSymbol(Method.FullName, Method.ExternMethodName, SectionKind.Text);
 		}
 
 		private void InternalMethod()

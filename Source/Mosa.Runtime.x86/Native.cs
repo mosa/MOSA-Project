@@ -156,9 +156,6 @@ namespace Mosa.Runtime.x86
 		[DllImportAttribute("Mosa.Platform.x86.Intrinsic:GetIDTJumpLocation")]
 		public extern static uint GetIDTJumpLocation(uint irq);
 
-		[DllImportAttribute("Mosa.Platform.x86.Intrinsic:GetAssemblyListTable")]
-		public extern static uint GetAssemblyListTable();
-
 		[DllImportAttribute("Mosa.Platform.x86.Intrinsic:GetMethodLookupTable")]
 		public extern static IntPtr GetMethodLookupTable();
 

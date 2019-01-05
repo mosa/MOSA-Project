@@ -13,6 +13,8 @@ namespace Mosa.Compiler.Framework.Linker
 	{
 		public string Name { get; }
 
+		public string ExportName { get; internal set; }
+
 		public SectionKind SectionKind { get; internal set; }
 
 		public Stream Stream { get; internal set; }
@@ -24,6 +26,8 @@ namespace Mosa.Compiler.Framework.Linker
 		public uint Size { get { return Stream != null ? (uint)Stream.Length : 0; } }
 
 		public bool IsResolved { get { return VirtualAddress != 0; } }
+
+		public bool IsExport { get; set; }
 
 		public uint SectionOffset { get; internal set; }
 
@@ -39,6 +43,7 @@ namespace Mosa.Compiler.Framework.Linker
 			Alignment = alignment;
 			SectionKind = kind;
 			LinkRequests = new List<LinkRequest>();
+			IsExport = false;
 		}
 
 		public void SetData(MemoryStream stream)
