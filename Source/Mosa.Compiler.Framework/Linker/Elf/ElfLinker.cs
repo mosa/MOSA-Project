@@ -450,12 +450,15 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 					if (symbol.SectionKind != kind)
 						continue;
 
-					if (!symbol.IsExport) // FUTURE: include relocations for static symbols, if option selected
+					if (symbol.IsExport)
 						continue;
 
 					foreach (var patch in symbol.LinkRequests)
 					{
 						if (patch.LinkType == LinkType.Size)
+							continue;
+
+						if (!patch.ReferenceSymbol.IsExport)
 							continue;
 
 						if (patch.ReferenceOffset == 0)
@@ -537,22 +540,28 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 			foreach (var symbol in linker.Symbols)
 			{
+				if (symbol.IsExport)
+					continue;
+
 				foreach (var patch in symbol.LinkRequests)
 				{
 					if (patch.ReferenceOffset != 0)
 						continue;
 
+					if (patch.ReferenceSymbol.SectionKind != section.SectionKind)
+						continue;
+
 					if (patch.LinkType == LinkType.Size)
 						continue;
 
-					if (!symbol.IsExport) // FUTURE: include relocations for static symbols, if option selected
+					if (!patch.ReferenceSymbol.IsExport) // FUTURE: include relocations for static symbols, if option selected
 						continue;
 
 					var relocationEntry = new RelocationEntry()
 					{
 						RelocationType = ConvertType(patch.LinkType, linker.MachineType),
-						Symbol = symbolTableOffset[symbol],
-						Offset = (ulong)patch.PatchOffset,
+						Symbol = symbolTableOffset[patch.ReferenceSymbol],
+						Offset = (ulong)(symbol.SectionOffset + patch.PatchOffset),
 					};
 
 					relocationEntry.Write(linkerFormatType, writer);
@@ -569,7 +578,10 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 			foreach (var symbol in linker.Symbols)
 			{
-				if (symbol.SectionKind != section.SectionKind)
+				//if (symbol.SectionKind != section.SectionKind)
+				//	continue;
+
+				if (symbol.IsExport)
 					continue;
 
 				foreach (var patch in symbol.LinkRequests)
@@ -577,17 +589,20 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 					if (patch.ReferenceOffset == 0)
 						continue;
 
+					if (patch.ReferenceSymbol.SectionKind != section.SectionKind)
+						continue;
+
 					if (patch.LinkType == LinkType.Size)
 						continue;
 
-					if (!symbol.IsExport) // FUTURE: include relocations for static symbols, if option selected
+					if (!patch.ReferenceSymbol.IsExport) // FUTURE: include relocations for static symbols, if option selected
 						continue;
 
 					var relocationAddendEntry = new RelocationAddendEntry()
 					{
 						RelocationType = ConvertType(patch.LinkType, linker.MachineType),
-						Symbol = symbolTableOffset[symbol],
-						Offset = (ulong)patch.PatchOffset,
+						Symbol = symbolTableOffset[patch.ReferenceSymbol],
+						Offset = (ulong)(symbol.SectionOffset + patch.PatchOffset),
 						Addend = (ulong)patch.ReferenceOffset,
 					};
 
