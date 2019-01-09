@@ -31,14 +31,11 @@ namespace Mosa.Platform.Intel.Stages
 
 		protected override void PopulateVisitationDictionary()
 		{
-			// Nothing to do
+			// The Run() method is faster
 		}
 
 		protected override void Run()
 		{
-			if (!MethodCompiler.IsStackFrameRequired)
-				return;
-
 			Debug.Assert((MethodCompiler.StackSize % 4) == 0, "Stack size of interrupt can't be divided by 4!!");
 
 			UpdatePrologue();
@@ -55,11 +52,19 @@ namespace Mosa.Platform.Intel.Stages
 
 			for (var node = BasicBlocks.PrologueBlock.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (node.Instruction == IRInstruction.Prologue)
+				if (node.Instruction != IRInstruction.Prologue)
+					continue;
+
+				if (MethodCompiler.IsStackFrameRequired)
 				{
 					AddPrologueInstructions(new Context(node));
-					return;
 				}
+				else
+				{
+					node.Empty();
+				}
+
+				return;
 			}
 		}
 
@@ -73,11 +78,19 @@ namespace Mosa.Platform.Intel.Stages
 
 			for (var node = BasicBlocks.EpilogueBlock.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (node.Instruction == IRInstruction.Epilogue)
+				if (node.Instruction != IRInstruction.Epilogue)
+					continue;
+
+				if (MethodCompiler.IsStackFrameRequired)
 				{
 					AddEpilogueInstructions(new Context(node));
-					return;
 				}
+				else
+				{
+					node.Empty();
+				}
+
+				return;
 			}
 		}
 	}

@@ -261,9 +261,9 @@ namespace Mosa.Tool.Explorer
 			{
 				try
 				{
-					Compiler.Execute();
+					//Compiler.Execute();
 
-					//Compiler.ExecuteThreaded();
+					Compiler.ExecuteThreaded();
 				}
 				finally
 				{

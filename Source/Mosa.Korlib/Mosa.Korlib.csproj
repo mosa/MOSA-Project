@@ -96,6 +96,7 @@
     <Compile Include="System.Runtime.InteropServices\StructLayoutAttribute.cs" />
     <Compile Include="System.Runtime.InteropServices\DllImportAttribute.cs" />
     <Compile Include="System.Runtime.InteropServices\UnmanagedFunctionPointerAttribute.cs" />
+    <Compile Include="System.Runtime.InteropServices\Marshal.cs" />
     <Compile Include="System.Runtime.InteropServices\UnmanagedType.cs" />
     <Compile Include="System.Runtime.Versioning\NonVersionableAttribute.cs" />
     <Compile Include="System.Runtime.Versioning\TargetFrameworkAttribute.cs" />
