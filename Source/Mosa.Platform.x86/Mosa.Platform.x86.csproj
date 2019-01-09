@@ -267,7 +267,10 @@
     <Compile Include="Instructions\XChg32.cs" />
     <Compile Include="Instructions\XChgLoad32.cs" />
     <Compile Include="Instructions\Xor32.cs" />
+    <Compile Include="Intrinsic\GetIRQHandler.cs" />
+    <Compile Include="Intrinsic\IRQs.cs" />
     <Compile Include="Intrinsic\XAddLoad32.cs" />
+    <Compile Include="Intrinsic\SuppressStackFrame.cs" />
     <Compile Include="Intrinsic\XChgLoad32.cs" />
     <Compile Include="Intrinsic\Div.cs" />
     <Compile Include="Intrinsic\AllocateStackSpace.cs" />
@@ -310,7 +313,6 @@
     <Compile Include="Stages\SimpleDeadCodeRemovalStage.cs" />
     <Compile Include="Stages\AddressModeConversionStage.cs" />
     <Compile Include="Stages\FixedRegisterAssignmentStage.cs" />
-    <Compile Include="CompilerStages\InterruptVectorStage.cs" />
     <Compile Include="Intrinsic\GetEBP.cs" />
     <Compile Include="Intrinsic\GetMethodLookupTable.cs" />
     <Compile Include="Intrinsic\Cli.cs" />

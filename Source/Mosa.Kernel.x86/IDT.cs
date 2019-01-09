@@ -4,6 +4,7 @@ using Mosa.Runtime;
 using Mosa.Runtime.x86;
 using System;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace Mosa.Kernel.x86
 {
@@ -71,6 +72,13 @@ namespace Mosa.Kernel.x86
 			Intrinsic.Store8(entry, Offset.Flags, flags);
 		}
 
+		private static void Set(uint index, Delegate method)
+		{
+			var p = Marshal.GetFunctionPointerForDelegate(method);
+
+			Set(index, (uint)p.ToInt32(), 0x08, 0x8E);
+		}
+
 		/// <summary>
 		/// Sets the IDT.
 		/// </summary>
@@ -79,264 +87,1803 @@ namespace Mosa.Kernel.x86
 			// Clear out idt table
 			Runtime.Internal.MemoryClear(new IntPtr(Address.IDTTable) + 6, Offset.TotalSize * 256);
 
-			// Note: GetIDTJumpLocation parameter must be a constant and not a variable
-			Set(0, Native.GetIDTJumpLocation(0), 0x08, 0x8E);
-			Set(1, Native.GetIDTJumpLocation(1), 0x08, 0x8E);
-			Set(2, Native.GetIDTJumpLocation(2), 0x08, 0x8E);
-			Set(3, Native.GetIDTJumpLocation(3), 0x08, 0x8E);
-			Set(4, Native.GetIDTJumpLocation(4), 0x08, 0x8E);
-			Set(5, Native.GetIDTJumpLocation(5), 0x08, 0x8E);
-			Set(6, Native.GetIDTJumpLocation(6), 0x08, 0x8E);
-			Set(7, Native.GetIDTJumpLocation(7), 0x08, 0x8E);
-			Set(8, Native.GetIDTJumpLocation(8), 0x08, 0x8E);
-			Set(9, Native.GetIDTJumpLocation(9), 0x08, 0x8E);
-			Set(10, Native.GetIDTJumpLocation(10), 0x08, 0x8E);
-			Set(11, Native.GetIDTJumpLocation(11), 0x08, 0x8E);
-			Set(12, Native.GetIDTJumpLocation(12), 0x08, 0x8E);
-			Set(13, Native.GetIDTJumpLocation(13), 0x08, 0x8E);
-			Set(14, Native.GetIDTJumpLocation(14), 0x08, 0x8E);
-			Set(15, Native.GetIDTJumpLocation(15), 0x08, 0x8E);
-			Set(16, Native.GetIDTJumpLocation(16), 0x08, 0x8E);
-			Set(17, Native.GetIDTJumpLocation(17), 0x08, 0x8E);
-			Set(18, Native.GetIDTJumpLocation(18), 0x08, 0x8E);
-			Set(19, Native.GetIDTJumpLocation(19), 0x08, 0x8E);
-			Set(20, Native.GetIDTJumpLocation(20), 0x08, 0x8E);
-			Set(21, Native.GetIDTJumpLocation(21), 0x08, 0x8E);
-			Set(22, Native.GetIDTJumpLocation(22), 0x08, 0x8E);
-			Set(23, Native.GetIDTJumpLocation(23), 0x08, 0x8E);
-			Set(24, Native.GetIDTJumpLocation(24), 0x08, 0x8E);
-			Set(25, Native.GetIDTJumpLocation(25), 0x08, 0x8E);
-			Set(26, Native.GetIDTJumpLocation(26), 0x08, 0x8E);
-			Set(27, Native.GetIDTJumpLocation(27), 0x08, 0x8E);
-			Set(28, Native.GetIDTJumpLocation(28), 0x08, 0x8E);
-			Set(29, Native.GetIDTJumpLocation(29), 0x08, 0x8E);
-			Set(30, Native.GetIDTJumpLocation(30), 0x08, 0x8E);
-			Set(31, Native.GetIDTJumpLocation(31), 0x08, 0x8E);
-			Set(32, Native.GetIDTJumpLocation(32), 0x08, 0x8E);
-			Set(33, Native.GetIDTJumpLocation(33), 0x08, 0x8E);
-			Set(34, Native.GetIDTJumpLocation(34), 0x08, 0x8E);
-			Set(35, Native.GetIDTJumpLocation(35), 0x08, 0x8E);
-			Set(36, Native.GetIDTJumpLocation(36), 0x08, 0x8E);
-			Set(37, Native.GetIDTJumpLocation(37), 0x08, 0x8E);
-			Set(38, Native.GetIDTJumpLocation(38), 0x08, 0x8E);
-			Set(39, Native.GetIDTJumpLocation(39), 0x08, 0x8E);
-			Set(40, Native.GetIDTJumpLocation(40), 0x08, 0x8E);
-			Set(41, Native.GetIDTJumpLocation(41), 0x08, 0x8E);
-			Set(42, Native.GetIDTJumpLocation(42), 0x08, 0x8E);
-			Set(43, Native.GetIDTJumpLocation(43), 0x08, 0x8E);
-			Set(44, Native.GetIDTJumpLocation(44), 0x08, 0x8E);
-			Set(45, Native.GetIDTJumpLocation(45), 0x08, 0x8E);
-			Set(46, Native.GetIDTJumpLocation(46), 0x08, 0x8E);
-			Set(47, Native.GetIDTJumpLocation(47), 0x08, 0x8E);
-			Set(48, Native.GetIDTJumpLocation(48), 0x08, 0x8E);
-			Set(49, Native.GetIDTJumpLocation(49), 0x08, 0x8E);
-			Set(50, Native.GetIDTJumpLocation(50), 0x08, 0x8E);
-			Set(51, Native.GetIDTJumpLocation(51), 0x08, 0x8E);
-			Set(52, Native.GetIDTJumpLocation(52), 0x08, 0x8E);
-			Set(53, Native.GetIDTJumpLocation(53), 0x08, 0x8E);
-			Set(54, Native.GetIDTJumpLocation(54), 0x08, 0x8E);
-			Set(55, Native.GetIDTJumpLocation(55), 0x08, 0x8E);
-			Set(56, Native.GetIDTJumpLocation(56), 0x08, 0x8E);
-			Set(57, Native.GetIDTJumpLocation(57), 0x08, 0x8E);
-			Set(58, Native.GetIDTJumpLocation(58), 0x08, 0x8E);
-			Set(59, Native.GetIDTJumpLocation(59), 0x08, 0x8E);
-			Set(60, Native.GetIDTJumpLocation(60), 0x08, 0x8E);
-			Set(61, Native.GetIDTJumpLocation(61), 0x08, 0x8E);
-			Set(62, Native.GetIDTJumpLocation(62), 0x08, 0x8E);
-			Set(63, Native.GetIDTJumpLocation(63), 0x08, 0x8E);
-			Set(64, Native.GetIDTJumpLocation(64), 0x08, 0x8E);
-			Set(65, Native.GetIDTJumpLocation(65), 0x08, 0x8E);
-			Set(66, Native.GetIDTJumpLocation(66), 0x08, 0x8E);
-			Set(67, Native.GetIDTJumpLocation(67), 0x08, 0x8E);
-			Set(68, Native.GetIDTJumpLocation(68), 0x08, 0x8E);
-			Set(69, Native.GetIDTJumpLocation(69), 0x08, 0x8E);
-			Set(70, Native.GetIDTJumpLocation(70), 0x08, 0x8E);
-			Set(71, Native.GetIDTJumpLocation(71), 0x08, 0x8E);
-			Set(72, Native.GetIDTJumpLocation(72), 0x08, 0x8E);
-			Set(73, Native.GetIDTJumpLocation(73), 0x08, 0x8E);
-			Set(74, Native.GetIDTJumpLocation(74), 0x08, 0x8E);
-			Set(75, Native.GetIDTJumpLocation(75), 0x08, 0x8E);
-			Set(76, Native.GetIDTJumpLocation(76), 0x08, 0x8E);
-			Set(77, Native.GetIDTJumpLocation(77), 0x08, 0x8E);
-			Set(78, Native.GetIDTJumpLocation(78), 0x08, 0x8E);
-			Set(79, Native.GetIDTJumpLocation(79), 0x08, 0x8E);
-			Set(80, Native.GetIDTJumpLocation(80), 0x08, 0x8E);
-			Set(81, Native.GetIDTJumpLocation(81), 0x08, 0x8E);
-			Set(82, Native.GetIDTJumpLocation(82), 0x08, 0x8E);
-			Set(83, Native.GetIDTJumpLocation(83), 0x08, 0x8E);
-			Set(84, Native.GetIDTJumpLocation(84), 0x08, 0x8E);
-			Set(85, Native.GetIDTJumpLocation(85), 0x08, 0x8E);
-			Set(86, Native.GetIDTJumpLocation(86), 0x08, 0x8E);
-			Set(87, Native.GetIDTJumpLocation(87), 0x08, 0x8E);
-			Set(88, Native.GetIDTJumpLocation(88), 0x08, 0x8E);
-			Set(89, Native.GetIDTJumpLocation(89), 0x08, 0x8E);
-			Set(90, Native.GetIDTJumpLocation(90), 0x08, 0x8E);
-			Set(91, Native.GetIDTJumpLocation(91), 0x08, 0x8E);
-			Set(92, Native.GetIDTJumpLocation(92), 0x08, 0x8E);
-			Set(93, Native.GetIDTJumpLocation(93), 0x08, 0x8E);
-			Set(94, Native.GetIDTJumpLocation(94), 0x08, 0x8E);
-			Set(95, Native.GetIDTJumpLocation(95), 0x08, 0x8E);
-			Set(96, Native.GetIDTJumpLocation(96), 0x08, 0x8E);
-			Set(97, Native.GetIDTJumpLocation(97), 0x08, 0x8E);
-			Set(98, Native.GetIDTJumpLocation(98), 0x08, 0x8E);
-			Set(99, Native.GetIDTJumpLocation(99), 0x08, 0x8E);
-			Set(100, Native.GetIDTJumpLocation(100), 0x08, 0x8E);
-			Set(101, Native.GetIDTJumpLocation(101), 0x08, 0x8E);
-			Set(102, Native.GetIDTJumpLocation(102), 0x08, 0x8E);
-			Set(103, Native.GetIDTJumpLocation(103), 0x08, 0x8E);
-			Set(104, Native.GetIDTJumpLocation(104), 0x08, 0x8E);
-			Set(105, Native.GetIDTJumpLocation(105), 0x08, 0x8E);
-			Set(106, Native.GetIDTJumpLocation(106), 0x08, 0x8E);
-			Set(107, Native.GetIDTJumpLocation(107), 0x08, 0x8E);
-			Set(108, Native.GetIDTJumpLocation(108), 0x08, 0x8E);
-			Set(109, Native.GetIDTJumpLocation(109), 0x08, 0x8E);
-			Set(110, Native.GetIDTJumpLocation(110), 0x08, 0x8E);
-			Set(111, Native.GetIDTJumpLocation(111), 0x08, 0x8E);
-			Set(112, Native.GetIDTJumpLocation(112), 0x08, 0x8E);
-			Set(113, Native.GetIDTJumpLocation(113), 0x08, 0x8E);
-			Set(114, Native.GetIDTJumpLocation(114), 0x08, 0x8E);
-			Set(115, Native.GetIDTJumpLocation(115), 0x08, 0x8E);
-			Set(116, Native.GetIDTJumpLocation(116), 0x08, 0x8E);
-			Set(117, Native.GetIDTJumpLocation(117), 0x08, 0x8E);
-			Set(118, Native.GetIDTJumpLocation(118), 0x08, 0x8E);
-			Set(119, Native.GetIDTJumpLocation(119), 0x08, 0x8E);
-			Set(120, Native.GetIDTJumpLocation(120), 0x08, 0x8E);
-			Set(121, Native.GetIDTJumpLocation(121), 0x08, 0x8E);
-			Set(122, Native.GetIDTJumpLocation(122), 0x08, 0x8E);
-			Set(123, Native.GetIDTJumpLocation(123), 0x08, 0x8E);
-			Set(124, Native.GetIDTJumpLocation(124), 0x08, 0x8E);
-			Set(125, Native.GetIDTJumpLocation(125), 0x08, 0x8E);
-			Set(126, Native.GetIDTJumpLocation(126), 0x08, 0x8E);
-			Set(127, Native.GetIDTJumpLocation(127), 0x08, 0x8E);
-			Set(128, Native.GetIDTJumpLocation(128), 0x08, 0x8E);
-			Set(129, Native.GetIDTJumpLocation(129), 0x08, 0x8E);
-			Set(130, Native.GetIDTJumpLocation(130), 0x08, 0x8E);
-			Set(131, Native.GetIDTJumpLocation(131), 0x08, 0x8E);
-			Set(132, Native.GetIDTJumpLocation(132), 0x08, 0x8E);
-			Set(133, Native.GetIDTJumpLocation(133), 0x08, 0x8E);
-			Set(134, Native.GetIDTJumpLocation(134), 0x08, 0x8E);
-			Set(135, Native.GetIDTJumpLocation(135), 0x08, 0x8E);
-			Set(136, Native.GetIDTJumpLocation(136), 0x08, 0x8E);
-			Set(137, Native.GetIDTJumpLocation(137), 0x08, 0x8E);
-			Set(138, Native.GetIDTJumpLocation(138), 0x08, 0x8E);
-			Set(139, Native.GetIDTJumpLocation(139), 0x08, 0x8E);
-			Set(140, Native.GetIDTJumpLocation(140), 0x08, 0x8E);
-			Set(141, Native.GetIDTJumpLocation(141), 0x08, 0x8E);
-			Set(142, Native.GetIDTJumpLocation(142), 0x08, 0x8E);
-			Set(143, Native.GetIDTJumpLocation(143), 0x08, 0x8E);
-			Set(144, Native.GetIDTJumpLocation(144), 0x08, 0x8E);
-			Set(145, Native.GetIDTJumpLocation(145), 0x08, 0x8E);
-			Set(146, Native.GetIDTJumpLocation(146), 0x08, 0x8E);
-			Set(147, Native.GetIDTJumpLocation(147), 0x08, 0x8E);
-			Set(148, Native.GetIDTJumpLocation(148), 0x08, 0x8E);
-			Set(149, Native.GetIDTJumpLocation(149), 0x08, 0x8E);
-			Set(150, Native.GetIDTJumpLocation(150), 0x08, 0x8E);
-			Set(151, Native.GetIDTJumpLocation(151), 0x08, 0x8E);
-			Set(152, Native.GetIDTJumpLocation(152), 0x08, 0x8E);
-			Set(153, Native.GetIDTJumpLocation(153), 0x08, 0x8E);
-			Set(154, Native.GetIDTJumpLocation(154), 0x08, 0x8E);
-			Set(155, Native.GetIDTJumpLocation(155), 0x08, 0x8E);
-			Set(156, Native.GetIDTJumpLocation(156), 0x08, 0x8E);
-			Set(157, Native.GetIDTJumpLocation(157), 0x08, 0x8E);
-			Set(158, Native.GetIDTJumpLocation(158), 0x08, 0x8E);
-			Set(159, Native.GetIDTJumpLocation(159), 0x08, 0x8E);
-			Set(160, Native.GetIDTJumpLocation(160), 0x08, 0x8E);
-			Set(161, Native.GetIDTJumpLocation(161), 0x08, 0x8E);
-			Set(162, Native.GetIDTJumpLocation(162), 0x08, 0x8E);
-			Set(163, Native.GetIDTJumpLocation(163), 0x08, 0x8E);
-			Set(164, Native.GetIDTJumpLocation(164), 0x08, 0x8E);
-			Set(165, Native.GetIDTJumpLocation(165), 0x08, 0x8E);
-			Set(166, Native.GetIDTJumpLocation(166), 0x08, 0x8E);
-			Set(167, Native.GetIDTJumpLocation(167), 0x08, 0x8E);
-			Set(168, Native.GetIDTJumpLocation(168), 0x08, 0x8E);
-			Set(169, Native.GetIDTJumpLocation(169), 0x08, 0x8E);
-			Set(170, Native.GetIDTJumpLocation(170), 0x08, 0x8E);
-			Set(171, Native.GetIDTJumpLocation(171), 0x08, 0x8E);
-			Set(172, Native.GetIDTJumpLocation(172), 0x08, 0x8E);
-			Set(173, Native.GetIDTJumpLocation(173), 0x08, 0x8E);
-			Set(174, Native.GetIDTJumpLocation(174), 0x08, 0x8E);
-			Set(175, Native.GetIDTJumpLocation(175), 0x08, 0x8E);
-			Set(176, Native.GetIDTJumpLocation(176), 0x08, 0x8E);
-			Set(177, Native.GetIDTJumpLocation(177), 0x08, 0x8E);
-			Set(178, Native.GetIDTJumpLocation(178), 0x08, 0x8E);
-			Set(179, Native.GetIDTJumpLocation(179), 0x08, 0x8E);
-			Set(180, Native.GetIDTJumpLocation(180), 0x08, 0x8E);
-			Set(181, Native.GetIDTJumpLocation(181), 0x08, 0x8E);
-			Set(182, Native.GetIDTJumpLocation(182), 0x08, 0x8E);
-			Set(183, Native.GetIDTJumpLocation(183), 0x08, 0x8E);
-			Set(184, Native.GetIDTJumpLocation(184), 0x08, 0x8E);
-			Set(185, Native.GetIDTJumpLocation(185), 0x08, 0x8E);
-			Set(186, Native.GetIDTJumpLocation(186), 0x08, 0x8E);
-			Set(187, Native.GetIDTJumpLocation(187), 0x08, 0x8E);
-			Set(188, Native.GetIDTJumpLocation(188), 0x08, 0x8E);
-			Set(189, Native.GetIDTJumpLocation(189), 0x08, 0x8E);
-			Set(190, Native.GetIDTJumpLocation(190), 0x08, 0x8E);
-			Set(191, Native.GetIDTJumpLocation(191), 0x08, 0x8E);
-			Set(192, Native.GetIDTJumpLocation(192), 0x08, 0x8E);
-			Set(193, Native.GetIDTJumpLocation(193), 0x08, 0x8E);
-			Set(194, Native.GetIDTJumpLocation(194), 0x08, 0x8E);
-			Set(195, Native.GetIDTJumpLocation(195), 0x08, 0x8E);
-			Set(196, Native.GetIDTJumpLocation(196), 0x08, 0x8E);
-			Set(197, Native.GetIDTJumpLocation(197), 0x08, 0x8E);
-			Set(198, Native.GetIDTJumpLocation(198), 0x08, 0x8E);
-			Set(199, Native.GetIDTJumpLocation(199), 0x08, 0x8E);
-			Set(200, Native.GetIDTJumpLocation(200), 0x08, 0x8E);
-			Set(201, Native.GetIDTJumpLocation(201), 0x08, 0x8E);
-			Set(202, Native.GetIDTJumpLocation(202), 0x08, 0x8E);
-			Set(203, Native.GetIDTJumpLocation(203), 0x08, 0x8E);
-			Set(204, Native.GetIDTJumpLocation(204), 0x08, 0x8E);
-			Set(205, Native.GetIDTJumpLocation(205), 0x08, 0x8E);
-			Set(206, Native.GetIDTJumpLocation(206), 0x08, 0x8E);
-			Set(207, Native.GetIDTJumpLocation(207), 0x08, 0x8E);
-			Set(208, Native.GetIDTJumpLocation(208), 0x08, 0x8E);
-			Set(209, Native.GetIDTJumpLocation(209), 0x08, 0x8E);
-			Set(210, Native.GetIDTJumpLocation(210), 0x08, 0x8E);
-			Set(211, Native.GetIDTJumpLocation(211), 0x08, 0x8E);
-			Set(212, Native.GetIDTJumpLocation(212), 0x08, 0x8E);
-			Set(213, Native.GetIDTJumpLocation(213), 0x08, 0x8E);
-			Set(214, Native.GetIDTJumpLocation(214), 0x08, 0x8E);
-			Set(215, Native.GetIDTJumpLocation(215), 0x08, 0x8E);
-			Set(216, Native.GetIDTJumpLocation(216), 0x08, 0x8E);
-			Set(217, Native.GetIDTJumpLocation(217), 0x08, 0x8E);
-			Set(218, Native.GetIDTJumpLocation(218), 0x08, 0x8E);
-			Set(219, Native.GetIDTJumpLocation(219), 0x08, 0x8E);
-			Set(220, Native.GetIDTJumpLocation(220), 0x08, 0x8E);
-			Set(221, Native.GetIDTJumpLocation(221), 0x08, 0x8E);
-			Set(222, Native.GetIDTJumpLocation(222), 0x08, 0x8E);
-			Set(223, Native.GetIDTJumpLocation(223), 0x08, 0x8E);
-			Set(224, Native.GetIDTJumpLocation(224), 0x08, 0x8E);
-			Set(225, Native.GetIDTJumpLocation(225), 0x08, 0x8E);
-			Set(226, Native.GetIDTJumpLocation(226), 0x08, 0x8E);
-			Set(227, Native.GetIDTJumpLocation(227), 0x08, 0x8E);
-			Set(228, Native.GetIDTJumpLocation(228), 0x08, 0x8E);
-			Set(229, Native.GetIDTJumpLocation(229), 0x08, 0x8E);
-			Set(230, Native.GetIDTJumpLocation(230), 0x08, 0x8E);
-			Set(231, Native.GetIDTJumpLocation(231), 0x08, 0x8E);
-			Set(232, Native.GetIDTJumpLocation(232), 0x08, 0x8E);
-			Set(233, Native.GetIDTJumpLocation(233), 0x08, 0x8E);
-			Set(234, Native.GetIDTJumpLocation(234), 0x08, 0x8E);
-			Set(235, Native.GetIDTJumpLocation(235), 0x08, 0x8E);
-			Set(236, Native.GetIDTJumpLocation(236), 0x08, 0x8E);
-			Set(237, Native.GetIDTJumpLocation(237), 0x08, 0x8E);
-			Set(238, Native.GetIDTJumpLocation(238), 0x08, 0x8E);
-			Set(239, Native.GetIDTJumpLocation(239), 0x08, 0x8E);
-			Set(240, Native.GetIDTJumpLocation(240), 0x08, 0x8E);
-			Set(241, Native.GetIDTJumpLocation(241), 0x08, 0x8E);
-			Set(242, Native.GetIDTJumpLocation(242), 0x08, 0x8E);
-			Set(243, Native.GetIDTJumpLocation(243), 0x08, 0x8E);
-			Set(244, Native.GetIDTJumpLocation(244), 0x08, 0x8E);
-			Set(245, Native.GetIDTJumpLocation(245), 0x08, 0x8E);
-			Set(246, Native.GetIDTJumpLocation(246), 0x08, 0x8E);
-			Set(247, Native.GetIDTJumpLocation(247), 0x08, 0x8E);
-			Set(248, Native.GetIDTJumpLocation(248), 0x08, 0x8E);
-			Set(249, Native.GetIDTJumpLocation(249), 0x08, 0x8E);
-			Set(250, Native.GetIDTJumpLocation(250), 0x08, 0x8E);
-			Set(251, Native.GetIDTJumpLocation(251), 0x08, 0x8E);
-			Set(252, Native.GetIDTJumpLocation(252), 0x08, 0x8E);
-			Set(253, Native.GetIDTJumpLocation(253), 0x08, 0x8E);
-			Set(254, Native.GetIDTJumpLocation(254), 0x08, 0x8E);
-			Set(255, Native.GetIDTJumpLocation(255), 0x08, 0x8E);
+			Set(0, new Action(IRQ0));
+			Set(1, new Action(IRQ1));
+			Set(2, new Action(IRQ2));
+			Set(3, new Action(IRQ3));
+			Set(4, new Action(IRQ4));
+			Set(5, new Action(IRQ5));
+			Set(6, new Action(IRQ6));
+			Set(7, new Action(IRQ7));
+			Set(8, new Action(IRQ8));
+			Set(9, new Action(IRQ9));
+			Set(10, new Action(IRQ10));
+			Set(11, new Action(IRQ11));
+			Set(12, new Action(IRQ12));
+			Set(13, new Action(IRQ13));
+			Set(14, new Action(IRQ14));
+			Set(15, new Action(IRQ15));
+			Set(16, new Action(IRQ16));
+			Set(17, new Action(IRQ17));
+			Set(18, new Action(IRQ18));
+			Set(19, new Action(IRQ19));
+			Set(20, new Action(IRQ20));
+			Set(21, new Action(IRQ21));
+			Set(22, new Action(IRQ22));
+			Set(23, new Action(IRQ23));
+			Set(24, new Action(IRQ24));
+			Set(25, new Action(IRQ25));
+			Set(26, new Action(IRQ26));
+			Set(27, new Action(IRQ27));
+			Set(28, new Action(IRQ28));
+			Set(29, new Action(IRQ29));
+			Set(30, new Action(IRQ30));
+			Set(31, new Action(IRQ31));
+			Set(32, new Action(IRQ32));
+			Set(33, new Action(IRQ33));
+			Set(34, new Action(IRQ34));
+			Set(35, new Action(IRQ35));
+			Set(36, new Action(IRQ36));
+			Set(37, new Action(IRQ37));
+			Set(38, new Action(IRQ38));
+			Set(39, new Action(IRQ39));
+			Set(40, new Action(IRQ40));
+			Set(41, new Action(IRQ41));
+			Set(42, new Action(IRQ42));
+			Set(43, new Action(IRQ43));
+			Set(44, new Action(IRQ44));
+			Set(45, new Action(IRQ45));
+			Set(46, new Action(IRQ46));
+			Set(47, new Action(IRQ47));
+			Set(48, new Action(IRQ48));
+			Set(49, new Action(IRQ49));
+			Set(50, new Action(IRQ50));
+			Set(51, new Action(IRQ51));
+			Set(52, new Action(IRQ52));
+			Set(53, new Action(IRQ53));
+			Set(54, new Action(IRQ54));
+			Set(55, new Action(IRQ55));
+			Set(56, new Action(IRQ56));
+			Set(57, new Action(IRQ57));
+			Set(58, new Action(IRQ58));
+			Set(59, new Action(IRQ59));
+			Set(60, new Action(IRQ60));
+			Set(61, new Action(IRQ61));
+			Set(62, new Action(IRQ62));
+			Set(63, new Action(IRQ63));
+			Set(64, new Action(IRQ64));
+			Set(65, new Action(IRQ65));
+			Set(66, new Action(IRQ66));
+			Set(67, new Action(IRQ67));
+			Set(68, new Action(IRQ68));
+			Set(69, new Action(IRQ69));
+			Set(70, new Action(IRQ70));
+			Set(71, new Action(IRQ71));
+			Set(72, new Action(IRQ72));
+			Set(73, new Action(IRQ73));
+			Set(74, new Action(IRQ74));
+			Set(75, new Action(IRQ75));
+			Set(76, new Action(IRQ76));
+			Set(77, new Action(IRQ77));
+			Set(78, new Action(IRQ78));
+			Set(79, new Action(IRQ79));
+			Set(80, new Action(IRQ80));
+			Set(81, new Action(IRQ81));
+			Set(82, new Action(IRQ82));
+			Set(83, new Action(IRQ83));
+			Set(84, new Action(IRQ84));
+			Set(85, new Action(IRQ85));
+			Set(86, new Action(IRQ86));
+			Set(87, new Action(IRQ87));
+			Set(88, new Action(IRQ88));
+			Set(89, new Action(IRQ89));
+			Set(90, new Action(IRQ90));
+			Set(91, new Action(IRQ91));
+			Set(92, new Action(IRQ92));
+			Set(93, new Action(IRQ93));
+			Set(94, new Action(IRQ94));
+			Set(95, new Action(IRQ95));
+			Set(96, new Action(IRQ96));
+			Set(97, new Action(IRQ97));
+			Set(98, new Action(IRQ98));
+			Set(99, new Action(IRQ99));
+			Set(100, new Action(IRQ100));
+			Set(101, new Action(IRQ101));
+			Set(102, new Action(IRQ102));
+			Set(103, new Action(IRQ103));
+			Set(104, new Action(IRQ104));
+			Set(105, new Action(IRQ105));
+			Set(106, new Action(IRQ106));
+			Set(107, new Action(IRQ107));
+			Set(108, new Action(IRQ108));
+			Set(109, new Action(IRQ109));
+			Set(110, new Action(IRQ110));
+			Set(111, new Action(IRQ111));
+			Set(112, new Action(IRQ112));
+			Set(113, new Action(IRQ113));
+			Set(114, new Action(IRQ114));
+			Set(115, new Action(IRQ115));
+			Set(116, new Action(IRQ116));
+			Set(117, new Action(IRQ117));
+			Set(118, new Action(IRQ118));
+			Set(119, new Action(IRQ119));
+			Set(120, new Action(IRQ120));
+			Set(121, new Action(IRQ121));
+			Set(122, new Action(IRQ122));
+			Set(123, new Action(IRQ123));
+			Set(124, new Action(IRQ124));
+			Set(125, new Action(IRQ125));
+			Set(126, new Action(IRQ126));
+			Set(127, new Action(IRQ127));
+			Set(128, new Action(IRQ128));
+			Set(129, new Action(IRQ129));
+			Set(130, new Action(IRQ130));
+			Set(131, new Action(IRQ131));
+			Set(132, new Action(IRQ132));
+			Set(133, new Action(IRQ133));
+			Set(134, new Action(IRQ134));
+			Set(135, new Action(IRQ135));
+			Set(136, new Action(IRQ136));
+			Set(137, new Action(IRQ137));
+			Set(138, new Action(IRQ138));
+			Set(139, new Action(IRQ139));
+			Set(140, new Action(IRQ140));
+			Set(141, new Action(IRQ141));
+			Set(142, new Action(IRQ142));
+			Set(143, new Action(IRQ143));
+			Set(144, new Action(IRQ144));
+			Set(145, new Action(IRQ145));
+			Set(146, new Action(IRQ146));
+			Set(147, new Action(IRQ147));
+			Set(148, new Action(IRQ148));
+			Set(149, new Action(IRQ149));
+			Set(150, new Action(IRQ150));
+			Set(151, new Action(IRQ151));
+			Set(152, new Action(IRQ152));
+			Set(153, new Action(IRQ153));
+			Set(154, new Action(IRQ154));
+			Set(155, new Action(IRQ155));
+			Set(156, new Action(IRQ156));
+			Set(157, new Action(IRQ157));
+			Set(158, new Action(IRQ158));
+			Set(159, new Action(IRQ159));
+			Set(160, new Action(IRQ160));
+			Set(161, new Action(IRQ161));
+			Set(162, new Action(IRQ162));
+			Set(163, new Action(IRQ163));
+			Set(164, new Action(IRQ164));
+			Set(165, new Action(IRQ165));
+			Set(166, new Action(IRQ166));
+			Set(167, new Action(IRQ167));
+			Set(168, new Action(IRQ168));
+			Set(169, new Action(IRQ169));
+			Set(170, new Action(IRQ170));
+			Set(171, new Action(IRQ171));
+			Set(172, new Action(IRQ172));
+			Set(173, new Action(IRQ173));
+			Set(174, new Action(IRQ174));
+			Set(175, new Action(IRQ175));
+			Set(176, new Action(IRQ176));
+			Set(177, new Action(IRQ177));
+			Set(178, new Action(IRQ178));
+			Set(179, new Action(IRQ179));
+			Set(180, new Action(IRQ180));
+			Set(181, new Action(IRQ181));
+			Set(182, new Action(IRQ182));
+			Set(183, new Action(IRQ183));
+			Set(184, new Action(IRQ184));
+			Set(185, new Action(IRQ185));
+			Set(186, new Action(IRQ186));
+			Set(187, new Action(IRQ187));
+			Set(188, new Action(IRQ188));
+			Set(189, new Action(IRQ189));
+			Set(190, new Action(IRQ190));
+			Set(191, new Action(IRQ191));
+			Set(192, new Action(IRQ192));
+			Set(193, new Action(IRQ193));
+			Set(194, new Action(IRQ194));
+			Set(195, new Action(IRQ195));
+			Set(196, new Action(IRQ196));
+			Set(197, new Action(IRQ197));
+			Set(198, new Action(IRQ198));
+			Set(199, new Action(IRQ199));
+			Set(200, new Action(IRQ200));
+			Set(201, new Action(IRQ201));
+			Set(202, new Action(IRQ202));
+			Set(203, new Action(IRQ203));
+			Set(204, new Action(IRQ204));
+			Set(205, new Action(IRQ205));
+			Set(206, new Action(IRQ206));
+			Set(207, new Action(IRQ207));
+			Set(208, new Action(IRQ208));
+			Set(209, new Action(IRQ209));
+			Set(210, new Action(IRQ210));
+			Set(211, new Action(IRQ211));
+			Set(212, new Action(IRQ212));
+			Set(213, new Action(IRQ213));
+			Set(214, new Action(IRQ214));
+			Set(215, new Action(IRQ215));
+			Set(216, new Action(IRQ216));
+			Set(217, new Action(IRQ217));
+			Set(218, new Action(IRQ218));
+			Set(219, new Action(IRQ219));
+			Set(220, new Action(IRQ220));
+			Set(221, new Action(IRQ221));
+			Set(222, new Action(IRQ222));
+			Set(223, new Action(IRQ223));
+			Set(224, new Action(IRQ224));
+			Set(225, new Action(IRQ225));
+			Set(226, new Action(IRQ226));
+			Set(227, new Action(IRQ227));
+			Set(228, new Action(IRQ228));
+			Set(229, new Action(IRQ229));
+			Set(230, new Action(IRQ230));
+			Set(231, new Action(IRQ231));
+			Set(232, new Action(IRQ232));
+			Set(233, new Action(IRQ233));
+			Set(234, new Action(IRQ234));
+			Set(235, new Action(IRQ235));
+			Set(236, new Action(IRQ236));
+			Set(237, new Action(IRQ237));
+			Set(238, new Action(IRQ238));
+			Set(239, new Action(IRQ239));
+			Set(240, new Action(IRQ240));
+			Set(241, new Action(IRQ241));
+			Set(242, new Action(IRQ242));
+			Set(243, new Action(IRQ243));
+			Set(244, new Action(IRQ244));
+			Set(245, new Action(IRQ245));
+			Set(246, new Action(IRQ246));
+			Set(247, new Action(IRQ247));
+			Set(248, new Action(IRQ248));
+			Set(249, new Action(IRQ249));
+			Set(250, new Action(IRQ250));
+			Set(251, new Action(IRQ251));
+			Set(252, new Action(IRQ252));
+			Set(253, new Action(IRQ253));
+			Set(254, new Action(IRQ254));
+			Set(255, new Action(IRQ255));
 		}
+
+		#region IRQ Implementation Methods
+
+		private static void IRQ0()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ0();
+		}
+
+		private static void IRQ1()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ1();
+		}
+
+		private static void IRQ2()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ2();
+		}
+
+		private static void IRQ3()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ3();
+		}
+
+		private static void IRQ4()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ4();
+		}
+
+		private static void IRQ5()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ5();
+		}
+
+		private static void IRQ6()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ6();
+		}
+
+		private static void IRQ7()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ7();
+		}
+
+		private static void IRQ8()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ8();
+		}
+
+		private static void IRQ9()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ9();
+		}
+
+		private static void IRQ10()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ10();
+		}
+
+		private static void IRQ11()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ11();
+		}
+
+		private static void IRQ12()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ12();
+		}
+
+		private static void IRQ13()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ13();
+		}
+
+		private static void IRQ14()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ14();
+		}
+
+		private static void IRQ15()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ15();
+		}
+
+		private static void IRQ16()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ16();
+		}
+
+		private static void IRQ17()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ17();
+		}
+
+		private static void IRQ18()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ18();
+		}
+
+		private static void IRQ19()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ19();
+		}
+
+		private static void IRQ20()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ20();
+		}
+
+		private static void IRQ21()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ21();
+		}
+
+		private static void IRQ22()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ22();
+		}
+
+		private static void IRQ23()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ23();
+		}
+
+		private static void IRQ24()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ24();
+		}
+
+		private static void IRQ25()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ25();
+		}
+
+		private static void IRQ26()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ26();
+		}
+
+		private static void IRQ27()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ27();
+		}
+
+		private static void IRQ28()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ28();
+		}
+
+		private static void IRQ29()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ29();
+		}
+
+		private static void IRQ30()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ30();
+		}
+
+		private static void IRQ31()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ31();
+		}
+
+		private static void IRQ32()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ32();
+		}
+
+		private static void IRQ33()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ33();
+		}
+
+		private static void IRQ34()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ34();
+		}
+
+		private static void IRQ35()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ35();
+		}
+
+		private static void IRQ36()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ36();
+		}
+
+		private static void IRQ37()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ37();
+		}
+
+		private static void IRQ38()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ38();
+		}
+
+		private static void IRQ39()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ39();
+		}
+
+		private static void IRQ40()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ40();
+		}
+
+		private static void IRQ41()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ41();
+		}
+
+		private static void IRQ42()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ42();
+		}
+
+		private static void IRQ43()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ43();
+		}
+
+		private static void IRQ44()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ44();
+		}
+
+		private static void IRQ45()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ45();
+		}
+
+		private static void IRQ46()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ46();
+		}
+
+		private static void IRQ47()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ47();
+		}
+
+		private static void IRQ48()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ48();
+		}
+
+		private static void IRQ49()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ49();
+		}
+
+		private static void IRQ50()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ50();
+		}
+
+		private static void IRQ51()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ51();
+		}
+
+		private static void IRQ52()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ52();
+		}
+
+		private static void IRQ53()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ53();
+		}
+
+		private static void IRQ54()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ54();
+		}
+
+		private static void IRQ55()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ55();
+		}
+
+		private static void IRQ56()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ56();
+		}
+
+		private static void IRQ57()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ57();
+		}
+
+		private static void IRQ58()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ58();
+		}
+
+		private static void IRQ59()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ59();
+		}
+
+		private static void IRQ60()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ60();
+		}
+
+		private static void IRQ61()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ61();
+		}
+
+		private static void IRQ62()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ62();
+		}
+
+		private static void IRQ63()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ63();
+		}
+
+		private static void IRQ64()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ64();
+		}
+
+		private static void IRQ65()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ65();
+		}
+
+		private static void IRQ66()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ66();
+		}
+
+		private static void IRQ67()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ67();
+		}
+
+		private static void IRQ68()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ68();
+		}
+
+		private static void IRQ69()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ69();
+		}
+
+		private static void IRQ70()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ70();
+		}
+
+		private static void IRQ71()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ71();
+		}
+
+		private static void IRQ72()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ72();
+		}
+
+		private static void IRQ73()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ73();
+		}
+
+		private static void IRQ74()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ74();
+		}
+
+		private static void IRQ75()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ75();
+		}
+
+		private static void IRQ76()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ76();
+		}
+
+		private static void IRQ77()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ77();
+		}
+
+		private static void IRQ78()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ78();
+		}
+
+		private static void IRQ79()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ79();
+		}
+
+		private static void IRQ80()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ80();
+		}
+
+		private static void IRQ81()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ81();
+		}
+
+		private static void IRQ82()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ82();
+		}
+
+		private static void IRQ83()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ83();
+		}
+
+		private static void IRQ84()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ84();
+		}
+
+		private static void IRQ85()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ85();
+		}
+
+		private static void IRQ86()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ86();
+		}
+
+		private static void IRQ87()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ87();
+		}
+
+		private static void IRQ88()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ88();
+		}
+
+		private static void IRQ89()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ89();
+		}
+
+		private static void IRQ90()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ90();
+		}
+
+		private static void IRQ91()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ91();
+		}
+
+		private static void IRQ92()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ92();
+		}
+
+		private static void IRQ93()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ93();
+		}
+
+		private static void IRQ94()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ94();
+		}
+
+		private static void IRQ95()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ95();
+		}
+
+		private static void IRQ96()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ96();
+		}
+
+		private static void IRQ97()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ97();
+		}
+
+		private static void IRQ98()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ98();
+		}
+
+		private static void IRQ99()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ99();
+		}
+
+		private static void IRQ100()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ100();
+		}
+
+		private static void IRQ101()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ101();
+		}
+
+		private static void IRQ102()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ102();
+		}
+
+		private static void IRQ103()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ103();
+		}
+
+		private static void IRQ104()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ104();
+		}
+
+		private static void IRQ105()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ105();
+		}
+
+		private static void IRQ106()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ106();
+		}
+
+		private static void IRQ107()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ107();
+		}
+
+		private static void IRQ108()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ108();
+		}
+
+		private static void IRQ109()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ109();
+		}
+
+		private static void IRQ110()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ110();
+		}
+
+		private static void IRQ111()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ111();
+		}
+
+		private static void IRQ112()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ112();
+		}
+
+		private static void IRQ113()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ113();
+		}
+
+		private static void IRQ114()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ114();
+		}
+
+		private static void IRQ115()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ115();
+		}
+
+		private static void IRQ116()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ116();
+		}
+
+		private static void IRQ117()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ117();
+		}
+
+		private static void IRQ118()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ118();
+		}
+
+		private static void IRQ119()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ119();
+		}
+
+		private static void IRQ120()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ120();
+		}
+
+		private static void IRQ121()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ121();
+		}
+
+		private static void IRQ122()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ122();
+		}
+
+		private static void IRQ123()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ123();
+		}
+
+		private static void IRQ124()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ124();
+		}
+
+		private static void IRQ125()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ125();
+		}
+
+		private static void IRQ126()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ126();
+		}
+
+		private static void IRQ127()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ127();
+		}
+
+		private static void IRQ128()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ128();
+		}
+
+		private static void IRQ129()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ129();
+		}
+
+		private static void IRQ130()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ130();
+		}
+
+		private static void IRQ131()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ131();
+		}
+
+		private static void IRQ132()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ132();
+		}
+
+		private static void IRQ133()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ133();
+		}
+
+		private static void IRQ134()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ134();
+		}
+
+		private static void IRQ135()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ135();
+		}
+
+		private static void IRQ136()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ136();
+		}
+
+		private static void IRQ137()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ137();
+		}
+
+		private static void IRQ138()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ138();
+		}
+
+		private static void IRQ139()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ139();
+		}
+
+		private static void IRQ140()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ140();
+		}
+
+		private static void IRQ141()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ141();
+		}
+
+		private static void IRQ142()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ142();
+		}
+
+		private static void IRQ143()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ143();
+		}
+
+		private static void IRQ144()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ144();
+		}
+
+		private static void IRQ145()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ145();
+		}
+
+		private static void IRQ146()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ146();
+		}
+
+		private static void IRQ147()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ147();
+		}
+
+		private static void IRQ148()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ148();
+		}
+
+		private static void IRQ149()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ149();
+		}
+
+		private static void IRQ150()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ150();
+		}
+
+		private static void IRQ151()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ151();
+		}
+
+		private static void IRQ152()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ152();
+		}
+
+		private static void IRQ153()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ153();
+		}
+
+		private static void IRQ154()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ154();
+		}
+
+		private static void IRQ155()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ155();
+		}
+
+		private static void IRQ156()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ156();
+		}
+
+		private static void IRQ157()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ157();
+		}
+
+		private static void IRQ158()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ158();
+		}
+
+		private static void IRQ159()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ159();
+		}
+
+		private static void IRQ160()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ160();
+		}
+
+		private static void IRQ161()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ161();
+		}
+
+		private static void IRQ162()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ162();
+		}
+
+		private static void IRQ163()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ163();
+		}
+
+		private static void IRQ164()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ164();
+		}
+
+		private static void IRQ165()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ165();
+		}
+
+		private static void IRQ166()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ166();
+		}
+
+		private static void IRQ167()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ167();
+		}
+
+		private static void IRQ168()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ168();
+		}
+
+		private static void IRQ169()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ169();
+		}
+
+		private static void IRQ170()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ170();
+		}
+
+		private static void IRQ171()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ171();
+		}
+
+		private static void IRQ172()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ172();
+		}
+
+		private static void IRQ173()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ173();
+		}
+
+		private static void IRQ174()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ174();
+		}
+
+		private static void IRQ175()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ175();
+		}
+
+		private static void IRQ176()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ176();
+		}
+
+		private static void IRQ177()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ177();
+		}
+
+		private static void IRQ178()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ178();
+		}
+
+		private static void IRQ179()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ179();
+		}
+
+		private static void IRQ180()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ180();
+		}
+
+		private static void IRQ181()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ181();
+		}
+
+		private static void IRQ182()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ182();
+		}
+
+		private static void IRQ183()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ183();
+		}
+
+		private static void IRQ184()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ184();
+		}
+
+		private static void IRQ185()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ185();
+		}
+
+		private static void IRQ186()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ186();
+		}
+
+		private static void IRQ187()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ187();
+		}
+
+		private static void IRQ188()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ188();
+		}
+
+		private static void IRQ189()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ189();
+		}
+
+		private static void IRQ190()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ190();
+		}
+
+		private static void IRQ191()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ191();
+		}
+
+		private static void IRQ192()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ192();
+		}
+
+		private static void IRQ193()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ193();
+		}
+
+		private static void IRQ194()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ194();
+		}
+
+		private static void IRQ195()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ195();
+		}
+
+		private static void IRQ196()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ196();
+		}
+
+		private static void IRQ197()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ197();
+		}
+
+		private static void IRQ198()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ198();
+		}
+
+		private static void IRQ199()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ199();
+		}
+
+		private static void IRQ200()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ200();
+		}
+
+		private static void IRQ201()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ201();
+		}
+
+		private static void IRQ202()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ202();
+		}
+
+		private static void IRQ203()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ203();
+		}
+
+		private static void IRQ204()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ204();
+		}
+
+		private static void IRQ205()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ205();
+		}
+
+		private static void IRQ206()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ206();
+		}
+
+		private static void IRQ207()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ207();
+		}
+
+		private static void IRQ208()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ208();
+		}
+
+		private static void IRQ209()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ209();
+		}
+
+		private static void IRQ210()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ210();
+		}
+
+		private static void IRQ211()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ211();
+		}
+
+		private static void IRQ212()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ212();
+		}
+
+		private static void IRQ213()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ213();
+		}
+
+		private static void IRQ214()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ214();
+		}
+
+		private static void IRQ215()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ215();
+		}
+
+		private static void IRQ216()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ216();
+		}
+
+		private static void IRQ217()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ217();
+		}
+
+		private static void IRQ218()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ218();
+		}
+
+		private static void IRQ219()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ219();
+		}
+
+		private static void IRQ220()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ220();
+		}
+
+		private static void IRQ221()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ221();
+		}
+
+		private static void IRQ222()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ222();
+		}
+
+		private static void IRQ223()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ223();
+		}
+
+		private static void IRQ224()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ224();
+		}
+
+		private static void IRQ225()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ225();
+		}
+
+		private static void IRQ226()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ226();
+		}
+
+		private static void IRQ227()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ227();
+		}
+
+		private static void IRQ228()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ228();
+		}
+
+		private static void IRQ229()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ229();
+		}
+
+		private static void IRQ230()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ230();
+		}
+
+		private static void IRQ231()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ231();
+		}
+
+		private static void IRQ232()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ232();
+		}
+
+		private static void IRQ233()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ233();
+		}
+
+		private static void IRQ234()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ234();
+		}
+
+		private static void IRQ235()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ235();
+		}
+
+		private static void IRQ236()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ236();
+		}
+
+		private static void IRQ237()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ237();
+		}
+
+		private static void IRQ238()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ238();
+		}
+
+		private static void IRQ239()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ239();
+		}
+
+		private static void IRQ240()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ240();
+		}
+
+		private static void IRQ241()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ241();
+		}
+
+		private static void IRQ242()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ242();
+		}
+
+		private static void IRQ243()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ243();
+		}
+
+		private static void IRQ244()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ244();
+		}
+
+		private static void IRQ245()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ245();
+		}
+
+		private static void IRQ246()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ246();
+		}
+
+		private static void IRQ247()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ247();
+		}
+
+		private static void IRQ248()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ248();
+		}
+
+		private static void IRQ249()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ249();
+		}
+
+		private static void IRQ250()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ250();
+		}
+
+		private static void IRQ251()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ251();
+		}
+
+		private static void IRQ252()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ252();
+		}
+
+		private static void IRQ253()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ253();
+		}
+
+		private static void IRQ254()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ254();
+		}
+
+		private static void IRQ255()
+		{
+			Native.SuppressStackFrame();
+			Native.IRQ255();
+		}
+
+		#endregion IRQ Implementation Methods
 
 		/// <summary>
 		/// Interrupts the handler.
