@@ -139,16 +139,6 @@ namespace Mosa.Compiler.Framework
 		public List<ProtectedRegion> ProtectedRegions { get; set; }
 
 		/// <summary>
-		/// Gets a value indicating whether [plugged method].
-		/// </summary>
-		//public MosaMethod PluggedMethod { get; }
-
-		/// <summary>
-		/// Gets a value indicating whether this method is plugged.
-		/// </summary>
-		//public bool IsMethodPlugged { get { return PluggedMethod != null; } }
-
-		/// <summary>
 		/// The labels
 		/// </summary>
 		public Dictionary<int, int> Labels { get; set; }
