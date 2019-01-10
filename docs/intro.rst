@@ -61,11 +61,11 @@ You will also need the following prerequisites:
 Windows
 -------
 
-Install any [Visual Studio](http://www.visualstudio.com) version 2018 or newer. All editions are supported including the fully-featured free [Community Edition](https://www.visualstudio.com/products/visual-studio-community-vs).
+Install any `Visual Studio <http://www.visualstudio.com>`__ version 2018 or newer. All editions are supported including the fully-featured free `Community Edition <https://www.visualstudio.com/products/visual-studio-community-vs>`__.
 
 Note: The MOSA source code repository includes `Qemu <http://wiki.qemu.org/Main_Page>`__ virtual emulator for Windows.
 
-The [CodeMaid](http://www.codemaid.net/) Visual Studio Extension is strongly recommended for MOSA contributors.
+The `CodeMaid <http://www.codemaid.net>`__ Visual Studio Extension is strongly recommended for MOSA contributors.
 
 Linux
 -----
