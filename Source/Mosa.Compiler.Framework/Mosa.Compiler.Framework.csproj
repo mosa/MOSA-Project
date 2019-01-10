@@ -94,6 +94,7 @@
     <Compile Include="ConstantOperand.cs" />
     <Compile Include="CIL\IRInstructions.cs" />
     <Compile Include="Counter.cs" />
+    <Compile Include="Intrinsics\SuppressStackFrame.cs" />
     <Compile Include="IR\Add32.cs" />
     <Compile Include="IR\Add64.cs" />
     <Compile Include="IR\AddCarryOut32.cs" />
@@ -466,7 +467,7 @@
     <Compile Include="Stages\LeaveSSAStage.cs" />
     <Compile Include="Stages\CILOperandAssignmentStage.cs" />
     <Compile Include="CompilerOptions.cs" />
-    <Compile Include="Stages\StaticAllocationResolutionStage.cs" />
+    <Compile Include="Stages\CILStaticAllocationResolutionStage.cs" />
     <Compile Include="Stages\CILTransformationStage.cs" />
     <Compile Include="CIL\ConstrainedPrefixInstruction.cs" />
     <Compile Include="CIL\ConversionInstruction.cs" />

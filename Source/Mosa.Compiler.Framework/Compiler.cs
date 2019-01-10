@@ -20,9 +20,9 @@ namespace Mosa.Compiler.Framework
 	{
 		#region Data Members
 
-		private Pipeline<BaseMethodCompilerStage>[] methodStagePipelines;
+		private readonly Pipeline<BaseMethodCompilerStage>[] methodStagePipelines;
 
-		public Dictionary<string, InstrinsicMethodDelegate> internalIntrinsicMethods { get; } = new Dictionary<string, InstrinsicMethodDelegate>();
+		private Dictionary<string, InstrinsicMethodDelegate> internalIntrinsicMethods { get; } = new Dictionary<string, InstrinsicMethodDelegate>();
 
 		#endregion Data Members
 
@@ -144,7 +144,7 @@ namespace Mosa.Compiler.Framework
 				new StackSetupStage(),
 				new ProtectedRegionStage(),
 				new ExceptionStage(),
-				new StaticAllocationResolutionStage(),
+				new CILStaticAllocationResolutionStage(),
 				new CILTransformationStage(),
 				new PlugStage(),
 				new UnboxValueTypeStage(),
@@ -477,6 +477,10 @@ namespace Mosa.Compiler.Framework
 				NewCompilerTraceEvent(CompilerEvent.Counter, counter);
 			}
 		}
+
+		//public LoadBinary(string filename)
+		//{
+		//}
 
 		#endregion Methods
 

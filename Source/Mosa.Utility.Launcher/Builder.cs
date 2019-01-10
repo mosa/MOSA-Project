@@ -105,8 +105,8 @@ namespace Mosa.Utility.Launcher
 				compiler.CompilerOptions.SetCustomOption("multiboot.height", Options.Height.ToString());
 				compiler.CompilerOptions.SetCustomOption("multiboot.depth", Options.Depth.ToString());
 				compiler.CompilerOptions.BaseAddress = Options.BaseAddress;
-				compiler.CompilerOptions.EmitSymbols = Options.EmitSymbols;
-				compiler.CompilerOptions.EmitRelocations = Options.EmitRelocations;
+				compiler.CompilerOptions.EmitAllSymbols = Options.EmitAllSymbols;
+				compiler.CompilerOptions.EmitStaticRelocations = Options.EmitStaticRelocations;
 				compiler.CompilerOptions.SetCustomOption("x86.irq-methods", Options.Emitx86IRQMethods ? "true" : "false");
 
 				if (Options.GenerateMapFile)
@@ -139,17 +139,20 @@ namespace Mosa.Utility.Launcher
 					return;
 				}
 
-				compiler.AddPath(Options.Paths);
+				compiler.CompilerOptions.AddSourceFile(Options.SourceFile);
+				compiler.CompilerOptions.AddSearchPaths(Options.Paths);
 
 				var inputFiles = new List<FileInfo>
 				{
-					new FileInfo(Options.SourceFile),
 					(Options.HuntForCorLib) ? HuntFor("mscorlib.dll") : null,
 					(Options.PlugKorlib) ? HuntFor("Mosa.Plug.Korlib.dll") : null,
 					(Options.PlugKorlib) ? HuntFor("Mosa.Plug.Korlib." + Options.PlatformType.ToString() + ".dll"): null,
 				};
 
-				compiler.Load(inputFiles);
+				compiler.CompilerOptions.AddSourceFiles(inputFiles);
+				compiler.CompilerOptions.AddSearchPaths(inputFiles);
+
+				compiler.Load();
 
 				if (Options.UseMultiThreadingCompiler)
 				{
@@ -202,7 +205,6 @@ namespace Mosa.Utility.Launcher
 			}
 			finally
 			{
-				compiler.Dispose();
 				compiler = null;
 			}
 		}
@@ -498,7 +500,7 @@ namespace Mosa.Utility.Launcher
 
 			result = SearchSubdirectories(Path.Combine(Environment.CurrentDirectory, "..", "..", "packages"), filename);
 
-			return result ?? null;
+			return result;
 		}
 
 		private static string SearchSubdirectories(string path, string filename)

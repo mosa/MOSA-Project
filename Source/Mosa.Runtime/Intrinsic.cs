@@ -219,6 +219,9 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern static RuntimeTypeHandle GetStringType();
 
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public extern static void SuppressStackFrame();
+
 		#endregion Intrinsic
 	}
 }

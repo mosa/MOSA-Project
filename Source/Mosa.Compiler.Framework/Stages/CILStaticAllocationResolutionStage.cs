@@ -8,10 +8,13 @@ using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
 {
-	public class StaticAllocationResolutionStage : BaseMethodCompilerStage
+	public class CILStaticAllocationResolutionStage : BaseMethodCompilerStage
 	{
 		protected override void Run()
 		{
+			if (!MethodCompiler.IsCILDecodeRequired)
+				return;
+
 			if (MethodCompiler.Method.Name != ".cctor")
 				return;
 
@@ -44,7 +47,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					if ((node.Instruction is CIL.NewobjInstruction && !MosaTypeLayout.IsStoredOnStack(node.Result.Type)) || node.Instruction is CIL.NewarrInstruction)
+					if ((node.Instruction is NewobjInstruction && !MosaTypeLayout.IsStoredOnStack(node.Result.Type)) || node.Instruction is NewarrInstruction)
 					{
 						list.Add(node);
 					}
@@ -64,7 +67,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// If instruction is newarr then get the size of the element, multiply it by array size, and add array header size
 			// Also need to align to a 4-byte boundary
-			if (allocation.Instruction is CIL.NewarrInstruction)
+			if (allocation.Instruction is NewarrInstruction)
 			{
 				int elements = GetConstant(allocation.Operand1);
 				typeSize = (TypeLayout.GetTypeSize(allocatedType.ElementType) * elements) + (TypeLayout.NativePointerSize * 3);
@@ -84,20 +87,16 @@ namespace Mosa.Compiler.Framework.Stages
 			var staticAddress = Operand.CreateSymbol(assignmentField.FieldType, symbolName.Name);
 			var result1 = AllocateVirtualRegister(assignmentField.FieldType);
 
-			//Operand result2 = AllocateVirtualRegister(assignmentField.FieldType);
-
 			// Issue a load request before the newobj and before the assignment.
 			new Context(allocation).InsertBefore().SetInstruction(CILInstruction.Get(OpCode.Ldc_i4), result1, staticAddress);
 			assignment.Operand1 = result1;
 
 			// If the instruction is a newarr
-			if (allocation.Instruction is CIL.NewarrInstruction)
+			if (allocation.Instruction is NewarrInstruction)
 			{
 				allocation.SetInstruction(CILInstruction.Get(OpCode.Ldc_i4), allocation.Result, result1);
 				return;
 			}
-
-			//new Context(allocation).InsertBefore().SetInstruction(CILInstruction.Get(OpCode.Ldc_i4), result2, staticAddress);
 
 			// Change the newobj to a call and increase the operand count to include the this ptr.
 			// If the instruction is a newarr, then just replace with a nop instead
@@ -128,7 +127,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var node in allocation.Result.Uses)
 			{
-				if (node.Instruction is CIL.StsfldInstruction)
+				if (node.Instruction is StsfldInstruction)
 				{
 					return node;
 				}
@@ -143,7 +142,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var op = operand.Definitions[0];
 
-				if (op.Instruction is CIL.LdcInstruction)
+				if (op.Instruction is LdcInstruction)
 				{
 					if (op.Operand1.IsResolvedConstant)
 					{
@@ -161,7 +160,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// as that is hard to complete at this point of time.
 
 			var allocationType = (allocation.InvokeMethod != null) ? allocation.InvokeMethod.DeclaringType : allocation.Result.Type.ElementType;
-			var storageType = (allocation.Instruction is CIL.NewarrInstruction) ? assignment.Operand1.Type.ElementType : assignment.MosaField.DeclaringType;
+			var storageType = (allocation.Instruction is NewarrInstruction) ? assignment.Operand1.Type.ElementType : assignment.MosaField.DeclaringType;
 
 			return ReferenceEquals(allocationType, storageType);
 		}

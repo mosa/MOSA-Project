@@ -7,6 +7,7 @@ using Mosa.Compiler.Framework.Trace.BuiltIn;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
 namespace Mosa.Tool.Compiler
 {
@@ -80,6 +81,9 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -a x86 --mboot v1 --x
 
 				compiler.CompilerOptions = options.CompilerOptions;
 
+				Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
+				Debug.AutoFlush = true;
+
 				// Process boot format:
 				// Boot format only matters if it's an executable
 				// Process this only now, because input files must be known
@@ -148,7 +152,7 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -a x86 --mboot v1 --x
 		/// <returns>A string containing the options.</returns>
 		public override string ToString()
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			sb.Append(" > Output file: ").AppendLine(compiler.CompilerOptions.OutputFile);
 			sb.Append(" > Input file(s): ").AppendLine(string.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
 			sb.Append(" > Architecture: ").AppendLine(compiler.CompilerOptions.Architecture.GetType().FullName);
@@ -165,7 +169,11 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -a x86 --mboot v1 --x
 		private void Compile()
 		{
 			compiler.CompilerTrace.TraceListener = new ConsoleEventListener();
-			compiler.Load(options.InputFiles);
+
+			compiler.CompilerOptions.AddSourceFiles(options.InputFiles);
+
+			compiler.Load();
+
 			compiler.ExecuteThreaded();
 		}
 

@@ -72,7 +72,7 @@ name="${name%.*}"
 
 cd $(dirname $0)/../../bin
 
-mono Mosa.Tool.Compiler.exe \
+mono --debug Mosa.Tool.Compiler.exe \
 	-o ${name}.bin \
 	-a x64 \
 	--format elf32 \

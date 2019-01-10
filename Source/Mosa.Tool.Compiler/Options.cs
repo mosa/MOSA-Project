@@ -81,11 +81,11 @@ namespace Mosa.Tool.Compiler
 		[Option("enable-ir-optimizations", HelpText = "Performs ir-level optimizations.")]
 		public bool EnableIROptimizaionAlt { set { EnableIROptimizaion = value; } }
 
-		[Option("emit-symbols", HelpText = "Emits the Symbol Table.")]
-		public bool EmitSymbols { set { CompilerOptions.EmitSymbols = value; } }
+		[Option("emit-all-symbols", HelpText = "Emits all the symbols in the Symbol Table.")]
+		public bool EmitAllSymbols { set { CompilerOptions.EmitAllSymbols = value; } }
 
-		[Option("emit-relocations", HelpText = "Emits the Relocation Table.")]
-		public bool EmitRelocations { set { CompilerOptions.EmitRelocations = value; } }
+		[Option("emit-static-relocations", HelpText = "Emits the static symbols in Relocation Table.")]
+		public bool EmitStaticRelocations { set { CompilerOptions.EmitStaticRelocations = value; } }
 
 		[Option("x86-irq-methods", HelpText = "Emits x86 interrupt methods.")]
 		public bool EmitX86IRQMethods { set { CompilerOptions.SetCustomOption("x86.irq-methods", value ? "true" : "false"); } }

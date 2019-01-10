@@ -14,6 +14,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		internal List<ModuleDefMD> Modules { get; }
 
+		private readonly List<string> seenModules = new List<string>();
+
 		public MosaModuleLoader()
 		{
 			Modules = new List<ModuleDefMD>();
@@ -24,8 +26,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 		}
 
 		#region Internal methods
-
-		private List<string> seenModules = new List<string>();
 
 		private void LoadDependencies(ModuleDefMD module)
 		{
@@ -47,13 +47,33 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
+		/// <summary>
+		/// Appends the given path to the assembly search path.
+		/// </summary>
+		/// <param name="path">The path to append to the assembly search path.</param>
+		private void AddSearchPath(string path)
+		{
+			if (!Resolver.PostSearchPaths.Contains(path))
+			{
+				Resolver.PostSearchPaths.Add(path);
+			}
+		}
+
 		#endregion Internal methods
+
+		public void AddSearchPaths(List<string> paths)
+		{
+			foreach (var path in paths)
+			{
+				AddSearchPath(path);
+			}
+		}
 
 		/// <summary>
 		/// Appends the given path to the assembly search path.
 		/// </summary>
 		/// <param name="path">The path to append to the assembly search path.</param>
-		public void AddPrivatePath(string path)
+		public void __AddPath(string path)
 		{
 			if (!Resolver.PostSearchPaths.Contains(path))
 			{
@@ -64,15 +84,15 @@ namespace Mosa.Compiler.MosaTypeSystem
 		/// <summary>
 		/// Appends the given paths to the assembly search path.
 		/// </summary>
-		/// <param name="assemblyPaths">The assembly paths.</param>
-		public void AddPrivatePath(IEnumerable<string> assemblyPaths)
+		/// <param name="paths">The assembly paths.</param>
+		public void __AddPath(IEnumerable<string> paths)
 		{
-			foreach (string path in assemblyPaths)
+			foreach (string path in paths)
 			{
 				if (path == null)
 					continue;
 
-				AddPrivatePath(Path.GetDirectoryName(path));
+				__AddPath(Path.GetDirectoryName(path));
 			}
 		}
 
@@ -86,6 +106,18 @@ namespace Mosa.Compiler.MosaTypeSystem
 			module.EnableTypeDefFindCache = true;
 
 			LoadDependencies(module);
+		}
+
+		/// <summary>
+		/// Loads the module from files.
+		/// </summary>
+		/// <param name="files">The files.</param>
+		public void LoadModuleFromFiles(IList<string> files)
+		{
+			foreach (var file in files)
+			{
+				LoadModuleFromFile(file);
+			}
 		}
 
 		public IMetadata CreateMetadata()
