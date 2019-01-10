@@ -24,7 +24,7 @@ namespace Mosa.Platform.ESP32
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
-		public override MachineType MachineType { get { return MachineType.ARM; } }
+		public override MachineType MachineType { get { return MachineType.ESP32; } }
 
 		/// <summary>
 		/// Gets the name of the platform.
@@ -39,7 +39,7 @@ namespace Mosa.Platform.ESP32
 		public static BaseArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
 		{
 			if (architectureFeatures == ArchitectureFeatureFlags.AutoDetect)
-				architectureFeatures = ArchitectureFeatureFlags.ARM; // TODO
+				architectureFeatures = ArchitectureFeatureFlags.ESP32;
 
 			return new Architecture(architectureFeatures);
 		}

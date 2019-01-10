@@ -23,6 +23,11 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 		ARM = 40,
 
 		/// <summary>
+		/// ESP32
+		/// </summary>
+		ESP32 = 999,    // FIXME
+
+		/// <summary>
 		/// Intel IA-64 processor architecture
 		/// </summary>
 		IA_64 = 50,
