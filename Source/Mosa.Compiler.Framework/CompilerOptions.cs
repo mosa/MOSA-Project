@@ -88,7 +88,7 @@ namespace Mosa.Compiler.Framework
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable platform optimizations].
-		/// <summary>
+		/// </summary>
 		public bool EnablePlatformOptimizations { get; set; }
 
 		/// <summary>
