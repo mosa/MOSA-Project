@@ -5,19 +5,14 @@ using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 namespace Mosa.Compiler.Framework
 {
-	public class MosaCompiler : IDisposable
+	public class MosaCompiler
 	{
-		protected Compiler Compiler { get; private set; }
-
 		public CompilerOptions CompilerOptions { get; set; } = new CompilerOptions();
 
 		public CompilerTrace CompilerTrace { get; } = new CompilerTrace();
-
-		protected MosaModuleLoader ModuleLoader { get; } = new MosaModuleLoader();
 
 		public TypeSystem TypeSystem { get; private set; }
 
@@ -31,6 +26,8 @@ namespace Mosa.Compiler.Framework
 
 		public int MaxThreads { get; }
 
+		protected Compiler Compiler { get; private set; }
+
 		public MosaCompiler(List<BaseCompilerExtension> compilerExtensions = null, int maxThreads = 0)
 		{
 			MaxThreads = (maxThreads == 0) ? Environment.ProcessorCount : maxThreads;
@@ -41,43 +38,17 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		private static IEnumerable<string> GetInputFileNames(IEnumerable<FileInfo> inputFiles)
+		public void Load()
 		{
-			foreach (var file in inputFiles)
-			{
-				if (file == null)
-					continue;
+			var moduleLoader = new MosaModuleLoader();
 
-				yield return file.FullName;
-			}
-		}
+			moduleLoader.AddSearchPaths(CompilerOptions.SearchPaths);
 
-		public void AddPath(string path)
-		{
-			ModuleLoader.AddPrivatePath(path);
-		}
+			moduleLoader.LoadModuleFromFiles(CompilerOptions.SourceFiles);
 
-		public void AddPath(IEnumerable<string> paths)
-		{
-			foreach (var file in paths)
-			{
-				if (file == null)
-					continue;
+			var typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
 
-				ModuleLoader.AddPrivatePath(file);
-			}
-		}
-
-		public void Load(IEnumerable<FileInfo> inputFiles)
-		{
-			ModuleLoader.AddPrivatePath(GetInputFileNames(inputFiles));
-
-			foreach (var file in GetInputFileNames(inputFiles))
-			{
-				ModuleLoader.LoadModuleFromFile(file);
-			}
-
-			Load(TypeSystem.Load(ModuleLoader.CreateMetadata()));
+			Load(typeSystem);
 		}
 
 		public void Load(TypeSystem typeSystem)
@@ -109,7 +80,7 @@ namespace Mosa.Compiler.Framework
 
 		public void Initialize()
 		{
-			Linker = new Linker.MosaLinker(CompilerOptions.BaseAddress, CompilerOptions.Architecture.Endianness, CompilerOptions.Architecture.MachineType, CompilerOptions.EmitSymbols, CompilerOptions.LinkerFormatType);
+			Linker = new MosaLinker(CompilerOptions.BaseAddress, CompilerOptions.Architecture.Endianness, CompilerOptions.Architecture.MachineType, CompilerOptions.EmitAllSymbols, CompilerOptions.EmitStaticRelocations, CompilerOptions.LinkerFormatType);
 
 			Compiler = new Compiler(this);
 		}
@@ -142,11 +113,6 @@ namespace Mosa.Compiler.Framework
 		public void PostCompile()
 		{
 			Compiler.PostCompile();
-		}
-
-		public void Dispose()
-		{
-			ModuleLoader.Dispose();
 		}
 	}
 }

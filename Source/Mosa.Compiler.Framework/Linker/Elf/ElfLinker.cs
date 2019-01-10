@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 		private readonly List<byte> sectionHeaderStringTable = new List<byte>();
 
-		private readonly List<byte> stringTable = new List<byte>();
+		private readonly List<byte> stringTable = new List<byte>(4096);
 
 		private readonly Dictionary<LinkerSymbol, uint> symbolTableOffset = new Dictionary<LinkerSymbol, uint>();
 
@@ -228,7 +228,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 		{
 			CreateNullSection();
 
-			Section previous = nullSection;
+			var previous = nullSection;
 
 			foreach (var linkerSection in linker.LinkerSections)
 			{
@@ -276,13 +276,11 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 				previous = section;
 			}
 
-			if (linker.EmitSymbols)
-			{
-				CreateSymbolSection();
-				CreateStringSection();
+			CreateSymbolSection();
 
-				CreateRelocationSections();
-			}
+			CreateStringSection();
+
+			CreateRelocationSections();
 
 			CreateSectionHeaderStringSection();
 		}
@@ -418,9 +416,12 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			{
 				Debug.Assert(symbol.SectionKind != SectionKind.Unknown, "symbol.SectionKind != SectionKind.Unknown");
 
+				if (!(symbol.IsExport || linker.EmitAllSymbols))
+					continue;
+
 				var symbolEntry = new SymbolEntry()
 				{
-					Name = AddToStringTable(symbol.Name),
+					Name = AddToStringTable(symbol.ExportName ?? symbol.Name),
 					Value = symbol.VirtualAddress,
 					Size = symbol.Size,
 					SymbolBinding = SymbolBinding.Global,
@@ -450,9 +451,15 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 					if (symbol.SectionKind != kind)
 						continue;
 
+					if (symbol.IsExport)
+						continue;
+
 					foreach (var patch in symbol.LinkRequests)
 					{
 						if (patch.LinkType == LinkType.Size)
+							continue;
+
+						if (!patch.ReferenceSymbol.IsExport)
 							continue;
 
 						if (patch.ReferenceOffset == 0)
@@ -534,19 +541,28 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 			foreach (var symbol in linker.Symbols)
 			{
+				if (symbol.IsExport)
+					continue;
+
 				foreach (var patch in symbol.LinkRequests)
 				{
 					if (patch.ReferenceOffset != 0)
 						continue;
 
+					if (patch.ReferenceSymbol.SectionKind != section.SectionKind)
+						continue;
+
 					if (patch.LinkType == LinkType.Size)
+						continue;
+
+					if (!patch.ReferenceSymbol.IsExport) // FUTURE: include relocations for static symbols, if option selected
 						continue;
 
 					var relocationEntry = new RelocationEntry()
 					{
 						RelocationType = ConvertType(patch.LinkType, linker.MachineType),
-						Symbol = symbolTableOffset[symbol],
-						Offset = (ulong)patch.PatchOffset,
+						Symbol = symbolTableOffset[patch.ReferenceSymbol],
+						Offset = (ulong)(symbol.SectionOffset + patch.PatchOffset),
 					};
 
 					relocationEntry.Write(linkerFormatType, writer);
@@ -563,7 +579,10 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 			foreach (var symbol in linker.Symbols)
 			{
-				if (symbol.SectionKind != section.SectionKind)
+				//if (symbol.SectionKind != section.SectionKind)
+				//	continue;
+
+				if (symbol.IsExport)
 					continue;
 
 				foreach (var patch in symbol.LinkRequests)
@@ -571,14 +590,20 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 					if (patch.ReferenceOffset == 0)
 						continue;
 
+					if (patch.ReferenceSymbol.SectionKind != section.SectionKind)
+						continue;
+
 					if (patch.LinkType == LinkType.Size)
+						continue;
+
+					if (!patch.ReferenceSymbol.IsExport) // FUTURE: include relocations for static symbols, if option selected
 						continue;
 
 					var relocationAddendEntry = new RelocationAddendEntry()
 					{
 						RelocationType = ConvertType(patch.LinkType, linker.MachineType),
-						Symbol = symbolTableOffset[symbol],
-						Offset = (ulong)patch.PatchOffset,
+						Symbol = symbolTableOffset[patch.ReferenceSymbol],
+						Offset = (ulong)(symbol.SectionOffset + patch.PatchOffset),
 						Addend = (ulong)patch.ReferenceOffset,
 					};
 

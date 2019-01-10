@@ -222,17 +222,17 @@ namespace Mosa.Utility.Launcher
 		[Option("base")]
 		public string BaseAddressHelper { set { BaseAddress = value.ParseHexOrInteger(); } }
 
-		[Option("emit-symbols")]
-		public bool EmitSymbols { get; set; } = true;
+		[Option("emit-all-symbols")]
+		public bool EmitAllSymbols { get; set; } = false;
 
-		[Option("emit-symbols-false")]
-		public bool EmitSymbolsFalse { set { EmitSymbols = false; } }
+		[Option("emit-all-symbols-false")]
+		public bool EmitAllSymbolsFalse { set { EmitAllSymbols = false; } }
 
-		[Option("emit-relocations")]
-		public bool EmitRelocations { get; set; }
+		[Option("emit-static-relocations")]
+		public bool EmitStaticRelocations { get; set; }
 
 		[Option("emit-relocations-false")]
-		public bool EmitRelocationsFalse { set { EmitRelocations = false; } }
+		public bool EmitRelocationsFalse { set { EmitStaticRelocations = false; } }
 
 		[Option("x86-irq-methods")]
 		public bool Emitx86IRQMethods { get; set; } = true;

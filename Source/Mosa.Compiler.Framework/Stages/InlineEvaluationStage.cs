@@ -35,15 +35,15 @@ namespace Mosa.Compiler.Framework.Stages
 			MethodData.BasicBlocks = null;
 			MethodData.IsCompiled = true;
 			MethodData.HasProtectedRegions = HasProtectedRegions;
-			MethodData.IsLinkerGenerated = method.IsLinkerGenerated;
-			MethodData.IsCILDecoded = (!method.IsLinkerGenerated && method.HasImplementation);
+			MethodData.IsLinkerGenerated = method.IsCompilerGenerated;
+			MethodData.IsCILDecoded = MethodCompiler.IsCILDecodeRequired || (!method.IsCompilerGenerated && method.HasImplementation);
 			MethodData.HasLoops = false;
-			MethodData.IsMethodImplementationReplaced = IsMethodPlugged;
+			MethodData.IsMethodImplementationReplaced = MethodCompiler.IsMethodPlugged;
 			MethodData.HasDoNotInlineAttribute = MethodCompiler.Method.IsNoInlining;
 			MethodData.HasAggressiveInliningAttribute = MethodCompiler.Method.IsAggressiveInlining;
 			MethodData.HasAddressOfInstruction = false;
 			MethodData.IsVirtual = method.IsVirtual;
-			MethodData.IsDevirtualized = (method.IsVirtual && !TypeLayout.IsMethodOverridden(method));
+			MethodData.IsDevirtualized = method.IsVirtual && !TypeLayout.IsMethodOverridden(method);
 
 			int totalIRCount = 0;
 			int totalNonIRCount = 0;

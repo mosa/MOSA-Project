@@ -19,7 +19,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public string ShortName { get; internal set; }
 
-		public bool IsLinkerGenerated { get; private set; }
+		public bool IsCompilerGenerated { get; private set; }
 
 		private readonly MosaCustomAttributeList customAttributes;
 
@@ -64,7 +64,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public string Name { set { unit.Name = value; } }
 
-			public bool IsLinkerGenerated { set { unit.IsLinkerGenerated = value; } }
+			public bool IsCompilerGenerated { set { unit.IsCompilerGenerated = value; } }
 
 			public IList<MosaCustomAttribute> CustomAttributes { get { return unit.customAttributes; } }
 

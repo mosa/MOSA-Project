@@ -207,7 +207,12 @@ namespace Mosa.TestWorld.x86
 			Console.BackgroundColor = back;
 		}
 
-		//[DllImportAttribute("Test.dll", EntryPoint = "TestABCImplementation")]
-		//public static extern void TestABC();
+		[DllImportAttribute("Test.dll", EntryPoint = "_apple")]
+		public static extern int Apple();
+
+		public static int CallApple()
+		{
+			return Apple();
+		}
 	}
 }

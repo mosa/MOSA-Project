@@ -1059,10 +1059,10 @@
             this.cbRelocationTable.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbRelocationTable.Location = new System.Drawing.Point(6, 51);
             this.cbRelocationTable.Name = "cbRelocationTable";
-            this.cbRelocationTable.Size = new System.Drawing.Size(137, 15);
+            this.cbRelocationTable.Size = new System.Drawing.Size(143, 15);
             this.cbRelocationTable.Style = MetroFramework.MetroColorStyle.Blue;
             this.cbRelocationTable.TabIndex = 7;
-            this.cbRelocationTable.Text = "Emit Relocation Table";
+            this.cbRelocationTable.Text = "Emit Static Relocations";
             this.cbRelocationTable.UseCustomBackColor = true;
             this.cbRelocationTable.UseSelectable = true;
             // 
@@ -1073,10 +1073,10 @@
             this.cbEmitSymbolTable.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbEmitSymbolTable.Location = new System.Drawing.Point(6, 28);
             this.cbEmitSymbolTable.Name = "cbEmitSymbolTable";
-            this.cbEmitSymbolTable.Size = new System.Drawing.Size(121, 15);
+            this.cbEmitSymbolTable.Size = new System.Drawing.Size(112, 15);
             this.cbEmitSymbolTable.Style = MetroFramework.MetroColorStyle.Blue;
             this.cbEmitSymbolTable.TabIndex = 6;
-            this.cbEmitSymbolTable.Text = "Emit Symbol Table";
+            this.cbEmitSymbolTable.Text = "Emit All Symbols";
             this.cbEmitSymbolTable.UseCustomBackColor = true;
             this.cbEmitSymbolTable.UseSelectable = true;
             // 

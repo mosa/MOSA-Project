@@ -30,7 +30,9 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public uint BaseFileOffset { get; set; }
 
-		public bool EmitSymbols { get; set; }
+		public bool EmitAllSymbols { get; set; }
+
+		public bool EmitStaticRelocations { get; set; }
 
 		public LinkerFormatType LinkerFormatType { get; }
 
@@ -42,12 +44,13 @@ namespace Mosa.Compiler.Framework.Linker
 
 		private readonly object _lock = new object();
 
-		public MosaLinker(ulong baseAddress, Endianness endianness, MachineType machineType, bool emitSymbols, LinkerFormatType linkerFormatType)
+		public MosaLinker(ulong baseAddress, Endianness endianness, MachineType machineType, bool emitAllSymbols, bool emitStaticRelocations, LinkerFormatType linkerFormatType)
 		{
 			BaseAddress = baseAddress;
 			Endianness = endianness;
 			MachineType = machineType;
-			EmitSymbols = emitSymbols;
+			EmitAllSymbols = emitAllSymbols;
+			EmitStaticRelocations = emitStaticRelocations;
 			LinkerFormatType = linkerFormatType;
 
 			elfLinker = new ElfLinker(this, LinkerFormatType);
@@ -126,12 +129,11 @@ namespace Mosa.Compiler.Framework.Linker
 
 					Symbols.Add(symbol);
 					symbolLookup.Add(name, symbol);
+					symbol.IsExport = false;
 				}
-				else
-				{
-					symbol.Alignment = aligned;
-					symbol.SectionKind = kind;
-				}
+
+				symbol.Alignment = aligned;
+				symbol.SectionKind = kind;
 
 				var stream = (size == 0) ? new MemoryStream() : new MemoryStream(size);
 				symbol.Stream = Stream.Synchronized(stream);
@@ -140,6 +142,26 @@ namespace Mosa.Compiler.Framework.Linker
 				{
 					stream.SetLength(size);
 				}
+
+				return symbol;
+			}
+		}
+
+		public LinkerSymbol DefineExternalSymbol(string name, string externalName, SectionKind kind)
+		{
+			lock (_lock)
+			{
+				if (!symbolLookup.TryGetValue(name, out LinkerSymbol symbol))
+				{
+					symbol = new LinkerSymbol(name, 0, kind);
+
+					Symbols.Add(symbol);
+					symbolLookup.Add(name, symbol);
+				}
+
+				symbol.SectionKind = kind;
+				symbol.IsExport = true;
+				symbol.ExportName = externalName;
 
 				return symbol;
 			}
@@ -196,13 +218,7 @@ namespace Mosa.Compiler.Framework.Linker
 			{
 				value = linkRequest.ReferenceSymbol.VirtualAddress + (ulong)linkRequest.ReferenceOffset;
 
-				if (linkRequest.LinkType == LinkType.AbsoluteAddress)
-				{
-					// FIXME: Need a .reloc section with a relocation entry if the module is moved in virtual memory
-					// the runtime loader must patch this link request, we'll fail it until we can do relocations.
-					//throw new NotSupportedException(@".reloc section not supported.");
-				}
-				else
+				if (linkRequest.LinkType == LinkType.RelativeOffset)
 				{
 					// Change the absolute into a relative offset
 					value -= (linkRequest.PatchSymbol.VirtualAddress + (ulong)linkRequest.PatchOffset);
@@ -241,6 +257,9 @@ namespace Mosa.Compiler.Framework.Linker
 				if (symbol.IsResolved)
 					continue;
 
+				if (symbol.IsExport)
+					continue;
+
 				section.Size = Alignment.AlignUp(section.Size, symbol.Alignment);
 
 				symbol.SectionOffset = section.Size;
@@ -257,6 +276,9 @@ namespace Mosa.Compiler.Framework.Linker
 			foreach (var symbol in Symbols)
 			{
 				if (symbol.SectionKind != section.SectionKind)
+					continue;
+
+				if (!symbol.IsResolved)
 					continue;
 
 				stream.Seek(section.FileOffset + symbol.SectionOffset, SeekOrigin.Begin);

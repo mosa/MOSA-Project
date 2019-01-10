@@ -132,11 +132,6 @@ namespace Mosa.Compiler.Framework
 		public MosaType InternalRuntimeType { get { return MethodCompiler.Compiler.InternalRuntimeType; } }
 
 		/// <summary>
-		/// Gets a value indicating whether this instance is plugged.
-		/// </summary>
-		public bool IsMethodPlugged { get { return MethodCompiler.IsMethodPlugged; } }
-
-		/// <summary>
 		/// Gets the method.
 		/// </summary>
 		protected MosaMethod Method { get { return MethodCompiler.Method; } }
@@ -228,8 +223,6 @@ namespace Mosa.Compiler.Framework
 				counter.Reset();
 			}
 
-			//Run();
-
 			try
 			{
 				Run();
@@ -249,11 +242,6 @@ namespace Mosa.Compiler.Framework
 			{
 				UpdateCounter(counter);
 			}
-
-			//if (!MethodCompiler.IsStopped)
-			//{
-			//	Debug.Assert(BasicBlocks.RuntimeValidation());
-			//}
 
 			MethodCompiler = null;
 			traceLogs = null;

@@ -20,9 +20,9 @@ namespace Mosa.Compiler.Framework
 	{
 		#region Data Members
 
-		private Pipeline<BaseMethodCompilerStage>[] methodStagePipelines;
+		private readonly Pipeline<BaseMethodCompilerStage>[] methodStagePipelines;
 
-		public Dictionary<string, InstrinsicMethodDelegate> internalIntrinsicMethods { get; } = new Dictionary<string, InstrinsicMethodDelegate>();
+		private Dictionary<string, InstrinsicMethodDelegate> internalIntrinsicMethods { get; } = new Dictionary<string, InstrinsicMethodDelegate>();
 
 		#endregion Data Members
 
@@ -140,11 +140,11 @@ namespace Mosa.Compiler.Framework
 			return new List<BaseMethodCompilerStage>() {
 				new CILDecodingStage(),
 				new ExceptionPrologueStage(),
-				new OperandAssignmentStage(),
+				new CILOperandAssignmentStage(),
 				new StackSetupStage(),
-				new CILProtectedRegionStage(),
+				new ProtectedRegionStage(),
 				new ExceptionStage(),
-				new StaticAllocationResolutionStage(),
+				new CILStaticAllocationResolutionStage(),
 				new CILTransformationStage(),
 				new PlugStage(),
 				new UnboxValueTypeStage(),
@@ -310,7 +310,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Executes the compiler pre compiler stages.
+		/// Executes the compiler pre-compiler stages.
 		/// </summary>
 		/// <remarks>
 		/// The method iterates the compilation stage chain and runs each
@@ -455,7 +455,7 @@ namespace Mosa.Compiler.Framework
 				GlobalCounters.Merge(methodData.Counters);
 			}
 
-			ExportCounters();
+			EmitCounters();
 		}
 
 		public void Stop()
@@ -470,15 +470,19 @@ namespace Mosa.Compiler.Framework
 			return value;
 		}
 
-		#endregion Methods
-
-		private void ExportCounters()
+		private void EmitCounters()
 		{
 			foreach (var counter in GlobalCounters.Export())
 			{
 				NewCompilerTraceEvent(CompilerEvent.Counter, counter);
 			}
 		}
+
+		//public LoadBinary(string filename)
+		//{
+		//}
+
+		#endregion Methods
 
 		#region Helper Methods
 

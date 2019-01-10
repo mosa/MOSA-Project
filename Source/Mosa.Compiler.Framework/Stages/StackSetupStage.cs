@@ -12,11 +12,7 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			// No stack setup if this is a linker generated method
-			if (MethodCompiler.Method.DeclaringType.IsLinkerGenerated)
-				return;
-
-			if (IsMethodPlugged)
+			if (!MethodCompiler.IsStackFrameRequired)
 				return;
 
 			// Create a prologue instruction

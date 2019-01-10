@@ -1631,6 +1631,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion Visitation Methods
 
+		protected override void Run()
+		{
+			if (!MethodCompiler.IsCILDecodeRequired)
+				return;
+
+			base.Run();
+		}
+
 		#region Internals
 
 		private struct ConversionEntry
@@ -2056,8 +2064,6 @@ namespace Mosa.Compiler.Framework.Stages
 					var operands = node.GetOperands();
 					operands.Insert(0, Operand.CreateSymbolFromMethod(node.InvokeMethod, TypeSystem));
 					node.SetInstruction(IRInstruction.IntrinsicMethodCall, node.Result, operands);
-
-					//node.Instruction = IRInstruction.IntrinsicMethodCall;
 
 					return true;
 				}

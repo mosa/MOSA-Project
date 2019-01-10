@@ -27,7 +27,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			if (IsMethodPlugged)
+			if (!MethodCompiler.IsCILDecodeRequired)
+				return;
+
+			if (MethodCompiler.IsMethodPlugged)
 				return;
 
 			if (!HasProtectedRegions)
@@ -57,7 +60,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (trace.Active)
 					trace.Log("Handler: " + region.Handler.TryStart.ToString("X4") + " to " + region.Handler.TryEnd.ToString("X4") + " Handler: " + region.Handler.HandlerStart.ToString("X4") + " Offset: [" + handler.ToString("X4") + "]");
 
-				List<Tuple<int, int>> sections = new List<Tuple<int, int>>();
+				var sections = new List<Tuple<int, int>>();
 
 				foreach (var block in region.IncludedBlocks)
 				{
@@ -69,7 +72,7 @@ namespace Mosa.Compiler.Framework.Stages
 					int end = MethodCompiler.GetPosition(block.Label + 0x0F000000);
 
 					if (trace.Active)
-						trace.Log("   Block: " + block + " [" + start.ToString() + "-" + end.ToString() + "]");
+						trace.Log($"   Block: {block} [{start.ToString()}-{end.ToString()}]");
 
 					AddSection(sections, start, end);
 				}
@@ -87,7 +90,7 @@ namespace Mosa.Compiler.Framework.Stages
 					writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 					if (trace.Active)
-						trace.Log("     Section: [" + start.ToString() + "-" + end.ToString() + "]");
+						trace.Log($"     Section: [{start.ToString()}-{end.ToString()}]");
 				}
 			}
 

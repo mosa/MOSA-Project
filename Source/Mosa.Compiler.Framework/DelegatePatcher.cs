@@ -3,6 +3,7 @@
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 // FIXME -- not 64bit compatible
 
@@ -15,8 +16,10 @@ namespace Mosa.Compiler.Framework
 	{
 		public static bool PatchDelegate(MethodCompiler methodCompiler)
 		{
-			if (!methodCompiler.Method.DeclaringType.IsDelegate)
-				return false;
+			Debug.Assert(methodCompiler.Method.DeclaringType.IsDelegate);
+
+			//if (!methodCompiler.Method.DeclaringType.IsDelegate)
+			//	return false;
 
 			switch (methodCompiler.Method.Name)
 			{

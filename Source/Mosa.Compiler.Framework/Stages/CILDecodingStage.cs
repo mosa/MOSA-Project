@@ -47,27 +47,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			if (IsMethodPlugged)
-			{
-				var plugMethod = MethodCompiler.Compiler.PlugSystem.GetReplacement(Method);
-
-				Debug.Assert(plugMethod != null);
-
-				var plugSymbol = Operand.CreateSymbolFromMethod(plugMethod, TypeSystem);
-				var context = CreateNewBlockContext(-1, -1);
-				context.AppendInstruction(IRInstruction.Jmp, null, plugSymbol);
-				BasicBlocks.AddHeadBlock(context.Block);
+			if (!MethodCompiler.IsCILDecodeRequired)
 				return;
-			}
 
 			// No CIL decoding if this is a linker generated method
-			if (Method.IsLinkerGenerated)
-				return;
+			Debug.Assert(!Method.IsCompilerGenerated);
 
 			if (!Method.HasImplementation)
 			{
-				if (DelegatePatcher.PatchDelegate(MethodCompiler))
-					return;
+				//if (DelegatePatcher.PatchDelegate(MethodCompiler))
+				//	return;
 
 				MethodCompiler.Stop();
 				return;
