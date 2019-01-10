@@ -183,6 +183,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{A406F567-5C89-45AB-88CE-E20616B28FFD}"
 	ProjectSection(SolutionItems) = preProject
 		Data\ARMv6Instructions.json = Data\ARMv6Instructions.json
+		Data\ESP32Instructions.json = Data\ESP32Instructions.json
 		IntelFormat.txt = IntelFormat.txt
 		Data\IRInstructions.json = Data\IRInstructions.json
 		Data\X64Instructions.json = Data\X64Instructions.json
@@ -210,6 +211,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Plug.Korlib.x86", "Mosa.Plug.Korlib.x86\Mosa.Plug.Korlib.x86.csproj", "{028BC31C-2EDC-492E-90A3-3714E38CE2CF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Plug.Korlib.x64", "Mosa.Plug.Korlib.x64\Mosa.Plug.Korlib.x64.csproj", "{A9DEEBF5-0E64-44A0-807B-C7B4D3A5480E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Platform.ESP32", "Mosa.Platform.ESP32\Mosa.Platform.ESP32.csproj", "{5B45AF28-3B67-4542-A0C9-947F3CDD9741}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -834,6 +837,18 @@ Global
 		{A9DEEBF5-0E64-44A0-807B-C7B4D3A5480E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{A9DEEBF5-0E64-44A0-807B-C7B4D3A5480E}.Release|x86.ActiveCfg = Release|Any CPU
 		{A9DEEBF5-0E64-44A0-807B-C7B4D3A5480E}.Release|x86.Build.0 = Release|Any CPU
+		{5B45AF28-3B67-4542-A0C9-947F3CDD9741}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5B45AF28-3B67-4542-A0C9-947F3CDD9741}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5B45AF28-3B67-4542-A0C9-947F3CDD9741}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{5B45AF28-3B67-4542-A0C9-947F3CDD9741}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{5B45AF28-3B67-4542-A0C9-947F3CDD9741}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5B45AF28-3B67-4542-A0C9-947F3CDD9741}.Debug|x86.Build.0 = Debug|Any CPU
+		{5B45AF28-3B67-4542-A0C9-947F3CDD9741}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5B45AF28-3B67-4542-A0C9-947F3CDD9741}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5B45AF28-3B67-4542-A0C9-947F3CDD9741}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{5B45AF28-3B67-4542-A0C9-947F3CDD9741}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{5B45AF28-3B67-4542-A0C9-947F3CDD9741}.Release|x86.ActiveCfg = Release|Any CPU
+		{5B45AF28-3B67-4542-A0C9-947F3CDD9741}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -895,6 +910,7 @@ Global
 		{CBDEEF3C-BBE7-4655-A096-1367DE069E63} = {57A405DF-CCB3-4C9E-A88D-478E35042A84}
 		{028BC31C-2EDC-492E-90A3-3714E38CE2CF} = {57A405DF-CCB3-4C9E-A88D-478E35042A84}
 		{A9DEEBF5-0E64-44A0-807B-C7B4D3A5480E} = {57A405DF-CCB3-4C9E-A88D-478E35042A84}
+		{5B45AF28-3B67-4542-A0C9-947F3CDD9741} = {AB88960E-B233-475B-96E4-8C10EEF8622C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C22A5C94-6B05-4B1B-845A-A2EA7615E093}
