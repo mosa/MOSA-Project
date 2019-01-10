@@ -2,14 +2,14 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{5B45AF28-3B67-4542-A0C9-947F3CDD9741}</ProjectGuid>
+    <ProjectGuid>{5C002A6C-9FF8-40C2-88AD-539642B31E65}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Mosa.Platform.ESP32</AssemblyName>
+    <AssemblyName>Mosa.Kernel.ESP32</AssemblyName>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -18,7 +18,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
-    <RootNamespace>Mosa.Platform.ESP32</RootNamespace>
+    <RootNamespace>Mosa.Kernel.ESP32</RootNamespace>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -26,6 +26,7 @@
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
@@ -41,18 +42,18 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
-    <NoWarn>0414</NoWarn>
+    <NoWarn>0219,0414</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
     <DebugType>full</DebugType>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <BaseAddress>285212672</BaseAddress>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
+    <DocumentationFile>..\..\bin\Mosa.Kernel.ESP32.xml</DocumentationFile>
     <FileAlignment>4096</FileAlignment>
     <Optimize>true</Optimize>
     <OutputPath>..\..\bin\</OutputPath>
@@ -63,35 +64,19 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
+    <Compile Include="Address.cs" />
+    <Compile Include="Kernel.cs" />
+    <Compile Include="KernelMemory.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
-      <Project>{0b1011a6-8fcd-4f9e-bbb8-8db86e23d2e8}</Project>
-      <Name>Mosa.Compiler.Common</Name>
+    <ProjectReference Include="..\Mosa.Runtime.ARMv6\Mosa.Runtime.ARMv6.csproj">
+      <Project>{599d1c00-7c78-4211-a958-1285c4cb76c9}</Project>
+      <Name>Mosa.Runtime.ARMv6</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj">
-      <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
-      <Name>Mosa.Compiler.Framework</Name>
+    <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj">
+      <Project>{77961864-db33-4189-804f-d774022c96e2}</Project>
+      <Name>Mosa.Runtime</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj">
-      <Project>{5f30a68e-05bf-40ea-b576-5ebcde520559}</Project>
-      <Name>Mosa.Compiler.MosaTypeSystem</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Architecture.cs" />
-    <Compile Include="ArchitectureFeatureFlags.cs" />
-    <Compile Include="ESP32.cs" />
-    <Compile Include="ESP32Instruction.cs" />
-    <Compile Include="ESP32Instructions.cs" />
-    <Compile Include="BaseTransformationStage.cs" />
-    <Compile Include="GeneralPurposeRegister.cs" />
-    <Compile Include="ESP32CodeEmitter.cs" />
-    <Compile Include="Instructions\Add32.cs" />
-    <Compile Include="Intrinsic\Nop.cs" />
-    <Compile Include="Instructions\Nop32.cs" />
-    <Compile Include="Stages\IRTransformationStage.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

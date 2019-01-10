@@ -12,5 +12,6 @@ namespace Mosa.Platform.ESP32
 	public static class ESP32
 	{
 		public static readonly Add32 Add32 = new Add32();
+		public static readonly Nop32 Nop32 = new Nop32();
 	}
 }
