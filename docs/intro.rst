@@ -11,7 +11,7 @@ The MOSA project consists of:
 - Device Drivers Framework - a modular, device drivers framework and device drivers
 - Debugger - QEMU-based debugger
 
-Read our [Frequently Asked Questions](https://github.com/mosa/MOSA-Project/wiki/Frequently-Asked-Questions) for more information about this project.
+Read our `Frequently Asked Questions <https://github.com/mosa/MOSA-Project/wiki/Frequently-Asked-Questions>`__ for more information about this project.
 
 Current Status
 ==============
@@ -47,7 +47,7 @@ Getting Started
 Download
 --------
 
-The MOSA project is available as a `zip download <https://github.com/mosa/MOSA-Project/archive/master.zip>` or via git:
+The MOSA project is available as a `zip download <https://github.com/mosa/MOSA-Project/archive/master.zip>`__ or via git:
 
 .. code-block:: bash
 
@@ -63,14 +63,14 @@ Windows
 
 Install any [Visual Studio](http://www.visualstudio.com) version 2018 or newer. All editions are supported including the fully-featured free [Community Edition](https://www.visualstudio.com/products/visual-studio-community-vs).
 
-Note: The MOSA source code repository includes `Qemu <http://wiki.qemu.org/Main_Page>` virtual emulator for Windows.
+Note: The MOSA source code repository includes `Qemu <http://wiki.qemu.org/Main_Page>`__ virtual emulator for Windows.
 
 The [CodeMaid](http://www.codemaid.net/) Visual Studio Extension is strongly recommended for MOSA contributors.
 
 Linux
 ^^^^^
 
-Install [Mono](http://www.mono-project.com) and [Qemu](http://wiki.qemu.org/Main_Page).
+Install `Mono <http://www.mono-project.com>`__ and `Qemu <http://wiki.qemu.org/Main_Page>`__.
 
 The minimum supported version of Mono is 5.16.
 
@@ -83,7 +83,7 @@ If using the APT package manager you can use the following command to quickly se
 Mac
 ^^^
 
-Install `Mono <http://www.mono-project.com>` and `Qemu <http://wiki.qemu.org/Main_Page>`.
+Install `Mono <http://www.mono-project.com>`__ and `Qemu <http://wiki.qemu.org/Main_Page>`__.
 
 Running
 -------
@@ -109,6 +109,6 @@ Join us on [Gitter chat][gitter-chat]. This is the most interactive way to conne
 License
 -------
 
-MOSA is licensed under the `New BSD License <http://en.wikipedia.org/wiki/New_BSD>`.
+MOSA is licensed under the `New BSD License <http://en.wikipedia.org/wiki/New_BSD>`__.
 
 
