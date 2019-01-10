@@ -71,14 +71,18 @@
       <Project>{631bc4f3-e2d8-4319-814c-13904caa17ce}</Project>
       <Name>Mosa.Korlib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Runtime.x86\Mosa.Runtime.x86.csproj">
-      <Project>{A47B7998-4EE8-4AF8-9373-C664FDEDDC65}</Project>
-      <Name>Mosa.Runtime.x86</Name>
+    <ProjectReference Include="..\Mosa.Runtime.x64\Mosa.Runtime.x64.csproj">
+      <Project>{a47b7998-4ee8-4af8-9373-c664fdeddc61}</Project>
+      <Name>Mosa.Runtime.x64</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj">
       <Project>{77961864-db33-4189-804f-d774022c96e2}</Project>
       <Name>Mosa.Runtime</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="System.Threading\InterlockedPlug.cs" />
+    <Compile Include="System.Threading\MonitorPlug.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

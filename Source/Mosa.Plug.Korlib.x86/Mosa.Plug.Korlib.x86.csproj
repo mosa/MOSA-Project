@@ -84,8 +84,6 @@
     <Compile Include="System.Threading\InterlockedPlug.cs" />
     <Compile Include="System.Threading\MonitorPlug.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="System\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
