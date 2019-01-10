@@ -1,4 +1,4 @@
 Section 1
 =========
 
-Lorem ipsum
+Lorem ipsum.
