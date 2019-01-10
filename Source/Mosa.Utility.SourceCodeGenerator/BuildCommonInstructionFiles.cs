@@ -391,7 +391,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 					Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.ResultCount == " + node.ResultCount + ");");
 					Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.OperandCount == " + node.OperandCount + ");");
 
-					if (node.ThreeTwoAddressConversion == null || node.ThreeTwoAddressConversion == "true")
+					if (node.ThreeTwoAddressConversion != null && node.ThreeTwoAddressConversion == "true")
 					{
 						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Result.IsCPURegister);");
 						Lines.AppendLine("\t\t\tSystem.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);");

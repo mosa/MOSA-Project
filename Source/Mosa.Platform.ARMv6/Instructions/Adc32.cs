@@ -27,9 +27,6 @@ namespace Mosa.Platform.ARMv6.Instructions
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 3);
-			System.Diagnostics.Debug.Assert(node.Result.IsCPURegister);
-			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
-			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
 			if (node.Operand2.IsCPURegister)
 			{

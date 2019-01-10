@@ -150,11 +150,10 @@
     <Compile Include="Instructions\Wfe32.cs" />
     <Compile Include="Instructions\Wfi32.cs" />
     <Compile Include="Instructions\Yield32.cs" />
+    <Compile Include="Intrinsic\Nop.cs" />
     <Compile Include="Stages\IRTransformationStage.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Intrinsic\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

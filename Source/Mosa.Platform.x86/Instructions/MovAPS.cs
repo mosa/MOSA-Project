@@ -23,9 +23,6 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
-			System.Diagnostics.Debug.Assert(node.Result.IsCPURegister);
-			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
-			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
 			emitter.OpcodeEncoder.AppendByte(0x0F);
 			emitter.OpcodeEncoder.AppendByte(0x28);
