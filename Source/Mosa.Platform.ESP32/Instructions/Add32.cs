@@ -12,7 +12,7 @@ namespace Mosa.Platform.ESP32.Instructions
 	/// <seealso cref="Mosa.Platform.ESP32.ESP32Instruction" />
 	public sealed class Add32 : ESP32Instruction
 	{
-		public override int ID { get { return 1; } }
+		public override int ID { get { return 691; } }
 
 		internal Add32()
 			: base(1, 3)

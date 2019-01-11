@@ -28,6 +28,12 @@ namespace Mosa.Platform.x64.Instructions
 
 			if (node.Operand2.IsCPURegister)
 			{
+				emitter.OpcodeEncoder.SuppressByte(0x40);
+				emitter.OpcodeEncoder.AppendNibble(0b0100);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit((node.Operand1.Register.RegisterCode >> 3) & 0x1);
 				emitter.OpcodeEncoder.AppendByte(0x0F);
 				emitter.OpcodeEncoder.AppendByte(0x01);
 				emitter.OpcodeEncoder.Append2Bits(0b00);

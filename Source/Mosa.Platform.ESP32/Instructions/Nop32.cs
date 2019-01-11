@@ -12,7 +12,7 @@ namespace Mosa.Platform.ESP32.Instructions
 	/// <seealso cref="Mosa.Platform.ESP32.ESP32Instruction" />
 	public sealed class Nop32 : ESP32Instruction
 	{
-		public override int ID { get { return 2; } }
+		public override int ID { get { return 692; } }
 
 		internal Nop32()
 			: base(1, 3)

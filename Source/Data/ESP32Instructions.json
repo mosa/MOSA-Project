@@ -23,7 +23,7 @@
 			]
 		},
 		{
-			"Name": "Nop32",
+			"Name": "Nop",
 			"Commutative": "false",
 			"FamilyName": "ESP32",
 			"FlagsCleared": "",
@@ -37,7 +37,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[esp32-rrr],op2=0000,op1=0000,r=reg4:r,s=reg4:o1,t=reg4:o2,op0=0000"
+					"Encoding": "[esp32-rrr],op2=0000,op1=0000,r=0010,s=0000,t=1111,op0=0000"
 				}
 			]
 		}
