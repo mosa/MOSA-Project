@@ -89,8 +89,8 @@
     <Compile Include="GeneralPurposeRegister.cs" />
     <Compile Include="ESP32CodeEmitter.cs" />
     <Compile Include="Instructions\Add32.cs" />
+    <Compile Include="Instructions\Nop.cs" />
     <Compile Include="Intrinsic\Nop.cs" />
-    <Compile Include="Instructions\Nop32.cs" />
     <Compile Include="Stages\IRTransformationStage.cs" />
   </ItemGroup>
   <ItemGroup />
