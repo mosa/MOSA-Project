@@ -14,7 +14,7 @@ namespace Mosa.Platform.ESP32
 	{
 		public static readonly List<BaseInstruction> List = new List<BaseInstruction> {
 			ESP32.Add32,
-			ESP32.Nop32,
+			ESP32.Nop,
 		};
 	}
 }
