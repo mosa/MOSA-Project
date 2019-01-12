@@ -2,7 +2,9 @@
 License
 #######
 
-MOSA is licensed under the `New BSD License <http://en.wikipedia.org/wiki/New_BSD>`__: ::
+MOSA is licensed under the `New BSD License <http://en.wikipedia.org/wiki/New_BSD>`__:
+
+.. code-block:: text
 
   Copyright (c) 2008, MOSA-Project
   All rights reserved.
