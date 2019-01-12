@@ -6,6 +6,8 @@ Contents
 
    intro
    faq
+   compiler-tool
+   tools
    boot-image-tool
    booting-on-physical-machine
    compiler-design
