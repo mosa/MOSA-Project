@@ -14,7 +14,7 @@ If you are interested in supporting this project, join the project itself. Start
 Jobs
 ****
 
-We need help to achieve our goals. You can either help us with documentation, community, by fixing bugs in our code base, fixing reported [issues](https://github.com/mosa/MOSA-Project/issues?direction=desc&sort=updated&state=open) or taking on one of the open jobs. If you want to contribute, please make yourself heard on our IRC channel.
+We need help to achieve our goals. You can either help us with documentation, community, by fixing bugs in our code base, fixing reported `issues <https://github.com/mosa/MOSA-Project/issues?direction=desc&sort=updated&state=open>`__ or taking on one of the open jobs. If you want to contribute, please make yourself heard on our IRC channel.
 
 *****
 Rules
