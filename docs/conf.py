@@ -16,6 +16,7 @@ extensions = [
     'sphinx.ext.autosectionlabel',
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
+    'sphinxcontrib.httpdomain',
     'sphinx_tabs.tabs',
     'sphinx-prompt',
 ]
@@ -54,11 +55,11 @@ exclude_patterns = [
 html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 html_theme_path = [sphinx_rtd_theme.get_html_theme_path()]
-html_logo = 'img/logo.svg'
-html_theme_options = {
-    'logo_only': True,
-    'display_version': False,
-}
+#html_logo = 'img/logo.svg'
+#html_theme_options = {
+#    'logo_only': True,
+#    'display_version': False,
+#}
 
 # Activate autosectionlabel plugin
 autosectionlabel_prefix_document = True
