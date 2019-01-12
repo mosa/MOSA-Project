@@ -16,7 +16,7 @@ The following options are supported:
   * - Option
     - Arguments
     - Description
-  * --volume
+  * - --volume
     - Volume Name
     - Set the volume name for the first partition
   * - --blocks
