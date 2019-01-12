@@ -1,4 +1,6 @@
-### MOSA Tools
+##########
+MOSA Tools
+##########
 
 The MOSA project is developing a set of tools along with its core operating system components. This page provides quick links to descriptions of all MOSA tools.
 
