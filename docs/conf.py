@@ -10,14 +10,6 @@ from recommonmark.parser import CommonMarkParser
 
 sys.path.insert(0, os.path.abspath('..'))
 sys.path.append(os.path.dirname(__file__))
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "readthedocs.settings.dev")
-
-from django.conf import settings
-from django.utils import timezone
-
-import django
-django.setup()
-
 
 sys.path.append(os.path.abspath('_ext'))
 extensions = [
@@ -25,7 +17,6 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.intersphinx',
     'sphinxcontrib.httpdomain',
-    'djangodocs',
     'doc_extensions',
     'sphinx_tabs.tabs',
     'sphinx-prompt',
@@ -40,7 +31,7 @@ source_parsers = {
 master_doc = 'index'
 project = u'Mosa Project Documentation'
 copyright = '2008-{}, Mosa Project & contributors'.format(
-    timezone.now().year
+    2019
 )
 
 exclude_patterns = ['_build']
