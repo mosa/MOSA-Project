@@ -6,5 +6,7 @@ Contents
 
    intro
    faq
+   get-involved
    authors
+   license
    about-this-documentation
