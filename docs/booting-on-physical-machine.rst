@@ -8,7 +8,7 @@ While most of the development and testing of MOSA is done using virtualization s
 
 Here are detailed instructions for writing MOSA operating system to a USB Drive:
 
-1. Download the `dd <http://www.chrysocome.net/dd>``__ utility for Windows.
+1. Download the `dd <http://www.chrysocome.net/dd>`__ utility for Windows.
 
 2. Extract the ``dd.exe`` executable to:
 
@@ -43,4 +43,4 @@ Get a list all the block devices on your system by typing the command below. Fin
 7. Wait until all the blocks are written to the USB key before disconnecting it.
 
 8. Now boot a PC or laptop with the USB Key connected!
-c
+
