@@ -6,6 +6,7 @@ Contents
 
    intro
    faq
+   boot-image-tool
    booting-on-physical-machine
    compiler-design
    tests

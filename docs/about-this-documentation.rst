@@ -205,11 +205,11 @@ Table as CSV
 
 .. code-block:: rst
 
-   .. csv-table:: Title of CSV table
-      :header: "Column 1", "Column 2", "Column 3"
+  .. csv-table:: Title of CSV table
+    :header: "Column 1", "Column 2", "Column 3"
 
-      "Sampel Row 1", Cell, Cell
-      "Sampel Row 2", Cell, "Cell with multiple Words"
+    "Sampel Row 1", Cell, Cell
+    "Sampel Row 2", Cell, "Cell with multiple Words"
 
 You can skip quotes, of cell content conains only a single word
 
@@ -217,18 +217,18 @@ Table as flat list
 
 .. code-block:: rst
 
-   .. list-table:: Title of table as flat list
-      :header-rows: 1
+  .. list-table:: Title of table as flat list
+    :header-rows: 1
 
-      * - Column 1
-        - Column 2
-        - Column 3
-      * - Row 1
-        - Cell
-        - Cell
-      * - Row 2
-        - Cell
-        - Cell
+    * - Column 1
+      - Column 2
+      - Column 3
+    * - Row 1
+      - Cell
+      - Cell
+    * - Row 2
+      - Cell
+      - Cell
 
 ``:header-rows:`` defines the number of header rows. Skip this line, if you do not need a header.
 
