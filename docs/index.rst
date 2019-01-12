@@ -6,6 +6,7 @@ Contents
 
    intro
    faq
+   booting-on-physical-machine
    tests
    get-involved
    authors

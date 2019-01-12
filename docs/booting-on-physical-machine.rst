@@ -43,3 +43,4 @@ Get a list all the block devices on your system by typing the command below. Fin
 7. Wait until all the blocks are written to the USB key before disconnecting it.
 
 8. Now boot a PC or laptop with the USB Key connected!
+c
