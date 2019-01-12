@@ -819,8 +819,37 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "supress8": code = "SuppressByte"; return;
 				case "": return;
 
-				default: throw new Exception("ERROR!");
+				default: break;
 			}
+
+			if (part.StartsWith("reg("))
+			{
+				int open = part.IndexOf('(');
+				int comma = part.IndexOf('-');
+				int closed = part.IndexOf(')');
+
+				if (open >= 0)
+				{
+					int start = Convert.ToInt32(part.Substring(open + 1, comma - open - 1).Trim());
+					int end = comma < 0 ? start : Convert.ToInt32(part.Substring(comma + 1, closed - comma - 1).Trim());
+					int length = end - start + 1;
+
+					code = "AppendBit(";
+
+					if (start == 0)
+					{
+						postcode = ".Register.RegisterCode) & 0x" + ("111111111111111111111111111111".Substring(0, length));
+					}
+					else
+					{
+						postcode = ".Register.RegisterCode >> " + start.ToString() + ") & 0x" + ("111111111111111111111111111111".Substring(0, length));
+					}
+
+					return;
+				}
+			}
+
+			throw new Exception("ERROR!");
 		}
 
 		private static string GetOperand(string part)

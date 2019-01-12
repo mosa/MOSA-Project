@@ -6,7 +6,7 @@
 		"[x64-rex-64]=[x64-rex],rex.w=1",
 
 		"[x64-branch]=[x64],operand-prefix=0x0F,opcode=[opcode-branch],immediate=rel32:label",
-		"[x64-setbyteif]=[x64],operand-prefixoperand-prefix=0x0F,opcode=[opcode-setbyteif],mod=11,reg=000,rm=reg3:r",
+		"[x64-setbyteif]=[x64],operand-prefix=0x0F,opcode=[opcode-setbyteif],mod=11,reg=000,rm=reg3:r",
 		"[x64-cmov]=[x64],operand-prefix=0x0F,opcode=[opcode-cmov],mod=11,reg=reg3:r,rm=reg3:o1",
 
 		"[x64-base-load-ebp+zero]=[x64],mod=01,reg=reg3:[dest],rm=101,immediate=0x00",
