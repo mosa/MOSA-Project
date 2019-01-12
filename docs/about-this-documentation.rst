@@ -13,7 +13,7 @@ It is not about documentation content.
   * - PDF
     - http://readthedocs.org/projects/mosa/downloads/pdf/latest
   * - Html, as Zip
-    - http://readthedocs.org/projects/mosa/downloads/htmlzip/docs
+    - http://readthedocs.org/projects/mosa/downloads/htmlzip/latest
 
 ***************************************
 RestructuredText with Sphinx directives
@@ -29,7 +29,7 @@ Filenames
 
 Use only lowercase alphanumeric characters and ``-`` (minus) symbol.
 
-Suffix filenames with the ``.rst`` extension. When GitHub can render them.
+Suffix filenames with the ``.rst`` extension, so GitHub can render them.
 
 
 ***********

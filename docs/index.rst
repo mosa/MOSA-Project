@@ -6,6 +6,7 @@ Contents
 
    intro
    faq
+   tests
    get-involved
    authors
    license
