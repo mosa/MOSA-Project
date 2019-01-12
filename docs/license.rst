@@ -1,3 +1,7 @@
+#######
+License
+#######
+
 MOSA is licensed under the `New BSD License <http://en.wikipedia.org/wiki/New_BSD>`__:
 
 .. code-block::
