@@ -8,8 +8,7 @@ What does MOSA stand for?
 
 Managed Operation System Alliance. It was an alliance with the SharpOS project to create a .NET based operating system. As operating systems share a lot of common groundwork MOSA aims to standardize interfaces in order to foster portability and to provide both projects with basic implementations of these interfaces.
 
-Who can join?
--------------
+.. rubric:: Who can join?
 
 Anyone who is interested in operating system or .NET development can join the alliance. You have to keep in mind our [[New BSD License|License]] for your contributions though.
 
