@@ -244,10 +244,14 @@ Troubleshooting
 .. rubric:: After commiting, the documentation will not update
 
 - The build process of the documentation takes round about 1-2 minutes.
-- If the build fails, you can check the status here: `Builds <http://readthedocs.org/projects/mosa/builds>`__
-- If the build does not fail, but some content is missing, there might be some parsing errors or warnings.
+- You can check the status here: `Builds <http://readthedocs.org/projects/mosa/builds>`__
+- Check the status if the build fails
+
+.. rubric:: Documentation is updating, but some content is missing or malformed
+
+- There might be some parsing errors or warnings.
   Go to `Builds <http://readthedocs.org/projects/mosa/builds>`__ and click on ``Raw view``.
-  Check the build output for warnings.
+  Check the build output for warnings and fix them.
 
 **********
 References
