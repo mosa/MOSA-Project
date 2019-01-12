@@ -13,8 +13,9 @@ The MOSA project consists of:
 
 Read our `Frequently Asked Questions <https://github.com/mosa/MOSA-Project/wiki/Frequently-Asked-Questions>`__ for more information about this project.
 
+**************
 Current Status
-==============
+**************
 
 The target platforms are:
 
@@ -41,11 +42,12 @@ The MOSA compiler seeks to provide high quality code generation using the follow
 - Block Reordering
 - Greedy Register Allocation
 
+***************
 Getting Started
-===============
+***************
 
 Download
---------
+========
 
 The MOSA project is available as a `zip download <https://github.com/mosa/MOSA-Project/archive/master.zip>`__ or via git:
 
@@ -101,14 +103,14 @@ Next double click on the "Launcher.bat" script, which will bring up the MOSA Lau
 
 By default, the CoolWorld operating system demo is pre-selected. Click the "Compile and Run" button to compile and launch the demo.
 
+*******************
 Join the Discussion
-===================
+*******************
 
 Join us on [Gitter chat][gitter-chat]. This is the most interactive way to connect to MOSA's development team.
 
+*******
 License
-=======
+*******
 
 MOSA is licensed under the `New BSD License <http://en.wikipedia.org/wiki/New_BSD>`__.
-
-
