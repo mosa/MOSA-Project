@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
-	public sealed class OpcodeEncoder
+	public sealed class OpcodeEncoder   // Little Endian
 	{
 		private readonly BaseCodeEmitter Emitter;
 
@@ -76,6 +76,36 @@ namespace Mosa.Compiler.Framework
 
 		public void AppendNibble(int value)
 		{
+			AppendBit((value >> 3) & 0x1);
+			AppendBit((value >> 2) & 0x1);
+			AppendBit((value >> 1) & 0x1);
+			AppendBit(value & 0x1);
+		}
+
+		public void Append5Bits(int value)
+		{
+			AppendBit((value >> 4) & 0x1);
+			AppendBit((value >> 3) & 0x1);
+			AppendBit((value >> 2) & 0x1);
+			AppendBit((value >> 1) & 0x1);
+			AppendBit(value & 0x1);
+		}
+
+		public void Append6Bits(int value)
+		{
+			AppendBit((value >> 5) & 0x1);
+			AppendBit((value >> 4) & 0x1);
+			AppendBit((value >> 3) & 0x1);
+			AppendBit((value >> 2) & 0x1);
+			AppendBit((value >> 1) & 0x1);
+			AppendBit(value & 0x1);
+		}
+
+		public void Append7Bits(int value)
+		{
+			AppendBit((value >> 6) & 0x1);
+			AppendBit((value >> 5) & 0x1);
+			AppendBit((value >> 4) & 0x1);
 			AppendBit((value >> 3) & 0x1);
 			AppendBit((value >> 2) & 0x1);
 			AppendBit((value >> 1) & 0x1);

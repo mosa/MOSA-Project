@@ -834,8 +834,6 @@ namespace Mosa.Utility.SourceCodeGenerator
 					int end = comma < 0 ? start : Convert.ToInt32(part.Substring(comma + 1, closed - comma - 1).Trim());
 					int length = end - start + 1;
 
-					code = "AppendBit(";
-
 					if (start == 0)
 					{
 						postcode = ".Register.RegisterCode) & 0x" + ("111111111111111111111111111111".Substring(0, length));
@@ -843,6 +841,19 @@ namespace Mosa.Utility.SourceCodeGenerator
 					else
 					{
 						postcode = ".Register.RegisterCode >> " + start.ToString() + ") & 0x" + ("111111111111111111111111111111".Substring(0, length));
+					}
+
+					switch (length)
+					{
+						case 1: code = "AppendBit("; break;
+						case 2: code = "Append2Bits("; break;
+						case 3: code = "Append3Bits("; break;
+						case 4: code = "AppendNibble("; break;
+						case 5: code = "Append5Bits("; break;
+						case 6: code = "Append6Bits("; break;
+						case 7: code = "Append7Bits("; break;
+						case 8: code = "AppendByte("; break;
+						default: code = "AppendBits("; postcode += ", " + length.ToString(); break;
 					}
 
 					return;
