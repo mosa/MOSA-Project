@@ -7,14 +7,14 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ESP32.Instructions
 {
 	/// <summary>
-	/// Nop32
+	/// Nop
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ESP32.ESP32Instruction" />
-	public sealed class Nop32 : ESP32Instruction
+	public sealed class Nop : ESP32Instruction
 	{
-		public override int ID { get { return 2; } }
+		public override int ID { get { return 692; } }
 
-		internal Nop32()
+		internal Nop()
 			: base(1, 3)
 		{
 		}
@@ -26,9 +26,9 @@ namespace Mosa.Platform.ESP32.Instructions
 
 			emitter.OpcodeEncoder.AppendNibble(0b0000);
 			emitter.OpcodeEncoder.AppendNibble(0b0000);
-			emitter.OpcodeEncoder.AppendNibble(node.Result.Register.RegisterCode);
-			emitter.OpcodeEncoder.AppendNibble(node.Operand1.Register.RegisterCode);
-			emitter.OpcodeEncoder.AppendNibble(node.Operand2.Register.RegisterCode);
+			emitter.OpcodeEncoder.AppendNibble(0b0010);
+			emitter.OpcodeEncoder.AppendNibble(0b0000);
+			emitter.OpcodeEncoder.AppendNibble(0b1111);
 			emitter.OpcodeEncoder.AppendNibble(0b0000);
 		}
 	}

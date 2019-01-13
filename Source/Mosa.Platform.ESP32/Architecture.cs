@@ -52,22 +52,22 @@ namespace Mosa.Platform.ESP32
    			////////////////////////////////////////////////////////
             // 32-bit general purpose registers
    			////////////////////////////////////////////////////////
-            GeneralPurposeRegister.R0,
-			GeneralPurposeRegister.R1,
-			GeneralPurposeRegister.R2,
-			GeneralPurposeRegister.R3,
-			GeneralPurposeRegister.R4,
-			GeneralPurposeRegister.R5,
-			GeneralPurposeRegister.R6,
-			GeneralPurposeRegister.R7,
-			GeneralPurposeRegister.R8,
-			GeneralPurposeRegister.R9,
-			GeneralPurposeRegister.R10,
-			GeneralPurposeRegister.R11,
-			GeneralPurposeRegister.R12,
+            GeneralPurposeRegister.A0,
 			GeneralPurposeRegister.SP,
-			GeneralPurposeRegister.LR,
-			GeneralPurposeRegister.PC
+			GeneralPurposeRegister.A2,
+			GeneralPurposeRegister.A3,
+			GeneralPurposeRegister.A4,
+			GeneralPurposeRegister.A5,
+			GeneralPurposeRegister.A6,
+			GeneralPurposeRegister.A7,
+			GeneralPurposeRegister.A8,
+			GeneralPurposeRegister.A9,
+			GeneralPurposeRegister.A10,
+			GeneralPurposeRegister.A11,
+			GeneralPurposeRegister.A12,
+			GeneralPurposeRegister.A13,
+			GeneralPurposeRegister.A14,
+			GeneralPurposeRegister.A15
 		};
 
 		/// <summary>
@@ -98,7 +98,7 @@ namespace Mosa.Platform.ESP32
 		/// <summary>
 		/// Retrieves the stack frame register of the ESP32.
 		/// </summary>
-		public override PhysicalRegister StackFrameRegister { get { return GeneralPurposeRegister.LR; } }
+		public override PhysicalRegister StackFrameRegister { get { return null; /* TODO */} }
 
 		/// <summary>
 		/// Retrieves the stack pointer register of the ESP32.
@@ -128,12 +128,12 @@ namespace Mosa.Platform.ESP32
 		/// <summary>
 		/// Retrieves the exception register of the architecture.
 		/// </summary>
-		public override PhysicalRegister ExceptionRegister { get { return GeneralPurposeRegister.R10; } }
+		public override PhysicalRegister ExceptionRegister { get { return GeneralPurposeRegister.A10; } }
 
 		/// <summary>
 		/// Gets the finally return block register.
 		/// </summary>
-		public override PhysicalRegister LeaveTargetRegister { get { return GeneralPurposeRegister.R9; } }
+		public override PhysicalRegister LeaveTargetRegister { get { return GeneralPurposeRegister.A9; } }
 
 		/// <summary>
 		/// Retrieves the program counter register of the ESP32.

@@ -12,7 +12,7 @@ namespace Mosa.Platform.ESP32.Intrinsic
 		[IntrinsicMethod("Mosa.Platform.ESP32.Intrinsic:Nop")]
 		private static void Nop(Context context, MethodCompiler methodCompiler)
 		{
-			context.SetInstruction(ESP32.Nop32);
+			context.SetInstruction(ESP32.Nop);
 		}
 	}
 }
