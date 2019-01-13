@@ -49,8 +49,16 @@ namespace Mosa.Platform.x64.Instructions
 			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
 			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
+			emitter.OpcodeEncoder.SuppressByte(0x40);
+			emitter.OpcodeEncoder.AppendNibble(0b0100);
+			emitter.OpcodeEncoder.AppendBit(0b0);
+			emitter.OpcodeEncoder.AppendBit(0b0);
+			emitter.OpcodeEncoder.AppendBit(0b0);
+			emitter.OpcodeEncoder.AppendBit((node.Result.Register.RegisterCode >> 3) & 0x1);
 			emitter.OpcodeEncoder.AppendByte(0xF7);
-			emitter.OpcodeEncoder.AppendByte(0x03);
+			emitter.OpcodeEncoder.Append2Bits(0b11);
+			emitter.OpcodeEncoder.Append3Bits(0b011);
+			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 		}
 	}
 }

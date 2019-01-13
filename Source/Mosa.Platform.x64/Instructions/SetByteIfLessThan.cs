@@ -35,6 +35,7 @@ namespace Mosa.Platform.x64.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
+			emitter.OpcodeEncoder.AppendByte(0x0F);
 			emitter.OpcodeEncoder.AppendByte(0x9C);
 			emitter.OpcodeEncoder.Append2Bits(0b11);
 			emitter.OpcodeEncoder.Append3Bits(0b000);

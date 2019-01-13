@@ -27,9 +27,9 @@ namespace Mosa.Platform.x64.Instructions
 			emitter.OpcodeEncoder.SuppressByte(0x40);
 			emitter.OpcodeEncoder.AppendNibble(0b0100);
 			emitter.OpcodeEncoder.AppendBit(0b0);
+			emitter.OpcodeEncoder.AppendBit((node.Operand1.Register.RegisterCode >> 3) & 0x1);
+			emitter.OpcodeEncoder.AppendBit(0b0);
 			emitter.OpcodeEncoder.AppendBit((node.Result.Register.RegisterCode >> 3) & 0x1);
-			emitter.OpcodeEncoder.AppendBit(0b0);
-			emitter.OpcodeEncoder.AppendBit(0b0);
 			emitter.OpcodeEncoder.AppendNibble(0b0110);
 			emitter.OpcodeEncoder.AppendNibble(0b0110);
 			emitter.OpcodeEncoder.AppendNibble(0b0000);

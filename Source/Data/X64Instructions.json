@@ -96,11 +96,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex32],opcode=0x13,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0x13,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -120,11 +120,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex64],opcode=0x13,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex64],opcode=0x13,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm64:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm64:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -144,11 +144,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex32],opcode=0x03,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0x03,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -168,11 +168,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex64],opcode=0x03,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex64],opcode=0x03,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -192,7 +192,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x58,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x58,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -212,7 +212,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x58,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x58,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -232,11 +232,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex32],opcode=0x23,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0x23,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=100,rm=reg3:r,immediate=imm32:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=100,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -256,11 +256,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex64],opcode=0x23,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex64],opcode=0x23,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=100,rm=reg3:r,immediate=imm32:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=100,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -299,11 +299,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xBA,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xBA,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xB3,mod=11,reg=110,rm=reg3:r,immediate=imm8:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xB3,mod=11,reg=110,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -322,11 +322,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xBA,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xBA,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xB3,mod=11,reg=110,rm=reg3:r,immediate=imm8:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xB3,mod=11,reg=110,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -345,11 +345,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xA3,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xA3,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xBA,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xBA,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -368,11 +368,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xA3,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xA3,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xBA,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xBA,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -391,11 +391,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xBA,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xBA,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xAB,mod=11,reg=011,rm=reg3:r,immediate=imm8:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xAB,mod=11,reg=011,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -414,11 +414,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xBA,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xBA,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xAB,mod=11,reg=011,rm=reg3:r,immediate=imm8:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xAB,mod=11,reg=011,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -438,7 +438,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
-					"Encoding": "[x64-rex32],opcode=0xFF,mod=11,reg=010,rm=reg3:o1,rex.r=0,rex.x=0,rex.b=regx4:r"
+					"Encoding": "[x64-rex32],opcode=0xFF,mod=11,reg=010,rm=reg3:o1,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				},
 				{
 					"Condition": "[constant]",
@@ -519,11 +519,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex32],opcode=0x3B,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=regx4:o1,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0x3B,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=111,rm=reg3:o1,immediate=imm32:o2,rex.r=0,rex.x=0,rex.b=regx4:o1"
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=111,rm=reg3:o1,immediate=imm32:o2,rex.r=0,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -542,11 +542,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex64],opcode=0x3B,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=regx4:o1,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex64],opcode=0x3B,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=111,rm=reg3:o1,immediate=imm32:o2,rex.r=0,rex.x=0,rex.b=regx4:o1"
+					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=111,rm=reg3:o1,immediate=imm32:o2,rex.r=0,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -566,7 +566,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[eax][register][zero][register]",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xB1,mod=00,reg=reg3:o4,rm=reg3:o2,rex.r=regx4:o4,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xB1,mod=00,reg=reg3:o4,rm=reg3:o2,rex.r=reg4x:o4,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -586,7 +586,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[eax][register][zero][register]",
-					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xB1,mod=00,reg=reg3:o4,rm=reg3:o2,rex.r=regx4:o4,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xB1,mod=00,reg=reg3:o4,rm=reg3:o2,rex.r=reg4x:o4,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -605,7 +605,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=01100110,opcode2=00001111,opcode3=00101111,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=regx4:o1,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=01100110,opcode2=00001111,opcode3=00101111,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -624,7 +624,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=00001111,opcode2=00101111,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=regx4:o1,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=00001111,opcode2=00101111,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -662,7 +662,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x5A,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=regx4:o1,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x5A,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -681,7 +681,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x2A,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=regx4:r,rex.x=0,rex.b=regx4:o1"
+					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x2A,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -700,7 +700,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex64],opcode=0xF2,opcode2=0x0F,opcode3=0x2A,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=regx4:r,rex.x=0,rex.b=regx4:o1"
+					"Encoding": "[x64-rex64],opcode=0xF2,opcode2=0x0F,opcode3=0x2A,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -719,7 +719,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x2A,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=regx4:r,rex.x=0,rex.b=regx4:o1"
+					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x2A,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -738,7 +738,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex64],opcode=0xF3,opcode2=0x0F,opcode3=0x2A,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=regx4:r,rex.x=0,rex.b=regx4:o1"
+					"Encoding": "[x64-rex64],opcode=0xF3,opcode2=0x0F,opcode3=0x2A,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -757,7 +757,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x5A,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=regx4:r,rex.x=0,rex.b=regx4:o1"
+					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x5A,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -776,7 +776,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x2C,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=regx4:r,rex.x=0,rex.b=regx4:o1"
+					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x2C,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -795,7 +795,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex64],opcode=0xF2,opcode2=0x0F,opcode3=0x2C,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=regx4:r,rex.x=0,rex.b=regx4:o1"
+					"Encoding": "[x64-rex64],opcode=0xF2,opcode2=0x0F,opcode3=0x2C,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -814,7 +814,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x2C,mod=11,reg=reg3:r,rm=reg3:o1,,rex.r=regx4:r,rex.x=0,rex.b=regx4:o1"
+					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x2C,mod=11,reg=reg3:r,rm=reg3:o1,,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -833,7 +833,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex64],opcode=0xF3,opcode2=0x0F,opcode3=0x2C,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=regx4:r,rex.x=0,rex.b=regx4:o1"
+					"Encoding": "[x64-rex64],opcode=0xF3,opcode2=0x0F,opcode3=0x2C,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -890,7 +890,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF7,mod=11,reg=110,rm=reg3:o3,rex.r=0,rex.x=0,rex.b=regx4:o3"
+					"Encoding": "[x64-rex32],opcode=0xF7,mod=11,reg=110,rm=reg3:o3,rex.r=0,rex.x=0,rex.b=reg4x:o3"
 				}
 			]
 		},
@@ -909,7 +909,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex64],opcode=0xF7,mod=11,reg=110,rm=reg3:o3,rex.r=0,rex.x=0,rex.b=regx4:o3"
+					"Encoding": "[x64-rex64],opcode=0xF7,mod=11,reg=110,rm=reg3:o3,rex.r=0,rex.x=0,rex.b=reg4x:o3"
 				}
 			]
 		},
@@ -928,7 +928,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x5E,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x5E,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -947,7 +947,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x5E,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x5E,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -986,7 +986,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF7,mod=11,reg=111,rm=reg3:o3,rex.r=0,rex.x=0,rex.b=regx4:o3"
+					"Encoding": "[x64-rex32],opcode=0xF7,mod=11,reg=111,rm=reg3:o3,rex.r=0,rex.x=0,rex.b=reg4x:o3"
 				}
 			]
 		},
@@ -1005,7 +1005,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex64],opcode=0xF7,mod=11,reg=111,rm=reg3:o3,rex.r=0,rex.x=0,rex.b=regx4:o3"
+					"Encoding": "[x64-rex64],opcode=0xF7,mod=11,reg=111,rm=reg3:o3,rex.r=0,rex.x=0,rex.b=reg4x:o3"
 				}
 			]
 		},
@@ -1024,7 +1024,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xAF,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xAF,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -1043,7 +1043,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xAF,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xAF,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -1196,11 +1196,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=reg3:o1,rex.r=0,rex.x=0,rex.b=regx4:o1"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=reg3:o1,rex.r=0,rex.x=0,rex.b=reg4x:o1"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=101,immediate=imm32:o1"
+					"Encoding": "[x64],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=101,immediate=imm64:o1"
 				}
 			]
 		},
@@ -1261,7 +1261,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
-					"Encoding": "[x64-rex32],opcode=0xFF,mod=11,reg=100,rm=reg3:o1,rex.r=0,rex.x=0,rex.b=regx4:o1"
+					"Encoding": "[x64-rex32],opcode=0xFF,mod=11,reg=100,rm=reg3:o1,rex.r=0,rex.x=0,rex.b=reg4x:o1"
 				},
 				{
 					"Condition": "[constant]",
@@ -1409,7 +1409,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=reg3:o1,rex.r=0,rex.x=0,rex.b=regx4:o1"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=reg3:o1,rex.r=0,rex.x=0,rex.b=reg4x:o1"
 				},
 				{
 					"Condition": "[constant]",
@@ -1433,7 +1433,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x01,mod=00,reg=011,rm=reg3:o1,rex.r=0,rex.x=0,rex.b=regx4:o1"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x01,mod=00,reg=011,rm=reg3:o1,rex.r=0,rex.x=0,rex.b=reg4x:o1"
 				},
 				{
 					"Condition": "[constant]",
@@ -1476,7 +1476,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0x8C,mod=11,reg=reg3:o1,rm=reg3:r,rex.r=reg3:o1,rex.x=0,rex.b=regx4:r"
+					"Encoding": "[x64-rex32],opcode=0x8C,mod=11,reg=reg3:o1,rm=reg3:r,rex.r=reg3:o1,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -1495,7 +1495,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex64],opcode=0x8C,mod=11,reg=reg3:o1,rm=reg3:r,rex.r=reg3:o1,rex.x=0,rex.b=regx4:r"
+					"Encoding": "[x64-rex64],opcode=0x8C,mod=11,reg=reg3:o1,rm=reg3:r,rex.r=reg3:o1,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -1514,7 +1514,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0x8E,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg3:r,rex.x=0,rex.b=regx4:o1"
+					"Encoding": "[x64-rex32],opcode=0x8E,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg3:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -1533,7 +1533,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex64],opcode=0x8E,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg3:r,rex.x=0,rex.b=regx4:o1"
+					"Encoding": "[x64-rex64],opcode=0x8E,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg3:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -1552,11 +1552,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
-					"Encoding": "[x64-rex32],opcode=0x8B,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg3:r,rex.x=0,rex.b=regx4:o1"
+					"Encoding": "[x64-rex32],opcode=0x8B,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg3:r,rex.x=0,rex.b=reg4x:o1"
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x64-rex32],opcode=0xC7,mod=11,reg=000,rm=reg3:r,immediate=imm32:o1,rex.r=0,rex.x=0,rex.b=regx4:r"
+					"Encoding": "[x64-rex32],opcode=0xC7,mod=11,reg=000,rm=reg3:r,immediate=imm32:o1,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -1575,11 +1575,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
-					"Encoding": "[x64-rex64],opcode=0x8B,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg3:r,rex.x=0,rex.b=regx4:o1"
+					"Encoding": "[x64-rex64],opcode=0x8B,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg3:r,rex.x=0,rex.b=reg4x:o1"
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x64-rex64],opcode=0xC7,mod=11,reg=000,rm=reg3:r,immediate=imm32:o1,rex.r=0,rex.x=0,rex.b=regx4:r"
+					"Encoding": "[x64-rex64],opcode=0xC7,mod=11,reg=000,rm=reg3:r,immediate=imm32:o1,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -1597,7 +1597,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x28,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x28,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -1674,7 +1674,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x20,mod=11,reg=reg3:o1,rm=reg3:r,rex.r=regx4:o1,rex.x=0,rex.b=regx4:r"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x20,mod=11,reg=reg3:o1,rm=reg3:r,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -1694,7 +1694,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x20,mod=11,reg=reg3:o1,rm=reg3:r,rex.r=regx4:o1,rex.x=0,rex.b=regx4:r"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x20,mod=11,reg=reg3:o1,rm=reg3:r,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -1714,7 +1714,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x22,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=regx4:o1,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x22,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -1734,7 +1734,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0x22,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=regx4:o1,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0x22,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -1753,7 +1753,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=01100110,opcode2=00001111,opcode3=01111110,mod=11,reg=reg3:o1,rm=reg3:r"
+					"Encoding": "[x64-rex64],opcode=01100110,opcode2=00001111,opcode3=01111110,mod=11,reg=reg3:o1,rm=reg3:r,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -2020,7 +2020,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0xF2,opcode2=0x0F,opcode3=0x10,mod=11,reg=reg3:r,rm=reg3:o1"
+					"Encoding": "[x64-rex64],opcode=0xF2,opcode2=0x0F,opcode3=0x10,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -2154,7 +2154,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0xF3,opcode2=0x0F,opcode3=0x10,mod=11,reg=reg3:r,rm=reg3:o1"
+					"Encoding": "[x64-rex64],opcode=0xF3,opcode2=0x0F,opcode3=0x10,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -2716,7 +2716,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0x0F,opcode2=10111110,mod=11,reg=reg3:r,rm=reg3:o1"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=10111110,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -2735,7 +2735,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0x0F,opcode2=10111110,mod=11,reg=reg3:r,rm=reg3:o1"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=10111110,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -2754,7 +2754,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0x0F,opcode2=10111111,mod=11,reg=reg3:r,rm=reg3:o1"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=10111111,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -2773,7 +2773,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0x0F,opcode2=10111111,mod=11,reg=reg3:r,rm=reg3:o1"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=10111111,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -2792,7 +2792,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0x0F,opcode2=10111111,mod=11,reg=reg3:r,rm=reg3:o1"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=10111111,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -2997,7 +2997,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x10,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x10,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -3131,7 +3131,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0x0F,opcode2=10110110,mod=11,reg=reg3:r,rm=reg3:o1"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=10110110,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -3150,7 +3150,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0x0F,opcode2=10110110,mod=11,reg=reg3:r,rm=reg3:o1"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=10110110,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -3169,7 +3169,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0x0F,opcode2=10110111,mod=11,reg=reg3:r,rm=reg3:o1"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=10110111,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -3188,7 +3188,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0x0F,opcode2=10110111,mod=11,reg=reg3:r,rm=reg3:o1"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=10110111,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -3207,7 +3207,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0x0F,opcode2=10110111,mod=11,reg=reg3:r,rm=reg3:o1"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=10110111,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -3413,7 +3413,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0xF7,mod=11,reg=100,rm=reg3:o2"
+					"Encoding": "[x64-rex32],opcode=0xF7,mod=11,reg=100,rm=reg3:o2,rex.r=0,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -3433,7 +3433,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0xF7,mod=11,reg=100,rm=reg3:o2"
+					"Encoding": "[x64-rex64],opcode=0xF7,mod=11,reg=100,rm=reg3:o2,rex.r=0,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -3453,7 +3453,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x59,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x59,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -3473,7 +3473,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x59,mod=11,reg=reg3:r,rm=reg3:o2,,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x59,mod=11,reg=reg3:r,rm=reg3:o2,,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -3492,7 +3492,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0xF7,opcode2=0x03"
+					"Encoding": "[x64-rex32],opcode=0xF7,mod=11,reg=011,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -3511,7 +3511,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0xF7,opcode2=0x03"
+					"Encoding": "[x64-rex64],opcode=0xF7,mod=11,reg=011,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -3549,7 +3549,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0xF7,mod=11,reg=010,rm=reg3:r"
+					"Encoding": "[x64-rex32],opcode=0xF7,mod=11,reg=010,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -3568,7 +3568,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0xF7,mod=11,reg=010,rm=reg3:r"
+					"Encoding": "[x64-rex64],opcode=0xF7,mod=11,reg=010,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -3588,11 +3588,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex32],opcode=0x0B,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0x0B,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=001,rm=reg3:r,immediate=imm32:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=001,rm=reg3:r,immediate=imm32:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -3612,11 +3612,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex64],opcode=0x0B,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex64],opcode=0x0B,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=001,rm=reg3:r,immediate=imm32:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=001,rm=reg3:r,immediate=imm32:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -3729,7 +3729,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=01100110,opcode2=00001111,opcode3=00111010,opcode4=00010110,mod=11,reg=reg3:o1,rm=reg3:r,immediate=imm8:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=01100110,opcode2=00001111,opcode3=00111010,opcode4=00010110,mod=11,reg=reg3:o1,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -3748,7 +3748,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex64],opcode=01100110,opcode2=00001111,opcode3=00111010,opcode4=00010110,mod=11,reg=reg3:o1,rm=reg3:r,immediate=imm8:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=01100110,opcode2=00001111,opcode3=00111010,opcode4=00010110,mod=11,reg=reg3:o1,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -3767,7 +3767,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "01011|reg3:r"
+					"Encoding": "[x64-rex32],opcode=01010|reg3:r,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -3805,11 +3805,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
-					"Encoding": "[x64],opcode=0xFF,mod=11,reg=110,rm=reg3:o1"
+					"Encoding": "[x64-rex32],opcode=01010|reg3:r,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[x64],opcode=0x68,immediate=imm32:o1"
+					"Encoding": "[x64],opcode=0x68,immediate=imm64:o1"
 				}
 			]
 		},
@@ -3847,7 +3847,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],operand-prefix=0x66,opcode=0x0F,opcode2=0xEF,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],operand-prefix=0x66,opcode=0x0F,opcode2=0xEF,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -3866,15 +3866,15 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64],opcode=0xD3,mod=11,reg=011,rm=reg3:r"
+					"Encoding": "[x64-rex32],opcode=0xD3,mod=11,reg=011,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				},
 				{
 					"Condition": "[#register][1]",
-					"Encoding": "[x64],opcode=0xD1,mod=11,reg=011,rm=reg3:r"
+					"Encoding": "[x64-rex32],opcode=0xD1,mod=11,reg=011,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0xC1,mod=11,reg=011,rm=reg3:r,immediate=imm8:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0xC1,mod=11,reg=011,rm=reg3:r,immediate=imm8:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -3893,15 +3893,15 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64],opcode=0xD3,mod=11,reg=011,rm=reg3:r"
+					"Encoding": "[x64-rex64],opcode=0xD3,mod=11,reg=011,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				},
 				{
 					"Condition": "[#register][1]",
-					"Encoding": "[x64],opcode=0xD1,mod=11,reg=011,rm=reg3:r"
+					"Encoding": "[x64-rex64],opcode=0xD1,mod=11,reg=011,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0xC1,mod=11,reg=011,rm=reg3:r,immediate=imm8:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0xC1,mod=11,reg=011,rm=reg3:r,immediate=imm8:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -3940,7 +3940,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],operand-prefix=0x66,opcode=0x0F,opcode2=0x3A,opcode3=0x0B,mod=11,reg=reg3:r,rm=reg3:o1,immediate=imm8:o2"
+					"Encoding": "[x64-rex32],operand-prefix=0x66,opcode=0x0F,opcode2=0x3A,opcode3=0x0B,mod=11,reg=reg3:r,rm=reg3:o1,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -3959,7 +3959,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],operand-prefix=0x66,opcode=0x0F,opcode2=0x3A,opcode3=0x0A,mod=11,reg=reg3:r,rm=reg3:o1,immediate=imm8:o2"
+					"Encoding": "[x64-rex32],operand-prefix=0x66,opcode=0x0F,opcode2=0x3A,opcode3=0x0A,mod=11,reg=reg3:r,rm=reg3:o1,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -3978,15 +3978,15 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64],opcode=0xD3,mod=11,reg=111,rm=reg3:r"
+					"Encoding": "[x64-rex32],opcode=0xD3,mod=11,reg=111,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				},
 				{
 					"Condition": "[#register][1]",
-					"Encoding": "[x64],opcode=0xD1,mod=11,reg=111,rm=reg3:r"
+					"Encoding": "[x64-rex32],opcode=0xD1,mod=11,reg=111,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0xC1,mod=11,reg=111,rm=reg3:r,immediate=imm8:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0xC1,mod=11,reg=111,rm=reg3:r,immediate=imm8:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -4005,15 +4005,15 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64],opcode=0xD3,mod=11,reg=111,rm=reg3:r"
+					"Encoding": "[x64-rex64],opcode=0xD3,mod=11,reg=111,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				},
 				{
 					"Condition": "[#register][1]",
-					"Encoding": "[x64],opcode=0xD1,mod=11,reg=111,rm=reg3:r"
+					"Encoding": "[x64-rex64],opcode=0xD1,mod=11,reg=111,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0xC1,mod=11,reg=111,rm=reg3:r,immediate=imm8:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0xC1,mod=11,reg=111,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4033,11 +4033,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex32],opcode=0x1B,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0x1B,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=011,rm=reg3:r,immediate=imm32:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=011,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4057,11 +4057,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex64],opcode=0x1B,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex64],opcode=0x1B,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=011,rm=reg3:r,immediate=imm32:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=011,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4080,15 +4080,15 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64],opcode=0xD3,mod=11,reg=100,rm=reg3:r"
+					"Encoding": "[x64-rex32],opcode=0xD3,mod=11,reg=100,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				},
 				{
 					"Condition": "[#register][1]",
-					"Encoding": "[x64],opcode=0xD1,mod=11,reg=100,rm=reg3:r"
+					"Encoding": "[x64-rex32],opcode=0xD1,mod=11,reg=100,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0xC1,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0xC1,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -4107,15 +4107,15 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64],opcode=0xD3,mod=11,reg=100,rm=reg3:r"
+					"Encoding": "[x64-rex64],opcode=0xD3,mod=11,reg=100,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				},
 				{
 					"Condition": "[#register][1]",
-					"Encoding": "[x64],opcode=0xD1,mod=11,reg=100,rm=reg3:r"
+					"Encoding": "[x64-rex64],opcode=0xD1,mod=11,reg=100,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0xC1,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0xC1,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4134,11 +4134,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][#ignore][register]",
-					"Encoding": "[x64],opcode=0x0F,opcode2=0xA5,mod=11,reg=reg3:o2,rm=reg3:r"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xA5,mod=11,reg=reg3:o2,rm=reg3:r,rex.r=reg4x:o2,rex.x=0,rex.b=reg4x:r"
 				},
 				{
 					"Condition": "[#register][#ignore][constant]",
-					"Encoding": "[x64],opcode=0x0F,opcode2=0xA4,mod=11,reg=reg3:o2,rm=reg3:r,immediate=imm8:o3"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xA4,mod=11,reg=reg3:o2,rm=reg3:r,immediate=imm8:o3,rex.r=reg4x:o2,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -4157,11 +4157,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][#ignore][register]",
-					"Encoding": "[x64],opcode=0x0F,opcode2=0xA5,mod=11,reg=reg3:o2,rm=reg3:r"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xA5,mod=11,reg=reg3:o2,rm=reg3:r,rex.r=reg4x:o2,rex.x=0,rex.b=reg4x:r"
 				},
 				{
 					"Condition": "[#register][#ignore][constant]",
-					"Encoding": "[x64],opcode=0x0F,opcode2=0xA4,mod=11,reg=reg3:o2,rm=reg3:r,immediate=imm8:o3"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xA4,mod=11,reg=reg3:o2,rm=reg3:r,immediate=imm8:o3,rex.r=reg4x:o2,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -4180,15 +4180,15 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64],opcode=0xD3,mod=11,reg=101,rm=reg3:r"
+					"Encoding": "[x64-rex64],opcode=0xD3,mod=11,reg=101,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				},
 				{
 					"Condition": "[#register][1]",
-					"Encoding": "[x64],opcode=0xD1,mod=11,reg=101,rm=reg3:r"
+					"Encoding": "[x64-rex64],opcode=0xD1,mod=11,reg=101,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0xC1,mod=11,reg=101,rm=reg3:r,immediate=imm8:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0xC1,mod=11,reg=101,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4207,15 +4207,15 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64],opcode=0xD3,mod=11,reg=101,rm=reg3:r"
+					"Encoding": "[x64-rex64],opcode=0xD3,mod=11,reg=101,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				},
 				{
 					"Condition": "[#register][1]",
-					"Encoding": "[x64],opcode=0xD1,mod=11,reg=101,rm=reg3:r"
+					"Encoding": "[x64-rex64],opcode=0xD1,mod=11,reg=101,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0xC1,mod=11,reg=101,rm=reg3:r,immediate=imm8:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0xC1,mod=11,reg=101,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4234,11 +4234,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64],opcode=0x0F,opcode2=0xAD,mod=11,reg=reg3:o2,rm=reg3:r"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xAD,mod=11,reg=reg3:o2,rm=reg3:r,rex.r=reg4x:o2,rex.x=0,rex.b=reg4x:r"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xAC,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xAC,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4257,11 +4257,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64],opcode=0x0F,opcode2=0xAD,mod=11,reg=reg3:o2,rm=reg3:r"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xAD,mod=11,reg=reg3:o2,rm=reg3:r,rex.r=reg4x:o2,rex.x=0,rex.b=reg4x:r"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xAC,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xAC,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4301,7 +4301,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x51,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x51,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -4322,7 +4322,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x51,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x51,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -4342,11 +4342,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex32],opcode=0x2B,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0x2B,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=101,rm=reg3:r,immediate=imm32:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=101,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4365,11 +4365,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex64],opcode=0x2B,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex64],opcode=0x2B,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=101,rm=reg3:r,immediate=imm32:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=101,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4389,7 +4389,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x5C,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x5C,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -4409,7 +4409,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x5C,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x5C,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -4428,11 +4428,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex32],opcode=0x85,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0x85,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0xF7,mod=11,reg=000,rm=reg3:o1,immediate=imm32:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0xF7,mod=11,reg=000,rm=reg3:o1,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4451,11 +4451,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex64],opcode=0x85,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex64],opcode=0x85,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex64],opcode=0xF7,mod=11,reg=000,rm=reg3:o1,immediate=imm32:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex64],opcode=0xF7,mod=11,reg=000,rm=reg3:o1,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
 				}
 			]
 		},
@@ -4474,7 +4474,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],operand-prefix=0x66,opcode=0x0F,opcode2=0x2E,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],operand-prefix=0x66,opcode=0x0F,opcode2=0x2E,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -4493,7 +4493,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x2E,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x2E,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -4629,7 +4629,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0x87,mod=11,reg=reg3:o2,rm=reg3:o1"
+					"Encoding": "[x64-rex32],opcode=0x87,mod=11,reg=reg3:o2,rm=reg3:o1,rex.r=reg4x:o2,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -4649,7 +4649,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64],opcode=0x87,mod=11,reg=reg3:o2,rm=reg3:o1"
+					"Encoding": "[x64-rex64],opcode=0x87,mod=11,reg=reg3:o2,rm=reg3:o1,rex.r=reg4x:o2,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -4785,11 +4785,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex32],opcode=0x33,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0x33,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=110,rm=reg3:r,immediate=imm32:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=110,rm=reg3:r,immediate=imm32:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
@@ -4809,11 +4809,11 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x64-rex32],opcode=0x33,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=regx4:r,rex.x=0,rex.b=regx4:o2"
+					"Encoding": "[x64-rex32],opcode=0x33,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=110,rm=reg3:r,immediate=imm32:o2,rex.r=regx4:r,rex.x=0,rex.b=0"
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=110,rm=reg3:r,immediate=imm32:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},
