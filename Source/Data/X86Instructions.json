@@ -2561,7 +2561,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x86],opcode=0xF7,opcode2=0x03"
+					"Encoding": "[x86],opcode=0xF7,mod=11,reg=011,rm=reg3:r"
 				}
 			]
 		},

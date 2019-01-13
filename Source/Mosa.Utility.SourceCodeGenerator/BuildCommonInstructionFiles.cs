@@ -806,8 +806,10 @@ namespace Mosa.Utility.SourceCodeGenerator
 			switch (part)
 			{
 				case "reg3": code = "Append3Bits"; postcode = ".Register.RegisterCode"; return;
-				case "regx4": code = "AppendBit("; postcode = ".Register.RegisterCode >> 3) & 0x1"; return;
+				case "reg4x": code = "AppendBit("; postcode = ".Register.RegisterCode >> 3) & 0x1"; return;
 				case "reg4": code = "AppendNibble"; postcode = ".Register.RegisterCode"; return;
+				case "reg5": code = "Append5Bits"; postcode = ".Register.RegisterCode"; return;
+				case "reg6": code = "Append6Bits"; postcode = ".Register.RegisterCode"; return;
 				case "imm32": code = "Append32BitImmediate"; return;
 				case "imm32+": code = "Append32BitImmediateWithOffset"; return;
 				case "imm8": code = "Append8BitImmediate"; return;
@@ -834,8 +836,6 @@ namespace Mosa.Utility.SourceCodeGenerator
 					int end = comma < 0 ? start : Convert.ToInt32(part.Substring(comma + 1, closed - comma - 1).Trim());
 					int length = end - start + 1;
 
-					code = "AppendBit(";
-
 					if (start == 0)
 					{
 						postcode = ".Register.RegisterCode) & 0x" + ("111111111111111111111111111111".Substring(0, length));
@@ -843,6 +843,19 @@ namespace Mosa.Utility.SourceCodeGenerator
 					else
 					{
 						postcode = ".Register.RegisterCode >> " + start.ToString() + ") & 0x" + ("111111111111111111111111111111".Substring(0, length));
+					}
+
+					switch (length)
+					{
+						case 1: code = "AppendBit("; break;
+						case 2: code = "Append2Bits("; break;
+						case 3: code = "Append3Bits("; break;
+						case 4: code = "AppendNibble("; break;
+						case 5: code = "Append5Bits("; break;
+						case 6: code = "Append6Bits("; break;
+						case 7: code = "Append7Bits("; break;
+						case 8: code = "AppendByte("; break;
+						default: code = "AppendBits("; postcode += ", " + length.ToString(); break;
 					}
 
 					return;

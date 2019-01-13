@@ -30,6 +30,12 @@ namespace Mosa.Platform.x64.Instructions
 			{
 				emitter.OpcodeEncoder.AppendByte(0xF3);
 				emitter.OpcodeEncoder.AppendByte(0x0F);
+				emitter.OpcodeEncoder.SuppressByte(0x40);
+				emitter.OpcodeEncoder.AppendNibble(0b0100);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit((node.Operand3.Register.RegisterCode >> 3) & 0x1);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit(0b0);
 				emitter.OpcodeEncoder.AppendByte(0x11);
 				emitter.OpcodeEncoder.Append2Bits(0b01);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);
@@ -42,6 +48,12 @@ namespace Mosa.Platform.x64.Instructions
 			{
 				emitter.OpcodeEncoder.AppendByte(0xF3);
 				emitter.OpcodeEncoder.AppendByte(0x0F);
+				emitter.OpcodeEncoder.SuppressByte(0x40);
+				emitter.OpcodeEncoder.AppendNibble(0b0100);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit((node.Operand3.Register.RegisterCode >> 3) & 0x1);
+				emitter.OpcodeEncoder.AppendBit((node.Operand2.Register.RegisterCode >> 3) & 0x1);
+				emitter.OpcodeEncoder.AppendBit(0b0);
 				emitter.OpcodeEncoder.AppendByte(0x11);
 				emitter.OpcodeEncoder.Append2Bits(0b01);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);
@@ -57,6 +69,12 @@ namespace Mosa.Platform.x64.Instructions
 			{
 				emitter.OpcodeEncoder.AppendByte(0xF3);
 				emitter.OpcodeEncoder.AppendByte(0x0F);
+				emitter.OpcodeEncoder.SuppressByte(0x40);
+				emitter.OpcodeEncoder.AppendNibble(0b0100);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit((node.Operand3.Register.RegisterCode >> 3) & 0x1);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit(0b0);
 				emitter.OpcodeEncoder.AppendByte(0x11);
 				emitter.OpcodeEncoder.Append2Bits(0b00);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);
@@ -71,6 +89,12 @@ namespace Mosa.Platform.x64.Instructions
 			{
 				emitter.OpcodeEncoder.AppendByte(0xF3);
 				emitter.OpcodeEncoder.AppendByte(0x0F);
+				emitter.OpcodeEncoder.SuppressByte(0x40);
+				emitter.OpcodeEncoder.AppendNibble(0b0100);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit((node.Operand3.Register.RegisterCode >> 3) & 0x1);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit(0b0);
 				emitter.OpcodeEncoder.AppendByte(0x11);
 				emitter.OpcodeEncoder.Append2Bits(0b01);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);
@@ -86,6 +110,12 @@ namespace Mosa.Platform.x64.Instructions
 			{
 				emitter.OpcodeEncoder.AppendByte(0xF3);
 				emitter.OpcodeEncoder.AppendByte(0x0F);
+				emitter.OpcodeEncoder.SuppressByte(0x40);
+				emitter.OpcodeEncoder.AppendNibble(0b0100);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit((node.Operand3.Register.RegisterCode >> 3) & 0x1);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit(0b0);
 				emitter.OpcodeEncoder.AppendByte(0x11);
 				emitter.OpcodeEncoder.Append2Bits(0b10);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);
@@ -98,6 +128,12 @@ namespace Mosa.Platform.x64.Instructions
 			{
 				emitter.OpcodeEncoder.AppendByte(0xF3);
 				emitter.OpcodeEncoder.AppendByte(0x0F);
+				emitter.OpcodeEncoder.SuppressByte(0x40);
+				emitter.OpcodeEncoder.AppendNibble(0b0100);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit((node.Operand3.Register.RegisterCode >> 3) & 0x1);
+				emitter.OpcodeEncoder.AppendBit((node.Operand2.Register.RegisterCode >> 3) & 0x1);
+				emitter.OpcodeEncoder.AppendBit(0b0);
 				emitter.OpcodeEncoder.AppendByte(0x11);
 				emitter.OpcodeEncoder.Append2Bits(0b00);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);
@@ -112,6 +148,12 @@ namespace Mosa.Platform.x64.Instructions
 			{
 				emitter.OpcodeEncoder.AppendByte(0xF3);
 				emitter.OpcodeEncoder.AppendByte(0x0F);
+				emitter.OpcodeEncoder.SuppressByte(0x40);
+				emitter.OpcodeEncoder.AppendNibble(0b0100);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit((node.Operand3.Register.RegisterCode >> 3) & 0x1);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit((node.Operand1.Register.RegisterCode >> 3) & 0x1);
 				emitter.OpcodeEncoder.AppendByte(0x11);
 				emitter.OpcodeEncoder.Append2Bits(0b00);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);
@@ -123,6 +165,12 @@ namespace Mosa.Platform.x64.Instructions
 			{
 				emitter.OpcodeEncoder.AppendByte(0xF3);
 				emitter.OpcodeEncoder.AppendByte(0x0F);
+				emitter.OpcodeEncoder.SuppressByte(0x40);
+				emitter.OpcodeEncoder.AppendNibble(0b0100);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit((node.Operand3.Register.RegisterCode >> 3) & 0x1);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit((node.Operand1.Register.RegisterCode >> 3) & 0x1);
 				emitter.OpcodeEncoder.AppendByte(0x11);
 				emitter.OpcodeEncoder.Append2Bits(0b01);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);
@@ -135,6 +183,12 @@ namespace Mosa.Platform.x64.Instructions
 			{
 				emitter.OpcodeEncoder.AppendByte(0xF3);
 				emitter.OpcodeEncoder.AppendByte(0x0F);
+				emitter.OpcodeEncoder.SuppressByte(0x40);
+				emitter.OpcodeEncoder.AppendNibble(0b0100);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit((node.Operand3.Register.RegisterCode >> 3) & 0x1);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit((node.Operand1.Register.RegisterCode >> 3) & 0x1);
 				emitter.OpcodeEncoder.AppendByte(0x11);
 				emitter.OpcodeEncoder.Append2Bits(0b10);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);
@@ -147,6 +201,12 @@ namespace Mosa.Platform.x64.Instructions
 			{
 				emitter.OpcodeEncoder.AppendByte(0xF3);
 				emitter.OpcodeEncoder.AppendByte(0x0F);
+				emitter.OpcodeEncoder.SuppressByte(0x40);
+				emitter.OpcodeEncoder.AppendNibble(0b0100);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit((node.Operand3.Register.RegisterCode >> 3) & 0x1);
+				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit(0b0);
 				emitter.OpcodeEncoder.AppendByte(0x11);
 				emitter.OpcodeEncoder.Append2Bits(0b00);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);

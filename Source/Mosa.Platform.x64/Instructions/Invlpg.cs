@@ -49,7 +49,7 @@ namespace Mosa.Platform.x64.Instructions
 				emitter.OpcodeEncoder.Append2Bits(0b00);
 				emitter.OpcodeEncoder.Append3Bits(0b010);
 				emitter.OpcodeEncoder.Append3Bits(0b101);
-				emitter.OpcodeEncoder.Append32BitImmediate(node.Operand1);
+				emitter.OpcodeEncoder.Append64BitImmediate(node.Operand1);
 				return;
 			}
 
