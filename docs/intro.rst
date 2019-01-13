@@ -107,7 +107,7 @@ By default, the CoolWorld operating system demo is pre-selected. Click the "Comp
 Join the Discussion
 *******************
 
-Join us on [Gitter chat][gitter-chat]. This is the most interactive way to connect to MOSA's development team.
+Join us on `Gitter chat <https://gitter.im/mosa/MOSA-Project>`__. This is the most interactive way to connect to MOSA's development team.
 
 *******
 License
