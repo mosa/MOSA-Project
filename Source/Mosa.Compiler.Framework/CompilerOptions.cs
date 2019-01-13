@@ -141,6 +141,16 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public List<string> SourceFiles { get; set; } = new List<string>();
 
+		/// <summary>
+		/// Adds additional sections to the Elf-File.
+		/// </summary>
+		public MosaLinker.CreateExtraSectionsDelegate CreateExtraSections { get; set; }
+
+		/// <summary>
+		/// Adds additional program headers to the Elf-File.
+		/// </summary>
+		public MosaLinker.CreateExtraProgramHeaderDelegate CreateExtraProgramHeaders { get; set; }
+
 		#endregion Properties
 
 		/// <summary>

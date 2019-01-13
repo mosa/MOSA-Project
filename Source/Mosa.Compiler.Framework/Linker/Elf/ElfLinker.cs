@@ -222,6 +222,19 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 				elfheader.ProgramHeaderNumber++;
 			}
+
+			if (linker.CreateExtraProgramHeaders != null)
+			{
+				foreach (var programHeader in linker.CreateExtraProgramHeaders())
+				{
+					if (programHeader.FileSize == 0)
+						continue;
+
+					programHeader.Write(linkerFormatType, writer);
+
+					elfheader.ProgramHeaderNumber++;
+				}
+			}
 		}
 
 		private void CreateSections()
@@ -282,7 +295,18 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 			CreateRelocationSections();
 
+			if (linker.CreateExtraSections != null)
+				CreateExtraSections();
+
 			CreateSectionHeaderStringSection();
+		}
+
+		private void CreateExtraSections()
+		{
+			foreach (var section in linker.CreateExtraSections())
+			{
+				AddSection(section);
+			}
 		}
 
 		private void WriteSectionHeaders()
