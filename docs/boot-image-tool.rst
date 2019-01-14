@@ -1,5 +1,5 @@
 ####################
-MOSA boot image tool
+MOSA Boot Image Tool
 ####################
 
 The tool several command line options. Sample:
