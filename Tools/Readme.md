@@ -55,4 +55,4 @@ gdb
 rufus
 - GNU License v3
 - https://github.com/pbatard/rufus
-- Version: 2.17
+- Version: 3.4
