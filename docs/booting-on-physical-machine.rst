@@ -2,7 +2,7 @@
 Bootion on physical machine
 ###########################
 
-.. warning:: These instructions are out of date.
+.. warning:: These instructions maybe out of date.
 
 While most of the development and testing of MOSA is done using virtualization software, MOSA does indeed boot on real hardware too. 
 
@@ -10,19 +10,19 @@ Here are detailed instructions for writing MOSA operating system to a USB Drive:
 
 1. Download the `dd <http://www.chrysocome.net/dd>`__ utility for Windows.
 
-2. Extract the ``dd.exe`` executable to:
+2. Copy the ``dd.exe`` executable to the build directory (usually a sub-folder under temp):
 
 .. code-block:: text
 
-  Mosa\Run\build
+  %TEMP%\MOSA  
 
 3. Open a command prompt window and change directory to the build directory.
 
 .. code-block:: text
 
-  cd Mosa\Run\build 
+  cd %TEMP%\MOSA 
 
-4. Connect the USB key you wish to ERASE and install MOSA onto.
+4. Connect the USB key you wish to ERASE and install the MOSA image onto.
 
 .. danger:: Data on the USB drive will be lost!
 
@@ -34,7 +34,7 @@ Get a list all the block devices on your system by typing the command below. Fin
 
   dd -list
 
-6.Type the following and substitute the of= parameter with the device path found in the previous step.
+6. Type the following and substitute the of= parameter with the device path found in the previous step.
 
 .. code-block:: text
 
