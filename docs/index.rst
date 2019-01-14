@@ -9,7 +9,7 @@ Contents
    compiler-tool
    tools
    boot-image-tool
-   booting-on-physical-machine
+   bootable-usb-flash-drive
    compiler-design
    tests
    get-involved
