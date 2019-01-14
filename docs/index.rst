@@ -6,10 +6,10 @@ Contents
 
    intro
    faq
-   compiler-tool
    tools
+   compiler-tool
    boot-image-tool
-   bootable-usb-flash-drive
+   flash-drive-installation
    compiler-design
    tests
    get-involved
