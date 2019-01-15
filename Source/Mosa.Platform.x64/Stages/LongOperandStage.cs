@@ -33,6 +33,7 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(IRInstruction.ConvertInt64ToFloatR8, ConvertInt64ToFloatR8);
 			AddVisitation(IRInstruction.IfThenElse64, IfThenElse64);
 			AddVisitation(IRInstruction.LoadInt64, LoadInt64);
+			AddVisitation(IRInstruction.LoadSignExtend32x64, LoadSignExtend32x64);
 			AddVisitation(IRInstruction.LoadParamInt64, LoadParamInt64);
 			AddVisitation(IRInstruction.LoadParamSignExtend16x64, LoadParamSignExtend16x64);
 			AddVisitation(IRInstruction.LoadParamSignExtend32x64, LoadParamSignExtend32x64);
@@ -158,6 +159,13 @@ namespace Mosa.Platform.x64.Stages
 			LoadStore.OrderLoadOperands(node, MethodCompiler);
 
 			node.SetInstruction(X64.MovLoad64, node.Result, node.Operand1, node.Operand2);
+		}
+
+		private void LoadSignExtend32x64(InstructionNode node)
+		{
+			LoadStore.OrderLoadOperands(node, MethodCompiler);
+
+			node.SetInstruction(X64.MovzxLoad32, node.Result, node.Operand1, node.Operand2);
 		}
 
 		private void LoadParamInt64(InstructionNode node)

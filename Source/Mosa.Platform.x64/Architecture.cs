@@ -207,23 +207,27 @@ namespace Mosa.Platform.x64
 					new SimpleDeadCodeRemovalStage(),
 					new AddressModeConversionStage(),
 					new FloatingPointStage(),
-					new StopStage(),	// Temp
 				});
 
 			compilerPipeline.InsertAfterLast<StackLayoutStage>(
 				new BuildStackStage()
 			);
 
-			//compilerPipeline.InsertBefore<CodeGenerationStage>(
-			//	new BaseMethodCompilerStage[]
-			//	{
-			//		new FinalTweakStage(),
-			//		compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
-			//	});
+			compilerPipeline.InsertBefore<CodeGenerationStage>(
+				new BaseMethodCompilerStage[]
+				{
+					new FinalTweakStage(),
+
+					//compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
+				});
 
 			compilerPipeline.InsertBefore<CodeGenerationStage>(
 				new JumpOptimizationStage()
 			);
+
+			//compilerPipeline.InsertBefore<GreedyRegisterAllocatorStage>(
+			//	new StopStage()
+			//);
 		}
 
 		/// <summary>
