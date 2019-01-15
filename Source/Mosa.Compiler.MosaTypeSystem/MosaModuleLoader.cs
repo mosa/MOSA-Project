@@ -38,6 +38,18 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			foreach (var assemblyRef in module.GetAssemblyRefs())
 			{
+				// There are cases, where the Resolver will not be able to resolve the assemblis
+				// automaticly, even if they are in the same directory.
+				// (maybe this has todo with linux / specific mono versions?)
+				// So, try to load them manually recursivly first.
+				var subModuleFile = Path.Combine(Path.GetDirectoryName(module.Location), assemblyRef.Name + ".dll");
+				if (File.Exists(subModuleFile))
+				{
+					var subModule = ModuleDefMD.Load(subModuleFile, Resolver.DefaultModuleContext);
+					if (subModule != null)
+						LoadDependencies(subModule);
+				}
+
 				var assembly = Resolver.ResolveThrow(assemblyRef, null);
 
 				foreach (var moduleRef in assembly.Modules)
