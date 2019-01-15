@@ -14,6 +14,10 @@ namespace Mosa.Compiler.Framework.Linker
 	/// </summary>
 	public sealed class MosaLinker
 	{
+
+		public delegate List<Section> CreateExtraSectionsDelegate();
+		public delegate List<ProgramHeader> CreateExtraProgramHeaderDelegate();
+
 		public List<LinkerSymbol> Symbols { get; } = new List<LinkerSymbol>();
 
 		public LinkerSection[] LinkerSections { get; } = new LinkerSection[4];
@@ -44,7 +48,10 @@ namespace Mosa.Compiler.Framework.Linker
 
 		private readonly object _lock = new object();
 
-		public MosaLinker(ulong baseAddress, Endianness endianness, MachineType machineType, bool emitAllSymbols, bool emitStaticRelocations, LinkerFormatType linkerFormatType)
+		public CreateExtraSectionsDelegate CreateExtraSections { get; set; }
+		public CreateExtraProgramHeaderDelegate CreateExtraProgramHeaders { get; set; }
+
+		public MosaLinker(ulong baseAddress, Endianness endianness, MachineType machineType, bool emitAllSymbols, bool emitStaticRelocations, LinkerFormatType linkerFormatType, CreateExtraSectionsDelegate createExtraSections, CreateExtraProgramHeaderDelegate createExtraProgramHeaders)
 		{
 			BaseAddress = baseAddress;
 			Endianness = endianness;
@@ -52,6 +59,8 @@ namespace Mosa.Compiler.Framework.Linker
 			EmitAllSymbols = emitAllSymbols;
 			EmitStaticRelocations = emitStaticRelocations;
 			LinkerFormatType = linkerFormatType;
+			CreateExtraSections = createExtraSections;
+			CreateExtraProgramHeaders = createExtraProgramHeaders;
 
 			elfLinker = new ElfLinker(this, LinkerFormatType);
 
