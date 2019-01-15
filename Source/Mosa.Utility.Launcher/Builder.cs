@@ -109,6 +109,9 @@ namespace Mosa.Utility.Launcher
 				compiler.CompilerOptions.EmitStaticRelocations = Options.EmitStaticRelocations;
 				compiler.CompilerOptions.SetCustomOption("x86.irq-methods", Options.Emitx86IRQMethods ? "true" : "false");
 
+				compiler.CompilerOptions.CreateExtraSections = Options.CreateExtraSections;
+				compiler.CompilerOptions.CreateExtraProgramHeaders = Options.CreateExtraProgramHeaders;
+
 				if (Options.GenerateMapFile)
 				{
 					compiler.CompilerOptions.MapFile = Path.Combine(Options.DestinationDirectory, $"{Path.GetFileNameWithoutExtension(Options.SourceFile)}.map");
