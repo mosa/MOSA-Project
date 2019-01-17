@@ -29,7 +29,7 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
-		public override MachineType MachineType { get { return MachineType.Intel386; } }
+		public override MachineType ElfMachineType { get { return MachineType.Intel386; } }
 
 		/// <summary>
 		/// Defines the register set of the target architecture.
@@ -197,6 +197,10 @@ namespace Mosa.Platform.x64
 		/// <param name="compilerOptions"></param>
 		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> compilerPipeline, CompilerOptions compilerOptions)
 		{
+			compilerPipeline.InsertBefore<LowerIRStage>(
+				new IRSubstitutionStage()
+			);
+
 			compilerPipeline.InsertAfterLast<PlatformIntrinsicStage>(
 				new BaseMethodCompilerStage[]
 				{

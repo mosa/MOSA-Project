@@ -60,6 +60,16 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(IRInstruction.ZeroExtend16x64, ZeroExtended16x64);
 			AddVisitation(IRInstruction.ZeroExtend32x64, ZeroExtended32x64);
 			AddVisitation(IRInstruction.ZeroExtend8x64, ZeroExtended8x64);
+
+			AddVisitation(IRInstruction.DivSigned64, DivSigned64);
+			AddVisitation(IRInstruction.DivUnsigned64, DivUnsigned64);
+			AddVisitation(IRInstruction.LoadSignExtend16x64, LoadSignExtend16x64);
+			AddVisitation(IRInstruction.LoadSignExtend8x64, LoadSignExtend8x64);
+			AddVisitation(IRInstruction.LoadZeroExtend16x64, LoadZeroExtend16x64);
+			AddVisitation(IRInstruction.LoadZeroExtend32x64, LoadZeroExtend32x64);
+			AddVisitation(IRInstruction.LoadZeroExtend8x64, LoadZeroExtend8x64);
+			AddVisitation(IRInstruction.RemSigned64, RemSigned64);
+			AddVisitation(IRInstruction.RemUnsigned64, RemUnsigned64);
 		}
 
 		protected override void Setup()
@@ -140,6 +150,33 @@ namespace Mosa.Platform.x64.Stages
 			node.SetInstruction(X64.Cvtsi2sd64, node.Result, node.Operand1);
 		}
 
+		private void DivSigned64(Context context)
+		{
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			context.SetInstruction2(X64.Cdq64, v1, v2, operand1);
+			context.AppendInstruction2(X64.IDiv64, result, v3, v1, v2, operand2);
+		}
+
+		private void DivUnsigned64(Context context)
+		{
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U8);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U8);
+
+			context.SetInstruction(X64.Mov64, v1, ConstantZero);
+			context.AppendInstruction2(X64.Div64, result, v2, v1, operand1, operand2);
+		}
+
 		private void IfThenElse64(Context context)
 		{
 			var result = context.Operand1;
@@ -159,13 +196,6 @@ namespace Mosa.Platform.x64.Stages
 			LoadStore.OrderLoadOperands(node, MethodCompiler);
 
 			node.SetInstruction(X64.MovLoad64, node.Result, node.Operand1, node.Operand2);
-		}
-
-		private void LoadSignExtend32x64(InstructionNode node)
-		{
-			LoadStore.OrderLoadOperands(node, MethodCompiler);
-
-			node.SetInstruction(X64.MovzxLoad32, node.Result, node.Operand1, node.Operand2);
 		}
 
 		private void LoadParamInt64(InstructionNode node)
@@ -203,6 +233,38 @@ namespace Mosa.Platform.x64.Stages
 			node.SetInstruction(X64.MovzxLoad8, node.Result, StackFrame, node.Operand1);
 		}
 
+		private void LoadSignExtend16x64(InstructionNode node)
+		{
+			node.ReplaceInstruction(X64.MovsxLoad16);
+		}
+
+		private void LoadSignExtend32x64(InstructionNode node)
+		{
+			LoadStore.OrderLoadOperands(node, MethodCompiler);
+
+			node.SetInstruction(X64.MovzxLoad32, node.Result, node.Operand1, node.Operand2);
+		}
+
+		private void LoadSignExtend8x64(InstructionNode node)
+		{
+			node.ReplaceInstruction(X64.MovsxLoad8);
+		}
+
+		private void LoadZeroExtend16x64(InstructionNode node)
+		{
+			node.ReplaceInstruction(X64.MovzxLoad16);
+		}
+
+		private void LoadZeroExtend32x64(InstructionNode node)
+		{
+			node.ReplaceInstruction(X64.MovzxLoad32);
+		}
+
+		private void LoadZeroExtend8x64(InstructionNode node)
+		{
+			node.ReplaceInstruction(X64.MovzxLoad8);
+		}
+
 		private void LogicalAnd64(InstructionNode node)
 		{
 			node.ReplaceInstruction(X64.And64);
@@ -238,6 +300,33 @@ namespace Mosa.Platform.x64.Stages
 		{
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 			node.SetInstruction2(X64.Mul64, v1, node.Result, node.Operand1, node.Operand2);
+		}
+
+		private void RemSigned64(Context context)
+		{
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			context.SetInstruction2(X64.Cdq64, v1, v2, operand1);
+			context.AppendInstruction2(X64.IDiv64, result, v3, v1, v2, operand2);
+		}
+
+		private void RemUnsigned64(Context context)
+		{
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+
+			context.SetInstruction(X64.Mov64, v1, ConstantZero);
+			context.AppendInstruction2(X64.Div64, result, v2, v1, operand1, operand2);
 		}
 
 		private void ShiftLeft64(InstructionNode node)
