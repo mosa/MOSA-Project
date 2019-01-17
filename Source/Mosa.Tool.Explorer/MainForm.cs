@@ -98,12 +98,7 @@ namespace Mosa.Tool.Explorer
 			if (options == null)
 				return;
 
-			if (options.Inline)
-				cbEnableInlinedMethods.Checked = true;
-
-			if (options.InlineOff || options.ThreadingOff)
-				cbEnableInlinedMethods.Checked = false;
-
+			cbEnableInlinedMethods.Checked = options.Inline;
 			cbEnableBinaryCodeGeneration.Checked = !options.NoCode;
 			cbEnableSSA.Checked = !options.NoSSA;
 			cbEnableIROptimizations.Checked = !options.NoIROptimizations;
@@ -261,9 +256,9 @@ namespace Mosa.Tool.Explorer
 			{
 				try
 				{
-					//Compiler.Execute();
+					Compiler.Execute();
 
-					Compiler.ExecuteThreaded();
+					//Compiler.ExecuteThreaded();
 				}
 				finally
 				{
@@ -555,6 +550,9 @@ namespace Mosa.Tool.Explorer
 		protected void LoadAssembly(string filename, string platform, string includeDirectory = null)
 		{
 			Compiler.CompilerOptions.Architecture = GetArchitecture(platform);
+
+			Compiler.CompilerOptions.SearchPaths.Clear();
+			Compiler.CompilerOptions.SourceFiles.Clear();
 
 			Compiler.CompilerOptions.AddSearchPath(includeDirectory);
 			Compiler.CompilerOptions.AddSearchPath(Path.GetDirectoryName(filename));

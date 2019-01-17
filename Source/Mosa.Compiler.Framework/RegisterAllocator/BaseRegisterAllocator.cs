@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			StackFrame = stackFrame;
 
 			VirtualRegisterCount = virtualRegisters.Count;
-			PhysicalRegisterCount = 32; // max for all architectures
+			PhysicalRegisterCount = architecture.RegisterSet.Length;
 			RegisterCount = VirtualRegisterCount + PhysicalRegisterCount;
 
 			LiveIntervalTracks = new List<LiveIntervalTrack>(PhysicalRegisterCount);
