@@ -29,7 +29,7 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
-		public override MachineType MachineType { get { return MachineType.Intel386; } }
+		public override MachineType ElfMachineType { get { return MachineType.Intel386; } }
 
 		/// <summary>
 		/// Defines the register set of the target architecture.
@@ -197,11 +197,16 @@ namespace Mosa.Platform.x64
 		/// <param name="compilerOptions"></param>
 		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> compilerPipeline, CompilerOptions compilerOptions)
 		{
+			compilerPipeline.InsertBefore<LowerIRStage>(
+				new IRSubstitutionStage()
+			);
+
 			compilerPipeline.InsertAfterLast<PlatformIntrinsicStage>(
 				new BaseMethodCompilerStage[]
 				{
 					new LongOperandStage(),
 					new IRTransformationStage(),
+					compilerOptions.EnablePlatformOptimizations ? new OptimizationStage() : null,
 					new TweakStage(),
 					new FixedRegisterAssignmentStage(),
 					new SimpleDeadCodeRemovalStage(),
@@ -217,17 +222,12 @@ namespace Mosa.Platform.x64
 				new BaseMethodCompilerStage[]
 				{
 					new FinalTweakStage(),
-
-					//compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
+					compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
 				});
 
 			compilerPipeline.InsertBefore<CodeGenerationStage>(
 				new JumpOptimizationStage()
 			);
-
-			//compilerPipeline.InsertBefore<GreedyRegisterAllocatorStage>(
-			//	new StopStage()
-			//);
 		}
 
 		/// <summary>

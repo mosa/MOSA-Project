@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
-		public abstract MachineType MachineType { get; }
+		public abstract MachineType ElfMachineType { get; }
 
 		/// <summary>
 		/// Gets the register set of the architecture.

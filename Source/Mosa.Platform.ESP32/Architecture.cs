@@ -24,7 +24,7 @@ namespace Mosa.Platform.ESP32
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
-		public override MachineType MachineType { get { return MachineType.ESP32; } }
+		public override MachineType ElfMachineType { get { return MachineType.ESP32; } }
 
 		/// <summary>
 		/// Gets the name of the platform.

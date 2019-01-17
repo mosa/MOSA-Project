@@ -24,7 +24,7 @@ namespace Mosa.Platform.ARMv6
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
-		public override MachineType MachineType { get { return MachineType.ARM; } }
+		public override MachineType ElfMachineType { get { return MachineType.ARM; } }
 
 		/// <summary>
 		/// Gets the name of the platform.

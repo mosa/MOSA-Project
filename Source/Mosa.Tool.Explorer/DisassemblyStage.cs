@@ -28,15 +28,15 @@ namespace Mosa.Tool.Explorer
 
 			// Determine the architecture mode
 			ArchitectureMode mode;
-			switch (Architecture.MachineType)
+
+			if (Architecture is Platform.x86.Architecture)
+				mode = ArchitectureMode.x86_64;
+			else if (Architecture is Platform.x64.Architecture)
+				mode = ArchitectureMode.x86_64;
+			else
 			{
-				case MachineType.Intel386: mode = ArchitectureMode.x86_32; break;
-				case MachineType.IA_64: mode = ArchitectureMode.x86_64; break;
-				case MachineType.x86_64: mode = ArchitectureMode.x86_64; break;
-				case MachineType.ARM:
-				default:
-					trace.Log($"Unable to disassemble binary for machine type: {Architecture.MachineType}");
-					return;
+				trace.Log($"Unable to disassemble binary for machine type: {Architecture.ElfMachineType}");
+				return;
 			}
 
 			// Create a byte array from the symbol stream

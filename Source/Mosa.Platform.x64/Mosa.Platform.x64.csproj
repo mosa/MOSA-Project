@@ -342,8 +342,11 @@
     <Compile Include="Stages\FinalTweakStage.cs" />
     <Compile Include="Stages\FixedRegisterAssignmentStage.cs" />
     <Compile Include="Stages\FloatingPointStage.cs" />
+    <Compile Include="Stages\IRSubstitutionStage.cs" />
     <Compile Include="Stages\IRTransformationStage.cs" />
     <Compile Include="Stages\LongOperandStage.cs" />
+    <Compile Include="Stages\OptimizationStage.cs" />
+    <Compile Include="Stages\PostOptimizationStage.cs" />
     <Compile Include="Stages\SimpleDeadCodeRemovalStage.cs" />
     <Compile Include="Stages\TweakStage.cs" />
     <Compile Include="X64.cs" />
