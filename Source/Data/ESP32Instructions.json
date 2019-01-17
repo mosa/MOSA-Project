@@ -422,7 +422,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[esp32-bbi4],p1=reg(0,1):r,p2=reg(1,4):r,immediate=imm8:o2,s=reg4:o1,op0=0111"
+					"Encoding": "[esp32-bbi4],p1=reg(0-1):r,p2=reg(1-3):r,immediate=imm8:o2,s=reg4:o1,op0=0111"
 				}
 			]
 		}

@@ -7,22 +7,22 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ESP32.Instructions
 {
 	/// <summary>
-	/// Nop
+	/// Nop - No-Operation, This instruction performs no operation. It is typically used for instruction alignment. NOP is a 24-bit instruction. For a 16-bit version, see NOPN. 
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ESP32.ESP32Instruction" />
 	public sealed class Nop : ESP32Instruction
 	{
-		public override int ID { get { return 692; } }
+		public override int ID { get { return 691; } }
 
 		internal Nop()
-			: base(1, 3)
+			: base(0, 0)
 		{
 		}
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 3);
+			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
 			emitter.OpcodeEncoder.AppendNibble(0b0000);
 			emitter.OpcodeEncoder.AppendNibble(0b0000);
