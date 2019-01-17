@@ -1,27 +1,11 @@
-{
+﻿{
 	"Encoding": [
-		"[esp32-rrr]=[op2]|[op1]|[r]|[s]|[t]|[op0]"
+		"[esp32-rrr]=[op2]|[op1]|[r]|[s]|[t]|[op0]",
+		"[esp32-rrrn]=[r]|[s]|[t]|[op0]",
+		"[esp32-rri8]=[immediate]|[r]|[s]|[t]|[op0]",
+		"[esp32-bbi4]=[esp32-rri8],r=011|[p1],t=[p2]"
 	],
 	"Instructions": [
-		{
-			"Name": "Add32",
-			"Commutative": "false",
-			"FamilyName": "ESP32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "[esp32-rrr],op2=1000,op1=0000,r=reg4:r,s=reg4:o1,t=reg4:o2,op0=0000"
-				}
-			]
-		},
 		{
 			"Name": "Nop",
 			"Commutative": "false",
@@ -32,15 +16,415 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
+			"OperandCount": 0,
+			"ResultCount": 0,
+			"Description": "No-Operation, This instruction performs no operation. It is typically used for instruction alignment. NOP is a 24-bit instruction. For a 16-bit version, see NOPN. ",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
 					"Encoding": "[esp32-rrr],op2=0000,op1=0000,r=0010,s=0000,t=1111,op0=0000"
 				}
 			]
+		},
+		{
+			"Name": "Abs",
+			"Commutative": "false",
+			"FamilyName": "ESP32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Absolute Value, ABS calculates the absolute value of the contents of address register at and writes it to address register ar. Arithmetic overflow is not detected.",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[esp32-rrr],op2=0110,op1=0000,r=reg4:r,s=0001,t=reg4:o2,op0=0000"
+				}
+			]
+		},
+		{
+			"Name": "AbsS",
+			"Commutative": "false",
+			"FamilyName": "ESP32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Absolute Value Single, ABS.S computes the single-precision absolute value of the contents of floating-point register fs and writes the result to floating-point register fr.",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[esp32-rrr],op2=1111,op1=1010,r=reg4:r,s=reg4:o1,t=0001,op0=0000"
+				}
+			]
+		},
+		{
+			"Name": "Add",
+			"Commutative": "false",
+			"FamilyName": "ESP32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "ADD, ADD calculates the two’s complement 32-bit sum of address registers as and at. The low 32 bits of the sum are written to address register ar. Arithmetic overflow is not detected. ADD is a 24-bit instruction. The ADDN density-option instruction performs the same operation in a 16-bit encoding.",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[esp32-rrr],op2=1000,r=reg4:r,s=reg4:o1,t=reg4:o2,op1=0000,op0=0000"
+				}
+			]
+		},
+		{
+			"Name": "AddS",
+			"Commutative": "false",
+			"FamilyName": "ESP32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Add Single, ADDS computes the IEEE754 single-precision sum of the contents of floating-point registers fs and ft, and writes the result to floating-point register fr",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[esp32-rrr],op2=0000,op1=1010,r=reg4:r,s=reg4:o1,t=reg4:o2,op0=0000"
+				}
+			]
+		},
+		{
+			"Name": "Addi",
+			"Commutative": "false",
+			"FamilyName": "ESP32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Add Immediate, ADDI calculates the two’s complement 32-bit sum of address register as and a constant encoded in the imm8 field. The low 32 bits of the sum are written to address register at. Arithmetic overflow is not detected. The immediate operand encoded in the instruction can range from -128 to 127. It is decoded by sign-extending imm8. ADDI is a 24-bit instruction. The ADDI.N density-option instruction performs a similar operation (the immediate operand has less range) in a 16-bit encoding",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[esp32-rri8],immediate=imm8:o2,r=1010,s=reg4:o1,t=reg4:o2,op0=0010"
+				}
+			]
+		},
+		{
+			"Name": "Addmi",
+			"Commutative": "false",
+			"FamilyName": "ESP32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Add Immediate with Shift by 8, ADDMI extends the range of constant addition. It is often used in conjunction with load and store instructions to extend the range of the base, plus offset the calculation. ADDMI calculates the two’s complement 32-bit sum of address register as and an operand encoded in the imm8 field. The low 32 bits of the sum are written to address register at. Arithmetic overflow is not detected. The operand encoded in the instruction can have values that are multiples of 256 ranging from -32768 to 32512. It is decoded by sign-extending imm8 and shifting the result left by eight bits.",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[esp32-rri8],immediate=imm8:o2,r=1101,s=reg4:o1,t=reg4:o2,op0=0010"
+				}
+			]
+		},
+		{
+			"Name": "Addx2",
+			"Commutative": "false",
+			"FamilyName": "ESP32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Add with Shift by 1, ADDX2 calculates the two’s complement 32-bit sum of address register as shifted left by one bit and address register at. The low 32 bits of the sum are written to address register ar. Arithmetic overflow is not detected. ADDX2 is frequently used for address calculation and as part of sequences to multiply by small constants.",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[esp32-rrr],op2=1001,op1=0000,r=reg4:r,s=reg4:o1,t=reg4:o2,op0=0000"
+				}
+			]
+		},
+		{
+			"Name": "Addx4",
+			"Commutative": "false",
+			"FamilyName": "ESP32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Add with Shift by 2, ADDX4 calculates the two’s complement 32-bit sum of address register as shifted left by one bit and address register at. The low 32 bits of the sum are written to address register ar. Arithmetic overflow is not detected. ADDX4 is frequently used for address calculation and as part of sequences to multiply by small constants.",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[esp32-rrr],op2=1010,op1=0000,r=reg4:r,s=reg4:o1,t=reg4:o2,op0=0000"
+				}
+			]
+		},
+		{
+			"Name": "Addx8",
+			"Commutative": "false",
+			"FamilyName": "ESP32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Add with Shift by 3, ADDX8 calculates the two’s complement 32-bit sum of address register as shifted left by one bit and address register at. The low 32 bits of the sum are written to address register ar. Arithmetic overflow is not detected. ADDX8 is frequently used for address calculation and as part of sequences to multiply by small constants.",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[esp32-rrr],op2=1011,op1=0000,r=reg4:r,s=reg4:o1,t=reg4:o2,op0=0000"
+				}
+			]
+		},
+		{
+			"Name": "All4",
+			"Commutative": "false",
+			"FamilyName": "ESP32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "All 4 Booleans True, ALL4 sets Boolean register bt to the logical and of the four Boolean registers bs+0, bs+1, bs+2, and bs+3. bs must be a multiple of four (b0, b4, b8, or b12); otherwise the operation of this instruction is not defined. ALL4 reduces four test results such that the result is true if all four tests are true. When the sense of the bs Booleans is inverted (0 → true, 1 → false), use ANY4 and an inverted test of the result.",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[esp32-rrr],op2=0000,op1=0000,r=1001,s=reg4:o1,t=reg4:o2,op0=0000"
+				}
+			]
+		},
+		{
+			"Name": "All8",
+			"Commutative": "false",
+			"FamilyName": "ESP32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "All 8 Booleans True, ALL8 sets Boolean register bt to the logical and of the eight Boolean registers bs+0, bs+1, … bs+6, and bs+7. bs must be a multiple of eight (b0 or b8); otherwise the operation of this instruction is not defined. ALL8 reduces eight test results such that the result is true if all eight tests are true. When the sense of the bs Booleans is inverted (0 → true, 1 → false), use ANY8 and an inverted test of the result.",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[esp32-rrr],op2=0000,op1=0000,r=1011,s=reg4:o1,t=reg4:o2,op0=0000"
+				}
+			]
+		},
+		{
+			"Name": "And",
+			"Commutative": "false",
+			"FamilyName": "ESP32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Bitwise Logical And, AND calculates the bitwise logical and of address registers as and at. The result is written to address register ar.",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[esp32-rrr],op2=0001,op1=0000,r=reg4:r,s=reg4:o1,t=reg4:o2,op0=0000"
+				}
+			]
+		},
+		{
+			"Name": "Andb",
+			"Commutative": "false",
+			"FamilyName": "ESP32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Boolean And, ANDB performs the logical and of Boolean registers bs and bt and writes the result to Boolean register br. When the sense of one of the source Booleans is inverted (0 → true, 1 → false), use ANDBC. When the sense of both of the source Booleans is inverted, use ORB and an inverted test of the result.",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[esp32-rrr],op2=0000,op1=0010,r=reg4:r,s=reg4:o1,t=reg4:o2,op0=0000"
+				}
+			]
+		},
+		{
+			"Name": "Andbc",
+			"Commutative": "false",
+			"FamilyName": "ESP32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Boolean And with Complement, ANDBC performs the logical and of Boolean register bs with the logical complement of Boolean register bt, and writes the result to Boolean register br.",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[esp32-rrr],op2=0001,op1=0010,r=reg4:r,s=reg4:o1,t=reg4:o2,op0=0000"
+				}
+			]
+		},
+		{
+			"Name": "Any4",
+			"Commutative": "false",
+			"FamilyName": "ESP32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Any 4 Booleans True, ANY4 sets Boolean register bt to the logical or of the four Boolean registers bs+0, bs+1, bs+2, and bs+3. bs must be a multiple of four (b0, b4, b8, or b12); otherwise the operation of this instruction is not defined. ANY4 reduces four test results such that the result is true if any of the four tests are true. When the sense of the bs Booleans is inverted (0 → true, 1 → false), use ALL4 and an inverted test of the result.",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[esp32-rrr],op2=0000,op1=0000,r=1000,s=reg4:o1,t=reg4:o2,op0=0000"
+				}
+			]
+		},
+		{
+			"Name": "Any8",
+			"Commutative": "false",
+			"FamilyName": "ESP32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Any 8 Booleans True, ANY8 sets Boolean register bt to the logical or of the eight Boolean registers bs+0, bs+1, … bs+6, and bs+7. bs must be a multiple of eight (b0 or b8); otherwise the operation of this instruction is not defined. ANY8 reduces eight test results such that the result is true if any of the eight tests are true. When the sense of the bs Booleans is inverted (0 → true, 1 → false), use ALL8 and an inverted test of the result.",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[esp32-rrr],op2=0000,op1=0000,r=1010,s=reg4:o1,t=reg4:o2,op0=0000"
+				}
+			]
+		},
+		{
+			"Name": "Ball",
+			"Commutative": "false",
+			"FamilyName": "ESP32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Branch if All Bits Set, BALL branches if all the bits specified by the mask in address register at are set in address register as. The test is performed by taking the bitwise logical and of at and the complement of as, and testing if the result is zero. The target instruction address of the branch is given by the address of the BALL instruction, plus the sign-extended 8-bit imm8 field of the instruction plus four. If any of the masked bits are clear, execution continues with the next sequential instruction. The inverse of BALL is BNALL.",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[esp32-rri8],immediate=imm8:o2,r=0100,s=reg4:o1,t=reg4:o2,op0=0111"
+				}
+			]
+		},
+		{
+			"Name": "Bany",
+			"Commutative": "false",
+			"FamilyName": "ESP32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Branch if Any Bit Set, BANY branches if any of the bits specified by the mask in address register at are set in address register as. The test is performed by taking the bitwise logical and of as and at and testing if the result is non-zero. The target instruction address of the branch is given by the address of the BANY instruction, plus the sign-extended 8-bit imm8 field of the instruction plus four. If all of the masked bits are clear, execution continues with the next sequential instruction. The inverse of BANY is BNONE.",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[esp32-rri8],immediate=imm8:o2,r=1000,s=reg4:o1,t=reg4:o2,op0=0111"
+				}
+			]
+		},
+		{
+			"Name": "Bbc",
+			"Commutative": "false",
+			"FamilyName": "ESP32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Branch if Bit Clear, BBC branches if the bit specified by the low five bits of address register at is clear in address register as. For little-endian processors, bit 0 is the least significant bit and bit 31 is the most significant bit. For big-endian processors, bit 0 is the most significant bit and bit 31 is the least significant bit. The target instruction address of the branch is given by the address of the BBC instruction, plus the sign-extended 8-bit imm8 field of the instruction plus four. If the specified bit is set, execution continues with the next sequential instruction. The inverse of BBC is BBS.",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[esp32-rri8],immediate=imm8:o2,r=0101,s=reg4:o1,t=reg4:o2,op0=0111"
+				}
+			]
+		},
+		{
+			"Name": "Bbci",
+			"Commutative": "false",
+			"FamilyName": "ESP32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Branch if Bit Clear Immediate, BBCI branches if the bit specified by the constant encoded in the bbi field of the instruction word is clear in address register as. For little-endian processors, bit 0 is the least significant bit and bit 31 is the most significant bit. For big-endian processors bit 0 is the most significant bit and bit 31 is the least significant bit. The bbi field is split, with bits 3..0 in bits 7..4 of the instruction word, and bit 4 in bit 12 of the instruction word. The target instruction address of the branch is given by the address of the BBCI instruction, plus the sign-extended 8-bit imm8 field of the instruction plus four. If the specified bit is set, execution continues with the next sequential instruction. The inverse of BBCI is BBSI.",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[esp32-bbi4],p1=reg(0,1):r,p2=reg(1,4):r,immediate=imm8:o2,s=reg4:o1,op0=0111"
+				}
+			]
 		}
-
 	]
 }
