@@ -15,7 +15,7 @@ namespace Mosa.Runtime.x86
 
 		public static MethodDefinition GetMethodDefinition(IntPtr address)
 		{
-			var table = Native.GetMethodLookupTable();
+			var table = Intrinsic.GetMethodLookupTable();
 			uint entries = Intrinsic.Load32(table);
 
 			table += IntPtr.Size; // skip count
@@ -42,7 +42,7 @@ namespace Mosa.Runtime.x86
 
 		public static MethodDefinition GetMethodDefinitionViaMethodExceptionLookup(IntPtr address)
 		{
-			var table = Native.GetMethodExceptionLookupTable();
+			var table = Intrinsic.GetMethodExceptionLookupTable();
 
 			if (table == IntPtr.Zero)
 			{

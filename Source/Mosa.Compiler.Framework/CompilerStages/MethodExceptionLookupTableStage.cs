@@ -54,7 +54,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 					foreach (var method in methodList)
 					{
-						if (method.IsAbstract) // or !HasImplementation
+						if ((!method.HasImplementation && method.IsAbstract) || method.HasOpenGenericParams || method.DeclaringType.HasOpenGenericParams)
 							continue;
 
 						if (method.ExceptionHandlers.Count == 0)
@@ -95,11 +95,14 @@ namespace Mosa.Compiler.Framework.CompilerStages
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						// 3. Pointer to Method Definition
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, (int)writer.Position, method.FullName + Metadata.MethodDefinition, 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, (int)writer.Position, Metadata.MethodDefinition + method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 					}
 				}
 			}
+
+			// emit null entry (FUTURE)
+			//writer.WriteZeroBytes(TypeLayout.NativePointerSize * 3);
 		}
 	}
 }
