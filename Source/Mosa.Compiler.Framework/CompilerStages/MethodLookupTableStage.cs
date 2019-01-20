@@ -84,7 +84,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						// 3. Pointer to Method Definition
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, (int)writer.Position, method.FullName + Metadata.MethodDefinition, 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, (int)writer.Position, Metadata.MethodDefinition + method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 					}
 				}

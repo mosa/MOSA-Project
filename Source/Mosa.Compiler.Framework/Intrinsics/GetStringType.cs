@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	/// </summary>
 	static partial class IntrinsicMethods
 	{
-		private const string StringClassTypeDefinitionSymbolName = "System.String" + Metadata.TypeDefinition;
+		private const string StringClassTypeDefinitionSymbolName = Metadata.TypeDefinition + "System.String";
 
 		[IntrinsicMethod("Mosa.Runtime.Intrinsic:GetStringType")]
 		private static void GetStringType(Context context, MethodCompiler methodCompiler)

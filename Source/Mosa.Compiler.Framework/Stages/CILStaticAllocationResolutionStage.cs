@@ -118,7 +118,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (!allocatedType.IsValueType)
 			{
-				return allocatedType.FullName + Metadata.TypeDefinition;
+				return Metadata.TypeDefinition + allocatedType.FullName;
 			}
 			return null;
 		}

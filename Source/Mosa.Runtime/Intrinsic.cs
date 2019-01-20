@@ -222,6 +222,12 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern static void SuppressStackFrame();
 
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public extern static IntPtr GetMethodLookupTable();
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public extern static IntPtr GetMethodExceptionLookupTable();
+
 		#endregion Intrinsic
 	}
 }

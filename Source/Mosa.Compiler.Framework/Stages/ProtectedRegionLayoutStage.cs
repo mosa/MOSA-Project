@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var trace = CreateTraceLog("Regions");
 
-			var protectedRegionTableSymbol = MethodCompiler.Linker.DefineSymbol(MethodCompiler.Method.FullName + Metadata.ProtectedRegionTable, SectionKind.ROData, NativeAlignment, 0);
+			var protectedRegionTableSymbol = MethodCompiler.Linker.DefineSymbol(Metadata.ProtectedRegionTable + MethodCompiler.Method.FullName, SectionKind.ROData, NativeAlignment, 0);
 			var writer = new EndianAwareBinaryWriter(protectedRegionTableSymbol.Stream, Architecture.Endianness);
 
 			int sectioncount = 0;
@@ -84,7 +84,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					sectioncount++;
 
-					var name = MethodCompiler.Method.FullName + Metadata.ProtectedRegionTable + "$" + sectioncount.ToString();
+					var name = Metadata.ProtectedRegionTable + MethodCompiler.Method.FullName + "$" + sectioncount.ToString();
 					var protectedRegionDefinition = CreateProtectedRegionDefinition(name, (uint)start, (uint)end, handler, region.Handler.ExceptionHandlerType, region.Handler.Type);
 					MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionTableSymbol, (int)writer.Position, protectedRegionDefinition, 0);
 					writer.WriteZeroBytes(TypeLayout.NativePointerSize);
@@ -122,7 +122,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				// Store method table pointer of the exception object type
 				// The VES exception runtime will uses this to compare exception object types
-				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionDefinitionSymbol, (int)writer1.Position, exceptionType.FullName + Metadata.TypeDefinition, 0);
+				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionDefinitionSymbol, (int)writer1.Position, Metadata.TypeDefinition + exceptionType.FullName, 0);
 			}
 			else if (handlerType == ExceptionHandlerType.Filter)
 			{

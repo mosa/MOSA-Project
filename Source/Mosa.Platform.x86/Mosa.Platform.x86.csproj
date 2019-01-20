@@ -284,7 +284,6 @@
     <Compile Include="Intrinsic\GetCS.cs" />
     <Compile Include="Intrinsic\GetFS.cs" />
     <Compile Include="Intrinsic\GetExceptionRegister.cs" />
-    <Compile Include="Intrinsic\GetMethodExceptionLookupTable.cs" />
     <Compile Include="Intrinsic\GetMultibootEAX.cs" />
     <Compile Include="Intrinsic\GetMultibootEBX.cs" />
     <Compile Include="Intrinsic\Int.cs" />
@@ -313,7 +312,6 @@
     <Compile Include="Stages\AddressModeConversionStage.cs" />
     <Compile Include="Stages\FixedRegisterAssignmentStage.cs" />
     <Compile Include="Intrinsic\GetEBP.cs" />
-    <Compile Include="Intrinsic\GetMethodLookupTable.cs" />
     <Compile Include="Intrinsic\Cli.cs" />
     <Compile Include="Intrinsic\GetCR0.cs" />
     <Compile Include="Intrinsic\GetCR2.cs" />
