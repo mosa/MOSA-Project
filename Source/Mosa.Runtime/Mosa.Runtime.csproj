@@ -67,6 +67,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Division.cs" />
     <Compile Include="Metadata\ExceptionHandlerType.cs" />
     <Compile Include="IntPtrExtension.cs" />
     <Compile Include="Metadata\CustomAttribute.cs" />
