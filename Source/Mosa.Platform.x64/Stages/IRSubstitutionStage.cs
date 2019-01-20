@@ -26,7 +26,7 @@ namespace Mosa.Platform.x64.Stages
 			Debug.Assert(node.Result.IsR4);
 			Debug.Assert(node.Operand1.IsR4);
 
-			ReplaceWithDivisionCall(node, "RemR4", node.Result, node.Operand1, node.Operand2);
+			ReplaceWithPlatformDivisionCall(node, "RemR4", node.Result, node.Operand1, node.Operand2);
 		}
 
 		private void RemFloatR8(InstructionNode node)
@@ -34,20 +34,12 @@ namespace Mosa.Platform.x64.Stages
 			Debug.Assert(node.Result.IsR8);
 			Debug.Assert(node.Operand1.IsR8);
 
-			ReplaceWithDivisionCall(node, "RemR8", node.Result, node.Operand1, node.Operand2);
+			ReplaceWithPlatformDivisionCall(node, "RemR8", node.Result, node.Operand1, node.Operand2);
 		}
 
 		#endregion Visitation Methods
 
-		/// <summary>
-		/// Replaces the with division call.
-		/// </summary>
-		/// <param name="node">The node.</param>
-		/// <param name="methodName">Name of the method.</param>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
-		/// <param name="operand2">The operand2.</param>
-		private void ReplaceWithDivisionCall(InstructionNode node, string methodName, Operand result, Operand operand1, Operand operand2)
+		private void ReplaceWithPlatformDivisionCall(InstructionNode node, string methodName, Operand result, Operand operand1, Operand operand2)
 		{
 			var type = TypeSystem.GetTypeByName("Mosa.Runtime.x64", "Division");
 
