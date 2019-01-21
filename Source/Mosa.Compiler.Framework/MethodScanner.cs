@@ -1,12 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.MosaTypeSystem;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Mosa.Compiler.Framework
 {
@@ -17,6 +13,8 @@ namespace Mosa.Compiler.Framework
 		private Compiler Compiler { get; }
 		private HashSet<MosaType> allocatedTypes = new HashSet<MosaType>();
 		private HashSet<MosaMethod> invokedMethods = new HashSet<MosaMethod>();
+
+		private HashSet<MosaMethod> scheduledMethods = new HashSet<MosaMethod>();
 
 		private object _lock = new object();
 
@@ -40,14 +38,14 @@ namespace Mosa.Compiler.Framework
 
 				allocatedTypes.Add(type);
 
-				Debug.WriteLine("New Type Allocated: " + type.FullName);
+				Debug.WriteLine("***New Type Allocated: " + type.FullName);
 
 				// find all invoked methods for this type
 				lock (_lock)
 				{
 					foreach (var method in type.Methods)
 					{
-						if (invokedMethods.Contains(method))
+						if (!method.IsStatic && invokedMethods.Contains(method))
 						{
 							ScheduleMethod(method);
 						}
@@ -55,12 +53,12 @@ namespace Mosa.Compiler.Framework
 
 					foreach (var property in type.Properties)
 					{
-						if (property.GetterMethod != null && invokedMethods.Contains(property.GetterMethod))
+						if (property.GetterMethod != null && !property.GetterMethod.IsStatic && invokedMethods.Contains(property.GetterMethod))
 						{
 							ScheduleMethod(property.GetterMethod);
 						}
 
-						if (property.SetterMethod != null && invokedMethods.Contains(property.SetterMethod))
+						if (property.SetterMethod != null && !property.SetterMethod.IsStatic && invokedMethods.Contains(property.SetterMethod))
 						{
 							ScheduleMethod(property.SetterMethod);
 						}
@@ -81,6 +79,8 @@ namespace Mosa.Compiler.Framework
 
 				invokedMethods.Add(method);
 
+				Debug.WriteLine("Method Invoked: " + method.FullName + (method.IsStatic ? " [Static]" : " [Virtual]"));
+
 				if (method.IsStatic)
 				{
 					ScheduleMethod(method);
@@ -90,8 +90,16 @@ namespace Mosa.Compiler.Framework
 
 		private void ScheduleMethod(MosaMethod method)
 		{
-			Debug.WriteLine("Scanner Scheduling: " + method.ToString());
-			Compiler.CompilationScheduler.Schedule(method);
+			lock (scheduledMethods)
+			{
+				if (scheduledMethods.Contains(method))
+					return;
+
+				scheduledMethods.Add(method);
+
+				Debug.WriteLine("  Scheduling: " + method.ToString() + (method.IsStatic ? " [Static]" : " [Virtual]"));
+				Compiler.CompilationScheduler.Schedule(method);
+			}
 		}
 
 		public void Initialize()

@@ -34,6 +34,7 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.Add(NullableTest4);
 			testMethods.Add(NullableTest5);
 			testMethods.Add(ForeachU1Test);
+			testMethods.Add(MethodScanner);
 		}
 
 		private const uint StaticValue = 0x200000;
@@ -325,7 +326,16 @@ namespace Mosa.TestWorld.x86.Tests
 
 		public static bool BoxTestEqualsI4()
 		{
-			return Mosa.UnitTests.BoxingTests.EqualsI4(10);
+			return UnitTests.BoxingTests.EqualsI4(10);
+		}
+
+		public static bool MethodScanner()
+		{
+			var shape = new VeryOddBox();
+
+			var i = shape.GetArea();
+
+			return true;
 		}
 	}
 
@@ -360,5 +370,51 @@ namespace Mosa.TestWorld.x86.Tests
 	public struct TestClassAA
 	{
 		public int I;
+	}
+
+	public abstract class Shape
+	{
+		public abstract int GetArea();
+
+		public int GetPerimeter()
+		{
+			return 0;
+		}
+	}
+
+	public class Box : Shape
+	{
+		public override int GetArea()
+		{
+			return 10;
+		}
+	}
+
+	public class Circle : Shape
+	{
+		public override int GetArea()
+		{
+			return 10;
+		}
+	}
+
+	public class Rectangle : Box
+	{
+		public override int GetArea()
+		{
+			return 20;
+		}
+	}
+
+	public class OddBox : Rectangle
+	{
+		public override int GetArea()
+		{
+			return 30;
+		}
+	}
+
+	public class VeryOddBox : OddBox
+	{
 	}
 }

@@ -59,6 +59,8 @@ namespace Mosa.Compiler.Framework.Stages
 			DevirtualizedCount++;
 
 			node.SetInstruction(IRInstruction.CallStatic, node.Result, symbol, operands);
+
+			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method);
 		}
 	}
 }

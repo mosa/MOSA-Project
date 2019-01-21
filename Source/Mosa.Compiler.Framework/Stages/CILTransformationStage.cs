@@ -969,7 +969,11 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Ldftn(InstructionNode node)
 		{
-			node.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, Operand.CreateSymbolFromMethod(node.InvokeMethod, TypeSystem));
+			var invokedMethod = node.InvokeMethod;
+
+			node.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, Operand.CreateSymbolFromMethod(invokedMethod, TypeSystem));
+
+			MethodCompiler.Compiler.MethodScanner.MethodInvoked(invokedMethod);
 		}
 
 		/// <summary>
