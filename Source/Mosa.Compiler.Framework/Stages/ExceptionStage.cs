@@ -127,6 +127,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			newBlocks[0].AppendInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionRegister, exceptionVirtualRegister);
 			newBlocks[0].AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateSymbolFromMethod(method, TypeSystem));
+
+			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method);
 		}
 
 		private void FinallyStartInstruction(InstructionNode node)
@@ -157,6 +159,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			//ctx.AppendInstruction(IRInstruction.KillAllExcept, null, exceptionRegister);
 			ctx.AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateSymbolFromMethod(method, TypeSystem));
+
+			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method);
 		}
 
 		private void GotoLeaveTargetInstruction(InstructionNode node)

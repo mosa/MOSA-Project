@@ -103,19 +103,6 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public void TrackTypeAllocated(MosaType type)
-		{
-		}
-
-		public void TrackMethodInvoked(MosaMethod method)
-		{
-		}
-
-		public void TrackFieldReferenced(MosaField field)
-		{
-			// TODO
-		}
-
 		public MosaMethod GetMethodToCompile()
 		{
 			return queue.Dequeue();
@@ -124,8 +111,6 @@ namespace Mosa.Compiler.Framework
 		public void AddToInlineQueue(CompilerMethodData methodData)
 		{
 			Debug.Assert(!methodData.Method.HasOpenGenericParams);
-
-			//Debug.Assert(!methodData.Method.IsLinkerGenerated);
 
 			inlineQueue.Enqueue(methodData);
 		}

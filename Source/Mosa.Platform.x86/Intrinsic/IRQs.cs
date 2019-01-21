@@ -22,6 +22,8 @@ namespace Mosa.Platform.x86.Intrinsic
 			if (method == null)
 				return;
 
+			methodCompiler.Compiler.MethodScanner.MethodInvoked(method);
+
 			var interrupt = Operand.CreateSymbolFromMethod(method, methodCompiler.TypeSystem);
 
 			var esp = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ESP);

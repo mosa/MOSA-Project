@@ -142,6 +142,11 @@ namespace Mosa.Compiler.Framework
 		public List<string> SourceFiles { get; set; } = new List<string>();
 
 		/// <summary>
+		/// Gets or sets a value indicating whether [enable method scanner].
+		/// </summary>
+		public bool EnableMethodScanner { get; set; }
+
+		/// <summary>
 		/// Adds additional sections to the Elf-File.
 		/// </summary>
 		public MosaLinker.CreateExtraSectionsDelegate CreateExtraSections { get; set; }
@@ -311,6 +316,7 @@ namespace Mosa.Compiler.Framework
 			EnableValueNumbering = true;
 			EnableLoopInvariantCodeMotion = true;
 			EnablePlatformOptimizations = true;
+			EnableMethodScanner = false;
 		}
 	}
 }

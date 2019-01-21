@@ -1192,6 +1192,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var runtimeTypeHandle = GetRuntimeTypeHandle(arrayType);
 			var size = CreateConstant(elementSize);
 			node.SetInstruction(IRInstruction.NewArray, result, runtimeTypeHandle, size, elements);
+			node.MosaType = arrayType;
 		}
 
 		/// <summary>
@@ -1242,6 +1243,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var runtimeTypeHandle = GetRuntimeTypeHandle(classType);
 				var size = CreateConstant(TypeLayout.GetTypeSize(classType));
 				before.SetInstruction(IRInstruction.NewObject, result, runtimeTypeHandle, size);
+				before.MosaType = classType;
 
 				operands.Insert(0, result);
 			}

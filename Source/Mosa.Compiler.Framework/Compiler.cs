@@ -65,6 +65,11 @@ namespace Mosa.Compiler.Framework
 		public CompilerOptions CompilerOptions { get; }
 
 		/// <summary>
+		/// Gets the method scanner.
+		/// </summary>
+		public MethodScanner MethodScanner { get; }
+
+		/// <summary>
 		/// Gets the counters.
 		/// </summary>
 		public Counters GlobalCounters { get; } = new Counters();
@@ -206,6 +211,8 @@ namespace Mosa.Compiler.Framework
 			CompilerOptions = mosaCompiler.CompilerOptions;
 			CompilationScheduler = mosaCompiler.CompilationScheduler;
 			Linker = mosaCompiler.Linker;
+
+			MethodScanner = new MethodScanner(this);
 
 			CompilerExtensions.AddRange(mosaCompiler.CompilerExtensions);
 

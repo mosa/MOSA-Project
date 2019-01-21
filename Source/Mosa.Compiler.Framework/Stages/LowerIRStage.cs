@@ -43,6 +43,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(method != null, "Cannot find method: " + methodName);
 
+			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method);
+
 			return method;
 		}
 
@@ -58,16 +60,22 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var method = GetVMCallMethod(VmCall.AllocateObject);
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+			var classType = node.MosaType;
 
 			node.SetInstruction(IRInstruction.CallStatic, node.Result, symbol, node.GetOperands());
+
+			MethodCompiler.Compiler.MethodScanner.TypeAllocated(classType);
 		}
 
 		private void NewArray(InstructionNode node)
 		{
 			var method = GetVMCallMethod(VmCall.AllocateArray);
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+			var arrayType = node.MosaType;
 
 			node.SetInstruction(IRInstruction.CallStatic, node.Result, symbol, node.GetOperands());
+
+			MethodCompiler.Compiler.MethodScanner.TypeAllocated(arrayType);
 		}
 
 		private void MemorySet(InstructionNode node)

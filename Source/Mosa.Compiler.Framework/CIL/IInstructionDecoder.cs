@@ -20,17 +20,19 @@ namespace Mosa.Compiler.Framework.CIL
 		MosaMethod Method { get; }
 
 		/// <summary>
-		/// Gets the instruction being decoded.
+		/// Gets the type system.
 		/// </summary>
-		MosaInstruction Instruction { get; }
+		TypeSystem TypeSystem { get; }
 
 		/// <summary>
 		/// Gets the type system.
 		/// </summary>
-		/// <value>
-		/// The type system.
-		/// </value>
-		TypeSystem TypeSystem { get; }
+		MethodScanner MethodScanner { get; }
+
+		/// <summary>
+		/// Gets the instruction being decoded.
+		/// </summary>
+		MosaInstruction Instruction { get; }
 
 		/// <summary>
 		/// Gets the block.

@@ -76,6 +76,8 @@ namespace Mosa.Platform.x86.Stages
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
 			node.SetInstruction(IRInstruction.CallStatic, result, symbol, operand1, operand2);
+
+			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method);
 		}
 
 		private void ReplaceWithPlatformDivisionCall(InstructionNode node, string methodName, Operand result, Operand operand1, Operand operand2)
@@ -91,6 +93,8 @@ namespace Mosa.Platform.x86.Stages
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
 			node.SetInstruction(IRInstruction.CallStatic, result, symbol, operand1, operand2);
+
+			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method);
 		}
 	}
 }

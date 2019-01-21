@@ -329,6 +329,7 @@
     <Compile Include="Linker\PatchType.cs" />
     <Compile Include="Linker\SectionKind.cs" />
     <Compile Include="BuiltInOptimizations.cs" />
+    <Compile Include="MethodScanner.cs" />
     <Compile Include="MultibootSpecification.cs" />
     <Compile Include="OpcodeEncoder.cs" />
     <Compile Include="Pipeline.cs" />

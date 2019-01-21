@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			var field = (MosaField)decoder.Instruction.Operand;
 
-			decoder.MethodCompiler.Scheduler.TrackFieldReferenced(field);
+			//decoder.MethodCompiler.Scheduler.TrackFieldReferenced(field);
 
 			Debug.Assert(field.IsStatic, "Static field access on non-static field.");
 
