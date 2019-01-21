@@ -28,19 +28,32 @@ namespace Mosa.Tool.Explorer
 		[Option("no-sparse")]
 		public bool NoSparse { get; set; }
 
+		[Option("scanner")]
+		public bool EnableMethodScanner { get; set; }
+
 		[Option("x64")]
 		public bool X64 { get; set; }
 
 		[Option("x86")]
 		public bool X86 { get; set; }
 
+		[Option("esp32")]
+		public bool ESP32 { get; set; }
+
+		[Option("armv6")]
+		public bool ARMv6 { get; set; }
+
+		[Option("filter")]
+		public string Filter { get; set; }
+
 		[Value(0)]
 		public IEnumerable<string> Files { get; set; }
 
 		public Options()
 		{
-			X64 = false;
 			X86 = true;
+			X64 = false;
+			ESP32 = false;
 		}
 	}
 }

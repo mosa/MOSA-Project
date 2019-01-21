@@ -46,6 +46,7 @@
     <Compile Include="Bits.cs" />
     <Compile Include="BitArrayExtension.cs" />
     <Compile Include="Exceptions\AssemblyLoadException.cs" />
+    <Compile Include="HasSetExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SortedSetExtension.cs" />
     <Compile Include="Exceptions\NotImplementCompilerException.cs" />
