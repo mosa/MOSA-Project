@@ -85,6 +85,10 @@ namespace Mosa.Compiler.Framework
 				{
 					ScheduleMethod(method);
 				}
+				else if (allocatedTypes.Contains(method.DeclaringType))
+				{
+					ScheduleMethod(method);
+				}
 			}
 		}
 
