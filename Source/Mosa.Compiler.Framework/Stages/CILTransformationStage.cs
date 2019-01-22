@@ -415,7 +415,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private int CalculateInterfaceSlot(MosaType interaceType)
 		{
-			return TypeLayout.GetInterfaceSlotOffset(interaceType);
+			return TypeLayout.GetInterfaceSlot(interaceType);
 		}
 
 		/// <summary>

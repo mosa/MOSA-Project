@@ -77,7 +77,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private int CalculateMethodTableOffset(MosaMethod invokeTarget)
 		{
-			int slot = TypeLayout.GetMethodTableOffset(invokeTarget);
+			int slot = TypeLayout.GetMethodSlot(invokeTarget);
 
 			return NativePointerSize * slot;
 		}
@@ -159,7 +159,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private int CalculateInterfaceSlot(MosaType interaceType)
 		{
-			return TypeLayout.GetInterfaceSlotOffset(interaceType);
+			return TypeLayout.GetInterfaceSlot(interaceType);
 		}
 
 		private int CalculateInterfaceSlotOffset(MosaMethod invokeTarget)

@@ -26,9 +26,9 @@ namespace Mosa.Compiler.Framework
 		private readonly List<MosaType> interfaces = new List<MosaType>();
 
 		/// <summary>
-		/// Holds the method table offsets value for each method
+		/// Holds the method table slot index
 		/// </summary>
-		private readonly Dictionary<MosaMethod, int> methodTableOffsets = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
+		private readonly Dictionary<MosaMethod, int> methodSlots = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
 
 		/// <summary>
 		/// Holds the slot value for each interface
@@ -74,6 +74,11 @@ namespace Mosa.Compiler.Framework
 		/// The overridden methods
 		/// </summary>
 		private readonly HashSet<MosaMethod> overriddenMethods = new HashSet<MosaMethod>(new MosaMethodFullNameComparer());
+
+		/// <summary>
+		/// The derived children of the base type
+		/// </summary>
+		private readonly Dictionary<MosaType, List<MosaType>> derivedTypes = new Dictionary<MosaType, List<MosaType>>();
 
 		private readonly object _lock = new object();
 
@@ -136,25 +141,37 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the method table offset.
+		/// Gets the method slot number
 		/// </summary>
 		/// <param name="method">The method.</param>
 		/// <returns></returns>
-		public int GetMethodTableOffset(MosaMethod method)
+		public int GetMethodSlot(MosaMethod method)
 		{
 			lock (_lock)
 			{
 				ResolveType(method.DeclaringType);
-				return methodTableOffsets[method];
+				return methodSlots[method];
+			}
+		}
+
+		public MosaMethod GetMethodBySlot(MosaType type, int slot)
+		{
+			lock (_lock)
+			{
+				ResolveType(type);
+
+				var methodTable = GetMethodTable(type);
+
+				return methodTable[slot];
 			}
 		}
 
 		/// <summary>
-		/// Gets the interface slot offset.
+		/// Gets the interface slot number
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public int GetInterfaceSlotOffset(MosaType type)
+		public int GetInterfaceSlot(MosaType type)
 		{
 			lock (_lock)
 			{
@@ -301,7 +318,7 @@ namespace Mosa.Compiler.Framework
 				if (overriddenMethods.Contains(method))
 					return true;
 
-				int slot = methodTableOffsets[method];
+				int slot = methodSlots[method];
 				var type = method.DeclaringType.BaseType;
 
 				while (type != null)
@@ -325,6 +342,19 @@ namespace Mosa.Compiler.Framework
 
 				return false;
 			}
+		}
+
+		public MosaType[] GetDerivedTypes(MosaType baseType)
+		{
+			lock (_lock)
+			{
+				if (derivedTypes.TryGetValue(baseType, out List<MosaType> derivedList))
+				{
+					return derivedList.ToArray();
+				}
+			}
+
+			return null;
 		}
 
 		#region Internal - Layout
@@ -367,6 +397,8 @@ namespace Mosa.Compiler.Framework
 			if (type.BaseType != null)
 			{
 				ResolveType(type.BaseType);
+
+				Addchildren(type.BaseType, type);
 			}
 
 			if (type.IsInterface)
@@ -646,7 +678,7 @@ namespace Mosa.Compiler.Framework
 					{
 						int slot = methodTable.Count;
 						methodTable.Add(method);
-						methodTableOffsets.Add(method, slot);
+						methodSlots.Add(method, slot);
 					}
 					else
 					{
@@ -654,14 +686,14 @@ namespace Mosa.Compiler.Framework
 						if (slot != -1)
 						{
 							methodTable[slot] = method;
-							methodTableOffsets.Add(method, slot);
+							methodSlots.Add(method, slot);
 							SetMethodOverridden(method, slot);
 						}
 						else
 						{
 							slot = methodTable.Count;
 							methodTable.Add(method);
-							methodTableOffsets.Add(method, slot);
+							methodSlots.Add(method, slot);
 						}
 					}
 				}
@@ -671,13 +703,13 @@ namespace Mosa.Compiler.Framework
 					{
 						int slot = methodTable.Count;
 						methodTable.Add(method);
-						methodTableOffsets.Add(method, slot);
+						methodSlots.Add(method, slot);
 					}
 					else if (!method.IsInternal && !method.IsExternal)
 					{
 						int slot = methodTable.Count;
 						methodTable.Add(method);
-						methodTableOffsets.Add(method, slot);
+						methodSlots.Add(method, slot);
 					}
 				}
 			}
@@ -714,9 +746,9 @@ namespace Mosa.Compiler.Framework
 				if (baseMethod.Name.Equals(method.Name) && baseMethod.Equals(method))
 				{
 					if (baseMethod.GenericArguments.Count == 0)
-						return methodTableOffsets[baseMethod];
+						return methodSlots[baseMethod];
 					else
-						slot = methodTableOffsets[baseMethod];
+						slot = methodSlots[baseMethod];
 				}
 			}
 
@@ -754,6 +786,17 @@ namespace Mosa.Compiler.Framework
 
 				type = type.BaseType;
 			}
+		}
+
+		private void Addchildren(MosaType baseType, MosaType child)
+		{
+			if (!derivedTypes.TryGetValue(baseType, out List<MosaType> children))
+			{
+				children = new List<MosaType>();
+				derivedTypes.Add(baseType, children);
+			}
+
+			children.Add(child);
 		}
 
 		#endregion Internal

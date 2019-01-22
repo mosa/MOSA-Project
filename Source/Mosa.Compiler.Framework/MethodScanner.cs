@@ -43,13 +43,15 @@ namespace Mosa.Compiler.Framework
 				// find all invoked methods for this type
 				lock (_lock)
 				{
-					foreach (var method in type.Methods)
-					{
-						if (!method.IsStatic && invokedMethods.Contains(method))
-						{
-							ScheduleMethod(method);
-						}
-					}
+					ScheduleMethods(type);
+
+					//foreach (var method in type.Methods)
+					//{
+					//	if (!method.IsStatic && invokedMethods.Contains(method))
+					//	{
+					//		ScheduleMethod(method);
+					//	}
+					//}
 
 					foreach (var property in type.Properties)
 					{
@@ -85,10 +87,59 @@ namespace Mosa.Compiler.Framework
 				{
 					ScheduleMethod(method);
 				}
-				else if (allocatedTypes.Contains(method.DeclaringType))
+				else
 				{
-					ScheduleMethod(method);
+					var slot = Compiler.TypeLayout.GetMethodSlot(method);
+					var type = method.DeclaringType;
+
+					ScheduleDerivedMethods(type, slot);
 				}
+			}
+		}
+
+		private void ScheduleDerivedMethods(MosaType type, int slot)
+		{
+			var children = Compiler.TypeLayout.GetDerivedTypes(type);
+
+			if (children == null)
+				return;
+
+			foreach (var derived in children)
+			{
+				if (!allocatedTypes.Contains(derived))
+					continue;
+
+				var derivedMethod = Compiler.TypeLayout.GetMethodBySlot(derived, slot);
+
+				ScheduleMethod(derivedMethod);
+
+				ScheduleDerivedMethods(derived, slot);
+			}
+		}
+
+		private void ScheduleMethods(MosaType type)
+		{
+			var currentType = type;
+
+			var slots = new bool[Compiler.TypeLayout.GetMethodTable(type).Count];
+
+			while (currentType != null)
+			{
+				foreach (var method in currentType.Methods)
+				{
+					if (!method.IsStatic && invokedMethods.Contains(method))
+					{
+						int slot = Compiler.TypeLayout.GetMethodSlot(method);
+
+						if (slots[slot])
+							continue;
+
+						slots[slot] = true;
+						ScheduleMethod(method);
+					}
+				}
+
+				currentType = currentType.BaseType;
 			}
 		}
 
