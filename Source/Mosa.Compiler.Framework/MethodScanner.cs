@@ -40,31 +40,25 @@ namespace Mosa.Compiler.Framework
 
 				Debug.WriteLine("***New Type Allocated: " + type.FullName);
 
+				Compiler.CompilerData.GetTypeData(type).IsTypeAllocated = true;
+
 				// find all invoked methods for this type
 				lock (_lock)
 				{
 					ScheduleMethods(type);
 
-					//foreach (var method in type.Methods)
+					//foreach (var property in type.Properties)
 					//{
-					//	if (!method.IsStatic && invokedMethods.Contains(method))
+					//	if (property.GetterMethod != null && !property.GetterMethod.IsStatic && invokedMethods.Contains(property.GetterMethod))
 					//	{
-					//		ScheduleMethod(method);
+					//		ScheduleMethod(property.GetterMethod);
+					//	}
+
+					//	if (property.SetterMethod != null && !property.SetterMethod.IsStatic && invokedMethods.Contains(property.SetterMethod))
+					//	{
+					//		ScheduleMethod(property.SetterMethod);
 					//	}
 					//}
-
-					foreach (var property in type.Properties)
-					{
-						if (property.GetterMethod != null && !property.GetterMethod.IsStatic && invokedMethods.Contains(property.GetterMethod))
-						{
-							ScheduleMethod(property.GetterMethod);
-						}
-
-						if (property.SetterMethod != null && !property.SetterMethod.IsStatic && invokedMethods.Contains(property.SetterMethod))
-						{
-							ScheduleMethod(property.SetterMethod);
-						}
-					}
 				}
 			}
 		}
@@ -81,9 +75,10 @@ namespace Mosa.Compiler.Framework
 
 				invokedMethods.Add(method);
 
-				Debug.WriteLine("Method Invoked: " + method.FullName + (method.IsStatic ? " [Static]" : " [Virtual]"));
+				if (!method.IsStatic || method.IsConstructor)
+					Debug.WriteLine("Method Invoked: " + method.FullName + (method.IsStatic ? " [Static]" : " [Virtual]"));
 
-				if (method.IsStatic)
+				if (method.IsStatic || method.IsConstructor)
 				{
 					ScheduleMethod(method);
 				}
@@ -127,7 +122,7 @@ namespace Mosa.Compiler.Framework
 			{
 				foreach (var method in currentType.Methods)
 				{
-					if (!method.IsStatic && invokedMethods.Contains(method))
+					if (invokedMethods.Contains(method)) // !(method.IsStatic || method.IsConstructor) &&
 					{
 						int slot = Compiler.TypeLayout.GetMethodSlot(method);
 
@@ -152,7 +147,9 @@ namespace Mosa.Compiler.Framework
 
 				scheduledMethods.Add(method);
 
-				Debug.WriteLine("  Scheduling: " + method.ToString() + (method.IsStatic ? " [Static]" : " [Virtual]"));
+				if (!method.IsStatic || method.IsConstructor)
+					Debug.WriteLine("  Scheduling: " + method.ToString() + (method.IsStatic ? " [Static]" : " [Virtual]"));
+
 				Compiler.CompilationScheduler.Schedule(method);
 			}
 		}

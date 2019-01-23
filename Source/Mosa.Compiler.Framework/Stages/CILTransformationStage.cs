@@ -2129,7 +2129,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var method = node.InvokeMethod;
 
-			if (!method.IsInternal || method.Name != ".ctor")
+			if (!method.IsInternal || !method.IsConstructor)
 				return false;
 
 			var newmethod = method.DeclaringType.FindMethodByNameAndParameters("Ctor", method.Signature.Parameters);

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Compiler Metho dData
 	/// </summary>
-	public sealed class CompilerMethodData
+	public sealed class MethodData
 	{
 		private readonly object _lock = new object();
 
@@ -68,7 +68,7 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Properties
 
-		public CompilerMethodData(MosaMethod mosaMethod)
+		public MethodData(MosaMethod mosaMethod)
 		{
 			Method = mosaMethod ?? throw new ArgumentNullException(nameof(mosaMethod));
 

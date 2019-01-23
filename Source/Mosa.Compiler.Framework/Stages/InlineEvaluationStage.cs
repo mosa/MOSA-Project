@@ -156,7 +156,7 @@ namespace Mosa.Compiler.Framework.Stages
 			GeneratedBlocksCount.Set(MethodData.CanInline);
 		}
 
-		public bool CanInline(CompilerMethodData method)
+		public bool CanInline(MethodData method)
 		{
 			if (method.HasDoNotInlineAttribute)
 				return false;

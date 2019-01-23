@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			// If the method is static, non-virtual or is a constructor then don't process
-			if (Method.IsStatic || !Method.IsVirtual || Method.Name.Equals(".ctor"))
+			if (Method.IsStatic || !Method.IsVirtual || Method.IsConstructor)
 				return;
 
 			// If the method does not belong to an interface then don't process

@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework
 		private readonly UniqueQueueThreadSafe<MosaMethod> queue = new UniqueQueueThreadSafe<MosaMethod>();
 		private readonly HashSet<MosaMethod> methods = new HashSet<MosaMethod>();
 
-		private readonly UniqueQueueThreadSafe<CompilerMethodData> inlineQueue = new UniqueQueueThreadSafe<CompilerMethodData>();
+		private readonly UniqueQueueThreadSafe<MethodData> inlineQueue = new UniqueQueueThreadSafe<MethodData>();
 
 		#endregion Data Members
 
@@ -108,7 +108,7 @@ namespace Mosa.Compiler.Framework
 			return queue.Dequeue();
 		}
 
-		public void AddToInlineQueue(CompilerMethodData methodData)
+		public void AddToInlineQueue(MethodData methodData)
 		{
 			Debug.Assert(!methodData.Method.HasOpenGenericParams);
 

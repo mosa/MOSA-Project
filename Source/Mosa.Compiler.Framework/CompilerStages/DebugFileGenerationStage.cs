@@ -132,7 +132,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				foreach (var method in type.Methods)
 				{
 					var symbol = Linker.GetSymbol(method.FullName);
-					var methodData = Compiler.CompilerData.GetCompilerMethodData(method);
+					var methodData = Compiler.CompilerData.GetMethodData(method);
 
 					writer.WriteLine(
 						"{0}\t{1:x8}\t{2}\t{3:x8}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}",

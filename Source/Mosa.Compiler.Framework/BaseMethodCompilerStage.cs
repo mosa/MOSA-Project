@@ -114,7 +114,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the method data.
 		/// </summary>
-		protected CompilerMethodData MethodData { get { return MethodCompiler.MethodData; } }
+		protected MethodData MethodData { get { return MethodCompiler.MethodData; } }
 
 		/// <summary>
 		/// Gets the linker.

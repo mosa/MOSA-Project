@@ -57,7 +57,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					callSites.Add(node);
 
-					var invoked = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(invokedMethod);
+					var invoked = MethodCompiler.Compiler.CompilerData.GetMethodData(invokedMethod);
 
 					MethodData.Calls.AddIfNew(invokedMethod);
 
@@ -74,7 +74,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var invokedMethod = callSiteNode.Operand1.Method;
 
-				var callee = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(invokedMethod);
+				var callee = MethodCompiler.Compiler.CompilerData.GetMethodData(invokedMethod);
 
 				if (!callee.CanInline)
 					continue;

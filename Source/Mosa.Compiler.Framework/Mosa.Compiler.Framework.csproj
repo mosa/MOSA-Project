@@ -333,8 +333,8 @@
     <Compile Include="MultibootSpecification.cs" />
     <Compile Include="OpcodeEncoder.cs" />
     <Compile Include="Pipeline.cs" />
-    <Compile Include="CompilerTypeData.cs" />
-    <Compile Include="CompilerMethodData.cs" />
+    <Compile Include="TypeData.cs" />
+    <Compile Include="MethodData.cs" />
     <Compile Include="CompilerData.cs" />
     <Compile Include="DelegatePatcher.cs" />
     <Compile Include="GlobalSuppressions.cs" />
