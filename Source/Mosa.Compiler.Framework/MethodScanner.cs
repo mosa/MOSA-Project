@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -11,10 +12,11 @@ namespace Mosa.Compiler.Framework
 		public bool IsEnabled { get; set; }
 
 		private Compiler Compiler { get; }
+
 		private HashSet<MosaType> allocatedTypes = new HashSet<MosaType>();
 		private HashSet<MosaMethod> invokedMethods = new HashSet<MosaMethod>();
-
 		private HashSet<MosaMethod> scheduledMethods = new HashSet<MosaMethod>();
+		private HashSet<MosaField> accessedFields = new HashSet<MosaField>();
 
 		private MosaMethod lastSource;
 
@@ -195,6 +197,30 @@ namespace Mosa.Compiler.Framework
 			//		// TODO
 			//	}
 			//}
+		}
+
+		public void AccessedField(MosaField field)
+		{
+			if (!IsEnabled)
+				return;
+
+			if (!field.IsStatic)
+				return;
+
+			lock (accessedFields)
+			{
+				accessedFields.AddIfNew(field);
+			}
+		}
+
+		public bool IsFieldAccessed(MosaField field)
+		{
+			Debug.Assert(IsEnabled);
+
+			if (!IsEnabled)
+				return true; // always
+
+			return accessedFields.Contains(field);
 		}
 	}
 }

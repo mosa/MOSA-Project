@@ -948,18 +948,22 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Ldflda(InstructionNode node)
 		{
+			var field = node.MosaField;
+
+			MethodCompiler.Compiler.MethodScanner.AccessedField(field);
+
+			int offset = TypeLayout.GetFieldOffset(field);
+
 			var fieldAddress = node.Result;
 			var objectOperand = node.Operand1;
 
-			int offset = TypeLayout.GetFieldOffset(node.MosaField);
-
 			if (offset == 0)
 			{
-				node.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), fieldAddress, objectOperand);
+				node.SetInstruction(Select(fieldAddress, IRInstruction.MoveInt32, IRInstruction.MoveInt64), fieldAddress, objectOperand);
 			}
 			else
 			{
-				node.SetInstruction(Select(IRInstruction.Add32, IRInstruction.Add64), fieldAddress, objectOperand, CreateConstant(offset));
+				node.SetInstruction(Select(fieldAddress, IRInstruction.Add32, IRInstruction.Add64), fieldAddress, objectOperand, CreateConstant(offset));
 			}
 		}
 
@@ -1028,13 +1032,17 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Ldsfld(InstructionNode node)
 		{
-			var fieldType = node.MosaField.FieldType;
-			var destination = node.Result;
+			var field = node.MosaField;
 
-			var fieldOperand = Operand.CreateStaticField(node.MosaField, TypeSystem);
+			MethodCompiler.Compiler.MethodScanner.AccessedField(field);
+
+			var fieldType = field.FieldType;
+			var destination = node.Result;
+			var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
 
 			if (MosaTypeLayout.IsStoredOnStack(fieldType))
 			{
+				// Interesting -- this code appears to never be executed
 				node.SetInstruction(IRInstruction.LoadCompound, destination, fieldOperand, ConstantZero);
 				node.MosaType = fieldType;
 			}
@@ -1052,7 +1060,13 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Ldsflda(InstructionNode node)
 		{
-			node.SetInstruction(IRInstruction.AddressOf, node.Result, Operand.CreateStaticField(node.MosaField, TypeSystem));
+			var field = node.MosaField;
+
+			MethodCompiler.Compiler.MethodScanner.AccessedField(field);
+
+			var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
+
+			node.SetInstruction(IRInstruction.AddressOf, node.Result, fieldOperand);
 		}
 
 		/// <summary>
@@ -1431,12 +1445,16 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Stfld(InstructionNode node)
 		{
+			var field = node.MosaField;
+
+			MethodCompiler.Compiler.MethodScanner.AccessedField(field);
+
+			int offset = TypeLayout.GetFieldOffset(field);
+			var offsetOperand = CreateConstant(offset);
+
 			var objectOperand = node.Operand1;
 			var valueOperand = node.Operand2;
-			var fieldType = node.MosaField.FieldType;
-
-			int offset = TypeLayout.GetFieldOffset(node.MosaField);
-			var offsetOperand = CreateConstant(offset);
+			var fieldType = field.FieldType;
 
 			if (MosaTypeLayout.IsStoredOnStack(fieldType))
 			{
@@ -1514,19 +1532,23 @@ namespace Mosa.Compiler.Framework.Stages
 		private void Stsfld(InstructionNode node)
 		{
 			var field = node.MosaField;
-			var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
 
-			if (MosaTypeLayout.IsStoredOnStack(field.FieldType))
+			MethodCompiler.Compiler.MethodScanner.AccessedField(field);
+
+			var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
+			var fieldType = field.FieldType;
+
+			if (MosaTypeLayout.IsStoredOnStack(fieldType))
 			{
 				node.SetInstruction(IRInstruction.StoreCompound, null, fieldOperand, ConstantZero, node.Operand1);
-				node.MosaType = field.FieldType;
+				node.MosaType = fieldType;
 			}
 			else
 			{
-				var storeInstruction = GetStoreInstruction(field.FieldType);
+				var storeInstruction = GetStoreInstruction(fieldType);
 
 				node.SetInstruction(storeInstruction, null, fieldOperand, ConstantZero, node.Operand1);
-				node.MosaType = field.FieldType;
+				node.MosaType = fieldType;
 			}
 		}
 

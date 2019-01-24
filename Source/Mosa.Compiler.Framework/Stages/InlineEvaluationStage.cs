@@ -274,6 +274,7 @@ namespace Mosa.Compiler.Framework.Stages
 					// copy other
 					if (node.MosaType != null)
 						newNode.MosaType = node.MosaType;
+
 					if (node.MosaField != null)
 						newNode.MosaField = node.MosaField;
 
@@ -308,14 +309,17 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (operand.StringData != null)
 				{
+					// FUTURE: explore operand re-use
 					mappedOperand = Operand.CreateStringSymbol(operand.Name, operand.StringData, operand.Type.TypeSystem);
 				}
 				else if (operand.Method != null)
 				{
+					// FUTURE: explore operand re-use
 					mappedOperand = Operand.CreateSymbolFromMethod(operand.Method, operand.Type.TypeSystem);
 				}
 				else if (operand.Name != null)
 				{
+					// FUTURE: explore operand re-use
 					mappedOperand = Operand.CreateSymbol(operand.Type, operand.Name);
 				}
 			}
@@ -336,6 +340,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (operand.IsStaticField)
 			{
+				// FUTURE: explore operand re-use
 				mappedOperand = Operand.CreateStaticField(operand.Field, TypeSystem);
 			}
 			else if (operand.IsCPURegister)
