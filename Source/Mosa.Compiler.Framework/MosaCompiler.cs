@@ -64,7 +64,12 @@ namespace Mosa.Compiler.Framework
 		{
 			Initialize();
 			PreCompile();
-			ScheduleAll();
+
+			if (!CompilerOptions.EnableMethodScanner)
+			{
+				ScheduleAll();
+			}
+
 			Compile();
 			PostCompile();
 		}
@@ -73,7 +78,12 @@ namespace Mosa.Compiler.Framework
 		{
 			Initialize();
 			PreCompile();
-			ScheduleAll();
+
+			if (!CompilerOptions.EnableMethodScanner)
+			{
+				ScheduleAll();
+			}
+
 			Compiler.ExecuteThreadedCompile(MaxThreads);
 			PostCompile();
 		}

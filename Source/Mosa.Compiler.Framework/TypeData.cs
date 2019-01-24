@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Compiler Type Data
 	/// </summary>
-	public sealed class CompilerTypeData
+	public sealed class TypeData
 	{
 		#region Properties
 
@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework
 
 		#region Methods
 
-		public CompilerTypeData(MosaType mosaType)
+		public TypeData(MosaType mosaType)
 		{
 			if (mosaType == null)
 				throw new ArgumentNullException(nameof(mosaType));

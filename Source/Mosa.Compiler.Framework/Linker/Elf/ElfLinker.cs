@@ -438,6 +438,15 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 			foreach (var symbol in linker.Symbols)
 			{
+				// FIXME: Temp!!!
+				{
+					if (symbol.SectionKind == SectionKind.Unknown)
+					{
+						Debug.WriteLine("Unresolved Symbol: " + symbol.Name);
+						continue;
+					}
+				}
+
 				Debug.Assert(symbol.SectionKind != SectionKind.Unknown, "symbol.SectionKind != SectionKind.Unknown");
 
 				if (!(symbol.IsExport || linker.EmitAllSymbols))

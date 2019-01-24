@@ -36,8 +36,6 @@ namespace Mosa.Compiler.Framework.CIL
 
 			var field = (MosaField)decoder.Instruction.Operand;
 
-			decoder.MethodCompiler.Scheduler.TrackFieldReferenced(field);
-
 			node.MosaField = field;
 			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, field.FieldType.ToManagedPointer());
 		}

@@ -234,12 +234,6 @@ namespace Mosa.Utility.Launcher
 		[Option("emit-relocations-false")]
 		public bool EmitRelocationsFalse { set { EmitStaticRelocations = false; } }
 
-		[Option("x86-irq-methods")]
-		public bool Emitx86IRQMethods { get; set; } = true;
-
-		[Option("x86-irq-methods-false")]
-		public bool Emitx86IRQMethodsFalse { set { Emitx86IRQMethods = false; } }
-
 		[Option("bootloader-image")]
 		public string BootLoaderImage { get; set; }
 
@@ -272,6 +266,9 @@ namespace Mosa.Utility.Launcher
 
 		[Option("plug-korlib")]
 		public bool PlugKorlib { get; set; }
+
+		[Option("scanner")]
+		public bool EnableMethodScanner { get; set; }
 
 		public List<IncludeFile> IncludeFiles { get; set; }
 

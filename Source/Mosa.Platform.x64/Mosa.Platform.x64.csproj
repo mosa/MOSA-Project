@@ -84,7 +84,6 @@
     <Compile Include="Architecture.cs" />
     <Compile Include="ArchitectureFeatureFlags.cs" />
     <Compile Include="BaseTransformationStage.cs" />
-    <Compile Include="CompilerStages\InterruptVectorStage.cs" />
     <Compile Include="CompilerStages\MultibootV1Stage.cs" />
     <Compile Include="Instructions\Adc32.cs" />
     <Compile Include="Instructions\Adc64.cs" />

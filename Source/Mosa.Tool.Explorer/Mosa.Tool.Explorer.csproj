@@ -56,8 +56,8 @@
     <ApplicationIcon>magnifier.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="CommandLine, Version=2.3.0.0, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
-      <HintPath>..\packages\CommandLineParser.2.3.0\lib\net45\CommandLine.dll</HintPath>
+    <Reference Include="CommandLine, Version=2.4.3.0, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
+      <HintPath>..\packages\CommandLineParser.2.4.3\lib\netstandard2.0\CommandLine.dll</HintPath>
     </Reference>
     <Reference Include="dnlib, Version=1.0.1.0, Culture=neutral, PublicKeyToken=50e96378b6e77999, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -117,6 +117,10 @@
     <ProjectReference Include="..\Mosa.Platform.ARMv6\Mosa.Platform.ARMv6.csproj">
       <Project>{0fb92651-3ee8-441d-84f2-c4dfda68e8a5}</Project>
       <Name>Mosa.Platform.ARMv6</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Platform.ESP32\Mosa.Platform.ESP32.csproj">
+      <Project>{5b45af28-3b67-4542-a0c9-947f3cdd9741}</Project>
+      <Name>Mosa.Platform.ESP32</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj">
       <Project>{f445db8e-e25a-41ef-a158-c742f14e94e4}</Project>

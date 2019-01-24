@@ -185,10 +185,6 @@ namespace Mosa.Platform.x64
 			compilerPipeline.Add(
 				new Intel.CompilerStages.StartUpStage()
 			);
-
-			compilerPipeline.Add(
-				new InterruptVectorStage()
-			);
 		}
 
 		/// <summary>

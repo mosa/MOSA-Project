@@ -88,7 +88,6 @@
             this.cbEnableQemuGDB = new MetroFramework.Controls.MetroCheckBox();
             this.groupBox14 = new System.Windows.Forms.GroupBox();
             this.cbPlugKorlib = new MetroFramework.Controls.MetroCheckBox();
-            this.cbEmitx86IRQMethods = new MetroFramework.Controls.MetroCheckBox();
             this.groupBox13 = new System.Windows.Forms.GroupBox();
             this.label9 = new MetroFramework.Controls.MetroLabel();
             this.tbBaseAddress = new MetroFramework.Controls.MetroTextBox();
@@ -124,6 +123,7 @@
             this.tabOutput = new MetroFramework.Controls.MetroTabPage();
             this.rtbOutput = new System.Windows.Forms.RichTextBox();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
+            this.cbEnableMethodScanner = new MetroFramework.Controls.MetroCheckBox();
             this.tbApplicationLocations.SuspendLayout();
             this.tabOptions.SuspendLayout();
             this.groupBox12.SuspendLayout();
@@ -186,7 +186,7 @@
             this.tbApplicationLocations.Margin = new System.Windows.Forms.Padding(0);
             this.tbApplicationLocations.Multiline = true;
             this.tbApplicationLocations.Name = "tbApplicationLocations";
-            this.tbApplicationLocations.SelectedIndex = 1;
+            this.tbApplicationLocations.SelectedIndex = 0;
             this.tbApplicationLocations.Size = new System.Drawing.Size(663, 430);
             this.tbApplicationLocations.Style = MetroFramework.MetroColorStyle.Blue;
             this.tbApplicationLocations.TabIndex = 22;
@@ -218,11 +218,12 @@
             // groupBox12
             // 
             this.groupBox12.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox12.Controls.Add(this.cbEnableMethodScanner);
             this.groupBox12.Controls.Add(this.cbCompilerUsesMultipleThreads);
             this.groupBox12.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox12.Location = new System.Drawing.Point(264, 333);
+            this.groupBox12.Location = new System.Drawing.Point(264, 312);
             this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(158, 44);
+            this.groupBox12.Size = new System.Drawing.Size(158, 65);
             this.groupBox12.TabIndex = 30;
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = "Misc Options:";
@@ -268,7 +269,7 @@
             this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox2.Location = new System.Drawing.Point(264, 203);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(158, 112);
+            this.groupBox2.Size = new System.Drawing.Size(158, 106);
             this.groupBox2.TabIndex = 29;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Diagnostic Output:";
@@ -276,7 +277,7 @@
             // cbGenerateDebugInfoFile
             // 
             this.cbGenerateDebugInfoFile.AutoSize = true;
-            this.cbGenerateDebugInfoFile.Location = new System.Drawing.Point(6, 85);
+            this.cbGenerateDebugInfoFile.Location = new System.Drawing.Point(6, 82);
             this.cbGenerateDebugInfoFile.Name = "cbGenerateDebugInfoFile";
             this.cbGenerateDebugInfoFile.Size = new System.Drawing.Size(79, 15);
             this.cbGenerateDebugInfoFile.Style = MetroFramework.MetroColorStyle.Blue;
@@ -288,7 +289,7 @@
             // cbGenerateNASMFile
             // 
             this.cbGenerateNASMFile.AutoSize = true;
-            this.cbGenerateNASMFile.Location = new System.Drawing.Point(6, 43);
+            this.cbGenerateNASMFile.Location = new System.Drawing.Point(6, 40);
             this.cbGenerateNASMFile.Name = "cbGenerateNASMFile";
             this.cbGenerateNASMFile.Size = new System.Drawing.Size(78, 15);
             this.cbGenerateNASMFile.Style = MetroFramework.MetroColorStyle.Blue;
@@ -300,7 +301,7 @@
             // cbGenerateASMFile
             // 
             this.cbGenerateASMFile.AutoSize = true;
-            this.cbGenerateASMFile.Location = new System.Drawing.Point(6, 64);
+            this.cbGenerateASMFile.Location = new System.Drawing.Point(6, 61);
             this.cbGenerateASMFile.Name = "cbGenerateASMFile";
             this.cbGenerateASMFile.Size = new System.Drawing.Size(69, 15);
             this.cbGenerateASMFile.Style = MetroFramework.MetroColorStyle.Blue;
@@ -434,7 +435,7 @@
             // 
             this.lbSourceDirectory.AutoSize = true;
             this.lbSourceDirectory.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.lbSourceDirectory.Location = new System.Drawing.Point(119, 48);
+            this.lbSourceDirectory.Location = new System.Drawing.Point(119, 47);
             this.lbSourceDirectory.Name = "lbSourceDirectory";
             this.lbSourceDirectory.Size = new System.Drawing.Size(115, 19);
             this.lbSourceDirectory.TabIndex = 20;
@@ -445,7 +446,7 @@
             // 
             this.label7.AutoSize = true;
             this.label7.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.label7.Location = new System.Drawing.Point(6, 48);
+            this.label7.Location = new System.Drawing.Point(6, 47);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(113, 19);
             this.label7.TabIndex = 19;
@@ -726,7 +727,7 @@
             this.cbValueNumbering.AutoSize = true;
             this.cbValueNumbering.Checked = true;
             this.cbValueNumbering.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbValueNumbering.Location = new System.Drawing.Point(6, 148);
+            this.cbValueNumbering.Location = new System.Drawing.Point(6, 144);
             this.cbValueNumbering.Name = "cbValueNumbering";
             this.cbValueNumbering.Size = new System.Drawing.Size(115, 15);
             this.cbValueNumbering.Style = MetroFramework.MetroColorStyle.Blue;
@@ -740,7 +741,7 @@
             this.cbTwoPassOptimizations.AutoSize = true;
             this.cbTwoPassOptimizations.Checked = true;
             this.cbTwoPassOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbTwoPassOptimizations.Location = new System.Drawing.Point(6, 127);
+            this.cbTwoPassOptimizations.Location = new System.Drawing.Point(6, 123);
             this.cbTwoPassOptimizations.Name = "cbTwoPassOptimizations";
             this.cbTwoPassOptimizations.Size = new System.Drawing.Size(148, 15);
             this.cbTwoPassOptimizations.Style = MetroFramework.MetroColorStyle.Blue;
@@ -754,7 +755,7 @@
             this.cbIRLongExpansion.AutoSize = true;
             this.cbIRLongExpansion.Checked = true;
             this.cbIRLongExpansion.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbIRLongExpansion.Location = new System.Drawing.Point(6, 106);
+            this.cbIRLongExpansion.Location = new System.Drawing.Point(6, 102);
             this.cbIRLongExpansion.Name = "cbIRLongExpansion";
             this.cbIRLongExpansion.Size = new System.Drawing.Size(119, 15);
             this.cbIRLongExpansion.Style = MetroFramework.MetroColorStyle.Blue;
@@ -768,7 +769,7 @@
             this.cbInlinedMethods.AutoSize = true;
             this.cbInlinedMethods.Checked = true;
             this.cbInlinedMethods.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbInlinedMethods.Location = new System.Drawing.Point(6, 85);
+            this.cbInlinedMethods.Location = new System.Drawing.Point(6, 81);
             this.cbInlinedMethods.Name = "cbInlinedMethods";
             this.cbInlinedMethods.Size = new System.Drawing.Size(109, 15);
             this.cbInlinedMethods.Style = MetroFramework.MetroColorStyle.Blue;
@@ -782,7 +783,7 @@
             this.cbEnableSparseConditionalConstantPropagation.AutoSize = true;
             this.cbEnableSparseConditionalConstantPropagation.Checked = true;
             this.cbEnableSparseConditionalConstantPropagation.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbEnableSparseConditionalConstantPropagation.Location = new System.Drawing.Point(6, 64);
+            this.cbEnableSparseConditionalConstantPropagation.Location = new System.Drawing.Point(6, 60);
             this.cbEnableSparseConditionalConstantPropagation.Name = "cbEnableSparseConditionalConstantPropagation";
             this.cbEnableSparseConditionalConstantPropagation.Size = new System.Drawing.Size(241, 15);
             this.cbEnableSparseConditionalConstantPropagation.Style = MetroFramework.MetroColorStyle.Blue;
@@ -796,7 +797,7 @@
             this.cbEnableIROptimizations.AutoSize = true;
             this.cbEnableIROptimizations.Checked = true;
             this.cbEnableIROptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbEnableIROptimizations.Location = new System.Drawing.Point(6, 41);
+            this.cbEnableIROptimizations.Location = new System.Drawing.Point(6, 39);
             this.cbEnableIROptimizations.Name = "cbEnableIROptimizations";
             this.cbEnableIROptimizations.Size = new System.Drawing.Size(110, 15);
             this.cbEnableIROptimizations.Style = MetroFramework.MetroColorStyle.Blue;
@@ -956,7 +957,6 @@
             // 
             this.groupBox14.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.groupBox14.Controls.Add(this.cbPlugKorlib);
-            this.groupBox14.Controls.Add(this.cbEmitx86IRQMethods);
             this.groupBox14.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox14.Location = new System.Drawing.Point(432, 18);
             this.groupBox14.Name = "groupBox14";
@@ -970,7 +970,7 @@
             this.cbPlugKorlib.AutoSize = true;
             this.cbPlugKorlib.Checked = true;
             this.cbPlugKorlib.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbPlugKorlib.Location = new System.Drawing.Point(6, 72);
+            this.cbPlugKorlib.Location = new System.Drawing.Point(6, 19);
             this.cbPlugKorlib.Name = "cbPlugKorlib";
             this.cbPlugKorlib.Size = new System.Drawing.Size(81, 15);
             this.cbPlugKorlib.Style = MetroFramework.MetroColorStyle.Blue;
@@ -978,20 +978,6 @@
             this.cbPlugKorlib.Text = "Plug Korlib";
             this.cbPlugKorlib.UseCustomBackColor = true;
             this.cbPlugKorlib.UseSelectable = true;
-            // 
-            // cbEmitx86IRQMethods
-            // 
-            this.cbEmitx86IRQMethods.AutoSize = true;
-            this.cbEmitx86IRQMethods.Checked = true;
-            this.cbEmitx86IRQMethods.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbEmitx86IRQMethods.Location = new System.Drawing.Point(6, 28);
-            this.cbEmitx86IRQMethods.Name = "cbEmitx86IRQMethods";
-            this.cbEmitx86IRQMethods.Size = new System.Drawing.Size(197, 15);
-            this.cbEmitx86IRQMethods.Style = MetroFramework.MetroColorStyle.Blue;
-            this.cbEmitx86IRQMethods.TabIndex = 6;
-            this.cbEmitx86IRQMethods.Text = "Emit x86 Interrupt Table Methods";
-            this.cbEmitx86IRQMethods.UseCustomBackColor = true;
-            this.cbEmitx86IRQMethods.UseSelectable = true;
             // 
             // groupBox13
             // 
@@ -1446,6 +1432,21 @@
             this.openFileDialog2.Filter = "Executable|*.exe";
             this.openFileDialog2.Title = "Select Assembly";
             // 
+            // cbEnableMethodScanner
+            // 
+            this.cbEnableMethodScanner.AutoSize = true;
+            this.cbEnableMethodScanner.Checked = true;
+            this.cbEnableMethodScanner.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbEnableMethodScanner.Location = new System.Drawing.Point(7, 40);
+            this.cbEnableMethodScanner.Name = "cbEnableMethodScanner";
+            this.cbEnableMethodScanner.Size = new System.Drawing.Size(148, 15);
+            this.cbEnableMethodScanner.Style = MetroFramework.MetroColorStyle.Blue;
+            this.cbEnableMethodScanner.TabIndex = 14;
+            this.cbEnableMethodScanner.Text = "Enable Method Scanner";
+            this.cbEnableMethodScanner.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.cbEnableMethodScanner.UseCustomBackColor = true;
+            this.cbEnableMethodScanner.UseSelectable = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1584,7 +1585,6 @@
 		private MetroFramework.Controls.MetroTextBox tbBaseAddress;
 		private MetroFramework.Controls.MetroLabel label9;
 		private System.Windows.Forms.GroupBox groupBox14;
-		private MetroFramework.Controls.MetroCheckBox cbEmitx86IRQMethods;
 		private MetroFramework.Controls.MetroLabel lbDestinationDirectory;
 		private MetroFramework.Controls.MetroCheckBox cbGenerateASMFile;
 		private System.Windows.Forms.GroupBox groupBox15;
@@ -1606,5 +1606,6 @@
 		private System.Windows.Forms.DataGridView dataGridView1;
 		private MetroFramework.Controls.MetroCheckBox cbValueNumbering;
 		private MetroFramework.Controls.MetroCheckBox cbPlugKorlib;
+		private MetroFramework.Controls.MetroCheckBox cbEnableMethodScanner;
 	}
 }

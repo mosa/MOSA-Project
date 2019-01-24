@@ -75,9 +75,11 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			typeInitializerMethod = Compiler.CreateLinkerMethod(TypeInitializerName);
 
 			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
-			var startUpMethod = startUpType.FindMethodByName("InitializeAssembly");
+			var initializeAssemblyMethod = startUpType.FindMethodByName("InitializeAssembly");
 
-			Compiler.PlugSystem.CreatePlug(startUpMethod, typeInitializerMethod);
+			Compiler.PlugSystem.CreatePlug(initializeAssemblyMethod, typeInitializerMethod);
+
+			Compiler.MethodScanner.MethodInvoked(typeInitializerMethod, typeInitializerMethod);
 		}
 
 		protected override void RunPostCompile()

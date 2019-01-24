@@ -38,14 +38,16 @@ namespace Mosa.Platform.x86.CompilerStages
 			ctx.AppendInstruction(X86.MovStore32, null, multibootEBX, zero, ebx);
 
 			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
-			var startUpMethod = startUpType.FindMethodByName("Initialize");
+			var initializeMethod = startUpType.FindMethodByName("Initialize");
 
-			var entryPoint = Operand.CreateSymbolFromMethod(startUpMethod, TypeSystem);
+			var entryPoint = Operand.CreateSymbolFromMethod(initializeMethod, TypeSystem);
 			ctx.AppendInstruction(X86.Call, null, entryPoint);
 
 			ctx.AppendInstruction(X86.Ret);
 
 			Compiler.CompileMethod(multibootMethod, basicBlocks);
+
+			Compiler.MethodScanner.MethodInvoked(initializeMethod, multibootMethod);
 		}
 	}
 }

@@ -12,13 +12,13 @@ namespace Mosa.Compiler.Framework
 	{
 		#region Data Members
 
-		private readonly Dictionary<MosaType, CompilerTypeData> types = new Dictionary<MosaType, CompilerTypeData>();
+		private readonly Dictionary<MosaType, TypeData> types = new Dictionary<MosaType, TypeData>();
 
-		private readonly Dictionary<MosaMethod, CompilerMethodData> methods = new Dictionary<MosaMethod, CompilerMethodData>();
+		private readonly Dictionary<MosaMethod, MethodData> methods = new Dictionary<MosaMethod, MethodData>();
 
 		#endregion Data Members
 
-		public IEnumerable<CompilerMethodData> MethodData
+		public IEnumerable<MethodData> MethodData
 		{
 			get
 			{
@@ -31,13 +31,13 @@ namespace Mosa.Compiler.Framework
 
 		#region Methods
 
-		public CompilerTypeData GetCompilerTypeData(MosaType type)
+		public TypeData GetTypeData(MosaType type)
 		{
 			lock (types)
 			{
-				if (!types.TryGetValue(type, out CompilerTypeData compilerType))
+				if (!types.TryGetValue(type, out TypeData compilerType))
 				{
-					compilerType = new CompilerTypeData(type);
+					compilerType = new TypeData(type);
 					types.Add(type, compilerType);
 				}
 
@@ -45,13 +45,13 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public CompilerMethodData GetCompilerMethodData(MosaMethod method)
+		public MethodData GetMethodData(MosaMethod method)
 		{
 			lock (methods)
 			{
-				if (!methods.TryGetValue(method, out CompilerMethodData compilerMethod))
+				if (!methods.TryGetValue(method, out MethodData compilerMethod))
 				{
-					compilerMethod = new CompilerMethodData(method);
+					compilerMethod = new MethodData(method);
 					methods.Add(method, compilerMethod);
 				}
 
