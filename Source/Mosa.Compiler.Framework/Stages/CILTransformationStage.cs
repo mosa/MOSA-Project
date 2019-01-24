@@ -973,7 +973,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			node.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, Operand.CreateSymbolFromMethod(invokedMethod, TypeSystem));
 
-			MethodCompiler.Compiler.MethodScanner.MethodInvoked(invokedMethod);
+			MethodCompiler.Compiler.MethodScanner.MethodInvoked(invokedMethod, this.Method);
 		}
 
 		/// <summary>

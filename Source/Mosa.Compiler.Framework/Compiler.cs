@@ -131,6 +131,7 @@ namespace Mosa.Compiler.Framework
 		{
 			return new List<BaseCompilerStage> {
 				new TypeInitializerSchedulerStage(),
+				new StaticFieldStage(),
 				new MethodLookupTableStage(),
 				new MethodExceptionLookupTableStage(),
 				new MetadataStage(),

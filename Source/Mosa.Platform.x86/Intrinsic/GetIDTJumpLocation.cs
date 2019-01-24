@@ -42,7 +42,7 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			context.SetInstruction(IRInstruction.MoveInt32, context.Result, Operand.CreateSymbolFromMethod(method, methodCompiler.TypeSystem));
 
-			methodCompiler.Compiler.MethodScanner.MethodInvoked(method);
+			methodCompiler.Compiler.MethodScanner.MethodInvoked(method, methodCompiler.Method);
 		}
 	}
 }

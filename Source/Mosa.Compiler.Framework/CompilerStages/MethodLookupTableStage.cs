@@ -28,6 +28,9 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		protected override void RunPostCompile()
 		{
+			//if (CompilerOptions.EnableMethodScanner) // FIXME: Temp - REMOVE ME!!!
+			//	return;  // FIXME: Temp - REMOVE ME!!!
+
 			// Emit assembly list
 			var methodLookupTable = Linker.DefineSymbol(Metadata.MethodLookupTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer = new EndianAwareBinaryWriter(methodLookupTable.Stream, Architecture.Endianness);

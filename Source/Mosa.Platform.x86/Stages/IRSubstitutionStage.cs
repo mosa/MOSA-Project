@@ -77,7 +77,7 @@ namespace Mosa.Platform.x86.Stages
 
 			node.SetInstruction(IRInstruction.CallStatic, result, symbol, operand1, operand2);
 
-			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method);
+			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method, this.Method);
 		}
 
 		private void ReplaceWithPlatformDivisionCall(InstructionNode node, string methodName, Operand result, Operand operand1, Operand operand2)
@@ -94,7 +94,7 @@ namespace Mosa.Platform.x86.Stages
 
 			node.SetInstruction(IRInstruction.CallStatic, result, symbol, operand1, operand2);
 
-			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method);
+			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method, this.Method);
 		}
 	}
 }

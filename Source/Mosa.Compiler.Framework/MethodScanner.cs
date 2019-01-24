@@ -16,6 +16,8 @@ namespace Mosa.Compiler.Framework
 
 		private HashSet<MosaMethod> scheduledMethods = new HashSet<MosaMethod>();
 
+		private MosaMethod lastSource;
+
 		private object _lock = new object();
 
 		public MethodScanner(Compiler compiler)
@@ -26,7 +28,7 @@ namespace Mosa.Compiler.Framework
 			Initialize();
 		}
 
-		public void TypeAllocated(MosaType type)
+		public void TypeAllocated(MosaType type, MosaMethod source)
 		{
 			if (!IsEnabled)
 				return;
@@ -38,7 +40,13 @@ namespace Mosa.Compiler.Framework
 
 				allocatedTypes.Add(type);
 
-				Debug.WriteLine("***New Type Allocated: " + type.FullName);
+				if (lastSource == null || lastSource != source)
+				{
+					Debug.WriteLine("> Method: " + source.FullName);
+					lastSource = source;
+				}
+
+				Debug.WriteLine(" >>> Allocated: " + type.FullName);
 
 				Compiler.CompilerData.GetTypeData(type).IsTypeAllocated = true;
 
@@ -63,7 +71,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public void MethodInvoked(MosaMethod method)
+		public void MethodInvoked(MosaMethod method, MosaMethod source)
 		{
 			if (!IsEnabled)
 				return;
@@ -75,8 +83,16 @@ namespace Mosa.Compiler.Framework
 
 				invokedMethods.Add(method);
 
+				if (lastSource == null || lastSource != source)
+				{
+					Debug.WriteLine("> Method: " + source.FullName);
+					lastSource = source;
+				}
+
 				if (!method.IsStatic || method.IsConstructor)
-					Debug.WriteLine("Method Invoked: " + method.FullName + (method.IsStatic ? " [Static]" : " [Virtual]"));
+				{
+					Debug.WriteLine(" >> Invoked: " + method.FullName + (method.IsStatic ? " [Static]" : " [Virtual]"));
+				}
 
 				if (method.IsStatic || method.IsConstructor)
 				{
@@ -84,10 +100,14 @@ namespace Mosa.Compiler.Framework
 				}
 				else
 				{
-					var slot = Compiler.TypeLayout.GetMethodSlot(method);
-					var type = method.DeclaringType;
+					if (allocatedTypes.Contains(method.DeclaringType))
+					{
+						ScheduleMethod(method);
+					}
 
-					ScheduleDerivedMethods(type, slot);
+					var slot = Compiler.TypeLayout.GetMethodSlot(method);
+
+					ScheduleDerivedMethods(method.DeclaringType, slot);
 				}
 			}
 		}
@@ -148,7 +168,7 @@ namespace Mosa.Compiler.Framework
 				scheduledMethods.Add(method);
 
 				if (!method.IsStatic || method.IsConstructor)
-					Debug.WriteLine("  Scheduling: " + method.ToString() + (method.IsStatic ? " [Static]" : " [Virtual]"));
+					Debug.WriteLine(" ==> Scheduling: " + method.ToString() + (method.IsStatic ? " [Static]" : " [Virtual]"));
 
 				Compiler.CompilationScheduler.Schedule(method);
 			}
@@ -163,6 +183,10 @@ namespace Mosa.Compiler.Framework
 				invokedMethods.Add(entryPoint);
 				ScheduleMethod(entryPoint);
 			}
+
+			var stringType = Compiler.TypeSystem.GetTypeByName("System", "String");
+
+			allocatedTypes.Add(stringType);
 
 			//foreach (var type in Compiler.TypeSystem.AllTypes)
 			//{

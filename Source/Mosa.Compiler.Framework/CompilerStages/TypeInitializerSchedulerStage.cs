@@ -79,7 +79,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 			Compiler.PlugSystem.CreatePlug(initializeAssemblyMethod, typeInitializerMethod);
 
-			Compiler.MethodScanner.MethodInvoked(typeInitializerMethod);
+			Compiler.MethodScanner.MethodInvoked(typeInitializerMethod, typeInitializerMethod);
 		}
 
 		protected override void RunPostCompile()

@@ -22,7 +22,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			if (method == null)
 				return;
 
-			methodCompiler.Compiler.MethodScanner.MethodInvoked(method);
+			methodCompiler.Compiler.MethodScanner.MethodInvoked(method, methodCompiler.Method);
 
 			var interrupt = Operand.CreateSymbolFromMethod(method, methodCompiler.TypeSystem);
 

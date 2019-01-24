@@ -101,7 +101,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(method == call.Method);
 
-			MethodCompiler.Compiler.MethodScanner.MethodInvoked(call.Method);
+			MethodCompiler.Compiler.MethodScanner.MethodInvoked(call.Method, this.Method);
 		}
 
 		private void CallDynamic(InstructionNode node)
@@ -120,7 +120,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (call.Method != null)
 			{
-				MethodCompiler.Compiler.MethodScanner.MethodInvoked(call.Method);
+				MethodCompiler.Compiler.MethodScanner.MethodInvoked(call.Method, this.Method);
 			}
 		}
 
@@ -154,7 +154,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			MakeCall(context, callTarget, result, operands);
 
-			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method);
+			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method, this.Method);
 		}
 
 		private int CalculateInterfaceSlot(MosaType interaceType)
@@ -220,7 +220,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			MakeCall(context, callTarget, result, operands);
 
-			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method);
+			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method, this.Method);
 		}
 
 		private void MakeCall(Context context, Operand target, Operand result, List<Operand> operands)
@@ -238,7 +238,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (target.Method != null)
 			{
-				MethodCompiler.Compiler.MethodScanner.MethodInvoked(target.Method);
+				MethodCompiler.Compiler.MethodScanner.MethodInvoked(target.Method, this.Method);
 			}
 
 			GetReturnValue(context, result);

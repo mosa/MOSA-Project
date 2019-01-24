@@ -24,10 +24,10 @@ namespace Mosa.Platform.Intel.CompilerStages
 
 				Linker.EntryPoint = Linker.GetSymbol(startUpInitializeMethod.FullName);
 
-				Compiler.MethodScanner.MethodInvoked(startUpInitializeMethod);
+				Compiler.MethodScanner.MethodInvoked(startUpInitializeMethod, startUpMethod);
 			}
 
-			Compiler.MethodScanner.MethodInvoked(startUpMethod);
+			//Compiler.MethodScanner.MethodInvoked(startUpMethod, startUpMethod);  // probably not necessary
 		}
 	}
 }

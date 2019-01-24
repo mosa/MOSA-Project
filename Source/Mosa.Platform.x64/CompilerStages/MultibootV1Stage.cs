@@ -47,7 +47,7 @@ namespace Mosa.Platform.x64.CompilerStages
 
 			Compiler.CompileMethod(multibootMethod, basicBlocks);
 
-			Compiler.MethodScanner.MethodInvoked(initializeMethod);
+			Compiler.MethodScanner.MethodInvoked(initializeMethod, multibootMethod);
 		}
 	}
 }
