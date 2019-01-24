@@ -91,12 +91,12 @@ namespace Mosa.Compiler.Framework
 					lastSource = source;
 				}
 
-				if (!method.IsStatic || method.IsConstructor)
+				if (!method.IsStatic || method.IsConstructor || method.DeclaringType.IsValueType)
 				{
 					Debug.WriteLine(" >> Invoked: " + method.FullName + (method.IsStatic ? " [Static]" : " [Virtual]"));
 				}
 
-				if (method.IsStatic || method.IsConstructor)
+				if (method.IsStatic || method.IsConstructor || method.DeclaringType.IsValueType)
 				{
 					ScheduleMethod(method);
 				}
@@ -169,7 +169,7 @@ namespace Mosa.Compiler.Framework
 
 				scheduledMethods.Add(method);
 
-				if (!method.IsStatic || method.IsConstructor)
+				if (!method.IsStatic || method.IsConstructor || method.DeclaringType.IsValueType)
 					Debug.WriteLine(" ==> Scheduling: " + method.ToString() + (method.IsStatic ? " [Static]" : " [Virtual]"));
 
 				Compiler.CompilationScheduler.Schedule(method);
