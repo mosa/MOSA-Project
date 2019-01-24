@@ -268,14 +268,19 @@ namespace Mosa.Compiler.Framework.Stages
 		MosaMethod IInstructionDecoder.Method { get { return MethodCompiler.Method; } }
 
 		/// <summary>
-		/// Gets the Instruction being decoded.
+		/// Gets the type system.
 		/// </summary>
-		MosaInstruction IInstructionDecoder.Instruction { get { return instruction; } }
+		TypeSystem IInstructionDecoder.TypeSystem { get { return TypeSystem; } }
 
 		/// <summary>
 		/// Gets the type system.
 		/// </summary>
-		TypeSystem IInstructionDecoder.TypeSystem { get { return TypeSystem; } }
+		MethodScanner IInstructionDecoder.MethodScanner { get { return MethodCompiler.Compiler.MethodScanner; } }
+
+		/// <summary>
+		/// Gets the Instruction being decoded.
+		/// </summary>
+		MosaInstruction IInstructionDecoder.Instruction { get { return instruction; } }
 
 		/// <summary>
 		/// Gets the block.

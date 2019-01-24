@@ -65,6 +65,11 @@ namespace Mosa.Compiler.Framework
 		public CompilerOptions CompilerOptions { get; }
 
 		/// <summary>
+		/// Gets the method scanner.
+		/// </summary>
+		public MethodScanner MethodScanner { get; }
+
+		/// <summary>
 		/// Gets the counters.
 		/// </summary>
 		public Counters GlobalCounters { get; } = new Counters();
@@ -126,6 +131,7 @@ namespace Mosa.Compiler.Framework
 		{
 			return new List<BaseCompilerStage> {
 				new TypeInitializerSchedulerStage(),
+				new StaticFieldStage(),
 				new MethodLookupTableStage(),
 				new MethodExceptionLookupTableStage(),
 				new MetadataStage(),
@@ -206,6 +212,8 @@ namespace Mosa.Compiler.Framework
 			CompilerOptions = mosaCompiler.CompilerOptions;
 			CompilationScheduler = mosaCompiler.CompilationScheduler;
 			Linker = mosaCompiler.Linker;
+
+			MethodScanner = new MethodScanner(this);
 
 			CompilerExtensions.AddRange(mosaCompiler.CompilerExtensions);
 

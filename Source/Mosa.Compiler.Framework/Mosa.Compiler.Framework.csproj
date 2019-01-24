@@ -91,6 +91,7 @@
     <Compile Include="Analysis\SimpleTraceBlockOrder.cs" />
     <Compile Include="BaseCodeTransformationStage.cs" />
     <Compile Include="BaseCompilerExtension.cs" />
+    <Compile Include="CompilerStages\StaticFieldStage.cs" />
     <Compile Include="ConstantOperand.cs" />
     <Compile Include="CIL\IRInstructions.cs" />
     <Compile Include="Counter.cs" />
@@ -329,11 +330,12 @@
     <Compile Include="Linker\PatchType.cs" />
     <Compile Include="Linker\SectionKind.cs" />
     <Compile Include="BuiltInOptimizations.cs" />
+    <Compile Include="MethodScanner.cs" />
     <Compile Include="MultibootSpecification.cs" />
     <Compile Include="OpcodeEncoder.cs" />
     <Compile Include="Pipeline.cs" />
-    <Compile Include="CompilerTypeData.cs" />
-    <Compile Include="CompilerMethodData.cs" />
+    <Compile Include="TypeData.cs" />
+    <Compile Include="MethodData.cs" />
     <Compile Include="CompilerData.cs" />
     <Compile Include="DelegatePatcher.cs" />
     <Compile Include="GlobalSuppressions.cs" />

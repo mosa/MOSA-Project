@@ -19,13 +19,18 @@ namespace Mosa.Utility.GUI.Common
 		private Dictionary<object, TreeNode> map = new Dictionary<object, TreeNode>();
 		private HashSet<object> contains = new HashSet<object>();
 
-		public TypeSystemTree(TreeView treeView, TypeSystem typeSystem, MosaTypeLayout typeLayout, bool showSizes = true)
+		private HashSet<MosaUnit> Include;
+
+		public bool HasFilter { get { return Include != null && Include.Count != 0; } }
+
+		public TypeSystemTree(TreeView treeView, TypeSystem typeSystem, MosaTypeLayout typeLayout, bool showSizes = true, HashSet<MosaUnit> include = null)
 		{
 			TreeView = treeView;
 
 			TypeSystem = typeSystem;
 			TypeLayout = typeLayout;
 			ShowSizes = showSizes;
+			Include = include;
 
 			TreeView.BeginUpdate();
 
@@ -44,9 +49,15 @@ namespace Mosa.Utility.GUI.Common
 
 			foreach (var type in TypeSystem.AllTypes)
 			{
-				foreach (var method in type.Methods)
+				if (Include == null || Include.Contains(type))
 				{
-					GetOrCreateNode(method);
+					foreach (var method in type.Methods)
+					{
+						if (Include == null || Include.Contains(method))
+						{
+							GetOrCreateNode(method);
+						}
+					}
 				}
 			}
 
@@ -57,7 +68,10 @@ namespace Mosa.Utility.GUI.Common
 		{
 			//TreeView.BeginUpdate();
 
-			GetOrCreateNode(method);
+			if (Include == null || Include.Contains(method))
+			{
+				GetOrCreateNode(method);
+			}
 
 			//TreeView.EndUpdate();
 		}
@@ -66,7 +80,10 @@ namespace Mosa.Utility.GUI.Common
 		{
 			foreach (var module in TypeSystem.Modules)
 			{
-				GetOrCreateNode(module);
+				if (Include == null || Include.Contains(module))
+				{
+					GetOrCreateNode(module);
+				}
 			}
 		}
 
@@ -76,7 +93,10 @@ namespace Mosa.Utility.GUI.Common
 
 			foreach (var type in typeList)
 			{
-				GetOrCreateNode(type);
+				if (Include == null || Include.Contains(type))
+				{
+					GetOrCreateNode(type);
+				}
 			}
 		}
 
@@ -213,88 +233,91 @@ namespace Mosa.Utility.GUI.Common
 
 				foreach (var property in type.Properties)
 				{
-					var propertyNode = new TreeNode(property.ShortName) { Tag = property };
-					propertiesNode.Nodes.Add(propertyNode);
-
-					if (property.GetterMethod != null)
+					if (Include == null || Include.Contains(property))
 					{
-						var getterNode = new TreeNode(property.GetterMethod.ShortName) { Tag = property.GetterMethod };
+						var propertyNode = new TreeNode(property.ShortName) { Tag = property };
+						propertiesNode.Nodes.Add(propertyNode);
 
-						propertyNode.Nodes.Add(getterNode);
-
-						if (property.GetterMethod.IsStatic)
-							getterNode.Text += " [Static]";
-
-						if (property.GetterMethod.IsAbstract)
-							getterNode.Text += " [Abstract]";
-
-						if (property.GetterMethod.IsNewSlot)
+						if (property.GetterMethod != null)
 						{
-							getterNode.Text += " [NewSlot]";
-						}
+							var getterNode = new TreeNode(property.GetterMethod.ShortName) { Tag = property.GetterMethod };
 
-						if (property.GetterMethod.IsVirtual)
-							getterNode.Text += " [Virtual]";
+							propertyNode.Nodes.Add(getterNode);
 
-						if (property.GetterMethod.IsFinal)
-						{
-							getterNode.Text += " [Final]";
-						}
+							if (property.GetterMethod.IsStatic)
+								getterNode.Text += " [Static]";
 
-						if (property.GetterMethod.IsSpecialName)
-							getterNode.Text += " [SpecialName]";
+							if (property.GetterMethod.IsAbstract)
+								getterNode.Text += " [Abstract]";
 
-						if (property.GetterMethod.IsRTSpecialName)
-							getterNode.Text += " [RTSpecialName]";
-
-						if (property.GetterMethod.GenericArguments.Count != 0)
-						{
-							var genericParameterNodes = new TreeNode("Generic Arguments Types");
-							getterNode.Nodes.Add(genericParameterNodes);
-
-							foreach (var genericParameter in property.GetterMethod.GenericArguments)
+							if (property.GetterMethod.IsNewSlot)
 							{
-								var GenericParameterNode = new TreeNode(genericParameter.Name);
-								genericParameterNodes.Nodes.Add(GenericParameterNode);
+								getterNode.Text += " [NewSlot]";
+							}
+
+							if (property.GetterMethod.IsVirtual)
+								getterNode.Text += " [Virtual]";
+
+							if (property.GetterMethod.IsFinal)
+							{
+								getterNode.Text += " [Final]";
+							}
+
+							if (property.GetterMethod.IsSpecialName)
+								getterNode.Text += " [SpecialName]";
+
+							if (property.GetterMethod.IsRTSpecialName)
+								getterNode.Text += " [RTSpecialName]";
+
+							if (property.GetterMethod.GenericArguments.Count != 0)
+							{
+								var genericParameterNodes = new TreeNode("Generic Arguments Types");
+								getterNode.Nodes.Add(genericParameterNodes);
+
+								foreach (var genericParameter in property.GetterMethod.GenericArguments)
+								{
+									var GenericParameterNode = new TreeNode(genericParameter.Name);
+									genericParameterNodes.Nodes.Add(GenericParameterNode);
+								}
 							}
 						}
-					}
 
-					if (property.SetterMethod != null)
-					{
-						var setterNode = new TreeNode(property.SetterMethod.ShortName) { Tag = property.SetterMethod };
-						propertyNode.Nodes.Add(setterNode);
-
-						if (property.SetterMethod.IsStatic)
-							setterNode.Text += " [Static]";
-
-						if (property.SetterMethod.IsAbstract)
-							setterNode.Text += " [Abstract]";
-
-						if (property.SetterMethod.IsNewSlot)
-							setterNode.Text += " [NewSlot]";
-
-						if (property.SetterMethod.IsVirtual)
-							setterNode.Text += " [Virtual]";
-
-						if (property.SetterMethod.IsFinal)
-							setterNode.Text += " [Final]";
-
-						if (property.SetterMethod.IsSpecialName)
-							setterNode.Text += " [SpecialName]";
-
-						if (property.SetterMethod.IsRTSpecialName)
-							setterNode.Text += " [RTSpecialName]";
-
-						if (property.SetterMethod.GenericArguments.Count != 0)
+						if (property.SetterMethod != null)
 						{
-							var genericParameterNodes = new TreeNode("Generic Arguments Types");
-							setterNode.Nodes.Add(genericParameterNodes);
+							var setterNode = new TreeNode(property.SetterMethod.ShortName) { Tag = property.SetterMethod };
+							propertyNode.Nodes.Add(setterNode);
 
-							foreach (var genericParameter in property.SetterMethod.GenericArguments)
+							if (property.SetterMethod.IsStatic)
+								setterNode.Text += " [Static]";
+
+							if (property.SetterMethod.IsAbstract)
+								setterNode.Text += " [Abstract]";
+
+							if (property.SetterMethod.IsNewSlot)
+								setterNode.Text += " [NewSlot]";
+
+							if (property.SetterMethod.IsVirtual)
+								setterNode.Text += " [Virtual]";
+
+							if (property.SetterMethod.IsFinal)
+								setterNode.Text += " [Final]";
+
+							if (property.SetterMethod.IsSpecialName)
+								setterNode.Text += " [SpecialName]";
+
+							if (property.SetterMethod.IsRTSpecialName)
+								setterNode.Text += " [RTSpecialName]";
+
+							if (property.SetterMethod.GenericArguments.Count != 0)
 							{
-								var GenericParameterNode = new TreeNode(genericParameter.Name);
-								genericParameterNodes.Nodes.Add(GenericParameterNode);
+								var genericParameterNodes = new TreeNode("Generic Arguments Types");
+								setterNode.Nodes.Add(genericParameterNodes);
+
+								foreach (var genericParameter in property.SetterMethod.GenericArguments)
+								{
+									var GenericParameterNode = new TreeNode(genericParameter.Name);
+									genericParameterNodes.Nodes.Add(GenericParameterNode);
+								}
 							}
 						}
 					}
@@ -310,7 +333,10 @@ namespace Mosa.Utility.GUI.Common
 				// Methods
 				foreach (var method in type.Methods)
 				{
-					var methonode = GetOrCreateNode(method);
+					if (Include == null || Include.Contains(method))
+					{
+						var methonode = GetOrCreateNode(method);
+					}
 				}
 			}
 
@@ -324,8 +350,11 @@ namespace Mosa.Utility.GUI.Common
 
 				foreach (var method in methodList)
 				{
-					var methodNode = new TreeNode(method.ShortName) { Tag = method };
-					methodTableNode.Nodes.Add(methodNode);
+					if (Include == null || Include.Contains(method))
+					{
+						var methodNode = new TreeNode(method.ShortName) { Tag = method };
+						methodTableNode.Nodes.Add(methodNode);
+					}
 				}
 			}
 

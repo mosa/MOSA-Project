@@ -23,7 +23,11 @@ namespace Mosa.Platform.Intel.CompilerStages
 				var startUpInitializeMethod = startUpType.FindMethodByName("Initialize");
 
 				Linker.EntryPoint = Linker.GetSymbol(startUpInitializeMethod.FullName);
+
+				Compiler.MethodScanner.MethodInvoked(startUpInitializeMethod, startUpMethod);
 			}
+
+			//Compiler.MethodScanner.MethodInvoked(startUpMethod, startUpMethod);  // probably not necessary
 		}
 	}
 }

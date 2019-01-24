@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework
 		private readonly UniqueQueueThreadSafe<MosaMethod> queue = new UniqueQueueThreadSafe<MosaMethod>();
 		private readonly HashSet<MosaMethod> methods = new HashSet<MosaMethod>();
 
-		private readonly UniqueQueueThreadSafe<CompilerMethodData> inlineQueue = new UniqueQueueThreadSafe<CompilerMethodData>();
+		private readonly UniqueQueueThreadSafe<MethodData> inlineQueue = new UniqueQueueThreadSafe<MethodData>();
 
 		#endregion Data Members
 
@@ -103,29 +103,14 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public void TrackTypeAllocated(MosaType type)
-		{
-		}
-
-		public void TrackMethodInvoked(MosaMethod method)
-		{
-		}
-
-		public void TrackFieldReferenced(MosaField field)
-		{
-			// TODO
-		}
-
 		public MosaMethod GetMethodToCompile()
 		{
 			return queue.Dequeue();
 		}
 
-		public void AddToInlineQueue(CompilerMethodData methodData)
+		public void AddToInlineQueue(MethodData methodData)
 		{
 			Debug.Assert(!methodData.Method.HasOpenGenericParams);
-
-			//Debug.Assert(!methodData.Method.IsLinkerGenerated);
 
 			inlineQueue.Enqueue(methodData);
 		}

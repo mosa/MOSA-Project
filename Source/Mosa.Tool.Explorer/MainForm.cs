@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using CommandLine;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
@@ -103,6 +104,9 @@ namespace Mosa.Tool.Explorer
 			cbEnableSSA.Checked = !options.NoSSA;
 			cbEnableIROptimizations.Checked = !options.NoIROptimizations;
 			cbEnableSparseConditionalConstantPropagation.Checked = !options.NoSparse;
+			cbEnableMethodScanner.Checked = options.EnableMethodScanner;
+
+			tbFilter.Text = options.Filter;
 
 			if (options.X86)
 				cbPlatform.SelectedIndex = 0;
@@ -148,7 +152,110 @@ namespace Mosa.Tool.Explorer
 				return;
 			}
 
-			typeSystemTree = new TypeSystemTree(treeView, Compiler.TypeSystem, Compiler.TypeLayout, showSizes.Checked);
+			var include = GetIncluded(tbFilter.Text, out MosaUnit selected);
+
+			typeSystemTree = new TypeSystemTree(treeView, Compiler.TypeSystem, Compiler.TypeLayout, showSizes.Checked, include);
+
+			Select(selected);
+		}
+
+		protected void Select(MosaUnit selected)
+		{
+			if (selected == null)
+				return;
+
+			foreach (TreeNode node in treeView.Nodes)
+			{
+				if (Select(node, selected))
+					return;
+			}
+		}
+
+		protected bool Select(TreeNode node, MosaUnit selected)
+		{
+			if (node == null)
+				return false;
+
+			if (node.Tag != null)
+			{
+				if (node.Tag == selected)
+				{
+					treeView.SelectedNode = node;
+					node.EnsureVisible();
+					return true;
+				}
+			}
+
+			foreach (TreeNode children in node.Nodes)
+			{
+				if (Select(children, selected))
+					return true;
+			}
+
+			return false;
+		}
+
+		protected HashSet<MosaUnit> GetIncluded(string value, out MosaUnit selected)
+		{
+			selected = null;
+
+			value = value.Trim();
+
+			if (string.IsNullOrWhiteSpace(value))
+				return null;
+
+			if (value.Length < 1)
+				return null;
+
+			var include = new HashSet<MosaUnit>();
+
+			MosaUnit typeSelected = null;
+			MosaUnit methodSelected = null;
+
+			foreach (var type in Compiler.TypeSystem.AllTypes)
+			{
+				bool typeIncluded = false;
+
+				var typeMatch = type.FullName.Contains(value);
+
+				if (typeMatch)
+				{
+					include.Add(type);
+					include.AddIfNew(type.Module);
+
+					if (typeSelected == null)
+						typeSelected = type;
+				}
+
+				foreach (var method in type.Methods)
+				{
+					bool methodMatch = method.FullName.Contains(value);
+
+					if (typeMatch || methodMatch)
+					{
+						include.Add(method);
+						include.AddIfNew(type);
+						include.AddIfNew(type.Module);
+
+						if (methodMatch && methodSelected == null)
+							methodSelected = method;
+					}
+				}
+
+				foreach (var property in type.Properties)
+				{
+					if (typeIncluded || property.FullName.Contains(value))
+					{
+						include.Add(property);
+						include.AddIfNew(type);
+						include.AddIfNew(type.Module);
+					}
+				}
+			}
+
+			selected = methodSelected ?? typeSelected;
+
+			return include;
 		}
 
 		protected void UpdateTree()
@@ -226,6 +333,7 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.InlinedIRMaximum = 12;
 			Compiler.CompilerOptions.TwoPassOptimizations = cbEnableTwoPassOptimizations.Checked;
 			Compiler.CompilerOptions.TraceLevel = 100;
+			Compiler.CompilerOptions.EnableMethodScanner = cbEnableMethodScanner.Checked;
 		}
 
 		private void CleanGUI()
@@ -301,6 +409,7 @@ namespace Mosa.Tool.Explorer
 				case "x86": return Platform.x86.Architecture.CreateArchitecture(Platform.x86.ArchitectureFeatureFlags.AutoDetect);
 				case "x64": return Platform.x64.Architecture.CreateArchitecture(Platform.x64.ArchitectureFeatureFlags.AutoDetect);
 				case "armv6": return Platform.ARMv6.Architecture.CreateArchitecture(Platform.ARMv6.ArchitectureFeatureFlags.AutoDetect);
+				case "esp32": return Platform.ESP32.Architecture.CreateArchitecture(Platform.ESP32.ArchitectureFeatureFlags.AutoDetect);
 				default: return Platform.x86.Architecture.CreateArchitecture(Platform.x86.ArchitectureFeatureFlags.AutoDetect);
 			}
 		}
@@ -496,6 +605,11 @@ namespace Mosa.Tool.Explorer
 
 		private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
 		{
+			NodeSelected();
+		}
+
+		private void NodeSelected()
+		{
 			tbResult.Text = string.Empty;
 
 			var method = GetCurrentMethod();
@@ -505,7 +619,7 @@ namespace Mosa.Tool.Explorer
 
 			PreCompile();
 
-			if (!Compiler.CompilationScheduler.IsScheduled(method))
+			if (Compiler.Linker != null && !Compiler.CompilationScheduler.IsScheduled(method))
 			{
 				Compiler.Schedule(method);
 				Compiler.Compile();
@@ -728,6 +842,16 @@ namespace Mosa.Tool.Explorer
 		private void showOperandTypes_CheckStateChanged(object sender, EventArgs e)
 		{
 			UpdateResults();
+		}
+
+		private void tbFilter_TextChanged(object sender, EventArgs e)
+		{
+			CreateTree();
+		}
+
+		private void treeView_NodeMouseDoubleClick(object sender, TreeNodeMouseClickEventArgs e)
+		{
+			NodeSelected();
 		}
 	}
 }

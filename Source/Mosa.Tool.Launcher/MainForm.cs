@@ -104,7 +104,7 @@ namespace Mosa.Tool.Launcher
 			Options.BaseAddress = tbBaseAddress.Text.ParseHexOrInteger();
 			Options.EmitAllSymbols = cbEmitSymbolTable.Checked;
 			Options.EmitStaticRelocations = cbRelocationTable.Checked;
-			Options.Emitx86IRQMethods = cbEmitx86IRQMethods.Checked;
+			Options.EnableMethodScanner = cbEnableMethodScanner.Checked;
 
 			if (Options.VBEVideo)
 			{
@@ -221,11 +221,11 @@ namespace Mosa.Tool.Launcher
 			tbBaseAddress.Text = "0x" + Options.BaseAddress.ToString("x8");
 			cbRelocationTable.Checked = Options.EmitStaticRelocations;
 			cbEmitSymbolTable.Checked = Options.EmitAllSymbols;
-			cbEmitx86IRQMethods.Checked = Options.Emitx86IRQMethods;
 			tbMode.Text = Options.Width + "x" + Options.Height + "x" + Options.Depth;
 			cbIRLongExpansion.Checked = Options.EnableIRLongExpansion;
 			cbTwoPassOptimizations.Checked = Options.TwoPassOptimizations;
 			cbValueNumbering.Checked = Options.EnableValueNumbering;
+			cbEnableMethodScanner.Checked = Options.EnableMethodScanner;
 
 			switch (Options.ImageFormat)
 			{

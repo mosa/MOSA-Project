@@ -151,7 +151,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the compiler method data.
 		/// </summary>
-		public CompilerMethodData MethodData { get; }
+		public MethodData MethodData { get; }
 
 		/// <summary>
 		/// The stack frame
@@ -237,7 +237,7 @@ namespace Mosa.Compiler.Framework
 			IsCILDecodeRequired = true;
 			IsStackFrameRequired = true;
 
-			MethodData = compiler.CompilerData.GetCompilerMethodData(Method);
+			MethodData = compiler.CompilerData.GetMethodData(Method);
 			MethodData.Counters.Reset();
 
 			EvaluateParameterOperands();

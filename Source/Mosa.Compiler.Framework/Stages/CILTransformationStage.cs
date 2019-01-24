@@ -415,7 +415,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private int CalculateInterfaceSlot(MosaType interaceType)
 		{
-			return TypeLayout.GetInterfaceSlotOffset(interaceType);
+			return TypeLayout.GetInterfaceSlot(interaceType);
 		}
 
 		/// <summary>
@@ -969,7 +969,11 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Ldftn(InstructionNode node)
 		{
-			node.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, Operand.CreateSymbolFromMethod(node.InvokeMethod, TypeSystem));
+			var invokedMethod = node.InvokeMethod;
+
+			node.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, Operand.CreateSymbolFromMethod(invokedMethod, TypeSystem));
+
+			MethodCompiler.Compiler.MethodScanner.MethodInvoked(invokedMethod, this.Method);
 		}
 
 		/// <summary>
@@ -1192,6 +1196,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var runtimeTypeHandle = GetRuntimeTypeHandle(arrayType);
 			var size = CreateConstant(elementSize);
 			node.SetInstruction(IRInstruction.NewArray, result, runtimeTypeHandle, size, elements);
+			node.MosaType = arrayType;
 		}
 
 		/// <summary>
@@ -1242,6 +1247,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var runtimeTypeHandle = GetRuntimeTypeHandle(classType);
 				var size = CreateConstant(TypeLayout.GetTypeSize(classType));
 				before.SetInstruction(IRInstruction.NewObject, result, runtimeTypeHandle, size);
+				before.MosaType = classType;
 
 				operands.Insert(0, result);
 			}
@@ -2123,7 +2129,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var method = node.InvokeMethod;
 
-			if (!method.IsInternal || method.Name != ".ctor")
+			if (!method.IsInternal || !method.IsConstructor)
 				return false;
 
 			var newmethod = method.DeclaringType.FindMethodByNameAndParameters("Ctor", method.Signature.Parameters);

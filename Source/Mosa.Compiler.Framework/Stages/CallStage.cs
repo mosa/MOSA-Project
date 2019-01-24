@@ -77,7 +77,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private int CalculateMethodTableOffset(MosaMethod invokeTarget)
 		{
-			int slot = TypeLayout.GetMethodTableOffset(invokeTarget);
+			int slot = TypeLayout.GetMethodSlot(invokeTarget);
 
 			return NativePointerSize * slot;
 		}
@@ -98,6 +98,10 @@ namespace Mosa.Compiler.Framework.Stages
 			context.Empty();
 
 			MakeCall(context, call, result, operands);
+
+			Debug.Assert(method == call.Method);
+
+			MethodCompiler.Compiler.MethodScanner.MethodInvoked(call.Method, this.Method);
 		}
 
 		private void CallDynamic(InstructionNode node)
@@ -113,6 +117,11 @@ namespace Mosa.Compiler.Framework.Stages
 			context.Empty();
 
 			MakeCall(context, call, result, operands);
+
+			if (call.Method != null)
+			{
+				MethodCompiler.Compiler.MethodScanner.MethodInvoked(call.Method, this.Method);
+			}
 		}
 
 		private void CallVirtual(InstructionNode node)
@@ -144,11 +153,13 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(loadInstruction, callTarget, typeDefinition, CreateConstant(methodPointerOffset));
 
 			MakeCall(context, callTarget, result, operands);
+
+			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method, this.Method);
 		}
 
 		private int CalculateInterfaceSlot(MosaType interaceType)
 		{
-			return TypeLayout.GetInterfaceSlotOffset(interaceType);
+			return TypeLayout.GetInterfaceSlot(interaceType);
 		}
 
 		private int CalculateInterfaceSlotOffset(MosaMethod invokeTarget)
@@ -208,6 +219,8 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(loadInstruction, callTarget, methodDefinition, CreateConstant(methodPointerOffset));
 
 			MakeCall(context, callTarget, result, operands);
+
+			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method, this.Method);
 		}
 
 		private void MakeCall(Context context, Operand target, Operand result, List<Operand> operands)
@@ -222,6 +235,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// the mov/call two-instructions combo is to help facilitate the register allocator
 			context.AppendInstruction(IRInstruction.CallDirect, null, target);
+
+			if (target.Method != null)
+			{
+				MethodCompiler.Compiler.MethodScanner.MethodInvoked(target.Method, this.Method);
+			}
 
 			GetReturnValue(context, result);
 			FreeStackAfterCall(context, totalStack);

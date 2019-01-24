@@ -83,7 +83,6 @@ namespace Mosa.Utility.UnitTests
 				BaseAddress = 0x00500000,
 				EmitStaticRelocations = false,
 				EmitAllSymbols = false,
-				Emitx86IRQMethods = true,
 				SerialConnectionOption = SerialConnectionOption.TCPServer,
 				SerialConnectionPort = 9999,
 				SerialConnectionHost = "127.0.0.1",

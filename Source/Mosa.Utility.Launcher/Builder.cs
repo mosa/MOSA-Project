@@ -107,7 +107,7 @@ namespace Mosa.Utility.Launcher
 				compiler.CompilerOptions.BaseAddress = Options.BaseAddress;
 				compiler.CompilerOptions.EmitAllSymbols = Options.EmitAllSymbols;
 				compiler.CompilerOptions.EmitStaticRelocations = Options.EmitStaticRelocations;
-				compiler.CompilerOptions.SetCustomOption("x86.irq-methods", Options.Emitx86IRQMethods ? "true" : "false");
+				compiler.CompilerOptions.EnableMethodScanner = Options.EnableMethodScanner;
 
 				compiler.CompilerOptions.CreateExtraSections = Options.CreateExtraSections;
 				compiler.CompilerOptions.CreateExtraProgramHeaders = Options.CreateExtraProgramHeaders;

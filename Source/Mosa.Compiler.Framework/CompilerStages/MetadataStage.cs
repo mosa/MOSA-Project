@@ -29,6 +29,9 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		protected override void RunPostCompile()
 		{
+			//if (CompilerOptions.EnableMethodScanner) // FIXME: Temp - REMOVE ME!!!
+			//	return;  // FIXME: Temp - REMOVE ME!!!
+
 			CreateDefinitionTables();
 		}
 
@@ -186,7 +189,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			// 9. Constructor that accepts no parameters, if any, for this type
 			foreach (var method in type.Methods)
 			{
-				if (!method.Name.Equals(".ctor") || method.Signature.Parameters.Count != 0 || method.HasOpenGenericParams)
+				if (!method.IsConstructor || method.Signature.Parameters.Count != 0 || method.HasOpenGenericParams)
 					continue;
 
 				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, (int)writer1.Position, Metadata.MethodDefinition + method.FullName, 0);
@@ -449,26 +452,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 					writer2.Write(TypeLayout.GetFieldOffset(field), TypeLayout.NativePointerSize);
 				}
 
-				// Create another symbol with field data if any
-				if (field.IsStatic)
-				{
-					// Assign a memory slot to the static & initialize it, if there's initial data set
-					// Determine the size of the type & alignment requirements
-					//Architecture.GetTypeRequirements(TypeLayout, field.FieldType, out int size, out int alignment);
-
-					int size = TypeLayout.GetFieldSize(field);
-
-					// The linker section to move this field into
-					var section = field.Data != null ? SectionKind.ROData : SectionKind.BSS;
-
-					var symbol = Compiler.Linker.DefineSymbol(field.FullName, section, Architecture.NativeAlignment, size);
-
-					if (field.Data != null)
-					{
-						symbol.Stream.Write(field.Data, 0, size);
-					}
-				}
-
 				// Add pointer to field list
 				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, fieldsTableSymbol, (int)writer1.Position, fieldDefSymbol, 0);
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
@@ -583,7 +566,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			writer1.Write((uint)method.MethodAttributes, TypeLayout.NativePointerSize);
 
 			// 4. Local Stack Size (16 Bits) && Parameter Stack Size (16 Bits)
-			var methodData = Compiler.CompilerData.GetCompilerMethodData(method);
+			var methodData = Compiler.CompilerData.GetMethodData(method);
 			int value = methodData.LocalMethodStackSize | (methodData.ParameterStackSize << 16);
 			writer1.Write(value, TypeLayout.NativePointerSize);
 

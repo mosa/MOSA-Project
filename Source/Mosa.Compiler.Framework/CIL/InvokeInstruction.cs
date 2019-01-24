@@ -114,8 +114,6 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			var method = (MosaMethod)decoder.Instruction.Operand;
 
-			decoder.MethodCompiler.Scheduler.TrackMethodInvoked(method);
-
 			node.InvokeMethod = method;
 
 			// Fix the parameter list
