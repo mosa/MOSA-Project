@@ -88,7 +88,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			{
 				foreach (var method in type.Methods)
 				{
-					if (method.IsSpecialName && method.IsRTSpecialName && method.IsStatic && method.IsTypeConstructor)
+					if (method.IsSpecialName && method.IsRTSpecialName && method.IsStatic && method.IsTypeConstructor && !method.HasOpenGenericParams)
 					{
 						Schedule(method);
 
