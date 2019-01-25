@@ -186,9 +186,15 @@ namespace Mosa.Compiler.Framework
 				ScheduleMethod(entryPoint);
 			}
 
-			var stringType = Compiler.TypeSystem.GetTypeByName("System", "String");
+			var objectType = Compiler.TypeSystem.GetTypeByName("System", "Object");
+			allocatedTypes.Add(objectType);
 
+			var stringType = Compiler.TypeSystem.GetTypeByName("System", "String");
 			allocatedTypes.Add(stringType);
+
+			var exceptionType = Compiler.TypeSystem.GetTypeByName("System", "Exception");
+			allocatedTypes.Add(exceptionType);
+
 
 			//foreach (var type in Compiler.TypeSystem.AllTypes)
 			//{

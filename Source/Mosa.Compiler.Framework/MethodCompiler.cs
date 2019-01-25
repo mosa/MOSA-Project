@@ -24,11 +24,6 @@ namespace Mosa.Compiler.Framework
 		#region Data Members
 
 		/// <summary>
-		/// Holds the type initializer scheduler stage
-		/// </summary>
-		private TypeInitializerSchedulerStage typeInitializer;
-
-		/// <summary>
 		/// The empty operand list
 		/// </summary>
 		private static readonly Operand[] emptyOperandList = new Operand[0];
@@ -369,8 +364,6 @@ namespace Mosa.Compiler.Framework
 
 			ExecutePipeline();
 
-			InitializeType();
-
 			var log = new TraceLog(TraceType.Counters, Method, string.Empty, Trace.TraceFilter.Active);
 			log.Log(MethodData.Counters.Export());
 			Trace.TraceListener.OnNewTraceLog(log);
@@ -401,6 +394,8 @@ namespace Mosa.Compiler.Framework
 
 			if (plugMethod == null)
 				return;
+
+			Compiler.MethodScanner.MethodInvoked(plugMethod, this.Method);
 
 			IsMethodPlugged = true;
 
@@ -578,22 +573,6 @@ namespace Mosa.Compiler.Framework
 			else
 			{
 				return Architecture.NativeAlignment;
-			}
-		}
-
-		/// <summary>
-		/// Initializes the type.
-		/// </summary>
-		private void InitializeType()
-		{
-			if (Method.IsSpecialName && Method.IsRTSpecialName && Method.IsStatic && Method.Name == ".cctor")
-			{
-				typeInitializer = Compiler.CompilerPipeline.FindFirst<TypeInitializerSchedulerStage>();
-
-				if (typeInitializer == null)
-					return;
-
-				typeInitializer.Schedule(Method);
 			}
 		}
 
