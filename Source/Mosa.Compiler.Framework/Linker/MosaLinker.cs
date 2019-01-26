@@ -14,8 +14,8 @@ namespace Mosa.Compiler.Framework.Linker
 	/// </summary>
 	public sealed class MosaLinker
 	{
-
 		public delegate List<Section> CreateExtraSectionsDelegate();
+
 		public delegate List<ProgramHeader> CreateExtraProgramHeaderDelegate();
 
 		public List<LinkerSymbol> Symbols { get; } = new List<LinkerSymbol>();
@@ -85,17 +85,17 @@ namespace Mosa.Compiler.Framework.Linker
 			LinkerSections[(int)linkerSection.SectionKind] = linkerSection;
 		}
 
-		public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, LinkerSymbol referenceSymbol, int referenceOffset)
+		public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, long patchOffset, LinkerSymbol referenceSymbol, int referenceOffset)
 		{
 			lock (_lock)
 			{
-				var linkRequest = new LinkRequest(linkType, patchType, patchSymbol, patchOffset, referenceSymbol, referenceOffset);
+				var linkRequest = new LinkRequest(linkType, patchType, patchSymbol, (int)patchOffset, referenceSymbol, referenceOffset);
 
 				patchSymbol.AddPatch(linkRequest);
 			}
 		}
 
-		public void Link(LinkType linkType, PatchType patchType, string patchSymbolName, int patchOffset, string referenceSymbolName, int referenceOffset)
+		public void Link(LinkType linkType, PatchType patchType, string patchSymbolName, long patchOffset, string referenceSymbolName, int referenceOffset)
 		{
 			var referenceSymbol = GetSymbol(referenceSymbolName);
 			var patchObject = GetSymbol(patchSymbolName);
@@ -103,7 +103,7 @@ namespace Mosa.Compiler.Framework.Linker
 			Link(linkType, patchType, patchObject, patchOffset, referenceSymbol, referenceOffset);
 		}
 
-		public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, int patchOffset, string referenceSymbolName, int referenceOffset)
+		public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, long patchOffset, string referenceSymbolName, int referenceOffset)
 		{
 			var referenceObject = GetSymbol(referenceSymbolName);
 

@@ -195,7 +195,6 @@ namespace Mosa.Compiler.Framework
 			var exceptionType = Compiler.TypeSystem.GetTypeByName("System", "Exception");
 			allocatedTypes.Add(exceptionType);
 
-
 			//foreach (var type in Compiler.TypeSystem.AllTypes)
 			//{
 			//	foreach (var method in type.Methods)
@@ -227,6 +226,22 @@ namespace Mosa.Compiler.Framework
 				return true; // always
 
 			return accessedFields.Contains(field);
+		}
+
+		public bool IsTypeAllocated(MosaType type)
+		{
+			if (!IsEnabled)
+				return true; // always
+
+			return allocatedTypes.Contains(type);
+		}
+
+		public bool IsMethodInvoked(MosaMethod method)
+		{
+			if (!IsEnabled)
+				return true; // always
+
+			return invokedMethods.Contains(method);
 		}
 	}
 }

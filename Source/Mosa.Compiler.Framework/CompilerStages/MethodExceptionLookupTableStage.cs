@@ -20,10 +20,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		protected override void Setup()
 		{
-			if (TypeLayout.NativePointerSize == 4)
-				NativePatchType = PatchType.I4;
-			else
-				NativePatchType = PatchType.I8;
+			NativePatchType = (TypeLayout.NativePointerSize == 4) ? PatchType.I4 : NativePatchType = PatchType.I8;
 		}
 
 		protected override void RunPostCompile()
@@ -39,32 +36,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 			// 1. Number of methods
 			int count = 0;
-
-			foreach (var module in TypeSystem.Modules)
-			{
-				foreach (var type in module.Types.Values)
-				{
-					if (type.IsModule)
-						continue;
-
-					var methodList = TypeLayout.GetMethodTable(type);
-
-					if (methodList == null)
-						continue;
-
-					foreach (var method in methodList)
-					{
-						if ((!method.HasImplementation && method.IsAbstract) || method.HasOpenGenericParams || method.DeclaringType.HasOpenGenericParams)
-							continue;
-
-						if (method.ExceptionHandlers.Count == 0)
-							continue;
-
-						count++;
-					}
-				}
-			}
-			writer.Write(count);
+			writer.Write((int)0);
 
 			foreach (var module in TypeSystem.Modules)
 			{
@@ -87,19 +59,24 @@ namespace Mosa.Compiler.Framework.CompilerStages
 							continue;
 
 						// 1. Pointer to Method
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, (int)writer.Position, method.FullName, 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, writer.Position, method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						// 2. Size of Method
-						Linker.Link(LinkType.Size, NativePatchType, methodLookupTable, (int)writer.Position, method.FullName, 0);
+						Linker.Link(LinkType.Size, NativePatchType, methodLookupTable, writer.Position, method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						// 3. Pointer to Method Definition
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, (int)writer.Position, Metadata.MethodDefinition + method.FullName, 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, writer.Position, Metadata.MethodDefinition + method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
+
+						count++;
 					}
 				}
 			}
+
+			writer.Position = 0;
+			writer.Write(count);
 
 			// emit null entry (FUTURE)
 			//writer.WriteZeroBytes(TypeLayout.NativePointerSize * 3);
