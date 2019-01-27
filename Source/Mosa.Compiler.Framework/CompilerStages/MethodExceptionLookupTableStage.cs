@@ -45,6 +45,9 @@ namespace Mosa.Compiler.Framework.CompilerStages
 					if (type.IsModule)
 						continue;
 
+					if (!Compiler.MethodScanner.IsTypeAllocated(type))
+						continue;
+
 					var methodList = TypeLayout.GetMethodTable(type);
 
 					if (methodList == null)
@@ -56,6 +59,9 @@ namespace Mosa.Compiler.Framework.CompilerStages
 							continue;
 
 						if (method.ExceptionHandlers.Count == 0)
+							continue;
+
+						if (!Compiler.MethodScanner.IsMethodInvoked(method))
 							continue;
 
 						// 1. Pointer to Method

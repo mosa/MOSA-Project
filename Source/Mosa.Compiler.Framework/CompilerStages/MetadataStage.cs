@@ -60,7 +60,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			writer1.Write((uint)TypeSystem.Modules.Count, TypeLayout.NativePointerSize);
 
 			// 2. Pointers to Assemblies
-			// Create the definitions along the way
 			foreach (var module in TypeSystem.Modules)
 			{
 				var assemblyTableSymbol = CreateAssemblyDefinition(module);
@@ -99,31 +98,25 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 			// 4. Number of Types
 			uint count = 0;
-			foreach (var type in module.Types.Values)
-			{
-				if (type.IsModule)
-					continue;
-
-				count++;
-			}
-			writer1.Write(count, TypeLayout.NativePointerSize);
+			writer1.Write((uint)0);
 
 			// 5. Pointers to Types
-			// Create the definitions along the way
 			foreach (var type in module.Types.Values)
 			{
 				if (type.IsModule)
 					continue;
-
-				// Run the type through the TypeLayout system
-				//TypeLayout.ResolveType(type);
 
 				var typeTableSymbol = CreateTypeDefinition(type, assemblyTableSymbol);
 
 				// Link
 				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, assemblyTableSymbol, writer1.Position, typeTableSymbol, 0);
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
+
+				count++;
 			}
+
+			writer1.Position = 0;
+			writer1.Write(count, TypeLayout.NativePointerSize);
 
 			// Return assemblyTableSymbol
 			return assemblyTableSymbol;
@@ -189,7 +182,11 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				if (!method.IsConstructor || method.Signature.Parameters.Count != 0 || method.HasOpenGenericParams)
 					continue;
 
+				//if (!Compiler.MethodScanner.IsMethodInvoked(method))
+				//	break;
+
 				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, writer1.Position, Metadata.MethodDefinition + method.FullName, 0);
+
 				break;
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
@@ -245,7 +242,10 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				{
 					if ((!(!method.HasImplementation && method.IsAbstract)) && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams)
 					{
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, writer1.Position, method.FullName, 0);
+						if (Compiler.MethodScanner.IsMethodInvoked(method))
+						{
+							Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, writer1.Position, method.FullName, 0);
+						}
 					}
 					writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 				}
@@ -387,6 +387,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 				// Link
 				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, interfaceMethodTableSymbol, writer1.Position, methodDefinitionSymbol, 0);
+
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 			}
 
@@ -570,7 +571,10 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			// 5. Pointer to Method
 			if (method.HasImplementation && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams)
 			{
-				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, writer1.Position, method.FullName, 0);
+				if (Compiler.MethodScanner.IsMethodInvoked(method))
+				{
+					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, writer1.Position, method.FullName, 0);
+				}
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
@@ -581,7 +585,10 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			// 7. Pointer to Exception Handler Table
 			if (method.ExceptionHandlers.Count != 0)
 			{
-				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, writer1.Position, Metadata.ProtectedRegionTable + method.FullName, 0);
+				if (Compiler.MethodScanner.IsMethodInvoked(method))
+				{
+					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, writer1.Position, Metadata.ProtectedRegionTable + method.FullName, 0);
+				}
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
@@ -657,7 +664,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			writer1.Write(unit.CustomAttributes.Count, TypeLayout.NativePointerSize);
 
 			// 2. Pointers to Custom Attributes
-			// Create the definitions along the way
 			for (int i = 0; i < unit.CustomAttributes.Count; i++)
 			{
 				// Get custom attribute
@@ -688,6 +694,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 			// 2. Pointer to Constructor Method Definition
 			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, customAttributeSymbol, writer1.Position, Metadata.MethodDefinition + ca.Constructor.FullName, 0);
+
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 3. Number of Arguments (Both unnamed and named)

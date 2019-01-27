@@ -88,7 +88,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			{
 				foreach (var method in type.Methods)
 				{
-					if (method.IsSpecialName && method.IsRTSpecialName && method.IsStatic && method.IsTypeConstructor && !method.HasOpenGenericParams)
+					if (method.IsTypeConstructor && !method.HasOpenGenericParams)
 					{
 						Schedule(method);
 
@@ -105,7 +105,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		#endregion Overrides
 
-		#region Methods
+		#region Private Methods
 
 		/// <summary>
 		/// Schedules the specified method for invocation in the main.
@@ -118,6 +118,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			start.AppendInstruction(IRInstruction.CallStatic, null, symbol);
 		}
 
-		#endregion Methods
+		#endregion Private Methods
 	}
 }

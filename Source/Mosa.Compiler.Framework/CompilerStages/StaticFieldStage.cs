@@ -24,8 +24,8 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				{
 					if (field.IsStatic)
 					{
-						// TODO: Don't emit if method scanner is enabled and field never references
-						// if (!CompilerOptions.EnableMethodScanner)
+						//if (!Compiler.MethodScanner.IsTypeAllocated(type))
+						//	continue;
 
 						var section = field.Data != null ? SectionKind.ROData : SectionKind.BSS;
 						int size = TypeLayout.GetFieldSize(field);

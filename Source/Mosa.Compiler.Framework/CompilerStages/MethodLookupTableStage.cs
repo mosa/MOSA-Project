@@ -74,7 +74,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			}
 
 			writer.Position = 0;
-
 			writer.Write(count);
 		}
 	}
