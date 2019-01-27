@@ -98,7 +98,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 			// 4. Number of Types
 			uint count = 0;
-			writer1.Write((uint)0);
+			writer1.WriteZeroBytes(4);
 
 			// 5. Pointers to Types
 			foreach (var type in module.Types.Values)
@@ -115,10 +115,9 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				count++;
 			}
 
-			writer1.Position = 0;
+			writer1.Position = 3 * TypeLayout.NativePointerSize;
 			writer1.Write(count, TypeLayout.NativePointerSize);
 
-			// Return assemblyTableSymbol
 			return assemblyTableSymbol;
 		}
 
@@ -270,7 +269,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize * 4);
 			}
 
-			// Return typeTableSymbol for linker usage
 			return typeTableSymbol;
 		}
 
@@ -302,7 +300,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			var symbol = Linker.DefineSymbol(Metadata.InterfaceBitmap + type.FullName, SectionKind.ROData, TypeLayout.NativePointerAlignment, bitmap.Length);
 			symbol.Stream.Write(bitmap);
 
-			// Return symbol for linker usage
 			return symbol;
 		}
 
@@ -342,7 +339,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 			}
 
-			// Return interfaceSlotTableSymbol for linker usage
 			return interfaceSlotTableSymbol;
 		}
 
@@ -391,7 +387,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 			}
 
-			// Return interfaceMethodTableSymbol for linker usage
 			return interfaceMethodTableSymbol;
 		}
 
@@ -455,7 +450,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 			}
 
-			// Return fieldsTableSymbol for linker usage
 			return fieldsTableSymbol;
 		}
 
@@ -531,7 +525,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 			}
 
-			// Return fieldListTableSymbol for linker usage
 			return propertiesTableSymbol;
 		}
 
@@ -610,7 +603,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 			}
 
-			// Return methodTableSymbol for linker usage
 			return methodTableSymbol;
 		}
 
@@ -646,7 +638,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, parameterTableSymbol, writer1.Position, Metadata.TypeDefinition + parameter.ParameterType.FullName, 0);
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// Return parameterTableSymbol for linker usage
 			return parameterTableSymbol;
 		}
 
@@ -677,7 +668,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 			}
 
-			// Return customAttributesTableSymbol for linker usage
 			return customAttributesTableSymbol;
 		}
 
@@ -721,7 +711,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 			}
 
-			// Return customAttributeSymbol for linker usage
 			return customAttributeSymbol;
 		}
 
@@ -753,7 +742,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			// 5. Argument Value
 			WriteArgument(writer1, symbol, arg.Type, arg.Value);
 
-			// Return symbol for linker usage
 			return symbol;
 		}
 
