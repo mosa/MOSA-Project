@@ -457,6 +457,8 @@ namespace Mosa.Compiler.Framework
 				NewCompilerTraceEvent(CompilerEvent.PostCompileStageEnd, stage.Name);
 			}
 
+			MethodScanner.Complete();
+
 			// Sum up the counters
 			foreach (var methodData in CompilerData.MethodData)
 			{

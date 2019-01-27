@@ -37,6 +37,9 @@ namespace Mosa.Tool.Explorer
 
 		private TypeSystemTree typeSystemTree;
 
+		private int TotalMethods = 0;
+		private int CompletedMethods = 0;
+
 		public MainForm()
 		{
 			InitializeComponent();
@@ -722,10 +725,10 @@ namespace Mosa.Tool.Explorer
 			Compile();
 		}
 
-		private void SubmitMethodStatus(int totalMethods, int completedMethods)
+		private void SubmitMethodStatus()
 		{
-			toolStripProgressBar1.Maximum = totalMethods;
-			toolStripProgressBar1.Value = completedMethods;
+			toolStripProgressBar1.Maximum = TotalMethods;
+			toolStripProgressBar1.Value = CompletedMethods;
 		}
 
 		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
@@ -741,14 +744,24 @@ namespace Mosa.Tool.Explorer
 
 		void ITraceListener.OnUpdatedCompilerProgress(int totalMethods, int completedMethods)
 		{
-			MethodInvoker call = () => SubmitMethodStatus(totalMethods, completedMethods);
+			bool update =
+				totalMethods == completedMethods
+				|| Math.Abs(totalMethods - TotalMethods) > 20
+				|| Math.Abs(completedMethods - CompletedMethods) > 20;
 
-			Invoke(call);
+			TotalMethods = totalMethods;
+			CompletedMethods = completedMethods;
+
+			if (update)
+			{
+				MethodInvoker call = () => SubmitMethodStatus();
+				Invoke(call);
+			}
 		}
 
 		void ITraceListener.OnNewTraceLog(TraceLog traceLog)
 		{
-			if (traceLog.Type == TraceType.DebugTrace)
+			if (traceLog.Type == TraceType.MethodDebug)
 			{
 				if (traceLog.Lines.Count == 0)
 					return;

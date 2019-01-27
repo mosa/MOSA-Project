@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,6 +21,8 @@ namespace Mosa.Compiler.Framework
 
 		private MosaMethod lastSource;
 
+		private TraceLog trace;
+
 		private object _lock = new object();
 
 		public MethodScanner(Compiler compiler)
@@ -27,7 +30,44 @@ namespace Mosa.Compiler.Framework
 			Compiler = compiler;
 			IsEnabled = compiler.CompilerOptions.EnableMethodScanner;
 
+			trace = new TraceLog(TraceType.Debug, null, null, "MethodScanner", false);
+
 			Initialize();
+		}
+
+		public void Complete()
+		{
+			if (!IsEnabled)
+				return;
+
+			int totalTypes = 0;
+			int totalMethods = 0;
+
+			foreach (var type in Compiler.TypeSystem.AllTypes)
+			{
+				if (type.IsModule)
+					continue;
+
+				totalTypes++;
+
+				foreach (var method in type.Methods)
+				{
+					if ((!(!method.HasImplementation && method.IsAbstract)) && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams)
+					{
+						totalMethods++;
+					}
+				}
+			}
+
+			Compiler.GlobalCounters.Update("MethodScanner.TotalTypes", totalTypes);
+			Compiler.GlobalCounters.Update("MethodScanner.TotalMethods", totalMethods);
+
+			Compiler.GlobalCounters.Update("MethodScanner.AllocatedTypes", allocatedTypes.Count);
+			Compiler.GlobalCounters.Update("MethodScanner.InvokedMethods", invokedMethods.Count);
+			Compiler.GlobalCounters.Update("MethodScanner.ScheduledMethods", scheduledMethods.Count);
+			Compiler.GlobalCounters.Update("MethodScanner.AccessedFields", accessedFields.Count);
+
+			Compiler.CompilerTrace.NewTraceLog(trace);
 		}
 
 		public void TypeAllocated(MosaType type, MosaMethod source)
@@ -42,13 +82,15 @@ namespace Mosa.Compiler.Framework
 
 				allocatedTypes.Add(type);
 
-				if (lastSource == null || lastSource != source)
+				if (trace.Active)
 				{
-					Debug.WriteLine("> Method: " + source.FullName);
-					lastSource = source;
+					if (lastSource == null || lastSource != source)
+					{
+						trace.Log("> Method: " + source.FullName);
+						lastSource = source;
+					}
+					trace.Log(" >>> Allocated: " + type.FullName);
 				}
-
-				Debug.WriteLine(" >>> Allocated: " + type.FullName);
 
 				Compiler.CompilerData.GetTypeData(type).IsTypeAllocated = true;
 
@@ -85,15 +127,18 @@ namespace Mosa.Compiler.Framework
 
 				invokedMethods.Add(method);
 
-				if (lastSource == null || lastSource != source)
+				if (trace.Active)
 				{
-					Debug.WriteLine("> Method: " + source.FullName);
-					lastSource = source;
-				}
+					if (lastSource == null || lastSource != source)
+					{
+						trace.Log("> Method: " + source.FullName);
+						lastSource = source;
+					}
 
-				if (!method.IsStatic || method.IsConstructor || method.DeclaringType.IsValueType)
-				{
-					Debug.WriteLine(" >> Invoked: " + method.FullName + (method.IsStatic ? " [Static]" : " [Virtual]"));
+					if (!method.IsStatic || method.IsConstructor || method.DeclaringType.IsValueType)
+					{
+						trace.Log(" >> Invoked: " + method.FullName + (method.IsStatic ? " [Static]" : " [Virtual]"));
+					}
 				}
 
 				if (method.IsStatic || method.IsConstructor || method.DeclaringType.IsValueType)
@@ -169,8 +214,11 @@ namespace Mosa.Compiler.Framework
 
 				scheduledMethods.Add(method);
 
-				if (!method.IsStatic || method.IsConstructor || method.DeclaringType.IsValueType)
-					Debug.WriteLine(" ==> Scheduling: " + method.ToString() + (method.IsStatic ? " [Static]" : " [Virtual]"));
+				if (trace.Active)
+				{
+					if (!method.IsStatic || method.IsConstructor || method.DeclaringType.IsValueType)
+						trace.Log(" ==> Scheduling: " + method.ToString() + (method.IsStatic ? " [Static]" : " [Virtual]"));
+				}
 
 				Compiler.CompilationScheduler.Schedule(method);
 			}
@@ -192,16 +240,11 @@ namespace Mosa.Compiler.Framework
 			var stringType = Compiler.TypeSystem.GetTypeByName("System", "String");
 			allocatedTypes.Add(stringType);
 
+			var typeType = Compiler.TypeSystem.GetTypeByName("System", "Type");
+			allocatedTypes.Add(typeType);
+
 			var exceptionType = Compiler.TypeSystem.GetTypeByName("System", "Exception");
 			allocatedTypes.Add(exceptionType);
-
-			//foreach (var type in Compiler.TypeSystem.AllTypes)
-			//{
-			//	foreach (var method in type.Methods)
-			//	{
-			//		// TODO
-			//	}
-			//}
 		}
 
 		public void AccessedField(MosaField field)
@@ -242,6 +285,28 @@ namespace Mosa.Compiler.Framework
 				return true; // always
 
 			return invokedMethods.Contains(method);
+		}
+
+		public void DumpResults()
+		{
+			foreach (var type in Compiler.TypeSystem.AllTypes)
+			{
+				if (type.IsModule)
+					continue;
+
+				if (!IsTypeAllocated(type))
+				{
+					Debug.WriteLine("Type Excluded: " + type.FullName);
+				}
+
+				foreach (var method in type.Methods)
+				{
+					if (!IsMethodInvoked(method))
+					{
+						Debug.WriteLine("Method Excluded: " + method.FullName);
+					}
+				}
+			}
 		}
 	}
 }
