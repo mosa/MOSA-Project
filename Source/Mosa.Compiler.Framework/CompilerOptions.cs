@@ -173,6 +173,9 @@ namespace Mosa.Compiler.Framework
 		{
 			foreach (var file in files)
 			{
+				if (file == null)
+					continue;
+
 				AddSearchPath(Path.GetDirectoryName(file.FullName));
 			}
 		}
@@ -209,6 +212,9 @@ namespace Mosa.Compiler.Framework
 		{
 			foreach (var file in files)
 			{
+				if (file == null)
+					continue;
+
 				AddSourceFile(file.FullName);
 			}
 		}
