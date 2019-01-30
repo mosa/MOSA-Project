@@ -6,9 +6,9 @@
       <Compile Remove="Properties\AssemblyInfo.cs" />
     </ItemGroup>
     <ItemGroup>
-      <PackageReference Include="dnlib-new" Version="2.1.0" />
+      <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
     </ItemGroup>
     <ItemGroup>
-      <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
+      <PackageReference Include="dnlib" Version="3.1.0" />
     </ItemGroup>
 </Project>
