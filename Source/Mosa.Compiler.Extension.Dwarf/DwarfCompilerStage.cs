@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 		public static byte DW_CHILDREN_yes = 0x01;
 		public static byte DW_CHILDREN_no = 0x00;
 		public static byte DW_AT_name;
-		public static byte DW_AT_producer;
+		public static byte DW_AT_producer=0x25;
 		public static byte DW_AT_compdir;
 		public static byte DW_AT_language;
 		public static byte DW_AT_low_pc;
@@ -77,19 +77,30 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			// note: Compilation Unit Header != Debugging Information Entry
 
 			// Compilation Unit Header
+			var compilationUnitSizePosition = wr.Position;
 			wr.Write((uint)7); // length
 			wr.Write((ushort)0x02); // version
 			wr.Write((uint)0); // abbr tag offset
 			wr.WriteByte(4); //addr size of platform
+
+			// Debugging Information Entry
+			wr.WriteULEB128(0x01); //number of tag.
+			wr.WriteNullTerminatedString("test");
+
+			uint compilationUnitSize = (uint)(wr.Position - compilationUnitSizePosition - sizeof(uint));
+			wr.Position = compilationUnitSizePosition;
+			wr.Write(compilationUnitSize);
+			wr.Position = wr.BaseStream.Length;
 		}
 
 		private void EmitDebugAbbrev(EndianAwareBinaryWriter wr)
 		{
-			wr.WriteByte(0x01); // number of tag
+			wr.WriteULEB128(0x01); // number of tag. 
 			wr.WriteByte(DW_TAG_compile_unit);
-			wr.WriteByte(DW_CHILDREN_no);
+			wr.WriteByte(DW_CHILDREN_yes);
 			wr.WriteByte(DW_AT_producer);
 			wr.WriteByte(DW_FORM_string);
+			wr.WriteByte(0x00);
 			wr.WriteByte(0x00);
 		}
 
@@ -142,7 +153,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 					wr.WriteByte(0); // End of files
 
 					// Write header size
-					var headerSize = wr.Position - headerSizePosition - sizeof(ushort);
+					ushort headerSize = (ushort)(wr.Position - headerSizePosition - sizeof(ushort));
 					wr.Position = headerSizePosition;
 					wr.Write(headerSize);
 					wr.Position = wr.BaseStream.Length;
@@ -181,7 +192,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 						line += (uint)lineDiff;
 					};
 
-					var compilationUnitSize = wr.Position - compilationUnitSizePosition - sizeof(ushort);
+					uint compilationUnitSize = (uint)(wr.Position - compilationUnitSizePosition - sizeof(uint));
 					wr.Position = compilationUnitSizePosition;
 					wr.Write(compilationUnitSize);
 					wr.Position = wr.BaseStream.Length;
