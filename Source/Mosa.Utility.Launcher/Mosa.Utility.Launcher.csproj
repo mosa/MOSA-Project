@@ -66,10 +66,6 @@
     <Reference Include="CommandLine, Version=2.4.3.0, Culture=neutral, PublicKeyToken=de6f01bd326f8c32, processorArchitecture=MSIL">
       <HintPath>..\packages\CommandLineParser.2.4.3\lib\netstandard2.0\CommandLine.dll</HintPath>
     </Reference>
-    <Reference Include="dnlib, Version=1.0.1.0, Culture=neutral, PublicKeyToken=50e96378b6e77999, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\3rdParty\dnlib.dll</HintPath>
-    </Reference>
     <Reference Include="SharpDisasm, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpDisasm.1.1.11\lib\net45\SharpDisasm.dll</HintPath>
     </Reference>
@@ -127,6 +123,10 @@
     <ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj">
       <Project>{65f7691a-b355-4d98-bb97-0b19f13e2190}</Project>
       <Name>Mosa.Utility.BootImage</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Plugin.Dwarf\Mosa.Compiler.Plugin.Dwarf.csproj">
+      <Project>{F8264668-E0CE-46C1-9AA8-B710D564264D}</Project>
+      <Name>Mosa.Compiler.Extension.Dwarf</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

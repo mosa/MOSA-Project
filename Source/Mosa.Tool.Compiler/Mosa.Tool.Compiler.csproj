@@ -107,6 +107,10 @@
       <Project>{F445DB8E-E25A-41EF-A158-C742F14E94E4}</Project>
       <Name>Mosa.Platform.x64</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Extension.Dwarf\Mosa.Compiler.Extension.Dwarf.csproj">
+      <Project>{F8264668-E0CE-46C1-9AA8-B710D564264D}</Project>
+      <Name>Mosa.Compiler.Extension.Dwarf</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

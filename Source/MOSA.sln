@@ -223,9 +223,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Kernel.ESP32", "Mosa.K
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DeviceSystem", "DeviceSystem", "{88676490-5035-4424-812B-22FC1A70555E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{AFAB2795-9E00-4798-ACE9-54170BFD9192}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Extensions", "Extensions", "{AFAB2795-9E00-4798-ACE9-54170BFD9192}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Plugin.Dwarf", "Mosa.Compiler.Plugin.Dwarf\Mosa.Compiler.Plugin.Dwarf.csproj", "{F8264668-E0CE-46C1-9AA8-B710D564264D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Extension.Dwarf", "Mosa.Compiler.Extension.Dwarf\Mosa.Compiler.Extension.Dwarf.csproj", "{F8264668-E0CE-46C1-9AA8-B710D564264D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

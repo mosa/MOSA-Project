@@ -74,13 +74,19 @@ namespace Mosa.Utility.Launcher
 			return file;
 		}
 
+		private List<BaseCompilerExtension> GetCompilerExtensions() {
+			var list = new List<BaseCompilerExtension>();
+			list.Add(new Mosa.Compiler.Extensions.Dwarf.DwarfCompilerExtension());
+			return list;
+		}
+
 		public void Compile()
 		{
 			HasCompileError = true;
 			Log.Clear();
 			Counters.Clear();
 
-			var compiler = new MosaCompiler();
+			var compiler = new MosaCompiler(GetCompilerExtensions();
 
 			try
 			{
@@ -97,7 +103,6 @@ namespace Mosa.Utility.Launcher
 				compiler.CompilerOptions.TwoPassOptimizations = Options.TwoPassOptimizations;
 				compiler.CompilerOptions.EnableValueNumbering = Options.EnableValueNumbering;
 				compiler.CompilerOptions.OutputFile = CompiledFile;
-				compiler.CompilerOptions.Architecture = SelectArchitecture(Options.PlatformType);
 				compiler.CompilerOptions.LinkerFormatType = Options.LinkerFormatType;
 				compiler.CompilerOptions.MultibootSpecification = Options.MultibootSpecification;
 				compiler.CompilerOptions.SetCustomOption("multiboot.video", Options.VBEVideo ? "true" : "false");

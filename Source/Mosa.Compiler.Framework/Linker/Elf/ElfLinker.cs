@@ -295,10 +295,15 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 			CreateRelocationSections();
 
+			CreatePluginSecttions();
+
 			if (linker.CreateExtraSections != null)
 				CreateExtraSections();
 
 			CreateSectionHeaderStringSection();
+		}
+
+		private void CreatePluginSecttions() { 
 		}
 
 		private void CreateExtraSections()

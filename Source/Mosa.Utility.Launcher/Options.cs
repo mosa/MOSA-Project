@@ -272,6 +272,8 @@ namespace Mosa.Utility.Launcher
 
 		public List<IncludeFile> IncludeFiles { get; set; }
 
+		public List<string> CompilerExtensions { get; set; }
+
 		public List<string> Paths { get; set; }
 
 		[Option("file", HelpText = "Path to a file which contains files to be included in the generated image file.")]
