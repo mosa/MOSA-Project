@@ -60,7 +60,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			node.SetInstruction(IRInstruction.CallStatic, node.Result, symbol, operands);
 
-			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method, this.Method);
+			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method, Method);
 		}
 	}
 }

@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework
 			if (!Compiler.CompilerOptions.EnableStatistics)
 				return;
 
-			MoreLogInfo();
+			// MoreLogInfo();
 
 			Debug.WriteLine(trace.ToString()); // REMOVE
 
@@ -93,9 +93,9 @@ namespace Mosa.Compiler.Framework
 
 				if (trace.Active)
 				{
-					if (lastSource == null || lastSource != source)
+					if ((lastSource == null && source != null) || (lastSource != source))
 					{
-						trace.Log("> Method: " + source.FullName);
+						trace.Log("> Method: " + (source == null ? "[NULL]" : source.FullName));
 						lastSource = source;
 					}
 					trace.Log(" >>> Allocated: " + type.FullName);
@@ -113,6 +113,16 @@ namespace Mosa.Compiler.Framework
 
 		public void MethodInvoked(MosaMethod method, MosaMethod source)
 		{
+			MethodInvoked(method, source, false);
+		}
+
+		public void MethodDirectInvoked(MosaMethod method, MosaMethod source)
+		{
+			MethodInvoked(method, source, true);
+		}
+
+		private void MethodInvoked(MosaMethod method, MosaMethod source, bool direct)
+		{
 			if (!IsEnabled)
 				return;
 
@@ -125,9 +135,9 @@ namespace Mosa.Compiler.Framework
 
 				if (trace.Active)
 				{
-					if (lastSource == null || lastSource != source)
+					if ((lastSource == null && source != null) || (lastSource != source))
 					{
-						trace.Log("> Method: " + source.FullName);
+						trace.Log("> Method: " + (source == null ? "[NONE]" : source.FullName));
 						lastSource = source;
 					}
 
@@ -137,7 +147,7 @@ namespace Mosa.Compiler.Framework
 					}
 				}
 
-				if (method.IsStatic || method.IsConstructor || method.DeclaringType.IsValueType)
+				if (method.IsStatic || method.IsConstructor || method.DeclaringType.IsValueType || direct)
 				{
 					ScheduleMethod(method);
 				}
@@ -259,14 +269,18 @@ namespace Mosa.Compiler.Framework
 
 					if (methodAttribute != null)
 					{
-						invokedMethods.Add(method);
+						//invokedMethods.Add(method);
+						//MethodInvoked(method, null);
 						ScheduleMethod(method);
 						allocateType = true;
 					}
 				}
 
 				if (allocateType)
-					allocatedTypes.Add(type);
+				{
+					//allocatedTypes.Add(type);
+					TypeAllocated(type, null);
+				}
 			}
 		}
 

@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 					if (!Compiler.MethodScanner.IsFieldAccessed(field))
 					{
-						Debug.WriteLine("EXCLUDED FIELD:" + field.FullName);
+						//Debug.WriteLine("EXCLUDED FIELD: " + field.FullName);
 						continue;
 					}
 
