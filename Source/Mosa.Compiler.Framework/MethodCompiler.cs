@@ -7,6 +7,7 @@ using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -233,6 +234,7 @@ namespace Mosa.Compiler.Framework
 			IsStackFrameRequired = true;
 
 			MethodData = compiler.CompilerData.GetMethodData(Method);
+
 			MethodData.Counters.Reset();
 
 			EvaluateParameterOperands();
@@ -348,6 +350,8 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public void Compile()
 		{
+			MethodData.CompileTimeStartTick = DateTime.Now.Ticks;
+
 			if (Method.IsCompilerGenerated)
 			{
 				IsCILDecodeRequired = false;
@@ -367,6 +371,8 @@ namespace Mosa.Compiler.Framework
 			var log = new TraceLog(TraceType.Counters, Method, string.Empty, Trace.TraceFilter.Active);
 			log.Log(MethodData.Counters.Export());
 			Trace.TraceListener.OnNewTraceLog(log);
+
+			MethodData.CompileTimeEndTick = DateTime.Now.Ticks;
 		}
 
 		private void ExecutePipeline()
@@ -455,12 +461,6 @@ namespace Mosa.Compiler.Framework
 			IsCILDecodeRequired = false;
 			IsExecutePipeline = false;
 			IsStackFrameRequired = false;
-
-			//var methodName = Method.DeclaringType.FullName + ":" + Method.Name;
-			//var intrinsic = Compiler.GetInstrincMethod(methodName);
-
-			//Method.ExternMethodModule;
-			//Method.ExternMethodName;
 		}
 
 		/// <summary>

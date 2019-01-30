@@ -22,20 +22,26 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			{
 				foreach (var field in type.Fields)
 				{
-					if (field.IsStatic)
+					if (!field.IsStatic)
+						continue;
+
+					if (!Compiler.MethodScanner.IsFieldAccessed(field))
 					{
-						//if (!Compiler.MethodScanner.IsTypeAllocated(type))
-						//	continue;
+						Debug.WriteLine("EXCLUDED FIELD:" + field.FullName);
+						continue;
+					}
 
-						var section = field.Data != null ? SectionKind.ROData : SectionKind.BSS;
-						int size = TypeLayout.GetFieldSize(field);
+					//if (!Compiler.MethodScanner.IsTypeAllocated(type))
+					//continue;
 
-						var symbol = Compiler.Linker.DefineSymbol(field.FullName, section, Architecture.NativeAlignment, size);
+					var section = field.Data != null ? SectionKind.ROData : SectionKind.BSS;
+					int size = TypeLayout.GetFieldSize(field);
 
-						if (field.Data != null)
-						{
-							symbol.Stream.Write(field.Data, 0, size);
-						}
+					var symbol = Compiler.Linker.DefineSymbol(field.FullName, section, Architecture.NativeAlignment, size);
+
+					if (field.Data != null)
+					{
+						symbol.Stream.Write(field.Data, 0, size);
 					}
 				}
 			}

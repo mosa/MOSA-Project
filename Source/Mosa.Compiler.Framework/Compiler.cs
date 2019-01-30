@@ -272,7 +272,7 @@ namespace Mosa.Compiler.Framework
 			methodCompiler.Compile();
 
 			NewCompilerTraceEvent(CompilerEvent.CompiledMethod, method.FullName, threadID);
-			CompilerTrace.TraceListener.OnMethodcompiled(method);
+			CompilerTrace.TraceListener.OnMethodCompiled(method);
 		}
 
 		private MethodCompiler GetMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, int threadID = 0)

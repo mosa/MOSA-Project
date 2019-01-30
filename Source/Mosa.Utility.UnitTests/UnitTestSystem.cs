@@ -360,6 +360,11 @@ namespace Mosa.Utility.UnitTests
 		{
 			var symbol = linker.GetSymbol(method.FullName);
 
+			if (symbol.VirtualAddress == 0)
+			{
+				Console.WriteLine(method.FullName);
+			}
+
 			return new IntPtr((long)symbol.VirtualAddress);
 		}
 

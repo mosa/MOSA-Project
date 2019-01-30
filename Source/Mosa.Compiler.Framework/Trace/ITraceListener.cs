@@ -12,6 +12,6 @@ namespace Mosa.Compiler.Framework.Trace
 
 		void OnNewTraceLog(TraceLog traceLog);
 
-		void OnMethodcompiled(MosaMethod method);
+		void OnMethodCompiled(MosaMethod method);
 	}
 }

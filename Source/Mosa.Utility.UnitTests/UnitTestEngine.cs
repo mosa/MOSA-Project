@@ -63,6 +63,7 @@ namespace Mosa.Utility.UnitTests
 				EnableInlinedMethods = true,
 				EnableIRLongExpansion = true,
 				EnableValueNumbering = true,
+				EnableMethodScanner = true,
 				TwoPassOptimizations = true,
 
 				Emulator = EmulatorType.Qemu,

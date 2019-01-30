@@ -46,8 +46,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 			foreach (var attribute in customAttributes)
 			{
 				if (attribute.Constructor.DeclaringType.FullName == fullName)
+				{
 					return attribute;
+				}
 			}
+
 			return null;
 		}
 

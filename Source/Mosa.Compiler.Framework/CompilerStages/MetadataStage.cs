@@ -433,9 +433,12 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 				// 5 & 6. Offset / Address + Size
-				if (field.IsStatic && !field.IsLiteral)
+				if (field.IsStatic && !field.IsLiteral && !type.HasOpenGenericParams)
 				{
-					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, fieldDefSymbol, writer2.Position, field.FullName, 0);
+					if (Compiler.MethodScanner.IsFieldAccessed(field))
+					{
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, fieldDefSymbol, writer2.Position, field.FullName, 0);
+					}
 					writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
 					writer2.Write(field.Data?.Length ?? 0, TypeLayout.NativePointerSize);
 				}

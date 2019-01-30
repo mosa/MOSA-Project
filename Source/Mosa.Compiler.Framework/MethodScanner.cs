@@ -10,6 +10,8 @@ namespace Mosa.Compiler.Framework
 {
 	public class MethodScanner
 	{
+		private const string UnitTestAttributeName = "Mosa.UnitTests.MosaUnitTestAttribute";
+
 		public bool IsEnabled { get; set; }
 
 		private Compiler Compiler { get; }
@@ -30,7 +32,7 @@ namespace Mosa.Compiler.Framework
 			Compiler = compiler;
 			IsEnabled = compiler.CompilerOptions.EnableMethodScanner;
 
-			trace = new TraceLog(TraceType.Debug, null, null, "MethodScanner", false);
+			trace = new TraceLog(TraceType.Debug, null, null, "MethodScanner", true);
 
 			Initialize();
 		}
@@ -39,6 +41,13 @@ namespace Mosa.Compiler.Framework
 		{
 			if (!IsEnabled)
 				return;
+
+			if (!Compiler.CompilerOptions.EnableStatistics)
+				return;
+
+			MoreLogInfo();
+
+			Debug.WriteLine(trace.ToString()); // REMOVE
 
 			int totalTypes = 0;
 			int totalMethods = 0;
@@ -67,7 +76,7 @@ namespace Mosa.Compiler.Framework
 			Compiler.GlobalCounters.Update("MethodScanner.ScheduledMethods", scheduledMethods.Count);
 			Compiler.GlobalCounters.Update("MethodScanner.AccessedFields", accessedFields.Count);
 
-			Compiler.CompilerTrace.NewTraceLog(trace);
+			Compiler.CompilerTrace.NewTraceLog(trace, true);
 		}
 
 		public void TypeAllocated(MosaType type, MosaMethod source)
@@ -98,19 +107,6 @@ namespace Mosa.Compiler.Framework
 				lock (_lock)
 				{
 					ScheduleMethods(type);
-
-					//foreach (var property in type.Properties)
-					//{
-					//	if (property.GetterMethod != null && !property.GetterMethod.IsStatic && invokedMethods.Contains(property.GetterMethod))
-					//	{
-					//		ScheduleMethod(property.GetterMethod);
-					//	}
-
-					//	if (property.SetterMethod != null && !property.SetterMethod.IsStatic && invokedMethods.Contains(property.SetterMethod))
-					//	{
-					//		ScheduleMethod(property.SetterMethod);
-					//	}
-					//}
 				}
 			}
 		}
@@ -226,6 +222,9 @@ namespace Mosa.Compiler.Framework
 
 		public void Initialize()
 		{
+			if (!IsEnabled)
+				return;
+
 			var entryPoint = Compiler.TypeSystem.EntryPoint;
 
 			if (entryPoint != null)
@@ -245,6 +244,30 @@ namespace Mosa.Compiler.Framework
 
 			var exceptionType = Compiler.TypeSystem.GetTypeByName("System", "Exception");
 			allocatedTypes.Add(exceptionType);
+
+			// Collect all unit tests methods
+			foreach (var type in Compiler.TypeSystem.AllTypes)
+			{
+				bool allocateType = false;
+
+				foreach (var method in type.Methods)
+				{
+					if (!method.IsStatic)
+						continue;
+
+					var methodAttribute = method.FindCustomAttribute(UnitTestAttributeName);
+
+					if (methodAttribute != null)
+					{
+						invokedMethods.Add(method);
+						ScheduleMethod(method);
+						allocateType = true;
+					}
+				}
+
+				if (allocateType)
+					allocatedTypes.Add(type);
+			}
 		}
 
 		public void AccessedField(MosaField field)
@@ -263,8 +286,6 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsFieldAccessed(MosaField field)
 		{
-			Debug.Assert(IsEnabled);
-
 			if (!IsEnabled)
 				return true; // always
 
@@ -287,7 +308,7 @@ namespace Mosa.Compiler.Framework
 			return invokedMethods.Contains(method);
 		}
 
-		public void DumpResults()
+		public void MoreLogInfo()
 		{
 			foreach (var type in Compiler.TypeSystem.AllTypes)
 			{
@@ -296,14 +317,14 @@ namespace Mosa.Compiler.Framework
 
 				if (!IsTypeAllocated(type))
 				{
-					Debug.WriteLine("Type Excluded: " + type.FullName);
+					trace.Log($"Type Excluded: {type.FullName}");
 				}
 
 				foreach (var method in type.Methods)
 				{
 					if (!IsMethodInvoked(method))
 					{
-						Debug.WriteLine("Method Excluded: " + method.FullName);
+						trace.Log($"Method Excluded: {method.FullName}");
 					}
 				}
 			}

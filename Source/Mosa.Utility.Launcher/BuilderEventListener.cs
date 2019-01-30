@@ -49,7 +49,7 @@ namespace Mosa.Utility.Launcher
 		{
 		}
 
-		void ITraceListener.OnMethodcompiled(MosaMethod method)
+		void ITraceListener.OnMethodCompiled(MosaMethod method)
 		{
 		}
 	}
