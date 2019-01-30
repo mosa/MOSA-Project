@@ -74,7 +74,13 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 		private void EmitDebugInfo(EndianAwareBinaryWriter wr)
 		{
+			// note: Compilation Unit Header != Debugging Information Entry
 
+			// Compilation Unit Header
+			wr.Write((uint)7); // length
+			wr.Write((ushort)0x02); // version
+			wr.Write((uint)0); // abbr tag offset
+			wr.WriteByte(4); //addr size of platform
 		}
 
 		private void EmitDebugAbbrev(EndianAwareBinaryWriter wr)
