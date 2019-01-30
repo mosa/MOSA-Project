@@ -19,7 +19,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public MosaModuleLoader()
 		{
 			Modules = new List<ModuleDefMD>();
-			Resolver = new AssemblyResolver(null, false) { UseGAC = false };
+			Resolver = new AssemblyResolver(null) { UseGAC = false };
 			var typeResolver = new Resolver(Resolver);
 			Resolver.DefaultModuleContext = new ModuleContext(Resolver, typeResolver);
 			Resolver.EnableTypeDefCache = true;

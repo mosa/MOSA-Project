@@ -13,7 +13,6 @@
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
-    <DelaySign>false</DelaySign>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>
@@ -85,6 +84,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Kernel.x64\Mosa.Kernel.x64.csproj">
       <Name>Mosa.Kernel.x64</Name>
+      <Project>{4CFF6607-4D83-46E6-A1D0-EF045311C982}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj">
       <Project>{631bc4f3-e2d8-4319-814c-13904caa17ce}</Project>
