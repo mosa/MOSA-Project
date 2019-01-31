@@ -124,7 +124,7 @@
       <Project>{65f7691a-b355-4d98-bb97-0b19f13e2190}</Project>
       <Name>Mosa.Utility.BootImage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.Plugin.Dwarf\Mosa.Compiler.Plugin.Dwarf.csproj">
+    <ProjectReference Include="..\Mosa.Compiler.Extension.Dwarf\Mosa.Compiler.Extension.Dwarf.csproj">
       <Project>{F8264668-E0CE-46C1-9AA8-B710D564264D}</Project>
       <Name>Mosa.Compiler.Extension.Dwarf</Name>
     </ProjectReference>

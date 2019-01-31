@@ -74,7 +74,8 @@ namespace Mosa.Utility.Launcher
 			return file;
 		}
 
-		private List<BaseCompilerExtension> GetCompilerExtensions() {
+		private List<BaseCompilerExtension> GetCompilerExtensions()
+		{
 			var list = new List<BaseCompilerExtension>();
 			list.Add(new Mosa.Compiler.Extensions.Dwarf.DwarfCompilerExtension());
 			return list;
@@ -86,7 +87,7 @@ namespace Mosa.Utility.Launcher
 			Log.Clear();
 			Counters.Clear();
 
-			var compiler = new MosaCompiler(GetCompilerExtensions();
+			var compiler = new MosaCompiler(GetCompilerExtensions());
 
 			try
 			{

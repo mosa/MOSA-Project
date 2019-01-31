@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 		public static byte DW_CHILDREN_yes = 0x01;
 		public static byte DW_CHILDREN_no = 0x00;
 		public static byte DW_AT_name;
-		public static byte DW_AT_producer=0x25;
+		public static byte DW_AT_producer = 0x25;
 		public static byte DW_AT_compdir;
 		public static byte DW_AT_language;
 		public static byte DW_AT_low_pc;
@@ -97,7 +97,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 		{
 			wr.WriteULEB128(0x01); // number of tag. 
 			wr.WriteByte(DW_TAG_compile_unit);
-			wr.WriteByte(DW_CHILDREN_yes);
+			wr.WriteByte(DW_CHILDREN_no);
 			wr.WriteByte(DW_AT_producer);
 			wr.WriteByte(DW_FORM_string);
 			wr.WriteByte(0x00);
