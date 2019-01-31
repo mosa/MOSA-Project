@@ -147,22 +147,23 @@ namespace Mosa.Utility.Launcher
 				);
 			}
 
-			if (string.IsNullOrEmpty(BOCHSBIOSDirectory))
+			if (string.IsNullOrEmpty(BOCHSBIOSDirectory) && !string.IsNullOrEmpty(BOCHS))
 			{
-				BOCHSBIOSDirectory = Path.GetDirectoryName(
-					TryFind(
+				var dir = TryFind(
 						new string[] { "BIOS-bochs-latest" },
 						new string[] {
-								Path.GetDirectoryName(BOCHS),
-								"/usr/share/bochs/"
+											Path.GetDirectoryName(BOCHS),
+											"/usr/share/bochs/"
 						},
 						new string[]
 						{
-								@"..\packages",
-								@"..\..\packages",
+											@"..\packages",
+											@"..\..\packages",
 						}
-					)
-				);
+					);
+
+				if (!string.IsNullOrEmpty(dir))
+					BOCHSBIOSDirectory = Path.GetDirectoryName(dir);
 			}
 
 			if (string.IsNullOrEmpty(VMwarePlayer))
