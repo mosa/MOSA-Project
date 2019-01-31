@@ -118,6 +118,7 @@ namespace Mosa.Compiler.Framework
 
 		public void MethodDirectInvoked(MosaMethod method, MosaMethod source)
 		{
+			ScheduleMethod(method);
 			MethodInvoked(method, source, true);
 		}
 
@@ -141,10 +142,7 @@ namespace Mosa.Compiler.Framework
 						lastSource = source;
 					}
 
-					if (!method.IsStatic || method.IsConstructor || method.DeclaringType.IsValueType)
-					{
-						trace.Log(" >> Invoked: " + method.FullName + (method.IsStatic ? " [Static]" : " [Virtual]"));
-					}
+					trace.Log(" >> Invoked: " + method.FullName + (method.IsStatic ? " [Static]" : " [Virtual]"));
 				}
 
 				if (method.IsStatic || method.IsConstructor || method.DeclaringType.IsValueType || direct)
@@ -221,10 +219,7 @@ namespace Mosa.Compiler.Framework
 				scheduledMethods.Add(method);
 
 				if (trace.Active)
-				{
-					if (!method.IsStatic || method.IsConstructor || method.DeclaringType.IsValueType)
-						trace.Log(" ==> Scheduling: " + method.ToString() + (method.IsStatic ? " [Static]" : " [Virtual]"));
-				}
+					trace.Log(" ==> Scheduling: " + method.ToString() + (method.IsStatic ? " [Static]" : " [Virtual]"));
 
 				Compiler.CompilationScheduler.Schedule(method);
 			}

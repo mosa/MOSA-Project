@@ -223,10 +223,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Kernel.ESP32", "Mosa.K
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DeviceSystem", "DeviceSystem", "{88676490-5035-4424-812B-22FC1A70555E}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{AFAB2795-9E00-4798-ACE9-54170BFD9192}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.Plugin.Dwarf", "Mosa.Compiler.Plugin.Dwarf\Mosa.Compiler.Plugin.Dwarf.csproj", "{F8264668-E0CE-46C1-9AA8-B710D564264D}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1249,24 +1245,6 @@ Global
 		{5C002A6C-9FF8-40C2-88AD-539642B31E65}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{5C002A6C-9FF8-40C2-88AD-539642B31E65}.Release|x86.ActiveCfg = Release|Any CPU
 		{5C002A6C-9FF8-40C2-88AD-539642B31E65}.Release|x86.Build.0 = Release|Any CPU
-		{F8264668-E0CE-46C1-9AA8-B710D564264D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F8264668-E0CE-46C1-9AA8-B710D564264D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F8264668-E0CE-46C1-9AA8-B710D564264D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{F8264668-E0CE-46C1-9AA8-B710D564264D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{F8264668-E0CE-46C1-9AA8-B710D564264D}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{F8264668-E0CE-46C1-9AA8-B710D564264D}.Debug|x86.Build.0 = Debug|Any CPU
-		{F8264668-E0CE-46C1-9AA8-B710D564264D}.Description|Any CPU.ActiveCfg = Debug|Any CPU
-		{F8264668-E0CE-46C1-9AA8-B710D564264D}.Description|Any CPU.Build.0 = Debug|Any CPU
-		{F8264668-E0CE-46C1-9AA8-B710D564264D}.Description|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{F8264668-E0CE-46C1-9AA8-B710D564264D}.Description|Mixed Platforms.Build.0 = Debug|Any CPU
-		{F8264668-E0CE-46C1-9AA8-B710D564264D}.Description|x86.ActiveCfg = Debug|Any CPU
-		{F8264668-E0CE-46C1-9AA8-B710D564264D}.Description|x86.Build.0 = Debug|Any CPU
-		{F8264668-E0CE-46C1-9AA8-B710D564264D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F8264668-E0CE-46C1-9AA8-B710D564264D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F8264668-E0CE-46C1-9AA8-B710D564264D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{F8264668-E0CE-46C1-9AA8-B710D564264D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{F8264668-E0CE-46C1-9AA8-B710D564264D}.Release|x86.ActiveCfg = Release|Any CPU
-		{F8264668-E0CE-46C1-9AA8-B710D564264D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1333,8 +1311,6 @@ Global
 		{599D1C00-7C78-4211-A958-1285C4CB77C9} = {3C5A2C4B-FD05-42B3-B6C6-C366DF978A62}
 		{889162C2-B68B-4A89-B66F-7779BABD927F} = {57A405DF-CCB3-4C9E-A88D-478E35042A84}
 		{5C002A6C-9FF8-40C2-88AD-539642B31E65} = {FF773BDF-A20C-4A5F-BFF9-F422C2AFF3CE}
-		{AFAB2795-9E00-4798-ACE9-54170BFD9192} = {DDBC7F79-A2A1-4D92-9AE7-ADDC838F1E5E}
-		{F8264668-E0CE-46C1-9AA8-B710D564264D} = {AFAB2795-9E00-4798-ACE9-54170BFD9192}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C22A5C94-6B05-4B1B-845A-A2EA7615E093}
