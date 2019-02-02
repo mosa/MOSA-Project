@@ -135,8 +135,8 @@ namespace Mosa.Compiler.Extensions.Dwarf
 					var compilationUnitSizePosition = wr.Position;
 					wr.Write((uint)0); // Placeholder for Compilation unit Size
 
-					wr.Write(0x02); // DWARF Version
-					wr.Write(0x00); // version (2 bytes)
+					wr.WriteByte(0x02); // DWARF Version
+					wr.WriteByte(0x00); // version (2 bytes)
 
 					var headerSizePosition = wr.Position;
 					wr.Write((uint)0); // Placeholder for header size
@@ -145,17 +145,35 @@ namespace Mosa.Compiler.Extensions.Dwarf
 					wr.WriteByte(0x01); // Default is_stmt value
 					wr.WriteByte(0xFB); // Value doesn't matter, because we are not using special op codes
 					wr.WriteByte(0x0E); // Value doesn't matter, because we are not using special op codes
-					wr.WriteByte(0x0D); // first special op code
+					wr.WriteByte(9 + 1); // first special op code
 
-					wr.Write(0x00010101); // the number of arguments for the 12 standard opcodes
-					wr.Write(0x01000000);
-					wr.Write(0x01000001);
+					// wr.Write(0x00010101); // the number of arguments for the 12 standard opcodes
+					// wr.Write(0x01000000);
+					// wr.Write(0x01000001);
+
+					// the number of arguments for the 9 standard opcodes
+					wr.WriteByte(0x00);
+					wr.WriteByte(0x01);
+					wr.WriteByte(0x01);
+					wr.WriteByte(0x01);
+
+					wr.WriteByte(0x01);
+					wr.WriteByte(0x00);
+					wr.WriteByte(0x00);
+					wr.WriteByte(0x00);
+
+					wr.WriteByte(0x01);
+					//---
 
 					wr.WriteNullTerminatedString("dir1");
-					wr.WriteByte(0); // End of directories
+					wr.WriteByte(DwarfConstants.EndOfDirectories); // End of directories
 
 					wr.WriteNullTerminatedString("file1.cs");
-					wr.WriteByte(0); // End of files
+					wr.WriteULEB128(0); // Dir index 0
+					wr.WriteULEB128(DwarfConstants.NullFileTime);
+					wr.WriteULEB128(DwarfConstants.NullFileLength);
+
+					wr.WriteByte(DwarfConstants.EndOfFiles); // End of files
 
 					// Write header size
 					uint headerSize = (uint)(wr.Position - headerSizePosition - sizeof(uint));

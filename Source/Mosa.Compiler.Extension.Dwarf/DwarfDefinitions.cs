@@ -14,6 +14,11 @@ namespace Mosa.Compiler.Extensions.Dwarf
 		public static uint NullAttributeName = 0x00;
 		public static uint NullAttributeValue = 0x00;
 		public static uint NullTag = 0x00;
+
+		public static uint NullFileTime = 0x00;
+		public static uint NullFileLength = 0x00;
+		public static byte EndOfFiles = 0x00;
+		public static byte EndOfDirectories = 0x00;
 	}
 
 	public enum DwarfTag : uint
