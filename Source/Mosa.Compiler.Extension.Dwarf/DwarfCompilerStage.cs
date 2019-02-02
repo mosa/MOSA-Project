@@ -88,6 +88,8 @@ namespace Mosa.Compiler.Extensions.Dwarf
 		{
 			foreach (var abbr in AbbrevList)
 				EmitDebugAbbrev(wr, abbr);
+
+			wr.WriteULEB128(DwarfConstants.NullTag);
 		}
 
 		private void EmitDebugAbbrev(EndianAwareBinaryWriter wr, DwarfAbbrev abbr)
@@ -100,13 +102,12 @@ namespace Mosa.Compiler.Extensions.Dwarf
 				wr.WriteULEB128((uint)attr.Attribute);
 				wr.WriteULEB128((uint)attr.Form);
 			}
-			wr.WriteByte(DwarfConstants.EndOfAttributes);
+			wr.WriteULEB128(DwarfConstants.NullAttributeName);
+			wr.WriteULEB128(DwarfConstants.NullAttributeValue);
 
 			if (abbr.HasChildren)
 				foreach (var child in abbr.Children)
 					EmitDebugAbbrev(wr, child);
-
-			wr.WriteByte(DwarfConstants.EndOfTag);
 		}
 
 		private void EmitDebugLine(EndianAwareBinaryWriter wr)
@@ -200,7 +201,6 @@ namespace Mosa.Compiler.Extensions.Dwarf
 					wr.Position = compilationUnitSizePosition;
 					wr.Write(compilationUnitSize);
 					wr.Position = wr.BaseStream.Length;
-
 				}
 
 			}

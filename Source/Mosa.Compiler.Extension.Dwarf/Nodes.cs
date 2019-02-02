@@ -38,6 +38,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			ctx.Writer.WriteNullTerminatedString(Producer);
 			ctx.Writer.Write(ProgramCounterLow); // TODO: Dynamic
 			ctx.Writer.Write(ProgramCounterHigh); // TODO: Dynamic
+															  //ctx.Writer.WriteULEB128(0); // TODO: Dynamic
 
 		}
 	}

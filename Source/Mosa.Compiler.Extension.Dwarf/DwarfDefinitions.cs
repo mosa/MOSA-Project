@@ -11,8 +11,9 @@ namespace Mosa.Compiler.Extensions.Dwarf
 		public static byte DW_CHILDREN_yes = 1;
 
 		// Custom helper for better reading:
-		public static byte EndOfAttributes = 0x00;
-		public static byte EndOfTag = 0x00;
+		public static uint NullAttributeName = 0x00;
+		public static uint NullAttributeValue = 0x00;
+		public static uint NullTag = 0x00;
 	}
 
 	public enum DwarfTag : uint
