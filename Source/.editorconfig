@@ -11,11 +11,11 @@ root = true
 [*]
 insert_final_newline = true
 indent_style = tab
-indent_size = 4
+indent_size = 2
 trim_trailing_whitespace = true
 
 [*.cs]
-indent_size = 4
+indent_size = 3
 
 [*.csproj]
-indent_size = 4
+indent_size = 3
