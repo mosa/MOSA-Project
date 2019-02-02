@@ -40,8 +40,8 @@ namespace Mosa.Compiler.Extensions.Dwarf
 	{
 		public uint Number { get; set; }
 		public DwarfTag Tag { get; set; }
-		public List<DwarfAbbrevAttribute> Attributes { get; set; } = new List<DwarfAbbrevAttribute>();
-		public List<DwarfAbbrev> Children { get; set; }
+		public ICollection<DwarfAbbrevAttribute> Attributes { get; set; }
+		public ICollection<DwarfAbbrev> Children { get; set; }
 		public bool HasChildren => Children != null && Children.Count > 0;
 	}
 

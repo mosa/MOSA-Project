@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 			// Debugging Information Entry
 			wr.WriteULEB128(0x01); //number of tag.
-			wr.WriteNullTerminatedString("test3");
+			wr.WriteNullTerminatedString("test4");
 
 			uint compilationUnitSize = (uint)(wr.Position - compilationUnitSizePosition - sizeof(uint));
 			wr.Position = compilationUnitSizePosition;
@@ -73,16 +73,27 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 		private void EmitDebugAbbrev(EndianAwareBinaryWriter wr)
 		{
-			var abbr = new DwarfAbbrev
-			{
-				Number = 0x01,
-				Tag = DwarfTag.DW_TAG_compile_unit,
-				Attributes = new List<DwarfAbbrevAttribute>() {
+			var abbr = CreateAbbrev(DwarfTag.DW_TAG_compile_unit, new List<DwarfAbbrevAttribute>() {
 					new DwarfAbbrevAttribute { Attribute = DwarfAttribute.DW_AT_producer, Form = DwarfForm.DW_FORM_string },
-				}
-			};
-
+				});
 			EmitDebugAbbrev(wr, abbr);
+		}
+
+		private DwarfAbbrev CreateAbbrev(DwarfTag tag, ICollection<DwarfAbbrevAttribute> attributes, ICollection<DwarfAbbrev> children = null)
+		{
+			return new DwarfAbbrev
+			{
+				Number = GetNewTagNumber(),
+				Tag = tag,
+				Attributes = attributes,
+				Children = children
+			};
+		}
+
+		private uint LastTagNumber = 0;
+		private uint GetNewTagNumber()
+		{
+			return ++LastTagNumber;
 		}
 
 		private void EmitDebugAbbrev(EndianAwareBinaryWriter wr, DwarfAbbrev abbr)
