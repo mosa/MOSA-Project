@@ -49,6 +49,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 		public static byte DW_LNE_set_address = 2;
 		public static byte DW_LNE_define_file = 3;
 
+		private List<DwarfAbbrev> AbbrevList = new List<DwarfAbbrev>();
 
 		private void EmitDebugInfo(EndianAwareBinaryWriter wr)
 		{
@@ -58,12 +59,19 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			var compilationUnitSizePosition = wr.Position;
 			wr.Write((uint)7); // length
 			wr.Write((ushort)0x02); // version
-			wr.Write((uint)0); // abbr tag offset
+			wr.Write((uint)0); // abbr tag offset.
 			wr.WriteByte(4); //addr size of platform
 
+			var context = new DwarfWriteContext { Writer = wr, AbbrevList = AbbrevList };
+
 			// Debugging Information Entry
-			wr.WriteULEB128(0x01); //number of tag.
-			wr.WriteNullTerminatedString("test4");
+			var cu = new DwarfCompilationUnit
+			{
+				Producer = "Mosa Compiler",
+				ProgramCounterLow = 0x00500000,
+				ProgramCounterHigh = 0x00600000,
+			};
+			cu.Emit(context);
 
 			uint compilationUnitSize = (uint)(wr.Position - compilationUnitSizePosition - sizeof(uint));
 			wr.Position = compilationUnitSizePosition;
@@ -71,40 +79,26 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			wr.Position = wr.BaseStream.Length;
 		}
 
+		public void EmitDebugInfoCompilationUnitHeader(EndianAwareBinaryWriter wr)
+		{
+
+		}
+
 		private void EmitDebugAbbrev(EndianAwareBinaryWriter wr)
 		{
-			var abbr = CreateAbbrev(DwarfTag.DW_TAG_compile_unit, new List<DwarfAbbrevAttribute>() {
-					new DwarfAbbrevAttribute { Attribute = DwarfAttribute.DW_AT_producer, Form = DwarfForm.DW_FORM_string },
-				});
-			EmitDebugAbbrev(wr, abbr);
-		}
-
-		private DwarfAbbrev CreateAbbrev(DwarfTag tag, ICollection<DwarfAbbrevAttribute> attributes, ICollection<DwarfAbbrev> children = null)
-		{
-			return new DwarfAbbrev
-			{
-				Number = GetNewTagNumber(),
-				Tag = tag,
-				Attributes = attributes,
-				Children = children
-			};
-		}
-
-		private uint LastTagNumber = 0;
-		private uint GetNewTagNumber()
-		{
-			return ++LastTagNumber;
+			foreach (var abbr in AbbrevList)
+				EmitDebugAbbrev(wr, abbr);
 		}
 
 		private void EmitDebugAbbrev(EndianAwareBinaryWriter wr, DwarfAbbrev abbr)
 		{
 			wr.WriteULEB128(abbr.Number);
-			wr.WriteByte((byte)abbr.Tag);
+			wr.WriteULEB128((uint)abbr.Tag);
 			wr.WriteByte(abbr.HasChildren ? DwarfConstants.DW_CHILDREN_yes : DwarfConstants.DW_CHILDREN_no);
 			foreach (var attr in abbr.Attributes)
 			{
-				wr.WriteByte((byte)attr.Attribute);
-				wr.WriteByte((byte)attr.Form);
+				wr.WriteULEB128((uint)attr.Attribute);
+				wr.WriteULEB128((uint)attr.Form);
 			}
 			wr.WriteByte(DwarfConstants.EndOfAttributes);
 
@@ -158,7 +152,6 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 					wr.WriteNullTerminatedString("dir1");
 					wr.WriteByte(0); // End of directories
-
 
 					wr.WriteNullTerminatedString("file1.cs");
 					wr.WriteByte(0); // End of files

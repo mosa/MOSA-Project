@@ -15,25 +15,27 @@ namespace Mosa.Compiler.Extensions.Dwarf
 		public static byte EndOfTag = 0x00;
 	}
 
-	public enum DwarfTag : byte
+	public enum DwarfTag : uint
 	{
 		DW_TAG_compile_unit = 0x11
 	}
 
-	public enum DwarfAttribute : byte
+	public enum DwarfAttribute : uint
 	{
-		DW_AT_name,
+		DW_AT_name = 0x03,
 		DW_AT_producer = 0x25,
-		DW_AT_compdir,
-		DW_AT_language,
-		DW_AT_low_pc,
-		DW_AT_high_pc,
-		DW_AT_stmt_list,
+		DW_AT_compdir = 0x1B,
+		DW_AT_language = 0x13,
+		DW_AT_low_pc = 0x11,
+		DW_AT_high_pc = 0x12,
+		DW_AT_stmt_list = 0x10,
 	}
 
-	public enum DwarfForm : byte
+	public enum DwarfForm : uint
 	{
-		DW_FORM_string = 0x08
+		DW_FORM_string = 0x08,
+		DW_FORM_addr = 0x01,
+		DW_FORM_indirect = 0x16,
 	}
 
 	public class DwarfAbbrev
