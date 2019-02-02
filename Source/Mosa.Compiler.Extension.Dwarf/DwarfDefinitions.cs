@@ -37,6 +37,10 @@ namespace Mosa.Compiler.Extensions.Dwarf
 		DW_FORM_string = 0x08,
 		DW_FORM_addr = 0x01,
 		DW_FORM_indirect = 0x16,
+		DW_FORM_data2 = 0x05,
+		DW_FORM_data4 = 0x06,
+		DW_FORM_data8 = 0x07,
+		DW_FORM_data1 = 0x0b,
 	}
 
 	public class DwarfAbbrev

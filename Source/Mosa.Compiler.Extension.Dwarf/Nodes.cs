@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 					new DwarfAbbrevAttribute { Attribute = DwarfAttribute.DW_AT_producer, Form = DwarfForm.DW_FORM_string },
 					new DwarfAbbrevAttribute { Attribute = DwarfAttribute.DW_AT_low_pc, Form = DwarfForm.DW_FORM_addr },
 					new DwarfAbbrevAttribute { Attribute = DwarfAttribute.DW_AT_high_pc, Form = DwarfForm.DW_FORM_addr },
-					//new DwarfAbbrevAttribute { Attribute = DwarfAttribute.DW_AT_stmt_list, Form = DwarfForm.DW_FORM_indirect },
+					new DwarfAbbrevAttribute { Attribute = DwarfAttribute.DW_AT_stmt_list, Form = DwarfForm.DW_FORM_data4 },
 				});
 
 			ctx.Writer.WriteULEB128(0x01); //number of tag.
@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			ctx.Writer.WriteNullTerminatedString(Producer);
 			ctx.Writer.Write(ProgramCounterLow); // TODO: Dynamic
 			ctx.Writer.Write(ProgramCounterHigh); // TODO: Dynamic
-															  //ctx.Writer.WriteULEB128(0); // TODO: Dynamic
+			ctx.Writer.Write((uint)0);
 
 		}
 	}

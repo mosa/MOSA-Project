@@ -133,13 +133,13 @@ namespace Mosa.Compiler.Extensions.Dwarf
 					uint file = 1;
 
 					var compilationUnitSizePosition = wr.Position;
-					wr.Write((ushort)0); // Placeholder for Compilation unit Size
+					wr.Write((uint)0); // Placeholder for Compilation unit Size
 
 					wr.Write(0x02); // DWARF Version
-					wr.Write(0x00);
+					wr.Write(0x00); // version (2 bytes)
 
 					var headerSizePosition = wr.Position;
-					wr.Write((ushort)0); // Placeholder for header size
+					wr.Write((uint)0); // Placeholder for header size
 
 					wr.WriteByte(0x01); // Minimum Instruction length
 					wr.WriteByte(0x01); // Default is_stmt value
@@ -158,7 +158,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 					wr.WriteByte(0); // End of files
 
 					// Write header size
-					ushort headerSize = (ushort)(wr.Position - headerSizePosition - sizeof(ushort));
+					uint headerSize = (uint)(wr.Position - headerSizePosition - sizeof(uint));
 					wr.Position = headerSizePosition;
 					wr.Write(headerSize);
 					wr.Position = wr.BaseStream.Length;
@@ -170,6 +170,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 					foreach (var instruction in instructions)
 					{
+						continue;
 						if (instruction.Document == null)
 							continue;
 
