@@ -36,28 +36,6 @@ namespace Mosa.Compiler.Extensions.Dwarf
 				};
 		}
 
-		class FileLocationEntry
-		{
-
-			public void Emit(EndianAwareBinaryWriter writer)
-			{
-			}
-
-		}
-
-		public static byte DW_TAG_compile_unit = 0x11;
-		public static byte DW_CHILDREN_yes = 0x01;
-		public static byte DW_CHILDREN_no = 0x00;
-		public static byte DW_AT_name;
-		public static byte DW_AT_producer = 0x25;
-		public static byte DW_AT_compdir;
-		public static byte DW_AT_language;
-		public static byte DW_AT_low_pc;
-		public static byte DW_AT_high_pc;
-		public static byte DW_AT_stmt_list;
-
-		static byte DW_FORM_string = 0x08;
-
 		public static byte DW_LNS_extended_opcode = 0;
 		public static byte DW_LNS_set_file = 4;
 		public static byte DW_LNS_set_column = 5;
@@ -85,7 +63,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 			// Debugging Information Entry
 			wr.WriteULEB128(0x01); //number of tag.
-			wr.WriteNullTerminatedString("test");
+			wr.WriteNullTerminatedString("test3");
 
 			uint compilationUnitSize = (uint)(wr.Position - compilationUnitSizePosition - sizeof(uint));
 			wr.Position = compilationUnitSizePosition;
@@ -95,13 +73,35 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 		private void EmitDebugAbbrev(EndianAwareBinaryWriter wr)
 		{
-			wr.WriteULEB128(0x01); // number of tag. 
-			wr.WriteByte(DW_TAG_compile_unit);
-			wr.WriteByte(DW_CHILDREN_no);
-			wr.WriteByte(DW_AT_producer);
-			wr.WriteByte(DW_FORM_string);
-			wr.WriteByte(0x00);
-			wr.WriteByte(0x00);
+			var abbr = new DwarfAbbrev
+			{
+				Number = 0x01,
+				Tag = DwarfTag.DW_TAG_compile_unit,
+				Attributes = new List<DwarfAbbrevAttribute>() {
+					new DwarfAbbrevAttribute { Attribute = DwarfAttribute.DW_AT_producer, Form = DwarfForm.DW_FORM_string },
+				}
+			};
+
+			EmitDebugAbbrev(wr, abbr);
+		}
+
+		private void EmitDebugAbbrev(EndianAwareBinaryWriter wr, DwarfAbbrev abbr)
+		{
+			wr.WriteULEB128(abbr.Number);
+			wr.WriteByte((byte)abbr.Tag);
+			wr.WriteByte(abbr.HasChildren ? DwarfConstants.DW_CHILDREN_yes : DwarfConstants.DW_CHILDREN_no);
+			foreach (var attr in abbr.Attributes)
+			{
+				wr.WriteByte((byte)attr.Attribute);
+				wr.WriteByte((byte)attr.Form);
+			}
+			wr.WriteByte(DwarfConstants.EndOfAttributes);
+
+			if (abbr.HasChildren)
+				foreach (var child in abbr.Children)
+					EmitDebugAbbrev(wr, child);
+
+			wr.WriteByte(DwarfConstants.EndOfTag);
 		}
 
 		private void EmitDebugLine(EndianAwareBinaryWriter wr)
