@@ -185,9 +185,6 @@ namespace Mosa.Compiler.Extensions.Dwarf
 		void EmitDebugLineTypes(EndianAwareBinaryWriter wr)
 		{
 			uint baseAddr = 0x00500000;
-			uint pc;
-			uint line = 1;
-			uint file = 1;
 
 			foreach (var type in TypeSystem.AllTypes)
 			{
@@ -199,12 +196,15 @@ namespace Mosa.Compiler.Extensions.Dwarf
 					if (method.Code == null)
 						continue;
 
-					var instructions = method.Code.OrderBy(i => i.Document).ThenBy(i => i.Offset);
+					var instructions = method.Code.Where(inst => inst.Document != null && inst.StartLine != 0xFEEFEE).OrderBy(i => i.Document).ThenBy(i => i.Offset);
 					var firstInstruction = instructions.FirstOrDefault();
 					if (firstInstruction == null)
 						continue;
 
-					pc = baseAddr + (uint)firstInstruction.Offset;
+					uint line = 1;
+					uint file = 1;
+
+					var pc = baseAddr + (uint)firstInstruction.Offset;
 
 					wr.WriteByte(0); // signals an extended opcode
 					wr.WriteULEB128(0x05); // number of bytes after this used by the extended opcode (unsigned LEB128 encoded)
