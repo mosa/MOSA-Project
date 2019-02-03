@@ -8,6 +8,7 @@ using Mosa.Compiler.Framework.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using System.Linq;
+using System.IO;
 
 namespace Mosa.Compiler.Extensions.Dwarf
 {
@@ -143,13 +144,11 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			wr.WriteByte(0x00);
 
 			wr.WriteByte(0x01); // 9
-									  //---
 
-			var dirNum = EmitDebugLineDirectoryName(wr, "dir2");
-			wr.WriteByte(DwarfConstants.EndOfDirectories); // End of directories
+			AddFilenames();
 
-			EmitDebugLineFileName(wr, dirNum, "file2.cs");
-			wr.WriteByte(DwarfConstants.EndOfFiles); // End of files
+			EmitDirectories(wr);
+			EmitFiles(wr);
 
 			// Write header size
 			uint headerSize = (uint)(wr.Position - headerSizePosition - sizeof(uint));
@@ -165,26 +164,111 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			wr.Position = wr.BaseStream.Length;
 		}
 
-		private uint NextDirIndex = 0;
-		private uint NextFileIndex = 0;
-		uint EmitDebugLineDirectoryName(EndianAwareBinaryWriter wr, string name)
+		private Dictionary<string, uint> Directories = new Dictionary<string, uint>();
+		private Dictionary<string, FileItem> FileHash = new Dictionary<string, FileItem>();
+		private List<FileItem> FileList = new List<FileItem>();
+
+		private class FileItem
 		{
-			wr.WriteNullTerminatedString("file1.cs");
-			return NextDirIndex++;
+			public string Name;
+			public uint FileNum;
+			public uint DirectoryNum;
 		}
 
-		uint EmitDebugLineFileName(EndianAwareBinaryWriter wr, uint directoryIndex, string name)
+		public void AddFilenames()
 		{
-			wr.WriteNullTerminatedString("file1.cs");
+			var filenames = new List<string>();
+			var hashset = new HashSet<string>();
+
+			string last = string.Empty;
+
+			foreach (var type in TypeSystem.AllTypes)
+			{
+				if (type.IsModule)
+					continue;
+
+				foreach (var method in type.Methods)
+				{
+					if (method.Code == null)
+						continue;
+
+					foreach (var instruction in method.Code)
+					{
+						var filename = instruction.Document;
+
+						if (filename == null)
+							continue;
+
+						if (last == filename)
+							continue;
+
+						if (!hashset.Contains(filename))
+						{
+							filenames.Add(filename);
+							hashset.Add(filename);
+							last = filename;
+						}
+					}
+				}
+			}
+
+			uint nextDirNum = 1;
+			uint nextFileNum = 1;
+
+			foreach (var filepath in filenames)
+			{
+				var filename = Path.GetFileName(filepath);
+				var directory = Path.GetDirectoryName(filepath);
+
+				uint dirNum = 0;
+				if (!string.IsNullOrEmpty(directory)) // root dir is always dirNum = 0
+					if (!Directories.TryGetValue(directory, out dirNum))
+						Directories.Add(directory, dirNum = nextDirNum++);
+
+				var itm = new FileItem
+				{
+					Name = filename,
+					DirectoryNum = dirNum,
+					FileNum = nextFileNum++
+				};
+				FileHash.Add(filepath, itm);
+				FileList.Add(itm);
+			}
+		}
+
+		void EmitDirectories(EndianAwareBinaryWriter wr)
+		{
+			foreach (var entry in Directories.OrderBy(e => e.Value)) // order matters!
+				EmitDebugLineDirectoryName(wr, entry.Value, entry.Key);
+			wr.WriteByte(DwarfConstants.EndOfDirectories);
+		}
+
+		void EmitFiles(EndianAwareBinaryWriter wr)
+		{
+			foreach (var file in FileList) // order matters!
+				EmitDebugLineFileName(wr, file.DirectoryNum, file.Name);
+			wr.WriteByte(DwarfConstants.EndOfFiles);
+		}
+
+		void EmitDebugLineDirectoryName(EndianAwareBinaryWriter wr, uint dirNum, string name)
+		{
+			wr.WriteNullTerminatedString(name);
+		}
+
+		void EmitDebugLineFileName(EndianAwareBinaryWriter wr, uint directoryIndex, string name)
+		{
+			wr.WriteNullTerminatedString(name);
 			wr.WriteULEB128(directoryIndex);
 			wr.WriteULEB128(DwarfConstants.NullFileTime);
 			wr.WriteULEB128(DwarfConstants.NullFileLength);
-			return NextFileIndex++;
 		}
 
 		void EmitDebugLineTypes(EndianAwareBinaryWriter wr)
 		{
 			uint baseAddr = 0x00500000;
+
+			uint line = 0;
+			uint file = 1;
 
 			foreach (var type in TypeSystem.AllTypes)
 			{
@@ -201,9 +285,6 @@ namespace Mosa.Compiler.Extensions.Dwarf
 					if (firstInstruction == null)
 						continue;
 
-					uint line = 1;
-					uint file = 1;
-
 					var pc = baseAddr + (uint)firstInstruction.Offset;
 
 					wr.WriteByte(0); // signals an extended opcode
@@ -218,8 +299,14 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 						int lineDiff = instruction.StartLine - (int)line;
 
-						wr.Write(DW_LNS_set_file);
-						wr.WriteULEB128(file);
+						var newFile = FileHash[instruction.Document].FileNum;
+
+						if (newFile != file)
+						{
+							file = newFile;
+							wr.Write(DW_LNS_set_file);
+							wr.WriteULEB128(file);
+						}
 
 						wr.Write(DW_LNS_advance_pc);
 						wr.WriteSLEB128(pcDiff);
