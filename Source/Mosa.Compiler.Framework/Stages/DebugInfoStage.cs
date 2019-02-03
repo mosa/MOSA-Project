@@ -74,7 +74,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (Address == -1)
 						continue;
 
-					trace.Log(String.Format("{0:X5}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}",
+					trace.Log(String.Format("{0:X5}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
 						Label, Address, Length, StartLine, EndLine, StartColumn, EndColumn, node.ToString(), Document));
 				}
 			}
