@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework
 			if (!Compiler.CompilerOptions.EnableStatistics)
 				return;
 
-			// MoreLogInfo();
+			MoreLogInfo();
 
 			Debug.WriteLine(trace.ToString()); // REMOVE
 
@@ -172,12 +172,12 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var derived in children)
 			{
-				if (!allocatedTypes.Contains(derived))
-					continue;
+				if (allocatedTypes.Contains(derived))
+				{
+					var derivedMethod = Compiler.TypeLayout.GetMethodBySlot(derived, slot);
 
-				var derivedMethod = Compiler.TypeLayout.GetMethodBySlot(derived, slot);
-
-				ScheduleMethod(derivedMethod);
+					ScheduleMethod(derivedMethod);
+				}
 
 				ScheduleDerivedMethods(derived, slot);
 			}
@@ -250,6 +250,9 @@ namespace Mosa.Compiler.Framework
 			var exceptionType = Compiler.TypeSystem.GetTypeByName("System", "Exception");
 			allocatedTypes.Add(exceptionType);
 
+			//var arrayType = Compiler.TypeSystem.GetTypeByName("System", "Array");
+			//allocatedTypes.Add(arrayType);
+
 			// Collect all unit tests methods
 			foreach (var type in Compiler.TypeSystem.AllTypes)
 			{
@@ -264,8 +267,6 @@ namespace Mosa.Compiler.Framework
 
 					if (methodAttribute != null)
 					{
-						//invokedMethods.Add(method);
-						//MethodInvoked(method, null);
 						ScheduleMethod(method);
 						allocateType = true;
 					}
@@ -273,7 +274,6 @@ namespace Mosa.Compiler.Framework
 
 				if (allocateType)
 				{
-					//allocatedTypes.Add(type);
 					TypeAllocated(type, null);
 				}
 			}

@@ -103,7 +103,7 @@ namespace Mosa.Tool.Launcher
 			Options.TwoPassOptimizations = cbTwoPassOptimizations.Checked;
 			Options.EnableIRLongExpansion = cbIRLongExpansion.Checked;
 			Options.EnableValueNumbering = cbValueNumbering.Checked;
-			Options.GenerateDebugFile = Options.LaunchGDBDebugger;
+			Options.GenerateDebugFile = cbGenerateDebugInfoFile.Checked;
 			Options.BaseAddress = tbBaseAddress.Text.ParseHexOrInteger();
 			Options.EmitAllSymbols = cbEmitSymbolTable.Checked;
 			Options.EmitStaticRelocations = cbRelocationTable.Checked;
