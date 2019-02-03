@@ -101,7 +101,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var instruction in Method.Code)
 			{
-				trace.Log(String.Format("{0:X5}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}",
+				trace.Log(String.Format("{0:X5}\t{1}\t{2}\t{3}\t{4}\t{5}",
 					instruction.Offset, instruction.StartLine, instruction.EndLine, instruction.StartColumn, instruction.StartColumn, instruction.Document));
 			}
 		}
