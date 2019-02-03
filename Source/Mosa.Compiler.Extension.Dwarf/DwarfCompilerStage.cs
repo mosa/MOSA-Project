@@ -213,12 +213,6 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 					foreach (var instruction in instructions)
 					{
-						if (instruction.Document == null)
-							continue;
-
-						if (instruction.StartLine == 0xFEEFEE)
-							continue;
-
 						uint newPc = baseAddr + (uint)instruction.Offset;
 						uint pcDiff = newPc - pc;
 
