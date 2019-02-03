@@ -11,9 +11,16 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			var trace = CreateTraceLog();
+			DumpByInstructions();
+			DumpRegions();
+			DumpSourceInfo();
+		}
 
-			trace.Log("Label\tAddress\tLength\tStartLine\tEndLine\tStartColumn\tStartColumn\tDocument");
+		protected void DumpByInstructions()
+		{
+			var trace = CreateTraceLog("Instructions");
+
+			trace.Log("Label\tAddress\tLength\tStartLine\tEndLine\tStartColumn\tStartColumn\tInstruction\tDocument");
 
 			foreach (var block in BasicBlocks)
 			{
@@ -67,10 +74,35 @@ namespace Mosa.Compiler.Framework.Stages
 					if (Address == -1)
 						continue;
 
-					trace.Log(
-							String.Format("{0:X5}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}",
-							Label, Address, Length, StartLine, EndLine, StartColumn, StartColumn, Document));
+					trace.Log(String.Format("{0:X5}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}",
+						Label, Address, Length, StartLine, EndLine, StartColumn, StartColumn, node.ToString(), Document));
 				}
+			}
+		}
+
+		protected void DumpRegions()
+		{
+			var trace = CreateTraceLog("Regions");
+
+			trace.Log("Label\tAddress\tLength");
+
+			foreach (var region in MethodData.LabelRegions)
+			{
+				trace.Log(String.Format("{0:X5}\t{1}\t{2}",
+					region.Label, region.Start, region.Length));
+			}
+		}
+
+		protected void DumpSourceInfo()
+		{
+			var trace = CreateTraceLog("Source");
+
+			trace.Log("Label\tOffset\tStartLine\tEndLine\tStartColumn\tStartColumn\tDocument");
+
+			foreach (var instruction in Method.Code)
+			{
+				trace.Log(String.Format("{0:X5}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}",
+					instruction.Offset, instruction.StartLine, instruction.EndLine, instruction.StartColumn, instruction.StartColumn, instruction.Document));
 			}
 		}
 	}
