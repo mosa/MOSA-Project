@@ -175,6 +175,20 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			public uint DirectoryNum;
 		}
 
+		private string GetRelativePath(string fromAbsoluteDir, string toAbsoluteDir)
+		{
+			Uri fullPath = new Uri(toAbsoluteDir, UriKind.Absolute);
+			Uri relRoot = new Uri(fromAbsoluteDir, UriKind.Absolute);
+
+			return relRoot.MakeRelativeUri(fullPath).ToString();
+		}
+
+		private string GetDwarfDirPath(string sourceDir)
+		{
+			var dir = GetRelativePath(Environment.CurrentDirectory, sourceDir);
+			return dir;
+		}
+
 		public void AddFilenames()
 		{
 			var filenames = new List<string>();
@@ -218,7 +232,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			foreach (var filepath in filenames)
 			{
 				var filename = Path.GetFileName(filepath);
-				var directory = Path.GetDirectoryName(filepath);
+				var directory = GetDwarfDirPath(Path.GetDirectoryName(filepath));
 
 				uint dirNum = 0;
 				if (!string.IsNullOrEmpty(directory)) // root dir is always dirNum = 0
@@ -265,7 +279,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 		void EmitDebugLineTypes(EndianAwareBinaryWriter wr)
 		{
-			uint baseAddr = 0x00500000;
+			//uint baseAddr = 0x00500000;
 
 			uint line = 0;
 			uint file = 1;
@@ -279,6 +293,15 @@ namespace Mosa.Compiler.Extensions.Dwarf
 				{
 					if (method.Code == null)
 						continue;
+
+					var symbol = Linker.GetSymbol(method.FullName);
+					if (symbol == null)
+						continue;
+
+					if (symbol.VirtualAddress == 0)
+						continue;
+
+					uint baseAddr = (uint)symbol.VirtualAddress;
 
 					var instructions = method.Code.Where(inst => inst.Document != null && inst.StartLine != 0xFEEFEE).OrderBy(i => i.Document).ThenBy(i => i.Offset);
 					var firstInstruction = instructions.FirstOrDefault();

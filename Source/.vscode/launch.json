@@ -16,6 +16,8 @@
 				"x86",
 				"--mboot",
 				"v1",
+				"--map",
+				"Mosa.HelloWorld.x86.map",
 				"--x86-irq-methods",
 				"--base-address",
 				"0x00500000",
