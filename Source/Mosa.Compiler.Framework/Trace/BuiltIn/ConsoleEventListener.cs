@@ -129,7 +129,7 @@ namespace Mosa.Compiler.Framework.Trace.BuiltIn
 		{
 		}
 
-		void ITraceListener.OnMethodcompiled(MosaMethod method)
+		void ITraceListener.OnMethodCompiled(MosaMethod method)
 		{
 		}
 	}

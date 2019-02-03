@@ -14,8 +14,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 	{
 		#region Data Members
 
-		public string MapFile { get; set; }
-
 		/// <summary>
 		/// Holds the text writer used to emit the map file.
 		/// </summary>
@@ -25,15 +23,14 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		protected override void Setup()
 		{
-			MapFile = CompilerOptions.MapFile;
 		}
 
 		protected override void RunPostCompile()
 		{
-			if (string.IsNullOrEmpty(MapFile))
+			if (string.IsNullOrEmpty(CompilerOptions.MapFile))
 				return;
 
-			using (writer = new StreamWriter(MapFile))
+			using (writer = new StreamWriter(CompilerOptions.MapFile))
 			{
 				// Emit map file header
 				writer.WriteLine(CompilerOptions.OutputFile);

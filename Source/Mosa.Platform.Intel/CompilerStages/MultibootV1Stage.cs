@@ -99,6 +99,13 @@ namespace Mosa.Platform.Intel.CompilerStages
 			multibootMethod = Compiler.CreateLinkerMethod("MultibootInit");
 
 			Linker.EntryPoint = Linker.GetSymbol(multibootMethod.FullName);
+
+			Compiler.MethodScanner.MethodInvoked(multibootMethod, multibootMethod);
+
+			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
+			var initializeMethod = startUpType.FindMethodByName("Initialize");
+
+			Compiler.MethodScanner.MethodInvoked(initializeMethod, multibootMethod);
 		}
 
 		protected override void RunPostCompile()

@@ -272,7 +272,7 @@ namespace Mosa.Compiler.Framework
 			methodCompiler.Compile();
 
 			NewCompilerTraceEvent(CompilerEvent.CompiledMethod, method.FullName, threadID);
-			CompilerTrace.TraceListener.OnMethodcompiled(method);
+			CompilerTrace.TraceListener.OnMethodCompiled(method);
 		}
 
 		private MethodCompiler GetMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, int threadID = 0)
@@ -456,6 +456,8 @@ namespace Mosa.Compiler.Framework
 
 				NewCompilerTraceEvent(CompilerEvent.PostCompileStageEnd, stage.Name);
 			}
+
+			MethodScanner.Complete();
 
 			// Sum up the counters
 			foreach (var methodData in CompilerData.MethodData)

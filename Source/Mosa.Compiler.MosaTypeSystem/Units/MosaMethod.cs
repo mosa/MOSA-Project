@@ -70,9 +70,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public string ExternMethodModule { get; private set; }
 
-		public bool IsConstructor { get { return Name == ".ctor"; } }
+		public bool IsConstructor { get { return IsSpecialName && IsRTSpecialName && Name == ".ctor"; } }
 
-		public bool IsTypeConstructor { get { return Name == ".cctor"; } }
+		public bool IsTypeConstructor { get { return IsSpecialName && IsRTSpecialName && IsStatic && Name == ".cctor"; } }
 
 		internal MosaMethod()
 		{

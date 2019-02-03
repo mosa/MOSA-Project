@@ -418,7 +418,7 @@ namespace Mosa.Tool.GDBDebugger
 
 		public void OnCopyToClipboard(Object sender, EventArgs e)
 		{
-			var text = (sender as Menu).Tag as string;
+			var text = (((sender as Menu).Tag) as BreakPoint).Name;
 
 			Clipboard.SetText(text);
 		}

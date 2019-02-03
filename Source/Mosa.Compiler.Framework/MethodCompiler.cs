@@ -7,6 +7,7 @@ using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -22,11 +23,6 @@ namespace Mosa.Compiler.Framework
 	public sealed class MethodCompiler
 	{
 		#region Data Members
-
-		/// <summary>
-		/// Holds the type initializer scheduler stage
-		/// </summary>
-		private TypeInitializerSchedulerStage typeInitializer;
 
 		/// <summary>
 		/// The empty operand list
@@ -238,6 +234,7 @@ namespace Mosa.Compiler.Framework
 			IsStackFrameRequired = true;
 
 			MethodData = compiler.CompilerData.GetMethodData(Method);
+
 			MethodData.Counters.Reset();
 
 			EvaluateParameterOperands();
@@ -353,6 +350,8 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public void Compile()
 		{
+			MethodData.CompileTimeStartTick = DateTime.Now.Ticks;
+
 			if (Method.IsCompilerGenerated)
 			{
 				IsCILDecodeRequired = false;
@@ -369,11 +368,11 @@ namespace Mosa.Compiler.Framework
 
 			ExecutePipeline();
 
-			InitializeType();
-
 			var log = new TraceLog(TraceType.Counters, Method, string.Empty, Trace.TraceFilter.Active);
 			log.Log(MethodData.Counters.Export());
 			Trace.TraceListener.OnNewTraceLog(log);
+
+			MethodData.CompileTimeEndTick = DateTime.Now.Ticks;
 		}
 
 		private void ExecutePipeline()
@@ -401,6 +400,8 @@ namespace Mosa.Compiler.Framework
 
 			if (plugMethod == null)
 				return;
+
+			Compiler.MethodScanner.MethodInvoked(plugMethod, this.Method);
 
 			IsMethodPlugged = true;
 
@@ -460,12 +461,6 @@ namespace Mosa.Compiler.Framework
 			IsCILDecodeRequired = false;
 			IsExecutePipeline = false;
 			IsStackFrameRequired = false;
-
-			//var methodName = Method.DeclaringType.FullName + ":" + Method.Name;
-			//var intrinsic = Compiler.GetInstrincMethod(methodName);
-
-			//Method.ExternMethodModule;
-			//Method.ExternMethodName;
 		}
 
 		/// <summary>
@@ -578,22 +573,6 @@ namespace Mosa.Compiler.Framework
 			else
 			{
 				return Architecture.NativeAlignment;
-			}
-		}
-
-		/// <summary>
-		/// Initializes the type.
-		/// </summary>
-		private void InitializeType()
-		{
-			if (Method.IsSpecialName && Method.IsRTSpecialName && Method.IsStatic && Method.Name == ".cctor")
-			{
-				typeInitializer = Compiler.CompilerPipeline.FindFirst<TypeInitializerSchedulerStage>();
-
-				if (typeInitializer == null)
-					return;
-
-				typeInitializer.Schedule(Method);
 			}
 		}
 

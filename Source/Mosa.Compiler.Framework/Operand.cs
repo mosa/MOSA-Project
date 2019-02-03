@@ -658,7 +658,7 @@ namespace Mosa.Compiler.Framework
 
 			return new Operand(type)
 			{
-				IsStaticField = true,
+				IsStaticField = true, // field.IsStatic
 				Offset = 0,
 				Field = field,
 				IsConstant = true

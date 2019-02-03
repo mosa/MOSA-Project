@@ -439,7 +439,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (OverridesMethod(method))
 				{
-					before.SetInstruction(Select(IRInstruction.Sub32, IRInstruction.Sub64), context.Operand1, context.Operand1, CreateConstant(NativePointerSize * 2));
+					before.SetInstruction(Select(context.Operand1, IRInstruction.Sub32, IRInstruction.Sub64), context.Operand1, context.Operand1, CreateConstant(NativePointerSize * 2));
 				}
 				else
 				{
@@ -507,7 +507,7 @@ namespace Mosa.Compiler.Framework.Stages
 							&& method.DeclaringType == context.Operand1.Type.ElementType)
 						{
 							var before = context.InsertBefore();
-							before.SetInstruction(Select(IRInstruction.Sub32, IRInstruction.Sub64), context.Operand1, context.Operand1, CreateConstant(NativePointerSize * 2));
+							before.SetInstruction(Select(context.Operand1, IRInstruction.Sub32, IRInstruction.Sub64), context.Operand1, context.Operand1, CreateConstant(NativePointerSize * 2));
 						}
 					}
 					else
@@ -560,7 +560,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			// TODO!
 			//ReplaceWithVmCall(context, VmCall.Castclass);
-			node.ReplaceInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64)); // HACK!
+			node.ReplaceInstruction(Select(node.Result, IRInstruction.MoveInt32, IRInstruction.MoveInt64)); // HACK!
 		}
 
 		private ulong GetBitMask(int bits)
@@ -858,7 +858,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var elementOffset = CalculateArrayElementOffset(node, arrayType, arrayIndex);
 			var totalElementOffset = CalculateTotalArrayOffset(node, elementOffset);
 
-			node.SetInstruction(Select(IRInstruction.Add32, IRInstruction.Add64), result, array, totalElementOffset);
+			node.SetInstruction(Select(result, IRInstruction.Add32, IRInstruction.Add64), result, array, totalElementOffset);
 		}
 
 		/// <summary>
@@ -948,18 +948,22 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Ldflda(InstructionNode node)
 		{
+			var field = node.MosaField;
+
+			MethodCompiler.Compiler.MethodScanner.AccessedField(field);
+
+			int offset = TypeLayout.GetFieldOffset(field);
+
 			var fieldAddress = node.Result;
 			var objectOperand = node.Operand1;
 
-			int offset = TypeLayout.GetFieldOffset(node.MosaField);
-
 			if (offset == 0)
 			{
-				node.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), fieldAddress, objectOperand);
+				node.SetInstruction(Select(fieldAddress, IRInstruction.MoveInt32, IRInstruction.MoveInt64), fieldAddress, objectOperand);
 			}
 			else
 			{
-				node.SetInstruction(Select(IRInstruction.Add32, IRInstruction.Add64), fieldAddress, objectOperand, CreateConstant(offset));
+				node.SetInstruction(Select(fieldAddress, IRInstruction.Add32, IRInstruction.Add64), fieldAddress, objectOperand, CreateConstant(offset));
 			}
 		}
 
@@ -971,9 +975,9 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var invokedMethod = node.InvokeMethod;
 
-			node.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, Operand.CreateSymbolFromMethod(invokedMethod, TypeSystem));
-
 			MethodCompiler.Compiler.MethodScanner.MethodInvoked(invokedMethod, this.Method);
+
+			node.SetInstruction(Select(node.Result, IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, Operand.CreateSymbolFromMethod(invokedMethod, TypeSystem));
 		}
 
 		/// <summary>
@@ -983,7 +987,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void Ldlen(InstructionNode node)
 		{
 			var offset = CreateConstant(NativePointerSize * 2);
-			node.SetInstruction(Select(IRInstruction.LoadInt32, IRInstruction.LoadInt64), node.Result, node.Operand1, offset);
+			node.SetInstruction(Select(node.Result, IRInstruction.LoadInt32, IRInstruction.LoadInt64), node.Result, node.Operand1, offset);
 		}
 
 		/// <summary>
@@ -1028,13 +1032,17 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Ldsfld(InstructionNode node)
 		{
-			var fieldType = node.MosaField.FieldType;
-			var destination = node.Result;
+			var field = node.MosaField;
 
-			var fieldOperand = Operand.CreateStaticField(node.MosaField, TypeSystem);
+			MethodCompiler.Compiler.MethodScanner.AccessedField(field);
+
+			var fieldType = field.FieldType;
+			var destination = node.Result;
+			var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
 
 			if (MosaTypeLayout.IsStoredOnStack(fieldType))
 			{
+				// Interesting -- this code appears to never be executed
 				node.SetInstruction(IRInstruction.LoadCompound, destination, fieldOperand, ConstantZero);
 				node.MosaType = fieldType;
 			}
@@ -1052,7 +1060,13 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Ldsflda(InstructionNode node)
 		{
-			node.SetInstruction(IRInstruction.AddressOf, node.Result, Operand.CreateStaticField(node.MosaField, TypeSystem));
+			var field = node.MosaField;
+
+			MethodCompiler.Compiler.MethodScanner.AccessedField(field);
+
+			var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
+
+			node.SetInstruction(IRInstruction.AddressOf, node.Result, fieldOperand);
 		}
 
 		/// <summary>
@@ -1072,7 +1086,7 @@ namespace Mosa.Compiler.Framework.Stages
 			string symbolName = node.Operand1.Name;
 			string stringdata = node.Operand1.StringData;
 
-			node.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, node.Operand1);
+			node.SetInstruction(Select(node.Result, IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, node.Operand1);
 
 			var symbol = linker.DefineSymbol(symbolName, SectionKind.ROData, NativeAlignment, (NativePointerSize * 2) + 4 + (stringdata.Length * 2));
 			var stream = symbol.Stream;
@@ -1118,8 +1132,8 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			var destination = context.Result;
-			context.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), runtimeHandle, source);
-			context.AppendInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), destination, runtimeHandle);
+			context.SetInstruction(Select(runtimeHandle, IRInstruction.MoveInt32, IRInstruction.MoveInt64), runtimeHandle, source);
+			context.AppendInstruction(Select(destination, IRInstruction.MoveInt32, IRInstruction.MoveInt64), destination, runtimeHandle);
 		}
 
 		/// <summary>
@@ -1372,7 +1386,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var type = node.MosaType;
 			var size = type.IsPointer ? NativePointerSize : MethodCompiler.TypeLayout.GetTypeSize(type);
-			node.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, CreateConstant(size));
+			node.SetInstruction(Select(node.Result, IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, CreateConstant(size));
 		}
 
 		/// <summary>
@@ -1431,12 +1445,16 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Stfld(InstructionNode node)
 		{
+			var field = node.MosaField;
+
+			MethodCompiler.Compiler.MethodScanner.AccessedField(field);
+
+			int offset = TypeLayout.GetFieldOffset(field);
+			var offsetOperand = CreateConstant(offset);
+
 			var objectOperand = node.Operand1;
 			var valueOperand = node.Operand2;
-			var fieldType = node.MosaField.FieldType;
-
-			int offset = TypeLayout.GetFieldOffset(node.MosaField);
-			var offsetOperand = CreateConstant(offset);
+			var fieldType = field.FieldType;
 
 			if (MosaTypeLayout.IsStoredOnStack(fieldType))
 			{
@@ -1514,19 +1532,23 @@ namespace Mosa.Compiler.Framework.Stages
 		private void Stsfld(InstructionNode node)
 		{
 			var field = node.MosaField;
-			var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
 
-			if (MosaTypeLayout.IsStoredOnStack(field.FieldType))
+			MethodCompiler.Compiler.MethodScanner.AccessedField(field);
+
+			var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
+			var fieldType = field.FieldType;
+
+			if (MosaTypeLayout.IsStoredOnStack(fieldType))
 			{
 				node.SetInstruction(IRInstruction.StoreCompound, null, fieldOperand, ConstantZero, node.Operand1);
-				node.MosaType = field.FieldType;
+				node.MosaType = fieldType;
 			}
 			else
 			{
-				var storeInstruction = GetStoreInstruction(field.FieldType);
+				var storeInstruction = GetStoreInstruction(fieldType);
 
 				node.SetInstruction(storeInstruction, null, fieldOperand, ConstantZero, node.Operand1);
-				node.MosaType = field.FieldType;
+				node.MosaType = fieldType;
 			}
 		}
 
@@ -1964,7 +1986,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var lengthOperand = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 			var fixedOffset = CreateConstant(NativePointerSize * 2);
 
-			before.SetInstruction(Select(IRInstruction.LoadInt32, IRInstruction.LoadInt64), lengthOperand, arrayOperand, fixedOffset);
+			before.SetInstruction(Select(lengthOperand, IRInstruction.LoadInt32, IRInstruction.LoadInt64), lengthOperand, arrayOperand, fixedOffset);
 
 			// Now compare length with index
 			// If index is greater than or equal to the length then jump to exception block, otherwise jump to next block
@@ -1996,7 +2018,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var context = new Context(node).InsertBefore();
 
-			context.AppendInstruction(Select(IRInstruction.MulUnsigned32, IRInstruction.MulSigned64), elementOffset, index, elementSize);
+			context.AppendInstruction(Select(elementOffset, IRInstruction.MulUnsigned32, IRInstruction.MulSigned64), elementOffset, index, elementSize);
 
 			return elementOffset;
 		}
@@ -2015,7 +2037,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var arrayElement = AllocateVirtualRegister(Is32BitPlatform ? TypeSystem.BuiltIn.I4 : TypeSystem.BuiltIn.I8);
 
 			var context = new Context(node).InsertBefore();
-			context.AppendInstruction(Select(IRInstruction.Add32, IRInstruction.Add64), arrayElement, elementOffset, fixedOffset);
+			context.AppendInstruction(Select(arrayElement, IRInstruction.Add32, IRInstruction.Add64), arrayElement, elementOffset, fixedOffset);
 
 			return arrayElement;
 		}

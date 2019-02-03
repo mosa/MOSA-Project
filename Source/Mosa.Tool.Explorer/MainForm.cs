@@ -29,13 +29,17 @@ namespace Mosa.Tool.Explorer
 		private CompileStage Stage = CompileStage.Nothing;
 
 		private readonly StringBuilder compileLog = new StringBuilder();
-		private readonly StringBuilder counterLog = new StringBuilder();
+		private readonly StringBuilder eventLog = new StringBuilder();
+		private readonly StringBuilder debugLog = new StringBuilder();
 		private readonly StringBuilder errorLog = new StringBuilder();
 		private readonly StringBuilder exceptionLog = new StringBuilder();
 
 		private readonly MethodStore methodStore = new MethodStore();
 
 		private TypeSystemTree typeSystemTree;
+
+		private int TotalMethods = 0;
+		private int CompletedMethods = 0;
 
 		public MainForm()
 		{
@@ -287,7 +291,11 @@ namespace Mosa.Tool.Explorer
 
 		private void SubmitTraceEventGUI(CompilerEvent compilerEvent, string info)
 		{
-			if (compilerEvent != CompilerEvent.DebugInfo)
+			if (compilerEvent == CompilerEvent.StatusUpdate)
+			{
+				DisplayLogs();
+			}
+			else if (compilerEvent != CompilerEvent.DebugInfo)
 			{
 				SetStatus(compilerEvent.ToText() + ": " + info);
 				toolStripStatusLabel1.GetCurrentParent().Refresh();
@@ -296,27 +304,32 @@ namespace Mosa.Tool.Explorer
 
 		private readonly object compilerStageLock = new object();
 
-		private void SubmitTraceEvent(CompilerEvent compilerStage, string message, int threadID)
+		private void SubmitTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
+			if (compilerEvent == CompilerEvent.StatusUpdate)
+			{
+				return;
+			}
+
 			lock (compilerStageLock)
 			{
-				if (compilerStage == CompilerEvent.Error)
+				if (compilerEvent == CompilerEvent.Error)
 				{
-					errorLog.Append(compilerStage.ToText()).Append(": ").AppendLine(message);
-					compileLog.AppendFormat("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds).Append(" [").Append(threadID.ToString()).Append("] ").Append(compilerStage.ToText()).Append(": ").AppendLine(message);
+					errorLog.Append(compilerEvent.ToText()).Append(": ").AppendLine(message);
+					compileLog.AppendFormat("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds).Append(" [").Append(threadID.ToString()).Append("] ").Append(compilerEvent.ToText()).Append(": ").AppendLine(message);
 				}
-				if (compilerStage == CompilerEvent.Exception)
+				if (compilerEvent == CompilerEvent.Exception)
 				{
-					var stringBuilder = exceptionLog.Append(compilerStage.ToText()).Append(": ").AppendLine(message);
-					var stringBuilder2 = compileLog.AppendFormat("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds).Append(" [").Append(threadID.ToString()).Append("] ").Append(compilerStage.ToText()).Append(": ").AppendLine(message);
+					var stringBuilder = exceptionLog.Append(compilerEvent.ToText()).Append(": ").AppendLine(message);
+					var stringBuilder2 = compileLog.AppendFormat("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds).Append(" [").Append(threadID.ToString()).Append("] ").Append(compilerEvent.ToText()).Append(": ").AppendLine(message);
 				}
-				else if (compilerStage == CompilerEvent.Counter)
+				else if (compilerEvent == CompilerEvent.Counter)
 				{
-					counterLog.Append(compilerStage.ToText()).Append(": ").AppendLine(message);
+					eventLog.Append(compilerEvent.ToText()).Append(": ").AppendLine(message);
 				}
 				else
 				{
-					compileLog.AppendFormat("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds).Append(" [").Append(threadID.ToString()).Append("] ").Append(compilerStage.ToText()).Append(": ").AppendLine(message);
+					compileLog.AppendFormat("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds).Append(" [").Append(threadID.ToString()).Append("] ").Append(compilerEvent.ToText()).Append(": ").AppendLine(message);
 				}
 			}
 		}
@@ -340,13 +353,15 @@ namespace Mosa.Tool.Explorer
 		{
 			compileLog.Clear();
 			errorLog.Clear();
-			counterLog.Clear();
+			eventLog.Clear();
 			exceptionLog.Clear();
+			debugLog.Clear();
 
 			rbLog.Text = string.Empty;
 			rbErrors.Text = string.Empty;
 			rbGlobalCounters.Text = string.Empty;
 			rbException.Text = string.Empty;
+			tbDebug.Text = string.Empty;
 		}
 
 		private void Compile()
@@ -386,20 +401,23 @@ namespace Mosa.Tool.Explorer
 		{
 			toolStrip1.Enabled = true;
 
-			//Compiler.PostCompile();
-
 			Stage = CompileStage.Compiled;
 
 			SetStatus("Compiled!");
+			DisplayLogs();
 
-			tabControl1.SelectedTab = tbStages;
+			UpdateTree();
+		}
+
+		private void DisplayLogs()
+		{
+			tabControl1.SelectedTab = tabStages;
 
 			rbLog.Text = compileLog.ToString();
 			rbErrors.Text = errorLog.ToString();
-			rbGlobalCounters.Text = counterLog.ToString();
+			rbGlobalCounters.Text = eventLog.ToString();
 			rbException.Text = exceptionLog.ToString();
-
-			UpdateTree();
+			tbDebug.Text = debugLog.ToString();
 		}
 
 		private static BaseArchitecture GetArchitecture(string platform)
@@ -571,7 +589,7 @@ namespace Mosa.Tool.Explorer
 
 		private void UpdateResults()
 		{
-			tbResult.Text = string.Empty;
+			tbInstructions.Text = string.Empty;
 
 			var method = GetCurrentMethod();
 			var lines = GetCurrentLines();
@@ -586,9 +604,9 @@ namespace Mosa.Tool.Explorer
 				return;
 
 			if (string.IsNullOrWhiteSpace(label) || label == "All")
-				tbResult.Text = methodStore.GetStageInstructions(lines, string.Empty, !showOperandTypes.Checked, padInstructions.Checked);
+				tbInstructions.Text = methodStore.GetStageInstructions(lines, string.Empty, !showOperandTypes.Checked, padInstructions.Checked);
 			else
-				tbResult.Text = methodStore.GetStageInstructions(lines, label, !showOperandTypes.Checked, padInstructions.Checked);
+				tbInstructions.Text = methodStore.GetStageInstructions(lines, label, !showOperandTypes.Checked, padInstructions.Checked);
 		}
 
 		private void UpdateDebugResults()
@@ -610,7 +628,7 @@ namespace Mosa.Tool.Explorer
 
 		private void NodeSelected()
 		{
-			tbResult.Text = string.Empty;
+			tbInstructions.Text = string.Empty;
 
 			var method = GetCurrentMethod();
 
@@ -722,10 +740,10 @@ namespace Mosa.Tool.Explorer
 			Compile();
 		}
 
-		private void SubmitMethodStatus(int totalMethods, int completedMethods)
+		private void SubmitMethodStatus()
 		{
-			toolStripProgressBar1.Maximum = totalMethods;
-			toolStripProgressBar1.Value = completedMethods;
+			toolStripProgressBar1.Maximum = TotalMethods;
+			toolStripProgressBar1.Value = CompletedMethods;
 		}
 
 		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
@@ -741,14 +759,24 @@ namespace Mosa.Tool.Explorer
 
 		void ITraceListener.OnUpdatedCompilerProgress(int totalMethods, int completedMethods)
 		{
-			MethodInvoker call = () => SubmitMethodStatus(totalMethods, completedMethods);
+			bool update =
+				totalMethods == completedMethods
+				|| Math.Abs(totalMethods - TotalMethods) > 20
+				|| Math.Abs(completedMethods - CompletedMethods) > 20;
 
-			Invoke(call);
+			TotalMethods = totalMethods;
+			CompletedMethods = completedMethods;
+
+			if (update)
+			{
+				MethodInvoker call = () => SubmitMethodStatus();
+				Invoke(call);
+			}
 		}
 
 		void ITraceListener.OnNewTraceLog(TraceLog traceLog)
 		{
-			if (traceLog.Type == TraceType.DebugTrace)
+			if (traceLog.Type == TraceType.MethodDebug)
 			{
 				if (traceLog.Lines.Count == 0)
 					return;
@@ -768,9 +796,13 @@ namespace Mosa.Tool.Explorer
 			{
 				methodStore.SetInstructionTraceInformation(traceLog.Method, traceLog.Stage, traceLog.Lines);
 			}
+			else if (traceLog.Type == TraceType.Debug)
+			{
+				debugLog.AppendLine(traceLog.ToString());
+			}
 		}
 
-		void ITraceListener.OnMethodcompiled(MosaMethod method)
+		void ITraceListener.OnMethodCompiled(MosaMethod method)
 		{
 			//MethodInvoker call = () => UpdateTree(method);
 
@@ -795,7 +827,7 @@ namespace Mosa.Tool.Explorer
 					CbStages_SelectedIndexChanged(null, null);
 
 					string stage = GetCurrentStage();
-					var result = tbResult.Text.Replace("\n", "\r\n");
+					var result = tbInstructions.Text.Replace("\n", "\r\n");
 
 					File.WriteAllText(Path.Combine(path, stage + "-stage.txt"), result);
 

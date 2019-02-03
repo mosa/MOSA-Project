@@ -70,6 +70,8 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		#endregion Construction
 
+		#region Overrides
+
 		protected override void RunPreCompile()
 		{
 			typeInitializerMethod = Compiler.CreateLinkerMethod(TypeInitializerName);
@@ -79,7 +81,21 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 			Compiler.PlugSystem.CreatePlug(initializeAssemblyMethod, typeInitializerMethod);
 
+			Compiler.MethodScanner.MethodInvoked(initializeAssemblyMethod, initializeAssemblyMethod);
 			Compiler.MethodScanner.MethodInvoked(typeInitializerMethod, typeInitializerMethod);
+
+			foreach (var type in TypeSystem.AllTypes)
+			{
+				foreach (var method in type.Methods)
+				{
+					if (method.IsTypeConstructor && !method.HasOpenGenericParams)
+					{
+						Schedule(method);
+
+						Compiler.MethodScanner.MethodInvoked(method, method);
+					}
+				}
+			}
 		}
 
 		protected override void RunPostCompile()
@@ -87,22 +103,21 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			Compiler.CompileMethod(typeInitializerMethod, basicBlocks);
 		}
 
-		#region Methods
+		#endregion Overrides
+
+		#region Private Methods
 
 		/// <summary>
 		/// Schedules the specified method for invocation in the main.
 		/// </summary>
 		/// <param name="method">The method.</param>
-		public void Schedule(MosaMethod method)
+		private void Schedule(MosaMethod method)
 		{
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
-			lock (_lock)
-			{
-				start.AppendInstruction(IRInstruction.CallStatic, null, symbol);
-			}
+			start.AppendInstruction(IRInstruction.CallStatic, null, symbol);
 		}
 
-		#endregion Methods
+		#endregion Private Methods
 	}
 }

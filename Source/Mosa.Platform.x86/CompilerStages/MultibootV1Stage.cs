@@ -10,6 +10,10 @@ namespace Mosa.Platform.x86.CompilerStages
 	{
 		protected override void CreateMultibootMethod()
 		{
+			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
+			var initializeMethod = startUpType.FindMethodByName("Initialize");
+			var entryPoint = Operand.CreateSymbolFromMethod(initializeMethod, TypeSystem);
+
 			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 			var ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBX);
 			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EBP);
@@ -37,17 +41,10 @@ namespace Mosa.Platform.x86.CompilerStages
 			ctx.AppendInstruction(X86.MovStore32, null, multibootEAX, zero, eax);
 			ctx.AppendInstruction(X86.MovStore32, null, multibootEBX, zero, ebx);
 
-			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
-			var initializeMethod = startUpType.FindMethodByName("Initialize");
-
-			var entryPoint = Operand.CreateSymbolFromMethod(initializeMethod, TypeSystem);
 			ctx.AppendInstruction(X86.Call, null, entryPoint);
-
 			ctx.AppendInstruction(X86.Ret);
 
 			Compiler.CompileMethod(multibootMethod, basicBlocks);
-
-			Compiler.MethodScanner.MethodInvoked(initializeMethod, multibootMethod);
 		}
 	}
 }

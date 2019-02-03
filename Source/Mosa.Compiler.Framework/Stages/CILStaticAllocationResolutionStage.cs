@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!MethodCompiler.IsCILDecodeRequired)
 				return;
 
-			if (MethodCompiler.Method.Name != ".cctor")
+			if (!Method.IsTypeConstructor)
 				return;
 
 			AttemptToStaticallyAllocateObjects();
@@ -47,9 +47,18 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					if ((node.Instruction is NewobjInstruction && !MosaTypeLayout.IsStoredOnStack(node.Result.Type)) || node.Instruction is NewarrInstruction)
+					if (node.Instruction is NewobjInstruction)
+					{
+						if (!MosaTypeLayout.IsStoredOnStack(node.Result.Type))
+						{
+							list.Add(node);
+							MethodCompiler.Compiler.MethodScanner.TypeAllocated(node.InvokeMethod.DeclaringType, Method);
+						}
+					}
+					else if (node.Instruction is NewarrInstruction)
 					{
 						list.Add(node);
+						MethodCompiler.Compiler.MethodScanner.TypeAllocated(node.Result.Type, Method);
 					}
 				}
 			}

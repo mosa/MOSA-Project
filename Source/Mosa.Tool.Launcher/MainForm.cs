@@ -24,6 +24,9 @@ namespace Mosa.Tool.Launcher
 
 		public AppLocations AppLocations { get; set; }
 
+		private int TotalMethods = 0;
+		private int CompletedMethods = 0;
+
 		public string ConfigFile
 		{
 			get
@@ -100,7 +103,7 @@ namespace Mosa.Tool.Launcher
 			Options.TwoPassOptimizations = cbTwoPassOptimizations.Checked;
 			Options.EnableIRLongExpansion = cbIRLongExpansion.Checked;
 			Options.EnableValueNumbering = cbValueNumbering.Checked;
-			Options.GenerateDebugFile = Options.LaunchGDBDebugger;
+			Options.GenerateDebugFile = cbGenerateDebugInfoFile.Checked;
 			Options.BaseAddress = tbBaseAddress.Text.ParseHexOrInteger();
 			Options.EmitAllSymbols = cbEmitSymbolTable.Checked;
 			Options.EmitStaticRelocations = cbRelocationTable.Checked;
@@ -314,17 +317,16 @@ namespace Mosa.Tool.Launcher
 			Invoke(method);
 		}
 
-		private void UpdateProgress(int total, int at)
+		private void UpdateProgress()
 		{
-			progressBar1.Maximum = total;
-			progressBar1.Value = at;
+			progressBar1.Maximum = TotalMethods;
+			progressBar1.Value = CompletedMethods;
 		}
 
 		void IBuilderEvent.UpdateProgress(int total, int at)
 		{
-			MethodInvoker method = () => UpdateProgress(total, at);
-
-			Invoke(method);
+			TotalMethods = total;
+			CompletedMethods = at;
 		}
 
 		private void MainForm_Shown(object sender, EventArgs e)
@@ -534,6 +536,11 @@ namespace Mosa.Tool.Launcher
 			var cliParser = new Parser(config => config.HelpWriter = Console.Out);
 
 			cliParser.ParseArguments(() => Options, args);
+		}
+
+		private void timer1_Tick(object sender, EventArgs e)
+		{
+			UpdateProgress();
 		}
 	}
 }
