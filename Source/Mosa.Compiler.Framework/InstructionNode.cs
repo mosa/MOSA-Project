@@ -807,7 +807,7 @@ namespace Mosa.Compiler.Framework
 			//Debug.Assert(index < 255, @"No Index");
 			Debug.Assert(index >= 3, "No Index");
 
-			SizeAdditionalOperands(index - 3);
+			SizeAdditionalOperands(index - 3 + 1);
 
 			addition.AdditionalOperands[index - 3] = operand;
 		}
@@ -816,7 +816,9 @@ namespace Mosa.Compiler.Framework
 		{
 			if (addition.AdditionalOperands == null)
 			{
-				addition.AdditionalOperands = new Operand[(index < 8) ? 8 : index];
+				var minsize = Math.Max(index, 8);
+
+				addition.AdditionalOperands = new Operand[minsize];
 				return;
 			}
 
@@ -825,7 +827,9 @@ namespace Mosa.Compiler.Framework
 
 			var old = addition.AdditionalOperands;
 
-			addition.AdditionalOperands = new Operand[old.Length * 2];
+			var newsize = Math.Max(index, old.Length * 2);
+
+			addition.AdditionalOperands = new Operand[newsize];
 
 			for (int i = 0; i < old.Length; i++)
 			{
@@ -847,7 +851,7 @@ namespace Mosa.Compiler.Framework
 
 			//Debug.Assert(index < 255, @"No Index");
 
-			SizeAdditionalOperands(index - 3);
+			SizeAdditionalOperands(index - 3 + 1);
 
 			return addition.AdditionalOperands[index - 3];
 		}

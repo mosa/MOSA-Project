@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public void SetData(MemoryStream stream)
 		{
-			Stream = Stream.Synchronized(stream);
+			Stream = stream;
 		}
 
 		public void SetData(byte[] data)

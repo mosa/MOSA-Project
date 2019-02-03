@@ -1,78 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.Compiler.Common</RootNamespace>
-    <AssemblyName>Mosa.Compiler.Common</AssemblyName>
-    <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>True</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="EndianAwareBinaryWriterExtensions.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="IncludeFile.cs" />
-    <Compile Include="KeyedList.cs" />
-    <Compile Include="Alignment.cs" />
-    <Compile Include="Exceptions\InvalidMetadataException.cs" />
-    <Compile Include="Bits.cs" />
-    <Compile Include="BitArrayExtension.cs" />
-    <Compile Include="Exceptions\AssemblyLoadException.cs" />
-    <Compile Include="HasSetExtension.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SortedSetExtension.cs" />
-    <Compile Include="Exceptions\NotImplementCompilerException.cs" />
-    <Compile Include="Exceptions\CompilerException.cs" />
-    <Compile Include="SimplePriorityQueue.cs" />
-    <Compile Include="Endianness .cs" />
-    <Compile Include="ListExtension.cs" />
-    <Compile Include="EndianAwareBinaryWriter.cs" />
-    <Compile Include="EndianAwareBinaryReader.cs" />
-    <Compile Include="Endian.cs" />
-    <Compile Include="SparseBitArray.cs" />
-    <Compile Include="StreamExtension.cs" />
-    <Compile Include="UniqueStackThreadSafe.cs" />
-    <Compile Include="UniqueQueueThreadSafe.cs" />
-    <Compile Include="UniqueQueue.cs" />
-    <Compile Include="StringExtension.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+    </PropertyGroup>
+    <ItemGroup>
+      <Compile Remove="Properties\AssemblyInfo.cs" />
+    </ItemGroup>
 </Project>

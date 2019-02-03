@@ -18,12 +18,17 @@ namespace Mosa.Compiler.Framework.Trace
 			TraceFilter = new TraceFilter();
 		}
 
-		public void NewTraceLog(TraceLog traceLog)
+		public void NewTraceLog(TraceLog traceLog, bool signalStatusUpdate = false)
 		{
 			if (TraceListener == null)
 				return;
 
 			TraceListener.OnNewTraceLog(traceLog);
+
+			if (signalStatusUpdate)
+			{
+				TraceListener.OnNewCompilerTraceEvent(CompilerEvent.StatusUpdate, string.Empty, 0);
+			}
 		}
 
 		public void NewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID)

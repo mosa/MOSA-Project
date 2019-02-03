@@ -13,8 +13,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 	{
 		#region Data Members
 
-		public string DebugFile { get; set; }
-
 		/// <summary>
 		/// Holds the text writer used to emit the map file.
 		/// </summary>
@@ -24,17 +22,12 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		#endregion Data Members
 
-		protected override void Setup()
-		{
-			DebugFile = CompilerOptions.DebugFile;
-		}
-
 		protected override void RunPostCompile()
 		{
-			if (string.IsNullOrEmpty(DebugFile))
+			if (string.IsNullOrEmpty(CompilerOptions.DebugFile))
 				return;
 
-			using (writer = new StreamWriter(DebugFile))
+			using (writer = new StreamWriter(CompilerOptions.DebugFile))
 			{
 				EmitSections();
 				EmitSymbols();

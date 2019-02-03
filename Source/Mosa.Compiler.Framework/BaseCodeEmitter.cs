@@ -246,7 +246,7 @@ namespace Mosa.Compiler.Framework
 				LinkType.RelativeOffset,
 				PatchType.I4,
 				MethodName,
-				(int)CodeStream.Position,
+				CodeStream.Position,
 				symbolOperand.Name,
 				-4
 			);
@@ -258,7 +258,7 @@ namespace Mosa.Compiler.Framework
 				LinkType.RelativeOffset,
 				PatchType.I8,
 				MethodName,
-				(int)CodeStream.Position,
+				CodeStream.Position,
 				symbolOperand.Name,
 				-8
 			);

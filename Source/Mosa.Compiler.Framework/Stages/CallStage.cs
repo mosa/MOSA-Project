@@ -101,7 +101,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(method == call.Method);
 
-			MethodCompiler.Compiler.MethodScanner.MethodInvoked(call.Method, this.Method);
+			MethodCompiler.Compiler.MethodScanner.MethodDirectInvoked(call.Method, Method);
 		}
 
 		private void CallDynamic(InstructionNode node)
@@ -120,7 +120,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (call.Method != null)
 			{
-				MethodCompiler.Compiler.MethodScanner.MethodInvoked(call.Method, this.Method);
+				MethodCompiler.Compiler.MethodScanner.MethodInvoked(call.Method, Method);
 			}
 		}
 
@@ -154,7 +154,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			MakeCall(context, callTarget, result, operands);
 
-			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method, this.Method);
+			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method, Method);
 		}
 
 		private int CalculateInterfaceSlot(MosaType interaceType)
@@ -220,7 +220,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			MakeCall(context, callTarget, result, operands);
 
-			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method, this.Method);
+			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method, Method);
 		}
 
 		private void MakeCall(Context context, Operand target, Operand result, List<Operand> operands)
@@ -236,10 +236,10 @@ namespace Mosa.Compiler.Framework.Stages
 			// the mov/call two-instructions combo is to help facilitate the register allocator
 			context.AppendInstruction(IRInstruction.CallDirect, null, target);
 
-			if (target.Method != null)
-			{
-				MethodCompiler.Compiler.MethodScanner.MethodInvoked(target.Method, this.Method);
-			}
+			//if (target.Method != null)
+			//{
+			//	MethodCompiler.Compiler.MethodScanner.MethodDirectInvoked(target.Method, this.Method);
+			//}
 
 			GetReturnValue(context, result);
 			FreeStackAfterCall(context, totalStack);
@@ -250,7 +250,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (stackSize == 0)
 				return;
 
-			context.AppendInstruction(Select(IRInstruction.Sub32, IRInstruction.Sub64), StackPointer, StackPointer, CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
+			context.AppendInstruction(Select(StackPointer, IRInstruction.Sub32, IRInstruction.Sub64), StackPointer, StackPointer, CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
 		}
 
 		private void FreeStackAfterCall(Context context, int stackSize)
@@ -258,7 +258,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (stackSize == 0)
 				return;
 
-			context.AppendInstruction(Select(IRInstruction.Add32, IRInstruction.Add64), StackPointer, StackPointer, CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
+			context.AppendInstruction(Select(StackPointer, IRInstruction.Add32, IRInstruction.Add64), StackPointer, StackPointer, CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
 		}
 
 		private int CalculateParameterStackSize(List<Operand> operands)

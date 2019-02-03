@@ -96,7 +96,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var ctx = new Context(node);
 
-			ctx.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), leaveTargetRegister, CreateConstant(target.Label));
+			ctx.SetInstruction(Select(leaveTargetRegister, IRInstruction.MoveInt32, IRInstruction.MoveInt64), leaveTargetRegister, CreateConstant(target.Label));
 		}
 
 		private void ExceptionStartInstruction(InstructionNode node)
@@ -106,7 +106,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			ctx.SetInstruction(IRInstruction.KillAll);
 			ctx.AppendInstruction(IRInstruction.Gen, exceptionRegister);
-			ctx.AppendInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionVirtualRegister, exceptionRegister);
+			ctx.AppendInstruction(Select(exceptionVirtualRegister, IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionVirtualRegister, exceptionRegister);
 		}
 
 		private void FinallyEndInstruction(InstructionNode node)
@@ -125,7 +125,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var method = PlatformInternalRuntimeType.FindMethodByName("ExceptionHandler");
 
-			newBlocks[0].AppendInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionRegister, exceptionVirtualRegister);
+			newBlocks[0].AppendInstruction(Select(exceptionRegister, IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionRegister, exceptionVirtualRegister);
 			newBlocks[0].AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateSymbolFromMethod(method, TypeSystem));
 
 			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method, this.Method);
@@ -146,8 +146,8 @@ namespace Mosa.Compiler.Framework.Stages
 			ctx.AppendInstruction(IRInstruction.Gen, exceptionRegister);
 			ctx.AppendInstruction(IRInstruction.Gen, leaveTargetRegister);
 
-			ctx.AppendInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionVirtualRegister, exceptionRegister);
-			ctx.AppendInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), leaveTargetVirtualRegister, leaveTargetRegister);
+			ctx.AppendInstruction(Select(exceptionVirtualRegister, IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionVirtualRegister, exceptionRegister);
+			ctx.AppendInstruction(Select(leaveTargetVirtualRegister, IRInstruction.MoveInt32, IRInstruction.MoveInt64), leaveTargetVirtualRegister, leaveTargetRegister);
 		}
 
 		private void ThrowInstruction(InstructionNode node)
@@ -155,7 +155,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var method = PlatformInternalRuntimeType.FindMethodByName("ExceptionHandler");
 			var ctx = new Context(node);
 
-			ctx.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionRegister, node.Operand1);
+			ctx.SetInstruction(Select(exceptionRegister, IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionRegister, node.Operand1);
 
 			//ctx.AppendInstruction(IRInstruction.KillAllExcept, null, exceptionRegister);
 			ctx.AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateSymbolFromMethod(method, TypeSystem));
@@ -169,7 +169,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// clear exception register
 			// FIXME: This will need to be preserved for filtered exceptions; will need a flag to know this - maybe an upper bit of leaveTargetRegister
-			ctx.SetInstruction(Select(IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionRegister, nullOperand);
+			ctx.SetInstruction(Select(exceptionRegister, IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionRegister, nullOperand);
 
 			var label = node.Label;
 			var exceptionContext = FindImmediateExceptionContext(label);

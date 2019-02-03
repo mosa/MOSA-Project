@@ -42,12 +42,12 @@ namespace Mosa.Platform.x64.CompilerStages
 
 			var entryPoint = Operand.CreateSymbolFromMethod(initializeMethod, TypeSystem);
 			ctx.AppendInstruction(X64.Call, null, entryPoint);
-
 			ctx.AppendInstruction(X64.Ret);
 
 			Compiler.CompileMethod(multibootMethod, basicBlocks);
 
 			Compiler.MethodScanner.MethodInvoked(initializeMethod, multibootMethod);
+			Compiler.MethodScanner.MethodInvoked(multibootMethod, multibootMethod);
 		}
 	}
 }

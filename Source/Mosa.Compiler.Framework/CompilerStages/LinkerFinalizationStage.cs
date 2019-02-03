@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Framework.Linker;
 using System.IO;
 
 namespace Mosa.Compiler.Framework.CompilerStages
@@ -21,6 +22,11 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			{
 				Linker.Emit(file);
 			}
+
+			Compiler.GlobalCounters.Update("Linker.Text", (int)Linker.LinkerSections[(int)SectionKind.Text].Size);
+			Compiler.GlobalCounters.Update("Linker.Data", (int)Linker.LinkerSections[(int)SectionKind.Data].Size);
+			Compiler.GlobalCounters.Update("Linker.ROData", (int)Linker.LinkerSections[(int)SectionKind.ROData].Size);
+			Compiler.GlobalCounters.Update("Linker.BSS", (int)Linker.LinkerSections[(int)SectionKind.BSS].Size);
 		}
 	}
 }

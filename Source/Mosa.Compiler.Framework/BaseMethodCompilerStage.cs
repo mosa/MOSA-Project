@@ -656,7 +656,7 @@ namespace Mosa.Compiler.Framework
 		{
 			bool active = IsTraceable(traceLevel);
 
-			var traceLog = new TraceLog(TraceType.DebugTrace, MethodCompiler.Method, FormattedStageName, active);
+			var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName, active);
 
 			if (active)
 				traceLogs.Add(traceLog);
@@ -673,7 +673,7 @@ namespace Mosa.Compiler.Framework
 		{
 			bool active = IsTraceable(traceLevel);
 
-			var traceLog = new TraceLog(TraceType.DebugTrace, MethodCompiler.Method, FormattedStageName, section, active);
+			var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName, section, active);
 
 			if (active)
 				traceLogs.Add(traceLog);

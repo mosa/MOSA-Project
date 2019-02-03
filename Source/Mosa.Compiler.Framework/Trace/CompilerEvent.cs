@@ -21,6 +21,7 @@ namespace Mosa.Compiler.Framework.Trace
 		Warning,
 		Counter,
 		Special,
+		StatusUpdate,
 	};
 
 	public static class CompilerEventExtension

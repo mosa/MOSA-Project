@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.progressBar1 = new MetroFramework.Controls.MetroProgressBar();
@@ -35,6 +36,7 @@
             this.tbApplicationLocations = new MetroFramework.Controls.MetroTabControl();
             this.tabOptions = new MetroFramework.Controls.MetroTabPage();
             this.groupBox12 = new System.Windows.Forms.GroupBox();
+            this.cbEnableMethodScanner = new MetroFramework.Controls.MetroCheckBox();
             this.cbCompilerUsesMultipleThreads = new MetroFramework.Controls.MetroCheckBox();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
@@ -123,7 +125,7 @@
             this.tabOutput = new MetroFramework.Controls.MetroTabPage();
             this.rtbOutput = new System.Windows.Forms.RichTextBox();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
-            this.cbEnableMethodScanner = new MetroFramework.Controls.MetroCheckBox();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.tbApplicationLocations.SuspendLayout();
             this.tabOptions.SuspendLayout();
             this.groupBox12.SuspendLayout();
@@ -164,7 +166,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar1.Location = new System.Drawing.Point(0, 63);
             this.progressBar1.Name = "progressBar1";
+            this.progressBar1.ProgressBarStyle = System.Windows.Forms.ProgressBarStyle.Blocks;
             this.progressBar1.Size = new System.Drawing.Size(663, 20);
+            this.progressBar1.Step = 1;
             this.progressBar1.Style = MetroFramework.MetroColorStyle.Blue;
             this.progressBar1.TabIndex = 3;
             this.progressBar1.Theme = MetroFramework.MetroThemeStyle.Light;
@@ -227,6 +231,21 @@
             this.groupBox12.TabIndex = 30;
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = "Misc Options:";
+            // 
+            // cbEnableMethodScanner
+            // 
+            this.cbEnableMethodScanner.AutoSize = true;
+            this.cbEnableMethodScanner.Checked = true;
+            this.cbEnableMethodScanner.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbEnableMethodScanner.Location = new System.Drawing.Point(7, 40);
+            this.cbEnableMethodScanner.Name = "cbEnableMethodScanner";
+            this.cbEnableMethodScanner.Size = new System.Drawing.Size(148, 15);
+            this.cbEnableMethodScanner.Style = MetroFramework.MetroColorStyle.Blue;
+            this.cbEnableMethodScanner.TabIndex = 14;
+            this.cbEnableMethodScanner.Text = "Enable Method Scanner";
+            this.cbEnableMethodScanner.Theme = MetroFramework.MetroThemeStyle.Light;
+            this.cbEnableMethodScanner.UseCustomBackColor = true;
+            this.cbEnableMethodScanner.UseSelectable = true;
             // 
             // cbCompilerUsesMultipleThreads
             // 
@@ -1432,20 +1451,10 @@
             this.openFileDialog2.Filter = "Executable|*.exe";
             this.openFileDialog2.Title = "Select Assembly";
             // 
-            // cbEnableMethodScanner
+            // timer1
             // 
-            this.cbEnableMethodScanner.AutoSize = true;
-            this.cbEnableMethodScanner.Checked = true;
-            this.cbEnableMethodScanner.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbEnableMethodScanner.Location = new System.Drawing.Point(7, 40);
-            this.cbEnableMethodScanner.Name = "cbEnableMethodScanner";
-            this.cbEnableMethodScanner.Size = new System.Drawing.Size(148, 15);
-            this.cbEnableMethodScanner.Style = MetroFramework.MetroColorStyle.Blue;
-            this.cbEnableMethodScanner.TabIndex = 14;
-            this.cbEnableMethodScanner.Text = "Enable Method Scanner";
-            this.cbEnableMethodScanner.Theme = MetroFramework.MetroThemeStyle.Light;
-            this.cbEnableMethodScanner.UseCustomBackColor = true;
-            this.cbEnableMethodScanner.UseSelectable = true;
+            this.timer1.Enabled = true;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
             // MainForm
             // 
@@ -1607,5 +1616,6 @@
 		private MetroFramework.Controls.MetroCheckBox cbValueNumbering;
 		private MetroFramework.Controls.MetroCheckBox cbPlugKorlib;
 		private MetroFramework.Controls.MetroCheckBox cbEnableMethodScanner;
+		private System.Windows.Forms.Timer timer1;
 	}
 }
