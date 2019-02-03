@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var trace = CreateTraceLog("Instructions");
 
-			trace.Log("Label\tAddress\tLength\tStartLine\tEndLine\tStartColumn\tStartColumn\tInstruction\tDocument");
+			trace.Log("Label\tAddress\tLength\tStartLine\tEndLine\tStartColumn\tEndColumn\tInstruction\tDocument");
 
 			foreach (var block in BasicBlocks)
 			{
@@ -51,8 +51,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 						StartLine = instruction.StartLine;
 						EndLine = instruction.EndLine;
-						EndColumn = instruction.EndColumn;
 						StartColumn = instruction.StartColumn;
+						EndColumn = instruction.EndColumn;
 						Document = instruction.Document;
 
 						break;
@@ -75,7 +75,7 @@ namespace Mosa.Compiler.Framework.Stages
 						continue;
 
 					trace.Log(String.Format("{0:X5}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}",
-						Label, Address, Length, StartLine, EndLine, StartColumn, StartColumn, node.ToString(), Document));
+						Label, Address, Length, StartLine, EndLine, StartColumn, EndColumn, node.ToString(), Document));
 				}
 			}
 		}
@@ -97,12 +97,12 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var trace = CreateTraceLog("Source");
 
-			trace.Log("Label\tOffset\tStartLine\tEndLine\tStartColumn\tStartColumn\tDocument");
+			trace.Log("Label\tStartLine\tEndLine\tStartColumn\tEndColumn\tDocument");
 
 			foreach (var instruction in Method.Code)
 			{
 				trace.Log(String.Format("{0:X5}\t{1}\t{2}\t{3}\t{4}\t{5}",
-					instruction.Offset, instruction.StartLine, instruction.EndLine, instruction.StartColumn, instruction.StartColumn, instruction.Document));
+					instruction.Offset, instruction.StartLine, instruction.EndLine, instruction.StartColumn, instruction.EndColumn, instruction.Document));
 			}
 		}
 	}
