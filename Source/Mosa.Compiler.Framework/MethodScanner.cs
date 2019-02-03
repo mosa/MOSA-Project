@@ -118,8 +118,8 @@ namespace Mosa.Compiler.Framework
 
 		public void MethodDirectInvoked(MosaMethod method, MosaMethod source)
 		{
-			ScheduleMethod(method);
 			MethodInvoked(method, source, true);
+			ScheduleMethod(method);
 		}
 
 		private void MethodInvoked(MosaMethod method, MosaMethod source, bool direct)
@@ -176,6 +176,8 @@ namespace Mosa.Compiler.Framework
 				{
 					var derivedMethod = Compiler.TypeLayout.GetMethodBySlot(derived, slot);
 
+					invokedMethods.AddIfNew(derivedMethod);
+
 					ScheduleMethod(derivedMethod);
 				}
 
@@ -193,7 +195,7 @@ namespace Mosa.Compiler.Framework
 			{
 				foreach (var method in currentType.Methods)
 				{
-					if (invokedMethods.Contains(method)) // !(method.IsStatic || method.IsConstructor) &&
+					if (invokedMethods.Contains(method))
 					{
 						int slot = Compiler.TypeLayout.GetMethodSlot(method);
 
@@ -201,16 +203,22 @@ namespace Mosa.Compiler.Framework
 							continue;
 
 						slots[slot] = true;
+
 						ScheduleMethod(method);
 					}
 				}
 
-				currentType = currentType.BaseType;
+				currentType = currentType.BaseType; // EXPLORER: base types may not need to be considered
 			}
 		}
 
 		private void ScheduleMethod(MosaMethod method)
 		{
+			//lock (_lock)
+			//{
+			//	Debug.Assert(invokedMethods.Contains(method));
+			//}
+
 			lock (scheduledMethods)
 			{
 				if (scheduledMethods.Contains(method))
@@ -250,6 +258,9 @@ namespace Mosa.Compiler.Framework
 			var exceptionType = Compiler.TypeSystem.GetTypeByName("System", "Exception");
 			allocatedTypes.Add(exceptionType);
 
+			var delegateType = Compiler.TypeSystem.GetTypeByName("System", "Delegate");
+			allocatedTypes.Add(delegateType);
+
 			//var arrayType = Compiler.TypeSystem.GetTypeByName("System", "Array");
 			//allocatedTypes.Add(arrayType);
 
@@ -267,6 +278,7 @@ namespace Mosa.Compiler.Framework
 
 					if (methodAttribute != null)
 					{
+						invokedMethods.Add(method);
 						ScheduleMethod(method);
 						allocateType = true;
 					}
