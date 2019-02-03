@@ -13,6 +13,8 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var trace = CreateTraceLog();
 
+			trace.Log("Label\tAddressStart\tAddressLength\tStartLinevEndLine\tStartColumn\tStartColumn\tDocument");
+
 			foreach (var block in BasicBlocks)
 			{
 				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
@@ -28,6 +30,7 @@ namespace Mosa.Compiler.Framework.Stages
 					int EndLine = 0;
 					int EndColumn = 0;
 					int StartColumn = 0;
+					string Document = string.Empty;
 
 					//int Offset = node.Offset;
 
@@ -43,6 +46,8 @@ namespace Mosa.Compiler.Framework.Stages
 						EndLine = instruction.EndLine;
 						EndColumn = instruction.EndColumn;
 						StartColumn = instruction.StartColumn;
+						Document = instruction.Document;
+
 						break;
 					}
 
@@ -63,8 +68,8 @@ namespace Mosa.Compiler.Framework.Stages
 						continue;
 
 					trace.Log(
-							String.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}",
-							Label, AddressStart, AddressLength, StartLine, EndLine, StartColumn, StartColumn));
+							String.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}",
+							Label, AddressStart, AddressLength, StartLine, EndLine, StartColumn, StartColumn, Document));
 				}
 			}
 		}
