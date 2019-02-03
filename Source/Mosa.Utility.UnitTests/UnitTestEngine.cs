@@ -63,8 +63,8 @@ namespace Mosa.Utility.UnitTests
 				EnableInlinedMethods = true,
 				EnableIRLongExpansion = true,
 				EnableValueNumbering = true,
-				EnableMethodScanner = true,
 				TwoPassOptimizations = true,
+				EnableMethodScanner = false,
 
 				Emulator = EmulatorType.Qemu,
 				ImageFormat = ImageFormat.IMG,
