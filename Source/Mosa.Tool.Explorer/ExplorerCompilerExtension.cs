@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Stages;
 
 namespace Mosa.Tool.Explorer
 {
@@ -13,6 +14,10 @@ namespace Mosa.Tool.Explorer
 		{
 			pipeline.Add(
 				new DisassemblyStage()
+			);
+
+			pipeline.Add(
+				new DebugInfoStage()
 			);
 		}
 	}
