@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var trace = CreateTraceLog();
 
-			trace.Log("Label\tAddressStart\tAddressLength\tStartLinevEndLine\tStartColumn\tStartColumn\tDocument");
+			trace.Log("Label\tAddress\tLength\tStartLine\tEndLine\tStartColumn\tStartColumn\tDocument");
 
 			foreach (var block in BasicBlocks)
 			{
@@ -34,8 +34,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 					//int Offset = node.Offset;
 
-					int AddressStart = -1;
-					int AddressLength = 0;
+					int Address = -1;
+					int Length = 0;
 
 					foreach (var instruction in Method.Code)
 					{
@@ -59,17 +59,17 @@ namespace Mosa.Compiler.Framework.Stages
 						if (region.Label != Label)
 							continue;
 
-						AddressStart = region.Start;
-						AddressLength = region.Length;
+						Address = region.Start;
+						Length = region.Length;
 						break;
 					}
 
-					if (AddressStart == -1)
+					if (Address == -1)
 						continue;
 
 					trace.Log(
-							String.Format("{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}",
-							Label, AddressStart, AddressLength, StartLine, EndLine, StartColumn, StartColumn, Document));
+							String.Format("{0:X5}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}",
+							Label, Address, Length, StartLine, EndLine, StartColumn, StartColumn, Document));
 				}
 			}
 		}
