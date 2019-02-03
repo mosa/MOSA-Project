@@ -22,6 +22,7 @@ b *0x0
 # b *0xc010609f
 
 hbreak System.Void Mosa.HelloWorld.x86.Boot::Main()
+hbreak System.Void Mosa.Kernel.x86.ConsoleSession::GotoTop()
 
 ####################
 # continue debugging

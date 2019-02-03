@@ -281,7 +281,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 		{
 			//uint baseAddr = 0x00500000;
 
-			uint line = 0;
+			uint line = 1;
 			uint file = 1;
 
 			foreach (var type in TypeSystem.AllTypes)
@@ -301,14 +301,23 @@ namespace Mosa.Compiler.Extensions.Dwarf
 					if (symbol.VirtualAddress == 0)
 						continue;
 
-					uint baseAddr = (uint)symbol.VirtualAddress;
+					var methodData = Compiler.CompilerData.GetMethodData(method);
+					if (methodData == null)
+						continue;
+
+					uint methodVirtAddr = (uint)symbol.VirtualAddress;
 
 					var instructions = method.Code.Where(inst => inst.Document != null && inst.StartLine != 0xFEEFEE).OrderBy(i => i.Document).ThenBy(i => i.Offset);
 					var firstInstruction = instructions.FirstOrDefault();
 					if (firstInstruction == null)
 						continue;
 
-					var pc = baseAddr + (uint)firstInstruction.Offset;
+					if (method.FullName == "System.Void Mosa.Kernel.x86.ConsoleSession::GotoTop()")
+					{
+						var s = "";
+					}
+
+					var pc = methodVirtAddr + (uint)firstInstruction.Offset;
 
 					wr.WriteByte(0); // signals an extended opcode
 					wr.WriteULEB128(0x05); // number of bytes after this used by the extended opcode (unsigned LEB128 encoded)
@@ -317,7 +326,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 					foreach (var instruction in instructions)
 					{
-						uint newPc = baseAddr + (uint)instruction.Offset;
+						uint newPc = methodVirtAddr + (uint)instruction.Offset;
 						uint pcDiff = newPc - pc;
 
 						int lineDiff = instruction.StartLine - (int)line;

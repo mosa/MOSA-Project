@@ -18,6 +18,8 @@
 				"v1",
 				"--map",
 				"Mosa.HelloWorld.x86.map",
+				"--debug-info",
+				"Mosa.HelloWorld.x86.debug",
 				"--x86-irq-methods",
 				"--base-address",
 				"0x00500000",
