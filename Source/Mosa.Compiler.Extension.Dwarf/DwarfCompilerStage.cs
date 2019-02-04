@@ -308,17 +308,17 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 					uint methodVirtAddr = (uint)symbol.VirtualAddress;
 
-					// var instructions = method.Code.Where(inst => inst.Document != null && inst.StartLine != 0xFEEFEE).OrderBy(i => i.Document).ThenBy(i => i.Offset);
-					// var firstInstruction = instructions.FirstOrDefault();
-					// if (firstInstruction == null)
-					// 	continue;
+					var instructions = method.Code.Where(inst => inst.Document != null && inst.StartLine != 0xFEEFEE).OrderBy(i => i.Document).ThenBy(i => i.Offset);
+					var firstInstruction = instructions.FirstOrDefault();
+					if (firstInstruction == null)
+						continue;
 
 					if (method.FullName == "System.Void Mosa.Kernel.x86.ConsoleSession::GotoTop()")
 					{
 						var s = "";
 					}
-					var dmp = methodData.DumpByInstructions();
-					var locations = dmp.Where(loc => loc.Document != null).ToList();
+					var locations = Mosa.Compiler.Framework.Source.SourceRegions.GetSourceRegions(method, methodData);
+					// var locations = dmp.Where(loc => loc.Document != null).ToList();
 					if (locations.Count == 0)
 						continue;
 
@@ -336,7 +336,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 						int lineDiff = loc.StartLine - (int)line;
 
-						var newFile = FileHash[loc.Document].FileNum;
+						var newFile = FileHash[firstInstruction.Document].FileNum;
 
 						if (newFile != file)
 						{
