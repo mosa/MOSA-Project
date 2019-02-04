@@ -111,6 +111,14 @@ namespace Mosa.Compiler.Framework.Linker
 			Link(linkType, patchType, patchSymbol, patchOffset, referenceObject, referenceOffset);
 		}
 
+		public bool IsSymbolDefined(string name)
+		{
+			lock (_lock)
+			{
+				return symbolLookup.ContainsKey(name);
+			}
+		}
+
 		public LinkerSymbol GetSymbol(string name)
 		{
 			lock (_lock)

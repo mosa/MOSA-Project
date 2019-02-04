@@ -99,6 +99,9 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				if (type.IsModule)
 					continue;
 
+				if (!Linker.IsSymbolDefined(type.FullName))
+					continue;
+
 				writer.WriteLine(
 					"{0}\t{1:x8}\t{2}\t{3}\t{4}\t{5}\t{6}",
 					type.ID,
@@ -124,6 +127,9 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 				foreach (var method in type.Methods)
 				{
+					if (!Linker.IsSymbolDefined(method.FullName))
+						continue;
+
 					var symbol = Linker.GetSymbol(method.FullName);
 					var methodData = Compiler.CompilerData.GetMethodData(method);
 
@@ -189,6 +195,9 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 				foreach (var field in type.Fields)
 				{
+					if (!Linker.IsSymbolDefined(field.FullName))
+						continue;
+
 					var symbol = Linker.GetSymbol(Metadata.FieldDefinition + field.FullName);
 
 					//var datasection = (field.Data != null) ? SectionKind.ROData : SectionKind.BSS; // not used yet

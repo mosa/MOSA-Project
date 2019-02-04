@@ -336,8 +336,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				if (interfaceType != null)
 				{
 					var interfaceMethodTableSymbol = CreateInterfaceMethodTable(type, interfaceType);
-
-					// Link
 					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, interfaceSlotTableSymbol, writer.Position, interfaceMethodTableSymbol, 0);
 				}
 				writer.WriteZeroBytes(TypeLayout.NativePointerSize);
@@ -385,9 +383,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				// Create definition and get the symbol
 				var methodDefinitionSymbol = CreateMethodDefinition(method);
 
-				// Link
 				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, interfaceMethodTableSymbol, writer.Position, methodDefinitionSymbol, 0);
-
 				writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 			}
 
@@ -583,12 +579,9 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 7. Pointer to Exception Handler Table
-			if (method.ExceptionHandlers.Count != 0)
+			if (method.ExceptionHandlers.Count != 0 && Compiler.MethodScanner.IsMethodInvoked(method))
 			{
-				if (Compiler.MethodScanner.IsMethodInvoked(method))
-				{
-					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, writer.Position, Metadata.ProtectedRegionTable + method.FullName, 0);
-				}
+				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, writer.Position, Metadata.ProtectedRegionTable + method.FullName, 0);
 			}
 			writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
