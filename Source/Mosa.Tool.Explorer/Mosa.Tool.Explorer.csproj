@@ -83,7 +83,8 @@
     <Compile Include="CodeForm.Designer.cs">
       <DependentUpon>CodeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="DisassemblyStage.cs" />
+    <Compile Include="Stages\DebugInfoStage.cs" />
+    <Compile Include="Stages\DisassemblyStage.cs" />
     <Compile Include="ExplorerCompilerExtension.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>

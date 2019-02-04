@@ -6,7 +6,7 @@ using Mosa.Compiler.Framework.Trace;
 using SharpDisasm;
 using System;
 
-namespace Mosa.Tool.Explorer
+namespace Mosa.Tool.Explorer.Stages
 {
 	public class DisassemblyStage : BaseMethodCompilerStage
 	{
