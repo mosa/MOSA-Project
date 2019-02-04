@@ -317,7 +317,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 					{
 						var s = "";
 					}
-					var locations = Mosa.Compiler.Framework.Source.SourceRegions.GetSourceRegions(method, methodData);
+					var locations = Mosa.Compiler.Framework.Source.SourceRegions.GetSourceRegions(methodData);
 					// var locations = dmp.Where(loc => loc.Document != null).ToList();
 					if (locations.Count == 0)
 						continue;
