@@ -277,6 +277,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			wr.WriteULEB128(DwarfConstants.NullFileLength);
 		}
 
+
 		void EmitDebugLineTypes(EndianAwareBinaryWriter wr)
 		{
 			//uint baseAddr = 0x00500000;
@@ -307,31 +308,35 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 					uint methodVirtAddr = (uint)symbol.VirtualAddress;
 
-					var instructions = method.Code.Where(inst => inst.Document != null && inst.StartLine != 0xFEEFEE).OrderBy(i => i.Document).ThenBy(i => i.Offset);
-					var firstInstruction = instructions.FirstOrDefault();
-					if (firstInstruction == null)
-						continue;
+					// var instructions = method.Code.Where(inst => inst.Document != null && inst.StartLine != 0xFEEFEE).OrderBy(i => i.Document).ThenBy(i => i.Offset);
+					// var firstInstruction = instructions.FirstOrDefault();
+					// if (firstInstruction == null)
+					// 	continue;
 
 					if (method.FullName == "System.Void Mosa.Kernel.x86.ConsoleSession::GotoTop()")
 					{
 						var s = "";
 					}
+					var dmp = methodData.DumpByInstructions();
+					var locations = dmp.Where(loc => loc.Document != null).ToList();
+					if (locations.Count == 0)
+						continue;
 
-					var pc = methodVirtAddr + (uint)firstInstruction.Offset;
+					var pc = methodVirtAddr + (uint)locations[0].Address;
 
 					wr.WriteByte(0); // signals an extended opcode
 					wr.WriteULEB128(0x05); // number of bytes after this used by the extended opcode (unsigned LEB128 encoded)
 					wr.Write(DW_LNE_set_address);
 					wr.Write(pc);
 
-					foreach (var instruction in instructions)
+					foreach (var loc in locations)
 					{
-						uint newPc = methodVirtAddr + (uint)instruction.Offset;
+						uint newPc = methodVirtAddr + (uint)loc.Address;
 						uint pcDiff = newPc - pc;
 
-						int lineDiff = instruction.StartLine - (int)line;
+						int lineDiff = loc.StartLine - (int)line;
 
-						var newFile = FileHash[instruction.Document].FileNum;
+						var newFile = FileHash[loc.Document].FileNum;
 
 						if (newFile != file)
 						{
@@ -347,12 +352,12 @@ namespace Mosa.Compiler.Extensions.Dwarf
 						wr.WriteSLEB128(lineDiff);
 
 						wr.Write(DW_LNS_set_column);
-						wr.WriteULEB128((ulong)instruction.StartColumn);
+						wr.WriteULEB128((uint)loc.StartColumn);
 
 						wr.Write(DW_LNS_copy);
 
 						pc += pcDiff;
-						line = (uint)instruction.StartLine;
+						line = (uint)loc.StartLine;
 					};
 				}
 

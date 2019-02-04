@@ -95,7 +95,7 @@ namespace Mosa.Compiler.Framework
 			{
 				Label = label,
 				Start = start,
-				Length = length
+				Length = length,
 			});
 		}
 
