@@ -19,7 +19,6 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline)
 		{
-			pipeline.Add(new DebugInfoStage());
 		}
 
 	}
