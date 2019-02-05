@@ -48,6 +48,25 @@ namespace Mosa.Compiler.Extensions.Dwarf
 		DW_FORM_data1 = 0x0b,
 	}
 
+	public enum DwarfOpcodes : byte
+	{
+		DW_LNS_extended_opcode = 0,
+		DW_LNS_set_file = 4,
+		DW_LNS_set_column = 5,
+		DW_LNS_advance_line = 3,
+		DW_LNS_advance_pc = 2,
+		DW_LNS_copy = 1,
+		DW_LNS_negate_stmt = 6,
+		DW_LNS_set_basic_block = 7,
+	}
+
+	public enum DwarfExtendedOpcode : byte
+	{
+		DW_LNE_end_sequence = 1,
+		DW_LNE_set_address = 2,
+		DW_LNE_define_file = 3,
+	}
+
 	public class DwarfAbbrev
 	{
 		public uint Number { get; set; }

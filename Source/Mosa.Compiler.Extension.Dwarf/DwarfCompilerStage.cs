@@ -37,19 +37,6 @@ namespace Mosa.Compiler.Extensions.Dwarf
 				};
 		}
 
-		public static byte DW_LNS_extended_opcode = 0;
-		public static byte DW_LNS_set_file = 4;
-		public static byte DW_LNS_set_column = 5;
-		public static byte DW_LNS_advance_line = 3;
-		public static byte DW_LNS_advance_pc = 2;
-		public static byte DW_LNS_copy = 1;
-		public static byte DW_LNS_negate_stmt = 6;
-		public static byte DW_LNS_set_basic_block = 7;
-
-		public static byte DW_LNE_end_sequence = 1;
-		public static byte DW_LNE_set_address = 2;
-		public static byte DW_LNE_define_file = 3;
-
 		private List<DwarfAbbrev> AbbrevList = new List<DwarfAbbrev>();
 
 		private void EmitDebugInfo(EndianAwareBinaryWriter wr)
@@ -309,7 +296,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 					wr.WriteByte(0); // signals an extended opcode
 					wr.WriteULEB128(0x05); // number of bytes after this used by the extended opcode (unsigned LEB128 encoded)
-					wr.Write(DW_LNE_set_address);
+					wr.Write((byte)DwarfExtendedOpcode.DW_LNE_set_address);
 					wr.Write(pc);
 
 					foreach (var loc in locations)
@@ -324,20 +311,20 @@ namespace Mosa.Compiler.Extensions.Dwarf
 						if (newFile != file)
 						{
 							file = newFile;
-							wr.Write(DW_LNS_set_file);
+							wr.Write((byte)DwarfOpcodes.DW_LNS_set_file);
 							wr.WriteULEB128(file);
 						}
 
-						wr.Write(DW_LNS_advance_pc);
+						wr.Write((byte)DwarfOpcodes.DW_LNS_advance_pc);
 						wr.WriteSLEB128(pcDiff);
 
-						wr.Write(DW_LNS_advance_line);
+						wr.Write((byte)DwarfOpcodes.DW_LNS_advance_line);
 						wr.WriteSLEB128(lineDiff);
 
-						wr.Write(DW_LNS_set_column);
+						wr.Write((byte)DwarfOpcodes.DW_LNS_set_column);
 						wr.WriteULEB128((uint)loc.StartColumn);
 
-						wr.Write(DW_LNS_copy);
+						wr.Write((byte)DwarfOpcodes.DW_LNS_copy);
 
 						pc += pcDiff;
 						line = (uint)loc.StartLine;
