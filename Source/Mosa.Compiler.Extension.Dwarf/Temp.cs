@@ -28,6 +28,18 @@ namespace Mosa.Compiler.Framework.Source
 		public int EndColumn { get; set; }
 
 		public string Filename { get; set; }
+
+		/// <summary>
+		/// A valid source location requires at least a address, filename and line number to be usable.
+		/// Valid does not mean that all other properties are available, too.
+		/// </summary>
+		public bool IsValid
+		{
+			get
+			{
+				return !string.IsNullOrEmpty(Filename) && StartLine > 0 && Address >= 0;
+			}
+		}
 	}
 }
 
@@ -49,7 +61,7 @@ namespace Mosa.Compiler.Framework.Source
 			{
 				var firstInstruction = method.Code[0];
 
-				regions.Add(new SourceRegion
+				var region = new SourceRegion
 				{
 					Address = 0,
 					Length = data.LabelRegions.Count > 0 ? data.LabelRegions[0].Start : 0,
@@ -58,7 +70,9 @@ namespace Mosa.Compiler.Framework.Source
 					StartColumn = firstInstruction.StartColumn,
 					EndColumn = firstInstruction.EndColumn,
 					Filename = firstInstruction.Document
-				});
+				};
+				if (region.IsValid)
+					regions.Add(region);
 			}
 
 			var startLine = 0;
@@ -101,9 +115,11 @@ namespace Mosa.Compiler.Framework.Source
 						Filename = filename
 					};
 
-					regions.Add(region);
+					if (region.IsValid)
+						regions.Add(region);
 				}
 			}
+
 			return regions;
 		}
 
