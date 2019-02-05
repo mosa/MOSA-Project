@@ -6,9 +6,20 @@ using System.Linq;
 
 namespace Mosa.Compiler.Framework.Source
 {
+
+	/// <summary>
+	/// Mapping of method address to source code location
+	/// </summary>
 	public class SourceRegion
 	{
+		/// <summary>
+		/// Local address (Offset)
+		/// </summary>
 		public int Address { get; set; }
+
+		/// <summary>
+		/// How many bytes after Address belongs to this SourceRegion
+		/// </summary>
 		public int Length { get; set; }
 
 		public int StartLine { get; set; }
@@ -16,22 +27,24 @@ namespace Mosa.Compiler.Framework.Source
 		public int StartColumn { get; set; }
 		public int EndColumn { get; set; }
 
-		public string Document { get; set; }
+		public string Filename { get; set; }
 	}
 }
-
 
 namespace Mosa.Compiler.Framework.Source
 {
 	public static class SourceRegions
 	{
 
+		/// <summary>
+		/// Returns mapping of method address to source code location.
+		/// </summary>
 		public static List<SourceRegion> GetSourceRegions(MethodData data)
 		{
 			var method = data.Method;
 			var regions = new List<SourceRegion>(data.LabelRegions.Count + 1);
 
-			// Add prologue
+			// Add method header
 			if (method.Code.Count > 0)
 			{
 				var firstInstruction = method.Code[0];
@@ -44,7 +57,7 @@ namespace Mosa.Compiler.Framework.Source
 					EndLine = firstInstruction.EndLine,
 					StartColumn = firstInstruction.StartColumn,
 					EndColumn = firstInstruction.EndColumn,
-					Document = firstInstruction.Document
+					Filename = firstInstruction.Document
 				});
 			}
 
@@ -52,7 +65,7 @@ namespace Mosa.Compiler.Framework.Source
 			var endLine = 0;
 			var startColumn = 0;
 			var endColumn = 0;
-			var document = "";
+			var filename = "";
 
 			foreach (var labelRegion in data.LabelRegions)
 			{
@@ -71,7 +84,7 @@ namespace Mosa.Compiler.Framework.Source
 						endLine = instruction.EndLine;
 						startColumn = instruction.StartColumn;
 						endColumn = instruction.EndColumn;
-						document = instruction.Document;
+						filename = instruction.Document;
 					}
 
 					if (instruction.Offset != searchForLabel)
@@ -85,7 +98,7 @@ namespace Mosa.Compiler.Framework.Source
 						EndLine = endLine,
 						StartColumn = startColumn,
 						EndColumn = endColumn,
-						Document = document
+						Filename = filename
 					};
 
 					regions.Add(region);

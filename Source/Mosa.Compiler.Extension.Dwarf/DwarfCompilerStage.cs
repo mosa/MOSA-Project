@@ -273,7 +273,6 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			wr.WriteULEB128(DwarfConstants.NullFileLength);
 		}
 
-
 		void EmitDebugLineTypes(EndianAwareBinaryWriter wr)
 		{
 			uint line = 1;
