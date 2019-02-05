@@ -55,4 +55,3 @@ build.force
 .test/
 
 .gdb_history
-.vscode
