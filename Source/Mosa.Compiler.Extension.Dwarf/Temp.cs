@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.Source
 		public int StartColumn { get; set; }
 		public int EndColumn { get; set; }
 
-		public string Source { get; set; }
+		public string Document { get; set; }
 	}
 }
 
@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.Source
 					EndLine = firstInstruction.EndLine,
 					StartColumn = firstInstruction.StartColumn,
 					EndColumn = firstInstruction.EndColumn,
-					Source = firstInstruction.Document
+					Document = firstInstruction.Document
 				});
 			}
 
@@ -85,7 +85,7 @@ namespace Mosa.Compiler.Framework.Source
 						EndLine = endLine,
 						StartColumn = startColumn,
 						EndColumn = endColumn,
-						Source = document
+						Document = document
 					};
 
 					regions.Add(region);

@@ -69,7 +69,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			var cu = new DwarfCompilationUnit
 			{
 				Producer = "Mosa Compiler",
-				ProgramCounterLow = 0x00500000,
+				ProgramCounterLow = (uint)Compiler.CompilerOptions.BaseAddress,
 				ProgramCounterHigh = 0x00600000,
 			};
 			cu.Emit(context);
@@ -127,10 +127,6 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			wr.WriteByte(0xFB); // Value doesn't matter, because we are not using special op codes
 			wr.WriteByte(0x0E); // Value doesn't matter, because we are not using special op codes
 			wr.WriteByte(9 + 1); // first special op code
-
-			// wr.Write(0x00010101); // the number of arguments for the 12 standard opcodes
-			// wr.Write(0x01000000);
-			// wr.Write(0x01000001);
 
 			// the number of arguments for the 9 standard opcodes
 			wr.WriteByte(0x00); // 1
@@ -280,8 +276,6 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 		void EmitDebugLineTypes(EndianAwareBinaryWriter wr)
 		{
-			//uint baseAddr = 0x00500000;
-
 			uint line = 1;
 			uint file = 1;
 
@@ -308,17 +302,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 					uint methodVirtAddr = (uint)symbol.VirtualAddress;
 
-					var instructions = method.Code.Where(inst => inst.Document != null && inst.StartLine != 0xFEEFEE).OrderBy(i => i.Document).ThenBy(i => i.Offset);
-					var firstInstruction = instructions.FirstOrDefault();
-					if (firstInstruction == null)
-						continue;
-
-					if (method.FullName == "System.Void Mosa.Kernel.x86.ConsoleSession::GotoTop()")
-					{
-						var s = "";
-					}
 					var locations = Mosa.Compiler.Framework.Source.SourceRegions.GetSourceRegions(methodData);
-					// var locations = dmp.Where(loc => loc.Document != null).ToList();
 					if (locations.Count == 0)
 						continue;
 
@@ -336,7 +320,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 						int lineDiff = loc.StartLine - (int)line;
 
-						var newFile = FileHash[firstInstruction.Document].FileNum;
+						var newFile = FileHash[loc.Filename].FileNum;
 
 						if (newFile != file)
 						{
