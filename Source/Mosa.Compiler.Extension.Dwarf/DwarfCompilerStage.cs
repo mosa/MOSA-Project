@@ -7,6 +7,7 @@ using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Compiler.Framework.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
+using Mosa.Compiler.Framework.Source;
 using System.Linq;
 using System.IO;
 
@@ -288,7 +289,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 					uint methodVirtAddr = (uint)symbol.VirtualAddress;
 
-					var locations = Mosa.Compiler.Framework.Source.SourceRegions.GetSourceRegions(methodData);
+					var locations = SourceRegions.GetSourceRegions(methodData);
 					if (locations.Count == 0)
 						continue;
 
