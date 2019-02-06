@@ -5,6 +5,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using System.Text;
 
 namespace Mosa.Tool.Mosactl
 {
@@ -237,7 +238,34 @@ namespace Mosa.Tool.Mosactl
 			TaskCILBuild(CheckType.changed, args);
 			TaskBinaryBuild(CheckType.changed, args);
 
-			CallProcess(BinDir, GetEnv("${MOSA_BIN}/Mosa.Tool.GDBDebugger.exe"), "--image", ExpandKernelBinPath(OsName) + ".bin", "--autostart", "--debugfile", ExpandKernelBinPath(OsName) + ".debug");
+			if (IsWin)
+			{
+				CallProcess(BinDir, GetEnv("${MOSA_BIN}/Mosa.Tool.GDBDebugger.exe"), "--image", ExpandKernelBinPath(OsName) + ".bin", "--autostart", "--debugfile", ExpandKernelBinPath(OsName) + ".debug");
+			}
+			else
+			{
+				GenerateGDBFile();
+				CallProcess(BinDir, "gdb", "-x", ExpandKernelBinPath(OsName) + ".gdb.load", "-x", GetEnv("${MOSA_ROOT}/Demos/unix/debug-helloworld.gdb"));
+			}
+		}
+
+		private void GenerateGDBFile()
+		{
+			var expand = ExpandKernelBinPath(OsName);
+			var bin = expand + ".bin";
+			var gdb = expand + ".gdb.load";
+			var gdbqemu = expand + ".gdb.qemu";
+
+			var sb = new StringBuilder();
+			sb.AppendLine($"file {bin}");
+			sb.AppendLine($"target remote | {gdbqemu}");
+			File.WriteAllText(gdb, sb.ToString());
+
+			sb.Clear();
+			sb.AppendLine($"#/bin/bash");
+			sb.AppendLine($"qemu-system-i386 -kernel {bin} -S -gdb stdio");
+			File.WriteAllText(gdbqemu, sb.ToString());
+			CallProcess(BinDir, "chmod", "+x", gdbqemu);
 		}
 
 		public void TaskTools(CheckType ct)
