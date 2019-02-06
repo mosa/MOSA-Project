@@ -53,7 +53,7 @@ namespace Mosa.Tool.Mosactl
 						value = Path.Combine(GetEnv("MOSA_ROOT"), "Tools");
 						break;
 					case "MOSA_NUGET":
-						value = Path.Combine(GetEnv("MOSA_TOOLS"), "Nuget", "Nuget.exe");
+						value = Path.Combine(GetEnv("MOSA_TOOLS"), "nuget", "nuget.exe");
 						break;
 					case "MOSA_MSBUILD":
 						value = appLocations.MsBuild;

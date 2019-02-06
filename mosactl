@@ -3,7 +3,7 @@
 rdir=$(dirname $0)
 
 if [ ! -f $rdir/bin/Mosa.Tool.Mosactl.exe ]; then
-  $rdir/Tools/Nuget/Nuget.exe restor Source/Mosa.Tool.Mosactl.sln
+  $rdir/Tools/nuget/nuget.exe restore Source/Mosa.Tool.Mosactl.sln
   msbuild $rdir/Source/Mosa.Tool.Mosactl.sln
 fi
 
