@@ -87,6 +87,9 @@ namespace Mosa.Tool.Mosactl
 				return;
 			}
 
+			if (args.Count > 1)
+				OsName = args.Last(); // TODO!
+
 			switch (args[0])
 			{
 				case "tools":
@@ -112,6 +115,8 @@ namespace Mosa.Tool.Mosactl
 			}
 		}
 
+		private string OsName = "HelloWorld";
+
 		private void PrintHelp(string name)
 		{
 			using (var reader = new StreamReader(typeof(Application).Assembly.GetManifestResourceStream("Mosa.Tool.Mosactl.Help." + name + ".txt")))
@@ -124,9 +129,9 @@ namespace Mosa.Tool.Mosactl
 		{
 			TaskRuntime(CheckType.changed);
 
-			if (!File.Exists(GetEnv("${MOSA_BIN}/Mosa.HelloWorld.x86.exe")) || ct == CheckType.force)
+			if (!File.Exists(GetEnv(ExpandKernelBinPath(OsName) + ".exe")) || ct == CheckType.force)
 			{
-				CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), "Mosa.HelloWorld.x86/Mosa.HelloWorld.x86.csproj");
+				CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), ExpandKernelCsProjPath(OsName));
 			}
 		}
 
@@ -156,25 +161,25 @@ namespace Mosa.Tool.Mosactl
 			TaskTools(CheckType.changed);
 			TaskCILBuild(CheckType.changed, args);
 
-			if (!File.Exists("bin/Mosa.HelloWorld.x86.bin") || ct == CheckType.force)
+			if (!File.Exists(ExpandKernelBinPath(OsName) + ".bin") || ct == CheckType.force)
 			{
 				var compilerArgs = new List<string>() {
 				"-o",
-				"Mosa.HelloWorld.x86.bin",
+				ExpandKernelBinPath(OsName)+".bin",
 				"-a",
 				"x86",
 				"--mboot",
 				"v1",
 				"--map",
-				"Mosa.HelloWorld.x86.map",
+				ExpandKernelBinPath(OsName)+".map",
 				"--debug-info",
-				"Mosa.HelloWorld.x86.debug",
+				ExpandKernelBinPath(OsName)+".debug",
 				"--base-address",
 				"0x00500000",
 				"mscorlib.dll",
 				"Mosa.Plug.Korlib.dll",
 				"Mosa.Plug.Korlib.x86.dll",
-				"Mosa.HelloWorld.x86.exe"
+				ExpandKernelBinPath(OsName)+".exe"
 			};
 
 				CallProcess(BinDir, "Mosa.Tool.Compiler.exe", compilerArgs.ToArray());
@@ -224,7 +229,7 @@ namespace Mosa.Tool.Mosactl
 			TaskCILBuild(CheckType.changed, args);
 			TaskBinaryBuild(CheckType.changed, args);
 
-			CallProcess(BinDir, appLocations.QEMU, "-kernel", "Mosa.HelloWorld.x86.bin");
+			CallProcess(BinDir, appLocations.QEMU, "-kernel", ExpandKernelBinPath(OsName) + ".bin");
 		}
 
 		public void TaskDebug(List<string> args)
@@ -232,7 +237,7 @@ namespace Mosa.Tool.Mosactl
 			TaskCILBuild(CheckType.changed, args);
 			TaskBinaryBuild(CheckType.changed, args);
 
-			CallProcess(BinDir, GetEnv("${MOSA_BIN}/Mosa.Tool.GDBDebugger.exe"), "--image", "Mosa.HelloWorld.x86.bin", "--autostart", "--debugfile", "Mosa.HelloWorld.x86.debug");
+			CallProcess(BinDir, GetEnv("${MOSA_BIN}/Mosa.Tool.GDBDebugger.exe"), "--image", ExpandKernelBinPath(OsName) + ".bin", "--autostart", "--debugfile", ExpandKernelBinPath(OsName) + ".debug");
 		}
 
 		public void TaskTools(CheckType ct)
@@ -264,6 +269,40 @@ namespace Mosa.Tool.Mosactl
 			force,
 			changed,
 			notAvailable
+		}
+
+		public string ExpandKernelName(string name)
+		{
+			switch (name.ToLower())
+			{
+				case "helloworld":
+					return "Mosa.HelloWorld.x86";
+				case "coolworld":
+					return "Mosa.CoolWorld.x86";
+				case "testworld":
+					return "Mosa.TestWorld.x86";
+			}
+			return name;
+		}
+
+		public string ExpandKernelCsProjPath(string name)
+		{
+			var expandedName = ExpandKernelName(name);
+			if (expandedName != name)
+			{ // valid Alias
+				return GetEnv("${MOSA_SOURCE}/" + expandedName + "/" + expandedName + ".csproj");
+			}
+			return name;
+		}
+
+		public string ExpandKernelBinPath(string name)
+		{
+			var expandedName = ExpandKernelName(name);
+			if (expandedName != name)
+			{ // valid Alias
+				return GetEnv("${MOSA_BIN}/" + expandedName);
+			}
+			return name;
 		}
 	}
 
