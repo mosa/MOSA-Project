@@ -65,13 +65,15 @@
     <StartupObject>Mosa.Tool.Mosactl.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AppLocations.cs" />
     <Compile Include="Options.cs" />
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Application.cs" />
+    <Compile Include="..\Mosa.Utility.Launcher\AppLocations.cs">
+      <Link>AppLocations.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
