@@ -245,7 +245,7 @@ namespace Mosa.Tool.Mosactl
 			else
 			{
 				GenerateGDBFile();
-				CallProcess(BinDir, "gdb", "-x", ExpandKernelBinPath(OsName) + ".gdb.load", "-x", GetEnv("${MOSA_ROOT}/Demos/unix/debug-helloworld.gdb"));
+				CallProcess(BinDir, "gdb", "-x", ExpandKernelBinPath(OsName) + ".gdb.load", "-x", GetEnv("${MOSA_ROOT}/Ressources/settings.gdb"));
 			}
 		}
 
