@@ -1,0 +1,23 @@
+﻿mosactl
+
+[service|stage] <action> [options] [name]
+
+# handle by script:
+(framework configure)
+framework build
+
+# handle by app:
+cil build hellworld
+
+binary build hellworld
+binary delete hellworld
+
+disk build hellworld
+disk build --efi hellworld 
+
+build helloworld (calls: cil, binary, disk)
+
+run [--vm qemu] [--build] helloworld
+
+debug [--debugger gdb] [--build] helloworld
+
