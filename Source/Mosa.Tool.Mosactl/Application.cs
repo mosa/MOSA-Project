@@ -4,6 +4,7 @@ using System.Linq;
 using System.IO;
 using System.Diagnostics;
 using System.Reflection;
+using System.Text.RegularExpressions;
 
 namespace Mosa.Tool.Mosactl
 {
@@ -17,14 +18,66 @@ namespace Mosa.Tool.Mosactl
 		{
 			IsWin = Environment.OSVersion.Platform != PlatformID.Unix;
 			IsUnix = Environment.OSVersion.Platform == PlatformID.Unix;
-			BinDir = Path.GetDirectoryName(typeof(Application).Assembly.Location);
-			RootDir = Path.GetDirectoryName(BinDir);
-			SourceDir = Path.Combine(RootDir, "Source");
+
+			appLocations = new Mosa.Utility.Launcher.AppLocations();
+			appLocations.FindApplications();
+
+			RootDir = GetEnv("MOSA_ROOT");
+			BinDir = GetEnv("MOSA_BIN");
+			SourceDir = GetEnv("MOSA_SOURCE");
 		}
 
 		private string BinDir;
 		private string RootDir;
 		private string SourceDir;
+
+		private static Mosa.Utility.Launcher.AppLocations appLocations;
+
+		public static string GetEnv(string name)
+		{
+			var value = Environment.GetEnvironmentVariable(name);
+			if (string.IsNullOrEmpty(value))
+			{
+				switch (name)
+				{
+					case "MOSA_ROOT":
+						value = Path.GetDirectoryName(Path.GetDirectoryName(new Uri(typeof(Program).Assembly.Location).AbsolutePath));
+						break;
+					case "MOSA_BIN":
+						value = Path.Combine(GetEnv("MOSA_ROOT"), "bin");
+						break;
+					case "MOSA_SOURCE":
+						value = Path.Combine(GetEnv("MOSA_ROOT"), "Source");
+						break;
+					case "MOSA_TOOLS":
+						value = Path.Combine(GetEnv("MOSA_ROOT"), "Tools");
+						break;
+					case "MOSA_NUGET":
+						value = Path.Combine(GetEnv("MOSA_TOOLS"), "Nuget", "Nuget.exe");
+						break;
+					case "MOSA_MSBUILD":
+						value = appLocations.MsBuild;
+						break;
+					case "MOSA_WIN_OSDIR":
+						value = @"C:\Windows";
+						break;
+					case "MOSA_WIN_PROGRAMS":
+						value = @"C:\Program Files"; // TODO
+						break;
+					case "MOSA_WIN_PROGRAMS_X86":
+						value = @"C:\Program Files (x86)"; // TODO
+						break;
+				}
+			}
+
+			if (string.IsNullOrEmpty(value))
+				return "";
+
+			var regex = new Regex(@"\$\{(\w+)\}", RegexOptions.RightToLeft);
+			foreach (Match m in regex.Matches(value))
+				value = value.Replace(m.Value, GetEnv(m.Groups[1].Value));
+			return value;
+		}
 
 		public void Run(List<string> args)
 		{
@@ -36,8 +89,8 @@ namespace Mosa.Tool.Mosactl
 
 			switch (args[0])
 			{
-				case "framework":
-					TaskFramework();
+				case "tools":
+					TaskTools();
 					break;
 				case "net":
 				case "dotnet":
@@ -66,13 +119,13 @@ namespace Mosa.Tool.Mosactl
 
 		public void TaskCILBuild(List<string> args)
 		{
-			if (IsUnix)
-			{
-				CallProcess(SourceDir, "msbuild", "Mosa.HelloWorld.x86/Mosa.HelloWorld.x86.csproj");
-			}
-			else
-			{
-			}
+			CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), "Mosa.HelloWorld.x86/Mosa.HelloWorld.x86.csproj");
+		}
+
+		private bool CallMonoProcess(string workdir, string cmd, params string[] args)
+		{
+			var info = PrepareNetRuntime(cmd, args.ToList());
+			return CallProcess(workdir, info.target, info.Args);
 		}
 
 		private bool CallProcess(string workdir, string cmd, params string[] args)
@@ -82,6 +135,7 @@ namespace Mosa.Tool.Mosactl
 			start.FileName = cmd;
 			start.Arguments = string.Join(" ", args);
 			start.WorkingDirectory = workdir;
+			start.UseShellExecute = false;
 
 			var proc = Process.Start(start);
 			proc.WaitForExit();
@@ -91,9 +145,7 @@ namespace Mosa.Tool.Mosactl
 
 		public void TaskBinaryBuild(List<string> args)
 		{
-			if (IsUnix)
-			{
-				CallProcess(BinDir, "mono", "Mosa.Tool.Compiler.exe",
+			var compilerArgs = new List<string>() {
 				"-o",
 				"Mosa.HelloWorld.x86.bin",
 				"-a",
@@ -110,10 +162,39 @@ namespace Mosa.Tool.Mosactl
 				"mscorlib.dll",
 				"Mosa.Plug.Korlib.dll",
 				"Mosa.Plug.Korlib.x86.dll",
-				"Mosa.HelloWorld.x86.exe");
+				"Mosa.HelloWorld.x86.exe"
+			};
+
+
+			CallProcess(BinDir, "Mosa.Tool.Compiler.exe", compilerArgs.ToArray());
+		}
+
+		private class PlattformAppCall
+		{
+			public string target;
+			public string[] Args;
+		}
+
+		private PlattformAppCall PrepareNetRuntime(string netApplication, List<string> appArgs)
+		{
+			appArgs = new List<string>(appArgs);
+
+			if (IsUnix)
+			{
+				appArgs.Insert(0, netApplication);
+				return new PlattformAppCall
+				{
+					target = "mono",
+					Args = appArgs.ToArray()
+				};
 			}
 			else
 			{
+				return new PlattformAppCall
+				{
+					target = netApplication,
+					Args = appArgs.ToArray()
+				};
 			}
 		}
 
@@ -152,9 +233,10 @@ namespace Mosa.Tool.Mosactl
 		{
 		}
 
-		public void TaskFramework()
+		public void TaskTools()
 		{
-			Console.WriteLine("Cannot use target 'framework' directly. Please use the mosactl script in the project root directory.");
+			CallMonoProcess(SourceDir, GetEnv("MOSA_NUGET"), "restore", "Mosa.sln");
+			CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), "Mosa.Tool.Compiler/Mosa.Tool.Compiler.csproj");
 		}
 	}
 
