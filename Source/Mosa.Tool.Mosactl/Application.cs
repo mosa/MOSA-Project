@@ -182,7 +182,7 @@ namespace Mosa.Tool.Mosactl
 				ExpandKernelBinPath(OsName)+".exe"
 			};
 
-				CallProcess(BinDir, "Mosa.Tool.Compiler.exe", compilerArgs.ToArray());
+				CallMonoProcess(BinDir, "Mosa.Tool.Compiler.exe", compilerArgs.ToArray());
 			}
 		}
 
