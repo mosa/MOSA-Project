@@ -22,7 +22,7 @@ Function Find-MsBuild([int] $MaxVersion = 2017)
 $msbuild = Find-MsBuild
 
 if(-Not (Test-Path bin/Mosa.Tool.Mosactl.exe)) {
-  & Tools/Nuget/Nuget.exe Source/Mosa.Tool.Mosactl.sln
+  & Tools/Nuget/Nuget.exe restore Source/Mosa.Tool.Mosactl.sln
   & $msbuild Source/Mosa.Tool.Mosactl.sln
 }
 
