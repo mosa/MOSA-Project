@@ -122,7 +122,9 @@ namespace Mosa.Tool.Mosactl
 
 		public void TaskCILBuild(CheckType ct, List<string> args)
 		{
-			if (!File.Exists(GetEnv("${MOSA_BIN}/Mosa.HelloWorld.x86.dll")) || ct == CheckType.force)
+			TaskRuntime(CheckType.changed);
+
+			if (!File.Exists(GetEnv("${MOSA_BIN}/Mosa.HelloWorld.x86.exe")) || ct == CheckType.force)
 			{
 				CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), "Mosa.HelloWorld.x86/Mosa.HelloWorld.x86.csproj");
 			}
@@ -222,13 +224,7 @@ namespace Mosa.Tool.Mosactl
 			TaskCILBuild(CheckType.changed, args);
 			TaskBinaryBuild(CheckType.changed, args);
 
-			if (IsUnix)
-			{
-				CallProcess(BinDir, "qemu-system-i386", "Mosa.HelloWorld.x86.bin");
-			}
-			else
-			{
-			}
+			CallProcess(BinDir, appLocations.QEMU, "-kernel", "Mosa.HelloWorld.x86.bin");
 		}
 
 		public void TaskDebug(List<string> args)
@@ -258,7 +254,7 @@ namespace Mosa.Tool.Mosactl
 
 		public void TaskRuntime(CheckType ct)
 		{
-			var exists = File.Exists(GetEnv("${MOSA_BIN}/mscorlib.dll"));
+			var exists = File.Exists(GetEnv("${MOSA_BIN}/Mosa.Plug.Korlib.dll"));
 			if (!exists || ct == CheckType.force)
 			{
 				CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), "Mosa.Runtime.x86/Mosa.Runtime.x86.csproj");
