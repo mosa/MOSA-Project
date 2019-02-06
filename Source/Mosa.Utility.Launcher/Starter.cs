@@ -100,7 +100,10 @@ namespace Mosa.Utility.Launcher
 			}
 			else
 			{
-				arg = arg + " -hda " + Quote(Options.ImageFile);
+				if (Options.ImageFormat == ImageFormat.BIN)
+					arg = arg + " -kernel " + Quote(Options.ImageFile);
+				else
+					arg = arg + " -hda " + Quote(Options.ImageFile);
 			}
 
 			return LaunchApplication(AppLocations.QEMU, arg, getOutput);

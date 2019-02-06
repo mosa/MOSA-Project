@@ -167,8 +167,8 @@ namespace Mosa.Tool.Mosactl
 				"v1",
 				"--map",
 				"Mosa.HelloWorld.x86.map",
-				//"--debug-info",
-				//"Mosa.HelloWorld.x86.debug",
+				"--debug-info",
+				"Mosa.HelloWorld.x86.debug",
 				"--base-address",
 				"0x00500000",
 				"mscorlib.dll",
@@ -229,17 +229,10 @@ namespace Mosa.Tool.Mosactl
 
 		public void TaskDebug(List<string> args)
 		{
-			if (IsUnix)
-			{
-				//CallProcess(BinDir, "gdb", "-x","../Demo");
-			}
-			else
-			{
-			}
-		}
+			TaskCILBuild(CheckType.changed, args);
+			TaskBinaryBuild(CheckType.changed, args);
 
-		public void TaskDebug()
-		{
+			CallProcess(BinDir, GetEnv("${MOSA_BIN}/Mosa.Tool.GDBDebugger.exe"), "--image", "Mosa.HelloWorld.x86.bin", "--autostart", "--debugfile", "Mosa.HelloWorld.x86.debug");
 		}
 
 		public void TaskTools(CheckType ct)

@@ -136,14 +136,15 @@ namespace Mosa.Tool.GDBDebugger
 			{
 				VMProcess = StartQEMU();
 			}
-			else if (Options.AutoStart)
+			LoadDebugFile();
+			if (Options.AutoStart)
 			{
+				System.Threading.Thread.Sleep(3000);
 				Connect();
 			}
 
 			LoadBreakPoints();
 			LoadWatches();
-			LoadDebugFile();
 		}
 
 		void IStarterEvent.NewStatus(string status)
@@ -472,6 +473,7 @@ namespace Mosa.Tool.GDBDebugger
 		{
 			switch (Path.GetExtension(fileName).ToLower())
 			{
+				case ".bin": return ImageFormat.BIN;
 				case ".img": return ImageFormat.IMG;
 				case ".iso": return ImageFormat.ISO;
 			}
