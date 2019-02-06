@@ -7,8 +7,10 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseCompilerExtension
 	{
-		public abstract void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline);
+		public virtual void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline)
+		{ }
 
-		public abstract void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline);
+		public virtual void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline)
+		{ }
 	}
 }

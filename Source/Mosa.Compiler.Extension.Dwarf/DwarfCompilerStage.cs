@@ -24,17 +24,21 @@ namespace Mosa.Compiler.Extensions.Dwarf
 		protected override void RunPostCompile()
 		{
 			if (Linker.CreateExtraSections == null)
+			{
 				Linker.CreateExtraSections = CreateExtraSections;
+			}
 			else
+			{
 				Linker.CreateExtraSections = () =>
 				{
 					var sections = Linker.CreateExtraSections();
 					sections.AddRange(CreateExtraSections());
 					return sections;
 				};
+			}
 		}
 
-		private List<DwarfAbbrev> AbbrevList = new List<DwarfAbbrev>();
+		private readonly List<DwarfAbbrev> AbbrevList = new List<DwarfAbbrev>();
 
 		private void EmitDebugInfo(EndianAwareBinaryWriter wr)
 		{
@@ -90,8 +94,12 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			wr.WriteULEB128(DwarfConstants.NullAttributeValue);
 
 			if (abbr.HasChildren)
+			{
 				foreach (var child in abbr.Children)
+				{
 					EmitDebugAbbrev(wr, child);
+				}
+			}
 		}
 
 		private void EmitDebugLine(EndianAwareBinaryWriter wr)
@@ -143,9 +151,9 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			wr.Position = wr.BaseStream.Length;
 		}
 
-		private Dictionary<string, uint> Directories = new Dictionary<string, uint>();
-		private Dictionary<string, FileItem> FileHash = new Dictionary<string, FileItem>();
-		private List<FileItem> FileList = new List<FileItem>();
+		private readonly Dictionary<string, uint> Directories = new Dictionary<string, uint>();
+		private readonly Dictionary<string, FileItem> FileHash = new Dictionary<string, FileItem>();
+		private readonly List<FileItem> FileList = new List<FileItem>();
 
 		private class FileItem
 		{
@@ -213,10 +221,12 @@ namespace Mosa.Compiler.Extensions.Dwarf
 				var filename = Path.GetFileName(filepath);
 				var directory = GetDwarfDirPath(Path.GetDirectoryName(filepath));
 
-				uint dirNum = 0;
-				if (!string.IsNullOrEmpty(directory)) // root dir is always dirNum = 0
-					if (!Directories.TryGetValue(directory, out dirNum))
-						Directories.Add(directory, dirNum = nextDirNum++);
+				uint dirNum = 0;    // root dir is always dirNum = 0
+
+				if (!string.IsNullOrEmpty(directory) && !Directories.TryGetValue(directory, out dirNum))
+				{
+					Directories.Add(directory, dirNum = nextDirNum++);
+				}
 
 				var itm = new FileItem
 				{
@@ -232,14 +242,20 @@ namespace Mosa.Compiler.Extensions.Dwarf
 		private void EmitDirectories(EndianAwareBinaryWriter wr)
 		{
 			foreach (var entry in Directories.OrderBy(e => e.Value)) // order matters!
+			{
 				EmitDebugLineDirectoryName(wr, entry.Value, entry.Key);
+			}
+
 			wr.WriteByte(DwarfConstants.EndOfDirectories);
 		}
 
 		private void EmitFiles(EndianAwareBinaryWriter wr)
 		{
 			foreach (var file in FileList) // order matters!
+			{
 				EmitDebugLineFileName(wr, file.DirectoryNum, file.Name);
+			}
+
 			wr.WriteByte(DwarfConstants.EndOfFiles);
 		}
 
@@ -324,7 +340,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 						pc += pcDiff;
 						line = (uint)loc.StartLine;
-					};
+					}
 				}
 			}
 		}
