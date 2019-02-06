@@ -1,12 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Framework;
 using System;
 
-namespace Mosa.Compiler.Framework.Stages
+namespace Mosa.Tool.Explorer.Stages
 {
-	/// <summary>
-	/// Base class for code generation stages.
-	/// </summary>
 	public class DebugInfoStage : BaseMethodCompilerStage
 	{
 		protected override void Run()

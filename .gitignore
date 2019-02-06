@@ -54,3 +54,4 @@ build.force
 # exclude test directory
 .test/
 
+.gdb_history

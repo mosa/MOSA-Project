@@ -1,25 +1,19 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Stages;
-using Mosa.Tool.Explorer.Stages;
+using Mosa.Compiler.Framework.CompilerStages;
 
-namespace Mosa.Tool.Explorer
+namespace Mosa.Compiler.Extensions.Dwarf
 {
-	public class ExplorerCompilerExtension : BaseCompilerExtension
+	public class DwarfCompilerExtension : BaseCompilerExtension
 	{
 		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline)
-		{ }
+		{
+			pipeline.InsertBefore<LinkerFinalizationStage>(new DwarfCompilerStage());
+		}
 
 		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline)
 		{
-			pipeline.Add(
-				new DisassemblyStage()
-			);
-
-			pipeline.Add(
-				new DebugInfoStage()
-			);
 		}
 	}
 }

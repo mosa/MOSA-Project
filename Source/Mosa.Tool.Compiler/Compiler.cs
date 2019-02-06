@@ -18,7 +18,7 @@ namespace Mosa.Tool.Compiler
 	{
 		#region Data
 
-		protected MosaCompiler compiler = new MosaCompiler();
+		protected MosaCompiler compiler;
 
 		/// <summary>
 		/// Holds a reference to the Options parsed from the arguments.
@@ -50,6 +50,13 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -a x86 --mboot v1 --x
 
 		#endregion Constructors
 
+		private List<BaseCompilerExtension> GetCompilerExtensions()
+		{
+			var list = new List<BaseCompilerExtension>();
+			list.Add(new Mosa.Compiler.Extensions.Dwarf.DwarfCompilerExtension());
+			return list;
+		}
+
 		#region Public Methods
 
 		/// <summary>
@@ -79,6 +86,7 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -a x86 --mboot v1 --x
 					throw new Exception("No input file(s) specified.");
 				}
 
+				compiler = new MosaCompiler(GetCompilerExtensions());
 				compiler.CompilerOptions = options.CompilerOptions;
 
 				Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));

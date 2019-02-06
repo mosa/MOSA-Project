@@ -85,7 +85,7 @@ namespace Mosa.Tool.GDBDebugger.Views
 			};
 			var m = new ContextMenu();
 			m.MenuItems.Add(menu);
-			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MainForm.OnCopyToClipboard)) { Tag = clickedEntry.BreakPoint });
+			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MainForm.OnCopyToClipboardAsBreakPoint)) { Tag = clickedEntry.BreakPoint });
 			m.MenuItems.Add(new MenuItem("&Delete breakpoint", new EventHandler(MainForm.OnRemoveBreakPoint)) { Tag = clickedEntry.BreakPoint });
 
 			m.Show(dataGridView1, relativeMousePosition);

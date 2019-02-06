@@ -416,9 +416,16 @@ namespace Mosa.Tool.GDBDebugger
 			}
 		}
 
-		public void OnCopyToClipboard(Object sender, EventArgs e)
+		public void OnCopyToClipboardAsBreakPoint(Object sender, EventArgs e)
 		{
 			var text = (((sender as Menu).Tag) as BreakPoint).Name;
+
+			Clipboard.SetText(text);
+		}
+
+		public void OnCopyToClipboard(Object sender, EventArgs e)
+		{
+			var text = (((sender as Menu).Tag) as string);
 
 			Clipboard.SetText(text);
 		}
