@@ -195,10 +195,12 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 				foreach (var field in type.Fields)
 				{
-					if (!Linker.IsSymbolDefined(field.FullName))
+					var symbolName = Metadata.FieldDefinition + field.FullName;
+
+					if (!Linker.IsSymbolDefined(symbolName))
 						continue;
 
-					var symbol = Linker.GetSymbol(Metadata.FieldDefinition + field.FullName);
+					var symbol = Linker.GetSymbol(symbolName);
 
 					//var datasection = (field.Data != null) ? SectionKind.ROData : SectionKind.BSS; // not used yet
 
