@@ -14,7 +14,7 @@ namespace Mosa.Tool.Mosactl
 		/// <param name="args">The command line arguments.</param>
 		internal static void Main(string[] args)
 		{
-			var app = new Application();
+			var app = new MosaCtl();
 			app.Run(new List<string>(args));
 		}
 	}

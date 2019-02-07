@@ -17,8 +17,8 @@ namespace Mosa.Kernel.x86
 			if (!initialized)
 				Serial.SetupPort(Serial.COM2);
 
-			Serial.Write(Serial.COM1, message);
-			Serial.Write(Serial.COM1, "\n");
+			//Serial.Write(Serial.COM1, message);
+			//Serial.Write(Serial.COM1, "\n");
 		}
 
 	}

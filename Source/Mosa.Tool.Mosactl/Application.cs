@@ -11,12 +11,12 @@ using System.Threading;
 namespace Mosa.Tool.Mosactl
 {
 
-	public class Application
+	public class MosaCtl
 	{
 		private bool IsWin = false;
 		private bool IsUnix = false;
 
-		public Application()
+		public MosaCtl()
 		{
 			IsWin = Environment.OSVersion.Platform != PlatformID.Unix;
 			IsUnix = Environment.OSVersion.Platform == PlatformID.Unix;
@@ -112,7 +112,8 @@ namespace Mosa.Tool.Mosactl
 					TaskRun(args);
 					break;
 				case "test":
-					TaskTest(args);
+					if (!TaskTest(args))
+						Environment.Exit(1);
 					break;
 				case "debug":
 					TaskDebug(args);
@@ -124,7 +125,7 @@ namespace Mosa.Tool.Mosactl
 
 		private void PrintHelp(string name)
 		{
-			using (var reader = new StreamReader(typeof(Application).Assembly.GetManifestResourceStream("Mosa.Tool.Mosactl.Help." + name + ".txt")))
+			using (var reader = new StreamReader(typeof(MosaCtl).Assembly.GetManifestResourceStream("Mosa.Tool.Mosactl.Help." + name + ".txt")))
 			{
 				Console.WriteLine(reader.ReadToEnd());
 			}
@@ -238,7 +239,7 @@ namespace Mosa.Tool.Mosactl
 			CallQemu(false, null);
 		}
 
-		public void TaskTest(List<string> args)
+		public bool TaskTest(List<string> args)
 		{
 			TaskCILBuild(CheckType.changed, args);
 			TaskBinaryBuild(CheckType.changed, args);
@@ -254,9 +255,15 @@ namespace Mosa.Tool.Mosactl
 			});
 
 			if (testSuccess)
+			{
 				Console.WriteLine("Test PASSED");
+				return true;
+			}
 			else
+			{
 				Console.WriteLine("Test FAILED");
+				return false;
+			}
 		}
 
 		private bool CallQemu(bool nographic, Action<string, Process> OnKernelLog)
@@ -313,7 +320,23 @@ namespace Mosa.Tool.Mosactl
 			});
 			th.Start();
 
+			if (nographic)
+			{
+				var th2 = new Thread(() =>
+				{
+					Thread.Sleep(5000);
+					if (!p.HasExited)
+					{
+						Console.WriteLine("Test Timeout");
+						p.Kill();
+					}
+				});
+				th2.Start();
+			}
+
+
 			p.WaitForExit();
+
 			return true;
 		}
 
@@ -418,146 +441,5 @@ namespace Mosa.Tool.Mosactl
 			return name;
 		}
 	}
-
-	public class TProcess
-	{
-
-		private Process proc;
-		private ProcessStartInfo psi;
-
-		public void waitForExit()
-		{
-			proc.WaitForExit();
-		}
-
-		public TProcess(string bin, string args)
-		{
-			psi = new ProcessStartInfo(bin, args);
-		}
-
-		public void start()
-		{
-			psi.RedirectStandardOutput = true;
-			psi.UseShellExecute = false;
-
-			proc = Process.Start(psi);
-			try
-			{
-				proc.WaitForInputIdle();
-			}
-			catch (Exception ex)
-			{
-				Console.WriteLine(ex.ToString());
-			}
-		}
-
-		public static TProcess start(string bin, string args)
-		{
-			Console.WriteLine("EXEC: " + bin + " " + args);
-			var proc = new TProcess(bin, args);
-			proc.start();
-			return proc;
-		}
-
-		public static int startWait(string bin, string args = "")
-		{
-			var proc = start(bin, args);
-			proc.proc.WaitForExit();
-			return proc.proc.ExitCode;
-		}
-
-		public void GetOutputAsync(Action<string> lineHandler)
-		{
-			var th = new Thread(() =>
-			{
-				foreach (var line in GetOutput())
-				{
-					callHandler(() => lineHandler(line));
-				}
-			});
-			th.Start();
-		}
-
-		protected virtual void callHandler(Action cb)
-		{
-			cb();
-		}
-
-		public void GetAllOutputAsync(Action<IEnumerable<string>> lines)
-		{
-			var th = new Thread(() =>
-			{
-				callHandler(() => lines(GetAllOutput()));
-			});
-			th.Start();
-		}
-
-		public IEnumerable<string> GetOutput()
-		{
-			var buf = new char[1];
-			var sb = new StringBuilder();
-			while (!proc.HasExited)
-			{
-				var count = proc.StandardOutput.Read(buf, 0, 1);
-				if (count > 0)
-				{
-					if (buf[0].ToString() == Environment.NewLine)
-					{
-						var line = sb.ToString();
-						Console.WriteLine("EXEC-OUTPUT: " + line);
-						if (onNewLine != null)
-							onNewLine(line);
-						yield return line;
-						sb.Clear();
-					}
-					else
-					{
-						sb.Append(buf[0]);
-					}
-				}
-				else
-				{
-					Thread.Sleep(50);
-				}
-			}
-		}
-
-		public static IEnumerable<string> GetAllOutput(string bin, string args)
-		{
-			var proc = new TProcess(bin, args);
-			proc.start();
-			return proc.GetAllOutput();
-		}
-
-		public static string GetAllOutputString(string bin, string args)
-		{
-			var proc = new TProcess(bin, args);
-			proc.start();
-			return proc.GetAllOutputString();
-		}
-
-		public IEnumerable<string> GetAllOutput()
-		{
-			var lines = proc.StandardOutput.ReadToEnd().Split(new String[] { Environment.NewLine }, StringSplitOptions.None);
-			foreach (var line in lines)
-				Console.WriteLine("EXEC-OUTPUT: " + line);
-			return lines;
-		}
-
-		public string GetAllOutputString()
-		{
-			return string.Join(Environment.NewLine, GetAllOutput());
-		}
-
-		public event Action<string> onNewLine;
-
-		public static IEnumerable<string> GetOutput(string bin, string args)
-		{
-			var proc = TProcess.start(bin, args);
-			return proc.GetOutput();
-		}
-
-	}
-
 
 }
