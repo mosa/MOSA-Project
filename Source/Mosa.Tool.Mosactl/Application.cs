@@ -233,8 +233,9 @@ namespace Mosa.Tool.Mosactl
 
 		public void TaskRun(List<string> args)
 		{
-			TaskCILBuild(CheckType.changed, args);
-			TaskBinaryBuild(CheckType.changed, args);
+			var ct = args.Contains("--build") ? CheckType.force : CheckType.changed;
+			TaskCILBuild(ct, args);
+			TaskBinaryBuild(ct, args);
 
 			CallQemu(false, null);
 		}
