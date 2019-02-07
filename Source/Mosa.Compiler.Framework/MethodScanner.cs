@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework
 			Compiler = compiler;
 			IsEnabled = compiler.CompilerOptions.EnableMethodScanner;
 
-			trace = new TraceLog(TraceType.Debug, null, null, "MethodScanner", true);
+			trace = new TraceLog(TraceType.GlobalDebug, null, null, "MethodScanner", true);
 
 			Initialize();
 		}
