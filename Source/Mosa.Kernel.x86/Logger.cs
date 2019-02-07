@@ -5,7 +5,7 @@ using Mosa.Runtime.x86;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	/// Kernel log
+	/// Kernel log. Char only.
 	/// </summary>
 	public static class Logger
 	{
@@ -15,7 +15,7 @@ namespace Mosa.Kernel.x86
 		public static void Log(string message)
 		{
 			if (!initialized)
-				Serial.SetupPort(Serial.COM2);
+				Serial.SetupPort(Serial.COM1);
 
 			Serial.Write(Serial.COM1, message);
 			Serial.Write(Serial.COM1, "\n");

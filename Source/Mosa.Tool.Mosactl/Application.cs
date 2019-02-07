@@ -275,9 +275,14 @@ namespace Mosa.Tool.Mosactl
 
 			var args = new List<string>() {
 				"-kernel", ExpandKernelBinPath(OsName) + ".bin",
-				"-serial", "stdio",
-				"-serial", "tcp::1235,server,nowait"
 			};
+
+			args.Add("-serial");
+			args.Add("stdio");
+
+
+			args.Add("-serial");
+			args.Add("null");
 
 			if (nographic)
 				args.Add("-display none");
@@ -361,8 +366,12 @@ namespace Mosa.Tool.Mosactl
 		{
 			var expand = ExpandKernelBinPath(OsName);
 			var bin = expand + ".bin";
+			var log = expand + ".log";
 			var gdb = expand + ".gdb.load";
 			var gdbqemu = expand + ".gdb.qemu";
+
+			if (File.Exists(log))
+				File.Delete(log);
 
 			var sb = new StringBuilder();
 			sb.AppendLine($"file {bin}");
@@ -371,7 +380,7 @@ namespace Mosa.Tool.Mosactl
 
 			sb.Clear();
 			sb.AppendLine($"#/bin/bash");
-			sb.AppendLine($"qemu-system-i386 -kernel {bin} -S -gdb stdio");
+			sb.AppendLine($"qemu-system-i386 -kernel {bin} -S -gdb stdio -serial file:{log} -serial null");
 			File.WriteAllText(gdbqemu, sb.ToString());
 			CallProcess(BinDir, "chmod", "+x", gdbqemu);
 		}
