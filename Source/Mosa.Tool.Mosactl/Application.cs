@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Text;
+using System.Threading;
 
 namespace Mosa.Tool.Mosactl
 {
@@ -110,6 +111,9 @@ namespace Mosa.Tool.Mosactl
 				case "run":
 					TaskRun(args);
 					break;
+				case "test":
+					TaskTest(args);
+					break;
 				case "debug":
 					TaskDebug(args);
 					break;
@@ -145,6 +149,7 @@ namespace Mosa.Tool.Mosactl
 		private bool CallProcess(string workdir, string cmd, params string[] args)
 		{
 			Console.WriteLine("Call: " + cmd + string.Join("", args.Select(a => " " + a)));
+			Console.WriteLine("WorkDir: " + workdir);
 			var start = new ProcessStartInfo();
 			start.FileName = cmd;
 			start.Arguments = string.Join(" ", args);
@@ -230,7 +235,86 @@ namespace Mosa.Tool.Mosactl
 			TaskCILBuild(CheckType.changed, args);
 			TaskBinaryBuild(CheckType.changed, args);
 
-			CallProcess(BinDir, appLocations.QEMU, "-kernel", ExpandKernelBinPath(OsName) + ".bin");
+			CallQemu(false, null);
+		}
+
+		public void TaskTest(List<string> args)
+		{
+			TaskCILBuild(CheckType.changed, args);
+			TaskBinaryBuild(CheckType.changed, args);
+
+			var testSuccess = false;
+			CallQemu(true, (line, proc) =>
+			{
+				if (line == "<TEST:PASSED:Boot.Main>")
+				{
+					testSuccess = true;
+					proc.Kill();
+				}
+			});
+
+			if (testSuccess)
+				Console.WriteLine("Test PASSED");
+			else
+				Console.WriteLine("Test FAILED");
+		}
+
+		private bool CallQemu(bool nographic, Action<string, Process> OnKernelLog)
+		{
+			var logFile = ExpandKernelBinPath(OsName) + ".log";
+			if (File.Exists(logFile))
+				File.Delete(logFile);
+
+			var args = new List<string>() {
+				"-kernel", ExpandKernelBinPath(OsName) + ".bin",
+				"-serial", "stdio",
+				"-serial", "tcp::1235,server,nowait"
+			};
+
+			if (nographic)
+				args.Add("-display none");
+
+			var cmd = appLocations.QEMU;
+			var workDir = BinDir;
+			Console.WriteLine("Call: " + cmd + string.Join("", args.Select(a => " " + a)));
+			Console.WriteLine("WorkDir: " + workDir);
+
+			var start = new ProcessStartInfo();
+			start.FileName = cmd;
+			start.Arguments = string.Join(" ", args);
+			start.WorkingDirectory = workDir;
+			start.UseShellExecute = false;
+			start.RedirectStandardOutput = true;
+
+			var p = Process.Start(start);
+
+			var th = new Thread(() =>
+			{
+				var buf = new char[1];
+				var sb = new StringBuilder();
+				while (true)
+				{
+					var count = p.StandardOutput.Read(buf, 0, 1);
+					if (count == 0)
+						break;
+					Console.Write(buf[0]);
+					if (buf[0] == '\n')
+					{
+						var line = sb.ToString();
+						if (OnKernelLog != null) OnKernelLog(line, p);
+						sb.Clear();
+					}
+					else
+					{
+						sb.Append(buf[0]);
+					}
+
+				}
+			});
+			th.Start();
+
+			p.WaitForExit();
+			return true;
 		}
 
 		public void TaskDebug(List<string> args)
@@ -335,6 +419,145 @@ namespace Mosa.Tool.Mosactl
 		}
 	}
 
+	public class TProcess
+	{
+
+		private Process proc;
+		private ProcessStartInfo psi;
+
+		public void waitForExit()
+		{
+			proc.WaitForExit();
+		}
+
+		public TProcess(string bin, string args)
+		{
+			psi = new ProcessStartInfo(bin, args);
+		}
+
+		public void start()
+		{
+			psi.RedirectStandardOutput = true;
+			psi.UseShellExecute = false;
+
+			proc = Process.Start(psi);
+			try
+			{
+				proc.WaitForInputIdle();
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex.ToString());
+			}
+		}
+
+		public static TProcess start(string bin, string args)
+		{
+			Console.WriteLine("EXEC: " + bin + " " + args);
+			var proc = new TProcess(bin, args);
+			proc.start();
+			return proc;
+		}
+
+		public static int startWait(string bin, string args = "")
+		{
+			var proc = start(bin, args);
+			proc.proc.WaitForExit();
+			return proc.proc.ExitCode;
+		}
+
+		public void GetOutputAsync(Action<string> lineHandler)
+		{
+			var th = new Thread(() =>
+			{
+				foreach (var line in GetOutput())
+				{
+					callHandler(() => lineHandler(line));
+				}
+			});
+			th.Start();
+		}
+
+		protected virtual void callHandler(Action cb)
+		{
+			cb();
+		}
+
+		public void GetAllOutputAsync(Action<IEnumerable<string>> lines)
+		{
+			var th = new Thread(() =>
+			{
+				callHandler(() => lines(GetAllOutput()));
+			});
+			th.Start();
+		}
+
+		public IEnumerable<string> GetOutput()
+		{
+			var buf = new char[1];
+			var sb = new StringBuilder();
+			while (!proc.HasExited)
+			{
+				var count = proc.StandardOutput.Read(buf, 0, 1);
+				if (count > 0)
+				{
+					if (buf[0].ToString() == Environment.NewLine)
+					{
+						var line = sb.ToString();
+						Console.WriteLine("EXEC-OUTPUT: " + line);
+						if (onNewLine != null)
+							onNewLine(line);
+						yield return line;
+						sb.Clear();
+					}
+					else
+					{
+						sb.Append(buf[0]);
+					}
+				}
+				else
+				{
+					Thread.Sleep(50);
+				}
+			}
+		}
+
+		public static IEnumerable<string> GetAllOutput(string bin, string args)
+		{
+			var proc = new TProcess(bin, args);
+			proc.start();
+			return proc.GetAllOutput();
+		}
+
+		public static string GetAllOutputString(string bin, string args)
+		{
+			var proc = new TProcess(bin, args);
+			proc.start();
+			return proc.GetAllOutputString();
+		}
+
+		public IEnumerable<string> GetAllOutput()
+		{
+			var lines = proc.StandardOutput.ReadToEnd().Split(new String[] { Environment.NewLine }, StringSplitOptions.None);
+			foreach (var line in lines)
+				Console.WriteLine("EXEC-OUTPUT: " + line);
+			return lines;
+		}
+
+		public string GetAllOutputString()
+		{
+			return string.Join(Environment.NewLine, GetAllOutput());
+		}
+
+		public event Action<string> onNewLine;
+
+		public static IEnumerable<string> GetOutput(string bin, string args)
+		{
+			var proc = TProcess.start(bin, args);
+			return proc.GetOutput();
+		}
+
+	}
 
 
 }
