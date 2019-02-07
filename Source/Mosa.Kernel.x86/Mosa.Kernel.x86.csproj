@@ -81,6 +81,7 @@
     <Compile Include="Helpers\DebugImplementation.cs" />
     <Compile Include="Debugger.cs" />
     <Compile Include="Serial.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="KernelMemory.cs" />
     <Compile Include="CMOS.cs" />
     <Compile Include="CpuInfo.cs" />
