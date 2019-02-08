@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public void UpdateNoLock(string name, int count)
+		public void UpdateSkipLock(string name, int count)
 		{
 			if (counters.TryGetValue(name, out int current))
 			{

@@ -29,10 +29,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private static readonly Operand[] emptyOperandList = new Operand[0];
 
-		/// <summary>
-		/// Holds flag that will stop method compiler
-		/// </summary>
-		public bool IsStopped { get; private set; }
+		private Stopwatch Stopwatch = new Stopwatch();
 
 		#endregion Data Members
 
@@ -192,6 +189,11 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public bool IsStackFrameRequired { get; set; }
 
+		/// <summary>
+		/// Holds flag that will stop method compiler
+		/// </summary>
+		public bool IsStopped { get; private set; }
+
 		#endregion Properties
 
 		#region Construction
@@ -350,7 +352,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public void Compile()
 		{
-			MethodData.CompileTimeStartTick = DateTime.Now.Ticks;
+			Stopwatch.Restart();
 
 			if (Method.IsCompilerGenerated)
 			{
@@ -368,11 +370,18 @@ namespace Mosa.Compiler.Framework
 
 			ExecutePipeline();
 
-			var log = new TraceLog(TraceType.MethodCounters, Method, string.Empty, Trace.TraceFilter.Active);
-			log.Log(MethodData.Counters.Export());
-			Trace.TraceListener.OnNewTraceLog(log);
+			Stopwatch.Stop();
 
-			MethodData.CompileTimeEndTick = DateTime.Now.Ticks;
+			MethodData.ElapsedNanoSeconds = Stopwatch.ElapsedNanoSeconds();
+
+			if (Compiler.CompilerOptions.EnableStatistics)
+			{
+				MethodData.Counters.UpdateSkipLock("CompilerTime.ElapsedNanoSeconds", (int)MethodData.ElapsedNanoSeconds);
+
+				var log = new TraceLog(TraceType.MethodCounters, Method, string.Empty, Trace.TraceFilter.Active);
+				log.Log(MethodData.Counters.Export());
+				Trace.TraceListener.OnNewTraceLog(log);
+			}
 		}
 
 		private void ExecutePipeline()

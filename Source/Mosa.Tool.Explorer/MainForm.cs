@@ -39,6 +39,7 @@ namespace Mosa.Tool.Explorer
 		private readonly Dictionary<string, StringBuilder> Logs = new Dictionary<string, StringBuilder>();
 		private readonly List<string> LogSections = new List<string>();
 
+		private string CurrentLogSection = string.Empty;
 		private bool DirtyLogDropDown = true;
 		private bool DirtyLog = true;
 
@@ -102,7 +103,7 @@ namespace Mosa.Tool.Explorer
 				if (entry != null)
 				{
 					log.AppendLine(entry);
-					DirtyLog = true;
+					DirtyLog = CurrentLogSection == section;
 				}
 			}
 		}
@@ -138,21 +139,17 @@ namespace Mosa.Tool.Explorer
 
 		private void RefreshLog()
 		{
+			if (tabControl.SelectedTab != tabLogs)
+				return;
+
 			if (!DirtyLog)
 				return;
 
 			DirtyLog = false;
 
-			if (!(cbSectionLogs.SelectedItem is string section))
-				return;
-
-			var s = section.Substring(section.IndexOf(' ') + 1);
-
-			StringBuilder text = null;
-
 			lock (Logs)
 			{
-				text = Logs[s];
+				var text = Logs[CurrentLogSection];
 
 				if (text == null)
 				{
@@ -954,11 +951,14 @@ namespace Mosa.Tool.Explorer
 
 		private void cbSections_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			var formatted = cbSectionLogs.SelectedItem as string;
+			CurrentLogSection = formatted.Substring(formatted.IndexOf(' ') + 1);
+
 			DirtyLog = true;
 			RefreshLog();
 		}
 
-		private object _statusLock = new object();
+		private readonly object _statusLock = new object();
 
 		private void RefreshStatus()
 		{

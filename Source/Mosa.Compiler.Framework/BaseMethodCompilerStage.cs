@@ -718,7 +718,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="counter">The counter.</param>
 		public void UpdateCounter(Counter counter)
 		{
-			MethodData.Counters.UpdateNoLock(counter.Name, counter.Count);
+			MethodData.Counters.UpdateSkipLock(counter.Name, counter.Count);
 		}
 
 		/// <summary>
