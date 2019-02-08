@@ -267,7 +267,10 @@ namespace Mosa.Compiler.Framework
 		{
 			NewCompilerTraceEvent(CompilerEvent.CompilingMethod, method.FullName, threadID);
 
-			var methodCompiler = GetMethodCompiler(method, basicBlocks, threadID);
+			var pipeline = GetOrCreateMethodStagePipeline(threadID);
+
+			var methodCompiler = new MethodCompiler(this, method, basicBlocks, threadID);
+			methodCompiler.Pipeline = pipeline;
 
 			methodCompiler.Compile();
 
@@ -275,10 +278,8 @@ namespace Mosa.Compiler.Framework
 			CompilerTrace.TraceListener.OnMethodCompiled(method);
 		}
 
-		private MethodCompiler GetMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, int threadID = 0)
+		private Pipeline<BaseMethodCompilerStage> GetOrCreateMethodStagePipeline(int threadID)
 		{
-			var methodCompiler = new MethodCompiler(this, method, basicBlocks, threadID);
-
 			var pipeline = methodStagePipelines[threadID];
 
 			if (pipeline == null)
@@ -302,9 +303,7 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			methodCompiler.Pipeline = pipeline;
-
-			return methodCompiler;
+			return pipeline;
 		}
 
 		/// <summary>

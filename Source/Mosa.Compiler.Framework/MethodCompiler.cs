@@ -2,12 +2,10 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
-using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -207,6 +205,8 @@ namespace Mosa.Compiler.Framework
 		/// <param name="threadID">The thread identifier.</param>
 		public MethodCompiler(Compiler compiler, MosaMethod method, BasicBlocks basicBlocks, int threadID)
 		{
+			Stopwatch = Stopwatch.StartNew();
+
 			Compiler = compiler;
 			Method = method;
 			Type = method.DeclaringType;
@@ -352,8 +352,6 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public void Compile()
 		{
-			Stopwatch.Restart();
-
 			if (Method.IsCompilerGenerated)
 			{
 				IsCILDecodeRequired = false;
@@ -370,14 +368,8 @@ namespace Mosa.Compiler.Framework
 
 			ExecutePipeline();
 
-			Stopwatch.Stop();
-
-			MethodData.ElapsedNanoSeconds = Stopwatch.ElapsedNanoSeconds();
-
 			if (Compiler.CompilerOptions.EnableStatistics)
 			{
-				MethodData.Counters.UpdateSkipLock("CompilerTime.ElapsedNanoSeconds", (int)MethodData.ElapsedNanoSeconds);
-
 				var log = new TraceLog(TraceType.MethodCounters, Method, string.Empty, Trace.TraceFilter.Active);
 				log.Log(MethodData.Counters.Export());
 				Trace.TraceListener.OnNewTraceLog(log);
@@ -389,17 +381,63 @@ namespace Mosa.Compiler.Framework
 			if (!IsExecutePipeline)
 				return;
 
-			int position = 0;
+			Stopwatch stageStopwatch = null;
 
-			foreach (var stage in Pipeline)
+			long[] stageExecutionTimes = null;
+
+			if (Compiler.CompilerOptions.EnableStatistics)
 			{
-				stage.Setup(this, ++position);
+				stageExecutionTimes = new long[Pipeline.Count];
+				stageStopwatch = Stopwatch.StartNew();
+			}
+
+			for (int i = 0; i < Pipeline.Count; i++)
+			{
+				var stage = Pipeline[i];
+
+				if (stageStopwatch != null)
+				{
+					stageStopwatch.Restart();
+				}
+
+				stage.Setup(this, i);
 				stage.Execute();
+
+				if (stageStopwatch != null)
+				{
+					stageExecutionTimes[i] = stageStopwatch.ElapsedTicks;
+				}
 
 				InstructionLogger.Run(this, stage);
 
 				if (IsStopped)
 					break;
+			}
+
+			if (Compiler.CompilerOptions.EnableStatistics)
+			{
+				var totalTicks = Stopwatch.ElapsedTicks;
+
+				MethodData.ElapsedTicks = totalTicks;
+
+				MethodData.Counters.NewCountSkipLock("ExecutionTime.Total.ElapsedTicks", (int)MethodData.ElapsedTicks);
+
+				var executionTimeLog = new TraceLog(TraceType.MethodDebug, Method, "Execution Time/Ticks", Trace.TraceFilter.Active);
+
+				for (int i = 0; i < Pipeline.Count; i++)
+				{
+					var stageName = Pipeline[i].FormattedStageName;
+					var ticks = stageExecutionTimes[i];
+					var percentage = (ticks * 100) / totalTicks;
+
+					executionTimeLog.Log(stageName.PadRight(50) + " : " + percentage.ToString().PadLeft(3) + "%  Ticks = " + ticks.ToString());
+
+					MethodData.Counters.NewCountSkipLock("ExecutionTime." + stageName + ".ElapsedTicks", (int)ticks);
+				}
+
+				executionTimeLog.Log("****Total Time".PadRight(50) + "         Ticks = " + totalTicks.ToString());
+
+				Trace.TraceListener.OnNewTraceLog(executionTimeLog);
 			}
 		}
 

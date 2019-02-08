@@ -66,7 +66,7 @@ namespace Mosa.Compiler.Framework
 
 		public List<LabelRegion> LabelRegions { get; }
 
-		public long ElapsedNanoSeconds { get; set; }
+		public long ElapsedTicks { get; set; }
 
 		#endregion Properties
 

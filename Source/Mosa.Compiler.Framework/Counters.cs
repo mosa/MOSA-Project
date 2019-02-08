@@ -46,6 +46,11 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
+		public void NewCountSkipLock(string name, int count)
+		{
+			counters.Add(name, count);
+		}
+
 		public List<string> Export()
 		{
 			var counts = new List<string>();
