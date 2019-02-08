@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework
 
 		private readonly Pipeline<BaseMethodCompilerStage>[] methodStagePipelines;
 
-		private Dictionary<string, InstrinsicMethodDelegate> internalIntrinsicMethods { get; } = new Dictionary<string, InstrinsicMethodDelegate>();
+		private Dictionary<string, InstrinsicMethodDelegate> InternalIntrinsicMethods { get; } = new Dictionary<string, InstrinsicMethodDelegate>();
 
 		#endregion Data Members
 
@@ -234,7 +234,7 @@ namespace Mosa.Compiler.Framework
 						var d = (InstrinsicMethodDelegate)Delegate.CreateDelegate(typeof(InstrinsicMethodDelegate), method);
 
 						// Finally add the dictionary entry mapping the target name and the delegate
-						internalIntrinsicMethods.Add(attributes[i].Target, d);
+						InternalIntrinsicMethods.Add(attributes[i].Target, d);
 					}
 				}
 			}
@@ -475,7 +475,7 @@ namespace Mosa.Compiler.Framework
 
 		public InstrinsicMethodDelegate GetInstrincMethod(string name)
 		{
-			internalIntrinsicMethods.TryGetValue(name, out InstrinsicMethodDelegate value);
+			InternalIntrinsicMethods.TryGetValue(name, out InstrinsicMethodDelegate value);
 
 			return value;
 		}

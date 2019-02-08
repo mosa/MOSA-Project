@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.Trace
 			if (!compilerTrace.TraceFilter.IsMatch(method, stage))
 				return;
 
-			var traceLog = new TraceLog(TraceType.InstructionList, method, stage, true);
+			var traceLog = new TraceLog(TraceType.MethodInstructions, method, stage, true);
 
 			traceLog.Log($"{method.FullName} after stage {stage}:");
 			traceLog.Log();

@@ -368,7 +368,7 @@ namespace Mosa.Compiler.Framework
 
 			ExecutePipeline();
 
-			var log = new TraceLog(TraceType.Counters, Method, string.Empty, Trace.TraceFilter.Active);
+			var log = new TraceLog(TraceType.MethodCounters, Method, string.Empty, Trace.TraceFilter.Active);
 			log.Log(MethodData.Counters.Export());
 			Trace.TraceListener.OnNewTraceLog(log);
 

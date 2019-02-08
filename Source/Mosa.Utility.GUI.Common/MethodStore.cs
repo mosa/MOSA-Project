@@ -91,7 +91,7 @@ namespace Mosa.Utility.GUI.Common
 					line = Simplify(line);
 
 					result.Append(line);
-					result.Append("\n");
+					result.Append('\n');
 				}
 
 				return result.ToString();

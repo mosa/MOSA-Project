@@ -284,7 +284,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 				foreach (var method in type.Methods)
 				{
-					if (method.Code == null)
+					if (!method.HasImplementation)
 						continue;
 
 					var symbol = Linker.GetSymbol(method.FullName);
