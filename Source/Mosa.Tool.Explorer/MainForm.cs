@@ -39,6 +39,7 @@ namespace Mosa.Tool.Explorer
 
 		private int TotalMethods = 0;
 		private int CompletedMethods = 0;
+		private string Status = null;
 
 		private readonly Dictionary<string, StringBuilder> Logs = new Dictionary<string, StringBuilder>();
 		private bool DirtyLogSectionDropDown = true;
@@ -79,7 +80,11 @@ namespace Mosa.Tool.Explorer
 			CountersLog.Clear();
 			ErrorLog.Clear();
 			ExceptionLog.Clear();
-			Logs.Clear();
+
+			lock (Logs)
+			{
+				Logs.Clear();
+			}
 
 			ClearSectionDropDown();
 
@@ -88,28 +93,39 @@ namespace Mosa.Tool.Explorer
 
 		private void NewLog(string section, StringBuilder log)
 		{
-			if (Logs.ContainsKey(section))
+			lock (Logs)
 			{
-				Logs.Remove(section);
+				if (Logs.ContainsKey(section))
+				{
+					Logs.Remove(section);
+				}
+
+				Logs.Add(section, log);
+
+				DirtyLogSectionDropDown = true;
+				DirtyLogSection = true;
 			}
+		}
 
-			Logs.Add(section, log);
-
-			DirtyLogSectionDropDown = true;
-			DirtyLogSection = true;
+		private void UpdateLog(string section, List<string> lines)
+		{
+			UpdateLog(section, CreateText(lines));
 		}
 
 		private void UpdateLog(string section, string entry)
 		{
-			if (!Logs.TryGetValue(section, out StringBuilder log))
+			lock (Logs)
 			{
-				log = new StringBuilder();
-				Logs.Add(section, log);
-				DirtyLogSectionDropDown = true;
+				if (!Logs.TryGetValue(section, out StringBuilder log))
+				{
+					log = new StringBuilder();
+					Logs.Add(section, log);
+					DirtyLogSectionDropDown = true;
+				}
+
+				log.Append(entry);
 				DirtyLogSection = true;
 			}
-
-			log.Append(entry);
 		}
 
 		private void ClearSectionDropDown()
@@ -124,50 +140,49 @@ namespace Mosa.Tool.Explorer
 			DirtyLogSectionDropDown = true;
 			DirtyLogSection = true;
 
-			UpdateSectionDropDown();
+			RefreshLogDropDown();
+			RefreshLog();
 		}
 
-		private void UpdateSectionDropDown()
+		private void RefreshLogDropDown()
 		{
 			if (!DirtyLogSectionDropDown)
 				return;
 
-			foreach (var log in Logs)
+			DirtyLogSectionDropDown = false;
+
+			lock (Logs)
 			{
-				if (!cbSectionLogs.Items.Contains(log.Key))
+				foreach (var log in Logs)
 				{
-					cbSectionLogs.Items.Add("[" + cbSectionLogs.Items.Count.ToString() + "] " + log.Key);
+					if (!cbSectionLogs.Items.Contains(log.Key))
+					{
+						cbSectionLogs.Items.Add("[" + cbSectionLogs.Items.Count.ToString() + "] " + log.Key);
+					}
 				}
 			}
-
-			DirtyLogSectionDropDown = false;
 		}
 
 		private void RefreshLog()
 		{
+			if (!DirtyLogSection)
+				return;
+
 			DirtyLogSection = false;
 
-			var section = cbSectionLogs.SelectedItem as string;
-
-			if (section == null)
+			if (!(cbSectionLogs.SelectedItem is string section))
 				return;
 
 			var s = section.Substring(section.IndexOf(' ') + 1);
 
-			var text = Logs[s];
+			StringBuilder text = null;
 
-			if (text == null)
-				return;
+			lock (Logs)
+			{
+				text = Logs[s];
+			}
 
-			tbLogs.Text = text.ToString();
-		}
-
-		private void SoftRefreshLog()
-		{
-			if (!DirtyLogSection)
-				return;
-
-			RefreshLog();
+			tbLogs.Text = (text == null) ? string.Empty : text.ToString();
 		}
 
 		private void SetStatus(string status)
@@ -407,19 +422,6 @@ namespace Mosa.Tool.Explorer
 			CreateTree();
 		}
 
-		private void SubmitTraceEventGUI(CompilerEvent compilerEvent, string info)
-		{
-			if (compilerEvent == CompilerEvent.StatusUpdate)
-			{
-				DisplayLogs();
-			}
-			else if (compilerEvent != CompilerEvent.DebugInfo)
-			{
-				SetStatus(compilerEvent.ToText() + ": " + info);
-				toolStripStatusLabel1.GetCurrentParent().Refresh();
-			}
-		}
-
 		private readonly object compilerStageLock = new object();
 
 		private void SubmitTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
@@ -443,10 +445,12 @@ namespace Mosa.Tool.Explorer
 				}
 				else if (compilerEvent == CompilerEvent.Counter)
 				{
+					DirtyLogSection = true;
 					CountersLog.Append(message);
 				}
 				else
 				{
+					DirtyLogSection = true;
 					CompileLog.AppendFormat("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds).Append(" [").Append(threadID.ToString()).Append("] ").Append(compilerEvent.ToText()).Append(": ").AppendLine(message);
 				}
 			}
@@ -515,8 +519,8 @@ namespace Mosa.Tool.Explorer
 			Stage = CompileStage.Compiled;
 
 			SetStatus("Compiled!");
-			DisplayLogs();
 
+			DisplayLogs();
 			UpdateTree();
 		}
 
@@ -755,8 +759,6 @@ namespace Mosa.Tool.Explorer
 			UpdateStages();
 			UpdateDebugStages();
 			UpdateCounters();
-
-			SoftRefreshLog();
 		}
 
 		private void CbStages_SelectedIndexChanged(object sender, EventArgs e)
@@ -849,7 +851,7 @@ namespace Mosa.Tool.Explorer
 			Compile();
 		}
 
-		private void SubmitMethodStatus()
+		private void UpdateProgressBar()
 		{
 			toolStripProgressBar1.Maximum = TotalMethods;
 			toolStripProgressBar1.Value = CompletedMethods;
@@ -857,30 +859,18 @@ namespace Mosa.Tool.Explorer
 
 		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
-			SubmitTraceEvent(compilerEvent, message, threadID);
-
-			if (compilerEvent != CompilerEvent.DebugInfo)
+			lock (_statusLock)
 			{
-				MethodInvoker call = () => SubmitTraceEventGUI(compilerEvent, message);
-				Invoke(call);
+				Status = compilerEvent.ToText() + ": " + message;
 			}
+
+			SubmitTraceEvent(compilerEvent, message, threadID);
 		}
 
 		void ITraceListener.OnUpdatedCompilerProgress(int totalMethods, int completedMethods)
 		{
-			bool update =
-				totalMethods == completedMethods
-				|| Math.Abs(totalMethods - TotalMethods) > 20
-				|| Math.Abs(completedMethods - CompletedMethods) > 20;
-
 			TotalMethods = totalMethods;
 			CompletedMethods = completedMethods;
-
-			if (update)
-			{
-				MethodInvoker call = () => SubmitMethodStatus();
-				Invoke(call);
-			}
 		}
 
 		void ITraceListener.OnNewTraceLog(TraceLog traceLog)
@@ -907,7 +897,7 @@ namespace Mosa.Tool.Explorer
 			}
 			else if (traceLog.Type == TraceType.GlobalDebug)
 			{
-				UpdateLog(traceLog.Section, traceLog.ToString());
+				UpdateLog(traceLog.Section, traceLog.Lines);
 			}
 		}
 
@@ -996,6 +986,28 @@ namespace Mosa.Tool.Explorer
 		private void cbSections_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			RefreshLog();
+		}
+
+		private object _statusLock = new object();
+
+		private void RefreshStatus()
+		{
+			lock (_statusLock)
+			{
+				if (Status != null)
+				{
+					SetStatus(Status);
+					Status = null;
+				}
+			}
+		}
+
+		private void timer1_Tick(object sender, EventArgs e)
+		{
+			UpdateProgressBar();
+			RefreshLogDropDown();
+			RefreshLog();
+			RefreshStatus();
 		}
 	}
 }

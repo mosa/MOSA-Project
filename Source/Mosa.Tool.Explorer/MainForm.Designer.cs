@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+            this.components = new System.ComponentModel.Container();
             System.Windows.Forms.Label label4;
             System.Windows.Forms.Label label3;
             System.Windows.Forms.Label stageLabel;
@@ -87,6 +88,7 @@
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.cbPlatform = new System.Windows.Forms.ComboBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
             label4 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             stageLabel = new System.Windows.Forms.Label();
@@ -463,7 +465,7 @@
             this.tabControl.Name = "tabControl";
             this.tabControl.Padding = new System.Drawing.Point(0, 0);
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(620, 401);
+            this.tabControl.Size = new System.Drawing.Size(616, 401);
             this.tabControl.TabIndex = 38;
             // 
             // tabStages
@@ -477,7 +479,7 @@
             this.tabStages.Location = new System.Drawing.Point(4, 25);
             this.tabStages.Margin = new System.Windows.Forms.Padding(0);
             this.tabStages.Name = "tabStages";
-            this.tabStages.Size = new System.Drawing.Size(612, 372);
+            this.tabStages.Size = new System.Drawing.Size(608, 372);
             this.tabStages.TabIndex = 0;
             this.tabStages.Text = "Instructions";
             // 
@@ -530,7 +532,7 @@
             this.tabStageDebug.Location = new System.Drawing.Point(4, 25);
             this.tabStageDebug.Margin = new System.Windows.Forms.Padding(0);
             this.tabStageDebug.Name = "tabStageDebug";
-            this.tabStageDebug.Size = new System.Drawing.Size(612, 372);
+            this.tabStageDebug.Size = new System.Drawing.Size(608, 372);
             this.tabStageDebug.TabIndex = 1;
             this.tabStageDebug.Text = "Debug";
             // 
@@ -566,7 +568,7 @@
             this.tabMethodCounters.Controls.Add(this.tbMethodCounters);
             this.tabMethodCounters.Location = new System.Drawing.Point(4, 25);
             this.tabMethodCounters.Name = "tabMethodCounters";
-            this.tabMethodCounters.Size = new System.Drawing.Size(612, 372);
+            this.tabMethodCounters.Size = new System.Drawing.Size(608, 372);
             this.tabMethodCounters.TabIndex = 6;
             this.tabMethodCounters.Text = "Counters";
             // 
@@ -591,7 +593,7 @@
             this.tabLogs.Controls.Add(this.tbLogs);
             this.tabLogs.Location = new System.Drawing.Point(4, 25);
             this.tabLogs.Name = "tabLogs";
-            this.tabLogs.Size = new System.Drawing.Size(612, 372);
+            this.tabLogs.Size = new System.Drawing.Size(608, 372);
             this.tabLogs.TabIndex = 7;
             this.tabLogs.Text = "Logs";
             // 
@@ -690,6 +692,12 @@
             // 
             this.folderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer;
             // 
+            // timer1
+            // 
+            this.timer1.Enabled = true;
+            this.timer1.Interval = 200;
+            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -782,5 +790,6 @@
 		private System.Windows.Forms.TabPage tabLogs;
 		private System.Windows.Forms.ComboBox cbSectionLogs;
 		private System.Windows.Forms.RichTextBox tbLogs;
+		private System.Windows.Forms.Timer timer1;
 	}
 }
