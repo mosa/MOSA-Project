@@ -1,6 +1,10 @@
 #!/bin/bash
 
 rdir=$(dirname $0)
+tmpScript=$rdir/bin/.mosactl.tmp.script
+if [ -f $tmpScript  ]; then
+  rm $tmpScript
+fi
 
 if [ ! -f $rdir/bin/Mosa.Tool.Mosactl.exe ]; then
   $rdir/Tools/nuget/nuget.exe restore Source/Mosa.Tool.Mosactl.sln
@@ -8,3 +12,8 @@ if [ ! -f $rdir/bin/Mosa.Tool.Mosactl.exe ]; then
 fi
 
 mono $rdir/bin/Mosa.Tool.Mosactl.exe "$@"
+
+# GDB does not work well when te child process is a dotnet console. So we call it from the bash shell
+if [ -f $tmpScript  ]; then
+  source $tmpScript
+fi
