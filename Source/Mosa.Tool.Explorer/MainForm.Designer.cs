@@ -400,7 +400,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.treeView.Location = new System.Drawing.Point(0, 25);
             this.treeView.Name = "treeView";
-            this.treeView.Size = new System.Drawing.Size(231, 379);
+            this.treeView.Size = new System.Drawing.Size(232, 372);
             this.treeView.TabIndex = 3;
             this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeView_AfterSelect);
             this.treeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView_NodeMouseDoubleClick);
@@ -446,7 +446,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbFilter.Location = new System.Drawing.Point(33, 4);
             this.tbFilter.Name = "tbFilter";
-            this.tbFilter.Size = new System.Drawing.Size(195, 20);
+            this.tbFilter.Size = new System.Drawing.Size(199, 20);
             this.tbFilter.TabIndex = 4;
             this.tbFilter.TextChanged += new System.EventHandler(this.tbFilter_TextChanged);
             // 
@@ -465,7 +465,7 @@
             this.tabControl.Name = "tabControl";
             this.tabControl.Padding = new System.Drawing.Point(0, 0);
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(616, 401);
+            this.tabControl.Size = new System.Drawing.Size(626, 401);
             this.tabControl.TabIndex = 38;
             // 
             // tabStages
@@ -479,7 +479,7 @@
             this.tabStages.Location = new System.Drawing.Point(4, 25);
             this.tabStages.Margin = new System.Windows.Forms.Padding(0);
             this.tabStages.Name = "tabStages";
-            this.tabStages.Size = new System.Drawing.Size(608, 372);
+            this.tabStages.Size = new System.Drawing.Size(618, 372);
             this.tabStages.TabIndex = 0;
             this.tabStages.Text = "Instructions";
             // 
@@ -518,7 +518,7 @@
             this.tbInstructions.Font = new System.Drawing.Font("Lucida Console", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbInstructions.Location = new System.Drawing.Point(0, 32);
             this.tbInstructions.Name = "tbInstructions";
-            this.tbInstructions.Size = new System.Drawing.Size(400, 150);
+            this.tbInstructions.Size = new System.Drawing.Size(412, 150);
             this.tbInstructions.TabIndex = 31;
             this.tbInstructions.Text = "";
             this.tbInstructions.WordWrap = false;
@@ -532,7 +532,7 @@
             this.tabStageDebug.Location = new System.Drawing.Point(4, 25);
             this.tabStageDebug.Margin = new System.Windows.Forms.Padding(0);
             this.tabStageDebug.Name = "tabStageDebug";
-            this.tabStageDebug.Size = new System.Drawing.Size(608, 372);
+            this.tabStageDebug.Size = new System.Drawing.Size(618, 372);
             this.tabStageDebug.TabIndex = 1;
             this.tabStageDebug.Text = "Debug";
             // 
@@ -557,7 +557,7 @@
             this.tbDebugResult.Font = new System.Drawing.Font("Lucida Console", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.tbDebugResult.Location = new System.Drawing.Point(0, 32);
             this.tbDebugResult.Name = "tbDebugResult";
-            this.tbDebugResult.Size = new System.Drawing.Size(400, 150);
+            this.tbDebugResult.Size = new System.Drawing.Size(412, 150);
             this.tbDebugResult.TabIndex = 32;
             this.tbDebugResult.Text = "";
             this.tbDebugResult.WordWrap = false;
@@ -567,8 +567,9 @@
             this.tabMethodCounters.BackColor = System.Drawing.Color.Gainsboro;
             this.tabMethodCounters.Controls.Add(this.tbMethodCounters);
             this.tabMethodCounters.Location = new System.Drawing.Point(4, 25);
+            this.tabMethodCounters.Margin = new System.Windows.Forms.Padding(0);
             this.tabMethodCounters.Name = "tabMethodCounters";
-            this.tabMethodCounters.Size = new System.Drawing.Size(608, 372);
+            this.tabMethodCounters.Size = new System.Drawing.Size(618, 372);
             this.tabMethodCounters.TabIndex = 6;
             this.tabMethodCounters.Text = "Counters";
             // 
@@ -580,7 +581,7 @@
             this.tbMethodCounters.Font = new System.Drawing.Font("Lucida Console", 8F);
             this.tbMethodCounters.Location = new System.Drawing.Point(0, 0);
             this.tbMethodCounters.Name = "tbMethodCounters";
-            this.tbMethodCounters.Size = new System.Drawing.Size(400, 150);
+            this.tbMethodCounters.Size = new System.Drawing.Size(412, 150);
             this.tbMethodCounters.TabIndex = 3;
             this.tbMethodCounters.Text = "";
             this.tbMethodCounters.WordWrap = false;
@@ -592,8 +593,9 @@
             this.tabLogs.Controls.Add(label4);
             this.tabLogs.Controls.Add(this.tbLogs);
             this.tabLogs.Location = new System.Drawing.Point(4, 25);
+            this.tabLogs.Margin = new System.Windows.Forms.Padding(0);
             this.tabLogs.Name = "tabLogs";
-            this.tabLogs.Size = new System.Drawing.Size(608, 372);
+            this.tabLogs.Size = new System.Drawing.Size(618, 372);
             this.tabLogs.TabIndex = 7;
             this.tabLogs.Text = "Logs";
             // 
@@ -618,7 +620,7 @@
             this.tbLogs.Font = new System.Drawing.Font("Lucida Console", 8F);
             this.tbLogs.Location = new System.Drawing.Point(0, 32);
             this.tbLogs.Name = "tbLogs";
-            this.tbLogs.Size = new System.Drawing.Size(400, 150);
+            this.tbLogs.Size = new System.Drawing.Size(412, 150);
             this.tbLogs.TabIndex = 3;
             this.tbLogs.Text = "";
             this.tbLogs.WordWrap = false;

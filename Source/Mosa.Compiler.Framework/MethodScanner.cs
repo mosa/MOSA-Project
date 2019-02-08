@@ -16,16 +16,16 @@ namespace Mosa.Compiler.Framework
 
 		private Compiler Compiler { get; }
 
-		private HashSet<MosaType> allocatedTypes = new HashSet<MosaType>();
-		private HashSet<MosaMethod> invokedMethods = new HashSet<MosaMethod>();
-		private HashSet<MosaMethod> scheduledMethods = new HashSet<MosaMethod>();
-		private HashSet<MosaField> accessedFields = new HashSet<MosaField>();
+		private readonly HashSet<MosaType> allocatedTypes = new HashSet<MosaType>();
+		private readonly HashSet<MosaMethod> invokedMethods = new HashSet<MosaMethod>();
+		private readonly HashSet<MosaMethod> scheduledMethods = new HashSet<MosaMethod>();
+		private readonly HashSet<MosaField> accessedFields = new HashSet<MosaField>();
 
 		private MosaMethod lastSource;
 
-		private TraceLog trace;
+		private readonly TraceLog trace;
 
-		private object _lock = new object();
+		private readonly object _lock = new object();
 
 		public MethodScanner(Compiler compiler)
 		{
