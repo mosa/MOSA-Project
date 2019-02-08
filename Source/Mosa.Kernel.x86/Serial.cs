@@ -9,8 +9,8 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class Serial
 	{
-		public const ushort COM1 = 0x3F8;
-		public const ushort COM2 = 0x2F8;
+		public const ushort COM1 = 0x3F8; // Kernel log
+		public const ushort COM2 = 0x2F8; // Mosa Debugger
 		public const ushort COM3 = 0x3E8;
 		public const ushort COM4 = 0x2E8;
 

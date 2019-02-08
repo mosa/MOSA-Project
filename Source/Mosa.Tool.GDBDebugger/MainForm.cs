@@ -132,6 +132,9 @@ namespace Mosa.Tool.GDBDebugger
 
 			CalculateVMHash();
 
+			Options.SerialConnectionOption = SerialConnectionOption.TCPServer;
+			Options.SerialConnectionPort = 1250;
+
 			if (Options.ImageFile != null)
 			{
 				VMProcess = StartQEMU();
