@@ -99,6 +99,7 @@
     <Compile Include="Smbios\SmbiosManager.cs" />
     <Compile Include="Smbios\SmbiosStructure.cs" />
     <Compile Include="VirtualPageAllocator.cs" />
+    <Compile Include="Logger.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj">

@@ -76,6 +76,13 @@ namespace Mosa.Utility.Launcher
 
 			//arg = arg + " -vga vmware";
 
+			// We need as lest 2 COM Ports:
+
+			// COM1 = Kernel log
+			// COM2 = MosaDebugger
+
+			arg = arg + " -serial tcp::1240,server,nowait"; // TODO: Redirect to file
+
 			if (Options.SerialConnectionOption == SerialConnectionOption.Pipe)
 			{
 				arg = arg + " -serial pipe:" + Options.SerialPipeName;
@@ -143,9 +150,10 @@ namespace Mosa.Utility.Launcher
 				sb.AppendLine("ata0-master: type=disk,path=" + Quote(Options.ImageFile) + ",biosdetect=none,cylinders=0,heads=0,spt=0");
 			}
 
+			sb.AppendLine(@"com1: enabled=1, mode=pipe-server, dev=\\.\pipe\MOSA1");
 			if (Options.SerialConnectionOption == SerialConnectionOption.Pipe)
 			{
-				sb.AppendLine(@"com1: enabled=1, mode=pipe-server, dev=\\.\pipe\MOSA");
+				sb.AppendLine(@"com2: enabled=1, mode=pipe-server, dev=\\.\pipe\MOSA2");
 			}
 
 			string arg = "-q -f " + Quote(configfile);
@@ -182,14 +190,21 @@ namespace Mosa.Utility.Launcher
 
 			sb.AppendLine("floppy0.present = \"FALSE\"");
 
+			sb.AppendLine("serial0.present = \"TRUE\"");
+			sb.AppendLine("serial0.yieldOnMsrRead = \"FALSE\"");
+			sb.AppendLine("serial0.fileType = \"pipe\"");
+			sb.AppendLine("serial0.fileName = \"\\\\.\\pipe\\MOSA1\"");
+			sb.AppendLine("serial0.pipe.endPoint = \"server\"");
+			sb.AppendLine("serial0.tryNoRxLoss = \"FALSE\"");
+
 			if (Options.SerialConnectionOption == SerialConnectionOption.Pipe)
 			{
-				sb.AppendLine("serial0.present = \"TRUE\"");
-				sb.AppendLine("serial0.yieldOnMsrRead = \"FALSE\"");
-				sb.AppendLine("serial0.fileType = \"pipe\"");
-				sb.AppendLine("serial0.fileName = \"\\\\.\\pipe\\MOSA\"");
-				sb.AppendLine("serial0.pipe.endPoint = \"server\"");
-				sb.AppendLine("serial0.tryNoRxLoss = \"FALSE\"");
+				sb.AppendLine("serial1.present = \"TRUE\"");
+				sb.AppendLine("serial1.yieldOnMsrRead = \"FALSE\"");
+				sb.AppendLine("serial1.fileType = \"pipe\"");
+				sb.AppendLine("serial1.fileName = \"\\\\.\\pipe\\MOSA2\"");
+				sb.AppendLine("serial1.pipe.endPoint = \"server\"");
+				sb.AppendLine("serial1.tryNoRxLoss = \"FALSE\"");
 			}
 
 			File.WriteAllText(configfile, sb.ToString());

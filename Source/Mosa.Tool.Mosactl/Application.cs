@@ -6,16 +6,17 @@ using System.Diagnostics;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Text;
+using System.Threading;
 
 namespace Mosa.Tool.Mosactl
 {
 
-	public class Application
+	public class MosaCtl
 	{
 		private bool IsWin = false;
 		private bool IsUnix = false;
 
-		public Application()
+		public MosaCtl()
 		{
 			IsWin = Environment.OSVersion.Platform != PlatformID.Unix;
 			IsUnix = Environment.OSVersion.Platform == PlatformID.Unix;
@@ -110,6 +111,10 @@ namespace Mosa.Tool.Mosactl
 				case "run":
 					TaskRun(args);
 					break;
+				case "test":
+					if (!TaskTest(args))
+						Environment.Exit(1);
+					break;
 				case "debug":
 					TaskDebug(args);
 					break;
@@ -120,7 +125,7 @@ namespace Mosa.Tool.Mosactl
 
 		private void PrintHelp(string name)
 		{
-			using (var reader = new StreamReader(typeof(Application).Assembly.GetManifestResourceStream("Mosa.Tool.Mosactl.Help." + name + ".txt")))
+			using (var reader = new StreamReader(typeof(MosaCtl).Assembly.GetManifestResourceStream("Mosa.Tool.Mosactl.Help." + name + ".txt")))
 			{
 				Console.WriteLine(reader.ReadToEnd());
 			}
@@ -145,6 +150,7 @@ namespace Mosa.Tool.Mosactl
 		private bool CallProcess(string workdir, string cmd, params string[] args)
 		{
 			Console.WriteLine("Call: " + cmd + string.Join("", args.Select(a => " " + a)));
+			Console.WriteLine("WorkDir: " + workdir);
 			var start = new ProcessStartInfo();
 			start.FileName = cmd;
 			start.Arguments = string.Join(" ", args);
@@ -227,10 +233,117 @@ namespace Mosa.Tool.Mosactl
 
 		public void TaskRun(List<string> args)
 		{
+			var ct = args.Contains("--build") ? CheckType.force : CheckType.changed;
+			TaskCILBuild(ct, args);
+			TaskBinaryBuild(ct, args);
+
+			CallQemu(false, null);
+		}
+
+		public bool TaskTest(List<string> args)
+		{
 			TaskCILBuild(CheckType.changed, args);
 			TaskBinaryBuild(CheckType.changed, args);
 
-			CallProcess(BinDir, appLocations.QEMU, "-kernel", ExpandKernelBinPath(OsName) + ".bin");
+			var testSuccess = false;
+			CallQemu(true, (line, proc) =>
+			{
+				if (line == "<TEST:PASSED:Boot.Main>")
+				{
+					testSuccess = true;
+					proc.Kill();
+				}
+			});
+
+			if (testSuccess)
+			{
+				Console.WriteLine("Test PASSED");
+				return true;
+			}
+			else
+			{
+				Console.WriteLine("Test FAILED");
+				return false;
+			}
+		}
+
+		private bool CallQemu(bool nographic, Action<string, Process> OnKernelLog)
+		{
+			var logFile = ExpandKernelBinPath(OsName) + ".log";
+			if (File.Exists(logFile))
+				File.Delete(logFile);
+
+			var args = new List<string>() {
+				"-kernel", ExpandKernelBinPath(OsName) + ".bin",
+			};
+
+			args.Add("-serial");
+			args.Add("stdio");
+
+
+			args.Add("-serial");
+			args.Add("null");
+
+			if (nographic)
+				args.Add("-display none");
+
+			var cmd = appLocations.QEMU;
+			var workDir = BinDir;
+			Console.WriteLine("Call: " + cmd + string.Join("", args.Select(a => " " + a)));
+			Console.WriteLine("WorkDir: " + workDir);
+
+			var start = new ProcessStartInfo();
+			start.FileName = cmd;
+			start.Arguments = string.Join(" ", args);
+			start.WorkingDirectory = workDir;
+			start.UseShellExecute = false;
+			start.RedirectStandardOutput = true;
+
+			var p = Process.Start(start);
+
+			var th = new Thread(() =>
+			{
+				var buf = new char[1];
+				var sb = new StringBuilder();
+				while (true)
+				{
+					var count = p.StandardOutput.Read(buf, 0, 1);
+					if (count == 0)
+						break;
+					Console.Write(buf[0]);
+					if (buf[0] == '\n')
+					{
+						var line = sb.ToString();
+						if (OnKernelLog != null) OnKernelLog(line, p);
+						sb.Clear();
+					}
+					else
+					{
+						sb.Append(buf[0]);
+					}
+
+				}
+			});
+			th.Start();
+
+			if (nographic)
+			{
+				var th2 = new Thread(() =>
+				{
+					Thread.Sleep(5000);
+					if (!p.HasExited)
+					{
+						Console.WriteLine("Test Timeout");
+						p.Kill();
+					}
+				});
+				th2.Start();
+			}
+
+
+			p.WaitForExit();
+
+			return true;
 		}
 
 		public void TaskDebug(List<string> args)
@@ -245,7 +358,8 @@ namespace Mosa.Tool.Mosactl
 			else
 			{
 				GenerateGDBFile();
-				CallProcess(RootDir, "gdb", "-x", ExpandKernelBinPath(OsName) + ".gdb.load", "-x", GetEnv("${MOSA_ROOT}/Ressources/settings.gdb"));
+				Environment.Exit(0);
+				return;
 			}
 		}
 
@@ -253,8 +367,13 @@ namespace Mosa.Tool.Mosactl
 		{
 			var expand = ExpandKernelBinPath(OsName);
 			var bin = expand + ".bin";
-			var gdb = expand + ".gdb.load";
+			var log = expand + ".log";
+			var gdbLaunch = GetEnv("${MOSA_BIN}/.mosactl.tmp.script");
+			var gdb = expand + ".gdb.script";
 			var gdbqemu = expand + ".gdb.qemu";
+
+			if (File.Exists(log))
+				File.Delete(log);
 
 			var sb = new StringBuilder();
 			sb.AppendLine($"file {bin}");
@@ -262,8 +381,14 @@ namespace Mosa.Tool.Mosactl
 			File.WriteAllText(gdb, sb.ToString());
 
 			sb.Clear();
-			sb.AppendLine($"#/bin/bash");
-			sb.AppendLine($"qemu-system-i386 -kernel {bin} -S -gdb stdio");
+			sb.AppendLine($"#!/bin/bash");
+			sb.AppendLine($"# This is a autogenerated file.");
+			sb.AppendLine($"gdb -x {ExpandKernelBinPath(OsName)}.gdb\t.script -x {GetEnv("${MOSA_ROOT}/Ressources/settings.gdb")}");
+			File.WriteAllText(gdbLaunch, sb.ToString());
+
+			sb.Clear();
+			sb.AppendLine($"#!/bin/bash");
+			sb.AppendLine($"qemu-system-i386 -kernel {bin} -S -gdb stdio -serial file:{log} -serial null");
 			File.WriteAllText(gdbqemu, sb.ToString());
 			CallProcess(BinDir, "chmod", "+x", gdbqemu);
 		}
@@ -334,7 +459,5 @@ namespace Mosa.Tool.Mosactl
 			return name;
 		}
 	}
-
-
 
 }
