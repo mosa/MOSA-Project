@@ -30,6 +30,15 @@
 			],
 			"cwd": "${workspaceRoot}/../bin",
 			"internalConsoleOptions": "openOnSessionStart"
+		},
+		{
+			"name": "Tool.Mosactl",
+			"type": "mono",
+			"request": "launch",
+			"program": "${workspaceRoot}/../bin/Mosa.Tool.Mosactl.exe",
+			"args": [],
+			"cwd": "${workspaceRoot}/../bin",
+			"internalConsoleOptions": "openOnSessionStart"
 		}
 		/*
         {
