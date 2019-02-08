@@ -24,6 +24,8 @@ namespace Mosa.Utility.Launcher
 
 		public string Mkisofs { get; set; }
 
+		public string MsBuild { get; set; }
+
 		public string GDB { get; set; }
 
 		// TODO: The following methods should be placed in another class, possibly as a class extension
@@ -230,6 +232,24 @@ namespace Mosa.Utility.Launcher
 						@"..\..\packages",
 					}
 				);
+			}
+
+			if (string.IsNullOrEmpty(MsBuild))
+			{
+				MsBuild = TryFind(
+					new string[] { "msbuild.exe", "msbuild" },
+					new string[] {
+						CombineParameterAndDirectory("ProgramFiles(x86)", @"Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin\amd64"),
+						CombineParameterAndDirectory("ProgramFiles(x86)", @"Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\amd64"),
+						CombineParameterAndDirectory("ProgramFiles(x86)", @"Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin"),
+						CombineParameterAndDirectory("ProgramFiles(x86)", @"Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin\amd64"),
+						CombineParameterAndDirectory("ProgramFiles(x86)", @"Microsoft Visual Studio\2017\Community\MSBuild\15.0\Bin"),
+						CombineParameterAndDirectory("SYSTEMROOT", @"Microsoft.NET\Framework64\v4.0.30319"),
+						CombineParameterAndDirectory("SYSTEMROOT", @"Microsoft.NET\Framework\v4.0.30319")
+					}
+				);
+				if (string.IsNullOrEmpty(MsBuild))
+					MsBuild = "msbuild";
 			}
 		}
 
