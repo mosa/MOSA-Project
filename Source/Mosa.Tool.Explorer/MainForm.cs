@@ -36,7 +36,7 @@ namespace Mosa.Tool.Explorer
 		private int CompletedMethods = 0;
 		private string Status = null;
 
-		private readonly Dictionary<string, StringBuilder> Logs = new Dictionary<string, StringBuilder>();
+		private readonly Dictionary<string, List<string>> Logs = new Dictionary<string, List<string>>();
 		private readonly List<string> LogSections = new List<string>();
 
 		private string CurrentLogSection = string.Empty;
@@ -85,24 +85,39 @@ namespace Mosa.Tool.Explorer
 
 		private void UpdateLog(string section, List<string> lines)
 		{
-			UpdateLog(section, CreateText(lines));
-		}
-
-		private void UpdateLog(string section, string entry)
-		{
 			lock (Logs)
 			{
-				if (!Logs.TryGetValue(section, out StringBuilder log))
+				if (!Logs.TryGetValue(section, out List<string> log))
 				{
-					log = new StringBuilder();
+					log = new List<string>(100);
 					Logs.Add(section, log);
 					LogSections.Add(section);
 					DirtyLogDropDown = true;
 				}
 
-				if (entry != null)
+				if (log != null)
 				{
-					log.AppendLine(entry);
+					log.AddRange(lines);
+					DirtyLog = CurrentLogSection == section;
+				}
+			}
+		}
+
+		private void UpdateLog(string section, string line)
+		{
+			lock (Logs)
+			{
+				if (!Logs.TryGetValue(section, out List<string> log))
+				{
+					log = new List<string>(100);
+					Logs.Add(section, log);
+					LogSections.Add(section);
+					DirtyLogDropDown = true;
+				}
+
+				if (line != null)
+				{
+					log.Add(line);
 					DirtyLog = CurrentLogSection == section;
 				}
 			}
@@ -149,15 +164,15 @@ namespace Mosa.Tool.Explorer
 
 			lock (Logs)
 			{
-				var text = Logs[CurrentLogSection];
+				var lines = Logs[CurrentLogSection];
 
-				if (text == null)
+				if (lines == null)
 				{
 					tbLogs.Text = string.Empty;
 				}
 				else
 				{
-					tbLogs.Text = text.ToString();
+					tbLogs.Text = CreateText(lines);
 				}
 			}
 		}
@@ -869,7 +884,6 @@ namespace Mosa.Tool.Explorer
 
 		void ITraceListener.OnMethodCompiled(MosaMethod method)
 		{
-			//
 		}
 
 		private void DumpAllMethodStagesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -921,7 +935,6 @@ namespace Mosa.Tool.Explorer
 
 		private void CbPlatform_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			//
 		}
 
 		private void showSizesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -978,6 +991,11 @@ namespace Mosa.Tool.Explorer
 			RefreshLogDropDown();
 			RefreshLog();
 			RefreshStatus();
+		}
+
+		private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			RefreshLog();
 		}
 	}
 }

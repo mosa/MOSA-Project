@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private static readonly Operand[] emptyOperandList = new Operand[0];
 
-		private Stopwatch Stopwatch = new Stopwatch();
+		private Stopwatch Stopwatch;
 
 		#endregion Data Members
 
@@ -242,6 +242,8 @@ namespace Mosa.Compiler.Framework
 			EvaluateParameterOperands();
 
 			CalculateMethodParameterSize();
+
+			MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.Ticks", (int)Stopwatch.ElapsedTicks);
 		}
 
 		#endregion Construction
@@ -381,32 +383,18 @@ namespace Mosa.Compiler.Framework
 			if (!IsExecutePipeline)
 				return;
 
-			Stopwatch stageStopwatch = null;
+			var executionTimes = new long[Pipeline.Count];
 
-			long[] stageExecutionTimes = null;
-
-			if (Compiler.CompilerOptions.EnableStatistics)
-			{
-				stageExecutionTimes = new long[Pipeline.Count];
-				stageStopwatch = Stopwatch.StartNew();
-			}
+			var startTicks = Stopwatch.ElapsedTicks;
 
 			for (int i = 0; i < Pipeline.Count; i++)
 			{
 				var stage = Pipeline[i];
 
-				if (stageStopwatch != null)
-				{
-					stageStopwatch.Restart();
-				}
-
 				stage.Setup(this, i);
 				stage.Execute();
 
-				if (stageStopwatch != null)
-				{
-					stageExecutionTimes[i] = stageStopwatch.ElapsedTicks;
-				}
+				executionTimes[i] = Stopwatch.ElapsedTicks;
 
 				InstructionLogger.Run(this, stage);
 
@@ -420,22 +408,29 @@ namespace Mosa.Compiler.Framework
 
 				MethodData.ElapsedTicks = totalTicks;
 
-				MethodData.Counters.NewCountSkipLock("ExecutionTime.Total.ElapsedTicks", (int)MethodData.ElapsedTicks);
+				MethodData.Counters.NewCountSkipLock("ExecutionTime.StageStart.Ticks", (int)startTicks);
+				MethodData.Counters.NewCountSkipLock("ExecutionTime.Total.Ticks", (int)totalTicks);
 
 				var executionTimeLog = new TraceLog(TraceType.MethodDebug, Method, "Execution Time/Ticks", Trace.TraceFilter.Active);
 
+				long previousTicks = startTicks;
 				for (int i = 0; i < Pipeline.Count; i++)
 				{
-					var stageName = Pipeline[i].FormattedStageName;
-					var ticks = stageExecutionTimes[i];
-					var percentage = (ticks * 100) / totalTicks;
+					var pipelineTicks = executionTimes[i];
+					var ticks = pipelineTicks - previousTicks;
+					var percentage = (ticks * 100) / (double)(totalTicks - startTicks);
+					previousTicks = pipelineTicks;
 
-					executionTimeLog.Log(stageName.PadRight(50) + " : " + percentage.ToString().PadLeft(3) + "%  Ticks = " + ticks.ToString());
+					int per = (int)percentage / 5;
 
-					MethodData.Counters.NewCountSkipLock("ExecutionTime." + stageName + ".ElapsedTicks", (int)ticks);
+					var entry = $"[{i:00}] {Pipeline[i].Name.PadRight(45)} : {percentage:00.00} % [{string.Empty.PadRight(per, '#').PadRight(20, ' ')}] ({ticks})";
+
+					executionTimeLog.Log(entry);
+
+					MethodData.Counters.NewCountSkipLock($"ExecutionTime.{i:00}.{Pipeline[i].Name}.Ticks", (int)ticks);
 				}
 
-				executionTimeLog.Log("****Total Time".PadRight(50) + "         Ticks = " + totalTicks.ToString());
+				executionTimeLog.Log($"{"****Total Time".PadRight(57)}({totalTicks})");
 
 				Trace.TraceListener.OnNewTraceLog(executionTimeLog);
 			}
