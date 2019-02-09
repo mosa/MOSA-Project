@@ -218,7 +218,7 @@ namespace Mosa.HelloWorld.x86
 
 			Console.Goto(12, 0);
 
-			Logger.Log("<TEST:PASSED:Boot.Main>");
+			Logger.Log("<SELFTEST:PASSED>");
 
 			while (true)
 			{
