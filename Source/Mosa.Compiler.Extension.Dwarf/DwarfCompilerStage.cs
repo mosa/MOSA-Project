@@ -29,9 +29,11 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			}
 			else
 			{
+				var sectionsOldDelegate = Linker.CreateExtraSections;
 				Linker.CreateExtraSections = () =>
 				{
-					var sections = Linker.CreateExtraSections();
+					var sections = new List<Section>();
+					sections.AddRange(sectionsOldDelegate());
 					sections.AddRange(CreateExtraSections());
 					return sections;
 				};
