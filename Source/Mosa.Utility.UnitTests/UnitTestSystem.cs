@@ -23,8 +23,8 @@ namespace Mosa.Utility.UnitTests
 			stopwatch.Start();
 
 			Console.WriteLine("Discovering Unit Tests...");
-			var unitTests = DiscoverUnitTests();
-			Console.WriteLine("Found Tests: " + unitTests.Count.ToString());
+			var discoveredUnitTests = Discovery.DiscoverUnitTests();
+			Console.WriteLine("Found Tests: " + discoveredUnitTests.Count.ToString());
 			var elapsedDiscovery = stopwatch.ElapsedMilliseconds;
 			Console.WriteLine("Elapsed: " + (elapsedDiscovery / 1000.0).ToString("F2") + " secs");
 			Console.WriteLine();
@@ -36,7 +36,7 @@ namespace Mosa.Utility.UnitTests
 			Console.WriteLine();
 
 			Console.WriteLine("Preparing Unit Tests...");
-			PrepareUnitTest(unitTests, unitTestEngine.TypeSystem, unitTestEngine.Linker);
+			var unitTests = PrepareUnitTest(discoveredUnitTests, unitTestEngine.TypeSystem, unitTestEngine.Linker);
 			var elapsedPreparing = stopwatch.ElapsedMilliseconds - elapsedDiscovery - elapsedCompile;
 			Console.WriteLine("Elapsed: " + (elapsedPreparing / 1000.0).ToString("F2") + " secs");
 			Console.WriteLine();
@@ -95,80 +95,32 @@ namespace Mosa.Utility.UnitTests
 			return failures;
 		}
 
-		private static void PrepareUnitTest(List<UnitTest> unitTests, TypeSystem typeSystem, MosaLinker linker)
+		private static List<UnitTest> PrepareUnitTest(List<DiscoveredUnitTest> discoveredUnitTests, TypeSystem typeSystem, MosaLinker linker)
 		{
+			var unitTests = new List<UnitTest>(discoveredUnitTests.Count);
+
 			int id = 0;
 
-			foreach (var unitTest in unitTests)
+			foreach (var discovered in discoveredUnitTests)
 			{
+				var unitTest = new UnitTest(discovered);
+
 				ResolveUnitTest(typeSystem, linker, id++, unitTest);
+
+				unitTests.Add(unitTest);
 			}
+
+			return unitTests;
 		}
 
 		private static void ResolveUnitTest(TypeSystem typeSystem, MosaLinker linker, int id, UnitTest unitTest)
 		{
 			unitTest.UnitTestID = id;
 
-			ResolveExpectedResult(unitTest);
 			ResolveName(unitTest);
 			ResolveMosaMethod(unitTest, typeSystem);
 			ResolveAddress(unitTest, linker);
 			SerializeUnitTest(unitTest);
-		}
-
-		private static void ResolveExpectedResult(UnitTest unitTest)
-		{
-			try
-			{
-				unitTest.Expected = unitTest.MethodInfo.Invoke(null, unitTest.Values);
-			}
-			catch (Exception e)
-			{
-				if (e.InnerException is DivideByZeroException || e.InnerException is OverflowException)
-				{
-					unitTest.Status = UnitTestStatus.Skipped;
-				}
-				else
-				{
-					unitTest.Status = UnitTestStatus.Skipped;
-				}
-			}
-		}
-
-		private static List<UnitTest> DiscoverUnitTests()
-		{
-			var unitTests = new List<UnitTest>();
-
-			var assembly = typeof(MosaUnitTestAttribute).Assembly;
-
-			var methods = assembly.GetTypes()
-					  .SelectMany(t => t.GetMethods())
-					  .Where(m => m.GetCustomAttributes(typeof(MosaUnitTestAttribute), false).Length > 0)
-					  .ToArray();
-
-			foreach (var method in methods)
-			{
-				var fullMethodName = method.DeclaringType.FullName + "." + method.Name;
-
-				foreach (var attribute in method.GetCustomAttributes<MosaUnitTestAttribute>())
-				{
-					foreach (var paramValues in GetParameters(attribute))
-					{
-						var unitTest = new UnitTest()
-						{
-							MethodInfo = method,
-							FullMethodName = fullMethodName,
-							Values = paramValues,
-							UnitTestAttribute = attribute,
-							Status = UnitTestStatus.Pending,
-						};
-
-						unitTests.Add(unitTest);
-					}
-				}
-			}
-
-			return unitTests;
 		}
 
 		private static void Execute(List<UnitTest> unitTests, UnitTestEngine unitTestEngine)
@@ -176,133 +128,6 @@ namespace Mosa.Utility.UnitTests
 			unitTestEngine.QueueUnitTests(unitTests);
 
 			unitTestEngine.WaitUntilComplete();
-		}
-
-		public static object GetParam(MosaUnitTestAttribute unitTest, int index)
-		{
-			switch (index)
-			{
-				case 1: return unitTest.Param1 ?? unitTest.ParamSeries1;
-				case 2: return unitTest.Param2 ?? unitTest.ParamSeries2;
-				case 3: return unitTest.Param3 ?? unitTest.ParamSeries3;
-				case 4: return unitTest.Param4 ?? unitTest.ParamSeries4;
-				case 5: return unitTest.Param5 ?? unitTest.ParamSeries5;
-			}
-
-			return null;
-		}
-
-		public static IEnumerable<object> GetParamList(MosaUnitTestAttribute unitTest, int index)
-		{
-			var param = GetParam(unitTest, index);
-
-			if (param is string)
-			{
-				string s = param as string;
-
-				var property = SeriesType.GetProperty(s);
-
-				var values = property.GetValue("Value");
-
-				var val = (IEnumerable<object>)values;
-
-				foreach (var p in val)
-				{
-					yield return p;
-				}
-			}
-			else
-			{
-				yield return param;
-			}
-		}
-
-		public static List<object[]> GetParameters(MosaUnitTestAttribute unitTest)
-		{
-			var list = new List<object[]>();
-
-			if (unitTest.Series != null)
-			{
-				var property = CombinationType.GetProperty(unitTest.Series);
-
-				var value = property.GetValue("Value");
-
-				foreach (var param in ((IEnumerable<object[]>)value))
-				{
-					list.Add(param);
-				}
-			}
-			else if (unitTest.ParamCount == 0)
-			{
-				list.Add(new object[] { });
-			}
-			else if (unitTest.ParamCount == 1)
-			{
-				foreach (var p1 in GetParamList(unitTest, 1))
-				{
-					list.Add(new object[] { p1 });
-				}
-			}
-			else if (unitTest.ParamCount == 2)
-			{
-				foreach (var p1 in GetParamList(unitTest, 1))
-				{
-					foreach (var p2 in GetParamList(unitTest, 2))
-					{
-						list.Add(new object[] { p1, p2 });
-					}
-				}
-			}
-			else if (unitTest.ParamCount == 3)
-			{
-				foreach (var p1 in GetParamList(unitTest, 1))
-				{
-					foreach (var p2 in GetParamList(unitTest, 2))
-					{
-						foreach (var p3 in GetParamList(unitTest, 3))
-						{
-							list.Add(new object[] { p1, p2, p3 });
-						}
-					}
-				}
-			}
-			else if (unitTest.ParamCount == 4)
-			{
-				foreach (var p1 in GetParamList(unitTest, 1))
-				{
-					foreach (var p2 in GetParamList(unitTest, 2))
-					{
-						foreach (var p3 in GetParamList(unitTest, 3))
-						{
-							foreach (var p4 in GetParamList(unitTest, 4))
-							{
-								list.Add(new object[] { p1, p2, p3, p4 });
-							}
-						}
-					}
-				}
-			}
-			else if (unitTest.ParamCount == 5)
-			{
-				foreach (var p1 in GetParamList(unitTest, 1))
-				{
-					foreach (var p2 in GetParamList(unitTest, 2))
-					{
-						foreach (var p3 in GetParamList(unitTest, 3))
-						{
-							foreach (var p4 in GetParamList(unitTest, 4))
-							{
-								foreach (var p5 in GetParamList(unitTest, 5))
-								{
-									list.Add(new object[] { p1, p2, p3, p4, p5 });
-								}
-							}
-						}
-					}
-				}
-			}
-
-			return list;
 		}
 
 		public static void ResolveName(UnitTest unitTest)
