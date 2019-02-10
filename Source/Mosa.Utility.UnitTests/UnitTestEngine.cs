@@ -66,6 +66,8 @@ namespace Mosa.Utility.UnitTests
 				TwoPassOptimizations = true,
 				EnableMethodScanner = false,
 
+				UseMultiThreadingCompiler = true,
+
 				Emulator = EmulatorType.Qemu,
 				ImageFormat = ImageFormat.IMG,
 				MultibootSpecification = Compiler.Framework.MultibootSpecification.V1,
@@ -74,7 +76,6 @@ namespace Mosa.Utility.UnitTests
 				EmulatorMemoryInMB = 128,
 				DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA-UnitTest"),
 				FileSystem = FileSystem.FAT16,
-				UseMultiThreadingCompiler = false,
 				InlinedIRMaximum = 12,
 				BootLoader = BootLoader.Syslinux_3_72,
 				VBEVideo = false,
@@ -517,16 +518,8 @@ namespace Mosa.Utility.UnitTests
 			Console.WriteLine(status);
 		}
 
-		private DateTime UpdateProgressLastWrittenDate;
-
 		void IBuilderEvent.UpdateProgress(int total, int at)
 		{
-			var ts = DateTime.Now - UpdateProgressLastWrittenDate;
-			if (ts.TotalSeconds > 3)
-			{
-				UpdateProgressLastWrittenDate = DateTime.Now;
-				Console.WriteLine("{0} / {1}", at, total);
-			}
 		}
 
 		void IStarterEvent.NewStatus(string status)
