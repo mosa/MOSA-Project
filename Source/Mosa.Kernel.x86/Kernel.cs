@@ -12,11 +12,7 @@ namespace Mosa.Kernel.x86
 	{
 		public static void Setup()
 		{
-			Logger.Log("Initialize Kernel");
-
-			// Initialize GDT before IDT, because IDT Entries requies a valid Segment Selector
-			// This never happend before, because on fast computers GDT.Setup() was called
-			// before a Interrupt,for example clock, got triggered.
+			// Initialize GDT before IDT, because IDT Entries requires a valid Segment Selector
 			Multiboot.Setup();
 			GDT.Setup();
 

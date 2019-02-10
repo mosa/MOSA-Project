@@ -9,13 +9,14 @@ namespace Mosa.Tool.Explorer
 	{
 		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline)
 		{
-			pipeline.Add(
+			pipeline.Add(new Pipeline<BaseMethodCompilerStage>() {
 				new DisassemblyStage()
-			);
+				,new DebugInfoStage()
 
-			pipeline.Add(
-				new DebugInfoStage()
-			);
+				//,new GraphVizStage()
+			});
+
+			//new DominanceOutputStage(),
 		}
 	}
 }

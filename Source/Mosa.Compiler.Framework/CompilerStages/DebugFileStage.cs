@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 	/// An compilation stage, which generates a map file of the built binary file.
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
-	public sealed class DebugFileGenerationStage : BaseCompilerStage
+	public sealed class DebugFileStage : BaseCompilerStage
 	{
 		#region Data Members
 
@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		{
 			writer.WriteLine("[Sections]");
 			writer.WriteLine("Address\tOffset\tSize\tKind\tName");
-			foreach (var linkerSection in Linker.LinkerSections)
+			foreach (var linkerSection in Linker.Sections)
 			{
 				writer.WriteLine(
 					"{0:x8}\t{1}\t{2}\t{3}\t{4}",

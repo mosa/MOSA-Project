@@ -577,8 +577,6 @@ namespace Mosa.Compiler.Framework
 
 		protected MosaExceptionHandler FindFinallyExceptionContext(InstructionNode node)
 		{
-			MosaExceptionHandler innerClause = null;
-
 			int label = node.Label;
 
 			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
@@ -718,7 +716,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="counter">The counter.</param>
 		public void UpdateCounter(Counter counter)
 		{
-			MethodData.Counters.UpdateNoLock(counter.Name, counter.Count);
+			MethodData.Counters.UpdateSkipLock(counter.Name, counter.Count);
 		}
 
 		/// <summary>

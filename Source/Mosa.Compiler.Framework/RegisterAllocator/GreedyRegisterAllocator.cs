@@ -67,8 +67,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			foreach (var moveHint in hints)
 			{
-				LiveIntervalTrack track = null;
-
 				var register = (liveInterval.Start == moveHint.Slot) ? moveHint.FromRegister : moveHint.ToRegister;
 
 				if (register == null)

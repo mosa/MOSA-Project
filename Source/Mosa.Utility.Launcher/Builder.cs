@@ -374,7 +374,7 @@ namespace Mosa.Utility.Launcher
 
 		private void LaunchNDISASM()
 		{
-			var textSection = Linker.LinkerSections[(int)SectionKind.Text];
+			var textSection = Linker.Sections[(int)SectionKind.Text];
 
 			const uint multibootHeaderLength = MultibootHeaderLength;
 			ulong startingAddress = textSection.VirtualAddress + multibootHeaderLength;
@@ -401,7 +401,7 @@ namespace Mosa.Utility.Launcher
 
 			var asmfile = Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".asm");
 
-			var textSection = Linker.LinkerSections[(int)SectionKind.Text];
+			var textSection = Linker.Sections[(int)SectionKind.Text];
 
 			var map = new Dictionary<ulong, string>();
 

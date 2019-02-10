@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 	/// An compilation stage, which generates a map file of the built binary file.
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
-	public sealed class MapFileGenerationStage : BaseCompilerStage
+	public sealed class MapFileStage : BaseCompilerStage
 	{
 		#region Data Members
 
@@ -59,7 +59,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private void EmitSections()
 		{
 			writer.WriteLine("Offset           Virtual          Length           Name                             Class");
-			foreach (var linkerSection in Linker.LinkerSections)
+			foreach (var linkerSection in Linker.Sections)
 			{
 				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", linkerSection.FileOffset, linkerSection.VirtualAddress, linkerSection.Size, linkerSection.Name.PadRight(32), linkerSection.SectionKind);
 			}

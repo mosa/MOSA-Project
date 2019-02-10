@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class Counters
 	{
-		private Dictionary<string, int> counters = new Dictionary<string, int>();
+		private readonly Dictionary<string, int> counters = new Dictionary<string, int>();
 		private readonly object _lock = new object();
 
 		public void Reset()
@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public void UpdateNoLock(string name, int count)
+		public void UpdateSkipLock(string name, int count)
 		{
 			if (counters.TryGetValue(name, out int current))
 			{
@@ -44,6 +44,11 @@ namespace Mosa.Compiler.Framework
 			{
 				counters.Add(name, count);
 			}
+		}
+
+		public void NewCountSkipLock(string name, int count)
+		{
+			counters.Add(name, count);
 		}
 
 		public List<string> Export()

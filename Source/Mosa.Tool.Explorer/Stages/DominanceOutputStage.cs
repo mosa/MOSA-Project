@@ -1,9 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Analysis;
 using System.Text;
 
-namespace Mosa.Compiler.Framework.Stages
+namespace Mosa.Tool.Explorer.Stages
 {
 	public class DominanceOutputStage : BaseMethodCompilerStage
 	{

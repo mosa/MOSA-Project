@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 	{
 		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline)
 		{
-			pipeline.InsertBefore<LinkerFinalizationStage>(new DwarfCompilerStage());
+			pipeline.InsertBefore<LinkerEmitStage>(new DwarfCompilerStage());
 		}
 
 		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline)

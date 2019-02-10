@@ -66,11 +66,7 @@ namespace Mosa.Compiler.Framework
 
 		public List<LabelRegion> LabelRegions { get; }
 
-		public long CompileTimeStartTick { get; set; }
-
-		public long CompileTimeEndTick { get; set; }
-
-		public long CompileTimeTicks { get { return CompileTimeEndTick - CompileTimeStartTick; } }
+		public long ElapsedTicks { get; set; }
 
 		#endregion Properties
 

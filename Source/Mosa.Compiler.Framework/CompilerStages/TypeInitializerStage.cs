@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 	/// metadata.
 	/// </remarks>
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
-	public sealed class TypeInitializerSchedulerStage : BaseCompilerStage
+	public sealed class TypeInitializerStage : BaseCompilerStage
 	{
 		public const string TypeInitializerName = "AssemblyInit";
 
@@ -40,9 +40,9 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TypeInitializerSchedulerStage"/> class.
+		/// Initializes a new instance of the <see cref="TypeInitializerStage"/> class.
 		/// </summary>
-		public TypeInitializerSchedulerStage()
+		public TypeInitializerStage()
 		{
 			basicBlocks = new BasicBlocks();
 

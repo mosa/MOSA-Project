@@ -231,7 +231,7 @@ namespace Mosa.Utility.Launcher
 			arg = arg + " -s " + Quote(Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".bin"));
 			arg = arg + " -x " + Quote(gdbscript);
 
-			var textSection = Linker.LinkerSections[(int)SectionKind.Text];
+			var textSection = Linker.Sections[(int)SectionKind.Text];
 
 			const uint multibootHeaderLength = Builder.MultibootHeaderLength;
 			ulong startingAddress = textSection.VirtualAddress + multibootHeaderLength;

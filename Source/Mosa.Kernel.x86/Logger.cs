@@ -9,18 +9,15 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class Logger
 	{
-
 		private static bool initialized = false;
 
 		public static void Log(string message)
 		{
-			if (!initialized)
-				Serial.SetupPort(Serial.COM1);
+			//if (!initialized)
+			//	Serial.SetupPort(Serial.COM1);
 
-			Serial.Write(Serial.COM1, message);
-			Serial.Write(Serial.COM1, "\n");
+			//Serial.Write(Serial.COM1, message);
+			//Serial.Write(Serial.COM1, "\n");
 		}
-
 	}
-
 }

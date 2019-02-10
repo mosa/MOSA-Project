@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Compiler.Framework.Trace;
 using SharpDisasm;
 using System;
@@ -30,9 +29,13 @@ namespace Mosa.Tool.Explorer.Stages
 			ArchitectureMode mode;
 
 			if (Architecture is Platform.x86.Architecture)
+			{
 				mode = ArchitectureMode.x86_64;
+			}
 			else if (Architecture is Platform.x64.Architecture)
+			{
 				mode = ArchitectureMode.x86_64;
+			}
 			else
 			{
 				trace.Log($"Unable to disassemble binary for machine type: {Architecture.ElfMachineType}");
