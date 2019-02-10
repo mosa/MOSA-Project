@@ -511,21 +511,16 @@ namespace Mosa.Utility.UnitTests
 
 		void IBuilderEvent.NewStatus(string status)
 		{
-			Console.WriteLine(status);
+			//Console.WriteLine(status);
 		}
 
-		private DateTime LastUpdateProgressWrittenTime;
 		void IBuilderEvent.UpdateProgress(int total, int at)
 		{
-			if (LastUpdateProgressWrittenTime.Second == DateTime.Now.Second)
-				return;
-			LastUpdateProgressWrittenTime = DateTime.Now;
-			Console.WriteLine("{0} / {1}",at, total);
 		}
 
 		void IStarterEvent.NewStatus(string status)
 		{
-			Console.WriteLine(status);
+			//Console.WriteLine(status);
 		}
 
 		void IDisposable.Dispose()
