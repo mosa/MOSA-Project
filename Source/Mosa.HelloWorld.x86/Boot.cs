@@ -36,7 +36,7 @@ namespace Mosa.HelloWorld.x86
 			Console.Color = ScreenColor.Red;
 			Console.Write("Neptune");
 			Console.Color = ScreenColor.Yellow;
-			Console.Write("'                                Copyright 2008-2018");
+			Console.Write("'                                Copyright 2008-2019");
 
 			Console.Color = ScreenColor.White;
 			Console.Write(new String((char)205, 60));
