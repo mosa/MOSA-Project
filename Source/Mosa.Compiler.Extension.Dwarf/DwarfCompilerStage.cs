@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Compiler.Framework.Source;
 using System;
@@ -13,14 +14,6 @@ namespace Mosa.Compiler.Extensions.Dwarf
 {
 	internal class DwarfCompilerStage : BaseCompilerStage
 	{
-		protected override void Setup()
-		{
-		}
-
-		protected override void RunPreCompile()
-		{
-		}
-
 		protected override void RunPostCompile()
 		{
 			if (Linker.CreateExtraSections == null)
@@ -53,12 +46,14 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 			var context = new DwarfWriteContext { Writer = wr, AbbrevList = AbbrevList };
 
+			var textSection = Compiler.Linker.Sections[(int)SectionKind.Text];
+
 			// Debugging Information Entry
 			var cu = new DwarfCompilationUnit
 			{
 				Producer = "Mosa Compiler",
-				ProgramCounterLow = (uint)Compiler.CompilerOptions.BaseAddress,
-				ProgramCounterHigh = 0x00600000,
+				ProgramCounterLow = (uint)textSection.VirtualAddress,
+				ProgramCounterHigh = (uint)textSection.VirtualAddress + textSection.Size
 			};
 			cu.Emit(context);
 
