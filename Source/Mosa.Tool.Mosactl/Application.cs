@@ -321,7 +321,7 @@ namespace Mosa.Tool.Mosactl
 			if (!TaskCILBuild(CheckType.changed, args))
 				return false;
 
-			if (!CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), "Mosa.Utility.UnitTests/Mosa.Utility.UnitTests.csproj"))
+			if (!CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), "Mosa.Utility.UnitTests/Mosa.Utility.UnitTests.csproj", "/p:Configuration=Debug"))
 				return false;
 
 			if (!CallMonoProcess(BinDir, "Mosa.Utility.UnitTests.exe"))
