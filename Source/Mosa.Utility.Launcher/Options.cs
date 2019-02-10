@@ -151,6 +151,9 @@ namespace Mosa.Utility.Launcher
 		[Option("multiboot-none")]
 		public bool MultiBootNone { set { MultibootSpecification = MultibootSpecification.None; } }
 
+		[Option("no-display")]
+		public bool NoDisplay { get; set; }
+
 		[Option("platform")]
 		public PlatformType PlatformType { get; set; }
 

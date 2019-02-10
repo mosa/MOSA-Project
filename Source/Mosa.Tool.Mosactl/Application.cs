@@ -121,6 +121,10 @@ namespace Mosa.Tool.Mosactl
 					if (!TaskTest(args))
 						Environment.Exit(1);
 					break;
+				case "unittest":
+					if (!TaskUnitTest(args))
+						Environment.Exit(1);
+					break;
 				case "debug":
 					TaskDebug(args);
 					break;
@@ -310,6 +314,22 @@ namespace Mosa.Tool.Mosactl
 			}
 		}
 
+		public bool TaskUnitTest(List<string> args)
+		{
+			OsName = "UnitTests";
+
+			if (!TaskCILBuild(CheckType.changed, args))
+				return false;
+
+			if (!CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), "Mosa.Utility.UnitTests/Mosa.Utility.UnitTests.csproj", "/p:Configuration=Debug", "/p:Platform=\"AnyCPU\"", "-verbosity:minimal"))
+				return false;
+
+			if (!CallMonoProcess(BinDir, "Mosa.Utility.UnitTests.exe"))
+				return false;
+
+			return true;
+		}
+
 		private bool CallQemu(bool nographic, Action<string, Process> OnKernelLog)
 		{
 			var logFile = ExpandKernelBinPath(OsName) + ".log";
@@ -492,6 +512,8 @@ namespace Mosa.Tool.Mosactl
 					return "Mosa.CoolWorld.x86";
 				case "testworld":
 					return "Mosa.TestWorld.x86";
+				case "unittests":
+					return "Mosa.UnitTests.x86";
 			}
 			return name;
 		}

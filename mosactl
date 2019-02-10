@@ -7,7 +7,7 @@ if [ -f $tmpScript  ]; then
 fi
 
 if [ ! -f $rdir/bin/Mosa.Tool.Mosactl.exe ]; then
-  $rdir/Tools/nuget/nuget.exe restore Source/Mosa.Tool.Mosactl.sln
+  mono $rdir/Tools/nuget/nuget.exe restore Source/Mosa.Tool.Mosactl.sln
   msbuild $rdir/Source/Mosa.Tool.Mosactl.sln
 fi
 
