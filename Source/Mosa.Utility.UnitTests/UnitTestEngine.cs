@@ -96,6 +96,10 @@ namespace Mosa.Utility.UnitTests
 				PlugKorlib = true
 			};
 
+			// Ensure NoDisplay=true on appveyor! Otherwise, test will fail
+			// (appveyor cannot open a display)
+			Options.NoDisplay = true;
+
 			AppLocations = new AppLocations();
 
 			AppLocations.FindApplications();
@@ -290,8 +294,10 @@ namespace Mosa.Utility.UnitTests
 				DebugServerEngine.SetGlobalDispatch(GlobalDispatch);
 			}
 
-			for (int attempt = 0; attempt < 25; attempt++)
+			for (int attempt = 0; attempt < 100; attempt++)
 			{
+				Thread.Sleep(100);
+
 				if (DebugServerEngine.IsConnected)
 					return true;
 
@@ -302,9 +308,9 @@ namespace Mosa.Utility.UnitTests
 				catch
 				{
 				}
-
-				Thread.Sleep(50);
 			}
+
+			Console.Write("Unable to connect to DebugEngine");
 
 			return false;
 		}
@@ -339,7 +345,7 @@ namespace Mosa.Utility.UnitTests
 
 		private bool WaitForReady()
 		{
-			for (int attempt = 0; attempt < 400; attempt++)
+			for (int attempt = 0; attempt < 100; attempt++)
 			{
 				if (Ready)
 				{
@@ -347,7 +353,7 @@ namespace Mosa.Utility.UnitTests
 					return true;
 				}
 
-				Thread.Sleep(10);
+				Thread.Sleep(100);
 			}
 
 			return false;
@@ -511,16 +517,23 @@ namespace Mosa.Utility.UnitTests
 
 		void IBuilderEvent.NewStatus(string status)
 		{
-			//Console.WriteLine(status);
+			Console.WriteLine(status);
 		}
 
+		private DateTime UpdateProgressLastWrittenDate;
 		void IBuilderEvent.UpdateProgress(int total, int at)
 		{
+			var ts = DateTime.Now - UpdateProgressLastWrittenDate;
+			if (ts.TotalSeconds > 3)
+			{
+				UpdateProgressLastWrittenDate = DateTime.Now;
+				Console.WriteLine("{0} / {1}", at, total);
+			}
 		}
 
 		void IStarterEvent.NewStatus(string status)
 		{
-			//Console.WriteLine(status);
+			Console.WriteLine(status);
 		}
 
 		void IDisposable.Dispose()
