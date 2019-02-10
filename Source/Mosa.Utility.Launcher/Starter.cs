@@ -81,7 +81,7 @@ namespace Mosa.Utility.Launcher
 			// COM1 = Kernel log
 			// COM2 = MosaDebugger
 
-			//arg = arg + " -serial tcp::1240,server,nowait"; // TODO: Redirect to file
+			arg = arg + " -serial tcp::1240,server,nowait"; // TODO: Redirect to file
 
 			if (Options.SerialConnectionOption == SerialConnectionOption.Pipe)
 			{
