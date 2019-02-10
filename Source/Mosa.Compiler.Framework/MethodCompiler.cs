@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private static readonly Operand[] emptyOperandList = new Operand[0];
 
-		private Stopwatch Stopwatch;
+		private readonly Stopwatch Stopwatch;
 
 		#endregion Data Members
 

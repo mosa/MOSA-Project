@@ -577,8 +577,6 @@ namespace Mosa.Compiler.Framework
 
 		protected MosaExceptionHandler FindFinallyExceptionContext(InstructionNode node)
 		{
-			MosaExceptionHandler innerClause = null;
-
 			int label = node.Label;
 
 			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)

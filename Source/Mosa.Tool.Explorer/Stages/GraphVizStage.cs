@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.Stages
+using Mosa.Compiler.Framework;
+
+namespace Mosa.Tool.Explorer.Stages
 {
 	public class GraphVizStage : BaseMethodCompilerStage
 	{

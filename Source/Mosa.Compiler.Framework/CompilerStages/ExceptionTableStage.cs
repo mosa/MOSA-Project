@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 	/// Emits method lookup table
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
-	public class MethodLookupTableStage : BaseCompilerStage
+	public class ExceptionTableStage : BaseCompilerStage
 	{
 		#region Data Members
 
@@ -25,8 +25,13 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		protected override void RunPostCompile()
 		{
+			CreateMethodExceptionLookupTable();
+		}
+
+		protected void CreateMethodExceptionLookupTable()
+		{
 			// Emit assembly list
-			var methodLookupTable = Linker.DefineSymbol(Metadata.MethodLookupTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var methodLookupTable = Linker.DefineSymbol(Metadata.MethodExceptionLookupTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer = new EndianAwareBinaryWriter(methodLookupTable.Stream, Architecture.Endianness);
 
 			// 1. Number of methods
@@ -53,6 +58,9 @@ namespace Mosa.Compiler.Framework.CompilerStages
 						if ((!method.HasImplementation && method.IsAbstract) || method.HasOpenGenericParams || method.DeclaringType.HasOpenGenericParams)
 							continue;
 
+						if (method.ExceptionHandlers.Count == 0)
+							continue;
+
 						if (!Compiler.MethodScanner.IsMethodInvoked(method))
 							continue;
 
@@ -75,6 +83,9 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 			writer.Position = 0;
 			writer.Write(count);
+
+			// emit null entry (FUTURE)
+			//writer.WriteZeroBytes(TypeLayout.NativePointerSize * 3);
 		}
 	}
 }

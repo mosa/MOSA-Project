@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class Counters
 	{
-		private Dictionary<string, int> counters = new Dictionary<string, int>();
+		private readonly Dictionary<string, int> counters = new Dictionary<string, int>();
 		private readonly object _lock = new object();
 
 		public void Reset()

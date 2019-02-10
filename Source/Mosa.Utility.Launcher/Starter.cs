@@ -81,7 +81,7 @@ namespace Mosa.Utility.Launcher
 			// COM1 = Kernel log
 			// COM2 = MosaDebugger
 
-			arg = arg + " -serial tcp::1240,server,nowait"; // TODO: Redirect to file
+			//arg = arg + " -serial tcp::1240,server,nowait"; // TODO: Redirect to file
 
 			if (Options.SerialConnectionOption == SerialConnectionOption.Pipe)
 			{
@@ -231,7 +231,7 @@ namespace Mosa.Utility.Launcher
 			arg = arg + " -s " + Quote(Path.Combine(Options.DestinationDirectory, Path.GetFileNameWithoutExtension(Options.SourceFile) + ".bin"));
 			arg = arg + " -x " + Quote(gdbscript);
 
-			var textSection = Linker.LinkerSections[(int)SectionKind.Text];
+			var textSection = Linker.Sections[(int)SectionKind.Text];
 
 			const uint multibootHeaderLength = Builder.MultibootHeaderLength;
 			ulong startingAddress = textSection.VirtualAddress + multibootHeaderLength;

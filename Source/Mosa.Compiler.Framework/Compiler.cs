@@ -130,14 +130,15 @@ namespace Mosa.Compiler.Framework
 		private static List<BaseCompilerStage> GetDefaultCompilerPipeline(CompilerOptions compilerOptions)
 		{
 			return new List<BaseCompilerStage> {
-				new TypeInitializerSchedulerStage(),
+				new TypeInitializerStage(),
 				new StaticFieldStage(),
-				new MethodLookupTableStage(),
-				new MethodExceptionLookupTableStage(),
+				new MethodTableStage(),
+				new ExceptionTableStage(),
 				new MetadataStage(),
-				(compilerOptions.OutputFile != null && compilerOptions.EmitBinary) ? new LinkerFinalizationStage() : null,
-				(compilerOptions.MapFile != null) ? new MapFileGenerationStage() : null,
-				(compilerOptions.DebugFile != null) ? new DebugFileGenerationStage() : null
+				new LinkerLayoutStage(),
+				(compilerOptions.OutputFile != null && compilerOptions.EmitBinary) ? new LinkerEmitStage() : null,
+				(compilerOptions.MapFile != null) ? new MapFileStage() : null,
+				(compilerOptions.DebugFile != null) ? new DebugFileStage() : null
 			};
 		}
 
@@ -160,9 +161,6 @@ namespace Mosa.Compiler.Framework
 				new PromoteTemporaryVariables(),
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 
-				//new DominanceOutputStage(),
-				//new StopStage(),
-				//new GraphVizStage(),
 				//new PreciseGCStage(),
 
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
@@ -269,8 +267,10 @@ namespace Mosa.Compiler.Framework
 
 			var pipeline = GetOrCreateMethodStagePipeline(threadID);
 
-			var methodCompiler = new MethodCompiler(this, method, basicBlocks, threadID);
-			methodCompiler.Pipeline = pipeline;
+			var methodCompiler = new MethodCompiler(this, method, basicBlocks, threadID)
+			{
+				Pipeline = pipeline
+			};
 
 			methodCompiler.Compile();
 

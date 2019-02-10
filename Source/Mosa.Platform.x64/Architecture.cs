@@ -177,7 +177,7 @@ namespace Mosa.Platform.x64
 		{
 			if (compilerOptions.MultibootSpecification == MultibootSpecification.V1)
 			{
-				compilerPipeline.InsertAfterFirst<TypeInitializerSchedulerStage>(
+				compilerPipeline.InsertAfterFirst<TypeInitializerStage>(
 					new MultibootV1Stage()
 				);
 			}

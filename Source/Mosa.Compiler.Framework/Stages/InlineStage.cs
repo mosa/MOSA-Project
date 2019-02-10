@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (HasProtectedRegions)
 				return;
 
-			if (MethodCompiler.Method.IsCompilerGenerated && MethodCompiler.Method.Name == TypeInitializerSchedulerStage.TypeInitializerName)
+			if (MethodCompiler.Method.IsCompilerGenerated && MethodCompiler.Method.Name == TypeInitializerStage.TypeInitializerName)
 				return;
 
 			MethodData.CompileCount++;

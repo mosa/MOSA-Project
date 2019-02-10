@@ -49,7 +49,7 @@ namespace Mosa.Kernel.x86
 
 		private static bool enabled = false;
 
-		private static ushort com = Serial.COM2;
+		private static ushort com = Serial.COM1;
 
 		private static uint index = 0;
 

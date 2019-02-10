@@ -9,10 +9,13 @@ namespace Mosa.Compiler.Framework.CompilerStages
 	/// Finalizes the linking
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
-	public sealed class LinkerFinalizationStage : BaseCompilerStage
+	public sealed class LinkerEmitStage : BaseCompilerStage
 	{
 		protected override void RunPostCompile()
 		{
+			if (!CompilerOptions.EmitBinary)
+				return;
+
 			if (string.IsNullOrEmpty(CompilerOptions.OutputFile))
 				return;
 
@@ -22,11 +25,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			{
 				Linker.Emit(file);
 			}
-
-			Compiler.GlobalCounters.Update("Linker.Text", (int)Linker.LinkerSections[(int)SectionKind.Text].Size);
-			Compiler.GlobalCounters.Update("Linker.Data", (int)Linker.LinkerSections[(int)SectionKind.Data].Size);
-			Compiler.GlobalCounters.Update("Linker.ROData", (int)Linker.LinkerSections[(int)SectionKind.ROData].Size);
-			Compiler.GlobalCounters.Update("Linker.BSS", (int)Linker.LinkerSections[(int)SectionKind.BSS].Size);
 		}
 	}
 }

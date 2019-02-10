@@ -29,9 +29,13 @@ namespace Mosa.Tool.Explorer.Stages
 			ArchitectureMode mode;
 
 			if (Architecture is Platform.x86.Architecture)
+			{
 				mode = ArchitectureMode.x86_64;
+			}
 			else if (Architecture is Platform.x64.Architecture)
+			{
 				mode = ArchitectureMode.x86_64;
+			}
 			else
 			{
 				trace.Log($"Unable to disassemble binary for machine type: {Architecture.ElfMachineType}");
