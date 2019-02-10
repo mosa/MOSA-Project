@@ -25,7 +25,6 @@ mono Mosa.Tool.Compiler.exe \
 	-o ${name}.bin \
 	-a x86 \
 	--mboot v1 \
-	--x86-irq-methods \
 	--base-address 0x00500000 \
 	mscorlib.dll \
 	Mosa.Plug.Korlib.dll \

@@ -2,12 +2,10 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
-using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -29,10 +27,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private static readonly Operand[] emptyOperandList = new Operand[0];
 
-		/// <summary>
-		/// Holds flag that will stop method compiler
-		/// </summary>
-		public bool IsStopped { get; private set; }
+		private readonly Stopwatch Stopwatch;
 
 		#endregion Data Members
 
@@ -192,6 +187,11 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public bool IsStackFrameRequired { get; set; }
 
+		/// <summary>
+		/// Holds flag that will stop method compiler
+		/// </summary>
+		public bool IsStopped { get; private set; }
+
 		#endregion Properties
 
 		#region Construction
@@ -205,6 +205,8 @@ namespace Mosa.Compiler.Framework
 		/// <param name="threadID">The thread identifier.</param>
 		public MethodCompiler(Compiler compiler, MosaMethod method, BasicBlocks basicBlocks, int threadID)
 		{
+			Stopwatch = Stopwatch.StartNew();
+
 			Compiler = compiler;
 			Method = method;
 			Type = method.DeclaringType;
@@ -240,6 +242,8 @@ namespace Mosa.Compiler.Framework
 			EvaluateParameterOperands();
 
 			CalculateMethodParameterSize();
+
+			MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.Ticks", (int)Stopwatch.ElapsedTicks);
 		}
 
 		#endregion Construction
@@ -350,8 +354,6 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public void Compile()
 		{
-			MethodData.CompileTimeStartTick = DateTime.Now.Ticks;
-
 			if (Method.IsCompilerGenerated)
 			{
 				IsCILDecodeRequired = false;
@@ -368,11 +370,12 @@ namespace Mosa.Compiler.Framework
 
 			ExecutePipeline();
 
-			var log = new TraceLog(TraceType.Counters, Method, string.Empty, Trace.TraceFilter.Active);
-			log.Log(MethodData.Counters.Export());
-			Trace.TraceListener.OnNewTraceLog(log);
-
-			MethodData.CompileTimeEndTick = DateTime.Now.Ticks;
+			if (Compiler.CompilerOptions.EnableStatistics)
+			{
+				var log = new TraceLog(TraceType.MethodCounters, Method, string.Empty, Trace.TraceFilter.Active);
+				log.Log(MethodData.Counters.Export());
+				Trace.TraceListener.OnNewTraceLog(log);
+			}
 		}
 
 		private void ExecutePipeline()
@@ -380,17 +383,56 @@ namespace Mosa.Compiler.Framework
 			if (!IsExecutePipeline)
 				return;
 
-			int position = 0;
+			var executionTimes = new long[Pipeline.Count];
 
-			foreach (var stage in Pipeline)
+			var startTicks = Stopwatch.ElapsedTicks;
+
+			for (int i = 0; i < Pipeline.Count; i++)
 			{
-				stage.Setup(this, ++position);
+				var stage = Pipeline[i];
+
+				stage.Setup(this, i);
 				stage.Execute();
+
+				executionTimes[i] = Stopwatch.ElapsedTicks;
 
 				InstructionLogger.Run(this, stage);
 
 				if (IsStopped)
 					break;
+			}
+
+			if (Compiler.CompilerOptions.EnableStatistics)
+			{
+				var totalTicks = Stopwatch.ElapsedTicks;
+
+				MethodData.ElapsedTicks = totalTicks;
+
+				MethodData.Counters.NewCountSkipLock("ExecutionTime.StageStart.Ticks", (int)startTicks);
+				MethodData.Counters.NewCountSkipLock("ExecutionTime.Total.Ticks", (int)totalTicks);
+
+				var executionTimeLog = new TraceLog(TraceType.MethodDebug, Method, "Execution Time/Ticks", Trace.TraceFilter.Active);
+
+				long previousTicks = startTicks;
+				for (int i = 0; i < Pipeline.Count; i++)
+				{
+					var pipelineTicks = executionTimes[i];
+					var ticks = pipelineTicks - previousTicks;
+					var percentage = (ticks * 100) / (double)(totalTicks - startTicks);
+					previousTicks = pipelineTicks;
+
+					int per = (int)percentage / 5;
+
+					var entry = $"[{i:00}] {Pipeline[i].Name.PadRight(45)} : {percentage:00.00} % [{string.Empty.PadRight(per, '#').PadRight(20, ' ')}] ({ticks})";
+
+					executionTimeLog.Log(entry);
+
+					MethodData.Counters.NewCountSkipLock($"ExecutionTime.{i:00}.{Pipeline[i].Name}.Ticks", (int)ticks);
+				}
+
+				executionTimeLog.Log($"{"****Total Time".PadRight(57)}({totalTicks})");
+
+				Trace.TraceListener.OnNewTraceLog(executionTimeLog);
 			}
 		}
 

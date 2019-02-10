@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework
 
 		private readonly Pipeline<BaseMethodCompilerStage>[] methodStagePipelines;
 
-		private Dictionary<string, InstrinsicMethodDelegate> internalIntrinsicMethods { get; } = new Dictionary<string, InstrinsicMethodDelegate>();
+		private Dictionary<string, InstrinsicMethodDelegate> InternalIntrinsicMethods { get; } = new Dictionary<string, InstrinsicMethodDelegate>();
 
 		#endregion Data Members
 
@@ -130,14 +130,15 @@ namespace Mosa.Compiler.Framework
 		private static List<BaseCompilerStage> GetDefaultCompilerPipeline(CompilerOptions compilerOptions)
 		{
 			return new List<BaseCompilerStage> {
-				new TypeInitializerSchedulerStage(),
+				new TypeInitializerStage(),
 				new StaticFieldStage(),
-				new MethodLookupTableStage(),
-				new MethodExceptionLookupTableStage(),
+				new MethodTableStage(),
+				new ExceptionTableStage(),
 				new MetadataStage(),
-				(compilerOptions.OutputFile != null && compilerOptions.EmitBinary) ? new LinkerFinalizationStage() : null,
-				(compilerOptions.MapFile != null) ? new MapFileGenerationStage() : null,
-				(compilerOptions.DebugFile != null) ? new DebugFileGenerationStage() : null
+				new LinkerLayoutStage(),
+				(compilerOptions.OutputFile != null && compilerOptions.EmitBinary) ? new LinkerEmitStage() : null,
+				(compilerOptions.MapFile != null) ? new MapFileStage() : null,
+				(compilerOptions.DebugFile != null) ? new DebugFileStage() : null
 			};
 		}
 
@@ -160,9 +161,6 @@ namespace Mosa.Compiler.Framework
 				new PromoteTemporaryVariables(),
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 
-				//new DominanceOutputStage(),
-				//new StopStage(),
-				//new GraphVizStage(),
 				//new PreciseGCStage(),
 
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
@@ -234,7 +232,7 @@ namespace Mosa.Compiler.Framework
 						var d = (InstrinsicMethodDelegate)Delegate.CreateDelegate(typeof(InstrinsicMethodDelegate), method);
 
 						// Finally add the dictionary entry mapping the target name and the delegate
-						internalIntrinsicMethods.Add(attributes[i].Target, d);
+						InternalIntrinsicMethods.Add(attributes[i].Target, d);
 					}
 				}
 			}
@@ -267,7 +265,12 @@ namespace Mosa.Compiler.Framework
 		{
 			NewCompilerTraceEvent(CompilerEvent.CompilingMethod, method.FullName, threadID);
 
-			var methodCompiler = GetMethodCompiler(method, basicBlocks, threadID);
+			var pipeline = GetOrCreateMethodStagePipeline(threadID);
+
+			var methodCompiler = new MethodCompiler(this, method, basicBlocks, threadID)
+			{
+				Pipeline = pipeline
+			};
 
 			methodCompiler.Compile();
 
@@ -275,10 +278,8 @@ namespace Mosa.Compiler.Framework
 			CompilerTrace.TraceListener.OnMethodCompiled(method);
 		}
 
-		private MethodCompiler GetMethodCompiler(MosaMethod method, BasicBlocks basicBlocks, int threadID = 0)
+		private Pipeline<BaseMethodCompilerStage> GetOrCreateMethodStagePipeline(int threadID)
 		{
-			var methodCompiler = new MethodCompiler(this, method, basicBlocks, threadID);
-
 			var pipeline = methodStagePipelines[threadID];
 
 			if (pipeline == null)
@@ -302,9 +303,7 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			methodCompiler.Pipeline = pipeline;
-
-			return methodCompiler;
+			return pipeline;
 		}
 
 		/// <summary>
@@ -475,7 +474,7 @@ namespace Mosa.Compiler.Framework
 
 		public InstrinsicMethodDelegate GetInstrincMethod(string name)
 		{
-			internalIntrinsicMethods.TryGetValue(name, out InstrinsicMethodDelegate value);
+			InternalIntrinsicMethods.TryGetValue(name, out InstrinsicMethodDelegate value);
 
 			return value;
 		}

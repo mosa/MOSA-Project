@@ -6,7 +6,7 @@ using System.Text;
 
 namespace Mosa.Compiler.Framework.Trace
 {
-	public enum TraceType { InstructionList, Debug, MethodDebug, Counters }
+	public enum TraceType { MethodInstructions, MethodDebug, MethodCounters, GlobalDebug }
 
 	public sealed class TraceLog
 	{

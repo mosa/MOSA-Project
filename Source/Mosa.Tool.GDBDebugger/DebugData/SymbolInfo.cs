@@ -12,15 +12,17 @@ namespace Mosa.Tool.GDBDebugger.DebugData
 
 		public string CommonName
 		{
-			get
-			{
-				int pos = Name.IndexOf(' ');
+			get { return Name; }
 
-				if (pos <= 0)
-					return Name;
+			//get
+			//{
+			//	int pos = Name.IndexOf(' ');
 
-				return Name.Substring(pos + 1);
-			}
+			//	if (pos <= 0)
+			//		return Name;
+
+			//	return Name.Substring(pos + 1);
+			//}
 		}
 	}
 }

@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public List<LinkerSymbol> Symbols { get; } = new List<LinkerSymbol>();
 
-		public LinkerSection[] LinkerSections { get; } = new LinkerSection[4];
+		public LinkerSection[] Sections { get; } = new LinkerSection[4];
 
 		public LinkerSymbol EntryPoint { get; set; }
 
@@ -76,14 +76,12 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public void Emit(Stream stream)
 		{
-			FinalizeLayout();
-
 			elfLinker.Emit(stream);
 		}
 
 		private void AddSection(LinkerSection linkerSection)
 		{
-			LinkerSections[(int)linkerSection.SectionKind] = linkerSection;
+			Sections[(int)linkerSection.SectionKind] = linkerSection;
 		}
 
 		public void Link(LinkType linkType, PatchType patchType, LinkerSymbol patchSymbol, long patchOffset, LinkerSymbol referenceSymbol, int referenceOffset)
@@ -109,6 +107,14 @@ namespace Mosa.Compiler.Framework.Linker
 			var referenceObject = GetSymbol(referenceSymbolName);
 
 			Link(linkType, patchType, patchSymbol, patchOffset, referenceObject, referenceOffset);
+		}
+
+		public bool IsSymbolDefined(string name)
+		{
+			lock (_lock)
+			{
+				return symbolLookup.ContainsKey(name);
+			}
 		}
 
 		public LinkerSymbol GetSymbol(string name)
@@ -182,7 +188,7 @@ namespace Mosa.Compiler.Framework.Linker
 			Symbols.Insert(0, symbol);
 		}
 
-		private void FinalizeLayout()
+		public void FinalizeLayout()
 		{
 			LayoutObjectsAndSections();
 			ApplyPatches();
@@ -193,13 +199,16 @@ namespace Mosa.Compiler.Framework.Linker
 			ulong virtualAddress = BaseAddress;
 			uint fileOffset = BaseFileOffset;
 
-			foreach (var linkerSection in LinkerSections)
+			foreach (var section in Sections)
 			{
-				ResolveLayout(linkerSection, fileOffset, virtualAddress);
+				if (!section.IsResolved)
+				{
+					ResolveSectionLayout(section, fileOffset, virtualAddress);
+				}
 
-				uint size = linkerSection.AlignedSize;
+				uint size = section.AlignedSize;
 
-				virtualAddress = linkerSection.VirtualAddress + size;
+				virtualAddress = section.VirtualAddress + size;
 				fileOffset += size;
 			}
 		}
@@ -253,10 +262,11 @@ namespace Mosa.Compiler.Framework.Linker
 			throw new CompilerException($"unknown patch type: {patchType}");
 		}
 
-		private void ResolveLayout(LinkerSection section, uint fileOffset, ulong virtualAddress)
+		private void ResolveSectionLayout(LinkerSection section, uint fileOffset, ulong virtualAddress)
 		{
 			section.VirtualAddress = virtualAddress;
 			section.FileOffset = fileOffset;
+			section.Size = 0;
 
 			foreach (var symbol in Symbols)
 			{
@@ -269,14 +279,12 @@ namespace Mosa.Compiler.Framework.Linker
 				if (symbol.IsExport)
 					continue;
 
-				section.Size = Alignment.AlignUp(section.Size, symbol.Alignment);
-
 				symbol.SectionOffset = section.Size;
 				symbol.VirtualAddress = section.VirtualAddress + section.Size;
-
 				section.Size += symbol.Size;
 			}
 
+			section.Size = Alignment.AlignUp(section.Size, SectionAlignment);
 			section.IsResolved = true;
 		}
 

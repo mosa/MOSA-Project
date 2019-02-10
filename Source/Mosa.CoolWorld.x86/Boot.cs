@@ -200,6 +200,8 @@ namespace Mosa.CoolWorld.x86
 
 			IDT.SetInterruptHandler(manager.ProcessInterrupt);
 
+			Logger.Log("<SELFTEST:PASSED>");
+
 			manager.Start();
 		}
 

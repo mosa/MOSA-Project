@@ -440,6 +440,9 @@ namespace Mosa.Compiler.Framework
 			if (type.IsModule)
 				return;
 
+			if (type.HasOpenGenericParams)
+				return;
+
 			if (interfaces.Contains(type))
 				return;
 

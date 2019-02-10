@@ -19,7 +19,7 @@ namespace Mosa.Utility.Launcher
 		[Option("destination-dir")]
 		public string DestinationDirectoryAlt { set { DestinationDirectory = value; } }
 
-		[Option('a')]
+		[Option("autostart")]
 		public bool AutoStart { get; set; }
 
 		[Option('l', "launch")]
@@ -252,8 +252,25 @@ namespace Mosa.Utility.Launcher
 		[Option("launch-gdb-debugger")]
 		public bool LaunchGDBDebugger { get; set; }
 
+		private string _ImageFile;
+
 		[Option("image")]
-		public string ImageFile { get; set; }
+		public string ImageFile
+		{
+			get
+			{
+				return _ImageFile;
+			}
+			set
+			{
+				_ImageFile = value;
+
+				if (value.EndsWith(".bin"))
+				{
+					ImageFormat = ImageFormat.BIN;
+				}
+			}
+		}
 
 		[Option("debugfile")]
 		public string DebugFile { get; set; }
@@ -271,6 +288,8 @@ namespace Mosa.Utility.Launcher
 		public bool EnableMethodScanner { get; set; }
 
 		public List<IncludeFile> IncludeFiles { get; set; }
+
+		public List<string> CompilerExtensions { get; set; }
 
 		public List<string> Paths { get; set; }
 

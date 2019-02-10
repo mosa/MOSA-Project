@@ -132,18 +132,22 @@ namespace Mosa.Tool.GDBDebugger
 
 			CalculateVMHash();
 
+			Options.SerialConnectionOption = SerialConnectionOption.TCPServer;
+			Options.SerialConnectionPort = 1250;
+
 			if (Options.ImageFile != null)
 			{
 				VMProcess = StartQEMU();
 			}
-			else if (Options.AutoStart)
+			LoadDebugFile();
+			if (Options.AutoStart)
 			{
+				System.Threading.Thread.Sleep(3000);
 				Connect();
 			}
 
 			LoadBreakPoints();
 			LoadWatches();
-			LoadDebugFile();
 		}
 
 		void IStarterEvent.NewStatus(string status)
@@ -416,9 +420,16 @@ namespace Mosa.Tool.GDBDebugger
 			}
 		}
 
-		public void OnCopyToClipboard(Object sender, EventArgs e)
+		public void OnCopyToClipboardAsBreakPoint(Object sender, EventArgs e)
 		{
 			var text = (((sender as Menu).Tag) as BreakPoint).Name;
+
+			Clipboard.SetText(text);
+		}
+
+		public void OnCopyToClipboard(Object sender, EventArgs e)
+		{
+			var text = (((sender as Menu).Tag) as string);
 
 			Clipboard.SetText(text);
 		}
@@ -465,6 +476,7 @@ namespace Mosa.Tool.GDBDebugger
 		{
 			switch (Path.GetExtension(fileName).ToLower())
 			{
+				case ".bin": return ImageFormat.BIN;
 				case ".img": return ImageFormat.IMG;
 				case ".iso": return ImageFormat.ISO;
 			}

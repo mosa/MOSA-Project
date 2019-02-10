@@ -199,7 +199,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 			elfheader.ProgramHeaderNumber = 0;
 
-			foreach (var linkerSection in linker.LinkerSections)
+			foreach (var linkerSection in linker.Sections)
 			{
 				if (linkerSection.Size == 0 && linkerSection.SectionKind != SectionKind.BSS)
 					continue;
@@ -243,7 +243,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 			var previous = nullSection;
 
-			foreach (var linkerSection in linker.LinkerSections)
+			foreach (var linkerSection in linker.Sections)
 			{
 				if (linkerSection.Size == 0 && linkerSection.SectionKind != SectionKind.BSS)
 					continue;
@@ -295,10 +295,16 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 			CreateRelocationSections();
 
+			CreatePluginSecttions();
+
 			if (linker.CreateExtraSections != null)
 				CreateExtraSections();
 
 			CreateSectionHeaderStringSection();
+		}
+
+		private void CreatePluginSecttions()
+		{
 		}
 
 		private void CreateExtraSections()
@@ -323,7 +329,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 		private void WriteLinkerSection(Section section, EndianAwareBinaryWriter writer)
 		{
-			var linkerSection = linker.LinkerSections[(int)section.SectionKind];
+			var linkerSection = linker.Sections[(int)section.SectionKind];
 
 			writer.Position = section.Offset;
 			linker.WriteTo(writer.BaseStream, linkerSection);
