@@ -321,7 +321,11 @@ namespace Mosa.Tool.Mosactl
 			if (!TaskCILBuild(CheckType.changed, args))
 				return false;
 
-			if (!CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), "Mosa.Utility.UnitTests/Mosa.Utility.UnitTests.csproj", "/p:Configuration=Debug"))
+			CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), "Mosa.Utility.UnitTests/Mosa.Utility.UnitTests.csproj", "/p:Configuration=Debug", "p:Platform=\"AnyCPU\"");
+			CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), "Mosa.Utility.UnitTests/Mosa.Utility.UnitTests.csproj", "/p:Configuration=Release", "p:Platform=\"AnyCPU\"");
+			CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), "Mosa.Utility.UnitTests/Mosa.Utility.UnitTests.csproj", "/p:Configuration=Release", "p:Platform=\"Any CPU\"");
+
+			if (!CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), "Mosa.Utility.UnitTests/Mosa.Utility.UnitTests.csproj", "/p:Configuration=Debug", "p:Platform=\"Any CPU\""))
 				return false;
 
 			if (!CallMonoProcess(BinDir, "Mosa.Utility.UnitTests.exe"))
