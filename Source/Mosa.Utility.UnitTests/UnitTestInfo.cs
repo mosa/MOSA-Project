@@ -8,7 +8,7 @@ using System.Reflection;
 
 namespace Mosa.Utility.UnitTests
 {
-	public class DiscoveredUnitTest
+	public class UnitTestInfo
 	{
 		public string FullMethodName { get; set; }
 		public MethodInfo MethodInfo { get; set; }

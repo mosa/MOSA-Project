@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Discovery.cs" />
+    <Compile Include="Linker.cs" />
     <Compile Include="Numbers\B.cs" />
     <Compile Include="Numbers\C.cs" />
     <Compile Include="Numbers\Combinations.cs" />
@@ -61,7 +62,8 @@
     <Compile Include="Numbers\U2.cs" />
     <Compile Include="Numbers\U4.cs" />
     <Compile Include="Numbers\U8.cs" />
-    <Compile Include="DiscoveredUnitTest.cs" />
+    <Compile Include="UnitTestInfo.cs" />
+    <Compile Include="LinkerMethodInfo.cs" />
     <Compile Include="UnitTestStatus.cs" />
     <Compile Include="UnitTestEngine.cs" />
     <Compile Include="UnitTestHelper.cs" />

@@ -53,7 +53,7 @@ namespace Mosa.Utility.UnitTests
 		private int SendOneCount = -1;
 		private int Errors = 0;
 
-		public UnitTestEngine()
+		public UnitTestEngine(bool display = false)
 		{
 			Options = new Options()
 			{
@@ -93,12 +93,9 @@ namespace Mosa.Utility.UnitTests
 				GenerateASMFile = true,
 				GenerateMapFile = true,
 				GenerateDebugFile = false,
-				PlugKorlib = true
+				PlugKorlib = true,
+				NoDisplay = !display
 			};
-
-			// Ensure NoDisplay=true on appveyor! Otherwise, test will fail
-			// (appveyor cannot open a display)
-			Options.NoDisplay = true;
 
 			AppLocations = new AppLocations();
 
@@ -521,6 +518,7 @@ namespace Mosa.Utility.UnitTests
 		}
 
 		private DateTime UpdateProgressLastWrittenDate;
+
 		void IBuilderEvent.UpdateProgress(int total, int at)
 		{
 			var ts = DateTime.Now - UpdateProgressLastWrittenDate;
