@@ -29,6 +29,8 @@ namespace Mosa.UnitTests.x86
 
 		private static void Setup()
 		{
+			Logger.Log("Initialize Kernel");
+
 			IDT.SetInterruptHandler(null);
 			Panic.Setup();
 			Debugger.Setup(Serial.COM2);
@@ -41,6 +43,7 @@ namespace Mosa.UnitTests.x86
 			// ThreadScheduler.Setup();
 
 			//Runtime.Internal.Setup();
+			Logger.Log("Kernel initialized");
 		}
 
 		public static void EnterTestReadyLoop()

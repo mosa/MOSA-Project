@@ -76,12 +76,14 @@ namespace Mosa.Utility.Launcher
 
 			//arg = arg + " -vga vmware";
 
-			// We need as lest 2 COM Ports:
+			if (Options.NoDisplay)
+				arg += " -display none";
 
+			// We need as least 2 COM Ports:
 			// COM1 = Kernel log
 			// COM2 = MosaDebugger
 
-			arg = arg + " -serial tcp::1240,server,nowait"; // TODO: Redirect to file
+			arg = arg + " -serial null"; // TODO: Redirect to file
 
 			if (Options.SerialConnectionOption == SerialConnectionOption.Pipe)
 			{
