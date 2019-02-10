@@ -14,9 +14,9 @@ namespace Mosa.Utility.UnitTests
 		public static Type CombinationType = Assembly.Load("Mosa.Utility.UnitTests").GetTypes().First(t => t.Name == "Combinations");
 		public static Type SeriesType = Assembly.Load("Mosa.Utility.UnitTests").GetTypes().First(t => t.Name == "Series2");
 
-		public static List<DiscoveredUnitTest> DiscoverUnitTests()
+		public static List<UnitTestInfo> DiscoverUnitTests()
 		{
-			var unitTests = new List<DiscoveredUnitTest>();
+			var unitTests = new List<UnitTestInfo>();
 
 			var assembly = typeof(MosaUnitTestAttribute).Assembly;
 
@@ -33,7 +33,7 @@ namespace Mosa.Utility.UnitTests
 				{
 					foreach (var paramValues in GetParameters(attribute))
 					{
-						var unitTest = new DiscoveredUnitTest()
+						var unitTest = new UnitTestInfo()
 						{
 							MethodInfo = method,
 							FullMethodName = fullMethodName,
@@ -178,7 +178,7 @@ namespace Mosa.Utility.UnitTests
 			return null;
 		}
 
-		private static void GetExpectedResult(DiscoveredUnitTest unitTest)
+		private static void GetExpectedResult(UnitTestInfo unitTest)
 		{
 			try
 			{

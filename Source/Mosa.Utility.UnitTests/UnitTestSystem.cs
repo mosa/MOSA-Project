@@ -95,17 +95,20 @@ namespace Mosa.Utility.UnitTests
 			return failures;
 		}
 
-		private static List<UnitTest> PrepareUnitTest(List<DiscoveredUnitTest> discoveredUnitTests, TypeSystem typeSystem, MosaLinker linker)
+		private static List<UnitTest> PrepareUnitTest(List<UnitTestInfo> discoveredUnitTests, TypeSystem typeSystem, MosaLinker linker)
 		{
 			var unitTests = new List<UnitTest>(discoveredUnitTests.Count);
 
 			int id = 0;
 
-			foreach (var discovered in discoveredUnitTests)
+			foreach (var unitTestInfo in discoveredUnitTests)
 			{
-				var unitTest = new UnitTest(discovered);
+				var linkerMethodInfo = Linker.GetMethodInfo(typeSystem, linker, unitTestInfo);
 
-				ResolveUnitTest(typeSystem, linker, id++, unitTest);
+				var unitTest = new UnitTest(unitTestInfo, linkerMethodInfo);
+
+				unitTest.SerializedUnitTest = SerializeUnitTestMessage(unitTest);
+				unitTest.UnitTestID = id++;
 
 				unitTests.Add(unitTest);
 			}
@@ -113,72 +116,11 @@ namespace Mosa.Utility.UnitTests
 			return unitTests;
 		}
 
-		private static void ResolveUnitTest(TypeSystem typeSystem, MosaLinker linker, int id, UnitTest unitTest)
-		{
-			unitTest.UnitTestID = id;
-
-			ResolveName(unitTest);
-			ResolveMosaMethod(unitTest, typeSystem);
-			ResolveAddress(unitTest, linker);
-			SerializeUnitTest(unitTest);
-		}
-
 		private static void Execute(List<UnitTest> unitTests, UnitTestEngine unitTestEngine)
 		{
 			unitTestEngine.QueueUnitTests(unitTests);
 
 			unitTestEngine.WaitUntilComplete();
-		}
-
-		public static void ResolveName(UnitTest unitTest)
-		{
-			string fullMethodName = unitTest.FullMethodName;
-
-			int first = fullMethodName.LastIndexOf(".");
-			int second = fullMethodName.LastIndexOf(".", first - 1);
-
-			unitTest.MethodNamespaceName = fullMethodName.Substring(0, second);
-			unitTest.MethodTypeName = fullMethodName.Substring(second + 1, first - second - 1);
-			unitTest.MethodName = fullMethodName.Substring(first + 1);
-		}
-
-		public static void ResolveAddress(UnitTest unitTest, MosaLinker linker)
-		{
-			unitTest.MosaMethodAddress = GetMethodAddress(unitTest.MosaMethod, linker);
-		}
-
-		public static void ResolveMosaMethod(UnitTest unitTest, TypeSystem typeSystem)
-		{
-			unitTest.MosaMethod = FindMosaMethod(
-				typeSystem,
-				unitTest.MethodNamespaceName,
-				unitTest.MethodTypeName,
-				unitTest.MethodName,
-				unitTest.Values);
-		}
-
-		public static MosaMethod FindMosaMethod(TypeSystem typeSystem, string ns, string type, string method, params object[] parameters)
-		{
-			foreach (var t in typeSystem.AllTypes)
-			{
-				if (t.Name != type)
-					continue;
-
-				if (!string.IsNullOrEmpty(ns) && t.Namespace != ns)
-					continue;
-
-				foreach (var m in t.Methods)
-				{
-					if (m.Name == method && m.Signature.Parameters.Count == parameters.Length)
-					{
-						return m;
-					}
-				}
-
-				break;
-			}
-
-			return null;
 		}
 
 		public static IntPtr GetMethodAddress(MosaMethod method, MosaLinker linker)
@@ -191,30 +133,6 @@ namespace Mosa.Utility.UnitTests
 			}
 
 			return new IntPtr((long)symbol.VirtualAddress);
-		}
-
-		public static MosaMethod FindMethod(TypeSystem typeSystem, string ns, string type, string method, params object[] parameters)
-		{
-			foreach (var t in typeSystem.AllTypes)
-			{
-				if (t.Name != type)
-					continue;
-
-				if (!string.IsNullOrEmpty(ns) && t.Namespace != ns)
-					continue;
-
-				foreach (var m in t.Methods)
-				{
-					if (m.Name == method && m.Signature.Parameters.Count == parameters.Length)
-					{
-						return m;
-					}
-				}
-
-				break;
-			}
-
-			return null;
 		}
 
 		public static void SerializeUnitTest(UnitTest unitTest)
