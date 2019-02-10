@@ -10,12 +10,15 @@ namespace Mosa.Utility.UnitTests
 {
 	public class UnitTest
 	{
-		public string FullMethodName { get; set; }
-		public MethodInfo MethodInfo { get; set; }
-		public MosaUnitTestAttribute UnitTestAttribute { get; set; }
-		public object[] Values { get; set; }
+		private DiscoveredUnitTest UnitTestDiscovery;
 
-		public object Expected { get; set; }
+		public string FullMethodName { get { return UnitTestDiscovery.FullMethodName; } }
+		public MethodInfo MethodInfo { get { return UnitTestDiscovery.MethodInfo; } }
+		public MosaUnitTestAttribute UnitTestAttribute { get { return UnitTestDiscovery.UnitTestAttribute; } }
+		public object[] Values { get { return UnitTestDiscovery.Values; } }
+
+		public object Expected { get { return UnitTestDiscovery.Expected; } }
+
 		public object Result { get; set; }
 
 		public UnitTestStatus Status { get; set; }
@@ -30,5 +33,12 @@ namespace Mosa.Utility.UnitTests
 		public int UnitTestID { get; set; }
 		public IList<int> SerializedUnitTest { get; set; }
 		public List<byte> SerializedResult { get; set; }
+
+		public UnitTest(DiscoveredUnitTest unitTestDiscovery)
+		{
+			UnitTestDiscovery = unitTestDiscovery;
+
+			Status = unitTestDiscovery.Skip ? UnitTestStatus.Skipped : UnitTestStatus.Pending;
+		}
 	}
 }
