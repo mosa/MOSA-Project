@@ -31,7 +31,7 @@ namespace Mosa.UnitTests.x86
 		{
 			IDT.SetInterruptHandler(null);
 			Panic.Setup();
-			Debugger.Setup(Serial.COM1);
+			Debugger.Setup(Serial.COM2);
 
 			// Initialize interrupts
 			PIC.Setup();
