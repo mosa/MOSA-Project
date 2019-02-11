@@ -10,8 +10,8 @@ namespace Mosa.Utility.UnitTests
 {
 	public class UnitTest
 	{
-		private UnitTestInfo UnitTestInfo;
-		private LinkerMethodInfo LinkerMethodInfo;
+		private readonly UnitTestInfo UnitTestInfo;
+		private readonly LinkerMethodInfo LinkerMethodInfo;
 
 		public string FullMethodName { get { return UnitTestInfo.FullMethodName; } }
 		public MethodInfo MethodInfo { get { return UnitTestInfo.MethodInfo; } }

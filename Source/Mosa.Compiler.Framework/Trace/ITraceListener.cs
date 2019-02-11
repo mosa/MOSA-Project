@@ -6,11 +6,11 @@ namespace Mosa.Compiler.Framework.Trace
 {
 	public interface ITraceListener
 	{
-		void OnNewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID);
+		void OnCompilerEvent(CompilerEvent compilerEvent, string message, int threadID);
 
-		void OnUpdatedCompilerProgress(int totalMethods, int completedMethods);
+		void OnProgress(int totalMethods, int completedMethods);
 
-		void OnNewTraceLog(TraceLog traceLog);
+		void OnTraceLog(TraceLog traceLog);
 
 		void OnMethodCompiled(MosaMethod method);
 	}

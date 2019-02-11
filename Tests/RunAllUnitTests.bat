@@ -1,4 +1,4 @@
 
 cd ..\bin
 
-Mosa.Utility.UnitTests.exe
+Mosa.Utility.UnitTests.exe -display

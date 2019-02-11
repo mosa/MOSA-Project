@@ -133,7 +133,7 @@ namespace Mosa.Compiler.Framework
 
 		#region Constructor
 
-		public BaseArchitecture()
+		protected BaseArchitecture()
 		{
 			PlatformIntrinsicMethods = GetPlatformIntrinsicMethods();
 		}
@@ -145,15 +145,15 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Extends the compiler pipeline with architecture specific compiler stages.
 		/// </summary>
-		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public abstract void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline, CompilerOptions compilerOptions);
+		/// <param name="pipeline">The pipeline to extend.</param>
+		public abstract void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline, CompilerOptions compilerOptions);
 
 		/// <summary>
 		///	Requests the architecture to add architecture specific compilation stages to the pipeline. These
 		/// may depend upon the current state of the pipeline.</summary>
-		/// <param name="compilerPipeline">The pipeline of the method compiler to add architecture specific compilation stages to.</param>
+		/// <param name="pipeline">The pipeline of the method compiler to add architecture specific compilation stages to.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		public abstract void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> compilerPipeline, CompilerOptions compilerOptions);
+		public abstract void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerOptions compilerOptions);
 
 		/// <summary>
 		/// Create platform move.

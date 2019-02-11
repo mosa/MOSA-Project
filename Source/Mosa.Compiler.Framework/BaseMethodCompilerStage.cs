@@ -230,11 +230,11 @@ namespace Mosa.Compiler.Framework
 			catch (Exception ex)
 			{
 				MethodCompiler.Stop();
-				NewCompilerTraceEvent(CompilerEvent.Exception, "Method: " + Method + " -> " + ex);
+				PostCompilerTraceEvent(CompilerEvent.Exception, "Method: " + Method + " -> " + ex);
 				MethodCompiler.Compiler.Stop();
 			}
 
-			SubmitTraceLogs(traceLogs);
+			PostTraceLogs(traceLogs);
 
 			Finish();
 
@@ -679,15 +679,15 @@ namespace Mosa.Compiler.Framework
 			return traceLog;
 		}
 
-		private void SubmitTraceLog(TraceLog traceLog)
+		private void PostTraceLog(TraceLog traceLog)
 		{
 			if (!traceLog.Active)
 				return;
 
-			MethodCompiler.Trace.NewTraceLog(traceLog);
+			MethodCompiler.Trace.PostTraceLog(traceLog);
 		}
 
-		private void SubmitTraceLogs(List<TraceLog> traceLogs)
+		private void PostTraceLogs(List<TraceLog> traceLogs)
 		{
 			if (traceLogs == null)
 				return;
@@ -696,14 +696,14 @@ namespace Mosa.Compiler.Framework
 			{
 				if (traceLog != null)
 				{
-					SubmitTraceLog(traceLog);
+					PostTraceLog(traceLog);
 				}
 			}
 		}
 
-		protected void NewCompilerTraceEvent(CompilerEvent compileEvent, string message)
+		protected void PostCompilerTraceEvent(CompilerEvent compileEvent, string message)
 		{
-			MethodCompiler.Trace.NewCompilerTraceEvent(compileEvent, message, MethodCompiler.ThreadID);
+			MethodCompiler.Trace.PostCompilerTraceEvent(compileEvent, message, MethodCompiler.ThreadID);
 		}
 
 		#endregion Trace Helper Methods

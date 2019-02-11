@@ -119,9 +119,17 @@ namespace Mosa.Compiler.Framework
 
 		#region Helper Methods
 
-		protected void NewCompilerTraceEvent(CompilerEvent compilerEvent, string message)
+		protected void PostCompilerTraceEvent(CompilerEvent compilerEvent, string message)
 		{
-			CompilerTrace.NewCompilerTraceEvent(compilerEvent, message, 0);
+			CompilerTrace.PostCompilerTraceEvent(compilerEvent, message, 0);
+		}
+
+		protected void PostTrace(TraceLog traceLog)
+		{
+			if (!traceLog.Active)
+				return;
+
+			CompilerTrace.PostTraceLog(traceLog);
 		}
 
 		#endregion Helper Methods

@@ -374,7 +374,7 @@ namespace Mosa.Compiler.Framework
 			{
 				var log = new TraceLog(TraceType.MethodCounters, Method, string.Empty, Trace.TraceFilter.Active);
 				log.Log(MethodData.Counters.Export());
-				Trace.TraceListener.OnNewTraceLog(log);
+				Trace.TraceListener.OnTraceLog(log);
 			}
 		}
 
@@ -432,7 +432,7 @@ namespace Mosa.Compiler.Framework
 
 				executionTimeLog.Log($"{"****Total Time".PadRight(57)}({totalTicks})");
 
-				Trace.TraceListener.OnNewTraceLog(executionTimeLog);
+				Trace.TraceListener.OnTraceLog(executionTimeLog);
 			}
 		}
 

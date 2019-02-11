@@ -116,16 +116,16 @@ namespace Mosa.Compiler.Framework.Trace.BuiltIn
 			}
 		}
 
-		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
+		void ITraceListener.OnCompilerEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
 			TraceEvent(compilerEvent, message);
 		}
 
-		void ITraceListener.OnUpdatedCompilerProgress(int totalMethods, int completedMethods)
+		void ITraceListener.OnProgress(int totalMethods, int completedMethods)
 		{
 		}
 
-		void ITraceListener.OnNewTraceLog(TraceLog traceLog)
+		void ITraceListener.OnTraceLog(TraceLog traceLog)
 		{
 		}
 

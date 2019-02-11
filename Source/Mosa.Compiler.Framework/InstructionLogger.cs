@@ -54,7 +54,7 @@ namespace Mosa.Compiler.Framework.Trace
 				traceLog.Log("No instructions.");
 			}
 
-			compilerTrace.NewTraceLog(traceLog);
+			compilerTrace.PostTraceLog(traceLog);
 		}
 
 		private static string ListBlocks(IList<BasicBlock> blocks)

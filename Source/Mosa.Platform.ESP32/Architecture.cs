@@ -14,7 +14,7 @@ namespace Mosa.Platform.ESP32
 	/// This class provides a common base class for architecture
 	/// specific operations.
 	/// </summary>
-	public class Architecture : BaseArchitecture
+	public sealed class Architecture : BaseArchitecture
 	{
 		/// <summary>
 		/// Gets the endianness of the target architecture.
@@ -151,8 +151,8 @@ namespace Mosa.Platform.ESP32
 		/// <summary>
 		/// Extends the compiler pipeline with ESP32 specific stages.
 		/// </summary>
-		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline, CompilerOptions compilerOptions)
+		/// <param name="pipeline">The pipeline to extend.</param>
+		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline, CompilerOptions compilerOptions)
 		{
 			// TODO
 		}
@@ -160,11 +160,11 @@ namespace Mosa.Platform.ESP32
 		/// <summary>
 		/// Extends the method compiler pipeline with ESP32 specific stages.
 		/// </summary>
-		/// <param name="compilerPipeline">The method compiler pipeline to extend.</param>
+		/// <param name="pipeline">The method compiler pipeline to extend.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
-		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> compilerPipeline, CompilerOptions compilerOptions)
+		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerOptions compilerOptions)
 		{
-			compilerPipeline.InsertAfterLast<PlatformIntrinsicStage>(
+			pipeline.InsertAfterLast<PlatformIntrinsicStage>(
 				new BaseMethodCompilerStage[]
 				{
 			        //new LongOperandTransformationStage(),
@@ -175,7 +175,7 @@ namespace Mosa.Platform.ESP32
 			//    new ExceptionLayoutStage()
 			//);
 
-			compilerPipeline.InsertBefore<GreedyRegisterAllocatorStage>(
+			pipeline.InsertBefore<GreedyRegisterAllocatorStage>(
 				new StopStage()
 			);
 		}

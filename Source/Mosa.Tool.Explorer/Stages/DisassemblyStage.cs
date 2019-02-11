@@ -77,7 +77,7 @@ namespace Mosa.Tool.Explorer.Stages
 			catch (Exception e)
 			{
 				trace.Log($"Unable to continue disassembly, error encountered\r\n{e}");
-				NewCompilerTraceEvent(CompilerEvent.Error, $"Failed disassembly for method {MethodCompiler.Method}");
+				PostCompilerTraceEvent(CompilerEvent.Error, $"Failed disassembly for method {MethodCompiler.Method}");
 			}
 		}
 

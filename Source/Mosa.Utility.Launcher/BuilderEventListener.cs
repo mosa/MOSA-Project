@@ -16,7 +16,7 @@ namespace Mosa.Utility.Launcher
 			this.builder = builder;
 		}
 
-		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
+		void ITraceListener.OnCompilerEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
 			if (compilerEvent == CompilerEvent.PreCompileStageStart
 				|| compilerEvent == CompilerEvent.PreCompileStageEnd
@@ -40,12 +40,12 @@ namespace Mosa.Utility.Launcher
 			}
 		}
 
-		void ITraceListener.OnUpdatedCompilerProgress(int totalMethods, int completedMethods)
+		void ITraceListener.OnProgress(int totalMethods, int completedMethods)
 		{
 			builder.BuilderEvent?.UpdateProgress(totalMethods, completedMethods);
 		}
 
-		void ITraceListener.OnNewTraceLog(TraceLog traceLog)
+		void ITraceListener.OnTraceLog(TraceLog traceLog)
 		{
 		}
 

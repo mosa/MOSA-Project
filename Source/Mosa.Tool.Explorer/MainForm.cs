@@ -838,7 +838,7 @@ namespace Mosa.Tool.Explorer
 			toolStripProgressBar1.Value = CompletedMethods;
 		}
 
-		void ITraceListener.OnNewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
+		void ITraceListener.OnCompilerEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
 			lock (_statusLock)
 			{
@@ -848,13 +848,13 @@ namespace Mosa.Tool.Explorer
 			SubmitTraceEvent(compilerEvent, message, threadID);
 		}
 
-		void ITraceListener.OnUpdatedCompilerProgress(int totalMethods, int completedMethods)
+		void ITraceListener.OnProgress(int totalMethods, int completedMethods)
 		{
 			TotalMethods = totalMethods;
 			CompletedMethods = completedMethods;
 		}
 
-		void ITraceListener.OnNewTraceLog(TraceLog traceLog)
+		void ITraceListener.OnTraceLog(TraceLog traceLog)
 		{
 			if (traceLog.Type == TraceType.MethodDebug)
 			{

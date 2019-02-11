@@ -17,7 +17,7 @@ namespace Mosa.Utility.UnitTests
 		public static Type CombinationType = Assembly.Load("Mosa.Utility.UnitTests").GetTypes().First(t => t.Name == "Combinations");
 		public static Type SeriesType = Assembly.Load("Mosa.Utility.UnitTests").GetTypes().First(t => t.Name == "Series2");
 
-		public static int Start()
+		public static int Start(bool display)
 		{
 			var stopwatch = new Stopwatch();
 			stopwatch.Start();
@@ -30,7 +30,7 @@ namespace Mosa.Utility.UnitTests
 			Console.WriteLine();
 
 			Console.WriteLine("Starting Unit Test Engine...");
-			var unitTestEngine = new UnitTestEngine();
+			var unitTestEngine = new UnitTestEngine(display);
 			var elapsedCompile = stopwatch.ElapsedMilliseconds - elapsedDiscovery;
 			Console.WriteLine("Elapsed: " + (elapsedCompile / 1000.0).ToString("F2") + " secs");
 			Console.WriteLine();

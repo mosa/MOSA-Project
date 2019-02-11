@@ -83,7 +83,7 @@ namespace Mosa.Utility.Launcher
 			// COM1 = Kernel log
 			// COM2 = MosaDebugger
 
-			arg = arg + " -serial null"; // TODO: Redirect to file
+			arg += " -serial null"; // TODO: Redirect to file
 
 			if (Options.SerialConnectionOption == SerialConnectionOption.Pipe)
 			{
