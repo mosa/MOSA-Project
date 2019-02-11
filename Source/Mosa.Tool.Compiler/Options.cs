@@ -60,6 +60,9 @@ namespace Mosa.Tool.Compiler
 		[Option("map", HelpText = "Generate a map file of the produced binary.")]
 		public string MapFile { set { CompilerOptions.MapFile = value; } }
 
+		[Option("output-time")]
+		public string CompileTimeFile { set { CompilerOptions.CompileTimeFile = value; } }
+
 		[Option("debug-info", HelpText = "Generate a debug info file of the produced binary.")]
 		public string DebugInfoFile { set { CompilerOptions.DebugFile = value; } }
 

@@ -1,0 +1,34 @@
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.Compiler.Framework.Linker;
+using System;
+using System.IO;
+using System.Diagnostics;
+using Mosa.Compiler.Framework.CompilerStages;
+using Mosa.Compiler.Framework.Trace;
+
+namespace Mosa.Tool.Explorer.Stages
+{
+	/// <summary>
+	/// An compilation stage, which generates a map file of the built binary file.
+	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
+	public sealed class ExplorerMethodCompileTimeStage : MethodCompileTimeStage
+	{
+		protected override void RunPostCompile()
+		{
+			var methods = GetAndSortMethodData();
+
+			var log = new TraceLog(TraceType.GlobalDebug, null, null, "Compiler Time", true);
+
+			log.Log("Ticks\tMilliseconds\tCompiler Count\tMethod");
+
+			foreach (var data in methods)
+			{
+				log.Log($"{data.ElapsedTicks}{'\t'}{data.ElapsedTicks / TimeSpan.TicksPerMillisecond}{'\t'}{data.CompileCount}{'\t'}{data.Method.FullName}");
+			}
+
+			PostTrace(log);
+		}
+	}
+}

@@ -136,6 +136,7 @@ namespace Mosa.Compiler.Framework
 				new ExceptionTableStage(),
 				new MetadataStage(),
 				new LinkerLayoutStage(),
+				(compilerOptions.CompileTimeFile != null) ? new MethodCompileTimeStage() : null,
 				(compilerOptions.OutputFile != null && compilerOptions.EmitBinary) ? new LinkerEmitStage() : null,
 				(compilerOptions.MapFile != null) ? new MapFileStage() : null,
 				(compilerOptions.DebugFile != null) ? new DebugFileStage() : null
@@ -263,7 +264,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="threadID">The thread identifier.</param>
 		public void CompileMethod(MosaMethod method, BasicBlocks basicBlocks, int threadID = 0)
 		{
-			NewCompilerTraceEvent(CompilerEvent.CompilingMethod, method.FullName, threadID);
+			PostCompilerTraceEvent(CompilerEvent.CompilingMethod, method.FullName, threadID);
 
 			var pipeline = GetOrCreateMethodStagePipeline(threadID);
 
@@ -274,7 +275,7 @@ namespace Mosa.Compiler.Framework
 
 			methodCompiler.Compile();
 
-			NewCompilerTraceEvent(CompilerEvent.CompiledMethod, method.FullName, threadID);
+			PostCompilerTraceEvent(CompilerEvent.CompiledMethod, method.FullName, threadID);
 			CompilerTrace.TraceListener.OnMethodCompiled(method);
 		}
 
@@ -332,12 +333,12 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var stage in CompilerPipeline)
 			{
-				NewCompilerTraceEvent(CompilerEvent.PreCompileStageStart, stage.Name);
+				PostCompilerTraceEvent(CompilerEvent.PreCompileStageStart, stage.Name);
 
 				// Execute stage
 				stage.ExecutePreCompile();
 
-				NewCompilerTraceEvent(CompilerEvent.PreCompileStageEnd, stage.Name);
+				PostCompilerTraceEvent(CompilerEvent.PreCompileStageEnd, stage.Name);
 			}
 		}
 
@@ -392,25 +393,23 @@ namespace Mosa.Compiler.Framework
 
 					int tid = threadID;
 
-					ThreadPool.QueueUserWorkItem(
-						new WaitCallback(delegate
-						{
-							//try
-							//{
-							CompileWorker(tid);
+					ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
+					{
+						//try
+						//{
+						CompileWorker(tid);
 
-							//}
-							//catch (Exception e)
-							//{
-							//	this.CompilerTrace.NewCompilerTraceEvent(CompilerEvent.Exception, e.ToString(), threadID);
-							//}
-							//finally
-							//{
-							finished.Signal();
+						//}
+						//catch (Exception e)
+						//{
+						//	this.CompilerTrace.NewCompilerTraceEvent(CompilerEvent.Exception, e.ToString(), threadID);
+						//}
+						//finally
+						//{
+						finished.Signal();
 
-							//}
-						}
-					));
+						//}
+					}));
 				}
 
 				finished.Signal();
@@ -448,12 +447,12 @@ namespace Mosa.Compiler.Framework
 		{
 			foreach (BaseCompilerStage stage in CompilerPipeline)
 			{
-				NewCompilerTraceEvent(CompilerEvent.PostCompileStageStart, stage.Name);
+				PostCompilerTraceEvent(CompilerEvent.PostCompileStageStart, stage.Name);
 
 				// Execute stage
 				stage.ExecutePostCompile();
 
-				NewCompilerTraceEvent(CompilerEvent.PostCompileStageEnd, stage.Name);
+				PostCompilerTraceEvent(CompilerEvent.PostCompileStageEnd, stage.Name);
 			}
 
 			MethodScanner.Complete();
@@ -483,7 +482,7 @@ namespace Mosa.Compiler.Framework
 		{
 			foreach (var counter in GlobalCounters.Export())
 			{
-				NewCompilerTraceEvent(CompilerEvent.Counter, counter);
+				PostCompilerTraceEvent(CompilerEvent.Counter, counter);
 			}
 		}
 
@@ -495,14 +494,22 @@ namespace Mosa.Compiler.Framework
 
 		#region Helper Methods
 
+		public void PostTrace(TraceLog traceLog)
+		{
+			if (!traceLog.Active)
+				return;
+
+			CompilerTrace.PostTraceLog(traceLog);
+		}
+
 		/// <summary>
 		/// Traces the specified compiler event.
 		/// </summary>
 		/// <param name="compilerEvent">The compiler event.</param>
 		/// <param name="message">The message.</param>
-		private void NewCompilerTraceEvent(CompilerEvent compilerEvent, string message)
+		public void PostCompilerTraceEvent(CompilerEvent compilerEvent, string message)
 		{
-			CompilerTrace.NewCompilerTraceEvent(compilerEvent, message, 0);
+			CompilerTrace.PostCompilerTraceEvent(compilerEvent, message, 0);
 		}
 
 		/// <summary>
@@ -511,9 +518,9 @@ namespace Mosa.Compiler.Framework
 		/// <param name="compilerEvent">The compiler event.</param>
 		/// <param name="message">The message.</param>
 		/// <param name="threadID">The thread identifier.</param>
-		private void NewCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
+		public void PostCompilerTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
-			CompilerTrace.NewCompilerTraceEvent(compilerEvent, message, threadID);
+			CompilerTrace.PostCompilerTraceEvent(compilerEvent, message, threadID);
 		}
 
 		private MosaType GetPlatformInternalRuntimeType()

@@ -37,6 +37,11 @@ namespace Mosa.Compiler.Framework
 		public string MapFile { get; set; }
 
 		/// <summary>
+		/// Gets or sets the compile time file.
+		/// </summary>
+		public string CompileTimeFile { get; set; }
+
+		/// <summary>
 		/// Gets or sets the map file.
 		/// </summary>
 		public string DebugFile { get; set; }

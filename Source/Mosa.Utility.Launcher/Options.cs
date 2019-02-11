@@ -131,6 +131,9 @@ namespace Mosa.Utility.Launcher
 		[Option("output-debug")]
 		public bool GenerateDebugFile { get; set; }
 
+		[Option("output-time")]
+		public bool GenerateCompileTimeFile { get; set; }
+
 		[Option("linker-format")]
 		public LinkerFormatType LinkerFormatType { get; set; }
 

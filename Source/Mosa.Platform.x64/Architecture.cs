@@ -172,32 +172,32 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Extends the compiler pipeline with x64 specific stages.
 		/// </summary>
-		/// <param name="compilerPipeline">The pipeline to extend.</param>
-		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> compilerPipeline, CompilerOptions compilerOptions)
+		/// <param name="pipeline">The pipeline to extend.</param>
+		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline, CompilerOptions compilerOptions)
 		{
 			if (compilerOptions.MultibootSpecification == MultibootSpecification.V1)
 			{
-				compilerPipeline.InsertAfterFirst<TypeInitializerStage>(
+				pipeline.InsertAfterFirst<TypeInitializerStage>(
 					new MultibootV1Stage()
 				);
 			}
 
-			compilerPipeline.Add(
+			pipeline.Add(
 				new Intel.CompilerStages.StartUpStage()
 			);
 		}
 
 		/// <summary>
 		/// Extends the method compiler pipeline with x64 specific stages.</summary>
-		/// <param name="compilerPipeline">The method compiler pipeline to extend.</param>
+		/// <param name="pipeline">The method compiler pipeline to extend.</param>
 		/// <param name="compilerOptions"></param>
-		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> compilerPipeline, CompilerOptions compilerOptions)
+		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerOptions compilerOptions)
 		{
-			compilerPipeline.InsertBefore<LowerIRStage>(
+			pipeline.InsertBefore<LowerIRStage>(
 				new IRSubstitutionStage()
 			);
 
-			compilerPipeline.InsertAfterLast<PlatformIntrinsicStage>(
+			pipeline.InsertAfterLast<PlatformIntrinsicStage>(
 				new BaseMethodCompilerStage[]
 				{
 					new LongOperandStage(),
@@ -210,18 +210,18 @@ namespace Mosa.Platform.x64
 					new FloatingPointStage(),
 				});
 
-			compilerPipeline.InsertAfterLast<StackLayoutStage>(
+			pipeline.InsertAfterLast<StackLayoutStage>(
 				new BuildStackStage()
 			);
 
-			compilerPipeline.InsertBefore<CodeGenerationStage>(
+			pipeline.InsertBefore<CodeGenerationStage>(
 				new BaseMethodCompilerStage[]
 				{
 					new FinalTweakStage(),
 					compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
 				});
 
-			compilerPipeline.InsertBefore<CodeGenerationStage>(
+			pipeline.InsertBefore<CodeGenerationStage>(
 				new JumpOptimizationStage()
 			);
 		}

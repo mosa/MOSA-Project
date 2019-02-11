@@ -419,24 +419,23 @@ namespace Mosa.Tool.Launcher
 			tbApplicationLocations.SelectedTab = tabOutput;
 
 			ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
+			{
+				try
 				{
-					try
+					Builder.Compile();
+				}
+				catch (Exception e)
+				{
+					OnException(e.ToString());
+				}
+				finally
+				{
+					if (!Builder.HasCompileError)
 					{
-						Builder.Compile();
-					}
-					catch (Exception e)
-					{
-						OnException(e.ToString());
-					}
-					finally
-					{
-						if (!Builder.HasCompileError)
-						{
-							OnCompileCompleted();
-						}
+						OnCompileCompleted();
 					}
 				}
-			));
+			}));
 		}
 
 		private void OnException(string data)

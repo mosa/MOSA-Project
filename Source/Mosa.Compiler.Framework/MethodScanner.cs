@@ -76,7 +76,7 @@ namespace Mosa.Compiler.Framework
 			Compiler.GlobalCounters.Update("MethodScanner.ScheduledMethods", scheduledMethods.Count);
 			Compiler.GlobalCounters.Update("MethodScanner.AccessedFields", accessedFields.Count);
 
-			Compiler.CompilerTrace.NewTraceLog(trace, true);
+			Compiler.PostTrace(trace);
 		}
 
 		public void TypeAllocated(MosaType type, MosaMethod source)
@@ -113,11 +113,17 @@ namespace Mosa.Compiler.Framework
 
 		public void MethodInvoked(MosaMethod method, MosaMethod source)
 		{
+			if (!IsEnabled)
+				return;
+
 			MethodInvoked(method, source, false);
 		}
 
 		public void MethodDirectInvoked(MosaMethod method, MosaMethod source)
 		{
+			if (!IsEnabled)
+				return;
+
 			MethodInvoked(method, source, true);
 			ScheduleMethod(method);
 		}

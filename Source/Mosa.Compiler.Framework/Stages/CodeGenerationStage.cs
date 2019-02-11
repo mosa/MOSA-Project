@@ -159,7 +159,7 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					else
 					{
-						NewCompilerTraceEvent(CompilerEvent.Error, "Missing Code Transformation: " + node);
+						PostCompilerTraceEvent(CompilerEvent.Error, "Missing Code Transformation: " + node);
 					}
 				}
 

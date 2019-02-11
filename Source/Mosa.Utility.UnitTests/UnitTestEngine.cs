@@ -515,7 +515,7 @@ namespace Mosa.Utility.UnitTests
 
 		void IBuilderEvent.NewStatus(string status)
 		{
-			Console.WriteLine(status);
+			//Console.WriteLine(status);
 		}
 
 		void IBuilderEvent.UpdateProgress(int total, int at)
@@ -524,7 +524,7 @@ namespace Mosa.Utility.UnitTests
 
 		void IStarterEvent.NewStatus(string status)
 		{
-			Console.WriteLine(status);
+			//Console.WriteLine(status);
 		}
 
 		void IDisposable.Dispose()

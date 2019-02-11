@@ -76,9 +76,10 @@ namespace Mosa.Utility.Launcher
 
 		private List<BaseCompilerExtension> GetCompilerExtensions()
 		{
-			var list = new List<BaseCompilerExtension>();
-			list.Add(new Mosa.Compiler.Extensions.Dwarf.DwarfCompilerExtension());
-			return list;
+			return new List<BaseCompilerExtension>()
+			{
+				new Compiler.Extensions.Dwarf.DwarfCompilerExtension()
+			};
 		}
 
 		public void Compile()
@@ -122,6 +123,11 @@ namespace Mosa.Utility.Launcher
 				if (Options.GenerateMapFile)
 				{
 					compiler.CompilerOptions.MapFile = Path.Combine(Options.DestinationDirectory, $"{Path.GetFileNameWithoutExtension(Options.SourceFile)}.map");
+				}
+
+				if (Options.GenerateCompileTimeFile)
+				{
+					compiler.CompilerOptions.CompileTimeFile = Path.Combine(Options.DestinationDirectory, $"{Path.GetFileNameWithoutExtension(Options.SourceFile)}-time.txt");
 				}
 
 				if (Options.GenerateDebugFile)
