@@ -5,8 +5,16 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	public class LiveRange : Interval
+	public sealed class LiveRange : SlotInterval
 	{
+		// FUTURE:
+		//		Replace use/def individual list used below
+		//		with a single list from the VirutalRegistor instance bounded start/end boundaries
+		// RATIONAL:
+		//		1. No more list creation
+		//		2. Smaller memory working set
+		//		3. Avoid the use of interfaces
+
 		private readonly SortedList<SlotIndex, SlotIndex> usePositions = new SortedList<SlotIndex, SlotIndex>();
 
 		private readonly SortedList<SlotIndex, SlotIndex> defPositions = new SortedList<SlotIndex, SlotIndex>();

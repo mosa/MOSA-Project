@@ -67,12 +67,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			foreach (var moveHint in hints)
 			{
-				var register = (liveInterval.Start == moveHint.Slot) ? moveHint.FromRegister : moveHint.ToRegister;
+				var register = (liveInterval.StartSlot == moveHint.Slot) ? moveHint.FromRegister : moveHint.ToRegister;
 
 				if (register == null)
 					continue;   // no usable hint
 
-				if (Trace.Active) Trace.Log("  Trying move hint: " + register + "  [ " + moveHint + " ]");
+				if (Trace.Active) Trace.Log($"  Trying move hint: {register}  [ {moveHint} ]");
 
 				if (PlaceLiveIntervalOnTrack(liveInterval, LiveIntervalTracks[register.Index]))
 				{
@@ -86,10 +86,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		private MoveHint[] GetMoveHints(LiveInterval liveInterval)
 		{
 			MoveHint endMoveHint = null;
-			moveHints.TryGetValue(liveInterval.Start, out MoveHint startMoveHint);
+			moveHints.TryGetValue(liveInterval.StartSlot, out MoveHint startMoveHint);
 
-			if (!liveInterval.End.IsBlockStartInstruction)
-				moveHints.TryGetValue(liveInterval.End, out endMoveHint);
+			if (!liveInterval.EndSlot.IsBlockStartInstruction)
+			{
+				moveHints.TryGetValue(liveInterval.EndSlot, out endMoveHint);
+			}
 
 			int cnt = (startMoveHint == null ? 0 : 1) + (endMoveHint == null ? 0 : 1);
 
@@ -126,19 +128,23 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				return;
 
 			if (moveHints.Length >= 1)
+			{
 				moveHints[0].Update(liveInterval);
+			}
 			else if (moveHints.Length >= 2)
+			{
 				moveHints[1].Update(liveInterval);
+			}
 		}
 
 		private void UpdateMoveHints(LiveInterval liveInterval)
 		{
-			if (moveHints.TryGetValue(liveInterval.Start, out MoveHint MoveHint))
+			if (moveHints.TryGetValue(liveInterval.StartSlot, out MoveHint MoveHint))
 			{
 				MoveHint.Update(liveInterval);
 			}
 
-			if (moveHints.TryGetValue(liveInterval.End, out MoveHint))
+			if (moveHints.TryGetValue(liveInterval.EndSlot, out MoveHint))
 			{
 				MoveHint.Update(liveInterval);
 			}
@@ -194,6 +200,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected override bool TrySplitInterval(LiveInterval liveInterval, int level)
 		{
+			//if (level <= 1)
+			//	return false;
+
 			if (liveInterval.IsEmpty)
 				return false;
 
@@ -216,14 +225,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			List<LiveInterval> intervals;
 
-			if (liveInterval.Start == low)
+			if (liveInterval.StartSlot == low)
 			{
 				if (!liveInterval.LiveRange.CanSplitAt(high))
 					return false;
 
 				intervals = liveInterval.SplitAt(high);
 			}
-			else if (high == liveInterval.End)
+			else if (high == liveInterval.EndSlot)
 			{
 				if (!liveInterval.LiveRange.CanSplitAt(low))
 					return false;
@@ -247,7 +256,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private bool TrySimplePartialFreeIntervalSplit(LiveInterval liveInterval)
 		{
-			SlotIndex furthestUsed = null;
+			SlotIndex furthest = null;
 
 			foreach (var track in LiveIntervalTracks)
 			{
@@ -257,48 +266,62 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				if (track.IsFloatingPoint != liveInterval.VirtualRegister.IsFloatingPoint)
 					continue;
 
-				var next = track.GetNextLiveRange(liveInterval.Start);
-
-				if (next == null)
+				if (track.Intersects(liveInterval.StartSlot))
 					continue;
 
-				Debug.Assert(next > liveInterval.Start);
+				var intersections = track.GetIntersections(liveInterval);
 
-				if (Trace.Active) Trace.Log("  Register " + track + " free up to " + next);
+				Debug.Assert(intersections.Count != 0);
 
-				if (furthestUsed == null || furthestUsed < next)
-					furthestUsed = next;
+				foreach (var interval in intersections)
+				{
+					var start = interval.StartSlot;
+
+					if (Trace.Active) Trace.Log($"  Register {track} free up to {start}");
+
+					if (furthest == null || start > furthest)
+					{
+						furthest = start;
+					}
+				}
 			}
 
-			if (furthestUsed == null)
+			if (furthest == null)
 			{
 				if (Trace.Active) Trace.Log("  No partial free space available");
 				return false;
 			}
 
-			if (furthestUsed < liveInterval.Minimum)
+			if (furthest < liveInterval.Minimum)
 			{
 				if (Trace.Active) Trace.Log("  No partial free space available");
 				return false;
 			}
 
-			if (furthestUsed.IsBlockStartInstruction)
+			if (furthest.IsBlockStartInstruction)
 			{
 				return false;
 			}
 
-			if (furthestUsed <= liveInterval.Start)
+			if (furthest <= liveInterval.StartSlot)
 			{
 				if (Trace.Active) Trace.Log("  No partial free space available");
 				return false;
 			}
 
-			if (Trace.Active) Trace.Log("  Partial free up destination: " + furthestUsed);
+			if (Trace.Active) Trace.Log($"  Partial free up destination: {furthest}");
 
-			if (liveInterval.UsePositions.Contains(furthestUsed) && liveInterval.Contains(furthestUsed.HalfStepBack))
-				furthestUsed = furthestUsed.HalfStepBack;
+			if (liveInterval.UsePositions.Contains(furthest))
+			{
+				var nextfurthest = furthest.GetSlotBefore();
 
-			return PreferBlockBoundaryIntervalSplit(liveInterval, furthestUsed, true);
+				if (liveInterval.Contains(nextfurthest))
+				{
+					furthest = nextfurthest;
+				}
+			}
+
+			return PreferBlockBoundaryIntervalSplit(liveInterval, furthest, true);
 		}
 
 		private bool IntervalSplitAtFirstUseOrDef(LiveInterval liveInterval)
@@ -321,10 +344,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				at = firstDef;
 			}
 
-			if (at >= liveInterval.End)
+			if (at >= liveInterval.EndSlot)
 				return false;
 
-			if (at <= liveInterval.Start)
+			if (at <= liveInterval.StartSlot)
 				return false;
 
 			if (Trace.Active) Trace.Log(" Splitting around first use/def");
@@ -366,62 +389,73 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private SlotIndex GetLowerOptimalSplitLocation(LiveInterval liveInterval, SlotIndex at)
 		{
-			if (Trace.Active) Trace.Log("--Low Splitting: " + liveInterval + " move: " + at);
-
-			//a = liveInterval.Start.IsOnHalfStep ? liveInterval.Start : liveInterval.Start.HalfStepForward;
-			var a = liveInterval.Start;
+			if (Trace.Active) Trace.Log($"--Low Splitting: {liveInterval} move: {at}");
 
 			var blockStart = GetBlockStart(at);
-			var b = blockStart > liveInterval.Start ? blockStart : null;
-			if (Trace.Active) Trace.Log("   Block Start : " + (b != null ? b.ToString() : "null"));
+			var b = blockStart > liveInterval.StartSlot ? blockStart : null;
+			if (Trace.Active) Trace.Log($"   Block Start : {(b != null ? b.ToString() : "null")}");
 
 			var c = liveInterval.LiveRange.GetPreviousUsePosition(at);
-			if (c != null && c.HalfStepForward <= at)
+			if (c != null)
 			{
-				c = c.HalfStepForward;
+				var after = c.GetSlotAfter();   // FUTURE: Improve comparison
+				if (after <= at)
+				{
+					c = after;
+				}
 			}
 
-			if (Trace.Active) Trace.Log("  Previous Use : " + (c != null ? c.ToString() : "null"));
+			if (Trace.Active) Trace.Log($"  Previous Use : {(c != null ? c.ToString() : "null")}");
 
 			var d = liveInterval.LiveRange.GetPreviousDefPosition(at);
-			if (d != null && d.HalfStepForward <= at)
+			if (d != null)
 			{
-				d = d.HalfStepForward;
+				var after = d.GetSlotAfter();   // FUTURE: Improve comparison
+				if (after <= at)
+				{
+					d = after;
+				}
 			}
 
-			if (Trace.Active) Trace.Log("  Previous Def : " + (d != null ? d.ToString() : "null"));
+			if (Trace.Active) Trace.Log($"  Previous Def : {(d != null ? d.ToString() : "null")}");
 
+			var a = liveInterval.StartSlot;
 			var max = GetMaximum(a, b, c, d);
 
-			if (Trace.Active) Trace.Log("   Low Optimal : " + max);
+			if (Trace.Active) Trace.Log($"   Low Optimal : {max}");
 
 			return max;
 		}
 
 		private SlotIndex GetUpperOptimalSplitLocation(LiveInterval liveInterval, SlotIndex at)
 		{
-			if (Trace.Active) Trace.Log("--High Splitting: " + liveInterval + " move: " + at);
+			if (Trace.Active) Trace.Log($"--High Splitting: {liveInterval} move: {at}");
 
-			var a = liveInterval.End;
+			var a = liveInterval.EndSlot;
 
 			var blockEnd = GetBlockEnd(at);
-			var b = blockEnd > liveInterval.End ? blockEnd : null;
-			if (Trace.Active) Trace.Log("     Block End : " + (b != null ? b.ToString() : "null"));
+			var b = blockEnd > liveInterval.EndSlot ? blockEnd : null;
+
+			if (Trace.Active) Trace.Log($"     Block End : {(b != null ? b.ToString() : "null")}");
 
 			var c = liveInterval.LiveRange.GetNextUsePosition(at);
-			if (c != null && c.HalfStepBack > at)
+			if (c != null)
 			{
-				c = c.HalfStepBack;
+				var before = c.GetSlotBefore(); // FUTURE: Improve comparison
+				if (before > at)
+				{
+					c = before;
+				}
 			}
 
-			if (Trace.Active) Trace.Log("      Next Use : " + (c != null ? c.ToString() : "null"));
+			if (Trace.Active) Trace.Log($"      Next Use : {(c != null ? c.ToString() : "null")}");
 
 			var d = liveInterval.LiveRange.GetNextDefPosition(at);
-			if (Trace.Active) Trace.Log("      Next Def : " + (d != null ? d.ToString() : "null"));
+			if (Trace.Active) Trace.Log($"      Next Def : {(d != null ? d.ToString() : "null")}");
 
 			var min = GetMinimum(a, b, c, d);
 
-			if (Trace.Active) Trace.Log("  High Optimal : " + min);
+			if (Trace.Active) Trace.Log($"  High Optimal : {min}");
 
 			return min;
 		}

@@ -1,15 +1,15 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	// TODO: Use data structures which are faster at finding intersetions, and add & evicting intervals.
-	public class LiveIntervalTrack
+	public sealed class LiveIntervalTrack
 	{
-		public readonly List<LiveInterval> liveIntervals = new List<LiveInterval>();
+		private readonly IntervalTree<LiveInterval> intervals = new IntervalTree<LiveInterval>();
 
 		public readonly bool IsReserved;
 
@@ -29,14 +29,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			Debug.Assert(!Intersects(liveInterval));
 
-			liveIntervals.Add(liveInterval);
+			intervals.Add(liveInterval);
 
 			liveInterval.LiveIntervalTrack = this;
 		}
 
 		public void Evict(LiveInterval liveInterval)
 		{
-			liveIntervals.Remove(liveInterval);
+			intervals.Remove(liveInterval);
 
 			liveInterval.LiveIntervalTrack = null;
 		}
@@ -51,26 +51,17 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool Intersects(LiveInterval liveInterval)
 		{
-			foreach (var interval in liveIntervals)
-			{
-				if (interval.Intersects(liveInterval))
-				{
-					return true;
-				}
-			}
+			return intervals.Contains(liveInterval);
+		}
 
-			return false;
+		public bool Intersects(SlotIndex slotIndex)
+		{
+			return intervals.Contains(slotIndex.SlotNumber);
 		}
 
 		public LiveInterval GetLiveIntervalAt(SlotIndex slotIndex)
 		{
-			foreach (var liveInterval in liveIntervals)
-			{
-				if (liveInterval.Contains(slotIndex))
-					return liveInterval;
-			}
-
-			return null;
+			return intervals.SearchFirstOverlapping(slotIndex.SlotNumber);
 		}
 
 		/// <summary>
@@ -80,45 +71,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		/// <returns></returns>
 		public List<LiveInterval> GetIntersections(LiveInterval liveInterval)
 		{
-			List<LiveInterval> intersections = null;
-
-			foreach (var interval in liveIntervals)
-			{
-				if (interval.Intersects(liveInterval))
-				{
-					(intersections ?? (intersections = new List<LiveInterval>())).Add(interval);
-				}
-			}
-
-			return intersections;
-		}
-
-		/// <summary>
-		/// Gets the next live range.
-		/// </summary>
-		/// <param name="after">Index of the slot.</param>
-		/// <returns></returns>
-		public SlotIndex GetNextLiveRange(SlotIndex after)
-		{
-			SlotIndex lastFree = null;
-
-			foreach (var liveInterval in liveIntervals)
-			{
-				if (liveInterval.Contains(after))
-					return null;
-
-				if (liveInterval.End <= after)
-					continue;
-
-				if (lastFree == null || liveInterval.Start < lastFree)
-				{
-					Debug.Assert(liveInterval.Start > after);
-
-					lastFree = liveInterval.Start;
-				}
-			}
-
-			return lastFree;
+			return intervals.Search(liveInterval);
 		}
 
 		public override string ToString()
@@ -133,7 +86,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			sb.Append(Register.ToString());
 			sb.Append(' ');
 
-			foreach (var interval in liveIntervals)
+			foreach (var interval in intervals)
 			{
 				sb.Append(interval.ToString());
 				sb.Append(", ");

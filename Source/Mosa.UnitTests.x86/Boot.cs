@@ -40,9 +40,6 @@ namespace Mosa.UnitTests.x86
 			IDT.Setup();
 			GDT.Setup();
 
-			// ThreadScheduler.Setup();
-
-			//Runtime.Internal.Setup();
 			Logger.Log("Kernel initialized");
 		}
 

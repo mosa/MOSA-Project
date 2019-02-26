@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				}
 			}
 
-			methods.Sort((MethodData x, MethodData y) => (int)(x.ElapsedTicks - y.ElapsedTicks));
+			methods.Sort((MethodData x, MethodData y) => (int)(y.ElapsedTicks - x.ElapsedTicks));
 
 			return methods;
 		}

@@ -8,9 +8,21 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	public sealed class SlotIndex : IComparable
 	{
+		// FUTURE:
+		//		Convert SlotIndex into struct with internal integer value
+		//		InstructionNode is removed (another data structure with the allocator maps index values to slots)
+		//		The slot type is embedded into the internal value
+		//		Index is the internal value with the slot type masked out
+		//		See Slot.cs for future replacement
+		// RATIONAL:
+		//		1. No object creation
+		//		2. Smaller memory footprint
+		//		3. Fits into a single register
+		//		4. Much faster to use
+
 		public const int Increment = 2;
 
-		private enum SlotType { Normal, HalfStepBack, HalfStepForward }
+		private enum SlotType { On, Before, After }
 
 		public readonly InstructionNode Node;
 
@@ -22,20 +34,20 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				int slot = Node.Offset;
 
-				if (slotType == SlotType.HalfStepForward)
+				if (slotType == SlotType.After)
 					slot++;
-				else if (slotType == SlotType.HalfStepBack)
+				else if (slotType == SlotType.Before)
 					slot--;
 
 				return slot;
 			}
 		}
 
-		public bool IsOnHalfStep { get { return slotType != SlotType.Normal; } }
+		public bool IsOnSlot { get { return slotType != SlotType.On; } }
 
-		public bool IsOnHalfStepForward { get { return slotType == SlotType.HalfStepForward; } }
+		public bool IsAfterSlot { get { return slotType == SlotType.After; } }
 
-		public bool IsOnHalfStepBack { get { return slotType == SlotType.HalfStepBack; } }
+		public bool IsBeforeSlot { get { return slotType == SlotType.Before; } }
 
 		private SlotIndex(InstructionNode node, SlotType slotType)
 		{
@@ -44,7 +56,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		}
 
 		public SlotIndex(InstructionNode node)
-			: this(node, SlotType.Normal)
+			: this(node, SlotType.On)
 		{
 		}
 
@@ -82,6 +94,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				return true;
 			else if (ns1 ^ ns2)
 				return false;
+
+			// FUTURE: compare slot type too!
 
 			return s1.SlotNumber == s2.SlotNumber;
 		}
@@ -126,29 +140,23 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return SlotNumber.ToString();
 		}
 
-		public SlotIndex HalfStepForward
+		public SlotIndex GetSlotAfter()
 		{
-			get
-			{
-				Debug.Assert(slotType == SlotType.Normal);
-				return new SlotIndex(Node, SlotType.HalfStepForward);
-			}
+			Debug.Assert(slotType == SlotType.On);
+			return new SlotIndex(Node, SlotType.After);
 		}
 
-		public SlotIndex HalfStepBack
+		public SlotIndex GetSlotBefore()
 		{
-			get
-			{
-				Debug.Assert(slotType == SlotType.Normal);
-				return new SlotIndex(Node, SlotType.HalfStepBack);
-			}
+			Debug.Assert(slotType == SlotType.On);
+			return new SlotIndex(Node, SlotType.Before);
 		}
 
 		public bool IsBlockStartInstruction
 		{
 			get
 			{
-				if (slotType != SlotType.Normal)
+				if (slotType != SlotType.On)
 					return false;
 
 				return Node.Instruction == IRInstruction.BlockStart;
@@ -159,7 +167,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			get
 			{
-				if (slotType != SlotType.Normal)
+				if (slotType != SlotType.On)
 					return false;
 
 				return Node.Instruction == IRInstruction.BlockEnd;
