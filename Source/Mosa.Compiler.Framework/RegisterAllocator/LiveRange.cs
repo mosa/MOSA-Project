@@ -58,9 +58,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					usePositions.Add(use, use);
 
-					if (max == SlotIndex.NullSlot || use > max)
+					if (max.IsNull || use > max)
 						max = use;
-					if (min == SlotIndex.NullSlot || use < min)
+					if (min.IsNull || use < min)
 						min = use;
 				}
 			}
@@ -71,9 +71,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					defPositions.Add(def, def);
 
-					if (max == SlotIndex.NullSlot || def > max)
+					if (max.IsNull || def > max)
 						max = def;
-					if (min == SlotIndex.NullSlot || def < min)
+					if (min.IsNull || def < min)
 						min = def;
 				}
 			}

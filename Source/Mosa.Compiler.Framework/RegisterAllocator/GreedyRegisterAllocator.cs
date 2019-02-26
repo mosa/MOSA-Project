@@ -313,7 +313,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			if (liveInterval.UsePositions.Contains(furthest))
 			{
-				var nextfurthest = furthest.GetSlotBefore();
+				var nextfurthest = furthest.Before;
 
 				if (liveInterval.Contains(nextfurthest))
 				{
@@ -396,25 +396,17 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (Trace.Active) Trace.Log($"   Block Start : {b}");
 
 			var c = liveInterval.LiveRange.GetPreviousUsePosition(at);
-			if (c.IsNotNull)
+			if (c.IsNotNull && c.After <= at)
 			{
-				var after = c.GetSlotAfter();
-				if (after <= at)
-				{
-					c = after;
-				}
+				c = c.After;
 			}
 
 			if (Trace.Active) Trace.Log($"  Previous Use : {c}");
 
 			var d = liveInterval.LiveRange.GetPreviousDefPosition(at);
-			if (d.IsNotNull)
+			if (d.IsNotNull && d.After <= at)
 			{
-				var after = d.GetSlotAfter();
-				if (after <= at)
-				{
-					d = after;
-				}
+				d = d.After;
 			}
 
 			if (Trace.Active) Trace.Log($"  Previous Def : {d}");
@@ -439,13 +431,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (Trace.Active) Trace.Log($"     Block End : {b}");
 
 			var c = liveInterval.LiveRange.GetNextUsePosition(at);
-			if (c.IsNotNull)
+			if (c.IsNotNull && c.Before > at)
 			{
-				var before = c.GetSlotBefore(); // FUTURE: Improve comparison
-				if (before > at)
-				{
-					c = before;
-				}
+				c = c.Before;
 			}
 
 			if (Trace.Active) Trace.Log($"      Next Use : {c}");
@@ -482,11 +470,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					var from = VirtualRegisters[GetIndex(node.Operand1)];
 					var to = VirtualRegisters[GetIndex(node.Result)];
 
-					var slot = new SlotIndex(node);
-
 					int factor = (from.IsPhysicalRegister || to.IsPhysicalRegister) ? 150 : 125;
 
-					int bonus = GetLoopDepth(slot);
+					int bonus = ExtendedBlocks[block.Sequence].LoopDepth;
+
+					var slot = new SlotIndex(node);
 
 					moveHints.Add(slot, new MoveHint(slot, from, to, bonus));
 				}

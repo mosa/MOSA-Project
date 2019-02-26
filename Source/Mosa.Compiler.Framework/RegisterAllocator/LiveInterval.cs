@@ -146,7 +146,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 				Debug.Assert(firstUse.IsNotNull);
 
-				if (firstUse.GetSlotBefore() == StartSlot && firstUse.GetSlotAfter() == EndSlot) // FUTURE: Improve the comparison
+				if (firstUse.Before == StartSlot && firstUse.After == EndSlot)
 					return true;
 			}
 

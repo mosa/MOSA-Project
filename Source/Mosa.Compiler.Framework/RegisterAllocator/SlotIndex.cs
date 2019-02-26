@@ -13,6 +13,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public int Index { get { return Value >> 2; } }
 
+		public SlotIndex Before { get { return new SlotIndex(this, false); } }
+
+		public SlotIndex After { get { return new SlotIndex(this, true); } }
+
 		public SlotIndex(int index)
 		{
 			Value = (index << 2) | 0b01;
@@ -28,16 +32,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			Debug.Assert(slot.IsOnSlot);
 
 			Value = (slot.Value & (~0b11)) | (after ? 0b11 : 0b00);
-		}
-
-		public SlotIndex GetSlotAfter()
-		{
-			return new SlotIndex(this, true);
-		}
-
-		public SlotIndex GetSlotBefore()
-		{
-			return new SlotIndex(this, false);
 		}
 
 		public bool IsBeforeSlot { get { return (Value & 0b11) == 0b00; } }

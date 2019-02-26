@@ -1,9 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.RegisterAllocator;
-using System.Collections.Generic;
-using Xunit;
 
 namespace Mosa.Compiler.Framework.xUnit
 {
