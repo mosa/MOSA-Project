@@ -1,177 +1,113 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.IR;
 using System;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	public sealed class SlotIndex : IComparable
+	public struct SlotIndex : IComparable<SlotIndex>
 	{
-		// FUTURE:
-		//		Convert SlotIndex into struct with internal integer value
-		//		InstructionNode is removed (another data structure with the allocator maps index values to slots)
-		//		The slot type is embedded into the internal value
-		//		Index is the internal value with the slot type masked out
-		//		See Slot.cs for future replacement
-		// RATIONAL:
-		//		1. No object creation
-		//		2. Smaller memory footprint
-		//		3. Fits into a single register
-		//		4. Much faster to use
+		public static SlotIndex NullSlot = new SlotIndex(0);
 
-		public const int Increment = 2;
+		public readonly int Value;
 
-		private enum SlotType { On, Before, After }
+		public int Index { get { return Value >> 2; } }
 
-		public readonly InstructionNode Node;
-
-		private readonly SlotType slotType;
-
-		public int SlotNumber
+		public SlotIndex(int index)
 		{
-			get
-			{
-				int slot = Node.Offset;
-
-				if (slotType == SlotType.After)
-					slot++;
-				else if (slotType == SlotType.Before)
-					slot--;
-
-				return slot;
-			}
-		}
-
-		public bool IsOnSlot { get { return slotType != SlotType.On; } }
-
-		public bool IsAfterSlot { get { return slotType == SlotType.After; } }
-
-		public bool IsBeforeSlot { get { return slotType == SlotType.Before; } }
-
-		private SlotIndex(InstructionNode node, SlotType slotType)
-		{
-			Node = node;
-			this.slotType = slotType;
+			Value = (index << 2) | 0b01;
 		}
 
 		public SlotIndex(InstructionNode node)
-			: this(node, SlotType.On)
+			: this(node.Offset)
 		{
 		}
 
-		public static int operator -(SlotIndex s1, SlotIndex s2)
+		private SlotIndex(SlotIndex slot, bool after)
 		{
-			return s1.SlotNumber - s2.SlotNumber;
-		}
+			Debug.Assert(slot.IsOnSlot);
 
-		public static bool operator >=(SlotIndex s1, SlotIndex s2)
-		{
-			return s1.SlotNumber >= s2.SlotNumber;
-		}
-
-		public static bool operator <=(SlotIndex s1, SlotIndex s2)
-		{
-			return s1.SlotNumber <= s2.SlotNumber;
-		}
-
-		public static bool operator >(SlotIndex s1, SlotIndex s2)
-		{
-			return s1.SlotNumber > s2.SlotNumber;
-		}
-
-		public static bool operator <(SlotIndex s1, SlotIndex s2)
-		{
-			return s1.SlotNumber < s2.SlotNumber;
-		}
-
-		public static bool operator ==(SlotIndex s1, SlotIndex s2)
-		{
-			bool ns1 = ReferenceEquals(null, s1);
-			bool ns2 = ReferenceEquals(null, s2);
-
-			if (ns1 && ns2)
-				return true;
-			else if (ns1 ^ ns2)
-				return false;
-
-			// FUTURE: compare slot type too!
-
-			return s1.SlotNumber == s2.SlotNumber;
-		}
-
-		public static bool operator !=(SlotIndex s1, SlotIndex s2)
-		{
-			bool ns1 = ReferenceEquals(null, s1);
-			bool ns2 = ReferenceEquals(null, s2);
-
-			if (ns1 && ns2)
-				return false;
-			else if (ns1 ^ ns2)
-				return true;
-
-			return s1.SlotNumber != s2.SlotNumber;
-		}
-
-		public override bool Equals(object obj)
-		{
-			var o = obj as SlotIndex;
-
-			if (o == null)
-				return false;
-
-			return o.Node == Node;
-		}
-
-		public override int GetHashCode()
-		{
-			return SlotNumber;
-		}
-
-		int IComparable.CompareTo(Object obj)
-		{
-			var slotIndex = obj as SlotIndex;
-
-			return SlotNumber - slotIndex.SlotNumber;
-		}
-
-		public override string ToString()
-		{
-			return SlotNumber.ToString();
+			Value = (slot.Value & (~0b11)) | (after ? 0b11 : 0b00);
 		}
 
 		public SlotIndex GetSlotAfter()
 		{
-			Debug.Assert(slotType == SlotType.On);
-			return new SlotIndex(Node, SlotType.After);
+			return new SlotIndex(this, true);
 		}
 
 		public SlotIndex GetSlotBefore()
 		{
-			Debug.Assert(slotType == SlotType.On);
-			return new SlotIndex(Node, SlotType.Before);
+			return new SlotIndex(this, false);
 		}
 
-		public bool IsBlockStartInstruction
-		{
-			get
-			{
-				if (slotType != SlotType.On)
-					return false;
+		public bool IsBeforeSlot { get { return (Value & 0b11) == 0b00; } }
 
-				return Node.Instruction == IRInstruction.BlockStart;
-			}
+		public bool IsOnSlot { get { return (Value & 0b11) == 0b01; } }
+
+		public bool IsAfterSlot { get { return (Value & 0b11) == 0b11; } }
+
+		public bool IsNull { get { return Value == 0b01; } }
+
+		public bool IsNotNull { get { return !IsNull; } }
+
+		public static bool operator ==(SlotIndex s1, SlotIndex s2)
+		{
+			return s1.Value == s2.Value;
 		}
 
-		public bool IsBlockEndInstruction
+		public static bool operator !=(SlotIndex s1, SlotIndex s2)
 		{
-			get
-			{
-				if (slotType != SlotType.On)
-					return false;
+			return s1.Value != s2.Value;
+		}
 
-				return Node.Instruction == IRInstruction.BlockEnd;
-			}
+		public static bool operator >=(SlotIndex s1, SlotIndex s2)
+		{
+			return s1.Value >= s2.Value;
+		}
+
+		public static bool operator <=(SlotIndex s1, SlotIndex s2)
+		{
+			return s1.Value <= s2.Value;
+		}
+
+		public static bool operator >(SlotIndex s1, SlotIndex s2)
+		{
+			return s1.Value > s2.Value;
+		}
+
+		public static bool operator <(SlotIndex s1, SlotIndex s2)
+		{
+			return s1.Value < s2.Value;
+		}
+
+		public static int operator -(SlotIndex s1, SlotIndex s2)
+		{
+			return s1.Index - s2.Index;
+		}
+
+		public static SlotIndex operator ++(SlotIndex s)
+		{
+			return new SlotIndex(s, true);
+		}
+
+		public static SlotIndex operator --(SlotIndex s)
+		{
+			return new SlotIndex(s, false);
+		}
+
+		public int CompareTo(SlotIndex s)
+		{
+			return Value - s.Value;
+		}
+
+		public override int GetHashCode()
+		{
+			return Value;
+		}
+
+		public override string ToString()
+		{
+			return IsNull ? "Null" : $"{Index}";
 		}
 	}
 }

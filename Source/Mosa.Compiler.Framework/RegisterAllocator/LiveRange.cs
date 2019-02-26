@@ -29,13 +29,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public SlotIndex Maximum { get; }
 
-		public SlotIndex FirstUse { get { return usePositions.Count == 0 ? null : usePositions.Values[0]; } }
+		public SlotIndex FirstUse { get { return usePositions.Count == 0 ? SlotIndex.NullSlot : usePositions.Values[0]; } }
 
-		public SlotIndex FirstDef { get { return defPositions.Count == 0 ? null : defPositions.Values[0]; } }
+		public SlotIndex FirstDef { get { return defPositions.Count == 0 ? SlotIndex.NullSlot : defPositions.Values[0]; } }
 
-		public SlotIndex LastUse { get { return usePositions.Count == 0 ? null : usePositions.Values[usePositions.Count - 1]; } }
+		public SlotIndex LastUse { get { return usePositions.Count == 0 ? SlotIndex.NullSlot : usePositions.Values[usePositions.Count - 1]; } }
 
-		public SlotIndex LastDef { get { return defPositions.Count == 0 ? null : defPositions.Values[defPositions.Count - 1]; } }
+		public SlotIndex LastDef { get { return defPositions.Count == 0 ? SlotIndex.NullSlot : defPositions.Values[defPositions.Count - 1]; } }
 
 		public int UseCount { get { return usePositions.Count; } }
 
@@ -49,8 +49,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// live intervals can not start/end at the same location
 			Debug.Assert(start != end);
 
-			SlotIndex max = null;
-			SlotIndex min = null;
+			var max = SlotIndex.NullSlot;
+			var min = SlotIndex.NullSlot;
 
 			foreach (var use in uses)
 			{
@@ -58,9 +58,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					usePositions.Add(use, use);
 
-					if (max == null || use > max)
+					if (max == SlotIndex.NullSlot || use > max)
 						max = use;
-					if (min == null || use < min)
+					if (min == SlotIndex.NullSlot || use < min)
 						min = use;
 				}
 			}
@@ -71,9 +71,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					defPositions.Add(def, def);
 
-					if (max == null || def > max)
+					if (max == SlotIndex.NullSlot || def > max)
 						max = def;
-					if (min == null || def < min)
+					if (min == SlotIndex.NullSlot || def < min)
 						min = def;
 				}
 			}
@@ -81,9 +81,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			Minimum = min;
 			Maximum = max;
 
-			if (FirstDef == null)
+			if (FirstDef.IsNull)
 				IsDefFirst = false;
-			else if (FirstUse == null)
+			else if (FirstUse.IsNull)
 				IsDefFirst = true;
 			else if (FirstDef < FirstUse)
 				IsDefFirst = true;
@@ -103,7 +103,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				}
 			}
 
-			return null;
+			return SlotIndex.NullSlot;
 		}
 
 		private SlotIndex GetPrevious(IList<SlotIndex> slots, SlotIndex start)
@@ -118,7 +118,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				}
 			}
 
-			return null;
+			return SlotIndex.NullSlot;
 		}
 
 		public SlotIndex GetNextUsePosition(SlotIndex at)

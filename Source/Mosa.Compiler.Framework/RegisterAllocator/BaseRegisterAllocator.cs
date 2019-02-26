@@ -48,6 +48,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected readonly TraceLog Trace;
 
+		protected readonly List<InstructionNode> SlotsToNodes;
+
 		protected BaseRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, AddStackLocalDelegate addStackLocal, Operand stackFrame, ITraceFactory traceFactory)
 		{
 			TraceFactory = traceFactory;
@@ -94,6 +96,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			SpilledIntervals = new List<LiveInterval>();
 
 			KillAll = new List<SlotIndex>();
+
+			SlotsToNodes = new List<InstructionNode>(512);
 		}
 
 		protected TraceLog CreateTraceLog(string name)
@@ -166,6 +170,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		}
 
 		protected abstract void AdditionalSetup();
+
+		protected InstructionNode GetNode(SlotIndex slot)
+		{
+			return SlotsToNodes[slot.Index];
+		}
 
 		private void TraceBlocks()
 		{
@@ -280,10 +289,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			SpilledIntervals.Add(liveInterval);
 		}
 
-		public static void NumberInstructions(BasicBlocks basicBlocks)
+		public void NumberInstructions(BasicBlocks basicBlocks)
 		{
-			const int increment = SlotIndex.Increment;
-			int index = increment;
+			SlotsToNodes.Add(null);
 
 			foreach (var block in basicBlocks)
 			{
@@ -292,8 +300,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (node.IsEmpty)
 						continue;
 
-					node.Offset = index;
-					index += increment;
+					node.Offset = SlotsToNodes.Count;
+
+					SlotsToNodes.Add(node);
 
 					if (node.IsBlockEndInstruction)
 						break;
@@ -433,9 +442,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					var slotIndex = new SlotIndex(node);
 
 					if (node.IsBlockStartInstruction)
-						blockStarts.Add(slotIndex.SlotNumber);
+						blockStarts.Add(slotIndex.Value);
 					else if (node.IsBlockEndInstruction)
-						blockEnds.Add(slotIndex.SlotNumber);
+						blockEnds.Add(slotIndex.Value);
 
 					for (int step = 0; step < 2; step++)
 					{
@@ -445,12 +454,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 							slot = slot.GetSlotBefore();
 
 						var row = new string[RegisterCount];
-						map.Add(slot.SlotNumber, row);
+						map.Add(slot.Value, row);
 
-						header.Append(slot.SlotNumber.ToString());
+						header.Append(slot.Value.ToString());
 						header.Append("\t");
 
-						slots.Add(slot.SlotNumber);
+						slots.Add(slot.Value);
 
 						if (!slot.IsOnSlot)
 						{
@@ -767,7 +776,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						continue;
 
 					var slotIndex = new SlotIndex(node);
-					SlotIndex slotAfter = null;
+					var slotAfter = SlotIndex.NullSlot;
 
 					if (node.Instruction.FlowControl == FlowControl.Call || node.Instruction == IRInstruction.KillAll)
 					{
@@ -775,7 +784,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						{
 							var register = VirtualRegisters[s];
 
-							if (slotAfter == null)
+							if (slotAfter.IsNull)
 								slotAfter = slotIndex.GetSlotAfter();
 
 							if (intervalTrace.Active) intervalTrace.Log($"Add (Call) {register} : {slotIndex} destination {slotAfter}");
@@ -796,7 +805,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 								continue;
 
 							var register = VirtualRegisters[s];
-							if (slotAfter == null)
+							if (slotAfter.IsNull)
 								slotAfter = slotIndex.GetSlotAfter();
 
 							if (intervalTrace.Active) intervalTrace.Log($"Add (Call) {register} : {slotIndex} destination {slotAfter}");
@@ -834,7 +843,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						}
 						else
 						{
-							if (slotAfter == null)
+							if (slotAfter.IsNull)
 								slotAfter = slotIndex.GetSlotAfter();
 
 							// This is necessary to handled a result that is never used!
@@ -872,7 +881,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private ExtendedBlock GetContainingBlock(SlotIndex slotIndex)
 		{
-			return ExtendedBlocks[slotIndex.Node.Block.Sequence];
+			var node = GetNode(slotIndex);
+			return ExtendedBlocks[node.Block.Sequence];
 		}
 
 		protected int GetLoopDepth(SlotIndex slotIndex)
@@ -1226,7 +1236,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			if (Trace.Active) Trace.Log(" Splitting around first use/def");
 
 			var liveRange = liveInterval.LiveRange;
-			SlotIndex splitAt = null;
+			var splitAt = SlotIndex.NullSlot;
 
 			if (liveRange.IsDefFirst)
 			{
@@ -1305,7 +1315,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				if (liveInterval.Contains(slot))
 					return slot;
 			}
-			return null;
+			return SlotIndex.NullSlot;
 		}
 
 		protected void CreateSpillSlotOperands()
@@ -1348,7 +1358,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					foreach (var def in liveInterval.DefPositions)
 					{
-						var context = new Context(def.Node);
+						var context = new Context(GetNode(def));
 
 						Architecture.InsertStoreInstruction(context, StackFrame, register.SpillSlotOperand, liveInterval.AssignedPhysicalOperand);
 
@@ -1369,12 +1379,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				{
 					foreach (var use in liveInterval.UsePositions)
 					{
-						AssignPhysicalRegistersToInstructions(use.Node, register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand ?? liveInterval.VirtualRegister.SpillSlotOperand);
+						AssignPhysicalRegistersToInstructions(GetNode(use), register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand ?? liveInterval.VirtualRegister.SpillSlotOperand);
 					}
 
 					foreach (var def in liveInterval.DefPositions)
 					{
-						AssignPhysicalRegistersToInstructions(def.Node, register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand ?? liveInterval.VirtualRegister.SpillSlotOperand);
+						AssignPhysicalRegistersToInstructions(GetNode(def), register.VirtualRegisterOperand, liveInterval.AssignedPhysicalOperand ?? liveInterval.VirtualRegister.SpillSlotOperand);
 					}
 				}
 			}
@@ -1493,7 +1503,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			foreach (var key in moves.Keys)
 			{
-				var moveResolver = new MoveResolver(key.Node, !key.IsAfterSlot, moves[key]);
+				var moveResolver = new MoveResolver(GetNode(key), !key.IsAfterSlot, moves[key]);
 
 				moveResolver.InsertResolvingMoves(Architecture, StackFrame);
 

@@ -18,8 +18,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			Max = 5,
 		}
 
-		public override int Start { get { return LiveRange.Start.SlotNumber; } }
-		public override int End { get { return LiveRange.End.SlotNumber; } }
+		public override int Start { get { return LiveRange.Start.Value; } }
+		public override int End { get { return LiveRange.End.Value; } }
 
 		public LiveRange LiveRange { get; }
 
@@ -144,7 +144,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				var firstUse = LiveRange.FirstUse;
 
-				Debug.Assert(firstUse != null);
+				Debug.Assert(firstUse.IsNotNull);
 
 				if (firstUse.GetSlotBefore() == StartSlot && firstUse.GetSlotAfter() == EndSlot) // FUTURE: Improve the comparison
 					return true;

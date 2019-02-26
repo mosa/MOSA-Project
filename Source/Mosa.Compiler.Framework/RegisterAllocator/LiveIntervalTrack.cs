@@ -56,12 +56,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool Intersects(SlotIndex slotIndex)
 		{
-			return intervals.Contains(slotIndex.SlotNumber);
+			return intervals.Contains(slotIndex.Value);
 		}
 
 		public LiveInterval GetLiveIntervalAt(SlotIndex slotIndex)
 		{
-			return intervals.SearchFirstOverlapping(slotIndex.SlotNumber);
+			return intervals.SearchFirstOverlapping(slotIndex.Value);
 		}
 
 		/// <summary>

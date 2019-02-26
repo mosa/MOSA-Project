@@ -27,24 +27,5 @@ namespace Mosa.Compiler.Framework.xUnit
 
 			return basicBlocks;
 		}
-
-		[Fact]
-		public void LiveRangeTest()
-		{
-			var basicBlocks = CreateBasicBlockInstructionSet();
-
-			GreedyRegisterAllocator.NumberInstructions(basicBlocks);
-
-			var liveRange = new LiveRange(
-				new SlotIndex(basicBlocks[0].First),
-				new SlotIndex(basicBlocks[0].Last),
-				new List<SlotIndex>(),
-				new List<SlotIndex>()
-			);
-
-			Assert.True(liveRange.IsEmpty);
-
-			//liveRange.SplitAt(basicBlocks.)
-		}
 	}
 }
