@@ -1,9 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.RegisterAllocator;
-using System.Collections.Generic;
-using Xunit;
 
 namespace Mosa.Compiler.Framework.xUnit
 {
@@ -26,25 +23,6 @@ namespace Mosa.Compiler.Framework.xUnit
 			context.AppendInstruction(IRInstruction.Nop);
 
 			return basicBlocks;
-		}
-
-		[Fact]
-		public void LiveRangeTest()
-		{
-			var basicBlocks = CreateBasicBlockInstructionSet();
-
-			GreedyRegisterAllocator.NumberInstructions(basicBlocks);
-
-			var liveRange = new LiveRange(
-				new SlotIndex(basicBlocks[0].First),
-				new SlotIndex(basicBlocks[0].Last),
-				new List<SlotIndex>(),
-				new List<SlotIndex>()
-			);
-
-			Assert.True(liveRange.IsEmpty);
-
-			//liveRange.SplitAt(basicBlocks.)
 		}
 	}
 }

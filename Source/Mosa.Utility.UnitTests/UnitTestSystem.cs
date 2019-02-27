@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.UnitTests;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
