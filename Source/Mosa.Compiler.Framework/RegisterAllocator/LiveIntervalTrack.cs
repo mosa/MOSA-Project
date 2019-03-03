@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			Debug.Assert(!Intersects(liveInterval));
 
-			intervals.Add(liveInterval);
+			intervals.Add(liveInterval, liveInterval);
 
 			liveInterval.LiveIntervalTrack = this;
 		}
