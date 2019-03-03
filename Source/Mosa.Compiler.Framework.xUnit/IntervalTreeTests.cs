@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree;
 using System.Diagnostics;
 using Xunit;

@@ -1,21 +1,33 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Trace.BuiltIn;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Trace
 {
 	public class CompilerTrace
 	{
-		public ITraceListener TraceListener { get; set; }
+		private ITraceListener TraceListener;
 
-		public TraceFilter TraceFilter { get; }
+		public int MinTraceLevel { get; set; } = 0;
 
-		//public int MinTraceLevel { get; set; } = 0;
+		public bool Active { get { return MinTraceLevel != 0; } }
 
 		public CompilerTrace()
 		{
-			TraceListener = new DebugCompilerEventListener();
-			TraceFilter = new TraceFilter();
+			TraceListener = null;
+		}
+
+		public void SetTraceListener(ITraceListener traceListener)
+		{
+			TraceListener = traceListener;
+		}
+
+		public void PostMethodCompiled(MosaMethod method)
+		{
+			if (TraceListener == null)
+				return;
+
+			TraceListener.OnMethodCompiled(method);
 		}
 
 		public void PostTraceLog(TraceLog traceLog, bool signalStatusUpdate = false)

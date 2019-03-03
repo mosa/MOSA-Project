@@ -47,12 +47,7 @@ namespace Mosa.Tool.Explorer
 		{
 			InitializeComponent();
 
-			Compiler.CompilerTrace.TraceListener = this;
-			Compiler.CompilerTrace.TraceFilter.Active = true;
-			Compiler.CompilerTrace.TraceFilter.ExcludeInternalMethods = false;
-			Compiler.CompilerTrace.TraceFilter.MethodMatch = MatchType.Any;
-			Compiler.CompilerTrace.TraceFilter.StageMatch = MatchType.Any;
-
+			Compiler.CompilerTrace.MinTraceLevel = 9;
 			Compiler.CompilerOptions.LinkerFormatType = LinkerFormatType.Elf32;
 
 			tbInstructions.Width = tabControl.Width - 4;

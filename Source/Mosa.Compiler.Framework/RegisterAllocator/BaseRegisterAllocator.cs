@@ -1045,26 +1045,18 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					{
 						if (Trace.Active) Trace.Log("  Evicting live intervals");
 
-						Debug.WriteLine("  Evicting live intervals");
-
 						track.Evict(intersections);
 
 						foreach (var intersection in intersections)
 						{
 							if (Trace.Active) Trace.Log("  Evicted: " + intersection);
 
-							Debug.WriteLine("  Evicted: " + intersection);
-
 							liveInterval.Stage = LiveInterval.AllocationStage.Initial;
 							AddPriorityQueue(intersection);
 						}
 					}
 
-					Debug.WriteLine("  Adding: " + liveInterval);
-
 					track.Add(liveInterval);
-
-					Debug.WriteLine(string.Empty);
 
 					if (Trace.Active) Trace.Log("  Assigned live interval destination: " + track);
 

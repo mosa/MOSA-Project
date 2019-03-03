@@ -6,8 +6,8 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Trace.BuiltIn;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
+using System.Text;
 
 namespace Mosa.Tool.Compiler
 {
@@ -176,7 +176,7 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -a x86 --mboot v1 --x
 
 		private void Compile()
 		{
-			compiler.CompilerTrace.TraceListener = new ConsoleEventListener();
+			compiler.CompilerTrace.SetTraceListener(new ConsoleEventListener());
 
 			compiler.CompilerOptions.AddSourceFiles(options.InputFiles);
 

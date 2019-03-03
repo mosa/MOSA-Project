@@ -647,7 +647,7 @@ namespace Mosa.Compiler.Framework
 			if (traceLevel > CompilerOptions.TraceLevel)
 				return false;
 
-			return MethodCompiler.Trace.TraceFilter.IsMatch(MethodCompiler.Method, FormattedStageName);
+			return true;
 		}
 
 		protected TraceLog CreateTraceLog(int traceLevel = 0)

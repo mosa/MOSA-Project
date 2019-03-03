@@ -519,6 +519,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 
 				temp = GetSuccessor(node);
 				node.Interval = temp.Interval;
+				node.Value = temp.Value;
 
 				RecalculateMaxEnd(node);
 				while (node.Parent != Sentinel)

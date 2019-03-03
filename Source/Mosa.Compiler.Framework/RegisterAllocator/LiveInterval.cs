@@ -156,7 +156,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public override string ToString()
 		{
-			return VirtualRegister + " between " + LiveRange;
+			return $"{VirtualRegister} between {LiveRange}";
 		}
 
 		public void Evict()
