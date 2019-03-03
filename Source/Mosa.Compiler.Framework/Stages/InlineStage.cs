@@ -93,10 +93,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 				Inline(callSiteNode, blocks);
 
-				if (!BasicBlocks.RuntimeValidation())
-				{
-					throw new CompilerException($"InlineStage: Block Validation after inlining: {invokedMethod} into {Method}");
-				}
+				//if (!BasicBlocks.RuntimeValidation())
+				//{
+				//	throw new CompilerException($"InlineStage: Block Validation after inlining: {invokedMethod} into {Method}");
+				//}
 			}
 
 			InlinedMethodsCount.Set(1);
