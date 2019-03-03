@@ -21,6 +21,7 @@ namespace Mosa.Compiler.Framework.xUnit
 				for (int n = 0; n <= i; n++)
 				{
 					Debug.Assert(tree.Contains(n * 2));
+					Debug.Assert(tree.Contains(n * 2, n * 2 + 1));
 				}
 			}
 		}

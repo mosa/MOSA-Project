@@ -17,8 +17,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			Max = 5,
 		}
 
-		public int Start { get { return LiveRange.Start.Value; } }
-		public int End { get { return LiveRange.End.Value; } }
+		public int StartValue { get { return LiveRange.Start.Value; } }
+		public int EndValue { get { return LiveRange.End.Value; } }
+
 		public int Length { get { return LiveRange.Length; } }
 
 		public LiveRange LiveRange { get; }
@@ -27,7 +28,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public int SpillValue { get; set; }
 
-		public int SpillCost { get { return NeverSpill || TooSmallToSplit ? int.MaxValue : (SpillValue / (Length + 1)); } }
+		public int SpillCost { get { return NeverSpill || TooSmallToSplit ? int.MaxValue : (SpillValue / (LiveRange.Length + 1)); } }
 
 		public LiveIntervalTrack LiveIntervalTrack { get; set; }
 
