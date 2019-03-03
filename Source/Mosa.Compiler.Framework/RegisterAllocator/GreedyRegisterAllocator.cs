@@ -55,11 +55,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			liveInterval.SpillValue = spillvalue;
 		}
 
-		protected override int CalculatePriorityValue(LiveInterval liveInterval)
-		{
-			return liveInterval.Length | ((int)((int)LiveInterval.AllocationStage.Max - liveInterval.Stage) << 28);
-		}
-
 		private bool PlaceLiveIntervalOnTrack(LiveInterval liveInterval, MoveHint[] hints)
 		{
 			if (hints == null)

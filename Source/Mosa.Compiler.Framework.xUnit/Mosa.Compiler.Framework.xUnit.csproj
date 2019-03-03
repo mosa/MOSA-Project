@@ -83,7 +83,6 @@
   <ItemGroup>
     <Compile Include="LiveRangeTests.cs" />
     <Compile Include="SparseBitArrayTests.cs" />
-    <Compile Include="SimplePriorityQueueTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

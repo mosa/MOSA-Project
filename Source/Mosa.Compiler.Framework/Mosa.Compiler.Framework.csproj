@@ -3,6 +3,9 @@
         <TargetFramework>netstandard2.0</TargetFramework>
     </PropertyGroup>
     <ItemGroup>
+      <PackageReference Include="OptimizedPriorityQueue" Version="4.2.0" />
+    </ItemGroup>
+    <ItemGroup>
       <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
       <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
     </ItemGroup>

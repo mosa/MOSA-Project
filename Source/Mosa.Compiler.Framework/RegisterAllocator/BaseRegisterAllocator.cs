@@ -6,6 +6,7 @@ using Mosa.Compiler.Framework.Common;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
+using Priority_Queue;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -33,7 +34,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		protected readonly List<ExtendedBlock> ExtendedBlocks;
 		protected readonly List<VirtualRegister> VirtualRegisters;
 
-		private readonly SimpleKeyPriorityQueue<LiveInterval> PriorityQueue;
+		private readonly SimplePriorityQueue<LiveInterval> PriorityQueue;
 		protected readonly List<LiveIntervalTrack> LiveIntervalTracks;
 
 		private readonly PhysicalRegister StackFrameRegister;
@@ -92,7 +93,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				VirtualRegisters.Add(new VirtualRegister(virtualRegister));
 			}
 
-			PriorityQueue = new SimpleKeyPriorityQueue<LiveInterval>();
+			PriorityQueue = new SimplePriorityQueue<LiveInterval>();
 			SpilledIntervals = new List<LiveInterval>();
 
 			KillAll = new List<SlotIndex>();
@@ -634,9 +635,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 							liveGen.Set(index, true);
 
 							if (liveSetTrace.Active)
-							{
 								liveSetTrace.Log("GEN:  " + index.ToString() + " " + op);
-							}
 						}
 					}
 
@@ -948,7 +947,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			// priority is based on allocation stage (primary, lower first) and interval size (secondary, higher first)
 			int value = CalculatePriorityValue(liveInterval);
 
-			PriorityQueue.Enqueue(value, liveInterval);
+			PriorityQueue.Enqueue(liveInterval, value);
 		}
 
 		private void PopulatePriorityQueue()
@@ -975,7 +974,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void ProcessPriorityQueue()
 		{
-			while (!PriorityQueue.IsEmpty)
+			while (PriorityQueue.Count != 0)
 			{
 				var liveInterval = PriorityQueue.Dequeue();
 
