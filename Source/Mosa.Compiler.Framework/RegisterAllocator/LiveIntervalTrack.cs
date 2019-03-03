@@ -29,14 +29,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			Debug.Assert(!Intersects(liveInterval));
 
-			intervals.Add(liveInterval, liveInterval);
+			intervals.Add(liveInterval.Start, liveInterval.End, liveInterval);
 
 			liveInterval.LiveIntervalTrack = this;
 		}
 
 		public void Evict(LiveInterval liveInterval)
 		{
-			intervals.Remove(liveInterval);
+			intervals.Remove(liveInterval.Start, liveInterval.End);
 
 			liveInterval.LiveIntervalTrack = null;
 		}
@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool Intersects(LiveInterval liveInterval)
 		{
-			return intervals.Contains(liveInterval);
+			return intervals.Contains(liveInterval.Start, liveInterval.End);
 		}
 
 		public bool Intersects(SlotIndex slotIndex)
@@ -71,7 +71,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		/// <returns></returns>
 		public List<LiveInterval> GetIntersections(LiveInterval liveInterval)
 		{
-			return intervals.Search(liveInterval);
+			return intervals.Search(liveInterval.Start, liveInterval.End);
 		}
 
 		public override string ToString()

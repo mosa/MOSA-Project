@@ -6,7 +6,7 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	public sealed class LiveInterval : Interval
+	public sealed class LiveInterval
 	{
 		public enum AllocationStage
 		{
@@ -18,8 +18,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			Max = 5,
 		}
 
-		public override int Start { get { return LiveRange.Start.Value; } }
-		public override int End { get { return LiveRange.End.Value; } }
+		public int Start { get { return LiveRange.Start.Value; } }
+		public int End { get { return LiveRange.End.Value; } }
+		public int Length { get { return LiveRange.Length; } }
 
 		public LiveRange LiveRange { get; }
 
