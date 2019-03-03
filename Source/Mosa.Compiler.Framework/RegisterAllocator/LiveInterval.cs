@@ -1,11 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree;
 using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	public sealed class LiveInterval
+	public sealed class LiveInterval : Interval
 	{
 		public enum AllocationStage
 		{
@@ -16,6 +17,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			SplitFinal = 4,
 			Max = 5,
 		}
+
+		public override int Start { get { return LiveRange.Start.Value; } }
+		public override int End { get { return LiveRange.End.Value; } }
 
 		public LiveRange LiveRange { get; }
 
@@ -45,15 +49,15 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		#region Short Cuts
 
-		public SlotIndex Start { get { return LiveRange.Start; } }
+		public SlotIndex StartSlot { get { return LiveRange.Start; } }
 
-		public SlotIndex End { get { return LiveRange.End; } }
+		public SlotIndex EndSlot { get { return LiveRange.End; } }
 
 		public IList<SlotIndex> UsePositions { get { return LiveRange.UsePositions; } }
 
 		public IList<SlotIndex> DefPositions { get { return LiveRange.DefPositions; } }
 
-		public int Length { get { return LiveRange.Length; } }
+		//public int Length { get { return LiveRange.Length; } }
 
 		public bool IsEmpty { get { return LiveRange.IsEmpty; } }
 
@@ -71,12 +75,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return LiveRange.Intersects(start, end);
 		}
 
-		public bool IsAdjacent(Interval other)
+		public bool IsAdjacent(SlotInterval other)
 		{
 			return LiveRange.IsAdjacent(other);
 		}
 
-		public bool Intersects(Interval other)
+		public bool Intersects(SlotInterval other)
 		{
 			return LiveRange.Intersects(other);
 		}
@@ -120,16 +124,16 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			Debug.Assert(VirtualRegister == interval.VirtualRegister);
 
-			var start = Start < interval.Start ? Start : interval.Start;
-			var end = End > interval.End ? End : interval.End;
+			var start = StartSlot < interval.StartSlot ? StartSlot : interval.StartSlot;
+			var end = EndSlot > interval.EndSlot ? EndSlot : interval.EndSlot;
 
 			return new LiveInterval(VirtualRegister, start, end);
 		}
 
 		public LiveInterval CreateExpandedLiveRange(SlotIndex start, SlotIndex end)
 		{
-			var mergedStart = Start < start ? Start : start;
-			var mergedEnd = End > end ? End : end;
+			var mergedStart = StartSlot < start ? StartSlot : start;
+			var mergedEnd = EndSlot > end ? EndSlot : end;
 
 			return new LiveInterval(VirtualRegister, mergedStart, mergedEnd);
 		}
@@ -140,21 +144,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				var firstUse = LiveRange.FirstUse;
 
-				Debug.Assert(firstUse != null);
+				Debug.Assert(firstUse.IsNotNull);
 
-				if (firstUse.HalfStepBack == Start && firstUse.HalfStepForward == End)
+				if (firstUse.Before == StartSlot && firstUse.After == EndSlot)
 					return true;
 			}
-
-			//if (LiveRange.DefCount == 1)
-			//{
-			//	var firstDef = LiveRange.FirstDef;
-
-			//	Debug.Assert(firstDef != null);
-
-			//	if ((firstDef == Start) && (firstDef.HalfStepForward == End))
-			//		return true;
-			//}
 
 			return false;
 		}

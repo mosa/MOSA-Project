@@ -4,7 +4,7 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	public class Move
+	public sealed class Move
 	{
 		public readonly Operand Source;
 

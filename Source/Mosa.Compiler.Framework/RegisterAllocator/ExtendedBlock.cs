@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public int LoopDepth { get; }
 
-		public Interval Interval { get; set; }
+		public SlotInterval Interval { get; set; }
 
 		public SlotIndex Start { get { return Interval.Start; } }
 

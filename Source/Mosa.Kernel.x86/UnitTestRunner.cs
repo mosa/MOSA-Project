@@ -68,9 +68,6 @@ namespace Mosa.Kernel.x86
 					Screen.Write("Test #: ");
 					Screen.Write(++testCount, 10, 7);
 
-					//Screen.Write(" [X  ]");
-					//Screen.Column = Screen.Column - 3;
-
 					testResult = 0;
 					testResultReady = 0;
 					testResultReported = 0;
@@ -95,11 +92,7 @@ namespace Mosa.Kernel.x86
 
 					testResultReady = 1;
 
-					//Screen.Write("X");
-
 					Native.Int(255);
-
-					//Screen.Write("X");
 				}
 			}
 		}
@@ -133,7 +126,7 @@ namespace Mosa.Kernel.x86
 
 		public static bool IsReady()
 		{
-			return (testResultReported == 1 && testReady == 0);
+			return testResultReported == 1 && testReady == 0;
 		}
 
 		public static bool GetResult(out ulong result, out uint id)

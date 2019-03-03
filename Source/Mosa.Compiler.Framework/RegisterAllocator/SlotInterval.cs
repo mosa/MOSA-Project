@@ -4,13 +4,13 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	public class Interval
+	public class SlotInterval
 	{
 		public SlotIndex Start { get; }
 
 		public SlotIndex End { get; }
 
-		public Interval(SlotIndex start, SlotIndex end)
+		public SlotInterval(SlotIndex start, SlotIndex end)
 		{
 			Debug.Assert(start <= end);
 
@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return (Start <= start && End > start) || (start <= Start && end > Start);
 		}
 
-		public bool Intersects(Interval other)
+		public bool Intersects(SlotInterval other)
 		{
 			return Intersects(other.Start, other.End);
 		}
@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return start == End || end == Start;
 		}
 
-		public bool IsAdjacent(Interval other)
+		public bool IsAdjacent(SlotInterval other)
 		{
 			return IsAdjacent(other.Start, other.End);
 		}
