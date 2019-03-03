@@ -169,7 +169,7 @@ namespace Mosa.Compiler.Framework
 				(compilerOptions.EnableLoopInvariantCodeMotion && compilerOptions.EnableSSA) ? new LoopInvariantCodeMotionStage() : null,
 				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.EnableIROptimizations) ? new IROptimizationStage() : null,
-				(compilerOptions.IRLongExpansion && compilerOptions.Architecture.NativePointerSize == 4) ? new IRLongDecompositionStage() : null,
+				(compilerOptions.EnableIRLongExpansion && compilerOptions.Architecture.NativePointerSize == 4) ? new IRLongDecompositionStage() : null,
 				new LowerIRStage(),
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableLoopInvariantCodeMotion && compilerOptions.EnableSSA) ? new LoopInvariantCodeMotionStage() : null,
