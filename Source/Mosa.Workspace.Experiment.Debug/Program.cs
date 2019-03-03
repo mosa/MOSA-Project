@@ -80,6 +80,9 @@ namespace Mosa.Workspace.Experiment.Debug
 				Console.WriteLine("Elapsed: " + (stopwatch.ElapsedMilliseconds - start).ToString("F2") + " ms");
 			}
 
+			compiler.ScheduleAll();
+			compiler.Compile();
+
 			return;
 		}
 

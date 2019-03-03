@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 {
@@ -20,10 +20,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 				Start = start;
 				End = end;
 
-				if (Start.CompareTo(End) > 0)
-				{
-					throw new ArgumentException("Start cannot be larger than End of interval");
-				}
+				Debug.Assert(End >= Start);
+				Debug.Assert(Start.CompareTo(End) <= 0);
 			}
 
 			public int Length { get { return End - Start; } }

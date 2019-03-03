@@ -9,11 +9,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 	/// <summary>
 	/// Tree capable of adding arbitrary intervals and performing search queries on them
 	/// </summary>
-	public sealed partial class IntervalTree<T>
+	public sealed partial class IntervalTree<T> where T : class
 	{
-		private IntervalNode<T> Sentinel = new IntervalNode<T>();
+		private Node<T> Sentinel = new Node<T>(new Interval(-1, -1), null);
 
-		private IntervalNode<T> Root { get; set; }
+		private Node<T> Root { get; set; }
 
 		public IntervalTree()
 		{
@@ -138,7 +138,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 			return node.Value;
 		}
 
-		private void SearchSubtree(IntervalNode<T> node, Interval interval, List<T> result)
+		private void SearchSubtree(Node<T> node, Interval interval, List<T> result)
 		{
 			if (node == Sentinel)
 			{
@@ -162,7 +162,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 			}
 		}
 
-		private void SearchSubtree(IntervalNode<T> node, int at, List<T> result)
+		private void SearchSubtree(Node<T> node, int at, List<T> result)
 		{
 			if (node == Sentinel)
 			{
@@ -186,7 +186,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 			}
 		}
 
-		private bool SearchSubtree(IntervalNode<T> node, Interval interval)
+		private bool SearchSubtree(Node<T> node, Interval interval)
 		{
 			if (node == Sentinel)
 			{
@@ -213,7 +213,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 			return false;
 		}
 
-		private bool SearchSubtree(IntervalNode<T> node, int at)
+		private bool SearchSubtree(Node<T> node, int at)
 		{
 			if (node == Sentinel)
 			{
@@ -240,7 +240,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 			return false;
 		}
 
-		private IntervalNode<T> FindInterval(IntervalNode<T> tree, Interval interval)
+		private Node<T> FindInterval(Node<T> tree, Interval interval)
 		{
 			while (tree != Sentinel)
 			{
@@ -284,7 +284,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 		{
 			Debug.Assert(!Contains(interval));
 
-			var node = new IntervalNode<T>(interval, value)
+			var node = new Node<T>(interval, value)
 			{
 				Parent = Sentinel,
 				Left = Sentinel,
@@ -293,7 +293,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 
 			if (Root == Sentinel)
 			{
-				node.Color = NodeColor.BLACK;
+				node.Color = Color.BLACK;
 				Root = node;
 			}
 			else
@@ -310,7 +310,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 		/// </summary>
 		/// <param name="node">interval to be added</param>
 		/// <param name="currentNode">subtree accessed in recursion</param>
-		private void InsertInterval(IntervalNode<T> node, IntervalNode<T> currentNode)
+		private void InsertInterval(Node<T> node, Node<T> currentNode)
 		{
 			var addedNode = Sentinel;
 
@@ -323,7 +323,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 					node.Parent = Sentinel;
 					node.Left = Sentinel;
 					node.Right = Sentinel;
-					node.Color = NodeColor.RED;
+					node.Color = Color.RED;
 
 					currentNode.Left = node;
 					addedNode.Parent = currentNode;
@@ -341,7 +341,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 					node.Parent = Sentinel;
 					node.Left = Sentinel;
 					node.Right = Sentinel;
-					node.Color = NodeColor.RED;
+					node.Color = Color.RED;
 
 					currentNode.Right = node;
 					addedNode.Parent = currentNode;
@@ -361,23 +361,23 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 
 			RenewConstraintsAfterInsert(addedNode);
 
-			Root.Color = NodeColor.BLACK;
+			Root.Color = Color.BLACK;
 		}
 
 		/// <summary>
 		/// The direction of the parent, from the child point-of-view
 		/// </summary>
-		private NodeDirection GetParentDirection(IntervalNode<T> node)
+		private Direction GetParentDirection(Node<T> node)
 		{
 			if (node.Parent == Sentinel)
 			{
-				return NodeDirection.NONE;
+				return Direction.NONE;
 			}
 
-			return node.Parent.Left == node ? NodeDirection.RIGHT : NodeDirection.LEFT;
+			return node.Parent.Left == node ? Direction.RIGHT : Direction.LEFT;
 		}
 
-		private IntervalNode<T> GetSuccessor(IntervalNode<T> node)
+		private Node<T> GetSuccessor(Node<T> node)
 		{
 			if (node.Right == Sentinel)
 			{
@@ -393,7 +393,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 			return node;
 		}
 
-		private IntervalNode<T> GetGrandParent(IntervalNode<T> node)
+		private Node<T> GetGrandParent(Node<T> node)
 		{
 			if (node.Parent != Sentinel)
 			{
@@ -402,7 +402,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 			return Sentinel;
 		}
 
-		private IntervalNode<T> GetUncle(IntervalNode<T> node)
+		private Node<T> GetUncle(Node<T> node)
 		{
 			var grandparent = GetGrandParent(node);
 			if (grandparent == Sentinel)
@@ -422,28 +422,28 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 		/// Validates and applies RB-tree constraints to node
 		/// </summary>
 		/// <param name="node">node to be validated and fixed</param>
-		private void RenewConstraintsAfterInsert(IntervalNode<T> node)
+		private void RenewConstraintsAfterInsert(Node<T> node)
 		{
 			if (node.Parent == Sentinel)
 			{
 				return;
 			}
 
-			if (node.Parent.Color == NodeColor.BLACK)
+			if (node.Parent.Color == Color.BLACK)
 			{
 				return;
 			}
 
 			var uncle = GetUncle(node);
 
-			if (uncle != Sentinel && uncle.Color == NodeColor.RED)
+			if (uncle != Sentinel && uncle.Color == Color.RED)
 			{
-				node.Parent.Color = uncle.Color = NodeColor.BLACK;
+				node.Parent.Color = uncle.Color = Color.BLACK;
 
 				var grandparent = GetGrandParent(node);
 				if (grandparent != Sentinel && grandparent.Parent != Sentinel)
 				{
-					grandparent.Color = NodeColor.RED;
+					grandparent.Color = Color.RED;
 					RenewConstraintsAfterInsert(grandparent);
 				}
 			}
@@ -452,18 +452,18 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 				var parentDirection = GetParentDirection(node);
 				var parentParentDirection = GetParentDirection(node.Parent);
 
-				if (parentDirection == NodeDirection.LEFT && parentParentDirection == NodeDirection.RIGHT)
+				if (parentDirection == Direction.LEFT && parentParentDirection == Direction.RIGHT)
 				{
 					RotateLeft(node.Parent);
 					node = node.Left;
 				}
-				else if (parentDirection == NodeDirection.RIGHT && parentParentDirection == NodeDirection.LEFT)
+				else if (parentDirection == Direction.RIGHT && parentParentDirection == Direction.LEFT)
 				{
 					RotateRight(node.Parent);
 					node = node.Right;
 				}
 
-				node.Parent.Color = NodeColor.BLACK;
+				node.Parent.Color = Color.BLACK;
 
 				var grandparent = GetGrandParent(node);
 
@@ -471,9 +471,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 				{
 					return;
 				}
-				grandparent.Color = NodeColor.RED;
+				grandparent.Color = Color.RED;
 
-				if (GetParentDirection(node) == NodeDirection.RIGHT)
+				if (GetParentDirection(node) == Direction.RIGHT)
 				{
 					RotateRight(grandparent);
 				}
@@ -500,7 +500,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 			RemoveNode(FindInterval(Root, interval));
 		}
 
-		private void RemoveNode(IntervalNode<T> node)
+		private void RemoveNode(Node<T> node)
 		{
 			if (node == Sentinel)
 			{
@@ -535,7 +535,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 			else
 			{
 				// Reattach node to parent
-				if (GetParentDirection(node) == NodeDirection.RIGHT)
+				if (GetParentDirection(node) == Direction.RIGHT)
 				{
 					node.Parent.Left = temp;
 				}
@@ -553,7 +553,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 				}
 			}
 
-			if (node.Color == NodeColor.BLACK)
+			if (node.Color == Color.BLACK)
 			{
 				RenewConstraintsAfterDelete(temp);
 			}
@@ -564,40 +564,40 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 		/// - made with the help of algorithm from Cormen et Al. Introduction to Algorithms 2nd ed.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		private void RenewConstraintsAfterDelete(IntervalNode<T> node)
+		private void RenewConstraintsAfterDelete(Node<T> node)
 		{
 			// Need to bubble up and fix
-			while (node != Root && node.Color == NodeColor.BLACK)
+			while (node != Root && node.Color == Color.BLACK)
 			{
-				if (GetParentDirection(node) == NodeDirection.RIGHT)
+				if (GetParentDirection(node) == Direction.RIGHT)
 				{
 					var aux = node.Parent.Right;
-					if (aux.Color == NodeColor.RED)
+					if (aux.Color == Color.RED)
 					{
-						aux.Color = NodeColor.BLACK;
-						node.Parent.Color = NodeColor.RED;
+						aux.Color = Color.BLACK;
+						node.Parent.Color = Color.RED;
 						RotateLeft(node.Parent);
 						aux = node.Parent.Right;
 					}
 
-					if (aux.Left.Color == NodeColor.BLACK && aux.Right.Color == NodeColor.BLACK)
+					if (aux.Left.Color == Color.BLACK && aux.Right.Color == Color.BLACK)
 					{
-						aux.Color = NodeColor.RED;
+						aux.Color = Color.RED;
 						node = node.Parent;
 					}
 					else
 					{
-						if (aux.Right.Color == NodeColor.BLACK)
+						if (aux.Right.Color == Color.BLACK)
 						{
-							aux.Left.Color = NodeColor.BLACK;
-							aux.Color = NodeColor.RED;
+							aux.Left.Color = Color.BLACK;
+							aux.Color = Color.RED;
 							RotateRight(aux);
 							aux = node.Parent.Right;
 						}
 
 						aux.Color = node.Parent.Color;
-						node.Parent.Color = NodeColor.BLACK;
-						aux.Right.Color = NodeColor.BLACK;
+						node.Parent.Color = Color.BLACK;
+						aux.Right.Color = Color.BLACK;
 						RotateLeft(node.Parent);
 						node = Root;
 					}
@@ -605,46 +605,46 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 				else
 				{
 					var aux = node.Parent.Left;
-					if (aux.Color == NodeColor.RED)
+					if (aux.Color == Color.RED)
 					{
-						aux.Color = NodeColor.BLACK;
-						node.Parent.Color = NodeColor.RED;
+						aux.Color = Color.BLACK;
+						node.Parent.Color = Color.RED;
 						RotateRight(node.Parent);
 						aux = node.Parent.Left;
 					}
 
-					if (aux.Left.Color == NodeColor.BLACK && aux.Right.Color == NodeColor.BLACK)
+					if (aux.Left.Color == Color.BLACK && aux.Right.Color == Color.BLACK)
 					{
-						aux.Color = NodeColor.RED;
+						aux.Color = Color.RED;
 						node = node.Parent;
 					}
 					else
 					{
-						if (aux.Left.Color == NodeColor.BLACK)
+						if (aux.Left.Color == Color.BLACK)
 						{
-							aux.Right.Color = NodeColor.BLACK;
-							aux.Color = NodeColor.RED;
+							aux.Right.Color = Color.BLACK;
+							aux.Color = Color.RED;
 							RotateLeft(aux);
 							aux = node.Parent.Left;
 						}
 
 						aux.Color = node.Parent.Color;
-						node.Parent.Color = NodeColor.BLACK;
-						aux.Left.Color = NodeColor.BLACK;
+						node.Parent.Color = Color.BLACK;
+						aux.Left.Color = Color.BLACK;
 						RotateRight(node.Parent);
 						node = Root;
 					}
 				}
 			}
 
-			node.Color = NodeColor.BLACK;
+			node.Color = Color.BLACK;
 		}
 
 		/// <summary>
 		/// General right rotation
 		/// </summary>
 		/// <param name="node">Top of rotated subtree</param>
-		private void RotateRight(IntervalNode<T> node)
+		private void RotateRight(Node<T> node)
 		{
 			var pivot = node.Left;
 			var dir = GetParentDirection(node);
@@ -660,11 +660,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 				tempTree.Parent = node;
 			}
 
-			if (dir == NodeDirection.LEFT)
+			if (dir == Direction.LEFT)
 			{
 				parent.Right = pivot;
 			}
-			else if (dir == NodeDirection.RIGHT)
+			else if (dir == Direction.RIGHT)
 			{
 				parent.Left = pivot;
 			}
@@ -683,7 +683,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 		/// General left rotation
 		/// </summary>
 		/// <param name="node">top of rotated subtree</param>
-		private void RotateLeft(IntervalNode<T> node)
+		private void RotateLeft(Node<T> node)
 		{
 			var pivot = node.Right;
 			var dir = GetParentDirection(node);
@@ -699,11 +699,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 				tempTree.Parent = node;
 			}
 
-			if (dir == NodeDirection.LEFT)
+			if (dir == Direction.LEFT)
 			{
 				parent.Right = pivot;
 			}
-			else if (dir == NodeDirection.RIGHT)
+			else if (dir == Direction.RIGHT)
 			{
 				parent.Left = pivot;
 			}
@@ -722,7 +722,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 		/// Refreshes the MaxEnd value after node manipulation
 		/// This is a local operation only
 		/// </summary>
-		private void RecalculateMaxEnd(IntervalNode<T> node)
+		private void RecalculateMaxEnd(Node<T> node)
 		{
 			int max = node.Interval.End;
 
@@ -752,7 +752,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 
 		#region Enumerators
 
-		private IEnumerable<IntervalNode<T>> InOrderWalk(IntervalNode<T> node)
+		private IEnumerable<Node<T>> InOrderWalk(Node<T> node)
 		{
 			if (node.Left != Sentinel)
 			{
