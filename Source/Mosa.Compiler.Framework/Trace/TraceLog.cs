@@ -46,14 +46,6 @@ namespace Mosa.Compiler.Framework.Trace
 			Active = active;
 		}
 
-		public TraceLog(TraceType type, MosaMethod method, string stage, TraceFilter filter)
-			: this(type)
-		{
-			Stage = stage;
-			Method = method;
-			Active = filter.IsMatch(Method, Stage);
-		}
-
 		public void Log()
 		{
 			Log(string.Empty);

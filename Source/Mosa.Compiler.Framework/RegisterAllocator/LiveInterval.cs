@@ -1,12 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree;
 using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	public sealed class LiveInterval : Interval
+	public sealed class LiveInterval
 	{
 		public enum AllocationStage
 		{
@@ -18,8 +17,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			Max = 5,
 		}
 
-		public override int Start { get { return LiveRange.Start.Value; } }
-		public override int End { get { return LiveRange.End.Value; } }
+		public int StartValue { get { return LiveRange.Start.Value; } }
+		public int EndValue { get { return LiveRange.End.Value; } }
+
+		public int Length { get { return LiveRange.Length; } }
 
 		public LiveRange LiveRange { get; }
 
@@ -27,7 +28,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public int SpillValue { get; set; }
 
-		public int SpillCost { get { return NeverSpill || TooSmallToSplit ? int.MaxValue : (SpillValue / (Length + 1)); } }
+		public int SpillCost { get { return NeverSpill || TooSmallToSplit ? int.MaxValue : (SpillValue / (LiveRange.Length + 1)); } }
 
 		public LiveIntervalTrack LiveIntervalTrack { get; set; }
 
@@ -155,7 +156,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public override string ToString()
 		{
-			return VirtualRegister + " between " + LiveRange;
+			return $"{VirtualRegister} between {LiveRange}";
 		}
 
 		public void Evict()

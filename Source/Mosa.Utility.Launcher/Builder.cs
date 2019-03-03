@@ -142,7 +142,7 @@ namespace Mosa.Utility.Launcher
 					Directory.CreateDirectory(Options.DestinationDirectory);
 				}
 
-				compiler.CompilerTrace.TraceListener = traceListener;
+				compiler.CompilerTrace.SetTraceListener(traceListener);
 
 				if (string.IsNullOrEmpty(Options.SourceFile))
 				{

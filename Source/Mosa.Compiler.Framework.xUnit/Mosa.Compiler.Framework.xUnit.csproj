@@ -81,7 +81,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="LiveRangeTests.cs" />
+    <Compile Include="IntervalTreeTests.cs" />
     <Compile Include="SparseBitArrayTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

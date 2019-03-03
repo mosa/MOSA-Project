@@ -52,35 +52,47 @@ namespace Mosa.Workspace.Experiment.Debug
 
 			compiler.Load();
 
-			var method1 = GetMethod("Mosa.Kernel.x86.IDT::SetTableEntries", compiler.TypeSystem);
-			var method2 = GetMethod("System.Void Mosa.TestWorld.x86.Boot::Thread1", compiler.TypeSystem);
-
 			compiler.Initialize();
 			compiler.PreCompile();
 
 			stopwatch.Start();
 
+			MeasureCompileTime(stopwatch, compiler, "System.Void Mosa.TestWorld.x86.Boot::Thread1");
+			MeasureCompileTime(stopwatch, compiler, "Mosa.Kernel.x86.IDT::SetTableEntries");
+			MeasureCompileTime(stopwatch, compiler, "System.String System.Int32::CreateString(System.UInt32, System.Boolean, System.Boolean)");
+
+			compiler.ScheduleAll();
+
+			var start = stopwatch.Elapsed.TotalSeconds;
+
+			compiler.Compile();
+
+			Console.WriteLine("All Methods:");
+			Console.WriteLine($"Elapsed: {(stopwatch.Elapsed.TotalSeconds - start).ToString("F2")} secs");
+
+			return;
+		}
+
+		private static void MeasureCompileTime(Stopwatch stopwatch, MosaCompiler compiler, string methodName)
+		{
+			var method = GetMethod(methodName, compiler.TypeSystem);
+
+			MeasureCompileTime(stopwatch, compiler, method);
+		}
+
+		private static void MeasureCompileTime(Stopwatch stopwatch, MosaCompiler compiler, MosaMethod method1)
+		{
+			Console.WriteLine($"Method: {method1}");
+
 			for (int i = 0; i < 5; i++)
 			{
-				var start = stopwatch.ElapsedMilliseconds;
+				var start = stopwatch.Elapsed.TotalMilliseconds;
 
 				compiler.Schedule(method1);
 				compiler.Compile();
 
-				Console.WriteLine("Elapsed: " + (stopwatch.ElapsedMilliseconds - start).ToString("F2") + " ms");
+				Console.WriteLine($"Elapsed: {(stopwatch.Elapsed.TotalMilliseconds - start).ToString("F2")} ms");
 			}
-
-			for (int i = 0; i < 5; i++)
-			{
-				var start = stopwatch.ElapsedMilliseconds;
-
-				compiler.Schedule(method2);
-				compiler.Compile();
-
-				Console.WriteLine("Elapsed: " + (stopwatch.ElapsedMilliseconds - start).ToString("F2") + " ms");
-			}
-
-			return;
 		}
 
 		private static MosaMethod GetMethod(string partial, TypeSystem typeSystem)
