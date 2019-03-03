@@ -324,8 +324,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 					node.Left = Sentinel;
 					node.Right = Sentinel;
 					node.Color = Color.RED;
+					addedNode = node;
 
-					currentNode.Left = node;
+					currentNode.Left = addedNode;
 					addedNode.Parent = currentNode;
 				}
 				else
@@ -342,8 +343,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 					node.Left = Sentinel;
 					node.Right = Sentinel;
 					node.Color = Color.RED;
+					addedNode = node;
 
-					currentNode.Right = node;
+					currentNode.Right = addedNode;
 					addedNode.Parent = currentNode;
 				}
 				else
@@ -405,6 +407,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 		private Node<T> GetUncle(Node<T> node)
 		{
 			var grandparent = GetGrandParent(node);
+
 			if (grandparent == Sentinel)
 			{
 				return Sentinel;
@@ -495,10 +498,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 			RemoveNode(FindInterval(Root, new Interval(start, end)));
 		}
 
-		private void Remove(Interval interval)
-		{
-			RemoveNode(FindInterval(Root, interval));
-		}
+		//private void Remove(Interval interval)
+		//{
+		//	RemoveNode(FindInterval(Root, interval));
+		//}
 
 		private void RemoveNode(Node<T> node)
 		{
@@ -508,6 +511,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 			}
 
 			var temp = node;
+
 			if (node.Right != Sentinel && node.Left != Sentinel)
 			{
 				// Trick when deleting node with both children, switch it with closest in order node
@@ -523,11 +527,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 					RecalculateMaxEnd(node);
 				}
 			}
+
 			node = temp;
 			temp = node.Left != Sentinel ? node.Left : node.Right;
 
 			// we will replace node with temp and delete node
 			temp.Parent = node.Parent;
+
 			if (node.Parent == Sentinel)
 			{
 				Root = temp; // Set new root
@@ -546,6 +552,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 
 				var maxAux = node.Parent;
 				RecalculateMaxEnd(maxAux);
+
 				while (maxAux.Parent != Sentinel)
 				{
 					maxAux = maxAux.Parent;

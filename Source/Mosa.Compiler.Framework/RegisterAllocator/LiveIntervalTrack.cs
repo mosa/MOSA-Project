@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public void Add(LiveInterval liveInterval)
 		{
-			Debug.Assert(!Intersects(liveInterval));
+			Debug.Assert(!intervals.Contains(liveInterval.Start, liveInterval.End));
 
 			intervals.Add(liveInterval.Start, liveInterval.End, liveInterval);
 
@@ -39,6 +39,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			intervals.Remove(liveInterval.Start, liveInterval.End);
 
 			liveInterval.LiveIntervalTrack = null;
+
+			Debug.Assert(!intervals.Contains(liveInterval.Start, liveInterval.End));
 		}
 
 		public void Evict(List<LiveInterval> liveIntervals)
