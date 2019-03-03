@@ -222,7 +222,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				//instructionCount++;
 
-				const bool addjmp = false;
+				//const bool addjmp = false;
 
 				var flow = node.Instruction.FlowControl;
 

@@ -66,7 +66,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 					var callSite = FindCallSiteInInterval(liveInterval);
 
-					if (callSite == null)
+					if (callSite.IsNull)
 						continue;
 
 					SplitIntervalAtCallSite(liveInterval, callSite);

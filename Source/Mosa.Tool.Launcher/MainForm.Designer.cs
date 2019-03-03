@@ -42,7 +42,6 @@
             this.tsStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.cbGenerateDebugInfoFile = new MetroFramework.Controls.MetroCheckBox();
-            this.cbGenerateNASMFile = new MetroFramework.Controls.MetroCheckBox();
             this.cbGenerateASMFile = new MetroFramework.Controls.MetroCheckBox();
             this.cbGenerateMapFile = new MetroFramework.Controls.MetroCheckBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
@@ -126,6 +125,9 @@
             this.rtbOutput = new System.Windows.Forms.RichTextBox();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.groupBox16 = new System.Windows.Forms.GroupBox();
+            this.cbGenerateNASMFile = new MetroFramework.Controls.MetroCheckBox();
+            this.cbGenerateCompilerTime = new MetroFramework.Controls.MetroCheckBox();
             this.tbApplicationLocations.SuspendLayout();
             this.tabOptions.SuspendLayout();
             this.groupBox12.SuspendLayout();
@@ -152,6 +154,7 @@
             this.groupBox7.SuspendLayout();
             this.tabCounters.SuspendLayout();
             this.tabOutput.SuspendLayout();
+            this.groupBox16.SuspendLayout();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -280,8 +283,8 @@
             // groupBox2
             // 
             this.groupBox2.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox2.Controls.Add(this.cbGenerateCompilerTime);
             this.groupBox2.Controls.Add(this.cbGenerateDebugInfoFile);
-            this.groupBox2.Controls.Add(this.cbGenerateNASMFile);
             this.groupBox2.Controls.Add(this.cbGenerateASMFile);
             this.groupBox2.Controls.Add(this.cbGenerateMapFile);
             this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -304,22 +307,10 @@
             this.cbGenerateDebugInfoFile.UseCustomBackColor = true;
             this.cbGenerateDebugInfoFile.UseSelectable = true;
             // 
-            // cbGenerateNASMFile
-            // 
-            this.cbGenerateNASMFile.AutoSize = true;
-            this.cbGenerateNASMFile.Location = new System.Drawing.Point(6, 40);
-            this.cbGenerateNASMFile.Name = "cbGenerateNASMFile";
-            this.cbGenerateNASMFile.Size = new System.Drawing.Size(78, 15);
-            this.cbGenerateNASMFile.Style = MetroFramework.MetroColorStyle.Blue;
-            this.cbGenerateNASMFile.TabIndex = 47;
-            this.cbGenerateNASMFile.Text = "NASM File";
-            this.cbGenerateNASMFile.UseCustomBackColor = true;
-            this.cbGenerateNASMFile.UseSelectable = true;
-            // 
             // cbGenerateASMFile
             // 
             this.cbGenerateASMFile.AutoSize = true;
-            this.cbGenerateASMFile.Location = new System.Drawing.Point(6, 61);
+            this.cbGenerateASMFile.Location = new System.Drawing.Point(6, 40);
             this.cbGenerateASMFile.Name = "cbGenerateASMFile";
             this.cbGenerateASMFile.Size = new System.Drawing.Size(69, 15);
             this.cbGenerateASMFile.Style = MetroFramework.MetroColorStyle.Blue;
@@ -840,6 +831,7 @@
             // 
             // tabAdvanced
             // 
+            this.tabAdvanced.Controls.Add(this.groupBox16);
             this.tabAdvanced.Controls.Add(this.groupBox5);
             this.tabAdvanced.Controls.Add(this.groupBox15);
             this.tabAdvanced.Controls.Add(this.groupBox14);
@@ -922,7 +914,7 @@
             this.groupBox15.Controls.Add(this.cbLaunchGDB);
             this.groupBox15.Controls.Add(this.cbEnableQemuGDB);
             this.groupBox15.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox15.Location = new System.Drawing.Point(220, 18);
+            this.groupBox15.Location = new System.Drawing.Point(8, 18);
             this.groupBox15.Name = "groupBox15";
             this.groupBox15.Size = new System.Drawing.Size(206, 124);
             this.groupBox15.TabIndex = 44;
@@ -1005,7 +997,7 @@
             this.groupBox13.Controls.Add(this.cbRelocationTable);
             this.groupBox13.Controls.Add(this.cbEmitSymbolTable);
             this.groupBox13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox13.Location = new System.Drawing.Point(8, 18);
+            this.groupBox13.Location = new System.Drawing.Point(220, 18);
             this.groupBox13.Name = "groupBox13";
             this.groupBox13.Size = new System.Drawing.Size(206, 124);
             this.groupBox13.TabIndex = 23;
@@ -1455,6 +1447,42 @@
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // groupBox16
+            // 
+            this.groupBox16.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox16.Controls.Add(this.cbGenerateNASMFile);
+            this.groupBox16.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox16.Location = new System.Drawing.Point(220, 148);
+            this.groupBox16.Name = "groupBox16";
+            this.groupBox16.Size = new System.Drawing.Size(206, 112);
+            this.groupBox16.TabIndex = 49;
+            this.groupBox16.TabStop = false;
+            this.groupBox16.Text = "Diagnostic Output:";
+            // 
+            // cbGenerateNASMFile
+            // 
+            this.cbGenerateNASMFile.AutoSize = true;
+            this.cbGenerateNASMFile.Location = new System.Drawing.Point(6, 21);
+            this.cbGenerateNASMFile.Name = "cbGenerateNASMFile";
+            this.cbGenerateNASMFile.Size = new System.Drawing.Size(78, 15);
+            this.cbGenerateNASMFile.Style = MetroFramework.MetroColorStyle.Blue;
+            this.cbGenerateNASMFile.TabIndex = 48;
+            this.cbGenerateNASMFile.Text = "NASM File";
+            this.cbGenerateNASMFile.UseCustomBackColor = true;
+            this.cbGenerateNASMFile.UseSelectable = true;
+            // 
+            // cbGenerateCompilerTime
+            // 
+            this.cbGenerateCompilerTime.AutoSize = true;
+            this.cbGenerateCompilerTime.Location = new System.Drawing.Point(6, 61);
+            this.cbGenerateCompilerTime.Name = "cbGenerateCompilerTime";
+            this.cbGenerateCompilerTime.Size = new System.Drawing.Size(119, 15);
+            this.cbGenerateCompilerTime.Style = MetroFramework.MetroColorStyle.Blue;
+            this.cbGenerateCompilerTime.TabIndex = 49;
+            this.cbGenerateCompilerTime.Text = "Compile Time File";
+            this.cbGenerateCompilerTime.UseCustomBackColor = true;
+            this.cbGenerateCompilerTime.UseSelectable = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1514,6 +1542,8 @@
             this.groupBox7.PerformLayout();
             this.tabCounters.ResumeLayout(false);
             this.tabOutput.ResumeLayout(false);
+            this.groupBox16.ResumeLayout(false);
+            this.groupBox16.PerformLayout();
             this.ResumeLayout(false);
 
 		}
@@ -1598,7 +1628,6 @@
 		private System.Windows.Forms.GroupBox groupBox15;
 		private MetroFramework.Controls.MetroCheckBox cbEnableQemuGDB;
 		private MetroFramework.Controls.MetroCheckBox cbLaunchGDB;
-		private MetroFramework.Controls.MetroCheckBox cbGenerateNASMFile;
 		private MetroFramework.Controls.MetroCheckBox cbGenerateDebugInfoFile;
 		private System.Windows.Forms.GroupBox groupBox5;
 		private MetroFramework.Controls.MetroComboBox cbDebugConnectionOption;
@@ -1616,5 +1645,8 @@
 		private MetroFramework.Controls.MetroCheckBox cbPlugKorlib;
 		private MetroFramework.Controls.MetroCheckBox cbEnableMethodScanner;
 		private System.Windows.Forms.Timer timer1;
+		private MetroFramework.Controls.MetroCheckBox cbGenerateCompilerTime;
+		private System.Windows.Forms.GroupBox groupBox16;
+		private MetroFramework.Controls.MetroCheckBox cbGenerateNASMFile;
 	}
 }

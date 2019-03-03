@@ -49,6 +49,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
+      <Project>{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}</Project>
+      <Name>Mosa.Compiler.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj">
       <Project>{75a12a8a-8c8f-4d1e-801b-689d8f781bf4}</Project>
       <Name>Mosa.Compiler.Framework</Name>
@@ -60,6 +64,14 @@
     <ProjectReference Include="..\Mosa.Platform.ARMv6\Mosa.Platform.ARMv6.csproj">
       <Project>{0FB92651-3EE8-441D-84F2-C4DFDA68E8A5}</Project>
       <Name>Mosa.Platform.ARMv6</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Platform.ESP32\Mosa.Platform.ESP32.csproj">
+      <Project>{5b45af28-3b67-4542-a0c9-947f3cdd9741}</Project>
+      <Name>Mosa.Platform.ESP32</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj">
+      <Project>{f445db8e-e25a-41ef-a158-c742f14e94e4}</Project>
+      <Name>Mosa.Platform.x64</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj">
       <Project>{DE30CBE9-50F3-4A3E-BCC9-A8A36348530E}</Project>

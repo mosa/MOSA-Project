@@ -108,6 +108,7 @@ namespace Mosa.Tool.Launcher
 			Options.EmitAllSymbols = cbEmitSymbolTable.Checked;
 			Options.EmitStaticRelocations = cbRelocationTable.Checked;
 			Options.EnableMethodScanner = cbEnableMethodScanner.Checked;
+			Options.GenerateCompileTimeFile = cbGenerateCompilerTime.Checked;
 
 			if (Options.VBEVideo)
 			{
@@ -229,6 +230,7 @@ namespace Mosa.Tool.Launcher
 			cbTwoPassOptimizations.Checked = Options.TwoPassOptimizations;
 			cbValueNumbering.Checked = Options.EnableValueNumbering;
 			cbEnableMethodScanner.Checked = Options.EnableMethodScanner;
+			cbGenerateCompilerTime.Checked = Options.GenerateCompileTimeFile;
 
 			switch (Options.ImageFormat)
 			{

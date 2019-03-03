@@ -5,11 +5,11 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	public class MoveResolver
+	public sealed class MoveResolver
 	{
 		public enum ResolvedMoveType { Move, Exchange, Load }
 
-		public class ResolvedMoveList : List<MoveExtended<ResolvedMoveType>>
+		public sealed class ResolvedMoveList : List<MoveExtended<ResolvedMoveType>>
 		{
 			public void Add(Operand source, Operand destination, ResolvedMoveType type)
 			{
@@ -66,7 +66,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return -1;
 		}
 
-		protected void TrySimpleMoves(ResolvedMoveList moves)
+		private void TrySimpleMoves(ResolvedMoveList moves)
 		{
 			bool loop = true;
 
@@ -97,7 +97,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		protected void TryExchange(ResolvedMoveList moves)
+		private void TryExchange(ResolvedMoveList moves)
 		{
 			bool loop = true;
 
@@ -137,7 +137,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		protected void CreateMemoryMoves(ResolvedMoveList moves)
+		private void CreateMemoryMoves(ResolvedMoveList moves)
 		{
 			for (int i = 0; i < Moves.Count; i++)
 			{

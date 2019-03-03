@@ -47,12 +47,7 @@ namespace Mosa.Tool.Explorer
 		{
 			InitializeComponent();
 
-			Compiler.CompilerTrace.TraceListener = this;
-			Compiler.CompilerTrace.TraceFilter.Active = true;
-			Compiler.CompilerTrace.TraceFilter.ExcludeInternalMethods = false;
-			Compiler.CompilerTrace.TraceFilter.MethodMatch = MatchType.Any;
-			Compiler.CompilerTrace.TraceFilter.StageMatch = MatchType.Any;
-
+			Compiler.CompilerTrace.MinTraceLevel = 9;
 			Compiler.CompilerOptions.LinkerFormatType = LinkerFormatType.Elf32;
 
 			tbInstructions.Width = tabControl.Width - 4;
@@ -461,7 +456,7 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = cbEnableSparseConditionalConstantPropagation.Checked;
 			Compiler.CompilerOptions.EmitBinary = cbEnableBinaryCodeGeneration.Checked;
 			Compiler.CompilerOptions.EnableInlinedMethods = cbEnableInlinedMethods.Checked;
-			Compiler.CompilerOptions.IRLongExpansion = cbEnableIRLongExpansion.Checked;
+			Compiler.CompilerOptions.EnableIRLongExpansion = cbEnableIRLongExpansion.Checked;
 			Compiler.CompilerOptions.InlinedIRMaximum = 12;
 			Compiler.CompilerOptions.TwoPassOptimizations = cbEnableTwoPassOptimizations.Checked;
 			Compiler.CompilerOptions.TraceLevel = 100;

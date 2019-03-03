@@ -89,7 +89,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable IR long operand conversion].
 		/// </summary>
-		public bool IRLongExpansion { get; set; }
+		public bool EnableIRLongExpansion { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable platform optimizations].
@@ -323,7 +323,7 @@ namespace Mosa.Compiler.Framework
 			EmitStaticRelocations = true;
 			TwoPassOptimizations = true;
 			EnableStatistics = true;
-			IRLongExpansion = true;
+			EnableIRLongExpansion = true;
 			EnableValueNumbering = true;
 			EnableLoopInvariantCodeMotion = true;
 			EnablePlatformOptimizations = true;

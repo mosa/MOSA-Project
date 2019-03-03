@@ -2,7 +2,7 @@
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	public class MoveExtended<T>
+	public sealed class MoveExtended<T>
 	{
 		public readonly T Value;
 
