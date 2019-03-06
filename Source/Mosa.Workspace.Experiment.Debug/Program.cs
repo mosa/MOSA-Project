@@ -57,20 +57,23 @@ namespace Mosa.Workspace.Experiment.Debug
 
 			stopwatch.Start();
 
-			MeasureCompileTime(stopwatch, compiler, "System.Void Mosa.TestWorld.x86.Boot::Thread1");
 			MeasureCompileTime(stopwatch, compiler, "Mosa.Kernel.x86.IDT::SetTableEntries");
+			MeasureCompileTime(stopwatch, compiler, "System.Void Mosa.TestWorld.x86.Boot::Thread1");
 			MeasureCompileTime(stopwatch, compiler, "System.String System.Int32::CreateString(System.UInt32, System.Boolean, System.Boolean)");
 
 			compiler.ScheduleAll();
 
 			var start = stopwatch.Elapsed.TotalSeconds;
 
-			compiler.Compile();
-
 			Console.WriteLine("All Methods:");
+
+			compiler.ExecuteThreaded();
+
+			//compiler.Execute();
+
 			Console.WriteLine($"Elapsed: {(stopwatch.Elapsed.TotalSeconds - start).ToString("F2")} secs");
 
-			return;
+			Console.ReadKey();
 		}
 
 		private static void MeasureCompileTime(Stopwatch stopwatch, MosaCompiler compiler, string methodName)

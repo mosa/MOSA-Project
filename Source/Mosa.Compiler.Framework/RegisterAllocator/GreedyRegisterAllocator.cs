@@ -19,6 +19,26 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 		}
 
+		protected override void PopulatePriorityQueue()
+		{
+			foreach (var virtualRegister in VirtualRegisters)
+			{
+				foreach (var liveInterval in virtualRegister.LiveIntervals)
+				{
+					// Skip adding live intervals for physical registers to priority queue
+					if (liveInterval.VirtualRegister.IsPhysicalRegister)
+					{
+						LiveIntervalTracks[liveInterval.VirtualRegister.PhysicalRegister.Index].Add(liveInterval);
+						continue;
+					}
+
+					liveInterval.Stage = LiveInterval.AllocationStage.Initial;
+
+					ProcessLiveInterval(liveInterval);
+				}
+			}
+		}
+
 		protected override void AdditionalSetup()
 		{
 			moveHints = new Dictionary<SlotIndex, MoveHint>();

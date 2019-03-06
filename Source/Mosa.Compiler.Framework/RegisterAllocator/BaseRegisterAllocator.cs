@@ -950,7 +950,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			PriorityQueue.Enqueue(liveInterval, value);
 		}
 
-		private void PopulatePriorityQueue()
+		protected virtual void PopulatePriorityQueue()
 		{
 			foreach (var virtualRegister in VirtualRegisters)
 			{
@@ -1092,7 +1092,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return PlaceLiveIntervalOnTrackAllowEvictions(liveInterval);
 		}
 
-		private void ProcessLiveInterval(LiveInterval liveInterval)
+		protected void ProcessLiveInterval(LiveInterval liveInterval)
 		{
 			Debug.Assert(liveInterval.LiveIntervalTrack == null);
 

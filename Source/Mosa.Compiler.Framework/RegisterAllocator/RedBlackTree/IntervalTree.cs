@@ -498,10 +498,17 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 			RemoveNode(FindInterval(Root, new Interval(start, end)));
 		}
 
-		//private void Remove(Interval interval)
-		//{
-		//	RemoveNode(FindInterval(Root, interval));
-		//}
+		/// <summary>
+		/// Replaces interval with new value
+		/// </summary>
+		/// <param name="start">The start.</param>
+		/// <param name="end">The end.</param>
+		/// <param name="value">The value.</param>
+		public void Replace(int start, int end, T value)
+		{
+			var node = FindInterval(Root, new Interval(start, end));
+			node.Value = value;
+		}
 
 		private void RemoveNode(Node<T> node)
 		{

@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	public sealed class LiveIntervalTrack
 	{
-		private readonly IntervalTree<LiveInterval> intervals = new IntervalTree<LiveInterval>();
+		private readonly DelayedIntervalTree<LiveInterval> intervals = new DelayedIntervalTree<LiveInterval>();
 
 		public readonly bool IsReserved;
 
