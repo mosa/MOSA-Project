@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Framework.Trace
 			if (compilerTrace == null)
 				return;
 
-			if (!compilerTrace.Active)
+			if (!compilerTrace.IsTraceable(5))
 				return;
 
 			var traceLog = new TraceLog(TraceType.MethodInstructions, method, stage, true);

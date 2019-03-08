@@ -30,12 +30,14 @@ namespace Mosa.Compiler.Framework
 
 		public MosaCompiler(List<BaseCompilerExtension> compilerExtensions = null, int maxThreads = 0)
 		{
-			MaxThreads = (maxThreads == 0) ? Environment.ProcessorCount : maxThreads;
+			MaxThreads = (maxThreads == 0) ? Environment.ProcessorCount + 1 : maxThreads;
 
 			if (compilerExtensions != null)
 			{
 				CompilerExtensions.AddRange(compilerExtensions);
 			}
+
+			CompilerTrace.TraceLevel = CompilerOptions.TraceLevel;
 		}
 
 		public void Load()

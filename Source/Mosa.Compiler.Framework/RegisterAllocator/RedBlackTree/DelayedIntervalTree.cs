@@ -12,9 +12,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 		private IntervalTree<T> tree = new IntervalTree<T>();
 
 		private bool delayedDelete = false;
+		private bool delayedAdd = false;
 
 		private int delayedDeleteStart;
 		private int delayedDeleteEnd;
+
+		private int delayedAddStart;
+		private int delayedAddEnd;
+		private T delayedAddValue;
 
 		private void FlushDelete()
 		{
@@ -25,10 +30,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 			}
 		}
 
-		//private static bool Contains(int start, int end, int start2, int end2)
-		//{
-		//	return Contains(start, end, start2) || Contains(start, end, end2);
-		//}
+		private void FlushAdd()
+		{
+			if (delayedAdd)
+			{
+				tree.Add(delayedAddStart, delayedAddEnd, delayedAddValue);
+				delayedAdd = false;
+			}
+		}
 
 		private static bool Contains(int start, int end, int at)
 		{
@@ -37,47 +46,63 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 
 		public bool Contains(int start, int end)
 		{
-			if (delayedDelete && Contains(delayedDeleteStart, delayedDeleteEnd, start) && Contains(delayedDeleteStart, delayedDeleteEnd, end))
+			if (delayedDelete && start >= delayedDeleteStart && end < delayedDeleteEnd)
 			{
 				return false;
 			}
 
+			if (delayedAdd && (Contains(delayedAddStart, delayedAddEnd, start) || Contains(delayedAddStart, delayedAddEnd, end)))
+			{
+				return true;
+			}
+
 			FlushDelete();
+
 			return tree.Contains(start, end);
 		}
 
 		public bool Contains(int at)
 		{
+			if (delayedAdd && Contains(delayedAddStart, delayedAddEnd, at))
+			{
+				return true;
+			}
+
 			if (delayedDelete && Contains(delayedDeleteStart, delayedDeleteEnd, at))
 			{
 				return false;
 			}
 
-			FlushDelete();
 			return tree.Contains(at);
 		}
 
 		public void Add(int start, int end, T value)
 		{
-			if (!delayedDelete)
-			{
-				tree.Add(start, end, value);
-				return;
-			}
-
-			if (Contains(delayedDeleteStart, delayedDeleteEnd, start) || Contains(delayedDeleteStart, delayedDeleteEnd, end))
+			if (delayedDelete && (Contains(delayedDeleteStart, delayedDeleteEnd, start) || Contains(delayedDeleteStart, delayedDeleteEnd, end)))
 			{
 				tree.Replace(start, end, value);
 				delayedDelete = false;
 				return;
 			}
 
-			FlushDelete();
-			tree.Add(start, end, value);
+			//tree.Add(start, end, value);
+
+			FlushAdd();
+
+			delayedAdd = true;
+			delayedAddStart = start;
+			delayedAddEnd = end;
+			delayedAddValue = value;
 		}
 
 		public void Remove(int start, int end)
 		{
+			if (delayedAdd && (Contains(delayedAddStart, delayedAddEnd, start) || Contains(delayedAddStart, delayedAddEnd, end)))
+			{
+				delayedAdd = false;
+				return;
+			}
+
 			FlushDelete();
 
 			delayedDelete = true;
@@ -88,30 +113,35 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 		public T SearchFirstOverlapping(int start, int end)
 		{
 			FlushDelete();
+			FlushAdd();
 			return tree.SearchFirstOverlapping(start, end);
 		}
 
 		public T SearchFirstOverlapping(int at)
 		{
 			FlushDelete();
+			FlushAdd();
 			return tree.SearchFirstOverlapping(at);
 		}
 
 		public List<T> Search(int at)
 		{
 			FlushDelete();
+			FlushAdd();
 			return tree.Search(at);
 		}
 
 		public List<T> Search(int start, int end)
 		{
 			FlushDelete();
+			FlushAdd();
 			return tree.Search(start, end);
 		}
 
 		public IEnumerator<T> GetEnumerator()
 		{
 			FlushDelete();
+			FlushAdd();
 			return tree.GetEnumerator();
 		}
 	}

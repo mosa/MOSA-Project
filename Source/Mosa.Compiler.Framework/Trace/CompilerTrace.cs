@@ -8,13 +8,16 @@ namespace Mosa.Compiler.Framework.Trace
 	{
 		private ITraceListener TraceListener;
 
-		public int MinTraceLevel { get; set; } = 0;
-
-		public bool Active { get { return MinTraceLevel != 0; } }
+		public int TraceLevel { get; set; } = 0;
 
 		public CompilerTrace()
 		{
 			TraceListener = null;
+		}
+
+		public bool IsTraceable(int traceLevel)
+		{
+			return TraceLevel != 0 && TraceLevel >= traceLevel;
 		}
 
 		public void SetTraceListener(ITraceListener traceListener)
@@ -32,6 +35,9 @@ namespace Mosa.Compiler.Framework.Trace
 
 		public void PostTraceLog(TraceLog traceLog, bool signalStatusUpdate = false)
 		{
+			if (!traceLog.Active)
+				return;
+
 			if (TraceListener == null)
 				return;
 

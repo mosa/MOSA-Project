@@ -47,8 +47,9 @@ namespace Mosa.Tool.Explorer
 		{
 			InitializeComponent();
 
-			Compiler.CompilerTrace.MinTraceLevel = 9;
+			Compiler.CompilerTrace.TraceLevel = 9;
 			Compiler.CompilerOptions.LinkerFormatType = LinkerFormatType.Elf32;
+			Compiler.CompilerTrace.SetTraceListener(this);
 
 			tbInstructions.Width = tabControl.Width - 4;
 			tbInstructions.Height = tabControl.Height - 52;
@@ -221,7 +222,7 @@ namespace Mosa.Tool.Explorer
 			if (options == null)
 				return;
 
-			cbEnableInlinedMethods.Checked = options.Inline;
+			cbEnableInlinedMethods.Checked = !options.InlineOff;
 			cbEnableBinaryCodeGeneration.Checked = !options.NoCode;
 			cbEnableSSA.Checked = !options.NoSSA;
 			cbEnableIROptimizations.Checked = !options.NoIROptimizations;

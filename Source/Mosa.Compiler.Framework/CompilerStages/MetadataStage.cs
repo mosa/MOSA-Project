@@ -158,7 +158,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, writer.Position, assemblyTableSymbol, 0);
 			writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-			// 6. Pointer to Parent Type
+			// 6. Pointer to Base Type
 			if (type.BaseType != null)
 			{
 				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, writer.Position, Metadata.TypeDefinition + type.BaseType.FullName, 0);

@@ -76,16 +76,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return LiveRange.Intersects(start, end);
 		}
 
-		public bool IsAdjacent(SlotInterval other)
-		{
-			return LiveRange.IsAdjacent(other);
-		}
-
-		public bool Intersects(SlotInterval other)
-		{
-			return LiveRange.Intersects(other);
-		}
-
 		public bool Contains(SlotIndex start)
 		{
 			return LiveRange.Contains(start);
@@ -93,12 +83,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool IsAdjacent(LiveInterval other)
 		{
-			return LiveRange.IsAdjacent(other.LiveRange);
+			return LiveRange.IsAdjacent(other.LiveRange.Start, other.LiveRange.End);
 		}
 
 		public bool Intersects(LiveInterval other)
 		{
-			return LiveRange.Intersects(other.LiveRange);
+			return LiveRange.Intersects(other.LiveRange.Start, other.LiveRange.End);
 		}
 
 		#endregion Short Cuts

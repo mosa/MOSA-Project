@@ -220,7 +220,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			MakeCall(context, callTarget, result, operands);
 
-			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method, Method);
+			MethodCompiler.Compiler.MethodScanner.InterfaceMethodInvoked(method, Method);
 		}
 
 		private void MakeCall(Context context, Operand target, Operand result, List<Operand> operands)

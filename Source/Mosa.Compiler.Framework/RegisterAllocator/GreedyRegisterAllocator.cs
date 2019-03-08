@@ -53,28 +53,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			SplitIntervalsAtCallSites();
 		}
 
-		private int GetSpillCost(SlotIndex use, int factor)
-		{
-			return factor * GetLoopDepth(use) * 100;
-		}
-
-		protected override void CalculateSpillCost(LiveInterval liveInterval)
-		{
-			int spillvalue = 0;
-
-			foreach (var use in liveInterval.UsePositions)
-			{
-				spillvalue += GetSpillCost(use, 100);
-			}
-
-			foreach (var use in liveInterval.DefPositions)
-			{
-				spillvalue += GetSpillCost(use, 115);
-			}
-
-			liveInterval.SpillValue = spillvalue;
-		}
-
 		private bool PlaceLiveIntervalOnTrack(LiveInterval liveInterval, MoveHint[] hints)
 		{
 			if (hints == null)

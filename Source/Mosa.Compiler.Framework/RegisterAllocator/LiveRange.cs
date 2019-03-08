@@ -5,15 +5,18 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	public sealed class LiveRange : SlotInterval
+	public sealed class LiveRange
 	{
 		// FUTURE:
 		//		Replace use/def individual list used below
-		//		with a single list from the VirutalRegistor instance bounded start/end boundaries
+		//		with a single list from the VirtualRegistor instance bounded start/end boundaries
 		// RATIONAL:
 		//		1. No more list creation
 		//		2. Smaller memory working set
 		//		3. Avoid the use of interfaces
+
+		public SlotIndex Start { get; set; }
+		public SlotIndex End { get; set; }
 
 		private readonly SortedList<SlotIndex, SlotIndex> usePositions = new SortedList<SlotIndex, SlotIndex>();
 
@@ -44,10 +47,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public bool IsDefFirst { get; }
 
 		public LiveRange(SlotIndex start, SlotIndex end, IList<SlotIndex> uses, IList<SlotIndex> defs)
-			: base(start, end)
 		{
 			// live intervals can not start/end at the same location
 			Debug.Assert(start != end);
+
+			Start = start;
+			End = end;
 
 			var max = SlotIndex.NullSlot;
 			var min = SlotIndex.NullSlot;
@@ -87,6 +92,23 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				IsDefFirst = true;
 			else if (FirstDef < FirstUse)
 				IsDefFirst = true;
+		}
+
+		public int Length { get { return End - Start; } }
+
+		public bool Contains(SlotIndex slotIndex)
+		{
+			return slotIndex >= Start && slotIndex < End;
+		}
+
+		public bool Intersects(SlotIndex start, SlotIndex end)
+		{
+			return (Start <= start && End > start) || (start <= Start && end > Start);
+		}
+
+		public bool IsAdjacent(SlotIndex start, SlotIndex end)
+		{
+			return start == End || end == Start;
 		}
 
 		private static SlotIndex GetNext(IList<SlotIndex> slots, SlotIndex start)
@@ -156,12 +178,11 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			Debug.Assert(CanSplitAt(at));
 
-			var ranges = new List<LiveRange>(2)
+			return new List<LiveRange>(2)
 			{
 				new LiveRange(Start, at, UsePositions, DefPositions),
 				new LiveRange(at, End, UsePositions, DefPositions)
 			};
-			return ranges;
 		}
 
 		public bool CanSplitAt(SlotIndex low, SlotIndex high)
@@ -193,13 +214,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			Debug.Assert(CanSplitAt(low, high));
 
-			var ranges = new List<LiveRange>(3)
+			return new List<LiveRange>(3)
 			{
 				new LiveRange(Start, low, UsePositions, DefPositions),
 				new LiveRange(low, high, UsePositions, DefPositions),
 				new LiveRange(high, End, UsePositions, DefPositions)
 			};
-			return ranges;
 		}
 	}
 }

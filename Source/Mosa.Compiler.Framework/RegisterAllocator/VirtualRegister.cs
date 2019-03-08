@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
-	public sealed class VirtualRegister // alternative name is LiveInterval
+	public sealed class VirtualRegister
 	{
 		private readonly SortedList<SlotIndex, SlotIndex> usePositions = new SortedList<SlotIndex, SlotIndex>();
 
@@ -78,11 +78,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public void Remove(LiveInterval liveInterval)
 		{
 			LiveIntervals.Remove(liveInterval);
-		}
-
-		public void AddLiveInterval(SlotInterval interval)
-		{
-			AddLiveInterval(interval.Start, interval.End);
 		}
 
 		public void AddLiveInterval(SlotIndex start, SlotIndex end)
@@ -167,7 +162,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return null;
 		}
 
-		public void ReplaceWithSplit(LiveInterval source, IList<LiveInterval> liveIntervals)
+		public void ReplaceWithSplit(LiveInterval source, List<LiveInterval> liveIntervals)
 		{
 			Remove(source);
 
@@ -177,12 +172,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 		}
 
-		/// <summary>
-		/// Returns a <see cref="System.String" /> that represents this instance.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="System.String" /> that represents this instance.
-		/// </returns>
 		public override string ToString()
 		{
 			if (IsPhysicalRegister)
@@ -191,7 +180,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			}
 			else
 			{
-				return string.Format("V_{0}", VirtualRegisterOperand.Index);
+				return $"V_{VirtualRegisterOperand.Index}";
 			}
 		}
 	}

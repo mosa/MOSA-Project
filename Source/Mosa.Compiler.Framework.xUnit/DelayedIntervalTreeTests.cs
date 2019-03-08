@@ -6,12 +6,12 @@ using Xunit;
 
 namespace Mosa.Compiler.Framework.xUnit
 {
-	public class IntervalTreeTests
+	public class DelayedIntervalTreeTests
 	{
 		[Fact]
 		public void Insert()
 		{
-			var tree = new IntervalTree<object>();
+			var tree = new DelayedIntervalTree<object>();
 
 			for (int i = 0; i < 100; i++)
 			{
@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework.xUnit
 		[Fact]
 		public void Delete()
 		{
-			var tree = new IntervalTree<object>();
+			var tree = new DelayedIntervalTree<object>();
 
 			for (int i = 0; i < 100; i++)
 			{
@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework.xUnit
 		[Fact]
 		public void MixedAddDelete()
 		{
-			var tree = new IntervalTree<object>();
+			var tree = new DelayedIntervalTree<object>();
 
 			int i = 0;
 

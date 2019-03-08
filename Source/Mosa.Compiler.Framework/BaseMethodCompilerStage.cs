@@ -639,15 +639,9 @@ namespace Mosa.Compiler.Framework
 
 		#region Trace Helper Methods
 
-		public bool IsTraceable(int traceLevel = 0)
+		public bool IsTraceable(int traceLevel)
 		{
-			if (CompilerOptions.TraceLevel == 0)
-				return false;
-
-			if (traceLevel > CompilerOptions.TraceLevel)
-				return false;
-
-			return true;
+			return MethodCompiler.Trace.IsTraceable(traceLevel);
 		}
 
 		protected TraceLog CreateTraceLog(int traceLevel = 0)
@@ -657,7 +651,9 @@ namespace Mosa.Compiler.Framework
 			var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName, active);
 
 			if (active)
+			{
 				traceLogs.Add(traceLog);
+			}
 
 			return traceLog;
 		}
@@ -674,16 +670,15 @@ namespace Mosa.Compiler.Framework
 			var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName, section, active);
 
 			if (active)
+			{
 				traceLogs.Add(traceLog);
+			}
 
 			return traceLog;
 		}
 
 		private void PostTraceLog(TraceLog traceLog)
 		{
-			if (!traceLog.Active)
-				return;
-
 			MethodCompiler.Trace.PostTraceLog(traceLog);
 		}
 
