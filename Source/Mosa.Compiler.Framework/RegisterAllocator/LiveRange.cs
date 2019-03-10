@@ -15,6 +15,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		//		2. Smaller memory working set
 		//		3. Avoid the use of interfaces
 
+		//public int StartIndex { get; set; }
+		//public int EndIndex { get; set; }
+
 		public SlotIndex Start { get; set; }
 		public SlotIndex End { get; set; }
 

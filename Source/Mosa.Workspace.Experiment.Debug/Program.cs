@@ -24,7 +24,7 @@ namespace Mosa.Workspace.Experiment.Debug
 				EnableIRLongExpansion = true,
 				EnableValueNumbering = true,
 				TwoPassOptimizations = true,
-				EnableMethodScanner = true,
+				EnableMethodScanner = false,
 
 				MultibootSpecification = MultibootSpecification.V1,
 				LinkerFormatType = LinkerFormatType.Elf32,
@@ -84,9 +84,9 @@ namespace Mosa.Workspace.Experiment.Debug
 			MeasureCompileTime(stopwatch, compiler, method);
 		}
 
-		private static void MeasureCompileTime(Stopwatch stopwatch, MosaCompiler compiler, MosaMethod method1)
+		private static void MeasureCompileTime(Stopwatch stopwatch, MosaCompiler compiler, MosaMethod method)
 		{
-			Console.WriteLine($"Method: {method1}");
+			Console.WriteLine($"Method: {method}");
 
 			double min = double.MaxValue;
 
@@ -94,8 +94,7 @@ namespace Mosa.Workspace.Experiment.Debug
 			{
 				var start = stopwatch.Elapsed.TotalMilliseconds;
 
-				compiler.Schedule(method1);
-				compiler.Compile();
+				compiler.CompilerMethod(method);
 
 				var elapsed = stopwatch.Elapsed.TotalMilliseconds - start;
 
