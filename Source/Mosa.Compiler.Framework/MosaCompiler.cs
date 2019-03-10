@@ -102,6 +102,11 @@ namespace Mosa.Compiler.Framework
 			Compiler.PreCompile();
 		}
 
+		public void CompilerMethod(MosaMethod method)
+		{
+			Compiler.CompileMethod(method);
+		}
+
 		public void ScheduleAll()
 		{
 			CompilationScheduler.ScheduleAll(TypeSystem);

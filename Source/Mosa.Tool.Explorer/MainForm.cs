@@ -36,6 +36,8 @@ namespace Mosa.Tool.Explorer
 		private int CompletedMethods = 0;
 		private string Status = null;
 
+		private MosaMethod CurrentMethodSelected = null;
+
 		private readonly Dictionary<string, List<string>> Logs = new Dictionary<string, List<string>>();
 		private readonly List<string> LogSections = new List<string>();
 
@@ -523,17 +525,6 @@ namespace Mosa.Tool.Explorer
 			Compile();
 		}
 
-		private void PreCompile()
-		{
-			if (Stage == CompileStage.Loaded)
-			{
-				SetCompilerOptions();
-				Compiler.Initialize();
-				Compiler.PreCompile();
-				Stage = CompileStage.PreCompiled;
-			}
-		}
-
 		private MosaMethod GetCurrentMethod()
 		{
 			var node = treeView.SelectedNode;
@@ -561,7 +552,7 @@ namespace Mosa.Tool.Explorer
 
 		private List<string> GetCurrentLines()
 		{
-			var method = GetCurrentMethod();
+			var method = CurrentMethodSelected;
 
 			if (method == null)
 				return null;
@@ -578,7 +569,7 @@ namespace Mosa.Tool.Explorer
 
 		private List<string> GetCurrentDebugLines()
 		{
-			var method = GetCurrentMethod();
+			var method = CurrentMethodSelected;
 
 			if (method == null)
 				return null;
@@ -595,7 +586,7 @@ namespace Mosa.Tool.Explorer
 
 		private void UpdateStages()
 		{
-			var method = GetCurrentMethod();
+			var method = CurrentMethodSelected;
 
 			if (method == null)
 				return;
@@ -617,7 +608,7 @@ namespace Mosa.Tool.Explorer
 
 		private void UpdateDebugStages()
 		{
-			var method = GetCurrentMethod();
+			var method = CurrentMethodSelected;
 
 			if (method == null)
 				return;
@@ -642,7 +633,7 @@ namespace Mosa.Tool.Explorer
 
 		private void UpdateCounters()
 		{
-			var method = GetCurrentMethod();
+			var method = CurrentMethodSelected;
 
 			if (method == null)
 				return;
@@ -677,7 +668,7 @@ namespace Mosa.Tool.Explorer
 		{
 			tbInstructions.Text = string.Empty;
 
-			var method = GetCurrentMethod();
+			var method = CurrentMethodSelected;
 			var lines = GetCurrentLines();
 			var label = GetCurrentLabel();
 
@@ -709,6 +700,7 @@ namespace Mosa.Tool.Explorer
 
 		private void TreeView_AfterSelect(object sender, TreeViewEventArgs e)
 		{
+			CurrentMethodSelected = GetCurrentMethod();
 			NodeSelected();
 		}
 
@@ -716,26 +708,25 @@ namespace Mosa.Tool.Explorer
 		{
 			tbInstructions.Text = string.Empty;
 
-			var method = GetCurrentMethod();
+			var method = CurrentMethodSelected;
 
 			if (method == null)
 				return;
 
 			compileStartTime = DateTime.Now;
 
-			PreCompile();
-
-			if (Compiler.Linker != null && !Compiler.CompilationScheduler.IsScheduled(method))
+			if (Stage == CompileStage.Loaded)
 			{
-				Compiler.Schedule(method);
-				Compiler.Compile();
+				SetCompilerOptions();
+				Compiler.Initialize();
+				Compiler.PreCompile();
+				Stage = CompileStage.PreCompiled;
 			}
 
-			UpdateTree(method);
-
-			UpdateStages();
-			UpdateDebugStages();
-			UpdateCounters();
+			if (Compiler.Linker != null)
+			{
+				Compiler.CompilerMethod(method);
+			}
 		}
 
 		private void CbStages_SelectedIndexChanged(object sender, EventArgs e)
@@ -880,11 +871,22 @@ namespace Mosa.Tool.Explorer
 
 		void ITraceListener.OnMethodCompiled(MosaMethod method)
 		{
+			if (method == CurrentMethodSelected)
+			{
+				Invoke((MethodInvoker)(() => UpdateMethodInformation(method)));
+			}
+		}
+
+		private void UpdateMethodInformation(MosaMethod method)
+		{
+			UpdateStages();
+			UpdateDebugStages();
+			UpdateCounters();
 		}
 
 		private void DumpAllMethodStagesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			var method = GetCurrentMethod();
+			var method = CurrentMethodSelected;
 
 			if (method == null)
 				return;
@@ -992,6 +994,11 @@ namespace Mosa.Tool.Explorer
 		private void tabControl_SelectedIndexChanged(object sender, EventArgs e)
 		{
 			RefreshLog();
+		}
+
+		private void treeView_BeforeSelect(object sender, TreeViewCancelEventArgs e)
+		{
+			CurrentMethodSelected = GetCurrentMethod();
 		}
 	}
 }

@@ -125,6 +125,9 @@ namespace Mosa.Compiler.Framework
 				{
 					var methodData = inlineQueue.Dequeue();
 
+					if (methodData == null)
+						continue;
+
 					foreach (var callee in methodData.CalledBy)
 					{
 						Schedule(callee);
@@ -136,6 +139,14 @@ namespace Mosa.Compiler.Framework
 			PassCount++;
 
 			return i != 0;
+		}
+
+		public void DescheduledAllMethods()
+		{
+			while (queue.Count != 0)
+			{
+				queue.Dequeue();
+			}
 		}
 	}
 }

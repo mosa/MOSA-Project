@@ -403,6 +403,7 @@
             this.treeView.Name = "treeView";
             this.treeView.Size = new System.Drawing.Size(232, 372);
             this.treeView.TabIndex = 3;
+            this.treeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView_BeforeSelect);
             this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeView_AfterSelect);
             this.treeView.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView_NodeMouseDoubleClick);
             // 
@@ -447,7 +448,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.tbFilter.Location = new System.Drawing.Point(33, 4);
             this.tbFilter.Name = "tbFilter";
-            this.tbFilter.Size = new System.Drawing.Size(199, 20);
+            this.tbFilter.Size = new System.Drawing.Size(192, 20);
             this.tbFilter.TabIndex = 4;
             this.tbFilter.TextChanged += new System.EventHandler(this.tbFilter_TextChanged);
             // 
@@ -466,7 +467,7 @@
             this.tabControl.Name = "tabControl";
             this.tabControl.Padding = new System.Drawing.Point(0, 0);
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(620, 401);
+            this.tabControl.Size = new System.Drawing.Size(618, 401);
             this.tabControl.TabIndex = 38;
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
@@ -481,7 +482,7 @@
             this.tabStages.Location = new System.Drawing.Point(4, 25);
             this.tabStages.Margin = new System.Windows.Forms.Padding(0);
             this.tabStages.Name = "tabStages";
-            this.tabStages.Size = new System.Drawing.Size(612, 372);
+            this.tabStages.Size = new System.Drawing.Size(610, 372);
             this.tabStages.TabIndex = 0;
             this.tabStages.Text = "Instructions";
             // 
@@ -534,7 +535,7 @@
             this.tabStageDebug.Location = new System.Drawing.Point(4, 25);
             this.tabStageDebug.Margin = new System.Windows.Forms.Padding(0);
             this.tabStageDebug.Name = "tabStageDebug";
-            this.tabStageDebug.Size = new System.Drawing.Size(612, 372);
+            this.tabStageDebug.Size = new System.Drawing.Size(610, 372);
             this.tabStageDebug.TabIndex = 1;
             this.tabStageDebug.Text = "Debug";
             // 
@@ -571,7 +572,7 @@
             this.tabMethodCounters.Location = new System.Drawing.Point(4, 25);
             this.tabMethodCounters.Margin = new System.Windows.Forms.Padding(0);
             this.tabMethodCounters.Name = "tabMethodCounters";
-            this.tabMethodCounters.Size = new System.Drawing.Size(612, 372);
+            this.tabMethodCounters.Size = new System.Drawing.Size(610, 372);
             this.tabMethodCounters.TabIndex = 6;
             this.tabMethodCounters.Text = "Counters";
             // 
@@ -597,7 +598,7 @@
             this.tabLogs.Location = new System.Drawing.Point(4, 25);
             this.tabLogs.Margin = new System.Windows.Forms.Padding(0);
             this.tabLogs.Name = "tabLogs";
-            this.tabLogs.Size = new System.Drawing.Size(612, 372);
+            this.tabLogs.Size = new System.Drawing.Size(610, 372);
             this.tabLogs.TabIndex = 7;
             this.tabLogs.Text = "Logs";
             // 
