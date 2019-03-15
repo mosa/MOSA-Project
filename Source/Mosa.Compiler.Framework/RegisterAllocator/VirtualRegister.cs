@@ -1,18 +1,20 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
+using System;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	public sealed class VirtualRegister
 	{
-		private readonly SortedList<SlotIndex, SlotIndex> usePositions = new SortedList<SlotIndex, SlotIndex>();
+		public readonly List<SlotIndex> UsePositions;
 
-		private readonly SortedList<SlotIndex, SlotIndex> defPositions = new SortedList<SlotIndex, SlotIndex>();
+		public readonly List<SlotIndex> DefPositions;
 
-		public Operand VirtualRegisterOperand { get; }
+		public readonly Operand VirtualRegisterOperand;
 
-		public PhysicalRegister PhysicalRegister { get; }
+		public readonly PhysicalRegister PhysicalRegister;
 
 		public bool IsPhysicalRegister { get { return VirtualRegisterOperand == null; } }
 
@@ -21,10 +23,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public List<LiveInterval> LiveIntervals { get; } = new List<LiveInterval>(1);
 
 		public int Count { get { return LiveIntervals.Count; } }
-
-		public IList<SlotIndex> UsePositions { get { return usePositions.Keys; } }
-
-		public IList<SlotIndex> DefPositions { get { return defPositions.Keys; } }
 
 		public LiveInterval LastRange { get { return LiveIntervals.Count == 0 ? null : LiveIntervals[LiveIntervals.Count - 1]; } }
 
@@ -45,6 +43,32 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			VirtualRegisterOperand = virtualRegister;
 			IsReserved = false;
 			IsSpilled = false;
+
+			if (virtualRegister.IsVirtualRegister)
+			{
+				UsePositions = new List<SlotIndex>(VirtualRegisterOperand.Uses.Count);
+				DefPositions = new List<SlotIndex>(VirtualRegisterOperand.Definitions.Count);
+			}
+		}
+
+		public void UpdatePositions()
+		{
+			var usePositions = UsePositions;
+
+			foreach (var use in VirtualRegisterOperand.Uses)
+			{
+				usePositions.AddIfNew(new SlotIndex(use));
+			}
+
+			usePositions.Sort();
+
+			var defPositions = DefPositions;
+			foreach (var def in VirtualRegisterOperand.Definitions)
+			{
+				defPositions.AddIfNew(new SlotIndex(def));
+			}
+
+			defPositions.Sort();
 		}
 
 		public VirtualRegister(PhysicalRegister physicalRegister, bool reserved)
@@ -52,22 +76,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			PhysicalRegister = physicalRegister;
 			IsReserved = reserved;
 			IsSpilled = false;
-		}
-
-		public void AddUsePosition(SlotIndex position)
-		{
-			if (!usePositions.ContainsKey(position))
-			{
-				usePositions.Add(position, position);
-			}
-		}
-
-		public void AddDefPosition(SlotIndex position)
-		{
-			if (!defPositions.ContainsKey(position))
-			{
-				defPositions.Add(position, position);
-			}
 		}
 
 		public void Add(LiveInterval liveInterval)
@@ -92,7 +100,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				var liveRange = LiveIntervals[i];
 
-				if (liveRange.StartSlot == start && liveRange.EndSlot == end)
+				if (liveRange.Start == start && liveRange.End == end)
 					return;
 
 				if (liveRange.IsAdjacent(start, end) || liveRange.Intersects(start, end))
@@ -118,7 +126,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					return;
 				}
 
-				if (liveRange.StartSlot > end)
+				if (liveRange.Start > end)
 				{
 					// new range is before the current range (so insert before)
 					LiveIntervals.Insert(i, new LiveInterval(this, start, end));
@@ -155,7 +163,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			foreach (var liveInterval in LiveIntervals)
 			{
-				if (liveInterval.Contains(at) || at == liveInterval.EndSlot)
+				if (liveInterval.Contains(at) || at == liveInterval.End)
 					return liveInterval;
 			}
 

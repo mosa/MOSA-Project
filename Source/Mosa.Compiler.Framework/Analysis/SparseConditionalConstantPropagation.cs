@@ -254,7 +254,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			phiStatements = new KeyedList<BasicBlock, InstructionNode>();
 			executedStatements = new HashSet<InstructionNode>();
 
-			MainTrace = CreateTrace("SparseConditionalConstantPropagation");
+			MainTrace = CreateTrace("SparseConditionalConstantPropagation", 5);
 
 			blockStates = new bool[BasicBlocks.Count];
 
@@ -316,9 +316,9 @@ namespace Mosa.Compiler.Framework.Analysis
 			return list;
 		}
 
-		private TraceLog CreateTrace(string name)
+		private TraceLog CreateTrace(string name, int traceLevel)
 		{
-			return TraceFactory.CreateTraceLog(name);
+			return TraceFactory.CreateTraceLog(name, traceLevel);
 		}
 
 		private VariableState GetVariableState(Operand operand)
@@ -337,7 +337,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			if (!MainTrace.Active)
 				return;
 
-			var variableTrace = CreateTrace("Variables");
+			var variableTrace = CreateTrace("Variables", 5);
 
 			foreach (var variable in variableStates.Values)
 			{
@@ -347,7 +347,7 @@ namespace Mosa.Compiler.Framework.Analysis
 				}
 			}
 
-			var blockTrace = CreateTrace("Blocks");
+			var blockTrace = CreateTrace("Blocks", 5);
 
 			for (int i = 0; i < BasicBlocks.Count; i++)
 			{

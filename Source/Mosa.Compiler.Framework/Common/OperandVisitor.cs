@@ -6,18 +6,18 @@ namespace Mosa.Compiler.Framework.Common
 {
 	public struct OperandVisitor
 	{
-		private readonly InstructionNode node;
+		private readonly InstructionNode Node;
 
 		public OperandVisitor(InstructionNode node)
 		{
-			this.node = node;
+			Node = node;
 		}
 
 		public IEnumerable<Operand> Input
 		{
 			get
 			{
-				foreach (var operand in node.Operands)
+				foreach (var operand in Node.Operands)
 				{
 					if (operand.IsVirtualRegister || operand.IsCPURegister)
 					{
@@ -31,7 +31,7 @@ namespace Mosa.Compiler.Framework.Common
 		{
 			get
 			{
-				foreach (var operand in node.Results)
+				foreach (var operand in Node.Results)
 				{
 					if (operand.IsVirtualRegister || operand.IsCPURegister)
 					{

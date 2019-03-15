@@ -4,6 +4,6 @@ namespace Mosa.Compiler.Framework.Trace
 {
 	public interface ITraceFactory
 	{
-		TraceLog CreateTraceLog(string section);
+		TraceLog CreateTraceLog(string section, int traceLevel);
 	}
 }

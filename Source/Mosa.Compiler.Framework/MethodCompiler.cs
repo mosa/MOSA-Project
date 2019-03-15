@@ -402,7 +402,7 @@ namespace Mosa.Compiler.Framework
 					break;
 			}
 
-			if (Compiler.CompilerOptions.EnableStatistics)
+			if (Compiler.CompilerOptions.EnableStatistics && !IsStopped)
 			{
 				var totalTicks = Stopwatch.ElapsedTicks;
 
@@ -414,6 +414,7 @@ namespace Mosa.Compiler.Framework
 				var executionTimeLog = new TraceLog(TraceType.MethodDebug, Method, "Execution Time/Ticks", true);
 
 				long previousTicks = startTicks;
+
 				for (int i = 0; i < Pipeline.Count; i++)
 				{
 					var pipelineTicks = executionTimes[i];

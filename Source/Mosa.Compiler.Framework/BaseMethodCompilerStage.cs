@@ -630,9 +630,9 @@ namespace Mosa.Compiler.Framework
 
 		#region ITraceSectionFactory
 
-		TraceLog ITraceFactory.CreateTraceLog(string section)
+		TraceLog ITraceFactory.CreateTraceLog(string section, int traceLevel)
 		{
-			return CreateTraceLog(section);
+			return CreateTraceLog(section, traceLevel);
 		}
 
 		#endregion ITraceSectionFactory
@@ -660,10 +660,10 @@ namespace Mosa.Compiler.Framework
 
 		public TraceLog CreateTraceLog(string section)
 		{
-			return CreateTraceLog(0, section);
+			return CreateTraceLog(section, 0);
 		}
 
-		public TraceLog CreateTraceLog(int traceLevel, string section)
+		public TraceLog CreateTraceLog(string section, int traceLevel)
 		{
 			bool active = IsTraceable(traceLevel);
 

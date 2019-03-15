@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
+using Mosa.Compiler.Framework.Stages;
 using Mosa.Tool.Explorer.Stages;
 
 namespace Mosa.Tool.Explorer
@@ -19,6 +20,8 @@ namespace Mosa.Tool.Explorer
 		{
 			pipeline.Add(new DisassemblyStage());
 			pipeline.Add(new DebugInfoStage());
+
+			//pipeline.InsertAfterLast<GreedyRegisterAllocatorStage>(new StopStage());
 
 			//new DominanceOutputStage(),
 		}

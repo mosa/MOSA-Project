@@ -100,7 +100,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			ParamReadOnly = new BitArray(MethodCompiler.Parameters.Length, false);
 
-			var traceParameters = CreateTraceLog(5, "Parameters");
+			var traceParameters = CreateTraceLog("Parameters", 5);
 
 			foreach (var operand in MethodCompiler.Parameters)
 			{

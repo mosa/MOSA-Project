@@ -13,7 +13,7 @@ namespace Mosa.Workspace.Experiment.Debug
 	{
 		private static void Main()
 		{
-			var platform = "x86";
+			const string platform = "x86";
 
 			var compilerOptions = new CompilerOptions()
 			{
