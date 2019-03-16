@@ -390,9 +390,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			var nextDef = liveInterval.LiveRange.GetNextDefPosition(at);
 			Trace?.Log($"      Next Def : {nextDef}");
 
-			if (nextDef.IsNotNull && nextDef.Before > at && (min.IsNull || nextDef.Before < min))
+			if (nextDef.IsNotNull && nextDef > at && (min.IsNull || nextDef < min))
 			{
-				min = nextDef.Before;
+				min = nextDef;
 			}
 
 			Trace?.Log($"  High Optimal : {min}");
