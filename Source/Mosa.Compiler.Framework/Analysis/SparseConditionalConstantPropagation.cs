@@ -354,7 +354,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			for (int i = 0; i < BasicBlocks.Count; i++)
 			{
-				blockTrace.Log(BasicBlocks[i] + " = " + (blockStates[i] ? "Executable" : "Dead"));
+				blockTrace.Log($"{BasicBlocks[i]} = {(blockStates[i] ? "Executable" : "Dead")}");
 			}
 		}
 
@@ -394,7 +394,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private void ProcessBlock(BasicBlock block)
 		{
-			MainTrace?.Log("Process Block: " + block);
+			MainTrace?.Log($"Process Block: {block}");
 
 			// if the block has only one successor block, add successor block to executed block list
 			if (block.NextBlocks.Count == 1)

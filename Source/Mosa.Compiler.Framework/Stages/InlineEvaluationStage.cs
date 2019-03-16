@@ -138,19 +138,19 @@ namespace Mosa.Compiler.Framework.Stages
 			//	}
 			//}
 
-			trace?.Log("CanInline: " + MethodData.CanInline.ToString());
-			trace?.Log("IsVirtual: " + MethodData.IsVirtual.ToString());
-			trace?.Log("IsDevirtualized: " + MethodData.IsDevirtualized.ToString());
-			trace?.Log("HasLoops: " + MethodData.HasLoops.ToString());
-			trace?.Log("HasProtectedRegions: " + MethodData.HasProtectedRegions.ToString());
-			trace?.Log("IRInstructionCount: " + MethodData.IRInstructionCount.ToString());
-			trace?.Log("IRStackParameterInstructionCount: " + MethodData.IRStackParameterInstructionCount.ToString());
-			trace?.Log("InlinedIRMaximum: " + CompilerOptions.InlinedIRMaximum.ToString());
-			trace?.Log("NonIRInstructionCount: " + MethodData.NonIRInstructionCount.ToString());
-			trace?.Log("HasDoNotInlineAttribute: " + MethodData.HasDoNotInlineAttribute.ToString());
-			trace?.Log("HasAggressiveInliningAttribute: " + MethodData.HasAggressiveInliningAttribute.ToString());
-			trace?.Log("IsPlugged: " + MethodData.IsMethodImplementationReplaced.ToString());
-			trace?.Log("HasAddressOfInstruction: " + MethodData.HasAddressOfInstruction.ToString());
+			trace?.Log($"CanInline: {MethodData.CanInline}");
+			trace?.Log($"IsVirtual: {MethodData.IsVirtual}");
+			trace?.Log($"IsDevirtualized: {MethodData.IsDevirtualized}");
+			trace?.Log($"HasLoops: {MethodData.HasLoops}");
+			trace?.Log($"HasProtectedRegions: {MethodData.HasProtectedRegions}");
+			trace?.Log($"IRInstructionCount: {MethodData.IRInstructionCount}");
+			trace?.Log($"IRStackParameterInstructionCount: {MethodData.IRStackParameterInstructionCount}");
+			trace?.Log($"InlinedIRMaximum: {CompilerOptions.InlinedIRMaximum}");
+			trace?.Log($"NonIRInstructionCount: {MethodData.NonIRInstructionCount}");
+			trace?.Log($"HasDoNotInlineAttribute: {MethodData.HasDoNotInlineAttribute}");
+			trace?.Log($"HasAggressiveInliningAttribute: {MethodData.HasAggressiveInliningAttribute}");
+			trace?.Log($"IsPlugged: {MethodData.IsMethodImplementationReplaced}");
+			trace?.Log($"HasAddressOfInstruction: {MethodData.HasAddressOfInstruction}");
 
 			MethodCount.Set(1);
 			GeneratedBlocksCount.Set(MethodData.CanInline);

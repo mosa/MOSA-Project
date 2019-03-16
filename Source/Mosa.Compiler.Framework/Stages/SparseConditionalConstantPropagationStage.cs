@@ -67,7 +67,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected void ReplaceVirtualRegisterWithConstant(Operand target, ulong value)
 		{
-			trace?.Log(target + " = " + value.ToString() + " Uses: " + target.Uses.Count.ToString());
+			trace?.Log($"{target} = {value.ToString()} Uses: {target.Uses.Count.ToString()}");
 
 			Debug.Assert(target.Definitions.Count == 1);
 
@@ -88,10 +88,10 @@ namespace Mosa.Compiler.Framework.Stages
 							continue;
 
 						trace?.Log("*** ConditionalConstantPropagation");
-						trace?.Log("BEFORE:\t" + node);
+						trace?.Log($"BEFORE:\t{node}");
 						node.SetOperand(i, constant);
 						ConditionalConstantPropagationCount++;
-						trace?.Log("AFTER: \t" + node);
+						trace?.Log($"AFTER: \t{node}");
 
 						changed = true;
 					}
@@ -105,7 +105,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var defNode = target.Definitions[0];
 
-			trace?.Log("REMOVED:\t" + defNode);
+			trace?.Log($"REMOVED:\t{defNode}");
 			defNode.SetInstruction(IRInstruction.Nop);
 			InstructionsRemovedCount++;
 		}
@@ -159,16 +159,16 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.Instruction == IRInstruction.CompareIntBranch32 || node.Instruction == IRInstruction.CompareIntBranch64)
 					{
 						trace?.Log("*** RemoveBranchesToDeadBlocks");
-						trace?.Log("REMOVED:\t" + node);
+						trace?.Log($"REMOVED:\t{node}");
 						node.SetInstruction(IRInstruction.Nop);
 						InstructionsRemovedCount++;
 					}
 					else if (node.Instruction == IRInstruction.Jmp)
 					{
 						trace?.Log("*** RemoveBranchesToDeadBlocks");
-						trace?.Log("BEFORE:\t" + node);
+						trace?.Log($"BEFORE:\t{node}");
 						node.UpdateBranchTarget(0, otherBlock);
-						trace?.Log("AFTER: \t" + node);
+						trace?.Log($"AFTER: \t{node}");
 					}
 				}
 			}
@@ -181,7 +181,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (block.PreviousBlocks.Count != 0 || block.IsHeadBlock)
 				return;
 
-			trace?.Log("*** RemoveBlock: " + block);
+			trace?.Log($"*** RemoveBlock: {block}");
 
 			var nextBlocks = block.NextBlocks.ToArray();
 

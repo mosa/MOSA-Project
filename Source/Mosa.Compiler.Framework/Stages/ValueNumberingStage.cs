@@ -117,7 +117,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				ParamReadOnly[operand.Index] = !write;
 
-				traceParameters?.Log(operand + ": " + (write ? "Writable" : "ReadOnly"));
+				traceParameters?.Log($"{operand}: {(write ? "Writable" : "ReadOnly")}");
 			}
 		}
 

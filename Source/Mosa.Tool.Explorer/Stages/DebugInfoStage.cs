@@ -72,8 +72,7 @@ namespace Mosa.Tool.Explorer.Stages
 					if (Address == -1)
 						continue;
 
-					trace.Log(String.Format("{0:X5}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}\t{8}",
-						Label, Address, Length, StartLine, EndLine, StartColumn, EndColumn, node.ToString(), Document));
+					trace.Log($"{Label:X5}\t{Address}\t{Length}\t{StartLine}\t{EndLine}\t{StartColumn}\t{EndColumn}\t{node.ToString()}\t{Document}");
 				}
 			}
 		}
@@ -86,8 +85,7 @@ namespace Mosa.Tool.Explorer.Stages
 
 			foreach (var region in MethodData.LabelRegions)
 			{
-				trace.Log(String.Format("{0:X5}\t{1}\t{2}",
-					region.Label, region.Start, region.Length));
+				trace.Log($"{region.Label:X5}\t{region.Start}\t{region.Length}");
 			}
 		}
 
@@ -99,8 +97,7 @@ namespace Mosa.Tool.Explorer.Stages
 
 			foreach (var instruction in Method.Code)
 			{
-				trace.Log(String.Format("{0:X5}\t{1}\t{2}\t{3}\t{4}\t{5}",
-					instruction.Offset, instruction.StartLine, instruction.EndLine, instruction.StartColumn, instruction.EndColumn, instruction.Document));
+				trace.Log($"{instruction.Offset:X5}\t{instruction.StartLine}\t{instruction.EndLine}\t{instruction.StartColumn}\t{instruction.EndColumn}\t{instruction.Document}");
 			}
 		}
 	}

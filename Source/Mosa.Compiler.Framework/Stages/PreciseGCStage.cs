@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					var range = LiveAnalysis.LiveRanges[i];
 
-					trace.Log(i.ToString() + ": " + range);
+					trace.Log($"{i}: {range}");
 				}
 			}
 		}

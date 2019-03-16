@@ -169,11 +169,11 @@ namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 				block.LiveKill = liveKill;
 				block.LiveKillNot = ((BitArray)liveKill.Clone()).Not();
 
-				liveSetTrace?.Log("Block #  " + block.BasicBlock.Sequence.ToString());
-				liveSetTrace?.Log("GEN:     " + block.LiveGen.ToString2());
-				liveSetTrace?.Log("KILL:    " + block.LiveKill.ToString2());
-				liveSetTrace?.Log("KILLNOT: " + block.LiveKillNot.ToString2());
-				liveSetTrace?.Log(string.Empty);
+				liveSetTrace?.Log($"Block #  {block.BasicBlock.Sequence}");
+				liveSetTrace?.Log($"GEN:     {block.LiveGen.ToString2()}");
+				liveSetTrace?.Log($"KILL:    {block.LiveKill.ToString2()}");
+				liveSetTrace?.Log($"KILLNOT: {block.LiveKillNot.ToString2()}");
+				liveSetTrace?.Log();
 			}
 		}
 

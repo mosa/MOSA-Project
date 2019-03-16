@@ -146,7 +146,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="dominanceAnalysis">The dominance analysis.</param>
 		private void RenameVariables2(BasicBlock block, SimpleFastDominance dominanceAnalysis)
 		{
-			trace?.Log("Processing: " + block);
+			trace?.Log($"Processing: {block}");
 
 			UpdateOperands(block);
 			UpdatePHIs(block);
@@ -181,7 +181,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (block != null)
 				{
-					trace?.Log("Processing: " + block);
+					trace?.Log($"Processing: {block}");
 
 					UpdateOperands(block);
 					UpdatePHIs(block);
@@ -189,7 +189,7 @@ namespace Mosa.Compiler.Framework.Stages
 					worklist.Push(block);
 					worklist.Push(null);
 
-					trace?.Log("  >Pushed: " + block + " (Return)");
+					trace?.Log($"  >Pushed: {block} (Return)");
 
 					// Repeat for all children of the dominance block, if any
 					var children = dominanceAnalysis.GetChildren(block);
@@ -199,7 +199,7 @@ namespace Mosa.Compiler.Framework.Stages
 						{
 							worklist.Push(s);
 
-							trace?.Log("  >Pushed: " + s);
+							trace?.Log($"  >Pushed: {s}");
 						}
 					}
 				}
@@ -207,7 +207,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					block = worklist.Pop();
 
-					trace?.Log("Processing: " + block + " (Back)");
+					trace?.Log($"Processing: {block} (Back)");
 					UpdateResultOperands(block);
 				}
 			}
@@ -230,7 +230,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (op == null || !op.IsVirtualRegister)
 							continue;
 
-						Debug.Assert(variables.ContainsKey(op), op + " is not in dictionary [block = " + block + "]");
+						Debug.Assert(variables.ContainsKey(op), $"{op} is not in dictionary [block = {block}]");
 
 						var version = variables[op].Peek();
 						node.SetOperand(i, GetSSAOperand(op, version));
@@ -241,7 +241,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					var op = node.Result;
 
-					Debug.Assert(counts.ContainsKey(op), op + " is not in counts");
+					Debug.Assert(counts.ContainsKey(op), $"{op} is not in counts");
 
 					var index = counts[op];
 					node.Result = GetSSAOperand(op, index);
@@ -253,7 +253,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					var op = node.Result2;
 
-					Debug.Assert(counts.ContainsKey(op), op + " is not in counts");
+					Debug.Assert(counts.ContainsKey(op), $"{op} is not in counts");
 
 					var index = counts[op];
 					node.Result2 = GetSSAOperand(op, index);

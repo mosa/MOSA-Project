@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Framework.Stages
 				index++;
 			}
 
-			trace.Log(string.Empty);
+			trace.Log();
 
 			foreach (var block in BasicBlocks)
 			{

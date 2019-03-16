@@ -190,7 +190,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			bool changed = true;
 
-			trace?.Log("Loop: " + loop.Header.ToString());
+			trace?.Log($"Loop: {loop.Header}");
 
 			while (changed)
 			{
@@ -231,7 +231,7 @@ namespace Mosa.Compiler.Framework.Stages
 						invariantsSet.Add(node);
 						invariantsList.Add(node);
 
-						trace?.Log("  " + node.ToString());
+						trace?.Log($"  {node}");
 
 						changed = true;
 					}

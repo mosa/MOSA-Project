@@ -23,7 +23,7 @@ namespace Mosa.Tool.Explorer.Stages
 
 				foreach (var next in block.NextBlocks)
 				{
-					trace.Log("\t" + block + " -> " + next);
+					trace.Log($"\t{block} -> {next}");
 				}
 			}
 
