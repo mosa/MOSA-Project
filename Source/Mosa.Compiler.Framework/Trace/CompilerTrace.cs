@@ -38,9 +38,6 @@ namespace Mosa.Compiler.Framework.Trace
 			if (traceLog == null)
 				return;
 
-			if (traceLog == null)
-				return;
-
 			if (TraceListener == null)
 				return;
 
