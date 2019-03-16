@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Text;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
@@ -244,21 +243,23 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 		{
 			while (tree != Sentinel)
 			{
-				if (tree.Interval.CompareTo(interval) > 0)
+				var val = tree.Interval.CompareTo(interval);
+
+				if (val == 0)
+				{
+					return tree;
+				}
+
+				if (val > 0)
 				{
 					tree = tree.Left;
 					continue;
 				}
 
-				if (tree.Interval.CompareTo(interval) < 0)
+				if (val < 0)
 				{
 					tree = tree.Right;
 					continue;
-				}
-
-				if (tree.Interval.CompareTo(interval) == 0)
-				{
-					return tree;
 				}
 			}
 
@@ -282,7 +283,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 		/// <param name="interval">interval to add</param>
 		private void Add(Interval interval, T value)
 		{
-			Debug.Assert(!Contains(interval));
+			//Debug.Assert(!Contains(interval));
 
 			var node = new Node<T>(interval, value)
 			{
@@ -498,10 +499,17 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 			RemoveNode(FindInterval(Root, new Interval(start, end)));
 		}
 
-		//private void Remove(Interval interval)
-		//{
-		//	RemoveNode(FindInterval(Root, interval));
-		//}
+		/// <summary>
+		/// Replaces interval with new value
+		/// </summary>
+		/// <param name="start">The start.</param>
+		/// <param name="end">The end.</param>
+		/// <param name="value">The value.</param>
+		public void Replace(int start, int end, T value)
+		{
+			var node = FindInterval(Root, new Interval(start, end));
+			node.Value = value;
+		}
 
 		private void RemoveNode(Node<T> node)
 		{

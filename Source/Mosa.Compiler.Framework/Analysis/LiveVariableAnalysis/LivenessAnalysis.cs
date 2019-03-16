@@ -24,9 +24,9 @@ namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 		protected List<ExtendedBlock2> ExtendedBlocks;
 		public LiveRanges[] LiveRanges; // protected
 
-		protected TraceLog CreateTraceLog(string name)
+		protected TraceLog CreateTraceLog(string name, int tracelevel)
 		{
-			return TraceFactory.CreateTraceLog(name);
+			return TraceFactory.CreateTraceLog(name, tracelevel);
 		}
 
 		public LivenessAnalysis(BaseLivenessAnalysisEnvironment environment, ITraceFactory traceFactory, bool numberInstructions)
@@ -82,9 +82,9 @@ namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 
 		private void TraceNumberInstructions()
 		{
-			var numberTrace = CreateTraceLog("InstructionNumber");
+			var numberTrace = CreateTraceLog("InstructionNumber", 9);
 
-			if (!numberTrace.Active)
+			if (numberTrace == null)
 				return;
 
 			foreach (var block in BasicBlocks)
@@ -126,7 +126,7 @@ namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 
 		protected void ComputeLocalLiveSets()
 		{
-			var liveSetTrace = CreateTraceLog("ComputeLocalLiveSets");
+			var liveSetTrace = CreateTraceLog("ComputeLocalLiveSets", 9);
 
 			foreach (var block in ExtendedBlocks)
 			{
@@ -169,14 +169,11 @@ namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 				block.LiveKill = liveKill;
 				block.LiveKillNot = ((BitArray)liveKill.Clone()).Not();
 
-				if (liveSetTrace.Active)
-				{
-					liveSetTrace.Log("Block #  " + block.BasicBlock.Sequence.ToString());
-					liveSetTrace.Log("GEN:     " + block.LiveGen.ToString2());
-					liveSetTrace.Log("KILL:    " + block.LiveKill.ToString2());
-					liveSetTrace.Log("KILLNOT: " + block.LiveKillNot.ToString2());
-					liveSetTrace.Log(string.Empty);
-				}
+				liveSetTrace?.Log($"Block #  {block.BasicBlock.Sequence}");
+				liveSetTrace?.Log($"GEN:     {block.LiveGen.ToString2()}");
+				liveSetTrace?.Log($"KILL:    {block.LiveKill.ToString2()}");
+				liveSetTrace?.Log($"KILLNOT: {block.LiveKillNot.ToString2()}");
+				liveSetTrace?.Log();
 			}
 		}
 

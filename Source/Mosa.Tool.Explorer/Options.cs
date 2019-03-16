@@ -7,9 +7,6 @@ namespace Mosa.Tool.Explorer
 {
 	internal class Options
 	{
-		[Option("inline")]
-		public bool Inline { get; set; }
-
 		[Option("inline-off")]
 		public bool InlineOff { get; set; }
 

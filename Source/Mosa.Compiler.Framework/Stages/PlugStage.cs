@@ -55,9 +55,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		public void Replace(InstructionNode node, MosaMethod newTarget)
 		{
-			if (trace.Active) trace.Log("*** New Target: " + newTarget);
+			trace?.Log($"*** New Target: {newTarget}");
 
-			if (trace.Active) trace.Log("BEFORE:\t" + node);
+			trace?.Log($"BEFORE:\t{node}");
 
 			if (node.InvokeMethod != null)
 			{
@@ -69,7 +69,7 @@ namespace Mosa.Compiler.Framework.Stages
 				node.Operand1 = Operand.CreateSymbolFromMethod(newTarget, TypeSystem);
 			}
 
-			if (trace.Active) trace.Log("AFTER: \t" + node);
+			trace?.Log($"AFTER: \t{node}");
 		}
 	}
 }

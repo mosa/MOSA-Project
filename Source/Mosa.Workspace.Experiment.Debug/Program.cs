@@ -13,7 +13,7 @@ namespace Mosa.Workspace.Experiment.Debug
 	{
 		private static void Main()
 		{
-			var platform = "x86";
+			const string platform = "x86";
 
 			var compilerOptions = new CompilerOptions()
 			{
@@ -24,7 +24,7 @@ namespace Mosa.Workspace.Experiment.Debug
 				EnableIRLongExpansion = true,
 				EnableValueNumbering = true,
 				TwoPassOptimizations = true,
-				EnableMethodScanner = false,
+				EnableMethodScanner = true,
 
 				MultibootSpecification = MultibootSpecification.V1,
 				LinkerFormatType = LinkerFormatType.Elf32,
@@ -34,7 +34,8 @@ namespace Mosa.Workspace.Experiment.Debug
 				EmitStaticRelocations = false,
 				EmitAllSymbols = false,
 
-				EmitBinary = false
+				EmitBinary = false,
+				TraceLevel = 0
 			};
 
 			compilerOptions.Architecture = SelectArchitecture(platform);
@@ -57,20 +58,23 @@ namespace Mosa.Workspace.Experiment.Debug
 
 			stopwatch.Start();
 
-			MeasureCompileTime(stopwatch, compiler, "System.Void Mosa.TestWorld.x86.Boot::Thread1");
-			MeasureCompileTime(stopwatch, compiler, "Mosa.Kernel.x86.IDT::SetTableEntries");
-			MeasureCompileTime(stopwatch, compiler, "System.String System.Int32::CreateString(System.UInt32, System.Boolean, System.Boolean)");
+			//MeasureCompileTime(stopwatch, compiler, "Mosa.Kernel.x86.IDT::SetTableEntries");
+			//MeasureCompileTime(stopwatch, compiler, "System.Void Mosa.TestWorld.x86.Boot::Thread1");
+			//MeasureCompileTime(stopwatch, compiler, "System.String System.Int32::CreateString(System.UInt32, System.Boolean, System.Boolean)");
 
-			compiler.ScheduleAll();
+			//compiler.ScheduleAll();
 
 			var start = stopwatch.Elapsed.TotalSeconds;
 
-			compiler.Compile();
+			Console.WriteLine("Threaded Execution Time:");
 
-			Console.WriteLine("All Methods:");
+			compiler.ExecuteThreaded();
+
+			//compiler.Execute();
+
 			Console.WriteLine($"Elapsed: {(stopwatch.Elapsed.TotalSeconds - start).ToString("F2")} secs");
 
-			return;
+			Console.ReadKey();
 		}
 
 		private static void MeasureCompileTime(Stopwatch stopwatch, MosaCompiler compiler, string methodName)
@@ -80,19 +84,26 @@ namespace Mosa.Workspace.Experiment.Debug
 			MeasureCompileTime(stopwatch, compiler, method);
 		}
 
-		private static void MeasureCompileTime(Stopwatch stopwatch, MosaCompiler compiler, MosaMethod method1)
+		private static void MeasureCompileTime(Stopwatch stopwatch, MosaCompiler compiler, MosaMethod method)
 		{
-			Console.WriteLine($"Method: {method1}");
+			Console.WriteLine($"Method: {method}");
 
-			for (int i = 0; i < 5; i++)
+			double min = double.MaxValue;
+
+			for (int i = 0; i < 6; i++)
 			{
 				var start = stopwatch.Elapsed.TotalMilliseconds;
 
-				compiler.Schedule(method1);
-				compiler.Compile();
+				compiler.CompilerMethod(method);
 
-				Console.WriteLine($"Elapsed: {(stopwatch.Elapsed.TotalMilliseconds - start).ToString("F2")} ms");
+				var elapsed = stopwatch.Elapsed.TotalMilliseconds - start;
+
+				min = Math.Min(min, elapsed);
+
+				//Console.WriteLine($"Elapsed: {elapsed.ToString("F2")} ms");
 			}
+
+			Console.WriteLine($"Elapsed: {min.ToString("F2")} ms (best)");
 		}
 
 		private static MosaMethod GetMethod(string partial, TypeSystem typeSystem)

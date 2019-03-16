@@ -12,11 +12,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public int LoopDepth { get; }
 
-		public SlotInterval Interval { get; set; }
+		public SlotIndex Start { get; set; }
 
-		public SlotIndex Start { get { return Interval.Start; } }
-
-		public SlotIndex End { get { return Interval.End; } }
+		public SlotIndex End { get; set; }
 
 		public BitArray LiveGen { get; set; }
 
@@ -42,7 +40,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool Contains(SlotIndex slotIndex)
 		{
-			return Interval.Contains(slotIndex) || slotIndex == Interval.End;
+			return (slotIndex >= Start && slotIndex < End) || slotIndex == End;
 		}
 
 		public override string ToString()

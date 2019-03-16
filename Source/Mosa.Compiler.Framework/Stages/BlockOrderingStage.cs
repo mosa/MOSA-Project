@@ -31,7 +31,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var trace = CreateTraceLog();
 
-			if (!trace.Active)
+			if (trace == null)
 				return;
 
 			int index = 0;
@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Framework.Stages
 				index++;
 			}
 
-			trace.Log(string.Empty);
+			trace.Log();
 
 			foreach (var block in BasicBlocks)
 			{

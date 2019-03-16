@@ -125,10 +125,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (node.IsBlockStartInstruction)
 					{
-						if (trace.Active)
-						{
-							trace.Log($"Block #{block.Sequence} - Label L_{block.Label:X4}" + (block.IsHeadBlock ? " [Header]" : string.Empty));
-						}
+						trace?.Log($"Block #{block.Sequence} - Label L_{block.Label:X4}" + (block.IsHeadBlock ? " [Header]" : string.Empty));
 
 						continue;
 					}
@@ -155,11 +152,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 						GeneratedInstructionCount++;
 
-						if (trace.Active) trace.Log(node.Offset.ToString() + " - /0x" + node.Offset.ToString("X") + " : " + node);
+						trace?.Log($"{node.Offset} - /0x{node.Offset.ToString("X")} : {node}");
 					}
 					else
 					{
-						PostCompilerTraceEvent(CompilerEvent.Error, "Missing Code Transformation: " + node);
+						PostCompilerTraceEvent(CompilerEvent.Error, $"Missing Code Transformation: {node}");
 					}
 				}
 

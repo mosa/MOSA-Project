@@ -360,18 +360,32 @@ namespace Mosa.Compiler.Framework
 				if (IsStopped)
 					return;
 
-				var method = CompilationScheduler.GetMethodToCompile();
-
-				if (method == null)
-					return;
-
-				CompileMethod(method, null, 0);
-
-				CompilerTrace.UpdatedCompilerProgress(
-					CompilationScheduler.TotalMethods,
-					CompilationScheduler.TotalMethods - CompilationScheduler.TotalQueuedMethods
-				);
+				CompilerMethodInQueue();
 			}
+		}
+
+		private MosaMethod CompilerMethodInQueue(int threadID = 0)
+		{
+			var method = CompilationScheduler.GetMethodToCompile();
+
+			if (method == null)
+				return null;
+
+			return CompileMethod(method, threadID);
+		}
+
+		public MosaMethod CompileMethod(MosaMethod method, int threadID = 0)
+		{
+			lock (method)
+			{
+				CompileMethod(method, null, threadID);
+			}
+
+			CompilerTrace.UpdatedCompilerProgress(
+				CompilationScheduler.TotalMethods,
+				CompilationScheduler.TotalMethods - CompilationScheduler.TotalQueuedMethods);
+
+			return method;
 		}
 
 		public void ExecuteThreadedCompile(int threads)
@@ -422,18 +436,10 @@ namespace Mosa.Compiler.Framework
 		{
 			while (true)
 			{
-				var method = CompilationScheduler.GetMethodToCompile();
+				var method = CompilerMethodInQueue(threadID);
 
 				if (method == null)
 					return;
-
-				// only one method can be compiled at a time
-				lock (method)
-				{
-					CompileMethod(method, null, threadID);
-				}
-
-				CompilerTrace.UpdatedCompilerProgress(CompilationScheduler.TotalMethods, CompilationScheduler.TotalMethods - CompilationScheduler.TotalQueuedMethods);
 			}
 		}
 
@@ -497,7 +503,7 @@ namespace Mosa.Compiler.Framework
 
 		public void PostTrace(TraceLog traceLog)
 		{
-			if (!traceLog.Active)
+			if (traceLog == null)
 				return;
 
 			CompilerTrace.PostTraceLog(traceLog);

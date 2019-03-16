@@ -52,7 +52,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (loops.Count == 0)
 				return;
 
-			if (trace.Active) DumpLoops(loops);
+			if (trace != null)
+			{
+				DumpLoops(loops);
+			}
 
 			SortLoops(loops);
 
@@ -187,7 +190,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			bool changed = true;
 
-			if (trace.Active) trace.Log("Loop: " + loop.Header.ToString());
+			trace?.Log($"Loop: {loop.Header}");
 
 			while (changed)
 			{
@@ -228,7 +231,7 @@ namespace Mosa.Compiler.Framework.Stages
 						invariantsSet.Add(node);
 						invariantsList.Add(node);
 
-						if (trace.Active) trace.Log("  " + node.ToString());
+						trace?.Log($"  {node}");
 
 						changed = true;
 					}

@@ -81,6 +81,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DelayedIntervalTreeTests.cs" />
     <Compile Include="IntervalTreeTests.cs" />
     <Compile Include="SparseBitArrayTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">

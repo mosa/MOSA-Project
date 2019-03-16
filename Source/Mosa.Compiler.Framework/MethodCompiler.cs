@@ -372,7 +372,7 @@ namespace Mosa.Compiler.Framework
 
 			if (Compiler.CompilerOptions.EnableStatistics)
 			{
-				var log = new TraceLog(TraceType.MethodCounters, Method, string.Empty, Trace.Active);
+				var log = new TraceLog(TraceType.MethodCounters, Method, string.Empty);
 				log.Log(MethodData.Counters.Export());
 				Trace.PostTraceLog(log);
 			}
@@ -402,7 +402,7 @@ namespace Mosa.Compiler.Framework
 					break;
 			}
 
-			if (Compiler.CompilerOptions.EnableStatistics)
+			if (Compiler.CompilerOptions.EnableStatistics && !IsStopped)
 			{
 				var totalTicks = Stopwatch.ElapsedTicks;
 
@@ -411,9 +411,10 @@ namespace Mosa.Compiler.Framework
 				MethodData.Counters.NewCountSkipLock("ExecutionTime.StageStart.Ticks", (int)startTicks);
 				MethodData.Counters.NewCountSkipLock("ExecutionTime.Total.Ticks", (int)totalTicks);
 
-				var executionTimeLog = new TraceLog(TraceType.MethodDebug, Method, "Execution Time/Ticks", Trace.Active);
+				var executionTimeLog = new TraceLog(TraceType.MethodDebug, Method, "Execution Time/Ticks");
 
 				long previousTicks = startTicks;
+
 				for (int i = 0; i < Pipeline.Count; i++)
 				{
 					var pipelineTicks = executionTimes[i];

@@ -1,11 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Linker;
-using System;
-using System.IO;
-using System.Diagnostics;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Trace;
+using System;
 
 namespace Mosa.Tool.Explorer.Stages
 {
@@ -19,7 +16,7 @@ namespace Mosa.Tool.Explorer.Stages
 		{
 			var methods = GetAndSortMethodData();
 
-			var log = new TraceLog(TraceType.GlobalDebug, null, null, "Compiler Time", true);
+			var log = new TraceLog(TraceType.GlobalDebug, null, null, "Compiler Time");
 
 			log.Log("Ticks\tMilliseconds\tCompiler Count\tMethod");
 

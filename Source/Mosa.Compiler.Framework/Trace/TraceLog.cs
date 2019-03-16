@@ -18,32 +18,25 @@ namespace Mosa.Compiler.Framework.Trace
 
 		public string Section { get; }
 
-		public bool Active { get; }
-
 		public List<string> Lines { get; }
 
 		private TraceLog(TraceType type)
 		{
 			Type = type;
-			Active = true;
 			Lines = new List<string>();
 		}
 
-		public TraceLog(TraceType type, MosaMethod method, string stage, bool active)
+		public TraceLog(TraceType type, MosaMethod method, string stage)
 			: this(type)
 		{
 			Stage = stage;
 			Method = method;
-			Active = active;
 		}
 
-		public TraceLog(TraceType type, MosaMethod method, string stage, string section, bool active)
-			: this(type)
+		public TraceLog(TraceType type, MosaMethod method, string stage, string section)
+			: this(type, method, stage)
 		{
-			Stage = stage;
 			Section = section;
-			Method = method;
-			Active = active;
 		}
 
 		public void Log()
@@ -53,17 +46,11 @@ namespace Mosa.Compiler.Framework.Trace
 
 		public void Log(string line)
 		{
-			if (!Active)
-				return;
-
 			Lines.Add(line);
 		}
 
 		public void Log(IEnumerable<string> lines)
 		{
-			if (!Active)
-				return;
-
 			foreach (var line in lines)
 			{
 				Lines.Add(line);

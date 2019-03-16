@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					return null;
 
 				// lazy updates are allowed, so if interval doesn't touch move slot (anymore), return null
-				if (FromInterval.StartSlot != Slot)
+				if (FromInterval.Start != Slot)
 					return null;
 
 				return FromInterval.AssignedPhysicalRegister;
@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					return null;
 
 				// lazy updates are allowed, so if interval doesn't touch move slot (anymore), return null
-				if (ToInterval.EndSlot != Slot)
+				if (ToInterval.End != Slot)
 					return null;
 
 				return ToInterval.AssignedPhysicalRegister;

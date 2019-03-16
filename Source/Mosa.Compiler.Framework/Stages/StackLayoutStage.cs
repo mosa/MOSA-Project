@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var trace = CreateTraceLog("Stack Local");
 
-			if (!trace.Active)
+			if (trace == null)
 				return;
 
 			foreach (var local in MethodCompiler.LocalStack)
@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (local.Uses.Count == 0)
 					continue;
 
-				trace.Log(local + ": offset = " + local.Offset.ToString());
+				trace.Log($"{local}: offset = {local.Offset}");
 			}
 		}
 

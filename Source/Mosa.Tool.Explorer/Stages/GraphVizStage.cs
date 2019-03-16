@@ -6,9 +6,11 @@ namespace Mosa.Tool.Explorer.Stages
 {
 	public class GraphVizStage : BaseMethodCompilerStage
 	{
+		private const int TraceLevel = 6;
+
 		protected override void Run()
 		{
-			if (!IsTraceable())
+			if (!IsTraceable(TraceLevel))
 				return;
 
 			var trace = CreateTraceLog();
@@ -21,7 +23,7 @@ namespace Mosa.Tool.Explorer.Stages
 
 				foreach (var next in block.NextBlocks)
 				{
-					trace.Log("\t" + block + " -> " + next);
+					trace.Log($"\t{block} -> {next}");
 				}
 			}
 

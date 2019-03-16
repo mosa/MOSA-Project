@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public SlotIndex After { get { return new SlotIndex(this, true); } }
 
-		public SlotIndex(int index)
+		private SlotIndex(int index)
 		{
 			Value = (index << 2) | 0b01;
 		}
@@ -89,9 +89,17 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			return new SlotIndex(s, false);
 		}
 
-		public int CompareTo(SlotIndex s)
+		public int CompareTo(SlotIndex other)
 		{
-			return Value - s.Value;
+			return Value - other.Value;
+		}
+
+		public override bool Equals(object obj)
+		{
+			if (obj == null)
+				return false;
+
+			return Value == ((SlotIndex)obj).Value;
 		}
 
 		public override int GetHashCode()
@@ -101,7 +109,16 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public override string ToString()
 		{
-			return IsNull ? "Null" : $"{Index}";
+			if (IsNull)
+				return "Null";
+
+			if (IsBeforeSlot)
+				return $"{Index}-";
+
+			if (IsAfterSlot)
+				return $"{Index}+";
+
+			return $"{Index}";
 		}
 	}
 }

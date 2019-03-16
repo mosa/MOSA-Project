@@ -630,60 +630,51 @@ namespace Mosa.Compiler.Framework
 
 		#region ITraceSectionFactory
 
-		TraceLog ITraceFactory.CreateTraceLog(string section)
+		TraceLog ITraceFactory.CreateTraceLog(string section, int traceLevel)
 		{
-			return CreateTraceLog(section);
+			return CreateTraceLog(section, traceLevel);
 		}
 
 		#endregion ITraceSectionFactory
 
 		#region Trace Helper Methods
 
-		public bool IsTraceable(int traceLevel = 0)
+		public bool IsTraceable(int traceLevel)
 		{
-			if (CompilerOptions.TraceLevel == 0)
-				return false;
-
-			if (traceLevel > CompilerOptions.TraceLevel)
-				return false;
-
-			return true;
+			return MethodCompiler.Trace.IsTraceable(traceLevel);
 		}
 
 		protected TraceLog CreateTraceLog(int traceLevel = 0)
 		{
-			bool active = IsTraceable(traceLevel);
+			if (!IsTraceable(traceLevel))
+				return null;
 
-			var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName, active);
+			var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName);
 
-			if (active)
-				traceLogs.Add(traceLog);
+			traceLogs.Add(traceLog);
 
 			return traceLog;
 		}
 
 		public TraceLog CreateTraceLog(string section)
 		{
-			return CreateTraceLog(0, section);
+			return CreateTraceLog(section, 0);
 		}
 
-		public TraceLog CreateTraceLog(int traceLevel, string section)
+		public TraceLog CreateTraceLog(string section, int traceLevel)
 		{
-			bool active = IsTraceable(traceLevel);
+			if (!IsTraceable(traceLevel))
+				return null;
 
-			var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName, section, active);
+			var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName, section);
 
-			if (active)
-				traceLogs.Add(traceLog);
+			traceLogs.Add(traceLog);
 
 			return traceLog;
 		}
 
 		private void PostTraceLog(TraceLog traceLog)
 		{
-			if (!traceLog.Active)
-				return;
-
 			MethodCompiler.Trace.PostTraceLog(traceLog);
 		}
 

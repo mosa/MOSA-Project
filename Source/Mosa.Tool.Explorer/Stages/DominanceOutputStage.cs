@@ -8,9 +8,11 @@ namespace Mosa.Tool.Explorer.Stages
 {
 	public class DominanceOutputStage : BaseMethodCompilerStage
 	{
+		private const int TraceLevel = 10;
+
 		protected override void Run()
 		{
-			if (!IsTraceable())
+			if (!IsTraceable(TraceLevel))
 				return;
 
 			OutputList();
@@ -25,7 +27,7 @@ namespace Mosa.Tool.Explorer.Stages
 
 			foreach (var headBlock in BasicBlocks.HeadBlocks)
 			{
-				trace.Log("Head: " + headBlock);
+				trace.Log($"Head: {headBlock}");
 				var dominance = new SimpleFastDominance(BasicBlocks, headBlock);
 
 				for (int i = 0; i < BasicBlocks.Count; i++)
@@ -33,9 +35,7 @@ namespace Mosa.Tool.Explorer.Stages
 					var block = BasicBlocks[i];
 
 					sb.Clear();
-					sb.Append("  Block ");
-					sb.Append(block);
-					sb.Append(" : ");
+					sb.Append($"  Block {block} : ");
 
 					var children = dominance.GetChildren(block);
 
@@ -77,7 +77,7 @@ namespace Mosa.Tool.Explorer.Stages
 					{
 						foreach (var child in children)
 						{
-							trace.Log("\t" + block + " -> " + child);
+							trace.Log($"\t{block} -> {child}");
 						}
 					}
 				}
@@ -93,7 +93,7 @@ namespace Mosa.Tool.Explorer.Stages
 
 			foreach (var headBlock in BasicBlocks.HeadBlocks)
 			{
-				trace.Log("Head: " + headBlock);
+				trace.Log($"Head: {headBlock}");
 				var dominance = new SimpleFastDominance(BasicBlocks, headBlock);
 
 				for (int i = 0; i < BasicBlocks.Count; i++)
@@ -101,9 +101,7 @@ namespace Mosa.Tool.Explorer.Stages
 					var block = BasicBlocks[i];
 
 					sb.Clear();
-					sb.Append("  Block ");
-					sb.Append(block);
-					sb.Append(" : ");
+					sb.Append($"  Block {block} : ");
 
 					var dom = dominance.GetImmediateDominator(block);
 

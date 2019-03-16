@@ -20,6 +20,8 @@ namespace Mosa.Tool.Explorer
 			pipeline.Add(new DisassemblyStage());
 			pipeline.Add(new DebugInfoStage());
 
+			//pipeline.InsertAfterLast<GreedyRegisterAllocatorStage>(new StopStage());
+
 			//new DominanceOutputStage(),
 		}
 	}

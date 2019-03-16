@@ -307,16 +307,12 @@ namespace Mosa.Tool.Launcher
 
 		void IBuilderEvent.NewStatus(string status)
 		{
-			MethodInvoker method = () => NewStatus(status);
-
-			Invoke(method);
+			Invoke((MethodInvoker)(() => NewStatus(status)));
 		}
 
 		void IStarterEvent.NewStatus(string status)
 		{
-			MethodInvoker method = () => NewStatus(status);
-
-			Invoke(method);
+			Invoke((MethodInvoker)(() => NewStatus(status)));
 		}
 
 		private void UpdateProgress()
