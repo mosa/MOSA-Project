@@ -34,11 +34,9 @@ namespace Mosa.Compiler.Framework.Trace
 		}
 
 		public TraceLog(TraceType type, MosaMethod method, string stage, string section)
-			: this(type)
+			: this(type, method, stage)
 		{
-			Stage = stage;
 			Section = section;
-			Method = method;
 		}
 
 		public void Log()
