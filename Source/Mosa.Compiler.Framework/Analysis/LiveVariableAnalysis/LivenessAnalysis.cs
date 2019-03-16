@@ -84,7 +84,7 @@ namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 		{
 			var numberTrace = CreateTraceLog("InstructionNumber", 9);
 
-			if (!numberTrace.Active)
+			if (numberTrace == null)
 				return;
 
 			foreach (var block in BasicBlocks)
@@ -169,14 +169,11 @@ namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 				block.LiveKill = liveKill;
 				block.LiveKillNot = ((BitArray)liveKill.Clone()).Not();
 
-				if (liveSetTrace.Active)
-				{
-					liveSetTrace.Log("Block #  " + block.BasicBlock.Sequence.ToString());
-					liveSetTrace.Log("GEN:     " + block.LiveGen.ToString2());
-					liveSetTrace.Log("KILL:    " + block.LiveKill.ToString2());
-					liveSetTrace.Log("KILLNOT: " + block.LiveKillNot.ToString2());
-					liveSetTrace.Log(string.Empty);
-				}
+				liveSetTrace?.Log("Block #  " + block.BasicBlock.Sequence.ToString());
+				liveSetTrace?.Log("GEN:     " + block.LiveGen.ToString2());
+				liveSetTrace?.Log("KILL:    " + block.LiveKill.ToString2());
+				liveSetTrace?.Log("KILLNOT: " + block.LiveKillNot.ToString2());
+				liveSetTrace?.Log(string.Empty);
 			}
 		}
 

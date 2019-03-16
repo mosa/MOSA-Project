@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			LiveAnalysis = new LivenessAnalysis(liveAnalysisGCEnvironment, this, true);
 
-			if (trace.Active)
+			if (trace != null)
 			{
 				for (int i = 0; i < LiveAnalysis.LiveRanges.Length; i++)
 				{

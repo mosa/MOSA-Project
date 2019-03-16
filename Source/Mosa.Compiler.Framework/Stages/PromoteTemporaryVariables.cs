@@ -40,17 +40,17 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected bool CanPromote(Operand operand)
 		{
-			if (trace.Active) trace.Log("Check: " + operand);
+			trace?.Log("Check: " + operand);
 
 			if (operand.Uses.Count == 0)
 			{
-				if (trace.Active) trace.Log("No uses: " + operand);
+				trace?.Log("No uses: " + operand);
 				return false;
 			}
 
 			if (MosaTypeLayout.IsStoredOnStack(operand.Type))
 			{
-				if (trace.Active) trace.Log("incompatible type: " + operand);
+				trace?.Log("incompatible type: " + operand);
 				return false;
 			}
 
@@ -80,7 +80,7 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 				}
 
-				if (trace.Active) trace.Log("A-No: " + node);
+				trace?.Log("A-No: " + node);
 				return false;
 			}
 
@@ -105,7 +105,7 @@ namespace Mosa.Compiler.Framework.Stages
 					return true;
 				}
 
-				if (trace.Active) trace.Log("B-No: " + node);
+				trace?.Log("B-No: " + node);
 				return false;
 			}
 			else if (node.Instruction == IRInstruction.MoveInt32 || node.Instruction == IRInstruction.MoveInt64)
@@ -114,8 +114,8 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					if (!Check(node2))
 					{
-						if (trace.Active) trace.Log("C-No (parent): " + node);
-						if (trace.Active) trace.Log("C-No: " + node2);
+						trace?.Log("C-No (parent): " + node);
+						trace?.Log("C-No: " + node2);
 						return false;
 					}
 				}
@@ -128,7 +128,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return true;
 			}
 
-			if (trace.Active) trace.Log("D-No: " + node);
+			trace?.Log("D-No: " + node);
 			return false;
 		}
 
@@ -137,7 +137,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var virtualRegister = AllocateVirtualRegister(operand.Type);
 			TemporariesPromoted++;
 
-			if (trace.Active) trace.Log("VR: " + virtualRegister);
+			trace?.Log("VR: " + virtualRegister);
 
 			foreach (var node in operand.Uses.ToArray())
 			{
@@ -150,27 +150,27 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				else if (node.Instruction == IRInstruction.LoadInt32)
 				{
-					if (trace.Active) trace.Log("BEFORE:\t" + node);
+					trace?.Log("BEFORE:\t" + node);
 					node.SetInstruction(IRInstruction.MoveInt32, node.Result, virtualRegister);
-					if (trace.Active) trace.Log("AFTER: \t" + node);
+					trace?.Log("AFTER: \t" + node);
 				}
 				else if (node.Instruction == IRInstruction.LoadInt64)
 				{
-					if (trace.Active) trace.Log("BEFORE:\t" + node);
+					trace?.Log("BEFORE:\t" + node);
 					node.SetInstruction(IRInstruction.MoveInt64, node.Result, virtualRegister);
-					if (trace.Active) trace.Log("AFTER: \t" + node);
+					trace?.Log("AFTER: \t" + node);
 				}
 				else if (node.Instruction == IRInstruction.StoreInt32)
 				{
-					if (trace.Active) trace.Log("BEFORE:\t" + node);
+					trace?.Log("BEFORE:\t" + node);
 					node.SetInstruction(IRInstruction.MoveInt32, virtualRegister, node.Operand3);
-					if (trace.Active) trace.Log("AFTER: \t" + node);
+					trace?.Log("AFTER: \t" + node);
 				}
 				else if (node.Instruction == IRInstruction.StoreInt64)
 				{
-					if (trace.Active) trace.Log("BEFORE:\t" + node);
+					trace?.Log("BEFORE:\t" + node);
 					node.SetInstruction(IRInstruction.MoveInt64, virtualRegister, node.Operand3);
-					if (trace.Active) trace.Log("AFTER: \t" + node);
+					trace?.Log("AFTER: \t" + node);
 				}
 			}
 		}
@@ -186,42 +186,42 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (node.Instruction == IRInstruction.StoreInt32)
 			{
-				if (trace.Active) trace.Log("BEFORE:\t" + node);
+				trace?.Log("BEFORE:\t" + node);
 				node.SetInstruction(IRInstruction.MoveInt32, virtualRegister, node.Operand3);
-				if (trace.Active) trace.Log("AFTER: \t" + node);
+				trace?.Log("AFTER: \t" + node);
 			}
 			else if (node.Instruction == IRInstruction.StoreInt64)
 			{
-				if (trace.Active) trace.Log("BEFORE:\t" + node);
+				trace?.Log("BEFORE:\t" + node);
 				node.SetInstruction(IRInstruction.MoveInt64, virtualRegister, node.Operand3);
-				if (trace.Active) trace.Log("AFTER: \t" + node);
+				trace?.Log("AFTER: \t" + node);
 			}
 			else if (node.Instruction == IRInstruction.MemorySet)
 			{
 				if (node.Operand3.ConstantUnsignedLongInteger == 4)
 				{
-					if (trace.Active) trace.Log("BEFORE:\t" + node);
+					trace?.Log("BEFORE:\t" + node);
 					node.SetInstruction(IRInstruction.MoveInt32, virtualRegister, node.Operand2);
-					if (trace.Active) trace.Log("AFTER: \t" + node);
+					trace?.Log("AFTER: \t" + node);
 				}
 				else if (node.Operand3.ConstantUnsignedLongInteger == 8)
 				{
-					if (trace.Active) trace.Log("BEFORE:\t" + node);
+					trace?.Log("BEFORE:\t" + node);
 					node.SetInstruction(IRInstruction.MoveInt64, virtualRegister, node.Operand2);
-					if (trace.Active) trace.Log("AFTER: \t" + node);
+					trace?.Log("AFTER: \t" + node);
 				}
 			}
 			else if (node.Instruction == IRInstruction.LoadInt32)
 			{
-				if (trace.Active) trace.Log("BEFORE:\t" + node);
+				trace?.Log("BEFORE:\t" + node);
 				node.SetInstruction(IRInstruction.MoveInt32, node.Result, virtualRegister);
-				if (trace.Active) trace.Log("AFTER: \t" + node);
+				trace?.Log("AFTER: \t" + node);
 			}
 			else if (node.Instruction == IRInstruction.LoadInt64)
 			{
-				if (trace.Active) trace.Log("BEFORE:\t" + node);
+				trace?.Log("BEFORE:\t" + node);
 				node.SetInstruction(IRInstruction.MoveInt64, node.Result, virtualRegister);
-				if (trace.Active) trace.Log("AFTER: \t" + node);
+				trace?.Log("AFTER: \t" + node);
 			}
 		}
 	}

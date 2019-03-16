@@ -22,7 +22,7 @@ namespace Mosa.Tool.Explorer.Stages
 		{
 			var trace = CreateTraceLog();
 
-			if (!trace.Active)
+			if (trace == null)
 				return;
 
 			// Determine the architecture mode
@@ -85,20 +85,14 @@ namespace Mosa.Tool.Explorer.Stages
 		{
 			var trace = CreateTraceLog("Patch-Requests");
 
-			if (!trace.Active)
+			if (trace == null)
 				return;
 
 			var symbol = MethodCompiler.Linker.GetSymbol(MethodCompiler.Method.FullName);
 
 			foreach (var request in symbol.GetLinkRequests())
 			{
-				trace.Log(String.Format("{0:x8} -> [{1}] +{2:x} [{3}] {4}",
-					request.PatchOffset,
-					request.LinkType.ToString(),
-					request.ReferenceOffset,
-					request.ReferenceSymbol.SectionKind.ToString(),
-					request.ReferenceSymbol.Name
-				));
+				trace.Log($"{request.PatchOffset:x8} -> [{request.LinkType.ToString()}] +{request.ReferenceOffset:x} [{request.ReferenceSymbol.SectionKind.ToString()}] {request.ReferenceSymbol.Name}");
 			}
 		}
 	}

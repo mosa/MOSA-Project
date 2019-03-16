@@ -126,7 +126,7 @@ namespace Mosa.Compiler.Framework
 
 		protected void PostTrace(TraceLog traceLog)
 		{
-			if (!traceLog.Active)
+			if (traceLog == null)
 				return;
 
 			CompilerTrace.PostTraceLog(traceLog);

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.IR;
 using System.Collections.Generic;
@@ -14,8 +13,8 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class InlineStage : BaseMethodCompilerStage
 	{
-		private Counter InlinedMethodsCount = new Counter("InlineStage.InlinedMethods");
-		private Counter InlinedCallSitesCount = new Counter("InlineStage.InlinedCallSites");
+		private readonly Counter InlinedMethodsCount = new Counter("InlineStage.InlinedMethods");
+		private readonly Counter InlinedCallSitesCount = new Counter("InlineStage.InlinedCallSites");
 
 		protected override void Initialize()
 		{
@@ -88,8 +87,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (blocks == null)
 					continue;
 
-				if (trace.Active)
-					trace.Log(callee.Method.FullName);
+				trace?.Log(callee.Method.FullName);
 
 				Inline(callSiteNode, blocks);
 

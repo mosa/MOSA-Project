@@ -57,8 +57,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var handler = (uint)MethodCompiler.GetPosition(region.Handler.HandlerStart);
 
-				if (trace.Active)
-					trace.Log("Handler: " + region.Handler.TryStart.ToString("X4") + " to " + region.Handler.TryEnd.ToString("X4") + " Handler: " + region.Handler.HandlerStart.ToString("X4") + " Offset: [" + handler.ToString("X4") + "]");
+				trace?.Log("Handler: " + region.Handler.TryStart.ToString("X4") + " to " + region.Handler.TryEnd.ToString("X4") + " Handler: " + region.Handler.HandlerStart.ToString("X4") + " Offset: [" + handler.ToString("X4") + "]");
 
 				var sections = new List<Tuple<int, int>>();
 
@@ -71,8 +70,7 @@ namespace Mosa.Compiler.Framework.Stages
 					int start = MethodCompiler.GetPosition(block.Label);
 					int end = MethodCompiler.GetPosition(block.Label + 0x0F000000);
 
-					if (trace.Active)
-						trace.Log($"   Block: {block} [{start.ToString()}-{end.ToString()}]");
+					trace?.Log($"   Block: {block} [{start.ToString()}-{end.ToString()}]");
 
 					AddSection(sections, start, end);
 				}
@@ -89,8 +87,7 @@ namespace Mosa.Compiler.Framework.Stages
 					MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionTableSymbol, writer.Position, protectedRegionDefinition, 0);
 					writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-					if (trace.Active)
-						trace.Log($"     Section: [{start.ToString()}-{end.ToString()}]");
+					trace?.Log($"     Section: [{start.ToString()}-{end.ToString()}]");
 				}
 			}
 

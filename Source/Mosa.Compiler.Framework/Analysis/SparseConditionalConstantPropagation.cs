@@ -334,16 +334,19 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private void DumpTrace()
 		{
-			if (!MainTrace.Active)
+			if (MainTrace == null)
 				return;
 
 			var variableTrace = CreateTrace("Variables", 5);
+
+			if (variableTrace == null)
+				return;
 
 			foreach (var variable in variableStates.Values)
 			{
 				if (variable.IsVirtualRegister)
 				{
-					variableTrace.Log(variable.ToString());
+					variableTrace?.Log(variable.ToString());
 				}
 			}
 
@@ -391,7 +394,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private void ProcessBlock(BasicBlock block)
 		{
-			if (MainTrace.Active) MainTrace.Log("Process Block: " + block);
+			MainTrace?.Log("Process Block: " + block);
 
 			// if the block has only one successor block, add successor block to executed block list
 			if (block.NextBlocks.Count == 1)
@@ -451,7 +454,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private bool ProcessInstruction(InstructionNode node)
 		{
-			//if (MainTrace.Active) MainTrace.Log(context.ToString());
+			//MainTrace?.Log(context.ToString());
 
 			var instruction = node.Instruction;
 
@@ -660,7 +663,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			if (variable.AddConstant(value))
 			{
-				if (MainTrace.Active) MainTrace.Log(variable.ToString());
+				MainTrace?.Log(variable.ToString());
 
 				AddInstruction(variable);
 			}
@@ -673,7 +676,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			variable.IsOverDefined = true;
 
-			if (MainTrace.Active) MainTrace.Log(variable.ToString());
+			MainTrace?.Log(variable.ToString());
 
 			AddInstruction(variable);
 		}
@@ -695,7 +698,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			variable.IsReferenceOverDefined = true;
 
-			if (MainTrace.Active) MainTrace.Log(variable.ToString());
+			MainTrace?.Log(variable.ToString());
 
 			AddInstruction(variable);
 		}
@@ -707,7 +710,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			variable.IsReferenceDefinedNotNull = true;
 
-			if (MainTrace.Active) MainTrace.Log(variable.ToString());
+			MainTrace?.Log(variable.ToString());
 
 			AddInstruction(variable);
 		}

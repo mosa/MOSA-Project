@@ -4,7 +4,6 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -40,7 +39,10 @@ namespace Mosa.Compiler.Framework
 			TypeLayout = compiler.TypeLayout;
 			IsEnabled = compiler.CompilerOptions.EnableMethodScanner;
 
-			trace = new TraceLog(TraceType.GlobalDebug, null, null, "MethodScanner", Compiler.CompilerTrace.IsTraceable(TraceLevel));
+			if (Compiler.CompilerTrace.IsTraceable(TraceLevel))
+			{
+				trace = new TraceLog(TraceType.GlobalDebug, null, null, "MethodScanner");
+			}
 
 			Initialize();
 		}
@@ -55,7 +57,7 @@ namespace Mosa.Compiler.Framework
 
 			MoreLogInfo();
 
-			Debug.WriteLine(trace.ToString()); // REMOVE
+			//Debug.WriteLine(trace?.ToString()); // REMOVE
 
 			int totalTypes = 0;
 			int totalMethods = 0;
@@ -100,14 +102,14 @@ namespace Mosa.Compiler.Framework
 
 				allocatedTypes.Add(type);
 
-				if (trace.Active)
+				if (trace != null)
 				{
 					if ((lastSource == null && source != null) || (lastSource != source))
 					{
-						trace.Log("> Method: " + (source == null ? "[NULL]" : source.FullName));
+						trace.Log($"> Method: {(source == null ? "[NULL]" : source.FullName)}");
 						lastSource = source;
 					}
-					trace.Log(" >>> Allocated: " + type.FullName);
+					trace.Log($" >>> Allocated: {type.FullName}");
 				}
 
 				Compiler.CompilerData.GetTypeData(type).IsTypeAllocated = true;
@@ -172,15 +174,15 @@ namespace Mosa.Compiler.Framework
 				invokedInteraceTypes.Add(method.DeclaringType);
 				invokedMethods.Add(method);
 
-				if (trace.Active)
+				if (trace != null)
 				{
 					if ((lastSource == null && source != null) || (lastSource != source))
 					{
-						trace.Log("> Method: " + (source == null ? "[NONE]" : source.FullName));
+						trace.Log($"> Method: {(source == null ? "[NONE]" : source.FullName)}");
 						lastSource = source;
 					}
 
-					trace.Log(" >> Invoked: " + method.FullName + (method.IsStatic ? " [Static]" : " [Virtual]"));
+					trace.Log($" >> Invoked: {method.FullName}{(method.IsStatic ? " [Static]" : " [Virtual]")}");
 				}
 
 				int slot = TypeLayout.GetMethodSlot(method);
@@ -222,15 +224,15 @@ namespace Mosa.Compiler.Framework
 
 				invokedMethods.Add(method);
 
-				if (trace.Active)
+				if (trace != null)
 				{
 					if ((lastSource == null && source != null) || (lastSource != source))
 					{
-						trace.Log("> Method: " + (source == null ? "[NONE]" : source.FullName));
+						trace.Log($"> Method: {(source == null ? "[NONE]" : source.FullName)}");
 						lastSource = source;
 					}
 
-					trace.Log(" >> Invoked: " + method.FullName + (method.IsStatic ? " [Static]" : " [Virtual]"));
+					trace.Log($" >> Invoked: {method.FullName}{(method.IsStatic ? " [Static]" : " [Virtual]")}");
 				}
 
 				if (method.IsStatic || method.IsConstructor || method.DeclaringType.IsValueType || direct)
@@ -309,8 +311,7 @@ namespace Mosa.Compiler.Framework
 
 				scheduledMethods.Add(method);
 
-				if (trace.Active)
-					trace.Log(" ==> Scheduling: " + method.ToString() + (method.IsStatic ? " [Static]" : " [Virtual]"));
+				trace?.Log($" ==> Scheduling: {method}{(method.IsStatic ? " [Static]" : " [Virtual]")}");
 
 				Compiler.CompilationScheduler.Schedule(method);
 			}
@@ -421,14 +422,14 @@ namespace Mosa.Compiler.Framework
 
 				if (!IsTypeAllocated(type))
 				{
-					trace.Log($"Type Excluded: {type.FullName}");
+					trace?.Log($"Type Excluded: {type.FullName}");
 				}
 
 				foreach (var method in type.Methods)
 				{
 					if (!IsMethodInvoked(method))
 					{
-						trace.Log($"Method Excluded: {method.FullName}");
+						trace?.Log($"Method Excluded: {method.FullName}");
 					}
 				}
 			}

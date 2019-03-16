@@ -115,7 +115,7 @@ namespace Mosa.Platform.Intel.Stages
 				if (node.Result.HasLongParent && node.Result.LongParent.Uses.Count != 0)
 					return;
 
-				if (trace.Active) trace.Log("REMOVED:\t" + node);
+				trace?.Log("REMOVED:\t" + node);
 
 				node.Empty();
 				changed = true;
@@ -159,17 +159,17 @@ namespace Mosa.Platform.Intel.Stages
 
 					if (result == operand)
 					{
-						if (trace.Active) trace.Log("*** SimpleForwardCopyPropagation");
-						if (trace.Active) trace.Log("BEFORE:\t" + useNode);
+						trace?.Log("*** SimpleForwardCopyPropagation");
+						trace?.Log("BEFORE:\t" + useNode);
 						useNode.SetOperand(i, source);
-						if (trace.Active) trace.Log("AFTER: \t" + useNode);
+						trace?.Log("AFTER: \t" + useNode);
 					}
 				}
 			}
 
 			Debug.Assert(result.Uses.Count == 0);
 
-			if (trace.Active) trace.Log("REMOVED:\t" + node);
+			trace?.Log("REMOVED:\t" + node);
 			node.Empty();
 			IRInstructionRemovedCount++;
 		}

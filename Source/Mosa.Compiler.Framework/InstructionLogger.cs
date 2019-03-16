@@ -29,29 +29,27 @@ namespace Mosa.Compiler.Framework.Trace
 			if (!compilerTrace.IsTraceable(5))
 				return;
 
-			var traceLog = new TraceLog(TraceType.MethodInstructions, method, stage, true);
+			var traceLog = new TraceLog(TraceType.MethodInstructions, method, stage);
 
-			traceLog.Log($"{method.FullName} after stage {stage}:");
-			traceLog.Log();
+			traceLog?.Log($"{method.FullName} after stage {stage}:");
+			traceLog?.Log();
 
 			if (basicBlocks.Count > 0)
 			{
 				foreach (var block in basicBlocks)
 				{
-					traceLog.Log($"Block #{block.Sequence} - Label L_{block.Label:X4}" + (block.IsHeadBlock ? " [Header]" : string.Empty));
-
-					traceLog.Log($"  Prev: {ListBlocks(block.PreviousBlocks)}");
+					traceLog?.Log($"Block #{block.Sequence} - Label L_{block.Label:X4}" + (block.IsHeadBlock ? " [Header]" : string.Empty));
+					traceLog?.Log($"  Prev: {ListBlocks(block.PreviousBlocks)}");
 
 					LogInstructions(traceLog, block.First);
 
-					traceLog.Log($"  Next: {ListBlocks(block.NextBlocks)}");
-
-					traceLog.Log();
+					traceLog?.Log($"  Next: {ListBlocks(block.NextBlocks)}");
+					traceLog?.Log();
 				}
 			}
 			else
 			{
-				traceLog.Log("No instructions.");
+				traceLog?.Log("No instructions.");
 			}
 
 			compilerTrace.PostTraceLog(traceLog);

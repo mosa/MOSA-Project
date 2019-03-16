@@ -117,7 +117,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				ParamReadOnly[operand.Index] = !write;
 
-				if (traceParameters.Active) traceParameters.Log(operand + ": " + (write ? "Writable" : "ReadOnly"));
+				traceParameters?.Log(operand + ": " + (write ? "Writable" : "ReadOnly"));
 			}
 		}
 
@@ -170,7 +170,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ValueNumber(BasicBlock block, out List<BasicBlock> nextblocks, out List<Expression> newExpressions)
 		{
-			if (trace.Active) trace.Log($"Processing Block: {block}");
+			trace?.Log($"Processing Block: {block}");
 
 			//Debug.Assert(!Processed.Get(block.Sequence));
 
@@ -217,7 +217,7 @@ namespace Mosa.Compiler.Framework.Stages
 						var w = GetValueNumber(node.Operand1);
 						SetValueNumber(node.Result, w);
 
-						if (trace.Active) trace.Log($"Removed Unless PHI: {node}");
+						trace?.Log($"Removed Unless PHI: {node}");
 
 						node.SetInstruction(IRInstruction.Nop);
 						InstructionRemovalCount++;
@@ -232,7 +232,7 @@ namespace Mosa.Compiler.Framework.Stages
 						var w = GetValueNumber(redundant);
 						SetValueNumber(node.Result, w);
 
-						if (trace.Active) trace.Log($"Removed Redundant PHI: {node}");
+						trace?.Log($"Removed Redundant PHI: {node}");
 
 						node.SetInstruction(IRInstruction.Nop);
 						InstructionRemovalCount++;
@@ -333,7 +333,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					var w = GetValueNumber(match.ValueNumber);
 
-					if (trace.Active) trace.Log($"Found Expression Match: {node}");
+					trace?.Log($"Found Expression Match: {node}");
 
 					SetValueNumber(node.Result, w);
 
@@ -347,7 +347,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				else
 				{
-					if (trace.Active) trace.Log($"No Expression Found: {node}");
+					trace?.Log($"No Expression Found: {node}");
 				}
 
 				var newExpression = new Expression()
@@ -396,7 +396,7 @@ namespace Mosa.Compiler.Framework.Stages
 					// Efficient!
 					nextblocks.Add(children[0]);
 
-					//if (trace.Active) trace.Log("Queue Block:" + children[0]);
+					//trace?.Log("Queue Block:" + children[0]);
 				}
 				else if (ReversePostOrder.Count < 32)
 				{
@@ -407,7 +407,7 @@ namespace Mosa.Compiler.Framework.Stages
 						{
 							nextblocks.Add(child);
 
-							//if (trace.Active) trace.Log("Queue Block:" + child);
+							//trace?.Log("Queue Block:" + child);
 						}
 					}
 				}
@@ -427,7 +427,7 @@ namespace Mosa.Compiler.Framework.Stages
 						{
 							nextblocks.Add(child);
 
-							//if (trace.Active) trace.Log("Queue Block:" + child);
+							//trace?.Log("Queue Block:" + child);
 						}
 					}
 				}
@@ -539,7 +539,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void SetValueNumber(Operand operand, Operand valueVumber)
 		{
-			if (trace.Active) trace.Log($"Set: {operand} => {valueVumber}");
+			trace?.Log($"Set: {operand} => {valueVumber}");
 
 			MapToValueNumber[operand] = valueVumber;
 		}
@@ -590,7 +590,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			list.Add(expression);
 
-			if (trace.Active) trace.Log($"Added Expression: {expression.ValueNumber} <= {expression.Instruction} {expression.Operand1} {expression.Operand2}" ?? string.Empty);
+			trace?.Log($"Added Expression: {expression.ValueNumber} <= {expression.Instruction} {expression.Operand1} {expression.Operand2}" ?? string.Empty);
 		}
 
 		private void RemoveExpressionFromHashTable(Expression expression)
@@ -599,7 +599,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			list.Remove(expression);
 
-			if (trace.Active) trace.Log($"Removed Expression: {expression.ValueNumber} <= {expression.Instruction} {expression.Operand1} {expression.Operand2}" ?? string.Empty);
+			trace?.Log($"Removed Expression: {expression.ValueNumber} <= {expression.Instruction} {expression.Operand1} {expression.Operand2}" ?? string.Empty);
 		}
 
 		private void UpdateNodeWithValueNumbers(InstructionNode node)
@@ -617,11 +617,11 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						if (operand != valueNumber)
 						{
-							//if (trace.Active) trace.Log($"BEFORE: {node}");
-							//if (trace.Active) trace.Log($"Replaced: {operand} with {valueNumber}");
+							//trace?.Log($"BEFORE: {node}");
+							//trace?.Log($"Replaced: {operand} with {valueNumber}");
 							node.SetOperand(i, valueNumber);
 
-							if (trace.Active) trace.Log($"UPDATED: {node}");
+							trace?.Log($"UPDATED: {node}");
 						}
 					}
 					else

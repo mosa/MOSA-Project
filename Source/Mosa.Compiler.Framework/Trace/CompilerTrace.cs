@@ -35,7 +35,10 @@ namespace Mosa.Compiler.Framework.Trace
 
 		public void PostTraceLog(TraceLog traceLog, bool signalStatusUpdate = false)
 		{
-			if (!traceLog.Active)
+			if (traceLog == null)
+				return;
+
+			if (traceLog == null)
 				return;
 
 			if (TraceListener == null)

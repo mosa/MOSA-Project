@@ -646,14 +646,12 @@ namespace Mosa.Compiler.Framework
 
 		protected TraceLog CreateTraceLog(int traceLevel = 0)
 		{
-			bool active = IsTraceable(traceLevel);
+			if (!IsTraceable(traceLevel))
+				return null;
 
-			var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName, active);
+			var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName);
 
-			if (active)
-			{
-				traceLogs.Add(traceLog);
-			}
+			traceLogs.Add(traceLog);
 
 			return traceLog;
 		}
@@ -665,14 +663,12 @@ namespace Mosa.Compiler.Framework
 
 		public TraceLog CreateTraceLog(string section, int traceLevel)
 		{
-			bool active = IsTraceable(traceLevel);
+			if (!IsTraceable(traceLevel))
+				return null;
 
-			var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName, section, active);
+			var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName, section);
 
-			if (active)
-			{
-				traceLogs.Add(traceLog);
-			}
+			traceLogs.Add(traceLog);
 
 			return traceLog;
 		}

@@ -503,7 +503,7 @@ namespace Mosa.Compiler.Framework
 
 		public void PostTrace(TraceLog traceLog)
 		{
-			if (!traceLog.Active)
+			if (traceLog == null)
 				return;
 
 			CompilerTrace.PostTraceLog(traceLog);
