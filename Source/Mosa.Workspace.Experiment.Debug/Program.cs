@@ -24,7 +24,7 @@ namespace Mosa.Workspace.Experiment.Debug
 				EnableIRLongExpansion = true,
 				EnableValueNumbering = true,
 				TwoPassOptimizations = true,
-				EnableMethodScanner = false,
+				EnableMethodScanner = true,
 
 				MultibootSpecification = MultibootSpecification.V1,
 				LinkerFormatType = LinkerFormatType.Elf32,

@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Trace;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -198,26 +199,30 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			List<LiveInterval> intervals;
 
-			if (liveInterval.Start == low)
+			if (low.IsNull && high.IsNotNull)
 			{
 				if (!liveInterval.LiveRange.CanSplitAt(high))
 					return false;
 
 				intervals = liveInterval.SplitAt(high);
 			}
-			else if (high == liveInterval.End)
+			else if (high.IsNull && low.IsNotNull)
 			{
 				if (!liveInterval.LiveRange.CanSplitAt(low))
 					return false;
 
 				intervals = liveInterval.SplitAt(low);
 			}
-			else
+			else if (low.IsNotNull && high.IsNotNull)
 			{
 				if (!liveInterval.LiveRange.CanSplitAt(low, high))
 					return false;
 
 				intervals = liveInterval.SplitAt(low, high);
+			}
+			else
+			{
+				return false;
 			}
 
 			ReplaceIntervals(liveInterval, intervals, addToQueue);
@@ -330,18 +335,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			if (Trace.Active) Trace.Log($"--Low Splitting: {liveInterval} at: {at}");
 
-			var max = liveInterval.Start;
-
-			if (liveInterval.LiveRange.ContainUse(liveInterval.Start) || liveInterval.LiveRange.ContainDef(liveInterval.Start))
-			{
-				max = max.After;
-				Debug.Assert(max < at);
-			}
+			var max = SlotIndex.NullSlot;
 
 			var blockStart = GetBlockStart(at);
 			if (Trace.Active) Trace.Log($"   Block Start : {blockStart}");
 
-			if (blockStart > at && blockStart > max)
+			if (blockStart < at && blockStart > liveInterval.Start)
 			{
 				max = blockStart;
 			}
@@ -349,7 +348,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			var prevUse = liveInterval.LiveRange.GetPreviousUsePosition(at);
 			if (Trace.Active) Trace.Log($"  Previous Use : {prevUse}");
 
-			if (prevUse.IsNotNull && prevUse.After < at && prevUse.After > max)
+			if (prevUse.IsNotNull && prevUse.After < at && (max.IsNull || prevUse.After > max))
 			{
 				max = prevUse.After;
 			}
@@ -357,7 +356,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			var prevDef = liveInterval.LiveRange.GetPreviousDefPosition(at);
 			if (Trace.Active) Trace.Log($"  Previous Def : {prevDef}");
 
-			if (prevDef.IsNotNull && prevDef.After < at && prevDef.After > max)
+			if (prevDef.IsNotNull && prevDef.After < at && (max.IsNull || prevDef.After > max))
 			{
 				max = prevDef.After;
 			}
@@ -371,18 +370,12 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		{
 			if (Trace.Active) Trace.Log($"--High Splitting: {liveInterval} at: {at}");
 
-			var min = liveInterval.End;
-
-			if (liveInterval.LiveRange.ContainUse(liveInterval.End) || liveInterval.LiveRange.ContainDef(liveInterval.End))
-			{
-				min = min.Before;
-				Debug.Assert(min > at);
-			}
+			var min = SlotIndex.NullSlot;
 
 			var blockEnd = GetBlockEnd(at);
 			if (Trace.Active) Trace.Log($"     Block End : {blockEnd}");
 
-			if (blockEnd > at && blockEnd < min)
+			if (blockEnd > at && blockEnd < liveInterval.End)
 			{
 				min = blockEnd;
 			}
@@ -390,7 +383,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			var nextUse = liveInterval.LiveRange.GetNextUsePosition(at);
 			if (Trace.Active) Trace.Log($"      Next Use : {nextUse}");
 
-			if (nextUse.IsNotNull && nextUse.Before > at && nextUse.Before < min)
+			if (nextUse.IsNotNull && nextUse.Before > at && (min.IsNull || nextUse.Before < min))
 			{
 				min = nextUse.Before;
 			}
@@ -398,7 +391,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			var nextDef = liveInterval.LiveRange.GetNextDefPosition(at);
 			if (Trace.Active) Trace.Log($"      Next Def : {nextDef}");
 
-			if (nextDef.IsNotNull && nextDef.Before > at && nextDef.Before < min)
+			if (nextDef.IsNotNull && nextDef.Before > at && (min.IsNull || nextDef.Before < min))
 			{
 				min = nextDef.Before;
 			}

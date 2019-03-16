@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected readonly TraceLog Trace;
 
-		protected readonly List<InstructionNode> SlotsToNodes;
+		private readonly List<InstructionNode> SlotsToNodes;
 
 		protected BaseRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, AddStackLocalDelegate addStackLocal, Operand stackFrame, ITraceFactory traceFactory)
 		{
@@ -188,7 +188,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected InstructionNode GetNode(SlotIndex slot)
 		{
-			return SlotsToNodes[slot.Index];
+			return SlotsToNodes[slot.Index >> 1];
 		}
 
 		private void TraceBlocks()
@@ -318,7 +318,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (node.IsEmpty)
 						continue;
 
-					node.Offset = SlotsToNodes.Count;
+					node.Offset = SlotsToNodes.Count << 1;
 
 					SlotsToNodes.Add(node);
 
