@@ -8,6 +8,16 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 {
 	public sealed class LiveRange
 	{
+		// Live ranges includes:
+		// 1. Use > start && Use <= end
+		// 2. Def >= start && Def < end
+
+		// Notes:
+		// Uses can not be at the start of a live range
+		// Uses can end at the end of a live range
+		// Defs can be at the start of a live range
+		// Defs can not end at the end of a live range
+
 		private readonly VirtualRegister VirtualRegister;
 
 		private readonly int StartIndex;
@@ -64,7 +74,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 				if (use > end)
 					break;
 
-				if (use >= start)
+				if (use > start) // && (use <= end)
 				{
 					if (firstUseIndex < 0)
 					{
@@ -79,10 +89,10 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				var def = virtualRegister.DefPositions[i];
 
-				if (def > end)
+				if (def >= end)
 					break;
 
-				if (def >= start)
+				if (def >= start) // && (def < end)
 				{
 					if (firstDefIndex < 0)
 					{
@@ -215,7 +225,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public SlotIndex GetNextUsePosition(SlotIndex at)
 		{
-			if (UseCount == 0 || at < Start || at > End || at > LastUse) // at > End  is optional
+			if (UseCount == 0 || at < Start || at > LastUse) // || at > End
 				return SlotIndex.NullSlot;
 
 			for (int i = FirstUseIndex; i <= LastUseIndex; i++)
@@ -231,7 +241,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public SlotIndex GetNextDefPosition(SlotIndex at)
 		{
-			if (DefCount == 0 || at < Start || at > End || at > LastDef) // at > End  is optional
+			if (DefCount == 0 || at < Start || at > LastDef) // || at > End
 				return SlotIndex.NullSlot;
 
 			for (int i = FirstDefIndex; i <= LastDefIndex; i++)
@@ -247,7 +257,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public SlotIndex GetPreviousUsePosition(SlotIndex at)
 		{
-			if (UseCount == 0 || at < Start || at > End || at < FirstUse)
+			if (UseCount == 0 || at < Start || at < FirstUse) // || at > End
 				return SlotIndex.NullSlot;
 
 			for (int i = LastUseIndex; i >= FirstUseIndex; i--)
@@ -263,7 +273,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public SlotIndex GetPreviousDefPosition(SlotIndex at)
 		{
-			if (DefCount == 0 || at < Start || at > End || at < FirstDef)
+			if (DefCount == 0 || at < Start || at < FirstDef)  // || at > End
 				return SlotIndex.NullSlot;
 
 			for (int i = LastDefIndex; i >= FirstDefIndex; i--)
@@ -300,6 +310,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public bool CanSplitAt(SlotIndex low, SlotIndex high)
 		{
+			//return CanSplitAt(low) && CanSplitAt(high); // slightly slower version
+
 			if (low <= Start || low >= End)
 				return false;
 
