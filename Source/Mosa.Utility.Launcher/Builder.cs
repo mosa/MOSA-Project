@@ -88,7 +88,7 @@ namespace Mosa.Utility.Launcher
 			Log.Clear();
 			Counters.Clear();
 
-			var compiler = new MosaCompiler(GetCompilerExtensions());
+			var compiler = new MosaCompiler(null, GetCompilerExtensions());
 
 			try
 			{

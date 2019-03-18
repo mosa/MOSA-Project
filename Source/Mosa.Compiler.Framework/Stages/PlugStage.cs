@@ -50,6 +50,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (newTarget != null)
 			{
 				Replace(node, newTarget);
+
+				//MethodCompiler.Compiler.MethodScanner.MethodInvoked(method, Method);
 			}
 		}
 

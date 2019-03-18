@@ -236,11 +236,6 @@ namespace Mosa.Compiler.Framework.Stages
 			// the mov/call two-instructions combo is to help facilitate the register allocator
 			context.AppendInstruction(IRInstruction.CallDirect, null, target);
 
-			//if (target.Method != null)
-			//{
-			//	MethodCompiler.Compiler.MethodScanner.MethodDirectInvoked(target.Method, this.Method);
-			//}
-
 			GetReturnValue(context, result);
 			FreeStackAfterCall(context, totalStack);
 		}

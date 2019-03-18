@@ -975,7 +975,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var invokedMethod = node.InvokeMethod;
 
-			MethodCompiler.Compiler.MethodScanner.MethodInvoked(invokedMethod, this.Method);
+			MethodCompiler.Compiler.MethodScanner.MethodInvoked(invokedMethod, Method);
 
 			node.SetInstruction(Select(node.Result, IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, Operand.CreateSymbolFromMethod(invokedMethod, TypeSystem));
 		}

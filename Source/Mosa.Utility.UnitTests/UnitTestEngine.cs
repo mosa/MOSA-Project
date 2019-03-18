@@ -64,7 +64,7 @@ namespace Mosa.Utility.UnitTests
 				EnableIRLongExpansion = true,
 				EnableValueNumbering = true,
 				TwoPassOptimizations = true,
-				EnableMethodScanner = false,
+				EnableMethodScanner = true,
 
 				UseMultiThreadingCompiler = true,
 

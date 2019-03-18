@@ -10,9 +10,9 @@ namespace Mosa.Compiler.Framework
 {
 	public class MosaCompiler
 	{
-		public CompilerOptions CompilerOptions { get; set; } = new CompilerOptions();
+		public CompilerOptions CompilerOptions { get; }
 
-		public CompilerTrace CompilerTrace { get; } = new CompilerTrace();
+		public CompilerTrace CompilerTrace { get; }
 
 		public TypeSystem TypeSystem { get; private set; }
 
@@ -28,16 +28,24 @@ namespace Mosa.Compiler.Framework
 
 		protected Compiler Compiler { get; private set; }
 
+		private bool preCompileCompleted = false;
+
 		public MosaCompiler(List<BaseCompilerExtension> compilerExtensions = null, int maxThreads = 0)
+			: this(null, compilerExtensions, maxThreads)
+		{
+		}
+
+		public MosaCompiler(CompilerOptions compilerOptions = null, List<BaseCompilerExtension> compilerExtensions = null, int maxThreads = 0)
 		{
 			MaxThreads = (maxThreads == 0) ? Environment.ProcessorCount + 1 : maxThreads;
+
+			CompilerOptions = compilerOptions ?? new CompilerOptions();
+			CompilerTrace = new CompilerTrace(CompilerOptions);
 
 			if (compilerExtensions != null)
 			{
 				CompilerExtensions.AddRange(compilerExtensions);
 			}
-
-			CompilerTrace.TraceLevel = CompilerOptions.TraceLevel;
 		}
 
 		public void Load()
@@ -92,14 +100,20 @@ namespace Mosa.Compiler.Framework
 
 		public void Initialize()
 		{
-			Linker = new MosaLinker(CompilerOptions.BaseAddress, CompilerOptions.Architecture.Endianness, CompilerOptions.Architecture.ElfMachineType, CompilerOptions.EmitAllSymbols, CompilerOptions.EmitStaticRelocations, CompilerOptions.LinkerFormatType, CompilerOptions.CreateExtraSections, CompilerOptions.CreateExtraProgramHeaders);
-
-			Compiler = new Compiler(this);
+			if (Linker == null)
+			{
+				Linker = new MosaLinker(CompilerOptions.BaseAddress, CompilerOptions.Architecture.Endianness, CompilerOptions.Architecture.ElfMachineType, CompilerOptions.EmitAllSymbols, CompilerOptions.EmitStaticRelocations, CompilerOptions.LinkerFormatType, CompilerOptions.CreateExtraSections, CompilerOptions.CreateExtraProgramHeaders);
+				Compiler = new Compiler(this);
+			}
 		}
 
 		public void PreCompile()
 		{
-			Compiler.PreCompile();
+			if (!preCompileCompleted)
+			{
+				Compiler.PreCompile();
+				preCompileCompleted = true;
+			}
 		}
 
 		public void CompilerMethod(MosaMethod method)

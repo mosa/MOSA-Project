@@ -35,7 +35,9 @@ namespace Mosa.Workspace.Experiment.Debug
 				EmitAllSymbols = false,
 
 				EmitBinary = false,
-				TraceLevel = 0
+				TraceLevel = 0,
+
+				EnableStatistics = true,
 			};
 
 			compilerOptions.Architecture = SelectArchitecture(platform);
@@ -43,13 +45,11 @@ namespace Mosa.Workspace.Experiment.Debug
 			compilerOptions.AddSourceFile($"Mosa.TestWorld.{platform}.exe");
 			compilerOptions.AddSourceFile("Mosa.Plug.Korlib.dll");
 			compilerOptions.AddSourceFile($"Mosa.Plug.Korlib.{platform}.dll");
+			compilerOptions.TraceLevel = 5;
 
 			var stopwatch = new Stopwatch();
 
-			var compiler = new MosaCompiler
-			{
-				CompilerOptions = compilerOptions
-			};
+			var compiler = new MosaCompiler(compilerOptions);
 
 			compiler.Load();
 

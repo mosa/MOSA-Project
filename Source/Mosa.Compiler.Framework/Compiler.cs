@@ -207,10 +207,10 @@ namespace Mosa.Compiler.Framework
 
 			TypeSystem = mosaCompiler.TypeSystem;
 			TypeLayout = mosaCompiler.TypeLayout;
-			CompilerTrace = mosaCompiler.CompilerTrace;
 			CompilerOptions = mosaCompiler.CompilerOptions;
 			CompilationScheduler = mosaCompiler.CompilationScheduler;
 			Linker = mosaCompiler.Linker;
+			CompilerTrace = mosaCompiler.CompilerTrace;
 
 			MethodScanner = new MethodScanner(this);
 

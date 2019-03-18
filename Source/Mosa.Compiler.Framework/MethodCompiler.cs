@@ -444,7 +444,7 @@ namespace Mosa.Compiler.Framework
 			if (plugMethod == null)
 				return;
 
-			Compiler.MethodScanner.MethodInvoked(plugMethod, this.Method);
+			Compiler.MethodScanner.MethodInvoked(plugMethod, Method);
 
 			IsMethodPlugged = true;
 

@@ -86,8 +86,7 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -a x86 --mboot v1 --x
 					throw new Exception("No input file(s) specified.");
 				}
 
-				compiler = new MosaCompiler(GetCompilerExtensions());
-				compiler.CompilerOptions = options.CompilerOptions;
+				compiler = new MosaCompiler(options.CompilerOptions, GetCompilerExtensions());
 
 				Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
 				Debug.AutoFlush = true;

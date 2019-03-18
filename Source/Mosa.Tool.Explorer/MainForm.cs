@@ -49,7 +49,7 @@ namespace Mosa.Tool.Explorer
 		{
 			InitializeComponent();
 
-			Compiler.CompilerTrace.TraceLevel = 9;
+			Compiler.CompilerOptions.TraceLevel = 9;
 			Compiler.CompilerOptions.LinkerFormatType = LinkerFormatType.Elf32;
 			Compiler.CompilerTrace.SetTraceListener(this);
 

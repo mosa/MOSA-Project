@@ -4,6 +4,7 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -57,7 +58,7 @@ namespace Mosa.Compiler.Framework
 
 			MoreLogInfo();
 
-			//Debug.WriteLine(trace?.ToString()); // REMOVE
+			Debug.WriteLine(trace?.ToString()); // REMOVE
 
 			int totalTypes = 0;
 			int totalMethods = 0;
@@ -168,11 +169,15 @@ namespace Mosa.Compiler.Framework
 
 			lock (_lock)
 			{
-				if (invokedMethods.Contains(method))
-					return;
+				lock (invokedMethods)
+				{
+					if (invokedMethods.Contains(method))
+						return;
+
+					invokedMethods.Add(method);
+				}
 
 				invokedInteraceTypes.Add(method.DeclaringType);
-				invokedMethods.Add(method);
 
 				if (trace != null)
 				{
@@ -219,10 +224,13 @@ namespace Mosa.Compiler.Framework
 
 			lock (_lock)
 			{
-				if (invokedMethods.Contains(method))
-					return;
+				lock (invokedMethods)
+				{
+					if (invokedMethods.Contains(method))
+						return;
 
-				invokedMethods.Add(method);
+					invokedMethods.Add(method);
+				}
 
 				if (trace != null)
 				{
@@ -266,7 +274,13 @@ namespace Mosa.Compiler.Framework
 				{
 					var derivedMethod = TypeLayout.GetMethodBySlot(derived, slot);
 
-					invokedMethods.AddIfNew(derivedMethod);
+					lock (invokedMethods)
+					{
+						if (!invokedMethods.Contains(derivedMethod))
+						{
+							invokedMethods.Add(derivedMethod);
+						}
+					}
 
 					ScheduleMethod(derivedMethod);
 				}
@@ -285,7 +299,14 @@ namespace Mosa.Compiler.Framework
 			{
 				foreach (var method in currentType.Methods)
 				{
-					if (invokedMethods.Contains(method))
+					bool contains;
+
+					lock (invokedMethods)
+					{
+						contains = invokedMethods.Contains(method);
+					}
+
+					if (contains)
 					{
 						int slot = TypeLayout.GetMethodSlot(method);
 
@@ -316,6 +337,14 @@ namespace Mosa.Compiler.Framework
 				Compiler.CompilationScheduler.Schedule(method);
 			}
 		}
+
+		//private bool CheckAddInvokedMethod(MosaMethod method)
+		//{
+		//	lock (invokedMethods)
+		//	{
+		//		invokedMethods.Add(method)
+		//	}
+		//}
 
 		public void Initialize()
 		{
