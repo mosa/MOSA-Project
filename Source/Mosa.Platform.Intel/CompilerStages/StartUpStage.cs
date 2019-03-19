@@ -18,7 +18,7 @@ namespace Mosa.Platform.Intel.CompilerStages
 
 			Compiler.PlugSystem.CreatePlug(startUpMethod, TypeSystem.EntryPoint);
 
-			Compiler.MethodScanner.MethodInvoked(startUpMethod, startUpMethod);
+			MethodScanner.MethodInvoked(startUpMethod, startUpMethod);
 
 			if (Linker.EntryPoint == null)
 			{
@@ -26,11 +26,11 @@ namespace Mosa.Platform.Intel.CompilerStages
 
 				Linker.EntryPoint = Linker.GetSymbol(initializeMethod.FullName);
 
-				Compiler.MethodScanner.MethodInvoked(initializeMethod, initializeMethod);
+				MethodScanner.MethodInvoked(initializeMethod, initializeMethod);
 			}
 			else
 			{
-				Compiler.MethodScanner.MethodInvoked(TypeSystem.EntryPoint, TypeSystem.EntryPoint);
+				MethodScanner.MethodInvoked(TypeSystem.EntryPoint, TypeSystem.EntryPoint);
 			}
 		}
 	}

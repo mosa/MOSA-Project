@@ -192,6 +192,11 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public bool IsStopped { get; private set; }
 
+		/// <summary>
+		/// Gets the method scanner.
+		/// </summary>
+		public MethodScanner MethodScanner { get; private set; }
+
 		#endregion Properties
 
 		#region Construction
@@ -216,6 +221,7 @@ namespace Mosa.Compiler.Framework
 			TypeLayout = compiler.TypeLayout;
 			Trace = compiler.CompilerTrace;
 			Linker = compiler.Linker;
+			MethodScanner = compiler.MethodScanner;
 
 			BasicBlocks = basicBlocks ?? new BasicBlocks();
 			LocalStack = new List<Operand>();

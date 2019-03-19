@@ -54,6 +54,8 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		protected CompilationScheduler CompilationScheduler { get { return Compiler.CompilationScheduler; } }
 
+		protected MethodScanner MethodScanner { get { return Compiler.MethodScanner; } }
+
 		#endregion Properties
 
 		/// <summary>

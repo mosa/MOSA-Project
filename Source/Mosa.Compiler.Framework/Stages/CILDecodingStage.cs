@@ -275,7 +275,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Gets the type system.
 		/// </summary>
-		MethodScanner IInstructionDecoder.MethodScanner { get { return MethodCompiler.Compiler.MethodScanner; } }
+		MethodScanner IInstructionDecoder.MethodScanner { get { return MethodCompiler.MethodScanner; } }
 
 		/// <summary>
 		/// Gets the Instruction being decoded.

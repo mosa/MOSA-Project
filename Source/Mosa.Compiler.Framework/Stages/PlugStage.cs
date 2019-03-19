@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				Replace(node, newTarget);
 
-				//MethodCompiler.Compiler.MethodScanner.MethodInvoked(method, Method);
+				//methodCompiler.MethodScanner.MethodInvoked(method, Method);
 			}
 		}
 

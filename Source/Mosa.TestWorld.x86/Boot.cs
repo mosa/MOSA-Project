@@ -5,6 +5,7 @@ using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
 using Mosa.TestWorld.x86.Tests;
+using Mosa.UnitTests;
 using System.Runtime.InteropServices;
 
 namespace Mosa.TestWorld.x86
@@ -73,7 +74,9 @@ namespace Mosa.TestWorld.x86
 			Console.WriteLine();
 			Console.WriteLine();
 
-			KernelTest.RunTests();
+			ArrayLayoutTests.U8d();
+
+			//KernelTest.RunTests();
 
 			DumpStackTrace();
 

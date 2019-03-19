@@ -360,7 +360,8 @@ namespace Mosa.Compiler.Framework
 				if (IsStopped)
 					return;
 
-				CompilerMethodInQueue();
+				if (CompilerMethodInQueue() == null)
+					return;
 			}
 		}
 

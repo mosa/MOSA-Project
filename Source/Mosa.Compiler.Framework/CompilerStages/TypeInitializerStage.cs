@@ -81,8 +81,8 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 			Compiler.PlugSystem.CreatePlug(initializeAssemblyMethod, typeInitializerMethod);
 
-			Compiler.MethodScanner.MethodInvoked(initializeAssemblyMethod, initializeAssemblyMethod);
-			Compiler.MethodScanner.MethodInvoked(typeInitializerMethod, typeInitializerMethod);
+			MethodScanner.MethodInvoked(initializeAssemblyMethod, initializeAssemblyMethod);
+			MethodScanner.MethodInvoked(typeInitializerMethod, typeInitializerMethod);
 
 			foreach (var type in TypeSystem.AllTypes)
 			{
@@ -92,7 +92,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 					{
 						Schedule(method);
 
-						Compiler.MethodScanner.MethodInvoked(method, method);
+						MethodScanner.MethodInvoked(method, method);
 					}
 				}
 			}
