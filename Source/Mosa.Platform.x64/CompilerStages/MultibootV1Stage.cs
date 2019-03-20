@@ -10,6 +10,10 @@ namespace Mosa.Platform.x64.CompilerStages
 	{
 		protected override void CreateMultibootMethod()
 		{
+			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
+			var initializeMethod = startUpType.FindMethodByName("Initialize");
+			var entryPoint = Operand.CreateSymbolFromMethod(initializeMethod, TypeSystem);
+
 			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, GeneralPurposeRegister.EAX);
 			var ebx = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, GeneralPurposeRegister.EBX);
 			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, GeneralPurposeRegister.EBP);
@@ -27,6 +31,8 @@ namespace Mosa.Platform.x64.CompilerStages
 			basicBlocks.AddHeadBlock(block);
 			var ctx = new Context(block);
 
+			ctx.AppendInstruction(X64.Sti);
+
 			// Setup the stack and place the sentinel on the stack to indicate the start of the stack
 			ctx.AppendInstruction(X64.Mov64, esp, stackTop);
 			ctx.AppendInstruction(X64.Mov64, ebp, stackTop);
@@ -37,10 +43,7 @@ namespace Mosa.Platform.x64.CompilerStages
 			ctx.AppendInstruction(X64.MovStore64, null, multibootEAX, zero, eax);
 			ctx.AppendInstruction(X64.MovStore64, null, multibootEBX, zero, ebx);
 
-			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
-			var initializeMethod = startUpType.FindMethodByName("Initialize");
-
-			var entryPoint = Operand.CreateSymbolFromMethod(initializeMethod, TypeSystem);
+			ctx.AppendInstruction(X64.Cli);
 			ctx.AppendInstruction(X64.Call, null, entryPoint);
 			ctx.AppendInstruction(X64.Ret);
 
