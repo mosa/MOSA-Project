@@ -3,8 +3,8 @@ version: '1.8.{build}'
 configuration: Release
 platform: Any CPU
 image:
-- Ubuntu1804
 - Visual Studio 2017
+- Ubuntu1804
 
 shallow_clone: true
 
