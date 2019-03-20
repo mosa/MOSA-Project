@@ -56,8 +56,8 @@ namespace Mosa.Compiler.Framework
 		{
 			lock (_lock)
 			{
-				if (Stage != CompileStage.Initial)
-					return;
+				//if (Stage != CompileStage.Initial)
+				//	return;
 
 				var moduleLoader = new MosaModuleLoader();
 
@@ -67,8 +67,6 @@ namespace Mosa.Compiler.Framework
 				var typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
 
 				Load(typeSystem);
-
-				Stage = CompileStage.Loaded;
 			}
 		}
 
@@ -76,14 +74,18 @@ namespace Mosa.Compiler.Framework
 		{
 			lock (_lock)
 			{
-				if (Stage != CompileStage.Initial)
-					return;
+				//if (Stage != CompileStage.Initial)
+				//	return;
 
 				TypeSystem = typeSystem;
-
 				TypeLayout = new MosaTypeLayout(typeSystem, CompilerOptions.Architecture.NativePointerSize, CompilerOptions.Architecture.NativeAlignment);
 
+				Linker = null;
+				Compiler = null;
+
 				CompilationScheduler = new CompilationScheduler();
+
+				Stage = CompileStage.Loaded;
 			}
 		}
 

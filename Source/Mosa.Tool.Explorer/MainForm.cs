@@ -45,10 +45,6 @@ namespace Mosa.Tool.Explorer
 		{
 			InitializeComponent();
 
-			Compiler.CompilerOptions.TraceLevel = 9;
-			Compiler.CompilerOptions.LinkerFormatType = LinkerFormatType.Elf32;
-			Compiler.CompilerTrace.SetTraceListener(this);
-
 			tbInstructions.Width = tabControl.Width - 4;
 			tbInstructions.Height = tabControl.Height - 52;
 			tbDebugResult.Width = tabControl.Width - 4;
@@ -458,9 +454,14 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.TwoPassOptimizations = cbEnableTwoPassOptimizations.Checked;
 			Compiler.CompilerOptions.TraceLevel = 100;
 			Compiler.CompilerOptions.EnableMethodScanner = cbEnableMethodScanner.Checked;
+
+			Compiler.CompilerOptions.TraceLevel = 9;
+			Compiler.CompilerOptions.LinkerFormatType = LinkerFormatType.Elf32;
+
+			Compiler.CompilerTrace.SetTraceListener(this);
 		}
 
-		private void Compile()
+		private void CompileAll()
 		{
 			compileStartTime = DateTime.Now;
 			SetCompilerOptions();
@@ -514,7 +515,7 @@ namespace Mosa.Tool.Explorer
 
 		private void NowToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			Compile();
+			CompileAll();
 		}
 
 		private MosaMethod GetCurrentMethod()
@@ -709,7 +710,7 @@ namespace Mosa.Tool.Explorer
 
 			SetCompilerOptions();
 
-			Compiler.Schedule(method);
+			Compiler.CompileSingleMethod(method);
 		}
 
 		private void CbStages_SelectedIndexChanged(object sender, EventArgs e)
@@ -799,7 +800,7 @@ namespace Mosa.Tool.Explorer
 
 		private void ToolStripButton4_Click(object sender, EventArgs e)
 		{
-			Compile();
+			CompileAll();
 		}
 
 		private void UpdateProgressBar()
