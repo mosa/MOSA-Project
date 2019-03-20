@@ -52,9 +52,8 @@ namespace Mosa.Workspace.Experiment.Debug
 			var compiler = new MosaCompiler(compilerOptions);
 
 			compiler.Load();
-
 			compiler.Initialize();
-			compiler.PreCompile();
+			compiler.Setup();
 
 			stopwatch.Start();
 
@@ -68,7 +67,7 @@ namespace Mosa.Workspace.Experiment.Debug
 
 			Console.WriteLine("Threaded Execution Time:");
 
-			compiler.ExecuteThreaded();
+			compiler.ThreadedCompile();
 
 			//compiler.Execute();
 
@@ -94,7 +93,7 @@ namespace Mosa.Workspace.Experiment.Debug
 			{
 				var start = stopwatch.Elapsed.TotalMilliseconds;
 
-				compiler.CompilerMethod(method);
+				compiler.CompileSingleMethod(method);
 
 				var elapsed = stopwatch.Elapsed.TotalMilliseconds - start;
 

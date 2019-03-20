@@ -10,13 +10,13 @@ namespace Mosa.Utility.Launcher
 	public class BaseLauncher
 	{
 		public List<string> Log { get; }
-		public Options Options { get; set; }
+		public LauncherOptions LauncherOptions { get; set; }
 
 		public AppLocations AppLocations { get; set; }
 
-		public BaseLauncher(Options options, AppLocations appLocations)
+		public BaseLauncher(LauncherOptions options, AppLocations appLocations)
 		{
-			Options = options;
+			LauncherOptions = options;
 			AppLocations = appLocations;
 			Log = new List<string>();
 		}

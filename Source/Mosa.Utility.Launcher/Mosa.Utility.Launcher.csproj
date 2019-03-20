@@ -85,7 +85,7 @@
     <Compile Include="CheckOptions.cs" />
     <Compile Include="IBuilderEvent.cs" />
     <Compile Include="SerialConnectionOption.cs" />
-    <Compile Include="Options.cs" />
+    <Compile Include="LauncherOptions.cs" />
     <Compile Include="PlatformType.cs" />
     <Compile Include="Builder.cs" />
     <Compile Include="AppLocations.cs" />

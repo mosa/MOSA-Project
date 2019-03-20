@@ -24,10 +24,6 @@ namespace Mosa.Tool.Explorer
 
 		public readonly MosaCompiler Compiler = new MosaCompiler(new List<BaseCompilerExtension>() { new ExplorerCompilerExtension() });
 
-		private enum CompileStage { Nothing, Loaded, PreCompiled, Compiled }
-
-		private CompileStage Stage = CompileStage.Nothing;
-
 		private readonly MethodStore methodStore = new MethodStore();
 
 		private TypeSystemTree typeSystemTree;
@@ -263,8 +259,6 @@ namespace Mosa.Tool.Explorer
 
 			CreateTree();
 
-			Stage = CompileStage.Loaded;
-
 			methodStore.Clear();
 
 			SetStatus("Assemblies Loaded!");
@@ -481,7 +475,7 @@ namespace Mosa.Tool.Explorer
 				{
 					//Compiler.Execute();
 
-					Compiler.ExecuteThreaded();
+					Compiler.ThreadedCompile();
 				}
 				finally
 				{
@@ -500,8 +494,6 @@ namespace Mosa.Tool.Explorer
 		private void CompileCompleted()
 		{
 			toolStrip1.Enabled = true;
-
-			Stage = CompileStage.Compiled;
 
 			SetStatus("Compiled!");
 
@@ -715,18 +707,9 @@ namespace Mosa.Tool.Explorer
 
 			compileStartTime = DateTime.Now;
 
-			if (Stage == CompileStage.Loaded)
-			{
-				SetCompilerOptions();
-				Compiler.Initialize();
-				Compiler.PreCompile();
-				Stage = CompileStage.PreCompiled;
-			}
+			SetCompilerOptions();
 
-			if (Compiler.Linker != null)
-			{
-				Compiler.CompilerMethod(method);
-			}
+			Compiler.Schedule(method);
 		}
 
 		private void CbStages_SelectedIndexChanged(object sender, EventArgs e)

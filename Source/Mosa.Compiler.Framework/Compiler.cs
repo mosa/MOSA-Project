@@ -409,23 +409,15 @@ namespace Mosa.Compiler.Framework
 
 					int tid = threadID;
 
-					ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
-					{
-						//try
-						//{
-						CompileWorker(tid);
-
-						//}
-						//catch (Exception e)
-						//{
-						//	this.CompilerTrace.NewCompilerTraceEvent(CompilerEvent.Exception, e.ToString(), threadID);
-						//}
-						//finally
-						//{
-						finished.Signal();
-
-						//}
-					}));
+					ThreadPool.QueueUserWorkItem(
+						new WaitCallback(
+							delegate
+							{
+								CompileWorker(tid);
+								finished.Signal();
+							}
+						)
+					);
 				}
 
 				finished.Signal();

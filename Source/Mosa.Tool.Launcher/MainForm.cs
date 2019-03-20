@@ -20,7 +20,7 @@ namespace Mosa.Tool.Launcher
 
 		public Starter Starter { get; private set; }
 
-		public Options Options { get; }
+		public LauncherOptions Options { get; }
 
 		public AppLocations AppLocations { get; set; }
 
@@ -56,7 +56,7 @@ namespace Mosa.Tool.Launcher
 		{
 			InitializeComponent();
 
-			Options = new Options();
+			Options = new LauncherOptions();
 			AppLocations = new AppLocations();
 
 			AppLocations.FindApplications();
@@ -95,7 +95,7 @@ namespace Mosa.Tool.Launcher
 			Options.EnableQemuGDB = cbEnableQemuGDB.Checked;
 			Options.LaunchGDB = cbLaunchGDB.Checked;
 			Options.LaunchGDBDebugger = cbLaunchMosaDebugger.Checked;
-			Options.UseMultiThreadingCompiler = cbCompilerUsesMultipleThreads.Checked;
+			Options.EnableMultiThreading = cbCompilerUsesMultipleThreads.Checked;
 			Options.EmulatorMemoryInMB = (uint)nmMemory.Value;
 			Options.EnableInlinedMethods = cbInlinedMethods.Checked;
 			Options.VBEVideo = cbVBEVideo.Checked;
@@ -219,7 +219,7 @@ namespace Mosa.Tool.Launcher
 			cbLaunchGDB.Checked = Options.LaunchGDB;
 			cbLaunchMosaDebugger.Checked = Options.LaunchGDBDebugger;
 			cbInlinedMethods.Checked = Options.EnableInlinedMethods;
-			cbCompilerUsesMultipleThreads.Checked = Options.UseMultiThreadingCompiler;
+			cbCompilerUsesMultipleThreads.Checked = Options.EnableMultiThreading;
 			nmMemory.Value = Options.EmulatorMemoryInMB;
 			cbVBEVideo.Checked = Options.VBEVideo;
 			tbBaseAddress.Text = "0x" + Options.BaseAddress.ToString("x8");
@@ -452,7 +452,7 @@ namespace Mosa.Tool.Launcher
 
 		private void CompileCompleted()
 		{
-			if (Builder.Options.LaunchVM)
+			if (Builder.LauncherOptions.LaunchVM)
 			{
 				foreach (var line in Builder.Counters)
 				{

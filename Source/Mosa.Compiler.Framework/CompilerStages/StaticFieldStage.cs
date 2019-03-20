@@ -26,13 +26,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 						continue;
 
 					if (!Compiler.MethodScanner.IsFieldAccessed(field))
-					{
-						//Debug.WriteLine("EXCLUDED FIELD: " + field.FullName);
 						continue;
-					}
-
-					//if (!Compiler.MethodScanner.IsTypeAllocated(type))
-					//continue;
 
 					var section = field.Data != null ? SectionKind.ROData : SectionKind.BSS;
 					int size = TypeLayout.GetFieldSize(field);

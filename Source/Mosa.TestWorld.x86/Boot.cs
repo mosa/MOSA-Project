@@ -74,9 +74,9 @@ namespace Mosa.TestWorld.x86
 			Console.WriteLine();
 			Console.WriteLine();
 
-			ArrayLayoutTests.U8d();
+			//ArrayLayoutTests.U8d();
 
-			//KernelTest.RunTests();
+			KernelTest.RunTests();
 
 			DumpStackTrace();
 

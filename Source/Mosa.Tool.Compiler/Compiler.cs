@@ -181,7 +181,7 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -a x86 --mboot v1 --x
 
 			compiler.Load();
 
-			compiler.ExecuteThreaded();
+			compiler.ThreadedCompile();
 		}
 
 		/// <summary>

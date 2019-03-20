@@ -96,14 +96,17 @@ namespace Mosa.Compiler.Framework
 			if (!IsEnabled)
 				return;
 
-			lock (_lock)
+			lock (allocatedTypes)
 			{
 				if (allocatedTypes.Contains(type))
 					return;
 
 				allocatedTypes.Add(type);
+			}
 
-				if (trace != null)
+			if (trace != null)
+			{
+				lock (trace)
 				{
 					if ((lastSource == null && source != null) || (lastSource != source))
 					{
@@ -112,7 +115,10 @@ namespace Mosa.Compiler.Framework
 					}
 					trace.Log($" >>> Allocated: {type.FullName}");
 				}
+			}
 
+			lock (_lock)
+			{
 				Compiler.CompilerData.GetTypeData(type).IsTypeAllocated = true;
 
 				// find all invoked methods for this type
@@ -167,19 +173,17 @@ namespace Mosa.Compiler.Framework
 			if (!IsEnabled)
 				return;
 
-			lock (_lock)
+			lock (invokedMethods)
 			{
-				lock (invokedMethods)
-				{
-					if (invokedMethods.Contains(method))
-						return;
+				if (invokedMethods.Contains(method))
+					return;
 
-					invokedMethods.Add(method);
-				}
+				invokedMethods.Add(method);
+			}
 
-				invokedInteraceTypes.Add(method.DeclaringType);
-
-				if (trace != null)
+			if (trace != null)
+			{
+				lock (trace)
 				{
 					if ((lastSource == null && source != null) || (lastSource != source))
 					{
@@ -189,6 +193,11 @@ namespace Mosa.Compiler.Framework
 
 					trace.Log($" >> Invoked: {method.FullName}{(method.IsStatic ? " [Static]" : " [Virtual]")}");
 				}
+			}
+
+			lock (_lock)
+			{
+				invokedInteraceTypes.Add(method.DeclaringType);
 
 				int slot = TypeLayout.GetMethodSlot(method);
 				var interfaceType = method.DeclaringType;
@@ -204,8 +213,11 @@ namespace Mosa.Compiler.Framework
 					if (!type.Interfaces.Contains(interfaceType))
 						continue;
 
-					if (!allocatedTypes.Contains(type))
-						continue;
+					lock (allocatedTypes)
+					{
+						if (!allocatedTypes.Contains(type))
+							continue;
+					}
 
 					var imethods = TypeLayout.GetInterfaceTable(type, interfaceType); // this can be slow
 
@@ -222,17 +234,17 @@ namespace Mosa.Compiler.Framework
 			if (!IsEnabled)
 				return;
 
-			lock (_lock)
+			lock (invokedMethods)
 			{
-				lock (invokedMethods)
-				{
-					if (invokedMethods.Contains(method))
-						return;
+				if (invokedMethods.Contains(method))
+					return;
 
-					invokedMethods.Add(method);
-				}
+				invokedMethods.Add(method);
+			}
 
-				if (trace != null)
+			if (trace != null)
+			{
+				lock (trace)
 				{
 					if ((lastSource == null && source != null) || (lastSource != source))
 					{
@@ -242,14 +254,24 @@ namespace Mosa.Compiler.Framework
 
 					trace.Log($" >> Invoked: {method.FullName}{(method.IsStatic ? " [Static]" : " [Virtual]")}");
 				}
+			}
 
+			lock (_lock)
+			{
 				if (method.IsStatic || method.IsConstructor || method.DeclaringType.IsValueType || direct)
 				{
 					ScheduleMethod(method);
 				}
 				else
 				{
-					if (allocatedTypes.Contains(method.DeclaringType))
+					bool contains;
+
+					lock (allocatedTypes)
+					{
+						contains = allocatedTypes.Contains(method.DeclaringType);
+					}
+
+					if (contains)
 					{
 						ScheduleMethod(method);
 					}
@@ -270,7 +292,14 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var derived in children)
 			{
-				if (allocatedTypes.Contains(derived))
+				bool contains;
+
+				lock (allocatedTypes)
+				{
+					contains = allocatedTypes.Contains(derived);
+				}
+
+				if (contains)
 				{
 					var derivedMethod = TypeLayout.GetMethodBySlot(derived, slot);
 
@@ -330,6 +359,11 @@ namespace Mosa.Compiler.Framework
 				if (scheduledMethods.Contains(method))
 					return;
 
+				if (method.FullName.Contains("Mosa.UnitTests.GenericInterfaceTestClass`1<System.Int32>::Mosa.UnitTests.IInterfaceBB<T>.Get"))
+				{
+					trace?.Log("TEST");
+				}
+
 				scheduledMethods.Add(method);
 
 				trace?.Log($" ==> Scheduling: {method}{(method.IsStatic ? " [Static]" : " [Virtual]")}");
@@ -337,14 +371,6 @@ namespace Mosa.Compiler.Framework
 				Compiler.CompilationScheduler.Schedule(method);
 			}
 		}
-
-		//private bool CheckAddInvokedMethod(MosaMethod method)
-		//{
-		//	lock (invokedMethods)
-		//	{
-		//		invokedMethods.Add(method)
-		//	}
-		//}
 
 		public void Initialize()
 		{

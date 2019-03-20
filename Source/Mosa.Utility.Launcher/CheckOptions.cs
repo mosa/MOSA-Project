@@ -6,7 +6,7 @@ namespace Mosa.Utility.Launcher
 {
 	public static class CheckOptions
 	{
-		public static string Verify(Options options)
+		public static string Verify(LauncherOptions options)
 		{
 			if (options.Emulator == EmulatorType.Qemu && options.ImageFormat == ImageFormat.VDI)
 			{
