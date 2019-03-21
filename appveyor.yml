@@ -63,7 +63,7 @@ for:
         - image: Ubuntu1804
 
     install:
-    - sh: docker pull seblon/mosa-docker-integration || docker pull seblon/mosa-docker-integration # with retry, if failed
+    - sh: cd Ressources/docker-integration && docker build -t mosa-debian-integration .
 
     before_build:
     - echo test
