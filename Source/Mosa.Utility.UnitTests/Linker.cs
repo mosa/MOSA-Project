@@ -70,7 +70,9 @@ namespace Mosa.Utility.UnitTests
 
 			if (symbol.VirtualAddress == 0)
 			{
-				Console.WriteLine(method.FullName);
+				return IntPtr.Zero;
+
+				//Console.WriteLine(method.FullName);
 			}
 
 			return new IntPtr((long)symbol.VirtualAddress);

@@ -8,9 +8,9 @@ namespace Mosa.Tool.GDBDebugger
 {
 	public partial class ConnectWindow : Form
 	{
-		private readonly Options Options;
+		private readonly LauncherOptions Options;
 
-		public ConnectWindow(Options options)
+		public ConnectWindow(LauncherOptions options)
 		{
 			InitializeComponent();
 			Options = options;

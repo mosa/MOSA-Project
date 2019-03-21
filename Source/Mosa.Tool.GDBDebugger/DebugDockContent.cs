@@ -11,7 +11,7 @@ namespace Mosa.Tool.GDBDebugger
 	{
 		protected MainForm MainForm;
 
-		protected Options Options { get { return MainForm.Options; } }
+		protected LauncherOptions Options { get { return MainForm.LauncherOptions; } }
 
 		public DebugDockContent()
 		{

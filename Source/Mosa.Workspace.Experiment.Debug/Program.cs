@@ -35,7 +35,9 @@ namespace Mosa.Workspace.Experiment.Debug
 				EmitAllSymbols = false,
 
 				EmitBinary = false,
-				TraceLevel = 0
+				TraceLevel = 0,
+
+				EnableStatistics = true,
 			};
 
 			compilerOptions.Architecture = SelectArchitecture(platform);
@@ -43,18 +45,15 @@ namespace Mosa.Workspace.Experiment.Debug
 			compilerOptions.AddSourceFile($"Mosa.TestWorld.{platform}.exe");
 			compilerOptions.AddSourceFile("Mosa.Plug.Korlib.dll");
 			compilerOptions.AddSourceFile($"Mosa.Plug.Korlib.{platform}.dll");
+			compilerOptions.TraceLevel = 5;
 
 			var stopwatch = new Stopwatch();
 
-			var compiler = new MosaCompiler
-			{
-				CompilerOptions = compilerOptions
-			};
+			var compiler = new MosaCompiler(compilerOptions);
 
 			compiler.Load();
-
 			compiler.Initialize();
-			compiler.PreCompile();
+			compiler.Setup();
 
 			stopwatch.Start();
 
@@ -68,7 +67,7 @@ namespace Mosa.Workspace.Experiment.Debug
 
 			Console.WriteLine("Threaded Execution Time:");
 
-			compiler.ExecuteThreaded();
+			compiler.ThreadedCompile();
 
 			//compiler.Execute();
 
@@ -94,7 +93,7 @@ namespace Mosa.Workspace.Experiment.Debug
 			{
 				var start = stopwatch.Elapsed.TotalMilliseconds;
 
-				compiler.CompilerMethod(method);
+				compiler.CompileSingleMethod(method);
 
 				var elapsed = stopwatch.Elapsed.TotalMilliseconds - start;
 

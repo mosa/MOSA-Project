@@ -7,11 +7,14 @@ namespace Mosa.Compiler.Framework.Trace
 	public class CompilerTrace
 	{
 		private ITraceListener TraceListener;
+		private CompilerOptions CompilerOptions;
 
-		public int TraceLevel { get; set; } = 0;
+		public int TraceLevel { get { return CompilerOptions.TraceLevel; } }
 
-		public CompilerTrace()
+		public CompilerTrace(CompilerOptions compilerOptions)
 		{
+			CompilerOptions = compilerOptions;
+
 			TraceListener = null;
 		}
 

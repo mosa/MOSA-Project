@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(method != null, "Cannot find method: " + methodName);
 
-			MethodCompiler.Compiler.MethodScanner.MethodInvoked(method, this.Method);
+			MethodScanner.MethodInvoked(method, this.Method);
 
 			return method;
 		}
@@ -64,7 +64,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			node.SetInstruction(IRInstruction.CallStatic, node.Result, symbol, node.GetOperands());
 
-			MethodCompiler.Compiler.MethodScanner.TypeAllocated(classType, Method);
+			MethodScanner.TypeAllocated(classType, Method);
 		}
 
 		private void NewArray(InstructionNode node)
@@ -75,7 +75,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			node.SetInstruction(IRInstruction.CallStatic, node.Result, symbol, node.GetOperands());
 
-			MethodCompiler.Compiler.MethodScanner.TypeAllocated(arrayType, method);
+			MethodScanner.TypeAllocated(arrayType, method);
 		}
 
 		private void MemorySet(InstructionNode node)

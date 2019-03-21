@@ -52,13 +52,13 @@ namespace Mosa.Compiler.Framework.Stages
 						if (!MosaTypeLayout.IsStoredOnStack(node.Result.Type))
 						{
 							list.Add(node);
-							MethodCompiler.Compiler.MethodScanner.TypeAllocated(node.InvokeMethod.DeclaringType, Method);
+							MethodScanner.TypeAllocated(node.InvokeMethod.DeclaringType, Method);
 						}
 					}
 					else if (node.Instruction is NewarrInstruction)
 					{
 						list.Add(node);
-						MethodCompiler.Compiler.MethodScanner.TypeAllocated(node.Result.Type, Method);
+						MethodScanner.TypeAllocated(node.Result.Type, Method);
 					}
 				}
 			}

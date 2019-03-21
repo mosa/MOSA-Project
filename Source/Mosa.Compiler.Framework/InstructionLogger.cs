@@ -11,6 +11,8 @@ namespace Mosa.Compiler.Framework.Trace
 	/// </summary>
 	public static class InstructionLogger
 	{
+		private const int TraceLevel = 6;
+
 		public static void Run(MethodCompiler methodCompiler, BaseMethodCompilerStage stage)
 		{
 			Run(
@@ -23,10 +25,7 @@ namespace Mosa.Compiler.Framework.Trace
 
 		public static void Run(CompilerTrace compilerTrace, string stage, MosaMethod method, BasicBlocks basicBlocks)
 		{
-			if (compilerTrace == null)
-				return;
-
-			if (!compilerTrace.IsTraceable(5))
+			if (!compilerTrace.IsTraceable(TraceLevel))
 				return;
 
 			var traceLog = new TraceLog(TraceType.MethodInstructions, method, stage);

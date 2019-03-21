@@ -4,6 +4,7 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -57,7 +58,7 @@ namespace Mosa.Compiler.Framework
 
 			MoreLogInfo();
 
-			//Debug.WriteLine(trace?.ToString()); // REMOVE
+			Debug.WriteLine(trace?.ToString()); // REMOVE
 
 			int totalTypes = 0;
 			int totalMethods = 0;
@@ -95,14 +96,17 @@ namespace Mosa.Compiler.Framework
 			if (!IsEnabled)
 				return;
 
-			lock (_lock)
+			lock (allocatedTypes)
 			{
 				if (allocatedTypes.Contains(type))
 					return;
 
 				allocatedTypes.Add(type);
+			}
 
-				if (trace != null)
+			if (trace != null)
+			{
+				lock (trace)
 				{
 					if ((lastSource == null && source != null) || (lastSource != source))
 					{
@@ -111,7 +115,10 @@ namespace Mosa.Compiler.Framework
 					}
 					trace.Log($" >>> Allocated: {type.FullName}");
 				}
+			}
 
+			lock (_lock)
+			{
 				Compiler.CompilerData.GetTypeData(type).IsTypeAllocated = true;
 
 				// find all invoked methods for this type
@@ -166,15 +173,17 @@ namespace Mosa.Compiler.Framework
 			if (!IsEnabled)
 				return;
 
-			lock (_lock)
+			lock (invokedMethods)
 			{
 				if (invokedMethods.Contains(method))
 					return;
 
-				invokedInteraceTypes.Add(method.DeclaringType);
 				invokedMethods.Add(method);
+			}
 
-				if (trace != null)
+			if (trace != null)
+			{
+				lock (trace)
 				{
 					if ((lastSource == null && source != null) || (lastSource != source))
 					{
@@ -184,6 +193,11 @@ namespace Mosa.Compiler.Framework
 
 					trace.Log($" >> Invoked: {method.FullName}{(method.IsStatic ? " [Static]" : " [Virtual]")}");
 				}
+			}
+
+			lock (_lock)
+			{
+				invokedInteraceTypes.Add(method.DeclaringType);
 
 				int slot = TypeLayout.GetMethodSlot(method);
 				var interfaceType = method.DeclaringType;
@@ -199,8 +213,11 @@ namespace Mosa.Compiler.Framework
 					if (!type.Interfaces.Contains(interfaceType))
 						continue;
 
-					if (!allocatedTypes.Contains(type))
-						continue;
+					lock (allocatedTypes)
+					{
+						if (!allocatedTypes.Contains(type))
+							continue;
+					}
 
 					var imethods = TypeLayout.GetInterfaceTable(type, interfaceType); // this can be slow
 
@@ -217,14 +234,17 @@ namespace Mosa.Compiler.Framework
 			if (!IsEnabled)
 				return;
 
-			lock (_lock)
+			lock (invokedMethods)
 			{
 				if (invokedMethods.Contains(method))
 					return;
 
 				invokedMethods.Add(method);
+			}
 
-				if (trace != null)
+			if (trace != null)
+			{
+				lock (trace)
 				{
 					if ((lastSource == null && source != null) || (lastSource != source))
 					{
@@ -234,14 +254,24 @@ namespace Mosa.Compiler.Framework
 
 					trace.Log($" >> Invoked: {method.FullName}{(method.IsStatic ? " [Static]" : " [Virtual]")}");
 				}
+			}
 
+			lock (_lock)
+			{
 				if (method.IsStatic || method.IsConstructor || method.DeclaringType.IsValueType || direct)
 				{
 					ScheduleMethod(method);
 				}
 				else
 				{
-					if (allocatedTypes.Contains(method.DeclaringType))
+					bool contains;
+
+					lock (allocatedTypes)
+					{
+						contains = allocatedTypes.Contains(method.DeclaringType);
+					}
+
+					if (contains)
 					{
 						ScheduleMethod(method);
 					}
@@ -262,11 +292,24 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var derived in children)
 			{
-				if (allocatedTypes.Contains(derived))
+				bool contains;
+
+				lock (allocatedTypes)
+				{
+					contains = allocatedTypes.Contains(derived);
+				}
+
+				if (contains)
 				{
 					var derivedMethod = TypeLayout.GetMethodBySlot(derived, slot);
 
-					invokedMethods.AddIfNew(derivedMethod);
+					lock (invokedMethods)
+					{
+						if (!invokedMethods.Contains(derivedMethod))
+						{
+							invokedMethods.Add(derivedMethod);
+						}
+					}
 
 					ScheduleMethod(derivedMethod);
 				}
@@ -285,7 +328,14 @@ namespace Mosa.Compiler.Framework
 			{
 				foreach (var method in currentType.Methods)
 				{
-					if (invokedMethods.Contains(method))
+					bool contains;
+
+					lock (invokedMethods)
+					{
+						contains = invokedMethods.Contains(method);
+					}
+
+					if (contains)
 					{
 						int slot = TypeLayout.GetMethodSlot(method);
 
@@ -308,6 +358,11 @@ namespace Mosa.Compiler.Framework
 			{
 				if (scheduledMethods.Contains(method))
 					return;
+
+				if (method.FullName.Contains("Mosa.UnitTests.GenericInterfaceTestClass`1<System.Int32>::Mosa.UnitTests.IInterfaceBB<T>.Get"))
+				{
+					trace?.Log("TEST");
+				}
 
 				scheduledMethods.Add(method);
 

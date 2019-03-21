@@ -112,6 +112,11 @@ namespace Mosa.Compiler.Framework
 		protected MethodCompiler MethodCompiler { get; private set; }
 
 		/// <summary>
+		/// Hold the method compiler
+		/// </summary>
+		protected MethodScanner MethodScanner { get; private set; }
+
+		/// <summary>
 		/// Gets the method data.
 		/// </summary>
 		protected MethodData MethodData { get { return MethodCompiler.MethodData; } }
@@ -176,12 +181,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Setups the specified compiler.
 		/// </summary>
-		/// <param name="baseCompiler">The base compiler.</param>
-		public void Initialize(Compiler baseCompiler)
+		/// <param name="compiler">The base compiler.</param>
+		public void Initialize(Compiler compiler)
 		{
-			Architecture = baseCompiler.Architecture;
-			TypeSystem = baseCompiler.TypeSystem;
-			TypeLayout = baseCompiler.TypeLayout;
+			Architecture = compiler.Architecture;
+			TypeSystem = compiler.TypeSystem;
+			TypeLayout = compiler.TypeLayout;
 
 			NativePointerSize = Architecture.NativePointerSize;
 			NativeAlignment = Architecture.NativeAlignment;
@@ -189,7 +194,9 @@ namespace Mosa.Compiler.Framework
 			Is32BitPlatform = Architecture.Is32BitPlatform;
 			Is64BitPlatform = Architecture.Is64BitPlatform;
 
-			CompilerOptions = baseCompiler.CompilerOptions;
+			CompilerOptions = compiler.CompilerOptions;
+
+			MethodScanner = compiler.MethodScanner;
 
 			Initialize();
 		}

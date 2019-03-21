@@ -24,10 +24,6 @@ namespace Mosa.Tool.Explorer
 
 		public readonly MosaCompiler Compiler = new MosaCompiler(new List<BaseCompilerExtension>() { new ExplorerCompilerExtension() });
 
-		private enum CompileStage { Nothing, Loaded, PreCompiled, Compiled }
-
-		private CompileStage Stage = CompileStage.Nothing;
-
 		private readonly MethodStore methodStore = new MethodStore();
 
 		private TypeSystemTree typeSystemTree;
@@ -48,10 +44,6 @@ namespace Mosa.Tool.Explorer
 		public MainForm()
 		{
 			InitializeComponent();
-
-			Compiler.CompilerTrace.TraceLevel = 9;
-			Compiler.CompilerOptions.LinkerFormatType = LinkerFormatType.Elf32;
-			Compiler.CompilerTrace.SetTraceListener(this);
 
 			tbInstructions.Width = tabControl.Width - 4;
 			tbInstructions.Height = tabControl.Height - 52;
@@ -263,8 +255,6 @@ namespace Mosa.Tool.Explorer
 
 			CreateTree();
 
-			Stage = CompileStage.Loaded;
-
 			methodStore.Clear();
 
 			SetStatus("Assemblies Loaded!");
@@ -464,9 +454,14 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.TwoPassOptimizations = cbEnableTwoPassOptimizations.Checked;
 			Compiler.CompilerOptions.TraceLevel = 100;
 			Compiler.CompilerOptions.EnableMethodScanner = cbEnableMethodScanner.Checked;
+
+			Compiler.CompilerOptions.TraceLevel = 9;
+			Compiler.CompilerOptions.LinkerFormatType = LinkerFormatType.Elf32;
+
+			Compiler.CompilerTrace.SetTraceListener(this);
 		}
 
-		private void Compile()
+		private void CompileAll()
 		{
 			compileStartTime = DateTime.Now;
 			SetCompilerOptions();
@@ -481,7 +476,7 @@ namespace Mosa.Tool.Explorer
 				{
 					//Compiler.Execute();
 
-					Compiler.ExecuteThreaded();
+					Compiler.ThreadedCompile();
 				}
 				finally
 				{
@@ -500,8 +495,6 @@ namespace Mosa.Tool.Explorer
 		private void CompileCompleted()
 		{
 			toolStrip1.Enabled = true;
-
-			Stage = CompileStage.Compiled;
 
 			SetStatus("Compiled!");
 
@@ -522,7 +515,7 @@ namespace Mosa.Tool.Explorer
 
 		private void NowToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			Compile();
+			CompileAll();
 		}
 
 		private MosaMethod GetCurrentMethod()
@@ -715,18 +708,9 @@ namespace Mosa.Tool.Explorer
 
 			compileStartTime = DateTime.Now;
 
-			if (Stage == CompileStage.Loaded)
-			{
-				SetCompilerOptions();
-				Compiler.Initialize();
-				Compiler.PreCompile();
-				Stage = CompileStage.PreCompiled;
-			}
+			SetCompilerOptions();
 
-			if (Compiler.Linker != null)
-			{
-				Compiler.CompilerMethod(method);
-			}
+			Compiler.CompileSingleMethod(method);
 		}
 
 		private void CbStages_SelectedIndexChanged(object sender, EventArgs e)
@@ -816,7 +800,7 @@ namespace Mosa.Tool.Explorer
 
 		private void ToolStripButton4_Click(object sender, EventArgs e)
 		{
-			Compile();
+			CompileAll();
 		}
 
 		private void UpdateProgressBar()

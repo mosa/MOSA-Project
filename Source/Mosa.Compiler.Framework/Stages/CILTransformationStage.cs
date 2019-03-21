@@ -950,7 +950,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var field = node.MosaField;
 
-			MethodCompiler.Compiler.MethodScanner.AccessedField(field);
+			MethodScanner.AccessedField(field);
 
 			int offset = TypeLayout.GetFieldOffset(field);
 
@@ -975,7 +975,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var invokedMethod = node.InvokeMethod;
 
-			MethodCompiler.Compiler.MethodScanner.MethodInvoked(invokedMethod, this.Method);
+			MethodScanner.MethodInvoked(invokedMethod, Method);
 
 			node.SetInstruction(Select(node.Result, IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, Operand.CreateSymbolFromMethod(invokedMethod, TypeSystem));
 		}
@@ -1034,7 +1034,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var field = node.MosaField;
 
-			MethodCompiler.Compiler.MethodScanner.AccessedField(field);
+			MethodScanner.AccessedField(field);
 
 			var fieldType = field.FieldType;
 			var destination = node.Result;
@@ -1062,7 +1062,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var field = node.MosaField;
 
-			MethodCompiler.Compiler.MethodScanner.AccessedField(field);
+			MethodScanner.AccessedField(field);
 
 			var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
 
@@ -1114,26 +1114,23 @@ namespace Mosa.Compiler.Framework.Stages
 			// TODO: remove VmCall.GetHandleForToken?
 
 			Operand source;
-			Operand runtimeHandle;
 
 			if (context.MosaType != null)
 			{
 				source = Operand.CreateUnmanagedSymbolPointer(Metadata.TypeDefinition + context.MosaType.FullName, TypeSystem);
-				runtimeHandle = AllocateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
 			}
 			else if (context.MosaField != null)
 			{
 				source = Operand.CreateUnmanagedSymbolPointer(Metadata.FieldDefinition + context.MosaField.FullName, TypeSystem);
-				runtimeHandle = AllocateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"));
+
+				MethodScanner.AccessedField(context.MosaField);
 			}
 			else
 			{
 				throw new NotImplementCompilerException();
 			}
 
-			var destination = context.Result;
-			context.SetInstruction(Select(runtimeHandle, IRInstruction.MoveInt32, IRInstruction.MoveInt64), runtimeHandle, source);
-			context.AppendInstruction(Select(destination, IRInstruction.MoveInt32, IRInstruction.MoveInt64), destination, runtimeHandle);
+			context.SetInstruction(Select(context.Result, IRInstruction.MoveInt32, IRInstruction.MoveInt64), context.Result, source);
 		}
 
 		/// <summary>
@@ -1277,16 +1274,6 @@ namespace Mosa.Compiler.Framework.Stages
 		private void Nop(InstructionNode node)
 		{
 			node.SetInstruction(IRInstruction.Nop);
-		}
-
-		private static BaseIRInstruction Select(Operand operand, BaseIRInstruction instruction32, BaseIRInstruction instruction64)
-		{
-			return Select(operand.Is64BitInteger, instruction32, instruction64);
-		}
-
-		private static BaseIRInstruction Select(bool is64Bit, BaseIRInstruction instruction32, BaseIRInstruction instruction64)
-		{
-			return !is64Bit ? instruction32 : instruction64;
 		}
 
 		/// <summary>
@@ -1447,7 +1434,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var field = node.MosaField;
 
-			MethodCompiler.Compiler.MethodScanner.AccessedField(field);
+			MethodScanner.AccessedField(field);
 
 			int offset = TypeLayout.GetFieldOffset(field);
 			var offsetOperand = CreateConstant(offset);
@@ -1533,7 +1520,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var field = node.MosaField;
 
-			MethodCompiler.Compiler.MethodScanner.AccessedField(field);
+			MethodScanner.AccessedField(field);
 
 			var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
 			var fieldType = field.FieldType;
@@ -1668,6 +1655,16 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		#region Internals
+
+		private static BaseIRInstruction Select(Operand operand, BaseIRInstruction instruction32, BaseIRInstruction instruction64)
+		{
+			return Select(operand.Is64BitInteger, instruction32, instruction64);
+		}
+
+		private static BaseIRInstruction Select(bool is64Bit, BaseIRInstruction instruction32, BaseIRInstruction instruction64)
+		{
+			return !is64Bit ? instruction32 : instruction64;
+		}
 
 		private struct ConversionEntry
 		{

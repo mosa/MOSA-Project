@@ -5,6 +5,7 @@ using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
 using Mosa.TestWorld.x86.Tests;
+using Mosa.UnitTests;
 using System.Runtime.InteropServices;
 
 namespace Mosa.TestWorld.x86
@@ -72,6 +73,8 @@ namespace Mosa.TestWorld.x86
 			Console.BackgroundColor = ScreenColor.Blue;
 			Console.WriteLine();
 			Console.WriteLine();
+
+			//ArrayLayoutTests.U8d();
 
 			KernelTest.RunTests();
 

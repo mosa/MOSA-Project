@@ -203,20 +203,18 @@ namespace Mosa.Compiler.Framework
 
 		public Compiler(MosaCompiler mosaCompiler)
 		{
-			Architecture = mosaCompiler.CompilerOptions.Architecture;
-
 			TypeSystem = mosaCompiler.TypeSystem;
 			TypeLayout = mosaCompiler.TypeLayout;
-			CompilerTrace = mosaCompiler.CompilerTrace;
 			CompilerOptions = mosaCompiler.CompilerOptions;
 			CompilationScheduler = mosaCompiler.CompilationScheduler;
 			Linker = mosaCompiler.Linker;
+			CompilerTrace = mosaCompiler.CompilerTrace;
+			CompilerExtensions.AddRange(mosaCompiler.CompilerExtensions);
+			methodStagePipelines = new Pipeline<BaseMethodCompilerStage>[mosaCompiler.MaxThreads + 1];
+
+			Architecture = CompilerOptions.Architecture;
 
 			MethodScanner = new MethodScanner(this);
-
-			CompilerExtensions.AddRange(mosaCompiler.CompilerExtensions);
-
-			methodStagePipelines = new Pipeline<BaseMethodCompilerStage>[mosaCompiler.MaxThreads];
 
 			foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
 			{
@@ -360,7 +358,8 @@ namespace Mosa.Compiler.Framework
 				if (IsStopped)
 					return;
 
-				CompilerMethodInQueue();
+				if (CompilerMethodInQueue() == null)
+					return;
 			}
 		}
 
@@ -402,29 +401,21 @@ namespace Mosa.Compiler.Framework
 		{
 			using (var finished = new CountdownEvent(1))
 			{
-				for (int threadID = 0; threadID < threads; threadID++)
+				for (int threadID = 1; threadID <= threads; threadID++)
 				{
 					finished.AddCount();
 
 					int tid = threadID;
 
-					ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
-					{
-						//try
-						//{
-						CompileWorker(tid);
-
-						//}
-						//catch (Exception e)
-						//{
-						//	this.CompilerTrace.NewCompilerTraceEvent(CompilerEvent.Exception, e.ToString(), threadID);
-						//}
-						//finally
-						//{
-						finished.Signal();
-
-						//}
-					}));
+					ThreadPool.QueueUserWorkItem(
+						new WaitCallback(
+							delegate
+							{
+								CompileWorker(tid);
+								finished.Signal();
+							}
+						)
+					);
 				}
 
 				finished.Signal();

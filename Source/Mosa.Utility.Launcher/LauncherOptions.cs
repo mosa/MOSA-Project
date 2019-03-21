@@ -11,7 +11,7 @@ using System.IO;
 
 namespace Mosa.Utility.Launcher
 {
-	public class Options
+	public class LauncherOptions
 	{
 		[Option("dest")]
 		public string DestinationDirectory { get; set; }
@@ -185,10 +185,10 @@ namespace Mosa.Utility.Launcher
 		public string SerialPipeName { get; set; } = "MOSA";
 
 		[Option("threading")]
-		public bool UseMultiThreadingCompiler { get; set; } = true;
+		public bool EnableMultiThreading { get; set; } = true;
 
 		[Option("threading-off")]
-		public bool UseMultiThreadingCompilerFalse { set { UseMultiThreadingCompiler = false; } }
+		public bool UseMultiThreadingCompilerFalse { set { EnableMultiThreading = false; } }
 
 		[Option("bootloader")]
 		public BootLoader BootLoader { get; set; }
@@ -350,7 +350,7 @@ namespace Mosa.Utility.Launcher
 		public MosaLinker.CreateExtraSectionsDelegate CreateExtraSections { get; set; }
 		public MosaLinker.CreateExtraProgramHeaderDelegate CreateExtraProgramHeaders { get; set; }
 
-		public Options()
+		public LauncherOptions()
 		{
 			IncludeFiles = new List<IncludeFile>();
 			Paths = new List<string>();
