@@ -8,6 +8,5 @@ IMAGE=seblon/mosa-debian-integration
 docker rm -f $NAME
 
 docker run -it --name $NAME -v ${PWD}/start:/home/mosa/start $IMAGE /bin/bash -c /home/mosa/start
-#docker run -it --name $NAME -v ${PWD}/start:/home/mosa/start mosa/$NAME /bin/bash
 
 
