@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <package >
 	<metadata>
 		<id>Mosa.ClassLib</id>
@@ -6,9 +6,9 @@
 		<title>Mosa.ClassLib Library</title>
 		<authors>MOSA Project</authors>
 		<owners>MOSA Project</owners>
-		<licenseUrl>https://github.com/mosa/MOSA-Project/blob/master/LICENSE.txt</licenseUrl>
+		<license type="expression">BSD-3-Clause-Clear</license>
 		<projectUrl>http://www.mosa-project.org</projectUrl>
-		<iconUrl>https://raw.githubusercontent.com/tgiphil/MOSA-Project/VSIXProject/Source/Art/Mosa%20Icon.png</iconUrl>
+		<iconUrl>https://raw.githubusercontent.com/mosa/MOSA-Project/master/Source/Art/Mosa%20Icon.png</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>MOSA common libraries</description>
 		<releaseNotes></releaseNotes>
