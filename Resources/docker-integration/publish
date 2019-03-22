@@ -1,7 +1,7 @@
 #!/bin/bash
 
-NAME=mosa-debian-integration
-IMAGE=seblon/mosa-debian-integration
+NAME=mosa-docker-integration
+IMAGE=mosaproject/mosa-docker-integration
 
 #docker build . -t mosa/$NAME
 
