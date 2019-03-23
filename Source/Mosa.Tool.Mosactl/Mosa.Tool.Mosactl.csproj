@@ -65,7 +65,6 @@
     <StartupObject>Mosa.Tool.Mosactl.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Options.cs" />
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
