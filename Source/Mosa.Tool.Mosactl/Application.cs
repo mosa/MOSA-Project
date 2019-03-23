@@ -1,16 +1,16 @@
-﻿using System;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.IO;
 using System.Diagnostics;
-using System.Reflection;
-using System.Text.RegularExpressions;
+using System.IO;
+using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace Mosa.Tool.Mosactl
 {
-
 	public class MosaCtl
 	{
 		private bool IsWin = false;
@@ -45,27 +45,35 @@ namespace Mosa.Tool.Mosactl
 					case "MOSA_ROOT":
 						value = Path.GetDirectoryName(Path.GetDirectoryName(new Uri(typeof(Program).Assembly.Location).AbsolutePath));
 						break;
+
 					case "MOSA_BIN":
 						value = Path.Combine(GetEnv("MOSA_ROOT"), "bin");
 						break;
+
 					case "MOSA_SOURCE":
 						value = Path.Combine(GetEnv("MOSA_ROOT"), "Source");
 						break;
+
 					case "MOSA_TOOLS":
 						value = Path.Combine(GetEnv("MOSA_ROOT"), "Tools");
 						break;
+
 					case "MOSA_NUGET":
 						value = Path.Combine(GetEnv("MOSA_TOOLS"), "nuget", "nuget.exe");
 						break;
+
 					case "MOSA_MSBUILD":
 						value = appLocations.MsBuild;
 						break;
+
 					case "MOSA_WIN_OSDIR":
 						value = @"C:\Windows";
 						break;
+
 					case "MOSA_WIN_PROGRAMS":
 						value = @"C:\Program Files"; // TODO
 						break;
+
 					case "MOSA_WIN_PROGRAMS_X86":
 						value = @"C:\Program Files (x86)"; // TODO
 						break;
@@ -99,35 +107,43 @@ namespace Mosa.Tool.Mosactl
 					if (!TaskTools(CheckType.force))
 						Environment.Exit(1);
 					break;
+
 				case "runtime":
 					if (!TaskRuntime(CheckType.force))
 						Environment.Exit(1);
 					break;
+
 				case "net":
 				case "dotnet":
 					if (!TaskCILBuild(CheckType.force, args))
 						Environment.Exit(1);
 					break;
+
 				case "bin":
 				case "binary":
 					if (!TaskBinaryBuild(CheckType.force, args))
 						Environment.Exit(1);
 					break;
+
 				case "run":
 					if (!TaskRun(args))
 						Environment.Exit(1);
 					break;
+
 				case "test":
 					if (!TaskTest(args))
 						Environment.Exit(1);
 					break;
+
 				case "unittest":
 					if (!TaskUnitTest(args))
 						Environment.Exit(1);
 					break;
+
 				case "debug":
 					TaskDebug(args);
 					break;
+
 				case "help":
 					PrintHelp("usage");
 					break;
@@ -249,7 +265,9 @@ namespace Mosa.Tool.Mosactl
 			}
 		}
 
-		public void TaskDiskBuild() { }
+		public void TaskDiskBuild()
+		{
+		}
 
 		public void TaskBuild(List<string> args)
 		{
@@ -343,7 +361,6 @@ namespace Mosa.Tool.Mosactl
 			args.Add("-serial");
 			args.Add("stdio");
 
-
 			args.Add("-serial");
 			args.Add("null");
 
@@ -385,7 +402,6 @@ namespace Mosa.Tool.Mosactl
 						if (buf[0] != '\r')
 							sb.Append(buf[0]);
 					}
-
 				}
 			});
 			th.Start();
@@ -508,10 +524,13 @@ namespace Mosa.Tool.Mosactl
 			{
 				case "helloworld":
 					return "Mosa.HelloWorld.x86";
+
 				case "coolworld":
 					return "Mosa.CoolWorld.x86";
+
 				case "testworld":
 					return "Mosa.TestWorld.x86";
+
 				case "unittests":
 					return "Mosa.UnitTests.x86";
 			}
@@ -538,5 +557,4 @@ namespace Mosa.Tool.Mosactl
 			return name;
 		}
 	}
-
 }

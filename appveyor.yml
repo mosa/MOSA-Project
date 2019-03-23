@@ -11,14 +11,14 @@ shallow_clone: true
 build: off
 
 for:
+
+# Windows Build:
   -
     matrix:
       only:
         - image: Visual Studio 2017
 
-
     install:
-    #- cmd: choco install InnoSetup
     - cmd: SET PATH=%PATH%;C:\Program Files (x86)\Inno Setup 5
 
     before_build:
@@ -31,9 +31,9 @@ for:
       publish_nuget: true
 
     after_build:
-    - ps: ./mosactl.ps1 test
-    - ps: ./mosactl.ps1 unittest
     - cmd: ISCC.exe Source/Inno-Setup-Script/Mosa-Installer.iss
+    - ps: ./mosactl.ps1 unittest
+#    - ps: ./mosactl.ps1 test
 
     build_script:
 
@@ -57,24 +57,20 @@ for:
     artifacts:
     - path: 'bin/MOSA Installer/MOSA-Installer.exe'
 
+# Linux Build:
   -
     matrix:
       only:
         - image: Ubuntu1804
 
     install:
-    - sh: docker pull seblon/mosa-docker-integration || docker pull seblon/mosa-docker-integration # with retry, if failed
+    - sh: docker pull mosaproject/mosa-docker-integration || docker pull mosaproject/mosa-docker-integration # with retry, if failed
 
     before_build:
     - echo test
 
     build: off
-#      verbosity: minimal
-#      parallel: true
-#      project: Source/Mosa.sln
 
     build_script:
-#    - sh: echo $APPVEYOR_BUILD_FOLDER; ls -l $APPVEYOR_BUILD_FOLDER; 
-#    - sh: echo $PWD; ls -l; ls -l $PWD ; echo blubb; ls -l $PWD/Ressources; ls -l $PWD/Ressources/docker-integration
     - sh: echo UID "$UID"
-    - sh: docker run --name MOSA -v $APPVEYOR_BUILD_FOLDER:/home/appveyor seblon/mosa-docker-integration /bin/bash -c "useradd -m -u $UID appveyor && su appveyor -- -c 'cd /home/appveyor && chmod +x mosactl && ./mosactl test && ./mosactl unittest'"
+    - sh: docker run --name MOSA -v $APPVEYOR_BUILD_FOLDER:/home/appveyor mosaproject/mosa-docker-integration /bin/bash -c "useradd -m -u $UID appveyor && su appveyor -- -c 'cd /home/appveyor && chmod +x mosactl && ./mosactl test && ./mosactl unittest'"

@@ -1,4 +1,4 @@
-<?xml version="1.0"?>
+﻿<?xml version="1.0"?>
 <package >
 	<metadata minClientVersion="3.3.0">
 		<id>Mosa.Korlib</id>
@@ -6,9 +6,9 @@
 		<title>Mosa.Korlib Library</title>
 		<authors>MOSA Project</authors>
 		<owners>MOSA Project</owners>
-		<licenseUrl>https://github.com/mosa/MOSA-Project/blob/master/LICENSE.txt</licenseUrl>
+		<license type="expression">BSD-3-Clause-Clear</license>
 		<projectUrl>http://www.mosa-project.org</projectUrl>
-		<iconUrl>https://raw.githubusercontent.com/tgiphil/MOSA-Project/VSIXProject/Source/Art/Mosa%20Icon.png</iconUrl>
+		<iconUrl>https://raw.githubusercontent.com/mosa/MOSA-Project/master/Source/Art/Mosa%20Icon.png</iconUrl>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<description>MOSA implementation of corlib</description>
 		<releaseNotes></releaseNotes>
