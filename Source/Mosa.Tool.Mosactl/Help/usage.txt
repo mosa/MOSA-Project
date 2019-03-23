@@ -5,7 +5,7 @@
 possible name: helloworld, coolworld, testworld.
 (Name can also be a path to a project. This feature is in development.)
 
-if actions is ommited, it's always "build"
+if actions is omitted, it's always "build"
 
 # builds the compiler tools. Rebuild is only required if compiler source has been changed.
 tools build
