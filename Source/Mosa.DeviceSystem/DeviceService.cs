@@ -7,7 +7,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// Device Manager
 	/// </summary>
-	public sealed class DeviceManagerService : BaseService
+	public sealed class DeviceService : BaseService
 	{
 		/// <summary>
 		/// The maximum interrupts
@@ -47,10 +47,10 @@ namespace Mosa.DeviceSystem
 		private object _lock = new object();
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="DeviceManagerService" /> class.
+		/// Initializes a new instance of the <see cref="DeviceService" /> class.
 		/// </summary>
 		/// <param name="platform">The platform.</param>
-		public DeviceManagerService(PlatformArchitecture platform)
+		public DeviceService(PlatformArchitecture platform)
 		{
 			registry = new List<DeviceDriverRegistryEntry>();
 			devices = new List<Device>();

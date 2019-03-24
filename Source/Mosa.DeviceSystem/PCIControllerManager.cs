@@ -12,13 +12,13 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// The device manager
 		/// </summary>
-		protected DeviceManagerService deviceManager;
+		protected DeviceService deviceManager;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PCIControllerManager"/> class.
 		/// </summary>
 		/// <param name="deviceManager">The device manager.</param>
-		public PCIControllerManager(DeviceManagerService deviceManager)
+		public PCIControllerManager(DeviceService deviceManager)
 		{
 			this.deviceManager = deviceManager;
 		}

@@ -87,7 +87,7 @@
     <Compile Include="DeviceBusType.cs" />
     <Compile Include="DeviceDriverPhysicalMemory.cs" />
     <Compile Include="DeviceDriverStartStatus.cs" />
-    <Compile Include="DeviceManagerService.cs" />
+    <Compile Include="DeviceService.cs" />
     <Compile Include="DeviceStatus.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="DiskPartitionConfiguration.cs" />
@@ -116,7 +116,7 @@
     <Compile Include="GUIDPartitionTable.cs" />
     <Compile Include="PartitionType.cs" />
     <Compile Include="DiskGeometry.cs" />
-    <Compile Include="PartitionManager.cs" />
+    <Compile Include="PartitionService.cs" />
     <Compile Include="DiskDeviceDriver.cs">
       <SubType>Code</SubType>
     </Compile>

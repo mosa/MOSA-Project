@@ -53,24 +53,24 @@ namespace Mosa.CoolWorld.x86
 			Console.WriteLine("> Initializing hardware abstraction layer...");
 
 			// Create Device Manager
-			var DeviceManager = new DeviceManagerService(PlatformArchitecture.X86);
+			var DeviceService = new DeviceService(PlatformArchitecture.X86);
 
-			ServiceManager.Add(DeviceManager);
+			ServiceManager.Add(DeviceService);
 
-			DeviceManager.RegisterDaemon(new DiskDeviceMountDeamon());
+			DeviceService.RegisterDaemon(new DiskDeviceMountDeamon());
 
 			// Set device driver system with the hardware HAL
 			var hardware = new HAL.Hardware();
-			DeviceSystem.Setup.Initialize(hardware, DeviceManager.ProcessInterrupt);
+			DeviceSystem.Setup.Initialize(hardware, DeviceService.ProcessInterrupt);
 
 			Console.WriteLine("> Registering device drivers...");
-			DeviceManager.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
+			DeviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
 
 			Console.WriteLine("> Starting devices...");
-			DeviceManager.Initialize(new X86System(), null);
+			DeviceService.Initialize(new X86System(), null);
 
 			Console.Write("> Probing for ISA devices...");
-			var isaDevices = DeviceManager.GetAllDevices();
+			var isaDevices = DeviceService.GetAllDevices();
 			Console.WriteLine("[Completed: " + isaDevices.Count.ToString() + " found]");
 
 			foreach (var device in isaDevices)
@@ -85,7 +85,7 @@ namespace Mosa.CoolWorld.x86
 			Console.Write("> Probing for PCI devices...");
 
 			//Setup.StartPCIDevices();
-			var pciDevices = DeviceManager.GetDevices<DeviceSystem.PCI.IPCIDevice>(DeviceStatus.Available);
+			var pciDevices = DeviceService.GetDevices<DeviceSystem.PCI.IPCIDevice>(DeviceStatus.Available);
 			Console.WriteLine("[Completed: " + pciDevices.Count.ToString() + " found]");
 
 			foreach (var device in pciDevices)
@@ -100,7 +100,7 @@ namespace Mosa.CoolWorld.x86
 			}
 
 			Console.Write("> Probing for disk controllers...");
-			var diskcontrollers = DeviceManager.GetDevices<IDiskControllerDevice>();
+			var diskcontrollers = DeviceService.GetDevices<IDiskControllerDevice>();
 			Console.WriteLine("[Completed: " + diskcontrollers.Count.ToString() + " found]");
 
 			foreach (var device in diskcontrollers)
@@ -113,7 +113,7 @@ namespace Mosa.CoolWorld.x86
 			}
 
 			Console.Write("> Probing for disks...");
-			var disks = DeviceManager.GetDevices<IDiskDevice>();
+			var disks = DeviceService.GetDevices<IDiskDevice>();
 			Console.WriteLine("[Completed: " + disks.Count.ToString() + " found]");
 
 			foreach (var disk in disks)
@@ -126,11 +126,11 @@ namespace Mosa.CoolWorld.x86
 				Console.WriteLine();
 			}
 
-			var partitionManager = new PartitionManager(DeviceManager);
+			var partitionManager = new PartitionService(DeviceService);
 			partitionManager.CreatePartitionDevices();
 
 			Console.Write("> Finding partitions...");
-			var partitions = DeviceManager.GetDevices<IPartitionDevice>();
+			var partitions = DeviceService.GetDevices<IPartitionDevice>();
 			Console.WriteLine("[Completed: " + partitions.Count.ToString() + " found]");
 
 			foreach (var partition in partitions)
@@ -185,7 +185,7 @@ namespace Mosa.CoolWorld.x86
 			}
 
 			// Get StandardKeyboard
-			var standardKeyboards = DeviceManager.GetDevices("StandardKeyboard");
+			var standardKeyboards = DeviceService.GetDevices("StandardKeyboard");
 
 			if (standardKeyboards.Count == 0)
 			{
