@@ -7,7 +7,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// Device Manager
 	/// </summary>
-	public sealed class DeviceManager
+	public sealed class DeviceManager : BaseService
 	{
 		/// <summary>
 		/// The maximum interrupts
@@ -246,17 +246,17 @@ namespace Mosa.DeviceSystem
 
 		public List<Device> GetAllDevices()
 		{
-			var list = new List<Device>();
-
 			lock (_lock)
 			{
+				var list = new List<Device>(devices.Count);
+
 				foreach (var device in devices)
 				{
 					list.Add(device);
 				}
-			}
 
-			return list;
+				return list;
+			}
 		}
 
 		public bool CheckExists(Device parent, ulong componentID)

@@ -375,6 +375,9 @@ namespace Mosa.Compiler.Framework
 
 		public MosaMethod CompileMethod(MosaMethod method, int threadID = 0)
 		{
+			if (method.IsCompilerGenerated)
+				return method;
+
 			lock (method)
 			{
 				CompileMethod(method, null, threadID);

@@ -31,15 +31,15 @@ namespace Mosa.DeviceDriver
 				Factory = delegate { return new ISA.StandardKeyboard(); }
 			});
 
-			//deviceManager.RegisterDeviceDriver(new ISADeviceDriverRegistryEntry()
-			//{
-			//	Name = "PCIController",
-			//	Platforms = PlatformArchitecture.X86AndX64,
-			//	AutoLoad = true,
-			//	BasePort = 0x0CF8,
-			//	PortRange = 8,
-			//	Factory = delegate { return new ISA.PCIController(); }
-			//});
+			deviceManager.RegisterDeviceDriver(new ISADeviceDriverRegistryEntry()
+			{
+				Name = "PCIController",
+				Platforms = PlatformArchitecture.X86AndX64,
+				AutoLoad = true,
+				BasePort = 0x0CF8,
+				PortRange = 8,
+				Factory = delegate { return new ISA.PCIController(); }
+			});
 
 			deviceManager.RegisterDeviceDriver(new ISADeviceDriverRegistryEntry()
 			{
@@ -53,18 +53,28 @@ namespace Mosa.DeviceDriver
 				Factory = delegate { return new ISA.IDEController(); }
 			});
 
-			//deviceManager.RegisterDeviceDriver(new ISADeviceDriver()
-			//{
-			//	Name = "IDEController (Secondary)",
-			//	Platforms = PlatformArchitecture.X86AndX64,
-			//	AutoLoad = true,
-			//	BasePort = 0x170,
-			//	PortRange = 8,
-			//	AltBasePort = 0x376,
-			//	AltPortRange = 8,
-			//	ForceOption = "ide2",
-			//	Factory = delegate { return new ISA.IDEController(); }
-			//});
+			deviceManager.RegisterDeviceDriver(new ISADeviceDriverRegistryEntry()
+			{
+				Name = "IDEController (Secondary)",
+				Platforms = PlatformArchitecture.X86AndX64,
+				AutoLoad = true,
+				BasePort = 0x170,
+				PortRange = 8,
+				AltBasePort = 0x376,
+				AltPortRange = 8,
+				ForceOption = "ide2",
+				Factory = delegate { return new ISA.IDEController(); }
+			});
+
+			deviceManager.RegisterDeviceDriver(new PCIDeviceDriverRegistryEntry()
+			{
+				Name = "VMwareSGAII",
+				Platforms = PlatformArchitecture.X86AndX64,
+				BusType = DeviceBusType.PCI,
+				VendorID = 0x15AD,
+				DeviceID = 0x0405,
+				Factory = delegate { return new PCI.VMware.VMwareSVGAII(); }
+			});
 		}
 
 		public static void Start(DeviceManager deviceManager)

@@ -745,6 +745,7 @@ namespace Mosa.Tool.Explorer
 		protected void LoadAssembly(string filename, string platform, string includeDirectory = null)
 		{
 			Compiler.CompilerOptions.Architecture = GetArchitecture(platform);
+			Compiler.CompilerOptions.MultibootSpecification = MultibootSpecification.V1;
 
 			Compiler.CompilerOptions.SearchPaths.Clear();
 			Compiler.CompilerOptions.SourceFiles.Clear();

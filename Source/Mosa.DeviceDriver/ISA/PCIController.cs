@@ -16,7 +16,6 @@ namespace Mosa.DeviceDriver.ISA
 
 		#endregion Definitions
 
-
 		/// <summary>
 		/// The configuration address
 		/// </summary>

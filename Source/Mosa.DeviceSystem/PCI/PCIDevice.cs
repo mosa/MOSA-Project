@@ -238,7 +238,7 @@ namespace Mosa.DeviceSystem.PCI
 				if (baseAddress == null)
 					continue;
 
-				if ((object)baseAddress.Region == null)
+				if (baseAddress.Region == AddressType.Undefined)
 					continue;
 
 				switch (baseAddress.Region)
