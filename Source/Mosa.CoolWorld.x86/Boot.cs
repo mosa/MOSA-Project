@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.AppSystem;
+using Mosa.DeviceDriver;
 using Mosa.DeviceDriver.ScanCodeMap;
 using Mosa.DeviceSystem;
 using Mosa.FileSystem.FAT;
@@ -36,9 +37,6 @@ namespace Mosa.CoolWorld.x86
 
 			Console.Clear();
 			Console.Goto(0, 0);
-
-			//IDT.SetInterruptHandler(ProcessInterrupt);
-
 			Console.ScrollRow = 23;
 			Console.Color = ScreenColor.White;
 			Console.BackgroundColor = ScreenColor.Green;
@@ -53,22 +51,23 @@ namespace Mosa.CoolWorld.x86
 			var ServiceManager = new ServiceManager();
 
 			Console.WriteLine("> Initializing hardware abstraction layer...");
-			var hardware = new HAL.Hardware();
 
 			// Create Device Manager
-			var DeviceManager = new DeviceManager(PlatformArchitecture.X86);
+			var DeviceManager = new DeviceManagerService(PlatformArchitecture.X86);
+
 			ServiceManager.Add(DeviceManager);
 
 			DeviceManager.RegisterDaemon(new DiskDeviceMountDeamon());
 
 			// Set device driver system with the hardware HAL
-			Setup.Initialize(hardware, DeviceManager.ProcessInterrupt);
+			var hardware = new HAL.Hardware();
+			DeviceSystem.Setup.Initialize(hardware, DeviceManager.ProcessInterrupt);
 
 			Console.WriteLine("> Registering device drivers...");
-			DeviceDriver.Setup.Register(DeviceManager);
+			DeviceManager.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
 
 			Console.WriteLine("> Starting devices...");
-			DeviceDriver.Setup.Start(DeviceManager);
+			DeviceManager.Initialize(new X86System(), null);
 
 			Console.Write("> Probing for ISA devices...");
 			var isaDevices = DeviceManager.GetAllDevices();

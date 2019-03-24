@@ -10,13 +10,13 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// The device manager
 		/// </summary>
-		protected DeviceManager deviceManager;
+		protected DeviceManagerService deviceManager;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PartitionManager"/> class.
 		/// </summary>
 		/// <param name="deviceManager">The device manager.</param>
-		public PartitionManager(DeviceManager deviceManager)
+		public PartitionManager(DeviceManagerService deviceManager)
 		{
 			this.deviceManager = deviceManager;
 		}

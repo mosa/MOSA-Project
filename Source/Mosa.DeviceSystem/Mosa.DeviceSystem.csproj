@@ -87,7 +87,7 @@
     <Compile Include="DeviceBusType.cs" />
     <Compile Include="DeviceDriverPhysicalMemory.cs" />
     <Compile Include="DeviceDriverStartStatus.cs" />
-    <Compile Include="DeviceManager.cs" />
+    <Compile Include="DeviceManagerService.cs" />
     <Compile Include="DeviceStatus.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="DiskPartitionConfiguration.cs" />
