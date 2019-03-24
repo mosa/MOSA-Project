@@ -24,6 +24,14 @@ namespace Mosa.DeviceSystem
 			services = new List<BaseService>();
 		}
 
+		public void Add(BaseService sevice)
+		{
+			lock (_lock)
+			{
+				services.Add(sevice);
+			}
+		}
+
 		public List<T> GetService<T>() where T : BaseService
 		{
 			var list = new List<T>();

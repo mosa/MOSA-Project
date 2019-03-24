@@ -71,6 +71,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseDeviceConfiguration.cs" />
+    <Compile Include="BaseService.cs" />
+    <Compile Include="ServiceManager.cs" />
     <Compile Include="DiskDeviceMountDeamon.cs" />
     <Compile Include="BaseMountDaemon.cs" />
     <Compile Include="Color.cs">
@@ -94,7 +97,6 @@
     <Compile Include="BaseDeviceDriver.cs" />
     <Compile Include="HardwareResources.cs" />
     <Compile Include="DeviceDriverRegistryEntry.cs" />
-    <Compile Include="BaseDeviceConfiguration.cs" />
     <Compile Include="DiskDeviceConfiguration.cs" />
     <Compile Include="IDMAChannel.cs" />
     <Compile Include="BaseHardwareAbstraction.cs" />

@@ -50,10 +50,19 @@ namespace Mosa.CoolWorld.x86
 			Console.Color = ScreenColor.White;
 			Console.BackgroundColor = ScreenColor.Black;
 
+			var ServiceManager = new ServiceManager();
+
 			Console.WriteLine("> Initializing hardware abstraction layer...");
 			var hardware = new HAL.Hardware();
 
-			var DeviceManager = Setup.Initialize(PlatformArchitecture.X86, hardware);
+			// Create Device Manager
+			var DeviceManager = new DeviceManager(PlatformArchitecture.X86);
+			ServiceManager.Add(DeviceManager);
+
+			DeviceManager.RegisterDaemon(new DiskDeviceMountDeamon());
+
+			// Set device driver system with the hardware HAL
+			Setup.Initialize(hardware, DeviceManager.ProcessInterrupt);
 
 			Console.WriteLine("> Registering device drivers...");
 			DeviceDriver.Setup.Register(DeviceManager);
