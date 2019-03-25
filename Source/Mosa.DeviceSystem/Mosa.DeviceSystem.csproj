@@ -72,10 +72,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseDeviceConfiguration.cs" />
+    <Compile Include="ServiceEventType.cs" />
+    <Compile Include="ServiceEvent.cs" />
     <Compile Include="BaseService.cs" />
     <Compile Include="ServiceManager.cs" />
-    <Compile Include="DiskDeviceMountDeamon.cs" />
-    <Compile Include="BaseMountDaemon.cs" />
+    <Compile Include="DiskDeviceService.cs" />
     <Compile Include="Color.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -100,14 +101,12 @@
     <Compile Include="DiskDeviceConfiguration.cs" />
     <Compile Include="IDMAChannel.cs" />
     <Compile Include="BaseHardwareAbstraction.cs" />
-    <Compile Include="IHardwareDevice.cs" />
     <Compile Include="IIOPorts.cs" />
     <Compile Include="IOPortRegion.cs" />
     <Compile Include="IOPortResources.cs" />
     <Compile Include="IPCIController.cs" />
     <Compile Include="PCIDeviceDriverRegistryEntry.cs" />
     <Compile Include="ISADeviceDriverRegistryEntry.cs" />
-    <Compile Include="IService.cs" />
     <Compile Include="MemoryRegion.cs" />
     <Compile Include="MemoryResources.cs" />
     <Compile Include="NetworkDevicePacketBuffer.cs" />

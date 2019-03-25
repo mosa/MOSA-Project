@@ -2,17 +2,25 @@
 
 namespace Mosa.DeviceSystem
 {
-	public class DiskDeviceMountDeamon : BaseMountDaemon
+	public class DiskDeviceService : BaseService
 	{
-		public override void OnChange(Device device)
+		public override void PostEvent(ServiceEvent serviceEvent)
 		{
+			if (serviceEvent.ServiceEventType != ServiceEventType.Start)
+				return;
+
+			var device = serviceEvent.Subject as Device;
+
+			if (device == null)
+				return;
+
 			// this mounts everything
 			var controller = device.DeviceDriver as IDiskControllerDevice;
 
 			if (controller == null)
 				return;
 
-			var devicemanager = device.DeviceManager;
+			var deviceServe = device.DeviceService;
 
 			for (uint drive = 0; drive < controller.MaximunDriveCount; drive++)
 			{
@@ -22,7 +30,8 @@ namespace Mosa.DeviceSystem
 				if (controller.GetTotalSectors(drive) == 0)
 					continue;
 
-				if (devicemanager.CheckExists(device, drive))
+				// don't mount twice
+				if (deviceServe.CheckExists(device, drive))
 					return;
 
 				var configuration = new DiskDeviceConfiguration()
@@ -31,9 +40,9 @@ namespace Mosa.DeviceSystem
 					ReadOnly = false
 				};
 
-				devicemanager.Initialize(new DiskDeviceDriver(), device, configuration);
+				deviceServe.Initialize(new DiskDeviceDriver(), device, configuration);
 
-				//HAL.DebugWriteLine("DiskDeviceMountDeamon::OnChange():Exit");
+				//HAL.DebugWriteLine("DiskDeviceService::OnChange():Exit");
 			}
 		}
 	}

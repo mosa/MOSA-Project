@@ -15,29 +15,19 @@ namespace Mosa.DeviceSystem
 		public const ushort MaxInterrupts = 32;
 
 		/// <summary>
-		/// Gets the platform architecture.
-		/// </summary>
-		public PlatformArchitecture PlatformArchitecture { get; }
-
-		/// <summary>
 		/// The registered device drivers
 		/// </summary>
-		private readonly List<DeviceDriverRegistryEntry> registry;
+		private readonly List<DeviceDriverRegistryEntry> Registry;
 
 		/// <summary>
 		/// The devices
 		/// </summary>
-		private readonly List<Device> devices;
+		private readonly List<Device> Devices;
 
 		/// <summary>
 		/// The interrupt handlers
 		/// </summary>
-		private readonly List<Device>[] irqDispatch;
-
-		/// <summary>
-		/// The mount daemons
-		/// </summary>
-		private readonly List<BaseMountDaemon> daemons;
+		private readonly List<Device>[] IRQDispatch;
 
 		/// <summary>
 		/// The pending on change
@@ -50,19 +40,17 @@ namespace Mosa.DeviceSystem
 		/// Initializes a new instance of the <see cref="DeviceService" /> class.
 		/// </summary>
 		/// <param name="platform">The platform.</param>
-		public DeviceService(PlatformArchitecture platform)
+		public DeviceService()
 		{
-			registry = new List<DeviceDriverRegistryEntry>();
-			devices = new List<Device>();
-			daemons = new List<BaseMountDaemon>();
+			Registry = new List<DeviceDriverRegistryEntry>();
+			Devices = new List<Device>();
 			pendingOnChange = new List<Device>();
 
-			irqDispatch = new List<Device>[MaxInterrupts];
-			PlatformArchitecture = platform;
+			IRQDispatch = new List<Device>[MaxInterrupts];
 
 			for (int i = 0; i < MaxInterrupts; i++)
 			{
-				irqDispatch[i] = new List<Device>();
+				IRQDispatch[i] = new List<Device>();
 			}
 		}
 
@@ -80,7 +68,7 @@ namespace Mosa.DeviceSystem
 		{
 			lock (_lock)
 			{
-				registry.Add(deviceDriver);
+				Registry.Add(deviceDriver);
 			}
 		}
 
@@ -90,7 +78,7 @@ namespace Mosa.DeviceSystem
 
 			lock (_lock)
 			{
-				foreach (var deviceDriver in registry)
+				foreach (var deviceDriver in Registry)
 				{
 					if (deviceDriver.BusType == busType)
 					{
@@ -123,16 +111,12 @@ namespace Mosa.DeviceSystem
 				Parent = parent,
 				Configuration = configuration,
 				Resources = resources,
-				DeviceManager = this,
+				DeviceService = this,
 
 				//Name = string.Empty,
 			};
 
 			StartDevice(device);
-
-			OnChangeNotification(device);
-
-			ProcessOnChangeNotifications();
 
 			return device;
 		}
@@ -143,11 +127,11 @@ namespace Mosa.DeviceSystem
 		/// <param name="device">The device.</param>
 		private void StartDevice(Device device)
 		{
-			//HAL.DebugWriteLine("DeviceManger:StartDevice():Enter");
+			//HAL.DebugWriteLine("DeviceService:StartDevice():Enter");
 
 			lock (_lock)
 			{
-				devices.Add(device);
+				Devices.Add(device);
 
 				if (device.Parent != null)
 				{
@@ -176,7 +160,9 @@ namespace Mosa.DeviceSystem
 				}
 			}
 
-			//HAL.DebugWriteLine("DeviceManger:StartDevice():Exit");
+			ServiceManager.AddEvent(new ServiceEvent(ServiceEventType.Start, device));
+
+			//HAL.DebugWriteLine("DeviceService:StartDevice():Exit");
 		}
 
 		#endregion Initialize Devices Drivers
@@ -189,7 +175,7 @@ namespace Mosa.DeviceSystem
 
 			lock (_lock)
 			{
-				foreach (var device in devices)
+				foreach (var device in Devices)
 				{
 					if (device.DeviceDriver is T)
 					{
@@ -207,7 +193,7 @@ namespace Mosa.DeviceSystem
 
 			lock (_lock)
 			{
-				foreach (var device in devices)
+				foreach (var device in Devices)
 				{
 					if (device.Status == status && device.DeviceDriver is T)
 					{
@@ -225,7 +211,7 @@ namespace Mosa.DeviceSystem
 
 			lock (_lock)
 			{
-				foreach (var device in devices)
+				foreach (var device in Devices)
 				{
 					if (device.Name == name)
 					{
@@ -256,9 +242,9 @@ namespace Mosa.DeviceSystem
 		{
 			lock (_lock)
 			{
-				var list = new List<Device>(devices.Count);
+				var list = new List<Device>(Devices.Count);
 
-				foreach (var device in devices)
+				foreach (var device in Devices)
 				{
 					list.Add(device);
 				}
@@ -271,7 +257,7 @@ namespace Mosa.DeviceSystem
 		{
 			lock (_lock)
 			{
-				foreach (var device in devices)
+				foreach (var device in Devices)
 				{
 					if (device.Parent == parent && device.ComponentID == componentID)
 					{
@@ -291,7 +277,7 @@ namespace Mosa.DeviceSystem
 		{
 			lock (_lock)
 			{
-				foreach (var device in irqDispatch[irq])
+				foreach (var device in IRQDispatch[irq])
 				{
 					var deviceDriver = device.DeviceDriver;
 					deviceDriver.OnInterrupt();
@@ -310,7 +296,7 @@ namespace Mosa.DeviceSystem
 
 				lock (_lock)
 				{
-					irqDispatch[irq].Add(device);
+					IRQDispatch[irq].Add(device);
 				}
 			}
 		}
@@ -326,74 +312,11 @@ namespace Mosa.DeviceSystem
 
 				lock (_lock)
 				{
-					irqDispatch[irq].Remove(device);
+					IRQDispatch[irq].Remove(device);
 				}
 			}
 		}
 
 		#endregion Interrupts
-
-		#region Daemons
-
-		public void RegisterDaemon(BaseMountDaemon daemon)
-		{
-			lock (_lock)
-			{
-				daemons.Add(daemon);
-			}
-		}
-
-		public void OnChangeNotification(Device device)
-		{
-			//HAL.DebugWriteLine("OnChangeNotification:OnChange():Enter");
-
-			if (device == null)
-				return;
-
-			lock (_lock)
-			{
-				//if (pendingOnChange.Contains(device))
-				//	return;
-
-				pendingOnChange.Add(device);
-			}
-
-			//HAL.DebugWriteLine("OnChangeNotification:OnChange():Exit");
-
-			ProcessOnChangeNotifications();
-		}
-
-		private Device GetPendingOnChangeNotification()
-		{
-			lock (_lock)
-			{
-				if (pendingOnChange.Count == 0)
-					return null;
-
-				var device = pendingOnChange[0];
-				pendingOnChange.RemoveAt(0);
-
-				return device;
-			}
-		}
-
-		private void ProcessOnChangeNotifications()
-		{
-			//HAL.DebugWriteLine("DeviceManger:ProcessOnChangeNotifications():Enter");
-
-			var device = GetPendingOnChangeNotification();
-
-			if (device != null)
-			{
-				foreach (var daemon in daemons)
-				{
-					daemon.OnChange(device);
-				}
-			}
-
-			//HAL.DebugWriteLine("DeviceManger:ProcessOnChangeNotifications():Exit");
-		}
-
-		#endregion Daemons
 	}
 }

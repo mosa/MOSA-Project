@@ -8,17 +8,13 @@ namespace Mosa.DeviceSystem
 	public class PartitionService : BaseService
 	{
 		/// <summary>
-		/// The device manager
+		/// The device service
 		/// </summary>
-		protected DeviceService deviceManager;
+		protected DeviceService DeviceService;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="PartitionService"/> class.
-		/// </summary>
-		/// <param name="deviceManager">The device manager.</param>
-		public PartitionService(DeviceService deviceManager)
+		public override void Initialize()
 		{
-			this.deviceManager = deviceManager;
+			DeviceService = ServiceManager.GetFirstService<DeviceService>();
 		}
 
 		/// <summary>
@@ -28,7 +24,7 @@ namespace Mosa.DeviceSystem
 		{
 			// FIXME: Do not create multiple partition devices if this method executed more than once
 
-			var disks = deviceManager.GetDevices<IDiskDevice>(DeviceStatus.Online);
+			var disks = DeviceService.GetDevices<IDiskDevice>(DeviceStatus.Online);
 
 			// Find all online disk devices
 			foreach (var device in disks)
@@ -42,18 +38,18 @@ namespace Mosa.DeviceSystem
 
 				for (uint i = 0; i < MasterBootBlock.MaxMBRPartitions; i++)
 				{
-					if (mbr.Partitions[i].PartitionType != PartitionType.Empty)
-					{
-						var configuration = new DiskPartitionConfiguration()
-						{
-							Index = i,
-							StartLBA = mbr.Partitions[i].StartLBA,
-							TotalBlocks = mbr.Partitions[i].TotalBlocks,
-							ReadOnly = false,
-						};
+					if (mbr.Partitions[i].PartitionType == PartitionType.Empty)
+						continue;
 
-						deviceManager.Initialize(new PartitionDeviceDriver(), device, configuration, null, null);
-					}
+					var configuration = new DiskPartitionConfiguration()
+					{
+						Index = i,
+						StartLBA = mbr.Partitions[i].StartLBA,
+						TotalBlocks = mbr.Partitions[i].TotalBlocks,
+						ReadOnly = false,
+					};
+
+					DeviceService.Initialize(new PartitionDeviceDriver(), device, configuration, null, null);
 				}
 			}
 		}

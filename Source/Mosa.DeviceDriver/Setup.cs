@@ -9,7 +9,7 @@ namespace Mosa.DeviceDriver
 	{
 		public static List<DeviceDriverRegistryEntry> GetDeviceDriverRegistryEntries()
 		{
-			return new List<DeviceDriverRegistryEntry>
+			return new List<DeviceDriverRegistryEntry>()
 			{
 				new ISADeviceDriverRegistryEntry()
 				{

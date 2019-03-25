@@ -2,8 +2,14 @@
 
 namespace Mosa.DeviceSystem
 {
-	public abstract class BaseMountDaemon
+	public enum ServiceEventType
 	{
-		public abstract void OnChange(Device device);
+		New,
+		Change,
+		Delete,
+		Start,
+		Stop,
+		Error,
+		Warning,
 	}
 }
