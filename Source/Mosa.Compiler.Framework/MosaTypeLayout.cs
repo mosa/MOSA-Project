@@ -710,12 +710,12 @@ namespace Mosa.Compiler.Framework
 					}
 					else if (!method.IsInternal && !method.IsExternal)
 					{
-						int slot = methodTable.Count;
-						methodTable.Add(method);
-
 						// HACK
 						if (methodSlots.ContainsKey(method))
 							continue;
+
+						int slot = methodTable.Count;
+						methodTable.Add(method);
 
 						methodSlots.Add(method, slot);
 					}
