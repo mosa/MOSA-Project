@@ -712,6 +712,11 @@ namespace Mosa.Compiler.Framework
 					{
 						int slot = methodTable.Count;
 						methodTable.Add(method);
+
+						// HACK
+						if (methodSlots.ContainsKey(method))
+							continue;
+
 						methodSlots.Add(method, slot);
 					}
 				}

@@ -5,22 +5,21 @@ using Mosa.DeviceSystem.PCI;
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// PCI Controller Manager
+	/// PCI Controller Service
 	/// </summary>
-	public class PCIControllerManager
+	public class PCIControllerService : BaseService
 	{
 		/// <summary>
-		/// The device manager
+		/// The device service
 		/// </summary>
-		protected DeviceService deviceManager;
+		protected DeviceService DeviceService;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="PCIControllerManager"/> class.
+		/// Initializes this instance.
 		/// </summary>
-		/// <param name="deviceManager">The device manager.</param>
-		public PCIControllerManager(DeviceService deviceManager)
+		public override void Initialize()
 		{
-			this.deviceManager = deviceManager;
+			DeviceService = ServiceManager.GetFirstService<DeviceService>();
 		}
 
 		/// <summary>
@@ -44,7 +43,7 @@ namespace Mosa.DeviceSystem
 		public void CreatePCIDevices()
 		{
 			// Find PCI controller devices
-			var devices = deviceManager.GetDevices<IPCIController>(DeviceStatus.Online);
+			var devices = DeviceService.GetDevices<IPCIController>(DeviceStatus.Online);
 
 			if (devices.Count == 0)
 				return;
@@ -58,17 +57,17 @@ namespace Mosa.DeviceSystem
 				{
 					for (int fun = 0; fun < 7; fun++)
 					{
-						if (ProbeDevice(pciController, (byte)bus, (byte)slot, (byte)fun))
-						{
-							var configuration = new PCIDeviceConfiguration()
-							{
-								Bus = (byte)bus,
-								Slot = (byte)slot,
-								Function = (byte)fun
-							};
+						if (!ProbeDevice(pciController, (byte)bus, (byte)slot, (byte)fun))
+							continue;
 
-							deviceManager.Initialize(new PCIDevice(), devices[0], configuration, null, null);
-						}
+						var configuration = new PCIDeviceConfiguration()
+						{
+							Bus = (byte)bus,
+							Slot = (byte)slot,
+							Function = (byte)fun
+						};
+
+						DeviceService.Initialize(new PCIDevice(), devices[0], configuration, null, null);
 					}
 				}
 			}

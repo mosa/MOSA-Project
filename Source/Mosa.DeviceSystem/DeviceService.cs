@@ -39,7 +39,6 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DeviceService" /> class.
 		/// </summary>
-		/// <param name="platform">The platform.</param>
 		public DeviceService()
 		{
 			Registry = new List<DeviceDriverRegistryEntry>();

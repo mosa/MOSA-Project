@@ -473,8 +473,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		private MosaField ResolveFieldOperand(IField operand, GenericArgumentResolver resolver)
 		{
 			TypeSig declType;
-			var fieldDef = operand as FieldDef;
-			if (fieldDef == null)
+			if (!(operand is FieldDef fieldDef))
 			{
 				var memberRef = (MemberRef)operand;
 				fieldDef = memberRef.ResolveFieldThrow();
@@ -502,6 +501,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		private MosaMethod ResolveArrayMethod(IMethod method, GenericArgumentResolver resolver)
 		{
 			var type = metadata.Loader.GetType(resolver.Resolve(method.DeclaringType.ToTypeSig()));
+
 			if (method.Name == "Get")
 				return type.FindMethodByName("Get");
 			else if (method.Name == "Set")
@@ -517,13 +517,16 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 		private MosaMethod ResolveMethodOperand(IMethod operand, GenericArgumentResolver resolver)
 		{
 			if (operand is MethodSpec)
+			{
 				return metadata.Loader.LoadGenericMethodInstance((MethodSpec)operand, resolver);
+			}
 			else if (operand.DeclaringType.TryGetArraySig() != null || operand.DeclaringType.TryGetSZArraySig() != null)
+			{
 				return ResolveArrayMethod(operand, resolver);
+			}
 
 			TypeSig declType;
-			var methodDef = operand as MethodDef;
-			if (methodDef == null)
+			if (!(operand is MethodDef methodDef))
 			{
 				var memberRef = (MemberRef)operand;
 				methodDef = memberRef.ResolveMethodThrow();
@@ -576,6 +579,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 						.Methods
 						.Where(x => x.GenericArguments.Count > 0 && x.GenericArguments[0] == arrayType.ElementType)
 						.ToList();
+
 					foreach (var method in methods)
 					{
 						// HACK: the normal Equals for methods only compares signatures which causes issues with wrong methods being removed from the list

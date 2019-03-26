@@ -191,7 +191,7 @@
     <Compile Include="PartitionDeviceDriver.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PCIControllerManager.cs" />
+    <Compile Include="PCIControllerService.cs" />
     <Compile Include="PCI\AddressType.cs" />
     <Compile Include="PCI\BaseAddress.cs" />
     <Compile Include="PCI\ClassCodeTable.cs" />

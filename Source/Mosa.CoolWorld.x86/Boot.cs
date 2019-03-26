@@ -56,10 +56,12 @@ namespace Mosa.CoolWorld.x86
 			var deviceService = new DeviceService();
 			var diskDeviceService = new DiskDeviceService();
 			var partitionService = new PartitionService();
+			var pciControllerService = new PCIControllerService();
 
 			serviceManager.AddService(deviceService);
 			serviceManager.AddService(diskDeviceService);
 			serviceManager.AddService(partitionService);
+			serviceManager.AddService(pciControllerService);
 
 			Console.WriteLine("> Initializing hardware abstraction layer...");
 
@@ -88,7 +90,7 @@ namespace Mosa.CoolWorld.x86
 
 			Console.Write("> Probing for PCI devices...");
 
-			//Setup.StartPCIDevices();
+			pciControllerService.CreatePCIDevices();
 			var pciDevices = deviceService.GetDevices<DeviceSystem.PCI.IPCIDevice>(DeviceStatus.Available);
 			Console.WriteLine("[Completed: " + pciDevices.Count.ToString() + " found]");
 

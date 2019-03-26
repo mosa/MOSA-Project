@@ -12,6 +12,9 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		protected DeviceService DeviceService;
 
+		/// <summary>
+		/// Initializes this instance.
+		/// </summary>
 		public override void Initialize()
 		{
 			DeviceService = ServiceManager.GetFirstService<DeviceService>();
