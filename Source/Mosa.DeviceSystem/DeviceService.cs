@@ -126,7 +126,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="device">The device.</param>
 		private void StartDevice(Device device)
 		{
-			//HAL.DebugWriteLine("DeviceService:StartDevice():Enter");
+			//HAL.DebugWriteLine("DeviceService:StartDevice():Enter = " + device.Name);
 
 			lock (_lock)
 			{
@@ -144,14 +144,17 @@ namespace Mosa.DeviceSystem
 
 			if (device.Status == DeviceStatus.Initializing)
 			{
+				//HAL.DebugWriteLine("DeviceService:StartDevice():Initializing = " + (device.Name ?? string.Empty));
 				device.DeviceDriver.Initialize();
 
 				if (device.Status == DeviceStatus.Initializing)
 				{
+					//HAL.DebugWriteLine("DeviceService:StartDevice():Probing = " + (device.Name ?? string.Empty));
 					device.DeviceDriver.Probe();
 
 					if (device.Status == DeviceStatus.Available)
 					{
+						//HAL.DebugWriteLine("DeviceService:StartDevice():Starting = " + (device.Name ?? string.Empty));
 						device.DeviceDriver.Start();
 
 						AddInterruptHandler(device);

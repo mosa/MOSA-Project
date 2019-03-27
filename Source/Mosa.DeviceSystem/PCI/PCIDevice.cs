@@ -191,7 +191,7 @@ namespace Mosa.DeviceSystem.PCI
 
 		public override void Initialize()
 		{
-			pciController = base.Device.Parent as IPCIController;
+			pciController = Device.Parent.DeviceDriver as IPCIController;
 
 			var configuration = Device.Configuration as PCIDeviceConfiguration;
 
@@ -207,6 +207,7 @@ namespace Mosa.DeviceSystem.PCI
 			for (byte i = 0; i < 6; i++)
 			{
 				byte barr = (byte)(PCIConfigurationHeader.BaseAddressRegisterBase + (i * 4));
+
 				uint address = pciController.ReadConfig32(Bus, Slot, Function, barr);
 
 				if (address == 0)

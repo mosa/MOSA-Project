@@ -91,7 +91,7 @@ namespace Mosa.CoolWorld.x86
 			Console.Write("> Probing for PCI devices...");
 
 			pciControllerService.CreatePCIDevices();
-			var pciDevices = deviceService.GetDevices<DeviceSystem.PCI.IPCIDevice>(DeviceStatus.Available);
+			var pciDevices = deviceService.GetDevices<DeviceSystem.PCI.IPCIDevice>();
 			Console.WriteLine("[Completed: " + pciDevices.Count.ToString() + " found]");
 
 			foreach (var device in pciDevices)
@@ -101,6 +101,7 @@ namespace Mosa.CoolWorld.x86
 				Console.Write("  ");
 				Bullet(ScreenColor.Yellow);
 				Console.Write(" ");
+
 				InBrackets(device.Name + ": " + pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x") + " " + pciDevice.SubSystemID.ToString("x") + ":" + pciDevice.SubVendorID.ToString("x") + " (" + pciDevice.Function.ToString("x") + ":" + pciDevice.ClassCode.ToString("x") + ":" + pciDevice.SubClassCode.ToString("x") + ":" + pciDevice.ProgIF.ToString("x") + ":" + pciDevice.RevisionID.ToString("x") + ")", ScreenColor.White, ScreenColor.Green);
 				Console.WriteLine();
 			}

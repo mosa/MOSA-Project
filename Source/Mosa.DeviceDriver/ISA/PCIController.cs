@@ -44,14 +44,13 @@ namespace Mosa.DeviceDriver.ISA
 
 			var found = configAddress.Read32() == BaseValue;
 
-			if (!found)
-			{
-				Device.Status = DeviceStatus.NotFound;
-			}
+			Device.Status = (found) ? DeviceStatus.Available : DeviceStatus.NotFound;
 		}
 
 		public override void Start()
 		{
+			HAL.DebugWriteLine("PCI Controller - here2");
+
 			if (Device.Status == DeviceStatus.Available)
 			{
 				Device.Status = DeviceStatus.Online;

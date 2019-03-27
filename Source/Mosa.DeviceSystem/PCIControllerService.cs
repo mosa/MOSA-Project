@@ -48,7 +48,9 @@ namespace Mosa.DeviceSystem
 			if (devices.Count == 0)
 				return;
 
-			var pciController = devices[0].DeviceDriver as IPCIController;
+			var device = devices[0];
+
+			var pciController = device.DeviceDriver as IPCIController;
 
 			// For each controller
 			for (int bus = 0; bus < 255; bus++)
@@ -67,7 +69,7 @@ namespace Mosa.DeviceSystem
 							Function = (byte)fun
 						};
 
-						DeviceService.Initialize(new PCIDevice(), devices[0], configuration, null, null);
+						DeviceService.Initialize(new PCIDevice(), device, configuration, null, null);
 					}
 				}
 			}
