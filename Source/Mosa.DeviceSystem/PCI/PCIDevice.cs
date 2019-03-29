@@ -147,7 +147,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// Gets the sub vendor ID.
 		/// </summary>
 		/// <value>The sub vendor ID.</value>
-		public ushort SubVendorID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIConfigurationHeader.SubSystemVendorID); } }
+		public ushort SubSystemVendorID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIConfigurationHeader.SubSystemVendorID); } }
 
 		/// <summary>
 		/// Gets the sub device ID.

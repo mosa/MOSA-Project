@@ -53,7 +53,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// Gets the sub vendor ID.
 		/// </summary>
 		/// <value>The sub vendor ID.</value>
-		ushort SubVendorID { get; }
+		ushort SubSystemVendorID { get; }
 
 		/// <summary>
 		/// Gets the sub device ID.

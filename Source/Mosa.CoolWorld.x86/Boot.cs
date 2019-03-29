@@ -5,6 +5,7 @@ using Mosa.DeviceDriver;
 using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceDriver.ScanCodeMap;
 using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.PCI;
 using Mosa.FileSystem.FAT;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
@@ -78,61 +79,89 @@ namespace Mosa.CoolWorld.x86
 			Console.WriteLine("> Starting devices...");
 			deviceService.Initialize(new X86System(), null);
 
-			Console.Write("> Probing for ISA devices...");
-			var isaDevices = deviceService.GetChildrenOf(deviceService.GetFirstDevice<ISABus>());
-			Console.WriteLine("[Completed: " + isaDevices.Count.ToString() + " found]");
+			Console.Write("> Probing for devices...");
+			var devices = deviceService.GetAllDevices();
+			Console.WriteLine("[Completed: " + devices.Count.ToString() + " found]");
 
-			foreach (var device in isaDevices)
+			foreach (var device in devices)
 			{
 				Console.Write("  ");
 				Bullet(ScreenColor.Yellow);
 				Console.Write(" ");
-				InBrackets(device.Name, ScreenColor.White, ScreenColor.Green);
+
+				if (device.Parent != null && device.Parent.DeviceDriver is PCIDevice)
+				{
+					var pciDevice = device.Parent.DeviceDriver as PCIDevice;
+					InBrackets(device.Name + ": " + pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x") + " " + pciDevice.SubSystemID.ToString("x") + ":" + pciDevice.SubSystemVendorID.ToString("x") + " (" + pciDevice.Function.ToString("x") + ":" + pciDevice.ClassCode.ToString("x") + ":" + pciDevice.SubClassCode.ToString("x") + ":" + pciDevice.ProgIF.ToString("x") + ":" + pciDevice.RevisionID.ToString("x") + ")", ScreenColor.White, ScreenColor.Green);
+				}
+				else if (device.DeviceDriver is PCIDevice)
+				{
+					var pciDevice = device.DeviceDriver as PCIDevice;
+					InBrackets(device.Name + ": " + pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x") + " " + pciDevice.SubSystemID.ToString("x") + ":" + pciDevice.SubSystemVendorID.ToString("x") + " (" + pciDevice.Function.ToString("x") + ":" + pciDevice.ClassCode.ToString("x") + ":" + pciDevice.SubClassCode.ToString("x") + ":" + pciDevice.ProgIF.ToString("x") + ":" + pciDevice.RevisionID.ToString("x") + ")", ScreenColor.White, ScreenColor.Green);
+				}
+				else
+				{
+					InBrackets(device.Name, ScreenColor.White, ScreenColor.Green);
+				}
+
 				Console.WriteLine();
 			}
 
-			Console.Write("> Probing for PCI devices...");
-			var pciDevices = deviceService.GetDevices<DeviceSystem.PCI.IPCIDevice>();
-			Console.WriteLine("[Completed: " + pciDevices.Count.ToString() + " found]");
+			//Console.Write("> Probing for ISA devices...");
+			//var isaDevices = deviceService.GetChildrenOf(deviceService.GetFirstDevice<ISABus>());
+			//Console.WriteLine("[Completed: " + isaDevices.Count.ToString() + " found]");
 
-			foreach (var device in pciDevices)
-			{
-				var pciDevice = device.DeviceDriver as DeviceSystem.PCI.IPCIDevice;
+			//foreach (var device in isaDevices)
+			//{
+			//	Console.Write("  ");
+			//	Bullet(ScreenColor.Yellow);
+			//	Console.Write(" ");
+			//	InBrackets(device.Name, ScreenColor.White, ScreenColor.Green);
+			//	Console.WriteLine();
+			//}
 
-				Console.Write("  ");
-				Bullet(ScreenColor.Yellow);
-				Console.Write(" ");
+			//Console.Write("> Probing for PCI devices...");
+			//var pciDevices = deviceService.GetAllDevices();
+			//Console.WriteLine("[Completed: " + pciDevices.Count.ToString() + " found]");
 
-				InBrackets(device.Name + ": " + pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x") + " " + pciDevice.SubSystemID.ToString("x") + ":" + pciDevice.SubVendorID.ToString("x") + " (" + pciDevice.Function.ToString("x") + ":" + pciDevice.ClassCode.ToString("x") + ":" + pciDevice.SubClassCode.ToString("x") + ":" + pciDevice.ProgIF.ToString("x") + ":" + pciDevice.RevisionID.ToString("x") + ")", ScreenColor.White, ScreenColor.Green);
-				Console.WriteLine();
-			}
+			//foreach (var device in pciDevices)
+			//{
+			//	var pciDevice = device.DeviceDriver as DeviceSystem.PCI.IPCIDevice;
 
-			Console.Write("> Probing for disk controllers...");
-			var diskcontrollers = deviceService.GetDevices<IDiskControllerDevice>();
-			Console.WriteLine("[Completed: " + diskcontrollers.Count.ToString() + " found]");
+			//	Console.Write("  ");
+			//	Bullet(ScreenColor.Yellow);
+			//	Console.Write(" ");
 
-			foreach (var device in diskcontrollers)
-			{
-				Console.Write("  ");
-				Bullet(ScreenColor.Yellow);
-				Console.Write(" ");
-				InBrackets(device.Name, ScreenColor.White, ScreenColor.Green);
-				Console.WriteLine();
-			}
+			//	InBrackets(device.Name + ": " + pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x") + " " + pciDevice.SubSystemID.ToString("x") + ":" + pciDevice.SubSystemVendorID.ToString("x") + " (" + pciDevice.Function.ToString("x") + ":" + pciDevice.ClassCode.ToString("x") + ":" + pciDevice.SubClassCode.ToString("x") + ":" + pciDevice.ProgIF.ToString("x") + ":" + pciDevice.RevisionID.ToString("x") + ")", ScreenColor.White, ScreenColor.Green);
+			//	Console.WriteLine();
+			//}
 
-			Console.Write("> Probing for disks...");
-			var disks = deviceService.GetDevices<IDiskDevice>();
-			Console.WriteLine("[Completed: " + disks.Count.ToString() + " found]");
+			//Console.Write("> Probing for disk controllers...");
+			//var diskcontrollers = deviceService.GetDevices<IDiskControllerDevice>();
+			//Console.WriteLine("[Completed: " + diskcontrollers.Count.ToString() + " found]");
 
-			foreach (var disk in disks)
-			{
-				Console.Write("  ");
-				Bullet(ScreenColor.Yellow);
-				Console.Write(" ");
-				InBrackets(disk.Name, ScreenColor.White, ScreenColor.Green);
-				Console.Write(" " + (disk.DeviceDriver as IDiskDevice).TotalBlocks.ToString() + " blocks");
-				Console.WriteLine();
-			}
+			//foreach (var device in diskcontrollers)
+			//{
+			//	Console.Write("  ");
+			//	Bullet(ScreenColor.Yellow);
+			//	Console.Write(" ");
+			//	InBrackets(device.Name, ScreenColor.White, ScreenColor.Green);
+			//	Console.WriteLine();
+			//}
+
+			//Console.Write("> Probing for disks...");
+			//var disks = deviceService.GetDevices<IDiskDevice>();
+			//Console.WriteLine("[Completed: " + disks.Count.ToString() + " found]");
+
+			//foreach (var disk in disks)
+			//{
+			//	Console.Write("  ");
+			//	Bullet(ScreenColor.Yellow);
+			//	Console.Write(" ");
+			//	InBrackets(disk.Name, ScreenColor.White, ScreenColor.Green);
+			//	Console.Write(" " + (disk.DeviceDriver as IDiskDevice).TotalBlocks.ToString() + " blocks");
+			//	Console.WriteLine();
+			//}
 
 			partitionService.CreatePartitionDevices();
 
@@ -140,15 +169,15 @@ namespace Mosa.CoolWorld.x86
 			var partitions = deviceService.GetDevices<IPartitionDevice>();
 			Console.WriteLine("[Completed: " + partitions.Count.ToString() + " found]");
 
-			foreach (var partition in partitions)
-			{
-				Console.Write("  ");
-				Bullet(ScreenColor.Yellow);
-				Console.Write(" ");
-				InBrackets(partition.Name, ScreenColor.White, ScreenColor.Green);
-				Console.Write(" " + (partition.DeviceDriver as IPartitionDevice).BlockCount.ToString() + " blocks");
-				Console.WriteLine();
-			}
+			//foreach (var partition in partitions)
+			//{
+			//	Console.Write("  ");
+			//	Bullet(ScreenColor.Yellow);
+			//	Console.Write(" ");
+			//	InBrackets(partition.Name, ScreenColor.White, ScreenColor.Green);
+			//	Console.Write(" " + (partition.DeviceDriver as IPartitionDevice).BlockCount.ToString() + " blocks");
+			//	Console.WriteLine();
+			//}
 
 			Console.Write("> Finding file systems...");
 
