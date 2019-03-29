@@ -232,6 +232,10 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 		public override void Start()
 		{
+		}
+
+		public void _Start()
+		{
 			videoRamSize = ReadRegister(Register.VRamSize);
 			maxWidth = ReadRegister(Register.MaxWidth);
 			maxHeight = ReadRegister(Register.MaxHeight);

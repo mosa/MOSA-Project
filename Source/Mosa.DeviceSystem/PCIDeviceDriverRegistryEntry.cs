@@ -22,11 +22,11 @@ namespace Mosa.DeviceSystem
 
 		public byte SubClassCode { get; set; }
 
-		public PCIFields PCIFields { get; set; }
+		public PCIField PCIFields { get; set; }
 	}
 
 	[System.Flags]
-	public enum PCIFields : byte
+	public enum PCIField : byte
 	{
 		DeviceID = 1,
 		VendorID = 2,

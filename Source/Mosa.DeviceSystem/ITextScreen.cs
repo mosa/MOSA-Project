@@ -8,7 +8,7 @@ namespace Mosa.DeviceSystem
 	public interface ITextScreen
 	{
 		/// <summary>
-		/// Clears the screen scren.
+		/// Clears the screen.
 		/// </summary>
 		void ClearScreen();
 

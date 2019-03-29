@@ -80,6 +80,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PCI\VideoCard\GenericVGA.cs" />
     <Compile Include="X86System.cs" />
     <Compile Include="ISA\ISABus.cs" />
     <Compile Include="ISA\CMOS.cs" />
@@ -101,7 +102,6 @@
   <ItemGroup>
     <Folder Include="PCI\MassStorage\" />
     <Folder Include="PCI\Network\" />
-    <Folder Include="PCI\VideoCard\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

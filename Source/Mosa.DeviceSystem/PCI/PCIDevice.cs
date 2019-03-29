@@ -147,7 +147,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// Gets the sub vendor ID.
 		/// </summary>
 		/// <value>The sub vendor ID.</value>
-		public ushort SubVendorID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIConfigurationHeader.SubSystemVendorID); } }
+		public ushort SubSystemVendorID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIConfigurationHeader.SubSystemVendorID); } }
 
 		/// <summary>
 		/// Gets the sub device ID.
@@ -191,7 +191,7 @@ namespace Mosa.DeviceSystem.PCI
 
 		public override void Initialize()
 		{
-			pciController = base.Device.Parent as IPCIController;
+			pciController = Device.Parent.DeviceDriver as IPCIController;
 
 			var configuration = Device.Configuration as PCIDeviceConfiguration;
 
@@ -207,6 +207,7 @@ namespace Mosa.DeviceSystem.PCI
 			for (byte i = 0; i < 6; i++)
 			{
 				byte barr = (byte)(PCIConfigurationHeader.BaseAddressRegisterBase + (i * 4));
+
 				uint address = pciController.ReadConfig32(Bus, Slot, Function, barr);
 
 				if (address == 0)
@@ -238,7 +239,7 @@ namespace Mosa.DeviceSystem.PCI
 				if (baseAddress == null)
 					continue;
 
-				if ((object)baseAddress.Region == null)
+				if (baseAddress.Region == AddressType.Undefined)
 					continue;
 
 				switch (baseAddress.Region)
