@@ -2,6 +2,7 @@
 
 using Mosa.AppSystem;
 using Mosa.DeviceDriver;
+using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceDriver.ScanCodeMap;
 using Mosa.DeviceSystem;
 using Mosa.FileSystem.FAT;
@@ -57,11 +58,13 @@ namespace Mosa.CoolWorld.x86
 			var diskDeviceService = new DiskDeviceService();
 			var partitionService = new PartitionService();
 			var pciControllerService = new PCIControllerService();
+			var pciDeviceService = new PCIDeviceService();
 
 			serviceManager.AddService(deviceService);
 			serviceManager.AddService(diskDeviceService);
 			serviceManager.AddService(partitionService);
 			serviceManager.AddService(pciControllerService);
+			serviceManager.AddService(pciDeviceService);
 
 			Console.WriteLine("> Initializing hardware abstraction layer...");
 
@@ -76,7 +79,7 @@ namespace Mosa.CoolWorld.x86
 			deviceService.Initialize(new X86System(), null);
 
 			Console.Write("> Probing for ISA devices...");
-			var isaDevices = deviceService.GetAllDevices();
+			var isaDevices = deviceService.GetChildrenOf(deviceService.GetFirstDevice<ISABus>());
 			Console.WriteLine("[Completed: " + isaDevices.Count.ToString() + " found]");
 
 			foreach (var device in isaDevices)
@@ -89,8 +92,6 @@ namespace Mosa.CoolWorld.x86
 			}
 
 			Console.Write("> Probing for PCI devices...");
-
-			pciControllerService.CreatePCIDevices();
 			var pciDevices = deviceService.GetDevices<DeviceSystem.PCI.IPCIDevice>();
 			Console.WriteLine("[Completed: " + pciDevices.Count.ToString() + " found]");
 

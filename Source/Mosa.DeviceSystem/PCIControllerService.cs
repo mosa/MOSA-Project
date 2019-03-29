@@ -22,6 +22,48 @@ namespace Mosa.DeviceSystem
 			DeviceService = ServiceManager.GetFirstService<DeviceService>();
 		}
 
+		public override void PostEvent(ServiceEvent serviceEvent)
+		{
+			var device = MatchEvent<IPCIController>(serviceEvent, ServiceEventType.Start);
+
+			if (device == null)
+				return;
+
+			var pciController = device.DeviceDriver as IPCIController;
+
+			CreatePCIDevices(device, pciController);
+		}
+
+		/// <summary>
+		/// Creates the partition devices.
+		/// </summary>
+		private void CreatePCIDevices(Device device, IPCIController pciController)
+		{
+			// For each controller
+			for (int bus = 0; bus < 255; bus++)
+			{
+				for (int slot = 0; slot < 16; slot++)
+				{
+					for (int fun = 0; fun < 7; fun++)
+					{
+						if (!ProbeDevice(pciController, (byte)bus, (byte)slot, (byte)fun))
+							continue;
+
+						// TODO: Check for duplicate
+
+						var configuration = new PCIDeviceConfiguration()
+						{
+							Bus = (byte)bus,
+							Slot = (byte)slot,
+							Function = (byte)fun
+						};
+
+						DeviceService.Initialize(new PCIDevice(), device, configuration, null, null);
+					}
+				}
+			}
+		}
+
 		/// <summary>
 		/// Probes for a PCI device.
 		/// </summary>
@@ -35,44 +77,6 @@ namespace Mosa.DeviceSystem
 			uint value = pciController.ReadConfig32(bus, slot, fun, 0);
 
 			return value != 0xFFFFFFFF;
-		}
-
-		/// <summary>
-		/// Creates the partition devices.
-		/// </summary>
-		public void CreatePCIDevices()
-		{
-			// Find PCI controller devices
-			var devices = DeviceService.GetDevices<IPCIController>(DeviceStatus.Online);
-
-			if (devices.Count == 0)
-				return;
-
-			var device = devices[0];
-
-			var pciController = device.DeviceDriver as IPCIController;
-
-			// For each controller
-			for (int bus = 0; bus < 255; bus++)
-			{
-				for (int slot = 0; slot < 16; slot++)
-				{
-					for (int fun = 0; fun < 7; fun++)
-					{
-						if (!ProbeDevice(pciController, (byte)bus, (byte)slot, (byte)fun))
-							continue;
-
-						var configuration = new PCIDeviceConfiguration()
-						{
-							Bus = (byte)bus,
-							Slot = (byte)slot,
-							Function = (byte)fun
-						};
-
-						DeviceService.Initialize(new PCIDevice(), device, configuration, null, null);
-					}
-				}
-			}
 		}
 	}
 }

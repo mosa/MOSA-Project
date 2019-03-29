@@ -6,21 +6,16 @@ namespace Mosa.DeviceSystem
 	{
 		public override void PostEvent(ServiceEvent serviceEvent)
 		{
-			if (serviceEvent.ServiceEventType != ServiceEventType.Start)
-				return;
-
-			var device = serviceEvent.Subject as Device;
+			var device = MatchEvent<IDiskControllerDevice>(serviceEvent, ServiceEventType.Start);
 
 			if (device == null)
 				return;
 
-			// this mounts everything
+			// This mounts everything detected
+
 			var controller = device.DeviceDriver as IDiskControllerDevice;
 
-			if (controller == null)
-				return;
-
-			var deviceServe = device.DeviceService;
+			var deviceService = device.DeviceService;
 
 			for (uint drive = 0; drive < controller.MaximunDriveCount; drive++)
 			{
@@ -31,7 +26,7 @@ namespace Mosa.DeviceSystem
 					continue;
 
 				// don't mount twice
-				if (deviceServe.CheckExists(device, drive))
+				if (deviceService.CheckExists(device, drive))
 					return;
 
 				var configuration = new DiskDeviceConfiguration()
@@ -40,9 +35,7 @@ namespace Mosa.DeviceSystem
 					ReadOnly = false
 				};
 
-				deviceServe.Initialize(new DiskDeviceDriver(), device, configuration);
-
-				//HAL.DebugWriteLine("DiskDeviceService::OnChange():Exit");
+				deviceService.Initialize(new DiskDeviceDriver(), device, configuration);
 			}
 		}
 	}

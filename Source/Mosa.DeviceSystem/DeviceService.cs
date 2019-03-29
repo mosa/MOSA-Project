@@ -171,6 +171,22 @@ namespace Mosa.DeviceSystem
 
 		#region Get Devices
 
+		public Device GetFirstDevice<T>()
+		{
+			lock (_lock)
+			{
+				foreach (var device in Devices)
+				{
+					if (device.DeviceDriver is T)
+					{
+						return device;
+					}
+				}
+			}
+
+			return null;
+		}
+
 		public List<Device> GetDevices<T>()
 		{
 			var list = new List<Device>();
@@ -187,6 +203,22 @@ namespace Mosa.DeviceSystem
 			}
 
 			return list;
+		}
+
+		public Device GetFirstDevice<T>(DeviceStatus status)
+		{
+			lock (_lock)
+			{
+				foreach (var device in Devices)
+				{
+					if (device.Status == status && device.DeviceDriver is T)
+					{
+						return device;
+					}
+				}
+			}
+
+			return null;
 		}
 
 		public List<Device> GetDevices<T>(DeviceStatus status)

@@ -49,8 +49,6 @@ namespace Mosa.DeviceDriver.ISA
 
 		public override void Start()
 		{
-			HAL.DebugWriteLine("PCI Controller - here2");
-
 			if (Device.Status == DeviceStatus.Available)
 			{
 				Device.Status = DeviceStatus.Online;

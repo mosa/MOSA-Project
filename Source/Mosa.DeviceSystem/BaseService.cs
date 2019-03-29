@@ -32,5 +32,23 @@ namespace Mosa.DeviceSystem
 		public virtual void PostEvent(ServiceEvent serviceEvent)
 		{
 		}
+
+		protected Device MatchEvent<SERVICE>(ServiceEvent serviceEvent, ServiceEventType eventType) where SERVICE : class
+		{
+			if (serviceEvent.ServiceEventType != eventType)
+				return null;
+
+			var device = serviceEvent.Subject as Device;
+
+			if (device == null)
+				return null;
+
+			var service = device.DeviceDriver as SERVICE;
+
+			if (service == null)
+				return null;
+
+			return device;
+		}
 	}
 }

@@ -72,7 +72,7 @@ namespace Mosa.DeviceDriver.ISA
 
 			var hardwareResources = new HardwareResources(ioPortRegions, memoryRegions, driverEntry.IRQ);
 
-			DeviceManager.Initialize(driverEntry, null, null, hardwareResources);
+			DeviceManager.Initialize(driverEntry, Device, null, hardwareResources);
 		}
 	}
 }

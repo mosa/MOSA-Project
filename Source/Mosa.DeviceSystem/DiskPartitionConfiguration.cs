@@ -8,6 +8,7 @@ namespace Mosa.DeviceSystem
 	public class DiskPartitionConfiguration : BaseDeviceConfiguration
 	{
 		public uint StartLBA { get; set; }
+
 		public uint TotalBlocks { get; set; }
 
 		public bool ReadOnly { get; set; }
