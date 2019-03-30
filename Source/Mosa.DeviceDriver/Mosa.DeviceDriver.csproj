@@ -80,6 +80,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PCI\Intel\Intel440FX.cs" />
+    <Compile Include="PCI\Intel\Intel4SeriesChipsetDRAMController.cs" />
+    <Compile Include="PCI\Intel\Intel4SeriesChipsetIntegratedGraphicsController.cs" />
+    <Compile Include="PCI\Intel\Intel4SeriesChipsetIntegratedGraphicsController2E13.cs" />
+    <Compile Include="PCI\Intel\Intel4SeriesChipsetPCIExpressRootPort.cs" />
+    <Compile Include="PCI\Intel\Intel82540EM.cs" />
+    <Compile Include="PCI\Intel\Intel82541EI.cs" />
+    <Compile Include="PCI\Intel\IntelPIIX3.cs" />
+    <Compile Include="PCI\Intel\PCIIDEInterface.cs" />
+    <Compile Include="PCI\Intel\IntelPIIX4.cs" />
+    <Compile Include="PCI\Intel\QuarkSoC\IntelGPIOController.cs" />
+    <Compile Include="PCI\Intel\QuarkSoC\IntelHSUART.cs" />
     <Compile Include="PCI\VideoCard\GenericVGA.cs" />
     <Compile Include="X86System.cs" />
     <Compile Include="ISA\ISABus.cs" />
