@@ -92,7 +92,7 @@ namespace Mosa.CoolWorld.x86
 				Console.WriteLine();
 			}
 
-			Console.Write("> Probing for devices...");
+			Console.Write("> Probing for PCI devices...");
 			var devices = deviceService.GetDevices<PCIDevice>();
 			Console.WriteLine("[Completed: " + devices.Count.ToString() + " found]");
 
@@ -225,7 +225,7 @@ namespace Mosa.CoolWorld.x86
 			var keyboard = new DeviceSystem.Keyboard(standardKeyboard, keymap);
 
 			// setup app manager
-			var manager = new AppManager(Console, keyboard);
+			var manager = new AppManager(Console, keyboard, serviceManager);
 
 			IDT.SetInterruptHandler(manager.ProcessInterrupt);
 

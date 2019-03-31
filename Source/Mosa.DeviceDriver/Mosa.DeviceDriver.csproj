@@ -93,6 +93,7 @@
     <Compile Include="PCI\Intel\QuarkSoC\IntelGPIOController.cs" />
     <Compile Include="PCI\Intel\QuarkSoC\IntelHSUART.cs" />
     <Compile Include="PCI\VideoCard\GenericVGA.cs" />
+    <Compile Include="PCI\VideoCard\VGAText.cs" />
     <Compile Include="X86System.cs" />
     <Compile Include="ISA\ISABus.cs" />
     <Compile Include="ISA\CMOS.cs" />

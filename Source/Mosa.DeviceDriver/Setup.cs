@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceDriver.PCI.Intel;
 using Mosa.DeviceDriver.PCI.Intel.QuarkSoC;
 using Mosa.DeviceSystem;
@@ -71,6 +72,18 @@ namespace Mosa.DeviceDriver
 					Factory = delegate { return new ISA.IDEController(); }
 				},
 
+				//new ISADeviceDriverRegistryEntry()
+				//{
+				//	Name = "VGAText",
+				//	Platforms = PlatformArchitecture.X86AndX64,
+				//	AutoLoad = true,
+				//	BasePort = 0x03B0,
+				//	PortRange = 0x1F,
+				//	BaseAddress = 0xB0000,
+				//	AddressRange = 0x10000,
+				//	Factory = delegate { return new VGAText(); }
+				//},
+
 				new PCIDeviceDriverRegistryEntry()
 				{
 					Name = "VMwareSGAII",
@@ -80,18 +93,6 @@ namespace Mosa.DeviceDriver
 					DeviceID = 0x0405,
 					PCIFields = PCIField.VendorID | PCIField.DeviceID,
 					Factory = delegate { return new PCI.VMware.VMwareSVGAII(); }
-				},
-
-				new PCIDeviceDriverRegistryEntry()
-				{
-					Name = "VMwareSGAII",
-					Platforms = PlatformArchitecture.X86AndX64,
-					BusType = DeviceBusType.PCI,
-					ClassCode = 0X03,
-					SubClassCode = 0x00,
-					ProgIF = 0x00,
-					PCIFields = PCIField.ClassCode | PCIField.SubClassCode | PCIField.ProgIF,
-					Factory = delegate { return new PCI.VideoCard.GenericVGA(); }
 				},
 
 				new PCIDeviceDriverRegistryEntry()

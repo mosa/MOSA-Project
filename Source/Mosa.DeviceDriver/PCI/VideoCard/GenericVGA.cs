@@ -17,7 +17,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 	/// Generic VGA Device Driver
 	/// </summary>
 	//[PCIDeviceDriver(ClassCode = 0X03, SubClassCode = 0x00, ProgIF = 0x00, Platforms = PlatformArchitecture.X86AndX64)]
-	public class GenericVGA : BaseDeviceDriver //, IPixelPaletteGraphicsDevice
+	public class GenericVGA : BaseDeviceDriver, IPixelPaletteGraphicsDevice
 	{
 		#region Definitions
 
@@ -45,6 +45,8 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		}
 
 		#endregion Definitions
+
+		#region Ports
 
 		/// <summary>
 		///
@@ -124,11 +126,6 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// <summary>
 		///
 		/// </summary>
-		protected Memory memory;
-
-		/// <summary>
-		///
-		/// </summary>
 		protected IOPortReadWrite activeControllerIndex;
 
 		/// <summary>
@@ -150,6 +147,13 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		///
 		/// </summary>
 		protected IOPortReadWrite attributeData;
+
+		#endregion Ports
+
+		/// <summary>
+		///
+		/// </summary>
+		protected Memory memory;
 
 		/// <summary>
 		///
