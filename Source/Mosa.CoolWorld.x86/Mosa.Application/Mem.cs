@@ -6,7 +6,7 @@ using Mosa.Kernel.x86;
 namespace Mosa.Application
 {
 	/// <summary>
-	///
+	/// Mem
 	/// </summary>
 	public class Mem : BaseApplication, IConsoleApp
 	{

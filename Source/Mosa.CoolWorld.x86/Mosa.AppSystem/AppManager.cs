@@ -20,12 +20,14 @@ namespace Mosa.AppSystem
 
 		protected ConsoleSession debug;
 
+		public ServiceManager ServiceManager;
+
 		private uint tick = 0;
 
-		public AppManager(ConsoleSession debug, IKeyboard keyboard)
+		public AppManager(ConsoleSession debug, IKeyboard keyboard, ServiceManager serviceManager)
 		{
+			this.ServiceManager = serviceManager;
 			this.keyboard = keyboard;
-
 			this.debug = debug;
 
 			shell = new Shell();

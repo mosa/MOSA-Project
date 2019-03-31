@@ -9,24 +9,11 @@ namespace Mosa.DeviceDriver.PCI.Intel.QuarkSoC
 	/// <summary>
 	/// </summary>
 	//[PCIDeviceDriver(VendorID = 0x8086, DeviceID = 0x0936, ClassCode = 0X07, SubClassCode = 0x80, ProgIF = 0x02, RevisionID = 0x10, Platforms = PlatformArchitecture.X86AndX64)]
-	public class IntelHSUART : DeviceSystem.DeviceDriver
+	public class IntelHSUART : BaseDeviceDriver
 	{
-		protected override void Initialize()
+		public override void Initialize()
 		{
 			Device.Name = "IntelHSUART";
-		}
-
-		public override void Start()
-		{
-			if (Device.Status != DeviceStatus.Available)
-				return;
-
-			Device.Status = DeviceStatus.Online;
-		}
-
-		public override bool OnInterrupt()
-		{
-			return true;
 		}
 	}
 }

@@ -5,7 +5,7 @@ using Mosa.AppSystem;
 namespace Mosa.Application
 {
 	/// <summary>
-	///
+	/// Credits
 	/// </summary>
 	public class Credits : BaseApplication, IConsoleApp
 	{

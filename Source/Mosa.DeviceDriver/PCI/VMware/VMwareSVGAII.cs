@@ -105,9 +105,13 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 		#endregion Definitions
 
+		#region Ports
+
 		protected IOPortReadWrite indexPort;
 
 		protected IOPortReadWrite valuePort;
+
+		#endregion Ports
 
 		protected Memory memory;
 

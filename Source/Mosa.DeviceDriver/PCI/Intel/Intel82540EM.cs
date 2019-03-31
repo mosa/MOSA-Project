@@ -10,24 +10,11 @@ namespace Mosa.DeviceDriver.PCI.Intel
 	/// <summary>
 	/// </summary>
 	//[PCIDeviceDriver(VendorID = 0x8086, DeviceID = 0x100E, Platforms = PlatformArchitecture.X86AndX64)]
-	public class Intel82540EM : DeviceSystem.DeviceDriver
+	public class Intel82540EM : BaseDeviceDriver
 	{
-		protected override void Initialize()
+		public override void Initialize()
 		{
 			Device.Name = "Intel82540EM";
-		}
-
-		public override void Start()
-		{
-			if (Device.Status != DeviceStatus.Available)
-				return;
-
-			Device.Status = DeviceStatus.Online;
-		}
-
-		public override bool OnInterrupt()
-		{
-			return true;
 		}
 	}
 }

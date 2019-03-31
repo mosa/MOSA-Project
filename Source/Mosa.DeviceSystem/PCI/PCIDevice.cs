@@ -199,7 +199,7 @@ namespace Mosa.DeviceSystem.PCI
 			Slot = configuration.Slot;
 			Function = configuration.Function;
 
-			Device.Name = Device.Parent.Name + "/" + Bus.ToString() + "." + Slot.ToString() + "." + Function.ToString();
+			Device.Name = Device.Parent.Name + '/' + Bus.ToString() + '.' + Slot.ToString() + '.' + Function.ToString();
 
 			ioPortRegionCount = memoryRegionCount = 0;
 			BaseAddresses = new BaseAddress[8];
@@ -227,9 +227,9 @@ namespace Mosa.DeviceSystem.PCI
 					BaseAddresses[i] = new BaseAddress(AddressType.Memory, address & 0xFFFFFFF0, ~(mask & 0xFFFFFFF0) + 1, ((address & 0x08) == 1));
 			}
 
+			// Special case for generic VGA
 			if (ClassCode == 0x03 && SubClassCode == 0x00 && ProgIF == 0x00)
 			{
-				// Special case for generic VGA
 				BaseAddresses[6] = new BaseAddress(AddressType.Memory, 0xA0000, 0x1FFFF, false);
 				BaseAddresses[7] = new BaseAddress(AddressType.IO, 0x3B0, 0x0F, false);
 			}

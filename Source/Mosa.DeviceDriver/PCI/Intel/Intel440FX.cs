@@ -10,24 +10,11 @@ namespace Mosa.DeviceDriver.PCI.Intel
 	/// <summary>
 	/// </summary>
 	//[PCIDeviceDriver(VendorID = 0x8086, DeviceID = 0x1237, Platforms = PlatformArchitecture.X86AndX64)]
-	public class Intel440FX : DeviceSystem.DeviceDriver
+	public class Intel440FX : BaseDeviceDriver
 	{
-		protected override void Initialize()
+		public override void Initialize()
 		{
 			Device.Name = "Intel440FX";
-		}
-
-		public override void Start()
-		{
-			if (Device.Status != DeviceStatus.Available)
-				return;
-
-			Device.Status = DeviceStatus.Online;
-		}
-
-		public override bool OnInterrupt()
-		{
-			return true;
 		}
 	}
 }
