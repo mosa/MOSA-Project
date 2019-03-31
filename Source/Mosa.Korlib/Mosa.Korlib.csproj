@@ -103,8 +103,17 @@
     <Compile Include="System.Threading\Monitor.cs" />
     <Compile Include="System.Threading\Thread.cs" />
     <Compile Include="System.Threading\SpinLock.cs" />
+    <Compile Include="System\ArithmeticException.cs" />
     <Compile Include="System\BitConverter.cs" />
     <Compile Include="System\ConsoleColor.cs" />
+    <Compile Include="System\IConvertible.cs" />
+    <Compile Include="System\ICustomFormatter.cs" />
+    <Compile Include="System\Math.CoreCLR.cs" />
+    <Compile Include="System\Math.cs" />
+    <Compile Include="System\MathF.CoreCLR.cs" />
+    <Compile Include="System\MathF.cs" />
+    <Compile Include="System\MidpointRounding.cs" />
+    <Compile Include="System\OverflowException.cs" />
     <Compile Include="System\PlatformNotSupportedException.cs" />
     <Compile Include="System\Action.cs" />
     <Compile Include="System\Activator.cs" />
