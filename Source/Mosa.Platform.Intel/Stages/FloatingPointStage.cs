@@ -15,6 +15,8 @@ namespace Mosa.Platform.Intel.Stages
 
 		protected abstract bool IsLoad(BaseInstruction instruction);
 
+		protected abstract bool IsIntegerToFloating(BaseInstruction instruction);
+
 		protected abstract BaseInstruction MovssLoad { get; }
 
 		protected abstract BaseInstruction MovsdLoad { get; }
@@ -38,12 +40,36 @@ namespace Mosa.Platform.Intel.Stages
 					if (node.OperandCount == 0)
 						continue;
 
-					// fixme - must be a better way
+					if (IsIntegerToFloating(node.Instruction) && node.Operand1.IsConstant)
+					{
+						FixConstantIntegerToFloat(node);
+						continue;
+					}
+
 					if (IsLoad(node.Instruction))
 						continue;
 
 					EmitFloatingPointConstants(node);
 				}
+			}
+		}
+
+		protected void FixConstantIntegerToFloat(InstructionNode node)
+		{
+			var source = node.Operand1;
+			var result = node.Result;
+
+			if (result.IsR4)
+			{
+				var symbol = MethodCompiler.Linker.GetConstantSymbol((float)source.ConstantUnsignedLongInteger);
+				var label = Operand.CreateLabel(result.Type, symbol.Name);
+				node.SetInstruction(MovssLoad, result, label, ConstantZero);
+			}
+			else if (result.IsR8)
+			{
+				var symbol = MethodCompiler.Linker.GetConstantSymbol((double)source.ConstantUnsignedLongInteger);
+				var label = Operand.CreateLabel(result.Type, symbol.Name);
+				node.SetInstruction(MovsdLoad, result, label, ConstantZero);
 			}
 		}
 
@@ -63,23 +89,21 @@ namespace Mosa.Platform.Intel.Stages
 				if (operand.IsUnresolvedConstant)
 					continue;
 
-				var v1 = AllocateVirtualRegister(operand.Type);
-
-				var symbol = (operand.IsR4) ?
-					MethodCompiler.Linker.GetConstantSymbol(operand.ConstantSingleFloatingPoint)
-					: MethodCompiler.Linker.GetConstantSymbol(operand.ConstantDoubleFloatingPoint);
-
-				var s1 = Operand.CreateLabel(operand.Type, symbol.Name);
-
 				var before = new Context(node).InsertBefore();
+
+				var v1 = AllocateVirtualRegister(operand.Type);
 
 				if (operand.IsR4)
 				{
-					before.SetInstruction(MovssLoad, v1, s1, ConstantZero);
+					var symbol = MethodCompiler.Linker.GetConstantSymbol(operand.ConstantSingleFloatingPoint);
+					var label = Operand.CreateLabel(operand.Type, symbol.Name);
+					before.SetInstruction(MovssLoad, v1, label, ConstantZero);
 				}
 				else
 				{
-					before.SetInstruction(MovsdLoad, v1, s1, ConstantZero);
+					var symbol = MethodCompiler.Linker.GetConstantSymbol(operand.ConstantDoubleFloatingPoint);
+					var label = Operand.CreateLabel(operand.Type, symbol.Name);
+					before.SetInstruction(MovsdLoad, v1, label, ConstantZero);
 				}
 
 				node.SetOperand(i, v1);

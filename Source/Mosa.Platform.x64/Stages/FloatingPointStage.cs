@@ -15,6 +15,12 @@ namespace Mosa.Platform.x64.Stages
 			return instruction == X64.MovsdLoad || instruction == X64.MovssLoad || instruction == X64.MovLoad32 || instruction == X64.MovLoad64;
 		}
 
+		protected override bool IsIntegerToFloating(BaseInstruction instruction)
+		{
+			return instruction == X64.Cvtsi2sd64 || instruction == X64.Cvtsi2ss64 ||
+				   instruction == X64.Cvtsi2sd32 || instruction == X64.Cvtsi2ss32;
+		}
+
 		protected override BaseInstruction MovssLoad { get { return X64.MovssLoad; } }
 
 		protected override BaseInstruction MovsdLoad { get { return X64.MovsdLoad; } }

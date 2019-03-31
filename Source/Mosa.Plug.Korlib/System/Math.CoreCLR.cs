@@ -24,12 +24,6 @@ namespace Mosa.Plug.Korlib.System
 			return 0; // TODO
 		}
 
-		[Plug("System.Math::Floor")]
-		internal static double Floor(double a)
-		{
-			return 0; // TODO
-		}
-
 		[Plug("System.Math::Log")]
 		internal static double Log(double d)
 		{

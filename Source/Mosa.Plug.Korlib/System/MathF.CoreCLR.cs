@@ -12,14 +12,8 @@ namespace Mosa.Plug.Korlib.System
 			return 0; // TODO
 		}
 
-		[Plug("System.MathF::Floor")]
-		internal static float Floor(float d)
-		{
-			return 0; // TODO
-		}
-
 		[Plug("System.MathF::Log")]
-		internal static float Log(float d)
+		internal static float Log(float s)
 		{
 			return 0; // TODO
 		}

@@ -198,6 +198,24 @@ namespace Mosa.Runtime.x86
 		[DllImportAttribute("Mosa.Platform.x86.Intrinsic:Memclr256")]
 		public extern static void Memclr256(void* destination);
 
+		[DllImportAttribute("Mosa.Platform.x86.Intrinsic:Sqrtsd")]
+		public extern static double Sqrtsd(double destination);
+
+		[DllImportAttribute("Mosa.Platform.x86.Intrinsic:Sqrtss")]
+		public extern static float Sqrtss(float destination);
+
+		[DllImportAttribute("Mosa.Platform.x86.Intrinsic:Roundsd2Negative")]
+		public extern static double Roundsd2Negative(double destination);
+
+		[DllImportAttribute("Mosa.Platform.x86.Intrinsic:Roundsd2Positive")]
+		public extern static double Roundsd2Positive(double destination);
+
+		[DllImportAttribute("Mosa.Platform.x86.Intrinsic:Roundss2Negative")]
+		public extern static float Roundss2Negative(float destination);
+
+		[DllImportAttribute("Mosa.Platform.x86.Intrinsic:Roundss2Positive")]
+		public extern static float Roundss2Positive(float destination);
+
 		#endregion Intrinsic
 
 		#region IRQs Intrinsic

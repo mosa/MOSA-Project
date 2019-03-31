@@ -349,15 +349,11 @@ namespace Mosa.Platform.x86
 		/// <param name="source">The source.</param>
 		public override void InsertExchangeInstruction(Context context, Operand destination, Operand source)
 		{
-			if (source.IsR4)
+			if (source.IsR8 || source.IsR4)
 			{
-				// TODO
-				throw new CompilerException("R4 not implemented in InsertExchangeInstruction method");
-			}
-			else if (source.IsR8)
-			{
-				// TODO
-				throw new CompilerException("R8 not implemented in InsertExchangeInstruction method");
+				context.AppendInstruction(X86.PXor, destination, source);
+				context.AppendInstruction(X86.PXor, source, destination);
+				context.AppendInstruction(X86.PXor, destination, source);
 			}
 			else
 			{

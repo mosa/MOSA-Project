@@ -85,8 +85,8 @@ namespace System
 		//[MethodImpl(MethodImplOptions.InternalCall)]
 		//public static extern float Sinh(float x);
 
-		//[MethodImpl(MethodImplOptions.InternalCall)]
-		//public static extern float Sqrt(float x);
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern float Sqrt(float x);
 
 		//[MethodImpl(MethodImplOptions.InternalCall)]
 		//public static extern float Tan(float x);

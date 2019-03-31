@@ -94,8 +94,8 @@ namespace System
 		//[MethodImpl(MethodImplOptions.InternalCall)]
 		//public static extern double Sinh(double value);
 
-		//[MethodImpl(MethodImplOptions.InternalCall)]
-		//public static extern double Sqrt(double d);
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern double Sqrt(double d);
 
 		//[MethodImpl(MethodImplOptions.InternalCall)]
 		//public static extern double Tan(double a);

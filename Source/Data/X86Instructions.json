@@ -3145,13 +3145,13 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 2,
+			"OperandCount": 1,
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x86],opcode=0xF2,opcode2=0x0F,opcode3=0x51,mod=11,reg=reg3:r,rm=reg3:o2"
+					"Encoding": "[x86],opcode=0xF2,opcode2=0x0F,opcode3=0x51,mod=11,reg=reg3:r,rm=reg3:o1"
 				}
 			]
 		},
