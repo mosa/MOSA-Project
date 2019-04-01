@@ -72,10 +72,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseDeviceConfiguration.cs" />
-    <Compile Include="BaseService.cs" />
-    <Compile Include="ServiceManager.cs" />
-    <Compile Include="DiskDeviceMountDeamon.cs" />
-    <Compile Include="BaseMountDaemon.cs" />
     <Compile Include="PCIDeviceService.cs" />
     <Compile Include="ServiceEventType.cs" />
     <Compile Include="ServiceEvent.cs" />
@@ -93,7 +89,6 @@
     <Compile Include="DeviceBusType.cs" />
     <Compile Include="DeviceDriverPhysicalMemory.cs" />
     <Compile Include="DeviceDriverStartStatus.cs" />
-    <Compile Include="DeviceManagerService.cs" />
     <Compile Include="DeviceService.cs" />
     <Compile Include="DeviceStatus.cs" />
     <Compile Include="Device.cs" />
