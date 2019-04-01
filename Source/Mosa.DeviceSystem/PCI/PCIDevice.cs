@@ -147,7 +147,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// Gets the sub vendor ID.
 		/// </summary>
 		/// <value>The sub vendor ID.</value>
-		public ushort SubVendorID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIConfigurationHeader.SubSystemVendorID); } }
+		public ushort SubSystemVendorID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIConfigurationHeader.SubSystemVendorID); } }
 
 		/// <summary>
 		/// Gets the sub device ID.
@@ -191,7 +191,7 @@ namespace Mosa.DeviceSystem.PCI
 
 		public override void Initialize()
 		{
-			pciController = base.Device.Parent as IPCIController;
+			pciController = Device.Parent.DeviceDriver as IPCIController;
 
 			var configuration = Device.Configuration as PCIDeviceConfiguration;
 
@@ -199,7 +199,7 @@ namespace Mosa.DeviceSystem.PCI
 			Slot = configuration.Slot;
 			Function = configuration.Function;
 
-			Device.Name = Device.Parent.Name + "/" + Bus.ToString() + "." + Slot.ToString() + "." + Function.ToString();
+			Device.Name = Device.Parent.Name + '/' + Bus.ToString() + '.' + Slot.ToString() + '.' + Function.ToString();
 
 			ioPortRegionCount = memoryRegionCount = 0;
 			BaseAddresses = new BaseAddress[8];
@@ -207,6 +207,7 @@ namespace Mosa.DeviceSystem.PCI
 			for (byte i = 0; i < 6; i++)
 			{
 				byte barr = (byte)(PCIConfigurationHeader.BaseAddressRegisterBase + (i * 4));
+
 				uint address = pciController.ReadConfig32(Bus, Slot, Function, barr);
 
 				if (address == 0)
@@ -226,9 +227,9 @@ namespace Mosa.DeviceSystem.PCI
 					BaseAddresses[i] = new BaseAddress(AddressType.Memory, address & 0xFFFFFFF0, ~(mask & 0xFFFFFFF0) + 1, ((address & 0x08) == 1));
 			}
 
+			// Special case for generic VGA
 			if (ClassCode == 0x03 && SubClassCode == 0x00 && ProgIF == 0x00)
 			{
-				// Special case for generic VGA
 				BaseAddresses[6] = new BaseAddress(AddressType.Memory, 0xA0000, 0x1FFFF, false);
 				BaseAddresses[7] = new BaseAddress(AddressType.IO, 0x3B0, 0x0F, false);
 			}

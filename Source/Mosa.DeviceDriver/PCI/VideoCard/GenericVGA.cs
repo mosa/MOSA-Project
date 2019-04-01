@@ -17,7 +17,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 	/// Generic VGA Device Driver
 	/// </summary>
 	//[PCIDeviceDriver(ClassCode = 0X03, SubClassCode = 0x00, ProgIF = 0x00, Platforms = PlatformArchitecture.X86AndX64)]
-	public class GenericVGA : DeviceSystem.DeviceDriver, IPixelPaletteGraphicsDevice
+	public class GenericVGA : BaseDeviceDriver, IPixelPaletteGraphicsDevice
 	{
 		#region Definitions
 
@@ -45,6 +45,8 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		}
 
 		#endregion Definitions
+
+		#region Ports
 
 		/// <summary>
 		///
@@ -124,11 +126,6 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// <summary>
 		///
 		/// </summary>
-		protected BaseMemory memory;
-
-		/// <summary>
-		///
-		/// </summary>
 		protected IOPortReadWrite activeControllerIndex;
 
 		/// <summary>
@@ -150,6 +147,13 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		///
 		/// </summary>
 		protected IOPortReadWrite attributeData;
+
+		#endregion Ports
+
+		/// <summary>
+		///
+		/// </summary>
+		protected Memory memory;
 
 		/// <summary>
 		///
@@ -181,9 +185,9 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// </summary>
 		private WriteMethod writeMethod;
 
-		protected override void Initialize()
+		public override void Initialize()
 		{
-			Device.Name = "GenericVGA";
+			Device.Name = "GenericVGA_0x" + Device.Resources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
 			byte portBar = (byte)(Device.Resources.IOPointRegionCount - 1);
 
@@ -214,17 +218,19 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 			if (Device.Status != DeviceStatus.Available)
 				return;
 
-			if (!SetMode(13))
-			{
-				Device.Status = DeviceStatus.Error;
-			}
+			// TODO
+
+			//if (!SetMode(13))
+			//{
+			//	Device.Status = DeviceStatus.Error;
+			//}
 
 			Device.Status = DeviceStatus.Online;
 		}
 
 		public override bool OnInterrupt()
 		{
-			return true;
+			return false;
 		}
 
 		/// <summary>

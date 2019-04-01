@@ -44,10 +44,7 @@ namespace Mosa.DeviceDriver.ISA
 
 			var found = configAddress.Read32() == BaseValue;
 
-			if (!found)
-			{
-				Device.Status = DeviceStatus.NotFound;
-			}
+			Device.Status = (found) ? DeviceStatus.Available : DeviceStatus.NotFound;
 		}
 
 		public override void Start()

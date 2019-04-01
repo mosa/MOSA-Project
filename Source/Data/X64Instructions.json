@@ -3912,13 +3912,13 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 2,
+			"OperandCount": 1,
 			"ResultCount": 1,
-			"ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],operand-prefix=0x66,opcode=0x0F,opcode2=0xEF,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+					"Encoding": "[x64-rex32],operand-prefix=0x66,opcode=0x0F,opcode2=0xEF,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -4366,13 +4366,13 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 2,
+			"OperandCount": 1,
 			"ResultCount": 1,
-			"ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x51,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x51,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},
@@ -4387,13 +4387,13 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 2,
+			"OperandCount": 1,
 			"ResultCount": 1,
-			"ThreeTwoAddressConversion": "true",
+			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x51,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x51,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
 				}
 			]
 		},

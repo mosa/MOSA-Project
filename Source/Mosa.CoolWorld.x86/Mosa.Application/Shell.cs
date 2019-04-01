@@ -65,7 +65,9 @@ namespace Mosa.Application
 		{
 			switch (name)
 			{
+				case "clear": return new Clear();
 				case "mem": return new Mem();
+				case "showpci": return new ShowPCI();
 				case "credits": return new Credits();
 				default: return null;
 			}

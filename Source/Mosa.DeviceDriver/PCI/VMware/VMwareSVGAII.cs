@@ -105,9 +105,13 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 		#endregion Definitions
 
+		#region Ports
+
 		protected IOPortReadWrite indexPort;
 
 		protected IOPortReadWrite valuePort;
+
+		#endregion Ports
 
 		protected Memory memory;
 
@@ -231,6 +235,10 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		}
 
 		public override void Start()
+		{
+		}
+
+		public void _Start()
 		{
 			videoRamSize = ReadRegister(Register.VRamSize);
 			maxWidth = ReadRegister(Register.MaxWidth);

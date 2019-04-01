@@ -76,6 +76,12 @@
     <Compile Include="ServiceManager.cs" />
     <Compile Include="DiskDeviceMountDeamon.cs" />
     <Compile Include="BaseMountDaemon.cs" />
+    <Compile Include="PCIDeviceService.cs" />
+    <Compile Include="ServiceEventType.cs" />
+    <Compile Include="ServiceEvent.cs" />
+    <Compile Include="BaseService.cs" />
+    <Compile Include="ServiceManager.cs" />
+    <Compile Include="DiskDeviceService.cs" />
     <Compile Include="Color.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -88,6 +94,7 @@
     <Compile Include="DeviceDriverPhysicalMemory.cs" />
     <Compile Include="DeviceDriverStartStatus.cs" />
     <Compile Include="DeviceManagerService.cs" />
+    <Compile Include="DeviceService.cs" />
     <Compile Include="DeviceStatus.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="DiskPartitionConfiguration.cs" />
@@ -100,14 +107,12 @@
     <Compile Include="DiskDeviceConfiguration.cs" />
     <Compile Include="IDMAChannel.cs" />
     <Compile Include="BaseHardwareAbstraction.cs" />
-    <Compile Include="IHardwareDevice.cs" />
     <Compile Include="IIOPorts.cs" />
     <Compile Include="IOPortRegion.cs" />
     <Compile Include="IOPortResources.cs" />
     <Compile Include="IPCIController.cs" />
     <Compile Include="PCIDeviceDriverRegistryEntry.cs" />
     <Compile Include="ISADeviceDriverRegistryEntry.cs" />
-    <Compile Include="IService.cs" />
     <Compile Include="MemoryRegion.cs" />
     <Compile Include="MemoryResources.cs" />
     <Compile Include="NetworkDevicePacketBuffer.cs" />
@@ -116,7 +121,7 @@
     <Compile Include="GUIDPartitionTable.cs" />
     <Compile Include="PartitionType.cs" />
     <Compile Include="DiskGeometry.cs" />
-    <Compile Include="PartitionManager.cs" />
+    <Compile Include="PartitionService.cs" />
     <Compile Include="DiskDeviceDriver.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -192,7 +197,7 @@
     <Compile Include="PartitionDeviceDriver.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PCIControllerManager.cs" />
+    <Compile Include="PCIControllerService.cs" />
     <Compile Include="PCI\AddressType.cs" />
     <Compile Include="PCI\BaseAddress.cs" />
     <Compile Include="PCI\ClassCodeTable.cs" />

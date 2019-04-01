@@ -29,7 +29,7 @@ namespace Mosa.DeviceDriver.ISA
 		protected void StartISADevices()
 		{
 			// Start ISA Drivers
-			var drivers = DeviceManager.GetDeviceDrivers(DeviceBusType.ISA);
+			var drivers = DeviceService.GetDeviceDrivers(DeviceBusType.ISA);
 
 			foreach (var driver in drivers)
 			{
@@ -72,7 +72,7 @@ namespace Mosa.DeviceDriver.ISA
 
 			var hardwareResources = new HardwareResources(ioPortRegions, memoryRegions, driverEntry.IRQ);
 
-			DeviceManager.Initialize(driverEntry, null, null, hardwareResources);
+			DeviceService.Initialize(driverEntry, Device, null, hardwareResources);
 		}
 	}
 }

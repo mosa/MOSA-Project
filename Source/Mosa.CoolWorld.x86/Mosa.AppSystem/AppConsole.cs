@@ -62,7 +62,7 @@ namespace Mosa.AppSystem
 
 		public void ClearScreen()
 		{
-			Output.WriteByte(10);
+			Output.WriteByte(12);
 		}
 
 		private void AddToBuffer(char c)

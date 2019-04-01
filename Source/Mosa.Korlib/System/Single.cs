@@ -1,9 +1,11 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Runtime.CompilerServices;
+
 namespace System
 {
 	/// <summary>
-	///
+	/// Single
 	/// </summary>
 	public struct Single
 	{
@@ -14,6 +16,8 @@ namespace System
 		public const float PositiveInfinity = 1.0f / 0.0f;
 		public const float NegativeInfinity = -1.0f / 0.0f;
 
+		internal const float NegativeZero = (float)-0.0;
+
 		internal float _value;
 
 		public static bool IsNaN(float s)
@@ -23,12 +27,14 @@ namespace System
 #pragma warning restore
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsNegativeInfinity(float s)
 		{
 			return (s < 0.0f && (s == NegativeInfinity || s == PositiveInfinity));
 		}
 
-		public static bool IsPositiveInfinity(double s)
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool IsPositiveInfinity(float s)
 		{
 			return (s > 0.0f && (s == NegativeInfinity || s == PositiveInfinity));
 		}
@@ -36,6 +42,12 @@ namespace System
 		public static bool IsInfinity(float s)
 		{
 			return (s == PositiveInfinity || s == NegativeInfinity);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool IsNegative(float s)
+		{
+			return IsNegativeInfinity(s) || IsPositiveInfinity(s);
 		}
 
 		public int CompareTo(float value)

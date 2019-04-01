@@ -84,7 +84,9 @@
   <ItemGroup>
     <Compile Include="HAL\Hardware.cs" />
     <Compile Include="HAL\IOPort.cs" />
+    <Compile Include="Mosa.Application\Clear.cs" />
     <Compile Include="Mosa.Application\Credits.cs" />
+    <Compile Include="Mosa.Application\ShowPCI.cs" />
     <Compile Include="Mosa.Application\Mem.cs" />
     <Compile Include="Mosa.AppSystem\AppOutputStream.cs" />
     <Compile Include="Mosa.AppSystem\AppConsole.cs" />

@@ -9,7 +9,7 @@ namespace Mosa.DeviceSystem
 	{
 		protected Device Device;
 
-		protected DeviceManagerService DeviceManager { get { return Device.DeviceManager; } }
+		protected DeviceService DeviceService { get { return Device.DeviceService; } }
 
 		protected object _lock = new object();
 

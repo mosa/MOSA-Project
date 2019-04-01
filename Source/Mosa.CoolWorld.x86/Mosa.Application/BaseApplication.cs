@@ -5,7 +5,7 @@ using Mosa.AppSystem;
 namespace Mosa.Application
 {
 	/// <summary>
-	///
+	/// BaseApplication
 	/// </summary>
 	public abstract class BaseApplication
 	{

@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 namespace System
 {
 	/// <summary>
-	///
+	/// Double
 	/// </summary>
 	public struct Double
 	{
@@ -16,6 +16,8 @@ namespace System
 		public const double NegativeInfinity = -1.0d / 0.0d;
 		public const double PositiveInfinity = 1.0d / 0.0d;
 
+		internal const double NegativeZero = -0.0;
+
 		internal double _value;
 
 		public static bool IsNaN(double d)
@@ -25,19 +27,28 @@ namespace System
 #pragma warning restore
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsNegativeInfinity(double d)
 		{
 			return (d < 0.0d && (d == NegativeInfinity || d == PositiveInfinity));
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsPositiveInfinity(double d)
 		{
 			return (d > 0.0d && (d == NegativeInfinity || d == PositiveInfinity));
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static bool IsInfinity(double d)
 		{
 			return (d == PositiveInfinity || d == NegativeInfinity);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static bool IsNegative(double d)
+		{
+			return IsNegativeInfinity(d) || IsPositiveInfinity(d);
 		}
 
 		public int CompareTo(double value)

@@ -10,24 +10,11 @@ namespace Mosa.DeviceDriver.PCI.Intel
 	/// <summary>
 	/// </summary>
 	//[PCIDeviceDriver(VendorID = 0x8086, DeviceID = 0x1013, Platforms = PlatformArchitecture.X86AndX64)]
-	public class Intel82541EI : DeviceSystem.DeviceDriver
+	public class Intel82541EI : BaseDeviceDriver
 	{
-		protected override void Initialize()
+		public override void Initialize()
 		{
 			Device.Name = "Intel82541EI";
-		}
-
-		public override void Start()
-		{
-			if (Device.Status != DeviceStatus.Available)
-				return;
-
-			Device.Status = DeviceStatus.Online;
-		}
-
-		public override bool OnInterrupt()
-		{
-			return true;
 		}
 	}
 }

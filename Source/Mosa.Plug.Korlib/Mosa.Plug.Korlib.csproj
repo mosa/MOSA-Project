@@ -84,6 +84,8 @@
     <Compile Include="System.Runtime.CompilerServices\Unsafe.cs" />
     <Compile Include="System.Runtime.CompilerServices\RuntimeHelpersPlug.cs" />
     <Compile Include="System.Runtime.InteropServices\Marshal.cs" />
+    <Compile Include="System\MathF.CoreCLR.cs" />
+    <Compile Include="System\Math.CoreCLR.cs" />
     <Compile Include="System\ObjectPlug.cs" />
     <Compile Include="System\ArrayPlug.cs" />
     <Compile Include="System\TypePlug.cs" />

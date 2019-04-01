@@ -267,6 +267,12 @@
     <Compile Include="Instructions\XChg32.cs" />
     <Compile Include="Instructions\XChgLoad32.cs" />
     <Compile Include="Instructions\Xor32.cs" />
+    <Compile Include="Intrinsic\Roundsd2Positive.cs" />
+    <Compile Include="Intrinsic\Roundsd2Negative.cs" />
+    <Compile Include="Intrinsic\Roundss2Positive.cs" />
+    <Compile Include="Intrinsic\Roundss2Negative.cs" />
+    <Compile Include="Intrinsic\Sqrtss.cs" />
+    <Compile Include="Intrinsic\Sqrtsd.cs" />
     <Compile Include="Intrinsic\GetIRQHandler.cs" />
     <Compile Include="Intrinsic\IRQs.cs" />
     <Compile Include="Intrinsic\XAddLoad32.cs" />

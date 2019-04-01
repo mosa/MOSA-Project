@@ -2,12 +2,15 @@
 
 using Mosa.AppSystem;
 using Mosa.DeviceDriver;
+using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceDriver.ScanCodeMap;
 using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.PCI;
 using Mosa.FileSystem.FAT;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
+using System;
 
 namespace Mosa.CoolWorld.x86
 {
@@ -48,29 +51,37 @@ namespace Mosa.CoolWorld.x86
 			Console.Color = ScreenColor.White;
 			Console.BackgroundColor = ScreenColor.Black;
 
-			var ServiceManager = new ServiceManager();
+			Console.WriteLine("> Initializing services...");
+
+			// Create Service manager and basic services
+			var serviceManager = new ServiceManager();
+
+			var deviceService = new DeviceService();
+			var diskDeviceService = new DiskDeviceService();
+			var partitionService = new PartitionService();
+			var pciControllerService = new PCIControllerService();
+			var pciDeviceService = new PCIDeviceService();
+
+			serviceManager.AddService(deviceService);
+			serviceManager.AddService(diskDeviceService);
+			serviceManager.AddService(partitionService);
+			serviceManager.AddService(pciControllerService);
+			serviceManager.AddService(pciDeviceService);
 
 			Console.WriteLine("> Initializing hardware abstraction layer...");
 
-			// Create Device Manager
-			var DeviceManager = new DeviceManagerService(PlatformArchitecture.X86);
-
-			ServiceManager.Add(DeviceManager);
-
-			DeviceManager.RegisterDaemon(new DiskDeviceMountDeamon());
-
 			// Set device driver system with the hardware HAL
 			var hardware = new HAL.Hardware();
-			DeviceSystem.Setup.Initialize(hardware, DeviceManager.ProcessInterrupt);
+			DeviceSystem.Setup.Initialize(hardware, deviceService.ProcessInterrupt);
 
 			Console.WriteLine("> Registering device drivers...");
-			DeviceManager.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
+			deviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
 
 			Console.WriteLine("> Starting devices...");
-			DeviceManager.Initialize(new X86System(), null);
+			deviceService.Initialize(new X86System(), null);
 
 			Console.Write("> Probing for ISA devices...");
-			var isaDevices = DeviceManager.GetAllDevices();
+			var isaDevices = deviceService.GetChildrenOf(deviceService.GetFirstDevice<ISABus>());
 			Console.WriteLine("[Completed: " + isaDevices.Count.ToString() + " found]");
 
 			foreach (var device in isaDevices)
@@ -83,24 +94,36 @@ namespace Mosa.CoolWorld.x86
 			}
 
 			Console.Write("> Probing for PCI devices...");
+			var devices = deviceService.GetDevices<PCIDevice>();
+			Console.WriteLine("[Completed: " + devices.Count.ToString() + " found]");
 
-			//Setup.StartPCIDevices();
-			var pciDevices = DeviceManager.GetDevices<DeviceSystem.PCI.IPCIDevice>(DeviceStatus.Available);
-			Console.WriteLine("[Completed: " + pciDevices.Count.ToString() + " found]");
-
-			foreach (var device in pciDevices)
+			foreach (var device in devices)
 			{
-				var pciDevice = device.DeviceDriver as DeviceSystem.PCI.IPCIDevice;
-
 				Console.Write("  ");
 				Bullet(ScreenColor.Yellow);
 				Console.Write(" ");
-				InBrackets(device.Name + ": " + pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x") + " " + pciDevice.SubSystemID.ToString("x") + ":" + pciDevice.SubVendorID.ToString("x") + " (" + pciDevice.Function.ToString("x") + ":" + pciDevice.ClassCode.ToString("x") + ":" + pciDevice.SubClassCode.ToString("x") + ":" + pciDevice.ProgIF.ToString("x") + ":" + pciDevice.RevisionID.ToString("x") + ")", ScreenColor.White, ScreenColor.Green);
+
+				var pciDevice = device.DeviceDriver as PCIDevice;
+				InBrackets(device.Name + ": " + pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x") + " " + pciDevice.SubSystemID.ToString("x") + ":" + pciDevice.SubSystemVendorID.ToString("x") + " (" + pciDevice.Function.ToString("x") + ":" + pciDevice.ClassCode.ToString("x") + ":" + pciDevice.SubClassCode.ToString("x") + ":" + pciDevice.ProgIF.ToString("x") + ":" + pciDevice.RevisionID.ToString("x") + ")", ScreenColor.White, ScreenColor.Green);
+
+				var children = deviceService.GetChildrenOf(device);
+
+				if (children.Count != 0)
+				{
+					var child = children[0];
+
+					Console.WriteLine();
+					Console.Write("    ");
+
+					var pciDevice2 = child.DeviceDriver as PCIDevice;
+					InBrackets(child.Name, ScreenColor.White, ScreenColor.Green);
+				}
+
 				Console.WriteLine();
 			}
 
 			Console.Write("> Probing for disk controllers...");
-			var diskcontrollers = DeviceManager.GetDevices<IDiskControllerDevice>();
+			var diskcontrollers = deviceService.GetDevices<IDiskControllerDevice>();
 			Console.WriteLine("[Completed: " + diskcontrollers.Count.ToString() + " found]");
 
 			foreach (var device in diskcontrollers)
@@ -113,7 +136,7 @@ namespace Mosa.CoolWorld.x86
 			}
 
 			Console.Write("> Probing for disks...");
-			var disks = DeviceManager.GetDevices<IDiskDevice>();
+			var disks = deviceService.GetDevices<IDiskDevice>();
 			Console.WriteLine("[Completed: " + disks.Count.ToString() + " found]");
 
 			foreach (var disk in disks)
@@ -126,22 +149,21 @@ namespace Mosa.CoolWorld.x86
 				Console.WriteLine();
 			}
 
-			var partitionManager = new PartitionManager(DeviceManager);
-			partitionManager.CreatePartitionDevices();
+			partitionService.CreatePartitionDevices();
 
 			Console.Write("> Finding partitions...");
-			var partitions = DeviceManager.GetDevices<IPartitionDevice>();
+			var partitions = deviceService.GetDevices<IPartitionDevice>();
 			Console.WriteLine("[Completed: " + partitions.Count.ToString() + " found]");
 
-			foreach (var partition in partitions)
-			{
-				Console.Write("  ");
-				Bullet(ScreenColor.Yellow);
-				Console.Write(" ");
-				InBrackets(partition.Name, ScreenColor.White, ScreenColor.Green);
-				Console.Write(" " + (partition.DeviceDriver as IPartitionDevice).BlockCount.ToString() + " blocks");
-				Console.WriteLine();
-			}
+			//foreach (var partition in partitions)
+			//{
+			//	Console.Write("  ");
+			//	Bullet(ScreenColor.Yellow);
+			//	Console.Write(" ");
+			//	InBrackets(partition.Name, ScreenColor.White, ScreenColor.Green);
+			//	Console.Write(" " + (partition.DeviceDriver as IPartitionDevice).BlockCount.ToString() + " blocks");
+			//	Console.WriteLine();
+			//}
 
 			Console.Write("> Finding file systems...");
 
@@ -185,7 +207,7 @@ namespace Mosa.CoolWorld.x86
 			}
 
 			// Get StandardKeyboard
-			var standardKeyboards = DeviceManager.GetDevices("StandardKeyboard");
+			var standardKeyboards = deviceService.GetDevices("StandardKeyboard");
 
 			if (standardKeyboards.Count == 0)
 			{
@@ -204,7 +226,7 @@ namespace Mosa.CoolWorld.x86
 			var keyboard = new DeviceSystem.Keyboard(standardKeyboard, keymap);
 
 			// setup app manager
-			var manager = new AppManager(Console, keyboard);
+			var manager = new AppManager(Console, keyboard, serviceManager);
 
 			IDT.SetInterruptHandler(manager.ProcessInterrupt);
 
@@ -277,53 +299,55 @@ namespace Mosa.CoolWorld.x86
 			Console.BackgroundColor = back;
 		}
 
-		//public static void Mandelbrot()
-		//{
-		//	double xmin = -2.1;
-		//	double ymin = -1.3;
-		//	double xmax = 1;
-		//	double ymax = 1.3;
+		public static void Mandelbrot()
+		{
+			double xmin = -2.1;
+			double ymin = -1.3;
+			double xmax = 1;
+			double ymax = 1.3;
 
-		//	int Width = 200;
-		//	int Height = 200;
+			int Width = 200;
+			int Height = 200;
 
-		//	double x, y, x1, y1, xx;
+			double x, y, x1, y1, xx;
 
-		//	int looper, s, z = 0;
-		//	double intigralX, intigralY = 0.0;
+			int looper, s, z = 0;
+			double intigralX, intigralY = 0.0;
 
-		//	intigralX = (xmax - xmin) / Width; // Make it fill the whole window
-		//	intigralY = (ymax - ymin) / Height;
-		//	x = xmin;
+			intigralX = (xmax - xmin) / Width; // Make it fill the whole window
+			intigralY = (ymax - ymin) / Height;
+			x = xmin;
 
-		//	for (s = 1; s < Width; s++)
-		//	{
-		//		y = ymin;
-		//		for (z = 1; z < Height; z++)
-		//		{
-		//			x1 = 0;
-		//			y1 = 0;
-		//			looper = 0;
-		//			while (looper < 100 && Math.Sqrt((x1 * x1) + (y1 * y1)) < 2)
-		//			{
-		//				looper++;
-		//				xx = (x1 * x1) - (y1 * y1) + x;
-		//				y1 = 2 * x1 * y1 + y;
-		//				x1 = xx;
-		//			}
+			for (s = 1; s < Width; s++)
+			{
+				y = ymin;
+				for (z = 1; z < Height; z++)
+				{
+					x1 = 0;
+					y1 = 0;
+					looper = 0;
+					while (looper < 100 && Math.Sqrt((x1 * x1) + (y1 * y1)) < 2)
+					{
+						looper++;
+						xx = (x1 * x1) - (y1 * y1) + x;
+						y1 = 2 * x1 * y1 + y;
+						x1 = xx;
+					}
 
-		//			// Get the percent of where the looper stopped
-		//			double perc = looper / (100.0);
-		//			// Get that part of a 255 scale
-		//			int val = ((int)(perc * 255));
-		//			// Use that number to set the color
+					// Get the percent of where the looper stopped
+					double perc = looper / (100.0);
 
-		//			//map[s, z]= value;
+					// Get that part of a 255 scale
+					int val = ((int)(perc * 255));
 
-		//			y += intigralY;
-		//		}
-		//		x += intigralX;
-		//	}
-		//}
+					// Use that number to set the color
+
+					//map[s, z]= value;
+
+					y += intigralY;
+				}
+				x += intigralX;
+			}
+		}
 	}
 }
