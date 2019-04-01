@@ -477,24 +477,18 @@ namespace Mosa.Compiler.Framework
 		/// <exception cref="CompilerException"></exception>
 		public static Operand CreateConstant(MosaType type, ulong value)
 		{
-			var operand = new Operand(type)
+			if (type.IsReferenceType && value != 0)
+			{
+				throw new CompilerException();
+			}
+
+			return new Operand(type)
 			{
 				IsConstant = true,
 				ConstantUnsignedLongInteger = value,
 				IsNull = (type.IsReferenceType && value == 0),
 				IsResolved = true
 			};
-			if (type.IsReferenceType && value != 0)
-			{
-				throw new CompilerException();
-			}
-
-			//if (!(operand.IsInteger || operand.IsBoolean || operand.IsChar || operand.IsPointer || operand.IsReferenceType))
-			//{
-			//	throw new CompilerException();
-			//}
-
-			return operand;
 		}
 
 		/// <summary>
@@ -508,6 +502,28 @@ namespace Mosa.Compiler.Framework
 		public static Operand CreateConstant(MosaType type, long value)
 		{
 			return CreateConstant(type, (ulong)value);
+		}
+
+		public static Operand CreateConstant(MosaType type, float value)
+		{
+			return new Operand(type)
+			{
+				IsConstant = true,
+				ConstantSingleFloatingPoint = value,
+				IsNull = false,
+				IsResolved = true
+			};
+		}
+
+		public static Operand CreateConstant(MosaType type, double value)
+		{
+			return new Operand(type)
+			{
+				IsConstant = true,
+				ConstantDoubleFloatingPoint = value,
+				IsNull = false,
+				IsResolved = true
+			};
 		}
 
 		/// <summary>

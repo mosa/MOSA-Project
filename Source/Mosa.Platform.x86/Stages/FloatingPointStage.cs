@@ -15,6 +15,11 @@ namespace Mosa.Platform.x86.Stages
 			return instruction == X86.MovsdLoad || instruction == X86.MovssLoad || instruction == X86.MovLoad32;
 		}
 
+		protected override bool IsIntegerToFloating(BaseInstruction instruction)
+		{
+			return instruction == X86.Cvtsi2sd32 || instruction == X86.Cvtsi2ss32;
+		}
+
 		protected override BaseInstruction MovssLoad { get { return X86.MovssLoad; } }
 
 		protected override BaseInstruction MovsdLoad { get { return X86.MovsdLoad; } }
