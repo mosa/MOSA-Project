@@ -28,6 +28,16 @@ namespace Mosa.Compiler.Framework
 			return Operand.CreateConstant(type, value);
 		}
 
+		public static Operand Create(MosaType type, float value)
+		{
+			return Operand.CreateConstant(type, value);
+		}
+
+		public static Operand Create(MosaType type, double value)
+		{
+			return Operand.CreateConstant(type, value);
+		}
+
 		#endregion Constant Helper Methods
 	}
 }

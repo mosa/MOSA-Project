@@ -21,15 +21,10 @@ namespace Mosa.Platform.x64.Instructions
 
 		public override bool IsCommutative { get { return true; } }
 
-		public override bool ThreeTwoAddressConversion { get { return true; } }
-
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
-			System.Diagnostics.Debug.Assert(node.Result.IsCPURegister);
-			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
-			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
 			emitter.OpcodeEncoder.SuppressByte(0x40);
 			emitter.OpcodeEncoder.AppendNibble(0b0100);
