@@ -239,6 +239,14 @@ namespace Mosa.Compiler.Framework
 			{
 				return ConstantOperand.Create(result.Type, (ulong)(op1.ConstantSignedLongInteger / op2.ConstantSignedLongInteger));
 			}
+			else if (instruction == IRInstruction.DivFloatR4 && !op2.IsConstantZero)
+			{
+				return ConstantOperand.Create(result.Type, op1.ConstantSingleFloatingPoint / op2.ConstantSingleFloatingPoint);
+			}
+			else if (instruction == IRInstruction.DivFloatR8 && !op2.IsConstantZero)
+			{
+				return ConstantOperand.Create(result.Type, op1.ConstantDoubleFloatingPoint / op2.ConstantDoubleFloatingPoint);
+			}
 			else if (instruction == IRInstruction.ArithShiftRight32)
 			{
 				return ConstantOperand.Create(result.Type, ((ulong)(((long)op1.ConstantUnsignedLongInteger) >> (int)op2.ConstantUnsignedLongInteger)) & 0xFFFFFFFF);
@@ -278,6 +286,14 @@ namespace Mosa.Compiler.Framework
 			else if (instruction == IRInstruction.RemUnsigned64 && !op2.IsConstantZero)
 			{
 				return ConstantOperand.Create(result.Type, op1.ConstantUnsignedLongInteger % op2.ConstantUnsignedLongInteger);
+			}
+			else if (instruction == IRInstruction.RemFloatR4 && !op2.IsConstantZero)
+			{
+				return ConstantOperand.Create(result.Type, op1.ConstantSingleFloatingPoint % op2.ConstantSingleFloatingPoint);
+			}
+			else if (instruction == IRInstruction.RemFloatR8 && !op2.IsConstantZero)
+			{
+				return ConstantOperand.Create(result.Type, op1.ConstantDoubleFloatingPoint % op2.ConstantDoubleFloatingPoint);
 			}
 			else if (instruction == IRInstruction.To64)
 			{
@@ -379,31 +395,31 @@ namespace Mosa.Compiler.Framework
 			{
 				return ConstantOperand.Create(result.Type, 0);
 			}
-			else if ((instruction == IRInstruction.MulSigned32 || instruction == IRInstruction.MulUnsigned32 || instruction == IRInstruction.MulSigned64 || instruction == IRInstruction.MulUnsigned64) && (op1.IsConstantZero || op2.IsConstantZero))
+			else if ((instruction == IRInstruction.MulSigned32 || instruction == IRInstruction.MulUnsigned32 || instruction == IRInstruction.MulSigned64 || instruction == IRInstruction.MulUnsigned64 || instruction == IRInstruction.MulFloatR4 || instruction == IRInstruction.MulFloatR8) && (op1.IsConstantZero || op2.IsConstantZero))
 			{
 				return ConstantOperand.Create(result.Type, 0);
 			}
-			else if ((instruction == IRInstruction.MulSigned32 || instruction == IRInstruction.MulUnsigned32 || instruction == IRInstruction.MulSigned64 || instruction == IRInstruction.MulUnsigned64) && op1.IsConstantOne)
+			else if ((instruction == IRInstruction.MulSigned32 || instruction == IRInstruction.MulUnsigned32 || instruction == IRInstruction.MulSigned64 || instruction == IRInstruction.MulUnsigned64 || instruction == IRInstruction.MulFloatR4 || instruction == IRInstruction.MulFloatR8) && op1.IsConstantOne)
 			{
 				return op2;
 			}
-			else if ((instruction == IRInstruction.MulSigned32 || instruction == IRInstruction.MulUnsigned32 || instruction == IRInstruction.MulSigned64 || instruction == IRInstruction.MulUnsigned64) && op2.IsConstantOne)
+			else if ((instruction == IRInstruction.MulSigned32 || instruction == IRInstruction.MulUnsigned32 || instruction == IRInstruction.MulSigned64 || instruction == IRInstruction.MulUnsigned64 || instruction == IRInstruction.MulFloatR4 || instruction == IRInstruction.MulFloatR8) && op2.IsConstantOne)
 			{
 				return op1;
 			}
-			else if ((node.Instruction == IRInstruction.DivSigned32 || node.Instruction == IRInstruction.DivUnsigned32 || node.Instruction == IRInstruction.DivSigned64 || node.Instruction == IRInstruction.DivUnsigned64) && op2.IsConstantOne)
+			else if ((node.Instruction == IRInstruction.DivSigned32 || node.Instruction == IRInstruction.DivUnsigned32 || node.Instruction == IRInstruction.DivSigned64 || node.Instruction == IRInstruction.DivUnsigned64 || instruction == IRInstruction.DivFloatR4 || instruction == IRInstruction.DivFloatR8) && op2.IsConstantOne)
 			{
 				return op1;
 			}
-			else if ((node.Instruction == IRInstruction.DivSigned32 || node.Instruction == IRInstruction.DivUnsigned32 || node.Instruction == IRInstruction.DivSigned64 || node.Instruction == IRInstruction.DivUnsigned64) && op1.IsConstantZero)
+			else if ((node.Instruction == IRInstruction.DivSigned32 || node.Instruction == IRInstruction.DivUnsigned32 || node.Instruction == IRInstruction.DivSigned64 || node.Instruction == IRInstruction.DivUnsigned64 || instruction == IRInstruction.DivFloatR4 || instruction == IRInstruction.DivFloatR8) && op1.IsConstantZero)
 			{
 				return ConstantOperand.Create(result.Type, 0);
 			}
-			else if ((node.Instruction == IRInstruction.DivSigned32 || node.Instruction == IRInstruction.DivUnsigned32 || node.Instruction == IRInstruction.DivSigned64 || node.Instruction == IRInstruction.DivUnsigned64) && op1 == op2)
+			else if ((node.Instruction == IRInstruction.DivSigned32 || node.Instruction == IRInstruction.DivUnsigned32 || node.Instruction == IRInstruction.DivSigned64 || node.Instruction == IRInstruction.DivUnsigned64 || instruction == IRInstruction.DivFloatR4 || instruction == IRInstruction.DivFloatR8) && op1 == op2)
 			{
 				return ConstantOperand.Create(result.Type, 1);
 			}
-			else if ((node.Instruction == IRInstruction.RemUnsigned32 || node.Instruction == IRInstruction.RemUnsigned64) && op2.IsConstantOne)
+			else if ((node.Instruction == IRInstruction.RemUnsigned32 || node.Instruction == IRInstruction.RemUnsigned64 || instruction == IRInstruction.RemFloatR4 || instruction == IRInstruction.RemFloatR8) && op2.IsConstantOne)
 			{
 				return ConstantOperand.Create(result.Type, 0);
 			}
