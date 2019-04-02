@@ -7,8 +7,6 @@ namespace Mosa.TestWorld.x86.Tests
 {
 	public class KernelTest
 	{
-		private static ConsoleSession Console;
-
 		private readonly string testName = string.Empty;
 
 		protected delegate bool TestMethod();
