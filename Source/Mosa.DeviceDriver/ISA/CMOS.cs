@@ -13,12 +13,12 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		/// The command port
 		/// </summary>
-		protected IOPortReadWrite commandPort;
+		protected BaseIOPortReadWrite commandPort;
 
 		/// <summary>
 		/// The data port
 		/// </summary>
-		protected IOPortReadWrite dataPort;
+		protected BaseIOPortReadWrite dataPort;
 
 		public override void Initialize()
 		{

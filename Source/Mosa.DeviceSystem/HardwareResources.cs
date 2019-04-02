@@ -74,9 +74,9 @@ namespace Mosa.DeviceSystem
 		/// <param name="region">The region.</param>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public IOPortReadWrite GetIOPortReadWrite(byte region, ushort index)
+		public BaseIOPortReadWrite GetIOPortReadWrite(byte region, ushort index)
 		{
-			return HAL.RequestReadWriteIOPort((ushort)(ioPortRegions[region].BaseIOPort + index));
+			return HAL.GetReadWriteIOPort((ushort)(ioPortRegions[region].BaseIOPort + index));
 		}
 
 		/// <summary>
@@ -85,9 +85,9 @@ namespace Mosa.DeviceSystem
 		/// <param name="region">The region.</param>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public IOPortRead GetIOPortRead(byte region, ushort index)
+		public BaseIOPortRead GetIOPortRead(byte region, ushort index)
 		{
-			return HAL.RequestReadIOPort((ushort)(ioPortRegions[region].BaseIOPort + index));
+			return HAL.GetReadIOPort((ushort)(ioPortRegions[region].BaseIOPort + index));
 		}
 
 		/// <summary>
@@ -96,9 +96,9 @@ namespace Mosa.DeviceSystem
 		/// <param name="region">The region.</param>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public IOPortWrite GetIOPortWrite(byte region, ushort index)
+		public BaseIOPortWrite GetIOPortWrite(byte region, ushort index)
 		{
-			return HAL.RequestWriteIOPort((ushort)(ioPortRegions[region].BaseIOPort + index));
+			return HAL.GetWriteIOPort((ushort)(ioPortRegions[region].BaseIOPort + index));
 		}
 
 		/// <summary>
@@ -108,7 +108,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public Memory GetMemory(byte region)
 		{
-			return HAL.RequestPhysicalMemory(memoryRegions[region].BaseAddress, memoryRegions[region].Size);
+			return HAL.GetPhysicalMemory(memoryRegions[region].BaseAddress, memoryRegions[region].Size);
 		}
 	}
 }

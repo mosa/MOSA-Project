@@ -22,7 +22,7 @@ namespace Mosa.VBEWorld.x86
 			VBEMode vbeInfo = Multiboot.VBEModeInfoStructure;
 
 			uint memorySize = (uint)(vbeInfo.ScreenWidth * vbeInfo.ScreenHeight * (vbeInfo.BitsPerPixel / 8));
-			_lfb = hal.RequestPhysicalMemory(vbeInfo.MemoryPhysicalLocation, memorySize);
+			_lfb = hal.GetPhysicalMemory(vbeInfo.MemoryPhysicalLocation, memorySize);
 
 			switch (vbeInfo.BitsPerPixel)
 			{

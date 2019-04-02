@@ -57,7 +57,7 @@ namespace Mosa.Kernel.x86
 			//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
 
 			//Native.Set32(Address.PageTable + ((virtualAddress & 0xFFC00000u) >> 10), physicalAddress & 0xFFC00000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
-			Intrinsic.Store32(new IntPtr(Address.PageTable), ((virtualAddress & 0xFFFFF000u) >> 10), physicalAddress & 0xFFFFF000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
+			Intrinsic.Store32(new IntPtr(Address.PageTable), (virtualAddress & 0xFFFFF000u) >> 10, physicalAddress & 0xFFFFF000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
 		}
 
 		/// <summary>
@@ -68,7 +68,7 @@ namespace Mosa.Kernel.x86
 		public static uint GetPhysicalAddressFromVirtual(IntPtr virtualAddress)
 		{
 			//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
-			return Intrinsic.Load32(new IntPtr(Address.PageTable), (((uint)virtualAddress.ToInt32() & 0xFFFFF000u) >> 10)) + ((uint)virtualAddress.ToInt32() & 0xFFFu);
+			return Intrinsic.Load32(new IntPtr(Address.PageTable), ((uint)virtualAddress.ToInt32() & 0xFFFFF000u) >> 10) + ((uint)virtualAddress.ToInt32() & 0xFFFu);
 		}
 	}
 }

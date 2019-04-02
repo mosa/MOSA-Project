@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Mosa.Runtime
+namespace Mosa.Runtime.Extension
 {
 	public static class IntPtrExtension
 	{
