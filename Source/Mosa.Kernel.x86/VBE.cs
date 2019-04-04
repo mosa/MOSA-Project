@@ -53,7 +53,7 @@ namespace Mosa.Kernel.x86
 		#endregion VBEModeInfoOffset
 
 		/// <summary>
-		/// Gets a value indicating whether multiboot is enabled.
+		/// Gets a value indicating whether VBE is available.
 		/// </summary>
 		public static bool IsVBEAvailable => Multiboot.IsMultibootAvailable && !VBEModeInfo.IsNull();
 

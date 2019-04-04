@@ -174,7 +174,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Gets the APM table.
 		/// </summary>
-		public static uint APMTable { get { return GetValue(MultiBootInfoOffset.ApmTable); } }
+		public static IntPtr APMTable { get { return GetPointer(MultiBootInfoOffset.ApmTable); } }
 
 		/// <summary>
 		/// Gets the VBE control information.
