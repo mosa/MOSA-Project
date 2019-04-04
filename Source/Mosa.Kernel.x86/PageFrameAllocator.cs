@@ -36,7 +36,7 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		private static void SetupFreeMemory()
 		{
-			if (!Multiboot.IsMultibootEnabled)
+			if (!Multiboot.IsMultibootAvailable)
 				return;
 
 			uint cnt = 0;
