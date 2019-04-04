@@ -60,9 +60,9 @@ namespace Mosa.HelloWorld.x86
 			Console.Color = ScreenColor.Green;
 			Console.Write("Size of Memory:   ");
 			Console.Color = ScreenColor.Gray;
-			Console.Write((Multiboot.MemoryLower + Multiboot.MemoryUpper) / 1024, 10, -1);
+			Console.Write((uint)(Multiboot.MemoryLower.ToInt32() + Multiboot.MemoryUpper.ToInt32()) / 1024, 10, -1);
 			Console.Write(" MB (");
-			Console.Write(Multiboot.MemoryLower + Multiboot.MemoryUpper, 10, -1);
+			Console.Write((uint)(Multiboot.MemoryLower.ToInt32() + Multiboot.MemoryUpper.ToInt32()), 10, -1);
 			Console.Write(" KB)");
 			Console.WriteLine();
 			Console.WriteLine();

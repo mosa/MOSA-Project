@@ -1,14 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
 using Mosa.Runtime;
 using Mosa.Runtime.Extension;
 using Mosa.Runtime.x86;
@@ -17,10 +8,15 @@ using System;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	/// Static class of helpful memory functions
+	/// Multiboot
 	/// </summary>
 	public static class Multiboot
 	{
+		/// <summary>
+		/// Magic value that indicates that kernel was loaded by a Multiboot-compliant boot loader
+		/// </summary>
+		public const uint MultibootMagic = 0x2BADB002;
+
 		#region MultiBootInfoOffset
 
 		private struct MultiBootInfoOffset
@@ -72,28 +68,23 @@ namespace Mosa.Kernel.x86
 		public static IntPtr MultibootStructure { get; private set; }
 
 		/// <summary>
-		/// Magic value that indicates that kernel was loaded by a Multiboot-compliant boot loader
-		/// </summary>
-		public const uint MultibootMagic = 0x2BADB002;
-
-		/// <summary>
 		/// Gets the memory map count.
 		/// </summary>
 		/// <value>The memory map count.</value>
 		public static uint MemoryMapCount { get; internal set; }
 
 		/// <summary>
-		/// Setups this multiboot.
+		/// Setup multiboot.
 		/// </summary>
 		public static void Setup()
 		{
 			MultibootStructure = IntPtr.Zero;
 
-			uint magic = Native.GetMultibootEAX();
+			var magic = Native.GetMultibootEAX();
 
 			if (magic == MultibootMagic)
 			{
-				uint address = Native.GetMultibootEBX();
+				var address = Native.GetMultibootEBX();
 
 				MultibootStructure = new IntPtr(address);// Intrinsic.LoadPointer(new IntPtr(address));
 				CountMemoryMap();
@@ -103,14 +94,16 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Gets a value indicating whether multiboot is enabled.
 		/// </summary>
-		public static bool IsMultibootAvailable
-		{
-			get { return MultibootStructure != IntPtr.Zero; }
-		}
+		public static bool IsMultibootAvailable => !MultibootStructure.IsNull();
 
 		private static uint GetValue(uint offset)
 		{
 			return Intrinsic.Load32(MultibootStructure, offset);
+		}
+
+		private static IntPtr GetPointer(uint offset)
+		{
+			return Intrinsic.LoadPointer(MultibootStructure, offset);
 		}
 
 		/// <summary>
@@ -121,12 +114,12 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Gets the memory lower.
 		/// </summary>
-		public static uint MemoryLower { get { return GetValue(MultiBootInfoOffset.MemLower); } }
+		public static IntPtr MemoryLower { get { return GetPointer(MultiBootInfoOffset.MemLower); } }
 
 		/// <summary>
 		/// Gets the memory upper.
 		/// </summary>
-		public static uint MemoryUpper { get { return GetValue(MultiBootInfoOffset.MemUpper); } }
+		public static IntPtr MemoryUpper { get { return GetPointer(MultiBootInfoOffset.MemUpper); } }
 
 		/// <summary>
 		/// Gets the boot device.
@@ -136,7 +129,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Gets the command line address.
 		/// </summary>
-		public static uint CommandLineAddress { get { return GetValue(MultiBootInfoOffset.CommandLine); } }
+		public static IntPtr CommandLineAddress { get { return GetPointer(MultiBootInfoOffset.CommandLine); } }
 
 		/// <summary>
 		/// Gets the module count.
@@ -146,7 +139,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Gets the module start.
 		/// </summary>
-		public static uint ModuleStart { get { return GetValue(MultiBootInfoOffset.ModuleAddress); } }
+		public static IntPtr ModuleStart { get { return GetPointer(MultiBootInfoOffset.ModuleAddress); } }
 
 		/// <summary>
 		/// Gets the length of the memory map.
@@ -156,7 +149,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Gets the memory map start.
 		/// </summary>
-		public static IntPtr MemoryMapStart { get { return Intrinsic.LoadPointer(MultibootStructure, MultiBootInfoOffset.MemMapAddress); } }
+		public static IntPtr MemoryMapStart { get { return GetPointer(MultiBootInfoOffset.MemMapAddress); } }
 
 		/// <summary>
 		/// Gets the length of the drive.
@@ -174,7 +167,7 @@ namespace Mosa.Kernel.x86
 		public static uint ConfigurationTable { get { return GetValue(MultiBootInfoOffset.ConfigTable); } }
 
 		/// <summary>
-		/// Gets the name of the boot loader.
+		/// Gets the name of the boot loader address.
 		/// </summary>
 		public static uint BootLoaderName { get { return GetValue(MultiBootInfoOffset.BootLoaderName); } }
 
@@ -191,7 +184,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Gets the VBE mode info.
 		/// </summary>
-		public static uint VBEModeInfo { get { return GetValue(MultiBootInfoOffset.VbeModeInfo); } }
+		public static IntPtr VBEModeInfo { get { return GetPointer(MultiBootInfoOffset.VbeModeInfo); } }
 
 		/// <summary>
 		/// Gets the VBE mode.
@@ -223,20 +216,11 @@ namespace Mosa.Kernel.x86
 			var location = MemoryMapStart;
 			var end = IntPtr.Add(location, (int)MemoryMapLength);
 
-			Screen.Write("Start = ");
-			Screen.Write((uint)location.ToInt32(), 16, 8);
-
-			Screen.Write("  End = ");
-			Screen.Write((uint)end.ToInt32(), 16, 8);
-			Screen.WriteLine();
-
 			while (location.LessThan(end))
 			{
 				MemoryMapCount++;
-				Screen.Write(location.ToInt32().ToString());
-				Screen.Write(' ');
-				var size = Intrinsic.Load32(location, MultiBootMemoryMapOffset.Size) + 4;
 
+				var size = Intrinsic.Load32(location, MultiBootMemoryMapOffset.Size) + 4;
 				location += (int)size;
 			}
 		}

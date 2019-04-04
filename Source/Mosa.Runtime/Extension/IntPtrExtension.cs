@@ -30,5 +30,10 @@ namespace Mosa.Runtime.Extension
 		{
 			return b.ToInt64() - a.ToInt64();
 		}
+
+		static public bool IsNull(this IntPtr a)
+		{
+			return a == IntPtr.Zero;
+		}
 	}
 }
