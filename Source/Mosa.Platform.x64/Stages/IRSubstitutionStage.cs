@@ -41,7 +41,7 @@ namespace Mosa.Platform.x64.Stages
 
 		private void ReplaceWithPlatformDivisionCall(InstructionNode node, string methodName, Operand result, Operand operand1, Operand operand2)
 		{
-			var type = TypeSystem.GetTypeByName("Mosa.Runtime.x64", "Division");
+			var type = TypeSystem.GetTypeByName("Mosa.Runtime.Math.x64", "Division");
 
 			Debug.Assert(type != null, "Cannot find type: Mosa.Runtime.x64.Division type");
 
@@ -52,6 +52,8 @@ namespace Mosa.Platform.x64.Stages
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
 			node.SetInstruction(IRInstruction.CallStatic, result, symbol, operand1, operand2);
+
+			MethodScanner.MethodInvoked(method, Method);
 		}
 	}
 }

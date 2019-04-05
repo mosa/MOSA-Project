@@ -8,7 +8,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// Provides indirect access to a block of memory
 	/// </summary>
-	public class Memory
+	public sealed class Memory
 	{
 		/// <summary>
 		/// Gets the address.

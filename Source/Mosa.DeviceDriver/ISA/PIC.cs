@@ -28,13 +28,13 @@ namespace Mosa.DeviceDriver.ISA
 
 		#endregion Definitions
 
-		protected IOPortReadWrite masterCommandPort;
+		protected BaseIOPortReadWrite masterCommandPort;
 
-		protected IOPortReadWrite masterDataPort;
+		protected BaseIOPortReadWrite masterDataPort;
 
-		protected IOPortReadWrite slaveCommandPort;
+		protected BaseIOPortReadWrite slaveCommandPort;
 
-		protected IOPortReadWrite slaveDataPort;
+		protected BaseIOPortReadWrite slaveDataPort;
 
 		protected byte masterInterruptMask;
 

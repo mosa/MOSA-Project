@@ -2,7 +2,7 @@
 
 namespace Mosa.DeviceSystem
 {
-	public abstract class IOPort
+	public abstract class BaseIOPort
 	{
 		/// <summary>
 		/// Gets the address.
@@ -16,7 +16,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// Interface to IOPort with read only permission
 	/// </summary>
-	public abstract class IOPortRead : IOPort
+	public abstract class BaseIOPortRead : BaseIOPort
 	{
 		/// <summary>
 		/// Read8s this instance.
@@ -40,7 +40,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// Interface to IOPort with write only permission
 	/// </summary>
-	public abstract class IOPortWrite : IOPort
+	public abstract class BaseIOPortWrite : BaseIOPort
 	{
 		/// <summary>
 		/// Write8s the specified data.
@@ -64,7 +64,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// class to IOPort with full read/write permissions
 	/// </summary>
-	public abstract class IOPortReadWrite : IOPortRead
+	public abstract class BaseIOPortReadWrite : BaseIOPortRead
 	{
 		/// <summary>
 		/// Write8s the specified data.

@@ -7,8 +7,8 @@ namespace Mosa.CoolWorld.x86.HAL
 	/// <summary>
 	/// X86IOPortReadWrite
 	/// </summary>
-	/// <seealso cref="Mosa.DeviceSystem.IOPortReadWrite" />
-	public sealed class X86IOPortReadWrite : DeviceSystem.IOPortReadWrite
+	/// <seealso cref="Mosa.DeviceSystem.BaseIOPortReadWrite" />
+	public sealed class X86IOPortReadWrite : DeviceSystem.BaseIOPortReadWrite
 	{
 		public X86IOPortReadWrite(ushort address)
 		{
@@ -16,7 +16,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		}
 
 		/// <summary>
-		/// Read8s this instance.
+		/// Reads a byte from the IO Port
 		/// </summary>
 		/// <returns></returns>
 		public override byte Read8()
@@ -25,7 +25,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		}
 
 		/// <summary>
-		/// Read16s this instance.
+		/// Reads a short from the IO Port
 		/// </summary>
 		/// <returns></returns>
 		public override ushort Read16()
@@ -34,7 +34,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		}
 
 		/// <summary>
-		/// Read32s this instance.
+		/// Reads an integer from the IO Port
 		/// </summary>
 		/// <returns></returns>
 		public override uint Read32()
@@ -43,7 +43,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		}
 
 		/// <summary>
-		/// Write8s the specified data.
+		///  Writes a byte to the IO Port
 		/// </summary>
 		/// <param name="data">The data.</param>
 		public override void Write8(byte data)
@@ -52,7 +52,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		}
 
 		/// <summary>
-		/// Write16s the specified data.
+		///  Writes a short to the IO Port
 		/// </summary>
 		/// <param name="data">The data.</param>
 		public override void Write16(ushort data)
@@ -61,7 +61,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		}
 
 		/// <summary>
-		/// Write32s the specified data.
+		///  Writes an integer to the IO Port
 		/// </summary>
 		/// <param name="data">The data.</param>
 		public override void Write32(uint data)
@@ -73,8 +73,8 @@ namespace Mosa.CoolWorld.x86.HAL
 	/// <summary>
 	/// X86IOPortRead
 	/// </summary>
-	/// <seealso cref="Mosa.DeviceSystem.IOPortRead" />
-	public sealed class X86IOPortRead : DeviceSystem.IOPortRead
+	/// <seealso cref="Mosa.DeviceSystem.BaseIOPortRead" />
+	public sealed class X86IOPortRead : DeviceSystem.BaseIOPortRead
 	{
 		public X86IOPortRead(ushort address)
 		{
@@ -82,7 +82,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		}
 
 		/// <summary>
-		/// Read8s this instance.
+		/// Reads a byte from the IO Port
 		/// </summary>
 		/// <returns></returns>
 		public override byte Read8()
@@ -91,7 +91,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		}
 
 		/// <summary>
-		/// Read16s this instance.
+		/// Reads a short from the IO Port
 		/// </summary>
 		/// <returns></returns>
 		public override ushort Read16()
@@ -100,7 +100,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		}
 
 		/// <summary>
-		/// Read32s this instance.
+		/// Reads an integer from the IO Port
 		/// </summary>
 		/// <returns></returns>
 		public override uint Read32()
@@ -112,8 +112,8 @@ namespace Mosa.CoolWorld.x86.HAL
 	/// <summary>
 	/// X86IOPortWrite
 	/// </summary>
-	/// <seealso cref="Mosa.DeviceSystem.IOPortWrite" />
-	public sealed class X86IOPortWrite : DeviceSystem.IOPortWrite
+	/// <seealso cref="Mosa.DeviceSystem.BaseIOPortWrite" />
+	public sealed class X86IOPortWrite : DeviceSystem.BaseIOPortWrite
 	{
 		public X86IOPortWrite(ushort address)
 		{
@@ -121,7 +121,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		}
 
 		/// <summary>
-		/// Write8s the specified data.
+		///  Writes a byte to the IO Port
 		/// </summary>
 		/// <param name="data">The data.</param>
 		public override void Write8(byte data)
@@ -130,7 +130,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		}
 
 		/// <summary>
-		/// Write16s the specified data.
+		/// Writes a short to the IO Port
 		/// </summary>
 		/// <param name="data">The data.</param>
 		public override void Write16(ushort data)
@@ -139,7 +139,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		}
 
 		/// <summary>
-		/// Write32s the specified data.
+		/// Writes an integer to the IO Port
 		/// </summary>
 		/// <param name="data">The data.</param>
 		public override void Write32(uint data)

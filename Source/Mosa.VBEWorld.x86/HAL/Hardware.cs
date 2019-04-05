@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
-using Mosa.Kernel;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
 using System;
@@ -14,15 +13,20 @@ namespace Mosa.VBEWorld.x86.HAL
 	public sealed class Hardware : BaseHardwareAbstraction
 	{
 		/// <summary>
-		/// Requests a block of memory from the kernel
+		/// Gets the size of the page.
+		/// </summary>
+		public override uint PageSize { get { return PageFrameAllocator.PageSize; } }
+
+		/// <summary>
+		/// Gets a block of memory from the kernel
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		public override Memory RequestPhysicalMemory(uint address, uint size)
+		public override Memory GetPhysicalMemory(uint address, uint size)
 		{
 			// Map physical memory space to virtual memory space
-			for (uint at = address; at < address + size; at += 4096)
+			for (uint at = address; at < address + size; at += PageSize)
 			{
 				PageTable.MapVirtualAddressToPhysical(at, at);
 			}
@@ -91,7 +95,7 @@ namespace Mosa.VBEWorld.x86.HAL
 		/// </summary>
 		/// <param name="port">The port number.</param>
 		/// <returns></returns>
-		public override IOPortReadWrite RequestReadWriteIOPort(ushort port)
+		public override BaseIOPortReadWrite GetReadWriteIOPort(ushort port)
 		{
 			throw new Exception("Unimplemented");
 		}
@@ -101,7 +105,7 @@ namespace Mosa.VBEWorld.x86.HAL
 		/// </summary>
 		/// <param name="port">The port number.</param>
 		/// <returns></returns>
-		public override IOPortRead RequestReadIOPort(ushort port)
+		public override BaseIOPortRead GetReadIOPort(ushort port)
 		{
 			throw new Exception("Unimplemented");
 		}
@@ -111,7 +115,7 @@ namespace Mosa.VBEWorld.x86.HAL
 		/// </summary>
 		/// <param name="port">The port number.</param>
 		/// <returns></returns>
-		public override IOPortWrite RequestWriteIOPort(ushort port)
+		public override BaseIOPortWrite GetWriteIOPort(ushort port)
 		{
 			throw new Exception("Unimplemented");
 		}
@@ -122,6 +126,7 @@ namespace Mosa.VBEWorld.x86.HAL
 		/// <param name="message">The message.</param>
 		public override void DebugWrite(string message)
 		{
+			Boot.Console.Write(message);
 		}
 
 		/// <summary>
@@ -130,6 +135,7 @@ namespace Mosa.VBEWorld.x86.HAL
 		/// <param name="message">The message.</param>
 		public override void DebugWriteLine(string message)
 		{
+			Boot.Console.WriteLine(message);
 		}
 
 		/// <summary>

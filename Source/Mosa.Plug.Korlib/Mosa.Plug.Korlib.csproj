@@ -80,7 +80,7 @@
     <Compile Include="Runtime\RuntimeCustomAttributeData.cs" />
     <Compile Include="Runtime\RuntimeType.cs" />
     <Compile Include="Runtime\RuntimeTypeInfo.cs" />
-    <Compile Include="KorlibInternal.cs" />
+    <Compile Include="Internal.cs" />
     <Compile Include="System.Runtime.CompilerServices\Unsafe.cs" />
     <Compile Include="System.Runtime.CompilerServices\RuntimeHelpersPlug.cs" />
     <Compile Include="System.Runtime.InteropServices\Marshal.cs" />

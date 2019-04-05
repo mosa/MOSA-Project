@@ -52,9 +52,9 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="port">The port number.</param>
 		/// <returns></returns>
-		internal static IOPortReadWrite RequestReadWriteIOPort(ushort port)
+		internal static BaseIOPortReadWrite GetReadWriteIOPort(ushort port)
 		{
-			return hardwareAbstraction.RequestReadWriteIOPort(port);
+			return hardwareAbstraction.GetReadWriteIOPort(port);
 		}
 
 		/// <summary>
@@ -62,9 +62,9 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="port">The port number.</param>
 		/// <returns></returns>
-		internal static IOPortRead RequestReadIOPort(ushort port)
+		internal static BaseIOPortRead GetReadIOPort(ushort port)
 		{
-			return hardwareAbstraction.RequestReadIOPort(port);
+			return hardwareAbstraction.GetReadIOPort(port);
 		}
 
 		/// <summary>
@@ -72,9 +72,9 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="port">The port number.</param>
 		/// <returns></returns>
-		internal static IOPortWrite RequestWriteIOPort(ushort port)
+		internal static BaseIOPortWrite GetWriteIOPort(ushort port)
 		{
-			return hardwareAbstraction.RequestWriteIOPort(port);
+			return hardwareAbstraction.GetWriteIOPort(port);
 		}
 
 		/// <summary>
@@ -83,9 +83,9 @@ namespace Mosa.DeviceSystem
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		public static Memory RequestPhysicalMemory(uint address, uint size)
+		public static Memory GetPhysicalMemory(uint address, uint size)
 		{
-			return hardwareAbstraction.RequestPhysicalMemory(address, size);
+			return hardwareAbstraction.GetPhysicalMemory(address, size);
 		}
 
 		/// <summary>
