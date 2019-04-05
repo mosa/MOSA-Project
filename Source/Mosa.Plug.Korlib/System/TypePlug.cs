@@ -14,7 +14,7 @@ namespace Mosa.Plug.Korlib.System
 				throw new ArgumentNullException(nameof(typeName));
 
 			// Iterate through all the assemblies and look for the type name
-			foreach (var assembly in KorlibInternal.Assemblies)
+			foreach (var assembly in Internal.Assemblies)
 			{
 				foreach (var type in assembly.typeList)
 				{
@@ -37,7 +37,7 @@ namespace Mosa.Plug.Korlib.System
 		public static Type GetTypeFromHandle(RuntimeTypeHandle handle)
 		{
 			// Iterate through all the assemblies and look for the type handle
-			foreach (var assembly in KorlibInternal.Assemblies)
+			foreach (var assembly in Internal.Assemblies)
 			{
 				foreach (var type in assembly.typeList)
 				{

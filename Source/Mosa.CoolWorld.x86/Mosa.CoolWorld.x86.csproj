@@ -83,7 +83,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="HAL\Hardware.cs" />
-    <Compile Include="HAL\IOPort.cs" />
+    <Compile Include="HAL\X86IOPort.cs" />
     <Compile Include="Mosa.Application\Clear.cs" />
     <Compile Include="Mosa.Application\Credits.cs" />
     <Compile Include="Mosa.Application\ShowPCI.cs" />

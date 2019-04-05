@@ -5,12 +5,12 @@ using Mosa.Runtime.x86;
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	/// Implementation of IReadWriteIOPort
+	/// IOPort
 	/// </summary>
 	public static class IOPort
 	{
 		/// <summary>
-		/// Read8s this instance.
+		/// Reads a byte
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <returns></returns>
@@ -20,7 +20,7 @@ namespace Mosa.Kernel.x86
 		}
 
 		/// <summary>
-		/// Read16s this instance.
+		/// Reads a short
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <returns></returns>
@@ -30,7 +30,7 @@ namespace Mosa.Kernel.x86
 		}
 
 		/// <summary>
-		/// Read32s this instance.
+		/// Reads an integer
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <returns></returns>
@@ -40,7 +40,7 @@ namespace Mosa.Kernel.x86
 		}
 
 		/// <summary>
-		/// Write8s the specified data.
+		/// Writes a byte
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <param name="data">The data.</param>
@@ -50,7 +50,7 @@ namespace Mosa.Kernel.x86
 		}
 
 		/// <summary>
-		/// Write16s the specified data.
+		/// Writes a short
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <param name="data">The data.</param>
@@ -60,7 +60,7 @@ namespace Mosa.Kernel.x86
 		}
 
 		/// <summary>
-		/// Write32s the specified data.
+		/// Writes an integer
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <param name="data">The data.</param>

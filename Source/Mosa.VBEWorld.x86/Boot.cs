@@ -30,7 +30,7 @@ namespace Mosa.VBEWorld.x86
 			Serial.SetupPort(Serial.COM1);
 
 			_hal = new Hardware();
-			if (VBE.InitVBE(_hal))
+			if (VBEDisplay.InitVBE(_hal))
 			{
 				Log("VBE setup OK!");
 
@@ -46,9 +46,9 @@ namespace Mosa.VBEWorld.x86
 
 		private static void DoGraphics()
 		{
-			VBE.Framebuffer.FillRectangle(0x00555555, 0, 0, VBE.Framebuffer.Width, VBE.Framebuffer.Height);
+			VBEDisplay.Framebuffer.FillRectangle(0x00555555, 0, 0, VBEDisplay.Framebuffer.Width, VBEDisplay.Framebuffer.Height);
 
-			MosaLogo.Draw(VBE.Framebuffer, 10);
+			MosaLogo.Draw(VBEDisplay.Framebuffer, 10);
 		}
 
 		public static void Log(string line)

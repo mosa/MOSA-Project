@@ -30,67 +30,67 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		///
 		/// </summary>
-		protected IOPortReadWrite miscellaneousOutput;
+		protected BaseIOPortReadWrite miscellaneousOutput;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IOPortReadWrite crtControllerIndex;
+		protected BaseIOPortReadWrite crtControllerIndex;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IOPortReadWrite crtControllerData;
+		protected BaseIOPortReadWrite crtControllerData;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IOPortReadWrite crtControllerIndexColor;
+		protected BaseIOPortReadWrite crtControllerIndexColor;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IOPortReadWrite crtControllerDataColor;
+		protected BaseIOPortReadWrite crtControllerDataColor;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IOPortWrite miscellaneousOutputWrite;
+		protected BaseIOPortWrite miscellaneousOutputWrite;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IOPortReadWrite sequencerAddress;
+		protected BaseIOPortReadWrite sequencerAddress;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IOPortReadWrite sequencerData;
+		protected BaseIOPortReadWrite sequencerData;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IOPortReadWrite graphicsControllerAddress;
+		protected BaseIOPortReadWrite graphicsControllerAddress;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IOPortReadWrite graphicsControllerData;
+		protected BaseIOPortReadWrite graphicsControllerData;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IOPortReadWrite inputStatus1ReadB;
+		protected BaseIOPortReadWrite inputStatus1ReadB;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IOPortReadWrite attributeAddress;
+		protected BaseIOPortReadWrite attributeAddress;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IOPortReadWrite attributeData;
+		protected BaseIOPortReadWrite attributeData;
 
 		/// <summary>
 		///
@@ -100,12 +100,12 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		///
 		/// </summary>
-		protected IOPortReadWrite activeControllerIndex;
+		protected BaseIOPortReadWrite activeControllerIndex;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IOPortReadWrite activeControllerData;
+		protected BaseIOPortReadWrite activeControllerData;
 
 		#endregion Ports
 

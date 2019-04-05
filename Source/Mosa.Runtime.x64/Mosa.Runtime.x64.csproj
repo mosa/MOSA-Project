@@ -67,7 +67,7 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Division.cs" />
+    <Compile Include="Math\Division.cs" />
     <Compile Include="Internal.cs" />
     <Compile Include="Native.cs" />
   </ItemGroup>

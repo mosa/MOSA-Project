@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime.Extension;
 using Mosa.Runtime.Metadata;
 using System;
 using System.Runtime.CompilerServices;

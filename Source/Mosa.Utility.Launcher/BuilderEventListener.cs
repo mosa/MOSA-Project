@@ -18,13 +18,23 @@ namespace Mosa.Utility.Launcher
 
 		void ITraceListener.OnCompilerEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
-			if (compilerEvent == CompilerEvent.PreCompileStageStart
-				|| compilerEvent == CompilerEvent.PreCompileStageEnd
-				|| compilerEvent == CompilerEvent.PostCompileStageStart
-				|| compilerEvent == CompilerEvent.PostCompileStageEnd
+			if (compilerEvent == CompilerEvent.CompileStart
+				|| compilerEvent == CompilerEvent.CompileEnd
+				|| compilerEvent == CompilerEvent.CompilingMethods
+				|| compilerEvent == CompilerEvent.CompilingMethodsCompleted
+
+				//|| compilerEvent == CompilerEvent.PreCompileStart
+				//|| compilerEvent == CompilerEvent.PreCompileEnd
+				//|| compilerEvent == CompilerEvent.PostCompileStart
+				//|| compilerEvent == CompilerEvent.PostCompileEnd
+				|| compilerEvent == CompilerEvent.Linking
+				|| compilerEvent == CompilerEvent.LinkingCompleted
 				|| compilerEvent == CompilerEvent.Exception)
 			{
-				string status = $"Compiling: {$"{(DateTime.Now - builder.CompileStartTime).TotalSeconds:0.00}"} secs: {compilerEvent.ToText()}: {message}";
+				string status = $"Compiling: {$"{(DateTime.Now - builder.CompileStartTime).TotalSeconds:0.00}"} secs: {compilerEvent.ToText()}";
+
+				if (!string.IsNullOrEmpty(message))
+					status += $"- { message}";
 
 				lock (_lock)
 				{

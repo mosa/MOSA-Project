@@ -10,11 +10,11 @@ namespace Mosa.DeviceDriver.ISA
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x60, PortRange = 1, AltBasePort = 0x64, AltPortRange = 1, IRQ = 1, Platforms = PlatformArchitecture.X86AndX64)]
 	public class StandardKeyboard : BaseDeviceDriver, IKeyboardDevice
 	{
-		protected IOPortReadWrite dataPort;
+		protected BaseIOPortReadWrite dataPort;
 
-		protected IOPortRead statusPort;
+		protected BaseIOPortRead statusPort;
 
-		protected IOPortWrite commandPort;
+		protected BaseIOPortWrite commandPort;
 
 		protected const ushort fifoSize = 256;
 

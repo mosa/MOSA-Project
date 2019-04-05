@@ -19,12 +19,12 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		/// The configuration address
 		/// </summary>
-		protected IOPortReadWrite configAddress;
+		protected BaseIOPortReadWrite configAddress;
 
 		/// <summary>
 		/// The configuration data
 		/// </summary>
-		protected IOPortReadWrite configData;
+		protected BaseIOPortReadWrite configData;
 
 		public override void Initialize()
 		{

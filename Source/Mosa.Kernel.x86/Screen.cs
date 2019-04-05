@@ -136,6 +136,14 @@ namespace Mosa.Kernel.x86
 		}
 
 		/// <summary>
+		/// Writes the line.
+		/// </summary>
+		public static void WriteLine()
+		{
+			NextLine();
+		}
+
+		/// <summary>
 		/// Goto the next line.
 		/// </summary>
 		public static void NextLine()
@@ -143,6 +151,16 @@ namespace Mosa.Kernel.x86
 			Column = 0;
 			Row++;
 			UpdateCursor();
+		}
+
+		/// <summary>
+		/// Writes the line.
+		/// </summary>
+		/// <param name="line">The line.</param>
+		public static void WriteLine(string line)
+		{
+			Write(line);
+			NextLine();
 		}
 
 		/// <summary>

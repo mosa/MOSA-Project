@@ -107,9 +107,9 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 		#region Ports
 
-		protected IOPortReadWrite indexPort;
+		protected BaseIOPortReadWrite indexPort;
 
-		protected IOPortReadWrite valuePort;
+		protected BaseIOPortReadWrite valuePort;
 
 		#endregion Ports
 
