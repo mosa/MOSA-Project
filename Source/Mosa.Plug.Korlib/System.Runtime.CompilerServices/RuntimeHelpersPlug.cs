@@ -36,7 +36,7 @@ namespace Mosa.Plug.Korlib.System.Runtime.CompilerServices
 			var fieldData = fieldDefinition.FieldData;
 			uint dataLength = fieldDefinition.OffsetOrSize;
 
-			Internal.MemoryCopy(arrayElements, fieldData, dataLength);
+			Mosa.Runtime.Internal.MemoryCopy(arrayElements, fieldData, dataLength);
 		}
 
 		[Plug("System.Runtime.CompilerServices.RuntimeHelpers::UnsafeCast")]
@@ -50,7 +50,7 @@ namespace Mosa.Plug.Korlib.System.Runtime.CompilerServices
 		{
 			var assemblies = new List<Assembly>();
 
-			foreach (var assembly in KorlibInternal.Assemblies)
+			foreach (var assembly in Internal.Assemblies)
 			{
 				assemblies.Add(assembly);
 			}
@@ -66,7 +66,7 @@ namespace Mosa.Plug.Korlib.System.Runtime.CompilerServices
 			if (typeDefinition.DefaultConstructor.IsNull)
 				throw new ArgumentException("Type has no parameterless constructor.");
 
-			var thisObject = Internal.AllocateObject(type.TypeHandle, typeDefinition.Size);
+			var thisObject = Mosa.Runtime.Internal.AllocateObject(type.TypeHandle, typeDefinition.Size);
 
 			return Intrinsic.CreateInstanceSimple(typeDefinition.DefaultConstructor.Method, thisObject);
 		}

@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace Mosa.Plug.Korlib
 {
-	internal static class KorlibInternal
+	internal static class Internal
 	{
 		internal static List<RuntimeAssembly> Assemblies;
 
