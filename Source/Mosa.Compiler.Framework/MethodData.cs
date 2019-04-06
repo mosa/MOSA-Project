@@ -20,8 +20,6 @@ namespace Mosa.Compiler.Framework
 
 		public MosaMethod Method { get; }
 
-		public bool InvokesAnyMethod { get { return Calls.Count != 0; } }
-
 		public bool IsCompiled { get; set; }
 
 		public bool IsCILDecoded { get; set; }
@@ -41,8 +39,6 @@ namespace Mosa.Compiler.Framework
 		public bool HasLoops { get; set; }
 
 		public bool HasAddressOfInstruction { get; set; }
-
-		public List<MosaMethod> Calls { get; set; }
 
 		public List<MosaMethod> CalledBy { get; set; }
 
@@ -74,7 +70,6 @@ namespace Mosa.Compiler.Framework
 		{
 			Method = mosaMethod ?? throw new ArgumentNullException(nameof(mosaMethod));
 
-			Calls = new List<MosaMethod>();
 			CalledBy = new List<MosaMethod>();
 			LabelRegions = new List<LabelRegion>();
 			Counters = new Counters();

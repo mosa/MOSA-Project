@@ -31,7 +31,6 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			MethodData.CompileCount++;
-			MethodData.Calls.Clear();
 
 			var callSites = new List<InstructionNode>();
 
@@ -57,8 +56,6 @@ namespace Mosa.Compiler.Framework.Stages
 					callSites.Add(node);
 
 					var invoked = MethodCompiler.Compiler.CompilerData.GetMethodData(invokedMethod);
-
-					MethodData.Calls.AddIfNew(invokedMethod);
 
 					invoked.AddCalledBy(MethodCompiler.Method);
 				}
