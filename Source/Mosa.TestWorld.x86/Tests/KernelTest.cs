@@ -7,8 +7,6 @@ namespace Mosa.TestWorld.x86.Tests
 {
 	public class KernelTest
 	{
-		private static ConsoleSession Console;
-
 		private readonly string testName = string.Empty;
 
 		protected delegate bool TestMethod();
@@ -22,20 +20,20 @@ namespace Mosa.TestWorld.x86.Tests
 
 		public void PrintResult(bool flag)
 		{
-			var color = Console.Color;
+			var color = Screen.Color;
 
 			if (flag)
 			{
-				Console.Color = ScreenColor.White;
-				Console.Write("+");
+				Screen.Color = ScreenColor.White;
+				Screen.Write("+");
 			}
 			else
 			{
-				Console.Color = ScreenColor.Red;
-				Console.Write("X");
+				Screen.Color = ScreenColor.Red;
+				Screen.Write("X");
 			}
 
-			Console.Color = color;
+			Screen.Color = color;
 		}
 
 		/// <summary>
@@ -43,18 +41,15 @@ namespace Mosa.TestWorld.x86.Tests
 		/// </summary>
 		public static void RunTests()
 		{
-			Console = Boot.Console;
-
-			Console.Goto(2, 0);
-			Console.Color = ScreenColor.Yellow;
-			Console.Write("[");
-			Console.Color = ScreenColor.White;
-			Console.Write("Tests");
-			Console.Color = ScreenColor.Yellow;
-			Console.Write("]");
-			Console.WriteLine();
-			Console.WriteLine();
-			Console.Color = ScreenColor.Yellow;
+			Screen.Color = ScreenColor.Yellow;
+			Screen.Write('[');
+			Screen.Color = ScreenColor.White;
+			Screen.Write("Tests");
+			Screen.Color = ScreenColor.Yellow;
+			Screen.Write(']');
+			Screen.WriteLine();
+			Screen.WriteLine();
+			Screen.Color = ScreenColor.Yellow;
 
 			var delegateTest = new DelegateTest();
 			var stringTest = new StringTest();
@@ -84,31 +79,25 @@ namespace Mosa.TestWorld.x86.Tests
 			compareTest.Test();
 			simpleTest.Test();
 			arrayTest.Test();
-
 			reflectionTest.Test();
+
+			Screen.WriteLine();
+			Screen.WriteLine();
 		}
 
 		public void Test()
 		{
-			Console.Color = ScreenColor.Yellow;
-			Console.Write(testName);
+			Screen.Color = ScreenColor.Yellow;
 
-			int len = 15 - testName.Length;
-
-			while (len > 0)
-			{
-				Console.Write(' ');
-				len--;
-			}
-
-			Console.Write(": ");
+			Screen.Write(testName);
+			Screen.Write(':');
 
 			foreach (var node in testMethods)
 			{
 				PrintResult(node());
 			}
 
-			Console.WriteLine();
+			Screen.Write(' ');
 		}
 	}
 }

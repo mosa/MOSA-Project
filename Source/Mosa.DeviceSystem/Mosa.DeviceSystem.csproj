@@ -102,7 +102,7 @@
     <Compile Include="DiskDeviceConfiguration.cs" />
     <Compile Include="IDMAChannel.cs" />
     <Compile Include="BaseHardwareAbstraction.cs" />
-    <Compile Include="IIOPorts.cs" />
+    <Compile Include="BaseIOPort.cs" />
     <Compile Include="IOPortRegion.cs" />
     <Compile Include="IOPortResources.cs" />
     <Compile Include="IPCIController.cs" />

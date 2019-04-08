@@ -66,6 +66,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Address.cs" />
+    <Compile Include="VBE.cs" />
     <Compile Include="SSE.cs" />
     <Compile Include="IDTStack.cs" />
     <Compile Include="IOPort.cs" />

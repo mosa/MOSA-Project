@@ -1,6 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Runtime.x86
+using Mosa.Runtime.x64;
+
+namespace Mosa.Runtime.Math.x64
 {
 	internal static class Division
 	{

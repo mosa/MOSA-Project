@@ -209,10 +209,13 @@ namespace Mosa.Compiler.Framework
 			CompilationScheduler = mosaCompiler.CompilationScheduler;
 			Linker = mosaCompiler.Linker;
 			CompilerTrace = mosaCompiler.CompilerTrace;
-			CompilerExtensions.AddRange(mosaCompiler.CompilerExtensions);
-			methodStagePipelines = new Pipeline<BaseMethodCompilerStage>[mosaCompiler.MaxThreads + 1];
-
 			Architecture = CompilerOptions.Architecture;
+
+			PostCompilerTraceEvent(CompilerEvent.CompileStart);
+
+			CompilerExtensions.AddRange(mosaCompiler.CompilerExtensions);
+
+			methodStagePipelines = new Pipeline<BaseMethodCompilerStage>[mosaCompiler.MaxThreads + 1];
 
 			MethodScanner = new MethodScanner(this);
 
@@ -325,6 +328,8 @@ namespace Mosa.Compiler.Framework
 		/// </remarks>
 		internal void PreCompile()
 		{
+			PostCompilerTraceEvent(CompilerEvent.PreCompileStart);
+
 			foreach (var stage in CompilerPipeline)
 			{
 				stage.Initialize(this);
@@ -339,16 +344,22 @@ namespace Mosa.Compiler.Framework
 
 				PostCompilerTraceEvent(CompilerEvent.PreCompileStageEnd, stage.Name);
 			}
+
+			PostCompilerTraceEvent(CompilerEvent.PreCompileEnd);
 		}
 
 		public void ExecuteCompile()
 		{
+			PostCompilerTraceEvent(CompilerEvent.CompilingMethods);
+
 			ExecuteCompilePass();
 
 			while (CompilationScheduler.StartNextPass())
 			{
 				ExecuteCompilePass();
 			}
+
+			PostCompilerTraceEvent(CompilerEvent.CompilingMethodsCompleted);
 		}
 
 		private void ExecuteCompilePass()
@@ -392,12 +403,16 @@ namespace Mosa.Compiler.Framework
 
 		public void ExecuteThreadedCompile(int threads)
 		{
+			PostCompilerTraceEvent(CompilerEvent.CompilingMethods);
+
 			ExecuteThreadedCompilePass(threads);
 
 			while (CompilationScheduler.StartNextPass())
 			{
 				ExecuteThreadedCompilePass(threads);
 			}
+
+			PostCompilerTraceEvent(CompilerEvent.CompilingMethodsCompleted);
 		}
 
 		private void ExecuteThreadedCompilePass(int threads)
@@ -446,6 +461,8 @@ namespace Mosa.Compiler.Framework
 		/// </remarks>
 		internal void PostCompile()
 		{
+			PostCompilerTraceEvent(CompilerEvent.PostCompileStart);
+
 			foreach (BaseCompilerStage stage in CompilerPipeline)
 			{
 				PostCompilerTraceEvent(CompilerEvent.PostCompileStageStart, stage.Name);
@@ -465,10 +482,14 @@ namespace Mosa.Compiler.Framework
 			}
 
 			EmitCounters();
+
+			PostCompilerTraceEvent(CompilerEvent.PostCompileEnd);
+			PostCompilerTraceEvent(CompilerEvent.CompileEnd);
 		}
 
 		public void Stop()
 		{
+			PostCompilerTraceEvent(CompilerEvent.Stopped);
 			IsStopped = true;
 		}
 
@@ -501,6 +522,11 @@ namespace Mosa.Compiler.Framework
 				return;
 
 			CompilerTrace.PostTraceLog(traceLog);
+		}
+
+		public void PostCompilerTraceEvent(CompilerEvent compilerEvent)
+		{
+			CompilerTrace.PostCompilerTraceEvent(compilerEvent, string.Empty, 0);
 		}
 
 		/// <summary>

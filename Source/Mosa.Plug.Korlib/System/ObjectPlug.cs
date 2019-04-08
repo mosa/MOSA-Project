@@ -22,7 +22,7 @@ namespace Mosa.Plug.Korlib.System
 			var handle = GetTypeHandle(obj);
 
 			// Iterate through all the assemblies and look for the type handle
-			foreach (var assembly in KorlibInternal.Assemblies)
+			foreach (var assembly in Internal.Assemblies)
 			{
 				foreach (var type in assembly.typeList)
 				{

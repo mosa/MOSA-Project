@@ -70,62 +70,62 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		/// The data port
 		/// </summary>
-		protected IOPortReadWrite DataPort;
+		protected BaseIOPortReadWrite DataPort;
 
 		/// <summary>
 		/// The feature port
 		/// </summary>
-		protected IOPortReadWrite FeaturePort;
+		protected BaseIOPortReadWrite FeaturePort;
 
 		/// <summary>
 		/// The error port
 		/// </summary>
-		protected IOPortRead ErrorPort;
+		protected BaseIOPortRead ErrorPort;
 
 		/// <summary>
 		/// The sector count port
 		/// </summary>
-		protected IOPortReadWrite SectorCountPort;
+		protected BaseIOPortReadWrite SectorCountPort;
 
 		/// <summary>
 		/// The lba low port
 		/// </summary>
-		protected IOPortReadWrite LBALowPort;
+		protected BaseIOPortReadWrite LBALowPort;
 
 		/// <summary>
 		/// The lba mid port
 		/// </summary>
-		protected IOPortReadWrite LBAMidPort;
+		protected BaseIOPortReadWrite LBAMidPort;
 
 		/// <summary>
 		/// The lba high port
 		/// </summary>
-		protected IOPortReadWrite LBAHighPort;
+		protected BaseIOPortReadWrite LBAHighPort;
 
 		/// <summary>
 		/// The device head port
 		/// </summary>
-		protected IOPortReadWrite DeviceHeadPort;
+		protected BaseIOPortReadWrite DeviceHeadPort;
 
 		/// <summary>
 		/// The status port
 		/// </summary>
-		protected IOPortRead StatusPort;
+		protected BaseIOPortRead StatusPort;
 
 		/// <summary>
 		/// The command port
 		/// </summary>
-		protected IOPortWrite CommandPort;
+		protected BaseIOPortWrite CommandPort;
 
 		/// <summary>
 		/// The bus control register port
 		/// </summary>
-		protected IOPortWrite ControlPort;
+		protected BaseIOPortWrite ControlPort;
 
 		/// <summary>
 		/// The status port
 		/// </summary>
-		protected IOPortRead AltStatusPort;
+		protected BaseIOPortRead AltStatusPort;
 
 		/// <summary>
 		/// The maximum number of drives

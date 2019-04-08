@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Mosa.Runtime
+namespace Mosa.Runtime.Extension
 {
 	public static class IntPtrExtension
 	{
@@ -29,6 +29,11 @@ namespace Mosa.Runtime
 		static public long GetOffset(this IntPtr a, IntPtr b)
 		{
 			return b.ToInt64() - a.ToInt64();
+		}
+
+		static public bool IsNull(this IntPtr a)
+		{
+			return a == IntPtr.Zero;
 		}
 	}
 }

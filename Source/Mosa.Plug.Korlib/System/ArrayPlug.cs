@@ -42,7 +42,7 @@ namespace Mosa.Plug.Korlib.System
 
 			var size = (typeCode == TypeCode.ReferenceType) ? IntPtr.Size : (int)typeStruct.Size;
 
-			Internal.MemoryCopy(
+			Mosa.Runtime.Internal.MemoryCopy(
 				destinationArrayPtr + (IntPtr.Size * 2) + (destinationIndex * size),
 				sourceArrayPtr + (IntPtr.Size * 2) + (sourceIndex * size),
 				(uint)(length * size)
