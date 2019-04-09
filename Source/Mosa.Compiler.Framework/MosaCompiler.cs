@@ -22,8 +22,6 @@ namespace Mosa.Compiler.Framework
 
 		public MosaTypeLayout TypeLayout { get; private set; }
 
-		public CompilationScheduler CompilationScheduler { get; private set; }
-
 		public MosaLinker Linker { get; private set; }
 
 		public List<BaseCompilerExtension> CompilerExtensions { get; } = new List<BaseCompilerExtension>();
@@ -83,8 +81,6 @@ namespace Mosa.Compiler.Framework
 				Linker = null;
 				Compiler = null;
 
-				CompilationScheduler = new CompilationScheduler();
-
 				Stage = CompileStage.Loaded;
 			}
 		}
@@ -105,6 +101,8 @@ namespace Mosa.Compiler.Framework
 
 		public void Setup()
 		{
+			Initialize();
+
 			lock (_lock)
 			{
 				if (Stage != CompileStage.Initialized)
@@ -131,22 +129,24 @@ namespace Mosa.Compiler.Framework
 
 		public void ScheduleAll()
 		{
-			CompilationScheduler.ScheduleAll(TypeSystem);
+			Setup();
+			Compiler.MethodScheduler.ScheduleAll(TypeSystem);
 		}
 
 		public void Schedule(MosaType type)
 		{
-			CompilationScheduler.Schedule(type);
+			Setup();
+			Compiler.MethodScheduler.Schedule(type);
 		}
 
 		public void Schedule(MosaMethod method)
 		{
-			CompilationScheduler.Schedule(method);
+			Setup();
+			Compiler.MethodScheduler.Schedule(method);
 		}
 
 		public void Compile(bool skipFinalization = false)
 		{
-			Initialize();
 			Setup();
 
 			if (!CompilerOptions.EnableMethodScanner)
@@ -177,7 +177,6 @@ namespace Mosa.Compiler.Framework
 
 		public void ThreadedCompile(bool skipFinalization = false)
 		{
-			Initialize();
 			Setup();
 
 			if (!CompilerOptions.EnableMethodScanner)
@@ -208,7 +207,6 @@ namespace Mosa.Compiler.Framework
 
 		public void CompileSingleMethod(MosaMethod method)
 		{
-			Initialize();
 			Setup();
 
 			// Thread Safe

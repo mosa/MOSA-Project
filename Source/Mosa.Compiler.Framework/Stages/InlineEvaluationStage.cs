@@ -13,37 +13,36 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		public static string InlineMethodAttribute = "System.Runtime.CompilerServices.MethodImplAttribute";
 
-		private readonly Counter MethodCount = new Counter("InlineMethodEvaluationStage.Methods");
-		private readonly Counter GeneratedBlocksCount = new Counter("InlineMethodEvaluationStage.GeneratedBlocks");
+		private readonly Counter InlinedMethodsCount = new Counter("InlineMethodEvaluationStage.InlinedMethods");
+		private readonly Counter ReversedInlinedMethodsCount = new Counter("InlineMethodEvaluationStage.ReversedInlinedMethods");
 
 		public const int MaximumCompileCount = 10;
 
 		protected override void Initialize()
 		{
-			Register(MethodCount);
-			Register(GeneratedBlocksCount);
+			Register(InlinedMethodsCount);
+			Register(ReversedInlinedMethodsCount);
 		}
 
 		protected override void Run()
 		{
-			var method = MethodCompiler.Method;
-
 			var trace = CreateTraceLog("Inline");
 
 			bool firstCompile = (MethodData.CompileCount == 0);
 
-			MethodData.BasicBlocks = null;
+			var currentInlineStatus = MethodData.Inlined;
+
 			MethodData.IsCompiled = true;
 			MethodData.HasProtectedRegions = HasProtectedRegions;
-			MethodData.IsLinkerGenerated = method.IsCompilerGenerated;
-			MethodData.IsCILDecoded = MethodCompiler.IsCILDecodeRequired || (!method.IsCompilerGenerated && method.HasImplementation);
+			MethodData.IsLinkerGenerated = Method.IsCompilerGenerated;
+			MethodData.IsCILDecoded = MethodCompiler.IsCILDecodeRequired || (!Method.IsCompilerGenerated && Method.HasImplementation);
 			MethodData.HasLoops = false;
 			MethodData.IsMethodImplementationReplaced = MethodCompiler.IsMethodPlugged;
 			MethodData.HasDoNotInlineAttribute = MethodCompiler.Method.IsNoInlining;
 			MethodData.HasAggressiveInliningAttribute = MethodCompiler.Method.IsAggressiveInlining;
 			MethodData.HasAddressOfInstruction = false;
-			MethodData.IsVirtual = method.IsVirtual;
-			MethodData.IsDevirtualized = method.IsVirtual && !TypeLayout.IsMethodOverridden(method);
+			MethodData.IsVirtual = Method.IsVirtual;
+			MethodData.IsDevirtualized = Method.IsVirtual && !TypeLayout.IsMethodOverridden(Method);
 
 			int totalIRCount = 0;
 			int totalNonIRCount = 0;
@@ -113,32 +112,28 @@ namespace Mosa.Compiler.Framework.Stages
 			MethodData.NonIRInstructionCount = totalNonIRCount;
 			MethodData.IRStackParameterInstructionCount = totalStackParameterInstruction;
 
-			MethodData.CanInline = CanInline(MethodData);
+			bool inline = CanInline(MethodData);
 
-			if (MethodData.CanInline)
+			MethodData.Inlined = inline;
+
+			bool triggerReschedules = inline || (currentInlineStatus && !inline);
+
+			var timestamp = 0;
+
+			if (inline)
 			{
 				MethodData.BasicBlocks = CopyInstructions();
-
-				if (MethodData.CompileCount < MaximumCompileCount)
-				{
-					MethodCompiler.Compiler.CompilationScheduler.AddToInlineQueue(MethodData);
-				}
 			}
 
-			//lock (compilerMethod)
-			//{
-			//	foreach (var called in compilerMethod.CalledBy)
-			//	{
-			//		var calledMethod = MethodCompiler.Compiler.CompilerData.GetCompilerMethodData(called);
+			if (triggerReschedules)
+			{
+				timestamp = MethodScheduler.GetTimestamp();
 
-			//		if (calledMethod.CompileCount < MaximumCompileCount)
-			//		{
-			//			MethodCompiler.Compiler.CompilationScheduler.Schedule(called);
-			//		}
-			//	}
-			//}
+				MethodScheduler.AddToInlineQueueByCallee(MethodData, timestamp);
+			}
 
-			trace?.Log($"CanInline: {MethodData.CanInline}");
+			trace?.Log($"Inlined: {MethodData.Inlined}");
+			trace?.Log($"DoNotInline: {MethodData.DoNotInline}");
 			trace?.Log($"IsVirtual: {MethodData.IsVirtual}");
 			trace?.Log($"IsDevirtualized: {MethodData.IsDevirtualized}");
 			trace?.Log($"HasLoops: {MethodData.HasLoops}");
@@ -151,9 +146,10 @@ namespace Mosa.Compiler.Framework.Stages
 			trace?.Log($"HasAggressiveInliningAttribute: {MethodData.HasAggressiveInliningAttribute}");
 			trace?.Log($"IsPlugged: {MethodData.IsMethodImplementationReplaced}");
 			trace?.Log($"HasAddressOfInstruction: {MethodData.HasAddressOfInstruction}");
+			trace?.Log($"CompileCount: {MethodData.CompileCount}");
 
-			MethodCount.Set(1);
-			GeneratedBlocksCount.Set(MethodData.CanInline);
+			InlinedMethodsCount.Set(inline);
+			ReversedInlinedMethodsCount.Set(MethodData.CompileCount >= MaximumCompileCount);
 		}
 
 		public bool CanInline(MethodData method)
@@ -180,8 +176,14 @@ namespace Mosa.Compiler.Framework.Stages
 			if (method.NonIRInstructionCount > 0)
 				return false;
 
-			// methods with aggressive inline attribute will double the IR instruction cout
-			int max = !method.HasAggressiveInliningAttribute ? CompilerOptions.InlinedIRMaximum : (CompilerOptions.InlinedIRMaximum * 2);
+			if (method.DoNotInline)
+				return false;
+
+			if (MethodData.CompileCount >= MaximumCompileCount)
+				return false;   // too many compiles - cyclic loop suspected
+
+			// methods with aggressive inline attribute will double the IR instruction count
+			int max = method.HasAggressiveInliningAttribute ? (CompilerOptions.InlinedIRMaximum * 2) : CompilerOptions.InlinedIRMaximum;
 
 			if ((method.IRInstructionCount - method.IRStackParameterInstructionCount) > max)
 				return false;

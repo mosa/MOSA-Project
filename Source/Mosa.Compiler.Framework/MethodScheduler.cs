@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -10,14 +11,20 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Schedules compilation of types/methods.
 	/// </summary>
-	public sealed class CompilationScheduler
+	public sealed class MethodScheduler
 	{
 		#region Data Members
+
+		private int Timestamp;
 
 		private readonly UniqueQueueThreadSafe<MosaMethod> queue = new UniqueQueueThreadSafe<MosaMethod>();
 		private readonly HashSet<MosaMethod> methods = new HashSet<MosaMethod>();
 
-		private readonly UniqueQueueThreadSafe<MethodData> inlineQueue = new UniqueQueueThreadSafe<MethodData>();
+		private readonly Dictionary<MosaMethod, int> inlineQueue = new Dictionary<MosaMethod, int>();
+
+		private object _timestamplock = new object();
+
+		public Compiler Compiler;
 
 		#endregion Data Members
 
@@ -43,9 +50,11 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Properties
 
-		public CompilationScheduler()
+		public MethodScheduler(Compiler compiler)
 		{
+			Compiler = compiler;
 			PassCount = 0;
+			Timestamp = 0;
 		}
 
 		public void ScheduleAll(TypeSystem typeSystem)
@@ -105,40 +114,19 @@ namespace Mosa.Compiler.Framework
 
 		public MosaMethod GetMethodToCompile()
 		{
-			return queue.Dequeue();
-		}
+			var method = queue.Dequeue();
 
-		public void AddToInlineQueue(MethodData methodData)
-		{
-			Debug.Assert(!methodData.Method.HasOpenGenericParams);
+			if (method != null)
+				return method;
 
-			inlineQueue.Enqueue(methodData);
-		}
+			FlushInlineQueue();
 
-		public bool StartNextPass()
-		{
-			int i = 0;
+			method = queue.Dequeue();
 
-			lock (inlineQueue)
-			{
-				while (inlineQueue.Count != 0)
-				{
-					var methodData = inlineQueue.Dequeue();
+			if (method != null)
+				return method;
 
-					if (methodData == null)
-						continue;
-
-					foreach (var callee in methodData.CalledBy)
-					{
-						Schedule(callee);
-						i++;
-					}
-				}
-			}
-
-			PassCount++;
-
-			return i != 0;
+			return null;
 		}
 
 		public void DescheduledAllMethods()
@@ -146,6 +134,78 @@ namespace Mosa.Compiler.Framework
 			while (queue.Count != 0)
 			{
 				queue.Dequeue();
+			}
+		}
+
+		public int GetTimestamp()
+		{
+			lock (_timestamplock)
+			{
+				return ++Timestamp;
+			}
+		}
+
+		public void AddToInlineQueueByCallee(MethodData calleeMethod, int timestamp)
+		{
+			lock (inlineQueue)
+			{
+				foreach (var method in calleeMethod.CalledBy)
+				{
+					if (!inlineQueue.TryGetValue(method, out int existingtimestamp))
+					{
+						inlineQueue.Add(method, timestamp);
+					}
+					else
+					{
+						if (existingtimestamp < timestamp)
+							return;
+
+						inlineQueue.Remove(method);
+						inlineQueue.Add(method, existingtimestamp);
+					}
+				}
+			}
+		}
+
+		public void AddToInlineQueue(MosaMethod method, int timestamp)
+		{
+			Debug.Assert(!method.HasOpenGenericParams);
+
+			lock (inlineQueue)
+			{
+				if (!inlineQueue.TryGetValue(method, out int existingtimestamp))
+				{
+					inlineQueue.Add(method, timestamp);
+				}
+				else
+				{
+					if (existingtimestamp < timestamp)
+						return;
+
+					inlineQueue.Remove(method);
+					inlineQueue.Add(method, existingtimestamp);
+				}
+			}
+		}
+
+		public void FlushInlineQueue()
+		{
+			lock (inlineQueue)
+			{
+				foreach (var item in inlineQueue)
+				{
+					var method = item.Key;
+					var timestamp = item.Value;
+
+					var methodData = Compiler.CompilerData.GetMethodData(method);
+
+					if (methodData.InlineTimestamp > timestamp)
+						continue;   // nothing to do
+
+					queue.Enqueue(method);
+				}
+
+				inlineQueue.Clear();
 			}
 		}
 	}

@@ -117,6 +117,12 @@ namespace Mosa.Compiler.Framework
 		protected MethodScanner MethodScanner { get; private set; }
 
 		/// <summary>
+		/// Retrieves the compilation scheduler.
+		/// </summary>
+		/// <value>The compilation scheduler.</value>
+		public MethodScheduler MethodScheduler { get; private set; }
+
+		/// <summary>
 		/// Gets the method data.
 		/// </summary>
 		protected MethodData MethodData { get { return MethodCompiler.MethodData; } }
@@ -187,16 +193,15 @@ namespace Mosa.Compiler.Framework
 			Architecture = compiler.Architecture;
 			TypeSystem = compiler.TypeSystem;
 			TypeLayout = compiler.TypeLayout;
+			MethodScheduler = compiler.MethodScheduler;
+			CompilerOptions = compiler.CompilerOptions;
+			MethodScanner = compiler.MethodScanner;
 
 			NativePointerSize = Architecture.NativePointerSize;
 			NativeAlignment = Architecture.NativeAlignment;
 			NativeInstructionSize = Architecture.NativeInstructionSize;
 			Is32BitPlatform = Architecture.Is32BitPlatform;
 			Is64BitPlatform = Architecture.Is64BitPlatform;
-
-			CompilerOptions = compiler.CompilerOptions;
-
-			MethodScanner = compiler.MethodScanner;
 
 			Initialize();
 		}

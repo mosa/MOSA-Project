@@ -179,12 +179,6 @@ namespace System.Diagnostics
 		}
 
 		[Conditional("DEBUG")]
-		public static void WriteLineIf(bool condition, object value)
-		{
-			WriteLineIf(condition, value);
-		}
-
-		[Conditional("DEBUG")]
 		public static void WriteLineIf(bool condition, string message)
 		{
 			WriteLineIf(condition, message);

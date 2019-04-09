@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Framework
 		/// Retrieves the compilation scheduler.
 		/// </summary>
 		/// <value>The compilation scheduler.</value>
-		public CompilationScheduler Scheduler { get; }
+		public MethodScheduler MethodScheduler { get; }
 
 		/// <summary>
 		/// Provides access to the pipeline of this compiler.
@@ -215,7 +215,7 @@ namespace Mosa.Compiler.Framework
 			Compiler = compiler;
 			Method = method;
 			Type = method.DeclaringType;
-			Scheduler = compiler.CompilationScheduler;
+			MethodScheduler = compiler.MethodScheduler;
 			Architecture = compiler.Architecture;
 			TypeSystem = compiler.TypeSystem;
 			TypeLayout = compiler.TypeLayout;

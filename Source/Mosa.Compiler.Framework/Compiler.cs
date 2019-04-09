@@ -77,7 +77,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the scheduler.
 		/// </summary>
-		public CompilationScheduler CompilationScheduler { get; }
+		public MethodScheduler MethodScheduler { get; }
 
 		/// <summary>
 		/// Gets the linker.
@@ -206,7 +206,6 @@ namespace Mosa.Compiler.Framework
 			TypeSystem = mosaCompiler.TypeSystem;
 			TypeLayout = mosaCompiler.TypeLayout;
 			CompilerOptions = mosaCompiler.CompilerOptions;
-			CompilationScheduler = mosaCompiler.CompilationScheduler;
 			Linker = mosaCompiler.Linker;
 			CompilerTrace = mosaCompiler.CompilerTrace;
 			Architecture = CompilerOptions.Architecture;
@@ -217,6 +216,7 @@ namespace Mosa.Compiler.Framework
 
 			methodStagePipelines = new Pipeline<BaseMethodCompilerStage>[mosaCompiler.MaxThreads + 1];
 
+			MethodScheduler = new MethodScheduler(this);
 			MethodScanner = new MethodScanner(this);
 
 			foreach (var type in Assembly.GetExecutingAssembly().GetTypes())
@@ -354,11 +354,6 @@ namespace Mosa.Compiler.Framework
 
 			ExecuteCompilePass();
 
-			while (CompilationScheduler.StartNextPass())
-			{
-				ExecuteCompilePass();
-			}
-
 			PostCompilerTraceEvent(CompilerEvent.CompilingMethodsCompleted);
 		}
 
@@ -376,7 +371,7 @@ namespace Mosa.Compiler.Framework
 
 		private MosaMethod CompilerMethodInQueue(int threadID = 0)
 		{
-			var method = CompilationScheduler.GetMethodToCompile();
+			var method = MethodScheduler.GetMethodToCompile();
 
 			if (method == null)
 				return null;
@@ -395,8 +390,8 @@ namespace Mosa.Compiler.Framework
 			}
 
 			CompilerTrace.UpdatedCompilerProgress(
-				CompilationScheduler.TotalMethods,
-				CompilationScheduler.TotalMethods - CompilationScheduler.TotalQueuedMethods);
+				MethodScheduler.TotalMethods,
+				MethodScheduler.TotalMethods - MethodScheduler.TotalQueuedMethods);
 
 			return method;
 		}
@@ -406,11 +401,6 @@ namespace Mosa.Compiler.Framework
 			PostCompilerTraceEvent(CompilerEvent.CompilingMethods);
 
 			ExecuteThreadedCompilePass(threads);
-
-			while (CompilationScheduler.StartNextPass())
-			{
-				ExecuteThreadedCompilePass(threads);
-			}
 
 			PostCompilerTraceEvent(CompilerEvent.CompilingMethodsCompleted);
 		}

@@ -368,7 +368,7 @@ namespace Mosa.Compiler.Framework
 
 				trace?.Log($" ==> Scheduling: {method}{(method.IsStatic ? " [Static]" : " [Virtual]")}");
 
-				Compiler.CompilationScheduler.Schedule(method);
+				Compiler.MethodScheduler.Schedule(method);
 			}
 		}
 

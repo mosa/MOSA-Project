@@ -3,8 +3,10 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
+using static Mosa.Compiler.Framework.MethodData;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -13,7 +15,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class InlineStage : BaseMethodCompilerStage
 	{
-		private readonly Counter InlinedMethodsCount = new Counter("InlineStage.InlinedMethods");
+		private readonly Counter InlinedMethodsCount = new Counter("InlineStage.MethodsWithInlinedCallSites");
 		private readonly Counter InlinedCallSitesCount = new Counter("InlineStage.InlinedCallSites");
 
 		protected override void Initialize()
@@ -33,6 +35,7 @@ namespace Mosa.Compiler.Framework.Stages
 			MethodData.CompileCount++;
 
 			var callSites = new List<InstructionNode>();
+			var methodCalls = new List<MosaMethod>();
 
 			// find all call sites
 			foreach (var block in BasicBlocks)
@@ -55,6 +58,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 					callSites.Add(node);
 
+					if (methodCalls.Contains(invokedMethod))
+						continue;
+
+					methodCalls.Add(invokedMethod);
+
 					var invoked = MethodCompiler.Compiler.CompilerData.GetMethodData(invokedMethod);
 
 					invoked.AddCalledBy(MethodCompiler.Method);
@@ -66,27 +74,32 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var trace = CreateTraceLog("Inlined");
 
+			// Captures point in time - immediately before inlined blocks are used
+			var timestampStart = MethodScheduler.GetTimestamp();
+			int callSiteCount = 0;
+
 			foreach (var callSiteNode in callSites)
 			{
 				var invokedMethod = callSiteNode.Operand1.Method;
 
 				var callee = MethodCompiler.Compiler.CompilerData.GetMethodData(invokedMethod);
 
-				if (!callee.CanInline)
+				if (!callee.Inlined)
 					continue;
 
 				// don't inline self
 				if (callee.Method == MethodCompiler.Method)
 					continue;
 
-				var blocks = callee.BasicBlocks;
+				var inlineBlocks = callee.BasicBlocks;
 
-				if (blocks == null)
+				if (inlineBlocks == null)
 					continue;
 
 				trace?.Log(callee.Method.FullName);
 
-				Inline(callSiteNode, blocks);
+				Inline(callSiteNode, inlineBlocks);
+				callSiteCount++;
 
 				//if (!BasicBlocks.RuntimeValidation())
 				//{
@@ -94,8 +107,12 @@ namespace Mosa.Compiler.Framework.Stages
 				//}
 			}
 
+			// Captures point in time - immediately after inlined blocks were used
+			var timestampEnd = MethodScheduler.GetTimestamp();
+			MethodData.InlineTimestamp = timestampStart;
+
 			InlinedMethodsCount.Set(1);
-			InlinedCallSitesCount.Set(callSites.Count);
+			InlinedCallSitesCount.Set(callSiteCount);
 		}
 
 		protected void Inline(InstructionNode callSiteNode, BasicBlocks blocks)
