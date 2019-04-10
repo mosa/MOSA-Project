@@ -173,7 +173,7 @@ namespace Mosa.Platform.x64.Stages
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U8);
 			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U8);
 
-			context.SetInstruction(X64.Mov64, v1, ConstantZero);
+			context.SetInstruction(X64.Mov64, v1, ConstantZero64);
 			context.AppendInstruction2(X64.Div64, result, v2, v1, operand1, operand2);
 		}
 
@@ -183,7 +183,7 @@ namespace Mosa.Platform.x64.Stages
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			context.SetInstruction(X64.Cmp64, null, operand1, ConstantZero);
+			context.SetInstruction(X64.Cmp64, null, operand1, ConstantZero64);
 			context.AppendInstruction(X64.CMovNotEqual64, result, operand1);    // true
 			context.AppendInstruction(X64.CMovEqual64, result, operand2);       // false
 		}
@@ -325,7 +325,7 @@ namespace Mosa.Platform.x64.Stages
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-			context.SetInstruction(X64.Mov64, v1, ConstantZero);
+			context.SetInstruction(X64.Mov64, v1, ConstantZero64);
 			context.AppendInstruction2(X64.Div64, result, v2, v1, operand1, operand2);
 		}
 

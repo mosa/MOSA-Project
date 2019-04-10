@@ -153,6 +153,16 @@ namespace Mosa.Compiler.Framework
 		protected Operand ConstantZero { get { return MethodCompiler.ConstantZero; } }
 
 		/// <summary>
+		/// Gets the 32-bit constant zero.
+		/// </summary>
+		protected Operand ConstantZero32 { get { return MethodCompiler.ConstantZero32; } }
+
+		/// <summary>
+		/// Gets the 64-bit constant zero.
+		/// </summary>
+		protected Operand ConstantZero64 { get { return MethodCompiler.ConstantZero64; } }
+
+		/// <summary>
 		/// Gets the stack frame.
 		/// </summary>
 		protected Operand StackFrame { get { return MethodCompiler.StackFrame; } }

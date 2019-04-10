@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework
 
 		protected Compiler Compiler { get; private set; }
 
-		private object _lock = new object();
+		private readonly object _lock = new object();
 
 		public MosaCompiler(List<BaseCompilerExtension> compilerExtensions = null, int maxThreads = 0)
 			: this(null, compilerExtensions, maxThreads)

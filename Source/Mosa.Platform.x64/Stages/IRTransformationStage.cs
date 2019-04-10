@@ -140,7 +140,7 @@ namespace Mosa.Platform.x64.Stages
 
 		private void AddressOf(InstructionNode node)
 		{
-			Debug.Assert(node.Operand1.IsOnStack | node.Operand1.IsStaticField);
+			Debug.Assert(node.Operand1.IsOnStack || node.Operand1.IsStaticField);
 
 			if (node.Operand1.IsStaticField)
 			{
@@ -194,7 +194,10 @@ namespace Mosa.Platform.x64.Stages
 			{
 				node.ReplaceInstruction(X64.Call);
 			}
-			else throw new NotSupportedException();
+			else
+			{
+				throw new NotSupportedException();
+			}
 		}
 
 		private void CompareFloatR4(Context context)
@@ -315,7 +318,7 @@ namespace Mosa.Platform.x64.Stages
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-			context.SetInstruction(X64.Mov32, v1, ConstantZero);
+			context.SetInstruction(X64.Mov32, v1, ConstantZero64);
 			context.AppendInstruction2(X64.Div32, v1, v2, v1, operand1, operand2);
 			context.AppendInstruction(X64.Mov32, result, v2);
 		}
@@ -365,7 +368,7 @@ namespace Mosa.Platform.x64.Stages
 						newBlocks[0].AppendInstruction(X64.BranchNotEqual, newBlocks[1].Block);
 						newBlocks[0].AppendInstruction(X64.Jmp, nextBlock.Block);
 
-						newBlocks[1].AppendInstruction(X64.Mov32, result, ConstantZero);
+						newBlocks[1].AppendInstruction(X64.Mov32, result, ConstantZero64);
 						newBlocks[1].AppendInstruction(X64.Jmp, nextBlock.Block);
 						break;
 					}
@@ -399,7 +402,7 @@ namespace Mosa.Platform.x64.Stages
 						//	ucomisd	xmm1, xmm0
 						//	seta	al
 
-						context.SetInstruction(X64.Mov64, result, ConstantZero);
+						context.SetInstruction(X64.Mov64, result, ConstantZero64);
 						context.AppendInstruction(instruction, null, right, left);
 						context.AppendInstruction(X64.SetByteIfUnsignedGreaterThan, result);
 						break;
@@ -411,7 +414,7 @@ namespace Mosa.Platform.x64.Stages
 						//	ucomisd	xmm0, xmm1
 						//	seta	al
 
-						context.SetInstruction(X64.Mov32, result, ConstantZero);
+						context.SetInstruction(X64.Mov32, result, ConstantZero64);
 						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X64.SetByteIfUnsignedGreaterThan, result);
 						break;
@@ -423,7 +426,7 @@ namespace Mosa.Platform.x64.Stages
 						//	ucomisd	xmm1, xmm0
 						//	setae	al
 
-						context.SetInstruction(X64.Mov32, result, ConstantZero);
+						context.SetInstruction(X64.Mov32, result, ConstantZero64);
 						context.AppendInstruction(instruction, null, right, left);
 						context.AppendInstruction(X64.SetByteIfUnsignedGreaterOrEqual, result);
 						break;
@@ -435,7 +438,7 @@ namespace Mosa.Platform.x64.Stages
 						//	ucomisd	xmm0, xmm1
 						//	setae	al
 
-						context.SetInstruction(X64.Mov32, result, ConstantZero);
+						context.SetInstruction(X64.Mov32, result, ConstantZero64);
 						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X64.SetByteIfUnsignedGreaterOrEqual, result);
 						break;
@@ -450,7 +453,7 @@ namespace Mosa.Platform.x64.Stages
 			var operand2 = context.Operand2;
 			var operand3 = context.Operand3;
 
-			context.SetInstruction(X64.Cmp32, null, operand1, ConstantZero);
+			context.SetInstruction(X64.Cmp32, null, operand1, ConstantZero64);
 			context.AppendInstruction(X64.CMovNotEqual32, result, operand1);    // true
 			context.AppendInstruction(X64.CMovEqual32, result, operand2);       // false
 		}
@@ -664,7 +667,7 @@ namespace Mosa.Platform.x64.Stages
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-			context.SetInstruction(X64.Mov32, v1, ConstantZero);
+			context.SetInstruction(X64.Mov32, v1, ConstantZero64);
 			context.AppendInstruction2(X64.Div32, result, v2, v1, operand1, operand2);
 		}
 

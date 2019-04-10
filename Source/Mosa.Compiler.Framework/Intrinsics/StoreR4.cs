@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	/// <summary>
 	/// IntrinsicMethods
 	/// </summary>
-	static partial class IntrinsicMethods
+	internal static partial class IntrinsicMethods
 	{
 		[IntrinsicMethod("Mosa.Runtime.Intrinsic:StoreR4")]
 		private static void StoreR4(Context context, MethodCompiler methodCompiler)

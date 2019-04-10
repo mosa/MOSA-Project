@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework
 
 		private readonly Dictionary<MosaMethod, int> inlineQueue = new Dictionary<MosaMethod, int>();
 
-		private object _timestamplock = new object();
+		private readonly object _timestamplock = new object();
 
 		#endregion Data Members
 

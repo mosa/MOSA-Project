@@ -2,8 +2,6 @@
 
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -16,6 +14,7 @@ namespace Mosa.Compiler.Framework.Stages
 		protected override void PopulateVisitationDictionary()
 		{
 			AddVisitation(IRInstruction.LoadInt32, LoadInt32);
+			AddVisitation(IRInstruction.LoadInt64, LoadInt64);
 		}
 
 		private void LoadInt32(InstructionNode node)
@@ -25,13 +24,31 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!operand1.IsStaticField || !operand1.Field.IsStatic)
 				return;
 
-			if (!operand1.Field.FieldAttributes.HasFlag(MosaFieldAttributes.InitOnly))
+			if ((operand1.Field.FieldAttributes & MosaFieldAttributes.InitOnly) == 0)
 				return;
 
 			// HARD CODED
-			if (operand1.Field.DeclaringType.IsValueType && operand1.Field.DeclaringType.Name == "System.IntPtr" || operand1.Field.Name == "Zero")
+			if (operand1.Field.DeclaringType.IsValueType && (operand1.Field.DeclaringType.Name == "System.IntPtr" || operand1.Field.DeclaringType.Name == "System.UIntPtr") && operand1.Field.Name == "Zero")
 			{
 				node.SetInstruction(IRInstruction.MoveInt32, node.Result, ConstantZero);
+				return;
+			}
+		}
+
+		private void LoadInt64(InstructionNode node)
+		{
+			var operand1 = node.Operand1;
+
+			if (!operand1.IsStaticField || !operand1.Field.IsStatic)
+				return;
+
+			if ((operand1.Field.FieldAttributes & MosaFieldAttributes.InitOnly) == 0)
+				return;
+
+			// HARD CODED
+			if (operand1.Field.DeclaringType.IsValueType && (operand1.Field.DeclaringType.Name == "System.IntPtr" || operand1.Field.DeclaringType.Name == "System.UIntPtr") && operand1.Field.Name == "Zero")
+			{
+				node.SetInstruction(IRInstruction.MoveInt64, node.Result, ConstantZero);
 				return;
 			}
 		}

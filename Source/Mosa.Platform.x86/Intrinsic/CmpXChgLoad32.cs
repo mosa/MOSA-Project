@@ -8,7 +8,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// IntrinsicMethods
 	/// </summary>
-	static partial class IntrinsicMethods
+	internal static partial class IntrinsicMethods
 	{
 		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:CmpXChgLoad32")]
 		private static void CmpXChgLoad32(Context context, MethodCompiler methodCompiler)
@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.SetInstruction(X86.Mov32, eax, comparand);
 			context.AppendInstruction(X86.Mov32, v1, value);
 			context.AppendInstruction(X86.Lock);
-			context.AppendInstruction(X86.CmpXChgLoad32, eax, eax, location, methodCompiler.ConstantZero, v1);
+			context.AppendInstruction(X86.CmpXChgLoad32, eax, eax, location, methodCompiler.ConstantZero32, v1);
 			context.AppendInstruction(X86.Mov32, result, eax);
 		}
 	}
