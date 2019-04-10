@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using System.IO;
 
@@ -20,7 +19,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			if (string.IsNullOrEmpty(CompilerOptions.OutputFile))
 				return;
 
-			Compiler.PostCompilerTraceEvent(CompilerEvent.Linking);
+			Compiler.PostCompilerTraceEvent(CompilerEvent.LinkingStart);
 
 			File.Delete(CompilerOptions.OutputFile);
 
@@ -29,7 +28,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				Linker.Emit(file);
 			}
 
-			Compiler.PostCompilerTraceEvent(CompilerEvent.LinkingCompleted);
+			Compiler.PostCompilerTraceEvent(CompilerEvent.LinkingEnd);
 		}
 	}
 }

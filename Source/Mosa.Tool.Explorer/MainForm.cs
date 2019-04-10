@@ -452,10 +452,8 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.EnableIRLongExpansion = cbEnableIRLongExpansion.Checked;
 			Compiler.CompilerOptions.InlinedIRMaximum = 12;
 			Compiler.CompilerOptions.TwoPassOptimizations = cbEnableTwoPassOptimizations.Checked;
-			Compiler.CompilerOptions.TraceLevel = 100;
 			Compiler.CompilerOptions.EnableMethodScanner = cbEnableMethodScanner.Checked;
-
-			Compiler.CompilerOptions.TraceLevel = 9;
+			Compiler.CompilerOptions.TraceLevel = 8;
 			Compiler.CompilerOptions.LinkerFormatType = LinkerFormatType.Elf32;
 
 			Compiler.CompilerTrace.SetTraceListener(this);

@@ -1,8 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -15,22 +14,24 @@ namespace Mosa.Compiler.Framework
 	{
 		#region Data Members
 
+		public Compiler Compiler;
 		private int Timestamp;
 
-		private readonly UniqueQueueThreadSafe<MosaMethod> queue = new UniqueQueueThreadSafe<MosaMethod>();
+		private readonly Queue<MosaMethod> scheduleQueue = new Queue<MosaMethod>();
+
+		private readonly HashSet<MosaMethod> scheduleSet = new HashSet<MosaMethod>();
+
 		private readonly HashSet<MosaMethod> methods = new HashSet<MosaMethod>();
 
 		private readonly Dictionary<MosaMethod, int> inlineQueue = new Dictionary<MosaMethod, int>();
 
 		private object _timestamplock = new object();
 
-		public Compiler Compiler;
-
 		#endregion Data Members
 
 		#region Properties
 
-		public int PassCount { get; private set; }
+		public int PassCount { get; }
 
 		/// <summary>
 		/// Gets the total methods.
@@ -38,7 +39,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The total methods.
 		/// </value>
-		public int TotalMethods { get { return methods.Count; } }
+		public int TotalMethods { get { lock (methods) { return methods.Count; } } }
 
 		/// <summary>
 		/// Gets the queued methods.
@@ -46,7 +47,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The queued methods.
 		/// </value>
-		public int TotalQueuedMethods { get { return queue.Count; } }
+		public int TotalQueuedMethods { get { lock (scheduleQueue) { return scheduleQueue.Count; } } }
 
 		#endregion Properties
 
@@ -93,7 +94,14 @@ namespace Mosa.Compiler.Framework
 			if (method.IsCompilerGenerated)
 				return;
 
-			queue.Enqueue(method);
+			lock (scheduleQueue)
+			{
+				if (!scheduleSet.Contains(method))
+				{
+					scheduleSet.Add(method);
+					scheduleQueue.Enqueue(method);
+				}
+			}
 
 			lock (methods)
 			{
@@ -104,36 +112,40 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public bool IsScheduled(MosaMethod method)
-		{
-			lock (methods)
-			{
-				return methods.Contains(method);
-			}
-		}
-
 		public MosaMethod GetMethodToCompile()
 		{
-			var method = queue.Dequeue();
+			var method = GetScheduledMethod();
 
 			if (method != null)
 				return method;
 
 			FlushInlineQueue();
 
-			method = queue.Dequeue();
+			method = GetScheduledMethod();
 
-			if (method != null)
+			return method;
+		}
+
+		private MosaMethod GetScheduledMethod()
+		{
+			lock (scheduleQueue)
+			{
+				if (scheduleQueue.Count == 0)
+					return null;
+
+				var method = scheduleQueue.Dequeue();
+				scheduleSet.Remove(method);
+
 				return method;
-
-			return null;
+			}
 		}
 
 		public void DescheduledAllMethods()
 		{
-			while (queue.Count != 0)
+			lock (scheduleQueue)
 			{
-				queue.Dequeue();
+				scheduleQueue.Clear();
+				scheduleSet.Clear();
 			}
 		}
 
@@ -190,6 +202,8 @@ namespace Mosa.Compiler.Framework
 
 		public void FlushInlineQueue()
 		{
+			bool action = false;
+
 			lock (inlineQueue)
 			{
 				foreach (var item in inlineQueue)
@@ -202,10 +216,23 @@ namespace Mosa.Compiler.Framework
 					if (methodData.InlineTimestamp > timestamp)
 						continue;   // nothing to do
 
-					queue.Enqueue(method);
+					lock (scheduleQueue)
+					{
+						if (!scheduleSet.Contains(method))
+						{
+							scheduleQueue.Enqueue(method);
+							scheduleSet.Add(method);
+							action = true;
+						}
+					}
 				}
 
 				inlineQueue.Clear();
+			}
+
+			if (action)
+			{
+				Compiler.PostCompilerTraceEvent(CompilerEvent.InlineMethodsScheduled);
 			}
 		}
 	}

@@ -108,20 +108,20 @@ namespace Mosa.Compiler.Framework
 				if (Stage != CompileStage.Initialized)
 					return;
 
-				Compiler.PreCompile();
+				Compiler.Setup();
 
 				Stage = CompileStage.Ready;
 			}
 		}
 
-		public void PostCompile()
+		public void Finalization()
 		{
 			lock (_lock)
 			{
 				if (Stage != CompileStage.Ready)
 					return;
 
-				Compiler.PostCompile();
+				Compiler.Finalization();
 
 				Stage = CompileStage.Completed;
 			}
@@ -171,7 +171,7 @@ namespace Mosa.Compiler.Framework
 
 			if (!skipFinalization)
 			{
-				PostCompile();
+				Finalization();
 			}
 		}
 
@@ -201,7 +201,7 @@ namespace Mosa.Compiler.Framework
 
 			if (!skipFinalization)
 			{
-				PostCompile();
+				Finalization();
 			}
 		}
 
