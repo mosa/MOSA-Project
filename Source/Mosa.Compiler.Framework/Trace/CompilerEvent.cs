@@ -4,34 +4,35 @@ namespace Mosa.Compiler.Framework.Trace
 {
 	public enum CompilerEvent
 	{
-		CompileStart,
-		CompileEnd,
+		CompilerStart,
+		CompilerEnd,
 
-		CompilingMethod,
-		CompiledMethod,
-		CompilingType,
-
-		Linking,
-		LinkingCompleted,
 		CompilingMethods,
 		CompilingMethodsCompleted,
 
-		PreCompileStart,
-		PreCompileEnd,
+		MethodCompileStart,
+		MethodCompileEnd,
 
-		PreCompileStageStart,
-		PreCompileStageEnd,
+		LinkingStart,
+		LinkingEnd,
 
-		PostCompileStart,
-		PostCompileEnd,
+		SetupStart,
+		SetupEnd,
 
-		PostCompileStageStart,
-		PostCompileStageEnd,
+		SetupStageStart,
+		SetupStageEnd,
+
+		FinalizationStart,
+		FinalizationEnd,
+
+		FinalizationStageStart,
+		FinalizationStageEnd,
+
+		MethodScheduled,   // unused
+		InlineMethodsScheduled,
 
 		DebugInfo,
-		SchedulingType,
-		SchedulingMethod,
-		Plug,
+
 		Error,
 		Exception,
 		Warning,
@@ -47,35 +48,39 @@ namespace Mosa.Compiler.Framework.Trace
 		{
 			switch (stage)
 			{
-				case CompilerEvent.CompilingMethod: return "Compiling Method";
-				case CompilerEvent.CompiledMethod: return "Compiled Method";
-				case CompilerEvent.CompilingType: return "Compiling Type";
-				case CompilerEvent.SchedulingType: return "Scheduling Type";
-				case CompilerEvent.SchedulingMethod: return "Scheduling Method";
-				case CompilerEvent.DebugInfo: return "Debug Info";
-
-				case CompilerEvent.CompileStart: return "Compile Start";
-				case CompilerEvent.CompileEnd: return "Compile End";
+				case CompilerEvent.CompilerStart: return "Compiler Started";
+				case CompilerEvent.CompilerEnd: return "Compiler Completed";
 
 				case CompilerEvent.CompilingMethods: return "Compiling Methods";
 				case CompilerEvent.CompilingMethodsCompleted: return "Compiling Methods Completed";
 
-				case CompilerEvent.Linking: return "Linking";
-				case CompilerEvent.LinkingCompleted: return "Linking Completed";
+				case CompilerEvent.MethodCompileStart: return "Method Compile Started";
+				case CompilerEvent.MethodCompileEnd: return "Method Compile Completed";
 
-				case CompilerEvent.PreCompileStart: return "Pre-Compile Start";
-				case CompilerEvent.PreCompileEnd: return "Pre-Compile End";
-				case CompilerEvent.PostCompileStart: return "Post-Compile Start";
-				case CompilerEvent.PostCompileEnd: return "Post-Compile End";
+				case CompilerEvent.MethodScheduled: return "Method Scheduled";
+				case CompilerEvent.InlineMethodsScheduled: return "Inline Methods Scheduled";
 
-				case CompilerEvent.PreCompileStageStart: return "Pre-Compile Stage Started";
-				case CompilerEvent.PreCompileStageEnd: return "Pre-Compile Stage Ended";
-				case CompilerEvent.PostCompileStageStart: return "Post-Compile Stage Started";
-				case CompilerEvent.PostCompileStageEnd: return "Post-Compile Stage Ended";
+				case CompilerEvent.LinkingStart: return "Linking Started";
+				case CompilerEvent.LinkingEnd: return "Linking Completed";
 
+				case CompilerEvent.SetupStart: return "Setup Started";
+				case CompilerEvent.SetupEnd: return "Setup Completed";
+
+				case CompilerEvent.FinalizationStart: return "Finalization Started";
+				case CompilerEvent.FinalizationEnd: return "Finalization Completed";
+
+				case CompilerEvent.SetupStageStart: return "Setup Stage Started";
+				case CompilerEvent.SetupStageEnd: return "Setup Stage Completed";
+
+				case CompilerEvent.FinalizationStageStart: return "Finalization Stage Started";
+				case CompilerEvent.FinalizationStageEnd: return "Finalization Stage Completed";
+
+				case CompilerEvent.DebugInfo: return "Debug Info";
+
+				case CompilerEvent.Warning: return "Warning";
 				case CompilerEvent.Error: return "Error";
 				case CompilerEvent.Exception: return "Exception";
-				case CompilerEvent.Warning: return "Warning";
+
 				default: return stage.ToString();
 			}
 		}

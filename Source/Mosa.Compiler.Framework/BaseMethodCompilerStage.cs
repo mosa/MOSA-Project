@@ -117,6 +117,12 @@ namespace Mosa.Compiler.Framework
 		protected MethodScanner MethodScanner { get; private set; }
 
 		/// <summary>
+		/// Retrieves the compilation scheduler.
+		/// </summary>
+		/// <value>The compilation scheduler.</value>
+		public MethodScheduler MethodScheduler { get; private set; }
+
+		/// <summary>
 		/// Gets the method data.
 		/// </summary>
 		protected MethodData MethodData { get { return MethodCompiler.MethodData; } }
@@ -145,6 +151,16 @@ namespace Mosa.Compiler.Framework
 		/// Gets the constant zero.
 		/// </summary>
 		protected Operand ConstantZero { get { return MethodCompiler.ConstantZero; } }
+
+		/// <summary>
+		/// Gets the 32-bit constant zero.
+		/// </summary>
+		protected Operand ConstantZero32 { get { return MethodCompiler.ConstantZero32; } }
+
+		/// <summary>
+		/// Gets the 64-bit constant zero.
+		/// </summary>
+		protected Operand ConstantZero64 { get { return MethodCompiler.ConstantZero64; } }
 
 		/// <summary>
 		/// Gets the stack frame.
@@ -187,16 +203,15 @@ namespace Mosa.Compiler.Framework
 			Architecture = compiler.Architecture;
 			TypeSystem = compiler.TypeSystem;
 			TypeLayout = compiler.TypeLayout;
+			MethodScheduler = compiler.MethodScheduler;
+			CompilerOptions = compiler.CompilerOptions;
+			MethodScanner = compiler.MethodScanner;
 
 			NativePointerSize = Architecture.NativePointerSize;
 			NativeAlignment = Architecture.NativeAlignment;
 			NativeInstructionSize = Architecture.NativeInstructionSize;
 			Is32BitPlatform = Architecture.Is32BitPlatform;
 			Is64BitPlatform = Architecture.Is64BitPlatform;
-
-			CompilerOptions = compiler.CompilerOptions;
-
-			MethodScanner = compiler.MethodScanner;
 
 			Initialize();
 		}

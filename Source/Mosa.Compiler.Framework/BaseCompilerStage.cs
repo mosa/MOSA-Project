@@ -52,7 +52,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the compiler scheduler
 		/// </summary>
-		protected CompilationScheduler CompilationScheduler { get { return Compiler.CompilationScheduler; } }
+		protected MethodScheduler CompilationScheduler { get { return Compiler.MethodScheduler; } }
 
 		protected MethodScanner MethodScanner { get { return Compiler.MethodScanner; } }
 

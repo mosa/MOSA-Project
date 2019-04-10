@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Framework
 		/// Retrieves the compilation scheduler.
 		/// </summary>
 		/// <value>The compilation scheduler.</value>
-		public CompilationScheduler Scheduler { get; }
+		public MethodScheduler MethodScheduler { get; }
 
 		/// <summary>
 		/// Provides access to the pipeline of this compiler.
@@ -155,16 +155,23 @@ namespace Mosa.Compiler.Framework
 		public Operand StackPointer { get; }
 
 		/// <summary>
-		/// The constant zero
+		/// Gets the platform constant zero
 		/// </summary>
 		public Operand ConstantZero { get; }
 
 		/// <summary>
+		/// Gets the 32-bit constant zero.
+		/// </summary>
+		public Operand ConstantZero32 { get; }
+
+		/// <summary>
+		/// Gets the 64-bit constant zero.
+		/// </summary>
+		public Operand ConstantZero64 { get; }
+
+		/// <summary>
 		/// Gets a value indicating whether this instance is in SSA form.
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if this instance is in SSA form; otherwise, <c>false</c>.
-		/// </value>
 		public bool IsInSSAForm { get; set; }
 
 		/// <summary>
@@ -195,7 +202,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the method scanner.
 		/// </summary>
-		public MethodScanner MethodScanner { get; private set; }
+		public MethodScanner MethodScanner { get; }
 
 		#endregion Properties
 
@@ -215,7 +222,7 @@ namespace Mosa.Compiler.Framework
 			Compiler = compiler;
 			Method = method;
 			Type = method.DeclaringType;
-			Scheduler = compiler.CompilationScheduler;
+			MethodScheduler = compiler.MethodScheduler;
 			Architecture = compiler.Architecture;
 			TypeSystem = compiler.TypeSystem;
 			TypeLayout = compiler.TypeLayout;
@@ -230,7 +237,10 @@ namespace Mosa.Compiler.Framework
 			StackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
 			StackPointer = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackPointerRegister);
 			Parameters = new Operand[method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0)];
-			ConstantZero = Architecture.Is32BitPlatform ? CreateConstant((uint)0) : CreateConstant((ulong)0);
+
+			ConstantZero32 = CreateConstant((uint)0);
+			ConstantZero64 = CreateConstant((ulong)0);
+			ConstantZero = Architecture.Is32BitPlatform ? ConstantZero32 : ConstantZero64;
 
 			LocalVariables = emptyOperandList;
 			ThreadID = threadID;
@@ -559,7 +569,7 @@ namespace Mosa.Compiler.Framework
 			else
 			{
 				operandLow = operand;
-				operandHigh = ConstantZero;
+				operandHigh = ConstantZero32;
 			}
 		}
 

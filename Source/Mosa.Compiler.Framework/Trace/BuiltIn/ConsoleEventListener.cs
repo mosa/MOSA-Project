@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Framework.Trace.BuiltIn
 		{
 			switch (compilerStage)
 			{
-				case CompilerEvent.CompilingMethod:
+				case CompilerEvent.MethodCompileStart:
 					{
 						if (Quiet)
 						{
@@ -37,27 +37,7 @@ namespace Mosa.Compiler.Framework.Trace.BuiltIn
 						break;
 					}
 
-				case CompilerEvent.CompilingType:
-					{
-						if (Quiet) break;
-						Console.ForegroundColor = ConsoleColor.Yellow;
-						Console.Write("[Compiling]  ");
-						Console.ForegroundColor = ConsoleColor.White;
-						Console.WriteLine(info);
-						break;
-					}
-
-				case CompilerEvent.SchedulingType:
-					{
-						if (Quiet) break;
-						Console.ForegroundColor = ConsoleColor.Blue;
-						Console.Write("[Scheduling]  ");
-						Console.ForegroundColor = ConsoleColor.White;
-						Console.WriteLine(info);
-						break;
-					}
-
-				case CompilerEvent.SchedulingMethod:
+				case CompilerEvent.MethodScheduled:
 					{
 						if (Quiet) break;
 						Console.ForegroundColor = ConsoleColor.Blue;

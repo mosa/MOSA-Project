@@ -11,11 +11,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 	public enum MosaFieldAttributes : ushort
 	{
 		/// <summary>
-		/// Member access mask - Use this mask to retrieve accessibility information.
-		/// </summary>
-		FieldAccessMask = 0x0007,
-
-		/// <summary>
 		/// Member not referenceable.
 		/// </summary>
 		PrivateScope = 0x0000,
@@ -56,6 +51,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 		Public = 0x0006,
 
 		/// <summary>
+		/// Member access mask - Use this mask to retrieve accessibility information.
+		/// </summary>
+		FieldAccessMask = 0x0007,
+
+		/// <summary>
 		/// Defined on type, else per instance.
 		/// </summary>
 		Static = 0x0010,
@@ -76,14 +76,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 		NotSerialized = 0x0080,
 
 		/// <summary>
+		/// Field has RVA.
+		/// </summary>
+		HasFieldRVA = 0x0100,
+
+		/// <summary>
 		/// Field is special. Name describes how.
 		/// </summary>
 		SpecialName = 0x0200,
-
-		/// <summary>
-		/// Implementation is forwarded through pinvoke.
-		/// </summary>
-		PinvokeImpl = 0x2000,
 
 		/// <summary>
 		/// Runtime(metadata internal APIs) should check name encoding.
@@ -96,13 +96,13 @@ namespace Mosa.Compiler.MosaTypeSystem
 		HasFieldMarshal = 0x1000,
 
 		/// <summary>
+		/// Implementation is forwarded through pinvoke.
+		/// </summary>
+		PinvokeImpl = 0x2000,
+
+		/// <summary>
 		/// Field has default.
 		/// </summary>
 		HasDefault = 0x8000,
-
-		/// <summary>
-		/// Field has RVA.
-		/// </summary>
-		HasFieldRVA = 0x0100,
 	}
 }

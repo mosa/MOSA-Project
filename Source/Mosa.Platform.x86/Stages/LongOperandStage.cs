@@ -206,7 +206,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[2].AppendInstruction(X86.Jmp, nextBlock.Block);
 
 			// Failed
-			newBlocks[3].AppendInstruction(X86.Mov32, result, ConstantZero);
+			newBlocks[3].AppendInstruction(X86.Mov32, result, ConstantZero32);
 			newBlocks[3].AppendInstruction(X86.Jmp, nextBlock.Block);
 		}
 
@@ -243,7 +243,7 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
 
 			context.SetInstruction(X86.Cvttss2si32, resultLow, context.Operand1);
-			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero);
+			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero32);
 		}
 
 		private void ConvertFloatR8ToInteger64(Context context)
@@ -251,7 +251,7 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
 
 			context.SetInstruction(X86.Cvttsd2si32, resultLow, context.Operand1);
-			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero);
+			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero32);
 		}
 
 		private void ConvertInt64ToFloatR4(Context context)
@@ -317,7 +317,7 @@ namespace Mosa.Platform.x86.Stages
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			context.SetInstruction(X86.Or32, v1, op1L, op1H);
-			context.SetInstruction(X86.Cmp32, null, v1, ConstantZero);
+			context.SetInstruction(X86.Cmp32, null, v1, ConstantZero32);
 			context.AppendInstruction(X86.CMovNotEqual32, resultLow, op2L);    // true
 			context.AppendInstruction(X86.CMovNotEqual32, resultHigh, op2H);   // true
 			context.AppendInstruction(X86.CMovEqual32, resultLow, op3L);       // false
@@ -390,7 +390,7 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
 
 			context.SetInstruction(X86.MovLoad16, resultLow, StackFrame, lowOffset);
-			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero);
+			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero32);
 		}
 
 		private void LoadParamZeroExtended32x64(Context context)
@@ -399,7 +399,7 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
 
 			context.SetInstruction(X86.MovLoad32, resultLow, StackFrame, lowOffset);
-			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero);
+			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero32);
 		}
 
 		private void LoadParamZeroExtended8x64(Context context)
@@ -408,7 +408,7 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
 
 			context.SetInstruction(X86.MovLoad8, resultLow, StackFrame, lowOffset);
-			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero);
+			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero32);
 		}
 
 		private void LogicalAnd64(Context context)
@@ -480,7 +480,7 @@ namespace Mosa.Platform.x86.Stages
 			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			context.SetInstruction(X86.Shld32, resultHigh, op1H, op1L, count);
-			context.AppendInstruction(X86.Mov32, resultLow, ConstantZero);
+			context.AppendInstruction(X86.Mov32, resultLow, ConstantZero32);
 			context.AppendInstruction(X86.Shl32, v1, op1L, count);
 			context.AppendInstruction(X86.Mov32, v2, count);
 
@@ -501,7 +501,7 @@ namespace Mosa.Platform.x86.Stages
 			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			context.SetInstruction(X86.Shrd32, resultLow, op1L, op1H, count);
-			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero);
+			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero32);
 			context.AppendInstruction(X86.Shr32, v1, op1H, count);
 			context.AppendInstruction(X86.Mov32, v2, count);
 
@@ -623,7 +623,7 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 
 			context.SetInstruction(X86.Movzx16To32, resultLow, op1L);
-			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero);
+			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero32);
 		}
 
 		private void ZeroExtended32x64(Context context)
@@ -632,7 +632,7 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 
 			context.SetInstruction(X86.Mov32, resultLow, op1L);
-			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero);
+			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero32);
 		}
 
 		private void ZeroExtended8x64(Context context)
@@ -641,7 +641,7 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 
 			context.SetInstruction(X86.Movzx8To32, resultLow, op1L);
-			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero);
+			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero32);
 		}
 
 		#endregion Visitation Methods

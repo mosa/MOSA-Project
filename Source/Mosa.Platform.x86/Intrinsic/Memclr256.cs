@@ -8,7 +8,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// IntrinsicMethods
 	/// </summary>
-	static partial class IntrinsicMethods
+	internal static partial class IntrinsicMethods
 	{
 		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Memclr256")]
 		private static void Memclr256(Context context, MethodCompiler methodCompiler)
@@ -19,7 +19,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			var offset16 = methodCompiler.CreateConstant(16);
 
 			context.SetInstruction(X86.PXor, v0, v0, v0);
-			context.AppendInstruction(X86.MovupsStore, dest, methodCompiler.ConstantZero, v0);
+			context.AppendInstruction(X86.MovupsStore, dest, methodCompiler.ConstantZero32, v0);
 			context.AppendInstruction(X86.MovupsStore, dest, offset16, v0);
 		}
 	}

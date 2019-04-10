@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
-using System;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework
@@ -12,15 +11,11 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class MethodData
 	{
-		private readonly object _lock = new object();
-
 		#region Properties
 
 		public Counters Counters { get; }
 
 		public MosaMethod Method { get; }
-
-		public bool InvokesAnyMethod { get { return Calls.Count != 0; } }
 
 		public bool IsCompiled { get; set; }
 
@@ -30,7 +25,7 @@ namespace Mosa.Compiler.Framework
 
 		public bool HasProtectedRegions { get; set; }
 
-		public bool CanInline { get; set; }
+		public bool Inlined { get; set; }
 
 		public bool HasDoNotInlineAttribute { get; set; }
 
@@ -41,12 +36,6 @@ namespace Mosa.Compiler.Framework
 		public bool HasLoops { get; set; }
 
 		public bool HasAddressOfInstruction { get; set; }
-
-		public List<MosaMethod> Calls { get; set; }
-
-		public List<MosaMethod> CalledBy { get; set; }
-
-		public BasicBlocks BasicBlocks { get; set; }
 
 		public int IRInstructionCount { get; set; }
 
@@ -68,26 +57,80 @@ namespace Mosa.Compiler.Framework
 
 		public long ElapsedTicks { get; set; }
 
+		public bool DoNotInline { get; set; }
+
+		public int InlineTimestamp
+		{
+			get { lock (_lock) { return inlinedTimestamp; } }
+			set { lock (_lock) { inlinedTimestamp = value; } }
+		}
+
+		public int InlineEvalulationTimestamp
+		{
+			get { lock (_lock) { return inlineEvalulationTimestamp; } }
+			set { lock (_lock) { inlineEvalulationTimestamp = value; } }
+		}
+
+		public BasicBlocks BasicBlocks
+		{
+			get { lock (_lock) { return inlinedBasicBlocks; } }
+			set { lock (_lock) { inlinedBasicBlocks = value; } }
+		}
+
+		public List<MosaMethod> CalledBy
+		{
+			get
+			{
+				lock (calledBy)
+				{
+					if (cachedCallBy == null)
+					{
+						cachedCallBy = new List<MosaMethod>(calledBy);
+					}
+
+					return cachedCallBy;
+				}
+			}
+		}
+
 		#endregion Properties
+
+		#region Data Members
+
+		private readonly object _lock = new object();
+
+		private BasicBlocks inlinedBasicBlocks;
+
+		private int inlinedTimestamp;
+
+		private int inlineEvalulationTimestamp;
+
+		private List<MosaMethod> calledBy;
+
+		private List<MosaMethod> cachedCallBy;
+
+		#endregion Data Members
 
 		public MethodData(MosaMethod mosaMethod)
 		{
-			Method = mosaMethod ?? throw new ArgumentNullException(nameof(mosaMethod));
+			Method = mosaMethod;
 
-			Calls = new List<MosaMethod>();
-			CalledBy = new List<MosaMethod>();
+			calledBy = new List<MosaMethod>();
 			LabelRegions = new List<LabelRegion>();
 			Counters = new Counters();
 			CompileCount = 0;
+			DoNotInline = false;
+			BasicBlocks = null;
 		}
 
 		#region Methods
 
 		public void AddCalledBy(MosaMethod method)
 		{
-			lock (_lock)
+			lock (calledBy)
 			{
-				CalledBy.AddIfNew(method);
+				calledBy.AddIfNew(method);
+				cachedCallBy = null;
 			}
 		}
 
