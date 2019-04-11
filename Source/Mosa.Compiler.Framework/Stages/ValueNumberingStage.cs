@@ -443,6 +443,12 @@ namespace Mosa.Compiler.Framework.Stages
 				return true;
 			}
 
+			if (node.Instruction == IRInstruction.AddressOf
+				&& node.Operand1.IsStackLocal)
+			{
+				return true;
+			}
+
 			if (node.ResultCount != 1
 				|| node.OperandCount == 0
 				|| node.OperandCount > 2
