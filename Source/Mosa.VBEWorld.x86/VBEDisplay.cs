@@ -9,7 +9,7 @@ namespace Mosa.VBEWorld.x86
 {
 	public static class VBEDisplay
 	{
-		private static Memory _lfb;
+		private static ConstrainedPointer _lfb;
 
 		public static IFrameBuffer Framebuffer { get; set; }
 
@@ -19,7 +19,7 @@ namespace Mosa.VBEWorld.x86
 				return false;
 
 			uint memorySize = (uint)(VBE.ScreenWidth * VBE.ScreenHeight * (VBE.BitsPerPixel / 8));
-			_lfb = hal.GetPhysicalMemory((uint)VBE.MemoryPhysicalLocation.ToInt32(), memorySize);
+			_lfb = hal.GetPhysicalMemory(VBE.MemoryPhysicalLocation, memorySize);
 
 			switch (VBE.BitsPerPixel)
 			{

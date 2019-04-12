@@ -12,7 +12,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// The memory regions
 		/// </summary>
-		protected LinkedList<MemoryRegion> memoryRegions;
+		protected LinkedList<AddressRegion> memoryRegions;
 
 		/// <summary>
 		/// The spin lock
@@ -24,18 +24,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		public MemoryResources()
 		{
-			memoryRegions = new LinkedList<MemoryRegion>();
-		}
-
-		/// <summary>
-		/// Gets the memory.
-		/// </summary>
-		/// <param name="address">The address.</param>
-		/// <param name="size">The size.</param>
-		/// <returns></returns>
-		public Memory GetMemory(uint address, uint size)
-		{
-			return HAL.GetPhysicalMemory(address, size);
+			memoryRegions = new LinkedList<AddressRegion>();
 		}
 
 		/// <summary>
@@ -47,18 +36,18 @@ namespace Mosa.DeviceSystem
 		{
 			lock (_lock)
 			{
-				for (byte r = 0; r < hardwareResources.MemoryRegionCount; r++)
+				for (byte r = 0; r < hardwareResources.AddressRegionCount; r++)
 				{
 					var region = hardwareResources.GetMemoryRegion(r);
 
 					foreach (var memoryRegion in memoryRegions)
 					{
-						if (memoryRegion.Contains(region.BaseAddress) || memoryRegion.Contains(region.BaseAddress + region.Size))
+						if (memoryRegion.Contains(region.Address) || memoryRegion.Contains(region.Address + (int)region.Size))
 							return false;
 					}
 				}
 
-				for (byte r = 0; r < hardwareResources.MemoryRegionCount; r++)
+				for (byte r = 0; r < hardwareResources.AddressRegionCount; r++)
 				{
 					memoryRegions.AddLast(hardwareResources.GetMemoryRegion(r));
 				}
@@ -75,7 +64,7 @@ namespace Mosa.DeviceSystem
 		{
 			lock (_lock)
 			{
-				for (byte r = 0; r < hardwareResources.MemoryRegionCount; r++)
+				for (byte r = 0; r < hardwareResources.AddressRegionCount; r++)
 				{
 					memoryRegions.Remove(hardwareResources.GetMemoryRegion(r));
 				}

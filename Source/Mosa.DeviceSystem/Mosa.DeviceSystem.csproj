@@ -72,6 +72,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseDeviceConfiguration.cs" />
+    <Compile Include="PointerTest.cs" />
+    <Compile Include="Pointer.cs" />
+    <Compile Include="ConstrainedPointer.cs" />
     <Compile Include="PCIDeviceService.cs" />
     <Compile Include="ServiceEventType.cs" />
     <Compile Include="ServiceEvent.cs" />
@@ -93,7 +96,6 @@
     <Compile Include="DeviceStatus.cs" />
     <Compile Include="Device.cs" />
     <Compile Include="DiskPartitionConfiguration.cs" />
-    <Compile Include="Memory.cs" />
     <Compile Include="PCIDeviceConfiguration.cs" />
     <Compile Include="HAL.cs" />
     <Compile Include="BaseDeviceDriver.cs" />
@@ -108,7 +110,7 @@
     <Compile Include="IPCIController.cs" />
     <Compile Include="PCIDeviceDriverRegistryEntry.cs" />
     <Compile Include="ISADeviceDriverRegistryEntry.cs" />
-    <Compile Include="MemoryRegion.cs" />
+    <Compile Include="AddressRegion.cs" />
     <Compile Include="MemoryResources.cs" />
     <Compile Include="NetworkDevicePacketBuffer.cs" />
     <Compile Include="INetworkDevice.cs" />

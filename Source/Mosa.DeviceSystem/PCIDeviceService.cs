@@ -65,7 +65,7 @@ namespace Mosa.DeviceSystem
 		private void StartDevice(PCIDeviceDriverRegistryEntry driver, Device device, PCIDevice pciDevice)
 		{
 			var ioPortRegions = new List<IOPortRegion>();
-			var memoryRegions = new List<MemoryRegion>();
+			var memoryRegions = new List<AddressRegion>();
 
 			foreach (var pciBaseAddress in pciDevice.BaseAddresses)
 			{
@@ -75,7 +75,7 @@ namespace Mosa.DeviceSystem
 				switch (pciBaseAddress.Region)
 				{
 					case AddressType.IO: ioPortRegions.Add(new IOPortRegion((ushort)pciBaseAddress.Address, (ushort)pciBaseAddress.Size)); break;
-					case AddressType.Memory: memoryRegions.Add(new MemoryRegion(pciBaseAddress.Address, pciBaseAddress.Size)); break;
+					case AddressType.Memory: memoryRegions.Add(new AddressRegion(pciBaseAddress.Address, pciBaseAddress.Size)); break;
 					default: break;
 				}
 			}

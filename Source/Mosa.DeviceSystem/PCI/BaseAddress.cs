@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
+
 namespace Mosa.DeviceSystem.PCI
 {
 	/// <summary>
@@ -10,7 +12,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// <summary>
 		///
 		/// </summary>
-		protected uint address;
+		protected IntPtr address;
 
 		/// <summary>
 		///
@@ -31,7 +33,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// Gets the address.
 		/// </summary>
 		/// <value>The address.</value>
-		public uint Address { get { return address; } }
+		public IntPtr Address { get { return address; } }
 
 		/// <summary>
 		/// Gets the size.
@@ -58,7 +60,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <param name="prefetchable">if set to <c>true</c> [prefetchable].</param>
-		public BaseAddress(AddressType region, uint address, uint size, bool prefetchable)
+		public BaseAddress(AddressType region, IntPtr address, uint size, bool prefetchable)
 		{
 			this.region = region;
 			this.address = address;
@@ -78,12 +80,12 @@ namespace Mosa.DeviceSystem.PCI
 				return string.Empty;
 
 			if (region == AddressType.IO)
-				return "I/O Port at 0x" + address.ToString("X") + " [size=" + size.ToString() + "]";
+				return "I/O Port at 0x" + address.ToInt32().ToString("X") + " [size=" + size.ToString() + "]";
 
 			if (prefetchable)
-				return "Memory at 0x" + address.ToString("X") + " [size=" + size.ToString() + "] (prefetchable)";
+				return "Memory at 0x" + address.ToInt32().ToString("X") + " [size=" + size.ToString() + "] (prefetchable)";
 
-			return "Memory at 0x" + address.ToString("X") + " [size=" + size.ToString() + "] (non-prefetchable)";
+			return "Memory at 0x" + address.ToInt32().ToString("X") + " [size=" + size.ToString() + "] (non-prefetchable)";
 		}
 	}
 }

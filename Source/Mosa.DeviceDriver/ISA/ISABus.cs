@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
+using System;
 using System.Collections.Generic;
 
 namespace Mosa.DeviceDriver.ISA
@@ -43,7 +44,7 @@ namespace Mosa.DeviceDriver.ISA
 		protected void StartISADevice(ISADeviceDriverRegistryEntry driverEntry)
 		{
 			var ioPortRegions = new List<IOPortRegion>();
-			var memoryRegions = new List<MemoryRegion>();
+			var memoryRegions = new List<AddressRegion>();
 
 			ioPortRegions.Add(new IOPortRegion(driverEntry.BasePort, driverEntry.PortRange));
 
@@ -54,7 +55,7 @@ namespace Mosa.DeviceDriver.ISA
 
 			if (driverEntry.BaseAddress != 0x00)
 			{
-				memoryRegions.Add(new MemoryRegion(driverEntry.BaseAddress, driverEntry.AddressRange));
+				memoryRegions.Add(new AddressRegion(new IntPtr(driverEntry.BaseAddress), driverEntry.AddressRange));
 			}
 
 			//if (driverEntry.PhysicalMemory != null)

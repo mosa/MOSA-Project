@@ -95,7 +95,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		///
 		/// </summary>
-		protected Memory memory;
+		protected ConstrainedPointer memory;
 
 		/// <summary>
 		///
