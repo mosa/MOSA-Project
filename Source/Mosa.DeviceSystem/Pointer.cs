@@ -101,7 +101,6 @@ namespace Mosa.DeviceSystem
 		/// <param name="value">The value.</param>
 		public void Write24(uint offset, uint value)
 		{
-
 			Intrinsic.Store16(address, offset, (ushort)(value & 0xFFFF));
 			Intrinsic.Store8(address, offset + 2, (byte)((value >> 16) & 0xFF));
 		}

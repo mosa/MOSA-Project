@@ -1,12 +1,11 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime;
+using Mosa.DeviceSystem;
 using System;
 
-namespace Mosa.DeviceSystem
+namespace Mosa.CoolWorld.x86
 {
 	/// <summary>
-	/// Provides indirect access to a block of memory
 	/// </summary>
 	public class PointerTest
 	{
