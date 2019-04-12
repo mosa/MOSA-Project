@@ -1,16 +1,19 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime.Extension;
+using System;
+
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
 	/// MemoryRegion
 	/// </summary>
-	public sealed class MemoryRegion
+	public struct AddressRegion
 	{
 		/// <summary>
 		/// Gets the base address.
 		/// </summary>
-		public uint BaseAddress { get; }
+		public IntPtr Address { get; }
 
 		/// <summary>
 		/// Gets the size.
@@ -18,13 +21,13 @@ namespace Mosa.DeviceSystem
 		public uint Size { get; }
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MemoryRegion"/> class.
+		/// Initializes a new instance of the <see cref="AddressRegion"/> class.
 		/// </summary>
-		/// <param name="baseAddress">The base address.</param>
+		/// <param name="address">The base address.</param>
 		/// <param name="size">The size.</param>
-		public MemoryRegion(uint baseAddress, uint size)
+		public AddressRegion(IntPtr address, uint size)
 		{
-			BaseAddress = baseAddress;
+			Address = address;
 			Size = size;
 		}
 
@@ -35,9 +38,9 @@ namespace Mosa.DeviceSystem
 		/// <returns>
 		/// 	<c>true</c> if [contains] [the specified address]; otherwise, <c>false</c>.
 		/// </returns>
-		public bool Contains(uint address)
+		public bool Contains(IntPtr address)
 		{
-			return ((address >= BaseAddress) && (address <= BaseAddress + Size));
+			return address.GreaterThanOrEqual(Address) && address.LessThan(Address + (int)Size);
 		}
 	}
 }

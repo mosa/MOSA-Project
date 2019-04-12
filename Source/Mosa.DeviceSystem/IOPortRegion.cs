@@ -5,7 +5,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// IO Port Region
 	/// </summary>
-	public sealed class IOPortRegion
+	public struct IOPortRegion
 	{
 		/// <summary>
 		/// Gets the base IO port.

@@ -10,14 +10,14 @@ namespace Mosa.DeviceSystem
 	public sealed class HardwareResources
 	{
 		/// <summary>
+		/// The address regions
+		/// </summary>
+		private readonly List<AddressRegion> addressRegions;
+
+		/// <summary>
 		/// The io port regions
 		/// </summary>
 		private readonly List<IOPortRegion> ioPortRegions;
-
-		/// <summary>
-		/// The memory regions
-		/// </summary>
-		private readonly List<MemoryRegion> memoryRegions;
 
 		/// <summary>
 		/// The irq
@@ -28,11 +28,11 @@ namespace Mosa.DeviceSystem
 		/// Initializes a new instance of the <see cref="HardwareResources" /> class.
 		/// </summary>
 		/// <param name="ioPortRegions">The io port regions.</param>
-		/// <param name="memoryRegions">The memory regions.</param>
-		public HardwareResources(List<IOPortRegion> ioPortRegions, List<MemoryRegion> memoryRegions, byte irq = 0)
+		/// <param name="addressRegions">The memory regions.</param>
+		public HardwareResources(List<IOPortRegion> ioPortRegions, List<AddressRegion> addressRegions, byte irq = 0)
 		{
 			this.ioPortRegions = ioPortRegions;
-			this.memoryRegions = memoryRegions;
+			this.addressRegions = addressRegions;
 			this.IRQ = irq;
 		}
 
@@ -51,9 +51,9 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public MemoryRegion GetMemoryRegion(byte index)
+		public AddressRegion GetMemoryRegion(byte index)
 		{
-			return memoryRegions[index];
+			return addressRegions[index];
 		}
 
 		/// <summary>
@@ -66,39 +66,39 @@ namespace Mosa.DeviceSystem
 		/// Gets the memory region count.
 		/// </summary>
 		/// <value>The memory region count.</value>
-		public byte MemoryRegionCount { get { return (byte)memoryRegions.Count; } }
+		public byte AddressRegionCount { get { return (byte)addressRegions.Count; } }
 
 		/// <summary>
 		/// Gets the IO port.
 		/// </summary>
-		/// <param name="region">The region.</param>
-		/// <param name="index">The index.</param>
+		/// <param name="index">The region.</param>
+		/// <param name="offset">The index.</param>
 		/// <returns></returns>
-		public BaseIOPortReadWrite GetIOPortReadWrite(byte region, ushort index)
+		public BaseIOPortReadWrite GetIOPortReadWrite(byte index, ushort offset)
 		{
-			return HAL.GetReadWriteIOPort((ushort)(ioPortRegions[region].BaseIOPort + index));
+			return HAL.GetReadWriteIOPort((ushort)(ioPortRegions[index].BaseIOPort + offset));
 		}
 
 		/// <summary>
 		/// Gets the IO port.
 		/// </summary>
-		/// <param name="region">The region.</param>
-		/// <param name="index">The index.</param>
+		/// <param name="index">The region.</param>
+		/// <param name="offset">The index.</param>
 		/// <returns></returns>
-		public BaseIOPortRead GetIOPortRead(byte region, ushort index)
+		public BaseIOPortRead GetIOPortRead(byte index, ushort offset)
 		{
-			return HAL.GetReadIOPort((ushort)(ioPortRegions[region].BaseIOPort + index));
+			return HAL.GetReadIOPort((ushort)(ioPortRegions[index].BaseIOPort + offset));
 		}
 
 		/// <summary>
 		/// Gets the IO port.
 		/// </summary>
-		/// <param name="region">The region.</param>
-		/// <param name="index">The index.</param>
+		/// <param name="index">The region.</param>
+		/// <param name="offset">The index.</param>
 		/// <returns></returns>
-		public BaseIOPortWrite GetIOPortWrite(byte region, ushort index)
+		public BaseIOPortWrite GetIOPortWrite(byte index, ushort offset)
 		{
-			return HAL.GetWriteIOPort((ushort)(ioPortRegions[region].BaseIOPort + index));
+			return HAL.GetWriteIOPort((ushort)(ioPortRegions[index].BaseIOPort + offset));
 		}
 
 		/// <summary>
@@ -106,9 +106,9 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="region">The region.</param>
 		/// <returns></returns>
-		public Memory GetMemory(byte region)
+		public ConstrainedPointer GetMemory(byte region)
 		{
-			return HAL.GetPhysicalMemory(memoryRegions[region].BaseAddress, memoryRegions[region].Size);
+			return HAL.GetPhysicalMemory(addressRegions[region].Address, addressRegions[region].Size);
 		}
 	}
 }

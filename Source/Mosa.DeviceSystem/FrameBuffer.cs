@@ -21,7 +21,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// The memory
 		/// </summary>
-		protected Memory memory;
+		protected ConstrainedPointer buffer;
 
 		/// <summary>
 		/// The offset

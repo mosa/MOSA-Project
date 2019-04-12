@@ -113,9 +113,9 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 		#endregion Ports
 
-		protected Memory memory;
+		protected ConstrainedPointer memory;
 
-		protected Memory fifo;
+		protected ConstrainedPointer fifo;
 
 		protected IFrameBuffer frameBuffer;
 

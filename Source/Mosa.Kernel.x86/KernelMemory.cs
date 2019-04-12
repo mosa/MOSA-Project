@@ -17,10 +17,10 @@ namespace Mosa.Kernel.x86
 		[Plug("Mosa.Runtime.GC::AllocateMemory")]
 		static unsafe private IntPtr _AllocateMemory(uint size)
 		{
-			return AllocateMemory(size);
+			return AllocateVirtualMemory(size);
 		}
 
-		static public IntPtr AllocateMemory(uint size)
+		static public IntPtr AllocateVirtualMemory(uint size)
 		{
 			if (heapStart == 0 || (heapSize - heapUsed) < size)
 			{

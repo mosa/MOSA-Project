@@ -153,7 +153,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// <summary>
 		///
 		/// </summary>
-		protected Memory memory;
+		protected ConstrainedPointer memory;
 
 		/// <summary>
 		///
@@ -210,7 +210,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 			attributeAddress = Device.Resources.GetIOPortReadWrite(portBar, 0x10);
 			attributeData = Device.Resources.GetIOPortReadWrite(portBar, 0x11);
 
-			memory = Device.Resources.GetMemory((byte)(Device.Resources.MemoryRegionCount - 1));
+			memory = Device.Resources.GetMemory((byte)(Device.Resources.AddressRegionCount - 1));
 		}
 
 		public override void Start()
