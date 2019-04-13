@@ -43,6 +43,7 @@
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -62,6 +63,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>2</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Boot.cs" />

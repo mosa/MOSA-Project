@@ -60,6 +60,7 @@
     <DebugType>full</DebugType>
     <NoWarn>1685,227</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -80,6 +81,7 @@
     <WarningLevel>2</WarningLevel>
     <NoWarn>1685</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="HAL\Hardware.cs" />
@@ -96,6 +98,7 @@
     <Compile Include="Mosa.Application\Shell.cs" />
     <Compile Include="Mosa.AppSystem\IConsoleApp.cs" />
     <Compile Include="Boot.cs" />
+    <Compile Include="PointerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj">
