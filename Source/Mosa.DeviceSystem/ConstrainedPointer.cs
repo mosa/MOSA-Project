@@ -23,7 +23,7 @@ namespace Mosa.DeviceSystem
 		/// Gets the size.
 		/// </summary>
 		/// <value>The size.</value>
-		public uint Size { get { return Size; } }
+		public uint Size { get { return size; } }
 
 		public ConstrainedPointer(IntPtr address, uint size)
 		{
