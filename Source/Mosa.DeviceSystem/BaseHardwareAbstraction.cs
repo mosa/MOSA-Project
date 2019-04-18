@@ -76,7 +76,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// Gets the physical address.
 		/// </summary>
-		/// <param name="memory">The memory.</param>
+		/// <param name="virtualAddress"></param>
 		/// <returns></returns>
 		public abstract IntPtr TranslateVirtualToPhysicalAddress(IntPtr virtualAddress);
 
