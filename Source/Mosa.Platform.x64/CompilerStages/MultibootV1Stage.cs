@@ -31,8 +31,6 @@ namespace Mosa.Platform.x64.CompilerStages
 			basicBlocks.AddHeadBlock(block);
 			var ctx = new Context(block);
 
-			//ctx.AppendInstruction(X64.Cli);
-
 			// Setup the stack and place the sentinel on the stack to indicate the start of the stack
 			ctx.AppendInstruction(X64.Mov64, esp, stackTop);
 			ctx.AppendInstruction(X64.Mov64, ebp, stackTop);
@@ -43,14 +41,10 @@ namespace Mosa.Platform.x64.CompilerStages
 			ctx.AppendInstruction(X64.MovStore64, null, multibootEAX, zero, eax);
 			ctx.AppendInstruction(X64.MovStore64, null, multibootEBX, zero, ebx);
 
-			//ctx.AppendInstruction(X64.Sti);
 			ctx.AppendInstruction(X64.Call, null, entryPoint);
 			ctx.AppendInstruction(X64.Ret);
 
 			Compiler.CompileMethod(multibootMethod, basicBlocks);
-
-			MethodScanner.MethodInvoked(initializeMethod, multibootMethod);
-			MethodScanner.MethodInvoked(multibootMethod, multibootMethod);
 		}
 	}
 }

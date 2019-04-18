@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 	public class MethodCompileTimeStage : BaseCompilerStage
 	{
-		protected override void RunPostCompile()
+		protected override void Finalization()
 		{
 			if (string.IsNullOrEmpty(CompilerOptions.CompileTimeFile))
 				return;

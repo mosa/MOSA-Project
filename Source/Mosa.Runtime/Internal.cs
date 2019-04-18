@@ -2,7 +2,6 @@
 
 using Mosa.Runtime.Metadata;
 using System;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace Mosa.Runtime

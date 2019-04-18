@@ -21,11 +21,11 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		#endregion Data Members
 
-		protected override void Setup()
+		protected override void Initialization()
 		{
 		}
 
-		protected override void RunPostCompile()
+		protected override void Finalization()
 		{
 			if (string.IsNullOrEmpty(CompilerOptions.MapFile))
 				return;

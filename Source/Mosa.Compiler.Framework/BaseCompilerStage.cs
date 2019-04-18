@@ -64,56 +64,64 @@ namespace Mosa.Compiler.Framework
 		/// <value>The name of the compilation stage.</value>
 		public virtual string Name { get { return GetType().Name; } }
 
-		public void Initialize(Compiler compiler)
+		/// <summary>
+		/// Executes the initialization stage.
+		/// </summary>
+		public void ExecuteInitialization(Compiler compiler)
 		{
 			Debug.Assert(compiler != null);
 
 			Compiler = compiler;
 
-			Setup();
+			Initialization();
 		}
 
 		/// <summary>
-		/// Executes the pre-compile phase.
+		/// Executes the setup stage.
 		/// </summary>
-		public void ExecutePreCompile()
-		{
-			RunPreCompile();
-		}
-
-		/// <summary>
-		/// Executes the post compile phase.
-		/// </summary>
-		public void ExecutePostCompile()
+		public void ExecuteSetup()
 		{
 			if (Compiler.IsStopped)
 			{
 				return;
 			}
 
-			RunPostCompile();
+			Setup();
+		}
+
+		/// <summary>
+		/// Executes finalization stage.
+		/// </summary>
+		public void ExecuteFinalization()
+		{
+			if (Compiler.IsStopped)
+			{
+				return;
+			}
+
+			Finalization();
 		}
 
 		#region Overrides
 
 		/// <summary>
-		/// Setups this stage.
+		/// Runs the initialize stage.
+		/// </summary>
+		protected virtual void Initialization()
+		{
+		}
+
+		/// <summary>
+		/// Runs the setup stage.
 		/// </summary>
 		protected virtual void Setup()
 		{
 		}
 
 		/// <summary>
-		/// Runs pre compile stage.
+		/// Runs the finalization stage.
 		/// </summary>
-		protected virtual void RunPreCompile()
-		{
-		}
-
-		/// <summary>
-		/// Runs post compile stage.
-		/// </summary>
-		protected virtual void RunPostCompile()
+		protected virtual void Finalization()
 		{
 		}
 

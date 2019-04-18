@@ -12,7 +12,7 @@ namespace Mosa.Tool.Explorer.Stages
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 	public sealed class ExplorerMethodCompileTimeStage : MethodCompileTimeStage
 	{
-		protected override void RunPostCompile()
+		protected override void Finalization()
 		{
 			var methods = GetAndSortMethodData();
 

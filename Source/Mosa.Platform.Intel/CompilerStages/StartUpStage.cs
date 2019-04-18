@@ -11,7 +11,7 @@ namespace Mosa.Platform.Intel.CompilerStages
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 	public sealed class StartUpStage : BaseCompilerStage
 	{
-		protected override void RunPreCompile()
+		protected override void Setup()
 		{
 			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
 			var startUpMethod = startUpType.FindMethodByName("StartApplication");

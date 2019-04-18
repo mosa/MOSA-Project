@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 	public sealed class LinkerEmitStage : BaseCompilerStage
 	{
-		protected override void RunPostCompile()
+		protected override void Finalization()
 		{
 			if (!CompilerOptions.EmitBinary)
 				return;

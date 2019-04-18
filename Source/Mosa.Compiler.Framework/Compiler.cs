@@ -320,7 +320,7 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var stage in CompilerPipeline)
 			{
-				stage.Initialize(this);
+				stage.ExecuteInitialization(this);
 			}
 
 			foreach (var stage in CompilerPipeline)
@@ -328,7 +328,7 @@ namespace Mosa.Compiler.Framework
 				PostCompilerTraceEvent(CompilerEvent.SetupStageStart, stage.Name);
 
 				// Execute stage
-				stage.ExecutePreCompile();
+				stage.ExecuteSetup();
 
 				PostCompilerTraceEvent(CompilerEvent.SetupStageEnd, stage.Name);
 			}
@@ -479,7 +479,7 @@ namespace Mosa.Compiler.Framework
 				PostCompilerTraceEvent(CompilerEvent.FinalizationStageStart, stage.Name);
 
 				// Execute stage
-				stage.ExecutePostCompile();
+				stage.ExecuteFinalization();
 
 				PostCompilerTraceEvent(CompilerEvent.FinalizationStageEnd, stage.Name);
 			}
