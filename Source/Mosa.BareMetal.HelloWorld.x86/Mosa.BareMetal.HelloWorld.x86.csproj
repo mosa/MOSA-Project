@@ -2,27 +2,43 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4CFF6607-4D83-46E6-A1D0-EF045311C983}</ProjectGuid>
+    <ProjectGuid>{F1776FF2-A727-4FBF-B6BE-D37D6B019038}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Mosa.Kernel.BareMetal.x86</AssemblyName>
+    <AssemblyName>Mosa.BareMetal.HelloWorld.x86</AssemblyName>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
-    <RootNamespace>Mosa.Kernel.BareMetal.x86</RootNamespace>
+    <RootNamespace>Mosa.BareMetal.HelloWorld.x86</RootNamespace>
+    <StartupObject>Mosa.BareMetal.HelloWorld.x86.Boot</StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
     <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -41,7 +57,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
     <DebugType>full</DebugType>
-    <NoWarn>0219,0414</NoWarn>
     <Prefer32Bit>false</Prefer32Bit>
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
@@ -66,31 +81,32 @@
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="GDT\GDTTable.cs" />
-    <Compile Include="PIC.cs" />
-    <Compile Include="PlatformPlug.cs" />
-    <Compile Include="Console.cs" />
-    <Compile Include="Screen.cs" />
-    <Compile Include="SSE.cs" />
+    <Compile Include="Boot.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.Kernel.BareMetal.x86\Mosa.Kernel.BareMetal.x86.csproj">
+      <Project>{4cff6607-4d83-46e6-a1d0-ef045311c983}</Project>
+      <Name>Mosa.Kernel.BareMetal.x86</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Kernel.BareMetal\Mosa.Kernel.BareMetal.csproj">
       <Project>{4cff6607-4d83-46e6-a1d0-ef045311c984}</Project>
       <Name>Mosa.Kernel.BareMetal</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Kernel.x86\Mosa.Kernel.x86.csproj">
-      <Project>{FF099D48-3FA5-4ED6-BBA0-1497D734962A}</Project>
-      <Name>Mosa.Kernel.x86</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Runtime.x86\Mosa.Runtime.x86.csproj">
-      <Project>{a47b7998-4ee8-4af8-9373-c664fdeddc61}</Project>
-      <Name>Mosa.Runtime.x86</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj">
-      <Project>{77961864-db33-4189-804f-d774022c96e2}</Project>
-      <Name>Mosa.Runtime</Name>
-    </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
