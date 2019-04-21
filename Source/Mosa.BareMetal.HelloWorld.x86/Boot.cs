@@ -14,6 +14,8 @@ namespace Mosa.BareMetal.HelloWorld.x86
 		/// </summary>
 		public static void Main()
 		{
+			while (true)
+			{ }
 		}
 	}
 }
