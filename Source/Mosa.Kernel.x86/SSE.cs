@@ -10,7 +10,7 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class SSE
 	{
-		[Plug("Mosa.Runtime.StartUp::InitalizeProcessor1")]
+		[Plug("Mosa.Runtime.StartUp::KernalInitialization")]
 		public static void Setup()
 		{
 			Native.SetCR0(Native.GetCR0() & 0xFFFB | 0x2);
