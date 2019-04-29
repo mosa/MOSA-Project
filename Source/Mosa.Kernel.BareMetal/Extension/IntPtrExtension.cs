@@ -132,5 +132,10 @@ namespace Mosa.Kernel.BareMetal.Extension
 		{
 			Intrinsic.StorePointer(address, offset, value);
 		}
+
+		public static IntPtr AlignDown(this IntPtr address, uint align)
+		{
+			return new IntPtr((long)Alignment.AlignDown(address.ToInt64(), align));
+		}
 	}
 }

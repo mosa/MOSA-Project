@@ -23,8 +23,8 @@ namespace Mosa.Kernel.BareMetal.x64
 			// TODO: SSE
 		}
 
-		[Plug("Mosa.Kernel.BareMetal.Platform::GetMemoryMapLocation")]
-		public static IntPtr GetMemoryMapLocation()
+		[Plug("Mosa.Kernel.BareMetal.Platform::GetMemoryMapAddress")]
+		public static IntPtr GetMemoryMapAddress()
 		{
 			return new IntPtr(0x00007E00);
 		}
@@ -34,6 +34,12 @@ namespace Mosa.Kernel.BareMetal.x64
 		{
 			// Reserve the first 1MB
 			BootMemoryMap.SetMemoryMap(new IntPtr(0), 1024 * 1024, BootMemoryMapType.Reserved);
+		}
+
+		[Plug("Mosa.Kernel.BareMetal.Platform::GetInitialGCMemoryPool")]
+		public static (IntPtr pool, int size) GetInitialGCMemoryPool()
+		{
+			return (new IntPtr(0x03000000), 16 * 1024 * 1024); // 16MB @ 48MB
 		}
 	}
 }

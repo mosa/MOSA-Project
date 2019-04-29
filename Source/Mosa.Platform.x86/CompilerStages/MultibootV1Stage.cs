@@ -41,7 +41,7 @@ namespace Mosa.Platform.x86.CompilerStages
 			ctx.AppendInstruction(X86.MovStore32, null, multibootEAX, zero, eax);
 			ctx.AppendInstruction(X86.MovStore32, null, multibootEBX, zero, ebx);
 
-			ctx.AppendInstruction(X86.Call, null, entryPoint);
+			ctx.AppendInstruction(X86.Call, null, entryPoint);  // FUTURE: Remove line (SetupStage)
 			ctx.AppendInstruction(X86.Ret);
 
 			Compiler.CompileMethod(multibootMethod, basicBlocks);

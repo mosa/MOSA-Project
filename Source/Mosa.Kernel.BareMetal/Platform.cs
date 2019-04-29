@@ -17,13 +17,18 @@ namespace Mosa.Kernel.BareMetal
 		{
 		}
 
-		public static IntPtr GetMemoryMapLocation()
+		public static IntPtr GetMemoryMapAddress()
 		{
 			return IntPtr.Zero;
 		}
 
 		public static void UpdateBootMemoryMap()
 		{
+		}
+
+		public static (IntPtr pool, int size) GetInitialGCMemoryPool()
+		{
+			return (new IntPtr(0x0), 0);
 		}
 	}
 }

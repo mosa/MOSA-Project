@@ -33,8 +33,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		private MosaMethod typeInitializerMethod;
 
-		private readonly object _lock = new object();
-
 		#endregion Data Members
 
 		#region Construction

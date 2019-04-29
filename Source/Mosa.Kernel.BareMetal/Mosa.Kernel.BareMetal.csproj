@@ -66,6 +66,7 @@
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Alignment.cs" />
     <Compile Include="BootMemory\BootMemoryMapTable.cs" />
     <Compile Include="BootMemory\BootMemoryMapType.cs" />
     <Compile Include="Extension\IntPtrExtension.cs" />
