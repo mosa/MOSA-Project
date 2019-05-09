@@ -37,9 +37,9 @@ namespace Mosa.Kernel.BareMetal.x64
 		}
 
 		[Plug("Mosa.Kernel.BareMetal.Platform::GetInitialGCMemoryPool")]
-		public static (IntPtr pool, int size) GetInitialGCMemoryPool()
+		public static AddressRange GetInitialGCMemoryPool()
 		{
-			return (new IntPtr(0x03000000), 16 * 1024 * 1024); // 16MB @ 48MB
+			return new AddressRange(0x03000000, 16 * 1024 * 1024); // 16MB @ 48MB
 		}
 	}
 }

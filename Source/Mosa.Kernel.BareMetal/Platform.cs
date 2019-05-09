@@ -26,9 +26,23 @@ namespace Mosa.Kernel.BareMetal
 		{
 		}
 
-		public static (IntPtr pool, int size) GetInitialGCMemoryPool()
+		public static AddressRange GetInitialGCMemoryPool()
 		{
-			return (new IntPtr(0x0), 0);
+			return new AddressRange(0, 0);
+		}
+
+		public static void PageTableSetup()
+		{ }
+
+		public static void PageTableInitialize()
+		{ }
+
+		public static void PageTableMapVirtualAddressToPhysical(uint virtualAddress, uint physicalAddress, bool present = true)
+		{ }
+
+		public static IntPtr PageTableGetPhysicalAddressFromVirtual(IntPtr virtualAddress)
+		{
+			return IntPtr.Zero;
 		}
 	}
 }

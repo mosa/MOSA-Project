@@ -9,7 +9,7 @@ namespace Mosa.Kernel.BareMetal.MultibootSpecification
 	/// <summary>
 	/// Multiboot V1 Memory Map
 	/// </summary>
-	public readonly struct MultibootV1MemoryMapEntry
+	public /*readonly*/ struct MultibootV1MemoryMapEntry
 	{
 		private readonly IntPtr Entry;
 

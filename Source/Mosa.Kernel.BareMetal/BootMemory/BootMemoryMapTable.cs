@@ -5,7 +5,7 @@ using System;
 
 namespace Mosa.Kernel.BareMetal.BootMemory
 {
-	public readonly struct BootMemoryMapTable
+	public /*readonly*/ struct BootMemoryMapTable
 	{
 		private readonly IntPtr Entry;
 

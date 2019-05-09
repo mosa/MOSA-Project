@@ -6,7 +6,7 @@ using System;
 
 namespace Mosa.Kernel.BareMetal.MultibootSpecification
 {
-	public readonly struct MultibootV1
+	public /*readonly*/ struct MultibootV1
 	{
 		private static IntPtr Entry;
 

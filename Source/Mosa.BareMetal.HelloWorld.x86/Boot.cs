@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
+using Mosa.Kernel.BareMetal.x86;
 
 namespace Mosa.BareMetal.HelloWorld.x86
 {
@@ -14,6 +14,8 @@ namespace Mosa.BareMetal.HelloWorld.x86
 		/// </summary>
 		public static void Main()
 		{
+			Screen.Backspace();
+
 			while (true)
 			{ }
 		}

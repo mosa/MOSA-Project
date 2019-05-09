@@ -13,9 +13,9 @@ namespace Mosa.Kernel.BareMetal.x86
 	/// <summary>
 	/// GDT
 	/// </summary>
-	public readonly struct GDTTable
+	public /*readonly*/ struct GDTTable
 	{
-		private readonly IntPtr Entry;
+		private /*readonly*/ IntPtr Entry;
 
 		#region GDT Entry Offsets
 
@@ -62,7 +62,7 @@ namespace Mosa.Kernel.BareMetal.x86
 		{
 			var entry = Entry + (int)(6 + (index * GDTEntryOffset.TotalSize));
 
-			entry.Store16(+GDTEntryOffset.BaseLow, (ushort)(address & 0xFFFF));
+			entry.Store16(GDTEntryOffset.BaseLow, (ushort)(address & 0xFFFF));
 			entry.Store8(GDTEntryOffset.BaseMiddle, (byte)((address >> 16) & 0xFF));
 			entry.Store8(GDTEntryOffset.BaseHigh, (byte)((address >> 24) & 0xFF));
 			entry.Store16(GDTEntryOffset.LimitLow, (ushort)(limit & 0xFFFF));
