@@ -67,10 +67,6 @@
       <Project>{0FB92651-3EE8-441D-84F2-C4DFDA68E8A5}</Project>
       <Name>Mosa.Platform.ARMv6</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Platform.ESP32\Mosa.Platform.ESP32.csproj">
-      <Project>{5b45af28-3b67-4542-a0c9-947f3cdd9741}</Project>
-      <Name>Mosa.Platform.ESP32</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj">
       <Project>{f445db8e-e25a-41ef-a158-c742f14e94e4}</Project>
       <Name>Mosa.Platform.x64</Name>
