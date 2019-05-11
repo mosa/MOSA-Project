@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		#endregion Data Members
 
-		protected override void RunPostCompile()
+		protected override void Finalization()
 		{
 			if (string.IsNullOrEmpty(CompilerOptions.DebugFile))
 				return;

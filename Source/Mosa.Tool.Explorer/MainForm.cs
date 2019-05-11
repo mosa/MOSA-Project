@@ -506,7 +506,8 @@ namespace Mosa.Tool.Explorer
 				case "x86": return Platform.x86.Architecture.CreateArchitecture(Platform.x86.ArchitectureFeatureFlags.AutoDetect);
 				case "x64": return Platform.x64.Architecture.CreateArchitecture(Platform.x64.ArchitectureFeatureFlags.AutoDetect);
 				case "armv6": return Platform.ARMv6.Architecture.CreateArchitecture(Platform.ARMv6.ArchitectureFeatureFlags.AutoDetect);
-				case "esp32": return Platform.ESP32.Architecture.CreateArchitecture(Platform.ESP32.ArchitectureFeatureFlags.AutoDetect);
+
+				//case "esp32": return Platform.ESP32.Architecture.CreateArchitecture(Platform.ESP32.ArchitectureFeatureFlags.AutoDetect);
 				default: return Platform.x86.Architecture.CreateArchitecture(Platform.x86.ArchitectureFeatureFlags.AutoDetect);
 			}
 		}

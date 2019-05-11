@@ -6,29 +6,14 @@ namespace Mosa.Runtime
 	{
 		public static void Initialize()
 		{
-			Stage1();
-			Stage2();
-			InitalizeProcessor1();
-			InitalizeProcessor2();
+			KernalInitialization();
 			SetInitialMemory();
 			InitializeAssembly();
 			InitializeRuntimeMetadata();
 			StartApplication();
 		}
 
-		public static void Stage1()
-		{
-		}
-
-		public static void Stage2()
-		{
-		}
-
-		public static void InitalizeProcessor1()
-		{
-		}
-
-		public static void InitalizeProcessor2()
+		public static void KernalInitialization()
 		{
 		}
 

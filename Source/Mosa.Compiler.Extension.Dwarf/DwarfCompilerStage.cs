@@ -14,7 +14,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 {
 	internal class DwarfCompilerStage : BaseCompilerStage
 	{
-		protected override void RunPostCompile()
+		protected override void Finalization()
 		{
 			if (Linker.CreateExtraSections == null)
 			{

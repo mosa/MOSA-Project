@@ -1,4 +1,6 @@
-﻿// Quote from 0xd4d, https://github.com/0xd4d/dnlib/issues/230:
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+// Quote from 0xd4d, https://github.com/0xd4d/dnlib/issues/230:
 // "I don't plan on making that type public ever again. If you need to use it,
 // you can just copy the source code to your project, it's not a lot of code."
 
@@ -9,13 +11,14 @@ namespace dnlib.DotNet
 	/// <summary>
 	/// Recursion counter
 	/// </summary>
-	struct RecursionCounter
+	internal struct RecursionCounter
 	{
 		/// <summary>
 		/// Max recursion count. If this is reached, we won't continue, and will use a default value.
 		/// </summary>
 		public const int MAX_RECURSION_COUNT = 100;
-		int counter;
+
+		private int counter;
 
 		/// <summary>
 		/// Gets the recursion counter

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.Linker;
-using System.IO;
 
 namespace Mosa.Compiler.Framework.CompilerStages
 {
@@ -11,7 +10,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 	public sealed class LinkerLayoutStage : BaseCompilerStage
 	{
-		protected override void RunPostCompile()
+		protected override void Finalization()
 		{
 			if (string.IsNullOrEmpty(CompilerOptions.OutputFile))
 				return;

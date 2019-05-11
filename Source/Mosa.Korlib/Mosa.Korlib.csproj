@@ -88,6 +88,7 @@
     <Compile Include="System.Runtime.CompilerServices\ExtensionAttribute.cs" />
     <Compile Include="System.Runtime.CompilerServices\RuntimeCompatibilityAttribute.cs" />
     <Compile Include="System.Runtime.CompilerServices\IntrinsicAttribute.cs" />
+    <Compile Include="System.Runtime.CompilerServices\ITuple.cs" />
     <Compile Include="System.Runtime.CompilerServices\Unsafe.cs" />
     <Compile Include="System.Runtime.CompilerServices\RuntimeHelpers.cs" />
     <Compile Include="System.Runtime.InteropServices\CallingConvention.cs" />
@@ -143,6 +144,8 @@
     <Compile Include="System\TypedReference.cs" />
     <Compile Include="System\Random.cs" />
     <Compile Include="System\TypeLoadException.cs" />
+    <Compile Include="System\Tuple.cs" />
+    <Compile Include="System\ValueTuple.cs" />
     <Compile Include="System\WaitHandle.cs" />
     <Compile Include="System\IComparable.cs" />
     <Compile Include="System\Delegate.cs" />

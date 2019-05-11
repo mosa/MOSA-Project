@@ -115,6 +115,12 @@ namespace Mosa.Runtime
 		public static extern void Store64(IntPtr address, uint offset, ulong value);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store64(IntPtr address, int offset, long value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Store64(IntPtr address, uint offset, long value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern void Store64(IntPtr address, IntPtr value);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
@@ -194,6 +200,21 @@ namespace Mosa.Runtime
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern void Store(IntPtr address, long offset, IntPtr value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void StorePointer(IntPtr address, IntPtr value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void StorePointer(IntPtr address, uint offset, IntPtr value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void StorePointer(IntPtr address, int offset, IntPtr value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void StorePointer(IntPtr address, ulong offset, IntPtr value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void StorePointer(IntPtr address, long offset, IntPtr value);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern IntPtr GetObjectAddress<T>(T obj) where T : class;

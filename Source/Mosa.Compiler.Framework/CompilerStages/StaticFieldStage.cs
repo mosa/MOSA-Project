@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCompilerStage" />
 	public sealed class StaticFieldStage : BaseCompilerStage
 	{
-		protected override void RunPostCompile()
+		protected override void Finalization()
 		{
 			foreach (var type in TypeSystem.AllTypes)
 			{

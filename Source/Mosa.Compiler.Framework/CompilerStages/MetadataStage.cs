@@ -24,12 +24,12 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		#endregion Data Members
 
-		protected override void Setup()
+		protected override void Initialization()
 		{
 			NativePatchType = (TypeLayout.NativePointerSize == 4) ? PatchType.I4 : NativePatchType = PatchType.I8;
 		}
 
-		protected override void RunPostCompile()
+		protected override void Finalization()
 		{
 			Interfaces = TypeLayout.Interfaces;
 

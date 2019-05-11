@@ -29,32 +29,23 @@ namespace Mosa.Kernel.x86
 
 		public static void Setup()
 		{
-			Runtime.Internal.MemoryClear(new IntPtr(Address.GDTTable), 6);
-			Intrinsic.Store16(new IntPtr(Address.GDTTable), (Offset.TotalSize * 3) - 1);
-			Intrinsic.Store32(new IntPtr(Address.GDTTable), 2, Address.GDTTable + 6);
+			var gdt = new IntPtr(Address.GDTTable);
+
+			Runtime.Internal.MemoryClear(gdt, 6);
+			Intrinsic.Store16(gdt, (Offset.TotalSize * 3) - 1);
+			Intrinsic.Store32(gdt, 2, Address.GDTTable + 6);
 
 			Set(0, 0, 0, 0, 0);                // Null segment
 			Set(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code segment
 			Set(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data segment
 
-			_Lgdt(Address.GDTTable);
+			SetLgdt(gdt);
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		private static void _Lgdt(uint address)
+		private static void SetLgdt(IntPtr address)
 		{
-			Native.Lgdt(address);
-		}
-
-		private static void Set(uint index, uint address, uint limit, byte access, byte granularity)
-		{
-			var entry = GetEntryLocation(index);
-			Intrinsic.Store16(entry, Offset.BaseLow, (ushort)(address & 0xFFFF));
-			Intrinsic.Store8(entry, Offset.BaseMiddle, (byte)((address >> 16) & 0xFF));
-			Intrinsic.Store8(entry, Offset.BaseHigh, (byte)((address >> 24) & 0xFF));
-			Intrinsic.Store16(entry, Offset.LimitLow, (ushort)(limit & 0xFFFF));
-			Intrinsic.Store8(entry, Offset.Granularity, (byte)(((byte)(limit >> 16) & 0x0F) | (granularity & 0xF0)));
-			Intrinsic.Store8(entry, Offset.Access, access);
+			Native.Lgdt((uint)address.ToInt32());
 		}
 
 		/// <summary>
@@ -65,6 +56,18 @@ namespace Mosa.Kernel.x86
 		private static IntPtr GetEntryLocation(uint index)
 		{
 			return new IntPtr(Address.GDTTable + 6 + (index * Offset.TotalSize));
+		}
+
+		private static void Set(uint index, uint address, uint limit, byte access, byte granularity)
+		{
+			var entry = GetEntryLocation(index);
+
+			Intrinsic.Store16(entry, Offset.BaseLow, (ushort)(address & 0xFFFF));
+			Intrinsic.Store8(entry, Offset.BaseMiddle, (byte)((address >> 16) & 0xFF));
+			Intrinsic.Store8(entry, Offset.BaseHigh, (byte)((address >> 24) & 0xFF));
+			Intrinsic.Store16(entry, Offset.LimitLow, (ushort)(limit & 0xFFFF));
+			Intrinsic.Store8(entry, Offset.Granularity, (byte)(((byte)(limit >> 16) & 0x0F) | (granularity & 0xF0)));
+			Intrinsic.Store8(entry, Offset.Access, access);
 		}
 	}
 }

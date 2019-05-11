@@ -33,8 +33,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		private MosaMethod typeInitializerMethod;
 
-		private readonly object _lock = new object();
-
 		#endregion Data Members
 
 		#region Construction
@@ -72,7 +70,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		#region Overrides
 
-		protected override void RunPreCompile()
+		protected override void Setup()
 		{
 			typeInitializerMethod = Compiler.CreateLinkerMethod(TypeInitializerName);
 
@@ -98,7 +96,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			}
 		}
 
-		protected override void RunPostCompile()
+		protected override void Finalization()
 		{
 			Compiler.CompileMethod(typeInitializerMethod, basicBlocks);
 		}

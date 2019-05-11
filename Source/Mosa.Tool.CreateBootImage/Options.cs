@@ -6,8 +6,8 @@ using Mosa.Utility.BootImage;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Linq;
+using System.Text;
 
 namespace Mosa.Tool.CreateBootImage
 {
@@ -131,11 +131,10 @@ namespace Mosa.Tool.CreateBootImage
 		{
 			StringBuilder sb = new StringBuilder();
 			sb.Append(" > Output file: ").AppendLine(options.DiskImageFileName);
-			sb.Append(" > Input file(s): ").AppendLine(string.Join(", ", new List<string>(options.IncludeFiles.Select(f=>f.SourceFileName).ToArray())));
+			sb.Append(" > Input file(s): ").AppendLine(string.Join(", ", new List<string>(options.IncludeFiles.Select(f => f.SourceFileName).ToArray())));
 			sb.Append(" > ImageFormat: ").AppendLine(options.ImageFormat.ToString());
 			sb.Append(" > FileSystem: ").AppendLine(options.FileSystem.ToString());
 			return sb.ToString();
 		}
-
 	}
 }

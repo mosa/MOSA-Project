@@ -12,12 +12,13 @@ namespace Mosa.Kernel.x86
 	{
 		public static void Setup()
 		{
+			IDT.SetInterruptHandler(null);
+
 			// Initialize GDT before IDT, because IDT Entries requires a valid Segment Selector
 			Multiboot.Setup();
 			GDT.Setup();
 
 			// At this stage, allocating memory does not work, so you are only allowed to use ValueTypes or static classes.
-			IDT.SetInterruptHandler(null);
 			Panic.Setup();
 
 			// Initialize interrupts

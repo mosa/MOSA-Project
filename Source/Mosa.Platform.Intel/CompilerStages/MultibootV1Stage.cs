@@ -81,7 +81,7 @@ namespace Mosa.Platform.Intel.CompilerStages
 		public int Height { get; set; }
 		public int Depth { get; set; }
 
-		protected override void Setup()
+		protected override void Initialization()
 		{
 			HasVideo = CompilerOptions.GetCustomOptionAsBoolean("multiboot.video", false);
 			Width = CompilerOptions.GetCustomOptionAsInteger("multiboot.width", 0);
@@ -89,7 +89,7 @@ namespace Mosa.Platform.Intel.CompilerStages
 			Depth = CompilerOptions.GetCustomOptionAsInteger("multiboot.depth", 0);
 		}
 
-		protected override void RunPreCompile()
+		protected override void Setup()
 		{
 			multibootHeader = Linker.DefineSymbol(MultibootHeaderSymbolName, SectionKind.Text, 1, 0x30);
 
@@ -108,7 +108,7 @@ namespace Mosa.Platform.Intel.CompilerStages
 			MethodScanner.MethodInvoked(initializeMethod, multibootMethod);
 		}
 
-		protected override void RunPostCompile()
+		protected override void Finalization()
 		{
 			CreateMultibootMethod();
 
