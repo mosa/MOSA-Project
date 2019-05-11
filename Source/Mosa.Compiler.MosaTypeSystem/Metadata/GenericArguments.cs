@@ -1,19 +1,24 @@
-﻿// Quote from 0xd4d, https://github.com/0xd4d/dnlib/issues/230:
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+// Quote from 0xd4d, https://github.com/0xd4d/dnlib/issues/230:
 // "I don't plan on making that type public ever again. If you need to use it,
 // you can just copy the source code to your project, it's not a lot of code."
 
 using System.Collections.Generic;
 
-namespace dnlib.DotNet {
-	struct GenericArgumentsStack {
-		readonly List<IList<TypeSig>> argsStack;
-		readonly bool isTypeVar;
+namespace dnlib.DotNet
+{
+	internal struct GenericArgumentsStack
+	{
+		private readonly List<IList<TypeSig>> argsStack;
+		private readonly bool isTypeVar;
 
 		/// <summary>
 		/// Constructor
 		/// </summary>
 		/// <param name="isTypeVar"><c>true</c> if it's for generic types, <c>false</c> if generic methods</param>
-		public GenericArgumentsStack(bool isTypeVar) {
+		public GenericArgumentsStack(bool isTypeVar)
+		{
 			argsStack = new List<IList<TypeSig>>();
 			this.isTypeVar = isTypeVar;
 		}
@@ -28,7 +33,8 @@ namespace dnlib.DotNet {
 		/// Pops generic arguments
 		/// </summary>
 		/// <returns>The popped generic arguments</returns>
-		public IList<TypeSig> Pop() {
+		public IList<TypeSig> Pop()
+		{
 			int index = argsStack.Count - 1;
 			var result = argsStack[index];
 			argsStack.RemoveAt(index);
@@ -40,9 +46,11 @@ namespace dnlib.DotNet {
 		/// </summary>
 		/// <param name="number">Generic variable number</param>
 		/// <returns>A <see cref="TypeSig"/> or <c>null</c> if none was found</returns>
-		public TypeSig Resolve(uint number) {
+		public TypeSig Resolve(uint number)
+		{
 			TypeSig result = null;
-			for (int i = argsStack.Count - 1; i >= 0; i--) {
+			for (int i = argsStack.Count - 1; i >= 0; i--)
+			{
 				var args = argsStack[i];
 				if (number >= args.Count)
 					return null;
@@ -60,9 +68,10 @@ namespace dnlib.DotNet {
 	/// <summary>
 	/// Replaces generic type/method var with its generic argument
 	/// </summary>
-	sealed class GenericArguments {
-		GenericArgumentsStack typeArgsStack = new GenericArgumentsStack(true);
-		GenericArgumentsStack methodArgsStack = new GenericArgumentsStack(false);
+	internal sealed class GenericArguments
+	{
+		private GenericArgumentsStack typeArgsStack = new GenericArgumentsStack(true);
+		private GenericArgumentsStack methodArgsStack = new GenericArgumentsStack(false);
 
 		/// <summary>
 		/// Pushes generic arguments
@@ -96,20 +105,23 @@ namespace dnlib.DotNet {
 		/// <param name="typeSig">Type signature</param>
 		/// <returns>New <see cref="TypeSig"/> which is never <c>null</c> unless
 		/// <paramref name="typeSig"/> is <c>null</c></returns>
-		public TypeSig Resolve(TypeSig typeSig) {
+		public TypeSig Resolve(TypeSig typeSig)
+		{
 			if (typeSig == null)
 				return null;
 
 			var sig = typeSig;
 
-			if (sig is GenericMVar genericMVar) {
+			if (sig is GenericMVar genericMVar)
+			{
 				var newSig = methodArgsStack.Resolve(genericMVar.Number);
 				if (newSig == null || newSig == sig)
 					return sig;
 				return newSig;
 			}
 
-			if (sig is GenericVar genericVar) {
+			if (sig is GenericVar genericVar)
+			{
 				var newSig = typeArgsStack.Resolve(genericVar.Number);
 				if (newSig == null || newSig == sig)
 					return sig;

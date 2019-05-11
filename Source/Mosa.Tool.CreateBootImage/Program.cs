@@ -49,7 +49,6 @@ namespace Mosa.Tool.CreateBootImage
 
 			try
 			{
-
 				var opt = ParseOptions(args);
 				var bootImageOptions = opt?.BootImageOptions;
 
