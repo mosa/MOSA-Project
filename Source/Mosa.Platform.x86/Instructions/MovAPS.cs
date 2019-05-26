@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Movaps : X86Instruction
 	{
-		public override int ID { get { return 239; } }
+		public override int ID { get { return 243; } }
 
 		internal Movaps()
 			: base(1, 1)

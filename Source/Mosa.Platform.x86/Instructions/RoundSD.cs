@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Roundsd : X86Instruction
 	{
-		public override int ID { get { return 286; } }
+		public override int ID { get { return 290; } }
 
 		internal Roundsd()
 			: base(1, 2)

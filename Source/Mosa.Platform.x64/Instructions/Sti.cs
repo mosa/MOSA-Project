@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Sti : X64Instruction
 	{
-		public override int ID { get { return 519; } }
+		public override int ID { get { return 529; } }
 
 		internal Sti()
 			: base(0, 0)

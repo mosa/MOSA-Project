@@ -148,27 +148,28 @@ namespace Mosa.Compiler.Framework
 				(compilerOptions.EnableInlinedMethods) ? new DeadBlockStage() : null,
 				new PromoteTemporaryVariables(),
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
-
-				//new PreciseGCStage(),
 				new StaticLoadOptimizationStage(),
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
+
+				//(compilerOptions.EnableBitTracker) ? new BitTrackerStage() : null,
 				(compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,
 				(compilerOptions.EnableLoopInvariantCodeMotion && compilerOptions.EnableSSA) ? new LoopInvariantCodeMotionStage() : null,
 				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.EnableIROptimizations) ? new IROptimizationStage() : null,
 				(compilerOptions.EnableIRLongExpansion && compilerOptions.Architecture.NativePointerSize == 4) ? new IRLongDecompositionStage() : null,
 				new LowerIRStage(),
+				(compilerOptions.EnableBitTracker) ? new BitTrackerStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableLoopInvariantCodeMotion && compilerOptions.EnableSSA) ? new LoopInvariantCodeMotionStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSSA) ? new IROptimizationStage() : null,
-				(compilerOptions.EnableSSA) ? new LeaveSSAStage() : null,
-
+				(compilerOptions.EnableSSA) ? new ExitSSAStage() : null,
+				new DeadBlockStage(),
 				new BlockMergeStage(),
 				new IRCleanupStage(),
+				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
 
 				//new StopStage(),
-				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
 				new DevirtualizeCallStage(),
 				new CallStage(),
 				new PlatformIntrinsicStage(),
@@ -178,6 +179,9 @@ namespace Mosa.Compiler.Framework
 				new StackLayoutStage(),
 				new DeadBlockStage(),
 				new BlockOrderingStage(),
+
+				//new PreciseGCStage(),
+
 				new CodeGenerationStage(compilerOptions.EmitBinary),
 
 				(compilerOptions.EmitBinary) ? new ProtectedRegionLayoutStage() : null,

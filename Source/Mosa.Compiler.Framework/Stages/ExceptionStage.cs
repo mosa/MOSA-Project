@@ -269,19 +269,18 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var block in BasicBlocks)
 			{
-				var context = new Context(block.Last);
+				var node = block.BeforeLast;
 
-				while (context.IsEmpty
-					|| context.IsBlockEndInstruction
-					|| context.Instruction == IRInstruction.Flow
-					|| context.Instruction == IRInstruction.GotoLeaveTarget)
+				while (node.IsEmptyOrNop
+					|| node.Instruction == IRInstruction.Flow
+					|| node.Instruction == IRInstruction.GotoLeaveTarget)
 				{
-					context.GotoPrevious();
+					node = node.Previous;
 				}
 
-				if (context.Instruction == IRInstruction.SetLeaveTarget)
+				if (node.Instruction == IRInstruction.SetLeaveTarget)
 				{
-					leaveTargets.Add(new Tuple<BasicBlock, BasicBlock>(context.BranchTargets[0], block));
+					leaveTargets.Add(new Tuple<BasicBlock, BasicBlock>(node.BranchTargets[0], block));
 				}
 			}
 

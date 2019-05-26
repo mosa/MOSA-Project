@@ -79,22 +79,22 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Path.Combine(targetPath, @"Mosa.Platform.ARMv6\Instructions")
 			);
 
-			new BuildESP32(
-				Path.Combine(dataPath, @"ESP32Instructions.json"),
-				Path.Combine(targetPath, @"Mosa.Platform.ESP32\"),
-				"ESP32.cs"
-			);
+			//new BuildESP32(
+			//	Path.Combine(dataPath, @"ESP32Instructions.json"),
+			//	Path.Combine(targetPath, @"Mosa.Platform.ESP32\"),
+			//	"ESP32.cs"
+			//);
 
-			new BuildESP32Instructions(
-				Path.Combine(dataPath, @"ESP32Instructions.json"),
-				Path.Combine(targetPath, @"Mosa.Platform.ESP32\"),
-				"ESP32Instructions.cs"
-			);
+			//new BuildESP32Instructions(
+			//	Path.Combine(dataPath, @"ESP32Instructions.json"),
+			//	Path.Combine(targetPath, @"Mosa.Platform.ESP32\"),
+			//	"ESP32Instructions.cs"
+			//);
 
-			new BuildESP32InstructionFiles(
-				Path.Combine(dataPath, @"ESP32Instructions.json"),
-				Path.Combine(targetPath, @"Mosa.Platform.ESP32\Instructions")
-			);
+			//new BuildESP32InstructionFiles(
+			//	Path.Combine(dataPath, @"ESP32Instructions.json"),
+			//	Path.Combine(targetPath, @"Mosa.Platform.ESP32\Instructions")
+			//);
 		}
 	}
 }

@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Invlpg : X86Instruction
 	{
-		public override int ID { get { return 227; } }
+		public override int ID { get { return 231; } }
 
 		internal Invlpg()
 			: base(0, 1)

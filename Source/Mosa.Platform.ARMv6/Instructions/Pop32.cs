@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Pop32 : ARMv6Instruction
 	{
-		public override int ID { get { return 655; } }
+		public override int ID { get { return 665; } }
 
 		internal Pop32()
 			: base(1, 3)

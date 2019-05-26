@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Nop32 : ARMv6Instruction
 	{
-		public override int ID { get { return 653; } }
+		public override int ID { get { return 663; } }
 
 		internal Nop32()
 			: base(1, 3)

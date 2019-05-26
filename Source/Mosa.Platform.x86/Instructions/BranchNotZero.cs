@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class BranchNotZero : X86Instruction
 	{
-		public override int ID { get { return 317; } }
+		public override int ID { get { return 321; } }
 
 		internal BranchNotZero()
 			: base(0, 0)

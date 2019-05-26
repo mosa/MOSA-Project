@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Cli : X86Instruction
 	{
-		public override int ID { get { return 202; } }
+		public override int ID { get { return 206; } }
 
 		internal Cli()
 			: base(0, 0)

@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Lock : X64Instruction
 	{
-		public override int ID { get { return 433; } }
+		public override int ID { get { return 443; } }
 
 		internal Lock()
 			: base(0, 0)

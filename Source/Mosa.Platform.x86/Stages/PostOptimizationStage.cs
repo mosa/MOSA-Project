@@ -6,12 +6,12 @@ using static Mosa.Platform.x86.Stages.OptimizationStage;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	/// X86 Optimization Stage
+	/// X86 Post Optimization Stage
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.BaseTransformationStage" />
 	public sealed class PostOptimizationStage : BaseTransformationStage
 	{
-		private Counter ZeroToXorSubstitutionCount = new Counter("X86.Optimizations.ZeroToXorSubstitution");
+		private Counter ZeroToXorSubstitutionCount = new Counter("X86.PostOptimizationStage.ZeroToXorSubstitution");
 
 		protected override void PopulateVisitationDictionary()
 		{

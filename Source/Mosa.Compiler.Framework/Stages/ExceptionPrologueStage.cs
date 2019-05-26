@@ -71,11 +71,11 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				for (var node = block.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
 				{
-					if (node.IsEmpty)
+					if (node.IsEmptyOrNop)
 						continue;
 
 					if (!(node.Instruction is CIL.LeaveInstruction))
-						continue;
+						continue;   // FUTURE: Could this be a break instruction instead?
 
 					var target = node.BranchTargets[0];
 

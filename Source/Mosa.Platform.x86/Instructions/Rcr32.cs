@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Rcr32 : X86Instruction
 	{
-		public override int ID { get { return 284; } }
+		public override int ID { get { return 288; } }
 
 		internal Rcr32()
 			: base(1, 2)

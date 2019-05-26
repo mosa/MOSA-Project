@@ -92,6 +92,11 @@ namespace Mosa.Compiler.Framework
 		public bool EnableIRLongExpansion { get; set; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether [enable bit estimator].
+		/// </summary>
+		public bool EnableBitTracker { get; set; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether [enable platform optimizations].
 		/// </summary>
 		public bool EnablePlatformOptimizations { get; set; }
@@ -328,6 +333,7 @@ namespace Mosa.Compiler.Framework
 			EnableLoopInvariantCodeMotion = true;
 			EnablePlatformOptimizations = true;
 			EnableMethodScanner = false;
+			EnableBitTracker = true;
 		}
 	}
 }

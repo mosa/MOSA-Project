@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Lsl32 : ARMv6Instruction
 	{
-		public override int ID { get { return 646; } }
+		public override int ID { get { return 656; } }
 
 		internal Lsl32()
 			: base(1, 3)

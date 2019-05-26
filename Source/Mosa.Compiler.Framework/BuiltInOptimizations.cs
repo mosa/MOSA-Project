@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework
@@ -575,9 +576,9 @@ namespace Mosa.Compiler.Framework
 			if (!op2.IsResolvedConstant)
 				return null;
 
-			if (IsPowerOfTwo(op2.ConstantUnsignedLongInteger))
+			if (BitTwiddling.IsPowerOfTwo(op2.ConstantUnsignedLongInteger))
 			{
-				int shift = GetPowerOfTwo(op2.ConstantUnsignedLongInteger);
+				int shift = BitTwiddling.GetPowerOfTwo(op2.ConstantUnsignedLongInteger);
 
 				if (shift < 32 || (shift < 64 && result.Is64BitInteger))
 				{
@@ -610,9 +611,9 @@ namespace Mosa.Compiler.Framework
 			if (op2.IsConstantZero || op2.IsVirtualRegister)
 				return null;
 
-			if ((node.Instruction == IRInstruction.DivUnsigned32 || node.Instruction == IRInstruction.DivUnsigned64) && IsPowerOfTwo(op2.ConstantUnsignedLongInteger))
+			if ((node.Instruction == IRInstruction.DivUnsigned32 || node.Instruction == IRInstruction.DivUnsigned64) && BitTwiddling.IsPowerOfTwo(op2.ConstantUnsignedLongInteger))
 			{
-				int shift = GetPowerOfTwo(op2.ConstantUnsignedLongInteger);
+				int shift = BitTwiddling.GetPowerOfTwo(op2.ConstantUnsignedLongInteger);
 
 				if (shift < 32 || (shift < 64 && result.Is64BitInteger))
 				{
@@ -645,10 +646,10 @@ namespace Mosa.Compiler.Framework
 			if (op2.ConstantUnsignedLongInteger == 0)
 				return null;
 
-			if (!IsPowerOfTwo(op2.ConstantUnsignedLongInteger))
+			if (!BitTwiddling.IsPowerOfTwo(op2.ConstantUnsignedLongInteger))
 				return null;
 
-			int power = GetPowerOfTwo(op2.ConstantUnsignedLongInteger);
+			int power = BitTwiddling.GetPowerOfTwo(op2.ConstantUnsignedLongInteger);
 
 			var mask = (1 << power) - 1;
 
@@ -798,23 +799,6 @@ namespace Mosa.Compiler.Framework
 		private static ulong SignExtend32x64(uint value)
 		{
 			return ((value & 0x80000000) == 0) ? value : (value | 0xFFFFFFFF00000000ul);
-		}
-
-		private static bool IsPowerOfTwo(ulong n)
-		{
-			return (n & (n - 1)) == 0;
-		}
-
-		private static int GetPowerOfTwo(ulong n)
-		{
-			int bits = 0;
-			while (n > 0)
-			{
-				bits++;
-				n >>= 1;
-			}
-
-			return bits - 1;
 		}
 
 		private static bool ValidateSSAForm(Operand operand)

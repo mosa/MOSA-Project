@@ -20,18 +20,23 @@ namespace Mosa.Compiler.Framework.Stages
 		private Dictionary<Operand, Operand[]> ssaOperands;
 		private Dictionary<BasicBlock, SimpleFastDominance> blockAnalysis;
 		private Dictionary<Operand, List<BasicBlock>> assignments;
+		private Dictionary<Operand, Operand> parentOperand;
 
-		private Counter InstructionCount = new Counter("EnterSSA.IRInstructions");
+		private Counter InstructionCount = new Counter("EnterSSAStage.IRInstructions");
 
 		private TraceLog trace;
 
 		protected override void Initialize()
 		{
+			Register(InstructionCount);
+		}
+
+		protected override void Setup()
+		{
 			ssaOperands = new Dictionary<Operand, Operand[]>();
 			blockAnalysis = new Dictionary<BasicBlock, SimpleFastDominance>();
 			assignments = new Dictionary<Operand, List<BasicBlock>>();
-
-			Register(InstructionCount);
+			parentOperand = new Dictionary<Operand, Operand>();
 		}
 
 		protected override void Run()
@@ -43,7 +48,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (HasProtectedRegions)
 				return;
 
-			trace = CreateTraceLog(6);
+			trace = CreateTraceLog(8);
 
 			foreach (var headBlock in BasicBlocks.HeadBlocks)
 			{
@@ -61,11 +66,13 @@ namespace Mosa.Compiler.Framework.Stages
 		protected override void Finish()
 		{
 			// Clean up
+			trace = null;
 			variables = null;
 			counts = null;
-			ssaOperands.Clear();
-			assignments.Clear();
-			blockAnalysis.Clear();
+			ssaOperands = null;
+			assignments = null;
+			blockAnalysis = null;
+			parentOperand = null;
 		}
 
 		private void EnterSSA()
@@ -132,8 +139,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (ssaOperand == null)
 			{
-				ssaOperand = Operand.CreateSSA(operand, version);
+				ssaOperand = version == 0 ? operand : AllocateVirtualRegister(operand.Type);
 				ssaArray[version] = ssaOperand;
+
+				parentOperand.Add(ssaOperand, operand);
 			}
 
 			return ssaOperand;
@@ -230,6 +239,9 @@ namespace Mosa.Compiler.Framework.Stages
 						if (op == null || !op.IsVirtualRegister)
 							continue;
 
+						if (!variables.ContainsKey(op))
+							AllStopWithException("");
+
 						Debug.Assert(variables.ContainsKey(op), $"{op} is not in dictionary [block = {block}]");
 
 						var version = variables[op].Peek();
@@ -268,7 +280,6 @@ namespace Mosa.Compiler.Framework.Stages
 			// Update PHIs in successor blocks
 			foreach (var s in block.NextBlocks)
 			{
-				// index does not change between this stage and PhiPlacementStage since the block list order does not change
 				var index = WhichPredecessor(s, block);
 
 				for (var node = s.First.Next; !node.IsBlockEndInstruction; node = node.Next)
@@ -303,13 +314,15 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (node.Result?.IsVirtualRegister == true)
 				{
-					var op = node.Result.SSAParent;
+					//var op = node.Result.SSAParent;
+					var op = parentOperand[node.Result];
 					var index = variables[op].Pop();
 				}
 
 				if (node.Result2?.IsVirtualRegister == true)
 				{
-					var op = node.Result2.SSAParent;
+					//var op = node.Result2.SSAParent;
+					var op = parentOperand[node.Result2];
 					var index = variables[op].Pop();
 				}
 			}

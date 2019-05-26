@@ -100,6 +100,12 @@ namespace Mosa.Utility.Launcher
 		[Option("value-numbering-off")]
 		public bool ValueNumberingFalse { set { EnableValueNumbering = false; } }
 
+		[Option("bit-tracker")]
+		public bool EnableBitTracker { get; set; }
+
+		[Option("bit-tracker-off")]
+		public bool EnableBitTrackerFalse { set { EnableBitTracker = false; } }
+
 		public int InlinedIRMaximum { get; set; }
 
 		[Option("inline-level")]
@@ -116,6 +122,7 @@ namespace Mosa.Utility.Launcher
 				EnableIRLongExpansion = false;
 				EnableSparseConditionalConstantPropagation = false;
 				EnableValueNumbering = false;
+				EnableBitTracker = false;
 			}
 		}
 
@@ -383,6 +390,7 @@ namespace Mosa.Utility.Launcher
 			EnableIRLongExpansion = true;
 			TwoPassOptimizations = true;
 			EnableValueNumbering = true;
+			EnableBitTracker = true;
 			MultibootSpecification = MultibootSpecification.V1;
 			PlugKorlib = true;
 		}

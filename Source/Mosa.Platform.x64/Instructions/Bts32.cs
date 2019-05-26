@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Bts32 : X64Instruction
 	{
-		public override int ID { get { return 384; } }
+		public override int ID { get { return 394; } }
 
 		internal Bts32()
 			: base(1, 2)

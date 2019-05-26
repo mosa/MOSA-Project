@@ -41,6 +41,9 @@ namespace Mosa.Tool.Explorer
 		private bool DirtyLogDropDown = true;
 		private bool DirtyLog = true;
 
+		private string LastAssemblyFilename = null;
+		private string LastIncludeDirectory = null;
+
 		public MainForm()
 		{
 			InitializeComponent();
@@ -232,6 +235,7 @@ namespace Mosa.Tool.Explorer
 				cbPlatform.SelectedIndex = 1;
 
 			var files = (IList<string>)options.Files;
+
 			if (files.Count == 1)
 			{
 				string file = files[0];
@@ -249,13 +253,15 @@ namespace Mosa.Tool.Explorer
 
 		public void LoadAssembly(string filename, string includeDirectory = null)
 		{
+			LastAssemblyFilename = filename;
+			LastIncludeDirectory = includeDirectory;
+
 			ClearAllLogs();
+			methodStore.Clear();
 
 			LoadAssembly(filename, cbPlatform.Text, includeDirectory);
 
 			CreateTree();
-
-			methodStore.Clear();
 
 			SetStatus("Assemblies Loaded!");
 		}
@@ -455,6 +461,7 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.EnableMethodScanner = cbEnableMethodScanner.Checked;
 			Compiler.CompilerOptions.TraceLevel = 8;
 			Compiler.CompilerOptions.LinkerFormatType = LinkerFormatType.Elf32;
+			Compiler.CompilerOptions.EnableBitTracker = true; // FUTURE
 
 			Compiler.CompilerTrace.SetTraceListener(this);
 		}
@@ -756,16 +763,16 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.AddSourceFile("Mosa.Plug.Korlib.dll");
 			Compiler.CompilerOptions.AddSourceFile("Mosa.Plug.Korlib." + platform + ".dll");
 
-			var moduleLoader = new MosaModuleLoader();
+			//var moduleLoader = new MosaModuleLoader();
 
-			moduleLoader.AddSearchPaths(Compiler.CompilerOptions.SearchPaths);
-			moduleLoader.LoadModuleFromFiles(Compiler.CompilerOptions.SourceFiles);
+			//moduleLoader.AddSearchPaths(Compiler.CompilerOptions.SearchPaths);
+			//moduleLoader.LoadModuleFromFiles(Compiler.CompilerOptions.SourceFiles);
 
-			var metadata = moduleLoader.CreateMetadata();
+			//var metadata = moduleLoader.CreateMetadata();
 
-			var typeSystem = TypeSystem.Load(metadata);
+			//var typeSystem = TypeSystem.Load(metadata);
 
-			Compiler.Load(typeSystem);
+			Compiler.Load();
 		}
 
 		private void ShowCodeForm()
@@ -917,6 +924,8 @@ namespace Mosa.Tool.Explorer
 
 		private void CbPlatform_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			// reload assembly
+			LoadAssembly(LastAssemblyFilename, LastIncludeDirectory);
 		}
 
 		private void showSizesToolStripMenuItem_Click(object sender, EventArgs e)
