@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Sti : X86Instruction
 	{
-		public override int ID { get { return 294; } }
+		public override int ID { get { return 298; } }
 
 		internal Sti()
 			: base(0, 0)

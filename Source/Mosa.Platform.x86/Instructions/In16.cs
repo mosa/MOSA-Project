@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class In16 : X86Instruction
 	{
-		public override int ID { get { return 223; } }
+		public override int ID { get { return 227; } }
 
 		internal In16()
 			: base(1, 1)

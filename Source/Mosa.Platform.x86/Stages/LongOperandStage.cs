@@ -21,6 +21,8 @@ namespace Mosa.Platform.x86.Stages
 		protected override void PopulateVisitationDictionary()
 		{
 			AddVisitation(IRInstruction.Add64, Add64);
+			AddVisitation(IRInstruction.BitCopyFloatR8ToInt64, BitCopyFloatR8ToInt64);
+			AddVisitation(IRInstruction.BitCopyInt64ToFloatR8, BitCopyInt64ToFloatR8);
 			AddVisitation(IRInstruction.ArithShiftRight64, ArithShiftRight64);
 			AddVisitation(IRInstruction.Call, Call);
 			AddVisitation(IRInstruction.CompareInt32x64, CompareInt32x64);
@@ -135,6 +137,26 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[5].AppendInstruction(X86.Mov32, resultHigh, v2);
 			newBlocks[5].AppendInstruction(X86.Mov32, resultLow, v1);
 			newBlocks[5].AppendInstruction(X86.Jmp, nextBlock.Block);
+		}
+
+		private void BitCopyFloatR8ToInt64(Context context)
+		{
+			var operand1 = context.Operand1;
+
+			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
+
+			context.SetInstruction(X86.Movd, resultLow, operand1);
+			context.AppendInstruction(X86.Pextrd32, resultHigh, operand1, CreateConstant(1));
+		}
+
+		private void BitCopyInt64ToFloatR8(Context context)
+		{
+			var result = context.Result;
+
+			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
+
+			context.SetInstruction(X86.Movd, result, op1L);
+			context.AppendInstruction(X86.Pextrd32, result, op1H, CreateConstant(1));
 		}
 
 		private void Call(Context context)
@@ -295,14 +317,14 @@ namespace Mosa.Platform.x86.Stages
 
 		private void GetHigh64(Context context)
 		{
-			SplitLongOperand(context.Operand1, out Operand op0L, out Operand op0H);
+			SplitLongOperand(context.Operand1, out Operand _, out Operand op0H);
 
 			context.SetInstruction(X86.Mov32, context.Result, op0H);
 		}
 
 		private void GetLow64(Context context)
 		{
-			SplitLongOperand(context.Operand1, out Operand op0L, out Operand op0H);
+			SplitLongOperand(context.Operand1, out Operand op0L, out Operand _);
 
 			context.SetInstruction(X86.Mov32, context.Result, op0L);
 		}

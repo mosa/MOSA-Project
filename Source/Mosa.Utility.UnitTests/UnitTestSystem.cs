@@ -352,7 +352,7 @@ namespace Mosa.Utility.UnitTests
 
 			sb.Append(": ");
 
-			sb.Append(unitTest.MethodName);
+			sb.Append($"{unitTest.MethodTypeName}::{unitTest.MethodName}");
 
 			sb.Append("(");
 

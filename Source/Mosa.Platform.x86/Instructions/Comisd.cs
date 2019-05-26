@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Comisd : X86Instruction
 	{
-		public override int ID { get { return 205; } }
+		public override int ID { get { return 209; } }
 
 		internal Comisd()
 			: base(0, 2)

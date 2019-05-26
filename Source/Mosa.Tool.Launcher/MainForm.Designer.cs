@@ -41,6 +41,7 @@
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.tsStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.cbGenerateCompilerTime = new MetroFramework.Controls.MetroCheckBox();
             this.cbGenerateDebugInfoFile = new MetroFramework.Controls.MetroCheckBox();
             this.cbGenerateASMFile = new MetroFramework.Controls.MetroCheckBox();
             this.cbGenerateMapFile = new MetroFramework.Controls.MetroCheckBox();
@@ -71,6 +72,7 @@
             this.lbDestinationDirectory = new MetroFramework.Controls.MetroLabel();
             this.label3 = new MetroFramework.Controls.MetroLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cbBitTracker = new MetroFramework.Controls.MetroCheckBox();
             this.cbValueNumbering = new MetroFramework.Controls.MetroCheckBox();
             this.cbTwoPassOptimizations = new MetroFramework.Controls.MetroCheckBox();
             this.cbIRLongExpansion = new MetroFramework.Controls.MetroCheckBox();
@@ -79,6 +81,8 @@
             this.cbEnableIROptimizations = new MetroFramework.Controls.MetroCheckBox();
             this.cbEnableSSA = new MetroFramework.Controls.MetroCheckBox();
             this.tabAdvanced = new MetroFramework.Controls.MetroTabPage();
+            this.groupBox16 = new System.Windows.Forms.GroupBox();
+            this.cbGenerateNASMFile = new MetroFramework.Controls.MetroCheckBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.cbDebugConnectionOption = new MetroFramework.Controls.MetroComboBox();
             this.label8 = new MetroFramework.Controls.MetroLabel();
@@ -125,9 +129,6 @@
             this.rtbOutput = new System.Windows.Forms.RichTextBox();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.groupBox16 = new System.Windows.Forms.GroupBox();
-            this.cbGenerateNASMFile = new MetroFramework.Controls.MetroCheckBox();
-            this.cbGenerateCompilerTime = new MetroFramework.Controls.MetroCheckBox();
             this.tbApplicationLocations.SuspendLayout();
             this.tabOptions.SuspendLayout();
             this.groupBox12.SuspendLayout();
@@ -139,6 +140,7 @@
             this.groupBox3.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.tabAdvanced.SuspendLayout();
+            this.groupBox16.SuspendLayout();
             this.groupBox5.SuspendLayout();
             this.groupBox15.SuspendLayout();
             this.groupBox14.SuspendLayout();
@@ -154,7 +156,6 @@
             this.groupBox7.SuspendLayout();
             this.tabCounters.SuspendLayout();
             this.tabOutput.SuspendLayout();
-            this.groupBox16.SuspendLayout();
             this.SuspendLayout();
             // 
             // openFileDialog1
@@ -169,7 +170,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar1.Location = new System.Drawing.Point(0, 63);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(663, 20);
+            this.progressBar1.Size = new System.Drawing.Size(665, 20);
             this.progressBar1.Step = 1;
             this.progressBar1.Style = MetroFramework.MetroColorStyle.Blue;
             this.progressBar1.TabIndex = 3;
@@ -193,7 +194,7 @@
             this.tbApplicationLocations.Multiline = true;
             this.tbApplicationLocations.Name = "tbApplicationLocations";
             this.tbApplicationLocations.SelectedIndex = 0;
-            this.tbApplicationLocations.Size = new System.Drawing.Size(663, 430);
+            this.tbApplicationLocations.Size = new System.Drawing.Size(665, 446);
             this.tbApplicationLocations.Style = MetroFramework.MetroColorStyle.Blue;
             this.tbApplicationLocations.TabIndex = 22;
             this.tbApplicationLocations.UseSelectable = true;
@@ -214,7 +215,7 @@
             this.tabOptions.Location = new System.Drawing.Point(4, 22);
             this.tabOptions.Margin = new System.Windows.Forms.Padding(0);
             this.tabOptions.Name = "tabOptions";
-            this.tabOptions.Size = new System.Drawing.Size(655, 404);
+            this.tabOptions.Size = new System.Drawing.Size(657, 420);
             this.tabOptions.TabIndex = 0;
             this.tabOptions.Text = "Compile Options";
             this.tabOptions.VerticalScrollbarBarColor = true;
@@ -229,7 +230,7 @@
             this.groupBox12.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox12.Location = new System.Drawing.Point(264, 312);
             this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(158, 65);
+            this.groupBox12.Size = new System.Drawing.Size(158, 83);
             this.groupBox12.TabIndex = 30;
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = "Misc Options:";
@@ -269,9 +270,9 @@
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsStatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 382);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 398);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Size = new System.Drawing.Size(655, 22);
+            this.statusStrip1.Size = new System.Drawing.Size(657, 22);
             this.statusStrip1.TabIndex = 32;
             this.statusStrip1.Text = "statusStrip1";
             // 
@@ -294,6 +295,18 @@
             this.groupBox2.TabIndex = 29;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Diagnostic Output:";
+            // 
+            // cbGenerateCompilerTime
+            // 
+            this.cbGenerateCompilerTime.AutoSize = true;
+            this.cbGenerateCompilerTime.Location = new System.Drawing.Point(6, 61);
+            this.cbGenerateCompilerTime.Name = "cbGenerateCompilerTime";
+            this.cbGenerateCompilerTime.Size = new System.Drawing.Size(119, 15);
+            this.cbGenerateCompilerTime.Style = MetroFramework.MetroColorStyle.Blue;
+            this.cbGenerateCompilerTime.TabIndex = 49;
+            this.cbGenerateCompilerTime.Text = "Compile Time File";
+            this.cbGenerateCompilerTime.UseCustomBackColor = true;
+            this.cbGenerateCompilerTime.UseSelectable = true;
             // 
             // cbGenerateDebugInfoFile
             // 
@@ -344,14 +357,14 @@
             this.groupBox6.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox6.Location = new System.Drawing.Point(428, 203);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(217, 174);
+            this.groupBox6.Size = new System.Drawing.Size(219, 192);
             this.groupBox6.TabIndex = 28;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Virtual Machine Emulator:";
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(10, 140);
+            this.button1.Location = new System.Drawing.Point(10, 163);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(168, 23);
             this.button1.TabIndex = 28;
@@ -396,7 +409,7 @@
             // cbExitOnLaunch
             // 
             this.cbExitOnLaunch.AutoSize = true;
-            this.cbExitOnLaunch.Location = new System.Drawing.Point(10, 119);
+            this.cbExitOnLaunch.Location = new System.Drawing.Point(10, 142);
             this.cbExitOnLaunch.Name = "cbExitOnLaunch";
             this.cbExitOnLaunch.Size = new System.Drawing.Size(109, 15);
             this.cbExitOnLaunch.Style = MetroFramework.MetroColorStyle.Blue;
@@ -435,7 +448,7 @@
             this.groupBox4.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox4.Location = new System.Drawing.Point(5, 7);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(640, 70);
+            this.groupBox4.Size = new System.Drawing.Size(642, 70);
             this.groupBox4.TabIndex = 25;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Source:";
@@ -504,7 +517,7 @@
             this.groupBox3.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox3.Location = new System.Drawing.Point(5, 82);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(640, 115);
+            this.groupBox3.Size = new System.Drawing.Size(642, 115);
             this.groupBox3.TabIndex = 24;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Output:";
@@ -716,6 +729,7 @@
             // groupBox1
             // 
             this.groupBox1.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox1.Controls.Add(this.cbBitTracker);
             this.groupBox1.Controls.Add(this.cbValueNumbering);
             this.groupBox1.Controls.Add(this.cbTwoPassOptimizations);
             this.groupBox1.Controls.Add(this.cbIRLongExpansion);
@@ -726,10 +740,24 @@
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(5, 203);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(253, 174);
+            this.groupBox1.Size = new System.Drawing.Size(253, 192);
             this.groupBox1.TabIndex = 22;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Optimizations:";
+            // 
+            // cbBitTracker
+            // 
+            this.cbBitTracker.AutoSize = true;
+            this.cbBitTracker.Checked = true;
+            this.cbBitTracker.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbBitTracker.Location = new System.Drawing.Point(6, 165);
+            this.cbBitTracker.Name = "cbBitTracker";
+            this.cbBitTracker.Size = new System.Drawing.Size(78, 15);
+            this.cbBitTracker.Style = MetroFramework.MetroColorStyle.Blue;
+            this.cbBitTracker.TabIndex = 13;
+            this.cbBitTracker.Text = "Bit Tracker";
+            this.cbBitTracker.UseCustomBackColor = true;
+            this.cbBitTracker.UseSelectable = true;
             // 
             // cbValueNumbering
             // 
@@ -842,13 +870,37 @@
             this.tabAdvanced.Location = new System.Drawing.Point(4, 22);
             this.tabAdvanced.Name = "tabAdvanced";
             this.tabAdvanced.Padding = new System.Windows.Forms.Padding(3);
-            this.tabAdvanced.Size = new System.Drawing.Size(655, 404);
+            this.tabAdvanced.Size = new System.Drawing.Size(657, 420);
             this.tabAdvanced.TabIndex = 4;
             this.tabAdvanced.Text = "Advanced Options";
             this.tabAdvanced.UseVisualStyleBackColor = true;
             this.tabAdvanced.VerticalScrollbarBarColor = true;
             this.tabAdvanced.VerticalScrollbarHighlightOnWheel = false;
             this.tabAdvanced.VerticalScrollbarSize = 10;
+            // 
+            // groupBox16
+            // 
+            this.groupBox16.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.groupBox16.Controls.Add(this.cbGenerateNASMFile);
+            this.groupBox16.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox16.Location = new System.Drawing.Point(220, 148);
+            this.groupBox16.Name = "groupBox16";
+            this.groupBox16.Size = new System.Drawing.Size(206, 112);
+            this.groupBox16.TabIndex = 49;
+            this.groupBox16.TabStop = false;
+            this.groupBox16.Text = "Diagnostic Output:";
+            // 
+            // cbGenerateNASMFile
+            // 
+            this.cbGenerateNASMFile.AutoSize = true;
+            this.cbGenerateNASMFile.Location = new System.Drawing.Point(6, 21);
+            this.cbGenerateNASMFile.Name = "cbGenerateNASMFile";
+            this.cbGenerateNASMFile.Size = new System.Drawing.Size(78, 15);
+            this.cbGenerateNASMFile.Style = MetroFramework.MetroColorStyle.Blue;
+            this.cbGenerateNASMFile.TabIndex = 48;
+            this.cbGenerateNASMFile.Text = "NASM File";
+            this.cbGenerateNASMFile.UseCustomBackColor = true;
+            this.cbGenerateNASMFile.UseSelectable = true;
             // 
             // groupBox5
             // 
@@ -1082,7 +1134,7 @@
             this.tabFiles.Controls.Add(this.panelAdditionalFiles);
             this.tabFiles.Location = new System.Drawing.Point(4, 22);
             this.tabFiles.Name = "tabFiles";
-            this.tabFiles.Size = new System.Drawing.Size(655, 404);
+            this.tabFiles.Size = new System.Drawing.Size(657, 420);
             this.tabFiles.TabIndex = 5;
             this.tabFiles.Text = "Included Files";
             // 
@@ -1094,7 +1146,7 @@
             this.panelAdditionalFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelAdditionalFiles.Location = new System.Drawing.Point(0, 0);
             this.panelAdditionalFiles.Name = "panelAdditionalFiles";
-            this.panelAdditionalFiles.Size = new System.Drawing.Size(655, 404);
+            this.panelAdditionalFiles.Size = new System.Drawing.Size(657, 420);
             this.panelAdditionalFiles.TabIndex = 23;
             // 
             // dataGridView1
@@ -1110,7 +1162,7 @@
             // btnRemoveFiles
             // 
             this.btnRemoveFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemoveFiles.Location = new System.Drawing.Point(627, 26);
+            this.btnRemoveFiles.Location = new System.Drawing.Point(629, 42);
             this.btnRemoveFiles.Name = "btnRemoveFiles";
             this.btnRemoveFiles.Size = new System.Drawing.Size(25, 25);
             this.btnRemoveFiles.TabIndex = 30;
@@ -1121,7 +1173,7 @@
             // btnAddFiles
             // 
             this.btnAddFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddFiles.Location = new System.Drawing.Point(627, -5);
+            this.btnAddFiles.Location = new System.Drawing.Point(629, 11);
             this.btnAddFiles.Name = "btnAddFiles";
             this.btnAddFiles.Size = new System.Drawing.Size(25, 25);
             this.btnAddFiles.TabIndex = 29;
@@ -1142,7 +1194,7 @@
             this.tabApplicationLocations.Location = new System.Drawing.Point(4, 22);
             this.tabApplicationLocations.Name = "tabApplicationLocations";
             this.tabApplicationLocations.Padding = new System.Windows.Forms.Padding(3);
-            this.tabApplicationLocations.Size = new System.Drawing.Size(655, 404);
+            this.tabApplicationLocations.Size = new System.Drawing.Size(657, 420);
             this.tabApplicationLocations.TabIndex = 3;
             this.tabApplicationLocations.Text = "Application Locations";
             this.tabApplicationLocations.UseVisualStyleBackColor = true;
@@ -1383,7 +1435,7 @@
             this.tabCounters.Location = new System.Drawing.Point(4, 22);
             this.tabCounters.Name = "tabCounters";
             this.tabCounters.Padding = new System.Windows.Forms.Padding(3);
-            this.tabCounters.Size = new System.Drawing.Size(655, 404);
+            this.tabCounters.Size = new System.Drawing.Size(657, 420);
             this.tabCounters.TabIndex = 2;
             this.tabCounters.Text = "Counters";
             this.tabCounters.UseVisualStyleBackColor = true;
@@ -1414,7 +1466,7 @@
             this.tabOutput.Location = new System.Drawing.Point(4, 22);
             this.tabOutput.Name = "tabOutput";
             this.tabOutput.Padding = new System.Windows.Forms.Padding(3);
-            this.tabOutput.Size = new System.Drawing.Size(655, 404);
+            this.tabOutput.Size = new System.Drawing.Size(657, 420);
             this.tabOutput.TabIndex = 1;
             this.tabOutput.Text = "Output";
             this.tabOutput.UseVisualStyleBackColor = true;
@@ -1447,47 +1499,11 @@
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // groupBox16
-            // 
-            this.groupBox16.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.groupBox16.Controls.Add(this.cbGenerateNASMFile);
-            this.groupBox16.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox16.Location = new System.Drawing.Point(220, 148);
-            this.groupBox16.Name = "groupBox16";
-            this.groupBox16.Size = new System.Drawing.Size(206, 112);
-            this.groupBox16.TabIndex = 49;
-            this.groupBox16.TabStop = false;
-            this.groupBox16.Text = "Diagnostic Output:";
-            // 
-            // cbGenerateNASMFile
-            // 
-            this.cbGenerateNASMFile.AutoSize = true;
-            this.cbGenerateNASMFile.Location = new System.Drawing.Point(6, 21);
-            this.cbGenerateNASMFile.Name = "cbGenerateNASMFile";
-            this.cbGenerateNASMFile.Size = new System.Drawing.Size(78, 15);
-            this.cbGenerateNASMFile.Style = MetroFramework.MetroColorStyle.Blue;
-            this.cbGenerateNASMFile.TabIndex = 48;
-            this.cbGenerateNASMFile.Text = "NASM File";
-            this.cbGenerateNASMFile.UseCustomBackColor = true;
-            this.cbGenerateNASMFile.UseSelectable = true;
-            // 
-            // cbGenerateCompilerTime
-            // 
-            this.cbGenerateCompilerTime.AutoSize = true;
-            this.cbGenerateCompilerTime.Location = new System.Drawing.Point(6, 61);
-            this.cbGenerateCompilerTime.Name = "cbGenerateCompilerTime";
-            this.cbGenerateCompilerTime.Size = new System.Drawing.Size(119, 15);
-            this.cbGenerateCompilerTime.Style = MetroFramework.MetroColorStyle.Blue;
-            this.cbGenerateCompilerTime.TabIndex = 49;
-            this.cbGenerateCompilerTime.Text = "Compile Time File";
-            this.cbGenerateCompilerTime.UseCustomBackColor = true;
-            this.cbGenerateCompilerTime.UseSelectable = true;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(661, 516);
+            this.ClientSize = new System.Drawing.Size(663, 532);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.tbApplicationLocations);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -1518,6 +1534,8 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.tabAdvanced.ResumeLayout(false);
+            this.groupBox16.ResumeLayout(false);
+            this.groupBox16.PerformLayout();
             this.groupBox5.ResumeLayout(false);
             this.groupBox5.PerformLayout();
             this.groupBox15.ResumeLayout(false);
@@ -1542,8 +1560,6 @@
             this.groupBox7.PerformLayout();
             this.tabCounters.ResumeLayout(false);
             this.tabOutput.ResumeLayout(false);
-            this.groupBox16.ResumeLayout(false);
-            this.groupBox16.PerformLayout();
             this.ResumeLayout(false);
 
 		}
@@ -1648,5 +1664,6 @@
 		private MetroFramework.Controls.MetroCheckBox cbGenerateCompilerTime;
 		private System.Windows.Forms.GroupBox groupBox16;
 		private MetroFramework.Controls.MetroCheckBox cbGenerateNASMFile;
+		private MetroFramework.Controls.MetroCheckBox cbBitTracker;
 	}
 }

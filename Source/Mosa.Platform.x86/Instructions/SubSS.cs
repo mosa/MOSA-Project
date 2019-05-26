@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Subss : X86Instruction
 	{
-		public override int ID { get { return 300; } }
+		public override int ID { get { return 304; } }
 
 		internal Subss()
 			: base(1, 2)

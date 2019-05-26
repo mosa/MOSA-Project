@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class BranchNotEqual : X64Instruction
 	{
-		public override int ID { get { return 546; } }
+		public override int ID { get { return 556; } }
 
 		internal BranchNotEqual()
 			: base(0, 0)

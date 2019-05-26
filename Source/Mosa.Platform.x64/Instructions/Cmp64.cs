@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Cmp64 : X64Instruction
 	{
-		public override int ID { get { return 391; } }
+		public override int ID { get { return 401; } }
 
 		internal Cmp64()
 			: base(0, 2)

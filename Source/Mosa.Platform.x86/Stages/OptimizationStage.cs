@@ -11,7 +11,7 @@ namespace Mosa.Platform.x86.Stages
 	/// <seealso cref="Mosa.Platform.x86.BaseTransformationStage" />
 	public sealed class OptimizationStage : BaseTransformationStage
 	{
-		private Counter LeaSubstitutionCount = new Counter("X86.Optimizations.LeaSubstitution");
+		private Counter LeaSubstitutionCount = new Counter("X86.OptimizationStage.LeaSubstitution");
 
 		protected override void PopulateVisitationDictionary()
 		{

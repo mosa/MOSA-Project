@@ -42,7 +42,7 @@ namespace Mosa.Compiler.Framework
 		{
 			int index = virtualRegisters.Count + 1;
 
-			Operand virtualRegister = Operand.CreateVirtualRegister(type, index);
+			var virtualRegister = Operand.CreateVirtualRegister(type, index);
 
 			virtualRegisters.Add(virtualRegister);
 

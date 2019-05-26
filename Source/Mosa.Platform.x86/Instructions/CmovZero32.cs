@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class CMovZero32 : X86Instruction
 	{
-		public override int ID { get { return 355; } }
+		public override int ID { get { return 359; } }
 
 		internal CMovZero32()
 			: base(1, 1)

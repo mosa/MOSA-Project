@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Mulsd : X64Instruction
 	{
-		public override int ID { get { return 482; } }
+		public override int ID { get { return 492; } }
 
 		internal Mulsd()
 			: base(1, 2)

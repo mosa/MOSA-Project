@@ -1305,6 +1305,30 @@
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 3
+		},
+		{
+			"Name": "BitCopyFloatR4ToInt32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "BitCopyFloatR8ToInt64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "BitCopyInt32ToFloatR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "BitCopyInt64ToFloatR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
 		}
 	]
 }

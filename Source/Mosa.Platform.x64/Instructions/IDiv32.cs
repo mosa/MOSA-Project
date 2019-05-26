@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class IDiv32 : X64Instruction
 	{
-		public override int ID { get { return 414; } }
+		public override int ID { get { return 424; } }
 
 		internal IDiv32()
 			: base(2, 3)

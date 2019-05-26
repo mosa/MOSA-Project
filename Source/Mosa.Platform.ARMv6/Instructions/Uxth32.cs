@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Uxth32 : ARMv6Instruction
 	{
-		public override int ID { get { return 679; } }
+		public override int ID { get { return 689; } }
 
 		internal Uxth32()
 			: base(1, 3)

@@ -5,10 +5,23 @@ using System.Collections.Generic;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	///	This stage removes empty blocks.
+	///	This stage removes dead and empty blocks.
 	/// </summary>
 	public class DeadBlockStage : BaseMethodCompilerStage
 	{
+		// WARNING!!!! This stage is not PHI instruction aware!
+
+		private Counter DeadBlocksRemovedCount = new Counter("DeadBlockStage.DeadBlocksRemoved");
+		private Counter EmptyBlocksRemovedCount = new Counter("DeadBlockStage.EmptyBlocksRemoved");
+		private Counter SkipEmptyBlocksCount = new Counter("DeadBlockStage.SkipEmptyBlocks");
+
+		protected override void Initialize()
+		{
+			Register(EmptyBlocksRemovedCount);
+			Register(DeadBlocksRemovedCount);
+			Register(SkipEmptyBlocksCount);
+		}
+
 		protected override void Run()
 		{
 			EmptyDeadBlocks();
@@ -36,11 +49,11 @@ namespace Mosa.Compiler.Framework.Stages
 					if (HasProtectedRegions && !block.IsCompilerBlock)
 						continue;
 
-					// don't remove block if it jumps back to itself
-					if (block.PreviousBlocks.Contains(block))
+					if (block.PreviousBlocks.Count != 0)
 						continue;
 
-					if (block.PreviousBlocks.Count != 0)
+					// don't remove block if it jumps back to itself
+					if (block.PreviousBlocks.Contains(block))
 						continue;
 
 					if (emptiedBlocks != null && emptiedBlocks.Contains(block))
@@ -50,6 +63,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 					(emptiedBlocks ?? (emptiedBlocks = new HashSet<BasicBlock>())).Add(block);
 					changed = true;
+
+					EmptyBlocksRemovedCount++;
 				}
 			}
 		}
@@ -75,6 +90,7 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 
 				RemoveEmptyBlockWithSingleJump(block);
+				SkipEmptyBlocksCount++;
 			}
 		}
 
@@ -96,6 +112,8 @@ namespace Mosa.Compiler.Framework.Stages
 					list.Add(block);
 				}
 			}
+
+			DeadBlocksRemovedCount.Count = BasicBlocks.Count - list.Count;
 
 			if (list.Count != BasicBlocks.Count)
 			{

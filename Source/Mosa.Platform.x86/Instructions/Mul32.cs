@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Mul32 : X86Instruction
 	{
-		public override int ID { get { return 267; } }
+		public override int ID { get { return 271; } }
 
 		internal Mul32()
 			: base(2, 2)

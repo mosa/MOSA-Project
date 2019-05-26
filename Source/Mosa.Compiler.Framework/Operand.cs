@@ -229,6 +229,8 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsR { get { return UnderlyingType.IsR; } }
 
+		public bool IsFloatingPoint { get { return IsR; } }
+
 		public bool IsR4 { get { return UnderlyingType.IsR4; } }
 
 		public bool IsR8 { get { return UnderlyingType.IsR8; } }
@@ -260,12 +262,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		///   <c>true</c> if this instance has long parent; otherwise, <c>false</c>.
 		/// </value>
-		public bool HasLongParent { get { return LongParent != null && !IsSSA; } }
-
-		/// <summary>
-		/// Determines if the operand is a ssa operand.
-		/// </summary>
-		public bool IsSSA { get; private set; }
+		public bool HasLongParent { get { return LongParent != null; } }
 
 		/// <summary>
 		/// Determines if the operand is a local stack operand.
@@ -292,9 +289,6 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets a value indicating whether this instance is unresolved constant.
 		/// </summary>
-		/// <value>
-		/// <c>true</c> if this instance is unresolved constant; otherwise, <c>false</c>.
-		/// </value>
 		public bool IsUnresolvedConstant { get { return IsConstant && !IsResolved; } }
 
 		public bool IsUnsigned { get { return UnderlyingType.IsUnsigned; } }
@@ -388,16 +382,6 @@ namespace Mosa.Compiler.Framework
 		public Operand LongParent { get; private set; }
 
 		/// <summary>
-		/// Gets the base operand.
-		/// </summary>
-		public Operand SSAParent { get; private set; }
-
-		/// <summary>
-		/// Gets the ssa version.
-		/// </summary>
-		public int SSAVersion { get; private set; }
-
-		/// <summary>
 		/// Gets the string data.
 		/// </summary>
 		/// <value>
@@ -432,7 +416,6 @@ namespace Mosa.Compiler.Framework
 			IsVirtualRegister = false;
 			IsLabel = false;
 			IsCPURegister = false;
-			IsSSA = false;
 			IsSymbol = false;
 			IsStaticField = false;
 			IsParameter = false;
@@ -725,32 +708,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates the SSA <see cref="Operand"/>.
-		/// </summary>
-		/// <param name="ssa">The ssa operand.</param>
-		/// <param name="version">The ssa version.</param>
-		/// <returns></returns>
-		public static Operand CreateSSA(Operand ssa, int version)
-		{
-			Debug.Assert(ssa.IsVirtualRegister);
-			Debug.Assert(!ssa.IsConstant);
-			Debug.Assert(!ssa.IsParameter);
-			Debug.Assert(!ssa.IsStackLocal);
-			Debug.Assert(!ssa.IsCPURegister);
-			Debug.Assert(!ssa.IsLabel);
-			Debug.Assert(!ssa.IsSymbol);
-			Debug.Assert(!ssa.IsStaticField);
-
-			return new Operand(ssa.Type)
-			{
-				IsVirtualRegister = true,
-				IsSSA = true,
-				SSAParent = ssa,
-				SSAVersion = version
-			};
-		}
-
-		/// <summary>
 		/// Creates the stack local.
 		/// </summary>
 		/// <param name="type">The type.</param>
@@ -1026,17 +983,6 @@ namespace Mosa.Compiler.Framework
 		/// </returns>
 		public string ToString(bool full)
 		{
-			if (IsSSA)
-			{
-				string ssa = SSAParent.ToString(full);
-				int pos = ssa.IndexOf(' ');
-
-				if (pos < 0)
-					return ssa + "<" + SSAVersion + ">";
-				else
-					return ssa.Substring(0, pos) + "<" + SSAVersion + ">" + ssa.Substring(pos);
-			}
-
 			var sb = new StringBuilder();
 
 			if (IsConstant)
@@ -1093,14 +1039,7 @@ namespace Mosa.Compiler.Framework
 				}
 				else
 				{
-					if (LongParent.IsSSA)
-					{
-						sb.AppendFormat("v{0}<v{1}{2}>", Index, LongParent.SSAParent.Index, IsHigh ? "H" : "L");
-					}
-					else
-					{
-						sb.AppendFormat("v{0}<v{1}{2}>", Index, LongParent.Index, IsHigh ? "H" : "L");
-					}
+					sb.AppendFormat("v{0}<v{1}{2}>", Index, LongParent.Index, IsHigh ? "H" : "L");
 				}
 			}
 			else if (IsParameter)

@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Pop32 : X86Instruction
 	{
-		public override int ID { get { return 279; } }
+		public override int ID { get { return 283; } }
 
 		internal Pop32()
 			: base(1, 0)

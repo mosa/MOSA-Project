@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Ret : X64Instruction
 	{
-		public override int ID { get { return 504; } }
+		public override int ID { get { return 514; } }
 
 		internal Ret()
 			: base(0, 0)

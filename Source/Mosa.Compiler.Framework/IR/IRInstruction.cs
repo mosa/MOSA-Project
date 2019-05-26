@@ -199,5 +199,9 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly GetHigh64 GetHigh64 = new GetHigh64();
 		public static readonly IfThenElse32 IfThenElse32 = new IfThenElse32();
 		public static readonly IfThenElse64 IfThenElse64 = new IfThenElse64();
+		public static readonly BitCopyFloatR4ToInt32 BitCopyFloatR4ToInt32 = new BitCopyFloatR4ToInt32();
+		public static readonly BitCopyFloatR8ToInt64 BitCopyFloatR8ToInt64 = new BitCopyFloatR8ToInt64();
+		public static readonly BitCopyInt32ToFloatR4 BitCopyInt32ToFloatR4 = new BitCopyInt32ToFloatR4();
+		public static readonly BitCopyInt64ToFloatR8 BitCopyInt64ToFloatR8 = new BitCopyInt64ToFloatR8();
 	}
 }

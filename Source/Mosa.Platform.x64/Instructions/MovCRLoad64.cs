@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class MovCRLoad64 : X64Instruction
 	{
-		public override int ID { get { return 443; } }
+		public override int ID { get { return 453; } }
 
 		internal MovCRLoad64()
 			: base(1, 1)

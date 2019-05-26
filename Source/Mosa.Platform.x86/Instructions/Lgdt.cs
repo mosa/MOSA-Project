@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Lgdt : X86Instruction
 	{
-		public override int ID { get { return 233; } }
+		public override int ID { get { return 237; } }
 
 		internal Lgdt()
 			: base(0, 1)
