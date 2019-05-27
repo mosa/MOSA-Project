@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Addsd : X64Instruction
 	{
-		public override int ID { get { return 375; } }
+		public override int ID { get { return 385; } }
 
 		internal Addsd()
 			: base(1, 2)

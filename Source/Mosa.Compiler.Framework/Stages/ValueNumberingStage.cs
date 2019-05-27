@@ -24,12 +24,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private BitArray ParamReadOnly;
 
-		private Counter InstructionRemovalCount = new Counter("ValueNumbering.IRInstructionRemoved");
-		private Counter ConstantFoldingAndStrengthReductionCount = new Counter("ValueNumbering.ConstantFoldingAndStrengthReduction");
-		private Counter SubexpressionEliminationCount = new Counter("ValueNumbering.SubexpressionElimination");
-		private Counter ParameterLoadEliminationCount = new Counter("ValueNumbering.ParameterLoadElimination");
-		private Counter DeadCodeEliminationCount = new Counter("ValueNumbering.DeadCodeElimination");
-		private Counter StrengthReductionAndSimplificationCount = new Counter("ValueNumbering.StrengthReductionAndSimplification");
+		private Counter InstructionRemovalCount = new Counter("ValueNumberingStage.IRInstructionRemoved");
+		private Counter ConstantFoldingAndStrengthReductionCount = new Counter("ValueNumberingStage.ConstantFoldingAndStrengthReduction");
+		private Counter SubexpressionEliminationCount = new Counter("ValueNumberingStage.SubexpressionElimination");
+		private Counter ParameterLoadEliminationCount = new Counter("ValueNumberingStage.ParameterLoadElimination");
+		private Counter DeadCodeEliminationCount = new Counter("ValueNumberingStage.DeadCodeElimination");
+		private Counter StrengthReductionAndSimplificationCount = new Counter("ValueNumberingStage.StrengthReductionAndSimplification");
 
 		private class Expression
 		{
@@ -444,7 +444,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			if (node.Instruction == IRInstruction.AddressOf
-				&& node.Operand1.IsStackLocal)
+				&& (node.Operand1.IsStackLocal || node.Operand1.IsStaticField))
 			{
 				return true;
 			}
@@ -477,14 +477,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (node.Operand1.IsConstant)
 				hash = UpdateHash(hash, (int)node.Operand1.ConstantUnsignedLongInteger);
-			else if (node.Operand1.IsVirtualRegister)
-				hash = UpdateHash(hash, (int)node.Operand1.Index);
+			else if (node.Operand1.IsVirtualRegister || node.Operand1.IsStackLocal)
+				hash = UpdateHash(hash, node.Operand1.Index);
 
 			if (node.OperandCount >= 2)
 				if (node.Operand2.IsConstant)
 					hash = UpdateHash(hash, (int)node.Operand2.ConstantUnsignedLongInteger);
-				else if (node.Operand2.IsVirtualRegister)
-					hash = UpdateHash(hash, (int)node.Operand2.Index);
+				else if (node.Operand2.IsVirtualRegister || node.Operand2.IsStackLocal)
+					hash = UpdateHash(hash, node.Operand2.Index);
 
 			return hash;
 		}
@@ -495,7 +495,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return list;
 		}
 
-		private static bool IsEqual(Operand operand1, Operand operand2)
+		private static bool IsEqual(Operand operand1, Operand operand2, BaseInstruction instruction = null)
 		{
 			if (operand1 == operand2)
 				return true;
@@ -514,6 +514,20 @@ namespace Mosa.Compiler.Framework.Stages
 				&& operand1.ConstantDoubleFloatingPoint == operand2.ConstantDoubleFloatingPoint)
 				return true;
 
+			if (instruction != null
+				&& instruction == IRInstruction.AddressOf
+				&& operand1.IsStaticField
+				&& operand2.IsStaticField
+				&& operand1.Field == operand2.Field)
+				return true;
+
+			if (instruction != null
+				&& instruction == IRInstruction.AddressOf
+				&& operand1.IsStackLocal
+				&& operand2.IsStackLocal
+				&& operand1.Index == operand2.Index)
+				return true;
+
 			return false;
 		}
 
@@ -525,7 +539,7 @@ namespace Mosa.Compiler.Framework.Stages
 			foreach (var expression in expressions)
 			{
 				if (node.Instruction == expression.Instruction
-					&& IsEqual(node.Operand1, expression.Operand1)
+					&& IsEqual(node.Operand1, expression.Operand1, node.Instruction)
 					&& (node.OperandCount == 1 || (node.OperandCount == 2 && IsEqual(node.Operand2, expression.Operand2))))
 				{
 					return expression;

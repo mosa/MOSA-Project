@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Addss : X86Instruction
 	{
-		public override int ID { get { return 194; } }
+		public override int ID { get { return 198; } }
 
 		internal Addss()
 			: base(1, 2)

@@ -5,10 +5,17 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// IR Cleanup Stage
+	/// Merges Blocks
 	/// </summary>
 	public class BlockMergeStage : BaseMethodCompilerStage
 	{
+		private Counter BlocksMergedCount = new Counter("BlockMergeStage.BlocksMerged");
+
+		protected override void Initialize()
+		{
+			Register(BlocksMergedCount);
+		}
+
 		protected override void Run()
 		{
 			MergeBlocks();
@@ -57,6 +64,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					insertPoint.Empty();
 					insertPoint.CutFrom(next.AfterFirst.GoForwardToNonEmpty(), next.Last.Previous.GoBackwardsToNonEmpty());
+					BlocksMergedCount++;
 					changed = true;
 				}
 			}

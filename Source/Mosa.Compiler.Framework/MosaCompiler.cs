@@ -54,9 +54,6 @@ namespace Mosa.Compiler.Framework
 		{
 			lock (_lock)
 			{
-				//if (Stage != CompileStage.Initial)
-				//	return;
-
 				var moduleLoader = new MosaModuleLoader();
 
 				moduleLoader.AddSearchPaths(CompilerOptions.SearchPaths);
@@ -72,9 +69,6 @@ namespace Mosa.Compiler.Framework
 		{
 			lock (_lock)
 			{
-				//if (Stage != CompileStage.Initial)
-				//	return;
-
 				TypeSystem = typeSystem;
 				TypeLayout = new MosaTypeLayout(typeSystem, CompilerOptions.Architecture.NativePointerSize, CompilerOptions.Architecture.NativeAlignment);
 

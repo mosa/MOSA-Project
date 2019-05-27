@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class RdMSR : X64Instruction
 	{
-		public override int ID { get { return 619; } }
+		public override int ID { get { return 629; } }
 
 		internal RdMSR()
 			: base(1, 1)

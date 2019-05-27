@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Movzx16To64 : X64Instruction
 	{
-		public override int ID { get { return 475; } }
+		public override int ID { get { return 485; } }
 
 		internal Movzx16To64()
 			: base(1, 1)

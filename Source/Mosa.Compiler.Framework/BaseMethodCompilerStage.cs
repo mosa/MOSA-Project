@@ -455,6 +455,9 @@ namespace Mosa.Compiler.Framework
 		{
 			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
+				if (node.IsEmpty)
+					continue;
+
 				node.Empty();
 			}
 		}
@@ -467,9 +470,9 @@ namespace Mosa.Compiler.Framework
 		/// <param name="newTarget">The new target block.</param>
 		protected void ReplaceBranchTargets(BasicBlock block, BasicBlock oldTarget, BasicBlock newTarget)
 		{
-			for (var node = block.Last; !node.IsBlockStartInstruction; node = node.Previous)
+			for (var node = block.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
 			{
-				if (node.IsEmpty)
+				if (node.IsEmptyOrNop)
 					continue;
 
 				if (node.BranchTargetsCount == 0)
@@ -966,6 +969,22 @@ namespace Mosa.Compiler.Framework
 				|| instruction == IRInstruction.MoveInt64
 				|| instruction == IRInstruction.MoveFloatR8
 				|| instruction == IRInstruction.MoveFloatR4;
+		}
+
+		public static void ReplaceOperand(Operand target, Operand replacement)
+		{
+			foreach (var node in target.Uses.ToArray())
+			{
+				for (int i = 0; i < node.OperandCount; i++)
+				{
+					var operand = node.GetOperand(i);
+
+					if (target == operand)
+					{
+						node.SetOperand(i, replacement);
+					}
+				}
+			}
 		}
 
 		#endregion Helper Methods

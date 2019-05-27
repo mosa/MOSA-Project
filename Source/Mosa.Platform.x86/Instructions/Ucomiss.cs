@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Ucomiss : X86Instruction
 	{
-		public override int ID { get { return 303; } }
+		public override int ID { get { return 307; } }
 
 		internal Ucomiss()
 			: base(0, 2)

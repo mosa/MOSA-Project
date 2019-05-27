@@ -19,7 +19,9 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine("\tpublic static class IRInstruction");
 			Lines.AppendLine("\t{");
 
-			foreach (var entry in Entries.Instructions)
+			var instructions = Entries.Instructions;
+
+			foreach (var entry in instructions)
 			{
 				Lines.AppendLine("\t\tpublic static readonly " + entry.Name + " " + entry.Name + " = new " + entry.Name + "();");
 			}

@@ -16,10 +16,10 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected TraceLog trace;
 
-		private readonly Counter ConstantCount = new Counter("ConditionalConstantPropagation.ConstantVariables");
-		private Counter ConditionalConstantPropagationCount = new Counter("ConditionalConstantPropagation.ConstantPropagations");
-		private readonly Counter DeadBlockCount = new Counter("ConditionalConstantPropagation.DeadBlocks");
-		private Counter InstructionsRemovedCount = new Counter("ConditionalConstantPropagation.IRInstructionRemoved");
+		private readonly Counter ConstantCount = new Counter("SparseConditionalConstantPropagationStage.ConstantVariables");
+		private Counter ConditionalConstantPropagationCount = new Counter("SparseConditionalConstantPropagationStage.ConstantPropagations");
+		private readonly Counter DeadBlockCount = new Counter("SparseConditionalConstantPropagationStage.DeadBlocks");
+		private Counter InstructionsRemovedCount = new Counter("SparseConditionalConstantPropagationStage.IRInstructionRemoved");
 
 		protected bool changed = false;
 

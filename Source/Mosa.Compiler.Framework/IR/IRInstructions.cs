@@ -203,6 +203,10 @@ namespace Mosa.Compiler.Framework.IR
 			IRInstruction.GetHigh64,
 			IRInstruction.IfThenElse32,
 			IRInstruction.IfThenElse64,
+			IRInstruction.BitCopyFloatR4ToInt32,
+			IRInstruction.BitCopyFloatR8ToInt64,
+			IRInstruction.BitCopyInt32ToFloatR4,
+			IRInstruction.BitCopyInt64ToFloatR8,
 		};
 	}
 }

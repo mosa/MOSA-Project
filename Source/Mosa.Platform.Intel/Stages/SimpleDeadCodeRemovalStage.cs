@@ -151,6 +151,7 @@ namespace Mosa.Platform.Intel.Stages
 
 			changed = true;
 
+			//ReplaceOperand(result, source);
 			foreach (var useNode in result.Uses.ToArray())
 			{
 				for (int i = 0; i < useNode.OperandCount; i++)

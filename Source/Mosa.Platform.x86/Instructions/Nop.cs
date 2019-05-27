@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Nop : X86Instruction
 	{
-		public override int ID { get { return 271; } }
+		public override int ID { get { return 275; } }
 
 		internal Nop()
 			: base(0, 0)

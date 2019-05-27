@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Dec32 : X86Instruction
 	{
-		public override int ID { get { return 214; } }
+		public override int ID { get { return 218; } }
 
 		internal Dec32()
 			: base(1, 1)

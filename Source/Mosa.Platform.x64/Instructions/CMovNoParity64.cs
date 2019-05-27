@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class CMovNoParity64 : X64Instruction
 	{
-		public override int ID { get { return 613; } }
+		public override int ID { get { return 623; } }
 
 		internal CMovNoParity64()
 			: base(1, 1)

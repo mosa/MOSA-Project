@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
+using Mosa.Compiler.Framework.Stages;
 using Mosa.Tool.Explorer.Stages;
 
 namespace Mosa.Tool.Explorer

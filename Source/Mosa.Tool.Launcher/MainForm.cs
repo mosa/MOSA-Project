@@ -109,6 +109,7 @@ namespace Mosa.Tool.Launcher
 			Options.EmitStaticRelocations = cbRelocationTable.Checked;
 			Options.EnableMethodScanner = cbEnableMethodScanner.Checked;
 			Options.GenerateCompileTimeFile = cbGenerateCompilerTime.Checked;
+			Options.EnableBitTracker = cbBitTracker.Checked;
 
 			if (Options.VBEVideo)
 			{
@@ -231,6 +232,7 @@ namespace Mosa.Tool.Launcher
 			cbValueNumbering.Checked = Options.EnableValueNumbering;
 			cbEnableMethodScanner.Checked = Options.EnableMethodScanner;
 			cbGenerateCompilerTime.Checked = Options.GenerateCompileTimeFile;
+			cbBitTracker.Checked = Options.EnableBitTracker;
 
 			switch (Options.ImageFormat)
 			{

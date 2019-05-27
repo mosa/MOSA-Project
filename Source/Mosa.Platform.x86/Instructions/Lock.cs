@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Lock : X86Instruction
 	{
-		public override int ID { get { return 235; } }
+		public override int ID { get { return 239; } }
 
 		internal Lock()
 			: base(0, 0)

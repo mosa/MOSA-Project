@@ -14,8 +14,8 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class CodeGenerationStage : BaseMethodCompilerStage
 	{
-		private Counter GeneratedInstructionCount = new Counter("CodeGeneration.GeneratedInstructions");
-		private Counter GeneratedBlockCount = new Counter("CodeGeneration.GeneratedBlocks");
+		private Counter GeneratedInstructionCount = new Counter("CodeGenerationStage.GeneratedInstructions");
+		private Counter GeneratedBlockCount = new Counter("CodeGenerationStage.GeneratedBlocks");
 
 		#region Data Members
 

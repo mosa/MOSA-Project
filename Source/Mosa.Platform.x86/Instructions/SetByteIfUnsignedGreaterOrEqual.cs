@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class SetByteIfUnsignedGreaterOrEqual : X86Instruction
 	{
-		public override int ID { get { return 332; } }
+		public override int ID { get { return 336; } }
 
 		internal SetByteIfUnsignedGreaterOrEqual()
 			: base(1, 0)

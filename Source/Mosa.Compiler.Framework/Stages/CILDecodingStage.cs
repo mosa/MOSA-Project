@@ -318,6 +318,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			MethodCompiler.LocalVariables[index] = stackLocal;
 
+			//ReplaceOperand(virtualRegister, stackLocal);
 			foreach (var node in virtualRegister.Uses.ToArray())
 			{
 				for (int i = 0; i < node.OperandCount; i++)

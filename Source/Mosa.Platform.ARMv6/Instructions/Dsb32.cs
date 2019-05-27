@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Dsb32 : ARMv6Instruction
 	{
-		public override int ID { get { return 635; } }
+		public override int ID { get { return 645; } }
 
 		internal Dsb32()
 			: base(1, 3)

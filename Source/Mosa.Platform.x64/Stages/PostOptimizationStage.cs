@@ -11,7 +11,7 @@ namespace Mosa.Platform.x64.Stages
 	/// <seealso cref="Mosa.Platform.x64.BaseTransformationStage" />
 	public sealed class PostOptimizationStage : BaseTransformationStage
 	{
-		private Counter ZeroToXorSubstitutionCount = new Counter("X86.Optimizations.ZeroToXorSubstitution");
+		private Counter ZeroToXorSubstitutionCount = new Counter("X86.PostOptimizationStage.ZeroToXorSubstitution");
 
 		protected override void PopulateVisitationDictionary()
 		{

@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Sqrtss : X86Instruction
 	{
-		public override int ID { get { return 296; } }
+		public override int ID { get { return 300; } }
 
 		internal Sqrtss()
 			: base(1, 1)

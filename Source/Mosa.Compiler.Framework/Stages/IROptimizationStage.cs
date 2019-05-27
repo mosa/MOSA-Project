@@ -12,37 +12,37 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class IROptimizationStage : BaseMethodCompilerStage
 	{
-		private Counter InstructionsRemovedCount = new Counter("IROptimizations.IRInstructionRemoved");
-		private Counter BlockRemovedCount = new Counter("IROptimizations.BlockRemoved");
-		private Counter PropagateConstantCount = new Counter("IROptimizations.PropagateConstant");
-		private Counter PropagateMoveCount = new Counter("IROptimizations.PropagateMoveCount");
-		private Counter ConstantFoldingAndStrengthReductionCount = new Counter("IROptimizations.ConstantFoldingAndStrengthReduction");
-		private Counter StrengthReductionAndSimplificationCount = new Counter("IROptimizations.StrengthReductionAndSimplification");
-		private Counter InstructionSimplificationCount = new Counter("IROptimizations.InstructionSimplification");
-		private Counter CombineAdditionAndSubstractionCount = new Counter("IROptimizations.CombineAdditionAndSubstraction");
-		private Counter CombineMultiplicationCount = new Counter("IROptimizations.CombineMultiplication");
-		private Counter CombineDivisionCount = new Counter("IROptimizations.CombineDivision");
-		private Counter CombineLogicalOrCount = new Counter("IROptimizations.CombineLogicalOrCount");
-		private Counter CombineLogicalAndCount = new Counter("IROptimizations.CombineLogicalAndCount");
-		private Counter ConstantFoldingPhiCount = new Counter("IROptimizations.ConstantFoldingPhi");
-		private Counter FoldIntegerCompareBranchCount = new Counter("IROptimizations.FoldIntegerCompareBranch");
-		private Counter FoldIntegerCompareCount = new Counter("IROptimizations.FoldIntegerCompare");
-		private Counter FoldLoadStoreOffsetsCount = new Counter("IROptimizations.FoldLoadStoreOffsets");
-		private Counter DeadCodeEliminationCount = new Counter("IROptimizations.DeadCodeElimination");
-		private Counter DeadCodeEliminationPhiCount = new Counter("IROptimizations.DeadCodeEliminationPhi");
-		private Counter CombineIntegerCompareBranchCount = new Counter("IROptimizations.CombineIntegerCompareBranch");
-		private Counter SimplifyPhiCount = new Counter("IROptimizations.SimplifyPhi");
-		private Counter SimplifyIntegerCompareCount = new Counter("IROptimizations.SimplifyIntegerCompare");
-		private Counter SimplifyGeneralCount = new Counter("IROptimizations.SimplifyGeneral");
-		private Counter SimplifyParamLoadCount = new Counter("IROptimizations.SimplifyParamLoad");
-		private Counter SimplifyBranchComparisonCount = new Counter("IROptimizations.SimplifyBranchComparison");
-		private Counter SimplifyGetLowCount = new Counter("IROptimizations.SimplifyGetLow");
-		private Counter SimplifyGetHighCount = new Counter("IROptimizations.SimplifyGetHigh");
-		private Counter RemoveUselessIntegerCompareBranchCount = new Counter("IROptimizations.RemoveUselessIntegerCompareBranch");
-		private Counter LongPropagateCount = new Counter("IROptimizations.LongPropagateCount");
-		private Counter LongConstantFoldingCount = new Counter("IROptimizations.LongConstantFolding");
-		private Counter PropagateCompoundMoveCount = new Counter("IROptimizations.PropagateCompoundMove");
-		private Counter FoldIfThenElseCount = new Counter("IROptimizations.FoldIfThenElse");
+		private Counter InstructionsRemovedCount = new Counter("IROptimizationStage.IRInstructionRemoved");
+		private Counter BlockRemovedCount = new Counter("IROptimizationStage.BlockRemoved");
+		private Counter PropagateConstantCount = new Counter("IROptimizationStage.PropagateConstant");
+		private Counter PropagateMoveCount = new Counter("IROptimizationStage.PropagateMoveCount");
+		private Counter ConstantFoldingAndStrengthReductionCount = new Counter("IROptimizationStage.ConstantFoldingAndStrengthReduction");
+		private Counter StrengthReductionAndSimplificationCount = new Counter("IROptimizationStage.StrengthReductionAndSimplification");
+		private Counter InstructionSimplificationCount = new Counter("IROptimizationStage.InstructionSimplification");
+		private Counter CombineAdditionAndSubstractionCount = new Counter("IROptimizationStage.CombineAdditionAndSubstraction");
+		private Counter CombineMultiplicationCount = new Counter("IROptimizationStage.CombineMultiplication");
+		private Counter CombineDivisionCount = new Counter("IROptimizationStage.CombineDivision");
+		private Counter CombineLogicalOrCount = new Counter("IROptimizationStage.CombineLogicalOrCount");
+		private Counter CombineLogicalAndCount = new Counter("IROptimizationStage.CombineLogicalAndCount");
+		private Counter ConstantFoldingPhiCount = new Counter("IROptimizationStage.ConstantFoldingPhi");
+		private Counter FoldIntegerCompareBranchCount = new Counter("IROptimizationStage.FoldIntegerCompareBranch");
+		private Counter FoldIntegerCompareCount = new Counter("IROptimizationStage.FoldIntegerCompare");
+		private Counter FoldLoadStoreOffsetsCount = new Counter("IROptimizationStage.FoldLoadStoreOffsets");
+		private Counter DeadCodeEliminationCount = new Counter("IROptimizationStage.DeadCodeElimination");
+		private Counter DeadCodeEliminationPhiCount = new Counter("IROptimizationStage.DeadCodeEliminationPhi");
+		private Counter CombineIntegerCompareBranchCount = new Counter("IROptimizationStage.CombineIntegerCompareBranch");
+		private Counter SimplifyPhiCount = new Counter("IROptimizationStage.SimplifyPhi");
+		private Counter SimplifyIntegerCompareCount = new Counter("IROptimizationStage.SimplifyIntegerCompare");
+		private Counter SimplifyGeneralCount = new Counter("IROptimizationStage.SimplifyGeneral");
+		private Counter SimplifyParamLoadCount = new Counter("IROptimizationStage.SimplifyParamLoad");
+		private Counter SimplifyBranchComparisonCount = new Counter("IROptimizationStage.SimplifyBranchComparison");
+		private Counter SimplifyGetLowCount = new Counter("IROptimizationStage.SimplifyGetLow");
+		private Counter SimplifyGetHighCount = new Counter("IROptimizationStage.SimplifyGetHigh");
+		private Counter RemoveUselessIntegerCompareBranchCount = new Counter("IROptimizationStage.RemoveUselessIntegerCompareBranch");
+		private Counter LongPropagateCount = new Counter("IROptimizationStage.LongPropagateCount");
+		private Counter LongConstantFoldingCount = new Counter("IROptimizationStage.LongConstantFolding");
+		private Counter PropagateCompoundMoveCount = new Counter("IROptimizationStage.PropagateCompoundMove");
+		private Counter FoldIfThenElseCount = new Counter("IROptimizationStage.FoldIfThenElse");
 
 		private Stack<InstructionNode> worklist;
 
@@ -1235,6 +1235,17 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			BaseInstruction instruction = null;
+
+			Debug.Assert(node2.Operand1.IsParameter);
+
+			var paramType = MethodCompiler.Parameters[node2.Operand1.Index];
+
+			// Don't mix int and floating point otherwise the inliner will break
+			// Rational - the inliner can not transform the bits between floating point and regular registers without a load and store to memory (at least on Intel Platforms)
+			if ((node.Instruction == IRInstruction.LoadInt32 || node.Instruction == IRInstruction.LoadInt64) && paramType.IsFloatingPoint)
+				return;
+			else if ((node.Instruction == IRInstruction.LoadFloatR4 || node.Instruction == IRInstruction.LoadFloatR8) && paramType.IsInteger)
+				return;
 
 			if (node.Instruction == IRInstruction.LoadInt32)
 				instruction = IRInstruction.LoadParamInt32;

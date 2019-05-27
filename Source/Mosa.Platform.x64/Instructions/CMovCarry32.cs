@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class CMovCarry32 : X64Instruction
 	{
-		public override int ID { get { return 580; } }
+		public override int ID { get { return 590; } }
 
 		internal CMovCarry32()
 			: base(1, 1)

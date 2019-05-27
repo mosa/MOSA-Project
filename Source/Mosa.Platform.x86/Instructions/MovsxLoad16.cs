@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class MovsxLoad16 : X86Instruction
 	{
-		public override int ID { get { return 259; } }
+		public override int ID { get { return 263; } }
 
 		internal MovsxLoad16()
 			: base(1, 2)

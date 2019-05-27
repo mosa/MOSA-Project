@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class JmpFar : X86Instruction
 	{
-		public override int ID { get { return 218; } }
+		public override int ID { get { return 222; } }
 
 		internal JmpFar()
 			: base(0, 0)
