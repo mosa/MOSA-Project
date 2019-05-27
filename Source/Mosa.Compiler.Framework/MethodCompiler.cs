@@ -471,12 +471,11 @@ namespace Mosa.Compiler.Framework
 			var block = BasicBlocks.CreateBlock(BasicBlock.PrologueLabel);
 			BasicBlocks.AddHeadBlock(block);
 
-			var ctx = new Context(block);
-
-			ctx.AppendInstruction(IRInstruction.Jmp, null, plugSymbol);
+			//var ctx = new Context(block);
+			//ctx.AppendInstruction(IRInstruction.Jmp, null, plugSymbol);
 
 			IsCILDecodeRequired = false;
-			IsExecutePipeline = true;
+			IsExecutePipeline = false;
 			IsStackFrameRequired = false;
 		}
 

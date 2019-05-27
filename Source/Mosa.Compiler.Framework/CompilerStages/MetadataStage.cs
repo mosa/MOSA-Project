@@ -247,7 +247,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 					{
 						if (Compiler.MethodScanner.IsMethodInvoked(method))
 						{
-							Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, writer.Position, method.FullName, 0);
+							Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, writer.Position, GetMethodNameConsiderPlug(method), 0);
 						}
 					}
 					writer.WriteZeroBytes(TypeLayout.NativePointerSize);
@@ -569,7 +569,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			{
 				if (Compiler.MethodScanner.IsMethodInvoked(method))
 				{
-					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, writer.Position, method.FullName, 0);
+					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, writer.Position, GetMethodNameConsiderPlug(method), 0);
 				}
 			}
 			writer.WriteZeroBytes(TypeLayout.NativePointerSize);
@@ -895,5 +895,12 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		}
 
 		#endregion Custom Attributes
+
+		private string GetMethodNameConsiderPlug(MosaMethod method)
+		{
+			var plugMethod = Compiler.PlugSystem.GetReplacement(method);
+
+			return (plugMethod == null) ? method.FullName : plugMethod.FullName;
+		}
 	}
 }
