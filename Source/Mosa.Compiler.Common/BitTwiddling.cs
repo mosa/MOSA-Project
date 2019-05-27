@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Common
 			return r;
 		}
 
-		public static ulong GetClearBits(ulong value)
+		public static ulong GetClearBitsOver(ulong value)
 		{
 			var highest = GetHighestBitSet(value);
 
