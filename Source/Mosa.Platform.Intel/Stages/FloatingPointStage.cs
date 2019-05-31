@@ -61,13 +61,13 @@ namespace Mosa.Platform.Intel.Stages
 
 			if (result.IsR4)
 			{
-				var symbol = MethodCompiler.Linker.GetConstantSymbol((float)source.ConstantUnsignedLongInteger);
+				var symbol = Linker.GetConstantSymbol((float)source.ConstantUnsignedLongInteger);
 				var label = Operand.CreateLabel(result.Type, symbol.Name);
 				node.SetInstruction(MovssLoad, result, label, ConstantZero);
 			}
 			else if (result.IsR8)
 			{
-				var symbol = MethodCompiler.Linker.GetConstantSymbol((double)source.ConstantUnsignedLongInteger);
+				var symbol = Linker.GetConstantSymbol((double)source.ConstantUnsignedLongInteger);
 				var label = Operand.CreateLabel(result.Type, symbol.Name);
 				node.SetInstruction(MovsdLoad, result, label, ConstantZero);
 			}
@@ -95,13 +95,13 @@ namespace Mosa.Platform.Intel.Stages
 
 				if (operand.IsR4)
 				{
-					var symbol = MethodCompiler.Linker.GetConstantSymbol(operand.ConstantSingleFloatingPoint);
+					var symbol = Linker.GetConstantSymbol(operand.ConstantSingleFloatingPoint);
 					var label = Operand.CreateLabel(operand.Type, symbol.Name);
 					before.SetInstruction(MovssLoad, v1, label, ConstantZero);
 				}
 				else
 				{
-					var symbol = MethodCompiler.Linker.GetConstantSymbol(operand.ConstantDoubleFloatingPoint);
+					var symbol = Linker.GetConstantSymbol(operand.ConstantDoubleFloatingPoint);
 					var label = Operand.CreateLabel(operand.Type, symbol.Name);
 					before.SetInstruction(MovsdLoad, v1, label, ConstantZero);
 				}

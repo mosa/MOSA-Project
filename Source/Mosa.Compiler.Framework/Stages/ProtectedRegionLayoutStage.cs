@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var trace = CreateTraceLog("Regions");
 
-			var protectedRegionTableSymbol = MethodCompiler.Linker.DefineSymbol(Metadata.ProtectedRegionTable + MethodCompiler.Method.FullName, SectionKind.ROData, NativeAlignment, 0);
+			var protectedRegionTableSymbol = Linker.DefineSymbol(Metadata.ProtectedRegionTable + MethodCompiler.Method.FullName, SectionKind.ROData, NativeAlignment, 0);
 			var writer = new EndianAwareBinaryWriter(protectedRegionTableSymbol.Stream, Architecture.Endianness);
 
 			int sectioncount = 0;
@@ -82,9 +82,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 					sectioncount++;
 
-					var name = Metadata.ProtectedRegionTable + MethodCompiler.Method.FullName + "$" + sectioncount.ToString();
+					var name = Metadata.ProtectedRegionTable + Method.FullName + "$" + sectioncount.ToString();
 					var protectedRegionDefinition = CreateProtectedRegionDefinition(name, (uint)start, (uint)end, handler, region.Handler.ExceptionHandlerType, region.Handler.Type);
-					MethodCompiler.Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionTableSymbol, writer.Position, protectedRegionDefinition, 0);
+					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionTableSymbol, writer.Position, protectedRegionDefinition, 0);
 					writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 					trace?.Log($"     Section: [{start.ToString()}-{end.ToString()}]");
@@ -99,7 +99,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private LinkerSymbol CreateProtectedRegionDefinition(string name, uint start, uint end, uint handler, ExceptionHandlerType handlerType, MosaType exceptionType)
 		{
 			// Emit parameter table
-			var protectedRegionDefinitionSymbol = MethodCompiler.Linker.DefineSymbol(name, SectionKind.ROData, 0/*TypeLayout.NativePointerAlignment*/, 0);
+			var protectedRegionDefinitionSymbol = Linker.DefineSymbol(name, SectionKind.ROData, 0/*TypeLayout.NativePointerAlignment*/, 0);
 			var writer1 = new EndianAwareBinaryWriter(protectedRegionDefinitionSymbol.Stream, Architecture.Endianness);
 
 			// 1. Offset to start

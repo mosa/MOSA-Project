@@ -28,8 +28,6 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var trace = CreateTraceLog("Inline");
 
-			bool firstCompile = (MethodData.CompileCount == 0);
-
 			var currentInlineStatus = MethodData.Inlined;
 
 			MethodData.IsCompiled = true;
@@ -123,6 +121,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (inline)
 			{
 				MethodData.BasicBlocks = CopyInstructions();
+
+				//MethodCompiler.IsMethodInlined = true;
 			}
 
 			if (triggerReschedules)

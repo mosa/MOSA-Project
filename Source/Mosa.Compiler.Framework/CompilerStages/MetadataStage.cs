@@ -185,6 +185,9 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				if (!method.IsConstructor || method.Signature.Parameters.Count != 0 || method.HasOpenGenericParams)
 					continue;
 
+				if (Compiler.CompilerData.IsMethodInlined(method))
+					continue;
+
 				//if (!Compiler.MethodScanner.IsMethodInvoked(method))
 				//	break;
 
@@ -243,12 +246,15 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				// 15. Pointer to Methods
 				foreach (var method in methodList)
 				{
-					if ((!(!method.HasImplementation && method.IsAbstract)) && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams)
+					Debug.Assert((!(!method.HasImplementation && method.IsAbstract)) == (method.HasImplementation || !method.IsAbstract));
+
+					if ((!(!method.HasImplementation && method.IsAbstract))
+						&& !method.HasOpenGenericParams
+						&& !method.DeclaringType.HasOpenGenericParams
+						&& !Compiler.CompilerData.IsMethodInlined(method)
+						&& Compiler.MethodScanner.IsMethodInvoked(method))
 					{
-						if (Compiler.MethodScanner.IsMethodInvoked(method))
-						{
-							Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, writer.Position, GetMethodNameConsiderPlug(method), 0);
-						}
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, writer.Position, GetMethodNameConsiderPlug(method), 0);
 					}
 					writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 				}
@@ -565,7 +571,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			writer.Write(value, TypeLayout.NativePointerSize);
 
 			// 5. Pointer to Method
-			if (method.HasImplementation && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams)
+			if (method.HasImplementation && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams && !methodData.Inlined)
 			{
 				if (Compiler.MethodScanner.IsMethodInvoked(method))
 				{

@@ -145,7 +145,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 					Symbols.Add(symbol);
 					symbolLookup.Add(name, symbol);
-					symbol.IsExport = false;
+					symbol.IsExternalSymbol = false;
 				}
 
 				symbol.Alignment = aligned;
@@ -175,8 +175,8 @@ namespace Mosa.Compiler.Framework.Linker
 				}
 
 				symbol.SectionKind = kind;
-				symbol.IsExport = true;
-				symbol.ExportName = externalName;
+				symbol.IsExternalSymbol = true;
+				symbol.ExternalSymbolName = externalName;
 
 				return symbol;
 			}
@@ -276,7 +276,7 @@ namespace Mosa.Compiler.Framework.Linker
 				if (symbol.IsResolved)
 					continue;
 
-				if (symbol.IsExport)
+				if (symbol.IsExternalSymbol)
 					continue;
 
 				symbol.SectionOffset = section.Size;

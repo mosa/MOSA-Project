@@ -43,7 +43,7 @@ namespace Mosa.Tool.Explorer.Stages
 			}
 
 			// Create a byte array from the symbol stream
-			var symbol = MethodCompiler.Linker.GetSymbol(MethodCompiler.Method.FullName);
+			var symbol = Linker.GetSymbol(MethodCompiler.Method.FullName);
 			var stream = symbol.Stream;
 			var oldPosition = stream.Position;
 			var length = (int)stream.Length;
@@ -88,7 +88,7 @@ namespace Mosa.Tool.Explorer.Stages
 			if (trace == null)
 				return;
 
-			var symbol = MethodCompiler.Linker.GetSymbol(MethodCompiler.Method.FullName);
+			var symbol = Linker.GetSymbol(MethodCompiler.Method.FullName);
 
 			foreach (var request in symbol.GetLinkRequests())
 			{

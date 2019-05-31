@@ -57,9 +57,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (Is32BitPlatform)
 			{
-				//var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-				//var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-
 				context.SetInstruction(IRInstruction.GetLow64, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.ReturnRegister), operand);
 				context.AppendInstruction(IRInstruction.GetHigh64, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.ReturnHighRegister), operand);
 			}
@@ -90,6 +87,19 @@ namespace Mosa.Compiler.Framework.Stages
 			var operands = node.GetOperands();
 
 			Debug.Assert(method != null);
+
+			if (MethodCompiler.Compiler.CompilerData.IsMethodInlined(method))
+			{
+				// If above is true, then a race condition occurred between:
+				// 1) after inline stage of this method, and
+				// 2) theinline evaluation stage of the target method
+				// the only best option at this point is to stop compiling this method.
+				// Note: It should already be scheduled to be re-compiled!
+				//MethodCompiler.Stop();
+				//return;
+			}
+
+			//Debug.Assert(!MethodCompiler.Compiler.CompilerData.IsMethodInlined(method));
 
 			operands.RemoveAt(0);
 
