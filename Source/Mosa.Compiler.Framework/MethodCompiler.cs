@@ -521,7 +521,8 @@ namespace Mosa.Compiler.Framework
 			if (intrinsic != null)
 				return;
 
-			Linker.DefineExternalSymbol(Method.FullName, Method.ExternMethodName, SectionKind.Text);
+			Symbol.ExternalSymbolName = Method.ExternMethodName;
+			Symbol.IsExternalSymbol = true;
 
 			if (Trace.IsTraceable(5))
 			{

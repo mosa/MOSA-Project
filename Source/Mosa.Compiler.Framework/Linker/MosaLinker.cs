@@ -162,26 +162,6 @@ namespace Mosa.Compiler.Framework.Linker
 			}
 		}
 
-		public LinkerSymbol DefineExternalSymbol(string name, string externalName, SectionKind kind)
-		{
-			lock (_lock)
-			{
-				if (!symbolLookup.TryGetValue(name, out LinkerSymbol symbol))
-				{
-					symbol = new LinkerSymbol(name, 0, kind);
-
-					Symbols.Add(symbol);
-					symbolLookup.Add(name, symbol);
-				}
-
-				symbol.SectionKind = kind;
-				symbol.IsExternalSymbol = true;
-				symbol.ExternalSymbolName = externalName;
-
-				return symbol;
-			}
-		}
-
 		public void SetFirst(LinkerSymbol symbol)
 		{
 			Symbols.Remove(symbol);
