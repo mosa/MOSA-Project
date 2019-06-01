@@ -122,7 +122,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				MethodData.BasicBlocks = CopyInstructions();
 
-				//MethodCompiler.IsMethodInlined = true;
+				MethodCompiler.IsMethodInlined = true;
 			}
 
 			if (triggerReschedules)

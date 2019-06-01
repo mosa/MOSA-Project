@@ -261,7 +261,7 @@ namespace Mosa.Compiler.Framework
 			MethodData.Counters.Reset();
 
 			// Both defines the symbol and also clears the data
-			//Symbol = Linker.DefineSymbol(Method.FullName, SectionKind.Text, 0, 0);
+			Symbol = Linker.DefineSymbol(Method.FullName, SectionKind.Text, 0, 0);
 
 			EvaluateParameterOperands();
 
@@ -424,7 +424,7 @@ namespace Mosa.Compiler.Framework
 
 				InstructionLogger.Run(this, stage);
 
-				if (IsStopped || IsMethodInlined)
+				if (IsStopped /*|| IsMethodInlined*/)
 					break;
 			}
 
