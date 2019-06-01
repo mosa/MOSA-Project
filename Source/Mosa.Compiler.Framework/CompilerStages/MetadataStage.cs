@@ -189,8 +189,8 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				//if (Compiler.CompilerData.IsMethodInlined(method))
 				//	continue;
 
-				//if (!Compiler.MethodScanner.IsMethodInvoked(method))
-				//	break;
+				if (!Compiler.MethodScanner.IsMethodInvoked(method))
+					break;
 
 				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, writer.Position, Metadata.MethodDefinition + method.FullName, 0);
 
