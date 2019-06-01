@@ -185,8 +185,9 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				if (!method.IsConstructor || method.Signature.Parameters.Count != 0 || method.HasOpenGenericParams)
 					continue;
 
-				if (Compiler.CompilerData.IsMethodInlined(method))
-					continue;
+				// TODO: Inline
+				//if (Compiler.CompilerData.IsMethodInlined(method))
+				//	continue;
 
 				//if (!Compiler.MethodScanner.IsMethodInvoked(method))
 				//	break;
@@ -251,7 +252,8 @@ namespace Mosa.Compiler.Framework.CompilerStages
 					if ((!(!method.HasImplementation && method.IsAbstract))
 						&& !method.HasOpenGenericParams
 						&& !method.DeclaringType.HasOpenGenericParams
-						&& !Compiler.CompilerData.IsMethodInlined(method)
+
+						//&& !Compiler.CompilerData.IsMethodInlined(method) // TODO: Inline
 						&& Compiler.MethodScanner.IsMethodInvoked(method))
 					{
 						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, writer.Position, GetMethodNameConsiderPlug(method), 0);
@@ -571,7 +573,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			writer.Write(value, TypeLayout.NativePointerSize);
 
 			// 5. Pointer to Method
-			if (method.HasImplementation && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams && !methodData.Inlined)
+			if (method.HasImplementation && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams /*&& !methodData.Inlined*/)  // TODO: Inline
 			{
 				if (Compiler.MethodScanner.IsMethodInvoked(method))
 				{
