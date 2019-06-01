@@ -36,8 +36,8 @@ namespace Mosa.Compiler.Framework.Stages
 			MethodData.IsCILDecoded = MethodCompiler.IsCILDecodeRequired || (!Method.IsCompilerGenerated && Method.HasImplementation);
 			MethodData.HasLoops = false;
 			MethodData.IsMethodImplementationReplaced = MethodCompiler.IsMethodPlugged;
-			MethodData.HasDoNotInlineAttribute = MethodCompiler.Method.IsNoInlining;
-			MethodData.HasAggressiveInliningAttribute = MethodCompiler.Method.IsAggressiveInlining;
+			MethodData.HasDoNotInlineAttribute = Method.IsNoInlining;
+			MethodData.HasAggressiveInliningAttribute = Method.IsAggressiveInlining;
 			MethodData.HasAddressOfInstruction = false;
 			MethodData.IsVirtual = Method.IsVirtual;
 			MethodData.IsDevirtualized = Method.IsVirtual && !TypeLayout.IsMethodOverridden(Method);
@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Framework.Stages
 			int totalNonIRCount = 0;
 			int totalStackParameterInstruction = 0;
 
-			if (!MethodCompiler.Method.IsNoInlining)
+			if (!Method.IsNoInlining)
 			{
 				foreach (var block in BasicBlocks)
 				{

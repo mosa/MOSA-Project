@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool OverridesMethod()
 		{
-			if (MethodCompiler.Method.Overrides == null)
+			if (Method.Overrides == null)
 				return false;
 			if (MethodCompiler.Type.BaseType.Name.Equals("ValueType"))
 				return true;

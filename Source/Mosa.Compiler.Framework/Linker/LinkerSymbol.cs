@@ -33,6 +33,8 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public ulong VirtualAddress { get; internal set; }
 
+		public bool IsReplaced { get; internal set; }
+
 		public List<LinkRequest> LinkRequests { get; }
 
 		private readonly object _lock = new object();
@@ -44,6 +46,7 @@ namespace Mosa.Compiler.Framework.Linker
 			SectionKind = kind;
 			LinkRequests = new List<LinkRequest>();
 			IsExternalSymbol = false;
+			IsReplaced = false;
 		}
 
 		public void SetData(MemoryStream stream)
@@ -54,6 +57,11 @@ namespace Mosa.Compiler.Framework.Linker
 		public void SetData(byte[] data)
 		{
 			SetData(new MemoryStream(data));
+		}
+
+		public void SetReplacementStatus(bool replaced)
+		{
+			IsReplaced = replaced;
 		}
 
 		public void AddPatch(LinkRequest linkRequest)

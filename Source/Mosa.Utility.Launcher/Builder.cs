@@ -415,14 +415,17 @@ namespace Mosa.Utility.Launcher
 
 			var textSection = Linker.Sections[(int)SectionKind.Text];
 
-			var map = new Dictionary<ulong, string>();
+			var map = new Dictionary<ulong, List<string>>();
 
 			foreach (var symbol in Linker.Symbols)
 			{
-				if (map.ContainsKey(symbol.VirtualAddress))
-					continue;
+				if (!map.TryGetValue(symbol.VirtualAddress, out List<string> list))
+				{
+					list = new List<string>();
+					map.Add(symbol.VirtualAddress, list);
+				}
 
-				map.Add(symbol.VirtualAddress, symbol.Name);
+				list.Add(symbol.Name);
 			}
 
 			const uint multibootHeaderLength = MultibootHeaderLength;
@@ -443,9 +446,12 @@ namespace Mosa.Utility.Launcher
 			{
 				using (var dest = File.CreateText(asmfile))
 				{
-					if (map.ContainsKey(startingAddress))
+					if (map.TryGetValue(startingAddress, out List<string> list))
 					{
-						dest.WriteLine("; " + map[startingAddress]);
+						foreach (var entry in list)
+						{
+							dest.WriteLine($"; {entry}");
+						}
 					}
 
 					foreach (var instruction in disasm.Disassemble())
@@ -453,9 +459,12 @@ namespace Mosa.Utility.Launcher
 						var inst = translator.Translate(instruction);
 						dest.WriteLine(inst);
 
-						if (map.ContainsKey(instruction.PC))
+						if (map.TryGetValue(instruction.PC, out List<string> list2))
 						{
-							dest.WriteLine("; " + map[instruction.PC]);
+							foreach (var entry in list2)
+							{
+								dest.WriteLine($"; {entry}");
+							}
 						}
 
 						if (instruction.PC > startingAddress + length)

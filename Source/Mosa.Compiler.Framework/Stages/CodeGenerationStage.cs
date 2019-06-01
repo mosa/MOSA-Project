@@ -68,7 +68,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!EmitBinary)
 				return;
 
-			var symbol = Linker.DefineSymbol(MethodCompiler.Method.FullName, SectionKind.Text, 0, 0);
+			var symbol = Linker.DefineSymbol(Method.FullName, SectionKind.Text, 0, 0);
 
 			codeStream = new MemoryStream();
 
@@ -170,7 +170,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void BeginGenerate()
 		{
 			CodeEmitter = new BaseCodeEmitter();
-			CodeEmitter.Initialize(MethodCompiler.Method.FullName, Linker, codeStream);
+			CodeEmitter.Initialize(Method.FullName, Linker, codeStream);
 
 			MethodCompiler.Labels = CodeEmitter.Labels;
 		}

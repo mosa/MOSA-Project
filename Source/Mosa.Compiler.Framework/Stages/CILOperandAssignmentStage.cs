@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!MethodCompiler.IsCILDecodeRequired)
 				return;
 
-			if (!MethodCompiler.Method.HasImplementation)
+			if (!Method.HasImplementation)
 				return;
 
 			//trace = CreateTraceLog();

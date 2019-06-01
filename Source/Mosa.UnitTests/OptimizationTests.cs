@@ -284,22 +284,22 @@ namespace Mosa.UnitTests
 			return b != 0;
 		}
 
-		[MosaUnitTest(0)]
-		[MosaUnitTest(1)]
-		[MosaUnitTest(2)]
-		[MosaUnitTest(3)]
-		public static int OptimizationTest22(int a)
-		{
-			return a % 2 != 0 ? 4 : 2;
-		}
+		//[MosaUnitTest(0)]
+		//[MosaUnitTest(1)]
+		//[MosaUnitTest(2)]
+		//[MosaUnitTest(3)]
+		//public static int OptimizationTest22(int a)
+		//{
+		//	return a % 2 != 0 ? 4 : 2;
+		//}
 
-		[MosaUnitTest((uint)0)]
-		[MosaUnitTest((uint)1)]
-		[MosaUnitTest((uint)2)]
-		[MosaUnitTest((uint)3)]
-		public static uint OptimizationTest23(uint a)
-		{
-			return a % 2 != 0 ? 4u : 2u;
-		}
+		//[MosaUnitTest((uint)0)]
+		//[MosaUnitTest((uint)1)]
+		//[MosaUnitTest((uint)2)]
+		//[MosaUnitTest((uint)3)]
+		//public static uint OptimizationTest23(uint a)
+		//{
+		//	return a % 2 != 0 ? 4u : 2u;
+		//}
 	}
 }

@@ -217,6 +217,9 @@ namespace Mosa.Compiler.Framework.Linker
 		{
 			foreach (var symbol in Symbols)
 			{
+				if (symbol.IsReplaced)
+					continue;
+
 				foreach (var linkRequest in symbol.LinkRequests)
 				{
 					ApplyPatch(linkRequest);
@@ -270,6 +273,9 @@ namespace Mosa.Compiler.Framework.Linker
 
 			foreach (var symbol in Symbols)
 			{
+				if (symbol.IsReplaced)
+					continue;
+
 				if (symbol.SectionKind != section.SectionKind)
 					continue;
 
@@ -292,6 +298,9 @@ namespace Mosa.Compiler.Framework.Linker
 		{
 			foreach (var symbol in Symbols)
 			{
+				if (symbol.IsReplaced)
+					continue;
+
 				if (symbol.SectionKind != section.SectionKind)
 					continue;
 

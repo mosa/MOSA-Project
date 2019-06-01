@@ -200,6 +200,11 @@ namespace Mosa.Compiler.Framework
 		public bool IsStopped { get; private set; }
 
 		/// <summary>
+		/// Gets the linker symbol.
+		/// </summary>
+		public LinkerSymbol Symbol { get; private set; }
+
+		/// <summary>
 		/// Gets the method scanner.
 		/// </summary>
 		public MethodScanner MethodScanner { get; }
@@ -254,6 +259,9 @@ namespace Mosa.Compiler.Framework
 			MethodData = compiler.CompilerData.GetMethodData(Method);
 
 			MethodData.Counters.Reset();
+
+			// Both defines the symbol and also clears the data
+			//Symbol = Linker.DefineSymbol(Method.FullName, SectionKind.Text, 0, 0);
 
 			EvaluateParameterOperands();
 
@@ -385,6 +393,8 @@ namespace Mosa.Compiler.Framework
 			InternalMethod();
 
 			ExecutePipeline();
+
+			//Symbol.SetReplacementStatus(MethodData.Inlined);
 
 			if (Compiler.CompilerOptions.EnableStatistics)
 			{
