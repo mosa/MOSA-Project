@@ -37,6 +37,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		{
 			setupMethod = Compiler.CreateLinkerMethod(SetupStagerName);
 
+			Compiler.CompilerData.GetMethodData(setupMethod).DoNotInline = true;
 			MethodScanner.MethodInvoked(setupMethod, setupMethod);
 
 			Linker.EntryPoint = Linker.GetSymbol(setupMethod.FullName);

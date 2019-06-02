@@ -157,8 +157,10 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public void AddToInlineQueueByCallee(MethodData calleeMethod, int timestamp)
+		public void AddToInlineQueueByCallee(MethodData calleeMethod)
 		{
+			var timestamp = GetTimestamp();
+
 			lock (inlineQueue)
 			{
 				foreach (var method in calleeMethod.CalledBy)
@@ -175,27 +177,6 @@ namespace Mosa.Compiler.Framework
 						inlineQueue.Remove(method);
 						inlineQueue.Add(method, existingtimestamp);
 					}
-				}
-			}
-		}
-
-		public void AddToInlineQueue(MosaMethod method, int timestamp)
-		{
-			Debug.Assert(!method.HasOpenGenericParams);
-
-			lock (inlineQueue)
-			{
-				if (!inlineQueue.TryGetValue(method, out int existingtimestamp))
-				{
-					inlineQueue.Add(method, timestamp);
-				}
-				else
-				{
-					if (existingtimestamp < timestamp)
-						return;
-
-					inlineQueue.Remove(method);
-					inlineQueue.Add(method, existingtimestamp);
 				}
 			}
 		}

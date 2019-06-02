@@ -19,8 +19,6 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsCompiled { get; set; }
 
-		public bool IsCILDecoded { get; set; }
-
 		public bool IsLinkerGenerated { get; set; }
 
 		public bool HasProtectedRegions { get; set; }

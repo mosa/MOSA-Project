@@ -26,6 +26,8 @@ namespace Mosa.Platform.Intel.CompilerStages
 
 				Linker.EntryPoint = Linker.GetSymbol(initializeMethod.FullName);
 
+				Compiler.CompilerData.GetMethodData(initializeMethod).DoNotInline = true;
+
 				MethodScanner.MethodInvoked(initializeMethod, initializeMethod);
 			}
 			else
