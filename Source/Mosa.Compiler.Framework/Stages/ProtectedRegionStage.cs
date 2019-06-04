@@ -26,12 +26,12 @@ namespace Mosa.Compiler.Framework.Stages
 			InsertBlockProtectInstructions();
 			UpdateBlockProtectInstructions();
 
-			MethodCompiler.ProtectedRegions = ProtectedRegion.CreateProtectedRegions(BasicBlocks, MethodCompiler.Method.ExceptionHandlers);
+			MethodCompiler.ProtectedRegions = ProtectedRegion.CreateProtectedRegions(BasicBlocks, Method.ExceptionHandlers);
 		}
 
 		private void InsertBlockProtectInstructions()
 		{
-			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
+			foreach (var handler in Method.ExceptionHandlers)
 			{
 				var tryBlock = BasicBlocks.GetByLabel(handler.TryStart);
 

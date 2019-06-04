@@ -178,7 +178,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// <c>true</c> if this instance has protected regions; otherwise, <c>false</c>.
 		/// </value>
-		protected bool HasProtectedRegions { get { return MethodCompiler.Method.ExceptionHandlers.Count != 0; } }
+		protected bool HasProtectedRegions { get { return Method.ExceptionHandlers.Count != 0; } }
 
 		/// <summary>
 		/// Gets a value indicating whether this instance has code.
@@ -569,7 +569,7 @@ namespace Mosa.Compiler.Framework
 
 		protected MosaExceptionHandler FindImmediateExceptionContext(int label)
 		{
-			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
+			foreach (var handler in Method.ExceptionHandlers)
 			{
 				if (handler.IsLabelWithinTry(label) || handler.IsLabelWithinHandler(label))
 				{
@@ -582,11 +582,11 @@ namespace Mosa.Compiler.Framework
 
 		protected MosaExceptionHandler FindNextEnclosingFinallyContext(MosaExceptionHandler exceptionContext)
 		{
-			int index = MethodCompiler.Method.ExceptionHandlers.IndexOf(exceptionContext);
+			int index = Method.ExceptionHandlers.IndexOf(exceptionContext);
 
-			for (int i = index + 1; i < MethodCompiler.Method.ExceptionHandlers.Count; i++)
+			for (int i = index + 1; i < Method.ExceptionHandlers.Count; i++)
 			{
-				var entry = MethodCompiler.Method.ExceptionHandlers[i];
+				var entry = Method.ExceptionHandlers[i];
 
 				if (!entry.IsLabelWithinTry(exceptionContext.TryStart))
 					return null;
@@ -604,7 +604,7 @@ namespace Mosa.Compiler.Framework
 		{
 			int label = node.Label;
 
-			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
+			foreach (var handler in Method.ExceptionHandlers)
 			{
 				if (handler.IsLabelWithinHandler(label))
 				{
@@ -620,7 +620,7 @@ namespace Mosa.Compiler.Framework
 			int leaveLabel = node.Label;
 			int targetLabel = node.BranchTargets[0].First.Label;
 
-			foreach (var handler in MethodCompiler.Method.ExceptionHandlers)
+			foreach (var handler in Method.ExceptionHandlers)
 			{
 				bool one = handler.IsLabelWithinTry(leaveLabel);
 				bool two = handler.IsLabelWithinTry(targetLabel);

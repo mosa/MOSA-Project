@@ -145,7 +145,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 					Symbols.Add(symbol);
 					symbolLookup.Add(name, symbol);
-					symbol.IsExport = false;
+					symbol.IsExternalSymbol = false;
 				}
 
 				symbol.Alignment = aligned;
@@ -157,26 +157,6 @@ namespace Mosa.Compiler.Framework.Linker
 				{
 					symbol.Stream.SetLength(size);
 				}
-
-				return symbol;
-			}
-		}
-
-		public LinkerSymbol DefineExternalSymbol(string name, string externalName, SectionKind kind)
-		{
-			lock (_lock)
-			{
-				if (!symbolLookup.TryGetValue(name, out LinkerSymbol symbol))
-				{
-					symbol = new LinkerSymbol(name, 0, kind);
-
-					Symbols.Add(symbol);
-					symbolLookup.Add(name, symbol);
-				}
-
-				symbol.SectionKind = kind;
-				symbol.IsExport = true;
-				symbol.ExportName = externalName;
 
 				return symbol;
 			}
@@ -217,6 +197,9 @@ namespace Mosa.Compiler.Framework.Linker
 		{
 			foreach (var symbol in Symbols)
 			{
+				if (symbol.IsReplaced)
+					continue;
+
 				foreach (var linkRequest in symbol.LinkRequests)
 				{
 					ApplyPatch(linkRequest);
@@ -270,13 +253,16 @@ namespace Mosa.Compiler.Framework.Linker
 
 			foreach (var symbol in Symbols)
 			{
+				if (symbol.IsReplaced)
+					continue;
+
 				if (symbol.SectionKind != section.SectionKind)
 					continue;
 
 				if (symbol.IsResolved)
 					continue;
 
-				if (symbol.IsExport)
+				if (symbol.IsExternalSymbol)
 					continue;
 
 				symbol.SectionOffset = section.Size;
@@ -292,6 +278,9 @@ namespace Mosa.Compiler.Framework.Linker
 		{
 			foreach (var symbol in Symbols)
 			{
+				if (symbol.IsReplaced)
+					continue;
+
 				if (symbol.SectionKind != section.SectionKind)
 					continue;
 

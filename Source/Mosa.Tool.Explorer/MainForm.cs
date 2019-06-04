@@ -602,7 +602,7 @@ namespace Mosa.Tool.Explorer
 				cbStages.Items.Add(stage);
 			}
 
-			cbStages.SelectedIndex = 0;
+			cbStages.SelectedIndex = cbStages.Items.Count == 0 ? -1 : 0;
 		}
 
 		private void UpdateDebugStages()

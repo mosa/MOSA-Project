@@ -68,7 +68,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				for (var node = BasicBlocks[i].First; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty)
+					if (node.IsEmptyOrNop)
 						continue;
 
 					if (dispatches.TryGetValue(node.Instruction, out Dispatch dispatch))

@@ -35,10 +35,8 @@ namespace Mosa.Compiler.Framework
 			{
 				for (var node = BasicBlocks[index].AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty)
+					if (node.IsEmptyOrNop)
 						continue;
-
-					//instructionCount++;
 
 					if (node.Instruction.ID == 0)
 						continue; // no mapping
@@ -49,13 +47,17 @@ namespace Mosa.Compiler.Framework
 					{
 						context.Node = node;
 						visitationContext(context);
+						continue;
 					}
 
-					if (node.IsEmpty)
+					if (node.IsEmptyOrNop)
 						continue;
 
 					visitationNodes[node.Instruction.ID]?.Invoke(node);
 				}
+
+				if (MethodCompiler.IsStopped)
+					return;
 			}
 		}
 

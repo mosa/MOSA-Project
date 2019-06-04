@@ -1082,17 +1082,16 @@ namespace Mosa.Compiler.Framework.Stages
 			 * be replaced by a proper VM call.
 			 */
 
-			var linker = MethodCompiler.Linker;
 			string symbolName = node.Operand1.Name;
 			string stringdata = node.Operand1.StringData;
 
 			node.SetInstruction(Select(node.Result, IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, node.Operand1);
 
-			var symbol = linker.DefineSymbol(symbolName, SectionKind.ROData, NativeAlignment, (NativePointerSize * 2) + 4 + (stringdata.Length * 2));
+			var symbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, NativeAlignment, (NativePointerSize * 2) + 4 + (stringdata.Length * 2));
 			var stream = symbol.Stream;
 
 			// Type Definition and sync block
-			linker.Link(LinkType.AbsoluteAddress, PatchType.I4, symbol, 0, Metadata.TypeDefinition + "System.String", 0);
+			Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, symbol, 0, Metadata.TypeDefinition + "System.String", 0);
 
 			stream.WriteZeroBytes(NativePointerSize * 2);
 

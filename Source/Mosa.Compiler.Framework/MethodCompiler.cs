@@ -49,11 +49,6 @@ namespace Mosa.Compiler.Framework
 		public MosaMethod Method { get; }
 
 		/// <summary>
-		/// Gets the owner type of the method.
-		/// </summary>
-		public MosaType Type { get; }
-
-		/// <summary>
 		/// Gets the basic blocks.
 		/// </summary>
 		/// <value>The basic blocks.</value>
@@ -170,11 +165,6 @@ namespace Mosa.Compiler.Framework
 		public Operand ConstantZero64 { get; }
 
 		/// <summary>
-		/// Gets a value indicating whether this instance is in SSA form.
-		/// </summary>
-		public bool IsInSSAForm { get; set; }
-
-		/// <summary>
 		/// Gets or sets a value indicating whether this instance is execute pipeline.
 		/// </summary>
 		public bool IsExecutePipeline { get; set; }
@@ -195,9 +185,19 @@ namespace Mosa.Compiler.Framework
 		public bool IsStackFrameRequired { get; set; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether this instance is method inlined.
+		/// </summary>
+		public bool IsMethodInlined { get; set; }
+
+		/// <summary>
 		/// Holds flag that will stop method compiler
 		/// </summary>
 		public bool IsStopped { get; private set; }
+
+		/// <summary>
+		/// Gets the linker symbol.
+		/// </summary>
+		public LinkerSymbol Symbol { get; private set; }
 
 		/// <summary>
 		/// Gets the method scanner.
@@ -221,7 +221,6 @@ namespace Mosa.Compiler.Framework
 
 			Compiler = compiler;
 			Method = method;
-			Type = method.DeclaringType;
 			MethodScheduler = compiler.MethodScheduler;
 			Architecture = compiler.Architecture;
 			TypeSystem = compiler.TypeSystem;
@@ -246,14 +245,17 @@ namespace Mosa.Compiler.Framework
 			ThreadID = threadID;
 
 			IsStopped = false;
-			IsInSSAForm = false;
 			IsExecutePipeline = true;
 			IsCILDecodeRequired = true;
 			IsStackFrameRequired = true;
+			IsMethodInlined = false;
 
 			MethodData = compiler.CompilerData.GetMethodData(Method);
 
 			MethodData.Counters.Reset();
+
+			// Both defines the symbol and also clears the data
+			Symbol = Linker.DefineSymbol(Method.FullName, SectionKind.Text, 0, 0);
 
 			EvaluateParameterOperands();
 
@@ -339,9 +341,9 @@ namespace Mosa.Compiler.Framework
 
 			if (Method.HasThis || Method.HasExplicitThis)
 			{
-				if (Type.IsValueType)
+				if (Method.DeclaringType.IsValueType)
 				{
-					var ptr = Type.ToManagedPointer();
+					var ptr = Method.DeclaringType.ToManagedPointer();
 					SetStackParameter(index++, ptr, "this", true, offset);
 
 					var size = GetReferenceOrTypeSize(ptr, true);
@@ -349,9 +351,9 @@ namespace Mosa.Compiler.Framework
 				}
 				else
 				{
-					SetStackParameter(index++, Type, "this", true, offset);
+					SetStackParameter(index++, Method.DeclaringType, "this", true, offset);
 
-					var size = GetReferenceOrTypeSize(Type, true);
+					var size = GetReferenceOrTypeSize(Method.DeclaringType, true);
 					offset += size;
 				}
 			}
@@ -386,6 +388,8 @@ namespace Mosa.Compiler.Framework
 
 			ExecutePipeline();
 
+			//Symbol.SetReplacementStatus(MethodData.Inlined);	// TOTO
+
 			if (Compiler.CompilerOptions.EnableStatistics)
 			{
 				var log = new TraceLog(TraceType.MethodCounters, Method, string.Empty);
@@ -414,7 +418,7 @@ namespace Mosa.Compiler.Framework
 
 				InstructionLogger.Run(this, stage);
 
-				if (IsStopped)
+				if (IsStopped/* || IsMethodInlined*/)   // TOTO
 					break;
 			}
 
@@ -434,7 +438,7 @@ namespace Mosa.Compiler.Framework
 				for (int i = 0; i < Pipeline.Count; i++)
 				{
 					var pipelineTicks = executionTimes[i];
-					var ticks = pipelineTicks - previousTicks;
+					var ticks = pipelineTicks == 0 ? 0 : pipelineTicks - previousTicks;
 					var percentage = (ticks * 100) / (double)(totalTicks - startTicks);
 					previousTicks = pipelineTicks;
 
@@ -463,21 +467,16 @@ namespace Mosa.Compiler.Framework
 			Compiler.MethodScanner.MethodInvoked(plugMethod, Method);
 
 			IsMethodPlugged = true;
-
-			Debug.Assert(plugMethod != null);
-
-			var plugSymbol = Operand.CreateSymbolFromMethod(plugMethod, TypeSystem);
-
-			var block = BasicBlocks.CreateBlock(BasicBlock.PrologueLabel);
-			BasicBlocks.AddHeadBlock(block);
-
-			var ctx = new Context(block);
-
-			ctx.AppendInstruction(IRInstruction.Jmp, null, plugSymbol);
-
 			IsCILDecodeRequired = false;
-			IsExecutePipeline = true;
+			IsExecutePipeline = false;
 			IsStackFrameRequired = false;
+
+			if (Trace.IsTraceable(5))
+			{
+				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-Plugged Method");
+				traceLog?.Log($"Plugged by {plugMethod.FullName}");
+				Trace.PostTraceLog(traceLog);
+			}
 		}
 
 		private void PatchDelegate()
@@ -493,6 +492,13 @@ namespace Mosa.Compiler.Framework
 
 			IsCILDecodeRequired = false;
 			IsExecutePipeline = true;
+
+			if (Trace.IsTraceable(5))
+			{
+				var traceLog = new TraceLog(TraceType.MethodDebug, Method, "XX-Delegate Patched");
+				traceLog?.Log("This delegate method was patched");
+				Trace.PostTraceLog(traceLog);
+			}
 		}
 
 		private void ExternalMethod()
@@ -509,7 +515,15 @@ namespace Mosa.Compiler.Framework
 			if (intrinsic != null)
 				return;
 
-			Linker.DefineExternalSymbol(Method.FullName, Method.ExternMethodName, SectionKind.Text);
+			Symbol.ExternalSymbolName = Method.ExternMethodName;
+			Symbol.IsExternalSymbol = true;
+
+			if (Trace.IsTraceable(5))
+			{
+				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-External Method");
+				traceLog?.Log($"This method is external linked: {Method.ExternMethodName}");
+				Trace.PostTraceLog(traceLog);
+			}
 		}
 
 		private void InternalMethod()
@@ -520,6 +534,13 @@ namespace Mosa.Compiler.Framework
 			IsCILDecodeRequired = false;
 			IsExecutePipeline = false;
 			IsStackFrameRequired = false;
+
+			if (Trace.IsTraceable(5))
+			{
+				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-External Method");
+				traceLog?.Log($"This method is an internal method");
+				Trace.PostTraceLog(traceLog);
+			}
 		}
 
 		/// <summary>

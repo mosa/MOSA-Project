@@ -18,18 +18,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Initialize()
 		{
-			Register(InlinedCallSitesCount);
+			Register(InlinedMethodsCount);
 			Register(InlinedCallSitesCount);
 		}
 
 		protected override void Run()
 		{
-			if (HasProtectedRegions)
-				return;
-
-			if (MethodCompiler.Method.IsCompilerGenerated && MethodCompiler.Method.Name == TypeInitializerStage.TypeInitializerName)
-				return;
-
 			MethodData.CompileCount++;
 
 			var callSites = new List<InstructionNode>();
@@ -72,8 +66,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var trace = CreateTraceLog("Inlined");
 
-			// Captures point in time - immediately before inlined blocks are used
-			var timestampStart = MethodScheduler.GetTimestamp();
 			int callSiteCount = 0;
 
 			foreach (var callSiteNode in callSites)
@@ -106,8 +98,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			// Captures point in time - immediately after inlined blocks were used
-			var timestampEnd = MethodScheduler.GetTimestamp();
-			MethodData.InlineTimestamp = timestampStart;
+			MethodData.InlineTimestamp = MethodScheduler.GetTimestamp();
 
 			InlinedMethodsCount.Set(1);
 			InlinedCallSitesCount.Set(callSiteCount);
