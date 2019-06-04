@@ -24,8 +24,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-
-
 			MethodData.CompileCount++;
 
 			var callSites = new List<InstructionNode>();

@@ -388,7 +388,7 @@ namespace Mosa.Compiler.Framework
 
 			ExecutePipeline();
 
-			Symbol.SetReplacementStatus(MethodData.Inlined);
+			//Symbol.SetReplacementStatus(MethodData.Inlined);	// TOTO
 
 			if (Compiler.CompilerOptions.EnableStatistics)
 			{
@@ -418,7 +418,7 @@ namespace Mosa.Compiler.Framework
 
 				InstructionLogger.Run(this, stage);
 
-				if (IsStopped || IsMethodInlined)
+				if (IsStopped/* || IsMethodInlined*/)   // TOTO
 					break;
 			}
 
