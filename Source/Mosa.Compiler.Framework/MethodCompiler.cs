@@ -49,11 +49,6 @@ namespace Mosa.Compiler.Framework
 		public MosaMethod Method { get; }
 
 		/// <summary>
-		/// Gets the owner type of the method.
-		/// </summary>
-		public MosaType Type { get; }
-
-		/// <summary>
 		/// Gets the basic blocks.
 		/// </summary>
 		/// <value>The basic blocks.</value>
@@ -226,7 +221,6 @@ namespace Mosa.Compiler.Framework
 
 			Compiler = compiler;
 			Method = method;
-			Type = method.DeclaringType;
 			MethodScheduler = compiler.MethodScheduler;
 			Architecture = compiler.Architecture;
 			TypeSystem = compiler.TypeSystem;
@@ -347,9 +341,9 @@ namespace Mosa.Compiler.Framework
 
 			if (Method.HasThis || Method.HasExplicitThis)
 			{
-				if (Type.IsValueType)
+				if (Method.DeclaringType.IsValueType)
 				{
-					var ptr = Type.ToManagedPointer();
+					var ptr = Method.DeclaringType.ToManagedPointer();
 					SetStackParameter(index++, ptr, "this", true, offset);
 
 					var size = GetReferenceOrTypeSize(ptr, true);
@@ -357,9 +351,9 @@ namespace Mosa.Compiler.Framework
 				}
 				else
 				{
-					SetStackParameter(index++, Type, "this", true, offset);
+					SetStackParameter(index++, Method.DeclaringType, "this", true, offset);
 
-					var size = GetReferenceOrTypeSize(Type, true);
+					var size = GetReferenceOrTypeSize(Method.DeclaringType, true);
 					offset += size;
 				}
 			}

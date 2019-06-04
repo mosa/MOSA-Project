@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -49,7 +50,7 @@ namespace Mosa.Compiler.Framework.Stages
 			trace?.Log($"IsMethodImplementationReplaced (Plugged): {MethodData.IsMethodImplementationReplaced}");
 			trace?.Log($"CompileCount: {MethodData.CompileCount}");
 
-			if (StaticCanNotInline(MethodData))
+			if (StaticCanNotInline(MethodData, Method))
 			{
 				trace?.Log($"** Staticly Evaluated");
 				trace?.Log($"Inlined: {MethodData.Inlined}");
@@ -126,7 +127,7 @@ namespace Mosa.Compiler.Framework.Stages
 			MethodData.NonIRInstructionCount = totalNonIRCount;
 			MethodData.IRStackParameterInstructionCount = totalStackParameterInstruction;
 
-			bool inline = CanInline(MethodData);
+			bool inline = CanInline(MethodData, Method);
 
 			MethodData.Inlined = inline;
 			MethodCompiler.IsMethodInlined = inline;
@@ -156,24 +157,30 @@ namespace Mosa.Compiler.Framework.Stages
 			ReversedInlinedMethodsCount.Set(MethodData.CompileCount >= MaximumCompileCount);
 		}
 
-		public bool StaticCanNotInline(MethodData method)
+		public bool StaticCanNotInline(MethodData methodData, MosaMethod method)
 		{
-			if (method.HasDoNotInlineAttribute)
+			if (methodData.HasDoNotInlineAttribute)
 				return true;
 
-			if (method.IsMethodImplementationReplaced)
+			if (methodData.IsMethodImplementationReplaced)
 				return true;
 
-			if (method.HasProtectedRegions)
+			if (methodData.HasProtectedRegions)
 				return true;
 
-			if (method.IsVirtual && !method.IsDevirtualized)
+			if (methodData.IsVirtual && !methodData.IsDevirtualized)
 				return true;
 
-			if (method.DoNotInline)
+			if (methodData.DoNotInline)
 				return true;
 
-			var returnType = method.Method.Signature.ReturnType;
+			if (method.DeclaringType.IsValueType
+				&& method.IsVirtual
+				&& !method.IsConstructor
+				&& !method.IsStatic)
+				return true;
+
+			var returnType = methodData.Method.Signature.ReturnType;
 
 			// FIXME: Add rational
 			if (MosaTypeLayout.IsStoredOnStack(returnType) && !returnType.IsUI8 && !returnType.IsR8)
@@ -182,25 +189,25 @@ namespace Mosa.Compiler.Framework.Stages
 			return false;
 		}
 
-		public bool CanInline(MethodData method)
+		public bool CanInline(MethodData methodData, MosaMethod method)
 		{
-			if (StaticCanNotInline(method))
+			if (StaticCanNotInline(methodData, method))
 				return false;
 
 			// current implementation limitation - can't include methods with addressOf instruction
-			if (method.HasAddressOfInstruction)
+			if (methodData.HasAddressOfInstruction)
 				return false;
 
-			if (method.NonIRInstructionCount > 0)
+			if (methodData.NonIRInstructionCount > 0)
 				return false;
 
 			if (MethodData.CompileCount >= MaximumCompileCount)
 				return false;   // too many compiles - cyclic loop suspected
 
 			// methods with aggressive inline attribute will double the allow IR instruction count
-			int max = method.HasAggressiveInliningAttribute ? (CompilerOptions.InlinedIRMaximum * 2) : CompilerOptions.InlinedIRMaximum;
+			int max = methodData.HasAggressiveInliningAttribute ? (CompilerOptions.InlinedIRMaximum * 2) : CompilerOptions.InlinedIRMaximum;
 
-			if ((method.IRInstructionCount - method.IRStackParameterInstructionCount) > max)
+			if ((methodData.IRInstructionCount - methodData.IRStackParameterInstructionCount) > max)
 				return false;
 
 			return true;

@@ -24,11 +24,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			//if (HasProtectedRegions)
-			//	return;
 
-			//if (Method.IsCompilerGenerated && Method.Name == TypeInitializerStage.TypeInitializerName)
-			//	return;
 
 			MethodData.CompileCount++;
 
