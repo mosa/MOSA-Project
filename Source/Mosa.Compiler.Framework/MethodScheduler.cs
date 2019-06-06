@@ -23,7 +23,9 @@ namespace Mosa.Compiler.Framework
 
 		private readonly HashSet<MosaMethod> methods = new HashSet<MosaMethod>();
 
-		private readonly Dictionary<MosaMethod, int> inlineQueue = new Dictionary<MosaMethod, int>();
+		//private readonly Dictionary<MosaMethod, int> inlineQueue = new Dictionary<MosaMethod, int>();
+
+		private readonly HashSet<MosaMethod> inlineSet = new HashSet<MosaMethod>();
 
 		private readonly object _timestamplock = new object();
 
@@ -159,24 +161,28 @@ namespace Mosa.Compiler.Framework
 
 		public void AddToInlineQueueByCallee(MethodData calleeMethod)
 		{
-			var timestamp = GetTimestamp();
-
-			lock (inlineQueue)
+			lock (inlineSet)
 			{
-				foreach (var method in calleeMethod.CalledBy)
-				{
-					if (!inlineQueue.TryGetValue(method, out int existingtimestamp))
-					{
-						inlineQueue.Add(method, timestamp);
-					}
-					else
-					{
-						if (existingtimestamp < timestamp)
-							return;
+				var timestamp = GetTimestamp();
 
-						inlineQueue.Remove(method);
-						inlineQueue.Add(method, existingtimestamp);
+				foreach (var method in calleeMethod.Callers)
+				{
+					calleeMethod.LastInlineDependencyReferenceTimestamp = timestamp;
+
+					if (!inlineSet.Contains(method))
+					{
+						inlineSet.Add(method);
 					}
+
+					//if (!inlineQueue.TryGetValue(method, out int existingtimestamp))
+					//{
+					//	// not currently scheduled
+					//	inlineQueue.Add(method, timestamp);
+					//}
+					//else
+					//{
+					//	inlineQueue[method] = timestamp;
+					//}
 				}
 			}
 		}
@@ -185,16 +191,16 @@ namespace Mosa.Compiler.Framework
 		{
 			bool action = false;
 
-			lock (inlineQueue)
+			lock (inlineSet)
 			{
-				foreach (var item in inlineQueue)
+				foreach (var method in inlineSet)
 				{
-					var method = item.Key;
-					var timestamp = item.Value;
+					//var method = item.Key;
+					//var timestamp = item.Value;
 
 					var methodData = Compiler.CompilerData.GetMethodData(method);
 
-					if (methodData.InlineTimestamp > timestamp)
+					if (methodData.InlinedTimestamp < methodData.LastInlineDependencyReferenceTimestamp)
 						continue;   // nothing to do
 
 					lock (scheduleQueue)
@@ -208,7 +214,9 @@ namespace Mosa.Compiler.Framework
 					}
 				}
 
-				inlineQueue.Clear();
+				inlineSet.Clear();
+
+				//inlineQueue.Clear();
 			}
 
 			if (action)

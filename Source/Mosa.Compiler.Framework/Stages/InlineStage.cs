@@ -3,6 +3,7 @@
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -28,6 +29,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var callSites = new List<InstructionNode>();
 			var methodCalls = new List<MosaMethod>();
+
+			var timestamp = MethodScheduler.GetTimestamp();
 
 			// find all call sites
 			foreach (var block in BasicBlocks)
@@ -57,7 +60,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var invoked = MethodCompiler.Compiler.CompilerData.GetMethodData(invokedMethod);
 
-					invoked.AddCalledBy(MethodCompiler.Method);
+					invoked.AddCaller(MethodCompiler.Method);
 				}
 			}
 
@@ -81,7 +84,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (callee.Method == MethodCompiler.Method)
 					continue;
 
-				var inlineBlocks = callee.BasicBlocks;
+				var inlineBlocks = callee.InlineBasicBlocks;
 
 				if (inlineBlocks == null)
 					continue;
@@ -97,8 +100,8 @@ namespace Mosa.Compiler.Framework.Stages
 				//}
 			}
 
-			// Captures point in time - immediately after inlined blocks were used
-			MethodData.InlineTimestamp = MethodScheduler.GetTimestamp();
+			// Captures timestamp immediately after inlined blocks are inserted
+			MethodData.InlinedTimestamp = timestamp;
 
 			InlinedMethodsCount.Set(1);
 			InlinedCallSitesCount.Set(callSiteCount);

@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
+using System;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework
@@ -57,36 +58,36 @@ namespace Mosa.Compiler.Framework
 
 		public bool DoNotInline { get; set; }
 
-		public int InlineTimestamp
+		public int InlinedTimestamp
 		{
 			get { lock (_lock) { return inlinedTimestamp; } }
 			set { lock (_lock) { inlinedTimestamp = value; } }
 		}
 
-		public int InlineEvalulationTimestamp
+		public int LastInlineDependencyReferenceTimestamp
 		{
-			get { lock (_lock) { return inlineEvalulationTimestamp; } }
-			set { lock (_lock) { inlineEvalulationTimestamp = value; } }
+			get { lock (_lock) { return lastInlineDependencyReferenceTimestamp; } }
+			set { lock (_lock) { lastInlineDependencyReferenceTimestamp = Math.Max(lastInlineDependencyReferenceTimestamp, value); } }
 		}
 
-		public BasicBlocks BasicBlocks
+		public BasicBlocks InlineBasicBlocks
 		{
-			get { lock (_lock) { return inlinedBasicBlocks; } }
-			set { lock (_lock) { inlinedBasicBlocks = value; } }
+			get { lock (_lock) { return inlineBasicBlocks; } }
+			set { lock (_lock) { inlineBasicBlocks = value; } }
 		}
 
-		public List<MosaMethod> CalledBy
+		public List<MosaMethod> Callers
 		{
 			get
 			{
-				lock (calledBy)
+				lock (callers)
 				{
-					if (cachedCallBy == null)
+					if (cachedCallers == null)
 					{
-						cachedCallBy = new List<MosaMethod>(calledBy);
+						cachedCallers = new List<MosaMethod>(callers);
 					}
 
-					return cachedCallBy;
+					return cachedCallers;
 				}
 			}
 		}
@@ -97,15 +98,15 @@ namespace Mosa.Compiler.Framework
 
 		private readonly object _lock = new object();
 
-		private BasicBlocks inlinedBasicBlocks;
+		private BasicBlocks inlineBasicBlocks;
 
 		private int inlinedTimestamp;
 
-		private int inlineEvalulationTimestamp;
+		private int lastInlineDependencyReferenceTimestamp;
 
-		private List<MosaMethod> calledBy;
+		private List<MosaMethod> callers;
 
-		private List<MosaMethod> cachedCallBy;
+		private List<MosaMethod> cachedCallers;
 
 		#endregion Data Members
 
@@ -113,22 +114,22 @@ namespace Mosa.Compiler.Framework
 		{
 			Method = mosaMethod;
 
-			calledBy = new List<MosaMethod>();
+			callers = new List<MosaMethod>();
 			LabelRegions = new List<LabelRegion>();
 			Counters = new Counters();
 			CompileCount = 0;
 			DoNotInline = false;
-			BasicBlocks = null;
+			InlineBasicBlocks = null;
 		}
 
 		#region Methods
 
-		public void AddCalledBy(MosaMethod method)
+		public void AddCaller(MosaMethod method)
 		{
-			lock (calledBy)
+			lock (callers)
 			{
-				calledBy.AddIfNew(method);
-				cachedCallBy = null;
+				callers.AddIfNew(method);
+				cachedCallers = null;
 			}
 		}
 

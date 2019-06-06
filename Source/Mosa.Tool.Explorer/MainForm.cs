@@ -259,6 +259,9 @@ namespace Mosa.Tool.Explorer
 			ClearAllLogs();
 			methodStore.Clear();
 
+			if (filename == null)
+				return;
+
 			LoadAssembly(filename, cbPlatform.Text, includeDirectory);
 
 			CreateTree();
@@ -762,15 +765,6 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.AddSourceFile(filename);
 			Compiler.CompilerOptions.AddSourceFile("Mosa.Plug.Korlib.dll");
 			Compiler.CompilerOptions.AddSourceFile("Mosa.Plug.Korlib." + platform + ".dll");
-
-			//var moduleLoader = new MosaModuleLoader();
-
-			//moduleLoader.AddSearchPaths(Compiler.CompilerOptions.SearchPaths);
-			//moduleLoader.LoadModuleFromFiles(Compiler.CompilerOptions.SourceFiles);
-
-			//var metadata = moduleLoader.CreateMetadata();
-
-			//var typeSystem = TypeSystem.Load(metadata);
 
 			Compiler.Load();
 		}

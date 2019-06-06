@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -30,7 +31,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var trace = CreateTraceLog();
 
 			MethodData.IsCompiled = false;
-			MethodData.BasicBlocks = null;
+			MethodData.InlineBasicBlocks = null;
 			MethodData.HasProtectedRegions = HasProtectedRegions;
 			MethodData.IsLinkerGenerated = Method.IsCompilerGenerated;
 			MethodData.IsMethodImplementationReplaced = MethodCompiler.IsMethodPlugged;
@@ -52,6 +53,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (StaticCanNotInline(MethodData, Method))
 			{
+				MethodData.Inlined = false;
+				MethodCompiler.IsMethodInlined = false;
+				MethodData.InlineBasicBlocks = null;
+
 				trace?.Log($"** Staticly Evaluated");
 				trace?.Log($"Inlined: {MethodData.Inlined}");
 				return;
@@ -136,7 +141,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (inline)
 			{
-				MethodData.BasicBlocks = CopyInstructions();
+				MethodData.InlineBasicBlocks = CopyInstructions();
 			}
 
 			if (triggerReschedules)
@@ -184,6 +189,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// FIXME: Add rational
 			if (MosaTypeLayout.IsStoredOnStack(returnType) && !returnType.IsUI8 && !returnType.IsR8)
+				return true;
+
+			// FUTURE: Don't hardcode namepsace
+			if (((method.MethodAttributes & MosaMethodAttributes.Public) == MosaMethodAttributes.Public) && method.DeclaringType.BaseType != null && method.DeclaringType.BaseType.Namespace == "Mosa.UnitTests")
 				return true;
 
 			return false;
