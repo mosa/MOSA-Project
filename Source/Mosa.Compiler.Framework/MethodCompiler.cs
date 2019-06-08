@@ -378,6 +378,8 @@ namespace Mosa.Compiler.Framework
 				IsStackFrameRequired = false;
 			}
 
+			Debug.WriteLine($"Compiling: {Method}");
+
 			PlugMethod();
 
 			PatchDelegate();

@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
@@ -31,7 +32,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var trace = CreateTraceLog();
 
 			MethodData.IsCompiled = false;
-			MethodData.InlineBasicBlocks = null;
+			MethodData.InlineMethodData = null;
 			MethodData.HasProtectedRegions = HasProtectedRegions;
 			MethodData.IsLinkerGenerated = Method.IsCompilerGenerated;
 			MethodData.IsMethodImplementationReplaced = MethodCompiler.IsMethodPlugged;
@@ -55,7 +56,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				MethodData.Inlined = false;
 				MethodCompiler.IsMethodInlined = false;
-				MethodData.InlineBasicBlocks = null;
+				MethodData.InlineMethodData = null;
 
 				trace?.Log($"** Staticly Evaluated");
 				trace?.Log($"Inlined: {MethodData.Inlined}");
@@ -141,7 +142,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (inline)
 			{
-				MethodData.InlineBasicBlocks = CopyInstructions();
+				MethodData.InlineMethodData = CopyInstructions();
 			}
 
 			if (triggerReschedules)
@@ -222,11 +223,12 @@ namespace Mosa.Compiler.Framework.Stages
 			return true;
 		}
 
-		protected BasicBlocks CopyInstructions()
+		protected InlineMethodData CopyInstructions()
 		{
 			var newBasicBlocks = new BasicBlocks();
 			var mapBlocks = new Dictionary<BasicBlock, BasicBlock>(BasicBlocks.Count);
 			var map = new Dictionary<Operand, Operand>();
+			var staticCalls = new List<MosaMethod>();
 
 			foreach (var block in BasicBlocks)
 			{
@@ -264,13 +266,19 @@ namespace Mosa.Compiler.Framework.Stages
 
 				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty)
+					if (node.IsEmptyOrNop)
 						continue;
+
+					if (node.Instruction == IRInstruction.CallStatic)
+					{
+						staticCalls.AddIfNew(node.Operand1.Method);
+					}
 
 					var newNode = new InstructionNode(node.Instruction, node.OperandCount, node.ResultCount)
 					{
 						ConditionCode = node.ConditionCode
 					};
+
 					if (node.BranchTargets != null)
 					{
 						// copy targets
@@ -319,7 +327,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
-			return newBasicBlocks;
+			return new InlineMethodData(newBasicBlocks, staticCalls);
 		}
 
 		private Operand Map(Operand operand, Dictionary<Operand, Operand> map)

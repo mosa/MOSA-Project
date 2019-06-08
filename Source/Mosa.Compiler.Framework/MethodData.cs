@@ -70,10 +70,10 @@ namespace Mosa.Compiler.Framework
 			set { lock (_lock) { lastInlineDependencyReferenceTimestamp = Math.Max(lastInlineDependencyReferenceTimestamp, value); } }
 		}
 
-		public BasicBlocks InlineBasicBlocks
+		public InlineMethodData InlineMethodData
 		{
-			get { lock (_lock) { return inlineBasicBlocks; } }
-			set { lock (_lock) { inlineBasicBlocks = value; } }
+			get { lock (_lock) { return inlineMethodData; } }
+			set { lock (_lock) { inlineMethodData = value; } }
 		}
 
 		public List<MosaMethod> Callers
@@ -98,7 +98,7 @@ namespace Mosa.Compiler.Framework
 
 		private readonly object _lock = new object();
 
-		private BasicBlocks inlineBasicBlocks;
+		private InlineMethodData inlineMethodData;
 
 		private int inlinedTimestamp;
 
@@ -119,7 +119,7 @@ namespace Mosa.Compiler.Framework
 			Counters = new Counters();
 			CompileCount = 0;
 			DoNotInline = false;
-			InlineBasicBlocks = null;
+			inlineMethodData = null;
 		}
 
 		#region Methods

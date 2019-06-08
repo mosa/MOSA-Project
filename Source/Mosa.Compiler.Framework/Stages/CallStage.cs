@@ -109,8 +109,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			MakeCall(context, call, result, operands);
 
-			Debug.Assert(method == call.Method);
-
 			MethodScanner.MethodDirectInvoked(call.Method, Method);
 		}
 

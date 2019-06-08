@@ -73,19 +73,19 @@
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="Mosa.ClassLib, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-			<HintPath>..\packages\Mosa.ClassLib.1.0.0.0\lib\Mosa.ClassLib.dll</HintPath>
+			<HintPath>..\packages\Mosa.ClassLib.1.0.0.1\lib\net45\Mosa.ClassLib.dll</HintPath>
 			<Private>True</Private>
 		</Reference>
 		<Reference Include="Mosa.Kernel.x86, Version=0.0.0.0, Culture=neutral">
-			<HintPath>..\packages\Mosa.Kernel.x86.1.0.0.0\lib\Mosa.Kernel.x86.dll</HintPath>
+			<HintPath>..\packages\Mosa.Kernel.x86.1.0.0.1\lib\net45\Mosa.Kernel.x86.dll</HintPath>
 			<Private>True</Private>
 		</Reference>
 		<Reference Include="Mosa.Runtime, Version=0.0.0.0, Culture=neutral">
-			<HintPath>..\packages\Mosa.Runtime.1.0.0.0\lib\Mosa.Runtime.dll</HintPath>
+			<HintPath>..\packages\Mosa.Runtime.1.0.0.1\lib\net45\Mosa.Runtime.dll</HintPath>
 			<Private>True</Private>
 		</Reference>
 		<Reference Include="Mosa.Runtime.x86, Version=0.0.0.0, Culture=neutral">
-			<HintPath>..\packages\Mosa.Runtime.x86.1.0.0.0\lib\Mosa.Runtime.x86.dll</HintPath>
+			<HintPath>..\packages\Mosa.Runtime.x86.1.0.0.1\lib\net45\Mosa.Runtime.x86.dll</HintPath>
 			<Private>True</Private>
 		</Reference>
 	</ItemGroup>

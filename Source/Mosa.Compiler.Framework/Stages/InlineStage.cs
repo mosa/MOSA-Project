@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework.Stages
 			MethodData.CompileCount++;
 
 			var callSites = new List<InstructionNode>();
-			var methodCalls = new List<MosaMethod>();
+			var staticCalls = new List<MosaMethod>();
 
 			var timestamp = MethodScheduler.GetTimestamp();
 
@@ -53,14 +53,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 					callSites.Add(node);
 
-					if (methodCalls.Contains(invokedMethod))
+					if (staticCalls.Contains(invokedMethod))
 						continue;
 
-					methodCalls.Add(invokedMethod);
+					staticCalls.Add(invokedMethod);
 
 					var invoked = MethodCompiler.Compiler.CompilerData.GetMethodData(invokedMethod);
 
-					invoked.AddCaller(MethodCompiler.Method);
+					invoked.AddCaller(Method);
+
+					Debug.WriteLine($" -> Calls: {invokedMethod}");
 				}
 			}
 
@@ -84,20 +86,17 @@ namespace Mosa.Compiler.Framework.Stages
 				if (callee.Method == MethodCompiler.Method)
 					continue;
 
-				var inlineBlocks = callee.InlineBasicBlocks;
+				Debug.WriteLine($" -> Inlined: {callee.Method}");
 
-				if (inlineBlocks == null)
+				var inlineMethodData = callee.InlineMethodData;
+
+				if (inlineMethodData.BasicBlocks == null)
 					continue;
 
 				trace?.Log(callee.Method.FullName);
 
-				Inline(callSiteNode, inlineBlocks);
+				Inline(callSiteNode, inlineMethodData.BasicBlocks);
 				callSiteCount++;
-
-				//if (!BasicBlocks.RuntimeValidation())
-				//{
-				//	throw new CompilerException($"InlineStage: Block Validation after inlining: {invokedMethod} into {Method}");
-				//}
 			}
 
 			// Captures timestamp immediately after inlined blocks are inserted

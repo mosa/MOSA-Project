@@ -167,22 +167,14 @@ namespace Mosa.Compiler.Framework
 
 				foreach (var method in calleeMethod.Callers)
 				{
+					Debug.WriteLine($" -> Caller: {method}");
+
 					calleeMethod.LastInlineDependencyReferenceTimestamp = timestamp;
 
 					if (!inlineSet.Contains(method))
 					{
 						inlineSet.Add(method);
 					}
-
-					//if (!inlineQueue.TryGetValue(method, out int existingtimestamp))
-					//{
-					//	// not currently scheduled
-					//	inlineQueue.Add(method, timestamp);
-					//}
-					//else
-					//{
-					//	inlineQueue[method] = timestamp;
-					//}
 				}
 			}
 		}
