@@ -25,12 +25,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			MethodData.CompileCount++;
-
 			var callSites = new List<InstructionNode>();
 			var staticCalls = new List<MosaMethod>();
-
-			var timestamp = MethodScheduler.GetTimestamp();
 
 			// find all call sites
 			foreach (var block in BasicBlocks)
@@ -48,8 +44,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var invokedMethod = node.Operand1.Method;
 
-					if (invokedMethod == null)
-						continue;
+					Debug.Assert(invokedMethod != null);
 
 					callSites.Add(node);
 
@@ -62,9 +57,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 					invoked.AddCaller(Method);
 
-					Debug.WriteLine($" -> Calls: {invokedMethod}");
+					Debug.WriteLine($" -> Calls: [{invoked.CompileCount}] {invokedMethod}");
 				}
 			}
+
+			MethodData.InlineTimestamp = MethodScheduler.GetTimestamp();
 
 			if (callSites.Count == 0)
 				return;
@@ -86,7 +83,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (callee.Method == MethodCompiler.Method)
 					continue;
 
-				Debug.WriteLine($" -> Inlined: {callee.Method}");
+				Debug.WriteLine($" -> Inlined: [{callee.CompileCount}] {callee.Method}");
 
 				var inlineMethodData = callee.InlineMethodData;
 
@@ -98,9 +95,6 @@ namespace Mosa.Compiler.Framework.Stages
 				Inline(callSiteNode, inlineMethodData.BasicBlocks);
 				callSiteCount++;
 			}
-
-			// Captures timestamp immediately after inlined blocks are inserted
-			MethodData.InlinedTimestamp = timestamp;
 
 			InlinedMethodsCount.Set(1);
 			InlinedCallSitesCount.Set(callSiteCount);

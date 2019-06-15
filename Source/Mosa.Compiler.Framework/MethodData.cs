@@ -42,8 +42,6 @@ namespace Mosa.Compiler.Framework
 
 		public int NonIRInstructionCount { get; set; }
 
-		public bool IsVirtual { get; set; }
-
 		public bool IsDevirtualized { get; set; }
 
 		public int CompileCount { get; set; }
@@ -58,16 +56,16 @@ namespace Mosa.Compiler.Framework
 
 		public bool DoNotInline { get; set; }
 
-		public int InlinedTimestamp
+		public int InlineTimestamp
 		{
-			get { lock (_lock) { return inlinedTimestamp; } }
-			set { lock (_lock) { inlinedTimestamp = value; } }
+			get { lock (_lock) { return inlineTimestamp; } }
+			set { lock (_lock) { inlineTimestamp = value; } }
 		}
 
-		public int LastInlineDependencyReferenceTimestamp
+		public int InlineDependencyUpdateTimestamp
 		{
-			get { lock (_lock) { return lastInlineDependencyReferenceTimestamp; } }
-			set { lock (_lock) { lastInlineDependencyReferenceTimestamp = Math.Max(lastInlineDependencyReferenceTimestamp, value); } }
+			get { lock (_lock) { return inlineDependencyUpdateTimestamp; } }
+			set { lock (_lock) { inlineDependencyUpdateTimestamp = Math.Max(inlineDependencyUpdateTimestamp, value); } }
 		}
 
 		public InlineMethodData InlineMethodData
@@ -100,9 +98,9 @@ namespace Mosa.Compiler.Framework
 
 		private InlineMethodData inlineMethodData;
 
-		private int inlinedTimestamp;
+		private int inlineTimestamp;
 
-		private int lastInlineDependencyReferenceTimestamp;
+		private int inlineDependencyUpdateTimestamp;
 
 		private List<MosaMethod> callers;
 
@@ -120,6 +118,7 @@ namespace Mosa.Compiler.Framework
 			CompileCount = 0;
 			DoNotInline = false;
 			inlineMethodData = null;
+			IsDevirtualized = false;
 		}
 
 		#region Methods

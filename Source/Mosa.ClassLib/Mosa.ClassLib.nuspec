@@ -16,6 +16,6 @@
 		<tags>MOSA Compiler</tags>
 	</metadata>
 	<files>
-		<file src="..\..\bin\Mosa.ClassLib.dll" target="lib\net45" />
+		<file src="..\..\bin\Mosa.ClassLib.dll" target="lib\net472" />
 	</files>
 </package>

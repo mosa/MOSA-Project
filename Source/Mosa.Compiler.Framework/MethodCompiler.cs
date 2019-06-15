@@ -119,10 +119,9 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the protected regions.
 		/// </summary>
-		/// <value>
-		/// The protected regions.
-		/// </value>
 		public List<ProtectedRegion> ProtectedRegions { get; set; }
+
+		public bool HasProtectedRegions { get; private set; }
 
 		/// <summary>
 		/// The labels
@@ -249,10 +248,18 @@ namespace Mosa.Compiler.Framework
 			IsCILDecodeRequired = true;
 			IsStackFrameRequired = true;
 			IsMethodInlined = false;
+			HasProtectedRegions = Method.ExceptionHandlers.Count != 0;
 
 			MethodData = compiler.CompilerData.GetMethodData(Method);
-
 			MethodData.Counters.Reset();
+
+			MethodData.CompileCount++;
+			MethodData.IsCompiled = false;
+			MethodData.HasProtectedRegions = HasProtectedRegions;
+			MethodData.IsLinkerGenerated = Method.IsCompilerGenerated;
+			MethodData.IsMethodImplementationReplaced = IsMethodPlugged;
+			MethodData.HasDoNotInlineAttribute = Method.IsNoInlining;
+			MethodData.HasAggressiveInliningAttribute = Method.IsAggressiveInlining;
 
 			// Both defines the symbol and also clears the data
 			Symbol = Linker.DefineSymbol(Method.FullName, SectionKind.Text, 0, 0);
@@ -378,7 +385,7 @@ namespace Mosa.Compiler.Framework
 				IsStackFrameRequired = false;
 			}
 
-			Debug.WriteLine($"Compiling: {Method}");
+			Debug.WriteLine($"Compiling: [{MethodData.CompileCount}] {Method}");
 
 			PlugMethod();
 
@@ -391,6 +398,11 @@ namespace Mosa.Compiler.Framework
 			ExecutePipeline();
 
 			Symbol.SetReplacementStatus(MethodData.Inlined);
+
+			if (IsStopped || IsMethodInlined)
+			{
+				MethodData.IsCompiled = false;
+			}
 
 			if (Compiler.CompilerOptions.EnableStatistics)
 			{

@@ -118,6 +118,7 @@ namespace Mosa.Compiler.Framework
 		{
 			return new List<BaseCompilerStage> {
 				new TypeInitializerStage(),
+				new DevirtualizationStage(),
 				new StaticFieldStage(),
 				new MethodTableStage(),
 				new ExceptionTableStage(),
@@ -136,6 +137,7 @@ namespace Mosa.Compiler.Framework
 				new CILDecodingStage(),
 				new ExceptionPrologueStage(),
 				new CILOperandAssignmentStage(),
+				new DevirtualizeCallStage(),
 				new StackSetupStage(),
 				new ProtectedRegionStage(),
 				new ExceptionStage(),
@@ -170,7 +172,6 @@ namespace Mosa.Compiler.Framework
 				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
 
 				//new StopStage(),
-				new DevirtualizeCallStage(),
 				new CallStage(),
 				new PlatformIntrinsicStage(),
 				new PlatformEdgeSplitStage(),

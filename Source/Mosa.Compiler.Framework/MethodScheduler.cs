@@ -169,7 +169,7 @@ namespace Mosa.Compiler.Framework
 				{
 					Debug.WriteLine($" -> Caller: {method}");
 
-					calleeMethod.LastInlineDependencyReferenceTimestamp = timestamp;
+					calleeMethod.InlineDependencyUpdateTimestamp = timestamp;
 
 					if (!inlineSet.Contains(method))
 					{
@@ -187,13 +187,13 @@ namespace Mosa.Compiler.Framework
 			{
 				foreach (var method in inlineSet)
 				{
-					//var method = item.Key;
-					//var timestamp = item.Value;
-
 					var methodData = Compiler.CompilerData.GetMethodData(method);
 
-					if (methodData.InlinedTimestamp < methodData.LastInlineDependencyReferenceTimestamp)
+					if (methodData.InlineTimestamp > methodData.InlineDependencyUpdateTimestamp)
+					{
+						Debug.WriteLine($"Skipping Recompile: [{method}] Inlined @ {methodData.InlineTimestamp} Dependency Update @ {methodData.InlineDependencyUpdateTimestamp}");
 						continue;   // nothing to do
+					}
 
 					lock (scheduleQueue)
 					{

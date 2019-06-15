@@ -31,20 +31,14 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var trace = CreateTraceLog();
 
-			MethodData.IsCompiled = false;
 			MethodData.InlineMethodData = null;
-			MethodData.HasProtectedRegions = HasProtectedRegions;
-			MethodData.IsLinkerGenerated = Method.IsCompilerGenerated;
-			MethodData.IsMethodImplementationReplaced = MethodCompiler.IsMethodPlugged;
-			MethodData.HasDoNotInlineAttribute = Method.IsNoInlining;
-			MethodData.HasAggressiveInliningAttribute = Method.IsAggressiveInlining;
 			MethodData.HasAddressOfInstruction = false;
 			MethodData.HasLoops = false;
-			MethodData.IsVirtual = Method.IsVirtual;
-			MethodData.IsDevirtualized = Method.IsVirtual && !TypeLayout.IsMethodOverridden(Method);
+
+			//MethodData.IsDevirtualized = Method.IsVirtual && !TypeLayout.IsMethodOverridden(Method);
 
 			trace?.Log($"DoNotInline: {MethodData.DoNotInline}");
-			trace?.Log($"IsVirtual: {MethodData.IsVirtual}");
+			trace?.Log($"IsVirtual: {Method.IsVirtual}");
 			trace?.Log($"IsDevirtualized: {MethodData.IsDevirtualized}");
 			trace?.Log($"HasProtectedRegions: {MethodData.HasProtectedRegions}");
 			trace?.Log($"HasDoNotInlineAttribute: {MethodData.HasDoNotInlineAttribute}");
@@ -60,6 +54,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 				trace?.Log($"** Staticly Evaluated");
 				trace?.Log($"Inlined: {MethodData.Inlined}");
+
+				Debug.WriteLine($">Inlined: No");
+
 				return;
 			}
 
@@ -138,14 +135,12 @@ namespace Mosa.Compiler.Framework.Stages
 			MethodData.Inlined = inline;
 			MethodCompiler.IsMethodInlined = inline;
 
-			bool triggerReschedules = inline || (currentInlineStatus && !inline);
-
 			if (inline)
 			{
 				MethodData.InlineMethodData = CopyInstructions();
 			}
 
-			if (triggerReschedules)
+			if (inline || (currentInlineStatus && !inline))
 			{
 				MethodScheduler.AddToInlineQueueByCallee(MethodData);
 			}
@@ -161,6 +156,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			InlinedMethodsCount.Set(inline);
 			ReversedInlinedMethodsCount.Set(MethodData.CompileCount >= MaximumCompileCount);
+
+			Debug.WriteLine($">Inlined: {(inline ? "Yes" : "No")}");
 		}
 
 		public bool StaticCanNotInline(MethodData methodData, MosaMethod method)
@@ -174,7 +171,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (methodData.HasProtectedRegions)
 				return true;
 
-			if (methodData.IsVirtual && !methodData.IsDevirtualized)
+			if (method.IsVirtual && !methodData.IsDevirtualized)
 				return true;
 
 			if (methodData.DoNotInline)

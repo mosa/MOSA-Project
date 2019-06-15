@@ -541,6 +541,18 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				else
 				{
+					// Check if method can be devirtualized (called directly)
+					//var methodData = MethodCompiler.Compiler.CompilerData.GetMethodData(method);
+
+					//if (methodData.IsDevirtualized)
+					//{
+					//	context.SetInstruction(IRInstruction.CallStatic, result, symbol, operands);
+					//}
+					//else
+					//{
+					//	context.SetInstruction(IRInstruction.CallVirtual, result, symbol, operands);
+					//}
+
 					context.SetInstruction(IRInstruction.CallVirtual, result, symbol, operands);
 				}
 			}

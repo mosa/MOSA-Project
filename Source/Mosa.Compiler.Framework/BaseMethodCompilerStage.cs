@@ -175,10 +175,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets a value indicating whether this instance has protected regions.
 		/// </summary>
-		/// <value>
-		/// <c>true</c> if this instance has protected regions; otherwise, <c>false</c>.
-		/// </value>
-		protected bool HasProtectedRegions { get { return Method.ExceptionHandlers.Count != 0; } }
+		protected bool HasProtectedRegions { get { return MethodCompiler.HasProtectedRegions; } }
 
 		/// <summary>
 		/// Gets a value indicating whether this instance has code.

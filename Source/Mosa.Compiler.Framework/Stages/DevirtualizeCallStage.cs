@@ -24,7 +24,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void PopulateVisitationDictionary()
 		{
-			//AddVisitation(IRInstruction.CallInterface, CallInterface);
 			AddVisitation(IRInstruction.CallVirtual, CallVirtual);
 		}
 
@@ -40,14 +39,19 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void CallVirtual(InstructionNode node)
 		{
-			var call = node.Operand1;
-			var method = call.Method;
+			var method = node.Operand1.Method;
 
-			if (TypeLayout.IsMethodOverridden(method))
-				return;
-
+			// Next lines are not necessary but faster then getting the method data
 			if (!method.HasImplementation && method.IsAbstract)
 				return;
+
+			var methodData = MethodCompiler.Compiler.CompilerData.GetMethodData(method);
+
+			if (!methodData.IsDevirtualized)
+				return;
+
+			//if (TypeLayout.IsMethodOverridden(method))
+			//	return;
 
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
