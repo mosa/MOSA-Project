@@ -142,7 +142,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (inline || (currentInlineStatus && !inline))
 			{
-				MethodScheduler.AddToInlineQueueByCallee(MethodData);
+				MethodScheduler.AddCallersToInlineQueue(MethodData);
 			}
 
 			trace?.Log($"IRInstructionCount: {MethodData.IRInstructionCount}");

@@ -63,6 +63,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			MethodData.InlineTimestamp = MethodScheduler.GetTimestamp();
 
+			Debug.WriteLine($" Inline Start @ {MethodData.InlineTimestamp}");
+
 			if (callSites.Count == 0)
 				return;
 

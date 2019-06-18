@@ -15,9 +15,6 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			AddVisitation(IRInstruction.NewObject, NewObject);
-			AddVisitation(IRInstruction.NewArray, NewArray);
-
 			AddVisitation(IRInstruction.MemorySet, MemorySet);
 			AddVisitation(IRInstruction.MemoryCopy, MemoryCopy);
 			AddVisitation(IRInstruction.IsInstanceOfInterfaceType, IsInstanceOfInterfaceType);
@@ -43,7 +40,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(method != null, "Cannot find method: " + methodName);
 
-			MethodScanner.MethodInvoked(method, this.Method);
+			MethodScanner.MethodInvoked(method, Method);
 
 			return method;
 		}
@@ -54,28 +51,6 @@ namespace Mosa.Compiler.Framework.Stages
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
 			node.SetInstruction(IRInstruction.CallStatic, result, symbol, operands);
-		}
-
-		private void NewObject(InstructionNode node)
-		{
-			var method = GetVMCallMethod(VmCall.AllocateObject);
-			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
-			var classType = node.MosaType;
-
-			node.SetInstruction(IRInstruction.CallStatic, node.Result, symbol, node.GetOperands());
-
-			MethodScanner.TypeAllocated(classType, Method);
-		}
-
-		private void NewArray(InstructionNode node)
-		{
-			var method = GetVMCallMethod(VmCall.AllocateArray);
-			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
-			var arrayType = node.MosaType;
-
-			node.SetInstruction(IRInstruction.CallStatic, node.Result, symbol, node.GetOperands());
-
-			MethodScanner.TypeAllocated(arrayType, method);
 		}
 
 		private void MemorySet(InstructionNode node)

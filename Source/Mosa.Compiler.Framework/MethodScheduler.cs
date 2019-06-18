@@ -159,21 +159,25 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public void AddToInlineQueueByCallee(MethodData calleeMethod)
+		public void AddCallersToInlineQueue(MethodData method)
 		{
+			var timestamp = GetTimestamp();
+
+			Debug.WriteLine($" Inline Eval @ {timestamp}");
+
 			lock (inlineSet)
 			{
-				var timestamp = GetTimestamp();
-
-				foreach (var method in calleeMethod.Callers)
+				foreach (var caller in method.Callers)
 				{
-					Debug.WriteLine($" -> Caller: {method}");
+					Debug.WriteLine($" -> Caller: {caller}");
 
-					calleeMethod.InlineDependencyUpdateTimestamp = timestamp;
+					var methodData = Compiler.CompilerData.GetMethodData(caller);
 
-					if (!inlineSet.Contains(method))
+					methodData.InlineDependencyUpdateTimestamp = timestamp;
+
+					if (!inlineSet.Contains(caller))
 					{
-						inlineSet.Add(method);
+						inlineSet.Add(caller);
 					}
 				}
 			}
