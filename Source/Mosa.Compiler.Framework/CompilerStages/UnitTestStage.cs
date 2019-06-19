@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 					if (methodAttribute != null)
 					{
-						var methodData = Compiler.CompilerData.GetMethodData(method);
+						var methodData = Compiler.GetMethodData(method);
 
 						methodData.DoNotInline = true;
 					}

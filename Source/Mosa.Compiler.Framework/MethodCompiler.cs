@@ -250,16 +250,12 @@ namespace Mosa.Compiler.Framework
 			IsMethodInlined = false;
 			HasProtectedRegions = Method.ExceptionHandlers.Count != 0;
 
-			MethodData = compiler.CompilerData.GetMethodData(Method);
+			MethodData = Compiler.GetMethodData(Method);
 			MethodData.Counters.Reset();
 
 			MethodData.Version++;
 			MethodData.IsCompiled = false;
-			MethodData.HasProtectedRegions = HasProtectedRegions;
-			MethodData.IsLinkerGenerated = Method.IsCompilerGenerated;
 			MethodData.IsMethodImplementationReplaced = IsMethodPlugged;
-			MethodData.HasDoNotInlineAttribute = Method.IsNoInlining;
-			MethodData.HasAggressiveInliningAttribute = Method.IsAggressiveInlining;
 
 			// Both defines the symbol and also clears the data
 			Symbol = Linker.DefineSymbol(Method.FullName, SectionKind.Text, 0, 0);

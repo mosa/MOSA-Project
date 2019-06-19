@@ -67,7 +67,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected void ReplaceVirtualRegisterWithConstant(Operand target, ulong value)
 		{
-			trace?.Log($"{target} = {value.ToString()} Uses: {target.Uses.Count.ToString()}");
+			trace?.Log($"{target} = {value.ToString()} Uses: {target.Uses.Count}");
+
+			if (target.Definitions.Count == 0)
+				return;
 
 			Debug.Assert(target.Definitions.Count == 1);
 

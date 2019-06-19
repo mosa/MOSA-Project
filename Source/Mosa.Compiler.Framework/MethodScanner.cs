@@ -93,7 +93,7 @@ namespace Mosa.Compiler.Framework
 
 		private void MarkMethodInvoked(MosaMethod method)
 		{
-			var methodData = Compiler.CompilerData.GetMethodData(method);
+			var methodData = Compiler.GetMethodData(method);
 
 			if (methodData.IsInvoked)
 				return;

@@ -138,12 +138,12 @@ namespace Mosa.Compiler.Framework
 				new CILDecodingStage(),
 				new ExceptionPrologueStage(),
 				new CILOperandAssignmentStage(),
-				new DevirtualizeCallStage(),
 				new StackSetupStage(),
 				new ProtectedRegionStage(),
 				new ExceptionStage(),
 				new CILStaticAllocationResolutionStage(),
 				new CILTransformationStage(),
+				new DevirtualizeCallStage(),
 				new PlugStage(),
 				new UnboxValueTypeStage(),
 				new LowerIRStage(),
@@ -577,6 +577,11 @@ namespace Mosa.Compiler.Framework
 		private MosaType GeInternalRuntimeType()
 		{
 			return TypeSystem.GetTypeByName("Mosa.Runtime", "Internal");
+		}
+
+		public MethodData GetMethodData(MosaMethod method)
+		{
+			return CompilerData.GetMethodData(method);
 		}
 
 		#endregion Helper Methods

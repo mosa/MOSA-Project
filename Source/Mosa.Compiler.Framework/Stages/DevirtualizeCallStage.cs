@@ -45,13 +45,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!method.HasImplementation && method.IsAbstract)
 				return;
 
-			var methodData = MethodCompiler.Compiler.CompilerData.GetMethodData(method);
+			var methodData = MethodCompiler.Compiler.GetMethodData(method);
 
 			if (!methodData.IsDevirtualized)
 				return;
-
-			//if (TypeLayout.IsMethodOverridden(method))
-			//	return;
 
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 

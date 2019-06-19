@@ -291,7 +291,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 					if (symbol.VirtualAddress == 0)
 						continue;
 
-					var methodData = Compiler.CompilerData.GetMethodData(method);
+					var methodData = Compiler.GetMethodData(method);
 					if (methodData == null)
 						continue;
 

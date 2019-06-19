@@ -542,7 +542,7 @@ namespace Mosa.Compiler.Framework.Stages
 				else
 				{
 					// Check if method can be devirtualized (called directly)
-					//var methodData = MethodCompiler.Compiler.CompilerData.GetMethodData(method);
+					//var methodData = MethodCompiler.Compiler.GetMethodData(method);
 
 					//if (methodData.IsDevirtualized)
 					//{
@@ -991,7 +991,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			node.SetInstruction(Select(node.Result, IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, Operand.CreateSymbolFromMethod(invokedMethod, TypeSystem));
 
-			var methodData = MethodCompiler.Compiler.CompilerData.GetMethodData(invokedMethod);
+			var methodData = MethodCompiler.Compiler.GetMethodData(invokedMethod);
 
 			if (!methodData.HasMethodPointerReferenced)
 			{

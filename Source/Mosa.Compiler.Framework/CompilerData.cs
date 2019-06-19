@@ -49,21 +49,21 @@ namespace Mosa.Compiler.Framework
 		{
 			lock (methods)
 			{
-				if (!methods.TryGetValue(method, out MethodData compilerMethod))
+				if (!methods.TryGetValue(method, out MethodData methodData))
 				{
-					compilerMethod = new MethodData(method);
-					methods.Add(method, compilerMethod);
+					methodData = new MethodData(method)
+					{
+						HasProtectedRegions = method.ExceptionHandlers.Count != 0,
+						IsLinkerGenerated = method.IsCompilerGenerated,
+						HasDoNotInlineAttribute = method.IsNoInlining,
+						HasAggressiveInliningAttribute = method.IsAggressiveInlining
+					};
+
+					methods.Add(method, methodData);
 				}
 
-				return compilerMethod;
+				return methodData;
 			}
-		}
-
-		public bool IsMethodInlined(MosaMethod method)
-		{
-			var methodData = GetMethodData(method);
-
-			return methodData.Inlined;
 		}
 
 		#endregion Methods

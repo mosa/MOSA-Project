@@ -89,12 +89,12 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		private MethodData GetTargetMethodConsiderPlug(MosaMethod method)
 		{
-			var methodData = Compiler.CompilerData.GetMethodData(method);
+			var methodData = Compiler.GetMethodData(method);
 
 			if (methodData.PluggedBy == null)
 				return methodData;
 
-			return Compiler.CompilerData.GetMethodData(methodData.PluggedBy);
+			return Compiler.GetMethodData(methodData.PluggedBy);
 		}
 	}
 }

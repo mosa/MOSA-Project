@@ -13,7 +13,7 @@ namespace Mosa.Platform.x64.CompilerStages
 			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
 			var initializeMethod = startUpType.FindMethodByName("Initialize");
 
-			Compiler.CompilerData.GetMethodData(initializeMethod).DoNotInline = true;
+			Compiler.GetMethodData(initializeMethod).DoNotInline = true;
 
 			var entryPoint = Operand.CreateSymbolFromMethod(initializeMethod, TypeSystem);
 

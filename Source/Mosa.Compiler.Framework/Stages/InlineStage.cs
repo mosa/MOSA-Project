@@ -56,7 +56,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				Debug.Assert(callSiteNode.Operand1.IsSymbol);
 
-				var callee = MethodCompiler.Compiler.CompilerData.GetMethodData(invokedMethod);
+				var callee = MethodCompiler.Compiler.GetMethodData(invokedMethod);
 
 				var inlineMethodData = callee.GetInlineMethodDataForUseBy(Method);
 

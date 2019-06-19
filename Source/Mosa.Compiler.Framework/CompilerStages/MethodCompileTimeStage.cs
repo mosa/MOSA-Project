@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			{
 				foreach (var method in type.Methods)
 				{
-					var data = Compiler.CompilerData.GetMethodData(method);
+					var data = Compiler.GetMethodData(method);
 
 					if (data == null)
 						continue;

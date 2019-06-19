@@ -31,7 +31,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 					if (TypeLayout.IsMethodOverridden(method))
 						continue;
 
-					var methodData = Compiler.CompilerData.GetMethodData(method);
+					var methodData = Compiler.GetMethodData(method);
 
 					methodData.IsDevirtualized = true;
 					DevirtualizedMethodsCount++;
