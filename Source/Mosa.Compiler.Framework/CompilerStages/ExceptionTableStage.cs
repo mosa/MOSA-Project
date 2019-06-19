@@ -55,25 +55,24 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 					foreach (var method in methodList)
 					{
-						if ((!method.HasImplementation && method.IsAbstract) || method.HasOpenGenericParams || method.DeclaringType.HasOpenGenericParams)
+						var methodData = GetTargetMethodConsiderPlug(method);
+
+						if (!methodData.HasCode)
 							continue;
 
-						if (method.ExceptionHandlers.Count == 0)
-							continue;
-
-						if (!Compiler.MethodScanner.IsMethodInvoked(method))
+						if (methodData.Method.ExceptionHandlers.Count == 0)
 							continue;
 
 						// 1. Pointer to Method
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, writer.Position, method.FullName, 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, writer.Position, methodData.Method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						// 2. Size of Method
-						Linker.Link(LinkType.Size, NativePatchType, methodLookupTable, writer.Position, method.FullName, 0);
+						Linker.Link(LinkType.Size, NativePatchType, methodLookupTable, writer.Position, methodData.Method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						// 3. Pointer to Method Definition
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, writer.Position, Metadata.MethodDefinition + method.FullName, 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, writer.Position, Metadata.MethodDefinition + methodData.Method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						count++;
@@ -86,6 +85,16 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 			// emit null entry (FUTURE)
 			//writer.WriteZeroBytes(TypeLayout.NativePointerSize * 3);
+		}
+
+		private MethodData GetTargetMethodConsiderPlug(MosaMethod method)
+		{
+			var methodData = Compiler.CompilerData.GetMethodData(method);
+
+			if (methodData.PluggedBy == null)
+				return methodData;
+
+			return Compiler.CompilerData.GetMethodData(methodData.PluggedBy);
 		}
 	}
 }

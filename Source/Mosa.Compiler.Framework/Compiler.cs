@@ -117,6 +117,7 @@ namespace Mosa.Compiler.Framework
 		private static List<BaseCompilerStage> GetDefaultCompilerPipeline(CompilerOptions compilerOptions)
 		{
 			return new List<BaseCompilerStage> {
+				new UnitTestStage(),
 				new TypeInitializerStage(),
 				new DevirtualizationStage(),
 				new StaticFieldStage(),

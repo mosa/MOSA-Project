@@ -5,6 +5,7 @@ using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
 using Mosa.TestWorld.x86.Tests;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 namespace Mosa.TestWorld.x86
@@ -122,6 +123,7 @@ namespace Mosa.TestWorld.x86
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void Thread1()
 		{
 			uint ticks = 0;
@@ -132,6 +134,7 @@ namespace Mosa.TestWorld.x86
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void Thread2()
 		{
 			uint ticks = 0;
@@ -142,6 +145,7 @@ namespace Mosa.TestWorld.x86
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void Thread3()
 		{
 			uint ticks = 0;
@@ -152,6 +156,7 @@ namespace Mosa.TestWorld.x86
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void Thread4()
 		{
 			uint ticks = 0;
@@ -162,6 +167,7 @@ namespace Mosa.TestWorld.x86
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void Thread5()
 		{
 			uint ticks = 0;

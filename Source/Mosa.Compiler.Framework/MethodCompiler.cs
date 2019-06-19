@@ -253,7 +253,7 @@ namespace Mosa.Compiler.Framework
 			MethodData = compiler.CompilerData.GetMethodData(Method);
 			MethodData.Counters.Reset();
 
-			MethodData.CompileCount++;
+			MethodData.Version++;
 			MethodData.IsCompiled = false;
 			MethodData.HasProtectedRegions = HasProtectedRegions;
 			MethodData.IsLinkerGenerated = Method.IsCompilerGenerated;
@@ -379,13 +379,15 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public void Compile()
 		{
+			MethodData.HasCode = false;
+
 			if (Method.IsCompilerGenerated)
 			{
 				IsCILDecodeRequired = false;
 				IsStackFrameRequired = false;
 			}
 
-			Debug.WriteLine($"Compiling: [{MethodData.CompileCount}] {Method}");
+			//Debug.WriteLine($"Compiling: [{MethodData.Version}] {Method}"); //DEBUGREMOVE
 
 			PlugMethod();
 
@@ -477,6 +479,8 @@ namespace Mosa.Compiler.Framework
 
 			if (plugMethod == null)
 				return;
+
+			MethodData.PluggedBy = plugMethod;
 
 			Compiler.MethodScanner.MethodInvoked(plugMethod, Method);
 

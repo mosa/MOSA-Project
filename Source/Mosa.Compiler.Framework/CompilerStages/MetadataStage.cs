@@ -185,14 +185,12 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				if (!method.IsConstructor || method.Signature.Parameters.Count != 0 || method.HasOpenGenericParams)
 					continue;
 
-				// TODO: Inline
-				//if (Compiler.CompilerData.IsMethodInlined(method))
-				//	continue;
+				var targetMethodData = GetTargetMethodConsiderPlug(method);
 
-				if (!Compiler.MethodScanner.IsMethodInvoked(method))
-					break;
-
-				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, writer.Position, Metadata.MethodDefinition + method.FullName, 0);
+				if (targetMethodData.HasCode)
+				{
+					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, writer.Position, Metadata.MethodDefinition + targetMethodData.Method.FullName, 0);
+				}
 
 				break;
 			}
@@ -247,17 +245,13 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				// 15. Pointer to Methods
 				foreach (var method in methodList)
 				{
-					Debug.Assert((!(!method.HasImplementation && method.IsAbstract)) == (method.HasImplementation || !method.IsAbstract));
+					var targetMethodData = GetTargetMethodConsiderPlug(method);
 
-					if ((!(!method.HasImplementation && method.IsAbstract))
-						&& !method.HasOpenGenericParams
-						&& !method.DeclaringType.HasOpenGenericParams
-
-						//&& !Compiler.CompilerData.IsMethodInlined(method) // TODO: Inline
-						&& Compiler.MethodScanner.IsMethodInvoked(method))
+					if (targetMethodData.HasCode)
 					{
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, writer.Position, GetMethodNameConsiderPlug(method), 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, writer.Position, targetMethodData.Method.FullName, 0);
 					}
+
 					writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 				}
 
@@ -568,17 +562,15 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			writer.Write((uint)method.MethodAttributes, TypeLayout.NativePointerSize);
 
 			// 4. Local Stack Size (16 Bits) && Parameter Stack Size (16 Bits)
-			var methodData = Compiler.CompilerData.GetMethodData(method);
-			int value = methodData.LocalMethodStackSize | (methodData.ParameterStackSize << 16);
+			var targetMethodData = GetTargetMethodConsiderPlug(method);
+
+			int value = targetMethodData.LocalMethodStackSize | (targetMethodData.ParameterStackSize << 16);
 			writer.Write(value, TypeLayout.NativePointerSize);
 
 			// 5. Pointer to Method
-			if (method.HasImplementation && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams /*&& !methodData.Inlined*/)  // TODO: Inline
+			if (targetMethodData.HasCode)
 			{
-				if (Compiler.MethodScanner.IsMethodInvoked(method))
-				{
-					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, writer.Position, GetMethodNameConsiderPlug(method), 0);
-				}
+				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, writer.Position, targetMethodData.Method.FullName, 0);
 			}
 			writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
@@ -904,11 +896,14 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		#endregion Custom Attributes
 
-		private string GetMethodNameConsiderPlug(MosaMethod method)
+		private MethodData GetTargetMethodConsiderPlug(MosaMethod method)
 		{
-			var plugMethod = Compiler.PlugSystem.GetReplacement(method);
+			var methodData = Compiler.CompilerData.GetMethodData(method);
 
-			return (plugMethod == null) ? method.FullName : plugMethod.FullName;
+			if (methodData.PluggedBy == null)
+				return methodData;
+
+			return Compiler.CompilerData.GetMethodData(methodData.PluggedBy);
 		}
 	}
 }

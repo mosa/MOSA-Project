@@ -18,6 +18,8 @@ namespace Mosa.Platform.Intel.CompilerStages
 
 			Compiler.PlugSystem.CreatePlug(startUpMethod, TypeSystem.EntryPoint);
 
+			Compiler.CompilerData.GetMethodData(startUpMethod).DoNotInline = true;
+
 			MethodScanner.MethodInvoked(startUpMethod, startUpMethod);
 
 			if (Linker.EntryPoint == null)
@@ -32,6 +34,8 @@ namespace Mosa.Platform.Intel.CompilerStages
 			}
 			else
 			{
+				Compiler.CompilerData.GetMethodData(TypeSystem.EntryPoint).DoNotInline = true;
+
 				MethodScanner.MethodInvoked(TypeSystem.EntryPoint, TypeSystem.EntryPoint);
 			}
 		}

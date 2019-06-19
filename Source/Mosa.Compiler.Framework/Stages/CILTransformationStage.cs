@@ -990,6 +990,17 @@ namespace Mosa.Compiler.Framework.Stages
 			MethodScanner.MethodInvoked(invokedMethod, Method);
 
 			node.SetInstruction(Select(node.Result, IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, Operand.CreateSymbolFromMethod(invokedMethod, TypeSystem));
+
+			var methodData = MethodCompiler.Compiler.CompilerData.GetMethodData(invokedMethod);
+
+			if (!methodData.HasMethodPointerReferenced)
+			{
+				methodData.HasMethodPointerReferenced = true;
+
+				MethodScheduler.AddToRecompileQueue(invokedMethod); // FUTURE: Optimize this not to re-schedule when not necessary
+
+				//Debug.WriteLine($" Method Reference: [{MethodData.Version}] {invokedMethod}"); //DEBUGREMOVE
+			}
 		}
 
 		/// <summary>

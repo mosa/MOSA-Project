@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework
 
 		//private readonly Dictionary<MosaMethod, int> inlineQueue = new Dictionary<MosaMethod, int>();
 
-		private readonly HashSet<MosaMethod> inlineSet = new HashSet<MosaMethod>();
+		private readonly HashSet<MosaMethod> recompileSet = new HashSet<MosaMethod>();
 
 		private readonly object _timestamplock = new object();
 
@@ -159,27 +159,19 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public void AddCallersToInlineQueue(MethodData method)
+		public void AddToRecompileQueue(HashSet<MosaMethod> methods)
 		{
-			var timestamp = GetTimestamp();
-
-			Debug.WriteLine($" Inline Eval @ {timestamp}");
-
-			lock (inlineSet)
+			lock (recompileSet)
 			{
-				foreach (var caller in method.Callers)
-				{
-					Debug.WriteLine($" -> Caller: {caller}");
+				recompileSet.UnionWith(methods);
+			}
+		}
 
-					var methodData = Compiler.CompilerData.GetMethodData(caller);
-
-					methodData.InlineDependencyUpdateTimestamp = timestamp;
-
-					if (!inlineSet.Contains(caller))
-					{
-						inlineSet.Add(caller);
-					}
-				}
+		public void AddToRecompileQueue(MosaMethod method)
+		{
+			lock (recompileSet)
+			{
+				recompileSet.Add(method);
 			}
 		}
 
@@ -187,18 +179,10 @@ namespace Mosa.Compiler.Framework
 		{
 			bool action = false;
 
-			lock (inlineSet)
+			lock (recompileSet)
 			{
-				foreach (var method in inlineSet)
+				foreach (var method in recompileSet)
 				{
-					var methodData = Compiler.CompilerData.GetMethodData(method);
-
-					if (methodData.InlineTimestamp > methodData.InlineDependencyUpdateTimestamp)
-					{
-						Debug.WriteLine($"Skipping Recompile: [{method}] Inlined @ {methodData.InlineTimestamp} Dependency Update @ {methodData.InlineDependencyUpdateTimestamp}");
-						continue;   // nothing to do
-					}
-
 					lock (scheduleQueue)
 					{
 						if (!scheduleSet.Contains(method))
@@ -210,9 +194,7 @@ namespace Mosa.Compiler.Framework
 					}
 				}
 
-				inlineSet.Clear();
-
-				//inlineQueue.Clear();
+				recompileSet.Clear();
 			}
 
 			if (action)

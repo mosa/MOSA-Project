@@ -24,8 +24,6 @@ namespace Mosa.Compiler.Framework
 
 		public bool HasProtectedRegions { get; set; }
 
-		public bool Inlined { get; set; }
-
 		public bool HasDoNotInlineAttribute { get; set; }
 
 		public bool HasAggressiveInliningAttribute { get; set; }
@@ -44,7 +42,7 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsDevirtualized { get; set; }
 
-		public int CompileCount { get; set; }
+		public int Version { get; set; }
 
 		public int ParameterStackSize { get; set; }
 
@@ -56,39 +54,15 @@ namespace Mosa.Compiler.Framework
 
 		public bool DoNotInline { get; set; }
 
-		public int InlineTimestamp
-		{
-			get { lock (_lock) { return inlineTimestamp; } }
-			set { lock (_lock) { inlineTimestamp = value; } }
-		}
+		public bool HasMethodPointerReferenced { get; set; }
 
-		public int InlineDependencyUpdateTimestamp
-		{
-			get { lock (_lock) { return inlineDependencyUpdateTimestamp; } }
-			set { lock (_lock) { inlineDependencyUpdateTimestamp = Math.Max(inlineDependencyUpdateTimestamp, value); } }
-		}
+		public bool HasCode { get; set; }
 
-		public InlineMethodData InlineMethodData
-		{
-			get { lock (_lock) { return inlineMethodData; } }
-			set { lock (_lock) { inlineMethodData = value; } }
-		}
+		public bool Inlined { get { lock (_lock) { return InlineMethodData.IsInlined; } } }
 
-		public List<MosaMethod> Callers
-		{
-			get
-			{
-				lock (callers)
-				{
-					if (cachedCallers == null)
-					{
-						cachedCallers = new List<MosaMethod>(callers);
-					}
+		public MosaMethod PluggedBy { get; set; }
 
-					return cachedCallers;
-				}
-			}
-		}
+		public bool IsInvoked { get; set; }
 
 		#endregion Properties
 
@@ -96,15 +70,7 @@ namespace Mosa.Compiler.Framework
 
 		private readonly object _lock = new object();
 
-		private InlineMethodData inlineMethodData;
-
-		private int inlineTimestamp;
-
-		private int inlineDependencyUpdateTimestamp;
-
-		private List<MosaMethod> callers;
-
-		private List<MosaMethod> cachedCallers;
+		private InlineMethodData InlineMethodData;
 
 		#endregion Data Members
 
@@ -112,25 +78,18 @@ namespace Mosa.Compiler.Framework
 		{
 			Method = mosaMethod;
 
-			callers = new List<MosaMethod>();
 			LabelRegions = new List<LabelRegion>();
 			Counters = new Counters();
-			CompileCount = 0;
+			Version = 0;
 			DoNotInline = false;
-			inlineMethodData = null;
+			InlineMethodData = new InlineMethodData(null, 0);
 			IsDevirtualized = false;
+			HasMethodPointerReferenced = false;
+			HasCode = false;
+			IsInvoked = false;
 		}
 
 		#region Methods
-
-		public void AddCaller(MosaMethod method)
-		{
-			lock (callers)
-			{
-				callers.AddIfNew(method);
-				cachedCallers = null;
-			}
-		}
 
 		public void AddLabelRegion(int label, int start, int length)
 		{
@@ -140,6 +99,31 @@ namespace Mosa.Compiler.Framework
 				Start = start,
 				Length = length,
 			});
+		}
+
+		public InlineMethodData GetInlineMethodDataForUseBy(MosaMethod method)
+		{
+			lock (_lock)
+			{
+				InlineMethodData.AddReference(method);
+				return InlineMethodData;
+			}
+		}
+
+		public void SetInlineMethodData(BasicBlocks basicBlocks)
+		{
+			lock (_lock)
+			{
+				InlineMethodData = new InlineMethodData(basicBlocks, Version);
+			}
+		}
+
+		public InlineMethodData GetInlineMethodData()
+		{
+			lock (_lock)
+			{
+				return InlineMethodData;
+			}
 		}
 
 		#endregion Methods

@@ -107,6 +107,7 @@ namespace Mosa.Platform.Intel.CompilerStages
 			var initializeMethod = startUpType.FindMethodByName("Initialize");
 
 			Compiler.CompilerData.GetMethodData(initializeMethod).DoNotInline = true;
+
 			MethodScanner.MethodInvoked(initializeMethod, multibootMethod);
 		}
 

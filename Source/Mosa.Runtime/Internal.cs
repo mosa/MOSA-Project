@@ -10,7 +10,7 @@ namespace Mosa.Runtime
 	{
 		#region Allocation
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static IntPtr AllocateObject(RuntimeTypeHandle handle, uint classSize)
 		{
 			// An object has the following memory layout:

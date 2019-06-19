@@ -50,18 +50,13 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 					foreach (var method in methodList)
 					{
-						if ((!method.HasImplementation && method.IsAbstract) || method.HasOpenGenericParams || method.DeclaringType.HasOpenGenericParams)
-							continue;
+						var targetMethodData = GetTargetMethodConsiderPlug(method);
 
-						if (!Compiler.MethodScanner.IsMethodInvoked(method))
-							continue;
-
-						// Don't emit entry for plug methods
-						if (Compiler.PlugSystem.GetReplacement(method) != null)
+						if (!targetMethodData.HasCode)
 							continue;
 
 						// 1. Pointer to Method
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, writer.Position, method.FullName, 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, writer.Position, targetMethodData.Method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						// 2. Size of Method
@@ -79,6 +74,16 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 			writer.Position = 0;
 			writer.Write(count);
+		}
+
+		private MethodData GetTargetMethodConsiderPlug(MosaMethod method)
+		{
+			var methodData = Compiler.CompilerData.GetMethodData(method);
+
+			if (methodData.PluggedBy == null)
+				return methodData;
+
+			return Compiler.CompilerData.GetMethodData(methodData.PluggedBy);
 		}
 	}
 }

@@ -25,10 +25,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			var callSites = new List<InstructionNode>();
-			var staticCalls = new List<MosaMethod>();
+			var trace = CreateTraceLog("Inlined");
+
+			int callSiteCount = 0;
 
 			// find all call sites
+			var callSites = new List<InstructionNode>();
+
 			foreach (var block in BasicBlocks)
 			{
 				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
@@ -39,63 +42,33 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.Instruction != IRInstruction.CallStatic)
 						continue;
 
-					if (!node.Operand1.IsSymbol)
-						continue;
-
-					var invokedMethod = node.Operand1.Method;
-
-					Debug.Assert(invokedMethod != null);
-
 					callSites.Add(node);
-
-					if (staticCalls.Contains(invokedMethod))
-						continue;
-
-					staticCalls.Add(invokedMethod);
-
-					var invoked = MethodCompiler.Compiler.CompilerData.GetMethodData(invokedMethod);
-
-					invoked.AddCaller(Method);
-
-					Debug.WriteLine($" -> Calls: [{invoked.CompileCount}] {invokedMethod}");
 				}
 			}
-
-			MethodData.InlineTimestamp = MethodScheduler.GetTimestamp();
-
-			Debug.WriteLine($" Inline Start @ {MethodData.InlineTimestamp}");
-
-			if (callSites.Count == 0)
-				return;
-
-			var trace = CreateTraceLog("Inlined");
-
-			int callSiteCount = 0;
 
 			foreach (var callSiteNode in callSites)
 			{
 				var invokedMethod = callSiteNode.Operand1.Method;
 
+				// don't inline self
+				if (invokedMethod == Method)
+					continue;
+
+				Debug.Assert(callSiteNode.Operand1.IsSymbol);
+
 				var callee = MethodCompiler.Compiler.CompilerData.GetMethodData(invokedMethod);
 
-				if (!callee.Inlined)
+				var inlineMethodData = callee.GetInlineMethodDataForUseBy(Method);
+
+				if (!inlineMethodData.IsInlined)
 					continue;
-
-				// don't inline self
-				if (callee.Method == MethodCompiler.Method)
-					continue;
-
-				Debug.WriteLine($" -> Inlined: [{callee.CompileCount}] {callee.Method}");
-
-				var inlineMethodData = callee.InlineMethodData;
-
-				if (inlineMethodData.BasicBlocks == null)
-					continue;
-
-				trace?.Log(callee.Method.FullName);
 
 				Inline(callSiteNode, inlineMethodData.BasicBlocks);
 				callSiteCount++;
+
+				trace?.Log($" -> Inlined: [{callee.Version}] {callee.Method}");
+
+				//Debug.WriteLine($" -> Inlined: [{callee.Version}] {callee.Method}");//DEBUGREMOVE
 			}
 
 			InlinedMethodsCount.Set(1);
