@@ -651,10 +651,10 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		{
 			var symbolName = Metadata.CustomAttributesTable + unit.FullName;
 
-			//if (Linker.IsSymbolDefined(symbolName))
-			//{
-			//	return Linker.GetSymbol(symbolName);
-			//}
+			if (Linker.IsSymbolDefined(symbolName))
+			{
+				return Linker.GetSymbol(symbolName);
+			}
 
 			// Emit custom attributes table
 			var customAttributesTableSymbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
