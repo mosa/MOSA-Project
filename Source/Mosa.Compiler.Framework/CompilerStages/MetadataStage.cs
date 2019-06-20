@@ -185,7 +185,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				if (!method.IsConstructor || method.Signature.Parameters.Count != 0 || method.HasOpenGenericParams)
 					continue;
 
-				var targetMethodData = GetTargetMethodConsiderPlug(method);
+				var targetMethodData = GetTargetMethodData(method);
 
 				if (targetMethodData.HasCode)
 				{
@@ -245,7 +245,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				// 15. Pointer to Methods
 				foreach (var method in methodList)
 				{
-					var targetMethodData = GetTargetMethodConsiderPlug(method);
+					var targetMethodData = GetTargetMethodData(method);
 
 					if (targetMethodData.HasCode)
 					{
@@ -535,19 +535,17 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private LinkerSymbol CreateMethodDefinition(MosaMethod method)
 		{
 			var symbolName = Metadata.MethodDefinition + method.FullName;
+			var methodTableSymbol = Linker.GetSymbol(symbolName);
 
-			//if (Linker.IsSymbolDefined(symbolName))
-			//{
-			//	return Linker.GetSymbol(symbolName);
-			//}
+			if (methodTableSymbol.Size != 0)
+				return methodTableSymbol;
 
 			// Emit method name
 			var methodNameSymbol = EmitStringWithLength(Metadata.NameString + method.FullName, method.FullName);
 
 			// Emit method table
-			var methodTableSymbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, TypeLayout.NativePointerAlignment, (method.Signature.Parameters.Count + 9) * TypeLayout.NativePointerSize);
+			methodTableSymbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, TypeLayout.NativePointerAlignment, (method.Signature.Parameters.Count + 9) * TypeLayout.NativePointerSize);
 			var writer = new EndianAwareBinaryWriter(methodTableSymbol.Stream, Architecture.Endianness);
-
 
 			// 1. Pointer to Name
 			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, writer.Position, methodNameSymbol, 0);
@@ -564,7 +562,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			// 3. Attributes
 			writer.Write((uint)method.MethodAttributes, TypeLayout.NativePointerSize);
 
-			var targetMethodData = GetTargetMethodConsiderPlug(method);
+			var targetMethodData = GetTargetMethodData(method);
 
 			// 4. Local Stack Size (16 Bits) && Parameter Stack Size (16 Bits)
 			writer.Write(targetMethodData.LocalMethodStackSize | (targetMethodData.ParameterStackSize << 16), TypeLayout.NativePointerSize);
@@ -651,13 +649,13 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		{
 			var symbolName = Metadata.CustomAttributesTable + unit.FullName;
 
-			if (Linker.IsSymbolDefined(symbolName))
-			{
-				return Linker.GetSymbol(symbolName);
-			}
+			var customAttributesTableSymbol = Linker.GetSymbol(symbolName);
+
+			if (customAttributesTableSymbol.Size != 0)
+				return customAttributesTableSymbol;
 
 			// Emit custom attributes table
-			var customAttributesTableSymbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			customAttributesTableSymbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer = new EndianAwareBinaryWriter(customAttributesTableSymbol.Stream, Architecture.Endianness);
 
 			// 1. Number of Custom Attributes
@@ -727,22 +725,21 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private LinkerSymbol CreateCustomAttributeArgument(string name, int count, string argName, MosaCustomAttribute.Argument arg, bool isField)
 		{
 			var attributeName = name + ":" + (argName ?? count.ToString());
-
 			var symbolName = Metadata.CustomAttributeArgument + attributeName;
 
-			if (Linker.IsSymbolDefined(symbolName))
-			{
-				return Linker.GetSymbol(symbolName);
-			}
+			var customAttributeArgumentSymbol = Linker.GetSymbol(symbolName);
 
-			var symbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
-			var writer1 = new EndianAwareBinaryWriter(symbol.Stream, Architecture.Endianness);
+			if (customAttributeArgumentSymbol.Size != 0)
+				return customAttributeArgumentSymbol;
+
+			customAttributeArgumentSymbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var writer1 = new EndianAwareBinaryWriter(customAttributeArgumentSymbol.Stream, Architecture.Endianness);
 
 			// 1. Pointer to name (if named)
 			if (argName != null)
 			{
 				var nameSymbol = EmitStringWithLength(Metadata.NameString + attributeName, argName);
-				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, writer1.Position, nameSymbol, 0);
+				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, customAttributeArgumentSymbol, writer1.Position, nameSymbol, 0);
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
@@ -750,16 +747,16 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			writer1.Write(isField, TypeLayout.NativePointerSize);
 
 			// 3. Argument Type Pointer
-			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, writer1.Position, Metadata.TypeDefinition + arg.Type.FullName, 0);
+			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, customAttributeArgumentSymbol, writer1.Position, Metadata.TypeDefinition + arg.Type.FullName, 0);
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 4. Argument Size
 			writer1.Write(ComputeArgumentSize(arg.Type, arg.Value), TypeLayout.NativePointerSize);
 
 			// 5. Argument Value
-			WriteArgument(writer1, symbol, arg.Type, arg.Value);
+			WriteArgument(writer1, customAttributeArgumentSymbol, arg.Type, arg.Value);
 
-			return symbol;
+			return customAttributeArgumentSymbol;
 		}
 
 		private int ComputeArgumentSize(MosaType type, object value)
@@ -913,14 +910,14 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		#endregion Custom Attributes
 
-		private MethodData GetTargetMethodConsiderPlug(MosaMethod method)
+		private MethodData GetTargetMethodData(MosaMethod method)
 		{
 			var methodData = Compiler.GetMethodData(method);
 
-			if (methodData.PluggedBy == null)
+			if (methodData.ReplacedBy == null)
 				return methodData;
 
-			return Compiler.GetMethodData(methodData.PluggedBy);
+			return Compiler.GetMethodData(methodData.ReplacedBy);
 		}
 	}
 }

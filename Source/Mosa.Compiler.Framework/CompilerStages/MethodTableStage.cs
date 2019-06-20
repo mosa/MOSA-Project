@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 					foreach (var method in methodList)
 					{
-						var targetMethodData = GetTargetMethodConsiderPlug(method);
+						var targetMethodData = GetTargetMethodData(method);
 
 						if (!targetMethodData.HasCode)
 							continue;
@@ -60,7 +60,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						// 2. Size of Method
-						Linker.Link(LinkType.Size, NativePatchType, methodLookupTable, writer.Position, method.FullName, 0);
+						Linker.Link(LinkType.Size, NativePatchType, methodLookupTable, writer.Position, targetMethodData.Method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						// 3. Pointer to Method Definition
@@ -76,14 +76,14 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			writer.Write(count);
 		}
 
-		private MethodData GetTargetMethodConsiderPlug(MosaMethod method)
+		private MethodData GetTargetMethodData(MosaMethod method)
 		{
 			var methodData = Compiler.GetMethodData(method);
 
-			if (methodData.PluggedBy == null)
+			if (methodData.ReplacedBy == null)
 				return methodData;
 
-			return Compiler.GetMethodData(methodData.PluggedBy);
+			return Compiler.GetMethodData(methodData.ReplacedBy);
 		}
 	}
 }

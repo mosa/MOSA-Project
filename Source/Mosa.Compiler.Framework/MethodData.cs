@@ -60,7 +60,7 @@ namespace Mosa.Compiler.Framework
 
 		public bool Inlined { get { lock (_lock) { return InlineMethodData.IsInlined; } } }
 
-		public MosaMethod PluggedBy { get; set; }
+		public MosaMethod ReplacedBy { get; set; }
 
 		public bool IsInvoked { get; set; }
 

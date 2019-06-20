@@ -476,7 +476,7 @@ namespace Mosa.Compiler.Framework
 			if (plugMethod == null)
 				return;
 
-			MethodData.PluggedBy = plugMethod;
+			MethodData.ReplacedBy = plugMethod;
 
 			Compiler.MethodScanner.MethodInvoked(plugMethod, Method);
 
