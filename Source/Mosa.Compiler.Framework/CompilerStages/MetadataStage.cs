@@ -684,6 +684,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		{
 			// Emit custom attribute list
 			string name = unit.FullName + ">>" + position.ToString() + ":" + ca.Constructor.DeclaringType.Name;
+
 			var customAttributeSymbol = Linker.DefineSymbol(Metadata.CustomAttribute + name, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer1 = new EndianAwareBinaryWriter(customAttributeSymbol.Stream, Architecture.Endianness);
 
@@ -729,10 +730,10 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 			var symbolName = Metadata.CustomAttributeArgument + attributeName;
 
-			//if (Linker.IsSymbolDefined(symbolName))
-			//{
-			//	return Linker.GetSymbol(symbolName);
-			//}
+			if (Linker.IsSymbolDefined(symbolName))
+			{
+				return Linker.GetSymbol(symbolName);
+			}
 
 			var symbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer1 = new EndianAwareBinaryWriter(symbol.Stream, Architecture.Endianness);
