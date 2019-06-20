@@ -4,6 +4,7 @@ configuration: Release
 platform: Any CPU
 image:
 - Visual Studio 2017
+- Visual Studio 2019
 - Ubuntu1804
 
 shallow_clone: true
@@ -12,11 +13,56 @@ build: off
 
 for:
 
-# Windows Build:
+# Windows Build - Visual Studio 2017:
   -
     matrix:
       only:
         - image: Visual Studio 2017
+
+    install:
+    - cmd: SET PATH=%PATH%;C:\Program Files (x86)\Inno Setup 5
+
+    before_build:
+    - nuget restore -Verbosity quiet Source/Mosa.sln
+
+    build:
+      verbosity: minimal
+      parallel: true
+      project: Source/Mosa.sln
+      publish_nuget: true
+
+    after_build:
+    - cmd: ISCC.exe Source/Inno-Setup-Script/Mosa-Installer.iss
+    - ps: ./mosactl.ps1 unittest
+#    - ps: ./mosactl.ps1 test
+
+    build_script:
+
+    test_script:
+#    - cmd: ./mosactl.ps1 test
+
+    after_test:
+
+    nuget:
+      project_feed: true
+
+    test: off
+
+    assembly_info:
+      patch: true
+      file: AssemblyInfo.*
+      assembly_version: "{version}"
+      assembly_file_version: "{version}"
+      assembly_informational_version: "{version}"
+
+    artifacts:
+    - path: 'bin/MOSA Installer/MOSA-Installer.exe'
+
+# Windows Build - Visual Studio 2019:
+  -
+    matrix:
+      only:
+        - image: Visual Studio 2019
 
     install:
     - cmd: SET PATH=%PATH%;C:\Program Files (x86)\Inno Setup 5
