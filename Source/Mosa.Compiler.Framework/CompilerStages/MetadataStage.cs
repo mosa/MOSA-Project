@@ -251,21 +251,16 @@ namespace Mosa.Compiler.Framework.CompilerStages
 					{
 						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, writer.Position, targetMethodData.Method.FullName, 0);
 					}
-
 					writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 				}
 
 				// 16. Pointer to Method Definitions
 				foreach (var method in methodList)
 				{
-					if ((!(!method.HasImplementation && method.IsAbstract)) && !method.HasOpenGenericParams && !method.DeclaringType.HasOpenGenericParams)
-					{
-						// Create definition and get the symbol
-						var methodDefinitionSymbol = CreateMethodDefinition(method);
+					// Create definition and get the symbol
+					var methodDefinitionSymbol = CreateMethodDefinition(method);
 
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, writer.Position, methodDefinitionSymbol, 0);
-					}
-
+					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, typeTableSymbol, writer.Position, methodDefinitionSymbol, 0);
 					writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 				}
 			}
@@ -500,15 +495,16 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, propertyDefSymbol, writer2.Position, Metadata.TypeDefinition + property.PropertyType.FullName, 0);
 				writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
 
-				// If the type is a property then skip linking the methods
+				// If the type is a interface then skip linking the methods
 				if (!type.IsInterface)
 				{
+					// TODO: Replace .HasImpelement with .HasCode
+
 					// 5. Pointer to Getter Method Definition
 					if (property.GetterMethod != null && property.GetterMethod.HasImplementation && !property.GetterMethod.HasOpenGenericParams)
 					{
 						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, propertyDefSymbol, writer2.Position, Metadata.MethodDefinition + property.GetterMethod.FullName, 0);
 					}
-
 					writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 					// 6. Pointer to Setter Method Definition
@@ -516,7 +512,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 					{
 						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, propertyDefSymbol, writer2.Position, Metadata.MethodDefinition + property.SetterMethod.FullName, 0);
 					}
-
 					writer2.WriteZeroBytes(TypeLayout.NativePointerSize);
 				}
 				else
@@ -539,12 +534,20 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		private LinkerSymbol CreateMethodDefinition(MosaMethod method)
 		{
+			var symbolName = Metadata.MethodDefinition + method.FullName;
+
+			//if (Linker.IsSymbolDefined(symbolName))
+			//{
+			//	return Linker.GetSymbol(symbolName);
+			//}
+
 			// Emit method name
 			var methodNameSymbol = EmitStringWithLength(Metadata.NameString + method.FullName, method.FullName);
 
 			// Emit method table
-			var methodTableSymbol = Linker.DefineSymbol(Metadata.MethodDefinition + method.FullName, SectionKind.ROData, TypeLayout.NativePointerAlignment, (method.Signature.Parameters.Count + 9) * TypeLayout.NativePointerSize);
+			var methodTableSymbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, TypeLayout.NativePointerAlignment, (method.Signature.Parameters.Count + 9) * TypeLayout.NativePointerSize);
 			var writer = new EndianAwareBinaryWriter(methodTableSymbol.Stream, Architecture.Endianness);
+
 
 			// 1. Pointer to Name
 			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, writer.Position, methodNameSymbol, 0);
@@ -561,11 +564,10 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			// 3. Attributes
 			writer.Write((uint)method.MethodAttributes, TypeLayout.NativePointerSize);
 
-			// 4. Local Stack Size (16 Bits) && Parameter Stack Size (16 Bits)
 			var targetMethodData = GetTargetMethodConsiderPlug(method);
 
-			int value = targetMethodData.LocalMethodStackSize | (targetMethodData.ParameterStackSize << 16);
-			writer.Write(value, TypeLayout.NativePointerSize);
+			// 4. Local Stack Size (16 Bits) && Parameter Stack Size (16 Bits)
+			writer.Write(targetMethodData.LocalMethodStackSize | (targetMethodData.ParameterStackSize << 16), TypeLayout.NativePointerSize);
 
 			// 5. Pointer to Method
 			if (targetMethodData.HasCode)
@@ -579,9 +581,9 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 			// 7. Pointer to Exception Handler Table
-			if (method.ExceptionHandlers.Count != 0 && Compiler.MethodScanner.IsMethodInvoked(method))
+			if (targetMethodData.HasProtectedRegions && targetMethodData.HasCode)
 			{
-				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, writer.Position, Metadata.ProtectedRegionTable + method.FullName, 0);
+				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodTableSymbol, writer.Position, Metadata.ProtectedRegionTable + targetMethodData.Method.FullName, 0);
 			}
 			writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
@@ -647,8 +649,15 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		private LinkerSymbol CreateCustomAttributesTable(MosaUnit unit)
 		{
+			var symbolName = Metadata.CustomAttributesTable + unit.FullName;
+
+			//if (Linker.IsSymbolDefined(symbolName))
+			//{
+			//	return Linker.GetSymbol(symbolName);
+			//}
+
 			// Emit custom attributes table
-			var customAttributesTableSymbol = Linker.DefineSymbol(Metadata.CustomAttributesTable + unit.FullName, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var customAttributesTableSymbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer = new EndianAwareBinaryWriter(customAttributesTableSymbol.Stream, Architecture.Endianness);
 
 			// 1. Number of Custom Attributes
@@ -714,17 +723,24 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			return customAttributeSymbol;
 		}
 
-		private LinkerSymbol CreateCustomAttributeArgument(string symbolName, int count, string name, MosaCustomAttribute.Argument arg, bool isField)
+		private LinkerSymbol CreateCustomAttributeArgument(string name, int count, string argName, MosaCustomAttribute.Argument arg, bool isField)
 		{
-			string nameForSymbol = name ?? count.ToString();
-			nameForSymbol = symbolName + ":" + nameForSymbol;
-			var symbol = Linker.DefineSymbol(Metadata.CustomAttributeArgument + nameForSymbol, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var attributeName = name + ":" + (argName ?? count.ToString());
+
+			var symbolName = Metadata.CustomAttributeArgument + attributeName;
+
+			//if (Linker.IsSymbolDefined(symbolName))
+			//{
+			//	return Linker.GetSymbol(symbolName);
+			//}
+
+			var symbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer1 = new EndianAwareBinaryWriter(symbol.Stream, Architecture.Endianness);
 
 			// 1. Pointer to name (if named)
-			if (name != null)
+			if (argName != null)
 			{
-				var nameSymbol = EmitStringWithLength(Metadata.NameString + nameForSymbol, name);
+				var nameSymbol = EmitStringWithLength(Metadata.NameString + attributeName, argName);
 				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, writer1.Position, nameSymbol, 0);
 			}
 			writer1.WriteZeroBytes(TypeLayout.NativePointerSize);
