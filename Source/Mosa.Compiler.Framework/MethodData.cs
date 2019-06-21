@@ -18,8 +18,6 @@ namespace Mosa.Compiler.Framework
 
 		public MosaMethod Method { get; }
 
-		public bool IsCompiled { get; set; }
-
 		public bool IsLinkerGenerated { get; set; }
 
 		public bool HasProtectedRegions { get; set; }
@@ -110,11 +108,15 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public void SetInlineMethodData(BasicBlocks basicBlocks)
+		public InlineMethodData SwapInlineMethodData(BasicBlocks basicBlocks)
 		{
 			lock (_lock)
 			{
+				var tmp = InlineMethodData;
+
 				InlineMethodData = new InlineMethodData(basicBlocks, Version);
+
+				return tmp;
 			}
 		}
 

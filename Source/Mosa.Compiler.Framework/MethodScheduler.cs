@@ -96,20 +96,25 @@ namespace Mosa.Compiler.Framework
 			if (method.IsCompilerGenerated)
 				return;
 
-			lock (scheduleQueue)
-			{
-				if (!scheduleSet.Contains(method))
-				{
-					scheduleSet.Add(method);
-					scheduleQueue.Enqueue(method);
-				}
-			}
+			AddToQueue(method);
 
 			lock (methods)
 			{
 				if (!methods.Contains(method))
 				{
 					methods.Add(method);
+				}
+			}
+		}
+
+		private void AddToQueue(MosaMethod method)
+		{
+			lock (scheduleQueue)
+			{
+				if (!scheduleSet.Contains(method))
+				{
+					scheduleSet.Add(method);
+					scheduleQueue.Enqueue(method);
 				}
 			}
 		}
@@ -185,12 +190,7 @@ namespace Mosa.Compiler.Framework
 				{
 					lock (scheduleQueue)
 					{
-						if (!scheduleSet.Contains(method))
-						{
-							scheduleQueue.Enqueue(method);
-							scheduleSet.Add(method);
-							action = true;
-						}
+						AddToQueue(method);
 					}
 				}
 

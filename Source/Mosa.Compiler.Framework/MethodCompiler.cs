@@ -15,8 +15,7 @@ namespace Mosa.Compiler.Framework
 	/// Base class of a method compiler.
 	/// </summary>
 	/// <remarks>
-	/// A method compiler is responsible for compiling a single method
-	/// of an object.
+	/// A method compiler is responsible for compiling a single method of an object.
 	/// </remarks>
 	public sealed class MethodCompiler
 	{
@@ -254,11 +253,15 @@ namespace Mosa.Compiler.Framework
 			MethodData.Counters.Reset();
 
 			MethodData.Version++;
-			MethodData.IsCompiled = false;
 			MethodData.IsMethodImplementationReplaced = IsMethodPlugged;
 
 			// Both defines the symbol and also clears the data
 			Symbol = Linker.DefineSymbol(Method.FullName, SectionKind.Text, 0, 0);
+			Symbol.RemovePatches();
+
+			Symbol.MethodData = MethodData; // for debugging
+			Symbol.MosaMethod = Method; // for debugging
+			Symbol.Version = MethodData.Version;
 
 			EvaluateParameterOperands();
 
@@ -383,7 +386,7 @@ namespace Mosa.Compiler.Framework
 				IsStackFrameRequired = false;
 			}
 
-			//Debug.WriteLine($"Compiling: [{MethodData.Version}] {Method}"); //DEBUGREMOVE
+			//Debug.WriteLine($"{MethodScheduler.GetTimestamp()} - Compiling: [{MethodData.Version}] {Method}"); //DEBUGREMOVE
 
 			PlugMethod();
 
@@ -395,12 +398,9 @@ namespace Mosa.Compiler.Framework
 
 			ExecutePipeline();
 
-			Symbol.SetReplacementStatus(MethodData.Inlined);
+			//Debug.WriteLine($"{MethodScheduler.GetTimestamp()} - Compiled: [{MethodData.Version}] {Method}"); //DEBUGREMOVE
 
-			if (IsStopped || IsMethodInlined)
-			{
-				MethodData.IsCompiled = false;
-			}
+			Symbol.SetReplacementStatus(MethodData.Inlined);
 
 			if (Compiler.CompilerOptions.EnableStatistics)
 			{

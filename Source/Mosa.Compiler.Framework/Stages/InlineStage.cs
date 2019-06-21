@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty)
+					if (node.IsEmptyOrNop)
 						continue;
 
 					if (node.Instruction != IRInstruction.CallStatic)
@@ -59,6 +59,8 @@ namespace Mosa.Compiler.Framework.Stages
 				var callee = MethodCompiler.Compiler.GetMethodData(invokedMethod);
 
 				var inlineMethodData = callee.GetInlineMethodDataForUseBy(Method);
+
+				//Debug.WriteLine($"{MethodScheduler.GetTimestamp()} - Inline: {(inlineMethodData.IsInlined ? "Inlined" : "NOT Inlined")} [{MethodData.Version}] {Method} -> [{inlineMethodData.Version}] {callee.Method}"); //DEBUGREMOVE
 
 				if (!inlineMethodData.IsInlined)
 					continue;

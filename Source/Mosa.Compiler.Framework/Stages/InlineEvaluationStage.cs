@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (StaticCanNotInline(MethodData))
 			{
-				MethodData.SetInlineMethodData(null);
+				MethodData.SwapInlineMethodData(null);
 				MethodCompiler.IsMethodInlined = false;
 				ScheduleReferenceMethods(previousInlineMethodData);
 
@@ -134,16 +134,16 @@ namespace Mosa.Compiler.Framework.Stages
 			if (inline)
 			{
 				var inlineBlocks = CopyInstructions();
-				MethodData.SetInlineMethodData(inlineBlocks);
+				MethodData.SwapInlineMethodData(inlineBlocks);
 			}
 			else
 			{
-				MethodData.SetInlineMethodData(null);
+				MethodData.SwapInlineMethodData(null);
 			}
 
-			ScheduleReferenceMethods(previousInlineMethodData);
-
 			MethodCompiler.IsMethodInlined = inline;
+
+			ScheduleReferenceMethods(previousInlineMethodData);
 
 			trace?.Log($"IRInstructionCount: {MethodData.IRInstructionCount}");
 			trace?.Log($"IRStackParameterInstructionCount: {MethodData.IRStackParameterInstructionCount}");
@@ -166,7 +166,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// If previous was not inlined and current is not inline, do nothing
 			if (!current.IsInlined && !previous.IsInlined)
+			{
+				foreach (var method in previous.References)
+				{
+					MethodData.GetInlineMethodDataForUseBy(method);
+				}
+
 				return;
+			}
 
 			// If previous or current is inline, schedule all references from previous
 			MethodScheduler.AddToRecompileQueue(previous.References);
@@ -331,7 +338,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
-			var trace = CreateTraceLog("InlineMap");
+			var trace = CreateTraceLog("InlineMap", 9);
 
 			if (trace != null)
 			{
