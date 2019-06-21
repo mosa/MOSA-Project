@@ -138,16 +138,6 @@ namespace Mosa.Compiler.Framework
 		public MethodData MethodData { get; }
 
 		/// <summary>
-		/// The stack frame
-		/// </summary>
-		public Operand StackFrame { get; }
-
-		/// <summary>
-		/// The stack frame
-		/// </summary>
-		public Operand StackPointer { get; }
-
-		/// <summary>
 		/// Gets the platform constant zero
 		/// </summary>
 		public Operand ConstantZero { get; }
@@ -231,8 +221,6 @@ namespace Mosa.Compiler.Framework
 			LocalStack = new List<Operand>();
 			VirtualRegisters = new VirtualRegisters();
 
-			StackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
-			StackPointer = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackPointerRegister);
 			Parameters = new Operand[method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0)];
 
 			ConstantZero32 = CreateConstant((uint)0);

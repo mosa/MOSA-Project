@@ -110,6 +110,16 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public bool IsStopped { get; private set; }
 
+		/// <summary>
+		/// The stack frame
+		/// </summary>
+		internal Operand StackFrame { get; }
+
+		/// <summary>
+		/// The stack frame
+		/// </summary>
+		internal Operand StackPointer { get; }
+
 		#endregion Properties
 
 		#region Static Methods
@@ -204,6 +214,9 @@ namespace Mosa.Compiler.Framework
 			Linker = mosaCompiler.Linker;
 			CompilerTrace = mosaCompiler.CompilerTrace;
 			Architecture = CompilerOptions.Architecture;
+
+			StackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
+			StackPointer = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackPointerRegister);
 
 			PostCompilerTraceEvent(CompilerEvent.CompilerStart);
 

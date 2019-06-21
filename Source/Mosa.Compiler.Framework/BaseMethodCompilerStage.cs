@@ -165,12 +165,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the stack frame.
 		/// </summary>
-		protected Operand StackFrame { get { return MethodCompiler.StackFrame; } }
+		protected Operand StackFrame { get { return MethodCompiler.Compiler.StackFrame; } }
 
 		/// <summary>
 		/// Gets the stack pointer.
 		/// </summary>
-		protected Operand StackPointer { get { return MethodCompiler.StackPointer; } }
+		protected Operand StackPointer { get { return MethodCompiler.Compiler.StackPointer; } }
 
 		/// <summary>
 		/// Gets a value indicating whether this instance has protected regions.
