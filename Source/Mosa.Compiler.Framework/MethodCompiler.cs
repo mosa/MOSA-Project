@@ -417,7 +417,7 @@ namespace Mosa.Compiler.Framework
 
 			var executionTimes = new long[Pipeline.Count];
 
-			var startTicks = Stopwatch.ElapsedTicks;
+			var startTick = Stopwatch.ElapsedTicks;
 
 			for (int i = 0; i < Pipeline.Count; i++)
 			{
@@ -434,25 +434,27 @@ namespace Mosa.Compiler.Framework
 					break;
 			}
 
-			if (Compiler.CompilerOptions.EnableStatistics && !IsStopped)
+
+			if (Compiler.CompilerOptions.EnableStatistics)
 			{
-				var totalTicks = Stopwatch.ElapsedTicks;
+				var lastTick = Stopwatch.ElapsedTicks;
 
-				MethodData.ElapsedTicks = totalTicks;
+				MethodData.ElapsedTicks = lastTick;
 
-				MethodData.Counters.NewCountSkipLock("ExecutionTime.StageStart.Ticks", (int)startTicks);
-				MethodData.Counters.NewCountSkipLock("ExecutionTime.Total.Ticks", (int)totalTicks);
+				MethodData.Counters.NewCountSkipLock("ExecutionTime.StageStart.Ticks", (int)startTick);
+				MethodData.Counters.NewCountSkipLock("ExecutionTime.Total.Ticks", (int)lastTick);
 
 				var executionTimeLog = new TraceLog(TraceType.MethodDebug, Method, "Execution Time/Ticks");
 
-				long previousTicks = startTicks;
+				long previousTick = startTick;
+				var totalTick = lastTick - startTick;
 
 				for (int i = 0; i < Pipeline.Count; i++)
 				{
-					var pipelineTicks = executionTimes[i];
-					var ticks = pipelineTicks == 0 ? 0 : pipelineTicks - previousTicks;
-					var percentage = (ticks * 100) / (double)(totalTicks - startTicks);
-					previousTicks = pipelineTicks;
+					var pipelineTick = executionTimes[i];
+					var ticks = pipelineTick == 0 ? 0 : pipelineTick - previousTick;
+					var percentage = totalTick == 0 ? 0 : (ticks * 100) / (double)(totalTick);
+					previousTick = pipelineTick;
 
 					int per = (int)percentage / 5;
 
@@ -463,7 +465,7 @@ namespace Mosa.Compiler.Framework
 					MethodData.Counters.NewCountSkipLock($"ExecutionTime.{i:00}.{Pipeline[i].Name}.Ticks", (int)ticks);
 				}
 
-				executionTimeLog.Log($"{"****Total Time".PadRight(57)}({totalTicks})");
+				executionTimeLog.Log($"{"****Total Time".PadRight(57)}({lastTick})");
 
 				Trace.PostTraceLog(executionTimeLog);
 			}

@@ -31,8 +31,6 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var trace = CreateTraceLog();
 
-			var previousInlineMethodData = MethodData.GetInlineMethodData();
-
 			MethodData.HasAddressOfInstruction = false;
 			MethodData.HasLoops = false;
 
@@ -49,9 +47,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (StaticCanNotInline(MethodData))
 			{
-				MethodData.SwapInlineMethodData(null);
-				MethodCompiler.IsMethodInlined = false;
-				ScheduleReferenceMethods(previousInlineMethodData);
+				SetInlinedBasicBlocks(null);
 
 				trace?.Log($"** Staticly Evaluated");
 				trace?.Log($"Inlined: {MethodData.Inlined}");
@@ -134,16 +130,13 @@ namespace Mosa.Compiler.Framework.Stages
 			if (inline)
 			{
 				var inlineBlocks = CopyInstructions();
-				MethodData.SwapInlineMethodData(inlineBlocks);
+				SetInlinedBasicBlocks(inlineBlocks);
+
 			}
 			else
 			{
-				MethodData.SwapInlineMethodData(null);
+				SetInlinedBasicBlocks(null);
 			}
-
-			MethodCompiler.IsMethodInlined = inline;
-
-			ScheduleReferenceMethods(previousInlineMethodData);
 
 			trace?.Log($"IRInstructionCount: {MethodData.IRInstructionCount}");
 			trace?.Log($"IRStackParameterInstructionCount: {MethodData.IRStackParameterInstructionCount}");
@@ -158,6 +151,15 @@ namespace Mosa.Compiler.Framework.Stages
 			ReversedInlinedMethodsCount.Set(MethodData.Version >= MaximumCompileCount);
 
 			//Debug.WriteLine($">Inlined: {(inline ? "Yes" : "No")}"); //DEBUGREMOVE
+		}
+
+		private void SetInlinedBasicBlocks(BasicBlocks inlineBlocks)
+		{
+			MethodCompiler.IsMethodInlined = inlineBlocks != null;
+
+			var previousInlineMethodData = MethodData.SwapInlineMethodData(inlineBlocks);
+
+			ScheduleReferenceMethods(previousInlineMethodData);
 		}
 
 		private void ScheduleReferenceMethods(InlineMethodData previous)
