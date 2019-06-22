@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -24,81 +22,53 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			MethodData.CompileCount++;
+			var trace = CreateTraceLog("Inlined");
 
-			var callSites = new List<InstructionNode>();
-			var methodCalls = new List<MosaMethod>();
+			int callSiteCount = 0;
 
 			// find all call sites
+			var callSites = new List<InstructionNode>();
+
 			foreach (var block in BasicBlocks)
 			{
 				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty)
+					if (node.IsEmptyOrNop)
 						continue;
 
 					if (node.Instruction != IRInstruction.CallStatic)
 						continue;
 
-					if (!node.Operand1.IsSymbol)
-						continue;
-
-					var invokedMethod = node.Operand1.Method;
-
-					if (invokedMethod == null)
-						continue;
-
 					callSites.Add(node);
-
-					if (methodCalls.Contains(invokedMethod))
-						continue;
-
-					methodCalls.Add(invokedMethod);
-
-					var invoked = MethodCompiler.Compiler.CompilerData.GetMethodData(invokedMethod);
-
-					invoked.AddCalledBy(MethodCompiler.Method);
 				}
 			}
-
-			if (callSites.Count == 0)
-				return;
-
-			var trace = CreateTraceLog("Inlined");
-
-			int callSiteCount = 0;
 
 			foreach (var callSiteNode in callSites)
 			{
 				var invokedMethod = callSiteNode.Operand1.Method;
 
-				var callee = MethodCompiler.Compiler.CompilerData.GetMethodData(invokedMethod);
-
-				if (!callee.Inlined)
-					continue;
-
 				// don't inline self
-				if (callee.Method == MethodCompiler.Method)
+				if (invokedMethod == Method)
 					continue;
 
-				var inlineBlocks = callee.BasicBlocks;
+				Debug.Assert(callSiteNode.Operand1.IsSymbol);
 
-				if (inlineBlocks == null)
+				var callee = MethodCompiler.Compiler.GetMethodData(invokedMethod);
+
+				var inlineMethodData = callee.GetInlineMethodDataForUseBy(Method);
+
+				//Debug.WriteLine($"{MethodScheduler.GetTimestamp()} - Inline: {(inlineMethodData.IsInlined ? "Inlined" : "NOT Inlined")} [{MethodData.Version}] {Method} -> [{inlineMethodData.Version}] {callee.Method}"); //DEBUGREMOVE
+
+				if (!inlineMethodData.IsInlined)
 					continue;
 
-				trace?.Log(callee.Method.FullName);
-
-				Inline(callSiteNode, inlineBlocks);
+				Inline(callSiteNode, inlineMethodData.BasicBlocks);
 				callSiteCount++;
 
-				//if (!BasicBlocks.RuntimeValidation())
-				//{
-				//	throw new CompilerException($"InlineStage: Block Validation after inlining: {invokedMethod} into {Method}");
-				//}
-			}
+				trace?.Log($" -> Inlined: [{callee.Version}] {callee.Method}");
 
-			// Captures point in time - immediately after inlined blocks were used
-			MethodData.InlineTimestamp = MethodScheduler.GetTimestamp();
+				//Debug.WriteLine($" -> Inlined: [{callee.Version}] {callee.Method}");//DEBUGREMOVE
+			}
 
 			InlinedMethodsCount.Set(1);
 			InlinedCallSitesCount.Set(callSiteCount);

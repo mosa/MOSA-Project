@@ -22,6 +22,6 @@
 		</dependencies>
 	</metadata>
 	<files>
-		<file src="..\..\bin\Mosa.Kernel.x86.dll" target="lib\net45" />
+		<file src="..\..\bin\Mosa.Kernel.x86.dll" target="lib\net472" />
 	</files>
 </package>

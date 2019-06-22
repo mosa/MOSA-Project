@@ -88,19 +88,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(method != null);
 
-			if (MethodCompiler.Compiler.CompilerData.IsMethodInlined(method))
-			{
-				// If above is true, then a race condition occurred between:
-				// 1) after inline stage of this method, and
-				// 2) theinline evaluation stage of the target method
-				// the only best option at this point is to stop compiling this method.
-				// Note: It should already be scheduled to be re-compiled!
-				//MethodCompiler.Stop();
-				//return;
-			}
-
-			//Debug.Assert(!MethodCompiler.Compiler.CompilerData.IsMethodInlined(method));
-
 			operands.RemoveAt(0);
 
 			var context = new Context(node);
@@ -108,8 +95,6 @@ namespace Mosa.Compiler.Framework.Stages
 			context.Empty();
 
 			MakeCall(context, call, result, operands);
-
-			Debug.Assert(method == call.Method);
 
 			MethodScanner.MethodDirectInvoked(call.Method, Method);
 		}

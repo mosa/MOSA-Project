@@ -91,6 +91,21 @@ namespace Mosa.Compiler.Framework
 			Compiler.PostTrace(trace);
 		}
 
+		private void MarkMethodInvoked(MosaMethod method)
+		{
+			var methodData = Compiler.GetMethodData(method);
+
+			if (methodData.IsInvoked)
+				return;
+
+			methodData.IsInvoked = true;
+
+			lock (invokedMethods)
+			{
+				invokedMethods.Add(method);
+			}
+		}
+
 		public void TypeAllocated(MosaType type, MosaMethod source)
 		{
 			if (!IsEnabled)
@@ -173,13 +188,7 @@ namespace Mosa.Compiler.Framework
 			if (!IsEnabled)
 				return;
 
-			lock (invokedMethods)
-			{
-				if (invokedMethods.Contains(method))
-					return;
-
-				invokedMethods.Add(method);
-			}
+			MarkMethodInvoked(method);
 
 			if (trace != null)
 			{
@@ -234,13 +243,7 @@ namespace Mosa.Compiler.Framework
 			if (!IsEnabled)
 				return;
 
-			lock (invokedMethods)
-			{
-				if (invokedMethods.Contains(method))
-					return;
-
-				invokedMethods.Add(method);
-			}
+			MarkMethodInvoked(method);
 
 			if (trace != null)
 			{
@@ -303,13 +306,7 @@ namespace Mosa.Compiler.Framework
 				{
 					var derivedMethod = TypeLayout.GetMethodBySlot(derived, slot);
 
-					lock (invokedMethods)
-					{
-						if (!invokedMethods.Contains(derivedMethod))
-						{
-							invokedMethods.Add(derivedMethod);
-						}
-					}
+					MarkMethodInvoked(derivedMethod);
 
 					ScheduleMethod(derivedMethod);
 				}
@@ -381,7 +378,7 @@ namespace Mosa.Compiler.Framework
 
 			if (entryPoint != null)
 			{
-				invokedMethods.Add(entryPoint);
+				MarkMethodInvoked(entryPoint);
 				ScheduleMethod(entryPoint);
 			}
 
@@ -417,7 +414,8 @@ namespace Mosa.Compiler.Framework
 
 					if (methodAttribute != null)
 					{
-						invokedMethods.Add(method);
+						MarkMethodInvoked(method);
+
 						ScheduleMethod(method);
 						allocateType = true;
 					}

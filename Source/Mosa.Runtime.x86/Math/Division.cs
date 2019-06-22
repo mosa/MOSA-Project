@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime.x86;
+using System.Runtime.CompilerServices;
 
 namespace Mosa.Runtime.Math.x86
 {
@@ -8,6 +9,7 @@ namespace Mosa.Runtime.Math.x86
 	{
 		/* Single and Double Remainder */
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static double RemR8(double n, double d)
 		{
 			if (double.IsInfinity(d))
@@ -39,6 +41,7 @@ namespace Mosa.Runtime.Math.x86
 			return Native.Remainder(n, d);
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static float RemR4(float n, float d)
 		{
 			if (float.IsInfinity(d))

@@ -110,6 +110,16 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public bool IsStopped { get; private set; }
 
+		/// <summary>
+		/// The stack frame
+		/// </summary>
+		internal Operand StackFrame { get; }
+
+		/// <summary>
+		/// The stack frame
+		/// </summary>
+		internal Operand StackPointer { get; }
+
 		#endregion Properties
 
 		#region Static Methods
@@ -117,7 +127,9 @@ namespace Mosa.Compiler.Framework
 		private static List<BaseCompilerStage> GetDefaultCompilerPipeline(CompilerOptions compilerOptions)
 		{
 			return new List<BaseCompilerStage> {
+				new UnitTestStage(),
 				new TypeInitializerStage(),
+				new DevirtualizationStage(),
 				new StaticFieldStage(),
 				new MethodTableStage(),
 				new ExceptionTableStage(),
@@ -141,8 +153,10 @@ namespace Mosa.Compiler.Framework
 				new ExceptionStage(),
 				new CILStaticAllocationResolutionStage(),
 				new CILTransformationStage(),
+				new DevirtualizeCallStage(),
 				new PlugStage(),
 				new UnboxValueTypeStage(),
+				new LowerIRStage(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineStage() : null,
 				(compilerOptions.EnableInlinedMethods) ? new BlockMergeStage() : null,
 				(compilerOptions.EnableInlinedMethods) ? new DeadBlockStage() : null,
@@ -152,12 +166,12 @@ namespace Mosa.Compiler.Framework
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 
 				//(compilerOptions.EnableBitTracker) ? new BitTrackerStage() : null,
+
 				(compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,
 				(compilerOptions.EnableLoopInvariantCodeMotion && compilerOptions.EnableSSA) ? new LoopInvariantCodeMotionStage() : null,
 				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerOptions.EnableIROptimizations) ? new IROptimizationStage() : null,
 				(compilerOptions.EnableIRLongExpansion && compilerOptions.Architecture.NativePointerSize == 4) ? new IRLongDecompositionStage() : null,
-				new LowerIRStage(),
 				(compilerOptions.EnableBitTracker) ? new BitTrackerStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableLoopInvariantCodeMotion && compilerOptions.EnableSSA) ? new LoopInvariantCodeMotionStage() : null,
@@ -167,10 +181,11 @@ namespace Mosa.Compiler.Framework
 				new DeadBlockStage(),
 				new BlockMergeStage(),
 				new IRCleanupStage(),
+				new NewObjectIRStage(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineEvaluationStage() : null,
 
 				//new StopStage(),
-				new DevirtualizeCallStage(),
+
 				new CallStage(),
 				new PlatformIntrinsicStage(),
 				new PlatformEdgeSplitStage(),
@@ -183,7 +198,6 @@ namespace Mosa.Compiler.Framework
 				//new PreciseGCStage(),
 
 				new CodeGenerationStage(compilerOptions.EmitBinary),
-
 				(compilerOptions.EmitBinary) ? new ProtectedRegionLayoutStage() : null,
 			};
 		}
@@ -200,6 +214,9 @@ namespace Mosa.Compiler.Framework
 			Linker = mosaCompiler.Linker;
 			CompilerTrace = mosaCompiler.CompilerTrace;
 			Architecture = CompilerOptions.Architecture;
+
+			StackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
+			StackPointer = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackPointerRegister);
 
 			PostCompilerTraceEvent(CompilerEvent.CompilerStart);
 
@@ -573,6 +590,11 @@ namespace Mosa.Compiler.Framework
 		private MosaType GeInternalRuntimeType()
 		{
 			return TypeSystem.GetTypeByName("Mosa.Runtime", "Internal");
+		}
+
+		public MethodData GetMethodData(MosaMethod method)
+		{
+			return CompilerData.GetMethodData(method);
 		}
 
 		#endregion Helper Methods

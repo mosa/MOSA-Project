@@ -3,7 +3,6 @@
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -23,7 +22,9 @@ namespace Mosa.Compiler.Framework
 
 		private readonly HashSet<MosaMethod> methods = new HashSet<MosaMethod>();
 
-		private readonly Dictionary<MosaMethod, int> inlineQueue = new Dictionary<MosaMethod, int>();
+		//private readonly Dictionary<MosaMethod, int> inlineQueue = new Dictionary<MosaMethod, int>();
+
+		private readonly HashSet<MosaMethod> recompileSet = new HashSet<MosaMethod>();
 
 		private readonly object _timestamplock = new object();
 
@@ -94,20 +95,25 @@ namespace Mosa.Compiler.Framework
 			if (method.IsCompilerGenerated)
 				return;
 
-			lock (scheduleQueue)
-			{
-				if (!scheduleSet.Contains(method))
-				{
-					scheduleSet.Add(method);
-					scheduleQueue.Enqueue(method);
-				}
-			}
+			AddToQueue(method);
 
 			lock (methods)
 			{
 				if (!methods.Contains(method))
 				{
 					methods.Add(method);
+				}
+			}
+		}
+
+		private void AddToQueue(MosaMethod method)
+		{
+			lock (scheduleQueue)
+			{
+				if (!scheduleSet.Contains(method))
+				{
+					scheduleSet.Add(method);
+					scheduleQueue.Enqueue(method);
 				}
 			}
 		}
@@ -157,27 +163,19 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public void AddToInlineQueueByCallee(MethodData calleeMethod)
+		public void AddToRecompileQueue(HashSet<MosaMethod> methods)
 		{
-			var timestamp = GetTimestamp();
-
-			lock (inlineQueue)
+			lock (recompileSet)
 			{
-				foreach (var method in calleeMethod.CalledBy)
-				{
-					if (!inlineQueue.TryGetValue(method, out int existingtimestamp))
-					{
-						inlineQueue.Add(method, timestamp);
-					}
-					else
-					{
-						if (existingtimestamp < timestamp)
-							return;
+				recompileSet.UnionWith(methods);
+			}
+		}
 
-						inlineQueue.Remove(method);
-						inlineQueue.Add(method, existingtimestamp);
-					}
-				}
+		public void AddToRecompileQueue(MosaMethod method)
+		{
+			lock (recompileSet)
+			{
+				recompileSet.Add(method);
 			}
 		}
 
@@ -185,30 +183,18 @@ namespace Mosa.Compiler.Framework
 		{
 			bool action = false;
 
-			lock (inlineQueue)
+			lock (recompileSet)
 			{
-				foreach (var item in inlineQueue)
+				foreach (var method in recompileSet)
 				{
-					var method = item.Key;
-					var timestamp = item.Value;
-
-					var methodData = Compiler.CompilerData.GetMethodData(method);
-
-					if (methodData.InlineTimestamp > timestamp)
-						continue;   // nothing to do
-
 					lock (scheduleQueue)
 					{
-						if (!scheduleSet.Contains(method))
-						{
-							scheduleQueue.Enqueue(method);
-							scheduleSet.Add(method);
-							action = true;
-						}
+						AddToQueue(method);
 					}
 				}
 
-				inlineQueue.Clear();
+				recompileSet.Clear();
+				action = recompileSet.Count != 0;
 			}
 
 			if (action)

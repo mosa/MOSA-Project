@@ -5,6 +5,7 @@ using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Linker.Elf;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 namespace Mosa.Compiler.Framework.Linker
@@ -217,6 +218,9 @@ namespace Mosa.Compiler.Framework.Linker
 			}
 			else
 			{
+				Debug.Assert(linkRequest.ReferenceSymbol.VirtualAddress != 0);
+				Debug.Assert(linkRequest.PatchSymbol.VirtualAddress != 0);
+
 				value = linkRequest.ReferenceSymbol.VirtualAddress + (ulong)linkRequest.ReferenceOffset;
 
 				if (linkRequest.LinkType == LinkType.RelativeOffset)
