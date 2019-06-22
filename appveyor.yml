@@ -59,14 +59,16 @@ for:
     - path: 'bin/MOSA-Installer.exe'
 
     deploy:
-      release: MOSA Project v$(appveyor_build_version)
-      description: 'MOSA Project v$(appveyor_build_version)'
+	  tag: Current
+      release: MOSA Project - Current Build
+      description: 'Build Version - v$(appveyor_build_version)'
       provider: GitHub
       auth_token:
         secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
       artifact: 'bin/MOSA-Installer.exe'
       draft: false
       prerelease: true
+	  force_update: true
       on:
         branch: master                 # release from master branch only
         APPVEYOR_REPO_TAG: true        # deploy on tag push only
