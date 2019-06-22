@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
-using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
@@ -15,8 +14,7 @@ namespace Mosa.Compiler.Framework
 	/// Base class of a method compiler.
 	/// </summary>
 	/// <remarks>
-	/// A method compiler is responsible for compiling a single method
-	/// of an object.
+	/// A method compiler is responsible for compiling a single method of an object.
 	/// </remarks>
 	public sealed class MethodCompiler
 	{
@@ -119,10 +117,9 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the protected regions.
 		/// </summary>
-		/// <value>
-		/// The protected regions.
-		/// </value>
 		public List<ProtectedRegion> ProtectedRegions { get; set; }
+
+		public bool HasProtectedRegions { get; private set; }
 
 		/// <summary>
 		/// The labels
@@ -138,16 +135,6 @@ namespace Mosa.Compiler.Framework
 		/// Gets the compiler method data.
 		/// </summary>
 		public MethodData MethodData { get; }
-
-		/// <summary>
-		/// The stack frame
-		/// </summary>
-		public Operand StackFrame { get; }
-
-		/// <summary>
-		/// The stack frame
-		/// </summary>
-		public Operand StackPointer { get; }
 
 		/// <summary>
 		/// Gets the platform constant zero
@@ -233,8 +220,6 @@ namespace Mosa.Compiler.Framework
 			LocalStack = new List<Operand>();
 			VirtualRegisters = new VirtualRegisters();
 
-			StackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
-			StackPointer = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackPointerRegister);
 			Parameters = new Operand[method.Signature.Parameters.Count + (method.HasThis || method.HasExplicitThis ? 1 : 0)];
 
 			ConstantZero32 = CreateConstant((uint)0);
@@ -249,13 +234,21 @@ namespace Mosa.Compiler.Framework
 			IsCILDecodeRequired = true;
 			IsStackFrameRequired = true;
 			IsMethodInlined = false;
+			HasProtectedRegions = Method.ExceptionHandlers.Count != 0;
 
-			MethodData = compiler.CompilerData.GetMethodData(Method);
-
+			MethodData = Compiler.GetMethodData(Method);
 			MethodData.Counters.Reset();
+
+			MethodData.Version++;
+			MethodData.IsMethodImplementationReplaced = IsMethodPlugged;
 
 			// Both defines the symbol and also clears the data
 			Symbol = Linker.DefineSymbol(Method.FullName, SectionKind.Text, 0, 0);
+			Symbol.RemovePatches();
+
+			Symbol.MethodData = MethodData; // for debugging
+			Symbol.MosaMethod = Method; // for debugging
+			Symbol.Version = MethodData.Version;
 
 			EvaluateParameterOperands();
 
@@ -372,11 +365,15 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public void Compile()
 		{
+			MethodData.HasCode = false;
+
 			if (Method.IsCompilerGenerated)
 			{
 				IsCILDecodeRequired = false;
 				IsStackFrameRequired = false;
 			}
+
+			//Debug.WriteLine($"{MethodScheduler.GetTimestamp()} - Compiling: [{MethodData.Version}] {Method}"); //DEBUGREMOVE
 
 			PlugMethod();
 
@@ -388,7 +385,9 @@ namespace Mosa.Compiler.Framework
 
 			ExecutePipeline();
 
-			//Symbol.SetReplacementStatus(MethodData.Inlined);	// TOTO
+			//Debug.WriteLine($"{MethodScheduler.GetTimestamp()} - Compiled: [{MethodData.Version}] {Method}"); //DEBUGREMOVE
+
+			Symbol.SetReplacementStatus(MethodData.Inlined);
 
 			if (Compiler.CompilerOptions.EnableStatistics)
 			{
@@ -405,7 +404,7 @@ namespace Mosa.Compiler.Framework
 
 			var executionTimes = new long[Pipeline.Count];
 
-			var startTicks = Stopwatch.ElapsedTicks;
+			var startTick = Stopwatch.ElapsedTicks;
 
 			for (int i = 0; i < Pipeline.Count; i++)
 			{
@@ -418,29 +417,30 @@ namespace Mosa.Compiler.Framework
 
 				InstructionLogger.Run(this, stage);
 
-				if (IsStopped/* || IsMethodInlined*/)   // TOTO
+				if (IsStopped || IsMethodInlined)
 					break;
 			}
 
-			if (Compiler.CompilerOptions.EnableStatistics && !IsStopped)
+			if (Compiler.CompilerOptions.EnableStatistics)
 			{
-				var totalTicks = Stopwatch.ElapsedTicks;
+				var lastTick = Stopwatch.ElapsedTicks;
 
-				MethodData.ElapsedTicks = totalTicks;
+				MethodData.ElapsedTicks = lastTick;
 
-				MethodData.Counters.NewCountSkipLock("ExecutionTime.StageStart.Ticks", (int)startTicks);
-				MethodData.Counters.NewCountSkipLock("ExecutionTime.Total.Ticks", (int)totalTicks);
+				MethodData.Counters.NewCountSkipLock("ExecutionTime.StageStart.Ticks", (int)startTick);
+				MethodData.Counters.NewCountSkipLock("ExecutionTime.Total.Ticks", (int)lastTick);
 
 				var executionTimeLog = new TraceLog(TraceType.MethodDebug, Method, "Execution Time/Ticks");
 
-				long previousTicks = startTicks;
+				long previousTick = startTick;
+				var totalTick = lastTick - startTick;
 
 				for (int i = 0; i < Pipeline.Count; i++)
 				{
-					var pipelineTicks = executionTimes[i];
-					var ticks = pipelineTicks == 0 ? 0 : pipelineTicks - previousTicks;
-					var percentage = (ticks * 100) / (double)(totalTicks - startTicks);
-					previousTicks = pipelineTicks;
+					var pipelineTick = executionTimes[i];
+					var ticks = pipelineTick == 0 ? 0 : pipelineTick - previousTick;
+					var percentage = totalTick == 0 ? 0 : (ticks * 100) / (double)(totalTick);
+					previousTick = pipelineTick;
 
 					int per = (int)percentage / 5;
 
@@ -451,7 +451,7 @@ namespace Mosa.Compiler.Framework
 					MethodData.Counters.NewCountSkipLock($"ExecutionTime.{i:00}.{Pipeline[i].Name}.Ticks", (int)ticks);
 				}
 
-				executionTimeLog.Log($"{"****Total Time".PadRight(57)}({totalTicks})");
+				executionTimeLog.Log($"{"****Total Time".PadRight(57)}({lastTick})");
 
 				Trace.PostTraceLog(executionTimeLog);
 			}
@@ -463,6 +463,8 @@ namespace Mosa.Compiler.Framework
 
 			if (plugMethod == null)
 				return;
+
+			MethodData.ReplacedBy = plugMethod;
 
 			Compiler.MethodScanner.MethodInvoked(plugMethod, Method);
 

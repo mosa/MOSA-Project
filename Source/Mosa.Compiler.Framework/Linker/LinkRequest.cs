@@ -29,23 +29,16 @@ namespace Mosa.Compiler.Framework.Linker
 		/// <summary>
 		/// Gets the patch offset.
 		/// </summary>
-		/// <value>
-		/// The symbol offset.
-		/// </value>
 		public int PatchOffset { get; }
 
 		/// <summary>
 		/// Gets the reference symbol.
 		/// </summary>
-		/// <value>
-		/// The reference symbol.
-		/// </value>
 		public LinkerSymbol ReferenceSymbol { get; }
 
 		/// <summary>
 		/// Gets the offset to apply to the reference target.
 		/// </summary>
-		/// <value>The offset.</value>
 		public int ReferenceOffset { get; }
 
 		#endregion Properties

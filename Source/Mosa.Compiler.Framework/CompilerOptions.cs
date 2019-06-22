@@ -157,6 +157,11 @@ namespace Mosa.Compiler.Framework
 		public bool EnableMethodScanner { get; set; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether [emit inline methods].
+		/// </summary>
+		public bool EmitInlinedMethods { get; set; }
+
+		/// <summary>
 		/// Adds additional sections to the Elf-File.
 		/// </summary>
 		public MosaLinker.CreateExtraSectionsDelegate CreateExtraSections { get; set; }
@@ -334,6 +339,7 @@ namespace Mosa.Compiler.Framework
 			EnablePlatformOptimizations = true;
 			EnableMethodScanner = false;
 			EnableBitTracker = true;
+			EmitInlinedMethods = false;
 		}
 	}
 }

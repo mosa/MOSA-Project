@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Framework
 
 		public MosaCompiler(CompilerOptions compilerOptions = null, List<BaseCompilerExtension> compilerExtensions = null, int maxThreads = 0)
 		{
-			MaxThreads = (maxThreads == 0) ? Environment.ProcessorCount + 1 : maxThreads;
+			MaxThreads = (maxThreads == 0) ? Environment.ProcessorCount * 2 : maxThreads;
 
 			CompilerOptions = compilerOptions ?? new CompilerOptions();
 			CompilerTrace = new CompilerTrace(CompilerOptions);

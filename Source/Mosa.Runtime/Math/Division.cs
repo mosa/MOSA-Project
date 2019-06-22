@@ -1,11 +1,14 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Runtime.CompilerServices;
+
 namespace Mosa.Runtime.Math
 {
 	internal static class Division
 	{
 		/* Divides unsigned 64-bit N by unsigned 64-bit D and returns the quotient. */
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static ulong udiv64(ulong n, ulong d)
 		{
 			DivUmod(n, d, out ulong quotient, out ulong remainder);
@@ -14,6 +17,7 @@ namespace Mosa.Runtime.Math
 
 		/* Divides unsigned 64-bit N by unsigned 64-bit D and returns the remainder. */
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static ulong umod64(ulong n, ulong d)
 		{
 			DivUmod(n, d, out ulong quotient, out ulong remainder);
@@ -22,6 +26,7 @@ namespace Mosa.Runtime.Math
 
 		/* Divides signed 64-bit N by signed 64-bit D and returns the quotient. */
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static long sdiv64(long n, long d)
 		{
 			DivMod(n, d, out long quotient, out long remainder);
@@ -30,6 +35,7 @@ namespace Mosa.Runtime.Math
 
 		/* Divides signed 64-bit N by signed 64-bit D and returns the remainder. */
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static long smod64(long n, long d)
 		{
 			DivMod(n, d, out long quotient, out long remainder);

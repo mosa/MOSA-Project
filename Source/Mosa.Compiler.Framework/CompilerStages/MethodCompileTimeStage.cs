@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 				foreach (var data in methods)
 				{
-					writer.WriteLine($"{data.ElapsedTicks}{'\t'}{data.ElapsedTicks / TimeSpan.TicksPerMillisecond}{'\t'}{data.CompileCount}{'\t'}{data.Method.FullName}");
+					writer.WriteLine($"{data.ElapsedTicks}{'\t'}{data.ElapsedTicks / TimeSpan.TicksPerMillisecond}{'\t'}{data.Version}{'\t'}{data.Method.FullName}");
 				}
 			}
 		}
@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			{
 				foreach (var method in type.Methods)
 				{
-					var data = Compiler.CompilerData.GetMethodData(method);
+					var data = Compiler.GetMethodData(method);
 
 					if (data == null)
 						continue;

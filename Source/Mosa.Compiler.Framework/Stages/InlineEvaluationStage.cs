@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
@@ -29,35 +30,31 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var trace = CreateTraceLog();
 
-			MethodData.IsCompiled = false;
-			MethodData.BasicBlocks = null;
-			MethodData.HasProtectedRegions = HasProtectedRegions;
-			MethodData.IsLinkerGenerated = Method.IsCompilerGenerated;
-			MethodData.IsMethodImplementationReplaced = MethodCompiler.IsMethodPlugged;
-			MethodData.HasDoNotInlineAttribute = Method.IsNoInlining;
-			MethodData.HasAggressiveInliningAttribute = Method.IsAggressiveInlining;
 			MethodData.HasAddressOfInstruction = false;
 			MethodData.HasLoops = false;
-			MethodData.IsVirtual = Method.IsVirtual;
-			MethodData.IsDevirtualized = Method.IsVirtual && !TypeLayout.IsMethodOverridden(Method);
+
+			//MethodData.IsDevirtualized = Method.IsVirtual && !TypeLayout.IsMethodOverridden(Method);
 
 			trace?.Log($"DoNotInline: {MethodData.DoNotInline}");
-			trace?.Log($"IsVirtual: {MethodData.IsVirtual}");
+			trace?.Log($"IsVirtual: {Method.IsVirtual}");
 			trace?.Log($"IsDevirtualized: {MethodData.IsDevirtualized}");
 			trace?.Log($"HasProtectedRegions: {MethodData.HasProtectedRegions}");
 			trace?.Log($"HasDoNotInlineAttribute: {MethodData.HasDoNotInlineAttribute}");
 			trace?.Log($"HasAggressiveInliningAttribute: {MethodData.HasAggressiveInliningAttribute}");
 			trace?.Log($"IsMethodImplementationReplaced (Plugged): {MethodData.IsMethodImplementationReplaced}");
-			trace?.Log($"CompileCount: {MethodData.CompileCount}");
+			trace?.Log($"CompileCount: {MethodData.Version}");
 
-			if (StaticCanNotInline(MethodData, Method))
+			if (StaticCanNotInline(MethodData))
 			{
+				SetInlinedBasicBlocks(null);
+
 				trace?.Log($"** Staticly Evaluated");
 				trace?.Log($"Inlined: {MethodData.Inlined}");
+
+				//Debug.WriteLine($">Inlined: No"); //DEBUGREMOVE
+
 				return;
 			}
-
-			var currentInlineStatus = MethodData.Inlined;
 
 			int totalIRCount = 0;
 			int totalNonIRCount = 0;
@@ -127,21 +124,16 @@ namespace Mosa.Compiler.Framework.Stages
 			MethodData.NonIRInstructionCount = totalNonIRCount;
 			MethodData.IRStackParameterInstructionCount = totalStackParameterInstruction;
 
-			bool inline = CanInline(MethodData, Method);
-
-			MethodData.Inlined = inline;
-			MethodCompiler.IsMethodInlined = inline;
-
-			bool triggerReschedules = inline || (currentInlineStatus && !inline);
+			bool inline = CanInline(MethodData);
 
 			if (inline)
 			{
-				MethodData.BasicBlocks = CopyInstructions();
+				var inlineBlocks = CopyInstructions();
+				SetInlinedBasicBlocks(inlineBlocks);
 			}
-
-			if (triggerReschedules)
+			else
 			{
-				MethodScheduler.AddToInlineQueueByCallee(MethodData);
+				SetInlinedBasicBlocks(null);
 			}
 
 			trace?.Log($"IRInstructionCount: {MethodData.IRInstructionCount}");
@@ -154,10 +146,40 @@ namespace Mosa.Compiler.Framework.Stages
 			trace?.Log($"Inlined: {MethodData.Inlined}");
 
 			InlinedMethodsCount.Set(inline);
-			ReversedInlinedMethodsCount.Set(MethodData.CompileCount >= MaximumCompileCount);
+			ReversedInlinedMethodsCount.Set(MethodData.Version >= MaximumCompileCount);
+
+			//Debug.WriteLine($">Inlined: {(inline ? "Yes" : "No")}"); //DEBUGREMOVE
 		}
 
-		public bool StaticCanNotInline(MethodData methodData, MosaMethod method)
+		private void SetInlinedBasicBlocks(BasicBlocks inlineBlocks)
+		{
+			MethodCompiler.IsMethodInlined = inlineBlocks != null;
+
+			var previousInlineMethodData = MethodData.SwapInlineMethodData(inlineBlocks);
+
+			ScheduleReferenceMethods(previousInlineMethodData);
+		}
+
+		private void ScheduleReferenceMethods(InlineMethodData previous)
+		{
+			var current = MethodData.GetInlineMethodData();
+
+			// If previous was not inlined and current is not inline, do nothing
+			if (!current.IsInlined && !previous.IsInlined)
+			{
+				foreach (var method in previous.References)
+				{
+					MethodData.GetInlineMethodDataForUseBy(method);
+				}
+
+				return;
+			}
+
+			// If previous or current is inline, schedule all references from previous
+			MethodScheduler.AddToRecompileQueue(previous.References);
+		}
+
+		private bool StaticCanNotInline(MethodData methodData)
 		{
 			if (methodData.HasDoNotInlineAttribute)
 				return true;
@@ -168,7 +190,12 @@ namespace Mosa.Compiler.Framework.Stages
 			if (methodData.HasProtectedRegions)
 				return true;
 
-			if (methodData.IsVirtual && !methodData.IsDevirtualized)
+			if (methodData.HasMethodPointerReferenced)
+				return true;
+
+			var method = methodData.Method;
+
+			if (method.IsVirtual && !methodData.IsDevirtualized)
 				return true;
 
 			if (methodData.DoNotInline)
@@ -186,12 +213,16 @@ namespace Mosa.Compiler.Framework.Stages
 			if (MosaTypeLayout.IsStoredOnStack(returnType) && !returnType.IsUI8 && !returnType.IsR8)
 				return true;
 
+			// FUTURE: Don't hardcode namepsace
+			if (((method.MethodAttributes & MosaMethodAttributes.Public) == MosaMethodAttributes.Public) && method.DeclaringType.BaseType != null && method.DeclaringType.BaseType.Namespace == "Mosa.UnitTests")
+				return true;
+
 			return false;
 		}
 
-		public bool CanInline(MethodData methodData, MosaMethod method)
+		private bool CanInline(MethodData methodData)
 		{
-			if (StaticCanNotInline(methodData, method))
+			if (StaticCanNotInline(methodData))
 				return false;
 
 			// current implementation limitation - can't include methods with addressOf instruction
@@ -201,7 +232,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (methodData.NonIRInstructionCount > 0)
 				return false;
 
-			if (MethodData.CompileCount >= MaximumCompileCount)
+			if (MethodData.Version >= MaximumCompileCount)
 				return false;   // too many compiles - cyclic loop suspected
 
 			// methods with aggressive inline attribute will double the allow IR instruction count
@@ -218,6 +249,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var newBasicBlocks = new BasicBlocks();
 			var mapBlocks = new Dictionary<BasicBlock, BasicBlock>(BasicBlocks.Count);
 			var map = new Dictionary<Operand, Operand>();
+			var staticCalls = new List<MosaMethod>();
 
 			foreach (var block in BasicBlocks)
 			{
@@ -255,13 +287,19 @@ namespace Mosa.Compiler.Framework.Stages
 
 				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty)
+					if (node.IsEmptyOrNop)
 						continue;
+
+					if (node.Instruction == IRInstruction.CallStatic)
+					{
+						staticCalls.AddIfNew(node.Operand1.Method);
+					}
 
 					var newNode = new InstructionNode(node.Instruction, node.OperandCount, node.ResultCount)
 					{
 						ConditionCode = node.ConditionCode
 					};
+
 					if (node.BranchTargets != null)
 					{
 						// copy targets
@@ -300,7 +338,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
-			var trace = CreateTraceLog("InlineMap");
+			var trace = CreateTraceLog("InlineMap", 9);
 
 			if (trace != null)
 			{

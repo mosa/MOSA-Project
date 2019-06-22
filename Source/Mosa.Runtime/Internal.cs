@@ -10,7 +10,7 @@ namespace Mosa.Runtime
 	{
 		#region Allocation
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static IntPtr AllocateObject(RuntimeTypeHandle handle, uint classSize)
 		{
 			// An object has the following memory layout:
@@ -34,13 +34,13 @@ namespace Mosa.Runtime
 			return memory;
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static IntPtr AllocateObject(RuntimeTypeHandle handle, int classSize)
 		{
 			return AllocateObject(handle, (uint)classSize);
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static IntPtr AllocateArray(RuntimeTypeHandle handle, uint elementSize, uint elements)
 		{
 			// An array has the following memory layout:
@@ -71,7 +71,7 @@ namespace Mosa.Runtime
 			return memory;
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static IntPtr AllocateString(RuntimeTypeHandle handle, uint length)
 		{
 			return AllocateArray(handle, sizeof(char), length);
@@ -114,7 +114,7 @@ namespace Mosa.Runtime
 			return memory;
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static IntPtr Box64(RuntimeTypeHandle handle, ulong value)
 		{
 			var memory = AllocateObject(handle, IntPtr.Size * 2);

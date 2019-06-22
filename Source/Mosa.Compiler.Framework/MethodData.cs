@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
+using System;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework
@@ -17,13 +18,9 @@ namespace Mosa.Compiler.Framework
 
 		public MosaMethod Method { get; }
 
-		public bool IsCompiled { get; set; }
-
 		public bool IsLinkerGenerated { get; set; }
 
 		public bool HasProtectedRegions { get; set; }
-
-		public bool Inlined { get; set; }
 
 		public bool HasDoNotInlineAttribute { get; set; }
 
@@ -41,11 +38,9 @@ namespace Mosa.Compiler.Framework
 
 		public int NonIRInstructionCount { get; set; }
 
-		public bool IsVirtual { get; set; }
-
 		public bool IsDevirtualized { get; set; }
 
-		public int CompileCount { get; set; }
+		public int Version { get; set; }
 
 		public int ParameterStackSize { get; set; }
 
@@ -57,39 +52,15 @@ namespace Mosa.Compiler.Framework
 
 		public bool DoNotInline { get; set; }
 
-		public int InlineTimestamp
-		{
-			get { lock (_lock) { return inlinedTimestamp; } }
-			set { lock (_lock) { inlinedTimestamp = value; } }
-		}
+		public bool HasMethodPointerReferenced { get; set; }
 
-		public int InlineEvalulationTimestamp
-		{
-			get { lock (_lock) { return inlineEvalulationTimestamp; } }
-			set { lock (_lock) { inlineEvalulationTimestamp = value; } }
-		}
+		public bool HasCode { get; set; }
 
-		public BasicBlocks BasicBlocks
-		{
-			get { lock (_lock) { return inlinedBasicBlocks; } }
-			set { lock (_lock) { inlinedBasicBlocks = value; } }
-		}
+		public bool Inlined { get { lock (_lock) { return InlineMethodData.IsInlined; } } }
 
-		public List<MosaMethod> CalledBy
-		{
-			get
-			{
-				lock (calledBy)
-				{
-					if (cachedCallBy == null)
-					{
-						cachedCallBy = new List<MosaMethod>(calledBy);
-					}
+		public MosaMethod ReplacedBy { get; set; }
 
-					return cachedCallBy;
-				}
-			}
-		}
+		public bool IsInvoked { get; set; }
 
 		#endregion Properties
 
@@ -97,15 +68,7 @@ namespace Mosa.Compiler.Framework
 
 		private readonly object _lock = new object();
 
-		private BasicBlocks inlinedBasicBlocks;
-
-		private int inlinedTimestamp;
-
-		private int inlineEvalulationTimestamp;
-
-		private List<MosaMethod> calledBy;
-
-		private List<MosaMethod> cachedCallBy;
+		private InlineMethodData InlineMethodData;
 
 		#endregion Data Members
 
@@ -113,24 +76,18 @@ namespace Mosa.Compiler.Framework
 		{
 			Method = mosaMethod;
 
-			calledBy = new List<MosaMethod>();
 			LabelRegions = new List<LabelRegion>();
 			Counters = new Counters();
-			CompileCount = 0;
+			Version = 0;
 			DoNotInline = false;
-			BasicBlocks = null;
+			InlineMethodData = new InlineMethodData(null, 0);
+			IsDevirtualized = false;
+			HasMethodPointerReferenced = false;
+			HasCode = false;
+			IsInvoked = false;
 		}
 
 		#region Methods
-
-		public void AddCalledBy(MosaMethod method)
-		{
-			lock (calledBy)
-			{
-				calledBy.AddIfNew(method);
-				cachedCallBy = null;
-			}
-		}
 
 		public void AddLabelRegion(int label, int start, int length)
 		{
@@ -140,6 +97,35 @@ namespace Mosa.Compiler.Framework
 				Start = start,
 				Length = length,
 			});
+		}
+
+		public InlineMethodData GetInlineMethodDataForUseBy(MosaMethod method)
+		{
+			lock (_lock)
+			{
+				InlineMethodData.AddReference(method);
+				return InlineMethodData;
+			}
+		}
+
+		public InlineMethodData SwapInlineMethodData(BasicBlocks basicBlocks)
+		{
+			lock (_lock)
+			{
+				var tmp = InlineMethodData;
+
+				InlineMethodData = new InlineMethodData(basicBlocks, Version);
+
+				return tmp;
+			}
+		}
+
+		public InlineMethodData GetInlineMethodData()
+		{
+			lock (_lock)
+			{
+				return InlineMethodData;
+			}
 		}
 
 		#endregion Methods

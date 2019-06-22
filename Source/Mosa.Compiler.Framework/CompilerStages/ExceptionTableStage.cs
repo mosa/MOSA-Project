@@ -31,8 +31,8 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		protected void CreateMethodExceptionLookupTable()
 		{
 			// Emit assembly list
-			var methodLookupTable = Linker.DefineSymbol(Metadata.MethodExceptionLookupTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
-			var writer = new EndianAwareBinaryWriter(methodLookupTable.Stream, Architecture.Endianness);
+			var exceptionMethodLookupTable = Linker.DefineSymbol(Metadata.MethodExceptionLookupTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var writer = new EndianAwareBinaryWriter(exceptionMethodLookupTable.Stream, Architecture.Endianness);
 
 			// 1. Number of methods
 			int count = 0;
@@ -55,25 +55,24 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 					foreach (var method in methodList)
 					{
-						if ((!method.HasImplementation && method.IsAbstract) || method.HasOpenGenericParams || method.DeclaringType.HasOpenGenericParams)
+						var targetMethodData = GetTargetMethodData(method);
+
+						if (!targetMethodData.HasCode)
 							continue;
 
-						if (method.ExceptionHandlers.Count == 0)
-							continue;
-
-						if (!Compiler.MethodScanner.IsMethodInvoked(method))
+						if (!targetMethodData.HasProtectedRegions)
 							continue;
 
 						// 1. Pointer to Method
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, writer.Position, method.FullName, 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, exceptionMethodLookupTable, writer.Position, targetMethodData.Method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						// 2. Size of Method
-						Linker.Link(LinkType.Size, NativePatchType, methodLookupTable, writer.Position, method.FullName, 0);
+						Linker.Link(LinkType.Size, NativePatchType, exceptionMethodLookupTable, writer.Position, targetMethodData.Method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						// 3. Pointer to Method Definition
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, writer.Position, Metadata.MethodDefinition + method.FullName, 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, exceptionMethodLookupTable, writer.Position, Metadata.MethodDefinition + method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						count++;
@@ -86,6 +85,16 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 			// emit null entry (FUTURE)
 			//writer.WriteZeroBytes(TypeLayout.NativePointerSize * 3);
+		}
+
+		private MethodData GetTargetMethodData(MosaMethod method)
+		{
+			var methodData = Compiler.GetMethodData(method);
+
+			if (methodData.ReplacedBy == null)
+				return methodData;
+
+			return Compiler.GetMethodData(methodData.ReplacedBy);
 		}
 	}
 }

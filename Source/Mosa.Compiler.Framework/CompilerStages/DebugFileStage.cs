@@ -131,7 +131,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 						continue;
 
 					var symbol = Linker.GetSymbol(method.FullName);
-					var methodData = Compiler.CompilerData.GetMethodData(method);
+					var methodData = Compiler.GetMethodData(method);
 
 					writer.WriteLine(
 						"{0}\t{1:x8}\t{2}\t{3:x8}\t{4}\t{5}\t{6}\t{7}\t{8}\t{9}",

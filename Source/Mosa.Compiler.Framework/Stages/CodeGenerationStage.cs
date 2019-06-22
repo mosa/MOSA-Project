@@ -88,6 +88,7 @@ namespace Mosa.Compiler.Framework.Stages
 			EndGenerate();
 
 			symbol.SetData(codeStream);
+			MethodData.HasCode = true;
 		}
 
 		protected override void Finish()
