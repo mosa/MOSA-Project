@@ -3,7 +3,6 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
-using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -131,7 +130,6 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var inlineBlocks = CopyInstructions();
 				SetInlinedBasicBlocks(inlineBlocks);
-
 			}
 			else
 			{

@@ -20,6 +20,11 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		{
 			foreach (var type in TypeSystem.AllTypes)
 			{
+				// If type has an interface - don't consider either type for devirtualization
+				// FUTURE: be more specific and check each method
+				if (HasInterface(type))
+					continue;
+
 				foreach (var method in type.Methods)
 				{
 					if (method.IsStatic || !method.IsVirtual)
@@ -50,5 +55,22 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		}
 
 		#endregion Overrides
+
+		private bool HasInterface(MosaType type)
+		{
+			var baseType = type;
+
+			while (baseType != null)
+			{
+				foreach (var interfaceType in baseType.Interfaces)
+				{
+					return true;
+				}
+
+				baseType = baseType.BaseType;
+			}
+
+			return false;
+		}
 	}
 }

@@ -3,7 +3,6 @@
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
@@ -195,6 +194,7 @@ namespace Mosa.Compiler.Framework
 				}
 
 				recompileSet.Clear();
+				action = recompileSet.Count != 0;
 			}
 
 			if (action)

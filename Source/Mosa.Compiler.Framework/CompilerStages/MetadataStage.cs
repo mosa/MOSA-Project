@@ -50,6 +50,16 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			return symbol;
 		}
 
+		private MethodData GetTargetMethodData(MosaMethod method)
+		{
+			var methodData = Compiler.GetMethodData(method);
+
+			if (methodData.ReplacedBy == null)
+				return methodData;
+
+			return Compiler.GetMethodData(methodData.ReplacedBy);
+		}
+
 		#endregion Helper Functions
 
 		#region Assembly Tables
@@ -909,15 +919,5 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		}
 
 		#endregion Custom Attributes
-
-		private MethodData GetTargetMethodData(MosaMethod method)
-		{
-			var methodData = Compiler.GetMethodData(method);
-
-			if (methodData.ReplacedBy == null)
-				return methodData;
-
-			return Compiler.GetMethodData(methodData.ReplacedBy);
-		}
 	}
 }
