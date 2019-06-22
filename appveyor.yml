@@ -1,4 +1,4 @@
-version: '1.8.{build}'
+version: '1.9.7.{build}'
 
 configuration: Release
 platform: Any CPU
@@ -64,7 +64,7 @@ for:
         provider: GitHub
         auth_token:
             secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
-        artifact: MOSA-Installer.exe            
+        artifact: 'bin/MOSA-Installer.exe'
         draft: false
         prerelease: false
         on:
@@ -78,7 +78,7 @@ for:
         - image: Visual Studio 2019
 
     install:
-    - cmd: SET PATH=%PATH%;C:\Program Files (x86)\Inno Setup 5
+    - cmd: SET PATH=%PATH%;C:\Program Files (x86)\Inno Setup 6
 
     before_build:
     - nuget restore -Verbosity quiet Source/Mosa.sln
@@ -90,7 +90,7 @@ for:
       publish_nuget: true
 
     after_build:
-#    - cmd: ISCC.exe Source/Inno-Setup-Script/Mosa-Installer.iss
+    - cmd: ISCC.exe Source/Inno-Setup-Script/Mosa-Installer.iss
     - ps: ./mosactl.ps1 unittest
 #    - ps: ./mosactl.ps1 test
 
