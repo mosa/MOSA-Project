@@ -66,7 +66,7 @@ namespace Mosa.Utility.UnitTests
 				TwoPassOptimizations = true,
 				EnableMethodScanner = false,
 				EnableBitTracker = true,
-				EnableMultiThreading = false,
+				EnableMultiThreading = true,
 
 				Emulator = EmulatorType.Qemu,
 				ImageFormat = ImageFormat.IMG,
