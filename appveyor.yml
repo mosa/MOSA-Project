@@ -1,4 +1,4 @@
-version: '1.8.{build}'
+version: '1.9.7.{build}'
 
 configuration: Release
 platform: Any CPU
@@ -11,9 +11,6 @@ shallow_clone: true
 
 build: off
 
-environment:
-  nuget:
-    secure: aTaYVizieVZLoxu3Cys6R6lAk3OvG5vtLp3ly4MBz6kwEr9I6HJfhFPNjeLpEa+Y
 for:
 
 # Windows Build - Visual Studio 2017:
@@ -62,17 +59,17 @@ for:
     - path: 'bin/MOSA-Installer.exe'
 
     deploy:
-        release: MOSA Project v$(appveyor_build_version)
-        description: 'MOSA Project v$(appveyor_build_version)'
-        provider: GitHub
-        auth_token:
-            secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
-        artifact: MOSA-Installer.exe            
-        draft: false
-        prerelease: false
-        on:
-            branch: master                 # release from master branch only
-#            APPVEYOR_REPO_TAG: true        # deploy on tag push only
+      release: MOSA Project v$(appveyor_build_version)
+      description: 'MOSA Project v$(appveyor_build_version)'
+      provider: GitHub
+      auth_token:
+        secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
+      artifact: MOSA-Installer.exe            
+      draft: false
+      prerelease: false
+      on:
+        branch: master                 # release from master branch only
+#       APPVEYOR_REPO_TAG: true        # deploy on tag push only
 
 # Windows Build - Visual Studio 2019:
   -
@@ -81,7 +78,7 @@ for:
         - image: Visual Studio 2019
 
     install:
-    - cmd: SET PATH=%PATH%;C:\Program Files (x86)\Inno Setup 5
+    - cmd: SET PATH=%PATH%;C:\Program Files (x86)\Inno Setup 6
 
     before_build:
     - nuget restore -Verbosity quiet Source/Mosa.sln
