@@ -64,9 +64,9 @@ for:
       provider: GitHub
       auth_token:
         secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
-      artifact: MOSA-Installer.exe            
+      artifact: 'bin/MOSA-Installer.exe'
       draft: false
-      prerelease: false
+      prerelease: true
       on:
         branch: master                 # release from master branch only
 #       APPVEYOR_REPO_TAG: true        # deploy on tag push only
