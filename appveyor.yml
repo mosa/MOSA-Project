@@ -10,6 +10,7 @@ image:
 shallow_clone: true
 
 build: off
+skip_tags: true
 
 for:
 
@@ -59,18 +60,26 @@ for:
     - path: 'bin/MOSA-Installer.exe'
 
     deploy:
-      tag: Current
-      release: MOSA Project - Current Build
-      description: 'Build Version - v$(appveyor_build_version)'
-      provider: GitHub
-      auth_token:
-        secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
-      artifact: 'bin/MOSA-Installer.exe'
-      draft: false
-      prerelease: true
-      force_update: true
-      on:
-        branch: master                 # release from master branch only
+      - provider: GitHub
+        tag: Current
+        release: MOSA Project - Current Build
+        description: 'Build Version - v$(appveyor_build_version)'
+        auth_token:
+          secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
+        artifact: 'bin/MOSA-Installer.exe'
+        draft: false
+        prerelease: true
+        force_update: true
+        on:
+          branch: master                 # release from master branch only
+
+      - provider: NuGet
+        server:                  
+        api_key:
+          secure: aTaYVizieVZLoxu3Cys6R6lAk3OvG5vtLp3ly4MBz6kwEr9I6HJfhFPNjeLpEa+Y
+        skip_symbols: false
+        symbol_server:           
+        artifact: /.*\.nupkg/
 
 # Windows Build - Visual Studio 2019:
   -
