@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.ClassLib;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
 using System;
@@ -315,7 +314,6 @@ namespace Mosa.Kernel.x86
 				case DebugCode.ClearMemory: ClearMemory(); return;
 				case DebugCode.HardJump: HardJump(); return;
 				case DebugCode.ExecuteUnitTest: QueueUnitTest(); return;
-				case DebugCode.GetMemoryCRC: GetMemoryCRC(); return;
 				default: return;
 			}
 		}
@@ -399,11 +397,10 @@ namespace Mosa.Kernel.x86
 			uint address = GetDataUInt32(0);
 			uint length = GetDataUInt32(4);
 			uint size = GetDataUInt32(8);
-			uint uncompresscrc = GetDataUInt32(12);
+
+			//uint uncompresscrc = GetDataUInt32(12);
 
 			LZF.Decompress(new IntPtr(Address.DebuggerBuffer + HeaderSize), length, new IntPtr(address), size);
-
-			uint computedcrc = ComputeMemoryCRC(address, size);
 
 			Screen.Goto(15, 0);
 			Screen.ClearRow();
@@ -419,12 +416,13 @@ namespace Mosa.Kernel.x86
 			Screen.Write(" Size: ");
 			Screen.Write(size, 10, 5);
 			Screen.Write(" CRC: ");
-			Screen.Write(uncompresscrc, 16, 8);
 
-			if (uncompresscrc == computedcrc)
-				Screen.Write(" OK");
-			else
-				Screen.Write(" BAD");
+			//Screen.Write(uncompresscrc, 16, 8);
+
+			//if (uncompresscrc == computedcrc)
+			//	Screen.Write(" OK");
+			//else
+			//	Screen.Write(" BAD");
 
 			SendResponse(id, DebugCode.CompressedWriteMemory);
 		}
@@ -452,31 +450,6 @@ namespace Mosa.Kernel.x86
 			}
 
 			SendResponse(id, DebugCode.ClearMemory);
-		}
-
-		private static void GetMemoryCRC()
-		{
-			uint id = GetID();
-			uint start = GetDataUInt32(0);
-			uint length = GetDataUInt32(4);
-
-			uint crc = ComputeMemoryCRC(start, length);
-
-			SendResponseStart(id, DebugCode.GetMemoryCRC, 4);
-			SendInteger(crc);
-		}
-
-		private static uint ComputeMemoryCRC(uint start, uint length)
-		{
-			uint crc = CRC.InitialCRC;
-
-			for (uint i = 0; i < length; i++)
-			{
-				byte b = Intrinsic.Load8(new IntPtr(start), i);
-				crc = CRC.Update(crc, b);
-			}
-
-			return crc;
 		}
 
 		private static void QueueUnitTest()
