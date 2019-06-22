@@ -11,6 +11,9 @@ shallow_clone: true
 
 build: off
 
+environment:
+  nuget:
+    secure: aTaYVizieVZLoxu3Cys6R6lAk3OvG5vtLp3ly4MBz6kwEr9I6HJfhFPNjeLpEa+Y
 for:
 
 # Windows Build - Visual Studio 2017:
@@ -77,7 +80,7 @@ for:
       publish_nuget: true
 
     after_build:
-    - cmd: ISCC.exe Source/Inno-Setup-Script/Mosa-Installer.iss
+#    - cmd: ISCC.exe Source/Inno-Setup-Script/Mosa-Installer.iss
     - ps: ./mosactl.ps1 unittest
 #    - ps: ./mosactl.ps1 test
 

@@ -85,6 +85,17 @@
 			<Private>True</Private>
 		</Reference>
 		<Reference Include="Mosa.Runtime.x86, Version=0.0.0.0, Culture=neutral">
+			<HintPath>..\packages\Mosa.Runtime.x86.1.0.0.0\lib\Mosa.Runtime.x86.dll</HintPath>
+		<Reference Include="Mosa.Kernel.x86, Version=0.0.0.0, Culture=neutral">
+			<HintPath>..\packages\Mosa.Kernel.x86.1.0.0.5\lib\net472\Mosa.Kernel.x86.dll</HintPath>
+			<Private>True</Private>
+		</Reference>
+		<Reference Include="Mosa.Runtime, Version=0.0.0.0, Culture=neutral">
+			<HintPath>..\packages\Mosa.Runtime.1.0.0.5\lib\net472\Mosa.Runtime.dll</HintPath>
+			<Private>True</Private>
+		</Reference>
+		<Reference Include="Mosa.Runtime.x86, Version=0.0.0.0, Culture=neutral">
+			<HintPath>..\packages\Mosa.Runtime.x86.1.0.0.5\lib\net472\Mosa.Runtime.x86.dll</HintPath>
 			<HintPath>..\packages\Mosa.Runtime.x86.1.0.0.1\lib\net472\Mosa.Runtime.x86.dll</HintPath>
 			<Private>True</Private>
 		</Reference>
