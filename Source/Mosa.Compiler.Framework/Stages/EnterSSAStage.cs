@@ -81,8 +81,6 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				EnterSSA(headBlock);
 			}
-
-			MethodCompiler.IsInSSAForm = true;
 		}
 
 		/// <summary>

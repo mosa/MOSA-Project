@@ -43,8 +43,6 @@ namespace Mosa.Compiler.Framework.Stages
 					ProcessPhiInstruction(node);
 				}
 			}
-
-			MethodCompiler.IsInSSAForm = false;
 		}
 
 		/// <summary>

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
+using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.IO;
 
@@ -12,8 +13,6 @@ namespace Mosa.Compiler.Framework.Linker
 	public sealed class LinkerSymbol
 	{
 		public string Name { get; }
-
-		public string ExportName { get; internal set; }
 
 		public SectionKind SectionKind { get; internal set; }
 
@@ -27,15 +26,25 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public bool IsResolved { get { return VirtualAddress != 0; } }
 
-		public bool IsExport { get; set; }
+		public string ExternalSymbolName { get; internal set; }
+
+		public bool IsExternalSymbol { get; set; }
 
 		public uint SectionOffset { get; internal set; }
 
 		public ulong VirtualAddress { get; internal set; }
 
+		public bool IsReplaced { get; internal set; }
+
 		public List<LinkRequest> LinkRequests { get; }
 
 		private readonly object _lock = new object();
+
+		public int Version { get; set; } // for debugging
+
+		public MosaMethod MosaMethod { get; set; } // for debugging
+
+		public MethodData MethodData { get; set; } // for debugging
 
 		internal LinkerSymbol(string name, uint alignment = 0, SectionKind kind = SectionKind.Unknown)
 		{
@@ -43,7 +52,8 @@ namespace Mosa.Compiler.Framework.Linker
 			Alignment = alignment;
 			SectionKind = kind;
 			LinkRequests = new List<LinkRequest>();
-			IsExport = false;
+			IsExternalSymbol = false;
+			IsReplaced = false;
 		}
 
 		public void SetData(MemoryStream stream)
@@ -54,6 +64,11 @@ namespace Mosa.Compiler.Framework.Linker
 		public void SetData(byte[] data)
 		{
 			SetData(new MemoryStream(data));
+		}
+
+		public void SetReplacementStatus(bool replaced)
+		{
+			IsReplaced = replaced;
 		}
 
 		public void AddPatch(LinkRequest linkRequest)

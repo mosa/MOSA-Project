@@ -66,7 +66,7 @@ namespace Mosa.Utility.UnitTests
 				TwoPassOptimizations = true,
 				EnableMethodScanner = false,
 				EnableBitTracker = true,
-				EnableMultiThreading = false,
+				EnableMultiThreading = true,
 
 				Emulator = EmulatorType.Qemu,
 				ImageFormat = ImageFormat.IMG,
@@ -93,7 +93,7 @@ namespace Mosa.Utility.UnitTests
 				GenerateNASMFile = false,
 				GenerateASMFile = true,
 				GenerateMapFile = true,
-				GenerateDebugFile = false,
+				GenerateDebugFile = true,
 				PlugKorlib = true,
 				NoDisplay = !display
 			};

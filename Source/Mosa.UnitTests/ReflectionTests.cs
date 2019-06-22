@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
+using System.Runtime.CompilerServices;
 
 namespace Mosa.UnitTests
 {
@@ -90,6 +91,7 @@ namespace Mosa.UnitTests
 		{
 			public int i = 0;
 
+			[MethodImpl(MethodImplOptions.NoInlining)]
 			public TestClass123()
 			{
 				i = 52;

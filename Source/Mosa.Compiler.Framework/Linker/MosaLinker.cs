@@ -5,6 +5,7 @@ using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Linker.Elf;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 
 namespace Mosa.Compiler.Framework.Linker
@@ -145,7 +146,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 					Symbols.Add(symbol);
 					symbolLookup.Add(name, symbol);
-					symbol.IsExport = false;
+					symbol.IsExternalSymbol = false;
 				}
 
 				symbol.Alignment = aligned;
@@ -157,26 +158,6 @@ namespace Mosa.Compiler.Framework.Linker
 				{
 					symbol.Stream.SetLength(size);
 				}
-
-				return symbol;
-			}
-		}
-
-		public LinkerSymbol DefineExternalSymbol(string name, string externalName, SectionKind kind)
-		{
-			lock (_lock)
-			{
-				if (!symbolLookup.TryGetValue(name, out LinkerSymbol symbol))
-				{
-					symbol = new LinkerSymbol(name, 0, kind);
-
-					Symbols.Add(symbol);
-					symbolLookup.Add(name, symbol);
-				}
-
-				symbol.SectionKind = kind;
-				symbol.IsExport = true;
-				symbol.ExportName = externalName;
 
 				return symbol;
 			}
@@ -217,6 +198,9 @@ namespace Mosa.Compiler.Framework.Linker
 		{
 			foreach (var symbol in Symbols)
 			{
+				if (symbol.IsReplaced)
+					continue;
+
 				foreach (var linkRequest in symbol.LinkRequests)
 				{
 					ApplyPatch(linkRequest);
@@ -234,6 +218,9 @@ namespace Mosa.Compiler.Framework.Linker
 			}
 			else
 			{
+				Debug.Assert(linkRequest.ReferenceSymbol.VirtualAddress != 0);
+				Debug.Assert(linkRequest.PatchSymbol.VirtualAddress != 0);
+
 				value = linkRequest.ReferenceSymbol.VirtualAddress + (ulong)linkRequest.ReferenceOffset;
 
 				if (linkRequest.LinkType == LinkType.RelativeOffset)
@@ -270,13 +257,16 @@ namespace Mosa.Compiler.Framework.Linker
 
 			foreach (var symbol in Symbols)
 			{
+				if (symbol.IsReplaced)
+					continue;
+
 				if (symbol.SectionKind != section.SectionKind)
 					continue;
 
 				if (symbol.IsResolved)
 					continue;
 
-				if (symbol.IsExport)
+				if (symbol.IsExternalSymbol)
 					continue;
 
 				symbol.SectionOffset = section.Size;
@@ -292,6 +282,9 @@ namespace Mosa.Compiler.Framework.Linker
 		{
 			foreach (var symbol in Symbols)
 			{
+				if (symbol.IsReplaced)
+					continue;
+
 				if (symbol.SectionKind != section.SectionKind)
 					continue;
 

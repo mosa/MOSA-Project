@@ -22,7 +22,7 @@ namespace Mosa.Tool.Explorer.Stages
 
 			foreach (var data in methods)
 			{
-				log.Log($"{data.ElapsedTicks}{'\t'}{data.ElapsedTicks / TimeSpan.TicksPerMillisecond}{'\t'}{data.CompileCount}{'\t'}{data.Method.FullName}");
+				log.Log($"{data.ElapsedTicks}{'\t'}{data.ElapsedTicks / TimeSpan.TicksPerMillisecond}{'\t'}{data.Version}{'\t'}{data.Method.FullName}");
 			}
 
 			PostTrace(log);

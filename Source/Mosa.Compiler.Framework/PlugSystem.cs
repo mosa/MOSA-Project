@@ -80,12 +80,7 @@ namespace Mosa.Compiler.Framework
 		{
 			lock (_lock)
 			{
-				if (PlugMethods.ContainsKey(targetMethod))
-				{
-					//Debug.Assert(PlugMethods[targetMethod] == newMethod);
-					return;
-				}
-				else
+				if (!PlugMethods.ContainsKey(targetMethod))
 				{
 					PlugMethods.Add(targetMethod, newMethod);
 				}
@@ -140,9 +135,6 @@ namespace Mosa.Compiler.Framework
 		{
 			if (targetMethod.Signature.Parameters.Count != plugMethod.Signature.Parameters.Count - 1)
 				return false;
-
-			//if (plugMethod.Signature.Parameters[0].ParameterType.IsValueType && !plugMethod.Signature.Parameters[0].ParameterType.IsManagedPointer)
-			//	return false;
 
 			for (int i = 0; i < targetMethod.Signature.Parameters.Count; i++)
 			{

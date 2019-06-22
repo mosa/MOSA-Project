@@ -3,6 +3,7 @@
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
 using System;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace Mosa.Kernel.x86
@@ -52,6 +53,7 @@ namespace Mosa.Kernel.x86
 			Native.Int(ClockIRQ);
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		private static void IdleThread()
 		{
 			while (true)
@@ -80,6 +82,7 @@ namespace Mosa.Kernel.x86
 			SwitchToThread(threadID);
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void SignalThreadTerminationMethod()
 		{
 			Native.Int(ThreadTerminationSignalIRQ);

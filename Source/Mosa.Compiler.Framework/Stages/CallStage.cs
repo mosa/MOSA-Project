@@ -57,9 +57,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (Is32BitPlatform)
 			{
-				//var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-				//var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-
 				context.SetInstruction(IRInstruction.GetLow64, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.ReturnRegister), operand);
 				context.AppendInstruction(IRInstruction.GetHigh64, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.ReturnHighRegister), operand);
 			}
@@ -98,8 +95,6 @@ namespace Mosa.Compiler.Framework.Stages
 			context.Empty();
 
 			MakeCall(context, call, result, operands);
-
-			Debug.Assert(method == call.Method);
 
 			MethodScanner.MethodDirectInvoked(call.Method, Method);
 		}

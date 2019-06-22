@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void InsertExceptionStartInstructions()
 		{
-			foreach (var clause in MethodCompiler.Method.ExceptionHandlers)
+			foreach (var clause in Method.ExceptionHandlers)
 			{
 				if (clause.ExceptionHandlerType == ExceptionHandlerType.Exception)
 				{

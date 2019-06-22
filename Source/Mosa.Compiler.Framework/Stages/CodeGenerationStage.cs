@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// Base class for code generation stages.
 	/// </summary>
-	public class CodeGenerationStage : BaseMethodCompilerStage
+	public sealed class CodeGenerationStage : BaseMethodCompilerStage
 	{
 		private Counter GeneratedInstructionCount = new Counter("CodeGenerationStage.GeneratedInstructions");
 		private Counter GeneratedBlockCount = new Counter("CodeGenerationStage.GeneratedBlocks");
@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Holds the stream, where code is emitted to.
 		/// </summary>
-		protected MemoryStream codeStream;
+		private MemoryStream codeStream;
 
 		//protected Stream codeStream;
 
@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#region Properties
 
-		public BaseCodeEmitter CodeEmitter { get; protected set; }
+		private BaseCodeEmitter CodeEmitter;
 
 		public bool EmitBinary { get; set; }
 
@@ -68,15 +68,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!EmitBinary)
 				return;
 
-			var symbol = MethodCompiler.Linker.DefineSymbol(MethodCompiler.Method.FullName, SectionKind.Text, 0, 0);
+			var symbol = Linker.DefineSymbol(Method.FullName, SectionKind.Text, 0, 0);
 
 			codeStream = new MemoryStream();
 
-			//codeStream = symbol.Stream;
-
-			// Retrieve a stream to place the code into
-
-			// HINT: We need seeking to resolve Labels.
 			Debug.Assert(codeStream.CanSeek, "Can't seek codeReader output stream.");
 			Debug.Assert(codeStream.CanWrite, "Can't write to codeReader output stream.");
 
@@ -93,6 +88,7 @@ namespace Mosa.Compiler.Framework.Stages
 			EndGenerate();
 
 			symbol.SetData(codeStream);
+			MethodData.HasCode = true;
 		}
 
 		protected override void Finish()
@@ -106,11 +102,11 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Called to emit a list of instructions offered by the instruction provider.
 		/// </summary>
-		protected virtual void EmitInstructions()
+		private void EmitInstructions()
 		{
-			var trace = CreateTraceLog();
+			var trace = CreateTraceLog(9);
 
-			MethodCompiler.MethodData.LabelRegions.Clear();
+			MethodData.LabelRegions.Clear();
 			int labelCurrent = BasicBlock.ReservedLabel;
 			int labelStart = 0;
 
@@ -120,7 +116,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty)
+					if (node.IsEmptyOrNop)
 						continue;
 
 					if (node.IsBlockStartInstruction)
@@ -141,7 +137,7 @@ namespace Mosa.Compiler.Framework.Stages
 						{
 							if (labelCurrent != BasicBlock.ReservedLabel)
 							{
-								MethodCompiler.MethodData.AddLabelRegion(labelCurrent, labelStart, CodeEmitter.CurrentPosition - labelStart);
+								MethodData.AddLabelRegion(labelCurrent, labelStart, CodeEmitter.CurrentPosition - labelStart);
 							}
 
 							labelCurrent = node.Label;
@@ -166,16 +162,16 @@ namespace Mosa.Compiler.Framework.Stages
 				GeneratedBlockCount++;
 			}
 
-			MethodCompiler.MethodData.AddLabelRegion(labelCurrent, labelStart, CodeEmitter.CurrentPosition - labelStart);
+			MethodData.AddLabelRegion(labelCurrent, labelStart, CodeEmitter.CurrentPosition - labelStart);
 		}
 
 		/// <summary>
 		/// Begins the generate.
 		/// </summary>
-		protected virtual void BeginGenerate()
+		private void BeginGenerate()
 		{
 			CodeEmitter = new BaseCodeEmitter();
-			CodeEmitter.Initialize(MethodCompiler.Method.FullName, MethodCompiler.Linker, codeStream);
+			CodeEmitter.Initialize(Method.FullName, Linker, codeStream);
 
 			MethodCompiler.Labels = CodeEmitter.Labels;
 		}
@@ -184,7 +180,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Start of code generation for a block.
 		/// </summary>
 		/// <param name="block">The started block.</param>
-		protected virtual void BlockStart(BasicBlock block)
+		private void BlockStart(BasicBlock block)
 		{
 			CodeEmitter.Label(block.Label);
 		}
@@ -193,7 +189,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Completion of code generation for a block.
 		/// </summary>
 		/// <param name="block">The completed block.</param>
-		protected virtual void BlockEnd(BasicBlock block)
+		private void BlockEnd(BasicBlock block)
 		{
 			// TODO: Adjust BaseCodeEmitter interface to mark the end of label sections, rather than create this special label:
 			CodeEmitter.Label(block.Label + 0x0F000000);
@@ -202,7 +198,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Code generation completed.
 		/// </summary>
-		protected virtual void EndGenerate()
+		private void EndGenerate()
 		{
 			CodeEmitter.ResolvePatches();
 		}

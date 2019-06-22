@@ -50,18 +50,17 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 					foreach (var method in methodList)
 					{
-						if ((!method.HasImplementation && method.IsAbstract) || method.HasOpenGenericParams || method.DeclaringType.HasOpenGenericParams)
-							continue;
+						var targetMethodData = GetTargetMethodData(method);
 
-						if (!Compiler.MethodScanner.IsMethodInvoked(method))
+						if (!targetMethodData.HasCode)
 							continue;
 
 						// 1. Pointer to Method
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, writer.Position, method.FullName, 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, writer.Position, targetMethodData.Method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						// 2. Size of Method
-						Linker.Link(LinkType.Size, NativePatchType, methodLookupTable, writer.Position, method.FullName, 0);
+						Linker.Link(LinkType.Size, NativePatchType, methodLookupTable, writer.Position, targetMethodData.Method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						// 3. Pointer to Method Definition
@@ -75,6 +74,16 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 			writer.Position = 0;
 			writer.Write(count);
+		}
+
+		private MethodData GetTargetMethodData(MosaMethod method)
+		{
+			var methodData = Compiler.GetMethodData(method);
+
+			if (methodData.ReplacedBy == null)
+				return methodData;
+
+			return Compiler.GetMethodData(methodData.ReplacedBy);
 		}
 	}
 }

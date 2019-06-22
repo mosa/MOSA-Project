@@ -79,6 +79,9 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 			Compiler.PlugSystem.CreatePlug(initializeAssemblyMethod, typeInitializerMethod);
 
+			Compiler.GetMethodData(initializeAssemblyMethod).DoNotInline = true;
+			Compiler.GetMethodData(typeInitializerMethod).DoNotInline = true;
+
 			MethodScanner.MethodInvoked(initializeAssemblyMethod, initializeAssemblyMethod);
 			MethodScanner.MethodInvoked(typeInitializerMethod, typeInitializerMethod);
 
