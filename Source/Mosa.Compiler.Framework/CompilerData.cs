@@ -66,13 +66,6 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public bool IsMethodInlined(MosaMethod method)
-		{
-			var methodData = GetMethodData(method);
-
-			return methodData.Inlined;
-		}
-
 		#endregion Methods
 	}
 }

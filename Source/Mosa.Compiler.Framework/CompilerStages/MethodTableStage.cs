@@ -55,10 +55,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 						if (!targetMethodData.HasCode)
 							continue;
 
-						// Don't emit entry for plug methods
-						if (Compiler.PlugSystem.GetReplacement(method) != null)
-							continue;
-
 						// 1. Pointer to Method
 						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, writer.Position, targetMethodData.Method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
