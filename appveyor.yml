@@ -12,6 +12,13 @@ shallow_clone: true
 build: off
 skip_tags: true
 
+assembly_info:
+  patch: true
+  file: AssemblyInfo.*
+  assembly_version: "{version}"
+  assembly_file_version: "{version}"
+  assembly_informational_version: "{version}"
+
 for:
 
 # Windows Build - Visual Studio 2017:
@@ -49,13 +56,6 @@ for:
 
     test: off
 
-    assembly_info:
-      patch: true
-      file: AssemblyInfo.*
-      assembly_version: "{version}"
-      assembly_file_version: "{version}"
-      assembly_informational_version: "{version}"
-
     artifacts:
     - path: 'bin/MOSA-Installer.exe'
 
@@ -63,7 +63,7 @@ for:
       - provider: GitHub
         tag: Current
         release: MOSA Project - Current Build
-        description: 'Build Version - v$(appveyor_build_version)'
+        description: 'Build Version - v$(APPVEYOR_BUILD_VERSION) at $(APPVEYOR_REPO_COMMIT_TIMESTAMP)'
         auth_token:
           secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
         artifact: 'bin/MOSA-Installer.exe'

@@ -2,7 +2,7 @@
 <package >
 	<metadata minClientVersion="3.3.0">
 		<id>Mosa.Korlib</id>
-		<version>1.0.0.5</version>
+		<version>$version$</version>
 		<title>Mosa.Korlib Library</title>
 		<authors>MOSA Project</authors>
 		<owners>MOSA Project</owners>
@@ -20,5 +20,6 @@
 		<file src="..\..\bin\mscorlib.dll" target="lib\net472" />
 		<file src="..\..\bin\Mosa.Plug.Korlib.dll" target="lib\net472" />
 		<file src="..\..\bin\Mosa.Plug.Korlib.x86.dll" target="lib\net472" />
+		<file src="..\..\bin\Mosa.Plug.Korlib.x64.dll" target="lib\net472" />
 	</files>
 </package>

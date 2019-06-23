@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>Mosa.Tools.Package</id>
-		<version>1.0.0.5</version>
+		<version>$version$</version>
 		<title>Mosa.Tools.Package</title>
 		<authors>MOSA Project</authors>
 		<owners>MOSA Project</owners>
@@ -19,7 +19,6 @@
 		</dependencies>
 	</metadata>
 	<files>
-		<file src="..\..\bin\dnlib.dll" target="tools" />
 		<file src="..\..\bin\Mosa.ClassLib.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Compiler.Common.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Compiler.Framework.dll" target="tools" />
@@ -41,6 +40,7 @@
 		<file src="..\..\bin\Mosa.Utility.Launcher.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.RSP.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Tool.Compiler.exe" target="tools" />
+		<file src="..\..\bin\dnlib.dll" target="tools" />
 		<file src="..\..\bin\SharpDisasm.dll" target="tools" />
 		<file src="..\..\bin\CommandLine.dll" target="tools" />
 		<file src="..\..\bin\Priority Queue.dll" target="tools" />
