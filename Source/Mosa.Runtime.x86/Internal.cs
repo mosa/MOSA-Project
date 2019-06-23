@@ -4,6 +4,7 @@ using Mosa.Runtime.Extension;
 using Mosa.Runtime.Metadata;
 using System;
 using System.Runtime.CompilerServices;
+using System.Diagnostics;
 
 namespace Mosa.Runtime.x86
 {
@@ -11,7 +12,7 @@ namespace Mosa.Runtime.x86
 	{
 		public static void Fault(uint code, uint extra = 0)
 		{
-			System.Diagnostics.Debug.Fail("Fault: " + ((int)code).ToString("hex") + " , Extra: " + ((int)extra).ToString("hex"));
+			Debug.Fail("Fault: " + ((int)code).ToString("hex") + " , Extra: " + ((int)extra).ToString("hex"));
 		}
 
 		public static MethodDefinition GetMethodDefinition(IntPtr address)

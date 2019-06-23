@@ -68,6 +68,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Address.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="VBE.cs" />
     <Compile Include="SSE.cs" />
     <Compile Include="IDTStack.cs" />
@@ -122,6 +123,9 @@
     <None Include="Mosa.Kernel.x86.nuspec">
       <SubType>Designer</SubType>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

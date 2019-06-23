@@ -80,6 +80,7 @@
     <Compile Include="Metadata\ProtectedRegionDefinition.cs" />
     <Compile Include="Metadata\ProtectedRegionTable.cs" />
     <Compile Include="Metadata\MethodDefinition.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StartUp.cs" />
     <Compile Include="GC.cs" />
     <Compile Include="Intrinsic.cs" />
@@ -97,6 +98,9 @@
       <Project>{631bc4f3-e2d8-4319-814c-13904caa17ce}</Project>
       <Name>Mosa.Korlib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
