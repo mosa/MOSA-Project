@@ -43,6 +43,7 @@
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="System.Collections.Generic\IReadOnlyCollection.cs" />
     <Compile Include="System.Collections.Generic\IReadOnlyList.cs" />
     <Compile Include="System.Collections.Generic\LinkedList.cs" />
