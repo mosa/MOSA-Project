@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>Mosa.Runtime</id>
-		<version>1.0.0.5</version>
+		<version>$version$</version>
 		<title>Mosa.Runtime Library</title>
 		<authors>MOSA Project</authors>
 		<owners>MOSA Project</owners>
