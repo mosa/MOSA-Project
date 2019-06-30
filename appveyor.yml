@@ -67,7 +67,7 @@ for:
 
     artifacts:
     - path: 'bin/MOSA-Installer.exe'
-	- path: 'bin/mscorlib.dll'
+    - path: 'bin/mscorlib.dll'
 
     deploy:
       - provider: GitHub
@@ -136,7 +136,7 @@ for:
 
     artifacts:
 #   - path: 'bin/MOSA-Installer.exe'
-	- path: 'bin/mscorlib.dll'
+    - path: 'bin/mscorlib.dll'
 
 # Linux Build:
   -
