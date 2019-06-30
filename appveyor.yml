@@ -15,9 +15,18 @@ skip_tags: true
 assembly_info:
   patch: true
   file: AssemblyInfo.*
-  assembly_version: "{version}"
-  assembly_file_version: "{version}"
-  assembly_informational_version: "{version}"
+  assembly_version: '{version}'
+  assembly_file_version: '{version}'
+  assembly_informational_version: '{version}'
+
+dotnet_csproj:
+  patch: true
+  file: '**\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}'
 
 for:
 
@@ -58,6 +67,7 @@ for:
 
     artifacts:
     - path: 'bin/MOSA-Installer.exe'
+	- path: 'bin/mscorlib.dll'
 
     deploy:
       - provider: GitHub
@@ -88,6 +98,7 @@ for:
         - image: Visual Studio 2019
 
     install:
+    - cmd: choco install InnoSetup
     - cmd: SET PATH=%PATH%;C:\Program Files (x86)\Inno Setup 6
 
     before_build:
@@ -124,7 +135,8 @@ for:
       assembly_informational_version: "{version}"
 
     artifacts:
-#    - path: 'bin/MOSA Installer/MOSA-Installer.exe'
+#   - path: 'bin/MOSA-Installer.exe'
+	- path: 'bin/mscorlib.dll'
 
 # Linux Build:
   -
