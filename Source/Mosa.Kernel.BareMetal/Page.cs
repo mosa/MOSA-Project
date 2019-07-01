@@ -7,11 +7,11 @@ namespace Mosa.Kernel.BareMetal
 {
 	internal static class Page
 	{
-		public static uint Shift = Platform.GetPageShift();
+		public static uint Shift { get { return Platform.GetPageShift(); } }
 
-		public static uint Size = (uint)(1 << (int)Shift);
+		public static uint Size { get { return (uint)(1 << (int)Shift); } }
 
-		public static ulong Mask = (~(Size - 1));
+		public static ulong Mask { get { return (~(Size - 1)); } }
 
 		public static void ZeroOutPage(IntPtr page)
 		{

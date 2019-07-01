@@ -67,6 +67,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Alignment.cs" />
+    <Compile Include="PageListNodeEntry.cs" />
     <Compile Include="PageTable.cs" />
     <Compile Include="AddressRange.cs" />
     <Compile Include="VirtualMemoryManager.cs" />
