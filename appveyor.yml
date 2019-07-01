@@ -50,7 +50,7 @@ for:
       publish_nuget: true
 
     after_build:
-    - cmd: "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" Source/Inno-Setup-Script/Mosa-Installer.iss
+    - cmd: 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe" Source/Inno-Setup-Script/Mosa-Installer.iss'
     - ps: ./mosactl.ps1 unittest
 #    - ps: ./mosactl.ps1 test
 
@@ -112,7 +112,7 @@ for:
       publish_nuget: true
 
     after_build:
-    - cmd: "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" Source/Inno-Setup-Script/Mosa-Installer.iss
+    - cmd: 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe" Source/Inno-Setup-Script/Mosa-Installer.iss'
 #    - ps: ./mosactl.ps1 unittest
 #    - ps: ./mosactl.ps1 test
 
