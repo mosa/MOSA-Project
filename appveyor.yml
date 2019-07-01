@@ -38,7 +38,7 @@ for:
 
     install:
     - cmd: choco install InnoSetup
-#   - cmd: SET PATH=%PATH%;C:\Program Files (x86)\Inno Setup 6
+    - cmd: SET PATH=%PATH%;C:\Program Files (x86)\Inno Setup 6
 
     before_build:
     - nuget restore -Verbosity quiet Source/Mosa.sln
@@ -50,9 +50,9 @@ for:
       publish_nuget: true
 
     after_build:
-    - cmd: 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe" Source/Inno-Setup-Script/Mosa-Installer.iss'
+    - cmd: ISCC.exe Source/Inno-Setup-Script/Mosa-Installer.iss
     - ps: ./mosactl.ps1 unittest
-#    - ps: ./mosactl.ps1 test
+#   - ps: ./mosactl.ps1 test
 
     build_script:
 
@@ -100,7 +100,7 @@ for:
 
     install:
     - cmd: choco install InnoSetup
- #  - cmd: SET PATH=%PATH%;C:\Program Files (x86)\Inno Setup 6
+    - cmd: SET PATH=%PATH%;C:\Program Files (x86)\Inno Setup 6
 
     before_build:
     - nuget restore -Verbosity quiet Source/Mosa.sln
@@ -112,9 +112,9 @@ for:
       publish_nuget: true
 
     after_build:
-    - cmd: 'C:\Program Files (x86)\Inno Setup 6\ISCC.exe" Source/Inno-Setup-Script/Mosa-Installer.iss'
-#    - ps: ./mosactl.ps1 unittest
-#    - ps: ./mosactl.ps1 test
+    - cmd: ISCC.exe Source/Inno-Setup-Script/Mosa-Installer.iss
+#   - ps: ./mosactl.ps1 unittest
+#   - ps: ./mosactl.ps1 test
 
     build_script:
 
