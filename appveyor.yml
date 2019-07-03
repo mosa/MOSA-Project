@@ -103,7 +103,7 @@ for:
         skip_symbols: false
         symbol_server:           
         artifact: /.*\.nupkg/
-		on:
+        on:
           branch: stable
 
 # Windows Build - Visual Studio 2019:
