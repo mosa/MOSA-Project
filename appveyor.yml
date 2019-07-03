@@ -95,7 +95,7 @@ for:
         force_update: true
         on:
           appveyor_repo_tag: true
-          is_Stable_tag: true
+          APPVEYOR_REPO_TAG_NAME: Stable
 
       - provider: NuGet
         server:                  
@@ -105,7 +105,8 @@ for:
         symbol_server:           
         artifact: /.*\.nupkg/
         on:
-          tag: Stable
+          appveyor_repo_tag: true
+          APPVEYOR_REPO_TAG_NAME: Stable
 
 # Windows Build - Visual Studio 2019:
   -
