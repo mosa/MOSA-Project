@@ -94,7 +94,8 @@ for:
         prerelease: false
         force_update: true
         on:
-          tag: Stable
+          appveyor_repo_tag: true
+          is_Stable_tag: true
 
       - provider: NuGet
         server:                  
