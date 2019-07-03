@@ -11,16 +11,16 @@ namespace Mosa.Kernel.BareMetal
 			//TODO
 		}
 
-		public static IntPtr ReservePage(int count, int alignment)
+		public static IntPtr ReservePages(int count, int alignment)
 		{
 			//TODO
 			return IntPtr.Zero;
 		}
 
-		public static AddressRange ReserveAnyPages(int pages)
+		public static IntPtr ReserveAnyPage()
 		{
 			//TODO
-			return new AddressRange(0, 1);
+			return IntPtr.Zero; // new AddressRange(0, 1);
 		}
 
 		public static void ReleasePages(IntPtr page, int count)
