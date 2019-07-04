@@ -20,6 +20,8 @@
 		<RemoveIntegerChecks>False</RemoveIntegerChecks>
 		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 		<FileAlignment>4096</FileAlignment>
+	</PropertyGroup>
+	<PropertyGroup>
 		<NoStdLib>True</NoStdLib>
 		<AddAdditionalExplicitAssemblyReferences>false</AddAdditionalExplicitAssemblyReferences>
 		<AdditionalExplicitAssemblyReferences />
