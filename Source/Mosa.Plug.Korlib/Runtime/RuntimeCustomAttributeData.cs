@@ -25,8 +25,8 @@ namespace Mosa.Plug.Korlib.Runtime
 			EnumTypePtr = new TypeDefinition(typeHandle.Value);
 
 			// Create temporary lists to hold the arguments
-			var typedArgs = new LinkedList<CustomAttributeTypedArgument>();
-			var namedArgs = new LinkedList<CustomAttributeNamedArgument>();
+			var typedArgs = new List<CustomAttributeTypedArgument>();
+			var namedArgs = new List<CustomAttributeNamedArgument>();
 
 			for (uint i = 0; i < customAttributeTable.NumberOfArguments; i++)
 			{
@@ -47,17 +47,17 @@ namespace Mosa.Plug.Korlib.Runtime
 				// If the argument has a name then its a NamedArgument, otherwise its a TypedArgument
 				if (name == null)
 				{
-					typedArgs.AddLast(CreateTypedArgumentStruct(argType, value));
+					typedArgs.Add(CreateTypedArgumentStruct(argType, value));
 				}
 				else
 				{
-					namedArgs.AddLast(CreateNamedArgumentStruct(name, argType, value, argument.IsField));
+					namedArgs.Add(CreateNamedArgumentStruct(name, argType, value, argument.IsField));
 				}
 			}
 
 			// Generate arrays from the argument lists
-			ctorArgs = typedArgs.ToArray();
-			this.namedArgs = namedArgs.ToArray();
+			ctorArgs = typedArgs;
+			this.namedArgs = namedArgs;
 		}
 
 		public CustomAttributeTypedArgument CreateTypedArgumentStruct(Type type, object value)

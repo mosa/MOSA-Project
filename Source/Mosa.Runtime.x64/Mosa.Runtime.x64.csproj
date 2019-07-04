@@ -72,6 +72,7 @@
     <Compile Include="Math\Division.cs" />
     <Compile Include="Internal.cs" />
     <Compile Include="Native.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj">

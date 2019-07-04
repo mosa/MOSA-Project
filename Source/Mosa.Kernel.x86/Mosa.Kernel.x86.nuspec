@@ -2,7 +2,7 @@
 <package >
 	<metadata>
 		<id>Mosa.Kernel.x86</id>
-		<version>1.0.0.5</version>
+		<version>$version$</version>
 		<title>Mosa.Kernel.x86 Library</title>
 		<authors>MOSA Project</authors>
 		<owners>MOSA Project</owners>

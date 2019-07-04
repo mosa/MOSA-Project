@@ -1,16 +1,17 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Mosa.Tool.Launcher")]
+[assembly: AssemblyTitle("Mosa.Plug.Korlib.ARMv6")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MOSA Project")]
-[assembly: AssemblyProduct("Mosa.Tool.Launcher")]
+[assembly: AssemblyProduct("Mosa.Plug.Korlib.ARMv6")]
 [assembly: AssemblyCopyright("Copyright © 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -21,7 +22,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("6fe34ef1-3c86-41d2-a4ed-36969cfde276")]
+[assembly: Guid("de533d8d-bca0-476c-9b64-e7f831f7f9c1")]
 
 // Version information for an assembly consists of the following four values:
 //
@@ -30,8 +31,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-// You can specify all the values or you can default the Build and Revision Numbers
-// by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion("1.0.0.0")]
 [assembly: AssemblyFileVersion("1.0.0.0")]

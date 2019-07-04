@@ -2,9 +2,9 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "MOSA-Project"
-#define MyAppVersion "1.5"
 #define MyAppPublisher "MOSA-Project"
 #define MyAppURL "http://www.mosa-project.org"
+#define MyAppVersion GetFileVersion('..\..\bin\Mosa.Tool.Bootstrap.exe')
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -18,12 +18,12 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={pf}\{#MyAppName}
+DefaultDirName={commonpf}\{#MyAppName}
 DisableDirPage=yes
 DisableReadyPage=yes
 DefaultGroupName={#MyAppName}
 OutputDir=..\..\bin
-OutputBaseFilename=MOSA-Installer
+OutputBaseFilename=MOSA-Installer-{#MyAppVersion}
 SolidCompression=yes
 MinVersion=0,6.0
 AllowUNCPath=False
@@ -65,7 +65,6 @@ Source: "..\..\bin\MOSA Project\MyTemplate.vstemplate"; DestDir: "{userdocs}\Vis
 Source: "..\..\bin\MOSA Project\packages.config"; DestDir: "{userdocs}\Visual Studio 2019\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
 Source: "..\..\bin\MOSA Project\Program.cs"; DestDir: "{userdocs}\Visual Studio 2019\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
 Source: "..\..\bin\MOSA Project\__TemplateIcon.ico"; DestDir: "{userdocs}\Visual Studio 2019\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
-
 
 [ThirdParty]
 UseRelativePaths=True
