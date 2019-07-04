@@ -7,11 +7,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Mosa.Runtime.x86")]
+[assembly: AssemblyTitle("Mosa.Plug.Korlib")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("MOSA Project")]
-[assembly: AssemblyProduct("Mosa.Runtime.x86")]
+[assembly: AssemblyProduct("Mosa.Plug.Korlib")]
 [assembly: AssemblyCopyright("Copyright © 2019")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -22,7 +22,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("9c75fcf6-5bee-42bc-89d1-6c4f61a4e9e4")]
+[assembly: Guid("204ade79-e30f-4368-a683-e3f4e9aea01d")]
 
 // Version information for an assembly consists of the following four values:
 //

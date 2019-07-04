@@ -82,11 +82,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="System.Threading\InterlockedPlug.cs" />
     <Compile Include="System.Threading\MonitorPlug.cs" />
     <Compile Include="System\Math.CoreCLR.cs" />
     <Compile Include="System\MathF.CoreCLR.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
