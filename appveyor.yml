@@ -3,8 +3,8 @@ version: '1.9.7.{build}'
 configuration: Release
 platform: Any CPU
 image:
-- Visual Studio 2017
 - Visual Studio 2019
+- Visual Studio 2017
 - Ubuntu1804
 
 shallow_clone: true
