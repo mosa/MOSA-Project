@@ -78,7 +78,6 @@ for:
 
     deploy:
       - provider: GitHub
-        tag: Current
         release: MOSA Project - Development Build
         description: 'Build Version - v$(APPVEYOR_BUILD_VERSION) at $(APPVEYOR_REPO_COMMIT_TIMESTAMP)'
         auth_token:
