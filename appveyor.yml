@@ -85,7 +85,7 @@ for:
           secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
         artifact: 'bin\MOSA-Installer-*.exe'
         draft: false
-        prerelease: false
+        prerelease: true
         force_update: true
         on:
           branch: master
