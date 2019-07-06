@@ -75,15 +75,15 @@ for:
 
     artifacts:
     - path: 'bin\MOSA-Installer.exe'
-	  name: 'MOSA-Installer.exe'
+      name: 'MOSA-Installer.exe'
     - path: 'bin\MOSA-Installer-*.exe'
-	  name: 'MOSA-Installer-{version}.exe'
+      name: 'MOSA-Installer-{version}.exe'
     - path: Mosa.*.nupkg
 
     deploy:
       - provider: GitHub
         release: MOSA Project - Development Build
-#		tag: {version}
+#        tag: {version}
         description: 'Build Version - v$(APPVEYOR_BUILD_VERSION) at $(APPVEYOR_REPO_COMMIT_TIMESTAMP)'
         auth_token:
           secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
