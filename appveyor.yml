@@ -30,11 +30,11 @@ assembly_info:
 
 for:
 
-# Windows Build - Visual Studio 2017:
+# Windows Build - Visual Studio 2019:
   -
     matrix:
       only:
-        - image: Visual Studio 2017
+        - image: Visual Studio 2019
 
     install:
     - cmd: choco install InnoSetup
@@ -83,7 +83,7 @@ for:
         description: 'Build Version - v$(APPVEYOR_BUILD_VERSION) at $(APPVEYOR_REPO_COMMIT_TIMESTAMP)'
         auth_token:
           secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
-        artifact: 'bin/MOSA-Installer-*.exe'
+        artifact: 'bin\MOSA-Installer-*.exe'
         draft: false
         prerelease: true
         force_update: true
@@ -96,7 +96,7 @@ for:
         description: 'Build Version - v$(APPVEYOR_BUILD_VERSION) at $(APPVEYOR_REPO_COMMIT_TIMESTAMP)'
         auth_token:
           secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
-        artifact: 'bin/MOSA-Installer-*.exe'
+        artifact: 'bin\MOSA-Installer-*.exe'
         draft: false
         prerelease: false
         force_update: true
@@ -113,11 +113,11 @@ for:
         on:
           branch: Stable
 
-# Windows Build - Visual Studio 2019:
+# Windows Build - Visual Studio 2017:
   -
     matrix:
       only:
-        - image: Visual Studio 2019
+        - image: Visual Studio 2017
 
     install:
     - cmd: choco install InnoSetup
