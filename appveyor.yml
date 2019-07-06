@@ -73,7 +73,8 @@ for:
     test: off
 
     artifacts:
-    - path: bin\MOSA-Installer-*.exe
+    - path: bin
+      name: MOSA-Installer-*.exe
     - path: Mosa.*.nupkg
 
     deploy:
@@ -157,7 +158,9 @@ for:
       assembly_informational_version: "{version}"
 
     artifacts:
-    - path: 'bin\MOSA-Installer-*.exe'
+    - path: bin
+      name: 'MOSA-Installer-*.exe'
+    - path: 'Mosa.*.nupkg'
 
 # Linux Build:
   -
