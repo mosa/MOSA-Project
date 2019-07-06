@@ -73,8 +73,7 @@ for:
     test: off
 
     artifacts:
-    - path: bin
-      name: MOSA-Installer-*.exe
+    - path: 'bin/MOSA-Installer-*.exe'
     - path: Mosa.*.nupkg
 
     deploy:
@@ -83,7 +82,7 @@ for:
         description: 'Build Version - v$(APPVEYOR_BUILD_VERSION) at $(APPVEYOR_REPO_COMMIT_TIMESTAMP)'
         auth_token:
           secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
-        artifact: MOSA-Installer-*.exe
+        artifact: 'bin/MOSA-Installer-*.exe'
         draft: false
         prerelease: true
         force_update: true
@@ -96,7 +95,7 @@ for:
         description: 'Build Version - v$(APPVEYOR_BUILD_VERSION) at $(APPVEYOR_REPO_COMMIT_TIMESTAMP)'
         auth_token:
           secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
-        artifact: MOSA-Installer-*.exe
+        artifact: 'bin/MOSA-Installer-*.exe'
         draft: false
         prerelease: false
         force_update: true
@@ -158,9 +157,8 @@ for:
       assembly_informational_version: "{version}"
 
     artifacts:
-    - path: bin
-      name: 'MOSA-Installer-*.exe'
-    - path: 'Mosa.*.nupkg'
+    - path: 'bin/MOSA-Installer-*.exe'
+    - path: Mosa.*.nupkg
 
 # Linux Build:
   -
