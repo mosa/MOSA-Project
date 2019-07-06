@@ -57,7 +57,7 @@ for:
     - cmd: nuget.exe pack Source/Mosa.ClassLib/Mosa.ClassLib.nuspec -Properties version=%APPVEYOR_BUILD_VERSION%
     - cmd: nuget.exe pack Source/Mosa.Tools.Package/Mosa.Tools.Package.nuspec -Properties version=%APPVEYOR_BUILD_VERSION%
     - cmd: ISCC.exe Source/Inno-Setup-Script/Mosa-Installer.iss
-    - cmd: copy bin\MOSA-Installer-*.exe bin\MOSA-Installer.exe
+    - cmd: copy bin\MOSA-Installer-%APPVEYOR_BUILD_VERSION%.exe bin\MOSA-Installer.exe
 #   - ps: ./mosactl.ps1 unittest
 #   - ps: ./mosactl.ps1 test
 
@@ -135,7 +135,7 @@ for:
 
     after_build:
     - cmd: ISCC.exe Source/Inno-Setup-Script/Mosa-Installer.iss
-    - cmd: copy bin\MOSA-Installer-*.exe bin\MOSA-Installer.exe
+    - cmd: copy bin\MOSA-Installer-%APPVEYOR_BUILD_VERSION%.exe bin\MOSA-Installer.exe
 #   - ps: ./mosactl.ps1 unittest
 #   - ps: ./mosactl.ps1 test
 
