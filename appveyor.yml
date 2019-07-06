@@ -40,7 +40,7 @@ for:
     - cmd: choco install InnoSetup
     - cmd: SET PATH=C:\Program Files (x86)\Inno Setup 6;%PATH%
 
-    before_buil V\d:
+    before_build:
     - nuget restore -Verbosity quiet Source/Mosa.sln
 
     build:
