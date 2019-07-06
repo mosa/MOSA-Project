@@ -73,7 +73,7 @@ for:
     test: off
 
     artifacts:
-    - path: 'bin/MOSA-Installer-*.exe'
+    - path: 'bin\MOSA-Installer-*.exe'
     - path: 'Mosa.*.nupkg'
 
     deploy:
@@ -85,7 +85,7 @@ for:
           secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
         artifact: 'bin\MOSA-Installer-*.exe'
         draft: false
-        prerelease: true
+        prerelease: false
         force_update: true
         on:
           branch: master
@@ -158,7 +158,7 @@ for:
       assembly_informational_version: "{version}"
 
     artifacts:
-    - path: 'bin/MOSA-Installer-*.exe'
+    - path: 'bin\MOSA-Installer-*.exe'
 
 # Linux Build:
   -
