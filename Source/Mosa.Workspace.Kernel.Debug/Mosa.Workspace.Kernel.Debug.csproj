@@ -50,8 +50,6 @@
     <Compile Include="Internal\CPU.cs" />
     <Compile Include="Internal\InvalidMemoryAccess.cs" />
     <Compile Include="Internal\Memory.cs" />
-    <Compile Include="Mosa.Kernel.BareMetal.x86\PlatformPlug.cs" />
-    <Compile Include="Mosa.Kernel.BareMetal.x64\PlatformPlug.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\Alignment.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\Page.cs" />
     <Compile Include="Map\Platform.cs" />
@@ -91,9 +89,7 @@
   <ItemGroup>
     <None Include="app.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Mosa.Runtime\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
