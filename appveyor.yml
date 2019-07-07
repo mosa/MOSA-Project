@@ -57,7 +57,6 @@ for:
     - cmd: nuget.exe pack Source/Mosa.ClassLib/Mosa.ClassLib.nuspec -Properties version=%APPVEYOR_BUILD_VERSION%
     - cmd: nuget.exe pack Source/Mosa.Tools.Package/Mosa.Tools.Package.nuspec -Properties version=%APPVEYOR_BUILD_VERSION%
     - cmd: ISCC.exe Source/Inno-Setup-Script/Mosa-Installer.iss
-#   - cmd: copy bin\MOSA-Installer-%APPVEYOR_BUILD_VERSION%.exe bin\MOSA-Installer.exe
 #   - ps: ./mosactl.ps1 unittest
 #   - ps: ./mosactl.ps1 test
 
@@ -74,20 +73,17 @@ for:
     test: off
 
     artifacts:
-    - path: 'bin\MOSA-Installer.exe'
-      name: 'MOSA-Installer.exe'
-    - path: 'bin\MOSA-Installer-*.exe'
-      name: 'MOSA-Installer-{version}.exe'
+    - path: bin\MOSA-Installer-*.exe
     - path: Mosa.*.nupkg
 
     deploy:
       - provider: GitHub
-        release: MOSA Project - Development Build
-#        tag: {version}
+        release: MOSA Project - Development Build v{version}
+        tag: v{version}-dev
         description: 'Build Version - v$(APPVEYOR_BUILD_VERSION) at $(APPVEYOR_REPO_COMMIT_TIMESTAMP)'
         auth_token:
           secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
-        artifact: 'MOSA-Installer-{version}.exe'
+        artifact: '*.exe'
         draft: false
         prerelease: true
         force_update: true
@@ -100,7 +96,7 @@ for:
         description: 'Build Version - v$(APPVEYOR_BUILD_VERSION) at $(APPVEYOR_REPO_COMMIT_TIMESTAMP)'
         auth_token:
           secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
-        artifact: 'MOSA-Installer-{version}.exe'
+        artifact: '*.exe'
         draft: false
         prerelease: false
         force_update: true
@@ -138,7 +134,6 @@ for:
 
     after_build:
     - cmd: ISCC.exe Source/Inno-Setup-Script/Mosa-Installer.iss
-#   - cmd: copy bin\MOSA-Installer-*.exe bin\MOSA-Installer.exe
 #   - ps: ./mosactl.ps1 unittest
 #   - ps: ./mosactl.ps1 test
 
@@ -162,6 +157,7 @@ for:
       assembly_informational_version: "{version}"
 
     artifacts:
+    - path: bin\MOSA-Installer-*.exe
     - path: Mosa.*.nupkg
 
 # Linux Build:
