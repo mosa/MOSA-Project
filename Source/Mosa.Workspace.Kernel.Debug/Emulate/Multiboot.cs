@@ -1,0 +1,66 @@
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.Workspace.Kernel.Internal;
+using System.Collections.Generic;
+
+namespace Mosa.Workspace.Kernel.Emulate
+{
+	public class Multiboot
+	{
+		public static readonly uint Magic = 0x2BADB002;
+		public static readonly uint MultibootStructure = 0x10090; // same as QEMU
+
+		public static void Setup(uint totalMemory)
+		{
+			CPU.Write32(0x200000, Magic);
+			CPU.Write32(0x200004, MultibootStructure);
+
+			uint multiboot = MultibootStructure;
+			uint mem_upper = totalMemory;
+
+			mem_upper = mem_upper - (1024 * 1024);
+
+			CPU.Write32(multiboot + 0, 0x01 | 0x40); // flags
+			CPU.Write32(multiboot + 4, 640);     // mem_lower - assuming at least 640k
+			CPU.Write32(multiboot + 8, mem_upper / 1024);    // mem_upper
+			CPU.Write32(multiboot + 12, 0x0);    // boot_device
+			CPU.Write32(multiboot + 16, 0x0);    // cmdline
+			CPU.Write32(multiboot + 20, 0x0);    // mods_count
+			CPU.Write32(multiboot + 24, 0x0);    // mods_addr
+			CPU.Write32(multiboot + 28, 0x0);    // syms
+			CPU.Write32(multiboot + 44, 1 * 24); // mmap_length
+			CPU.Write32(multiboot + 48, multiboot + 96); // mmap_addr
+			CPU.Write32(multiboot + 52, 0x0);    // drives_length
+			CPU.Write32(multiboot + 56, 0x0);    // drives_addr
+			CPU.Write32(multiboot + 60, 0x0);    // config_table
+			CPU.Write32(multiboot + 64, 0x0);    // boot_loader_name
+			CPU.Write32(multiboot + 68, 0x0);    // apm_table
+			CPU.Write32(multiboot + 72, 0x0);    // vbe_control_info
+			CPU.Write32(multiboot + 76, 0x0);    // vbe_mode_info
+			CPU.Write32(multiboot + 80, 0x0);    // vbe_mode
+			CPU.Write32(multiboot + 84, 0x0);    // vbe_interface_seg
+			CPU.Write32(multiboot + 88, 0x0);    // vbe_interface_off
+			CPU.Write32(multiboot + 92, 0x0);    // vbe_interface_len
+
+			multiboot += 96;
+
+			// TODO:
+
+			multiboot = SetMemoryRegion(multiboot, 0, 0, 0);
+			multiboot = SetMemoryRegion(multiboot, 0, 0, 0);
+			multiboot = SetMemoryRegion(multiboot, 0, 0, 0);
+			multiboot = SetMemoryRegion(multiboot, 0, 0, 0);
+		}
+
+		private static uint SetMemoryRegion(uint at, uint address, uint size, uint type)
+		{
+			CPU.Write32(at + 0, 20);      // Size
+			CPU.Write32(at + 4, address);    // base_addr_low
+			CPU.Write32(at + 8, 0x00);    // base_addr_high
+			CPU.Write32(at + 12, size);  // length_low
+			CPU.Write32(at + 16, 0x00);   // length_high
+			CPU.Write32(at + 20, type);  // type
+			return at + 24;
+		}
+	}
+}
