@@ -671,7 +671,7 @@ namespace Mosa.Compiler.Framework
 			if (!IsTraceable(traceLevel))
 				return null;
 
-			var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName);
+			var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName, MethodData.Version);
 
 			traceLogs.Add(traceLog);
 
@@ -688,7 +688,7 @@ namespace Mosa.Compiler.Framework
 			if (!IsTraceable(traceLevel))
 				return null;
 
-			var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName, section);
+			var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName, section, MethodData.Version);
 
 			traceLogs.Add(traceLog);
 

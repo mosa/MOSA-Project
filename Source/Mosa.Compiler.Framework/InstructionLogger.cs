@@ -19,18 +19,19 @@ namespace Mosa.Compiler.Framework.Trace
 				methodCompiler.Trace,
 				stage.FormattedStageName,
 				methodCompiler.Method,
-				methodCompiler.BasicBlocks
+				methodCompiler.BasicBlocks,
+				methodCompiler.MethodData.Version
 			);
 		}
 
-		public static void Run(CompilerTrace compilerTrace, string stage, MosaMethod method, BasicBlocks basicBlocks)
+		public static void Run(CompilerTrace compilerTrace, string stage, MosaMethod method, BasicBlocks basicBlocks, int version)
 		{
 			if (!compilerTrace.IsTraceable(TraceLevel))
 				return;
 
-			var traceLog = new TraceLog(TraceType.MethodInstructions, method, stage);
+			var traceLog = new TraceLog(TraceType.MethodInstructions, method, stage, version);
 
-			traceLog?.Log($"{method.FullName} after stage {stage}:");
+			traceLog?.Log($"{method.FullName} [v{version}] after stage {stage}:");
 			traceLog?.Log();
 
 			if (basicBlocks.Count > 0)

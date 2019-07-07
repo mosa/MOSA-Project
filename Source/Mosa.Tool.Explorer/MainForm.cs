@@ -6,7 +6,6 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Utility.GUI.Common;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -838,15 +837,15 @@ namespace Mosa.Tool.Explorer
 				if (traceLog.Section != null)
 					stagesection = stagesection + "-" + traceLog.Section;
 
-				methodStore.SetDebugStageInformation(traceLog.Method, stagesection, traceLog.Lines);
+				methodStore.SetDebugStageInformation(traceLog.Method, stagesection, traceLog.Lines, traceLog.Version);
 			}
 			else if (traceLog.Type == TraceType.MethodCounters)
 			{
-				methodStore.SetMethodCounterInformation(traceLog.Method, traceLog.Lines);
+				methodStore.SetMethodCounterInformation(traceLog.Method, traceLog.Lines, traceLog.Version);
 			}
 			else if (traceLog.Type == TraceType.MethodInstructions)
 			{
-				methodStore.SetInstructionTraceInformation(traceLog.Method, traceLog.Stage, traceLog.Lines);
+				methodStore.SetInstructionTraceInformation(traceLog.Method, traceLog.Stage, traceLog.Lines, traceLog.Version);
 			}
 			else if (traceLog.Type == TraceType.GlobalDebug)
 			{

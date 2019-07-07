@@ -72,6 +72,8 @@
     <Compile Include="CodeForm.Designer.cs">
       <DependentUpon>CodeForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="MethodData.cs" />
+    <Compile Include="MethodStore.cs" />
     <Compile Include="Stages\DebugInfoStage.cs" />
     <Compile Include="Stages\DisassemblyStage.cs" />
     <Compile Include="ExplorerCompilerExtension.cs" />
@@ -87,6 +89,7 @@
     <Compile Include="Stages\DominanceOutputStage.cs" />
     <Compile Include="Stages\GraphVizStage.cs" />
     <Compile Include="CompilerStage\ExplorerMethodCompileTimeStage.cs" />
+    <Compile Include="TypeSystemTree.cs" />
     <EmbeddedResource Include="CodeForm.resx">
       <DependentUpon>CodeForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -122,10 +125,6 @@
     <ProjectReference Include="..\Mosa.Utility.CodeCompiler\Mosa.Utility.CodeCompiler.csproj">
       <Project>{7b8fba4e-d6ac-4dad-a607-43ba112f8ec1}</Project>
       <Name>Mosa.Utility.CodeCompiler</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Utility.GUI.Common\Mosa.Utility.GUI.Common.csproj">
-      <Project>{5a813793-78e2-413c-aa05-fcdd12b7db04}</Project>
-      <Name>Mosa.Utility.GUI.Common</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

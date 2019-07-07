@@ -63,6 +63,11 @@ namespace Mosa.Kernel.BareMetal.Extension
 			return Intrinsic.LoadPointer(address, offset);
 		}
 
+		public static IntPtr LoadPointer(this IntPtr address, int offset)
+		{
+			return Intrinsic.LoadPointer(address, offset);
+		}
+
 		public static void Store16(this IntPtr address, uint offset, ushort value)
 		{
 			Intrinsic.Store16(address, offset, value);
