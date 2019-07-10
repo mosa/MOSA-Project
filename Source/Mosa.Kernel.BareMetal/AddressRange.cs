@@ -7,23 +7,29 @@ namespace Mosa.Kernel.BareMetal
 	public struct AddressRange
 	{
 		public IntPtr Address { get; }
-		public int Size { get; }
+		public ulong Size { get; }
 
-		public AddressRange(IntPtr address, int size)
+		public AddressRange(IntPtr address, uint size)
 		{
 			Address = address;
 			Size = size;
 		}
 
-		public AddressRange(int address, int size)
+		public AddressRange(uint address, uint size)
 		{
 			Address = new IntPtr(address);
 			Size = size;
 		}
 
-		public AddressRange(long address, int size)
+		public AddressRange(ulong address, uint size)
 		{
-			Address = new IntPtr(address);
+			Address = new IntPtr((long)address);
+			Size = size;
+		}
+
+		public AddressRange(ulong address, ulong size)
+		{
+			Address = new IntPtr((long)address);
 			Size = size;
 		}
 	}

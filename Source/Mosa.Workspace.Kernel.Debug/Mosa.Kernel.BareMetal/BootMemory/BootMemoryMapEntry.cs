@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.BareMetal.Extension;
+using Mosa.Runtime.Extension;
 using System;
 
 namespace Mosa.Kernel.BareMetal.BootMemory
@@ -16,7 +17,7 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 
 		public bool IsNull => Entry == IntPtr.Zero;
 
-		public IntPtr Address
+		public IntPtr StartAddress
 		{
 			get { return Entry.LoadPointer(); }
 			set { Entry.StorePointer(value); }
@@ -26,6 +27,11 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 		{
 			get { return Entry.Load64(IntPtr.Size); }
 			set { Entry.Store64(IntPtr.Size, value); }
+		}
+
+		public IntPtr EndAddress
+		{
+			get { return StartAddress.Add(Size); }
 		}
 
 		public BootMemoryMapType Type

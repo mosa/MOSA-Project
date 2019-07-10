@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Workspace.Kernel.Internal.Debug;
+using Mosa.Workspace.Kernel.Internal;
 using System;
 using System.Runtime.CompilerServices;
 

@@ -5,7 +5,7 @@ using System;
 
 namespace Mosa.Kernel.BareMetal
 {
-	internal static class Page
+	public static class Page
 	{
 		public static uint Shift { get { return Platform.GetPageShift(); } }
 
@@ -13,7 +13,7 @@ namespace Mosa.Kernel.BareMetal
 
 		public static ulong Mask { get { return (~(Size - 1)); } }
 
-		public static void ZeroOutPage(IntPtr page)
+		public static IntPtr ClearPage(IntPtr page)
 		{
 			uint writes = Size / 8;
 
@@ -21,6 +21,8 @@ namespace Mosa.Kernel.BareMetal
 			{
 				page.Store64(i, 0);
 			}
+
+			return page;
 		}
 	}
 }

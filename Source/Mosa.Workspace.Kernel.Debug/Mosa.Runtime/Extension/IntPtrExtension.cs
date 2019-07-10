@@ -35,5 +35,15 @@ namespace Mosa.Runtime.Extension
 		{
 			return a == IntPtr.Zero;
 		}
+
+		static public IntPtr Add(this IntPtr a, ulong b)
+		{
+			return new IntPtr(a.ToInt64() + (long)b);
+		}
+
+		static public IntPtr Add(this IntPtr a, uint b)
+		{
+			return new IntPtr(a.ToInt64() + b);
+		}
 	}
 }

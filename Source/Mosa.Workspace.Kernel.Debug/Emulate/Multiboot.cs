@@ -44,22 +44,22 @@ namespace Mosa.Workspace.Kernel.Emulate
 
 			multiboot += 96;
 
-			// TODO:
-
-			multiboot = SetMemoryRegion(multiboot, 0, 0, 0);
-			multiboot = SetMemoryRegion(multiboot, 0, 0, 0);
-			multiboot = SetMemoryRegion(multiboot, 0, 0, 0);
-			multiboot = SetMemoryRegion(multiboot, 0, 0, 0);
+			multiboot = SetMemoryRegion(multiboot, 0x00000000, 0x009FC00, 1);
+			multiboot = SetMemoryRegion(multiboot, 0x0009FC00, 0x0000400, 2);
+			multiboot = SetMemoryRegion(multiboot, 0x000F0000, 0x0010000, 2);
+			multiboot = SetMemoryRegion(multiboot, 0x00100000, 0x7EE0000, 1);
+			multiboot = SetMemoryRegion(multiboot, 0x07FE0000, 0x0020000, 2);
+			multiboot = SetMemoryRegion(multiboot, 0xFFFC0000, 0x0020000, 2);
 		}
 
 		private static uint SetMemoryRegion(uint at, uint address, uint size, uint type)
 		{
 			CPU.Write32(at + 0, 20);      // Size
-			CPU.Write32(at + 4, address);    // base_addr_low
+			CPU.Write32(at + 4, address); // base_addr_low
 			CPU.Write32(at + 8, 0x00);    // base_addr_high
-			CPU.Write32(at + 12, size);  // length_low
+			CPU.Write32(at + 12, size);   // length_low
 			CPU.Write32(at + 16, 0x00);   // length_high
-			CPU.Write32(at + 20, type);  // type
+			CPU.Write32(at + 20, type);   // type
 			return at + 24;
 		}
 	}

@@ -32,7 +32,7 @@ namespace Mosa.Kernel.BareMetal
 
 		public void ClearPage()
 		{
-			Page.ZeroOutPage(Ptr);
+			Page.ClearPage(Ptr);
 		}
 
 		public void InsertPageBefore(IntPtr page)

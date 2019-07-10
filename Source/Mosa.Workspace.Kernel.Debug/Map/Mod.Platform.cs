@@ -18,11 +18,9 @@ namespace Mosa.Kernel.BareMetal
 			//PlatformPlug.EntryPoint();
 		}
 
-		public static IntPtr GetMemoryMapAddress()
+		public static AddressRange GetBootReservedRegion()
 		{
-			return new IntPtr(0);
-
-			//return PlatformPlug.GetMemoryMapAddress();
+			return new AddressRange(1024 * 10, 0);
 		}
 
 		public static void UpdateBootMemoryMap()

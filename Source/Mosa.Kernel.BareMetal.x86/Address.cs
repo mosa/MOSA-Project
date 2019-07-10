@@ -4,7 +4,7 @@ namespace Mosa.Kernel.BareMetal.x86
 {
 	internal static class Address
 	{
-		public const uint MemoryMap = 0x00007E00;  // 1KB [Size=1KB]
+		public const uint BootReservedStartPage = 0x00007E00; // Size=Undefined
 
 		public const uint GDTTable = 0x00B10000;  // 12MB+ [Size=1KB]
 		public const uint IDTTable = 0x00B11000;  // 12MB+ [Size=1KB]

@@ -67,10 +67,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Alignment.cs" />
-    <Compile Include="PageListNodeEntry.cs" />
-    <Compile Include="PageNodeDoubleListEntry.cs" />
+    <Compile Include="BootPageAllocator.cs" />
     <Compile Include="PageTable.cs" />
     <Compile Include="AddressRange.cs" />
+    <Compile Include="BitMap\BitMapIndexTable.cs" />
     <Compile Include="VirtualMemoryManager.cs" />
     <Compile Include="PhysicalMemoryManager.cs" />
     <Compile Include="BootMemory\BootMemoryMapTable.cs" />

@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime.Extension;
 using System;
 
 namespace Mosa.Kernel.BareMetal.BootMemory
@@ -10,7 +11,7 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 
 		public static void Initialize()
 		{
-			var entry = Platform.GetMemoryMapAddress();
+			var entry = BootPageAllocator.AllocatePage();
 
 			Map = new BootMemoryMapTable(entry)
 			{
@@ -22,13 +23,41 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 		{
 			var entry = Map.GetBootMemoryMapEntry(Map.Count);
 
-			entry.Address = address;
+			entry.StartAddress = address;
 			entry.Size = size;
 			entry.Type = type;
 
 			Map.Count += 1;
 
 			return entry;
+		}
+
+		public static uint GetBootMemoryMapEntryCount()
+		{
+			return Map.Count;
+		}
+
+		public static BootMemoryMapEntry GetBootMemoryMapEntry(uint index)
+		{
+			return Map.GetBootMemoryMapEntry(index);
+		}
+
+		public static IntPtr GetMaximumAddress()
+		{
+			var max = IntPtr.Zero;
+			var count = Map.Count;
+
+			for (uint i = 0; i < count; i++)
+			{
+				var entry = BootMemoryMap.GetBootMemoryMapEntry(i);
+
+				var endAddress = entry.EndAddress;
+
+				if (endAddress.GreaterThan(max))
+					max = endAddress;
+			}
+
+			return max;
 		}
 	}
 }

@@ -376,7 +376,7 @@ namespace Mosa.Tool.Launcher
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			Text = "MOSA Launcher v" + CompilerVersion.Version;
+			Text = "MOSA Launcher v" + CompilerVersion.VersionString;
 			tbApplicationLocations.SelectedTab = tabOptions;
 
 			foreach (var includeFile in Options.IncludeFiles)

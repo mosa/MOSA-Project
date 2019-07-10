@@ -4,11 +4,12 @@ using Mosa.Compiler.Common;
 using System;
 using System.Collections.Generic;
 
-namespace Mosa.Workspace.Kernel.Internal.Debug
+namespace Mosa.Workspace.Kernel.Internal
 {
 	public class Memory
 	{
 		public uint BlockSize = 4096;
+
 		private Dictionary<ulong, uint[]> MemoryBlocks = new Dictionary<ulong, uint[]>();
 
 		#region Private

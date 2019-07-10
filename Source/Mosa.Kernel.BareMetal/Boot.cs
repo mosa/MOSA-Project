@@ -14,6 +14,8 @@ namespace Mosa.Kernel.BareMetal
 		{
 			Platform.EntryPoint();
 
+			BootPageAllocator.Setup();
+
 			BootMemoryMap.Initialize();
 
 			Platform.UpdateBootMemoryMap();

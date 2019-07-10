@@ -95,7 +95,7 @@ namespace Mosa.Tool.GDBDebugger
 
 		private void MainForm_Load(object sender, EventArgs e)
 		{
-			Text = "MOSA GDB Debugger v" + CompilerVersion.Version;
+			Text = "MOSA GDB Debugger v" + CompilerVersion.VersionString;
 
 			dockPanel.SuspendLayout(true);
 			dockPanel.DockTopPortion = 75;

@@ -7,8 +7,8 @@
     <ProjectGuid>{FD933E22-7211-453B-BC1C-A60AE1D10829}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.Workspace.Kernel.Debug</RootNamespace>
-    <AssemblyName>Mosa.Workspace.Kernel.Debug</AssemblyName>
+    <RootNamespace>Mosa.Workspace.Kernel</RootNamespace>
+    <AssemblyName>Mosa.Workspace.Kernel</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -41,13 +41,16 @@
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Mosa.Workspace.Kernel.Debug.Program</StartupObject>
+    <StartupObject>Mosa.Workspace.Kernel.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Emulate\Multiboot.cs" />
+    <Compile Include="Emulate\Pair.cs" />
     <Compile Include="Internal\CPU.cs" />
+    <Compile Include="Internal\PageFaultException.cs" />
     <Compile Include="Internal\InvalidMemoryAccess.cs" />
     <Compile Include="Internal\Memory.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\AddressRange.cs" />
@@ -57,6 +60,7 @@
     <Compile Include="Mosa.Kernel.BareMetal\BootMemory\BootMemoryMapEntry.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\BootMemory\BootMemoryMapTable.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\BootMemory\BootMemoryMapType.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal\BootPageAllocator.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\Extension\IntPtrExtension.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\Multiboot.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\MultibootSpecification\MultibootV1.cs" />
@@ -65,9 +69,10 @@
     <Compile Include="Mosa.Kernel.BareMetal\Page.cs" />
     <Compile Include="Map\Mod.Platform.cs" />
     <Compile Include="Map\Mod.Intrinsic.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal\PhysicalMemoryManager.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal\VirtualMemoryManager.cs" />
     <Compile Include="Mosa.Runtime\Extension\IntPtrExtension.cs" />
     <Compile Include="Mosa.Runtime\Plug\PlugAttribute.cs" />
-    <Compile Include="Mosa.Kernel.BareMetal\PageNodeDoubleListEntry.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\PageTable.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

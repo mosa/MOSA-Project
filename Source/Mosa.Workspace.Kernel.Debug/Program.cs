@@ -1,18 +1,14 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Exceptions;
-using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.MosaTypeSystem;
-using System;
-using System.Diagnostics;
+using Mosa.Workspace.Kernel.Emulate;
 
-namespace Mosa.Workspace.Kernel.Debug
+namespace Mosa.Workspace.Kernel
 {
 	internal static class Program
 	{
 		private static void Main()
 		{
+			Multiboot.Setup(128 * 1024 * 1024); // 128 MB
 		}
 	}
 }
