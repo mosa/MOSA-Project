@@ -20,7 +20,8 @@ namespace Mosa.Kernel.BareMetal
 
 		public static AddressRange GetBootReservedRegion()
 		{
-			return new AddressRange(1024 * 10, 0);
+			// Approximately 120 x 4K pages
+			return new AddressRange(0x00007E00, 0x78000);
 		}
 
 		public static void UpdateBootMemoryMap()

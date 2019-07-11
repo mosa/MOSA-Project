@@ -157,5 +157,10 @@ namespace Mosa.Kernel.BareMetal.Extension
 		{
 			return new IntPtr((long)Alignment.AlignDown(address.ToInt64(), align));
 		}
+
+		public static IntPtr AlignUp(this IntPtr address, uint align)
+		{
+			return new IntPtr((long)Alignment.AlignUp(address.ToInt64(), align));
+		}
 	}
 }

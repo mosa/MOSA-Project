@@ -15,14 +15,14 @@ namespace Mosa.Kernel.BareMetal
 			Page.ClearPage(Ptr);
 		}
 
-		public void AddBitMapEntry(IntPtr page, int index)
+		public void AddBitMapEntry(uint index, IntPtr page)
 		{
 			Ptr.StorePointer(index * IntPtr.Size, page);
 		}
 
-		public IntPtr GetBitMapEntry(int index)
+		public IntPtr GetBitMapEntry(uint index)
 		{
-			return Ptr.LoadPointer(index * IntPtr.Size);
+			return Ptr.LoadPointer((uint)(index * IntPtr.Size));
 		}
 	}
 }

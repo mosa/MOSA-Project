@@ -15,7 +15,7 @@ namespace Mosa.Kernel.BareMetal
 			var start = Platform.GetBootReservedRegion();
 
 			BootReserveStartPage = start.Address;
-			BootReserveSize = (uint)start.Size;
+			BootReserveSize = (uint)start.Size / Page.Size;
 
 			UsedPages = 0;
 		}

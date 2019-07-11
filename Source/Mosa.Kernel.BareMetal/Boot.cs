@@ -20,27 +20,9 @@ namespace Mosa.Kernel.BareMetal
 
 			Platform.UpdateBootMemoryMap();
 
-			ImportMultibootMemoryMap();
-		}
+			BootMemoryMap.ImportMultibootV1MemoryMap();
 
-		private static void ImportMultibootMemoryMap()
-		{
-			if (!Multiboot.IsAvailable)
-				return;
-
-			if (Multiboot.MultibootV1.MemoryMapStart.IsNull())
-				return;
-
-			var memoryMapEnd = Multiboot.MultibootV1.MemoryMapStart + (int)Multiboot.MultibootV1.MemoryMapLength;
-
-			var entry = new MultibootV1MemoryMapEntry(Multiboot.MultibootV1.MemoryMapStart);
-
-			while (entry.IsAvailable)
-			{
-				BootMemoryMap.SetMemoryMap(entry.BaseAddr, entry.Length, entry.Type == 1 ? BootMemoryMapType.Available : BootMemoryMapType.Reserved);
-
-				entry = entry.GetNext(memoryMapEnd);
-			}
+			PhysicalMemoryManager.Setup();
 		}
 	}
 }
