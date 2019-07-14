@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Kernel.BareMetal.MultibootSpecification;
 using System;
 
 namespace Mosa.Kernel.BareMetal
@@ -15,7 +16,7 @@ namespace Mosa.Kernel.BareMetal
 
 		public static void EntryPoint()
 		{
-			//PlatformPlug.EntryPoint();
+			Multiboot.Setup(new IntPtr(Mosa.Workspace.Kernel.Emulate.Multiboot.MultibootStructure), MultibootV1.MultibootMagic);
 		}
 
 		public static AddressRange GetBootReservedRegion()

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Workspace.Kernel.Internal;
-using System.Collections.Generic;
 
 namespace Mosa.Workspace.Kernel.Emulate
 {
@@ -28,7 +27,7 @@ namespace Mosa.Workspace.Kernel.Emulate
 			CPU.Write32(multiboot + 20, 0x0);    // mods_count
 			CPU.Write32(multiboot + 24, 0x0);    // mods_addr
 			CPU.Write32(multiboot + 28, 0x0);    // syms
-			CPU.Write32(multiboot + 44, 1 * 24); // mmap_length
+			CPU.Write32(multiboot + 44, 6 * 24); // mmap_length
 			CPU.Write32(multiboot + 48, multiboot + 96); // mmap_addr
 			CPU.Write32(multiboot + 52, 0x0);    // drives_length
 			CPU.Write32(multiboot + 56, 0x0);    // drives_addr

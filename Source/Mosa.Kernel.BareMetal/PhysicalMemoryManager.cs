@@ -37,37 +37,76 @@ namespace Mosa.Kernel.BareMetal
 					continue;
 
 				var start = Alignment.AlignUp(entry.StartAddress.ToInt64(), Page.Size);
-				var pages = ((ulong)entry.EndAddress.ToInt64() + 1 - start) / Page.Size;
+				var end = Alignment.AlignDown(entry.EndAddress.ToInt64() + 1, Page.Size);
+
+				var pages = (end - start) / Page.Size;
 
 				if (pages <= 0)
 					continue;
 
 				var startPage = start / Page.Shift;
 
-				MarkPagesAvailable(startPage, pages);
+				SetPageBitMapEntry(startPage, pages, true);
 			}
 		}
 
-		private static void MarkPagesAvailable(ulong start, ulong count)
+		private static void SetPageBitMapEntry(ulong start, ulong count, bool set)
 		{
-			// slow trivial implementation
+			var indexShift = (IntPtr.Size == 4) ? 10 : 9;
+			var maskOffIndex = (uint)((1 << (indexShift + 1)) - 1);
 
-			var end = start + count;
+			var at = start;
 
-			for (var page = start; page < end; page++)
+			while (count > 0)
 			{
-				// find table index
-				var index = page >> ((int)Page.Shift + 4);
+				var index = (int)(at >> indexShift);
 
 				var bitmap = BitMapIndexTable.GetBitMapEntry((uint)index);
 
-				var offset = page >> ((int)Page.Shift) & Page.Shift;
+				if (at % 64 == 0 && count >= 64 && IntPtr.Size == 8)
+				{
+					// 32 bit update
+					var offset = (uint)((index & maskOffIndex) >> 6);
 
-				byte value = bitmap.Load8((uint)offset);
+					bitmap.Store64(offset, set ? ulong.MaxValue : 0);
 
-				var bit = index & 0b1111;
+					at += 64;
+					count -= 64;
+				}
+				else if (at % 32 == 0 && count >= 32)
+				{
+					// 32 bit update
+					var offset = (uint)((index & maskOffIndex) >> 5);
 
-				// TODO
+					bitmap.Store32(offset, set ? uint.MaxValue : 0);
+
+					at += 32;
+					count -= 32;
+				}
+				else if (at % 8 == 0 && count >= 8)
+				{
+					// 8 bit update
+					var offset = (uint)((index & maskOffIndex) >> 5);
+
+					bitmap.Store8(offset, set ? byte.MaxValue : (byte)0);
+
+					at += 8;
+					count -= 8;
+				}
+				else
+				{
+					// one bit update
+					var offset = (uint)((index & maskOffIndex) >> 3);
+					var value = bitmap.Load8(offset);
+
+					var bit = (byte)(1 << index & 0b111);
+					value = (byte)(set ? value | bit : value & bit);
+
+					bitmap.Store8(offset, value);
+
+					at += 1;
+					count -= 1;
+				}
 			}
 		}
 

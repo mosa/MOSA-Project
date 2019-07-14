@@ -40,6 +40,8 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 			set { Entry.Store8(IntPtr.Size, (byte)value); }
 		}
 
+		public bool IsAvailable { get { return Type == BootMemoryMapType.Available; } }
+
 		public static uint EntrySize = (uint)IntPtr.Size + sizeof(ulong) + (sizeof(byte));
 	}
 }

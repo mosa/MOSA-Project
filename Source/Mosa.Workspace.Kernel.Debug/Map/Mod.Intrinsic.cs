@@ -209,7 +209,7 @@ namespace Mosa.Runtime
 		public static void Store64(IntPtr address, IntPtr value)
 		{
 			if (CPU.Is32Bit)
-				CPU.Write64((ulong)address.ToInt64(), (uint)value.ToInt32());
+				CPU.Write64((ulong)address.ToInt64(), (uint)value.ToInt64());
 			else
 				CPU.Write64((ulong)address.ToInt64(), (ulong)value.ToInt64());
 		}
@@ -326,7 +326,7 @@ namespace Mosa.Runtime
 		public static void Store(IntPtr address, uint offset, IntPtr value)
 		{
 			if (CPU.Is32Bit)
-				CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value.ToInt32());
+				CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value.ToInt64());
 			else
 				CPU.Write64((ulong)(address.ToInt64() + offset), (ulong)value.ToInt64());
 		}
@@ -334,7 +334,7 @@ namespace Mosa.Runtime
 		public static void Store(IntPtr address, int offset, IntPtr value)
 		{
 			if (CPU.Is32Bit)
-				CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value.ToInt32());
+				CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value.ToInt64());
 			else
 				CPU.Write64((ulong)(address.ToInt64() + offset), (ulong)value.ToInt64());
 		}
@@ -342,7 +342,7 @@ namespace Mosa.Runtime
 		public static void Store(IntPtr address, ulong offset, IntPtr value)
 		{
 			if (CPU.Is32Bit)
-				CPU.Write32((ulong)address.ToInt64() + offset, (uint)value.ToInt32());
+				CPU.Write32((ulong)address.ToInt64() + offset, (uint)value.ToInt64());
 			else
 				CPU.Write64((ulong)address.ToInt64() + offset, (ulong)value.ToInt64());
 		}
@@ -350,7 +350,7 @@ namespace Mosa.Runtime
 		public static void Store(IntPtr address, long offset, IntPtr value)
 		{
 			if (CPU.Is32Bit)
-				CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value.ToInt32());
+				CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value.ToInt64());
 			else
 				CPU.Write64((ulong)(address.ToInt64() + offset), (ulong)value.ToInt64());
 		}
@@ -358,7 +358,7 @@ namespace Mosa.Runtime
 		public static void StorePointer(IntPtr address, IntPtr value)
 		{
 			if (CPU.Is32Bit)
-				CPU.Write32((ulong)address.ToInt64(), (uint)value.ToInt32());
+				CPU.Write32((ulong)address.ToInt64(), (uint)value.ToInt64());
 			else
 				CPU.Write64((ulong)address.ToInt64(), (ulong)value.ToInt64());
 		}
@@ -366,7 +366,7 @@ namespace Mosa.Runtime
 		public static void StorePointer(IntPtr address, uint offset, IntPtr value)
 		{
 			if (CPU.Is32Bit)
-				CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value.ToInt32());
+				CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value.ToInt64());
 			else
 				CPU.Write64((ulong)(address.ToInt64() + offset), (ulong)value.ToInt64());
 		}
@@ -374,7 +374,7 @@ namespace Mosa.Runtime
 		public static void StorePointer(IntPtr address, int offset, IntPtr value)
 		{
 			if (CPU.Is32Bit)
-				CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value.ToInt32());
+				CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value.ToInt64());
 			else
 				CPU.Write64((ulong)(address.ToInt64() + offset), (ulong)value.ToInt64());
 		}
@@ -382,7 +382,7 @@ namespace Mosa.Runtime
 		public static void StorePointer(IntPtr address, ulong offset, IntPtr value)
 		{
 			if (CPU.Is32Bit)
-				CPU.Write32((ulong)address.ToInt64() + offset, (uint)value.ToInt32());
+				CPU.Write32((ulong)address.ToInt64() + offset, (uint)value.ToInt64());
 			else
 				CPU.Write64((ulong)address.ToInt64() + offset, (ulong)value.ToInt64());
 		}
@@ -390,7 +390,7 @@ namespace Mosa.Runtime
 		public static void StorePointer(IntPtr address, long offset, IntPtr value)
 		{
 			if (CPU.Is32Bit)
-				CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value.ToInt32());
+				CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value.ToInt64());
 			else
 				CPU.Write64((ulong)(address.ToInt64() + offset), (ulong)value.ToInt64());
 		}

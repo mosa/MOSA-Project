@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Workspace.Kernel.Emulate;
+using Mosa.Kernel.BareMetal;
 
 namespace Mosa.Workspace.Kernel
 {
@@ -8,7 +8,11 @@ namespace Mosa.Workspace.Kernel
 	{
 		private static void Main()
 		{
-			Multiboot.Setup(128 * 1024 * 1024); // 128 MB
+			Emulate.Multiboot.Setup(128 * 1024 * 1024); // 128 MB
+
+			Boot.EntryPoint();
+
+			return;
 		}
 	}
 }

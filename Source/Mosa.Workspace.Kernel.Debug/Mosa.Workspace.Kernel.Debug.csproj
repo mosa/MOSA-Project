@@ -55,6 +55,7 @@
     <Compile Include="Internal\Memory.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\AddressRange.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\Alignment.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal\BitMap\BitMapIndexTable.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\Boot.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\BootMemory\BootMemoryMap.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\BootMemory\BootMemoryMapEntry.cs" />

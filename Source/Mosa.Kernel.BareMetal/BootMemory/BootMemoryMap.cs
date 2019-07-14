@@ -35,7 +35,7 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 
 			while (entry.IsAvailable)
 			{
-				BootMemoryMap.SetMemoryMap(entry.BaseAddr, entry.Length, entry.Type == 1 ? BootMemoryMapType.Available : BootMemoryMapType.Reserved);
+				SetMemoryMap(entry.BaseAddr, entry.Length, entry.Type == 1 ? BootMemoryMapType.Available : BootMemoryMapType.Reserved);
 
 				entry = entry.GetNext(memoryMapEnd);
 			}
@@ -71,7 +71,7 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 
 			for (uint i = 0; i < count; i++)
 			{
-				var entry = BootMemoryMap.GetBootMemoryMapEntry(i);
+				var entry = GetBootMemoryMapEntry(i);
 
 				var endAddress = entry.EndAddress;
 
