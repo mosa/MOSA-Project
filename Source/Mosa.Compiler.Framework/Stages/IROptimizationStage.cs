@@ -1402,8 +1402,6 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			AddOperandUsageToWorkList(node);
-			AddOperandUsageToWorkList(node.Operand1.Definitions[0]);
-			AddOperandUsageToWorkList(node.Operand2.Definitions[0]);
 
 			trace?.Log("*** SimplifyCompareBranch");
 			trace?.Log($"BEFORE:\t{node}");
