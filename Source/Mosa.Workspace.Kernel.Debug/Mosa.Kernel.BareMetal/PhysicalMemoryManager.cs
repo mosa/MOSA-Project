@@ -46,11 +46,11 @@ namespace Mosa.Kernel.BareMetal
 
 				var startPage = start / Page.Shift;
 
-				SetPageBitMapEntry(startPage, pages, true);
+				SetPageBitMapEntry((uint)startPage, (uint)pages, true);
 			}
 		}
 
-		private static void SetPageBitMapEntry(ulong start, ulong count, bool set)
+		private static void SetPageBitMapEntry(uint start, uint count, bool set)
 		{
 			var indexShift = (IntPtr.Size == 4) ? 10 : 9;
 			var maskOffIndex = (uint)((1 << (indexShift + 1)) - 1);
@@ -63,9 +63,9 @@ namespace Mosa.Kernel.BareMetal
 
 				var bitmap = BitMapIndexTable.GetBitMapEntry((uint)index);
 
-				if (at % 64 == 0 && count >= 64 && IntPtr.Size == 8)
+				if (at % 64 == 0 && count >= 64)
 				{
-					// 32 bit update
+					// 64 bit update
 					var offset = (uint)((index & maskOffIndex) >> 6);
 
 					bitmap.Store64(offset, set ? ulong.MaxValue : 0);

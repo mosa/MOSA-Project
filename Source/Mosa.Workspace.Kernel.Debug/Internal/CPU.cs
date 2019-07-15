@@ -26,7 +26,7 @@ namespace Mosa.Workspace.Kernel.Internal
 			if (IsIntel && Is32Bit)
 			{
 				uint pd = Memory.Read32(IntelCR3Register + ((address >> 22) * 4));
-				uint pt = Memory.Read32((pd & 0xFFFFF000) + ((address >> 12 & 0x03FF) * 4));
+				uint pt = Memory.Read32((pd & 0xFFFFF000) + (((address >> 12) & 0x03FF) * 4));
 
 				if ((pt & 0x1) == 0)
 				{
