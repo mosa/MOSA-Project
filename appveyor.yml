@@ -78,8 +78,8 @@ for:
 
     deploy:
       - provider: GitHub
-        release: MOSA Project - Development Build v{version}
-        tag: v{version}-dev
+        release: MOSA Project - Development Build v$(APPVEYOR_BUILD_VERSION)
+        tag: v$(APPVEYOR_BUILD_VERSION)-dev
         description: 'Build Version - v$(APPVEYOR_BUILD_VERSION) at $(APPVEYOR_REPO_COMMIT_TIMESTAMP)'
         auth_token:
           secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
@@ -91,7 +91,7 @@ for:
           branch: master
 
       - provider: GitHub
-        tag: Stable
+        tag: stable
         release: MOSA Project - Stable Build
         description: 'Build Version - v$(APPVEYOR_BUILD_VERSION) at $(APPVEYOR_REPO_COMMIT_TIMESTAMP)'
         auth_token:
