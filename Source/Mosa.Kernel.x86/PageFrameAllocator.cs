@@ -56,7 +56,6 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Adds the free memory.
 		/// </summary>
-		/// <param name="cnt">The count.</param>
 		/// <param name="start">The start.</param>
 		/// <param name="size">The size.</param>
 		private static void AddFreeMemory(uint start, uint size)
