@@ -1,5 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Reflection;
+using System;
+
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
@@ -7,13 +10,24 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public static class CompilerVersion
 	{
-		public static int Major = 1;
-		public static int Minor = 9;
-		public static int Build = 7;
+		private static Version Version = GetVersion();
 
-		public static string Version
+		public static Version GetVersion()
 		{
-			get { return $"{Major}.{Minor}.{Build}"; }
+			var version = Assembly.GetExecutingAssembly().GetName().Version;
+
+			if (version.Build == 0)
+			{
+				// Revision and build number are reversed by design
+				version = new Version(1, 9, 0, 7);
+			}
+
+			return version;
+		}
+
+		public static string VersionString
+		{
+			get { return $"{Version.Major}.{Version.Minor}.{Version.Revision}.{Version.Build}"; }
 		}
 	}
 }

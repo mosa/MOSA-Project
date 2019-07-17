@@ -5,7 +5,7 @@ using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.Utility.GUI.Common
+namespace Mosa.Tool.Explorer
 {
 	public class MethodStore
 	{
@@ -32,36 +32,55 @@ namespace Mosa.Utility.GUI.Common
 			}
 		}
 
-		public void SetInstructionTraceInformation(MosaMethod method, string stage, List<string> lines)
+		public void SetInstructionTraceInformation(MosaMethod method, string stage, List<string> lines, int version)
 		{
 			var methodData = GetMethodData(method, true);
 
 			lock (methodData)
 			{
+				ClearMethodDataOnNewVersion(version, methodData);
+
 				methodData.OrderedStageNames.AddIfNew(stage);
 				methodData.InstructionLogs.Remove(stage);
 				methodData.InstructionLogs.Add(stage, lines);
 			}
 		}
 
-		public void SetDebugStageInformation(MosaMethod method, string stage, List<string> lines)
+		private static void ClearMethodDataOnNewVersion(int version, MethodData methodData)
+		{
+			if (methodData.Version != version)
+			{
+				methodData.InstructionLogs.Clear();
+				methodData.OrderedDebugStageNames.Clear();
+				methodData.OrderedStageNames.Clear();
+				methodData.CounterData.Clear();
+				methodData.DebugLogs.Clear();
+				methodData.Version = version;
+			}
+		}
+
+		public void SetDebugStageInformation(MosaMethod method, string stage, List<string> lines, int version)
 		{
 			var methodData = GetMethodData(method, true);
 
 			lock (methodData)
 			{
+				ClearMethodDataOnNewVersion(version, methodData);
+
 				methodData.OrderedDebugStageNames.AddIfNew(stage);
 				methodData.DebugLogs.Remove(stage);
 				methodData.DebugLogs.Add(stage, lines);
 			}
 		}
 
-		public void SetMethodCounterInformation(MosaMethod method, List<string> lines)
+		public void SetMethodCounterInformation(MosaMethod method, List<string> lines, int version)
 		{
 			var methodData = GetMethodData(method, true);
 
 			lock (methodData)
 			{
+				ClearMethodDataOnNewVersion(version, methodData);
+
 				methodData.CounterData = lines;
 			}
 		}

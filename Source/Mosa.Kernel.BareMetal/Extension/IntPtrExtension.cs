@@ -62,6 +62,11 @@ namespace Mosa.Kernel.BareMetal.Extension
 			return Intrinsic.LoadPointer(address, offset);
 		}
 
+		public static IntPtr LoadPointer(this IntPtr address, int offset)
+		{
+			return Intrinsic.LoadPointer(address, offset);
+		}
+
 		public static void Store16(this IntPtr address, uint offset, ushort value)
 		{
 			Intrinsic.Store16(address, offset, value);
@@ -133,9 +138,29 @@ namespace Mosa.Kernel.BareMetal.Extension
 			Intrinsic.StorePointer(address, offset, value);
 		}
 
+		public static void StorePointer(this IntPtr address, int offset, IntPtr value)
+		{
+			Intrinsic.StorePointer(address, offset, value);
+		}
+
+		public static void StorePointer(this IntPtr address, long offset, IntPtr value)
+		{
+			Intrinsic.StorePointer(address, offset, value);
+		}
+
+		public static void StorePointer(this IntPtr address, ulong offset, IntPtr value)
+		{
+			Intrinsic.StorePointer(address, offset, value);
+		}
+
 		public static IntPtr AlignDown(this IntPtr address, uint align)
 		{
 			return new IntPtr((long)Alignment.AlignDown(address.ToInt64(), align));
+		}
+
+		public static IntPtr AlignUp(this IntPtr address, uint align)
+		{
+			return new IntPtr((long)Alignment.AlignUp(address.ToInt64(), align));
 		}
 	}
 }

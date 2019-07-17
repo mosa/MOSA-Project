@@ -2,10 +2,11 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Utility.GUI.Common
+namespace Mosa.Tool.Explorer
 {
 	public class MethodData
 	{
+		public int Version;
 		public List<string> OrderedStageNames = new List<string>();
 		public List<string> OrderedDebugStageNames = new List<string>();
 		public Dictionary<string, List<string>> InstructionLogs = new Dictionary<string, List<string>>();

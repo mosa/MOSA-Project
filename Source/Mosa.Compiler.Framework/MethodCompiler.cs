@@ -391,7 +391,7 @@ namespace Mosa.Compiler.Framework
 
 			if (Compiler.CompilerOptions.EnableStatistics)
 			{
-				var log = new TraceLog(TraceType.MethodCounters, Method, string.Empty);
+				var log = new TraceLog(TraceType.MethodCounters, Method, string.Empty, MethodData.Version);
 				log.Log(MethodData.Counters.Export());
 				Trace.PostTraceLog(log);
 			}
@@ -430,7 +430,7 @@ namespace Mosa.Compiler.Framework
 				MethodData.Counters.NewCountSkipLock("ExecutionTime.StageStart.Ticks", (int)startTick);
 				MethodData.Counters.NewCountSkipLock("ExecutionTime.Total.Ticks", (int)lastTick);
 
-				var executionTimeLog = new TraceLog(TraceType.MethodDebug, Method, "Execution Time/Ticks");
+				var executionTimeLog = new TraceLog(TraceType.MethodDebug, Method, "Execution Time/Ticks", MethodData.Version);
 
 				long previousTick = startTick;
 				var totalTick = lastTick - startTick;
@@ -475,7 +475,7 @@ namespace Mosa.Compiler.Framework
 
 			if (Trace.IsTraceable(5))
 			{
-				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-Plugged Method");
+				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-Plugged Method", MethodData.Version);
 				traceLog?.Log($"Plugged by {plugMethod.FullName}");
 				Trace.PostTraceLog(traceLog);
 			}
@@ -497,7 +497,7 @@ namespace Mosa.Compiler.Framework
 
 			if (Trace.IsTraceable(5))
 			{
-				var traceLog = new TraceLog(TraceType.MethodDebug, Method, "XX-Delegate Patched");
+				var traceLog = new TraceLog(TraceType.MethodDebug, Method, "XX-Delegate Patched", MethodData.Version);
 				traceLog?.Log("This delegate method was patched");
 				Trace.PostTraceLog(traceLog);
 			}
@@ -522,7 +522,7 @@ namespace Mosa.Compiler.Framework
 
 			if (Trace.IsTraceable(5))
 			{
-				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-External Method");
+				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-External Method", MethodData.Version);
 				traceLog?.Log($"This method is external linked: {Method.ExternMethodName}");
 				Trace.PostTraceLog(traceLog);
 			}
@@ -539,7 +539,7 @@ namespace Mosa.Compiler.Framework
 
 			if (Trace.IsTraceable(5))
 			{
-				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-External Method");
+				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-External Method", MethodData.Version);
 				traceLog?.Log($"This method is an internal method");
 				Trace.PostTraceLog(traceLog);
 			}

@@ -39,8 +39,6 @@ namespace Mosa.Kernel.x86
 			if (!Multiboot.IsMultibootAvailable)
 				return;
 
-			uint cnt = 0;
-
 			for (uint index = 0; index < Multiboot.MemoryMapCount; index++)
 			{
 				byte value = Multiboot.GetMemoryMapType(index);
@@ -50,7 +48,7 @@ namespace Mosa.Kernel.x86
 					uint start = Multiboot.GetMemoryMapBase(index);
 					uint size = Multiboot.GetMemoryMapLength(index);
 
-					AddFreeMemory(cnt++, start, size);
+					AddFreeMemory(start, size);
 				}
 			}
 		}
@@ -58,10 +56,9 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Adds the free memory.
 		/// </summary>
-		/// <param name="cnt">The count.</param>
 		/// <param name="start">The start.</param>
 		/// <param name="size">The size.</param>
-		private static void AddFreeMemory(uint cnt, uint start, uint size)
+		private static void AddFreeMemory(uint start, uint size)
 		{
 			if ((start > Address.MaximumMemory) || (start + size < Address.ReserveMemory))
 				return;

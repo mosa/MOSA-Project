@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.BareMetal.BootMemory;
+using Mosa.Kernel.BareMetal;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
 using System;
@@ -26,10 +27,10 @@ namespace Mosa.Kernel.BareMetal.x86
 			SSE.Setup();
 		}
 
-		[Plug("Mosa.Kernel.BareMetal.Platform::GetMemoryMapAddress")]
-		public static IntPtr GetMemoryMapAddress()
+		[Plug("Mosa.Kernel.BareMetal.Platform::GetBootReservedRegion")]
+		public static AddressRange GetBootReservedRegion()
 		{
-			return new IntPtr(Address.GCInitialMemory);
+			return new AddressRange(Address.BootReservedStartPage, Page.Size);
 		}
 
 		[Plug("Mosa.Kernel.BareMetal.Platform::UpdateBootMemoryMap")]

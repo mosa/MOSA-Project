@@ -18,6 +18,8 @@ namespace Mosa.Compiler.Framework.Trace
 
 		public string Section { get; }
 
+		public int Version { get; }
+
 		public List<string> Lines { get; }
 
 		private TraceLog(TraceType type)
@@ -26,17 +28,19 @@ namespace Mosa.Compiler.Framework.Trace
 			Lines = new List<string>();
 		}
 
-		public TraceLog(TraceType type, MosaMethod method, string stage)
+		public TraceLog(TraceType type, MosaMethod method, string stage, int version = 0)
 			: this(type)
 		{
 			Stage = stage;
 			Method = method;
+			Version = version;
 		}
 
-		public TraceLog(TraceType type, MosaMethod method, string stage, string section)
+		public TraceLog(TraceType type, MosaMethod method, string stage, string section, int version = 0)
 			: this(type, method, stage)
 		{
 			Section = section;
+			Version = version;
 		}
 
 		public void Log()

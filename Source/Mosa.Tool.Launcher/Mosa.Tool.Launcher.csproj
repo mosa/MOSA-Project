@@ -113,10 +113,6 @@
       <Project>{65f7691a-b355-4d98-bb97-0b19f13e2190}</Project>
       <Name>Mosa.Utility.BootImage</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Utility.GUI.Common\Mosa.Utility.GUI.Common.csproj">
-      <Project>{5a813793-78e2-413c-aa05-fcdd12b7db04}</Project>
-      <Name>Mosa.Utility.GUI.Common</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj">
       <Project>{b69c2f31-5161-47aa-9fd3-2f2f2bccf659}</Project>
       <Name>Mosa.Utility.Launcher</Name>
