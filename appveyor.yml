@@ -96,7 +96,7 @@ for:
         description: 'Build Version - v$(APPVEYOR_BUILD_VERSION) at $(APPVEYOR_REPO_COMMIT_TIMESTAMP)'
         auth_token:
           secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
-        artifact: *.exe
+        artifact: bin\*.exe
         draft: false
         prerelease: false
         force_update: true
