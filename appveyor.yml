@@ -81,7 +81,7 @@ for:
       - provider: GitHub
         release: MOSA Project - Development Build v$(APPVEYOR_BUILD_VERSION)
         tag: v$(APPVEYOR_BUILD_VERSION)-dev
-        description: 'Build Version - v$(APPVEYOR_BUILD_VERSION) at $(APPVEYOR_REPO_COMMIT_TIMESTAMP)'
+        description: 'Development Version - v$(APPVEYOR_BUILD_VERSION)'
         auth_token:
           secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
         artifact: installer
@@ -94,10 +94,10 @@ for:
       - provider: GitHub
         tag: v$(APPVEYOR_BUILD_VERSION)
         release: MOSA Project v$(APPVEYOR_BUILD_VERSION)
-        description: 'Build Version - v$(APPVEYOR_BUILD_VERSION) at $(APPVEYOR_REPO_COMMIT_TIMESTAMP)'
+        description: 'Stable Version - v$(APPVEYOR_BUILD_VERSION)'
         auth_token:
           secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
-        artifact: bin\MOSA-Installer-*.exe
+        artifact: installer
         draft: false
         prerelease: false
         force_update: true
