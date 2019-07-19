@@ -8,6 +8,9 @@ namespace Mosa.Kernel.BareMetal.x64
 {
 	public static class PlatformPlug
 	{
+		private const uint BootReservedAddress = 0x00007E00; // Size=Undefined
+		private const uint GCInitialAddress = 0x03000000;  // 48MB [Size=16MB]
+
 		[Plug("Mosa.Kernel.BareMetal.Platform::GetPageShift")]
 		public static uint GetPageShift()
 		{
@@ -17,16 +20,18 @@ namespace Mosa.Kernel.BareMetal.x64
 		[Plug("Mosa.Kernel.BareMetal.Platform::EntryPoint")]
 		public static void EntryPoint()
 		{
-			// TODO: Get EAX and EBX
-			Multiboot.Setup(IntPtr.Zero, 0);
+			//var eax = Native.GetMultibootEAX();
+			//var ebx = Native.GetMultibootEBX();
 
-			// TODO: SSE
+			//Multiboot.Setup(new IntPtr(eax), ebx);
+
+			//SSE.Setup();
 		}
 
-		[Plug("Mosa.Kernel.BareMetal.Platform::GetMemoryMapAddress")]
-		public static IntPtr GetMemoryMapAddress()
+		[Plug("Mosa.Kernel.BareMetal.Platform::GetBootReservedRegion")]
+		public static AddressRange GetBootReservedRegion()
 		{
-			return new IntPtr(0x00007E00);
+			return new AddressRange(BootReservedAddress, Page.Size);
 		}
 
 		[Plug("Mosa.Kernel.BareMetal.Platform::UpdateBootMemoryMap")]
@@ -39,7 +44,37 @@ namespace Mosa.Kernel.BareMetal.x64
 		[Plug("Mosa.Kernel.BareMetal.Platform::GetInitialGCMemoryPool")]
 		public static AddressRange GetInitialGCMemoryPool()
 		{
-			return new AddressRange(0x03000000, 16 * 1024 * 1024); // 16MB @ 48MB
+			return new AddressRange(GCInitialAddress, 16 * 1024 * 1024); // 16MB @ 48MB
+		}
+
+		[Plug("Mosa.Kernel.BareMetal.Platform::PageTableSetup")]
+		public static void PageTableSetup()
+		{
+			//PageTable.Setup();
+		}
+
+		[Plug("Mosa.Kernel.BareMetal.Platform::PageTableInitialize")]
+		public static void PageTableInitialize()
+		{
+			//PageTable.Initialize();
+		}
+
+		[Plug("Mosa.Kernel.BareMetal.Platform::PageTableEnable")]
+		public static void PageTableEnable()
+		{
+			//PageTable.Enable();
+		}
+
+		[Plug("Mosa.Kernel.BareMetal.Platform::PageTableMapVirtualAddressToPhysical")]
+		public static void PageTableMapVirtualAddressToPhysical(uint virtualAddress, uint physicalAddress, bool present = true)
+		{
+			PageTable.MapVirtualAddressToPhysical(virtualAddress, physicalAddress, present);
+		}
+
+		[Plug("Mosa.Kernel.BareMetal.Platform::PageTableGetPhysicalAddressFromVirtual")]
+		public static IntPtr PageTableGetPhysicalAddressFromVirtual(IntPtr virtualAddress)
+		{
+			return PageTable.GetPhysicalAddressFromVirtual(virtualAddress);
 		}
 	}
 }

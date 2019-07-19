@@ -22,7 +22,11 @@ namespace Mosa.Kernel.BareMetal
 
 			BootMemoryMap.ImportMultibootV1MemoryMap();
 
-			PhysicalMemoryManager.Setup();
+			PhysicalPageAllocator.Setup();
+
+			// TODO: SinglePageAllocator --- allocates single pages only
+
+			PageTable.Setup();
 		}
 	}
 }

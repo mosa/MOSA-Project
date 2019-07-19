@@ -70,7 +70,7 @@
     <Compile Include="Mosa.Kernel.BareMetal\Page.cs" />
     <Compile Include="Map\Mod.Platform.cs" />
     <Compile Include="Map\Mod.Intrinsic.cs" />
-    <Compile Include="Mosa.Kernel.BareMetal\PhysicalMemoryManager.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal\PhysicalPageAllocator.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\VirtualMemoryManager.cs" />
     <Compile Include="Mosa.Runtime\Extension\IntPtrExtension.cs" />
     <Compile Include="Mosa.Runtime\Plug\PlugAttribute.cs" />

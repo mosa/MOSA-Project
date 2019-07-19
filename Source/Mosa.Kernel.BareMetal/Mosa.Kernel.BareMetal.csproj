@@ -72,7 +72,7 @@
     <Compile Include="AddressRange.cs" />
     <Compile Include="BitMap\BitMapIndexTable.cs" />
     <Compile Include="VirtualMemoryManager.cs" />
-    <Compile Include="PhysicalMemoryManager.cs" />
+    <Compile Include="PhysicalPageAllocator.cs" />
     <Compile Include="BootMemory\BootMemoryMapTable.cs" />
     <Compile Include="BootMemory\BootMemoryMapType.cs" />
     <Compile Include="Extension\IntPtrExtension.cs" />
