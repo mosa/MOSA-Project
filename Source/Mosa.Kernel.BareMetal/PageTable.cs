@@ -17,6 +17,8 @@ namespace Mosa.Kernel.BareMetal
 
 			// Unmap the first page for null pointer exceptions
 			MapVirtualAddressToPhysical(0x0, 0x0, false);
+
+			Platform.PageTableEnable();
 		}
 
 		/// <summary>

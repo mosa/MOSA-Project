@@ -14,15 +14,19 @@ namespace Mosa.Kernel.BareMetal.x86
 	{
 		public static IntPtr PageDirectory;
 		public static IntPtr PageTables;
+		public static GDTTable GDTTable;
 
 		public static void Setup()
 		{
-			PageDirectory = PhysicalPageAllocator.ReservePages(1);
+			GDTTable = new GDTTable(PhysicalPageAllocator.ReservePage());
+			PageDirectory = PhysicalPageAllocator.ReservePage();
 			PageTables = PhysicalPageAllocator.ReservePages(Page.Size * 1024);
 		}
 
 		public static void Initialize()
 		{
+			GDTTable.Setup();
+
 			// Setup Page Directory
 			for (uint index = 0; index < 1024; index++)
 			{
@@ -38,6 +42,8 @@ namespace Mosa.Kernel.BareMetal.x86
 
 		public static void Enable()
 		{
+			GDTTable.Enable();
+
 			// Set CR3 register on processor - sets page directory
 			Native.SetCR3((uint)PageDirectory.ToInt32());
 
@@ -55,7 +61,9 @@ namespace Mosa.Kernel.BareMetal.x86
 		public static IntPtr GetPhysicalAddressFromVirtual(IntPtr virtualAddress)
 		{
 			//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
-			var offset = (((uint)virtualAddress.ToInt32() & 0xFFFFF000u) >> 10) + ((uint)virtualAddress.ToInt32() & 0xFFFu);
+
+			var address = (uint)virtualAddress.ToInt32();
+			var offset = ((address & 0xFFFFF000u) >> 10) + (address & 0xFFFu);
 
 			return PageTables.LoadPointer(offset);
 		}

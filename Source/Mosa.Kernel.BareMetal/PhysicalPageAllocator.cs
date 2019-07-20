@@ -102,6 +102,8 @@ namespace Mosa.Kernel.BareMetal
 
 			var at = start;
 
+			// TODO: Acquire lock
+
 			while (count > 0)
 			{
 				var index = (int)(at >> indexShift);
@@ -160,6 +162,11 @@ namespace Mosa.Kernel.BareMetal
 			SetPageBitMapEntry((uint)page.ToInt64() / Page.Size, count, true);
 		}
 
+		public static IntPtr ReservePage()
+		{
+			return ReservePages(1, 1);
+		}
+
 		public static IntPtr ReservePages(uint count, uint alignment = 1)
 		{
 			if (count == 0)
@@ -167,6 +174,8 @@ namespace Mosa.Kernel.BareMetal
 
 			if (alignment == 0)
 				alignment = 1;
+
+			// TODO: Acquire lock
 
 			uint start = SearchNextStartPage;
 			uint at = start;

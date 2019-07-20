@@ -27,6 +27,8 @@ namespace Mosa.Kernel.BareMetal
 
 		public static IntPtr AllocatePages(uint pages = 1)
 		{
+			// TODO: Acquire lock
+
 			var result = BootReserveStartPage + (int)(UsedPages * Page.Size);
 
 			UsedPages += pages;

@@ -67,7 +67,7 @@
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="GDT\GDTTable.cs" />
+    <Compile Include="GDTTable.cs" />
     <Compile Include="PageTable.cs" />
     <Compile Include="PIC.cs" />
     <Compile Include="PlatformPlug.cs" />
