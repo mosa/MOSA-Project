@@ -71,8 +71,8 @@
     <Compile Include="PageTable.cs" />
     <Compile Include="PIC.cs" />
     <Compile Include="PlatformPlug.cs" />
-    <Compile Include="Console.cs" />
-    <Compile Include="Screen.cs" />
+    <Compile Include="VGAConsole.cs" />
+    <Compile Include="VGAText.cs" />
     <Compile Include="SSE.cs" />
   </ItemGroup>
   <ItemGroup>

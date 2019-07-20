@@ -14,13 +14,13 @@ namespace Mosa.Workspace.Kernel
 			Boot.EntryPoint();
 
 			var page1 = PhysicalPageAllocator.ReservePages(1, 0);
-			Console.WriteLine($"Page: {page1.ToInt32()}");
+			System.Console.WriteLine($"Page: {page1.ToInt32()}");
 
 			var page2 = PhysicalPageAllocator.ReservePages(65, 0);
-			Console.WriteLine($"Page: {page2.ToInt32()}");
+			System.Console.WriteLine($"Page: {page2.ToInt32()}");
 
 			var page3 = PhysicalPageAllocator.ReservePages(1, 0);
-			Console.WriteLine($"Page: {page3.ToInt32()}");
+			System.Console.WriteLine($"Page: {page3.ToInt32()}");
 
 			return;
 		}

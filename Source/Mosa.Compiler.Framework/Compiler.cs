@@ -167,6 +167,8 @@ namespace Mosa.Compiler.Framework
 
 				//(compilerOptions.EnableBitTracker) ? new BitTrackerStage() : null,
 
+				//new StopStage(),
+
 				(compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,
 				(compilerOptions.EnableLoopInvariantCodeMotion && compilerOptions.EnableSSA) ? new LoopInvariantCodeMotionStage() : null,
 				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,

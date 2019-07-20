@@ -78,5 +78,11 @@ namespace Mosa.Kernel.BareMetal.x86
 		{
 			return PageTable.GetPhysicalAddressFromVirtual(virtualAddress);
 		}
+
+		[Plug("Mosa.Kernel.BareMetal.Platform::ConsoleWrite")]
+		public static void ConsoleWrite(char c)
+		{
+			VGAConsole.Write(c);
+		}
 	}
 }

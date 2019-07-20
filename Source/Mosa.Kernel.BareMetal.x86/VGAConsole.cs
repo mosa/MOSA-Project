@@ -10,7 +10,7 @@ namespace Mosa.Kernel.BareMetal.x86
 	/// <summary>
 	/// Screen
 	/// </summary>
-	public static class Console
+	public static class VGAConsole
 	{
 		private enum State { Normal, Color, Background };
 
@@ -34,8 +34,8 @@ namespace Mosa.Kernel.BareMetal.x86
 			switch (state)
 			{
 				case State.Normal: { Normal(b); return; }
-				case State.Color: { Screen.SetColor(b); state = State.Normal; return; }
-				case State.Background: { Screen.SetBackground(b); state = State.Normal; ; return; }
+				case State.Color: { VGAText.SetColor(b); state = State.Normal; return; }
+				case State.Background: { VGAText.SetBackground(b); state = State.Normal; ; return; }
 			}
 		}
 
@@ -43,16 +43,16 @@ namespace Mosa.Kernel.BareMetal.x86
 		{
 			if ((b >= 33 && b <= 126))
 			{
-				Screen.Write(b);
+				VGAText.Write(b);
 				return;
 			}
 
 			switch (b)
 			{
-				case 0x08: Screen.Backspace(); return;
-				case 0x0A: Screen.Newline(); return;
-				case 0x0C: Screen.Formfeed(); return;
-				case 0x0D: Screen.CarriageReturn(); return;
+				case 0x08: VGAText.Backspace(); return;
+				case 0x0A: VGAText.Newline(); return;
+				case 0x0C: VGAText.Formfeed(); return;
+				case 0x0D: VGAText.CarriageReturn(); return;
 				case 0x9E: state = State.Color; return;
 				case 0x9F: state = State.Background; return;
 				default: return;

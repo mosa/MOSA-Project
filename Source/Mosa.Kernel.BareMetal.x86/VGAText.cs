@@ -10,7 +10,7 @@ namespace Mosa.Kernel.BareMetal.x86
 	/// <summary>
 	/// Screen
 	/// </summary>
-	public static class Screen
+	public static class VGAText
 	{
 		private const int Address = 0x0B8000;
 		private const uint Columns = 80;

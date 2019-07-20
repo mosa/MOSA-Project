@@ -53,6 +53,7 @@
     <Compile Include="Internal\PageFaultException.cs" />
     <Compile Include="Internal\InvalidMemoryAccess.cs" />
     <Compile Include="Internal\Memory.cs" />
+    <Compile Include="Map\Mod.Mosa.Runtime.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\AddressRange.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\Alignment.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\BitMap\BitMapIndexTable.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Mosa.Kernel.BareMetal\BootMemory\BootMemoryMapTable.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\BootMemory\BootMemoryMapType.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\BootPageAllocator.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal\Console.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\Extension\IntPtrExtension.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\Multiboot.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\MultibootSpecification\MultibootV1.cs" />

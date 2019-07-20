@@ -55,5 +55,10 @@ namespace Mosa.Kernel.BareMetal
 
 			//return PlatformPlug.PageTableGetPhysicalAddressFromVirtual(virtualAddress);
 		}
+
+		public static void ConsoleWrite(char c)
+		{
+			System.Console.Write(c);
+		}
 	}
 }

@@ -47,5 +47,8 @@ namespace Mosa.Kernel.BareMetal
 		{
 			return IntPtr.Zero;
 		}
+
+		public static void ConsoleWrite(char c)
+		{ }
 	}
 }

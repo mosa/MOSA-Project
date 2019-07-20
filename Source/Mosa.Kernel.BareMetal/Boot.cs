@@ -14,6 +14,8 @@ namespace Mosa.Kernel.BareMetal
 		{
 			Platform.EntryPoint();
 
+			Console.WriteLine("Booting...");
+
 			BootPageAllocator.Setup();
 
 			BootMemoryMap.Initialize();
@@ -24,9 +26,13 @@ namespace Mosa.Kernel.BareMetal
 
 			PhysicalPageAllocator.Setup();
 
-			// TODO: SinglePageAllocator --- allocates single pages only
+			// TODO: PageFrameAllocator --- allocates single pages only
 
 			PageTable.Setup();
+
+			while (true)
+			{
+			}
 		}
 	}
 }
