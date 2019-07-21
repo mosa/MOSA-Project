@@ -24,6 +24,10 @@ namespace Mosa.Tool.Explorer
 			//pipeline.InsertAfterLast<GreedyRegisterAllocatorStage>(new StopStage());
 
 			//new DominanceOutputStage(),
+
+			pipeline.InsertAfterFirst<StaticLoadOptimizationStage>(
+				new GraphVizStage()
+			);
 		}
 	}
 }

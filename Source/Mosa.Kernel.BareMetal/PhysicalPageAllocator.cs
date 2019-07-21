@@ -38,58 +38,64 @@ namespace Mosa.Kernel.BareMetal
 
 			var entries = BootMemoryMap.GetBootMemoryMapEntryCount();
 
-			int pass = 0;
-
 			// pass 0 - mark available pages
-			// pass 1 - unmark reserved pages
-			while (pass <= 1)
+			for (uint i = 0; i < entries; i++)
 			{
-				for (uint i = 0; i < entries; i++)
+				var entry = BootMemoryMap.GetBootMemoryMapEntry(i);
+
+				if (!entry.IsAvailable)
+					continue;
+
+				var start = Alignment.AlignUp(entry.StartAddress.ToInt64(), Page.Size);
+				var end = Alignment.AlignDown(entry.EndAddress.ToInt64() + 1, Page.Size);
+
+				var pages = (uint)(end - start) / Page.Size;
+
+				if (pages <= 0)
+					continue;
+
+				var startPage = (uint)(start / Page.Shift);
+				var endPage = startPage + pages - 1;
+
+				MinimumAvailablePage = Math.Min(MinimumAvailablePage, startPage);
+				MaximumAvailablePage = Math.Max(MaximumAvailablePage, endPage);
+
+				SetPageBitMapEntry(startPage, pages, entry.IsAvailable);
+			}
+
+			// pass 1 - unmark reserved pages
+			for (uint i = 0; i < entries; i++)
+			{
+				var entry = BootMemoryMap.GetBootMemoryMapEntry(i);
+
+				if (entry.IsAvailable)
+					continue;
+
+				var start = Alignment.AlignUp(entry.StartAddress.ToInt64(), Page.Size);
+				var end = Alignment.AlignDown(entry.EndAddress.ToInt64() + 1, Page.Size);
+
+				var pages = (uint)(end - start) / Page.Size;
+
+				if (pages <= 0)
+					continue;
+
+				var startPage = (uint)(start / Page.Shift);
+				var endPage = startPage + pages - 1;
+
+				MinimumReservedPage = Math.Min(MinimumReservedPage, startPage);
+				MaximumReservedPage = Math.Max(MaximumReservedPage, endPage);
+
+				if (MinimumAvailablePage >= startPage && MinimumAvailablePage <= endPage)
 				{
-					var entry = BootMemoryMap.GetBootMemoryMapEntry(i);
-
-					if (pass == 0 && !entry.IsAvailable)
-						continue;
-
-					if (pass == 1 && entry.IsAvailable)
-						continue;
-
-					var start = Alignment.AlignUp(entry.StartAddress.ToInt64(), Page.Size);
-					var end = Alignment.AlignDown(entry.EndAddress.ToInt64() + 1, Page.Size);
-
-					var pages = (uint)(end - start) / Page.Size;
-
-					if (pages <= 0)
-						continue;
-
-					var startPage = (uint)(start / Page.Shift);
-					var endPage = startPage + pages - 1;
-
-					if (pass == 0)
-					{
-						MinimumAvailablePage = Math.Min(MinimumAvailablePage, startPage);
-						MaximumAvailablePage = Math.Max(MaximumAvailablePage, endPage);
-					}
-					else if (pass == 1)
-					{
-						MinimumReservedPage = Math.Min(MinimumReservedPage, startPage);
-						MaximumReservedPage = Math.Max(MaximumReservedPage, endPage);
-
-						if (MinimumAvailablePage >= startPage && MinimumAvailablePage <= endPage)
-						{
-							MinimumAvailablePage = endPage + 1;
-						}
-
-						if (MaximumAvailablePage >= startPage && MaximumAvailablePage <= endPage)
-						{
-							MaximumAvailablePage = startPage - 1;
-						}
-					}
-
-					SetPageBitMapEntry(startPage, pages, entry.IsAvailable);
+					MinimumAvailablePage = endPage + 1;
 				}
 
-				pass++;
+				if (MaximumAvailablePage >= startPage && MaximumAvailablePage <= endPage)
+				{
+					MaximumAvailablePage = startPage - 1;
+				}
+
+				SetPageBitMapEntry(startPage, pages, entry.IsAvailable);
 			}
 
 			SearchNextStartPage = MinimumAvailablePage;

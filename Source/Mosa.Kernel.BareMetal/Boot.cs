@@ -24,7 +24,7 @@ namespace Mosa.Kernel.BareMetal
 
 			BootMemoryMap.ImportMultibootV1MemoryMap();
 
-			PhysicalPageAllocator.Setup();
+			//PhysicalPageAllocator.Setup();
 
 			// TODO: PageFrameAllocator --- allocates single pages only
 
