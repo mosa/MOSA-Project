@@ -33,6 +33,8 @@ namespace Mosa.Kernel.BareMetal
 
 			UsedPages += pages;
 
+			// TODO: Release lock
+
 			return result;
 		}
 	}

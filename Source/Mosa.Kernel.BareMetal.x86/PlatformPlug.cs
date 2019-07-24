@@ -80,7 +80,7 @@ namespace Mosa.Kernel.BareMetal.x86
 		}
 
 		[Plug("Mosa.Kernel.BareMetal.Platform::ConsoleWrite")]
-		public static void ConsoleWrite(char c)
+		public static void ConsoleWrite(byte c)
 		{
 			VGAConsole.Write(c);
 		}

@@ -64,6 +64,7 @@
     <Compile Include="Mosa.Kernel.BareMetal\BootMemory\BootMemoryMapType.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\BootPageAllocator.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\Console.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal\ConsoleColor.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\Extension\IntPtrExtension.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\Multiboot.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\MultibootSpecification\MultibootV1.cs" />

@@ -9,11 +9,14 @@ namespace Mosa.Kernel.BareMetal
 {
 	public static class Boot
 	{
-		[Plug("Mosa.Runtime.StartUp::InitalizeKernal")]
+		[Plug("Mosa.Runtime.StartUp::KernelInitialization")]
 		public static void EntryPoint()
 		{
 			Platform.EntryPoint();
 
+			Console.SetBackground(ConsoleColor.Blue);
+			Console.SetForground(ConsoleColor.White);
+			Console.ClearScreen();
 			Console.WriteLine("Booting...");
 
 			BootPageAllocator.Setup();

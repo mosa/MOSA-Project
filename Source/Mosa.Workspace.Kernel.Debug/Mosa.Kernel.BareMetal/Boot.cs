@@ -9,11 +9,14 @@ namespace Mosa.Kernel.BareMetal
 {
 	public static class Boot
 	{
-		[Plug("Mosa.Runtime.StartUp::InitalizeKernal")]
+		[Plug("Mosa.Runtime.StartUp::KernelInitialization")]
 		public static void EntryPoint()
 		{
 			Platform.EntryPoint();
 
+			Console.SetBackground(ConsoleColor.Blue);
+			Console.SetForground(ConsoleColor.White);
+			Console.ClearScreen();
 			Console.WriteLine("Booting...");
 
 			BootPageAllocator.Setup();
@@ -24,11 +27,15 @@ namespace Mosa.Kernel.BareMetal
 
 			BootMemoryMap.ImportMultibootV1MemoryMap();
 
-			PhysicalPageAllocator.Setup();
+			//PhysicalPageAllocator.Setup();
 
 			// TODO: PageFrameAllocator --- allocates single pages only
 
 			PageTable.Setup();
+
+			while (true)
+			{
+			}
 		}
 	}
 }

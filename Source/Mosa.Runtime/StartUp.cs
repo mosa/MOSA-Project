@@ -6,14 +6,14 @@ namespace Mosa.Runtime
 	{
 		public static void Initialize()
 		{
-			KernalInitialization();
+			KernelInitialization();
 			SetInitialMemory();
 			InitializeAssembly();
 			InitializeRuntimeMetadata();
 			StartApplication();
 		}
 
-		public static void KernalInitialization()
+		public static void KernelInitialization()
 		{
 		}
 
