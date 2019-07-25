@@ -41,21 +41,23 @@ namespace Mosa.Kernel.BareMetal
 		public static void ClearScreen()
 		{
 			Write(Escape);
-			Write("[2J]");
+			Write("[2J");
 		}
 
 		public static void SetForground(ConsoleColor color)
 		{
 			Write(Escape);
 			Write("[3");
-			Write((byte)((byte)(color) % 10));
+			Write((byte)((byte)'0' + (byte)(color) % 10));
+			Write("m");
 		}
 
 		public static void SetBackground(ConsoleColor color)
 		{
 			Write(Escape);
 			Write("[4");
-			Write((byte)((byte)(color) % 10));
+			Write((byte)((byte)'0' + (byte)(color) % 10));
+			Write("m");
 		}
 	}
 }

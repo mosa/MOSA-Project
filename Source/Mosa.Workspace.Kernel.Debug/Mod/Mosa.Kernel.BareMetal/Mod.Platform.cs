@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.BareMetal.MultibootSpecification;
+using Mosa.Kernel.BareMetal.x86;
 using System;
 
 namespace Mosa.Kernel.BareMetal
@@ -58,7 +59,7 @@ namespace Mosa.Kernel.BareMetal
 
 		public static void ConsoleWrite(byte c)
 		{
-			System.Console.Write(c);
+			VGAConsole.Write(c);
 		}
 	}
 }

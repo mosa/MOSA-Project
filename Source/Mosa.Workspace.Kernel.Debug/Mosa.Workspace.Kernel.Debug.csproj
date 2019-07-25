@@ -24,7 +24,7 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <NoWarn>162</NoWarn>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -39,6 +39,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <NoWarn>162</NoWarn>
     <LangVersion>7.2</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Mosa.Workspace.Kernel.Program</StartupObject>
@@ -53,7 +54,16 @@
     <Compile Include="Internal\PageFaultException.cs" />
     <Compile Include="Internal\InvalidMemoryAccess.cs" />
     <Compile Include="Internal\Memory.cs" />
-    <Compile Include="Map\Mod.Mosa.Runtime.cs" />
+    <Compile Include="Mod\Mosa.Runtime\Mod.Runtime.cs" />
+    <Compile Include="Mod\Mosa.Runtime.x86\Mod.Native.cs" />
+    <Compile Include="Mod\Mosa.Runtime\Mod.Internal.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal.x86\GDTTable.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal.x86\PageTable.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal.x86\PIC.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal.x86\SSE.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal.x86\VGAColor.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal.x86\VGAConsole.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal.x86\VGAText.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\AddressRange.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\Alignment.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\BitMap\BitMapIndexTable.cs" />
@@ -71,8 +81,8 @@
     <Compile Include="Mosa.Kernel.BareMetal\MultibootSpecification\MultibootV1MemoryMapEntry.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\MultibootSpecification\MultibootV1VBEEntry.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\Page.cs" />
-    <Compile Include="Map\Mod.Platform.cs" />
-    <Compile Include="Map\Mod.Intrinsic.cs" />
+    <Compile Include="Mod\Mosa.Kernel.BareMetal\Mod.Platform.cs" />
+    <Compile Include="Mod\Mosa.Runtime\Mod.Intrinsic.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\PhysicalPageAllocator.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\VirtualMemoryManager.cs" />
     <Compile Include="Mosa.Runtime\Extension\IntPtrExtension.cs" />
