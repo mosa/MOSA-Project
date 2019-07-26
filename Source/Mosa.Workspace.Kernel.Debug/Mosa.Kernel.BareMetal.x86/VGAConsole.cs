@@ -179,7 +179,7 @@ namespace Mosa.Kernel.BareMetal.x86
 					{
 						case 0: break; // TODO: Clear screen cursor dowon
 						case 1: break; // TODO: Clear screen cursor up
-						case 3: VGAText.Clear(); break;
+						case 2: VGAText.Clear(); break;
 						default: break;
 					}
 				}
@@ -202,7 +202,7 @@ namespace Mosa.Kernel.BareMetal.x86
 		{
 			int value = 0;
 
-			for (int i = BufferLength - 1; i >= 0; i--)
+			for (int i = 0; i < BufferLength; i++)
 			{
 				var b = GetBuffer(i);
 				value = (value * 10) + (b - (byte)'0');

@@ -12,7 +12,7 @@ namespace Mosa.Kernel.BareMetal.x86
 	/// </summary>
 	public static class VGAConsole
 	{
-		private enum ControlState { Normal, Escape, Color, Background };
+		private enum ControlState { Normal, Escape };
 
 		private static ControlState State = ControlState.Normal;
 
@@ -55,8 +55,6 @@ namespace Mosa.Kernel.BareMetal.x86
 			{
 				case ControlState.Normal: { Normal(b); return; }
 				case ControlState.Escape: { Escape(b); return; }
-				case ControlState.Color: { VGAText.SetColor(b); State = ControlState.Normal; return; }
-				case ControlState.Background: { VGAText.SetBackground(b); State = ControlState.Normal; ; return; }
 			}
 		}
 
@@ -75,8 +73,6 @@ namespace Mosa.Kernel.BareMetal.x86
 				case 0x0C: VGAText.Formfeed(); return;      // ascii
 				case 0x0D: VGAText.CarriageReturn(); return;// ascii
 				case 0x1b: State = ControlState.Escape; return;    // vt100
-				case 0x9E: State = ControlState.Color; return;
-				case 0x9F: State = ControlState.Background; return;
 				default: return;
 			}
 		}
@@ -179,7 +175,7 @@ namespace Mosa.Kernel.BareMetal.x86
 					{
 						case 0: break; // TODO: Clear screen cursor dowon
 						case 1: break; // TODO: Clear screen cursor up
-						case 3: VGAText.Clear(); break;
+						case 2: VGAText.Clear(); break;
 						default: break;
 					}
 				}
@@ -202,7 +198,7 @@ namespace Mosa.Kernel.BareMetal.x86
 		{
 			int value = 0;
 
-			for (int i = BufferLength - 1; i >= 0; i--)
+			for (int i = 0; i < BufferLength; i++)
 			{
 				var b = GetBuffer(i);
 				value = (value * 10) + (b - (byte)'0');

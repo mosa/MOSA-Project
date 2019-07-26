@@ -22,16 +22,36 @@ namespace Mosa.Kernel.BareMetal.x86
 
 		private static byte BackgroundColor { get; set; }
 
-		private static int Column
+		public static int Column
 		{
 			get { return (int)(Offset % Rows); }
-			set { Offset = (short)(Row * Rows + value); }
+			private set { Offset = (short)(Row * Rows + value); }
 		}
 
-		private static int Row
+		public static int Row
 		{
 			get { return (int)(Offset / Rows); }
-			set { Offset = (short)(Column * Columns + value); }
+			private set { Offset = (short)(Column * Columns + value); }
+		}
+
+		public static void SetColor(byte color)
+		{
+			Color = color;
+		}
+
+		public static void SetBackground(byte color)
+		{
+			BackgroundColor = color;
+		}
+
+		public static void Goto(int column, int row)
+		{
+			if (column > Columns || row > Rows)
+				return;
+
+			Row = row;
+			Column = column;
+			UpdateCursor();
 		}
 
 		public static void Newline()
@@ -55,6 +75,21 @@ namespace Mosa.Kernel.BareMetal.x86
 			UpdateCursor();
 		}
 
+		public static void Up()
+		{
+			if (Row == 0)
+				return;
+
+			Row--;
+		}
+
+		public static void Down()
+		{
+			Row++;
+			CheckForScroll();
+			UpdateCursor();
+		}
+
 		public static void Backspace()
 		{
 			if (Offset <= 0)
@@ -66,7 +101,8 @@ namespace Mosa.Kernel.BareMetal.x86
 
 		public static void Clear()
 		{
-			Runtime.Internal.MemorySet(new IntPtr(Address), (byte)((BackgroundColor & 0x0F) << 4), (int)(Rows * Columns * 2));
+			ushort value = (ushort)(Color << 8 | (BackgroundColor & 0x0F) << 12);
+			Runtime.Internal.MemorySet(new IntPtr(Address), value, (int)(Rows * Columns * 2));
 			Offset = 0;
 		}
 
@@ -92,7 +128,6 @@ namespace Mosa.Kernel.BareMetal.x86
 			while (Offset >= Columns * Rows)
 			{
 				Runtime.Internal.MemoryCopy(new IntPtr(Address), new IntPtr(Address + (Columns * 2)), Columns * 2);
-
 				Runtime.Internal.MemorySet(new IntPtr(Address + (Columns * (Rows - 1))), (byte)((BackgroundColor & 0x0F) << 4), (int)(Columns * 2));
 
 				Offset = (short)(Offset - Columns);
@@ -107,16 +142,6 @@ namespace Mosa.Kernel.BareMetal.x86
 
 			Native.Out8(0x3D4, 0x0E);
 			Native.Out8(0x3D5, (byte)((Offset >> 8) & 0xFF));
-		}
-
-		public static void SetColor(byte color)
-		{
-			Color = color;
-		}
-
-		public static void SetBackground(byte color)
-		{
-			BackgroundColor = color;
 		}
 	}
 }

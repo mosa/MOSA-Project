@@ -29,6 +29,24 @@ namespace Mosa.Runtime
 			}
 		}
 
+		public static void MemorySet(IntPtr dest, ushort value, uint count)
+		{
+			// FUTURE: Improve
+			for (int i = 0; i < count; i = i + 2)
+			{
+				Intrinsic.Store16(dest, i, value);
+			}
+		}
+
+		public static void MemorySet(IntPtr dest, uint value, uint count)
+		{
+			// FUTURE: Improve
+			for (int i = 0; i < count; i = i + 4)
+			{
+				Intrinsic.Store32(dest, i, value);
+			}
+		}
+
 		public static void MemoryClear(IntPtr dest, uint count)
 		{
 			// FUTURE: Improve
