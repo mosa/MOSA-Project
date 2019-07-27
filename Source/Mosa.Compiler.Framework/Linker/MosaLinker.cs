@@ -266,8 +266,8 @@ namespace Mosa.Compiler.Framework.Linker
 				if (symbol.IsResolved)
 					continue;
 
-				if (symbol.IsExternalSymbol)
-					continue;
+				//if (symbol.IsExternalSymbol)
+				//	continue;
 
 				symbol.SectionOffset = section.Size;
 				symbol.VirtualAddress = section.VirtualAddress + section.Size;

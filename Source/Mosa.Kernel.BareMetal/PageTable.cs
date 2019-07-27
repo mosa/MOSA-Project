@@ -11,14 +11,20 @@ namespace Mosa.Kernel.BareMetal
 	{
 		public static void Setup()
 		{
+			Console.Write("a");
+
 			Platform.PageTableSetup();
+			Console.Write("b");
 
 			Platform.PageTableInitialize();
+			Console.Write("c");
 
 			// Unmap the first page for null pointer exceptions
 			MapVirtualAddressToPhysical(0x0, 0x0, false);
+			Console.Write("d");
 
 			Platform.PageTableEnable();
+			Console.Write("e");
 		}
 
 		/// <summary>

@@ -17,21 +17,26 @@ namespace Mosa.Kernel.BareMetal
 			Console.SetBackground(ConsoleColor.Blue);
 			Console.SetForground(ConsoleColor.White);
 			Console.ClearScreen();
-			Console.WriteLine("Booting...");
+			Console.Write("Booting...");
 
 			BootPageAllocator.Setup();
+			Console.Write("1...");
 
 			BootMemoryMap.Initialize();
+			Console.Write("2...");
 
 			Platform.UpdateBootMemoryMap();
+			Console.Write("3...");
 
 			BootMemoryMap.ImportMultibootV1MemoryMap();
+			Console.Write("4...");
 
 			//PhysicalPageAllocator.Setup();
 
 			// TODO: PageFrameAllocator --- allocates single pages only
 
 			PageTable.Setup();
+			Console.Write("5...");
 
 			while (true)
 			{

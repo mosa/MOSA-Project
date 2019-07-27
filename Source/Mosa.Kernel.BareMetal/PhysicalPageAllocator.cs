@@ -175,6 +175,8 @@ namespace Mosa.Kernel.BareMetal
 
 		public static IntPtr ReservePages(uint count, uint alignment = 1)
 		{
+			Console.Write("z");
+
 			if (count == 0)
 				return IntPtr.Zero;
 
@@ -182,12 +184,14 @@ namespace Mosa.Kernel.BareMetal
 				alignment = 1;
 
 			// TODO: Acquire lock
+			Console.Write("y");
 
 			uint start = SearchNextStartPage;
 			uint at = start;
 
 			while (true)
 			{
+				Console.Write("x");
 				uint restartAt;
 
 				if (at % alignment != 0)

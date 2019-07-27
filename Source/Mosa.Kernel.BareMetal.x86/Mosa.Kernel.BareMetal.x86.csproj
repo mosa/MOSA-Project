@@ -82,7 +82,7 @@
       <Name>Mosa.Kernel.BareMetal</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Runtime.x86\Mosa.Runtime.x86.csproj">
-      <Project>{a47b7998-4ee8-4af8-9373-c664fdeddc61}</Project>
+      <Project>{a47b7998-4ee8-4af8-9373-c664fdeddc65}</Project>
       <Name>Mosa.Runtime.x86</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj">

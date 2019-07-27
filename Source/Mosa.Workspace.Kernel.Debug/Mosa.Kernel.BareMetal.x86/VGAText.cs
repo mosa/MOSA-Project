@@ -14,7 +14,7 @@ namespace Mosa.Kernel.BareMetal.x86
 	{
 		private const int Address = 0x0B8000;
 		private const uint Columns = 80;
-		private const uint Rows = 40;
+		private const uint Rows = 25;
 
 		private static short Offset = 0;
 
@@ -22,16 +22,16 @@ namespace Mosa.Kernel.BareMetal.x86
 
 		private static byte BackgroundColor { get; set; }
 
-		public static int Column
+		public static byte Column
 		{
-			get { return (int)(Offset % Rows); }
-			private set { Offset = (short)(Row * Rows + value); }
+			get { return (byte)(Offset % Columns); }
+			private set { Offset = (short)((Columns * Row) + value); }
 		}
 
-		public static int Row
+		public static byte Row
 		{
-			get { return (int)(Offset / Rows); }
-			private set { Offset = (short)(Column * Columns + value); }
+			get { return (byte)(Offset / Columns); }
+			private set { Offset = (short)((Columns * value) + Column); }
 		}
 
 		public static void SetColor(byte color)
@@ -49,8 +49,8 @@ namespace Mosa.Kernel.BareMetal.x86
 			if (column > Columns || row > Rows)
 				return;
 
-			Row = row;
-			Column = column;
+			Row = (byte)row;
+			Column = (byte)column;
 			UpdateCursor();
 		}
 
@@ -103,7 +103,7 @@ namespace Mosa.Kernel.BareMetal.x86
 		{
 			ushort value = (ushort)(Color << 8 | (BackgroundColor & 0x0F) << 12);
 			Runtime.Internal.MemorySet(new IntPtr(Address), value, (int)(Rows * Columns * 2));
-			Offset = 0;
+			Goto(0, 0);
 		}
 
 		private static void Next()
@@ -120,7 +120,6 @@ namespace Mosa.Kernel.BareMetal.x86
 			address.Store8(0, b);
 			address.Store8(1, (byte)(Color | ((BackgroundColor & 0x0F) << 4)));
 			Next();
-			UpdateCursor();
 		}
 
 		private static void CheckForScroll()
@@ -137,11 +136,13 @@ namespace Mosa.Kernel.BareMetal.x86
 
 		private static void UpdateCursor()
 		{
+			var location = (Row * Columns) + Column;
+
 			Native.Out8(0x3D4, 0x0F);
-			Native.Out8(0x3D5, (byte)(Offset & 0xFF));
+			Native.Out8(0x3D5, (byte)(location & 0xFF));
 
 			Native.Out8(0x3D4, 0x0E);
-			Native.Out8(0x3D5, (byte)((Offset >> 8) & 0xFF));
+			Native.Out8(0x3D5, (byte)((location >> 8) & 0xFF));
 		}
 	}
 }
