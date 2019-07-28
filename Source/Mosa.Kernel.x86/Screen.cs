@@ -196,7 +196,7 @@ namespace Mosa.Kernel.x86
 		/// Sets the cursor.
 		/// </summary>
 		/// <param name="row">The row.</param>
-		/// <param name="col">The col.</param>
+		/// <param name="column">The column.</param>
 		public static void SetCursor(uint row, uint column)
 		{
 			uint location = (row * Columns) + column;
