@@ -256,7 +256,7 @@ namespace Mosa.TestWorld.x86
 
 		public static int CallReturn10()
 		{
-			return 10; // Return10();
+			return Return10();
 		}
 
 		public static void UnitTest()
