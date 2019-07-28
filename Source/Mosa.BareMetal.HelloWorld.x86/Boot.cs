@@ -14,7 +14,7 @@ namespace Mosa.BareMetal.HelloWorld.x86
 		/// </summary>
 		public static void Main()
 		{
-			Screen.Clear();
+			VGAText.Clear();
 
 			while (true)
 			{ }

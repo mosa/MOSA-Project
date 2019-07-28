@@ -193,8 +193,8 @@ namespace Mosa.Platform.x64
 		/// <param name="compilerOptions"></param>
 		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerOptions compilerOptions)
 		{
-			pipeline.InsertBefore<LowerIRStage>(
-				new IRSubstitutionStage()
+			pipeline.InsertBefore<Compiler.Framework.Stages.RuntimeCallStage>(
+				new Stages.RuntimeCallStage()
 			);
 
 			pipeline.InsertAfterLast<PlatformIntrinsicStage>(

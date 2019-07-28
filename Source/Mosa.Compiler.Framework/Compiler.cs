@@ -156,16 +156,19 @@ namespace Mosa.Compiler.Framework
 				new DevirtualizeCallStage(),
 				new PlugStage(),
 				new UnboxValueTypeStage(),
-				new LowerIRStage(),
+				new RuntimeCallStage(),
 				(compilerOptions.EnableInlinedMethods) ? new InlineStage() : null,
 				(compilerOptions.EnableInlinedMethods) ? new BlockMergeStage() : null,
 				(compilerOptions.EnableInlinedMethods) ? new DeadBlockStage() : null,
 				new PromoteTemporaryVariables(),
-				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				new StaticLoadOptimizationStage(),
+				new FastSimplification(),
+				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
 
 				//(compilerOptions.EnableBitTracker) ? new BitTrackerStage() : null,
+
+				//new StopStage(),
 
 				(compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,
 				(compilerOptions.EnableLoopInvariantCodeMotion && compilerOptions.EnableSSA) ? new LoopInvariantCodeMotionStage() : null,

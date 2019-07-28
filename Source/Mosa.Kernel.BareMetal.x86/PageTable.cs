@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.BareMetal.Extension;
+using Mosa.Runtime.Extension;
 using Mosa.Runtime.x86;
 using System;
 
@@ -13,22 +14,40 @@ namespace Mosa.Kernel.BareMetal.x86
 	{
 		public static IntPtr PageDirectory;
 		public static IntPtr PageTables;
+		public static GDTTable GDTTable;
 
 		public static void Setup()
 		{
-			PageDirectory = new IntPtr(Address.PageDirectory); // 12MB [Size=4KB]
-			PageTables = new IntPtr(Address.PageTables); // 16MB [Size=4MB]
+			Console.Write("A");
+
+			GDTTable = new GDTTable(PhysicalPageAllocator.ReservePage());
+			Console.Write("B");
+			PageDirectory = PhysicalPageAllocator.ReservePage();
+			Console.Write("C");
+			PageTables = PhysicalPageAllocator.ReservePages(Page.Size * 1024);
+			Console.Write("D");
 		}
 
 		public static void Initialize()
 		{
+			GDTTable.Setup();
+
 			// Setup Page Directory
-			for (int index = 0; index < 1024; index++)
+			for (uint index = 0; index < 1024; index++)
 			{
 				PageDirectory.Store32(index << 2, (uint)(PageTables.ToInt32() + (index * 4096) | 0x04 | 0x02 | 0x01));
 			}
 
-			// TODO: Clear all the page table entries
+			// Clear the Page Tables
+			for (uint index = 0; index < 1024; index++)
+			{
+				Page.ClearPage(PageTables.Add(index * Page.Size));
+			}
+		}
+
+		public static void Enable()
+		{
+			GDTTable.Enable();
 
 			// Set CR3 register on processor - sets page directory
 			Native.SetCR3((uint)PageDirectory.ToInt32());
@@ -41,14 +60,15 @@ namespace Mosa.Kernel.BareMetal.x86
 		{
 			//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
 
-			//Native.Set32(Address.PageTable + ((virtualAddress & 0xFFC00000u) >> 10), physicalAddress & 0xFFC00000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
 			PageTables.Store32((virtualAddress & 0xFFFFF000u) >> 10, physicalAddress & 0xFFFFF000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
 		}
 
 		public static IntPtr GetPhysicalAddressFromVirtual(IntPtr virtualAddress)
 		{
 			//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
-			var offset = (((uint)virtualAddress.ToInt32() & 0xFFFFF000u) >> 10) + ((uint)virtualAddress.ToInt32() & 0xFFFu);
+
+			var address = (uint)virtualAddress.ToInt32();
+			var offset = ((address & 0xFFFFF000u) >> 10) + (address & 0xFFFu);
 
 			return PageTables.LoadPointer(offset);
 		}

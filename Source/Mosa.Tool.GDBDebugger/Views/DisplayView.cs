@@ -88,7 +88,7 @@ namespace Mosa.Tool.GDBDebugger.Views
 
 			lock (bitmap)
 			{
-				for (int index = 0; index < memory.Length; index = index + 2)
+				for (int index = 0; index < memory.Length; index += 2)
 				{
 					int text = memory[index];
 					int color = memory[index + 1];

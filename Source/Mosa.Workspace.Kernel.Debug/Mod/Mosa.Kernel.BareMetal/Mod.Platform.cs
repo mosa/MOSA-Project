@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.BareMetal.MultibootSpecification;
+using Mosa.Kernel.BareMetal.x86;
 using System;
 
 namespace Mosa.Kernel.BareMetal
@@ -54,6 +55,11 @@ namespace Mosa.Kernel.BareMetal
 			return new IntPtr(0);
 
 			//return PlatformPlug.PageTableGetPhysicalAddressFromVirtual(virtualAddress);
+		}
+
+		public static void ConsoleWrite(byte c)
+		{
+			VGAConsole.Write(c);
 		}
 	}
 }

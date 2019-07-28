@@ -723,6 +723,11 @@ namespace Mosa.Compiler.Framework
 
 		#region Helper Methods
 
+		public static bool ValidateSSAForm(Operand operand)
+		{
+			return operand.Definitions.Count == 1;
+		}
+
 		/// <summary>
 		/// Updates the counter.
 		/// </summary>

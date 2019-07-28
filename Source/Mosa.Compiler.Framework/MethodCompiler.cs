@@ -7,6 +7,7 @@ using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 
 namespace Mosa.Compiler.Framework
 {
@@ -519,6 +520,22 @@ namespace Mosa.Compiler.Framework
 
 			Symbol.ExternalSymbolName = Method.ExternMethodName;
 			Symbol.IsExternalSymbol = true;
+
+			var filename = Method.ExternMethodModule;
+
+			foreach (var path in Compiler.CompilerOptions.SearchPaths)
+			{
+				var src = Path.Combine(path, filename);
+
+				if (File.Exists(src))
+				{
+					var b = File.ReadAllBytes(src);
+
+					Symbol.SetData(b);
+
+					break;
+				}
+			}
 
 			if (Trace.IsTraceable(5))
 			{

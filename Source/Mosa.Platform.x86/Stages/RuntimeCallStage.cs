@@ -11,7 +11,7 @@ namespace Mosa.Platform.x86.Stages
 	/// IR Substitution Stage
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.BaseTransformationStage" />
-	public sealed class IRSubstitutionStage : BaseTransformationStage
+	public sealed class RuntimeCallStage : BaseTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()
 		{

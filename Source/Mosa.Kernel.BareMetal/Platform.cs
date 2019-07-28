@@ -37,6 +37,9 @@ namespace Mosa.Kernel.BareMetal
 		public static void PageTableInitialize()
 		{ }
 
+		public static void PageTableEnable()
+		{ }
+
 		public static void PageTableMapVirtualAddressToPhysical(uint virtualAddress, uint physicalAddress, bool present = true)
 		{ }
 
@@ -44,5 +47,8 @@ namespace Mosa.Kernel.BareMetal
 		{
 			return IntPtr.Zero;
 		}
+
+		public static void ConsoleWrite(byte c)
+		{ }
 	}
 }

@@ -2,12 +2,11 @@
 
 using Mosa.Kernel.BareMetal.BootMemory;
 using Mosa.Kernel.BareMetal.Extension;
-using Mosa.Runtime.Extension;
 using System;
 
 namespace Mosa.Kernel.BareMetal
 {
-	public static class PhysicalMemoryManager
+	public static class PhysicalPageAllocator
 	{
 		private static BitMapIndexTable BitMapIndexTable;
 
@@ -31,7 +30,7 @@ namespace Mosa.Kernel.BareMetal
 
 			for (uint i = 0; i < bitMapCount; i++)
 			{
-				var bitmap = BootPageAllocator.AllocatePage(1);
+				var bitmap = BootPageAllocator.AllocatePage();
 				Page.ClearPage(bitmap);
 
 				BitMapIndexTable.AddBitMapEntry(i, bitmap);
@@ -39,54 +38,67 @@ namespace Mosa.Kernel.BareMetal
 
 			var entries = BootMemoryMap.GetBootMemoryMapEntryCount();
 
-			int pass = 0;
-
 			// pass 0 - mark available pages
-			// pass 1 - unmark reserved pages
-			while (pass <= 1)
+			for (uint i = 0; i < entries; i++)
 			{
-				uint min = 0;
-				uint max = 0;
+				var entry = BootMemoryMap.GetBootMemoryMapEntry(i);
 
-				for (uint i = 0; i < entries; i++)
-				{
-					var entry = BootMemoryMap.GetBootMemoryMapEntry(i);
+				if (!entry.IsAvailable)
+					continue;
 
-					if (pass == 0 && !entry.IsAvailable)
-						continue;
+				var start = Alignment.AlignUp(entry.StartAddress.ToInt64(), Page.Size);
+				var end = Alignment.AlignDown(entry.EndAddress.ToInt64() + 1, Page.Size);
 
-					if (pass == 1 && entry.IsAvailable)
-						continue;
+				var pages = (uint)(end - start) / Page.Size;
 
-					var start = Alignment.AlignUp(entry.StartAddress.ToInt64(), Page.Size);
-					var end = Alignment.AlignDown(entry.EndAddress.ToInt64() + 1, Page.Size);
+				if (pages <= 0)
+					continue;
 
-					var pages = (uint)(end - start) / Page.Size;
+				var startPage = (uint)(start / Page.Shift);
+				var endPage = startPage + pages - 1;
 
-					if (pages <= 0)
-						continue;
+				MinimumAvailablePage = Math.Min(MinimumAvailablePage, startPage);
+				MaximumAvailablePage = Math.Max(MaximumAvailablePage, endPage);
 
-					var startPage = (uint)(start / Page.Shift);
-
-					min = Math.Min(min, startPage);
-					max = Math.Max(max, startPage + pages);
-
-					SetPageBitMapEntry(startPage, pages, entry.IsAvailable);
-				}
-
-				if (pass == 0)
-				{
-					MinimumAvailablePage = min;
-					MaximumAvailablePage = max;
-				}
-				else if (pass == 1)
-				{
-					MinimumReservedPage = min;
-					MaximumReservedPage = max;
-				}
-
-				pass++;
+				SetPageBitMapEntry(startPage, pages, entry.IsAvailable);
 			}
+
+			// pass 1 - unmark reserved pages
+			for (uint i = 0; i < entries; i++)
+			{
+				var entry = BootMemoryMap.GetBootMemoryMapEntry(i);
+
+				if (entry.IsAvailable)
+					continue;
+
+				var start = Alignment.AlignUp(entry.StartAddress.ToInt64(), Page.Size);
+				var end = Alignment.AlignDown(entry.EndAddress.ToInt64() + 1, Page.Size);
+
+				var pages = (uint)(end - start) / Page.Size;
+
+				if (pages <= 0)
+					continue;
+
+				var startPage = (uint)(start / Page.Shift);
+				var endPage = startPage + pages - 1;
+
+				MinimumReservedPage = Math.Min(MinimumReservedPage, startPage);
+				MaximumReservedPage = Math.Max(MaximumReservedPage, endPage);
+
+				if (MinimumAvailablePage >= startPage && MinimumAvailablePage <= endPage)
+				{
+					MinimumAvailablePage = endPage + 1;
+				}
+
+				if (MaximumAvailablePage >= startPage && MaximumAvailablePage <= endPage)
+				{
+					MaximumAvailablePage = startPage - 1;
+				}
+
+				SetPageBitMapEntry(startPage, pages, entry.IsAvailable);
+			}
+
+			SearchNextStartPage = MinimumAvailablePage;
 		}
 
 		private static void SetPageBitMapEntry(uint start, uint count, bool set)
@@ -95,6 +107,8 @@ namespace Mosa.Kernel.BareMetal
 			var maskOffIndex = (uint)((1 << (indexShift + 1)) - 1);
 
 			var at = start;
+
+			// TODO: Acquire lock
 
 			while (count > 0)
 			{
@@ -154,7 +168,12 @@ namespace Mosa.Kernel.BareMetal
 			SetPageBitMapEntry((uint)page.ToInt64() / Page.Size, count, true);
 		}
 
-		public static IntPtr ReservePages(uint count, uint alignment)
+		public static IntPtr ReservePage()
+		{
+			return ReservePages(1, 1);
+		}
+
+		public static IntPtr ReservePages(uint count, uint alignment = 1)
 		{
 			if (count == 0)
 				return IntPtr.Zero;
@@ -162,62 +181,69 @@ namespace Mosa.Kernel.BareMetal
 			if (alignment == 0)
 				alignment = 1;
 
+			// TODO: Acquire lock
+
 			uint start = SearchNextStartPage;
 			uint at = start;
 
 			while (true)
 			{
-				uint increment;
+				uint restartAt;
 
 				if (at % alignment != 0)
 				{
 					// not aligned
 					// todo - skip to next aligned address
-					increment = 1;
+					restartAt = at + 1;
 				}
-				else if (CheckFreePage(at, count, out uint breakPage))
+				else if (CheckFreePage(at, count, out restartAt))
 				{
 					// found space!
 
 					SetPageBitMapEntry(at, count, true);
 
-					SearchNextStartPage = at + 1;
+					SearchNextStartPage = restartAt;
 
 					return new IntPtr(at * Page.Size);
 				}
 				else
 				{
-					increment = 1;
+					at = restartAt;
 				}
 
-				var nextAt = at + increment;
-
-				if (nextAt > TotalPages || nextAt > MaximumAvailablePage)
+				if (restartAt > MaximumAvailablePage || restartAt > TotalPages)
 				{
 					// warp around to the start of the bitmap
-					nextAt = MinimumAvailablePage;
+					restartAt = MinimumAvailablePage;
 				}
 
-				if (nextAt > start && at < start)
+				if (at < start && restartAt > start)
 				{
-					// just loop around in the search
-					// quit, there are no free pages
+					// looped around in the search
+					// quit, as there are no free pages
 					return IntPtr.Zero;
 				}
 
-				at = nextAt;
+				at = restartAt;
 			}
 		}
 
-		private static bool CheckFreePage(uint start, uint count, out uint breakPage)
+		private static bool CheckFreePage(uint start, uint count, out uint restartAt)
 		{
-			breakPage = 0;
+			//if (start < MinimumAvailablePage)
+			//{
+			//	// should never happen
+			//	restartAt = MinimumAvailablePage;
+			//	return false;
+			//}
 
-			if (start <= MinimumAvailablePage)
-				return false;
+			var end = start + count;
 
-			if (start + count > MaximumAvailablePage)
+			if (end > MaximumAvailablePage || end > TotalPages)
+			{
+				restartAt = MinimumAvailablePage;
 				return false;
+			}
 
 			var indexShift = (IntPtr.Size == 4) ? 10 : 9;
 			var maskOffIndex = (uint)((1 << (indexShift + 1)) - 1);
@@ -237,9 +263,9 @@ namespace Mosa.Kernel.BareMetal
 
 					var value = bitmap.Load64(offset);
 
-					if (value != 0)
+					if (value != ulong.MaxValue)
 					{
-						// todo - calculate last searched
+						restartAt = at + 64;
 						return false;
 					}
 
@@ -253,9 +279,9 @@ namespace Mosa.Kernel.BareMetal
 
 					var value = bitmap.Load32(offset);
 
-					if (value != 0)
+					if (value != uint.MaxValue)
 					{
-						// todo - calculate last searched
+						restartAt = at + 32;
 						return false;
 					}
 
@@ -269,9 +295,9 @@ namespace Mosa.Kernel.BareMetal
 
 					var value = bitmap.Load8(offset);
 
-					if (value != 0)
+					if (value != byte.MaxValue)
 					{
-						// todo - calculate last searched
+						restartAt = at + 8;
 						return false;
 					}
 					at += 8;
@@ -287,7 +313,7 @@ namespace Mosa.Kernel.BareMetal
 
 					if (bit != 0)
 					{
-						// todo - calculate last searched
+						restartAt = at + 1;
 						return false;
 					}
 
@@ -295,6 +321,8 @@ namespace Mosa.Kernel.BareMetal
 					count -= 1;
 				}
 			}
+
+			restartAt = start + count + 1;
 
 			return true;
 		}

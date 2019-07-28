@@ -1,3 +1,3 @@
 cd %~dp0
-cd ..\..\bin
+cd ..\bin
 start Mosa.Tool.Launcher.exe --q --autostart --qemu --output-asm Mosa.HelloWorld.x86.exe

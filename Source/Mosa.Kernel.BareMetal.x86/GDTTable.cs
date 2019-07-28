@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.BareMetal.Extension;
-using Mosa.Kernel.x86;
 using Mosa.Runtime;
 using Mosa.Runtime.Extension;
 using Mosa.Runtime.x86;
@@ -35,20 +34,20 @@ namespace Mosa.Kernel.BareMetal.x86
 		public GDTTable(IntPtr entry)
 		{
 			Entry = entry;
+		}
 
-			// FIXME: Temporary
-			if (Entry.IsNull())
-			{
-				Entry = new IntPtr(0x00008E00);
-			}
-
+		public void Setup()
+		{
 			Entry.Store16(0, (GDTEntryOffset.TotalSize * 3) - 1);
 			Entry.StorePointer(2, Entry + 6);
 
 			Set(0, 0, 0, 0, 0);                // Null segment
 			Set(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code segment
 			Set(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data segment
+		}
 
+		public void Enable()
+		{
 			SetLgdt(Entry);
 		}
 

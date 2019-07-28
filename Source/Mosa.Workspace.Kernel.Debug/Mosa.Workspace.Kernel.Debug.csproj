@@ -24,7 +24,7 @@
     <WarningLevel>4</WarningLevel>
     <Prefer32Bit>false</Prefer32Bit>
     <NoWarn>162</NoWarn>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -39,6 +39,7 @@
     <Prefer32Bit>false</Prefer32Bit>
     <NoWarn>162</NoWarn>
     <LangVersion>7.2</LangVersion>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Mosa.Workspace.Kernel.Program</StartupObject>
@@ -53,24 +54,36 @@
     <Compile Include="Internal\PageFaultException.cs" />
     <Compile Include="Internal\InvalidMemoryAccess.cs" />
     <Compile Include="Internal\Memory.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal\Boot.cs" />
+    <Compile Include="Mod\Mosa.Runtime\Mod.Runtime.cs" />
+    <Compile Include="Mod\Mosa.Runtime.x86\Mod.Native.cs" />
+    <Compile Include="Mod\Mosa.Runtime\Mod.Internal.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal.x86\GDTTable.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal.x86\PageTable.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal.x86\PIC.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal.x86\SSE.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal.x86\VGAColor.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal.x86\VGAConsole.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal.x86\VGAText.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\AddressRange.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\Alignment.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\BitMap\BitMapIndexTable.cs" />
-    <Compile Include="Mosa.Kernel.BareMetal\Boot.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\BootMemory\BootMemoryMap.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\BootMemory\BootMemoryMapEntry.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\BootMemory\BootMemoryMapTable.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\BootMemory\BootMemoryMapType.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\BootPageAllocator.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal\Console.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal\ConsoleColor.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\Extension\IntPtrExtension.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\Multiboot.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\MultibootSpecification\MultibootV1.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\MultibootSpecification\MultibootV1MemoryMapEntry.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\MultibootSpecification\MultibootV1VBEEntry.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\Page.cs" />
-    <Compile Include="Map\Mod.Platform.cs" />
-    <Compile Include="Map\Mod.Intrinsic.cs" />
-    <Compile Include="Mosa.Kernel.BareMetal\PhysicalMemoryManager.cs" />
+    <Compile Include="Mod\Mosa.Kernel.BareMetal\Mod.Platform.cs" />
+    <Compile Include="Mod\Mosa.Runtime\Mod.Intrinsic.cs" />
+    <Compile Include="Mosa.Kernel.BareMetal\PhysicalPageAllocator.cs" />
     <Compile Include="Mosa.Kernel.BareMetal\VirtualMemoryManager.cs" />
     <Compile Include="Mosa.Runtime\Extension\IntPtrExtension.cs" />
     <Compile Include="Mosa.Runtime\Plug\PlugAttribute.cs" />
@@ -90,18 +103,6 @@
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj">
       <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520559}</Project>
       <Name>Mosa.Compiler.MosaTypeSystem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Platform.ARMv6\Mosa.Platform.ARMv6.csproj">
-      <Project>{0FB92651-3EE8-441D-84F2-C4DFDA68E8A5}</Project>
-      <Name>Mosa.Platform.ARMv6</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj">
-      <Project>{f445db8e-e25a-41ef-a158-c742f14e94e4}</Project>
-      <Name>Mosa.Platform.x64</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj">
-      <Project>{DE30CBE9-50F3-4A3E-BCC9-A8A36348530E}</Project>
-      <Name>Mosa.Platform.x86</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

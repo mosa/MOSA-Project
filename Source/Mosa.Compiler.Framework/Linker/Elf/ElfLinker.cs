@@ -591,6 +591,8 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 					if (!patch.ReferenceSymbol.IsExternalSymbol) // FUTURE: include relocations for static symbols, if option selected
 						continue;
 
+					Debug.Assert(symbolTableOffset.ContainsKey(patch.ReferenceSymbol));
+
 					var relocationEntry = new RelocationEntry()
 					{
 						RelocationType = ConvertType(patch.LinkType, linker.MachineType),

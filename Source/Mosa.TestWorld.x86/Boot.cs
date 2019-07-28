@@ -75,6 +75,15 @@ namespace Mosa.TestWorld.x86
 
 			KernelTest.RunTests();
 			StackTrace();
+
+			int value = CallReturn10();
+
+			Screen.Write("Return10 TesT: ");
+			if (value == 10)
+				Screen.WriteLine("Ok");
+			else
+				Screen.WriteLine("Failed");
+
 			StartThreadTest();
 
 			// should never get here
@@ -242,12 +251,12 @@ namespace Mosa.TestWorld.x86
 			Screen.BackgroundColor = back;
 		}
 
-		[DllImportAttribute("Test.dll", EntryPoint = "_apple")]
-		public static extern int Apple();
+		[DllImportAttribute("Asm/Return10.o", EntryPoint = "Return10")]
+		public static extern int Return10();
 
-		public static int CallApple()
+		public static int CallReturn10()
 		{
-			return Apple();
+			return Return10();
 		}
 
 		public static void UnitTest()

@@ -177,7 +177,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup", "Setup", "{624E8284
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{A406F567-5C89-45AB-88CE-E20616B28FFD}"
 	ProjectSection(SolutionItems) = preProject
-		Data\ARMv6Instructions.json = Data\ARMv6Instructions.json
+		Data\ARMv8-AArch32-Instructions.json = Data\ARMv8-AArch32-Instructions.json
 		Data\ESP32Instructions.json = Data\ESP32Instructions.json
 		Data\IRInstructions.json = Data\IRInstructions.json
 		Data\X64Instructions.json = Data\X64Instructions.json

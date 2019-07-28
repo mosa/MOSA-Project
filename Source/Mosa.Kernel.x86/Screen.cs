@@ -23,7 +23,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// The rows
 		/// </summary>
-		public const uint Rows = 40;
+		public const uint Rows = 25;
 
 		/// <summary>
 		/// Gets or sets the column.
@@ -197,9 +197,9 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		/// <param name="row">The row.</param>
 		/// <param name="col">The col.</param>
-		public static void SetCursor(uint row, uint col)
+		public static void SetCursor(uint row, uint column)
 		{
-			uint location = (row * Columns + col);
+			uint location = (row * Columns) + column;
 
 			Native.Out8(0x3D4, 0x0F);
 			Native.Out8(0x3D5, (byte)(location & 0xFF));

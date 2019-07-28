@@ -8,10 +8,10 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// Lower IR Stage
+	/// This stage converts high level IR instructions to VM Calls
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
-	public sealed class LowerIRStage : BaseCodeTransformationStage
+	public sealed class RuntimeCallStage : BaseCodeTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()
 		{

@@ -4,13 +4,13 @@ using System;
 
 namespace Mosa.Kernel.BareMetal
 {
-	internal class BootPageAllocator
+	public class BootPageAllocator
 	{
 		private static IntPtr BootReserveStartPage;
 		private static uint BootReserveSize;
 		private static uint UsedPages;
 
-		public static void Setup()
+		internal static void Setup()
 		{
 			var start = Platform.GetBootReservedRegion();
 
@@ -20,11 +20,20 @@ namespace Mosa.Kernel.BareMetal
 			UsedPages = 0;
 		}
 
-		public static IntPtr AllocatePage(uint pages = 1)
+		public static IntPtr AllocatePage()
 		{
+			return AllocatePages(1);
+		}
+
+		public static IntPtr AllocatePages(uint pages = 1)
+		{
+			// TODO: Acquire lock
+
 			var result = BootReserveStartPage + (int)(UsedPages * Page.Size);
 
 			UsedPages += pages;
+
+			// TODO: Release lock
 
 			return result;
 		}

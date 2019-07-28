@@ -41,6 +41,11 @@ build.force
 .vs/
 /Tests/BootImage/
 /Installer/installer
+.gdb_history
+NuGetUpgradeLog.html
+MigrationBackup/
+.test/
+docs/build
 
 # NuGet Packages
 *.nupkg
@@ -50,10 +55,3 @@ build.force
 
 # except build/, which is used as an MSBuild target.
 !**/packages/build/
-
-# exclude test directory
-.test/
-
-.gdb_history
-NuGetUpgradeLog.html
-MigrationBackup/

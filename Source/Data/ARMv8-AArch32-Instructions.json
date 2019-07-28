@@ -1,0 +1,1246 @@
+{
+	"Encoding": [
+		"[arm-data-processing]=[cond]|[00]|[i]|[opcode]|[s]|[rn]|[rd]|[shifter]"
+	],
+	"Instructions": [
+		{
+			"Name": "Adc32",
+			"Commutative": "true",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Add with Carry",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[arm-data-processing],cond=0000,opcode=0101,i=0,s=0,rn=reg3:r,rd=reg3:o2,shifter=0000"
+				}
+			]
+		},
+		{
+			"Name": "Add32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Adr32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Form PC-relative Address",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "And32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Bitwise AND",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Asr32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Arithmetic Shift Right",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "B32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Branch to target address",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Bic32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Bitwise Bit Clear",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Bkpt32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Breakpoint instruction",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Bl32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Call a subroutine",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Blx32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Call a subroutine",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Bx32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Branch to target address",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Cmn32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Compare Negative",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Cmp32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Compare",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Dmb32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Data Memory Barrier",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Dsb32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Data Synchronization Barrier",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Eor32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Bitwise Exclusive OR",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Isb32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Instruction Synchronization Barrier",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Ldm32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Load Multiple",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Ldmfd32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Load Multiple Full Descending",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Ldmia32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Load Multiple Increment After",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Ldr32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Load 32-bit word",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Ldrb32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Load 8-bit unsigned byte",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Ldrh32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Load 16-bit unsigned halfword",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Ldrsb32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Load 8-bit signed byte",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Ldrsh32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Load 16-bit signed halfword",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Lsl32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Logical Shift Left",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Lsr32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Logical Shift Right",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Mov32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Copies operand to destination",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Mrs32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Status register access",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Msr32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Status register access ",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Mul32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Mvn32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Bitwise NOT",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Nop32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "No Operation",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Orr32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Bitwise OR",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Pop32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Pop multiple registers off the stack",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Push32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Push multiple registers onto the stack",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Rev32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Byte-Reverse Word",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Rev16",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Byte-Reverse Packed Halfword",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Revsh32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Byte-Reverse Signed Halfword",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Ror32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Rotate Right",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Rsb32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Reverse Subtract",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Rsc32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Reverse Subtract Carry",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Sbc32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Subtract with Carry",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Sev32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Send Event",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Stm32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Store Multiple",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Stmea32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Store Multiple Empty Ascending",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Stmia32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Store Multiple Increment After",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Str32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Store 32-bit word",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Strb32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Store 8-bit byte",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Strh32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Store 16-bit halfword",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Sub32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Subtract",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Svc32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Supervisor Call",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Swi32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Supervisor Call",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Sxtb32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Signed Extend Byte",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Sxth32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Signed Extend Halfword",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Teq32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Test",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Tst32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Test",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Uxtb32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Unsigned Extend Byte",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Uxth32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Unsigned Extend Halfword",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Wfe32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Wait for Event",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Wfi32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Wait for Interrupt",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Yield32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Yield",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		}
+	]
+}

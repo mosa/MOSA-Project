@@ -237,9 +237,6 @@ namespace Mosa.Compiler.Framework.Stages
 						if (op == null || !op.IsVirtualRegister)
 							continue;
 
-						if (!variables.ContainsKey(op))
-							AllStopWithException("");
-
 						Debug.Assert(variables.ContainsKey(op), $"{op} is not in dictionary [block = {block}]");
 
 						var version = variables[op].Peek();

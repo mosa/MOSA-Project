@@ -66,13 +66,15 @@
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="ConsoleColor.cs" />
+    <Compile Include="Console.cs" />
     <Compile Include="Alignment.cs" />
     <Compile Include="BootPageAllocator.cs" />
     <Compile Include="PageTable.cs" />
     <Compile Include="AddressRange.cs" />
     <Compile Include="BitMap\BitMapIndexTable.cs" />
     <Compile Include="VirtualMemoryManager.cs" />
-    <Compile Include="PhysicalMemoryManager.cs" />
+    <Compile Include="PhysicalPageAllocator.cs" />
     <Compile Include="BootMemory\BootMemoryMapTable.cs" />
     <Compile Include="BootMemory\BootMemoryMapType.cs" />
     <Compile Include="Extension\IntPtrExtension.cs" />
