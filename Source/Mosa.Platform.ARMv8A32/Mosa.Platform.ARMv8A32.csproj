@@ -1,0 +1,167 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{1D3F8C25-77DE-4E04-81DF-5E7EF1ABE914}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Mosa.Platform.ARMv8A32</AssemblyName>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>
+    </AppDesignerFolder>
+    <RootNamespace>Mosa.Platform.ARMv8A32</RootNamespace>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+    <NoWarn>0414</NoWarn>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugSymbols>True</DebugSymbols>
+    <DebugType>full</DebugType>
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>2</WarningLevel>
+    <Prefer32Bit>false</Prefer32Bit>
+    <LangVersion>7.2</LangVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
+      <Project>{0b1011a6-8fcd-4f9e-bbb8-8db86e23d2e8}</Project>
+      <Name>Mosa.Compiler.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj">
+      <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
+      <Name>Mosa.Compiler.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj">
+      <Project>{5f30a68e-05bf-40ea-b576-5ebcde520559}</Project>
+      <Name>Mosa.Compiler.MosaTypeSystem</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Architecture.cs" />
+    <Compile Include="ArchitectureFeatureFlags.cs" />
+    <Compile Include="ARMv8A32.cs" />
+    <Compile Include="ARMv8A32CodeEmitter.cs" />
+    <Compile Include="ARMv8A32Instruction.cs" />
+    <Compile Include="ARMv8A32Instructions.cs" />
+    <Compile Include="BaseTransformationStage.cs" />
+    <Compile Include="GeneralPurposeRegister.cs" />
+    <Compile Include="Instructions\Adc32.cs" />
+    <Compile Include="Instructions\AdcS32.cs" />
+    <Compile Include="Instructions\Add32.cs" />
+    <Compile Include="Instructions\Adr32.cs" />
+    <Compile Include="Instructions\And32.cs" />
+    <Compile Include="Instructions\Asr32.cs" />
+    <Compile Include="Instructions\B32.cs" />
+    <Compile Include="Instructions\Bic32.cs" />
+    <Compile Include="Instructions\Bkpt32.cs" />
+    <Compile Include="Instructions\Bl32.cs" />
+    <Compile Include="Instructions\Blx32.cs" />
+    <Compile Include="Instructions\Bx32.cs" />
+    <Compile Include="Instructions\Cmn32.cs" />
+    <Compile Include="Instructions\Cmp32.cs" />
+    <Compile Include="Instructions\Dmb32.cs" />
+    <Compile Include="Instructions\Dsb32.cs" />
+    <Compile Include="Instructions\Eor32.cs" />
+    <Compile Include="Instructions\Isb32.cs" />
+    <Compile Include="Instructions\Ldm32.cs" />
+    <Compile Include="Instructions\Ldmfd32.cs" />
+    <Compile Include="Instructions\Ldmia32.cs" />
+    <Compile Include="Instructions\Ldr32.cs" />
+    <Compile Include="Instructions\Ldrb32.cs" />
+    <Compile Include="Instructions\Ldrh32.cs" />
+    <Compile Include="Instructions\Ldrsb32.cs" />
+    <Compile Include="Instructions\Ldrsh32.cs" />
+    <Compile Include="Instructions\Lsl32.cs" />
+    <Compile Include="Instructions\Lsr32.cs" />
+    <Compile Include="Instructions\Mov32.cs" />
+    <Compile Include="Instructions\Mrs32.cs" />
+    <Compile Include="Instructions\Msr32.cs" />
+    <Compile Include="Instructions\Mul32.cs" />
+    <Compile Include="Instructions\Mvn32.cs" />
+    <Compile Include="Instructions\Nop32.cs" />
+    <Compile Include="Instructions\Orr32.cs" />
+    <Compile Include="Instructions\Pop32.cs" />
+    <Compile Include="Instructions\Push32.cs" />
+    <Compile Include="Instructions\Rev16.cs" />
+    <Compile Include="Instructions\Rev32.cs" />
+    <Compile Include="Instructions\Revsh32.cs" />
+    <Compile Include="Instructions\Ror32.cs" />
+    <Compile Include="Instructions\Rsb32.cs" />
+    <Compile Include="Instructions\Rsc32.cs" />
+    <Compile Include="Instructions\Sbc32.cs" />
+    <Compile Include="Instructions\Sev32.cs" />
+    <Compile Include="Instructions\Stm32.cs" />
+    <Compile Include="Instructions\Stmea32.cs" />
+    <Compile Include="Instructions\Stmia32.cs" />
+    <Compile Include="Instructions\Str32.cs" />
+    <Compile Include="Instructions\Strb32.cs" />
+    <Compile Include="Instructions\Strh32.cs" />
+    <Compile Include="Instructions\Sub32.cs" />
+    <Compile Include="Instructions\Svc32.cs" />
+    <Compile Include="Instructions\Swi32.cs" />
+    <Compile Include="Instructions\Sxtb32.cs" />
+    <Compile Include="Instructions\Sxth32.cs" />
+    <Compile Include="Instructions\Teq32.cs" />
+    <Compile Include="Instructions\Tst32.cs" />
+    <Compile Include="Instructions\Uxtb32.cs" />
+    <Compile Include="Instructions\Uxth32.cs" />
+    <Compile Include="Instructions\Wfe32.cs" />
+    <Compile Include="Instructions\Wfi32.cs" />
+    <Compile Include="Instructions\Yield32.cs" />
+    <Compile Include="Intrinsic\Nop.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Stages\IRTransformationStage.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

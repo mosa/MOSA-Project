@@ -47,6 +47,9 @@
     <Reference Include="System.Web.Extensions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuildARMv8A32.cs" />
+    <Compile Include="BuildARMv8A32InstructionFiles.cs" />
+    <Compile Include="BuildARMv8A32Instructions.cs" />
     <Compile Include="BuildESP32.cs" />
     <Compile Include="BuildARMv6.cs" />
     <Compile Include="BuildESP32InstructionFiles.cs" />
