@@ -247,73 +247,76 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Lines.AppendLine("\t\tpublic override bool IsCarryFlagUndefined { get { return true; } }");
 			}
 
-			if (FlagsUsed.Contains("S"))
+			if (FlagsUsed.Contains("S") || FlagsUsed.Contains("N"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsSignFlagUsed { get { return true; } }");
 			}
 
-			if (FlagsSet.Contains("S"))
+			if (FlagsSet.Contains("S") || FlagsSet.Contains("N"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsSignFlagSet { get { return true; } }");
 			}
 
-			if (FlagsCleared.Contains("S"))
+			if (FlagsCleared.Contains("S") || FlagsCleared.Contains("N"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsSignFlagCleared { get { return true; } }");
 			}
 
-			if (FlagsModified.Contains("S") || FlagsSet.Contains("S") || FlagsCleared.Contains("S"))
+			if (FlagsModified.Contains("S") || FlagsSet.Contains("S") || FlagsCleared.Contains("S")
+				|| FlagsModified.Contains("N") || FlagsSet.Contains("N") || FlagsCleared.Contains("N")
+				)
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsSignFlagModified { get { return true; } }");
 			}
 
-			if (FlagsUndefined.Contains("S"))
+			if (FlagsUndefined.Contains("S") || FlagsUndefined.Contains("N"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsSignFlagUnchanged { get { return true; } }");
 			}
 
-			if (FlagsUndefined.Contains("S"))
+			if (FlagsUndefined.Contains("S") || FlagsUndefined.Contains("N"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsSignFlagUndefined { get { return true; } }");
 			}
 
-			if (FlagsUsed.Contains("O"))
+			if (FlagsUsed.Contains("O") || FlagsUsed.Contains("V"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsOverflowFlagUsed { get { return true; } }");
 			}
 
-			if (FlagsSet.Contains("O"))
+			if (FlagsSet.Contains("O") || FlagsSet.Contains("V"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsOverflowFlagSet { get { return true; } }");
 			}
 
-			if (FlagsCleared.Contains("O"))
+			if (FlagsCleared.Contains("O") || FlagsCleared.Contains("V"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsOverflowFlagCleared { get { return true; } }");
 			}
 
-			if (FlagsModified.Contains("O") || FlagsSet.Contains("O") || FlagsCleared.Contains("O"))
+			if (FlagsModified.Contains("O") || FlagsSet.Contains("O") || FlagsCleared.Contains("O")
+				|| FlagsModified.Contains("V") || FlagsSet.Contains("V") || FlagsCleared.Contains("V"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsOverflowFlagModified { get { return true; } }");
 			}
 
-			if (FlagsUndefined.Contains("O"))
+			if (FlagsUndefined.Contains("O") || FlagsUndefined.Contains("V"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsOverflowFlagUnchanged { get { return true; } }");
 			}
 
-			if (FlagsUndefined.Contains("O"))
+			if (FlagsUndefined.Contains("O") || FlagsUndefined.Contains("V"))
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsOverflowFlagUndefined { get { return true; } }");
@@ -812,13 +815,17 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "reg6": code = "Append6Bits"; postcode = ".Register.RegisterCode"; return;
 				case "imm32": code = "Append32BitImmediate"; return;
 				case "imm32+": code = "Append32BitImmediateWithOffset"; return;
+				case "imm2": code = "Append2BitImmediate"; return;
+				case "imm5": code = "Append5BitImmediate"; return;
 				case "imm8": code = "Append8BitImmediate"; return;
+				case "imm12": code = "Append12BitImmediate"; return;
 				case "imm16": code = "Append16BitImmediate"; return;
 				case "imm64": code = "Append64BitImmediate"; return;
 				case "rel32": code = "EmitRelative32"; return;
 				case "rel64": code = "EmitRelative64"; return;
 				case "forward32": code = "EmitForward32"; return;
 				case "supress8": code = "SuppressByte"; return;
+				case "arm-condition": code = "Append3Bits"; return; // TODO
 				case "": return;
 
 				default: break;

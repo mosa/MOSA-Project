@@ -305,6 +305,27 @@ namespace Mosa.Compiler.Framework
 			AppendByte((byte)operand.ConstantUnsignedInteger);
 		}
 
+		public void Append12BitImmediate(Operand operand)
+		{
+			Debug.Assert(operand.IsConstant);
+
+			AppendBits(operand.ConstantUnsignedInteger & 0xFFF, 12);
+		}
+
+		public void Append5BitImmediate(Operand operand)
+		{
+			Debug.Assert(operand.IsConstant);
+
+			AppendBits(operand.ConstantUnsignedInteger & 0b11111, 5);
+		}
+
+		public void Append2BitImmediate(Operand operand)
+		{
+			Debug.Assert(operand.IsConstant);
+
+			AppendBits(operand.ConstantUnsignedInteger & 0b11, 2);
+		}
+
 		private void WriteZeroBytes(int length)
 		{
 			for (int i = 0; i < length; i++)

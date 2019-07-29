@@ -152,6 +152,7 @@
     <Compile Include="Instructions\Wfi32.cs" />
     <Compile Include="Instructions\Yield32.cs" />
     <Compile Include="Intrinsic\Nop.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stages\IRTransformationStage.cs" />
   </ItemGroup>
   <ItemGroup />

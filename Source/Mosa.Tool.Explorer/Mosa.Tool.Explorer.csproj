@@ -114,6 +114,10 @@
       <Project>{0fb92651-3ee8-441d-84f2-c4dfda68e8a5}</Project>
       <Name>Mosa.Platform.ARMv6</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Platform.ARMv8A32\Mosa.Platform.ARMv8A32.csproj">
+      <Project>{1d3f8c25-77de-4e04-81df-5e7ef1abe914}</Project>
+      <Name>Mosa.Platform.ARMv8A32</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj">
       <Project>{f445db8e-e25a-41ef-a158-c742f14e94e4}</Project>
       <Name>Mosa.Platform.x64</Name>
