@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Ldr32 : ARMv8A32Instruction
 	{
-		public override int ID { get { return 722; } }
+		public override int ID { get { return 724; } }
 
 		internal Ldr32()
 			: base(1, 3)

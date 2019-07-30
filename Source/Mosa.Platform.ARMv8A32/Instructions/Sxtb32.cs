@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Sxtb32 : ARMv8A32Instruction
 	{
-		public override int ID { get { return 755; } }
+		public override int ID { get { return 757; } }
 
 		internal Sxtb32()
 			: base(1, 3)

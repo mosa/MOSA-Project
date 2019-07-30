@@ -84,13 +84,14 @@
     <Compile Include="Architecture.cs" />
     <Compile Include="ArchitectureFeatureFlags.cs" />
     <Compile Include="ARMv8A32.cs" />
-    <Compile Include="ARMv8A32CodeEmitter.cs" />
     <Compile Include="ARMv8A32Instruction.cs" />
     <Compile Include="ARMv8A32Instructions.cs" />
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="GeneralPurposeRegister.cs" />
     <Compile Include="Instructions\Adc32.cs" />
+    <Compile Include="Instructions\AdcImmediate32.cs" />
     <Compile Include="Instructions\AdcS32.cs" />
+    <Compile Include="Instructions\AdcSImmediate32.cs" />
     <Compile Include="Instructions\Add32.cs" />
     <Compile Include="Instructions\Adr32.cs" />
     <Compile Include="Instructions\And32.cs" />

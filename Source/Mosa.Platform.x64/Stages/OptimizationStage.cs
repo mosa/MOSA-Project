@@ -31,7 +31,7 @@ namespace Mosa.Platform.x64.Stages
 		public void Add64(InstructionNode node)
 		{
 			// This transformation can reduces restrictions placed on the register allocator.
-			// The LEA does not change any of the status flags, however, the add instruction some flags (carry, zero, etc.)
+			// The LEA does not change any of the status flags, however, the add instruction normally updates the status flags (carry, zero, etc.)
 			// Therefore, this transformation can only occur if the status flags are unused later.
 			// A search is required to determine if a status flag is used
 			// The search may not be conclusive; when so, the transformation is not made.

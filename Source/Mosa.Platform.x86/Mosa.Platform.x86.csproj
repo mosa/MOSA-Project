@@ -95,6 +95,7 @@
     <Compile Include="Instructions\AddSS.cs" />
     <Compile Include="Instructions\And32.cs" />
     <Compile Include="Instructions\BochsDebug.cs" />
+    <Compile Include="Instructions\Branch.cs" />
     <Compile Include="Instructions\BranchCarry.cs" />
     <Compile Include="Instructions\BranchEqual.cs" />
     <Compile Include="Instructions\BranchGreaterOrEqual.cs" />
@@ -122,6 +123,7 @@
     <Compile Include="Instructions\Call.cs" />
     <Compile Include="Instructions\Cdq32.cs" />
     <Compile Include="Instructions\Cli.cs" />
+    <Compile Include="Instructions\CMov.cs" />
     <Compile Include="Instructions\CmovCarry32.cs" />
     <Compile Include="Instructions\CmovEqual32.cs" />
     <Compile Include="Instructions\CmovGreaterOrEqual32.cs" />
@@ -230,6 +232,7 @@
     <Compile Include="Instructions\RoundSS.cs" />
     <Compile Include="Instructions\Sar32.cs" />
     <Compile Include="Instructions\Sbb32.cs" />
+    <Compile Include="Instructions\SetByte.cs" />
     <Compile Include="Instructions\SetByteIfCarry.cs" />
     <Compile Include="Instructions\SetByteIfEqual.cs" />
     <Compile Include="Instructions\SetByteIfGreaterOrEqual.cs" />

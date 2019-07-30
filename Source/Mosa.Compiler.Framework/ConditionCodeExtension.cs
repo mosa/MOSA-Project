@@ -66,6 +66,8 @@ namespace Mosa.Compiler.Framework
 				case ConditionCode.Negative: return ConditionCode.Positive;
 				case ConditionCode.Always: return ConditionCode.Never;
 				case ConditionCode.Never: return ConditionCode.Always;
+				case ConditionCode.Parity: return ConditionCode.NoParity;
+				case ConditionCode.NoParity: return ConditionCode.Parity;
 				default: throw new NotSupportedException();
 			}
 		}
@@ -94,6 +96,8 @@ namespace Mosa.Compiler.Framework
 				case ConditionCode.Negative: return ConditionCode.Negative;
 				case ConditionCode.Always: return ConditionCode.Always;
 				case ConditionCode.Never: return ConditionCode.Never;
+				case ConditionCode.Parity: return ConditionCode.NoParity;
+				case ConditionCode.NoParity: return ConditionCode.Parity;
 				default: throw new NotSupportedException();
 			}
 		}
@@ -119,7 +123,8 @@ namespace Mosa.Compiler.Framework
 				case ConditionCode.Carry: return "carry";
 				case ConditionCode.NoCarry: return "no carry";
 				case ConditionCode.Always: return "always";
-
+				case ConditionCode.Parity: return "parity";
+				case ConditionCode.NoParity: return "no parity";
 				default: throw new NotSupportedException();
 			}
 		}

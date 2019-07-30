@@ -128,6 +128,7 @@ namespace Mosa.Platform.x86
 		public static readonly XChg32 XChg32 = new XChg32();
 		public static readonly XChgLoad32 XChgLoad32 = new XChgLoad32();
 		public static readonly Xor32 Xor32 = new Xor32();
+		public static readonly Branch Branch = new Branch();
 		public static readonly BranchOverflow BranchOverflow = new BranchOverflow();
 		public static readonly BranchNoOverflow BranchNoOverflow = new BranchNoOverflow();
 		public static readonly BranchCarry BranchCarry = new BranchCarry();
@@ -148,6 +149,7 @@ namespace Mosa.Platform.x86
 		public static readonly BranchGreaterOrEqual BranchGreaterOrEqual = new BranchGreaterOrEqual();
 		public static readonly BranchLessOrEqual BranchLessOrEqual = new BranchLessOrEqual();
 		public static readonly BranchGreaterThan BranchGreaterThan = new BranchGreaterThan();
+		public static readonly SetByte SetByte = new SetByte();
 		public static readonly SetByteIfOverflow SetByteIfOverflow = new SetByteIfOverflow();
 		public static readonly SetByteIfNoOverflow SetByteIfNoOverflow = new SetByteIfNoOverflow();
 		public static readonly SetByteIfCarry SetByteIfCarry = new SetByteIfCarry();
@@ -168,6 +170,7 @@ namespace Mosa.Platform.x86
 		public static readonly SetByteIfGreaterOrEqual SetByteIfGreaterOrEqual = new SetByteIfGreaterOrEqual();
 		public static readonly SetByteIfLessOrEqual SetByteIfLessOrEqual = new SetByteIfLessOrEqual();
 		public static readonly SetByteIfGreaterThan SetByteIfGreaterThan = new SetByteIfGreaterThan();
+		public static readonly CMov CMov = new CMov();
 		public static readonly CMovOverflow32 CMovOverflow32 = new CMovOverflow32();
 		public static readonly CMovNoOverflow32 CMovNoOverflow32 = new CMovNoOverflow32();
 		public static readonly CMovCarry32 CMovCarry32 = new CMovCarry32();

@@ -7,28 +7,33 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// BranchEqual
+	/// Branch
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class BranchEqual : X86Instruction
+	public sealed class Branch : X86Instruction
 	{
-		public override int ID { get { return 319; } }
+		public override int ID { get { return 312; } }
 
-		internal BranchEqual()
+		internal Branch()
 			: base(0, 0)
 		{
 		}
 
-		public override string AlternativeName { get { return "JE"; } }
+		public override string AlternativeName { get { return "Jxx"; } }
 
 		public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
 
 		public override bool IsZeroFlagUsed { get { return true; } }
 
-		public override BaseInstruction GetOpposite()
-		{
-			return X86.BranchNotEqual;
-		}
+		public override bool IsCarryFlagUsed { get { return true; } }
+
+		public override bool IsSignFlagUsed { get { return true; } }
+
+		public override bool IsOverflowFlagUsed { get { return true; } }
+
+		public override bool IsParityFlagUsed { get { return true; } }
+
+		public override bool AreFlagUseConditional { get { return true; } }
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
@@ -36,7 +41,8 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
 			emitter.OpcodeEncoder.AppendByte(0x0F);
-			emitter.OpcodeEncoder.AppendByte(0x84);
+			emitter.OpcodeEncoder.AppendNibble(0b1000);
+			emitter.OpcodeEncoder.AppendNibble(GetConditionCode(node.ConditionCode));
 			emitter.OpcodeEncoder.EmitRelative32(node.BranchTargets[0].Label);
 		}
 	}

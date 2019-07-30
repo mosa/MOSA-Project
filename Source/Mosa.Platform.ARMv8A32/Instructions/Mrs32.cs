@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Mrs32 : ARMv8A32Instruction
 	{
-		public override int ID { get { return 730; } }
+		public override int ID { get { return 732; } }
 
 		internal Mrs32()
 			: base(1, 3)

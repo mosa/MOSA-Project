@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Lsl32 : ARMv8A32Instruction
 	{
-		public override int ID { get { return 727; } }
+		public override int ID { get { return 729; } }
 
 		internal Lsl32()
 			: base(1, 3)

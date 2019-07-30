@@ -1,11 +1,51 @@
 {
 	"Encoding": [
-		"[arm-data-processing-immediate]=[cond]|00|[i]|[opcode]|[s]|[rn]|[rd]|[imm12]",
-		"[arm-data-processing-register]=[cond]|00|[i]|[opcode]|[s]|[rn]|[rd]|[shift]|[stype]|0|[rm]"
+		"[arm-data-processing-immediate]=conditional|00|[i]|[opcode]|[s]|[rn]|reg4:r|[imm12]",
+		"[arm-data-processing-register]=conditional|00|[i]|[opcode]|[s]|[rn]|reg4:r|[shift]|[stype]|0|[rm]"
 	],
 	"Instructions": [
 		{
+			"Name": "AdcImmediate32",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Add with Carry",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[arm-data-processing-immediate],i=1,opcode=0101,s=0,rn=reg4:o1,imm12=imm12:o2"
+				}
+			]
+		},
+		{
 			"Name": "Adc32",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Add with Carry",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[arm-data-processing-register],i=0,opcode=0101,s=0,rn=reg4:o1,shift=imm5:o3,stype=imm2:o4,rm=reg4:o2"
+				}
+			]
+		},
+		{
+			"Name": "AdcSImmediate32",
 			"Commutative": "true",
 			"FamilyName": "ARMv8A32",
 			"FlagsCleared": "",
@@ -20,11 +60,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[arm-data-processing-immediate],cond=0000,i=1,opcode=0101,s=0,rn=reg4:o1,rd=reg4:r,imm12=imm12:o2"
-				},
-				{
-					"Condition": "[#register][register][register][register]",
-					"Encoding": "[arm-data-processing-register],cond=0000,i=0,opcode=0101,s=0,rn=reg4:o1,rd=reg4:r,shift=imm5:o3,stype=imm2:o4,rm=reg4:o2"
+					"Encoding": "[arm-data-processing-immediate],i=1,opcode=0101,s=1,rn=reg4:o1,imm12=imm12:o2"
 				}
 			]
 		},
@@ -38,17 +74,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "C",
-			"OperandCount": 2,
+			"OperandCount": 4,
 			"ResultCount": 1,
 			"Description": "Add with Carry",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[#register][constant]",
-					"Encoding": "[arm-data-processing-immediate],cond=0000,i=1,opcode=0101,s=1,rn=reg4:o1,rd=reg4:r,imm12=imm12:o2"
-				},
-				{
 					"Condition": "[#register][register][register][register]",
-					"Encoding": "[arm-data-processing-register],cond=0000,i=1,opcode=0101,s=0,rn=reg4:o1,rd=reg4:r,shift=imm5:o3,stype=imm2:o4,rm=reg4:o2"
+					"Encoding": "[arm-data-processing-register],i=1,opcode=0101,s=0,rn=reg4:o1,shift=imm5:o3,stype=imm2:o4,rm=reg4:o2"
 				}
 			]
 		},

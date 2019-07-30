@@ -7,41 +7,40 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// CMovLessOrEqual32
+	/// SetByte
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class CMovLessOrEqual32 : X86Instruction
+	public sealed class SetByte : X86Instruction
 	{
-		public override int ID { get { return 373; } }
+		public override int ID { get { return 333; } }
 
-		internal CMovLessOrEqual32()
-			: base(1, 1)
+		internal SetByte()
+			: base(1, 0)
 		{
 		}
 
-		public override string AlternativeName { get { return "CMovLE"; } }
+		public override string AlternativeName { get { return "Setxx"; } }
 
 		public override bool IsZeroFlagUsed { get { return true; } }
+
+		public override bool IsCarryFlagUsed { get { return true; } }
 
 		public override bool IsSignFlagUsed { get { return true; } }
 
 		public override bool IsOverflowFlagUsed { get { return true; } }
 
-		public override BaseInstruction GetOpposite()
-		{
-			return X86.CMovGreaterThan32;
-		}
+		public override bool IsParityFlagUsed { get { return true; } }
+
+		public override bool AreFlagUseConditional { get { return true; } }
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
 			emitter.OpcodeEncoder.AppendByte(0x0F);
-			emitter.OpcodeEncoder.AppendByte(0x4E);
-			emitter.OpcodeEncoder.Append2Bits(0b11);
-			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+			emitter.OpcodeEncoder.AppendNibble(0b1001);
+			emitter.OpcodeEncoder.AppendNibble(GetConditionCode(node.ConditionCode));
 		}
 	}
 }

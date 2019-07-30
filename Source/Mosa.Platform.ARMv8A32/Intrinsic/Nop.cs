@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Platform.ARMv8A32;
 
 namespace Mosa.Platform.ARMv8A32.Intrinsic
 {

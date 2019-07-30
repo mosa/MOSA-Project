@@ -3439,6 +3439,29 @@
 				}
 			]
 		},
+
+		{
+			"Name": "Branch",
+			"AlternativeName": "Jxx",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "Conditional",
+			"FlowControl": "ConditionalBranch",
+			"OperandCount": 0,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x86],operand-prefix=0x0F,opcode=|0b1000|conditional,immediate=rel32:label"
+				}
+			]
+		},
+
 		{
 			"Name": "BranchOverflow",
 			"AlternativeName": "JO",
@@ -3880,6 +3903,26 @@
 			]
 		},
 		{
+			"Name": "SetByte",
+			"AlternativeName": "Setxx",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "Conditional",
+			"OperandCount": 0,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x86],operand-prefix=0x0F,opcode=|0b1001|conditional"
+				}
+			]
+		},
+		{
 			"Name": "SetByteIfOverflow",
 			"AlternativeName": "SetO",
 			"FamilyName": "X86",
@@ -4296,6 +4339,26 @@
 				{
 					"Condition": "",
 					"Encoding": "[x86-setbyteif],opcode-setbyteif=0x9F"
+				}
+			]
+		},
+		{
+			"Name": "CMov",
+			"AlternativeName": "CMov",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "Conditional",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x86],operand-prefix=0x0F,opcode=|0b0100|conditional,mod=11,reg=reg3:r,rm=reg3:o1"
 				}
 			]
 		},

@@ -175,7 +175,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Lines.AppendLine("\t\tpublic override bool ThreeTwoAddressConversion { get { return true; } }");
 			}
 
-			if (FlagsUsed.Contains("Z"))
+			if (FlagsUsed.Contains("Z") || FlagsUsed == "CONDITIONAL")
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsZeroFlagUsed { get { return true; } }");
@@ -211,7 +211,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Lines.AppendLine("\t\tpublic override bool IsZeroFlagUndefined { get { return true; } }");
 			}
 
-			if (FlagsUsed.Contains("C"))
+			if (FlagsUsed.Contains("C") || FlagsUsed == "CONDITIONAL")
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsCarryFlagUsed { get { return true; } }");
@@ -247,7 +247,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Lines.AppendLine("\t\tpublic override bool IsCarryFlagUndefined { get { return true; } }");
 			}
 
-			if (FlagsUsed.Contains("S") || FlagsUsed.Contains("N"))
+			if (FlagsUsed.Contains("S") || FlagsUsed.Contains("N") || FlagsUsed == "CONDITIONAL")
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsSignFlagUsed { get { return true; } }");
@@ -285,7 +285,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Lines.AppendLine("\t\tpublic override bool IsSignFlagUndefined { get { return true; } }");
 			}
 
-			if (FlagsUsed.Contains("O") || FlagsUsed.Contains("V"))
+			if (FlagsUsed.Contains("O") || FlagsUsed.Contains("V") || FlagsUsed == "CONDITIONAL")
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsOverflowFlagUsed { get { return true; } }");
@@ -322,7 +322,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Lines.AppendLine("\t\tpublic override bool IsOverflowFlagUndefined { get { return true; } }");
 			}
 
-			if (FlagsUsed.Contains("P"))
+			if (FlagsUsed.Contains("P") || FlagsUsed == "CONDITIONAL")
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsParityFlagUsed { get { return true; } }");
@@ -356,6 +356,12 @@ namespace Mosa.Utility.SourceCodeGenerator
 			{
 				Lines.AppendLine();
 				Lines.AppendLine("\t\tpublic override bool IsParityFlagUndefined { get { return true; } }");
+			}
+
+			if (FlagsUsed != null && FlagsUsed == "CONDITIONAL")
+			{
+				Lines.AppendLine();
+				Lines.AppendLine("\t\tpublic override bool AreFlagUseConditional { get { return true; } }");
 			}
 
 			if (node.LogicalOpposite != null)
@@ -810,7 +816,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			{
 				case "reg3": code = "Append3Bits"; postcode = ".Register.RegisterCode"; return;
 				case "reg4x": code = "AppendBit("; postcode = ".Register.RegisterCode >> 3) & 0x1"; return;
-				case "reg4": code = "AppendNibble"; postcode = ".Register.RegisterCode"; return;
+				case "reg4": code = "Append4Bits"; postcode = ".Register.RegisterCode"; return;
 				case "reg5": code = "Append5Bits"; postcode = ".Register.RegisterCode"; return;
 				case "reg6": code = "Append6Bits"; postcode = ".Register.RegisterCode"; return;
 				case "imm32": code = "Append32BitImmediate"; return;
@@ -825,7 +831,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "rel64": code = "EmitRelative64"; return;
 				case "forward32": code = "EmitForward32"; return;
 				case "supress8": code = "SuppressByte"; return;
-				case "arm-condition": code = "Append3Bits"; return; // TODO
+				case "conditional": code = "AppendNibble"; postcode = "GetConditionCode(node.ConditionCode)"; return;
 				case "": return;
 
 				default: break;
@@ -854,14 +860,14 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 					switch (length)
 					{
-						case 1: code = "AppendBit("; break;
+						case 1: code = "Append1Bit("; break;
 						case 2: code = "Append2Bits("; break;
 						case 3: code = "Append3Bits("; break;
-						case 4: code = "AppendNibble("; break;
+						case 4: code = "Append4Bits("; break;
 						case 5: code = "Append5Bits("; break;
 						case 6: code = "Append6Bits("; break;
 						case 7: code = "Append7Bits("; break;
-						case 8: code = "AppendByte("; break;
+						case 8: code = "Append8Bits("; break;
 						default: code = "AppendBits("; postcode += ", " + length.ToString(); break;
 					}
 
@@ -884,8 +890,9 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "r1": return "node.Result";
 				case "r2": return "node.Result2";
 				case "label": return "node.BranchTargets[0].Label";
-				case "cond": return string.Empty; // TODO
-				case "shifter": return string.Empty; // TODO
+
+				//case "cond": return string.Empty; // TODO
+				//case "shifter": return string.Empty; // TODO
 
 				default: return part; // pass as is
 			}
