@@ -48,7 +48,7 @@ namespace Mosa.Tool.Explorer
 
 		public Options()
 		{
-			X86 = true;
+			X86 = false;
 			X64 = false;
 			ARMv6 = false;
 			ARMv8A32 = false;

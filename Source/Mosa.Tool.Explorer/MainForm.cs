@@ -229,15 +229,14 @@ namespace Mosa.Tool.Explorer
 
 			if (options.X86)
 				cbPlatform.SelectedIndex = 0;
-
-			if (options.X64)
+			else if (options.X64)
 				cbPlatform.SelectedIndex = 1;
-
-			if (options.ARMv6)
+			else if (options.ARMv6)
 				cbPlatform.SelectedIndex = 2;
-
-			if (options.ARMv8A32)
+			else if (options.ARMv8A32)
 				cbPlatform.SelectedIndex = 3;
+			else
+				cbPlatform.SelectedIndex = 0;
 
 			var files = (IList<string>)options.Files;
 
@@ -769,6 +768,7 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.AddSourceFile(filename);
 			Compiler.CompilerOptions.AddSourceFile("Mosa.Plug.Korlib.dll");
 			Compiler.CompilerOptions.AddSourceFile("Mosa.Plug.Korlib." + platform + ".dll");
+			Compiler.CompilerOptions.AddSourceFile("Mosa.Runtime." + platform + ".dll");
 
 			Compiler.Load();
 		}
