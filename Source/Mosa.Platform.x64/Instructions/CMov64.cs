@@ -7,26 +7,31 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x64.Instructions
 {
 	/// <summary>
-	/// CMovNoCarry64
+	/// CMov64
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
-	public sealed class CMovNoCarry64 : X64Instruction
+	public sealed class CMov64 : X64Instruction
 	{
-		public override int ID { get { return 553; } }
+		public override int ID { get { return 491; } }
 
-		internal CMovNoCarry64()
+		internal CMov64()
 			: base(1, 1)
 		{
 		}
 
-		public override string AlternativeName { get { return "CMovNC"; } }
+		public override string AlternativeName { get { return "CMov"; } }
+
+		public override bool IsZeroFlagUsed { get { return true; } }
 
 		public override bool IsCarryFlagUsed { get { return true; } }
 
-		public override BaseInstruction GetOpposite()
-		{
-			return X64.CMovCarry64;
-		}
+		public override bool IsSignFlagUsed { get { return true; } }
+
+		public override bool IsOverflowFlagUsed { get { return true; } }
+
+		public override bool IsParityFlagUsed { get { return true; } }
+
+		public override bool AreFlagUseConditional { get { return true; } }
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
@@ -40,7 +45,8 @@ namespace Mosa.Platform.x64.Instructions
 			emitter.OpcodeEncoder.AppendBit((node.Result.Register.RegisterCode >> 3) & 0x1);
 			emitter.OpcodeEncoder.AppendBit(0b0);
 			emitter.OpcodeEncoder.AppendBit((node.Operand1.Register.RegisterCode >> 3) & 0x1);
-			emitter.OpcodeEncoder.AppendByte(0x43);
+			emitter.OpcodeEncoder.AppendNibble(0b0100);
+			emitter.OpcodeEncoder.AppendNibble(GetConditionCode(node.ConditionCode));
 			emitter.OpcodeEncoder.Append2Bits(0b11);
 			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);

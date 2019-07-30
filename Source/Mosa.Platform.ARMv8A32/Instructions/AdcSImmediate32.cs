@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class AdcSImmediate32 : ARMv8A32Instruction
 	{
-		public override int ID { get { return 643; } }
+		public override int ID { get { return 573; } }
 
 		internal AdcSImmediate32()
 			: base(1, 2)

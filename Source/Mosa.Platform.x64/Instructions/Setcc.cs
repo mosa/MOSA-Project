@@ -7,26 +7,31 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x64.Instructions
 {
 	/// <summary>
-	/// SetByteIfUnsignedLessThan
+	/// Setcc
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
-	public sealed class SetByteIfUnsignedLessThan : X64Instruction
+	public sealed class Setcc : X64Instruction
 	{
-		public override int ID { get { return 511; } }
+		public override int ID { get { return 489; } }
 
-		internal SetByteIfUnsignedLessThan()
+		internal Setcc()
 			: base(1, 0)
 		{
 		}
 
-		public override string AlternativeName { get { return "SetB"; } }
+		public override string AlternativeName { get { return "Setcc"; } }
+
+		public override bool IsZeroFlagUsed { get { return true; } }
 
 		public override bool IsCarryFlagUsed { get { return true; } }
 
-		public override BaseInstruction GetOpposite()
-		{
-			return X64.SetByteIfUnsignedGreaterOrEqual;
-		}
+		public override bool IsSignFlagUsed { get { return true; } }
+
+		public override bool IsOverflowFlagUsed { get { return true; } }
+
+		public override bool IsParityFlagUsed { get { return true; } }
+
+		public override bool AreFlagUseConditional { get { return true; } }
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
@@ -34,13 +39,8 @@ namespace Mosa.Platform.x64.Instructions
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
 			emitter.OpcodeEncoder.AppendByte(0x0F);
-			emitter.OpcodeEncoder.SuppressByte(0x40);
-			emitter.OpcodeEncoder.AppendNibble(0b0100);
-			emitter.OpcodeEncoder.AppendBit(0b1);
-			emitter.OpcodeEncoder.AppendBit(0b0);
-			emitter.OpcodeEncoder.AppendBit(0b0);
-			emitter.OpcodeEncoder.AppendBit((node.Result.Register.RegisterCode >> 3) & 0x1);
-			emitter.OpcodeEncoder.AppendByte(0x92);
+			emitter.OpcodeEncoder.AppendNibble(0b1001);
+			emitter.OpcodeEncoder.AppendNibble(GetConditionCode(node.ConditionCode));
 			emitter.OpcodeEncoder.Append2Bits(0b11);
 			emitter.OpcodeEncoder.Append3Bits(0b000);
 			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);

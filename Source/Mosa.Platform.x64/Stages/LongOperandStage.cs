@@ -106,11 +106,9 @@ namespace Mosa.Platform.x64.Stages
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			var setcc = IRTransformationStage.GetSetcc(condition);
-
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			context.SetInstruction(X64.Cmp64, null, operand1, operand2);
-			context.AppendInstruction(setcc, v1);
+			context.AppendInstruction(X64.Setcc, condition, v1);
 			context.AppendInstruction(X64.Movzx8To64, resultOperand, v1);
 		}
 
@@ -123,10 +121,8 @@ namespace Mosa.Platform.x64.Stages
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			var branch = GetBranch(condition);
-
 			context.SetInstruction(X64.Cmp64, null, operand1, operand2);
-			context.AppendInstruction(branch, target);
+			context.AppendInstruction(X64.Branch, condition, target);
 		}
 
 		private void ConvertFloatR4ToInt64(InstructionNode node)
@@ -184,8 +180,8 @@ namespace Mosa.Platform.x64.Stages
 			var operand2 = context.Operand2;
 
 			context.SetInstruction(X64.Cmp64, null, operand1, ConstantZero64);
-			context.AppendInstruction(X64.CMovNotEqual64, result, operand1);    // true
-			context.AppendInstruction(X64.CMovEqual64, result, operand2);       // false
+			context.AppendInstruction(X64.CMov64, ConditionCode.NotEqual, result, operand1);    // true
+			context.AppendInstruction(X64.CMov64, ConditionCode.Equal, result, operand2);       // false
 		}
 
 		private void LoadInt64(InstructionNode node)
@@ -394,33 +390,6 @@ namespace Mosa.Platform.x64.Stages
 		#endregion Visitation Methods
 
 		#region Utility Methods
-
-		public static BaseInstruction GetBranch(ConditionCode condition)
-		{
-			switch (condition)
-			{
-				case ConditionCode.Overflow: return X64.BranchOverflow;
-				case ConditionCode.NoOverflow: return X64.BranchNoOverflow;
-				case ConditionCode.Carry: return X64.BranchCarry;
-				case ConditionCode.UnsignedLessThan: return X64.BranchUnsignedLessThan;
-				case ConditionCode.UnsignedGreaterOrEqual: return X64.BranchUnsignedGreaterOrEqual;
-				case ConditionCode.NoCarry: return X64.BranchNoCarry;
-				case ConditionCode.Equal: return X64.BranchEqual;
-				case ConditionCode.Zero: return X64.BranchZero;
-				case ConditionCode.NotEqual: return X64.BranchNotEqual;
-				case ConditionCode.NotZero: return X64.BranchNotZero;
-				case ConditionCode.UnsignedLessOrEqual: return X64.BranchUnsignedLessOrEqual;
-				case ConditionCode.UnsignedGreaterThan: return X64.BranchUnsignedGreaterThan;
-				case ConditionCode.Signed: return X64.BranchSigned;
-				case ConditionCode.NotSigned: return X64.BranchNotSigned;
-				case ConditionCode.LessThan: return X64.BranchLessThan;
-				case ConditionCode.GreaterOrEqual: return X64.BranchGreaterOrEqual;
-				case ConditionCode.LessOrEqual: return X64.BranchLessOrEqual;
-				case ConditionCode.GreaterThan: return X64.BranchGreaterThan;
-
-				default: throw new NotSupportedException();
-			}
-		}
 
 		public static void OptimizeBranch(Context context)
 		{

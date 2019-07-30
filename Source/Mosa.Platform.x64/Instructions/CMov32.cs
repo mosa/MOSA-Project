@@ -7,30 +7,31 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x64.Instructions
 {
 	/// <summary>
-	/// CMovGreaterThan64
+	/// CMov32
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
-	public sealed class CMovGreaterThan64 : X64Instruction
+	public sealed class CMov32 : X64Instruction
 	{
-		public override int ID { get { return 567; } }
+		public override int ID { get { return 490; } }
 
-		internal CMovGreaterThan64()
+		internal CMov32()
 			: base(1, 1)
 		{
 		}
 
-		public override string AlternativeName { get { return "CMovG"; } }
+		public override string AlternativeName { get { return "CMov"; } }
 
 		public override bool IsZeroFlagUsed { get { return true; } }
+
+		public override bool IsCarryFlagUsed { get { return true; } }
 
 		public override bool IsSignFlagUsed { get { return true; } }
 
 		public override bool IsOverflowFlagUsed { get { return true; } }
 
-		public override BaseInstruction GetOpposite()
-		{
-			return X64.CMovLessOrEqual64;
-		}
+		public override bool IsParityFlagUsed { get { return true; } }
+
+		public override bool AreFlagUseConditional { get { return true; } }
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
@@ -40,11 +41,12 @@ namespace Mosa.Platform.x64.Instructions
 			emitter.OpcodeEncoder.AppendByte(0x0F);
 			emitter.OpcodeEncoder.SuppressByte(0x40);
 			emitter.OpcodeEncoder.AppendNibble(0b0100);
-			emitter.OpcodeEncoder.AppendBit(0b1);
+			emitter.OpcodeEncoder.AppendBit(0b0);
 			emitter.OpcodeEncoder.AppendBit((node.Result.Register.RegisterCode >> 3) & 0x1);
 			emitter.OpcodeEncoder.AppendBit(0b0);
 			emitter.OpcodeEncoder.AppendBit((node.Operand1.Register.RegisterCode >> 3) & 0x1);
-			emitter.OpcodeEncoder.AppendByte(0x4F);
+			emitter.OpcodeEncoder.AppendNibble(0b0100);
+			emitter.OpcodeEncoder.AppendNibble(GetConditionCode(node.ConditionCode));
 			emitter.OpcodeEncoder.Append2Bits(0b11);
 			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);

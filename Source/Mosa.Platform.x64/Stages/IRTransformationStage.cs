@@ -118,7 +118,7 @@ namespace Mosa.Platform.x64.Stages
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
 
 			context.SetInstruction(X64.Add32, result, operand1, operand2);
-			context.AppendInstruction(X64.SetByteIfCarry, v1);
+			context.AppendInstruction(X64.Setcc, ConditionCode.Carry, v1);
 			context.AppendInstruction(X64.Movzx8To32, result2, v1);
 		}
 
@@ -217,26 +217,23 @@ namespace Mosa.Platform.x64.Stages
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			var setcc = GetSetcc(condition);
-
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			context.SetInstruction(X64.Cmp32, null, operand1, operand2);
-			context.AppendInstruction(setcc, v1);
+			context.AppendInstruction(X64.Setcc, condition, v1);
 			context.AppendInstruction(X64.Movzx8To32, resultOperand, v1);
 		}
 
 		private void CompareIntBranch32(Context context)
 		{
 			OptimizeBranch(context);
+
 			var target = context.BranchTargets[0];
 			var condition = context.ConditionCode;
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			var branch = GetBranch(condition);
-
 			context.SetInstruction(X64.Cmp32, null, operand1, operand2);
-			context.AppendInstruction(branch, target);
+			context.AppendInstruction(X64.Branch, condition, target);
 		}
 
 		private void ConvertFloatR4ToFloatR8(InstructionNode node)
@@ -362,10 +359,10 @@ namespace Mosa.Platform.x64.Stages
 
 						context.SetInstruction(X64.Mov32, result, CreateConstant(1));
 						context.AppendInstruction(instruction, null, left, right);
-						context.AppendInstruction(X64.BranchParity, newBlocks[1].Block);
+						context.AppendInstruction(X64.Branch, ConditionCode.Parity, newBlocks[1].Block);
 						context.AppendInstruction(X64.Jmp, newBlocks[0].Block);
 
-						newBlocks[0].AppendInstruction(X64.BranchNotEqual, newBlocks[1].Block);
+						newBlocks[0].AppendInstruction(X64.Branch, ConditionCode.NotEqual, newBlocks[1].Block);
 						newBlocks[0].AppendInstruction(X64.Jmp, nextBlock.Block);
 
 						newBlocks[1].AppendInstruction(X64.Mov32, result, ConstantZero64);
@@ -387,9 +384,9 @@ namespace Mosa.Platform.x64.Stages
 
 						context.SetInstruction(X64.Mov64, result, CreateConstant(1));
 						context.AppendInstruction(instruction, null, left, right);
-						context.AppendInstruction(X64.BranchParity, nextBlock.Block);
+						context.AppendInstruction(X64.Branch, ConditionCode.Parity, nextBlock.Block);
 						context.AppendInstruction(X64.Jmp, newBlocks[0].Block);
-						newBlocks[0].AppendInstruction(X64.SetByteIfNotEqual, result);
+						newBlocks[0].AppendInstruction(X64.Setcc, ConditionCode.NotEqual, result);
 
 						//newBlocks[0].AppendInstruction(X64.Movzx, InstructionSize.Size8, result, result);
 						newBlocks[0].AppendInstruction(X64.Jmp, nextBlock.Block);
@@ -404,7 +401,7 @@ namespace Mosa.Platform.x64.Stages
 
 						context.SetInstruction(X64.Mov64, result, ConstantZero64);
 						context.AppendInstruction(instruction, null, right, left);
-						context.AppendInstruction(X64.SetByteIfUnsignedGreaterThan, result);
+						context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreaterThan, result);
 						break;
 					}
 				case ConditionCode.GreaterThan:
@@ -416,7 +413,7 @@ namespace Mosa.Platform.x64.Stages
 
 						context.SetInstruction(X64.Mov32, result, ConstantZero64);
 						context.AppendInstruction(instruction, null, left, right);
-						context.AppendInstruction(X64.SetByteIfUnsignedGreaterThan, result);
+						context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreaterThan, result);
 						break;
 					}
 				case ConditionCode.LessOrEqual:
@@ -428,7 +425,7 @@ namespace Mosa.Platform.x64.Stages
 
 						context.SetInstruction(X64.Mov32, result, ConstantZero64);
 						context.AppendInstruction(instruction, null, right, left);
-						context.AppendInstruction(X64.SetByteIfUnsignedGreaterOrEqual, result);
+						context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreaterOrEqual, result);
 						break;
 					}
 				case ConditionCode.GreaterOrEqual:
@@ -440,7 +437,7 @@ namespace Mosa.Platform.x64.Stages
 
 						context.SetInstruction(X64.Mov32, result, ConstantZero64);
 						context.AppendInstruction(instruction, null, left, right);
-						context.AppendInstruction(X64.SetByteIfUnsignedGreaterOrEqual, result);
+						context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreaterOrEqual, result);
 						break;
 					}
 			}
@@ -454,8 +451,8 @@ namespace Mosa.Platform.x64.Stages
 			var operand3 = context.Operand3;
 
 			context.SetInstruction(X64.Cmp32, null, operand1, ConstantZero64);
-			context.AppendInstruction(X64.CMovNotEqual32, result, operand1);    // true
-			context.AppendInstruction(X64.CMovEqual32, result, operand2);       // false
+			context.AppendInstruction(X64.CMov32, ConditionCode.NotEqual, result, operand1);    // true
+			context.AppendInstruction(X64.CMov32, ConditionCode.Equal, result, operand2);       // false
 		}
 
 		private void Jmp(InstructionNode node)
@@ -772,7 +769,7 @@ namespace Mosa.Platform.x64.Stages
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
 
 			context.SetInstruction(X64.Sub32, result, operand1, operand2);
-			context.AppendInstruction(X64.SetByteIfCarry, v1);
+			context.AppendInstruction(X64.Setcc, ConditionCode.Carry, v1);
 			context.AppendInstruction(X64.Movzx8To32, result2, v1);
 		}
 
@@ -816,7 +813,7 @@ namespace Mosa.Platform.x64.Stages
 			for (int i = 0; i < targets.Count - 1; ++i)
 			{
 				context.AppendInstruction(X64.Cmp32, null, operand, CreateConstant(i));
-				context.AppendInstruction(X64.BranchEqual, targets[i]);
+				context.AppendInstruction(X64.Branch, ConditionCode.Equal, targets[i]);
 			}
 		}
 
@@ -833,87 +830,6 @@ namespace Mosa.Platform.x64.Stages
 		#endregion Visitation Methods
 
 		#region Helper Methods
-
-		public static BaseInstruction GetBranch(ConditionCode condition)
-		{
-			switch (condition)
-			{
-				case ConditionCode.Overflow: return X64.BranchOverflow;
-				case ConditionCode.NoOverflow: return X64.BranchNoOverflow;
-				case ConditionCode.Carry: return X64.BranchCarry;
-				case ConditionCode.UnsignedLessThan: return X64.BranchUnsignedLessThan;
-				case ConditionCode.UnsignedGreaterOrEqual: return X64.BranchUnsignedGreaterOrEqual;
-				case ConditionCode.NoCarry: return X64.BranchNoCarry;
-				case ConditionCode.Equal: return X64.BranchEqual;
-				case ConditionCode.Zero: return X64.BranchZero;
-				case ConditionCode.NotEqual: return X64.BranchNotEqual;
-				case ConditionCode.NotZero: return X64.BranchNotZero;
-				case ConditionCode.UnsignedLessOrEqual: return X64.BranchUnsignedLessOrEqual;
-				case ConditionCode.UnsignedGreaterThan: return X64.BranchUnsignedGreaterThan;
-				case ConditionCode.Signed: return X64.BranchSigned;
-				case ConditionCode.NotSigned: return X64.BranchNotSigned;
-				case ConditionCode.LessThan: return X64.BranchLessThan;
-				case ConditionCode.GreaterOrEqual: return X64.BranchGreaterOrEqual;
-				case ConditionCode.LessOrEqual: return X64.BranchLessOrEqual;
-				case ConditionCode.GreaterThan: return X64.BranchGreaterThan;
-
-				default: throw new NotSupportedException();
-			}
-		}
-
-		public static BaseInstruction GetCMovcc64(ConditionCode condition)
-		{
-			switch (condition)
-			{
-				case ConditionCode.Overflow: return X64.CMovOverflow64;
-				case ConditionCode.NoOverflow: return X64.CMovNoOverflow64;
-				case ConditionCode.Carry: return X64.CMovCarry64;
-				case ConditionCode.UnsignedLessThan: return X64.CMovUnsignedLessThan64;
-				case ConditionCode.UnsignedGreaterOrEqual: return X64.CMovUnsignedGreaterOrEqual64;
-				case ConditionCode.NoCarry: return X64.CMovNoCarry64;
-				case ConditionCode.Equal: return X64.CMovEqual64;
-				case ConditionCode.Zero: return X64.CMovZero64;
-				case ConditionCode.NotEqual: return X64.CMovNotEqual64;
-				case ConditionCode.NotZero: return X64.CMovNotZero64;
-				case ConditionCode.UnsignedLessOrEqual: return X64.CMovUnsignedLessOrEqual64;
-				case ConditionCode.UnsignedGreaterThan: return X64.CMovUnsignedGreaterThan64;
-				case ConditionCode.Signed: return X64.CMovSigned64;
-				case ConditionCode.NotSigned: return X64.CMovNotSigned64;
-				case ConditionCode.LessThan: return X64.CMovLessThan64;
-				case ConditionCode.GreaterOrEqual: return X64.CMovGreaterOrEqual64;
-				case ConditionCode.LessOrEqual: return X64.CMovLessOrEqual64;
-				case ConditionCode.GreaterThan: return X64.CMovGreaterThan64;
-
-				default: throw new NotSupportedException();
-			}
-		}
-
-		public static BaseInstruction GetSetcc(ConditionCode condition)
-		{
-			switch (condition)
-			{
-				case ConditionCode.Overflow: return X64.SetByteIfOverflow;
-				case ConditionCode.NoOverflow: return X64.SetByteIfNoOverflow;
-				case ConditionCode.Carry: return X64.SetByteIfCarry;
-				case ConditionCode.UnsignedLessThan: return X64.SetByteIfUnsignedLessThan;
-				case ConditionCode.UnsignedGreaterOrEqual: return X64.SetByteIfUnsignedGreaterOrEqual;
-				case ConditionCode.NoCarry: return X64.SetByteIfNoCarry;
-				case ConditionCode.Equal: return X64.SetByteIfEqual;
-				case ConditionCode.Zero: return X64.SetByteIfZero;
-				case ConditionCode.NotEqual: return X64.SetByteIfNotEqual;
-				case ConditionCode.NotZero: return X64.SetByteIfNotZero;
-				case ConditionCode.UnsignedLessOrEqual: return X64.SetByteIfUnsignedLessOrEqual;
-				case ConditionCode.UnsignedGreaterThan: return X64.SetByteIfUnsignedGreaterThan;
-				case ConditionCode.Signed: return X64.SetByteIfSigned;
-				case ConditionCode.NotSigned: return X64.SetByteIfNotSigned;
-				case ConditionCode.LessThan: return X64.SetByteIfLessThan;
-				case ConditionCode.GreaterOrEqual: return X64.SetByteIfGreaterOrEqual;
-				case ConditionCode.LessOrEqual: return X64.SetByteIfLessOrEqual;
-				case ConditionCode.GreaterThan: return X64.SetByteIfGreaterThan;
-
-				default: throw new NotSupportedException();
-			}
-		}
 
 		public static void OptimizeBranch(Context context)
 		{

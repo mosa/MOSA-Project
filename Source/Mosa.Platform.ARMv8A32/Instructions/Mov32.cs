@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Mov32 : ARMv8A32Instruction
 	{
-		public override int ID { get { return 671; } }
+		public override int ID { get { return 601; } }
 
 		internal Mov32()
 			: base(1, 3)
