@@ -121,5 +121,15 @@ namespace Mosa.Compiler.Framework
 		/// The negative
 		/// </summary>
 		Negative,
+
+		/// <summary>
+		/// No parity
+		/// </summary>
+		NoParity,
+
+		/// <summary>
+		/// Parity
+		/// </summary>
+		Parity,
 	}
 }

@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Comisd : X64Instruction
 	{
-		public override int ID { get { return 404; } }
+		public override int ID { get { return 344; } }
 
 		internal Comisd()
 			: base(0, 2)

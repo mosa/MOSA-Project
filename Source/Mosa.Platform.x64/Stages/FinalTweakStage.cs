@@ -26,26 +26,7 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(X64.Movzx16To32, Movzx16To32);
 			AddVisitation(X64.Movzx8To32, Movzx8To32);
 			AddVisitation(X64.Nop, Nop);
-			AddVisitation(X64.SetByteIfCarry, Setcc);
-			AddVisitation(X64.SetByteIfEqual, Setcc);
-			AddVisitation(X64.SetByteIfGreaterOrEqual, Setcc);
-			AddVisitation(X64.SetByteIfGreaterThan, Setcc);
-			AddVisitation(X64.SetByteIfLessOrEqual, Setcc);
-			AddVisitation(X64.SetByteIfLessThan, Setcc);
-			AddVisitation(X64.SetByteIfNoCarry, Setcc);
-			AddVisitation(X64.SetByteIfNoOverflow, Setcc);
-			AddVisitation(X64.SetByteIfNoParity, Setcc);
-			AddVisitation(X64.SetByteIfNotEqual, Setcc);
-			AddVisitation(X64.SetByteIfNotSigned, Setcc);
-			AddVisitation(X64.SetByteIfNotZero, Setcc);
-			AddVisitation(X64.SetByteIfOverflow, Setcc);
-			AddVisitation(X64.SetByteIfParity, Setcc);
-			AddVisitation(X64.SetByteIfSigned, Setcc);
-			AddVisitation(X64.SetByteIfUnsignedGreaterOrEqual, Setcc);
-			AddVisitation(X64.SetByteIfUnsignedGreaterThan, Setcc);
-			AddVisitation(X64.SetByteIfUnsignedLessOrEqual, Setcc);
-			AddVisitation(X64.SetByteIfUnsignedLessThan, Setcc);
-			AddVisitation(X64.SetByteIfZero, Setcc);
+			AddVisitation(X64.Setcc, Setcc);
 		}
 
 		#region Visitation Methods

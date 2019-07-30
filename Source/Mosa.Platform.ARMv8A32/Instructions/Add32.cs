@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Add32 : ARMv8A32Instruction
 	{
-		public override int ID { get { return 703; } }
+		public override int ID { get { return 575; } }
 
 		internal Add32()
 			: base(1, 3)

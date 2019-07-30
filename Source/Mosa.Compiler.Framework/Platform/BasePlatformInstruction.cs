@@ -45,6 +45,8 @@ namespace Mosa.Compiler.Framework.Platform
 		public virtual bool IsParityFlagUnchanged { get { return false; } }
 		public virtual bool IsParityFlagUndefined { get { return false; } }
 
+		public virtual bool AreFlagUseConditional { get { return false; } }
+
 		/// <summary>
 		/// Gets a value indicating whether [three two address conversion].
 		/// </summary>

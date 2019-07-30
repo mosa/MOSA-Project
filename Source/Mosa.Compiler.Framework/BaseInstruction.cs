@@ -208,11 +208,6 @@ namespace Mosa.Compiler.Framework
 
 		#region Methods
 
-		public virtual BaseInstruction GetOpposite()
-		{
-			return null;
-		}
-
 		/// <summary>
 		/// Returns a string representation of the context.
 		/// </summary>

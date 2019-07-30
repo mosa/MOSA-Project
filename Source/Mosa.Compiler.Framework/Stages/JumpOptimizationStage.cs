@@ -49,18 +49,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var jumpTarget = jumpNode.BranchTargets[0];
 
-					var oppInstruction = branchNode.Instruction.GetOpposite();
-
-					if (oppInstruction != null)
-					{
-						// reverse condition - by changing the instruction to it's logical opposite
-						branchNode.Instruction = oppInstruction;
-					}
-					else
-					{
-						// reverse condition
-						branchNode.ConditionCode = branchNode.ConditionCode.GetOpposite();
-					}
+					// reverse condition
+					branchNode.ConditionCode = branchNode.ConditionCode.GetOpposite();
 
 					// insert pseudo flow instruction --- this is important when protected regions exists
 					jumpNode.SetInstruction(IRInstruction.Flow, branchNode.BranchTargets[0]);

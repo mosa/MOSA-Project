@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Rev32 : ARMv8A32Instruction
 	{
-		public override int ID { get { return 738; } }
+		public override int ID { get { return 610; } }
 
 		internal Rev32()
 			: base(1, 3)

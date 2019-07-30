@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Isb32 : ARMv8A32Instruction
 	{
-		public override int ID { get { return 718; } }
+		public override int ID { get { return 590; } }
 
 		internal Isb32()
 			: base(1, 3)

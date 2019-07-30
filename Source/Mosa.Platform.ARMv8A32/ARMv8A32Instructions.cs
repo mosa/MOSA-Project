@@ -13,7 +13,9 @@ namespace Mosa.Platform.ARMv8A32
 	public static class ARMv8A32Instructions
 	{
 		public static readonly List<BaseInstruction> List = new List<BaseInstruction> {
+			ARMv8A32.AdcImm32,
 			ARMv8A32.Adc32,
+			ARMv8A32.AdcSImm32,
 			ARMv8A32.AdcS32,
 			ARMv8A32.Add32,
 			ARMv8A32.Adr32,

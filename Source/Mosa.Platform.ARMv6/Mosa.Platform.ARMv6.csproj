@@ -88,7 +88,6 @@
     <Compile Include="ARMv6Instructions.cs" />
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="GeneralPurposeRegister.cs" />
-    <Compile Include="ARMv6CodeEmitter.cs" />
     <Compile Include="Instructions\Adc32.cs" />
     <Compile Include="Instructions\Add32.cs" />
     <Compile Include="Instructions\Adr32.cs" />
