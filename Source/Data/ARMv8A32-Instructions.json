@@ -5,7 +5,7 @@
 	],
 	"Instructions": [
 		{
-			"Name": "AdcImmediate32",
+			"Name": "AdcImm32",
 			"Commutative": "true",
 			"FamilyName": "ARMv8A32",
 			"FlagsCleared": "",
@@ -45,7 +45,7 @@
 			]
 		},
 		{
-			"Name": "AdcSImmediate32",
+			"Name": "AdcSImm32",
 			"Commutative": "true",
 			"FamilyName": "ARMv8A32",
 			"FlagsCleared": "",

@@ -7,14 +7,14 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv8A32.Instructions
 {
 	/// <summary>
-	/// AdcSImmediate32 - Add with Carry
+	/// AdcSImm32 - Add with Carry
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
-	public sealed class AdcSImmediate32 : ARMv8A32Instruction
+	public sealed class AdcSImm32 : ARMv8A32Instruction
 	{
 		public override int ID { get { return 573; } }
 
-		internal AdcSImmediate32()
+		internal AdcSImm32()
 			: base(1, 2)
 		{
 		}

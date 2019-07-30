@@ -11,9 +11,9 @@ namespace Mosa.Platform.ARMv8A32
 	/// </summary>
 	public static class ARMv8A32
 	{
-		public static readonly AdcImmediate32 AdcImmediate32 = new AdcImmediate32();
+		public static readonly AdcImm32 AdcImm32 = new AdcImm32();
 		public static readonly Adc32 Adc32 = new Adc32();
-		public static readonly AdcSImmediate32 AdcSImmediate32 = new AdcSImmediate32();
+		public static readonly AdcSImm32 AdcSImm32 = new AdcSImm32();
 		public static readonly AdcS32 AdcS32 = new AdcS32();
 		public static readonly Add32 Add32 = new Add32();
 		public static readonly Adr32 Adr32 = new Adr32();
