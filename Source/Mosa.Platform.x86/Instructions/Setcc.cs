@@ -7,28 +7,31 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// SetByteIfUnsignedGreaterThan
+	/// Setcc
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class SetByteIfUnsignedGreaterThan : X86Instruction
+	public sealed class Setcc : X86Instruction
 	{
-		public override int ID { get { return 345; } }
+		public override int ID { get { return 313; } }
 
-		internal SetByteIfUnsignedGreaterThan()
+		internal Setcc()
 			: base(1, 0)
 		{
 		}
 
-		public override string AlternativeName { get { return "SetA"; } }
+		public override string AlternativeName { get { return "Setcc"; } }
 
 		public override bool IsZeroFlagUsed { get { return true; } }
 
 		public override bool IsCarryFlagUsed { get { return true; } }
 
-		public override BaseInstruction GetOpposite()
-		{
-			return X86.SetByteIfUnsignedLessOrEqual;
-		}
+		public override bool IsSignFlagUsed { get { return true; } }
+
+		public override bool IsOverflowFlagUsed { get { return true; } }
+
+		public override bool IsParityFlagUsed { get { return true; } }
+
+		public override bool AreFlagUseConditional { get { return true; } }
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
@@ -36,7 +39,8 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
 			emitter.OpcodeEncoder.AppendByte(0x0F);
-			emitter.OpcodeEncoder.AppendByte(0x97);
+			emitter.OpcodeEncoder.AppendNibble(0b1001);
+			emitter.OpcodeEncoder.AppendNibble(GetConditionCode(node.ConditionCode));
 			emitter.OpcodeEncoder.Append2Bits(0b11);
 			emitter.OpcodeEncoder.Append3Bits(0b000);
 			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);

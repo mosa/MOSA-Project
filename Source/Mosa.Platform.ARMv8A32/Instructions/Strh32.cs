@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Strh32 : ARMv8A32Instruction
 	{
-		public override int ID { get { return 753; } }
+		public override int ID { get { return 713; } }
 
 		internal Strh32()
 			: base(1, 3)

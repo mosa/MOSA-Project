@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class IMul64 : X64Instruction
 	{
-		public override int ID { get { return 427; } }
+		public override int ID { get { return 387; } }
 
 		internal IMul64()
 			: base(1, 2)

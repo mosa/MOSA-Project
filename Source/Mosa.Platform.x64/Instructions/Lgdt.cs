@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Lgdt : X64Instruction
 	{
-		public override int ID { get { return 441; } }
+		public override int ID { get { return 401; } }
 
 		internal Lgdt()
 			: base(0, 1)

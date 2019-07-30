@@ -113,11 +113,11 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[0].AppendInstruction(X86.Mov32, v2, op1H);
 			newBlocks[0].AppendInstruction(X86.Mov32, v1, op1L);
 			newBlocks[0].AppendInstruction(X86.Cmp32, null, v3, CreateConstant(64));
-			newBlocks[0].AppendInstruction(X86.BranchUnsignedGreaterOrEqual, newBlocks[4].Block);
+			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].Block);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].Block);
 
 			newBlocks[1].AppendInstruction(X86.Cmp32, null, v3, CreateConstant(32));
-			newBlocks[1].AppendInstruction(X86.BranchUnsignedGreaterOrEqual, newBlocks[3].Block);
+			newBlocks[1].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].Block);
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[2].Block);
 
 			newBlocks[2].AppendInstruction(X86.Shrd32, v1, v1, v2, v3);
@@ -194,33 +194,31 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
 
 			var result = context.Result;
-
-			var branch = IRTransformationStage.GetBranch(context.ConditionCode);
-			var branchUnsigned = IRTransformationStage.GetBranch(context.ConditionCode.GetUnsigned());
+			var condition = context.ConditionCode;
 
 			var nextBlock = Split(context);
 			var newBlocks = CreateNewBlockContexts(4, context.Label);
 
 			// Compare high dwords
 			context.SetInstruction(X86.Cmp32, null, op1H, op2H);
-			context.AppendInstruction(X86.BranchEqual, newBlocks[1].Block);
+			context.AppendInstruction(X86.Branch, ConditionCode.Equal, newBlocks[1].Block);
 			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 
 			// Branch if check already gave results
-			if (branch == X86.BranchEqual)
+			if (condition == ConditionCode.Equal)
 			{
 				newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[3].Block);
 			}
 			else
 			{
 				// Branch if check already gave results
-				newBlocks[0].AppendInstruction(branch, newBlocks[2].Block);
+				newBlocks[0].AppendInstruction(X86.Branch, condition, newBlocks[2].Block);
 				newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[3].Block);
 			}
 
 			// Compare low dwords
 			newBlocks[1].AppendInstruction(X86.Cmp32, null, op1L, op2L);
-			newBlocks[1].AppendInstruction(branchUnsigned, newBlocks[2].Block);
+			newBlocks[1].AppendInstruction(X86.Branch, condition.GetUnsigned(), newBlocks[2].Block);
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[3].Block);
 
 			// Success
@@ -238,25 +236,23 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
 
 			var target = context.BranchTargets[0];
-
-			var branch = IRTransformationStage.GetBranch(context.ConditionCode);
-			var branchUnsigned = IRTransformationStage.GetBranch(context.ConditionCode.GetUnsigned());
+			var condition = context.ConditionCode;
 
 			var nextBlock = Split(context);
 			var newBlocks = CreateNewBlockContexts(2, context.Label);
 
 			// Compare high dwords
 			context.SetInstruction(X86.Cmp32, null, op1H, op2H);
-			context.AppendInstruction(X86.BranchEqual, newBlocks[1].Block);
+			context.AppendInstruction(X86.Branch, ConditionCode.Equal, newBlocks[1].Block);
 			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 
 			// Branch if check already gave results
-			newBlocks[0].AppendInstruction(branch, target);
+			newBlocks[0].AppendInstruction(X86.Branch, condition, target);
 			newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
 
 			// Compare low dwords
 			newBlocks[1].AppendInstruction(X86.Cmp32, null, op1L, op2L);
-			newBlocks[1].AppendInstruction(branchUnsigned, target);
+			newBlocks[1].AppendInstruction(X86.Branch, condition.GetUnsigned(), target);
 			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.Block);
 		}
 
