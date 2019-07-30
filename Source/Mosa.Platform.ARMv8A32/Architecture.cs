@@ -154,7 +154,6 @@ namespace Mosa.Platform.ARMv8A32
 		/// <param name="pipeline">The pipeline to extend.</param>
 		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline, CompilerOptions compilerOptions)
 		{
-			// TODO
 		}
 
 		/// <summary>
@@ -164,20 +163,41 @@ namespace Mosa.Platform.ARMv8A32
 		/// <param name="compilerOptions">The compiler options.</param>
 		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerOptions compilerOptions)
 		{
-			pipeline.InsertAfterLast<PlatformIntrinsicStage>(
-				new BaseMethodCompilerStage[]
-				{
-			        //new LongOperandTransformationStage(),
-			        new IRTransformationStage(),
-				});
-
-			//methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
-			//    new ExceptionLayoutStage()
-			//);
-
 			pipeline.InsertBefore<GreedyRegisterAllocatorStage>(
 				new StopStage()
 			);
+
+			//pipeline.InsertBefore<CallStage>(
+			//	new Stages.RuntimeCallStage()
+			//);
+
+			pipeline.InsertAfterLast<PlatformIntrinsicStage>(
+				new BaseMethodCompilerStage[]
+				{
+			//		new LongOperandStage(),
+
+			//		compilerOptions.EnablePlatformOptimizations ? new OptimizationStage() : null,
+			//		new TweakStage(),
+			//		new FixedRegisterAssignmentStage(),
+			//		new SimpleDeadCodeRemovalStage(),
+			//		new AddressModeConversionStage(),
+			//		new FloatingPointStage(),
+				});
+
+			//pipeline.InsertAfterLast<StackLayoutStage>(
+			//	new BuildStackStage()
+			//);
+
+			//pipeline.InsertBefore<CodeGenerationStage>(
+			//	new BaseMethodCompilerStage[]
+			//	{
+			//		new FinalTweakStage(),
+			//		compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
+			//	});
+
+			//pipeline.InsertBefore<CodeGenerationStage>(
+			//	new JumpOptimizationStage()
+			//);
 		}
 
 		/// <summary>

@@ -28,7 +28,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 4);
 
-			if (node.Operand2.IsConstant)
+			if (node.Operand2.IsCPURegister && node.Operand3.IsCPURegister && node.GetOperand(3).IsCPURegister)
 			{
 				emitter.OpcodeEncoder.AppendNibble(GetConditionCode(node.ConditionCode));
 				emitter.OpcodeEncoder.Append2Bits(0b00);

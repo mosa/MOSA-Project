@@ -7,21 +7,29 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv8A32.Instructions
 {
 	/// <summary>
-	/// Add32 - Addition
+	/// AddS32 - Addition
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
-	public sealed class Add32 : ARMv8A32Instruction
+	public sealed class AddS32 : ARMv8A32Instruction
 	{
-		public override int ID { get { return 576; } }
+		public override int ID { get { return 578; } }
 
-		internal Add32()
+		internal AddS32()
 			: base(1, 4)
 		{
 		}
 
 		public override bool IsCommutative { get { return true; } }
 
+		public override bool IsZeroFlagModified { get { return true; } }
+
 		public override bool IsCarryFlagUsed { get { return true; } }
+
+		public override bool IsCarryFlagModified { get { return true; } }
+
+		public override bool IsSignFlagModified { get { return true; } }
+
+		public override bool IsOverflowFlagModified { get { return true; } }
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
@@ -32,7 +40,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 			{
 				emitter.OpcodeEncoder.AppendNibble(GetConditionCode(node.ConditionCode));
 				emitter.OpcodeEncoder.Append2Bits(0b00);
-				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.AppendBit(0b1);
 				emitter.OpcodeEncoder.AppendNibble(0b0100);
 				emitter.OpcodeEncoder.AppendBit(0b0);
 				emitter.OpcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);

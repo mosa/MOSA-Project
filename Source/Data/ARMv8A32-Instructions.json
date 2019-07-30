@@ -39,7 +39,7 @@
 			"Description": "Add with Carry",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[#register][constant]",
+					"Condition": "[#register][register][register][register]",
 					"Encoding": "[arm-data-processing-register],i=0,opcode=0101,s=0,rn=reg4:o1,shift=imm5:o3,stype=imm2:o4,rm=reg4:o2"
 				}
 			]
@@ -85,21 +85,82 @@
 			]
 		},
 		{
-			"Name": "Add32",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"Name": "AddImm32",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
-			"FlagsUnchanged": "",
+			"FlagsUnchanged": "NZCV",
 			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
+			"FlagsUsed": "C",
+			"OperandCount": 2,
 			"ResultCount": 1,
+			"Description": "Addition",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
-					"Encoding": "0x00000000"
+					"Condition": "[#register][constant]",
+					"Encoding": "[arm-data-processing-immediate],i=1,opcode=0100,s=0,rn=reg4:o1,imm12=imm12:o2"
+				}
+			]
+		},
+		{
+			"Name": "Add32",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Addition",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register][register][register]",
+					"Encoding": "[arm-data-processing-register],i=0,opcode=0100,s=0,rn=reg4:o1,shift=imm5:o3,stype=imm2:o4,rm=reg4:o2"
+				}
+			]
+		},
+		{
+			"Name": "AddSImm32",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Addition",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[arm-data-processing-immediate],i=1,opcode=0100,s=1,rn=reg4:o1,imm12=imm12:o2"
+				}
+			]
+		},
+		{
+			"Name": "AddS32",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Addition",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register][register][register]",
+					"Encoding": "[arm-data-processing-register],i=1,opcode=0100,s=0,rn=reg4:o1,shift=imm5:o3,stype=imm2:o4,rm=reg4:o2"
 				}
 			]
 		},
