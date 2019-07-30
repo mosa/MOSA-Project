@@ -229,9 +229,14 @@ namespace Mosa.Tool.Explorer
 
 			if (options.X86)
 				cbPlatform.SelectedIndex = 0;
-
-			if (options.X64)
+			else if (options.X64)
 				cbPlatform.SelectedIndex = 1;
+			else if (options.ARMv6)
+				cbPlatform.SelectedIndex = 2;
+			else if (options.ARMv8A32)
+				cbPlatform.SelectedIndex = 3;
+			else
+				cbPlatform.SelectedIndex = 0;
 
 			var files = (IList<string>)options.Files;
 
@@ -516,8 +521,6 @@ namespace Mosa.Tool.Explorer
 				case "x64": return Platform.x64.Architecture.CreateArchitecture(Platform.x64.ArchitectureFeatureFlags.AutoDetect);
 				case "armv6": return Platform.ARMv6.Architecture.CreateArchitecture(Platform.ARMv6.ArchitectureFeatureFlags.AutoDetect);
 				case "armv8a32": return Platform.ARMv8A32.Architecture.CreateArchitecture(Platform.ARMv8A32.ArchitectureFeatureFlags.AutoDetect);
-
-				//case "esp32": return Platform.ESP32.Architecture.CreateArchitecture(Platform.ESP32.ArchitectureFeatureFlags.AutoDetect);
 				default: return Platform.x86.Architecture.CreateArchitecture(Platform.x86.ArchitectureFeatureFlags.AutoDetect);
 			}
 		}
@@ -765,6 +768,7 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.AddSourceFile(filename);
 			Compiler.CompilerOptions.AddSourceFile("Mosa.Plug.Korlib.dll");
 			Compiler.CompilerOptions.AddSourceFile("Mosa.Plug.Korlib." + platform + ".dll");
+			Compiler.CompilerOptions.AddSourceFile("Mosa.Runtime." + platform + ".dll");
 
 			Compiler.Load();
 		}

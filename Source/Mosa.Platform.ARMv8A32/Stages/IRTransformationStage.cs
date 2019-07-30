@@ -15,58 +15,21 @@ namespace Mosa.Platform.ARMv8A32.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			AddVisitation(IRInstruction.Add32, AddSigned32);
-			AddVisitation(IRInstruction.Add32, AddUnsigned32);
-			AddVisitation(IRInstruction.LogicalOr32, LogicalOr32);
-			AddVisitation(IRInstruction.Sub32, SubSigned32);
-			AddVisitation(IRInstruction.Sub32, SubUnsigned32);
+			AddVisitation(IRInstruction.Add32, Add32);
 		}
 
 		#region Visitation Methods
 
-		/// <summary>
-		/// Visitation function for AddSigned.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void AddSigned32(Context context)
+		private void Add32(Context context)
 		{
-			context.ReplaceInstruction(ARMv8A32.Add32);
-		}
-
-		/// <summary>
-		/// Visitation function for AddUnsigned.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void AddUnsigned32(Context context)
-		{
-			context.ReplaceInstruction(ARMv8A32.Add32);
-		}
-
-		/// <summary>
-		/// Visitation function for LogicalOrInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void LogicalOr32(Context context)
-		{
-			context.ReplaceInstruction(ARMv8A32.Orr32);
-		}
-
-		/// <summary>
-		/// Visitation function for SubSigned.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void SubSigned32(Context context)
-		{
-			context.ReplaceInstruction(ARMv8A32.Sub32);
-		}
-
-		/// <summary>
-		/// Visitation function for SubUnsigned.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void SubUnsigned32(Context context)
-		{
-			context.ReplaceInstruction(ARMv8A32.Sub32);
+			if (context.Operand2.IsVirtualRegister)
+			{
+				context.SetInstruction(ARMv8A32.Add32, context.Result, context.Operand1, context.Operand2, ConstantZero32, ConstantZero32);
+			}
+			else
+			{
+				context.SetInstruction(ARMv8A32.AddImm32, context.Result, context.Operand1, context.Operand2);
+			}
 		}
 
 		#endregion Visitation Methods
