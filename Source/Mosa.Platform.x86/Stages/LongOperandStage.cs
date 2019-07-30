@@ -336,10 +336,10 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Or32, v1, op1L, op1H);
 			context.SetInstruction(X86.Cmp32, null, v1, ConstantZero32);
-			context.AppendInstruction(X86.CMovNotEqual32, resultLow, op2L);    // true
-			context.AppendInstruction(X86.CMovNotEqual32, resultHigh, op2H);   // true
-			context.AppendInstruction(X86.CMovEqual32, resultLow, op3L);       // false
-			context.AppendInstruction(X86.CMovEqual32, resultHigh, op3H);      // false
+			context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, resultLow, op2L);    // true
+			context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, resultHigh, op2H);   // true
+			context.AppendInstruction(X86.CMov32, ConditionCode.Equal, resultLow, op3L);       // false
+			context.AppendInstruction(X86.CMov32, ConditionCode.Equal, resultHigh, op3H);      // false
 		}
 
 		private void LoadInt64(Context context)
@@ -504,8 +504,8 @@ namespace Mosa.Platform.x86.Stages
 
 			// FUTURE: Optimization - TestConst32 and conditional moves are not necessary if count is a constant
 			context.AppendInstruction(X86.Test32, null, v2, CreateConstant(32));
-			context.AppendInstruction(X86.CMovNotEqual32, resultHigh, v1);
-			context.AppendInstruction(X86.CMovEqual32, resultLow, v1);
+			context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, resultHigh, v1);
+			context.AppendInstruction(X86.CMov32, ConditionCode.Equal, resultLow, v1);
 		}
 
 		private void ShiftRight64(Context context)
@@ -525,8 +525,8 @@ namespace Mosa.Platform.x86.Stages
 
 			// FUTURE: Optimization - TestConst32 and conditional moves are not necessary if count is a constant
 			context.AppendInstruction(X86.Test32, null, v2, CreateConstant(32));
-			context.AppendInstruction(X86.CMovNotEqual32, resultLow, v1);
-			context.AppendInstruction(X86.CMovEqual32, resultHigh, v1);
+			context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, resultLow, v1);
+			context.AppendInstruction(X86.CMov32, ConditionCode.Equal, resultHigh, v1);
 		}
 
 		private void SignExtend16x64(Context context)

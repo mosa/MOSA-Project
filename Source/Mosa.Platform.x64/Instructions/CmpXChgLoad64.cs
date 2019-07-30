@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class CmpXChgLoad64 : X64Instruction
 	{
-		public override int ID { get { return 363; } }
+		public override int ID { get { return 343; } }
 
 		internal CmpXChgLoad64()
 			: base(1, 4)

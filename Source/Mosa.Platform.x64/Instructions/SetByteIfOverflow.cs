@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class SetByteIfOverflow : X64Instruction
 	{
-		public override int ID { get { return 528; } }
+		public override int ID { get { return 508; } }
 
 		internal SetByteIfOverflow()
 			: base(1, 0)

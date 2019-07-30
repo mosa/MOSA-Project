@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Sub32 : ARMv8A32Instruction
 	{
-		public override int ID { get { return 714; } }
+		public override int ID { get { return 694; } }
 
 		internal Sub32()
 			: base(1, 3)

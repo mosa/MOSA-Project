@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Orr32 : ARMv8A32Instruction
 	{
-		public override int ID { get { return 697; } }
+		public override int ID { get { return 677; } }
 
 		internal Orr32()
 			: base(1, 3)

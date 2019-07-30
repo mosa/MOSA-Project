@@ -462,8 +462,8 @@ namespace Mosa.Platform.x86.Stages
 			var operand2 = context.Operand2;
 
 			context.SetInstruction(X86.Cmp32, null, operand1, ConstantZero32);
-			context.AppendInstruction(X86.CMovNotEqual32, result, operand1);    // true
-			context.AppendInstruction(X86.CMovEqual32, result, operand2);       // false
+			context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, result, operand1);    // true
+			context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, operand2);       // false
 		}
 
 		private void Jmp(InstructionNode node)

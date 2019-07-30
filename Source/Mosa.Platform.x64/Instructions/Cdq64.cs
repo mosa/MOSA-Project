@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Cdq64 : X64Instruction
 	{
-		public override int ID { get { return 358; } }
+		public override int ID { get { return 338; } }
 
 		internal Cdq64()
 			: base(2, 1)

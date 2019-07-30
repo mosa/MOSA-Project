@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv6.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv6.ARMv6Instruction" />
 	public sealed class Stmia32 : ARMv6Instruction
 	{
-		public override int ID { get { return 637; } }
+		public override int ID { get { return 617; } }
 
 		internal Stmia32()
 			: base(1, 3)

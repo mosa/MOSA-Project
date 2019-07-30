@@ -891,9 +891,6 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "r2": return "node.Result2";
 				case "label": return "node.BranchTargets[0].Label";
 
-				//case "cond": return string.Empty; // TODO
-				//case "shifter": return string.Empty; // TODO
-
 				default: return part; // pass as is
 			}
 		}
