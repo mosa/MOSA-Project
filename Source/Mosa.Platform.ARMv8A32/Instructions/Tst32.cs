@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Tst32 : ARMv8A32Instruction
 	{
-		public override int ID { get { return 633; } }
+		public override int ID { get { return 637; } }
 
 		internal Tst32()
 			: base(1, 3)
