@@ -91,11 +91,15 @@
     <Compile Include="Instructions\Adc32.cs" />
     <Compile Include="Instructions\AdcImm32.cs" />
     <Compile Include="Instructions\AdcS32.cs" />
+    <Compile Include="Instructions\AdcShift32.cs" />
     <Compile Include="Instructions\AdcSImm32.cs" />
+    <Compile Include="Instructions\AdcSShift32.cs" />
     <Compile Include="Instructions\Add32.cs" />
     <Compile Include="Instructions\AddImm32.cs" />
     <Compile Include="Instructions\AddS32.cs" />
+    <Compile Include="Instructions\AddShift32.cs" />
     <Compile Include="Instructions\AddSImm32.cs" />
+    <Compile Include="Instructions\AddSShift32.cs" />
     <Compile Include="Instructions\Adr32.cs" />
     <Compile Include="Instructions\And32.cs" />
     <Compile Include="Instructions\Asr32.cs" />
@@ -159,6 +163,7 @@
     <Compile Include="Intrinsic\Nop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stages\IRTransformationStage.cs" />
+    <Compile Include="Stages\LongOperandStage.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
