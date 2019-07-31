@@ -24,6 +24,16 @@ namespace System.IO
 			this.publiclyVisible = publiclyVisible;
 		}
 
+		public MemoryStream(byte[] buffer)
+		{
+			internalBuffer = buffer;
+			initialIndex = 0;
+			position = 0;
+			count = buffer.Length;
+			writable = true;
+			publiclyVisible = true;
+		}
+
 		public override bool CanRead
 		{
 			get { return !streamClosed; }
