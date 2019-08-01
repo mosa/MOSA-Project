@@ -25,12 +25,12 @@ namespace Mosa.Platform.x64.Instructions
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
 			emitter.OpcodeEncoder.SuppressByte(0x40);
-			emitter.OpcodeEncoder.AppendNibble(0b0100);
-			emitter.OpcodeEncoder.AppendBit(0b0);
-			emitter.OpcodeEncoder.AppendBit((node.Result.Register.RegisterCode >> 3) & 0x1);
-			emitter.OpcodeEncoder.AppendBit(0b0);
-			emitter.OpcodeEncoder.AppendBit((node.Operand1.Register.RegisterCode >> 3) & 0x1);
-			emitter.OpcodeEncoder.AppendByte(0x8E);
+			emitter.OpcodeEncoder.Append4Bits(0b0100);
+			emitter.OpcodeEncoder.Append1Bit(0b0);
+			emitter.OpcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3) & 0x1);
+			emitter.OpcodeEncoder.Append1Bit(0b0);
+			emitter.OpcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3) & 0x1);
+			emitter.OpcodeEncoder.Append8Bits(0x8E);
 			emitter.OpcodeEncoder.Append2Bits(0b11);
 			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);

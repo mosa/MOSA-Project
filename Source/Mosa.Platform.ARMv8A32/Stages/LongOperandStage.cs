@@ -83,8 +83,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-			context.AppendInstruction(ARMv8A32.AddS32, resultLow, op1L, op2L);
-			context.AppendInstruction(ARMv8A32.Adc32, resultHigh, op1H, op2H);
+			context.AppendInstruction(ARMv8A32.AddS, resultLow, op1L, op2L);
+			context.AppendInstruction(ARMv8A32.Adc, resultHigh, op1H, op2H);
 		}
 
 		#endregion Visitation Methods

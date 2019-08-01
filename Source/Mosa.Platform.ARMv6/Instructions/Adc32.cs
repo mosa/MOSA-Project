@@ -30,13 +30,13 @@ namespace Mosa.Platform.ARMv6.Instructions
 
 			if (node.Operand2.IsCPURegister)
 			{
-				emitter.OpcodeEncoder.AppendNibble(0b0000);
-				emitter.OpcodeEncoder.AppendBit(0b0);
-				emitter.OpcodeEncoder.AppendNibble(0b0101);
-				emitter.OpcodeEncoder.AppendBit(0b0);
+				emitter.OpcodeEncoder.Append4Bits(0b0000);
+				emitter.OpcodeEncoder.Append1Bit(0b0);
+				emitter.OpcodeEncoder.Append4Bits(0b0101);
+				emitter.OpcodeEncoder.Append1Bit(0b0);
 				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
-				emitter.OpcodeEncoder.AppendNibble(0b0000);
+				emitter.OpcodeEncoder.Append4Bits(0b0000);
 				return;
 			}
 

@@ -274,7 +274,7 @@ namespace Mosa.Platform.ARMv8A32
 		/// <returns></returns>
 		public override bool IsInstructionMove(BaseInstruction instruction)
 		{
-			return instruction == ARMv8A32.Mov32;
+			return instruction == ARMv8A32.Mov;
 		}
 	}
 }

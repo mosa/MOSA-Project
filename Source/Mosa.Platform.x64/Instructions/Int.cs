@@ -46,7 +46,7 @@ namespace Mosa.Platform.x64.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			emitter.OpcodeEncoder.AppendByte(0xCD);
+			emitter.OpcodeEncoder.Append8Bits(0xCD);
 			emitter.OpcodeEncoder.Append8BitImmediate(node.Operand1);
 		}
 	}

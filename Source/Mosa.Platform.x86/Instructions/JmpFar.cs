@@ -26,10 +26,10 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-			emitter.OpcodeEncoder.AppendByte(0xEA);
+			emitter.OpcodeEncoder.Append8Bits(0xEA);
 			emitter.OpcodeEncoder.EmitForward32(6);
-			emitter.OpcodeEncoder.AppendByte(0x08);
-			emitter.OpcodeEncoder.AppendByte(0x00);
+			emitter.OpcodeEncoder.Append8Bits(0x08);
+			emitter.OpcodeEncoder.Append8Bits(0x00);
 		}
 	}
 }

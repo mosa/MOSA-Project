@@ -106,11 +106,11 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		{
 			if (context.Operand2.IsVirtualRegister)
 			{
-				context.SetInstruction(ARMv8A32.Add32, context.Result, context.Operand1, context.Operand2, ConstantZero32, ConstantZero32);
+				context.SetInstruction(ARMv8A32.Add, context.Result, context.Operand1, context.Operand2, ConstantZero32, ConstantZero32);
 			}
 			else
 			{
-				context.SetInstruction(ARMv8A32.AddImm32, context.Result, context.Operand1, context.Operand2);
+				context.SetInstruction(ARMv8A32.AddImm, context.Result, context.Operand1, context.Operand2);
 			}
 		}
 

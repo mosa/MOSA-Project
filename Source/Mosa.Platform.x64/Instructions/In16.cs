@@ -30,15 +30,15 @@ namespace Mosa.Platform.x64.Instructions
 
 			if (node.Operand1.IsCPURegister)
 			{
-				emitter.OpcodeEncoder.AppendByte(0x66);
-				emitter.OpcodeEncoder.AppendByte(0xED);
+				emitter.OpcodeEncoder.Append8Bits(0x66);
+				emitter.OpcodeEncoder.Append8Bits(0xED);
 				return;
 			}
 
 			if (node.Operand1.IsConstant)
 			{
-				emitter.OpcodeEncoder.AppendByte(0x66);
-				emitter.OpcodeEncoder.AppendByte(0xE4);
+				emitter.OpcodeEncoder.Append8Bits(0x66);
+				emitter.OpcodeEncoder.Append8Bits(0xE4);
 				emitter.OpcodeEncoder.Append8BitImmediate(node.Operand1);
 				return;
 			}

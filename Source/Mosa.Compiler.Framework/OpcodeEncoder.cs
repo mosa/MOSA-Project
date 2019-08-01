@@ -79,9 +79,19 @@ namespace Mosa.Compiler.Framework
 			AppendBit(value & 0x1);
 		}
 
+		public void Append4Bits(byte value)
+		{
+			AppendNibble((int)value);
+		}
+
 		public void Append4Bits(int value)
 		{
 			AppendNibble(value);
+		}
+
+		public void AppendNibble(byte value)
+		{
+			AppendNibble((int)value);
 		}
 
 		public void AppendNibble(int value)
@@ -323,6 +333,13 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(operand.IsConstant);
 
 			AppendByte((byte)operand.ConstantUnsignedInteger);
+		}
+
+		public void Append4BitImmediate(Operand operand)
+		{
+			Debug.Assert(operand.IsConstant);
+
+			Append4Bits((byte)operand.ConstantUnsignedInteger);
 		}
 
 		public void Append12BitImmediate(Operand operand)

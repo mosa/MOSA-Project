@@ -38,9 +38,9 @@ namespace Mosa.Platform.x64.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-			emitter.OpcodeEncoder.AppendByte(0x0F);
-			emitter.OpcodeEncoder.AppendNibble(0b1001);
-			emitter.OpcodeEncoder.AppendNibble(GetConditionCode(node.ConditionCode));
+			emitter.OpcodeEncoder.Append8Bits(0x0F);
+			emitter.OpcodeEncoder.Append4Bits(0b1001);
+			emitter.OpcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			emitter.OpcodeEncoder.Append2Bits(0b11);
 			emitter.OpcodeEncoder.Append3Bits(0b000);
 			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
