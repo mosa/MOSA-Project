@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class AddSImm : ARMv8A32Instruction
 	{
-		public override int ID { get { return 617; } }
+		public override int ID { get { return 584; } }
 
 		internal AddSImm()
 			: base(1, 3)

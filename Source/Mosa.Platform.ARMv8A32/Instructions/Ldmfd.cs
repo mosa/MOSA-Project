@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Ldmfd : ARMv8A32Instruction
 	{
-		public override int ID { get { return 742; } }
+		public override int ID { get { return 691; } }
 
 		internal Ldmfd()
 			: base(1, 3)

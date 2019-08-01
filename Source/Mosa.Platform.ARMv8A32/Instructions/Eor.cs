@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Eor : ARMv8A32Instruction
 	{
-		public override int ID { get { return 581; } }
+		public override int ID { get { return 611; } }
 
 		internal Eor()
 			: base(1, 2)

@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Mvn : ARMv8A32Instruction
 	{
-		public override int ID { get { return 721; } }
+		public override int ID { get { return 627; } }
 
 		internal Mvn()
 			: base(1, 2)

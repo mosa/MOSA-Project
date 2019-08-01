@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class TeqImmShift : ARMv8A32Instruction
 	{
-		public override int ID { get { return 664; } }
+		public override int ID { get { return 677; } }
 
 		internal TeqImmShift()
 			: base(0, 4)
@@ -20,6 +20,14 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 		}
 
 		public override bool IsCommutative { get { return true; } }
+
+		public override bool IsZeroFlagModified { get { return true; } }
+
+		public override bool IsCarryFlagModified { get { return true; } }
+
+		public override bool IsSignFlagModified { get { return true; } }
+
+		public override bool IsOverflowFlagModified { get { return true; } }
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
@@ -32,7 +40,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 				emitter.OpcodeEncoder.Append2Bits(0b00);
 				emitter.OpcodeEncoder.Append1Bit(0b0);
 				emitter.OpcodeEncoder.Append4Bits(0b1001);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
+				emitter.OpcodeEncoder.Append1Bit(0b1);
 				emitter.OpcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append4Bits(0b0000);
 				emitter.OpcodeEncoder.Append5BitImmediate(node.Operand3);

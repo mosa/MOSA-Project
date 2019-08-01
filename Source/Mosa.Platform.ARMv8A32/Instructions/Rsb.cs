@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Rsb : ARMv8A32Instruction
 	{
-		public override int ID { get { return 601; } }
+		public override int ID { get { return 643; } }
 
 		internal Rsb()
 			: base(1, 2)

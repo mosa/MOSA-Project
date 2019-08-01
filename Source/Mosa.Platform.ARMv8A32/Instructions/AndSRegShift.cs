@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class AndSRegShift : ARMv8A32Instruction
 	{
-		public override int ID { get { return 580; } }
+		public override int ID { get { return 594; } }
 
 		internal AndSRegShift()
 			: base(1, 4)

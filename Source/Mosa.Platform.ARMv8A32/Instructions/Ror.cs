@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Ror : ARMv8A32Instruction
 	{
-		public override int ID { get { return 760; } }
+		public override int ID { get { return 709; } }
 
 		internal Ror()
 			: base(1, 3)

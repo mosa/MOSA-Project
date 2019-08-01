@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Mul : ARMv8A32Instruction
 	{
-		public override int ID { get { return 753; } }
+		public override int ID { get { return 702; } }
 
 		internal Mul()
 			: base(1, 3)
