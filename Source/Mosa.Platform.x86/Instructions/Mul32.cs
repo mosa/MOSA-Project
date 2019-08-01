@@ -42,7 +42,7 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 2);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			emitter.OpcodeEncoder.AppendByte(0xF7);
+			emitter.OpcodeEncoder.Append8Bits(0xF7);
 			emitter.OpcodeEncoder.Append2Bits(0b11);
 			emitter.OpcodeEncoder.Append3Bits(0b100);
 			emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);

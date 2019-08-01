@@ -48,8 +48,8 @@ namespace Mosa.Platform.x86.Instructions
 
 			if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 0) && node.Operand2.IsCPURegister && node.Operand3.IsConstantZero && node.GetOperand(3).IsCPURegister)
 			{
-				emitter.OpcodeEncoder.AppendByte(0x0F);
-				emitter.OpcodeEncoder.AppendByte(0xB1);
+				emitter.OpcodeEncoder.Append8Bits(0x0F);
+				emitter.OpcodeEncoder.Append8Bits(0xB1);
 				emitter.OpcodeEncoder.Append2Bits(0b00);
 				emitter.OpcodeEncoder.Append3Bits(node.GetOperand(3).Register.RegisterCode);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);

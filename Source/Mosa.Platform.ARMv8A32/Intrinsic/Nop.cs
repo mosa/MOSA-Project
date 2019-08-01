@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Intrinsic
 		[IntrinsicMethod("Mosa.Platform.ARMv8A32.Intrinsic:Nop")]
 		private static void Nop(Context context, MethodCompiler methodCompiler)
 		{
-			context.SetInstruction(ARMv8A32.Nop32);
+			context.SetInstruction(ARMv8A32.Nop);
 		}
 	}
 }

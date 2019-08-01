@@ -694,17 +694,17 @@ namespace Mosa.Utility.SourceCodeGenerator
 					switch (hex.Length)
 					{
 						case 1:
-							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0x" + hex + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.Append4Bits(0x" + hex + ");");
 							break;
 
 						case 2:
-							Lines.AppendLine("emitter.OpcodeEncoder.AppendByte(0x" + hex + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.Append8Bits(0x" + hex + ");");
 							break;
 
 						case 3:
-							Lines.AppendLine("emitter.OpcodeEncoder.AppendByte(0x" + hex.Substring(0, 2) + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.Append8Bits(0x" + hex.Substring(0, 2) + ");");
 							Lines.Append(tabs);
-							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0x" + hex.Substring(1) + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.Append4Bits(0x" + hex.Substring(1) + ");");
 							break;
 
 						case 4:
@@ -714,7 +714,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 						case 5:
 							Lines.AppendLine("emitter.OpcodeEncoder.AppendShort(0x" + hex.Substring(0, 4) + ");");
 							Lines.Append(tabs);
-							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0x" + hex.Substring(5) + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.Append4Bits(0x" + hex.Substring(5) + ");");
 							break;
 
 						case 8:
@@ -740,7 +740,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 					switch (binary.Length)
 					{
 						case 1:
-							Lines.AppendLine("emitter.OpcodeEncoder.AppendBit(0b" + binary + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.Append1Bit(0b" + binary + ");");
 							break;
 
 						case 2:
@@ -752,31 +752,31 @@ namespace Mosa.Utility.SourceCodeGenerator
 							break;
 
 						case 4:
-							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.Append4Bits(0b" + binary + ");");
 							break;
 
 						case 5:
-							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.Append4Bits(0b" + binary.Substring(0, 4) + ");");
 							Lines.Append(tabs);
-							Lines.AppendLine("emitter.OpcodeEncoder.AppendBit(0b" + binary.Substring(4) + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.Append1Bit(0b" + binary.Substring(4) + ");");
 							break;
 
 						case 6:
-							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.Append4Bits(0b" + binary.Substring(0, 4) + ");");
 							Lines.Append(tabs);
 							Lines.AppendLine("emitter.OpcodeEncoder.Append2Bits(0b" + binary.Substring(4) + ");");
 							break;
 
 						case 7:
-							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.Append4Bits(0b" + binary.Substring(0, 4) + ");");
 							Lines.Append(tabs);
 							Lines.AppendLine("emitter.OpcodeEncoder.Append3Bits(0b" + binary.Substring(4) + ");");
 							break;
 
 						case 8:
-							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(0, 4) + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.Append4Bits(0b" + binary.Substring(0, 4) + ");");
 							Lines.Append(tabs);
-							Lines.AppendLine("emitter.OpcodeEncoder.AppendNibble(0b" + binary.Substring(4) + ");");
+							Lines.AppendLine("emitter.OpcodeEncoder.Append4Bits(0b" + binary.Substring(4) + ");");
 							break;
 
 						default: throw new Exception("ERROR!");
@@ -815,13 +815,14 @@ namespace Mosa.Utility.SourceCodeGenerator
 			switch (part)
 			{
 				case "reg3": code = "Append3Bits"; postcode = ".Register.RegisterCode"; return;
-				case "reg4x": code = "AppendBit("; postcode = ".Register.RegisterCode >> 3) & 0x1"; return;
+				case "reg4x": code = "Append1Bit("; postcode = ".Register.RegisterCode >> 3) & 0x1"; return;
 				case "reg4": code = "Append4Bits"; postcode = ".Register.RegisterCode"; return;
 				case "reg5": code = "Append5Bits"; postcode = ".Register.RegisterCode"; return;
 				case "reg6": code = "Append6Bits"; postcode = ".Register.RegisterCode"; return;
 				case "imm32": code = "Append32BitImmediate"; return;
 				case "imm32+": code = "Append32BitImmediateWithOffset"; return;
 				case "imm2": code = "Append2BitImmediate"; return;
+				case "imm4": code = "Append4BitImmediate"; return;
 				case "imm5": code = "Append5BitImmediate"; return;
 				case "imm8": code = "Append8BitImmediate"; return;
 				case "imm12": code = "Append12BitImmediate"; return;
@@ -831,7 +832,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "rel64": code = "EmitRelative64"; return;
 				case "forward32": code = "EmitForward32"; return;
 				case "supress8": code = "SuppressByte"; return;
-				case "conditional": code = "AppendNibble"; postcode = "GetConditionCode(node.ConditionCode)"; return;
+				case "conditional": code = "Append4Bits"; postcode = "GetConditionCode(node.ConditionCode)"; return;
 				case "": return;
 
 				default: break;

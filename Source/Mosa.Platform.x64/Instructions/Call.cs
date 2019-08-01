@@ -49,12 +49,12 @@ namespace Mosa.Platform.x64.Instructions
 			if (node.Operand1.IsCPURegister)
 			{
 				emitter.OpcodeEncoder.SuppressByte(0x40);
-				emitter.OpcodeEncoder.AppendNibble(0b0100);
-				emitter.OpcodeEncoder.AppendBit(0b0);
-				emitter.OpcodeEncoder.AppendBit(0b0);
-				emitter.OpcodeEncoder.AppendBit(0b0);
-				emitter.OpcodeEncoder.AppendBit((node.Operand1.Register.RegisterCode >> 3) & 0x1);
-				emitter.OpcodeEncoder.AppendByte(0xFF);
+				emitter.OpcodeEncoder.Append4Bits(0b0100);
+				emitter.OpcodeEncoder.Append1Bit(0b0);
+				emitter.OpcodeEncoder.Append1Bit(0b0);
+				emitter.OpcodeEncoder.Append1Bit(0b0);
+				emitter.OpcodeEncoder.Append1Bit((node.Operand1.Register.RegisterCode >> 3) & 0x1);
+				emitter.OpcodeEncoder.Append8Bits(0xFF);
 				emitter.OpcodeEncoder.Append2Bits(0b11);
 				emitter.OpcodeEncoder.Append3Bits(0b010);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
@@ -63,7 +63,7 @@ namespace Mosa.Platform.x64.Instructions
 
 			if (node.Operand1.IsConstant)
 			{
-				emitter.OpcodeEncoder.AppendByte(0xE8);
+				emitter.OpcodeEncoder.Append8Bits(0xE8);
 				emitter.OpcodeEncoder.EmitRelative32(node.Operand1);
 				return;
 			}

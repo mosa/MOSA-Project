@@ -26,7 +26,7 @@ namespace Mosa.Platform.x86.Instructions
 
 			if (node.Operand1.IsCPURegister)
 			{
-				emitter.OpcodeEncoder.AppendByte(0x8B);
+				emitter.OpcodeEncoder.Append8Bits(0x8B);
 				emitter.OpcodeEncoder.Append2Bits(0b11);
 				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
@@ -35,7 +35,7 @@ namespace Mosa.Platform.x86.Instructions
 
 			if (node.Operand1.IsConstant)
 			{
-				emitter.OpcodeEncoder.AppendByte(0xC7);
+				emitter.OpcodeEncoder.Append8Bits(0xC7);
 				emitter.OpcodeEncoder.Append2Bits(0b11);
 				emitter.OpcodeEncoder.Append3Bits(0b000);
 				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);

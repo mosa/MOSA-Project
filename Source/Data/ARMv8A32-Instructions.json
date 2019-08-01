@@ -1,11 +1,17 @@
 {
 	"Encoding": [
-		"[arm-data-processing-immediate]=conditional|00|[i]|[opcode]|[s]|[rn]|reg4:r|[imm12]",
-		"[arm-data-processing-register]=conditional|00|[i]|[opcode]|[s]|[rn]|reg4:r|[shift]|[stype]|0|[rm]"
+		"[arm-data-processing]=conditional|00|[i]|[opcode]|[s]|[rn]|[rd]|[operand2]",
+
+		"[arm-data-processing-immediate]=[arm-data-processing],operand2=[immediate12],i=1",
+		"[arm-data-processing-rotate-immediate]=[arm-data-processing],operand2=[rotate]|[immediate],i=1",
+		"[arm-data-processing-shift]=[arm-data-processing],operand2=[shift]|[rm],i=0",
+		"[arm-data-processing-shift-amount]=[arm-data-processing-shift],shift=[shiftamount]|[shifttype]|0,i=0",
+		"[arm-data-processing-shift-register]=[arm-data-processing-shift],shift=[rs]|0|[shifttype]|1,i=0"
+
 	],
 	"Instructions": [
 		{
-			"Name": "Adc32",
+			"Name": "And",
 			"Commutative": "true",
 			"FamilyName": "ARMv8A32",
 			"FlagsCleared": "",
@@ -13,19 +19,209 @@
 			"FlagsSet": "",
 			"FlagsUnchanged": "NZCV",
 			"FlagsUndefined": "",
-			"FlagsUsed": "C",
-			"OperandCount": 4,
+			"FlagsUsed": "",
+			"OperandCount": 2,
 			"ResultCount": 1,
-			"Description": "Add with Carry",
+			"Description": "And",
+			"OpcodeEncodingAppend": "s=0,opcode=0000,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[#register][register]",
-					"Encoding": "[arm-data-processing-register],i=0,opcode=0101,s=0,rn=reg4:o1,shift=00000,stype=00,rm=reg4:o2"
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
 		},
 		{
-			"Name": "AdcImm32",
+			"Name": "AndImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "And",
+			"OpcodeEncodingAppend": "s=0,opcode=0000,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "AndImmRotate",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "And",
+			"OpcodeEncodingAppend": "s=0,opcode=0000,rd=reg4:r,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "AndImmShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "And",
+			"OpcodeEncodingAppend": "s=0,opcode=0000,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "AndRegShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "And",
+			"OpcodeEncodingAppend": "s=0,opcode=0000,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "AndS",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "And",
+			"OpcodeEncodingAppend": "s=1,opcode=0000,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "AndSImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "And",
+			"OpcodeEncodingAppend": "s=1,opcode=0000,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "AndSImmRotate",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "And",
+			"OpcodeEncodingAppend": "s=1,opcode=0000,rd=reg4:r,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "AndSImmShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "And",
+			"OpcodeEncodingAppend": "s=1,opcode=0000,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "AndSRegShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "And",
+			"OpcodeEncodingAppend": "s=1,opcode=0000,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "Eor",
 			"Commutative": "true",
 			"FamilyName": "ARMv8A32",
 			"FlagsCleared": "",
@@ -36,16 +232,38 @@
 			"FlagsUsed": "C",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"Description": "Add with Carry",
+			"Description": "Exclusive OR",
+			"OpcodeEncodingAppend": "s=0,opcode=0001,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[#register][constant]",
-					"Encoding": "[arm-data-processing-immediate],i=1,opcode=0101,s=0,rn=reg4:o1,imm12=imm12:o2"
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
 		},
 		{
-			"Name": "AdcShift32",
+			"Name": "EorImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Exclusive OR",
+			"OpcodeEncodingAppend": "s=0,opcode=0001,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "EorImmRotate",
 			"Commutative": "true",
 			"FamilyName": "ARMv8A32",
 			"FlagsCleared": "",
@@ -56,16 +274,17 @@
 			"FlagsUsed": "C",
 			"OperandCount": 4,
 			"ResultCount": 1,
-			"Description": "Add with Carry",
+			"Description": "Exclusive OR",
+			"OpcodeEncodingAppend": "s=0,opcode=0001,rd=reg4:r,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[#register][register][constant][constant]",
-					"Encoding": "[arm-data-processing-register],i=0,opcode=0101,s=0,rn=reg4:o1,shift=imm5:o3,stype=imm2:o4,rm=reg4:o2"
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
 				}
 			]
 		},
 		{
-			"Name": "AdcS32",
+			"Name": "EorImmShift",
 			"Commutative": "true",
 			"FamilyName": "ARMv8A32",
 			"FlagsCleared": "",
@@ -76,180 +295,3085 @@
 			"FlagsUsed": "C",
 			"OperandCount": 4,
 			"ResultCount": 1,
-			"Description": "Add with Carry",
+			"Description": "Exclusive OR",
+			"OpcodeEncodingAppend": "s=0,opcode=0001,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[#register][register]",
-					"Encoding": "[arm-data-processing-register],i=0,opcode=0101,s=1,rn=reg4:o1,shift=00000,stype=00,rm=reg4:o2"
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
 		},
 		{
-			"Name": "AdcSImm32",
+			"Name": "EorRegShift",
 			"Commutative": "true",
 			"FamilyName": "ARMv8A32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
 			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Exclusive OR",
+			"OpcodeEncodingAppend": "s=0,opcode=0001,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "EorS",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "C",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"Description": "Add with Carry",
+			"Description": "Exclusive OR",
+			"OpcodeEncodingAppend": "s=1,opcode=0001,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[#register][constant]",
-					"Encoding": "[arm-data-processing-immediate],i=1,opcode=0101,s=1,rn=reg4:o1,imm12=imm12:o2"
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
 		},
 		{
-			"Name": "AdcSShift32",
+			"Name": "EorSImm",
 			"Commutative": "true",
 			"FamilyName": "ARMv8A32",
 			"FlagsCleared": "",
-			"FlagsModified": "",
+			"FlagsModified": "NZCV",
 			"FlagsSet": "",
-			"FlagsUnchanged": "NZCV",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Exclusive OR",
+			"OpcodeEncodingAppend": "s=1,opcode=0001,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "EorSImmRotate",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "C",
 			"OperandCount": 4,
 			"ResultCount": 1,
-			"Description": "Add with Carry",
+			"Description": "Exclusive OR",
+			"OpcodeEncodingAppend": "s=1,opcode=0001,rd=reg4:r,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[#register][register][constant][constant]",
-					"Encoding": "[arm-data-processing-register],i=0,opcode=0101,s=1,rn=reg4:o1,shift=imm5:o3,stype=imm2:o4,rm=reg4:o2"
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
 				}
 			]
 		},
-
 		{
-			"Name": "Add32",
+			"Name": "EorSImmShift",
 			"Commutative": "true",
 			"FamilyName": "ARMv8A32",
 			"FlagsCleared": "",
-			"FlagsModified": "",
+			"FlagsModified": "NZCV",
 			"FlagsSet": "",
-			"FlagsUnchanged": "NZCV",
+			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "C",
 			"OperandCount": 4,
 			"ResultCount": 1,
-			"Description": "Addition",
+			"Description": "Exclusive OR",
+			"OpcodeEncodingAppend": "s=1,opcode=0001,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[#register][register]",
-					"Encoding": "[arm-data-processing-register],i=0,opcode=0100,s=0,rn=reg4:o1,shift=00000,stype=00,rm=reg4:o2"
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
 		},
 		{
-			"Name": "AddImm32",
+			"Name": "EorSRegShift",
 			"Commutative": "true",
 			"FamilyName": "ARMv8A32",
 			"FlagsCleared": "",
-			"FlagsModified": "",
+			"FlagsModified": "NZCV",
 			"FlagsSet": "",
-			"FlagsUnchanged": "NZCV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "C",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Addition",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[#register][constant]",
-					"Encoding": "[arm-data-processing-immediate],i=1,opcode=0100,s=0,rn=reg4:o1,imm12=imm12:o2"
-				}
-			]
-		},
-		{
-			"Name": "AddShift32",
-			"Commutative": "true",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "NZCV",
+			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "C",
 			"OperandCount": 4,
 			"ResultCount": 1,
-			"Description": "Addition",
+			"Description": "Exclusive OR",
+			"OpcodeEncodingAppend": "s=1,opcode=0001,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[#register][register][constant][constant]",
-					"Encoding": "[arm-data-processing-register],i=0,opcode=0100,s=0,rn=reg4:o1,shift=imm5:o3,stype=imm2:o4,rm=reg4:o2"
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
 				}
 			]
 		},
 		{
-			"Name": "AddS32",
-			"Commutative": "true",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "NZCV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "C",
-			"OperandCount": 4,
-			"ResultCount": 1,
-			"Description": "Addition",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[#register][register]",
-					"Encoding": "[arm-data-processing-register],i=0,opcode=0100,s=1,rn=reg4:o1,shift=00000,stype=00,rm=reg4:o2"
-				}
-			]
-		},
-		{
-			"Name": "AddSImm32",
-			"Commutative": "true",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "NZCV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "C",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Addition",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[#register][constant]",
-					"Encoding": "[arm-data-processing-immediate],i=1,opcode=0100,s=1,rn=reg4:o1,imm12=imm12:o2"
-				}
-			]
-		},
-		{
-			"Name": "AddSShift32",
-			"Commutative": "true",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "NZCV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "C",
-			"OperandCount": 4,
-			"ResultCount": 1,
-			"Description": "Addition",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[#register][register][constant][constant]",
-					"Encoding": "[arm-data-processing-register],i=0,opcode=0100,s=1,rn=reg4:o1,shift=imm5:o3,stype=imm2:o4,rm=reg4:o2"
-				}
-			]
-		},
-
-		{
-			"Name": "Adr32",
+			"Name": "Sub",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Subtraction",
+			"OpcodeEncodingAppend": "s=0,opcode=0010,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "SubImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Subtraction",
+			"OpcodeEncodingAppend": "s=0,opcode=0010,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "SubImmRotate",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Subtraction",
+			"OpcodeEncodingAppend": "s=0,opcode=0010,rd=reg4:r,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "SubImmShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Subtraction",
+			"OpcodeEncodingAppend": "s=0,opcode=0010,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "SubRegShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Subtraction",
+			"OpcodeEncodingAppend": "s=0,opcode=0010,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "SubS",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Subtraction",
+			"OpcodeEncodingAppend": "s=1,opcode=0010,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "SubSImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Subtraction",
+			"OpcodeEncodingAppend": "s=1,opcode=0010,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "SubSImmRotate",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Subtraction",
+			"OpcodeEncodingAppend": "s=1,opcode=0010,rd=reg4:r,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "SubSImmShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Subtraction",
+			"OpcodeEncodingAppend": "s=1,opcode=0010,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "SubSRegShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Subtraction",
+			"OpcodeEncodingAppend": "s=1,opcode=0010,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "Rsb",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=0011,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "RsbImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=0011,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "RsbImmRotate",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=0011,rd=reg4:r,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "RsbImmShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=0011,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "RsbRegShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=0011,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "RsbS",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=0011,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "RsbSImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=0011,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "RsbSImmRotate",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=0011,rd=reg4:r,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "RsbSImmShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=0011,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "RsbSRegShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=0011,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "Add",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Addition",
+			"OpcodeEncodingAppend": "s=0,opcode=0100,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "AddImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Addition",
+			"OpcodeEncodingAppend": "s=0,opcode=0100,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "AddImmRotate",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Addition",
+			"OpcodeEncodingAppend": "s=0,opcode=0100,rd=reg4:r,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "AddImmShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Addition",
+			"OpcodeEncodingAppend": "s=0,opcode=0100,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "AddRegShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Addition",
+			"OpcodeEncodingAppend": "s=0,opcode=0100,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "AddS",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Addition",
+			"OpcodeEncodingAppend": "s=1,opcode=0100,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "AddSImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Addition",
+			"OpcodeEncodingAppend": "s=1,opcode=0100,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "AddSImmRotate",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Addition",
+			"OpcodeEncodingAppend": "s=1,opcode=0100,rd=reg4:r,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "AddSImmShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Addition",
+			"OpcodeEncodingAppend": "s=1,opcode=0100,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "AddSRegShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Addition",
+			"OpcodeEncodingAppend": "s=1,opcode=0100,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "Adc",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Addition with Carry",
+			"OpcodeEncodingAppend": "s=0,opcode=0101,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "AdcImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Addition with Carry",
+			"OpcodeEncodingAppend": "s=0,opcode=0101,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "AdcImmRotate",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Addition with Carry",
+			"OpcodeEncodingAppend": "s=0,opcode=0101,rd=reg4:r,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "AdcImmShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Addition with Carry",
+			"OpcodeEncodingAppend": "s=0,opcode=0101,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "AdcRegShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Addition with Carry",
+			"OpcodeEncodingAppend": "s=0,opcode=0101,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "AdcS",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Addition with Carry",
+			"OpcodeEncodingAppend": "s=1,opcode=0101,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "AdcSImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Addition with Carry",
+			"OpcodeEncodingAppend": "s=1,opcode=0101,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "AdcSImmRotate",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Addition with Carry",
+			"OpcodeEncodingAppend": "s=1,opcode=0101,rd=reg4:r,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "AdcSImmShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Addition with Carry",
+			"OpcodeEncodingAppend": "s=1,opcode=0101,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "AdcSRegShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Addition with Carry",
+			"OpcodeEncodingAppend": "s=1,opcode=0101,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "Sbc",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Subtract with Carry",
+			"OpcodeEncodingAppend": "s=0,opcode=0110,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "SbcImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Subtract with Carry",
+			"OpcodeEncodingAppend": "s=0,opcode=0110,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "SbcImmRotate",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Subtract with Carry",
+			"OpcodeEncodingAppend": "s=0,opcode=0110,rd=reg4:r,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "SbcImmShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Subtract with Carry",
+			"OpcodeEncodingAppend": "s=0,opcode=0110,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "SbcRegShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Subtract with Carry",
+			"OpcodeEncodingAppend": "s=0,opcode=0110,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "SbcS",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Subtract with Carry",
+			"OpcodeEncodingAppend": "s=1,opcode=0110,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "SbcSImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Subtract with Carry",
+			"OpcodeEncodingAppend": "s=1,opcode=0110,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "SbcSImmRotate",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Subtract with Carry",
+			"OpcodeEncodingAppend": "s=1,opcode=0110,rd=reg4:r,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "SbcSImmShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Subtract with Carry",
+			"OpcodeEncodingAppend": "s=1,opcode=0110,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "SbcSRegShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Subtract with Carry",
+			"OpcodeEncodingAppend": "s=1,opcode=0110,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "Rsc",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=0111,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "RscImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=0111,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "RscImmRotate",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=0111,rd=reg4:r,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "RscImmShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=0111,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "RscRegShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=0111,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "RscS",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=0111,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "RscSImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=0111,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "RscSImmRotate",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=0111,rd=reg4:r,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "RscSImmShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=0111,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "RscSRegShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=0111,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "Tst",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1000,rd=0000,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "TstImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1000,rd=0000,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "TstImmRotate",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1000,rd=0000,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "TstImmShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1000,rd=0000,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "TstRegShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1000,rd=0000,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "TstS",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1000,rd=0000,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "TstSImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1000,rd=0000,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "TstSImmRotate",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1000,rd=0000,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "TstSImmShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1000,rd=0000,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "TstSRegShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1000,rd=0000,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "Teq",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1001,rd=0000,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "TeqImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1001,rd=0000,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "TeqImmRotate",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1001,rd=0000,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "TeqImmShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1001,rd=0000,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "TeqRegShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1001,rd=0000,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "TeqS",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1001,rd=0000,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "TeqSImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1001,rd=0000,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "TeqSImmRotate",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1001,rd=0000,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "TeqSImmShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1001,rd=0000,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "TeqSRegShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1001,rd=0000,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "Cmp",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1010,rd=0000,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "CmpImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1010,rd=0000,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "CmpImmRotate",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1010,rd=0000,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "CmpImmShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1010,rd=0000,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "CmpRegShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1010,rd=0000,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "CmpS",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1010,rd=0000,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "CmpSImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1010,rd=0000,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "CmpSImmRotate",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1010,rd=0000,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "CmpSImmShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1010,rd=0000,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "CmpSRegShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1010,rd=0000,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "Cmn",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1011,rd=0000,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "CmnImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1011,rd=0000,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "CmnImmRotate",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1011,rd=0000,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "CmnImmShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1011,rd=0000,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "CmnRegShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1011,rd=0000,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "CmnS",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1011,rd=0000,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "CmnSImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1011,rd=0000,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "CmnSImmRotate",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1011,rd=0000,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "CmnSImmShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1011,rd=0000,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "CmnSRegShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 0,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1011,rd=0000,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "Orr",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Or",
+			"OpcodeEncodingAppend": "s=0,opcode=1100,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "OrrImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Or",
+			"OpcodeEncodingAppend": "s=0,opcode=1100,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "OrrImmRotate",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Or",
+			"OpcodeEncodingAppend": "s=0,opcode=1100,rd=reg4:r,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "OrrImmShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Or",
+			"OpcodeEncodingAppend": "s=0,opcode=1100,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "OrrRegShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Or",
+			"OpcodeEncodingAppend": "s=0,opcode=1100,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "OrrS",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Or",
+			"OpcodeEncodingAppend": "s=1,opcode=1100,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "OrrSImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Or",
+			"OpcodeEncodingAppend": "s=1,opcode=1100,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "OrrSImmRotate",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Or",
+			"OpcodeEncodingAppend": "s=1,opcode=1100,rd=reg4:r,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "OrrSImmShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Or",
+			"OpcodeEncodingAppend": "s=1,opcode=1100,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "OrrSRegShift",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Or",
+			"OpcodeEncodingAppend": "s=1,opcode=1100,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "Mov",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1101,rd=reg4:r,rn=0000,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "MovImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1101,rd=reg4:r,rn=0000,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "MovImmRotate",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1101,rd=reg4:r,rn=0000,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "MovImmShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "MovRegShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "MovS",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1101,rd=reg4:r,rn=0000,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "MovSImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1101,rd=reg4:r,rn=0000,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "MovSImmRotate",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1101,rd=reg4:r,rn=0000,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "MovSImmShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "MovSRegShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "Bic",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1110,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "BicImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1110,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "BicImmRotate",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1110,rd=reg4:r,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "BicImmShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1110,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "BicRegShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=0,opcode=1110,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "BicS",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1110,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "BicSImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1110,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "BicSImmRotate",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1110,rd=reg4:r,rn=reg4:o1,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "BicSImmShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1110,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "BicSRegShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=1,opcode=1110,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "Mvn",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Not",
+			"OpcodeEncodingAppend": "s=0,opcode=1111,rd=reg4:r,rn=0000,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "MvnImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Not",
+			"OpcodeEncodingAppend": "s=0,opcode=1111,rd=reg4:r,rn=0000,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "MvnImmRotate",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Not",
+			"OpcodeEncodingAppend": "s=0,opcode=1111,rd=reg4:r,rn=0000,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "MvnImmShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Not",
+			"OpcodeEncodingAppend": "s=0,opcode=1111,rd=reg4:r,rn=0000,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "MvnRegShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "NZCV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Not",
+			"OpcodeEncodingAppend": "s=0,opcode=1111,rd=reg4:r,rn=0000,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "MvnS",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Not",
+			"OpcodeEncodingAppend": "s=1,opcode=1111,rd=reg4:r,rn=0000,shiftamount=00000,shifttype=00,rm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "MvnSImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "Not",
+			"OpcodeEncodingAppend": "s=1,opcode=1111,rd=reg4:r,rn=0000,immediate12=imm12:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "MvnSImmRotate",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Not",
+			"OpcodeEncodingAppend": "s=1,opcode=1111,rd=reg4:r,rn=0000,rotate=imm4:o1,immediate=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-rotate-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "MvnSImmShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Not",
+			"OpcodeEncodingAppend": "s=1,opcode=1111,rd=reg4:r,rn=0000,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "MvnSRegShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "NZCV",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "Not",
+			"OpcodeEncodingAppend": "s=1,opcode=1111,rd=reg4:r,rn=0000,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "Adr",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -266,30 +3390,11 @@
 				}
 			]
 		},
+
 		{
-			"Name": "And32",
+			"Name": "Asr",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Bitwise AND",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Asr32",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -307,9 +3412,9 @@
 			]
 		},
 		{
-			"Name": "B32",
+			"Name": "B",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -326,30 +3431,11 @@
 				}
 			]
 		},
+
 		{
-			"Name": "Bic32",
+			"Name": "Bkpt",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Bitwise Bit Clear",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Bkpt32",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -367,9 +3453,9 @@
 			]
 		},
 		{
-			"Name": "Bl32",
+			"Name": "Bl",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -387,9 +3473,9 @@
 			]
 		},
 		{
-			"Name": "Blx32",
+			"Name": "Blx",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -407,9 +3493,9 @@
 			]
 		},
 		{
-			"Name": "Bx32",
+			"Name": "Bx",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -427,49 +3513,9 @@
 			]
 		},
 		{
-			"Name": "Cmn32",
+			"Name": "Dmb",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Compare Negative",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Cmp32",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Compare",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Dmb32",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -487,9 +3533,9 @@
 			]
 		},
 		{
-			"Name": "Dsb32",
+			"Name": "Dsb",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -506,30 +3552,11 @@
 				}
 			]
 		},
+
 		{
-			"Name": "Eor32",
+			"Name": "Isb",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Bitwise Exclusive OR",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Isb32",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -547,9 +3574,9 @@
 			]
 		},
 		{
-			"Name": "Ldm32",
+			"Name": "Ldm",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -567,9 +3594,9 @@
 			]
 		},
 		{
-			"Name": "Ldmfd32",
+			"Name": "Ldmfd",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -587,9 +3614,9 @@
 			]
 		},
 		{
-			"Name": "Ldmia32",
+			"Name": "Ldmia",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -607,9 +3634,9 @@
 			]
 		},
 		{
-			"Name": "Ldr32",
+			"Name": "Ldr",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -627,9 +3654,9 @@
 			]
 		},
 		{
-			"Name": "Ldrb32",
+			"Name": "Ldrb",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -647,9 +3674,9 @@
 			]
 		},
 		{
-			"Name": "Ldrh32",
+			"Name": "Ldrh",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -667,9 +3694,9 @@
 			]
 		},
 		{
-			"Name": "Ldrsb32",
+			"Name": "Ldrsb",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -687,9 +3714,9 @@
 			]
 		},
 		{
-			"Name": "Ldrsh32",
+			"Name": "Ldrsh",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -707,9 +3734,9 @@
 			]
 		},
 		{
-			"Name": "Lsl32",
+			"Name": "Lsl",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -727,9 +3754,9 @@
 			]
 		},
 		{
-			"Name": "Lsr32",
+			"Name": "Lsr",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -746,30 +3773,11 @@
 				}
 			]
 		},
+
 		{
-			"Name": "Mov32",
+			"Name": "Mrs",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Copies operand to destination",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Mrs32",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -787,9 +3795,9 @@
 			]
 		},
 		{
-			"Name": "Msr32",
+			"Name": "Msr",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -807,9 +3815,9 @@
 			]
 		},
 		{
-			"Name": "Mul32",
+			"Name": "Mul",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -827,29 +3835,9 @@
 			]
 		},
 		{
-			"Name": "Mvn32",
+			"Name": "Nop",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Bitwise NOT",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Nop32",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -867,29 +3855,9 @@
 			]
 		},
 		{
-			"Name": "Orr32",
+			"Name": "Pop",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Bitwise OR",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Pop32",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -907,9 +3875,9 @@
 			]
 		},
 		{
-			"Name": "Push32",
+			"Name": "Push",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -927,9 +3895,9 @@
 			]
 		},
 		{
-			"Name": "Rev32",
+			"Name": "Rev",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -949,7 +3917,7 @@
 		{
 			"Name": "Rev16",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -967,9 +3935,9 @@
 			]
 		},
 		{
-			"Name": "Revsh32",
+			"Name": "Revsh",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -987,9 +3955,9 @@
 			]
 		},
 		{
-			"Name": "Ror32",
+			"Name": "Ror",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1006,70 +3974,11 @@
 				}
 			]
 		},
+
 		{
-			"Name": "Rsb32",
+			"Name": "Sev",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Reverse Subtract",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Rsc32",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Reverse Subtract Carry",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Sbc32",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Subtract with Carry",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Sev32",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1087,9 +3996,9 @@
 			]
 		},
 		{
-			"Name": "Stm32",
+			"Name": "Stm",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1107,9 +4016,9 @@
 			]
 		},
 		{
-			"Name": "Stmea32",
+			"Name": "Stmea",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1127,9 +4036,9 @@
 			]
 		},
 		{
-			"Name": "Stmia32",
+			"Name": "Stmia",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1147,9 +4056,9 @@
 			]
 		},
 		{
-			"Name": "Str32",
+			"Name": "Str",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1167,9 +4076,9 @@
 			]
 		},
 		{
-			"Name": "Strb32",
+			"Name": "Strb",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1187,9 +4096,9 @@
 			]
 		},
 		{
-			"Name": "Strh32",
+			"Name": "Strh",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1207,29 +4116,9 @@
 			]
 		},
 		{
-			"Name": "Sub32",
+			"Name": "Svc",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Subtract",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Svc32",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1247,9 +4136,9 @@
 			]
 		},
 		{
-			"Name": "Swi32",
+			"Name": "Swi",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1267,9 +4156,9 @@
 			]
 		},
 		{
-			"Name": "Sxtb32",
+			"Name": "Sxtb",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1287,9 +4176,9 @@
 			]
 		},
 		{
-			"Name": "Sxth32",
+			"Name": "Sxth",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1307,49 +4196,9 @@
 			]
 		},
 		{
-			"Name": "Teq32",
+			"Name": "Uxtb",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Test",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Tst32",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Test",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Uxtb32",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1367,9 +4216,9 @@
 			]
 		},
 		{
-			"Name": "Uxth32",
+			"Name": "Uxth",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1387,9 +4236,9 @@
 			]
 		},
 		{
-			"Name": "Wfe32",
+			"Name": "Wfe",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1407,9 +4256,9 @@
 			]
 		},
 		{
-			"Name": "Wfi32",
+			"Name": "Wfi",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
@@ -1427,9 +4276,9 @@
 			]
 		},
 		{
-			"Name": "Yield32",
+			"Name": "Yield",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA32",
+			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",

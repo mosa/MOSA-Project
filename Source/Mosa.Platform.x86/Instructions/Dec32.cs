@@ -37,8 +37,8 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
 			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
-			emitter.OpcodeEncoder.AppendNibble(0b0100);
-			emitter.OpcodeEncoder.AppendBit(0b1);
+			emitter.OpcodeEncoder.Append4Bits(0b0100);
+			emitter.OpcodeEncoder.Append1Bit(0b1);
 			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 		}
 	}
