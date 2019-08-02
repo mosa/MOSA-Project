@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Teq : ARMv8A32Instruction
 	{
-		public override int ID { get { return 675; } }
+		public override int ID { get { return 627; } }
 
 		internal Teq()
 			: base(0, 2)

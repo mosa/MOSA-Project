@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class MovRegShift : ARMv8A32Instruction
 	{
-		public override int ID { get { return 622; } }
+		public override int ID { get { return 602; } }
 
 		internal MovRegShift()
 			: base(1, 4)
@@ -30,7 +30,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 				emitter.OpcodeEncoder.Append2Bits(0b00);
 				emitter.OpcodeEncoder.Append1Bit(0b0);
 				emitter.OpcodeEncoder.Append4Bits(0b1101);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
+				emitter.OpcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.Update ? 1 :0);
 				emitter.OpcodeEncoder.Append4Bits(0b0000);
 				emitter.OpcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append4Bits(node.Operand3.Register.RegisterCode);

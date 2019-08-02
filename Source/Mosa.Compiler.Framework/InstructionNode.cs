@@ -17,16 +17,6 @@ namespace Mosa.Compiler.Framework
 		#region Data Members
 
 		/// <summary>
-		/// Holds a packed value (to save space)
-		/// </summary>
-		private uint packed;
-
-		/// <summary>
-		/// The additional properties of an instruction node
-		/// </summary>
-		private InstructionNodeAddition addition;
-
-		/// <summary>
 		/// Holds the first operand of the instruction.
 		/// </summary>
 		private Operand operand1;
@@ -60,6 +50,11 @@ namespace Mosa.Compiler.Framework
 		/// Holds the branch targets
 		/// </summary>
 		private List<BasicBlock> branchTargets;
+
+		/// <summary>
+		/// The additional properties of an instruction node
+		/// </summary>
+		private InstructionNodeAddition addition;
 
 		#endregion Data Members
 
@@ -298,6 +293,8 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public ConditionCode ConditionCode { get; set; }
 
+		public StatusRegister StatusRegister { get; set; }
+
 		/// <summary>
 		/// Holds branch targets
 		/// </summary>
@@ -338,60 +335,19 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets a value indicating whether this instance has a prefix.
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if this instance has a prefix; otherwise, <c>false</c>.
-		/// </value>
-		public bool HasPrefix
-		{
-			get { return (packed & 0x02) == 0x02; }
-			set { if (value) { packed |= 0x02; } else { packed = (uint)(packed & ~0x2); } }
-		}
-
-		/// <summary>
-		/// Gets or sets the branch hint (true means branch likely)
-		/// </summary>
-		public bool BranchHint
-		{
-			get { return (packed & 0x04) == 0x04; }
-			set { if (value) { packed |= 0x04; } else { packed = (uint)(packed & ~0x04); } }
-		}
-
-		/// <summary>
 		/// Gets or sets a value indicating whether this <see cref="InstructionNode"/> is marked.
 		/// </summary>
-		public bool Marked
-		{
-			get { return (packed & 0x08) == 0x08; }
-			set { if (value) { packed |= 0x08; } else { packed = (uint)(packed & ~0x08); } }
-		}
-
-		/// <summary>
-		/// Gets or sets a value indicating whether the instruction updates the status flag.
-		/// </summary>
-		/// <value>
-		///   <c>true</c> if [set status flag]; otherwise, <c>false</c>.
-		/// </value>
-		public bool UpdateStatus
-		{
-			get { return (packed & 0x16) == 0x16; }
-			set { if (value) packed |= 0x16; else packed = (uint)(packed & ~0x16); }
-		}
-
-		/// <summary>
-		/// Gets or sets the number of operand results
-		/// </summary>
-		public int ResultCount
-		{
-			get { return (byte)((packed >> 8) & 0xF); }
-			set { packed = (packed & 0xFFFFF0FF) | ((uint)value << 8); }
-		}
+		public bool Marked { get; set; }
 
 		/// <summary>
 		/// Gets or sets the number of operands
 		/// </summary>
 		public int OperandCount { get; set; }
+
+		/// <summary>
+		/// Gets or sets the number of operand results
+		/// </summary>
+		public int ResultCount { get; set; }
 
 		private void CheckAddition()
 		{
@@ -512,29 +468,25 @@ namespace Mosa.Compiler.Framework
 
 			ClearOperands();
 
-			packed = 0;
-			addition = null;
-			BranchHint = false;
 			ConditionCode = ConditionCode.Undefined;
+			StatusRegister = StatusRegister.NotSet;
+			addition = null;
 			Block = null;
 			branchTargets = null;
 		}
 
 		/// <summary>
-		/// Empties this context.
+		/// Empties this node.
 		/// </summary>
 		public void Empty()
 		{
 			ClearOperands();
 
-			Instruction = null;
-			packed = 0;
-			addition = null;
-			BranchHint = false;
 			ConditionCode = ConditionCode.Undefined;
-
+			StatusRegister = StatusRegister.NotSet;
+			Instruction = null;
+			addition = null;
 			Block.RemoveBranchInstruction(this);
-
 			branchTargets = null;
 
 			//Block.DebugCheck();
@@ -1137,10 +1089,10 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
 		/// <param name="result">The result.</param>
-		public InstructionNode(BaseInstruction instruction, bool updateStatus, Operand result)
+		public InstructionNode(BaseInstruction instruction, StatusRegister statusRegister, Operand result)
 			: this(instruction, result)
 		{
-			UpdateStatus = updateStatus;
+			StatusRegister = statusRegister;
 		}
 
 		/// <summary>
@@ -1284,11 +1236,11 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instruction">The instruction.</param>
 		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
 		/// <param name="result">The result.</param>
-		public void SetInstruction(BaseInstruction instruction, bool updateStatus, Operand result)
+		public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result)
 		{
 			SetInstruction(instruction, 0, 1);
 			Result = result;
-			UpdateStatus = updateStatus;
+			StatusRegister = statusRegister;
 		}
 
 		/// <summary>
@@ -1351,12 +1303,12 @@ namespace Mosa.Compiler.Framework
 		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
-		public void SetInstruction(BaseInstruction instruction, bool updateStatus, Operand result, Operand operand1)
+		public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result, Operand operand1)
 		{
 			SetInstruction(instruction, 1, (byte)((result == null) ? 0 : 1));
 			Result = result;
 			Operand1 = operand1;
-			UpdateStatus = updateStatus;
+			StatusRegister = statusRegister;
 		}
 
 		/// <summary>
@@ -1482,13 +1434,13 @@ namespace Mosa.Compiler.Framework
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
 		/// <param name="operand2">The operand2.</param>
-		public void SetInstruction(BaseInstruction instruction, bool updateStatus, Operand result, Operand operand1, Operand operand2)
+		public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result, Operand operand1, Operand operand2)
 		{
 			SetInstruction(instruction, 2, (byte)((result == null) ? 0 : 1));
 			Result = result;
 			Operand1 = operand1;
 			Operand2 = operand2;
-			UpdateStatus = updateStatus;
+			StatusRegister = statusRegister;
 		}
 
 		/// <summary>
@@ -1514,13 +1466,13 @@ namespace Mosa.Compiler.Framework
 		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
-		public void SetInstruction(BaseInstruction instruction, ConditionCode condition, bool updateStatus, Operand result, Operand operand1)
+		public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, ConditionCode condition, Operand result, Operand operand1)
 		{
 			SetInstruction(instruction, 1, (byte)((result == null) ? 0 : 1));
 			Result = result;
 			Operand1 = operand1;
 			ConditionCode = condition;
-			UpdateStatus = updateStatus;
+			StatusRegister = statusRegister;
 		}
 
 		/// <summary>
@@ -1581,14 +1533,14 @@ namespace Mosa.Compiler.Framework
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
 		/// <param name="operand2">The operand2.</param>
-		public void SetInstruction(BaseInstruction instruction, ConditionCode condition, bool updateStatus, Operand result, Operand operand1, Operand operand2)
+		public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, ConditionCode condition, Operand result, Operand operand1, Operand operand2)
 		{
 			SetInstruction(instruction, 2, (byte)((result == null) ? 0 : 1));
 			Result = result;
 			Operand1 = operand1;
 			Operand2 = operand2;
 			ConditionCode = condition;
-			UpdateStatus = updateStatus;
+			StatusRegister = statusRegister;
 		}
 
 		/// <summary>

@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class TstRegShift : ARMv8A32Instruction
 	{
-		public override int ID { get { return 682; } }
+		public override int ID { get { return 634; } }
 
 		internal TstRegShift()
 			: base(0, 4)

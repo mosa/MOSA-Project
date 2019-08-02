@@ -31,12 +31,12 @@ namespace Mosa.Platform.x64.Stages
 
 		#region Visitation Methods
 
-		public void CallReg(Context context)
+		public void CallReg(InstructionNode node)
 		{
-			Debug.Assert(context.Operand1 != null);
-			Debug.Assert(context.Operand1.IsCPURegister);
+			Debug.Assert(node.Operand1 != null);
+			Debug.Assert(node.Operand1.IsCPURegister);
 
-			var before = context.Previous;
+			var before = node.Previous;
 
 			while (before.IsEmpty && !before.IsBlockStartInstruction)
 			{
@@ -52,11 +52,11 @@ namespace Mosa.Platform.x64.Stages
 			if (!before.Result.IsCPURegister)
 				return;
 
-			if (context.Operand1.Register != before.Result.Register)
+			if (node.Operand1.Register != before.Result.Register)
 				return;
 
 			before.SetInstruction(X64.Call, null, before.Operand1);
-			context.Empty();
+			node.Empty();
 		}
 
 		public void Mov32(Context context)

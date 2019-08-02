@@ -833,6 +833,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "forward32": code = "EmitForward32"; return;
 				case "supress8": code = "SuppressByte"; return;
 				case "conditional": code = "Append4Bits"; postcode = "GetConditionCode(node.ConditionCode)"; return;
+				case "status": code = "Append1Bit"; postcode = " == StatusRegister.Update ? 1 :0"; return;
 				case "": return;
 
 				default: break;
@@ -891,6 +892,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "r1": return "node.Result";
 				case "r2": return "node.Result2";
 				case "label": return "node.BranchTargets[0].Label";
+
+				case "status": return "node.StatusRegister";
 
 				default: return part; // pass as is
 			}
