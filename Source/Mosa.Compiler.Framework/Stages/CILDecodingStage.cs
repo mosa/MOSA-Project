@@ -211,7 +211,8 @@ namespace Mosa.Compiler.Framework.Stages
 				var node = new InstructionNode()
 				{
 					Label = instruction.Offset,
-					HasPrefix = prefix,
+
+					//HasPrefix = prefix,
 					Instruction = cil ?? throw new InvalidMetadataException()
 				};
 				block.BeforeLast.Insert(node);

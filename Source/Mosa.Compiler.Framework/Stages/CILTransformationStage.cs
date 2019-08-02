@@ -487,12 +487,14 @@ namespace Mosa.Compiler.Framework.Stages
 			var result = context.Result;
 			var operands = context.GetOperands();
 
-			if (context.Previous.Instruction is CIL.ConstrainedPrefixInstruction)
+			var previous = context.Node.Previous;
+
+			if (previous.Instruction is ConstrainedPrefixInstruction)
 			{
-				var type = context.Previous.MosaType;
+				var type = context.Node.Previous.MosaType;
 
 				// remove constrained prefix
-				context.Previous.Empty();
+				previous.Empty();
 
 				if (type.IsValueType)
 				{

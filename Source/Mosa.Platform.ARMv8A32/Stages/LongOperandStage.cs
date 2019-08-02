@@ -83,7 +83,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-			context.AppendInstruction(ARMv8A32.AddS, resultLow, op1L, op2L);
+			context.AppendInstruction(ARMv8A32.Add, StatusRegister.Update, resultLow, op1L, op2L);
 			context.AppendInstruction(ARMv8A32.Adc, resultHigh, op1H, op2H);
 		}
 

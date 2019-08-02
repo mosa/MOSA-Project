@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Dmb : ARMv8A32Instruction
 	{
-		public override int ID { get { return 687; } }
+		public override int ID { get { return 639; } }
 
 		internal Dmb()
 			: base(1, 3)

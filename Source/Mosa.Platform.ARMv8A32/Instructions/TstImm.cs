@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class TstImm : ARMv8A32Instruction
 	{
-		public override int ID { get { return 680; } }
+		public override int ID { get { return 632; } }
 
 		internal TstImm()
 			: base(0, 3)

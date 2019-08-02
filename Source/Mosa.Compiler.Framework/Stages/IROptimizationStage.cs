@@ -1041,7 +1041,7 @@ namespace Mosa.Compiler.Framework.Stages
 				context.AppendInstruction(IRInstruction.MoveInt32, result2, ConstantZero);
 
 				trace?.Log($"AFTER: \t{context}");
-				trace?.Log($"AFTER: \t{context.Previous}");
+				trace?.Log($"AFTER: \t{context.Node.Previous}");
 				SimplifyGeneralCount.Increment();
 			}
 		}
@@ -1080,7 +1080,7 @@ namespace Mosa.Compiler.Framework.Stages
 				trace?.Log($"BEFORE:\t{node}");
 				context.SetInstruction(IRInstruction.Add32, v1, operand1, operand2);
 				context.AppendInstruction(IRInstruction.Add32, result, v1, CreateConstant(1));
-				trace?.Log($"AFTER: \t{context.Previous}");
+				trace?.Log($"AFTER: \t{context.Node.Previous}");
 				trace?.Log($"AFTER: \t{context}");
 				SimplifyGeneralCount.Increment();
 				return;

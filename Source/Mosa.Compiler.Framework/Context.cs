@@ -51,12 +51,9 @@ namespace Mosa.Compiler.Framework
 		public bool Marked { get { return Node.Marked; } set { Node.Marked = value; } }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether [update status flags].
+		/// Gets or sets status resister setting.
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if [update status flags]; otherwise, <c>false</c>.
-		/// </value>
-		public bool UpdateStatus { get { return Node.UpdateStatus; } set { Node.UpdateStatus = value; } }
+		public StatusRegister StatusRegister { get { return Node.StatusRegister; } set { Node.StatusRegister = value; } }
 
 		/// <summary>
 		/// Gets the branch targets.
@@ -137,20 +134,6 @@ namespace Mosa.Compiler.Framework
 		public bool IsEmpty { get { return Node.IsEmpty; } }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether this instance has prefix.
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if this instance has prefix; otherwise, <c>false</c>.
-		/// </value>
-		public bool HasPrefix { get { return Node.HasPrefix; } set { Node.HasPrefix = value; } }
-
-		/// <summary>
-		/// Gets or sets the branch hint (true means branch likely).
-		/// </summary>
-		/// <value><c>true</c> if the branch is likely; otherwise <c>false</c>.</value>
-		public bool BranchHint { get { return Node.BranchHint; } set { Node.BranchHint = value; } }
-
-		/// <summary>
 		/// Gets or sets the runtime method.
 		/// </summary>
 		public MosaMethod InvokeMethod { get { return Node.InvokeMethod; } set { Node.InvokeMethod = value; } }
@@ -194,18 +177,6 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <value><c>true</c> if this is the last instruction; otherwise, <c>false</c>.</value>
 		public bool IsBlockEndInstruction { get { return Node.IsBlockEndInstruction; } }
-
-		/// <summary>
-		/// Gets the context of the next instruction.
-		/// </summary>
-		/// <value>The context of the next instruction.</value>
-		public Context Next { get { return new Context(Node.Next); } }
-
-		/// <summary>
-		/// Gets the context of the previous instruction.
-		/// </summary>
-		/// <value>The context of the previous instruction.</value>
-		public Context Previous { get { return new Context(Node.Previous); } }
 
 		#endregion Properties
 
@@ -493,11 +464,11 @@ namespace Mosa.Compiler.Framework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
-		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
+		/// <param name="statusRegister">if set to <c>true</c> [update status].</param>
 		/// <param name="result">The result.</param>
-		public void SetInstruction(BaseInstruction instruction, bool updateStatus, Operand result)
+		public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result)
 		{
-			Node.SetInstruction(instruction, updateStatus, result);
+			Node.SetInstruction(instruction, statusRegister, result);
 		}
 
 		/// <summary>
@@ -526,12 +497,12 @@ namespace Mosa.Compiler.Framework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
-		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
+		/// <param name="statusRegister">if set to <c>true</c> [update status].</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
-		public void SetInstruction(BaseInstruction instruction, bool updateStatus, Operand result, Operand operand1)
+		public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result, Operand operand1)
 		{
-			Node.SetInstruction(instruction, updateStatus, result, operand1);
+			Node.SetInstruction(instruction, statusRegister, result, operand1);
 		}
 
 		/// <summary>
@@ -612,13 +583,13 @@ namespace Mosa.Compiler.Framework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
-		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
+		/// <param name="statusRegister">if set to <c>true</c> [update status].</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
 		/// <param name="operand2">The operand2.</param>
-		public void SetInstruction(BaseInstruction instruction, bool updateStatus, Operand result, Operand operand1, Operand operand2)
+		public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result, Operand operand1, Operand operand2)
 		{
-			Node.SetInstruction(instruction, updateStatus, result, operand1, operand2);
+			Node.SetInstruction(instruction, statusRegister, result, operand1, operand2);
 		}
 
 		/// <summary>
@@ -637,13 +608,13 @@ namespace Mosa.Compiler.Framework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
+		/// <param name="statusRegister">if set to <c>true</c> [update status].</param>
 		/// <param name="condition">The condition.</param>
-		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
-		public void SetInstruction(BaseInstruction instruction, ConditionCode condition, bool updateStatus, Operand result, Operand operand1)
+		public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, ConditionCode condition, Operand result, Operand operand1)
 		{
-			Node.SetInstruction(instruction, condition, updateStatus, result, operand1);
+			Node.SetInstruction(instruction, statusRegister, condition, result, operand1);
 		}
 
 		/// <summary>
@@ -677,14 +648,14 @@ namespace Mosa.Compiler.Framework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
+		/// <param name="statusRegister">if set to <c>true</c> [update status].</param>
 		/// <param name="condition">The condition.</param>
-		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
 		/// <param name="operand2">The operand2.</param>
-		public void SetInstruction(BaseInstruction instruction, ConditionCode condition, bool updateStatus, Operand result, Operand operand1, Operand operand2)
+		public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, ConditionCode condition, Operand result, Operand operand1, Operand operand2)
 		{
-			Node.SetInstruction(instruction, condition, updateStatus, result, operand1, operand2);
+			Node.SetInstruction(instruction, statusRegister, condition, result, operand1, operand2);
 		}
 
 		/// <summary>
@@ -822,12 +793,12 @@ namespace Mosa.Compiler.Framework
 		/// Appends the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
-		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
+		/// <param name="statusRegister">if set to <c>true</c> [update status].</param>
 		/// <param name="result">The result.</param>
-		public void AppendInstruction(BaseInstruction instruction, bool updateStatus, Operand result)
+		public void AppendInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result)
 		{
 			AppendInstruction();
-			Node.SetInstruction(instruction, updateStatus, result);
+			Node.SetInstruction(instruction, statusRegister, result);
 		}
 
 		/// <summary>
@@ -846,13 +817,13 @@ namespace Mosa.Compiler.Framework
 		/// Appends the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
-		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
+		/// <param name="statusRegister">if set to <c>true</c> [update status].</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
-		public void AppendInstruction(BaseInstruction instruction, bool updateStatus, Operand result, Operand operand1)
+		public void AppendInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result, Operand operand1)
 		{
 			AppendInstruction();
-			Node.SetInstruction(instruction, updateStatus, result, operand1);
+			Node.SetInstruction(instruction, statusRegister, result, operand1);
 		}
 
 		/// <summary>
@@ -926,14 +897,14 @@ namespace Mosa.Compiler.Framework
 		/// Appends the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
-		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
+		/// <param name="statusRegister">if set to <c>true</c> [update status].</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
 		/// <param name="operand2">The operand2.</param>
-		public void AppendInstruction(BaseInstruction instruction, bool updateStatus, Operand result, Operand operand1, Operand operand2)
+		public void AppendInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result, Operand operand1, Operand operand2)
 		{
 			AppendInstruction();
-			Node.SetInstruction(instruction, updateStatus, result, operand1, operand2);
+			Node.SetInstruction(instruction, statusRegister, result, operand1, operand2);
 		}
 
 		/// <summary>
@@ -1004,14 +975,14 @@ namespace Mosa.Compiler.Framework
 		/// Appends the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
+		/// <param name="statusRegister">if set to <c>true</c> [update status].</param>
 		/// <param name="condition">The condition.</param>
-		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
-		public void AppendInstruction(BaseInstruction instruction, ConditionCode condition, bool updateStatus, Operand result, Operand operand1)
+		public void AppendInstruction(BaseInstruction instruction, StatusRegister statusRegister, ConditionCode condition, Operand result, Operand operand1)
 		{
 			AppendInstruction();
-			Node.SetInstruction(instruction, condition, updateStatus, result, operand1);
+			Node.SetInstruction(instruction, statusRegister, condition, result, operand1);
 		}
 
 		/// <summary>
@@ -1047,15 +1018,15 @@ namespace Mosa.Compiler.Framework
 		/// Appends the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
+		/// <param name="statusRegister">if set to <c>true</c> [update status].</param>
 		/// <param name="condition">The condition.</param>
-		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
 		/// <param name="operand2">The operand2.</param>
-		public void AppendInstruction(BaseInstruction instruction, ConditionCode condition, bool updateStatus, Operand result, Operand operand1, Operand operand2)
+		public void AppendInstruction(BaseInstruction instruction, StatusRegister statusRegister, ConditionCode condition, Operand result, Operand operand1, Operand operand2)
 		{
 			AppendInstruction();
-			Node.SetInstruction(instruction, condition, updateStatus, result, operand1, operand2);
+			Node.SetInstruction(instruction, statusRegister, condition, result, operand1, operand2);
 		}
 
 		/// <summary>
