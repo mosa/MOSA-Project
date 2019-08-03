@@ -167,10 +167,8 @@ namespace Mosa.Platform.x86.Stages
 			var operand2 = context.Operand2;
 			var operand3 = context.Operand3;
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-			context.SetInstruction(X86.Bt32, v1, operand3, CreateConstant((byte)0));
-			context.AppendInstruction(X86.Adc32, result, operand1, operand2);
+			context.AppendInstruction(X86.Add32, result, operand1, operand2);
+			context.AppendInstruction(X86.Add32, result, result, operand3);
 		}
 
 		private void ArithShiftRight32(InstructionNode node)
@@ -229,6 +227,7 @@ namespace Mosa.Platform.x86.Stages
 			var operand2 = context.Operand2;
 
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
 			context.SetInstruction(X86.Cmp32, null, operand1, operand2);
 			context.AppendInstruction(X86.Setcc, condition, v1);
 			context.AppendInstruction(X86.Movzx8To32, resultOperand, v1);
@@ -583,9 +582,9 @@ namespace Mosa.Platform.x86.Stages
 			node.ReplaceInstruction(X86.And32);
 		}
 
-		private void LogicalNot32(Context context)
+		private void LogicalNot32(InstructionNode node)
 		{
-			context.SetInstruction(X86.Not32, context.Result, context.Operand1);
+			node.SetInstruction(X86.Not32, node.Result, node.Operand1);
 		}
 
 		private void LogicalOr32(InstructionNode node)

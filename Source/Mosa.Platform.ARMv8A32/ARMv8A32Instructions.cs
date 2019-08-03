@@ -120,6 +120,8 @@ namespace Mosa.Platform.ARMv8A32
 			ARMv8A32.Wfe,
 			ARMv8A32.Wfi,
 			ARMv8A32.Yield,
+			ARMv8A32.MovwImm,
+			ARMv8A32.MovtImm,
 		};
 	}
 }

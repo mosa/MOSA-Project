@@ -15,7 +15,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 		public override int ID { get { return 592; } }
 
 		internal CmpImm()
-			: base(0, 3)
+			: base(0, 2)
 		{
 		}
 
@@ -32,9 +32,9 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 3);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister && node.Operand3.IsConstant)
+			if (node.Operand1.IsCPURegister && node.Operand2.IsConstant)
 			{
 				emitter.OpcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 				emitter.OpcodeEncoder.Append2Bits(0b00);

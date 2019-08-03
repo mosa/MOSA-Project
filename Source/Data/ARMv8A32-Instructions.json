@@ -41,13 +41,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "C",
-			"OperandCount": 3,
+			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Addition with Carry",
 			"OpcodeEncodingAppend": "s=status:status,opcode=0101,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][constant]",
+					"Condition": "[register][constant]",
 					"Encoding": "[arm-data-processing-immediate]"
 				}
 			]
@@ -125,13 +125,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 3,
+			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Addition",
 			"OpcodeEncodingAppend": "s=status:status,opcode=0100,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][constant]",
+					"Condition": "[register][constant]",
 					"Encoding": "[arm-data-processing-immediate]"
 				}
 			]
@@ -209,13 +209,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 3,
+			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "And",
 			"OpcodeEncodingAppend": "s=status:status,opcode=0000,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][constant]",
+					"Condition": "[register][constant]",
 					"Encoding": "[arm-data-processing-immediate]"
 				}
 			]
@@ -293,13 +293,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 3,
+			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "",
 			"OpcodeEncodingAppend": "s=status:status,opcode=1110,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][constant]",
+					"Condition": "[register][constant]",
 					"Encoding": "[arm-data-processing-immediate]"
 				}
 			]
@@ -377,13 +377,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 3,
+			"OperandCount": 2,
 			"ResultCount": 0,
 			"Description": "",
 			"OpcodeEncodingAppend": "s=1,opcode=1011,rd=0000,rn=reg4:o1,immediate12=imm12:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][constant]",
+					"Condition": "[register][constant]",
 					"Encoding": "[arm-data-processing-immediate]"
 				}
 			]
@@ -461,13 +461,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 3,
+			"OperandCount": 2,
 			"ResultCount": 0,
 			"Description": "",
 			"OpcodeEncodingAppend": "s=1,opcode=1010,rd=0000,rn=reg4:o1,immediate12=imm12:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][constant]",
+					"Condition": "[register][constant]",
 					"Encoding": "[arm-data-processing-immediate]"
 				}
 			]
@@ -545,13 +545,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "C",
-			"OperandCount": 3,
+			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Exclusive OR",
 			"OpcodeEncodingAppend": "s=status:status,opcode=0001,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][constant]",
+					"Condition": "[register][constant]",
 					"Encoding": "[arm-data-processing-immediate]"
 				}
 			]
@@ -629,13 +629,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 3,
+			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "",
 			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,immediate12=imm12:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][constant]",
+					"Condition": "[register][constant]",
 					"Encoding": "[arm-data-processing-immediate]"
 				}
 			]
@@ -713,13 +713,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 3,
+			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Not",
 			"OpcodeEncodingAppend": "s=status:status,opcode=1111,rd=reg4:r,rn=0000,immediate12=imm12:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][constant]",
+					"Condition": "[register][constant]",
 					"Encoding": "[arm-data-processing-immediate]"
 				}
 			]
@@ -797,13 +797,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 3,
+			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Or",
 			"OpcodeEncodingAppend": "s=status:status,opcode=1100,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][constant]",
+					"Condition": "[register][constant]",
 					"Encoding": "[arm-data-processing-immediate]"
 				}
 			]
@@ -881,13 +881,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 3,
+			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "",
 			"OpcodeEncodingAppend": "s=status:status,opcode=0011,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][constant]",
+					"Condition": "[register][constant]",
 					"Encoding": "[arm-data-processing-immediate]"
 				}
 			]
@@ -965,13 +965,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "C",
-			"OperandCount": 3,
+			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "",
 			"OpcodeEncodingAppend": "s=status:status,opcode=0111,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][constant]",
+					"Condition": "[register][constant]",
 					"Encoding": "[arm-data-processing-immediate]"
 				}
 			]
@@ -1049,13 +1049,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "C",
-			"OperandCount": 3,
+			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Subtract with Carry",
 			"OpcodeEncodingAppend": "s=status:status,opcode=0110,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][constant]",
+					"Condition": "[register][constant]",
 					"Encoding": "[arm-data-processing-immediate]"
 				}
 			]
@@ -1133,13 +1133,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "C",
-			"OperandCount": 3,
+			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Subtraction",
 			"OpcodeEncodingAppend": "s=status:status,opcode=0010,rd=reg4:r,rn=reg4:o1,immediate12=imm12:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][constant]",
+					"Condition": "[register][constant]",
 					"Encoding": "[arm-data-processing-immediate]"
 				}
 			]
@@ -1217,13 +1217,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 3,
+			"OperandCount": 2,
 			"ResultCount": 0,
 			"Description": "",
 			"OpcodeEncodingAppend": "s=1,opcode=1001,rd=0000,rn=reg4:o1,immediate12=imm12:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][constant]",
+					"Condition": "[register][constant]",
 					"Encoding": "[arm-data-processing-immediate]"
 				}
 			]
@@ -1301,13 +1301,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 3,
+			"OperandCount": 2,
 			"ResultCount": 0,
 			"Description": "",
 			"OpcodeEncodingAppend": "s=1,opcode=1000,rd=0000,rn=reg4:o1,immediate12=imm12:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][constant]",
+					"Condition": "[register][constant]",
 					"Encoding": "[arm-data-processing-immediate]"
 				}
 			]
@@ -2210,6 +2210,46 @@
 			"OperandCount": 3,
 			"ResultCount": 1,
 			"Description": "Yield",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "MovwImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "MovwImm",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "MovtImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "MovtImm",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",

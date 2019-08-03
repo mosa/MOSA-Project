@@ -118,5 +118,7 @@ namespace Mosa.Platform.ARMv8A32
 		public static readonly Wfe Wfe = new Wfe();
 		public static readonly Wfi Wfi = new Wfi();
 		public static readonly Yield Yield = new Yield();
+		public static readonly MovwImm MovwImm = new MovwImm();
+		public static readonly MovtImm MovtImm = new MovtImm();
 	}
 }
