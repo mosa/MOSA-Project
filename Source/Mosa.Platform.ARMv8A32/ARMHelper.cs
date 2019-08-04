@@ -8,7 +8,22 @@ namespace Mosa.Platform.ARMv8A32
 	{
 		public static bool CalculateImmediateValue(uint value, out uint immediate, out byte rotation4, out byte imm8)
 		{
+			if ((value & 0xFF) == value)
+			{
+				rotation4 = 0;
+				imm8 = (byte)value;
+				immediate = value;
+
+				return true;
+			}
+
 			int shift = 0;
+
+			if ((value & 0xFFFF) == 0)
+			{
+				shift = 16;
+				value >>= 16;
+			}
 
 			do
 			{

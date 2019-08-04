@@ -236,6 +236,18 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Emit Methods
 
+		public void EmitRelative24(Operand symbolOperand)
+		{
+			Linker.Link(
+				LinkType.RelativeOffset,
+				PatchType.B24,
+				MethodName,
+				CodeStream.Position,
+				symbolOperand.Name,
+				-4
+			);
+		}
+
 		public void EmitRelative32(Operand symbolOperand)
 		{
 			Linker.Link(
