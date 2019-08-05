@@ -371,10 +371,23 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
+		public void EmitRelative24(int label)
+		{
+			// TODO
+			int offset = Emitter.EmitRelative(label, 4);
+			AppendImmediateInteger((uint)offset);
+		}
+
 		public void EmitRelative32(int label)
 		{
 			int offset = Emitter.EmitRelative(label, 4);
 			AppendImmediateInteger((uint)offset);
+		}
+
+		public void EmitForward32(int offset)
+		{
+			Emitter.EmitForwardLink(offset);
+			WriteZeroBytes(4);
 		}
 
 		public void EmitRelative32(Operand operand)
@@ -387,12 +400,6 @@ namespace Mosa.Compiler.Framework
 		{
 			Emitter.EmitRelative64(operand);
 			WriteZeroBytes(8);
-		}
-
-		public void EmitForward32(int offset)
-		{
-			Emitter.EmitForwardLink(offset);
-			WriteZeroBytes(4);
 		}
 
 		public void SuppressByte(byte supressByte)

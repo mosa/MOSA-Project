@@ -1355,6 +1355,66 @@
 			]
 		},
 		{
+			"Name": "Bl",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "CNZV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 0,
+			"Description": "Call a subroutine",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[constant]",
+					"Encoding": "conditional|1011|rel24:label"
+				}
+			]
+		},
+		{
+			"Name": "B",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "CNZV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 0,
+			"Description": "Call a subroutine",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[constant]",
+					"Encoding": "conditional|1010|rel24:label"
+				}
+			]
+		},
+		{
+			"Name": "Bx",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "CNZV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 0,
+			"Description": "Branch to target address",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "conditional|0001|0010|1111|1111|0001|reg4:o1"
+				}
+			]
+		},
+		{
 			"Name": "Bkpt",
 			"Commutative": "false",
 			"FamilyName": "ARMv8xA",
@@ -1367,66 +1427,6 @@
 			"OperandCount": 3,
 			"ResultCount": 1,
 			"Description": "Breakpoint instruction",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Bl",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Call a subroutine",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Blx",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Call a subroutine",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Bx",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Branch to target address",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -1474,7 +1474,6 @@
 				}
 			]
 		},
-
 		{
 			"Name": "Isb",
 			"Commutative": "false",
@@ -1695,7 +1694,6 @@
 				}
 			]
 		},
-
 		{
 			"Name": "Mrs",
 			"Commutative": "false",
@@ -1728,7 +1726,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"Description": "Status register access ",
+			"Description": "Status register access",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -1763,16 +1761,16 @@
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
-			"FlagsUnchanged": "",
+			"FlagsUnchanged": "CNZV",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
+			"OperandCount": 0,
+			"ResultCount": 0,
 			"Description": "No Operation",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "0x00000000"
+					"Encoding": "0xBF00"
 				}
 			]
 		},

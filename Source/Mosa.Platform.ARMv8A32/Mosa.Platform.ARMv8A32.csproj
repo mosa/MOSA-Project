@@ -101,13 +101,13 @@
     <Compile Include="Instructions\AndImm.cs" />
     <Compile Include="Instructions\AndImmShift.cs" />
     <Compile Include="Instructions\AndRegShift.cs" />
+    <Compile Include="Instructions\B.cs" />
     <Compile Include="Instructions\Bic.cs" />
     <Compile Include="Instructions\BicImm.cs" />
     <Compile Include="Instructions\BicImmShift.cs" />
     <Compile Include="Instructions\BicRegShift.cs" />
     <Compile Include="Instructions\Bkpt.cs" />
     <Compile Include="Instructions\Bl.cs" />
-    <Compile Include="Instructions\Blx.cs" />
     <Compile Include="Instructions\Bx.cs" />
     <Compile Include="Instructions\Cmn.cs" />
     <Compile Include="Instructions\CmnImm.cs" />

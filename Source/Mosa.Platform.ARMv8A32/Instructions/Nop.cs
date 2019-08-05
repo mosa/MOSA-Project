@@ -15,16 +15,16 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 		public override int ID { get { return 655; } }
 
 		internal Nop()
-			: base(1, 3)
+			: base(0, 0)
 		{
 		}
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 3);
+			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-			emitter.OpcodeEncoder.Append32Bits(0x00000000);
+			emitter.OpcodeEncoder.AppendShort(0xBF00);
 		}
 	}
 }
