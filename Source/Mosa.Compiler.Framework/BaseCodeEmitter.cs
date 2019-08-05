@@ -231,7 +231,7 @@ namespace Mosa.Compiler.Framework
 
 		public void EmitForwardLink(int offset)
 		{
-			Linker.Link(LinkType.AbsoluteAddress, PatchType.I4, MethodName, CurrentPosition, MethodName, CurrentPosition + offset);
+			Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, MethodName, CurrentPosition, MethodName, CurrentPosition + offset);
 		}
 
 		#endregion Emit Methods
@@ -241,7 +241,7 @@ namespace Mosa.Compiler.Framework
 			// TODO
 			Linker.Link(
 				LinkType.RelativeOffset,
-				PatchType.B24,
+				PatchType.I24O8,
 				MethodName,
 				CodeStream.Position,
 				symbolOperand.Name,
@@ -253,7 +253,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Linker.Link(
 				LinkType.RelativeOffset,
-				PatchType.I4,
+				PatchType.I32,
 				MethodName,
 				CodeStream.Position,
 				symbolOperand.Name,
@@ -265,7 +265,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Linker.Link(
 				LinkType.RelativeOffset,
-				PatchType.I8,
+				PatchType.I64,
 				MethodName,
 				CodeStream.Position,
 				symbolOperand.Name,

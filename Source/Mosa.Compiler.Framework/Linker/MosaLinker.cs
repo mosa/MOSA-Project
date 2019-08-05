@@ -242,8 +242,8 @@ namespace Mosa.Compiler.Framework.Linker
 		{
 			switch (patchType)
 			{
-				case PatchType.I4: return 32;
-				case PatchType.I8: return 64;
+				case PatchType.I32: return 32;
+				case PatchType.I64: return 64;
 			}
 
 			throw new CompilerException($"unknown patch type: {patchType}");

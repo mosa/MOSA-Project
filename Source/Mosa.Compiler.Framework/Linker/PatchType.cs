@@ -2,5 +2,10 @@
 
 namespace Mosa.Compiler.Framework.Linker
 {
-	public enum PatchType { I4, I8, B24 }
+	public enum PatchType
+	{
+		I32, // 32-bit patch type
+		I64, // 64-bit patch type
+		I24O8 // 24-bit patch type (offset 8)
+	}
 }
