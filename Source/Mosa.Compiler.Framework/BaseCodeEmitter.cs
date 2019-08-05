@@ -238,6 +238,7 @@ namespace Mosa.Compiler.Framework
 
 		public void EmitRelative24(Operand symbolOperand)
 		{
+			// TODO
 			Linker.Link(
 				LinkType.RelativeOffset,
 				PatchType.B24,
