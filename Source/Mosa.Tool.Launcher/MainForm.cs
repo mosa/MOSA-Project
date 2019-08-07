@@ -111,6 +111,8 @@ namespace Mosa.Tool.Launcher
 			Options.GenerateCompileTimeFile = cbGenerateCompilerTime.Checked;
 			Options.EnableBitTracker = cbBitTracker.Checked;
 
+			Options.OsName = tbOsName.Text;
+
 			if (Options.VBEVideo)
 			{
 				var Mode = tbMode.Text.Split('x');
@@ -233,6 +235,8 @@ namespace Mosa.Tool.Launcher
 			cbEnableMethodScanner.Checked = Options.EnableMethodScanner;
 			cbGenerateCompilerTime.Checked = Options.GenerateCompileTimeFile;
 			cbBitTracker.Checked = Options.EnableBitTracker;
+
+			tbOsName.Text = Options.OsName;
 
 			switch (Options.ImageFormat)
 			{
