@@ -275,32 +275,29 @@ namespace System
 		{
 			return this;
 		}
-		
+
 		public List<string> Split(char delimiter, string text)
-        {
-            List<string> ret = new List<string>();
-            string temp = "";
-            for (int i = 0; i < text.Length; i++)
-            {
-                if (text[i] == delimiter)
-                {
-                    ret.Add(temp);
-                    temp = "";
-                }
-                else
-                {
-                    temp += text[i];
-                }
+		{
+			List<string> ret = new List<string>();
+			int startPos = 0;
+			string temp = "";
 
-            }
-            if (temp != "")
-            {
-                ret.Add(temp);
-            }
+			for (int i = 0; i < text.Length; i++)
+			{
+				if (text[i] == delimiter)
+				{
+					temp = text.Substring(startPos, text.IndexOf(delimiter) - startPos);
 
-            return ret;
+					startPos = i + 1;
+				}
+			}
+			if (temp != "")
+			{
+				ret.Add(temp);
+			}
 
-        }
+			return ret;
+		}
 
 		public unsafe string ToUpper()
 		{
