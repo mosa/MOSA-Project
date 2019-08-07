@@ -280,7 +280,7 @@ namespace System
 		{
 			List<string> ret = new List<string>();
 			int startPos = 0;
-			string temp = "";
+			string temp = string.Empty;
 
 			for (int i = 0; i < text.Length; i++)
 			{
@@ -291,7 +291,7 @@ namespace System
 					startPos = i + 1;
 				}
 			}
-			if (temp != "")
+			if (temp != string.Empty)
 			{
 				ret.Add(temp);
 			}
