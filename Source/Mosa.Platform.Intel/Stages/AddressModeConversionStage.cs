@@ -23,7 +23,7 @@ namespace Mosa.Platform.Intel.Stages
 			{
 				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty)
+					if (node.IsEmptyOrNop)
 						continue;
 
 					if (IsThreeTwoAddressRequired(node.Instruction))

@@ -19,9 +19,9 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.AddFloatR8, AddFloatR8);
 			//AddVisitation(IRInstruction.AddressOf, AddressOf);
 			AddVisitation(IRInstruction.Add32, Add32);
+			AddVisitation(IRInstruction.AddCarryOut32, AddCarryOut32);
+			AddVisitation(IRInstruction.AddWithCarry32, AddWithCarry32);
 
-			//AddVisitation(IRInstruction.AddCarryOut32, AddCarryOut32);
-			//AddVisitation(IRInstruction.AddWithCarry32, AddWithCarry32);
 			//AddVisitation(IRInstruction.ArithShiftRight32, ArithShiftRight32);
 			//AddVisitation(IRInstruction.BitCopyFloatR4ToInt32, BitCopyFloatR4ToInt32);
 			//AddVisitation(IRInstruction.BitCopyInt32ToFloatR4, BitCopyInt32ToFloatR4);
@@ -61,13 +61,15 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.LoadParamZeroExtend8x32, LoadParamZeroExtend8x32);
 			//AddVisitation(IRInstruction.LoadParamZeroExtend16x32, LoadParamZeroExtend16x32);
 			//AddVisitation(IRInstruction.LoadParamCompound, LoadParamCompound);
-			//AddVisitation(IRInstruction.LogicalAnd32, LogicalAnd32);
-			//AddVisitation(IRInstruction.LogicalNot32, LogicalNot32);
-			//AddVisitation(IRInstruction.LogicalOr32, LogicalOr32);
-			//AddVisitation(IRInstruction.LogicalXor32, LogicalXor32);
+			AddVisitation(IRInstruction.LogicalAnd32, LogicalAnd32);
+			AddVisitation(IRInstruction.LogicalNot32, LogicalNot32);
+			AddVisitation(IRInstruction.LogicalOr32, LogicalOr32);
+			AddVisitation(IRInstruction.LogicalXor32, LogicalXor32);
+
 			//AddVisitation(IRInstruction.MoveFloatR4, MoveFloatR4);
 			//AddVisitation(IRInstruction.MoveFloatR8, MoveFloatR8);
-			//AddVisitation(IRInstruction.MoveInt32, MoveInt32);
+			AddVisitation(IRInstruction.MoveInt32, MoveInt32);
+
 			//AddVisitation(IRInstruction.SignExtend8x32, SignExtend8x32);
 			//AddVisitation(IRInstruction.SignExtend16x32, SignExtend16x32);
 			//AddVisitation(IRInstruction.ZeroExtend8x32, ZeroExtend8x32);
@@ -112,6 +114,54 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			{
 				context.SetInstruction(ARMv8A32.AddImm, context.Result, context.Operand1, context.Operand2);
 			}
+		}
+
+		private void AddCarryOut32(Context context)
+		{
+			var result = context.Result;
+			var result2 = context.Result2;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			context.SetInstruction(ARMv8A32.Add, StatusRegister.Update, result, operand1, operand2);
+			context.AppendInstruction(ARMv8A32.Mov, ConditionCode.Carry, result2, CreateConstant(1));
+			context.AppendInstruction(ARMv8A32.Mov, ConditionCode.NoCarry, result2, CreateConstant(0));
+		}
+
+		private void AddWithCarry32(Context context)
+		{
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var operand3 = context.Operand3;
+
+			context.SetInstruction(ARMv8A32.Add, result, operand1, operand2);
+			context.AppendInstruction(ARMv8A32.Add, result, result, operand3);
+		}
+
+		private void LogicalAnd32(InstructionNode node)
+		{
+			node.ReplaceInstruction(ARMv8A32.And);
+		}
+
+		private void LogicalNot32(InstructionNode node)
+		{
+			node.SetInstruction(ARMv8A32.Mvn);
+		}
+
+		private void LogicalOr32(InstructionNode node)
+		{
+			node.ReplaceInstruction(ARMv8A32.Orr);
+		}
+
+		private void LogicalXor32(InstructionNode node)
+		{
+			node.ReplaceInstruction(ARMv8A32.Eor);
+		}
+
+		private void MoveInt32(InstructionNode node)
+		{
+			node.ReplaceInstruction(ARMv8A32.Mov);
 		}
 
 		#endregion Visitation Methods

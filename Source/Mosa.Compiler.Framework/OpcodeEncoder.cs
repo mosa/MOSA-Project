@@ -269,7 +269,7 @@ namespace Mosa.Compiler.Framework
 			}
 			else
 			{
-				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I4, operand, 0, offset.ConstantSignedInteger);
+				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, offset.ConstantSignedInteger);
 				WriteZeroBytes(4);
 			}
 		}
@@ -284,7 +284,7 @@ namespace Mosa.Compiler.Framework
 			}
 			else
 			{
-				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I4, operand, 0, 0);
+				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);
 				WriteZeroBytes(4);
 			}
 		}
@@ -300,7 +300,7 @@ namespace Mosa.Compiler.Framework
 			}
 			else
 			{
-				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I8, operand, 0, offset.ConstantSignedInteger);
+				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I64, operand, 0, offset.ConstantSignedInteger);
 				WriteZeroBytes(8);
 			}
 		}
@@ -315,7 +315,7 @@ namespace Mosa.Compiler.Framework
 			}
 			else
 			{
-				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I8, operand, 0, 0);
+				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I64, operand, 0, 0);
 				WriteZeroBytes(4);
 			}
 		}
@@ -369,6 +369,13 @@ namespace Mosa.Compiler.Framework
 			{
 				WriteByte(0);
 			}
+		}
+
+		public void EmitRelative24(int label)
+		{
+			// TODO
+			int offset = Emitter.EmitRelative(label, 4);
+			AppendImmediateInteger((uint)offset);
 		}
 
 		public void EmitRelative32(int label)

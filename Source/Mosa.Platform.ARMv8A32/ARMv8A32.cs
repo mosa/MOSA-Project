@@ -75,10 +75,10 @@ namespace Mosa.Platform.ARMv8A32
 		public static readonly TstImm TstImm = new TstImm();
 		public static readonly TstImmShift TstImmShift = new TstImmShift();
 		public static readonly TstRegShift TstRegShift = new TstRegShift();
-		public static readonly Bkpt Bkpt = new Bkpt();
 		public static readonly Bl Bl = new Bl();
-		public static readonly Blx Blx = new Blx();
+		public static readonly B B = new B();
 		public static readonly Bx Bx = new Bx();
+		public static readonly Bkpt Bkpt = new Bkpt();
 		public static readonly Dmb Dmb = new Dmb();
 		public static readonly Dsb Dsb = new Dsb();
 		public static readonly Isb Isb = new Isb();
@@ -118,5 +118,7 @@ namespace Mosa.Platform.ARMv8A32
 		public static readonly Wfe Wfe = new Wfe();
 		public static readonly Wfi Wfi = new Wfi();
 		public static readonly Yield Yield = new Yield();
+		public static readonly MovwImm MovwImm = new MovwImm();
+		public static readonly MovtImm MovtImm = new MovtImm();
 	}
 }

@@ -34,7 +34,7 @@ namespace Mosa.Platform.Intel.Stages
 			{
 				for (var node = block.First; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty || !(node.Instruction is BasePlatformInstruction))
+					if (node.IsEmptyOrNop || !(node.Instruction is BasePlatformInstruction))
 						continue;
 
 					if (node.OperandCount == 0)

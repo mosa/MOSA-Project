@@ -12,19 +12,27 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Bl : ARMv8A32Instruction
 	{
-		public override int ID { get { return 636; } }
+		public override int ID { get { return 635; } }
 
 		internal Bl()
-			: base(1, 3)
+			: base(0, 1)
 		{
 		}
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 3);
+			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			emitter.OpcodeEncoder.Append32Bits(0x00000000);
+			if (node.Operand1.IsConstant)
+			{
+				emitter.OpcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
+				emitter.OpcodeEncoder.Append4Bits(0b1011);
+				emitter.OpcodeEncoder.EmitRelative24(node.BranchTargets[0].Label);
+				return;
+			}
+
+			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 		}
 	}
 }

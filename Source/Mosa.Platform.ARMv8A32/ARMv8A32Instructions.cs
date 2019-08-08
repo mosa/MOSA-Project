@@ -77,10 +77,10 @@ namespace Mosa.Platform.ARMv8A32
 			ARMv8A32.TstImm,
 			ARMv8A32.TstImmShift,
 			ARMv8A32.TstRegShift,
-			ARMv8A32.Bkpt,
 			ARMv8A32.Bl,
-			ARMv8A32.Blx,
+			ARMv8A32.B,
 			ARMv8A32.Bx,
+			ARMv8A32.Bkpt,
 			ARMv8A32.Dmb,
 			ARMv8A32.Dsb,
 			ARMv8A32.Isb,
@@ -120,6 +120,8 @@ namespace Mosa.Platform.ARMv8A32
 			ARMv8A32.Wfe,
 			ARMv8A32.Wfi,
 			ARMv8A32.Yield,
+			ARMv8A32.MovwImm,
+			ARMv8A32.MovtImm,
 		};
 	}
 }

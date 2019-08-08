@@ -28,15 +28,15 @@ grub
 - http://www.gnu.org/software/grub/
 - Version 0.97
 
-ndisasm
+nasm & ndisasm
 - Simplified BSD License
 - http://www.nasm.us/
-- Version 2.11.08
+- Version 2.14.03rc2
 
 xunit
 - Apache License, Version 2.0
-- http://xunit.codeplex.com/
-- Version: Build 1705
+- https://github.com/xunit/xunit
+- Version: Build 2.4.1+
 
 mkisofs
 - GPLv2 License
@@ -55,4 +55,9 @@ gdb
 rufus
 - GNU License v3
 - https://github.com/pbatard/rufus
-- Version: 3.4
+- https://rufus.ie/
+- Version: 3.6
+
+Raspberry Pi Firmware
+- See LICENCE.broadcom
+- https://github.com/raspberrypi/firmware/tree/master/boot

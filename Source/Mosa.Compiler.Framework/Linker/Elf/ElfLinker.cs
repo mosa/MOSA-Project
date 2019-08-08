@@ -595,7 +595,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 					var relocationEntry = new RelocationEntry()
 					{
-						RelocationType = ConvertType(patch.LinkType, linker.MachineType),
+						RelocationType = ConvertType(linker.MachineType, patch.LinkType, patch.PatchType),
 						Symbol = symbolTableOffset[patch.ReferenceSymbol],
 						Offset = (ulong)(symbol.SectionOffset + patch.PatchOffset),
 					};
@@ -636,7 +636,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 					var relocationAddendEntry = new RelocationAddendEntry()
 					{
-						RelocationType = ConvertType(patch.LinkType, linker.MachineType),
+						RelocationType = ConvertType(linker.MachineType, patch.LinkType, patch.PatchType),
 						Symbol = symbolTableOffset[patch.ReferenceSymbol],
 						Offset = (ulong)(symbol.SectionOffset + patch.PatchOffset),
 						Addend = (ulong)patch.ReferenceOffset,
@@ -651,7 +651,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			section.Size = (uint)(count * RelocationAddendEntry.GetEntrySize(linkerFormatType));
 		}
 
-		private static RelocationType ConvertType(LinkType linkType, MachineType machineType)
+		private static RelocationType ConvertType(MachineType machineType, LinkType linkType, PatchType patchType)
 		{
 			if (machineType == MachineType.Intel386)
 			{
@@ -659,6 +659,17 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 					return RelocationType.R_386_32;
 				else if (linkType == LinkType.RelativeOffset)
 					return RelocationType.R_386_PC32;
+				else if (linkType == LinkType.Size)
+					return RelocationType.R_386_COPY;
+			}
+			else if (machineType == MachineType.ARM)
+			{
+				if (linkType == LinkType.AbsoluteAddress)
+					return RelocationType.R_ARM_ABS16;
+				else if (linkType == LinkType.RelativeOffset)
+					return RelocationType.R_ARM_PC24;
+				else if (linkType == LinkType.Size)
+					return RelocationType.R_ARM_COPY;
 			}
 
 			return RelocationType.R_386_NONE;
