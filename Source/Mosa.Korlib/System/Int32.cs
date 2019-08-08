@@ -97,5 +97,52 @@ namespace System
 		{
 			return _value;
 		}
+
+		public static bool TryParse(string s, out int result)
+		{
+			try
+			{
+				result = Parse(s);
+				return true;
+			}
+			catch
+			{
+				result = 0;
+				return false;
+			}
+		}
+
+		public static int Parse(string s)
+		{
+			const string digits = "0123456789";
+			int result = 0;
+
+			int z = 0;
+			bool neg = false;
+
+			if (s.Length >= 1)
+			{
+				if (s[0] == '+') z = 1;
+				if (s[0] == '-')
+				{
+					z = 1;
+					neg = true;
+				}
+			}
+
+			for (int i = z; i < s.Length; i++)
+			{
+				int ind = (int)digits.IndexOf(s[i]);
+				if (ind == -1)
+				{
+					throw new Exception("Format is incorrect");
+				}
+				result = (Int32)((result * 10) + ind);
+			}
+
+			if (neg) result *= -1;
+
+			return result;
+		}
 	}
 }
