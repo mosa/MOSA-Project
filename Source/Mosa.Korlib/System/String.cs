@@ -303,6 +303,29 @@ namespace System
 			return ret;
 		}
 
+		public List<string> Split(char delimiter, string text)
+		{
+			List<string> ret = new List<string>();
+			int startPos = 0;
+			string temp = string.Empty;
+
+			for (int i = 0; i < text.Length; i++)
+			{
+				if (text[i] == delimiter)
+				{
+					temp = text.Substring(startPos, text.IndexOf(delimiter) - startPos);
+
+					startPos = i + 1;
+				}
+			}
+			if (temp != string.Empty)
+			{
+				ret.Add(temp);
+			}
+
+			return ret;
+		}
+
 		public unsafe string ToUpper()
 		{
 			string result = InternalAllocateString(length);
