@@ -78,7 +78,7 @@ namespace Mosa.TestWorld.x86
 
 			int value = CallReturn10();
 
-			Screen.Write("Return10 TesT: ");
+			Screen.Write("Return10 Test: ");
 			if (value == 10)
 				Screen.WriteLine("Ok");
 			else

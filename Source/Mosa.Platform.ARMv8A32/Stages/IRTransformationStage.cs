@@ -68,7 +68,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 			//AddVisitation(IRInstruction.MoveFloatR4, MoveFloatR4);
 			//AddVisitation(IRInstruction.MoveFloatR8, MoveFloatR8);
-			//AddVisitation(IRInstruction.MoveInt32, MoveInt32);
+			AddVisitation(IRInstruction.MoveInt32, MoveInt32);
+
 			//AddVisitation(IRInstruction.SignExtend8x32, SignExtend8x32);
 			//AddVisitation(IRInstruction.SignExtend16x32, SignExtend16x32);
 			//AddVisitation(IRInstruction.ZeroExtend8x32, ZeroExtend8x32);
@@ -145,7 +146,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void LogicalNot32(InstructionNode node)
 		{
-			node.SetInstruction(ARMv8A32.Mvn, node.Result, node.Operand1);
+			node.SetInstruction(ARMv8A32.Mvn);
 		}
 
 		private void LogicalOr32(InstructionNode node)
@@ -156,6 +157,11 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		private void LogicalXor32(InstructionNode node)
 		{
 			node.ReplaceInstruction(ARMv8A32.Eor);
+		}
+
+		private void MoveInt32(InstructionNode node)
+		{
+			node.ReplaceInstruction(ARMv8A32.Mov);
 		}
 
 		#endregion Visitation Methods

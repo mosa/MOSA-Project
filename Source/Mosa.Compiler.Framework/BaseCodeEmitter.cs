@@ -241,7 +241,7 @@ namespace Mosa.Compiler.Framework
 			// TODO
 			Linker.Link(
 				LinkType.RelativeOffset,
-				PatchType.I24O8,
+				PatchType.I24o8,
 				MethodName,
 				CodeStream.Position,
 				symbolOperand.Name,

@@ -659,14 +659,17 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 					return RelocationType.R_386_32;
 				else if (linkType == LinkType.RelativeOffset)
 					return RelocationType.R_386_PC32;
+				else if (linkType == LinkType.Size)
+					return RelocationType.R_386_COPY;
 			}
 			else if (machineType == MachineType.ARM)
 			{
-				// TODO:
 				if (linkType == LinkType.AbsoluteAddress)
 					return RelocationType.R_ARM_ABS16;
 				else if (linkType == LinkType.RelativeOffset)
 					return RelocationType.R_ARM_PC24;
+				else if (linkType == LinkType.Size)
+					return RelocationType.R_ARM_COPY;
 			}
 
 			return RelocationType.R_386_NONE;
