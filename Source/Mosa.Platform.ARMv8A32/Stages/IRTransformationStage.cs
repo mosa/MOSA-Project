@@ -1,7 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
+using System;
+using System.Diagnostics;
 
 namespace Mosa.Platform.ARMv8A32.Stages
 {
@@ -13,6 +16,11 @@ namespace Mosa.Platform.ARMv8A32.Stages
 	/// </remarks>
 	public sealed class IRTransformationStage : BaseTransformationStage
 	{
+		public const int LogicalLeft = 0b00;
+		public const int LogicalRight = 0b01;
+		public const int ArithShiftRight = 0b10;
+		public const int RotateRight = 0b11;
+
 		protected override void PopulateVisitationDictionary()
 		{
 			//AddVisitation(IRInstruction.AddFloatR4, AddFloatR4);
@@ -22,7 +30,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.AddCarryOut32, AddCarryOut32);
 			AddVisitation(IRInstruction.AddWithCarry32, AddWithCarry32);
 
-			//AddVisitation(IRInstruction.ArithShiftRight32, ArithShiftRight32);
+			AddVisitation(IRInstruction.ArithShiftRight32, ArithShiftRight32);
+
 			//AddVisitation(IRInstruction.BitCopyFloatR4ToInt32, BitCopyFloatR4ToInt32);
 			//AddVisitation(IRInstruction.BitCopyInt32ToFloatR4, BitCopyInt32ToFloatR4);
 			//AddVisitation(IRInstruction.Break, Break);
@@ -81,8 +90,9 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.Nop, Nop);
 			//AddVisitation(IRInstruction.RemSigned32, RemSigned32);
 			//AddVisitation(IRInstruction.RemUnsigned32, RemUnsigned32);
-			//AddVisitation(IRInstruction.ShiftLeft32, ShiftLeft32);
-			//AddVisitation(IRInstruction.ShiftRight32, ShiftRight32);
+			AddVisitation(IRInstruction.ShiftLeft32, ShiftLeft32);
+			AddVisitation(IRInstruction.ShiftRight32, ShiftRight32);
+
 			//AddVisitation(IRInstruction.StoreFloatR4, StoreFloatR4);
 			//AddVisitation(IRInstruction.StoreFloatR8, StoreFloatR8);
 			//AddVisitation(IRInstruction.StoreInt8, StoreInt8);
@@ -106,64 +116,212 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void Add32(Context context)
 		{
-			if (context.Operand2.IsVirtualRegister)
-			{
-				context.SetInstruction(ARMv8A32.Add, context.Result, context.Operand1, context.Operand2, ConstantZero32, ConstantZero32);
-			}
-			else
-			{
-				context.SetInstruction(ARMv8A32.AddImm, context.Result, context.Operand1, context.Operand2);
-			}
+			SwapFirstTwoOperandsIfFirstConstant(context);
+			UpdateInstruction2(context, ARMv8A32.Add, ARMv8A32.AddImm);
 		}
 
 		private void AddCarryOut32(Context context)
 		{
-			var result = context.Result;
 			var result2 = context.Result2;
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
 
-			context.SetInstruction(ARMv8A32.Add, StatusRegister.Update, result, operand1, operand2);
-			context.AppendInstruction(ARMv8A32.Mov, ConditionCode.Carry, result2, CreateConstant(1));
-			context.AppendInstruction(ARMv8A32.Mov, ConditionCode.NoCarry, result2, CreateConstant(0));
+			SwapFirstTwoOperandsIfFirstConstant(context);
+			UpdateInstruction2(context, ARMv8A32.Add, ARMv8A32.AddImm, StatusRegister.Update);
+
+			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.Carry, result2, CreateConstant(1));
+			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.NoCarry, result2, CreateConstant(0));
 		}
 
 		private void AddWithCarry32(Context context)
 		{
 			var result = context.Result;
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
 			var operand3 = context.Operand3;
 
-			context.SetInstruction(ARMv8A32.Add, result, operand1, operand2);
-			context.AppendInstruction(ARMv8A32.Add, result, result, operand3);
+			UpdateInstruction2(context, ARMv8A32.Add, ARMv8A32.AddImm);
+
+			if (operand3.IsVirtualRegister)
+			{
+				context.AppendInstruction(ARMv8A32.Add, result, result, operand3);
+			}
+			else if (operand3.IsResolvedConstant)
+			{
+				context.AppendInstruction(ARMv8A32.AddImm, result, result, operand3);
+			}
+			else
+			{
+				throw new CompilerException("Error at {context} in {Method}");
+			}
 		}
 
-		private void LogicalAnd32(InstructionNode node)
+		private void LogicalAnd32(Context context)
 		{
-			node.ReplaceInstruction(ARMv8A32.And);
+			SwapFirstTwoOperandsIfFirstConstant(context);
+			UpdateInstruction2(context, ARMv8A32.And, ARMv8A32.AndImm);
 		}
 
-		private void LogicalNot32(InstructionNode node)
+		private void LogicalNot32(Context context)
 		{
-			node.SetInstruction(ARMv8A32.Mvn);
+			UpdateInstruction1(context, ARMv8A32.Mvn, ARMv8A32.MvnImm);
 		}
 
-		private void LogicalOr32(InstructionNode node)
+		private void LogicalOr32(Context context)
 		{
-			node.ReplaceInstruction(ARMv8A32.Orr);
+			SwapFirstTwoOperandsIfFirstConstant(context);
+			UpdateInstruction2(context, ARMv8A32.Orr, ARMv8A32.OrrImm);
 		}
 
-		private void LogicalXor32(InstructionNode node)
+		private void LogicalXor32(Context context)
 		{
-			node.ReplaceInstruction(ARMv8A32.Eor);
+			SwapFirstTwoOperandsIfFirstConstant(context);
+			UpdateInstruction2(context, ARMv8A32.Eor, ARMv8A32.EorImm);
 		}
 
-		private void MoveInt32(InstructionNode node)
+		private void MoveInt32(Context context)
 		{
-			node.ReplaceInstruction(ARMv8A32.Mov);
+			UpdateInstruction1(context, ARMv8A32.Mov, ARMv8A32.MovImm);
+		}
+
+		private void ShiftLeft32(Context context)
+		{
+			Shift(context, LogicalLeft);
+		}
+
+		private void ShiftRight32(Context context)
+		{
+			Shift(context, LogicalRight);
+		}
+
+		private void ArithShiftRight32(Context context)
+		{
+			Shift(context, ArithShiftRight);
 		}
 
 		#endregion Visitation Methods
+
+		private void Shift(Context context, int ShiftType)
+		{
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			if (operand1.IsConstant)
+			{
+				operand1 = CreateImmediateOperand(context, operand1);
+			}
+
+			if (operand2.IsVirtualRegister)
+			{
+				context.SetInstruction(ARMv8A32.MovRegShift, result, operand1, operand2, CreateConstant(ShiftType));
+			}
+			else if (operand2.IsResolvedConstant)
+			{
+				context.SetInstruction(ARMv8A32.MovImmShift, result, operand1, operand2, CreateConstant(ShiftType));
+			}
+			else if (operand2.IsUnresolvedConstant)
+			{
+				var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+				context.SetInstruction(ARMv8A32.MovwImm, v1, operand2);
+				context.AppendInstruction(ARMv8A32.MovtImm, v1, operand2);
+
+				context.AppendInstruction(ARMv8A32.MovRegShift, result, operand1, v1, CreateConstant(ShiftType));
+			}
+			else
+			{
+				throw new CompilerException("Error at {context} in {Method}");
+			}
+		}
+
+		private void UpdateInstruction1(Context context, BaseInstruction virtualInstruction, BaseInstruction immediateInstruction)
+		{
+			var result = context.Result;
+			var operand1 = context.Operand1;
+
+			if (operand1.IsConstant)
+			{
+				operand1 = CreateImmediateOperand(context, operand1);
+			}
+
+			if (operand1.IsVirtualRegister || operand1.IsCPURegister)
+			{
+				context.SetInstruction(virtualInstruction, result, operand1);
+			}
+			else if (operand1.IsResolvedConstant)
+			{
+				context.SetInstruction(immediateInstruction, result, operand1);
+			}
+			else
+			{
+				throw new CompilerException("Error at {context} in {Method}");
+			}
+		}
+
+		private void UpdateInstruction2(Context context, BaseInstruction virtualInstruction, BaseInstruction immediateInstruction, StatusRegister statusRegister = StatusRegister.NotSet)
+		{
+			Debug.Assert(context.Operand1.IsVirtualRegister || context.Operand1.IsCPURegister);
+
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			if (operand2.IsConstant)
+			{
+				operand2 = CreateImmediateOperand(context, operand2);
+			}
+
+			if (operand2.IsVirtualRegister || operand1.IsCPURegister)
+			{
+				context.SetInstruction(virtualInstruction, statusRegister, result, operand1, operand2);
+			}
+			else if (operand2.IsResolvedConstant)
+			{
+				context.SetInstruction(immediateInstruction, statusRegister, result, operand1, operand2);
+			}
+			else
+			{
+				throw new CompilerException("Error at {context} in {Method}");
+			}
+		}
+
+		private Operand CreateImmediateOperand(Context context, Operand operand)
+		{
+			Debug.Assert(operand.IsConstant);
+
+			if (operand.IsResolvedConstant)
+			{
+				if (ARMHelper.CalculateImmediateValue(operand.ConstantUnsignedInteger, out uint immediate, out _, out _))
+				{
+					if (operand.ConstantUnsignedLongInteger == immediate)
+					{
+						return operand;
+					}
+
+					return CreateConstant(immediate);
+				}
+				else
+				{
+					var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+					var before = context.InsertBefore();
+
+					before.SetInstruction(ARMv8A32.MovwImm, v1, CreateConstant(operand.ConstantUnsignedInteger & 0xFFFF));
+					before.AppendInstruction(ARMv8A32.MovtImm, v1, CreateConstant(operand.ConstantUnsignedInteger >> 16));
+
+					return v1;
+				}
+			}
+			else if (operand.IsUnresolvedConstant)
+			{
+				var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+				var before = context.InsertBefore();
+
+				before.SetInstruction(ARMv8A32.MovwImm, v1, operand);
+				before.AppendInstruction(ARMv8A32.MovtImm, v1, operand);
+
+				return v1;
+			}
+
+			return operand;
+		}
 	}
 }

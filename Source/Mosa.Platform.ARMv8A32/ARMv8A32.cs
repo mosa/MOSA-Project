@@ -39,10 +39,6 @@ namespace Mosa.Platform.ARMv8A32
 		public static readonly EorImm EorImm = new EorImm();
 		public static readonly EorImmShift EorImmShift = new EorImmShift();
 		public static readonly EorRegShift EorRegShift = new EorRegShift();
-		public static readonly Mov Mov = new Mov();
-		public static readonly MovImm MovImm = new MovImm();
-		public static readonly MovImmShift MovImmShift = new MovImmShift();
-		public static readonly MovRegShift MovRegShift = new MovRegShift();
 		public static readonly Mvn Mvn = new Mvn();
 		public static readonly MvnImm MvnImm = new MvnImm();
 		public static readonly MvnImmShift MvnImmShift = new MvnImmShift();
@@ -120,5 +116,9 @@ namespace Mosa.Platform.ARMv8A32
 		public static readonly Yield Yield = new Yield();
 		public static readonly MovwImm MovwImm = new MovwImm();
 		public static readonly MovtImm MovtImm = new MovtImm();
+		public static readonly Mov Mov = new Mov();
+		public static readonly MovImm MovImm = new MovImm();
+		public static readonly MovImmShift MovImmShift = new MovImmShift();
+		public static readonly MovRegShift MovRegShift = new MovRegShift();
 	}
 }

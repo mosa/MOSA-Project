@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class MovtImm : ARMv8A32Instruction
 	{
-		public override int ID { get { return 679; } }
+		public override int ID { get { return 675; } }
 
 		internal MovtImm()
 			: base(1, 2)

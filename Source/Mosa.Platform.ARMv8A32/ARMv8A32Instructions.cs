@@ -41,10 +41,6 @@ namespace Mosa.Platform.ARMv8A32
 			ARMv8A32.EorImm,
 			ARMv8A32.EorImmShift,
 			ARMv8A32.EorRegShift,
-			ARMv8A32.Mov,
-			ARMv8A32.MovImm,
-			ARMv8A32.MovImmShift,
-			ARMv8A32.MovRegShift,
 			ARMv8A32.Mvn,
 			ARMv8A32.MvnImm,
 			ARMv8A32.MvnImmShift,
@@ -122,6 +118,10 @@ namespace Mosa.Platform.ARMv8A32
 			ARMv8A32.Yield,
 			ARMv8A32.MovwImm,
 			ARMv8A32.MovtImm,
+			ARMv8A32.Mov,
+			ARMv8A32.MovImm,
+			ARMv8A32.MovImmShift,
+			ARMv8A32.MovRegShift,
 		};
 	}
 }

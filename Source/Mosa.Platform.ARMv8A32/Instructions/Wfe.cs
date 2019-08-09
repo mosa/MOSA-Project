@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Wfe : ARMv8A32Instruction
 	{
-		public override int ID { get { return 675; } }
+		public override int ID { get { return 671; } }
 
 		internal Wfe()
 			: base(1, 3)

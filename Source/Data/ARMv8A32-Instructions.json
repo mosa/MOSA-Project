@@ -599,90 +599,6 @@
 			]
 		},
 		{
-			"Name": "Mov",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "",
-			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,shiftamount=00000,shifttype=00,rm=reg4:o2",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][register]",
-					"Encoding": "[arm-data-processing-shift-amount]"
-				}
-			]
-		},
-		{
-			"Name": "MovImm",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "",
-			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,immediate12=imm12:o2",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-data-processing-immediate]"
-				}
-			]
-		},
-		{
-			"Name": "MovImmShift",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 4,
-			"ResultCount": 1,
-			"Description": "",
-			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o2,shiftamount=imm5:o3,shifttype=reg4:o4",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][register][register][constant]",
-					"Encoding": "[arm-data-processing-shift-amount]"
-				}
-			]
-		},
-		{
-			"Name": "MovRegShift",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 4,
-			"ResultCount": 1,
-			"Description": "",
-			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o2,rs=reg4:o3,shifttype=reg4:o4",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][register][register][constant]",
-					"Encoding": "[arm-data-processing-shift-register]"
-				}
-			]
-		},
-		{
 			"Name": "Mvn",
 			"Commutative": "false",
 			"FamilyName": "ARMv8A32",
@@ -2252,6 +2168,90 @@
 				{
 					"Condition": "",
 					"Encoding": "0x00000000"
+				}
+			]
+		},
+		{
+			"Name": "Mov",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,shiftamount=00000,shifttype=00,rm=reg4:o1",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "MovImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,immediate12=imm12:o1",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[arm-data-processing-immediate]"
+				}
+			]
+		},
+		{
+			"Name": "MovImmShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,shiftamount=imm5:o2,shifttype=reg4:o3",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "MovRegShift",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,rs=reg4:o2,shifttype=reg4:o3",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-data-processing-shift-register]"
 				}
 			]
 		}

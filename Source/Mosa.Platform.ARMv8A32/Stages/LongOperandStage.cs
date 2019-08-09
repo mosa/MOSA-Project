@@ -80,6 +80,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
 
+			// TODO
+
 			context.SetInstruction(ARMv8A32.Add, StatusRegister.Update, resultLow, op1L, op2L);
 			context.AppendInstruction(ARMv8A32.Adc, resultHigh, op1H, op2H);
 		}

@@ -86,9 +86,10 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.cbPlatform = new System.Windows.Forms.ComboBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.cbPlatform = new System.Windows.Forms.ToolStripComboBox();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             label4 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             stageLabel = new System.Windows.Forms.Label();
@@ -467,7 +468,7 @@
             this.tabControl.Name = "tabControl";
             this.tabControl.Padding = new System.Drawing.Point(0, 0);
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(616, 401);
+            this.tabControl.Size = new System.Drawing.Size(614, 401);
             this.tabControl.TabIndex = 38;
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
@@ -482,7 +483,7 @@
             this.tabStages.Location = new System.Drawing.Point(4, 25);
             this.tabStages.Margin = new System.Windows.Forms.Padding(0);
             this.tabStages.Name = "tabStages";
-            this.tabStages.Size = new System.Drawing.Size(608, 372);
+            this.tabStages.Size = new System.Drawing.Size(606, 372);
             this.tabStages.TabIndex = 0;
             this.tabStages.Text = "Instructions";
             // 
@@ -535,7 +536,7 @@
             this.tabStageDebug.Location = new System.Drawing.Point(4, 25);
             this.tabStageDebug.Margin = new System.Windows.Forms.Padding(0);
             this.tabStageDebug.Name = "tabStageDebug";
-            this.tabStageDebug.Size = new System.Drawing.Size(608, 372);
+            this.tabStageDebug.Size = new System.Drawing.Size(606, 372);
             this.tabStageDebug.TabIndex = 1;
             this.tabStageDebug.Text = "Debug";
             // 
@@ -572,7 +573,7 @@
             this.tabMethodCounters.Location = new System.Drawing.Point(4, 25);
             this.tabMethodCounters.Margin = new System.Windows.Forms.Padding(0);
             this.tabMethodCounters.Name = "tabMethodCounters";
-            this.tabMethodCounters.Size = new System.Drawing.Size(608, 372);
+            this.tabMethodCounters.Size = new System.Drawing.Size(606, 372);
             this.tabMethodCounters.TabIndex = 6;
             this.tabMethodCounters.Text = "Counters";
             // 
@@ -598,7 +599,7 @@
             this.tabLogs.Location = new System.Drawing.Point(4, 25);
             this.tabLogs.Margin = new System.Windows.Forms.Padding(0);
             this.tabLogs.Name = "tabLogs";
-            this.tabLogs.Size = new System.Drawing.Size(608, 372);
+            this.tabLogs.Size = new System.Drawing.Size(606, 372);
             this.tabLogs.TabIndex = 7;
             this.tabLogs.Text = "Logs";
             // 
@@ -631,11 +632,13 @@
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.cbPlatform,
+            this.toolStripSeparator3,
             this.toolStripButton1,
             this.toolStripButton2,
-            this.toolStripSeparator1,
+            this.toolStripSeparator2,
             this.toolStripButton4,
-            this.toolStripSeparator2});
+            this.toolStripSeparator1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 24);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(864, 25);
@@ -658,6 +661,7 @@
             this.toolStripButton2.Name = "toolStripButton2";
             this.toolStripButton2.Size = new System.Drawing.Size(67, 22);
             this.toolStripButton2.Text = "Snippet";
+            this.toolStripButton2.Visible = false;
             this.toolStripButton2.Click += new System.EventHandler(this.ToolStripButton2_Click);
             // 
             // toolStripSeparator1
@@ -679,21 +683,6 @@
             this.toolStripSeparator2.Name = "toolStripSeparator2";
             this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
-            // cbPlatform
-            // 
-            this.cbPlatform.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbPlatform.FormattingEnabled = true;
-            this.cbPlatform.Items.AddRange(new object[] {
-            "x86",
-            "x64",
-            "ARMv6",
-            "ARMv8A32"});
-            this.cbPlatform.Location = new System.Drawing.Point(221, 27);
-            this.cbPlatform.Name = "cbPlatform";
-            this.cbPlatform.Size = new System.Drawing.Size(78, 21);
-            this.cbPlatform.TabIndex = 28;
-            this.cbPlatform.SelectedIndexChanged += new System.EventHandler(this.CbPlatform_SelectedIndexChanged);
-            // 
             // folderBrowserDialog1
             // 
             this.folderBrowserDialog1.RootFolder = System.Environment.SpecialFolder.MyComputer;
@@ -703,12 +692,29 @@
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // cbPlatform
+            // 
+            this.cbPlatform.BackColor = System.Drawing.SystemColors.Window;
+            this.cbPlatform.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbPlatform.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
+            this.cbPlatform.Items.AddRange(new object[] {
+            "x86",
+            "x64",
+            "ARMv6",
+            "ARMv8A32"});
+            this.cbPlatform.Name = "cbPlatform";
+            this.cbPlatform.Size = new System.Drawing.Size(90, 25);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(864, 478);
-            this.Controls.Add(this.cbPlatform);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
@@ -760,7 +766,6 @@
 		private System.Windows.Forms.ToolStripButton toolStripButton2;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripButton toolStripButton4;
-		private System.Windows.Forms.ComboBox cbPlatform;
 		private System.Windows.Forms.ToolStripMenuItem cbEnableSSA;
 		private System.Windows.Forms.ToolStripMenuItem cbEnableBinaryCodeGeneration;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
@@ -796,5 +801,7 @@
 		private System.Windows.Forms.ComboBox cbSectionLogs;
 		private System.Windows.Forms.RichTextBox tbLogs;
 		private System.Windows.Forms.Timer timer1;
+		private System.Windows.Forms.ToolStripComboBox cbPlatform;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
 	}
 }

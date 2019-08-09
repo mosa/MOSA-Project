@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.BareMetal.ARMv8A32;
+using Mosa.UnitTests;
 
 namespace Mosa.BareMetal.HelloWorld.ARMv8A32
 {
@@ -16,6 +17,11 @@ namespace Mosa.BareMetal.HelloWorld.ARMv8A32
 		{
 			while (true)
 			{ }
+		}
+
+		public static bool IncludeUnitTestAssembly()
+		{
+			return OptimizationTests.OptimizationTest1();
 		}
 	}
 }

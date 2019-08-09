@@ -201,7 +201,6 @@
     <Compile Include="Intrinsic\Nop.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Stages\IRTransformationStage.cs" />
-    <Compile Include="Stages\ImmediateConstantStage.cs" />
     <Compile Include="Stages\LongOperandStage.cs" />
   </ItemGroup>
   <ItemGroup />
