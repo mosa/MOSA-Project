@@ -86,8 +86,6 @@ namespace Mosa.Platform.ARMv8A32
 		public static readonly Ldrh Ldrh = new Ldrh();
 		public static readonly Ldrsb Ldrsb = new Ldrsb();
 		public static readonly Ldrsh Ldrsh = new Ldrsh();
-		public static readonly Lsl Lsl = new Lsl();
-		public static readonly Lsr Lsr = new Lsr();
 		public static readonly Mrs Mrs = new Mrs();
 		public static readonly Msr Msr = new Msr();
 		public static readonly Mul Mul = new Mul();
@@ -97,7 +95,6 @@ namespace Mosa.Platform.ARMv8A32
 		public static readonly Rev Rev = new Rev();
 		public static readonly Rev16 Rev16 = new Rev16();
 		public static readonly Revsh Revsh = new Revsh();
-		public static readonly Ror Ror = new Ror();
 		public static readonly Sev Sev = new Sev();
 		public static readonly Stm Stm = new Stm();
 		public static readonly Stmea Stmea = new Stmea();
@@ -120,5 +117,13 @@ namespace Mosa.Platform.ARMv8A32
 		public static readonly MovImm MovImm = new MovImm();
 		public static readonly MovImmShift MovImmShift = new MovImmShift();
 		public static readonly MovRegShift MovRegShift = new MovRegShift();
+		public static readonly Lsl Lsl = new Lsl();
+		public static readonly LslImm LslImm = new LslImm();
+		public static readonly Lsr Lsr = new Lsr();
+		public static readonly LsrImm LsrImm = new LsrImm();
+		public static readonly Asr Asr = new Asr();
+		public static readonly AsrImm AsrImm = new AsrImm();
+		public static readonly Ror Ror = new Ror();
+		public static readonly RorImm RorImm = new RorImm();
 	}
 }

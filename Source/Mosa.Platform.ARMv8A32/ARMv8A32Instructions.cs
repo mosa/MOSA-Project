@@ -88,8 +88,6 @@ namespace Mosa.Platform.ARMv8A32
 			ARMv8A32.Ldrh,
 			ARMv8A32.Ldrsb,
 			ARMv8A32.Ldrsh,
-			ARMv8A32.Lsl,
-			ARMv8A32.Lsr,
 			ARMv8A32.Mrs,
 			ARMv8A32.Msr,
 			ARMv8A32.Mul,
@@ -99,7 +97,6 @@ namespace Mosa.Platform.ARMv8A32
 			ARMv8A32.Rev,
 			ARMv8A32.Rev16,
 			ARMv8A32.Revsh,
-			ARMv8A32.Ror,
 			ARMv8A32.Sev,
 			ARMv8A32.Stm,
 			ARMv8A32.Stmea,
@@ -122,6 +119,14 @@ namespace Mosa.Platform.ARMv8A32
 			ARMv8A32.MovImm,
 			ARMv8A32.MovImmShift,
 			ARMv8A32.MovRegShift,
+			ARMv8A32.Lsl,
+			ARMv8A32.LslImm,
+			ARMv8A32.Lsr,
+			ARMv8A32.LsrImm,
+			ARMv8A32.Asr,
+			ARMv8A32.AsrImm,
+			ARMv8A32.Ror,
+			ARMv8A32.RorImm,
 		};
 	}
 }

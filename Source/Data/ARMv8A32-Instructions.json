@@ -1571,46 +1571,6 @@
 			]
 		},
 		{
-			"Name": "Lsl",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Logical Shift Left",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Lsr",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Logical Shift Right",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
 			"Name": "Mrs",
 			"Commutative": "false",
 			"FamilyName": "ARMv8xA",
@@ -1783,26 +1743,6 @@
 			"OperandCount": 3,
 			"ResultCount": 1,
 			"Description": "Byte-Reverse Signed Halfword",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Ror",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Rotate Right",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -2252,6 +2192,174 @@
 				{
 					"Condition": "[register][register][constant]",
 					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "Lsl",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "C",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Logical Shift Left",
+			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,rs=reg4:o2,shifttype=00",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "LslImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "C",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Logical Shift Left",
+			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,shiftamount=imm5:o2,shifttype=00",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "Lsr",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "C",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Logical Shift Right",
+			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,rs=reg4:o2,shifttype=01",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "LsrImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "C",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Logical Shift Right",
+			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,shiftamount=imm5:o2,shifttype=01",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "Asr",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "C",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Arthmetic Shift Right",
+			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,rs=reg4:o2,shifttype=10",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "AsrImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "C",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Arthmetic Shift Right",
+			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,shiftamount=imm5:o2,shifttype=10",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "Ror",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "C",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Rotate Right",
+			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,rs=reg4:o2,shifttype=11",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-data-processing-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "RorImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "C",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Rotate Right",
+			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,shiftamount=imm5:o2,shifttype=11",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
 		}

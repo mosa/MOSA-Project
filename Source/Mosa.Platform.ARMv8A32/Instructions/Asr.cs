@@ -7,17 +7,19 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv8A32.Instructions
 {
 	/// <summary>
-	/// Mov
+	/// Asr - Arthmetic Shift Right
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
-	public sealed class Mov : ARMv8A32Instruction
+	public sealed class Asr : ARMv8A32Instruction
 	{
-		public override int ID { get { return 673; } }
+		public override int ID { get { return 681; } }
 
-		internal Mov()
+		internal Asr()
 			: base(1, 2)
 		{
 		}
+
+		public override bool IsCarryFlagModified { get { return true; } }
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
@@ -33,10 +35,10 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 				emitter.OpcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.Update ? 1 :0);
 				emitter.OpcodeEncoder.Append4Bits(0b0000);
 				emitter.OpcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append4Bits(0b0000);
+				emitter.OpcodeEncoder.Append4Bits(node.Operand2.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append2Bits(0b00);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
+				emitter.OpcodeEncoder.Append2Bits(0b10);
+				emitter.OpcodeEncoder.Append1Bit(0b1);
 				emitter.OpcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
 				return;
 			}

@@ -232,7 +232,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 			linkRequest.PatchSymbol.ApplyPatch(
 				linkRequest.PatchOffset,
-				value,
+				0,
 				GetPatchTypeSize(linkRequest.PatchType),
 				Endianness
 			);

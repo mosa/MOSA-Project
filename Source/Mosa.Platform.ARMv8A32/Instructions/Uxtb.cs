@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Uxtb : ARMv8A32Instruction
 	{
-		public override int ID { get { return 669; } }
+		public override int ID { get { return 666; } }
 
 		internal Uxtb()
 			: base(1, 3)
