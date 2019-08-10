@@ -46,7 +46,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.DivFloatR8, DivFloatR8);
 			//AddVisitation(IRInstruction.DivSigned32, DivSigned32);
 			//AddVisitation(IRInstruction.DivUnsigned32, DivUnsigned32);
-			//AddVisitation(IRInstruction.Jmp, Jmp);
+			AddVisitation(IRInstruction.Jmp, Jmp);
+
 			//AddVisitation(IRInstruction.LoadFloatR4, LoadFloatR4);
 			//AddVisitation(IRInstruction.LoadFloatR8, LoadFloatR8);
 			//AddVisitation(IRInstruction.LoadInt32, LoadInt32);
@@ -142,6 +143,12 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			{
 				throw new CompilerException("Error at {context} in {Method}");
 			}
+		}
+
+		private void Jmp(Context context)
+		{
+			context.ReplaceInstruction(ARMv8A32.B);
+			context.ConditionCode = ConditionCode.Always;
 		}
 
 		private void LogicalAnd32(Context context)

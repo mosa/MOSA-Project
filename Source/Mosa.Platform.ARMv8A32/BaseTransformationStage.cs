@@ -88,7 +88,7 @@ namespace Mosa.Platform.ARMv8A32
 
 			Debug.Assert(operand1.IsVirtualRegister || operand1.IsCPURegister);
 
-			if (operand2.IsVirtualRegister || operand1.IsCPURegister)
+			if (operand2.IsVirtualRegister || operand2.IsCPURegister)
 			{
 				context.SetInstruction(virtualInstruction, statusRegister, result, operand1, operand2);
 			}
