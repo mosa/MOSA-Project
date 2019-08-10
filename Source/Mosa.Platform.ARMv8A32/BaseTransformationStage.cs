@@ -68,13 +68,13 @@ namespace Mosa.Platform.ARMv8A32
 
 					if (operand1.IsResolvedConstant)
 					{
-						before.SetInstruction(ARMv8A32.MovwImm, v1, CreateConstant(operand1.ConstantUnsignedInteger & 0xFFFF));
-						before.AppendInstruction(ARMv8A32.MovtImm, v1, CreateConstant(operand1.ConstantUnsignedInteger >> 16));
+						before.SetInstruction(ARMv8A32.MovImm, v1, CreateConstant(operand1.ConstantUnsignedInteger & 0xFFFF));
+						before.AppendInstruction(ARMv8A32.MovtImm, v1, v1, CreateConstant(operand1.ConstantUnsignedInteger >> 16));
 					}
 					else
 					{
-						before.SetInstruction(ARMv8A32.MovwImm, v1, operand1);
-						before.AppendInstruction(ARMv8A32.MovtImm, v1, operand1);
+						before.SetInstruction(ARMv8A32.MovImm, v1, operand1);
+						before.AppendInstruction(ARMv8A32.MovtImm, v1, v1, operand1);
 					}
 
 					operand1 = v1;
@@ -124,7 +124,7 @@ namespace Mosa.Platform.ARMv8A32
 
 					var before = context.InsertBefore();
 
-					before.SetInstruction(ARMv8A32.MovwImm, v1, CreateConstant(operand.ConstantUnsignedInteger & 0xFFFF));
+					before.SetInstruction(ARMv8A32.MovImm, v1, CreateConstant(operand.ConstantUnsignedInteger & 0xFFFF));
 					before.AppendInstruction(ARMv8A32.MovtImm, v1, CreateConstant(operand.ConstantUnsignedInteger >> 16));
 
 					return v1;
@@ -136,8 +136,8 @@ namespace Mosa.Platform.ARMv8A32
 
 				var before = context.InsertBefore();
 
-				before.SetInstruction(ARMv8A32.MovwImm, v1, operand);
-				before.AppendInstruction(ARMv8A32.MovtImm, v1, operand);
+				before.SetInstruction(ARMv8A32.MovImm, v1, operand);
+				before.AppendInstruction(ARMv8A32.MovtImm, v1, v1, operand);
 
 				return v1;
 			}

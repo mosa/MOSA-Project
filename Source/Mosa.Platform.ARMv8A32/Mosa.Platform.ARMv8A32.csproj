@@ -141,9 +141,9 @@
     <Compile Include="Instructions\Mov.cs" />
     <Compile Include="Instructions\MovImm.cs" />
     <Compile Include="Instructions\MovImmShift.cs" />
+    <Compile Include="Instructions\MovkImm.cs" />
     <Compile Include="Instructions\MovRegShift.cs" />
     <Compile Include="Instructions\MovtImm.cs" />
-    <Compile Include="Instructions\MovwImm.cs" />
     <Compile Include="Instructions\Mrs.cs" />
     <Compile Include="Instructions\Msr.cs" />
     <Compile Include="Instructions\Mul.cs" />

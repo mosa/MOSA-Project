@@ -19,6 +19,8 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 		{
 		}
 
+		public override bool IsCarryFlagModified { get { return true; } }
+
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);

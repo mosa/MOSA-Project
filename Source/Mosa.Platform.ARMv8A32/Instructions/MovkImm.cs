@@ -7,24 +7,24 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv8A32.Instructions
 {
 	/// <summary>
-	/// MovtImm - MovtImm
+	/// MovkImm - MovtImm
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
-	public sealed class MovtImm : ARMv8A32Instruction
+	public sealed class MovkImm : ARMv8A32Instruction
 	{
-		public override int ID { get { return 671; } }
+		public override int ID { get { return 672; } }
 
-		internal MovtImm()
-			: base(1, 2)
+		internal MovkImm()
+			: base(1, 3)
 		{
 		}
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 3);
 
-			if (node.Operand1.IsCPURegister && node.Operand2.IsConstant)
+			if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister && node.Operand3.IsConstant)
 			{
 				emitter.OpcodeEncoder.Append32Bits(0x00000000);
 				return;
