@@ -68,7 +68,7 @@
 			"OpcodeEncodingAppend": "s=status:status,opcode=0101,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][register][constant]",
+					"Condition": "[register][register][constant][constant]",
 					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
@@ -152,7 +152,7 @@
 			"OpcodeEncodingAppend": "s=status:status,opcode=0100,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][register][constant]",
+					"Condition": "[register][register][constant][constant]",
 					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
@@ -236,7 +236,7 @@
 			"OpcodeEncodingAppend": "s=status:status,opcode=0000,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][register][constant]",
+					"Condition": "[register][register][constant][constant]",
 					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
@@ -320,7 +320,7 @@
 			"OpcodeEncodingAppend": "s=status:status,opcode=1110,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][register][constant]",
+					"Condition": "[register][register][constant][constant]",
 					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
@@ -404,7 +404,7 @@
 			"OpcodeEncodingAppend": "s=1,opcode=1011,rd=0000,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][register][constant]",
+					"Condition": "[register][register][constant][constant]",
 					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
@@ -488,7 +488,7 @@
 			"OpcodeEncodingAppend": "s=1,opcode=1010,rd=0000,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][register][constant]",
+					"Condition": "[register][register][constant][constant]",
 					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
@@ -572,7 +572,7 @@
 			"OpcodeEncodingAppend": "s=status:status,opcode=0001,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][register][constant]",
+					"Condition": "[register][register][constant][constant]",
 					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
@@ -656,7 +656,7 @@
 			"OpcodeEncodingAppend": "s=status:status,opcode=1111,rd=reg4:r,rn=0000,rm=reg4:o2,shiftamount=imm5:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][register][constant]",
+					"Condition": "[register][register][constant][constant]",
 					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
@@ -740,7 +740,7 @@
 			"OpcodeEncodingAppend": "s=status:status,opcode=1100,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][register][constant]",
+					"Condition": "[register][register][constant][constant]",
 					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
@@ -824,7 +824,7 @@
 			"OpcodeEncodingAppend": "s=status:status,opcode=0011,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][register][constant]",
+					"Condition": "[register][register][constant][constant]",
 					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
@@ -908,7 +908,7 @@
 			"OpcodeEncodingAppend": "s=status:status,opcode=0111,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][register][constant]",
+					"Condition": "[register][register][constant][constant]",
 					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
@@ -992,7 +992,7 @@
 			"OpcodeEncodingAppend": "s=status:status,opcode=0110,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][register][constant]",
+					"Condition": "[register][register][constant][constant]",
 					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
@@ -1076,7 +1076,7 @@
 			"OpcodeEncodingAppend": "s=status:status,opcode=0010,rd=reg4:r,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][register][constant]",
+					"Condition": "[register][register][constant][constant]",
 					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
@@ -1160,7 +1160,7 @@
 			"OpcodeEncodingAppend": "s=1,opcode=1001,rd=0000,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][register][constant]",
+					"Condition": "[register][register][constant][constant]",
 					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
@@ -1244,7 +1244,7 @@
 			"OpcodeEncodingAppend": "s=1,opcode=1000,rd=0000,rn=reg4:o1,rm=reg4:o2,shiftamount=imm5:o3,shifttype=imm2:o4",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][register][constant]",
+					"Condition": "[register][register][constant][constant]",
 					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
