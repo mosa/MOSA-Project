@@ -81,8 +81,12 @@ namespace Mosa.Platform.ARMv8A32
 		public static readonly Ldm Ldm = new Ldm();
 		public static readonly Ldmfd Ldmfd = new Ldmfd();
 		public static readonly Ldmia Ldmia = new Ldmia();
-		public static readonly Ldr Ldr = new Ldr();
-		public static readonly Ldrb Ldrb = new Ldrb();
+		public static readonly Ldr32 Ldr32 = new Ldr32();
+		public static readonly LdrUp32 LdrUp32 = new LdrUp32();
+		public static readonly LdrDown32 LdrDown32 = new LdrDown32();
+		public static readonly Ldr8 Ldr8 = new Ldr8();
+		public static readonly LdrUp8 LdrUp8 = new LdrUp8();
+		public static readonly LdrDown8 LdrDown8 = new LdrDown8();
 		public static readonly Ldrh Ldrh = new Ldrh();
 		public static readonly Ldrsb Ldrsb = new Ldrsb();
 		public static readonly Ldrsh Ldrsh = new Ldrsh();

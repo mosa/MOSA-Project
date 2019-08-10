@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Nop : ARMv8A32Instruction
 	{
-		public override int ID { get { return 649; } }
+		public override int ID { get { return 653; } }
 
 		internal Nop()
 			: base(0, 0)

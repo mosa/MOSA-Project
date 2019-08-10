@@ -537,6 +537,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 				rawEncoding = rawEncoding + "," + append.Trim();
 			}
 
+			//rawEncoding = rawEncoding.Replace("\t", string.Empty);
+
 			return ReduceEncoding(rawEncoding);
 		}
 
@@ -819,14 +821,15 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "reg4": code = "Append4Bits"; postcode = ".Register.RegisterCode"; return;
 				case "reg5": code = "Append5Bits"; postcode = ".Register.RegisterCode"; return;
 				case "reg6": code = "Append6Bits"; postcode = ".Register.RegisterCode"; return;
-				case "imm32": code = "Append32BitImmediate"; return;
-				case "imm32+": code = "Append32BitImmediateWithOffset"; return;
+				case "imm1": code = "Append1BitImmediate"; return;
 				case "imm2": code = "Append2BitImmediate"; return;
 				case "imm4": code = "Append4BitImmediate"; return;
 				case "imm5": code = "Append5BitImmediate"; return;
 				case "imm8": code = "Append8BitImmediate"; return;
 				case "imm12": code = "Append12BitImmediate"; return;
 				case "imm16": code = "Append16BitImmediate"; return;
+				case "imm32": code = "Append32BitImmediate"; return;
+				case "imm32+": code = "Append32BitImmediateWithOffset"; return;
 				case "imm64": code = "Append64BitImmediate"; return;
 				case "rel24": code = "EmitRelative24"; return;
 				case "rel32": code = "EmitRelative32"; return;

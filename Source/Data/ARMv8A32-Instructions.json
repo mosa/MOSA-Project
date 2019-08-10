@@ -1,13 +1,15 @@
 {
 	"Encoding": [
-		"[arm-data-processing]=conditional|00|[i]|[opcode]|[s]|[rn]|[rd]|[operand2]",
+		"[arm-data-processing-immediate]=           conditional|00|1|[opcode]|[s]|[rn]|[rd]|[immediate12]",
+		"[arm-data-processing-rotate-immediate]=    conditional|00|1|[opcode]|[s]|[rn]|[rd]|[rotate]|[immediate]",
+		"[arm-data-processing-shift-amount]=        conditional|00|0|[opcode]|[s]|[rn]|[rd]|[shiftamount]|[shifttype]|0|[rm]",
+		"[arm-data-processing-shift-register]=      conditional|00|0|[opcode]|[s]|[rn]|[rd]|[rs]|0|[shifttype]|1|[rm]",
 
-		"[arm-data-processing-immediate]=[arm-data-processing],operand2=[immediate12],i=1",
-		"[arm-data-processing-rotate-immediate]=[arm-data-processing],operand2=[rotate]|[immediate],i=1",
-		"[arm-data-processing-shift]=[arm-data-processing],operand2=[shift]|[rm],i=0",
-		"[arm-data-processing-shift-amount]=[arm-data-processing-shift],shift=[shiftamount]|[shifttype]|0,i=0",
-		"[arm-data-processing-shift-register]=[arm-data-processing-shift],shift=[rs]|0|[shifttype]|1,i=0"
+		"[arm-single-data-transfer-immediate]=      conditional|01|[i]|[p]|[u]|[b]|[w]|[l]|[rn]|[rd]|[offset]",
+		"[arm-single-data-transfer-shift-register]= conditional|01|[i]|[p]|[u]|[b]|[w]|[l]|[rn]|[rd]|[shiftamount]|[shifttype]|0|[rm]",
 
+		"[arm-halfword-data-transfer-register]=     conditional|000|[p]|[u]|0|[w]|[l]|[rn]|[rd]|0000|1|[s]|[h]|1[rm]",
+		"[arm-halfword-data-transfer-immediate]=    conditional|000|[p]|[u]|1|[w]|[l]|[rn]|[rd]|[offsethigh]|1|[s]|[h]|1[offsetlow]"
 	],
 	"Instructions": [
 		{
@@ -1471,45 +1473,134 @@
 			]
 		},
 		{
-			"Name": "Ldr",
+			"Name": "Ldr32",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARMv8A32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
-			"FlagsUnchanged": "",
+			"FlagsUnchanged": "CNZV",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"Description": "Load 32-bit word",
+			"Description": "Single Data Transfer",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,l=1,w=0,b=0,u=imm1:o3",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
-					"Encoding": "0x00000000"
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-single-data-transfer-shift-register]"
+				}
+			]
+		},
+
+		{
+			"Name": "LdrUp32",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "CNZV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Single Data Transfer",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,l=1,w=0,b=0,u=1",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-single-data-transfer-shift-register]"
 				}
 			]
 		},
 		{
-			"Name": "Ldrb",
+			"Name": "LdrDown32",
 			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
+			"FamilyName": "ARMv8A32",
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
-			"FlagsUnchanged": "",
+			"FlagsUnchanged": "CNZV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Single Data Transfer",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,l=1,w=0,b=0,u=0",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-single-data-transfer-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "Ldr8",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "CNZV",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"Description": "Load 8-bit unsigned byte",
+			"Description": "Single Data Transfer",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,l=1,w=0,b=1,u=imm1:o3",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
-					"Encoding": "0x00000000"
+					"Condition": "[register][register][constant]",
+					"Encoding": "[arm-single-data-transfer-shift-register]"
 				}
 			]
 		},
+
+		{
+			"Name": "LdrUp8",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "CNZV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Single Data Transfer",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,l=1,w=0,b=1,u=1",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-single-data-transfer-shift-register]"
+				}
+			]
+		},
+		{
+			"Name": "LdrDown8",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "CNZV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Single Data Transfer",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,l=1,w=0,b=1,u=0",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-single-data-transfer-shift-register]"
+				}
+			]
+		},
+
 		{
 			"Name": "Ldrh",
 			"Commutative": "false",
