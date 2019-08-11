@@ -529,22 +529,22 @@ namespace Mosa.Platform.x86.Stages
 			node.SetInstruction(X86.MovLoad32, node.Result, StackFrame, node.Operand1);
 		}
 
-		private void LoadParamSignExtend16x32(Context node)
+		private void LoadParamSignExtend16x32(InstructionNode node)
 		{
 			node.SetInstruction(X86.MovsxLoad16, node.Result, StackFrame, node.Operand1);
 		}
 
-		private void LoadParamSignExtend8x32(Context node)
+		private void LoadParamSignExtend8x32(InstructionNode node)
 		{
 			node.SetInstruction(X86.MovsxLoad8, node.Result, StackFrame, node.Operand1);
 		}
 
-		private void LoadParamZeroExtend16x32(Context node)
+		private void LoadParamZeroExtend16x32(InstructionNode node)
 		{
 			node.SetInstruction(X86.MovzxLoad16, node.Result, StackFrame, node.Operand1);
 		}
 
-		private void LoadParamZeroExtend8x32(Context node)
+		private void LoadParamZeroExtend8x32(InstructionNode node)
 		{
 			node.SetInstruction(X86.MovzxLoad8, node.Result, StackFrame, node.Operand1);
 		}

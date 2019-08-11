@@ -79,8 +79,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
 
-			UpdateInstruction(context, ARMv8A32.Add, ARMv8A32.AddImm, resultLow, StatusRegister.Update, op1L, op2L);
-			UpdateInstruction(context.InsertAfter(), ARMv8A32.Adc, ARMv8A32.AdcImm, resultLow, StatusRegister.NotSet, op1H, op2H);
+			TransformInstruction(context, ARMv8A32.Add, ARMv8A32.AddImm, resultLow, StatusRegister.Update, op1L, op2L);
+			TransformInstruction(context.InsertAfter(), ARMv8A32.Adc, ARMv8A32.AdcImm, resultLow, StatusRegister.NotSet, op1H, op2H);
 		}
 
 		#endregion Visitation Methods

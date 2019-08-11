@@ -53,18 +53,19 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.LoadFloatR8, LoadFloatR8);
 			AddVisitation(IRInstruction.LoadInt32, LoadInt32);
 
-			//AddVisitation(IRInstruction.LoadSignExtend8x32, LoadSignExtend8x32);
-			//AddVisitation(IRInstruction.LoadSignExtend16x32, LoadSignExtend16x32);
-			//AddVisitation(IRInstruction.LoadZeroExtend8x32, LoadZeroExtend8x32);
-			//AddVisitation(IRInstruction.LoadZeroExtend16x32, LoadZeroExtend16x32);
+			AddVisitation(IRInstruction.LoadSignExtend8x32, LoadSignExtend8x32);
+			AddVisitation(IRInstruction.LoadSignExtend16x32, LoadSignExtend16x32);
+			AddVisitation(IRInstruction.LoadZeroExtend8x32, LoadZeroExtend8x32);
+			AddVisitation(IRInstruction.LoadZeroExtend16x32, LoadZeroExtend16x32);
+
 			//AddVisitation(IRInstruction.LoadParamFloatR4, LoadParamFloatR4);
 			//AddVisitation(IRInstruction.LoadParamFloatR8, LoadParamFloatR8);
 			AddVisitation(IRInstruction.LoadParamInt32, LoadParamInt32);
+			AddVisitation(IRInstruction.LoadParamSignExtend8x32, LoadParamSignExtend8x32);
+			AddVisitation(IRInstruction.LoadParamSignExtend16x32, LoadParamSignExtend16x32);
+			AddVisitation(IRInstruction.LoadParamZeroExtend8x32, LoadParamZeroExtend8x32);
+			AddVisitation(IRInstruction.LoadParamZeroExtend16x32, LoadParamZeroExtend16x32);
 
-			//AddVisitation(IRInstruction.LoadParamSignExtend8x32, LoadParamSignExtend8x32);
-			//AddVisitation(IRInstruction.LoadParamSignExtend16x32, LoadParamSignExtend16x32);
-			//AddVisitation(IRInstruction.LoadParamZeroExtend8x32, LoadParamZeroExtend8x32);
-			//AddVisitation(IRInstruction.LoadParamZeroExtend16x32, LoadParamZeroExtend16x32);
 			//AddVisitation(IRInstruction.LoadParamCompound, LoadParamCompound);
 			AddVisitation(IRInstruction.LogicalAnd32, LogicalAnd32);
 			AddVisitation(IRInstruction.LogicalNot32, LogicalNot32);
@@ -113,14 +114,14 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void Add32(Context context)
 		{
-			UpdateInstruction(context, ARMv8A32.Add, ARMv8A32.AddImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
+			TransformInstruction(context, ARMv8A32.Add, ARMv8A32.AddImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
 		}
 
 		private void AddCarryOut32(Context context)
 		{
 			var result2 = context.Result2;
 
-			UpdateInstruction(context, ARMv8A32.Add, ARMv8A32.AddImm, context.Result, StatusRegister.Update, context.Operand1, context.Operand2);
+			TransformInstruction(context, ARMv8A32.Add, ARMv8A32.AddImm, context.Result, StatusRegister.Update, context.Operand1, context.Operand2);
 
 			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.Carry, result2, CreateConstant(1));
 			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.NoCarry, result2, CreateConstant(0));
@@ -131,7 +132,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			var result = context.Result;
 			var operand3 = context.Operand3;
 
-			UpdateInstruction(context, ARMv8A32.Add, ARMv8A32.AddImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
+			TransformInstruction(context, ARMv8A32.Add, ARMv8A32.AddImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
 
 			// FIXME: Operand3 may need fixup
 			if (operand3.IsVirtualRegister)
@@ -159,37 +160,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
 
-			var result = context.Result;
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
-			BaseInstruction instruction = null;
-
-			operand1 = MoveConstantToRegister(context, operand1);
-
-			if (operand2.IsResolvedConstant)
-			{
-				if (operand2.ConstantUnsignedLongInteger >= 0 && operand2.ConstantSignedInteger <= (1 << 13))
-				{
-					instruction = ARMv8A32.LdrUpImm32;
-				}
-				else if (operand2.ConstantUnsignedLongInteger < 0 && -operand2.ConstantSignedInteger <= (1 << 13))
-				{
-					instruction = ARMv8A32.LdrDownImm32;
-					operand2 = CreateConstant((uint)-operand2.ConstantSignedInteger);
-				}
-				else
-				{
-					instruction = ARMv8A32.LdrDown32;
-					operand2 = MoveConstantToRegister(context, operand2);
-				}
-			}
-			else if (operand2.IsUnresolvedConstant)
-			{
-				instruction = ARMv8A32.LdrUp32;
-				operand2 = MoveConstantToRegister(context, operand2);
-			}
-
-			context.SetInstruction(instruction, ConditionCode.Always, result, operand1, operand2);
+			TransformLoadInstruction(context, ARMv8A32.LdrUp32, ARMv8A32.LdrUpImm32, ARMv8A32.LdrDownImm32, context.Result, context.Operand1, context.Operand2);
 		}
 
 		private void LoadParamInt32(Context context)
@@ -197,86 +168,123 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
 
-			var result = context.Result;
-			var operand2 = context.Operand1;
-			BaseInstruction instruction = null;
+			TransformLoadInstruction(context, ARMv8A32.LdrUp32, ARMv8A32.LdrUpImm32, ARMv8A32.LdrDownImm32, context.Result, StackFrame, context.Operand1);
+		}
 
-			if (operand2.IsResolvedConstant)
-			{
-				if (operand2.ConstantUnsignedLongInteger >= 0 && operand2.ConstantSignedInteger <= (1 << 13))
-				{
-					instruction = ARMv8A32.LdrUpImm32;
-				}
-				else if (operand2.ConstantUnsignedLongInteger < 0 && -operand2.ConstantSignedInteger <= (1 << 13))
-				{
-					instruction = ARMv8A32.LdrDownImm32;
-					operand2 = CreateConstant((uint)-operand2.ConstantSignedInteger);
-				}
-				else
-				{
-					instruction = ARMv8A32.LdrDown32;
-					operand2 = MoveConstantToRegister(context, operand2);
-				}
-			}
-			else if (operand2.IsUnresolvedConstant)
-			{
-				instruction = ARMv8A32.LdrUp32;
-				operand2 = MoveConstantToRegister(context, operand2);
-			}
+		private void LoadParamSignExtend16x32(Context context)
+		{
+			Debug.Assert(!context.Result.IsR4);
+			Debug.Assert(!context.Result.IsR8);
 
-			context.SetInstruction(instruction, ConditionCode.Always, result, StackFrame, operand2);
+			TransformLoadInstruction(context, ARMv8A32.LdrUpS16, ARMv8A32.LdrUpImmS16, ARMv8A32.LdrDownImmS16, context.Result, StackFrame, context.Operand1);
+		}
+
+		private void LoadParamSignExtend8x32(Context context)
+		{
+			Debug.Assert(!context.Result.IsR4);
+			Debug.Assert(!context.Result.IsR8);
+
+			TransformLoadInstruction(context, ARMv8A32.LdrUpS8, ARMv8A32.LdrUpImmS8, ARMv8A32.LdrDownImmS8, context.Result, StackFrame, context.Operand1);
+		}
+
+		private void LoadParamZeroExtend16x32(Context context)
+		{
+			Debug.Assert(!context.Result.IsR4);
+			Debug.Assert(!context.Result.IsR8);
+
+			TransformLoadInstruction(context, ARMv8A32.LdrUp16, ARMv8A32.LdrUpImm16, ARMv8A32.LdrDownImm16, context.Result, StackFrame, context.Operand1);
+		}
+
+		private void LoadParamZeroExtend8x32(Context context)
+		{
+			Debug.Assert(!context.Result.IsR4);
+			Debug.Assert(!context.Result.IsR8);
+
+			TransformLoadInstruction(context, ARMv8A32.LdrUp8, ARMv8A32.LdrUpImm8, ARMv8A32.LdrDownImm8, context.Result, StackFrame, context.Operand1);
+		}
+
+		private void LoadSignExtend16x32(Context context)
+		{
+			Debug.Assert(!context.Result.IsR4);
+			Debug.Assert(!context.Result.IsR8);
+
+			TransformLoadInstruction(context, ARMv8A32.LdrUpS16, ARMv8A32.LdrUpImmS16, ARMv8A32.LdrDownImmS16, context.Result, StackFrame, context.Operand1);
+		}
+
+		private void LoadSignExtend8x32(Context context)
+		{
+			Debug.Assert(!context.Result.IsR4);
+			Debug.Assert(!context.Result.IsR8);
+
+			TransformLoadInstruction(context, ARMv8A32.LdrUpS8, ARMv8A32.LdrUpImmS8, ARMv8A32.LdrDownImmS8, context.Result, StackFrame, context.Operand1);
+		}
+
+		private void LoadZeroExtend16x32(Context context)
+		{
+			Debug.Assert(!context.Result.IsR4);
+			Debug.Assert(!context.Result.IsR8);
+
+			TransformLoadInstruction(context, ARMv8A32.LdrUp16, ARMv8A32.LdrUpImm16, ARMv8A32.LdrDownImm16, context.Result, StackFrame, context.Operand1);
+		}
+
+		private void LoadZeroExtend8x32(Context context)
+		{
+			Debug.Assert(!context.Result.IsR4);
+			Debug.Assert(!context.Result.IsR8);
+
+			TransformLoadInstruction(context, ARMv8A32.LdrUp8, ARMv8A32.LdrUpImm8, ARMv8A32.LdrDownImm8, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void LogicalAnd32(Context context)
 		{
-			UpdateInstruction(context, ARMv8A32.And, ARMv8A32.AndImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
+			TransformInstruction(context, ARMv8A32.And, ARMv8A32.AndImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
 		}
 
 		private void LogicalNot32(Context context)
 		{
-			UpdateInstruction(context, ARMv8A32.Mvn, ARMv8A32.MvnImm, context.Result, StatusRegister.NotSet, context.Operand1);
+			TransformInstruction(context, ARMv8A32.Mvn, ARMv8A32.MvnImm, context.Result, StatusRegister.NotSet, context.Operand1);
 		}
 
 		private void LogicalOr32(Context context)
 		{
-			UpdateInstruction(context, ARMv8A32.Orr, ARMv8A32.OrrImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
+			TransformInstruction(context, ARMv8A32.Orr, ARMv8A32.OrrImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
 		}
 
 		private void LogicalXor32(Context context)
 		{
-			UpdateInstruction(context, ARMv8A32.Eor, ARMv8A32.EorImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
+			TransformInstruction(context, ARMv8A32.Eor, ARMv8A32.EorImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
 		}
 
 		private void MoveInt32(Context context)
 		{
-			UpdateInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, context.Result, StatusRegister.NotSet, context.Operand1);
+			TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, context.Result, StatusRegister.NotSet, context.Operand1);
 		}
 
 		private void ShiftLeft32(Context context)
 		{
-			UpdateInstruction(context, ARMv8A32.Lsl, ARMv8A32.LslImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
+			TransformInstruction(context, ARMv8A32.Lsl, ARMv8A32.LslImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
 		}
 
 		private void ShiftRight32(Context context)
 		{
-			UpdateInstruction(context, ARMv8A32.Lsr, ARMv8A32.LsrImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
+			TransformInstruction(context, ARMv8A32.Lsr, ARMv8A32.LsrImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
 		}
 
 		private void ArithShiftRight32(Context context)
 		{
-			UpdateInstruction(context, ARMv8A32.Asr, ARMv8A32.AsrImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
+			TransformInstruction(context, ARMv8A32.Asr, ARMv8A32.AsrImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
 		}
 
 		private void Sub32(Context context)
 		{
-			UpdateInstruction(context, ARMv8A32.Sub, ARMv8A32.SubImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
+			TransformInstruction(context, ARMv8A32.Sub, ARMv8A32.SubImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
 		}
 
 		private void SubCarryOut32(Context context)
 		{
 			var result2 = context.Result2;
 
-			UpdateInstruction(context, ARMv8A32.Sub, ARMv8A32.SubImm, context.Result, StatusRegister.Update, context.Operand1, context.Operand2);
+			TransformInstruction(context, ARMv8A32.Sub, ARMv8A32.SubImm, context.Result, StatusRegister.Update, context.Operand1, context.Operand2);
 
 			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.Carry, result2, CreateConstant(1));
 			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.NoCarry, result2, CreateConstant(0));
@@ -287,7 +295,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			var result = context.Result;
 			var operand3 = context.Operand3;
 
-			UpdateInstruction(context, ARMv8A32.Sub, ARMv8A32.SubImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
+			TransformInstruction(context, ARMv8A32.Sub, ARMv8A32.SubImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
 
 			// FIXME: Operand3 may need fixup
 			if (operand3.IsVirtualRegister)

@@ -29,7 +29,43 @@ namespace Mosa.Platform.ARMv8A32
 			}
 		}
 
-		protected void UpdateInstruction(Context context, BaseInstruction virtualInstruction, BaseInstruction immediateInstruction, Operand result, StatusRegister statusRegister, Operand operand1)
+		protected void TransformLoadInstruction(Context context, BaseInstruction loadUp, BaseInstruction loadUpImm, BaseInstruction loadDownImm, Operand result, Operand operand1, Operand operand2)
+		{
+			BaseInstruction instruction;
+
+			operand1 = MoveConstantToRegister(context, operand1);
+
+			if (operand2.IsResolvedConstant)
+			{
+				if (operand2.ConstantUnsignedLongInteger >= 0 && operand2.ConstantSignedInteger <= (1 << 13))
+				{
+					instruction = loadUpImm;
+				}
+				else if (operand2.ConstantUnsignedLongInteger < 0 && -operand2.ConstantSignedInteger <= (1 << 13))
+				{
+					instruction = loadDownImm;
+					operand2 = CreateConstant((uint)-operand2.ConstantSignedInteger);
+				}
+				else
+				{
+					instruction = loadDownImm;
+					operand2 = MoveConstantToRegister(context, operand2);
+				}
+			}
+			else if (operand2.IsUnresolvedConstant)
+			{
+				instruction = loadUp;
+				operand2 = MoveConstantToRegister(context, operand2);
+			}
+			else
+			{
+				instruction = loadUpImm;
+			}
+
+			context.SetInstruction(instruction, ConditionCode.Always, result, operand1, operand2);
+		}
+
+		protected void TransformInstruction(Context context, BaseInstruction virtualInstruction, BaseInstruction immediateInstruction, Operand result, StatusRegister statusRegister, Operand operand1)
 		{
 			if (operand1.IsConstant)
 			{
@@ -50,7 +86,7 @@ namespace Mosa.Platform.ARMv8A32
 			}
 		}
 
-		protected void UpdateInstruction(Context context, BaseInstruction virtualInstruction, BaseInstruction immediateInstruction, Operand result, StatusRegister statusRegister, Operand operand1, Operand operand2)
+		protected void TransformInstruction(Context context, BaseInstruction virtualInstruction, BaseInstruction immediateInstruction, Operand result, StatusRegister statusRegister, Operand operand1, Operand operand2)
 		{
 			if (operand1.IsConstant)
 			{
@@ -62,22 +98,7 @@ namespace Mosa.Platform.ARMv8A32
 				}
 				else
 				{
-					var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-					var before = context.InsertBefore();
-
-					if (operand1.IsResolvedConstant)
-					{
-						before.SetInstruction(ARMv8A32.MovImm, v1, CreateConstant(operand1.ConstantUnsignedInteger & 0xFFFF));
-						before.AppendInstruction(ARMv8A32.MovtImm, v1, v1, CreateConstant(operand1.ConstantUnsignedInteger >> 16));
-					}
-					else
-					{
-						before.SetInstruction(ARMv8A32.MovImm, v1, operand1);
-						before.AppendInstruction(ARMv8A32.MovtImm, v1, v1, operand1);
-					}
-
-					operand1 = v1;
+					operand1 = MoveConstantToRegister(context, operand1);
 				}
 			}
 
