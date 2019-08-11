@@ -65,6 +65,42 @@ namespace Mosa.Platform.ARMv8A32
 			context.SetInstruction(instruction, ConditionCode.Always, result, operand1, operand2);
 		}
 
+		protected void TransformStoreInstruction(Context context, BaseInstruction storeUp, BaseInstruction storeUpImm, BaseInstruction loadDownImm, Operand operand1, Operand operand2, Operand operand3)
+		{
+			BaseInstruction instruction;
+
+			operand1 = MoveConstantToRegister(context, operand1);
+
+			if (operand2.IsResolvedConstant)
+			{
+				if (operand2.ConstantUnsignedLongInteger >= 0 && operand2.ConstantSignedInteger <= (1 << 13))
+				{
+					instruction = storeUpImm;
+				}
+				else if (operand2.ConstantUnsignedLongInteger < 0 && -operand2.ConstantSignedInteger <= (1 << 13))
+				{
+					instruction = loadDownImm;
+					operand2 = CreateConstant((uint)-operand2.ConstantSignedInteger);
+				}
+				else
+				{
+					instruction = loadDownImm;
+					operand2 = MoveConstantToRegister(context, operand2);
+				}
+			}
+			else if (operand2.IsUnresolvedConstant)
+			{
+				instruction = storeUp;
+				operand2 = MoveConstantToRegister(context, operand2);
+			}
+			else
+			{
+				instruction = storeUpImm;
+			}
+
+			context.SetInstruction(instruction, ConditionCode.Always, null, operand1, operand2, operand3);
+		}
+
 		protected void TransformInstruction(Context context, BaseInstruction virtualInstruction, BaseInstruction immediateInstruction, Operand result, StatusRegister statusRegister, Operand operand1)
 		{
 			if (operand1.IsConstant)

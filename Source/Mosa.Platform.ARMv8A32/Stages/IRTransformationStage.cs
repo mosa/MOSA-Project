@@ -52,7 +52,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.LoadFloatR4, LoadFloatR4);
 			//AddVisitation(IRInstruction.LoadFloatR8, LoadFloatR8);
 			AddVisitation(IRInstruction.LoadInt32, LoadInt32);
-
 			AddVisitation(IRInstruction.LoadSignExtend8x32, LoadSignExtend8x32);
 			AddVisitation(IRInstruction.LoadSignExtend16x32, LoadSignExtend16x32);
 			AddVisitation(IRInstruction.LoadZeroExtend8x32, LoadZeroExtend8x32);
@@ -92,14 +91,16 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 			//AddVisitation(IRInstruction.StoreFloatR4, StoreFloatR4);
 			//AddVisitation(IRInstruction.StoreFloatR8, StoreFloatR8);
-			//AddVisitation(IRInstruction.StoreInt8, StoreInt8);
-			//AddVisitation(IRInstruction.StoreInt16, StoreInt16);
-			//AddVisitation(IRInstruction.StoreInt32, StoreInt32);
+			AddVisitation(IRInstruction.StoreInt8, StoreInt8);
+			AddVisitation(IRInstruction.StoreInt16, StoreInt16);
+			AddVisitation(IRInstruction.StoreInt32, StoreInt32);
+
 			//AddVisitation(IRInstruction.StoreParamFloatR4, StoreParamFloatR4);
 			//AddVisitation(IRInstruction.StoreParamFloatR8, StoreParamFloatR8);
-			//AddVisitation(IRInstruction.StoreParamInt8, StoreParamInt8);
-			//AddVisitation(IRInstruction.StoreParamInt16, StoreParamInt16);
-			//AddVisitation(IRInstruction.StoreParamInt32, StoreParamInt32);
+			AddVisitation(IRInstruction.StoreParamInt8, StoreParamInt8);
+			AddVisitation(IRInstruction.StoreParamInt16, StoreParamInt16);
+			AddVisitation(IRInstruction.StoreParamInt32, StoreParamInt32);
+
 			//AddVisitation(IRInstruction.StoreParamCompound, StoreParamCompound);
 			//AddVisitation(IRInstruction.SubFloatR4, SubFloatR4);
 			//AddVisitation(IRInstruction.SubFloatR8, SubFloatR8);
@@ -268,6 +269,36 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		private void ShiftRight32(Context context)
 		{
 			TransformInstruction(context, ARMv8A32.Lsr, ARMv8A32.LsrImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
+		}
+
+		private void StoreInt32(Context context)
+		{
+			TransformStoreInstruction(context, ARMv8A32.StrUp32, ARMv8A32.StrUpImm32, ARMv8A32.StrDownImm32, context.Operand1, context.Operand2, context.Operand3);
+		}
+
+		private void StoreInt8(Context context)
+		{
+			TransformStoreInstruction(context, ARMv8A32.StrUp8, ARMv8A32.StrUpImm8, ARMv8A32.StrDownImm8, context.Operand1, context.Operand2, context.Operand3);
+		}
+
+		private void StoreInt16(Context context)
+		{
+			TransformStoreInstruction(context, ARMv8A32.StrUp16, ARMv8A32.StrUpImm16, ARMv8A32.StrDownImm16, context.Operand1, context.Operand2, context.Operand3);
+		}
+
+		private void StoreParamInt16(Context context)
+		{
+			TransformStoreInstruction(context, ARMv8A32.StrUp16, ARMv8A32.StrUpImm16, ARMv8A32.StrDownImm16, StackFrame, context.Operand1, context.Operand2);
+		}
+
+		private void StoreParamInt32(Context context)
+		{
+			TransformStoreInstruction(context, ARMv8A32.StrUp32, ARMv8A32.StrUpImm32, ARMv8A32.StrDownImm32, StackFrame, context.Operand1, context.Operand2);
+		}
+
+		private void StoreParamInt8(Context context)
+		{
+			TransformStoreInstruction(context, ARMv8A32.StrUp8, ARMv8A32.StrUpImm8, ARMv8A32.StrDownImm8, StackFrame, context.Operand1, context.Operand2);
 		}
 
 		private void ArithShiftRight32(Context context)
