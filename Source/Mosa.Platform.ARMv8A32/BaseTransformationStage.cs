@@ -33,7 +33,7 @@ namespace Mosa.Platform.ARMv8A32
 		{
 			if (operand1.IsConstant)
 			{
-				operand1 = CreateImmediateOperand(context, operand1);
+				operand1 = CreateRotatedImmediateOperand(context, operand1);
 			}
 
 			if (operand1.IsVirtualRegister || operand1.IsCPURegister)
@@ -83,7 +83,7 @@ namespace Mosa.Platform.ARMv8A32
 
 			if (operand2.IsConstant)
 			{
-				operand2 = CreateImmediateOperand(context, operand2);
+				operand2 = CreateRotatedImmediateOperand(context, operand2);
 			}
 
 			Debug.Assert(operand1.IsVirtualRegister || operand1.IsCPURegister);
@@ -102,14 +102,14 @@ namespace Mosa.Platform.ARMv8A32
 			}
 		}
 
-		protected Operand CreateImmediateOperand(Context context, Operand operand)
+		protected Operand CreateRotatedImmediateOperand(Context context, Operand operand)
 		{
-			if (!operand.IsConstant)
+			if (operand.IsVirtualRegister || operand.IsCPURegister)
 				return operand;
 
 			if (operand.IsResolvedConstant)
 			{
-				if (ARMHelper.CalculateImmediateValue(operand.ConstantUnsignedInteger, out uint immediate, out _, out _))
+				if (ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsignedInteger, out uint immediate, out _, out _))
 				{
 					if (operand.ConstantUnsignedLongInteger == immediate)
 					{
@@ -118,17 +118,40 @@ namespace Mosa.Platform.ARMv8A32
 
 					return CreateConstant(immediate);
 				}
-				else
+			}
+
+			return MoveConstantToRegister(context, operand);
+		}
+
+		protected Operand MoveConstantToRegister(Context context, Operand operand)
+		{
+			if (operand.IsVirtualRegister || operand.IsCPURegister)
+				return operand;
+
+			if (operand.IsResolvedConstant)
+			{
+				var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+				var before = context.InsertBefore();
+
+				if (operand.ConstantUnsignedInteger <= 0xFFFF)
 				{
-					var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-					var before = context.InsertBefore();
-
-					before.SetInstruction(ARMv8A32.MovImm, v1, CreateConstant(operand.ConstantUnsignedInteger & 0xFFFF));
-					before.AppendInstruction(ARMv8A32.MovtImm, v1, CreateConstant(operand.ConstantUnsignedInteger >> 16));
+					before.SetInstruction(ARMv8A32.MovImm, v1, operand);
 
 					return v1;
 				}
+
+				if (ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsignedInteger, out uint immediate, out _, out _))
+				{
+					before.SetInstruction(ARMv8A32.MovImmShift, v1, CreateConstant(immediate));
+
+					return v1;
+				}
+
+				before.SetInstruction(ARMv8A32.MovImm, v1, CreateConstant(operand.ConstantUnsignedInteger & 0xFFFF));
+				before.AppendInstruction(ARMv8A32.MovtImm, v1, CreateConstant(operand.ConstantUnsignedInteger >> 16));
+
+				return v1;
 			}
 			else if (operand.IsUnresolvedConstant)
 			{
@@ -141,10 +164,8 @@ namespace Mosa.Platform.ARMv8A32
 
 				return v1;
 			}
-			else
-			{
-				throw new CompilerException("Error at {context} in {Method}");
-			}
+
+			throw new CompilerException("Error at {context} in {Method}");
 		}
 
 		#endregion Helper Methods

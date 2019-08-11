@@ -3,6 +3,7 @@
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
+using System.Diagnostics;
 
 namespace Mosa.Platform.ARMv8A32.Stages
 {
@@ -50,7 +51,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 			//AddVisitation(IRInstruction.LoadFloatR4, LoadFloatR4);
 			//AddVisitation(IRInstruction.LoadFloatR8, LoadFloatR8);
-			//AddVisitation(IRInstruction.LoadInt32, LoadInt32);
+			AddVisitation(IRInstruction.LoadInt32, LoadInt32);
+
 			//AddVisitation(IRInstruction.LoadSignExtend8x32, LoadSignExtend8x32);
 			//AddVisitation(IRInstruction.LoadSignExtend16x32, LoadSignExtend16x32);
 			//AddVisitation(IRInstruction.LoadZeroExtend8x32, LoadZeroExtend8x32);
@@ -149,6 +151,44 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		{
 			context.ReplaceInstruction(ARMv8A32.B);
 			context.ConditionCode = ConditionCode.Always;
+		}
+
+		private void LoadInt32(Context context)
+		{
+			Debug.Assert(!context.Result.IsR4);
+			Debug.Assert(!context.Result.IsR8);
+
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			BaseInstruction instruction = null;
+
+			operand1 = MoveConstantToRegister(context, operand1);
+
+			if (operand2.IsResolvedConstant)
+			{
+				if (operand2.ConstantUnsignedLongInteger >= 0 && operand2.ConstantSignedInteger <= (1 << 13))
+				{
+					instruction = ARMv8A32.LdrUpImm32;
+				}
+				else if (operand2.ConstantUnsignedLongInteger < 0 && -operand2.ConstantSignedInteger <= (1 << 13))
+				{
+					instruction = ARMv8A32.LdrDownImm32;
+					operand2 = CreateConstant((uint)-operand2.ConstantSignedInteger);
+				}
+				else
+				{
+					instruction = ARMv8A32.LdrDown32;
+					operand2 = MoveConstantToRegister(context, operand2);
+				}
+			}
+			else if (operand2.IsUnresolvedConstant)
+			{
+				instruction = ARMv8A32.LdrUp32;
+				operand2 = MoveConstantToRegister(context, operand2);
+			}
+
+			context.SetInstruction(instruction, ConditionCode.Always, result, operand1, operand2);
 		}
 
 		private void LogicalAnd32(Context context)
