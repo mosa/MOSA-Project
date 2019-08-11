@@ -824,6 +824,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "imm1": code = "Append1BitImmediate"; return;
 				case "imm2": code = "Append2BitImmediate"; return;
 				case "imm4": code = "Append4BitImmediate"; return;
+				case "imm4hn": code = "Append4BitImmediateHighNibble"; return;
 				case "imm5": code = "Append5BitImmediate"; return;
 				case "imm8": code = "Append8BitImmediate"; return;
 				case "imm12": code = "Append12BitImmediate"; return;

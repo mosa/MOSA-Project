@@ -295,6 +295,13 @@ namespace Mosa.Compiler.Framework
 			Append4Bits((byte)operand.ConstantUnsignedInteger);
 		}
 
+		public void Append4BitImmediateHighNibble(Operand operand)
+		{
+			Debug.Assert(operand.IsConstant);
+
+			Append4Bits((byte)operand.ConstantUnsignedInteger >> 4);
+		}
+
 		public void Append5BitImmediate(Operand operand)
 		{
 			Debug.Assert(operand.IsConstant);
