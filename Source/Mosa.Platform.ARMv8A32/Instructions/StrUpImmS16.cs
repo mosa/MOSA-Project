@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class StrUpImmS16 : ARMv8A32Instruction
 	{
-		public override int ID { get { return 693; } }
+		public override int ID { get { return 675; } }
 
 		internal StrUpImmS16()
 			: base(0, 3)

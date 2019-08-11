@@ -129,9 +129,6 @@
     <Compile Include="Instructions\Ldm.cs" />
     <Compile Include="Instructions\Ldmfd.cs" />
     <Compile Include="Instructions\Ldmia.cs" />
-    <Compile Include="Instructions\Ldr16.cs" />
-    <Compile Include="Instructions\Ldr32.cs" />
-    <Compile Include="Instructions\Ldr8.cs" />
     <Compile Include="Instructions\LdrDown16.cs" />
     <Compile Include="Instructions\LdrDown32.cs" />
     <Compile Include="Instructions\LdrDown8.cs" />
@@ -142,13 +139,6 @@
     <Compile Include="Instructions\LdrDownImmS8.cs" />
     <Compile Include="Instructions\LdrDownS16.cs" />
     <Compile Include="Instructions\LdrDownS8.cs" />
-    <Compile Include="Instructions\LdrImm16.cs" />
-    <Compile Include="Instructions\LdrImm32.cs" />
-    <Compile Include="Instructions\LdrImm8.cs" />
-    <Compile Include="Instructions\LdrImmS16.cs" />
-    <Compile Include="Instructions\LdrImmS8.cs" />
-    <Compile Include="Instructions\LdrS16.cs" />
-    <Compile Include="Instructions\LdrS8.cs" />
     <Compile Include="Instructions\LdrUp16.cs" />
     <Compile Include="Instructions\LdrUp32.cs" />
     <Compile Include="Instructions\LdrUp8.cs" />
@@ -204,9 +194,6 @@
     <Compile Include="Instructions\Stm.cs" />
     <Compile Include="Instructions\Stmea.cs" />
     <Compile Include="Instructions\Stmia.cs" />
-    <Compile Include="Instructions\Str16.cs" />
-    <Compile Include="Instructions\Str32.cs" />
-    <Compile Include="Instructions\Str8.cs" />
     <Compile Include="Instructions\StrDown16.cs" />
     <Compile Include="Instructions\StrDown32.cs" />
     <Compile Include="Instructions\StrDown8.cs" />
@@ -217,13 +204,6 @@
     <Compile Include="Instructions\StrDownImmS8.cs" />
     <Compile Include="Instructions\StrDownS16.cs" />
     <Compile Include="Instructions\StrDownS8.cs" />
-    <Compile Include="Instructions\StrImm16.cs" />
-    <Compile Include="Instructions\StrImm32.cs" />
-    <Compile Include="Instructions\StrImm8.cs" />
-    <Compile Include="Instructions\StrImmS16.cs" />
-    <Compile Include="Instructions\StrImmS8.cs" />
-    <Compile Include="Instructions\StrS16.cs" />
-    <Compile Include="Instructions\StrS8.cs" />
     <Compile Include="Instructions\StrUp16.cs" />
     <Compile Include="Instructions\StrUp32.cs" />
     <Compile Include="Instructions\StrUp8.cs" />

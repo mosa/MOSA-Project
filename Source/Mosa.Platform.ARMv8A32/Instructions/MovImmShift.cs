@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class MovImmShift : ARMv8A32Instruction
 	{
-		public override int ID { get { return 727; } }
+		public override int ID { get { return 707; } }
 
 		internal MovImmShift()
 			: base(1, 4)

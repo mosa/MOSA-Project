@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Pop : ARMv8A32Instruction
 	{
-		public override int ID { get { return 705; } }
+		public override int ID { get { return 685; } }
 
 		internal Pop()
 			: base(1, 3)
