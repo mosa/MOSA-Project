@@ -31,6 +31,8 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 				emitter.OpcodeEncoder.Append1Bit(0b0);
 				emitter.OpcodeEncoder.Append1Bit(0b0);
 				emitter.OpcodeEncoder.Append1Bit(0b0);
+				emitter.OpcodeEncoder.Append1Bit(0b0);
+				emitter.OpcodeEncoder.Append1Bit(0b0);
 				emitter.OpcodeEncoder.Append1Bit(0b1);
 				emitter.OpcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);

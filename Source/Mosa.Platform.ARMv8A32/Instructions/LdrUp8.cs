@@ -28,6 +28,8 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 			{
 				emitter.OpcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 				emitter.OpcodeEncoder.Append2Bits(0b01);
+				emitter.OpcodeEncoder.Append1Bit(0b0);
+				emitter.OpcodeEncoder.Append1Bit(0b0);
 				emitter.OpcodeEncoder.Append1Bit(0b1);
 				emitter.OpcodeEncoder.Append1Bit(0b1);
 				emitter.OpcodeEncoder.Append1Bit(0b0);

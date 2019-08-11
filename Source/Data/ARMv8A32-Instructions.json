@@ -1485,7 +1485,7 @@
 			"OperandCount": 3,
 			"ResultCount": 1,
 			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,l=1,w=0,b=0,u=imm1:o3",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,i=0,p=0,l=1,w=0,b=0,u=imm1:o3",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][constant]",
@@ -1507,7 +1507,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,l=1,w=0,b=0,u=1",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,i=0,p=0,l=1,w=0,b=0,u=1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -1528,7 +1528,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,l=1,w=0,b=0,u=0",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,i=0,p=0,l=1,w=0,b=0,u=0",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -1549,7 +1549,7 @@
 			"OperandCount": 3,
 			"ResultCount": 1,
 			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,l=1,w=0,b=1,u=imm1:o3",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,i=0,p=0,l=1,w=0,b=1,u=imm1:o3",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][constant]",
@@ -1571,7 +1571,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,l=1,w=0,b=1,u=1",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,i=0,p=0,l=1,w=0,b=1,u=1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -1592,7 +1592,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,l=1,w=0,b=1,u=0",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,i=0,p=0,l=1,w=0,b=1,u=0",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
