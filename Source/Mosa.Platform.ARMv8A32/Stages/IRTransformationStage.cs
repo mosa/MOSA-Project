@@ -59,7 +59,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.LoadZeroExtend16x32, LoadZeroExtend16x32);
 			//AddVisitation(IRInstruction.LoadParamFloatR4, LoadParamFloatR4);
 			//AddVisitation(IRInstruction.LoadParamFloatR8, LoadParamFloatR8);
-			//AddVisitation(IRInstruction.LoadParamInt32, LoadParamInt32);
+			AddVisitation(IRInstruction.LoadParamInt32, LoadParamInt32);
+
 			//AddVisitation(IRInstruction.LoadParamSignExtend8x32, LoadParamSignExtend8x32);
 			//AddVisitation(IRInstruction.LoadParamSignExtend16x32, LoadParamSignExtend16x32);
 			//AddVisitation(IRInstruction.LoadParamZeroExtend8x32, LoadParamZeroExtend8x32);
@@ -189,6 +190,41 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			}
 
 			context.SetInstruction(instruction, ConditionCode.Always, result, operand1, operand2);
+		}
+
+		private void LoadParamInt32(Context context)
+		{
+			Debug.Assert(!context.Result.IsR4);
+			Debug.Assert(!context.Result.IsR8);
+
+			var result = context.Result;
+			var operand2 = context.Operand1;
+			BaseInstruction instruction = null;
+
+			if (operand2.IsResolvedConstant)
+			{
+				if (operand2.ConstantUnsignedLongInteger >= 0 && operand2.ConstantSignedInteger <= (1 << 13))
+				{
+					instruction = ARMv8A32.LdrUpImm32;
+				}
+				else if (operand2.ConstantUnsignedLongInteger < 0 && -operand2.ConstantSignedInteger <= (1 << 13))
+				{
+					instruction = ARMv8A32.LdrDownImm32;
+					operand2 = CreateConstant((uint)-operand2.ConstantSignedInteger);
+				}
+				else
+				{
+					instruction = ARMv8A32.LdrDown32;
+					operand2 = MoveConstantToRegister(context, operand2);
+				}
+			}
+			else if (operand2.IsUnresolvedConstant)
+			{
+				instruction = ARMv8A32.LdrUp32;
+				operand2 = MoveConstantToRegister(context, operand2);
+			}
+
+			context.SetInstruction(instruction, ConditionCode.Always, result, StackFrame, operand2);
 		}
 
 		private void LogicalAnd32(Context context)
