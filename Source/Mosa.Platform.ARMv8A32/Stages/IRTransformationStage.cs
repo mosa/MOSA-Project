@@ -74,11 +74,11 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.MoveFloatR4, MoveFloatR4);
 			//AddVisitation(IRInstruction.MoveFloatR8, MoveFloatR8);
 			AddVisitation(IRInstruction.MoveInt32, MoveInt32);
+			AddVisitation(IRInstruction.SignExtend8x32, SignExtend8x32);
+			AddVisitation(IRInstruction.SignExtend16x32, SignExtend16x32);
+			AddVisitation(IRInstruction.ZeroExtend8x32, ZeroExtend8x32);
+			AddVisitation(IRInstruction.ZeroExtend16x32, ZeroExtend16x32);
 
-			//AddVisitation(IRInstruction.SignExtend8x32, SignExtend8x32);
-			//AddVisitation(IRInstruction.SignExtend16x32, SignExtend16x32);
-			//AddVisitation(IRInstruction.ZeroExtend8x32, ZeroExtend8x32);
-			//AddVisitation(IRInstruction.ZeroExtend16x32, ZeroExtend16x32);
 			//AddVisitation(IRInstruction.MulFloatR4, MulFloatR4);
 			//AddVisitation(IRInstruction.MulFloatR8, MulFloatR8);
 			//AddVisitation(IRInstruction.MulSigned32, MulSigned32);
@@ -148,6 +148,11 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			{
 				throw new CompilerException("Error at {context} in {Method}");
 			}
+		}
+
+		private void ArithShiftRight32(Context context)
+		{
+			TransformInstruction(context, ARMv8A32.Asr, ARMv8A32.AsrImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
 		}
 
 		private void Jmp(Context context)
@@ -271,6 +276,21 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			TransformInstruction(context, ARMv8A32.Lsr, ARMv8A32.LsrImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
 		}
 
+		private void SignExtend16x32(Context context)
+		{
+			TransformExtend(context, ARMv8A32.Sxth, context.Result, context.Operand1);
+		}
+
+		private void SignExtend8x32(Context context)
+		{
+			TransformExtend(context, ARMv8A32.Sxtb, context.Result, context.Operand1);
+		}
+
+		private void StoreInt16(Context context)
+		{
+			TransformStoreInstruction(context, ARMv8A32.StrUp16, ARMv8A32.StrUpImm16, ARMv8A32.StrDownImm16, context.Operand1, context.Operand2, context.Operand3);
+		}
+
 		private void StoreInt32(Context context)
 		{
 			TransformStoreInstruction(context, ARMv8A32.StrUp32, ARMv8A32.StrUpImm32, ARMv8A32.StrDownImm32, context.Operand1, context.Operand2, context.Operand3);
@@ -279,11 +299,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		private void StoreInt8(Context context)
 		{
 			TransformStoreInstruction(context, ARMv8A32.StrUp8, ARMv8A32.StrUpImm8, ARMv8A32.StrDownImm8, context.Operand1, context.Operand2, context.Operand3);
-		}
-
-		private void StoreInt16(Context context)
-		{
-			TransformStoreInstruction(context, ARMv8A32.StrUp16, ARMv8A32.StrUpImm16, ARMv8A32.StrDownImm16, context.Operand1, context.Operand2, context.Operand3);
 		}
 
 		private void StoreParamInt16(Context context)
@@ -299,11 +314,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		private void StoreParamInt8(Context context)
 		{
 			TransformStoreInstruction(context, ARMv8A32.StrUp8, ARMv8A32.StrUpImm8, ARMv8A32.StrDownImm8, StackFrame, context.Operand1, context.Operand2);
-		}
-
-		private void ArithShiftRight32(Context context)
-		{
-			TransformInstruction(context, ARMv8A32.Asr, ARMv8A32.AsrImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
 		}
 
 		private void Sub32(Context context)
@@ -341,6 +351,16 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			{
 				throw new CompilerException("Error at {context} in {Method}");
 			}
+		}
+
+		private void ZeroExtend16x32(Context context)
+		{
+			TransformExtend(context, ARMv8A32.Uxth, context.Result, context.Operand1);
+		}
+
+		private void ZeroExtend8x32(Context context)
+		{
+			TransformExtend(context, ARMv8A32.Uxtb, context.Result, context.Operand1);
 		}
 
 		#endregion Visitation Methods

@@ -29,6 +29,13 @@ namespace Mosa.Platform.ARMv8A32
 			}
 		}
 
+		protected void TransformExtend(Context context, BaseInstruction instruction, Operand result, Operand operand1)
+		{
+			operand1 = MoveConstantToRegister(context, operand1);
+
+			context.SetInstruction(instruction, ConditionCode.Always, result, operand1);
+		}
+
 		protected void TransformLoadInstruction(Context context, BaseInstruction loadUp, BaseInstruction loadUpImm, BaseInstruction loadDownImm, Operand result, Operand operand1, Operand operand2)
 		{
 			BaseInstruction instruction;
@@ -201,6 +208,13 @@ namespace Mosa.Platform.ARMv8A32
 				if (ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsignedInteger, out uint immediate, out _, out _))
 				{
 					before.SetInstruction(ARMv8A32.MovImmShift, v1, CreateConstant(immediate));
+
+					return v1;
+				}
+
+				if (ARMHelper.CalculateRotatedImmediateValue(~operand.ConstantUnsignedInteger, out uint immediate2, out _, out _))
+				{
+					before.SetInstruction(ARMv8A32.MvnImmShift, v1, CreateConstant(immediate2));
 
 					return v1;
 				}

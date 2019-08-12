@@ -15,16 +15,33 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 		public override int ID { get { return 698; } }
 
 		internal Uxtb()
-			: base(1, 3)
+			: base(1, 1)
 		{
 		}
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 3);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			emitter.OpcodeEncoder.Append32Bits(0x00000000);
+			if (node.Operand1.IsCPURegister)
+			{
+				emitter.OpcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
+				emitter.OpcodeEncoder.Append4Bits(0b0110);
+				emitter.OpcodeEncoder.Append1Bit(0b1);
+				emitter.OpcodeEncoder.Append1Bit(0b1);
+				emitter.OpcodeEncoder.Append1Bit(0b1);
+				emitter.OpcodeEncoder.Append1Bit(0b0);
+				emitter.OpcodeEncoder.Append4Bits(0b1111);
+				emitter.OpcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
+				emitter.OpcodeEncoder.Append2Bits(0b00);
+				emitter.OpcodeEncoder.Append2Bits(0b00);
+				emitter.OpcodeEncoder.Append4Bits(0b0111);
+				emitter.OpcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
+				return;
+			}
+
+			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 		}
 	}
 }

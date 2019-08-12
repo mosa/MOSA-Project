@@ -9,7 +9,9 @@
 		"[arm-single-data-transfer-shift-register]= conditional|01|[i]|[p]|[u]|[b]|[w]|[l]|[rn]|[rd]|[shiftamount]|[shifttype]|0|[rm]",
 
 		"[arm-halfword-data-transfer-immediate]=    conditional|000|[p]|[u]|1|[w]|[l]|[rn]|[rd]|[offsethigh]|1|[s]|[h]|1|[offsetlow]",
-		"[arm-halfword-data-transfer-register]=     conditional|000|[p]|[u]|0|[w]|[l]|[rn]|[rd]|0000|1|[s]|[h]|1|[rm]"
+		"[arm-halfword-data-transfer-register]=     conditional|000|[p]|[u]|0|[w]|[l]|[rn]|[rd]|0000|1|[s]|[h]|1|[rm]",
+
+		"[arm-extended-register]=                   conditional|01101|[s]|1|[b]|1111|[rd]|[rotate]|00|0111|[rm]"
 	],
 	"Instructions": [
 		{
@@ -2620,16 +2622,17 @@
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
-			"FlagsUnchanged": "",
+			"FlagsUnchanged": "NZCV",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 3,
+			"OperandCount": 1,
 			"ResultCount": 1,
+			"OpcodeEncodingAppend": "rd=reg4:r,rm=reg4:o1,b=0,rotate=00,sbz=00,s=0",
 			"Description": "Signed Extend Byte",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
-					"Encoding": "0x00000000"
+					"Condition": "[register]",
+					"Encoding": "[arm-extended-register]"
 				}
 			]
 		},
@@ -2640,16 +2643,17 @@
 			"FlagsCleared": "",
 			"FlagsModified": "",
 			"FlagsSet": "",
-			"FlagsUnchanged": "",
+			"FlagsUnchanged": "NZCV",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 3,
+			"OperandCount": 1,
 			"ResultCount": 1,
+			"OpcodeEncodingAppend": "rd=reg4:r,rm=reg4:o1,b=1,rotate=00,sbz=00,s=0",
 			"Description": "Signed Extend Halfword",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
-					"Encoding": "0x00000000"
+					"Condition": "[register]",
+					"Encoding": "[arm-extended-register]"
 				}
 			]
 		},
@@ -2663,13 +2667,14 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 3,
+			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Unsigned Extend Byte",
+			"OpcodeEncodingAppend": "rd=reg4:r,rm=reg4:o1,b=0,rotate=00,sbz=00,s=1",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
-					"Encoding": "0x00000000"
+					"Condition": "[register]",
+					"Encoding": "[arm-extended-register]"
 				}
 			]
 		},
@@ -2683,13 +2688,14 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 3,
+			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Unsigned Extend Halfword",
+			"OpcodeEncodingAppend": "rd=reg4:r,rm=reg4:o1,b=1,rotate=00,sbz=00,s=1",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
-					"Encoding": "0x00000000"
+					"Condition": "[register]",
+					"Encoding": "[arm-extended-register]"
 				}
 			]
 		},
