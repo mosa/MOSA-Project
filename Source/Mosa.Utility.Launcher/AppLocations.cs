@@ -36,7 +36,7 @@ namespace Mosa.Utility.Launcher
 			{
 				// find QEMU executable
 				QEMU = TryFind(
-					new string[] { "qemu-system-i386.exe", "qemu-system-i386" },
+					new string[] { "qemu-system-x86_64.exe", "qemu-system-x86_64-i386" },
 					new string[] {
 						CombineParameterAndDirectory("MOSA",@"Tools\QEMU"),
 						CombineParameterAndDirectory("MOSA","QEMU"),
