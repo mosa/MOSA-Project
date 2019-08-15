@@ -113,12 +113,12 @@ namespace Mosa.Platform.ARMv8A32
 		/// <summary>
 		/// Gets the return register.
 		/// </summary>
-		public override PhysicalRegister ReturnRegister { get { return null; /* TODO */} }
+		public override PhysicalRegister ReturnRegister { get { return GeneralPurposeRegister.R0; } }
 
 		/// <summary>
 		/// Gets the return register for the high portion of the 64bit result.
 		/// </summary>
-		public override PhysicalRegister ReturnHighRegister { get { return null; /* TODO */} }
+		public override PhysicalRegister ReturnHighRegister { get { return GeneralPurposeRegister.R1; } }
 
 		/// <summary>
 		/// Gets the return floating point register.
@@ -176,7 +176,6 @@ namespace Mosa.Platform.ARMv8A32
 				{
 					new LongOperandStage(),
 					new IRTransformationStage(),
-					new ImmediateConstantStage(),
 
 			//		compilerOptions.EnablePlatformOptimizations ? new OptimizationStage() : null,
 			//		new TweakStage(),

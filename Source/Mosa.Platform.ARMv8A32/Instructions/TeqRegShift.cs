@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class TeqRegShift : ARMv8A32Instruction
 	{
-		public override int ID { get { return 630; } }
+		public override int ID { get { return 626; } }
 
 		internal TeqRegShift()
 			: base(0, 4)
@@ -45,7 +45,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 				emitter.OpcodeEncoder.Append4Bits(0b0000);
 				emitter.OpcodeEncoder.Append4Bits(node.Operand3.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append4Bits(node.GetOperand(3).Register.RegisterCode);
+				emitter.OpcodeEncoder.Append2BitImmediate(node.GetOperand(3));
 				emitter.OpcodeEncoder.Append1Bit(0b1);
 				emitter.OpcodeEncoder.Append4Bits(node.Operand2.Register.RegisterCode);
 				return;

@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class TstImmShift : ARMv8A32Instruction
 	{
-		public override int ID { get { return 633; } }
+		public override int ID { get { return 629; } }
 
 		internal TstImmShift()
 			: base(0, 4)
@@ -34,7 +34,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 4);
 
-			if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister && node.Operand3.IsCPURegister && node.GetOperand(3).IsConstant)
+			if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister && node.Operand3.IsConstant && node.GetOperand(3).IsConstant)
 			{
 				emitter.OpcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 				emitter.OpcodeEncoder.Append2Bits(0b00);
@@ -44,7 +44,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 				emitter.OpcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append4Bits(0b0000);
 				emitter.OpcodeEncoder.Append5BitImmediate(node.Operand3);
-				emitter.OpcodeEncoder.Append4Bits(node.GetOperand(3).Register.RegisterCode);
+				emitter.OpcodeEncoder.Append2BitImmediate(node.GetOperand(3));
 				emitter.OpcodeEncoder.Append1Bit(0b0);
 				emitter.OpcodeEncoder.Append4Bits(node.Operand2.Register.RegisterCode);
 				return;

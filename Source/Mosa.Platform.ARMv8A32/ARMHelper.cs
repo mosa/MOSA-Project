@@ -6,7 +6,7 @@ namespace Mosa.Platform.ARMv8A32
 {
 	public static class ARMHelper
 	{
-		public static bool CalculateImmediateValue(uint value, out uint immediate, out byte rotation4, out byte imm8)
+		public static bool CalculateRotatedImmediateValue(uint value, out uint immediate, out byte rotation4, out byte imm8)
 		{
 			if ((value & 0xFF) == value)
 			{
