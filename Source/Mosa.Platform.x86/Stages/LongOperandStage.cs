@@ -79,7 +79,7 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
 
-			context.AppendInstruction(X86.Add32, resultLow, op1L, op2L);
+			context.SetInstruction(X86.Add32, resultLow, op1L, op2L);
 			context.AppendInstruction(X86.Adc32, resultHigh, op1H, op2H);
 		}
 
