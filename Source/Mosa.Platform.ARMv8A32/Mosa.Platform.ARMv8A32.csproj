@@ -153,6 +153,8 @@
     <Compile Include="Instructions\LslImm.cs" />
     <Compile Include="Instructions\Lsr.cs" />
     <Compile Include="Instructions\LsrImm.cs" />
+    <Compile Include="Instructions\Mla.cs" />
+    <Compile Include="Instructions\Mlal.cs" />
     <Compile Include="Instructions\Mov.cs" />
     <Compile Include="Instructions\MovImm.cs" />
     <Compile Include="Instructions\MovImmShift.cs" />
@@ -162,6 +164,7 @@
     <Compile Include="Instructions\Mrs.cs" />
     <Compile Include="Instructions\Msr.cs" />
     <Compile Include="Instructions\Mul.cs" />
+    <Compile Include="Instructions\Mull.cs" />
     <Compile Include="Instructions\Mvn.cs" />
     <Compile Include="Instructions\MvnImm.cs" />
     <Compile Include="Instructions\MvnImmShift.cs" />

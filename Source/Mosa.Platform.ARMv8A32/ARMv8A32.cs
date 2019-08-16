@@ -121,10 +121,13 @@ namespace Mosa.Platform.ARMv8A32
 		public static readonly StrDownS8 StrDownS8 = new StrDownS8();
 		public static readonly StrUpImmS8 StrUpImmS8 = new StrUpImmS8();
 		public static readonly StrDownImmS8 StrDownImmS8 = new StrDownImmS8();
+		public static readonly Mul Mul = new Mul();
+		public static readonly Mla Mla = new Mla();
+		public static readonly Mull Mull = new Mull();
+		public static readonly Mlal Mlal = new Mlal();
+		public static readonly Nop Nop = new Nop();
 		public static readonly Mrs Mrs = new Mrs();
 		public static readonly Msr Msr = new Msr();
-		public static readonly Mul Mul = new Mul();
-		public static readonly Nop Nop = new Nop();
 		public static readonly Pop Pop = new Pop();
 		public static readonly Push Push = new Push();
 		public static readonly Rev Rev = new Rev();
