@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using System;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x64.Stages

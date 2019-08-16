@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Linker.Elf;
 using System;
 using System.Collections.Generic;
@@ -14,11 +13,6 @@ namespace Mosa.Compiler.Framework
 	public abstract class BaseArchitecture
 	{
 		#region Properties
-
-		/// <summary>
-		/// Gets the endianness of the target architecture.
-		/// </summary>
-		public abstract Endianness Endianness { get; }
 
 		/// <summary>
 		/// Gets the type of the elf machine.

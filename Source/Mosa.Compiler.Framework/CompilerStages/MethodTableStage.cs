@@ -3,6 +3,7 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
+using System.IO;
 
 namespace Mosa.Compiler.Framework.CompilerStages
 {
@@ -27,7 +28,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		{
 			// Emit assembly list
 			var methodLookupTable = Linker.DefineSymbol(Metadata.MethodLookupTable, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
-			var writer = new EndianAwareBinaryWriter(methodLookupTable.Stream, Architecture.Endianness);
+			var writer = new BinaryWriter(methodLookupTable.Stream);
 
 			// 1. Number of methods
 			int count = 0;
@@ -56,15 +57,15 @@ namespace Mosa.Compiler.Framework.CompilerStages
 							continue;
 
 						// 1. Pointer to Method
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, writer.Position, targetMethodData.Method.FullName, 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, writer.GetPosition(), targetMethodData.Method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						// 2. Size of Method
-						Linker.Link(LinkType.Size, NativePatchType, methodLookupTable, writer.Position, targetMethodData.Method.FullName, 0);
+						Linker.Link(LinkType.Size, NativePatchType, methodLookupTable, writer.GetPosition(), targetMethodData.Method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						// 3. Pointer to Method Definition
-						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, writer.Position, Metadata.MethodDefinition + method.FullName, 0);
+						Linker.Link(LinkType.AbsoluteAddress, NativePatchType, methodLookupTable, writer.GetPosition(), Metadata.MethodDefinition + method.FullName, 0);
 						writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 						count++;
@@ -72,7 +73,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				}
 			}
 
-			writer.Position = 0;
+			writer.SetPosition(0);
 			writer.Write(count);
 		}
 

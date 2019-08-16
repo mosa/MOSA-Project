@@ -840,11 +840,11 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[#register][register]",
+					"Condition": "[register]",
 					"Encoding": "[x86],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=reg3:o1"
 				},
 				{
-					"Condition": "[#register][constant]",
+					"Condition": "[constant]",
 					"Encoding": "[x86],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=101,immediate=imm32:o1"
 				}
 			]

@@ -1,13 +1,13 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Mosa.Compiler.Extensions.Dwarf
 {
 	public class DwarfWriteContext
 	{
-		public EndianAwareBinaryWriter Writer { get; set; }
+		public BinaryWriter Writer { get; set; }
 
 		public List<DwarfAbbrev> AbbrevList;
 

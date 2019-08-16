@@ -104,7 +104,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 		/// </summary>
 		/// <param name="elfType">Type of the elf.</param>
 		/// <param name="writer">The writer.</param>
-		public void Write(LinkerFormatType elfType, EndianAwareBinaryWriter writer)
+		public void Write(LinkerFormatType elfType, BinaryWriter writer)
 		{
 			if (elfType == LinkerFormatType.Elf32)
 				Write32(writer);
@@ -116,7 +116,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 		/// Writes the elf header
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		protected void Write32(EndianAwareBinaryWriter writer)
+		protected void Write32(BinaryWriter writer)
 		{
 			writer.Seek(0, SeekOrigin.Begin);
 			writer.Write(Ident);                    // ident
@@ -139,7 +139,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 		/// Writes the elf header
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		protected void Write64(EndianAwareBinaryWriter writer)
+		protected void Write64(BinaryWriter writer)
 		{
 			writer.Seek(0, SeekOrigin.Begin);
 			writer.Write(Ident);                    // ident
@@ -162,7 +162,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 		/// Reads elf header
 		/// </summary>
 		/// <param name="reader">The reader.</param>
-		public void Read32(EndianAwareBinaryReader reader)
+		public void Read32(BinaryReader reader)
 		{
 			Ident = reader.ReadBytes(16);
 

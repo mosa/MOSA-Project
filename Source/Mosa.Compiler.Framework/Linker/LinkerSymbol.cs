@@ -95,7 +95,7 @@ namespace Mosa.Compiler.Framework.Linker
 			}
 		}
 
-		public void ApplyPatch(long offset, ulong value, byte patchSize, Endianness endianness)
+		public void ApplyPatch(long offset, ulong value, byte patchSize)
 		{
 			Stream.Position = offset;
 
@@ -103,9 +103,9 @@ namespace Mosa.Compiler.Framework.Linker
 			switch (patchSize)
 			{
 				case 8: Stream.WriteByte((byte)value); break;
-				case 16: Stream.Write((ushort)value, endianness); break;
-				case 32: Stream.Write((uint)value, endianness); break;
-				case 64: Stream.Write(value, endianness); break;
+				case 16: Stream.Write((ushort)value); break;
+				case 32: Stream.Write((uint)value); break;
+				case 64: Stream.Write(value); break;
 			}
 		}
 

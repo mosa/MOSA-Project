@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 		private readonly Dictionary<LinkerSymbol, uint> symbolTableOffset = new Dictionary<LinkerSymbol, uint>();
 
-		private EndianAwareBinaryWriter writer;
+		private BinaryWriter writer;
 
 		private static readonly string[] LinkerSectionNames = { ".text", ".data", ".rodata", ".bss" };
 
@@ -108,7 +108,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 		public void Emit(Stream stream)
 		{
-			writer = new EndianAwareBinaryWriter(stream, Encoding.Unicode, linker.Endianness);
+			writer = new BinaryWriter(stream, Encoding.Unicode);
 
 			// Create the sections headers
 			CreateSections();
@@ -172,19 +172,18 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 				return;
 
 			ResolveSectionOffset(section);
-			writer.Position = section.Offset;
-
+			writer.SetPosition(section.Offset);
 			section.EmitMethod?.Invoke(section, writer);
 		}
 
 		private void WriteElfHeader()
 		{
-			writer.Position = 0;
+			writer.SetPosition(0);
 
 			elfheader.Type = FileType.Executable;
 			elfheader.Machine = linker.MachineType;
 			elfheader.EntryAddress = (uint)linker.EntryPoint.VirtualAddress;
-			elfheader.CreateIdent((linkerFormatType == LinkerFormatType.Elf32) ? IdentClass.Class32 : IdentClass.Class64, linker.Endianness == Endianness.Little ? IdentData.Data2LSB : IdentData.Data2MSB);
+			elfheader.CreateIdent((linkerFormatType == LinkerFormatType.Elf32) ? IdentClass.Class32 : IdentClass.Class64, IdentData.Data2LSB);
 			elfheader.SectionHeaderNumber = (ushort)sections.Count;
 			elfheader.SectionHeaderStringIndex = sectionHeaderStringSection.Index;
 
@@ -195,7 +194,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 		{
 			elfheader.ProgramHeaderOffset = ElfHeader.GetEntrySize(linkerFormatType);
 
-			writer.Position = elfheader.ProgramHeaderOffset;
+			writer.SetPosition(elfheader.ProgramHeaderOffset);
 
 			elfheader.ProgramHeaderNumber = 0;
 
@@ -319,7 +318,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 		{
 			elfheader.SectionHeaderOffset = elfheader.ProgramHeaderOffset + (ProgramHeader.GetEntrySize(linkerFormatType) * elfheader.ProgramHeaderNumber);
 
-			writer.Position = elfheader.SectionHeaderOffset;
+			writer.SetPosition(elfheader.SectionHeaderOffset);
 
 			foreach (var section in sections)
 			{
@@ -327,11 +326,11 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			}
 		}
 
-		private void WriteLinkerSection(Section section, EndianAwareBinaryWriter writer)
+		private void WriteLinkerSection(Section section, BinaryWriter writer)
 		{
 			var linkerSection = linker.Sections[(int)section.SectionKind];
 
-			writer.Position = section.Offset;
+			writer.SetPosition(section.Offset);
 			linker.WriteTo(writer.BaseStream, linkerSection);
 		}
 
@@ -355,7 +354,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			AddSection(sectionHeaderStringSection);
 		}
 
-		private void WriteSectionHeaderStringSection(Section section, EndianAwareBinaryWriter writer)
+		private void WriteSectionHeaderStringSection(Section section, BinaryWriter writer)
 		{
 			Debug.Assert(section == sectionHeaderStringSection);
 
@@ -392,7 +391,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			sectionHeaderStringSection.AddDependency(stringSection);
 		}
 
-		private void WriteStringSection(Section section, EndianAwareBinaryWriter writer)
+		private void WriteStringSection(Section section, BinaryWriter writer)
 		{
 			Debug.Assert(section == stringSection);
 
@@ -433,7 +432,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			sectionHeaderStringSection.AddDependency(symbolSection);
 		}
 
-		private void WriteSymbolSection(Section section, EndianAwareBinaryWriter writer)
+		private void WriteSymbolSection(Section section, BinaryWriter writer)
 		{
 			Debug.Assert(section == symbolSection);
 
@@ -550,7 +549,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			return false;
 		}
 
-		private void WriteRelocationSection(Section section, EndianAwareBinaryWriter writer)
+		private void WriteRelocationSection(Section section, BinaryWriter writer)
 		{
 			if (section.SectionKind == SectionKind.BSS)
 				return;
@@ -568,7 +567,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			}
 		}
 
-		private void EmitRelocation(Section section, EndianAwareBinaryWriter writer)
+		private void EmitRelocation(Section section, BinaryWriter writer)
 		{
 			int count = 0;
 
@@ -608,7 +607,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			}
 		}
 
-		private void EmitRelocationAddend(Section section, EndianAwareBinaryWriter writer)
+		private void EmitRelocationAddend(Section section, BinaryWriter writer)
 		{
 			int count = 0;
 

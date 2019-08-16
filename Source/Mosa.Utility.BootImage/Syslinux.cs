@@ -70,7 +70,7 @@ namespace Mosa.Utility.BootImage
 			// Get the ldlinux.sys file stream
 			var ldlinux = new FatFileStream(fat, location);
 
-			var ldlinuxReader = new EndianAwareBinaryReader(ldlinux, Endianness.Little);
+			var ldlinuxReader = new BinaryReader(ldlinux);
 
 			// Search for 0x3EB202FE (magic)
 			while ((ldlinuxReader.ReadUInt32() != Syslinux.LDLINUX_MAGIC) && (ldlinux.Position < ldlinux.Length)) ;
@@ -102,7 +102,7 @@ namespace Mosa.Utility.BootImage
 			if (sectors.Count > nptrs)
 				throw new InvalidProgramException("Insufficient space for patching syslinux");
 
-			var ldlinuxWriter = new EndianAwareBinaryWriter(ldlinux, Endianness.Little);
+			var ldlinuxWriter = new BinaryWriter(ldlinux);
 
 			// Set up the totals
 			ldlinux.Position = patchArea + Syslinux.PatchAreaOffset.DataSectors;

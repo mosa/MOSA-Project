@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.BareMetal;
-using System;
 
 namespace Mosa.Workspace.Kernel
 {

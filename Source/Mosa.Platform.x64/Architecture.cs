@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
@@ -21,11 +20,6 @@ namespace Mosa.Platform.x64
 	/// </summary>
 	public sealed class Architecture : BaseArchitecture
 	{
-		/// <summary>
-		/// Gets the endianness of the target architecture.
-		/// </summary>
-		public override Endianness Endianness { get { return Endianness.Little; } }
-
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
