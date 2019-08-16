@@ -295,8 +295,6 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsValueType { get { return UnderlyingType.IsValueType; } }
 
-		public bool IsResolvedByLinker { get { return IsLabel || IsStaticField || IsSymbol; } }
-
 		public bool IsHigh { get { return LongParent.High == this; } }
 
 		public bool IsLow { get { return LongParent.Low == this; } }

@@ -278,7 +278,7 @@ namespace System
 
 		public List<string> Split(char delimiter, string text)
 		{
-			List<string> ret = new List<string>();
+			var ret = new List<string>();
 			int startPos = 0;
 			string temp = Empty;
 

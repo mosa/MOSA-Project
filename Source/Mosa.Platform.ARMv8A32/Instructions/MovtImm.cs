@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class MovtImm : ARMv8A32Instruction
 	{
-		public override int ID { get { return 679; } }
+		public override int ID { get { return 703; } }
 
 		internal MovtImm()
 			: base(1, 2)
@@ -24,7 +24,13 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			emitter.OpcodeEncoder.Append32Bits(0x00000000);
+			if (node.Operand1.IsCPURegister && node.Operand2.IsConstant)
+			{
+				emitter.OpcodeEncoder.Append32Bits(0x00000000);
+				return;
+			}
+
+			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 		}
 	}
 }

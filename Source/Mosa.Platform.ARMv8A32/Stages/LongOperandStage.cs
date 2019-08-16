@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using System.Diagnostics;
 
 namespace Mosa.Platform.ARMv8A32.Stages
 {
@@ -80,8 +79,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
 
-			context.SetInstruction(ARMv8A32.Add, StatusRegister.Update, resultLow, op1L, op2L);
-			context.AppendInstruction(ARMv8A32.Adc, resultHigh, op1H, op2H);
+			TransformInstruction(context, ARMv8A32.Add, ARMv8A32.AddImm, resultLow, StatusRegister.Update, op1L, op2L);
+			TransformInstruction(context.InsertAfter(), ARMv8A32.Adc, ARMv8A32.AdcImm, resultLow, StatusRegister.NotSet, op1H, op2H);
 		}
 
 		#endregion Visitation Methods
