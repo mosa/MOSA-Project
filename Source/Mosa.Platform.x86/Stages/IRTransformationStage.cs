@@ -280,12 +280,6 @@ namespace Mosa.Platform.x86.Stages
 			node.ReplaceInstruction(X86.Cvtsi2sd32);
 		}
 
-		private void CopyCompound(Context context, MosaType type, Operand destinationBase, Operand destination, Operand sourceBase, Operand source)
-		{
-			context.Empty();
-			Architecture.InsertCompoundCopy(MethodCompiler, context, destinationBase, destination, sourceBase, source, TypeLayout.GetTypeSize(type));
-		}
-
 		private void DivFloatR4(InstructionNode node)
 		{
 			Debug.Assert(node.Result.IsR4);
@@ -851,6 +845,49 @@ namespace Mosa.Platform.x86.Stages
 			context.Operand1 = operand2;
 			context.Operand2 = operand1;
 			context.ConditionCode = context.ConditionCode.GetReverse();
+		}
+
+		private void CopyCompound(Context context, MosaType type, Operand destinationBase, Operand destination, Operand sourceBase, Operand source)
+		{
+			int size = TypeLayout.GetTypeSize(type);
+			const int LargeAlignment = 16;
+			int alignedSize = size - (size % NativeAlignment);
+			int largeAlignedTypeSize = size - (size % LargeAlignment);
+
+			Debug.Assert(size > 0);
+
+			var srcReg = AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
+			var dstReg = AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
+
+			context.SetInstruction(IRInstruction.UnstableObjectTracking);
+
+			context.AppendInstruction(X86.Lea32, srcReg, sourceBase, source);
+			context.AppendInstruction(X86.Lea32, dstReg, destinationBase, destination);
+
+			var tmp = AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
+			var tmpLarge = AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.R8);
+
+			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
+			{
+				// Large aligned moves allow 128bits to be copied at a time
+				var index = CreateConstant((int)i);
+				context.AppendInstruction(X86.MovupsLoad, tmpLarge, srcReg, index);
+				context.AppendInstruction(X86.MovupsStore, null, dstReg, index, tmpLarge);
+			}
+			for (int i = largeAlignedTypeSize; i < alignedSize; i += 4)
+			{
+				var index = CreateConstant(i);
+				context.AppendInstruction(X86.MovLoad32, tmp, srcReg, index);
+				context.AppendInstruction(X86.MovStore32, null, dstReg, index, tmp);
+			}
+			for (int i = alignedSize; i < size; i++)
+			{
+				var index = CreateConstant(i);
+				context.AppendInstruction(X86.MovLoad8, tmp, srcReg, index);
+				context.AppendInstruction(X86.MovStore8, null, dstReg, index, tmp);
+			}
+
+			context.AppendInstruction(IRInstruction.StableObjectTracking);
 		}
 
 		#endregion Helper Methods

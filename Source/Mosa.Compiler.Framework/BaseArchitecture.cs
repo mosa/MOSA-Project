@@ -176,18 +176,6 @@ namespace Mosa.Compiler.Framework
 		public abstract void InsertLoadInstruction(Context context, Operand destination, Operand source, Operand offset);
 
 		/// <summary>
-		/// Create platform compound move.
-		/// </summary>
-		/// <param name="methodCompiler">The compiler.</param>
-		/// <param name="context">The context.</param>
-		/// <param name="destinationBase">The destination.</param>
-		/// <param name="destination">The destination offset.</param>
-		/// <param name="sourceBase">The source.</param>
-		/// <param name="source">The source offset.</param>
-		/// <param name="size">The size.</param>
-		public abstract void InsertCompoundCopy(MethodCompiler methodCompiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size);
-
-		/// <summary>
 		/// Create platform exchange registers.
 		/// </summary>
 		/// <param name="context">The context.</param>

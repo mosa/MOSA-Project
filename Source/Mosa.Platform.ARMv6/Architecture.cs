@@ -205,22 +205,6 @@ namespace Mosa.Platform.ARMv6
 		}
 
 		/// <summary>
-		/// Create platform compound move.
-		/// </summary>
-		/// <param name="methodCompiler">The compiler.</param>
-		/// <param name="context">The context.</param>
-		/// <param name="destinationBase">The destination.</param>
-		/// <param name="destination">The destination offset.</param>
-		/// <param name="sourceBase">The source.</param>
-		/// <param name="source">The source offset.</param>
-		/// <param name="size">The size.</param>
-		/// <exception cref="NotImplementCompilerException"></exception>
-		public override void InsertCompoundCopy(MethodCompiler methodCompiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
-		{
-			throw new NotImplementCompilerException();
-		}
-
-		/// <summary>
 		/// Creates the swap.
 		/// </summary>
 		/// <param name="context">The context.</param>
