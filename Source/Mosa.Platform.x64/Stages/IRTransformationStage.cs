@@ -33,9 +33,6 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(IRInstruction.CompareInt32x32, CompareInt32x32);
 			AddVisitation(IRInstruction.CompareIntBranch32, CompareIntBranch32);
 			AddVisitation(IRInstruction.IfThenElse32, IfThenElse32);
-			AddVisitation(IRInstruction.LoadCompound, LoadCompound);
-			AddVisitation(IRInstruction.MoveCompound, MoveCompound);
-			AddVisitation(IRInstruction.StoreCompound, StoreCompound);
 			AddVisitation(IRInstruction.ConvertFloatR4ToFloatR8, ConvertFloatR4ToFloatR8);
 			AddVisitation(IRInstruction.ConvertFloatR8ToFloatR4, ConvertFloatR8ToFloatR4);
 			AddVisitation(IRInstruction.ConvertFloatR4ToInt32, ConvertFloatR4ToInt32);
@@ -61,7 +58,6 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(IRInstruction.LoadParamSignExtend16x32, LoadParamSignExtend16x32);
 			AddVisitation(IRInstruction.LoadParamZeroExtend8x32, LoadParamZeroExtend8x32);
 			AddVisitation(IRInstruction.LoadParamZeroExtend16x32, LoadParamZeroExtend16x32);
-			AddVisitation(IRInstruction.LoadParamCompound, LoadParamCompound);
 			AddVisitation(IRInstruction.LogicalAnd32, LogicalAnd32);
 			AddVisitation(IRInstruction.LogicalNot32, LogicalNot32);
 			AddVisitation(IRInstruction.LogicalOr32, LogicalOr32);
@@ -92,7 +88,6 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(IRInstruction.StoreParamInt8, StoreParamInt8);
 			AddVisitation(IRInstruction.StoreParamInt16, StoreParamInt16);
 			AddVisitation(IRInstruction.StoreParamInt32, StoreParamInt32);
-			AddVisitation(IRInstruction.StoreParamCompound, StoreParamCompound);
 			AddVisitation(IRInstruction.SubFloatR4, SubFloatR4);
 			AddVisitation(IRInstruction.SubFloatR8, SubFloatR8);
 			AddVisitation(IRInstruction.Sub32, Sub32);
@@ -460,11 +455,6 @@ namespace Mosa.Platform.x64.Stages
 			}
 		}
 
-		private void LoadCompound(Context context)
-		{
-			CopyCompound(context, context.Result.Type, StackFrame, context.Result, context.Operand1, context.Operand2);
-		}
-
 		private void LoadFloatR4(InstructionNode node)
 		{
 			Debug.Assert(node.Result.IsR4);
@@ -487,11 +477,6 @@ namespace Mosa.Platform.x64.Stages
 			LoadStore.OrderLoadOperands(node, MethodCompiler);
 
 			node.SetInstruction(X64.MovLoad32, node.Result, node.Operand1, node.Operand2);
-		}
-
-		private void LoadParamCompound(Context context)
-		{
-			CopyCompound(context, context.Result.Type, StackFrame, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void LoadParamFloatR4(InstructionNode node)
@@ -579,11 +564,6 @@ namespace Mosa.Platform.x64.Stages
 		private void LogicalXor32(InstructionNode node)
 		{
 			node.ReplaceInstruction(X64.Xor32);
-		}
-
-		private void MoveCompound(Context context)
-		{
-			CopyCompound(context, context.Result.Type, StackFrame, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void MoveFloatR4(InstructionNode node)
@@ -681,11 +661,6 @@ namespace Mosa.Platform.x64.Stages
 			node.ReplaceInstruction(X64.Movsx8To32);
 		}
 
-		private void StoreCompound(Context context)
-		{
-			CopyCompound(context, context.Operand3.Type, context.Operand1, context.Operand2, StackFrame, context.Operand3);
-		}
-
 		private void StoreFloatR4(InstructionNode node)
 		{
 			node.SetInstruction(X64.MovssStore, null, node.Operand1, node.Operand2, node.Operand3);
@@ -715,11 +690,6 @@ namespace Mosa.Platform.x64.Stages
 			LoadStore.OrderStoreOperands(node, MethodCompiler);
 
 			node.SetInstruction(X64.MovStore8, null, node.Operand1, node.Operand2, node.Operand3);
-		}
-
-		private void StoreParamCompound(Context context)
-		{
-			CopyCompound(context, context.Operand2.Type, StackFrame, context.Operand1, StackFrame, context.Operand2);
 		}
 
 		private void StoreParamFloatR4(InstructionNode node)
@@ -838,48 +808,48 @@ namespace Mosa.Platform.x64.Stages
 			context.ConditionCode = context.ConditionCode.GetReverse();
 		}
 
-		private void CopyCompound(Context context, MosaType type, Operand destinationBase, Operand destination, Operand sourceBase, Operand source)
-		{
-			int size = TypeLayout.GetTypeSize(type);
-			const int LargeAlignment = 16;
-			int alignedSize = size - (size % NativeAlignment);
-			int largeAlignedTypeSize = size - (size % LargeAlignment);
+		//private void CopyCompound(Context context, MosaType type, Operand destinationBase, Operand destination, Operand sourceBase, Operand source)
+		//{
+		//	int size = TypeLayout.GetTypeSize(type);
+		//	const int LargeAlignment = 16;
+		//	int alignedSize = size - (size % NativeAlignment);
+		//	int largeAlignedTypeSize = size - (size % LargeAlignment);
 
-			Debug.Assert(size > 0);
+		//	Debug.Assert(size > 0);
 
-			var srcReg = AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
-			var dstReg = AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
+		//	var srcReg = AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
+		//	var dstReg = AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
 
-			context.SetInstruction(IRInstruction.UnstableObjectTracking);
+		//	context.SetInstruction(IRInstruction.UnstableObjectTracking);
 
-			context.AppendInstruction(X64.Lea64, srcReg, sourceBase, source);
-			context.AppendInstruction(X64.Lea64, dstReg, destinationBase, destination);
+		//	context.AppendInstruction(X64.Lea64, srcReg, sourceBase, source);
+		//	context.AppendInstruction(X64.Lea64, dstReg, destinationBase, destination);
 
-			var tmp = AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
-			var tmpLarge = AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.R8);
+		//	var tmp = AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
+		//	var tmpLarge = AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.R8);
 
-			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
-			{
-				// Large aligned moves allow 128bits to be copied at a time
-				var index = CreateConstant(i);
-				context.AppendInstruction(X64.MovupsLoad, tmpLarge, srcReg, index);
-				context.AppendInstruction(X64.MovupsStore, null, dstReg, index, tmpLarge);
-			}
-			for (int i = largeAlignedTypeSize; i < alignedSize; i += 8)
-			{
-				var index = CreateConstant(i);
-				context.AppendInstruction(X64.MovLoad64, tmp, srcReg, index);
-				context.AppendInstruction(X64.MovStore64, null, dstReg, index, tmp);
-			}
-			for (int i = alignedSize; i < size; i++)
-			{
-				var index = CreateConstant(i);
-				context.AppendInstruction(X64.MovLoad8, tmp, srcReg, index);
-				context.AppendInstruction(X64.MovStore8, null, dstReg, index, tmp);
-			}
+		//	for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
+		//	{
+		//		// Large aligned moves allow 128bits to be copied at a time
+		//		var index = CreateConstant(i);
+		//		context.AppendInstruction(X64.MovupsLoad, tmpLarge, srcReg, index);
+		//		context.AppendInstruction(X64.MovupsStore, null, dstReg, index, tmpLarge);
+		//	}
+		//	for (int i = largeAlignedTypeSize; i < alignedSize; i += 8)
+		//	{
+		//		var index = CreateConstant(i);
+		//		context.AppendInstruction(X64.MovLoad64, tmp, srcReg, index);
+		//		context.AppendInstruction(X64.MovStore64, null, dstReg, index, tmp);
+		//	}
+		//	for (int i = alignedSize; i < size; i++)
+		//	{
+		//		var index = CreateConstant(i);
+		//		context.AppendInstruction(X64.MovLoad8, tmp, srcReg, index);
+		//		context.AppendInstruction(X64.MovStore8, null, dstReg, index, tmp);
+		//	}
 
-			context.AppendInstruction(IRInstruction.StableObjectTracking);
-		}
+		//	context.AppendInstruction(IRInstruction.StableObjectTracking);
+		//}
 
 		#endregion Helper Methods
 	}
