@@ -81,8 +81,9 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 			//AddVisitation(IRInstruction.MulFloatR4, MulFloatR4);
 			//AddVisitation(IRInstruction.MulFloatR8, MulFloatR8);
-			//AddVisitation(IRInstruction.MulSigned32, MulSigned32);
-			//AddVisitation(IRInstruction.MulUnsigned32, MulUnsigned32);
+			AddVisitation(IRInstruction.MulSigned32, MulSigned32);
+			AddVisitation(IRInstruction.MulUnsigned32, MulUnsigned32);
+
 			//AddVisitation(IRInstruction.Nop, Nop);
 			//AddVisitation(IRInstruction.RemSigned32, RemSigned32);
 			//AddVisitation(IRInstruction.RemUnsigned32, RemUnsigned32);
@@ -264,6 +265,16 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		private void MoveInt32(Context context)
 		{
 			TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, context.Result, StatusRegister.NotSet, context.Operand1);
+		}
+
+		private void MulSigned32(Context context)
+		{
+			context.SetInstruction(ARMv8A32.Mul, context.Result, context.Operand1, context.Operand2);
+		}
+
+		private void MulUnsigned32(Context context)
+		{
+			context.SetInstruction(ARMv8A32.Mul, context.Result, context.Operand1, context.Operand2);
 		}
 
 		private void ShiftLeft32(Context context)

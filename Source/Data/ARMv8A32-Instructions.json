@@ -2367,7 +2367,7 @@
 			"FlagsUndefined": "C",
 			"FlagsUsed": "",
 			"OperandCount": 2,
-			"ResultCount": 1,
+			"ResultCount": 2,
 			"Description": "",
 			"OpcodeEncodingAppend": "s=status:status,rdhi=reg4:r,rdlo=reg4:r2,rs=reg4:o1,rm=reg4:o2,a=0",
 			"OpcodeEncoding": [
@@ -2388,7 +2388,7 @@
 			"FlagsUndefined": "C",
 			"FlagsUsed": "",
 			"OperandCount": 3,
-			"ResultCount": 1,
+			"ResultCount": 2,
 			"Description": "",
 			"OpcodeEncodingAppend": "s=status:status,rdhi=reg4:r,rdlo=reg4:r2,rs=reg4:o1,rm=reg4:o2,a=1",
 			"OpcodeEncoding": [

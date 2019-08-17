@@ -19,6 +19,16 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 		{
 		}
 
+		public override bool IsZeroFlagModified { get { return true; } }
+
+		public override bool IsCarryFlagModified { get { return true; } }
+
+		public override bool IsCarryFlagUnchanged { get { return true; } }
+
+		public override bool IsCarryFlagUndefined { get { return true; } }
+
+		public override bool IsSignFlagModified { get { return true; } }
+
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);

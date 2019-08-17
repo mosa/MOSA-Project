@@ -15,13 +15,23 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 		public override int ID { get { return 684; } }
 
 		internal Mlal()
-			: base(1, 3)
+			: base(2, 3)
 		{
 		}
 
+		public override bool IsZeroFlagModified { get { return true; } }
+
+		public override bool IsCarryFlagModified { get { return true; } }
+
+		public override bool IsCarryFlagUnchanged { get { return true; } }
+
+		public override bool IsCarryFlagUndefined { get { return true; } }
+
+		public override bool IsSignFlagModified { get { return true; } }
+
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+			System.Diagnostics.Debug.Assert(node.ResultCount == 2);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 3);
 
 			if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister && node.Operand3.IsCPURegister)
