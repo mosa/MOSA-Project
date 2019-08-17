@@ -46,11 +46,13 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.DivUnsigned32, DivUnsigned32);
 			AddVisitation(IRInstruction.IfThenElse32, IfThenElse32);
 			AddVisitation(IRInstruction.Jmp, Jmp);
-			AddVisitation(IRInstruction.LoadCompound, LoadCompound);
+
+			//AddVisitation(IRInstruction.LoadCompound, LoadCompound);
 			AddVisitation(IRInstruction.LoadFloatR4, LoadFloatR4);
 			AddVisitation(IRInstruction.LoadFloatR8, LoadFloatR8);
 			AddVisitation(IRInstruction.LoadInt32, LoadInt32);
-			AddVisitation(IRInstruction.LoadParamCompound, LoadParamCompound);
+
+			//AddVisitation(IRInstruction.LoadParamCompound, LoadParamCompound);
 			AddVisitation(IRInstruction.LoadParamFloatR4, LoadParamFloatR4);
 			AddVisitation(IRInstruction.LoadParamFloatR8, LoadParamFloatR8);
 			AddVisitation(IRInstruction.LoadParamInt32, LoadParamInt32);
@@ -66,7 +68,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.LogicalNot32, LogicalNot32);
 			AddVisitation(IRInstruction.LogicalOr32, LogicalOr32);
 			AddVisitation(IRInstruction.LogicalXor32, LogicalXor32);
-			AddVisitation(IRInstruction.MoveCompound, MoveCompound);
+
+			//AddVisitation(IRInstruction.MoveCompound, MoveCompound);
 			AddVisitation(IRInstruction.MoveFloatR4, MoveFloatR4);
 			AddVisitation(IRInstruction.MoveFloatR8, MoveFloatR8);
 			AddVisitation(IRInstruction.MoveInt32, MoveInt32);
@@ -81,13 +84,15 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.ShiftRight32, ShiftRight32);
 			AddVisitation(IRInstruction.SignExtend16x32, SignExtend16x32);
 			AddVisitation(IRInstruction.SignExtend8x32, SignExtend8x32);
-			AddVisitation(IRInstruction.StoreCompound, StoreCompound);
+
+			//AddVisitation(IRInstruction.StoreCompound, StoreCompound);
 			AddVisitation(IRInstruction.StoreFloatR4, StoreFloatR4);
 			AddVisitation(IRInstruction.StoreFloatR8, StoreFloatR8);
 			AddVisitation(IRInstruction.StoreInt16, StoreInt16);
 			AddVisitation(IRInstruction.StoreInt32, StoreInt32);
 			AddVisitation(IRInstruction.StoreInt8, StoreInt8);
-			AddVisitation(IRInstruction.StoreParamCompound, StoreParamCompound);
+
+			//AddVisitation(IRInstruction.StoreParamCompound, StoreParamCompound);
 			AddVisitation(IRInstruction.StoreParamFloatR4, StoreParamFloatR4);
 			AddVisitation(IRInstruction.StoreParamFloatR8, StoreParamFloatR8);
 			AddVisitation(IRInstruction.StoreParamInt16, StoreParamInt16);
@@ -870,7 +875,7 @@ namespace Mosa.Platform.x86.Stages
 			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
 			{
 				// Large aligned moves allow 128bits to be copied at a time
-				var index = CreateConstant((int)i);
+				var index = CreateConstant(i);
 				context.AppendInstruction(X86.MovupsLoad, tmpLarge, srcReg, index);
 				context.AppendInstruction(X86.MovupsStore, null, dstReg, index, tmpLarge);
 			}

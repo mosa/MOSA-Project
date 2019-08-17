@@ -190,6 +190,7 @@ namespace Mosa.Compiler.Framework
 				//new StopStage(),
 
 				new CallStage(),
+				new CompoundStage(),
 				new PlatformIntrinsicStage(),
 				new PlatformEdgeSplitStage(),
 				new VirtualRegisterRenameStage(),
