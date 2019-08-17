@@ -1,10 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Kernel.BareMetal.Extension;
-using Mosa.Runtime;
-using Mosa.Runtime.x86;
-using System;
-
 namespace Mosa.Kernel.BareMetal.x86
 {
 	/// <summary>

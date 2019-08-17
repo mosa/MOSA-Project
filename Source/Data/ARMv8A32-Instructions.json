@@ -2315,6 +2315,110 @@
 			]
 		},
 		{
+			"Name": "Mul",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA",
+			"FlagsCleared": "",
+			"FlagsModified": "NZC",
+			"FlagsSet": "",
+			"FlagsUnchanged": "V",
+			"FlagsUndefined": "C",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rs=reg4:o1,rm=reg4:o2,rn=0000,a=0",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "conditional|000000|[a]|[s]|[rd]|[rn]|[rs]|1001|[rm]"
+				}
+			]
+		},
+		{
+			"Name": "Mla",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA",
+			"FlagsCleared": "",
+			"FlagsModified": "NZC",
+			"FlagsSet": "",
+			"FlagsUnchanged": "V",
+			"FlagsUndefined": "C",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rs=reg4:o1,rm=reg4:o2,rn=reg4:o3,a=1",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "conditional|000000|[a]|[s]|[rd]|[rn]|[rs]|1001|[rm]"
+				}
+			]
+		},
+		{
+			"Name": "Mull",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA",
+			"FlagsCleared": "",
+			"FlagsModified": "NZC",
+			"FlagsSet": "",
+			"FlagsUnchanged": "V",
+			"FlagsUndefined": "C",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 2,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=status:status,rdhi=reg4:r,rdlo=reg4:r2,rs=reg4:o1,rm=reg4:o2,a=0",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "conditional|00001|[u]|[a]|[s]|[rdhi]|[rdlo]|[rs]|1001|[rm]"
+				}
+			]
+		},
+		{
+			"Name": "Mlal",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA",
+			"FlagsCleared": "",
+			"FlagsModified": "NZC",
+			"FlagsSet": "",
+			"FlagsUnchanged": "V",
+			"FlagsUndefined": "C",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 2,
+			"Description": "",
+			"OpcodeEncodingAppend": "s=status:status,rdhi=reg4:r,rdlo=reg4:r2,rs=reg4:o1,rm=reg4:o2,a=1",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "conditional|00001|[u]|[a]|[s]|[rdhi]|[rdlo]|[rs]|1001|[rm]"
+				}
+			]
+		},
+		{
+			"Name": "Nop",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "CNZV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 0,
+			"ResultCount": 0,
+			"Description": "No Operation",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0xBF00"
+				}
+			]
+		},
+		{
 			"Name": "Mrs",
 			"Commutative": "false",
 			"FamilyName": "ARMv8xA",
@@ -2351,46 +2455,6 @@
 				{
 					"Condition": "",
 					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Mul",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Nop",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 0,
-			"ResultCount": 0,
-			"Description": "No Operation",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0xBF00"
 				}
 			]
 		},

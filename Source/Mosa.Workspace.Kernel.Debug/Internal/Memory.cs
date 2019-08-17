@@ -193,10 +193,7 @@ namespace Mosa.Workspace.Kernel.Internal
 		{
 			ushort value = InternalRead16(address);
 
-			if (Endian.NativeIsLittleEndian)
-			{
-				value = Endian.Swap(value);
-			}
+			value = Endian.Swap(value);
 
 			return value;
 		}
@@ -205,10 +202,7 @@ namespace Mosa.Workspace.Kernel.Internal
 		{
 			uint value = InternalRead32(address);
 
-			if (Endian.NativeIsLittleEndian)
-			{
-				value = Endian.Swap(value);
-			}
+			value = Endian.Swap(value);
 
 			return value;
 		}
@@ -221,10 +215,7 @@ namespace Mosa.Workspace.Kernel.Internal
 
 			var value = val;
 
-			if (Endian.NativeIsLittleEndian)
-			{
-				value = Endian.Swap(value);
-			}
+			value = Endian.Swap(value);
 
 			return value;
 		}
@@ -240,39 +231,24 @@ namespace Mosa.Workspace.Kernel.Internal
 
 		public void Write16(ulong address, ushort value)
 		{
-			ushort val = value;
+			value = Endian.Swap(value);
 
-			if (Endian.NativeIsLittleEndian)
-			{
-				val = Endian.Swap(val);
-			}
-
-			InternalWrite16(address, val);
+			InternalWrite16(address, value);
 		}
 
 		public void Write32(ulong address, uint value)
 		{
-			uint val = value;
+			value = Endian.Swap(value);
 
-			if (Endian.NativeIsLittleEndian)
-			{
-				val = Endian.Swap(val);
-			}
-
-			InternalWrite32(address, val);
+			InternalWrite32(address, value);
 		}
 
 		public void Write64(ulong address, ulong value)
 		{
-			ulong val = value;
+			value = Endian.Swap(value);
 
-			if (Endian.NativeIsLittleEndian)
-			{
-				val = Endian.Swap(val);
-			}
-
-			uint low = (uint)(val >> 32);
-			uint high = (uint)val;
+			uint low = (uint)(value >> 32);
+			uint high = (uint)value;
 
 			InternalWrite32(address, low);
 			InternalWrite32(address + 0x4, high);

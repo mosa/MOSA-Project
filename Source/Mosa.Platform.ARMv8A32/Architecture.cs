@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker.Elf;
@@ -16,11 +15,6 @@ namespace Mosa.Platform.ARMv8A32
 	/// </summary>
 	public sealed class Architecture : BaseArchitecture
 	{
-		/// <summary>
-		/// Gets the endianness of the target architecture.
-		/// </summary>
-		public override Endianness Endianness { get { return Endianness.Little; } }
-
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
@@ -227,22 +221,6 @@ namespace Mosa.Platform.ARMv8A32
 		/// <param name="offset">The offset.</param>
 		/// <exception cref="NotImplementCompilerException"></exception>
 		public override void InsertLoadInstruction(Context context, Operand destination, Operand source, Operand offset)
-		{
-			throw new NotImplementCompilerException();
-		}
-
-		/// <summary>
-		/// Create platform compound move.
-		/// </summary>
-		/// <param name="methodCompiler">The compiler.</param>
-		/// <param name="context">The context.</param>
-		/// <param name="destinationBase">The destination.</param>
-		/// <param name="destination">The destination offset.</param>
-		/// <param name="sourceBase">The source.</param>
-		/// <param name="source">The source offset.</param>
-		/// <param name="size">The size.</param>
-		/// <exception cref="NotImplementCompilerException"></exception>
-		public override void InsertCompoundCopy(MethodCompiler methodCompiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
 		{
 			throw new NotImplementCompilerException();
 		}

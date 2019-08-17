@@ -26,7 +26,7 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			if (node.Operand2.IsCPURegister)
+			if (node.Operand1.IsCPURegister)
 			{
 				emitter.OpcodeEncoder.Append8Bits(0x0F);
 				emitter.OpcodeEncoder.Append8Bits(0x01);
@@ -36,7 +36,7 @@ namespace Mosa.Platform.x86.Instructions
 				return;
 			}
 
-			if (node.Operand2.IsConstant)
+			if (node.Operand1.IsConstant)
 			{
 				emitter.OpcodeEncoder.Append8Bits(0x0F);
 				emitter.OpcodeEncoder.Append8Bits(0x01);

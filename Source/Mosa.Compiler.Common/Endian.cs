@@ -7,8 +7,6 @@ namespace Mosa.Compiler.Common
 {
 	public static class Endian
 	{
-		public static readonly bool NativeIsLittleEndian = BitConverter.IsLittleEndian;
-
 		public static ushort Swap(ushort value)
 		{
 			return (ushort)(((value & 0xFF00) >> 8) | ((value & 0x00FF) << 8));
@@ -23,26 +21,6 @@ namespace Mosa.Compiler.Common
 		{
 			return ((value & 0xFF00000000000000) >> 56) | ((value & 0x00FF000000000000) >> 40) | ((value & 0x0000FF0000000000) >> 24) | ((value & 0x000000FF00000000) >> 8)
 				 | ((value & 0x00000000FF000000) << 8) | ((value & 0x0000000000FF0000) << 24) | ((value & 0x000000000000FF00) << 40) | ((value & 0x00000000000000FF) << 56);
-		}
-
-		[StructLayout(LayoutKind.Explicit)]
-		private struct Union4
-		{
-			[FieldOffset(0)]
-			public float Single;
-
-			[FieldOffset(0)]
-			public int Int32;
-
-			[FieldOffset(0)]
-			public uint UInt32;
-		}
-
-		public static uint ConvertToUInt32(float value)
-		{
-			Union4 v = new Union4();
-			v.Single = value;
-			return v.UInt32;
 		}
 	}
 }

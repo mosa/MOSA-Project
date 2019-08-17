@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using System.Collections.Generic;
 using System.IO;
 
@@ -11,7 +10,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 	/// </summary>
 	public class Section
 	{
-		public delegate void EmitSectionMethod(Section section, EndianAwareBinaryWriter writer);
+		public delegate void EmitSectionMethod(Section section, BinaryWriter writer);
 
 		public int Index { get; set; }
 

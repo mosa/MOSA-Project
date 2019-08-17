@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.IR;
@@ -20,11 +19,6 @@ namespace Mosa.Platform.x86
 	/// </summary>
 	public sealed class Architecture : BaseArchitecture
 	{
-		/// <summary>
-		/// Gets the endianness of the target architecture.
-		/// </summary>
-		public override Endianness Endianness { get { return Endianness.Little; } }
-
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
@@ -286,58 +280,6 @@ namespace Mosa.Platform.x86
 			}
 
 			context.AppendInstruction(instruction, destination, source, offset);
-		}
-
-		/// <summary>
-		/// Create platform compound move.
-		/// </summary>
-		/// <param name="methodCompiler">The compiler.</param>
-		/// <param name="context">The context.</param>
-		/// <param name="destinationBase">The destination base.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="sourceBase">The source base.</param>
-		/// <param name="source">The source.</param>
-		/// <param name="size">The size.</param>
-		public override void InsertCompoundCopy(MethodCompiler methodCompiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size)
-		{
-			const int LargeAlignment = 16;
-			int alignedSize = size - (size % NativeAlignment);
-			int largeAlignedTypeSize = size - (size % LargeAlignment);
-
-			Debug.Assert(size > 0);
-
-			var srcReg = methodCompiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
-			var dstReg = methodCompiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
-
-			context.AppendInstruction(IRInstruction.UnstableObjectTracking);
-
-			context.AppendInstruction(X86.Lea32, srcReg, sourceBase, source);
-			context.AppendInstruction(X86.Lea32, dstReg, destinationBase, destination);
-
-			var tmp = methodCompiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
-			var tmpLarge = methodCompiler.CreateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.R8);
-
-			for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
-			{
-				// Large aligned moves allow 128bits to be copied at a time
-				var index = methodCompiler.CreateConstant((int)i);
-				context.AppendInstruction(X86.MovupsLoad, tmpLarge, srcReg, index);
-				context.AppendInstruction(X86.MovupsStore, null, dstReg, index, tmpLarge);
-			}
-			for (int i = largeAlignedTypeSize; i < alignedSize; i += 4)
-			{
-				var index = methodCompiler.CreateConstant(i);
-				context.AppendInstruction(X86.MovLoad32, tmp, srcReg, index);
-				context.AppendInstruction(X86.MovStore32, null, dstReg, index, tmp);
-			}
-			for (int i = alignedSize; i < size; i++)
-			{
-				var index = methodCompiler.CreateConstant(i);
-				context.AppendInstruction(X86.MovLoad8, tmp, srcReg, index);
-				context.AppendInstruction(X86.MovStore8, null, dstReg, index, tmp);
-			}
-
-			context.AppendInstruction(IRInstruction.StableObjectTracking);
 		}
 
 		/// <summary>

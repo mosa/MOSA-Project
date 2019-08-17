@@ -25,8 +25,6 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public LinkerSymbol EntryPoint { get; set; }
 
-		public Endianness Endianness { get; }
-
 		public MachineType MachineType { get; }
 
 		public ulong BaseAddress { get; }
@@ -53,10 +51,9 @@ namespace Mosa.Compiler.Framework.Linker
 		public CreateExtraSectionsDelegate CreateExtraSections { get; set; }
 		public CreateExtraProgramHeaderDelegate CreateExtraProgramHeaders { get; set; }
 
-		public MosaLinker(ulong baseAddress, Endianness endianness, MachineType machineType, bool emitAllSymbols, bool emitStaticRelocations, LinkerFormatType linkerFormatType, CreateExtraSectionsDelegate createExtraSections, CreateExtraProgramHeaderDelegate createExtraProgramHeaders)
+		public MosaLinker(ulong baseAddress, MachineType machineType, bool emitAllSymbols, bool emitStaticRelocations, LinkerFormatType linkerFormatType, CreateExtraSectionsDelegate createExtraSections, CreateExtraProgramHeaderDelegate createExtraProgramHeaders)
 		{
 			BaseAddress = baseAddress;
-			Endianness = endianness;
 			MachineType = machineType;
 			EmitAllSymbols = emitAllSymbols;
 			EmitStaticRelocations = emitStaticRelocations;
@@ -233,8 +230,7 @@ namespace Mosa.Compiler.Framework.Linker
 			linkRequest.PatchSymbol.ApplyPatch(
 				linkRequest.PatchOffset,
 				value,
-				GetPatchTypeSize(linkRequest.PatchType),
-				Endianness
+				GetPatchTypeSize(linkRequest.PatchType)
 			);
 		}
 

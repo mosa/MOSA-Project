@@ -364,15 +364,6 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Lines.AppendLine("\t\tpublic override bool AreFlagUseConditional { get { return true; } }");
 			}
 
-			if (node.LogicalOpposite != null)
-			{
-				Lines.AppendLine();
-				Lines.AppendLine("\t\tpublic override BaseInstruction GetOpposite()");
-				Lines.AppendLine("\t\t{");
-				Lines.AppendLine("\t\t\treturn " + node.FamilyName + "." + node.LogicalOpposite + ";");
-				Lines.AppendLine("\t\t}");
-			}
-
 			if (node.StaticEmitMethod != null)
 			{
 				Lines.AppendLine();
@@ -512,10 +503,17 @@ namespace Mosa.Utility.SourceCodeGenerator
 				}
 				else
 				{
-					// substitution
-					var split = part.Split('=');
+					if (!part.Contains("="))
+					{
+						encoding += part;
+					}
+					else
+					{
+						// substitution
+						var split = part.Split('=');
 
-					encoding = encoding.Replace('[' + split[0] + ']', split[1]);
+						encoding = encoding.Replace('[' + split[0] + ']', split[1]);
+					}
 				}
 			}
 

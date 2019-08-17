@@ -34,9 +34,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.CompareInt32x32, CompareInt32x32);
 			//AddVisitation(IRInstruction.CompareIntBranch32, CompareIntBranch32);
 			//AddVisitation(IRInstruction.IfThenElse32, IfThenElse32);
-			//AddVisitation(IRInstruction.LoadCompound, LoadCompound);
-			//AddVisitation(IRInstruction.MoveCompound, MoveCompound);
-			//AddVisitation(IRInstruction.StoreCompound, StoreCompound);
 			//AddVisitation(IRInstruction.ConvertFloatR4ToFloatR8, ConvertFloatR4ToFloatR8);
 			//AddVisitation(IRInstruction.ConvertFloatR8ToFloatR4, ConvertFloatR8ToFloatR4);
 			//AddVisitation(IRInstruction.ConvertFloatR4ToInt32, ConvertFloatR4ToInt32);
@@ -65,7 +62,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.LoadParamZeroExtend8x32, LoadParamZeroExtend8x32);
 			AddVisitation(IRInstruction.LoadParamZeroExtend16x32, LoadParamZeroExtend16x32);
 
-			//AddVisitation(IRInstruction.LoadParamCompound, LoadParamCompound);
 			AddVisitation(IRInstruction.LogicalAnd32, LogicalAnd32);
 			AddVisitation(IRInstruction.LogicalNot32, LogicalNot32);
 			AddVisitation(IRInstruction.LogicalOr32, LogicalOr32);
@@ -81,8 +77,9 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 			//AddVisitation(IRInstruction.MulFloatR4, MulFloatR4);
 			//AddVisitation(IRInstruction.MulFloatR8, MulFloatR8);
-			//AddVisitation(IRInstruction.MulSigned32, MulSigned32);
-			//AddVisitation(IRInstruction.MulUnsigned32, MulUnsigned32);
+			AddVisitation(IRInstruction.MulSigned32, MulSigned32);
+			AddVisitation(IRInstruction.MulUnsigned32, MulUnsigned32);
+
 			//AddVisitation(IRInstruction.Nop, Nop);
 			//AddVisitation(IRInstruction.RemSigned32, RemSigned32);
 			//AddVisitation(IRInstruction.RemUnsigned32, RemUnsigned32);
@@ -101,7 +98,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.StoreParamInt16, StoreParamInt16);
 			AddVisitation(IRInstruction.StoreParamInt32, StoreParamInt32);
 
-			//AddVisitation(IRInstruction.StoreParamCompound, StoreParamCompound);
 			//AddVisitation(IRInstruction.SubFloatR4, SubFloatR4);
 			//AddVisitation(IRInstruction.SubFloatR8, SubFloatR8);
 			AddVisitation(IRInstruction.Sub32, Sub32);
@@ -264,6 +260,16 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		private void MoveInt32(Context context)
 		{
 			TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, context.Result, StatusRegister.NotSet, context.Operand1);
+		}
+
+		private void MulSigned32(Context context)
+		{
+			context.SetInstruction(ARMv8A32.Mul, context.Result, context.Operand1, context.Operand2);
+		}
+
+		private void MulUnsigned32(Context context)
+		{
+			context.SetInstruction(ARMv8A32.Mul, context.Result, context.Operand1, context.Operand2);
 		}
 
 		private void ShiftLeft32(Context context)

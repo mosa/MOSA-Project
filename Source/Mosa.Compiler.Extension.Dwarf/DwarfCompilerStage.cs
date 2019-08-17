@@ -35,16 +35,16 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 		private readonly List<DwarfAbbrev> AbbrevList = new List<DwarfAbbrev>();
 
-		private void EmitDebugInfo(EndianAwareBinaryWriter wr)
+		private void EmitDebugInfo(BinaryWriter wr)
 		{
 			// note: Compilation Unit Header != Debugging Information Entry
 
 			// Compilation Unit Header
-			var compilationUnitSizePosition = wr.Position;
+			var compilationUnitSizePosition = wr.GetPosition();
 			wr.Write((uint)7); // length
 			wr.Write((ushort)0x02); // version
 			wr.Write((uint)0); // abbr tag offset.
-			wr.WriteByte(4); //addr size of platform
+			wr.Write(4); //addr size of platform
 
 			var context = new DwarfWriteContext { Writer = wr, AbbrevList = AbbrevList };
 
@@ -59,17 +59,17 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			};
 			cu.Emit(context);
 
-			uint compilationUnitSize = (uint)(wr.Position - compilationUnitSizePosition - sizeof(uint));
-			wr.Position = compilationUnitSizePosition;
+			uint compilationUnitSize = (uint)(wr.GetPosition() - compilationUnitSizePosition - sizeof(uint));
+			wr.SetPosition(compilationUnitSizePosition);
 			wr.Write(compilationUnitSize);
-			wr.Position = wr.BaseStream.Length;
+			wr.SetPosition(wr.BaseStream.Length);
 		}
 
-		public void EmitDebugInfoCompilationUnitHeader(EndianAwareBinaryWriter wr)
+		public void EmitDebugInfoCompilationUnitHeader(BinaryWriter wr)
 		{
 		}
 
-		private void EmitDebugAbbrev(EndianAwareBinaryWriter wr)
+		private void EmitDebugAbbrev(BinaryWriter wr)
 		{
 			foreach (var abbr in AbbrevList)
 				EmitDebugAbbrev(wr, abbr);
@@ -77,11 +77,11 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			wr.WriteULEB128(DwarfConstants.NullTag);
 		}
 
-		private void EmitDebugAbbrev(EndianAwareBinaryWriter wr, DwarfAbbrev abbr)
+		private void EmitDebugAbbrev(BinaryWriter wr, DwarfAbbrev abbr)
 		{
 			wr.WriteULEB128(abbr.Number);
 			wr.WriteULEB128((uint)abbr.Tag);
-			wr.WriteByte(abbr.HasChildren ? DwarfConstants.DW_CHILDREN_yes : DwarfConstants.DW_CHILDREN_no);
+			wr.Write(abbr.HasChildren ? DwarfConstants.DW_CHILDREN_yes : DwarfConstants.DW_CHILDREN_no);
 			foreach (var attr in abbr.Attributes)
 			{
 				wr.WriteULEB128((uint)attr.Attribute);
@@ -99,35 +99,35 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			}
 		}
 
-		private void EmitDebugLine(EndianAwareBinaryWriter wr)
+		private void EmitDebugLine(BinaryWriter wr)
 		{
-			var compilationUnitSizePosition = wr.Position;
+			var compilationUnitSizePosition = wr.GetPosition();
 			wr.Write((uint)0); // Placeholder for Compilation unit Size
 
-			wr.WriteByte(0x02); // DWARF Version
-			wr.WriteByte(0x00); // version (2 bytes)
+			wr.Write(0x02); // DWARF Version
+			wr.Write(0x00); // version (2 bytes)
 
-			var headerSizePosition = wr.Position;
+			var headerSizePosition = wr.GetPosition();
 			wr.Write((uint)0); // Placeholder for header size
 
-			wr.WriteByte(0x01); // Minimum Instruction length
-			wr.WriteByte(0x01); // Default is_stmt value
-			wr.WriteByte(0xFB); // Value doesn't matter, because we are not using special op codes
-			wr.WriteByte(0x0E); // Value doesn't matter, because we are not using special op codes
-			wr.WriteByte(9 + 1); // first special op code
+			wr.Write(0x01); // Minimum Instruction length
+			wr.Write(0x01); // Default is_stmt value
+			wr.Write(0xFB); // Value doesn't matter, because we are not using special op codes
+			wr.Write(0x0E); // Value doesn't matter, because we are not using special op codes
+			wr.Write(9 + 1); // first special op code
 
 			// the number of arguments for the 9 standard opcodes
-			wr.WriteByte(0x00); // 1
-			wr.WriteByte(0x01); // 2
-			wr.WriteByte(0x01); // ...
-			wr.WriteByte(0x01);
+			wr.Write(0x00); // 1
+			wr.Write(0x01); // 2
+			wr.Write(0x01); // ...
+			wr.Write(0x01);
 
-			wr.WriteByte(0x01);
-			wr.WriteByte(0x00);
-			wr.WriteByte(0x00);
-			wr.WriteByte(0x00);
+			wr.Write(0x01);
+			wr.Write(0x00);
+			wr.Write(0x00);
+			wr.Write(0x00);
 
-			wr.WriteByte(0x01); // 9
+			wr.Write(0x01); // 9
 
 			AddFilenames();
 
@@ -135,17 +135,17 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			EmitFiles(wr);
 
 			// Write header size
-			uint headerSize = (uint)(wr.Position - headerSizePosition - sizeof(uint));
-			wr.Position = headerSizePosition;
+			uint headerSize = (uint)(wr.GetPosition() - headerSizePosition - sizeof(uint));
+			wr.SetPosition(headerSizePosition);
 			wr.Write(headerSize);
-			wr.Position = wr.BaseStream.Length;
+			wr.SetPosition(wr.BaseStream.Length);
 
 			EmitDebugLineTypes(wr);
 
-			uint compilationUnitSize = (uint)(wr.Position - compilationUnitSizePosition - sizeof(uint));
-			wr.Position = compilationUnitSizePosition;
+			uint compilationUnitSize = (uint)(wr.GetPosition() - compilationUnitSizePosition - sizeof(uint));
+			wr.SetPosition(compilationUnitSizePosition);
 			wr.Write(compilationUnitSize);
-			wr.Position = wr.BaseStream.Length;
+			wr.SetPosition(wr.BaseStream.Length);
 		}
 
 		private readonly Dictionary<string, uint> Directories = new Dictionary<string, uint>();
@@ -236,32 +236,32 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			}
 		}
 
-		private void EmitDirectories(EndianAwareBinaryWriter wr)
+		private void EmitDirectories(BinaryWriter wr)
 		{
 			foreach (var entry in Directories.OrderBy(e => e.Value)) // order matters!
 			{
 				EmitDebugLineDirectoryName(wr, entry.Value, entry.Key);
 			}
 
-			wr.WriteByte(DwarfConstants.EndOfDirectories);
+			wr.Write(DwarfConstants.EndOfDirectories);
 		}
 
-		private void EmitFiles(EndianAwareBinaryWriter wr)
+		private void EmitFiles(BinaryWriter wr)
 		{
 			foreach (var file in FileList) // order matters!
 			{
 				EmitDebugLineFileName(wr, file.DirectoryNum, file.Name);
 			}
 
-			wr.WriteByte(DwarfConstants.EndOfFiles);
+			wr.Write(DwarfConstants.EndOfFiles);
 		}
 
-		private void EmitDebugLineDirectoryName(EndianAwareBinaryWriter wr, uint dirNum, string name)
+		private void EmitDebugLineDirectoryName(BinaryWriter wr, uint dirNum, string name)
 		{
 			wr.WriteNullTerminatedString(name);
 		}
 
-		private void EmitDebugLineFileName(EndianAwareBinaryWriter wr, uint directoryIndex, string name)
+		private void EmitDebugLineFileName(BinaryWriter wr, uint directoryIndex, string name)
 		{
 			wr.WriteNullTerminatedString(name);
 			wr.WriteULEB128(directoryIndex);
@@ -269,7 +269,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			wr.WriteULEB128(DwarfConstants.NullFileLength);
 		}
 
-		private void EmitDebugLineTypes(EndianAwareBinaryWriter wr)
+		private void EmitDebugLineTypes(BinaryWriter wr)
 		{
 			uint line = 1;
 			uint file = 1;
@@ -303,7 +303,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 					var pc = methodVirtAddr + (uint)locations[0].Address;
 
-					wr.WriteByte(0); // signals an extended opcode
+					wr.Write(0); // signals an extended opcode
 					wr.WriteULEB128(0x05); // number of bytes after this used by the extended opcode (unsigned LEB128 encoded)
 					wr.Write((byte)DwarfExtendedOpcode.DW_LNE_set_address);
 					wr.Write(pc);
@@ -353,9 +353,9 @@ namespace Mosa.Compiler.Extensions.Dwarf
 				AddressAlignment = 0x1000,
 				EmitMethod = (section, writer) =>
 				{
-					var oldPos = writer.Position;
+					var oldPos = writer.GetPosition();
 					EmitDebugInfo(writer);
-					section.Size = (uint)writer.Position - (uint)oldPos;
+					section.Size = (uint)writer.GetPosition() - (uint)oldPos;
 				}
 			});
 
@@ -366,9 +366,9 @@ namespace Mosa.Compiler.Extensions.Dwarf
 				AddressAlignment = 0x1000,
 				EmitMethod = (section, writer) =>
 				{
-					var oldPos = writer.Position;
+					var oldPos = writer.GetPosition();
 					EmitDebugAbbrev(writer);
-					section.Size = (uint)writer.Position - (uint)oldPos;
+					section.Size = (uint)writer.GetPosition() - (uint)oldPos;
 				}
 			});
 
@@ -379,9 +379,9 @@ namespace Mosa.Compiler.Extensions.Dwarf
 				AddressAlignment = 0x1000,
 				EmitMethod = (section, writer) =>
 				{
-					var oldPos = writer.Position;
+					var oldPos = writer.GetPosition();
 					EmitDebugLine(writer);
-					section.Size = (uint)writer.Position - (uint)oldPos;
+					section.Size = (uint)writer.GetPosition() - (uint)oldPos;
 				}
 			});
 

@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Linker.Elf;
 using System;
 using System.Collections.Generic;
@@ -14,11 +13,6 @@ namespace Mosa.Compiler.Framework
 	public abstract class BaseArchitecture
 	{
 		#region Properties
-
-		/// <summary>
-		/// Gets the endianness of the target architecture.
-		/// </summary>
-		public abstract Endianness Endianness { get; }
 
 		/// <summary>
 		/// Gets the type of the elf machine.
@@ -180,18 +174,6 @@ namespace Mosa.Compiler.Framework
 		/// <param name="source">The source.</param>
 		/// <param name="offset">The offset.</param>
 		public abstract void InsertLoadInstruction(Context context, Operand destination, Operand source, Operand offset);
-
-		/// <summary>
-		/// Create platform compound move.
-		/// </summary>
-		/// <param name="methodCompiler">The compiler.</param>
-		/// <param name="context">The context.</param>
-		/// <param name="destinationBase">The destination.</param>
-		/// <param name="destination">The destination offset.</param>
-		/// <param name="sourceBase">The source.</param>
-		/// <param name="source">The source offset.</param>
-		/// <param name="size">The size.</param>
-		public abstract void InsertCompoundCopy(MethodCompiler methodCompiler, Context context, Operand destinationBase, Operand destination, Operand sourceBase, Operand source, int size);
 
 		/// <summary>
 		/// Create platform exchange registers.

@@ -6,6 +6,7 @@ using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -46,7 +47,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var trace = CreateTraceLog("Regions");
 
 			var protectedRegionTableSymbol = Linker.DefineSymbol(Metadata.ProtectedRegionTable + Method.FullName, SectionKind.ROData, NativeAlignment, 0);
-			var writer = new EndianAwareBinaryWriter(protectedRegionTableSymbol.Stream, Architecture.Endianness);
+			var writer = new BinaryWriter(protectedRegionTableSymbol.Stream);
 
 			int sectioncount = 0;
 
@@ -84,7 +85,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var name = Metadata.ProtectedRegionTable + Method.FullName + "$" + sectioncount.ToString();
 					var protectedRegionDefinition = CreateProtectedRegionDefinition(name, (uint)start, (uint)end, handler, region.Handler.ExceptionHandlerType, region.Handler.Type);
-					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionTableSymbol, writer.Position, protectedRegionDefinition, 0);
+					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionTableSymbol, writer.GetPosition(), protectedRegionDefinition, 0);
 					writer.WriteZeroBytes(TypeLayout.NativePointerSize);
 
 					trace?.Log($"     Section: [{start.ToString()}-{end.ToString()}]");
@@ -92,7 +93,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			// 1. Number of Regions (now put the real number)
-			writer.Position = 0;
+			writer.SetPosition(0);
 			writer.Write(sectioncount);
 		}
 
@@ -100,7 +101,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			// Emit parameter table
 			var protectedRegionDefinitionSymbol = Linker.DefineSymbol(name, SectionKind.ROData, 0/*TypeLayout.NativePointerAlignment*/, 0);
-			var writer1 = new EndianAwareBinaryWriter(protectedRegionDefinitionSymbol.Stream, Architecture.Endianness);
+			var writer1 = new BinaryWriter(protectedRegionDefinitionSymbol.Stream);
 
 			// 1. Offset to start
 			writer1.Write(start, TypeLayout.NativePointerSize);
@@ -119,7 +120,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				// Store method table pointer of the exception object type
 				// The VES exception runtime will uses this to compare exception object types
-				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionDefinitionSymbol, writer1.Position, Metadata.TypeDefinition + exceptionType.FullName, 0);
+				Linker.Link(LinkType.AbsoluteAddress, NativePatchType, protectedRegionDefinitionSymbol, writer1.GetPosition(), Metadata.TypeDefinition + exceptionType.FullName, 0);
 			}
 			else if (handlerType == ExceptionHandlerType.Filter)
 			{
