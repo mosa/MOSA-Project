@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class FinallyEnd : BaseIRInstruction
 	{
-		public override int ID { get { return 50; } }
+		public override int ID { get { return 49; } }
 
 		public FinallyEnd()
 			: base(0, 0)

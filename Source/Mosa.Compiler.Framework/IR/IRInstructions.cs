@@ -26,7 +26,6 @@ namespace Mosa.Compiler.Framework.IR
 			IRInstruction.ArithShiftRight64,
 			IRInstruction.BlockEnd,
 			IRInstruction.BlockStart,
-			IRInstruction.Break,
 			IRInstruction.Call,
 			IRInstruction.CallDirect,
 			IRInstruction.CallDynamic,

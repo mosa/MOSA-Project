@@ -404,15 +404,6 @@ namespace Mosa.Compiler.Framework.Stages
 			node.ReplaceInstruction(IRInstruction.Jmp);
 		}
 
-		/// <summary>
-		/// Visitation function for Break instruction.
-		/// </summary>
-		/// <param name="node">The node.</param>
-		private void Break(InstructionNode node)
-		{
-			node.SetInstruction(IRInstruction.Break);
-		}
-
 		private int CalculateInterfaceSlot(MosaType interaceType)
 		{
 			return TypeLayout.GetInterfaceSlot(interaceType);
@@ -1588,6 +1579,15 @@ namespace Mosa.Compiler.Framework.Stages
 		private void Throw(InstructionNode node)
 		{
 			throw new CompilerException();
+		}
+
+		/// <summary>
+		/// Visitation function for Break instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void Break(Context context)
+		{
+			context.Empty();
 		}
 
 		/// <summary>

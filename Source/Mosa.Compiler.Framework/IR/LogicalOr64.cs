@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class LogicalOr64 : BaseIRInstruction
 	{
-		public override int ID { get { return 99; } }
+		public override int ID { get { return 98; } }
 
 		public LogicalOr64()
 			: base(2, 1)

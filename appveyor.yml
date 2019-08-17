@@ -57,7 +57,7 @@ for:
     - cmd: nuget.exe pack Source/Mosa.ClassLib/Mosa.ClassLib.nuspec -Properties version=%APPVEYOR_BUILD_VERSION%
     - cmd: nuget.exe pack Source/Mosa.Tools.Package/Mosa.Tools.Package.nuspec -Properties version=%APPVEYOR_BUILD_VERSION%
     - cmd: ISCC.exe Source/Inno-Setup-Script/Mosa-Installer.iss
-#   - ps: ./mosactl.ps1 unittest
+    - ps: ./mosactl.ps1 unittest
 #   - ps: ./mosactl.ps1 test
 
     build_script:

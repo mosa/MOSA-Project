@@ -89,12 +89,6 @@
 			"IgnoreDuringCodeGeneration": "true"
 		},
 		{
-			"Name": "Break",
-			"FamilyName": "IR",
-			"ResultCount": 0,
-			"OperandCount": 0
-		},
-		{
 			"Name": "Call",
 			"FamilyName": "IR",
 			"ResultCount": 0,

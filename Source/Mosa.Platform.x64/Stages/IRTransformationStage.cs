@@ -26,7 +26,6 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(IRInstruction.AddCarryOut32, AddCarryOut32);
 			AddVisitation(IRInstruction.AddWithCarry32, AddWithCarry32);
 			AddVisitation(IRInstruction.ArithShiftRight32, ArithShiftRight32);
-			AddVisitation(IRInstruction.Break, Break);
 			AddVisitation(IRInstruction.CallDirect, CallDirect);
 			AddVisitation(IRInstruction.CompareFloatR4, CompareFloatR4);
 			AddVisitation(IRInstruction.CompareFloatR8, CompareFloatR8);

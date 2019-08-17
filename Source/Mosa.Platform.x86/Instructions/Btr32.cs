@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Btr32 : X86Instruction
 	{
-		public override int ID { get { return 201; } }
+		public override int ID { get { return 200; } }
 
 		internal Btr32()
 			: base(1, 2)
