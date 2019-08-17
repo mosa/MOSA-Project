@@ -34,9 +34,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.CompareInt32x32, CompareInt32x32);
 			//AddVisitation(IRInstruction.CompareIntBranch32, CompareIntBranch32);
 			//AddVisitation(IRInstruction.IfThenElse32, IfThenElse32);
-			//AddVisitation(IRInstruction.LoadCompound, LoadCompound);
-			//AddVisitation(IRInstruction.MoveCompound, MoveCompound);
-			//AddVisitation(IRInstruction.StoreCompound, StoreCompound);
 			//AddVisitation(IRInstruction.ConvertFloatR4ToFloatR8, ConvertFloatR4ToFloatR8);
 			//AddVisitation(IRInstruction.ConvertFloatR8ToFloatR4, ConvertFloatR8ToFloatR4);
 			//AddVisitation(IRInstruction.ConvertFloatR4ToInt32, ConvertFloatR4ToInt32);
@@ -65,7 +62,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.LoadParamZeroExtend8x32, LoadParamZeroExtend8x32);
 			AddVisitation(IRInstruction.LoadParamZeroExtend16x32, LoadParamZeroExtend16x32);
 
-			//AddVisitation(IRInstruction.LoadParamCompound, LoadParamCompound);
 			AddVisitation(IRInstruction.LogicalAnd32, LogicalAnd32);
 			AddVisitation(IRInstruction.LogicalNot32, LogicalNot32);
 			AddVisitation(IRInstruction.LogicalOr32, LogicalOr32);
@@ -102,7 +98,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.StoreParamInt16, StoreParamInt16);
 			AddVisitation(IRInstruction.StoreParamInt32, StoreParamInt32);
 
-			//AddVisitation(IRInstruction.StoreParamCompound, StoreParamCompound);
 			//AddVisitation(IRInstruction.SubFloatR4, SubFloatR4);
 			//AddVisitation(IRInstruction.SubFloatR8, SubFloatR8);
 			AddVisitation(IRInstruction.Sub32, Sub32);
