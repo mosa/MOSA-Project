@@ -22,6 +22,7 @@ The compiler framework uses a linear intermediate representation to transform th
 
 During compilation of an CIL method the instructions are represented by CIL instruction classes and moving forward, the linear instruction stream is modified to use instructions from the intermediate representation. In some cases an instruction from the intermediate representation can not be emitted directly to machine code and it is replaced by a sequence of machine specific instruction objects. The machine specific instruction classes are provided by the appropriate platform. There are other uses for machine specific instruction classes, but the main use is effective code generation.
 
+
 Compiler Optimizations
 ----------------------
 
