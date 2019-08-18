@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			wr.Write((uint)7); // length
 			wr.Write((ushort)0x02); // version
 			wr.Write((uint)0); // abbr tag offset.
-			wr.Write(4); //addr size of platform
+			wr.WriteByte(4); //addr size of platform
 
 			var context = new DwarfWriteContext { Writer = wr, AbbrevList = AbbrevList };
 
@@ -65,7 +65,8 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			wr.SetPosition(wr.BaseStream.Length);
 		}
 
-		public void EmitDebugInfoCompilationUnitHeader(BinaryWriter wr)
+		public
+		void EmitDebugInfoCompilationUnitHeader(BinaryWriter wr)
 		{
 		}
 
@@ -81,7 +82,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 		{
 			wr.WriteULEB128(abbr.Number);
 			wr.WriteULEB128((uint)abbr.Tag);
-			wr.Write(abbr.HasChildren ? DwarfConstants.DW_CHILDREN_yes : DwarfConstants.DW_CHILDREN_no);
+			wr.WriteByte(abbr.HasChildren ? DwarfConstants.DW_CHILDREN_yes : DwarfConstants.DW_CHILDREN_no);
 			foreach (var attr in abbr.Attributes)
 			{
 				wr.WriteULEB128((uint)attr.Attribute);
@@ -104,30 +105,30 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			var compilationUnitSizePosition = wr.GetPosition();
 			wr.Write((uint)0); // Placeholder for Compilation unit Size
 
-			wr.Write(0x02); // DWARF Version
-			wr.Write(0x00); // version (2 bytes)
+			wr.WriteByte(0x02); // DWARF Version
+			wr.WriteByte(0x00); // version (2 bytes)
 
 			var headerSizePosition = wr.GetPosition();
 			wr.Write((uint)0); // Placeholder for header size
 
-			wr.Write(0x01); // Minimum Instruction length
-			wr.Write(0x01); // Default is_stmt value
-			wr.Write(0xFB); // Value doesn't matter, because we are not using special op codes
-			wr.Write(0x0E); // Value doesn't matter, because we are not using special op codes
-			wr.Write(9 + 1); // first special op code
+			wr.WriteByte(0x01); // Minimum Instruction length
+			wr.WriteByte(0x01); // Default is_stmt value
+			wr.WriteByte(0xFB); // Value doesn't matter, because we are not using special op codes
+			wr.WriteByte(0x0E); // Value doesn't matter, because we are not using special op codes
+			wr.WriteByte(9 + 1); // first special op code
 
 			// the number of arguments for the 9 standard opcodes
-			wr.Write(0x00); // 1
-			wr.Write(0x01); // 2
-			wr.Write(0x01); // ...
-			wr.Write(0x01);
+			wr.WriteByte(0x00); // 1
+			wr.WriteByte(0x01); // 2
+			wr.WriteByte(0x01); // ...
+			wr.WriteByte(0x01);
 
-			wr.Write(0x01);
-			wr.Write(0x00);
-			wr.Write(0x00);
-			wr.Write(0x00);
+			wr.WriteByte(0x01);
+			wr.WriteByte(0x00);
+			wr.WriteByte(0x00);
+			wr.WriteByte(0x00);
 
-			wr.Write(0x01); // 9
+			wr.WriteByte(0x01); // 9
 
 			AddFilenames();
 
@@ -243,7 +244,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 				EmitDebugLineDirectoryName(wr, entry.Value, entry.Key);
 			}
 
-			wr.Write(DwarfConstants.EndOfDirectories);
+			wr.WriteByte(DwarfConstants.EndOfDirectories);
 		}
 
 		private void EmitFiles(BinaryWriter wr)
@@ -253,7 +254,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 				EmitDebugLineFileName(wr, file.DirectoryNum, file.Name);
 			}
 
-			wr.Write(DwarfConstants.EndOfFiles);
+			wr.WriteByte(DwarfConstants.EndOfFiles);
 		}
 
 		private void EmitDebugLineDirectoryName(BinaryWriter wr, uint dirNum, string name)
@@ -303,7 +304,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 					var pc = methodVirtAddr + (uint)locations[0].Address;
 
-					wr.Write(0); // signals an extended opcode
+					wr.WriteByte(0); // signals an extended opcode
 					wr.WriteULEB128(0x05); // number of bytes after this used by the extended opcode (unsigned LEB128 encoded)
 					wr.Write((byte)DwarfExtendedOpcode.DW_LNE_set_address);
 					wr.Write(pc);
