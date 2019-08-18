@@ -188,5 +188,13 @@ namespace Mosa.Platform.ARMv8A32
 		public static readonly Cnf Cnf = new Cnf();
 		public static readonly Cmfe Cmfe = new Cmfe();
 		public static readonly Cnfe Cnfe = new Cnfe();
+		public static readonly LdfUp LdfUp = new LdfUp();
+		public static readonly LdfDown LdfDown = new LdfDown();
+		public static readonly LdfUpImm LdfUpImm = new LdfUpImm();
+		public static readonly LdfDownImm LdfDownImm = new LdfDownImm();
+		public static readonly StfUp StfUp = new StfUp();
+		public static readonly StfDown StfDown = new StfDown();
+		public static readonly StfUpImm StfUpImm = new StfUpImm();
+		public static readonly StfDownImm StfDownImm = new StfDownImm();
 	}
 }

@@ -15,7 +15,8 @@
 
 		"[arm-fp-data-processing]=                  conditional|1110|[opcode]|[e]|[fn]|0|[fd]|0001|[f]|[gh]|0|[i]|[fm]",
 		"[arm-fp-register-transfer]=                conditional|1110|[opcode]|[e]|[fn]|[rd]|0001|[f]|[gh]|1|[i]|[fm]",
-		"[arm-fp-comparision]=                      conditional|1110|[opcode]|1|[e]|[fn]|1111|0001|[f]|[gh]|1|[i]|[fm]"
+		"[arm-fp-comparision]=                      conditional|1110|[opcode]|1|[e]|[fn]|1111|0001|[f]|[gh]|1|[i]|[fm]",
+		"[arm-fp-data-transfer-register]=           conditional|110|[p]|[ud]|[t1]|[wb]||[ls]|[rn]|[t0]|[fd]|0001|[offset]"
 	],
 	"Instructions": [
 		{
@@ -3705,6 +3706,175 @@
 				{
 					"Condition": "[register]",
 					"Encoding": "[arm-fp-comparision]"
+				}
+			]
+		},
+		{
+			"Name": "LdfUp",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "CNZV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Load Floating Point Data Transfer",
+			"OpcodeEncodingAppend": "s=status:status,fd=reg4:r,rn=reg4:o1,t1=0,t0=fp:o3,ls=1,p=1,wb=0,up=1,offset=0",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[arm-fp-data-transfer-register]"
+				}
+			]
+		},
+		{
+			"Name": "LdfDown",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "CNZV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Load Floating Point Data Transfer",
+			"OpcodeEncodingAppend": "s=status:status,fd=reg4:r,rn=reg4:o1,t1=0,t0=fp:o3,ls=1,p=1,wb=0,up=0,offset=0",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[arm-fp-data-transfer-register]"
+				}
+			]
+		},
+		{
+			"Name": "LdfUpImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "CNZV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Load Floating Point Data Transfer",
+			"OpcodeEncodingAppend": "s=status:status,fd=reg4:r,rn=reg4:o1,t1=0,t0=fp:o3,ls=1,p=1,wb=0,up=1,offset=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-transfer-register]"
+				}
+			]
+		},
+		{
+			"Name": "LdfDownImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "CNZV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Load Floating Point Data Transfer",
+			"OpcodeEncodingAppend": "s=status:status,fd=reg4:r,rn=reg4:o1,t1=0,t0=fp:o3,ls=1,p=1,wb=0,up=0,offset=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-transfer-register]"
+				}
+			]
+		},
+
+		{
+			"Name": "StfUp",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "CNZV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"Description": "Store Floating Point Data Transfer",
+			"OpcodeEncodingAppend": "s=status:status,fd=reg4:o2,rn=reg4:o1,t1=0,t0=fp:o3,ls=0,p=1,wb=0,up=1,offset=0",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-transfer-register]"
+				}
+			]
+		},
+		{
+			"Name": "StfDown",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "CNZV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"Description": "Store Floating Point Data Transfer",
+			"OpcodeEncodingAppend": "s=status:status,fd=reg4:o2,rn=reg4:o1,t1=0,t0=fp:o3,ls=0,p=1,wb=0,up=0,offset=0",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-transfer-register]"
+				}
+			]
+		},
+		{
+			"Name": "StfUpImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "CNZV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"Description": "Store Floating Point Data Transfer",
+			"OpcodeEncodingAppend": "s=status:status,fd=reg4:o3,rn=reg4:o1,t1=0,t0=fp:o3,ls=0,p=1,wb=0,up=1,offset=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-transfer-register]"
+				}
+			]
+		},
+		{
+			"Name": "StfDownImm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "CNZV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"Description": "Store Floating Point Data Transfer",
+			"OpcodeEncodingAppend": "s=status:status,fd=reg4:o3,rn=reg4:o1,t1=0,t0=fp:o3,ls=0,p=1,wb=0,up=0,offset=imm8:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-transfer-register]"
 				}
 			]
 		}
