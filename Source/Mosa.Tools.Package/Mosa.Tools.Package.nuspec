@@ -26,7 +26,7 @@
 		<file src="..\..\bin\Mosa.Compiler.Extension.Dwarf.dll" target="tools" />
 		<file src="..\..\bin\Mosa.DeviceSystem.dll" target="tools" />
 		<file src="..\..\bin\Mosa.FileSystem.dll" target="tools" />
-		<file src="..\..\bin\Mosa.Platform.ARMv6.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Platform.ARMv8A32.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Platform.Intel.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Platform.x86.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Platform.x64.dll" target="tools" />
