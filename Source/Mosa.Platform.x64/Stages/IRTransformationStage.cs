@@ -190,20 +190,7 @@ namespace Mosa.Platform.x64.Stages
 
 		private void CallDirect(InstructionNode node)
 		{
-			Debug.Assert(node.Operand1 != null);
-
-			if (node.Operand1.IsConstant)
-			{
-				node.ReplaceInstruction(X64.Call);
-			}
-			else if (node.Operand1.IsVirtualRegister)
-			{
-				node.ReplaceInstruction(X64.Call);
-			}
-			else
-			{
-				throw new NotSupportedException();
-			}
+			node.ReplaceInstruction(X64.Call);
 		}
 
 		private void CompareFloatR4(Context context)

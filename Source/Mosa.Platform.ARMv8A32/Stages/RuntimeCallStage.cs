@@ -5,12 +5,12 @@ using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Diagnostics;
 
-namespace Mosa.Platform.x86.Stages
+namespace Mosa.Platform.ARMv8A32.Stages
 {
 	/// <summary>
 	/// Runtime Call Stage
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.x86.BaseTransformationStage" />
+	/// <seealso cref="Mosa.Platform.ARMv8A32.BaseTransformationStage" />
 	public sealed class RuntimeCallStage : BaseTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()

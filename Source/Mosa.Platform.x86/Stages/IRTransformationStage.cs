@@ -182,20 +182,7 @@ namespace Mosa.Platform.x86.Stages
 
 		private void CallDirect(InstructionNode node)
 		{
-			Debug.Assert(node.Operand1 != null);
-
-			if (node.Operand1.IsConstant)
-			{
-				node.ReplaceInstruction(X86.Call);
-			}
-			else if (node.Operand1.IsVirtualRegister)
-			{
-				node.ReplaceInstruction(X86.Call);
-			}
-			else
-			{
-				throw new NotSupportedException();
-			}
+			node.ReplaceInstruction(X86.Call);
 		}
 
 		private void CompareFloatR4(Context context)
@@ -449,14 +436,7 @@ namespace Mosa.Platform.x86.Stages
 
 		private void Jmp(InstructionNode node)
 		{
-			if (node.Operand1 == null)
-			{
-				node.ReplaceInstruction(X86.Jmp);
-			}
-			else
-			{
-				node.ReplaceInstruction(X86.JmpExternal);
-			}
+			node.ReplaceInstruction(X86.Jmp);
 		}
 
 		private void LoadFloatR4(InstructionNode node)
