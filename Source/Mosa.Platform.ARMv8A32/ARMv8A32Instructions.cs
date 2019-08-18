@@ -192,6 +192,10 @@ namespace Mosa.Platform.ARMv8A32
 			ARMv8A32.FltR8,
 			ARMv8A32.FixR4,
 			ARMv8A32.FixR8,
+			ARMv8A32.Wfs,
+			ARMv8A32.Rfs,
+			ARMv8A32.Wfc,
+			ARMv8A32.Rfc,
 		};
 	}
 }

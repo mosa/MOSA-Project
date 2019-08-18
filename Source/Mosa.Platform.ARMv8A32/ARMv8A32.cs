@@ -190,5 +190,9 @@ namespace Mosa.Platform.ARMv8A32
 		public static readonly FltR8 FltR8 = new FltR8();
 		public static readonly FixR4 FixR4 = new FixR4();
 		public static readonly FixR8 FixR8 = new FixR8();
+		public static readonly Wfs Wfs = new Wfs();
+		public static readonly Rfs Rfs = new Rfs();
+		public static readonly Wfc Wfc = new Wfc();
+		public static readonly Rfc Rfc = new Rfc();
 	}
 }

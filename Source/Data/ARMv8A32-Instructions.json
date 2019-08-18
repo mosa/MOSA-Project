@@ -3747,6 +3747,92 @@
 					"Encoding": "[arm-fp-register-transfer]"
 				}
 			]
+		},
+		{
+			"Name": "Wfs",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Write Floating-Point Status Register",
+			"OpcodeEncodingAppend": "opcode=0010,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-register-transfer]"
+				}
+			]
+		},
+		{
+			"Name": "Rfs",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Read Floating-Point Status Register",
+			"OpcodeEncodingAppend": "opcode=0011,e=0,f=1,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-register-transfer]"
+				}
+			]
+		},
+
+		{
+			"Name": "Wfc",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Write Floating-Point Control Register",
+			"OpcodeEncodingAppend": "opcode=0100,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-register-transfer]"
+				}
+			]
+		},
+		{
+			"Name": "Rfc",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Read Floating-Point Control Register",
+			"OpcodeEncodingAppend": "opcode=0101,e=0,f=1,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-register-transfer]"
+				}
+			]
 		}
+
 	]
 }
