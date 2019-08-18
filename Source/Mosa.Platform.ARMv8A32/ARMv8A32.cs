@@ -186,5 +186,9 @@ namespace Mosa.Platform.ARMv8A32
 		public static readonly FrdR8 FrdR8 = new FrdR8();
 		public static readonly PolR4 PolR4 = new PolR4();
 		public static readonly PolR8 PolR8 = new PolR8();
+		public static readonly FltR4 FltR4 = new FltR4();
+		public static readonly FltR8 FltR8 = new FltR8();
+		public static readonly FixR4 FixR4 = new FixR4();
+		public static readonly FixR8 FixR8 = new FixR8();
 	}
 }

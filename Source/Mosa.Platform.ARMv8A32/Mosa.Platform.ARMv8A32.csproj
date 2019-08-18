@@ -133,6 +133,10 @@
     <Compile Include="Instructions\EorRegShift.cs" />
     <Compile Include="Instructions\FdvR4.cs" />
     <Compile Include="Instructions\FdvR8.cs" />
+    <Compile Include="Instructions\FixR4.cs" />
+    <Compile Include="Instructions\FixR8.cs" />
+    <Compile Include="Instructions\FltR4.cs" />
+    <Compile Include="Instructions\FltR8.cs" />
     <Compile Include="Instructions\FmlR4.cs" />
     <Compile Include="Instructions\FmlR8.cs" />
     <Compile Include="Instructions\FrdR4.cs" />

@@ -3663,6 +3663,90 @@
 					"Encoding": "[arm-fp-data-processing]"
 				}
 			]
+		},
+		{
+			"Name": "FltR4",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Convert Integer to Floating-Point",
+			"OpcodeEncodingAppend": "opcode=0001,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-register-transfer]"
+				}
+			]
+		},
+		{
+			"Name": "FltR8",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Convert Integer to Floating-Point",
+			"OpcodeEncodingAppend": "opcode=0001,e=0,f=1,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-register-transfer]"
+				}
+			]
+		},
+		{
+			"Name": "FixR4",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Convert Floating-Point to Integer",
+			"OpcodeEncodingAppend": "opcode=0000,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-register-transfer]"
+				}
+			]
+		},
+		{
+			"Name": "FixR8",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Convert Floating-Point to Integer",
+			"OpcodeEncodingAppend": "opcode=0000,e=0,f=1,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-register-transfer]"
+				}
+			]
 		}
 	]
 }
