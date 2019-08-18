@@ -11,7 +11,9 @@
 		"[arm-halfword-data-transfer-immediate]=    conditional|000|[p]|[u]|1|[w]|[l]|[rn]|[rd]|[offsethigh]|1|[s]|[h]|1|[offsetlow]",
 		"[arm-halfword-data-transfer-register]=     conditional|000|[p]|[u]|0|[w]|[l]|[rn]|[rd]|0000|1|[s]|[h]|1|[rm]",
 
-		"[arm-extended-register]=                   conditional|01101|[s]|1|[b]|1111|[rd]|[rotate]|00|0111|[rm]"
+		"[arm-extended-register]=                   conditional|01101|[s]|1|[b]|1111|[rd]|[rotate]|00|0111|[rm]",
+
+		"[arm-fp-data-processing]=					conditional|1110|[opcode]|[e]|[fn]||[0]|[fd]|0001|[f]|[gh]|0|[i]|[fm]"
 	],
 	"Instructions": [
 		{
@@ -3112,6 +3114,552 @@
 				{
 					"Condition": "[register][constant]",
 					"Encoding": "[arm-data-processing-shift-amount]"
+				}
+			]
+		},
+		{
+			"Name": "AdfR4",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Addition",
+			"OpcodeEncodingAppend": "opcode=0000,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "AdfR8",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Addition",
+			"OpcodeEncodingAppend": "opcode=0000,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "MufR4",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Multiply",
+			"OpcodeEncodingAppend": "opcode=0001,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "MufR8",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Multiply",
+			"OpcodeEncodingAppend": "opcode=0001,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "SufR4",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Subtract",
+			"OpcodeEncodingAppend": "opcode=0010,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "SufR8",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Subtract",
+			"OpcodeEncodingAppend": "opcode=0010,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "RsfR4",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Reverse Subtract",
+			"OpcodeEncodingAppend": "opcode=0011,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "RsfR8",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Reverse Subtract",
+			"OpcodeEncodingAppend": "opcode=0011,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "DvrR4",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Divide",
+			"OpcodeEncodingAppend": "opcode=0100,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "DvrR8",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Divide",
+			"OpcodeEncodingAppend": "opcode=0100,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "DvfR4",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Reverse Divide",
+			"OpcodeEncodingAppend": "opcode=0101,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "DvfR8",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Reverse Divide",
+			"OpcodeEncodingAppend": "opcode=0101,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "PowR4",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Power",
+			"OpcodeEncodingAppend": "opcode=0110,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "PowR8",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Power",
+			"OpcodeEncodingAppend": "opcode=0110,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "RpwR4",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Reverse Power",
+			"OpcodeEncodingAppend": "opcode=0111,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "RpwR8",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Reverse Power",
+			"OpcodeEncodingAppend": "opcode=0111,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "RmfR4",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Remainder",
+			"OpcodeEncodingAppend": "opcode=1000,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "RmfR8",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Remainder",
+			"OpcodeEncodingAppend": "opcode=1000,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "FmlR4",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Fast Multiply",
+			"OpcodeEncodingAppend": "opcode=1001,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "FmlR8",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Fast Multiply",
+			"OpcodeEncodingAppend": "opcode=1001,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "FdvR4",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Fast Divide",
+			"OpcodeEncodingAppend": "opcode=1010,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "FdvR8",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Fast Divide",
+			"OpcodeEncodingAppend": "opcode=1010,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "FrdR4",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Fast Reverse Divide",
+			"OpcodeEncodingAppend": "opcode=1011,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "FrdR8",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Fast Reverse Divide",
+			"OpcodeEncodingAppend": "opcode=1011,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "PolR4",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Polar Angle",
+			"OpcodeEncodingAppend": "opcode=1100,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "PolR8",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Polar Angle",
+			"OpcodeEncodingAppend": "opcode=1100,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
 				}
 			]
 		}

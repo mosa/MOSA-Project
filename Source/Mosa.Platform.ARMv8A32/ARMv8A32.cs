@@ -160,5 +160,31 @@ namespace Mosa.Platform.ARMv8A32
 		public static readonly AsrImm AsrImm = new AsrImm();
 		public static readonly Ror Ror = new Ror();
 		public static readonly RorImm RorImm = new RorImm();
+		public static readonly AdfR4 AdfR4 = new AdfR4();
+		public static readonly AdfR8 AdfR8 = new AdfR8();
+		public static readonly MufR4 MufR4 = new MufR4();
+		public static readonly MufR8 MufR8 = new MufR8();
+		public static readonly SufR4 SufR4 = new SufR4();
+		public static readonly SufR8 SufR8 = new SufR8();
+		public static readonly RsfR4 RsfR4 = new RsfR4();
+		public static readonly RsfR8 RsfR8 = new RsfR8();
+		public static readonly DvrR4 DvrR4 = new DvrR4();
+		public static readonly DvrR8 DvrR8 = new DvrR8();
+		public static readonly DvfR4 DvfR4 = new DvfR4();
+		public static readonly DvfR8 DvfR8 = new DvfR8();
+		public static readonly PowR4 PowR4 = new PowR4();
+		public static readonly PowR8 PowR8 = new PowR8();
+		public static readonly RpwR4 RpwR4 = new RpwR4();
+		public static readonly RpwR8 RpwR8 = new RpwR8();
+		public static readonly RmfR4 RmfR4 = new RmfR4();
+		public static readonly RmfR8 RmfR8 = new RmfR8();
+		public static readonly FmlR4 FmlR4 = new FmlR4();
+		public static readonly FmlR8 FmlR8 = new FmlR8();
+		public static readonly FdvR4 FdvR4 = new FdvR4();
+		public static readonly FdvR8 FdvR8 = new FdvR8();
+		public static readonly FrdR4 FrdR4 = new FrdR4();
+		public static readonly FrdR8 FrdR8 = new FrdR8();
+		public static readonly PolR4 PolR4 = new PolR4();
+		public static readonly PolR8 PolR8 = new PolR8();
 	}
 }

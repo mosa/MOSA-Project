@@ -437,6 +437,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 				var condition = DecodeExperimentalCondition(entry.Condition) ?? string.Empty;
 				var encoding = DecodeExperimentalEncoding(entry.Encoding, node.OpcodeEncodingAppend);
 
+				encoding = encoding.Replace("\t", string.Empty);
+
 				if (!String.IsNullOrEmpty(condition))
 				{
 					cond = true;
@@ -534,8 +536,6 @@ namespace Mosa.Utility.SourceCodeGenerator
 			{
 				rawEncoding = rawEncoding + "," + append.Trim();
 			}
-
-			//rawEncoding = rawEncoding.Replace("\t", string.Empty);
 
 			return ReduceEncoding(rawEncoding);
 		}
