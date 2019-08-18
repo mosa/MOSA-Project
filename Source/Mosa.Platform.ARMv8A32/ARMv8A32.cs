@@ -193,5 +193,21 @@ namespace Mosa.Platform.ARMv8A32
 		public static readonly StfDown StfDown = new StfDown();
 		public static readonly StfUpOffset StfUpOffset = new StfUpOffset();
 		public static readonly StfDownOffset StfDownOffset = new StfDownOffset();
+		public static readonly AdfImm AdfImm = new AdfImm();
+		public static readonly MufImm MufImm = new MufImm();
+		public static readonly SufImm SufImm = new SufImm();
+		public static readonly RsfImm RsfImm = new RsfImm();
+		public static readonly DvrImm DvrImm = new DvrImm();
+		public static readonly DvfImm DvfImm = new DvfImm();
+		public static readonly RmfImm RmfImm = new RmfImm();
+		public static readonly FmlImm FmlImm = new FmlImm();
+		public static readonly FdvImm FdvImm = new FdvImm();
+		public static readonly FrdImm FrdImm = new FrdImm();
+		public static readonly MvfImm MvfImm = new MvfImm();
+		public static readonly MnfImm MnfImm = new MnfImm();
+		public static readonly AbsImm AbsImm = new AbsImm();
+		public static readonly RndImm RndImm = new RndImm();
+		public static readonly SqtImm SqtImm = new SqtImm();
+		public static readonly FltImm FltImm = new FltImm();
 	}
 }

@@ -195,6 +195,22 @@ namespace Mosa.Platform.ARMv8A32
 			ARMv8A32.StfDown,
 			ARMv8A32.StfUpOffset,
 			ARMv8A32.StfDownOffset,
+			ARMv8A32.AdfImm,
+			ARMv8A32.MufImm,
+			ARMv8A32.SufImm,
+			ARMv8A32.RsfImm,
+			ARMv8A32.DvrImm,
+			ARMv8A32.DvfImm,
+			ARMv8A32.RmfImm,
+			ARMv8A32.FmlImm,
+			ARMv8A32.FdvImm,
+			ARMv8A32.FrdImm,
+			ARMv8A32.MvfImm,
+			ARMv8A32.MnfImm,
+			ARMv8A32.AbsImm,
+			ARMv8A32.RndImm,
+			ARMv8A32.SqtImm,
+			ARMv8A32.FltImm,
 		};
 	}
 }

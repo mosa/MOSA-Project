@@ -3343,7 +3343,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Move",
-			"OpcodeEncodingAppend": "opcode=0000,e=1,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=000,fm=reg3:o2",
+			"OpcodeEncodingAppend": "opcode=0000,e=1,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=000,fm=reg3:o1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3364,7 +3364,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Move Negated",
-			"OpcodeEncodingAppend": "opcode=0001,e=1,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=000,fm=reg3:o2",
+			"OpcodeEncodingAppend": "opcode=0001,e=1,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=000,fm=reg3:o1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3385,7 +3385,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Absolute value",
-			"OpcodeEncodingAppend": "opcode=0101,e=1,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=000,fm=reg3:o2",
+			"OpcodeEncodingAppend": "opcode=0101,e=1,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=000,fm=reg3:o1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3406,7 +3406,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Round to integral value",
-			"OpcodeEncodingAppend": "opcode=0111,e=1,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=000,fm=reg3:o2",
+			"OpcodeEncodingAppend": "opcode=0111,e=1,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=000,fm=reg3:o1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3427,7 +3427,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Square root",
-			"OpcodeEncodingAppend": "opcode=0100,e=1,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=000,fm=reg3:o2",
+			"OpcodeEncodingAppend": "opcode=0100,e=1,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=000,fm=reg3:o1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3811,6 +3811,342 @@
 				{
 					"Condition": "[register][register]",
 					"Encoding": "[arm-fp-data-transfer-register]"
+				}
+			]
+		},
+		{
+			"Name": "AdfImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Addition",
+			"OpcodeEncodingAppend": "opcode=0000,e=0,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=reg3:o1,fm=imm4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "MufImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Multiply",
+			"OpcodeEncodingAppend": "opcode=0001,e=0,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=reg3:o1,fm=imm4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "SufImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Subtract",
+			"OpcodeEncodingAppend": "opcode=0010,e=0,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=reg3:o1,fm=imm4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "RsfImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Reverse Subtract",
+			"OpcodeEncodingAppend": "opcode=0011,e=0,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=reg3:o1,fm=imm4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "DvrImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Divide",
+			"OpcodeEncodingAppend": "opcode=0100,e=0,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=reg3:o1,fm=imm4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "DvfImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Reverse Divide",
+			"OpcodeEncodingAppend": "opcode=0101,e=0,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=reg3:o1,fm=imm4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "RmfImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Remainder",
+			"OpcodeEncodingAppend": "opcode=1000,e=0,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=reg3:o1,fm=imm4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "FmlImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Fast Multiply",
+			"OpcodeEncodingAppend": "opcode=1001,e=0,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=reg3:o1,fm=imm4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "FdvImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Fast Divide",
+			"OpcodeEncodingAppend": "opcode=1010,e=0,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=reg3:o1,fm=imm4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "FrdImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Fast Reverse Divide",
+			"OpcodeEncodingAppend": "opcode=1011,e=0,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=reg3:o1,fm=imm4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "MvfImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Move",
+			"OpcodeEncodingAppend": "opcode=0000,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm4:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "MnfImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Move Negated",
+			"OpcodeEncodingAppend": "opcode=0001,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm4:o1",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "AbsImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Absolute value",
+			"OpcodeEncodingAppend": "opcode=0101,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm4:o1",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "RndImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Round to integral value",
+			"OpcodeEncodingAppend": "opcode=0111,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm4:o1",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "SqtImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Square root",
+			"OpcodeEncodingAppend": "opcode=0100,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm4:o1",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "FltImm",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Convert Integer to Floating-Point",
+			"OpcodeEncodingAppend": "opcode=0001,e=0,f=fp:r,gh=00,i=1,fd=reg3:r,fm=imm4:o1",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[arm-fp-register-transfer]"
 				}
 			]
 		}

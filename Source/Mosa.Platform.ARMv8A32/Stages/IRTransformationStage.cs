@@ -125,6 +125,12 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void AddFloatR4(Context context)
 		{
+			// TODO: (across all float instructions)
+			// if operand1 is constant
+			// if resolved & specific constant, then AdfImm
+			// else if resolved & non-specific constant, then LoadConstant, adf
+			// else if unresolved, throw not implemented
+
 			context.ReplaceInstruction(ARMv8A32.Adf);
 		}
 

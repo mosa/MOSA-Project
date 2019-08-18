@@ -7,14 +7,14 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv8A32.Instructions
 {
 	/// <summary>
-	/// Abs - Absolute value
+	/// SqtImm - Square root
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
-	public sealed class Abs : ARMv8A32Instruction
+	public sealed class SqtImm : ARMv8A32Instruction
 	{
-		public override int ID { get { return 662; } }
+		public override int ID { get { return 697; } }
 
-		internal Abs()
+		internal SqtImm()
 			: base(1, 1)
 		{
 		}
@@ -30,7 +30,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 			{
 				emitter.OpcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 				emitter.OpcodeEncoder.Append4Bits(0b1110);
-				emitter.OpcodeEncoder.Append4Bits(0b0101);
+				emitter.OpcodeEncoder.Append4Bits(0b0100);
 				emitter.OpcodeEncoder.Append1Bit(0b1);
 				emitter.OpcodeEncoder.Append3Bits(0b000);
 				emitter.OpcodeEncoder.Append1Bit(0b0);
@@ -39,8 +39,8 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 				emitter.OpcodeEncoder.Append1Bit(node.Result.IsR4 ? 0 : 1);
 				emitter.OpcodeEncoder.Append2Bits(0b00);
 				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				emitter.OpcodeEncoder.Append1Bit(0b1);
+				emitter.OpcodeEncoder.Append4BitImmediate(node.Operand1);
 				return;
 			}
 
