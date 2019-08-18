@@ -3531,7 +3531,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Convert Floating-Point to Integer",
-			"OpcodeEncodingAppend": "opcode=0000,e=0,f=fp:o1,gh=00,i=0,fd=reg3:r,fm=reg3:o1",
+			"OpcodeEncodingAppend": "opcode=0000,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",

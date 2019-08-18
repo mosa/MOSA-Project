@@ -51,11 +51,8 @@
     <Compile Include="BuildARMv8A32InstructionFiles.cs" />
     <Compile Include="BuildARMv8A32Instructions.cs" />
     <Compile Include="BuildESP32.cs" />
-    <Compile Include="BuildARMv6.cs" />
     <Compile Include="BuildESP32InstructionFiles.cs" />
     <Compile Include="BuildESP32Instructions.cs" />
-    <Compile Include="BuildARMv6Instructions.cs" />
-    <Compile Include="BuildARMv6InstructionFiles.cs" />
     <Compile Include="BuildX64InstructionFiles.cs" />
     <Compile Include="BuildX64.cs" />
     <Compile Include="BuildRules.cs" />

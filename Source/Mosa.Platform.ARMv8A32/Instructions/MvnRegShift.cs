@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class MvnRegShift : ARMv8A32Instruction
 	{
-		public override int ID { get { return 602; } }
+		public override int ID { get { return 532; } }
 
 		internal MvnRegShift()
 			: base(1, 4)

@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class EorRegShift : ARMv8A32Instruction
 	{
-		public override int ID { get { return 598; } }
+		public override int ID { get { return 528; } }
 
 		internal EorRegShift()
 			: base(1, 4)

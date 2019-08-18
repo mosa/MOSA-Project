@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Adf : ARMv8A32Instruction
 	{
-		public override int ID { get { return 720; } }
+		public override int ID { get { return 650; } }
 
 		internal Adf()
 			: base(1, 2)

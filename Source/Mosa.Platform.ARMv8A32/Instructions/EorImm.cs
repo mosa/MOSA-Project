@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class EorImm : ARMv8A32Instruction
 	{
-		public override int ID { get { return 596; } }
+		public override int ID { get { return 526; } }
 
 		internal EorImm()
 			: base(1, 2)

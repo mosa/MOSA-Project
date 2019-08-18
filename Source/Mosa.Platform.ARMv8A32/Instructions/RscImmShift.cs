@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class RscImmShift : ARMv8A32Instruction
 	{
-		public override int ID { get { return 613; } }
+		public override int ID { get { return 543; } }
 
 		internal RscImmShift()
 			: base(1, 4)

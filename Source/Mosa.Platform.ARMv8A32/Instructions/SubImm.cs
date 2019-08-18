@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class SubImm : ARMv8A32Instruction
 	{
-		public override int ID { get { return 620; } }
+		public override int ID { get { return 550; } }
 
 		internal SubImm()
 			: base(1, 2)

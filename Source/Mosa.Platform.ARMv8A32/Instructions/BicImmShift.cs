@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class BicImmShift : ARMv8A32Instruction
 	{
-		public override int ID { get { return 585; } }
+		public override int ID { get { return 515; } }
 
 		internal BicImmShift()
 			: base(1, 4)

@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Rfs : ARMv8A32Instruction
 	{
-		public override int ID { get { return 741; } }
+		public override int ID { get { return 671; } }
 
 		internal Rfs()
 			: base(1, 1)
