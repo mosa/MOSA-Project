@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class SubFloatR4 : BaseIRInstruction
 	{
-		public override int ID { get { return 161; } }
+		public override int ID { get { return 160; } }
 
 		public SubFloatR4()
 			: base(2, 1)

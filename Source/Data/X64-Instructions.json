@@ -1810,7 +1810,7 @@
 			]
 		},
 		{
-			"Name": "Movd",
+			"Name": "Movdsdi64",
 			"FamilyName": "X64",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -1824,7 +1824,26 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex64],opcode=01100110,opcode2=00001111,opcode3=01111110,mod=11,reg=reg3:o1,rm=reg3:r,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:r"
+					"Encoding": "[x64-rex64],opcode=01100110,opcode2=00001111,opcode3=0x6E,mod=11,reg=reg3:o1,rm=reg3:r,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "Movdi64sd",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=01100110,opcode2=00001111,opcode3=0x7E,mod=11,reg=reg3:o1,rm=reg3:r,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:r"
 				}
 			]
 		},

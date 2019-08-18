@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Branch : X64Instruction
 	{
-		public override int ID { get { return 488; } }
+		public override int ID { get { return 489; } }
 
 		internal Branch()
 			: base(0, 0)

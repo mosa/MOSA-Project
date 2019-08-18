@@ -468,7 +468,7 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = cbEnableSparseConditionalConstantPropagation.Checked;
 			Compiler.CompilerOptions.EmitBinary = cbEnableBinaryCodeGeneration.Checked;
 			Compiler.CompilerOptions.EnableInlinedMethods = cbEnableInlinedMethods.Checked;
-			Compiler.CompilerOptions.EnableIRLongExpansion = cbEnableIRLongExpansion.Checked;
+			Compiler.CompilerOptions.EnableLongExpansion = cbEnableLongExpansion.Checked;
 			Compiler.CompilerOptions.InlinedIRMaximum = 12;
 			Compiler.CompilerOptions.TwoPassOptimizations = cbEnableTwoPassOptimizations.Checked;
 			Compiler.CompilerOptions.EnableMethodScanner = cbEnableMethodScanner.Checked;
@@ -525,7 +525,6 @@ namespace Mosa.Tool.Explorer
 			{
 				case "x86": return Platform.x86.Architecture.CreateArchitecture(Platform.x86.ArchitectureFeatureFlags.AutoDetect);
 				case "x64": return Platform.x64.Architecture.CreateArchitecture(Platform.x64.ArchitectureFeatureFlags.AutoDetect);
-				case "armv6": return Platform.ARMv6.Architecture.CreateArchitecture(Platform.ARMv6.ArchitectureFeatureFlags.AutoDetect);
 				case "armv8a32": return Platform.ARMv8A32.Architecture.CreateArchitecture(Platform.ARMv8A32.ArchitectureFeatureFlags.AutoDetect);
 				default: return Platform.x86.Architecture.CreateArchitecture(Platform.x86.ArchitectureFeatureFlags.AutoDetect);
 			}

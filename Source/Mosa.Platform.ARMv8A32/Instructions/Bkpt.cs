@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Bkpt : ARMv8A32Instruction
 	{
-		public override int ID { get { return 634; } }
+		public override int ID { get { return 564; } }
 
 		internal Bkpt()
 			: base(1, 3)

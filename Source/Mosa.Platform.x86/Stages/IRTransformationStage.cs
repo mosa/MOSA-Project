@@ -28,7 +28,6 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.ArithShiftRight32, ArithShiftRight32);
 			AddVisitation(IRInstruction.BitCopyFloatR4ToInt32, BitCopyFloatR4ToInt32);
 			AddVisitation(IRInstruction.BitCopyInt32ToFloatR4, BitCopyInt32ToFloatR4);
-			AddVisitation(IRInstruction.Break, Break);
 			AddVisitation(IRInstruction.CallDirect, CallDirect);
 			AddVisitation(IRInstruction.CompareFloatR4, CompareFloatR4);
 			AddVisitation(IRInstruction.CompareFloatR8, CompareFloatR8);
@@ -173,17 +172,12 @@ namespace Mosa.Platform.x86.Stages
 
 		private void BitCopyFloatR4ToInt32(InstructionNode node)
 		{
-			node.SetInstruction(X86.Movd, node.Result, node.Operand1);
+			node.ReplaceInstruction(X86.Movdssi32);
 		}
 
 		private void BitCopyInt32ToFloatR4(InstructionNode node)
 		{
-			node.SetInstruction(X86.Movd, node.Result, node.Operand1);
-		}
-
-		private void Break(InstructionNode node)
-		{
-			node.SetInstruction(X86.Break);
+			node.ReplaceInstruction(X86.Movdi32ss);
 		}
 
 		private void CallDirect(InstructionNode node)

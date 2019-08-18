@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class CpuId : X86Instruction
 	{
-		public override int ID { get { return 211; } }
+		public override int ID { get { return 210; } }
 
 		internal CpuId()
 			: base(1, 1)

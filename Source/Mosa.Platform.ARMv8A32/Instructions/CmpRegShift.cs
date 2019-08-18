@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class CmpRegShift : ARMv8A32Instruction
 	{
-		public override int ID { get { return 594; } }
+		public override int ID { get { return 524; } }
 
 		internal CmpRegShift()
 			: base(0, 4)

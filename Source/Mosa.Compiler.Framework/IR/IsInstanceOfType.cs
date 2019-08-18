@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class IsInstanceOfType : BaseIRInstruction
 	{
-		public override int ID { get { return 56; } }
+		public override int ID { get { return 55; } }
 
 		public IsInstanceOfType()
 			: base(2, 1)

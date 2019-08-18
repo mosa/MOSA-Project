@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Sxth : ARMv8A32Instruction
 	{
-		public override int ID { get { return 700; } }
+		public override int ID { get { return 630; } }
 
 		internal Sxth()
 			: base(1, 1)

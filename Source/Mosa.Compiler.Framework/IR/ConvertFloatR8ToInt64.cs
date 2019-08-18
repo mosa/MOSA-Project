@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class ConvertFloatR8ToInt64 : BaseIRInstruction
 	{
-		public override int ID { get { return 34; } }
+		public override int ID { get { return 33; } }
 
 		public ConvertFloatR8ToInt64()
 			: base(1, 1)

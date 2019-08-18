@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class RsbImm : ARMv8A32Instruction
 	{
-		public override int ID { get { return 608; } }
+		public override int ID { get { return 538; } }
 
 		internal RsbImm()
 			: base(1, 2)
@@ -30,7 +30,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 				emitter.OpcodeEncoder.Append2Bits(0b00);
 				emitter.OpcodeEncoder.Append1Bit(0b1);
 				emitter.OpcodeEncoder.Append4Bits(0b0011);
-				emitter.OpcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.Update ? 1 :0);
+				emitter.OpcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.Update ? 1 : 0);
 				emitter.OpcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append12BitImmediate(node.Operand2);

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class CallDirect : BaseIRInstruction
 	{
-		public override int ID { get { return 16; } }
+		public override int ID { get { return 15; } }
 
 		public CallDirect()
 			: base(0, 0)

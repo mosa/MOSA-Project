@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Mull : ARMv8A32Instruction
 	{
-		public override int ID { get { return 683; } }
+		public override int ID { get { return 613; } }
 
 		internal Mull()
 			: base(2, 2)
@@ -40,7 +40,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 				emitter.OpcodeEncoder.Append4Bits(0b0000);
 				emitter.OpcodeEncoder.Append1Bit(0b1);
 				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.Update ? 1 :0);
+				emitter.OpcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.Update ? 1 : 0);
 				emitter.OpcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append4Bits(node.Result2.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);

@@ -22,7 +22,6 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly ArithShiftRight64 ArithShiftRight64 = new ArithShiftRight64();
 		public static readonly BlockEnd BlockEnd = new BlockEnd();
 		public static readonly BlockStart BlockStart = new BlockStart();
-		public static readonly Break Break = new Break();
 		public static readonly Call Call = new Call();
 		public static readonly CallDirect CallDirect = new CallDirect();
 		public static readonly CallDynamic CallDynamic = new CallDynamic();

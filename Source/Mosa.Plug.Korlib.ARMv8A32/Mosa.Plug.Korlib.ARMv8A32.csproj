@@ -72,10 +72,6 @@
       <Project>{631bc4f3-e2d8-4319-814c-13904caa17ce}</Project>
       <Name>Mosa.Korlib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Runtime.ARMv6\Mosa.Runtime.ARMv6.csproj">
-      <Project>{599d1c00-7c78-4211-a958-1285c4cb76c9}</Project>
-      <Name>Mosa.Runtime.ARMv6</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj">
       <Project>{77961864-db33-4189-804f-d774022c96e2}</Project>
       <Name>Mosa.Runtime</Name>

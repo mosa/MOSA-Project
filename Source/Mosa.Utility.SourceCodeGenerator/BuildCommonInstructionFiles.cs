@@ -437,6 +437,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 				var condition = DecodeExperimentalCondition(entry.Condition) ?? string.Empty;
 				var encoding = DecodeExperimentalEncoding(entry.Encoding, node.OpcodeEncodingAppend);
 
+				encoding = encoding.Replace("\t", string.Empty);
+
 				if (!String.IsNullOrEmpty(condition))
 				{
 					cond = true;
@@ -534,8 +536,6 @@ namespace Mosa.Utility.SourceCodeGenerator
 			{
 				rawEncoding = rawEncoding + "," + append.Trim();
 			}
-
-			//rawEncoding = rawEncoding.Replace("\t", string.Empty);
 
 			return ReduceEncoding(rawEncoding);
 		}
@@ -836,7 +836,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "forward32": code = "EmitForward32"; return;
 				case "supress8": code = "SuppressByte"; return;
 				case "conditional": code = "Append4Bits"; postcode = "GetConditionCode(node.ConditionCode)"; return;
-				case "status": code = "Append1Bit"; postcode = " == StatusRegister.Update ? 1 :0"; return;
+				case "status": code = "Append1Bit"; postcode = " == StatusRegister.Update ? 1 : 0"; return;
+				case "fp": code = "Append1Bit"; postcode = ".IsR4 ? 0 : 1"; return;
 				case "": return;
 
 				default: break;

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class Unbox64 : BaseIRInstruction
 	{
-		public override int ID { get { return 185; } }
+		public override int ID { get { return 184; } }
 
 		public Unbox64()
 			: base(2, 1)

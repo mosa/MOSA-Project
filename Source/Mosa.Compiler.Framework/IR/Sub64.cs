@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class Sub64 : BaseIRInstruction
 	{
-		public override int ID { get { return 164; } }
+		public override int ID { get { return 163; } }
 
 		public Sub64()
 			: base(2, 1)

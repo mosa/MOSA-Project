@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class StoreInt8 : BaseIRInstruction
 	{
-		public override int ID { get { return 150; } }
+		public override int ID { get { return 149; } }
 
 		public StoreInt8()
 			: base(3, 0)

@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class MovLoad8 : X64Instruction
 	{
-		public override int ID { get { return 397; } }
+		public override int ID { get { return 398; } }
 
 		internal MovLoad8()
 			: base(1, 2)

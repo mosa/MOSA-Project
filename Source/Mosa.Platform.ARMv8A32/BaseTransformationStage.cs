@@ -239,6 +239,47 @@ namespace Mosa.Platform.ARMv8A32
 			throw new CompilerException("Error at {context} in {Method}");
 		}
 
+		private Operand ConvertFloatToImm(Operand operand)
+		{
+			if (operand.IsCPURegister || operand.IsVirtualRegister)
+				return operand;
+
+			if (operand.IsR4)
+			{
+				var value = operand.ConstantSingleFloatingPoint;
+
+				switch (value)
+				{
+					case 0.0f: return CreateConstant(0b1000);
+					case 1.0f: return CreateConstant(0b1001);
+					case 2.0f: return CreateConstant(0b1010);
+					case 3.0f: return CreateConstant(0b1011);
+					case 4.0f: return CreateConstant(0b1100);
+					case 5.0f: return CreateConstant(0b1101);
+					case 0.5f: return CreateConstant(0b1110);
+					case 10.0f: return CreateConstant(0b1111);
+				}
+			}
+			else if (operand.IsR4)
+			{
+				var value = operand.ConstantDoubleFloatingPoint;
+
+				switch (value)
+				{
+					case 0.0d: return CreateConstant(0b1000);
+					case 1.0d: return CreateConstant(0b1001);
+					case 2.0d: return CreateConstant(0b1010);
+					case 3.0d: return CreateConstant(0b1011);
+					case 4.0d: return CreateConstant(0b1100);
+					case 5.0d: return CreateConstant(0b1101);
+					case 0.5d: return CreateConstant(0b1110);
+					case 10.0d: return CreateConstant(0b1111);
+				}
+			}
+
+			return operand;
+		}
+
 		#endregion Helper Methods
 	}
 }

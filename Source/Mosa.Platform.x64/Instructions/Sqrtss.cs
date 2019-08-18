@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Sqrtss : X64Instruction
 	{
-		public override int ID { get { return 470; } }
+		public override int ID { get { return 471; } }
 
 		internal Sqrtss()
 			: base(1, 1)

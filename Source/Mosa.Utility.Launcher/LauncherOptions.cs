@@ -92,7 +92,7 @@ namespace Mosa.Utility.Launcher
 		public bool EnableInlinedMethodsFalse { set { EnableInlinedMethods = false; } }
 
 		[Option("ir-long-expansion")]
-		public bool EnableIRLongExpansion { get; set; }
+		public bool EnableLongExpansion { get; set; }
 
 		[Option("two-pass-optimizations")]
 		public bool TwoPassOptimizations { get; set; }
@@ -122,7 +122,7 @@ namespace Mosa.Utility.Launcher
 				EnableIROptimizations = false;
 				EnableInlinedMethods = false;
 				TwoPassOptimizations = false;
-				EnableIRLongExpansion = false;
+				EnableLongExpansion = false;
 				EnableSparseConditionalConstantPropagation = false;
 				EnableValueNumbering = false;
 				EnableBitTracker = false;
@@ -376,7 +376,7 @@ namespace Mosa.Utility.Launcher
 			SerialConnectionHost = "127.0.0.1";
 			InlinedIRMaximum = 12;
 			LaunchVM = true;
-			EnableIRLongExpansion = true;
+			EnableLongExpansion = true;
 			TwoPassOptimizations = true;
 			EnableValueNumbering = true;
 			LaunchGDB = false;
@@ -390,7 +390,7 @@ namespace Mosa.Utility.Launcher
 			EnableIROptimizations = true;
 			EnableSparseConditionalConstantPropagation = true;
 			EnableInlinedMethods = true;
-			EnableIRLongExpansion = true;
+			EnableLongExpansion = true;
 			TwoPassOptimizations = true;
 			EnableValueNumbering = true;
 			EnableBitTracker = true;

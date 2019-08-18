@@ -161,7 +161,8 @@
     <Compile Include="Instructions\MovCRLoad64.cs" />
     <Compile Include="Instructions\MovCRStore32.cs" />
     <Compile Include="Instructions\MovCRStore64.cs" />
-    <Compile Include="Instructions\Movd.cs" />
+    <Compile Include="Instructions\Movdi64sd.cs" />
+    <Compile Include="Instructions\Movdsdi64.cs" />
     <Compile Include="Instructions\MovLoad16.cs" />
     <Compile Include="Instructions\MovLoad32.cs" />
     <Compile Include="Instructions\MovLoad64.cs" />

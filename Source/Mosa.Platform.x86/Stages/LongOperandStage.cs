@@ -135,7 +135,7 @@ namespace Mosa.Platform.x86.Stages
 
 			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
 
-			context.SetInstruction(X86.Movd, resultLow, operand1);
+			context.SetInstruction(X86.Movdssi32, resultLow, operand1); // FIXME
 			context.AppendInstruction(X86.Pextrd32, resultHigh, operand1, CreateConstant(1));
 		}
 
@@ -145,7 +145,7 @@ namespace Mosa.Platform.x86.Stages
 
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);
 
-			context.SetInstruction(X86.Movd, result, op1L);
+			context.SetInstruction(X86.Movdssi32, result, op1L);    // FIXME
 			context.AppendInstruction(X86.Pextrd32, result, op1H, CreateConstant(1));
 		}
 

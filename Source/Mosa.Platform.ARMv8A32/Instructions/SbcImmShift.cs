@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class SbcImmShift : ARMv8A32Instruction
 	{
-		public override int ID { get { return 617; } }
+		public override int ID { get { return 547; } }
 
 		internal SbcImmShift()
 			: base(1, 4)
@@ -32,7 +32,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 				emitter.OpcodeEncoder.Append2Bits(0b00);
 				emitter.OpcodeEncoder.Append1Bit(0b0);
 				emitter.OpcodeEncoder.Append4Bits(0b0110);
-				emitter.OpcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.Update ? 1 :0);
+				emitter.OpcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.Update ? 1 : 0);
 				emitter.OpcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append5BitImmediate(node.Operand3);

@@ -142,7 +142,8 @@
     <Compile Include="Instructions\MovapsLoad.cs" />
     <Compile Include="Instructions\MovCRLoad32.cs" />
     <Compile Include="Instructions\MovCRStore32.cs" />
-    <Compile Include="Instructions\Movd.cs" />
+    <Compile Include="Instructions\Movdi32ss.cs" />
+    <Compile Include="Instructions\Movdssi32.cs" />
     <Compile Include="Instructions\MovLoad16.cs" />
     <Compile Include="Instructions\MovLoad32.cs" />
     <Compile Include="Instructions\MovLoad8.cs" />

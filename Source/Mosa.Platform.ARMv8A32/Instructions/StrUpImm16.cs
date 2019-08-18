@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class StrUpImm16 : ARMv8A32Instruction
 	{
-		public override int ID { get { return 671; } }
+		public override int ID { get { return 601; } }
 
 		internal StrUpImm16()
 			: base(0, 3)
@@ -37,7 +37,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 				emitter.OpcodeEncoder.Append4Bits(node.Operand3.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append4BitImmediateHighNibble(node.Operand2);
 				emitter.OpcodeEncoder.Append1Bit(0b1);
-				emitter.OpcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.Update ? 1 :0);
+				emitter.OpcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.Update ? 1 : 0);
 				emitter.OpcodeEncoder.Append1Bit(0b1);
 				emitter.OpcodeEncoder.Append1Bit(0b1);
 				emitter.OpcodeEncoder.Append4BitImmediate(node.Operand2);

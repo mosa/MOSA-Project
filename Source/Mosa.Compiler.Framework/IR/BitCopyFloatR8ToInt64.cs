@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class BitCopyFloatR8ToInt64 : BaseIRInstruction
 	{
-		public override int ID { get { return 192; } }
+		public override int ID { get { return 191; } }
 
 		public BitCopyFloatR8ToInt64()
 			: base(1, 1)
