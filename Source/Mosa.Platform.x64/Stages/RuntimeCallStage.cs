@@ -8,7 +8,7 @@ using System.Diagnostics;
 namespace Mosa.Platform.x64.Stages
 {
 	/// <summary>
-	/// IR Substitution Stage
+	/// Runtime Call Stage
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x64.BaseTransformationStage" />
 	public sealed class RuntimeCallStage : BaseTransformationStage
