@@ -1,3 +1,7 @@
+###############
+Compiler Design
+###############
+
 The MOSA Compiler Framework is based on the idea of a pipeline. Every method is compiled by a method compiler, that specifies the pipeline to use for compilation. Such a pipeline may consist of any number of compilation stages. These stages can be grouped into various kinds:
 
 - Compiler Frontends - Create an instruction stream from a source specific representation, such as CIL or Java byte code
@@ -17,3 +21,29 @@ The compiler framework uses a linear intermediate representation to transform th
 - MIR - Machine specific Intermediate Representation
 
 During compilation of an CIL method the instructions are represented by CIL instruction classes and moving forward, the linear instruction stream is modified to use instructions from the intermediate representation. In some cases an instruction from the intermediate representation can not be emitted directly to machine code and it is replaced by a sequence of machine specific instruction objects. The machine specific instruction classes are provided by the appropriate platform. There are other uses for machine specific instruction classes, but the main use is effective code generation.
+
+
+Compiler Optimizations
+----------------------
+
+InlinedMethods
+  Inlines the code of small methods into the caller. This improves the performance, because calls are expensive (Storing the registers, placing the arguments onto stack, jumping to another location). As side effect, inlining methods may increase the compile file size. For debugging purposes it could be usefull to disable this optimizations (setting correct breakpoint, see real back trace in GDB).
+
+BitTracker
+  BitTracker tracks the bits in virtual registers thru the various instructions. Either, set, clear or unknown per bit. With all the other optimization enabled, it doesn’t do much.
+
+IROptimizations
+  TODO: Documentation
+  
+SparseConditionalConstantPropagation
+  TODO: Documentation
+
+IRLongExpansion
+  TODO: Documentation
+
+ValueNumbering
+  TODO: Documentation
+
+TwoPassOptimizations
+  TODO: Documentation
+
