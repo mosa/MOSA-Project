@@ -113,6 +113,8 @@
     <Compile Include="Instructions\Bkpt.cs" />
     <Compile Include="Instructions\Bl.cs" />
     <Compile Include="Instructions\Bx.cs" />
+    <Compile Include="Instructions\Cmf.cs" />
+    <Compile Include="Instructions\Cmfe.cs" />
     <Compile Include="Instructions\Cmn.cs" />
     <Compile Include="Instructions\CmnImm.cs" />
     <Compile Include="Instructions\CmnImmShift.cs" />
@@ -121,6 +123,8 @@
     <Compile Include="Instructions\CmpImm.cs" />
     <Compile Include="Instructions\CmpImmShift.cs" />
     <Compile Include="Instructions\CmpRegShift.cs" />
+    <Compile Include="Instructions\Cnf.cs" />
+    <Compile Include="Instructions\Cnfe.cs" />
     <Compile Include="Instructions\Dmb.cs" />
     <Compile Include="Instructions\Dsb.cs" />
     <Compile Include="Instructions\DvfR4.cs" />

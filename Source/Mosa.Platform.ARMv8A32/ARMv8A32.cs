@@ -194,5 +194,9 @@ namespace Mosa.Platform.ARMv8A32
 		public static readonly Rfs Rfs = new Rfs();
 		public static readonly Wfc Wfc = new Wfc();
 		public static readonly Rfc Rfc = new Rfc();
+		public static readonly Cmf Cmf = new Cmf();
+		public static readonly Cnf Cnf = new Cnf();
+		public static readonly Cmfe Cmfe = new Cmfe();
+		public static readonly Cnfe Cnfe = new Cnfe();
 	}
 }

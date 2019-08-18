@@ -13,8 +13,9 @@
 
 		"[arm-extended-register]=                   conditional|01101|[s]|1|[b]|1111|[rd]|[rotate]|00|0111|[rm]",
 
-		"[arm-fp-data-processing]=					conditional|1110|[opcode]|[e]|[fn]|0|[fd]|0001|[f]|[gh]|0|[i]|[fm]",
-		"[arm-fp-register-transfer]=				conditional|1110|[opcode]|[e]|[fn]|[rd]|0001|[f]|[gh]|1|[i]|[fm]"
+		"[arm-fp-data-processing]=                  conditional|1110|[opcode]|[e]|[fn]|0|[fd]|0001|[f]|[gh]|0|[i]|[fm]",
+		"[arm-fp-register-transfer]=                conditional|1110|[opcode]|[e]|[fn]|[rd]|0001|[f]|[gh]|1|[i]|[fm]",
+		"[arm-fp-comparision]=                      conditional|1110|[opcode]|1|[e]|[fn]|1111|0001|[f]|[gh]|1|[i]|[fm]"
 	],
 	"Instructions": [
 		{
@@ -3680,7 +3681,7 @@
 			"OpcodeEncodingAppend": "opcode=0001,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register]",
+					"Condition": "[register]",
 					"Encoding": "[arm-fp-register-transfer]"
 				}
 			]
@@ -3701,7 +3702,7 @@
 			"OpcodeEncodingAppend": "opcode=0001,e=0,f=1,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register]",
+					"Condition": "[register]",
 					"Encoding": "[arm-fp-register-transfer]"
 				}
 			]
@@ -3722,7 +3723,7 @@
 			"OpcodeEncodingAppend": "opcode=0000,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register]",
+					"Condition": "[register]",
 					"Encoding": "[arm-fp-register-transfer]"
 				}
 			]
@@ -3743,7 +3744,7 @@
 			"OpcodeEncodingAppend": "opcode=0000,e=0,f=1,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register]",
+					"Condition": "[register]",
 					"Encoding": "[arm-fp-register-transfer]"
 				}
 			]
@@ -3764,7 +3765,7 @@
 			"OpcodeEncodingAppend": "opcode=0010,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register]",
+					"Condition": "[register]",
 					"Encoding": "[arm-fp-register-transfer]"
 				}
 			]
@@ -3785,12 +3786,11 @@
 			"OpcodeEncodingAppend": "opcode=0011,e=0,f=1,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register]",
+					"Condition": "[register]",
 					"Encoding": "[arm-fp-register-transfer]"
 				}
 			]
 		},
-
 		{
 			"Name": "Wfc",
 			"Commutative": "true",
@@ -3807,7 +3807,7 @@
 			"OpcodeEncodingAppend": "opcode=0100,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register]",
+					"Condition": "[register]",
 					"Encoding": "[arm-fp-register-transfer]"
 				}
 			]
@@ -3828,11 +3828,95 @@
 			"OpcodeEncodingAppend": "opcode=0101,e=0,f=1,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register]",
+					"Condition": "[register]",
 					"Encoding": "[arm-fp-register-transfer]"
 				}
 			]
-		}
+		},
+		{
+			"Name": "Cmf",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Write Floating-Point Status Register",
+			"OpcodeEncodingAppend": "opcode=100,e=0,f=0,gh=00,i=0,fn=reg3:r,fm=reg3:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[arm-fp-comparision]"
+				}
+			]
+		},
+		{
+			"Name": "Cnf",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Read Floating-Point Status Register",
+			"OpcodeEncodingAppend": "opcode=101,e=0,f=1,gh=00,i=0,fn=reg3:r,fm=reg3:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[arm-fp-comparision]"
+				}
+			]
+		},
 
+		{
+			"Name": "Cmfe",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Write Floating-Point Control Register",
+			"OpcodeEncodingAppend": "opcode=110,e=0,f=0,gh=00,i=0,fn=reg3:r,fm=reg3:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[arm-fp-comparision]"
+				}
+			]
+		},
+		{
+			"Name": "Cnfe",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Read Floating-Point Control Register",
+			"OpcodeEncodingAppend": "opcode=111,e=0,f=1,gh=00,i=0,fn=reg3:r,fm=reg3:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[arm-fp-comparision]"
+				}
+			]
+		}
 	]
 }

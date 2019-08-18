@@ -26,7 +26,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister)
+			if (node.Operand1.IsCPURegister)
 			{
 				emitter.OpcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 				emitter.OpcodeEncoder.Append4Bits(0b1110);
