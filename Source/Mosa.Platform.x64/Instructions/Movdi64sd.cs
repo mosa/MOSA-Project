@@ -7,14 +7,14 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x64.Instructions
 {
 	/// <summary>
-	/// Movdssi64
+	/// Movdi64sd
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
-	public sealed class Movdssi64 : X64Instruction
+	public sealed class Movdi64sd : X64Instruction
 	{
-		public override int ID { get { return 396; } }
+		public override int ID { get { return 397; } }
 
-		internal Movdssi64()
+		internal Movdi64sd()
 			: base(1, 1)
 		{
 		}
@@ -34,7 +34,7 @@ namespace Mosa.Platform.x64.Instructions
 			emitter.OpcodeEncoder.Append4Bits(0b0110);
 			emitter.OpcodeEncoder.Append4Bits(0b0000);
 			emitter.OpcodeEncoder.Append4Bits(0b1111);
-			emitter.OpcodeEncoder.Append8Bits(0x6E);
+			emitter.OpcodeEncoder.Append8Bits(0x7E);
 			emitter.OpcodeEncoder.Append2Bits(0b11);
 			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);

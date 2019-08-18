@@ -12,7 +12,7 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Movdsdi64 : X64Instruction
 	{
-		public override int ID { get { return 397; } }
+		public override int ID { get { return 396; } }
 
 		internal Movdsdi64()
 			: base(1, 1)
@@ -34,7 +34,7 @@ namespace Mosa.Platform.x64.Instructions
 			emitter.OpcodeEncoder.Append4Bits(0b0110);
 			emitter.OpcodeEncoder.Append4Bits(0b0000);
 			emitter.OpcodeEncoder.Append4Bits(0b1111);
-			emitter.OpcodeEncoder.Append8Bits(0x7E);
+			emitter.OpcodeEncoder.Append8Bits(0x6E);
 			emitter.OpcodeEncoder.Append2Bits(0b11);
 			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);

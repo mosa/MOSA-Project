@@ -1810,7 +1810,7 @@
 			]
 		},
 		{
-			"Name": "Movdssi64",
+			"Name": "Movdsdi64",
 			"FamilyName": "X64",
 			"FlagsCleared": "",
 			"FlagsModified": "",
@@ -1829,7 +1829,7 @@
 			]
 		},
 		{
-			"Name": "Movdsdi64",
+			"Name": "Movdi64sd",
 			"FamilyName": "X64",
 			"FlagsCleared": "",
 			"FlagsModified": "",
