@@ -17,8 +17,9 @@ namespace Mosa.Platform.ARMv8A32.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			//AddVisitation(IRInstruction.AddFloatR4, AddFloatR4);
-			//AddVisitation(IRInstruction.AddFloatR8, AddFloatR8);
+			AddVisitation(IRInstruction.AddFloatR4, AddFloatR4);
+			AddVisitation(IRInstruction.AddFloatR8, AddFloatR8);
+
 			//AddVisitation(IRInstruction.AddressOf, AddressOf);
 			AddVisitation(IRInstruction.Add32, Add32);
 			AddVisitation(IRInstruction.AddCarryOut32, AddCarryOut32);
@@ -40,8 +41,9 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.ConvertFloatR8ToInt32, ConvertFloatR8ToInt32);
 			//AddVisitation(IRInstruction.ConvertInt32ToFloatR4, ConvertInt32ToFloatR4);
 			//AddVisitation(IRInstruction.ConvertInt32ToFloatR8, ConvertInt32ToFloatR8);
-			//AddVisitation(IRInstruction.DivFloatR4, DivFloatR4);
-			//AddVisitation(IRInstruction.DivFloatR8, DivFloatR8);
+			AddVisitation(IRInstruction.DivFloatR4, DivFloatR4);
+			AddVisitation(IRInstruction.DivFloatR8, DivFloatR8);
+
 			//AddVisitation(IRInstruction.DivSigned32, DivSigned32);
 			//AddVisitation(IRInstruction.DivUnsigned32, DivUnsigned32);
 			AddVisitation(IRInstruction.Jmp, Jmp);
@@ -75,8 +77,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.ZeroExtend8x32, ZeroExtend8x32);
 			AddVisitation(IRInstruction.ZeroExtend16x32, ZeroExtend16x32);
 
-			//AddVisitation(IRInstruction.MulFloatR4, MulFloatR4);
-			//AddVisitation(IRInstruction.MulFloatR8, MulFloatR8);
+			AddVisitation(IRInstruction.MulFloatR4, MulFloatR4);
+			AddVisitation(IRInstruction.MulFloatR8, MulFloatR8);
 			AddVisitation(IRInstruction.MulSigned32, MulSigned32);
 			AddVisitation(IRInstruction.MulUnsigned32, MulUnsigned32);
 
@@ -98,8 +100,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.StoreParamInt16, StoreParamInt16);
 			AddVisitation(IRInstruction.StoreParamInt32, StoreParamInt32);
 
-			//AddVisitation(IRInstruction.SubFloatR4, SubFloatR4);
-			//AddVisitation(IRInstruction.SubFloatR8, SubFloatR8);
+			AddVisitation(IRInstruction.SubFloatR4, SubFloatR4);
+			AddVisitation(IRInstruction.SubFloatR8, SubFloatR8);
 			AddVisitation(IRInstruction.Sub32, Sub32);
 			AddVisitation(IRInstruction.SubCarryOut32, SubCarryOut32);
 			AddVisitation(IRInstruction.SubWithCarry32, SubWithCarry32);
@@ -122,6 +124,16 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.Carry, result2, CreateConstant(1));
 			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.NoCarry, result2, CreateConstant(0));
+		}
+
+		private void AddFloatR4(Context context)
+		{
+			context.ReplaceInstruction(ARMv8A32.Adf);
+		}
+
+		private void AddFloatR8(Context context)
+		{
+			context.ReplaceInstruction(ARMv8A32.Adf);
 		}
 
 		private void AddWithCarry32(Context context)
@@ -149,6 +161,16 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		private void ArithShiftRight32(Context context)
 		{
 			TransformInstruction(context, ARMv8A32.Asr, ARMv8A32.AsrImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
+		}
+
+		private void DivFloatR4(Context context)
+		{
+			context.ReplaceInstruction(ARMv8A32.Dvf);
+		}
+
+		private void DivFloatR8(Context context)
+		{
+			context.ReplaceInstruction(ARMv8A32.Dvf);
 		}
 
 		private void Jmp(Context context)
@@ -262,6 +284,16 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, context.Result, StatusRegister.NotSet, context.Operand1);
 		}
 
+		private void MulFloatR4(Context context)
+		{
+			context.ReplaceInstruction(ARMv8A32.Muf);
+		}
+
+		private void MulFloatR8(Context context)
+		{
+			context.ReplaceInstruction(ARMv8A32.Muf);
+		}
+
 		private void MulSigned32(Context context)
 		{
 			context.SetInstruction(ARMv8A32.Mul, context.Result, context.Operand1, context.Operand2);
@@ -335,6 +367,16 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.Carry, result2, CreateConstant(1));
 			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.NoCarry, result2, CreateConstant(0));
+		}
+
+		private void SubFloatR4(Context context)
+		{
+			context.ReplaceInstruction(ARMv8A32.Suf);
+		}
+
+		private void SubFloatR8(Context context)
+		{
+			context.ReplaceInstruction(ARMv8A32.Suf);
 		}
 
 		private void SubWithCarry32(Context context)

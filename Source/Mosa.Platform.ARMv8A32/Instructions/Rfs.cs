@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Rfs : ARMv8A32Instruction
 	{
-		public override int ID { get { return 751; } }
+		public override int ID { get { return 736; } }
 
 		internal Rfs()
 			: base(1, 1)
@@ -33,7 +33,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 				emitter.OpcodeEncoder.Append4Bits(0b0011);
 				emitter.OpcodeEncoder.Append1Bit(0b0);
 				emitter.OpcodeEncoder.Append4Bits(0b0001);
-				emitter.OpcodeEncoder.Append1Bit(0b1);
+				emitter.OpcodeEncoder.Append1Bit(0b0);
 				emitter.OpcodeEncoder.Append2Bits(0b00);
 				emitter.OpcodeEncoder.Append1Bit(0b1);
 				emitter.OpcodeEncoder.Append1Bit(0b0);

@@ -7,12 +7,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv8A32.Instructions
 {
 	/// <summary>
-	/// Cmfe - Write Floating-Point Control Register
+	/// Cmfe - Compare floating with exception compare
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Cmfe : ARMv8A32Instruction
 	{
-		public override int ID { get { return 756; } }
+		public override int ID { get { return 741; } }
 
 		internal Cmfe()
 			: base(1, 1)
@@ -36,7 +36,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append4Bits(0b1111);
 				emitter.OpcodeEncoder.Append4Bits(0b0001);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
+				emitter.OpcodeEncoder.Append1Bit(node.Operand1.IsR4 ? 0 : 1);
 				emitter.OpcodeEncoder.Append2Bits(0b00);
 				emitter.OpcodeEncoder.Append1Bit(0b1);
 				emitter.OpcodeEncoder.Append1Bit(0b0);

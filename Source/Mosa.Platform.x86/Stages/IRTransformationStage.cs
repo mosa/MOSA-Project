@@ -180,11 +180,6 @@ namespace Mosa.Platform.x86.Stages
 			node.SetInstruction(X86.Movd, node.Result, node.Operand1);
 		}
 
-		private void Break(InstructionNode node)
-		{
-			node.SetInstruction(X86.Break);
-		}
-
 		private void CallDirect(InstructionNode node)
 		{
 			Debug.Assert(node.Operand1 != null);

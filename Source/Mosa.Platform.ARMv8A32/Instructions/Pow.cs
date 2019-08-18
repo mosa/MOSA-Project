@@ -7,14 +7,14 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv8A32.Instructions
 {
 	/// <summary>
-	/// PowR8 - Power
+	/// Pow - Power
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
-	public sealed class PowR8 : ARMv8A32Instruction
+	public sealed class Pow : ARMv8A32Instruction
 	{
-		public override int ID { get { return 733; } }
+		public override int ID { get { return 726; } }
 
-		internal PowR8()
+		internal Pow()
 			: base(1, 2)
 		{
 		}
@@ -36,7 +36,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 				emitter.OpcodeEncoder.Append1Bit(0b0);
 				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append4Bits(0b0001);
-				emitter.OpcodeEncoder.Append1Bit(0b1);
+				emitter.OpcodeEncoder.Append1Bit(node.Result.IsR4 ? 0 : 1);
 				emitter.OpcodeEncoder.Append2Bits(0b00);
 				emitter.OpcodeEncoder.Append1Bit(0b0);
 				emitter.OpcodeEncoder.Append1Bit(0b0);
