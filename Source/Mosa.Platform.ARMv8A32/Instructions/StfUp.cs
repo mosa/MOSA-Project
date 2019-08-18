@@ -12,7 +12,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class StfUp : ARMv8A32Instruction
 	{
-		public override int ID { get { return 682; } }
+		public override int ID { get { return 679; } }
 
 		internal StfUp()
 			: base(0, 2)

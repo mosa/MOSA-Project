@@ -166,13 +166,10 @@ namespace Mosa.Platform.ARMv8A32
 		public static readonly Rsf Rsf = new Rsf();
 		public static readonly Dvr Dvr = new Dvr();
 		public static readonly Dvf Dvf = new Dvf();
-		public static readonly Pow Pow = new Pow();
-		public static readonly Rpw Rpw = new Rpw();
 		public static readonly Rmf Rmf = new Rmf();
 		public static readonly Fml Fml = new Fml();
 		public static readonly Fdv Fdv = new Fdv();
 		public static readonly Frd Frd = new Frd();
-		public static readonly Pol Pol = new Pol();
 		public static readonly Mvf Mvf = new Mvf();
 		public static readonly Mnf Mnf = new Mnf();
 		public static readonly Abs Abs = new Abs();

@@ -194,9 +194,7 @@
     <Compile Include="Instructions\OrrImm.cs" />
     <Compile Include="Instructions\OrrImmShift.cs" />
     <Compile Include="Instructions\OrrRegShift.cs" />
-    <Compile Include="Instructions\Pol.cs" />
     <Compile Include="Instructions\Pop.cs" />
-    <Compile Include="Instructions\Pow.cs" />
     <Compile Include="Instructions\Push.cs" />
     <Compile Include="Instructions\Rev.cs" />
     <Compile Include="Instructions\Rev16.cs" />
@@ -207,7 +205,6 @@
     <Compile Include="Instructions\Rnd.cs" />
     <Compile Include="Instructions\Ror.cs" />
     <Compile Include="Instructions\RorImm.cs" />
-    <Compile Include="Instructions\Rpw.cs" />
     <Compile Include="Instructions\Rsb.cs" />
     <Compile Include="Instructions\RsbImm.cs" />
     <Compile Include="Instructions\RsbImmShift.cs" />

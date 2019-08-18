@@ -636,7 +636,6 @@ namespace Mosa.Platform.x64.Stages
 		private void SubWithCarry32(Context context)
 		{
 			var result = context.Result;
-			var result2 = context.Result2;
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 			var operand3 = context.Operand3;

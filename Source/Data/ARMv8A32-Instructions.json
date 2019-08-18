@@ -3247,48 +3247,6 @@
 			]
 		},
 		{
-			"Name": "Pow",
-			"Commutative": "true",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Power",
-			"OpcodeEncodingAppend": "opcode=0110,e=0,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][register]",
-					"Encoding": "[arm-fp-data-processing]"
-				}
-			]
-		},
-		{
-			"Name": "Rpw",
-			"Commutative": "true",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Reverse Power",
-			"OpcodeEncodingAppend": "opcode=0111,e=0,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][register]",
-					"Encoding": "[arm-fp-data-processing]"
-				}
-			]
-		},
-		{
 			"Name": "Rmf",
 			"Commutative": "true",
 			"FamilyName": "ARMv8A32",
@@ -3365,27 +3323,6 @@
 			"ResultCount": 1,
 			"Description": "Fast Reverse Divide",
 			"OpcodeEncodingAppend": "opcode=1011,e=0,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][register]",
-					"Encoding": "[arm-fp-data-processing]"
-				}
-			]
-		},
-		{
-			"Name": "Pol",
-			"Commutative": "true",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Polar Angle",
-			"OpcodeEncodingAppend": "opcode=1100,e=0,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
