@@ -25,6 +25,9 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(IRInstruction.Add32, Add32);
 			AddVisitation(IRInstruction.AddCarryOut32, AddCarryOut32);
 			AddVisitation(IRInstruction.AddWithCarry32, AddWithCarry32);
+
+			//AddVisitation(IRInstruction.BitCopyFloatR4ToInt32, BitCopyFloatR4ToInt32);
+			//AddVisitation(IRInstruction.BitCopyInt32ToFloatR4, BitCopyInt32ToFloatR4);
 			AddVisitation(IRInstruction.ArithShiftRight32, ArithShiftRight32);
 			AddVisitation(IRInstruction.CallDirect, CallDirect);
 			AddVisitation(IRInstruction.CompareFloatR4, CompareFloatR4);
@@ -307,135 +310,11 @@ namespace Mosa.Platform.x64.Stages
 			context.AppendInstruction(X64.Mov32, result, v2);
 		}
 
-		private void FloatCompare(Context context, X64Instruction instruction)
-		{
-			var result = context.Result;
-			var left = context.Operand1;
-			var right = context.Operand2;
-			var condition = context.ConditionCode;
-
-			// normalize condition
-			switch (condition)
-			{
-				case ConditionCode.Equal: break;
-				case ConditionCode.NotEqual: break;
-				case ConditionCode.UnsignedGreaterOrEqual: condition = ConditionCode.GreaterOrEqual; break;
-				case ConditionCode.UnsignedGreaterThan: condition = ConditionCode.GreaterThan; break;
-				case ConditionCode.UnsignedLessOrEqual: condition = ConditionCode.LessOrEqual; break;
-				case ConditionCode.UnsignedLessThan: condition = ConditionCode.LessThan; break;
-			}
-
-			Debug.Assert(!(left.IsR4 && right.IsR8));
-			Debug.Assert(!(left.IsR8 && right.IsR4));
-
-			switch (condition)
-			{
-				case ConditionCode.Equal:
-					{
-						//  a==b
-						//	mov	eax, 1
-						//	ucomisd	xmm0, xmm1
-						//	jp	L3
-						//	jne	L3
-						//	ret
-						//L3:
-						//	mov	eax, 0
-
-						var newBlocks = CreateNewBlockContexts(2, context.Label);
-						var nextBlock = Split(context);
-
-						context.SetInstruction(X64.Mov32, result, CreateConstant(1));
-						context.AppendInstruction(instruction, null, left, right);
-						context.AppendInstruction(X64.Branch, ConditionCode.Parity, newBlocks[1].Block);
-						context.AppendInstruction(X64.Jmp, newBlocks[0].Block);
-
-						newBlocks[0].AppendInstruction(X64.Branch, ConditionCode.NotEqual, newBlocks[1].Block);
-						newBlocks[0].AppendInstruction(X64.Jmp, nextBlock.Block);
-
-						newBlocks[1].AppendInstruction(X64.Mov32, result, ConstantZero64);
-						newBlocks[1].AppendInstruction(X64.Jmp, nextBlock.Block);
-						break;
-					}
-				case ConditionCode.NotEqual:
-					{
-						//  a!=b
-						//	mov	eax, 1
-						//	ucomisd	xmm0, xmm1
-						//	jp	L5
-						//	setne	al
-						//	movzx	eax, al
-						//L5:
-
-						var newBlocks = CreateNewBlockContexts(1, context.Label);
-						var nextBlock = Split(context);
-
-						context.SetInstruction(X64.Mov64, result, CreateConstant(1));
-						context.AppendInstruction(instruction, null, left, right);
-						context.AppendInstruction(X64.Branch, ConditionCode.Parity, nextBlock.Block);
-						context.AppendInstruction(X64.Jmp, newBlocks[0].Block);
-						newBlocks[0].AppendInstruction(X64.Setcc, ConditionCode.NotEqual, result);
-
-						//newBlocks[0].AppendInstruction(X64.Movzx, InstructionSize.Size8, result, result);
-						newBlocks[0].AppendInstruction(X64.Jmp, nextBlock.Block);
-						break;
-					}
-				case ConditionCode.LessThan:
-					{
-						//	a<b
-						//	mov	eax, 0
-						//	ucomisd	xmm1, xmm0
-						//	seta	al
-
-						context.SetInstruction(X64.Mov64, result, ConstantZero64);
-						context.AppendInstruction(instruction, null, right, left);
-						context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreaterThan, result);
-						break;
-					}
-				case ConditionCode.GreaterThan:
-					{
-						//	a>b
-						//	mov	eax, 0
-						//	ucomisd	xmm0, xmm1
-						//	seta	al
-
-						context.SetInstruction(X64.Mov32, result, ConstantZero64);
-						context.AppendInstruction(instruction, null, left, right);
-						context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreaterThan, result);
-						break;
-					}
-				case ConditionCode.LessOrEqual:
-					{
-						//	a<=b
-						//	mov	eax, 0
-						//	ucomisd	xmm1, xmm0
-						//	setae	al
-
-						context.SetInstruction(X64.Mov32, result, ConstantZero64);
-						context.AppendInstruction(instruction, null, right, left);
-						context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreaterOrEqual, result);
-						break;
-					}
-				case ConditionCode.GreaterOrEqual:
-					{
-						//	a>=b
-						//	mov	eax, 0
-						//	ucomisd	xmm0, xmm1
-						//	setae	al
-
-						context.SetInstruction(X64.Mov32, result, ConstantZero64);
-						context.AppendInstruction(instruction, null, left, right);
-						context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreaterOrEqual, result);
-						break;
-					}
-			}
-		}
-
 		private void IfThenElse32(Context context)
 		{
 			var result = context.Operand1;
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
-			var operand3 = context.Operand3;
 
 			context.SetInstruction(X64.Cmp32, null, operand1, ConstantZero64);
 			context.AppendInstruction(X64.CMov32, ConditionCode.NotEqual, result, operand1);    // true
@@ -444,14 +323,7 @@ namespace Mosa.Platform.x64.Stages
 
 		private void Jmp(InstructionNode node)
 		{
-			if (node.Operand1 == null)
-			{
-				node.ReplaceInstruction(X64.Jmp);
-			}
-			else
-			{
-				node.ReplaceInstruction(X64.JmpExternal);
-			}
+			node.ReplaceInstruction(X64.Jmp);
 		}
 
 		private void LoadFloatR4(InstructionNode node)
@@ -805,6 +677,129 @@ namespace Mosa.Platform.x64.Stages
 			context.Operand1 = operand2;
 			context.Operand2 = operand1;
 			context.ConditionCode = context.ConditionCode.GetReverse();
+		}
+
+		private void FloatCompare(Context context, X64Instruction instruction)
+		{
+			var result = context.Result;
+			var left = context.Operand1;
+			var right = context.Operand2;
+			var condition = context.ConditionCode;
+
+			// normalize condition
+			switch (condition)
+			{
+				case ConditionCode.Equal: break;
+				case ConditionCode.NotEqual: break;
+				case ConditionCode.UnsignedGreaterOrEqual: condition = ConditionCode.GreaterOrEqual; break;
+				case ConditionCode.UnsignedGreaterThan: condition = ConditionCode.GreaterThan; break;
+				case ConditionCode.UnsignedLessOrEqual: condition = ConditionCode.LessOrEqual; break;
+				case ConditionCode.UnsignedLessThan: condition = ConditionCode.LessThan; break;
+			}
+
+			Debug.Assert(!(left.IsR4 && right.IsR8));
+			Debug.Assert(!(left.IsR8 && right.IsR4));
+
+			switch (condition)
+			{
+				case ConditionCode.Equal:
+					{
+						//  a==b
+						//	mov	eax, 1
+						//	ucomisd	xmm0, xmm1
+						//	jp	L3
+						//	jne	L3
+						//	ret
+						//L3:
+						//	mov	eax, 0
+
+						var newBlocks = CreateNewBlockContexts(2, context.Label);
+						var nextBlock = Split(context);
+
+						context.SetInstruction(X64.Mov32, result, CreateConstant(1));
+						context.AppendInstruction(instruction, null, left, right);
+						context.AppendInstruction(X64.Branch, ConditionCode.Parity, newBlocks[1].Block);
+						context.AppendInstruction(X64.Jmp, newBlocks[0].Block);
+
+						newBlocks[0].AppendInstruction(X64.Branch, ConditionCode.NotEqual, newBlocks[1].Block);
+						newBlocks[0].AppendInstruction(X64.Jmp, nextBlock.Block);
+
+						newBlocks[1].AppendInstruction(X64.Mov32, result, ConstantZero64);
+						newBlocks[1].AppendInstruction(X64.Jmp, nextBlock.Block);
+						break;
+					}
+				case ConditionCode.NotEqual:
+					{
+						//  a!=b
+						//	mov	eax, 1
+						//	ucomisd	xmm0, xmm1
+						//	jp	L5
+						//	setne	al
+						//	movzx	eax, al
+						//L5:
+
+						var newBlocks = CreateNewBlockContexts(1, context.Label);
+						var nextBlock = Split(context);
+
+						context.SetInstruction(X64.Mov64, result, CreateConstant(1));
+						context.AppendInstruction(instruction, null, left, right);
+						context.AppendInstruction(X64.Branch, ConditionCode.Parity, nextBlock.Block);
+						context.AppendInstruction(X64.Jmp, newBlocks[0].Block);
+						newBlocks[0].AppendInstruction(X64.Setcc, ConditionCode.NotEqual, result);
+
+						//newBlocks[0].AppendInstruction(X64.Movzx, InstructionSize.Size8, result, result);
+						newBlocks[0].AppendInstruction(X64.Jmp, nextBlock.Block);
+						break;
+					}
+				case ConditionCode.LessThan:
+					{
+						//	a<b
+						//	mov	eax, 0
+						//	ucomisd	xmm1, xmm0
+						//	seta	al
+
+						context.SetInstruction(X64.Mov64, result, ConstantZero64);
+						context.AppendInstruction(instruction, null, right, left);
+						context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreaterThan, result);
+						break;
+					}
+				case ConditionCode.GreaterThan:
+					{
+						//	a>b
+						//	mov	eax, 0
+						//	ucomisd	xmm0, xmm1
+						//	seta	al
+
+						context.SetInstruction(X64.Mov32, result, ConstantZero64);
+						context.AppendInstruction(instruction, null, left, right);
+						context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreaterThan, result);
+						break;
+					}
+				case ConditionCode.LessOrEqual:
+					{
+						//	a<=b
+						//	mov	eax, 0
+						//	ucomisd	xmm1, xmm0
+						//	setae	al
+
+						context.SetInstruction(X64.Mov32, result, ConstantZero64);
+						context.AppendInstruction(instruction, null, right, left);
+						context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreaterOrEqual, result);
+						break;
+					}
+				case ConditionCode.GreaterOrEqual:
+					{
+						//	a>=b
+						//	mov	eax, 0
+						//	ucomisd	xmm0, xmm1
+						//	setae	al
+
+						context.SetInstruction(X64.Mov32, result, ConstantZero64);
+						context.AppendInstruction(instruction, null, left, right);
+						context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreaterOrEqual, result);
+						break;
+					}
+			}
 		}
 
 		//private void CopyCompound(Context context, MosaType type, Operand destinationBase, Operand destination, Operand sourceBase, Operand source)

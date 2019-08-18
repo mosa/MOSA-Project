@@ -63,7 +63,8 @@ namespace Mosa.Platform.x86
 		public static readonly MovapsLoad MovapsLoad = new MovapsLoad();
 		public static readonly MovCRLoad32 MovCRLoad32 = new MovCRLoad32();
 		public static readonly MovCRStore32 MovCRStore32 = new MovCRStore32();
-		public static readonly Movd Movd = new Movd();
+		public static readonly Movdssi32 Movdssi32 = new Movdssi32();
+		public static readonly Movdi32ss Movdi32ss = new Movdi32ss();
 		public static readonly MovLoad8 MovLoad8 = new MovLoad8();
 		public static readonly MovLoad16 MovLoad16 = new MovLoad16();
 		public static readonly MovLoad32 MovLoad32 = new MovLoad32();

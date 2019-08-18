@@ -21,7 +21,7 @@ namespace Mosa.Workspace.Experiment.Debug
 				EnableIROptimizations = true,
 				EnableSparseConditionalConstantPropagation = true,
 				EnableInlinedMethods = true,
-				EnableIRLongExpansion = true,
+				EnableLongExpansion = true,
 				EnableValueNumbering = true,
 				TwoPassOptimizations = true,
 				EnableMethodScanner = true,

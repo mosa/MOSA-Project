@@ -64,12 +64,10 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.LoadParamSignExtend16x32, LoadParamSignExtend16x32);
 			AddVisitation(IRInstruction.LoadParamZeroExtend8x32, LoadParamZeroExtend8x32);
 			AddVisitation(IRInstruction.LoadParamZeroExtend16x32, LoadParamZeroExtend16x32);
-
 			AddVisitation(IRInstruction.LogicalAnd32, LogicalAnd32);
 			AddVisitation(IRInstruction.LogicalNot32, LogicalNot32);
 			AddVisitation(IRInstruction.LogicalOr32, LogicalOr32);
 			AddVisitation(IRInstruction.LogicalXor32, LogicalXor32);
-
 			AddVisitation(IRInstruction.MoveFloatR4, MoveFloatR4);
 			AddVisitation(IRInstruction.MoveFloatR8, MoveFloatR8);
 			AddVisitation(IRInstruction.MoveInt32, MoveInt32);
@@ -77,7 +75,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.SignExtend16x32, SignExtend16x32);
 			AddVisitation(IRInstruction.ZeroExtend8x32, ZeroExtend8x32);
 			AddVisitation(IRInstruction.ZeroExtend16x32, ZeroExtend16x32);
-
 			AddVisitation(IRInstruction.MulFloatR4, MulFloatR4);
 			AddVisitation(IRInstruction.MulFloatR8, MulFloatR8);
 			AddVisitation(IRInstruction.MulSigned32, MulSigned32);
@@ -100,7 +97,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.StoreParamInt8, StoreParamInt8);
 			AddVisitation(IRInstruction.StoreParamInt16, StoreParamInt16);
 			AddVisitation(IRInstruction.StoreParamInt32, StoreParamInt32);
-
 			AddVisitation(IRInstruction.SubFloatR4, SubFloatR4);
 			AddVisitation(IRInstruction.SubFloatR8, SubFloatR8);
 			AddVisitation(IRInstruction.Sub32, Sub32);
@@ -166,12 +162,12 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void CompareFloatR4(Context context)
 		{
-			context.ReplaceInstruction(ARMv8A32.Cmf);
+			FloatCompare(context, ARMv8A32.Cmf);
 		}
 
 		private void CompareFloatR8(Context context)
 		{
-			context.ReplaceInstruction(ARMv8A32.Cmf);
+			FloatCompare(context, ARMv8A32.Cmf);
 		}
 
 		private void ConvertFloatR4ToInt32(Context context)
@@ -453,5 +449,28 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		}
 
 		#endregion Visitation Methods
+
+		#region Helper Methods
+
+		public static void OptimizeBranch(Context context)
+		{
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			if (operand2.IsConstant || operand1.IsVirtualRegister)
+				return;
+
+			// Move constant to the right
+			context.Operand1 = operand2;
+			context.Operand2 = operand1;
+			context.ConditionCode = context.ConditionCode.GetReverse();
+		}
+
+		private void FloatCompare(Context context, BaseInstruction instruction)
+		{
+			// TODO
+		}
+
+		#endregion Helper Methods
 	}
 }

@@ -89,7 +89,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable IR long operand conversion].
 		/// </summary>
-		public bool EnableIRLongExpansion { get; set; }
+		public bool EnableLongExpansion { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable bit estimator].
@@ -333,7 +333,7 @@ namespace Mosa.Compiler.Framework
 			EmitStaticRelocations = true;
 			TwoPassOptimizations = true;
 			EnableStatistics = true;
-			EnableIRLongExpansion = true;
+			EnableLongExpansion = true;
 			EnableValueNumbering = true;
 			EnableLoopInvariantCodeMotion = true;
 			EnablePlatformOptimizations = true;

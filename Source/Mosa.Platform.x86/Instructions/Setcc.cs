@@ -12,7 +12,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Setcc : X86Instruction
 	{
-		public override int ID { get { return 312; } }
+		public override int ID { get { return 313; } }
 
 		internal Setcc()
 			: base(1, 0)

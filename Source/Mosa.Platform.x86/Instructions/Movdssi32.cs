@@ -7,14 +7,14 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Movd
+	/// Movdssi32
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
-	public sealed class Movd : X86Instruction
+	public sealed class Movdssi32 : X86Instruction
 	{
 		public override int ID { get { return 246; } }
 
-		internal Movd()
+		internal Movdssi32()
 			: base(1, 1)
 		{
 		}
@@ -28,8 +28,7 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.OpcodeEncoder.Append4Bits(0b0110);
 			emitter.OpcodeEncoder.Append4Bits(0b0000);
 			emitter.OpcodeEncoder.Append4Bits(0b1111);
-			emitter.OpcodeEncoder.Append4Bits(0b0111);
-			emitter.OpcodeEncoder.Append4Bits(0b1110);
+			emitter.OpcodeEncoder.Append8Bits(0x6E);
 			emitter.OpcodeEncoder.Append2Bits(0b11);
 			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);

@@ -172,12 +172,12 @@ namespace Mosa.Platform.x86.Stages
 
 		private void BitCopyFloatR4ToInt32(InstructionNode node)
 		{
-			node.SetInstruction(X86.Movd, node.Result, node.Operand1);
+			node.ReplaceInstruction(X86.Movdssi32);
 		}
 
 		private void BitCopyInt32ToFloatR4(InstructionNode node)
 		{
-			node.SetInstruction(X86.Movd, node.Result, node.Operand1);
+			node.ReplaceInstruction(X86.Movdi32ss);
 		}
 
 		private void CallDirect(InstructionNode node)

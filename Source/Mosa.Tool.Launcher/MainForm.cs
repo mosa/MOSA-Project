@@ -99,9 +99,9 @@ namespace Mosa.Tool.Launcher
 			Options.EmulatorMemoryInMB = (uint)nmMemory.Value;
 			Options.EnableInlinedMethods = cbInlinedMethods.Checked;
 			Options.VBEVideo = cbVBEVideo.Checked;
-			Options.EnableIRLongExpansion = cbIRLongExpansion.Checked;
+			Options.EnableLongExpansion = cbIRLongExpansion.Checked;
 			Options.TwoPassOptimizations = cbTwoPassOptimizations.Checked;
-			Options.EnableIRLongExpansion = cbIRLongExpansion.Checked;
+			Options.EnableLongExpansion = cbIRLongExpansion.Checked;
 			Options.EnableValueNumbering = cbValueNumbering.Checked;
 			Options.GenerateDebugFile = cbGenerateDebugInfoFile.Checked;
 			Options.BaseAddress = tbBaseAddress.Text.ParseHexOrInteger();
@@ -229,7 +229,7 @@ namespace Mosa.Tool.Launcher
 			cbRelocationTable.Checked = Options.EmitStaticRelocations;
 			cbEmitSymbolTable.Checked = Options.EmitAllSymbols;
 			tbMode.Text = Options.Width + "x" + Options.Height + "x" + Options.Depth;
-			cbIRLongExpansion.Checked = Options.EnableIRLongExpansion;
+			cbIRLongExpansion.Checked = Options.EnableLongExpansion;
 			cbTwoPassOptimizations.Checked = Options.TwoPassOptimizations;
 			cbValueNumbering.Checked = Options.EnableValueNumbering;
 			cbEnableMethodScanner.Checked = Options.EnableMethodScanner;

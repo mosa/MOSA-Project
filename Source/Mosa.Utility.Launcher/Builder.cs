@@ -101,7 +101,7 @@ namespace Mosa.Utility.Launcher
 				compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = LauncherOptions.EnableSparseConditionalConstantPropagation;
 				compiler.CompilerOptions.EnableInlinedMethods = LauncherOptions.EnableInlinedMethods;
 				compiler.CompilerOptions.InlinedIRMaximum = LauncherOptions.InlinedIRMaximum;
-				compiler.CompilerOptions.EnableIRLongExpansion = LauncherOptions.EnableIRLongExpansion;
+				compiler.CompilerOptions.EnableLongExpansion = LauncherOptions.EnableLongExpansion;
 				compiler.CompilerOptions.TwoPassOptimizations = LauncherOptions.TwoPassOptimizations;
 				compiler.CompilerOptions.EnableValueNumbering = LauncherOptions.EnableValueNumbering;
 				compiler.CompilerOptions.OutputFile = CompiledFile;

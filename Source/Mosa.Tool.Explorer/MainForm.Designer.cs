@@ -53,7 +53,7 @@
             this.cbEnableSparseConditionalConstantPropagation = new System.Windows.Forms.ToolStripMenuItem();
             this.cbEnableInlinedMethods = new System.Windows.Forms.ToolStripMenuItem();
             this.cbEnableTwoPassOptimizations = new System.Windows.Forms.ToolStripMenuItem();
-            this.cbEnableIRLongExpansion = new System.Windows.Forms.ToolStripMenuItem();
+            this.cbEnableLongExpansion = new System.Windows.Forms.ToolStripMenuItem();
             this.cbEnableBinaryCodeGeneration = new System.Windows.Forms.ToolStripMenuItem();
             this.displayOptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showOperandTypes = new System.Windows.Forms.ToolStripMenuItem();
@@ -250,7 +250,7 @@
             this.cbEnableSparseConditionalConstantPropagation,
             this.cbEnableInlinedMethods,
             this.cbEnableTwoPassOptimizations,
-            this.cbEnableIRLongExpansion,
+            this.cbEnableLongExpansion,
             this.cbEnableBinaryCodeGeneration});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
@@ -312,12 +312,12 @@
             // 
             // cbEnableIRLongExpansion
             // 
-            this.cbEnableIRLongExpansion.Checked = true;
-            this.cbEnableIRLongExpansion.CheckOnClick = true;
-            this.cbEnableIRLongExpansion.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbEnableIRLongExpansion.Name = "cbEnableIRLongExpansion";
-            this.cbEnableIRLongExpansion.Size = new System.Drawing.Size(293, 22);
-            this.cbEnableIRLongExpansion.Text = "Enable IR Long Expansion";
+            this.cbEnableLongExpansion.Checked = true;
+            this.cbEnableLongExpansion.CheckOnClick = true;
+            this.cbEnableLongExpansion.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbEnableLongExpansion.Name = "cbEnableIRLongExpansion";
+            this.cbEnableLongExpansion.Size = new System.Drawing.Size(293, 22);
+            this.cbEnableLongExpansion.Text = "Enable IR Long Expansion";
             // 
             // cbEnableBinaryCodeGeneration
             // 
@@ -777,7 +777,7 @@
 		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
 		private System.Windows.Forms.ToolStripMenuItem advanceToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem dumpAllMethodStagesToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem cbEnableIRLongExpansion;
+		private System.Windows.Forms.ToolStripMenuItem cbEnableLongExpansion;
 		private System.Windows.Forms.ToolStripMenuItem cbEnableTwoPassOptimizations;
 		private System.Windows.Forms.ToolStripMenuItem displayOptionsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem showOperandTypes;
