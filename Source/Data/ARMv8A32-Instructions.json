@@ -3678,7 +3678,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Convert Integer to Floating-Point",
-			"OpcodeEncodingAppend": "opcode=0001,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
+			"OpcodeEncodingAppend": "opcode=0001,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3699,7 +3699,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Convert Integer to Floating-Point",
-			"OpcodeEncodingAppend": "opcode=0001,e=0,f=1,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
+			"OpcodeEncodingAppend": "opcode=0001,e=0,f=1,gh=00,i=0,fd=reg3:r,fm=reg3:o1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3720,7 +3720,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Convert Floating-Point to Integer",
-			"OpcodeEncodingAppend": "opcode=0000,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
+			"OpcodeEncodingAppend": "opcode=0000,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3741,7 +3741,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Convert Floating-Point to Integer",
-			"OpcodeEncodingAppend": "opcode=0000,e=0,f=1,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
+			"OpcodeEncodingAppend": "opcode=0000,e=0,f=1,gh=00,i=0,fd=reg3:r,fm=reg3:o1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3762,7 +3762,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Write Floating-Point Status Register",
-			"OpcodeEncodingAppend": "opcode=0010,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
+			"OpcodeEncodingAppend": "opcode=0010,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3783,7 +3783,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Read Floating-Point Status Register",
-			"OpcodeEncodingAppend": "opcode=0011,e=0,f=1,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
+			"OpcodeEncodingAppend": "opcode=0011,e=0,f=1,gh=00,i=0,fd=reg3:r,fm=reg3:o1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3804,7 +3804,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Write Floating-Point Control Register",
-			"OpcodeEncodingAppend": "opcode=0100,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
+			"OpcodeEncodingAppend": "opcode=0100,e=0,f=0,gh=00,i=0,fd=reg3:r,fm=reg3:o1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3825,7 +3825,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Read Floating-Point Control Register",
-			"OpcodeEncodingAppend": "opcode=0101,e=0,f=1,gh=00,i=0,fd=reg3:r,fm=reg3:o2",
+			"OpcodeEncodingAppend": "opcode=0101,e=0,f=1,gh=00,i=0,fd=reg3:r,fm=reg3:o1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3846,7 +3846,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Write Floating-Point Status Register",
-			"OpcodeEncodingAppend": "opcode=100,e=0,f=0,gh=00,i=0,fn=reg3:r,fm=reg3:o2",
+			"OpcodeEncodingAppend": "opcode=100,e=0,f=0,gh=00,i=0,fn=reg3:r,fm=reg3:o1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3867,7 +3867,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Read Floating-Point Status Register",
-			"OpcodeEncodingAppend": "opcode=101,e=0,f=1,gh=00,i=0,fn=reg3:r,fm=reg3:o2",
+			"OpcodeEncodingAppend": "opcode=101,e=0,f=1,gh=00,i=0,fn=reg3:r,fm=reg3:o1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3889,7 +3889,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Write Floating-Point Control Register",
-			"OpcodeEncodingAppend": "opcode=110,e=0,f=0,gh=00,i=0,fn=reg3:r,fm=reg3:o2",
+			"OpcodeEncodingAppend": "opcode=110,e=0,f=0,gh=00,i=0,fn=reg3:r,fm=reg3:o1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3910,7 +3910,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Read Floating-Point Control Register",
-			"OpcodeEncodingAppend": "opcode=111,e=0,f=1,gh=00,i=0,fn=reg3:r,fm=reg3:o2",
+			"OpcodeEncodingAppend": "opcode=111,e=0,f=1,gh=00,i=0,fn=reg3:r,fm=reg3:o1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
