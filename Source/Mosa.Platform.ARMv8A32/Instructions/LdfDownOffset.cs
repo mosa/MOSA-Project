@@ -7,14 +7,14 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv8A32.Instructions
 {
 	/// <summary>
-	/// LdfDownImm - Load Floating Point Data Transfer
+	/// LdfDownOffset - Load Floating Point Data Transfer
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
-	public sealed class LdfDownImm : ARMv8A32Instruction
+	public sealed class LdfDownOffset : ARMv8A32Instruction
 	{
 		public override int ID { get { return 681; } }
 
-		internal LdfDownImm()
+		internal LdfDownOffset()
 			: base(1, 2)
 		{
 		}

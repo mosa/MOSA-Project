@@ -140,9 +140,9 @@
     <Compile Include="Instructions\Frd.cs" />
     <Compile Include="Instructions\Isb.cs" />
     <Compile Include="Instructions\LdfDown.cs" />
-    <Compile Include="Instructions\LdfDownImm.cs" />
+    <Compile Include="Instructions\LdfDownOffset.cs" />
     <Compile Include="Instructions\LdfUp.cs" />
-    <Compile Include="Instructions\LdfUpImm.cs" />
+    <Compile Include="Instructions\LdfUpOffset.cs" />
     <Compile Include="Instructions\Ldm.cs" />
     <Compile Include="Instructions\Ldmfd.cs" />
     <Compile Include="Instructions\Ldmia.cs" />
@@ -224,9 +224,9 @@
     <Compile Include="Instructions\Sev.cs" />
     <Compile Include="Instructions\Sqt.cs" />
     <Compile Include="Instructions\StfDown.cs" />
-    <Compile Include="Instructions\StfDownImm.cs" />
+    <Compile Include="Instructions\StfDownOffset.cs" />
     <Compile Include="Instructions\StfUp.cs" />
-    <Compile Include="Instructions\StfUpImm.cs" />
+    <Compile Include="Instructions\StfUpOffset.cs" />
     <Compile Include="Instructions\Stm.cs" />
     <Compile Include="Instructions\Stmea.cs" />
     <Compile Include="Instructions\Stmia.cs" />

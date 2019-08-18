@@ -3722,7 +3722,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Load Floating Point Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,fd=reg4:r,rn=reg4:o1,t1=0,t0=fp:o3,ls=1,p=1,wb=0,up=1,offset=0",
+			"OpcodeEncodingAppend": "s=status:status,fd=reg4:r,rn=reg4:o1,t1=0,t0=fp:o3,ls=1,p=1,wb=0,up=1,offset=0x00",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3743,7 +3743,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Load Floating Point Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,fd=reg4:r,rn=reg4:o1,t1=0,t0=fp:o3,ls=1,p=1,wb=0,up=0,offset=0",
+			"OpcodeEncodingAppend": "s=status:status,fd=reg4:r,rn=reg4:o1,t1=0,t0=fp:o3,ls=1,p=1,wb=0,up=0,offset=0x00",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3752,7 +3752,7 @@
 			]
 		},
 		{
-			"Name": "LdfUpImm",
+			"Name": "LdfUpOffset",
 			"Commutative": "false",
 			"FamilyName": "ARMv8A32",
 			"FlagsCleared": "",
@@ -3773,7 +3773,7 @@
 			]
 		},
 		{
-			"Name": "LdfDownImm",
+			"Name": "LdfDownOffset",
 			"Commutative": "false",
 			"FamilyName": "ARMv8A32",
 			"FlagsCleared": "",
@@ -3793,7 +3793,6 @@
 				}
 			]
 		},
-
 		{
 			"Name": "StfUp",
 			"Commutative": "false",
@@ -3807,7 +3806,7 @@
 			"OperandCount": 2,
 			"ResultCount": 0,
 			"Description": "Store Floating Point Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,fd=reg4:o2,rn=reg4:o1,t1=0,t0=fp:o3,ls=0,p=1,wb=0,up=1,offset=0",
+			"OpcodeEncodingAppend": "s=status:status,fd=reg4:o2,rn=reg4:o1,t1=0,t0=fp:o3,ls=0,p=1,wb=0,up=1,offset=0x00",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3828,7 +3827,7 @@
 			"OperandCount": 2,
 			"ResultCount": 0,
 			"Description": "Store Floating Point Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,fd=reg4:o2,rn=reg4:o1,t1=0,t0=fp:o3,ls=0,p=1,wb=0,up=0,offset=0",
+			"OpcodeEncodingAppend": "s=status:status,fd=reg4:o2,rn=reg4:o1,t1=0,t0=fp:o3,ls=0,p=1,wb=0,up=0,offset=0x00",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3837,7 +3836,7 @@
 			]
 		},
 		{
-			"Name": "StfUpImm",
+			"Name": "StfUpOffset",
 			"Commutative": "false",
 			"FamilyName": "ARMv8A32",
 			"FlagsCleared": "",
@@ -3858,7 +3857,7 @@
 			]
 		},
 		{
-			"Name": "StfDownImm",
+			"Name": "StfDownOffset",
 			"Commutative": "false",
 			"FamilyName": "ARMv8A32",
 			"FlagsCleared": "",

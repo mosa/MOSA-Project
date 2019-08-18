@@ -7,21 +7,21 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv8A32.Instructions
 {
 	/// <summary>
-	/// LdfUpImm - Load Floating Point Data Transfer
+	/// StfDownOffset - Store Floating Point Data Transfer
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
-	public sealed class LdfUpImm : ARMv8A32Instruction
+	public sealed class StfDownOffset : ARMv8A32Instruction
 	{
-		public override int ID { get { return 680; } }
+		public override int ID { get { return 685; } }
 
-		internal LdfUpImm()
-			: base(1, 2)
+		internal StfDownOffset()
+			: base(0, 2)
 		{
 		}
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
 			if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister)
@@ -31,10 +31,10 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 				emitter.OpcodeEncoder.Append1Bit(0b1);
 				emitter.OpcodeEncoder.Append1Bit(0b0);
 				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append1Bit(0b1);
+				emitter.OpcodeEncoder.Append1Bit(0b0);
 				emitter.OpcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append1Bit(node.Operand3.IsR4 ? 0 : 1);
-				emitter.OpcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
+				emitter.OpcodeEncoder.Append4Bits(node.Operand3.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append4Bits(0b0001);
 				emitter.OpcodeEncoder.Append8BitImmediate(node.Operand2);
 				return;
