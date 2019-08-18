@@ -26,5 +26,24 @@ During compilation of an CIL method the instructions are represented by CIL inst
 Compiler Optimizations
 ----------------------
 
+InlinedMethods
+  Inlines the code of small methods into the caller. This improves the performance, because calls are expensive (Storing the registers, placing the arguments onto stack, jumping to another location). As side effect, inlining methods may increase the compile file size. For debugging purposes it could be usefull to disable this optimizations (setting correct breakpoint, see real back trace in GDB).
+
 BitTracker
   BitTracker tracks the bits in virtual registers thru the various instructions. Either, set, clear or unknown per bit. With all the other optimization enabled, it doesn’t do much.
+
+IROptimizations
+  TODO: Documentation
+  
+SparseConditionalConstantPropagation
+  TODO: Documentation
+
+IRLongExpansion
+  TODO: Documentation
+
+ValueNumbering
+  TODO: Documentation
+
+TwoPassOptimizations
+  TODO: Documentation
+
