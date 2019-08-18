@@ -13,7 +13,8 @@
 
 		"[arm-extended-register]=                   conditional|01101|[s]|1|[b]|1111|[rd]|[rotate]|00|0111|[rm]",
 
-		"[arm-fp-data-processing]=					conditional|1110|[opcode]|[e]|[fn]||[0]|[fd]|0001|[f]|[gh]|0|[i]|[fm]"
+		"[arm-fp-data-processing]=					conditional|1110|[opcode]|[e]|[fn]|0|[fd]|0001|[f]|[gh]|0|[i]|[fm]",
+		"[arm-fp-register-transfer]=				conditional|1110|[opcode]|[e]|[fn]|[rd]|0001|[f]|[gh]|1|[i]|[fm]"
 	],
 	"Instructions": [
 		{
@@ -3130,7 +3131,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Addition",
-			"OpcodeEncodingAppend": "opcode=0000,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=0000,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3151,7 +3152,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Addition",
-			"OpcodeEncodingAppend": "opcode=0000,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=0000,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3172,7 +3173,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Multiply",
-			"OpcodeEncodingAppend": "opcode=0001,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=0001,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3193,7 +3194,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Multiply",
-			"OpcodeEncodingAppend": "opcode=0001,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=0001,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3214,7 +3215,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Subtract",
-			"OpcodeEncodingAppend": "opcode=0010,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=0010,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3235,7 +3236,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Subtract",
-			"OpcodeEncodingAppend": "opcode=0010,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=0010,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3256,7 +3257,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Reverse Subtract",
-			"OpcodeEncodingAppend": "opcode=0011,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=0011,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3277,7 +3278,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Reverse Subtract",
-			"OpcodeEncodingAppend": "opcode=0011,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=0011,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3298,7 +3299,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Divide",
-			"OpcodeEncodingAppend": "opcode=0100,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=0100,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3319,7 +3320,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Divide",
-			"OpcodeEncodingAppend": "opcode=0100,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=0100,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3340,7 +3341,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Reverse Divide",
-			"OpcodeEncodingAppend": "opcode=0101,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=0101,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3361,7 +3362,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Reverse Divide",
-			"OpcodeEncodingAppend": "opcode=0101,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=0101,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3382,7 +3383,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Power",
-			"OpcodeEncodingAppend": "opcode=0110,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=0110,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3403,7 +3404,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Power",
-			"OpcodeEncodingAppend": "opcode=0110,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=0110,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3424,7 +3425,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Reverse Power",
-			"OpcodeEncodingAppend": "opcode=0111,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=0111,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3445,7 +3446,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Reverse Power",
-			"OpcodeEncodingAppend": "opcode=0111,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=0111,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3466,7 +3467,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Remainder",
-			"OpcodeEncodingAppend": "opcode=1000,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=1000,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3487,7 +3488,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Remainder",
-			"OpcodeEncodingAppend": "opcode=1000,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=1000,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3508,7 +3509,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Fast Multiply",
-			"OpcodeEncodingAppend": "opcode=1001,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=1001,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3529,7 +3530,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Fast Multiply",
-			"OpcodeEncodingAppend": "opcode=1001,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=1001,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3550,7 +3551,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Fast Divide",
-			"OpcodeEncodingAppend": "opcode=1010,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=1010,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3571,7 +3572,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Fast Divide",
-			"OpcodeEncodingAppend": "opcode=1010,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=1010,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3592,7 +3593,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Fast Reverse Divide",
-			"OpcodeEncodingAppend": "opcode=1011,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=1011,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3613,7 +3614,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Fast Reverse Divide",
-			"OpcodeEncodingAppend": "opcode=1011,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=1011,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3634,7 +3635,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Polar Angle",
-			"OpcodeEncodingAppend": "opcode=1100,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=1100,e=0,f=0,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3655,7 +3656,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Polar Angle",
-			"OpcodeEncodingAppend": "opcode=1100,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg4:o2",
+			"OpcodeEncodingAppend": "opcode=1100,e=0,f=1,j=0,gh=00,i=0,fd=reg3:r,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
