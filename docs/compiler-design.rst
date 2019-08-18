@@ -26,24 +26,27 @@ During compilation of an CIL method the instructions are represented by CIL inst
 Compiler Optimizations
 ----------------------
 
-InlinedMethods
-  Inlines the code of small methods into the caller. This improves the performance, because calls are expensive (Storing the registers, placing the arguments onto stack, jumping to another location). As side effect, inlining methods may increase the compile file size. For debugging purposes it could be usefull to disable this optimizations (setting correct breakpoint, see real back trace in GDB).
+Inlined Methods
+  Inlines the code of small methods into the caller. This improves the performance, because calls are expensive (Storing the registers, placing the arguments onto stack, jumping to another location). As side effect, inlining methods may increase or decrease the compile file size. For debugging purposes it could be usefull to disable this optimizations (setting correct breakpoint, see real back trace in GDB).
 
-BitTracker
-  BitTracker tracks the bits in virtual registers thru the various instructions. Either, set, clear or unknown per bit. With all the other optimization enabled, it doesn’t do much.
+Bit Tracker
+  Bit Tracker tracks the known state of bits and value ranges thru the various operations. This enables various optimization and shortcuts. 
 
-IROptimizations
+Static Single Assignment Form
+  TODO: Documentation	
+
+IR Optimization
   TODO: Documentation
   
-SparseConditionalConstantPropagation
-  TODO: Documentation
+Sparse Conditional Constant Propagation
+  Sparse conditional constant propagation is an optimization applied after conversion to static single assignment form (SSA). It simultaneously removes dead code and propagates constants. It can find more constant values, and thus more opportunities for improvement, than other optimizations.
 
-IRLongExpansion
-  TODO: Documentation
+Long Expansion
+  Expands 64-bit instructions into 32-bit components for platforms without native 64-bit instructions.
 
-ValueNumbering
-  TODO: Documentation
+Value Numbering
+  Value numbering is a technique of determining when two computations in a program are equivalent and eliminating one of them with a semantics preserving optimization. 
 
-TwoPassOptimizations
-  TODO: Documentation
+Two Pass Optimizations
+  This options causes the optimization stages to be executed again, possibility unlocked additional optimiztions.
 
