@@ -173,6 +173,11 @@ namespace Mosa.Platform.ARMv8A32
 		public static readonly Fdv Fdv = new Fdv();
 		public static readonly Frd Frd = new Frd();
 		public static readonly Pol Pol = new Pol();
+		public static readonly Mvf Mvf = new Mvf();
+		public static readonly Mnf Mnf = new Mnf();
+		public static readonly Abs Abs = new Abs();
+		public static readonly Rnd Rnd = new Rnd();
+		public static readonly Sqt Sqt = new Sqt();
 		public static readonly Flt Flt = new Flt();
 		public static readonly Fix Fix = new Fix();
 		public static readonly Wfs Wfs = new Wfs();

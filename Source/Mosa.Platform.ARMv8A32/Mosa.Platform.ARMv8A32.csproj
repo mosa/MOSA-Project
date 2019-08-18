@@ -89,6 +89,7 @@
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="ARMHelper.cs" />
     <Compile Include="GeneralPurposeRegister.cs" />
+    <Compile Include="Instructions\Abs.cs" />
     <Compile Include="Instructions\Adc.cs" />
     <Compile Include="Instructions\AdcImm.cs" />
     <Compile Include="Instructions\AdcImmShift.cs" />
@@ -167,6 +168,7 @@
     <Compile Include="Instructions\LsrImm.cs" />
     <Compile Include="Instructions\Mla.cs" />
     <Compile Include="Instructions\Mlal.cs" />
+    <Compile Include="Instructions\Mnf.cs" />
     <Compile Include="Instructions\Mov.cs" />
     <Compile Include="Instructions\MovImm.cs" />
     <Compile Include="Instructions\MovImmShift.cs" />
@@ -178,6 +180,7 @@
     <Compile Include="Instructions\Muf.cs" />
     <Compile Include="Instructions\Mul.cs" />
     <Compile Include="Instructions\Mull.cs" />
+    <Compile Include="Instructions\Mvf.cs" />
     <Compile Include="Instructions\Mvn.cs" />
     <Compile Include="Instructions\MvnImm.cs" />
     <Compile Include="Instructions\MvnImmShift.cs" />
@@ -197,6 +200,7 @@
     <Compile Include="Instructions\Rfc.cs" />
     <Compile Include="Instructions\Rfs.cs" />
     <Compile Include="Instructions\Rmf.cs" />
+    <Compile Include="Instructions\Rnd.cs" />
     <Compile Include="Instructions\Ror.cs" />
     <Compile Include="Instructions\RorImm.cs" />
     <Compile Include="Instructions\Rpw.cs" />
@@ -214,6 +218,7 @@
     <Compile Include="Instructions\SbcImmShift.cs" />
     <Compile Include="Instructions\SbcRegShift.cs" />
     <Compile Include="Instructions\Sev.cs" />
+    <Compile Include="Instructions\Sqt.cs" />
     <Compile Include="Instructions\Stm.cs" />
     <Compile Include="Instructions\Stmea.cs" />
     <Compile Include="Instructions\Stmia.cs" />

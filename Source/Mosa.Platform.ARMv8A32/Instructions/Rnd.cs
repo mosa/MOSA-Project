@@ -7,14 +7,14 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv8A32.Instructions
 {
 	/// <summary>
-	/// Fix - Convert Floating-Point to Integer
+	/// Rnd - Round to integral value
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
-	public sealed class Fix : ARMv8A32Instruction
+	public sealed class Rnd : ARMv8A32Instruction
 	{
-		public override int ID { get { return 739; } }
+		public override int ID { get { return 736; } }
 
-		internal Fix()
+		internal Rnd()
 			: base(1, 1)
 		{
 		}
@@ -30,14 +30,17 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 			{
 				emitter.OpcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 				emitter.OpcodeEncoder.Append4Bits(0b1110);
-				emitter.OpcodeEncoder.Append4Bits(0b0000);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append4Bits(0b0001);
-				emitter.OpcodeEncoder.Append1Bit(node.Operand1.IsR4 ? 0 : 1);
-				emitter.OpcodeEncoder.Append2Bits(0b00);
+				emitter.OpcodeEncoder.Append4Bits(0b0111);
 				emitter.OpcodeEncoder.Append1Bit(0b1);
+				emitter.OpcodeEncoder.Append3Bits(0b000);
 				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				emitter.OpcodeEncoder.Append4Bits(0b0001);
+				emitter.OpcodeEncoder.Append1Bit(node.Result.IsR4 ? 0 : 1);
+				emitter.OpcodeEncoder.Append2Bits(0b00);
+				emitter.OpcodeEncoder.Append1Bit(0b0);
+				emitter.OpcodeEncoder.Append1Bit(0b0);
+				emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
 				return;
 			}
 

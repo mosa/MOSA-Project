@@ -3393,6 +3393,111 @@
 			]
 		},
 		{
+			"Name": "Mvf",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Move",
+			"OpcodeEncodingAppend": "opcode=0000,e=1,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=000,fm=reg3:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "Mnf",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Move Negated",
+			"OpcodeEncodingAppend": "opcode=0001,e=1,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=000,fm=reg3:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "Abs",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Absolute value",
+			"OpcodeEncodingAppend": "opcode=0101,e=1,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=000,fm=reg3:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "Rnd",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Round to integral value",
+			"OpcodeEncodingAppend": "opcode=0111,e=1,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=000,fm=reg3:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
+			"Name": "Sqt",
+			"Commutative": "true",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"Description": "Square root",
+			"OpcodeEncodingAppend": "opcode=0100,e=1,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=000,fm=reg3:o2",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[arm-fp-data-processing]"
+				}
+			]
+		},
+		{
 			"Name": "Flt",
 			"Commutative": "true",
 			"FamilyName": "ARMv8A32",
