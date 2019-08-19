@@ -28,7 +28,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 			//AddVisitation(IRInstruction.BitCopyFloatR4ToInt32, BitCopyFloatR4ToInt32);
 			//AddVisitation(IRInstruction.BitCopyInt32ToFloatR4, BitCopyInt32ToFloatR4);
-			//AddVisitation(IRInstruction.Break, Break);
 			//AddVisitation(IRInstruction.CallDirect, CallDirect);
 			AddVisitation(IRInstruction.CompareFloatR4, CompareFloatR4);
 			AddVisitation(IRInstruction.CompareFloatR8, CompareFloatR8);
@@ -44,9 +43,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.ConvertInt32ToFloatR8, ConvertInt32ToFloatR8);
 			AddVisitation(IRInstruction.DivFloatR4, DivFloatR4);
 			AddVisitation(IRInstruction.DivFloatR8, DivFloatR8);
-
-			//AddVisitation(IRInstruction.DivSigned32, DivSigned32);
-			//AddVisitation(IRInstruction.DivUnsigned32, DivUnsigned32);
 			AddVisitation(IRInstruction.Jmp, Jmp);
 
 			//AddVisitation(IRInstruction.LoadFloatR4, LoadFloatR4);
@@ -81,8 +77,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.MulUnsigned32, MulUnsigned32);
 
 			//AddVisitation(IRInstruction.Nop, Nop);
-			//AddVisitation(IRInstruction.RemSigned32, RemSigned32);
-			//AddVisitation(IRInstruction.RemUnsigned32, RemUnsigned32);
 			AddVisitation(IRInstruction.ShiftLeft32, ShiftLeft32);
 			AddVisitation(IRInstruction.ShiftRight32, ShiftRight32);
 
