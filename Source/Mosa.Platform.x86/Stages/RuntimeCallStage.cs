@@ -15,15 +15,25 @@ namespace Mosa.Platform.x86.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
+			AddVisitation(IRInstruction.DivSigned64, DivSigned64);     // sdiv64
+			AddVisitation(IRInstruction.DivUnsigned64, DivUnsigned64); // udiv64
 			AddVisitation(IRInstruction.RemFloatR4, RemFloatR4);
 			AddVisitation(IRInstruction.RemFloatR8, RemFloatR8);
-			AddVisitation(IRInstruction.RemSigned64, RemSigned64); // smod64
-			AddVisitation(IRInstruction.DivSigned64, DivSigned64); // sdiv64
+			AddVisitation(IRInstruction.RemSigned64, RemSigned64);     // smod64
 			AddVisitation(IRInstruction.RemUnsigned64, RemUnsigned64); // umod64
-			AddVisitation(IRInstruction.DivUnsigned64, DivUnsigned64); // udiv64
 		}
 
 		#region Visitation Methods
+
+		private void DivSigned64(InstructionNode node)
+		{
+			ReplaceWithDivisionCall(node, "sdiv64", node.Result, node.Operand1, node.Operand2);
+		}
+
+		private void DivUnsigned64(InstructionNode node)
+		{
+			ReplaceWithDivisionCall(node, "udiv64", node.Result, node.Operand1, node.Operand2);
+		}
 
 		private void RemFloatR4(InstructionNode node)
 		{
@@ -46,19 +56,9 @@ namespace Mosa.Platform.x86.Stages
 			ReplaceWithDivisionCall(node, "smod64", node.Result, node.Operand1, node.Operand2);
 		}
 
-		private void DivSigned64(InstructionNode node)
-		{
-			ReplaceWithDivisionCall(node, "sdiv64", node.Result, node.Operand1, node.Operand2);
-		}
-
 		private void RemUnsigned64(InstructionNode node)
 		{
 			ReplaceWithDivisionCall(node, "umod64", node.Result, node.Operand1, node.Operand2);
-		}
-
-		private void DivUnsigned64(InstructionNode node)
-		{
-			ReplaceWithDivisionCall(node, "udiv64", node.Result, node.Operand1, node.Operand2);
 		}
 
 		#endregion Visitation Methods
