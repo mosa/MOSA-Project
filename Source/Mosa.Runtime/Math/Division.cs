@@ -46,7 +46,7 @@ namespace Mosa.Runtime.Math
 		/* Divides unsigned 32-bit N by unsigned 32-bit D and returns the quotient. */
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static uint udivsi3(uint n, uint d)
+		public static uint udiv32(uint n, uint d)  // udivsi3
 		{
 			if (d == 0)
 			{
@@ -62,7 +62,7 @@ namespace Mosa.Runtime.Math
 		/* Divides unsigned 32-bit N by unsigned 32-bit D and returns the remainder. */
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static uint umodsi3(uint n, uint d)
+		public static uint umod32(uint n, uint d)  // umodsi3
 		{
 			if (d == 0)
 			{
@@ -73,6 +73,31 @@ namespace Mosa.Runtime.Math
 				DivUMod(n, d, out _, out uint remainder);
 				return remainder;
 			}
+		}
+
+		/* Divides signed 32-bit N by signed 32-bit D and returns the quotient. */
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static int sdiv32(int a, int b)  // divsi3
+		{
+			int s_a = a >> 31;          // s_a = a < 0 ? -1 : 0
+			int s_b = b >> 31;          // s_b = b < 0 ? -1 : 0
+
+			a = (a ^ s_a) - s_a;        // negate if s_a == -1
+			b = (b ^ s_b) - s_b;        // negate if s_b == -1
+			s_a ^= s_b;                 // sign of quotient
+
+			DivUMod((uint)a, (uint)b, out uint quotient, out _);
+
+			return (int)(quotient ^ s_a - s_a);   // negate if s_a == -1
+		}
+
+		/* Divides signed 32-bit N by signed 32-bit D and returns the remainder. */
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static int smod32(int a, int b)  // modsi3
+		{
+			return a - sdiv32(a, b) * b;
 		}
 
 		private static void DivUMod(uint dividend, uint divisor, out uint quotient, out uint remainder)
