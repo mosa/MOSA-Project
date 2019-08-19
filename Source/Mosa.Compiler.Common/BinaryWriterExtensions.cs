@@ -90,5 +90,16 @@ namespace Mosa.Compiler.Common
 		{
 			Write(writer, BitConverter.GetBytes(value), nativeSize);
 		}
+
+		public static void WriteByte(this BinaryWriter stream, byte value)
+		{
+			stream.Write(value);
+		}
+
+		public static void WriteByte(this BinaryWriter stream, int value)
+		{
+			stream.Write((byte)value);
+		}
+
 	}
 }
