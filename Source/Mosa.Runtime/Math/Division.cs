@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Runtime.CompilerServices;
 
 namespace Mosa.Runtime.Math
@@ -11,7 +12,7 @@ namespace Mosa.Runtime.Math
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static ulong udiv64(ulong n, ulong d)
 		{
-			DivUmod(n, d, out ulong quotient, out ulong remainder);
+			DivUMod(n, d, out ulong quotient, out _);
 			return quotient;
 		}
 
@@ -20,7 +21,7 @@ namespace Mosa.Runtime.Math
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static ulong umod64(ulong n, ulong d)
 		{
-			DivUmod(n, d, out ulong quotient, out ulong remainder);
+			DivUMod(n, d, out _, out ulong remainder);
 			return remainder;
 		}
 
@@ -29,7 +30,7 @@ namespace Mosa.Runtime.Math
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static long sdiv64(long n, long d)
 		{
-			DivMod(n, d, out long quotient, out long remainder);
+			DivMod(n, d, out long quotient, out _);
 			return quotient;
 		}
 
@@ -38,11 +39,72 @@ namespace Mosa.Runtime.Math
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static long smod64(long n, long d)
 		{
-			DivMod(n, d, out long quotient, out long remainder);
+			DivMod(n, d, out _, out long remainder);
 			return remainder;
 		}
 
-		public static void DivUmod(ulong dividend, ulong divisor, out ulong quotient, out ulong remainder)
+		/* Divides unsigned 32-bit N by unsigned 32-bit D and returns the quotient. */
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static uint udivsi3(uint n, uint d)
+		{
+			if (d == 0)
+			{
+				throw new DivideByZeroException();
+			}
+			else
+			{
+				DivUMod(n, d, out uint quotient, out _);
+				return quotient;
+			}
+		}
+
+		/* Divides unsigned 32-bit N by unsigned 32-bit D and returns the remainder. */
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static uint umodsi3(uint n, uint d)
+		{
+			if (d == 0)
+			{
+				throw new DivideByZeroException();
+			}
+			else
+			{
+				DivUMod(n, d, out _, out uint remainder);
+				return remainder;
+			}
+		}
+
+		private static void DivUMod(uint dividend, uint divisor, out uint quotient, out uint remainder)
+		{
+			uint n = dividend;
+			uint d = divisor;
+
+			uint bit = 1;
+			uint res = 0;
+
+			while ((d < n && bit != 0) && ((d & (1L << 31)) == 0))
+			{
+				d <<= 1;
+				bit <<= 1;
+			}
+
+			while (bit != 0)
+			{
+				if (n >= d)
+				{
+					n -= d;
+					res |= bit;
+				}
+				bit >>= 1;
+				d >>= 1;
+			}
+
+			remainder = n;
+			quotient = res;
+		}
+
+		private static void DivUMod(ulong dividend, ulong divisor, out ulong quotient, out ulong remainder)
 		{
 			bool isFlipped = false;
 			quotient = dividend;
@@ -68,7 +130,7 @@ namespace Mosa.Runtime.Math
 			}
 		}
 
-		public unsafe static void DivMod(long dividend, long divisor, out long quotient, out long remainder)
+		private static void DivMod(long dividend, long divisor, out long quotient, out long remainder)
 		{
 			// Catch divide by zero and just return zero
 			if (dividend == 0 || divisor == 0)

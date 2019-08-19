@@ -15,30 +15,29 @@ namespace Mosa.Platform.ARMv8A32.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			AddVisitation(IRInstruction.RemFloatR4, RemFloatR4);
-			AddVisitation(IRInstruction.RemFloatR8, RemFloatR8);
-			AddVisitation(IRInstruction.RemSigned64, RemSigned64); // smod64
-			AddVisitation(IRInstruction.DivSigned64, DivSigned64); // sdiv64
-			AddVisitation(IRInstruction.RemUnsigned64, RemUnsigned64); // umod64
+			AddVisitation(IRInstruction.DivSigned64, DivSigned64);     // sdiv64
 			AddVisitation(IRInstruction.DivUnsigned64, DivUnsigned64); // udiv64
+			AddVisitation(IRInstruction.DivUnsigned32, DivUnsigned32); // udivsi3
+			AddVisitation(IRInstruction.RemSigned64, RemSigned64);     // smod64
+			AddVisitation(IRInstruction.RemUnsigned64, RemUnsigned64); // umod64
+			AddVisitation(IRInstruction.RemUnsigned32, RemUnsigned32); // umodsi3
 		}
 
 		#region Visitation Methods
 
-		private void RemFloatR4(InstructionNode node)
+		private void DivSigned64(InstructionNode node)
 		{
-			Debug.Assert(node.Result.IsR4);
-			Debug.Assert(node.Operand1.IsR4);
-
-			ReplaceWithPlatformDivisionCall(node, "RemR4", node.Result, node.Operand1, node.Operand2);
+			ReplaceWithDivisionCall(node, "sdiv64", node.Result, node.Operand1, node.Operand2);
 		}
 
-		private void RemFloatR8(InstructionNode node)
+		private void DivUnsigned32(InstructionNode node)
 		{
-			Debug.Assert(node.Result.IsR8);
-			Debug.Assert(node.Operand1.IsR8);
+			ReplaceWithDivisionCall(node, "udivsi3", node.Result, node.Operand1, node.Operand2);
+		}
 
-			ReplaceWithPlatformDivisionCall(node, "RemR8", node.Result, node.Operand1, node.Operand2);
+		private void DivUnsigned64(InstructionNode node)
+		{
+			ReplaceWithDivisionCall(node, "udiv64", node.Result, node.Operand1, node.Operand2);
 		}
 
 		private void RemSigned64(InstructionNode node)
@@ -46,19 +45,14 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			ReplaceWithDivisionCall(node, "smod64", node.Result, node.Operand1, node.Operand2);
 		}
 
-		private void DivSigned64(InstructionNode node)
+		private void RemUnsigned32(InstructionNode node)
 		{
-			ReplaceWithDivisionCall(node, "sdiv64", node.Result, node.Operand1, node.Operand2);
+			ReplaceWithDivisionCall(node, "umodsi3", node.Result, node.Operand1, node.Operand2);
 		}
 
 		private void RemUnsigned64(InstructionNode node)
 		{
 			ReplaceWithDivisionCall(node, "umod64", node.Result, node.Operand1, node.Operand2);
-		}
-
-		private void DivUnsigned64(InstructionNode node)
-		{
-			ReplaceWithDivisionCall(node, "udiv64", node.Result, node.Operand1, node.Operand2);
 		}
 
 		#endregion Visitation Methods

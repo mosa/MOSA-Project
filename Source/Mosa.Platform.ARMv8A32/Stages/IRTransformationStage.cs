@@ -32,10 +32,10 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.CallDirect, CallDirect);
 			AddVisitation(IRInstruction.CompareFloatR4, CompareFloatR4);
 			AddVisitation(IRInstruction.CompareFloatR8, CompareFloatR8);
+			AddVisitation(IRInstruction.CompareInt32x32, CompareInt32x32);
+			AddVisitation(IRInstruction.CompareIntBranch32, CompareIntBranch32);
+			AddVisitation(IRInstruction.IfThenElse32, IfThenElse32);
 
-			//AddVisitation(IRInstruction.CompareInt32x32, CompareInt32x32);
-			//AddVisitation(IRInstruction.CompareIntBranch32, CompareIntBranch32);
-			//AddVisitation(IRInstruction.IfThenElse32, IfThenElse32);
 			//AddVisitation(IRInstruction.ConvertFloatR4ToFloatR8, ConvertFloatR4ToFloatR8);
 			//AddVisitation(IRInstruction.ConvertFloatR8ToFloatR4, ConvertFloatR8ToFloatR4);
 			AddVisitation(IRInstruction.ConvertFloatR4ToInt32, ConvertFloatR4ToInt32);
@@ -174,6 +174,52 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		private void CompareFloatR8(Context context)
 		{
 			FloatCompare(context, ARMv8A32.Cmf);
+		}
+
+		private void CompareInt32x32(Context context)
+		{
+			var condition = context.ConditionCode;
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			// TODO: operand1 and operand2 must be registers
+			// otherwise, place them into a register (or use CmpImm32, if possible)
+
+			context.SetInstruction(ARMv8A32.Cmp, null, operand1, operand2);
+			context.AppendInstruction(ARMv8A32.Mov, condition, result, CreateConstant(1));
+			context.AppendInstruction(ARMv8A32.Mov, condition.GetOpposite(), result, CreateConstant(0));
+		}
+
+		private void CompareIntBranch32(Context context)
+		{
+			OptimizeBranch(context);
+
+			var target = context.BranchTargets[0];
+			var condition = context.ConditionCode;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			// TODO: operand1 and operand2 must be registers
+			// otherwise, place them into a register (or use CmpImm32, if possible)
+
+			context.SetInstruction(ARMv8A32.Cmp, null, operand1, operand2);
+			context.AppendInstruction(ARMv8A32.B, condition, target);
+		}
+
+		private void IfThenElse32(Context context)
+		{
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var operand3 = context.Operand3;
+
+			// TODO: operand2 must be a register
+			// if not place it into a register
+
+			context.SetInstruction(ARMv8A32.Cmp, null, operand1, ConstantZero32);
+			context.AppendInstruction(ARMv8A32.Mov, ConditionCode.NotZero, result, operand2);    // true
+			context.AppendInstruction(ARMv8A32.Mov, ConditionCode.Zero, result, operand3);       // false
 		}
 
 		private void ConvertFloatR4ToInt32(Context context)

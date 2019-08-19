@@ -198,7 +198,7 @@ namespace Mosa.Platform.x86.Stages
 		private void CompareInt32x32(Context context)
 		{
 			var condition = context.ConditionCode;
-			var resultOperand = context.Result;
+			var result = context.Result;
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
@@ -206,7 +206,7 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Cmp32, null, operand1, operand2);
 			context.AppendInstruction(X86.Setcc, condition, v1);
-			context.AppendInstruction(X86.Movzx8To32, resultOperand, v1);
+			context.AppendInstruction(X86.Movzx8To32, result, v1);
 		}
 
 		private void CompareIntBranch32(Context context)
@@ -425,13 +425,14 @@ namespace Mosa.Platform.x86.Stages
 
 		private void IfThenElse32(Context context)
 		{
-			var result = context.Operand1;
+			var result = context.Result;
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
+			var operand3 = context.Operand3;
 
 			context.SetInstruction(X86.Cmp32, null, operand1, ConstantZero32);
-			context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, result, operand1);    // true
-			context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, operand2);       // false
+			context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, result, operand2);    // true
+			context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, operand3);       // false
 		}
 
 		private void Jmp(InstructionNode node)

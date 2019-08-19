@@ -309,13 +309,14 @@ namespace Mosa.Platform.x64.Stages
 
 		private void IfThenElse32(Context context)
 		{
-			var result = context.Operand1;
+			var result = context.Result;
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
+			var operand3 = context.Operand3;
 
-			context.SetInstruction(X64.Cmp32, null, operand1, ConstantZero64);
-			context.AppendInstruction(X64.CMov32, ConditionCode.NotEqual, result, operand1);    // true
-			context.AppendInstruction(X64.CMov32, ConditionCode.Equal, result, operand2);       // false
+			context.SetInstruction(X64.Cmp32, null, operand1, ConstantZero32);
+			context.AppendInstruction(X64.CMov32, ConditionCode.NotEqual, result, operand2);    // true
+			context.AppendInstruction(X64.CMov32, ConditionCode.Equal, result, operand3);       // false
 		}
 
 		private void Jmp(InstructionNode node)
