@@ -27,49 +27,49 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		#region Visitation Methods
 
-		private void DivSigned32(InstructionNode node)
+		private void DivSigned32(Context context)
 		{
-			ReplaceWithDivisionCall(node, "sdiv32", node.Result, node.Operand1, node.Operand2);
+			ReplaceWithDivisionCall(context, "sdiv32", context.Result, context.Operand1, context.Operand2);
 		}
 
-		private void DivSigned64(InstructionNode node)
+		private void DivSigned64(Context context)
 		{
-			ReplaceWithDivisionCall(node, "sdiv64", node.Result, node.Operand1, node.Operand2);
+			ReplaceWithDivisionCall(context, "sdiv64", context.Result, context.Operand1, context.Operand2);
 		}
 
-		private void DivUnsigned32(InstructionNode node)
+		private void DivUnsigned32(Context context)
 		{
-			ReplaceWithDivisionCall(node, "udiv32", node.Result, node.Operand1, node.Operand2);
+			ReplaceWithDivisionCall(context, "udiv32", context.Result, context.Operand1, context.Operand2);
 		}
 
-		private void DivUnsigned64(InstructionNode node)
+		private void DivUnsigned64(Context context)
 		{
-			ReplaceWithDivisionCall(node, "udiv64", node.Result, node.Operand1, node.Operand2);
+			ReplaceWithDivisionCall(context, "udiv64", context.Result, context.Operand1, context.Operand2);
 		}
 
-		private void RemSigned32(InstructionNode node)
+		private void RemSigned32(Context context)
 		{
-			ReplaceWithDivisionCall(node, "smod32", node.Result, node.Operand1, node.Operand2);
+			ReplaceWithDivisionCall(context, "smod32", context.Result, context.Operand1, context.Operand2);
 		}
 
-		private void RemSigned64(InstructionNode node)
+		private void RemSigned64(Context context)
 		{
-			ReplaceWithDivisionCall(node, "smod64", node.Result, node.Operand1, node.Operand2);
+			ReplaceWithDivisionCall(context, "smod64", context.Result, context.Operand1, context.Operand2);
 		}
 
-		private void RemUnsigned32(InstructionNode node)
+		private void RemUnsigned32(Context context)
 		{
-			ReplaceWithDivisionCall(node, "umod32", node.Result, node.Operand1, node.Operand2);
+			ReplaceWithDivisionCall(context, "umod32", context.Result, context.Operand1, context.Operand2);
 		}
 
-		private void RemUnsigned64(InstructionNode node)
+		private void RemUnsigned64(Context context)
 		{
-			ReplaceWithDivisionCall(node, "umod64", node.Result, node.Operand1, node.Operand2);
+			ReplaceWithDivisionCall(context, "umod64", context.Result, context.Operand1, context.Operand2);
 		}
 
 		#endregion Visitation Methods
 
-		private void ReplaceWithDivisionCall(InstructionNode node, string methodName, Operand result, Operand operand1, Operand operand2)
+		private void ReplaceWithDivisionCall(Context context, string methodName, Operand result, Operand operand1, Operand operand2)
 		{
 			var type = TypeSystem.GetTypeByName("Mosa.Runtime.Math", "Division");
 
@@ -81,7 +81,24 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
-			node.SetInstruction(IRInstruction.CallStatic, result, symbol, operand1, operand2);
+			context.SetInstruction(IRInstruction.CallStatic, result, symbol, operand1, operand2);
+
+			MethodScanner.MethodInvoked(method, Method);
+		}
+
+		private void ReplaceWithPlatformDivisionCall(Context context, string methodName, Operand result, Operand operand1, Operand operand2)
+		{
+			var type = TypeSystem.GetTypeByName("Mosa.Runtime.ARMv8A32.Math", "FloatingPoint");
+
+			Debug.Assert(type != null, "Cannot find type: Mosa.Runtime.ARMv8A32.Math::FloatingPoint type");
+
+			var method = type.FindMethodByName(methodName);
+
+			Debug.Assert(method != null, "Cannot find method: " + methodName);
+
+			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+
+			context.SetInstruction(IRInstruction.CallStatic, result, symbol, operand1, operand2);
 
 			MethodScanner.MethodInvoked(method, Method);
 		}

@@ -45,16 +45,16 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.DivFloatR8, DivFloatR8);
 			AddVisitation(IRInstruction.Jmp, Jmp);
 
-			//AddVisitation(IRInstruction.LoadFloatR4, LoadFloatR4);
-			//AddVisitation(IRInstruction.LoadFloatR8, LoadFloatR8);
+			AddVisitation(IRInstruction.LoadFloatR4, LoadFloatR4);
+			AddVisitation(IRInstruction.LoadFloatR8, LoadFloatR8);
 			AddVisitation(IRInstruction.LoadInt32, LoadInt32);
 			AddVisitation(IRInstruction.LoadSignExtend8x32, LoadSignExtend8x32);
 			AddVisitation(IRInstruction.LoadSignExtend16x32, LoadSignExtend16x32);
 			AddVisitation(IRInstruction.LoadZeroExtend8x32, LoadZeroExtend8x32);
 			AddVisitation(IRInstruction.LoadZeroExtend16x32, LoadZeroExtend16x32);
 
-			//AddVisitation(IRInstruction.LoadParamFloatR4, LoadParamFloatR4);
-			//AddVisitation(IRInstruction.LoadParamFloatR8, LoadParamFloatR8);
+			AddVisitation(IRInstruction.LoadParamFloatR4, LoadParamFloatR4);
+			AddVisitation(IRInstruction.LoadParamFloatR8, LoadParamFloatR8);
 			AddVisitation(IRInstruction.LoadParamInt32, LoadParamInt32);
 			AddVisitation(IRInstruction.LoadParamSignExtend8x32, LoadParamSignExtend8x32);
 			AddVisitation(IRInstruction.LoadParamSignExtend16x32, LoadParamSignExtend16x32);
@@ -80,14 +80,14 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.ShiftLeft32, ShiftLeft32);
 			AddVisitation(IRInstruction.ShiftRight32, ShiftRight32);
 
-			//AddVisitation(IRInstruction.StoreFloatR4, StoreFloatR4);
-			//AddVisitation(IRInstruction.StoreFloatR8, StoreFloatR8);
+			AddVisitation(IRInstruction.StoreFloatR4, StoreFloatR4);
+			AddVisitation(IRInstruction.StoreFloatR8, StoreFloatR8);
 			AddVisitation(IRInstruction.StoreInt8, StoreInt8);
 			AddVisitation(IRInstruction.StoreInt16, StoreInt16);
 			AddVisitation(IRInstruction.StoreInt32, StoreInt32);
 
-			//AddVisitation(IRInstruction.StoreParamFloatR4, StoreParamFloatR4);
-			//AddVisitation(IRInstruction.StoreParamFloatR8, StoreParamFloatR8);
+			AddVisitation(IRInstruction.StoreParamFloatR4, StoreParamFloatR4);
+			AddVisitation(IRInstruction.StoreParamFloatR8, StoreParamFloatR8);
 			AddVisitation(IRInstruction.StoreParamInt8, StoreParamInt8);
 			AddVisitation(IRInstruction.StoreParamInt16, StoreParamInt16);
 			AddVisitation(IRInstruction.StoreParamInt32, StoreParamInt32);
@@ -252,12 +252,52 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			context.ConditionCode = ConditionCode.Always;
 		}
 
+		private void LoadFloatR4(Context context)
+		{
+			Debug.Assert(context.Result.IsR4);
+
+			// TODO: Operand1 must be a register
+			// TODO: Operand2 must be a constant between 0-255, if not create new virtual register to create new base address
+
+			context.SetInstruction(ARMv8A32.LdfUpOffset, context.Result, context.Operand1, context.Operand2);
+		}
+
+		private void LoadFloatR8(Context context)
+		{
+			Debug.Assert(context.Result.IsR8);
+
+			// TODO: Operand1 must be a register
+			// TODO: Operand2 must be a constant between 0-255, if not create new virtual register to create new base address
+
+			context.SetInstruction(ARMv8A32.LdfUpOffset, context.Result, context.Operand1, context.Operand2);
+		}
+
 		private void LoadInt32(Context context)
 		{
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
 
 			TransformLoadInstruction(context, ARMv8A32.LdrUp32, ARMv8A32.LdrUpImm32, ARMv8A32.LdrDownImm32, context.Result, context.Operand1, context.Operand2);
+		}
+
+		private void LoadParamFloatR4(Context context)
+		{
+			Debug.Assert(context.Result.IsR4);
+			Debug.Assert(context.Operand1.IsConstant);
+
+			// TODO: Operand1 must be a constant between 0-255, if not create new virtual register to create new base address
+
+			context.SetInstruction(ARMv8A32.LdfUpOffset, context.Result, StackFrame, context.Operand1);
+		}
+
+		private void LoadParamFloatR8(Context context)
+		{
+			Debug.Assert(context.Result.IsR8);
+			Debug.Assert(context.Operand1.IsConstant);
+
+			// TODO: Operand1 must be a constant between 0-255, if not create new virtual register to create new base address
+
+			context.SetInstruction(ARMv8A32.LdfUpOffset, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void LoadParamInt32(Context context)
@@ -417,6 +457,32 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			TransformStoreInstruction(context, ARMv8A32.StrUp32, ARMv8A32.StrUpImm32, ARMv8A32.StrDownImm32, context.Operand1, context.Operand2, context.Operand3);
 		}
 
+		private void StoreFloatR4(Context context)
+		{
+			Debug.Assert(context.Result.IsR4);
+			Debug.Assert(context.Operand1.IsConstant);
+
+			// TODO: Operand1 must be a virtual register
+			// TODO: Operand2 must be a constant between 0-255, if not create new virtual register to create new base address
+			// TODO: Operand3 must be a virtual register
+			// TODO: Instruction up/down depends on base and real offset
+
+			context.SetInstruction(ARMv8A32.StfUpOffset, null, context.Operand1, context.Operand2, context.Operand3);
+		}
+
+		private void StoreFloatR8(Context context)
+		{
+			Debug.Assert(context.Result.IsR8);
+			Debug.Assert(context.Operand1.IsConstant);
+
+			// TODO: Operand1 must be a virtual register
+			// TODO: Operand2 must be a constant between 0-255, if not create new virtual register to create new base address
+			// TODO: Operand3 must be a virtual register
+			// TODO: Instruction up/down depends on base and real offset
+
+			context.SetInstruction(ARMv8A32.StfUpOffset, null, context.Operand1, context.Operand2, context.Operand3);
+		}
+
 		private void StoreInt8(Context context)
 		{
 			TransformStoreInstruction(context, ARMv8A32.StrUp8, ARMv8A32.StrUpImm8, ARMv8A32.StrDownImm8, context.Operand1, context.Operand2, context.Operand3);
@@ -430,6 +496,30 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		private void StoreParamInt32(Context context)
 		{
 			TransformStoreInstruction(context, ARMv8A32.StrUp32, ARMv8A32.StrUpImm32, ARMv8A32.StrDownImm32, StackFrame, context.Operand1, context.Operand2);
+		}
+
+		private void StoreParamFloatR4(Context context)
+		{
+			Debug.Assert(context.Result.IsR4);
+			Debug.Assert(context.Operand1.IsConstant);
+
+			// TODO: Operand1 must be a constant between 0-255, if not create new virtual register to create new base address
+			// TODO: Operand2 must be a virtual register
+			// TODO: Instruction up/down depends on base and real offset
+
+			context.SetInstruction(ARMv8A32.StfUpOffset, null, StackFrame, context.Operand1, context.Operand2);
+		}
+
+		private void StoreParamFloatR8(Context context)
+		{
+			Debug.Assert(context.Result.IsR8);
+			Debug.Assert(context.Operand1.IsConstant);
+
+			// TODO: Operand1 must be a constant between 0-255, if not create new virtual register to create new base address
+			// TODO: Operand2 must be a virtual register
+			// TODO: Instruction up/down depends on base and real offset
+
+			context.SetInstruction(ARMv8A32.StfUpOffset, null, StackFrame, context.Operand1, context.Operand2);
 		}
 
 		private void StoreParamInt8(Context context)

@@ -28,7 +28,7 @@ namespace Mosa.Platform.x64.Stages
 
 		#region Visitation Methods
 
-		public void Add64(InstructionNode node)
+		public void Add64(Context context)
 		{
 			// This transformation can reduces restrictions placed on the register allocator.
 			// The LEA does not change any of the status flags, however, the add instruction normally updates the status flags (carry, zero, etc.)
@@ -36,27 +36,27 @@ namespace Mosa.Platform.x64.Stages
 			// A search is required to determine if a status flag is used
 			// The search may not be conclusive; when so, the transformation is not made.
 
-			if (node.Operand1.IsVirtualRegister && !node.Operand2.IsCPURegister)
+			if (context.Operand1.IsVirtualRegister && !context.Operand2.IsCPURegister)
 			{
-				if (AreStatusFlagsUsed(node) != TriState.No)
+				if (AreStatusFlagsUsed(context.Node) != TriState.No)
 					return;
 
-				node.SetInstruction(X64.Lea64, node.Result, node.Operand1, node.Operand2);
+				context.SetInstruction(X64.Lea64, context.Result, context.Operand1, context.Operand2);
 				LeaSubstitutionCount++;
 				return;
 			}
 		}
 
-		public void Sub64(InstructionNode node)
+		public void Sub64(Context context)
 		{
-			if (node.Operand1.IsVirtualRegister && node.Operand2.IsResolvedConstant)
+			if (context.Operand1.IsVirtualRegister && context.Operand2.IsResolvedConstant)
 			{
-				if (AreStatusFlagsUsed(node) != TriState.No)
+				if (AreStatusFlagsUsed(context.Node) != TriState.No)
 					return;
 
-				var constant = CreateConstant(-node.Operand2.ConstantSignedInteger);
+				var constant = CreateConstant(-context.Operand2.ConstantSignedInteger);
 
-				node.SetInstruction(X64.Lea64, node.Result, node.Operand1, constant);
+				context.SetInstruction(X64.Lea64, context.Result, context.Operand1, constant);
 				LeaSubstitutionCount++;
 				return;
 			}
