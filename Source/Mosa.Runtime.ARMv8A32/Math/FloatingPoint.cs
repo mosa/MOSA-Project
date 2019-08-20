@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using System.Runtime.CompilerServices;
 
 namespace Mosa.Runtime.ARMv8A32.Math
@@ -19,6 +18,18 @@ namespace Mosa.Runtime.ARMv8A32.Math
 		{
 			// TODO
 			return 0.0f;
+		}
+
+		public static uint BitCopyFloatR4ToInt32(float f)
+		{
+			// TODO
+			return 0;
+		}
+
+		public static uint BitCopyInt32ToFloatR4(float f)
+		{
+			// TODO
+			return 0;
 		}
 	}
 }

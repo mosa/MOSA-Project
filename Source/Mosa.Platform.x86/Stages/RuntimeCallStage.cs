@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.MosaTypeSystem;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
@@ -62,20 +61,5 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		#endregion Visitation Methods
-
-		private void ReplaceWithCall(Context context, string namespaceName, string typeName, string methodName)
-		{
-			var method = GetMethod(namespaceName, typeName, methodName);
-
-			Debug.Assert(method != null, $"Cannot find method: {methodName}");
-
-			// FUTURE: throw compiler exception
-
-			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
-
-			context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.Operand1, context.Operand2);
-
-			MethodScanner.MethodInvoked(method, Method);
-		}
 	}
 }

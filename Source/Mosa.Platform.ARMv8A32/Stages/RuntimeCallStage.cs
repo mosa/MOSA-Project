@@ -2,8 +2,6 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.MosaTypeSystem;
-using System.Diagnostics;
 
 namespace Mosa.Platform.ARMv8A32.Stages
 {
@@ -26,6 +24,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 			AddVisitation(IRInstruction.ConvertFloatR4ToFloatR8, ConvertFloatR4ToFloatR8);
 			AddVisitation(IRInstruction.ConvertFloatR8ToFloatR4, ConvertFloatR8ToFloatR4);
+			AddVisitation(IRInstruction.BitCopyFloatR4ToInt32, BitCopyFloatR4ToInt32);
+			AddVisitation(IRInstruction.BitCopyInt32ToFloatR4, BitCopyInt32ToFloatR4);
 		}
 
 		#region Visitation Methods
@@ -80,21 +80,16 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			ReplaceWithCall(context, "Mosa.Runtime.ARMv8A32.Math", "FloatingPoint", "DoubleToFloat");
 		}
 
-		#endregion Visitation Methods
-
-		private void ReplaceWithCall(Context context, string namespaceName, string typeName, string methodName)
+		private void BitCopyFloatR4ToInt32(Context context)
 		{
-			var method = GetMethod(namespaceName, typeName, methodName);
-
-			Debug.Assert(method != null, $"Cannot find method: {methodName}");
-
-			// FUTURE: throw compiler exception
-
-			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
-
-			context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.Operand1, context.Operand2);
-
-			MethodScanner.MethodInvoked(method, Method);
+			ReplaceWithCall(context, "Mosa.Runtime.ARMv8A32.Math", "FloatingPoint", "BitCopyFloatR4ToInt32");
 		}
+
+		private void BitCopyInt32ToFloatR4(Context context)
+		{
+			ReplaceWithCall(context, "Mosa.Runtime.ARMv8A32.Math", "FloatingPoint", "BitCopyInt32ToFloatR4");
+		}
+
+		#endregion Visitation Methods
 	}
 }

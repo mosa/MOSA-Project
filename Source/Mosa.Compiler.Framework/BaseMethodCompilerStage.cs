@@ -998,6 +998,32 @@ namespace Mosa.Compiler.Framework
 			return method;
 		}
 
+		protected void ReplaceWithCall(Context context, string namespaceName, string typeName, string methodName)
+		{
+			var method = GetMethod(namespaceName, typeName, methodName);
+
+			Debug.Assert(method != null, $"Cannot find method: {methodName}");
+
+			// FUTURE: throw compiler exception
+
+			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+
+			if (context.OperandCount == 1)
+			{
+				context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.Operand1);
+			}
+			else if (context.OperandCount == 2)
+			{
+				context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.Operand1, context.Operand2);
+			}
+			else
+			{
+				// FUTURE: throw compiler exception
+			}
+
+			MethodScanner.MethodInvoked(method, Method);
+		}
+
 		#endregion Helper Methods
 
 		#region Constant Helper Methods
