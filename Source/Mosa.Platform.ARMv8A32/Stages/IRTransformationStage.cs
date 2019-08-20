@@ -452,8 +452,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void StoreFloatR4(Context context)
 		{
-			Debug.Assert(context.Result.IsR4);
-			Debug.Assert(context.Operand1.IsConstant);
+			//Debug.Assert(context.Operand2.IsConstant);
+			Debug.Assert(context.Operand3.IsR4);
 
 			// TODO: Operand1 must be a virtual register
 			// TODO: Operand2 must be a constant between 0-255, if not create new virtual register to create new base address
@@ -465,8 +465,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void StoreFloatR8(Context context)
 		{
-			Debug.Assert(context.Result.IsR8);
-			Debug.Assert(context.Operand1.IsConstant);
+			//Debug.Assert(context.Operand2.IsConstant);
+			Debug.Assert(context.Operand3.IsR8);
 
 			// TODO: Operand1 must be a virtual register
 			// TODO: Operand2 must be a constant between 0-255, if not create new virtual register to create new base address
@@ -493,7 +493,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void StoreParamFloatR4(Context context)
 		{
-			Debug.Assert(context.Result.IsR4);
+			Debug.Assert(context.Operand2.IsR4);
 			Debug.Assert(context.Operand1.IsConstant);
 
 			// TODO: Operand1 must be a constant between 0-255, if not create new virtual register to create new base address
@@ -505,7 +505,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void StoreParamFloatR8(Context context)
 		{
-			Debug.Assert(context.Result.IsR8);
+			Debug.Assert(context.Operand2.IsR8);
 			Debug.Assert(context.Operand1.IsConstant);
 
 			// TODO: Operand1 must be a constant between 0-255, if not create new virtual register to create new base address
