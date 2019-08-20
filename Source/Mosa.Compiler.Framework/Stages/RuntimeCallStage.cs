@@ -45,82 +45,82 @@ namespace Mosa.Compiler.Framework.Stages
 			return method;
 		}
 
-		private void SetVMCall(InstructionNode node, VmCall vmcall, Operand result, List<Operand> operands)
+		private void SetVMCall(Context context, VmCall vmcall, Operand result, List<Operand> operands)
 		{
 			var method = GetVMCallMethod(vmcall);
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
-			node.SetInstruction(IRInstruction.CallStatic, result, symbol, operands);
+			context.SetInstruction(IRInstruction.CallStatic, result, symbol, operands);
 		}
 
-		private void MemorySet(InstructionNode node)
+		private void MemorySet(Context context)
 		{
-			SetVMCall(node, VmCall.MemorySet, node.Result, node.GetOperands());
+			SetVMCall(context, VmCall.MemorySet, context.Result, context.GetOperands());
 		}
 
-		private void IsInstanceOfType(InstructionNode node)
+		private void IsInstanceOfType(Context context)
 		{
-			SetVMCall(node, VmCall.IsInstanceOfType, node.Result, node.GetOperands());
+			SetVMCall(context, VmCall.IsInstanceOfType, context.Result, context.GetOperands());
 		}
 
-		private void IsInstanceOfInterfaceType(InstructionNode node)
+		private void IsInstanceOfInterfaceType(Context context)
 		{
-			SetVMCall(node, VmCall.IsInstanceOfInterfaceType, node.Result, node.GetOperands());
+			SetVMCall(context, VmCall.IsInstanceOfInterfaceType, context.Result, context.GetOperands());
 		}
 
-		private void GetVirtualFunctionPtr(InstructionNode node)
+		private void GetVirtualFunctionPtr(Context context)
 		{
-			SetVMCall(node, VmCall.GetVirtualFunctionPtr, node.Result, node.GetOperands());
+			SetVMCall(context, VmCall.GetVirtualFunctionPtr, context.Result, context.GetOperands());
 		}
 
-		private void Rethrow(InstructionNode node)
+		private void Rethrow(Context context)
 		{
-			SetVMCall(node, VmCall.Rethrow, node.Result, node.GetOperands());
+			SetVMCall(context, VmCall.Rethrow, context.Result, context.GetOperands());
 		}
 
-		private void MemoryCopy(InstructionNode node)
+		private void MemoryCopy(Context context)
 		{
-			SetVMCall(node, VmCall.MemoryCopy, node.Result, node.GetOperands());
+			SetVMCall(context, VmCall.MemoryCopy, context.Result, context.GetOperands());
 		}
 
-		private void Box(InstructionNode node)
+		private void Box(Context context)
 		{
-			SetVMCall(node, VmCall.Box, node.Result, node.GetOperands());
+			SetVMCall(context, VmCall.Box, context.Result, context.GetOperands());
 		}
 
-		private void Box32(InstructionNode node)
+		private void Box32(Context context)
 		{
-			SetVMCall(node, VmCall.Box32, node.Result, node.GetOperands());
+			SetVMCall(context, VmCall.Box32, context.Result, context.GetOperands());
 		}
 
-		private void Box64(InstructionNode node)
+		private void Box64(Context context)
 		{
-			SetVMCall(node, VmCall.Box64, node.Result, node.GetOperands());
+			SetVMCall(context, VmCall.Box64, context.Result, context.GetOperands());
 		}
 
-		private void BoxR4(InstructionNode node)
+		private void BoxR4(Context context)
 		{
-			SetVMCall(node, VmCall.BoxR4, node.Result, node.GetOperands());
+			SetVMCall(context, VmCall.BoxR4, context.Result, context.GetOperands());
 		}
 
-		private void BoxR8(InstructionNode node)
+		private void BoxR8(Context context)
 		{
-			SetVMCall(node, VmCall.BoxR8, node.Result, node.GetOperands());
+			SetVMCall(context, VmCall.BoxR8, context.Result, context.GetOperands());
 		}
 
-		private void Unbox(InstructionNode node)
+		private void Unbox(Context context)
 		{
-			SetVMCall(node, VmCall.Unbox, node.Result, node.GetOperands());
+			SetVMCall(context, VmCall.Unbox, context.Result, context.GetOperands());
 		}
 
-		private void Unbox32(InstructionNode node)
+		private void Unbox32(Context context)
 		{
-			SetVMCall(node, VmCall.Unbox32, node.Result, node.GetOperands());
+			SetVMCall(context, VmCall.Unbox32, context.Result, context.GetOperands());
 		}
 
-		private void Unbox64(InstructionNode node)
+		private void Unbox64(Context context)
 		{
-			SetVMCall(node, VmCall.Unbox64, node.Result, node.GetOperands());
+			SetVMCall(context, VmCall.Unbox64, context.Result, context.GetOperands());
 		}
 	}
 }

@@ -10,19 +10,15 @@ namespace Mosa.Compiler.Framework
 	{
 		private const int MaxInstructions = 1024;
 
-		protected delegate void ContextVisitationDelegate(Context context);
+		protected delegate void VisitationDelegate(Context context);
 
-		protected delegate void NodeVisitationDelegate(InstructionNode node);
-
-		protected ContextVisitationDelegate[] visitationContexts;
-		protected NodeVisitationDelegate[] visitationNodes;
+		protected VisitationDelegate[] visitations;
 
 		protected abstract void PopulateVisitationDictionary();
 
 		protected override void Initialize()
 		{
-			visitationContexts = new ContextVisitationDelegate[MaxInstructions];
-			visitationNodes = new NodeVisitationDelegate[MaxInstructions];
+			visitations = new VisitationDelegate[MaxInstructions];
 
 			PopulateVisitationDictionary();
 		}
@@ -41,19 +37,13 @@ namespace Mosa.Compiler.Framework
 					if (node.Instruction.ID == 0)
 						continue; // no mapping
 
-					var visitationContext = visitationContexts[node.Instruction.ID];
+					var visitationContext = visitations[node.Instruction.ID];
 
-					if (visitationContext != null)
-					{
-						context.Node = node;
-						visitationContext(context);
-						continue;
-					}
-
-					if (node.IsEmptyOrNop)
+					if (visitationContext == null)
 						continue;
 
-					visitationNodes[node.Instruction.ID]?.Invoke(node);
+					context.Node = node;
+					visitationContext(context);
 				}
 
 				if (MethodCompiler.IsStopped)
@@ -61,14 +51,9 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		protected void AddVisitation(BaseInstruction instruction, ContextVisitationDelegate visitation)
+		protected void AddVisitation(BaseInstruction instruction, VisitationDelegate visitation)
 		{
-			visitationContexts[instruction.ID] = visitation;
-		}
-
-		protected void AddVisitation(BaseInstruction instruction, NodeVisitationDelegate visitation)
-		{
-			visitationNodes[instruction.ID] = visitation;
+			visitations[instruction.ID] = visitation;
 		}
 	}
 }

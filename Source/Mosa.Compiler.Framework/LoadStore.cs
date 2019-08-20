@@ -7,39 +7,39 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public static class LoadStore
 	{
-		public static void OrderLoadOperands(InstructionNode node, MethodCompiler methodCompiler)
+		public static void OrderLoadOperands(Context context, MethodCompiler methodCompiler)
 		{
-			if (node.Operand1.IsResolvedConstant && node.Operand2.IsResolvedConstant)
+			if (context.Operand1.IsResolvedConstant && context.Operand2.IsResolvedConstant)
 			{
-				node.Operand1 = methodCompiler.CreateConstant(node.Operand1.ConstantUnsignedLongInteger + node.Operand2.ConstantUnsignedLongInteger);
-				node.Operand2 = methodCompiler.ConstantZero;
+				context.Operand1 = methodCompiler.CreateConstant(context.Operand1.ConstantUnsignedLongInteger + context.Operand2.ConstantUnsignedLongInteger);
+				context.Operand2 = methodCompiler.ConstantZero;
 			}
 
-			if (node.Operand1.IsConstant && !node.Operand2.IsConstant)
+			if (context.Operand1.IsConstant && !context.Operand2.IsConstant)
 			{
-				var operand1 = node.Operand1;
-				var operand2 = node.Operand2;
+				var operand1 = context.Operand1;
+				var operand2 = context.Operand2;
 
-				node.Operand2 = operand1;
-				node.Operand1 = operand2;
+				context.Operand2 = operand1;
+				context.Operand1 = operand2;
 			}
 		}
 
-		public static void OrderStoreOperands(InstructionNode node, MethodCompiler methodCompiler)
+		public static void OrderStoreOperands(Context context, MethodCompiler methodCompiler)
 		{
-			if (node.Operand1.IsResolvedConstant && node.Operand2.IsResolvedConstant)
+			if (context.Operand1.IsResolvedConstant && context.Operand2.IsResolvedConstant)
 			{
-				node.Operand1 = methodCompiler.CreateConstant(node.Operand1.ConstantUnsignedLongInteger + node.Operand2.ConstantUnsignedLongInteger);
-				node.Operand2 = methodCompiler.ConstantZero;
+				context.Operand1 = methodCompiler.CreateConstant(context.Operand1.ConstantUnsignedLongInteger + context.Operand2.ConstantUnsignedLongInteger);
+				context.Operand2 = methodCompiler.ConstantZero;
 			}
 
-			if (node.Operand1.IsConstant && !node.Operand2.IsConstant)
+			if (context.Operand1.IsConstant && !context.Operand2.IsConstant)
 			{
-				var operand1 = node.Operand1;
-				var operand2 = node.Operand2;
+				var operand1 = context.Operand1;
+				var operand2 = context.Operand2;
 
-				node.Operand2 = operand1;
-				node.Operand1 = operand2;
+				context.Operand2 = operand1;
+				context.Operand1 = operand2;
 			}
 		}
 	}

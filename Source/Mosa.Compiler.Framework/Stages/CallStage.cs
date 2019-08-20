@@ -79,19 +79,16 @@ namespace Mosa.Compiler.Framework.Stages
 			return NativePointerSize * slot;
 		}
 
-		private void CallStatic(InstructionNode node)
+		private void CallStatic(Context context)
 		{
-			var call = node.Operand1;
-			var result = node.Result;
+			var call = context.Operand1;
+			var result = context.Result;
 			var method = call.Method;
-			var operands = node.GetOperands();
+			var operands = context.GetOperands();
 
 			Debug.Assert(method != null);
 
 			operands.RemoveAt(0);
-
-			var context = new Context(node);
-
 			context.Empty();
 
 			MakeCall(context, call, result, operands);
@@ -99,16 +96,13 @@ namespace Mosa.Compiler.Framework.Stages
 			MethodScanner.MethodDirectInvoked(call.Method, Method);
 		}
 
-		private void CallDynamic(InstructionNode node)
+		private void CallDynamic(Context context)
 		{
-			var call = node.Operand1;
-			var result = node.Result;
-			var operands = node.GetOperands();
+			var call = context.Operand1;
+			var result = context.Result;
+			var operands = context.GetOperands();
 
 			operands.RemoveAt(0);
-
-			var context = new Context(node);
-
 			context.Empty();
 
 			MakeCall(context, call, result, operands);
@@ -119,13 +113,13 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private void CallVirtual(InstructionNode node)
+		private void CallVirtual(Context context)
 		{
-			var call = node.Operand1;
-			var result = node.Result;
+			var call = context.Operand1;
+			var result = context.Result;
 			var method = call.Method;
-			var thisPtr = node.Operand2;
-			var operands = node.GetOperands();
+			var thisPtr = context.Operand2;
+			var operands = context.GetOperands();
 
 			Debug.Assert(method != null);
 
@@ -135,8 +129,6 @@ namespace Mosa.Compiler.Framework.Stages
 			var callTarget = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 
 			Debug.Assert(!method.DeclaringType.IsInterface);
-
-			var context = new Context(node);
 
 			// Same as above except for methodPointer
 			int methodPointerOffset = CalculateMethodTableOffset(method) + (NativePointerSize * 14);
@@ -162,13 +154,13 @@ namespace Mosa.Compiler.Framework.Stages
 			return CalculateInterfaceSlot(invokeTarget.DeclaringType) * NativePointerSize;
 		}
 
-		private void CallInterface(InstructionNode node)
+		private void CallInterface(Context context)
 		{
-			var call = node.Operand1;
+			var call = context.Operand1;
 			var method = call.Method;
-			var result = node.Result;
-			var thisPtr = node.Operand2;
-			var operands = node.GetOperands();
+			var result = context.Result;
+			var thisPtr = context.Operand2;
+			var operands = context.GetOperands();
 
 			Debug.Assert(method != null);
 
@@ -195,8 +187,6 @@ namespace Mosa.Compiler.Framework.Stages
 			var interfaceSlotPtr = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 			var interfaceMethodTablePtr = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 			var methodDefinition = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
-
-			var context = new Context(node);
 
 			// Get the TypeDef pointer
 			context.SetInstruction(loadInstruction, typeDefinition, thisPtr, ConstantZero);

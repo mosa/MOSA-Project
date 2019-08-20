@@ -27,14 +27,14 @@ namespace Mosa.Platform.x86.Stages
 
 		#region Visitation Methods
 
-		public void Mov32(InstructionNode node)
+		public void Mov32(Context context)
 		{
-			if (!node.Operand1.IsConstantZero)
+			if (!context.Operand1.IsConstantZero)
 				return;
 
-			if (OptimizationStage.AreStatusFlagsUsed(node.Next, true, true, true, true, true) == TriState.No)
+			if (OptimizationStage.AreStatusFlagsUsed(context.Node.Next, true, true, true, true, true) == TriState.No)
 			{
-				node.SetInstruction(X86.Xor32, node.Result, node.Result, node.Result);
+				context.SetInstruction(X86.Xor32, context.Result, context.Result, context.Result);
 				ZeroToXorSubstitutionCount++;
 			}
 		}

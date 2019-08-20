@@ -2,8 +2,6 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.MosaTypeSystem;
-using System.Diagnostics;
 
 namespace Mosa.Platform.ARMv8A32.Stages
 {
@@ -23,67 +21,75 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.RemSigned64, RemSigned64);     // smod64
 			AddVisitation(IRInstruction.RemUnsigned64, RemUnsigned64); // umod64
 			AddVisitation(IRInstruction.RemUnsigned32, RemUnsigned32); // umod32
+
+			AddVisitation(IRInstruction.ConvertFloatR4ToFloatR8, ConvertFloatR4ToFloatR8);
+			AddVisitation(IRInstruction.ConvertFloatR8ToFloatR4, ConvertFloatR8ToFloatR4);
+			AddVisitation(IRInstruction.BitCopyFloatR4ToInt32, BitCopyFloatR4ToInt32);
+			AddVisitation(IRInstruction.BitCopyInt32ToFloatR4, BitCopyInt32ToFloatR4);
 		}
 
 		#region Visitation Methods
 
-		private void DivSigned32(InstructionNode node)
+		private void DivSigned32(Context context)
 		{
-			ReplaceWithDivisionCall(node, "sdiv32", node.Result, node.Operand1, node.Operand2);
+			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "sdiv32");
 		}
 
-		private void DivSigned64(InstructionNode node)
+		private void DivSigned64(Context context)
 		{
-			ReplaceWithDivisionCall(node, "sdiv64", node.Result, node.Operand1, node.Operand2);
+			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "sdiv64");
 		}
 
-		private void DivUnsigned32(InstructionNode node)
+		private void DivUnsigned32(Context context)
 		{
-			ReplaceWithDivisionCall(node, "udiv32", node.Result, node.Operand1, node.Operand2);
+			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "udiv32");
 		}
 
-		private void DivUnsigned64(InstructionNode node)
+		private void DivUnsigned64(Context context)
 		{
-			ReplaceWithDivisionCall(node, "udiv64", node.Result, node.Operand1, node.Operand2);
+			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "udiv64");
 		}
 
-		private void RemSigned32(InstructionNode node)
+		private void RemSigned32(Context context)
 		{
-			ReplaceWithDivisionCall(node, "smod32", node.Result, node.Operand1, node.Operand2);
+			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "smod32");
 		}
 
-		private void RemSigned64(InstructionNode node)
+		private void RemSigned64(Context context)
 		{
-			ReplaceWithDivisionCall(node, "smod64", node.Result, node.Operand1, node.Operand2);
+			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "smod64");
 		}
 
-		private void RemUnsigned32(InstructionNode node)
+		private void RemUnsigned32(Context context)
 		{
-			ReplaceWithDivisionCall(node, "umod32", node.Result, node.Operand1, node.Operand2);
+			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "umod32");
 		}
 
-		private void RemUnsigned64(InstructionNode node)
+		private void RemUnsigned64(Context context)
 		{
-			ReplaceWithDivisionCall(node, "umod64", node.Result, node.Operand1, node.Operand2);
+			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "umod64");
+		}
+
+		private void ConvertFloatR4ToFloatR8(Context context)
+		{
+			ReplaceWithCall(context, "Mosa.Runtime.ARMv8A32.Math", "FloatingPoint", "FloatToDouble");
+		}
+
+		private void ConvertFloatR8ToFloatR4(Context context)
+		{
+			ReplaceWithCall(context, "Mosa.Runtime.ARMv8A32.Math", "FloatingPoint", "DoubleToFloat");
+		}
+
+		private void BitCopyFloatR4ToInt32(Context context)
+		{
+			ReplaceWithCall(context, "Mosa.Runtime.ARMv8A32.Math", "FloatingPoint", "BitCopyFloatR4ToInt32");
+		}
+
+		private void BitCopyInt32ToFloatR4(Context context)
+		{
+			ReplaceWithCall(context, "Mosa.Runtime.ARMv8A32.Math", "FloatingPoint", "BitCopyInt32ToFloatR4");
 		}
 
 		#endregion Visitation Methods
-
-		private void ReplaceWithDivisionCall(InstructionNode node, string methodName, Operand result, Operand operand1, Operand operand2)
-		{
-			var type = TypeSystem.GetTypeByName("Mosa.Runtime.Math", "Division");
-
-			Debug.Assert(type != null, "Cannot find type: Mosa.Runtime.Math.Division type");
-
-			var method = type.FindMethodByName(methodName);
-
-			Debug.Assert(method != null, "Cannot find method: " + methodName);
-
-			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
-
-			node.SetInstruction(IRInstruction.CallStatic, result, symbol, operand1, operand2);
-
-			MethodScanner.MethodInvoked(method, Method);
-		}
 	}
 }

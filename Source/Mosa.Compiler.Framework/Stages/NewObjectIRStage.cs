@@ -31,24 +31,24 @@ namespace Mosa.Compiler.Framework.Stages
 			return method;
 		}
 
-		private void NewObject(InstructionNode node)
+		private void NewObject(Context context)
 		{
 			var method = GetVMCallMethod(VmCall.AllocateObject);
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
-			var classType = node.MosaType;
+			var classType = context.MosaType;
 
-			node.SetInstruction(IRInstruction.CallStatic, node.Result, symbol, node.GetOperands());
+			context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.GetOperands());
 
 			MethodScanner.TypeAllocated(classType, Method);
 		}
 
-		private void NewArray(InstructionNode node)
+		private void NewArray(Context context)
 		{
 			var method = GetVMCallMethod(VmCall.AllocateArray);
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
-			var arrayType = node.MosaType;
+			var arrayType = context.MosaType;
 
-			node.SetInstruction(IRInstruction.CallStatic, node.Result, symbol, node.GetOperands());
+			context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.GetOperands());
 
 			MethodScanner.TypeAllocated(arrayType, method);
 		}

@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// Exception Stage
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
-	public class ExceptionStage : BaseMethodCompilerStage
+	public class ExceptionStage : BaseCodeTransformationStage
 	{
 		private Operand exceptionRegister;
 
@@ -25,10 +25,26 @@ namespace Mosa.Compiler.Framework.Stages
 		private Dictionary<BasicBlock, Operand> exceptionVirtualRegisters;
 		private List<Tuple<BasicBlock, BasicBlock>> leaveTargets;
 
-		private delegate void Dispatch(InstructionNode node);
+		private delegate void Dispatch(Context context);
+
+		protected override void PopulateVisitationDictionary()
+		{
+			AddVisitation(IRInstruction.Throw, ThrowInstruction);
+			AddVisitation(IRInstruction.FinallyStart, FinallyStartInstruction);
+			AddVisitation(IRInstruction.FinallyEnd, FinallyEndInstruction);
+			AddVisitation(IRInstruction.ExceptionStart, ExceptionStartInstruction);
+			AddVisitation(IRInstruction.SetLeaveTarget, SetLeaveTargetInstruction);
+			AddVisitation(IRInstruction.GotoLeaveTarget, GotoLeaveTargetInstruction);
+			AddVisitation(IRInstruction.Flow, Empty);
+			AddVisitation(IRInstruction.TryStart, Empty);
+			AddVisitation(IRInstruction.TryEnd, Empty);
+			AddVisitation(IRInstruction.ExceptionEnd, Empty);
+		}
 
 		protected override void Initialize()
 		{
+			base.Initialize();
+
 			exceptionType = TypeSystem.GetTypeByName("System", "Exception");
 			exceptionRegister = Operand.CreateCPURegister(exceptionType, Architecture.ExceptionRegister);
 			leaveTargetRegister = Operand.CreateCPURegister(Is32BitPlatform ? TypeSystem.BuiltIn.I4 : TypeSystem.BuiltIn.I8, Architecture.LeaveTargetRegister);
@@ -41,87 +57,53 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Setup()
 		{
-			exceptionVirtualRegisters.Clear();
-			leaveTargets.Clear();
-		}
+			exceptionVirtualRegisters = new Dictionary<BasicBlock, Operand>();
+			leaveTargets = new List<Tuple<BasicBlock, BasicBlock>>();
 
-		protected override void Run()
-		{
 			// collect leave targets
 			leaveTargets = CollectLeaveTargets();
-
-			var dispatches = new Dictionary<BaseInstruction, Dispatch>
-			{
-				[IRInstruction.Throw] = ThrowInstruction,
-				[IRInstruction.FinallyStart] = FinallyStartInstruction,
-				[IRInstruction.FinallyEnd] = FinallyEndInstruction,
-				[IRInstruction.ExceptionStart] = ExceptionStartInstruction,
-				[IRInstruction.SetLeaveTarget] = SetLeaveTargetInstruction,
-				[IRInstruction.GotoLeaveTarget] = GotoLeaveTargetInstruction,
-				[IRInstruction.Flow] = Empty,
-				[IRInstruction.TryStart] = Empty,
-				[IRInstruction.TryEnd] = Empty,
-				[IRInstruction.ExceptionEnd] = Empty
-			};
-
-			for (int i = 0; i < BasicBlocks.Count; i++)
-			{
-				for (var node = BasicBlocks[i].First; !node.IsBlockEndInstruction; node = node.Next)
-				{
-					if (node.IsEmptyOrNop)
-						continue;
-
-					if (dispatches.TryGetValue(node.Instruction, out Dispatch dispatch))
-					{
-						dispatch.Invoke(node);
-					}
-				}
-			}
 		}
 
 		protected override void Finish()
 		{
-			exceptionVirtualRegisters.Clear();
-			leaveTargets.Clear();
+			exceptionVirtualRegisters = null;
+			leaveTargets = null;
 		}
 
-		private static void Empty(InstructionNode node)
+		private static void Empty(Context context)
 		{
-			node.Empty();
+			context.Empty();
 		}
 
-		private void SetLeaveTargetInstruction(InstructionNode node)
+		private void SetLeaveTargetInstruction(Context context)
 		{
-			var target = node.BranchTargets[0];
+			var target = context.BranchTargets[0];
 
-			var ctx = new Context(node);
-
-			ctx.SetInstruction(Select(leaveTargetRegister, IRInstruction.MoveInt32, IRInstruction.MoveInt64), leaveTargetRegister, CreateConstant(target.Label));
+			context.SetInstruction(Select(leaveTargetRegister, IRInstruction.MoveInt32, IRInstruction.MoveInt64), leaveTargetRegister, CreateConstant(target.Label));
 		}
 
-		private void ExceptionStartInstruction(InstructionNode node)
+		private void ExceptionStartInstruction(Context context)
 		{
-			var exceptionVirtualRegister = node.Result;
-			var ctx = new Context(node);
+			var exceptionVirtualRegister = context.Result;
 
-			ctx.SetInstruction(IRInstruction.KillAll);
-			ctx.AppendInstruction(IRInstruction.Gen, exceptionRegister);
-			ctx.AppendInstruction(Select(exceptionVirtualRegister, IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionVirtualRegister, exceptionRegister);
+			context.SetInstruction(IRInstruction.KillAll);
+			context.AppendInstruction(IRInstruction.Gen, exceptionRegister);
+			context.AppendInstruction(Select((Operand)exceptionVirtualRegister, IRInstruction.MoveInt32, IRInstruction.MoveInt64), (Operand)exceptionVirtualRegister, exceptionRegister);
 		}
 
-		private void FinallyEndInstruction(InstructionNode node)
+		private void FinallyEndInstruction(Context context)
 		{
-			var header = FindImmediateExceptionContext(node.Label);
+			var header = FindImmediateExceptionContext(context.Label);
 			var headerBlock = BasicBlocks.GetByLabel(header.HandlerStart);
 
 			var exceptionVirtualRegister = exceptionVirtualRegisters[headerBlock];
 
-			var newBlocks = CreateNewBlockContexts(1, node.Label);
-			var ctx = new Context(node);
-			var nextBlock = Split(ctx);
+			var newBlocks = CreateNewBlockContexts(1, context.Label);
 
-			ctx.SetInstruction(Select(IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.NotEqual, null, exceptionVirtualRegister, nullOperand, newBlocks[0].Block);
-			ctx.AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
+			var nextBlock = Split(context);
+
+			context.SetInstruction(Select(IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.NotEqual, null, exceptionVirtualRegister, nullOperand, newBlocks[0].Block);
+			context.AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 
 			var method = PlatformInternalRuntimeType.FindMethodByName("ExceptionHandler");
 
@@ -131,55 +113,49 @@ namespace Mosa.Compiler.Framework.Stages
 			MethodScanner.MethodInvoked(method, Method);
 		}
 
-		private void FinallyStartInstruction(InstructionNode node)
+		private void FinallyStartInstruction(Context context)
 		{
 			// Remove from header blocks
-			BasicBlocks.RemoveHeaderBlock(node.Block);
+			BasicBlocks.RemoveHeaderBlock(context.Block);
 
-			var exceptionVirtualRegister = node.Result;
-			var leaveTargetVirtualRegister = node.Result2;
-			var ctx = new Context(node);
+			var exceptionVirtualRegister = context.Result;
+			var leaveTargetVirtualRegister = context.Result2;
 
-			exceptionVirtualRegisters.Add(node.Block, exceptionVirtualRegister);
+			exceptionVirtualRegisters.Add(context.Block, exceptionVirtualRegister);
 
-			ctx.SetInstruction(IRInstruction.KillAll);
-			ctx.AppendInstruction(IRInstruction.Gen, exceptionRegister);
-			ctx.AppendInstruction(IRInstruction.Gen, leaveTargetRegister);
+			context.SetInstruction(IRInstruction.KillAll);
+			context.AppendInstruction(IRInstruction.Gen, exceptionRegister);
+			context.AppendInstruction(IRInstruction.Gen, leaveTargetRegister);
 
-			ctx.AppendInstruction(Select(exceptionVirtualRegister, IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionVirtualRegister, exceptionRegister);
-			ctx.AppendInstruction(Select(leaveTargetVirtualRegister, IRInstruction.MoveInt32, IRInstruction.MoveInt64), leaveTargetVirtualRegister, leaveTargetRegister);
+			context.AppendInstruction(Select(exceptionVirtualRegister, IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionVirtualRegister, exceptionRegister);
+			context.AppendInstruction(Select(leaveTargetVirtualRegister, IRInstruction.MoveInt32, IRInstruction.MoveInt64), leaveTargetVirtualRegister, leaveTargetRegister);
 		}
 
-		private void ThrowInstruction(InstructionNode node)
+		private void ThrowInstruction(Context context)
 		{
 			var method = PlatformInternalRuntimeType.FindMethodByName("ExceptionHandler");
-			var ctx = new Context(node);
 
-			ctx.SetInstruction(Select(exceptionRegister, IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionRegister, node.Operand1);
-
-			//ctx.AppendInstruction(IRInstruction.KillAllExcept, null, exceptionRegister);
-			ctx.AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateSymbolFromMethod(method, TypeSystem));
+			context.SetInstruction(Select(exceptionRegister, IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionRegister, context.Operand1);
+			context.AppendInstruction(IRInstruction.CallStatic, null, Operand.CreateSymbolFromMethod(method, TypeSystem));
 
 			MethodScanner.MethodInvoked(method, Method);
 		}
 
-		private void GotoLeaveTargetInstruction(InstructionNode node)
+		private void GotoLeaveTargetInstruction(Context context)
 		{
-			var ctx = new Context(node);
-
 			// clear exception register
 			// FIXME: This will need to be preserved for filtered exceptions; will need a flag to know this - maybe an upper bit of leaveTargetRegister
-			ctx.SetInstruction(Select(exceptionRegister, IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionRegister, nullOperand);
+			context.SetInstruction(Select(exceptionRegister, IRInstruction.MoveInt32, IRInstruction.MoveInt64), exceptionRegister, nullOperand);
 
-			var label = node.Label;
+			var label = context.Label;
 			var exceptionContext = FindImmediateExceptionContext(label);
 
 			// 1) currently within a try block with a finally handler --- call it.
-			if (exceptionContext.ExceptionHandlerType == ExceptionHandlerType.Finally && exceptionContext.IsLabelWithinTry(node.Label))
+			if (exceptionContext.ExceptionHandlerType == ExceptionHandlerType.Finally && exceptionContext.IsLabelWithinTry(context.Label))
 			{
 				var handlerBlock = BasicBlocks.GetByLabel(exceptionContext.HandlerStart);
 
-				ctx.AppendInstruction(IRInstruction.Jmp, handlerBlock);
+				context.AppendInstruction(IRInstruction.Jmp, handlerBlock);
 
 				return;
 			}
@@ -191,13 +167,13 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var handlerBlock = BasicBlocks.GetByLabel(nextFinallyContext.HandlerStart);
 
-				var nextBlock = Split(ctx);
+				var nextBlock = Split(context);
 
 				// compare leaveTargetRegister > handlerBlock.End, then goto finally handler
-				ctx.AppendInstruction(Select(IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.GreaterThan, null, CreateConstant(handlerBlock.Label), leaveTargetRegister, nextBlock.Block); // TODO: Constant should be 64bit
-				ctx.AppendInstruction(IRInstruction.Jmp, handlerBlock);
+				context.AppendInstruction(Select(IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.GreaterThan, null, CreateConstant(handlerBlock.Label), leaveTargetRegister, nextBlock.Block); // TODO: Constant should be 64bit
+				context.AppendInstruction(IRInstruction.Jmp, handlerBlock);
 
-				ctx = nextBlock;
+				context = nextBlock;
 			}
 
 			// find all the available targets within the method from this node's location
@@ -227,9 +203,9 @@ namespace Mosa.Compiler.Framework.Stages
 				// this is an unreachable location
 
 				// clear this block --- should only have on instruction
-				ctx.Empty();
+				context.Empty();
 
-				var currentBlock = ctx.Block;
+				var currentBlock = context.Block;
 				var previousBlock = currentBlock.PreviousBlocks[0];
 
 				var otherBranch = (previousBlock.NextBlocks[0] == currentBlock) ? previousBlock.NextBlocks[1] : previousBlock.NextBlocks[0];
@@ -237,21 +213,17 @@ namespace Mosa.Compiler.Framework.Stages
 				ReplaceBranchTargets(previousBlock, currentBlock, otherBranch);
 
 				// the optimizer will remove the branch comparison
-
-				return;
 			}
-
-			if (targets.Count == 1)
+			else if (targets.Count == 1)
 			{
-				ctx.AppendInstruction(IRInstruction.Jmp, targets[0]);
-				return;
+				context.AppendInstruction(IRInstruction.Jmp, targets[0]);
 			}
 			else
 			{
-				var newBlocks = CreateNewBlockContexts(targets.Count - 1, node.Label);
+				var newBlocks = CreateNewBlockContexts(targets.Count - 1, label);
 
-				ctx.AppendInstruction(Select(IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.Equal, null, leaveTargetRegister, CreateConstant(targets[0].Label), targets[0]); // TODO: Constant should be 64bit
-				ctx.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
+				context.AppendInstruction(Select(IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.Equal, null, leaveTargetRegister, CreateConstant(targets[0].Label), targets[0]); // TODO: Constant should be 64bit
+				context.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
 
 				for (int b = 1; b < targets.Count - 2; b++)
 				{

@@ -18,8 +18,6 @@ namespace Mosa.Compiler.Framework
 	{
 		#region Data Members
 
-		//protected int instructionCount = 0;
-
 		protected string formattedStageName;
 
 		private List<TraceLog> traceLogs;
@@ -954,7 +952,6 @@ namespace Mosa.Compiler.Framework
 			return !operand.Is64BitInteger ? instruction32 : instruction64;
 		}
 
-		// review --- should not always be based on platform
 		public BaseInstruction Select(BaseInstruction instruction32, BaseInstruction instruction64)
 		{
 			return Is32BitPlatform ? instruction32 : instruction64;
@@ -987,6 +984,44 @@ namespace Mosa.Compiler.Framework
 					}
 				}
 			}
+		}
+
+		protected MosaMethod GetMethod(string namespaceName, string typeName, string methodName)
+		{
+			var type = TypeSystem.GetTypeByName(namespaceName, typeName);
+
+			if (type == null)
+				return null;
+
+			var method = type.FindMethodByName(methodName);
+
+			return method;
+		}
+
+		protected void ReplaceWithCall(Context context, string namespaceName, string typeName, string methodName)
+		{
+			var method = GetMethod(namespaceName, typeName, methodName);
+
+			Debug.Assert(method != null, $"Cannot find method: {methodName}");
+
+			// FUTURE: throw compiler exception
+
+			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+
+			if (context.OperandCount == 1)
+			{
+				context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.Operand1);
+			}
+			else if (context.OperandCount == 2)
+			{
+				context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.Operand1, context.Operand2);
+			}
+			else
+			{
+				// FUTURE: throw compiler exception
+			}
+
+			MethodScanner.MethodInvoked(method, Method);
 		}
 
 		#endregion Helper Methods

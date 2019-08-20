@@ -31,8 +31,11 @@ namespace Mosa.Platform.x64.Stages
 
 		#region Visitation Methods
 
-		public void CallReg(InstructionNode node)
+		public void CallReg(Context context)
 		{
+			// TODO: this can be written better
+			var node = context.Node;
+
 			Debug.Assert(node.Operand1 != null);
 			Debug.Assert(node.Operand1.IsCPURegister);
 
