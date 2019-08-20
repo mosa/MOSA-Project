@@ -18,8 +18,6 @@ namespace Mosa.Compiler.Framework
 	{
 		#region Data Members
 
-		//protected int instructionCount = 0;
-
 		protected string formattedStageName;
 
 		private List<TraceLog> traceLogs;
@@ -954,7 +952,6 @@ namespace Mosa.Compiler.Framework
 			return !operand.Is64BitInteger ? instruction32 : instruction64;
 		}
 
-		// review --- should not always be based on platform
 		public BaseInstruction Select(BaseInstruction instruction32, BaseInstruction instruction64)
 		{
 			return Is32BitPlatform ? instruction32 : instruction64;
@@ -987,6 +984,18 @@ namespace Mosa.Compiler.Framework
 					}
 				}
 			}
+		}
+
+		protected MosaMethod GetMethod(string namespaceName, string typeName, string methodName)
+		{
+			var type = TypeSystem.GetTypeByName(namespaceName, typeName);
+
+			if (type == null)
+				return null;
+
+			var method = type.FindMethodByName(methodName);
+
+			return method;
 		}
 
 		#endregion Helper Methods

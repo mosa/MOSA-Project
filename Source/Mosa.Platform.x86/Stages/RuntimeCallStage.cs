@@ -27,12 +27,12 @@ namespace Mosa.Platform.x86.Stages
 
 		private void DivSigned64(Context context)
 		{
-			ReplaceWithDivisionCall(context, "sdiv64", context.Result, context.Operand1, context.Operand2);
+			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "sdiv64");
 		}
 
 		private void DivUnsigned64(Context context)
 		{
-			ReplaceWithDivisionCall(context, "udiv64", context.Result, context.Operand1, context.Operand2);
+			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "udiv64");
 		}
 
 		private void RemFloatR4(Context context)
@@ -40,7 +40,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(context.Result.IsR4);
 			Debug.Assert(context.Operand1.IsR4);
 
-			ReplaceWithPlatformDivisionCall(context, "RemR4", context.Result, context.Operand1, context.Operand2);
+			ReplaceWithCall(context, "Mosa.Runtime.Math.x86", "Division", "RemR4");
 		}
 
 		private void RemFloatR8(Context context)
@@ -48,51 +48,32 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(context.Result.IsR8);
 			Debug.Assert(context.Operand1.IsR8);
 
-			ReplaceWithPlatformDivisionCall(context, "RemR8", context.Result, context.Operand1, context.Operand2);
+			ReplaceWithCall(context, "Mosa.Runtime.Math.x86", "Division", "RemR8");
 		}
 
 		private void RemSigned64(Context context)
 		{
-			ReplaceWithDivisionCall(context, "smod64", context.Result, context.Operand1, context.Operand2);
+			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "smod64");
 		}
 
 		private void RemUnsigned64(Context context)
 		{
-			ReplaceWithDivisionCall(context, "umod64", context.Result, context.Operand1, context.Operand2);
+			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "umod64");
 		}
 
 		#endregion Visitation Methods
 
-		private void ReplaceWithDivisionCall(Context context, string methodName, Operand result, Operand operand1, Operand operand2)
+		private void ReplaceWithCall(Context context, string namespaceName, string typeName, string methodName)
 		{
-			var type = TypeSystem.GetTypeByName("Mosa.Runtime.Math", "Division");
+			var method = GetMethod(namespaceName, typeName, methodName);
 
-			Debug.Assert(type != null, "Cannot find type: Mosa.Runtime.Math.Division type");
+			Debug.Assert(method != null, $"Cannot find method: {methodName}");
 
-			var method = type.FindMethodByName(methodName);
-
-			Debug.Assert(method != null, "Cannot find method: " + methodName);
+			// FUTURE: throw compiler exception
 
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
-			context.SetInstruction(IRInstruction.CallStatic, result, symbol, operand1, operand2);
-
-			MethodScanner.MethodInvoked(method, Method);
-		}
-
-		private void ReplaceWithPlatformDivisionCall(Context context, string methodName, Operand result, Operand operand1, Operand operand2)
-		{
-			var type = TypeSystem.GetTypeByName("Mosa.Runtime.Math.x86", "Division");
-
-			Debug.Assert(type != null, "Cannot find type: Mosa.Runtime.x86.Division type");
-
-			var method = type.FindMethodByName(methodName);
-
-			Debug.Assert(method != null, "Cannot find method: " + methodName);
-
-			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
-
-			context.SetInstruction(IRInstruction.CallStatic, result, symbol, operand1, operand2);
+			context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, context.Operand1, context.Operand2);
 
 			MethodScanner.MethodInvoked(method, Method);
 		}
