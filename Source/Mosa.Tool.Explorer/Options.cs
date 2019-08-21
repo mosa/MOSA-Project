@@ -34,9 +34,6 @@ namespace Mosa.Tool.Explorer
 		[Option("x86")]
 		public bool X86 { get; set; }
 
-		[Option("armv6")]
-		public bool ARMv6 { get; set; }
-
 		[Option("armv8a32")]
 		public bool ARMv8A32 { get; set; }
 
@@ -50,7 +47,6 @@ namespace Mosa.Tool.Explorer
 		{
 			X86 = false;
 			X64 = false;
-			ARMv6 = false;
 			ARMv8A32 = false;
 		}
 	}

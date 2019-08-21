@@ -231,18 +231,10 @@ namespace Mosa.Tool.Explorer
 				cbPlatform.SelectedIndex = 0;
 			else if (options.X64)
 				cbPlatform.SelectedIndex = 1;
-			else if (options.ARMv6)
-				cbPlatform.SelectedIndex = 2;
 			else if (options.ARMv8A32)
-				cbPlatform.SelectedIndex = 3;
+				cbPlatform.SelectedIndex = 2;
 			else
 				cbPlatform.SelectedIndex = 0;
-
-			if (options.ARMv6)
-				cbPlatform.SelectedIndex = 2;
-
-			if (options.ARMv8A32)
-				cbPlatform.SelectedIndex = 3;
 
 			var files = (IList<string>)options.Files;
 
