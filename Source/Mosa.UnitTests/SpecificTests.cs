@@ -4,35 +4,36 @@ namespace Mosa.UnitTests
 {
 	public static class SpecificTests
 	{
-		//public static bool R8IsPositiveInfinityTrue()
-		//{
-		//	return Double.IsPositiveInfinity(Double.PositiveInfinity);
-		//}
+		[MosaUnitTest]
+		public static uint SetBits32()
+		{
+			uint self = 0x00004000;
+			uint mask = 0x00000007;
+			return self.SetBits(12, 52, mask, 12);
+		}
 
-		//public static bool R8IsNegativeInfinityFalse()
-		//{
-		//	return Double.IsNegativeInfinity(Double.PositiveInfinity);
-		//}
+		[MosaUnitTest]
+		public static ulong SetBits64()
+		{
+			ulong self = 0x00004000;
+			ulong mask = 0x00000007;
+			return self.SetBits(12, 52, mask, 12);
+		}
 
-		//public static bool R8IsNegativeInfinityTrue()
-		//{
-		//	return Double.IsNegativeInfinity(Double.NegativeInfinity);
-		//}
+		public static uint SetBits(this uint self, byte index, byte count, uint value, byte sourceIndex)
+		{
+			value = value >> sourceIndex;
+			uint mask = 0xFFFFFFFFU >> (32 - count);
+			uint bits = (value & mask) << index;
+			return (self & ~(mask << index)) | bits;
+		}
 
-		//public static bool R8IsPositiveInfinityFalse()
-		//{
-		//	return Double.IsPositiveInfinity(Double.NegativeInfinity);
-		//}
-
-		//private readonly struct Test
-		//{
-		//	public readonly uint x;
-
-		//	private static void Method()
-		//	{
-		//		Test x = default;
-		//		x.x.ToString();
-		//	}
-		//}
+		public static ulong SetBits(this ulong self, byte index, byte count, ulong value, byte sourceIndex)
+		{
+			value = value >> sourceIndex;
+			ulong mask = 0xFFFFFFFFFFFFFFFFU >> (64 - count);
+			ulong bits = (value & mask) << index;
+			return (self & ~(mask << index)) | bits;
+		}
 	}
 }
