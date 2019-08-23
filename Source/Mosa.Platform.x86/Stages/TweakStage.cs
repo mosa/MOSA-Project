@@ -14,6 +14,11 @@ namespace Mosa.Platform.x86.Stages
 		{
 			AddVisitation(X86.Call, CallReg);
 			AddVisitation(X86.Cmp32, Cmp32);
+			AddVisitation(X86.Shl32, Shl32);
+			AddVisitation(X86.Shld32, Shld32);
+			AddVisitation(X86.Shr32, Shr32);
+			AddVisitation(X86.Shrd32, Shrd32);
+			AddVisitation(X86.CMov32, CMov32);
 		}
 
 		#region Visitation Methods
@@ -45,6 +50,89 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
+		public void Shrd32(Context context)
+		{
+			RegisterForOperand1And2(context);
+		}
+
+		public void Shld32(Context context)
+		{
+			RegisterForOperand1And2(context);
+		}
+
+		public void Shr32(Context context)
+		{
+			RegisterForOperand1And2(context);
+		}
+
+		public void Shl32(Context context)
+		{
+			RegisterForOperand1And2(context);
+		}
+
+		public void CMov32(Context context)
+		{
+			RegisterForOperand1(context);
+		}
+
 		#endregion Visitation Methods
+
+		public void RegisterForOperand1And2(Context context)
+		{
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			if (operand1.IsConstant && operand2.IsConstant && operand1.ConstantUnsignedLongInteger == operand2.ConstantUnsignedLongInteger)
+			{
+				var v1 = AllocateVirtualRegister(operand1.Type);
+
+				context.InsertBefore().AppendInstruction(X86.Mov32, v1, operand1);
+				context.Operand1 = v1;
+				context.Operand2 = v1;
+				return;
+			}
+			else if (operand1.IsConstant)
+			{
+				var v1 = AllocateVirtualRegister(operand1.Type);
+
+				context.InsertBefore().AppendInstruction(X86.Mov32, v1, operand1);
+				context.Operand1 = v1;
+				return;
+			}
+			else if (operand2.IsConstant)
+			{
+				var v1 = AllocateVirtualRegister(operand2.Type);
+
+				context.InsertBefore().AppendInstruction(X86.Mov32, v1, operand2);
+				context.Operand2 = v1;
+				return;
+			}
+		}
+
+		public void RegisterForOperand1(Context context)
+		{
+			var operand1 = context.Operand1;
+
+			if (operand1.IsConstant)
+			{
+				var v1 = AllocateVirtualRegister(operand1.Type);
+
+				context.InsertBefore().AppendInstruction(X86.Mov32, v1, operand1);
+				context.Operand1 = v1;
+			}
+		}
+
+		public void RegisterForOperand2(Context context)
+		{
+			var operand2 = context.Operand2;
+
+			if (operand2.IsConstant)
+			{
+				var v1 = AllocateVirtualRegister(operand2.Type);
+
+				context.InsertBefore().AppendInstruction(X86.Mov32, v1, operand2);
+				context.Operand2 = v1;
+			}
+		}
 	}
 }
