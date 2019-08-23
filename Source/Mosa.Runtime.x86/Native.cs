@@ -70,6 +70,12 @@ namespace Mosa.Runtime.x86
 		[DllImportAttribute("Mosa.Platform.x86.Intrinsic:CpuIdEdx")]
 		public extern static uint CpuIdEdx(uint function);
 
+		[DllImportAttribute("Mosa.Platform.x86.Intrinsic:WrMSR")]
+		public extern static uint WrMSR(uint edx, uint eax);
+
+		[DllImportAttribute("Mosa.Platform.x86.Intrinsic:RdMSR")]
+		public extern static ulong RdMSR(uint ecx);
+
 		[DllImportAttribute("Mosa.Platform.x86.Intrinsic:BochsDebug")]
 		public extern static void BochsDebug();
 

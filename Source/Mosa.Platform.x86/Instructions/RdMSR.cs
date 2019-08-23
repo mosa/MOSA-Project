@@ -15,13 +15,13 @@ namespace Mosa.Platform.x86.Instructions
 		public override int ID { get { return 316; } }
 
 		internal RdMSR()
-			: base(1, 1)
+			: base(2, 1)
 		{
 		}
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+			System.Diagnostics.Debug.Assert(node.ResultCount == 2);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
 			emitter.OpcodeEncoder.Append8Bits(0x0F);
