@@ -528,7 +528,7 @@ namespace Mosa.Platform.x86.Stages
 				else if (shift > 32)
 				{
 					// shift is greater than 32 bits
-					var newshift = CreateConstant(32 - shift);
+					var newshift = CreateConstant(shift - 32);
 					context.SetInstruction(X86.Shr32, resultHigh, op1H, newshift);
 					context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero32);
 					return;
