@@ -6,20 +6,6 @@ namespace Mosa.UnitTests
 {
 	public static class SpecificTests
 	{
-		[MosaUnitTest]
-		public static uint SetBits32()
-		{
-			uint self = 0x00004000;
-			return self.SetBits(12, 52, 0x00000007, 12);
-		}
-
-		[MosaUnitTest]
-		public static ulong SetBits64()
-		{
-			ulong self = 0x00004000;
-			return self.SetBits(12, 52, 0x00000007, 12);
-		}
-
 		[MosaUnitTest((byte)0)]
 		[MosaUnitTest((byte)1)]
 		[MosaUnitTest((byte)2)]
@@ -54,6 +40,31 @@ namespace Mosa.UnitTests
 			return 0xFFFFFFFFFFFFFFFFU << (64 - count);
 		}
 
+		[MosaUnitTest]
+		public static uint SetBits32()
+		{
+			uint self = 0x00004000;
+			return self.SetBits(12, 52, 0x00000007, 12);
+		}
+
+		[MosaUnitTest]
+		public static ulong SetBits64()
+		{
+			ulong self = 0x00004000;
+			return self.SetBits(12, 52, 0x00000007, 12);
+		}
+
+		[MosaUnitTest]
+		public static ulong SetBits64B()
+		{
+			ulong addr = 0x0000000019ad000;
+			ulong data = 40004005;
+			return data.SetBits(12, 52, 0x00000007, 12);
+		}
+	}
+
+	public static class Extension
+	{
 		public static uint SetBits(this uint self, byte index, byte count, uint value, byte sourceIndex)
 		{
 			value = value >> sourceIndex;
@@ -68,20 +79,6 @@ namespace Mosa.UnitTests
 			ulong mask = 0xFFFFFFFFFFFFFFFFU >> (64 - count);
 			ulong bits = (value & mask) << index;
 			return (self & ~(mask << index)) | bits;
-		}
-
-		[MosaUnitTest]
-		public static ulong SetBits2()
-		{
-			ulong self = 0x00004000;
-			return self.SetBits2(12, 52, 0x00000007, 12);
-		}
-
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static ulong SetBits2(this ulong self, byte index, byte count, ulong value, byte sourceIndex)
-		{
-			value = value >> sourceIndex;
-			return value;
 		}
 	}
 }

@@ -12,7 +12,9 @@ namespace Mosa.Platform.x86.Intrinsic
 		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:WrMSR")]
 		private static void WrMSR(Context context, MethodCompiler methodCompiler)
 		{
-			context.SetInstruction(X86.WrMSR, context.Result, context.Operand1, context.Operand2);
+			methodCompiler.SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
+
+			context.SetInstruction2(X86.WrMSR, resultLow, resultHigh, context.Operand1);
 		}
 	}
 }

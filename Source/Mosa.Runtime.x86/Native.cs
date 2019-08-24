@@ -71,7 +71,7 @@ namespace Mosa.Runtime.x86
 		public extern static uint CpuIdEdx(uint function);
 
 		[DllImportAttribute("Mosa.Platform.x86.Intrinsic:WrMSR")]
-		public extern static uint WrMSR(uint edx, uint eax);
+		public extern static ulong WrMSR(uint ecx);
 
 		[DllImportAttribute("Mosa.Platform.x86.Intrinsic:RdMSR")]
 		public extern static ulong RdMSR(uint ecx);
