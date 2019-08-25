@@ -267,7 +267,6 @@ namespace Mosa.TestWorld.x86
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		private static void EnableExecutionProtectionInternal()
 		{
-			// set IA32_EFER.NXE
 			const uint EFER = 0xC0000080;
 			Native.WrMSR(EFER, Native.RdMSR(EFER) | 0b11);
 		}
