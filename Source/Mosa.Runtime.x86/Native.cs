@@ -22,6 +22,12 @@ namespace Mosa.Runtime.x86
 		[DllImportAttribute("Mosa.Platform.x86.Intrinsic:Lgdt")]
 		public extern static void Lgdt(uint address);
 
+		[DllImportAttribute("Mosa.Platform.x86.Intrinsic:SetSegments")]
+		public extern static void SetSegments(ushort ds, ushort es, ushort fs, ushort gs, ushort ss);
+
+		[DllImportAttribute("Mosa.Platform.x86.Intrinsic:FarJump")]
+		public extern static void FarJump();
+
 		[DllImportAttribute("Mosa.Platform.x86.Intrinsic:Jmp")]
 		public extern static void Jmp(uint address);
 

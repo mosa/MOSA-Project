@@ -213,6 +213,8 @@
     <Compile Include="Instructions\XChg32.cs" />
     <Compile Include="Instructions\XChgLoad32.cs" />
     <Compile Include="Instructions\Xor32.cs" />
+    <Compile Include="Intrinsic\FarJump.cs" />
+    <Compile Include="Intrinsic\SetSegments.cs" />
     <Compile Include="Intrinsic\RdMSR.cs" />
     <Compile Include="Intrinsic\WrMSR.cs" />
     <Compile Include="Intrinsic\Roundsd2Positive.cs" />

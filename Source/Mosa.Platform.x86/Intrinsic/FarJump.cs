@@ -10,11 +10,10 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	static partial class IntrinsicMethods
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Lgdt")]
-		private static void Lgdt(Context context, MethodCompiler methodCompiler)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:FarJump")]
+		private static void FarJump(Context context, MethodCompiler methodCompiler)
 		{
-			context.SetInstruction(X86.Lgdt, null, context.Operand1);
-			context.AppendInstruction(X86.JmpFar);
+			context.SetInstruction(X86.JmpFar);
 		}
 	}
 }

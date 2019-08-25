@@ -55,6 +55,8 @@ namespace Mosa.Kernel.BareMetal.x86
 		private void SetLgdt(IntPtr address)
 		{
 			Native.Lgdt((uint)address.ToInt32());
+			Native.SetSegments(0x10, 0x10, 0x10, 0x10, 0x10);
+			Native.FarJump();
 		}
 
 		private void Set(uint index, uint address, uint limit, byte access, byte granularity)
