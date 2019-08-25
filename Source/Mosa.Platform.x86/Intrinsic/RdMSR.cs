@@ -20,8 +20,10 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			var EAX = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 			var EDX = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
+			var ECX = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
 
-			context.SetInstruction2(X86.RdMSR, EAX, EDX, operand1);
+			context.SetInstruction(X86.Mov32, ECX, operand1);
+			context.AppendInstruction2(X86.RdMSR, EAX, EDX, ECX);
 			context.AppendInstruction(X86.Mov32, resultLow, EAX);
 			context.AppendInstruction(X86.Mov32, resultHigh, EDX);
 		}

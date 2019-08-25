@@ -59,7 +59,7 @@ namespace Mosa.UnitTests
 		{
 			ulong addr = 0x0000000019ad000;
 			ulong data = 40004005;
-			return data.SetBits(12, 52, 0x00000007, 12);
+			return data.SetBits(12, 52, addr, 12);
 		}
 	}
 

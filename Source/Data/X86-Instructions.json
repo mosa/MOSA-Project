@@ -3563,8 +3563,8 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
+			"OperandCount": 3,
+			"ResultCount": 0,
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{

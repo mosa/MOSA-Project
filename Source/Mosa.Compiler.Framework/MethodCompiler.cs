@@ -523,18 +523,24 @@ namespace Mosa.Compiler.Framework
 
 			var filename = Method.ExternMethodModule;
 
-			foreach (var path in Compiler.CompilerOptions.SearchPaths)
+			if (filename != null)
 			{
-				var src = Path.Combine(path, filename);
-
-				if (File.Exists(src))
+				foreach (var path in Compiler.CompilerOptions.SearchPaths)
 				{
-					var b = File.ReadAllBytes(src);
+					var src = Path.Combine(path, filename);
 
-					Symbol.SetData(b);
+					if (File.Exists(src))
+					{
+						var b = File.ReadAllBytes(src);
 
-					break;
+						Symbol.SetData(b);
+
+						break;
+					}
 				}
+
+				// TODO: Generate an error if the file is not found
+				// CompilerException.FileNotFound
 			}
 
 			if (Trace.IsTraceable(5))
