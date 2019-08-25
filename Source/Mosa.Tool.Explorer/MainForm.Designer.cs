@@ -90,6 +90,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.cbEnableBitTracker = new System.Windows.Forms.ToolStripMenuItem();
             label4 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             stageLabel = new System.Windows.Forms.Label();
@@ -251,6 +252,7 @@
             this.cbEnableInlinedMethods,
             this.cbEnableTwoPassOptimizations,
             this.cbEnableLongExpansion,
+            this.cbEnableBitTracker,
             this.cbEnableBinaryCodeGeneration});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
@@ -317,7 +319,7 @@
             this.cbEnableLongExpansion.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbEnableLongExpansion.Name = "cbEnableLongExpansion";
             this.cbEnableLongExpansion.Size = new System.Drawing.Size(293, 22);
-            this.cbEnableLongExpansion.Text = "Enable IR Long Expansion";
+            this.cbEnableLongExpansion.Text = "Enable Long Expansion";
             // 
             // cbEnableBinaryCodeGeneration
             // 
@@ -468,7 +470,7 @@
             this.tabControl.Name = "tabControl";
             this.tabControl.Padding = new System.Drawing.Point(0, 0);
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(612, 401);
+            this.tabControl.Size = new System.Drawing.Size(610, 401);
             this.tabControl.TabIndex = 38;
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
@@ -483,7 +485,7 @@
             this.tabStages.Location = new System.Drawing.Point(4, 25);
             this.tabStages.Margin = new System.Windows.Forms.Padding(0);
             this.tabStages.Name = "tabStages";
-            this.tabStages.Size = new System.Drawing.Size(604, 372);
+            this.tabStages.Size = new System.Drawing.Size(602, 372);
             this.tabStages.TabIndex = 0;
             this.tabStages.Text = "Instructions";
             // 
@@ -536,7 +538,7 @@
             this.tabStageDebug.Location = new System.Drawing.Point(4, 25);
             this.tabStageDebug.Margin = new System.Windows.Forms.Padding(0);
             this.tabStageDebug.Name = "tabStageDebug";
-            this.tabStageDebug.Size = new System.Drawing.Size(604, 372);
+            this.tabStageDebug.Size = new System.Drawing.Size(602, 372);
             this.tabStageDebug.TabIndex = 1;
             this.tabStageDebug.Text = "Debug";
             // 
@@ -573,7 +575,7 @@
             this.tabMethodCounters.Location = new System.Drawing.Point(4, 25);
             this.tabMethodCounters.Margin = new System.Windows.Forms.Padding(0);
             this.tabMethodCounters.Name = "tabMethodCounters";
-            this.tabMethodCounters.Size = new System.Drawing.Size(604, 372);
+            this.tabMethodCounters.Size = new System.Drawing.Size(602, 372);
             this.tabMethodCounters.TabIndex = 6;
             this.tabMethodCounters.Text = "Counters";
             // 
@@ -599,7 +601,7 @@
             this.tabLogs.Location = new System.Drawing.Point(4, 25);
             this.tabLogs.Margin = new System.Windows.Forms.Padding(0);
             this.tabLogs.Name = "tabLogs";
-            this.tabLogs.Size = new System.Drawing.Size(604, 372);
+            this.tabLogs.Size = new System.Drawing.Size(602, 372);
             this.tabLogs.TabIndex = 7;
             this.tabLogs.Text = "Logs";
             // 
@@ -709,6 +711,15 @@
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // cbEnableBitTracker
+            // 
+            this.cbEnableBitTracker.Checked = true;
+            this.cbEnableBitTracker.CheckOnClick = true;
+            this.cbEnableBitTracker.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbEnableBitTracker.Name = "cbEnableBitTracker";
+            this.cbEnableBitTracker.Size = new System.Drawing.Size(293, 22);
+            this.cbEnableBitTracker.Text = "Enable Bit Tracker";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -802,5 +813,6 @@
 		private System.Windows.Forms.Timer timer1;
 		private System.Windows.Forms.ToolStripComboBox cbPlatform;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+		private System.Windows.Forms.ToolStripMenuItem cbEnableBitTracker;
 	}
 }

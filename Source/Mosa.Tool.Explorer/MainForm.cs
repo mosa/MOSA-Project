@@ -464,9 +464,9 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.InlinedIRMaximum = 12;
 			Compiler.CompilerOptions.TwoPassOptimizations = cbEnableTwoPassOptimizations.Checked;
 			Compiler.CompilerOptions.EnableMethodScanner = cbEnableMethodScanner.Checked;
-			Compiler.CompilerOptions.TraceLevel = 10;
+			Compiler.CompilerOptions.TraceLevel = 8;
 			Compiler.CompilerOptions.LinkerFormatType = LinkerFormatType.Elf32;
-			Compiler.CompilerOptions.EnableBitTracker = true; // FUTURE
+			Compiler.CompilerOptions.EnableBitTracker = cbEnableBitTracker.Checked;
 
 			Compiler.CompilerTrace.SetTraceListener(this);
 		}
