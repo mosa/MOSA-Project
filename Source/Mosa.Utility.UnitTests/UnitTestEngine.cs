@@ -61,12 +61,12 @@ namespace Mosa.Utility.UnitTests
 				EnableIROptimizations = true,
 				EnableSparseConditionalConstantPropagation = true,
 				EnableInlinedMethods = true,
-				EnableLongExpansion = false,
+				EnableLongExpansion = true,
 				EnableValueNumbering = true,
 				TwoPassOptimizations = true,
 				EnableBitTracker = true,
 
-				EnableMultiThreading = true,
+				EnableMultiThreading = false,
 				EnableMethodScanner = false,
 
 				Emulator = EmulatorType.Qemu,

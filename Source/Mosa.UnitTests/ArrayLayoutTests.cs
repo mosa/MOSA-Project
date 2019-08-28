@@ -53,6 +53,17 @@ namespace Mosa.UnitTests
 			return arr[0] == 0x5555555555555555 && arr[1] == 0x8080808080808080 && arr[2] == 0xaaaaaaaaaaaaaaaa && arr[3] == 0xffffffffffffffff;
 		}
 
+		//private static ulong[] arrayU8 = new ulong[] { 0x5555555555555555, 0x8080808080808080, 0xaaaaaaaaaaaaaaaa, 0xffffffffffffffff };
+
+		//[MosaUnitTest(0)]
+		//[MosaUnitTest(1)]
+		//[MosaUnitTest(2)]
+		//[MosaUnitTest(3)]
+		//public static ulong U8(int i)
+		//{
+		//	return arrayU8[i];
+		//}
+
 		[MosaUnitTest]
 		public static ulong U8a()
 		{

@@ -45,7 +45,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			//AddVisitation(IRInstruction.RemSigned64, RemSigned64);
 			//AddVisitation(IRInstruction.RemUnsigned64, RemUnsigned64);
-
 			//AddVisitation(IRInstruction.ArithShiftRight64, ArithShiftRight64);
 			//AddVisitation(IRInstruction.CompareInt64x64, CompareInt64x64);
 			//AddVisitation(IRInstruction.IfThenElse64, IfThenElse64);
