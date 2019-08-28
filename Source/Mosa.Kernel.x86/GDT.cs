@@ -46,6 +46,8 @@ namespace Mosa.Kernel.x86
 		private static void SetLgdt(IntPtr address)
 		{
 			Native.Lgdt((uint)address.ToInt32());
+			Native.SetSegments(0x10, 0x10, 0x10, 0x10, 0x10);
+			Native.FarJump();
 		}
 
 		/// <summary>

@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// IR Long Decomposition Stage
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
-	public sealed class IRLongDecompositionStage : BaseCodeTransformationStage
+	public sealed class LongExpansionStage : BaseCodeTransformationStage
 	{
 		private Operand Constant4;
 
@@ -45,7 +45,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			//AddVisitation(IRInstruction.RemSigned64, RemSigned64);
 			//AddVisitation(IRInstruction.RemUnsigned64, RemUnsigned64);
-
 			//AddVisitation(IRInstruction.ArithShiftRight64, ArithShiftRight64);
 			//AddVisitation(IRInstruction.CompareInt64x64, CompareInt64x64);
 			//AddVisitation(IRInstruction.IfThenElse64, IfThenElse64);

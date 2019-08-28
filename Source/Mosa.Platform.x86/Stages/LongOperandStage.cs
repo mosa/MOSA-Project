@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Platform.Intel;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Stages
@@ -368,7 +369,7 @@ namespace Mosa.Platform.x86.Stages
 		private void LoadParamSignExtend16x64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
-			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
+			SplitLongOperand(context.Operand1, out Operand lowOffset, out _);
 
 			context.SetInstruction(X86.MovsxLoad16, resultLow, StackFrame, lowOffset);
 			context.AppendInstruction2(X86.Cdq32, resultHigh, resultLow, resultLow);
@@ -377,7 +378,7 @@ namespace Mosa.Platform.x86.Stages
 		private void LoadParamSignExtend32x64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
-			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
+			SplitLongOperand(context.Operand1, out Operand lowOffset, out _);
 
 			context.SetInstruction(X86.MovLoad32, resultLow, StackFrame, lowOffset);
 			context.AppendInstruction2(X86.Cdq32, resultHigh, resultLow, resultLow);
@@ -395,7 +396,7 @@ namespace Mosa.Platform.x86.Stages
 		private void LoadParamZeroExtended16x64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
-			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
+			SplitLongOperand(context.Operand1, out Operand lowOffset, out _);
 
 			context.SetInstruction(X86.MovLoad16, resultLow, StackFrame, lowOffset);
 			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero32);
@@ -404,7 +405,7 @@ namespace Mosa.Platform.x86.Stages
 		private void LoadParamZeroExtended32x64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
-			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
+			SplitLongOperand(context.Operand1, out Operand lowOffset, out _);
 
 			context.SetInstruction(X86.MovLoad32, resultLow, StackFrame, lowOffset);
 			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero32);
@@ -413,7 +414,7 @@ namespace Mosa.Platform.x86.Stages
 		private void LoadParamZeroExtended8x64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
-			SplitLongOperand(context.Operand1, out Operand lowOffset, out Operand highOffset);
+			SplitLongOperand(context.Operand1, out Operand lowOffset, out _);
 
 			context.SetInstruction(X86.MovLoad8, resultLow, StackFrame, lowOffset);
 			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero32);
@@ -505,18 +506,55 @@ namespace Mosa.Platform.x86.Stages
 
 			var count = context.Operand2;
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			/// Optimized shift when shift value is a constant and 32 or more, or zero
+			if (count.IsResolvedConstant)
+			{
+				var shift = count.ConstantUnsignedLongInteger & 0b111111;
 
-			context.SetInstruction(X86.Shrd32, resultLow, op1L, op1H, count);
-			context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero32);
-			context.AppendInstruction(X86.Shr32, v1, op1H, count);
-			context.AppendInstruction(X86.Mov32, v2, count);
+				if (shift == 0)
+				{
+					// shift is exactly 0 bits (nop)
+					context.SetInstruction(X86.Mov32, resultLow, op1L);
+					context.AppendInstruction(X86.Mov32, resultHigh, op1H);
+					return;
+				}
+				else if (shift == 32)
+				{
+					// shift is exactly 32 bits
+					context.SetInstruction(X86.Mov32, resultLow, op1H);
+					context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero32);
+					return;
+				}
+				else if (shift > 32)
+				{
+					// shift is greater than 32 bits
+					var newshift = CreateConstant(shift - 32);
+					context.SetInstruction(X86.Shr32, resultHigh, op1H, newshift);
+					context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero32);
+					return;
+				}
+			}
 
-			// FUTURE: Optimization - TestConst32 and conditional moves are not necessary if count is a constant
-			context.AppendInstruction(X86.Test32, null, v2, CreateConstant(32));
-			context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, resultLow, v1);
-			context.AppendInstruction(X86.CMov32, ConditionCode.Equal, resultHigh, v1);
+			var newBlocks = CreateNewBlockContexts(1, context.Label);
+			var nextBlock = Split(context);
+
+			var ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
+
+			context.SetInstruction(X86.Mov32, ECX, count);
+			context.AppendInstruction(X86.Shrd32, resultLow, op1L, op1H, ECX);
+			context.AppendInstruction(X86.Shr32, resultHigh, op1H, ECX);
+
+			context.AppendInstruction(X86.Test32, null, ECX, CreateConstant(32));
+			context.AppendInstruction(X86.Branch, ConditionCode.Zero, nextBlock.Block);
+			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
+
+			newBlocks[0].AppendInstruction(X86.Mov32, resultLow, resultHigh);
+			newBlocks[0].AppendInstruction(X86.Mov32, resultHigh, ConstantZero32);
+			newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
+
+			//context.AppendInstruction(X86.Cmp32, null, count, CreateConstant(32));
+			//context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, resultLow, resultHigh);
+			//context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, resultHigh, ConstantZero32);
 		}
 
 		private void SignExtend16x64(Context context)
@@ -551,25 +589,25 @@ namespace Mosa.Platform.x86.Stages
 
 		private void StoreInt64(Context context)
 		{
+			SplitLongOperand(context.Operand2, out Operand op2L, out _);
 			SplitLongOperand(context.Operand3, out Operand op3L, out Operand op3H);
-			SplitLongOperand(context.Operand2, out Operand op2L, out Operand op2H);
 
 			var address = context.Operand1;
 			var offset = context.Operand2;
 
-			context.SetInstruction(X86.MovStore32, null, address, offset, op3L);
+			context.SetInstruction(X86.MovStore32, null, address, op2L, op3L);
 
 			if (offset.IsResolvedConstant)
 			{
-				var offset2 = offset.IsConstantZero ? Constant4 : CreateConstant(offset.Offset + NativePointerSize);
-				context.AppendInstruction(X86.MovStore32, null, address, offset2, op3H);
-				return;
+				context.AppendInstruction(X86.MovStore32, null, address, CreateConstant(offset.Offset + NativePointerSize), op3H);
 			}
+			else
+			{
+				var offset4 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-
-			context.AppendInstruction(X86.Add32, v1, op2L, Constant4);
-			context.AppendInstruction(X86.MovStore32, null, address, v1, op3H);
+				context.AppendInstruction(X86.Add32, offset4, op2L, Constant4);
+				context.AppendInstruction(X86.MovStore32, null, address, offset4, op3H);
+			}
 		}
 
 		private void StoreParamInt64(Context context)

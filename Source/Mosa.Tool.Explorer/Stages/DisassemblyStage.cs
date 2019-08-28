@@ -30,7 +30,7 @@ namespace Mosa.Tool.Explorer.Stages
 
 			if (Architecture is Platform.x86.Architecture)
 			{
-				mode = ArchitectureMode.x86_64;
+				mode = ArchitectureMode.x86_32;
 			}
 			else if (Architecture is Platform.x64.Architecture)
 			{

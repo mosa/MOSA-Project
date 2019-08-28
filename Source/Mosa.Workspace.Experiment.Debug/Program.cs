@@ -25,7 +25,7 @@ namespace Mosa.Workspace.Experiment.Debug
 				EnableValueNumbering = true,
 				TwoPassOptimizations = true,
 				EnableMethodScanner = true,
-				EnableBitTracker = true, // FUTURE
+				EnableBitTracker = true,
 
 				MultibootSpecification = MultibootSpecification.V1,
 				LinkerFormatType = LinkerFormatType.Elf32,

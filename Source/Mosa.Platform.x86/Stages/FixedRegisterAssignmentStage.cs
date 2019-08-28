@@ -361,26 +361,26 @@ namespace Mosa.Platform.x86.Stages
 
 		private void WrMSR(Context context)
 		{
-			if (context.Result.IsCPURegister
-				&& context.Result2.IsCPURegister
-				&& context.Operand1.IsCPURegister
-				&& context.Result.Register == GeneralPurposeRegister.ECX
-				&& context.Operand1.Register == GeneralPurposeRegister.EAX
-				&& context.Operand2.Register == GeneralPurposeRegister.EDX)
+			if (context.Operand1.IsCPURegister
+				&& context.Operand2.IsCPURegister
+				&& context.Operand3.IsCPURegister
+				&& context.Operand1.Register == GeneralPurposeRegister.ECX
+				&& context.Operand2.Register == GeneralPurposeRegister.EAX
+				&& context.Operand3.Register == GeneralPurposeRegister.EDX)
 				return;
 
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
-			var result = context.Result;
+			var operand3 = context.Operand3;
 
 			var EAX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 			var EDX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EDX);
 			var ECX = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.ECX);
 
-			context.SetInstruction(X86.Mov32, EAX, operand1);
-			context.AppendInstruction(X86.Mov32, EDX, operand2);
-			context.AppendInstruction(X86.WrMSR, ECX, EAX, EDX);
-			context.AppendInstruction(X86.Mov32, result, ECX);
+			context.SetInstruction(X86.Mov32, ECX, operand1);
+			context.AppendInstruction(X86.Mov32, EAX, operand2);
+			context.AppendInstruction(X86.Mov32, EDX, operand3);
+			context.AppendInstruction(X86.WrMSR, null, ECX, EAX, EDX);
 		}
 
 		#endregion Visitation Methods

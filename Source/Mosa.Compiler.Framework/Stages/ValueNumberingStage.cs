@@ -115,6 +115,30 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 				}
 
+				if (!write && operand.Low != null)
+				{
+					foreach (var use in operand.Low.Uses)
+					{
+						if (use.Instruction.IsParameterStore)
+						{
+							write = true;
+							break;
+						}
+					}
+				}
+
+				if (!write && operand.High != null)
+				{
+					foreach (var use in operand.High.Uses)
+					{
+						if (use.Instruction.IsParameterStore)
+						{
+							write = true;
+							break;
+						}
+					}
+				}
+
 				ParamReadOnly[operand.Index] = !write;
 
 				traceParameters?.Log($"{operand}: {(write ? "Writable" : "ReadOnly")}");

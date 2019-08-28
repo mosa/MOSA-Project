@@ -25,9 +25,9 @@ namespace Mosa.Tool.Explorer
 
 			//new DominanceOutputStage(),
 
-			pipeline.InsertAfterFirst<StaticLoadOptimizationStage>(
-				new GraphVizStage()
-			);
+			//pipeline.InsertAfterFirst<StaticLoadOptimizationStage>(
+			//	new GraphVizStage()
+			//);
 		}
 	}
 }

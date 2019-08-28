@@ -81,15 +81,16 @@
             this.cbSectionLogs = new System.Windows.Forms.ComboBox();
             this.tbLogs = new System.Windows.Forms.RichTextBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.cbPlatform = new System.Windows.Forms.ToolStripComboBox();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.cbEnableBitTracker = new System.Windows.Forms.ToolStripMenuItem();
             label4 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             stageLabel = new System.Windows.Forms.Label();
@@ -251,6 +252,7 @@
             this.cbEnableInlinedMethods,
             this.cbEnableTwoPassOptimizations,
             this.cbEnableLongExpansion,
+            this.cbEnableBitTracker,
             this.cbEnableBinaryCodeGeneration});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
@@ -310,14 +312,14 @@
             this.cbEnableTwoPassOptimizations.Size = new System.Drawing.Size(293, 22);
             this.cbEnableTwoPassOptimizations.Text = "Enable Two Pass Optimizations";
             // 
-            // cbEnableIRLongExpansion
+            // cbEnableLongExpansion
             // 
             this.cbEnableLongExpansion.Checked = true;
             this.cbEnableLongExpansion.CheckOnClick = true;
             this.cbEnableLongExpansion.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbEnableLongExpansion.Name = "cbEnableIRLongExpansion";
+            this.cbEnableLongExpansion.Name = "cbEnableLongExpansion";
             this.cbEnableLongExpansion.Size = new System.Drawing.Size(293, 22);
-            this.cbEnableLongExpansion.Text = "Enable IR Long Expansion";
+            this.cbEnableLongExpansion.Text = "Enable Long Expansion";
             // 
             // cbEnableBinaryCodeGeneration
             // 
@@ -468,7 +470,7 @@
             this.tabControl.Name = "tabControl";
             this.tabControl.Padding = new System.Drawing.Point(0, 0);
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(614, 401);
+            this.tabControl.Size = new System.Drawing.Size(610, 401);
             this.tabControl.TabIndex = 38;
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
@@ -483,7 +485,7 @@
             this.tabStages.Location = new System.Drawing.Point(4, 25);
             this.tabStages.Margin = new System.Windows.Forms.Padding(0);
             this.tabStages.Name = "tabStages";
-            this.tabStages.Size = new System.Drawing.Size(606, 372);
+            this.tabStages.Size = new System.Drawing.Size(602, 372);
             this.tabStages.TabIndex = 0;
             this.tabStages.Text = "Instructions";
             // 
@@ -536,7 +538,7 @@
             this.tabStageDebug.Location = new System.Drawing.Point(4, 25);
             this.tabStageDebug.Margin = new System.Windows.Forms.Padding(0);
             this.tabStageDebug.Name = "tabStageDebug";
-            this.tabStageDebug.Size = new System.Drawing.Size(606, 372);
+            this.tabStageDebug.Size = new System.Drawing.Size(602, 372);
             this.tabStageDebug.TabIndex = 1;
             this.tabStageDebug.Text = "Debug";
             // 
@@ -573,7 +575,7 @@
             this.tabMethodCounters.Location = new System.Drawing.Point(4, 25);
             this.tabMethodCounters.Margin = new System.Windows.Forms.Padding(0);
             this.tabMethodCounters.Name = "tabMethodCounters";
-            this.tabMethodCounters.Size = new System.Drawing.Size(606, 372);
+            this.tabMethodCounters.Size = new System.Drawing.Size(602, 372);
             this.tabMethodCounters.TabIndex = 6;
             this.tabMethodCounters.Text = "Counters";
             // 
@@ -599,7 +601,7 @@
             this.tabLogs.Location = new System.Drawing.Point(4, 25);
             this.tabLogs.Margin = new System.Windows.Forms.Padding(0);
             this.tabLogs.Name = "tabLogs";
-            this.tabLogs.Size = new System.Drawing.Size(606, 372);
+            this.tabLogs.Size = new System.Drawing.Size(602, 372);
             this.tabLogs.TabIndex = 7;
             this.tabLogs.Text = "Logs";
             // 
@@ -645,6 +647,23 @@
             this.toolStrip1.TabIndex = 27;
             this.toolStrip1.Text = "toolStrip1";
             // 
+            // cbPlatform
+            // 
+            this.cbPlatform.BackColor = System.Drawing.SystemColors.Window;
+            this.cbPlatform.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbPlatform.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
+            this.cbPlatform.Items.AddRange(new object[] {
+            "x86",
+            "x64",
+            "ARMv8A32"});
+            this.cbPlatform.Name = "cbPlatform";
+            this.cbPlatform.Size = new System.Drawing.Size(90, 25);
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            // 
             // toolStripButton1
             // 
             this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
@@ -664,10 +683,10 @@
             this.toolStripButton2.Visible = false;
             this.toolStripButton2.Click += new System.EventHandler(this.ToolStripButton2_Click);
             // 
-            // toolStripSeparator1
+            // toolStripSeparator2
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
             // 
             // toolStripButton4
             // 
@@ -678,10 +697,10 @@
             this.toolStripButton4.Text = "Compile";
             this.toolStripButton4.Click += new System.EventHandler(this.ToolStripButton4_Click);
             // 
-            // toolStripSeparator2
+            // toolStripSeparator1
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 25);
             // 
             // folderBrowserDialog1
             // 
@@ -692,23 +711,14 @@
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // cbPlatform
+            // cbEnableBitTracker
             // 
-            this.cbPlatform.BackColor = System.Drawing.SystemColors.Window;
-            this.cbPlatform.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cbPlatform.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
-            this.cbPlatform.Items.AddRange(new object[] {
-            "x86",
-            "x64",
-            "ARMv6",
-            "ARMv8A32"});
-            this.cbPlatform.Name = "cbPlatform";
-            this.cbPlatform.Size = new System.Drawing.Size(90, 25);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(6, 25);
+            this.cbEnableBitTracker.Checked = true;
+            this.cbEnableBitTracker.CheckOnClick = true;
+            this.cbEnableBitTracker.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbEnableBitTracker.Name = "cbEnableBitTracker";
+            this.cbEnableBitTracker.Size = new System.Drawing.Size(293, 22);
+            this.cbEnableBitTracker.Text = "Enable Bit Tracker";
             // 
             // MainForm
             // 
@@ -803,5 +813,6 @@
 		private System.Windows.Forms.Timer timer1;
 		private System.Windows.Forms.ToolStripComboBox cbPlatform;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+		private System.Windows.Forms.ToolStripMenuItem cbEnableBitTracker;
 	}
 }

@@ -5018,7 +5018,7 @@
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
 			"OperandCount": 1,
-			"ResultCount": 1,
+			"ResultCount": 2,
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
@@ -5036,7 +5036,7 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 1,
+			"OperandCount": 2,
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
