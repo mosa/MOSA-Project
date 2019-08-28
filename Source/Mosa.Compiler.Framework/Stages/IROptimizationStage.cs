@@ -231,6 +231,11 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
+		private void AddOperandUsageToWorkList(Context context)
+		{
+			AddOperandUsageToWorkList(context.Node);
+		}
+
 		/// <summary>
 		/// Adds the all the operands usage and definitions to work list.
 		/// </summary>
