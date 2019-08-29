@@ -12,8 +12,6 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Invlpg : X64Instruction
 	{
-		public override int ID { get { return 374; } }
-
 		internal Invlpg()
 			: base(0, 1)
 		{

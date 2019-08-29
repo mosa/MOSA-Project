@@ -12,8 +12,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class MovStore8 : X86Instruction
 	{
-		public override int ID { get { return 257; } }
-
 		internal MovStore8()
 			: base(0, 3)
 		{

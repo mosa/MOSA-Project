@@ -12,8 +12,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Leave : X86Instruction
 	{
-		public override int ID { get { return 235; } }
-
 		internal Leave()
 			: base(0, 0)
 		{

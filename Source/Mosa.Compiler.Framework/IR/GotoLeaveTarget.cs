@@ -10,8 +10,6 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class GotoLeaveTarget : BaseIRInstruction
 	{
-		public override int ID { get { return 53; } }
-
 		public GotoLeaveTarget()
 			: base(0, 0)
 		{

@@ -7,6 +7,11 @@ namespace Mosa.Compiler.Framework
 {
 	public static class BuiltInOptimizations
 	{
+		private static SimpleInstruction SimpleNopInstruction = new SimpleInstruction()
+		{
+			Instruction = IRInstruction.Nop
+		};
+
 		public static SimpleInstruction ConstantFoldingAndStrengthReductionInteger(InstructionNode node)
 		{
 			var operand = ConstantFoldingAndStrengthReductionIntegerToOperand(node);
@@ -667,10 +672,7 @@ namespace Mosa.Compiler.Framework
 			if (!IsDeadCode(node))
 				return null;
 
-			return new SimpleInstruction()
-			{
-				Instruction = IRInstruction.Nop
-			};
+			return SimpleNopInstruction;
 		}
 
 		public static SimpleInstruction FoldIfThenElse(InstructionNode node)

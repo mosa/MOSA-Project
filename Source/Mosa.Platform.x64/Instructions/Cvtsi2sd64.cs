@@ -12,8 +12,6 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Cvtsi2sd64 : X64Instruction
 	{
-		public override int ID { get { return 349; } }
-
 		internal Cvtsi2sd64()
 			: base(1, 1)
 		{

@@ -12,8 +12,6 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class Wfi : ARMv8A32Instruction
 	{
-		public override int ID { get { return 634; } }
-
 		internal Wfi()
 			: base(1, 3)
 		{

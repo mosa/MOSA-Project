@@ -10,8 +10,6 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class ExceptionEnd : BaseIRInstruction
 	{
-		public override int ID { get { return 45; } }
-
 		public ExceptionEnd()
 			: base(0, 0)
 		{

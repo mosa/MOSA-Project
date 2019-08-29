@@ -12,8 +12,6 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Shld64 : X64Instruction
 	{
-		public override int ID { get { return 465; } }
-
 		internal Shld64()
 			: base(1, 3)
 		{

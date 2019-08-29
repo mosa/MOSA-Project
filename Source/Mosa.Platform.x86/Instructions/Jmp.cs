@@ -12,8 +12,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Jmp : X86Instruction
 	{
-		public override int ID { get { return 232; } }
-
 		internal Jmp()
 			: base(0, 0)
 		{

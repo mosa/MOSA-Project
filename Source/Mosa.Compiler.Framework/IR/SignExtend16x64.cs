@@ -10,8 +10,6 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class SignExtend16x64 : BaseIRInstruction
 	{
-		public override int ID { get { return 108; } }
-
 		public SignExtend16x64()
 			: base(1, 1)
 		{
