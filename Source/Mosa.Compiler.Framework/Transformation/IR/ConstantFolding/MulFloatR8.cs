@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transformation.IR.ConstantFolding
 {
 	public class MulFloatR8 : BaseTransformation
 	{
-		public override BaseInstruction Instruction { get { return IRInstruction.Add64; } }
+		public override BaseInstruction Instruction { get { return IRInstruction.MulFloatR8; } }
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{

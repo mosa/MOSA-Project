@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transformation.IR.ConstantFolding
 {
 	public class LogicalAnd32 : BaseTransformation
 	{
-		public override BaseInstruction Instruction { get { return IRInstruction.Add64; } }
+		public override BaseInstruction Instruction { get { return IRInstruction.LogicalAnd32; } }
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{

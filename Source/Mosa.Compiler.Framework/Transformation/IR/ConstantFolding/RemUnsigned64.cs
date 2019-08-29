@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transformation.IR.ConstantFolding
 {
 	public class RemUnsigned64 : BaseTransformation
 	{
-		public override BaseInstruction Instruction { get { return IRInstruction.Add64; } }
+		public override BaseInstruction Instruction { get { return IRInstruction.RemUnsigned64; } }
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{
