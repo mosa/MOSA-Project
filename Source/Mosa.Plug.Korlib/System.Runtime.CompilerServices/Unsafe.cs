@@ -19,7 +19,7 @@ namespace Mosa.Plug.Korlib.System.Runtime.CompilerServices
 		}
 
 		//[Plug("System.Runtime.CompilerServices.Unsafe::As")]
-		//[DllImportAttribute("System.Runtime.CompilerServices.Unsafe::As")]
+		//[DllImport("System.Runtime.CompilerServices.Unsafe::As")]
 		//public extern static ref TTo As<TFrom, TTo>(ref TFrom source);
 	}
 }
