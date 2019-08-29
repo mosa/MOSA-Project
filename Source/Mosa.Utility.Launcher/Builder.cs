@@ -442,7 +442,15 @@ namespace Mosa.Utility.Launcher
 				code[i - fileOffset] = code2[i];
 			}
 
-			using (var disasm = new Disassembler(code, ArchitectureMode.x86_32, startingAddress, true, Vendor.Any))
+			var mode = ArchitectureMode.x86_32;
+			switch (LauncherOptions.PlatformType)
+			{
+				case PlatformType.x64:
+					mode = ArchitectureMode.x86_64;
+					break;
+			}
+
+			using (var disasm = new Disassembler(code, mode, startingAddress, true, Vendor.Any))
 			{
 				using (var dest = File.CreateText(asmfile))
 				{
