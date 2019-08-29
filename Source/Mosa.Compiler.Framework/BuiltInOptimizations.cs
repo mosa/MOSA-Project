@@ -167,7 +167,7 @@ namespace Mosa.Compiler.Framework
 			}
 			else if (instruction == IRInstruction.AddFloatR4)
 			{
-				return ConstantOperand.Create(result.Type, (op1.ConstantDoubleFloatingPoint + op2.ConstantDoubleFloatingPoint));
+				return ConstantOperand.Create(result.Type, (op1.ConstantSingleFloatingPoint + op2.ConstantSingleFloatingPoint));
 			}
 			else if (instruction == IRInstruction.AddFloatR8)
 			{
@@ -223,7 +223,7 @@ namespace Mosa.Compiler.Framework
 			}
 			else if (instruction == IRInstruction.MulFloatR4)
 			{
-				return ConstantOperand.Create(result.Type, (op1.ConstantSingleFloatingPoint * op2.ConstantSingleFloatingPoint));
+				return ConstantOperand.Create(result.Type, op1.ConstantSingleFloatingPoint * op2.ConstantSingleFloatingPoint);
 			}
 			else if (instruction == IRInstruction.MulFloatR8)
 			{

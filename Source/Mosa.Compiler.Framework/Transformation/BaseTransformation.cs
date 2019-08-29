@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Framework.IR;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -12,7 +13,7 @@ namespace Mosa.Compiler.Framework.Transformation
 
 		public string Name { get; }
 
-		public BaseTransformation()
+		protected BaseTransformation()
 		{
 			Name = ExtractName();
 		}
@@ -40,5 +41,47 @@ namespace Mosa.Compiler.Framework.Transformation
 		public abstract bool Match(Context context, TransformContext transformContext);
 
 		public abstract void Transform(Context context, TransformContext transformContext);
+
+		//public bool IsFirstOperandResolvedConstant(Context context)
+		//{
+		//	return context.Operand1.IsResolvedConstant;
+		//}
+
+		//public bool AreFirstTwoOperandsResolvedConstants(Context context)
+		//{
+		//	return context.Operand1.IsResolvedConstant && context.Operand2.IsResolvedConstant;
+		//}
+
+		#region Helpers
+
+		protected static void SetConstantResult(Context context, uint constant)
+		{
+			var result = context.Result;
+
+			context.SetInstruction(IRInstruction.MoveInt32, result, ConstantOperand.Create(result.Type, constant));
+		}
+
+		protected static void SetConstantResult(Context context, ulong constant)
+		{
+			var result = context.Result;
+
+			context.SetInstruction(IRInstruction.MoveInt64, result, ConstantOperand.Create(result.Type, constant));
+		}
+
+		protected static void SetConstantResult(Context context, float constant)
+		{
+			var result = context.Result;
+
+			context.SetInstruction(IRInstruction.MoveFloatR4, result, ConstantOperand.Create(result.Type, constant));
+		}
+
+		protected static void SetConstantResult(Context context, double constant)
+		{
+			var result = context.Result;
+
+			context.SetInstruction(IRInstruction.MoveFloatR8, result, ConstantOperand.Create(result.Type, constant));
+		}
+
+		#endregion Helpers
 	}
 }

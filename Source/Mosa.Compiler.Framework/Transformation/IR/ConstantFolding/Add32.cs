@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework.IR;
 
-namespace Mosa.Compiler.Framework.Transformation.IR.Lower
+namespace Mosa.Compiler.Framework.Transformation.IR.ConstantFolding
 {
 	public class Add32 : BaseTransformation
 	{
@@ -15,13 +15,7 @@ namespace Mosa.Compiler.Framework.Transformation.IR.Lower
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
-			var result = context.Result;
-			var op1 = context.Operand1;
-			var op2 = context.Operand2;
-
-			var constant = ConstantOperand.Create(result.Type, (op1.ConstantUnsignedLongInteger + op2.ConstantUnsignedLongInteger) & 0xFFFFFFFF);
-
-			context.SetInstruction(IRInstruction.MoveInt32, result, constant);
+			SetConstantResult(context, context.Operand1.ConstantUnsignedInteger + context.Operand2.ConstantUnsignedInteger);
 		}
 	}
 }
