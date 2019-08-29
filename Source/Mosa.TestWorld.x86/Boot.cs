@@ -251,7 +251,7 @@ namespace Mosa.TestWorld.x86
 			Screen.BackgroundColor = back;
 		}
 
-		[DllImportAttribute("Asm/Return10.o", EntryPoint = "Return10")]
+		[DllImport("Asm/Return10.o", EntryPoint = "Return10")]
 		public static extern int Return10();
 
 		public static int CallReturn10()
