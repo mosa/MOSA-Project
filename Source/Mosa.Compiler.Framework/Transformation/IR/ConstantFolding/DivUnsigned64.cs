@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transformation.IR.ConstantFolding
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{
-			return context.Operand1.IsResolvedConstant && context.Operand2.IsResolvedConstant;
+			return context.Operand1.IsResolvedConstant && context.Operand2.IsResolvedConstant && !context.Operand2.IsConstantZero;
 		}
 
 		public override void Transform(Context context, TransformContext transformContext)
