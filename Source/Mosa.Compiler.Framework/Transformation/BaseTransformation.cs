@@ -1,9 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.IR;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mosa.Compiler.Framework.Transformation
 {
@@ -42,17 +39,7 @@ namespace Mosa.Compiler.Framework.Transformation
 
 		public abstract void Transform(Context context, TransformContext transformContext);
 
-		//public bool IsFirstOperandResolvedConstant(Context context)
-		//{
-		//	return context.Operand1.IsResolvedConstant;
-		//}
-
-		//public bool AreFirstTwoOperandsResolvedConstants(Context context)
-		//{
-		//	return context.Operand1.IsResolvedConstant && context.Operand2.IsResolvedConstant;
-		//}
-
-		#region Helpers
+		#region Set Constant Result Helpers
 
 		protected static void SetConstantResult(Context context, uint constant)
 		{
@@ -82,6 +69,40 @@ namespace Mosa.Compiler.Framework.Transformation
 			context.SetInstruction(IRInstruction.MoveFloatR8, result, ConstantOperand.Create(result.Type, constant));
 		}
 
-		#endregion Helpers
+		#endregion Set Constant Result Helpers
+
+		protected static bool ValidateSSAForm(Operand operand)
+		{
+			return operand.Definitions.Count == 1;
+		}
+
+		#region SignExtend Helpers
+
+		protected static uint SignExtend8x32(byte value)
+		{
+			return ((value & 0x80) == 0) ? value : (value | 0xFFFFFF00);
+		}
+
+		protected static uint SignExtend16x32(ushort value)
+		{
+			return ((value & 0x8000) == 0) ? value : (value | 0xFFFF0000);
+		}
+
+		protected static ulong SignExtend8x64(byte value)
+		{
+			return ((value & 0x80) == 0) ? value : (value | 0xFFFFFFFFFFFFFF00ul);
+		}
+
+		protected static ulong SignExtend16x64(ushort value)
+		{
+			return ((value & 0x8000) == 0) ? value : (value | 0xFFFFFFFFFFFF0000ul);
+		}
+
+		protected static ulong SignExtend32x64(uint value)
+		{
+			return ((value & 0x80000000) == 0) ? value : (value | 0xFFFFFFFF00000000ul);
+		}
+
+		#endregion SignExtend Helpers
 	}
 }

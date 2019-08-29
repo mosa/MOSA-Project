@@ -78,7 +78,7 @@ namespace Mosa.Compiler.Framework
 			}
 			else if (instruction == IRInstruction.LogicalNot64)
 			{
-				return ConstantOperand.Create(result.Type, ~((ulong)op1.ConstantUnsignedLongInteger));
+				return ConstantOperand.Create(result.Type, ~op1.ConstantUnsignedLongInteger);
 			}
 			else if (instruction == IRInstruction.Truncation64x32)
 			{

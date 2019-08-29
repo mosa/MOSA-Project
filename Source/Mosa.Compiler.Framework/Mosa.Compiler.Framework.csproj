@@ -11,6 +11,7 @@
       <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
     </ItemGroup>
     <ItemGroup>
+      <Folder Include="Transformation\IR\Simplification\" />
       <Folder Include="Transformation\IR\StrengthReduction\" />
     </ItemGroup>
 </Project>

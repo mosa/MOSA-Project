@@ -3,9 +3,7 @@
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Mosa.Compiler.Framework.Transformation
 {
@@ -28,16 +26,16 @@ namespace Mosa.Compiler.Framework.Transformation
 			return MethodCompiler.VirtualRegisters.Allocate(type);
 		}
 
-		public bool ApplyTransform(Context context, BaseTransformation transformation, Stack<InstructionNode> worklist = null)
+		public bool ApplyTransform(Context context, BaseTransformation transformation, Stack<Operand> virtualRegisters = null)
 		{
 			if (!transformation.Match(context, this))
 				return false;
 
 			TraceBefore(context, transformation.Name);
 
-			if (worklist != null)
+			if (virtualRegisters != null)
 			{
-				AddToWorkList(context, worklist);
+				CollectVirtualRegisters(context, virtualRegisters);
 			}
 
 			transformation.Transform(context, this);
@@ -49,47 +47,28 @@ namespace Mosa.Compiler.Framework.Transformation
 
 		#region WorkList
 
-		private void AddToWorkList(InstructionNode node, Stack<InstructionNode> worklist)
+		private void CollectVirtualRegisters(Operand operand, Stack<Operand> virtualRegisters)
 		{
-			if (node.IsEmptyOrNop)
-				return;
-
 			// work list stays small, so the check is inexpensive
-			if (worklist.Contains(node))
+			if (virtualRegisters.Contains(operand))
 				return;
 
-			worklist.Push(node);
+			virtualRegisters.Push(operand);
 		}
 
-		private void AddToWorkList(Operand operand, Stack<InstructionNode> worklist)
-		{
-			if (!operand.IsVirtualRegister)
-				return;
-
-			foreach (var index in operand.Uses)
-			{
-				AddToWorkList(index, worklist);
-			}
-
-			foreach (var index in operand.Definitions)
-			{
-				AddToWorkList(index, worklist);
-			}
-		}
-
-		private void AddToWorkList(Context context, Stack<InstructionNode> worklist)
+		private void CollectVirtualRegisters(Context context, Stack<Operand> virtualRegisters)
 		{
 			if (context.Result != null)
 			{
-				AddToWorkList(context.Result, worklist);
+				CollectVirtualRegisters(context.Result, virtualRegisters);
 			}
 			if (context.Result2 != null)
 			{
-				AddToWorkList(context.Result2, worklist);
+				CollectVirtualRegisters(context.Result2, virtualRegisters);
 			}
 			foreach (var operand in context.Operands)
 			{
-				AddToWorkList(operand, worklist);
+				CollectVirtualRegisters(operand, virtualRegisters);
 			}
 		}
 
