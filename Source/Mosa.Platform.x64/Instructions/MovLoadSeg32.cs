@@ -12,8 +12,6 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class MovLoadSeg32 : X64Instruction
 	{
-		public override int ID { get { return 384; } }
-
 		internal MovLoadSeg32()
 			: base(1, 1)
 		{

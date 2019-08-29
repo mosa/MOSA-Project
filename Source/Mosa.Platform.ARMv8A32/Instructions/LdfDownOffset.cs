@@ -12,8 +12,6 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class LdfDownOffset : ARMv8A32Instruction
 	{
-		public override int ID { get { return 678; } }
-
 		internal LdfDownOffset()
 			: base(1, 2)
 		{

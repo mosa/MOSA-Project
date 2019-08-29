@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The identifier.
 		/// </value>
-		public virtual int ID { get; }
+		public int ID { get; private set; }
 
 		/// <summary>
 		/// Gets the default operand count of the instruction
@@ -191,6 +191,14 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Properties
 
+		#region Static Data
+
+		private static int NextInstructionID = 0;
+
+		private static object _lock = new object();
+
+		#endregion Static Data
+
 		#region Construction
 
 		/// <summary>
@@ -202,6 +210,11 @@ namespace Mosa.Compiler.Framework
 		{
 			DefaultResultCount = resultCount;
 			DefaultOperandCount = operandCount;
+
+			lock (_lock)
+			{
+				ID = ++NextInstructionID;
+			}
 		}
 
 		#endregion Construction

@@ -12,8 +12,6 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Pextrd32 : X64Instruction
 	{
-		public override int ID { get { return 446; } }
-
 		internal Pextrd32()
 			: base(1, 2)
 		{

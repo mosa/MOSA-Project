@@ -12,8 +12,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class WrMSR : X86Instruction
 	{
-		public override int ID { get { return 317; } }
-
 		internal WrMSR()
 			: base(0, 3)
 		{

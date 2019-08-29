@@ -10,8 +10,6 @@ namespace Mosa.Compiler.Framework.IR
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
 	public sealed class AddCarryOut64 : BaseIRInstruction
 	{
-		public override int ID { get { return 7; } }
-
 		public AddCarryOut64()
 			: base(2, 2)
 		{

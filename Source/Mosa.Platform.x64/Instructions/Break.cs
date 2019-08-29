@@ -12,8 +12,6 @@ namespace Mosa.Platform.x64.Instructions
 	/// <seealso cref="Mosa.Platform.x64.X64Instruction" />
 	public sealed class Break : X64Instruction
 	{
-		public override int ID { get { return 329; } }
-
 		internal Break()
 			: base(0, 0)
 		{

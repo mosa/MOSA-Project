@@ -12,8 +12,6 @@ namespace Mosa.Platform.x86.Instructions
 	/// <seealso cref="Mosa.Platform.x86.X86Instruction" />
 	public sealed class Out16 : X86Instruction
 	{
-		public override int ID { get { return 279; } }
-
 		internal Out16()
 			: base(0, 2)
 		{

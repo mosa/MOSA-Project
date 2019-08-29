@@ -12,8 +12,6 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class LdfUp : ARMv8A32Instruction
 	{
-		public override int ID { get { return 675; } }
-
 		internal LdfUp()
 			: base(1, 1)
 		{
