@@ -4,13 +4,10 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Transformation.IR.ConstantFolding
 {
-	public class LogicalNot64 : BaseTransformation
+	public sealed class LogicalNot64 : BaseTransformation
 	{
-		public override BaseInstruction Instruction { get { return IRInstruction.LogicalNot64; } }
-
-		public override bool Match(Context context, TransformContext transformContext)
+		public LogicalNot64() : base(IRInstruction.LogicalNot64, OperandFilter.ResolvedConstant)
 		{
-			return context.Operand1.IsResolvedConstant;
 		}
 
 		public override void Transform(Context context, TransformContext transformContext)

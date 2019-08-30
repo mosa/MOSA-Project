@@ -4,13 +4,10 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Transformation.IR.ConstantFolding
 {
-	public class Add32 : BaseTransformation
+	public sealed class Add32 : BaseTransformation
 	{
-		public override BaseInstruction Instruction { get { return IRInstruction.Add32; } }
-
-		public override bool Match(Context context, TransformContext transformContext)
+		public Add32() : base(IRInstruction.Add32, OperandFilter.ResolvedConstant, OperandFilter.ResolvedConstant)
 		{
-			return context.Operand1.IsResolvedConstant && context.Operand2.IsResolvedConstant;
 		}
 
 		public override void Transform(Context context, TransformContext transformContext)

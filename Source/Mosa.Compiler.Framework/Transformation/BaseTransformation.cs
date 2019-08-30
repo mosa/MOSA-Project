@@ -1,19 +1,93 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.MosaTypeSystem;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Transformation
 {
 	public abstract class BaseTransformation
 	{
-		public virtual BaseInstruction Instruction { get; private set; }
+		#region Properties
+
+		public BaseInstruction Instruction { get; private set; }
+		public List<BaseInstruction> Instructions { get; private set; }
 
 		public string Name { get; }
+
+		#endregion Properties
+
+		#region Data Fields
+
+		public List<OperandFilter> OperandFilters;
+
+		#endregion Data Fields
+
+		#region Constructors
 
 		protected BaseTransformation()
 		{
 			Name = ExtractName();
+			TransformationDirectory.Add(this);
 		}
+
+		public BaseTransformation(BaseInstruction instruction)
+			: this()
+		{
+			Instruction = instruction;
+		}
+
+		public BaseTransformation(List<BaseInstruction> instructions)
+			: this()
+		{
+			Instructions = instructions;
+		}
+
+		public BaseTransformation(BaseInstruction instruction, OperandFilter operand1 = null, OperandFilter operand2 = null, OperandFilter operand3 = null, OperandFilter operand4 = null)
+			: this(instruction)
+		{
+			if (operand1 != null)
+			{
+				OperandFilters = new List<OperandFilter>();
+			}
+
+			if (operand1 != null)
+				OperandFilters.Add(operand1);
+
+			if (operand2 != null)
+				OperandFilters.Add(operand2);
+
+			if (operand3 != null)
+				OperandFilters.Add(operand3);
+
+			if (operand4 != null)
+				OperandFilters.Add(operand4);
+		}
+
+		public BaseTransformation(List<BaseInstruction> instructions, OperandFilter operand1 = null, OperandFilter operand2 = null, OperandFilter operand3 = null, OperandFilter operand4 = null)
+			: this(instructions)
+		{
+			if (operand1 != null)
+			{
+				OperandFilters = new List<OperandFilter>();
+			}
+
+			if (operand1 != null)
+				OperandFilters.Add(operand1);
+
+			if (operand2 != null)
+				OperandFilters.Add(operand2);
+
+			if (operand3 != null)
+				OperandFilters.Add(operand3);
+
+			if (operand4 != null)
+				OperandFilters.Add(operand4);
+		}
+
+		#endregion Constructors
+
+		#region Internals
 
 		private string ExtractName()
 		{
@@ -27,6 +101,8 @@ namespace Mosa.Compiler.Framework.Transformation
 			return name.Substring(offset4 + 1);
 		}
 
+		#endregion Internals
+
 		public bool ValidateInstruction(Context context)
 		{
 			if (context.IsEmpty)
@@ -35,7 +111,36 @@ namespace Mosa.Compiler.Framework.Transformation
 			return context.Instruction == Instruction;
 		}
 
-		public abstract bool Match(Context context, TransformContext transformContext);
+		public virtual bool Match(Context context, TransformContext transformContext)
+		{
+			// Default - built in match
+
+			if (OperandFilters != null)
+			{
+				// operand counts must match
+				if (OperandFilters.Count != context.OperandCount)
+					return false;
+
+				if (OperandFilters.Count >= 1 && !OperandFilters[0].Compare(context.Operand1))
+					return false;
+
+				if (OperandFilters.Count >= 2 && !OperandFilters[1].Compare(context.Operand2))
+					return false;
+
+				if (OperandFilters.Count >= 3 && !OperandFilters[2].Compare(context.Operand3))
+					return false;
+
+				for (int i = 3; i < OperandFilters.Count; i++)
+				{
+					if (!OperandFilters[i].Compare(context.GetOperand(i)))
+						return false;
+				}
+
+				return true;
+			}
+
+			return false;
+		}
 
 		public abstract void Transform(Context context, TransformContext transformContext);
 
@@ -74,6 +179,30 @@ namespace Mosa.Compiler.Framework.Transformation
 		protected static bool ValidateSSAForm(Operand operand)
 		{
 			return operand.Definitions.Count == 1;
+		}
+
+		protected static BaseInstruction GetMove(Operand operand)
+		{
+			if (operand.IsR4)
+				return IRInstruction.MoveFloatR4;
+			else if (operand.IsR8)
+				return IRInstruction.MoveFloatR8;
+			else if (operand.Is64BitInteger)
+				return IRInstruction.MoveInt64;
+			else
+				return IRInstruction.MoveInt32;
+		}
+
+		protected static Operand GetZero(MosaType type, Operand operand)
+		{
+			if (operand.IsR4)
+				return Operand.CreateConstant(type, 0.0f);
+			else if (operand.IsR8)
+				return Operand.CreateConstant(type, 0.0d);
+			else if (operand.Is64BitInteger)
+				return Operand.CreateConstant(type, 0);
+			else
+				return Operand.CreateConstant(type, 0);
 		}
 
 		#region SignExtend Helpers

@@ -4,9 +4,11 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Transformation.IR.Special
 {
-	public class CodeInDeadBlock : BaseTransformation
+	public sealed class CodeInDeadBlock : BaseTransformation
 	{
-		public override BaseInstruction Instruction { get { return null; } }
+		public CodeInDeadBlock()
+		{
+		}
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{

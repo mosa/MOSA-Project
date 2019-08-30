@@ -4,13 +4,10 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Transformation.IR.ConstantFolding
 {
-	public class MulUnsigned64 : BaseTransformation
+	public sealed class MulUnsigned64 : BaseTransformation
 	{
-		public override BaseInstruction Instruction { get { return IRInstruction.MulUnsigned64; } }
-
-		public override bool Match(Context context, TransformContext transformContext)
+		public MulUnsigned64() : base(IRInstruction.MulUnsigned64, OperandFilter.ResolvedConstant, OperandFilter.ResolvedConstant)
 		{
-			return context.Operand1.IsResolvedConstant && context.Operand2.IsResolvedConstant;
 		}
 
 		public override void Transform(Context context, TransformContext transformContext)

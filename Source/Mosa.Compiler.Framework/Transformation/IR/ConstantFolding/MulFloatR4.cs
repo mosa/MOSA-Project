@@ -4,13 +4,10 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Transformation.IR.ConstantFolding
 {
-	public class MulFloatR4 : BaseTransformation
+	public sealed class MulFloatR4 : BaseTransformation
 	{
-		public override BaseInstruction Instruction { get { return IRInstruction.MulFloatR4; } }
-
-		public override bool Match(Context context, TransformContext transformContext)
+		public MulFloatR4() : base(IRInstruction.MulFloatR4, OperandFilter.ResolvedConstant, OperandFilter.ResolvedConstant)
 		{
-			return context.Operand1.IsResolvedConstant && context.Operand2.IsResolvedConstant;
 		}
 
 		public override void Transform(Context context, TransformContext transformContext)

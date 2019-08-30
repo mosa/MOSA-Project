@@ -4,9 +4,11 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Transformation.IR.ConstantFolding
 {
-	public class CompareInt64x32 : BaseTransformation
+	public sealed class CompareInt64x32 : BaseTransformation
 	{
-		public override BaseInstruction Instruction { get { return IRInstruction.CompareInt64x32; } }
+		public CompareInt64x32() : base(IRInstruction.CompareInt64x32, OperandFilter.ResolvedConstant, OperandFilter.ResolvedConstant)
+		{
+		}
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{

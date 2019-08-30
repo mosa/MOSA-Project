@@ -4,13 +4,10 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Transformation.IR.ConstantFolding
 {
-	public class ConvertInt32ToFloatR4 : BaseTransformation
+	public sealed class ConvertInt32ToFloatR4 : BaseTransformation
 	{
-		public override BaseInstruction Instruction { get { return IRInstruction.ConvertInt32ToFloatR4; } }
-
-		public override bool Match(Context context, TransformContext transformContext)
+		public ConvertInt32ToFloatR4() : base(IRInstruction.ConvertInt32ToFloatR4, OperandFilter.ResolvedConstant)
 		{
-			return context.Operand1.IsResolvedConstant;
 		}
 
 		public override void Transform(Context context, TransformContext transformContext)

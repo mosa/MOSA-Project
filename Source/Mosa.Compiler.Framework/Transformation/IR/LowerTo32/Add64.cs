@@ -1,17 +1,13 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Transformation;
 
 namespace Mosa.Compiler.Framework.Transformation.IR.LowerTo32
 {
-	public class Add64 : BaseTransformation
+	public sealed class Add64 : BaseTransformation
 	{
-		public override BaseInstruction Instruction { get { return IRInstruction.Add64; } }
-
-		public override bool Match(Context context, TransformContext transformContext)
+		public Add64() : base(IRInstruction.Add64, OperandFilter.Any, OperandFilter.Any)
 		{
-			return true;
 		}
 
 		public override void Transform(Context context, TransformContext transformContext)

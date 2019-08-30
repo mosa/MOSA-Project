@@ -381,9 +381,17 @@ namespace Mosa.Compiler.Framework
 			{
 				return op1;
 			}
-			else if ((instruction == IRInstruction.Sub32 || instruction == IRInstruction.Sub64 || instruction == IRInstruction.SubFloatR4 || instruction == IRInstruction.SubFloatR8) && (op1 == op2))
+			else if ((instruction == IRInstruction.Sub32 || instruction == IRInstruction.Sub64) && (op1 == op2))
 			{
 				return ConstantOperand.Create(result.Type, 0);
+			}
+			else if (instruction == IRInstruction.SubFloatR4 && op1 == op2)
+			{
+				return ConstantOperand.Create(result.Type, (float)0);
+			}
+			else if (instruction == IRInstruction.SubFloatR8 && op1 == op2)
+			{
+				return ConstantOperand.Create(result.Type, (double)0);
 			}
 			else if ((instruction == IRInstruction.ShiftLeft32 || instruction == IRInstruction.ShiftLeft64 || instruction == IRInstruction.ShiftRight32 || instruction == IRInstruction.ShiftRight64) && op1.IsConstantZero)
 			{
@@ -393,15 +401,24 @@ namespace Mosa.Compiler.Framework
 			{
 				return op1;
 			}
-			else if ((instruction == IRInstruction.ShiftLeft32 || instruction == IRInstruction.ShiftRight32) && op2.IsResolvedConstant && op2.ConstantUnsignedLongInteger >= 32)
+
+			//else if ((instruction == IRInstruction.ShiftLeft32 || instruction == IRInstruction.ShiftRight32) && op2.IsResolvedConstant && op2.ConstantUnsignedLongInteger >= 32)
+			//{
+			//	return ConstantOperand.Create(result.Type, 0);
+			//}
+			//else if ((instruction == IRInstruction.ShiftLeft64 || instruction == IRInstruction.ShiftRight64) && op2.IsResolvedConstant && op2.ConstantUnsignedLongInteger >= 64)
+			//{
+			//	return ConstantOperand.Create(result.Type, 0);
+			//}
+			else if ((instruction == IRInstruction.MulFloatR4) && (op1.IsConstantZero || op2.IsConstantZero))
 			{
-				return ConstantOperand.Create(result.Type, 0);
+				return ConstantOperand.Create(result.Type, 0.0f);
 			}
-			else if ((instruction == IRInstruction.ShiftLeft64 || instruction == IRInstruction.ShiftRight64) && op2.IsResolvedConstant && op2.ConstantUnsignedLongInteger >= 64)
+			else if ((instruction == IRInstruction.MulFloatR8) && (op1.IsConstantZero || op2.IsConstantZero))
 			{
-				return ConstantOperand.Create(result.Type, 0);
+				return ConstantOperand.Create(result.Type, 0.0d);
 			}
-			else if ((instruction == IRInstruction.MulSigned32 || instruction == IRInstruction.MulUnsigned32 || instruction == IRInstruction.MulSigned64 || instruction == IRInstruction.MulUnsigned64 || instruction == IRInstruction.MulFloatR4 || instruction == IRInstruction.MulFloatR8) && (op1.IsConstantZero || op2.IsConstantZero))
+			else if ((instruction == IRInstruction.MulSigned32 || instruction == IRInstruction.MulUnsigned32 || instruction == IRInstruction.MulSigned64 || instruction == IRInstruction.MulUnsigned64) && (op1.IsConstantZero || op2.IsConstantZero))
 			{
 				return ConstantOperand.Create(result.Type, 0);
 			}

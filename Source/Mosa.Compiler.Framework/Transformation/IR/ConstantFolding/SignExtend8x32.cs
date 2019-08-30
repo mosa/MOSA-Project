@@ -4,13 +4,10 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Transformation.IR.ConstantFolding
 {
-	public class SignExtend8x32 : BaseTransformation
+	public sealed class SignExtend8x32 : BaseTransformation
 	{
-		public override BaseInstruction Instruction { get { return IRInstruction.SignExtend8x32; } }
-
-		public override bool Match(Context context, TransformContext transformContext)
+		public SignExtend8x32() : base(IRInstruction.SignExtend8x32, OperandFilter.ResolvedConstant)
 		{
-			return context.Operand1.IsResolvedConstant;
 		}
 
 		public override void Transform(Context context, TransformContext transformContext)
