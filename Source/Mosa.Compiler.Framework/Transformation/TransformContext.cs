@@ -15,6 +15,11 @@ namespace Mosa.Compiler.Framework.Transformation
 
 		public TraceLog TraceLog { get; private set; }
 
+		public Operand ConstantZero32 { get { return MethodCompiler.ConstantZero32; } }
+		public Operand ConstantZero64 { get { return MethodCompiler.ConstantZero64; } }
+		public Operand ConstantZeroR4 { get { return MethodCompiler.ConstantZeroR4; } }
+		public Operand ConstantZeroR8 { get { return MethodCompiler.ConstantZeroR8; } }
+
 		public TransformContext(MethodCompiler methodCompiler, TraceLog traceLog = null)
 		{
 			MethodCompiler = methodCompiler;
@@ -92,6 +97,22 @@ namespace Mosa.Compiler.Framework.Transformation
 		#endregion Trace
 
 		#region Constant Helper Methods
+
+		public Operand GetZero(MosaType type)
+		{
+			if (type.IsI4)
+				return MethodCompiler.ConstantZero32;
+			else if (type.IsI8)
+				return MethodCompiler.ConstantZero64;
+			else if (type.IsR4)
+				return MethodCompiler.ConstantZeroR4;
+			else if (type.IsR8)
+				return MethodCompiler.ConstantZeroR8;
+			else if (type.IsReferenceType)
+				return Operand.GetNull(type);
+
+			return null;
+		}
 
 		public Operand CreateConstant(byte value)
 		{
@@ -201,5 +222,63 @@ namespace Mosa.Compiler.Framework.Transformation
 		}
 
 		#endregion 64-Bit Helpers
+
+		public static BaseInstruction GetMove(Operand operand)
+		{
+			if (operand.IsR4)
+				return IRInstruction.MoveFloatR4;
+			else if (operand.IsR8)
+				return IRInstruction.MoveFloatR8;
+			else if (operand.Is64BitInteger)
+				return IRInstruction.MoveInt64;
+			else
+				return IRInstruction.MoveInt32;
+		}
+
+		#region Set Result To Constant Helpers
+
+		public void SetResultToZero(Context context)
+		{
+			var result = context.Result;
+			context.SetInstruction(GetMove(result), result, GetZero(result.Type));
+		}
+
+		public void SetResultToConstant(Context context, Operand constant)
+		{
+			var result = context.Result;
+			context.SetInstruction(GetMove(result), result, constant);
+		}
+
+		public void SetResultTo(Context context, Operand operand)
+		{
+			var result = context.Result;
+			context.SetInstruction(GetMove(result), result, operand);
+		}
+
+		public void SetResultToConstant(Context context, uint constant)
+		{
+			var result = context.Result;
+			context.SetInstruction(IRInstruction.MoveInt32, result, ConstantOperand.Create(result.Type, constant));
+		}
+
+		public void SetResultToConstant(Context context, ulong constant)
+		{
+			var result = context.Result;
+			context.SetInstruction(IRInstruction.MoveInt64, result, ConstantOperand.Create(result.Type, constant));
+		}
+
+		public void SetResultToConstant(Context context, float constant)
+		{
+			var result = context.Result;
+			context.SetInstruction(IRInstruction.MoveFloatR4, result, ConstantOperand.Create(result.Type, constant));
+		}
+
+		public void SetResultToConstant(Context context, double constant)
+		{
+			var result = context.Result;
+			context.SetInstruction(IRInstruction.MoveFloatR8, result, ConstantOperand.Create(result.Type, constant));
+		}
+
+		#endregion Set Result To Constant Helpers
 	}
 }

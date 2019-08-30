@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.Transformation.IR.ConstantFolding
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
-			SetConstantResult(context, (float)context.Operand1.ConstantUnsignedLongInteger);
+			transformContext.SetResultToConstant(context, (float)context.Operand1.ConstantUnsignedLongInteger);
 		}
 	}
 }

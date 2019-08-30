@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transformation.IR.ConstantFolding
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
-			context.SetInstruction(GetMove(context.Result), context.Result, context.Operand2);
+			transformContext.SetResultTo(context, context.Operand2);
 		}
 	}
 }

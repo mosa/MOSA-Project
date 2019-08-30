@@ -153,6 +153,16 @@ namespace Mosa.Compiler.Framework
 		public Operand ConstantZero64 { get; }
 
 		/// <summary>
+		/// Gets the R4 constant zero.
+		/// </summary>
+		public Operand ConstantZeroR4 { get; }
+
+		/// <summary>
+		/// Gets the R4 constant zero.
+		/// </summary>
+		public Operand ConstantZeroR8 { get; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether this instance is execute pipeline.
 		/// </summary>
 		public bool IsExecutePipeline { get; set; }
@@ -225,6 +235,9 @@ namespace Mosa.Compiler.Framework
 
 			ConstantZero32 = CreateConstant((uint)0);
 			ConstantZero64 = CreateConstant((ulong)0);
+			ConstantZeroR4 = CreateConstant(0.0f);
+			ConstantZeroR8 = CreateConstant(0.0d);
+
 			ConstantZero = Architecture.Is32BitPlatform ? ConstantZero32 : ConstantZero64;
 
 			LocalVariables = emptyOperandList;

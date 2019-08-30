@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.Transformation.IR.ConstantFolding
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
-			SetConstantResult(context, context.Operand1.ConstantDoubleFloatingPoint * context.Operand2.ConstantDoubleFloatingPoint);
+			transformContext.SetResultToConstant(context, context.Operand1.ConstantDoubleFloatingPoint * context.Operand2.ConstantDoubleFloatingPoint);
 		}
 	}
 }

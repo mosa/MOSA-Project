@@ -144,38 +144,6 @@ namespace Mosa.Compiler.Framework.Transformation
 
 		public abstract void Transform(Context context, TransformContext transformContext);
 
-		#region Set Constant Result Helpers
-
-		protected static void SetConstantResult(Context context, uint constant)
-		{
-			var result = context.Result;
-
-			context.SetInstruction(IRInstruction.MoveInt32, result, ConstantOperand.Create(result.Type, constant));
-		}
-
-		protected static void SetConstantResult(Context context, ulong constant)
-		{
-			var result = context.Result;
-
-			context.SetInstruction(IRInstruction.MoveInt64, result, ConstantOperand.Create(result.Type, constant));
-		}
-
-		protected static void SetConstantResult(Context context, float constant)
-		{
-			var result = context.Result;
-
-			context.SetInstruction(IRInstruction.MoveFloatR4, result, ConstantOperand.Create(result.Type, constant));
-		}
-
-		protected static void SetConstantResult(Context context, double constant)
-		{
-			var result = context.Result;
-
-			context.SetInstruction(IRInstruction.MoveFloatR8, result, ConstantOperand.Create(result.Type, constant));
-		}
-
-		#endregion Set Constant Result Helpers
-
 		protected static bool ValidateSSAForm(Operand operand)
 		{
 			return operand.Definitions.Count == 1;
@@ -193,16 +161,27 @@ namespace Mosa.Compiler.Framework.Transformation
 				return IRInstruction.MoveInt32;
 		}
 
-		protected static Operand GetZero(MosaType type, Operand operand)
+		protected static bool AreSame(Operand operand1, Operand operand2)
 		{
-			if (operand.IsR4)
-				return Operand.CreateConstant(type, 0.0f);
-			else if (operand.IsR8)
-				return Operand.CreateConstant(type, 0.0d);
-			else if (operand.Is64BitInteger)
-				return Operand.CreateConstant(type, 0);
-			else
-				return Operand.CreateConstant(type, 0);
+			if (operand1.IsVirtualRegister && operand1.IsVirtualRegister && operand1 == operand2)
+				return true;
+
+			if (operand1.IsCPURegister && operand1.IsCPURegister && operand1 == operand2)
+				return true;
+
+			if (operand1.IsResolvedConstant && operand2.IsResolvedConstant)
+			{
+				if (operand1.IsInteger && operand1.ConstantUnsignedLongInteger == operand2.ConstantUnsignedLongInteger)
+					return true;
+
+				if (operand1.IsR4 && operand1.IsR4 && operand1.ConstantDoubleFloatingPoint == operand2.ConstantDoubleFloatingPoint)
+					return true;
+
+				if (operand1.IsR8 && operand1.IsR8 && operand2.ConstantSingleFloatingPoint == operand2.ConstantSingleFloatingPoint)
+					return true;
+			}
+
+			return false;
 		}
 
 		#region SignExtend Helpers

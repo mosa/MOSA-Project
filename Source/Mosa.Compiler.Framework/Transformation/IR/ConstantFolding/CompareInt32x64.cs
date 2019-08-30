@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Framework.Transformation.IR.ConstantFolding
 				case ConditionCode.UnsignedLessOrEqual: compareResult = context.Operand1.ConstantUnsignedLongInteger <= context.Operand2.ConstantUnsignedLongInteger; break;
 			}
 
-			SetConstantResult(context, compareResult ? 1 : 0);
+			transformContext.SetResultToConstant(context, compareResult ? 1 : 0);
 		}
 	}
 }
