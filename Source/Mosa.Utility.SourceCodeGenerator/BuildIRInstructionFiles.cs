@@ -24,8 +24,6 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected override void Body(dynamic node = null)
 		{
-			//int id = Identifiers.GetInstructionID();
-
 			if (node.ResultType != null || node.ResultType2 != null)
 			{
 				Lines.AppendLine("using Mosa.Compiler.MosaTypeSystem;");
@@ -35,7 +33,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine("namespace Mosa.Compiler.Framework.IR");
 			Lines.AppendLine("{");
 			Lines.AppendLine("\t/// <summary>");
-			Lines.AppendLine("\t/// " + node.Name);
+			Lines.AppendLine($"\t/// {node.Name}");
 
 			if (!string.IsNullOrWhiteSpace(node.Description))
 			{
@@ -44,13 +42,10 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 			Lines.AppendLine("\t/// </summary>");
 			Lines.AppendLine("\t/// <seealso cref=\"Mosa.Compiler.Framework.IR.BaseIRInstruction\" />");
-			Lines.AppendLine("\tpublic sealed class " + node.Name + " : BaseIRInstruction");
+			Lines.AppendLine($"\tpublic sealed class {node.Name} : BaseIRInstruction");
 			Lines.AppendLine("\t{");
-
-			//Lines.AppendLine("\t\tpublic override int ID { get { return " + id.ToString() + "; } }");
-			//Lines.AppendLine();
 			Lines.AppendLine("\t\tpublic " + node.Name + "()");
-			Lines.AppendLine("\t\t\t: base(" + node.OperandCount + ", " + node.ResultCount + ")");
+			Lines.AppendLine($"\t\t\t: base({node.OperandCount}, {node.ResultCount})");
 			Lines.AppendLine("\t\t{");
 			Lines.AppendLine("\t\t}");
 

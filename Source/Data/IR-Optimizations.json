@@ -1,0 +1,167 @@
+﻿{
+	"Optimizations": [
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "Add32",
+			"SubName": "",
+			"Expression": "IR.Add32 a b",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "Add32(a,b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "Add64",
+			"SubName": "",
+			"Expression": "IR.Add64 a b",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "Add64(a,b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Add32",
+			"SubName": "Right",
+			"Expression": "IR.Add32 a 0",
+			"Filter": "",
+			"Result": "a"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Add32",
+			"SubName": "Left",
+			"Expression": "IR.Add32 0 a",
+			"Filter": "",
+			"Result": "a"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Add64",
+			"SubName": "Right",
+			"Expression": "IR.Add64 a 0",
+			"Filter": "",
+			"Result": "a"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Add64",
+			"SubName": "Left",
+			"Expression": "IR.Add64 0 a",
+			"Filter": "",
+			"Result": "a"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "ShiftRight32",
+			"SubName": "ZeroValue",
+			"Expression": "IR.ShiftRight32 0 a",
+			"Filter": "",
+			"Result": "0"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "ShiftRight32",
+			"SubName": "ByZero",
+			"Expression": "IR.ShiftRight32 a 0",
+			"Filter": "",
+			"Result": "a"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "ShiftRight64",
+			"SubName": "ZeroValue",
+			"Expression": "IR.ShiftRight64 0 a",
+			"Filter": "",
+			"Result": "0"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "ShiftRight64",
+			"SubName": "ByZero",
+			"Expression": "IR.ShiftRight64 a 0",
+			"Filter": "",
+			"Result": "a"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "ShiftLeft32",
+			"SubName": "ByZero",
+			"Expression": "IR.ShiftLeft32 a 0",
+			"Filter": "",
+			"Result": "a"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "ShiftLeft32",
+			"SubName": "ByZero",
+			"Expression": "IR.ShiftLeft32 a 0",
+			"Filter": "",
+			"Result": "a"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "ShiftLeft64",
+			"SubName": "ByZero",
+			"Expression": "IR.ShiftLeft64 a 0",
+			"Filter": "",
+			"Result": "a"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "ShiftLeft64",
+			"SubName": "ByZero",
+			"Expression": "IR.ShiftLeft64 a 0",
+			"Filter": "",
+			"Result": "a"
+		},
+
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Sub32",
+			"SubName": "ByZero",
+			"Expression": "IR.Sub32 a 0",
+			"Filter": "",
+			"Result": "a"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Sub64",
+			"SubName": "ByZero",
+			"Expression": "IR.Sub64 a 0",
+			"Filter": "",
+			"Result": "a"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Sub32",
+			"SubName": "BySame",
+			"Expression": "IR.Sub32 a b",
+			"Filter": "Same(a,b)",
+			"Result": "0"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Sub64",
+			"SubName": "BySame",
+			"Expression": "IR.Sub64 a b",
+			"Filter": "Same(a,b)",
+			"Result": "0"
+		}
+	]
+}

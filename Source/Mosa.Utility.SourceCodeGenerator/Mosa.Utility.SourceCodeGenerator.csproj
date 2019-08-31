@@ -55,7 +55,7 @@
     <Compile Include="BuildESP32Instructions.cs" />
     <Compile Include="BuildX64InstructionFiles.cs" />
     <Compile Include="BuildX64.cs" />
-    <Compile Include="BuildRules.cs" />
+    <Compile Include="BuildTransformationFiles.cs" />
     <Compile Include="BuildX64Instructions.cs" />
     <Compile Include="BuildCommonInstructionFiles.cs" />
     <Compile Include="BuildX86InstructionFiles.cs" />
@@ -66,7 +66,9 @@
     <Compile Include="BuildIRInstructions.cs" />
     <Compile Include="BuildBaseTemplate.cs" />
     <Compile Include="DynamicJsonConverter.cs" />
-    <Compile Include="Identifiers.cs" />
+    <Compile Include="Expression\Token.cs" />
+    <Compile Include="Expression\Tokenizer.cs" />
+    <Compile Include="Expression\TokenType.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
