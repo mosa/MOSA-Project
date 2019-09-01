@@ -34,11 +34,12 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 					{
 						c = expression[index];
 
-						if (!IsDigit(c) || c == '.' || c == 'x' || c == 'l' || c == 'f' || c == 'd' || c == 'b')
-							break;
-
-						index++;
-						continue;
+						if (IsDigit(c) || c == '.' || c == 'x' || c == 'l' || c == 'f' || c == 'd' || c == 'b')
+						{
+							index++;
+							continue;
+						}
+						break;
 					}
 
 					var part = expression.Substring(start, index - start);
@@ -56,11 +57,12 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 					{
 						c = expression[index];
 
-						if (!IsCharacter(c) || IsDigit(c) || c == '.')
-							break;
-
-						index++;
-						continue;
+						if (IsCharacter(c) || IsDigit(c) || c == '.')
+						{
+							index++;
+							continue;
+						}
+						break;
 					}
 
 					tokens.Add(new Token(TokenType.Word, start, expression.Substring(start, index - start)));
@@ -120,6 +122,10 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 				else if (c == '!')
 				{
 					tokens.Add(new Token(TokenType.Less, index++, "!"));
+				}
+				else if (c == ',')
+				{
+					tokens.Add(new Token(TokenType.Comma, index++, ","));
 				}
 				else
 				{

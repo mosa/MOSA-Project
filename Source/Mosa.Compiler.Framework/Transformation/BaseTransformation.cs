@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.MosaTypeSystem;
+using System;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Transformation
@@ -19,7 +19,8 @@ namespace Mosa.Compiler.Framework.Transformation
 
 		#region Data Fields
 
-		public List<OperandFilter> OperandFilters;
+		protected int OperandFiltersCount;
+		protected OperandFilter[] OperandFilters = new OperandFilter[10];
 
 		#endregion Data Fields
 
@@ -43,49 +44,36 @@ namespace Mosa.Compiler.Framework.Transformation
 			Instructions = instructions;
 		}
 
-		public BaseTransformation(BaseInstruction instruction, OperandFilter operand1 = null, OperandFilter operand2 = null, OperandFilter operand3 = null, OperandFilter operand4 = null)
+		public BaseTransformation(BaseInstruction instruction, OperandFilter operand1 = null, OperandFilter operand2 = null, OperandFilter operand3 = null, OperandFilter operand4 = null, OperandFilter operand5 = null, OperandFilter operand6 = null)
 			: this(instruction)
 		{
-			if (operand1 != null)
-			{
-				OperandFilters = new List<OperandFilter>();
-			}
-
-			if (operand1 != null)
-				OperandFilters.Add(operand1);
-
-			if (operand2 != null)
-				OperandFilters.Add(operand2);
-
-			if (operand3 != null)
-				OperandFilters.Add(operand3);
-
-			if (operand4 != null)
-				OperandFilters.Add(operand4);
+			AddFilter(1, operand1);
+			AddFilter(2, operand2);
+			AddFilter(3, operand3);
+			AddFilter(4, operand4);
+			AddFilter(5, operand5);
+			AddFilter(6, operand6);
 		}
 
 		public BaseTransformation(List<BaseInstruction> instructions, OperandFilter operand1 = null, OperandFilter operand2 = null, OperandFilter operand3 = null, OperandFilter operand4 = null)
 			: this(instructions)
 		{
-			if (operand1 != null)
-			{
-				OperandFilters = new List<OperandFilter>();
-			}
-
-			if (operand1 != null)
-				OperandFilters.Add(operand1);
-
-			if (operand2 != null)
-				OperandFilters.Add(operand2);
-
-			if (operand3 != null)
-				OperandFilters.Add(operand3);
-
-			if (operand4 != null)
-				OperandFilters.Add(operand4);
+			AddFilter(1, operand1);
+			AddFilter(2, operand2);
+			AddFilter(3, operand3);
+			AddFilter(4, operand4);
 		}
 
 		#endregion Constructors
+
+		public void AddFilter(int index, OperandFilter filter)
+		{
+			if (filter == null)
+				return;
+
+			OperandFiltersCount = Math.Max(index - 1, OperandFiltersCount);
+			OperandFilters[index - 1] = filter;
+		}
 
 		#region Internals
 
@@ -115,28 +103,26 @@ namespace Mosa.Compiler.Framework.Transformation
 		{
 			// Default - built in match
 
-			if (OperandFilters != null)
-			{
-				// operand counts must match
-				if (OperandFilters.Count != context.OperandCount)
-					return false;
-
-				if (OperandFilters.Count >= 1 && !OperandFilters[0].Compare(context.Operand1))
-					return false;
-
-				if (OperandFilters.Count >= 2 && !OperandFilters[1].Compare(context.Operand2))
-					return false;
-
-				if (OperandFilters.Count >= 3 && !OperandFilters[2].Compare(context.Operand3))
-					return false;
-
-				for (int i = 3; i < OperandFilters.Count; i++)
-				{
-					if (!OperandFilters[i].Compare(context.GetOperand(i)))
-						return false;
-				}
-
+			if (OperandFiltersCount == 0)
 				return true;
+
+			// operand counts must match
+			if (OperandFiltersCount != context.OperandCount)
+				return false;
+
+			if (OperandFiltersCount >= 1 && !OperandFilters[0].Compare(context.Operand1))
+				return false;
+
+			if (OperandFiltersCount >= 2 && !OperandFilters[1].Compare(context.Operand2))
+				return false;
+
+			if (OperandFiltersCount >= 3 && !OperandFilters[2].Compare(context.Operand3))
+				return false;
+
+			for (int i = 3; i < OperandFiltersCount; i++)
+			{
+				if (!OperandFilters[i].Compare(context.GetOperand(i)))
+					return false;
 			}
 
 			return false;

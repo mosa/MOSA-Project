@@ -91,6 +91,11 @@ namespace Mosa.Compiler.Framework.Transformation
 			FloatConstant = constant;
 		}
 
+		public bool Compare(Context context, int index)
+		{
+			return Compare(context.GetOperand(index));
+		}
+
 		public bool Compare(Operand operand)
 		{
 			if (operand == null)

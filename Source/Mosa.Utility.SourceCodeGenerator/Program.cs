@@ -11,6 +11,11 @@ namespace Mosa.Utility.SourceCodeGenerator
 			var dataPath = @"..\Source\Data";
 			var targetPath = @"..\Source\";
 
+			new BuildTransformationFiles(
+				Path.Combine(dataPath, @"IR-Optimizations.json"),
+				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transformation")
+			);
+
 			new BuildIRInstruction(
 				Path.Combine(dataPath, @"IR-Instructions.json"),
 				Path.Combine(targetPath, @"Mosa.Compiler.Framework\IR\"),
