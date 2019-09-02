@@ -189,6 +189,33 @@
 			"Expression": "IR.Add32 (IR.MulUnsigned32 x1 y) (IR.MulUnsigned32 x2 z)",
 			"Filter": "Same(x1, x2)",
 			"Result": "IR.MulUnsigned32 x1 (Add32 y z)"
+		},
+		{
+			"FamilyName": "IR2",
+			"Type": "Rewrite",
+			"Name": "Add64",
+			"SubName": "MultipleWithCommon",
+			"Expression": "IR.Add64 (IR.MulUnsigned64 x1 y) (IR.MulUnsigned64 x2 z)",
+			"Filter": "Same(x1, x2)",
+			"Result": "IR.MulUnsigned64 x1 (Add64 y z)"
+		},
+		{
+			"FamilyName": "IR2",
+			"Type": "Rewrite",
+			"Name": "Sub32",
+			"SubName": "MultipleWithCommon",
+			"Expression": "IR.Add32 (IR.MulUnsigned32 x1 y) (IR.MulUnsigned32 x2 z)",
+			"Filter": "Same(x1, x2)",
+			"Result": "IR.MulUnsigned32 x1 (Sub32 y z)"
+		},
+		{
+			"FamilyName": "IR2",
+			"Type": "Rewrite",
+			"Name": "Sub64",
+			"SubName": "MultipleWithCommon",
+			"Expression": "IR.Add64 (IR.MulUnsigned64 x1 y) (IR.MulUnsigned64 x2 z)",
+			"Filter": "Same(x1, x2)",
+			"Result": "IR.MulUnsigned64 x1 (Sub64 y z)"
 		}
 	]
 }

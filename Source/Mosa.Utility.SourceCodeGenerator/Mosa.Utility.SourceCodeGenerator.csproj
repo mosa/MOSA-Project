@@ -66,6 +66,8 @@
     <Compile Include="BuildIRInstructions.cs" />
     <Compile Include="BuildBaseTemplate.cs" />
     <Compile Include="DynamicJsonConverter.cs" />
+    <Compile Include="Expression\ExpressionLabel.cs" />
+    <Compile Include="Expression\ExpressionLabels.cs" />
     <Compile Include="Expression\ExpressionOperand.cs" />
     <Compile Include="Expression\ExpressionNode.cs" />
     <Compile Include="Expression\Transformation.cs" />

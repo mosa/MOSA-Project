@@ -8,6 +8,8 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 
 		public string Value { get { return Token.Value; } }
 
+		public int Index { get; }
+
 		public ExpressionNode Node { get; set; }
 
 		public bool IsExpressionNode { get { return Node != null; } }
@@ -34,22 +36,26 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 
 		public double Float { get { return Token.Float; } }
 
-		public ExpressionOperand(Token token)
+		public string Label { get { return Token.Value; } }
+
+		public ExpressionOperand(Token token, int index)
 		{
 			Token = token;
+			Index = index;
 		}
 
-		public ExpressionOperand(ExpressionNode node)
+		public ExpressionOperand(ExpressionNode node, int index)
 		{
 			Node = node;
+			Index = index;
 		}
 
 		public override string ToString()
 		{
 			if (Node != null)
-				return Node.ToString();
+				return $"{Index}:{Node}";
 			else
-				return Token.ToString();
+				return $"{Index}:{Token}";
 		}
 	}
 }

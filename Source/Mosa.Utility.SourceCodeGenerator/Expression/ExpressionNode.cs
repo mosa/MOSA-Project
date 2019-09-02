@@ -14,7 +14,7 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 
 		public static ExpressionNode Parse(List<Token> tokens)
 		{
-			return Parse(tokens, 0, 1).node;
+			return Parse(tokens, 0, 0).node;
 		}
 
 		protected static (ExpressionNode node, int end, int nodeNbr) Parse(List<Token> tokens, int start, int nodeNbr)
@@ -40,27 +40,27 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 				}
 				else if (token.TokenType == TokenType.Word && node.InstructionName != null)
 				{
-					node.Operands.Add(new ExpressionOperand(token));
+					node.Operands.Add(new ExpressionOperand(token, node.Operands.Count));
 				}
 				else if (token.TokenType == TokenType.IntegerConstant)
 				{
-					node.Operands.Add(new ExpressionOperand(token));
+					node.Operands.Add(new ExpressionOperand(token, node.Operands.Count));
 				}
 				else if (token.TokenType == TokenType.LongConstant)
 				{
-					node.Operands.Add(new ExpressionOperand(token));
+					node.Operands.Add(new ExpressionOperand(token, node.Operands.Count));
 				}
 				else if (token.TokenType == TokenType.DoubleConstant)
 				{
-					node.Operands.Add(new ExpressionOperand(token));
+					node.Operands.Add(new ExpressionOperand(token, node.Operands.Count));
 				}
 				else if (token.TokenType == TokenType.FloatConstant)
 				{
-					node.Operands.Add(new ExpressionOperand(token));
+					node.Operands.Add(new ExpressionOperand(token, node.Operands.Count));
 				}
 				else if (token.TokenType == TokenType.Underscore)
 				{
-					node.Operands.Add(new ExpressionOperand(token));
+					node.Operands.Add(new ExpressionOperand(token, node.Operands.Count));
 				}
 				else if (token.TokenType == TokenType.OpenParens)
 				{
@@ -69,7 +69,7 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 					index = innerNode.end;
 					nodeNbr = innerNode.nodeNbr;
 
-					node.Operands.Add(new ExpressionOperand(innerNode.node));
+					node.Operands.Add(new ExpressionOperand(innerNode.node, node.Operands.Count));
 				}
 				else if (token.TokenType == TokenType.CloseBracket)
 				{

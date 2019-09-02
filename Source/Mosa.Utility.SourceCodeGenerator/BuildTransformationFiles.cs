@@ -46,6 +46,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine("\t{");
 
 			var transform = new Transformation(node.Expression, node.Filter, node.Result);
+			var labels = new ExpressionLabels(transform.ExpressionNode);
 			var instructionName = transform.ExpressionNode.InstructionName.Replace("IR.", "IRInstruction.");
 
 			// constructor
@@ -78,14 +79,14 @@ namespace Mosa.Utility.SourceCodeGenerator
 		{
 			NodeNbrToNode.Add(expressionNode.NodeNbr, parent);
 
-			for (int index = 0; index < expressionNode.Operands.Count; index++)
+			foreach (var operand in expressionNode.Operands)
 			{
-				ProcessConditions(index, expressionNode.Operands[index], parent, expressionNode.NodeNbr);
+				ProcessConditions(operand, parent, expressionNode.NodeNbr);
 			}
 
-			for (int index = 0; index < expressionNode.Operands.Count; index++)
+			foreach (var operand in expressionNode.Operands)
 			{
-				ProcessNestedConditions(index, expressionNode.Operands[index], parent, expressionNode.NodeNbr);
+				ProcessNestedConditions(operand, parent, expressionNode.NodeNbr);
 			}
 		}
 
@@ -96,12 +97,12 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine("");
 		}
 
-		protected void ProcessConditions(int index, ExpressionOperand operand, string parent, int nodeNbr)
+		protected void ProcessConditions(ExpressionOperand operand, string parent, int nodeNbr)
 		{
 			if (operand.IsAny)
 				return; // nothing;
 
-			var operandName = parent + GetOperandName(index);
+			var operandName = parent + GetOperandName(operand.Index);
 
 			//if (operand.IsLabel)
 			//{
@@ -139,12 +140,12 @@ namespace Mosa.Utility.SourceCodeGenerator
 			}
 		}
 
-		protected void ProcessNestedConditions(int index, ExpressionOperand operand, string parent, int nodenbr)
+		protected void ProcessNestedConditions(ExpressionOperand operand, string parent, int nodenbr)
 		{
 			if (!operand.IsExpressionNode)
 				return;
 
-			var operandName = parent + GetOperandName(index);
+			var operandName = parent + GetOperandName(operand.Index);
 
 			EmitCondition($"context{operandName}.Definitions.Count != 1");
 
