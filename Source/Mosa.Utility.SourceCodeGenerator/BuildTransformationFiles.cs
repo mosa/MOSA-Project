@@ -12,6 +12,10 @@ namespace Mosa.Utility.SourceCodeGenerator
 		{
 		}
 
+		protected Dictionary<int, string> NodeNbrToNode = new Dictionary<int, string>();
+
+		protected Dictionary<string, string> OperandLabelToVariable = new Dictionary<string, string>();
+
 		protected override void Iterator()
 		{
 			foreach (var entry in Entries.Optimizations)
@@ -42,7 +46,6 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine("\t{");
 
 			var transform = new Transformation(node.Expression, node.Filter, node.Result);
-
 			var instructionName = transform.ExpressionNode.InstructionName.Replace("IR.", "IRInstruction.");
 
 			// constructor
@@ -54,20 +57,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine("\t\tpublic override bool Match(Context context, TransformContext transformContext)");
 			Lines.AppendLine("\t\t{");
 
-			for (int index = 0; index < transform.ExpressionNode.Operands.Count; index++)
-			{
-				var match = CreateConditions(index, transform.ExpressionNode.Operands[index]);
-
-				if (match != null)
-				{
-					foreach (string condition in match)
-					{
-						Lines.AppendLine($"\t\t\tif ({condition})");
-						Lines.AppendLine($"\t\t\t\treturn false;");
-						Lines.AppendLine("");
-					}
-				}
-			}
+			ProcessExpressionNode(transform.ExpressionNode, ".");
 
 			Lines.AppendLine("\t\t\treturn true;");
 			Lines.AppendLine("\t\t}");
@@ -79,46 +69,90 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 			Lines.AppendLine("\t}");
 			Lines.AppendLine("}");
+
+			NodeNbrToNode.Clear();
+			OperandLabelToVariable.Clear();
 		}
 
-		protected List<string> CreateConditions(int index, ExpressionOperand operand)
+		private void ProcessExpressionNode(ExpressionNode expressionNode, string parent)
+		{
+			NodeNbrToNode.Add(expressionNode.NodeNbr, parent);
+
+			for (int index = 0; index < expressionNode.Operands.Count; index++)
+			{
+				ProcessConditions(index, expressionNode.Operands[index], parent, expressionNode.NodeNbr);
+			}
+
+			for (int index = 0; index < expressionNode.Operands.Count; index++)
+			{
+				ProcessNestedConditions(index, expressionNode.Operands[index], parent, expressionNode.NodeNbr);
+			}
+		}
+
+		private void EmitCondition(string condition)
+		{
+			Lines.AppendLine($"\t\t\tif ({condition})");
+			Lines.AppendLine($"\t\t\t\treturn false;");
+			Lines.AppendLine("");
+		}
+
+		protected void ProcessConditions(int index, ExpressionOperand operand, string parent, int nodeNbr)
 		{
 			if (operand.IsAny)
-				return null; // nothing;
+				return; // nothing;
 
-			var lines = new List<string>();
+			var operandName = parent + GetOperandName(index);
 
-			if (operand.IsVirtualRegister)
+			//if (operand.IsLabel)
+			//{
+			//	OperandLabelToVariable.Add(operand.Value, operandName);
+			//}
+
+			if (operand.IsExpressionNode)
 			{
-				lines.Add($"!context.{GetOperandName(index)}.IsVirtualRegister");
+				EmitCondition($"!context{operandName}.IsVirtualRegister");
 			}
 
 			if (operand.IsLong || operand.IsDouble || operand.IsFloat || operand.IsInteger)
 			{
-				lines.Add($"!context.{GetOperandName(index)}.IsResolvedConstant");
+				EmitCondition($"!context{operandName}.IsResolvedConstant");
 			}
 
 			if (operand.IsLong)
 			{
-				lines.Add($"context.{GetOperandName(index)}.ConstantUnsignedLongInteger != {operand.Long}");
+				EmitCondition($"context{operandName}.ConstantUnsignedLongInteger != {operand.Long}");
 			}
 
 			if (operand.IsInteger)
 			{
-				lines.Add($"context.{GetOperandName(index)}.ConstantUnsignedInteger != {operand.Integer}");
+				EmitCondition($"context{operandName}.ConstantUnsignedInteger != {operand.Integer}");
 			}
 
 			if (operand.IsDouble)
 			{
-				lines.Add($"context.{GetOperandName(index)}.ConstantDouble != {operand.Double}");
+				EmitCondition($"context{operandName}.ConstantDouble != {operand.Double}");
 			}
 
 			if (operand.IsFloat)
 			{
-				lines.Add($"context.{GetOperandName(index)}.ConstantFloat != {operand.Float}f");
+				EmitCondition($"context{operandName}.ConstantFloat != {operand.Float}f");
 			}
+		}
 
-			return lines;
+		protected void ProcessNestedConditions(int index, ExpressionOperand operand, string parent, int nodenbr)
+		{
+			if (!operand.IsExpressionNode)
+				return;
+
+			var operandName = parent + GetOperandName(index);
+
+			EmitCondition($"context{operandName}.Definitions.Count != 1");
+
+			var instructionName = operand.Node.InstructionName.Replace("IR.", "IRInstruction.");
+
+			EmitCondition($"context{operandName}.Definitions[0].Instruction != {instructionName}");
+
+			ProcessExpressionNode(operand.Node, parent + ".Definations[0]");
 		}
 
 		protected string GetOperandName(int index)

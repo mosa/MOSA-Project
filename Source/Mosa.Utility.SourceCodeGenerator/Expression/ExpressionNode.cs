@@ -10,14 +10,16 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 
 		public List<ExpressionOperand> Operands { get; } = new List<ExpressionOperand>();
 
+		public int NodeNbr { get; private set; }
+
 		public static ExpressionNode Parse(List<Token> tokens)
 		{
-			return Parse(tokens, 0).node;
+			return Parse(tokens, 0, 1).node;
 		}
 
-		protected static (ExpressionNode node, int end) Parse(List<Token> tokens, int start)
+		protected static (ExpressionNode node, int end, int nodeNbr) Parse(List<Token> tokens, int start, int nodeNbr)
 		{
-			var node = new ExpressionNode();
+			var node = new ExpressionNode() { NodeNbr = nodeNbr };
 			var length = tokens.Count;
 
 			// skip first open parens, if one exists
@@ -36,7 +38,7 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 				{
 					node.InstructionName = token.Value;
 				}
-				if (token.TokenType == TokenType.Word && node.InstructionName != null)
+				else if (token.TokenType == TokenType.Word && node.InstructionName != null)
 				{
 					node.Operands.Add(new ExpressionOperand(token));
 				}
@@ -60,21 +62,22 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 				{
 					node.Operands.Add(new ExpressionOperand(token));
 				}
-				else if (token.TokenType == TokenType.OpenBracket)
+				else if (token.TokenType == TokenType.OpenParens)
 				{
-					var innerNode = Parse(tokens, index + 1);
+					var innerNode = Parse(tokens, index + 1, ++nodeNbr);
 
 					index = innerNode.end;
+					nodeNbr = innerNode.nodeNbr;
 
 					node.Operands.Add(new ExpressionOperand(innerNode.node));
 				}
 				else if (token.TokenType == TokenType.CloseBracket)
 				{
-					return (node, index + 1);
+					return (node, index + 1, nodeNbr);
 				}
 			}
 
-			return (node, index);
+			return (node, index, nodeNbr);
 		}
 	}
 }

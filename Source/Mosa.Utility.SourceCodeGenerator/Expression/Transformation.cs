@@ -38,5 +38,10 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 
 			return;
 		}
+
+		public override string ToString()
+		{
+			return $"{Expression} & {Filter} -> {Result}";
+		}
 	}
 }

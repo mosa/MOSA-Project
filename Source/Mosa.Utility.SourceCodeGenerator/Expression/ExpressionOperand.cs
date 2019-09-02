@@ -14,7 +14,7 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 
 		public bool IsLabel { get { return !IsExpressionNode && Token.TokenType == TokenType.Word; } }
 
-		public bool IsVirtualRegister { get { return IsExpressionNode && Token.TokenType == TokenType.Word; } }
+		public bool IsVirtualRegister { get { return IsExpressionNode; } }
 
 		public bool IsLong { get { return !IsExpressionNode && Token.TokenType == TokenType.LongConstant; } }
 
@@ -42,6 +42,14 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 		public ExpressionOperand(ExpressionNode node)
 		{
 			Node = node;
+		}
+
+		public override string ToString()
+		{
+			if (Node != null)
+				return Node.ToString();
+			else
+				return Token.ToString();
 		}
 	}
 }

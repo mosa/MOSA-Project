@@ -121,7 +121,7 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 				}
 				else if (c == '!')
 				{
-					tokens.Add(new Token(TokenType.Less, index++, "!"));
+					tokens.Add(new Token(TokenType.Not, index++, "!"));
 				}
 				else if (c == ',')
 				{

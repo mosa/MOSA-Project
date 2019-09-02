@@ -162,6 +162,33 @@
 			"Expression": "IR.Sub64 a b",
 			"Filter": "Same(a,b)",
 			"Result": "0"
+		},
+		{
+			"FamilyName": "IR2",
+			"Type": "Simplification",
+			"Name": "LogicalNot32",
+			"SubName": "Twice",
+			"Expression": "IR.LogicalNot32 (IR.LogicalNot32 x)",
+			"Filter": "",
+			"Result": "x"
+		},
+		{
+			"FamilyName": "IR2",
+			"Type": "Simplification",
+			"Name": "LogicalNot64",
+			"SubName": "Twice",
+			"Expression": "IR.LogicalNot64 (IR.LogicalNot64 x)",
+			"Filter": "",
+			"Result": "x"
+		},
+		{
+			"FamilyName": "IR2",
+			"Type": "Rewrite",
+			"Name": "Add32",
+			"SubName": "MultipleWithCommon",
+			"Expression": "IR.Add32 (IR.MulUnsigned32 x1 y) (IR.MulUnsigned32 x2 z)",
+			"Filter": "Same(x1, x2)",
+			"Result": "IR.MulUnsigned32 x1 (Add32 y z)"
 		}
 	]
 }
