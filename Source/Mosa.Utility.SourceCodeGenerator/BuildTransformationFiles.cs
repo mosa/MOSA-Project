@@ -61,6 +61,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 			ProcessExpressionNode(transform.ExpressionNode, string.Empty);
 
+			ProcessDuplicatesInExpression(transform);
+
 			ProcessFilters(transform);
 
 			Lines.AppendLine("\t\t\treturn true;");
@@ -78,6 +80,32 @@ namespace Mosa.Utility.SourceCodeGenerator
 			OperandLabelToVariable.Clear();
 		}
 
+		private void ProcessDuplicatesInExpression(Transformation transform)
+		{
+			foreach (var label in transform.ExpressionLabels.Labels)
+			{
+				var expressionLabel = transform.ExpressionLabels.GetExpressionLabel(label);
+
+				if (expressionLabel.Positions.Count == 1)
+					continue;
+
+				var first = expressionLabel.Positions[0];
+				var firstParent = NodeNbrToNode[first.NodeNbr];
+				var firstOperandName = GetOperandName(first.OperandIndex);
+				var firstName = $"context.{firstParent}{firstOperandName}";
+
+				for (int i = 1; i < expressionLabel.Positions.Count; i++)
+				{
+					var other = expressionLabel.Positions[i];
+					var otherParent = NodeNbrToNode[other.NodeNbr];
+					var otherOperandName = GetOperandName(other.OperandIndex);
+					var otherName = $"context.{otherParent}{otherOperandName}";
+
+					EmitCondition($"!AreSame({firstName}, {otherName})");
+				}
+			}
+		}
+
 		private void ProcessFilters(Transformation transform)
 		{
 			var filters = transform.ExpressionMethodFilters;
@@ -92,7 +120,9 @@ namespace Mosa.Utility.SourceCodeGenerator
 		{
 			var sb = new StringBuilder();
 
-			sb.Append('!');
+			if (!filter.IsNegated)
+				sb.Append('!');
+
 			sb.Append(filter.MethodName);
 			sb.Append('(');
 
@@ -104,7 +134,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				}
 				else if (parameter.IsLabel)
 				{
-					var first = transform.ExpressionLabels.GetFirst(parameter.Value);
+					var first = transform.ExpressionLabels.GetFirstPosition(parameter.Value);
 
 					var parent = NodeNbrToNode[first.NodeNbr];
 

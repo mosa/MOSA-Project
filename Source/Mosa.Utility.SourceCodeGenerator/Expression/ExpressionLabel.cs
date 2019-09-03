@@ -13,11 +13,11 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 			Label = label;
 		}
 
-		public List<LabelPosition> LabelPositions { get; } = new List<LabelPosition>();
+		public List<LabelPosition> Positions { get; } = new List<LabelPosition>();
 
 		public void Add(int nodeNbr, int operandIndex)
 		{
-			LabelPositions.Add(new LabelPosition(nodeNbr, operandIndex));
+			Positions.Add(new LabelPosition(nodeNbr, operandIndex));
 		}
 	}
 }

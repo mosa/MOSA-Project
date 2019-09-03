@@ -6,26 +6,33 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 {
 	public class ExpressionLabels
 	{
-		protected Dictionary<string, ExpressionLabel> Labels = new Dictionary<string, ExpressionLabel>();
+		protected Dictionary<string, ExpressionLabel> ExpressionalLabels = new Dictionary<string, ExpressionLabel>();
+
+		public List<string> Labels { get; } = new List<string>();
 
 		public ExpressionLabels(ExpressionNode node)
 		{
 			AddPositions(node);
 		}
 
-		public LabelPosition GetFirst(string label)
+		public LabelPosition GetFirstPosition(string label)
 		{
-			var expressionLabel = Labels[label];
+			var expressionLabel = ExpressionalLabels[label];
 
-			return expressionLabel.LabelPositions[0];
+			return expressionLabel.Positions[0];
+		}
+
+		public ExpressionLabel GetExpressionLabel(string label)
+		{
+			return ExpressionalLabels[label];
 		}
 
 		protected void AddPosition(string label, int nodeNbr, int operandIndex)
 		{
-			if (!Labels.TryGetValue(label, out ExpressionLabel expressionLabel))
+			if (!ExpressionalLabels.TryGetValue(label, out ExpressionLabel expressionLabel))
 			{
 				expressionLabel = new ExpressionLabel(label);
-				Labels.Add(label, expressionLabel);
+				ExpressionalLabels.Add(label, expressionLabel);
 			}
 
 			expressionLabel.Add(nodeNbr, operandIndex);
@@ -38,6 +45,9 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 				if (operand.IsLabel)
 				{
 					AddPosition(operand.Label, node.NodeNbr, operand.Index);
+
+					if (!Labels.Contains(operand.Label))
+						Labels.Add(operand.Label);
 				}
 
 				if (operand.IsExpressionNode)
