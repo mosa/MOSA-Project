@@ -12,9 +12,13 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 
 		public ExpressionNode Node { get; set; }
 
+		public ExpressionMethodFilter Method { get; set; }
+
 		public bool IsExpressionNode { get { return Node != null; } }
 
-		public bool IsLabel { get { return !IsExpressionNode && Token.TokenType == TokenType.Word; } }
+		public bool IsMethod { get { return Method != null; } }
+
+		public bool IsLabel { get { return (!IsExpressionNode && Token.TokenType == TokenType.Label) || (!IsExpressionNode && Token.TokenType == TokenType.Word); } }
 
 		public bool IsVirtualRegister { get { return IsExpressionNode; } }
 
@@ -47,6 +51,12 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 		public ExpressionOperand(ExpressionNode node, int index)
 		{
 			Node = node;
+			Index = index;
+		}
+
+		public ExpressionOperand(ExpressionMethodFilter method, int index)
+		{
+			Method = method;
 			Index = index;
 		}
 

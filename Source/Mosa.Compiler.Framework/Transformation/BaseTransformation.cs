@@ -170,6 +170,15 @@ namespace Mosa.Compiler.Framework.Transformation
 			return false;
 		}
 
+		#region Methods
+
+		protected static bool IsResolvedConstant(Operand operand)
+		{
+			return operand.IsResolvedConstant;
+		}
+
+		#endregion Methods
+
 		#region SignExtend Helpers
 
 		protected static uint SignExtend8x32(byte value)

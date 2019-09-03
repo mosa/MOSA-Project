@@ -19,24 +19,25 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 
 		public ExpressionNode ExpressionNode;
 
+		public ExpressionLabels ExpressionLabels;
+
+		public List<ExpressionMethodFilter> ExpressionMethodFilters;
+
 		public Transformation(string expression, string filter, string result)
 		{
 			Expression = expression;
 			Filter = filter;
 			Result = result;
 
-			Parse();
-		}
-
-		protected void Parse()
-		{
 			TokenizedExpression = Tokenizer.Parse(Expression);
 			TokenizedFilter = Tokenizer.Parse(Filter);
 			TokenizedResult = Tokenizer.Parse(Result);
 
 			ExpressionNode = ExpressionNode.Parse(TokenizedExpression);
 
-			return;
+			ExpressionLabels = new ExpressionLabels(ExpressionNode);
+
+			ExpressionMethodFilters = ExpressionMethodFilter.ParseAll(TokenizedFilter);
 		}
 
 		public override string ToString()

@@ -13,6 +13,13 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 			AddPositions(node);
 		}
 
+		public LabelPosition GetFirst(string label)
+		{
+			var expressionLabel = Labels[label];
+
+			return expressionLabel.LabelPositions[0];
+		}
+
 		protected void AddPosition(string label, int nodeNbr, int operandIndex)
 		{
 			if (!Labels.TryGetValue(label, out ExpressionLabel expressionLabel))

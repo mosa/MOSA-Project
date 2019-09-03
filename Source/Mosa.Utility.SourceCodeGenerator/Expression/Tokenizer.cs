@@ -81,7 +81,7 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 				}
 				else if (c == ')')
 				{
-					tokens.Add(new Token(TokenType.CloseBracket, index++, ")"));
+					tokens.Add(new Token(TokenType.CloseParens, index++, ")"));
 				}
 				else if (c == '[')
 				{
@@ -113,11 +113,11 @@ namespace Mosa.Utility.SourceCodeGenerator.Expression
 				}
 				else if (c == '&')
 				{
-					tokens.Add(new Token(TokenType.Less, index++, "&"));
+					tokens.Add(new Token(TokenType.And, index++, "&"));
 				}
 				else if (c == '|')
 				{
-					tokens.Add(new Token(TokenType.Less, index++, "|"));
+					tokens.Add(new Token(TokenType.Or, index++, "|"));
 				}
 				else if (c == '!')
 				{

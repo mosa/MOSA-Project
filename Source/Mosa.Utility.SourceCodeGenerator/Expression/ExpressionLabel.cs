@@ -4,20 +4,8 @@ using System.Collections.Generic;
 
 namespace Mosa.Utility.SourceCodeGenerator.Expression
 {
-	public class ExpressionLabel
+	public partial class ExpressionLabel
 	{
-		public struct LabelPosition
-		{
-			public int NodeNbr;
-			public int OperandIndex;
-
-			public LabelPosition(int nodeNbr, int operandIndex)
-			{
-				NodeNbr = nodeNbr;
-				OperandIndex = operandIndex;
-			}
-		}
-
 		public string Label { get; }
 
 		public ExpressionLabel(string label)
