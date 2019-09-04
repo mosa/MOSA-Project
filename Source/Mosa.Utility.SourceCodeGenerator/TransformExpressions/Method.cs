@@ -11,5 +11,10 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 		public bool IsNegated { get; set; } = false;
 
 		public List<Operand> Parameters { get; } = new List<Operand>();
+
+		public override string ToString()
+		{
+			return $"{MethodName}";
+		}
 	}
 }

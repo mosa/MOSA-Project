@@ -12,5 +12,10 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			NodeNbr = nodeNbr;
 			OperandIndex = operandIndex;
 		}
+
+		public override string ToString()
+		{
+			return $"{NodeNbr} @ {OperandIndex}";
+		}
 	}
 }

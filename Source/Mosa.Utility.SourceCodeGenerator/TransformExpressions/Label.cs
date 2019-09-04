@@ -19,5 +19,10 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 		{
 			Positions.Add(new LabelPosition(nodeNbr, operandIndex));
 		}
+
+		public override string ToString()
+		{
+			return Name;
+		}
 	}
 }

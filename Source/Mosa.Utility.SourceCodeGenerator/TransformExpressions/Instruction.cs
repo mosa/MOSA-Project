@@ -11,5 +11,10 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 		public List<Operand> Operands { get; } = new List<Operand>();
 
 		public int NodeNbr { get; set; }
+
+		public override string ToString()
+		{
+			return $"{NodeNbr}:{InstructionName}";
+		}
 	}
 }
