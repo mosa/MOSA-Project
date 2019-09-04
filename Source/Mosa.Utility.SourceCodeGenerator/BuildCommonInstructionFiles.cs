@@ -601,9 +601,9 @@ namespace Mosa.Utility.SourceCodeGenerator
 						case "one":
 						case "1": cond1 = ".IsConstantOne"; break;
 						case "sbyte":
-						case "signedbyte": cond1 = ".IsConstant"; cond2 = ".ConstantSignedInteger >= " + sbyte.MinValue.ToString(); cond3 = ".ConstantSignedInteger <= " + sbyte.MaxValue.ToString(); break;
-						case "signedshort": cond1 = ".IsConstant"; cond2 = ".ConstantSignedInteger >= " + short.MinValue.ToString(); cond3 = ".ConstantSignedInteger <= " + short.MaxValue.ToString(); break;
-						case "signint": cond1 = ".IsConstant"; cond2 = ".ConstantSignedInteger >= " + int.MinValue.ToString(); cond3 = ".ConstantSignedInteger <= " + int.MaxValue.ToString(); break;
+						case "signedbyte": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + sbyte.MinValue.ToString(); cond3 = ".ConstantSigned32 <= " + sbyte.MaxValue.ToString(); break;
+						case "signedshort": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + short.MinValue.ToString(); cond3 = ".ConstantSigned32 <= " + short.MaxValue.ToString(); break;
+						case "signint": cond1 = ".IsConstant"; cond2 = ".ConstantSigned32 >= " + int.MinValue.ToString(); cond3 = ".ConstantSigned32 <= " + int.MaxValue.ToString(); break;
 					}
 
 					string subexpression = "node." + operand + cond1;

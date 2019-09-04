@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
 using System;
 using System.Collections.Generic;
@@ -147,6 +148,8 @@ namespace Mosa.Compiler.Framework.Transformation
 				return IRInstruction.MoveInt32;
 		}
 
+		#region Filter Methods
+
 		protected static bool AreSame(Operand operand1, Operand operand2)
 		{
 			if (operand1.IsVirtualRegister && operand1.IsVirtualRegister && operand1 == operand2)
@@ -157,27 +160,129 @@ namespace Mosa.Compiler.Framework.Transformation
 
 			if (operand1.IsResolvedConstant && operand2.IsResolvedConstant)
 			{
-				if (operand1.IsInteger && operand1.ConstantUnsignedLongInteger == operand2.ConstantUnsignedLongInteger)
+				if (operand1.IsInteger && operand1.ConstantUnsigned64 == operand2.ConstantUnsigned64)
 					return true;
 
-				if (operand1.IsR4 && operand1.IsR4 && operand1.ConstantDoubleFloatingPoint == operand2.ConstantDoubleFloatingPoint)
+				if (operand1.IsR4 && operand1.IsR4 && operand1.ConstantDouble == operand2.ConstantDouble)
 					return true;
 
-				if (operand1.IsR8 && operand1.IsR8 && operand2.ConstantSingleFloatingPoint == operand2.ConstantSingleFloatingPoint)
+				if (operand1.IsR8 && operand1.IsR8 && operand2.ConstantFloat == operand2.ConstantFloat)
 					return true;
 			}
 
 			return false;
 		}
 
-		#region Methods
-
 		protected static bool IsResolvedConstant(Operand operand)
 		{
 			return operand.IsResolvedConstant;
 		}
 
-		#endregion Methods
+		protected static bool IsPowerOfTwo32(Operand operand)
+		{
+			return BitTwiddling.IsPowerOfTwo(operand.ConstantUnsigned32);
+		}
+
+		protected static bool IsPowerOfTwo64(Operand operand)
+		{
+			return BitTwiddling.IsPowerOfTwo(operand.ConstantUnsigned64);
+		}
+
+		#endregion Filter Methods
+
+		#region Expression Methods
+
+		protected static uint To32(Operand operand)
+		{
+			return operand.ConstantUnsigned32;
+		}
+
+		protected static ulong To64(Operand operand)
+		{
+			return operand.ConstantUnsigned64;
+		}
+
+		protected static int ToSigned32(Operand operand)
+		{
+			return operand.ConstantSigned32;
+		}
+
+		protected static long ToSigned64(Operand operand)
+		{
+			return operand.ConstantSigned64;
+		}
+
+		protected static uint To32(ulong value)
+		{
+			return (uint)value;
+		}
+
+		protected static ulong To64(ulong value)
+		{
+			return value;
+		}
+
+		protected static double ToDouble(double value)
+		{
+			return value;
+		}
+
+		protected static float ToFloat(float value)
+		{
+			return value;
+		}
+
+		protected static ulong Add(ulong a, ulong b)
+		{
+			return a + b;
+		}
+
+		protected static ulong Sub(ulong a, ulong b)
+		{
+			return a - b;
+		}
+
+		protected static ulong UnsignedMultiple(ulong a, ulong b)
+		{
+			return a * b;
+		}
+
+		protected static ulong UnsignedDivide(ulong a, ulong b)
+		{
+			return a / b;
+		}
+
+		protected static ulong UnsignedMod(ulong a, ulong b)
+		{
+			return a % b;
+		}
+
+		protected static long SignedMultiple(long a, long b)
+		{
+			return a * b;
+		}
+
+		protected static long SignedDivide(long a, long b)
+		{
+			return a / b;
+		}
+
+		protected static long SignedMod(long a, long b)
+		{
+			return a % b;
+		}
+
+		protected static uint GetPowerOfTwo(ulong value)
+		{
+			return BitTwiddling.GetPowerOfTwo(value);
+		}
+
+		protected static uint GetPowerOfTwo(Operand operand)
+		{
+			return GetPowerOfTwo(operand.ConstantUnsigned64);
+		}
+
+		#endregion Expression Methods
 
 		#region SignExtend Helpers
 

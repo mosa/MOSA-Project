@@ -7,7 +7,7 @@
 			"SubName": "",
 			"Expression": "IR.Add32 a b",
 			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
-			"Result": "Add32(a,b)"
+			"Result": "[Add32(a,b)]"
 		},
 		{
 			"FamilyName": "IR2",
@@ -16,7 +16,7 @@
 			"SubName": "",
 			"Expression": "IR.Add64 a b",
 			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
-			"Result": "Add64(a,b)"
+			"Result": "[Add64(a,b)]"
 		},
 		{
 			"FamilyName": "IR2",
@@ -188,7 +188,7 @@
 			"SubName": "MultipleWithCommon",
 			"Expression": "IR.Add32 (IR.MulUnsigned32 x y) (IR.MulUnsigned32 x z)",
 			"Filter": "",
-			"Result": "IR.MulUnsigned32 x (Add32 y z)"
+			"Result": "(IR.MulUnsigned32 x (Add32 y z))"
 		},
 		{
 			"FamilyName": "IR2",
@@ -197,7 +197,7 @@
 			"SubName": "MultipleWithCommon",
 			"Expression": "IR.Add64 (IR.MulUnsigned64 x y) (IR.MulUnsigned64 x z)",
 			"Filter": "",
-			"Result": "IR.MulUnsigned64 x (Add64 y z)"
+			"Result": "(IR.MulUnsigned64 x (Add64 y z))"
 		},
 		{
 			"FamilyName": "IR2",
@@ -206,7 +206,7 @@
 			"SubName": "MultipleWithCommon",
 			"Expression": "IR.Add32 (IR.MulUnsigned32 x y) (IR.MulUnsigned32 x z)",
 			"Filter": "",
-			"Result": "IR.MulUnsigned32 x (Sub32 y z)"
+			"Result": "(IR.MulUnsigned32 x (Sub32 y z))"
 		},
 		{
 			"FamilyName": "IR2",
@@ -215,7 +215,25 @@
 			"SubName": "MultipleWithCommon",
 			"Expression": "IR.Add64 (IR.MulUnsigned64 x y) (IR.MulUnsigned64 x z)",
 			"Filter": "",
-			"Result": "IR.MulUnsigned64 x (Sub64 y z)"
+			"Result": "(IR.MulUnsigned64 x (Sub64 y z))"
+		},
+		{
+			"FamilyName": "IR2",
+			"Type": "StrengthReduction",
+			"Name": "MulUnsigned32",
+			"SubName": "ByPowerOfTwo",
+			"Expression": "IR.MulUnsigned32 x c",
+			"Filter": "IsPowerOfTwo32(c)",
+			"Result": "(ShiftLeft32 x [GetPowerOfTwo(c)])"
+		},
+		{
+			"FamilyName": "IR2",
+			"Type": "StrengthReduction",
+			"Name": "MulUnsigned64",
+			"SubName": "ByPowerOfTwo",
+			"Expression": "IR.MulUnsigned64 x c",
+			"Filter": "IsPowerOfTwo64(c)",
+			"Result": "(ShiftLeft64 x [GetPowerOfTwo(c)])"
 		}
 	]
 }

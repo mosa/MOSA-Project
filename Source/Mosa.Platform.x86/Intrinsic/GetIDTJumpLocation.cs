@@ -30,7 +30,7 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			Debug.Assert(operand.IsResolvedConstant);
 
-			int irq = (int)operand.ConstantSignedLongInteger;
+			int irq = (int)operand.ConstantSigned64;
 
 			// Find the method
 			var method = methodCompiler.TypeSystem.DefaultLinkerType.FindMethodByName("InterruptISR" + irq.ToString());

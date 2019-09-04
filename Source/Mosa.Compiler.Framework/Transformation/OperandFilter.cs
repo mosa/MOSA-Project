@@ -118,13 +118,13 @@ namespace Mosa.Compiler.Framework.Transformation
 
 			if (operand.IsResolvedConstant == IsResolvedConstant && HasSpecificConstant)
 			{
-				if (operand.IsInteger && operand.ConstantUnsignedLongInteger == IntegerConstant)
+				if (operand.IsInteger && operand.ConstantUnsigned64 == IntegerConstant)
 					return true;
 
-				if (operand.IsR8 && operand.ConstantDoubleFloatingPoint == DoubleConstant)
+				if (operand.IsR8 && operand.ConstantDouble == DoubleConstant)
 					return true;
 
-				if (operand.IsR4 && operand.ConstantSingleFloatingPoint == FloatConstant)
+				if (operand.IsR4 && operand.ConstantFloat == FloatConstant)
 					return true;
 			}
 

@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (operand2.IsResolvedConstant)
 			{
-				context.SetInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsignedInteger));
+				context.SetInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsigned32));
 			}
 			else
 			{
@@ -77,7 +77,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (operand2.IsResolvedConstant)
 			{
-				context.SetInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsignedLongInteger >> 32));
+				context.SetInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsigned64 >> 32));
 			}
 			else
 			{
@@ -89,7 +89,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (operand2.IsResolvedConstant)
 			{
-				context.AppendInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsignedInteger));
+				context.AppendInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsigned32));
 			}
 			else
 			{
@@ -101,7 +101,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (operand2.IsResolvedConstant)
 			{
-				context.AppendInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsignedLongInteger >> 32));
+				context.AppendInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsigned64 >> 32));
 			}
 			else
 			{

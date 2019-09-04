@@ -110,7 +110,7 @@ namespace Mosa.Compiler.Framework.Analysis
 				}
 				else if (operand.IsConstant && operand.IsInteger)
 				{
-					AddConstant(operand.ConstantUnsignedLongInteger);
+					AddConstant(operand.ConstantUnsigned64);
 				}
 				else if (operand.IsNull)
 				{

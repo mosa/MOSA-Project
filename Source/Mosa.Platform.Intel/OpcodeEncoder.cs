@@ -300,7 +300,7 @@ namespace Mosa.Platform.Intel
 
 		public bool Is8BitDisplacement(Operand displacement)
 		{
-			return displacement.ConstantSignedInteger >= sbyte.MinValue && displacement.ConstantSignedInteger <= sbyte.MaxValue;
+			return displacement.ConstantSigned32 >= sbyte.MinValue && displacement.ConstantSigned32 <= sbyte.MaxValue;
 		}
 
 		public OpcodeEncoder AppendMod(bool memory, Operand displacement)
@@ -330,9 +330,9 @@ namespace Mosa.Platform.Intel
 			Debug.Assert(displacement.IsConstant);
 
 			if (Is8BitDisplacement(displacement))
-				return AppendByteValue((byte)displacement.ConstantUnsignedInteger);
+				return AppendByteValue((byte)displacement.ConstantUnsigned32);
 
-			return AppendIntegerValue(displacement.ConstantUnsignedInteger);
+			return AppendIntegerValue(displacement.ConstantUnsigned32);
 		}
 
 		private OpcodeEncoder AppendConditionalDisplacement(Operand displacement)
@@ -344,19 +344,19 @@ namespace Mosa.Platform.Intel
 				return this;
 
 			if (Is8BitDisplacement(displacement))
-				return AppendByteValue((byte)displacement.ConstantUnsignedInteger);
+				return AppendByteValue((byte)displacement.ConstantUnsigned32);
 
-			return AppendIntegerValue(displacement.ConstantUnsignedInteger);
+			return AppendIntegerValue(displacement.ConstantUnsigned32);
 		}
 
 		public OpcodeEncoder AppendIntegerOfSize(Operand operand, InstructionSize size)
 		{
 			if (size == InstructionSize.Size32)
-				return AppendIntegerValue(operand.ConstantUnsignedInteger);
+				return AppendIntegerValue(operand.ConstantUnsigned32);
 			if (size == InstructionSize.Size8)
-				return AppendByteValue((byte)operand.ConstantUnsignedInteger);
+				return AppendByteValue((byte)operand.ConstantUnsigned32);
 			if (size == InstructionSize.Size16)
-				return AppendShortValue((ushort)operand.ConstantUnsignedInteger);
+				return AppendShortValue((ushort)operand.ConstantUnsigned32);
 
 			throw new CompilerException("Instruction size invalid");
 		}

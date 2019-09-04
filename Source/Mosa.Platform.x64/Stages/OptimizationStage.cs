@@ -54,7 +54,7 @@ namespace Mosa.Platform.x64.Stages
 				if (AreStatusFlagsUsed(context.Node) != TriState.No)
 					return;
 
-				var constant = CreateConstant(-context.Operand2.ConstantSignedInteger);
+				var constant = CreateConstant(-context.Operand2.ConstantSigned32);
 
 				context.SetInstruction(X64.Lea64, context.Result, context.Operand1, constant);
 				LeaSubstitutionCount++;

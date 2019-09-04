@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace Mosa.Utility.SourceCodeGenerator.Expression
+namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 {
 	public static class Tokenizer
 	{

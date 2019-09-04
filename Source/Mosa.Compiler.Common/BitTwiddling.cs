@@ -11,9 +11,9 @@ namespace Mosa.Compiler.Common
 			return (n & (n - 1)) == 0;
 		}
 
-		public static int GetPowerOfTwo(ulong n)
+		public static uint GetPowerOfTwo(ulong n)
 		{
-			int bits = 0;
+			uint bits = 0;
 			while (n != 0)
 			{
 				bits++;

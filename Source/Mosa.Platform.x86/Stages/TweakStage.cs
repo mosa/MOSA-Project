@@ -82,7 +82,7 @@ namespace Mosa.Platform.x86.Stages
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			if (operand1.IsConstant && operand2.IsConstant && operand1.ConstantUnsignedLongInteger == operand2.ConstantUnsignedLongInteger)
+			if (operand1.IsConstant && operand2.IsConstant && operand1.ConstantUnsigned64 == operand2.ConstantUnsigned64)
 			{
 				var v1 = AllocateVirtualRegister(operand1.Type);
 

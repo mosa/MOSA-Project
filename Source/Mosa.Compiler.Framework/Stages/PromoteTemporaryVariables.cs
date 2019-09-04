@@ -96,11 +96,11 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (node.Instruction == IRInstruction.MemorySet)
 			{
-				if (node.Operand3.ConstantUnsignedLongInteger == 4)
+				if (node.Operand3.ConstantUnsigned64 == 4)
 				{
 					return true;
 				}
-				else if (node.Operand3.ConstantUnsignedLongInteger == 8)
+				else if (node.Operand3.ConstantUnsigned64 == 8)
 				{
 					return true;
 				}
@@ -198,13 +198,13 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (node.Instruction == IRInstruction.MemorySet)
 			{
-				if (node.Operand3.ConstantUnsignedLongInteger == 4)
+				if (node.Operand3.ConstantUnsigned64 == 4)
 				{
 					trace?.Log($"BEFORE:\t{node}");
 					node.SetInstruction(IRInstruction.MoveInt32, virtualRegister, node.Operand2);
 					trace?.Log($"AFTER: \t{node}");
 				}
-				else if (node.Operand3.ConstantUnsignedLongInteger == 8)
+				else if (node.Operand3.ConstantUnsigned64 == 8)
 				{
 					trace?.Log($"BEFORE:\t{node}");
 					node.SetInstruction(IRInstruction.MoveInt64, virtualRegister, node.Operand2);

@@ -2,15 +2,15 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Utility.SourceCodeGenerator.Expression
+namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 {
-	public partial class ExpressionLabel
+	public partial class Label
 	{
-		public string Label { get; }
+		public string Name { get; }
 
-		public ExpressionLabel(string label)
+		public Label(string name)
 		{
-			Label = label;
+			Name = name;
 		}
 
 		public List<LabelPosition> Positions { get; } = new List<LabelPosition>();

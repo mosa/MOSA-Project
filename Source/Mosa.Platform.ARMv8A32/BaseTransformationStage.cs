@@ -44,14 +44,14 @@ namespace Mosa.Platform.ARMv8A32
 
 			if (operand2.IsResolvedConstant)
 			{
-				if (operand2.ConstantUnsignedLongInteger >= 0 && operand2.ConstantSignedInteger <= (1 << 13))
+				if (operand2.ConstantUnsigned64 >= 0 && operand2.ConstantSigned32 <= (1 << 13))
 				{
 					instruction = loadUpImm;
 				}
-				else if (operand2.ConstantUnsignedLongInteger < 0 && -operand2.ConstantSignedInteger <= (1 << 13))
+				else if (operand2.ConstantUnsigned64 < 0 && -operand2.ConstantSigned32 <= (1 << 13))
 				{
 					instruction = loadDownImm;
-					operand2 = CreateConstant((uint)-operand2.ConstantSignedInteger);
+					operand2 = CreateConstant((uint)-operand2.ConstantSigned32);
 				}
 				else
 				{
@@ -80,14 +80,14 @@ namespace Mosa.Platform.ARMv8A32
 
 			if (operand2.IsResolvedConstant)
 			{
-				if (operand2.ConstantUnsignedLongInteger >= 0 && operand2.ConstantSignedInteger <= (1 << 13))
+				if (operand2.ConstantUnsigned64 >= 0 && operand2.ConstantSigned32 <= (1 << 13))
 				{
 					instruction = storeUpImm;
 				}
-				else if (operand2.ConstantUnsignedLongInteger < 0 && -operand2.ConstantSignedInteger <= (1 << 13))
+				else if (operand2.ConstantUnsigned64 < 0 && -operand2.ConstantSigned32 <= (1 << 13))
 				{
 					instruction = loadDownImm;
-					operand2 = CreateConstant((uint)-operand2.ConstantSignedInteger);
+					operand2 = CreateConstant((uint)-operand2.ConstantSigned32);
 				}
 				else
 				{
@@ -173,9 +173,9 @@ namespace Mosa.Platform.ARMv8A32
 
 			if (operand.IsResolvedConstant)
 			{
-				if (ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsignedInteger, out uint immediate, out _, out _))
+				if (ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsigned32, out uint immediate, out _, out _))
 				{
-					if (operand.ConstantUnsignedLongInteger == immediate)
+					if (operand.ConstantUnsigned64 == immediate)
 					{
 						return operand;
 					}
@@ -198,29 +198,29 @@ namespace Mosa.Platform.ARMv8A32
 
 				var before = context.InsertBefore();
 
-				if (operand.ConstantUnsignedInteger <= 0xFFFF)
+				if (operand.ConstantUnsigned32 <= 0xFFFF)
 				{
 					before.SetInstruction(ARMv8A32.MovImm, v1, operand);
 
 					return v1;
 				}
 
-				if (ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsignedInteger, out uint immediate, out _, out _))
+				if (ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsigned32, out uint immediate, out _, out _))
 				{
 					before.SetInstruction(ARMv8A32.MovImmShift, v1, CreateConstant(immediate));
 
 					return v1;
 				}
 
-				if (ARMHelper.CalculateRotatedImmediateValue(~operand.ConstantUnsignedInteger, out uint immediate2, out _, out _))
+				if (ARMHelper.CalculateRotatedImmediateValue(~operand.ConstantUnsigned32, out uint immediate2, out _, out _))
 				{
 					before.SetInstruction(ARMv8A32.MvnImmShift, v1, CreateConstant(immediate2));
 
 					return v1;
 				}
 
-				before.SetInstruction(ARMv8A32.MovImm, v1, CreateConstant(operand.ConstantUnsignedInteger & 0xFFFF));
-				before.AppendInstruction(ARMv8A32.MovtImm, v1, CreateConstant(operand.ConstantUnsignedInteger >> 16));
+				before.SetInstruction(ARMv8A32.MovImm, v1, CreateConstant(operand.ConstantUnsigned32 & 0xFFFF));
+				before.AppendInstruction(ARMv8A32.MovtImm, v1, CreateConstant(operand.ConstantUnsigned32 >> 16));
 
 				return v1;
 			}
@@ -246,7 +246,7 @@ namespace Mosa.Platform.ARMv8A32
 
 			if (operand.IsR4)
 			{
-				var value = operand.ConstantSingleFloatingPoint;
+				var value = operand.ConstantFloat;
 
 				switch (value)
 				{
@@ -262,7 +262,7 @@ namespace Mosa.Platform.ARMv8A32
 			}
 			else if (operand.IsR4)
 			{
-				var value = operand.ConstantDoubleFloatingPoint;
+				var value = operand.ConstantDouble;
 
 				switch (value)
 				{

@@ -509,7 +509,7 @@ namespace Mosa.Platform.x86.Stages
 			/// Optimized shift when shift value is a constant and 32 or more, or zero
 			if (count.IsResolvedConstant)
 			{
-				var shift = count.ConstantUnsignedLongInteger & 0b111111;
+				var shift = count.ConstantUnsigned64 & 0b111111;
 
 				if (shift == 0)
 				{

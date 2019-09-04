@@ -16,52 +16,34 @@ namespace Mosa.Compiler.Framework
 		#region Properties
 
 		/// <summary>
-		/// Gets the constant double float point.
+		/// Gets the constant long integer.
 		/// </summary>
-		/// <value>
-		/// The constant double float point.
-		/// </value>
-		public double ConstantDoubleFloatingPoint { get; private set; }
-
-		/// <summary>
-		/// Gets or sets the constant signed integer.
-		/// </summary>
-		/// <value>
-		/// The constant signed integer.
-		/// </value>
-		public int ConstantSignedInteger { get { return (int)ConstantUnsignedLongInteger; } set { ConstantUnsignedLongInteger = (ulong)value; } }
-
-		/// <summary>
-		/// Gets or sets the constant signed long integer.
-		/// </summary>
-		/// <value>
-		/// The constant signed long integer.
-		/// </value>
-		public long ConstantSignedLongInteger { get { return (long)ConstantUnsignedLongInteger; } set { ConstantUnsignedLongInteger = (ulong)value; } }
-
-		/// <summary>
-		/// Gets the single double float point.
-		/// </summary>
-		/// <value>
-		/// The single double float point.
-		/// </value>
-		public float ConstantSingleFloatingPoint { get; private set; }
+		public ulong ConstantUnsigned64 { get; set; }
 
 		/// <summary>
 		/// Gets the constant integer.
 		/// </summary>
-		/// <value>
-		/// The constant integer.
-		/// </value>
-		public uint ConstantUnsignedInteger { get { return (uint)ConstantUnsignedLongInteger; } set { ConstantUnsignedLongInteger = value; } }
+		public uint ConstantUnsigned32 { get { return (uint)ConstantUnsigned64; } private set { ConstantUnsigned64 = value; } }
 
 		/// <summary>
-		/// Gets the constant long integer.
+		/// Gets or sets the constant signed integer.
 		/// </summary>
-		/// <value>
-		/// The constant long integer.
-		/// </value>
-		public ulong ConstantUnsignedLongInteger { get; set; }
+		public int ConstantSigned32 { get { return (int)ConstantUnsigned64; } private set { ConstantUnsigned64 = (ulong)value; } }
+
+		/// <summary>
+		/// Gets or sets the constant signed long integer.
+		/// </summary>
+		public long ConstantSigned64 { get { return (long)ConstantUnsigned64; } private set { ConstantUnsigned64 = (ulong)value; } }
+
+		/// <summary>
+		/// Gets the constant double float point.
+		/// </summary>
+		public double ConstantDouble { get; private set; }
+
+		/// <summary>
+		/// Gets the single double float point.
+		/// </summary>
+		public float ConstantFloat { get; private set; }
 
 		/// <summary>
 		/// Holds a list of instructions, which define this operand.
@@ -121,15 +103,15 @@ namespace Mosa.Compiler.Framework
 				if (!IsResolvedConstant)
 					return false;
 				else if (IsInteger || IsBoolean || IsChar || IsPointer)
-					return ConstantUnsignedLongInteger == 1;
+					return ConstantUnsigned64 == 1;
 				else if (IsStackLocal)
-					return ConstantUnsignedLongInteger == 1;
+					return ConstantUnsigned64 == 1;
 				else if (IsParameter)
-					return ConstantUnsignedLongInteger == 1;
+					return ConstantUnsigned64 == 1;
 				else if (IsR8)
-					return ConstantDoubleFloatingPoint == 1;
+					return ConstantDouble == 1;
 				else if (IsR4)
-					return ConstantSingleFloatingPoint == 1;
+					return ConstantFloat == 1;
 				else if (IsNull)
 					return false;
 
@@ -151,15 +133,15 @@ namespace Mosa.Compiler.Framework
 				if (!IsResolvedConstant)
 					return false;
 				else if (IsInteger || IsBoolean || IsChar || IsPointer)
-					return ConstantUnsignedLongInteger == 0;
+					return ConstantUnsigned64 == 0;
 				else if (IsStackLocal)
-					return ConstantUnsignedLongInteger == 0;
+					return ConstantUnsigned64 == 0;
 				else if (IsParameter)
-					return ConstantUnsignedLongInteger == 0;
+					return ConstantUnsigned64 == 0;
 				else if (IsR8)
-					return ConstantDoubleFloatingPoint == 0;
+					return ConstantDouble == 0;
 				else if (IsR4)
-					return ConstantSingleFloatingPoint == 0;
+					return ConstantFloat == 0;
 				else if (IsNull)
 					return true;
 
@@ -348,13 +330,13 @@ namespace Mosa.Compiler.Framework
 			{
 				Debug.Assert(IsResolved);
 
-				return ConstantSignedLongInteger;
+				return ConstantSigned64;
 			}
 			set
 			{
 				Debug.Assert(!IsResolved);
 
-				ConstantSignedLongInteger = value;
+				ConstantSigned64 = value;
 			}
 		}
 
@@ -466,7 +448,7 @@ namespace Mosa.Compiler.Framework
 			return new Operand(type)
 			{
 				IsConstant = true,
-				ConstantUnsignedLongInteger = value,
+				ConstantUnsigned64 = value,
 				IsNull = (type.IsReferenceType && value == 0),
 				IsResolved = true
 			};
@@ -490,7 +472,7 @@ namespace Mosa.Compiler.Framework
 			return new Operand(type)
 			{
 				IsConstant = true,
-				ConstantSingleFloatingPoint = value,
+				ConstantFloat = value,
 				IsNull = false,
 				IsResolved = true
 			};
@@ -501,7 +483,7 @@ namespace Mosa.Compiler.Framework
 			return new Operand(type)
 			{
 				IsConstant = true,
-				ConstantDoubleFloatingPoint = value,
+				ConstantDouble = value,
 				IsNull = false,
 				IsResolved = true
 			};
@@ -533,7 +515,7 @@ namespace Mosa.Compiler.Framework
 			return new Operand(typeSystem.BuiltIn.I4)
 			{
 				IsConstant = true,
-				ConstantSignedLongInteger = value,
+				ConstantSigned64 = value,
 				IsResolved = true
 			};
 		}
@@ -549,7 +531,7 @@ namespace Mosa.Compiler.Framework
 			return new Operand(typeSystem.BuiltIn.U4)
 			{
 				IsConstant = true,
-				ConstantSignedLongInteger = value,
+				ConstantSigned64 = value,
 				IsResolved = true
 			};
 		}
@@ -567,7 +549,7 @@ namespace Mosa.Compiler.Framework
 			return new Operand(typeSystem.BuiltIn.I8)
 			{
 				IsConstant = true,
-				ConstantUnsignedLongInteger = value,
+				ConstantUnsigned64 = value,
 				IsResolved = true
 			};
 		}
@@ -585,7 +567,7 @@ namespace Mosa.Compiler.Framework
 			return new Operand(typeSystem.BuiltIn.I8)
 			{
 				IsConstant = true,
-				ConstantSignedLongInteger = value,
+				ConstantSigned64 = value,
 				IsResolved = true
 			};
 		}
@@ -603,7 +585,7 @@ namespace Mosa.Compiler.Framework
 			return new Operand(typeSystem.BuiltIn.R4)
 			{
 				IsConstant = true,
-				ConstantSingleFloatingPoint = value,
+				ConstantFloat = value,
 				IsResolved = true
 			};
 		}
@@ -621,7 +603,7 @@ namespace Mosa.Compiler.Framework
 			return new Operand(typeSystem.BuiltIn.R8)
 			{
 				IsConstant = true,
-				ConstantDoubleFloatingPoint = value,
+				ConstantDouble = value,
 				IsResolved = true
 			};
 		}
@@ -744,7 +726,7 @@ namespace Mosa.Compiler.Framework
 				IsResolved = true,
 				Name = name,
 				IsThis = isThis,
-				ConstantSignedLongInteger = offset
+				ConstantSigned64 = offset
 			};
 		}
 
@@ -884,7 +866,7 @@ namespace Mosa.Compiler.Framework
 				{
 					IsConstant = true,
 					IsResolved = true,
-					ConstantUnsignedLongInteger = longOperand.ConstantUnsignedLongInteger & uint.MaxValue,
+					ConstantUnsigned64 = longOperand.ConstantUnsigned64 & uint.MaxValue,
 				};
 			}
 			else if (longOperand.IsVirtualRegister)
@@ -937,7 +919,7 @@ namespace Mosa.Compiler.Framework
 				{
 					IsConstant = true,
 					IsResolved = true,
-					ConstantUnsignedLongInteger = ((uint)(longOperand.ConstantUnsignedLongInteger >> 32)) & uint.MaxValue
+					ConstantUnsigned64 = ((uint)(longOperand.ConstantUnsigned64 >> 32)) & uint.MaxValue
 				};
 			}
 			else if (longOperand.IsVirtualRegister)
@@ -997,29 +979,29 @@ namespace Mosa.Compiler.Framework
 				}
 				else if (IsOnStack)
 				{
-					sb.AppendFormat("{0}", ConstantSignedLongInteger);
+					sb.AppendFormat("{0}", ConstantSigned64);
 				}
 				else if (IsUnsigned || IsBoolean || IsChar || IsPointer)
 				{
 					if (IsU8)
-						sb.AppendFormat("{0}", ConstantUnsignedLongInteger);
+						sb.AppendFormat("{0}", ConstantUnsigned64);
 					else
-						sb.AppendFormat("{0}", ConstantUnsignedInteger);
+						sb.AppendFormat("{0}", ConstantUnsigned32);
 				}
 				else if (IsSigned)
 				{
 					if (IsI8)
-						sb.AppendFormat("{0}", ConstantSignedLongInteger);
+						sb.AppendFormat("{0}", ConstantSigned64);
 					else
-						sb.AppendFormat("{0}", ConstantSignedInteger);
+						sb.AppendFormat("{0}", ConstantSigned32);
 				}
 				else if (IsR8)
 				{
-					sb.AppendFormat("{0}", ConstantDoubleFloatingPoint);
+					sb.AppendFormat("{0}", ConstantDouble);
 				}
 				else if (IsR4)
 				{
-					sb.AppendFormat("{0}", ConstantSingleFloatingPoint);
+					sb.AppendFormat("{0}", ConstantFloat);
 				}
 
 				sb.Append(' ');

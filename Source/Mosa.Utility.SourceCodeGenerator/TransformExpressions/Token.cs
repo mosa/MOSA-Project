@@ -4,7 +4,7 @@ using Mosa.Compiler.Common.Exceptions;
 using System;
 using System.Globalization;
 
-namespace Mosa.Utility.SourceCodeGenerator.Expression
+namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 {
 	public class Token
 	{

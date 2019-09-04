@@ -66,16 +66,19 @@
     <Compile Include="BuildIRInstructions.cs" />
     <Compile Include="BuildBaseTemplate.cs" />
     <Compile Include="DynamicJsonConverter.cs" />
-    <Compile Include="Expression\LabelPosition.cs" />
-    <Compile Include="Expression\ExpressionMethodFilter.cs" />
-    <Compile Include="Expression\ExpressionLabel.cs" />
-    <Compile Include="Expression\ExpressionLabels.cs" />
-    <Compile Include="Expression\ExpressionOperand.cs" />
-    <Compile Include="Expression\ExpressionNode.cs" />
-    <Compile Include="Expression\Transformation.cs" />
-    <Compile Include="Expression\Token.cs" />
-    <Compile Include="Expression\Tokenizer.cs" />
-    <Compile Include="Expression\TokenType.cs" />
+    <Compile Include="TransformExpressions\ResultParser.cs" />
+    <Compile Include="TransformExpressions\InstructionParser.cs" />
+    <Compile Include="TransformExpressions\Method.cs" />
+    <Compile Include="TransformExpressions\LabelPosition.cs" />
+    <Compile Include="TransformExpressions\FilterParser.cs" />
+    <Compile Include="TransformExpressions\Label.cs" />
+    <Compile Include="TransformExpressions\LabelSet.cs" />
+    <Compile Include="TransformExpressions\Operand.cs" />
+    <Compile Include="TransformExpressions\Instruction.cs" />
+    <Compile Include="TransformExpressions\Transformation.cs" />
+    <Compile Include="TransformExpressions\Token.cs" />
+    <Compile Include="TransformExpressions\Tokenizer.cs" />
+    <Compile Include="TransformExpressions\TokenType.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
