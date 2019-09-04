@@ -68,11 +68,11 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				}
 				else if (token.TokenType == TokenType.OpenBracket)
 				{
-					var innerNode = ParseExpression(tokens, index + 1);
+					var (method, end) = ParseExpression(tokens, index + 1);
 
-					index = innerNode.end;
+					index = end;
 
-					node.Operands.Add(new Operand(innerNode.method, node.Operands.Count));
+					node.Operands.Add(new Operand(method, node.Operands.Count));
 				}
 				else
 				{

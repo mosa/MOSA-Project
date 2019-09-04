@@ -311,17 +311,17 @@ namespace Mosa.Compiler.Framework
 			return null;
 		}
 
-		public List<BasicBlock> ReversePostOrder(BasicBlock head)
+		public List<BasicBlock> ReversePostorder(BasicBlock head)
 		{
 			var array = new BitArray(Count, false);
 			var result = new List<BasicBlock>();
-			var workList = new Queue<BasicBlock>();
+			var worklist = new Queue<BasicBlock>();
 
-			workList.Enqueue(head);
+			worklist.Enqueue(head);
 
-			while (workList.Count != 0)
+			while (worklist.Count != 0)
 			{
-				var current = workList.Dequeue();
+				var current = worklist.Dequeue();
 
 				if (!array.Get(current.Sequence))
 				{
@@ -330,7 +330,7 @@ namespace Mosa.Compiler.Framework
 
 					foreach (var next in current.NextBlocks)
 					{
-						workList.Enqueue(next);
+						worklist.Enqueue(next);
 					}
 				}
 			}

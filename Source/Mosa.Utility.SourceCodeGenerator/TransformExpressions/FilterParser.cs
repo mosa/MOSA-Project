@@ -57,11 +57,11 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 
 					if (next.TokenType == TokenType.OpenParens)
 					{
-						var innerNode = ParseMethod(tokens, index + 2);
+						var (innermethod, end) = ParseMethod(tokens, index + 2);
 
-						index = innerNode.end;
+						index = end;
 
-						method.Parameters.Add(new Operand(innerNode.method, method.Parameters.Count));
+						method.Parameters.Add(new Operand(innermethod, method.Parameters.Count));
 					}
 					else
 					{

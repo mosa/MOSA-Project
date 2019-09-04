@@ -231,7 +231,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			}
 		}
 
-		protected void ProcessNestedConditions(Operand operand, string parent, int nodenbr)
+		protected void ProcessNestedConditions(Operand operand, string parent, int nodeNbr)
 		{
 			if (!operand.IsInstruction)
 				return;
