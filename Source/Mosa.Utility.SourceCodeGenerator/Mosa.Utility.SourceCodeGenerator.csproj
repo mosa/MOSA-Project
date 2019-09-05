@@ -74,7 +74,7 @@
     <Compile Include="TransformExpressions\Label.cs" />
     <Compile Include="TransformExpressions\LabelSet.cs" />
     <Compile Include="TransformExpressions\Operand.cs" />
-    <Compile Include="TransformExpressions\Instruction.cs" />
+    <Compile Include="TransformExpressions\InstructionNode.cs" />
     <Compile Include="TransformExpressions\Transformation.cs" />
     <Compile Include="TransformExpressions\Token.cs" />
     <Compile Include="TransformExpressions\Tokenizer.cs" />

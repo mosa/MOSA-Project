@@ -59,12 +59,12 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				}
 				else if (token.TokenType == TokenType.OpenParens)
 				{
-					var innerNode = ParseInstructionNode(tokens, index + 1, ++nodeNbr);
+					var childNode = ParseInstructionNode(tokens, index + 1, nodeNbr + 1);
 
-					index = innerNode.end;
-					nodeNbr = innerNode.nodeNbr;
+					index = childNode.end;
+					nodeNbr = childNode.nodeNbr;
 
-					node.Operands.Add(new Operand(innerNode.node, node.Operands.Count));
+					node.Operands.Add(new Operand(childNode.node, node.Operands.Count));
 				}
 				else
 				{

@@ -20,15 +20,31 @@ namespace Mosa.Compiler.Framework.Transformation
 		public Operand ConstantZeroR4 { get { return MethodCompiler.ConstantZeroR4; } }
 		public Operand ConstantZeroR8 { get { return MethodCompiler.ConstantZeroR8; } }
 
+		public MosaType I4 { get; private set; }
+		public MosaType I8 { get; private set; }
+		public MosaType R4 { get; private set; }
+		public MosaType R8 { get; private set; }
+		public MosaType O { get; private set; }
+
+		public VirtualRegisters VirtualRegisters { get; private set; }
+
 		public TransformContext(MethodCompiler methodCompiler, TraceLog traceLog = null)
 		{
 			MethodCompiler = methodCompiler;
 			TraceLog = traceLog;
+
+			VirtualRegisters = MethodCompiler.VirtualRegisters;
+
+			I4 = TypeSystem.BuiltIn.I4;
+			I8 = TypeSystem.BuiltIn.I8;
+			R4 = TypeSystem.BuiltIn.R4;
+			R8 = TypeSystem.BuiltIn.R8;
+			O = TypeSystem.BuiltIn.Object;
 		}
 
 		public Operand AllocateVirtualRegister(MosaType type)
 		{
-			return MethodCompiler.VirtualRegisters.Allocate(type);
+			return VirtualRegisters.Allocate(type);
 		}
 
 		public bool ApplyTransform(Context context, BaseTransformation transformation, Stack<Operand> virtualRegisters = null)

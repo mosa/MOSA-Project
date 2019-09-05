@@ -71,13 +71,239 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine("");
 			Lines.AppendLine("\t\tpublic override void Transform(Context context, TransformContext transformContext)");
 			Lines.AppendLine("\t\t{");
-			Lines.AppendLine("\t\t}");
+			ProcessResultInstructionTree(transform);
 
+			Lines.AppendLine("\t\t}");
 			Lines.AppendLine("\t}");
 			Lines.AppendLine("}");
 
 			NodeNbrToNode.Clear();
 			OperandLabelToVariable.Clear();
+		}
+
+		private void ProcessResultInstructionTree(Transformation transform)
+		{
+			var postOrder = transform.Postorder(transform.ResultInstructionTree);
+			bool firstInstruction = true;
+
+			// Capture the result type
+			Lines.AppendLine("\t\t\tvar result = context.Result;");
+			Lines.AppendLine("");
+
+			// Capture all the labeled operands into variables
+			int labelCount = 0;
+			var labelToTemp = new Dictionary<string, int>();
+			foreach (var name in transform.LabelSet.Labels)
+			{
+				labelCount++;
+
+				var label = transform.LabelSet.GetExpressionLabel(name);
+
+				var labelPosition = label.Positions[0];
+				var labelParent = NodeNbrToNode[labelPosition.NodeNbr];
+				var labelOperandName = GetOperandName(labelPosition.OperandIndex);
+				var labelName = $"context.{labelParent}{labelOperandName}";
+
+				labelToTemp.Add(label.Name, labelCount);
+
+				Lines.AppendLine($"\t\t\tvar t{labelCount} = {labelName};");
+			}
+			if (labelCount != 0)
+				Lines.AppendLine("");
+
+			// Create virtual register for each child instruction
+			int virtualRegisterNbr = 0;
+			var nodeToResultVirtualRegister = new Dictionary<int, int>();
+
+			foreach (var node in postOrder)
+			{
+				if (node == transform.ResultInstructionTree)
+					continue;
+
+				virtualRegisterNbr++;
+				var resultType = DetermineResultType(node);
+
+				nodeToResultVirtualRegister.Add(node.NodeNbr, virtualRegisterNbr);
+
+				Lines.AppendLine($"\t\t\tvar v{virtualRegisterNbr} = transformContext.AllocateVirtualRegister(transformContext.{resultType});");
+			}
+			if (virtualRegisterNbr != 0)
+				Lines.AppendLine("");
+
+			// Create all the constants variables
+			int constantNbr = 0;
+			var constantToConstant = new Dictionary<string, int>();
+
+			foreach (var node in postOrder)
+			{
+				foreach (var operand in node.Operands)
+				{
+					string name = CreateConstantName(operand);
+
+					if (name == null)
+						continue;
+
+					if (constantToConstant.ContainsKey(name))
+						continue;
+
+					constantNbr++;
+
+					Lines.AppendLine($"\t\t\tvar c{constantNbr} = transformContext.CreateConstant({name});");
+
+					constantToConstant.Add(name, constantNbr);
+				}
+			}
+			if (constantNbr != 0)
+				Lines.AppendLine("");
+
+			// Evaluate functions
+			int evalNbr = 0;
+			var evalToEval = new Dictionary<string, int>();
+
+			foreach (var node in postOrder)
+			{
+				foreach (var operand in node.Operands)
+				{
+					string name = CreateExpression(operand);
+
+					if (name == null)
+						continue;
+
+					if (evalToEval.ContainsKey(name))
+						continue;
+
+					evalNbr++;
+
+					Lines.AppendLine($"\t\t\tvar e{constantNbr} = {name};");
+
+					evalToEval.Add(name, constantNbr);
+				}
+			}
+			if (evalNbr != 0)
+				Lines.AppendLine("");
+
+			foreach (var node in postOrder)
+			{
+				var sb = new StringBuilder();
+				foreach (var operand in node.Operands)
+				{
+					if (operand.IsLabel)
+					{
+						var name = labelToTemp[operand.LabelName];
+						sb.Append($"t{name}");
+					}
+					else if (operand.IsInteger)
+					{
+						var name = CreateConstantName(operand);
+						var nbr = constantToConstant[name];
+						sb.Append($"c{nbr}");
+					}
+					else if (operand.IsLong)
+					{
+						var name = CreateConstantName(operand);
+						var nbr = constantToConstant[name];
+						sb.Append($"c{nbr}");
+					}
+					else if (operand.IsDouble)
+					{
+						var name = CreateConstantName(operand);
+						var nbr = constantToConstant[name];
+						sb.Append($"c{nbr}");
+					}
+					else if (operand.IsFloat)
+					{
+						var name = CreateConstantName(operand);
+						var nbr = constantToConstant[name];
+						sb.Append($"c{nbr}");
+					}
+					else if (operand.IsInstruction)
+					{
+						var nbr = nodeToResultVirtualRegister[operand.InstructionNode.NodeNbr];
+						sb.Append($"v{nbr}");
+					}
+					else if (operand.IsMethod)
+					{
+						var name = CreateExpression(operand);
+						var nbr = evalToEval[name];
+						sb.Append($"e{nbr}");
+					}
+
+					sb.Append(", ");
+				}
+
+				if (node.Operands.Count != 0)
+					sb.Length -= 2;
+
+				var operands = sb.ToString();
+
+				var operation = firstInstruction ? "Set" : "Append";
+
+				if (!string.IsNullOrWhiteSpace(node.InstructionName))
+				{
+					var instruction = node.InstructionName.Replace("IR.", "IRInstruction."); ;
+					var result = node == transform.ResultInstructionTree ? "result" : $"v{nodeToResultVirtualRegister[node.NodeNbr]}";
+
+					Lines.AppendLine($"\t\t\tcontext.{operation}Instruction({instruction}, {result}, {operands});");
+				}
+				else
+				{
+					Lines.AppendLine($"\t\t\tcontext.{operation}Instruction(GetMove(result), result, {operands});");
+				}
+
+				firstInstruction = false;
+			}
+		}
+
+		private string CreateExpression(Operand operand)
+		{
+			return "Apples";
+		}
+
+		private static string CreateConstantName(Operand operand)
+		{
+			if (operand.IsInteger)
+			{
+				return $"{operand.Integer}u";
+			}
+			else if (operand.IsLong)
+			{
+				return $"{operand.Long}UL";
+			}
+			else if (operand.IsDouble)
+			{
+				return $"{operand.Double}d";
+			}
+			else if (operand.IsFloat)
+			{
+				return $"{operand.Float}f";
+			}
+
+			return null;
+		}
+
+		private string DetermineResultType(InstructionNode node)
+		{
+			if (!string.IsNullOrWhiteSpace(node.ResultType))
+				return node.ResultType;
+
+			if (node.InstructionName.EndsWith("32"))
+				return "I4";
+
+			if (node.InstructionName.EndsWith("64"))
+				return "I8";
+
+			if (node.InstructionName.EndsWith("R4"))
+				return "R4";
+
+			if (node.InstructionName.EndsWith("R8"))
+				return "R8";
+
+			if (node.InstructionName.EndsWith("Object"))
+				return "O";
+
+			// TODO
+
+			return "I8";    // default
 		}
 
 		private void ProcessDuplicatesInExpression(Transformation transform)

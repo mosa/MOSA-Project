@@ -9,31 +9,41 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 	{
 		public static InstructionNode Parse(List<Token> tokens)
 		{
-			return ParseInstructionNode(tokens, 0, 0).node;
+			return ParseInstructionNode(tokens, 0, 0, null).node;
 		}
 
-		private static (InstructionNode node, int end, int nodeNbr) ParseInstructionNode(List<Token> tokens, int start, int nodeNbr)
+		private static (InstructionNode node, int index, int nodeNbr) ParseInstructionNode(List<Token> tokens, int start, int nodeNbr, InstructionNode parent)
 		{
-			var node = new InstructionNode() { NodeNbr = nodeNbr };
+			var node = new InstructionNode() { NodeNbr = nodeNbr, Parent = parent };
 			var length = tokens.Count;
-
-			// skip first open parens, if one exists
-			if (tokens[start].TokenType == TokenType.OpenParens)
-				start++;
 
 			int index = start;
 			for (; index < length; index++)
 			{
 				var token = tokens[index];
 
-				if (token.TokenType == TokenType.CloseParens)
-					break;
-
-				if (token.TokenType == TokenType.Word && node.InstructionName == null)
+				if (token.TokenType == TokenType.OpenParens)
 				{
-					node.InstructionName = token.Value;
+					if (node.InstructionName == null)
+					{
+						index++;
+						node.InstructionName = tokens[index].Value;
+					}
+					else
+					{
+						var childNode = ParseInstructionNode(tokens, index, nodeNbr + 1, node);
+
+						index = childNode.index;
+						nodeNbr = childNode.nodeNbr;
+
+						node.Operands.Add(new Operand(childNode.node, node.Operands.Count));
+					}
 				}
-				else if (token.TokenType == TokenType.Word && node.InstructionName != null)
+				else if (token.TokenType == TokenType.CloseParens)
+				{
+					break;
+				}
+				else if (token.TokenType == TokenType.Word)
 				{
 					node.Operands.Add(new Operand(new Token(TokenType.Label, token.Position, token.Value), node.Operands.Count));
 				}
@@ -57,15 +67,6 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				{
 					node.Operands.Add(new Operand(token, node.Operands.Count));
 				}
-				else if (token.TokenType == TokenType.OpenParens)
-				{
-					var innerNode = ParseInstructionNode(tokens, index + 1, ++nodeNbr);
-
-					index = innerNode.end;
-					nodeNbr = innerNode.nodeNbr;
-
-					node.Operands.Add(new Operand(innerNode.node, node.Operands.Count));
-				}
 				else if (token.TokenType == TokenType.OpenBracket)
 				{
 					var (method, end) = ParseExpression(tokens, index + 1);
@@ -73,6 +74,12 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 					index = end;
 
 					node.Operands.Add(new Operand(method, node.Operands.Count));
+				}
+				else if (token.TokenType == TokenType.Greater)
+				{
+					index++; // skip to next token, which should be label
+					node.ResultType = tokens[index].Value;
+					index++; // skip to next token, which should be less
 				}
 				else
 				{

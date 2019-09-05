@@ -14,7 +14,10 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 
 		public override string ToString()
 		{
-			return $"{MethodName}";
+			if (IsNegated)
+				return $"!{MethodName}";
+			else
+				return $"{MethodName}";
 		}
 	}
 }
