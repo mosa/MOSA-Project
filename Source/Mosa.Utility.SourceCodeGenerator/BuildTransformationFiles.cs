@@ -84,6 +84,9 @@ namespace Mosa.Utility.SourceCodeGenerator
 		private void ProcessResultInstructionTree(Transformation transform)
 		{
 			var postOrder = transform.Postorder(transform.ResultInstructionTree);
+
+			//var postOrder = transform.Postorder(transform)
+
 			bool firstInstruction = true;
 
 			// Capture the result type

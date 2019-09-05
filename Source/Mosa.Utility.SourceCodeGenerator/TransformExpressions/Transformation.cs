@@ -46,43 +46,11 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			return $"{InstructionTree} & {FilterText} -> {ResultText}";
 		}
 
-		protected int CountNodes(InstructionNode node)
-		{
-			int count = 1;
-
-			foreach (var operand in node.Operands)
-			{
-				if (operand.IsInstruction)
-				{
-					count += CountNodes(operand.InstructionNode);
-				}
-			}
-
-			return count;
-		}
-
-		//protected int CountNodes(Method method)
-		//{
-		//	int count = 1;
-
-		//	foreach (var operand in method.Parameters)
-		//	{
-		//		if (operand.IsInstruction)
-		//		{
-		//			count += CountNodes(operand.Method);
-		//		}
-		//	}
-
-		//	return count;
-		//}
-
 		public List<InstructionNode> Preorder(InstructionNode tree)
 		{
-			int count = CountNodes(tree);
-
-			var array = new BitArray(count, false);
 			var result = new List<InstructionNode>();
 			var worklist = new Queue<InstructionNode>();
+			var contains = new HashSet<InstructionNode>();
 
 			worklist.Enqueue(tree);
 
@@ -90,10 +58,10 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			{
 				var current = worklist.Dequeue();
 
-				if (!array.Get(current.NodeNbr))
+				if (!contains.Contains(current))
 				{
 					result.Add(current);
-					array.Set(current.NodeNbr, true);
+					contains.Add(current);
 
 					foreach (var next in current.Operands)
 					{
@@ -158,9 +126,8 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 
 		public List<InstructionNode> Postorder(InstructionNode tree)
 		{
-			// not written for performance! (but that's okay here)
 			var result = new List<InstructionNode>();
-			var constains = new HashSet<InstructionNode>();
+			var contains = new HashSet<InstructionNode>();
 
 			var list = GetList(tree);
 
@@ -168,7 +135,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			{
 				foreach (var node in list)
 				{
-					if (constains.Contains(node))
+					if (contains.Contains(node))
 						continue;
 
 					bool children = true;
@@ -177,7 +144,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 					{
 						if (operand.IsInstruction)
 						{
-							if (!constains.Contains(operand.InstructionNode))
+							if (!contains.Contains(operand.InstructionNode))
 							{
 								children = false;
 								break;
@@ -188,7 +155,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 					if (children)
 					{
 						result.Add(node);
-						constains.Add(node);
+						contains.Add(node);
 						break;
 					}
 				}
@@ -197,53 +164,10 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			return result;
 		}
 
-		//public List<InstructionNode> Postorder(InstructionNode tree)
-		//{
-		//	// not written for performance! (but that's okay here)
-		//	int count = CountNodes(tree);
-		//	var result = new List<InstructionNode>(count);
-		//	var array = new BitArray(count, false);
-
-		//	var list = GetList(tree);
-
-		//	while (count != result.Count)
-		//	{
-		//		foreach (var node in list)
-		//		{
-		//			if (array.Get(node.NodeNbr))
-		//				continue;
-
-		//			bool children = true;
-
-		//			foreach (var operand in node.Operands)
-		//			{
-		//				if (operand.IsInstruction)
-		//				{
-		//					if (!array.Get(operand.InstructionNode.NodeNbr))
-		//					{
-		//						children = false;
-		//						break;
-		//					}
-		//				}
-		//			}
-
-		//			if (children)
-		//			{
-		//				result.Add(node);
-		//				array.Set(node.NodeNbr, true);
-		//				break;
-		//			}
-		//		}
-		//	}
-
-		//	return result;
-		//}
-
 		public List<Method> Postorder(Method tree)
 		{
-			// not written for performance! (but that's okay here)
 			var result = new List<Method>();
-			var constains = new HashSet<Method>();
+			var contains = new HashSet<Method>();
 
 			var list = GetList(tree);
 
@@ -251,7 +175,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			{
 				foreach (var node in list)
 				{
-					if (constains.Contains(node))
+					if (contains.Contains(node))
 						continue;
 
 					bool children = true;
@@ -260,7 +184,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 					{
 						if (operand.IsMethod)
 						{
-							if (!constains.Contains(operand.Method))
+							if (!contains.Contains(operand.Method))
 							{
 								children = false;
 								break;
@@ -271,7 +195,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 					if (children)
 					{
 						result.Add(node);
-						constains.Add(node);
+						contains.Add(node);
 						break;
 					}
 				}
