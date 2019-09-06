@@ -68,7 +68,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets a value indicating whether [is 64 bit integer].
 		/// </summary>
-		public bool Is64BitInteger { get { return IsLong; } }
+		public bool Is64BitInteger { get { return IsLong || UnderlyingType.IsUI8; } }
 
 		public bool IsArray { get { return Type.IsArray; } }
 
@@ -168,7 +168,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public bool IsLabel { get; private set; }
 
-		public bool IsLong { get { return UnderlyingType.IsUI8; } }
+		public bool IsLong { get { return Type.IsUI8; } }
 
 		public bool IsManagedPointer { get { return Type.IsManagedPointer; } }
 
@@ -776,7 +776,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateLowSplitForLong(Operand longOperand, int index, TypeSystem typeSystem)
 		{
-			Debug.Assert(longOperand.IsLong);
+			Debug.Assert(longOperand.Is64BitInteger);
 			Debug.Assert(longOperand.LongParent == null);
 			Debug.Assert(longOperand.Low == null);
 
@@ -829,7 +829,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateHighSplitForLong(Operand longOperand, int index, TypeSystem typeSystem)
 		{
-			Debug.Assert(longOperand.IsLong);
+			Debug.Assert(longOperand.Is64BitInteger);
 			Debug.Assert(longOperand.LongParent == null || longOperand.LongParent == longOperand);
 			Debug.Assert(longOperand.High == null);
 
