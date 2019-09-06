@@ -157,11 +157,11 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsI4 { get { return Type.IsI4; } }
 
-		public bool IsI8 { get { return UnderlyingType.IsI8; } }
+		public bool IsI8 { get { return Type.IsI8; } }
 
-		public bool IsInt { get { return UnderlyingType.IsUI4; } }
+		public bool IsInt { get { return Type.IsUI4; } }
 
-		public bool IsInteger { get { return UnderlyingType.IsInteger; } }
+		public bool IsInteger { get { return Type.IsInteger; } }
 
 		/// <summary>
 		/// Determines if the operand is a label operand.
