@@ -774,6 +774,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		{
 			if (type.IsEnum)
 				type = type.GetEnumUnderlyingType();
+
 			switch (type.TypeCode)
 			{
 				// 1 byte

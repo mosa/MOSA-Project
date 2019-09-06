@@ -58,9 +58,6 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets or sets the high operand.
 		/// </summary>
-		/// <value>
-		/// The high operand.
-		/// </value>
 		public Operand High { get; private set; }
 
 		/// <summary>
@@ -71,18 +68,15 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets a value indicating whether [is 64 bit integer].
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if [is signed integer]; otherwise, <c>false</c>.
-		/// </value>
 		public bool Is64BitInteger { get { return IsLong; } }
 
 		public bool IsArray { get { return Type.IsArray; } }
 
 		public bool IsBoolean { get { return Type.IsBoolean; } }
 
-		public bool IsByte { get { return UnderlyingType.IsUI1; } }
+		public bool IsByte { get { return Type.IsUI1; } }
 
-		public bool IsChar { get { return UnderlyingType.IsChar; } }
+		public bool IsChar { get { return Type.IsChar; } }
 
 		/// <summary>
 		/// Determines if the operand is a constant variable.
@@ -92,9 +86,6 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets a value indicating whether [is constant one].
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if [is constant one]; otherwise, <c>false</c>.
-		/// </value>
 		/// <exception cref="CompilerException"></exception>
 		public bool IsConstantOne
 		{
@@ -122,9 +113,6 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets a value indicating whether [is constant zero].
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if [is constant zero]; otherwise, <c>false</c>.
-		/// </value>
 		/// <exception cref="CompilerException"></exception>
 		public bool IsConstantZero
 		{
@@ -161,13 +149,13 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsFunctionPointer { get { return Type.IsFunctionPointer; } }
 
-		public bool IsI { get { return UnderlyingType.IsI; } }
+		public bool IsI { get { return Type.IsI; } }
 
-		public bool IsI1 { get { return UnderlyingType.IsI1; } }
+		public bool IsI1 { get { return Type.IsI1; } }
 
-		public bool IsI2 { get { return UnderlyingType.IsI2; } }
+		public bool IsI2 { get { return Type.IsI2; } }
 
-		public bool IsI4 { get { return UnderlyingType.IsI4; } }
+		public bool IsI4 { get { return Type.IsI4; } }
 
 		public bool IsI8 { get { return UnderlyingType.IsI8; } }
 
@@ -187,17 +175,11 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets a value indicating whether [is null].
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if [is null]; otherwise, <c>false</c>.
-		/// </value>
 		public bool IsNull { get; private set; }
 
 		/// <summary>
 		/// Gets a value indicating whether this instance is on stack.
 		/// </summary>
-		/// <value>
-		/// <c>true</c> if this instance is on stack; otherwise, <c>false</c>.
-		/// </value>
 		public bool IsOnStack { get { return IsStackLocal || IsParameter; } }
 
 		/// <summary>
@@ -209,13 +191,13 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsPointer { get { return Type.IsPointer; } }
 
-		public bool IsR { get { return UnderlyingType.IsR; } }
+		public bool IsR { get { return Type.IsR; } }
 
 		public bool IsFloatingPoint { get { return IsR; } }
 
-		public bool IsR4 { get { return UnderlyingType.IsR4; } }
+		public bool IsR4 { get { return Type.IsR4; } }
 
-		public bool IsR8 { get { return UnderlyingType.IsR8; } }
+		public bool IsR8 { get { return Type.IsR8; } }
 
 		public bool IsReferenceType { get { return Type.IsReferenceType; } }
 
@@ -224,9 +206,6 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets a value indicating whether this instance is resolved constant.
 		/// </summary>
-		/// <value>
-		/// <c>true</c> if this instance is resolved constant; otherwise, <c>false</c>.
-		/// </value>
 		public bool IsResolvedConstant { get { return IsConstant && IsResolved; } }
 
 		/// <summary>
@@ -241,9 +220,6 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets a value indicating whether this instance has long parent.
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if this instance has long parent; otherwise, <c>false</c>.
-		/// </value>
 		public bool HasLongParent { get { return LongParent != null; } }
 
 		/// <summary>
@@ -256,13 +232,13 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public bool IsSymbol { get; private set; }
 
-		public bool IsU { get { return UnderlyingType.IsU; } }
+		public bool IsU { get { return Type.IsU; } }
 
-		public bool IsU1 { get { return UnderlyingType.IsU1; } }
+		public bool IsU1 { get { return Type.IsU1; } }
 
-		public bool IsU2 { get { return UnderlyingType.IsU2; } }
+		public bool IsU2 { get { return Type.IsU2; } }
 
-		public bool IsU4 { get { return UnderlyingType.IsU4; } }
+		public bool IsU4 { get { return Type.IsU4; } }
 
 		public bool IsU8 { get { return UnderlyingType.IsU8; } }
 
@@ -284,8 +260,6 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets a value indicating whether this instance is this.
 		/// </summary>
-		/// <value>
-		///   <c>true</c> if this instance is this; otherwise, <c>false</c>.
 		/// </value>
 		public bool IsThis { get; private set; }
 
@@ -297,33 +271,21 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets or sets the low operand.
 		/// </summary>
-		/// <value>
-		/// The low operand.
-		/// </value>
 		public Operand Low { get; private set; }
 
 		/// <summary>
 		/// Retrieves the method.
 		/// </summary>
-		/// <value>
-		/// The method.
-		/// </value>
 		public MosaMethod Method { get; private set; }
 
 		/// <summary>
 		/// Gets the name.
 		/// </summary>
-		/// <value>
-		/// The name.
-		/// </value>
 		public string Name { get; private set; }
 
 		/// <summary>
 		/// Gets or sets the offset.
 		/// </summary>
-		/// <value>
-		/// The offset.
-		/// </value>
 		public long Offset
 		{
 			get
@@ -346,27 +308,13 @@ namespace Mosa.Compiler.Framework
 		public PhysicalRegister Register { get; private set; }
 
 		/// <summary>
-		/// Gets the type of the shift.
-		/// </summary>
-		/// <value>
-		/// The type of the shift.
-		/// </value>
-		public ShiftType ShiftType { get; }
-
-		/// <summary>
 		/// Gets the split64 parent.
 		/// </summary>
-		/// <value>
-		/// The split64 parent.
-		/// </value>
 		public Operand LongParent { get; private set; }
 
 		/// <summary>
 		/// Gets the string data.
 		/// </summary>
-		/// <value>
-		/// The string data.
-		/// </value>
 		public string StringData { get; private set; }
 
 		/// <summary>
@@ -411,18 +359,6 @@ namespace Mosa.Compiler.Framework
 		{
 			//Debug.Assert(type != null);
 			Type = type;
-		}
-
-		/// <summary>
-		/// Prevents a default instance of the <see cref="Operand"/> class from being created.
-		/// </summary>
-		/// <param name="shiftType">Type of the shift.</param>
-		private Operand(ShiftType shiftType)
-				: this()
-		{
-			ShiftType = shiftType;
-			IsShift = true;
-			IsResolved = true;
 		}
 
 		#endregion Construction
@@ -675,16 +611,6 @@ namespace Mosa.Compiler.Framework
 				Name = name,
 				IsConstant = true
 			};
-		}
-
-		/// <summary>
-		/// Creates the shifter.
-		/// </summary>
-		/// <param name="shiftType">Type of the shift.</param>
-		/// <returns></returns>
-		public static Operand CreateShifter(ShiftType shiftType)
-		{
-			return new Operand(shiftType);
 		}
 
 		/// <summary>
@@ -981,19 +907,12 @@ namespace Mosa.Compiler.Framework
 				{
 					sb.AppendFormat("{0}", ConstantSigned64);
 				}
-				else if (IsUnsigned || IsBoolean || IsChar || IsPointer)
+				else if (IsBoolean || IsChar || IsPointer || IsInteger || IsLong)
 				{
 					if (IsU8)
 						sb.AppendFormat("{0}", ConstantUnsigned64);
 					else
 						sb.AppendFormat("{0}", ConstantUnsigned32);
-				}
-				else if (IsSigned)
-				{
-					if (IsI8)
-						sb.AppendFormat("{0}", ConstantSigned64);
-					else
-						sb.AppendFormat("{0}", ConstantSigned32);
 				}
 				else if (IsR8)
 				{

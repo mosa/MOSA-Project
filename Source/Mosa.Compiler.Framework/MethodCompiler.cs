@@ -619,6 +619,12 @@ namespace Mosa.Compiler.Framework
 		/// <param name="operandHigh">The operand high.</param>
 		public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 		{
+			//if (operand.IsParameter)
+			//{
+			//	operandLow = operand;
+			//	operandHigh = Operand.CreateStackParameter(TypeSystem.BuiltIn.U4, operand.Index, operand.Name + " (High)", false, (int)operand.Offset + 4);
+			//}
+			//else
 			if (operand.Is64BitInteger)
 			{
 				SplitLongOperand(operand);

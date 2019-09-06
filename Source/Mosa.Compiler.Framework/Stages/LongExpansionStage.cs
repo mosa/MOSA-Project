@@ -410,13 +410,13 @@ namespace Mosa.Compiler.Framework.Stages
 			var result = context.Result;
 			var operand1 = context.Operand1;
 
-			MethodCompiler.SplitLongOperand(operand1, out Operand op0Low, out Operand op0High);
-
 			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.SetInstruction(IRInstruction.LoadParamInt32, resultLow, op0Low);
-			context.AppendInstruction(IRInstruction.LoadParamInt32, resultHigh, op0High);
+			MethodCompiler.SplitLongOperand(operand1, out Operand op1Low, out Operand op1High);
+
+			context.SetInstruction(IRInstruction.LoadParamInt32, resultLow, op1Low);
+			context.AppendInstruction(IRInstruction.LoadParamInt32, resultHigh, op1High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 

@@ -47,7 +47,9 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 					AddPosition(operand.LabelName, node.NodeNbr, operand.Index);
 
 					if (!Labels.Contains(operand.LabelName))
+					{
 						Labels.Add(operand.LabelName);
+					}
 				}
 
 				if (operand.IsInstruction)

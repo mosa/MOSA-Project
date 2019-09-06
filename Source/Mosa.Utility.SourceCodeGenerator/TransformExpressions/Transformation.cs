@@ -203,5 +203,76 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 
 			return result;
 		}
+
+		public List<Method> GetAllInstructionNodeMethods(InstructionNode tree)
+		{
+			var result = new List<Method>();
+			var worklist = new Stack<InstructionNode>();
+
+			worklist.Push(tree);
+
+			while (worklist.Count != 0)
+			{
+				var node = worklist.Pop();
+
+				foreach (var operand in node.Operands)
+				{
+					if (operand.IsInstruction)
+					{
+						worklist.Push(operand.InstructionNode);
+					}
+					if (operand.IsMethod)
+					{
+						result.Add(operand.Method);
+					}
+				}
+			}
+
+			return result;
+		}
+
+		public List<Operand> GetAllOperands(InstructionNode tree)
+		{
+			var result = new List<Operand>();
+			var worklistNode = new Stack<InstructionNode>();
+			var worklistMethod = new Stack<Method>();
+
+			worklistNode.Push(tree);
+
+			while (worklistNode.Count != 0 || worklistMethod.Count != 0)
+			{
+				while (worklistNode.Count != 0)
+				{
+					var node = worklistNode.Pop();
+
+					foreach (var operand in node.Operands)
+					{
+						if (operand.IsInstruction)
+						{
+							worklistNode.Push(operand.InstructionNode);
+						}
+						if (operand.IsMethod)
+						{
+							worklistMethod.Push(operand.Method);
+						}
+					}
+				}
+
+				while (worklistMethod.Count != 0)
+				{
+					var node = worklistNode.Pop();
+
+					foreach (var operand in node.Operands)
+					{
+						if (operand.IsMethod)
+						{
+							worklistMethod.Push(operand.Method);
+						}
+					}
+				}
+			}
+
+			return result;
+		}
 	}
 }

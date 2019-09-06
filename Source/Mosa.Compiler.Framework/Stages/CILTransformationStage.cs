@@ -1252,7 +1252,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				operands.Insert(0, newThis);
 			}
-			else if (result.Type.IsValueType)
+			else if (result.IsValueType)
 			{
 				//Debug.Assert(result.Uses.Count <= 1, "Usages too high");
 
@@ -1268,7 +1268,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				Debug.Assert(result.Type.IsReferenceType);
+				Debug.Assert(result.IsReferenceType);
 
 				var runtimeTypeHandle = GetRuntimeTypeHandle(classType);
 				var size = CreateConstant(TypeLayout.GetTypeSize(classType));
