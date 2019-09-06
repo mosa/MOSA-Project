@@ -213,9 +213,9 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public bool IsShift { get; }
 
-		public bool IsShort { get { return UnderlyingType.IsUI2; } }
+		public bool IsShort { get { return Type.IsUI2; } }
 
-		public bool IsSigned { get { return UnderlyingType.IsSigned; } }
+		public bool IsSigned { get { return Type.IsSigned; } }
 
 		/// <summary>
 		/// Gets a value indicating whether this instance has long parent.
