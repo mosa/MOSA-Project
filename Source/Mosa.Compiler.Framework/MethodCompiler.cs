@@ -621,7 +621,7 @@ namespace Mosa.Compiler.Framework
 		{
 			//if (operand.IsParameter)
 			//{
-			//	operandLow = operand;
+			//	operandLow = Operand.CreateStackParameter(TypeSystem.BuiltIn.U4, operand.Index, operand.Name + " (Low)", false, (int)operand.Offset);
 			//	operandHigh = Operand.CreateStackParameter(TypeSystem.BuiltIn.U4, operand.Index, operand.Name + " (High)", false, (int)operand.Offset + 4);
 			//}
 			//else
