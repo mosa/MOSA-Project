@@ -240,7 +240,7 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsU4 { get { return Type.IsU4; } }
 
-		public bool IsU8 { get { return UnderlyingType.IsU8; } }
+		public bool IsU8 { get { return Type.IsU8; } }
 
 		public bool IsUnmanagedPointer { get { return Type.IsUnmanagedPointer; } }
 
@@ -249,9 +249,9 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public bool IsUnresolvedConstant { get { return IsConstant && !IsResolved; } }
 
-		public bool IsUnsigned { get { return UnderlyingType.IsUnsigned; } }
+		public bool IsUnsigned { get { return Type.IsUnsigned; } }
 
-		public bool IsValueType { get { return UnderlyingType.IsValueType; } }
+		public bool IsValueType { get { return Type.IsValueType; } }
 
 		public bool IsHigh { get { return LongParent.High == this; } }
 
