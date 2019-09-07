@@ -4,10 +4,22 @@ using System.Text;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
-	internal class SignatureName
+	public class SignatureName
 	{
+
+		// For better GDB, ELF, DWARF and exported EntryPoints, we want customize the SymbolName for better usability.
+		public delegate string GetSignatureDelegate(string name, MosaMethodSignature sig, bool shortSig, bool includeReturnType = true);
+		public static GetSignatureDelegate GetSignatureOverride;
+
 		public static string GetSignature(string name, MosaMethodSignature sig, bool shortSig, bool includeReturnType = true)
 		{
+			if (GetSignatureOverride != null)
+			{
+				var signature = GetSignatureOverride(name, sig, shortSig, includeReturnType);
+				if (!string.IsNullOrEmpty(signature))
+					return signature;
+			}
+
 			var result = new StringBuilder();
 			if (shortSig)
 			{
@@ -50,7 +62,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
-		public static void UpdateType(MosaType type)
+		internal static void UpdateType(MosaType type)
 		{
 			var result = new StringBuilder();
 
