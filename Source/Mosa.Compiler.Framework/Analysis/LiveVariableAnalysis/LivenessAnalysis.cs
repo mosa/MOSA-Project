@@ -94,11 +94,11 @@ namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 					if (node.IsEmpty)
 						continue;
 
-					string log = node.Offset.ToString() + " = " + node;
+					string log = $"{node.Offset} = {node}";
 
 					if (node.IsBlockStartInstruction)
 					{
-						log = log + " # " + block;
+						log = $"{log} # {block}";
 					}
 
 					numberTrace.Log(log);

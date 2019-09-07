@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 
 		public override string ToString()
 		{
-			return "[" + Start + ", " + End + "]";
+			return $"[{Start}, {End}]";
 		}
 	}
 }

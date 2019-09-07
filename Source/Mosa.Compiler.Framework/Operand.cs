@@ -147,12 +147,10 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public bool IsCPURegister { get; private set; }
 
+		public bool IsEnum { get; private set; }
 		public bool IsFloatingPoint { get { return IsR; } }
 
 		public bool IsFunctionPointer { get; private set; }
-
-		public bool IsEnum { get; private set; }
-
 		public bool IsHigh { get { return LongParent.High == this; } }
 
 		public bool IsI { get; private set; }
@@ -226,6 +224,8 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public bool IsStaticField { get; private set; }
 
+		public bool IsString { get; private set; }
+
 		/// <summary>
 		/// Determines if the operand is a symbol operand.
 		/// </summary>
@@ -246,7 +246,6 @@ namespace Mosa.Compiler.Framework
 		public bool IsU4 { get; private set; }
 
 		public bool IsU8 { get; private set; }
-
 		public bool IsUnmanagedPointer { get; private set; }
 
 		/// <summary>
@@ -284,21 +283,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets or sets the offset.
 		/// </summary>
-		public long Offset
-		{
-			get
-			{
-				Debug.Assert(IsResolved);
-
-				return ConstantSigned64;
-			}
-			set
-			{
-				Debug.Assert(!IsResolved);
-
-				ConstantSigned64 = value;
-			}
-		}
+		public long Offset { get { Debug.Assert(IsResolved); return ConstantSigned64; } set { Debug.Assert(!IsResolved); ConstantSigned64 = value; } }
 
 		/// <summary>
 		/// Retrieves the register, where the operand is located.
@@ -338,6 +323,7 @@ namespace Mosa.Compiler.Framework
 			IsStaticField = false;
 			IsParameter = false;
 			IsResolved = false;
+			IsString = false;
 		}
 
 		/// <summary>
@@ -786,6 +772,7 @@ namespace Mosa.Compiler.Framework
 				IsSymbol = true,
 				Name = name,
 				StringData = data,
+				IsString = true,
 				IsConstant = true
 			};
 		}

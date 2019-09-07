@@ -1098,8 +1098,8 @@ namespace Mosa.Compiler.Framework.Stages
 			 * be replaced by a proper VM call.
 			 */
 
-			string symbolName = node.Operand1.Name;
-			string stringdata = node.Operand1.StringData;
+			var symbolName = node.Operand1.Name;
+			var stringdata = node.Operand1.StringData;
 
 			node.SetInstruction(Select(node.Result, IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, node.Operand1);
 
@@ -1107,7 +1107,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var stream = symbol.Stream;
 
 			// Type Definition and sync block
-			Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, symbol, 0, Metadata.TypeDefinition + "System.String", 0);
+			Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, symbol, 0, $"{Metadata.TypeDefinition}System.String", 0);
 
 			stream.WriteZeroBytes(NativePointerSize * 2);
 
@@ -2110,14 +2110,14 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (node.InvokeMethod.IsInternal)
 			{
-				var methodName = node.InvokeMethod.DeclaringType.FullName + ":" + node.InvokeMethod.Name;
+				var methodName = $"{node.InvokeMethod.DeclaringType.FullName}:{node.InvokeMethod.Name}";
 
 				var intrinsic = MethodCompiler.Compiler.GetInstrincMethod(methodName);
 
 				if (intrinsic == null)
 				{
 					// special case for plugging constructors
-					intrinsic = MethodCompiler.Compiler.GetInstrincMethod(node.InvokeMethod.DeclaringType.FullName + "::" + node.InvokeMethod.Name);
+					intrinsic = MethodCompiler.Compiler.GetInstrincMethod($"{node.InvokeMethod.DeclaringType.FullName}::{node.InvokeMethod.Name}");
 				}
 
 				if (intrinsic != null)

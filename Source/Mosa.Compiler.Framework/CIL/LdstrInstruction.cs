@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			string data = decoder.TypeSystem.LookupUserString(decoder.Method.Module, token);
 
-			string symbolName = "$ldstr$" + decoder.Method.Module.Name + "$" + token;
+			string symbolName = $"$ldstr${decoder.Method.Module.Name}${token}";
 
 			node.Operand1 = Operand.CreateStringSymbol(symbolName, data, decoder.TypeSystem);
 
