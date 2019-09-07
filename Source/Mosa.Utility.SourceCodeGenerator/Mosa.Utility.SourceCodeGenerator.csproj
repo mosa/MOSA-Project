@@ -55,7 +55,7 @@
     <Compile Include="BuildESP32Instructions.cs" />
     <Compile Include="BuildX64InstructionFiles.cs" />
     <Compile Include="BuildX64.cs" />
-    <Compile Include="BuildRules.cs" />
+    <Compile Include="BuildTransformationFiles.cs" />
     <Compile Include="BuildX64Instructions.cs" />
     <Compile Include="BuildCommonInstructionFiles.cs" />
     <Compile Include="BuildX86InstructionFiles.cs" />
@@ -66,7 +66,19 @@
     <Compile Include="BuildIRInstructions.cs" />
     <Compile Include="BuildBaseTemplate.cs" />
     <Compile Include="DynamicJsonConverter.cs" />
-    <Compile Include="Identifiers.cs" />
+    <Compile Include="TransformExpressions\ResultParser.cs" />
+    <Compile Include="TransformExpressions\InstructionParser.cs" />
+    <Compile Include="TransformExpressions\Method.cs" />
+    <Compile Include="TransformExpressions\LabelPosition.cs" />
+    <Compile Include="TransformExpressions\FilterParser.cs" />
+    <Compile Include="TransformExpressions\Label.cs" />
+    <Compile Include="TransformExpressions\LabelSet.cs" />
+    <Compile Include="TransformExpressions\Operand.cs" />
+    <Compile Include="TransformExpressions\InstructionNode.cs" />
+    <Compile Include="TransformExpressions\Transformation.cs" />
+    <Compile Include="TransformExpressions\Token.cs" />
+    <Compile Include="TransformExpressions\Tokenizer.cs" />
+    <Compile Include="TransformExpressions\TokenType.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>

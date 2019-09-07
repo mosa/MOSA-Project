@@ -168,6 +168,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{A406F567-5
 	ProjectSection(SolutionItems) = preProject
 		Data\ARMv8A32-Instructions.json = Data\ARMv8A32-Instructions.json
 		Data\IR-Instructions.json = Data\IR-Instructions.json
+		Data\IR-Optimizations.json = Data\IR-Optimizations.json
 		Data\X64-Instructions.json = Data\X64-Instructions.json
 		Data\X86-Instructions.json = Data\X86-Instructions.json
 	EndProjectSection

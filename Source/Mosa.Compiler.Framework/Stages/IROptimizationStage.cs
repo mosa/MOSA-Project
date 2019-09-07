@@ -463,17 +463,17 @@ namespace Mosa.Compiler.Framework.Stages
 
 			switch (node.ConditionCode)
 			{
-				case ConditionCode.Equal: compareResult = (op1.ConstantUnsignedLongInteger == op2.ConstantUnsignedLongInteger); break;
-				case ConditionCode.NotEqual: compareResult = (op1.ConstantUnsignedLongInteger != op2.ConstantUnsignedLongInteger); break;
-				case ConditionCode.GreaterOrEqual: compareResult = (op1.ConstantUnsignedLongInteger >= op2.ConstantUnsignedLongInteger); break;
-				case ConditionCode.GreaterThan: compareResult = (op1.ConstantUnsignedLongInteger > op2.ConstantUnsignedLongInteger); break;
-				case ConditionCode.LessOrEqual: compareResult = (op1.ConstantUnsignedLongInteger <= op2.ConstantUnsignedLongInteger); break;
-				case ConditionCode.LessThan: compareResult = (op1.ConstantUnsignedLongInteger < op2.ConstantUnsignedLongInteger); break;
+				case ConditionCode.Equal: compareResult = (op1.ConstantUnsigned64 == op2.ConstantUnsigned64); break;
+				case ConditionCode.NotEqual: compareResult = (op1.ConstantUnsigned64 != op2.ConstantUnsigned64); break;
+				case ConditionCode.GreaterOrEqual: compareResult = (op1.ConstantUnsigned64 >= op2.ConstantUnsigned64); break;
+				case ConditionCode.GreaterThan: compareResult = (op1.ConstantUnsigned64 > op2.ConstantUnsigned64); break;
+				case ConditionCode.LessOrEqual: compareResult = (op1.ConstantUnsigned64 <= op2.ConstantUnsigned64); break;
+				case ConditionCode.LessThan: compareResult = (op1.ConstantUnsigned64 < op2.ConstantUnsigned64); break;
 
-				case ConditionCode.UnsignedGreaterThan: compareResult = (op1.ConstantUnsignedLongInteger > op2.ConstantUnsignedLongInteger); break;
-				case ConditionCode.UnsignedGreaterOrEqual: compareResult = (op1.ConstantUnsignedLongInteger >= op2.ConstantUnsignedLongInteger); break;
-				case ConditionCode.UnsignedLessThan: compareResult = (op1.ConstantUnsignedLongInteger < op2.ConstantUnsignedLongInteger); break;
-				case ConditionCode.UnsignedLessOrEqual: compareResult = (op1.ConstantUnsignedLongInteger <= op2.ConstantUnsignedLongInteger); break;
+				case ConditionCode.UnsignedGreaterThan: compareResult = (op1.ConstantUnsigned64 > op2.ConstantUnsigned64); break;
+				case ConditionCode.UnsignedGreaterOrEqual: compareResult = (op1.ConstantUnsigned64 >= op2.ConstantUnsigned64); break;
+				case ConditionCode.UnsignedLessThan: compareResult = (op1.ConstantUnsigned64 < op2.ConstantUnsigned64); break;
+				case ConditionCode.UnsignedLessOrEqual: compareResult = (op1.ConstantUnsigned64 <= op2.ConstantUnsigned64); break;
 
 				// TODO: Add more
 				default: return;
@@ -575,8 +575,8 @@ namespace Mosa.Compiler.Framework.Stages
 				add = false;
 			}
 
-			ulong r = add ? node.Operand2.ConstantUnsignedLongInteger + node2.Operand2.ConstantUnsignedLongInteger :
-				node.Operand2.ConstantUnsignedLongInteger - node2.Operand2.ConstantUnsignedLongInteger;
+			ulong r = add ? node.Operand2.ConstantUnsigned64 + node2.Operand2.ConstantUnsigned64 :
+				node.Operand2.ConstantUnsigned64 - node2.Operand2.ConstantUnsigned64;
 
 			Debug.Assert(node2.Result.Definitions.Count == 1);
 
@@ -617,7 +617,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(node2.Result.Definitions.Count == 1);
 
-			ulong r = node.Operand2.ConstantUnsignedLongInteger | node2.Operand2.ConstantUnsignedLongInteger;
+			ulong r = node.Operand2.ConstantUnsigned64 | node2.Operand2.ConstantUnsigned64;
 
 			AddOperandUsageToWorkList(node2);
 			AddOperandUsageToWorkList(node);
@@ -656,7 +656,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(node2.Result.Definitions.Count == 1);
 
-			ulong r = node.Operand2.ConstantUnsignedLongInteger & node2.Operand2.ConstantUnsignedLongInteger;
+			ulong r = node.Operand2.ConstantUnsigned64 & node2.Operand2.ConstantUnsigned64;
 
 			AddOperandUsageToWorkList(node2);
 			AddOperandUsageToWorkList(node);
@@ -701,7 +701,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(node2.Result.Definitions.Count == 1);
 
-			ulong r = node.Operand2.ConstantUnsignedLongInteger * node2.Operand2.ConstantUnsignedLongInteger;
+			ulong r = node.Operand2.ConstantUnsigned64 * node2.Operand2.ConstantUnsigned64;
 
 			AddOperandUsageToWorkList(node2);
 
@@ -746,8 +746,8 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(node2.Result.Definitions.Count == 1);
 
 			ulong r = (node2.Instruction == IRInstruction.DivSigned32 || node2.Instruction == IRInstruction.DivSigned64) ?
-				(ulong)(node.Operand2.ConstantSignedLongInteger * node2.Operand2.ConstantSignedLongInteger) :
-				node.Operand2.ConstantUnsignedLongInteger * node2.Operand2.ConstantUnsignedLongInteger;
+				(ulong)(node.Operand2.ConstantSigned64 * node2.Operand2.ConstantSigned64) :
+				node.Operand2.ConstantUnsigned64 * node2.Operand2.ConstantUnsigned64;
 
 			AddOperandUsageToWorkList(node2);
 			AddOperandUsageToWorkList(node);
@@ -898,11 +898,11 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node2.Instruction == IRInstruction.Add32
 				|| node2.Instruction == IRInstruction.Add64)
 			{
-				constant = Operand.CreateConstant(node.Operand2.Type, node2.Operand2.ConstantSignedLongInteger + node.Operand2.ConstantSignedLongInteger);
+				constant = Operand.CreateConstant(node.Operand2.Type, node2.Operand2.ConstantSigned64 + node.Operand2.ConstantSigned64);
 			}
 			else
 			{
-				constant = Operand.CreateConstant(node.Operand2.Type, node.Operand2.ConstantSignedLongInteger - node2.Operand2.ConstantSignedLongInteger);
+				constant = Operand.CreateConstant(node.Operand2.Type, node.Operand2.ConstantSigned64 - node2.Operand2.ConstantSigned64);
 			}
 
 			AddOperandUsageToWorkList(node);
@@ -938,7 +938,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (!operand.IsResolvedConstant)
 					return;
 
-				if (operand.ConstantUnsignedLongInteger != operand1.ConstantUnsignedLongInteger)
+				if (operand.ConstantUnsigned64 != operand1.ConstantUnsigned64)
 					return;
 			}
 
@@ -1432,7 +1432,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!node2.Operand2.IsResolvedConstant)
 				return;
 
-			if (node2.Operand2.ConstantSignedInteger != 32)
+			if (node2.Operand2.ConstantSigned32 != 32)
 				return;
 
 			if (!ValidateSSAForm(node2.Operand1))
@@ -1474,7 +1474,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!ValidateSSAForm(node2.Operand1))
 				return;
 
-			if (node2.Operand2.ConstantSignedInteger != 32)
+			if (node2.Operand2.ConstantSigned32 != 32)
 				return;
 
 			AddOperandUsageToWorkList(node);
@@ -1513,7 +1513,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!ValidateSSAForm(node2.Operand1))
 				return;
 
-			if (node2.Operand2.ConstantSignedInteger < 32)
+			if (node2.Operand2.ConstantSigned32 < 32)
 				return;
 
 			AddOperandUsageToWorkList(node);
@@ -1552,7 +1552,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!ValidateSSAForm(node2.Operand1))
 				return;
 
-			if (node2.Operand2.ConstantSignedInteger < 32)
+			if (node2.Operand2.ConstantSigned32 < 32)
 				return;
 
 			AddOperandUsageToWorkList(node);

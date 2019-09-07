@@ -255,7 +255,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Add(InstructionNode node)
 		{
-			Replace(node, IRInstruction.AddFloatR4, IRInstruction.AddFloatR8, IRInstruction.Add32, IRInstruction.Add64, IRInstruction.Add32, IRInstruction.Add64);
+			Replace(node, IRInstruction.Add32, IRInstruction.Add64, IRInstruction.AddFloatR8, IRInstruction.AddFloatR4);
 		}
 
 		/// <summary>
@@ -321,14 +321,14 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void BinaryLogic(InstructionNode node)
 		{
-			if (node.Operand1.Type.IsEnum)
+			if (node.Operand1.IsEnum)
 			{
 				var type = node.Operand1.Type;
 				var operand = Operand.CreateStaticField(type.Fields[0], TypeSystem);
 				node.SetOperand(0, operand);
 			}
 
-			if (node.Operand2.Type.IsEnum)
+			if (node.Operand2.IsEnum)
 			{
 				var type = node.Operand2.Type;
 				var operand = Operand.CreateStaticField(type.Fields[0], TypeSystem);
@@ -641,7 +641,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Div(InstructionNode node)
 		{
-			Replace(node, IRInstruction.DivFloatR4, IRInstruction.DivFloatR8, IRInstruction.DivSigned32, IRInstruction.DivSigned64, IRInstruction.DivUnsigned32, IRInstruction.DivUnsigned64);
+			Replace(node, IRInstruction.DivSigned32, IRInstruction.DivSigned64, IRInstruction.DivFloatR8, IRInstruction.DivFloatR4);
 		}
 
 		/// <summary>
@@ -1098,8 +1098,8 @@ namespace Mosa.Compiler.Framework.Stages
 			 * be replaced by a proper VM call.
 			 */
 
-			string symbolName = node.Operand1.Name;
-			string stringdata = node.Operand1.StringData;
+			var symbolName = node.Operand1.Name;
+			var stringdata = node.Operand1.StringData;
 
 			node.SetInstruction(Select(node.Result, IRInstruction.MoveInt32, IRInstruction.MoveInt64), node.Result, node.Operand1);
 
@@ -1107,7 +1107,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var stream = symbol.Stream;
 
 			// Type Definition and sync block
-			Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, symbol, 0, Metadata.TypeDefinition + "System.String", 0);
+			Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, symbol, 0, $"{Metadata.TypeDefinition}System.String", 0);
 
 			stream.WriteZeroBytes(NativePointerSize * 2);
 
@@ -1173,7 +1173,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Mul(InstructionNode node)
 		{
-			Replace(node, IRInstruction.MulFloatR4, IRInstruction.MulFloatR8, IRInstruction.MulSigned32, IRInstruction.MulSigned64, IRInstruction.MulUnsigned32, IRInstruction.MulUnsigned64);
+			Replace(node, IRInstruction.MulSigned32, IRInstruction.MulSigned64, IRInstruction.MulFloatR8, IRInstruction.MulFloatR4);
 		}
 
 		/// <summary>
@@ -1183,7 +1183,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void Neg(InstructionNode node)
 		{
 			//FUTURE: Add IRInstruction.Negate
-			if (node.Operand1.IsUnsigned)
+			if (node.Operand1.IsInteger)
 			{
 				var zero = CreateConstant(node.Operand1.Type, 0);
 				node.SetInstruction(Select(node.Result, IRInstruction.Sub32, IRInstruction.Sub64), node.Result, zero, node.Operand1);
@@ -1197,11 +1197,6 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var minusOne = CreateConstant(-1.0d);
 				node.SetInstruction(IRInstruction.MulFloatR8, node.Result, minusOne, node.Operand1);
-			}
-			else
-			{
-				var minusOne = CreateConstant(node.Operand1.Type, -1);
-				node.SetInstruction(Select(node.Result, IRInstruction.MulSigned32, IRInstruction.MulSigned64), node.Result, minusOne, node.Operand1);
 			}
 		}
 
@@ -1252,7 +1247,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				operands.Insert(0, newThis);
 			}
-			else if (result.Type.IsValueType)
+			else if (result.IsValueType)
 			{
 				//Debug.Assert(result.Uses.Count <= 1, "Usages too high");
 
@@ -1268,7 +1263,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				Debug.Assert(result.Type.IsReferenceType);
+				Debug.Assert(result.IsReferenceType);
 
 				var runtimeTypeHandle = GetRuntimeTypeHandle(classType);
 				var size = CreateConstant(TypeLayout.GetTypeSize(classType));
@@ -1330,7 +1325,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Rem(InstructionNode node)
 		{
-			Replace(node, IRInstruction.RemFloatR4, IRInstruction.RemFloatR8, IRInstruction.RemSigned32, IRInstruction.RemSigned64, IRInstruction.RemUnsigned32, IRInstruction.RemUnsigned64);
+			Replace(node, IRInstruction.RemSigned32, IRInstruction.RemSigned64, IRInstruction.RemFloatR8, IRInstruction.RemFloatR4);
 		}
 
 		/// <summary>
@@ -1560,7 +1555,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void Sub(InstructionNode node)
 		{
-			Replace(node, IRInstruction.SubFloatR4, IRInstruction.SubFloatR8, IRInstruction.Sub32, IRInstruction.Sub64, IRInstruction.Sub32, IRInstruction.Sub64);
+			Replace(node, IRInstruction.Sub32, IRInstruction.Sub64, IRInstruction.SubFloatR8, IRInstruction.SubFloatR4);
 		}
 
 		/// <summary>
@@ -1969,7 +1964,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private static void Replace(InstructionNode node, BaseIRInstruction floatingPointR4Instruction, BaseIRInstruction floatingPointR8Instruction, BaseIRInstruction signedInstruction32, BaseIRInstruction signedInstruction64, BaseIRInstruction unsignedInstruction32, BaseIRInstruction unsignedInstruction64)
+		private static void Replace(InstructionNode node, BaseIRInstruction integerInstruction32, BaseIRInstruction integerInstruction64, BaseIRInstruction floatingPointR8Instruction, BaseIRInstruction floatingPointR4Instruction)
 		{
 			if (node.Result.IsR4)
 			{
@@ -1979,13 +1974,9 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				node.ReplaceInstruction(floatingPointR8Instruction);
 			}
-			else if (node.Result.IsUnsigned)
-			{
-				node.ReplaceInstruction(Select(node.Result, unsignedInstruction32, unsignedInstruction64));
-			}
 			else
 			{
-				node.ReplaceInstruction(Select(node.Result, signedInstruction32, signedInstruction64));
+				node.ReplaceInstruction(Select(node.Result, integerInstruction32, integerInstruction64));
 			}
 		}
 
@@ -2119,14 +2110,14 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (node.InvokeMethod.IsInternal)
 			{
-				var methodName = node.InvokeMethod.DeclaringType.FullName + ":" + node.InvokeMethod.Name;
+				var methodName = $"{node.InvokeMethod.DeclaringType.FullName}:{node.InvokeMethod.Name}";
 
 				var intrinsic = MethodCompiler.Compiler.GetInstrincMethod(methodName);
 
 				if (intrinsic == null)
 				{
 					// special case for plugging constructors
-					intrinsic = MethodCompiler.Compiler.GetInstrincMethod(node.InvokeMethod.DeclaringType.FullName + "::" + node.InvokeMethod.Name);
+					intrinsic = MethodCompiler.Compiler.GetInstrincMethod($"{node.InvokeMethod.DeclaringType.FullName}::{node.InvokeMethod.Name}");
 				}
 
 				if (intrinsic != null)

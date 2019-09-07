@@ -59,6 +59,13 @@ namespace Mosa.Utility.SourceCodeGenerator
 					return;
 			}
 
+			string path = Path.GetDirectoryName(destination);
+
+			if (!Directory.Exists(path))
+			{
+				Directory.CreateDirectory(path);
+			}
+
 			File.WriteAllText(destination, lines);
 		}
 

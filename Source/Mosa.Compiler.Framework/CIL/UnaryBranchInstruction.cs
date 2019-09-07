@@ -85,7 +85,7 @@ namespace Mosa.Compiler.Framework.CIL
 			}
 			else
 			{
-				throw new NotSupportedException("Invalid opcode " + opcode.ToString() + " specified for UnaryBranchInstruction.");
+				throw new NotSupportedException($"Invalid opcode {opcode} specified for UnaryBranchInstruction.");
 			}
 		}
 

@@ -280,7 +280,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (operand.IsSymbol)
 			{
-				if (operand.StringData != null)
+				if (operand.IsString)
 				{
 					// FUTURE: explore operand re-use
 					mappedOperand = Operand.CreateStringSymbol(operand.Name, operand.StringData, operand.Type.TypeSystem);

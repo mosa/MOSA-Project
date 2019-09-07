@@ -500,13 +500,13 @@ namespace Mosa.Compiler.Framework.Stages
 			int hash = node.Instruction.ID;
 
 			if (node.Operand1.IsConstant)
-				hash = UpdateHash(hash, (int)node.Operand1.ConstantUnsignedLongInteger);
+				hash = UpdateHash(hash, (int)node.Operand1.ConstantUnsigned64);
 			else if (node.Operand1.IsVirtualRegister || node.Operand1.IsStackLocal)
 				hash = UpdateHash(hash, node.Operand1.Index);
 
 			if (node.OperandCount >= 2)
 				if (node.Operand2.IsConstant)
-					hash = UpdateHash(hash, (int)node.Operand2.ConstantUnsignedLongInteger);
+					hash = UpdateHash(hash, (int)node.Operand2.ConstantUnsigned64);
 				else if (node.Operand2.IsVirtualRegister || node.Operand2.IsStackLocal)
 					hash = UpdateHash(hash, node.Operand2.Index);
 
@@ -528,14 +528,14 @@ namespace Mosa.Compiler.Framework.Stages
 				&& operand2.IsResolvedConstant
 				&& operand1.IsInteger
 				&& operand2.IsInteger
-				&& operand1.ConstantUnsignedLongInteger == operand2.ConstantUnsignedLongInteger)
+				&& operand1.ConstantUnsigned64 == operand2.ConstantUnsigned64)
 				return true;
 
 			if (operand1.IsResolvedConstant
 				&& operand2.IsResolvedConstant
 				&& operand1.IsR
 				&& operand2.IsR
-				&& operand1.ConstantDoubleFloatingPoint == operand2.ConstantDoubleFloatingPoint)
+				&& operand1.ConstantDouble == operand2.ConstantDouble)
 				return true;
 
 			if (instruction != null

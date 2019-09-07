@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			if (StackTypeCode.Unknown == result)
 			{
-				throw new InvalidOperationException("Invalid operand to Neg instruction [" + result + "]");
+				throw new InvalidOperationException($"Invalid operand to Neg instruction [{result}]");
 			}
 
 			context.Result = methodCompiler.CreateVirtualRegister(context.Operand1.Type);

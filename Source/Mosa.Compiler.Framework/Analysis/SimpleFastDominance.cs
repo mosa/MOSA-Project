@@ -60,10 +60,10 @@ namespace Mosa.Compiler.Framework.Analysis
 			children = new List<BasicBlock>[blockCount];
 			blockToPostorderIndex = new int[blockCount];
 
-			// Blocks in reverse post order topology
-			reversePostOrder = BasicBlocks.ReversePostOrder(entryBlock);
+			// Blocks in reverse postorder
+			reversePostOrder = basicBlocks.ReversePostorder(entryBlock);
 
-			// Map block to reverse post order index
+			// Map block to reverse postorder index
 			int i = reversePostOrder.Count;
 			foreach (var block in reversePostOrder)
 			{

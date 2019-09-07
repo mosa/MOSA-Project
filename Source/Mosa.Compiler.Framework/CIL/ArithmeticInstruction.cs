@@ -132,18 +132,18 @@ namespace Mosa.Compiler.Framework.CIL
 			{
 				resultType = methodCompiler.Compiler.GetStackTypeFromCode(result);
 
-				if (result == StackTypeCode.F && context.Operand1.Type.IsR4 && context.Operand2.Type.IsR4)
+				if (result == StackTypeCode.F && context.Operand1.IsR4 && context.Operand2.IsR4)
 				{
 					resultType = methodCompiler.TypeSystem.BuiltIn.R4;
 				}
 			}
 			else
 			{
-				if (context.Operand1.Type.IsPointer)
+				if (context.Operand1.IsPointer)
 				{
 					resultType = context.Operand1.Type;
 				}
-				else if (context.Operand2.Type.IsPointer)
+				else if (context.Operand2.IsPointer)
 				{
 					resultType = context.Operand2.Type;
 				}

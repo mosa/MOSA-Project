@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (operand2.IsResolvedConstant)
 			{
-				context.SetInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsignedInteger));
+				context.SetInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsigned32));
 			}
 			else
 			{
@@ -77,7 +77,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (operand2.IsResolvedConstant)
 			{
-				context.SetInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsignedLongInteger >> 32));
+				context.SetInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsigned64 >> 32));
 			}
 			else
 			{
@@ -89,7 +89,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (operand2.IsResolvedConstant)
 			{
-				context.AppendInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsignedInteger));
+				context.AppendInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsigned32));
 			}
 			else
 			{
@@ -101,7 +101,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (operand2.IsResolvedConstant)
 			{
-				context.AppendInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsignedLongInteger >> 32));
+				context.AppendInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsigned64 >> 32));
 			}
 			else
 			{
@@ -410,13 +410,13 @@ namespace Mosa.Compiler.Framework.Stages
 			var result = context.Result;
 			var operand1 = context.Operand1;
 
-			MethodCompiler.SplitLongOperand(operand1, out Operand op0Low, out Operand op0High);
-
 			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.SetInstruction(IRInstruction.LoadParamInt32, resultLow, op0Low);
-			context.AppendInstruction(IRInstruction.LoadParamInt32, resultHigh, op0High);
+			MethodCompiler.SplitLongOperand(operand1, out Operand op1Low, out Operand op1High);
+
+			context.SetInstruction(IRInstruction.LoadParamInt32, resultLow, op1Low);
+			context.AppendInstruction(IRInstruction.LoadParamInt32, resultHigh, op1High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 

@@ -112,11 +112,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsN { get { return IsU || IsI; } }
 
-		public bool IsInteger { get { return IsSigned || IsUnsigned; } }
-
-		public bool IsSigned { get { return IsI1 || IsI2 || IsI4 || IsI8 || IsI; } }
-
-		public bool IsUnsigned { get { return IsU1 || IsU2 || IsU4 || IsU8 || IsU; } }
+		public bool IsInteger { get { return IsI1 || IsI2 || IsI4 || IsI8 || IsI || IsU1 || IsU2 || IsU4 || IsU8 || IsU; } }
 
 		public bool IsPointer { get { return IsManagedPointer || IsUnmanagedPointer || IsFunctionPointer; } }
 

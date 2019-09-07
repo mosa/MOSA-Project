@@ -223,7 +223,7 @@ namespace Mosa.Compiler.Framework
 
 			traceLogs = new List<TraceLog>();
 
-			FormattedStageName = "[" + position.ToString("00") + "] " + Name;
+			FormattedStageName = $"[{position.ToString("00")}] {Name}";
 
 			Setup();
 		}
@@ -247,7 +247,7 @@ namespace Mosa.Compiler.Framework
 			catch (Exception ex)
 			{
 				MethodCompiler.Stop();
-				PostCompilerTraceEvent(CompilerEvent.Exception, "Method: " + Method + " -> " + ex);
+				PostCompilerTraceEvent(CompilerEvent.Exception, $"Method: {Method} -> {ex}");
 				MethodCompiler.Compiler.Stop();
 			}
 

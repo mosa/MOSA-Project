@@ -80,7 +80,7 @@ namespace Mosa.Platform.x64.Instructions
 				return;
 			}
 
-			if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4) && (node.Operand2.IsConstant && node.Operand2.ConstantSignedInteger >= -128 && node.Operand2.ConstantSignedInteger <= 127))
+			if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4) && (node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127))
 			{
 				return;
 			}
@@ -137,7 +137,7 @@ namespace Mosa.Platform.x64.Instructions
 				return;
 			}
 
-			if (node.Operand1.IsCPURegister && (node.Operand2.IsConstant && node.Operand2.ConstantSignedInteger >= -128 && node.Operand2.ConstantSignedInteger <= 127))
+			if (node.Operand1.IsCPURegister && (node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127))
 			{
 				emitter.OpcodeEncoder.SuppressByte(0x40);
 				emitter.OpcodeEncoder.Append4Bits(0b0100);

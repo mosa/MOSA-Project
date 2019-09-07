@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			// Strings are now going to be embedded objects since they are immutable
 			var symbol = Linker.DefineSymbol(name, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer = new BinaryWriter(symbol.Stream);
-			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, writer.GetPosition(), Metadata.TypeDefinition + "System.String", 0);
+			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, writer.GetPosition(), $"{Metadata.TypeDefinition}System.String", 0);
 			writer.WriteZeroBytes(TypeLayout.NativePointerSize * 2);
 			writer.Write(value.Length, TypeLayout.NativePointerSize);
 			writer.Write(Encoding.Unicode.GetBytes(value));
@@ -373,7 +373,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private LinkerSymbol CreateInterfaceMethodTable(MosaType type, MosaType interfaceType)
 		{
 			// Emit interface method table
-			var interfaceMethodTableSymbol = Linker.DefineSymbol(Metadata.InterfaceMethodTable + type.FullName + "$" + interfaceType.FullName, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
+			var interfaceMethodTableSymbol = Linker.DefineSymbol($"{Metadata.InterfaceMethodTable}{type.FullName}${interfaceType.FullName}", SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer = new BinaryWriter(interfaceMethodTableSymbol.Stream);
 
 			var interfaceMethodTable = TypeLayout.GetInterfaceTable(type, interfaceType) ?? new MosaMethod[0];
@@ -692,7 +692,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private LinkerSymbol CreateCustomAttribute(MosaUnit unit, MosaCustomAttribute ca, int position)
 		{
 			// Emit custom attribute list
-			string name = unit.FullName + ">>" + position.ToString() + ":" + ca.Constructor.DeclaringType.Name;
+			string name = $"{unit.FullName}>>{position.ToString()}:{ca.Constructor.DeclaringType.Name}";
 
 			var customAttributeSymbol = Linker.DefineSymbol(Metadata.CustomAttribute + name, SectionKind.ROData, TypeLayout.NativePointerAlignment, 0);
 			var writer1 = new BinaryWriter(customAttributeSymbol.Stream);
@@ -735,7 +735,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		private LinkerSymbol CreateCustomAttributeArgument(string name, int count, string argName, MosaCustomAttribute.Argument arg, bool isField)
 		{
-			var attributeName = name + ":" + (argName ?? count.ToString());
+			var attributeName = $"{name}:{(argName ?? count.ToString())}";
 			var symbolName = Metadata.CustomAttributeArgument + attributeName;
 
 			var customAttributeArgumentSymbol = Linker.GetSymbol(symbolName);
@@ -774,6 +774,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		{
 			if (type.IsEnum)
 				type = type.GetEnumUnderlyingType();
+
 			switch (type.TypeCode)
 			{
 				// 1 byte
@@ -829,6 +830,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		{
 			if (type.IsEnum)
 				type = type.GetEnumUnderlyingType();
+
 			switch (type.TypeCode)
 			{
 				// 1 byte
@@ -897,10 +899,10 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 					// Since strings are immutable, make it an object that we can just use
 					var str = (string)value;
-					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, writer.GetPosition(), Metadata.TypeDefinition + "System.String", 0);
+					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, writer.GetPosition(), $"{Metadata.TypeDefinition}System.String", 0);
 					writer.WriteZeroBytes(TypeLayout.NativePointerSize * 2);
 					writer.Write(str.Length, TypeLayout.NativePointerSize);
-					writer.Write(System.Text.Encoding.Unicode.GetBytes(str));
+					writer.Write(Encoding.Unicode.GetBytes(str));
 					break;
 
 				default:

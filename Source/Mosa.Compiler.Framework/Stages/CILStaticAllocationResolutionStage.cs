@@ -155,7 +155,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					if (op.Operand1.IsResolvedConstant)
 					{
-						return op.Operand1.ConstantSignedInteger;
+						return op.Operand1.ConstantSigned32;
 					}
 				}
 			}

@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Framework
 
 		public void SplitLongOperand(TypeSystem typeSystem, Operand longOperand)
 		{
-			Debug.Assert(longOperand.Is64BitInteger);
+			Debug.Assert(longOperand.Is64BitInteger || longOperand.IsParameter);
 
 			if (longOperand.Low == null && longOperand.High == null)
 			{

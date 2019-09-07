@@ -3,13 +3,11 @@
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Mosa.Compiler.Framework.Transformation
 {
-	public class TransformContext
+	public sealed class TransformContext
 	{
 		public MethodCompiler MethodCompiler { get; private set; }
 
@@ -17,27 +15,48 @@ namespace Mosa.Compiler.Framework.Transformation
 
 		public TraceLog TraceLog { get; private set; }
 
+		public Operand ConstantZero32 { get { return MethodCompiler.ConstantZero32; } }
+		public Operand ConstantZero64 { get { return MethodCompiler.ConstantZero64; } }
+		public Operand ConstantZeroR4 { get { return MethodCompiler.ConstantZeroR4; } }
+		public Operand ConstantZeroR8 { get { return MethodCompiler.ConstantZeroR8; } }
+
+		public MosaType I4 { get; private set; }
+		public MosaType I8 { get; private set; }
+		public MosaType R4 { get; private set; }
+		public MosaType R8 { get; private set; }
+		public MosaType O { get; private set; }
+
+		public VirtualRegisters VirtualRegisters { get; private set; }
+
 		public TransformContext(MethodCompiler methodCompiler, TraceLog traceLog = null)
 		{
 			MethodCompiler = methodCompiler;
 			TraceLog = traceLog;
+
+			VirtualRegisters = MethodCompiler.VirtualRegisters;
+
+			I4 = TypeSystem.BuiltIn.I4;
+			I8 = TypeSystem.BuiltIn.I8;
+			R4 = TypeSystem.BuiltIn.R4;
+			R8 = TypeSystem.BuiltIn.R8;
+			O = TypeSystem.BuiltIn.Object;
 		}
 
 		public Operand AllocateVirtualRegister(MosaType type)
 		{
-			return MethodCompiler.VirtualRegisters.Allocate(type);
+			return VirtualRegisters.Allocate(type);
 		}
 
-		public bool ApplyTransform(Context context, BaseTransformation transformation, Stack<InstructionNode> worklist = null)
+		public bool ApplyTransform(Context context, BaseTransformation transformation, Stack<Operand> virtualRegisters = null)
 		{
 			if (!transformation.Match(context, this))
 				return false;
 
 			TraceBefore(context, transformation.Name);
 
-			if (worklist != null)
+			if (virtualRegisters != null)
 			{
-				AddToWorkList(context, worklist);
+				CollectVirtualRegisters(context, virtualRegisters);
 			}
 
 			transformation.Transform(context, this);
@@ -49,47 +68,28 @@ namespace Mosa.Compiler.Framework.Transformation
 
 		#region WorkList
 
-		private void AddToWorkList(InstructionNode node, Stack<InstructionNode> worklist)
+		private void CollectVirtualRegisters(Operand operand, Stack<Operand> virtualRegisters)
 		{
-			if (node.IsEmptyOrNop)
-				return;
-
 			// work list stays small, so the check is inexpensive
-			if (worklist.Contains(node))
+			if (virtualRegisters.Contains(operand))
 				return;
 
-			worklist.Push(node);
+			virtualRegisters.Push(operand);
 		}
 
-		private void AddToWorkList(Operand operand, Stack<InstructionNode> worklist)
-		{
-			if (!operand.IsVirtualRegister)
-				return;
-
-			foreach (var index in operand.Uses)
-			{
-				AddToWorkList(index, worklist);
-			}
-
-			foreach (var index in operand.Definitions)
-			{
-				AddToWorkList(index, worklist);
-			}
-		}
-
-		private void AddToWorkList(Context context, Stack<InstructionNode> worklist)
+		private void CollectVirtualRegisters(Context context, Stack<Operand> virtualRegisters)
 		{
 			if (context.Result != null)
 			{
-				AddToWorkList(context.Result, worklist);
+				CollectVirtualRegisters(context.Result, virtualRegisters);
 			}
 			if (context.Result2 != null)
 			{
-				AddToWorkList(context.Result2, worklist);
+				CollectVirtualRegisters(context.Result2, virtualRegisters);
 			}
 			foreach (var operand in context.Operands)
 			{
-				AddToWorkList(operand, worklist);
+				CollectVirtualRegisters(operand, virtualRegisters);
 			}
 		}
 
@@ -114,57 +114,73 @@ namespace Mosa.Compiler.Framework.Transformation
 
 		#region Constant Helper Methods
 
+		public Operand GetZero(MosaType type)
+		{
+			if (type.IsI4)
+				return MethodCompiler.ConstantZero32;
+			else if (type.IsI8)
+				return MethodCompiler.ConstantZero64;
+			else if (type.IsR4)
+				return MethodCompiler.ConstantZeroR4;
+			else if (type.IsR8)
+				return MethodCompiler.ConstantZeroR8;
+			else if (type.IsReferenceType)
+				return Operand.GetNull(type);
+
+			return null;
+		}
+
 		public Operand CreateConstant(byte value)
 		{
 			return Operand.CreateConstant(TypeSystem.BuiltIn.U1, value);
 		}
 
-		protected Operand CreateConstant(int value)
+		public Operand CreateConstant(int value)
 		{
 			return Operand.CreateConstant(TypeSystem.BuiltIn.I4, value);
 		}
 
-		protected Operand CreateConstant(uint value)
+		public Operand CreateConstant(uint value)
 		{
 			return Operand.CreateConstant(TypeSystem.BuiltIn.U4, value);
 		}
 
-		protected Operand CreateConstant(long value)
+		public Operand CreateConstant(long value)
 		{
 			return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
 		}
 
-		protected Operand CreateConstant(ulong value)
+		public Operand CreateConstant(ulong value)
 		{
 			return Operand.CreateConstant(TypeSystem.BuiltIn.U8, value);
 		}
 
-		protected static Operand CreateConstant(MosaType type, long value)
+		public static Operand CreateConstant(MosaType type, long value)
 		{
 			return Operand.CreateConstant(type, (ulong)value);
 		}
 
-		protected static Operand CreateConstant(MosaType type, ulong value)
+		public static Operand CreateConstant(MosaType type, ulong value)
 		{
 			return Operand.CreateConstant(type, value);
 		}
 
-		protected static Operand CreateConstant(MosaType type, int value)
+		public static Operand CreateConstant(MosaType type, int value)
 		{
 			return Operand.CreateConstant(type, (long)value);
 		}
 
-		protected static Operand CreateConstant(MosaType type, uint value)
+		public static Operand CreateConstant(MosaType type, uint value)
 		{
 			return Operand.CreateConstant(type, value);
 		}
 
-		protected Operand CreateConstant(float value)
+		public Operand CreateConstant(float value)
 		{
 			return Operand.CreateConstant(value, TypeSystem);
 		}
 
-		protected Operand CreateConstant(double value)
+		public Operand CreateConstant(double value)
 		{
 			return Operand.CreateConstant(value, TypeSystem);
 		}
@@ -177,7 +193,7 @@ namespace Mosa.Compiler.Framework.Transformation
 		{
 			if (operand2.IsResolvedConstant)
 			{
-				context.SetInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsignedInteger));
+				context.SetInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsigned32));
 			}
 			else
 			{
@@ -189,7 +205,7 @@ namespace Mosa.Compiler.Framework.Transformation
 		{
 			if (operand2.IsResolvedConstant)
 			{
-				context.SetInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsignedLongInteger >> 32));
+				context.SetInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsigned64 >> 32));
 			}
 			else
 			{
@@ -201,7 +217,7 @@ namespace Mosa.Compiler.Framework.Transformation
 		{
 			if (operand2.IsResolvedConstant)
 			{
-				context.AppendInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsignedInteger));
+				context.AppendInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsigned32));
 			}
 			else
 			{
@@ -213,7 +229,7 @@ namespace Mosa.Compiler.Framework.Transformation
 		{
 			if (operand2.IsResolvedConstant)
 			{
-				context.AppendInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsignedLongInteger >> 32));
+				context.AppendInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsigned64 >> 32));
 			}
 			else
 			{
@@ -222,5 +238,63 @@ namespace Mosa.Compiler.Framework.Transformation
 		}
 
 		#endregion 64-Bit Helpers
+
+		public static BaseInstruction GetMove(Operand operand)
+		{
+			if (operand.IsR4)
+				return IRInstruction.MoveFloatR4;
+			else if (operand.IsR8)
+				return IRInstruction.MoveFloatR8;
+			else if (operand.Is64BitInteger)
+				return IRInstruction.MoveInt64;
+			else
+				return IRInstruction.MoveInt32;
+		}
+
+		#region Set Result To Constant Helpers
+
+		public void SetResultToZero(Context context)
+		{
+			var result = context.Result;
+			context.SetInstruction(GetMove(result), result, GetZero(result.Type));
+		}
+
+		public void SetResultToConstant(Context context, Operand constant)
+		{
+			var result = context.Result;
+			context.SetInstruction(GetMove(result), result, constant);
+		}
+
+		public void SetResultTo(Context context, Operand operand)
+		{
+			var result = context.Result;
+			context.SetInstruction(GetMove(result), result, operand);
+		}
+
+		public void SetResultToConstant(Context context, uint constant)
+		{
+			var result = context.Result;
+			context.SetInstruction(IRInstruction.MoveInt32, result, ConstantOperand.Create(result.Type, constant));
+		}
+
+		public void SetResultToConstant(Context context, ulong constant)
+		{
+			var result = context.Result;
+			context.SetInstruction(IRInstruction.MoveInt64, result, ConstantOperand.Create(result.Type, constant));
+		}
+
+		public void SetResultToConstant(Context context, float constant)
+		{
+			var result = context.Result;
+			context.SetInstruction(IRInstruction.MoveFloatR4, result, ConstantOperand.Create(result.Type, constant));
+		}
+
+		public void SetResultToConstant(Context context, double constant)
+		{
+			var result = context.Result;
+			context.SetInstruction(IRInstruction.MoveFloatR8, result, ConstantOperand.Create(result.Type, constant));
+		}
+
+		#endregion Set Result To Constant Helpers
 	}
 }

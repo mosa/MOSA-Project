@@ -120,7 +120,7 @@ namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 
 		public bool ContainsReference(Operand operand)
 		{
-			if (operand.Type.IsReferenceType || operand.Type.IsManagedPointer)
+			if (operand.IsReferenceType || operand.IsManagedPointer)
 				return true;
 
 			if (!operand.IsValueType)

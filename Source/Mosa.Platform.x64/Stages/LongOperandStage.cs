@@ -131,7 +131,7 @@ namespace Mosa.Platform.x64.Stages
 
 		private void ConvertFloatR8ToInteger64(Context context)
 		{
-			Debug.Assert(context.Result.Type.IsI1 || context.Result.Type.IsI2 || context.Result.Type.IsI4);
+			Debug.Assert(context.Result.IsI1 || context.Result.IsI2 || context.Result.IsI4);
 			context.ReplaceInstruction(X64.Cvttss2si64);
 		}
 
