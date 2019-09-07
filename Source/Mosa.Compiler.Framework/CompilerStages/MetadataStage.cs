@@ -830,6 +830,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		{
 			if (type.IsEnum)
 				type = type.GetEnumUnderlyingType();
+
 			switch (type.TypeCode)
 			{
 				// 1 byte
@@ -901,7 +902,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 					Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, writer.GetPosition(), Metadata.TypeDefinition + "System.String", 0);
 					writer.WriteZeroBytes(TypeLayout.NativePointerSize * 2);
 					writer.Write(str.Length, TypeLayout.NativePointerSize);
-					writer.Write(System.Text.Encoding.Unicode.GetBytes(str));
+					writer.Write(Encoding.Unicode.GetBytes(str));
 					break;
 
 				default:
