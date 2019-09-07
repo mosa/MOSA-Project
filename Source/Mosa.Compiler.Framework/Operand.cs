@@ -151,6 +151,8 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsFunctionPointer { get; private set; }
 
+		public bool IsEnum { get; private set; }
+
 		public bool IsHigh { get { return LongParent.High == this; } }
 
 		public bool IsI { get; private set; }
@@ -368,6 +370,7 @@ namespace Mosa.Compiler.Framework
 			IsBoolean = type.IsBoolean;
 			IsChar = type.IsChar;
 
+			IsEnum = type.IsEnum;
 			IsManagedPointer = type.IsManagedPointer;
 			IsUnmanagedPointer = type.IsUnmanagedPointer;
 			IsReferenceType = type.IsReferenceType;
