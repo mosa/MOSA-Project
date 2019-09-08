@@ -4,22 +4,12 @@ using System.Text;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
-	public class SignatureName
+	internal class SignatureName
 	{
 
-		// For better GDB, ELF, DWARF and exported EntryPoints, we want customize the SymbolName for better usability.
-		public delegate string GetSignatureDelegate(string name, MosaMethodSignature sig, bool shortSig, bool includeReturnType = true);
-		public static GetSignatureDelegate GetSignatureOverride;
-
-		public static string GetSignature(string name, MosaMethodSignature sig, bool shortSig, bool includeReturnType = true)
+		// For better GDB, ELF, DWARF and exported EntryPoints, we want avoid ReturnType and (Arguments) spaces within SymbolName for better usability.
+		public static string GetSignature(string name, MosaMethodSignature sig, bool shortSig, bool includeReturnType = true, bool stripSpaces = false)
 		{
-			if (GetSignatureOverride != null)
-			{
-				var signature = GetSignatureOverride(name, sig, shortSig, includeReturnType);
-				if (!string.IsNullOrEmpty(signature))
-					return signature;
-			}
-
 			var result = new StringBuilder();
 			if (shortSig)
 			{
@@ -28,7 +18,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 				for (int i = 0; i < sig.Parameters.Count; i++)
 				{
 					if (i != 0)
-						result.Append(", ");
+					{
+						result.Append(",");
+						if (!stripSpaces)
+							result.Append(" ");
+					}
 					result.Append(sig.Parameters[i].ParameterType.ShortName);
 				}
 				result.Append(")");
@@ -54,7 +48,11 @@ namespace Mosa.Compiler.MosaTypeSystem
 				for (int i = 0; i < sig.Parameters.Count; i++)
 				{
 					if (i != 0)
-						result.Append(", ");
+					{
+						result.Append(",");
+						if (!stripSpaces)
+							result.Append(" ");
+					}
 					result.Append(sig.Parameters[i].ParameterType.FullName);
 				}
 				result.Append(")");
@@ -62,7 +60,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
-		internal static void UpdateType(MosaType type)
+		public static void UpdateType(MosaType type)
 		{
 			var result = new StringBuilder();
 
@@ -72,7 +70,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				for (int i = 0; i < type.GenericArguments.Count; i++)
 				{
 					if (i != 0)
-						result.Append(", ");
+						result.Append(",");
 					result.Append(type.GenericArguments[i].FullName);
 				}
 				result.Append(">");

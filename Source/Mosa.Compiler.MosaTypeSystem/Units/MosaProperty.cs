@@ -80,7 +80,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				if (property.PropertyType != null)
 				{
-					property.FullName = string.Concat(property.PropertyType.FullName, " ", property.DeclaringType.FullName, "::", property.Name);
+					property.FullName = string.Concat(property.DeclaringType.FullName, "::", property.Name);
 					property.ShortName = string.Concat(property.Name, " : ", property.PropertyType.ShortName);
 
 					if (GetCleanMethodName(property.Name) != GetUncleanMethodPrefix(property.Name))

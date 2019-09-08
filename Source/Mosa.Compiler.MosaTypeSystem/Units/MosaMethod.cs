@@ -188,7 +188,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 					}
 
 					method.ShortName = SignatureName.GetSignature(methodName.ToString(), method.Signature, true, true);
-					method.FullName = SignatureName.GetSignature(method.DeclaringType.FullName + "::" + methodName, method.Signature, false, true);
+					method.FullName = SignatureName.GetSignature(method.DeclaringType.FullName + "::" + methodName, method.Signature, false, false, true);
 				}
 			}
 		}
