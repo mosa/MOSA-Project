@@ -121,6 +121,34 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return null;
 		}
 
+		/// <summary>
+		/// Get a type by fullName
+		/// </summary>
+		/// <param name="fullName">fullName like namespace.typeName</param>
+		public MosaType GetTypeByName(string fullName)
+		{
+			if (string.IsNullOrEmpty(fullName))
+				return null;
+
+			string ns;
+			string typeName;
+
+			var indexOfLastDot = fullName.LastIndexOf('.');
+			if (indexOfLastDot == -1)
+			{
+				// type is in no namespace
+				ns = "";
+				typeName = fullName;
+			}
+			else
+			{
+				ns = fullName.Substring(0, indexOfLastDot);
+				typeName = fullName.Substring(indexOfLastDot + 1);
+			}
+
+			return GetTypeByName(ns, typeName);
+		}
+
 		public MosaModule GetModuleByAssembly(string name)
 		{
 			foreach (var module in Modules)

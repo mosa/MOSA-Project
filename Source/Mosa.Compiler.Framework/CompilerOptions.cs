@@ -47,6 +47,12 @@ namespace Mosa.Compiler.Framework
 		public string DebugFile { get; set; }
 
 		/// <summary>
+		/// Gets or sets interrupt method name to override the architecture specific default method
+		/// </summary>
+		/// <example>Mosa.Kernel.x86.IDT::ProcessInterrupt</example>
+		public string InterruptMethodName { get; set; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether SSA is enabled.
 		/// </summary>
 		public bool EnableSSA { get; set; }
