@@ -70,6 +70,13 @@ namespace Mosa.Utility.Launcher
 		[Option("emulator-memory", HelpText = "Emulator memory in megabytes.")]
 		public uint EmulatorMemoryInMB { get; set; }
 
+		/// <summary>
+		/// Gets or sets interrupt method name to override the architecture specific default method
+		/// </summary>
+		/// <example>Mosa.Kernel.x86.IDT::ProcessInterrupt</example>
+		[Option("interrupt-method")]
+		public string InterruptMethodName { get; set; }
+
 		[Option("ssa")]
 		public bool EnableSSA { get; set; }
 
