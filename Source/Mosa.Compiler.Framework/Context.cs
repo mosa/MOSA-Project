@@ -133,6 +133,8 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public bool IsEmpty { get { return Node.IsEmpty; } }
 
+		public bool IsEmptyOrNop { get { return Node.IsEmptyOrNop; } }
+
 		/// <summary>
 		/// Gets or sets the runtime method.
 		/// </summary>

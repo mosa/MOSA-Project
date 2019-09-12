@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		[IntrinsicMethod("Mosa.Runtime.Intrinsic:Load32")]
 		private static void Load32(Context context, MethodCompiler methodCompiler)
 		{
-			var instruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadInt32 : IRInstruction.LoadZeroExtend32x64;
+			var instruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.Load32 : IRInstruction.LoadZeroExtend32x64;
 
 			if (context.OperandCount == 1)
 			{

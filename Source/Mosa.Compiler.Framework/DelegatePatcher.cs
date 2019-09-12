@@ -52,13 +52,13 @@ namespace Mosa.Compiler.Framework
 			var v2 = methodCompiler.CreateVirtualRegister(methodPointerOperand.Type);
 			var v3 = methodCompiler.CreateVirtualRegister(instanceOperand.Type);
 
-			var loadParameterInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadParamInt32 : IRInstruction.LoadParamInt64;
+			var loadParameterInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadParam32 : IRInstruction.LoadParam64;
 
 			context.AppendInstruction(loadParameterInstruction, v1, thisOperand);
 			context.AppendInstruction(loadParameterInstruction, v2, methodPointerOperand);
 			context.AppendInstruction(loadParameterInstruction, v3, instanceOperand);
 
-			var storeIntegerInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.StoreInt32 : IRInstruction.StoreInt64;
+			var storeIntegerInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.Store32 : IRInstruction.Store64;
 
 			context.AppendInstruction(storeIntegerInstruction, null, v1, methodPointerOffsetOperand, v2);
 			context.MosaType = methodPointerOperand.Type;
@@ -71,8 +71,8 @@ namespace Mosa.Compiler.Framework
 		{
 			// check if instance is null (if so, it's a static call to the methodPointer)
 
-			var loadInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.LoadInt32 : IRInstruction.LoadInt64;
-			var compareInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.CompareInt32x32 : IRInstruction.CompareInt64x64;
+			var loadInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.Load32 : IRInstruction.Load64;
+			var compareInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.Compare32x32 : IRInstruction.Compare64x64;
 			var branchInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.CompareIntBranch32 : IRInstruction.CompareIntBranch64;
 			var nativeIntegerType = methodCompiler.Architecture.Is32BitPlatform ? methodCompiler.TypeSystem.BuiltIn.U4 : methodCompiler.TypeSystem.BuiltIn.U8;
 

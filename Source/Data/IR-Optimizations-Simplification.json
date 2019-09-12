@@ -1,0 +1,311 @@
+﻿{
+	"Optimizations": [
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Move32",
+			"SubName": "Propogation",
+			"Expression": "IR.Move32 (IR.Move32 a)",
+			"Filter": "",
+			"Result": "(IR.Move32 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Move64",
+			"SubName": "Propogation",
+			"Expression": "IR.Move64 (IR.Move64 a)",
+			"Filter": "",
+			"Result": "(IR.Move64 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "LogicalNot32",
+			"SubName": "Twice",
+			"Expression": "IR.LogicalNot32 (IR.LogicalNot32 x)",
+			"Filter": "",
+			"Result": "(IR.Move32 x)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "LogicalNot64",
+			"SubName": "Twice",
+			"Expression": "IR.LogicalNot64 (IR.LogicalNot64 x)",
+			"Filter": "",
+			"Result": "(IR.Move64 x)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Add32",
+			"SubName": "Combine",
+			"Expression": "IR.Add32 (IR.Add32 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Add32 a [Add32(To32(b), To32(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Add64",
+			"SubName": "Combine",
+			"Expression": "IR.Add64 (IR.Add64 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Add64 a [Add64(To64(b), To64(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "AddR4",
+			"SubName": "Combine",
+			"Expression": "IR.AddR4 (IR.AddR4 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.AddR4 a [AddR4(ToR4(b), ToR4(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "AddR8",
+			"SubName": "Combine",
+			"Expression": "IR.AddR8 (IR.AddR8 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.AddR8 a [AddR8(ToR8(b), ToR8(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Sub32",
+			"SubName": "Combine",
+			"Expression": "IR.Sub32 (IR.Sub32 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Sub32 a [Sub32(To32(b), To32(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Sub64",
+			"SubName": "Combine",
+			"Expression": "IR.Sub64 (IR.Sub64 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Sub64 a [Sub64(To64(b), To64(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "SubR4",
+			"SubName": "Combine",
+			"Expression": "IR.SubR4 (IR.SubR4 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.SubR4 a [SubR4(ToR4(b), ToR4(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "SubR8",
+			"SubName": "Combine",
+			"Expression": "IR.SubR8 (IR.SubR8 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.SubR8 a [SubR8(ToR8(b), ToR8(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "MulSigned32",
+			"MulSignedName": "Combine",
+			"Expression": "IR.MulSigned32 (IR.MulSigned32 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.MulSigned32 a [MulSigned32(ToSigned32(b), ToSigned32(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "MulSigned64",
+			"MulSignedName": "Combine",
+			"Expression": "IR.MulSigned64 (IR.MulSigned64 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.MulSigned64 a [MulSigned64(ToSigned64(b), ToSigned64(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "MulR4",
+			"MulSignedName": "Combine",
+			"Expression": "IR.MulR4 (IR.MulR4 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.MulR4 a [MulR4(ToR4(b), ToR4(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "MulR8",
+			"MulSignedName": "Combine",
+			"Expression": "IR.MulR8 (IR.MulR8 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.MulR8 a [MulR8(ToR8(b), ToR8(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "MulUnsigned32",
+			"MulUnsignedName": "Combine",
+			"Expression": "IR.MulUnsigned32 (IR.MulUnsigned32 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.MulUnsigned32 a [MulUnsigned32(To32(b), To32(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "MulUnsigned64",
+			"MulUnsignedName": "Combine",
+			"Expression": "IR.MulUnsigned64 (IR.MulUnsigned64 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.MulUnsigned64 a [MulUnsigned64(To64(b), To64(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "LogicalOr32",
+			"SubName": "Combine",
+			"Expression": "IR.LogicalOr32 (IR.LogicalOr32 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.LogicalOr32 a [Or32(To32(b), To32(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "LogicalOr64",
+			"SubName": "Combine",
+			"Expression": "IR.LogicalOr64 (IR.LogicalOr64 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.LogicalOr64 a [Or64(To64(b), To64(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "LogicalAnd32",
+			"SubName": "Combine",
+			"Expression": "IR.LogicalAnd32 (IR.LogicalAnd32 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.LogicalAnd32 a [And32(To32(b), To32(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "LogicalAnd64",
+			"SubName": "Combine",
+			"Expression": "IR.LogicalAnd64 (IR.LogicalAnd64 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.LogicalAnd64 a [And64(To64(b), To64(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "LogicalXor32",
+			"SubName": "Combine",
+			"Expression": "IR.LogicalXor32 (IR.LogicalXor32 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.LogicalXor32 a [Xor32(To32(b), To32(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "LogicalXor64",
+			"SubName": "Combine",
+			"Expression": "IR.LogicalXor64 (IR.LogicalXor64 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.LogicalXor64 a [Xor64(To64(b), To64(c))])"
+		},
+
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "AddSub32",
+			"SubName": "Combine",
+			"Expression": "IR.Add32 (IR.Sub32 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Sub32 a [Add32(To32(b), To32(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "AddSub64",
+			"SubName": "Combine",
+			"Expression": "IR.Add64 (IR.Sub64 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Sub64 a [Add64(To64(b), To64(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "AddSubR4",
+			"SubName": "Combine",
+			"Expression": "IR.AddR4 (IR.SubR4 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.SubR4 a [AddR4(ToR4(b), ToR4(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "AddSubR8",
+			"SubName": "Combine",
+			"Expression": "IR.AddR8 (IR.SubR8 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.SubR8 a [AddR8(ToR8(b), ToR8(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "SubAdd32",
+			"SubName": "Combine",
+			"Expression": "IR.Sub32 (IR.Add32 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Add32 a [Sub32(To32(b), To32(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "SubAdd64",
+			"SubName": "Combine",
+			"Expression": "IR.Sub64 (IR.Add64 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Add64 a [Sub64(To64(b), To64(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "SubAddR4",
+			"SubName": "Combine",
+			"Expression": "IR.SubR4 (IR.AddR4 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.AddR4 a [SubR4(ToR4(b), ToR4(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "SubAddR8",
+			"SubName": "Combine",
+			"Expression": "IR.SubR8 (IR.AddR8 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.AddR8 a [SubR8(ToR8(b), ToR8(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "GetLow64",
+			"SubName": "FromTo64",
+			"Expression": "IR.GetLow64 (IR.To64 a b))",
+			"Filter": "",
+			"Result": "(IR.Move32 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "GetLHigh64",
+			"SubName": "FromTo64",
+			"Expression": "IR.GetHigh64 (IR.To64 a b))",
+			"Filter": "",
+			"Result": "(IR.Move32 b)"
+		}
+	]
+}

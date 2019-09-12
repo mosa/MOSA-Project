@@ -156,6 +156,12 @@ namespace Mosa.Tool.Explorer
 
 			lock (Logs)
 			{
+				if (!Logs.ContainsKey(CurrentLogSection))
+				{
+					tbLogs.Text = string.Empty;
+					return;
+				}
+
 				var lines = Logs[CurrentLogSection];
 
 				if (lines == null)

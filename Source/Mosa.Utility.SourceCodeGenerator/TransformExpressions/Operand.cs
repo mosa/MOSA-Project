@@ -62,10 +62,12 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 
 		public override string ToString()
 		{
-			if (InstructionNode != null)
-				return $"{Index}:{InstructionNode}";
+			if (IsInstruction)
+				return $"{Index} : {InstructionNode}";
+			else if (IsMethod)
+				return $"{Index} : {Method}";
 			else
-				return $"{Index}:{Token}";
+				return $"{Index} : {Token}";
 		}
 	}
 }

@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					InstructionCount++;
 
-					if (node.Instruction != IRInstruction.Phi)
+					if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
 						break;
 
 					Debug.Assert(node.OperandCount == node.Block.PreviousBlocks.Count);

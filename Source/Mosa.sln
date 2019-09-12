@@ -165,13 +165,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup", "Setup", "{624E8284
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{A406F567-5C89-45AB-88CE-E20616B28FFD}"
-	ProjectSection(SolutionItems) = preProject
-		Data\ARMv8A32-Instructions.json = Data\ARMv8A32-Instructions.json
-		Data\IR-Instructions.json = Data\IR-Instructions.json
-		Data\IR-Optimizations.json = Data\IR-Optimizations.json
-		Data\X64-Instructions.json = Data\X64-Instructions.json
-		Data\X86-Instructions.json = Data\X86-Instructions.json
-	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.SourceCodeGenerator", "Mosa.Utility.SourceCodeGenerator\Mosa.Utility.SourceCodeGenerator.csproj", "{A8765C3C-1194-4A3A-8579-745CA47C36D1}"
 EndProject
@@ -226,6 +219,23 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Kernel.BareMetal.ARMv8A32", "Mosa.Kernel.BareMetal.ARMv8A32\Mosa.Kernel.BareMetal.ARMv8A32.csproj", "{6D7FEE6A-1623-49D2-817A-7307BE2BD8BC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.BareMetal.HelloWorldARMv8A32", "Mosa.BareMetal.HelloWorld.ARMv8A32\Mosa.BareMetal.HelloWorldARMv8A32.csproj", "{70D04EFA-8BEA-45D1-8FC2-F48F5C590C69}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Instructions", "Instructions", "{225883A6-A279-4F4A-9A06-9FE4E32A1B6A}"
+	ProjectSection(SolutionItems) = preProject
+		Data\ARMv8A32-Instructions.json = Data\ARMv8A32-Instructions.json
+		Data\IR-Instructions.json = Data\IR-Instructions.json
+		Data\X64-Instructions.json = Data\X64-Instructions.json
+		Data\X86-Instructions.json = Data\X86-Instructions.json
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transforms", "Transforms", "{F84EFA2E-4B38-410F-A7DE-385DB71BB37F}"
+	ProjectSection(SolutionItems) = preProject
+		Data\IR-Optimizations-ConstantFolding.json = Data\IR-Optimizations-ConstantFolding.json
+		Data\IR-Optimizations-ConstantMove.json = Data\IR-Optimizations-ConstantMove.json
+		Data\IR-Optimizations-Rewrite.json = Data\IR-Optimizations-Rewrite.json
+		Data\IR-Optimizations-Simplification.json = Data\IR-Optimizations-Simplification.json
+		Data\IR-Optimizations-StrengthReduction.json = Data\IR-Optimizations-StrengthReduction.json
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1335,6 +1345,8 @@ Global
 		{599D1C00-7C78-4211-A958-1285C4CB76C1} = {3C5A2C4B-FD05-42B3-B6C6-C366DF978A62}
 		{6D7FEE6A-1623-49D2-817A-7307BE2BD8BC} = {75BB6B40-C122-422F-8B40-F50A70A08E0D}
 		{70D04EFA-8BEA-45D1-8FC2-F48F5C590C69} = {1AB7FA6A-829C-4DCF-BCA6-A27156D8DA26}
+		{225883A6-A279-4F4A-9A06-9FE4E32A1B6A} = {A406F567-5C89-45AB-88CE-E20616B28FFD}
+		{F84EFA2E-4B38-410F-A7DE-385DB71BB37F} = {A406F567-5C89-45AB-88CE-E20616B28FFD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C22A5C94-6B05-4B1B-845A-A2EA7615E093}

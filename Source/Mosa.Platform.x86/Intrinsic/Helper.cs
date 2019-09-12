@@ -31,7 +31,7 @@ namespace Mosa.Platform.x86.Intrinsic
 
 				var node = operand1.Definitions[0];
 
-				if ((node.Instruction == X86.Mov32 || node.Instruction == IRInstruction.MoveInt32) && node.Operand1.IsConstant)
+				if ((node.Instruction == X86.Mov32 || node.Instruction == IRInstruction.Move32) && node.Operand1.IsConstant)
 				{
 					operand1 = node.Operand1;
 					continue;

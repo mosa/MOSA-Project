@@ -58,5 +58,47 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				}
 			}
 		}
+
+		public void AddUse(InstructionNode node)
+		{
+			foreach (var operand in node.Operands)
+			{
+				if (operand.IsLabel)
+				{
+					var label = GetExpressionLabel(operand.LabelName);
+
+					label.IsInResult = true;
+				}
+				else if (operand.IsInstruction)
+				{
+					AddUse(operand.InstructionNode);
+				}
+				else if (operand.IsMethod)
+				{
+					AddUseMethod(operand.Method);
+				}
+			}
+		}
+
+		public void AddUseMethod(Method method)
+		{
+			foreach (var operand in method.Parameters)
+			{
+				if (operand.IsLabel)
+				{
+					var label = GetExpressionLabel(operand.LabelName);
+
+					label.IsInResult = true;
+				}
+				else if (operand.IsInstruction)
+				{
+					AddUse(operand.InstructionNode);
+				}
+				else if (operand.IsMethod)
+				{
+					AddUseMethod(operand.Method);
+				}
+			}
+		}
 	}
 }

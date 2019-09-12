@@ -33,7 +33,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 					{
 						c = expression[index];
 
-						if (IsDigit(c) || c == '.' || c == 'x' || c == 'l' || c == 'f' || c == 'd' || c == 'b')
+						if (IsDigit(c) || c == '.' || c == 'x' || c == 'l' || c == 'f' || c == 'd' || c == 'b' || c == 'u' || c == 'i')
 						{
 							index++;
 							continue;
@@ -140,7 +140,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			int length = part.Length;
 			char last = (length > 1) ? part[length - 1] : ' ';
 
-			if (last == 'd' || last == 'f' || last == 'l' || last == 'i')
+			if (last == 'd' || last == 'f' || last == 'l' || last == 'i' || last == 'u')
 			{
 				part = part.Substring(0, length - 1);
 			}
@@ -181,7 +181,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			// integer
 			var l = long.Parse(part);
 
-			return (last == 'i')
+			return (last == 'i' || last == 'u')
 				? new Token(TokenType.IntegerConstant, index, part, (uint)l)
 				: new Token(TokenType.LongConstant, index, part, l);
 		}

@@ -36,8 +36,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				start++;
 			}
 
-			int index = start;
-			for (; index < length;)
+			for (int index = start; index < length;)
 			{
 				var token = tokens[index++];
 
@@ -48,7 +47,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				else if (token.TokenType == TokenType.Word && method.MethodName == null)
 				{
 					method.MethodName = token.Value;
-					index++; // skip open paran
+					index++; // skip open param
 				}
 				else if (token.TokenType == TokenType.Word && method.MethodName != null)
 				{
@@ -57,7 +56,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 
 					if (next.TokenType == TokenType.OpenParens)
 					{
-						var (innermethod, end) = ParseMethod(tokens, index + 2);
+						var (innermethod, end) = ParseMethod(tokens, index - 1);
 
 						index = end;
 

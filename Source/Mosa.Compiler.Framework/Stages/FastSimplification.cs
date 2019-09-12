@@ -57,8 +57,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var node = virtualRegister.Definitions[0];
 
-					if ((node.Instruction == IRInstruction.MoveInt32
-						|| node.Instruction == IRInstruction.MoveInt64)
+					if ((node.Instruction == IRInstruction.Move32
+						|| node.Instruction == IRInstruction.Move64)
 						&& node.Operand1.IsResolvedConstant)
 					{
 						// Propagate Constant
@@ -86,10 +86,10 @@ namespace Mosa.Compiler.Framework.Stages
 						change = true;
 						PropagateConstantCount.Increment();
 					}
-					else if ((node.Instruction == IRInstruction.MoveInt32
-						|| node.Instruction == IRInstruction.MoveInt64
-						|| node.Instruction == IRInstruction.MoveFloatR4
-						|| node.Instruction == IRInstruction.MoveFloatR8)
+					else if ((node.Instruction == IRInstruction.Move32
+						|| node.Instruction == IRInstruction.Move64
+						|| node.Instruction == IRInstruction.MoveR4
+						|| node.Instruction == IRInstruction.MoveR8)
 						&& node.Operand1.IsVirtualRegister
 						&& ValidateSSAForm(node.Operand1))
 					{
