@@ -66,12 +66,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the linker used to resolve externals.
 		/// </summary>
-		protected Linker.MosaLinker Linker;
+		protected MosaLinker Linker;
 
 		/// <summary>
 		/// Gets the name of the method.
 		/// </summary>
-		protected string MethodName;
+		public string MethodName;
 
 		/// <summary>
 		/// Patches we need to perform.

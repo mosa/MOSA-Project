@@ -96,8 +96,8 @@ namespace Mosa.Compiler.Framework
 				case ConditionCode.Negative: return ConditionCode.Negative;
 				case ConditionCode.Always: return ConditionCode.Always;
 				case ConditionCode.Never: return ConditionCode.Never;
-				case ConditionCode.Parity: return ConditionCode.NoParity;
-				case ConditionCode.NoParity: return ConditionCode.Parity;
+				case ConditionCode.Parity: return ConditionCode.Parity;
+				case ConditionCode.NoParity: return ConditionCode.NoParity;
 				default: throw new NotSupportedException();
 			}
 		}

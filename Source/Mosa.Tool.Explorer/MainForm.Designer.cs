@@ -54,6 +54,7 @@
             this.cbEnableInlinedMethods = new System.Windows.Forms.ToolStripMenuItem();
             this.cbEnableTwoPassOptimizations = new System.Windows.Forms.ToolStripMenuItem();
             this.cbEnableLongExpansion = new System.Windows.Forms.ToolStripMenuItem();
+            this.cbEnableBitTracker = new System.Windows.Forms.ToolStripMenuItem();
             this.cbEnableBinaryCodeGeneration = new System.Windows.Forms.ToolStripMenuItem();
             this.displayOptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showOperandTypes = new System.Windows.Forms.ToolStripMenuItem();
@@ -90,7 +91,7 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.cbEnableBitTracker = new System.Windows.Forms.ToolStripMenuItem();
+            this.CBEnableMultithreading = new System.Windows.Forms.ToolStripMenuItem();
             label4 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             stageLabel = new System.Windows.Forms.Label();
@@ -321,6 +322,15 @@
             this.cbEnableLongExpansion.Size = new System.Drawing.Size(293, 22);
             this.cbEnableLongExpansion.Text = "Enable Long Expansion";
             // 
+            // cbEnableBitTracker
+            // 
+            this.cbEnableBitTracker.Checked = true;
+            this.cbEnableBitTracker.CheckOnClick = true;
+            this.cbEnableBitTracker.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbEnableBitTracker.Name = "cbEnableBitTracker";
+            this.cbEnableBitTracker.Size = new System.Drawing.Size(293, 22);
+            this.cbEnableBitTracker.Text = "Enable Bit Tracker";
+            // 
             // cbEnableBinaryCodeGeneration
             // 
             this.cbEnableBinaryCodeGeneration.Checked = true;
@@ -344,7 +354,7 @@
             // 
             this.showOperandTypes.CheckOnClick = true;
             this.showOperandTypes.Name = "showOperandTypes";
-            this.showOperandTypes.Size = new System.Drawing.Size(185, 22);
+            this.showOperandTypes.Size = new System.Drawing.Size(184, 22);
             this.showOperandTypes.Text = "Show Operand Types";
             this.showOperandTypes.CheckStateChanged += new System.EventHandler(this.showOperandTypes_CheckStateChanged);
             // 
@@ -354,7 +364,7 @@
             this.padInstructions.CheckOnClick = true;
             this.padInstructions.CheckState = System.Windows.Forms.CheckState.Checked;
             this.padInstructions.Name = "padInstructions";
-            this.padInstructions.Size = new System.Drawing.Size(185, 22);
+            this.padInstructions.Size = new System.Drawing.Size(184, 22);
             this.padInstructions.Text = "Pad Instructions";
             this.padInstructions.CheckStateChanged += new System.EventHandler(this.padInstructions_CheckStateChanged);
             // 
@@ -364,7 +374,7 @@
             this.showSizes.CheckOnClick = true;
             this.showSizes.CheckState = System.Windows.Forms.CheckState.Checked;
             this.showSizes.Name = "showSizes";
-            this.showSizes.Size = new System.Drawing.Size(185, 22);
+            this.showSizes.Size = new System.Drawing.Size(184, 22);
             this.showSizes.Text = "Show Sizes";
             this.showSizes.Click += new System.EventHandler(this.showSizesToolStripMenuItem_Click);
             // 
@@ -372,6 +382,7 @@
             // 
             this.advanceToolStripMenuItem.CheckOnClick = true;
             this.advanceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.CBEnableMultithreading,
             this.cbEnableMethodScanner,
             this.dumpAllMethodStagesToolStripMenuItem});
             this.advanceToolStripMenuItem.Name = "advanceToolStripMenuItem";
@@ -470,7 +481,7 @@
             this.tabControl.Name = "tabControl";
             this.tabControl.Padding = new System.Drawing.Point(0, 0);
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(610, 401);
+            this.tabControl.Size = new System.Drawing.Size(608, 401);
             this.tabControl.TabIndex = 38;
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
@@ -485,7 +496,7 @@
             this.tabStages.Location = new System.Drawing.Point(4, 25);
             this.tabStages.Margin = new System.Windows.Forms.Padding(0);
             this.tabStages.Name = "tabStages";
-            this.tabStages.Size = new System.Drawing.Size(602, 372);
+            this.tabStages.Size = new System.Drawing.Size(600, 372);
             this.tabStages.TabIndex = 0;
             this.tabStages.Text = "Instructions";
             // 
@@ -538,7 +549,7 @@
             this.tabStageDebug.Location = new System.Drawing.Point(4, 25);
             this.tabStageDebug.Margin = new System.Windows.Forms.Padding(0);
             this.tabStageDebug.Name = "tabStageDebug";
-            this.tabStageDebug.Size = new System.Drawing.Size(602, 372);
+            this.tabStageDebug.Size = new System.Drawing.Size(600, 372);
             this.tabStageDebug.TabIndex = 1;
             this.tabStageDebug.Text = "Debug";
             // 
@@ -575,7 +586,7 @@
             this.tabMethodCounters.Location = new System.Drawing.Point(4, 25);
             this.tabMethodCounters.Margin = new System.Windows.Forms.Padding(0);
             this.tabMethodCounters.Name = "tabMethodCounters";
-            this.tabMethodCounters.Size = new System.Drawing.Size(602, 372);
+            this.tabMethodCounters.Size = new System.Drawing.Size(600, 372);
             this.tabMethodCounters.TabIndex = 6;
             this.tabMethodCounters.Text = "Counters";
             // 
@@ -601,7 +612,7 @@
             this.tabLogs.Location = new System.Drawing.Point(4, 25);
             this.tabLogs.Margin = new System.Windows.Forms.Padding(0);
             this.tabLogs.Name = "tabLogs";
-            this.tabLogs.Size = new System.Drawing.Size(602, 372);
+            this.tabLogs.Size = new System.Drawing.Size(600, 372);
             this.tabLogs.TabIndex = 7;
             this.tabLogs.Text = "Logs";
             // 
@@ -711,14 +722,11 @@
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // cbEnableBitTracker
+            // CBEnableMultithreading
             // 
-            this.cbEnableBitTracker.Checked = true;
-            this.cbEnableBitTracker.CheckOnClick = true;
-            this.cbEnableBitTracker.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbEnableBitTracker.Name = "cbEnableBitTracker";
-            this.cbEnableBitTracker.Size = new System.Drawing.Size(293, 22);
-            this.cbEnableBitTracker.Text = "Enable Bit Tracker";
+            this.CBEnableMultithreading.Name = "CBEnableMultithreading";
+            this.CBEnableMultithreading.Size = new System.Drawing.Size(206, 22);
+            this.CBEnableMultithreading.Text = "Enable Multithreading";
             // 
             // MainForm
             // 
@@ -814,5 +822,6 @@
 		private System.Windows.Forms.ToolStripComboBox cbPlatform;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
 		private System.Windows.Forms.ToolStripMenuItem cbEnableBitTracker;
+		private System.Windows.Forms.ToolStripMenuItem CBEnableMultithreading;
 	}
 }

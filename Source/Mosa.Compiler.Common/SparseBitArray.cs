@@ -7,9 +7,9 @@ namespace Mosa.Compiler.Common
 {
 	public sealed class SparseBitArray
 	{
-		private int[] Bits;
+		private ulong[] Bits;
 
-		private int Length { get { return Bits == null ? 0 : Bits.Length * 4; } }
+		private int Length { get { return Bits == null ? 0 : Bits.Length * 8; } }
 
 		public SparseBitArray()
 		{
@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Common
 		{
 			Debug.Assert(size >= 0);
 
-			Bits = new int[(size + 31) / 32];
+			Bits = new ulong[(size + 63) / 64];
 		}
 
 		public bool Get(int index)
@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Common
 			if (index >= Length)
 				return false;
 
-			return (Bits[index / 32] & (1 << (index % 32))) != 0;
+			return (Bits[index / 64] & (1ul << (index % 64))) != 0;
 		}
 
 		public void Reserve(int size)
@@ -39,16 +39,16 @@ namespace Mosa.Compiler.Common
 
 			if (size < 32)
 			{
-				size = 32;
+				size = 64;
 			}
 
 			if (Bits == null)
 			{
-				Bits = new int[(size + 31) / 32];
+				Bits = new ulong[(size + 63) / 64];
 			}
 			else
 			{
-				var newBits = new int[(size + 31) / 32];
+				var newBits = new ulong[(size + 63) / 64];
 
 				for (int i = 0; i < Bits.Length; i++)
 				{
@@ -73,12 +73,20 @@ namespace Mosa.Compiler.Common
 
 			if (value)
 			{
-				Bits[index / 32] |= (1 << (index % 32));
+				Bits[index / 64] |= (1u << (index % 64));
 			}
 			else
 
 			{
-				Bits[index / 32] &= ~(1 << (index % 32));
+				Bits[index / 64] &= ~(1u << (index % 64));
+			}
+		}
+
+		public void SetAll(bool value)
+		{
+			for (int i = 0; i < Bits.Length; i++)
+			{
+				Bits[i] = value ? uint.MaxValue : 0u;
 			}
 		}
 
@@ -87,7 +95,9 @@ namespace Mosa.Compiler.Common
 			for (int i = 0; i < Length; i++)
 			{
 				if (Get(i))
+				{
 					yield return i;
+				}
 			}
 		}
 	}

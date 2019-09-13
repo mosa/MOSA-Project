@@ -228,7 +228,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (node.IsEmptyOrNop)
 					continue;
 
-				if (node.Instruction != IRInstruction.Phi)
+				if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
 				{
 					for (var i = 0; i < node.OperandCount; ++i)
 					{
@@ -282,7 +282,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmptyOrNop)
 						continue;
 
-					if (node.Instruction != IRInstruction.Phi)
+					if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
 						break;
 
 					Debug.Assert(node.OperandCount == node.Block.PreviousBlocks.Count);
@@ -393,7 +393,15 @@ namespace Mosa.Compiler.Framework.Stages
 		private void InsertPhiInstruction(BasicBlock block, Operand variable)
 		{
 			var context = new Context(block);
-			context.AppendInstruction(IRInstruction.Phi, variable);
+
+			if (variable.IsR4)
+				context.AppendInstruction(IRInstruction.PhiR4, variable);
+			else if (variable.IsR8)
+				context.AppendInstruction(IRInstruction.PhiR8, variable);
+			else if (variable.Is64BitInteger)
+				context.AppendInstruction(IRInstruction.Phi64, variable);
+			else
+				context.AppendInstruction(IRInstruction.Phi32, variable);
 
 			var sourceBlocks = new List<BasicBlock>(block.PreviousBlocks.Count);
 			context.PhiBlocks = sourceBlocks;

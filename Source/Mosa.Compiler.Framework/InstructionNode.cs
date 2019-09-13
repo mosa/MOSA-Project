@@ -952,15 +952,15 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			for (int i = 0; i < ResultCount; i++)
-			{
-				var operand = GetResult(i);
+			//for (int i = 0; i < ResultCount; i++)
+			//{
+			//	var operand = GetResult(i);
 
-				if (target == operand)
-				{
-					SetResult(i, replacement);
-				}
-			}
+			//	if (target == operand)
+			//	{
+			//		SetResult(i, replacement);
+			//	}
+			//}
 		}
 
 		/// <summary>

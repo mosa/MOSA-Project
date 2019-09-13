@@ -16,8 +16,8 @@ namespace Mosa.Platform.x86.Stages
 		{
 			AddVisitation(IRInstruction.DivSigned64, DivSigned64);     // sdiv64
 			AddVisitation(IRInstruction.DivUnsigned64, DivUnsigned64); // udiv64
-			AddVisitation(IRInstruction.RemFloatR4, RemFloatR4);
-			AddVisitation(IRInstruction.RemFloatR8, RemFloatR8);
+			AddVisitation(IRInstruction.RemR4, RemFloatR4);
+			AddVisitation(IRInstruction.RemR8, RemFloatR8);
 			AddVisitation(IRInstruction.RemSigned64, RemSigned64);     // smod64
 			AddVisitation(IRInstruction.RemUnsigned64, RemUnsigned64); // umod64
 		}

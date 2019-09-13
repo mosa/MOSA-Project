@@ -21,7 +21,10 @@ namespace Mosa.Utility.SourceCodeGenerator
 			JsonFile = jsonFile;
 			DestinationPath = destinationPath;
 			DestinationFile = destinationFile;
+		}
 
+		public void Execute()
+		{
 			ReadJSON();
 			Iterator();
 		}
@@ -71,6 +74,9 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected void ReadJSON()
 		{
+			if (JsonFile == null)
+				return;
+
 			var json = File.ReadAllText(JsonFile);
 
 			var jss = new JavaScriptSerializer();

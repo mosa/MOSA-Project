@@ -99,9 +99,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.Kernel.BareMetal.ARMv8A32\Mosa.Kernel.BareMetal.ARMv8A32.csproj">
+    <ProjectReference Include="..\Mosa.Kernel.BareMetal.x86\Mosa.Kernel.BareMetal.x86.csproj">
       <Project>{4cff6607-4d83-46e6-a1d0-ef045311c983}</Project>
-      <Name>Mosa.Kernel.BareMetal.ARMv8A32</Name>
+      <Name>Mosa.Kernel.BareMetal.x86</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Kernel.BareMetal\Mosa.Kernel.BareMetal.csproj">
       <Project>{4cff6607-4d83-46e6-a1d0-ef045311c984}</Project>

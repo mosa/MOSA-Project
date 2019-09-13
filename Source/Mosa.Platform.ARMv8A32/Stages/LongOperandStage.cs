@@ -21,21 +21,21 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		{
 			AddVisitation(IRInstruction.Add64, Add64);
 
-			//AddVisitation(IRInstruction.BitCopyFloatR8ToInt64, BitCopyFloatR8ToInt64);
-			//AddVisitation(IRInstruction.BitCopyInt64ToFloatR8, BitCopyInt64ToFloatR8);
+			//AddVisitation(IRInstruction.BitCopyFloatR8To64, BitCopyFloatR8To64);
+			//AddVisitation(IRInstruction.BitCopy64ToFloatR8, BitCopy64ToFloatR8);
 			//AddVisitation(IRInstruction.ArithShiftRight64, ArithShiftRight64);
 			//AddVisitation(IRInstruction.Call, Call);
 			//AddVisitation(IRInstruction.CompareInt32x64, CompareInt32x64);
-			//AddVisitation(IRInstruction.CompareInt64x32, CompareInt64x32);
-			//AddVisitation(IRInstruction.CompareInt64x64, CompareInt64x64);
+			//AddVisitation(IRInstruction.Compare64x32, Compare64x32);
+			//AddVisitation(IRInstruction.Compare64x64, Compare64x64);
 			//AddVisitation(IRInstruction.CompareIntBranch64, CompareIntBranch64);
-			//AddVisitation(IRInstruction.ConvertFloatR4ToInt64, ConvertFloatR4ToInt64);
-			//AddVisitation(IRInstruction.ConvertFloatR8ToInt64, ConvertFloatR8ToInteger64);
-			//AddVisitation(IRInstruction.ConvertInt64ToFloatR4, ConvertInt64ToFloatR4);
-			//AddVisitation(IRInstruction.ConvertInt64ToFloatR8, ConvertInt64ToFloatR8);
+			//AddVisitation(IRInstruction.ConvertFloatR4To64, ConvertFloatR4To64);
+			//AddVisitation(IRInstruction.ConvertFloatR8To64, ConvertFloatR8ToInteger64);
+			//AddVisitation(IRInstruction.Convert64ToFloatR4, Convert64ToFloatR4);
+			//AddVisitation(IRInstruction.Convert64ToFloatR8, Convert64ToFloatR8);
 			//AddVisitation(IRInstruction.IfThenElse64, IfThenElse64);
-			//AddVisitation(IRInstruction.LoadInt64, LoadInt64);
-			//AddVisitation(IRInstruction.LoadParamInt64, LoadParamInt64);
+			//AddVisitation(IRInstruction.Load64, Load64);
+			//AddVisitation(IRInstruction.LoadParam64, LoadParam64);
 			//AddVisitation(IRInstruction.LoadParamSignExtend16x64, LoadParamSignExtend16x64);
 			//AddVisitation(IRInstruction.LoadParamSignExtend32x64, LoadParamSignExtend32x64);
 			//AddVisitation(IRInstruction.LoadParamSignExtend8x64, LoadParamSignExtend8x64);
@@ -46,7 +46,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.LogicalNot64, LogicalNot64);
 			//AddVisitation(IRInstruction.LogicalOr64, LogicalOr64);
 			//AddVisitation(IRInstruction.LogicalXor64, LogicalXor64);
-			//AddVisitation(IRInstruction.MoveInt64, MoveInteger64);
+			//AddVisitation(IRInstruction.Move64, MoveInteger64);
 			//AddVisitation(IRInstruction.MulSigned64, MulSigned64);
 			//AddVisitation(IRInstruction.MulUnsigned64, MulUnsigned64);
 			//AddVisitation(IRInstruction.ShiftLeft64, ShiftLeft64);
@@ -56,8 +56,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.SignExtend8x64, SignExtend8x64);
 			//AddVisitation(IRInstruction.GetHigh64, GetHigh64);
 			//AddVisitation(IRInstruction.GetLow64, GetLow64);
-			//AddVisitation(IRInstruction.StoreInt64, StoreInt64);
-			//AddVisitation(IRInstruction.StoreParamInt64, StoreParamInt64);
+			//AddVisitation(IRInstruction.Store64, Store64);
+			//AddVisitation(IRInstruction.StoreParam64, StoreParam64);
 			//AddVisitation(IRInstruction.Sub64, Sub64);
 			//AddVisitation(IRInstruction.To64, To64);
 			//AddVisitation(IRInstruction.Truncation64x32, Truncation64x32);

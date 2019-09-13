@@ -288,8 +288,10 @@ namespace Mosa.Compiler.Framework.Stages
 				if (IsSimpleIRMoveInstruction(node.Instruction))
 					continue; // sometimes PHI are converted to moves
 
-				if (node.Instruction != IRInstruction.Phi)
+				if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
 					break;
+
+				var phiInstruction = node.Instruction;
 
 				var internalSourceBlocks = new List<BasicBlock>(node.OperandCount);
 				var internalSourceOperands = new List<Operand>(node.OperandCount);
@@ -322,10 +324,10 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 				}
 
-				preheader.AppendInstruction(IRInstruction.Phi, transitionOperand, externalSourceOperands);
+				preheader.AppendInstruction(phiInstruction, transitionOperand, externalSourceOperands);
 				preheader.PhiBlocks = externalSourceBlocks;
 
-				node.SetInstruction(IRInstruction.Phi, node.Result, internalSourceOperands);
+				node.SetInstruction(phiInstruction, node.Result, internalSourceOperands);
 				node.PhiBlocks = internalSourceBlocks;
 
 				OptimizePhi(preheader.Node);

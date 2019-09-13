@@ -14,8 +14,8 @@ namespace Mosa.Platform.x64.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			AddVisitation(IRInstruction.RemFloatR4, RemFloatR4);
-			AddVisitation(IRInstruction.RemFloatR8, RemFloatR8);
+			AddVisitation(IRInstruction.RemR4, RemFloatR4);
+			AddVisitation(IRInstruction.RemR8, RemFloatR8);
 		}
 
 		#region Visitation Methods

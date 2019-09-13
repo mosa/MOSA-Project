@@ -38,7 +38,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 
 			ResultInstructionTree = ResultParser.Parse(TokenizedResult);
 
-			var reversePostOrder = Preorder(ResultInstructionTree);
+			LabelSet.AddUse(ResultInstructionTree);
 		}
 
 		public override string ToString()
@@ -46,7 +46,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			return $"{InstructionTree} & {FilterText} -> {ResultText}";
 		}
 
-		public List<InstructionNode> Preorder(InstructionNode tree)
+		public List<InstructionNode> __Preorder(InstructionNode tree)
 		{
 			var result = new List<InstructionNode>();
 			var worklist = new Queue<InstructionNode>();
@@ -76,7 +76,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			return result;
 		}
 
-		public List<InstructionNode> GetList(InstructionNode tree)
+		public List<InstructionNode> GetPreorder(InstructionNode tree)
 		{
 			var result = new List<InstructionNode>();
 			var worklist = new Stack<InstructionNode>();
@@ -100,7 +100,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			return result;
 		}
 
-		public List<Method> GetList(Method tree)
+		public List<Method> GetPreorder(Method tree)
 		{
 			var result = new List<Method>();
 			var worklist = new Stack<Method>();
@@ -124,12 +124,12 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			return result;
 		}
 
-		public List<InstructionNode> Postorder(InstructionNode tree)
+		public List<InstructionNode> GetPostorder(InstructionNode tree)
 		{
 			var result = new List<InstructionNode>();
 			var contains = new HashSet<InstructionNode>();
 
-			var list = GetList(tree);
+			var list = GetPreorder(tree);
 
 			while (list.Count != result.Count)
 			{
@@ -164,12 +164,12 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			return result;
 		}
 
-		public List<Method> Postorder(Method tree)
+		public List<Method> GetPostorder(Method tree)
 		{
 			var result = new List<Method>();
 			var contains = new HashSet<Method>();
 
-			var list = GetList(tree);
+			var list = GetPreorder(tree);
 
 			while (list.Count != result.Count)
 			{
@@ -251,22 +251,32 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 						{
 							worklistNode.Push(operand.InstructionNode);
 						}
-						if (operand.IsMethod)
+						else if (operand.IsMethod)
 						{
 							worklistMethod.Push(operand.Method);
+						}
+						else
+						{
+							result.Add(operand);
 						}
 					}
 				}
 
 				while (worklistMethod.Count != 0)
 				{
-					var node = worklistNode.Pop();
+					var node = worklistMethod.Pop();
 
-					foreach (var operand in node.Operands)
+					foreach (var operand in node.Parameters)
 					{
 						if (operand.IsMethod)
 						{
 							worklistMethod.Push(operand.Method);
+						}
+						else
+						{
+							// except constants in expressions
+							if (!(operand.IsInteger || operand.IsLong || operand.IsFloat || operand.IsDouble))
+								result.Add(operand);
 						}
 					}
 				}

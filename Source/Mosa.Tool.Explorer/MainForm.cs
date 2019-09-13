@@ -156,6 +156,12 @@ namespace Mosa.Tool.Explorer
 
 			lock (Logs)
 			{
+				if (!Logs.ContainsKey(CurrentLogSection))
+				{
+					tbLogs.Text = string.Empty;
+					return;
+				}
+
 				var lines = Logs[CurrentLogSection];
 
 				if (lines == null)
@@ -484,9 +490,10 @@ namespace Mosa.Tool.Explorer
 			{
 				try
 				{
-					//Compiler.Execute();
-
-					Compiler.ThreadedCompile();
+					if (CBEnableMultithreading.Checked)
+						Compiler.ThreadedCompile();
+					else
+						Compiler.Compile();
 				}
 				finally
 				{

@@ -73,16 +73,16 @@ namespace Mosa.Compiler.Framework.Stages
 				if (left >= 8 & !Is32BitPlatform)
 				{
 					// 64bit move
-					context.AppendInstruction(IRInstruction.LoadInt64, tmpLarge, srcReg, index);
-					context.AppendInstruction(IRInstruction.StoreInt64, null, dstReg, index, tmpLarge);
+					context.AppendInstruction(IRInstruction.Load64, tmpLarge, srcReg, index);
+					context.AppendInstruction(IRInstruction.Store64, null, dstReg, index, tmpLarge);
 					i += 8;
 					continue;
 				}
 				else if (left >= 4)
 				{
 					// 32bit move
-					context.AppendInstruction(IRInstruction.LoadInt32, tmp, srcReg, index);
-					context.AppendInstruction(IRInstruction.StoreInt32, null, dstReg, index, tmp);
+					context.AppendInstruction(IRInstruction.Load32, tmp, srcReg, index);
+					context.AppendInstruction(IRInstruction.Store32, null, dstReg, index, tmp);
 					i += 4;
 					continue;
 				}
@@ -90,7 +90,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					// 16bit move
 					context.AppendInstruction(IRInstruction.LoadParamZeroExtend16x32, tmp, srcReg, index);
-					context.AppendInstruction(IRInstruction.StoreInt16, null, dstReg, index, tmp);
+					context.AppendInstruction(IRInstruction.Store16, null, dstReg, index, tmp);
 					i += 2;
 					continue;
 				}
@@ -98,7 +98,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					// 8bit move
 					context.AppendInstruction(IRInstruction.LoadParamZeroExtend8x32, tmp, srcReg, index);
-					context.AppendInstruction(IRInstruction.StoreInt8, null, dstReg, index, tmp);
+					context.AppendInstruction(IRInstruction.Store8, null, dstReg, index, tmp);
 					i += 1;
 					continue;
 				}

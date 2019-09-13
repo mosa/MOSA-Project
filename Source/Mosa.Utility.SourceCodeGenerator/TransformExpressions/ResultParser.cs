@@ -12,13 +12,12 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			return ParseInstructionNode(tokens, 0, 0, null).node;
 		}
 
-		private static (InstructionNode node, int index, int nodeNbr) ParseInstructionNode(List<Token> tokens, int start, int nodeNbr, InstructionNode parent)
+		private static (InstructionNode node, int end, int nodeNbr) ParseInstructionNode(List<Token> tokens, int start, int nodeNbr, InstructionNode parent)
 		{
 			var node = new InstructionNode() { NodeNbr = nodeNbr, Parent = parent };
 			var length = tokens.Count;
 
-			int index = start;
-			for (; index < length; index++)
+			for (int index = start; index < length; index++)
 			{
 				var token = tokens[index];
 
@@ -33,7 +32,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 					{
 						var childNode = ParseInstructionNode(tokens, index, nodeNbr + 1, node);
 
-						index = childNode.index;
+						index = childNode.end;
 						nodeNbr = childNode.nodeNbr;
 
 						node.Operands.Add(new Operand(childNode.node, node.Operands.Count));
@@ -41,7 +40,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				}
 				else if (token.TokenType == TokenType.CloseParens)
 				{
-					break;
+					return (node, index, nodeNbr);
 				}
 				else if (token.TokenType == TokenType.Word)
 				{
@@ -87,7 +86,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				}
 			}
 
-			return (node, index, nodeNbr);
+			throw new Exception($"parsing error incomplete");
 		}
 
 		private static (Method method, int end) ParseExpression(List<Token> tokens, int start)
@@ -107,7 +106,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				else if (token.TokenType == TokenType.Word && method.MethodName == null)
 				{
 					method.MethodName = token.Value;
-					index++; // skip open paran
+					index++; // skip open param
 				}
 				else if (token.TokenType == TokenType.Word && method.MethodName != null)
 				{
@@ -116,7 +115,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 
 					if (next.TokenType == TokenType.OpenParens)
 					{
-						var innerNode = ParseExpression(tokens, index + 2);
+						var innerNode = ParseExpression(tokens, index - 1);
 
 						index = innerNode.end;
 
@@ -161,7 +160,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				}
 			}
 
-			return (method, index);
+			throw new Exception($"parsing error unexpected end");
 		}
 	}
 }

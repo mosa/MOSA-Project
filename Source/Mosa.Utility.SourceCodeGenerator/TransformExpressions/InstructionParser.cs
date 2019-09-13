@@ -9,31 +9,45 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 	{
 		public static InstructionNode Parse(List<Token> tokens)
 		{
+			if (tokens[0].TokenType != TokenType.OpenParens)
+			{
+				tokens.Insert(0, new Token(TokenType.OpenParens, 0));
+				tokens.Add(new Token(TokenType.CloseParens, 0));
+			}
 			return ParseInstructionNode(tokens, 0, 0).node;
 		}
 
 		private static (InstructionNode node, int end, int nodeNbr) ParseInstructionNode(List<Token> tokens, int start, int nodeNbr)
 		{
-			// skip first open parens, if one exists
-			if (tokens[start].TokenType == TokenType.OpenParens)
-				start++;
-
 			var node = new InstructionNode() { NodeNbr = nodeNbr };
 			var length = tokens.Count;
 
-			int index = start;
-			for (; index < length; index++)
+			for (int index = start; index < length; index++)
 			{
 				var token = tokens[index];
 
-				if (token.TokenType == TokenType.CloseParens)
-					break;
-
-				if (token.TokenType == TokenType.Word && node.InstructionName == null)
+				if (token.TokenType == TokenType.OpenParens)
 				{
-					node.InstructionName = token.Value;
+					if (node.InstructionName == null)
+					{
+						index++;
+						node.InstructionName = tokens[index].Value;
+					}
+					else
+					{
+						var childNode = ParseInstructionNode(tokens, index, nodeNbr + 1);
+
+						index = childNode.end;
+						nodeNbr = childNode.nodeNbr;
+
+						node.Operands.Add(new Operand(childNode.node, node.Operands.Count));
+					}
 				}
-				else if (token.TokenType == TokenType.Word && node.InstructionName != null)
+				else if (token.TokenType == TokenType.CloseParens)
+				{
+					return (node, index, nodeNbr);
+				}
+				else if (token.TokenType == TokenType.Word)
 				{
 					node.Operands.Add(new Operand(new Token(TokenType.Label, token.Position, token.Value), node.Operands.Count));
 				}
@@ -57,22 +71,13 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				{
 					node.Operands.Add(new Operand(token, node.Operands.Count));
 				}
-				else if (token.TokenType == TokenType.OpenParens)
-				{
-					var childNode = ParseInstructionNode(tokens, index + 1, nodeNbr + 1);
-
-					index = childNode.end;
-					nodeNbr = childNode.nodeNbr;
-
-					node.Operands.Add(new Operand(childNode.node, node.Operands.Count));
-				}
 				else
 				{
 					throw new Exception($"parsing error {token}");
 				}
 			}
 
-			return (node, index, nodeNbr);
+			throw new Exception($"parsing error incomplete");
 		}
 	}
 }

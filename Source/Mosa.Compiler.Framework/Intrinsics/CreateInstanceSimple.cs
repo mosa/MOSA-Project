@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			var result = context.Result;
 
 			context.SetInstruction(IRInstruction.CallDynamic, null, ctor, thisObject);
-			context.AppendInstruction(IRInstruction.MoveInt32, result, thisObject);
+			context.AppendInstruction(IRInstruction.Move32, result, thisObject);
 		}
 	}
 }
