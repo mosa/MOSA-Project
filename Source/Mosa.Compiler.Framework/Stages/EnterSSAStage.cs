@@ -174,7 +174,10 @@ namespace Mosa.Compiler.Framework.Stages
 				if (node.IsEmptyOrNop)
 					continue;
 
-				if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
+				if (!(node.Instruction == IRInstruction.Phi32
+					|| node.Instruction == IRInstruction.Phi64
+					|| node.Instruction == IRInstruction.PhiR4
+					|| node.Instruction == IRInstruction.PhiR8))
 				{
 					for (var i = 0; i < node.OperandCount; ++i)
 					{
@@ -223,8 +226,6 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
 						break;
 
-					Debug.Assert(node.OperandCount == node.Block.PreviousBlocks.Count);
-
 					var op = node.GetOperand(index);
 
 					if (variables[op].Count > 0)
@@ -247,14 +248,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (node.Result.IsVirtualRegister == true)
 				{
-					//var op = node.Result.SSAParent;
 					var op = parentOperand[node.Result];
 					variables[op].Pop();
 				}
 
 				if (node.Result2?.IsVirtualRegister == true)
 				{
-					//var op = node.Result2.SSAParent;
 					var op = parentOperand[node.Result2];
 					variables[op].Pop();
 				}
