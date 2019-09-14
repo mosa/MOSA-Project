@@ -61,6 +61,7 @@
             this.padInstructions = new System.Windows.Forms.ToolStripMenuItem();
             this.showSizes = new System.Windows.Forms.ToolStripMenuItem();
             this.advanceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CBEnableMultithreading = new System.Windows.Forms.ToolStripMenuItem();
             this.cbEnableMethodScanner = new System.Windows.Forms.ToolStripMenuItem();
             this.dumpAllMethodStagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
@@ -91,7 +92,6 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.CBEnableMultithreading = new System.Windows.Forms.ToolStripMenuItem();
             label4 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             stageLabel = new System.Windows.Forms.Label();
@@ -389,6 +389,15 @@
             this.advanceToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
             this.advanceToolStripMenuItem.Text = "Advance";
             // 
+            // CBEnableMultithreading
+            // 
+            this.CBEnableMultithreading.Checked = true;
+            this.CBEnableMultithreading.CheckOnClick = true;
+            this.CBEnableMultithreading.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.CBEnableMultithreading.Name = "CBEnableMultithreading";
+            this.CBEnableMultithreading.Size = new System.Drawing.Size(206, 22);
+            this.CBEnableMultithreading.Text = "Enable Multithreading";
+            // 
             // cbEnableMethodScanner
             // 
             this.cbEnableMethodScanner.CheckOnClick = true;
@@ -481,7 +490,7 @@
             this.tabControl.Name = "tabControl";
             this.tabControl.Padding = new System.Drawing.Point(0, 0);
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(608, 401);
+            this.tabControl.Size = new System.Drawing.Size(606, 401);
             this.tabControl.TabIndex = 38;
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
@@ -496,7 +505,7 @@
             this.tabStages.Location = new System.Drawing.Point(4, 25);
             this.tabStages.Margin = new System.Windows.Forms.Padding(0);
             this.tabStages.Name = "tabStages";
-            this.tabStages.Size = new System.Drawing.Size(600, 372);
+            this.tabStages.Size = new System.Drawing.Size(598, 372);
             this.tabStages.TabIndex = 0;
             this.tabStages.Text = "Instructions";
             // 
@@ -549,7 +558,7 @@
             this.tabStageDebug.Location = new System.Drawing.Point(4, 25);
             this.tabStageDebug.Margin = new System.Windows.Forms.Padding(0);
             this.tabStageDebug.Name = "tabStageDebug";
-            this.tabStageDebug.Size = new System.Drawing.Size(600, 372);
+            this.tabStageDebug.Size = new System.Drawing.Size(598, 372);
             this.tabStageDebug.TabIndex = 1;
             this.tabStageDebug.Text = "Debug";
             // 
@@ -586,7 +595,7 @@
             this.tabMethodCounters.Location = new System.Drawing.Point(4, 25);
             this.tabMethodCounters.Margin = new System.Windows.Forms.Padding(0);
             this.tabMethodCounters.Name = "tabMethodCounters";
-            this.tabMethodCounters.Size = new System.Drawing.Size(600, 372);
+            this.tabMethodCounters.Size = new System.Drawing.Size(598, 372);
             this.tabMethodCounters.TabIndex = 6;
             this.tabMethodCounters.Text = "Counters";
             // 
@@ -612,7 +621,7 @@
             this.tabLogs.Location = new System.Drawing.Point(4, 25);
             this.tabLogs.Margin = new System.Windows.Forms.Padding(0);
             this.tabLogs.Name = "tabLogs";
-            this.tabLogs.Size = new System.Drawing.Size(600, 372);
+            this.tabLogs.Size = new System.Drawing.Size(598, 372);
             this.tabLogs.TabIndex = 7;
             this.tabLogs.Text = "Logs";
             // 
@@ -721,12 +730,6 @@
             // 
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // CBEnableMultithreading
-            // 
-            this.CBEnableMultithreading.Name = "CBEnableMultithreading";
-            this.CBEnableMultithreading.Size = new System.Drawing.Size(206, 22);
-            this.CBEnableMultithreading.Text = "Enable Multithreading";
             // 
             // MainForm
             // 

@@ -83,10 +83,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		/// <summary>
-		/// Enters the SSA.
-		/// </summary>
-		/// <param name="headBlock">The head block.</param>
 		private void EnterSSA(BasicBlock headBlock)
 		{
 			var analysis = blockAnalysis[headBlock];
@@ -105,10 +101,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		/// <summary>
-		/// Adds to assignments.
-		/// </summary>
-		/// <param name="operand">The operand.</param>
 		private void AddToAssignments(Operand operand)
 		{
 			if (!variables.ContainsKey(operand))
@@ -124,12 +116,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		/// <summary>
-		/// Gets the SSA operand.
-		/// </summary>
-		/// <param name="operand">The operand.</param>
-		/// <param name="version">The version.</param>
-		/// <returns></returns>
 		private Operand GetSSAOperand(Operand operand, int version)
 		{
 			var ssaArray = ssaOperands[operand];
@@ -146,11 +132,6 @@ namespace Mosa.Compiler.Framework.Stages
 			return ssaOperand;
 		}
 
-		/// <summary>
-		/// Renames the variables.
-		/// </summary>
-		/// <param name="block">The block.</param>
-		/// <param name="dominanceAnalysis">The dominance analysis.</param>
 		private void RenameVariables2(BasicBlock block, SimpleFastDominance dominanceAnalysis)
 		{
 			trace?.Log($"Processing: {block}");
@@ -171,11 +152,6 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateResultOperands(block);
 		}
 
-		/// <summary>
-		/// Renames the variables.
-		/// </summary>
-		/// <param name="headBlock">The head block.</param>
-		/// <param name="dominanceAnalysis">The dominance analysis.</param>
 		private void RenameVariables(BasicBlock headBlock, SimpleFastDominance dominanceAnalysis)
 		{
 			var worklist = new Stack<BasicBlock>();
@@ -323,12 +299,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		/// <summary>
-		/// Which the predecessor.
-		/// </summary>
-		/// <param name="y">The y.</param>
-		/// <param name="x">The x.</param>
-		/// <returns></returns>
 		private int WhichPredecessor(BasicBlock y, BasicBlock x)
 		{
 			for (var i = 0; i < y.PreviousBlocks.Count; ++i)
@@ -342,9 +312,6 @@ namespace Mosa.Compiler.Framework.Stages
 			return -1;
 		}
 
-		/// <summary>
-		/// Collects the assignments.
-		/// </summary>
 		private void CollectAssignments()
 		{
 			foreach (var block in BasicBlocks)
@@ -369,11 +336,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		/// <summary>
-		/// Adds to assignments.
-		/// </summary>
-		/// <param name="operand">The operand.</param>
-		/// <param name="block">The block.</param>
 		private void AddToAssignments(Operand operand, BasicBlock block)
 		{
 			if (!assignments.TryGetValue(operand, out List<BasicBlock> blocks))
@@ -385,11 +347,6 @@ namespace Mosa.Compiler.Framework.Stages
 			blocks.AddIfNew(block);
 		}
 
-		/// <summary>
-		/// Inserts the phi instruction.
-		/// </summary>
-		/// <param name="block">The block.</param>
-		/// <param name="variable">The variable.</param>
 		private void InsertPhiInstruction(BasicBlock block, Operand variable)
 		{
 			var context = new Context(block);
@@ -417,9 +374,6 @@ namespace Mosa.Compiler.Framework.Stages
 			//Debug.Assert(context.OperandCount == context.Block.PreviousBlocks.Count);
 		}
 
-		/// <summary>
-		/// Places the phi functions minimal.
-		/// </summary>
 		private void PlacePhiFunctionsMinimal()
 		{
 			foreach (var headBlock in BasicBlocks.HeadBlocks)
@@ -428,10 +382,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		/// <summary>
-		/// Places the phi functions minimal.
-		/// </summary>
-		/// <param name="headBlock">The head block.</param>
 		private void PlacePhiFunctionsMinimal(BasicBlock headBlock)
 		{
 			var analysis = blockAnalysis[headBlock];
