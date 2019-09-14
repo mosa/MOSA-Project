@@ -22,14 +22,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private Dictionary<Operand, List<BasicBlock>> assignments;
 		private Dictionary<Operand, Operand> parentOperand;
 
-		private Counter InstructionCount = new Counter("EnterSSAStage.IRInstructions");
-
 		private TraceLog trace;
-
-		protected override void Initialize()
-		{
-			Register(InstructionCount);
-		}
 
 		protected override void Setup()
 		{
@@ -85,8 +78,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void EnterSSA(BasicBlock headBlock)
 		{
-			var analysis = blockAnalysis[headBlock];
-
 			variables = new Dictionary<Operand, Stack<int>>();
 			counts = new Dictionary<Operand, int>();
 
@@ -97,7 +88,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (headBlock.NextBlocks.Count > 0)
 			{
-				RenameVariables(headBlock.NextBlocks[0], analysis);
+				RenameVariables(headBlock.NextBlocks[0], blockAnalysis[headBlock]);
 			}
 		}
 
@@ -123,33 +114,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (ssaOperand == null)
 			{
-				ssaOperand = version == 0 ? operand : AllocateVirtualRegister(operand.Type);
+				ssaOperand = AllocateVirtualRegister(operand.Type);
 				ssaArray[version] = ssaOperand;
 
 				parentOperand.Add(ssaOperand, operand);
 			}
 
 			return ssaOperand;
-		}
-
-		private void RenameVariables2(BasicBlock block, SimpleFastDominance dominanceAnalysis)
-		{
-			trace?.Log($"Processing: {block}");
-
-			UpdateOperands(block);
-			UpdatePHIs(block);
-
-			// Repeat for all children of the dominance block, if any
-			var children = dominanceAnalysis.GetChildren(block);
-			if (children != null && children.Count != 0)
-			{
-				foreach (var s in children)
-				{
-					RenameVariables2(s, dominanceAnalysis);
-				}
-			}
-
-			UpdateResultOperands(block);
 		}
 
 		private void RenameVariables(BasicBlock headBlock, SimpleFastDominance dominanceAnalysis)
@@ -198,7 +169,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void UpdateOperands(BasicBlock block)
 		{
-			// Update Operands in current block
 			for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 			{
 				if (node.IsEmptyOrNop)
@@ -210,10 +180,8 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						var op = node.GetOperand(i);
 
-						if (op == null || !op.IsVirtualRegister)
+						if (!op.IsVirtualRegister)
 							continue;
-
-						Debug.Assert(variables.ContainsKey(op), $"{op} is not in dictionary [block = {block}]");
 
 						var version = variables[op].Peek();
 						node.SetOperand(i, GetSSAOperand(op, version));
@@ -223,9 +191,6 @@ namespace Mosa.Compiler.Framework.Stages
 				if (node.Result?.IsVirtualRegister == true)
 				{
 					var op = node.Result;
-
-					Debug.Assert(counts.ContainsKey(op), $"{op} is not in counts");
-
 					var index = counts[op];
 					node.Result = GetSSAOperand(op, index);
 					variables[op].Push(index);
@@ -235,9 +200,6 @@ namespace Mosa.Compiler.Framework.Stages
 				if (node.Result2?.IsVirtualRegister == true)
 				{
 					var op = node.Result2;
-
-					Debug.Assert(counts.ContainsKey(op), $"{op} is not in counts");
-
 					var index = counts[op];
 					node.Result2 = GetSSAOperand(op, index);
 					variables[op].Push(index);
@@ -283,18 +245,18 @@ namespace Mosa.Compiler.Framework.Stages
 				if (node.IsEmptyOrNop || node.ResultCount == 0)
 					continue;
 
-				if (node.Result?.IsVirtualRegister == true)
+				if (node.Result.IsVirtualRegister == true)
 				{
 					//var op = node.Result.SSAParent;
 					var op = parentOperand[node.Result];
-					var index = variables[op].Pop();
+					variables[op].Pop();
 				}
 
 				if (node.Result2?.IsVirtualRegister == true)
 				{
 					//var op = node.Result2.SSAParent;
 					var op = parentOperand[node.Result2];
-					var index = variables[op].Pop();
+					variables[op].Pop();
 				}
 			}
 		}
@@ -318,12 +280,13 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty)
+					if (node.IsEmptyOrNop || node.ResultCount == 0)
 						continue;
 
-					InstructionCount++;
+					if (node.Result.Definitions.Count <= 0)
+						continue;
 
-					if (node.Result?.IsVirtualRegister == true)
+					if (node.Result.IsVirtualRegister == true)
 					{
 						AddToAssignments(node.Result, block);
 					}
@@ -370,8 +333,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			context.OperandCount = block.PreviousBlocks.Count;
-
-			//Debug.Assert(context.OperandCount == context.Block.PreviousBlocks.Count);
 		}
 
 		private void PlacePhiFunctionsMinimal()
@@ -392,8 +353,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (blocks.Count < 2)
 					continue;
-
-				blocks.AddIfNew(headBlock);
 
 				foreach (var n in analysis.IteratedDominanceFrontier(blocks))
 				{
