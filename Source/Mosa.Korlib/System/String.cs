@@ -463,6 +463,16 @@ namespace System
 			return result;
 		}
 
+		public bool StartsWith(string s)
+		{
+			return Substring(0, s.Length) == s;
+		}
+
+		public bool EndsWith(string s)
+		{
+			return Substring(Length - s.Length, s.Length) == s;
+		}
+
 		public unsafe string Substring(int startIndex)
 		{
 			if (startIndex == 0)
