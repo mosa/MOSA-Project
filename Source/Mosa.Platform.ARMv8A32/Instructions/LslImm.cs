@@ -7,7 +7,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv8A32.Instructions
 {
 	/// <summary>
-	/// LslImm - Logical Shift Left
+	/// LslImm -  Shift Left
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
 	public sealed class LslImm : ARMv8A32Instruction

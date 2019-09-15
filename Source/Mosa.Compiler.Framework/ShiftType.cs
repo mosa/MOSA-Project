@@ -8,14 +8,14 @@ namespace Mosa.Compiler.Framework
 	public enum ShiftType
 	{
 		/// <summary>
-		/// The logical left
+		/// The  left
 		/// </summary>
-		LogicalLeft,
+		Left,
 
 		/// <summary>
-		/// The logical right
+		/// The  right
 		/// </summary>
-		LogicalRight,
+		Right,
 
 		/// <summary>
 		/// The arithmetic right

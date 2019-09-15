@@ -25,7 +25,7 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(IRInstruction.Compare32x64, Compare32x64);
 			AddVisitation(IRInstruction.Compare64x32, Compare64x32);
 			AddVisitation(IRInstruction.Compare64x64, Compare64x64);
-			AddVisitation(IRInstruction.CompareBranch64, CompareIntBranch64);
+			AddVisitation(IRInstruction.CompareBranch64, CompareBranch64);
 			AddVisitation(IRInstruction.ConvertR4To64, ConvertFloatR4To64);
 			AddVisitation(IRInstruction.ConvertR8To64, ConvertFloatR8ToInteger64);
 			AddVisitation(IRInstruction.Convert64ToR4, Convert64ToFloatR4);
@@ -40,10 +40,10 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(IRInstruction.LoadParamZeroExtend16x64, LoadParamZeroExtended16x64);
 			AddVisitation(IRInstruction.LoadParamZeroExtend32x64, LoadParamZeroExtended32x64);
 			AddVisitation(IRInstruction.LoadParamZeroExtend8x64, LoadParamZeroExtended8x64);
-			AddVisitation(IRInstruction.And64, LogicalAnd64);
-			AddVisitation(IRInstruction.Not64, LogicalNot64);
-			AddVisitation(IRInstruction.Or64, LogicalOr64);
-			AddVisitation(IRInstruction.Xor64, LogicalXor64);
+			AddVisitation(IRInstruction.And64, And64);
+			AddVisitation(IRInstruction.Not64, Not64);
+			AddVisitation(IRInstruction.Or64, Or64);
+			AddVisitation(IRInstruction.Xor64, Xor64);
 			AddVisitation(IRInstruction.Move64, Move64);
 			AddVisitation(IRInstruction.MulSigned64, MulSigned64);
 			AddVisitation(IRInstruction.MulUnsigned64, MulUnsigned64);
@@ -111,7 +111,7 @@ namespace Mosa.Platform.x64.Stages
 			context.AppendInstruction(X64.Movzx8To64, resultOperand, v1);
 		}
 
-		private void CompareIntBranch64(Context context)
+		private void CompareBranch64(Context context)
 		{
 			OptimizeBranch(context);
 
@@ -260,22 +260,22 @@ namespace Mosa.Platform.x64.Stages
 			context.ReplaceInstruction(X64.MovzxLoad8);
 		}
 
-		private void LogicalAnd64(Context context)
+		private void And64(Context context)
 		{
 			context.ReplaceInstruction(X64.And64);
 		}
 
-		private void LogicalNot64(Context context)
+		private void Not64(Context context)
 		{
 			context.SetInstruction(X64.Mov64, context.Result, context.Operand1);
 		}
 
-		private void LogicalOr64(Context context)
+		private void Or64(Context context)
 		{
 			context.ReplaceInstruction(X64.Or64);
 		}
 
-		private void LogicalXor64(Context context)
+		private void Xor64(Context context)
 		{
 			context.ReplaceInstruction(X64.Xor64);
 		}

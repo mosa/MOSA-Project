@@ -33,7 +33,7 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(IRInstruction.CompareR4, CompareR4);
 			AddVisitation(IRInstruction.CompareR8, CompareR8);
 			AddVisitation(IRInstruction.Compare32x32, Compare32x32);
-			AddVisitation(IRInstruction.CompareBranch32, CompareIntBranch32);
+			AddVisitation(IRInstruction.CompareBranch32, CompareBranch32);
 			AddVisitation(IRInstruction.IfThenElse32, IfThenElse32);
 			AddVisitation(IRInstruction.ConvertR4ToR8, ConvertR4ToR8);
 			AddVisitation(IRInstruction.ConvertR8ToR4, ConvertR8ToR4);
@@ -60,10 +60,10 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(IRInstruction.LoadParamSignExtend16x32, LoadParamSignExtend16x32);
 			AddVisitation(IRInstruction.LoadParamZeroExtend8x32, LoadParamZeroExtend8x32);
 			AddVisitation(IRInstruction.LoadParamZeroExtend16x32, LoadParamZeroExtend16x32);
-			AddVisitation(IRInstruction.And32, LogicalAnd32);
-			AddVisitation(IRInstruction.Not32, LogicalNot32);
-			AddVisitation(IRInstruction.Or32, LogicalOr32);
-			AddVisitation(IRInstruction.Xor32, LogicalXor32);
+			AddVisitation(IRInstruction.And32, And32);
+			AddVisitation(IRInstruction.Not32, Not32);
+			AddVisitation(IRInstruction.Or32, Or32);
+			AddVisitation(IRInstruction.Xor32, Xor32);
 			AddVisitation(IRInstruction.MoveR4, MoveR4);
 			AddVisitation(IRInstruction.MoveR8, MoveR8);
 			AddVisitation(IRInstruction.Move32, Move32);
@@ -216,7 +216,7 @@ namespace Mosa.Platform.x64.Stages
 			context.AppendInstruction(X64.Movzx8To32, resultOperand, v1);
 		}
 
-		private void CompareIntBranch32(Context context)
+		private void CompareBranch32(Context context)
 		{
 			OptimizeBranch(context);
 
@@ -415,22 +415,22 @@ namespace Mosa.Platform.x64.Stages
 			context.SetInstruction(X64.MovzxLoad8, context.Result, context.Operand1, context.Operand2);
 		}
 
-		private void LogicalAnd32(Context context)
+		private void And32(Context context)
 		{
 			context.ReplaceInstruction(X64.And32);
 		}
 
-		private void LogicalNot32(Context context)
+		private void Not32(Context context)
 		{
 			context.SetInstruction(X64.Not32, context.Result, context.Operand1);
 		}
 
-		private void LogicalOr32(Context context)
+		private void Or32(Context context)
 		{
 			context.ReplaceInstruction(X64.Or32);
 		}
 
-		private void LogicalXor32(Context context)
+		private void Xor32(Context context)
 		{
 			context.ReplaceInstruction(X64.Xor32);
 		}

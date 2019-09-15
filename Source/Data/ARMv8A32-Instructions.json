@@ -2964,7 +2964,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"Description": "Logical Shift Left",
+			"Description": " Shift Left",
 			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,rs=reg4:o2,shifttype=00",
 			"OpcodeEncoding": [
 				{
@@ -2985,7 +2985,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"Description": "Logical Shift Left",
+			"Description": " Shift Left",
 			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,shiftamount=imm5:o2,shifttype=00",
 			"OpcodeEncoding": [
 				{
@@ -3006,7 +3006,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"Description": "Logical Shift Right",
+			"Description": " Shift Right",
 			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,rs=reg4:o2,shifttype=01",
 			"OpcodeEncoding": [
 				{
@@ -3027,7 +3027,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"Description": "Logical Shift Right",
+			"Description": " Shift Right",
 			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,shiftamount=imm5:o2,shifttype=01",
 			"OpcodeEncoding": [
 				{

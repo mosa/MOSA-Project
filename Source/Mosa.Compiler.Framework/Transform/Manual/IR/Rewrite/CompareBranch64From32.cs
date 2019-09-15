@@ -4,9 +4,9 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Transform.Manual.IR.Rewrite
 {
-	public sealed class CompareIntBranch32 : BaseTransformation
+	public sealed class CompareBranch64From32 : BaseTransformation
 	{
-		public CompareIntBranch32() : base(IRInstruction.CompareBranch32)
+		public CompareBranch64From32() : base(IRInstruction.CompareBranch32)
 		{
 		}
 
@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.Rewrite
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Compare32x32)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Compare32x64)
 				return false;
 
 			return true;

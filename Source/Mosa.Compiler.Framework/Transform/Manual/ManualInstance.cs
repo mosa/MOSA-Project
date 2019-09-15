@@ -12,8 +12,8 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 		public static readonly BaseTransformation IR_ConstantFolding_Compare64x32 = new IR.ConstantFolding.Compare64x32();
 		public static readonly BaseTransformation IR_ConstantFolding_Compare64x64 = new IR.ConstantFolding.Compare64x64();
 
-		public static readonly BaseTransformation IR_ConstantFolding_CompareIntBranch32 = new IR.ConstantFolding.CompareIntBranch32();
-		public static readonly BaseTransformation IR_ConstantFolding_CompareIntBranch64 = new IR.ConstantFolding.CompareIntBranch64();
+		public static readonly BaseTransformation IR_ConstantFolding_CompareBranch32 = new IR.ConstantFolding.CompareBranch32();
+		public static readonly BaseTransformation IR_ConstantFolding_CompareBranch64 = new IR.ConstantFolding.CompareBranch64();
 
 		public static readonly BaseTransformation IR_ConstantMove_Compare32x32 = new IR.ConstantMove.Compare32x32();
 		public static readonly BaseTransformation IR_ConstantMove_Compare32x64 = new IR.ConstantMove.Compare32x64();
@@ -64,17 +64,17 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 		public static readonly BaseTransformation IR_Special_PhiR4Invalid = new IR.Special.PhiR4Invalid();
 		public static readonly BaseTransformation IR_Special_PhiR8Invalid = new IR.Special.PhiR8Invalid();
 
-		public static readonly BaseTransformation IR_Simplification_CompareIntBranch32OnlyOneExit = new IR.Simplification.CompareBranch32OnlyOneExit();
-		public static readonly BaseTransformation IR_Simplification_CompareIntBranch64OnlyOneExit = new IR.Simplification.CompareBranch64OnlyOneExit();
+		public static readonly BaseTransformation IR_Simplification_CompareBranch32OnlyOneExit = new IR.Simplification.CompareBranch32OnlyOneExit();
+		public static readonly BaseTransformation IR_Simplification_CompareBranch64OnlyOneExit = new IR.Simplification.CompareBranch64OnlyOneExit();
 
-		public static readonly BaseTransformation IR_ConstantMove_CompareIntBranch32 = new IR.ConstantMove.CompareIntBranch32();
-		public static readonly BaseTransformation IR_ConstantMove_CompareIntBranch64 = new IR.ConstantMove.CompareIntBranch64();
+		public static readonly BaseTransformation IR_ConstantMove_CompareBranch32 = new IR.ConstantMove.CompareBranch32();
+		public static readonly BaseTransformation IR_ConstantMove_CompareBranch64 = new IR.ConstantMove.CompareBranch64();
 
-		public static readonly BaseTransformation IR_Rewrite_CompareIntBranch32 = new IR.Rewrite.CompareIntBranch32();
-		public static readonly BaseTransformation IR_Rewrite_CompareIntBranch64 = new IR.Rewrite.CompareIntBranch64();
+		public static readonly BaseTransformation IR_Rewrite_CompareBranch32 = new IR.Rewrite.CompareBranch32();
+		public static readonly BaseTransformation IR_Rewrite_CompareBranch64 = new IR.Rewrite.CompareBranch64();
 
-		public static readonly BaseTransformation IR_Rewrite_CompareIntBranch32From64 = new IR.Rewrite.CompareIntBranch32From64();
-		public static readonly BaseTransformation IR_Rewrite_CompareIntBranch64From32 = new IR.Rewrite.CompareIntBranch64From32();
+		public static readonly BaseTransformation IR_Rewrite_CompareBranch32From64 = new IR.Rewrite.CompareBranch32From64();
+		public static readonly BaseTransformation IR_Rewrite_CompareBranch64From32 = new IR.Rewrite.CompareBranch64From32();
 
 		public static readonly BaseTransformation IR_Special_MoveCompoundPropagate = new IR.Special.MoveCompoundPropagate();
 

@@ -18,8 +18,8 @@ namespace Mosa.Compiler.Framework.Stages
 		protected override void PopulateVisitationDictionary()
 		{
 			AddVisitation(IRInstruction.Add64, Add64);
-			AddVisitation(IRInstruction.Compare64x32, CompareInt64x32);
-			AddVisitation(IRInstruction.CompareBranch64, CompareIntBranch64);
+			AddVisitation(IRInstruction.Compare64x32, Compare64x32);
+			AddVisitation(IRInstruction.CompareBranch64, CompareBranch64);
 			AddVisitation(IRInstruction.Load64, LoadInt64);
 			AddVisitation(IRInstruction.LoadParam64, LoadParamInt64);
 			AddVisitation(IRInstruction.LoadParamSignExtend16x64, LoadParamSignExtend16x64);
@@ -28,10 +28,10 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(IRInstruction.LoadParamZeroExtend8x64, LoadParamZeroExtend8x64);
 			AddVisitation(IRInstruction.LoadParamZeroExtend16x64, LoadParamZeroExtend16x64);
 			AddVisitation(IRInstruction.LoadParamZeroExtend32x64, LoadParamZeroExtend32x64);
-			AddVisitation(IRInstruction.And64, LogicalAnd64);
-			AddVisitation(IRInstruction.Or64, LogicalOr64);
-			AddVisitation(IRInstruction.Xor64, LogicalXor64);
-			AddVisitation(IRInstruction.Not64, LogicalNot64);
+			AddVisitation(IRInstruction.And64, And64);
+			AddVisitation(IRInstruction.Or64, Or64);
+			AddVisitation(IRInstruction.Xor64, Xor64);
+			AddVisitation(IRInstruction.Not64, Not64);
 			AddVisitation(IRInstruction.SignExtend16x64, SignExtend16x64);
 			AddVisitation(IRInstruction.SignExtend32x64, SignExtend32x64);
 			AddVisitation(IRInstruction.SignExtend8x64, SignExtend8x64);
@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Framework.Stages
 			//AddVisitation(IRInstruction.RemSigned64, RemSigned64);
 			//AddVisitation(IRInstruction.RemUnsigned64, RemUnsigned64);
 			//AddVisitation(IRInstruction.ArithShiftRight64, ArithShiftRight64);
-			//AddVisitation(IRInstruction.CompareInt64x64, CompareInt64x64);
+			//AddVisitation(IRInstruction.Compare64x64, Compare64x64);
 			//AddVisitation(IRInstruction.IfThenElse64, IfThenElse64);
 			//AddVisitation(IRInstruction.MulSigned64, MulSigned64);
 			//AddVisitation(IRInstruction.MulUnsigned64, MulUnsigned64);
@@ -157,7 +157,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void CompareIntBranch64(Context context)
+		private void CompareBranch64(Context context)
 		{
 			//Debug.Assert(context.Operand1.Is64BitInteger);
 			//Debug.Assert(context.Operand2.Is64BitInteger);
@@ -208,7 +208,7 @@ namespace Mosa.Compiler.Framework.Stages
 			newBlocks[2].AppendInstruction(IRInstruction.Jmp, target);
 		}
 
-		private void CompareInt64x32(Context context)
+		private void Compare64x32(Context context)
 		{
 			Debug.Assert(context.Operand1.Is64BitInteger);
 			Debug.Assert(context.Operand2.Is64BitInteger);
@@ -246,15 +246,15 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (CompilerOptions.EnableSSA)
 			{
-				CompareInteger64x32SSA(context);
+				Compareeger64x32SSA(context);
 			}
 			else
 			{
-				CompareInteger64x32NonSSA(context);
+				Compareeger64x32NonSSA(context);
 			}
 		}
 
-		private void CompareInteger64x32SSA(Context context)
+		private void Compareeger64x32SSA(Context context)
 		{
 			Debug.Assert(context.Operand1.Is64BitInteger);
 			Debug.Assert(context.Operand2.Is64BitInteger);
@@ -318,7 +318,7 @@ namespace Mosa.Compiler.Framework.Stages
 			newBlocks[4].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 		}
 
-		private void CompareInteger64x32NonSSA(Context context)
+		private void Compareeger64x32NonSSA(Context context)
 		{
 			Debug.Assert(context.Operand1.Is64BitInteger);
 			Debug.Assert(context.Operand2.Is64BitInteger);
@@ -528,7 +528,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, ConstantZero);
 		}
 
-		private void LogicalAnd64(Context context)
+		private void And64(Context context)
 		{
 			Debug.Assert(context.Result.Is64BitInteger);
 
@@ -552,7 +552,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void LogicalNot64(Context context)
+		private void Not64(Context context)
 		{
 			Debug.Assert(context.Result.Is64BitInteger);
 
@@ -571,7 +571,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void LogicalOr64(Context context)
+		private void Or64(Context context)
 		{
 			Debug.Assert(context.Result.Is64BitInteger);
 
@@ -595,7 +595,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void LogicalXor64(Context context)
+		private void Xor64(Context context)
 		{
 			Debug.Assert(context.Result.Is64BitInteger);
 

@@ -1292,9 +1292,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The context.</param>
 		private void Not(InstructionNode node)
 		{
-			var logicalNot = Select(node.Result, IRInstruction.Not32, IRInstruction.Not64);
+			var Not = Select(node.Result, IRInstruction.Not32, IRInstruction.Not64);
 
-			node.SetInstruction(logicalNot, node.Result, node.Operand1);
+			node.SetInstruction(Not, node.Result, node.Operand1);
 		}
 
 		private bool OverridesMethod(MosaMethod method)

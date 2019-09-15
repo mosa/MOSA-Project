@@ -29,8 +29,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.CallDirect, CallDirect);
 			AddVisitation(IRInstruction.CompareR4, CompareR4);
 			AddVisitation(IRInstruction.CompareR8, CompareR8);
-			AddVisitation(IRInstruction.Compare32x32, CompareInt32x32);
-			AddVisitation(IRInstruction.CompareBranch32, CompareIntBranch32);
+			AddVisitation(IRInstruction.Compare32x32, Compare32x32);
+			AddVisitation(IRInstruction.CompareBranch32, CompareBranch32);
 			AddVisitation(IRInstruction.IfThenElse32, IfThenElse32);
 			AddVisitation(IRInstruction.ConvertR4To32, ConvertR4ToInt32);
 			AddVisitation(IRInstruction.ConvertR8To32, ConvertR8ToInt32);
@@ -53,10 +53,10 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.LoadParamSignExtend16x32, LoadParamSignExtend16x32);
 			AddVisitation(IRInstruction.LoadParamZeroExtend8x32, LoadParamZeroExtend8x32);
 			AddVisitation(IRInstruction.LoadParamZeroExtend16x32, LoadParamZeroExtend16x32);
-			AddVisitation(IRInstruction.And32, LogicalAnd32);
-			AddVisitation(IRInstruction.Not32, LogicalNot32);
-			AddVisitation(IRInstruction.Or32, LogicalOr32);
-			AddVisitation(IRInstruction.Xor32, LogicalXor32);
+			AddVisitation(IRInstruction.And32, And32);
+			AddVisitation(IRInstruction.Not32, Not32);
+			AddVisitation(IRInstruction.Or32, Or32);
+			AddVisitation(IRInstruction.Xor32, Xor32);
 			AddVisitation(IRInstruction.MoveR4, MoveR4);
 			AddVisitation(IRInstruction.MoveR8, MoveR8);
 			AddVisitation(IRInstruction.Move32, MoveInt32);
@@ -163,7 +163,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			FloatCompare(context, ARMv8A32.Cmf);
 		}
 
-		private void CompareInt32x32(Context context)
+		private void Compare32x32(Context context)
 		{
 			var condition = context.ConditionCode;
 			var result = context.Result;
@@ -178,7 +178,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			context.AppendInstruction(ARMv8A32.Mov, condition.GetOpposite(), result, CreateConstant(0));
 		}
 
-		private void CompareIntBranch32(Context context)
+		private void CompareBranch32(Context context)
 		{
 			OptimizeBranch(context);
 
@@ -365,22 +365,22 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			TransformLoadInstruction(context, ARMv8A32.LdrUp8, ARMv8A32.LdrUpImm8, ARMv8A32.LdrDownImm8, context.Result, StackFrame, context.Operand1);
 		}
 
-		private void LogicalAnd32(Context context)
+		private void And32(Context context)
 		{
 			TransformInstruction(context, ARMv8A32.And, ARMv8A32.AndImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
 		}
 
-		private void LogicalNot32(Context context)
+		private void Not32(Context context)
 		{
 			TransformInstruction(context, ARMv8A32.Mvn, ARMv8A32.MvnImm, context.Result, StatusRegister.NotSet, context.Operand1);
 		}
 
-		private void LogicalOr32(Context context)
+		private void Or32(Context context)
 		{
 			TransformInstruction(context, ARMv8A32.Orr, ARMv8A32.OrrImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
 		}
 
-		private void LogicalXor32(Context context)
+		private void Xor32(Context context)
 		{
 			TransformInstruction(context, ARMv8A32.Eor, ARMv8A32.EorImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
 		}

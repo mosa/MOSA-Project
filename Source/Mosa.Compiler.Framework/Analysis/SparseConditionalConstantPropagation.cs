@@ -541,7 +541,7 @@ namespace Mosa.Compiler.Framework.Analysis
 				|| instruction == IRInstruction.Compare64x32
 				|| instruction == IRInstruction.Compare64x64)
 			{
-				CompareIntegerOperation(node);
+				CompareegerOperation(node);
 			}
 			else if (instruction == IRInstruction.Phi32 || instruction == IRInstruction.Phi64 || instruction == IRInstruction.PhiR4 || instruction == IRInstruction.PhiR8)
 			{
@@ -554,7 +554,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			else if (instruction == IRInstruction.CompareBranch32
 				|| instruction == IRInstruction.CompareBranch64)
 			{
-				return CompareIntegerBranch(node);
+				return CompareegerBranch(node);
 			}
 			else if (instruction == IRInstruction.AddressOf)
 			{
@@ -636,7 +636,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			return null;
 		}
 
-		private void CompareIntegerOperation(InstructionNode node)
+		private void CompareegerOperation(InstructionNode node)
 		{
 			var result = GetVariableState(node.Result);
 
@@ -996,7 +996,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 		}
 
-		private bool CompareIntegerBranch(InstructionNode node)
+		private bool CompareegerBranch(InstructionNode node)
 		{
 			var operand1 = GetVariableState(node.Operand1);
 			var operand2 = GetVariableState(node.Operand2);

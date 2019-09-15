@@ -4,9 +4,9 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Transform.Manual.IR.ConstantMove
 {
-	public sealed class CompareIntBranch32 : BaseTransformation
+	public sealed class CompareBranch32 : BaseTransformation
 	{
-		public CompareIntBranch32() : base(IRInstruction.CompareBranch32)
+		public CompareBranch32() : base(IRInstruction.CompareBranch32)
 		{
 		}
 

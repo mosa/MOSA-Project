@@ -18,8 +18,8 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			ManualInstance.IR_ConstantMove_Compare64x32,
 			ManualInstance.IR_ConstantMove_Compare64x64,
 
-			ManualInstance.IR_ConstantMove_CompareIntBranch32,
-			ManualInstance.IR_ConstantMove_CompareIntBranch64,
+			ManualInstance.IR_ConstantMove_CompareBranch32,
+			ManualInstance.IR_ConstantMove_CompareBranch64,
 
 			ManualInstance.IR_Rewrite_Compare32x32,
 			ManualInstance.IR_Rewrite_Compare32x64,
@@ -31,8 +31,8 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			ManualInstance.IR_ConstantFolding_Compare64x32,
 			ManualInstance.IR_ConstantFolding_Compare64x64,
 
-			ManualInstance.IR_ConstantFolding_CompareIntBranch32,
-			ManualInstance.IR_ConstantFolding_CompareIntBranch64,
+			ManualInstance.IR_ConstantFolding_CompareBranch32,
+			ManualInstance.IR_ConstantFolding_CompareBranch64,
 
 			//ManualTransformation.IR_LowerTo32_Add64,
 			ManualInstance.IR_Special_CodeInDeadBlock,
@@ -68,16 +68,16 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			ManualInstance.IR_Special_PhiR4Dead,
 			ManualInstance.IR_Special_PhiR8Dead,
 
-			ManualInstance.IR_Simplification_CompareIntBranch32OnlyOneExit,
-			ManualInstance.IR_Simplification_CompareIntBranch64OnlyOneExit,
+			ManualInstance.IR_Simplification_CompareBranch32OnlyOneExit,
+			ManualInstance.IR_Simplification_CompareBranch64OnlyOneExit,
 
-			ManualInstance.IR_Rewrite_CompareIntBranch32,
-			ManualInstance.IR_Rewrite_CompareIntBranch64,
+			ManualInstance.IR_Rewrite_CompareBranch32,
+			ManualInstance.IR_Rewrite_CompareBranch64,
 
 			ManualInstance.IR_Special_MoveCompoundPropagate,
 
-			//ManualInstance.IR_Rewrite_CompareIntBranch32From64,
-			//ManualInstance.IR_Rewrite_CompareIntBranch64From32,
+			//ManualInstance.IR_Rewrite_CompareBranch32From64,
+			//ManualInstance.IR_Rewrite_CompareBranch64From32,
 
 			ManualInstance.IR_Special_Move32PropagateConstant,
 			ManualInstance.IR_Special_Move64PropagateConstant,
