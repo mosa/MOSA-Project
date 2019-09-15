@@ -98,6 +98,7 @@ namespace Mosa.Tool.Launcher
 			Options.EnableMultiThreading = cbCompilerUsesMultipleThreads.Checked;
 			Options.EmulatorMemoryInMB = (uint)nmMemory.Value;
 			Options.EnableInlinedMethods = cbInlinedMethods.Checked;
+			Options.InlineOnlyExplicit = cbInlineOnlyExplicit.Checked;
 			Options.VBEVideo = cbVBEVideo.Checked;
 			Options.EnableLongExpansion = cbIRLongExpansion.Checked;
 			Options.TwoPassOptimizations = cbTwoPassOptimizations.Checked;
@@ -222,6 +223,7 @@ namespace Mosa.Tool.Launcher
 			cbLaunchGDB.Checked = Options.LaunchGDB;
 			cbLaunchMosaDebugger.Checked = Options.LaunchGDBDebugger;
 			cbInlinedMethods.Checked = Options.EnableInlinedMethods;
+			cbInlineOnlyExplicit.Checked = Options.InlineOnlyExplicit;
 			cbCompilerUsesMultipleThreads.Checked = Options.EnableMultiThreading;
 			nmMemory.Value = Options.EmulatorMemoryInMB;
 			cbVBEVideo.Checked = Options.VBEVideo;
