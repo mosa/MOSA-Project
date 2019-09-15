@@ -93,57 +93,57 @@
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantMove",
-			"Name": "LogicalAnd32",
+			"Name": "And32",
 			"SubName": "",
-			"Expression": "IR.LogicalAnd32 a b",
+			"Expression": "IR.And32 a b",
 			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.LogicalAnd32 b a)"
+			"Result": "(IR.And32 b a)"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantMove",
-			"Name": "LogicalAnd64",
+			"Name": "And64",
 			"SubName": "",
-			"Expression": "IR.LogicalAnd64 a b",
+			"Expression": "IR.And64 a b",
 			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.LogicalAnd64 b a)"
+			"Result": "(IR.And64 b a)"
 		},
 
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantMove",
-			"Name": "LogicalOr32",
+			"Name": "Or32",
 			"SubName": "",
-			"Expression": "IR.LogicalOr32 a b",
+			"Expression": "IR.Or32 a b",
 			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.LogicalOr32 b a)"
+			"Result": "(IR.Or32 b a)"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantMove",
-			"Name": "LogicalOr64",
+			"Name": "Or64",
 			"SubName": "",
-			"Expression": "IR.LogicalOr64 a b",
+			"Expression": "IR.Or64 a b",
 			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.LogicalOr64 b a)"
+			"Result": "(IR.Or64 b a)"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantMove",
-			"Name": "LogicalXor32",
+			"Name": "Xor32",
 			"SubName": "",
-			"Expression": "IR.LogicalXor32 a b",
+			"Expression": "IR.Xor32 a b",
 			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.LogicalXor32 b a)"
+			"Result": "(IR.Xor32 b a)"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantMove",
-			"Name": "LogicalXor64",
+			"Name": "Xor64",
 			"SubName": "",
-			"Expression": "IR.LogicalXor64 a b",
+			"Expression": "IR.Xor64 a b",
 			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.LogicalXor64 b a)"
+			"Result": "(IR.Xor64 b a)"
 		}
 	]
 }

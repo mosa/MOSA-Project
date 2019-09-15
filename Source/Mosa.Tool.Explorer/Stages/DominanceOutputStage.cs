@@ -8,7 +8,7 @@ namespace Mosa.Tool.Explorer.Stages
 {
 	public class DominanceOutputStage : BaseMethodCompilerStage
 	{
-		private const int TraceLevel = 10;
+		private const int TraceLevel = 5;
 
 		protected override void Run()
 		{

@@ -59,8 +59,13 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 		public static readonly BaseTransformation IR_Special_PhiR4Dead = new IR.Special.PhiR4Dead();
 		public static readonly BaseTransformation IR_Special_PhiR8Dead = new IR.Special.PhiR8Dead();
 
-		public static readonly BaseTransformation IR_Simplification_CompareIntBranch32OnlyOnceExit = new IR.Simplification.CompareIntBranch32OnlyOnceExit();
-		public static readonly BaseTransformation IR_Simplification_CompareIntBranch64OnlyOnceExit = new IR.Simplification.CompareIntBranch64OnlyOnceExit();
+		public static readonly BaseTransformation IR_Special_Phi32Invalid = new IR.Special.Phi32Invalid();
+		public static readonly BaseTransformation IR_Special_Phi64Invalid = new IR.Special.Phi64Invalid();
+		public static readonly BaseTransformation IR_Special_PhiR4Invalid = new IR.Special.PhiR4Invalid();
+		public static readonly BaseTransformation IR_Special_PhiR8Invalid = new IR.Special.PhiR8Invalid();
+
+		public static readonly BaseTransformation IR_Simplification_CompareIntBranch32OnlyOneExit = new IR.Simplification.CompareBranch32OnlyOneExit();
+		public static readonly BaseTransformation IR_Simplification_CompareIntBranch64OnlyOneExit = new IR.Simplification.CompareBranch64OnlyOneExit();
 
 		public static readonly BaseTransformation IR_ConstantMove_CompareIntBranch32 = new IR.ConstantMove.CompareIntBranch32();
 		public static readonly BaseTransformation IR_ConstantMove_CompareIntBranch64 = new IR.ConstantMove.CompareIntBranch64();

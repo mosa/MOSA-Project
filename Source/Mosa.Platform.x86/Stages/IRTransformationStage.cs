@@ -32,7 +32,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.CompareR4, CompareR4);
 			AddVisitation(IRInstruction.CompareR8, CompareR8);
 			AddVisitation(IRInstruction.Compare32x32, Compare32x32);
-			AddVisitation(IRInstruction.CompareIntBranch32, CompareIntBranch32);
+			AddVisitation(IRInstruction.CompareBranch32, CompareIntBranch32);
 			AddVisitation(IRInstruction.ConvertR4ToR8, ConvertR4ToR8);
 			AddVisitation(IRInstruction.ConvertR4To32, ConvertR4To32);
 			AddVisitation(IRInstruction.ConvertR8ToR4, ConvertR8ToR4);
@@ -59,10 +59,10 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.LoadSignExtend8x32, LoadSignExtend8x32);
 			AddVisitation(IRInstruction.LoadZeroExtend16x32, LoadZeroExtend16x32);
 			AddVisitation(IRInstruction.LoadZeroExtend8x32, LoadZeroExtend8x32);
-			AddVisitation(IRInstruction.LogicalAnd32, LogicalAnd32);
-			AddVisitation(IRInstruction.LogicalNot32, LogicalNot32);
-			AddVisitation(IRInstruction.LogicalOr32, LogicalOr32);
-			AddVisitation(IRInstruction.LogicalXor32, LogicalXor32);
+			AddVisitation(IRInstruction.And32, LogicalAnd32);
+			AddVisitation(IRInstruction.Not32, LogicalNot32);
+			AddVisitation(IRInstruction.Or32, LogicalOr32);
+			AddVisitation(IRInstruction.Xor32, LogicalXor32);
 			AddVisitation(IRInstruction.MoveR4, MoveR4);
 			AddVisitation(IRInstruction.MoveR8, MoveR8);
 			AddVisitation(IRInstruction.Move32, Move32);

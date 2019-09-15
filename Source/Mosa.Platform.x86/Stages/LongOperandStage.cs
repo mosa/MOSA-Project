@@ -29,7 +29,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.Compare32x64, Compare32x64);
 			AddVisitation(IRInstruction.Compare64x32, Compare64x32);
 			AddVisitation(IRInstruction.Compare64x64, Compare64x64);
-			AddVisitation(IRInstruction.CompareIntBranch64, CompareIntBranch64);
+			AddVisitation(IRInstruction.CompareBranch64, CompareIntBranch64);
 			AddVisitation(IRInstruction.ConvertR4To64, ConvertFloatR4To64);
 			AddVisitation(IRInstruction.ConvertR8To64, ConvertFloatR8ToInteger64);
 			AddVisitation(IRInstruction.Convert64ToR4, Convert64ToFloatR4);
@@ -43,10 +43,10 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.LoadParamZeroExtend16x64, LoadParamZeroExtended16x64);
 			AddVisitation(IRInstruction.LoadParamZeroExtend32x64, LoadParamZeroExtended32x64);
 			AddVisitation(IRInstruction.LoadParamZeroExtend8x64, LoadParamZeroExtended8x64);
-			AddVisitation(IRInstruction.LogicalAnd64, LogicalAnd64);
-			AddVisitation(IRInstruction.LogicalNot64, LogicalNot64);
-			AddVisitation(IRInstruction.LogicalOr64, LogicalOr64);
-			AddVisitation(IRInstruction.LogicalXor64, LogicalXor64);
+			AddVisitation(IRInstruction.And64, LogicalAnd64);
+			AddVisitation(IRInstruction.Not64, LogicalNot64);
+			AddVisitation(IRInstruction.Or64, LogicalOr64);
+			AddVisitation(IRInstruction.Xor64, LogicalXor64);
 			AddVisitation(IRInstruction.Move64, MoveInteger64);
 			AddVisitation(IRInstruction.MulSigned64, MulSigned64);
 			AddVisitation(IRInstruction.MulUnsigned64, MulUnsigned64);

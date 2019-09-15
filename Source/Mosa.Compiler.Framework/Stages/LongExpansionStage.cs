@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			AddVisitation(IRInstruction.Add64, Add64);
 			AddVisitation(IRInstruction.Compare64x32, CompareInt64x32);
-			AddVisitation(IRInstruction.CompareIntBranch64, CompareIntBranch64);
+			AddVisitation(IRInstruction.CompareBranch64, CompareIntBranch64);
 			AddVisitation(IRInstruction.Load64, LoadInt64);
 			AddVisitation(IRInstruction.LoadParam64, LoadParamInt64);
 			AddVisitation(IRInstruction.LoadParamSignExtend16x64, LoadParamSignExtend16x64);
@@ -28,10 +28,10 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(IRInstruction.LoadParamZeroExtend8x64, LoadParamZeroExtend8x64);
 			AddVisitation(IRInstruction.LoadParamZeroExtend16x64, LoadParamZeroExtend16x64);
 			AddVisitation(IRInstruction.LoadParamZeroExtend32x64, LoadParamZeroExtend32x64);
-			AddVisitation(IRInstruction.LogicalAnd64, LogicalAnd64);
-			AddVisitation(IRInstruction.LogicalOr64, LogicalOr64);
-			AddVisitation(IRInstruction.LogicalXor64, LogicalXor64);
-			AddVisitation(IRInstruction.LogicalNot64, LogicalNot64);
+			AddVisitation(IRInstruction.And64, LogicalAnd64);
+			AddVisitation(IRInstruction.Or64, LogicalOr64);
+			AddVisitation(IRInstruction.Xor64, LogicalXor64);
+			AddVisitation(IRInstruction.Not64, LogicalNot64);
 			AddVisitation(IRInstruction.SignExtend16x64, SignExtend16x64);
 			AddVisitation(IRInstruction.SignExtend32x64, SignExtend32x64);
 			AddVisitation(IRInstruction.SignExtend8x64, SignExtend8x64);
@@ -193,15 +193,15 @@ namespace Mosa.Compiler.Framework.Stages
 			AppendGetHigh64(context, op1High, operand2);
 
 			// Compare high (equal)
-			context.AppendInstruction(IRInstruction.CompareIntBranch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
+			context.AppendInstruction(IRInstruction.CompareBranch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
 			context.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
 
 			// Compare high
-			newBlocks[0].AppendInstruction(IRInstruction.CompareIntBranch32, branch, null, op0High, op1High, newBlocks[2].Block);
+			newBlocks[0].AppendInstruction(IRInstruction.CompareBranch32, branch, null, op0High, op1High, newBlocks[2].Block);
 			newBlocks[0].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 
 			// Compare low
-			newBlocks[1].AppendInstruction(IRInstruction.CompareIntBranch32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
+			newBlocks[1].AppendInstruction(IRInstruction.CompareBranch32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
 			newBlocks[1].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 
 			// Target
@@ -236,9 +236,9 @@ namespace Mosa.Compiler.Framework.Stages
 				AppendGetLow64(context, op1Low, operand2);
 				AppendGetHigh64(context, op1High, operand2);
 
-				context.AppendInstruction(IRInstruction.LogicalXor32, v1, op0Low, op1Low);
-				context.AppendInstruction(IRInstruction.LogicalXor32, v2, op0High, op1High);
-				context.AppendInstruction(IRInstruction.LogicalOr32, v3, v1, v2);
+				context.AppendInstruction(IRInstruction.Xor32, v1, op0Low, op1Low);
+				context.AppendInstruction(IRInstruction.Xor32, v2, op0High, op1High);
+				context.AppendInstruction(IRInstruction.Or32, v3, v1, v2);
 				context.AppendInstruction(IRInstruction.Compare32x32, condition, result, v3, ConstantZero);
 
 				return;
@@ -285,7 +285,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AppendGetHigh64(context, op1High, operand2);
 
 			// Compare high
-			context.AppendInstruction(IRInstruction.CompareIntBranch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
+			context.AppendInstruction(IRInstruction.CompareBranch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
 			context.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
 
 			// Branch if check already gave results
@@ -295,12 +295,12 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				newBlocks[0].AppendInstruction(IRInstruction.CompareIntBranch32, branch, null, op0High, op1High, newBlocks[2].Block);
+				newBlocks[0].AppendInstruction(IRInstruction.CompareBranch32, branch, null, op0High, op1High, newBlocks[2].Block);
 				newBlocks[0].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
 			}
 
 			// Compare low
-			newBlocks[1].AppendInstruction(IRInstruction.CompareIntBranch32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
+			newBlocks[1].AppendInstruction(IRInstruction.CompareBranch32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
 			newBlocks[1].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
 
 			// Success
@@ -348,7 +348,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AppendGetHigh64(context, op1High, operand2);
 
 			// Compare high
-			context.AppendInstruction(IRInstruction.CompareIntBranch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
+			context.AppendInstruction(IRInstruction.CompareBranch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
 			context.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
 
 			// Branch if check already gave results
@@ -358,12 +358,12 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				newBlocks[0].AppendInstruction(IRInstruction.CompareIntBranch32, branch, null, op0High, op1High, newBlocks[2].Block);
+				newBlocks[0].AppendInstruction(IRInstruction.CompareBranch32, branch, null, op0High, op1High, newBlocks[2].Block);
 				newBlocks[0].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
 			}
 
 			// Compare low
-			newBlocks[1].AppendInstruction(IRInstruction.CompareIntBranch32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
+			newBlocks[1].AppendInstruction(IRInstruction.CompareBranch32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
 			newBlocks[1].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
 
 			// Success
@@ -547,8 +547,8 @@ namespace Mosa.Compiler.Framework.Stages
 			AppendGetHigh64(context, op0High, operand1);
 			AppendGetLow64(context, op1Low, operand2);
 			AppendGetHigh64(context, op1High, operand2);
-			context.AppendInstruction(IRInstruction.LogicalAnd32, resultLow, op0Low, op1Low);
-			context.AppendInstruction(IRInstruction.LogicalAnd32, resultHigh, op0High, op1High);
+			context.AppendInstruction(IRInstruction.And32, resultLow, op0Low, op1Low);
+			context.AppendInstruction(IRInstruction.And32, resultHigh, op0High, op1High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
@@ -566,8 +566,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			SetGetLow64(context, op0Low, operand1);
 			AppendGetHigh64(context, op0High, operand1);
-			context.AppendInstruction(IRInstruction.LogicalNot32, resultLow, op0Low);
-			context.AppendInstruction(IRInstruction.LogicalNot32, resultHigh, op0High);
+			context.AppendInstruction(IRInstruction.Not32, resultLow, op0Low);
+			context.AppendInstruction(IRInstruction.Not32, resultHigh, op0High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
@@ -590,8 +590,8 @@ namespace Mosa.Compiler.Framework.Stages
 			AppendGetHigh64(context, op0High, operand1);
 			AppendGetLow64(context, op1Low, operand2);
 			AppendGetHigh64(context, op1High, operand2);
-			context.AppendInstruction(IRInstruction.LogicalOr32, resultLow, op0Low, op1Low);
-			context.AppendInstruction(IRInstruction.LogicalOr32, resultHigh, op0High, op1High);
+			context.AppendInstruction(IRInstruction.Or32, resultLow, op0Low, op1Low);
+			context.AppendInstruction(IRInstruction.Or32, resultHigh, op0High, op1High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
@@ -614,8 +614,8 @@ namespace Mosa.Compiler.Framework.Stages
 			AppendGetHigh64(context, op0High, operand1);
 			AppendGetLow64(context, op1Low, operand2);
 			AppendGetHigh64(context, op1High, operand2);
-			context.AppendInstruction(IRInstruction.LogicalXor32, resultLow, op0Low, op1Low);
-			context.AppendInstruction(IRInstruction.LogicalXor32, resultHigh, op0High, op1High);
+			context.AppendInstruction(IRInstruction.Xor32, resultLow, op0Low, op1Low);
+			context.AppendInstruction(IRInstruction.Xor32, resultHigh, op0High, op1High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 

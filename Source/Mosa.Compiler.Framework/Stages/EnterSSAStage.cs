@@ -6,6 +6,7 @@ using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Trace;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -15,8 +16,8 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
 	public sealed class EnterSSAStage : BaseMethodCompilerStage
 	{
-		private Dictionary<Operand, Stack<int>> variables;
-		private Dictionary<Operand, int> counts;
+		private Dictionary<Operand, Stack<int>> stack;
+		private Dictionary<Operand, int> counters;
 		private Dictionary<Operand, Operand[]> ssaOperands;
 		private Dictionary<BasicBlock, SimpleFastDominance> blockAnalysis;
 		private Dictionary<Operand, List<BasicBlock>> assignments;
@@ -41,7 +42,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (HasProtectedRegions)
 				return;
 
-			trace = CreateTraceLog(8);
+			trace = CreateTraceLog(5);
 
 			foreach (var headBlock in BasicBlocks.HeadBlocks)
 			{
@@ -60,8 +61,8 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			// Clean up
 			trace = null;
-			variables = null;
-			counts = null;
+			stack = null;
+			counters = null;
 			ssaOperands = null;
 			assignments = null;
 			blockAnalysis = null;
@@ -78,8 +79,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void EnterSSA(BasicBlock headBlock)
 		{
-			variables = new Dictionary<Operand, Stack<int>>();
-			counts = new Dictionary<Operand, int>();
+			stack = new Dictionary<Operand, Stack<int>>();
+			counters = new Dictionary<Operand, int>();
 
 			foreach (var op in assignments.Keys)
 			{
@@ -94,11 +95,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void AddToAssignments(Operand operand)
 		{
-			if (!variables.ContainsKey(operand))
+			if (!stack.ContainsKey(operand))
 			{
-				variables[operand] = new Stack<int>();
-				counts.Add(operand, 0);
-				variables[operand].Push(0);
+				stack[operand] = new Stack<int>();
+				counters.Add(operand, 0);
+				stack[operand].Push(0);
 
 				if (!ssaOperands.ContainsKey(operand))
 				{
@@ -186,7 +187,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (!op.IsVirtualRegister)
 							continue;
 
-						var version = variables[op].Peek();
+						var version = stack[op].Peek();
 						node.SetOperand(i, GetSSAOperand(op, version));
 					}
 				}
@@ -194,19 +195,19 @@ namespace Mosa.Compiler.Framework.Stages
 				if (node.Result?.IsVirtualRegister == true)
 				{
 					var op = node.Result;
-					var index = counts[op];
+					var index = counters[op];
 					node.Result = GetSSAOperand(op, index);
-					variables[op].Push(index);
-					counts[op] = index + 1;
+					stack[op].Push(index);
+					counters[op] = index + 1;
 				}
 
 				if (node.Result2?.IsVirtualRegister == true)
 				{
 					var op = node.Result2;
-					var index = counts[op];
+					var index = counters[op];
 					node.Result2 = GetSSAOperand(op, index);
-					variables[op].Push(index);
-					counts[op] = index + 1;
+					stack[op].Push(index);
+					counters[op] = index + 1;
 				}
 			}
 		}
@@ -228,9 +229,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var op = node.GetOperand(index);
 
-					if (variables[op].Count > 0)
+					if (stack[op].Count > 0)
 					{
-						var version = variables[op].Peek();
+						var version = stack[op].Peek();
 						var ssaOperand = GetSSAOperand(node.GetOperand(index), version);
 						node.SetOperand(index, ssaOperand);
 					}
@@ -249,13 +250,13 @@ namespace Mosa.Compiler.Framework.Stages
 				if (node.Result.IsVirtualRegister == true)
 				{
 					var op = parentOperand[node.Result];
-					variables[op].Pop();
+					stack[op].Pop();
 				}
 
 				if (node.Result2?.IsVirtualRegister == true)
 				{
 					var op = parentOperand[node.Result2];
-					variables[op].Pop();
+					stack[op].Pop();
 				}
 			}
 		}
@@ -309,8 +310,10 @@ namespace Mosa.Compiler.Framework.Stages
 			blocks.AddIfNew(block);
 		}
 
-		private void InsertPhiInstruction(BasicBlock block, Operand variable)
+		private Context InsertPhiInstruction(BasicBlock block, Operand variable)
 		{
+			//trace?.Log($"     Phi: {variable} into {block}");
+
 			var context = new Context(block);
 
 			if (variable.IsR4)
@@ -332,6 +335,8 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			context.OperandCount = block.PreviousBlocks.Count;
+
+			return context;
 		}
 
 		private void PlacePhiFunctionsMinimal()
@@ -348,16 +353,71 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var t in assignments)
 			{
+				var operand = t.Key;
 				var blocks = t.Value;
+
+				//trace?.Log($"Operand {operand}");
 
 				if (blocks.Count < 2)
 					continue;
 
-				foreach (var n in analysis.IteratedDominanceFrontier(blocks))
+				foreach (var block in analysis.IteratedDominanceFrontier(blocks))
 				{
-					InsertPhiInstruction(n, t.Key);
+					InsertPhiInstruction(block, operand);
 				}
+
+				//trace?.Log($"Operand {operand} defined in {ToString(blocks)}");
+				//trace?.Log("");
+
+				//var workList = new Stack<BasicBlock>(blocks);
+				//var everOnWorkList = new HashSet<BasicBlock>(blocks);
+				//var alreadyHasPhiFunction = new HashSet<BasicBlock>();
+
+				//while (workList.Count != 0)
+				//{
+				//	var node = workList.Pop();
+
+				//	var df = analysis.GetDominanceFrontier(node);
+
+				//	if (df != null)
+				//	{
+				//		//trace?.Log($" DF ( {node} ) -> {ToString(df)}");
+
+				//		foreach (var d in df)
+				//		{
+				//			if (!alreadyHasPhiFunction.Contains(d))
+				//			{
+				//				InsertPhiInstruction(d, operand);
+				//				alreadyHasPhiFunction.Add(d);
+
+				//				if (!everOnWorkList.Contains(d))
+				//				{
+				//					workList.Push(d);
+				//					everOnWorkList.Add(d);
+				//				}
+				//			}
+				//		}
+				//	}
+				//}
+
+				//trace?.Log("");
 			}
+		}
+
+		private static string ToString(List<BasicBlock> blocks)
+		{
+			var sb = new StringBuilder();
+
+			foreach (var block in blocks)
+			{
+				sb.Append(block);
+				sb.Append(" ");
+			}
+
+			if (blocks.Count != 0)
+				sb.Length -= 1;
+
+			return sb.ToString();
 		}
 	}
 }

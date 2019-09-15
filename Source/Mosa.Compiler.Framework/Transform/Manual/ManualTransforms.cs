@@ -68,8 +68,8 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			ManualInstance.IR_Special_PhiR4Dead,
 			ManualInstance.IR_Special_PhiR8Dead,
 
-			ManualInstance.IR_Simplification_CompareIntBranch32OnlyOnceExit,
-			ManualInstance.IR_Simplification_CompareIntBranch64OnlyOnceExit,
+			ManualInstance.IR_Simplification_CompareIntBranch32OnlyOneExit,
+			ManualInstance.IR_Simplification_CompareIntBranch64OnlyOneExit,
 
 			ManualInstance.IR_Rewrite_CompareIntBranch32,
 			ManualInstance.IR_Rewrite_CompareIntBranch64,
@@ -82,10 +82,15 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			ManualInstance.IR_Special_Move32PropagateConstant,
 			ManualInstance.IR_Special_Move64PropagateConstant,
 
-			//ManualTransformation.IR_Simplification_Phi32,
-			//ManualTransformation.IR_Simplification_Phi64,
-			//ManualTransformation.IR_Simplification_PhiR4,
-			//ManualTransformation.IR_Simplification_PhiR8,
+			//ManualInstance..IR_Simplification_Phi32,
+			//ManualInstance..IR_Simplification_Phi64,
+			//ManualInstance..IR_Simplification_PhiR4,
+			//ManualInstance..IR_Simplification_PhiR8,
+
+			//ManualInstance.IR_Special_Phi32Invalid,
+			//ManualInstance.IR_Special_Phi64Invalid,
+			//ManualInstance.IR_Special_PhiR4Invalid,
+			//ManualInstance.IR_Special_PhiR8Invalid,
 		};
 	}
 }

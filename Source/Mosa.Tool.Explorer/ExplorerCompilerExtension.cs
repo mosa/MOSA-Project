@@ -4,6 +4,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Tool.Explorer.Stages;
+using System.Collections.Generic;
 
 namespace Mosa.Tool.Explorer
 {
@@ -23,11 +24,8 @@ namespace Mosa.Tool.Explorer
 
 			//pipeline.InsertAfterLast<GreedyRegisterAllocatorStage>(new StopStage());
 
-			//new DominanceOutputStage(),
-
-			//pipeline.InsertAfterFirst<StaticLoadOptimizationStage>(
-			//	new GraphVizStage()
-			//);
+			pipeline.InsertBefore<EnterSSAStage>(new DominanceOutputStage());
+			pipeline.InsertBefore<EnterSSAStage>(new GraphVizStage());
 		}
 	}
 }

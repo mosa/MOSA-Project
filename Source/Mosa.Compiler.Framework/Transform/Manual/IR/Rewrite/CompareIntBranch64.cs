@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.Rewrite
 {
 	public sealed class CompareIntBranch64 : BaseTransformation
 	{
-		public CompareIntBranch64() : base(IRInstruction.CompareIntBranch64)
+		public CompareIntBranch64() : base(IRInstruction.CompareBranch64)
 		{
 		}
 
@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.Rewrite
 			var node2 = context.Operand1.Definitions[0];
 			var conditionCode = context.ConditionCode == ConditionCode.NotEqual ? node2.ConditionCode : node2.ConditionCode.GetOpposite();
 
-			context.SetInstruction(IRInstruction.CompareIntBranch64, conditionCode, null, node2.Operand1, node2.Operand2, context.BranchTargets[0]);
+			context.SetInstruction(IRInstruction.CompareBranch64, conditionCode, null, node2.Operand1, node2.Operand2, context.BranchTargets[0]);
 		}
 	}
 }

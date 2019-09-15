@@ -162,14 +162,14 @@ namespace Mosa.Compiler.Framework.Stages
 			Register(IRInstruction.GetHigh64, GetHigh64);
 			Register(IRInstruction.To64, To64);
 
-			Register(IRInstruction.LogicalOr32, LogicalOr32);
-			Register(IRInstruction.LogicalOr64, LogicalOr64);
-			Register(IRInstruction.LogicalAnd32, LogicalAnd32);
-			Register(IRInstruction.LogicalAnd64, LogicalAnd64);
-			Register(IRInstruction.LogicalXor32, LogicalXor32);
-			Register(IRInstruction.LogicalXor64, LogicalXor64);
-			Register(IRInstruction.LogicalNot32, LogicalNot32);
-			Register(IRInstruction.LogicalNot64, LogicalNot64);
+			Register(IRInstruction.Or32, LogicalOr32);
+			Register(IRInstruction.Or64, LogicalOr64);
+			Register(IRInstruction.And32, LogicalAnd32);
+			Register(IRInstruction.And64, LogicalAnd64);
+			Register(IRInstruction.Xor32, LogicalXor32);
+			Register(IRInstruction.Xor64, LogicalXor64);
+			Register(IRInstruction.Not32, LogicalNot32);
+			Register(IRInstruction.Not64, LogicalNot64);
 
 			Register(IRInstruction.LoadZeroExtend8x32, LoadZeroExtend8x32);
 			Register(IRInstruction.LoadZeroExtend16x32, LoadZeroExtend16x32);
@@ -583,7 +583,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (node.Instruction == IRInstruction.Switch)
 					continue;
 
-				Debug.Assert(node.Instruction == IRInstruction.CompareIntBranch32 || node.Instruction == IRInstruction.CompareIntBranch64);
+				Debug.Assert(node.Instruction == IRInstruction.CompareBranch32 || node.Instruction == IRInstruction.CompareBranch64);
 
 				var result = EvaluateCompare(node);
 

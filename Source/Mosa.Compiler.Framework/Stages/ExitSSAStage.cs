@@ -127,8 +127,8 @@ namespace Mosa.Compiler.Framework.Stages
 			var node = predecessor.BeforeLast;
 
 			while (node.IsEmptyOrNop
-				|| node.Instruction == IRInstruction.CompareIntBranch32
-				|| node.Instruction == IRInstruction.CompareIntBranch64
+				|| node.Instruction == IRInstruction.CompareBranch32
+				|| node.Instruction == IRInstruction.CompareBranch64
 				|| node.Instruction == IRInstruction.Jmp)
 			{
 				node = node.Previous;

@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.ConstantFolding
 {
 	public sealed class CompareIntBranch32 : BaseTransformation
 	{
-		public CompareIntBranch32() : base(IRInstruction.CompareIntBranch32)
+		public CompareIntBranch32() : base(IRInstruction.CompareBranch32)
 		{
 		}
 

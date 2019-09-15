@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.ConstantMove
 {
 	public sealed class CompareIntBranch64 : BaseTransformation
 	{
-		public CompareIntBranch64() : base(IRInstruction.CompareIntBranch64)
+		public CompareIntBranch64() : base(IRInstruction.CompareBranch64)
 		{
 		}
 
@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.ConstantMove
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
-			context.SetInstruction(IRInstruction.CompareIntBranch64, context.ConditionCode.GetReverse(), context.Result, context.Operand2, context.Operand1, context.BranchTargets[0]);
+			context.SetInstruction(IRInstruction.CompareBranch64, context.ConditionCode.GetReverse(), context.Result, context.Operand2, context.Operand1, context.BranchTargets[0]);
 		}
 	}
 }

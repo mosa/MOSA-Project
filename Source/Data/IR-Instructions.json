@@ -174,14 +174,14 @@
 			"ResultType": "Boolean"
 		},
 		{
-			"Name": "CompareIntBranch32",
+			"Name": "CompareBranch32",
 			"FamilyName": "IR",
 			"ResultCount": 2,
 			"OperandCount": 0,
 			"FlowControl": "ConditionalBranch"
 		},
 		{
-			"Name": "CompareIntBranch64",
+			"Name": "CompareBranch64",
 			"FamilyName": "IR",
 			"ResultCount": 2,
 			"OperandCount": 0,
@@ -641,54 +641,54 @@
 			"ParameterLoad": "true"
 		},
 		{
-			"Name": "LogicalAnd32",
+			"Name": "And32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true"
 		},
 		{
-			"Name": "LogicalAnd64",
+			"Name": "And64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true"
 		},
 		{
-			"Name": "LogicalNot32",
+			"Name": "Not32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "LogicalNot64",
+			"Name": "Not64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "LogicalOr32",
+			"Name": "Or32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true"
 		},
 		{
-			"Name": "LogicalOr64",
+			"Name": "Or64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true"
 		},
 		{
-			"Name": "LogicalXor32",
+			"Name": "Xor32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
 			"Commutative": "true"
 		},
 		{
-			"Name": "LogicalXor64",
+			"Name": "Xor64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,

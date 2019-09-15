@@ -6,7 +6,7 @@ namespace Mosa.Compiler.Framework.Transform.IR.Special
 {
 	public sealed class Move64PropagateConstant : BaseTransformation
 	{
-		public Move64PropagateConstant() : base(IRInstruction.Move32)
+		public Move64PropagateConstant() : base(IRInstruction.Move64)
 		{
 		}
 

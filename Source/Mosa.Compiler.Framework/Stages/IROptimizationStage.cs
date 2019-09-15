@@ -22,8 +22,8 @@ namespace Mosa.Compiler.Framework.Stages
 		private Counter CombineAdditionAndSubstractionCount = new Counter("IROptimizationStage.CombineAdditionAndSubstraction");
 		private Counter CombineMultiplicationCount = new Counter("IROptimizationStage.CombineMultiplication");
 		private Counter CombineDivisionCount = new Counter("IROptimizationStage.CombineDivision");
-		private Counter CombineLogicalOrCount = new Counter("IROptimizationStage.CombineLogicalOrCount");
-		private Counter CombineLogicalAndCount = new Counter("IROptimizationStage.CombineLogicalAndCount");
+		private Counter CombineOrCount = new Counter("IROptimizationStage.CombineOrCount");
+		private Counter CombineAndCount = new Counter("IROptimizationStage.CombineAndCount");
 		private Counter ConstantFoldingPhiCount = new Counter("IROptimizationStage.ConstantFoldingPhi");
 		private Counter FoldIntegerCompareBranchCount = new Counter("IROptimizationStage.FoldIntegerCompareBranch");
 		private Counter FoldIntegerCompareCount = new Counter("IROptimizationStage.FoldIntegerCompare");
@@ -72,8 +72,8 @@ namespace Mosa.Compiler.Framework.Stages
 			Register(CombineAdditionAndSubstractionCount);
 			Register(CombineMultiplicationCount);
 			Register(CombineDivisionCount);
-			Register(CombineLogicalOrCount);
-			Register(CombineLogicalAndCount);
+			Register(CombineOrCount);
+			Register(CombineAndCount);
 			Register(ConstantFoldingPhiCount);
 			Register(FoldIntegerCompareBranchCount);
 			Register(FoldIntegerCompareCount);
@@ -134,8 +134,8 @@ namespace Mosa.Compiler.Framework.Stages
 				CombineAdditionAndSubstraction,
 				CombineMultiplication,
 				CombineDivision,
-				CombineLogicalOr,
-				CombineLogicalAnd,
+				CombineOr,
+				CombineAnd,
 				GetLowWhenZeroHighSimplification,
 				To64Propagation,
 			};
@@ -413,8 +413,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void RemoveUselessIntegerCompareBranch(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.CompareIntBranch32
-				|| node.Instruction == IRInstruction.CompareIntBranch64))
+			if (!(node.Instruction == IRInstruction.CompareBranch32
+				|| node.Instruction == IRInstruction.CompareBranch64))
 				return;
 
 			if (node.Block.NextBlocks.Count != 1)
@@ -430,8 +430,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void ConstantFoldIntegerCompareBranch(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.CompareIntBranch32
-				|| node.Instruction == IRInstruction.CompareIntBranch64))
+			if (!(node.Instruction == IRInstruction.CompareBranch32
+				|| node.Instruction == IRInstruction.CompareBranch64))
 				return;
 
 			Debug.Assert(node.OperandCount == 2);
@@ -592,9 +592,9 @@ namespace Mosa.Compiler.Framework.Stages
 			CombineAdditionAndSubstractionCount.Increment();
 		}
 
-		private void CombineLogicalOr(InstructionNode node)
+		private void CombineOr(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.LogicalOr32 || node.Instruction == IRInstruction.LogicalOr64))
+			if (!(node.Instruction == IRInstruction.Or32 || node.Instruction == IRInstruction.Or64))
 				return;
 
 			if (!ValidateSSAForm(node.Result))
@@ -608,7 +608,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var node2 = node.Result.Uses[0];
 
-			if (!(node2.Instruction == IRInstruction.LogicalOr32 || node2.Instruction == IRInstruction.LogicalOr64))
+			if (!(node2.Instruction == IRInstruction.Or32 || node2.Instruction == IRInstruction.Or64))
 				return;
 
 			if (!node2.Operand2.IsResolvedConstant)
@@ -621,19 +621,19 @@ namespace Mosa.Compiler.Framework.Stages
 			AddOperandUsageToWorkList(node2);
 			AddOperandUsageToWorkList(node);
 
-			trace?.Log("*** CombineLogicalOr");
+			trace?.Log("*** CombineOr");
 			trace?.Log($"BEFORE:\t{node2}");
 			node2.SetInstruction(GetMoveInteger(node2.Result), node2.Result, node.Result);
 			trace?.Log($"AFTER: \t{node2}");
 			trace?.Log($"BEFORE:\t{node}");
 			node.Operand2 = CreateConstant(node.Operand2.Type, r);
 			trace?.Log($"AFTER: \t{node}");
-			CombineLogicalOrCount.Increment();
+			CombineOrCount.Increment();
 		}
 
-		private void CombineLogicalAnd(InstructionNode node)
+		private void CombineAnd(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.LogicalAnd32 || node.Instruction == IRInstruction.LogicalAnd64))
+			if (!(node.Instruction == IRInstruction.And32 || node.Instruction == IRInstruction.And64))
 				return;
 
 			if (!ValidateSSAForm(node.Result))
@@ -647,7 +647,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var node2 = node.Result.Uses[0];
 
-			if (!(node2.Instruction == IRInstruction.LogicalAnd32 || node2.Instruction == IRInstruction.LogicalAnd64))
+			if (!(node2.Instruction == IRInstruction.And32 || node2.Instruction == IRInstruction.And64))
 				return;
 
 			if (!node2.Operand2.IsResolvedConstant)
@@ -660,14 +660,14 @@ namespace Mosa.Compiler.Framework.Stages
 			AddOperandUsageToWorkList(node2);
 			AddOperandUsageToWorkList(node);
 
-			trace?.Log("*** CombineLogicalAnd");
+			trace?.Log("*** CombineAnd");
 			trace?.Log($"BEFORE:\t{node2}");
 			node2.SetInstruction(GetMoveInteger(node2.Result), node2.Result, node.Result);
 			trace?.Log($"AFTER: \t{node2}");
 			trace?.Log($"BEFORE:\t{node}");
 			node.Operand2 = CreateConstant(node.Operand2.Type, r);
 			trace?.Log($"AFTER: \t{node}");
-			CombineLogicalAndCount.Increment();
+			CombineAndCount.Increment();
 		}
 
 		private void CombineMultiplication(InstructionNode node)
@@ -763,8 +763,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void CombineIntegerCompareBranch(InstructionNode node)
 		{
-			if (!(node.Instruction == IRInstruction.CompareIntBranch32
-				|| node.Instruction == IRInstruction.CompareIntBranch64))
+			if (!(node.Instruction == IRInstruction.CompareBranch32
+				|| node.Instruction == IRInstruction.CompareBranch64))
 				return;
 
 			if (!(node.ConditionCode == ConditionCode.NotEqual || node.ConditionCode == ConditionCode.Equal))
@@ -797,7 +797,7 @@ namespace Mosa.Compiler.Framework.Stages
 			node.ConditionCode = node.ConditionCode == ConditionCode.NotEqual ? node2.ConditionCode : node2.ConditionCode.GetOpposite();
 			node.Operand1 = node2.Operand1;
 			node.Operand2 = node2.Operand2;
-			node.Instruction = Select(node2.Operand1, IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64);
+			node.Instruction = Select(node2.Operand1, IRInstruction.CompareBranch32, IRInstruction.CompareBranch64);
 			trace?.Log($"AFTER: \t{node}");
 			trace?.Log($"REMOVED:\t{node2}");
 			node2.SetInstruction(IRInstruction.Nop);
@@ -1383,7 +1383,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void SimplifyCompareBranch(InstructionNode node)
 		{
-			if (node.Instruction != IRInstruction.CompareIntBranch64)
+			if (node.Instruction != IRInstruction.CompareBranch64)
 				return;
 
 			if (!ValidateSSAForm(node.Operand1))
@@ -1402,7 +1402,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			trace?.Log("*** SimplifyCompareBranch");
 			trace?.Log($"BEFORE:\t{node}");
-			node.SetInstruction(IRInstruction.CompareIntBranch32, node.ConditionCode, null, node.Operand1.Definitions[0].Operand1, node.Operand2.Definitions[0].Operand1, node.BranchTargets[0]);
+			node.SetInstruction(IRInstruction.CompareBranch32, node.ConditionCode, null, node.Operand1.Definitions[0].Operand1, node.Operand2.Definitions[0].Operand1, node.BranchTargets[0]);
 			trace?.Log($"AFTER: \t{node}");
 			SimplifyBranchComparisonCount.Increment();
 		}

@@ -21,18 +21,18 @@
 		{
 			"FamilyName": "IR",
 			"Type": "Simplification",
-			"Name": "LogicalNot32",
+			"Name": "Not32",
 			"SubName": "Twice",
-			"Expression": "IR.LogicalNot32 (IR.LogicalNot32 x)",
+			"Expression": "IR.Not32 (IR.Not32 x)",
 			"Filter": "",
 			"Result": "(IR.Move32 x)"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "Simplification",
-			"Name": "LogicalNot64",
+			"Name": "Not64",
 			"SubName": "Twice",
-			"Expression": "IR.LogicalNot64 (IR.LogicalNot64 x)",
+			"Expression": "IR.Not64 (IR.Not64 x)",
 			"Filter": "",
 			"Result": "(IR.Move64 x)"
 		},
@@ -165,56 +165,56 @@
 		{
 			"FamilyName": "IR",
 			"Type": "Simplification",
-			"Name": "LogicalOr32",
+			"Name": "Or32",
 			"SubName": "Combine",
-			"Expression": "IR.LogicalOr32 (IR.LogicalOr32 a b) c",
+			"Expression": "IR.Or32 (IR.Or32 a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.LogicalOr32 a [Or32(To32(b), To32(c))])"
+			"Result": "(IR.Or32 a [Or32(To32(b), To32(c))])"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "Simplification",
-			"Name": "LogicalOr64",
+			"Name": "Or64",
 			"SubName": "Combine",
-			"Expression": "IR.LogicalOr64 (IR.LogicalOr64 a b) c",
+			"Expression": "IR.Or64 (IR.Or64 a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.LogicalOr64 a [Or64(To64(b), To64(c))])"
+			"Result": "(IR.Or64 a [Or64(To64(b), To64(c))])"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "Simplification",
-			"Name": "LogicalAnd32",
+			"Name": "And32",
 			"SubName": "Combine",
-			"Expression": "IR.LogicalAnd32 (IR.LogicalAnd32 a b) c",
+			"Expression": "IR.And32 (IR.And32 a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.LogicalAnd32 a [And32(To32(b), To32(c))])"
+			"Result": "(IR.And32 a [And32(To32(b), To32(c))])"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "Simplification",
-			"Name": "LogicalAnd64",
+			"Name": "And64",
 			"SubName": "Combine",
-			"Expression": "IR.LogicalAnd64 (IR.LogicalAnd64 a b) c",
+			"Expression": "IR.And64 (IR.And64 a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.LogicalAnd64 a [And64(To64(b), To64(c))])"
+			"Result": "(IR.And64 a [And64(To64(b), To64(c))])"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "Simplification",
-			"Name": "LogicalXor32",
+			"Name": "Xor32",
 			"SubName": "Combine",
-			"Expression": "IR.LogicalXor32 (IR.LogicalXor32 a b) c",
+			"Expression": "IR.Xor32 (IR.Xor32 a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.LogicalXor32 a [Xor32(To32(b), To32(c))])"
+			"Result": "(IR.Xor32 a [Xor32(To32(b), To32(c))])"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "Simplification",
-			"Name": "LogicalXor64",
+			"Name": "Xor64",
 			"SubName": "Combine",
-			"Expression": "IR.LogicalXor64 (IR.LogicalXor64 a b) c",
+			"Expression": "IR.Xor64 (IR.Xor64 a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.LogicalXor64 a [Xor64(To64(b), To64(c))])"
+			"Result": "(IR.Xor64 a [Xor64(To64(b), To64(c))])"
 		},
 
 		{

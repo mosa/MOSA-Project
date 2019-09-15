@@ -72,11 +72,11 @@ namespace Mosa.Compiler.Framework
 			{
 				return ConstantOperand.Create(result.Type, (uint)(op1.ConstantUnsigned64 >> 32));
 			}
-			else if (instruction == IRInstruction.LogicalNot32)
+			else if (instruction == IRInstruction.Not32)
 			{
 				return ConstantOperand.Create(result.Type, ~((uint)op1.ConstantUnsigned64));
 			}
-			else if (instruction == IRInstruction.LogicalNot64)
+			else if (instruction == IRInstruction.Not64)
 			{
 				return ConstantOperand.Create(result.Type, ~op1.ConstantUnsigned64);
 			}
@@ -189,27 +189,27 @@ namespace Mosa.Compiler.Framework
 			{
 				return ConstantOperand.Create(result.Type, op1.ConstantFloat + op2.ConstantFloat);
 			}
-			else if (instruction == IRInstruction.LogicalAnd32)
+			else if (instruction == IRInstruction.And32)
 			{
 				return ConstantOperand.Create(result.Type, op1.ConstantUnsigned64 & op2.ConstantUnsigned64 & 0xFFFFFFFF);
 			}
-			else if (instruction == IRInstruction.LogicalAnd64)
+			else if (instruction == IRInstruction.And64)
 			{
 				return ConstantOperand.Create(result.Type, op1.ConstantUnsigned64 & op2.ConstantUnsigned64);
 			}
-			else if (instruction == IRInstruction.LogicalOr32)
+			else if (instruction == IRInstruction.Or32)
 			{
 				return ConstantOperand.Create(result.Type, (op1.ConstantUnsigned64 | op2.ConstantUnsigned64) & 0xFFFFFFFF);
 			}
-			else if (instruction == IRInstruction.LogicalOr64)
+			else if (instruction == IRInstruction.Or64)
 			{
 				return ConstantOperand.Create(result.Type, op1.ConstantUnsigned64 | op2.ConstantUnsigned64);
 			}
-			else if (instruction == IRInstruction.LogicalXor32)
+			else if (instruction == IRInstruction.Xor32)
 			{
 				return ConstantOperand.Create(result.Type, (op1.ConstantUnsigned64 ^ op2.ConstantUnsigned64) & 0xFFFFFFFF);
 			}
-			else if (instruction == IRInstruction.LogicalXor64)
+			else if (instruction == IRInstruction.Xor64)
 			{
 				return ConstantOperand.Create(result.Type, op1.ConstantUnsigned64 ^ op2.ConstantUnsigned64);
 			}
@@ -447,67 +447,67 @@ namespace Mosa.Compiler.Framework
 			{
 				return ConstantOperand.Create(result.Type, 0);
 			}
-			else if ((instruction == IRInstruction.LogicalAnd32 || instruction == IRInstruction.LogicalAnd64) && op1 == op2)
+			else if ((instruction == IRInstruction.And32 || instruction == IRInstruction.And64) && op1 == op2)
 			{
 				return op1;
 			}
-			else if ((instruction == IRInstruction.LogicalAnd32 || instruction == IRInstruction.LogicalAnd64) && (op1.IsConstantZero || op2.IsConstantZero))
+			else if ((instruction == IRInstruction.And32 || instruction == IRInstruction.And64) && (op1.IsConstantZero || op2.IsConstantZero))
 			{
 				return ConstantOperand.Create(result.Type, 0);
 			}
-			else if (instruction == IRInstruction.LogicalAnd32 && op1.IsConstant && op1.ConstantUnsigned32 == 0xFFFFFFFF)
+			else if (instruction == IRInstruction.And32 && op1.IsConstant && op1.ConstantUnsigned32 == 0xFFFFFFFF)
 			{
 				return op2;
 			}
-			else if (instruction == IRInstruction.LogicalAnd64 && op1.IsConstant && op1.ConstantUnsigned64 == 0xFFFFFFFFFFFFFFFF)
+			else if (instruction == IRInstruction.And64 && op1.IsConstant && op1.ConstantUnsigned64 == 0xFFFFFFFFFFFFFFFF)
 			{
 				return op2;
 			}
-			else if (instruction == IRInstruction.LogicalAnd32 && op2.IsConstant && op2.ConstantUnsigned32 == 0xFFFFFFFF)
+			else if (instruction == IRInstruction.And32 && op2.IsConstant && op2.ConstantUnsigned32 == 0xFFFFFFFF)
 			{
 				return op1;
 			}
-			else if (instruction == IRInstruction.LogicalAnd64 && op2.IsConstant && op2.ConstantUnsigned64 == 0xFFFFFFFFFFFFFFFF)
+			else if (instruction == IRInstruction.And64 && op2.IsConstant && op2.ConstantUnsigned64 == 0xFFFFFFFFFFFFFFFF)
 			{
 				return op1;
 			}
-			else if ((instruction == IRInstruction.LogicalOr32 || instruction == IRInstruction.LogicalOr64) && op1 == op2)
+			else if ((instruction == IRInstruction.Or32 || instruction == IRInstruction.Or64) && op1 == op2)
 			{
 				return op1;
 			}
-			else if ((instruction == IRInstruction.LogicalOr32 || instruction == IRInstruction.LogicalOr64) && op1.IsConstantZero)
+			else if ((instruction == IRInstruction.Or32 || instruction == IRInstruction.Or64) && op1.IsConstantZero)
 			{
 				return op2;
 			}
-			else if ((instruction == IRInstruction.LogicalOr32 || instruction == IRInstruction.LogicalOr64) && op2.IsConstantZero)
+			else if ((instruction == IRInstruction.Or32 || instruction == IRInstruction.Or64) && op2.IsConstantZero)
 			{
 				return op1;
 			}
-			else if (instruction == IRInstruction.LogicalOr32 && op1.IsConstant && op1.ConstantUnsigned32 == 0xFFFFFFFF)
+			else if (instruction == IRInstruction.Or32 && op1.IsConstant && op1.ConstantUnsigned32 == 0xFFFFFFFF)
 			{
 				return ConstantOperand.Create(result.Type, 0xFFFFFFFF);
 			}
-			else if (instruction == IRInstruction.LogicalOr64 && op1.IsConstant && op1.ConstantUnsigned64 == 0xFFFFFFFFFFFFFFFF)
+			else if (instruction == IRInstruction.Or64 && op1.IsConstant && op1.ConstantUnsigned64 == 0xFFFFFFFFFFFFFFFF)
 			{
 				return ConstantOperand.Create(result.Type, 0xFFFFFFFFFFFFFFFF);
 			}
-			else if (instruction == IRInstruction.LogicalOr32 && op2.IsConstant && op2.ConstantUnsigned32 == 0xFFFFFFFF)
+			else if (instruction == IRInstruction.Or32 && op2.IsConstant && op2.ConstantUnsigned32 == 0xFFFFFFFF)
 			{
 				return ConstantOperand.Create(result.Type, 0xFFFFFFFF);
 			}
-			else if (instruction == IRInstruction.LogicalOr64 && op2.IsConstant && op2.ConstantUnsigned64 == 0xFFFFFFFFFFFFFFFF)
+			else if (instruction == IRInstruction.Or64 && op2.IsConstant && op2.ConstantUnsigned64 == 0xFFFFFFFFFFFFFFFF)
 			{
 				return ConstantOperand.Create(result.Type, 0xFFFFFFFFFFFFFFFF);
 			}
-			else if ((instruction == IRInstruction.LogicalXor32 || instruction == IRInstruction.LogicalXor64) && op1 == op2)
+			else if ((instruction == IRInstruction.Xor32 || instruction == IRInstruction.Xor64) && op1 == op2)
 			{
 				return ConstantOperand.Create(result.Type, 0);
 			}
-			else if ((instruction == IRInstruction.LogicalXor32 || instruction == IRInstruction.LogicalXor64) && op1.IsConstantZero)
+			else if ((instruction == IRInstruction.Xor32 || instruction == IRInstruction.Xor64) && op1.IsConstantZero)
 			{
 				return op2;
 			}
-			else if ((instruction == IRInstruction.LogicalXor32 || instruction == IRInstruction.LogicalXor64) && op2.IsConstantZero)
+			else if ((instruction == IRInstruction.Xor32 || instruction == IRInstruction.Xor64) && op2.IsConstantZero)
 			{
 				return op1;
 			}
@@ -675,7 +675,7 @@ namespace Mosa.Compiler.Framework
 
 			return new SimpleInstruction()
 			{
-				Instruction = Select(result.Is64BitInteger, IRInstruction.LogicalAnd32, IRInstruction.LogicalAnd64),
+				Instruction = Select(result.Is64BitInteger, IRInstruction.And32, IRInstruction.And64),
 				Result = result,
 				Operand1 = op1,
 				Operand2 = ConstantOperand.Create(result.Type, (uint)mask)
@@ -696,7 +696,7 @@ namespace Mosa.Compiler.Framework
 				|| node.Instruction == IRInstruction.IfThenElse32))
 				return null;
 
-			bool result = false;
+			bool result;
 
 			if (node.Operand2.IsVirtualRegister && node.Operand3.IsVirtualRegister && node.Operand2 == node.Operand3)
 			{

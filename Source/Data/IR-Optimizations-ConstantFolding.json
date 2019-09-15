@@ -174,72 +174,72 @@
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
-			"Name": "LogicalAnd32",
+			"Name": "And32",
 			"SubName": "",
-			"Expression": "IR.LogicalAnd32 a b",
+			"Expression": "IR.And32 a b",
 			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
 			"Result": "(IR.Move32 [And32(To32(a),To32(b))])"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
-			"Name": "LogicalAnd64",
+			"Name": "And64",
 			"SubName": "",
-			"Expression": "IR.LogicalAnd64 a b",
+			"Expression": "IR.And64 a b",
 			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
 			"Result": "(IR.Move64 [And64(To64(a),To64(b))])"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
-			"Name": "LogicalOr32",
+			"Name": "Or32",
 			"SubName": "",
-			"Expression": "IR.LogicalOr32 a b",
+			"Expression": "IR.Or32 a b",
 			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
 			"Result": "(IR.Move32 [Or32(To32(a),To32(b))])"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
-			"Name": "LogicalOr64",
+			"Name": "Or64",
 			"SubName": "",
-			"Expression": "IR.LogicalOr64 a b",
+			"Expression": "IR.Or64 a b",
 			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
 			"Result": "(IR.Move64 [Or64(To64(a),To64(b))])"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
-			"Name": "LogicalXor32",
+			"Name": "Xor32",
 			"SubName": "",
-			"Expression": "IR.LogicalXor32 a b",
+			"Expression": "IR.Xor32 a b",
 			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
 			"Result": "(IR.Move32 [Xor32(To32(a),To32(b))])"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
-			"Name": "LogicalXor64",
+			"Name": "Xor64",
 			"SubName": "",
-			"Expression": "IR.LogicalXor64 a b",
+			"Expression": "IR.Xor64 a b",
 			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
 			"Result": "(IR.Move64 [Xor64(To64(a),To64(b))])"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
-			"Name": "LogicalNot32",
+			"Name": "Not32",
 			"SubName": "",
-			"Expression": "IR.LogicalNot32 a",
+			"Expression": "IR.Not32 a",
 			"Filter": "IsResolvedConstant(a) ",
 			"Result": "(IR.Move32 [Not32(To32(a))])"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
-			"Name": "LogicalNot64",
+			"Name": "Not64",
 			"SubName": "",
-			"Expression": "IR.LogicalNot64 a",
+			"Expression": "IR.Not64 a",
 			"Filter": "IsResolvedConstant(a)",
 			"Result": "(IR.Move64 [Not64(To64(a))])"
 		},

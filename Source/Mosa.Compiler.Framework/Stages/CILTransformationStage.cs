@@ -276,11 +276,11 @@ namespace Mosa.Compiler.Framework.Stages
 				var instruction = (first.IsR4) ? (BaseInstruction)IRInstruction.CompareR4 : IRInstruction.CompareR8;
 
 				context.SetInstruction(instruction, cc, result, first, second);
-				context.AppendInstruction(Select(result, IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.Equal, null, result, CreateConstant(1)); // TODO: Constant should be 64bit
+				context.AppendInstruction(Select(result, IRInstruction.CompareBranch32, IRInstruction.CompareBranch64), ConditionCode.Equal, null, result, CreateConstant(1)); // TODO: Constant should be 64bit
 			}
 			else
 			{
-				context.SetInstruction(Select(first, IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), cc, null, first, second);
+				context.SetInstruction(Select(first, IRInstruction.CompareBranch32, IRInstruction.CompareBranch64), cc, null, first, second);
 			}
 
 			context.AddBranchTarget(target);
@@ -337,9 +337,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			switch ((node.Instruction as BaseCILInstruction).OpCode)
 			{
-				case OpCode.And: node.SetInstruction(Select(node.Result, IRInstruction.LogicalAnd32, IRInstruction.LogicalAnd64), node.Result, node.Operand1, node.Operand2); break;
-				case OpCode.Or: node.SetInstruction(Select(node.Result, IRInstruction.LogicalOr32, IRInstruction.LogicalOr64), node.Result, node.Operand1, node.Operand2); break;
-				case OpCode.Xor: node.SetInstruction(Select(node.Result, IRInstruction.LogicalXor32, IRInstruction.LogicalXor64), node.Result, node.Operand1, node.Operand2); break;
+				case OpCode.And: node.SetInstruction(Select(node.Result, IRInstruction.And32, IRInstruction.And64), node.Result, node.Operand1, node.Operand2); break;
+				case OpCode.Or: node.SetInstruction(Select(node.Result, IRInstruction.Or32, IRInstruction.Or64), node.Result, node.Operand1, node.Operand2); break;
+				case OpCode.Xor: node.SetInstruction(Select(node.Result, IRInstruction.Xor32, IRInstruction.Xor64), node.Result, node.Operand1, node.Operand2); break;
 				case OpCode.Div_un: node.SetInstruction(Select(node.Result, IRInstruction.DivUnsigned32, IRInstruction.DivUnsigned64), node.Result, node.Operand1, node.Operand2); break;
 				case OpCode.Rem_un: node.SetInstruction(Select(node.Result, IRInstruction.RemUnsigned32, IRInstruction.RemUnsigned64), node.Result, node.Operand1, node.Operand2); break;
 				default: throw new CompilerException();
@@ -1292,7 +1292,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The context.</param>
 		private void Not(InstructionNode node)
 		{
-			var logicalNot = Select(node.Result, IRInstruction.LogicalNot32, IRInstruction.LogicalNot64);
+			var logicalNot = Select(node.Result, IRInstruction.Not32, IRInstruction.Not64);
 
 			node.SetInstruction(logicalNot, node.Result, node.Operand1);
 		}
@@ -1598,13 +1598,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (opcode == OpCode.Brtrue || opcode == OpCode.Brtrue_s)
 			{
-				context.SetInstruction(Select(first, IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.NotEqual, null, first, second); // TODO: Constant should be 64bit
+				context.SetInstruction(Select(first, IRInstruction.CompareBranch32, IRInstruction.CompareBranch64), ConditionCode.NotEqual, null, first, second); // TODO: Constant should be 64bit
 				context.AddBranchTarget(target);
 				return;
 			}
 			else if (opcode == OpCode.Brfalse || opcode == OpCode.Brfalse_s)
 			{
-				context.SetInstruction(Select(first, IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.Equal, null, first, second); // TODO: Constant should be 64bit
+				context.SetInstruction(Select(first, IRInstruction.CompareBranch32, IRInstruction.CompareBranch64), ConditionCode.Equal, null, first, second); // TODO: Constant should be 64bit
 				context.AddBranchTarget(target);
 				return;
 			}
@@ -1721,14 +1721,14 @@ namespace Mosa.Compiler.Framework.Stages
 				/* I4 */ new ConversionEntry(IRInstruction.SignExtend8x32),
 				/* I8 */ new ConversionEntry(IRInstruction.Truncation64x32, IRInstruction.SignExtend8x32),
 				/* U1 */ new ConversionEntry(IRInstruction.Move32),
-				/* U2 */ new ConversionEntry(IRInstruction.LogicalAnd32, 8),
-				/* U4 */ new ConversionEntry(IRInstruction.LogicalAnd32, 8),
-				/* U8 */ new ConversionEntry(IRInstruction.Truncation64x32, IRInstruction.LogicalAnd32, 8),
-				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4To32, IRInstruction.LogicalAnd32, 8),
-				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8To32, IRInstruction.LogicalAnd32, 8),
-				/* I  */ new ConversionEntry(IRInstruction.LogicalAnd32, 8),
-				/* U  */ new ConversionEntry(IRInstruction.LogicalAnd32, 8),
-				/* Ptr*/ new ConversionEntry(IRInstruction.LogicalAnd32, 8)
+				/* U2 */ new ConversionEntry(IRInstruction.And32, 8),
+				/* U4 */ new ConversionEntry(IRInstruction.And32, 8),
+				/* U8 */ new ConversionEntry(IRInstruction.Truncation64x32, IRInstruction.And32, 8),
+				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4To32, IRInstruction.And32, 8),
+				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8To32, IRInstruction.And32, 8),
+				/* I  */ new ConversionEntry(IRInstruction.And32, 8),
+				/* U  */ new ConversionEntry(IRInstruction.And32, 8),
+				/* Ptr*/ new ConversionEntry(IRInstruction.And32, 8)
 				},
 		/* I2 */ new ConversionEntry[] {
 				/* I1 */ new ConversionEntry(IRInstruction.SignExtend16x32),
@@ -1737,13 +1737,13 @@ namespace Mosa.Compiler.Framework.Stages
 				/* I8 */ new ConversionEntry(IRInstruction.Truncation64x32, IRInstruction.SignExtend16x32),
 				/* U1 */ new ConversionEntry(IRInstruction.Move32),
 				/* U2 */ new ConversionEntry(IRInstruction.Move32),
-				/* U4 */ new ConversionEntry(IRInstruction.LogicalAnd32, 16),
-				/* U8 */ new ConversionEntry(IRInstruction.Truncation64x32, IRInstruction.LogicalAnd32, 16),
-				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4To32, IRInstruction.LogicalAnd32, 8),
-				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8To32, IRInstruction.LogicalAnd32, 8),
-				/* I  */ new ConversionEntry(IRInstruction.LogicalAnd32, 16),
-				/* U  */ new ConversionEntry(IRInstruction.LogicalAnd32, 16),
-				/* Ptr*/ new ConversionEntry(IRInstruction.LogicalAnd32, 16)
+				/* U4 */ new ConversionEntry(IRInstruction.And32, 16),
+				/* U8 */ new ConversionEntry(IRInstruction.Truncation64x32, IRInstruction.And32, 16),
+				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4To32, IRInstruction.And32, 8),
+				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8To32, IRInstruction.And32, 8),
+				/* I  */ new ConversionEntry(IRInstruction.And32, 16),
+				/* U  */ new ConversionEntry(IRInstruction.And32, 16),
+				/* Ptr*/ new ConversionEntry(IRInstruction.And32, 16)
 				},
 		/* I4 */ new ConversionEntry[] {
 				/* I1 */ new ConversionEntry(IRInstruction.SignExtend8x32),
@@ -1752,7 +1752,7 @@ namespace Mosa.Compiler.Framework.Stages
 				/* I8 */ new ConversionEntry(IRInstruction.Truncation64x32),
 				/* U1 */ new ConversionEntry(IRInstruction.Move32),
 				/* U2 */ new ConversionEntry(IRInstruction.Move32),
-				/* U4 */ new ConversionEntry(IRInstruction.LogicalAnd32, 16),
+				/* U4 */ new ConversionEntry(IRInstruction.And32, 16),
 				/* U8 */ new ConversionEntry(IRInstruction.Truncation64x32),
 				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4To32),
 				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8To32),
@@ -1777,33 +1777,33 @@ namespace Mosa.Compiler.Framework.Stages
 				},
 		/* U1 */ new ConversionEntry[] {
 				/* I1 */ new ConversionEntry(IRInstruction.Move32),
-				/* I2 */ new ConversionEntry(IRInstruction.LogicalAnd32, 8),
-				/* I4 */ new ConversionEntry(IRInstruction.LogicalAnd32, 8),
-				/* I8 */ new ConversionEntry(IRInstruction.Truncation64x32, IRInstruction.LogicalAnd32, 8),
+				/* I2 */ new ConversionEntry(IRInstruction.And32, 8),
+				/* I4 */ new ConversionEntry(IRInstruction.And32, 8),
+				/* I8 */ new ConversionEntry(IRInstruction.Truncation64x32, IRInstruction.And32, 8),
 				/* U1 */ new ConversionEntry(IRInstruction.Move32),
-				/* U2 */ new ConversionEntry(IRInstruction.LogicalAnd32, 8),
-				/* U4 */ new ConversionEntry(IRInstruction.LogicalAnd32, 8),
-				/* U8 */ new ConversionEntry(IRInstruction.Truncation64x32, IRInstruction.LogicalAnd32, 8),
-				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4To32, IRInstruction.LogicalAnd32, 8),
-				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8To32, IRInstruction.LogicalAnd32, 8),
-				/* I  */ new ConversionEntry(IRInstruction.LogicalAnd32, 8),
-				/* U  */ new ConversionEntry(IRInstruction.LogicalAnd32, 8),
-				/* Ptr*/ new ConversionEntry(IRInstruction.LogicalAnd32, 8)
+				/* U2 */ new ConversionEntry(IRInstruction.And32, 8),
+				/* U4 */ new ConversionEntry(IRInstruction.And32, 8),
+				/* U8 */ new ConversionEntry(IRInstruction.Truncation64x32, IRInstruction.And32, 8),
+				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4To32, IRInstruction.And32, 8),
+				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8To32, IRInstruction.And32, 8),
+				/* I  */ new ConversionEntry(IRInstruction.And32, 8),
+				/* U  */ new ConversionEntry(IRInstruction.And32, 8),
+				/* Ptr*/ new ConversionEntry(IRInstruction.And32, 8)
 				},
 		/* U2 */ new ConversionEntry[] {
-				/* I1 */ new ConversionEntry(IRInstruction.LogicalAnd32, 16),
+				/* I1 */ new ConversionEntry(IRInstruction.And32, 16),
 				/* I2 */ new ConversionEntry(IRInstruction.Move32),
-				/* I4 */ new ConversionEntry(IRInstruction.LogicalAnd32, 16),
-				/* I8 */ new ConversionEntry(IRInstruction.Truncation64x32, IRInstruction.LogicalAnd32, 16),
+				/* I4 */ new ConversionEntry(IRInstruction.And32, 16),
+				/* I8 */ new ConversionEntry(IRInstruction.Truncation64x32, IRInstruction.And32, 16),
 				/* U1 */ new ConversionEntry(IRInstruction.Move32),
 				/* U2 */ new ConversionEntry(IRInstruction.Move32),
-				/* U4 */ new ConversionEntry(IRInstruction.LogicalAnd32, 16),
-				/* U8 */ new ConversionEntry(IRInstruction.Truncation64x32, IRInstruction.LogicalAnd32, 16),
-				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4To32, IRInstruction.LogicalAnd32, 16),
-				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8To32, IRInstruction.LogicalAnd32, 16),
-				/* I  */ new ConversionEntry(IRInstruction.LogicalAnd32, 16),
-				/* U  */ new ConversionEntry(IRInstruction.LogicalAnd32, 16),
-				/* Ptr*/ new ConversionEntry(IRInstruction.LogicalAnd32, 16)
+				/* U4 */ new ConversionEntry(IRInstruction.And32, 16),
+				/* U8 */ new ConversionEntry(IRInstruction.Truncation64x32, IRInstruction.And32, 16),
+				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4To32, IRInstruction.And32, 16),
+				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8To32, IRInstruction.And32, 16),
+				/* I  */ new ConversionEntry(IRInstruction.And32, 16),
+				/* U  */ new ConversionEntry(IRInstruction.And32, 16),
+				/* Ptr*/ new ConversionEntry(IRInstruction.And32, 16)
 				},
 		/* U4 */ new ConversionEntry[] {
 				/* I1 */ new ConversionEntry(IRInstruction.ZeroExtend8x32),
@@ -1866,8 +1866,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* Ptr*/ new ConversionEntry(IRInstruction.Convert32ToR8)
 				},
 		/* I */ new ConversionEntry[] {
-				/* I1 */ new ConversionEntry(IRInstruction.LogicalAnd32, 8),
-				/* I2 */ new ConversionEntry(IRInstruction.LogicalAnd32, 16),
+				/* I1 */ new ConversionEntry(IRInstruction.And32, 8),
+				/* I2 */ new ConversionEntry(IRInstruction.And32, 16),
 				/* I4 */ new ConversionEntry(IRInstruction.Move32),
 				/* I8 */ new ConversionEntry(IRInstruction.Truncation64x32),
 				/* U1 */ new ConversionEntry(IRInstruction.Move32),
@@ -1881,8 +1881,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* Ptr*/ new ConversionEntry(IRInstruction.Move32)
 				},
 		/* U */ new ConversionEntry[] {
-				/* I1 */ new ConversionEntry(IRInstruction.LogicalAnd32, 8),
-				/* I2 */ new ConversionEntry(IRInstruction.LogicalAnd32, 16),
+				/* I1 */ new ConversionEntry(IRInstruction.And32, 8),
+				/* I2 */ new ConversionEntry(IRInstruction.And32, 16),
 				/* I4 */ new ConversionEntry(IRInstruction.Move32),
 				/* I8 */ new ConversionEntry(IRInstruction.Truncation64x32),
 				/* U1 */ new ConversionEntry(IRInstruction.Move32),
@@ -1896,8 +1896,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* Ptr*/ new ConversionEntry(IRInstruction.Move32)
 				},
 		/* Ptr */ new ConversionEntry[] {
-				/* I1 */ new ConversionEntry(IRInstruction.LogicalAnd32, 8),
-				/* I2 */ new ConversionEntry(IRInstruction.LogicalAnd32, 16),
+				/* I1 */ new ConversionEntry(IRInstruction.And32, 8),
+				/* I2 */ new ConversionEntry(IRInstruction.And32, 16),
 				/* I4 */ new ConversionEntry(IRInstruction.Move32),
 				/* I8 */ new ConversionEntry(IRInstruction.Truncation64x32),
 				/* U1 */ new ConversionEntry(IRInstruction.Move32),
@@ -2002,7 +2002,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Now compare length with index
 			// If index is greater than or equal to the length then jump to exception block, otherwise jump to next block
-			before.AppendInstruction(Select(IRInstruction.CompareIntBranch32, IRInstruction.CompareIntBranch64), ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block);
+			before.AppendInstruction(Select(IRInstruction.CompareBranch32, IRInstruction.CompareBranch64), ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block);
 			before.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
 
 			// Build exception block which is just a call to throw exception
