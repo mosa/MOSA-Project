@@ -80,7 +80,7 @@ namespace Mosa.Compiler.Framework
 			{
 				return ConstantOperand.Create(result.Type, ~op1.ConstantUnsigned64);
 			}
-			else if (instruction == IRInstruction.Truncation64x32)
+			else if (instruction == IRInstruction.Truncate64x32)
 			{
 				return ConstantOperand.Create(result.Type, (uint)op1.ConstantUnsigned64);
 			}

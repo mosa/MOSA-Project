@@ -156,7 +156,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Register(IRInstruction.Move32, MoveInt32);
 			Register(IRInstruction.Move64, MoveInt64);
 
-			Register(IRInstruction.Truncation64x32, Truncation64x32);
+			Register(IRInstruction.Truncate64x32, Truncate64x32);
 
 			Register(IRInstruction.GetLow64, GetLow64);
 			Register(IRInstruction.GetHigh64, GetHigh64);
@@ -2212,7 +2212,7 @@ namespace Mosa.Compiler.Framework.Stages
 			};
 		}
 
-		private Value Truncation64x32(InstructionNode node)
+		private Value Truncate64x32(InstructionNode node)
 		{
 			var value1 = node.Operand1.IsConstant ? new Value(node.Operand1.ConstantUnsigned64, true) : Values[node.Operand1.Index];
 

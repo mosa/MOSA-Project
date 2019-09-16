@@ -1174,7 +1174,7 @@
 			"OperandCount": 1
 		},
 		{
-			"Name": "Truncation64x32",
+			"Name": "Truncate64x32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1

@@ -4,7 +4,7 @@
 
 using Mosa.Compiler.Framework.IR;
 
-namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
+namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 {
 	/// <summary>
 	/// GetHigh64FromRightLeftAndTo64

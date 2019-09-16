@@ -186,7 +186,7 @@ namespace Mosa.Compiler.Framework.IR
 			IRInstruction.SubWithCarry64,
 			IRInstruction.Switch,
 			IRInstruction.Throw,
-			IRInstruction.Truncation64x32,
+			IRInstruction.Truncate64x32,
 			IRInstruction.TryEnd,
 			IRInstruction.TryStart,
 			IRInstruction.UnstableObjectTracking,

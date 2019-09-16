@@ -183,7 +183,7 @@ namespace Mosa.Compiler.Framework
 		public static readonly SubWithCarry64 SubWithCarry64 = new SubWithCarry64();
 		public static readonly Switch Switch = new Switch();
 		public static readonly Throw Throw = new Throw();
-		public static readonly Truncation64x32 Truncation64x32 = new Truncation64x32();
+		public static readonly Truncate64x32 Truncate64x32 = new Truncate64x32();
 		public static readonly TryEnd TryEnd = new TryEnd();
 		public static readonly TryStart TryStart = new TryStart();
 		public static readonly UnstableObjectTracking UnstableObjectTracking = new UnstableObjectTracking();

@@ -4,14 +4,14 @@
 
 using Mosa.Compiler.Framework.IR;
 
-namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
+namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 {
 	/// <summary>
-	/// GetHigh64FromShiftedMore32
+	/// GetLow64FromShiftedMore32
 	/// </summary>
-	public sealed class GetHigh64FromShiftedMore32 : BaseTransformation
+	public sealed class GetLow64FromShiftedMore32 : BaseTransformation
 	{
-		public GetHigh64FromShiftedMore32() : base(IRInstruction.GetHigh64)
+		public GetLow64FromShiftedMore32() : base(IRInstruction.GetLow64)
 		{
 		}
 
@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftRight64)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftLeft64)
 				return false;
 
 			if (!IsGreaterThanOrEqual(And32(To32(context.Operand1.Definitions[0].Operand2), 63), 32))

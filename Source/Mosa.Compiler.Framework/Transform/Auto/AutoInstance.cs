@@ -110,6 +110,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 		public static readonly BaseTransformation IR_Simplification_GetHigh64To64 = new IR.Simplification.GetHigh64To64();
 		public static readonly BaseTransformation IR_Simplification_GetLow64To64 = new IR.Simplification.GetLow64To64();
 		public static readonly BaseTransformation IR_Simplification_To64FromLowHigh = new IR.Simplification.To64FromLowHigh();
+		public static readonly BaseTransformation IR_Simplification_GetLow64FromShiftedRight32 = new IR.Simplification.GetLow64FromShiftedRight32();
+		public static readonly BaseTransformation IR_Simplification_GetLow64FromRightShiftAndTo64 = new IR.Simplification.GetLow64FromRightShiftAndTo64();
+		public static readonly BaseTransformation IR_Simplification_GetHigh64FromRightLeftAndTo64 = new IR.Simplification.GetHigh64FromRightLeftAndTo64();
+		public static readonly BaseTransformation IR_Simplification_GetHigh64FromShiftedMore32 = new IR.Simplification.GetHigh64FromShiftedMore32();
+		public static readonly BaseTransformation IR_Simplification_GetLow64FromShiftedMore32 = new IR.Simplification.GetLow64FromShiftedMore32();
 		public static readonly BaseTransformation IR_StrengthReduction_Add32LeftZero = new IR.StrengthReduction.Add32LeftZero();
 		public static readonly BaseTransformation IR_StrengthReduction_Add32RightZero = new IR.StrengthReduction.Add32RightZero();
 		public static readonly BaseTransformation IR_StrengthReduction_Add64LeftZero = new IR.StrengthReduction.Add64LeftZero();
@@ -134,10 +139,6 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 		public static readonly BaseTransformation IR_StrengthReduction_DivSigned64ByPowerOfTwo = new IR.StrengthReduction.DivSigned64ByPowerOfTwo();
 		public static readonly BaseTransformation IR_StrengthReduction_RemUnsigned32ByPowerOfTwo = new IR.StrengthReduction.RemUnsigned32ByPowerOfTwo();
 		public static readonly BaseTransformation IR_StrengthReduction_RemUnsigned64ByPowerOfTwo = new IR.StrengthReduction.RemUnsigned64ByPowerOfTwo();
-		public static readonly BaseTransformation IR_StrengthReduction_GetLow64FromRightShiftAndTo64 = new IR.StrengthReduction.GetLow64FromRightShiftAndTo64();
-		public static readonly BaseTransformation IR_StrengthReduction_GetHigh64FromRightLeftAndTo64 = new IR.StrengthReduction.GetHigh64FromRightLeftAndTo64();
-		public static readonly BaseTransformation IR_StrengthReduction_GetHigh64FromShiftedMore32 = new IR.StrengthReduction.GetHigh64FromShiftedMore32();
-		public static readonly BaseTransformation IR_StrengthReduction_GetLow64FromShiftedMore32 = new IR.StrengthReduction.GetLow64FromShiftedMore32();
 		public static readonly BaseTransformation IR_Rewrite_Add32MultipleWithCommon = new IR.Rewrite.Add32MultipleWithCommon();
 		public static readonly BaseTransformation IR_Rewrite_Add64MultipleWithCommon = new IR.Rewrite.Add64MultipleWithCommon();
 		public static readonly BaseTransformation IR_Rewrite_Sub32MultipleWithCommon = new IR.Rewrite.Sub32MultipleWithCommon();

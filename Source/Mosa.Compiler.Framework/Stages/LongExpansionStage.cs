@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(IRInstruction.Store64, StoreInt64);
 			AddVisitation(IRInstruction.StoreParam64, StoreParamInt64);
 			AddVisitation(IRInstruction.Sub64, Sub64);
-			AddVisitation(IRInstruction.Truncation64x32, Truncation64x32);
+			AddVisitation(IRInstruction.Truncate64x32, Truncate64x32);
 			AddVisitation(IRInstruction.ZeroExtend8x64, ZeroExtend8x64);
 			AddVisitation(IRInstruction.ZeroExtend16x64, ZeroExtend16x64);
 			AddVisitation(IRInstruction.ZeroExtend32x64, ZeroExtend32x64);
@@ -710,7 +710,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void Truncation64x32(Context context)
+		private void Truncate64x32(Context context)
 		{
 			Debug.Assert(context.Operand1.Is64BitInteger);
 			Debug.Assert(!context.Result.Is64BitInteger);
