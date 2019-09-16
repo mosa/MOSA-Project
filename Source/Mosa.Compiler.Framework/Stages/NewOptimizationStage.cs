@@ -53,16 +53,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			if (HasProtectedRegions)
-				return;
-
-			// Method is empty - must be a plugged method
-			if (BasicBlocks.HeadBlocks.Count != 1)
-				return;
-
-			if (BasicBlocks.PrologueBlock == null)
-				return;
-
 			trace = CreateTraceLog(5);
 
 			Optimize();

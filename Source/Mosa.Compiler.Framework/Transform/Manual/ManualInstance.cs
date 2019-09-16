@@ -85,5 +85,15 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 		public static readonly BaseTransformation IR_Rewrite_Compare64x64Combine64x64 = new IR.Rewrite.Compare64x64Combine64x64();
 		public static readonly BaseTransformation IR_Rewrite_Compare32x32Combine64x64 = new IR.Rewrite.Compare32x32Combine32x64();
 		public static readonly BaseTransformation IR_Rewrite_Compare64x64Combine32x32 = new IR.Rewrite.Compare64x64Combine32x32();
+		public static readonly BaseTransformation IR_Rewrite_Compare32x32Combine64x32 = new IR.Rewrite.Compare32x32Combine64x32();
+
+		public static readonly BaseTransformation IR_Rewrite_CompareBranch32Combine32x32 = new IR.Rewrite.CompareBranch32Combine32x32();
+		public static readonly BaseTransformation IR_Rewrite_CompareBranch32Combine32x64 = new IR.Rewrite.CompareBranch32Combine32x64();
+		public static readonly BaseTransformation IR_Rewrite_CompareBranch32Combine64x32 = new IR.Rewrite.CompareBranch32Combine64x32();
+		public static readonly BaseTransformation IR_Rewrite_CompareBranch32Combine64x64 = new IR.Rewrite.CompareBranch32Combine64x64();
+		public static readonly BaseTransformation IR_Rewrite_CompareBranch64Combine32x32 = new IR.Rewrite.CompareBranch64Combine32x32();
+		public static readonly BaseTransformation IR_Rewrite_CompareBranch64Combine32x64 = new IR.Rewrite.CompareBranch64Combine32x64();
+		public static readonly BaseTransformation IR_Rewrite_CompareBranch64Combine64x32 = new IR.Rewrite.CompareBranch64Combine64x32();
+		public static readonly BaseTransformation IR_Rewrite_CompareBranch64Combine64x64 = new IR.Rewrite.CompareBranch64Combine64x64();
 	}
 }

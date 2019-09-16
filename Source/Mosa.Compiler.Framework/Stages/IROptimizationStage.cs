@@ -143,7 +143,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			// Method is empty - must be a plugged method
 			if (!HasCode)
 				return;
 
