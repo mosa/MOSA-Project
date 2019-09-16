@@ -301,7 +301,7 @@
 		{
 			"FamilyName": "IR",
 			"Type": "Simplification",
-			"Name": "GetLHigh64",
+			"Name": "GetHigh64",
 			"SubName": "FromTo64",
 			"Expression": "IR.GetHigh64 (IR.To64 a b))",
 			"Filter": "",

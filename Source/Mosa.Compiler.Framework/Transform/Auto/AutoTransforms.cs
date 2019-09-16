@@ -108,7 +108,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 			AutoInstance.IR_Simplification_SubAddR4Combine,
 			AutoInstance.IR_Simplification_SubAddR8Combine,
 			AutoInstance.IR_Simplification_GetLow64FromTo64,
-			AutoInstance.IR_Simplification_GetLHigh64FromTo64,
+			AutoInstance.IR_Simplification_GetHigh64FromTo64,
 			AutoInstance.IR_StrengthReduction_Add32LeftZero,
 			AutoInstance.IR_StrengthReduction_Add32RightZero,
 			AutoInstance.IR_StrengthReduction_Add64LeftZero,

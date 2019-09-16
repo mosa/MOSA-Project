@@ -834,7 +834,6 @@ namespace Mosa.Compiler.Framework.Stages
 				|| node2.Instruction == IRInstruction.Compare64x64))
 				return;
 
-			var Compareeger = node2.Instruction;
 			var conditionCode = node.ConditionCode == ConditionCode.NotEqual ? node2.ConditionCode : node2.ConditionCode.GetOpposite();
 
 			AddOperandUsageToWorkList(node2);
@@ -842,7 +841,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			trace?.Log("*** FoldIntegerCompare");
 			trace?.Log($"BEFORE:\t{node}");
-			node.SetInstruction(Compareeger, conditionCode, node.Result, node2.Operand1, node2.Operand2);
+			node.SetInstruction(node2.Instruction, conditionCode, node.Result, node2.Operand1, node2.Operand2);
 			trace?.Log($"AFTER: \t{node}");
 			trace?.Log($"REMOVED:\t{node2}");
 			node2.SetInstruction(IRInstruction.Nop);

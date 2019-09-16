@@ -4,9 +4,9 @@ using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Transform.Manual.IR.Rewrite
 {
-	public sealed class CompareBranch64 : BaseTransformation
+	public sealed class Compare32x32Combine32x32 : BaseTransformation
 	{
-		public CompareBranch64() : base(IRInstruction.CompareBranch64)
+		public Compare32x32Combine32x32() : base(IRInstruction.Compare32x32)
 		{
 		}
 
@@ -21,13 +21,13 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.Rewrite
 			if (!IsResolvedConstant(context.Operand2))
 				return false;
 
-			if (context.Operand2.ConstantUnsigned64 != 0)
+			if (context.Operand2.ConstantUnsigned32 != 0)
 				return false;
 
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Compare64x64)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Compare32x32)
 				return false;
 
 			return true;
@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.Rewrite
 			var node2 = context.Operand1.Definitions[0];
 			var conditionCode = context.ConditionCode == ConditionCode.NotEqual ? node2.ConditionCode : node2.ConditionCode.GetOpposite();
 
-			context.SetInstruction(IRInstruction.CompareBranch64, conditionCode, null, node2.Operand1, node2.Operand2, context.BranchTargets[0]);
+			context.SetInstruction(IRInstruction.Compare32x32, conditionCode, context.Result, node2.Operand1, node2.Operand2);
 		}
 	}
 }
