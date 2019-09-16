@@ -50,7 +50,7 @@
 			"Type": "Rewrite",
 			"Name": "Load64",
 			"SubName": "FoldAdd32",
-			"Expression": "IR.Load32 (IR.Add32 a b) c",
+			"Expression": "IR.Load64 (IR.Add32 a b) c",
 			"Filter": " IsResolvedConstant(c) & IsResolvedConstant(b)",
 			"Result": "(IR.Load64 a [Add32(To32(b),To32(c))])"
 		},
@@ -853,9 +853,9 @@
 			"Type": "Rewrite",
 			"Name": "LoadZeroExtend16x32",
 			"SubName": "AddressFold",
-			"Expression": "(IR.LoadSignExtend16x32 (IR.AddressOf parameter) offset)",
+			"Expression": "(IR.LoadZeroExtend16x32 (IR.AddressOf parameter) offset)",
 			"Filter": "IsParameter(parameter)",
-			"Result": "(IR.LoadZeroExtend16x32 parameter)"
+			"Result": "(IR.LoadParamZeroExtend16x32 parameter)"
 		},
 		{
 			"FamilyName": "IR",

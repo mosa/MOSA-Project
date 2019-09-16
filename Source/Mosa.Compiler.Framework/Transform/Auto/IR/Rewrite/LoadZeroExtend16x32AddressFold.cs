@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Rewrite
 	/// </summary>
 	public sealed class LoadZeroExtend16x32AddressFold : BaseTransformation
 	{
-		public LoadZeroExtend16x32AddressFold() : base(IRInstruction.LoadSignExtend16x32)
+		public LoadZeroExtend16x32AddressFold() : base(IRInstruction.LoadZeroExtend16x32)
 		{
 		}
 
@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Rewrite
 
 			var t1 = context.Operand1.Definitions[0].Operand1;
 
-			context.SetInstruction(IRInstruction.LoadZeroExtend16x32, result, t1);
+			context.SetInstruction(IRInstruction.LoadParamZeroExtend16x32, result, t1);
 		}
 	}
 }

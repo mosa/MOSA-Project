@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Rewrite
 	/// </summary>
 	public sealed class Load64FoldAdd32 : BaseTransformation
 	{
-		public Load64FoldAdd32() : base(IRInstruction.Load32)
+		public Load64FoldAdd32() : base(IRInstruction.Load64)
 		{
 		}
 
