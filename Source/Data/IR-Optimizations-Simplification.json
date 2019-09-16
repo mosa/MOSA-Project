@@ -306,6 +306,34 @@
 			"Expression": "IR.GetHigh64 (IR.To64 a b))",
 			"Filter": "",
 			"Result": "(IR.Move32 b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "GetHigh64",
+			"SubName": "To64",
+			"Expression": "IR.GetHigh64 (IR.To64 a b)",
+			"Filter": "",
+			"Result": "(IR.Move32 b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "GetLow64",
+			"SubName": "To64",
+			"Expression": "IR.GetLow64 (IR.To64 a b)",
+			"Filter": "",
+			"Result": "(IR.Move32 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "To64",
+			"SubName": "FromLowHigh",
+			"Expression": "IR.To64 (IR.GetLow64 a) (IR.GetHigh64 a)",
+			"Filter": "",
+			"Result": "(IR.Move32 a)"
 		}
+
 	]
 }

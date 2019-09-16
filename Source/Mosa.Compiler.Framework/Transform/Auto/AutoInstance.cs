@@ -107,6 +107,9 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 		public static readonly BaseTransformation IR_Simplification_SubAddR8Combine = new IR.Simplification.SubAddR8Combine();
 		public static readonly BaseTransformation IR_Simplification_GetLow64FromTo64 = new IR.Simplification.GetLow64FromTo64();
 		public static readonly BaseTransformation IR_Simplification_GetHigh64FromTo64 = new IR.Simplification.GetHigh64FromTo64();
+		public static readonly BaseTransformation IR_Simplification_GetHigh64To64 = new IR.Simplification.GetHigh64To64();
+		public static readonly BaseTransformation IR_Simplification_GetLow64To64 = new IR.Simplification.GetLow64To64();
+		public static readonly BaseTransformation IR_Simplification_To64FromLowHigh = new IR.Simplification.To64FromLowHigh();
 		public static readonly BaseTransformation IR_StrengthReduction_Add32LeftZero = new IR.StrengthReduction.Add32LeftZero();
 		public static readonly BaseTransformation IR_StrengthReduction_Add32RightZero = new IR.StrengthReduction.Add32RightZero();
 		public static readonly BaseTransformation IR_StrengthReduction_Add64LeftZero = new IR.StrengthReduction.Add64LeftZero();
