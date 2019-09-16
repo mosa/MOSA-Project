@@ -95,6 +95,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			ManualInstance.IR_Rewrite_Compare32x32Combine32x32,
 			ManualInstance.IR_Rewrite_Compare32x32Combine64x64,
 			ManualInstance.IR_Rewrite_Compare32x32Combine64x32,
+			ManualInstance.IR_Rewrite_Compare64x64Combine64x32,
 			ManualInstance.IR_Rewrite_Compare64x64Combine64x64,
 			ManualInstance.IR_Rewrite_Compare64x64Combine32x32,
 
