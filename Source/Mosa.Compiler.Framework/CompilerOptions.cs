@@ -83,6 +83,11 @@ namespace Mosa.Compiler.Framework
 		public bool EnableInlinedMethods { get; set; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether only methods are inlined marked as AgressiveInlining.
+		/// </summary>
+		public bool InlineOnlyExplicit { get; set; }
+
+		/// <summary>
 		/// Gets or sets the maximum IR numbers for inlined optimization.
 		/// </summary>
 		public int InlinedIRMaximum { get; set; }
