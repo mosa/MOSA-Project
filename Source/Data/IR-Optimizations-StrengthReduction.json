@@ -75,6 +75,42 @@
 		{
 			"FamilyName": "IR",
 			"Type": "StrengthReduction",
+			"Name": "Xor32",
+			"SubName": "Zero",
+			"Expression": "IR.Xor32 a 0",
+			"Filter": "",
+			"Result": "(IR.Move32 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Xor64",
+			"SubName": "Zero",
+			"Expression": "IR.Xor32 a 0",
+			"Filter": "",
+			"Result": "(IR.Move64 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Xor32",
+			"SubName": "Max",
+			"Expression": "IR.Xor32 a 0xFFFFFFFF",
+			"Filter": "",
+			"Result": "(IR.Not32 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Xor64",
+			"SubName": "Max",
+			"Expression": "IR.Xor64 a 0xFFFFFFFFFFFFFFFF",
+			"Filter": "",
+			"Result": "(IR.Not64 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
 			"Name": "Add32",
 			"SubName": "Zero",
 			"Expression": "IR.Add32 a 0",
@@ -166,7 +202,7 @@
 			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "Sub32",
-			"SubName": "BySame",
+			"SubName": "Same",
 			"Expression": "IR.Sub32 a a",
 			"Filter": "",
 			"Result": "(IR.Move32 0)"
@@ -175,8 +211,26 @@
 			"FamilyName": "IR",
 			"Type": "StrengthReduction",
 			"Name": "Sub64",
-			"SubName": "BySame",
+			"SubName": "Same",
 			"Expression": "IR.Sub64 a a",
+			"Filter": "",
+			"Result": "(IR.Move64 0)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Xor32",
+			"SubName": "Same",
+			"Expression": "IR.Xor32 a a",
+			"Filter": "",
+			"Result": "(IR.Move32 0)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Xor64",
+			"SubName": "Same",
+			"Expression": "IR.Xor64 a a",
 			"Filter": "",
 			"Result": "(IR.Move64 0)"
 		},

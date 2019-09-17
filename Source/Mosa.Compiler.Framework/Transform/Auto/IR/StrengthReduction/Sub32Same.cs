@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 {
 	/// <summary>
-	/// Sub32BySame
+	/// Sub32Same
 	/// </summary>
-	public sealed class Sub32BySame : BaseTransformation
+	public sealed class Sub32Same : BaseTransformation
 	{
-		public Sub32BySame() : base(IRInstruction.Sub32)
+		public Sub32Same() : base(IRInstruction.Sub32)
 		{
 		}
 

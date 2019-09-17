@@ -123,6 +123,10 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 		public static readonly BaseTransformation IR_StrengthReduction_Or64Max = new IR.StrengthReduction.Or64Max();
 		public static readonly BaseTransformation IR_StrengthReduction_Or32Zero = new IR.StrengthReduction.Or32Zero();
 		public static readonly BaseTransformation IR_StrengthReduction_Or64Zero = new IR.StrengthReduction.Or64Zero();
+		public static readonly BaseTransformation IR_StrengthReduction_Xor32Zero = new IR.StrengthReduction.Xor32Zero();
+		public static readonly BaseTransformation IR_StrengthReduction_Xor64Zero = new IR.StrengthReduction.Xor64Zero();
+		public static readonly BaseTransformation IR_StrengthReduction_Xor32Max = new IR.StrengthReduction.Xor32Max();
+		public static readonly BaseTransformation IR_StrengthReduction_Xor64Max = new IR.StrengthReduction.Xor64Max();
 		public static readonly BaseTransformation IR_StrengthReduction_Add32Zero = new IR.StrengthReduction.Add32Zero();
 		public static readonly BaseTransformation IR_StrengthReduction_Add64Zero = new IR.StrengthReduction.Add64Zero();
 		public static readonly BaseTransformation IR_StrengthReduction_ShiftRight32ZeroValue = new IR.StrengthReduction.ShiftRight32ZeroValue();
@@ -133,8 +137,10 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 		public static readonly BaseTransformation IR_StrengthReduction_ShiftLeft64ByZero = new IR.StrengthReduction.ShiftLeft64ByZero();
 		public static readonly BaseTransformation IR_StrengthReduction_Sub32ByZero = new IR.StrengthReduction.Sub32ByZero();
 		public static readonly BaseTransformation IR_StrengthReduction_Sub64ByZero = new IR.StrengthReduction.Sub64ByZero();
-		public static readonly BaseTransformation IR_StrengthReduction_Sub32BySame = new IR.StrengthReduction.Sub32BySame();
-		public static readonly BaseTransformation IR_StrengthReduction_Sub64BySame = new IR.StrengthReduction.Sub64BySame();
+		public static readonly BaseTransformation IR_StrengthReduction_Sub32Same = new IR.StrengthReduction.Sub32Same();
+		public static readonly BaseTransformation IR_StrengthReduction_Sub64Same = new IR.StrengthReduction.Sub64Same();
+		public static readonly BaseTransformation IR_StrengthReduction_Xor32Same = new IR.StrengthReduction.Xor32Same();
+		public static readonly BaseTransformation IR_StrengthReduction_Xor64Same = new IR.StrengthReduction.Xor64Same();
 		public static readonly BaseTransformation IR_StrengthReduction_MulUnsigned32ByPowerOfTwo = new IR.StrengthReduction.MulUnsigned32ByPowerOfTwo();
 		public static readonly BaseTransformation IR_StrengthReduction_MulUnsigned64ByPowerOfTwo = new IR.StrengthReduction.MulUnsigned64ByPowerOfTwo();
 		public static readonly BaseTransformation IR_StrengthReduction_MulSigned32ByPowerOfTwo = new IR.StrengthReduction.MulSigned32ByPowerOfTwo();

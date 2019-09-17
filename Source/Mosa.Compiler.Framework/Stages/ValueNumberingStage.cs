@@ -270,24 +270,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 				UpdateNodeWithValueNumbers(node);
 
-				var newInstruction = BuiltInOptimizations.DeadCodeElimination(node);
-				if (newInstruction != null)
-				{
-					node.SetInstruction(newInstruction);
-					DeadCodeEliminationCount++;
-					InstructionRemovalCount++;
-					continue;
-				}
-
-				newInstruction = BuiltInOptimizations.StrengthReduction(node)
-					?? BuiltInOptimizations.Simplification(node);
-
-				if (newInstruction != null)
-				{
-					node.SetInstruction(newInstruction);
-					StrengthReductionAndSimplificationCount++;
-				}
-
 				// move constant to right for commutative operations - helpful later
 				if (node.Instruction.IsCommutative && node.Operand1.IsResolvedConstant && node.Operand2.IsVirtualRegister)
 				{
@@ -332,20 +314,6 @@ namespace Mosa.Compiler.Framework.Stages
 						SetValueNumber(node.Result2, node.Result2);
 					}
 
-					continue;
-				}
-
-				// Simplify expression: constant folding & strength reduction
-				var newOperand = BuiltInOptimizations.ConstantFoldingAndStrengthReductionIntegerToOperand(node);
-
-				if (newOperand != null)
-				{
-					Debug.Assert(newOperand != node.Result);
-
-					SetValueNumber(node.Result, newOperand);
-					node.SetInstruction(IRInstruction.Nop);
-					ConstantFoldingAndStrengthReductionCount++;
-					InstructionRemovalCount++;
 					continue;
 				}
 

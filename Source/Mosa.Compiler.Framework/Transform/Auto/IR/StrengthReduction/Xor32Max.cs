@@ -7,17 +7,20 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 {
 	/// <summary>
-	/// Sub64BySame
+	/// Xor32Max
 	/// </summary>
-	public sealed class Sub64BySame : BaseTransformation
+	public sealed class Xor32Max : BaseTransformation
 	{
-		public Sub64BySame() : base(IRInstruction.Sub64)
+		public Xor32Max() : base(IRInstruction.Xor32)
 		{
 		}
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{
-			if (!AreSame(context.Operand1, context.Operand2))
+			if (!context.Operand2.IsResolvedConstant)
+				return false;
+
+			if (context.Operand2.ConstantUnsigned64 != 64279106901)
 				return false;
 
 			return true;
@@ -27,9 +30,9 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 		{
 			var result = context.Result;
 
-			var c1 = transformContext.CreateConstant(0L);
+			var t1 = context.Operand1;
 
-			context.SetInstruction(IRInstruction.Move64, result, c1);
+			context.SetInstruction(IRInstruction.Not32, result, t1);
 		}
 	}
 }

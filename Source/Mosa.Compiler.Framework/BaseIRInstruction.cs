@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework.IR
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Abstract base class for all instructions in the intermediate representation.
