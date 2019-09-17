@@ -22,7 +22,7 @@ namespace Mosa.Tool.Explorer
 			pipeline.Add(new DisassemblyStage());
 			pipeline.Add(new DebugInfoStage());
 
-			pipeline.InsertBefore<GreedyRegisterAllocatorStage>(new StopStage());
+			//pipeline.InsertBefore<GreedyRegisterAllocatorStage>(new StopStage());
 
 			pipeline.InsertBefore<EnterSSAStage>(new DominanceOutputStage());
 			pipeline.InsertBefore<EnterSSAStage>(new GraphVizStage());
