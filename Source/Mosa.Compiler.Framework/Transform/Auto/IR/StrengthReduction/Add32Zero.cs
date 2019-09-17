@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 {
 	/// <summary>
-	/// Add64LeftZero
+	/// Add32Zero
 	/// </summary>
-	public sealed class Add64LeftZero : BaseTransformation
+	public sealed class Add32Zero : BaseTransformation
 	{
-		public Add64LeftZero() : base(IRInstruction.Add64)
+		public Add32Zero() : base(IRInstruction.Add32)
 		{
 		}
 
@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 
 			var t1 = context.Operand1;
 
-			context.SetInstruction(IRInstruction.Move64, result, t1);
+			context.SetInstruction(IRInstruction.Move32, result, t1);
 		}
 	}
 }

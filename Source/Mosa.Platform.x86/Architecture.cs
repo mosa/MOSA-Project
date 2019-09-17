@@ -190,7 +190,7 @@ namespace Mosa.Platform.x86
 				{
 					new LongOperandStage(),
 					new IRTransformationStage(),
-					compilerOptions.EnablePlatformOptimizations ? new OptimizationStage() : null,
+					compilerOptions.EnablePlatformOptimizations ? new Stages.OptimizationStage() : null,
 					new TweakStage(),
 					new FixedRegisterAssignmentStage(),
 					new SimpleDeadCodeRemovalStage(),

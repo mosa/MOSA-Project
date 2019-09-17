@@ -15,18 +15,10 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.Special
 			if (context.ResultCount == 0 || context.ResultCount > 2)
 				return false;
 
-			var result = context.Result;
-
-			if (!IsSSAForm(result))
+			if (context.Operand1 != context.Result)
 				return false;
 
-			foreach (var operands in context.Operands)
-			{
-				if (operands == result)
-					return true;
-			}
-
-			return false;
+			return true;
 		}
 
 		public override void Transform(Context context, TransformContext transformContext)

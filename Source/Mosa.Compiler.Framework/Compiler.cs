@@ -162,29 +162,19 @@ namespace Mosa.Compiler.Framework
 				(compilerOptions.EnableInlinedMethods) ? new DeadBlockStage() : null,
 				new PromoteTemporaryVariables(),
 				new StaticLoadOptimizationStage(),
-
-				(compilerOptions.EnableIROptimizations) ? new NewOptimizationStage() : null,
-				new FastSimplification(),
+				(compilerOptions.EnableIROptimizations) ? new OptimizationStage() : null,
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
-
-				//(compilerOptions.EnableBitTracker) ? new BitTrackerStage() : null,
-
-				//new StopStage(),
-
 				(compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,
 				(compilerOptions.EnableLoopInvariantCodeMotion && compilerOptions.EnableSSA) ? new LoopInvariantCodeMotionStage() : null,
 				(compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
-
-				(compilerOptions.EnableIROptimizations) ? new NewOptimizationStage() : null,
-				(compilerOptions.EnableIROptimizations) ? new IROptimizationStage() : null,
+				(compilerOptions.EnableIROptimizations) ? new OptimizationStage() : null,
 				(compilerOptions.EnableLongExpansion && compilerOptions.Architecture.NativePointerSize == 4) ? new LongExpansionStage() : null,
 				(compilerOptions.EnableBitTracker) ? new BitTrackerStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableValueNumbering && compilerOptions.EnableSSA) ? new ValueNumberingStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableLoopInvariantCodeMotion && compilerOptions.EnableSSA) ? new LoopInvariantCodeMotionStage() : null,
 				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableSparseConditionalConstantPropagation && compilerOptions.EnableSSA) ? new SparseConditionalConstantPropagationStage() : null,
-				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSSA) ? new NewOptimizationStage() : null,
-				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSSA) ? new IROptimizationStage() : null,
+				(compilerOptions.TwoPassOptimizations && compilerOptions.EnableIROptimizations && compilerOptions.EnableSSA) ? new OptimizationStage() : null,
 				(compilerOptions.EnableSSA) ? new ExitSSAStage() : null,
 				new DeadBlockStage(),
 				new BlockMergeStage(),

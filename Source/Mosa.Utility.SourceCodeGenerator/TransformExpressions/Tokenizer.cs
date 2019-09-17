@@ -33,7 +33,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 					{
 						c = expression[index];
 
-						if (IsDigit(c) || c == '.' || c == 'x' || c == 'l' || c == 'f' || c == 'd' || c == 'b' || c == 'u' || c == 'i')
+						if (IsDigit(c) || IsHexDigit(c) || c == '.' || c == 'l' || c == 'f' || c == 'd' || c == 'b' || c == 'u' || c == 'i')
 						{
 							index++;
 							continue;
@@ -220,6 +220,11 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 		public static bool IsDigit(char c)
 		{
 			return c >= '0' && c <= '9';
+		}
+
+		public static bool IsHexDigit(char c)
+		{
+			return IsDigit(c) || (c >= 'A' && c <= 'F') || (c >= 'a' && c <= 'f') || c == 'x';
 		}
 	}
 }

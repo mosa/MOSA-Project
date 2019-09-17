@@ -7,20 +7,20 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 {
 	/// <summary>
-	/// Add64RightZero
+	/// And64Max
 	/// </summary>
-	public sealed class Add64RightZero : BaseTransformation
+	public sealed class And64Max : BaseTransformation
 	{
-		public Add64RightZero() : base(IRInstruction.Add64)
+		public And64Max() : base(IRInstruction.And64)
 		{
 		}
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{
-			if (!context.Operand1.IsResolvedConstant)
+			if (!context.Operand2.IsResolvedConstant)
 				return false;
 
-			if (context.Operand1.ConstantUnsigned64 != 0)
+			if (context.Operand2.ConstantUnsigned64 != 17822244925380842837)
 				return false;
 
 			return true;
@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 		{
 			var result = context.Result;
 
-			var t1 = context.Operand2;
+			var t1 = context.Operand1;
 
 			context.SetInstruction(IRInstruction.Move64, result, t1);
 		}

@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	///	Optimization Stage
 	/// </summary>
-	public class NewOptimizationStage : BaseMethodCompilerStage
+	public class OptimizationStage : BaseMethodCompilerStage
 	{
 		private const int MaximumInstructionID = 1000;
 

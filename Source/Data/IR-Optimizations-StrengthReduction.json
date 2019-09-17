@@ -3,8 +3,80 @@
 		{
 			"FamilyName": "IR",
 			"Type": "StrengthReduction",
+			"Name": "And32",
+			"SubName": "Zero",
+			"Expression": "IR.And32 a 0",
+			"Filter": "",
+			"Result": "(IR.Move32 0)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "And64",
+			"SubName": "Zero",
+			"Expression": "IR.And64 a 0",
+			"Filter": "",
+			"Result": "(IR.Move64 0)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "And32",
+			"SubName": "Max",
+			"Expression": "IR.And32 a 0xFFFFFFFF",
+			"Filter": "",
+			"Result": "(IR.Move32 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "And64",
+			"SubName": "Max",
+			"Expression": "IR.And64 a 0xFFFFFFFFFFFFFFFF",
+			"Filter": "",
+			"Result": "(IR.Move64 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Or32",
+			"SubName": "Max",
+			"Expression": "IR.Or32 a 0xFFFFFFFF",
+			"Filter": "",
+			"Result": "(IR.Move32 0xFFFFFFFF)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Or64",
+			"SubName": "Max",
+			"Expression": "IR.Or64 a 0xFFFFFFFFFFFFFFFF",
+			"Filter": "",
+			"Result": "(IR.Move64 0xFFFFFFFFFFFFFFFF)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Or32",
+			"SubName": "Zero",
+			"Expression": "IR.Or32 a 0",
+			"Filter": "",
+			"Result": "(IR.Move32 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Or64",
+			"SubName": "Zero",
+			"Expression": "IR.Or64 a 0",
+			"Filter": "",
+			"Result": "(IR.Move64 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
 			"Name": "Add32",
-			"SubName": "LeftZero",
+			"SubName": "Zero",
 			"Expression": "IR.Add32 a 0",
 			"Filter": "",
 			"Result": "(IR.Move32 a)"
@@ -12,27 +84,9 @@
 		{
 			"FamilyName": "IR",
 			"Type": "StrengthReduction",
-			"Name": "Add32",
-			"SubName": "RightZero",
-			"Expression": "IR.Add32 0 a",
-			"Filter": "",
-			"Result": "(IR.Move32 a)"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "StrengthReduction",
 			"Name": "Add64",
-			"SubName": "LeftZero",
+			"SubName": "Zero",
 			"Expression": "IR.Add64 a 0",
-			"Filter": "",
-			"Result": "(IR.Move64 a)"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "StrengthReduction",
-			"Name": "Add64",
-			"SubName": "RightZero",
-			"Expression": "IR.Add64 0 a",
 			"Filter": "",
 			"Result": "(IR.Move64 a)"
 		},
