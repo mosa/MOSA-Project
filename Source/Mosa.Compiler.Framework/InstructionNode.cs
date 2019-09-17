@@ -527,7 +527,7 @@ namespace Mosa.Compiler.Framework
 
 		public void CutFrom(InstructionNode startNode, InstructionNode endNode)
 		{
-			var cutBlock = startNode.Previous.Block;
+			//var cutBlock = startNode.Previous.Block;
 
 			startNode.Previous.Next = endNode.Next;
 			endNode.Next.Previous = startNode.Previous;
@@ -542,7 +542,7 @@ namespace Mosa.Compiler.Framework
 
 		public void CutFrom(InstructionNode node)
 		{
-			var cutBlock = node.Previous.Block;
+			//var cutBlock = node.Previous.Block;
 
 			node.Previous.Next = node.Next;
 			node.Next.Previous = node.Previous;
@@ -1560,35 +1560,6 @@ namespace Mosa.Compiler.Framework
 			Operand2 = operand2;
 			ConditionCode = condition;
 			StatusRegister = statusRegister;
-		}
-
-		/// <summary>
-		/// Sets the instruction.
-		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		public void SetInstruction(SimpleInstruction instruction)
-		{
-			Debug.Assert(!IsBlockStartInstruction);
-			Debug.Assert(!IsBlockEndInstruction);
-
-			int label = Label;
-			var block = Block;
-
-			Clear();
-
-			Instruction = instruction.Instruction;
-			OperandCount = instruction.OperandCount;
-			ResultCount = instruction.ResultCount;
-			Result = instruction.Result;
-			Result2 = instruction.Result2;
-			Operand1 = instruction.Operand1;
-			Operand2 = instruction.Operand2;
-			Operand3 = instruction.Operand3;
-			ConditionCode = instruction.ConditionCode;
-			Label = label;
-			Block = block;
-
-			//Block.DebugCheck();
 		}
 
 		#endregion SetInstructions

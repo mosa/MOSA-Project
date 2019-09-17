@@ -22,6 +22,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private Dictionary<BasicBlock, SimpleFastDominance> blockAnalysis;
 		private Dictionary<Operand, List<BasicBlock>> assignments;
 		private Dictionary<Operand, Operand> parentOperand;
+		private List<Context> phiInstructions;
 
 		private TraceLog trace;
 
@@ -31,12 +32,16 @@ namespace Mosa.Compiler.Framework.Stages
 			blockAnalysis = new Dictionary<BasicBlock, SimpleFastDominance>();
 			assignments = new Dictionary<Operand, List<BasicBlock>>();
 			parentOperand = new Dictionary<Operand, Operand>();
+			phiInstructions = new List<Context>();
 		}
 
 		protected override void Run()
 		{
 			// Method is empty - must be a plugged method
 			if (BasicBlocks.HeadBlocks.Count == 0)
+				return;
+
+			if (!HasCode)
 				return;
 
 			if (HasProtectedRegions)
@@ -50,16 +55,19 @@ namespace Mosa.Compiler.Framework.Stages
 				blockAnalysis.Add(headBlock, analysis);
 			}
 
-			CollectAssignments();
+			CollectAssignments2();
 
 			PlacePhiFunctionsMinimal();
 
 			EnterSSA();
+
+			RemoveUselessPhiInstructions();
 		}
 
 		protected override void Finish()
 		{
 			// Clean up
+			phiInstructions.Clear();
 			trace = null;
 			stack = null;
 			counters = null;
@@ -310,6 +318,23 @@ namespace Mosa.Compiler.Framework.Stages
 			blocks.AddIfNew(block);
 		}
 
+		private void CollectAssignments2()
+		{
+			foreach (var operand in MethodCompiler.VirtualRegisters)
+			{
+				//if (operand.Definitions.Count <= 1)
+				//continue;
+
+				var blocks = new List<BasicBlock>(operand.Definitions.Count);
+				assignments.Add(operand, blocks);
+
+				foreach (var def in operand.Definitions)
+				{
+					blocks.AddIfNew(def.Block);
+				}
+			}
+		}
+
 		private Context InsertPhiInstruction(BasicBlock block, Operand variable)
 		{
 			//trace?.Log($"     Phi: {variable} into {block}");
@@ -335,6 +360,8 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			context.OperandCount = block.PreviousBlocks.Count;
+
+			phiInstructions.Add(context);
 
 			return context;
 		}
@@ -401,6 +428,17 @@ namespace Mosa.Compiler.Framework.Stages
 				//}
 
 				//trace?.Log("");
+			}
+		}
+
+		private void RemoveUselessPhiInstructions()
+		{
+			foreach (var context in phiInstructions)
+			{
+				if (context.Result == context.Operand1)
+				{
+					context.Empty();
+				}
 			}
 		}
 

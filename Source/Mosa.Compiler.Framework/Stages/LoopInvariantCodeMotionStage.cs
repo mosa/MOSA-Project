@@ -288,7 +288,8 @@ namespace Mosa.Compiler.Framework.Stages
 				if (IsSimpleIRMoveInstruction(node.Instruction))
 					continue; // sometimes PHI are converted to moves
 
-				if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
+				//if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
+				if (!IsPhiInstruction(node.Instruction))
 					break;
 
 				var phiInstruction = node.Instruction;
@@ -330,8 +331,8 @@ namespace Mosa.Compiler.Framework.Stages
 				node.SetInstruction(phiInstruction, node.Result, internalSourceOperands);
 				node.PhiBlocks = internalSourceBlocks;
 
-				OptimizePhi(preheader.Node);
-				OptimizePhi(node);
+				//OptimizePhi(preheader.Node);
+				//OptimizePhi(node);
 			}
 
 			preheader.AppendInstruction(IRInstruction.Jmp, header);
@@ -341,14 +342,37 @@ namespace Mosa.Compiler.Framework.Stages
 			return preheaderBlock;
 		}
 
-		private void OptimizePhi(InstructionNode node)
-		{
-			var newInstruction = BuiltInOptimizations.PhiSimplication(node);
-			if (newInstruction != null)
-			{
-				node.SetInstruction(newInstruction);
-			}
-		}
+		//private void OptimizePhi(InstructionNode node)
+		//{
+		//	var newInstruction = BuiltInOptimizations.PhiSimplication(node);
+		//	if (newInstruction != null)
+		//	{
+		//		if (IsPhiInstruction(newInstruction.Instruction))
+		//		{
+		//			node.SetInstruction(newInstruction);
+		//			return;
+		//		}
+
+		//		// move node after all other phi instructions
+		//		for (var at = node.Next; ; at = at.Next)
+		//		{
+		//			if (at.IsEmptyOrNop)
+		//				continue;
+
+		//			if (IsPhiInstruction(at.Instruction))
+		//				continue;
+
+		//			at = at.Previous;
+
+		//			node.Empty();
+
+		//			var context = new Context(at);
+		//			context.AppendInstruction(newInstruction);
+
+		//			return;
+		//		}
+		//	}
+		//}
 
 		private void MoveToPreHeader(List<InstructionNode> nodes, Loop loop)
 		{

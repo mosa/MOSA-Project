@@ -721,7 +721,12 @@ namespace Mosa.Compiler.Framework
 
 		#region Helper Methods
 
-		public static bool ValidateSSAForm(Operand operand)
+		public static bool IsPhiInstruction(BaseInstruction instruction)
+		{
+			return instruction == IRInstruction.Phi32 || instruction == IRInstruction.Phi64 || instruction == IRInstruction.PhiR4 || instruction == IRInstruction.PhiR8;
+		}
+
+		public static bool IsSSAForm(Operand operand)
 		{
 			return operand.Definitions.Count == 1;
 		}
