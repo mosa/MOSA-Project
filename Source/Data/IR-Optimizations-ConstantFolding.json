@@ -39,9 +39,9 @@
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
-			"Name": "AddWithCarry32",
+			"Name": "AddCarryIn32",
 			"SubName": "",
-			"Expression": "IR.AddWithCarry32 a b c",
+			"Expression": "IR.AddCarryIn32 a b c",
 			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b) & IsResolvedConstant(c)",
 			"Result": "(IR.Move32 [Add32(Add32(To32(a),To32(b)),BoolTo32(To32(c)))])"
 		},
@@ -390,9 +390,9 @@
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
-			"Name": "SubWithCarry32",
+			"Name": "SubCarryIn32",
 			"SubName": "",
-			"Expression": "IR.SubWithCarry32 a b c",
+			"Expression": "IR.SubCarryIn32 a b c",
 			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b) & IsResolvedConstant(c)",
 			"Result": "(IR.Move32 [Sub32(Sub32(To32(a),To32(b)),BoolTo32(To32(c)))])"
 		},

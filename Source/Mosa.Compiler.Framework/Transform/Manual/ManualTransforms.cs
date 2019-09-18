@@ -68,6 +68,11 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			ManualInstance.IR_Special_PhiR4Dead,
 			ManualInstance.IR_Special_PhiR8Dead,
 
+			ManualInstance.IR_Special_Phi32Update,
+			ManualInstance.IR_Special_Phi64Update,
+			ManualInstance.IR_Special_PhiR4Update,
+			ManualInstance.IR_Special_PhiR8Update,
+
 			ManualInstance.IR_Simplification_CompareBranch32OnlyOneExit,
 			ManualInstance.IR_Simplification_CompareBranch64OnlyOneExit,
 

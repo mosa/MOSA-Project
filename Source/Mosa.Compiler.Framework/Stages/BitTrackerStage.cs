@@ -205,7 +205,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Register(IRInstruction.Add32, Add32);
 			Register(IRInstruction.Add64, Add64);
-			Register(IRInstruction.AddWithCarry32, AddWithCarry32);
+			Register(IRInstruction.AddCarryIn32, AddCarryIn32);
 
 			Register(IRInstruction.SignExtend16x32, SignExtend16x32);
 			Register(IRInstruction.SignExtend8x32, SignExtend8x32);
@@ -226,7 +226,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// AddCarryOut32
 			// AddCarryOut64
-			// AddWithCarry32
+			// AddCarryIn32
 			// AddWithCarry64
 
 			// DivUnsigned32
@@ -254,7 +254,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Sub64
 			// SubCarryOut32
 			// SubCarryOut64
-			// SubWithCarry32
+			// SubCarryIn32
 			// SubWithCarry64
 
 			IntegerLoads.Add(IRInstruction.LoadParamSignExtend16x32);
@@ -833,7 +833,7 @@ namespace Mosa.Compiler.Framework.Stages
 			};
 		}
 
-		private Value AddWithCarry32(InstructionNode node)
+		private Value AddCarryIn32(InstructionNode node)
 		{
 			var value1 = node.Operand1.IsConstant ? new Value(node.Operand1.ConstantUnsigned64, true) : Values[node.Operand1.Index];
 			var value2 = node.Operand2.IsConstant ? new Value(node.Operand2.ConstantUnsigned64, true) : Values[node.Operand2.Index];

@@ -5,6 +5,7 @@ using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Transform
 {
@@ -136,26 +137,6 @@ namespace Mosa.Compiler.Framework.Transform
 			return Operand.CreateConstant(TypeSystem.BuiltIn.U8, value);
 		}
 
-		public static Operand CreateConstant(MosaType type, long value)
-		{
-			return Operand.CreateConstant(type, (ulong)value);
-		}
-
-		public static Operand CreateConstant(MosaType type, ulong value)
-		{
-			return Operand.CreateConstant(type, value);
-		}
-
-		public static Operand CreateConstant(MosaType type, int value)
-		{
-			return Operand.CreateConstant(type, (long)value);
-		}
-
-		public static Operand CreateConstant(MosaType type, uint value)
-		{
-			return Operand.CreateConstant(type, value);
-		}
-
 		public Operand CreateConstant(float value)
 		{
 			return Operand.CreateConstant(value, TypeSystem);
@@ -219,5 +200,36 @@ namespace Mosa.Compiler.Framework.Transform
 		}
 
 		#endregion 64-Bit Helpers
+
+		public void UpdatePHI(Context context)
+		{
+			Debug.Assert(context.OperandCount != context.Block.PreviousBlocks.Count);
+
+			// One of the previous blocks was removed, fix up the operand blocks
+
+			var node = context.Node;
+			var previousBlocks = node.Block.PreviousBlocks;
+			var phiBlocks = node.PhiBlocks;
+
+			for (int index = 0; index < node.OperandCount; index++)
+			{
+				var phiBlock = phiBlocks[index];
+
+				if (previousBlocks.Contains(phiBlock))
+					continue;
+
+				phiBlocks.RemoveAt(index);
+
+				for (int i = index; index < node.OperandCount - 1; index++)
+				{
+					context.SetOperand(i, node.GetOperand(i + 1));
+				}
+
+				context.SetOperand(node.OperandCount - 1, null);
+				node.OperandCount--;
+			}
+
+			Debug.Assert(context.OperandCount == context.Block.PreviousBlocks.Count);
+		}
 	}
 }

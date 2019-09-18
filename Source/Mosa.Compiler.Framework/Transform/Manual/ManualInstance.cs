@@ -59,6 +59,11 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 		public static readonly BaseTransformation IR_Special_PhiR4Dead = new IR.Special.PhiR4Dead();
 		public static readonly BaseTransformation IR_Special_PhiR8Dead = new IR.Special.PhiR8Dead();
 
+		public static readonly BaseTransformation IR_Special_Phi32Update = new IR.Special.Phi32Update();
+		public static readonly BaseTransformation IR_Special_Phi64Update = new IR.Special.Phi64Update();
+		public static readonly BaseTransformation IR_Special_PhiR4Update = new IR.Special.PhiR4Update();
+		public static readonly BaseTransformation IR_Special_PhiR8Update = new IR.Special.PhiR8Update();
+
 		public static readonly BaseTransformation IR_Special_Phi32Invalid = new IR.Special.Phi32Invalid();
 		public static readonly BaseTransformation IR_Special_Phi64Invalid = new IR.Special.Phi64Invalid();
 		public static readonly BaseTransformation IR_Special_PhiR4Invalid = new IR.Special.PhiR4Invalid();

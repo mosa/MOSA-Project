@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 			if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand2.ConstantUnsigned64 != 0)
+			if (context.Operand1.Definitions[0].Operand2.ConstantUnsigned64 != 0L)
 				return false;
 
 			return true;

@@ -158,24 +158,24 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			else if (part.StartsWith("0x"))
 			{
 				// hex
-				part = part.Substring(0, part.Length - 2);
+				part = part.Substring(2);
 
 				var value = ParseHex(part);
 
-				return (last == 'i')
-					? new Token(TokenType.IntegerConstant, index, part, (uint)value)
-					: new Token(TokenType.LongConstant, index, part, value);
+				return (last == 'i' || last == 'u')
+					? new Token(TokenType.IntegerConstant, index, $"0x{part}", (uint)value)
+					: new Token(TokenType.LongConstant, index, $"0x{part}", value);
 			}
 			else if (part.StartsWith("0b"))
 			{
 				// binary
-				part = part.Substring(0, part.Length - 2);
+				part = part.Substring(2);
 
 				var value = ParseBinary(part);
 
 				return (last == 'i')
-					? new Token(TokenType.IntegerConstant, index, part, (uint)value)
-					: new Token(TokenType.LongConstant, index, part, value);
+					? new Token(TokenType.IntegerConstant, index, $"0b{part}", (uint)value)
+					: new Token(TokenType.LongConstant, index, $"0b{part}", value);
 			}
 
 			// integer
@@ -206,7 +206,11 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			foreach (var c in s)
 			{
 				l <<= 4;
-				l |= Char.IsLower(c) ? (byte)(c - 'a') : (byte)(c - 'A');
+
+				if (char.IsDigit(c))
+					l |= (byte)(c - '0');
+				else if (char.IsLetter(c))
+					l |= (Char.IsLower(c) ? (byte)(c - 'a') : (byte)(c - 'A')) + 10ul;
 			}
 
 			return l;

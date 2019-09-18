@@ -5,9 +5,9 @@
 			"Type": "StrengthReduction",
 			"Name": "And32",
 			"SubName": "Zero",
-			"Expression": "IR.And32 a 0",
+			"Expression": "IR.And32 a 0u",
 			"Filter": "",
-			"Result": "(IR.Move32 0)"
+			"Result": "(IR.Move32 0u)"
 		},
 		{
 			"FamilyName": "IR",
@@ -23,7 +23,7 @@
 			"Type": "StrengthReduction",
 			"Name": "And32",
 			"SubName": "Max",
-			"Expression": "IR.And32 a 0xFFFFFFFF",
+			"Expression": "IR.And32 a 0xFFFFFFFFu",
 			"Filter": "",
 			"Result": "(IR.Move32 a)"
 		},
@@ -41,9 +41,9 @@
 			"Type": "StrengthReduction",
 			"Name": "Or32",
 			"SubName": "Max",
-			"Expression": "IR.Or32 a 0xFFFFFFFF",
+			"Expression": "IR.Or32 a 0xFFFFFFFFu",
 			"Filter": "",
-			"Result": "(IR.Move32 0xFFFFFFFF)"
+			"Result": "(IR.Move32 0xFFFFFFFFu)"
 		},
 		{
 			"FamilyName": "IR",
@@ -59,7 +59,7 @@
 			"Type": "StrengthReduction",
 			"Name": "Or32",
 			"SubName": "Zero",
-			"Expression": "IR.Or32 a 0",
+			"Expression": "IR.Or32 a 0u",
 			"Filter": "",
 			"Result": "(IR.Move32 a)"
 		},
@@ -77,7 +77,7 @@
 			"Type": "StrengthReduction",
 			"Name": "Xor32",
 			"SubName": "Zero",
-			"Expression": "IR.Xor32 a 0",
+			"Expression": "IR.Xor32 a 0u",
 			"Filter": "",
 			"Result": "(IR.Move32 a)"
 		},
@@ -86,7 +86,7 @@
 			"Type": "StrengthReduction",
 			"Name": "Xor64",
 			"SubName": "Zero",
-			"Expression": "IR.Xor32 a 0",
+			"Expression": "IR.Xor64 a 0",
 			"Filter": "",
 			"Result": "(IR.Move64 a)"
 		},
@@ -95,7 +95,7 @@
 			"Type": "StrengthReduction",
 			"Name": "Xor32",
 			"SubName": "Max",
-			"Expression": "IR.Xor32 a 0xFFFFFFFF",
+			"Expression": "IR.Xor32 a 0xFFFFFFFFu",
 			"Filter": "",
 			"Result": "(IR.Not32 a)"
 		},
@@ -113,7 +113,7 @@
 			"Type": "StrengthReduction",
 			"Name": "Add32",
 			"SubName": "Zero",
-			"Expression": "IR.Add32 a 0",
+			"Expression": "IR.Add32 a 0u",
 			"Filter": "",
 			"Result": "(IR.Move32 a)"
 		},
@@ -131,7 +131,7 @@
 			"Type": "StrengthReduction",
 			"Name": "ShiftRight32",
 			"SubName": "ZeroValue",
-			"Expression": "IR.ShiftRight32 0 a",
+			"Expression": "IR.ShiftRight32 0u a",
 			"Filter": "",
 			"Result": "(IR.Move32 0)"
 		},
@@ -140,7 +140,7 @@
 			"Type": "StrengthReduction",
 			"Name": "ShiftRight32",
 			"SubName": "ByZero",
-			"Expression": "IR.ShiftRight32 a 0",
+			"Expression": "IR.ShiftRight32 a 0u",
 			"Filter": "",
 			"Result": "(IR.Move32 a)"
 		},
@@ -167,7 +167,7 @@
 			"Type": "StrengthReduction",
 			"Name": "ShiftLeft32",
 			"SubName": "ByZero",
-			"Expression": "IR.ShiftLeft32 a 0",
+			"Expression": "IR.ShiftLeft32 a 0u",
 			"Filter": "",
 			"Result": "(IR.Move32 a)"
 		},
@@ -185,7 +185,7 @@
 			"Type": "StrengthReduction",
 			"Name": "Sub32",
 			"SubName": "ByZero",
-			"Expression": "IR.Sub32 a 0",
+			"Expression": "IR.Sub32 a 0u",
 			"Filter": "",
 			"Result": "(IR.Move32 a)"
 		},
@@ -205,7 +205,7 @@
 			"SubName": "Same",
 			"Expression": "IR.Sub32 a a",
 			"Filter": "",
-			"Result": "(IR.Move32 0)"
+			"Result": "(IR.Move32 0u)"
 		},
 		{
 			"FamilyName": "IR",
@@ -223,7 +223,7 @@
 			"SubName": "Same",
 			"Expression": "IR.Xor32 a a",
 			"Filter": "",
-			"Result": "(IR.Move32 0)"
+			"Result": "(IR.Move32 0u)"
 		},
 		{
 			"FamilyName": "IR",

@@ -37,17 +37,17 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			// Method is empty - must be a plugged method
-			if (BasicBlocks.HeadBlocks.Count == 0)
-				return;
-
 			if (!HasCode)
 				return;
 
 			if (HasProtectedRegions)
 				return;
 
-			trace = CreateTraceLog(5);
+			// Method is empty - must be a plugged method
+			if (BasicBlocks.HeadBlocks.Count == 0)
+				return;
+
+			trace = CreateTraceLog(8);
 
 			foreach (var headBlock in BasicBlocks.HeadBlocks)
 			{
@@ -280,42 +280,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			return -1;
-		}
-
-		private void CollectAssignments()
-		{
-			foreach (var block in BasicBlocks)
-			{
-				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
-				{
-					if (node.IsEmptyOrNop || node.ResultCount == 0)
-						continue;
-
-					if (node.Result.Definitions.Count <= 0)
-						continue;
-
-					if (node.Result.IsVirtualRegister == true)
-					{
-						AddToAssignments(node.Result, block);
-					}
-
-					if (node.Result2?.IsVirtualRegister == true)
-					{
-						AddToAssignments(node.Result2, block);
-					}
-				}
-			}
-		}
-
-		private void AddToAssignments(Operand operand, BasicBlock block)
-		{
-			if (!assignments.TryGetValue(operand, out List<BasicBlock> blocks))
-			{
-				blocks = new List<BasicBlock>();
-				assignments.Add(operand, blocks);
-			}
-
-			blocks.AddIfNew(block);
 		}
 
 		private void CollectAssignments2()

@@ -23,7 +23,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.AddressOf, AddressOf);
 			AddVisitation(IRInstruction.Add32, Add32);
 			AddVisitation(IRInstruction.AddCarryOut32, AddCarryOut32);
-			AddVisitation(IRInstruction.AddWithCarry32, AddWithCarry32);
+			AddVisitation(IRInstruction.AddCarryIn32, AddCarryIn32);
 			AddVisitation(IRInstruction.ArithShiftRight32, ArithShiftRight32);
 
 			//AddVisitation(IRInstruction.CallDirect, CallDirect);
@@ -86,7 +86,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.SubR8, SubR8);
 			AddVisitation(IRInstruction.Sub32, Sub32);
 			AddVisitation(IRInstruction.SubCarryOut32, SubCarryOut32);
-			AddVisitation(IRInstruction.SubWithCarry32, SubWithCarry32);
+			AddVisitation(IRInstruction.SubCarryIn32, SubCarryIn32);
 
 			//AddVisitation(IRInstruction.Switch, Switch);
 			AddVisitation(IRInstruction.ZeroExtend16x32, ZeroExtend16x32);
@@ -126,7 +126,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			context.ReplaceInstruction(ARMv8A32.Adf);
 		}
 
-		private void AddWithCarry32(Context context)
+		private void AddCarryIn32(Context context)
 		{
 			var result = context.Result;
 			var operand3 = context.Operand3;
@@ -545,7 +545,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			context.ReplaceInstruction(ARMv8A32.Suf);
 		}
 
-		private void SubWithCarry32(Context context)
+		private void SubCarryIn32(Context context)
 		{
 			var result = context.Result;
 			var operand3 = context.Operand3;

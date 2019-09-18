@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.IR;
 using System.Diagnostics;
 
@@ -37,6 +38,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
 						break;
+
+					if (node.OperandCount != node.Block.PreviousBlocks.Count)
+						throw new CompilerException($"ExitSSAStage: Invalid block counts: {node}");
 
 					Debug.Assert(node.OperandCount == node.Block.PreviousBlocks.Count);
 

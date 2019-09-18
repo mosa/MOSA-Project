@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// AddCarryIn32
+	/// SubCarryIn64
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class AddCarryIn32 : BaseIRInstruction
+	public sealed class SubCarryIn64 : BaseIRInstruction
 	{
-		public AddCarryIn32()
+		public SubCarryIn64()
 			: base(3, 1)
 		{
 		}
