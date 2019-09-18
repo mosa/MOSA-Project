@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		private const int MaximumInstructionID = 1000;
 
-		private Counter OptimizationsCount = new Counter("NewOptimizationStage.Optimizations");
+		private Counter OptimizationsCount = new Counter("OptimizationStage.Optimizations");
 
 		private List<BaseTransformation>[] transformations = new List<BaseTransformation>[MaximumInstructionID];
 

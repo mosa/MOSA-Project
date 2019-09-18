@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 	/// </summary>
 	public sealed class Xor64Zero : BaseTransformation
 	{
-		public Xor64Zero() : base(IRInstruction.Xor32)
+		public Xor64Zero() : base(IRInstruction.Xor64)
 		{
 		}
 
@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			if (!context.Operand2.IsResolvedConstant)
 				return false;
 
-			if (context.Operand2.ConstantUnsigned64 != 0)
+			if (context.Operand2.ConstantUnsigned64 != 0L)
 				return false;
 
 			return true;

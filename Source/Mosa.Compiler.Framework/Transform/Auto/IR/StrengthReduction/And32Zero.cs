@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			if (!context.Operand2.IsResolvedConstant)
 				return false;
 
-			if (context.Operand2.ConstantUnsigned64 != 0)
+			if (context.Operand2.ConstantUnsigned32 != 0u)
 				return false;
 
 			return true;
@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 		{
 			var result = context.Result;
 
-			var c1 = transformContext.CreateConstant(0L);
+			var c1 = transformContext.CreateConstant(0u);
 
 			context.SetInstruction(IRInstruction.Move32, result, c1);
 		}

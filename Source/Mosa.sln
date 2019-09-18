@@ -237,6 +237,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transforms", "Transforms", 
 		Data\IR-Optimizations-StrengthReduction.json = Data\IR-Optimizations-StrengthReduction.json
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.Experimental.TypeSystem", "Mosa.Compiler.Experimental.TypeSystem\Mosa.Compiler.Experimental.TypeSystem.csproj", "{A5FE7166-31EA-44D1-A065-3AA793696F71}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1277,6 +1279,24 @@ Global
 		{70D04EFA-8BEA-45D1-8FC2-F48F5C590C69}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{70D04EFA-8BEA-45D1-8FC2-F48F5C590C69}.Release|x86.ActiveCfg = Release|Any CPU
 		{70D04EFA-8BEA-45D1-8FC2-F48F5C590C69}.Release|x86.Build.0 = Release|Any CPU
+		{A5FE7166-31EA-44D1-A065-3AA793696F71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5FE7166-31EA-44D1-A065-3AA793696F71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A5FE7166-31EA-44D1-A065-3AA793696F71}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A5FE7166-31EA-44D1-A065-3AA793696F71}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A5FE7166-31EA-44D1-A065-3AA793696F71}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A5FE7166-31EA-44D1-A065-3AA793696F71}.Debug|x86.Build.0 = Debug|Any CPU
+		{A5FE7166-31EA-44D1-A065-3AA793696F71}.Description|Any CPU.ActiveCfg = Debug|Any CPU
+		{A5FE7166-31EA-44D1-A065-3AA793696F71}.Description|Any CPU.Build.0 = Debug|Any CPU
+		{A5FE7166-31EA-44D1-A065-3AA793696F71}.Description|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{A5FE7166-31EA-44D1-A065-3AA793696F71}.Description|Mixed Platforms.Build.0 = Debug|Any CPU
+		{A5FE7166-31EA-44D1-A065-3AA793696F71}.Description|x86.ActiveCfg = Debug|Any CPU
+		{A5FE7166-31EA-44D1-A065-3AA793696F71}.Description|x86.Build.0 = Debug|Any CPU
+		{A5FE7166-31EA-44D1-A065-3AA793696F71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A5FE7166-31EA-44D1-A065-3AA793696F71}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A5FE7166-31EA-44D1-A065-3AA793696F71}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{A5FE7166-31EA-44D1-A065-3AA793696F71}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{A5FE7166-31EA-44D1-A065-3AA793696F71}.Release|x86.ActiveCfg = Release|Any CPU
+		{A5FE7166-31EA-44D1-A065-3AA793696F71}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1347,6 +1367,7 @@ Global
 		{70D04EFA-8BEA-45D1-8FC2-F48F5C590C69} = {1AB7FA6A-829C-4DCF-BCA6-A27156D8DA26}
 		{225883A6-A279-4F4A-9A06-9FE4E32A1B6A} = {A406F567-5C89-45AB-88CE-E20616B28FFD}
 		{F84EFA2E-4B38-410F-A7DE-385DB71BB37F} = {A406F567-5C89-45AB-88CE-E20616B28FFD}
+		{A5FE7166-31EA-44D1-A065-3AA793696F71} = {DDBC7F79-A2A1-4D92-9AE7-ADDC838F1E5E}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C22A5C94-6B05-4B1B-845A-A2EA7615E093}

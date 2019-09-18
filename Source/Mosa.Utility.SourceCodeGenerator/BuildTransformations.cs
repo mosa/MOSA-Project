@@ -309,10 +309,16 @@ namespace Mosa.Utility.SourceCodeGenerator
 		{
 			if (operand.IsInteger)
 			{
+				if (operand.Value.Contains("0x") || operand.Value.Contains("0b"))
+					return $"{operand.Value}u";
+
 				return $"{operand.Integer}u";
 			}
 			else if (operand.IsLong)
 			{
+				if (operand.Value.Contains("0x") || operand.Value.Contains("0b"))
+					return $"{operand.Value}L";
+
 				return $"{operand.Long}L";
 			}
 			else if (operand.IsDouble)
@@ -420,20 +426,28 @@ namespace Mosa.Utility.SourceCodeGenerator
 				}
 				else if (parameter.IsLong)
 				{
-					sb.Append(parameter.Long.ToString());
+					sb.Append(CreateConstantName(parameter));
+
+					// sb.Append(parameter.Long.ToString());
 				}
 				else if (parameter.IsInteger)
 				{
-					sb.Append(parameter.Integer.ToString());
+					sb.Append(CreateConstantName(parameter));
+
+					//sb.Append(parameter.Integer.ToString());
 				}
 				else if (parameter.IsDouble)
 				{
-					sb.Append(parameter.Double.ToString());
+					sb.Append(CreateConstantName(parameter));
+
+					//sb.Append(parameter.Double.ToString());
 				}
 				else if (parameter.IsFloat)
 				{
-					sb.Append(parameter.Float.ToString());
-					sb.Append('f');
+					sb.Append(CreateConstantName(parameter));
+
+					//sb.Append(parameter.Float.ToString());
+					//sb.Append('f');
 				}
 
 				sb.Append(", ");
@@ -491,22 +505,22 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 			if (operand.IsLong)
 			{
-				EmitCondition($"context.{operandName}.ConstantUnsigned64 != {operand.Long}");
+				EmitCondition($"context.{operandName}.ConstantUnsigned64 != {CreateConstantName(operand)}");
 			}
 
 			if (operand.IsInteger)
 			{
-				EmitCondition($"context.{operandName}.ConstantUnsigned32 != {operand.Integer}");
+				EmitCondition($"context.{operandName}.ConstantUnsigned32 != {CreateConstantName(operand)}");
 			}
 
 			if (operand.IsDouble)
 			{
-				EmitCondition($"context.{operandName}.ConstantDouble != {operand.Double}");
+				EmitCondition($"context.{operandName}.ConstantDouble != {CreateConstantName(operand)}");
 			}
 
 			if (operand.IsFloat)
 			{
-				EmitCondition($"context.{operandName}.ConstantFloat != {operand.Float}f");
+				EmitCondition($"context.{operandName}.ConstantFloat != {CreateConstantName(operand)}");
 			}
 		}
 

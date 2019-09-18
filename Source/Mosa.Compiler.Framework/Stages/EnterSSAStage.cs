@@ -37,17 +37,17 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			// Method is empty - must be a plugged method
-			if (BasicBlocks.HeadBlocks.Count == 0)
-				return;
-
 			if (!HasCode)
 				return;
 
 			if (HasProtectedRegions)
 				return;
 
-			trace = CreateTraceLog(5);
+			// Method is empty - must be a plugged method
+			if (BasicBlocks.HeadBlocks.Count == 0)
+				return;
+
+			trace = CreateTraceLog(8);
 
 			foreach (var headBlock in BasicBlocks.HeadBlocks)
 			{

@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			if (!context.Operand2.IsResolvedConstant)
 				return false;
 
-			if (context.Operand2.ConstantUnsigned64 != 17822244925380842837)
+			if (context.Operand2.ConstantUnsigned64 != 0xFFFFFFFFFFFFFFFFL)
 				return false;
 
 			return true;
@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 		{
 			var result = context.Result;
 
-			var c1 = transformContext.CreateConstant(17822244925380842837L);
+			var c1 = transformContext.CreateConstant(0xFFFFFFFFFFFFFFFFL);
 
 			context.SetInstruction(IRInstruction.Move64, result, c1);
 		}

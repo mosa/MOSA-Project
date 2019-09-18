@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 			if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftRight64)
 				return false;
 
-			if (!IsGreaterThanOrEqual(And32(To32(context.Operand1.Definitions[0].Operand2), 63), 32))
+			if (!IsGreaterThanOrEqual(And32(To32(context.Operand1.Definitions[0].Operand2), 63u), 32u))
 				return false;
 
 			return true;

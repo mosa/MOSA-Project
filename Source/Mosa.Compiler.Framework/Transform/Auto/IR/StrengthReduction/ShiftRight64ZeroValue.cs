@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			if (!context.Operand1.IsResolvedConstant)
 				return false;
 
-			if (context.Operand1.ConstantUnsigned64 != 0)
+			if (context.Operand1.ConstantUnsigned64 != 0L)
 				return false;
 
 			return true;
