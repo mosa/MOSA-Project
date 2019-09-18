@@ -14,7 +14,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 		public static readonly BaseTransformation IR_ConstantFolding_Add64 = new IR.ConstantFolding.Add64();
 		public static readonly BaseTransformation IR_ConstantFolding_AddR4 = new IR.ConstantFolding.AddR4();
 		public static readonly BaseTransformation IR_ConstantFolding_AddR8 = new IR.ConstantFolding.AddR8();
-		public static readonly BaseTransformation IR_ConstantFolding_AddWithCarry32 = new IR.ConstantFolding.AddWithCarry32();
+		public static readonly BaseTransformation IR_ConstantFolding_AddCarryIn32 = new IR.ConstantFolding.AddCarryIn32();
 		public static readonly BaseTransformation IR_ConstantFolding_AddWithCarry64 = new IR.ConstantFolding.AddWithCarry64();
 		public static readonly BaseTransformation IR_ConstantFolding_ShiftRight32 = new IR.ConstantFolding.ShiftRight32();
 		public static readonly BaseTransformation IR_ConstantFolding_ShiftRight64 = new IR.ConstantFolding.ShiftRight64();
@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 		public static readonly BaseTransformation IR_ConstantFolding_Sub64 = new IR.ConstantFolding.Sub64();
 		public static readonly BaseTransformation IR_ConstantFolding_SubR4 = new IR.ConstantFolding.SubR4();
 		public static readonly BaseTransformation IR_ConstantFolding_SubR8 = new IR.ConstantFolding.SubR8();
-		public static readonly BaseTransformation IR_ConstantFolding_SubWithCarry32 = new IR.ConstantFolding.SubWithCarry32();
+		public static readonly BaseTransformation IR_ConstantFolding_SubCarryIn32 = new IR.ConstantFolding.SubCarryIn32();
 		public static readonly BaseTransformation IR_ConstantFolding_SubWithCarry64 = new IR.ConstantFolding.SubWithCarry64();
 		public static readonly BaseTransformation IR_ConstantFolding_SignExtend16x32 = new IR.ConstantFolding.SignExtend16x32();
 		public static readonly BaseTransformation IR_ConstantFolding_SignExtend16x64 = new IR.ConstantFolding.SignExtend16x64();

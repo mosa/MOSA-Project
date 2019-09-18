@@ -49,14 +49,14 @@
 			"Commutative": "true"
 		},
 		{
-			"Name": "AddWithCarry32",
+			"Name": "AddCarryIn32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 3,
 			"Commutative": "false"
 		},
 		{
-			"Name": "AddWithCarry64",
+			"Name": "AddCarryIn64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 3,
@@ -1147,14 +1147,14 @@
 			"Commutative": "false"
 		},
 		{
-			"Name": "SubWithCarry32",
+			"Name": "SubCarryIn32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 3,
 			"Commutative": "false"
 		},
 		{
-			"Name": "SubWithCarry64",
+			"Name": "SubCarryIn64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 3,

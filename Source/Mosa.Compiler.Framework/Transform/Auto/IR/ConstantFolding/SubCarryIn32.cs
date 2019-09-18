@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 {
 	/// <summary>
-	/// AddWithCarry32
+	/// SubCarryIn32
 	/// </summary>
-	public sealed class AddWithCarry32 : BaseTransformation
+	public sealed class SubCarryIn32 : BaseTransformation
 	{
-		public AddWithCarry32() : base(IRInstruction.AddWithCarry32)
+		public SubCarryIn32() : base(IRInstruction.SubCarryIn32)
 		{
 		}
 
@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 			var t2 = context.Operand2;
 			var t3 = context.Operand3;
 
-			var e1 = transformContext.CreateConstant(Add32(Add32(To32(t1), To32(t2)), BoolTo32(To32(t3))));
+			var e1 = transformContext.CreateConstant(Sub32(Sub32(To32(t1), To32(t2)), BoolTo32(To32(t3))));
 
 			context.SetInstruction(IRInstruction.Move32, result, e1);
 		}

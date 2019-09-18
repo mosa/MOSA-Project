@@ -153,7 +153,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AppendGetHigh64(context, op1High, operand2);
 
 			context.AppendInstruction2(IRInstruction.AddCarryOut32, resultLow, resultCarry, op0Low, op1Low);
-			context.AppendInstruction(IRInstruction.AddWithCarry32, resultHigh, op0High, op1High, resultCarry);
+			context.AppendInstruction(IRInstruction.AddCarryIn32, resultHigh, op0High, op1High, resultCarry);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
@@ -706,7 +706,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AppendGetHigh64(context, op1High, operand2);
 
 			context.AppendInstruction2(IRInstruction.SubCarryOut32, resultLow, resultCarry, op0Low, op1Low);
-			context.AppendInstruction(IRInstruction.SubWithCarry32, resultHigh, op0High, op1High, resultCarry);
+			context.AppendInstruction(IRInstruction.SubCarryIn32, resultHigh, op0High, op1High, resultCarry);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
