@@ -148,9 +148,11 @@ namespace Mosa.Compiler.Framework
 		public bool IsCPURegister { get; private set; }
 
 		public bool IsEnum { get; private set; }
+
 		public bool IsFloatingPoint { get { return IsR; } }
 
 		public bool IsFunctionPointer { get; private set; }
+
 		public bool IsHigh { get { return LongParent.High == this; } }
 
 		public bool IsI { get; private set; }
@@ -246,6 +248,7 @@ namespace Mosa.Compiler.Framework
 		public bool IsU4 { get; private set; }
 
 		public bool IsU8 { get; private set; }
+
 		public bool IsUnmanagedPointer { get; private set; }
 
 		/// <summary>

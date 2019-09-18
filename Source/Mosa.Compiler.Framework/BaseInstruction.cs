@@ -193,7 +193,7 @@ namespace Mosa.Compiler.Framework
 
 		#region Static Data
 
-		private static int NextInstructionID = 0;
+		private static int NextInstructionID = 1;
 
 		private static object _lock = new object();
 

@@ -21,36 +21,36 @@ namespace Mosa.Platform.x86.Stages
 		{
 			AddVisitation(IRInstruction.Add32, Add32);
 			AddVisitation(IRInstruction.AddCarryOut32, AddCarryOut32);
-			AddVisitation(IRInstruction.AddFloatR4, AddFloatR4);
-			AddVisitation(IRInstruction.AddFloatR8, AddFloatR8);
+			AddVisitation(IRInstruction.AddR4, AddR4);
+			AddVisitation(IRInstruction.AddR8, AddR8);
 			AddVisitation(IRInstruction.AddressOf, AddressOf);
 			AddVisitation(IRInstruction.AddWithCarry32, AddWithCarry32);
 			AddVisitation(IRInstruction.ArithShiftRight32, ArithShiftRight32);
-			AddVisitation(IRInstruction.BitCopyFloatR4ToInt32, BitCopyFloatR4ToInt32);
-			AddVisitation(IRInstruction.BitCopyInt32ToFloatR4, BitCopyInt32ToFloatR4);
+			AddVisitation(IRInstruction.BitCopyR4To32, BitCopyR4To32);
+			AddVisitation(IRInstruction.BitCopy32ToR4, BitCopy32ToR4);
 			AddVisitation(IRInstruction.CallDirect, CallDirect);
-			AddVisitation(IRInstruction.CompareFloatR4, CompareFloatR4);
-			AddVisitation(IRInstruction.CompareFloatR8, CompareFloatR8);
-			AddVisitation(IRInstruction.CompareInt32x32, CompareInt32x32);
-			AddVisitation(IRInstruction.CompareIntBranch32, CompareIntBranch32);
-			AddVisitation(IRInstruction.ConvertFloatR4ToFloatR8, ConvertFloatR4ToFloatR8);
-			AddVisitation(IRInstruction.ConvertFloatR4ToInt32, ConvertFloatR4ToInt32);
-			AddVisitation(IRInstruction.ConvertFloatR8ToFloatR4, ConvertFloatR8ToFloatR4);
-			AddVisitation(IRInstruction.ConvertFloatR8ToInt32, ConvertFloatR8ToInt32);
-			AddVisitation(IRInstruction.ConvertInt32ToFloatR4, ConvertInt32ToFloatR4);
-			AddVisitation(IRInstruction.ConvertInt32ToFloatR8, ConvertInt32ToFloatR8);
-			AddVisitation(IRInstruction.DivFloatR4, DivFloatR4);
-			AddVisitation(IRInstruction.DivFloatR8, DivFloatR8);
+			AddVisitation(IRInstruction.CompareR4, CompareR4);
+			AddVisitation(IRInstruction.CompareR8, CompareR8);
+			AddVisitation(IRInstruction.Compare32x32, Compare32x32);
+			AddVisitation(IRInstruction.CompareBranch32, CompareBranch32);
+			AddVisitation(IRInstruction.ConvertR4ToR8, ConvertR4ToR8);
+			AddVisitation(IRInstruction.ConvertR4To32, ConvertR4To32);
+			AddVisitation(IRInstruction.ConvertR8ToR4, ConvertR8ToR4);
+			AddVisitation(IRInstruction.ConvertR8To32, ConvertR8To32);
+			AddVisitation(IRInstruction.Convert32ToR4, Convert32ToR4);
+			AddVisitation(IRInstruction.Convert32ToR8, Convert32ToR8);
+			AddVisitation(IRInstruction.DivR4, DivR4);
+			AddVisitation(IRInstruction.DivR8, DivR8);
 			AddVisitation(IRInstruction.DivSigned32, DivSigned32);
 			AddVisitation(IRInstruction.DivUnsigned32, DivUnsigned32);
 			AddVisitation(IRInstruction.IfThenElse32, IfThenElse32);
 			AddVisitation(IRInstruction.Jmp, Jmp);
-			AddVisitation(IRInstruction.LoadFloatR4, LoadFloatR4);
-			AddVisitation(IRInstruction.LoadFloatR8, LoadFloatR8);
-			AddVisitation(IRInstruction.LoadInt32, LoadInt32);
-			AddVisitation(IRInstruction.LoadParamFloatR4, LoadParamFloatR4);
-			AddVisitation(IRInstruction.LoadParamFloatR8, LoadParamFloatR8);
-			AddVisitation(IRInstruction.LoadParamInt32, LoadParamInt32);
+			AddVisitation(IRInstruction.LoadR4, LoadR4);
+			AddVisitation(IRInstruction.LoadR8, LoadR8);
+			AddVisitation(IRInstruction.Load32, Load32);
+			AddVisitation(IRInstruction.LoadParamR4, LoadParamR4);
+			AddVisitation(IRInstruction.LoadParamR8, LoadParamR8);
+			AddVisitation(IRInstruction.LoadParam32, LoadParam32);
 			AddVisitation(IRInstruction.LoadParamSignExtend16x32, LoadParamSignExtend16x32);
 			AddVisitation(IRInstruction.LoadParamSignExtend8x32, LoadParamSignExtend8x32);
 			AddVisitation(IRInstruction.LoadParamZeroExtend16x32, LoadParamZeroExtend16x32);
@@ -59,15 +59,15 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.LoadSignExtend8x32, LoadSignExtend8x32);
 			AddVisitation(IRInstruction.LoadZeroExtend16x32, LoadZeroExtend16x32);
 			AddVisitation(IRInstruction.LoadZeroExtend8x32, LoadZeroExtend8x32);
-			AddVisitation(IRInstruction.LogicalAnd32, LogicalAnd32);
-			AddVisitation(IRInstruction.LogicalNot32, LogicalNot32);
-			AddVisitation(IRInstruction.LogicalOr32, LogicalOr32);
-			AddVisitation(IRInstruction.LogicalXor32, LogicalXor32);
-			AddVisitation(IRInstruction.MoveFloatR4, MoveFloatR4);
-			AddVisitation(IRInstruction.MoveFloatR8, MoveFloatR8);
-			AddVisitation(IRInstruction.MoveInt32, MoveInt32);
-			AddVisitation(IRInstruction.MulFloatR4, MulFloatR4);
-			AddVisitation(IRInstruction.MulFloatR8, MulFloatR8);
+			AddVisitation(IRInstruction.And32, And32);
+			AddVisitation(IRInstruction.Not32, Not32);
+			AddVisitation(IRInstruction.Or32, Or32);
+			AddVisitation(IRInstruction.Xor32, Xor32);
+			AddVisitation(IRInstruction.MoveR4, MoveR4);
+			AddVisitation(IRInstruction.MoveR8, MoveR8);
+			AddVisitation(IRInstruction.Move32, Move32);
+			AddVisitation(IRInstruction.MulR4, MulR4);
+			AddVisitation(IRInstruction.MulR8, MulR8);
 			AddVisitation(IRInstruction.MulSigned32, MulSigned32);
 			AddVisitation(IRInstruction.MulUnsigned32, MulUnsigned32);
 			AddVisitation(IRInstruction.Nop, Nop);
@@ -77,20 +77,20 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.ShiftRight32, ShiftRight32);
 			AddVisitation(IRInstruction.SignExtend16x32, SignExtend16x32);
 			AddVisitation(IRInstruction.SignExtend8x32, SignExtend8x32);
-			AddVisitation(IRInstruction.StoreFloatR4, StoreFloatR4);
-			AddVisitation(IRInstruction.StoreFloatR8, StoreFloatR8);
-			AddVisitation(IRInstruction.StoreInt16, StoreInt16);
-			AddVisitation(IRInstruction.StoreInt32, StoreInt32);
-			AddVisitation(IRInstruction.StoreInt8, StoreInt8);
-			AddVisitation(IRInstruction.StoreParamFloatR4, StoreParamFloatR4);
-			AddVisitation(IRInstruction.StoreParamFloatR8, StoreParamFloatR8);
-			AddVisitation(IRInstruction.StoreParamInt16, StoreParamInt16);
-			AddVisitation(IRInstruction.StoreParamInt32, StoreParamInt32);
-			AddVisitation(IRInstruction.StoreParamInt8, StoreParamInt8);
+			AddVisitation(IRInstruction.StoreR4, StoreR4);
+			AddVisitation(IRInstruction.StoreR8, StoreR8);
+			AddVisitation(IRInstruction.Store16, StoreInt16);
+			AddVisitation(IRInstruction.Store32, Store32);
+			AddVisitation(IRInstruction.Store8, StoreInt8);
+			AddVisitation(IRInstruction.StoreParamR4, StoreParamR4);
+			AddVisitation(IRInstruction.StoreParamR8, StoreParamR8);
+			AddVisitation(IRInstruction.StoreParam16, StoreParamInt16);
+			AddVisitation(IRInstruction.StoreParam32, StoreParam32);
+			AddVisitation(IRInstruction.StoreParam8, StoreParamInt8);
 			AddVisitation(IRInstruction.Sub32, Sub32);
 			AddVisitation(IRInstruction.SubCarryOut32, SubCarryOut32);
-			AddVisitation(IRInstruction.SubFloatR4, SubFloatR4);
-			AddVisitation(IRInstruction.SubFloatR8, SubFloatR8);
+			AddVisitation(IRInstruction.SubR4, SubR4);
+			AddVisitation(IRInstruction.SubR8, SubR8);
 			AddVisitation(IRInstruction.SubWithCarry32, SubWithCarry32);
 			AddVisitation(IRInstruction.Switch, Switch);
 			AddVisitation(IRInstruction.ZeroExtend16x32, ZeroExtend16x32);
@@ -118,7 +118,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Movzx8To32, result2, v1);
 		}
 
-		private void AddFloatR4(Context context)
+		private void AddR4(Context context)
 		{
 			Debug.Assert(context.Result.IsR4);
 			Debug.Assert(context.Operand1.IsR4);
@@ -126,7 +126,7 @@ namespace Mosa.Platform.x86.Stages
 			context.ReplaceInstruction(X86.Addss);
 		}
 
-		private void AddFloatR8(Context context)
+		private void AddR8(Context context)
 		{
 			Debug.Assert(context.Result.IsR8);
 			Debug.Assert(context.Operand1.IsR8);
@@ -170,12 +170,12 @@ namespace Mosa.Platform.x86.Stages
 			context.ReplaceInstruction(X86.Sar32);
 		}
 
-		private void BitCopyFloatR4ToInt32(Context context)
+		private void BitCopyR4To32(Context context)
 		{
 			context.ReplaceInstruction(X86.Movdssi32);
 		}
 
-		private void BitCopyInt32ToFloatR4(Context context)
+		private void BitCopy32ToR4(Context context)
 		{
 			context.ReplaceInstruction(X86.Movdi32ss);
 		}
@@ -185,17 +185,17 @@ namespace Mosa.Platform.x86.Stages
 			context.ReplaceInstruction(X86.Call);
 		}
 
-		private void CompareFloatR4(Context context)
+		private void CompareR4(Context context)
 		{
 			FloatCompare(context, X86.Ucomiss);
 		}
 
-		private void CompareFloatR8(Context context)
+		private void CompareR8(Context context)
 		{
 			FloatCompare(context, X86.Ucomisd);
 		}
 
-		private void CompareInt32x32(Context context)
+		private void Compare32x32(Context context)
 		{
 			var condition = context.ConditionCode;
 			var result = context.Result;
@@ -209,7 +209,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Movzx8To32, result, v1);
 		}
 
-		private void CompareIntBranch32(Context context)
+		private void CompareBranch32(Context context)
 		{
 			OptimizeBranch(context);
 
@@ -222,41 +222,41 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Branch, condition, target);
 		}
 
-		private void ConvertFloatR4ToFloatR8(Context context)
+		private void ConvertR4ToR8(Context context)
 		{
 			context.ReplaceInstruction(X86.Cvtss2sd);
 		}
 
-		private void ConvertFloatR4ToInt32(Context context)
+		private void ConvertR4To32(Context context)
 		{
 			Debug.Assert(context.Result.IsI1 || context.Result.IsI2 || context.Result.IsI4);
 			context.ReplaceInstruction(X86.Cvttss2si32);
 		}
 
-		private void ConvertFloatR8ToFloatR4(Context context)
+		private void ConvertR8ToR4(Context context)
 		{
 			context.ReplaceInstruction(X86.Cvtsd2ss);
 		}
 
-		private void ConvertFloatR8ToInt32(Context context)
+		private void ConvertR8To32(Context context)
 		{
 			Debug.Assert(context.Result.IsI1 || context.Result.IsI2 || context.Result.IsI4);
 			context.ReplaceInstruction(X86.Cvttsd2si32);
 		}
 
-		private void ConvertInt32ToFloatR4(Context context)
+		private void Convert32ToR4(Context context)
 		{
 			Debug.Assert(context.Result.IsR4);
 			context.ReplaceInstruction(X86.Cvtsi2ss32);
 		}
 
-		private void ConvertInt32ToFloatR8(Context context)
+		private void Convert32ToR8(Context context)
 		{
 			Debug.Assert(context.Result.IsR8);
 			context.ReplaceInstruction(X86.Cvtsi2sd32);
 		}
 
-		private void DivFloatR4(Context context)
+		private void DivR4(Context context)
 		{
 			Debug.Assert(context.Result.IsR4);
 			Debug.Assert(context.Operand1.IsR4);
@@ -264,7 +264,7 @@ namespace Mosa.Platform.x86.Stages
 			context.ReplaceInstruction(X86.Divss);
 		}
 
-		private void DivFloatR8(Context context)
+		private void DivR8(Context context)
 		{
 			Debug.Assert(context.Result.IsR8);
 			Debug.Assert(context.Operand1.IsR8);
@@ -317,21 +317,21 @@ namespace Mosa.Platform.x86.Stages
 			context.ReplaceInstruction(X86.Jmp);
 		}
 
-		private void LoadFloatR4(Context context)
+		private void LoadR4(Context context)
 		{
 			Debug.Assert(context.Result.IsR4);
 
 			context.SetInstruction(X86.MovssLoad, context.Result, context.Operand1, context.Operand2);
 		}
 
-		private void LoadFloatR8(Context context)
+		private void LoadR8(Context context)
 		{
 			Debug.Assert(context.Result.IsR8);
 
 			context.SetInstruction(X86.MovsdLoad, context.Result, context.Operand1, context.Operand2);
 		}
 
-		private void LoadInt32(Context context)
+		private void Load32(Context context)
 		{
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
@@ -341,21 +341,21 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.MovLoad32, context.Result, context.Operand1, context.Operand2);
 		}
 
-		private void LoadParamFloatR4(Context context)
+		private void LoadParamR4(Context context)
 		{
 			Debug.Assert(context.Result.IsR4);
 
 			context.SetInstruction(X86.MovssLoad, context.Result, StackFrame, context.Operand1);
 		}
 
-		private void LoadParamFloatR8(Context context)
+		private void LoadParamR8(Context context)
 		{
 			Debug.Assert(context.Result.IsR8);
 
 			context.SetInstruction(X86.MovsdLoad, context.Result, StackFrame, context.Operand1);
 		}
 
-		private void LoadParamInt32(Context context)
+		private void LoadParam32(Context context)
 		{
 			context.SetInstruction(X86.MovLoad32, context.Result, StackFrame, context.Operand1);
 		}
@@ -408,42 +408,42 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.MovzxLoad8, context.Result, context.Operand1, context.Operand2);
 		}
 
-		private void LogicalAnd32(Context context)
+		private void And32(Context context)
 		{
 			context.ReplaceInstruction(X86.And32);
 		}
 
-		private void LogicalNot32(Context context)
+		private void Not32(Context context)
 		{
 			context.SetInstruction(X86.Not32, context.Result, context.Operand1);
 		}
 
-		private void LogicalOr32(Context context)
+		private void Or32(Context context)
 		{
 			context.ReplaceInstruction(X86.Or32);
 		}
 
-		private void LogicalXor32(Context context)
+		private void Xor32(Context context)
 		{
 			context.ReplaceInstruction(X86.Xor32);
 		}
 
-		private void MoveFloatR4(Context context)
+		private void MoveR4(Context context)
 		{
 			context.ReplaceInstruction(X86.Movss);
 		}
 
-		private void MoveFloatR8(Context context)
+		private void MoveR8(Context context)
 		{
 			context.ReplaceInstruction(X86.Movsd);
 		}
 
-		private void MoveInt32(Context context)
+		private void Move32(Context context)
 		{
 			context.ReplaceInstruction(X86.Mov32);
 		}
 
-		private void MulFloatR4(Context context)
+		private void MulR4(Context context)
 		{
 			Debug.Assert(context.Result.IsR4);
 			Debug.Assert(context.Operand1.IsR4);
@@ -451,7 +451,7 @@ namespace Mosa.Platform.x86.Stages
 			context.ReplaceInstruction(X86.Mulss);
 		}
 
-		private void MulFloatR8(Context context)
+		private void MulR8(Context context)
 		{
 			Debug.Assert(context.Result.IsR8);
 			Debug.Assert(context.Operand1.IsR8);
@@ -523,12 +523,12 @@ namespace Mosa.Platform.x86.Stages
 			context.ReplaceInstruction(X86.Movsx8To32);
 		}
 
-		private void StoreFloatR4(Context context)
+		private void StoreR4(Context context)
 		{
 			context.SetInstruction(X86.MovssStore, null, context.Operand1, context.Operand2, context.Operand3);
 		}
 
-		private void StoreFloatR8(Context context)
+		private void StoreR8(Context context)
 		{
 			context.SetInstruction(X86.MovsdStore, null, context.Operand1, context.Operand2, context.Operand3);
 		}
@@ -540,7 +540,7 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.MovStore16, null, context.Operand1, context.Operand2, context.Operand3);
 		}
 
-		private void StoreInt32(Context context)
+		private void Store32(Context context)
 		{
 			LoadStore.OrderStoreOperands(context, MethodCompiler);
 
@@ -554,12 +554,12 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.MovStore8, null, context.Operand1, context.Operand2, context.Operand3);
 		}
 
-		private void StoreParamFloatR4(Context context)
+		private void StoreParamR4(Context context)
 		{
 			context.SetInstruction(X86.MovssStore, null, StackFrame, context.Operand1, context.Operand2);
 		}
 
-		private void StoreParamFloatR8(Context context)
+		private void StoreParamR8(Context context)
 		{
 			context.SetInstruction(X86.MovsdStore, null, StackFrame, context.Operand1, context.Operand2);
 		}
@@ -569,7 +569,7 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.MovStore16, null, StackFrame, context.Operand1, context.Operand2);
 		}
 
-		private void StoreParamInt32(Context context)
+		private void StoreParam32(Context context)
 		{
 			context.SetInstruction(X86.MovStore32, null, StackFrame, context.Operand1, context.Operand2);
 		}
@@ -598,7 +598,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Movzx8To32, result2, v1);
 		}
 
-		private void SubFloatR4(Context context)
+		private void SubR4(Context context)
 		{
 			Debug.Assert(context.Result.IsR4);
 			Debug.Assert(context.Operand1.IsR4);
@@ -606,7 +606,7 @@ namespace Mosa.Platform.x86.Stages
 			context.ReplaceInstruction(X86.Subss);
 		}
 
-		private void SubFloatR8(Context context)
+		private void SubR8(Context context)
 		{
 			Debug.Assert(context.Result.IsR8);
 			Debug.Assert(context.Operand1.IsR8);

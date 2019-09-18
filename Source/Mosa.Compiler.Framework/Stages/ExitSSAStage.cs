@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					InstructionCount++;
 
-					if (node.Instruction != IRInstruction.Phi)
+					if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
 						break;
 
 					Debug.Assert(node.OperandCount == node.Block.PreviousBlocks.Count);
@@ -127,8 +127,8 @@ namespace Mosa.Compiler.Framework.Stages
 			var node = predecessor.BeforeLast;
 
 			while (node.IsEmptyOrNop
-				|| node.Instruction == IRInstruction.CompareIntBranch32
-				|| node.Instruction == IRInstruction.CompareIntBranch64
+				|| node.Instruction == IRInstruction.CompareBranch32
+				|| node.Instruction == IRInstruction.CompareBranch64
 				|| node.Instruction == IRInstruction.Jmp)
 			{
 				node = node.Previous;

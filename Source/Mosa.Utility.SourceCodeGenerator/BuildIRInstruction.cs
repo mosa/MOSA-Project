@@ -11,7 +11,9 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected override void Body()
 		{
-			Lines.AppendLine("namespace Mosa.Compiler.Framework.IR");
+			Lines.AppendLine("using Mosa.Compiler.Framework.IR;");
+			Lines.AppendLine();
+			Lines.AppendLine("namespace Mosa.Compiler.Framework");
 			Lines.AppendLine("{");
 			Lines.AppendLine("\t/// <summary>");
 			Lines.AppendLine("\t/// IR Instructions");

@@ -439,8 +439,8 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				var node = instructionWorkList.Pop();
 
-				if (node.Instruction == IRInstruction.CompareIntBranch32
-					|| node.Instruction == IRInstruction.CompareIntBranch64)
+				if (node.Instruction == IRInstruction.CompareBranch32
+					|| node.Instruction == IRInstruction.CompareBranch64)
 				{
 					// special case
 					ProcessInstructionsContinuiously(node);
@@ -458,8 +458,8 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			var instruction = node.Instruction;
 
-			if (instruction == IRInstruction.MoveInt32
-				|| instruction == IRInstruction.MoveInt64)
+			if (instruction == IRInstruction.Move32
+				|| instruction == IRInstruction.Move64)
 			{
 				Move(node);
 			}
@@ -478,8 +478,8 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				Call(node);
 			}
-			else if (instruction == IRInstruction.LoadInt32
-				|| instruction == IRInstruction.LoadInt64
+			else if (instruction == IRInstruction.Load32
+				|| instruction == IRInstruction.Load64
 
 				|| instruction == IRInstruction.LoadSignExtend8x32
 				|| instruction == IRInstruction.LoadSignExtend16x32
@@ -493,12 +493,12 @@ namespace Mosa.Compiler.Framework.Analysis
 				|| instruction == IRInstruction.LoadZeroExtend16x64
 				|| instruction == IRInstruction.LoadZeroExtend32x64
 
-				|| instruction == IRInstruction.LoadFloatR4
-				|| instruction == IRInstruction.LoadFloatR8
+				|| instruction == IRInstruction.LoadR4
+				|| instruction == IRInstruction.LoadR8
 				|| instruction == IRInstruction.LoadParamSignExtend8x32
 				|| instruction == IRInstruction.LoadParamSignExtend16x32
-				|| instruction == IRInstruction.LoadParamInt32
-				|| instruction == IRInstruction.LoadParamInt64
+				|| instruction == IRInstruction.LoadParam32
+				|| instruction == IRInstruction.LoadParam64
 				|| instruction == IRInstruction.LoadParamSignExtend8x64
 				|| instruction == IRInstruction.LoadParamSignExtend16x64
 				|| instruction == IRInstruction.LoadParamSignExtend32x64
@@ -507,8 +507,8 @@ namespace Mosa.Compiler.Framework.Analysis
 				|| instruction == IRInstruction.LoadParamZeroExtend8x64
 				|| instruction == IRInstruction.LoadParamZeroExtend16x64
 				|| instruction == IRInstruction.LoadParamZeroExtend32x64
-				|| instruction == IRInstruction.LoadParamFloatR4
-				|| instruction == IRInstruction.LoadParamFloatR8)
+				|| instruction == IRInstruction.LoadParamR4
+				|| instruction == IRInstruction.LoadParamR8)
 			{
 				Load(node);
 			}
@@ -537,13 +537,13 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				IntegerOperation(node);
 			}
-			else if (instruction == IRInstruction.CompareInt32x32
-				|| instruction == IRInstruction.CompareInt64x32
-				|| instruction == IRInstruction.CompareInt64x64)
+			else if (instruction == IRInstruction.Compare32x32
+				|| instruction == IRInstruction.Compare64x32
+				|| instruction == IRInstruction.Compare64x64)
 			{
-				CompareIntegerOperation(node);
+				CompareegerOperation(node);
 			}
-			else if (instruction == IRInstruction.Phi)
+			else if (instruction == IRInstruction.Phi32 || instruction == IRInstruction.Phi64 || instruction == IRInstruction.PhiR4 || instruction == IRInstruction.PhiR8)
 			{
 				Phi(node);
 			}
@@ -551,10 +551,10 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				Jmp(node);
 			}
-			else if (instruction == IRInstruction.CompareIntBranch32
-				|| instruction == IRInstruction.CompareIntBranch64)
+			else if (instruction == IRInstruction.CompareBranch32
+				|| instruction == IRInstruction.CompareBranch64)
 			{
-				return CompareIntegerBranch(node);
+				return CompareegerBranch(node);
 			}
 			else if (instruction == IRInstruction.AddressOf)
 			{
@@ -636,7 +636,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			return null;
 		}
 
-		private void CompareIntegerOperation(InstructionNode node)
+		private void CompareegerOperation(InstructionNode node)
 		{
 			var result = GetVariableState(node.Result);
 
@@ -932,9 +932,9 @@ namespace Mosa.Compiler.Framework.Analysis
 				result = operand1 << (int)operand2;
 				return true;
 			}
-			else if (instruction == IRInstruction.CompareInt32x32
-				|| instruction == IRInstruction.CompareInt64x32
-				|| instruction == IRInstruction.CompareInt64x64)
+			else if (instruction == IRInstruction.Compare32x32
+				|| instruction == IRInstruction.Compare64x32
+				|| instruction == IRInstruction.Compare64x64)
 			{
 				bool? compare = Compare(operand1, operand2, conditionCode);
 
@@ -996,7 +996,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 		}
 
-		private bool CompareIntegerBranch(InstructionNode node)
+		private bool CompareegerBranch(InstructionNode node)
 		{
 			var operand1 = GetVariableState(node.Operand1);
 			var operand2 = GetVariableState(node.Operand2);

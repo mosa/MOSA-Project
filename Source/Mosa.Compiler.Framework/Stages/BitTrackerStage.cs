@@ -150,25 +150,26 @@ namespace Mosa.Compiler.Framework.Stages
 			Register(InstructionsRemovedCount);
 			Register(BranchesRemovedCount);
 
-			Register(IRInstruction.Phi, Phi);
+			Register(IRInstruction.Phi32, Phi32);
+			Register(IRInstruction.Phi64, Phi64);
 
-			Register(IRInstruction.MoveInt32, MoveInt32);
-			Register(IRInstruction.MoveInt64, MoveInt64);
+			Register(IRInstruction.Move32, MoveInt32);
+			Register(IRInstruction.Move64, MoveInt64);
 
-			Register(IRInstruction.Truncation64x32, Truncation64x32);
+			Register(IRInstruction.Truncate64x32, Truncate64x32);
 
 			Register(IRInstruction.GetLow64, GetLow64);
 			Register(IRInstruction.GetHigh64, GetHigh64);
 			Register(IRInstruction.To64, To64);
 
-			Register(IRInstruction.LogicalOr32, LogicalOr32);
-			Register(IRInstruction.LogicalOr64, LogicalOr64);
-			Register(IRInstruction.LogicalAnd32, LogicalAnd32);
-			Register(IRInstruction.LogicalAnd64, LogicalAnd64);
-			Register(IRInstruction.LogicalXor32, LogicalXor32);
-			Register(IRInstruction.LogicalXor64, LogicalXor64);
-			Register(IRInstruction.LogicalNot32, LogicalNot32);
-			Register(IRInstruction.LogicalNot64, LogicalNot64);
+			Register(IRInstruction.Or32, Or32);
+			Register(IRInstruction.Or64, Or64);
+			Register(IRInstruction.And32, And32);
+			Register(IRInstruction.And64, And64);
+			Register(IRInstruction.Xor32, Xor32);
+			Register(IRInstruction.Xor64, Xor64);
+			Register(IRInstruction.Not32, Not32);
+			Register(IRInstruction.Not64, Not64);
 
 			Register(IRInstruction.LoadZeroExtend8x32, LoadZeroExtend8x32);
 			Register(IRInstruction.LoadZeroExtend16x32, LoadZeroExtend16x32);
@@ -192,9 +193,9 @@ namespace Mosa.Compiler.Framework.Stages
 			Register(IRInstruction.ShiftLeft32, ShiftLeft32);
 			Register(IRInstruction.ShiftLeft64, ShiftLeft64);
 
-			Register(IRInstruction.CompareInt32x32, CompareInt32x32);
-			Register(IRInstruction.CompareInt64x64, CompareInt64x64);
-			Register(IRInstruction.CompareInt64x32, CompareInt64x32);
+			Register(IRInstruction.Compare32x32, Compare32x32);
+			Register(IRInstruction.Compare64x64, Compare64x64);
+			Register(IRInstruction.Compare64x32, Compare64x32);
 
 			Register(IRInstruction.MulUnsigned32, MulUnsigned32);
 			Register(IRInstruction.MulUnsigned64, MulUnsigned64);
@@ -276,10 +277,10 @@ namespace Mosa.Compiler.Framework.Stages
 			IntegerLoads.Add(IRInstruction.LoadParamZeroExtend8x64);
 			IntegerLoads.Add(IRInstruction.LoadParamZeroExtend16x64);
 			IntegerLoads.Add(IRInstruction.LoadParamZeroExtend32x64);
-			IntegerLoads.Add(IRInstruction.LoadInt32);
-			IntegerLoads.Add(IRInstruction.LoadInt64);
-			IntegerLoads.Add(IRInstruction.LoadParamInt32);
-			IntegerLoads.Add(IRInstruction.LoadParamInt64);
+			IntegerLoads.Add(IRInstruction.Load32);
+			IntegerLoads.Add(IRInstruction.Load64);
+			IntegerLoads.Add(IRInstruction.LoadParam32);
+			IntegerLoads.Add(IRInstruction.LoadParam64);
 		}
 
 		private void Register(BaseInstruction instruction, NodeVisitationDelegate method)
@@ -582,7 +583,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (node.Instruction == IRInstruction.Switch)
 					continue;
 
-				Debug.Assert(node.Instruction == IRInstruction.CompareIntBranch32 || node.Instruction == IRInstruction.CompareIntBranch64);
+				Debug.Assert(node.Instruction == IRInstruction.CompareBranch32 || node.Instruction == IRInstruction.CompareBranch64);
 
 				var result = EvaluateCompare(node);
 
@@ -946,7 +947,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return Value.Indeterminate;
 		}
 
-		private Value CompareInt32x32(InstructionNode node)
+		private Value Compare32x32(InstructionNode node)
 		{
 			var result = EvaluateCompare(node);
 
@@ -956,12 +957,12 @@ namespace Mosa.Compiler.Framework.Stages
 			return new Value(result.Value ? 1u : 0u, false);
 		}
 
-		private Value CompareInt64x32(InstructionNode node)
+		private Value Compare64x32(InstructionNode node)
 		{
-			return CompareInt64x64(node);
+			return Compare64x64(node);
 		}
 
-		private Value CompareInt64x64(InstructionNode node)
+		private Value Compare64x64(InstructionNode node)
 		{
 			var result = EvaluateCompare(node);
 
@@ -1146,7 +1147,7 @@ namespace Mosa.Compiler.Framework.Stages
 			};
 		}
 
-		private Value LogicalAnd32(InstructionNode node)
+		private Value And32(InstructionNode node)
 		{
 			var value1 = node.Operand1.IsConstant ? new Value(node.Operand1.ConstantUnsigned64, true) : Values[node.Operand1.Index];
 			var value2 = node.Operand2.IsConstant ? new Value(node.Operand2.ConstantUnsigned64, true) : Values[node.Operand2.Index];
@@ -1172,7 +1173,7 @@ namespace Mosa.Compiler.Framework.Stages
 			};
 		}
 
-		private Value LogicalAnd64(InstructionNode node)
+		private Value And64(InstructionNode node)
 		{
 			var value1 = node.Operand1.IsConstant ? new Value(node.Operand1.ConstantUnsigned64, false) : Values[node.Operand1.Index];
 			var value2 = node.Operand2.IsConstant ? new Value(node.Operand2.ConstantUnsigned64, false) : Values[node.Operand2.Index];
@@ -1198,7 +1199,7 @@ namespace Mosa.Compiler.Framework.Stages
 			};
 		}
 
-		private Value LogicalNot32(InstructionNode node)
+		private Value Not32(InstructionNode node)
 		{
 			var value1 = node.Operand1.IsConstant ? new Value(node.Operand1.ConstantUnsigned64, true) : Values[node.Operand1.Index];
 
@@ -1218,7 +1219,7 @@ namespace Mosa.Compiler.Framework.Stages
 			};
 		}
 
-		private Value LogicalNot64(InstructionNode node)
+		private Value Not64(InstructionNode node)
 		{
 			var value1 = node.Operand1.IsConstant ? new Value(node.Operand1.ConstantUnsigned64, false) : Values[node.Operand1.Index];
 
@@ -1238,7 +1239,7 @@ namespace Mosa.Compiler.Framework.Stages
 			};
 		}
 
-		private Value LogicalOr32(InstructionNode node)
+		private Value Or32(InstructionNode node)
 		{
 			var value1 = node.Operand1.IsConstant ? new Value(node.Operand1.ConstantUnsigned64, true) : Values[node.Operand1.Index];
 			var value2 = node.Operand2.IsConstant ? new Value(node.Operand2.ConstantUnsigned64, true) : Values[node.Operand2.Index];
@@ -1264,7 +1265,7 @@ namespace Mosa.Compiler.Framework.Stages
 			};
 		}
 
-		private Value LogicalOr64(InstructionNode node)
+		private Value Or64(InstructionNode node)
 		{
 			var value1 = node.Operand1.IsConstant ? new Value(node.Operand1.ConstantUnsigned64, false) : Values[node.Operand1.Index];
 			var value2 = node.Operand2.IsConstant ? new Value(node.Operand2.ConstantUnsigned64, false) : Values[node.Operand2.Index];
@@ -1290,7 +1291,7 @@ namespace Mosa.Compiler.Framework.Stages
 			};
 		}
 
-		private Value LogicalXor32(InstructionNode node)
+		private Value Xor32(InstructionNode node)
 		{
 			var value1 = node.Operand1.IsConstant ? new Value(node.Operand1.ConstantUnsigned64, true) : Values[node.Operand1.Index];
 			var value2 = node.Operand2.IsConstant ? new Value(node.Operand2.ConstantUnsigned64, true) : Values[node.Operand2.Index];
@@ -1310,7 +1311,7 @@ namespace Mosa.Compiler.Framework.Stages
 			};
 		}
 
-		private Value LogicalXor64(InstructionNode node)
+		private Value Xor64(InstructionNode node)
 		{
 			var value1 = node.Operand1.IsConstant ? new Value(node.Operand1.ConstantUnsigned64, false) : Values[node.Operand1.Index];
 			var value2 = node.Operand2.IsConstant ? new Value(node.Operand2.ConstantUnsigned64, false) : Values[node.Operand2.Index];
@@ -1531,7 +1532,30 @@ namespace Mosa.Compiler.Framework.Stages
 			};
 		}
 
-		private Value Phi(InstructionNode node)
+		private Value Phi32(InstructionNode node)
+		{
+			Debug.Assert(node.OperandCount != 0);
+
+			var value = node.Operand1.IsConstant ? new Value(node.Operand1.ConstantUnsigned32, false) : Values[node.Operand1.Index];
+
+			for (int i = 1; i < node.OperandCount; i++)
+			{
+				var operand = node.GetOperand(i);
+				var value2 = operand.IsConstant ? new Value(operand.ConstantUnsigned32, false) : Values[operand.Index];
+
+				value.MaxValue = Math.Max(value.MaxValue, value2.MaxValue);
+				value.MinValue = Math.Min(value.MinValue, value2.MinValue);
+				value.AreRangeValuesDeterminate = value.AreRangeValuesDeterminate && value2.AreRangeValuesDeterminate;
+				value.BitsSet &= value2.BitsSet;
+				value.BitsClear &= value2.BitsClear;
+			}
+
+			value.Is32Bit = true;
+
+			return value;
+		}
+
+		private Value Phi64(InstructionNode node)
 		{
 			Debug.Assert(node.OperandCount != 0);
 
@@ -1549,15 +1573,7 @@ namespace Mosa.Compiler.Framework.Stages
 				value.BitsClear &= value2.BitsClear;
 			}
 
-			if (node.Result.Is64BitInteger)
-			{
-				value.Is64Bit = true;
-			}
-			else
-			{
-				//value.BitsClear |= Upper32BitsSet;
-				value.Is32Bit = true;
-			}
+			value.Is64Bit = true;
 
 			return value;
 		}
@@ -2196,7 +2212,7 @@ namespace Mosa.Compiler.Framework.Stages
 			};
 		}
 
-		private Value Truncation64x32(InstructionNode node)
+		private Value Truncate64x32(InstructionNode node)
 		{
 			var value1 = node.Operand1.IsConstant ? new Value(node.Operand1.ConstantUnsigned64, true) : Values[node.Operand1.Index];
 

@@ -13,8 +13,8 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			AddVisitation(IRInstruction.LoadInt32, LoadInt32);
-			AddVisitation(IRInstruction.LoadInt64, LoadInt64);
+			AddVisitation(IRInstruction.Load32, LoadInt32);
+			AddVisitation(IRInstruction.Load64, LoadInt64);
 		}
 
 		private void LoadInt32(Context context)
@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// HARD CODED
 			if (operand1.Field.DeclaringType.IsValueType && (operand1.Field.DeclaringType.Name == "System.IntPtr" || operand1.Field.DeclaringType.Name == "System.UIntPtr") && operand1.Field.Name == "Zero")
 			{
-				context.SetInstruction(IRInstruction.MoveInt32, context.Result, ConstantZero);
+				context.SetInstruction(IRInstruction.Move32, context.Result, ConstantZero);
 				return;
 			}
 		}
@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// HARD CODED
 			if (operand1.Field.DeclaringType.IsValueType && (operand1.Field.DeclaringType.Name == "System.IntPtr" || operand1.Field.DeclaringType.Name == "System.UIntPtr") && operand1.Field.Name == "Zero")
 			{
-				context.SetInstruction(IRInstruction.MoveInt64, context.Result, ConstantZero);
+				context.SetInstruction(IRInstruction.Move64, context.Result, ConstantZero);
 				return;
 			}
 		}

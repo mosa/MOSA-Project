@@ -18,27 +18,27 @@ namespace Mosa.Compiler.Framework.Stages
 		protected override void PopulateVisitationDictionary()
 		{
 			AddVisitation(IRInstruction.Add64, Add64);
-			AddVisitation(IRInstruction.CompareInt64x32, CompareInt64x32);
-			AddVisitation(IRInstruction.CompareIntBranch64, CompareIntBranch64);
-			AddVisitation(IRInstruction.LoadInt64, LoadInt64);
-			AddVisitation(IRInstruction.LoadParamInt64, LoadParamInt64);
+			AddVisitation(IRInstruction.Compare64x32, Compare64x32);
+			AddVisitation(IRInstruction.CompareBranch64, CompareBranch64);
+			AddVisitation(IRInstruction.Load64, LoadInt64);
+			AddVisitation(IRInstruction.LoadParam64, LoadParamInt64);
 			AddVisitation(IRInstruction.LoadParamSignExtend16x64, LoadParamSignExtend16x64);
 			AddVisitation(IRInstruction.LoadParamSignExtend32x64, LoadParamSignExtend32x64);
 			AddVisitation(IRInstruction.LoadParamSignExtend8x64, LoadParamSignExtend8x64);
 			AddVisitation(IRInstruction.LoadParamZeroExtend8x64, LoadParamZeroExtend8x64);
 			AddVisitation(IRInstruction.LoadParamZeroExtend16x64, LoadParamZeroExtend16x64);
 			AddVisitation(IRInstruction.LoadParamZeroExtend32x64, LoadParamZeroExtend32x64);
-			AddVisitation(IRInstruction.LogicalAnd64, LogicalAnd64);
-			AddVisitation(IRInstruction.LogicalOr64, LogicalOr64);
-			AddVisitation(IRInstruction.LogicalXor64, LogicalXor64);
-			AddVisitation(IRInstruction.LogicalNot64, LogicalNot64);
+			AddVisitation(IRInstruction.And64, And64);
+			AddVisitation(IRInstruction.Or64, Or64);
+			AddVisitation(IRInstruction.Xor64, Xor64);
+			AddVisitation(IRInstruction.Not64, Not64);
 			AddVisitation(IRInstruction.SignExtend16x64, SignExtend16x64);
 			AddVisitation(IRInstruction.SignExtend32x64, SignExtend32x64);
 			AddVisitation(IRInstruction.SignExtend8x64, SignExtend8x64);
-			AddVisitation(IRInstruction.StoreInt64, StoreInt64);
-			AddVisitation(IRInstruction.StoreParamInt64, StoreParamInt64);
+			AddVisitation(IRInstruction.Store64, StoreInt64);
+			AddVisitation(IRInstruction.StoreParam64, StoreParamInt64);
 			AddVisitation(IRInstruction.Sub64, Sub64);
-			AddVisitation(IRInstruction.Truncation64x32, Truncation64x32);
+			AddVisitation(IRInstruction.Truncate64x32, Truncate64x32);
 			AddVisitation(IRInstruction.ZeroExtend8x64, ZeroExtend8x64);
 			AddVisitation(IRInstruction.ZeroExtend16x64, ZeroExtend16x64);
 			AddVisitation(IRInstruction.ZeroExtend32x64, ZeroExtend32x64);
@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Framework.Stages
 			//AddVisitation(IRInstruction.RemSigned64, RemSigned64);
 			//AddVisitation(IRInstruction.RemUnsigned64, RemUnsigned64);
 			//AddVisitation(IRInstruction.ArithShiftRight64, ArithShiftRight64);
-			//AddVisitation(IRInstruction.CompareInt64x64, CompareInt64x64);
+			//AddVisitation(IRInstruction.Compare64x64, Compare64x64);
 			//AddVisitation(IRInstruction.IfThenElse64, IfThenElse64);
 			//AddVisitation(IRInstruction.MulSigned64, MulSigned64);
 			//AddVisitation(IRInstruction.MulUnsigned64, MulUnsigned64);
@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (operand2.IsResolvedConstant)
 			{
-				context.SetInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsigned32));
+				context.SetInstruction(IRInstruction.Move32, operand1, CreateConstant(operand2.ConstantUnsigned32));
 			}
 			else
 			{
@@ -77,7 +77,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (operand2.IsResolvedConstant)
 			{
-				context.SetInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsigned64 >> 32));
+				context.SetInstruction(IRInstruction.Move32, operand1, CreateConstant(operand2.ConstantUnsigned64 >> 32));
 			}
 			else
 			{
@@ -89,7 +89,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (operand2.IsResolvedConstant)
 			{
-				context.AppendInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsigned32));
+				context.AppendInstruction(IRInstruction.Move32, operand1, CreateConstant(operand2.ConstantUnsigned32));
 			}
 			else
 			{
@@ -101,7 +101,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (operand2.IsResolvedConstant)
 			{
-				context.AppendInstruction(IRInstruction.MoveInt32, operand1, CreateConstant(operand2.ConstantUnsigned64 >> 32));
+				context.AppendInstruction(IRInstruction.Move32, operand1, CreateConstant(operand2.ConstantUnsigned64 >> 32));
 			}
 			else
 			{
@@ -126,8 +126,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			SetGetLow64(context, op0Low, operand2);
 			AppendGetHigh64(context, op0High, operand2);
-			context.AppendInstruction(IRInstruction.StoreParamInt32, null, op1Low, op0Low);
-			context.AppendInstruction(IRInstruction.StoreParamInt32, null, op1High, op0High);
+			context.AppendInstruction(IRInstruction.StoreParam32, null, op1Low, op0Low);
+			context.AppendInstruction(IRInstruction.StoreParam32, null, op1High, op0High);
 		}
 
 		private void Add64(Context context)
@@ -157,7 +157,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void CompareIntBranch64(Context context)
+		private void CompareBranch64(Context context)
 		{
 			//Debug.Assert(context.Operand1.Is64BitInteger);
 			//Debug.Assert(context.Operand2.Is64BitInteger);
@@ -193,22 +193,22 @@ namespace Mosa.Compiler.Framework.Stages
 			AppendGetHigh64(context, op1High, operand2);
 
 			// Compare high (equal)
-			context.AppendInstruction(IRInstruction.CompareIntBranch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
+			context.AppendInstruction(IRInstruction.CompareBranch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
 			context.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
 
 			// Compare high
-			newBlocks[0].AppendInstruction(IRInstruction.CompareIntBranch32, branch, null, op0High, op1High, newBlocks[2].Block);
+			newBlocks[0].AppendInstruction(IRInstruction.CompareBranch32, branch, null, op0High, op1High, newBlocks[2].Block);
 			newBlocks[0].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 
 			// Compare low
-			newBlocks[1].AppendInstruction(IRInstruction.CompareIntBranch32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
+			newBlocks[1].AppendInstruction(IRInstruction.CompareBranch32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
 			newBlocks[1].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 
 			// Target
 			newBlocks[2].AppendInstruction(IRInstruction.Jmp, target);
 		}
 
-		private void CompareInt64x32(Context context)
+		private void Compare64x32(Context context)
 		{
 			Debug.Assert(context.Operand1.Is64BitInteger);
 			Debug.Assert(context.Operand2.Is64BitInteger);
@@ -236,25 +236,25 @@ namespace Mosa.Compiler.Framework.Stages
 				AppendGetLow64(context, op1Low, operand2);
 				AppendGetHigh64(context, op1High, operand2);
 
-				context.AppendInstruction(IRInstruction.LogicalXor32, v1, op0Low, op1Low);
-				context.AppendInstruction(IRInstruction.LogicalXor32, v2, op0High, op1High);
-				context.AppendInstruction(IRInstruction.LogicalOr32, v3, v1, v2);
-				context.AppendInstruction(IRInstruction.CompareInt32x32, condition, result, v3, ConstantZero);
+				context.AppendInstruction(IRInstruction.Xor32, v1, op0Low, op1Low);
+				context.AppendInstruction(IRInstruction.Xor32, v2, op0High, op1High);
+				context.AppendInstruction(IRInstruction.Or32, v3, v1, v2);
+				context.AppendInstruction(IRInstruction.Compare32x32, condition, result, v3, ConstantZero);
 
 				return;
 			}
 
 			if (CompilerOptions.EnableSSA)
 			{
-				CompareInteger64x32SSA(context);
+				Compareeger64x32SSA(context);
 			}
 			else
 			{
-				CompareInteger64x32NonSSA(context);
+				Compareeger64x32NonSSA(context);
 			}
 		}
 
-		private void CompareInteger64x32SSA(Context context)
+		private void Compareeger64x32SSA(Context context)
 		{
 			Debug.Assert(context.Operand1.Is64BitInteger);
 			Debug.Assert(context.Operand2.Is64BitInteger);
@@ -285,7 +285,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AppendGetHigh64(context, op1High, operand2);
 
 			// Compare high
-			context.AppendInstruction(IRInstruction.CompareIntBranch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
+			context.AppendInstruction(IRInstruction.CompareBranch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
 			context.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
 
 			// Branch if check already gave results
@@ -295,12 +295,12 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				newBlocks[0].AppendInstruction(IRInstruction.CompareIntBranch32, branch, null, op0High, op1High, newBlocks[2].Block);
+				newBlocks[0].AppendInstruction(IRInstruction.CompareBranch32, branch, null, op0High, op1High, newBlocks[2].Block);
 				newBlocks[0].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
 			}
 
 			// Compare low
-			newBlocks[1].AppendInstruction(IRInstruction.CompareIntBranch32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
+			newBlocks[1].AppendInstruction(IRInstruction.CompareBranch32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
 			newBlocks[1].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
 
 			// Success
@@ -313,12 +313,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Exit
 			//newBlocks[4].AppendInstruction(IRInstruction.MoveInt32, result, resultLow);
-			newBlocks[4].AppendInstruction(IRInstruction.Phi, result, CreateConstant((uint)1), CreateConstant((uint)0));
+			newBlocks[4].AppendInstruction(IRInstruction.Phi32, result, CreateConstant((uint)1), CreateConstant((uint)0));
 			newBlocks[4].PhiBlocks = new List<BasicBlock>(2) { newBlocks[2].Block, newBlocks[3].Block };
 			newBlocks[4].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 		}
 
-		private void CompareInteger64x32NonSSA(Context context)
+		private void Compareeger64x32NonSSA(Context context)
 		{
 			Debug.Assert(context.Operand1.Is64BitInteger);
 			Debug.Assert(context.Operand2.Is64BitInteger);
@@ -348,7 +348,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AppendGetHigh64(context, op1High, operand2);
 
 			// Compare high
-			context.AppendInstruction(IRInstruction.CompareIntBranch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
+			context.AppendInstruction(IRInstruction.CompareBranch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
 			context.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
 
 			// Branch if check already gave results
@@ -358,24 +358,24 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				newBlocks[0].AppendInstruction(IRInstruction.CompareIntBranch32, branch, null, op0High, op1High, newBlocks[2].Block);
+				newBlocks[0].AppendInstruction(IRInstruction.CompareBranch32, branch, null, op0High, op1High, newBlocks[2].Block);
 				newBlocks[0].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
 			}
 
 			// Compare low
-			newBlocks[1].AppendInstruction(IRInstruction.CompareIntBranch32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
+			newBlocks[1].AppendInstruction(IRInstruction.CompareBranch32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
 			newBlocks[1].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
 
 			// Success
-			newBlocks[2].AppendInstruction(IRInstruction.MoveInt32, resultLow, CreateConstant((uint)1));
+			newBlocks[2].AppendInstruction(IRInstruction.Move32, resultLow, CreateConstant((uint)1));
 			newBlocks[2].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
 
 			// Failed
-			newBlocks[3].AppendInstruction(IRInstruction.MoveInt32, resultLow, CreateConstant((uint)0));
+			newBlocks[3].AppendInstruction(IRInstruction.Move32, resultLow, CreateConstant((uint)0));
 			newBlocks[3].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
 
 			// Exit
-			newBlocks[4].AppendInstruction(IRInstruction.MoveInt32, result, resultLow);
+			newBlocks[4].AppendInstruction(IRInstruction.Move32, result, resultLow);
 			newBlocks[4].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 		}
 
@@ -395,9 +395,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			SetGetLow64(context, addressLow, address);
 			AppendGetLow64(context, offsetLow, offset);
-			context.AppendInstruction(IRInstruction.LoadInt32, resultLow, addressLow, offset);
+			context.AppendInstruction(IRInstruction.Load32, resultLow, addressLow, offset);
 			context.AppendInstruction(IRInstruction.Add32, offset4, offsetLow, Constant4);
-			context.AppendInstruction(IRInstruction.LoadInt32, resultHigh, addressLow, offset4);
+			context.AppendInstruction(IRInstruction.Load32, resultHigh, addressLow, offset4);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
@@ -415,8 +415,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			MethodCompiler.SplitLongOperand(operand1, out Operand op1Low, out Operand op1High);
 
-			context.SetInstruction(IRInstruction.LoadParamInt32, resultLow, op1Low);
-			context.AppendInstruction(IRInstruction.LoadParamInt32, resultHigh, op1High);
+			context.SetInstruction(IRInstruction.LoadParam32, resultLow, op1Low);
+			context.AppendInstruction(IRInstruction.LoadParam32, resultHigh, op1High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
@@ -453,7 +453,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.SetInstruction(IRInstruction.LoadParamInt32, resultLow, op0Low);
+			context.SetInstruction(IRInstruction.LoadParam32, resultLow, op0Low);
 			context.AppendInstruction(IRInstruction.ArithShiftRight32, resultHigh, resultLow, CreateConstant((byte)31));
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
@@ -507,7 +507,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.SetInstruction(IRInstruction.LoadParamInt32, resultLow, op0Low);
+			context.SetInstruction(IRInstruction.LoadParam32, resultLow, op0Low);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, ConstantZero);
 		}
 
@@ -528,7 +528,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, ConstantZero);
 		}
 
-		private void LogicalAnd64(Context context)
+		private void And64(Context context)
 		{
 			Debug.Assert(context.Result.Is64BitInteger);
 
@@ -547,12 +547,12 @@ namespace Mosa.Compiler.Framework.Stages
 			AppendGetHigh64(context, op0High, operand1);
 			AppendGetLow64(context, op1Low, operand2);
 			AppendGetHigh64(context, op1High, operand2);
-			context.AppendInstruction(IRInstruction.LogicalAnd32, resultLow, op0Low, op1Low);
-			context.AppendInstruction(IRInstruction.LogicalAnd32, resultHigh, op0High, op1High);
+			context.AppendInstruction(IRInstruction.And32, resultLow, op0Low, op1Low);
+			context.AppendInstruction(IRInstruction.And32, resultHigh, op0High, op1High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void LogicalNot64(Context context)
+		private void Not64(Context context)
 		{
 			Debug.Assert(context.Result.Is64BitInteger);
 
@@ -566,36 +566,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			SetGetLow64(context, op0Low, operand1);
 			AppendGetHigh64(context, op0High, operand1);
-			context.AppendInstruction(IRInstruction.LogicalNot32, resultLow, op0Low);
-			context.AppendInstruction(IRInstruction.LogicalNot32, resultHigh, op0High);
+			context.AppendInstruction(IRInstruction.Not32, resultLow, op0Low);
+			context.AppendInstruction(IRInstruction.Not32, resultHigh, op0High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void LogicalOr64(Context context)
-		{
-			Debug.Assert(context.Result.Is64BitInteger);
-
-			var result = context.Result;
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
-
-			var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var op1Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var op1High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-			SetGetLow64(context, op0Low, operand1);
-			AppendGetHigh64(context, op0High, operand1);
-			AppendGetLow64(context, op1Low, operand2);
-			AppendGetHigh64(context, op1High, operand2);
-			context.AppendInstruction(IRInstruction.LogicalOr32, resultLow, op0Low, op1Low);
-			context.AppendInstruction(IRInstruction.LogicalOr32, resultHigh, op0High, op1High);
-			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
-		}
-
-		private void LogicalXor64(Context context)
+		private void Or64(Context context)
 		{
 			Debug.Assert(context.Result.Is64BitInteger);
 
@@ -614,8 +590,32 @@ namespace Mosa.Compiler.Framework.Stages
 			AppendGetHigh64(context, op0High, operand1);
 			AppendGetLow64(context, op1Low, operand2);
 			AppendGetHigh64(context, op1High, operand2);
-			context.AppendInstruction(IRInstruction.LogicalXor32, resultLow, op0Low, op1Low);
-			context.AppendInstruction(IRInstruction.LogicalXor32, resultHigh, op0High, op1High);
+			context.AppendInstruction(IRInstruction.Or32, resultLow, op0Low, op1Low);
+			context.AppendInstruction(IRInstruction.Or32, resultHigh, op0High, op1High);
+			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
+		}
+
+		private void Xor64(Context context)
+		{
+			Debug.Assert(context.Result.Is64BitInteger);
+
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var op0Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var op0High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var op1Low = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var op1High = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			SetGetLow64(context, op0Low, operand1);
+			AppendGetHigh64(context, op0High, operand1);
+			AppendGetLow64(context, op1Low, operand2);
+			AppendGetHigh64(context, op1High, operand2);
+			context.AppendInstruction(IRInstruction.Xor32, resultLow, op0Low, op1Low);
+			context.AppendInstruction(IRInstruction.Xor32, resultHigh, op0High, op1High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
@@ -628,7 +628,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.SetInstruction(IRInstruction.MoveInt32, v1, operand1);
+			context.SetInstruction(IRInstruction.Move32, v1, operand1);
 			context.AppendInstruction(IRInstruction.SignExtend16x32, resultLow, v1);
 			context.AppendInstruction(IRInstruction.ArithShiftRight32, resultHigh, resultLow, CreateConstant((byte)31));
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
@@ -642,7 +642,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.SetInstruction(IRInstruction.MoveInt32, resultLow, operand1);
+			context.SetInstruction(IRInstruction.Move32, resultLow, operand1);
 			context.AppendInstruction(IRInstruction.ArithShiftRight32, resultHigh, resultLow, CreateConstant((byte)31));
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
@@ -656,7 +656,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			context.SetInstruction(IRInstruction.MoveInt32, v1, operand1);
+			context.SetInstruction(IRInstruction.Move32, v1, operand1);
 			context.AppendInstruction(IRInstruction.SignExtend8x32, resultLow, v1);
 			context.AppendInstruction(IRInstruction.ArithShiftRight32, resultHigh, resultLow, CreateConstant((byte)31));
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
@@ -678,9 +678,9 @@ namespace Mosa.Compiler.Framework.Stages
 			AppendGetHigh64(context, valueHigh, value);
 			AppendGetLow64(context, addressLow, address);
 			AppendGetLow64(context, offsetLow, offset);
-			context.AppendInstruction(IRInstruction.StoreInt32, null, addressLow, offset, valueLow);
+			context.AppendInstruction(IRInstruction.Store32, null, addressLow, offset, valueLow);
 			context.AppendInstruction(IRInstruction.Add32, offset4, offsetLow, Constant4);
-			context.AppendInstruction(IRInstruction.StoreInt32, null, addressLow, offset4, valueHigh);
+			context.AppendInstruction(IRInstruction.Store32, null, addressLow, offset4, valueHigh);
 		}
 
 		private void Sub64(Context context)
@@ -710,7 +710,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void Truncation64x32(Context context)
+		private void Truncate64x32(Context context)
 		{
 			Debug.Assert(context.Operand1.Is64BitInteger);
 			Debug.Assert(!context.Result.Is64BitInteger);

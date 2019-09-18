@@ -22,10 +22,10 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.RemUnsigned64, RemUnsigned64); // umod64
 			AddVisitation(IRInstruction.RemUnsigned32, RemUnsigned32); // umod32
 
-			AddVisitation(IRInstruction.ConvertFloatR4ToFloatR8, ConvertFloatR4ToFloatR8);
-			AddVisitation(IRInstruction.ConvertFloatR8ToFloatR4, ConvertFloatR8ToFloatR4);
-			AddVisitation(IRInstruction.BitCopyFloatR4ToInt32, BitCopyFloatR4ToInt32);
-			AddVisitation(IRInstruction.BitCopyInt32ToFloatR4, BitCopyInt32ToFloatR4);
+			AddVisitation(IRInstruction.ConvertR4ToR8, ConvertFloatR4ToFloatR8);
+			AddVisitation(IRInstruction.ConvertR8ToR4, ConvertFloatR8ToFloatR4);
+			AddVisitation(IRInstruction.BitCopyR4To32, BitCopyFloatR4ToInt32);
+			AddVisitation(IRInstruction.BitCopy32ToR4, BitCopyInt32ToFloatR4);
 		}
 
 		#region Visitation Methods

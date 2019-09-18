@@ -159,7 +159,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.BranchTargetsCount == 0)
 						continue;
 
-					if (node.Instruction == IRInstruction.CompareIntBranch32 || node.Instruction == IRInstruction.CompareIntBranch64)
+					if (node.Instruction == IRInstruction.CompareBranch32 || node.Instruction == IRInstruction.CompareBranch64)
 					{
 						trace?.Log("*** RemoveBranchesToDeadBlocks");
 						trace?.Log($"REMOVED:\t{node}");
@@ -213,7 +213,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (IsSimpleIRMoveInstruction(node.Instruction))
 						continue; // sometimes PHI are converted to moves
 
-					if (node.Instruction != IRInstruction.Phi)
+					if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
 						break;
 
 					var sourceBlocks = node.PhiBlocks;

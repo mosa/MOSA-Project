@@ -88,10 +88,10 @@ namespace Mosa.Compiler.Framework.Stages
 							|| node.Instruction == IRInstruction.SetReturnR4
 							|| node.Instruction == IRInstruction.SetReturnR8
 							|| node.Instruction == IRInstruction.LoadParamCompound
-							|| node.Instruction == IRInstruction.LoadParamInt32
-							|| node.Instruction == IRInstruction.LoadParamInt64
-							|| node.Instruction == IRInstruction.LoadParamFloatR4
-							|| node.Instruction == IRInstruction.LoadParamFloatR4
+							|| node.Instruction == IRInstruction.LoadParam32
+							|| node.Instruction == IRInstruction.LoadParam64
+							|| node.Instruction == IRInstruction.LoadParamR4
+							|| node.Instruction == IRInstruction.LoadParamR4
 							|| node.Instruction == IRInstruction.LoadParamSignExtend16x32
 							|| node.Instruction == IRInstruction.LoadParamSignExtend16x64
 							|| node.Instruction == IRInstruction.LoadParamSignExtend32x64
@@ -139,6 +139,7 @@ namespace Mosa.Compiler.Framework.Stages
 			trace?.Log($"IRInstructionCount: {MethodData.IRInstructionCount}");
 			trace?.Log($"IRStackParameterInstructionCount: {MethodData.IRStackParameterInstructionCount}");
 			trace?.Log($"InlinedIRMaximum: {CompilerOptions.InlinedIRMaximum}");
+			trace?.Log($"InlineOnlyExplicit: {CompilerOptions.InlineOnlyExplicit}");
 			trace?.Log($"NonIRInstructionCount: {MethodData.NonIRInstructionCount}");
 			trace?.Log($"HasAddressOfInstruction: {MethodData.HasAddressOfInstruction}");
 			trace?.Log($"HasLoops: {MethodData.HasLoops}");
@@ -181,6 +182,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool StaticCanNotInline(MethodData methodData)
 		{
+			if (CompilerOptions.InlineOnlyExplicit && !methodData.HasAggressiveInliningAttribute)
+				return true;
+
 			if (methodData.HasDoNotInlineAttribute)
 				return true;
 
@@ -225,7 +229,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (StaticCanNotInline(methodData))
 				return false;
 
-			// current implementation limitation - can't include methods with addressOf instruction
+			// current implementation limitation - can't include methods with AddressOf instruction
 			if (methodData.HasAddressOfInstruction)
 				return false;
 

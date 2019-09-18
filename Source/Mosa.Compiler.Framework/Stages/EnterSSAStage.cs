@@ -6,6 +6,7 @@ using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Trace;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Text;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -15,21 +16,15 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
 	public sealed class EnterSSAStage : BaseMethodCompilerStage
 	{
-		private Dictionary<Operand, Stack<int>> variables;
-		private Dictionary<Operand, int> counts;
+		private Dictionary<Operand, Stack<int>> stack;
+		private Dictionary<Operand, int> counters;
 		private Dictionary<Operand, Operand[]> ssaOperands;
 		private Dictionary<BasicBlock, SimpleFastDominance> blockAnalysis;
 		private Dictionary<Operand, List<BasicBlock>> assignments;
 		private Dictionary<Operand, Operand> parentOperand;
-
-		private Counter InstructionCount = new Counter("EnterSSAStage.IRInstructions");
+		private List<Context> phiInstructions;
 
 		private TraceLog trace;
-
-		protected override void Initialize()
-		{
-			Register(InstructionCount);
-		}
 
 		protected override void Setup()
 		{
@@ -37,6 +32,7 @@ namespace Mosa.Compiler.Framework.Stages
 			blockAnalysis = new Dictionary<BasicBlock, SimpleFastDominance>();
 			assignments = new Dictionary<Operand, List<BasicBlock>>();
 			parentOperand = new Dictionary<Operand, Operand>();
+			phiInstructions = new List<Context>();
 		}
 
 		protected override void Run()
@@ -45,10 +41,13 @@ namespace Mosa.Compiler.Framework.Stages
 			if (BasicBlocks.HeadBlocks.Count == 0)
 				return;
 
+			if (!HasCode)
+				return;
+
 			if (HasProtectedRegions)
 				return;
 
-			trace = CreateTraceLog(8);
+			trace = CreateTraceLog(5);
 
 			foreach (var headBlock in BasicBlocks.HeadBlocks)
 			{
@@ -56,19 +55,22 @@ namespace Mosa.Compiler.Framework.Stages
 				blockAnalysis.Add(headBlock, analysis);
 			}
 
-			CollectAssignments();
+			CollectAssignments2();
 
 			PlacePhiFunctionsMinimal();
 
 			EnterSSA();
+
+			RemoveUselessPhiInstructions();
 		}
 
 		protected override void Finish()
 		{
 			// Clean up
+			phiInstructions.Clear();
 			trace = null;
-			variables = null;
-			counts = null;
+			stack = null;
+			counters = null;
 			ssaOperands = null;
 			assignments = null;
 			blockAnalysis = null;
@@ -83,16 +85,10 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		/// <summary>
-		/// Enters the SSA.
-		/// </summary>
-		/// <param name="headBlock">The head block.</param>
 		private void EnterSSA(BasicBlock headBlock)
 		{
-			var analysis = blockAnalysis[headBlock];
-
-			variables = new Dictionary<Operand, Stack<int>>();
-			counts = new Dictionary<Operand, int>();
+			stack = new Dictionary<Operand, Stack<int>>();
+			counters = new Dictionary<Operand, int>();
 
 			foreach (var op in assignments.Keys)
 			{
@@ -101,21 +97,17 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (headBlock.NextBlocks.Count > 0)
 			{
-				RenameVariables(headBlock.NextBlocks[0], analysis);
+				RenameVariables(headBlock.NextBlocks[0], blockAnalysis[headBlock]);
 			}
 		}
 
-		/// <summary>
-		/// Adds to assignments.
-		/// </summary>
-		/// <param name="operand">The operand.</param>
 		private void AddToAssignments(Operand operand)
 		{
-			if (!variables.ContainsKey(operand))
+			if (!stack.ContainsKey(operand))
 			{
-				variables[operand] = new Stack<int>();
-				counts.Add(operand, 0);
-				variables[operand].Push(0);
+				stack[operand] = new Stack<int>();
+				counters.Add(operand, 0);
+				stack[operand].Push(0);
 
 				if (!ssaOperands.ContainsKey(operand))
 				{
@@ -124,12 +116,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		/// <summary>
-		/// Gets the SSA operand.
-		/// </summary>
-		/// <param name="operand">The operand.</param>
-		/// <param name="version">The version.</param>
-		/// <returns></returns>
 		private Operand GetSSAOperand(Operand operand, int version)
 		{
 			var ssaArray = ssaOperands[operand];
@@ -137,7 +123,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (ssaOperand == null)
 			{
-				ssaOperand = version == 0 ? operand : AllocateVirtualRegister(operand.Type);
+				ssaOperand = AllocateVirtualRegister(operand.Type);
 				ssaArray[version] = ssaOperand;
 
 				parentOperand.Add(ssaOperand, operand);
@@ -146,36 +132,6 @@ namespace Mosa.Compiler.Framework.Stages
 			return ssaOperand;
 		}
 
-		/// <summary>
-		/// Renames the variables.
-		/// </summary>
-		/// <param name="block">The block.</param>
-		/// <param name="dominanceAnalysis">The dominance analysis.</param>
-		private void RenameVariables2(BasicBlock block, SimpleFastDominance dominanceAnalysis)
-		{
-			trace?.Log($"Processing: {block}");
-
-			UpdateOperands(block);
-			UpdatePHIs(block);
-
-			// Repeat for all children of the dominance block, if any
-			var children = dominanceAnalysis.GetChildren(block);
-			if (children != null && children.Count != 0)
-			{
-				foreach (var s in children)
-				{
-					RenameVariables2(s, dominanceAnalysis);
-				}
-			}
-
-			UpdateResultOperands(block);
-		}
-
-		/// <summary>
-		/// Renames the variables.
-		/// </summary>
-		/// <param name="headBlock">The head block.</param>
-		/// <param name="dominanceAnalysis">The dominance analysis.</param>
 		private void RenameVariables(BasicBlock headBlock, SimpleFastDominance dominanceAnalysis)
 		{
 			var worklist = new Stack<BasicBlock>();
@@ -222,24 +178,24 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void UpdateOperands(BasicBlock block)
 		{
-			// Update Operands in current block
 			for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
 			{
 				if (node.IsEmptyOrNop)
 					continue;
 
-				if (node.Instruction != IRInstruction.Phi)
+				if (!(node.Instruction == IRInstruction.Phi32
+					|| node.Instruction == IRInstruction.Phi64
+					|| node.Instruction == IRInstruction.PhiR4
+					|| node.Instruction == IRInstruction.PhiR8))
 				{
 					for (var i = 0; i < node.OperandCount; ++i)
 					{
 						var op = node.GetOperand(i);
 
-						if (op == null || !op.IsVirtualRegister)
+						if (!op.IsVirtualRegister)
 							continue;
 
-						Debug.Assert(variables.ContainsKey(op), $"{op} is not in dictionary [block = {block}]");
-
-						var version = variables[op].Peek();
+						var version = stack[op].Peek();
 						node.SetOperand(i, GetSSAOperand(op, version));
 					}
 				}
@@ -247,25 +203,19 @@ namespace Mosa.Compiler.Framework.Stages
 				if (node.Result?.IsVirtualRegister == true)
 				{
 					var op = node.Result;
-
-					Debug.Assert(counts.ContainsKey(op), $"{op} is not in counts");
-
-					var index = counts[op];
+					var index = counters[op];
 					node.Result = GetSSAOperand(op, index);
-					variables[op].Push(index);
-					counts[op] = index + 1;
+					stack[op].Push(index);
+					counters[op] = index + 1;
 				}
 
 				if (node.Result2?.IsVirtualRegister == true)
 				{
 					var op = node.Result2;
-
-					Debug.Assert(counts.ContainsKey(op), $"{op} is not in counts");
-
-					var index = counts[op];
+					var index = counters[op];
 					node.Result2 = GetSSAOperand(op, index);
-					variables[op].Push(index);
-					counts[op] = index + 1;
+					stack[op].Push(index);
+					counters[op] = index + 1;
 				}
 			}
 		}
@@ -282,16 +232,14 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmptyOrNop)
 						continue;
 
-					if (node.Instruction != IRInstruction.Phi)
+					if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
 						break;
-
-					Debug.Assert(node.OperandCount == node.Block.PreviousBlocks.Count);
 
 					var op = node.GetOperand(index);
 
-					if (variables[op].Count > 0)
+					if (stack[op].Count > 0)
 					{
-						var version = variables[op].Peek();
+						var version = stack[op].Peek();
 						var ssaOperand = GetSSAOperand(node.GetOperand(index), version);
 						node.SetOperand(index, ssaOperand);
 					}
@@ -307,28 +255,20 @@ namespace Mosa.Compiler.Framework.Stages
 				if (node.IsEmptyOrNop || node.ResultCount == 0)
 					continue;
 
-				if (node.Result?.IsVirtualRegister == true)
+				if (node.Result.IsVirtualRegister == true)
 				{
-					//var op = node.Result.SSAParent;
 					var op = parentOperand[node.Result];
-					var index = variables[op].Pop();
+					stack[op].Pop();
 				}
 
 				if (node.Result2?.IsVirtualRegister == true)
 				{
-					//var op = node.Result2.SSAParent;
 					var op = parentOperand[node.Result2];
-					var index = variables[op].Pop();
+					stack[op].Pop();
 				}
 			}
 		}
 
-		/// <summary>
-		/// Which the predecessor.
-		/// </summary>
-		/// <param name="y">The y.</param>
-		/// <param name="x">The x.</param>
-		/// <returns></returns>
 		private int WhichPredecessor(BasicBlock y, BasicBlock x)
 		{
 			for (var i = 0; i < y.PreviousBlocks.Count; ++i)
@@ -342,21 +282,19 @@ namespace Mosa.Compiler.Framework.Stages
 			return -1;
 		}
 
-		/// <summary>
-		/// Collects the assignments.
-		/// </summary>
 		private void CollectAssignments()
 		{
 			foreach (var block in BasicBlocks)
 			{
 				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty)
+					if (node.IsEmptyOrNop || node.ResultCount == 0)
 						continue;
 
-					InstructionCount++;
+					if (node.Result.Definitions.Count <= 0)
+						continue;
 
-					if (node.Result?.IsVirtualRegister == true)
+					if (node.Result.IsVirtualRegister == true)
 					{
 						AddToAssignments(node.Result, block);
 					}
@@ -369,11 +307,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		/// <summary>
-		/// Adds to assignments.
-		/// </summary>
-		/// <param name="operand">The operand.</param>
-		/// <param name="block">The block.</param>
 		private void AddToAssignments(Operand operand, BasicBlock block)
 		{
 			if (!assignments.TryGetValue(operand, out List<BasicBlock> blocks))
@@ -385,15 +318,37 @@ namespace Mosa.Compiler.Framework.Stages
 			blocks.AddIfNew(block);
 		}
 
-		/// <summary>
-		/// Inserts the phi instruction.
-		/// </summary>
-		/// <param name="block">The block.</param>
-		/// <param name="variable">The variable.</param>
-		private void InsertPhiInstruction(BasicBlock block, Operand variable)
+		private void CollectAssignments2()
 		{
+			foreach (var operand in MethodCompiler.VirtualRegisters)
+			{
+				//if (operand.Definitions.Count <= 1)
+				//continue;
+
+				var blocks = new List<BasicBlock>(operand.Definitions.Count);
+				assignments.Add(operand, blocks);
+
+				foreach (var def in operand.Definitions)
+				{
+					blocks.AddIfNew(def.Block);
+				}
+			}
+		}
+
+		private Context InsertPhiInstruction(BasicBlock block, Operand variable)
+		{
+			//trace?.Log($"     Phi: {variable} into {block}");
+
 			var context = new Context(block);
-			context.AppendInstruction(IRInstruction.Phi, variable);
+
+			if (variable.IsR4)
+				context.AppendInstruction(IRInstruction.PhiR4, variable);
+			else if (variable.IsR8)
+				context.AppendInstruction(IRInstruction.PhiR8, variable);
+			else if (variable.Is64BitInteger)
+				context.AppendInstruction(IRInstruction.Phi64, variable);
+			else
+				context.AppendInstruction(IRInstruction.Phi32, variable);
 
 			var sourceBlocks = new List<BasicBlock>(block.PreviousBlocks.Count);
 			context.PhiBlocks = sourceBlocks;
@@ -406,12 +361,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.OperandCount = block.PreviousBlocks.Count;
 
-			//Debug.Assert(context.OperandCount == context.Block.PreviousBlocks.Count);
+			phiInstructions.Add(context);
+
+			return context;
 		}
 
-		/// <summary>
-		/// Places the phi functions minimal.
-		/// </summary>
 		private void PlacePhiFunctionsMinimal()
 		{
 			foreach (var headBlock in BasicBlocks.HeadBlocks)
@@ -420,28 +374,88 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		/// <summary>
-		/// Places the phi functions minimal.
-		/// </summary>
-		/// <param name="headBlock">The head block.</param>
 		private void PlacePhiFunctionsMinimal(BasicBlock headBlock)
 		{
 			var analysis = blockAnalysis[headBlock];
 
 			foreach (var t in assignments)
 			{
+				var operand = t.Key;
 				var blocks = t.Value;
+
+				//trace?.Log($"Operand {operand}");
 
 				if (blocks.Count < 2)
 					continue;
 
-				blocks.AddIfNew(headBlock);
-
-				foreach (var n in analysis.IteratedDominanceFrontier(blocks))
+				foreach (var block in analysis.IteratedDominanceFrontier(blocks))
 				{
-					InsertPhiInstruction(n, t.Key);
+					InsertPhiInstruction(block, operand);
+				}
+
+				//trace?.Log($"Operand {operand} defined in {ToString(blocks)}");
+				//trace?.Log("");
+
+				//var workList = new Stack<BasicBlock>(blocks);
+				//var everOnWorkList = new HashSet<BasicBlock>(blocks);
+				//var alreadyHasPhiFunction = new HashSet<BasicBlock>();
+
+				//while (workList.Count != 0)
+				//{
+				//	var node = workList.Pop();
+
+				//	var df = analysis.GetDominanceFrontier(node);
+
+				//	if (df != null)
+				//	{
+				//		//trace?.Log($" DF ( {node} ) -> {ToString(df)}");
+
+				//		foreach (var d in df)
+				//		{
+				//			if (!alreadyHasPhiFunction.Contains(d))
+				//			{
+				//				InsertPhiInstruction(d, operand);
+				//				alreadyHasPhiFunction.Add(d);
+
+				//				if (!everOnWorkList.Contains(d))
+				//				{
+				//					workList.Push(d);
+				//					everOnWorkList.Add(d);
+				//				}
+				//			}
+				//		}
+				//	}
+				//}
+
+				//trace?.Log("");
+			}
+		}
+
+		private void RemoveUselessPhiInstructions()
+		{
+			foreach (var context in phiInstructions)
+			{
+				if (context.Result == context.Operand1)
+				{
+					context.Empty();
 				}
 			}
+		}
+
+		private static string ToString(List<BasicBlock> blocks)
+		{
+			var sb = new StringBuilder();
+
+			foreach (var block in blocks)
+			{
+				sb.Append(block);
+				sb.Append(" ");
+			}
+
+			if (blocks.Count != 0)
+				sb.Length -= 1;
+
+			return sb.ToString();
 		}
 	}
 }

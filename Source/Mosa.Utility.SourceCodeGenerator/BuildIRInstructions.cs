@@ -13,6 +13,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 		{
 			Lines.AppendLine("using Mosa.Compiler.Framework;");
 			Lines.AppendLine("using System.Collections.Generic;");
+			Lines.AppendLine("using Mosa.Compiler.Framework.IR;");
 			Lines.AppendLine();
 			Lines.AppendLine("namespace Mosa.Compiler.Framework.IR");
 			Lines.AppendLine("{");
