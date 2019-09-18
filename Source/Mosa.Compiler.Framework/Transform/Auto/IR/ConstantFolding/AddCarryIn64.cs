@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 {
 	/// <summary>
-	/// AddWithCarry64
+	/// AddCarryIn64
 	/// </summary>
-	public sealed class AddWithCarry64 : BaseTransformation
+	public sealed class AddCarryIn64 : BaseTransformation
 	{
-		public AddWithCarry64() : base(IRInstruction.AddWithCarry64)
+		public AddCarryIn64() : base(IRInstruction.AddCarryIn64)
 		{
 		}
 
