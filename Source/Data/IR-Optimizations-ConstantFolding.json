@@ -48,9 +48,9 @@
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
-			"Name": "AddWithCarry64",
+			"Name": "AddCarryIn64",
 			"SubName": "",
-			"Expression": "IR.AddWithCarry64 a b c",
+			"Expression": "IR.AddCarryIn64 a b c",
 			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b) & IsResolvedConstant(c)",
 			"Result": "(IR.Move64 [Add64(Add64(To32(a),To64(b)),BoolTo64(To64(c)))])"
 		},
@@ -399,9 +399,9 @@
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
-			"Name": "SubWithCarry64",
+			"Name": "SubCarryIn64",
 			"SubName": "",
-			"Expression": "IR.SubWithCarry64 a b c",
+			"Expression": "IR.SubCarryIn64 a b c",
 			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b) & IsResolvedConstant(c)",
 			"Result": "(IR.Move64 [Sub64(Sub64(To32(a),To64(b)),BoolTo64(To64(c)))])"
 		},

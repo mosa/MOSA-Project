@@ -227,7 +227,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// AddCarryOut32
 			// AddCarryOut64
 			// AddCarryIn32
-			// AddWithCarry64
+			// AddCarryIn64
 
 			// DivUnsigned32
 			// DivUnsigned64
@@ -255,7 +255,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// SubCarryOut32
 			// SubCarryOut64
 			// SubCarryIn32
-			// SubWithCarry64
+			// SubCarryIn64
 
 			IntegerLoads.Add(IRInstruction.LoadParamSignExtend16x32);
 			IntegerLoads.Add(IRInstruction.LoadParamSignExtend16x64);
