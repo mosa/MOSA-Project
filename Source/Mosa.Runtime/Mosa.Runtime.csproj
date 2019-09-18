@@ -68,6 +68,7 @@
     <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Pointer.cs" />
     <Compile Include="Math\Division.cs" />
     <Compile Include="Metadata\ExceptionHandlerType.cs" />
     <Compile Include="Extension\IntPtrExtension.cs" />
