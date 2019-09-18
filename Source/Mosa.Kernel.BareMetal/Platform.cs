@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal
 {
@@ -43,9 +43,9 @@ namespace Mosa.Kernel.BareMetal
 		public static void PageTableMapVirtualAddressToPhysical(uint virtualAddress, uint physicalAddress, bool present = true)
 		{ }
 
-		public static IntPtr PageTableGetPhysicalAddressFromVirtual(IntPtr virtualAddress)
+		public static Pointer PageTableGetPhysicalAddressFromVirtual(Pointer virtualAddress)
 		{
-			return IntPtr.Zero;
+			return Pointer.Zero;
 		}
 
 		public static void ConsoleWrite(byte c)

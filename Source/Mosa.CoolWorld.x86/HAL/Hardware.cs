@@ -2,8 +2,8 @@
 
 using Mosa.DeviceSystem;
 using Mosa.Kernel.x86;
+using Mosa.Runtime;
 using Mosa.Runtime.x86;
-using System;
 
 namespace Mosa.CoolWorld.x86.HAL
 {
@@ -23,7 +23,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		public override ConstrainedPointer GetPhysicalMemory(IntPtr address, uint size)
+		public override ConstrainedPointer GetPhysicalMemory(Pointer address, uint size)
 		{
 			var start = (uint)address.ToInt32();
 
@@ -87,7 +87,7 @@ namespace Mosa.CoolWorld.x86.HAL
 		/// </summary>
 		/// <param name="memory">The memory.</param>
 		/// <returns></returns>
-		public override IntPtr TranslateVirtualToPhysicalAddress(IntPtr virtualAddress)
+		public override Pointer TranslateVirtualToPhysicalAddress(Pointer virtualAddress)
 		{
 			return PageTable.GetPhysicalAddressFromVirtual(virtualAddress);
 		}

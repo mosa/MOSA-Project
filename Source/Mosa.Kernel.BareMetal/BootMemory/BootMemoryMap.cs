@@ -1,8 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.BareMetal.MultibootSpecification;
-using Mosa.Runtime.Extension;
-using System;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal.BootMemory
 {
@@ -26,7 +25,7 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 			if (!Multiboot.IsAvailable)
 				return;
 
-			if (Multiboot.MultibootV1.MemoryMapStart.IsNull())
+			if (Multiboot.MultibootV1.MemoryMapStart.IsNull)
 				return;
 
 			var memoryMapEnd = Multiboot.MultibootV1.MemoryMapStart + (int)Multiboot.MultibootV1.MemoryMapLength;
@@ -41,7 +40,7 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 			}
 		}
 
-		public static BootMemoryMapEntry SetMemoryMap(IntPtr address, ulong size, BootMemoryMapType type)
+		public static BootMemoryMapEntry SetMemoryMap(Pointer address, ulong size, BootMemoryMapType type)
 		{
 			var entry = Map.GetBootMemoryMapEntry(Map.Count);
 
@@ -64,9 +63,9 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 			return Map.GetBootMemoryMapEntry(index);
 		}
 
-		public static IntPtr GetMaximumAddress()
+		public static Pointer GetMaximumAddress()
 		{
-			var max = IntPtr.Zero;
+			var max = Pointer.Zero;
 			var count = Map.Count;
 
 			for (uint i = 0; i < count; i++)

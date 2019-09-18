@@ -27,8 +27,8 @@ namespace Mosa.Plug.Korlib.System
 			if (length < 0)
 				throw new ArgumentOutOfRangeException(nameof(length));
 
-			var sourceLength = GetLength(sourceArrayPtr, 0);
-			var destinationLength = GetLength(destinationArrayPtr, 0);
+			var sourceLength = GetLength(sourceArrayPtr.ToIntPtr(), 0);
+			var destinationLength = GetLength(destinationArrayPtr.ToIntPtr(), 0);
 
 			if (sourceLength - sourceIndex < length)
 				throw new ArgumentOutOfRangeException(nameof(length));
@@ -37,7 +37,7 @@ namespace Mosa.Plug.Korlib.System
 				throw new ArgumentOutOfRangeException(nameof(length));
 
 			// Get type info
-			var typeStruct = new TypeDefinition(sourceArrayPtr);
+			var typeStruct = new TypeDefinition(new Pointer(sourceArrayPtr.ToIntPtr()));
 			var typeCode = typeStruct.TypeCode;
 
 			var size = (typeCode == TypeCode.ReferenceType) ? IntPtr.Size : (int)typeStruct.Size;
@@ -52,7 +52,7 @@ namespace Mosa.Plug.Korlib.System
 		[Plug("System.Array::GetLength")]
 		internal static int GetLength(IntPtr array, int dimension)
 		{
-			return (int)Intrinsic.Load32(array, IntPtr.Size * 2);
+			return (int)Intrinsic.Load32(new Pointer(array), IntPtr.Size * 2);
 		}
 
 		[Plug("System.Array::GetLowerBound")]

@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
 using Mosa.Runtime.x86;
-using System;
 
 namespace Mosa.Kernel.x86
 {
@@ -121,7 +121,7 @@ namespace Mosa.Kernel.x86
 		{
 			while (true)
 			{
-				var entry = Internal.GetStackTraceEntry(depth, new IntPtr(EBP), new IntPtr(EIP));
+				var entry = Runtime.x86.Internal.GetStackTraceEntry(depth, new Pointer(EBP), new Pointer(EIP));
 
 				if (!entry.Valid)
 					return;

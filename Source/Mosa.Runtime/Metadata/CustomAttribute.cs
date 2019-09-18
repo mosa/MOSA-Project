@@ -8,30 +8,30 @@ namespace Mosa.Runtime.Metadata
 	{
 		#region layout
 
-		// IntPtr _attributeType;
-		// IntPtr _constructorMethod;
+		// Pointer _attributeType;
+		// Pointer _constructorMethod;
 		// int _numberOfArguments;
 
 		#endregion layout
 
-		public IntPtr Ptr;
+		public Pointer Ptr;
 
-		public CustomAttribute(IntPtr ptr)
+		public CustomAttribute(Pointer ptr)
 		{
 			Ptr = ptr;
 		}
 
-		public bool IsNull => Ptr == IntPtr.Zero;
+		public bool IsNull => Ptr.IsNull;
 
 		public TypeDefinition AttributeType => new TypeDefinition(Ptr);
 
-		public MethodDefinition ConstructorMethod => new MethodDefinition(Ptr + IntPtr.Size);
+		public MethodDefinition ConstructorMethod => new MethodDefinition(Ptr + Pointer.Size);
 
-		public uint NumberOfArguments => Intrinsic.Load32(Ptr, IntPtr.Size * 2);
+		public uint NumberOfArguments => Intrinsic.Load32(Ptr, Pointer.Size * 2);
 
 		public CustomAttributeArgument GetCustomAttributeArgument(uint slot)
 		{
-			return new CustomAttributeArgument(Intrinsic.LoadPointer(Ptr, (IntPtr.Size * 3) + (IntPtr.Size * (int)slot)));
+			return new CustomAttributeArgument(Intrinsic.LoadPointer(Ptr, (Pointer.Size * 3) + (Pointer.Size * (int)slot)));
 		}
 	}
 }

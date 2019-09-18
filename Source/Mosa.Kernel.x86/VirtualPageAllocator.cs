@@ -2,7 +2,6 @@
 
 using Mosa.Kernel.x86.Helpers;
 using Mosa.Runtime;
-using System;
 
 namespace Mosa.Kernel.x86
 {
@@ -25,7 +24,7 @@ namespace Mosa.Kernel.x86
 			pages = (PageFrameAllocator.TotalPages - Address.ReserveMemory) / PageFrameAllocator.PageSize;
 
 			// Bits: 0 = Available, 1 = Not Available
-			Internal.MemoryClear(new IntPtr(Address.VirtualPageAllocator), pages / 8);
+			Internal.MemoryClear(new Pointer(Address.VirtualPageAllocator), pages / 8);
 			initialized = true;
 		}
 
@@ -46,7 +45,7 @@ namespace Mosa.Kernel.x86
 		/// <param name="free">if set to <c>true</c> [free].</param>
 		private static void SetPageStatus(uint page, bool free)
 		{
-			var at = new IntPtr(Address.VirtualPageAllocator + (page / 32));
+			var at = new Pointer(Address.VirtualPageAllocator + (page / 32));
 			byte bit = (byte)(page % 32);
 			uint mask = (byte)(1 << bit);
 
@@ -67,7 +66,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		private static bool GetPageStatus(uint page)  // true = available
 		{
-			var at = new IntPtr(Address.VirtualPageAllocator + (page / 8));
+			var at = new Pointer(Address.VirtualPageAllocator + (page / 8));
 			byte bit = (byte)(page % 8);
 			byte mask = (byte)(1 << bit);
 

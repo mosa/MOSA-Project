@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
+using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem.PCI
 {
@@ -12,7 +12,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// <summary>
 		///
 		/// </summary>
-		protected IntPtr address;
+		protected Pointer address;
 
 		/// <summary>
 		///
@@ -33,7 +33,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// Gets the address.
 		/// </summary>
 		/// <value>The address.</value>
-		public IntPtr Address { get { return address; } }
+		public Pointer Address { get { return address; } }
 
 		/// <summary>
 		/// Gets the size.
@@ -60,7 +60,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <param name="prefetchable">if set to <c>true</c> [prefetchable].</param>
-		public BaseAddress(AddressType region, IntPtr address, uint size, bool prefetchable)
+		public BaseAddress(AddressType region, Pointer address, uint size, bool prefetchable)
 		{
 			this.region = region;
 			this.address = address;

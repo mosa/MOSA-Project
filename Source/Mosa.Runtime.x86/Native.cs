@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -128,7 +127,7 @@ namespace Mosa.Runtime.x86
 		public extern static void Set32(uint address, uint value);
 
 		[DllImport("Mosa.Platform.x86.Intrinsic:GetEBP")]
-		public extern static IntPtr GetEBP();
+		public extern static Pointer GetEBP();
 
 		[DllImport("Mosa.Platform.x86.Intrinsic:GetFS")]
 		public extern static uint GetFS();
@@ -176,7 +175,7 @@ namespace Mosa.Runtime.x86
 		public extern static uint GetMultibootEBX();
 
 		[DllImport("Mosa.Platform.x86.Intrinsic:FrameJump")]
-		public extern static void FrameJump(IntPtr eip, IntPtr esp, IntPtr ebp, int exceptionRegister);
+		public extern static void FrameJump(Pointer eip, Pointer esp, Pointer ebp, int exceptionRegister);
 
 		[DllImport("Mosa.Platform.x86.Intrinsic:FrameCall")]
 		public extern static void FrameCall(uint eip);

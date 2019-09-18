@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
 using Mosa.Runtime.Metadata;
 using System;
 using System.Collections.Generic;
@@ -109,7 +110,7 @@ namespace Mosa.Plug.Korlib.Runtime
 
 			var handle = type.TypeHandle;
 
-			typeDefinition = new TypeDefinition(handle.Value);
+			typeDefinition = new TypeDefinition(new Pointer(handle.Value));
 
 			AssemblyQualifiedName = typeDefinition.Name;   // TODO
 			Name = typeDefinition.Name;                    // TODO
@@ -122,7 +123,7 @@ namespace Mosa.Plug.Korlib.Runtime
 			// Base Type
 			if (!typeDefinition.ParentType.IsNull)
 			{
-				var parentHandle = new RuntimeTypeHandle(typeDefinition.ParentType.Ptr);
+				var parentHandle = new RuntimeTypeHandle(typeDefinition.ParentType.Ptr.ToIntPtr());
 
 				baseType = Type.GetTypeFromHandle(parentHandle);
 			}
@@ -130,7 +131,7 @@ namespace Mosa.Plug.Korlib.Runtime
 			// Declaring Type
 			if (!typeDefinition.DeclaringType.IsNull)
 			{
-				var declaringHandle = new RuntimeTypeHandle(typeDefinition.DeclaringType.Ptr);
+				var declaringHandle = new RuntimeTypeHandle(typeDefinition.DeclaringType.Ptr.ToIntPtr());
 
 				DeclaringType = Type.GetTypeFromHandle(declaringHandle);
 			}
@@ -138,7 +139,7 @@ namespace Mosa.Plug.Korlib.Runtime
 			// Element Type
 			if (!typeDefinition.ElementType.IsNull)
 			{
-				var elementHandle = new RuntimeTypeHandle(typeDefinition.ElementType.Ptr);
+				var elementHandle = new RuntimeTypeHandle(typeDefinition.ElementType.Ptr.ToIntPtr());
 
 				elementType = Type.GetTypeFromHandle(elementHandle);
 			}

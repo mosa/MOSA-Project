@@ -2,7 +2,6 @@
 
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
-using System;
 
 namespace Mosa.Kernel.x86
 {
@@ -19,13 +18,13 @@ namespace Mosa.Kernel.x86
 			// Setup Page Directory
 			for (int index = 0; index < 1024; index++)
 			{
-				Intrinsic.Store32(new IntPtr(Address.PageDirectory), index << 2, (uint)(Address.PageTable + (index * 4096) | 0x04 | 0x02 | 0x01));
+				Intrinsic.Store32(new Pointer(Address.PageDirectory), index << 2, (uint)(Address.PageTable + (index * 4096) | 0x04 | 0x02 | 0x01));
 			}
 
 			// Map the first 128MB of memory (32786 4K pages) (why 128MB?)
 			for (int index = 0; index < 1024 * 32; index++)
 			{
-				Intrinsic.Store32(new IntPtr(Address.PageTable), index << 2, (uint)(index * 4096) | 0x04 | 0x02 | 0x01);
+				Intrinsic.Store32(new Pointer(Address.PageTable), index << 2, (uint)(index * 4096) | 0x04 | 0x02 | 0x01);
 			}
 
 			// Unmap the first page for null pointer exceptions
@@ -48,7 +47,7 @@ namespace Mosa.Kernel.x86
 			//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
 
 			//Native.Set32(Address.PageTable + ((virtualAddress & 0xFFC00000u) >> 10), physicalAddress & 0xFFC00000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
-			Intrinsic.Store32(new IntPtr(Address.PageTable), (virtualAddress & 0xFFFFF000u) >> 10, physicalAddress & 0xFFFFF000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
+			Intrinsic.Store32(new Pointer(Address.PageTable), (virtualAddress & 0xFFFFF000u) >> 10, physicalAddress & 0xFFFFF000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
 		}
 
 		/// <summary>
@@ -56,12 +55,12 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		/// <param name="virtualAddress">The virtual address.</param>
 		/// <returns></returns>
-		public static IntPtr GetPhysicalAddressFromVirtual(IntPtr virtualAddress)
+		public static Pointer GetPhysicalAddressFromVirtual(Pointer virtualAddress)
 		{
 			//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
 			var offset = (((uint)virtualAddress.ToInt32() & 0xFFFFF000u) >> 10) + ((uint)virtualAddress.ToInt32() & 0xFFFu);
 
-			return Intrinsic.LoadPointer(new IntPtr(Address.PageTable), offset);
+			return Intrinsic.LoadPointer(new Pointer(Address.PageTable), offset);
 		}
 	}
 }

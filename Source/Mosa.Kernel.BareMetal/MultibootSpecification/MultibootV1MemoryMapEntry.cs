@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Kernel.BareMetal.Extension;
-using Mosa.Runtime.Extension;
-using System;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal.MultibootSpecification
 {
@@ -11,7 +9,7 @@ namespace Mosa.Kernel.BareMetal.MultibootSpecification
 	/// </summary>
 	public /*readonly*/ struct MultibootV1MemoryMapEntry
 	{
-		private readonly IntPtr Entry;
+		private readonly Pointer Entry;
 
 		#region Multiboot Memory Map Offsets
 
@@ -29,19 +27,19 @@ namespace Mosa.Kernel.BareMetal.MultibootSpecification
 		/// <summary>
 		/// Gets a value indicating whether Multiboot V1 Memory Map is available.
 		/// </summary>
-		public bool IsAvailable => !Entry.IsNull();
+		public bool IsAvailable => !Entry.IsNull;
 
 		/// <summary>
 		/// Setup Multiboot V1 Memory Map Entry.
 		/// </summary>
-		public MultibootV1MemoryMapEntry(IntPtr entry)
+		public MultibootV1MemoryMapEntry(Pointer entry)
 		{
 			Entry = entry;
 		}
 
 		public uint Size { get { return Entry.Load32(MultiBootMemoryMapOffset.Size); } }
 
-		public IntPtr BaseAddr { get { return Entry.LoadPointer(MultiBootMemoryMapOffset.BaseAddr); } }
+		public Pointer BaseAddr { get { return Entry.LoadPointer(MultiBootMemoryMapOffset.BaseAddr); } }
 
 		public uint Length { get { return Entry.Load32(MultiBootMemoryMapOffset.Length); } }
 
@@ -49,13 +47,13 @@ namespace Mosa.Kernel.BareMetal.MultibootSpecification
 
 		public byte Next { get { return Entry.Load8(MultiBootMemoryMapOffset.Next); } }
 
-		public MultibootV1MemoryMapEntry GetNext(IntPtr memoryMapEnd)
+		public MultibootV1MemoryMapEntry GetNext(Pointer memoryMapEnd)
 		{
 			var next = Entry + Next + sizeof(int);
 
 			if (!next.LessThan(memoryMapEnd))
 			{
-				next = IntPtr.Zero;
+				next = Pointer.Zero;
 			}
 
 			return new MultibootV1MemoryMapEntry(next);

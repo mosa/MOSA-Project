@@ -1,12 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal
 {
 	public class BootPageAllocator
 	{
-		private static IntPtr BootReserveStartPage;
+		private static Pointer BootReserveStartPage;
 		private static uint BootReserveSize;
 		private static uint UsedPages;
 
@@ -20,12 +20,12 @@ namespace Mosa.Kernel.BareMetal
 			UsedPages = 0;
 		}
 
-		public static IntPtr AllocatePage()
+		public static Pointer AllocatePage()
 		{
 			return AllocatePages(1);
 		}
 
-		public static IntPtr AllocatePages(uint pages = 1)
+		public static Pointer AllocatePages(uint pages = 1)
 		{
 			// TODO: Acquire lock
 

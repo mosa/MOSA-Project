@@ -5,8 +5,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Runtime.CompilerServices;
-using System.Runtime.Versioning;
 
 namespace Mosa.Runtime
 {
@@ -15,6 +13,17 @@ namespace Mosa.Runtime
 		private readonly unsafe void* _value; // Do not rename (binary serialization)
 
 		public static readonly Pointer Zero;
+		public bool IsNull { get { return ToInt64() == 0; } }
+
+		public unsafe Pointer(IntPtr value)
+		{
+			_value = value.ToPointer();
+		}
+
+		public unsafe Pointer(UIntPtr value)
+		{
+			_value = value.ToPointer();
+		}
 
 		public unsafe Pointer(int value)
 		{
@@ -55,6 +64,26 @@ namespace Mosa.Runtime
 			return (long)_value;
 		}
 
+		public unsafe uint ToUInt32()
+		{
+			return (uint)_value;
+		}
+
+		public unsafe ulong ToUInt64()
+		{
+			return (ulong)_value;
+		}
+
+		public unsafe IntPtr ToIntPtr()
+		{
+			return new IntPtr(_value);
+		}
+
+		public unsafe UIntPtr ToUIntPtr()
+		{
+			return new UIntPtr(_value);
+		}
+
 		public static unsafe explicit operator Pointer(int value)
 		{
 			return new Pointer(value);
@@ -83,6 +112,16 @@ namespace Mosa.Runtime
 		public static unsafe explicit operator long(Pointer value)
 		{
 			return (long)value._value;
+		}
+
+		public static unsafe explicit operator IntPtr(Pointer value)
+		{
+			return new IntPtr(value._value);
+		}
+
+		public static unsafe explicit operator UIntPtr(Pointer value)
+		{
+			return new UIntPtr(value._value);
 		}
 
 		public static unsafe bool operator ==(Pointer value1, Pointer value2)
@@ -131,11 +170,6 @@ namespace Mosa.Runtime
 		public unsafe override string ToString()
 		{
 			return ((long)_value).ToString();
-		}
-
-		public bool IsNull()
-		{
-			return ToInt32() == 0;
 		}
 
 		public Pointer Add(ulong b)

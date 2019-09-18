@@ -10,11 +10,11 @@ namespace Mosa.Kernel.x86.Smbios
 	/// </summary>
 	public abstract class SmbiosStructure
 	{
-		protected IntPtr address = IntPtr.Zero;
+		protected Pointer address;
 		protected uint length;
 		protected uint handle;
 
-		protected SmbiosStructure(IntPtr address)
+		protected SmbiosStructure(Pointer address)
 		{
 			this.address = address;
 			length = Intrinsic.Load8(address, 0x01u);

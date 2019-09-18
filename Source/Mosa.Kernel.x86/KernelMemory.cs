@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
 using Mosa.Runtime.Plug;
-using System;
 
 namespace Mosa.Kernel.x86
 {
@@ -15,12 +15,12 @@ namespace Mosa.Kernel.x86
 		static private uint heapUsed = 0;
 
 		[Plug("Mosa.Runtime.GC::AllocateMemory")]
-		static unsafe private IntPtr _AllocateMemory(uint size)
+		static unsafe private Pointer _AllocateMemory(uint size)
 		{
 			return AllocateVirtualMemory(size);
 		}
 
-		static public IntPtr AllocateVirtualMemory(uint size)
+		static public Pointer AllocateVirtualMemory(uint size)
 		{
 			if (heapStart == 0 || (heapSize - heapUsed) < size)
 			{
@@ -30,7 +30,7 @@ namespace Mosa.Kernel.x86
 				heapUsed = 0;
 			}
 
-			var at = new IntPtr(heapStart + heapUsed);
+			var at = new Pointer(heapStart + heapUsed);
 			heapUsed += size;
 			return at;
 		}

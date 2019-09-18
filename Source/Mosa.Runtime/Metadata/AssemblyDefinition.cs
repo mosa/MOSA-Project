@@ -1,40 +1,38 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
 namespace Mosa.Runtime.Metadata
 {
 	public struct AssemblyDefinition
 	{
 		#region layout
 
-		// IntPtr _name;
-		// IntPtr _customAttributes;
+		// Pointer _name;
+		// Pointer _customAttributes;
 		// uint _attributes;
 		// uint _numberOfTypes;
 
 		#endregion layout
 
-		public IntPtr Ptr;
+		public Pointer Ptr;
 
-		public AssemblyDefinition(IntPtr ptr)
+		public AssemblyDefinition(Pointer ptr)
 		{
 			Ptr = ptr;
 		}
 
-		public bool IsNull => Ptr == IntPtr.Zero;
+		public bool IsNull => Ptr.IsNull;
 
 		public string Name => (string)Intrinsic.GetObjectFromAddress(Intrinsic.LoadPointer(Ptr));
 
-		public CustomAttributeTable CustomAttributes => new CustomAttributeTable(Intrinsic.LoadPointer(Ptr, IntPtr.Size));
+		public CustomAttributeTable CustomAttributes => new CustomAttributeTable(Intrinsic.LoadPointer(Ptr, Pointer.Size));
 
-		public uint Attributes => Intrinsic.Load32(Ptr, IntPtr.Size * 2);
+		public uint Attributes => Intrinsic.Load32(Ptr, Pointer.Size * 2);
 
-		public uint NumberOfTypes => Intrinsic.Load32(Ptr, IntPtr.Size * 3);
+		public uint NumberOfTypes => Intrinsic.Load32(Ptr, Pointer.Size * 3);
 
 		public TypeDefinition GetTypeDefinition(uint slot)
 		{
-			return new TypeDefinition(Intrinsic.LoadPointer(Ptr, (IntPtr.Size * 4) + (IntPtr.Size * (int)slot)));
+			return new TypeDefinition(Intrinsic.LoadPointer(Ptr, (Pointer.Size * 4) + (Pointer.Size * (int)slot)));
 		}
 	}
 }

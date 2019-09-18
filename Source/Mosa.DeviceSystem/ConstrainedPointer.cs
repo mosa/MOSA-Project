@@ -10,14 +10,14 @@ namespace Mosa.DeviceSystem
 	/// </summary>
 	public readonly struct ConstrainedPointer
 	{
-		private readonly IntPtr address;
+		private readonly Pointer address;
 		private readonly uint size;
 
 		/// <summary>
 		/// Gets the address.
 		/// </summary>
 		/// <value>The address.</value>
-		public IntPtr Address { get { return address; } }
+		public Pointer Address { get { return address; } }
 
 		/// <summary>
 		/// Gets the size.
@@ -25,15 +25,9 @@ namespace Mosa.DeviceSystem
 		/// <value>The size.</value>
 		public uint Size { get { return size; } }
 
-		public ConstrainedPointer(IntPtr address, uint size)
+		public ConstrainedPointer(Pointer address, uint size)
 		{
 			this.address = address;
-			this.size = size;
-		}
-
-		public ConstrainedPointer(Pointer pointer, uint size)
-		{
-			this.address = pointer.Address;
 			this.size = size;
 		}
 

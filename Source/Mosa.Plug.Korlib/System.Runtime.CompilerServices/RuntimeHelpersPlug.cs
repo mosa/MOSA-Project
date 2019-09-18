@@ -30,7 +30,7 @@ namespace Mosa.Plug.Korlib.System.Runtime.CompilerServices
 		internal static void InitializeArray(Array array, RuntimeFieldHandle fldHandle)
 		{
 			var arrayAddress = Intrinsic.GetObjectAddress(array);
-			var fieldDefinition = new FieldDefinition(fldHandle.Value);
+			var fieldDefinition = new FieldDefinition(new Pointer(fldHandle.Value));
 
 			var arrayElements = arrayAddress + (IntPtr.Size * 3);
 			var fieldData = fieldDefinition.FieldData;
@@ -61,7 +61,7 @@ namespace Mosa.Plug.Korlib.System.Runtime.CompilerServices
 		[Plug("System.Runtime.CompilerServices.RuntimeHelpers::CreateInstance")]
 		internal static object CreateInstance(Type type, params object[] args)
 		{
-			var typeDefinition = new TypeDefinition(type.TypeHandle.Value);
+			var typeDefinition = new TypeDefinition(new Pointer(type.TypeHandle.Value));
 
 			if (typeDefinition.DefaultConstructor.IsNull)
 				throw new ArgumentException("Type has no parameterless constructor.");

@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
 using Mosa.Runtime.Metadata;
 using System;
 using System.Reflection;
@@ -85,7 +86,7 @@ namespace Mosa.Plug.Korlib.Runtime
 		internal RuntimeType(RuntimeTypeHandle handle)
 		{
 			this.handle = handle;
-			typeDefinition = new TypeDefinition(handle.Value);
+			typeDefinition = new TypeDefinition(new Pointer(handle.Value));
 
 			assemblyQualifiedName = typeDefinition.Name;   // TODO
 			name = typeDefinition.Name;                    // TODO
@@ -98,13 +99,13 @@ namespace Mosa.Plug.Korlib.Runtime
 			// Declaring Type
 			if (!typeDefinition.DeclaringType.IsNull)
 			{
-				declaringTypeHandle = new RuntimeTypeHandle(typeDefinition.DeclaringType.Ptr);
+				declaringTypeHandle = new RuntimeTypeHandle(typeDefinition.DeclaringType.Ptr.ToIntPtr());
 			}
 
 			// Element Type
 			if (!typeDefinition.ElementType.IsNull)
 			{
-				elementTypeHandle = new RuntimeTypeHandle(typeDefinition.ElementType.Ptr);
+				elementTypeHandle = new RuntimeTypeHandle(typeDefinition.ElementType.Ptr.ToIntPtr());
 			}
 		}
 

@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
-using Mosa.Runtime.Extension;
-using System;
 
 namespace Mosa.Kernel.x86
 {
@@ -11,34 +9,34 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class UnitTestQueue
 	{
-		private static IntPtr queueNext;
-		private static IntPtr queueCurrent;
+		private static Pointer queueNext;
+		private static Pointer queueCurrent;
 		private static uint count = 0;
 
 		private static uint TestQueueSize = 0x00100000;
 
 		public static void Setup()
 		{
-			queueNext = new IntPtr(Address.UnitTestQueue);
-			queueCurrent = new IntPtr(Address.UnitTestQueue);
+			queueNext = new Pointer(Address.UnitTestQueue);
+			queueCurrent = new Pointer(Address.UnitTestQueue);
 			count = 0;
 
 			Intrinsic.Store32(queueNext, 0);
 		}
 
-		public static bool QueueUnitTest(uint id, IntPtr start, IntPtr end)
+		public static bool QueueUnitTest(uint id, Pointer start, Pointer end)
 		{
 			uint len = (uint)start.GetOffset(end);
 
-			if ((queueNext + (int)len + 32).GreaterThan(new IntPtr(Address.UnitTestQueue) + (int)TestQueueSize))
+			if ((queueNext + (int)len + 32).GreaterThan(new Pointer(Address.UnitTestQueue) + (int)TestQueueSize))
 			{
-				if (new IntPtr(Address.UnitTestQueue + len + 32).GreaterThanOrEqual(queueCurrent))
+				if (new Pointer(Address.UnitTestQueue + len + 32).GreaterThanOrEqual(queueCurrent))
 					return false; // no space
 
 				Intrinsic.Store32(queueNext, uint.MaxValue); // mark jump to front
 
 				// cycle to front
-				queueNext = new IntPtr(Address.UnitTestQueue);
+				queueNext = new Pointer(Address.UnitTestQueue);
 			}
 
 			Intrinsic.Store32(queueNext, len + 4);
@@ -74,7 +72,7 @@ namespace Mosa.Kernel.x86
 
 			if (marker == uint.MaxValue)
 			{
-				queueCurrent = new IntPtr(Address.UnitTestQueue);
+				queueCurrent = new Pointer(Address.UnitTestQueue);
 			}
 
 			uint len = Intrinsic.Load32(queueCurrent);

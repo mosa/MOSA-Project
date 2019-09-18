@@ -1,9 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Kernel.BareMetal.Extension;
-using Mosa.Runtime.Extension;
+using Mosa.Runtime;
 using Mosa.Runtime.x86;
-using System;
 
 namespace Mosa.Kernel.BareMetal.x86
 {
@@ -12,8 +10,8 @@ namespace Mosa.Kernel.BareMetal.x86
 	/// </summary>
 	internal static class PageTable
 	{
-		public static IntPtr PageDirectory;
-		public static IntPtr PageTables;
+		public static Pointer PageDirectory;
+		public static Pointer PageTables;
 		public static GDTTable GDTTable;
 
 		public static void Setup()
@@ -63,7 +61,7 @@ namespace Mosa.Kernel.BareMetal.x86
 			PageTables.Store32((virtualAddress & 0xFFFFF000u) >> 10, physicalAddress & 0xFFFFF000u | 0x04u | 0x02u | (present ? 0x1u : 0x0u));
 		}
 
-		public static IntPtr GetPhysicalAddressFromVirtual(IntPtr virtualAddress)
+		public static Pointer GetPhysicalAddressFromVirtual(Pointer virtualAddress)
 		{
 			//FUTURE: traverse page directory from CR3 --- do not assume page table is linearly allocated
 

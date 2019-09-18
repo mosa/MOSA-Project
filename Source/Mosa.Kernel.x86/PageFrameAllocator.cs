@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
-using System;
 
 namespace Mosa.Kernel.x86
 {
@@ -11,10 +10,10 @@ namespace Mosa.Kernel.x86
 	public static class PageFrameAllocator
 	{
 		// Start of memory map
-		private static IntPtr map;
+		private static Pointer map;
 
 		// Current position in map data structure
-		private static IntPtr at;
+		private static Pointer at;
 
 		private static uint totalPages;
 		private static uint totalUsedPages;
@@ -24,8 +23,8 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		public static void Setup()
 		{
-			map = new IntPtr(Address.PageFrameAllocator);
-			at = new IntPtr(Address.PageFrameAllocator);
+			map = new Pointer(Address.PageFrameAllocator);
+			at = new Pointer(Address.PageFrameAllocator);
 			totalPages = 0;
 			totalUsedPages = 0;
 			SetupFreeMemory();
@@ -92,10 +91,10 @@ namespace Mosa.Kernel.x86
 		/// Allocate a physical page from the free list
 		/// </summary>
 		/// <returns>The page</returns>
-		public static IntPtr Allocate()
+		public static Pointer Allocate()
 		{
 			if (at == map)
-				return IntPtr.Zero; // out of memory
+				return Pointer.Zero; // out of memory
 
 			totalUsedPages++;
 			var avail = Intrinsic.LoadPointer(at);
@@ -111,7 +110,7 @@ namespace Mosa.Kernel.x86
 		/// Releases a page to the free list
 		/// </summary>
 		/// <param name="address">The address.</param>
-		public static void Free(IntPtr address)
+		public static void Free(Pointer address)
 		{
 			totalUsedPages--;
 			at += 4;

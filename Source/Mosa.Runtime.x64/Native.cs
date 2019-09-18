@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using System.Runtime.InteropServices;
 
 namespace Mosa.Runtime.x64
@@ -109,7 +108,7 @@ namespace Mosa.Runtime.x64
 		public extern static void Set32(ulong address, uint value);
 
 		[DllImport("Mosa.Platform.x64.Intrinsic:GetEBP")]
-		public extern static IntPtr GetEBP();
+		public extern static Pointer GetEBP();
 
 		[DllImport("Mosa.Platform.x64.Intrinsic:GetFS")]
 		public extern static ulong GetFS();
@@ -154,10 +153,10 @@ namespace Mosa.Runtime.x64
 		public extern static long GetAssemblyListTable();
 
 		[DllImport("Mosa.Platform.x64.Intrinsic:GetMethodLookupTable")]
-		public extern static IntPtr GetMethodLookupTable();
+		public extern static Pointer GetMethodLookupTable();
 
 		[DllImport("Mosa.Platform.x64.Intrinsic:GetMethodExceptionLookupTable")]
-		public extern static IntPtr GetMethodExceptionLookupTable();
+		public extern static Pointer GetMethodExceptionLookupTable();
 
 		[DllImport("Mosa.Platform.x64.Intrinsic:GetMultibootEAX")]
 		public extern static ulong GetMultibootEAX();
@@ -166,7 +165,7 @@ namespace Mosa.Runtime.x64
 		public extern static ulong GetMultibootEBX();
 
 		[DllImport("Mosa.Platform.x64.Intrinsic:FrameJump")]
-		public extern static void FrameJump(IntPtr eip, IntPtr esp, IntPtr ebp, int exceptionRegister);
+		public extern static void FrameJump(Pointer eip, Pointer esp, Pointer ebp, int exceptionRegister);
 
 		[DllImport("Mosa.Platform.x64.Intrinsic:FrameCall")]
 		public extern static void FrameCall(ulong eip);

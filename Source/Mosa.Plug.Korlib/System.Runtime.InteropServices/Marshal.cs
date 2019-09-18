@@ -11,7 +11,7 @@ namespace Mosa.Plug.Korlib.System
 		[Plug("System.Runtime.InteropServices.Marshal::GetFunctionPointerForDelegateInternal")]
 		internal static IntPtr GetFunctionPointerForDelegateInternal(Delegate d)
 		{
-			return Intrinsic.LoadPointer(Intrinsic.GetObjectAddress(d), IntPtr.Size * 2);
+			return Intrinsic.LoadPointer(Intrinsic.GetObjectAddress(d), Pointer.Size * 2).ToIntPtr();
 		}
 	}
 }

@@ -1,23 +1,21 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Kernel.BareMetal.Extension;
-using Mosa.Runtime.Extension;
-using System;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal.BootMemory
 {
 	public /*readonly*/ struct BootMemoryMapEntry
 	{
-		private readonly IntPtr Entry;
+		private readonly Pointer Entry;
 
-		public BootMemoryMapEntry(IntPtr entry)
+		public BootMemoryMapEntry(Pointer entry)
 		{
 			Entry = entry;
 		}
 
-		public bool IsNull => Entry == IntPtr.Zero;
+		public bool IsNull => Entry.IsNull;
 
-		public IntPtr StartAddress
+		public Pointer StartAddress
 		{
 			get { return Entry.LoadPointer(); }
 			set { Entry.StorePointer(value); }
@@ -25,23 +23,23 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 
 		public ulong Size
 		{
-			get { return Entry.Load64(IntPtr.Size); }
-			set { Entry.Store64(IntPtr.Size, value); }
+			get { return Entry.Load64(Pointer.Size); }
+			set { Entry.Store64(Pointer.Size, value); }
 		}
 
-		public IntPtr EndAddress
+		public Pointer EndAddress
 		{
 			get { return StartAddress.Add(Size); }
 		}
 
 		public BootMemoryMapType Type
 		{
-			get { return (BootMemoryMapType)Entry.Load8(IntPtr.Size + sizeof(ulong)); }
-			set { Entry.Store8(IntPtr.Size, (byte)value); }
+			get { return (BootMemoryMapType)Entry.Load8(Pointer.Size + sizeof(ulong)); }
+			set { Entry.Store8(Pointer.Size, (byte)value); }
 		}
 
 		public bool IsAvailable { get { return Type == BootMemoryMapType.Available; } }
 
-		public static uint EntrySize = (uint)IntPtr.Size + sizeof(ulong) + (sizeof(byte));
+		public static uint EntrySize = (uint)Pointer.Size + sizeof(ulong) + (sizeof(byte));
 	}
 }

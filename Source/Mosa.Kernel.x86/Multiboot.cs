@@ -1,9 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
-using Mosa.Runtime.Extension;
 using Mosa.Runtime.x86;
-using System;
 
 namespace Mosa.Kernel.x86
 {
@@ -65,7 +63,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Location of the Multiboot Structure
 		/// </summary>
-		public static IntPtr MultibootStructure { get; private set; }
+		public static Pointer MultibootStructure { get; private set; }
 
 		/// <summary>
 		/// Gets the memory map count.
@@ -78,7 +76,7 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		public static void Setup()
 		{
-			MultibootStructure = IntPtr.Zero;
+			MultibootStructure = Pointer.Zero;
 
 			var magic = Native.GetMultibootEAX();
 
@@ -86,7 +84,7 @@ namespace Mosa.Kernel.x86
 			{
 				var address = Native.GetMultibootEBX();
 
-				MultibootStructure = new IntPtr(address);// Intrinsic.LoadPointer(new IntPtr(address));
+				MultibootStructure = new Pointer(address);// Intrinsic.LoadPointer(new Pointer(address));
 				CountMemoryMap();
 			}
 		}
@@ -94,14 +92,14 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Gets a value indicating whether multiboot is enabled.
 		/// </summary>
-		public static bool IsMultibootAvailable => !MultibootStructure.IsNull();
+		public static bool IsMultibootAvailable => !MultibootStructure.IsNull;
 
 		private static uint GetValue(uint offset)
 		{
 			return Intrinsic.Load32(MultibootStructure, offset);
 		}
 
-		private static IntPtr GetPointer(uint offset)
+		private static Pointer GetPointer(uint offset)
 		{
 			return Intrinsic.LoadPointer(MultibootStructure, offset);
 		}
@@ -114,12 +112,12 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Gets the memory lower.
 		/// </summary>
-		public static IntPtr MemoryLower { get { return GetPointer(MultiBootInfoOffset.MemLower); } }
+		public static Pointer MemoryLower { get { return GetPointer(MultiBootInfoOffset.MemLower); } }
 
 		/// <summary>
 		/// Gets the memory upper.
 		/// </summary>
-		public static IntPtr MemoryUpper { get { return GetPointer(MultiBootInfoOffset.MemUpper); } }
+		public static Pointer MemoryUpper { get { return GetPointer(MultiBootInfoOffset.MemUpper); } }
 
 		/// <summary>
 		/// Gets the boot device.
@@ -129,7 +127,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Gets the command line address.
 		/// </summary>
-		public static IntPtr CommandLineAddress { get { return GetPointer(MultiBootInfoOffset.CommandLine); } }
+		public static Pointer CommandLineAddress { get { return GetPointer(MultiBootInfoOffset.CommandLine); } }
 
 		/// <summary>
 		/// Gets the module count.
@@ -139,7 +137,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Gets the module start.
 		/// </summary>
-		public static IntPtr ModuleStart { get { return GetPointer(MultiBootInfoOffset.ModuleAddress); } }
+		public static Pointer ModuleStart { get { return GetPointer(MultiBootInfoOffset.ModuleAddress); } }
 
 		/// <summary>
 		/// Gets the length of the memory map.
@@ -149,7 +147,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Gets the memory map start.
 		/// </summary>
-		public static IntPtr MemoryMapStart { get { return GetPointer(MultiBootInfoOffset.MemMapAddress); } }
+		public static Pointer MemoryMapStart { get { return GetPointer(MultiBootInfoOffset.MemMapAddress); } }
 
 		/// <summary>
 		/// Gets the length of the drive.
@@ -174,7 +172,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Gets the APM table.
 		/// </summary>
-		public static IntPtr APMTable { get { return GetPointer(MultiBootInfoOffset.ApmTable); } }
+		public static Pointer APMTable { get { return GetPointer(MultiBootInfoOffset.ApmTable); } }
 
 		/// <summary>
 		/// Gets the VBE control information.
@@ -184,7 +182,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Gets the VBE mode info.
 		/// </summary>
-		public static IntPtr VBEModeInfo { get { return GetPointer(MultiBootInfoOffset.VbeModeInfo); } }
+		public static Pointer VBEModeInfo { get { return GetPointer(MultiBootInfoOffset.VbeModeInfo); } }
 
 		/// <summary>
 		/// Gets the VBE mode.
@@ -214,7 +212,7 @@ namespace Mosa.Kernel.x86
 			MemoryMapCount = 0;
 
 			var location = MemoryMapStart;
-			var end = IntPtr.Add(location, (int)MemoryMapLength);
+			var end = Pointer.Add(location, (int)MemoryMapLength);
 
 			while (location.LessThan(end))
 			{
@@ -230,7 +228,7 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		private static IntPtr GetMemoryMapIndexLocation(uint index)
+		private static Pointer GetMemoryMapIndexLocation(uint index)
 		{
 			var location = MemoryMapStart;
 

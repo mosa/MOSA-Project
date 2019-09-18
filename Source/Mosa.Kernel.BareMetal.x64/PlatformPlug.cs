@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.BareMetal.BootMemory;
+using Mosa.Runtime;
 using Mosa.Runtime.Plug;
-using System;
 
 namespace Mosa.Kernel.BareMetal.x64
 {
@@ -23,7 +23,7 @@ namespace Mosa.Kernel.BareMetal.x64
 			//var eax = Native.GetMultibootEAX();
 			//var ebx = Native.GetMultibootEBX();
 
-			//Multiboot.Setup(new IntPtr(eax), ebx);
+			//Multiboot.Setup(new Pointer(eax), ebx);
 
 			//SSE.Setup();
 		}
@@ -38,7 +38,7 @@ namespace Mosa.Kernel.BareMetal.x64
 		public static void UpdateBootMemoryMap()
 		{
 			// Reserve the first 1MB
-			BootMemoryMap.SetMemoryMap(new IntPtr(0), 1024 * 1024, BootMemoryMapType.Reserved);
+			BootMemoryMap.SetMemoryMap(new Pointer(0), 1024 * 1024, BootMemoryMapType.Reserved);
 		}
 
 		[Plug("Mosa.Kernel.BareMetal.Platform::GetInitialGCMemoryPool")]
@@ -72,7 +72,7 @@ namespace Mosa.Kernel.BareMetal.x64
 		}
 
 		[Plug("Mosa.Kernel.BareMetal.Platform::PageTableGetPhysicalAddressFromVirtual")]
-		public static IntPtr PageTableGetPhysicalAddressFromVirtual(IntPtr virtualAddress)
+		public static Pointer PageTableGetPhysicalAddressFromVirtual(Pointer virtualAddress)
 		{
 			return PageTable.GetPhysicalAddressFromVirtual(virtualAddress);
 		}

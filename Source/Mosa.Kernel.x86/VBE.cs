@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
-using Mosa.Runtime.Extension;
-using System;
 
 namespace Mosa.Kernel.x86
 {
@@ -55,9 +53,9 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Gets a value indicating whether VBE is available.
 		/// </summary>
-		public static bool IsVBEAvailable => Multiboot.IsMultibootAvailable && !VBEModeInfo.IsNull();
+		public static bool IsVBEAvailable => Multiboot.IsMultibootAvailable && !VBEModeInfo.IsNull;
 
-		private static IntPtr VBEModeInfo => Multiboot.VBEModeInfo;
+		private static Pointer VBEModeInfo => Multiboot.VBEModeInfo;
 
 		/// <summary>
 		/// Setup VBE.
@@ -81,7 +79,7 @@ namespace Mosa.Kernel.x86
 			return Intrinsic.Load32(VBEModeInfo, offset);
 		}
 
-		private static IntPtr GetPointer(uint offset)
+		private static Pointer GetPointer(uint offset)
 		{
 			return Intrinsic.LoadPointer(VBEModeInfo, offset);
 		}
@@ -144,7 +142,7 @@ namespace Mosa.Kernel.x86
 
 		public static byte DirectColorAttributes { get { return GetValue8(VBEModeInfoOffset.DirectColorAttributes); } }
 
-		public static IntPtr MemoryPhysicalLocation { get { return GetPointer(VBEModeInfoOffset.PhysBase); } }
+		public static Pointer MemoryPhysicalLocation { get { return GetPointer(VBEModeInfoOffset.PhysBase); } }
 
 		public static uint OffScreenMemoryOff { get { return GetValue32(VBEModeInfoOffset.OffScreenMemoryOff); } }
 

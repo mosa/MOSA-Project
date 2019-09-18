@@ -15,14 +15,14 @@ namespace Mosa.Plug.Korlib.Runtime
 
 		public RuntimeCustomAttributeData(CustomAttribute customAttributeTable)
 		{
-			var typeHandle = new RuntimeTypeHandle(customAttributeTable.AttributeType.Ptr);
+			var typeHandle = new RuntimeTypeHandle(customAttributeTable.AttributeType.Ptr.ToIntPtr());
 
 			base.attributeType = Type.GetTypeFromHandle(typeHandle);
 
 			// Get the metadata pointer for the enum type
 			typeHandle = typeof(Enum).TypeHandle;
 
-			EnumTypePtr = new TypeDefinition(typeHandle.Value);
+			EnumTypePtr = new TypeDefinition(new Pointer(typeHandle.Value));
 
 			// Create temporary lists to hold the arguments
 			var typedArgs = new List<CustomAttributeTypedArgument>();
@@ -37,7 +37,7 @@ namespace Mosa.Plug.Korlib.Runtime
 				string name = argument.Name;
 
 				// Get the argument type
-				var argTypeHandle = new RuntimeTypeHandle(argument.ArgumentType.Ptr);
+				var argTypeHandle = new RuntimeTypeHandle(argument.ArgumentType.Ptr.ToIntPtr());
 
 				var argType = Type.GetTypeFromHandle(argTypeHandle);
 
@@ -138,7 +138,7 @@ namespace Mosa.Plug.Korlib.Runtime
 					if (type.FullName == "System.Type")
 					{
 						// Get the argument type
-						var argTypeHandle = new RuntimeTypeHandle(argument.ArgumentType.Ptr);
+						var argTypeHandle = new RuntimeTypeHandle(argument.ArgumentType.Ptr.ToIntPtr());
 
 						return Type.GetTypeFromHandle(argTypeHandle);
 					}

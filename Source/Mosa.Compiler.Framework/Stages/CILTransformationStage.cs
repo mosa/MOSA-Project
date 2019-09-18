@@ -1396,8 +1396,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (MosaTypeLayout.IsStoredOnStack(node.Operand1.Type))
 			{
-				node.SetInstruction(IRInstruction.StoreParamCompound, null, node.Result, node.Operand1);
-				node.MosaType = node.Result.Type; // may not be necessary
+				var result = node.Result;
+				node.SetInstruction(IRInstruction.StoreParamCompound, null, result, node.Operand1);
+				node.MosaType = result.Type; // may not be necessary
 			}
 			else
 			{
