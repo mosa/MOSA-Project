@@ -1,87 +1,86 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-// Licensed to the .NET Foundation under one or more agreements.
-// The .NET Foundation licenses this file to you under the MIT license.
-// See the LICENSE file in the project root for more information.
-
 using System;
 
 namespace Mosa.Runtime
 {
 	public struct Pointer
 	{
-		private readonly unsafe void* _value; // Do not rename (binary serialization)
+		private readonly unsafe void* value;
 
 		public static readonly Pointer Zero;
+
+		public unsafe static int Size { get { return sizeof(void*); } }
+
 		public bool IsNull { get { return ToInt64() == 0; } }
 
 		public unsafe Pointer(IntPtr value)
 		{
-			_value = value.ToPointer();
+			this.value = value.ToPointer();
 		}
 
 		public unsafe Pointer(UIntPtr value)
 		{
-			_value = value.ToPointer();
+			this.value = value.ToPointer();
 		}
 
 		public unsafe Pointer(int value)
 		{
-			_value = (void*)value;
+			this.value = (void*)value;
 		}
 
 		public unsafe Pointer(long value)
 		{
-			_value = (void*)((int)value);
+			this.value = (void*)((int)value);
 		}
 
 		public unsafe Pointer(void* value)
 		{
-			_value = value;
+			this.value = value;
 		}
 
 		public unsafe override bool Equals(Object obj)
 		{
 			if (obj is Pointer)
 			{
-				return (_value == ((Pointer)obj)._value);
+				return (value == ((Pointer)obj).value);
 			}
 			return false;
 		}
 
 		public unsafe override int GetHashCode()
 		{
-			return ((int)_value);
+			return ((int)value);
 		}
 
 		public unsafe int ToInt32()
 		{
-			return (int)_value;
+			return (int)value;
 		}
 
 		public unsafe long ToInt64()
 		{
-			return (long)_value;
+			return (long)value;
 		}
 
 		public unsafe uint ToUInt32()
 		{
-			return (uint)_value;
+			return (uint)value;
 		}
 
 		public unsafe ulong ToUInt64()
 		{
-			return (ulong)_value;
+			return (ulong)value;
 		}
 
 		public unsafe IntPtr ToIntPtr()
 		{
-			return new IntPtr(_value);
+			return new IntPtr(value);
 		}
 
 		public unsafe UIntPtr ToUIntPtr()
 		{
-			return new UIntPtr(_value);
+			return new UIntPtr(value);
 		}
 
 		public static unsafe explicit operator Pointer(int value)
@@ -101,37 +100,37 @@ namespace Mosa.Runtime
 
 		public static unsafe explicit operator void*(Pointer value)
 		{
-			return value._value;
+			return value.value;
 		}
 
 		public static unsafe explicit operator int(Pointer value)
 		{
-			return (int)value._value;
+			return (int)value.value;
 		}
 
 		public static unsafe explicit operator long(Pointer value)
 		{
-			return (long)value._value;
+			return (long)value.value;
 		}
 
 		public static unsafe explicit operator IntPtr(Pointer value)
 		{
-			return new IntPtr(value._value);
+			return new IntPtr(value.value);
 		}
 
 		public static unsafe explicit operator UIntPtr(Pointer value)
 		{
-			return new UIntPtr(value._value);
+			return new UIntPtr(value.value);
 		}
 
 		public static unsafe bool operator ==(Pointer value1, Pointer value2)
 		{
-			return value1._value == value2._value;
+			return value1.value == value2.value;
 		}
 
 		public static unsafe bool operator !=(Pointer value1, Pointer value2)
 		{
-			return value1._value != value2._value;
+			return value1.value != value2.value;
 		}
 
 		public static Pointer Add(Pointer pointer, int offset)
@@ -151,25 +150,17 @@ namespace Mosa.Runtime
 
 		public static unsafe Pointer operator -(Pointer pointer, int offset)
 		{
-			return new Pointer((long)pointer._value - offset);
-		}
-
-		public unsafe static int Size
-		{
-			get
-			{
-				return sizeof(void*);
-			}
+			return new Pointer((long)pointer.value - offset);
 		}
 
 		public unsafe void* ToPointer()
 		{
-			return _value;
+			return value;
 		}
 
 		public unsafe override string ToString()
 		{
-			return ((long)_value).ToString();
+			return ((long)value).ToString();
 		}
 
 		public Pointer Add(ulong b)
@@ -352,15 +343,5 @@ namespace Mosa.Runtime
 		{
 			Intrinsic.StorePointer(this, offset, value);
 		}
-
-		//public Pointer AlignDown(uint align)
-		//{
-		//	return new Pointer((long)Alignment.AlignDown(this.ToInt64(), align));
-		//}
-
-		//public Pointer AlignUp(uint align)
-		//{
-		//	return new Pointer((long)Alignment.AlignUp(this.ToInt64(), align));
-		//}
 	}
 }

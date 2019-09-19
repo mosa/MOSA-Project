@@ -923,7 +923,7 @@ namespace Mosa.Compiler.Framework
 			if (type.IsUI8 || (type.IsEnum && type.ElementType.IsUI8))
 				return IRInstruction.SetReturn64;
 
-			if (MosaTypeLayout.IsStoredOnStack(type))
+			if (!MosaTypeLayout.CanFitInRegister(type))
 				return IRInstruction.SetReturnCompound;
 
 			return IRInstruction.SetReturn32;

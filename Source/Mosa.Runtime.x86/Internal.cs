@@ -210,7 +210,7 @@ namespace Mosa.Runtime.x86
 
 			Pointer address;
 
-			if (depth == 0 && eip != Pointer.Zero)
+			if (depth == 0 && !eip.IsNull)
 			{
 				address = eip;
 			}
@@ -221,7 +221,7 @@ namespace Mosa.Runtime.x86
 					ebp = Native.GetEBP();
 				}
 
-				if (eip != Pointer.Zero)
+				if (!eip.IsNull)
 				{
 					depth--;
 				}

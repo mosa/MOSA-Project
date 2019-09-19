@@ -139,7 +139,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var context = new Context(node);
 
-			if (MosaTypeLayout.IsStoredOnStack(destination.Type))
+			if (!MosaTypeLayout.CanFitInRegister(destination.Type))
 			{
 				context.AppendInstruction(IRInstruction.MoveCompound, destination, source);
 				context.MosaType = destination.Type;

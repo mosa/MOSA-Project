@@ -774,7 +774,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Debug.Assert(node.Operand1.IsParameter);
 
-			if (MosaTypeLayout.IsStoredOnStack(node.Operand1.Type))
+			if (!MosaTypeLayout.CanFitInRegister(node.Operand1.Type))
 			{
 				node.SetInstruction(IRInstruction.LoadParamCompound, node.Result, node.Operand1);
 				node.MosaType = node.Operand1.Type;
@@ -807,7 +807,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var source = node.Operand1;
 			var destination = node.Result;
 
-			Debug.Assert(!MosaTypeLayout.IsStoredOnStack(destination.Type));
+			Debug.Assert(MosaTypeLayout.CanFitInRegister(destination.Type));
 			var moveInstruction = GetMoveInstruction(destination.Type);
 			node.SetInstruction(moveInstruction, destination, source);
 		}
@@ -831,7 +831,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(elementOffset != null);
 
-			if (MosaTypeLayout.IsStoredOnStack(arrayType.ElementType))
+			if (!MosaTypeLayout.CanFitInRegister(arrayType.ElementType))
 			{
 				node.SetInstruction(IRInstruction.LoadCompound, result, array, totalElementOffset);
 				node.MosaType = arrayType.ElementType;
@@ -879,7 +879,7 @@ namespace Mosa.Compiler.Framework.Stages
 			int offset = TypeLayout.GetFieldOffset(field);
 			bool isPointer = operand.IsPointer || operand.Type == TypeSystem.BuiltIn.I || operand.Type == TypeSystem.BuiltIn.U;
 
-			if (!result.IsOnStack && !MosaTypeLayout.IsStoredOnStack(operand.Type) && !operand.IsReferenceType && isPointer)
+			if (!result.IsOnStack && MosaTypeLayout.CanFitInRegister(operand.Type) && !operand.IsReferenceType && isPointer)
 			{
 				var loadInstruction = GetLoadInstruction(field.FieldType);
 				var fixedOffset = CreateConstant(offset);
@@ -889,7 +889,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (!result.IsOnStack && !MosaTypeLayout.IsStoredOnStack(operand.Type) && !operand.IsReferenceType && !isPointer)
+			if (!result.IsOnStack && MosaTypeLayout.CanFitInRegister(operand.Type) && !operand.IsReferenceType && !isPointer)
 			{
 				// simple move
 				Debug.Assert(result.IsVirtualRegister);
@@ -901,7 +901,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (!MosaTypeLayout.IsStoredOnStack(result.Type) && operand.IsOnStack)
+			if (MosaTypeLayout.CanFitInRegister(result.Type) && operand.IsOnStack)
 			{
 				var loadInstruction = GetLoadInstruction(field.FieldType);
 				var address = MethodCompiler.CreateVirtualRegister(operand.Type.ToUnmanagedPointer());
@@ -913,7 +913,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (!MosaTypeLayout.IsStoredOnStack(result.Type) && !operand.IsOnStack)
+			if (MosaTypeLayout.CanFitInRegister(result.Type) && !operand.IsOnStack)
 			{
 				var loadInstruction = GetLoadInstruction(field.FieldType);
 				var fixedOffset = CreateConstant(offset);
@@ -1028,7 +1028,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// This is actually ldind.* and ldobj - the opcodes have the same meanings
 
-			if (MosaTypeLayout.IsStoredOnStack(type))
+			if (!MosaTypeLayout.CanFitInRegister(type))
 			{
 				node.SetInstruction(IRInstruction.LoadCompound, destination, source, ConstantZero);
 			}
@@ -1056,7 +1056,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var destination = node.Result;
 			var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
 
-			if (MosaTypeLayout.IsStoredOnStack(fieldType))
+			if (!MosaTypeLayout.CanFitInRegister(fieldType))
 			{
 				// Interesting -- this code appears to never be executed
 				node.SetInstruction(IRInstruction.LoadCompound, destination, fieldOperand, ConstantZero);
@@ -1237,7 +1237,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var before = context.InsertBefore();
 
 			// If the type is value type we don't need to call AllocateObject
-			if (MosaTypeLayout.IsStoredOnStack(result.Type))
+			if (!MosaTypeLayout.CanFitInRegister(result.Type))
 			{
 				Debug.Assert(result.Uses.Count <= 1, "Usages too high");
 
@@ -1394,7 +1394,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Debug.Assert(node.Result.IsParameter);
 
-			if (MosaTypeLayout.IsStoredOnStack(node.Operand1.Type))
+			if (!MosaTypeLayout.CanFitInRegister(node.Operand1.Type))
 			{
 				var result = node.Result;
 				node.SetInstruction(IRInstruction.StoreParamCompound, null, result, node.Operand1);
@@ -1424,7 +1424,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var elementOffset = CalculateArrayElementOffset(node, arrayType, arrayIndex);
 			var totalElementOffset = CalculateTotalArrayOffset(node, elementOffset);
 
-			if (MosaTypeLayout.IsStoredOnStack(value.Type))
+			if (!MosaTypeLayout.CanFitInRegister(value.Type))
 			{
 				node.SetInstruction(IRInstruction.StoreCompound, null, array, totalElementOffset, value);
 				node.MosaType = arrayType.ElementType;
@@ -1454,7 +1454,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var valueOperand = node.Operand2;
 			var fieldType = field.FieldType;
 
-			if (MosaTypeLayout.IsStoredOnStack(fieldType))
+			if (!MosaTypeLayout.CanFitInRegister(fieldType))
 			{
 				node.SetInstruction(IRInstruction.StoreCompound, null, objectOperand, offsetOperand, valueOperand);
 				node.MosaType = fieldType;
@@ -1484,7 +1484,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (MosaTypeLayout.IsStoredOnStack(type))
+			if (!MosaTypeLayout.CanFitInRegister(type))
 			{
 				Debug.Assert(!node.Result.IsVirtualRegister);
 
@@ -1509,7 +1509,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// This is actually stind.* and stobj - the opcodes have the same meanings
 			var type = node.MosaType;  // pass thru
 
-			if (MosaTypeLayout.IsStoredOnStack(type))
+			if (!MosaTypeLayout.CanFitInRegister(type))
 			{
 				node.SetInstruction(IRInstruction.StoreCompound, null, node.Operand1, ConstantZero, node.Operand2);
 			}
@@ -1536,7 +1536,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
 			var fieldType = field.FieldType;
 
-			if (MosaTypeLayout.IsStoredOnStack(fieldType))
+			if (!MosaTypeLayout.CanFitInRegister(fieldType))
 			{
 				node.SetInstruction(IRInstruction.StoreCompound, null, fieldOperand, ConstantZero, node.Operand1);
 				node.MosaType = fieldType;
@@ -1645,7 +1645,7 @@ namespace Mosa.Compiler.Framework.Stages
 				context.AppendInstruction(IRInstruction.Unbox, tmp, value, adr, CreateConstant(typeSize));
 			}
 
-			if (MosaTypeLayout.IsStoredOnStack(type))
+			if (!MosaTypeLayout.CanFitInRegister(type))
 			{
 				context.AppendInstruction(IRInstruction.LoadCompound, result, tmp, ConstantZero);
 				context.MosaType = type;
@@ -2142,7 +2142,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var destination = node.Result;
 			var source = node.Operand1;
 
-			if (MosaTypeLayout.IsStoredOnStack(source.Type))
+			if (!MosaTypeLayout.CanFitInRegister(source.Type))
 			{
 				node.SetInstruction(IRInstruction.MoveCompound, destination, source);
 			}

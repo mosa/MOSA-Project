@@ -339,7 +339,7 @@ namespace Mosa.Compiler.Framework
 		{
 			int offset = Architecture.OffsetOfFirstParameter;
 
-			if (MosaTypeLayout.IsStoredOnStack(Method.Signature.ReturnType))
+			if (!MosaTypeLayout.CanFitInRegister(Method.Signature.ReturnType))
 			{
 				offset += TypeLayout.GetTypeSize(Method.Signature.ReturnType);
 			}
@@ -645,7 +645,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public Operand AllocateVirtualRegisterOrStackSlot(MosaType type)
 		{
-			if (MosaTypeLayout.IsStoredOnStack(type))
+			if (!MosaTypeLayout.CanFitInRegister(type))
 			{
 				return AddStackLocal(type);
 			}
@@ -667,7 +667,7 @@ namespace Mosa.Compiler.Framework
 			int index = 0;
 			foreach (var local in locals)
 			{
-				if (MosaTypeLayout.IsStoredOnStack(local.Type) || local.IsPinned)
+				if (!MosaTypeLayout.CanFitInRegister(local.Type) || local.IsPinned)
 				{
 					LocalVariables[index++] = AddStackLocal(local.Type, local.IsPinned);
 				}

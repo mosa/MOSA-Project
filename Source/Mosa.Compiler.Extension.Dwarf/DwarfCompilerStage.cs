@@ -5,6 +5,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Compiler.Framework.Source;
+using Mosa.Compiler.Framework.Trace;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -315,6 +316,11 @@ namespace Mosa.Compiler.Extensions.Dwarf
 						uint pcDiff = newPc - pc;
 
 						int lineDiff = loc.StartLine - (int)line;
+
+						//if (Math.Abs(lineDiff) > 100000)
+						//{
+						//	PostCompilerTraceEvent(CompilerEvent.Warning, $"Warning Line Numbers wrong: Location={loc} Method={method} lineDiff={lineDiff}");
+						//}
 
 						var newFile = FileHash[loc.Filename].FileNum;
 
