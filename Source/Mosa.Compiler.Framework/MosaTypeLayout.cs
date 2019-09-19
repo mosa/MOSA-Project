@@ -834,7 +834,7 @@ namespace Mosa.Compiler.Framework
 			{
 				case MosaTypeCode.Void: return true;
 				case MosaTypeCode.Var: return false;
-				case MosaTypeCode.MVar: return false;
+				case MosaTypeCode.MVar: return true;
 				case MosaTypeCode.Boolean: return true;
 				case MosaTypeCode.Char: return true;
 				case MosaTypeCode.I1: return true;
