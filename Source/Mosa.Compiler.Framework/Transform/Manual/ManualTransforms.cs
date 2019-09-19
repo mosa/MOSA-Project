@@ -108,7 +108,8 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			ManualInstance.IR_Rewrite_CompareBranch64Combine64x32,
 			ManualInstance.IR_Rewrite_CompareBranch64Combine64x64,
 
-			ManualInstance.IR_Rewrite_Compare64x32SkipHighCompare,
+			ManualInstance.IR_Rewrite_Compare64x32SameHigh,
+			ManualInstance.IR_Rewrite_Compare64x32SameLow,
 		};
 	}
 }
