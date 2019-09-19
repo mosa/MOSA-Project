@@ -28,7 +28,7 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 			if (Multiboot.MultibootV1.MemoryMapStart.IsNull)
 				return;
 
-			var memoryMapEnd = Multiboot.MultibootV1.MemoryMapStart + (int)Multiboot.MultibootV1.MemoryMapLength;
+			var memoryMapEnd = Multiboot.MultibootV1.MemoryMapStart + Multiboot.MultibootV1.MemoryMapLength;
 
 			var entry = new MultibootV1MemoryMapEntry(Multiboot.MultibootV1.MemoryMapStart);
 
@@ -74,7 +74,7 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 
 				var endAddress = entry.EndAddress;
 
-				if (endAddress.GreaterThan(max))
+				if (endAddress > max)
 					max = endAddress;
 			}
 

@@ -58,7 +58,7 @@ namespace Mosa.Kernel.BareMetal.x86
 
 		private void Set(uint index, uint address, uint limit, byte access, byte granularity)
 		{
-			var entry = Entry + (int)(6 + (index * GDTEntryOffset.TotalSize));
+			var entry = Entry + (6 + (index * GDTEntryOffset.TotalSize));
 
 			entry.Store16(GDTEntryOffset.BaseLow, (ushort)(address & 0xFFFF));
 			entry.Store8(GDTEntryOffset.BaseMiddle, (byte)((address >> 16) & 0xFF));

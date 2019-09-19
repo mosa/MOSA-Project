@@ -51,7 +51,7 @@ namespace Mosa.Kernel.BareMetal.MultibootSpecification
 		{
 			var next = Entry + Next + sizeof(int);
 
-			if (!next.LessThan(memoryMapEnd))
+			if (!(next < memoryMapEnd))
 			{
 				next = Pointer.Zero;
 			}

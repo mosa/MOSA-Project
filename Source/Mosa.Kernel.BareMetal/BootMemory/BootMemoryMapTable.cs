@@ -24,7 +24,7 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 		public BootMemoryMapEntry GetBootMemoryMapEntry(uint index)
 		{
 			var offset = sizeof(int) + (BootMemoryMapEntry.EntrySize * index);
-			return new BootMemoryMapEntry(Entry + (int)offset);
+			return new BootMemoryMapEntry(Entry + offset);
 		}
 	}
 }

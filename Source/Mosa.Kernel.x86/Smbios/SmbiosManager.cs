@@ -139,7 +139,7 @@ namespace Mosa.Kernel.x86.Smbios
 		{
 			var memory = new Pointer(0xF0000);
 
-			while (memory.LessThan(new Pointer(0x100000)))
+			while (memory < new Pointer(0x100000))
 			{
 				char a = (char)Intrinsic.Load8(memory);
 				char s = (char)Intrinsic.Load8(memory, 1u);

@@ -39,7 +39,7 @@ namespace Mosa.DeviceSystem
 		/// </returns>
 		public bool Contains(Pointer address)
 		{
-			return address.GreaterThanOrEqual(Address) && address.LessThan(Address + (int)Size);
+			return address >= Address && address < (Address + Size);
 		}
 	}
 }

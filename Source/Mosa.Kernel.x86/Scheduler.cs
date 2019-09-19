@@ -177,7 +177,7 @@ namespace Mosa.Kernel.x86
 			var thread = Threads[threadID];
 
 			var stack = new Pointer(VirtualPageAllocator.Reserve(stackSize));
-			var stackTop = stack + (int)stackSize;
+			var stackTop = stack + stackSize;
 
 			// Setup stack state
 			Intrinsic.Store32(stackTop, -4, 0);          // Zero Sentinel

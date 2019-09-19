@@ -25,14 +25,14 @@ namespace Mosa.Runtime.x86
 				var addr = Intrinsic.LoadPointer(table);
 				uint size = Intrinsic.Load32(table, Pointer.Size);
 
-				if (address.GreaterThanOrEqual(addr) && address.LessThan(addr + (int)size))
+				if (address >= addr && address < (addr + size))
 
 				//if (address.ToInt64() >= addr.ToInt64() && (address.ToInt64() < (addr.ToInt64() + size)))
 				{
 					return new MethodDefinition(Intrinsic.LoadPointer(table, Pointer.Size * 2));
 				}
 
-				table += (Pointer.Size * 3);
+				table += Pointer.Size * 3;
 
 				entries--;
 			}
@@ -58,14 +58,14 @@ namespace Mosa.Runtime.x86
 				var addr = Intrinsic.LoadPointer(table);
 				uint size = Intrinsic.Load32(table, Pointer.Size);
 
-				if (address.GreaterThanOrEqual(addr) && address.LessThan(addr + (int)size))
+				if (address >= addr && address < (addr + size))
 
 				//if (address.ToInt64() >= addr.ToInt64() && address.ToInt64() < addr.ToInt64() + size)
 				{
 					return new MethodDefinition(Intrinsic.LoadPointer(table, Pointer.Size * 2));
 				}
 
-				table += (Pointer.Size * 3);
+				table += Pointer.Size * 3;
 
 				entries--;
 			}
@@ -130,7 +130,7 @@ namespace Mosa.Runtime.x86
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static Pointer GetPreviousStackFrame(Pointer ebp)
 		{
-			if (ebp.LessThan(new Pointer(0x1000)))
+			if (ebp < new Pointer(0x1000))
 			{
 				return Pointer.Zero;
 			}
@@ -170,7 +170,7 @@ namespace Mosa.Runtime.x86
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static Pointer GetReturnAddressFromStackFrame(Pointer stackframe)
 		{
-			if (stackframe.LessThan(new Pointer(0x1000)))
+			if (stackframe < new Pointer(0x1000))
 			{
 				return Pointer.Zero;
 			}
@@ -273,11 +273,11 @@ namespace Mosa.Runtime.x86
 
 						var methodStart = methodDef.Method;
 						uint handlerOffset = protectedRegion.HandlerOffset;
-						var jumpTarget = methodStart + (int)handlerOffset;
+						var jumpTarget = methodStart + handlerOffset;
 
 						uint stackSize = methodDef.StackSize & 0xFFFF; // lower 16-bits only
 						var previousFrame = GetPreviousStackFrame(stackFrame);
-						var newStack = previousFrame - (int)stackSize;
+						var newStack = previousFrame - stackSize;
 
 						Native.FrameJump(jumpTarget, newStack, previousFrame, exceptionObject.ToInt32());
 					}

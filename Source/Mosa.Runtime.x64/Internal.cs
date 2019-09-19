@@ -24,7 +24,7 @@ namespace Mosa.Runtime.x64
 				var addr = Intrinsic.LoadPointer(table);
 				uint size = Intrinsic.Load32(table, Pointer.Size);
 
-				if (address.GreaterThanOrEqual(addr) && address.LessThan(addr + (int)size))
+				if (address >= addr && address < (addr + size))
 
 				//if (address.ToInt64() >= addr.ToInt64() && (address.ToInt64() < (addr.ToInt64() + size)))
 				{
@@ -57,7 +57,7 @@ namespace Mosa.Runtime.x64
 				var addr = Intrinsic.LoadPointer(table);
 				uint size = Intrinsic.Load32(table, Pointer.Size);
 
-				if (address.GreaterThanOrEqual(addr) && address.LessThan(addr + (int)size))
+				if (address >= addr && address < (addr + size))
 
 				//if (address.ToInt64() >= addr.ToInt64() && address.ToInt64() < addr.ToInt64() + size)
 				{
@@ -129,7 +129,7 @@ namespace Mosa.Runtime.x64
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static Pointer GetPreviousStackFrame(Pointer ebp)
 		{
-			if (ebp.LessThan(new Pointer(0x1000)))
+			if (ebp < new Pointer(0x1000))
 			{
 				return Pointer.Zero;
 			}
@@ -169,7 +169,7 @@ namespace Mosa.Runtime.x64
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static Pointer GetReturnAddressFromStackFrame(Pointer stackframe)
 		{
-			if (stackframe.LessThan(new Pointer(0x1000)))
+			if (stackframe < new Pointer(0x1000))
 			{
 				return Pointer.Zero;
 			}

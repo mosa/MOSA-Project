@@ -29,7 +29,7 @@ namespace Mosa.Kernel.BareMetal
 		{
 			// TODO: Acquire lock
 
-			var result = BootReserveStartPage + (int)(UsedPages * Page.Size);
+			var result = BootReserveStartPage + (UsedPages * Page.Size);
 
 			UsedPages += pages;
 

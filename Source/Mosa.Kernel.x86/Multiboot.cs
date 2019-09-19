@@ -212,14 +212,14 @@ namespace Mosa.Kernel.x86
 			MemoryMapCount = 0;
 
 			var location = MemoryMapStart;
-			var end = Pointer.Add(location, (int)MemoryMapLength);
+			var end = location + MemoryMapLength;
 
-			while (location.LessThan(end))
+			while (location < end)
 			{
 				MemoryMapCount++;
 
 				var size = Intrinsic.Load32(location, MultiBootMemoryMapOffset.Size) + 4;
-				location += (int)size;
+				location += size;
 			}
 		}
 
@@ -236,7 +236,7 @@ namespace Mosa.Kernel.x86
 			{
 				var size = Intrinsic.Load32(location, MultiBootMemoryMapOffset.Size) + 4;
 
-				location += (int)size;
+				location += size;
 			}
 
 			return location;

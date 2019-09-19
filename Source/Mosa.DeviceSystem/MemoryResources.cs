@@ -42,7 +42,7 @@ namespace Mosa.DeviceSystem
 
 					foreach (var memoryRegion in memoryRegions)
 					{
-						if (memoryRegion.Contains(region.Address) || memoryRegion.Contains(region.Address + (int)region.Size))
+						if (memoryRegion.Contains(region.Address) || memoryRegion.Contains(region.Address + region.Size))
 							return false;
 					}
 				}

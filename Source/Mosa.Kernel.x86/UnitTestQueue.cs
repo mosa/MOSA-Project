@@ -28,9 +28,9 @@ namespace Mosa.Kernel.x86
 		{
 			uint len = (uint)start.GetOffset(end);
 
-			if ((queueNext + (int)len + 32).GreaterThan(new Pointer(Address.UnitTestQueue) + (int)TestQueueSize))
+			if ((queueNext + len + 32) > (new Pointer(Address.UnitTestQueue) + TestQueueSize))
 			{
-				if (new Pointer(Address.UnitTestQueue + len + 32).GreaterThanOrEqual(queueCurrent))
+				if (new Pointer(Address.UnitTestQueue + len + 32) >= queueCurrent)
 					return false; // no space
 
 				Intrinsic.Store32(queueNext, uint.MaxValue); // mark jump to front
@@ -45,7 +45,7 @@ namespace Mosa.Kernel.x86
 			Intrinsic.Store32(queueNext, id);
 			queueNext += 4;
 
-			for (var i = start; i.LessThan(end); i += 4)
+			for (var i = start; i < end; i += 4)
 			{
 				uint value = Intrinsic.Load32(i);
 				Intrinsic.Store32(queueNext, value);
@@ -91,7 +91,7 @@ namespace Mosa.Kernel.x86
 				UnitTestRunner.SetUnitTestMethodParameter(index, value);
 			}
 
-			queueCurrent = queueCurrent + (int)len + 4;
+			queueCurrent = queueCurrent + len + 4;
 			--count;
 
 			Screen.Goto(17, 0);

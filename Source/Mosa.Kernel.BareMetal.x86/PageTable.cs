@@ -39,7 +39,7 @@ namespace Mosa.Kernel.BareMetal.x86
 			// Clear the Page Tables
 			for (uint index = 0; index < 1024; index++)
 			{
-				Page.ClearPage(PageTables.Add(index * Page.Size));
+				Page.ClearPage(PageTables + (index * Page.Size));
 			}
 		}
 

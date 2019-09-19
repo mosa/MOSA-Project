@@ -31,7 +31,17 @@ namespace Mosa.Runtime
 
 		public unsafe Pointer(long value)
 		{
-			this.value = (void*)((int)value);
+			this.value = (void*)value;
+		}
+
+		public unsafe Pointer(uint value)
+		{
+			this.value = (void*)value;
+		}
+
+		public unsafe Pointer(ulong value)
+		{
+			this.value = (void*)value;
 		}
 
 		public unsafe Pointer(void* value)
@@ -50,7 +60,7 @@ namespace Mosa.Runtime
 
 		public unsafe override int GetHashCode()
 		{
-			return ((int)value);
+			return (int)value;
 		}
 
 		public unsafe int ToInt32()
@@ -81,6 +91,16 @@ namespace Mosa.Runtime
 		public unsafe UIntPtr ToUIntPtr()
 		{
 			return new UIntPtr(value);
+		}
+
+		public static unsafe explicit operator Pointer(uint value)
+		{
+			return new Pointer(value);
+		}
+
+		public static unsafe explicit operator Pointer(ulong value)
+		{
+			return new Pointer(value);
 		}
 
 		public static unsafe explicit operator Pointer(int value)
@@ -133,9 +153,24 @@ namespace Mosa.Runtime
 			return value1.value != value2.value;
 		}
 
-		public static Pointer Add(Pointer pointer, int offset)
+		public static unsafe bool operator >(Pointer value1, Pointer value2)
 		{
-			return pointer + offset;
+			return value1.value > value2.value;
+		}
+
+		public static unsafe bool operator >=(Pointer value1, Pointer value2)
+		{
+			return value1.value >= value2.value;
+		}
+
+		public static unsafe bool operator <(Pointer value1, Pointer value2)
+		{
+			return value1.value < value2.value;
+		}
+
+		public static unsafe bool operator <=(Pointer value1, Pointer value2)
+		{
+			return value1.value <= value2.value;
 		}
 
 		public static unsafe Pointer operator +(Pointer pointer, int offset)
@@ -143,14 +178,34 @@ namespace Mosa.Runtime
 			return new Pointer(pointer.ToInt64() + (uint)offset);
 		}
 
-		public static Pointer Subtract(Pointer pointer, int offset)
+		public static unsafe Pointer operator +(Pointer pointer, long offset)
 		{
-			return pointer - offset;
+			return new Pointer(pointer.ToInt64() + offset);
+		}
+
+		public static unsafe Pointer operator +(Pointer pointer, ulong offset)
+		{
+			return new Pointer(pointer.ToUInt64() + offset);
 		}
 
 		public static unsafe Pointer operator -(Pointer pointer, int offset)
 		{
 			return new Pointer((long)pointer.value - offset);
+		}
+
+		public static unsafe Pointer operator -(Pointer pointer, uint offset)
+		{
+			return new Pointer((ulong)pointer.value - offset);
+		}
+
+		public static unsafe Pointer operator -(Pointer pointer, long offset)
+		{
+			return new Pointer((long)pointer.value - offset);
+		}
+
+		public static unsafe Pointer operator -(Pointer pointer, ulong offset)
+		{
+			return new Pointer((ulong)pointer.value - offset);
 		}
 
 		public unsafe void* ToPointer()
@@ -161,36 +216,6 @@ namespace Mosa.Runtime
 		public unsafe override string ToString()
 		{
 			return ((long)value).ToString();
-		}
-
-		public Pointer Add(ulong b)
-		{
-			return new Pointer(ToInt64() + (long)b);
-		}
-
-		public Pointer Add(uint b)
-		{
-			return new Pointer(ToInt64() + b);
-		}
-
-		public bool GreaterThan(Pointer b)
-		{
-			return ToInt64() > b.ToInt64();
-		}
-
-		public bool GreaterThanOrEqual(Pointer b)
-		{
-			return ToInt64() >= b.ToInt64();
-		}
-
-		public bool LessThan(Pointer b)
-		{
-			return ToInt64() < b.ToInt64();
-		}
-
-		public bool LessThanOrEqual(Pointer b)
-		{
-			return ToInt64() <= b.ToInt64();
 		}
 
 		public long GetOffset(Pointer b)

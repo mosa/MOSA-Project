@@ -29,7 +29,7 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 
 		public Pointer EndAddress
 		{
-			get { return StartAddress.Add(Size); }
+			get { return StartAddress + Size; }
 		}
 
 		public BootMemoryMapType Type

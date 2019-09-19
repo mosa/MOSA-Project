@@ -26,7 +26,7 @@ namespace Mosa.Kernel.x86.Smbios
 			if (index == 0)
 				return string.Empty;
 
-			var first = address + (int)length;
+			var first = address + length;
 			int offset = 0;
 
 			for (byte count = 1; count != index;)
