@@ -8,7 +8,7 @@ namespace Mosa.Runtime
 	{
 		private readonly unsafe void* value;
 
-		public static readonly Pointer Zero;
+		public static Pointer Zero { get { return new Pointer(0); } }
 
 		public unsafe static int Size { get { return sizeof(void*); } }
 
