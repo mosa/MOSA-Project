@@ -79,12 +79,14 @@ namespace Mosa.UnitTests
 
 	public static class InterfaceTests
 	{
+		[MosaUnitTest]
 		public static int InterfaceTest1()
 		{
 			InterfaceTestClass tc = new InterfaceTestClass();
 			return tc.B();
 		}
 
+		[MosaUnitTest]
 		public static int InterfaceTest2()
 		{
 			InterfaceTestClass tc = new InterfaceTestClass();
@@ -92,6 +94,7 @@ namespace Mosa.UnitTests
 			return b.B();
 		}
 
+		[MosaUnitTest]
 		public static int InterfaceTest3()
 		{
 			InterfaceTestClass tc = new InterfaceTestClass();
@@ -99,6 +102,7 @@ namespace Mosa.UnitTests
 			return b.A();
 		}
 
+		[MosaUnitTest]
 		public static int InterfaceTest4()
 		{
 			InterfaceTestClassB tc = new InterfaceTestClassB();
@@ -106,6 +110,7 @@ namespace Mosa.UnitTests
 			return a.A();
 		}
 
+		[MosaUnitTest]
 		public static bool InterfaceTest5()
 		{
 			InterfaceTestClassY y = new InterfaceTestClassY();
@@ -113,6 +118,7 @@ namespace Mosa.UnitTests
 			return (y as IInterfaceA) == null;
 		}
 
+		[MosaUnitTest]
 		public static bool InterfaceTest6()
 		{
 			InterfaceTestClassZ z = new InterfaceTestClassZ();
@@ -120,6 +126,7 @@ namespace Mosa.UnitTests
 			return (z as IInterfaceA) == null;
 		}
 
+		[MosaUnitTest]
 		public static bool InterfaceTest7()
 		{
 			InterfaceTestClassZ2 z = new InterfaceTestClassZ2();
