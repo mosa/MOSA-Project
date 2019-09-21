@@ -96,7 +96,7 @@
 				},
 				{
 					"Condition": "[#register][constant]",
-					"Encoding": "[x86],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:o2"
+					"Encoding": "[x86],opcode=0x81,mod=11,reg=010,rm=reg3:r,immediate=imm32:o2"
 				}
 			]
 		},

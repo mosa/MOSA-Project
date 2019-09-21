@@ -19,7 +19,8 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			AddVisitation(IRInstruction.Add64, Add64);
 			AddVisitation(IRInstruction.Compare64x32, Compare64x32);
-			AddVisitation(IRInstruction.CompareBranch64, CompareBranch64);
+
+			//AddVisitation(IRInstruction.CompareBranch64, CompareBranch64);
 			AddVisitation(IRInstruction.Load64, LoadInt64);
 			AddVisitation(IRInstruction.LoadParam64, LoadParamInt64);
 			AddVisitation(IRInstruction.LoadParamSignExtend16x64, LoadParamSignExtend16x64);
