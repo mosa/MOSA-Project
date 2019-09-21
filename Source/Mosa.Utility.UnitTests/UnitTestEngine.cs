@@ -57,14 +57,14 @@ namespace Mosa.Utility.UnitTests
 		{
 			LauncherOptions = new LauncherOptions()
 			{
-				EnableSSA = true,
-				EnableIROptimizations = true,
-				EnableSparseConditionalConstantPropagation = true,
+				EnableSSA = false,
+				EnableIROptimizations = false,
+				EnableSparseConditionalConstantPropagation = false,
 				EnableInlinedMethods = false,
 				EnableLongExpansion = true,
-				EnableValueNumbering = true,
-				TwoPassOptimizations = true,
-				EnableBitTracker = true,
+				EnableValueNumbering = false,
+				TwoPassOptimizations = false,
+				EnableBitTracker = false,
 
 				EnableMultiThreading = false,
 				EnableMethodScanner = false,

@@ -273,7 +273,7 @@ namespace Mosa.Runtime
 				return null;
 
 			var o = Intrinsic.GetObjectAddress(obj);
-			var objTypeDefinition = new TypeDefinition(o);
+			var objTypeDefinition = new TypeDefinition(Intrinsic.LoadPointer(o));
 
 			var bitmap = objTypeDefinition.Bitmap;
 
