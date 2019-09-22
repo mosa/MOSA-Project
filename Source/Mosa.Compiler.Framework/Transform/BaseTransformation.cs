@@ -380,7 +380,7 @@ namespace Mosa.Compiler.Framework.Transform
 
 		protected static ulong To64(uint low, uint high)
 		{
-			return (high << 32) | low;
+			return ((ulong)high << 32) | (ulong)low;
 		}
 
 		protected static byte ToByte(ulong value)
