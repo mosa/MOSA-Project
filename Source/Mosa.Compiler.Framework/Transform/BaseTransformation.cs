@@ -98,7 +98,7 @@ namespace Mosa.Compiler.Framework.Transform
 		{
 			return operand.IsConstant;
 		}
-		
+
 		protected static bool IsResolvedConstant(Operand operand)
 		{
 			return operand.IsResolvedConstant;
@@ -378,9 +378,9 @@ namespace Mosa.Compiler.Framework.Transform
 			return a - b;
 		}
 
-		protected static uint To64(uint a, uint b)
+		protected static ulong To64(uint low, uint high)
 		{
-			return (a << 32) | b;
+			return (high << 32) | low;
 		}
 
 		protected static byte ToByte(ulong value)
