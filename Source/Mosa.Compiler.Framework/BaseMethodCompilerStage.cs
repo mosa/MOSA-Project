@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common.Exceptions;
-using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
@@ -924,7 +923,7 @@ namespace Mosa.Compiler.Framework
 			if (type.IsUI8 || (type.IsEnum && type.ElementType.IsUI8))
 				return IRInstruction.SetReturn64;
 
-			if (MosaTypeLayout.IsStoredOnStack(type))
+			if (!MosaTypeLayout.CanFitInRegister(type))
 				return IRInstruction.SetReturnCompound;
 
 			return IRInstruction.SetReturn32;

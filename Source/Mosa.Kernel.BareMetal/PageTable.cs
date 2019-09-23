@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal
 {
@@ -41,9 +41,9 @@ namespace Mosa.Kernel.BareMetal
 		/// </summary>
 		/// <param name="virtualAddress">The virtual address.</param>
 		/// <returns></returns>
-		public static IntPtr GetPhysicalAddressFromVirtual(IntPtr virtualAddress)
+		public static Pointer GetPhysicalAddressFromVirtual(Pointer virtualAddress)
 		{
-			return IntPtr.Zero;
+			return Pointer.Zero;
 		}
 	}
 }

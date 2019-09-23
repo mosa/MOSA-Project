@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Setup()
 		{
-			trace = CreateTraceLog(6);
+			trace = CreateTraceLog(5);
 		}
 
 		protected override void Run()
@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return false;
 			}
 
-			if (MosaTypeLayout.IsStoredOnStack(operand.Type))
+			if (!MosaTypeLayout.CanFitInRegister(operand.Type))
 			{
 				trace?.Log($"incompatible type: {operand}");
 				return false;

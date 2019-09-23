@@ -71,10 +71,11 @@ namespace Mosa.Platform.Intel.Stages
 						{
 							Move(node);
 
-							if (!node.IsEmpty)
-							{
-								RemoveUseless(node);
-							}
+							if (node.IsEmpty)
+								continue;
+
+							RemoveUseless(node);
+
 							continue;
 						}
 
@@ -139,9 +140,6 @@ namespace Mosa.Platform.Intel.Stages
 				return;
 
 			if (result.Definitions.Count != 1)
-				return;
-
-			if (source.Definitions.Count != 1)
 				return;
 
 			if (source.IsResolvedConstant)

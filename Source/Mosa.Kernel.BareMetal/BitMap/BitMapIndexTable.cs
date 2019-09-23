@@ -1,28 +1,27 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Kernel.BareMetal.Extension;
-using System;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal
 {
 	public /*readonly*/ struct BitMapIndexTable
 	{
-		private readonly IntPtr Ptr;
+		private readonly Pointer Ptr;
 
-		public BitMapIndexTable(IntPtr page)
+		public BitMapIndexTable(Pointer page)
 		{
 			Ptr = page;
 			Page.ClearPage(Ptr);
 		}
 
-		public void AddBitMapEntry(uint index, IntPtr page)
+		public void AddBitMapEntry(uint index, Pointer page)
 		{
-			Ptr.StorePointer(index * IntPtr.Size, page);
+			Ptr.StorePointer(index * Pointer.Size, page);
 		}
 
-		public IntPtr GetBitMapEntry(uint index)
+		public Pointer GetBitMapEntry(uint index)
 		{
-			return Ptr.LoadPointer((uint)(index * IntPtr.Size));
+			return Ptr.LoadPointer((uint)(index * Pointer.Size));
 		}
 	}
 }

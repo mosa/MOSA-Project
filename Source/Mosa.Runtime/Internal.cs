@@ -11,68 +11,68 @@ namespace Mosa.Runtime
 		#region Allocation
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static IntPtr AllocateObject(RuntimeTypeHandle handle, uint classSize)
+		public static Pointer AllocateObject(RuntimeTypeHandle handle, uint classSize)
 		{
 			// An object has the following memory layout:
-			//   - IntPtr TypeDef
-			//   - IntPtr SyncBlock
+			//   - Pointer TypeDef
+			//   - Pointer SyncBlock
 			//   - 0 .. n object data fields
 
-			var memory = GC.AllocateObject((2 * (uint)(IntPtr.Size)) + classSize);
+			var memory = GC.AllocateObject((2 * (uint)(Pointer.Size)) + classSize);
 
-			Intrinsic.Store(memory, 0, handle.Value);
+			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
 
-			if (IntPtr.Size == 4)
+			if (Pointer.Size == 4)
 			{
-				Intrinsic.Store32(memory, IntPtr.Size, 0);
+				Intrinsic.Store32(memory, Pointer.Size, 0);
 			}
 			else
 			{
-				Intrinsic.Store64(memory, IntPtr.Size, 0);
+				Intrinsic.Store64(memory, Pointer.Size, 0);
 			}
 
 			return memory;
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static IntPtr AllocateObject(RuntimeTypeHandle handle, int classSize)
+		public static Pointer AllocateObject(RuntimeTypeHandle handle, int classSize)
 		{
 			return AllocateObject(handle, (uint)classSize);
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static IntPtr AllocateArray(RuntimeTypeHandle handle, uint elementSize, uint elements)
+		public static Pointer AllocateArray(RuntimeTypeHandle handle, uint elementSize, uint elements)
 		{
 			// An array has the following memory layout:
-			//   - IntPtr TypeDef
-			//   - IntPtr SyncBlock
+			//   - Pointer TypeDef
+			//   - Pointer SyncBlock
 			//   - int length
 			//   - ElementType[length] elements
 			//   - Padding
 
-			uint allocationSize = ((uint)(IntPtr.Size) * 3) + (elements * elementSize);
+			uint allocationSize = ((uint)(Pointer.Size) * 3) + (elements * elementSize);
 			allocationSize = (allocationSize + 3) & ~3u;    // Align to 4-bytes boundary
 
 			var memory = GC.AllocateObject(allocationSize);
 
-			Intrinsic.Store(memory, 0, handle.Value);
+			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
 
-			if (IntPtr.Size == 4)
+			if (Pointer.Size == 4)
 			{
-				Intrinsic.Store32(memory, IntPtr.Size, 0);
-				Intrinsic.Store32(memory, IntPtr.Size * 2, elements);
+				Intrinsic.Store32(memory, Pointer.Size, 0);
+				Intrinsic.Store32(memory, Pointer.Size * 2, elements);
 			}
 			else
 			{
-				Intrinsic.Store64(memory, IntPtr.Size, 0);
-				Intrinsic.Store64(memory, IntPtr.Size * 2, elements);
+				Intrinsic.Store64(memory, Pointer.Size, 0);
+				Intrinsic.Store64(memory, Pointer.Size * 2, elements);
 			}
 
 			return memory;
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static IntPtr AllocateString(RuntimeTypeHandle handle, uint length)
+		public static Pointer AllocateString(RuntimeTypeHandle handle, uint length)
 		{
 			return AllocateArray(handle, sizeof(char), length);
 		}
@@ -82,105 +82,105 @@ namespace Mosa.Runtime
 		#region (Un)Boxing
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static IntPtr Box8(RuntimeTypeHandle handle, byte value)
+		public static Pointer Box8(RuntimeTypeHandle handle, byte value)
 		{
-			var memory = AllocateObject(handle, IntPtr.Size);
+			var memory = AllocateObject(handle, Pointer.Size);
 
-			Intrinsic.Store(memory, 0, handle.Value);
-			Intrinsic.Store8(memory, IntPtr.Size * 2, value);
+			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
+			Intrinsic.Store8(memory, Pointer.Size * 2, value);
 
 			return memory;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static IntPtr Box16(RuntimeTypeHandle handle, ushort value)
+		public static Pointer Box16(RuntimeTypeHandle handle, ushort value)
 		{
-			var memory = AllocateObject(handle, IntPtr.Size);
+			var memory = AllocateObject(handle, Pointer.Size);
 
-			Intrinsic.Store(memory, 0, handle.Value);
-			Intrinsic.Store16(memory, IntPtr.Size * 2, value);
+			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
+			Intrinsic.Store16(memory, Pointer.Size * 2, value);
 
 			return memory;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static IntPtr Box32(RuntimeTypeHandle handle, uint value)
+		public static Pointer Box32(RuntimeTypeHandle handle, uint value)
 		{
-			var memory = AllocateObject(handle, IntPtr.Size);
+			var memory = AllocateObject(handle, Pointer.Size);
 
-			Intrinsic.Store(memory, 0, handle.Value);
-			Intrinsic.Store32(memory, IntPtr.Size * 2, value);
+			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
+			Intrinsic.Store32(memory, Pointer.Size * 2, value);
 
 			return memory;
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static IntPtr Box64(RuntimeTypeHandle handle, ulong value)
+		public static Pointer Box64(RuntimeTypeHandle handle, ulong value)
 		{
-			var memory = AllocateObject(handle, IntPtr.Size * 2);
+			var memory = AllocateObject(handle, Pointer.Size * 2);
 
-			Intrinsic.Store(memory, 0, handle.Value);
-			Intrinsic.Store64(memory, IntPtr.Size * 2, value);
+			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
+			Intrinsic.Store64(memory, Pointer.Size * 2, value);
 
 			return memory;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static IntPtr BoxR4(RuntimeTypeHandle handle, float value)
+		public static Pointer BoxR4(RuntimeTypeHandle handle, float value)
 		{
-			var memory = AllocateObject(handle, IntPtr.Size);
+			var memory = AllocateObject(handle, Pointer.Size);
 
-			Intrinsic.Store(memory, 0, handle.Value);
-			Intrinsic.StoreR4(memory, IntPtr.Size * 2, value);
+			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
+			Intrinsic.StoreR4(memory, Pointer.Size * 2, value);
 
 			return memory;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static IntPtr BoxR8(RuntimeTypeHandle handle, double value)
+		public static Pointer BoxR8(RuntimeTypeHandle handle, double value)
 		{
-			var memory = AllocateObject(handle, IntPtr.Size * 2);
+			var memory = AllocateObject(handle, Pointer.Size * 2);
 
-			Intrinsic.Store(memory, 0, handle.Value);
-			Intrinsic.StoreR8(memory, IntPtr.Size * 2, value);
+			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
+			Intrinsic.StoreR8(memory, Pointer.Size * 2, value);
 
 			return memory;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static IntPtr Box(RuntimeTypeHandle handle, IntPtr value, uint size)
+		public static Pointer Box(RuntimeTypeHandle handle, Pointer value, uint size)
 		{
 			var memory = AllocateObject(handle, size);
 
-			MemoryCopy(memory + (IntPtr.Size * 2), value, size);
+			MemoryCopy(memory + (Pointer.Size * 2), value, size);
 
 			return memory;
 		}
 
-		public static IntPtr Unbox8(IntPtr box)
+		public static Pointer Unbox8(Pointer box)
 		{
-			return box + (IntPtr.Size * 2);
+			return box + (Pointer.Size * 2);
 		}
 
-		public static IntPtr Unbox16(IntPtr box)
+		public static Pointer Unbox16(Pointer box)
 		{
-			return box + (IntPtr.Size * 2);
+			return box + (Pointer.Size * 2);
 		}
 
-		public static IntPtr Unbox32(IntPtr box)
+		public static Pointer Unbox32(Pointer box)
 		{
-			return box + (IntPtr.Size * 2);
+			return box + (Pointer.Size * 2);
 		}
 
-		public static IntPtr Unbox64(IntPtr box)
+		public static Pointer Unbox64(Pointer box)
 		{
-			return box + (IntPtr.Size * 2);
+			return box + (Pointer.Size * 2);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static IntPtr Unbox(IntPtr box, IntPtr vt, uint size)
+		public static Pointer Unbox(Pointer box, Pointer vt, uint size)
 		{
-			MemoryCopy(vt, box + (IntPtr.Size * 2), size);
+			MemoryCopy(vt, box + (Pointer.Size * 2), size);
 
 			return vt;
 		}
@@ -189,7 +189,7 @@ namespace Mosa.Runtime
 
 		#region Memory Manipulation
 
-		public static void MemoryCopy(IntPtr dest, IntPtr src, uint count)
+		public static void MemoryCopy(Pointer dest, Pointer src, uint count)
 		{
 			// FUTURE: Improve
 			for (int i = 0; i < count; i++)
@@ -199,7 +199,7 @@ namespace Mosa.Runtime
 			}
 		}
 
-		public static void MemorySet(IntPtr dest, byte value, uint count)
+		public static void MemorySet(Pointer dest, byte value, uint count)
 		{
 			// FUTURE: Improve
 			for (int i = 0; i < count; i++)
@@ -208,7 +208,7 @@ namespace Mosa.Runtime
 			}
 		}
 
-		public static void MemorySet(IntPtr dest, ushort value, uint count)
+		public static void MemorySet(Pointer dest, ushort value, uint count)
 		{
 			// FUTURE: Improve
 			for (int i = 0; i < count; i = i + 2)
@@ -217,7 +217,7 @@ namespace Mosa.Runtime
 			}
 		}
 
-		public static void MemorySet(IntPtr dest, uint value, uint count)
+		public static void MemorySet(Pointer dest, uint value, uint count)
 		{
 			// FUTURE: Improve
 			for (int i = 0; i < count; i = i + 4)
@@ -226,7 +226,7 @@ namespace Mosa.Runtime
 			}
 		}
 
-		public static void MemoryClear(IntPtr dest, uint count)
+		public static void MemoryClear(Pointer dest, uint count)
 		{
 			// FUTURE: Improve
 			for (int i = 0; i < count; i++)
@@ -252,19 +252,19 @@ namespace Mosa.Runtime
 			return false;
 		}
 
-		public static IntPtr IsInstanceOfType(RuntimeTypeHandle handle, object obj)
+		public static Pointer IsInstanceOfType(RuntimeTypeHandle handle, object obj)
 		{
 			if (obj == null)
-				return IntPtr.Zero;
+				return Pointer.Zero;
 
 			var o = Intrinsic.GetObjectAddress(obj);
 			var objTypeDefinition = new TypeDefinition(Intrinsic.LoadPointer(o));
-			var typeDefinition = new TypeDefinition(handle.Value);
+			var typeDefinition = new TypeDefinition(new Pointer(handle.Value));
 
 			if (IsTypeInInheritanceChain(typeDefinition, objTypeDefinition))
 				return o;
 
-			return IntPtr.Zero;
+			return Pointer.Zero;
 		}
 
 		public static object IsInstanceOfInterfaceType(int interfaceSlot, object obj)
@@ -277,7 +277,7 @@ namespace Mosa.Runtime
 
 			var bitmap = objTypeDefinition.Bitmap;
 
-			if (bitmap == IntPtr.Zero)
+			if (bitmap.IsNull)
 				return null;
 
 			int index = interfaceSlot / 32;

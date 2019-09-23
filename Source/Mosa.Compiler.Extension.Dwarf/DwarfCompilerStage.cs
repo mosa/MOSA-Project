@@ -323,6 +323,11 @@ namespace Mosa.Compiler.Extensions.Dwarf
 						if (Math.Abs(lineDiff) > 100000)
 							PostCompilerTraceEvent(CompilerEvent.Warning, $"Warning Line Numbers wrong: Location={loc} Method={method} lineDiff={lineDiff}");
 
+						//if (Math.Abs(lineDiff) > 100000)
+						//{
+						//	PostCompilerTraceEvent(CompilerEvent.Warning, $"Warning Line Numbers wrong: Location={loc} Method={method} lineDiff={lineDiff}");
+						//}
+
 						var newFile = FileHash[loc.Filename].FileNum;
 
 						if (newFile != file)

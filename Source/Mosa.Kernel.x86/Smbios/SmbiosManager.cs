@@ -1,8 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
-using Mosa.Runtime.Extension;
-using System;
 
 namespace Mosa.Kernel.x86.Smbios
 {
@@ -17,7 +15,7 @@ namespace Mosa.Kernel.x86.Smbios
 		/// <value>
 		/// The entry point.
 		/// </value>
-		public static IntPtr EntryPoint { get; private set; }
+		public static Pointer EntryPoint { get; private set; }
 
 		/// <summary>
 		/// Gets the major version.
@@ -49,7 +47,7 @@ namespace Mosa.Kernel.x86.Smbios
 		/// <value>
 		/// The table address.
 		/// </value>
-		public static IntPtr TableAddress { get; private set; }
+		public static Pointer TableAddress { get; private set; }
 
 		/// <summary>
 		/// Gets the total number of available structures
@@ -65,7 +63,7 @@ namespace Mosa.Kernel.x86.Smbios
 		/// <value>
 		///   <c>true</c> if this instance is available; otherwise, <c>false</c>.
 		/// </value>
-		public static bool IsAvailable { get { return EntryPoint != new IntPtr(0x100000); } }
+		public static bool IsAvailable { get { return EntryPoint != new Pointer(0x100000); } }
 
 		/// <summary>
 		/// Setups this instance.
@@ -89,7 +87,7 @@ namespace Mosa.Kernel.x86.Smbios
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public static IntPtr GetStructureOfType(byte type)
+		public static Pointer GetStructureOfType(byte type)
 		{
 			var address = TableAddress;
 
@@ -101,7 +99,7 @@ namespace Mosa.Kernel.x86.Smbios
 				address = GetAddressOfNextStructure(address);
 			}
 
-			return new IntPtr(0xFFFF);
+			return new Pointer(0xFFFF);
 		}
 
 		/// <summary>
@@ -109,7 +107,7 @@ namespace Mosa.Kernel.x86.Smbios
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <returns></returns>
-		private static byte GetType(IntPtr address)
+		private static byte GetType(Pointer address)
 		{
 			return Intrinsic.Load8(address);
 		}
@@ -119,7 +117,7 @@ namespace Mosa.Kernel.x86.Smbios
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <returns></returns>
-		private static IntPtr GetAddressOfNextStructure(IntPtr address)
+		private static Pointer GetAddressOfNextStructure(Pointer address)
 		{
 			byte length = Intrinsic.Load8(address, 0x01);
 			var endOfFormattedArea = address + length;
@@ -139,9 +137,9 @@ namespace Mosa.Kernel.x86.Smbios
 		/// </summary>
 		private static void LocateEntryPoint()
 		{
-			var memory = new IntPtr(0xF0000);
+			var memory = new Pointer(0xF0000);
 
-			while (memory.LessThan(new IntPtr(0x100000)))
+			while (memory < new Pointer(0x100000))
 			{
 				char a = (char)Intrinsic.Load8(memory);
 				char s = (char)Intrinsic.Load8(memory, 1u);

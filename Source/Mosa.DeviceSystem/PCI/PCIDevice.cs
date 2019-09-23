@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
+using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem.PCI
 {
@@ -224,16 +224,16 @@ namespace Mosa.DeviceSystem.PCI
 				HAL.EnableAllInterrupts();
 
 				if (address % 2 == 1)
-					BaseAddresses[i] = new BaseAddress(AddressType.IO, new IntPtr(address & 0x0000FFF8), (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
+					BaseAddresses[i] = new BaseAddress(AddressType.IO, new Pointer(address & 0x0000FFF8), (~(mask & 0xFFF8) + 1) & 0xFFFF, false);
 				else
-					BaseAddresses[i] = new BaseAddress(AddressType.Memory, new IntPtr(address & 0xFFFFFFF0), ~(mask & 0xFFFFFFF0) + 1, (address & 0x08) == 1);
+					BaseAddresses[i] = new BaseAddress(AddressType.Memory, new Pointer(address & 0xFFFFFFF0), ~(mask & 0xFFFFFFF0) + 1, (address & 0x08) == 1);
 			}
 
 			// FIXME: Special case for generic VGA
 			if (ClassCode == 0x03 && SubClassCode == 0x00 && ProgIF == 0x00)
 			{
-				BaseAddresses[6] = new BaseAddress(AddressType.Memory, new IntPtr(0xA0000), 0x1FFFF, false);
-				BaseAddresses[7] = new BaseAddress(AddressType.IO, new IntPtr(0x3B0), 0x0F, false);
+				BaseAddresses[6] = new BaseAddress(AddressType.Memory, new Pointer(0xA0000), 0x1FFFF, false);
+				BaseAddresses[7] = new BaseAddress(AddressType.IO, new Pointer(0x3B0), 0x0F, false);
 			}
 
 			foreach (var baseAddress in BaseAddresses)

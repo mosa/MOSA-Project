@@ -2,7 +2,6 @@
 
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
-using System;
 
 namespace Mosa.Kernel.x86
 {
@@ -101,7 +100,7 @@ namespace Mosa.Kernel.x86
 			SendInteger((int)i);
 		}
 
-		private static void SendPointer32(IntPtr pointer)
+		private static void SendPointer32(Pointer pointer)
 		{
 			SendInteger(pointer.ToInt32());
 		}
@@ -160,27 +159,27 @@ namespace Mosa.Kernel.x86
 
 		private static byte GetByte(uint offset)
 		{
-			return Intrinsic.Load8(new IntPtr(Address.DebuggerBuffer), offset);
+			return Intrinsic.Load8(new Pointer(Address.DebuggerBuffer), offset);
 		}
 
 		private static uint GetUInt32(uint offset)
 		{
-			return Intrinsic.Load32(new IntPtr(Address.DebuggerBuffer), offset);
+			return Intrinsic.Load32(new Pointer(Address.DebuggerBuffer), offset);
 		}
 
 		private static byte GetDataByte(uint offset)
 		{
-			return Intrinsic.Load8(new IntPtr(Address.DebuggerBuffer), HeaderSize + offset);
+			return Intrinsic.Load8(new Pointer(Address.DebuggerBuffer), HeaderSize + offset);
 		}
 
 		private static uint GetDataUInt32(uint offset)
 		{
-			return Intrinsic.Load32(new IntPtr(Address.DebuggerBuffer), HeaderSize + offset);
+			return Intrinsic.Load32(new Pointer(Address.DebuggerBuffer), HeaderSize + offset);
 		}
 
-		private static IntPtr GetDataPointer(uint offset)
+		private static Pointer GetDataPointer(uint offset)
 		{
-			return Intrinsic.LoadPointer(new IntPtr(Address.DebuggerBuffer), HeaderSize + offset);
+			return Intrinsic.LoadPointer(new Pointer(Address.DebuggerBuffer), HeaderSize + offset);
 		}
 
 		private static uint GetID()
@@ -261,7 +260,7 @@ namespace Mosa.Kernel.x86
 				return true;
 			}
 
-			Intrinsic.Store8(new IntPtr(Address.DebuggerBuffer), index++, b);
+			Intrinsic.Store8(new Pointer(Address.DebuggerBuffer), index++, b);
 
 			if (index >= HeaderSize)
 			{
@@ -400,7 +399,7 @@ namespace Mosa.Kernel.x86
 
 			//uint uncompresscrc = GetDataUInt32(12);
 
-			LZF.Decompress(new IntPtr(Address.DebuggerBuffer + HeaderSize), length, new IntPtr(address), size);
+			LZF.Decompress(new Pointer(Address.DebuggerBuffer + HeaderSize), length, new Pointer(address), size);
 
 			Screen.Goto(15, 0);
 			Screen.ClearRow();
@@ -457,7 +456,7 @@ namespace Mosa.Kernel.x86
 			uint id = GetID();
 			uint length = GetLength();
 
-			var start = new IntPtr(Address.DebuggerBuffer) + HeaderSize;
+			var start = new Pointer(Address.DebuggerBuffer) + HeaderSize;
 			var end = start + (int)length;
 
 			UnitTestQueue.QueueUnitTest(id, start, end);

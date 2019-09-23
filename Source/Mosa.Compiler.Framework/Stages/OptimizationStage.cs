@@ -62,10 +62,13 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var context = new Context(BasicBlocks.PrologueBlock);
 			var transformContext = new TransformContext(MethodCompiler, trace);
-
+			int pass = 0;
 			var changed = true;
 			while (changed)
 			{
+				pass++;
+				trace?.Log($"*** Pass # {pass}");
+
 				changed = false;
 
 				foreach (var block in BasicBlocks)

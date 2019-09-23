@@ -24,8 +24,8 @@ namespace Mosa.Tool.Explorer
 
 			//pipeline.InsertBefore<GreedyRegisterAllocatorStage>(new StopStage());
 
-			pipeline.InsertBefore<EnterSSAStage>(new DominanceOutputStage());
-			pipeline.InsertBefore<EnterSSAStage>(new GraphVizStage());
+			//pipeline.InsertBefore<EnterSSAStage>(new DominanceOutputStage());
+			//pipeline.InsertBefore<EnterSSAStage>(new GraphVizStage());
 		}
 	}
 }

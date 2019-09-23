@@ -349,7 +349,7 @@ namespace Mosa.Platform.x86.Stages
 				return;
 			}
 
-			SplitLongOperand(offset, out Operand op2L, out Operand op2H);
+			SplitLongOperand(offset, out Operand op2L, out _);
 
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 

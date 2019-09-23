@@ -8,33 +8,33 @@ namespace Mosa.Runtime.Metadata
 	{
 		#region layout
 
-		// IntPtr		_name;
-		// IntPtr		_customAttributes;
+		// Pointer		_name;
+		// Pointer		_customAttributes;
 		// uint			_attributes;
 		// uint			_stackSize;
-		// IntPtr		_method;
-		// IntPtr		_returnType;
-		// IntPtr		_protectedRegionTable;
-		// IntPtr		_gcTrackingInformation;
+		// Pointer		_method;
+		// Pointer		_returnType;
+		// Pointer		_protectedRegionTable;
+		// Pointer		_gcTrackingInformation;
 		// uint			_numberOfParameters;
 
 		#endregion layout
 
-		public IntPtr Ptr;
+		public Pointer Ptr;
 
-		public MethodDefinition(IntPtr ptr)
+		public MethodDefinition(Pointer ptr)
 		{
 			Ptr = ptr;
 		}
 
-		public bool IsNull => Ptr == IntPtr.Zero;
+		public bool IsNull => Ptr.IsNull;
 
 		public string Name => (string)Intrinsic.GetObjectFromAddress(Intrinsic.LoadPointer(Ptr));
 
-		public uint StackSize => Intrinsic.Load32(Ptr, IntPtr.Size * 3);
+		public uint StackSize => Intrinsic.Load32(Ptr, Pointer.Size * 3);
 
-		public IntPtr Method => Intrinsic.LoadPointer(Ptr, IntPtr.Size * 4);
+		public Pointer Method => Intrinsic.LoadPointer(Ptr, Pointer.Size * 4);
 
-		public ProtectedRegionTable ProtectedRegionTable => new ProtectedRegionTable(Intrinsic.LoadPointer(Ptr, IntPtr.Size * 6));
+		public ProtectedRegionTable ProtectedRegionTable => new ProtectedRegionTable(Intrinsic.LoadPointer(Ptr, Pointer.Size * 6));
 	}
 }

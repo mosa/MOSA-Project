@@ -2,7 +2,6 @@
 
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
-using System;
 using System.Runtime.CompilerServices;
 using System.Threading;
 
@@ -15,7 +14,7 @@ namespace Mosa.Kernel.x86
 		public const int ThreadTerminationSignalIRQ = 254;
 
 		private static bool Enabled;
-		private static IntPtr SignalThreadTerminationMethodAddress;
+		private static Pointer SignalThreadTerminationMethodAddress;
 
 		private static Thread[] Threads;
 
@@ -62,7 +61,7 @@ namespace Mosa.Kernel.x86
 			}
 		}
 
-		public static void ClockInterrupt(IntPtr stackSate)
+		public static void ClockInterrupt(Pointer stackSate)
 		{
 			Interlocked.Increment(ref clockTicks);
 
@@ -136,12 +135,12 @@ namespace Mosa.Kernel.x86
 			}
 		}
 
-		private static IntPtr GetAddress(ThreadStart d)
+		private static Pointer GetAddress(ThreadStart d)
 		{
 			return Intrinsic.GetDelegateMethodAddress(d);
 		}
 
-		private static IntPtr GetAddress(ParameterizedThreadStart d)
+		private static Pointer GetAddress(ParameterizedThreadStart d)
 		{
 			return Intrinsic.GetDelegateTargetAddress(d);
 		}
@@ -153,7 +152,7 @@ namespace Mosa.Kernel.x86
 			return CreateThread(address, stackSize);
 		}
 
-		public static uint CreateThread(IntPtr methodAddress, uint stackSize)
+		public static uint CreateThread(Pointer methodAddress, uint stackSize)
 		{
 			//Assert.True(stackSize != 0, "CreateThread(): invalid stack size = " + stackSize.ToString());
 			//Assert.True(stackSize % PageFrameAllocator.PageSize == 0, "CreateThread(): invalid stack size % PageSize, stack size = " + stackSize.ToString());
@@ -173,12 +172,12 @@ namespace Mosa.Kernel.x86
 			return threadID;
 		}
 
-		private static void CreateThread(IntPtr methodAddress, uint stackSize, uint threadID)
+		private static void CreateThread(Pointer methodAddress, uint stackSize, uint threadID)
 		{
 			var thread = Threads[threadID];
 
-			var stack = new IntPtr(VirtualPageAllocator.Reserve(stackSize));
-			var stackTop = stack + (int)stackSize;
+			var stack = new Pointer(VirtualPageAllocator.Reserve(stackSize));
+			var stackTop = stack + stackSize;
 
 			// Setup stack state
 			Intrinsic.Store32(stackTop, -4, 0);          // Zero Sentinel
@@ -206,7 +205,7 @@ namespace Mosa.Kernel.x86
 			thread.StackStatePointer = stackTop - 60;
 		}
 
-		private static void SaveThreadState(uint threadID, IntPtr stackSate)
+		private static void SaveThreadState(uint threadID, Pointer stackSate)
 		{
 			//Assert.True(threadID < MaxThreads, "SaveThreadState(): invalid thread id > max");
 

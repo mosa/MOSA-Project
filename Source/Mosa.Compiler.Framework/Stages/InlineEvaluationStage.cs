@@ -214,7 +214,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var returnType = methodData.Method.Signature.ReturnType;
 
 			// FIXME: Add rational
-			if (MosaTypeLayout.IsStoredOnStack(returnType) && !returnType.IsUI8 && !returnType.IsR8)
+			if (!MosaTypeLayout.CanFitInRegister(returnType) && !returnType.IsUI8 && !returnType.IsR8)
 				return true;
 
 			// FUTURE: Don't hardcode namepsace
@@ -271,7 +271,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var newOperand = Operand.CreateVirtualRegister(operand.Type, -operand.Index);
 
-					var moveInstruction = MosaTypeLayout.IsStoredOnStack(newOperand.Type)
+					var moveInstruction = !MosaTypeLayout.CanFitInRegister(newOperand.Type)
 						? IRInstruction.MoveCompound
 						: GetMoveInstruction(newOperand.Type);
 

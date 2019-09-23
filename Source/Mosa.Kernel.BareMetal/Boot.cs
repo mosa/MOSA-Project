@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.BareMetal.BootMemory;
-using Mosa.Kernel.BareMetal.MultibootSpecification;
-using Mosa.Runtime.Extension;
 using Mosa.Runtime.Plug;
 
 namespace Mosa.Kernel.BareMetal

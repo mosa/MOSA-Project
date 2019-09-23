@@ -12,24 +12,24 @@ namespace Mosa.Runtime.Metadata
 		#region layout
 
 		// uint			_numberOfRegions;
-		// IntPtr[]	_protectedRegionDefinitions
+		// Pointer[]	_protectedRegionDefinitions
 
 		#endregion layout
 
-		public IntPtr Ptr;
+		public Pointer Ptr;
 
-		public ProtectedRegionTable(IntPtr ptr)
+		public ProtectedRegionTable(Pointer ptr)
 		{
 			Ptr = ptr;
 		}
 
-		public bool IsNull => Ptr == IntPtr.Zero;
+		public bool IsNull => Ptr.IsNull;
 
 		public uint NumberOfRegions => Intrinsic.Load32(Ptr);
 
 		public ProtectedRegionDefinition GetProtectedRegionDefinition(uint slot)
 		{
-			return new ProtectedRegionDefinition(Intrinsic.LoadPointer(Ptr, IntPtr.Size + (IntPtr.Size * (int)slot)));
+			return new ProtectedRegionDefinition(Intrinsic.LoadPointer(Ptr, Pointer.Size + (Pointer.Size * (int)slot)));
 		}
 	}
 }

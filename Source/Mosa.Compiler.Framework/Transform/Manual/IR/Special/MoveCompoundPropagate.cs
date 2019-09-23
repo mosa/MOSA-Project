@@ -18,14 +18,6 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.Special
 			if (!IsSSAForm(context.Operand1))
 				return false;
 
-			var operand = context.Operand1;
-
-			foreach (var op in context.Operands)
-			{
-				if (!AreSame(op, operand))
-					return false;
-			}
-
 			return true;
 		}
 

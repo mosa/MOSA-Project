@@ -2,8 +2,6 @@
 
 using Mosa.DeviceSystem;
 using Mosa.Kernel.x86;
-using Mosa.Runtime.Extension;
-using System;
 
 namespace Mosa.VBEWorld.x86
 {

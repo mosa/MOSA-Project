@@ -809,25 +809,82 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Internal
 
-		public static bool IsStoredOnStack(MosaType type)
+		public static bool CanFitInRegister(MosaType type)
 		{
-			if (type.IsReferenceType)
+			var basetype = GetTypeForRegister(type);
+
+			var fits = FitsInRegister(basetype);
+
+			return fits;
+		}
+
+		private static bool FitsInRegister(MosaType type)
+		{
+			if (type == null)
 				return false;
 
-			if (type.IsUserValueType)
+			var typeCode = type.TypeCode;
+
+			if (typeCode == MosaTypeCode.ValueType)
+			{
+				return false; // no search
+			}
+
+			switch (typeCode)
+			{
+				case MosaTypeCode.Void: return true;
+				case MosaTypeCode.Var: return false;
+				case MosaTypeCode.MVar: return true;
+				case MosaTypeCode.Boolean: return true;
+				case MosaTypeCode.Char: return true;
+				case MosaTypeCode.I1: return true;
+				case MosaTypeCode.U1: return true;
+				case MosaTypeCode.I2: return true;
+				case MosaTypeCode.U2: return true;
+				case MosaTypeCode.I4: return true;
+				case MosaTypeCode.U4: return true;
+				case MosaTypeCode.I8: return true;
+				case MosaTypeCode.U8: return true;
+				case MosaTypeCode.R4: return true;
+				case MosaTypeCode.R8: return true;
+				case MosaTypeCode.String: return true;
+				case MosaTypeCode.UnmanagedPointer: return true;
+				case MosaTypeCode.ManagedPointer: return true;
+				case MosaTypeCode.ReferenceType: return true;
+				case MosaTypeCode.Array: return true;
+				case MosaTypeCode.TypedRef: return true;
+				case MosaTypeCode.I: return true;
+				case MosaTypeCode.U: return true;
+				case MosaTypeCode.FunctionPointer: return true;
+				case MosaTypeCode.Object: return true;
+				case MosaTypeCode.SZArray: return true;
+				default: return false;
+			}
+		}
+
+		public static MosaType GetTypeForRegister(MosaType type)
+		{
+			if (type.IsValueType)
 			{
 				if (type.Fields != null)
 				{
 					var nonStaticFields = type.Fields.Where(x => !x.IsStatic).ToList();
 
-					if (nonStaticFields.Count == 1)
-					{
-						return nonStaticFields[0].FieldType.IsUserValueType;
-					}
+					if (nonStaticFields.Count != 1)
+						return null;
+
+					var basetype = nonStaticFields[0].FieldType;
+
+					if (!basetype.IsUserValueType)
+						return basetype;
+
+					var result = GetTypeForRegister(basetype);
+
+					return result;
 				}
 			}
 
-			return type.IsUserValueType;
+			return type;
 		}
 	}
 }

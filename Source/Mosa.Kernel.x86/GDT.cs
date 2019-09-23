@@ -2,7 +2,6 @@
 
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
-using System;
 using System.Runtime.CompilerServices;
 
 namespace Mosa.Kernel.x86
@@ -29,7 +28,7 @@ namespace Mosa.Kernel.x86
 
 		public static void Setup()
 		{
-			var gdt = new IntPtr(Address.GDTTable);
+			var gdt = new Pointer(Address.GDTTable);
 
 			Runtime.Internal.MemoryClear(gdt, 6);
 			Intrinsic.Store16(gdt, (Offset.TotalSize * 3) - 1);
@@ -43,7 +42,7 @@ namespace Mosa.Kernel.x86
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		private static void SetLgdt(IntPtr address)
+		private static void SetLgdt(Pointer address)
 		{
 			Native.Lgdt((uint)address.ToInt32());
 			Native.SetSegments(0x10, 0x10, 0x10, 0x10, 0x10);
@@ -55,9 +54,9 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		private static IntPtr GetEntryLocation(uint index)
+		private static Pointer GetEntryLocation(uint index)
 		{
-			return new IntPtr(Address.GDTTable + 6 + (index * Offset.TotalSize));
+			return new Pointer(Address.GDTTable + 6 + (index * Offset.TotalSize));
 		}
 
 		private static void Set(uint index, uint address, uint limit, byte access, byte granularity)

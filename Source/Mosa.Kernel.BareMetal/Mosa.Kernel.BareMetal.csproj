@@ -77,7 +77,6 @@
     <Compile Include="PhysicalPageAllocator.cs" />
     <Compile Include="BootMemory\BootMemoryMapTable.cs" />
     <Compile Include="BootMemory\BootMemoryMapType.cs" />
-    <Compile Include="Extension\IntPtrExtension.cs" />
     <Compile Include="MultibootSpecification\MultibootV1.cs" />
     <Compile Include="Multiboot.cs" />
     <Compile Include="Boot.cs" />

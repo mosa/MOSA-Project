@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.BareMetal.MultibootSpecification;
-using System;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal
 {
@@ -12,9 +12,9 @@ namespace Mosa.Kernel.BareMetal
 		/// </summary>
 		public static MultibootV1 MultibootV1 { get; private set; }
 
-		public static void Setup(IntPtr location, uint magic)
+		public static void Setup(Pointer location, uint magic)
 		{
-			MultibootV1 = new MultibootV1(magic == MultibootV1.MultibootMagic ? location : IntPtr.Zero);
+			MultibootV1 = new MultibootV1(magic == MultibootV1.MultibootMagic ? location : Pointer.Zero);
 		}
 
 		/// <summary>

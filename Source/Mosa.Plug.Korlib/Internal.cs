@@ -27,7 +27,7 @@ namespace Mosa.Plug.Korlib
 				// Get the pointer to the Assembly Metadata
 				var ptr = Intrinsic.LoadPointer(assemblyListTable, IntPtr.Size + (IntPtr.Size * i));
 
-				Assemblies.Add(new RuntimeAssembly(ptr));
+				Assemblies.Add(new RuntimeAssembly(ptr.ToIntPtr()));
 			}
 		}
 	}

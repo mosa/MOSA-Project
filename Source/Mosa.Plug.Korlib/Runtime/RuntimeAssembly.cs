@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
 using Mosa.Runtime.Metadata;
 using System;
 using System.Collections.Generic;
@@ -86,7 +87,7 @@ namespace Mosa.Plug.Korlib.Runtime
 
 		internal RuntimeAssembly(IntPtr pointer)
 		{
-			assemblyDefinition = new AssemblyDefinition(pointer);
+			assemblyDefinition = new AssemblyDefinition(new Pointer(pointer));
 			fullName = assemblyDefinition.Name;
 
 			typeList = new List<RuntimeType>();
@@ -96,7 +97,7 @@ namespace Mosa.Plug.Korlib.Runtime
 
 			for (uint i = 0; i < typeCount; i++)
 			{
-				var handle = new RuntimeTypeHandle(assemblyDefinition.GetTypeDefinition(i).Ptr);
+				var handle = new RuntimeTypeHandle(assemblyDefinition.GetTypeDefinition(i).Ptr.ToIntPtr());
 
 				if (typeHandles.Contains(handle))
 					continue;

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common.Exceptions;
-using Mosa.Compiler.Framework.IR;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -140,7 +139,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var context = new Context(node);
 
-			if (MosaTypeLayout.IsStoredOnStack(destination.Type))
+			if (!MosaTypeLayout.CanFitInRegister(destination.Type))
 			{
 				context.AppendInstruction(IRInstruction.MoveCompound, destination, source);
 				context.MosaType = destination.Type;

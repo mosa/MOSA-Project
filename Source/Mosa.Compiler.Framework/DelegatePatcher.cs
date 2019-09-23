@@ -98,7 +98,7 @@ namespace Mosa.Compiler.Framework
 			{
 				var type = methodCompiler.Parameters[i].Type;
 
-				if (MosaTypeLayout.IsStoredOnStack(type))
+				if (!MosaTypeLayout.CanFitInRegister(type))
 				{
 					b0.AppendInstruction(IRInstruction.LoadParamCompound, vrs[i], methodCompiler.Parameters[i]);
 					b0.MosaType = type;

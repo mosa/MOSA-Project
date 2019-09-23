@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
-using System;
 
 namespace Mosa.Kernel.x86.Smbios
 {
@@ -10,11 +9,11 @@ namespace Mosa.Kernel.x86.Smbios
 	/// </summary>
 	public abstract class SmbiosStructure
 	{
-		protected IntPtr address = IntPtr.Zero;
+		protected Pointer address;
 		protected uint length;
 		protected uint handle;
 
-		protected SmbiosStructure(IntPtr address)
+		protected SmbiosStructure(Pointer address)
 		{
 			this.address = address;
 			length = Intrinsic.Load8(address, 0x01u);
@@ -26,7 +25,7 @@ namespace Mosa.Kernel.x86.Smbios
 			if (index == 0)
 				return string.Empty;
 
-			var first = address + (int)length;
+			var first = address + length;
 			int offset = 0;
 
 			for (byte count = 1; count != index;)

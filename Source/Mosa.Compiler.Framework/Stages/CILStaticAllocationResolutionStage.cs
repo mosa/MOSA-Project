@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (node.Instruction is NewobjInstruction)
 					{
-						if (!MosaTypeLayout.IsStoredOnStack(node.Result.Type))
+						if (MosaTypeLayout.CanFitInRegister(node.Result.Type))
 						{
 							list.Add(node);
 							MethodScanner.TypeAllocated(node.InvokeMethod.DeclaringType, Method);

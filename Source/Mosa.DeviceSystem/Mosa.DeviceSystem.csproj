@@ -74,7 +74,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseDeviceConfiguration.cs" />
-    <Compile Include="Pointer.cs" />
     <Compile Include="ConstrainedPointer.cs" />
     <Compile Include="PCIDeviceService.cs" />
     <Compile Include="ServiceEventType.cs" />

@@ -263,7 +263,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var returnType = result.Type;
 
-			if (MosaTypeLayout.IsStoredOnStack(returnType))
+			if (!MosaTypeLayout.CanFitInRegister(returnType))
 			{
 				return Alignment.AlignUp(TypeLayout.GetTypeSize(returnType), NativeAlignment);
 			}
@@ -300,7 +300,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				context.AppendInstruction(IRInstruction.StoreR8, null, scratch, offsetOperand, operand);
 			}
-			else if (MosaTypeLayout.IsStoredOnStack(operand.Type))
+			else if (!MosaTypeLayout.CanFitInRegister(operand.Type))
 			{
 				context.AppendInstruction(IRInstruction.StoreCompound, null, scratch, offsetOperand, operand);
 			}
@@ -343,7 +343,7 @@ namespace Mosa.Compiler.Framework.Stages
 				context.AppendInstruction(IRInstruction.Gen, returnFP);
 				context.AppendInstruction(IRInstruction.MoveR8, result, returnFP);
 			}
-			else if (MosaTypeLayout.IsStoredOnStack(result.Type))
+			else if (!MosaTypeLayout.CanFitInRegister(result.Type))
 			{
 				Debug.Assert(result.IsStackLocal);
 				context.AppendInstruction(IRInstruction.LoadCompound, result, StackPointer, ConstantZero);

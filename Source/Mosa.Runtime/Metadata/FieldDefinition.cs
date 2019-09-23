@@ -8,34 +8,34 @@ namespace Mosa.Runtime.Metadata
 	{
 		#region layout
 
-		// IntPtr _name;
-		// IntPtr _customAttributes;
+		// Pointer _name;
+		// Pointer _customAttributes;
 		// uint _attributes;
-		// IntPtr _fieldType;
-		// IntPtr _fieldData;
+		// Pointer _fieldType;
+		// Pointer _fieldData;
 		// uint _offsetOrSize;
 
 		#endregion layout
 
-		public IntPtr Ptr;
+		public Pointer Ptr;
 
-		public FieldDefinition(IntPtr ptr)
+		public FieldDefinition(Pointer ptr)
 		{
 			Ptr = ptr;
 		}
 
-		public bool IsNull => Ptr == IntPtr.Zero;
+		public bool IsNull => Ptr.IsNull;
 
 		public string Name => (string)Intrinsic.GetObjectFromAddress(Intrinsic.LoadPointer(Ptr));
 
-		public CustomAttributeTable CustomAttributes => new CustomAttributeTable(Intrinsic.LoadPointer(Ptr, IntPtr.Size));
+		public CustomAttributeTable CustomAttributes => new CustomAttributeTable(Intrinsic.LoadPointer(Ptr, Pointer.Size));
 
-		public uint Attributes => Intrinsic.Load32(Ptr, IntPtr.Size * 2);
+		public uint Attributes => Intrinsic.Load32(Ptr, Pointer.Size * 2);
 
-		public TypeDefinition FieldType => new TypeDefinition(Intrinsic.LoadPointer(Ptr, IntPtr.Size * 3));
+		public TypeDefinition FieldType => new TypeDefinition(Intrinsic.LoadPointer(Ptr, Pointer.Size * 3));
 
-		public IntPtr FieldData => Intrinsic.LoadPointer(Ptr, IntPtr.Size * 4);
+		public Pointer FieldData => Intrinsic.LoadPointer(Ptr, Pointer.Size * 4);
 
-		public uint OffsetOrSize => Intrinsic.Load32(Ptr, IntPtr.Size * 5);
+		public uint OffsetOrSize => Intrinsic.Load32(Ptr, Pointer.Size * 5);
 	}
 }

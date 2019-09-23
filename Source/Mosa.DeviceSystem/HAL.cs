@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
+using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem
 {
@@ -85,7 +85,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		public static ConstrainedPointer GetPhysicalMemory(IntPtr address, uint size)
+		public static ConstrainedPointer GetPhysicalMemory(Pointer address, uint size)
 		{
 			return hardwareAbstraction.GetPhysicalMemory(address, size);
 		}
@@ -131,7 +131,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="memory">The memory.</param>
 		/// <returns></returns>
-		public static IntPtr TranslateVirtualToPhysicalAddress(IntPtr memory)
+		public static Pointer TranslateVirtualToPhysicalAddress(Pointer memory)
 		{
 			return hardwareAbstraction.TranslateVirtualToPhysicalAddress(memory);
 		}

@@ -101,5 +101,8 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 		public static readonly BaseTransformation IR_Rewrite_CompareBranch64Combine32x64 = new IR.Rewrite.CompareBranch64Combine32x64();
 		public static readonly BaseTransformation IR_Rewrite_CompareBranch64Combine64x32 = new IR.Rewrite.CompareBranch64Combine64x32();
 		public static readonly BaseTransformation IR_Rewrite_CompareBranch64Combine64x64 = new IR.Rewrite.CompareBranch64Combine64x64();
+
+		public static readonly BaseTransformation IR_Rewrite_Compare64x32SameHigh = new IR.Simplification.Compare64x32SameHigh();
+		public static readonly BaseTransformation IR_Rewrite_Compare64x32SameLow = new IR.Simplification.Compare64x32SameLow();
 	}
 }

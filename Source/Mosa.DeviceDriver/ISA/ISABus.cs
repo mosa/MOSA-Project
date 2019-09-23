@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
-using System;
+using Mosa.Runtime;
 using System.Collections.Generic;
 
 namespace Mosa.DeviceDriver.ISA
@@ -55,7 +55,7 @@ namespace Mosa.DeviceDriver.ISA
 
 			if (driverEntry.BaseAddress != 0x00)
 			{
-				memoryRegions.Add(new AddressRegion(new IntPtr(driverEntry.BaseAddress), driverEntry.AddressRange));
+				memoryRegions.Add(new AddressRegion(new Pointer(driverEntry.BaseAddress), driverEntry.AddressRange));
 			}
 
 			//if (driverEntry.PhysicalMemory != null)

@@ -6,6 +6,7 @@ namespace Mosa.UnitTests
 	{
 		#region LargeSwitchFixture test
 
+		[MosaUnitTest(Series = "I4")]
 		public int LargeSwitchTest1(int a)
 		{
 			switch (a)
