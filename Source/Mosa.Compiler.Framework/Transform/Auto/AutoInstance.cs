@@ -249,6 +249,9 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 		public static readonly BaseTransformation IR_Rewrite_LoadZeroExtend8x64AddressFold = new IR.Rewrite.LoadZeroExtend8x64AddressFold();
 		public static readonly BaseTransformation IR_Rewrite_LoadZeroExtend16x64AddressFold = new IR.Rewrite.LoadZeroExtend16x64AddressFold();
 		public static readonly BaseTransformation IR_Rewrite_LoadZeroExtend32x64AddressFold = new IR.Rewrite.LoadZeroExtend32x64AddressFold();
+		public static readonly BaseTransformation IR_Rewrite_Truncate64x32Add64FromZeroExtended32x64 = new IR.Rewrite.Truncate64x32Add64FromZeroExtended32x64();
+		public static readonly BaseTransformation IR_Rewrite_Truncate64x32Sub64FromZeroExtended32x64 = new IR.Rewrite.Truncate64x32Sub64FromZeroExtended32x64();
+		public static readonly BaseTransformation IR_Rewrite_Truncate64x32MulUnsigned64FromZeroExtended32x64 = new IR.Rewrite.Truncate64x32MulUnsigned64FromZeroExtended32x64();
 		public static readonly BaseTransformation IR_ConstantMove_Add32 = new IR.ConstantMove.Add32();
 		public static readonly BaseTransformation IR_ConstantMove_Add64 = new IR.ConstantMove.Add64();
 		public static readonly BaseTransformation IR_ConstantMove_AddR4 = new IR.ConstantMove.AddR4();

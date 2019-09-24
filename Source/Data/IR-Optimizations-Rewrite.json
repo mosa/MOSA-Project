@@ -883,6 +883,33 @@
 			"Expression": "(IR.LoadZeroExtend32x64 (IR.AddressOf parameter) offset)",
 			"Filter": "IsParameter(parameter)",
 			"Result": "(IR.LoadParamZeroExtend32x64 parameter)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Rewrite",
+			"Name": "Truncate64x32Add64",
+			"SubName": "FromZeroExtended32x64",
+			"Expression": "(IR.Truncate64x32 (IR.Add64 (IR.ZeroExtend32x64 a) (IR.ZeroExtend32x64 b)))",
+			"Filter": "",
+			"Result": "(IR.Add32 a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Rewrite",
+			"Name": "Truncate64x32Sub64",
+			"SubName": "FromZeroExtended32x64",
+			"Expression": "(IR.Truncate64x32 (IR.Sub64 (IR.ZeroExtend32x64 a) (IR.ZeroExtend32x64 b)))",
+			"Filter": "",
+			"Result": "(IR.Sub32 a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Rewrite",
+			"Name": "Truncate64x32MulUnsigned64",
+			"SubName": "FromZeroExtended32x64",
+			"Expression": "(IR.Truncate64x32 (IR.MulUnsigned64 (IR.ZeroExtend32x64 a) (IR.ZeroExtend32x64 b)))",
+			"Filter": "",
+			"Result": "(IR.MulUnsigned32 a b)"
 		}
 	]
 }
