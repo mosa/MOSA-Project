@@ -93,11 +93,6 @@ namespace Mosa.Compiler.Framework
 		public int InlinedIRMaximum { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether static allocations are enabled.
-		/// </summary>
-		public bool EnableStaticAllocations { get; set; }
-
-		/// <summary>
 		/// Gets or sets a value indicating whether [enable IR long operand conversion].
 		/// </summary>
 		public bool EnableLongExpansion { get; set; }

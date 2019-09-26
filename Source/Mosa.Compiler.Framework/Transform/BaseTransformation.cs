@@ -40,9 +40,9 @@ namespace Mosa.Compiler.Framework.Transform
 			string name = GetType().FullName;
 
 			int offset1 = name.IndexOf('.');
-			int offset2 = name.IndexOf('.', offset1);
-			int offset3 = name.IndexOf('.', offset2);
-			int offset4 = name.IndexOf('.', offset3);
+			int offset2 = name.IndexOf('.', offset1 + 1);
+			int offset3 = name.IndexOf('.', offset2 + 1);
+			int offset4 = name.IndexOf('.', offset3 + 1);
 
 			return name.Substring(offset4 + 1);
 		}
