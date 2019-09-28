@@ -40,12 +40,18 @@ namespace Mosa.DeviceSystem
 
 		public void AddEvent(ServiceEvent serviceEvent)
 		{
+			//HAL.DebugWriteLine("ServiceManager:AddEvent():Start");
+
 			lock (_eventLock)
 			{
 				events.Add(serviceEvent);
 			}
 
+			//HAL.DebugWriteLine("ServiceManager:AddEvent():SendEvents");
+
 			SendEvents();
+
+			//HAL.DebugWriteLine("ServiceManager:AddEvent():End");
 		}
 
 		public List<T> GetService<T>() where T : BaseService
@@ -99,6 +105,8 @@ namespace Mosa.DeviceSystem
 
 		private void SendEvents()
 		{
+			//HAL.DebugWriteLine("ServiceManager:SendEvents():Start");
+
 			while (true)
 			{
 				ServiceEvent serviceEvent;
@@ -112,20 +120,28 @@ namespace Mosa.DeviceSystem
 					events.RemoveAt(0);
 				}
 
+				//HAL.DebugWriteLine("ServiceManager:SendEvents():Middle");
+
 				int i = 0;
 				while (true)
 				{
 					BaseService service;
+
+					//HAL.DebugWriteLine("ServiceManager:SendEvents():Loop" + i.ToString());
 
 					lock (_lock)
 					{
 						if (i >= services.Count)
 							break;
 
-						service = services[i++];
+						service = services[i];
 					}
 
+					i++;
+
 					service.PostEvent(serviceEvent);
+
+					//HAL.DebugWriteLine("ServiceManager:SendEvents():Post-PostEvent");
 				}
 			}
 		}
