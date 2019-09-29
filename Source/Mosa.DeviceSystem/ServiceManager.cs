@@ -134,9 +134,8 @@ namespace Mosa.DeviceSystem
 						if (i >= services.Count)
 							break;
 
-						service = services[i]; i++;
-
-						//service = services[i++];
+						//service = services[i]; i++;
+						service = services[i++];
 					}
 
 					service.PostEvent(serviceEvent);
