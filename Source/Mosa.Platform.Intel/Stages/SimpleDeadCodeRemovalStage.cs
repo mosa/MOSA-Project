@@ -142,6 +142,9 @@ namespace Mosa.Platform.Intel.Stages
 			if (result.Definitions.Count != 1)
 				return;
 
+			if (source.Definitions.Count != 1)
+				return;
+
 			if (source.IsResolvedConstant)
 				return;
 
