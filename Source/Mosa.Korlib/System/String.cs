@@ -160,6 +160,7 @@ namespace System
 			while (*at != 0)
 			{
 				length++;
+				at++;
 			}
 
 			if (length == 0)

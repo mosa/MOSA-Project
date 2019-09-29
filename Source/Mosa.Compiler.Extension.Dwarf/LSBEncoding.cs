@@ -39,7 +39,11 @@ namespace Mosa.Compiler.Extensions.Dwarf
 			bool more;
 			do
 			{
-				byte bt = (byte)((byte)value & 0x7f);
+				byte bt;
+				unchecked
+				{
+					bt = (byte)((byte)value & 0x7f);
+				}
 				value >>= 7;
 				more = !((((value == 0) && ((bt & 0x40) == 0)) ||
 						  ((value == -1) && ((bt & 0x40) != 0))));
