@@ -66,12 +66,6 @@ namespace Mosa.Tool.Compiler
 		[Option("debug-info", HelpText = "Generate a debug info file of the produced binary.")]
 		public string DebugInfoFile { set { CompilerOptions.DebugFile = value; } }
 
-		[Option("sa", HelpText = "Performs static allocations at compile time.")]
-		public bool EnableStaticAllocation { set { CompilerOptions.EnableStaticAllocations = value; } }
-
-		[Option("enable-static-alloc", HelpText = "Performs static allocations at compile time.")]
-		public bool EnableStaticAllocationTrue { set { EnableStaticAllocation = value; } }
-
 		[Option("ssa", HelpText = "Performs single static assignments at compile time.")]
 		public bool EnableSSA { set { CompilerOptions.EnableSSA = value; } }
 

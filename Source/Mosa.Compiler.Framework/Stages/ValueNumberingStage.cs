@@ -209,10 +209,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (node.IsEmpty)
+				if (node.IsEmptyOrNop)
 					continue;
 
-				if (node.Instruction == IRInstruction.Phi32 || node.Instruction == IRInstruction.Phi64 || node.Instruction == IRInstruction.PhiR4 || node.Instruction == IRInstruction.PhiR8)
+				if (IsPhiInstruction(node.Instruction))
 				{
 					// Validate all successor are already processed
 					// and if not, just set the value number
@@ -558,7 +558,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool IsPhiUseless(InstructionNode node)
 		{
-			Debug.Assert(node.Instruction == IRInstruction.Phi32 || node.Instruction == IRInstruction.Phi64 || node.Instruction == IRInstruction.PhiR4 || node.Instruction == IRInstruction.PhiR8);
+			Debug.Assert(IsPhiInstruction(node.Instruction));
 
 			var operand = node.Operand1;
 			var operandVN = GetValueNumber(operand);
@@ -574,8 +574,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool ArePhisRedundant(InstructionNode a, InstructionNode b)
 		{
-			Debug.Assert(a.Instruction == IRInstruction.Phi32 || a.Instruction == IRInstruction.Phi64 || a.Instruction == IRInstruction.PhiR4 || a.Instruction == IRInstruction.PhiR8);
-			Debug.Assert(b.Instruction == IRInstruction.Phi32 || b.Instruction == IRInstruction.Phi64 || b.Instruction == IRInstruction.PhiR4 || b.Instruction == IRInstruction.PhiR8);
+			Debug.Assert(IsPhiInstruction(a.Instruction));
+			Debug.Assert(IsPhiInstruction(b.Instruction));
 
 			if (a.OperandCount != b.OperandCount)
 				return false;
@@ -638,10 +638,10 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					else
 					{
-						if (node.Instruction == IRInstruction.Phi32 || node.Instruction == IRInstruction.Phi64 || node.Instruction == IRInstruction.PhiR4 || node.Instruction == IRInstruction.PhiR8)
+						if (IsPhiInstruction(node.Instruction))
 							continue;
 
-						Debug.Assert(node.Instruction == IRInstruction.Phi32 || node.Instruction == IRInstruction.Phi64 || node.Instruction == IRInstruction.PhiR4 || node.Instruction == IRInstruction.PhiR8);
+						Debug.Assert(IsPhiInstruction(node.Instruction));
 
 						//throw new CompilerException("ValueNumbering Stage: Expected PHI instruction but found instead: " + node + " for " + operand);
 					}
@@ -660,7 +660,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmptyOrNop)
 						continue;
 
-					if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
+					if (!IsPhiInstruction(node.Instruction))
 						break;
 
 					// update operands with their value number
@@ -678,7 +678,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (previousPhi.IsEmptyOrNop)
 					continue;
 
-				Debug.Assert(previousPhi.Instruction == IRInstruction.Phi32 || previousPhi.Instruction == IRInstruction.Phi64 || previousPhi.Instruction == IRInstruction.PhiR4 || previousPhi.Instruction == IRInstruction.PhiR8);
+				Debug.Assert(IsPhiInstruction(previousPhi.Instruction));
 
 				if (ArePhisRedundant(node, previousPhi))
 				{

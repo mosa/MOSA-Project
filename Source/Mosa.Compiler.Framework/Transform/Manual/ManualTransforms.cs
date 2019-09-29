@@ -81,16 +81,11 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 
 			ManualInstance.IR_Special_MoveCompoundPropagate,
 
-			//ManualInstance.IR_Rewrite_CompareBranch32From64,
-			//ManualInstance.IR_Rewrite_CompareBranch64From32,
+			ManualInstance.IR_Rewrite_CompareBranch32From64,
+			ManualInstance.IR_Rewrite_CompareBranch64From32,
 
 			ManualInstance.IR_Special_Move32PropagateConstant,
 			ManualInstance.IR_Special_Move64PropagateConstant,
-
-			ManualInstance.IR_Special_Phi32Invalid,
-			ManualInstance.IR_Special_Phi64Invalid,
-			ManualInstance.IR_Special_PhiR4Invalid,
-			ManualInstance.IR_Special_PhiR8Invalid,
 
 			ManualInstance.IR_Rewrite_Compare32x32Combine32x32,
 			ManualInstance.IR_Rewrite_Compare32x32Combine64x64,

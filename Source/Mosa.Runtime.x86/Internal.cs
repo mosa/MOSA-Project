@@ -59,8 +59,6 @@ namespace Mosa.Runtime.x86
 				uint size = Intrinsic.Load32(table, Pointer.Size);
 
 				if (address >= addr && address < (addr + size))
-
-				//if (address.ToInt64() >= addr.ToInt64() && address.ToInt64() < addr.ToInt64() + size)
 				{
 					return new MethodDefinition(Intrinsic.LoadPointer(table, Pointer.Size * 2));
 				}

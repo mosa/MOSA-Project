@@ -40,9 +40,9 @@ namespace Mosa.Compiler.Framework.Transform
 			string name = GetType().FullName;
 
 			int offset1 = name.IndexOf('.');
-			int offset2 = name.IndexOf('.', offset1);
-			int offset3 = name.IndexOf('.', offset2);
-			int offset4 = name.IndexOf('.', offset3);
+			int offset2 = name.IndexOf('.', offset1 + 1);
+			int offset3 = name.IndexOf('.', offset2 + 1);
+			int offset4 = name.IndexOf('.', offset3 + 1);
 
 			return name.Substring(offset4 + 1);
 		}
@@ -84,6 +84,46 @@ namespace Mosa.Compiler.Framework.Transform
 			return false;
 		}
 
+		protected static bool IsConstant(Operand operand)
+		{
+			return operand.IsConstant;
+		}
+
+		protected static bool IsFloatingPoint(Operand operand)
+		{
+			return operand.IsFloatingPoint;
+		}
+
+		protected static bool IsGreaterThan(ulong a, ulong b)
+		{
+			return a > b;
+		}
+
+		protected static bool IsGreaterThanOrEqual(ulong a, ulong b)
+		{
+			return a >= b;
+		}
+
+		protected static bool IsInteger(Operand operand)
+		{
+			return operand.IsInteger;
+		}
+
+		protected static bool IsLessThan(ulong a, ulong b)
+		{
+			return a < b;
+		}
+
+		protected static bool IsLessThanOrEqual(ulong a, ulong b)
+		{
+			return a <= b;
+		}
+
+		protected static bool IsParameter(Operand operand)
+		{
+			return operand.IsParameter;
+		}
+
 		protected static bool IsPowerOfTwo32(Operand operand)
 		{
 			return BitTwiddling.IsPowerOfTwo(operand.ConstantUnsigned32);
@@ -94,54 +134,14 @@ namespace Mosa.Compiler.Framework.Transform
 			return BitTwiddling.IsPowerOfTwo(operand.ConstantUnsigned64);
 		}
 
-		protected static bool IsConstant(Operand operand)
-		{
-			return operand.IsConstant;
-		}
-
 		protected static bool IsResolvedConstant(Operand operand)
 		{
 			return operand.IsResolvedConstant;
 		}
 
-		protected static bool IsParameter(Operand operand)
-		{
-			return operand.IsParameter;
-		}
-
-		protected static bool IsFloatingPoint(Operand operand)
-		{
-			return operand.IsFloatingPoint;
-		}
-
-		protected static bool IsInteger(Operand operand)
-		{
-			return operand.IsInteger;
-		}
-
 		protected static bool IsZero(Operand operand)
 		{
 			return operand.IsConstantZero;
-		}
-
-		protected static bool IsGreaterThan(ulong a, ulong b)
-		{
-			return a > b;
-		}
-
-		protected static bool IsLessThan(ulong a, ulong b)
-		{
-			return a < b;
-		}
-
-		protected static bool IsGreaterThanOrEqual(ulong a, ulong b)
-		{
-			return a >= b;
-		}
-
-		protected static bool IsLessThanOrEqual(ulong a, ulong b)
-		{
-			return a <= b;
 		}
 
 		#endregion Filter Methods
@@ -228,6 +228,11 @@ namespace Mosa.Compiler.Framework.Transform
 			return a / b;
 		}
 
+		protected static uint GetHigh64(ulong a)
+		{
+			return (uint)(a >> 32);
+		}
+
 		protected static uint GetPowerOfTwo(ulong value)
 		{
 			return BitTwiddling.GetPowerOfTwo(value);
@@ -296,6 +301,26 @@ namespace Mosa.Compiler.Framework.Transform
 		protected static ulong Not64(ulong a)
 		{
 			return ~a;
+		}
+
+		protected static uint Max32(uint a, uint b)
+		{
+			return Math.Max(a, b);
+		}
+
+		protected static ulong Max64(ulong a, ulong b)
+		{
+			return Math.Max(a, b);
+		}
+
+		protected static uint Min32(uint a, uint b)
+		{
+			return Math.Min(a, b);
+		}
+
+		protected static ulong Min64(ulong a, ulong b)
+		{
+			return Math.Min(a, b);
 		}
 
 		protected static uint Or32(uint a, uint b)
@@ -378,9 +403,29 @@ namespace Mosa.Compiler.Framework.Transform
 			return a - b;
 		}
 
+		protected static uint To32(Operand operand)
+		{
+			return operand.ConstantUnsigned32;
+		}
+
+		protected static uint To32(ulong value)
+		{
+			return (uint)value;
+		}
+
 		protected static ulong To64(uint low, uint high)
 		{
 			return ((ulong)high << 32) | (ulong)low;
+		}
+
+		protected static ulong To64(Operand operand)
+		{
+			return operand.ConstantUnsigned64;
+		}
+
+		protected static ulong To64(ulong value)
+		{
+			return value;
 		}
 
 		protected static byte ToByte(ulong value)
@@ -391,16 +436,6 @@ namespace Mosa.Compiler.Framework.Transform
 		protected static byte ToByte(Operand operand)
 		{
 			return (byte)operand.ConstantUnsigned32;
-		}
-
-		protected static double ToR8(Operand operand)
-		{
-			return operand.ConstantDouble;
-		}
-
-		protected static double ToR8(double value)
-		{
-			return value;
 		}
 
 		protected static float ToR4(Operand operand)
@@ -423,6 +458,16 @@ namespace Mosa.Compiler.Framework.Transform
 			return (float)a;
 		}
 
+		protected static double ToR8(Operand operand)
+		{
+			return operand.ConstantDouble;
+		}
+
+		protected static double ToR8(double value)
+		{
+			return value;
+		}
+
 		protected static double ToR8(int a)
 		{
 			return (double)a;
@@ -431,26 +476,6 @@ namespace Mosa.Compiler.Framework.Transform
 		protected static double ToR8(long a)
 		{
 			return (double)a;
-		}
-
-		protected static uint To32(Operand operand)
-		{
-			return operand.ConstantUnsigned32;
-		}
-
-		protected static uint To32(ulong value)
-		{
-			return (uint)value;
-		}
-
-		protected static ulong To64(Operand operand)
-		{
-			return operand.ConstantUnsigned64;
-		}
-
-		protected static ulong To64(ulong value)
-		{
-			return value;
 		}
 
 		protected static ushort ToShort(ulong value)

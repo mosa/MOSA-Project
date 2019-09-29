@@ -20,8 +20,8 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(IRInstruction.Add64, Add64);
 			AddVisitation(IRInstruction.Compare64x32, Compare64x32);
 			AddVisitation(IRInstruction.CompareBranch64, CompareBranch64);
-			AddVisitation(IRInstruction.Load64, LoadInt64); /// exposes bug without this
-			AddVisitation(IRInstruction.LoadParam64, LoadParamInt64);
+			AddVisitation(IRInstruction.Load64, Load64); // exposes bug without this
+			AddVisitation(IRInstruction.LoadParam64, LoadParam64);
 			AddVisitation(IRInstruction.LoadParamSignExtend16x64, LoadParamSignExtend16x64);
 			AddVisitation(IRInstruction.LoadParamSignExtend32x64, LoadParamSignExtend32x64);
 			AddVisitation(IRInstruction.LoadParamSignExtend8x64, LoadParamSignExtend8x64);
@@ -35,8 +35,8 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(IRInstruction.SignExtend16x64, SignExtend16x64);
 			AddVisitation(IRInstruction.SignExtend32x64, SignExtend32x64);
 			AddVisitation(IRInstruction.SignExtend8x64, SignExtend8x64);
-			AddVisitation(IRInstruction.Store64, StoreInt64);
-			AddVisitation(IRInstruction.StoreParam64, StoreParamInt64);
+			AddVisitation(IRInstruction.Store64, Store64);
+			AddVisitation(IRInstruction.StoreParam64, StoreParam64);
 			AddVisitation(IRInstruction.Sub64, Sub64);
 			AddVisitation(IRInstruction.Truncate64x32, Truncate64x32);
 			AddVisitation(IRInstruction.ZeroExtend8x64, ZeroExtend8x64);
@@ -113,7 +113,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#region Visitation Methods
 
-		private void StoreParamInt64(Context context)
+		private void StoreParam64(Context context)
 		{
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
@@ -154,6 +154,35 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.AppendInstruction2(IRInstruction.AddCarryOut32, resultLow, resultCarry, op0Low, op1Low);
 			context.AppendInstruction(IRInstruction.AddCarryIn32, resultHigh, op0High, op1High, resultCarry);
+			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
+		}
+
+		private void Add64v2(Context context)
+		{
+			Debug.Assert(context.Result.Is64BitInteger);
+
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var resultLow = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var resultHigh = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var resultCarry = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v4 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			MethodCompiler.SplitLongOperand(operand1, out Operand op1Low, out Operand op1High);
+			MethodCompiler.SplitLongOperand(operand2, out Operand op2Low, out Operand op2High);
+
+			context.SetInstruction(IRInstruction.GetLow64, v1, op1Low);
+			context.AppendInstruction(IRInstruction.GetLow64, v2, op2Low);
+			context.AppendInstruction2(IRInstruction.AddCarryOut32, resultLow, resultCarry, v1, v2);
+			context.AppendInstruction(IRInstruction.GetHigh64, v3, op1High);
+			context.AppendInstruction(IRInstruction.GetHigh64, v4, op2High);
+			context.AppendInstruction(IRInstruction.AddCarryIn32, resultHigh, v3, v4, resultCarry);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
@@ -379,7 +408,7 @@ namespace Mosa.Compiler.Framework.Stages
 			newBlocks[4].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 		}
 
-		private void LoadInt64(Context context)
+		private void Load64(Context context)
 		{
 			Debug.Assert(context.Result.Is64BitInteger);
 
@@ -401,7 +430,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void LoadParamInt64(Context context)
+		private void LoadParam64(Context context)
 		{
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
@@ -662,7 +691,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void StoreInt64(Context context)
+		private void Store64(Context context)
 		{
 			var address = context.Operand1;
 			var offset = context.Operand2;

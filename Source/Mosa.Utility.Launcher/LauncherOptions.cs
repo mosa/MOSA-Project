@@ -129,6 +129,7 @@ namespace Mosa.Utility.Launcher
 		{
 			set
 			{
+				EnableSSA = false;
 				EnableIROptimizations = false;
 				EnableInlinedMethods = false;
 				TwoPassOptimizations = false;
@@ -368,6 +369,7 @@ namespace Mosa.Utility.Launcher
 		public bool HuntForCorLib { get; set; }
 
 		public MosaLinker.CreateExtraSectionsDelegate CreateExtraSections { get; set; }
+
 		public MosaLinker.CreateExtraProgramHeaderDelegate CreateExtraProgramHeaders { get; set; }
 
 		public LauncherOptions()

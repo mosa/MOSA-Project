@@ -883,6 +883,96 @@
 			"Expression": "(IR.LoadZeroExtend32x64 (IR.AddressOf parameter) offset)",
 			"Filter": "IsParameter(parameter)",
 			"Result": "(IR.LoadParamZeroExtend32x64 parameter)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Rewrite",
+			"Name": "Truncate64x32Add64",
+			"SubName": "FromZeroExtended32x64",
+			"Expression": "(IR.Truncate64x32 (IR.Add64 (IR.ZeroExtend32x64 a) (IR.ZeroExtend32x64 b)))",
+			"Filter": "",
+			"Result": "(IR.Add32 a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Rewrite",
+			"Name": "Truncate64x32Sub64",
+			"SubName": "FromZeroExtended32x64",
+			"Expression": "(IR.Truncate64x32 (IR.Sub64 (IR.ZeroExtend32x64 a) (IR.ZeroExtend32x64 b)))",
+			"Filter": "",
+			"Result": "(IR.Sub32 a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Rewrite",
+			"Name": "Truncate64x32MulUnsigned64",
+			"SubName": "FromZeroExtended32x64",
+			"Expression": "(IR.Truncate64x32 (IR.MulUnsigned64 (IR.ZeroExtend32x64 a) (IR.ZeroExtend32x64 b)))",
+			"Filter": "",
+			"Result": "(IR.MulUnsigned32 a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Rewrite",
+			"Name": "Truncate64x32And64",
+			"SubName": "FromZeroExtended32x64",
+			"Expression": "(IR.Truncate64x32 (IR.And64 (IR.ZeroExtend32x64 a) (IR.ZeroExtend32x64 b)))",
+			"Filter": "",
+			"Result": "(IR.And32 a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Rewrite",
+			"Name": "Truncate64x32Or64",
+			"SubName": "FromZeroExtended32x64",
+			"Expression": "(IR.Truncate64x32 (IR.Or64 (IR.ZeroExtend32x64 a) (IR.ZeroExtend32x64 b)))",
+			"Filter": "",
+			"Result": "(IR.Or32 a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Rewrite",
+			"Name": "Truncate64x32Xor64",
+			"SubName": "FromZeroExtended32x64",
+			"Expression": "(IR.Truncate64x32 (IR.Xor64 (IR.ZeroExtend32x64 a) (IR.ZeroExtend32x64 b)))",
+			"Filter": "",
+			"Result": "(IR.Xor32 a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Rewrite",
+			"Name": "And32",
+			"SubName": "Not32Not32",
+			"Expression": "(IR.And32 (IR.Not32 a) (IR.Not32 b))",
+			"Filter": "",
+			"Result": "(IR.Not32 (IR.Or32 a b))"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Rewrite",
+			"Name": "And64",
+			"SubName": "Not64Not64",
+			"Expression": "(IR.And64 (IR.Not64 a) (IR.Not64 b))",
+			"Filter": "",
+			"Result": "(IR.Not64 (IR.Or64 a b))"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Rewrite",
+			"Name": "Or32",
+			"SubName": "Not32Not32",
+			"Expression": "(IR.Or32 (IR.Not32 a) (IR.Not32 b))",
+			"Filter": "",
+			"Result": "(IR.Not32 (IR.And32 a b))"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Rewrite",
+			"Name": "Or64",
+			"SubName": "Not64Not64",
+			"Expression": "(IR.Or64 (IR.Not64 a) (IR.Not64 b))",
+			"Filter": "",
+			"Result": "(IR.Not64 (IR.And32 a b))"
 		}
 	]
 }

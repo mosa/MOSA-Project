@@ -151,7 +151,7 @@
 			"SubName": "",
 			"Expression": "IR.GetHigh64 a",
 			"Filter": "IsResolvedConstant(a)",
-			"Result": "(IR.Move32 [To32(ShiftRight64(To64(a),32u))])"
+			"Result": "(IR.Move32 [GetHigh64(To64(a))])"
 		},
 		{
 			"FamilyName": "IR",
