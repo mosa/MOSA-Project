@@ -19,13 +19,10 @@
 		</dependencies>
 	</metadata>
 	<files>
-		<file src="..\..\bin\Mosa.ClassLib.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Compiler.Common.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Compiler.Framework.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Compiler.MosaTypeSystem.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Compiler.Extension.Dwarf.dll" target="tools" />
-		<file src="..\..\bin\Mosa.DeviceSystem.dll" target="tools" />
-		<file src="..\..\bin\Mosa.FileSystem.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Platform.ARMv8A32.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Platform.Intel.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Platform.x86.dll" target="tools" />
@@ -36,6 +33,7 @@
 		<file src="..\..\bin\Mosa.Utility.BootImage.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.CodeCompiler.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.DebugEngine.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Utility.FileSystem.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.Launcher.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.RSP.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Tool.Compiler.exe" target="tools" />
