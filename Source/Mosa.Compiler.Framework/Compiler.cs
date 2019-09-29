@@ -151,7 +151,6 @@ namespace Mosa.Compiler.Framework
 				new StackSetupStage(),
 				new ProtectedRegionStage(),
 				new ExceptionStage(),
-				new CILStaticAllocationResolutionStage(),
 				new CILTransformationStage(),
 				new DevirtualizeCallStage(),
 				new PlugStage(),
