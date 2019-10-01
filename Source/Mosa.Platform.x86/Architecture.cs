@@ -193,7 +193,7 @@ namespace Mosa.Platform.x86
 					compilerOptions.EnablePlatformOptimizations ? new Stages.OptimizationStage() : null,
 					new TweakStage(),
 					new FixedRegisterAssignmentStage(),
-					new SimpleDeadCodeRemovalStage(),
+					compilerOptions.EnablePlatformOptimizations ? new SimpleDeadCodeRemovalStage() : null,
 					new AddressModeConversionStage(),
 					new FloatingPointStage(),
 				});

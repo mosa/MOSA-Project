@@ -92,6 +92,8 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.cbPlatformOptimizations = new System.Windows.Forms.ToolStripMenuItem();
+            this.cbLoopInvariantCodeMotion = new System.Windows.Forms.ToolStripMenuItem();
             label4 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             stageLabel = new System.Windows.Forms.Label();
@@ -251,9 +253,11 @@
             this.cbEnableValueNumbering,
             this.cbEnableSparseConditionalConstantPropagation,
             this.cbEnableInlinedMethods,
-            this.cbEnableTwoPassOptimizations,
             this.cbEnableLongExpansion,
+            this.cbLoopInvariantCodeMotion,
             this.cbEnableBitTracker,
+            this.cbEnableTwoPassOptimizations,
+            this.cbPlatformOptimizations,
             this.cbEnableBinaryCodeGeneration});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
@@ -311,7 +315,7 @@
             this.cbEnableTwoPassOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbEnableTwoPassOptimizations.Name = "cbEnableTwoPassOptimizations";
             this.cbEnableTwoPassOptimizations.Size = new System.Drawing.Size(293, 22);
-            this.cbEnableTwoPassOptimizations.Text = "Enable Two Pass Optimizations";
+            this.cbEnableTwoPassOptimizations.Text = "Enable Two Optimization Passes";
             // 
             // cbEnableLongExpansion
             // 
@@ -490,7 +494,7 @@
             this.tabControl.Name = "tabControl";
             this.tabControl.Padding = new System.Drawing.Point(0, 0);
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(606, 401);
+            this.tabControl.Size = new System.Drawing.Size(604, 401);
             this.tabControl.TabIndex = 38;
             this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
             // 
@@ -505,7 +509,7 @@
             this.tabStages.Location = new System.Drawing.Point(4, 25);
             this.tabStages.Margin = new System.Windows.Forms.Padding(0);
             this.tabStages.Name = "tabStages";
-            this.tabStages.Size = new System.Drawing.Size(598, 372);
+            this.tabStages.Size = new System.Drawing.Size(596, 372);
             this.tabStages.TabIndex = 0;
             this.tabStages.Text = "Instructions";
             // 
@@ -558,7 +562,7 @@
             this.tabStageDebug.Location = new System.Drawing.Point(4, 25);
             this.tabStageDebug.Margin = new System.Windows.Forms.Padding(0);
             this.tabStageDebug.Name = "tabStageDebug";
-            this.tabStageDebug.Size = new System.Drawing.Size(598, 372);
+            this.tabStageDebug.Size = new System.Drawing.Size(596, 372);
             this.tabStageDebug.TabIndex = 1;
             this.tabStageDebug.Text = "Debug";
             // 
@@ -595,7 +599,7 @@
             this.tabMethodCounters.Location = new System.Drawing.Point(4, 25);
             this.tabMethodCounters.Margin = new System.Windows.Forms.Padding(0);
             this.tabMethodCounters.Name = "tabMethodCounters";
-            this.tabMethodCounters.Size = new System.Drawing.Size(598, 372);
+            this.tabMethodCounters.Size = new System.Drawing.Size(596, 372);
             this.tabMethodCounters.TabIndex = 6;
             this.tabMethodCounters.Text = "Counters";
             // 
@@ -621,7 +625,7 @@
             this.tabLogs.Location = new System.Drawing.Point(4, 25);
             this.tabLogs.Margin = new System.Windows.Forms.Padding(0);
             this.tabLogs.Name = "tabLogs";
-            this.tabLogs.Size = new System.Drawing.Size(598, 372);
+            this.tabLogs.Size = new System.Drawing.Size(596, 372);
             this.tabLogs.TabIndex = 7;
             this.tabLogs.Text = "Logs";
             // 
@@ -731,6 +735,24 @@
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
+            // cbPlatformOptimizations
+            // 
+            this.cbPlatformOptimizations.Checked = true;
+            this.cbPlatformOptimizations.CheckOnClick = true;
+            this.cbPlatformOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbPlatformOptimizations.Name = "cbPlatformOptimizations";
+            this.cbPlatformOptimizations.Size = new System.Drawing.Size(293, 22);
+            this.cbPlatformOptimizations.Text = "Enable Platform Optimizations";
+            // 
+            // cbLoopInvariantCodeMotion
+            // 
+            this.cbLoopInvariantCodeMotion.Checked = true;
+            this.cbLoopInvariantCodeMotion.CheckOnClick = true;
+            this.cbLoopInvariantCodeMotion.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbLoopInvariantCodeMotion.Name = "cbLoopInvariantCodeMotion";
+            this.cbLoopInvariantCodeMotion.Size = new System.Drawing.Size(293, 22);
+            this.cbLoopInvariantCodeMotion.Text = "Enable Loop Invariant Code Motion";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -826,5 +848,7 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
 		private System.Windows.Forms.ToolStripMenuItem cbEnableBitTracker;
 		private System.Windows.Forms.ToolStripMenuItem CBEnableMultithreading;
+		private System.Windows.Forms.ToolStripMenuItem cbLoopInvariantCodeMotion;
+		private System.Windows.Forms.ToolStripMenuItem cbPlatformOptimizations;
 	}
 }

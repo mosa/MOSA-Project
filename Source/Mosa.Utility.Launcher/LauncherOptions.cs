@@ -80,16 +80,24 @@ namespace Mosa.Utility.Launcher
 		[Option("ssa")]
 		public bool EnableSSA { get; set; }
 
-		[Option("ir")]
+		[Option("ir-optimizations")]
 		public bool EnableIROptimizations { get; set; }
 
-		[Option("optimization-ir-off")]
+		[Option("ir-optimizations-off")]
 		public bool IROptimizationsFalse { set { EnableIROptimizations = false; } }
+
+		// Legacy - will be removed in the future
+		[Option("ir")]
+		public bool EnableIROptimizationsTrue { set { EnableIROptimizations = true; } }
+
+		// Legacy - will be removed in the future
+		[Option("optimization-ir-off")]
+		public bool IROptimizationsFalse2 { set { EnableIROptimizations = false; } }
 
 		[Option("sccp")]
 		public bool EnableSparseConditionalConstantPropagation { get; set; }
 
-		[Option("optimization-sccp-off")]
+		[Option("sccp-off")]
 		public bool EnableSparseConditionalConstantPropagationFalse { set { EnableSparseConditionalConstantPropagation = false; } }
 
 		[Option("inline")]
@@ -101,9 +109,13 @@ namespace Mosa.Utility.Launcher
 		[Option("inline-explicit")]
 		public bool InlineOnlyExplicit { get; set; }
 
-		[Option("ir-long-expansion")]
+		[Option("long-expansion")]
 		public bool EnableLongExpansion { get; set; }
 
+		[Option("ir-long-expansion")]
+		public bool EnableLongExpansion2 { set { EnableLongExpansion = true; } }
+
+		// Legacy - will be removed in the future
 		[Option("two-pass-optimizations")]
 		public bool TwoPassOptimizations { get; set; }
 
@@ -112,6 +124,18 @@ namespace Mosa.Utility.Launcher
 
 		[Option("value-numbering-off")]
 		public bool ValueNumberingFalse { set { EnableValueNumbering = false; } }
+
+		[Option("loop-invariant-code-motion")]
+		public bool EnableLoopInvariantCodeMotion { get; set; }
+
+		[Option("loop-invariant-code-motion-off")]
+		public bool EnableLoopInvariantCodeMotionFalse { set { EnableLoopInvariantCodeMotion = false; } }
+
+		[Option("platform-optimizations")]
+		public bool EnablePlatformOptimizations { get; set; }
+
+		[Option("platform-optimizations-off")]
+		public bool EnablePlatformOptimizationsFalse { set { EnablePlatformOptimizations = false; } }
 
 		[Option("bit-tracker")]
 		public bool EnableBitTracker { get; set; }
@@ -137,6 +161,8 @@ namespace Mosa.Utility.Launcher
 				EnableSparseConditionalConstantPropagation = false;
 				EnableValueNumbering = false;
 				EnableBitTracker = false;
+				EnableLoopInvariantCodeMotion = false;
+				EnablePlatformOptimizations = false;
 			}
 		}
 
@@ -403,6 +429,8 @@ namespace Mosa.Utility.Launcher
 			EnableSparseConditionalConstantPropagation = true;
 			EnableInlinedMethods = true;
 			EnableLongExpansion = true;
+			EnableLoopInvariantCodeMotion = true;
+			EnablePlatformOptimizations = true;
 			TwoPassOptimizations = true;
 			EnableValueNumbering = true;
 			EnableBitTracker = true;
