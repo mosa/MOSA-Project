@@ -72,6 +72,8 @@
             this.lbDestinationDirectory = new MetroFramework.Controls.MetroLabel();
             this.label3 = new MetroFramework.Controls.MetroLabel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.cbPlatformOptimizations = new MetroFramework.Controls.MetroCheckBox();
+            this.cbLoopInvariantCodeMotion = new MetroFramework.Controls.MetroCheckBox();
             this.cbInlineOnlyExplicit = new MetroFramework.Controls.MetroCheckBox();
             this.cbBitTracker = new MetroFramework.Controls.MetroCheckBox();
             this.cbValueNumbering = new MetroFramework.Controls.MetroCheckBox();
@@ -132,8 +134,6 @@
             this.rtbOutput = new System.Windows.Forms.RichTextBox();
             this.openFileDialog2 = new System.Windows.Forms.OpenFileDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.cbLoopInvariantCodeMotion = new MetroFramework.Controls.MetroCheckBox();
-            this.cbPlatformOptimizations = new MetroFramework.Controls.MetroCheckBox();
             this.tbApplicationLocations.SuspendLayout();
             this.tabOptions.SuspendLayout();
             this.groupBox12.SuspendLayout();
@@ -235,7 +235,7 @@
             this.groupBox12.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox12.Location = new System.Drawing.Point(264, 312);
             this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Size = new System.Drawing.Size(158, 98);
+            this.groupBox12.Size = new System.Drawing.Size(158, 143);
             this.groupBox12.TabIndex = 30;
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = "Misc Options:";
@@ -362,7 +362,7 @@
             this.groupBox6.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox6.Location = new System.Drawing.Point(428, 203);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(215, 207);
+            this.groupBox6.Size = new System.Drawing.Size(215, 252);
             this.groupBox6.TabIndex = 28;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Virtual Machine Emulator:";
@@ -736,15 +736,15 @@
             this.groupBox1.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.groupBox1.Controls.Add(this.cbPlatformOptimizations);
             this.groupBox1.Controls.Add(this.cbLoopInvariantCodeMotion);
+            this.groupBox1.Controls.Add(this.cbTwoPassOptimizations);
             this.groupBox1.Controls.Add(this.cbInlineOnlyExplicit);
             this.groupBox1.Controls.Add(this.cbBitTracker);
             this.groupBox1.Controls.Add(this.cbValueNumbering);
-            this.groupBox1.Controls.Add(this.cbTwoPassOptimizations);
             this.groupBox1.Controls.Add(this.cbLongExpansion);
-            this.groupBox1.Controls.Add(this.cbInlinedMethods);
             this.groupBox1.Controls.Add(this.cbEnableSparseConditionalConstantPropagation);
             this.groupBox1.Controls.Add(this.cbEnableIROptimizations);
             this.groupBox1.Controls.Add(this.cbEnableSSA);
+            this.groupBox1.Controls.Add(this.cbInlinedMethods);
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox1.Location = new System.Drawing.Point(5, 203);
             this.groupBox1.Name = "groupBox1";
@@ -753,12 +753,40 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Optimizations:";
             // 
+            // cbPlatformOptimizations
+            // 
+            this.cbPlatformOptimizations.AutoSize = true;
+            this.cbPlatformOptimizations.Checked = true;
+            this.cbPlatformOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbPlatformOptimizations.Location = new System.Drawing.Point(6, 228);
+            this.cbPlatformOptimizations.Name = "cbPlatformOptimizations";
+            this.cbPlatformOptimizations.Size = new System.Drawing.Size(146, 15);
+            this.cbPlatformOptimizations.Style = MetroFramework.MetroColorStyle.Blue;
+            this.cbPlatformOptimizations.TabIndex = 16;
+            this.cbPlatformOptimizations.Text = "Platform Optimizations";
+            this.cbPlatformOptimizations.UseCustomBackColor = true;
+            this.cbPlatformOptimizations.UseSelectable = true;
+            // 
+            // cbLoopInvariantCodeMotion
+            // 
+            this.cbLoopInvariantCodeMotion.AutoSize = true;
+            this.cbLoopInvariantCodeMotion.Checked = true;
+            this.cbLoopInvariantCodeMotion.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.cbLoopInvariantCodeMotion.Location = new System.Drawing.Point(6, 102);
+            this.cbLoopInvariantCodeMotion.Name = "cbLoopInvariantCodeMotion";
+            this.cbLoopInvariantCodeMotion.Size = new System.Drawing.Size(172, 15);
+            this.cbLoopInvariantCodeMotion.Style = MetroFramework.MetroColorStyle.Blue;
+            this.cbLoopInvariantCodeMotion.TabIndex = 15;
+            this.cbLoopInvariantCodeMotion.Text = "Loop Invariant Code Motion";
+            this.cbLoopInvariantCodeMotion.UseCustomBackColor = true;
+            this.cbLoopInvariantCodeMotion.UseSelectable = true;
+            // 
             // cbInlineOnlyExplicit
             // 
             this.cbInlineOnlyExplicit.AutoSize = true;
             this.cbInlineOnlyExplicit.Checked = true;
             this.cbInlineOnlyExplicit.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbInlineOnlyExplicit.Location = new System.Drawing.Point(7, 102);
+            this.cbInlineOnlyExplicit.Location = new System.Drawing.Point(6, 186);
             this.cbInlineOnlyExplicit.Name = "cbInlineOnlyExplicit";
             this.cbInlineOnlyExplicit.Size = new System.Drawing.Size(121, 15);
             this.cbInlineOnlyExplicit.Style = MetroFramework.MetroColorStyle.Blue;
@@ -772,7 +800,7 @@
             this.cbBitTracker.AutoSize = true;
             this.cbBitTracker.Checked = true;
             this.cbBitTracker.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbBitTracker.Location = new System.Drawing.Point(7, 186);
+            this.cbBitTracker.Location = new System.Drawing.Point(6, 123);
             this.cbBitTracker.Name = "cbBitTracker";
             this.cbBitTracker.Size = new System.Drawing.Size(77, 15);
             this.cbBitTracker.Style = MetroFramework.MetroColorStyle.Blue;
@@ -786,7 +814,7 @@
             this.cbValueNumbering.AutoSize = true;
             this.cbValueNumbering.Checked = true;
             this.cbValueNumbering.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbValueNumbering.Location = new System.Drawing.Point(7, 165);
+            this.cbValueNumbering.Location = new System.Drawing.Point(6, 60);
             this.cbValueNumbering.Name = "cbValueNumbering";
             this.cbValueNumbering.Size = new System.Drawing.Size(115, 15);
             this.cbValueNumbering.Style = MetroFramework.MetroColorStyle.Blue;
@@ -800,12 +828,12 @@
             this.cbTwoPassOptimizations.AutoSize = true;
             this.cbTwoPassOptimizations.Checked = true;
             this.cbTwoPassOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbTwoPassOptimizations.Location = new System.Drawing.Point(7, 144);
+            this.cbTwoPassOptimizations.Location = new System.Drawing.Point(6, 207);
             this.cbTwoPassOptimizations.Name = "cbTwoPassOptimizations";
-            this.cbTwoPassOptimizations.Size = new System.Drawing.Size(147, 15);
+            this.cbTwoPassOptimizations.Size = new System.Drawing.Size(153, 15);
             this.cbTwoPassOptimizations.Style = MetroFramework.MetroColorStyle.Blue;
             this.cbTwoPassOptimizations.TabIndex = 11;
-            this.cbTwoPassOptimizations.Text = "Two Pass Optimizations";
+            this.cbTwoPassOptimizations.Text = "Two Optimization Passes";
             this.cbTwoPassOptimizations.UseCustomBackColor = true;
             this.cbTwoPassOptimizations.UseSelectable = true;
             // 
@@ -814,7 +842,7 @@
             this.cbLongExpansion.AutoSize = true;
             this.cbLongExpansion.Checked = true;
             this.cbLongExpansion.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbLongExpansion.Location = new System.Drawing.Point(7, 123);
+            this.cbLongExpansion.Location = new System.Drawing.Point(6, 144);
             this.cbLongExpansion.Name = "cbLongExpansion";
             this.cbLongExpansion.Size = new System.Drawing.Size(107, 15);
             this.cbLongExpansion.Style = MetroFramework.MetroColorStyle.Blue;
@@ -828,7 +856,7 @@
             this.cbInlinedMethods.AutoSize = true;
             this.cbInlinedMethods.Checked = true;
             this.cbInlinedMethods.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbInlinedMethods.Location = new System.Drawing.Point(6, 81);
+            this.cbInlinedMethods.Location = new System.Drawing.Point(6, 165);
             this.cbInlinedMethods.Name = "cbInlinedMethods";
             this.cbInlinedMethods.Size = new System.Drawing.Size(109, 15);
             this.cbInlinedMethods.Style = MetroFramework.MetroColorStyle.Blue;
@@ -842,7 +870,7 @@
             this.cbEnableSparseConditionalConstantPropagation.AutoSize = true;
             this.cbEnableSparseConditionalConstantPropagation.Checked = true;
             this.cbEnableSparseConditionalConstantPropagation.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbEnableSparseConditionalConstantPropagation.Location = new System.Drawing.Point(6, 60);
+            this.cbEnableSparseConditionalConstantPropagation.Location = new System.Drawing.Point(6, 81);
             this.cbEnableSparseConditionalConstantPropagation.Name = "cbEnableSparseConditionalConstantPropagation";
             this.cbEnableSparseConditionalConstantPropagation.Size = new System.Drawing.Size(241, 15);
             this.cbEnableSparseConditionalConstantPropagation.Style = MetroFramework.MetroColorStyle.Blue;
@@ -858,10 +886,10 @@
             this.cbEnableIROptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
             this.cbEnableIROptimizations.Location = new System.Drawing.Point(6, 39);
             this.cbEnableIROptimizations.Name = "cbEnableIROptimizations";
-            this.cbEnableIROptimizations.Size = new System.Drawing.Size(110, 15);
+            this.cbEnableIROptimizations.Size = new System.Drawing.Size(140, 15);
             this.cbEnableIROptimizations.Style = MetroFramework.MetroColorStyle.Blue;
             this.cbEnableIROptimizations.TabIndex = 7;
-            this.cbEnableIROptimizations.Text = "IR Optimizations";
+            this.cbEnableIROptimizations.Text = "IR Level Optimizations";
             this.cbEnableIROptimizations.UseCustomBackColor = true;
             this.cbEnableIROptimizations.UseSelectable = true;
             // 
@@ -892,7 +920,7 @@
             this.tabAdvanced.Location = new System.Drawing.Point(4, 22);
             this.tabAdvanced.Name = "tabAdvanced";
             this.tabAdvanced.Padding = new System.Windows.Forms.Padding(3);
-            this.tabAdvanced.Size = new System.Drawing.Size(657, 435);
+            this.tabAdvanced.Size = new System.Drawing.Size(653, 480);
             this.tabAdvanced.TabIndex = 4;
             this.tabAdvanced.Text = "Advanced Options";
             this.tabAdvanced.UseVisualStyleBackColor = true;
@@ -1202,7 +1230,7 @@
             this.tabFiles.Controls.Add(this.panelAdditionalFiles);
             this.tabFiles.Location = new System.Drawing.Point(4, 22);
             this.tabFiles.Name = "tabFiles";
-            this.tabFiles.Size = new System.Drawing.Size(657, 435);
+            this.tabFiles.Size = new System.Drawing.Size(653, 480);
             this.tabFiles.TabIndex = 5;
             this.tabFiles.Text = "Included Files";
             // 
@@ -1214,7 +1242,7 @@
             this.panelAdditionalFiles.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelAdditionalFiles.Location = new System.Drawing.Point(0, 0);
             this.panelAdditionalFiles.Name = "panelAdditionalFiles";
-            this.panelAdditionalFiles.Size = new System.Drawing.Size(657, 435);
+            this.panelAdditionalFiles.Size = new System.Drawing.Size(653, 480);
             this.panelAdditionalFiles.TabIndex = 23;
             // 
             // dataGridView1
@@ -1231,7 +1259,7 @@
             // btnRemoveFiles
             // 
             this.btnRemoveFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnRemoveFiles.Location = new System.Drawing.Point(630, 57);
+            this.btnRemoveFiles.Location = new System.Drawing.Point(626, 102);
             this.btnRemoveFiles.Name = "btnRemoveFiles";
             this.btnRemoveFiles.Size = new System.Drawing.Size(25, 25);
             this.btnRemoveFiles.TabIndex = 30;
@@ -1242,7 +1270,7 @@
             // btnAddFiles
             // 
             this.btnAddFiles.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btnAddFiles.Location = new System.Drawing.Point(630, 26);
+            this.btnAddFiles.Location = new System.Drawing.Point(626, 71);
             this.btnAddFiles.Name = "btnAddFiles";
             this.btnAddFiles.Size = new System.Drawing.Size(25, 25);
             this.btnAddFiles.TabIndex = 29;
@@ -1263,7 +1291,7 @@
             this.tabApplicationLocations.Location = new System.Drawing.Point(4, 22);
             this.tabApplicationLocations.Name = "tabApplicationLocations";
             this.tabApplicationLocations.Padding = new System.Windows.Forms.Padding(3);
-            this.tabApplicationLocations.Size = new System.Drawing.Size(657, 435);
+            this.tabApplicationLocations.Size = new System.Drawing.Size(653, 480);
             this.tabApplicationLocations.TabIndex = 3;
             this.tabApplicationLocations.Text = "Application Locations";
             this.tabApplicationLocations.UseVisualStyleBackColor = true;
@@ -1504,7 +1532,7 @@
             this.tabCounters.Location = new System.Drawing.Point(4, 22);
             this.tabCounters.Name = "tabCounters";
             this.tabCounters.Padding = new System.Windows.Forms.Padding(3);
-            this.tabCounters.Size = new System.Drawing.Size(657, 435);
+            this.tabCounters.Size = new System.Drawing.Size(653, 480);
             this.tabCounters.TabIndex = 2;
             this.tabCounters.Text = "Counters";
             this.tabCounters.UseVisualStyleBackColor = true;
@@ -1535,7 +1563,7 @@
             this.tabOutput.Location = new System.Drawing.Point(4, 22);
             this.tabOutput.Name = "tabOutput";
             this.tabOutput.Padding = new System.Windows.Forms.Padding(3);
-            this.tabOutput.Size = new System.Drawing.Size(657, 435);
+            this.tabOutput.Size = new System.Drawing.Size(653, 480);
             this.tabOutput.TabIndex = 1;
             this.tabOutput.Text = "Output";
             this.tabOutput.UseVisualStyleBackColor = true;
@@ -1567,34 +1595,6 @@
             // 
             this.timer1.Enabled = true;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
-            // cbLoopInvariantCodeMotion
-            // 
-            this.cbLoopInvariantCodeMotion.AutoSize = true;
-            this.cbLoopInvariantCodeMotion.Checked = true;
-            this.cbLoopInvariantCodeMotion.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbLoopInvariantCodeMotion.Location = new System.Drawing.Point(7, 207);
-            this.cbLoopInvariantCodeMotion.Name = "cbLoopInvariantCodeMotion";
-            this.cbLoopInvariantCodeMotion.Size = new System.Drawing.Size(172, 15);
-            this.cbLoopInvariantCodeMotion.Style = MetroFramework.MetroColorStyle.Blue;
-            this.cbLoopInvariantCodeMotion.TabIndex = 15;
-            this.cbLoopInvariantCodeMotion.Text = "Loop Invariant Code Motion";
-            this.cbLoopInvariantCodeMotion.UseCustomBackColor = true;
-            this.cbLoopInvariantCodeMotion.UseSelectable = true;
-            // 
-            // cbPlatformOptimizations
-            // 
-            this.cbPlatformOptimizations.AutoSize = true;
-            this.cbPlatformOptimizations.Checked = true;
-            this.cbPlatformOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbPlatformOptimizations.Location = new System.Drawing.Point(7, 231);
-            this.cbPlatformOptimizations.Name = "cbPlatformOptimizations";
-            this.cbPlatformOptimizations.Size = new System.Drawing.Size(146, 15);
-            this.cbPlatformOptimizations.Style = MetroFramework.MetroColorStyle.Blue;
-            this.cbPlatformOptimizations.TabIndex = 16;
-            this.cbPlatformOptimizations.Text = "Platform Optimizations";
-            this.cbPlatformOptimizations.UseCustomBackColor = true;
-            this.cbPlatformOptimizations.UseSelectable = true;
             // 
             // MainForm
             // 
