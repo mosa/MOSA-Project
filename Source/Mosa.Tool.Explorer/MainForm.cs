@@ -474,6 +474,9 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.LinkerFormatType = LinkerFormatType.Elf32;
 			Compiler.CompilerOptions.EnableBitTracker = cbEnableBitTracker.Checked;
 
+			Compiler.CompilerOptions.EnableLoopInvariantCodeMotion = cbLoopInvariantCodeMotion.Checked;
+			Compiler.CompilerOptions.EnablePlatformOptimizations = cbPlatformOptimizations.Checked;
+
 			Compiler.CompilerTrace.SetTraceListener(this);
 		}
 

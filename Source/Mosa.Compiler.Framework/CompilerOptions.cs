@@ -334,7 +334,7 @@ namespace Mosa.Compiler.Framework
 			EnableInlinedMethods = false;
 			BaseAddress = 0x00400000;
 			EmitBinary = true;
-			InlinedIRMaximum = 8;
+			InlinedIRMaximum = 12;
 			EmitAllSymbols = true;
 			EmitStaticRelocations = true;
 			TwoPassOptimizations = true;
