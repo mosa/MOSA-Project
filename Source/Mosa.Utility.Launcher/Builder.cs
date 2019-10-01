@@ -118,11 +118,11 @@ namespace Mosa.Utility.Launcher
 				compiler.CompilerOptions.EmitStaticRelocations = LauncherOptions.EmitStaticRelocations;
 				compiler.CompilerOptions.EnableMethodScanner = LauncherOptions.EnableMethodScanner;
 				compiler.CompilerOptions.EnableBitTracker = LauncherOptions.EnableBitTracker;
+				compiler.CompilerOptions.EnableLoopInvariantCodeMotion = LauncherOptions.EnableLoopInvariantCodeMotion;
+				compiler.CompilerOptions.EnablePlatformOptimizations = LauncherOptions.EnablePlatformOptimizations;
 				compiler.CompilerOptions.InterruptMethodName = LauncherOptions.InterruptMethodName;
-
 				compiler.CompilerOptions.CreateExtraSections = LauncherOptions.CreateExtraSections;
 				compiler.CompilerOptions.CreateExtraProgramHeaders = LauncherOptions.CreateExtraProgramHeaders;
-
 
 				if (LauncherOptions.GenerateMapFile)
 				{

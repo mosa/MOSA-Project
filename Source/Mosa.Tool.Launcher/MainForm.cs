@@ -100,9 +100,9 @@ namespace Mosa.Tool.Launcher
 			Options.EnableInlinedMethods = cbInlinedMethods.Checked;
 			Options.InlineOnlyExplicit = cbInlineOnlyExplicit.Checked;
 			Options.VBEVideo = cbVBEVideo.Checked;
-			Options.EnableLongExpansion = cbIRLongExpansion.Checked;
+			Options.EnableLongExpansion = cbLongExpansion.Checked;
 			Options.TwoPassOptimizations = cbTwoPassOptimizations.Checked;
-			Options.EnableLongExpansion = cbIRLongExpansion.Checked;
+			Options.EnableLongExpansion = cbLongExpansion.Checked;
 			Options.EnableValueNumbering = cbValueNumbering.Checked;
 			Options.GenerateDebugFile = cbGenerateDebugInfoFile.Checked;
 			Options.BaseAddress = tbBaseAddress.Text.ParseHexOrInteger();
@@ -111,6 +111,8 @@ namespace Mosa.Tool.Launcher
 			Options.EnableMethodScanner = cbEnableMethodScanner.Checked;
 			Options.GenerateCompileTimeFile = cbGenerateCompilerTime.Checked;
 			Options.EnableBitTracker = cbBitTracker.Checked;
+			Options.EnablePlatformOptimizations = cbPlatformOptimizations.Checked;
+			Options.EnableLoopInvariantCodeMotion = cbLoopInvariantCodeMotion.Checked;
 
 			Options.OsName = tbOsName.Text;
 
@@ -231,12 +233,14 @@ namespace Mosa.Tool.Launcher
 			cbRelocationTable.Checked = Options.EmitStaticRelocations;
 			cbEmitSymbolTable.Checked = Options.EmitAllSymbols;
 			tbMode.Text = Options.Width + "x" + Options.Height + "x" + Options.Depth;
-			cbIRLongExpansion.Checked = Options.EnableLongExpansion;
+			cbLongExpansion.Checked = Options.EnableLongExpansion;
 			cbTwoPassOptimizations.Checked = Options.TwoPassOptimizations;
 			cbValueNumbering.Checked = Options.EnableValueNumbering;
 			cbEnableMethodScanner.Checked = Options.EnableMethodScanner;
 			cbGenerateCompilerTime.Checked = Options.GenerateCompileTimeFile;
 			cbBitTracker.Checked = Options.EnableBitTracker;
+			cbPlatformOptimizations.Checked = Options.EnablePlatformOptimizations;
+			cbLoopInvariantCodeMotion.Checked = Options.EnableLoopInvariantCodeMotion;
 
 			tbOsName.Text = Options.OsName;
 

@@ -894,7 +894,7 @@ namespace Mosa.Tool.Explorer
 				{
 					CbStages_SelectedIndexChanged(null, null);
 
-					string stage = GetCurrentStage();
+					string stage = GetCurrentStage().Replace("\\", " - ");
 					var result = tbInstructions.Text.Replace("\n", "\r\n");
 
 					File.WriteAllText(Path.Combine(path, stage + "-stage.txt"), result);
@@ -911,7 +911,7 @@ namespace Mosa.Tool.Explorer
 				{
 					CbDebugStages_SelectedIndexChanged(null, null);
 
-					string stage = GetCurrentDebugStage();
+					var stage = GetCurrentDebugStage().Replace("\\", " - ");
 					var result = tbDebugResult.Text.Replace("\n", "\r\n");
 
 					File.WriteAllText(Path.Combine(path, stage + "-debug.txt"), result);
