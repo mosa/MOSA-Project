@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
 namespace Mosa.Runtime.Metadata
 {
 	public struct ProtectedRegionDefinition
@@ -25,14 +23,14 @@ namespace Mosa.Runtime.Metadata
 
 		public bool IsNull => Ptr.IsNull;
 
-		public uint StartOffset => Intrinsic.Load32(Ptr);
+		public uint StartOffset => Ptr.Load32();
 
-		public uint EndOffset => Intrinsic.Load32(Ptr, Pointer.Size);
+		public uint EndOffset => Ptr.Load32(Pointer.Size);
 
-		public uint HandlerOffset => Intrinsic.Load32(Ptr, Pointer.Size * 2);
+		public uint HandlerOffset => Ptr.Load32(Pointer.Size * 2);
 
-		public ExceptionHandlerType HandlerType => (ExceptionHandlerType)Intrinsic.Load32(Ptr, Pointer.Size * 3);
+		public ExceptionHandlerType HandlerType => (ExceptionHandlerType)Ptr.Load32(Pointer.Size * 3);
 
-		public TypeDefinition ExceptionType => new TypeDefinition(Intrinsic.LoadPointer(Ptr, Pointer.Size * 4));
+		public TypeDefinition ExceptionType => new TypeDefinition(Ptr.LoadPointer(Pointer.Size * 4));
 	}
 }

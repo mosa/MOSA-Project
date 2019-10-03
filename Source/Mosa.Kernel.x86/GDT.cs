@@ -63,12 +63,12 @@ namespace Mosa.Kernel.x86
 		{
 			var entry = GetEntryLocation(index);
 
-			Intrinsic.Store16(entry, Offset.BaseLow, (ushort)(address & 0xFFFF));
-			Intrinsic.Store8(entry, Offset.BaseMiddle, (byte)((address >> 16) & 0xFF));
-			Intrinsic.Store8(entry, Offset.BaseHigh, (byte)((address >> 24) & 0xFF));
-			Intrinsic.Store16(entry, Offset.LimitLow, (ushort)(limit & 0xFFFF));
-			Intrinsic.Store8(entry, Offset.Granularity, (byte)(((byte)(limit >> 16) & 0x0F) | (granularity & 0xF0)));
-			Intrinsic.Store8(entry, Offset.Access, access);
+			entry.Store16(Offset.BaseLow, (ushort)(address & 0xFFFF));
+			entry.Store8(Offset.BaseMiddle, (byte)((address >> 16) & 0xFF));
+			entry.Store8(Offset.BaseHigh, (byte)((address >> 24) & 0xFF));
+			entry.Store16(Offset.LimitLow, (ushort)(limit & 0xFFFF));
+			entry.Store8(Offset.Granularity, (byte)(((byte)(limit >> 16) & 0x0F) | (granularity & 0xF0)));
+			entry.Store8(Offset.Access, access);
 		}
 	}
 }

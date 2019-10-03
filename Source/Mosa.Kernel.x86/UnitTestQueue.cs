@@ -33,22 +33,22 @@ namespace Mosa.Kernel.x86
 				if (new Pointer(Address.UnitTestQueue + len + 32) >= queueCurrent)
 					return false; // no space
 
-				Intrinsic.Store32(queueNext, uint.MaxValue); // mark jump to front
+				queueNext.Store32(uint.MaxValue); // mark jump to front
 
 				// cycle to front
 				queueNext = new Pointer(Address.UnitTestQueue);
 			}
 
-			Intrinsic.Store32(queueNext, len + 4);
+			queueNext.Store32(len + 4);
 			queueNext += 4;
 
-			Intrinsic.Store32(queueNext, id);
+			queueNext.Store32(id);
 			queueNext += 4;
 
 			for (var i = start; i < end; i += 4)
 			{
-				uint value = Intrinsic.Load32(i);
-				Intrinsic.Store32(queueNext, value);
+				uint value = i.Load32();
+				queueNext.Store32(value);
 				queueNext += 4;
 			}
 
@@ -68,18 +68,18 @@ namespace Mosa.Kernel.x86
 				return;
 			}
 
-			uint marker = Intrinsic.Load32(queueCurrent);
+			uint marker = queueCurrent.Load32();
 
 			if (marker == uint.MaxValue)
 			{
 				queueCurrent = new Pointer(Address.UnitTestQueue);
 			}
 
-			uint len = Intrinsic.Load32(queueCurrent);
-			uint id = Intrinsic.Load32(queueCurrent, 4);
-			uint address = Intrinsic.Load32(queueCurrent, 8);
-			uint type = Intrinsic.Load32(queueCurrent, 12);
-			uint paramcnt = Intrinsic.Load32(queueCurrent, 16);
+			uint len = queueCurrent.Load32();
+			uint id = queueCurrent.Load32(4);
+			uint address = queueCurrent.Load32(8);
+			uint type = queueCurrent.Load32(12);
+			uint paramcnt = queueCurrent.Load32(16);
 
 			UnitTestRunner.SetUnitTestMethodAddress(address);
 			UnitTestRunner.SetUnitTestResultType(type);
@@ -87,7 +87,7 @@ namespace Mosa.Kernel.x86
 
 			for (uint index = 0; index < paramcnt; index++)
 			{
-				uint value = Intrinsic.Load32(queueCurrent, 20 + (index * 4));
+				uint value = queueCurrent.Load32(20 + (index * 4));
 				UnitTestRunner.SetUnitTestMethodParameter(index, value);
 			}
 

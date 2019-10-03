@@ -96,12 +96,12 @@ namespace Mosa.Kernel.x86
 
 		private static uint GetValue(uint offset)
 		{
-			return Intrinsic.Load32(MultibootStructure, offset);
+			return MultibootStructure.Load32(offset);
 		}
 
 		private static Pointer GetPointer(uint offset)
 		{
-			return Intrinsic.LoadPointer(MultibootStructure, offset);
+			return MultibootStructure.LoadPointer(offset);
 		}
 
 		/// <summary>
@@ -218,7 +218,7 @@ namespace Mosa.Kernel.x86
 			{
 				MemoryMapCount++;
 
-				var size = Intrinsic.Load32(location, MultiBootMemoryMapOffset.Size) + 4;
+				var size = location.Load32(MultiBootMemoryMapOffset.Size) + 4;
 				location += size;
 			}
 		}
@@ -234,7 +234,7 @@ namespace Mosa.Kernel.x86
 
 			for (uint i = 0; i < index; i++)
 			{
-				var size = Intrinsic.Load32(location, MultiBootMemoryMapOffset.Size) + 4;
+				var size = location.Load32(MultiBootMemoryMapOffset.Size) + 4;
 
 				location += size;
 			}
@@ -249,7 +249,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		public static uint GetMemoryMapBase(uint index)
 		{
-			return Intrinsic.Load32(GetMemoryMapIndexLocation(index), MultiBootMemoryMapOffset.BaseAddr);
+			return GetMemoryMapIndexLocation(index).Load32(MultiBootMemoryMapOffset.BaseAddr);
 		}
 
 		/// <summary>
@@ -259,7 +259,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		public static uint GetMemoryMapLength(uint index)
 		{
-			return Intrinsic.Load32(GetMemoryMapIndexLocation(index), MultiBootMemoryMapOffset.Length);
+			return GetMemoryMapIndexLocation(index).Load32(MultiBootMemoryMapOffset.Length);
 		}
 
 		/// <summary>

@@ -88,43 +88,43 @@ namespace Mosa.Plug.Korlib.Runtime
 			{
 				// 1 byte
 				case TypeCode.Boolean:
-					return (bool)(Intrinsic.Load8(valuePtr) != 0);
+					return (bool)(valuePtr.Load8() != 0);
 
 				case TypeCode.U1:
-					return (byte)Intrinsic.Load8(valuePtr);
+					return (byte)valuePtr.Load8();
 
 				case TypeCode.I1:
-					return (sbyte)Intrinsic.Load8(valuePtr);
+					return (sbyte)valuePtr.Load8();
 
 				// 2 bytes
 				case TypeCode.Char:
-					return (char)Intrinsic.Load16(valuePtr);
+					return (char)valuePtr.Load16();
 
 				case TypeCode.U2:
-					return (ushort)Intrinsic.Load16(valuePtr);
+					return (ushort)valuePtr.Load16();
 
 				case TypeCode.I2:
-					return (short)Intrinsic.Load16(valuePtr);
+					return (short)valuePtr.Load16();
 
 				// 4 bytes
 				case TypeCode.U4:
-					return (uint)Intrinsic.Load32(valuePtr);
+					return (uint)valuePtr.Load32();
 
 				case TypeCode.I4:
-					return (int)Intrinsic.Load32(valuePtr);
+					return (int)valuePtr.Load32();
 
 				case TypeCode.R4:
-					return Intrinsic.LoadR4(valuePtr);
+					return valuePtr.LoadR4();
 
 				// 8 bytes
 				case TypeCode.U8:
-					return (ulong)Intrinsic.Load64(valuePtr);
+					return (ulong)valuePtr.Load64();
 
 				case TypeCode.I8:
-					return (long)Intrinsic.Load64(valuePtr);
+					return (long)valuePtr.Load64();
 
 				case TypeCode.R8:
-					return Intrinsic.LoadR8(valuePtr);
+					return valuePtr.LoadR8();
 
 				// SZArray
 				case TypeCode.SZArray:

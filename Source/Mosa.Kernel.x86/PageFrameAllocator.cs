@@ -97,7 +97,7 @@ namespace Mosa.Kernel.x86
 				return Pointer.Zero; // out of memory
 
 			totalUsedPages++;
-			var avail = Intrinsic.LoadPointer(at);
+			var avail = at.LoadPointer();
 			at -= 4;
 
 			// Clear out memory

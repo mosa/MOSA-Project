@@ -47,10 +47,10 @@ namespace Mosa.Kernel.x86.Smbios
 		public CpuStructure()
 			: base(SmbiosManager.GetStructureOfType(0x04))
 		{
-			Version = GetStringFromIndex(Intrinsic.Load8(address, 0x10u));
-			Socket = GetStringFromIndex(Intrinsic.Load8(address, 0x04u));
-			MaxSpeed = Intrinsic.Load16(address, 0x16u);
-			Vendor = GetStringFromIndex(Intrinsic.Load8(address, 0x07u));
+			Version = GetStringFromIndex(address.Load8(0x10u));
+			Socket = GetStringFromIndex(address.Load8(0x04u));
+			MaxSpeed = address.Load16(0x16u);
+			Vendor = GetStringFromIndex(address.Load8(0x07u));
 		}
 	}
 }

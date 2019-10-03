@@ -259,9 +259,10 @@ namespace Mosa.TestWorld.x86
 			return Return10();
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void UnitTest()
 		{
-			GenericInterfaceTests.InterfaceTest2(5);
+			ReflectionTests.FindTypeOfTest();
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]

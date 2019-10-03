@@ -109,7 +109,7 @@ namespace Mosa.Kernel.x86.Smbios
 		/// <returns></returns>
 		private static byte GetType(Pointer address)
 		{
-			return Intrinsic.Load8(address);
+			return address.Load8();
 		}
 
 		/// <summary>
@@ -119,10 +119,10 @@ namespace Mosa.Kernel.x86.Smbios
 		/// <returns></returns>
 		private static Pointer GetAddressOfNextStructure(Pointer address)
 		{
-			byte length = Intrinsic.Load8(address, 0x01);
+			byte length = address.Load8(0x01);
 			var endOfFormattedArea = address + length;
 
-			while (Intrinsic.Load16(endOfFormattedArea) != 0x0000)
+			while (endOfFormattedArea.Load16() != 0x0000)
 			{
 				endOfFormattedArea += 1;
 			}
@@ -141,10 +141,10 @@ namespace Mosa.Kernel.x86.Smbios
 
 			while (memory < new Pointer(0x100000))
 			{
-				char a = (char)Intrinsic.Load8(memory);
-				char s = (char)Intrinsic.Load8(memory, 1u);
-				char m = (char)Intrinsic.Load8(memory, 2u);
-				char b = (char)Intrinsic.Load8(memory, 3u);
+				char a = (char)memory.Load8();
+				char s = (char)memory.Load8(1u);
+				char m = (char)memory.Load8(2u);
+				char b = (char)memory.Load8(3u);
 
 				if (a == '_' && s == 'S' && m == 'M' && b == '_')
 				{
@@ -163,7 +163,7 @@ namespace Mosa.Kernel.x86.Smbios
 		/// </summary>
 		private static void GetMajorVersion()
 		{
-			MajorVersion = Intrinsic.Load8(EntryPoint, 0x06u);
+			MajorVersion = EntryPoint.Load8(0x06u);
 		}
 
 		/// <summary>
@@ -171,7 +171,7 @@ namespace Mosa.Kernel.x86.Smbios
 		/// </summary>
 		private static void GetMinorVersion()
 		{
-			MinorVersion = Intrinsic.Load8(EntryPoint, 0x07u);
+			MinorVersion = EntryPoint.Load8(0x07u);
 		}
 
 		/// <summary>
@@ -179,7 +179,7 @@ namespace Mosa.Kernel.x86.Smbios
 		/// </summary>
 		private static void GetTableAddress()
 		{
-			TableAddress = Intrinsic.LoadPointer(EntryPoint, 0x18u);
+			TableAddress = EntryPoint.LoadPointer(0x18u);
 		}
 
 		/// <summary>
@@ -187,7 +187,7 @@ namespace Mosa.Kernel.x86.Smbios
 		/// </summary>
 		private static void GetTableLength()
 		{
-			TableLength = Intrinsic.Load16(EntryPoint, 0x16u);
+			TableLength = EntryPoint.Load16(0x16u);
 		}
 
 		/// <summary>
@@ -195,7 +195,7 @@ namespace Mosa.Kernel.x86.Smbios
 		/// </summary>
 		private static void GetNumberOfStructures()
 		{
-			NumberOfStructures = Intrinsic.Load16(EntryPoint, 0x1Cu);
+			NumberOfStructures = EntryPoint.Load16(0x1Cu);
 		}
 	}
 }

@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
 namespace Mosa.Runtime.Metadata
 {
 	public struct CustomAttribute
@@ -27,11 +25,11 @@ namespace Mosa.Runtime.Metadata
 
 		public MethodDefinition ConstructorMethod => new MethodDefinition(Ptr + Pointer.Size);
 
-		public uint NumberOfArguments => Intrinsic.Load32(Ptr, Pointer.Size * 2);
+		public uint NumberOfArguments => Ptr.Load32(Pointer.Size * 2);
 
 		public CustomAttributeArgument GetCustomAttributeArgument(uint slot)
 		{
-			return new CustomAttributeArgument(Intrinsic.LoadPointer(Ptr, (Pointer.Size * 3) + (Pointer.Size * (int)slot)));
+			return new CustomAttributeArgument(Ptr.LoadPointer((Pointer.Size * 3) + (Pointer.Size * (int)slot)));
 		}
 	}
 }

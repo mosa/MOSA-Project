@@ -3,7 +3,6 @@
 using Mosa.Runtime.Metadata;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
-using Mosa.Runtime;
 
 namespace Mosa.Runtime.x86
 {
@@ -14,91 +13,6 @@ namespace Mosa.Runtime.x86
 			Debug.Fail("Fault: " + ((int)code).ToString("hex") + " , Extra: " + ((int)extra).ToString("hex"));
 		}
 
-		public static MethodDefinition GetMethodDefinitionViaMethodExceptionLookup(Pointer address)
-		{
-			var table = Intrinsic.GetMethodExceptionLookupTable();
-
-			if (table.IsNull)
-			{
-				return new MethodDefinition(Pointer.Zero);
-			}
-
-			uint entries = Intrinsic.Load32(table);
-
-			table += Pointer.Size;
-
-			while (entries > 0)
-			{
-				var addr = Intrinsic.LoadPointer(table);
-				uint size = Intrinsic.Load32(table, Pointer.Size);
-
-				if (address >= addr && address < (addr + size))
-				{
-					return new MethodDefinition(Intrinsic.LoadPointer(table, Pointer.Size * 2));
-				}
-
-				table += Pointer.Size * 3;
-
-				entries--;
-			}
-
-			return new MethodDefinition(Pointer.Zero);
-		}
-
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static ProtectedRegionDefinition GetProtectedRegionEntryByAddress(Pointer address, TypeDefinition exceptionType, MethodDefinition methodDef)
-		{
-			var protectedRegionTable = methodDef.ProtectedRegionTable;
-
-			if (protectedRegionTable.IsNull)
-			{
-				return new ProtectedRegionDefinition(Pointer.Zero);
-			}
-
-			var method = methodDef.Method;
-
-			if (method.IsNull)
-			{
-				return new ProtectedRegionDefinition(Pointer.Zero);
-			}
-
-			uint offset = (uint)method.GetOffset(address);
-			uint entries = protectedRegionTable.NumberOfRegions;
-
-			var protectedRegionDefinition = new ProtectedRegionDefinition(Pointer.Zero);
-			uint currentStart = uint.MinValue;
-			uint currentEnd = uint.MaxValue;
-			uint entry = 0;
-
-			while (entry < entries)
-			{
-				var prDef = protectedRegionTable.GetProtectedRegionDefinition(entry);
-
-				uint start = prDef.StartOffset;
-				uint end = prDef.EndOffset;
-
-				if ((offset >= start) && (offset < end) && (start >= currentStart) && (end < currentEnd))
-				{
-					var handlerType = prDef.HandlerType;
-					var exType = prDef.ExceptionType;
-
-					// If the handler is a finally clause, accept without testing
-					// If the handler is a exception clause, accept if the exception type is in the is within the inheritance chain of the exception object
-					if ((handlerType == ExceptionHandlerType.Finally) ||
-						(handlerType == ExceptionHandlerType.Exception && Runtime.Internal.IsTypeInInheritanceChain(exType, exceptionType)))
-					{
-						protectedRegionDefinition = prDef;
-						currentStart = start;
-						currentEnd = end;
-					}
-				}
-
-				entry++;
-			}
-
-			return protectedRegionDefinition;
-		}
-
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static Pointer GetPreviousStackFrame(Pointer ebp)
 		{
@@ -107,7 +21,7 @@ namespace Mosa.Runtime.x86
 				return Pointer.Zero;
 			}
 
-			return Intrinsic.LoadPointer(ebp);
+			return ebp.LoadPointer();
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
@@ -147,13 +61,13 @@ namespace Mosa.Runtime.x86
 				return Pointer.Zero;
 			}
 
-			return Intrinsic.LoadPointer(stackframe, Pointer.Size);
+			return stackframe.LoadPointer(Pointer.Size);
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void SetReturnAddressForStackFrame(Pointer stackframe, uint value)
 		{
-			Intrinsic.Store(stackframe, Pointer.Size, value);
+			stackframe.Store32(Pointer.Size, value);
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
@@ -232,13 +146,13 @@ namespace Mosa.Runtime.x86
 					Fault(0XBAD00002, i);
 				}
 
-				var exceptionType = new TypeDefinition(Intrinsic.LoadPointer(exceptionObject));
+				var exceptionType = new TypeDefinition(exceptionObject.LoadPointer());
 
-				var methodDef = GetMethodDefinitionViaMethodExceptionLookup(returnAddress);
+				var methodDef = Runtime.Internal.GetMethodDefinitionViaMethodExceptionLookup(returnAddress);
 
 				if (!methodDef.IsNull)
 				{
-					var protectedRegion = GetProtectedRegionEntryByAddress(returnAddress - 1, exceptionType, methodDef);
+					var protectedRegion = Runtime.Internal.GetProtectedRegionEntryByAddress(returnAddress - 1, exceptionType, methodDef);
 
 					if (!protectedRegion.IsNull)
 					{

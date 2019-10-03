@@ -179,8 +179,8 @@ namespace Mosa.TestWorld.x86.Tests
 		public static bool ConditionalBug()
 		{
 			var address = new Pointer(0x3000);
-			Intrinsic.Store8(address, 81);
-			var num = Intrinsic.Load8(address);
+			address.Store8(81);
+			var num = address.Load8();
 
 			if (num >= 32 && num < 128)
 				return true;
