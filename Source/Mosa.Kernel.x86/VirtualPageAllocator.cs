@@ -56,7 +56,7 @@ namespace Mosa.Kernel.x86
 			else
 				value |= mask;
 
-			Intrinsic.Store32(at, value);
+			at.Store32(value);
 		}
 
 		/// <summary>

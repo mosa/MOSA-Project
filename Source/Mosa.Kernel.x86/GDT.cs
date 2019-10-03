@@ -31,8 +31,8 @@ namespace Mosa.Kernel.x86
 			var gdt = new Pointer(Address.GDTTable);
 
 			Runtime.Internal.MemoryClear(gdt, 6);
-			Intrinsic.Store16(gdt, (Offset.TotalSize * 3) - 1);
-			Intrinsic.Store32(gdt, 2, Address.GDTTable + 6);
+			gdt.Store16((Offset.TotalSize * 3) - 1);
+			gdt.Store32(2, Address.GDTTable + 6);
 
 			Set(0, 0, 0, 0, 0);                // Null segment
 			Set(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code segment

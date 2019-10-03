@@ -20,15 +20,15 @@ namespace Mosa.Runtime
 
 			var memory = GC.AllocateObject((2 * (uint)(Pointer.Size)) + classSize);
 
-			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
+			memory.StorePointer(0, new Pointer(handle.Value));
 
 			if (Pointer.Size == 4)
 			{
-				Intrinsic.Store32(memory, Pointer.Size, 0);
+				memory.Store32(Pointer.Size, 0);
 			}
 			else
 			{
-				Intrinsic.Store64(memory, Pointer.Size, 0);
+				memory.Store64(Pointer.Size, 0);
 			}
 
 			return memory;
@@ -55,17 +55,17 @@ namespace Mosa.Runtime
 
 			var memory = GC.AllocateObject(allocationSize);
 
-			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
+			memory.StorePointer(0, new Pointer(handle.Value));
 
 			if (Pointer.Size == 4)
 			{
-				Intrinsic.Store32(memory, Pointer.Size, 0);
-				Intrinsic.Store32(memory, Pointer.Size * 2, elements);
+				memory.Store32(Pointer.Size, 0);
+				memory.Store32(Pointer.Size * 2, elements);
 			}
 			else
 			{
-				Intrinsic.Store64(memory, Pointer.Size, 0);
-				Intrinsic.Store64(memory, Pointer.Size * 2, elements);
+				memory.Store64(Pointer.Size, 0);
+				memory.Store64(Pointer.Size * 2, elements);
 			}
 
 			return memory;
@@ -108,8 +108,8 @@ namespace Mosa.Runtime
 		{
 			var memory = AllocateObject(handle, Pointer.Size);
 
-			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
-			Intrinsic.Store32(memory, Pointer.Size * 2, value);
+			memory.StorePointer(0, new Pointer(handle.Value));
+			memory.Store32(Pointer.Size * 2, value);
 
 			return memory;
 		}
@@ -119,8 +119,8 @@ namespace Mosa.Runtime
 		{
 			var memory = AllocateObject(handle, Pointer.Size * 2);
 
-			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
-			Intrinsic.Store64(memory, Pointer.Size * 2, value);
+			memory.StorePointer(0, new Pointer(handle.Value));
+			memory.Store64(Pointer.Size * 2, value);
 
 			return memory;
 		}
@@ -130,8 +130,8 @@ namespace Mosa.Runtime
 		{
 			var memory = AllocateObject(handle, Pointer.Size);
 
-			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
-			Intrinsic.StoreR4(memory, Pointer.Size * 2, value);
+			memory.StorePointer(0, new Pointer(handle.Value));
+			memory.StoreR4(Pointer.Size * 2, value);
 
 			return memory;
 		}
@@ -141,8 +141,8 @@ namespace Mosa.Runtime
 		{
 			var memory = AllocateObject(handle, Pointer.Size * 2);
 
-			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
-			Intrinsic.StoreR8(memory, Pointer.Size * 2, value);
+			memory.StorePointer(0, new Pointer(handle.Value));
+			memory.StoreR8(Pointer.Size * 2, value);
 
 			return memory;
 		}
@@ -213,7 +213,7 @@ namespace Mosa.Runtime
 			// FUTURE: Improve
 			for (int i = 0; i < count; i += 2)
 			{
-				Intrinsic.Store16(dest, i, value);
+				dest.Store16(i, value);
 			}
 		}
 

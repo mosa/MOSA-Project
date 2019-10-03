@@ -318,6 +318,11 @@ namespace Mosa.Runtime
 			return Intrinsic.LoadPointer(this, offset);
 		}
 
+		public void Store16(ushort value)
+		{
+			Intrinsic.Store16(this, value);
+		}
+
 		public void Store16(int offset, ushort value)
 		{
 			Intrinsic.Store16(this, offset, value);
@@ -387,6 +392,36 @@ namespace Mosa.Runtime
 		public void Store8(int offset, byte value)
 		{
 			Intrinsic.Store8(this, offset, value);
+		}
+
+		public void StoreR4(float value)
+		{
+			Intrinsic.StoreR4(this, value);
+		}
+
+		public void StoreR8(double value)
+		{
+			Intrinsic.StoreR8(this, value);
+		}
+
+		public void StoreR4(uint offset, float value)
+		{
+			Intrinsic.StoreR4(this, offset, value);
+		}
+
+		public void StoreR4(int offset, float value)
+		{
+			Intrinsic.StoreR4(this, offset, value);
+		}
+
+		public void StoreR8(uint offset, double value)
+		{
+			Intrinsic.StoreR8(this, offset, value);
+		}
+
+		public void StoreR8(int offset, double value)
+		{
+			Intrinsic.StoreR8(this, offset, value);
 		}
 
 		public void StorePointer(Pointer value)

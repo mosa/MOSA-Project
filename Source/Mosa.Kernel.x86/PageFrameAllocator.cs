@@ -80,7 +80,7 @@ namespace Mosa.Kernel.x86
 			// Populate free table
 			for (uint mem = normstart; mem < normstart + normsize; mem = mem + PageSize, at = at + 4)
 			{
-				Intrinsic.Store32(at, mem);
+				at.Store32(mem);
 			}
 
 			at -= 4;
