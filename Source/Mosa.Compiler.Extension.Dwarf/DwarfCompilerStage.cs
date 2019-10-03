@@ -287,6 +287,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 						continue;
 
 					var symbol = Linker.GetSymbol(method.FullName);
+
 					if (symbol == null)
 						continue;
 

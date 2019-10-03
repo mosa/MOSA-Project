@@ -12,8 +12,6 @@ namespace Mosa.Compiler.Framework.Source
 		/// </summary>
 		public static List<SourceRegion> GetSourceRegions(MethodData methodData)
 		{
-			var method = methodData.Method;
-
 			if (methodData.IsMethodImplementationReplaced && methodData.Symbol.IsExternalSymbol)
 			{
 				var regions = new List<SourceRegion>(1);
@@ -34,7 +32,7 @@ namespace Mosa.Compiler.Framework.Source
 				return regions;
 			}
 
-			if (method.HasImplementation
+			if (methodData.Method.HasImplementation
 				&& methodData.HasCode
 				&& !methodData.IsMethodImplementationReplaced
 				&& !methodData.IsLinkerGenerated)
@@ -42,7 +40,7 @@ namespace Mosa.Compiler.Framework.Source
 				// Add method header
 				var regions = new List<SourceRegion>(methodData.LabelRegions.Count + 1);
 
-				var firstInstruction = method.Code[0];
+				var firstInstruction = methodData.Method.Code[0];
 
 				var headerRegion = new SourceRegion
 				{
@@ -68,14 +66,14 @@ namespace Mosa.Compiler.Framework.Source
 
 				foreach (var labelRegion in methodData.LabelRegions)
 				{
-					foreach (var instruction in method.Code)
+					foreach (var instruction in methodData.Method.Code)
 					{
 						// special case: the return label is always 0xFFFFF
 						var searchForLabel = labelRegion.Label;
 
 						if (labelRegion.Label == 0xFFFFF)
 						{
-							searchForLabel = method.Code.Last().Offset;
+							searchForLabel = methodData.Method.Code.Last().Offset;
 						}
 
 						if (instruction.StartLine > 0)
