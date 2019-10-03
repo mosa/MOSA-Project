@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
@@ -14,9 +15,11 @@ namespace Mosa.Compiler.Framework
 	{
 		#region Properties
 
-		public Counters Counters { get; }
-
 		public MosaMethod Method { get; }
+
+		public LinkerSymbol Symbol { get; set; }
+
+		public Counters Counters { get; }
 
 		public bool IsLinkerGenerated { get; set; }
 

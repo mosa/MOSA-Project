@@ -195,7 +195,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the linker symbol.
 		/// </summary>
-		public LinkerSymbol Symbol { get; private set; }
+		public LinkerSymbol Symbol { get { return MethodData.Symbol; } set { MethodData.Symbol = value; } }
 
 		/// <summary>
 		/// Gets the method scanner.
@@ -256,13 +256,16 @@ namespace Mosa.Compiler.Framework
 			MethodData.Version++;
 			MethodData.IsMethodImplementationReplaced = IsMethodPlugged;
 
-			// Both defines the symbol and also clears the data
-			Symbol = Linker.DefineSymbol(Method.FullName, SectionKind.Text, 0, 0);
-			Symbol.RemovePatches();
-
-			Symbol.MethodData = MethodData; // for debugging
-			Symbol.MosaMethod = Method; // for debugging
-			Symbol.Version = MethodData.Version;
+			if (Symbol == null)
+			{
+				Symbol = Linker.DefineSymbol(Method.FullName, SectionKind.Text, 0, 0);
+				Symbol.MethodData = MethodData; // for debugging
+				Symbol.MosaMethod = Method; // for debugging
+			}
+			else
+			{
+				Symbol.RemovePatches();
+			}
 
 			EvaluateParameterOperands();
 
@@ -525,6 +528,7 @@ namespace Mosa.Compiler.Framework
 			IsCILDecodeRequired = false;
 			IsExecutePipeline = false;
 			IsStackFrameRequired = false;
+			MethodData.IsMethodImplementationReplaced = false;
 
 			var intrinsic = Architecture.GetInstrinsicMethod(Method.ExternMethodModule);
 
