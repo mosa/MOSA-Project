@@ -294,6 +294,35 @@ namespace Mosa.Runtime
 
 		#endregion Virtual Machine
 
+		#region Metadata
+
+		public static MethodDefinition GetMethodDefinition(Pointer address)
+		{
+			var table = Intrinsic.GetMethodLookupTable();
+			uint entries = Intrinsic.Load32(table);
+
+			table += Pointer.Size; // skip count
+
+			while (entries > 0)
+			{
+				var addr = Intrinsic.LoadPointer(table);
+				uint size = Intrinsic.Load32(table, Pointer.Size);
+
+				if (address >= addr && address < (addr + size))
+				{
+					return new MethodDefinition(Intrinsic.LoadPointer(table, Pointer.Size * 2));
+				}
+
+				table += Pointer.Size * 3;
+
+				entries--;
+			}
+
+			return new MethodDefinition(Pointer.Zero);
+		}
+
+		#endregion Metadata
+
 		public static void ThrowIndexOutOfRangeException()
 		{
 			throw new IndexOutOfRangeException();

@@ -3,6 +3,7 @@
 using Mosa.Runtime.Metadata;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using Mosa.Runtime;
 
 namespace Mosa.Runtime.x86
 {
@@ -11,33 +12,6 @@ namespace Mosa.Runtime.x86
 		public static void Fault(uint code, uint extra = 0)
 		{
 			Debug.Fail("Fault: " + ((int)code).ToString("hex") + " , Extra: " + ((int)extra).ToString("hex"));
-		}
-
-		public static MethodDefinition GetMethodDefinition(Pointer address)
-		{
-			var table = Intrinsic.GetMethodLookupTable();
-			uint entries = Intrinsic.Load32(table);
-
-			table += Pointer.Size; // skip count
-
-			while (entries > 0)
-			{
-				var addr = Intrinsic.LoadPointer(table);
-				uint size = Intrinsic.Load32(table, Pointer.Size);
-
-				if (address >= addr && address < (addr + size))
-
-				//if (address.ToInt64() >= addr.ToInt64() && (address.ToInt64() < (addr.ToInt64() + size)))
-				{
-					return new MethodDefinition(Intrinsic.LoadPointer(table, Pointer.Size * 2));
-				}
-
-				table += Pointer.Size * 3;
-
-				entries--;
-			}
-
-			return new MethodDefinition(Pointer.Zero);
 		}
 
 		public static MethodDefinition GetMethodDefinitionViaMethodExceptionLookup(Pointer address)
@@ -199,7 +173,8 @@ namespace Mosa.Runtime.x86
 			ebp = GetStackFrame(depth + 0, ebp);
 
 			var address = GetReturnAddressFromStackFrame(ebp);
-			return GetMethodDefinition(address);
+
+			return Runtime.Internal.GetMethodDefinition(address);
 		}
 
 		public static SimpleStackTraceEntry GetStackTraceEntry(uint depth, Pointer ebp, Pointer eip)
@@ -229,7 +204,7 @@ namespace Mosa.Runtime.x86
 				address = GetReturnAddressFromStackFrame(ebp);
 			}
 
-			var methodDef = GetMethodDefinition(address);
+			var methodDef = Runtime.Internal.GetMethodDefinition(address);
 
 			if (methodDef.IsNull)
 				return entry;
