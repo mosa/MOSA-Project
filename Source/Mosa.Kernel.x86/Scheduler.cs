@@ -180,24 +180,24 @@ namespace Mosa.Kernel.x86
 			var stackTop = stack + stackSize;
 
 			// Setup stack state
-			Intrinsic.Store32(stackTop, -4, 0);          // Zero Sentinel
-			Intrinsic.Store32(stackTop, -8, SignalThreadTerminationMethodAddress.ToInt32());  // Address of method that will raise a interrupt signal to terminate thread
+			stackTop.Store32(-4, 0);          // Zero Sentinel
+			stackTop.Store32(-8, SignalThreadTerminationMethodAddress.ToInt32());  // Address of method that will raise a interrupt signal to terminate thread
 
-			Intrinsic.Store32(stackTop, -12, 0x00000202);// EFLAG
-			Intrinsic.Store32(stackTop, -16, 0x08);      // CS
-			Intrinsic.Store32(stackTop, -20, methodAddress.ToInt32()); // EIP
+			stackTop.Store32(-12, 0x00000202);// EFLAG
+			stackTop.Store32(-16, 0x08);      // CS
+			stackTop.Store32(-20, methodAddress.ToInt32()); // EIP
 
-			Intrinsic.Store32(stackTop, -24, 0);     // ErrorCode - not used
-			Intrinsic.Store32(stackTop, -28, 0);     // Interrupt Number - not used
+			stackTop.Store32(-24, 0);     // ErrorCode - not used
+			stackTop.Store32(-28, 0);     // Interrupt Number - not used
 
-			Intrinsic.Store32(stackTop, -32, 0);     // EAX
-			Intrinsic.Store32(stackTop, -36, 0);     // ECX
-			Intrinsic.Store32(stackTop, -40, 0);     // EDX
-			Intrinsic.Store32(stackTop, -44, 0);     // EBX
-			Intrinsic.Store32(stackTop, -48, 0);     // ESP (original) - not used
-			Intrinsic.Store32(stackTop, -52, (stackTop - 8).ToInt32()); // EBP
-			Intrinsic.Store32(stackTop, -56, 0);     // ESI
-			Intrinsic.Store32(stackTop, -60, 0);     // EDI
+			stackTop.Store32(-32, 0);     // EAX
+			stackTop.Store32(-36, 0);     // ECX
+			stackTop.Store32(-40, 0);     // EDX
+			stackTop.Store32(-44, 0);     // EBX
+			stackTop.Store32(-48, 0);     // ESP (original) - not used
+			stackTop.Store32(-52, (stackTop - 8).ToInt32()); // EBP
+			stackTop.Store32(-56, 0);     // ESI
+			stackTop.Store32(-60, 0);     // EDI
 
 			thread.Status = ThreadStatus.Running;
 			thread.StackBottom = stack;

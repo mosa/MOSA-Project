@@ -195,7 +195,7 @@ namespace Mosa.Runtime
 			for (int i = 0; i < count; i++)
 			{
 				byte value = src.Load8(i);
-				Intrinsic.Store8(dest, i, value);
+				dest.Store8(i, value);
 			}
 		}
 
@@ -204,7 +204,7 @@ namespace Mosa.Runtime
 			// FUTURE: Improve
 			for (int i = 0; i < count; i++)
 			{
-				Intrinsic.Store8(dest, i, value);
+				dest.Store8(i, value);
 			}
 		}
 
@@ -222,7 +222,7 @@ namespace Mosa.Runtime
 			// FUTURE: Improve
 			for (int i = 0; i < count; i += 4)
 			{
-				Intrinsic.Store32(dest, i, value);
+				dest.Store32(i, value);
 			}
 		}
 
@@ -231,7 +231,7 @@ namespace Mosa.Runtime
 			// FUTURE: Improve
 			for (int i = 0; i < count; i++)
 			{
-				Intrinsic.Store8(dest, i, 0);
+				dest.Store8(i, 0);
 			}
 		}
 

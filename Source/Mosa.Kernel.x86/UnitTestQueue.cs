@@ -21,7 +21,7 @@ namespace Mosa.Kernel.x86
 			queueCurrent = new Pointer(Address.UnitTestQueue);
 			count = 0;
 
-			Intrinsic.Store32(queueNext, 0);
+			queueNext.Store32(0);
 		}
 
 		public static bool QueueUnitTest(uint id, Pointer start, Pointer end)
@@ -52,7 +52,7 @@ namespace Mosa.Kernel.x86
 				queueNext += 4;
 			}
 
-			Intrinsic.Store32(queueNext, 0); // mark end
+			queueNext.Store32(0); // mark end
 			++count;
 
 			return true;

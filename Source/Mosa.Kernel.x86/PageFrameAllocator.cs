@@ -114,7 +114,7 @@ namespace Mosa.Kernel.x86
 		{
 			totalUsedPages--;
 			at += 4;
-			Intrinsic.Store32(at, address.ToInt32());
+			at.Store32(address.ToUInt32());
 		}
 
 		/// <summary>

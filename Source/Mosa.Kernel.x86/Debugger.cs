@@ -363,7 +363,7 @@ namespace Mosa.Kernel.x86
 			{
 				uint value = GetDataUInt32(8 + at);
 
-				Intrinsic.Store32(address, at, value);
+				address.Store32(at, value);
 
 				at += 4;
 			}
@@ -372,7 +372,7 @@ namespace Mosa.Kernel.x86
 			{
 				byte value = GetDataByte(8 + at);
 
-				Intrinsic.Store8(address, at, value);
+				address.Store8(at, value);
 
 				at++;
 			}
@@ -436,14 +436,14 @@ namespace Mosa.Kernel.x86
 
 			while (at + 4 < bytes)
 			{
-				Intrinsic.Store32(start, at, 0);
+				start.Store32(at, 0);
 
 				at += 4;
 			}
 
 			while (at < bytes)
 			{
-				Intrinsic.Store8(start, at, 0);
+				start.Store8(at, 0);
 
 				at++;
 			}

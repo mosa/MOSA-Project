@@ -35,8 +35,8 @@ namespace Mosa.Kernel.x86
 		{
 			// Setup IDT table
 			Runtime.Internal.MemoryClear(new Pointer(Address.IDTTable), 6);
-			Intrinsic.Store16(new Pointer(Address.IDTTable), (IDTEntryOffset.TotalSize * 256) - 1);
-			Intrinsic.Store32(new Pointer(Address.IDTTable), 2, Address.IDTTable + 6);
+			new Pointer(Address.IDTTable).Store16((IDTEntryOffset.TotalSize * 256) - 1);
+			new Pointer(Address.IDTTable).Store32(2, Address.IDTTable + 6);
 
 			SetTableEntries();
 
