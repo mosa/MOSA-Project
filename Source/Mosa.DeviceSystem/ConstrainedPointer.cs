@@ -41,8 +41,8 @@ namespace Mosa.DeviceSystem
 
 		public byte this[uint offset]
 		{
-			get { CheckOffset(offset); return Intrinsic.Load8(address, offset); }
-			set { CheckOffset(offset); Intrinsic.Store8(address, offset, value); }
+			get { CheckOffset(offset); return address.Load8(offset); }
+			set { CheckOffset(offset); address.Store8(offset, value); }
 		}
 
 		/// <summary>
@@ -53,7 +53,7 @@ namespace Mosa.DeviceSystem
 		public byte Read8(uint offset)
 		{
 			CheckOffset(offset);
-			return Intrinsic.Load8(address, offset);
+			return address.Load8(offset);
 		}
 
 		/// <summary>
@@ -64,7 +64,7 @@ namespace Mosa.DeviceSystem
 		public void Write8(uint offset, byte value)
 		{
 			CheckOffset(offset);
-			Intrinsic.Store8(address, offset, value);
+			address.Store8(offset, value);
 		}
 
 		/// <summary>
@@ -75,7 +75,7 @@ namespace Mosa.DeviceSystem
 		public ushort Read16(uint offset)
 		{
 			CheckOffset(offset);
-			return Intrinsic.Load16(address, offset);
+			return address.Load16(offset);
 		}
 
 		/// <summary>
@@ -86,7 +86,7 @@ namespace Mosa.DeviceSystem
 		public void Write16(uint offset, ushort value)
 		{
 			CheckOffset(offset);
-			Intrinsic.Store16(address, offset, value);
+			address.Store16(offset, value);
 		}
 
 		/// <summary>
@@ -97,7 +97,7 @@ namespace Mosa.DeviceSystem
 		public uint Read24(uint offset)
 		{
 			CheckOffset(offset);
-			return Intrinsic.Load16(address, offset) | (uint)(Intrinsic.Load8(address, offset + 2) << 16);
+			return address.Load16(offset) | (uint)(address.Load8(offset + 2) << 16);
 		}
 
 		/// <summary>
@@ -108,8 +108,8 @@ namespace Mosa.DeviceSystem
 		public void Write24(uint offset, uint value)
 		{
 			CheckOffset(offset);
-			Intrinsic.Store16(address, offset, (ushort)(value & 0xFFFF));
-			Intrinsic.Store8(address, offset + 2, (byte)((value >> 16) & 0xFF));
+			address.Store16(offset, (ushort)(value & 0xFFFF));
+			address.Store8(offset + 2, (byte)((value >> 16) & 0xFF));
 		}
 
 		/// <summary>
@@ -120,7 +120,7 @@ namespace Mosa.DeviceSystem
 		public uint Read32(uint offset)
 		{
 			CheckOffset(offset);
-			return Intrinsic.Load32(address, offset);
+			return address.Load32(offset);
 		}
 
 		/// <summary>
@@ -131,7 +131,7 @@ namespace Mosa.DeviceSystem
 		public void Write32(uint offset, uint value)
 		{
 			CheckOffset(offset);
-			Intrinsic.Store32(address, offset, value);
+			address.Store32(offset, value);
 		}
 	}
 }

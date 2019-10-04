@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
 namespace Mosa.Runtime.Metadata
 {
 	/// <summary>
@@ -24,11 +22,11 @@ namespace Mosa.Runtime.Metadata
 
 		public bool IsNull => Ptr.IsNull;
 
-		public uint NumberOfAttributes => Intrinsic.Load32(Ptr);
+		public uint NumberOfAttributes => Ptr.Load32();
 
 		public CustomAttribute GetCustomAttribute(uint slot)
 		{
-			return new CustomAttribute(Intrinsic.LoadPointer(Ptr, Pointer.Size + (Pointer.Size * (int)slot)));
+			return new CustomAttribute(Ptr.LoadPointer(Pointer.Size + (Pointer.Size * (int)slot)));
 		}
 	}
 }

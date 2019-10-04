@@ -3,7 +3,6 @@
 using Mosa.Plug.Korlib.Runtime;
 using Mosa.Runtime;
 using Mosa.Runtime.Plug;
-using System;
 using System.Collections.Generic;
 
 namespace Mosa.Plug.Korlib
@@ -19,14 +18,13 @@ namespace Mosa.Plug.Korlib
 
 			// Get AssemblyListTable and Assembly count
 			var assemblyListTable = Intrinsic.GetAssemblyListTable();
-			uint assemblyCount = Intrinsic.Load32(assemblyListTable);
+			uint assemblyCount = assemblyListTable.Load32();
 
 			// Loop through and populate the array
 			for (int i = 0; i < assemblyCount; i++)
 			{
 				// Get the pointer to the Assembly Metadata
-				var ptr = Intrinsic.LoadPointer(assemblyListTable, IntPtr.Size + (IntPtr.Size * i));
-
+				var ptr = assemblyListTable.LoadPointer(Pointer.Size + (Pointer.Size * i));
 				Assemblies.Add(new RuntimeAssembly(ptr.ToIntPtr()));
 			}
 		}

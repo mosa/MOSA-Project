@@ -2,7 +2,6 @@
 
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
-using System;
 
 namespace Mosa.Kernel.x86
 {
@@ -91,10 +90,10 @@ namespace Mosa.Kernel.x86
 		/// <param name="chr">The character.</param>
 		public static void RawWrite(uint row, uint column, char chr, byte color)
 		{
-			Pointer address = new Pointer(0x0B8000 + ((row * Columns + column) * 2));
+			var address = new Pointer(0x0B8000 + ((row * Columns + column) * 2));
 
-			Intrinsic.Store8(address, (byte)chr);
-			Intrinsic.Store8(address, 1, color);
+			address.Store8((byte)chr);
+			address.Store8(1, color);
 		}
 
 		/// <summary>
@@ -103,10 +102,10 @@ namespace Mosa.Kernel.x86
 		/// <param name="chr">The character.</param>
 		public static void Write(char chr)
 		{
-			Pointer address = new Pointer(0x0B8000 + ((Row * Columns + Column) * 2));
+			var address = new Pointer(0x0B8000 + ((Row * Columns + Column) * 2));
 
-			Intrinsic.Store8(address, (byte)chr);
-			Intrinsic.Store8(address, 1, color);
+			address.Store8((byte)chr);
+			address.Store8(1, color);
 
 			Next();
 			UpdateCursor();

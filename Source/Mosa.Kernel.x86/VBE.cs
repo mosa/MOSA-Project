@@ -66,22 +66,22 @@ namespace Mosa.Kernel.x86
 
 		private static byte GetValue8(uint offset)
 		{
-			return Intrinsic.Load8(VBEModeInfo, offset);
+			return VBEModeInfo.Load8(offset);
 		}
 
 		private static ushort GetValue16(uint offset)
 		{
-			return Intrinsic.Load16(VBEModeInfo, offset);
+			return VBEModeInfo.Load16(offset);
 		}
 
 		private static uint GetValue32(uint offset)
 		{
-			return Intrinsic.Load32(VBEModeInfo, offset);
+			return VBEModeInfo.Load32(offset);
 		}
 
 		private static Pointer GetPointer(uint offset)
 		{
-			return Intrinsic.LoadPointer(VBEModeInfo, offset);
+			return VBEModeInfo.LoadPointer(offset);
 		}
 
 		public static ushort Attributes { get { return GetValue16(VBEModeInfoOffset.Attributes); } }

@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
 namespace Mosa.Runtime.Metadata
 {
 	public struct MethodDefinition
@@ -29,12 +27,12 @@ namespace Mosa.Runtime.Metadata
 
 		public bool IsNull => Ptr.IsNull;
 
-		public string Name => (string)Intrinsic.GetObjectFromAddress(Intrinsic.LoadPointer(Ptr));
+		public string Name => (string)Intrinsic.GetObjectFromAddress(Ptr.LoadPointer());
 
-		public uint StackSize => Intrinsic.Load32(Ptr, Pointer.Size * 3);
+		public uint StackSize => Ptr.Load32(Pointer.Size * 3);
 
-		public Pointer Method => Intrinsic.LoadPointer(Ptr, Pointer.Size * 4);
+		public Pointer Method => Ptr.LoadPointer(Pointer.Size * 4);
 
-		public ProtectedRegionTable ProtectedRegionTable => new ProtectedRegionTable(Intrinsic.LoadPointer(Ptr, Pointer.Size * 6));
+		public ProtectedRegionTable ProtectedRegionTable => new ProtectedRegionTable(Ptr.LoadPointer(Pointer.Size * 6));
 	}
 }

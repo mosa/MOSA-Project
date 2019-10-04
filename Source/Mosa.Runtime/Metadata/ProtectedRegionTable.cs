@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
 namespace Mosa.Runtime.Metadata
 {
 	/// <summary>
@@ -25,11 +23,11 @@ namespace Mosa.Runtime.Metadata
 
 		public bool IsNull => Ptr.IsNull;
 
-		public uint NumberOfRegions => Intrinsic.Load32(Ptr);
+		public uint NumberOfRegions => Ptr.Load32();
 
 		public ProtectedRegionDefinition GetProtectedRegionDefinition(uint slot)
 		{
-			return new ProtectedRegionDefinition(Intrinsic.LoadPointer(Ptr, Pointer.Size + (Pointer.Size * (int)slot)));
+			return new ProtectedRegionDefinition(Ptr.LoadPointer(Pointer.Size + (Pointer.Size * (int)slot)));
 		}
 	}
 }

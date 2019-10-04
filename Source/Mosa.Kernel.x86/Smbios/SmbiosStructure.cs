@@ -30,7 +30,7 @@ namespace Mosa.Kernel.x86.Smbios
 
 			for (byte count = 1; count != index;)
 			{
-				if (Intrinsic.Load8(first, offset++) == 0x00)
+				if (first.Load8(offset++) == 0x00)
 					count++;
 			}
 
@@ -38,7 +38,7 @@ namespace Mosa.Kernel.x86.Smbios
 			var end = start;
 			int len = 0;
 
-			while (Intrinsic.Load8(end, len++) != 0x00)
+			while (end.Load8(len++) != 0x00)
 			{
 			}
 

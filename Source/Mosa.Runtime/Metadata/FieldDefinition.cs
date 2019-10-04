@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
 namespace Mosa.Runtime.Metadata
 {
 	public struct FieldDefinition
@@ -26,16 +24,16 @@ namespace Mosa.Runtime.Metadata
 
 		public bool IsNull => Ptr.IsNull;
 
-		public string Name => (string)Intrinsic.GetObjectFromAddress(Intrinsic.LoadPointer(Ptr));
+		public string Name => (string)Intrinsic.GetObjectFromAddress(Ptr.LoadPointer());
 
-		public CustomAttributeTable CustomAttributes => new CustomAttributeTable(Intrinsic.LoadPointer(Ptr, Pointer.Size));
+		public CustomAttributeTable CustomAttributes => new CustomAttributeTable(Ptr.LoadPointer(Pointer.Size));
 
-		public uint Attributes => Intrinsic.Load32(Ptr, Pointer.Size * 2);
+		public uint Attributes => Ptr.Load32(Pointer.Size * 2);
 
-		public TypeDefinition FieldType => new TypeDefinition(Intrinsic.LoadPointer(Ptr, Pointer.Size * 3));
+		public TypeDefinition FieldType => new TypeDefinition(Ptr.LoadPointer(Pointer.Size * 3));
 
-		public Pointer FieldData => Intrinsic.LoadPointer(Ptr, Pointer.Size * 4);
+		public Pointer FieldData => Ptr.LoadPointer(Pointer.Size * 4);
 
-		public uint OffsetOrSize => Intrinsic.Load32(Ptr, Pointer.Size * 5);
+		public uint OffsetOrSize => Ptr.Load32(Pointer.Size * 5);
 	}
 }

@@ -1450,7 +1450,7 @@
 				},
 				{
 					"Condition": "[constant][constant]",
-					"Encoding": "[x86-common-load-constant+zero]"
+					"Encoding": "[x86-common-load-constant+constant]"
 				}
 			]
 		},

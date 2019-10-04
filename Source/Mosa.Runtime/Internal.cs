@@ -20,15 +20,15 @@ namespace Mosa.Runtime
 
 			var memory = GC.AllocateObject((2 * (uint)(Pointer.Size)) + classSize);
 
-			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
+			memory.StorePointer(0, new Pointer(handle.Value));
 
 			if (Pointer.Size == 4)
 			{
-				Intrinsic.Store32(memory, Pointer.Size, 0);
+				memory.Store32(Pointer.Size, 0);
 			}
 			else
 			{
-				Intrinsic.Store64(memory, Pointer.Size, 0);
+				memory.Store64(Pointer.Size, 0);
 			}
 
 			return memory;
@@ -55,17 +55,17 @@ namespace Mosa.Runtime
 
 			var memory = GC.AllocateObject(allocationSize);
 
-			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
+			memory.StorePointer(0, new Pointer(handle.Value));
 
 			if (Pointer.Size == 4)
 			{
-				Intrinsic.Store32(memory, Pointer.Size, 0);
-				Intrinsic.Store32(memory, Pointer.Size * 2, elements);
+				memory.Store32(Pointer.Size, 0);
+				memory.Store32(Pointer.Size * 2, elements);
 			}
 			else
 			{
-				Intrinsic.Store64(memory, Pointer.Size, 0);
-				Intrinsic.Store64(memory, Pointer.Size * 2, elements);
+				memory.Store64(Pointer.Size, 0);
+				memory.Store64(Pointer.Size * 2, elements);
 			}
 
 			return memory;
@@ -86,8 +86,8 @@ namespace Mosa.Runtime
 		{
 			var memory = AllocateObject(handle, Pointer.Size);
 
-			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
-			Intrinsic.Store8(memory, Pointer.Size * 2, value);
+			memory.StorePointer(0, new Pointer(handle.Value));
+			memory.Store8(Pointer.Size * 2, value);
 
 			return memory;
 		}
@@ -97,8 +97,8 @@ namespace Mosa.Runtime
 		{
 			var memory = AllocateObject(handle, Pointer.Size);
 
-			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
-			Intrinsic.Store16(memory, Pointer.Size * 2, value);
+			memory.StorePointer(0, new Pointer(handle.Value));
+			memory.Store16(Pointer.Size * 2, value);
 
 			return memory;
 		}
@@ -108,8 +108,8 @@ namespace Mosa.Runtime
 		{
 			var memory = AllocateObject(handle, Pointer.Size);
 
-			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
-			Intrinsic.Store32(memory, Pointer.Size * 2, value);
+			memory.StorePointer(0, new Pointer(handle.Value));
+			memory.Store32(Pointer.Size * 2, value);
 
 			return memory;
 		}
@@ -119,8 +119,8 @@ namespace Mosa.Runtime
 		{
 			var memory = AllocateObject(handle, Pointer.Size * 2);
 
-			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
-			Intrinsic.Store64(memory, Pointer.Size * 2, value);
+			memory.StorePointer(0, new Pointer(handle.Value));
+			memory.Store64(Pointer.Size * 2, value);
 
 			return memory;
 		}
@@ -130,8 +130,8 @@ namespace Mosa.Runtime
 		{
 			var memory = AllocateObject(handle, Pointer.Size);
 
-			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
-			Intrinsic.StoreR4(memory, Pointer.Size * 2, value);
+			memory.StorePointer(0, new Pointer(handle.Value));
+			memory.StoreR4(Pointer.Size * 2, value);
 
 			return memory;
 		}
@@ -141,8 +141,8 @@ namespace Mosa.Runtime
 		{
 			var memory = AllocateObject(handle, Pointer.Size * 2);
 
-			Intrinsic.Store(memory, 0, new Pointer(handle.Value));
-			Intrinsic.StoreR8(memory, Pointer.Size * 2, value);
+			memory.StorePointer(0, new Pointer(handle.Value));
+			memory.StoreR8(Pointer.Size * 2, value);
 
 			return memory;
 		}
@@ -194,8 +194,8 @@ namespace Mosa.Runtime
 			// FUTURE: Improve
 			for (int i = 0; i < count; i++)
 			{
-				byte value = Intrinsic.Load8(src, i);
-				Intrinsic.Store8(dest, i, value);
+				byte value = src.Load8(i);
+				dest.Store8(i, value);
 			}
 		}
 
@@ -204,25 +204,25 @@ namespace Mosa.Runtime
 			// FUTURE: Improve
 			for (int i = 0; i < count; i++)
 			{
-				Intrinsic.Store8(dest, i, value);
+				dest.Store8(i, value);
 			}
 		}
 
 		public static void MemorySet(Pointer dest, ushort value, uint count)
 		{
 			// FUTURE: Improve
-			for (int i = 0; i < count; i = i + 2)
+			for (int i = 0; i < count; i += 2)
 			{
-				Intrinsic.Store16(dest, i, value);
+				dest.Store16(i, value);
 			}
 		}
 
 		public static void MemorySet(Pointer dest, uint value, uint count)
 		{
 			// FUTURE: Improve
-			for (int i = 0; i < count; i = i + 4)
+			for (int i = 0; i < count; i += 4)
 			{
-				Intrinsic.Store32(dest, i, value);
+				dest.Store32(i, value);
 			}
 		}
 
@@ -231,7 +231,7 @@ namespace Mosa.Runtime
 			// FUTURE: Improve
 			for (int i = 0; i < count; i++)
 			{
-				Intrinsic.Store8(dest, i, 0);
+				dest.Store8(i, 0);
 			}
 		}
 
@@ -258,7 +258,7 @@ namespace Mosa.Runtime
 				return Pointer.Zero;
 
 			var o = Intrinsic.GetObjectAddress(obj);
-			var objTypeDefinition = new TypeDefinition(Intrinsic.LoadPointer(o));
+			var objTypeDefinition = new TypeDefinition(o.LoadPointer());
 			var typeDefinition = new TypeDefinition(new Pointer(handle.Value));
 
 			if (IsTypeInInheritanceChain(typeDefinition, objTypeDefinition))
@@ -273,7 +273,7 @@ namespace Mosa.Runtime
 				return null;
 
 			var o = Intrinsic.GetObjectAddress(obj);
-			var objTypeDefinition = new TypeDefinition(Intrinsic.LoadPointer(o));
+			var objTypeDefinition = new TypeDefinition(o.LoadPointer());
 
 			var bitmap = objTypeDefinition.Bitmap;
 
@@ -283,7 +283,7 @@ namespace Mosa.Runtime
 			int index = interfaceSlot / 32;
 			int bit = interfaceSlot % 32;
 
-			uint value = Intrinsic.Load32(bitmap, index * 4);
+			uint value = bitmap.Load32(index * 4);
 			uint result = value & (uint)(1 << bit);
 
 			if (result == 0)
@@ -293,6 +293,120 @@ namespace Mosa.Runtime
 		}
 
 		#endregion Virtual Machine
+
+		#region Metadata
+
+		public static MethodDefinition GetMethodDefinition(Pointer address)
+		{
+			var table = Intrinsic.GetMethodLookupTable();
+			uint entries = table.Load32();
+
+			table += Pointer.Size; // skip count
+
+			while (entries > 0)
+			{
+				var addr = table.LoadPointer();
+				uint size = table.Load32(Pointer.Size);
+
+				if (address >= addr && address < (addr + size))
+				{
+					return new MethodDefinition(table.LoadPointer(Pointer.Size * 2));
+				}
+
+				table += Pointer.Size * 3;
+
+				entries--;
+			}
+
+			return new MethodDefinition(Pointer.Zero);
+		}
+
+		public static MethodDefinition GetMethodDefinitionViaMethodExceptionLookup(Pointer address)
+		{
+			var table = Intrinsic.GetMethodExceptionLookupTable();
+
+			if (table.IsNull)
+			{
+				return new MethodDefinition(Pointer.Zero);
+			}
+
+			uint entries = table.Load32();
+
+			table += Pointer.Size;
+
+			while (entries > 0)
+			{
+				var addr = table.LoadPointer();
+				uint size = table.Load32(Pointer.Size);
+
+				if (address >= addr && address < (addr + size))
+				{
+					return new MethodDefinition(table.LoadPointer(Pointer.Size * 2));
+				}
+
+				table += Pointer.Size * 3;
+
+				entries--;
+			}
+
+			return new MethodDefinition(Pointer.Zero);
+		}
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static ProtectedRegionDefinition GetProtectedRegionEntryByAddress(Pointer address, TypeDefinition exceptionType, MethodDefinition methodDef)
+		{
+			var protectedRegionTable = methodDef.ProtectedRegionTable;
+
+			if (protectedRegionTable.IsNull)
+			{
+				return new ProtectedRegionDefinition(Pointer.Zero);
+			}
+
+			var method = methodDef.Method;
+
+			if (method.IsNull)
+			{
+				return new ProtectedRegionDefinition(Pointer.Zero);
+			}
+
+			uint offset = (uint)method.GetOffset(address);
+			uint entries = protectedRegionTable.NumberOfRegions;
+
+			var protectedRegionDefinition = new ProtectedRegionDefinition(Pointer.Zero);
+			uint currentStart = uint.MinValue;
+			uint currentEnd = uint.MaxValue;
+			uint entry = 0;
+
+			while (entry < entries)
+			{
+				var prDef = protectedRegionTable.GetProtectedRegionDefinition(entry);
+
+				uint start = prDef.StartOffset;
+				uint end = prDef.EndOffset;
+
+				if ((offset >= start) && (offset < end) && (start >= currentStart) && (end < currentEnd))
+				{
+					var handlerType = prDef.HandlerType;
+					var exType = prDef.ExceptionType;
+
+					// If the handler is a finally clause, accept without testing
+					// If the handler is a exception clause, accept if the exception type is in the is within the inheritance chain of the exception object
+					if ((handlerType == ExceptionHandlerType.Finally) ||
+						(handlerType == ExceptionHandlerType.Exception && Runtime.Internal.IsTypeInInheritanceChain(exType, exceptionType)))
+					{
+						protectedRegionDefinition = prDef;
+						currentStart = start;
+						currentEnd = end;
+					}
+				}
+
+				entry++;
+			}
+
+			return protectedRegionDefinition;
+		}
+
+		#endregion Metadata
 
 		public static void ThrowIndexOutOfRangeException()
 		{

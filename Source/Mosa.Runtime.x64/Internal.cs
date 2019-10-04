@@ -15,20 +15,20 @@ namespace Mosa.Runtime.x64
 		public static MethodDefinition GetMethodDefinition(Pointer address)
 		{
 			var table = Native.GetMethodLookupTable();
-			uint entries = Intrinsic.Load32(table);
+			uint entries = table.Load32();
 
 			table += Pointer.Size; // skip count
 
 			while (entries > 0)
 			{
-				var addr = Intrinsic.LoadPointer(table);
-				uint size = Intrinsic.Load32(table, Pointer.Size);
+				var addr = table.LoadPointer();
+				uint size = table.Load32(Pointer.Size);
 
 				if (address >= addr && address < (addr + size))
 
 				//if (address.ToInt64() >= addr.ToInt64() && (address.ToInt64() < (addr.ToInt64() + size)))
 				{
-					return new MethodDefinition(Intrinsic.LoadPointer(table, Pointer.Size * 2));
+					return new MethodDefinition(table.LoadPointer(Pointer.Size * 2));
 				}
 
 				table += (Pointer.Size * 3);
@@ -48,20 +48,18 @@ namespace Mosa.Runtime.x64
 				return new MethodDefinition(Pointer.Zero);
 			}
 
-			uint entries = Intrinsic.Load32(table);
+			uint entries = table.Load32();
 
 			table += Pointer.Size;
 
 			while (entries > 0)
 			{
-				var addr = Intrinsic.LoadPointer(table);
-				uint size = Intrinsic.Load32(table, Pointer.Size);
+				var addr = table.LoadPointer();
+				uint size = table.Load32(Pointer.Size);
 
 				if (address >= addr && address < (addr + size))
-
-				//if (address.ToInt64() >= addr.ToInt64() && address.ToInt64() < addr.ToInt64() + size)
 				{
-					return new MethodDefinition(Intrinsic.LoadPointer(table, Pointer.Size * 2));
+					return new MethodDefinition(table.LoadPointer(Pointer.Size * 2));
 				}
 
 				table += (Pointer.Size * 3);
@@ -134,7 +132,7 @@ namespace Mosa.Runtime.x64
 				return Pointer.Zero;
 			}
 
-			return Intrinsic.LoadPointer(ebp);
+			return ebp.LoadPointer();
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
@@ -174,13 +172,13 @@ namespace Mosa.Runtime.x64
 				return Pointer.Zero;
 			}
 
-			return Intrinsic.LoadPointer(stackframe, Pointer.Size);
+			return stackframe.LoadPointer(Pointer.Size);
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static void SetReturnAddressForStackFrame(Pointer stackframe, uint value)
+		public static void SetReturnAddressForStackFrame(Pointer stackframe, ulong value)
 		{
-			Intrinsic.Store(stackframe, Pointer.Size, value);
+			stackframe.Store64(Pointer.Size, value);
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
@@ -258,7 +256,7 @@ namespace Mosa.Runtime.x64
 					Fault(0XBAD00002, i);
 				}
 
-				var exceptionType = new TypeDefinition(Intrinsic.LoadPointer(exceptionObject));
+				var exceptionType = new TypeDefinition(exceptionObject.LoadPointer());
 
 				var methodDef = GetMethodDefinitionViaMethodExceptionLookup(returnAddress);
 

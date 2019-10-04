@@ -52,7 +52,7 @@ namespace Mosa.Plug.Korlib.System
 		[Plug("System.Array::GetLength")]
 		internal static int GetLength(IntPtr array, int dimension)
 		{
-			return (int)Intrinsic.Load32(new Pointer(array), IntPtr.Size * 2);
+			return (int)(new Pointer(array)).Load32(IntPtr.Size * 2);
 		}
 
 		[Plug("System.Array::GetLowerBound")]

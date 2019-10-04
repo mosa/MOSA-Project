@@ -223,6 +223,11 @@ namespace Mosa.Runtime
 			return b.ToInt64() - ToInt64();
 		}
 
+		public ushort Load16()
+		{
+			return Intrinsic.Load16(this);
+		}
+
 		public ushort Load16(uint offset)
 		{
 			return Intrinsic.Load16(this, offset);
@@ -248,6 +253,11 @@ namespace Mosa.Runtime
 			return Intrinsic.Load32(this, offset);
 		}
 
+		public ulong Load64()
+		{
+			return Intrinsic.Load64(this);
+		}
+
 		public ulong Load64(int offset)
 		{
 			return Intrinsic.Load64(this, offset);
@@ -258,6 +268,11 @@ namespace Mosa.Runtime
 			return Intrinsic.Load64(this, offset);
 		}
 
+		public byte Load8()
+		{
+			return Intrinsic.Load8(this);
+		}
+
 		public byte Load8(uint offset)
 		{
 			return Intrinsic.Load8(this, offset);
@@ -266,6 +281,26 @@ namespace Mosa.Runtime
 		public byte Load8(int offset)
 		{
 			return Intrinsic.Load8(this, offset);
+		}
+
+		public float LoadR4()
+		{
+			return Intrinsic.LoadR4(this);
+		}
+
+		public float LoadR4(uint offset)
+		{
+			return Intrinsic.LoadR4(this, offset);
+		}
+
+		public double LoadR8()
+		{
+			return Intrinsic.LoadR8(this);
+		}
+
+		public double LoadR8(uint offset)
+		{
+			return Intrinsic.LoadR8(this, offset);
 		}
 
 		public Pointer LoadPointer()
@@ -281,6 +316,16 @@ namespace Mosa.Runtime
 		public Pointer LoadPointer(int offset)
 		{
 			return Intrinsic.LoadPointer(this, offset);
+		}
+
+		public void Store16(ushort value)
+		{
+			Intrinsic.Store16(this, value);
+		}
+
+		public void Store16(int offset, ushort value)
+		{
+			Intrinsic.Store16(this, offset, value);
 		}
 
 		public void Store16(uint offset, ushort value)
@@ -334,6 +379,11 @@ namespace Mosa.Runtime
 			Intrinsic.Store64(this, offset, value);
 		}
 
+		public void Store8(byte value)
+		{
+			Intrinsic.Store8(this, value);
+		}
+
 		public void Store8(uint offset, byte value)
 		{
 			Intrinsic.Store8(this, offset, value);
@@ -342,6 +392,36 @@ namespace Mosa.Runtime
 		public void Store8(int offset, byte value)
 		{
 			Intrinsic.Store8(this, offset, value);
+		}
+
+		public void StoreR4(float value)
+		{
+			Intrinsic.StoreR4(this, value);
+		}
+
+		public void StoreR8(double value)
+		{
+			Intrinsic.StoreR8(this, value);
+		}
+
+		public void StoreR4(uint offset, float value)
+		{
+			Intrinsic.StoreR4(this, offset, value);
+		}
+
+		public void StoreR4(int offset, float value)
+		{
+			Intrinsic.StoreR4(this, offset, value);
+		}
+
+		public void StoreR8(uint offset, double value)
+		{
+			Intrinsic.StoreR8(this, offset, value);
+		}
+
+		public void StoreR8(int offset, double value)
+		{
+			Intrinsic.StoreR8(this, offset, value);
 		}
 
 		public void StorePointer(Pointer value)

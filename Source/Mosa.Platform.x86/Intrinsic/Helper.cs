@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
 using System.Diagnostics;
@@ -40,7 +41,10 @@ namespace Mosa.Platform.x86.Intrinsic
 				break;
 			}
 
-			Debug.Assert(operand1.IsConstant); // only constants are supported
+			if (!operand1.IsConstant)
+			{
+				throw new CompilerException("unable to find constant value");
+			}
 
 			context.Operand1 = operand1;
 		}

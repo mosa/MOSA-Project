@@ -2,7 +2,6 @@
 
 using Mosa.Runtime;
 using Mosa.Runtime.x64;
-using System;
 
 namespace Mosa.Kernel.x64
 {
@@ -93,8 +92,8 @@ namespace Mosa.Kernel.x64
 		{
 			Pointer address = new Pointer(0x0B8000 + ((row * Columns + column) * 2));
 
-			Intrinsic.Store8(address, (byte)chr);
-			Intrinsic.Store8(address, 1, color);
+			address.Store8((byte)chr);
+			address.Store8(1, color);
 		}
 
 		/// <summary>
@@ -105,8 +104,8 @@ namespace Mosa.Kernel.x64
 		{
 			Pointer address = new Pointer(0x0B8000 + ((Row * Columns + Column) * 2));
 
-			Intrinsic.Store8(address, (byte)chr);
-			Intrinsic.Store8(address, 1, color);
+			address.Store8((byte)chr);
+			address.Store8(1, color);
 
 			Next();
 			UpdateCursor();

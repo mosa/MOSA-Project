@@ -287,6 +287,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 						continue;
 
 					var symbol = Linker.GetSymbol(method.FullName);
+
 					if (symbol == null)
 						continue;
 
@@ -294,13 +295,15 @@ namespace Mosa.Compiler.Extensions.Dwarf
 						continue;
 
 					var methodData = Compiler.GetMethodData(method);
+
 					if (methodData == null)
 						continue;
 
 					uint methodVirtAddr = (uint)symbol.VirtualAddress;
 
 					var locations = SourceRegions.GetSourceRegions(methodData);
-					if (locations.Count == 0)
+
+					if (locations == null || locations.Count == 0)
 						continue;
 
 					var pc = methodVirtAddr + (uint)locations[0].Address;
@@ -312,7 +315,6 @@ namespace Mosa.Compiler.Extensions.Dwarf
 
 					foreach (var loc in locations)
 					{
-
 						if (loc.StartLine == 0xFEEFEE)
 							continue;
 

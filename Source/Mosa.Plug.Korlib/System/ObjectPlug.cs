@@ -44,7 +44,7 @@ namespace Mosa.Plug.Korlib.System
 		{
 			var o = Intrinsic.GetObjectAddress(obj);
 
-			return new RuntimeTypeHandle(Intrinsic.LoadPointer(o).ToIntPtr());
+			return new RuntimeTypeHandle(o.LoadPointer().ToIntPtr());
 		}
 	}
 }

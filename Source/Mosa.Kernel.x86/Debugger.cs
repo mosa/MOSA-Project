@@ -159,27 +159,27 @@ namespace Mosa.Kernel.x86
 
 		private static byte GetByte(uint offset)
 		{
-			return Intrinsic.Load8(new Pointer(Address.DebuggerBuffer), offset);
+			return new Pointer(Address.DebuggerBuffer).Load8(offset);
 		}
 
 		private static uint GetUInt32(uint offset)
 		{
-			return Intrinsic.Load32(new Pointer(Address.DebuggerBuffer), offset);
+			return new Pointer(Address.DebuggerBuffer).Load32(offset);
 		}
 
 		private static byte GetDataByte(uint offset)
 		{
-			return Intrinsic.Load8(new Pointer(Address.DebuggerBuffer), HeaderSize + offset);
+			return new Pointer(Address.DebuggerBuffer).Load8(HeaderSize + offset);
 		}
 
 		private static uint GetDataUInt32(uint offset)
 		{
-			return Intrinsic.Load32(new Pointer(Address.DebuggerBuffer), HeaderSize + offset);
+			return new Pointer(Address.DebuggerBuffer).Load32(HeaderSize + offset);
 		}
 
 		private static Pointer GetDataPointer(uint offset)
 		{
-			return Intrinsic.LoadPointer(new Pointer(Address.DebuggerBuffer), HeaderSize + offset);
+			return new Pointer(Address.DebuggerBuffer).LoadPointer(HeaderSize + offset);
 		}
 
 		private static uint GetID()
@@ -345,7 +345,7 @@ namespace Mosa.Kernel.x86
 			{
 				var address = GetDataPointer(i * 4);
 				SendPointer32(address);
-				SendInteger(Intrinsic.Load32(address));
+				SendInteger(address.Load32());
 			}
 		}
 
@@ -363,7 +363,7 @@ namespace Mosa.Kernel.x86
 			{
 				uint value = GetDataUInt32(8 + at);
 
-				Intrinsic.Store32(address, at, value);
+				address.Store32(at, value);
 
 				at += 4;
 			}
@@ -372,7 +372,7 @@ namespace Mosa.Kernel.x86
 			{
 				byte value = GetDataByte(8 + at);
 
-				Intrinsic.Store8(address, at, value);
+				address.Store8(at, value);
 
 				at++;
 			}
@@ -436,14 +436,14 @@ namespace Mosa.Kernel.x86
 
 			while (at + 4 < bytes)
 			{
-				Intrinsic.Store32(start, at, 0);
+				start.Store32(at, 0);
 
 				at += 4;
 			}
 
 			while (at < bytes)
 			{
-				Intrinsic.Store8(start, at, 0);
+				start.Store8(at, 0);
 
 				at++;
 			}

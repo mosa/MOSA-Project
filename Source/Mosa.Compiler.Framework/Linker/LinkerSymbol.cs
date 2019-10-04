@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 		private readonly object _lock = new object();
 
-		public int Version { get; set; } // for debugging
+		//public int Version { get; set; } // for debugging
 
 		public MosaMethod MosaMethod { get; set; } // for debugging
 

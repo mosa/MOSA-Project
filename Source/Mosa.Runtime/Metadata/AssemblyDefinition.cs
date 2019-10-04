@@ -22,17 +22,17 @@ namespace Mosa.Runtime.Metadata
 
 		public bool IsNull => Ptr.IsNull;
 
-		public string Name => (string)Intrinsic.GetObjectFromAddress(Intrinsic.LoadPointer(Ptr));
+		public string Name => (string)Intrinsic.GetObjectFromAddress(Ptr.LoadPointer());
 
-		public CustomAttributeTable CustomAttributes => new CustomAttributeTable(Intrinsic.LoadPointer(Ptr, Pointer.Size));
+		public CustomAttributeTable CustomAttributes => new CustomAttributeTable(Ptr.LoadPointer(Pointer.Size));
 
-		public uint Attributes => Intrinsic.Load32(Ptr, Pointer.Size * 2);
+		public uint Attributes => Ptr.Load32(Pointer.Size * 2);
 
-		public uint NumberOfTypes => Intrinsic.Load32(Ptr, Pointer.Size * 3);
+		public uint NumberOfTypes => Ptr.Load32(Pointer.Size * 3);
 
 		public TypeDefinition GetTypeDefinition(uint slot)
 		{
-			return new TypeDefinition(Intrinsic.LoadPointer(Ptr, (Pointer.Size * 4) + (Pointer.Size * (int)slot)));
+			return new TypeDefinition(Ptr.LoadPointer((Pointer.Size * 4) + (Pointer.Size * (int)slot)));
 		}
 	}
 }

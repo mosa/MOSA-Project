@@ -31,8 +31,8 @@ namespace Mosa.Kernel.x86
 			var gdt = new Pointer(Address.GDTTable);
 
 			Runtime.Internal.MemoryClear(gdt, 6);
-			Intrinsic.Store16(gdt, (Offset.TotalSize * 3) - 1);
-			Intrinsic.Store32(gdt, 2, Address.GDTTable + 6);
+			gdt.Store16((Offset.TotalSize * 3) - 1);
+			gdt.Store32(2, Address.GDTTable + 6);
 
 			Set(0, 0, 0, 0, 0);                // Null segment
 			Set(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code segment
@@ -63,12 +63,12 @@ namespace Mosa.Kernel.x86
 		{
 			var entry = GetEntryLocation(index);
 
-			Intrinsic.Store16(entry, Offset.BaseLow, (ushort)(address & 0xFFFF));
-			Intrinsic.Store8(entry, Offset.BaseMiddle, (byte)((address >> 16) & 0xFF));
-			Intrinsic.Store8(entry, Offset.BaseHigh, (byte)((address >> 24) & 0xFF));
-			Intrinsic.Store16(entry, Offset.LimitLow, (ushort)(limit & 0xFFFF));
-			Intrinsic.Store8(entry, Offset.Granularity, (byte)(((byte)(limit >> 16) & 0x0F) | (granularity & 0xF0)));
-			Intrinsic.Store8(entry, Offset.Access, access);
+			entry.Store16(Offset.BaseLow, (ushort)(address & 0xFFFF));
+			entry.Store8(Offset.BaseMiddle, (byte)((address >> 16) & 0xFF));
+			entry.Store8(Offset.BaseHigh, (byte)((address >> 24) & 0xFF));
+			entry.Store16(Offset.LimitLow, (ushort)(limit & 0xFFFF));
+			entry.Store8(Offset.Granularity, (byte)(((byte)(limit >> 16) & 0x0F) | (granularity & 0xF0)));
+			entry.Store8(Offset.Access, access);
 		}
 	}
 }

@@ -35,8 +35,8 @@ namespace Mosa.Kernel.x86
 		{
 			// Setup IDT table
 			Runtime.Internal.MemoryClear(new Pointer(Address.IDTTable), 6);
-			Intrinsic.Store16(new Pointer(Address.IDTTable), (IDTEntryOffset.TotalSize * 256) - 1);
-			Intrinsic.Store32(new Pointer(Address.IDTTable), 2, Address.IDTTable + 6);
+			new Pointer(Address.IDTTable).Store16((IDTEntryOffset.TotalSize * 256) - 1);
+			new Pointer(Address.IDTTable).Store32(2, Address.IDTTable + 6);
 
 			SetTableEntries();
 
@@ -65,11 +65,11 @@ namespace Mosa.Kernel.x86
 		private static void Set(uint index, uint address, ushort select, byte flags)
 		{
 			var entry = new Pointer(Address.IDTTable + 6 + (index * IDTEntryOffset.TotalSize));
-			Intrinsic.Store16(entry, IDTEntryOffset.BaseLow, (ushort)(address & 0xFFFF));
-			Intrinsic.Store16(entry, IDTEntryOffset.BaseHigh, (ushort)((address >> 16) & 0xFFFF));
-			Intrinsic.Store16(entry, IDTEntryOffset.Select, select);
-			Intrinsic.Store8(entry, IDTEntryOffset.Always0, 0);
-			Intrinsic.Store8(entry, IDTEntryOffset.Flags, flags);
+			entry.Store16(IDTEntryOffset.BaseLow, (ushort)(address & 0xFFFF));
+			entry.Store16(IDTEntryOffset.BaseHigh, (ushort)((address >> 16) & 0xFFFF));
+			entry.Store16(IDTEntryOffset.Select, select);
+			entry.Store8(IDTEntryOffset.Always0, 0);
+			entry.Store8(IDTEntryOffset.Flags, flags);
 		}
 
 		private static void Set(uint index, Delegate method)

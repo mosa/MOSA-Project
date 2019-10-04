@@ -36,67 +36,39 @@ namespace Mosa.Runtime.Metadata
 
 		public long Handle => Ptr.ToInt64();
 
-		public string Name => (string)Intrinsic.GetObjectFromAddress(Intrinsic.LoadPointer(Ptr));
+		public string Name => (string)Intrinsic.GetObjectFromAddress(Ptr.LoadPointer());
 
-		public CustomAttributeTable CustomAttributes => new CustomAttributeTable(Intrinsic.LoadPointer(Ptr, Pointer.Size));
+		public CustomAttributeTable CustomAttributes => new CustomAttributeTable(Ptr.LoadPointer(Pointer.Size));
 
-		public TypeCode TypeCode => (TypeCode)(Intrinsic.Load32(Ptr, Pointer.Size * 2) >> 24);
+		public TypeCode TypeCode => (TypeCode)(Ptr.Load32(Pointer.Size * 2) >> 24);
 
-		public TypeAttributes Attributes => (TypeAttributes)(Intrinsic.Load32(Ptr, Pointer.Size * 2) & 0x00FFFFFF);
+		public TypeAttributes Attributes => (TypeAttributes)(Ptr.Load32(Pointer.Size * 2) & 0x00FFFFFF);
 
-		public uint Size => Intrinsic.Load32(Ptr, Pointer.Size * 3);
+		public uint Size => Ptr.Load32(Pointer.Size * 3);
 
-		public AssemblyDefinition Assembly => new AssemblyDefinition(Intrinsic.LoadPointer(Ptr, Pointer.Size * 4));
+		public AssemblyDefinition Assembly => new AssemblyDefinition(Ptr.LoadPointer(Pointer.Size * 4));
 
-		public TypeDefinition ParentType => new TypeDefinition(Intrinsic.LoadPointer(Ptr, Pointer.Size * 5));
+		public TypeDefinition ParentType => new TypeDefinition(Ptr.LoadPointer(Pointer.Size * 5));
 
-		public TypeDefinition DeclaringType => new TypeDefinition(Intrinsic.LoadPointer(Ptr, Pointer.Size * 6));
+		public TypeDefinition DeclaringType => new TypeDefinition(Ptr.LoadPointer(Pointer.Size * 6));
 
-		public TypeDefinition ElementType => new TypeDefinition(Intrinsic.LoadPointer(Ptr, Pointer.Size * 7));
+		public TypeDefinition ElementType => new TypeDefinition(Ptr.LoadPointer(Pointer.Size * 7));
 
-		public MethodDefinition DefaultConstructor => new MethodDefinition(Intrinsic.LoadPointer(Ptr, Pointer.Size * 8));
+		public MethodDefinition DefaultConstructor => new MethodDefinition(Ptr.LoadPointer(Pointer.Size * 8));
 
-		public Pointer Properties => Intrinsic.LoadPointer(Ptr, Pointer.Size * 9);
+		public Pointer Properties => Ptr.LoadPointer(Pointer.Size * 9);
 
-		public Pointer Fields => Intrinsic.LoadPointer(Ptr, Pointer.Size * 10);
+		public Pointer Fields => Ptr.LoadPointer(Pointer.Size * 10);
 
-		public Pointer SlotTable => Intrinsic.LoadPointer(Ptr, Pointer.Size * 11);
+		public Pointer SlotTable => Ptr.LoadPointer(Pointer.Size * 11);
 
-		public Pointer Bitmap => Intrinsic.LoadPointer(Ptr, Pointer.Size * 12);
+		public Pointer Bitmap => Ptr.LoadPointer(Pointer.Size * 12);
 
-		public uint NumberOfMethods => Intrinsic.Load32(Ptr, Pointer.Size * 13);
+		public uint NumberOfMethods => Ptr.Load32(Pointer.Size * 13);
 
 		public MethodDefinition GetMethodDefinition(uint slot)
 		{
-			return new MethodDefinition(Intrinsic.LoadPointer(Ptr, (Pointer.Size * 14) + (Pointer.Size * (int)slot)));
+			return new MethodDefinition(Ptr.LoadPointer((Pointer.Size * 14) + (Pointer.Size * (int)slot)));
 		}
-
-		//public static bool operator ==(TypeDefinition a, TypeDefinition b)
-		//{
-		//	return a.Ptr == b.Ptr;
-		//}
-
-		//public static bool operator !=(TypeDefinition a, TypeDefinition b)
-		//{
-		//	return a.Ptr != b.Ptr;
-		//}
-
-		//public override bool Equals(object obj)
-		//{
-		//	if (obj == null)
-		//	{
-		//		return false;
-		//	}
-
-		//	if (!(obj is TypeDefinition))
-		//		return false;
-
-		//	return ((TypeDefinition)obj).Ptr == this.Ptr;
-		//}
-
-		//public override int GetHashCode()
-		//{
-		//	return Ptr.GetHashCode();
-		//}
 	}
 }

@@ -49,14 +49,14 @@ namespace Mosa.Kernel.x86
 			byte bit = (byte)(page % 32);
 			uint mask = (byte)(1 << bit);
 
-			uint value = Intrinsic.Load32(at);
+			uint value = at.Load32();
 
 			if (free)
 				value &= ~mask;
 			else
 				value |= mask;
 
-			Intrinsic.Store32(at, value);
+			at.Store32(value);
 		}
 
 		/// <summary>
@@ -70,7 +70,7 @@ namespace Mosa.Kernel.x86
 			byte bit = (byte)(page % 8);
 			byte mask = (byte)(1 << bit);
 
-			byte value = Intrinsic.Load8(at);
+			byte value = at.Load8();
 
 			return (value & mask) == 0;
 		}

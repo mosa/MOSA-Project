@@ -80,7 +80,7 @@ namespace Mosa.Kernel.x86
 			// Populate free table
 			for (uint mem = normstart; mem < normstart + normsize; mem = mem + PageSize, at = at + 4)
 			{
-				Intrinsic.Store32(at, mem);
+				at.Store32(mem);
 			}
 
 			at -= 4;
@@ -97,7 +97,7 @@ namespace Mosa.Kernel.x86
 				return Pointer.Zero; // out of memory
 
 			totalUsedPages++;
-			var avail = Intrinsic.LoadPointer(at);
+			var avail = at.LoadPointer();
 			at -= 4;
 
 			// Clear out memory
@@ -114,7 +114,7 @@ namespace Mosa.Kernel.x86
 		{
 			totalUsedPages--;
 			at += 4;
-			Intrinsic.Store32(at, address.ToInt32());
+			at.Store32(address.ToUInt32());
 		}
 
 		/// <summary>
