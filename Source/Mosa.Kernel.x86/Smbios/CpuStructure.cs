@@ -1,7 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime;
-
 namespace Mosa.Kernel.x86.Smbios
 {
 	/// <summary>

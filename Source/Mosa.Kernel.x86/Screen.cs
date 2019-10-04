@@ -2,7 +2,6 @@
 
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
-using System;
 
 namespace Mosa.Kernel.x86
 {
