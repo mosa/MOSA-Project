@@ -466,6 +466,7 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = cbEnableSparseConditionalConstantPropagation.Checked;
 			Compiler.CompilerOptions.EmitBinary = cbEnableBinaryCodeGeneration.Checked;
 			Compiler.CompilerOptions.EnableInlinedMethods = cbEnableInlinedMethods.Checked;
+			Compiler.CompilerOptions.InlineOnlyExplicit = cbInlineOnlyExplicit.Checked;
 			Compiler.CompilerOptions.EnableLongExpansion = cbEnableLongExpansion.Checked;
 			Compiler.CompilerOptions.InlinedIRMaximum = 12;
 			Compiler.CompilerOptions.TwoPassOptimizations = cbEnableTwoPassOptimizations.Checked;
@@ -897,7 +898,7 @@ namespace Mosa.Tool.Explorer
 				{
 					CbStages_SelectedIndexChanged(null, null);
 
-					string stage = GetCurrentStage().Replace("\\", " - ");
+					string stage = GetCurrentStage().Replace("\\", " - ").Replace("/", " - ");
 					var result = tbInstructions.Text.Replace("\n", "\r\n");
 
 					File.WriteAllText(Path.Combine(path, stage + "-stage.txt"), result);
@@ -914,7 +915,7 @@ namespace Mosa.Tool.Explorer
 				{
 					CbDebugStages_SelectedIndexChanged(null, null);
 
-					var stage = GetCurrentDebugStage().Replace("\\", " - ");
+					var stage = GetCurrentDebugStage().Replace("\\", " - ").Replace("/", " - ");
 					var result = tbDebugResult.Text.Replace("\n", "\r\n");
 
 					File.WriteAllText(Path.Combine(path, stage + "-debug.txt"), result);
@@ -998,5 +999,33 @@ namespace Mosa.Tool.Explorer
 		{
 			CurrentMethodSelected = GetCurrentMethod();
 		}
+
+		private void cbEnableAllOptimizations_Click(object sender, EventArgs e)
+		{
+			ToggleOptimization(true);
+		}
+
+		private void cbDisableAllOptimizations_Click(object sender, EventArgs e)
+		{
+			ToggleOptimization(false);
+		}
+
+		private void ToggleOptimization(bool state)
+		{
+			cbEnableSSA.Checked = state;
+			cbEnableIROptimizations.Checked = state;
+			cbEnableValueNumbering.Checked = state;
+			cbEnableSparseConditionalConstantPropagation.Checked = state;
+			cbEnableBinaryCodeGeneration.Checked = state;
+			cbEnableInlinedMethods.Checked = state;
+			cbEnableLongExpansion.Checked = state;
+			cbEnableTwoPassOptimizations.Checked = state;
+			//cbEnableMethodScanner.Checked = state;
+			cbEnableBitTracker.Checked = state;
+
+			cbLoopInvariantCodeMotion.Checked = state;
+			cbPlatformOptimizations.Checked = state;
+		}
+
 	}
 }
