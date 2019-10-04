@@ -325,11 +325,6 @@ namespace Mosa.Compiler.Extensions.Dwarf
 						if (Math.Abs(lineDiff) > 100000)
 							PostCompilerTraceEvent(CompilerEvent.Warning, $"Warning Line Numbers wrong: Location={loc} Method={method} lineDiff={lineDiff}");
 
-						//if (Math.Abs(lineDiff) > 100000)
-						//{
-						//	PostCompilerTraceEvent(CompilerEvent.Warning, $"Warning Line Numbers wrong: Location={loc} Method={method} lineDiff={lineDiff}");
-						//}
-
 						var newFile = FileHash[loc.Filename].FileNum;
 
 						if (newFile != file)
@@ -340,7 +335,7 @@ namespace Mosa.Compiler.Extensions.Dwarf
 						}
 
 						wr.Write((byte)DwarfOpcodes.DW_LNS_advance_pc);
-						wr.WriteSLEB128(pcDiff);
+						wr.WriteULEB128(pcDiff);
 
 						wr.Write((byte)DwarfOpcodes.DW_LNS_advance_line);
 						wr.WriteSLEB128(lineDiff);
