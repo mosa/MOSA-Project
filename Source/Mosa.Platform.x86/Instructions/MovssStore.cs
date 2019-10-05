@@ -88,7 +88,10 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.OpcodeEncoder.Append2Bits(0b10);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);
 				emitter.OpcodeEncoder.Append3Bits(0b100);
-				emitter.OpcodeEncoder.Append8BitImmediate(node.Operand2);
+				emitter.OpcodeEncoder.Append2Bits(0b00);
+				emitter.OpcodeEncoder.Append3Bits(0b100);
+				emitter.OpcodeEncoder.Append3Bits(0b100);
+				emitter.OpcodeEncoder.Append32BitImmediate(node.Operand2);
 				return;
 			}
 
