@@ -120,6 +120,11 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		internal Operand StackPointer { get; }
 
+		/// <summary>
+		/// The stack frame
+		/// </summary>
+		internal Operand ExceptionRegister { get; }
+
 		#endregion Properties
 
 		#region Static Methods
@@ -218,6 +223,7 @@ namespace Mosa.Compiler.Framework
 
 			StackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
 			StackPointer = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackPointerRegister);
+			ExceptionRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.ExceptionRegister);
 
 			PostCompilerTraceEvent(CompilerEvent.CompilerStart);
 

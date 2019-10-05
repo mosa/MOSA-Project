@@ -121,7 +121,7 @@ namespace Mosa.Kernel.x86
 		{
 			while (true)
 			{
-				var entry = Runtime.x86.Internal.GetStackTraceEntry(depth, new Pointer(EBP), new Pointer(EIP));
+				var entry = Runtime.Internal.GetStackTraceEntry(depth, new Pointer(EBP), new Pointer(EIP));
 
 				if (!entry.Valid)
 					return;

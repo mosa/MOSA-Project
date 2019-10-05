@@ -249,6 +249,12 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern static void SuppressStackFrame();
 
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public extern static Pointer GetStackFrame();
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public extern static Pointer GetExceptionRegister();
+
 		#endregion Intrinsic
 	}
 }
