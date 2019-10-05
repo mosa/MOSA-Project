@@ -31,7 +31,7 @@
 		"[x86-base-store-register-ebp+register]=[x86],mod=01,reg=reg3:[value],rm=100,scale=00,index=reg3:[membase],base=101,displacement=0x00",
 		"[x86-base-store-register-esp+zero]=[x86],mod=00,reg=reg3:[value],rm=100,scale=00,index=100,base=100",
 		"[x86-base-store-register-esp+sbyte]=[x86],mod=01,reg=reg3:[value],rm=100,scale=00,index=100,base=100,displacement=imm8:[offset]",
-		"[x86-base-store-register-esp+constant]=[x86],mod=10,reg=reg3:[value],rm=100,immediate=imm32:[offset]",
+		"[x86-base-store-register-esp+constant]=[x86],mod=10,reg=reg3:[value],rm=100,scale=00,index=100,base=100,immediate=imm32:[offset]",
 		"[x86-base-store-register-register+register]=[x86],mod=00,reg=reg3:[value],rm=100,scale=00,index=reg3:[offset],base=reg3:[membase]",
 		"[x86-base-store-register-register+zero]=[x86],mod=00,reg=reg3:[value],rm=reg3:[membase]",
 		"[x86-base-store-register-register+sbyte]=[x86],mod=01,reg=reg3:[value],rm=reg3:[membase],displacement=imm8:[offset]",
@@ -60,7 +60,7 @@
 		"[x86-base-store-constant-register+constant]=[x86],mod=10,reg=000,rm=reg3:[membase],displacement=imm32:[offset],immediate=imm[size]:[value]",
 		"[x86-base-store-constant-constant+zero]=[x86],mod=00,reg=000,rm=101,displacement=imm32:[membase],immediate=imm[size]:[value]",
 		"[x86-base-store-constant-constant+constant]=[x86],mod=00,reg=000,rm=101,displacement=imm32+:[membase]:[offset],immediate=imm[size]:[value]",
-		"[x86-base-store-constant-constant+register]=[x86],mod=00,reg=reg3:[value],rm=110,immediate=imm32+:[membase]:[offset]",
+		"[x86-base-store-constant-constant+register]=[x86],mod=00,reg=reg3:[value],rm=101,displacement=imm32+:[membase]:[offset]",
 
 		"[x86-common-store-constant-ebp+zero]=[x86-base-store-constant-ebp+zero],opcode=[opcode-constant],value=o3",
 		"[x86-common-store-constant-ebp+register]=[x86-base-store-constant-ebp+register],opcode=[opcode-constant],value=o3,membase=o2",
@@ -73,7 +73,7 @@
 		"[x86-common-store-constant-register+constant]=[x86-base-store-constant-register+constant],opcode=[opcode-constant],value=o3,membase=o1,offset=o2",
 		"[x86-common-store-constant-constant+zero]=[x86-base-store-constant-constant+zero],opcode=[opcode-constant],value=o3,membase=o1",
 		"[x86-common-store-constant-constant+constant]=[x86-base-store-constant-constant+constant],opcode=[opcode-constant],value=o3,membase=o1,offset=o2",
-		"[x86-common-store-constant-constant+register]=[x86-base-store-constant-constant+register],opcode=[opcode-constant],value=o3,membase=o1,offset=o2"
+		"[x86-common-store-constant-constant+register]=[x86-base-store-constant-constant+register],opcode=[opcode-register],value=o3,membase=o1,offset=o2"
 	],
 	"Instructions": [
 		{
