@@ -177,7 +177,7 @@ namespace Mosa.AppSystem
 
 			while (true)
 			{
-				var methodDef = Runtime.x86.Internal.GetMethodDefinitionFromStackFrameDepth(depth);
+				var methodDef = Runtime.Internal.GetMethodDefinitionFromStackFrameDepth(depth);
 
 				if (methodDef.IsNull)
 					return;

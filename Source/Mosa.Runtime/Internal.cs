@@ -2,6 +2,7 @@
 
 using Mosa.Runtime.Metadata;
 using System;
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace Mosa.Runtime
@@ -407,6 +408,177 @@ namespace Mosa.Runtime
 		}
 
 		#endregion Metadata
+
+		#region Internal
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static Pointer GetPreviousStackFrame(Pointer stackFrame)
+		{
+			if (stackFrame < new Pointer(0x1000))
+			{
+				return Pointer.Zero;
+			}
+
+			return stackFrame.LoadPointer();
+		}
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static Pointer GetStackFrame(uint depth)
+		{
+			return GetStackFrame(depth, Pointer.Zero);
+		}
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static Pointer GetStackFrame(uint depth, Pointer stackFrame)
+		{
+			if (stackFrame.IsNull)
+			{
+				stackFrame = Intrinsic.GetStackFrame();
+			}
+
+			while (depth > 0)
+			{
+				depth--;
+
+				stackFrame = GetPreviousStackFrame(stackFrame);
+
+				if (stackFrame.IsNull)
+				{
+					return Pointer.Zero;
+				}
+			}
+
+			return stackFrame;
+		}
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static Pointer GetReturnAddressFromStackFrame(Pointer stackframe)
+		{
+			if (stackframe < new Pointer(0x1000))
+			{
+				return Pointer.Zero;
+			}
+
+			return stackframe.LoadPointer(Pointer.Size);
+		}
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static void SetReturnAddressForStackFrame(Pointer stackframe, uint value)
+		{
+			stackframe.Store32(Pointer.Size, value);
+		}
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static MethodDefinition GetMethodDefinitionFromStackFrameDepth(uint depth)
+		{
+			return GetMethodDefinitionFromStackFrameDepth(depth, Pointer.Zero);
+		}
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static MethodDefinition GetMethodDefinitionFromStackFrameDepth(uint depth, Pointer stackFrame)
+		{
+			if (stackFrame.IsNull)
+			{
+				stackFrame = Intrinsic.GetStackFrame();
+			}
+
+			stackFrame = GetStackFrame(depth + 0, stackFrame);
+
+			var address = GetReturnAddressFromStackFrame(stackFrame);
+
+			return Runtime.Internal.GetMethodDefinition(address);
+		}
+
+		public static SimpleStackTraceEntry GetStackTraceEntry(uint depth, Pointer stackFrame, Pointer eip)
+		{
+			var entry = new SimpleStackTraceEntry();
+
+			Pointer address;
+
+			if (depth == 0 && !eip.IsNull)
+			{
+				address = eip;
+			}
+			else
+			{
+				if (stackFrame.IsNull)
+				{
+					stackFrame = Intrinsic.GetStackFrame();
+				}
+
+				if (!eip.IsNull)
+				{
+					depth--;
+				}
+
+				stackFrame = GetStackFrame(depth, stackFrame);
+
+				address = GetReturnAddressFromStackFrame(stackFrame);
+			}
+
+			var methodDef = Runtime.Internal.GetMethodDefinition(address);
+
+			if (methodDef.IsNull)
+				return entry;
+
+			entry.MethodDefinition = methodDef;
+			entry.Offset = (uint)methodDef.Method.GetOffset(address);
+			return entry;
+		}
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static void xxExceptionHandler()
+		{
+			// capture this register immediately
+			var exceptionObject = Intrinsic.GetExceptionRegister();
+
+			var stackFrame = GetStackFrame(1);
+
+			for (uint i = 0; ; i++)
+			{
+				var returnAddress = GetReturnAddressFromStackFrame(stackFrame);
+
+				if (returnAddress.IsNull)
+				{
+					// hit the top of stack!
+					Fault(0XBAD00002, i);
+				}
+
+				var exceptionType = new TypeDefinition(exceptionObject.LoadPointer());
+
+				var methodDef = GetMethodDefinitionViaMethodExceptionLookup(returnAddress);
+
+				if (!methodDef.IsNull)
+				{
+					var protectedRegion = GetProtectedRegionEntryByAddress(returnAddress - 1, exceptionType, methodDef);
+
+					if (!protectedRegion.IsNull)
+					{
+						// found handler for current method, call it
+
+						var methodStart = methodDef.Method;
+						uint handlerOffset = protectedRegion.HandlerOffset;
+						var jumpTarget = methodStart + handlerOffset;
+
+						uint stackSize = methodDef.StackSize & 0xFFFF; // lower 16-bits only
+						var previousFrame = GetPreviousStackFrame(stackFrame);
+						var newStack = previousFrame - stackSize;
+
+						//Native.FrameJump(jumpTarget, newStack, previousFrame, exceptionObject.ToInt32());
+					}
+				}
+
+				// no handler in method, go up the stack
+				stackFrame = GetPreviousStackFrame(stackFrame);
+			}
+		}
+
+		#endregion Internal
+
+		public static void Fault(uint code, uint extra = 0)
+		{
+			Debug.Fail("Fault: " + ((int)code).ToString("hex") + " , Extra: " + ((int)extra).ToString("hex"));
+		}
 
 		public static void ThrowIndexOutOfRangeException()
 		{

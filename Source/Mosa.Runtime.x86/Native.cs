@@ -126,9 +126,6 @@ namespace Mosa.Runtime.x86
 		[DllImport("Mosa.Platform.x86.Intrinsic:Set32")]
 		public extern static void Set32(uint address, uint value);
 
-		[DllImport("Mosa.Platform.x86.Intrinsic:GetEBP")]
-		public extern static Pointer GetEBP();
-
 		[DllImport("Mosa.Platform.x86.Intrinsic:GetFS")]
 		public extern static uint GetFS();
 
@@ -161,9 +158,6 @@ namespace Mosa.Runtime.x86
 
 		[DllImport("Mosa.Platform.x86.Intrinsic:Pause")]
 		public extern static void Pause();
-
-		[DllImport("Mosa.Platform.x86.Intrinsic:GetExceptionRegister")]
-		public extern static uint GetExceptionRegister();
 
 		[DllImport("Mosa.Platform.x86.Intrinsic:GetIDTJumpLocation")]
 		public extern static uint GetIDTJumpLocation(uint irq);

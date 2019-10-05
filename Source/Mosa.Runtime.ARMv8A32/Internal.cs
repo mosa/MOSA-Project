@@ -6,8 +6,6 @@ namespace Mosa.Runtime.ARMv8A32
 {
 	public static class Internal
 	{
-		// TODO
-
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void ExceptionHandler()
 		{
