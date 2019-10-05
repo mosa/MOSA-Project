@@ -85,6 +85,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Boot.cs" />
+    <Compile Include="Test.cs" />
     <Compile Include="Tests\ArrayTest.cs" />
     <Compile Include="Tests\ComparisonTest.cs" />
     <Compile Include="Tests\Int64Test.cs" />

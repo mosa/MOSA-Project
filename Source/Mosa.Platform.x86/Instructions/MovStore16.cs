@@ -286,10 +286,10 @@ namespace Mosa.Platform.x86.Instructions
 			if (node.Operand1.IsConstant && node.Operand2.IsConstant && node.Operand3.IsCPURegister)
 			{
 				emitter.OpcodeEncoder.Append8Bits(0x66);
-				emitter.OpcodeEncoder.Append8Bits(0xC7);
+				emitter.OpcodeEncoder.Append8Bits(0x89);
 				emitter.OpcodeEncoder.Append2Bits(0b00);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand3.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append3Bits(0b110);
+				emitter.OpcodeEncoder.Append3Bits(0b101);
 				emitter.OpcodeEncoder.Append32BitImmediateWithOffset(node.Operand1, node.Operand2);
 				return;
 			}
