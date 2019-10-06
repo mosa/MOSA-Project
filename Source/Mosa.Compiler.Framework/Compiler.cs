@@ -159,7 +159,7 @@ namespace Mosa.Compiler.Framework
 				new CILExceptionPrologueStage(),
 				new CILOperandAssignmentStage(),
 				new StackSetupStage(),
-				new ProtectedRegionStage(),
+				new CILProtectedRegionStage(),
 				new ExceptionStage(),
 				new CILTransformationStage(),
 				new StaticAllocationResolutionStage(),

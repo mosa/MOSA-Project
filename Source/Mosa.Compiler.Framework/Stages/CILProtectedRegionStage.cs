@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// This stage inserts IR instructions related to protected regions.
 	/// </summary>
-	public class ProtectedRegionStage : BaseMethodCompilerStage
+	public class CILProtectedRegionStage : BaseMethodCompilerStage
 	{
 		private MosaType exceptionType;
 
