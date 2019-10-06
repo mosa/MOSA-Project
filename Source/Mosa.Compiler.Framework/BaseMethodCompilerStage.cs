@@ -609,9 +609,9 @@ namespace Mosa.Compiler.Framework
 			return null;
 		}
 
-		protected MosaExceptionHandler FindFinallyExceptionContext(InstructionNode node)
+		protected MosaExceptionHandler _NOT_USED_FindFinallyExceptionContext(InstructionNode node)
 		{
-			int label = node.Label;
+			int label = node.Block.Label;
 
 			foreach (var handler in Method.ExceptionHandlers)
 			{
@@ -626,8 +626,8 @@ namespace Mosa.Compiler.Framework
 
 		protected bool IsSourceAndTargetWithinSameTryOrException(InstructionNode node)
 		{
-			int leaveLabel = node.Label;
-			int targetLabel = node.BranchTargets[0].First.Label;
+			int leaveLabel = node.Block.Label;
+			int targetLabel = node.BranchTargets[0].Label;
 
 			foreach (var handler in Method.ExceptionHandlers)
 			{
@@ -658,6 +658,21 @@ namespace Mosa.Compiler.Framework
 
 			// very odd
 			return true;
+		}
+
+		protected BasicBlock TraverseBackToNonCompilerBlock(BasicBlock block)
+		{
+			var start = block;
+
+			while (start.IsCompilerBlock)
+			{
+				if (!start.HasPreviousBlocks)
+					return null;
+
+				start = start.PreviousBlocks[0]; // any one
+			}
+
+			return start;
 		}
 
 		#endregion Protected Region Methods

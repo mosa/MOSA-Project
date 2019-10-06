@@ -133,11 +133,11 @@ namespace Mosa.Compiler.Framework.Stages
 			// FIXME: This will need to be preserved for filtered exceptions; will need a flag to know this - maybe an upper bit of LeaveTargetRegister
 			context.SetInstruction(Select(ExceptionRegister, IRInstruction.Move32, IRInstruction.Move64), ExceptionRegister, nullOperand);
 
-			var label = context.Label;
+			var label = TraverseBackToNonCompilerBlock(context.Block).Label;
 			var exceptionContext = FindImmediateExceptionContext(label);
 
 			// 1) currently within a try block with a finally handler --- call it.
-			if (exceptionContext.ExceptionHandlerType == ExceptionHandlerType.Finally && exceptionContext.IsLabelWithinTry(context.Label))
+			if (exceptionContext.ExceptionHandlerType == ExceptionHandlerType.Finally && exceptionContext.IsLabelWithinTry(label))
 			{
 				var handlerBlock = BasicBlocks.GetByLabel(exceptionContext.HandlerStart);
 
@@ -170,14 +170,15 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var targetBlock in leaveTargets)
 			{
-				var source = targetBlock.Item2;
-				var target = targetBlock.Item1;
+				var source = TraverseBackToNonCompilerBlock(targetBlock.Item2);
+				var target = TraverseBackToNonCompilerBlock(targetBlock.Item1);
 
 				// target must be after end of exception context
 				if (target.Label <= location)
 					continue;
 
 				// target must be found within try or handler
+				// FUTURE - IsLabelWithinTry check is too simplistic of a check for when blocks are split by a previous stage!
 				if (exceptionContext.IsLabelWithinTry(source.Label) || exceptionContext.IsLabelWithinHandler(source.Label))
 				{
 					targets.AddIfNew(target);
@@ -188,7 +189,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				// this is an unreachable location
 
-				// clear this block --- should only have on instruction
+				// clear this block --- should only have one instruction
 				context.Empty();
 
 				var currentBlock = context.Block;
