@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// This stage inserts the IR ExceptionStart instructions at the beginning of each exception block and
 	/// IR Flow instructions when necessary after leave instructions
 	/// </summary>
-	public class ExceptionPrologueStage : BaseMethodCompilerStage
+	public class CILExceptionPrologueStage : BaseMethodCompilerStage
 	{
 		protected MosaType objectType;
 

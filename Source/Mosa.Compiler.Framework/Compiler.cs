@@ -121,9 +121,14 @@ namespace Mosa.Compiler.Framework
 		internal Operand StackPointer { get; }
 
 		/// <summary>
-		/// The stack frame
+		/// The exception register
 		/// </summary>
-		internal Operand ExceptionRegister { get; }
+		public Operand ExceptionRegister { get; }
+
+		/// <summary>
+		/// The ;eave target register
+		/// </summary>
+		public Operand LeaveTargetRegister { get; }
 
 		#endregion Properties
 
@@ -151,7 +156,7 @@ namespace Mosa.Compiler.Framework
 		{
 			return new List<BaseMethodCompilerStage>() {
 				new CILDecodingStage(),
-				new ExceptionPrologueStage(),
+				new CILExceptionPrologueStage(),
 				new CILOperandAssignmentStage(),
 				new StackSetupStage(),
 				new ProtectedRegionStage(),
@@ -223,7 +228,8 @@ namespace Mosa.Compiler.Framework
 
 			StackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
 			StackPointer = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackPointerRegister);
-			ExceptionRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.ExceptionRegister);
+			ExceptionRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.ExceptionRegister);
+			LeaveTargetRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.LeaveTargetRegister);
 
 			PostCompilerTraceEvent(CompilerEvent.CompilerStart);
 

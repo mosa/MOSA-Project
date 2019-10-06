@@ -170,6 +170,16 @@ namespace Mosa.Compiler.Framework
 		protected Operand StackPointer { get { return MethodCompiler.Compiler.StackPointer; } }
 
 		/// <summary>
+		/// Gets the exception register.
+		/// </summary>
+		protected Operand ExceptionRegister { get { return MethodCompiler.Compiler.ExceptionRegister; } }
+
+		/// <summary>
+		/// Gets the leave target register.
+		/// </summary>
+		protected Operand LeaveTargetRegister { get { return MethodCompiler.Compiler.LeaveTargetRegister; } }
+
+		/// <summary>
 		/// Gets a value indicating whether this instance has protected regions.
 		/// </summary>
 		protected bool HasProtectedRegions { get { return MethodCompiler.HasProtectedRegions; } }

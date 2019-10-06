@@ -223,8 +223,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 				//instructionCount++;
 
-				//const bool addjmp = false;
-
 				var flow = node.Instruction.FlowControl;
 
 				if (flow == FlowControl.Next || flow == FlowControl.Call || flow == FlowControl.ConditionalBranch || flow == FlowControl.Switch)
