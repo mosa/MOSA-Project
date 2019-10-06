@@ -15,6 +15,7 @@ namespace Mosa.Compiler.Framework.Stages
 	public class OptimizationStage : BaseMethodCompilerStage
 	{
 		private const int MaximumInstructionID = 1000;
+		private const int MaximumPasses = 20;
 
 		private Counter OptimizationsCount = new Counter("OptimizationStage.Optimizations");
 
@@ -90,6 +91,9 @@ namespace Mosa.Compiler.Framework.Stages
 						}
 					}
 				}
+
+				if (pass > MaximumPasses)
+					break;
 			}
 		}
 

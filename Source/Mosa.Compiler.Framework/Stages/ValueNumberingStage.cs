@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Trace;
@@ -641,9 +642,10 @@ namespace Mosa.Compiler.Framework.Stages
 						if (IsPhiInstruction(node.Instruction))
 							continue;
 
-						Debug.Assert(IsPhiInstruction(node.Instruction));
+						//Debug.Assert(IsPhiInstruction(node.Instruction));
 
-						//throw new CompilerException("ValueNumbering Stage: Expected PHI instruction but found instead: " + node + " for " + operand);
+						if (!IsPhiInstruction(node.Instruction))
+							throw new CompilerException("ValueNumbering Stage: Expected PHI instruction but found instead: " + node + " for " + operand);
 					}
 				}
 			}
