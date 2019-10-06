@@ -26,9 +26,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Initialize()
 		{
-			outgoingMoves = new Dictionary<BasicBlock, List<Operand>>();
-			incomingMoves = new Dictionary<BasicBlock, List<Operand>>();
-
 			dupNodes = new List<InstructionNode>();
 			worklist = new Queue<BasicBlock>();
 		}
@@ -40,6 +37,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (!Method.HasImplementation)
 				return;
+
+			outgoingMoves = new Dictionary<BasicBlock, List<Operand>>();
+			incomingMoves = new Dictionary<BasicBlock, List<Operand>>();
 
 			//trace = CreateTraceLog();
 
@@ -55,11 +55,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
-			outgoingMoves.Clear();
-			incomingMoves.Clear();
+			outgoingMoves = null;
+			incomingMoves = null;
+			processed = null;
 			worklist.Clear();
 			dupNodes.Clear();
-			processed = null;
 		}
 
 		/// <summary>

@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
@@ -40,9 +39,6 @@ namespace Mosa.Compiler.Framework.Stages
 			base.Initialize();
 
 			nullOperand = Operand.GetNullObject(TypeSystem);
-
-			exceptionVirtualRegisters = new Dictionary<BasicBlock, Operand>();
-			leaveTargets = new List<Tuple<BasicBlock, BasicBlock>>();
 		}
 
 		protected override void Setup()
@@ -78,7 +74,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			context.SetInstruction(IRInstruction.KillAll);
 			context.AppendInstruction(IRInstruction.Gen, ExceptionRegister);
-			context.AppendInstruction(Select(exceptionVirtualRegister, IRInstruction.Move32, IRInstruction.Move64), (Operand)exceptionVirtualRegister, ExceptionRegister);
+			context.AppendInstruction(Select(exceptionVirtualRegister, IRInstruction.Move32, IRInstruction.Move64), exceptionVirtualRegister, ExceptionRegister);
 		}
 
 		private void FinallyEndInstruction(Context context)

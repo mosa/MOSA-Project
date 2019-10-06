@@ -300,6 +300,11 @@ namespace Mosa.Compiler.Framework
 		protected virtual void Initialize()
 		{ }
 
+		protected virtual bool CheckToRun()
+		{
+			return true;
+		}
+
 		protected virtual void Setup()
 		{
 		}

@@ -16,11 +16,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Initialize()
 		{
-			objectType = TypeSystem.GetTypeByName("System", "Object");
+			objectType = TypeSystem.BuiltIn.Object;
 		}
 
 		protected override void Run()
 		{
+			if (!MethodCompiler.IsCILDecodeRequired)
+				return;
+
 			InsertExceptionStartInstructions();
 			InsertFlowOrJumpInstructions();
 		}
