@@ -508,6 +508,46 @@ namespace System
 			return result;
 		}
 
+		public unsafe bool StartsWith(string value)
+		{
+			if (value == null)
+				throw new ArgumentNullException(nameof(value));
+
+			if (value.length > length)
+				return false;
+
+			var thisChar = first_char;
+			var cmpChar = value.first_char;
+			for (var i = 0; i < value.length; i++)
+			{
+				if (*thisChar != *cmpChar)
+					return false;
+				thisChar++;
+				cmpChar++;
+			}
+			return true;
+		}
+
+		public unsafe bool EndsWith(string value)
+		{
+			if (value == null)
+				throw new ArgumentNullException(nameof(value));
+
+			if (value.length > length)
+				return false;
+
+			var thisChar = first_char + (length - value.length);
+			var cmpChar = value.first_char;
+			for (var i = 0; i < value.length; i++)
+			{
+				if (*thisChar != *cmpChar)
+					return false;
+				thisChar++;
+				cmpChar++;
+			}
+			return true;
+		}
+
 		public static bool IsNullOrEmpty(string value)
 		{
 			return (value == null) || (value.Length == 0);

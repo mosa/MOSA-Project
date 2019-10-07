@@ -22,7 +22,7 @@ namespace Mosa.Runtime
 		public override string ToString()
 		{
 			string methodAddress = MethodDefinition.IsNull ? "[NULL]" : MethodDefinition.Method.ToInt32().ToString("x");
-			string methodName = MethodName == null ? "(unknown method)" : MethodName.Substring(MethodName.IndexOf(' ') + 1);
+			string methodName = MethodName == null ? "(unknown method)" : MethodName;
 
 			return "0x" + methodAddress + "+0x" + Offset.ToString("x") + " " + methodName;
 		}
