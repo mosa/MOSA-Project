@@ -87,6 +87,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			InitializePromotedLocalVariablesToVirtualRegisters();
 
+			InsertExceptionStartInstructions();
+			InsertFlowOrJumpInstructions();
+
 			// This makes it easier to review --- it's not necessary
 			BasicBlocks.OrderByLabel();
 		}
@@ -95,49 +98,6 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			instruction = null;
 			block = null;
-		}
-
-		private void InitializePromotedLocalVariablesToVirtualRegisters()
-		{
-			if (Method.LocalVariables.Count == 0)
-				return;
-
-			var prologue = new Context(BasicBlocks.PrologueBlock.First);
-
-			foreach (var variable in MethodCompiler.LocalVariables)
-			{
-				if (!variable.IsVirtualRegister)
-					continue;
-
-				if (variable.IsI4)
-				{
-					prologue.AppendInstruction(IRInstruction.Move32, variable, CreateConstant(0));
-				}
-				else if (variable.IsI8)
-				{
-					prologue.AppendInstruction(IRInstruction.Move64, variable, CreateConstant(0ul));
-				}
-				else if (variable.IsR4)
-				{
-					prologue.AppendInstruction(IRInstruction.MoveR4, variable, CreateConstant(0.0f));
-				}
-				else if (variable.IsR8)
-				{
-					prologue.AppendInstruction(IRInstruction.MoveR8, variable, CreateConstant(0.0d));
-				}
-				else if (variable.IsReferenceType)
-				{
-					prologue.AppendInstruction(Select(variable.Is64BitInteger, IRInstruction.Move32, IRInstruction.Move64), variable, Operand.GetNull(variable.Type));
-				}
-				else if (variable.Is64BitInteger)
-				{
-					prologue.AppendInstruction(IRInstruction.Move64, variable, CreateConstant(0ul));
-				}
-				else
-				{
-					prologue.AppendInstruction(IRInstruction.Move32, variable, CreateConstant(0ul));
-				}
-			}
 		}
 
 		#region Internals
@@ -256,6 +216,132 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		#endregion Internals
+
+		private void InitializePromotedLocalVariablesToVirtualRegisters()
+		{
+			if (Method.LocalVariables.Count == 0)
+				return;
+
+			var prologue = new Context(BasicBlocks.PrologueBlock.First);
+
+			foreach (var variable in MethodCompiler.LocalVariables)
+			{
+				if (!variable.IsVirtualRegister)
+					continue;
+
+				if (variable.IsI4)
+				{
+					prologue.AppendInstruction(IRInstruction.Move32, variable, CreateConstant(0));
+				}
+				else if (variable.IsI8)
+				{
+					prologue.AppendInstruction(IRInstruction.Move64, variable, CreateConstant(0ul));
+				}
+				else if (variable.IsR4)
+				{
+					prologue.AppendInstruction(IRInstruction.MoveR4, variable, CreateConstant(0.0f));
+				}
+				else if (variable.IsR8)
+				{
+					prologue.AppendInstruction(IRInstruction.MoveR8, variable, CreateConstant(0.0d));
+				}
+				else if (variable.IsReferenceType)
+				{
+					prologue.AppendInstruction(Select(variable.Is64BitInteger, IRInstruction.Move32, IRInstruction.Move64), variable, Operand.GetNull(variable.Type));
+				}
+				else if (variable.Is64BitInteger)
+				{
+					prologue.AppendInstruction(IRInstruction.Move64, variable, CreateConstant(0ul));
+				}
+				else
+				{
+					prologue.AppendInstruction(IRInstruction.Move32, variable, CreateConstant(0ul));
+				}
+			}
+		}
+
+		private void InsertExceptionStartInstructions()
+		{
+			foreach (var clause in Method.ExceptionHandlers)
+			{
+				if (clause.ExceptionHandlerType == ExceptionHandlerType.Exception)
+				{
+					var handler = BasicBlocks.GetByLabel(clause.HandlerStart);
+
+					var exceptionObject = AllocateVirtualRegister(clause.Type);
+
+					var context = new Context(handler);
+
+					context.AppendInstruction(IRInstruction.ExceptionStart, exceptionObject);
+				}
+
+				if (clause.ExceptionHandlerType == ExceptionHandlerType.Filter)
+				{
+					{
+						var handler = BasicBlocks.GetByLabel(clause.HandlerStart);
+
+						var exceptionObject = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
+
+						var context = new Context(handler);
+
+						context.AppendInstruction(IRInstruction.ExceptionStart, exceptionObject);
+					}
+
+					{
+						var handler = BasicBlocks.GetByLabel(clause.FilterStart.Value);
+
+						var exceptionObject = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
+
+						var context = new Context(handler);
+
+						context.AppendInstruction(IRInstruction.FilterStart, exceptionObject);
+					}
+				}
+			}
+		}
+
+		private void InsertFlowOrJumpInstructions()
+		{
+			foreach (var block in BasicBlocks)
+			{
+				var label = TraverseBackToNonCompilerBlock(block).Label;
+
+				for (var node = block.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
+				{
+					if (node.IsEmptyOrNop)
+						continue;
+
+					if (!(node.Instruction is CIL.LeaveInstruction))
+						continue;   // FUTURE: Could this be a break instruction instead?
+
+					var target = node.BranchTargets[0];
+
+					if (IsSourceAndTargetWithinSameTryOrException(node))
+					{
+						// Leave instruction can be converted into a simple jump instruction
+						node.SetInstruction(IRInstruction.Jmp, target);
+						BasicBlocks.RemoveHeaderBlock(target);
+						continue;
+					}
+
+					var entry = FindImmediateExceptionContext(label);
+
+					if (!entry.IsLabelWithinTry(label))
+						break;
+
+					var flowNode = new InstructionNode(IRInstruction.Flow, target);
+
+					node.Insert(flowNode);
+
+					if (target.IsHeadBlock)
+					{
+						BasicBlocks.RemoveHeaderBlock(target);
+					}
+
+					break;
+				}
+			}
+		}
 
 		#region IInstructionDecoder Members
 

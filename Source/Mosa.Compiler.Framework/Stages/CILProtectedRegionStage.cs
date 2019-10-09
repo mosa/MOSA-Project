@@ -11,13 +11,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class CILProtectedRegionStage : BaseMethodCompilerStage
 	{
-		private MosaType exceptionType;
-
-		protected override void Initialize()
-		{
-			exceptionType = TypeSystem.GetTypeByName("System", "Exception");
-		}
-
 		protected override void Run()
 		{
 			if (!MethodCompiler.IsCILDecodeRequired)
@@ -50,7 +43,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (handler.ExceptionHandlerType == ExceptionHandlerType.Finally)
 				{
-					var exceptionObject = AllocateVirtualRegister(exceptionType);
+					var exceptionObject = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
 					var finallyOperand = AllocateVirtualRegister(Is32BitPlatform ? TypeSystem.BuiltIn.I4 : TypeSystem.BuiltIn.I8);
 
 					context.AppendInstruction2(IRInstruction.FinallyStart, exceptionObject, finallyOperand);
@@ -67,7 +60,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					if (node.Instruction is CIL.LeaveInstruction) // CIL.LeaveInstruction
+					if (node.Instruction is CIL.LeaveInstruction)
 					{
 						var leaveBlock = node.BranchTargets[0];
 
@@ -90,14 +83,14 @@ namespace Mosa.Compiler.Framework.Stages
 						ctx.AppendInstruction(IRInstruction.SetLeaveTarget, leaveBlock);
 						ctx.AppendInstruction(IRInstruction.GotoLeaveTarget);
 					}
-					else if (node.Instruction is CIL.EndFinallyInstruction) // CIL.Endfinally
+					else if (node.Instruction is CIL.EndFinallyInstruction)
 					{
 						var ctx = new Context(node);
 
 						ctx.SetInstruction(IRInstruction.FinallyEnd);
 						ctx.AppendInstruction(IRInstruction.GotoLeaveTarget);
 					}
-					else if (node.Instruction is CIL.ThrowInstruction) // CIL.Throw
+					else if (node.Instruction is CIL.ThrowInstruction)
 					{
 						node.SetInstruction(IRInstruction.Throw, node.Result, node.Operand1);
 					}
