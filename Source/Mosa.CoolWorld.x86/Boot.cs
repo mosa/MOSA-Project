@@ -57,6 +57,7 @@ namespace Mosa.CoolWorld.x86
 			var serviceManager = new ServiceManager();
 
 			var deviceService = new DeviceService();
+
 			var diskDeviceService = new DiskDeviceService();
 			var partitionService = new PartitionService();
 			var pciControllerService = new PCIControllerService();
@@ -72,13 +73,17 @@ namespace Mosa.CoolWorld.x86
 
 			// Set device driver system with the hardware HAL
 			var hardware = new HAL.Hardware();
+
 			DeviceSystem.Setup.Initialize(hardware, deviceService.ProcessInterrupt);
 
 			Console.WriteLine("> Registering device drivers...");
 			deviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
 
 			Console.WriteLine("> Starting devices...");
+
 			deviceService.Initialize(new X86System(), null);
+
+			//while (true) ;
 
 			Console.Write("> Probing for ISA devices...");
 			var isaDevices = deviceService.GetChildrenOf(deviceService.GetFirstDevice<ISABus>());

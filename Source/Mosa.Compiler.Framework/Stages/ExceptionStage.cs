@@ -79,7 +79,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void FinallyEndInstruction(Context context)
 		{
-			var header = FindImmediateExceptionContext(context.Label);
+			var header = FindImmediateExceptionContext(TraverseBackToNonCompilerBlock(context.Block).Label);
 			var headerBlock = BasicBlocks.GetByLabel(header.HandlerStart);
 
 			var exceptionVirtualRegister = exceptionVirtualRegisters[headerBlock];

@@ -23,8 +23,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!HasCode)
 				return;
 
-			if (HasProtectedRegions)
-				return;
+			//if (HasProtectedRegions)
+			//	return;
 
 			foreach (var block in BasicBlocks)
 			{
@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					InstructionCount++;
 
-					if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
+					if (!IsPhiInstruction(node.Instruction))
 						break;
 
 					if (node.OperandCount != node.Block.PreviousBlocks.Count)

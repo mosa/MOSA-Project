@@ -72,9 +72,9 @@ namespace Mosa.Compiler.Framework.Stages
 						var leaveBlock = node.BranchTargets[0];
 
 						// Find enclosing try or finally handler
-						var exceptionContext = FindImmediateExceptionContext(node.Label);
+						var exceptionContext = FindImmediateExceptionContext(TraverseBackToNonCompilerBlock(node.Block).Label);
 
-						bool InTryContext = exceptionContext.IsLabelWithinTry(node.Label);
+						bool InTryContext = exceptionContext.IsLabelWithinTry(TraverseBackToNonCompilerBlock(node.Block).Label);
 
 						var ctx = new Context(node);
 

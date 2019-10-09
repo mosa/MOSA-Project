@@ -626,8 +626,8 @@ namespace Mosa.Compiler.Framework
 
 		protected bool IsSourceAndTargetWithinSameTryOrException(InstructionNode node)
 		{
-			int leaveLabel = node.Block.Label;
-			int targetLabel = node.BranchTargets[0].Label;
+			int leaveLabel = TraverseBackToNonCompilerBlock(node.Block).Label;
+			int targetLabel = TraverseBackToNonCompilerBlock(node.BranchTargets[0]).Label;
 
 			foreach (var handler in Method.ExceptionHandlers)
 			{

@@ -72,6 +72,8 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var block in BasicBlocks)
 			{
+				var label = TraverseBackToNonCompilerBlock(block).Label;
+
 				for (var node = block.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
 				{
 					if (node.IsEmptyOrNop)
@@ -90,9 +92,9 @@ namespace Mosa.Compiler.Framework.Stages
 						continue;
 					}
 
-					var entry = FindImmediateExceptionContext(node.Label);
+					var entry = FindImmediateExceptionContext(label);
 
-					if (!entry.IsLabelWithinTry(node.Label))
+					if (!entry.IsLabelWithinTry(label))
 						break;
 
 					var flowNode = new InstructionNode(IRInstruction.Flow, target);
