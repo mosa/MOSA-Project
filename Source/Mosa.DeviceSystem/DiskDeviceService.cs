@@ -9,8 +9,8 @@ namespace Mosa.DeviceSystem
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public override void PostEvent(ServiceEvent serviceEvent)
 		{
-			HAL.DebugWriteLine("DiskDeviceService:PostEvent()-A");
-			HAL.Pause();
+			//HAL.DebugWriteLine("DiskDeviceService:PostEvent()-A");
+			//HAL.Pause();
 
 			var device = MatchEvent<IDiskControllerDevice>(serviceEvent, ServiceEventType.Start);
 
