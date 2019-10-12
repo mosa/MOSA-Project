@@ -42,17 +42,20 @@ namespace Mosa.DeviceSystem
 		public void AddEvent(ServiceEvent serviceEvent)
 		{
 			//HAL.DebugWriteLine("ServiceManager:AddEvent():Start");
+			//HAL.Pause();
 
 			lock (_lockEvents)
 			{
 				events.Add(serviceEvent);
 			}
 
-			HAL.DebugWriteLine("ServiceManager:AddEvent():SendEvents");
+			//HAL.DebugWriteLine("ServiceManager:AddEvent():SendEvents");
+			//HAL.Pause();
 
 			SendEvents();
 
-			HAL.DebugWriteLine("ServiceManager:AddEvent():End");
+			//HAL.DebugWriteLine("ServiceManager:AddEvent():End");
+			//HAL.Pause();
 		}
 
 		public List<T> GetService<T>() where T : BaseService
@@ -104,9 +107,11 @@ namespace Mosa.DeviceSystem
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		private void SendEvents()
 		{
 			//HAL.DebugWriteLine("ServiceManager:SendEvents():Start");
+			//HAL.Pause();
 
 			while (true)
 			{
@@ -122,10 +127,13 @@ namespace Mosa.DeviceSystem
 				}
 
 				//HAL.DebugWriteLine("ServiceManager:SendEvents():Middle");
+				//HAL.Pause();
+
 				DispatchEvents(serviceEvent);
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		private void DispatchEvents(ServiceEvent serviceEvent)
 		{
 			int i = 0;
@@ -134,7 +142,8 @@ namespace Mosa.DeviceSystem
 			{
 				BaseService service;
 
-				//HAL.DebugWriteLine("ServiceManager:SendEvents():Loop" + i.ToString());
+				//HAL.DebugWriteLine("ServiceManager:SendEvents():Loop-A: " + i.ToString() + "/" + services.Count.ToString());
+				//HAL.Pause();
 
 				lock (_lockServices)
 				{
@@ -144,11 +153,18 @@ namespace Mosa.DeviceSystem
 					service = services[i];
 				}
 
+				//HAL.DebugWriteLine("ServiceManager:SendEvents():Loop-B: " + i.ToString() + "/" + services.Count.ToString());
+				//HAL.Pause();
+
 				i++;
+
+				//HAL.DebugWriteLine("ServiceManager:SendEvents():Loop-C: " + i.ToString() + "/" + services.Count.ToString());
+				//HAL.Pause();
 
 				service.PostEvent(serviceEvent);
 
 				//HAL.DebugWriteLine("ServiceManager:SendEvents():Post-PostEvent");
+				//HAL.Pause();
 			}
 		}
 	}

@@ -83,8 +83,6 @@ namespace Mosa.CoolWorld.x86
 
 			deviceService.Initialize(new X86System(), null);
 
-			//while (true) ;
-
 			Console.Write("> Probing for ISA devices...");
 			var isaDevices = deviceService.GetChildrenOf(deviceService.GetFirstDevice<ISABus>());
 			Console.WriteLine("[Completed: " + isaDevices.Count.ToString() + " found]");
@@ -238,6 +236,11 @@ namespace Mosa.CoolWorld.x86
 			Logger.Log("<SELFTEST:PASSED>");
 
 			manager.Start();
+		}
+
+		public static void Pause()
+		{
+			DeviceSystem.HAL.Pause();
 		}
 
 		public static void ForeverLoop()

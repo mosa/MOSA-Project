@@ -148,5 +148,13 @@ namespace Mosa.CoolWorld.x86.HAL
 		{
 			Panic.Error(message);
 		}
+
+		/// <summary>
+		/// Pause
+		/// </summary>
+		public override void Pause()
+		{
+			for (var i = Scheduler.ClockTicks + 5; i > Scheduler.ClockTicks;) { }
+		}
 	}
 }

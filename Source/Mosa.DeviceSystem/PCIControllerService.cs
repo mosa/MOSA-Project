@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem.PCI;
+using System.Runtime.CompilerServices;
 
 namespace Mosa.DeviceSystem
 {
@@ -22,8 +23,12 @@ namespace Mosa.DeviceSystem
 			DeviceService = ServiceManager.GetFirstService<DeviceService>();
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public override void PostEvent(ServiceEvent serviceEvent)
 		{
+			HAL.DebugWriteLine("PCIControllerService:PostEvent()");
+			HAL.Pause();
+
 			var device = MatchEvent<IPCIController>(serviceEvent, ServiceEventType.Start);
 
 			if (device == null)
