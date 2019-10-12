@@ -98,7 +98,6 @@
     <Compile Include="Mosa.Application\Shell.cs" />
     <Compile Include="Mosa.AppSystem\IConsoleApp.cs" />
     <Compile Include="Boot.cs" />
-    <Compile Include="PointerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj">

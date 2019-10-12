@@ -127,6 +127,7 @@ namespace Mosa.DeviceSystem
 		private void StartDevice(Device device)
 		{
 			//HAL.DebugWriteLine($"DeviceService:StartDevice():Enter = " + (device.Name ?? string.Empty));
+			//HAL.Pause();
 
 			lock (_lock)
 			{

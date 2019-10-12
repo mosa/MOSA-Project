@@ -10,18 +10,22 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	static partial class IntrinsicMethods
 	{
-
 		private static readonly string DefaultInterruptMethodName = "Mosa.Kernel.x86.IDT::ProcessInterrupt";
 
 		private static void InsertIRQ(int irq, Context context, MethodCompiler methodCompiler)
 		{
 			var interruptMethodName = methodCompiler.Compiler.CompilerOptions.InterruptMethodName;
+
 			if (string.IsNullOrEmpty(interruptMethodName))
+			{
 				interruptMethodName = DefaultInterruptMethodName;
+			}
 
 			var ar = interruptMethodName.Split(new string[] { "::" }, System.StringSplitOptions.None);
+
 			if (ar.Length != 2)
 				return;
+
 			var typeFullname = ar[0];
 			var methodName = ar[1];
 

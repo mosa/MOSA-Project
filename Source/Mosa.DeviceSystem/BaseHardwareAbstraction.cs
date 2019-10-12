@@ -97,5 +97,10 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="message">The message.</param>
 		public abstract void Abort(string message);
+
+		/// <summary>
+		/// Pause
+		/// </summary>
+		public abstract void Pause();
 	}
 }

@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Runtime.CompilerServices;
+
 namespace Mosa.DeviceSystem
 {
 	public abstract class BaseService
@@ -33,8 +35,13 @@ namespace Mosa.DeviceSystem
 		{
 		}
 
+		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		protected Device MatchEvent<SERVICE>(ServiceEvent serviceEvent, ServiceEventType eventType) where SERVICE : class
 		{
+			//HAL.DebugWriteLine("BaseService:MatchEvent()-A");
+			//HAL.Pause();
+
 			if (serviceEvent.ServiceEventType != eventType)
 				return null;
 
@@ -47,6 +54,9 @@ namespace Mosa.DeviceSystem
 
 			if (service == null)
 				return null;
+
+			//HAL.DebugWriteLine("BaseService:MatchEvent()-Z");
+			//HAL.Pause();
 
 			return device;
 		}

@@ -47,7 +47,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.Not64, Not64);
 			AddVisitation(IRInstruction.Or64, Or64);
 			AddVisitation(IRInstruction.Xor64, Xor64);
-			AddVisitation(IRInstruction.Move64, MoveInteger64);
+			AddVisitation(IRInstruction.Move64, Move64);
 			AddVisitation(IRInstruction.MulSigned64, MulSigned64);
 			AddVisitation(IRInstruction.MulUnsigned64, MulUnsigned64);
 			AddVisitation(IRInstruction.ShiftLeft64, ShiftLeft64);
@@ -459,7 +459,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Xor32, resultLow, op1L, op2L);
 		}
 
-		private void MoveInteger64(Context context)
+		private void Move64(Context context)
 		{
 			SplitLongOperand(context.Result, out Operand resultLow, out Operand resultHigh);
 			SplitLongOperand(context.Operand1, out Operand op1L, out Operand op1H);

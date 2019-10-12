@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Trace;
 using System;
@@ -39,6 +40,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
+			if (!HasCode)
+				return;
+
+			if (HasProtectedRegions)
+				return;
+
 			var analysis = new SparseConditionalConstantPropagation(BasicBlocks, this);
 
 			var deadBlocks = analysis.GetDeadBlocked();
@@ -71,7 +78,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (target.Definitions.Count == 0)
 				return;
 
-			Debug.Assert(target.Definitions.Count == 1);
+			if (target.Definitions.Count != 1)
+				throw new CompilerException($"SCCP: {target} definition has move than one value");
+
+			//Debug.Assert(target.Definitions.Count == 1);
 
 			if (target.Uses.Count != 0)
 			{

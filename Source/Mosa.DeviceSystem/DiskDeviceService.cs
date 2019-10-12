@@ -1,11 +1,17 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Runtime.CompilerServices;
+
 namespace Mosa.DeviceSystem
 {
 	public class DiskDeviceService : BaseService
 	{
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public override void PostEvent(ServiceEvent serviceEvent)
 		{
+			//HAL.DebugWriteLine("DiskDeviceService:PostEvent()-A");
+			//HAL.Pause();
+
 			var device = MatchEvent<IDiskControllerDevice>(serviceEvent, ServiceEventType.Start);
 
 			if (device == null)

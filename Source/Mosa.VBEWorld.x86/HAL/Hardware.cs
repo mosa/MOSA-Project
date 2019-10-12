@@ -149,5 +149,13 @@ namespace Mosa.VBEWorld.x86.HAL
 		{
 			Panic.Error(message);
 		}
+
+		/// <summary>
+		/// Pause
+		/// </summary>
+		public override void Pause()
+		{
+			for (var i = Scheduler.ClockTicks + 25; i > Scheduler.ClockTicks;) { }
+		}
 	}
 }

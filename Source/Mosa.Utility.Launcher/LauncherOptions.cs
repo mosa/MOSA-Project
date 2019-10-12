@@ -86,14 +86,6 @@ namespace Mosa.Utility.Launcher
 		[Option("ir-optimizations-off")]
 		public bool IROptimizationsFalse { set { EnableIROptimizations = false; } }
 
-		// Legacy - will be removed in the future
-		[Option("ir")]
-		public bool EnableIROptimizationsTrue { set { EnableIROptimizations = true; } }
-
-		// Legacy - will be removed in the future
-		[Option("optimization-ir-off")]
-		public bool IROptimizationsFalse2 { set { EnableIROptimizations = false; } }
-
 		[Option("sccp")]
 		public bool EnableSparseConditionalConstantPropagation { get; set; }
 
