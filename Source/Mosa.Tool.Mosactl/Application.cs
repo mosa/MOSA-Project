@@ -76,7 +76,7 @@ namespace Mosa.Tool.Mosactl
 						break;
 
 					case "MOSA_TOOL_EXT":
-						value = IsWin ? ".exe" : "";
+						value = IsWin ? ".exe" : " " /* Whitespace */;
 						break;
 				}
 			}
