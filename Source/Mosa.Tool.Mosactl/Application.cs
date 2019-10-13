@@ -484,7 +484,7 @@ namespace Mosa.Tool.Mosactl
 					return false;
 				if (!CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), "Mosa.Tool.Compiler/Mosa.Tool.Compiler.csproj"))
 					return false;
-				if (!IsWin)
+				if (IsWin)
 				{
 					if (!CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), "Mosa.Tool.GDBDebugger/Mosa.Tool.GDBDebugger.csproj"))
 						return false;
