@@ -124,12 +124,12 @@ for:
     - sh: sudo apt-get install -y git wget qemu qemu-system qemu-system-x86
 
     before_build:
-    - sh: mono $APPVEYOR_BUILD_FOLDER/Tools/nuget/nuget.exe restore -Verbosity quiet $APPVEYOR_BUILD_FOLDER/Source/Mosa.sln
+    - sh: mono $APPVEYOR_BUILD_FOLDER/Tools/nuget/nuget.exe restore -Verbosity quiet $APPVEYOR_BUILD_FOLDER/Source/Mosa.LinuxCI.sln
 
     build: off
 
     build_script:
-    - sh: msbuild $APPVEYOR_BUILD_FOLDER/Source/Mosa.sln
+    - sh: msbuild $APPVEYOR_BUILD_FOLDER/Source/Mosa.LinuxCI.sln
 
     test_script:
     - sh: $APPVEYOR_BUILD_FOLDER/bin/Mosa.Tool.Mosactl test
