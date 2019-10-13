@@ -76,17 +76,18 @@ namespace Mosa.Tool.Mosactl
 						break;
 
 					case "MOSA_TOOL_EXT":
-						value = IsWin ? ".exe" : " " /* Whitespace */;
+						value = IsWin ? ".exe" : "";
 						break;
 				}
 			}
 
-			if (string.IsNullOrEmpty(value))
+			if (value == null)
 				value = name;
 
 			var regex = new Regex(@"\$\{(\w+)\}", RegexOptions.RightToLeft);
 			foreach (Match m in regex.Matches(value))
 				value = value.Replace(m.Value, GetEnv(m.Groups[1].Value));
+
 			return value;
 		}
 
