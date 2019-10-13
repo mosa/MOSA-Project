@@ -13,14 +13,17 @@ namespace Mosa.Tool.Mosactl
 {
 	public class MosaCtl
 	{
-		private bool IsWin = false;
-		private bool IsUnix = false;
+		private static bool IsWin = Environment.OSVersion.Platform != PlatformID.Unix;
+		private static bool IsUnix = Environment.OSVersion.Platform == PlatformID.Unix;
+
+		private string BinDir;
+		private string RootDir;
+		private string SourceDir;
+
+		private static Utility.Launcher.AppLocations appLocations;
 
 		public MosaCtl()
 		{
-			IsWin = Environment.OSVersion.Platform != PlatformID.Unix;
-			IsUnix = Environment.OSVersion.Platform == PlatformID.Unix;
-
 			appLocations = new Utility.Launcher.AppLocations();
 			appLocations.FindApplications();
 
@@ -28,12 +31,6 @@ namespace Mosa.Tool.Mosactl
 			BinDir = GetEnv("MOSA_BIN");
 			SourceDir = GetEnv("MOSA_SOURCE");
 		}
-
-		private string BinDir;
-		private string RootDir;
-		private string SourceDir;
-
-		private static Utility.Launcher.AppLocations appLocations;
 
 		public static string GetEnv(string name)
 		{
@@ -76,6 +73,10 @@ namespace Mosa.Tool.Mosactl
 
 					case "MOSA_WIN_PROGRAMS_X86":
 						value = @"C:\Program Files (x86)"; // TODO
+						break;
+
+					case "MOSA_TOOL_EXT":
+						value = IsWin ? ".exe" : "";
 						break;
 				}
 			}
@@ -229,7 +230,7 @@ namespace Mosa.Tool.Mosactl
 					ExpandKernelBinPath(OsName)+".exe"
 				};
 
-				if (!CallMonoProcess(BinDir, "Mosa.Tool.Compiler.exe", compilerArgs.ToArray()))
+				if (!CallProcess(BinDir, GetEnv("${MOSA_BIN}/Mosa.Tool.Compiler${MOSA_TOOL_EXT}"), compilerArgs.ToArray()))
 					return false;
 			}
 
@@ -293,7 +294,7 @@ namespace Mosa.Tool.Mosactl
 		public bool TaskTestAll(List<string> args)
 		{
 			foreach (var osName in OsNames)
-				if (!CallProcess(BinDir, GetEnv("${MOSA_BIN}/Mosa.Tool.Mosactl.exe"), "test", osName))
+				if (!CallProcess(BinDir, GetEnv("${MOSA_BIN}/Mosa.Tool.Mosactl" + (IsUnix ? "" : ".exe")), "test", osName))
 					return false;
 
 			return true;
@@ -342,7 +343,7 @@ namespace Mosa.Tool.Mosactl
 			if (!CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), "Mosa.Utility.UnitTests/Mosa.Utility.UnitTests.csproj", "/p:Configuration=Debug", "/p:Platform=\"AnyCPU\"", "-verbosity:minimal"))
 				return false;
 
-			if (!CallMonoProcess(BinDir, "Mosa.Utility.UnitTests.exe"))
+			if (!CallProcess(BinDir, GetEnv("${MOSA_BIN}/Mosa.Utility.UnitTests${MOSA_TOOL_EXT}")))
 				return false;
 
 			return true;
@@ -434,7 +435,7 @@ namespace Mosa.Tool.Mosactl
 
 			if (IsWin)
 			{
-				CallProcess(BinDir, GetEnv("${MOSA_BIN}/Mosa.Tool.GDBDebugger.exe"), "--image", ExpandKernelBinPath(OsName) + ".bin", "--autostart", "--debugfile", ExpandKernelBinPath(OsName) + ".debug");
+				CallProcess(BinDir, GetEnv("${MOSA_BIN}/Mosa.Tool.GDBDebugger${MOSA_TOOL_EXT}"), "--image", ExpandKernelBinPath(OsName) + ".bin", "--autostart", "--debugfile", ExpandKernelBinPath(OsName) + ".debug");
 			}
 			else
 			{
@@ -476,7 +477,7 @@ namespace Mosa.Tool.Mosactl
 
 		public bool TaskTools(CheckType ct)
 		{
-			var exists = File.Exists(GetEnv("${MOSA_BIN}/Mosa.Tool.Compiler.exe"));
+			var exists = File.Exists(GetEnv("${MOSA_BIN}/Mosa.Tool.Compiler${MOSA_TOOL_EXT}"));
 			if (!exists || ct == CheckType.force)
 			{
 				if (!CallMonoProcess(SourceDir, GetEnv("MOSA_NUGET"), "restore", "Mosa.sln"))
