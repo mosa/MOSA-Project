@@ -298,8 +298,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public List<LiveRange> SplitAt(SlotIndex at)
 		{
-			if (!CanSplitAt(at))
-				throw new CompilerException("Can not split at {at}");
+//			if (!CanSplitAt(at))
+//				throw new CompilerException($"Can not split at {at}");
 
 			Debug.Assert(CanSplitAt(at));
 

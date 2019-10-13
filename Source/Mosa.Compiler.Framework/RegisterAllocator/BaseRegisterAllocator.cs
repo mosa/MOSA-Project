@@ -1222,18 +1222,19 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			Trace?.Log(" Splitting around first use/def");
 
 			var liveRange = liveInterval.LiveRange;
-			var splitAt = SlotIndex.NullSlot;
+
+			SlotIndex splitAt;
 
 			if (liveRange.IsDefFirst)
 			{
-				if (liveRange.FirstDef == liveRange.Start)
+				if (liveRange.FirstDef == liveRange.Start || liveRange.FirstDef.Before == liveRange.Start)
 				{
 					// must split after def
 					splitAt = liveRange.FirstDef.After;
 				}
 				else
 				{
-					// split after def
+					// split before def
 					splitAt = liveRange.FirstDef.Before;
 				}
 			}
