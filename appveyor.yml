@@ -177,4 +177,4 @@ for:
     build: off
 
     build_script:
-    - sh: ./mosactl test
+    - sh: sh ./mosactl test
