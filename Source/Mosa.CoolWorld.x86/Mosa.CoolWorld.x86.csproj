@@ -1,152 +1,37 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B21130AE-311F-4F15-B763-0E91EE4C9646}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <AssemblyKeyContainerName>
-    </AssemblyKeyContainerName>
+    <TargetFramework>net472</TargetFramework>
     <AssemblyName>Mosa.CoolWorld.x86</AssemblyName>
-    <DefaultClientScript>JScript</DefaultClientScript>
-    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
-    <DefaultTargetSchema>IE50</DefaultTargetSchema>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <OutputType>Exe</OutputType>
-    <AppDesignerFolder>
-    </AppDesignerFolder>
     <RootNamespace>Mosa.CoolWorld.x86</RootNamespace>
     <StartupObject>Mosa.CoolWorld.x86.Boot</StartupObject>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
-    <TargetFrameworkProfile />
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <NoStdLib>true</NoStdLib>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <DebugType>full</DebugType>
+    <LangVersion>8.0</LangVersion>
+    <OutputPath>..\..\bin\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <BaseAddress>285212672</BaseAddress>
-    <ConfigurationOverrideFile>
-    </ConfigurationOverrideFile>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
-    <DebugSymbols>true</DebugSymbols>
-    <FileAlignment>4096</FileAlignment>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\</OutputPath>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <RemoveIntegerChecks>False</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningLevel>4</WarningLevel>
-    <DebugType>full</DebugType>
     <NoWarn>1685,227</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
-    <DebugType>full</DebugType>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <BaseAddress>285212672</BaseAddress>
-    <ConfigurationOverrideFile>
-    </ConfigurationOverrideFile>
-    <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
-    <FileAlignment>4096</FileAlignment>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\bin\</OutputPath>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>2</WarningLevel>
     <NoWarn>1685</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="HAL\Hardware.cs" />
-    <Compile Include="HAL\X86IOPort.cs" />
-    <Compile Include="Mosa.Application\Clear.cs" />
-    <Compile Include="Mosa.Application\Credits.cs" />
-    <Compile Include="Mosa.Application\ShowPCI.cs" />
-    <Compile Include="Mosa.Application\Mem.cs" />
-    <Compile Include="Mosa.AppSystem\AppOutputStream.cs" />
-    <Compile Include="Mosa.AppSystem\AppConsole.cs" />
-    <Compile Include="Mosa.AppSystem\AppManager.cs" />
-    <Compile Include="Mosa.Application\BaseApplication.cs" />
-    <Compile Include="Mosa.AppSystem\AppInputStream.cs" />
-    <Compile Include="Mosa.Application\Shell.cs" />
-    <Compile Include="Mosa.AppSystem\IConsoleApp.cs" />
-    <Compile Include="Boot.cs" />
+    <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj" />
+    <ProjectReference Include="..\Mosa.DeviceDriver\Mosa.DeviceDriver.csproj" />
+    <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj" />
+    <ProjectReference Include="..\Mosa.FileSystem\Mosa.FileSystem.csproj" />
+    <ProjectReference Include="..\Mosa.Kernel.x86\Mosa.Kernel.x86.csproj" />
+    <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
+    <ProjectReference Include="..\Mosa.Runtime.x86\Mosa.Runtime.x86.csproj" />
+    <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj">
-      <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
-      <Name>Mosa.ClassLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.DeviceDriver\Mosa.DeviceDriver.csproj">
-      <Project>{4dbd4c50-bec5-48d9-b471-9fb0a7f69999}</Project>
-      <Name>Mosa.DeviceDriver</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj">
-      <Project>{6509477a-7360-4937-a1b9-26fed0a75cda}</Project>
-      <Name>Mosa.DeviceSystem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.FileSystem\Mosa.FileSystem.csproj">
-      <Project>{d89972fd-a930-4d0c-b393-1895e78fafab}</Project>
-      <Name>Mosa.FileSystem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Kernel.x86\Mosa.Kernel.x86.csproj">
-      <Project>{FF099D48-3FA5-4ED6-BBA0-1497D734962A}</Project>
-      <Name>Mosa.Kernel.x86</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj">
-      <Project>{631bc4f3-e2d8-4319-814c-13904caa17ce}</Project>
-      <Name>Mosa.Korlib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Runtime.x86\Mosa.Runtime.x86.csproj">
-      <Project>{A47B7998-4EE8-4AF8-9373-C664FDEDDC65}</Project>
-      <Name>Mosa.Runtime.x86</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj">
-      <Project>{77961864-db33-4189-804f-d774022c96e2}</Project>
-      <Name>Mosa.Runtime</Name>
-    </ProjectReference>
+    <Compile Remove="Mosa.Application\ShowMem.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.6.1">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4.6.1 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

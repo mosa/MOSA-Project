@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
-    <ProjectGuid>{5B810793-78E2-413C-AA05-FCDD12B7DB04}</ProjectGuid>
     <AssemblyTitle>Mosa.Utility.DebugEngine</AssemblyTitle>
     <Company>MOSA Project</Company>
     <Product>Mosa.Utility.DebugEngine</Product>
@@ -10,8 +9,6 @@
     <LangVersion>8.0</LangVersion>
     <OutputPath>..\..\bin\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>

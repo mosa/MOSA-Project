@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <ProjectGuid>{F445DB8E-E25A-41EF-A158-C742F14E94E4}</ProjectGuid>
     <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyTitle>Mosa.Platform.x64</AssemblyTitle>
     <Company>MOSA Project</Company>

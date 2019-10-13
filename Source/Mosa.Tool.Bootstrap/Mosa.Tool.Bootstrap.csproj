@@ -2,6 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{8534DDDE-8B1A-4B5E-AECE-3D07834D9902}</ProjectGuid>
     <TargetFramework>net472</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
     <OutputType>WinExe</OutputType>
     <UseWindowsForms>true</UseWindowsForms>
     <AssemblyTitle>Mosa.Tool.Bootstrap</AssemblyTitle>
@@ -19,8 +20,6 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <OutputPath>..\..\bin\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>

@@ -2,7 +2,6 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <ProjectGuid>{FD933E22-721A-453B-BC1C-A60AE1D10829}</ProjectGuid>
     <AssemblyTitle>Mosa.Workspace.Experiment.Debug</AssemblyTitle>
     <Company>MOSA Project</Company>
     <Product>Mosa.Workspace.Experiment.Debug</Product>
@@ -11,8 +10,6 @@
     <LangVersion>8.0</LangVersion>
     <OutputPath>..\..\bin\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
