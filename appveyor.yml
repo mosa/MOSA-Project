@@ -168,7 +168,8 @@ for:
         - image: Ubuntu1804
 
     install:
-    - sh: docker pull mosaproject/mosa-docker-integration || docker pull mosaproject/mosa-docker-integration # with retry, if failed
+    - sh: apt-get upgrade -y
+    - sh: apt-get install -y git wget mono-devel qemu qemu-system qemu-system-x86
 
     before_build:
     - echo test
@@ -176,5 +177,4 @@ for:
     build: off
 
     build_script:
-    - sh: echo UID "$UID"
-    - sh: docker run --name MOSA -v $APPVEYOR_BUILD_FOLDER:/home/appveyor mosaproject/mosa-docker-integration /bin/bash -c "useradd -m -u $UID appveyor && su appveyor -- -c 'cd /home/appveyor && chmod +x mosactl && ./mosactl test && ./mosactl unittest'"
+    - sh: ./mosactl test
