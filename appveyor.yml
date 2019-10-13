@@ -171,10 +171,11 @@ for:
     - sh: sudo apt-get upgrade -y
     - sh: sudo apt-get install -y git wget mono-devel qemu qemu-system qemu-system-x86
 
-    build:
-      verbosity: minimal
-      parallel: true
-      project: Source/Mosa.sln
+    build: no
+
+    build_script:
+    - sh: mono $APPVEYOR_BUILD_FOLDER/Tools/nuget/nuget.exe restore -Verbosity quiet $APPVEYOR_BUILD_FOLDER/Source/Mosa.sln
+    - sh: msbuild $APPVEYOR_BUILD_FOLDER/Source/Mosa.sln
 
     test_script:
     - sh: sh ./mosactl test
