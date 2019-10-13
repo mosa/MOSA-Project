@@ -89,7 +89,7 @@ namespace System
 
 		[Intrinsic]
 		[NonVersionable]
-		public static unsafe explicit operator void* (IntPtr value)
+		public static unsafe explicit operator void*(IntPtr value)
 		{
 			return value._value;
 		}
@@ -151,6 +151,7 @@ namespace System
 		public unsafe static int Size
 		{
 			[NonVersionable]
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
 			get
 			{
 				return sizeof(void*);
