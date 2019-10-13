@@ -18,7 +18,7 @@
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.5.0" />
+    <PackageReference Include="CommandLineParser" Version="2.6.0" />
     <PackageReference Include="SharpDisasm" Version="1.1.11" />
   </ItemGroup>
   <ItemGroup>

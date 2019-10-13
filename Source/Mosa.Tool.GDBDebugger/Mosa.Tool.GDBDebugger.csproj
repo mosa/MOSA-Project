@@ -179,7 +179,7 @@
     <Content Include="bug.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.5.0" />
+    <PackageReference Include="CommandLineParser" Version="2.6.0" />
     <PackageReference Include="dnlib" Version="3.2.0" />
     <PackageReference Include="DockPanelSuite" Version="3.0.6" />
     <PackageReference Include="DockPanelSuite.ThemeVS2015" Version="3.0.6" />

@@ -31,11 +31,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private BasicBlock block;
 
-		/// <summary>
-		/// The counts
-		/// </summary>
-		private int[] counts;
-
 		#endregion Data Members
 
 		protected override void Setup()
