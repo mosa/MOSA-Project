@@ -1,0 +1,47 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>8.0</LangVersion>
+    <OutputPath>..\..\bin\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="..\Mosa.DeviceSystem\BaseDeviceConfiguration.cs">
+      <Link>DeviceSystem\BaseDeviceConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\Mosa.DeviceSystem\CHS.cs">
+      <Link>DeviceSystem\CHS.cs</Link>
+    </Compile>
+    <Compile Include="..\Mosa.DeviceSystem\DataBlock.cs">
+      <Link>DeviceSystem\DataBlock.cs</Link>
+    </Compile>
+    <Compile Include="..\Mosa.DeviceSystem\DeviceStatus.cs">
+      <Link>DeviceSystem\DeviceStatus.cs</Link>
+    </Compile>
+    <Compile Include="..\Mosa.DeviceSystem\DiskGeometry.cs">
+      <Link>DeviceSystem\DiskGeometry.cs</Link>
+    </Compile>
+    <Compile Include="..\Mosa.DeviceSystem\DiskPartitionConfiguration.cs">
+      <Link>DeviceSystem\DiskPartitionConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\Mosa.DeviceSystem\GenericPartition.cs">
+      <Link>DeviceSystem\GenericPartition.cs</Link>
+    </Compile>
+    <Compile Include="..\Mosa.DeviceSystem\IDiskDevice.cs">
+      <Link>DeviceSystem\IDiskDevice.cs</Link>
+    </Compile>
+    <Compile Include="..\Mosa.DeviceSystem\IPartitionDevice.cs">
+      <Link>DeviceSystem\IPartitionDevice.cs</Link>
+    </Compile>
+    <Compile Include="..\Mosa.DeviceSystem\MasterBootBlock.cs">
+      <Link>DeviceSystem\MasterBootBlock.cs</Link>
+    </Compile>
+    <Compile Include="..\Mosa.DeviceSystem\PartitionDeviceDriver.cs">
+      <Link>DeviceSystem\PartitionDeviceDriver.cs</Link>
+    </Compile>
+    <Compile Include="..\Mosa.DeviceSystem\PartitionType.cs">
+      <Link>DeviceSystem\PartitionType.cs</Link>
+    </Compile>
+    <Compile Include="..\Mosa.FileSystem\**\*.cs" />
+  </ItemGroup>
+</Project>

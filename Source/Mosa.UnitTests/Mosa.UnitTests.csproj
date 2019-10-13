@@ -1,86 +1,40 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{067AAB6B-447A-45BA-9E0D-DFEA886B4F69}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.UnitTests</RootNamespace>
-    <AssemblyName>Mosa.UnitTests</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
-    <TargetFrameworkProfile />
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>8.0</LangVersion>
+    <DebugType>full</DebugType>
+    <NoWarn>168,162,649</NoWarn>
+    <OutputPath>..\..\bin\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NoStdLib>false</NoStdLib>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <Prefer32Bit>false</Prefer32Bit>
-    <NoWarn>168,162,649</NoWarn>
-    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\bin\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <Prefer32Bit>false</Prefer32Bit>
-    <NoWarn>168,162,649</NoWarn>
-    <LangVersion>7.2</LangVersion>
-  </PropertyGroup>
-  <PropertyGroup>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="ArrayTest.cs" />
-    <Compile Include="ArrayLayoutTests.cs" />
-    <Compile Include="CallTests.cs">
+    <Compile Update="CallTests.cs">
       <DependentUpon>CallTests.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Include="CharTests.cs" />
-    <Compile Include="CompilerTests.cs" />
-    <Compile Include="BoxingTests.cs">
+    <Compile Update="BoxingTests.cs">
       <DependentUpon>BoxingTests.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="BooleanTests.cs" />
-    <Compile Include="ComparisonTests.cs">
+    <Compile Update="ComparisonTests.cs">
       <DependentUpon>ComparisonTests.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="CallOrderTests.cs" />
-    <Compile Include="ConvTests.cs">
+    <Compile Update="ConvTests.cs">
       <DependentUpon>ConvTests.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="CallVirtualTests.cs" />
     <None Include="BoxingTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>BoxingTests.cs</LastGenOutput>
@@ -113,38 +67,22 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>StructTests.cs</LastGenOutput>
     </None>
-    <Compile Include="EnumTests.cs">
+    <Compile Update="EnumTests.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>EnumTests.tt</DependentUpon>
     </Compile>
-    <Compile Include="QuickSort.cs" />
-    <Compile Include="GenericMethodTests.cs" />
-    <Compile Include="MosaUnitTestAttribute.cs" />
-    <Compile Include="NullCheckOptimizationTests.cs" />
-    <Compile Include="RemTests.cs" />
-    <Compile Include="LargeSwitchTest.cs" />
-    <Compile Include="LdargaTests.cs">
+    <Compile Update="LdargaTests.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>LdargaTests.tt</DependentUpon>
     </Compile>
-    <Compile Include="LinkedList.cs" />
-    <Compile Include="LinkedListNode.cs" />
-    <Compile Include="ListTests.cs" />
-    <Compile Include="LinkedListTests.cs" />
-    <Compile Include="NewObjectTests.cs" />
-    <Compile Include="OptimizationTests.cs" />
-    <Compile Include="RegisterAllocatorTests.cs" />
-    <Compile Include="SpecificTests.cs" />
-    <Compile Include="ForeachTests.cs">
+    <Compile Update="ForeachTests.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ForeachTests.tt</DependentUpon>
     </Compile>
-    <Compile Include="DelegateTests.cs" />
-    <Compile Include="ExceptionHandlingTests.cs" />
-    <Compile Include="GenericCallTests.cs">
+    <Compile Update="GenericCallTests.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>GenericCallTests.tt</DependentUpon>
@@ -153,50 +91,31 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>InitStructTests.cs</LastGenOutput>
     </None>
-    <Compile Include="InitStructTests.cs">
+    <Compile Update="InitStructTests.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>InitStructTests.tt</DependentUpon>
     </Compile>
-    <Compile Include="StructTests.cs">
+    <Compile Update="StructTests.cs">
       <DependentUpon>StructTests.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="IsInstTests.cs" />
-    <Compile Include="FibonacciTests.cs" />
-    <Compile Include="GenericInterfaceTests.cs" />
-    <Compile Include="StaticFieldTests.cs">
+    <Compile Update="StaticFieldTests.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>StaticFieldTests.tt</DependentUpon>
     </Compile>
-    <Compile Include="SwitchTests.cs">
+    <Compile Update="SwitchTests.cs">
       <DependentUpon>SwitchTests.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="LdlocaTests.cs">
+    <Compile Update="LdlocaTests.cs">
       <DependentUpon>LdlocaTests.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="ValueTypeTests.cs" />
-    <Compile Include="ReflectionTests.cs" />
-    <Compile Include="WhileTests.cs" />
-    <Compile Include="StringTests.cs" />
-    <Compile Include="SingleTests.cs" />
-    <Compile Include="DoubleTests.cs" />
-    <Compile Include="Int16Tests.cs" />
-    <Compile Include="Int32Tests.cs" />
-    <Compile Include="Int64Tests.cs" />
-    <Compile Include="Int8Tests.cs" />
-    <Compile Include="UInt16Tests.cs" />
-    <Compile Include="UInt32Tests.cs" />
-    <Compile Include="UInt64Tests.cs" />
-    <Compile Include="UInt8Tests.cs" />
-    <Compile Include="InterfaceTests.cs" />
-    <Compile Include="DerivedNewObjectTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ComparisonTests.tt">
@@ -216,18 +135,4 @@
       <LastGenOutput>LdlocaTests.cs</LastGenOutput>
     </None>
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-			 Other similar extension points exist, see Microsoft.Common.targets.
-	<Target Name="BeforeBuild">
-	</Target>
-	<Target Name="AfterBuild">
-	</Target>
-	-->
 </Project>

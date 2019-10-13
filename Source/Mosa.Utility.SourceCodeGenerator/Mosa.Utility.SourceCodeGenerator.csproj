@@ -1,103 +1,27 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A8765C3C-1194-4A3A-8579-745CA47C36D1}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.Utility.SourceCodeGenerator</RootNamespace>
-    <AssemblyName>Mosa.Utility.SourceCodeGenerator</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <ProjectGuid>{A8765C3C-1194-4A3A-8579-745CA47C36D1}</ProjectGuid>
+    <AssemblyTitle>Mosa.Utility.SourceCodeGenerator</AssemblyTitle>
+    <Company>MOSA Project</Company>
+    <Product>Mosa.Utility.SourceCodeGenerator</Product>
+    <Copyright>Copyright © 2019</Copyright>
+    <DebugType>full</DebugType>
+    <LangVersion>8.0</LangVersion>
+    <OutputPath>..\..\bin\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\bin\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <LangVersion>7.2</LangVersion>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Mosa.Utility.SourceCodeGenerator.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.Web.Extensions" />
+    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="BuildARMv8A32.cs" />
-    <Compile Include="BuildARMv8A32InstructionFiles.cs" />
-    <Compile Include="BuildARMv8A32Instructions.cs" />
-    <Compile Include="BuildESP32.cs" />
-    <Compile Include="BuildESP32InstructionFiles.cs" />
-    <Compile Include="BuildESP32Instructions.cs" />
-    <Compile Include="BuildTransformationFile.cs" />
-    <Compile Include="BuildTransformationListFile.cs" />
-    <Compile Include="BuildX64InstructionFiles.cs" />
-    <Compile Include="BuildX64.cs" />
-    <Compile Include="BuildTransformations.cs" />
-    <Compile Include="BuildX64Instructions.cs" />
-    <Compile Include="BuildCommonInstructionFiles.cs" />
-    <Compile Include="BuildX86InstructionFiles.cs" />
-    <Compile Include="BuildX86Instructions.cs" />
-    <Compile Include="BuildX86.cs" />
-    <Compile Include="BuildIRInstructionFiles.cs" />
-    <Compile Include="BuildIRInstruction.cs" />
-    <Compile Include="BuildIRInstructions.cs" />
-    <Compile Include="BuildBaseTemplate.cs" />
-    <Compile Include="DynamicJsonConverter.cs" />
-    <Compile Include="TransformExpressions\ResultParser.cs" />
-    <Compile Include="TransformExpressions\InstructionParser.cs" />
-    <Compile Include="TransformExpressions\Method.cs" />
-    <Compile Include="TransformExpressions\LabelPosition.cs" />
-    <Compile Include="TransformExpressions\FilterParser.cs" />
-    <Compile Include="TransformExpressions\Label.cs" />
-    <Compile Include="TransformExpressions\LabelSet.cs" />
-    <Compile Include="TransformExpressions\Operand.cs" />
-    <Compile Include="TransformExpressions\InstructionNode.cs" />
-    <Compile Include="TransformExpressions\Transformation.cs" />
-    <Compile Include="TransformExpressions\Token.cs" />
-    <Compile Include="TransformExpressions\Tokenizer.cs" />
-    <Compile Include="TransformExpressions\TokenType.cs" />
-    <Compile Include="Program.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
-      <Project>{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}</Project>
-      <Name>Mosa.Compiler.Common</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
