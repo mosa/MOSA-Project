@@ -40,7 +40,7 @@ for:
     - cmd: SET PATH=C:\Program Files (x86)\Inno Setup 6;%PATH%
 
     before_build:
-    - nuget restore -Verbosity quiet Source/Mosa.sln
+    - cmd: nuget restore -Verbosity quiet Source/Mosa.sln
 
     build:
       verbosity: minimal
@@ -82,7 +82,7 @@ for:
         tag: v$(APPVEYOR_BUILD_VERSION)-dev
         description: 'Development Version - v$(APPVEYOR_BUILD_VERSION)'
         auth_token:
-          secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
+          secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07
         artifact: installer
         draft: false
         prerelease: true
@@ -95,7 +95,7 @@ for:
         release: MOSA Project v$(APPVEYOR_BUILD_VERSION)
         description: 'Stable Version - v$(APPVEYOR_BUILD_VERSION)'
         auth_token:
-          secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07            
+          secure: HtzY0gh/s1gwDx89ZAqSdizGGNuQiyzXopLyFWhlpfC91/QvljGfNSS2L86hrl07
         artifact: installer
         draft: false
         prerelease: false
@@ -104,11 +104,11 @@ for:
           branch: stable
 
       - provider: NuGet
-        server:                  
+        server:
         api_key:
           secure: aTaYVizieVZLoxu3Cys6R6lAk3OvG5vtLp3ly4MBz6kwEr9I6HJfhFPNjeLpEa+Y
         skip_symbols: false
-        symbol_server:           
+        symbol_server:
         artifact: /.*\.nupkg/
         on:
           branch: stable
@@ -123,7 +123,7 @@ for:
     - sh: apt-get install -y git wget qemu qemu-system qemu-system-x86
 
     before_build:
-    - mono "$(APPVEYOR_BUILD_FOLDER)/Tools/nuget/nuget.exe" restore -Verbosity quiet "$(APPVEYOR_BUILD_FOLDER)/Source/Mosa.sln"
+    - sh: mono "$(APPVEYOR_BUILD_FOLDER)/Tools/nuget/nuget.exe" restore -Verbosity quiet "$(APPVEYOR_BUILD_FOLDER)/Source/Mosa.sln"
 
     build: off
 
@@ -131,5 +131,5 @@ for:
     - sh: msbuild "$(APPVEYOR_BUILD_FOLDER)/Source/Mosa.sln"
 
     test_script:
-    - sh: "$(APPVEYOR_BUILD_FOLDER)/bin/Mosa.Tool.Mosactl" test
-    - sh: "$(APPVEYOR_BUILD_FOLDER)/bin/Mosa.Tool.Mosactl" unittest
+    - sh: "$(APPVEYOR_BUILD_FOLDER)/bin/Mosa.Tool.Mosactl" "test"
+    - sh: "$(APPVEYOR_BUILD_FOLDER)/bin/Mosa.Tool.Mosactl" "unittest"
