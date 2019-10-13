@@ -5,28 +5,29 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
+using System.Text.Json;
 
 namespace Mosa.Utility.SourceCodeGenerator
 {
 	public class DynamicJsonObject : DynamicObject
 	{
-		private readonly IDictionary<string, object> _dictionary;
+		private readonly JsonElement _element;
 
-		public DynamicJsonObject(IDictionary<string, object> dictionary)
+		public DynamicJsonObject(JsonElement element)
 		{
-			_dictionary = dictionary ?? throw new ArgumentNullException(nameof(dictionary));
+			_element = element;
 		}
 
 		public override bool TryGetMember(GetMemberBinder binder, out object result)
 		{
-			if (!_dictionary.TryGetValue(binder.Name, out result))
+			if (!_element.TryGetProperty(binder.Name, out JsonElement value))
 			{
 				// return null to avoid exception.  caller can check for null this way...
 				result = null;
 				return true;
 			}
 
-			result = WrapResultObject(result);
+			result = WrapResultObject(value);
 			return true;
 		}
 
@@ -34,34 +35,49 @@ namespace Mosa.Utility.SourceCodeGenerator
 		{
 			if (indexes.Length == 1 && indexes[0] != null)
 			{
-				if (!_dictionary.TryGetValue(indexes[0].ToString(), out result))
+				if (!_element.TryGetProperty(indexes[0].ToString(), out JsonElement value))
 				{
 					// return null to avoid exception.  caller can check for null this way...
 					result = null;
 					return true;
 				}
 
-				result = WrapResultObject(result);
+				result = WrapResultObject(value);
 				return true;
 			}
 
 			return base.TryGetIndex(binder, indexes, out result);
 		}
 
-		private static object WrapResultObject(object result)
+		private static object WrapResultObject(JsonElement value)
 		{
-			if (result is IDictionary<string, object> dictionary)
-				return new DynamicJsonObject(dictionary);
-
-			var arrayList = result as ArrayList;
-			if (arrayList?.Count > 0)
+			switch (value.ValueKind)
 			{
-				return arrayList[0] is IDictionary<string, object>
-					? new List<object>(arrayList.Cast<IDictionary<string, object>>().Select(x => new DynamicJsonObject(x)))
-					: new List<object>(arrayList.Cast<object>());
-			}
+				case JsonValueKind.Array:
+					return value.EnumerateArray()
+						.Select(x => WrapResultObject(x))
+						.ToList();
 
-			return result;
+				case JsonValueKind.Object:
+					return new DynamicJsonObject(value);
+
+				case JsonValueKind.False:
+				case JsonValueKind.True:
+					return value.GetBoolean();
+
+				case JsonValueKind.String:
+					return value.GetString();
+
+				case JsonValueKind.Number:
+					return value.GetInt64();
+
+				case JsonValueKind.Null:
+				case JsonValueKind.Undefined:
+					return null;
+
+				default:
+					return value;
+			}
 		}
 	}
 }

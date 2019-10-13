@@ -5,7 +5,6 @@ platform: Any CPU
 image:
 - Visual Studio 2019
 - Ubuntu1804
-- Visual Studio 2017
 
 shallow_clone: true
 
@@ -19,14 +18,14 @@ assembly_info:
   assembly_file_version: '{version}'
   assembly_informational_version: '{version}'
 
-#dotnet_csproj:
-#  patch: true
-#  file: 'Source\*\*.csproj'
-#  version: '{version}'
-#  package_version: '{version}'
-#  assembly_version: '{version}'
-#  file_version: '{version}'
-#  informational_version: '{version}'
+dotnet_csproj:
+  patch: true
+  file: 'Source\*\*.csproj'
+  version: '{version}'
+  package_version: '{version}'
+  assembly_version: '{version}'
+  file_version: '{version}'
+  informational_version: '{version}'
 
 for:
 
@@ -114,53 +113,6 @@ for:
         on:
           branch: stable
 
-# Windows Build - Visual Studio 2017:
-  -
-    matrix:
-      only:
-        - image: Visual Studio 2017
-
-    install:
-    - cmd: choco install InnoSetup
-    - cmd: SET PATH=C:\Program Files (x86)\Inno Setup 6;%PATH%
-
-    before_build:
-    - nuget restore -Verbosity quiet Source/Mosa.sln
-
-    build:
-      verbosity: minimal
-      parallel: true
-      project: Source/Mosa.sln
-      publish_nuget: true
-
-    after_build:
-    - cmd: ISCC.exe Source/Inno-Setup-Script/Mosa-Installer.iss
-#   - ps: ./mosactl.ps1 unittest
-#   - ps: ./mosactl.ps1 test
-
-    build_script:
-
-    test_script:
-#    - cmd: ./mosactl.ps1 test
-
-    after_test:
-
-    nuget:
-      project_feed: true
-
-    test: off
-
-    assembly_info:
-      patch: true
-      file: AssemblyInfo.*
-      assembly_version: "{version}"
-      assembly_file_version: "{version}"
-      assembly_informational_version: "{version}"
-
-    artifacts:
-    - path: bin\MOSA-Installer-*.exe
-    - path: Mosa.*.nupkg
-
 # Linux Build:
   -
     matrix:
@@ -168,13 +120,16 @@ for:
         - image: Ubuntu1804
 
     install:
-    - sh: docker pull mosaproject/mosa-docker-integration || docker pull mosaproject/mosa-docker-integration # with retry, if failed
+    - sh: apt-get install -y git wget qemu qemu-system qemu-system-x86
 
     before_build:
-    - echo test
+    - mono "$(APPVEYOR_BUILD_FOLDER)/Tools/nuget/nuget.exe" restore -Verbosity quiet "$(APPVEYOR_BUILD_FOLDER)/Source/Mosa.sln"
 
     build: off
 
     build_script:
-    - sh: echo UID "$UID"
-    - sh: docker run --name MOSA -v $APPVEYOR_BUILD_FOLDER:/home/appveyor mosaproject/mosa-docker-integration /bin/bash -c "useradd -m -u $UID appveyor && su appveyor -- -c 'cd /home/appveyor && chmod +x mosactl && ./mosactl test && ./mosactl unittest'"
+    - sh: msbuild "$(APPVEYOR_BUILD_FOLDER)/Source/Mosa.sln"
+
+    test_script:
+    - sh: "$(APPVEYOR_BUILD_FOLDER)/bin/Mosa.Tool.Mosactl" test
+    - sh: "$(APPVEYOR_BUILD_FOLDER)/bin/Mosa.Tool.Mosactl" unittest

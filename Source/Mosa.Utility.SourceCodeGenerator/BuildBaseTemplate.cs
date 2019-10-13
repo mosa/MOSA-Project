@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.Json;
@@ -81,7 +80,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			using var jsonTextReader = File.OpenText(JsonFile);
 
 			var jsonData = jsonTextReader.ReadToEnd();
-			var jsonDeserialized = JsonSerializer.Deserialize<Dictionary<string, object>>(jsonData);
+			var jsonDeserialized = JsonSerializer.Deserialize<JsonElement>(jsonData);
 
 			Entries = new DynamicJsonObject(jsonDeserialized);
 		}

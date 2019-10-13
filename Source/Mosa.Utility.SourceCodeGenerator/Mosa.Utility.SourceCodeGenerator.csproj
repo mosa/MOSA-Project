@@ -22,9 +22,6 @@
     <StartupObject>Mosa.Utility.SourceCodeGenerator.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
   </ItemGroup>
 </Project>

@@ -241,6 +241,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.Experimental.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Utility.FileSystem", "Mosa.Utility.FileSystem\Mosa.Utility.FileSystem.csproj", "{23C02A05-4F5A-467D-B48E-41BD4DD82714}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Tool.Mosactl", "Mosa.Tool.Mosactl\Mosa.Tool.Mosactl.csproj", "{BB0BFCBE-EC7B-4EDF-868C-9289B729C95D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1317,6 +1319,24 @@ Global
 		{23C02A05-4F5A-467D-B48E-41BD4DD82714}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{23C02A05-4F5A-467D-B48E-41BD4DD82714}.Release|x86.ActiveCfg = Release|Any CPU
 		{23C02A05-4F5A-467D-B48E-41BD4DD82714}.Release|x86.Build.0 = Release|Any CPU
+		{BB0BFCBE-EC7B-4EDF-868C-9289B729C95D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB0BFCBE-EC7B-4EDF-868C-9289B729C95D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB0BFCBE-EC7B-4EDF-868C-9289B729C95D}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BB0BFCBE-EC7B-4EDF-868C-9289B729C95D}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BB0BFCBE-EC7B-4EDF-868C-9289B729C95D}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BB0BFCBE-EC7B-4EDF-868C-9289B729C95D}.Debug|x86.Build.0 = Debug|Any CPU
+		{BB0BFCBE-EC7B-4EDF-868C-9289B729C95D}.Description|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB0BFCBE-EC7B-4EDF-868C-9289B729C95D}.Description|Any CPU.Build.0 = Debug|Any CPU
+		{BB0BFCBE-EC7B-4EDF-868C-9289B729C95D}.Description|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BB0BFCBE-EC7B-4EDF-868C-9289B729C95D}.Description|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BB0BFCBE-EC7B-4EDF-868C-9289B729C95D}.Description|x86.ActiveCfg = Debug|Any CPU
+		{BB0BFCBE-EC7B-4EDF-868C-9289B729C95D}.Description|x86.Build.0 = Debug|Any CPU
+		{BB0BFCBE-EC7B-4EDF-868C-9289B729C95D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB0BFCBE-EC7B-4EDF-868C-9289B729C95D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB0BFCBE-EC7B-4EDF-868C-9289B729C95D}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BB0BFCBE-EC7B-4EDF-868C-9289B729C95D}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BB0BFCBE-EC7B-4EDF-868C-9289B729C95D}.Release|x86.ActiveCfg = Release|Any CPU
+		{BB0BFCBE-EC7B-4EDF-868C-9289B729C95D}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1389,6 +1409,7 @@ Global
 		{F84EFA2E-4B38-410F-A7DE-385DB71BB37F} = {A406F567-5C89-45AB-88CE-E20616B28FFD}
 		{A5FE7166-31EA-44D1-A065-3AA793696F71} = {DDBC7F79-A2A1-4D92-9AE7-ADDC838F1E5E}
 		{23C02A05-4F5A-467D-B48E-41BD4DD82714} = {90065B0F-1BFE-40D8-AED5-11096B2535B0}
+		{BB0BFCBE-EC7B-4EDF-868C-9289B729C95D} = {D032B24A-CE3A-4881-BACE-CC4FE0AFD69D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C22A5C94-6B05-4B1B-845A-A2EA7615E093}
