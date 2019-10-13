@@ -133,7 +133,7 @@ namespace Mosa.Utility.UnitTests
 			{
 				ProcessThread = new Thread(ProcessQueueLaunch)
 				{
-					Name = "ProcesQueue"
+					Name = "ProcessQueue"
 				};
 
 				ProcessThread.Start();
@@ -540,7 +540,6 @@ namespace Mosa.Utility.UnitTests
 
 			if (ProcessThread?.IsAlive == true)
 			{
-				ProcessThread.Abort();
 				ProcessThread.Join();
 			}
 		}
