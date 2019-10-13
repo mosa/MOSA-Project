@@ -120,7 +120,8 @@ for:
         - image: Ubuntu1804
 
     install:
-    - sh: apt-get install -y git wget qemu qemu-system qemu-system-x86
+    - sh: sudo apt-get upgrade -y
+    - sh: sudo apt-get install -y git wget qemu qemu-system qemu-system-x86
 
     before_build:
     - sh: mono $(APPVEYOR_BUILD_FOLDER)/Tools/nuget/nuget.exe restore -Verbosity quiet $(APPVEYOR_BUILD_FOLDER)/Source/Mosa.sln
