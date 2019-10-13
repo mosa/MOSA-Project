@@ -1,90 +1,32 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{FD933E22-721A-453B-BC1C-A60AE1D10829}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.Workspace.Experiment.Debug</RootNamespace>
-    <AssemblyName>Mosa.Workspace.Experiment.Debug</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <ProjectGuid>{FD933E22-721A-453B-BC1C-A60AE1D10829}</ProjectGuid>
+    <AssemblyTitle>Mosa.Workspace.Experiment.Debug</AssemblyTitle>
+    <Company>MOSA Project</Company>
+    <Product>Mosa.Workspace.Experiment.Debug</Product>
+    <Copyright>Copyright © 2019</Copyright>
+    <DebugType>full</DebugType>
+    <LangVersion>8.0</LangVersion>
+    <OutputPath>..\..\bin\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <NoWarn>162</NoWarn>
-    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
-    <DebugType>full</DebugType>
-    <PlatformTarget>AnyCPU</PlatformTarget>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\bin\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <NoWarn>162</NoWarn>
-    <LangVersion>7.2</LangVersion>
+    <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Mosa.Workspace.Experiment.Debug.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
+    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
+    <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
+    <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
+    <ProjectReference Include="..\Mosa.Platform.ARMv8A32\Mosa.Platform.ARMv8A32.csproj" />
+    <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj" />
+    <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Program.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
-      <Project>{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}</Project>
-      <Name>Mosa.Compiler.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj">
-      <Project>{75a12a8a-8c8f-4d1e-801b-689d8f781bf4}</Project>
-      <Name>Mosa.Compiler.Framework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj">
-      <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520559}</Project>
-      <Name>Mosa.Compiler.MosaTypeSystem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Platform.ARMv8A32\Mosa.Platform.ARMv8A32.csproj">
-      <Project>{1d3f8c25-77de-4e04-81df-5e7ef1abe914}</Project>
-      <Name>Mosa.Platform.ARMv8A32</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj">
-      <Project>{f445db8e-e25a-41ef-a158-c742f14e94e4}</Project>
-      <Name>Mosa.Platform.x64</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj">
-      <Project>{DE30CBE9-50F3-4A3E-BCC9-A8A36348530E}</Project>
-      <Name>Mosa.Platform.x86</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

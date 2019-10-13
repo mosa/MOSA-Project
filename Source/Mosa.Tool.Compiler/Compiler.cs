@@ -88,7 +88,7 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -a x86 --mboot v1 --x
 
 				compiler = new MosaCompiler(options.CompilerOptions, GetCompilerExtensions());
 
-				Debug.Listeners.Add(new TextWriterTraceListener(Console.Out));
+				Trace.Listeners.Add(new TextWriterTraceListener(Console.Out));
 				Debug.AutoFlush = true;
 
 				// Process boot format:
