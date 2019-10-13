@@ -171,10 +171,10 @@ for:
     - sh: sudo apt-get upgrade -y
     - sh: sudo apt-get install -y git wget mono-devel qemu qemu-system qemu-system-x86
 
-    before_build:
-    - echo test
+    build:
+      verbosity: minimal
+      parallel: true
+      project: Source/Mosa.sln
 
-    build: off
-
-    build_script:
+    test_script:
     - sh: sh ./mosactl test
