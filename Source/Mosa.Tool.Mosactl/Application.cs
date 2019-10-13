@@ -13,7 +13,7 @@ namespace Mosa.Tool.Mosactl
 {
 	public class MosaCtl
 	{
-		private static bool IsWin = Environment.OSVersion.Platform != PlatformID.Unix;
+		private static bool IsWin = Environment.OSVersion.Platform == PlatformID.Win32NT;
 		private static bool IsUnix = Environment.OSVersion.Platform == PlatformID.Unix;
 
 		private string BinDir;
@@ -294,7 +294,7 @@ namespace Mosa.Tool.Mosactl
 		public bool TaskTestAll(List<string> args)
 		{
 			foreach (var osName in OsNames)
-				if (!CallProcess(BinDir, GetEnv("${MOSA_BIN}/Mosa.Tool.Mosactl" + (IsUnix ? "" : ".exe")), "test", osName))
+				if (!CallProcess(BinDir, GetEnv("${MOSA_BIN}/Mosa.Tool.Mosactl${MOSA_TOOL_EXT}"), "test", osName))
 					return false;
 
 			return true;
@@ -484,8 +484,11 @@ namespace Mosa.Tool.Mosactl
 					return false;
 				if (!CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), "Mosa.Tool.Compiler/Mosa.Tool.Compiler.csproj"))
 					return false;
-				if (!CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), "Mosa.Tool.GDBDebugger/Mosa.Tool.GDBDebugger.csproj"))
-					return false;
+				if (!IsWin)
+				{
+					if (!CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), "Mosa.Tool.GDBDebugger/Mosa.Tool.GDBDebugger.csproj"))
+						return false;
+				}
 			}
 
 			return true;
