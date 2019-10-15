@@ -2,7 +2,7 @@
   <PropertyGroup>
     <ProjectGuid>{49D8DA65-FC99-4C63-ADC6-1B07260F674F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>publish\</PublishUrl>
