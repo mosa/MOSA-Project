@@ -43,6 +43,6 @@
       <Link>DeviceSystem\PartitionType.cs</Link>
     </Compile>
     <Compile Include="..\Mosa.FileSystem\**\*.cs" />
-    <Compile Remove="..\Mosa.FileSystem\obj\Debug\Mosa.FileSystem.AssemblyInfo.cs" />
+    <Compile Remove="..\Mosa.FileSystem\obj\**\*" />
   </ItemGroup>
 </Project>
