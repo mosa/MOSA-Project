@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworkIdentifier>.NETFramework</TargetFrameworkIdentifier>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFramework>net472</TargetFramework>
     <AssemblyName>mscorlib</AssemblyName>
     <RootNamespace>System</RootNamespace>
     <DebugType>full</DebugType>
@@ -9,11 +8,12 @@
     <OutputPath>..\..\bin\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <AddAdditionalExplicitAssemblyReferences>false</AddAdditionalExplicitAssemblyReferences>
     <AdditionalExplicitAssemblyReferences />
-    <NoWarn>MSB3245</NoWarn>
     <SkipCommonResourcesIncludes>true</SkipCommonResourcesIncludes>
+    <NoWarn>$(NoWarn),0419,0649,1573,1591,3021,CA2002</NoWarn>
+    <RuntimeMetadataVersion>v4.0.30319</RuntimeMetadataVersion>
   </PropertyGroup>
-  <Import Project="GenerateCompilerResponseFile.targets" />
 </Project>
