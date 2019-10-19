@@ -1,23 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <ProjectGuid>{8534DDDE-8B1A-4B5E-AECE-3D07834D9902}</ProjectGuid>
     <TargetFramework>net472</TargetFramework>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
     <OutputType>WinExe</OutputType>
     <UseWindowsForms>true</UseWindowsForms>
-    <AssemblyTitle>Mosa.Tool.Bootstrap</AssemblyTitle>
+    <Title>Mosa.Tool.Bootstrap</Title>
     <Company>MOSA Project</Company>
-    <Product>Mosa.Tool.Bootstrap</Product>
     <Copyright>Copyright © 2019</Copyright>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <RemoveIntegerChecks>False</RemoveIntegerChecks>
-    <BaseAddress>285212672</BaseAddress>
-    <ConfigurationOverrideFile />
-    <FileAlignment>4096</FileAlignment>
     <LangVersion>8.0</LangVersion>
     <DebugType>full</DebugType>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <OutputPath>..\..\bin\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>

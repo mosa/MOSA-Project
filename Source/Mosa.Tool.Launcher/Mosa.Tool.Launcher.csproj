@@ -1,29 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.WindowsDesktop">
   <PropertyGroup>
-    <OutputType>WinExe</OutputType>
     <TargetFramework>net472</TargetFramework>
-    <ProjectGuid>{B69C2F31-5161-47BB-9FD3-2F2F2BCCF659}</ProjectGuid>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <OutputType>WinExe</OutputType>
     <UseWindowsForms>true</UseWindowsForms>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
-    <UseMSBuildEngine>false</UseMSBuildEngine>
-    <PublishUrl>publish\</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Disk</InstallFrom>
-    <UpdateEnabled>false</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
-    <AssemblyTitle>Mosa.Tool.Launcher</AssemblyTitle>
+    <Title>Mosa.Tool.Launcher</Title>
     <Company>MOSA Project</Company>
-    <Product>Mosa.Tool.Launcher</Product>
     <Copyright>Copyright © 2019</Copyright>
     <LangVersion>8.0</LangVersion>
     <DebugType>full</DebugType>
@@ -32,7 +13,7 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
-    <NoWarn>1591</NoWarn>
+    <WarningLevel>2</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Mosa.Tool.Launcher.Program</StartupObject>

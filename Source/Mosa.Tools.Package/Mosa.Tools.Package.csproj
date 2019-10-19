@@ -2,21 +2,21 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <AssemblyTitle>Mosa.Tools.Package</AssemblyTitle>
+    <Title>Mosa.Tools.Package</Title>
     <Company>MOSA Project</Company>
-    <Product>Mosa.Tools.Package</Product>
     <Description>MOSA Tools Package</Description>
     <Copyright>Copyright © 2019</Copyright>
     <Version>1.0.0.0</Version>
-    <LangVersion>8.0</LangVersion>
-    <DebugType>full</DebugType>
     <Authors>MOSA Project</Authors>
-    <PackageIconUrl>https://raw.githubusercontent.com/mosa/MOSA-Project/master/Source/Art/Mosa%20Icon.png</PackageIconUrl>
+    <PackageIcon>images\Mosa Icon.png</PackageIcon>
     <PackageId>Mosa.Tools.Package</PackageId>
     <PackageProjectUrl>http://www.mosa-project.org</PackageProjectUrl>
     <PackageTags>MOSA Compiler</PackageTags>
+    <LangVersion>8.0</LangVersion>
+    <DebugType>full</DebugType>
     <OutputPath>..\..\bin\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <NuspecFile>Mosa.Tools.Package.nuspec</NuspecFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
@@ -35,5 +35,8 @@
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
     <ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj" />
     <ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\Art\Mosa Icon.png" Pack="true" PackagePath="images\"/>
   </ItemGroup>
 </Project>

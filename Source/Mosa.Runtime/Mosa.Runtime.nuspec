@@ -1,26 +1,26 @@
 ﻿<?xml version="1.0"?>
 <package>
 	<metadata>
-		<id>Mosa.Korlib</id>
+		<id>Mosa.Runtime</id>
 		<version>$version$</version>
-		<title>Mosa.Korlib Library</title>
+		<title>Mosa.Runtime Library</title>
 		<authors>MOSA Project</authors>
 		<owners>MOSA Project</owners>
 		<license type="expression">BSD-3-Clause-Clear</license>
 		<projectUrl>http://www.mosa-project.org</projectUrl>
 		<icon>images\Mosa Icon.png</icon>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
-		<summary>MOSA Corlib</summary>
-		<description>MOSA implementation of corlib</description>
+		<summary>MOSA Runtime Library</summary>
+		<description>MOSA Runtime Library</description>
 		<releaseNotes></releaseNotes>
 		<copyright>Copyright © 2019</copyright>
-		<tags>MOSA Compiler corlib</tags>
+		<tags>MOSA Compiler</tags>
+		<dependencies>
+			<dependency id="Mosa.Korlib" version="$version$" />
+		</dependencies>
 	</metadata>
 	<files>
 		<file src="..\Art\Mosa Icon.png" target="images\" />
-		<file src="..\..\bin\mscorlib.dll" target="lib\net472" />
-		<file src="..\..\bin\Mosa.Plug.Korlib.dll" target="lib\net472" />
-		<file src="..\..\bin\Mosa.Plug.Korlib.x86.dll" target="lib\net472" />
-		<file src="..\..\bin\Mosa.Plug.Korlib.x64.dll" target="lib\net472" />
+		<file src="..\..\bin\Mosa.Runtime.dll" target="lib\net472" />
 	</files>
 </package>

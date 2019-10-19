@@ -1,12 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <StartupObject>Mosa.Tool.CreateBootImage.Program</StartupObject>
-    <AssemblyTitle>Mosa.Tool.CreateBootImage</AssemblyTitle>
+    <OutputType>Exe</OutputType>
+    <Title>Mosa.Tool.CreateBootImage</Title>
     <Company>MOSA Project</Company>
-    <Product>Mosa.Tool.CreateBootImage</Product>
-    <Copyright>Copyright ©  2019</Copyright>
+    <Copyright>Copyright © 2019</Copyright>
     <LangVersion>8.0</LangVersion>
     <DebugType>full</DebugType>
     <OutputPath>..\..\bin\</OutputPath>
@@ -14,6 +12,10 @@
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
+    <WarningLevel>2</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Mosa.Tool.CreateBootImage.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
