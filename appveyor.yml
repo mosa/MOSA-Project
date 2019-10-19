@@ -49,12 +49,12 @@ for:
       publish_nuget: false
 
     after_build:
-    - cmd: dotnet pack Source/Mosa.Korlib/Mosa.Korlib.nuspec
-    - cmd: dotnet pack Source/Mosa.Runtime/Mosa.Runtime.nuspec
-    - cmd: dotnet pack Source/Mosa.Kernel.x86/Mosa.Kernel.x86.nuspec
-    - cmd: dotnet pack Source/Mosa.Runtime.x86/Mosa.Runtime.x86.nuspec
-    - cmd: dotnet pack Source/Mosa.ClassLib/Mosa.ClassLib.nuspec
-    - cmd: dotnet pack Source/Mosa.Tools.Package/Mosa.Tools.Package.nuspec
+    - cmd: dotnet pack Source/Mosa.Korlib/Mosa.Korlib.csproj
+    - cmd: dotnet pack Source/Mosa.Runtime/Mosa.Runtime.csproj
+    - cmd: dotnet pack Source/Mosa.Kernel.x86/Mosa.Kernel.x86.csproj
+    - cmd: dotnet pack Source/Mosa.Runtime.x86/Mosa.Runtime.x86.csproj
+    - cmd: dotnet pack Source/Mosa.ClassLib/Mosa.ClassLib.csproj
+    - cmd: dotnet pack Source/Mosa.Tools.Package/Mosa.Tools.Package.csproj
     - cmd: ISCC.exe Source/Inno-Setup-Script/Mosa-Installer.iss
 #   - ps: ./mosactl.ps1 unittest
 #   - ps: ./mosactl.ps1 test
