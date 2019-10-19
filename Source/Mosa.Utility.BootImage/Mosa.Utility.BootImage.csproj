@@ -9,10 +9,8 @@
     <DebugType>full</DebugType>
     <OutputPath>..\..\bin\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>True</DebugSymbols>
     <NoWarn>1591</NoWarn>
+    <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />

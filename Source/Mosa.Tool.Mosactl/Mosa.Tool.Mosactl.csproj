@@ -9,10 +9,8 @@
     <DebugType>full</DebugType>
     <OutputPath>..\..\bin\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>True</DebugSymbols>
     <WarningLevel>2</WarningLevel>
+    <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Mosa.Tool.Mosactl.Program</StartupObject>

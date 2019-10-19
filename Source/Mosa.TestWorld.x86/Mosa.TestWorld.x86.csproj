@@ -1,9 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
-    <AssemblyName>Mosa.TestWorld.x86</AssemblyName>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Mosa.TestWorld.x86</RootNamespace>
     <StartupObject>Mosa.TestWorld.x86.Boot</StartupObject>
     <DebugType>full</DebugType>
     <LangVersion>8.0</LangVersion>

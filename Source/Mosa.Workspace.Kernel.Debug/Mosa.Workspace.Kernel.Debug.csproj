@@ -11,10 +11,8 @@
     <OutputPath>..\..\bin\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>True</DebugSymbols>
     <NoWarn>1591</NoWarn>
+    <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Mosa.Workspace.Kernel.Program</StartupObject>

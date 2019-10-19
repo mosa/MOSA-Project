@@ -17,10 +17,8 @@
     <OutputPath>..\..\bin\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <NuspecFile>Mosa.Tools.Package.nuspec</NuspecFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>True</DebugSymbols>
     <NoWarn>1591</NoWarn>
+    <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="System.ComponentModel.Composition" Version="4.6.0" />
@@ -37,6 +35,6 @@
     <ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Art\Mosa Icon.png" Pack="true" PackagePath="images\"/>
+    <None Include="..\Art\Mosa Icon.png" Pack="true" PackagePath="images\" />
   </ItemGroup>
 </Project>

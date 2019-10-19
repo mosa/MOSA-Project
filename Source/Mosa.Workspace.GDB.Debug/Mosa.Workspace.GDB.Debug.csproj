@@ -10,10 +10,8 @@
     <LangVersion>8.0</LangVersion>
     <OutputPath>..\..\bin\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>True</DebugSymbols>
     <NoWarn>1591</NoWarn>
+    <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Mosa.Workspace.UnitTest.Debug.Program</StartupObject>
