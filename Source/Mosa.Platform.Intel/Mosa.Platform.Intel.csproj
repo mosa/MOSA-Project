@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <ProjectGuid>{17CE4F09-7CBF-49E9-84A7-178DB2CBD7C9}</ProjectGuid>
     <TargetFramework>netstandard2.0</TargetFramework>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <LangVersion>8.0</LangVersion>

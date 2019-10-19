@@ -14,11 +14,10 @@
     <Icon>__TemplateIcon.ico</Icon>
   </TemplateData>
   <TemplateContent>
-    <Project TargetFileName="Mosa.Starter.x86.csproj" File="Mosa.Starter.x86.csproj" ReplaceParameters="true">
+    <Project ReplaceParameters="true" TargetFileName="$safeprojectname$.csproj" File="Mosa.Starter.x86.csproj">
       <ProjectItem ReplaceParameters="true" TargetFileName="app.config">app.config</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Boot.cs">Boot.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
-	  <ProjectItem ReplaceParameters="true" TargetFileName="packages.config">packages.config</ProjectItem>
-	</Project>
+    </Project>
   </TemplateContent>
 </VSTemplate>

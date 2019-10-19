@@ -2,7 +2,7 @@
 
 using Mosa.Kernel.x86;
 
-namespace Mosa.Starter.x86
+namespace $safeprojectname$
 {
     public static class Boot
     {
