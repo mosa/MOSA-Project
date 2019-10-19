@@ -2,19 +2,19 @@
 
 using Mosa.Kernel.x86;
 
-namespace Mosa.Starter.x86
+namespace $safeprojectname$
 {
-	public static class Program
-	{
-		public static void Setup()
-		{
-			Screen.Write("Hello World!");
-		}
+    public static class Program
+    {
+        public static void Setup()
+        {
+            Screen.Write("Hello World!");
+        }
 
-		public static void Loop()
-		{ }
+        public static void Loop()
+        { }
 
-		public static void OnInterrupt()
-		{ }
-	}
+        public static void OnInterrupt()
+        { }
+    }
 }
