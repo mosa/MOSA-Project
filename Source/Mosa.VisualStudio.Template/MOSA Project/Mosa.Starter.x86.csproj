@@ -1,109 +1,41 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<ProjectType>Local</ProjectType>
-		<ProductVersion>9.0.21022</ProductVersion>
-		<SchemaVersion>2.0</SchemaVersion>
-		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-		<AssemblyKeyContainerName>
-		</AssemblyKeyContainerName>
-		<AssemblyName>Mosa.Starter.x86</AssemblyName>
-		<DefaultClientScript>JScript</DefaultClientScript>
-		<DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
-		<DefaultTargetSchema>IE50</DefaultTargetSchema>
-		<DelaySign>false</DelaySign>
-		<TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+		<TargetFramework>net472</TargetFramework>
 		<OutputType>Exe</OutputType>
-		<AppDesignerFolder>
-		</AppDesignerFolder>
-		<RootNamespace>Mosa.Starter.x86</RootNamespace>
-		<StartupObject>Mosa.Starter.x86.Boot</StartupObject>
-		<FileUpgradeFlags>
-		</FileUpgradeFlags>
-		<OldToolsVersion>3.5</OldToolsVersion>
-		<UpgradeBackupLocation />
-		<TargetFrameworkProfile />
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-		<BaseAddress>285212672</BaseAddress>
-		<ConfigurationOverrideFile>
-		</ConfigurationOverrideFile>
-		<DefineConstants>DEBUG;TRACE</DefineConstants>
-		<DocumentationFile>
-		</DocumentationFile>
-		<DebugSymbols>true</DebugSymbols>
-		<FileAlignment>4096</FileAlignment>
-		<Optimize>false</Optimize>
-		<OutputPath>bin\</OutputPath>
-		<RegisterForComInterop>False</RegisterForComInterop>
-		<RemoveIntegerChecks>False</RemoveIntegerChecks>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-		<WarningLevel>4</WarningLevel>
+		<StartupObject>$safeprojectname$.Boot</StartupObject>
 		<DebugType>full</DebugType>
-		<Prefer32Bit>false</Prefer32Bit>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<DebugSymbols>True</DebugSymbols>
-		<DebugType>full</DebugType>
-		<AllowUnsafeBlocks>false</AllowUnsafeBlocks>
-		<BaseAddress>285212672</BaseAddress>
-		<ConfigurationOverrideFile>
-		</ConfigurationOverrideFile>
-		<DefineConstants>TRACE</DefineConstants>
-		<DocumentationFile>
-		</DocumentationFile>
-		<FileAlignment>4096</FileAlignment>
-		<Optimize>true</Optimize>
+		<LangVersion>8.0</LangVersion>
 		<OutputPath>bin\</OutputPath>
-		<RegisterForComInterop>False</RegisterForComInterop>
-		<RemoveIntegerChecks>False</RemoveIntegerChecks>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-		<WarningLevel>2</WarningLevel>
-		<Prefer32Bit>false</Prefer32Bit>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
+		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 	<ItemGroup>
-		<Compile Include="Program.cs" />
-		<Compile Include="Boot.cs" />
-	</ItemGroup>
-	<ItemGroup>
-		<None Include="app.config" />
-		<None Include="packages.config" />
+		<PackageReference Include="Mosa.Korlib" Version="*" />
+		<PackageReference Include="Mosa.Kernel.x86" Version="*" />
+		<PackageReference Include="Mosa.Runtime" Version="*" />
+		<PackageReference Include="Mosa.Runtime.x86" Version="*" />
+		<PackageReference Include="Mosa.Tools.Package" Version="*" />
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="Mosa.ClassLib, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-			<HintPath>..\packages\Mosa.ClassLib.1.0.0.1\lib\net472\Mosa.ClassLib.dll</HintPath>
 			<Private>True</Private>
 		</Reference>
 		<Reference Include="Mosa.Kernel.x86, Version=0.0.0.0, Culture=neutral">
-			<HintPath>..\packages\Mosa.Kernel.x86.1.0.0.1\lib\net472\Mosa.Kernel.x86.dll</HintPath>
 			<Private>True</Private>
 		</Reference>
 		<Reference Include="Mosa.Runtime, Version=0.0.0.0, Culture=neutral">
-			<HintPath>..\packages\Mosa.Runtime.1.0.0.1\lib\net472\Mosa.Runtime.dll</HintPath>
 			<Private>True</Private>
 		</Reference>
 		<Reference Include="Mosa.Runtime.x86, Version=0.0.0.0, Culture=neutral">
-			<HintPath>..\packages\Mosa.Runtime.x86.1.0.0.0\lib\Mosa.Runtime.x86.dll</HintPath>
-		<Reference Include="Mosa.Kernel.x86, Version=0.0.0.0, Culture=neutral">
-			<HintPath>..\packages\Mosa.Kernel.x86.1.0.0.5\lib\net472\Mosa.Kernel.x86.dll</HintPath>
-			<Private>True</Private>
-		</Reference>
-		<Reference Include="Mosa.Runtime, Version=0.0.0.0, Culture=neutral">
-			<HintPath>..\packages\Mosa.Runtime.1.0.0.5\lib\net472\Mosa.Runtime.dll</HintPath>
-			<Private>True</Private>
-		</Reference>
-		<Reference Include="Mosa.Runtime.x86, Version=0.0.0.0, Culture=neutral">
-			<HintPath>..\packages\Mosa.Runtime.x86.1.0.0.5\lib\net472\Mosa.Runtime.x86.dll</HintPath>
-			<HintPath>..\packages\Mosa.Runtime.x86.1.0.0.1\lib\net472\Mosa.Runtime.x86.dll</HintPath>
 			<Private>True</Private>
 		</Reference>
 	</ItemGroup>
-	<Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<StartAction>Program</StartAction>
 		<StartProgram>C:\Program Files (x86)\MOSA-Project\bin\Mosa.Tool.Bootstrap.exe</StartProgram>
-		<StartArguments>--q --a Mosa.Starter.x86.exe</StartArguments>
+		<StartArguments>--q --a $safeprojectname$.exe</StartArguments>
 	</PropertyGroup>
 </Project>

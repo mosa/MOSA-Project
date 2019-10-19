@@ -2,27 +2,15 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
     <OutputType>Exe</OutputType>
-    <ProjectGuid>{BB0BFCBE-EC7B-4EDF-868C-9289B729C95D}</ProjectGuid>
-    <AssemblyTitle>Mosa.Tool.Compiler</AssemblyTitle>
+    <Title>Mosa.Tool.Compiler</Title>
     <Company>MOSA Project</Company>
-    <Product>Mosa.Tool.Compiler</Product>
     <Copyright>Copyright © 2019</Copyright>
-    <ConfigurationOverrideFile />
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <FileAlignment>4096</FileAlignment>
-    <RemoveIntegerChecks>False</RemoveIntegerChecks>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <BaseAddress>285212672</BaseAddress>
+    <LangVersion>8.0</LangVersion>
     <DebugType>full</DebugType>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <OutputPath>..\..\bin\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>True</DebugSymbols>
     <WarningLevel>2</WarningLevel>
+    <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Mosa.Tool.Mosactl.Program</StartupObject>

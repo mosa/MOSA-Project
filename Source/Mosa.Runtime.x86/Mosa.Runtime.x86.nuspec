@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0"?>
-<package >
+<package>
 	<metadata>
 		<id>Mosa.Runtime.x86</id>
 		<version>$version$</version>
@@ -8,7 +8,7 @@
 		<owners>MOSA Project</owners>
 		<license type="expression">BSD-3-Clause-Clear</license>
 		<projectUrl>http://www.mosa-project.org</projectUrl>
-		<iconUrl>https://raw.githubusercontent.com/mosa/MOSA-Project/master/Source/Art/Mosa%20Icon.png</iconUrl>
+		<icon>images\Mosa Icon.png</icon>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<summary>MOSA x86 Runtime Library</summary>
 		<description>MOSA runtime libraries for x86 platform</description>
@@ -16,11 +16,12 @@
 		<copyright>Copyright © 2019</copyright>
 		<tags>MOSA Compiler</tags>
 		<dependencies>
-			<dependency id="Mosa.Korlib" version="1.0.0.5" />
-			<dependency id="Mosa.Runtime" version="1.0.0.5" />
+			<dependency id="Mosa.Korlib" version="$version$" />
+			<dependency id="Mosa.Runtime" version="$version$" />
 		</dependencies>
 	</metadata>
 	<files>
+		<file src="..\Art\Mosa Icon.png" target="images\" />
 		<file src="..\..\bin\Mosa.Runtime.x86.dll" target="lib\net472" />
 	</files>
 </package>

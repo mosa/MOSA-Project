@@ -2,7 +2,6 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <ProjectGuid>{A8765C3C-1194-4A3A-8579-745CA47C36D1}</ProjectGuid>
     <AssemblyTitle>Mosa.Utility.SourceCodeGenerator</AssemblyTitle>
     <Company>MOSA Project</Company>
     <Product>Mosa.Utility.SourceCodeGenerator</Product>
@@ -11,12 +10,8 @@
     <LangVersion>8.0</LangVersion>
     <OutputPath>..\..\bin\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugSymbols>True</DebugSymbols>
     <NoWarn>1591</NoWarn>
+    <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
   <PropertyGroup>
     <StartupObject>Mosa.Utility.SourceCodeGenerator.Program</StartupObject>

@@ -1,7 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <ProjectGuid>{067AAB6B-447A-45BA-9E0D-DFEA886B4F69}</ProjectGuid>
-    <TargetFrameworks>net45</TargetFrameworks>
+    <TargetFramework>net472</TargetFramework>
     <LangVersion>8.0</LangVersion>
     <DebugType>full</DebugType>
     <NoWarn>168,162,649</NoWarn>

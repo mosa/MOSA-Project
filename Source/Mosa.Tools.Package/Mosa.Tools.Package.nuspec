@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0"?>
-<package >
+<package>
 	<metadata>
 		<id>Mosa.Tools.Package</id>
 		<version>$version$</version>
@@ -8,7 +8,7 @@
 		<owners>MOSA Project</owners>
 		<license type="expression">BSD-3-Clause-Clear</license>
 		<projectUrl>http://www.mosa-project.org</projectUrl>
-		<iconUrl>https://raw.githubusercontent.com/mosa/MOSA-Project/master/Source/Art/Mosa%20Icon.png</iconUrl>
+		<icon>images\Mosa Icon.png</icon>
 		<requireLicenseAcceptance>false</requireLicenseAcceptance>
 		<summary>MOSA Tools Package</summary>
 		<description>MOSA Tools Package</description>
@@ -19,6 +19,7 @@
 		</dependencies>
 	</metadata>
 	<files>
+		<file src="..\Art\Mosa Icon.png" target="images\" />
 		<file src="..\..\bin\Mosa.Compiler.Common.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Compiler.Framework.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Compiler.MosaTypeSystem.dll" target="tools" />
@@ -27,6 +28,7 @@
 		<file src="..\..\bin\Mosa.Platform.Intel.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Platform.x86.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Platform.x64.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Compiler.exe" target="tools" />
 		<file src="..\..\bin\Mosa.Tool.Explorer.exe" target="tools" />
 		<file src="..\..\bin\Mosa.Tool.GDBDebugger.exe" target="tools" />
 		<file src="..\..\bin\Mosa.Tool.Launcher.exe" target="tools" />
@@ -36,7 +38,6 @@
 		<file src="..\..\bin\Mosa.Utility.FileSystem.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.Launcher.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.RSP.dll" target="tools" />
-		<file src="..\..\bin\Mosa.Tool.Compiler.exe" target="tools" />
 		<file src="..\..\bin\dnlib.dll" target="tools" />
 		<file src="..\..\bin\SharpDisasm.dll" target="tools" />
 		<file src="..\..\bin\CommandLine.dll" target="tools" />
