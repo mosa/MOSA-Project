@@ -126,11 +126,10 @@ for:
     before_build:
     - sh: dotnet restore $APPVEYOR_BUILD_FOLDER/Source/Mosa.LinuxCI.sln
 
-    build:
-      verbosity: minimal
-      parallel: true
-      project: Source/Mosa.LinuxCI.sln
-      publish_nuget: false
+    build: off
+
+    build_script:
+    - sh: msbuild /verbosity:minimal $APPVEYOR_BUILD_FOLDER/Source/Mosa.LinuxCI.sln
 
     test_script:
     - sh: $APPVEYOR_BUILD_FOLDER/bin/Mosa.Tool.Mosactl test
