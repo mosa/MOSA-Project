@@ -129,7 +129,7 @@ for:
     build:
       verbosity: minimal
       parallel: true
-      project: Source/Mosa.sln
+      project: Source/Mosa.LinuxCI.sln
       publish_nuget: false
 
     test_script:
