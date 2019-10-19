@@ -47,8 +47,8 @@
 			this.nowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.snippetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.cbDisableAllOptimizations = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbEnableAllOptimizations = new System.Windows.Forms.ToolStripMenuItem();
+			this.cbDisableAllOptimizations = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
 			this.cbEnableSSA = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbEnableIROptimizations = new System.Windows.Forms.ToolStripMenuItem();
@@ -159,12 +159,12 @@
 			// statusStrip1
 			// 
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.toolStripStatusLabel1,
-			this.toolStripProgressBar1,
-			this.toolStripStatusLabel});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 456);
+            this.toolStripStatusLabel1,
+            this.toolStripProgressBar1,
+            this.toolStripStatusLabel});
+			this.statusStrip1.Location = new System.Drawing.Point(0, 458);
 			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(864, 22);
+			this.statusStrip1.Size = new System.Drawing.Size(817, 22);
 			this.statusStrip1.TabIndex = 0;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
@@ -186,23 +186,23 @@
 			// menuStrip1
 			// 
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.fileToolStripMenuItem,
-			this.compileToolStripMenuItem,
-			this.optionsToolStripMenuItem,
-			this.displayOptionsToolStripMenuItem,
-			this.advanceToolStripMenuItem});
+            this.fileToolStripMenuItem,
+            this.compileToolStripMenuItem,
+            this.optionsToolStripMenuItem,
+            this.displayOptionsToolStripMenuItem,
+            this.advanceToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(864, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(817, 24);
 			this.menuStrip1.TabIndex = 3;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
 			// fileToolStripMenuItem
 			// 
 			this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.openToolStripMenuItem,
-			this.toolStripMenuItem1,
-			this.quitToolStripMenuItem});
+            this.openToolStripMenuItem,
+            this.toolStripMenuItem1,
+            this.quitToolStripMenuItem});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
 			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
 			this.fileToolStripMenuItem.Text = "&File";
@@ -229,8 +229,8 @@
 			// compileToolStripMenuItem
 			// 
 			this.compileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.nowToolStripMenuItem,
-			this.snippetToolStripMenuItem});
+            this.nowToolStripMenuItem,
+            this.snippetToolStripMenuItem});
 			this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
 			this.compileToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
 			this.compileToolStripMenuItem.Text = "Compile";
@@ -252,31 +252,24 @@
 			// optionsToolStripMenuItem
 			// 
 			this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.cbEnableAllOptimizations,
-			this.cbDisableAllOptimizations,
-			this.toolStripSeparator4,
-			this.cbEnableSSA,
-			this.cbEnableIROptimizations,
-			this.cbEnableValueNumbering,
-			this.cbEnableSparseConditionalConstantPropagation,
-			this.cbEnableInlinedMethods,
-			this.cbInlineOnlyExplicit,
-			this.cbEnableLongExpansion,
-			this.cbLoopInvariantCodeMotion,
-			this.cbEnableBitTracker,
-			this.cbEnableTwoPassOptimizations,
-			this.cbPlatformOptimizations,
-			this.cbEnableBinaryCodeGeneration});
+            this.cbEnableAllOptimizations,
+            this.cbDisableAllOptimizations,
+            this.toolStripSeparator4,
+            this.cbEnableSSA,
+            this.cbEnableIROptimizations,
+            this.cbEnableValueNumbering,
+            this.cbEnableSparseConditionalConstantPropagation,
+            this.cbEnableInlinedMethods,
+            this.cbInlineOnlyExplicit,
+            this.cbEnableLongExpansion,
+            this.cbLoopInvariantCodeMotion,
+            this.cbEnableBitTracker,
+            this.cbEnableTwoPassOptimizations,
+            this.cbPlatformOptimizations,
+            this.cbEnableBinaryCodeGeneration});
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
 			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(93, 20);
 			this.optionsToolStripMenuItem.Text = "Optimizations";
-			// 
-			// cbDisableAllOptimizations
-			// 
-			this.cbDisableAllOptimizations.Name = "cbDisableAllOptimizations";
-			this.cbDisableAllOptimizations.Size = new System.Drawing.Size(293, 22);
-			this.cbDisableAllOptimizations.Text = "Disable All";
-			this.cbDisableAllOptimizations.Click += new System.EventHandler(this.cbDisableAllOptimizations_Click);
 			// 
 			// cbEnableAllOptimizations
 			// 
@@ -284,6 +277,13 @@
 			this.cbEnableAllOptimizations.Size = new System.Drawing.Size(293, 22);
 			this.cbEnableAllOptimizations.Text = "Enable All";
 			this.cbEnableAllOptimizations.Click += new System.EventHandler(this.cbEnableAllOptimizations_Click);
+			// 
+			// cbDisableAllOptimizations
+			// 
+			this.cbDisableAllOptimizations.Name = "cbDisableAllOptimizations";
+			this.cbDisableAllOptimizations.Size = new System.Drawing.Size(293, 22);
+			this.cbDisableAllOptimizations.Text = "Disable All";
+			this.cbDisableAllOptimizations.Click += new System.EventHandler(this.cbDisableAllOptimizations_Click);
 			// 
 			// toolStripSeparator4
 			// 
@@ -399,9 +399,9 @@
 			// displayOptionsToolStripMenuItem
 			// 
 			this.displayOptionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.showOperandTypes,
-			this.padInstructions,
-			this.showSizes});
+            this.showOperandTypes,
+            this.padInstructions,
+            this.showSizes});
 			this.displayOptionsToolStripMenuItem.Name = "displayOptionsToolStripMenuItem";
 			this.displayOptionsToolStripMenuItem.Size = new System.Drawing.Size(57, 20);
 			this.displayOptionsToolStripMenuItem.Text = "Display";
@@ -438,9 +438,9 @@
 			// 
 			this.advanceToolStripMenuItem.CheckOnClick = true;
 			this.advanceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.CBEnableMultithreading,
-			this.cbEnableMethodScanner,
-			this.dumpAllMethodStagesToolStripMenuItem});
+            this.CBEnableMultithreading,
+            this.cbEnableMethodScanner,
+            this.dumpAllMethodStagesToolStripMenuItem});
 			this.advanceToolStripMenuItem.Name = "advanceToolStripMenuItem";
 			this.advanceToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
 			this.advanceToolStripMenuItem.Text = "Advance";
@@ -475,12 +475,12 @@
 			// 
 			// treeView
 			// 
-			this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.treeView.Location = new System.Drawing.Point(0, 25);
 			this.treeView.Name = "treeView";
-			this.treeView.Size = new System.Drawing.Size(232, 372);
+			this.treeView.Size = new System.Drawing.Size(219, 374);
 			this.treeView.TabIndex = 3;
 			this.treeView.BeforeSelect += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView_BeforeSelect);
 			this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.TreeView_AfterSelect);
@@ -488,9 +488,9 @@
 			// 
 			// splitContainer1
 			// 
-			this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.splitContainer1.Location = new System.Drawing.Point(0, 52);
 			this.splitContainer1.Margin = new System.Windows.Forms.Padding(0);
 			this.splitContainer1.Name = "splitContainer1";
@@ -507,8 +507,8 @@
 			this.splitContainer1.Panel2.Controls.Add(this.tabControl);
 			this.splitContainer1.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.splitContainer1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this.splitContainer1.Size = new System.Drawing.Size(860, 401);
-			this.splitContainer1.SplitterDistance = 228;
+			this.splitContainer1.Size = new System.Drawing.Size(813, 403);
+			this.splitContainer1.SplitterDistance = 215;
 			this.splitContainer1.SplitterWidth = 6;
 			this.splitContainer1.TabIndex = 26;
 			// 
@@ -523,19 +523,19 @@
 			// 
 			// tbFilter
 			// 
-			this.tbFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.tbFilter.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.tbFilter.Location = new System.Drawing.Point(33, 4);
 			this.tbFilter.Name = "tbFilter";
-			this.tbFilter.Size = new System.Drawing.Size(192, 20);
+			this.tbFilter.Size = new System.Drawing.Size(179, 20);
 			this.tbFilter.TabIndex = 4;
 			this.tbFilter.TextChanged += new System.EventHandler(this.tbFilter_TextChanged);
 			// 
 			// tabControl
 			// 
-			this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.tabControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControl.Controls.Add(this.tabStages);
 			this.tabControl.Controls.Add(this.tabStageDebug);
 			this.tabControl.Controls.Add(this.tabMethodCounters);
@@ -546,7 +546,7 @@
 			this.tabControl.Name = "tabControl";
 			this.tabControl.Padding = new System.Drawing.Point(0, 0);
 			this.tabControl.SelectedIndex = 0;
-			this.tabControl.Size = new System.Drawing.Size(592, 401);
+			this.tabControl.Size = new System.Drawing.Size(592, 403);
 			this.tabControl.TabIndex = 38;
 			this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
 			// 
@@ -561,7 +561,7 @@
 			this.tabStages.Location = new System.Drawing.Point(4, 25);
 			this.tabStages.Margin = new System.Windows.Forms.Padding(0);
 			this.tabStages.Name = "tabStages";
-			this.tabStages.Size = new System.Drawing.Size(584, 372);
+			this.tabStages.Size = new System.Drawing.Size(584, 374);
 			this.tabStages.TabIndex = 0;
 			this.tabStages.Text = "Instructions";
 			// 
@@ -594,13 +594,13 @@
 			// 
 			// tbInstructions
 			// 
-			this.tbInstructions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.tbInstructions.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.tbInstructions.Font = new System.Drawing.Font("Lucida Console", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tbInstructions.Location = new System.Drawing.Point(0, 32);
 			this.tbInstructions.Name = "tbInstructions";
-			this.tbInstructions.Size = new System.Drawing.Size(412, 150);
+			this.tbInstructions.Size = new System.Drawing.Size(459, 152);
 			this.tbInstructions.TabIndex = 31;
 			this.tbInstructions.Text = "";
 			this.tbInstructions.WordWrap = false;
@@ -614,7 +614,7 @@
 			this.tabStageDebug.Location = new System.Drawing.Point(4, 25);
 			this.tabStageDebug.Margin = new System.Windows.Forms.Padding(0);
 			this.tabStageDebug.Name = "tabStageDebug";
-			this.tabStageDebug.Size = new System.Drawing.Size(584, 372);
+			this.tabStageDebug.Size = new System.Drawing.Size(584, 374);
 			this.tabStageDebug.TabIndex = 1;
 			this.tabStageDebug.Text = "Debug";
 			// 
@@ -633,13 +633,13 @@
 			// 
 			// tbDebugResult
 			// 
-			this.tbDebugResult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.tbDebugResult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.tbDebugResult.Font = new System.Drawing.Font("Lucida Console", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.tbDebugResult.Location = new System.Drawing.Point(0, 32);
 			this.tbDebugResult.Name = "tbDebugResult";
-			this.tbDebugResult.Size = new System.Drawing.Size(412, 150);
+			this.tbDebugResult.Size = new System.Drawing.Size(544, 152);
 			this.tbDebugResult.TabIndex = 32;
 			this.tbDebugResult.Text = "";
 			this.tbDebugResult.WordWrap = false;
@@ -651,19 +651,19 @@
 			this.tabMethodCounters.Location = new System.Drawing.Point(4, 25);
 			this.tabMethodCounters.Margin = new System.Windows.Forms.Padding(0);
 			this.tabMethodCounters.Name = "tabMethodCounters";
-			this.tabMethodCounters.Size = new System.Drawing.Size(584, 372);
+			this.tabMethodCounters.Size = new System.Drawing.Size(584, 374);
 			this.tabMethodCounters.TabIndex = 6;
 			this.tabMethodCounters.Text = "Counters";
 			// 
 			// tbMethodCounters
 			// 
-			this.tbMethodCounters.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.tbMethodCounters.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.tbMethodCounters.Font = new System.Drawing.Font("Lucida Console", 8F);
 			this.tbMethodCounters.Location = new System.Drawing.Point(0, 0);
 			this.tbMethodCounters.Name = "tbMethodCounters";
-			this.tbMethodCounters.Size = new System.Drawing.Size(412, 150);
+			this.tbMethodCounters.Size = new System.Drawing.Size(487, 152);
 			this.tbMethodCounters.TabIndex = 3;
 			this.tbMethodCounters.Text = "";
 			this.tbMethodCounters.WordWrap = false;
@@ -677,7 +677,7 @@
 			this.tabLogs.Location = new System.Drawing.Point(4, 25);
 			this.tabLogs.Margin = new System.Windows.Forms.Padding(0);
 			this.tabLogs.Name = "tabLogs";
-			this.tabLogs.Size = new System.Drawing.Size(584, 372);
+			this.tabLogs.Size = new System.Drawing.Size(584, 374);
 			this.tabLogs.TabIndex = 7;
 			this.tabLogs.Text = "Logs";
 			// 
@@ -696,13 +696,13 @@
 			// 
 			// tbLogs
 			// 
-			this.tbLogs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-			| System.Windows.Forms.AnchorStyles.Left)
-			| System.Windows.Forms.AnchorStyles.Right)));
+			this.tbLogs.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.tbLogs.Font = new System.Drawing.Font("Lucida Console", 8F);
 			this.tbLogs.Location = new System.Drawing.Point(0, 32);
 			this.tbLogs.Name = "tbLogs";
-			this.tbLogs.Size = new System.Drawing.Size(412, 150);
+			this.tbLogs.Size = new System.Drawing.Size(414, 152);
 			this.tbLogs.TabIndex = 3;
 			this.tbLogs.Text = "";
 			this.tbLogs.WordWrap = false;
@@ -710,16 +710,16 @@
 			// toolStrip1
 			// 
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-			this.cbPlatform,
-			this.toolStripSeparator3,
-			this.toolStripButton1,
-			this.toolStripButton2,
-			this.toolStripSeparator2,
-			this.toolStripButton4,
-			this.toolStripSeparator1});
+            this.cbPlatform,
+            this.toolStripSeparator3,
+            this.toolStripButton1,
+            this.toolStripButton2,
+            this.toolStripSeparator2,
+            this.toolStripButton4,
+            this.toolStripSeparator1});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 24);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(864, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(817, 25);
 			this.toolStrip1.TabIndex = 27;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -729,9 +729,9 @@
 			this.cbPlatform.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbPlatform.FlatStyle = System.Windows.Forms.FlatStyle.Standard;
 			this.cbPlatform.Items.AddRange(new object[] {
-			"x86",
-			"x64",
-			"ARMv8A32"});
+            "x86",
+            "x64",
+            "ARMv8A32"});
 			this.cbPlatform.Name = "cbPlatform";
 			this.cbPlatform.Size = new System.Drawing.Size(90, 25);
 			// 
@@ -791,7 +791,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(864, 478);
+			this.ClientSize = new System.Drawing.Size(817, 480);
 			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.menuStrip1);
