@@ -55,7 +55,6 @@ Source: "..\..\bin\MOSA Project\app.config"; DestDir: "{userdocs}\Visual Studio 
 Source: "..\..\bin\MOSA Project\Boot.cs"; DestDir: "{userdocs}\Visual Studio 2019\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
 Source: "..\..\bin\MOSA Project\Mosa.Starter.x86.csproj"; DestDir: "{userdocs}\Visual Studio 2019\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
 Source: "..\..\bin\MOSA Project\MyTemplate.vstemplate"; DestDir: "{userdocs}\Visual Studio 2019\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
-Source: "..\..\bin\MOSA Project\packages.config"; DestDir: "{userdocs}\Visual Studio 2019\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
 Source: "..\..\bin\MOSA Project\Program.cs"; DestDir: "{userdocs}\Visual Studio 2019\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
 Source: "..\..\bin\MOSA Project\__TemplateIcon.ico"; DestDir: "{userdocs}\Visual Studio 2019\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
 
