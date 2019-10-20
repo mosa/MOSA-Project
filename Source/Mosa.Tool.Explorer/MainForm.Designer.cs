@@ -51,7 +51,7 @@
 			this.cbDisableAllOptimizations = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
 			this.cbEnableSSA = new System.Windows.Forms.ToolStripMenuItem();
-			this.cbEnableIROptimizations = new System.Windows.Forms.ToolStripMenuItem();
+			this.cbEnableBasicOptimizations = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbEnableValueNumbering = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbEnableSparseConditionalConstantPropagation = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbEnableInlinedMethods = new System.Windows.Forms.ToolStripMenuItem();
@@ -256,7 +256,7 @@
             this.cbDisableAllOptimizations,
             this.toolStripSeparator4,
             this.cbEnableSSA,
-            this.cbEnableIROptimizations,
+            this.cbEnableBasicOptimizations,
             this.cbEnableValueNumbering,
             this.cbEnableSparseConditionalConstantPropagation,
             this.cbEnableInlinedMethods,
@@ -301,12 +301,12 @@
 			// 
 			// cbEnableIROptimizations
 			// 
-			this.cbEnableIROptimizations.Checked = true;
-			this.cbEnableIROptimizations.CheckOnClick = true;
-			this.cbEnableIROptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbEnableIROptimizations.Name = "cbEnableIROptimizations";
-			this.cbEnableIROptimizations.Size = new System.Drawing.Size(293, 22);
-			this.cbEnableIROptimizations.Text = "Enable Optimizations";
+			this.cbEnableBasicOptimizations.Checked = true;
+			this.cbEnableBasicOptimizations.CheckOnClick = true;
+			this.cbEnableBasicOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbEnableBasicOptimizations.Name = "cbEnableIROptimizations";
+			this.cbEnableBasicOptimizations.Size = new System.Drawing.Size(293, 22);
+			this.cbEnableBasicOptimizations.Text = "Enable Optimizations";
 			// 
 			// cbEnableValueNumbering
 			// 
@@ -846,7 +846,7 @@
 		private System.Windows.Forms.ToolStripMenuItem cbEnableSSA;
 		private System.Windows.Forms.ToolStripMenuItem cbEnableBinaryCodeGeneration;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
-		private System.Windows.Forms.ToolStripMenuItem cbEnableIROptimizations;
+		private System.Windows.Forms.ToolStripMenuItem cbEnableBasicOptimizations;
 		private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
 		private System.Windows.Forms.ToolStripMenuItem cbEnableSparseConditionalConstantPropagation;

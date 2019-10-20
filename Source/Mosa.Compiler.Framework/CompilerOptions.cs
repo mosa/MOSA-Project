@@ -60,7 +60,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable IR optimizations].
 		/// </summary>
-		public bool EnableIROptimizations { get; set; }
+		public bool EnableBasicOptimizations { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable value numbering].
@@ -78,19 +78,19 @@ namespace Mosa.Compiler.Framework
 		public bool EnableLoopInvariantCodeMotion { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether [enable inlined methods].
+		/// Gets or sets a value indicating whether [enable inline methods].
 		/// </summary>
-		public bool EnableInlinedMethods { get; set; }
+		public bool EnableInlineMethods { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether only methods are inlined marked as AgressiveInlining.
+		/// Gets or sets a value indicating whether only methods are inline marked as AgressiveInlining.
 		/// </summary>
 		public bool InlineOnlyExplicit { get; set; }
 
 		/// <summary>
-		/// Gets or sets the maximum IR numbers for inlined optimization.
+		/// Gets or sets the maximum IR numbers for inline optimization.
 		/// </summary>
-		public int InlinedIRMaximum { get; set; }
+		public int InlineMaximum { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable IR long operand conversion].
@@ -176,6 +176,10 @@ namespace Mosa.Compiler.Framework
 		/// Adds additional program headers to the Elf-File.
 		/// </summary>
 		public MosaLinker.CreateExtraProgramHeaderDelegate CreateExtraProgramHeaders { get; set; }
+
+		public List<string> InlineMethods { get; set; } = new List<string>();
+
+		public List<string> DoNotInlineMethods { get; set; } = new List<string>();
 
 		#endregion Properties
 
@@ -329,12 +333,12 @@ namespace Mosa.Compiler.Framework
 		{
 			TraceLevel = 0;
 			EnableSSA = true;
-			EnableIROptimizations = true;
+			EnableBasicOptimizations = true;
 			EnableSparseConditionalConstantPropagation = true;
-			EnableInlinedMethods = false;
+			EnableInlineMethods = false;
 			BaseAddress = 0x00400000;
 			EmitBinary = true;
-			InlinedIRMaximum = 12;
+			InlineMaximum = 12;
 			EmitAllSymbols = true;
 			EmitStaticRelocations = true;
 			TwoPassOptimizations = true;

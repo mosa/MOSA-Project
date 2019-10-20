@@ -97,11 +97,11 @@ namespace Mosa.Utility.Launcher
 				CompiledFile = Path.Combine(LauncherOptions.DestinationDirectory, $"{Path.GetFileNameWithoutExtension(LauncherOptions.SourceFile)}.bin");
 
 				compiler.CompilerOptions.EnableSSA = LauncherOptions.EnableSSA;
-				compiler.CompilerOptions.EnableIROptimizations = LauncherOptions.EnableIROptimizations;
+				compiler.CompilerOptions.EnableBasicOptimizations = LauncherOptions.EnableBasicOptimizations;
 				compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = LauncherOptions.EnableSparseConditionalConstantPropagation;
-				compiler.CompilerOptions.EnableInlinedMethods = LauncherOptions.EnableInlinedMethods;
+				compiler.CompilerOptions.EnableInlineMethods = LauncherOptions.EnableInlineMethods;
 				compiler.CompilerOptions.InlineOnlyExplicit = LauncherOptions.InlineOnlyExplicit;
-				compiler.CompilerOptions.InlinedIRMaximum = LauncherOptions.InlinedIRMaximum;
+				compiler.CompilerOptions.InlineMaximum = LauncherOptions.InlineMaximum;
 				compiler.CompilerOptions.EnableLongExpansion = LauncherOptions.EnableLongExpansion;
 				compiler.CompilerOptions.TwoPassOptimizations = LauncherOptions.TwoPassOptimizations;
 				compiler.CompilerOptions.EnableValueNumbering = LauncherOptions.EnableValueNumbering;

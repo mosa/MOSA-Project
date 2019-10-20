@@ -58,9 +58,9 @@ namespace Mosa.Utility.UnitTests
 			LauncherOptions = new LauncherOptions()
 			{
 				EnableSSA = true,
-				EnableIROptimizations = true,
+				EnableBasicOptimizations = true,
 				EnableSparseConditionalConstantPropagation = true,
-				EnableInlinedMethods = true,
+				EnableInlineMethods = true,
 				EnableLongExpansion = true,
 				EnableValueNumbering = true,
 				TwoPassOptimizations = true,
@@ -77,7 +77,7 @@ namespace Mosa.Utility.UnitTests
 				EmulatorMemoryInMB = 128,
 				DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA-UnitTest"),
 				FileSystem = BootImage.FileSystem.FAT16,
-				InlinedIRMaximum = 12,
+				InlineMaximum = 12,
 				BootLoader = BootLoader.Syslinux_3_72,
 				VBEVideo = false,
 				Width = 640,

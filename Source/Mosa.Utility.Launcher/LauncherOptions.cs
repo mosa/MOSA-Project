@@ -81,10 +81,10 @@ namespace Mosa.Utility.Launcher
 		public bool EnableSSA { get; set; }
 
 		[Option("ir-optimizations")]
-		public bool EnableIROptimizations { get; set; }
+		public bool EnableBasicOptimizations { get; set; }
 
 		[Option("ir-optimizations-off")]
-		public bool IROptimizationsFalse { set { EnableIROptimizations = false; } }
+		public bool IROptimizationsFalse { set { EnableBasicOptimizations = false; } }
 
 		[Option("sccp")]
 		public bool EnableSparseConditionalConstantPropagation { get; set; }
@@ -93,10 +93,10 @@ namespace Mosa.Utility.Launcher
 		public bool EnableSparseConditionalConstantPropagationFalse { set { EnableSparseConditionalConstantPropagation = false; } }
 
 		[Option("inline")]
-		public bool EnableInlinedMethods { get; set; }
+		public bool EnableInlineMethods { get; set; }
 
 		[Option("inline-off")]
-		public bool EnableInlinedMethodsFalse { set { EnableInlinedMethods = false; } }
+		public bool EnableInlinedMethodsFalse { set { EnableInlineMethods = false; } }
 
 		[Option("inline-explicit")]
 		public bool InlineOnlyExplicit { get; set; }
@@ -135,10 +135,10 @@ namespace Mosa.Utility.Launcher
 		[Option("bit-tracker-off")]
 		public bool EnableBitTrackerFalse { set { EnableBitTracker = false; } }
 
-		public int InlinedIRMaximum { get; set; }
+		public int InlineMaximum { get; set; }
 
 		[Option("inline-level")]
-		public string InlinedIRMaximumHelper { set { InlinedIRMaximum = (int)value.ParseHexOrInteger(); } }
+		public string InlinedIRMaximumHelper { set { InlineMaximum = (int)value.ParseHexOrInteger(); } }
 
 		[Option("all-optimizations-off")]
 		public bool AllOptimizationsOff
@@ -146,8 +146,8 @@ namespace Mosa.Utility.Launcher
 			set
 			{
 				EnableSSA = false;
-				EnableIROptimizations = false;
-				EnableInlinedMethods = false;
+				EnableBasicOptimizations = false;
+				EnableInlineMethods = false;
 				TwoPassOptimizations = false;
 				EnableLongExpansion = false;
 				EnableSparseConditionalConstantPropagation = false;
@@ -404,7 +404,7 @@ namespace Mosa.Utility.Launcher
 			FileSystem = BootImage.FileSystem.FAT16;
 			BaseAddress = 0x00400000;
 			SerialConnectionHost = "127.0.0.1";
-			InlinedIRMaximum = 12;
+			InlineMaximum = 12;
 			LaunchVM = true;
 			EnableLongExpansion = true;
 			TwoPassOptimizations = true;
@@ -417,9 +417,9 @@ namespace Mosa.Utility.Launcher
 			SerialConnectionPort = 9999;
 			GenerateASMFile = false;
 			EnableSSA = true;
-			EnableIROptimizations = true;
+			EnableBasicOptimizations = true;
 			EnableSparseConditionalConstantPropagation = true;
-			EnableInlinedMethods = true;
+			EnableInlineMethods = true;
 			EnableLongExpansion = true;
 			EnableLoopInvariantCodeMotion = true;
 			EnablePlatformOptimizations = true;

@@ -6,6 +6,9 @@ using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Diagnostics;
+using System.IO;
+using YamlDotNet.RepresentationModel;
+using YamlDotNet.Serialization;
 
 namespace Mosa.Workspace.Experiment.Debug
 {
@@ -13,14 +16,19 @@ namespace Mosa.Workspace.Experiment.Debug
 	{
 		private static void Main()
 		{
+			Test();
+		}
+
+		private static void Compile()
+		{
 			const string platform = "x86";
 
 			var compilerOptions = new CompilerOptions()
 			{
 				EnableSSA = true,
-				EnableIROptimizations = true,
+				EnableBasicOptimizations = true,
 				EnableSparseConditionalConstantPropagation = true,
-				EnableInlinedMethods = true,
+				EnableInlineMethods = true,
 				EnableLongExpansion = true,
 				EnableValueNumbering = true,
 				TwoPassOptimizations = true,
@@ -29,7 +37,7 @@ namespace Mosa.Workspace.Experiment.Debug
 
 				MultibootSpecification = MultibootSpecification.V1,
 				LinkerFormatType = LinkerFormatType.Elf32,
-				InlinedIRMaximum = 12,
+				InlineMaximum = 12,
 
 				BaseAddress = 0x00500000,
 				EmitStaticRelocations = false,
@@ -129,6 +137,34 @@ namespace Mosa.Workspace.Experiment.Debug
 				case "armv8a32": return Platform.ARMv8A32.Architecture.CreateArchitecture(Platform.ARMv8A32.ArchitectureFeatureFlags.AutoDetect);
 				default: throw new NotImplementCompilerException(string.Format("Unknown or unsupported Architecture {0}.", architecture));
 			}
+		}
+
+		private static void Test()
+		{ // Setup the input
+			var file = File.ReadAllText(".mosa-global.yml");
+
+			var input = new StringReader(file);
+
+			var yaml = new YamlStream();
+			yaml.Load(input);
+
+			var mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
+
+			foreach (var entry in mapping.Children)
+			{
+				Console.WriteLine(((YamlScalarNode)entry.Key).Value);
+			}
+
+			var child = mapping["Optimizations"];
+			var child2 = child["IROptimizations"];
+
+			var query = new YamlQuery(mapping).On("Optimizations").On("IROptimizations").AsString;
+
+			bool it = false;
+
+			YamlQuery.Query(mapping).On("Optimizations").On("IROptimizations").Update(ref it);
+
+			return;
 		}
 	}
 }

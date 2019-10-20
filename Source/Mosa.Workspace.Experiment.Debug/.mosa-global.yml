@@ -1,0 +1,42 @@
+Configuations:
+#    .mosa-default.yml
+
+Compiler:
+    InterruptMethodName: Mosa.Kernel.x86.IDT::ProcessInterrupt
+
+CompilerDebug:
+    DebugFile:
+    CompileTimeFile:
+    MapFile:
+
+Optimizations:
+    Basic: true
+    SSA : true
+    SCCP: true
+    ValueNumbering: true
+    LongExpansion: true
+    EnableBitTracker: true
+    Platform : true
+    InlineMethods: true
+    InlineMaximum: 12
+    InlineOnlyExplicit: true
+    TwoPass: false
+
+Inline:
+    
+
+DoNotInine:
+
+# OutputFile
+# Architecture
+# BaseAddress
+# LinkerFormatType
+# EmitBinary
+# EmitAllSymbols
+# EmitStaticRelocations
+# EnableStatistics
+# TraceLevel
+
+# SearchPaths
+# EnableMethodScanner
+# EmitInlinedMethods
