@@ -4,17 +4,17 @@ Import:
 Compiler:
     Architecture: x86	# Options: x86, x64, ArmARMv8A32
     BaseAddress: 0x00400000
-	EnableStatistics : false
-	TraceLevel : 0
-	EnableMethodScanner: false # experimental option
-	EmitInlinedMethods : false
-	#OutputFile
+    EnableStatistics : false
+    TraceLevel : 0
+    EnableMethodScanner: false # experimental option
+    EmitInlinedMethods : false
+    #OutputFile
 
 SearchPaths:
 
 Linker:
-	EmitAllSymbols: false
-	EmitStaticRelocations: false
+    EmitAllSymbols: false
+    EmitStaticRelocations: false
 
 CompilerDebug:
     DebugFile:
@@ -31,7 +31,7 @@ Optimizations:
     Platform : true
     InlineMethods: true
     InlineMaximum: 12
-	InlineAggressiveMaximum: 24
+    InlineAggressiveMaximum: 24
     InlineOnlyExplicit: true
     TwoPass: false
 
@@ -39,7 +39,7 @@ X86:
     InterruptMethodName: Mosa.Kernel.x86.IDT::ProcessInterrupt
 
 AggressiveInline:				# Aggressively inline methods
-	'Mosa.Runtime.Pointer::*'	
+    'Mosa.Runtime.Pointer::*'	
 
 MethodDoNotInline:
-	'Mosa.UnitTests::*'			# Don't inline the unit tests methods
+    'Mosa.UnitTests::*'			# Don't inline the unit tests methods
