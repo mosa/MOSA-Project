@@ -240,7 +240,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return false;   // too many compiles - cyclic loop suspected
 
 			// methods with aggressive inline attribute will double the allow IR instruction count
-			int max = methodData.HasAggressiveInliningAttribute ? (CompilerOptions.InlineMaximum * 2) : CompilerOptions.InlineMaximum;
+			int max = methodData.HasAggressiveInliningAttribute ? CompilerOptions.InlineAggressiveMaximum : CompilerOptions.InlineMaximum;
 
 			if ((methodData.IRInstructionCount - methodData.IRStackParameterInstructionCount) > max)
 				return false;

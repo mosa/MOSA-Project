@@ -138,7 +138,7 @@ namespace Mosa.Utility.Launcher
 		public int InlineMaximum { get; set; }
 
 		[Option("inline-level")]
-		public string InlinedIRMaximumHelper { set { InlineMaximum = (int)value.ParseHexOrInteger(); } }
+		public string InlinedMaximumHelper { set { InlineMaximum = (int)value.ParseHexOrInteger(); } }
 
 		[Option("all-optimizations-off")]
 		public bool AllOptimizationsOff

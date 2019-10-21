@@ -16,6 +16,8 @@ namespace Mosa.Workspace.Experiment.Debug
 		{
 			var yaml = new YamlStream();
 
+			text = text.Replace("\t", "    ");
+
 			using (var input = new StringReader(text))
 			{
 				yaml.Load(input);

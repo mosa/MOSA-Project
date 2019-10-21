@@ -102,6 +102,7 @@ namespace Mosa.Utility.Launcher
 				compiler.CompilerOptions.EnableInlineMethods = LauncherOptions.EnableInlineMethods;
 				compiler.CompilerOptions.InlineOnlyExplicit = LauncherOptions.InlineOnlyExplicit;
 				compiler.CompilerOptions.InlineMaximum = LauncherOptions.InlineMaximum;
+				compiler.CompilerOptions.InlineAggressiveMaximum = LauncherOptions.InlineMaximum * 2;
 				compiler.CompilerOptions.EnableLongExpansion = LauncherOptions.EnableLongExpansion;
 				compiler.CompilerOptions.TwoPassOptimizations = LauncherOptions.TwoPassOptimizations;
 				compiler.CompilerOptions.EnableValueNumbering = LauncherOptions.EnableValueNumbering;

@@ -1,17 +1,29 @@
-Configuations:
-#    .mosa-default.yml
+Import:
+#    .mosa-global.yml
 
 Compiler:
-    InterruptMethodName: Mosa.Kernel.x86.IDT::ProcessInterrupt
+    Architecture: x86	# Options: x86, x64, ArmARMv8A32
+    BaseAddress: 0x00400000
+	EnableStatistics : false
+	TraceLevel : 0
+	EnableMethodScanner: false # experimental option
+	EmitInlinedMethods : false
+	#OutputFile
+
+SearchPaths:
+
+Linker:
+	EmitAllSymbols: false
+	EmitStaticRelocations: false
 
 CompilerDebug:
     DebugFile:
-    CompileTimeFile:
     MapFile:
+    CompileTimeFile:
 
 Optimizations:
     Basic: true
-    SSA : true
+    SSA: true
     SCCP: true
     ValueNumbering: true
     LongExpansion: true
@@ -19,24 +31,15 @@ Optimizations:
     Platform : true
     InlineMethods: true
     InlineMaximum: 12
+	InlineAggressiveMaximum: 24
     InlineOnlyExplicit: true
     TwoPass: false
 
-Inline:
-    
+X86:
+    InterruptMethodName: Mosa.Kernel.x86.IDT::ProcessInterrupt
 
-DoNotInine:
+AggressiveInline:				# Aggressively inline methods
+	'Mosa.Runtime.Pointer::*'	
 
-# OutputFile
-# Architecture
-# BaseAddress
-# LinkerFormatType
-# EmitBinary
-# EmitAllSymbols
-# EmitStaticRelocations
-# EnableStatistics
-# TraceLevel
-
-# SearchPaths
-# EnableMethodScanner
-# EmitInlinedMethods
+MethodDoNotInline:
+	'Mosa.UnitTests::*'			# Don't inline the unit tests methods

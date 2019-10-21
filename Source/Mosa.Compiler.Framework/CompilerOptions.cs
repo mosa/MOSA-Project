@@ -88,9 +88,14 @@ namespace Mosa.Compiler.Framework
 		public bool InlineOnlyExplicit { get; set; }
 
 		/// <summary>
-		/// Gets or sets the maximum IR numbers for inline optimization.
+		/// Gets or sets the maximum IR instructions for inline optimization.
 		/// </summary>
 		public int InlineMaximum { get; set; }
+
+		/// <summary>
+		/// Gets or sets the maximum IR instructions for aggressive inline optimization.
+		/// </summary>
+		public int InlineAggressiveMaximum { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [enable IR long operand conversion].
@@ -339,6 +344,7 @@ namespace Mosa.Compiler.Framework
 			BaseAddress = 0x00400000;
 			EmitBinary = true;
 			InlineMaximum = 12;
+			InlineAggressiveMaximum = 24;
 			EmitAllSymbols = true;
 			EmitStaticRelocations = true;
 			TwoPassOptimizations = true;

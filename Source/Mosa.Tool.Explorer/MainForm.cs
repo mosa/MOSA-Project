@@ -469,6 +469,7 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.InlineOnlyExplicit = cbInlineOnlyExplicit.Checked;
 			Compiler.CompilerOptions.EnableLongExpansion = cbEnableLongExpansion.Checked;
 			Compiler.CompilerOptions.InlineMaximum = 12;
+			Compiler.CompilerOptions.InlineAggressiveMaximum = 24;
 			Compiler.CompilerOptions.TwoPassOptimizations = cbEnableTwoPassOptimizations.Checked;
 			Compiler.CompilerOptions.EnableMethodScanner = cbEnableMethodScanner.Checked;
 			Compiler.CompilerOptions.TraceLevel = 8;

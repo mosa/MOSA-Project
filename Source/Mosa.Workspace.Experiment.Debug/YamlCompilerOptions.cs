@@ -14,6 +14,7 @@ namespace Mosa.Workspace.Experiment.Debug
 			optimizations.On("SCCP").TryParseBool(value => compilerOptions.EnableSparseConditionalConstantPropagation = value);
 			optimizations.On("InlineMethods").TryParseBool(value => compilerOptions.EnableInlineMethods = value);
 			optimizations.On("InlineMaximum").TryParseInt32(value => compilerOptions.InlineMaximum = value);
+			optimizations.On("InlineAggressiveMaximum").TryParseInt32(value => compilerOptions.InlineAggressiveMaximum = value);
 			optimizations.On("InlineOnlyExplicit").TryParseBool(value => compilerOptions.InlineOnlyExplicit = value);
 			optimizations.On("LongExpansion").TryParseBool(value => compilerOptions.EnableLongExpansion = value);
 			optimizations.On("TwoPass").TryParseBool(value => compilerOptions.TwoPassOptimizations = value);
