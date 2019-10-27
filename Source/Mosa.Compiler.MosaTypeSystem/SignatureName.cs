@@ -6,9 +6,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 {
 	internal class SignatureName
 	{
-
-		// For better GDB, ELF, DWARF and exported EntryPoints, we want avoid ReturnType and (Arguments) spaces within SymbolName for better usability.
-		public static string GetSignature(string name, MosaMethodSignature sig, bool shortSig, bool includeReturnType = true, bool stripSpaces = false)
+		public static string GetSignature(string name, MosaMethodSignature sig, bool shortSig)
 		{
 			var result = new StringBuilder();
 			if (shortSig)
@@ -18,44 +16,31 @@ namespace Mosa.Compiler.MosaTypeSystem
 				for (int i = 0; i < sig.Parameters.Count; i++)
 				{
 					if (i != 0)
-					{
-						result.Append(",");
-						if (!stripSpaces)
-							result.Append(" ");
-					}
+						result.Append(", ");
 					result.Append(sig.Parameters[i].ParameterType.ShortName);
 				}
 				result.Append(")");
 
-				if (includeReturnType)
-				{
-					result.Append(" : ");
-					result.Append(sig.ReturnType.ShortName);
-				}
+				result.Append(" : ");
+				result.Append(sig.ReturnType.ShortName);
 
 				return result.ToString();
 			}
 			else
 			{
-				if (includeReturnType)
-				{
-					result.Append(sig.ReturnType.FullName);
-					result.Append(" ");
-				}
-
 				result.Append(name);
 				result.Append("(");
 				for (int i = 0; i < sig.Parameters.Count; i++)
 				{
 					if (i != 0)
-					{
-						result.Append(",");
-						if (!stripSpaces)
-							result.Append(" ");
-					}
+						result.Append(", ");
 					result.Append(sig.Parameters[i].ParameterType.FullName);
 				}
 				result.Append(")");
+
+				result.Append(" ");
+				result.Append(sig.ReturnType.FullName);
+
 				return result.ToString();
 			}
 		}
@@ -70,7 +55,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				for (int i = 0; i < type.GenericArguments.Count; i++)
 				{
 					if (i != 0)
-						result.Append(",");
+						result.Append(", ");
 					result.Append(type.GenericArguments[i].FullName);
 				}
 				result.Append(">");
