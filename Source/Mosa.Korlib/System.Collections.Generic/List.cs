@@ -381,6 +381,15 @@ namespace System.Collections.Generic
 				index = 0;
 				current = default(T);
 			}
+
 		}
+
+		public T[] ToArray()
+		{
+			var array = new T[_size];
+			CopyTo(array, 0);
+			return array;
+		}
+
 	}
 }
