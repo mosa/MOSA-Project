@@ -492,7 +492,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			if (pos < 0)
 				return symbol.Name;
 
-			var shortname = symbol.Name.Substring(0, pos + 2);
+			var shortname = symbol.Name.Substring(0, pos - 1);
 
 			return shortname;
 		}
