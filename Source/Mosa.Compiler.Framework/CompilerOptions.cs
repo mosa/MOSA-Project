@@ -138,6 +138,11 @@ namespace Mosa.Compiler.Framework
 		public bool EmitStaticRelocations { get; set; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether [emit short symbol names].
+		/// </summary>
+		public bool EmitShortSymbolNames { get; set; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether [aggressive optimizations].
 		/// </summary>
 		public bool TwoPassOptimizations { get; set; }
@@ -356,6 +361,7 @@ namespace Mosa.Compiler.Framework
 			EnableMethodScanner = false;
 			EnableBitTracker = true;
 			EmitInlinedMethods = false;
+			EmitShortSymbolNames = true;
 		}
 	}
 }

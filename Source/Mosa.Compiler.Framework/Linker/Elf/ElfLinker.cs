@@ -451,9 +451,14 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 				if (!(symbol.IsExternalSymbol || linker.EmitAllSymbols))
 					continue;
 
+				if (symbol.VirtualAddress == 0)
+					continue;
+
+				var name = GetFinalSymboName(symbol);
+
 				var symbolEntry = new SymbolEntry()
 				{
-					Name = AddToStringTable(symbol.ExternalSymbolName ?? symbol.Name),
+					Name = AddToStringTable(name),
 					Value = symbol.VirtualAddress,
 					Size = symbol.Size,
 					SymbolBinding = SymbolBinding.Global,
@@ -469,6 +474,27 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			}
 
 			section.Size = count * SymbolEntry.GetEntrySize(linkerFormatType);
+		}
+
+		private string GetFinalSymboName(LinkerSymbol symbol)
+		{
+			if (symbol.ExternalSymbolName != null)
+				return symbol.ExternalSymbolName;
+
+			if (symbol.SectionKind != SectionKind.Text)
+				return symbol.Name;
+
+			if (!linker.EmitShortSymbolName)
+				return symbol.Name;
+
+			int pos = symbol.Name.LastIndexOf("):");
+
+			if (pos < 0)
+				return symbol.Name;
+
+			var shortname = symbol.Name.Substring(0, pos + 2);
+
+			return shortname;
 		}
 
 		private void CreateRelocationSections()
