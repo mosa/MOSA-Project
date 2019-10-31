@@ -10,16 +10,16 @@ namespace System.IO
 		/// <summary>
 		/// Read
 		/// </summary>
-		Read,
+		Read = 1,
 
 		/// <summary>
 		/// Write
 		/// </summary>
-		Write,
+		Write = 2,
 
 		/// <summary>
 		/// Read and Write
 		/// </summary>
-		ReadWrite
+		ReadWrite = 3
 	}
 }
