@@ -70,7 +70,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			{
 				if (field.FieldType != null)
 				{
-					field.FullName = string.Concat(field.DeclaringType.FullName, "::", field.Name);
+					field.FullName = string.Concat(field.DeclaringType.FullName, "::", field.Name, " ", field.FieldType.FullName);
 					field.ShortName = string.Concat(field.Name, " : ", field.FieldType.ShortName);
 				}
 			}

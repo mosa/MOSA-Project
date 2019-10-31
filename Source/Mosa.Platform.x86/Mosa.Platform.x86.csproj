@@ -1,308 +1,34 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="12.0">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{DE30CBE9-50F3-4A3E-BCC9-A8A36348530E}</ProjectGuid>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <AssemblyKeyContainerName>
-    </AssemblyKeyContainerName>
-    <AssemblyName>Mosa.Platform.x86</AssemblyName>
-    <DefaultClientScript>JScript</DefaultClientScript>
-    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
-    <DefaultTargetSchema>IE50</DefaultTargetSchema>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>
-    </AppDesignerFolder>
-    <RootNamespace>Mosa.Platform.x86</RootNamespace>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
-    <TargetFrameworkProfile />
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <BaseAddress>285212672</BaseAddress>
-    <ConfigurationOverrideFile>
-    </ConfigurationOverrideFile>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
-    <DebugSymbols>true</DebugSymbols>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyTitle>Mosa.Platform.x86</AssemblyTitle>
+    <Company>MOSA Project</Company>
+    <Product>Mosa.Platform.x86</Product>
+    <Copyright>Copyright ©  2014</Copyright>
     <FileAlignment>4096</FileAlignment>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\bin\</OutputPath>
-    <RegisterForComInterop>False</RegisterForComInterop>
+    <DebugType>full</DebugType>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <WarningLevel>4</WarningLevel>
-    <DebugType>full</DebugType>
+    <BaseAddress>285212672</BaseAddress>
+    <LangVersion>8.0</LangVersion>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <OutputPath>..\..\bin\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <NoWarn>0414</NoWarn>
-    <Prefer32Bit>false</Prefer32Bit>
-    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
-    <DebugType>full</DebugType>
-    <BaseAddress>285212672</BaseAddress>
-    <ConfigurationOverrideFile>
-    </ConfigurationOverrideFile>
-    <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>
-    </DocumentationFile>
-    <FileAlignment>4096</FileAlignment>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\bin\</OutputPath>
-    <RegisterForComInterop>False</RegisterForComInterop>
-    <RemoveIntegerChecks>False</RemoveIntegerChecks>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>2</WarningLevel>
-    <Prefer32Bit>false</Prefer32Bit>
-    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
+    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
+    <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
+    <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
+    <ProjectReference Include="..\Mosa.Platform.Intel\Mosa.Platform.Intel.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
-      <Project>{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}</Project>
-      <Name>Mosa.Compiler.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj">
-      <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
-      <Name>Mosa.Compiler.Framework</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj">
-      <Project>{5f30a68e-05bf-40ea-b576-5ebcde520559}</Project>
-      <Name>Mosa.Compiler.MosaTypeSystem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Platform.Intel\Mosa.Platform.Intel.csproj">
-      <Project>{17ce4f09-7cbf-49e9-84a7-178db2cbd7c9}</Project>
-      <Name>Mosa.Platform.Intel</Name>
-    </ProjectReference>
+    <Compile Remove="Intrinsic\SuppressStackFrame.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Architecture.cs" />
-    <Compile Include="ArchitectureFeatureFlags.cs" />
-    <Compile Include="BaseTransformationStage.cs" />
-    <Compile Include="GlobalSuppressions.cs" />
-    <Compile Include="Instructions\Adc32.cs" />
-    <Compile Include="Instructions\Add32.cs" />
-    <Compile Include="Instructions\AddSD.cs" />
-    <Compile Include="Instructions\AddSS.cs" />
-    <Compile Include="Instructions\And32.cs" />
-    <Compile Include="Instructions\BochsDebug.cs" />
-    <Compile Include="Instructions\Branch.cs" />
-    <Compile Include="Instructions\Break.cs" />
-    <Compile Include="Instructions\Bt32.cs" />
-    <Compile Include="Instructions\Btr32.cs" />
-    <Compile Include="Instructions\Bts32.cs" />
-    <Compile Include="Instructions\Call.cs" />
-    <Compile Include="Instructions\Cdq32.cs" />
-    <Compile Include="Instructions\Cli.cs" />
-    <Compile Include="Instructions\CMov32.cs" />
-    <Compile Include="Instructions\Cmp32.cs" />
-    <Compile Include="Instructions\CmpXchgLoad32.cs" />
-    <Compile Include="Instructions\Comisd.cs" />
-    <Compile Include="Instructions\Comiss.cs" />
-    <Compile Include="Instructions\CpuId.cs" />
-    <Compile Include="Instructions\Cvtsd2ss.cs" />
-    <Compile Include="Instructions\Cvtsi2sd32.cs" />
-    <Compile Include="Instructions\Cvtsi2ss32.cs" />
-    <Compile Include="Instructions\Cvtss2sd.cs" />
-    <Compile Include="Instructions\Cvttsd2si32.cs" />
-    <Compile Include="Instructions\Cvttss2si32.cs" />
-    <Compile Include="Instructions\Dec32.cs" />
-    <Compile Include="Instructions\Div32.cs" />
-    <Compile Include="Instructions\DivSD.cs" />
-    <Compile Include="Instructions\DivSS.cs" />
-    <Compile Include="Instructions\Hlt.cs" />
-    <Compile Include="Instructions\IDiv32.cs" />
-    <Compile Include="Instructions\IMul32.cs" />
-    <Compile Include="Instructions\In16.cs" />
-    <Compile Include="Instructions\In32.cs" />
-    <Compile Include="Instructions\In8.cs" />
-    <Compile Include="Instructions\Inc32.cs" />
-    <Compile Include="Instructions\Int.cs" />
-    <Compile Include="Instructions\Invlpg.cs" />
-    <Compile Include="Instructions\IRetd.cs" />
-    <Compile Include="Instructions\Jmp.cs" />
-    <Compile Include="Instructions\JmpExternal.cs" />
-    <Compile Include="Instructions\JmpFar.cs" />
-    <Compile Include="Instructions\Lea32.cs" />
-    <Compile Include="Instructions\Leave.cs" />
-    <Compile Include="Instructions\Lgdt.cs" />
-    <Compile Include="Instructions\Lidt.cs" />
-    <Compile Include="Instructions\Lock.cs" />
-    <Compile Include="Instructions\Mov32.cs" />
-    <Compile Include="Instructions\MovAPS.cs" />
-    <Compile Include="Instructions\MovapsLoad.cs" />
-    <Compile Include="Instructions\MovCRLoad32.cs" />
-    <Compile Include="Instructions\MovCRStore32.cs" />
-    <Compile Include="Instructions\Movdi32ss.cs" />
-    <Compile Include="Instructions\Movdssi32.cs" />
-    <Compile Include="Instructions\MovLoad16.cs" />
-    <Compile Include="Instructions\MovLoad32.cs" />
-    <Compile Include="Instructions\MovLoad8.cs" />
-    <Compile Include="Instructions\MovLoadSeg32.cs" />
-    <Compile Include="Instructions\Movsd.cs" />
-    <Compile Include="Instructions\MovsdLoad.cs" />
-    <Compile Include="Instructions\MovsdStore.cs" />
-    <Compile Include="Instructions\Movss.cs" />
-    <Compile Include="Instructions\MovssLoad.cs" />
-    <Compile Include="Instructions\MovssStore.cs" />
-    <Compile Include="Instructions\MovStore16.cs" />
-    <Compile Include="Instructions\MovStore32.cs" />
-    <Compile Include="Instructions\MovStore8.cs" />
-    <Compile Include="Instructions\MovStoreSeg32.cs" />
-    <Compile Include="Instructions\Movsx16To32.cs" />
-    <Compile Include="Instructions\Movsx8To32.cs" />
-    <Compile Include="Instructions\MovsxLoad16.cs" />
-    <Compile Include="Instructions\MovsxLoad8.cs" />
-    <Compile Include="Instructions\MovUPS.cs" />
-    <Compile Include="Instructions\MovupsLoad.cs" />
-    <Compile Include="Instructions\MovupsStore.cs" />
-    <Compile Include="Instructions\Movzx16To32.cs" />
-    <Compile Include="Instructions\Movzx8To32.cs" />
-    <Compile Include="Instructions\MovzxLoad16.cs" />
-    <Compile Include="Instructions\MovzxLoad8.cs" />
-    <Compile Include="Instructions\Mul32.cs" />
-    <Compile Include="Instructions\MulSD.cs" />
-    <Compile Include="Instructions\MulSS.cs" />
-    <Compile Include="Instructions\Neg32.cs" />
-    <Compile Include="Instructions\Nop.cs" />
-    <Compile Include="Instructions\Not32.cs" />
-    <Compile Include="Instructions\Or32.cs" />
-    <Compile Include="Instructions\Out16.cs" />
-    <Compile Include="Instructions\Out32.cs" />
-    <Compile Include="Instructions\Out8.cs" />
-    <Compile Include="Instructions\Pause.cs" />
-    <Compile Include="Instructions\Pextrd32.cs" />
-    <Compile Include="Instructions\Pop32.cs" />
-    <Compile Include="Instructions\Popad.cs" />
-    <Compile Include="Instructions\Push32.cs" />
-    <Compile Include="Instructions\Pushad.cs" />
-    <Compile Include="Instructions\PXor.cs" />
-    <Compile Include="Instructions\Rcr32.cs" />
-    <Compile Include="Instructions\RdMSR.cs" />
-    <Compile Include="Instructions\Ret.cs" />
-    <Compile Include="Instructions\RoundSD.cs" />
-    <Compile Include="Instructions\RoundSS.cs" />
-    <Compile Include="Instructions\Sar32.cs" />
-    <Compile Include="Instructions\Sbb32.cs" />
-    <Compile Include="Instructions\Setcc.cs" />
-    <Compile Include="Instructions\Shl32.cs" />
-    <Compile Include="Instructions\Shld32.cs" />
-    <Compile Include="Instructions\Shr32.cs" />
-    <Compile Include="Instructions\Shrd32.cs" />
-    <Compile Include="Instructions\Sqrtsd.cs" />
-    <Compile Include="Instructions\Sqrtss.cs" />
-    <Compile Include="Instructions\Sti.cs" />
-    <Compile Include="Instructions\Stos.cs" />
-    <Compile Include="Instructions\Sub32.cs" />
-    <Compile Include="Instructions\SubSD.cs" />
-    <Compile Include="Instructions\SubSS.cs" />
-    <Compile Include="Instructions\Test32.cs" />
-    <Compile Include="Instructions\Ucomisd.cs" />
-    <Compile Include="Instructions\Ucomiss.cs" />
-    <Compile Include="Instructions\WrMSR.cs" />
-    <Compile Include="Instructions\XAddLoad32.cs" />
-    <Compile Include="Instructions\XChg32.cs" />
-    <Compile Include="Instructions\XChgLoad32.cs" />
-    <Compile Include="Instructions\Xor32.cs" />
-    <Compile Include="Intrinsic\FarJump.cs" />
-    <Compile Include="Intrinsic\SetSegments.cs" />
-    <Compile Include="Intrinsic\RdMSR.cs" />
-    <Compile Include="Intrinsic\WrMSR.cs" />
-    <Compile Include="Intrinsic\Roundsd2Positive.cs" />
-    <Compile Include="Intrinsic\Roundsd2Negative.cs" />
-    <Compile Include="Intrinsic\Roundss2Positive.cs" />
-    <Compile Include="Intrinsic\Roundss2Negative.cs" />
-    <Compile Include="Intrinsic\Sqrtss.cs" />
-    <Compile Include="Intrinsic\Sqrtsd.cs" />
-    <Compile Include="Intrinsic\GetIRQHandler.cs" />
-    <Compile Include="Intrinsic\IRQs.cs" />
-    <Compile Include="Intrinsic\XAddLoad32.cs" />
-    <Compile Include="Intrinsic\XChgLoad32.cs" />
-    <Compile Include="Intrinsic\Div.cs" />
-    <Compile Include="Intrinsic\AllocateStackSpace.cs" />
-    <Compile Include="Intrinsic\FrameCallRetR8.cs" />
-    <Compile Include="Intrinsic\FrameCallRetU8.cs" />
-    <Compile Include="Intrinsic\FrameCallRetU4.cs" />
-    <Compile Include="Intrinsic\FrameCall.cs" />
-    <Compile Include="Intrinsic\InterruptReturn.cs" />
-    <Compile Include="Intrinsic\Get32.cs" />
-    <Compile Include="Intrinsic\Get16.cs" />
-    <Compile Include="Intrinsic\FrameJump.cs" />
-    <Compile Include="Intrinsic\GetCS.cs" />
-    <Compile Include="Intrinsic\GetFS.cs" />
-    <Compile Include="Intrinsic\GetMultibootEAX.cs" />
-    <Compile Include="Intrinsic\GetMultibootEBX.cs" />
-    <Compile Include="Intrinsic\Int.cs" />
-    <Compile Include="Intrinsic\In16.cs" />
-    <Compile Include="Intrinsic\In32.cs" />
-    <Compile Include="Intrinsic\Helper.cs" />
-    <Compile Include="Intrinsic\Memclr256.cs" />
-    <Compile Include="Intrinsic\Memcpy256.cs" />
-    <Compile Include="Intrinsic\Out16.cs" />
-    <Compile Include="Intrinsic\Out32.cs" />
-    <Compile Include="Intrinsic\Pause.cs" />
-    <Compile Include="Intrinsic\CmpXChgLoad32.cs" />
-    <Compile Include="Intrinsic\Remainder.cs" />
-    <Compile Include="Intrinsic\Set32.cs" />
-    <Compile Include="Intrinsic\Set16.cs" />
-    <Compile Include="Intrinsic\Set8.cs" />
-    <Compile Include="Intrinsic\SetFS.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Stages\BuildStackStage.cs" />
-    <Compile Include="Stages\OptimizationStage.cs" />
-    <Compile Include="Stages\RuntimeCallStage.cs" />
-    <Compile Include="Stages\FloatingPointStage.cs" />
-    <Compile Include="Stages\FinalTweakStage.cs" />
-    <Compile Include="Stages\PostOptimizationStage.cs" />
-    <Compile Include="Stages\SimpleDeadCodeRemovalStage.cs" />
-    <Compile Include="Stages\AddressModeConversionStage.cs" />
-    <Compile Include="Stages\FixedRegisterAssignmentStage.cs" />
-    <Compile Include="Intrinsic\Cli.cs" />
-    <Compile Include="Intrinsic\GetCR0.cs" />
-    <Compile Include="Intrinsic\GetCR2.cs" />
-    <Compile Include="Intrinsic\GetCR3.cs" />
-    <Compile Include="Intrinsic\GetCR4.cs" />
-    <Compile Include="Intrinsic\In8.cs" />
-    <Compile Include="Intrinsic\SetCR0.cs" />
-    <Compile Include="Intrinsic\SetCR2.cs" />
-    <Compile Include="Intrinsic\SetCR3.cs" />
-    <Compile Include="Intrinsic\SetCR4.cs" />
-    <Compile Include="Intrinsic\Get8.cs" />
-    <Compile Include="Intrinsic\Hlt.cs" />
-    <Compile Include="Intrinsic\CpuIdEax.cs" />
-    <Compile Include="Intrinsic\CpuIdEbx.cs" />
-    <Compile Include="Intrinsic\CpuIdEcx.cs" />
-    <Compile Include="Intrinsic\CpuIdEdx.cs" />
-    <Compile Include="Intrinsic\CpuId.cs" />
-    <Compile Include="Intrinsic\Invlpg.cs" />
-    <Compile Include="Intrinsic\GetIDTJumpLocation.cs" />
-    <Compile Include="Intrinsic\Lgdt.cs" />
-    <Compile Include="Intrinsic\Lidt.cs" />
-    <Compile Include="Intrinsic\Nop.cs" />
-    <Compile Include="Intrinsic\Out8.cs" />
-    <Compile Include="Intrinsic\Sti.cs" />
-    <Compile Include="CompilerStages\MultibootV1Stage.cs" />
-    <Compile Include="X86.cs" />
-    <Compile Include="Stages\TweakStage.cs" />
-    <Compile Include="Intrinsic\BochsDebug.cs" />
-    <Compile Include="X86Instruction.cs" />
-    <Compile Include="Stages\IRTransformationStage.cs" />
-    <Compile Include="Stages\LongOperandStage.cs" />
-    <Compile Include="X86Instructions.cs" />
-    <Compile Include="Intrinsic\Jmp.cs" />
-    <Compile Include="Intrinsic\Call.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

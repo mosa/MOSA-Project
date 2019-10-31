@@ -23,8 +23,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!HasCode)
 				return;
 
-			if (HasProtectedRegions)
-				return;
+			//if (HasProtectedRegions)
+			//	return;
 
 			foreach (var block in BasicBlocks)
 			{
@@ -35,13 +35,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 					InstructionCount++;
 
-					if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
+					if (!IsPhiInstruction(node.Instruction))
 						break;
 
 					if (node.OperandCount != node.Block.PreviousBlocks.Count)
 						throw new CompilerException($"ExitSSAStage: Invalid block counts: {node}");
-
-					Debug.Assert(node.OperandCount == node.Block.PreviousBlocks.Count);
 
 					ProcessPhiInstruction(node);
 				}
@@ -54,9 +52,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The context.</param>
 		private void ProcessPhiInstruction(InstructionNode node)
 		{
-			//if (SimplePhiUpdate(node))
-			//	return;
-
 			var sourceBlocks = node.PhiBlocks;
 
 			for (var index = 0; index < node.Block.PreviousBlocks.Count; index++)
@@ -68,52 +63,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			node.Empty();
-		}
-
-		private bool SimplePhiUpdate(InstructionNode node)
-		{
-			// Experiment
-			var result = node.Result;
-
-			if (result.Definitions.Count != 1)
-				return false;
-
-			for (int i = 0; i < node.OperandCount; i++)
-			{
-				var operand = node.GetOperand(i);
-
-				if (operand.IsConstant)
-					continue;
-
-				if (operand.Definitions.Count != 1)
-					return false;
-
-				if (!operand.IsVirtualRegister)
-					return false;
-
-				if (operand.Definitions[0].Block != node.PhiBlocks[i])
-					return false;
-			}
-
-			for (int i = 0; i < node.OperandCount; i++)
-			{
-				var operand = node.GetOperand(i);
-
-				if (operand.IsVirtualRegister)
-				{
-					operand.Definitions[0].Result = result;
-
-					ReplaceOperand(operand, result);
-				}
-				else
-				{
-					InsertCopyStatement(node.PhiBlocks[i], result, operand);
-				}
-			}
-
-			node.Empty();
-
-			return true;
 		}
 
 		/// <summary>

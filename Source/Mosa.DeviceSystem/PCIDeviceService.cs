@@ -2,6 +2,7 @@
 
 using Mosa.DeviceSystem.PCI;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Mosa.DeviceSystem
 {
@@ -23,8 +24,12 @@ namespace Mosa.DeviceSystem
 			DeviceService = ServiceManager.GetFirstService<DeviceService>();
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public override void PostEvent(ServiceEvent serviceEvent)
 		{
+			//HAL.DebugWriteLine("PCIDeviceService:PostEvent()");
+			//HAL.Pause();
+
 			var device = MatchEvent<PCIDevice>(serviceEvent, ServiceEventType.Start);
 
 			if (device == null)

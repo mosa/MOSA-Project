@@ -86,14 +86,6 @@ namespace Mosa.Utility.Launcher
 		[Option("ir-optimizations-off")]
 		public bool IROptimizationsFalse { set { EnableIROptimizations = false; } }
 
-		// Legacy - will be removed in the future
-		[Option("ir")]
-		public bool EnableIROptimizationsTrue { set { EnableIROptimizations = true; } }
-
-		// Legacy - will be removed in the future
-		[Option("optimization-ir-off")]
-		public bool IROptimizationsFalse2 { set { EnableIROptimizations = false; } }
-
 		[Option("sccp")]
 		public bool EnableSparseConditionalConstantPropagation { get; set; }
 
@@ -208,7 +200,7 @@ namespace Mosa.Utility.Launcher
 		public PlatformType PlatformType { get; set; }
 
 		[Option("file-system")]
-		public FileSystem FileSystem { get; set; }
+		public BootImage.FileSystem FileSystem { get; set; }
 
 		[Option("serial-connection")]
 		public SerialConnectionOption SerialConnectionOption { get; set; }
@@ -409,7 +401,7 @@ namespace Mosa.Utility.Launcher
 			ImageFormat = ImageFormat.IMG;
 			LinkerFormatType = LinkerFormatType.Elf32;
 			PlatformType = PlatformType.x86;
-			FileSystem = FileSystem.FAT16;
+			FileSystem = BootImage.FileSystem.FAT16;
 			BaseAddress = 0x00400000;
 			SerialConnectionHost = "127.0.0.1";
 			InlinedIRMaximum = 12;

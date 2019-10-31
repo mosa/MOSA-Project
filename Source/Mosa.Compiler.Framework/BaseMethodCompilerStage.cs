@@ -170,6 +170,16 @@ namespace Mosa.Compiler.Framework
 		protected Operand StackPointer { get { return MethodCompiler.Compiler.StackPointer; } }
 
 		/// <summary>
+		/// Gets the exception register.
+		/// </summary>
+		protected Operand ExceptionRegister { get { return MethodCompiler.Compiler.ExceptionRegister; } }
+
+		/// <summary>
+		/// Gets the leave target register.
+		/// </summary>
+		protected Operand LeaveTargetRegister { get { return MethodCompiler.Compiler.LeaveTargetRegister; } }
+
+		/// <summary>
 		/// Gets a value indicating whether this instance has protected regions.
 		/// </summary>
 		protected bool HasProtectedRegions { get { return MethodCompiler.HasProtectedRegions; } }
@@ -289,6 +299,11 @@ namespace Mosa.Compiler.Framework
 
 		protected virtual void Initialize()
 		{ }
+
+		protected virtual bool CheckToRun()
+		{
+			return true;
+		}
 
 		protected virtual void Setup()
 		{
@@ -594,9 +609,9 @@ namespace Mosa.Compiler.Framework
 			return null;
 		}
 
-		protected MosaExceptionHandler FindFinallyExceptionContext(InstructionNode node)
+		protected MosaExceptionHandler _NOT_USED_FindFinallyExceptionContext(InstructionNode node)
 		{
-			int label = node.Label;
+			int label = node.Block.Label;
 
 			foreach (var handler in Method.ExceptionHandlers)
 			{
@@ -611,8 +626,8 @@ namespace Mosa.Compiler.Framework
 
 		protected bool IsSourceAndTargetWithinSameTryOrException(InstructionNode node)
 		{
-			int leaveLabel = node.Label;
-			int targetLabel = node.BranchTargets[0].First.Label;
+			int leaveLabel = TraverseBackToNonCompilerBlock(node.Block).Label;
+			int targetLabel = TraverseBackToNonCompilerBlock(node.BranchTargets[0]).Label;
 
 			foreach (var handler in Method.ExceptionHandlers)
 			{
@@ -643,6 +658,21 @@ namespace Mosa.Compiler.Framework
 
 			// very odd
 			return true;
+		}
+
+		protected BasicBlock TraverseBackToNonCompilerBlock(BasicBlock block)
+		{
+			var start = block;
+
+			while (start.IsCompilerBlock)
+			{
+				if (!start.HasPreviousBlocks)
+					return null;
+
+				start = start.PreviousBlocks[0]; // any one
+			}
+
+			return start;
 		}
 
 		#endregion Protected Region Methods

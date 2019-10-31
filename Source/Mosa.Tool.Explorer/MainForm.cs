@@ -1020,12 +1020,12 @@ namespace Mosa.Tool.Explorer
 			cbEnableInlinedMethods.Checked = state;
 			cbEnableLongExpansion.Checked = state;
 			cbEnableTwoPassOptimizations.Checked = state;
+
 			//cbEnableMethodScanner.Checked = state;
 			cbEnableBitTracker.Checked = state;
 
 			cbLoopInvariantCodeMotion.Checked = state;
 			cbPlatformOptimizations.Checked = state;
 		}
-
 	}
 }

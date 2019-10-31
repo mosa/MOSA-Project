@@ -17,8 +17,6 @@ namespace Mosa.Compiler.Framework.Stages
 		private List<InstructionNode> dupNodes;
 		private BitArray processed;
 
-		//private TraceLog trace;
-
 		private Dictionary<BasicBlock, List<Operand>> outgoingMoves;
 		private Dictionary<BasicBlock, List<Operand>> incomingMoves;
 
@@ -26,9 +24,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Initialize()
 		{
-			outgoingMoves = new Dictionary<BasicBlock, List<Operand>>();
-			incomingMoves = new Dictionary<BasicBlock, List<Operand>>();
-
 			dupNodes = new List<InstructionNode>();
 			worklist = new Queue<BasicBlock>();
 		}
@@ -41,7 +36,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!Method.HasImplementation)
 				return;
 
-			//trace = CreateTraceLog();
+			outgoingMoves = new Dictionary<BasicBlock, List<Operand>>();
+			incomingMoves = new Dictionary<BasicBlock, List<Operand>>();
 
 			processed = new BitArray(BasicBlocks.Count, false);
 
@@ -55,11 +51,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
-			outgoingMoves.Clear();
-			incomingMoves.Clear();
+			outgoingMoves = null;
+			incomingMoves = null;
+			processed = null;
 			worklist.Clear();
 			dupNodes.Clear();
-			processed = null;
 		}
 
 		/// <summary>
@@ -98,25 +94,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var operandStack = new Stack<Operand>(incoming);
 
-			//if (trace.Active)
-			//{
-			//	trace.Log("IN:    Block: " + block + " Operand Stack Count: " + operandStack.Count.ToString());
-			//	foreach (var op in operandStack)
-			//	{
-			//		trace.Log("       -> " + op);
-			//	}
-			//}
-
 			AssignOperands(block, operandStack);
-
-			//if (trace.Active)
-			//{
-			//	trace.Log("AFTER: Block: " + block + " Operand Stack Count: " + operandStack.Count.ToString());
-			//	foreach (var op in operandStack)
-			//	{
-			//		trace.Log("       -> " + op);
-			//	}
-			//}
 
 			var outgoing = new List<Operand>(operandStack);
 
@@ -162,7 +140,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void AddMoves(BasicBlock block, List<Operand> sourceOperands, List<Operand> destinationOperands)
 		{
-			// TODO: Generalize XXXX
 			var context = new Context(block.Last);
 
 			context.GotoPrevious();

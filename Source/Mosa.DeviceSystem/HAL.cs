@@ -162,5 +162,10 @@ namespace Mosa.DeviceSystem
 		{
 			hardwareAbstraction.Abort(message);
 		}
+
+		public static void Pause()
+		{
+			hardwareAbstraction.Pause();
+		}
 	}
 }

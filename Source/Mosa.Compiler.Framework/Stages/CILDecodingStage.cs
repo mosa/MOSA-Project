@@ -42,7 +42,6 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			instruction = null;
 			block = null;
-			counts = null;
 		}
 
 		protected override void Run()
@@ -52,20 +51,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// No CIL decoding if this is a linker generated method
 			Debug.Assert(!Method.IsCompilerGenerated);
-
-			if (!Method.HasImplementation)
-			{
-				//if (DelegatePatcher.PatchDelegate(MethodCompiler))
-				//	return;
-
-				MethodCompiler.Stop();
-				return;
-			}
-
-			if (CompilerOptions.EnableStatistics)
-			{
-				counts = new int[CILInstruction.MaxOpCodeValue];
-			}
 
 			MethodCompiler.SetLocalVariables(Method.LocalVariables);
 
@@ -89,7 +74,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			DecodeProtectedRegionTargets();
 
-			/* Decode the instructions */
 			DecodeInstructions();
 
 			foreach (var block in BasicBlocks)
@@ -101,36 +85,19 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
+			InitializePromotedLocalVariablesToVirtualRegisters();
+
+			InsertExceptionStartInstructions();
+			InsertFlowOrJumpInstructions();
+
 			// This makes it easier to review --- it's not necessary
 			BasicBlocks.OrderByLabel();
 		}
 
 		protected override void Finish()
 		{
-			if (counts == null)
-				return;
-
-			int total = 0;
-
-			for (int op = 0; op < counts.Length; op++)
-			{
-				int count = counts[op];
-
-				if (count == 0)
-					continue;
-
-				var cil = CILInstruction.Get((OpCode)op);
-
-				//UpdateCounter("CILDecodingStage.OpCode." + cil.FullName, count);
-
-				total += count;
-			}
-
-			//UpdateCounter("CILDecodingStage.CILInstructions", total);
-
 			instruction = null;
 			block = null;
-			counts = null;
 		}
 
 		#region Internals
@@ -180,8 +147,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 				var cil = CILInstruction.Get(op);
 
-				++counts[(int)op];
-
 				branched = cil.DecodeTargets(this);
 			}
 		}
@@ -223,8 +188,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 				//instructionCount++;
 
-				//const bool addjmp = false;
-
 				var flow = node.Instruction.FlowControl;
 
 				if (flow == FlowControl.Next || flow == FlowControl.Call || flow == FlowControl.ConditionalBranch || flow == FlowControl.Switch)
@@ -253,6 +216,132 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		#endregion Internals
+
+		private void InitializePromotedLocalVariablesToVirtualRegisters()
+		{
+			if (Method.LocalVariables.Count == 0)
+				return;
+
+			var prologue = new Context(BasicBlocks.PrologueBlock.First);
+
+			foreach (var variable in MethodCompiler.LocalVariables)
+			{
+				if (!variable.IsVirtualRegister)
+					continue;
+
+				if (variable.IsI4)
+				{
+					prologue.AppendInstruction(IRInstruction.Move32, variable, CreateConstant(0));
+				}
+				else if (variable.IsI8)
+				{
+					prologue.AppendInstruction(IRInstruction.Move64, variable, CreateConstant(0ul));
+				}
+				else if (variable.IsR4)
+				{
+					prologue.AppendInstruction(IRInstruction.MoveR4, variable, CreateConstant(0.0f));
+				}
+				else if (variable.IsR8)
+				{
+					prologue.AppendInstruction(IRInstruction.MoveR8, variable, CreateConstant(0.0d));
+				}
+				else if (variable.IsReferenceType)
+				{
+					prologue.AppendInstruction(Select(variable.Is64BitInteger, IRInstruction.Move32, IRInstruction.Move64), variable, Operand.GetNull(variable.Type));
+				}
+				else if (variable.Is64BitInteger)
+				{
+					prologue.AppendInstruction(IRInstruction.Move64, variable, CreateConstant(0ul));
+				}
+				else
+				{
+					prologue.AppendInstruction(IRInstruction.Move32, variable, CreateConstant(0ul));
+				}
+			}
+		}
+
+		private void InsertExceptionStartInstructions()
+		{
+			foreach (var clause in Method.ExceptionHandlers)
+			{
+				if (clause.ExceptionHandlerType == ExceptionHandlerType.Exception)
+				{
+					var handler = BasicBlocks.GetByLabel(clause.HandlerStart);
+
+					var exceptionObject = AllocateVirtualRegister(clause.Type);
+
+					var context = new Context(handler);
+
+					context.AppendInstruction(IRInstruction.ExceptionStart, exceptionObject);
+				}
+
+				if (clause.ExceptionHandlerType == ExceptionHandlerType.Filter)
+				{
+					{
+						var handler = BasicBlocks.GetByLabel(clause.HandlerStart);
+
+						var exceptionObject = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
+
+						var context = new Context(handler);
+
+						context.AppendInstruction(IRInstruction.ExceptionStart, exceptionObject);
+					}
+
+					{
+						var handler = BasicBlocks.GetByLabel(clause.FilterStart.Value);
+
+						var exceptionObject = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
+
+						var context = new Context(handler);
+
+						context.AppendInstruction(IRInstruction.FilterStart, exceptionObject);
+					}
+				}
+			}
+		}
+
+		private void InsertFlowOrJumpInstructions()
+		{
+			foreach (var block in BasicBlocks)
+			{
+				var label = TraverseBackToNonCompilerBlock(block).Label;
+
+				for (var node = block.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
+				{
+					if (node.IsEmptyOrNop)
+						continue;
+
+					if (!(node.Instruction is CIL.LeaveInstruction))
+						continue;   // FUTURE: Could this be a break instruction instead?
+
+					var target = node.BranchTargets[0];
+
+					if (IsSourceAndTargetWithinSameTryOrException(node))
+					{
+						// Leave instruction can be converted into a simple jump instruction
+						node.SetInstruction(IRInstruction.Jmp, target);
+						BasicBlocks.RemoveHeaderBlock(target);
+						continue;
+					}
+
+					var entry = FindImmediateExceptionContext(label);
+
+					if (!entry.IsLabelWithinTry(label))
+						break;
+
+					var flowNode = new InstructionNode(IRInstruction.Flow, target);
+
+					node.Insert(flowNode);
+
+					if (target.IsHeadBlock)
+					{
+						BasicBlocks.RemoveHeaderBlock(target);
+					}
+
+					break;
+				}
+			}
+		}
 
 		#region IInstructionDecoder Members
 

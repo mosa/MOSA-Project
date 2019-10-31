@@ -41,10 +41,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (HasProtectedRegions)
 				return;
 
-			// Method is empty - must be a plugged method
-			if (BasicBlocks.HeadBlocks.Count == 0)
-				return;
-
 			trace = CreateTraceLog(8);
 
 			foreach (var headBlock in BasicBlocks.HeadBlocks)
