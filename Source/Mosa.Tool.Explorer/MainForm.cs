@@ -6,6 +6,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Utility.Launcher;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -770,13 +771,15 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.SearchPaths.Clear();
 			Compiler.CompilerOptions.SourceFiles.Clear();
 
+			var sourceDirectory = Path.GetDirectoryName(filename);
 			Compiler.CompilerOptions.AddSearchPath(includeDirectory);
-			Compiler.CompilerOptions.AddSearchPath(Path.GetDirectoryName(filename));
+			Compiler.CompilerOptions.AddSearchPath(sourceDirectory);
 
+			var fileHunter = new FileHunter(sourceDirectory);
 			Compiler.CompilerOptions.AddSourceFile(filename);
-			Compiler.CompilerOptions.AddSourceFile("Mosa.Plug.Korlib.dll");
-			Compiler.CompilerOptions.AddSourceFile("Mosa.Plug.Korlib." + platform + ".dll");
-			Compiler.CompilerOptions.AddSourceFile("Mosa.Runtime." + platform + ".dll");
+			Compiler.CompilerOptions.AddSourceFile(fileHunter.HuntFile("Mosa.Plug.Korlib.dll")?.FullName);
+			Compiler.CompilerOptions.AddSourceFile(fileHunter.HuntFile("Mosa.Plug.Korlib." + platform + ".dll")?.FullName);
+			Compiler.CompilerOptions.AddSourceFile(fileHunter.HuntFile("Mosa.Runtime." + platform + ".dll")?.FullName);
 
 			Compiler.Load();
 		}

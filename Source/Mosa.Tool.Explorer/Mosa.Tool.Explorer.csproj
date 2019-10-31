@@ -65,6 +65,7 @@
     <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj" />
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
     <ProjectReference Include="..\Mosa.Utility.CodeCompiler\Mosa.Utility.CodeCompiler.csproj" />
+    <ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="magnifier.ico" />
