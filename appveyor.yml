@@ -120,6 +120,7 @@ for:
         - image: Ubuntu1804
 
     install:
+    - sh: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
     - sh: sudo apt-get upgrade -y
     - sh: sudo apt-get install -y git wget qemu qemu-system qemu-system-x86
 
