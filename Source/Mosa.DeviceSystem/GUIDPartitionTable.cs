@@ -37,7 +37,7 @@ namespace Mosa.DeviceSystem
 		protected IDiskDevice diskDevice;
 
 		/// <summary>
-		/// Gets a value indicating whether this <see cref="MasterBootBlock"/> is valid.
+		/// Gets a value indicating whether this <see cref="GUIDPartitionTable"/> is valid.
 		/// </summary>
 		/// <value><c>true</c> if valid; otherwise, <c>false</c>.</value>
 		public bool Valid { get { return valid; } }

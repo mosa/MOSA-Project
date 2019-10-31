@@ -16,7 +16,7 @@ namespace Mosa.Workspace.Experiment.Debug
 	{
 		private static void Main()
 		{
-			Test();
+			Compile();
 		}
 
 		private static void Compile()

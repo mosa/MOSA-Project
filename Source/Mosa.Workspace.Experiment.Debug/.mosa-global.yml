@@ -5,9 +5,9 @@ Compiler:
     Architecture: x86	# Options: x86, x64, ArmARMv8A32
     BaseAddress: 0x00400000
     EnableStatistics : false
-    TraceLevel : 0
+    TraceLevel: 0
     EnableMethodScanner: false # experimental option
-    EmitInlinedMethods : false
+    EmitInlinedMethods: false
     #OutputFile
 
 SearchPaths:
@@ -28,7 +28,7 @@ Optimizations:
     ValueNumbering: true
     LongExpansion: true
     EnableBitTracker: true
-    Platform : true
+    Platform: true
     InlineMethods: true
     InlineMaximum: 12
     InlineAggressiveMaximum: 24
