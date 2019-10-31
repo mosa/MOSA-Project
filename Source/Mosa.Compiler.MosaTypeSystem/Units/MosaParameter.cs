@@ -56,7 +56,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				if (parameter.ParameterType != null)
 				{
 					string signatureName = (parameter.DeclaringMethod == null) ? "<FunctionPointer>" : parameter.DeclaringMethod.FullName;
-					parameter.FullName = string.Concat(parameter.ParameterType.FullName, " ", signatureName, "::", parameter.Name);
+					parameter.FullName = string.Concat(signatureName, "::", parameter.Name, " ", parameter.ParameterType.FullName);
 					parameter.ShortName = string.Concat(parameter.Name, " : ", parameter.ParameterType.ShortName);
 				}
 			}

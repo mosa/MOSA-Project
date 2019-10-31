@@ -502,8 +502,29 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				if (mDesc.Definition != desc.Definition || !comparer.Equals(mDesc.Signature, newSig))
 					continue;
 
-				if (!newSig.ContainsGenericParameter && newSig.GenParamCount > 0)
-					return m;
+				if (newSig.ContainsGenericParameter || newSig.GenParamCount > 0)
+					continue;
+
+				if (m.GenericArguments.Count != genericArgs.Count)
+					continue;
+
+				if (m.GenericArguments.Count > 0)
+				{
+					var failedGenericArgumentMatch = false;
+					for (var i = 0; i < m.GenericArguments.Count; i++)
+					{
+						if (comparer.Equals(genericArguments[i], m.GenericArguments[i].GetTypeSig()))
+							continue;
+
+						failedGenericArgumentMatch = true;
+						break;
+					}
+
+					if (failedGenericArgumentMatch)
+						continue;
+				}
+
+				return m;
 			}
 
 			mosaMethod = metadata.Controller.CreateMethod(mosaMethod);

@@ -43,5 +43,49 @@ namespace System
 		{
 			return (int)_value;
 		}
+
+		public static uint Parse(string s)
+		{
+			if (s == null)
+				throw new ArgumentNullException();
+
+			if (s.Length == 0)
+				throw new FormatException();
+
+			uint result;
+			if (TryParse(s, out result))
+				return result;
+
+			throw new FormatException();
+		}
+
+		public static bool TryParse(string s, out uint result)
+		{
+			int len = s.Length;
+			uint n = 0;
+			result = 0;
+			var i = 0;
+			while (i < len)
+			{
+				if (n > (0xFFFFFFFF / 10))
+				{
+					return false;
+				}
+				n *= 10;
+				if (s[i] != '\0')
+				{
+					uint newN = n + (uint)(s[i] - '0');
+					// Detect an overflow here...
+					if (newN < n)
+					{
+						return false;
+					}
+					n = newN;
+				}
+				i++;
+			}
+			result = n;
+			return true;
+		}
 	}
 }

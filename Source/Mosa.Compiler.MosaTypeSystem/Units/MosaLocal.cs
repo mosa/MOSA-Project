@@ -21,7 +21,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public override string ToString()
 		{
-			return Type + " " + Name + (IsPinned ? " [Pinned]" : "");
+			return Name + (IsPinned ? " [Pinned]" : "") + " " + Type;
 		}
 
 		public bool Equals(MosaLocal local)
