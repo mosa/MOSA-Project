@@ -138,7 +138,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			trace?.Log($"IRInstructionCount: {MethodData.IRInstructionCount}");
 			trace?.Log($"IRStackParameterInstructionCount: {MethodData.IRStackParameterInstructionCount}");
-			trace?.Log($"InlinedIRMaximum: {CompilerOptions.InlinedIRMaximum}");
+			trace?.Log($"InlinedIRMaximum: {CompilerOptions.InlineMaximum}");
 			trace?.Log($"InlineOnlyExplicit: {CompilerOptions.InlineOnlyExplicit}");
 			trace?.Log($"NonIRInstructionCount: {MethodData.NonIRInstructionCount}");
 			trace?.Log($"HasAddressOfInstruction: {MethodData.HasAddressOfInstruction}");
@@ -240,7 +240,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return false;   // too many compiles - cyclic loop suspected
 
 			// methods with aggressive inline attribute will double the allow IR instruction count
-			int max = methodData.HasAggressiveInliningAttribute ? (CompilerOptions.InlinedIRMaximum * 2) : CompilerOptions.InlinedIRMaximum;
+			int max = methodData.HasAggressiveInliningAttribute ? CompilerOptions.InlineAggressiveMaximum : CompilerOptions.InlineMaximum;
 
 			if ((methodData.IRInstructionCount - methodData.IRStackParameterInstructionCount) > max)
 				return false;

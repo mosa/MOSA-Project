@@ -85,7 +85,7 @@ namespace Mosa.Tool.Launcher
 		private void UpdateBuilderOptions()
 		{
 			Options.EnableSSA = cbEnableSSA.Checked;
-			Options.EnableIROptimizations = cbEnableIROptimizations.Checked;
+			Options.EnableBasicOptimizations = cbEnableIROptimizations.Checked;
 			Options.EnableSparseConditionalConstantPropagation = cbEnableSparseConditionalConstantPropagation.Checked;
 			Options.GenerateNASMFile = cbGenerateNASMFile.Checked;
 			Options.GenerateASMFile = cbGenerateASMFile.Checked;
@@ -97,7 +97,7 @@ namespace Mosa.Tool.Launcher
 			Options.LaunchGDBDebugger = cbLaunchMosaDebugger.Checked;
 			Options.EnableMultiThreading = cbCompilerUsesMultipleThreads.Checked;
 			Options.EmulatorMemoryInMB = (uint)nmMemory.Value;
-			Options.EnableInlinedMethods = cbInlinedMethods.Checked;
+			Options.EnableInlineMethods = cbInlinedMethods.Checked;
 			Options.InlineOnlyExplicit = cbInlineOnlyExplicit.Checked;
 			Options.VBEVideo = cbVBEVideo.Checked;
 			Options.EnableLongExpansion = cbLongExpansion.Checked;
@@ -214,7 +214,7 @@ namespace Mosa.Tool.Launcher
 		private void UpdateInterfaceOptions()
 		{
 			cbEnableSSA.Checked = Options.EnableSSA;
-			cbEnableIROptimizations.Checked = Options.EnableIROptimizations;
+			cbEnableIROptimizations.Checked = Options.EnableBasicOptimizations;
 			cbEnableSparseConditionalConstantPropagation.Checked = Options.EnableSparseConditionalConstantPropagation;
 			cbGenerateNASMFile.Checked = Options.GenerateNASMFile;
 			cbGenerateASMFile.Checked = Options.GenerateASMFile;
@@ -224,7 +224,7 @@ namespace Mosa.Tool.Launcher
 			cbEnableQemuGDB.Checked = Options.EnableQemuGDB;
 			cbLaunchGDB.Checked = Options.LaunchGDB;
 			cbLaunchMosaDebugger.Checked = Options.LaunchGDBDebugger;
-			cbInlinedMethods.Checked = Options.EnableInlinedMethods;
+			cbInlinedMethods.Checked = Options.EnableInlineMethods;
 			cbInlineOnlyExplicit.Checked = Options.InlineOnlyExplicit;
 			cbCompilerUsesMultipleThreads.Checked = Options.EnableMultiThreading;
 			nmMemory.Value = Options.EmulatorMemoryInMB;

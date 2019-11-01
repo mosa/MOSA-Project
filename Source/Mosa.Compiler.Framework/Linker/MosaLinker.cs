@@ -37,6 +37,8 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public bool EmitStaticRelocations { get; set; }
 
+		public bool EmitShortSymbolName { get; set; }
+
 		public LinkerFormatType LinkerFormatType { get; }
 
 		private readonly ElfLinker elfLinker;
@@ -51,12 +53,13 @@ namespace Mosa.Compiler.Framework.Linker
 		public CreateExtraSectionsDelegate CreateExtraSections { get; set; }
 		public CreateExtraProgramHeaderDelegate CreateExtraProgramHeaders { get; set; }
 
-		public MosaLinker(ulong baseAddress, MachineType machineType, bool emitAllSymbols, bool emitStaticRelocations, LinkerFormatType linkerFormatType, CreateExtraSectionsDelegate createExtraSections, CreateExtraProgramHeaderDelegate createExtraProgramHeaders)
+		public MosaLinker(ulong baseAddress, MachineType machineType, bool emitAllSymbols, bool emitStaticRelocations, bool emitShortSymbolName, LinkerFormatType linkerFormatType, CreateExtraSectionsDelegate createExtraSections, CreateExtraProgramHeaderDelegate createExtraProgramHeaders)
 		{
 			BaseAddress = baseAddress;
 			MachineType = machineType;
 			EmitAllSymbols = emitAllSymbols;
 			EmitStaticRelocations = emitStaticRelocations;
+			EmitShortSymbolName = emitShortSymbolName;
 			LinkerFormatType = linkerFormatType;
 			CreateExtraSections = createExtraSections;
 			CreateExtraProgramHeaders = createExtraProgramHeaders;

@@ -17,11 +17,23 @@
     <StartupObject>Mosa.Workspace.Experiment.Debug.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="2.9.6">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="YamlDotNet" Version="8.0.0" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
     <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
     <ProjectReference Include="..\Mosa.Platform.ARMv8A32\Mosa.Platform.ARMv8A32.csproj" />
     <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj" />
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update=".mosa-global.yml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 </Project>

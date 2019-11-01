@@ -47,11 +47,11 @@ namespace Mosa.Tool.Explorer
 		{
 			InitializeComponent();
 
-			tbInstructions.Width = tabControl.Width - 4;
+			tbInstructions.Width = tabControl.Width - 12;
 			tbInstructions.Height = tabControl.Height - 52;
-			tbDebugResult.Width = tabControl.Width - 4;
+			tbDebugResult.Width = tabControl.Width - 12;
 			tbDebugResult.Height = tabControl.Height - 52;
-			tbMethodCounters.Width = tabControl.Width - 4;
+			tbMethodCounters.Width = tabControl.Width - 12;
 			tbMethodCounters.Height = tabControl.Height - 22;
 
 			tbLogs.Width = tabControl.Width - 4;
@@ -227,7 +227,7 @@ namespace Mosa.Tool.Explorer
 			cbEnableInlinedMethods.Checked = !options.InlineOff;
 			cbEnableBinaryCodeGeneration.Checked = !options.NoCode;
 			cbEnableSSA.Checked = !options.NoSSA;
-			cbEnableIROptimizations.Checked = !options.NoIROptimizations;
+			cbEnableBasicOptimizations.Checked = !options.NoIROptimizations;
 			cbEnableSparseConditionalConstantPropagation.Checked = !options.NoSparse;
 			cbEnableMethodScanner.Checked = options.EnableMethodScanner;
 
@@ -461,14 +461,15 @@ namespace Mosa.Tool.Explorer
 		private void SetCompilerOptions()
 		{
 			Compiler.CompilerOptions.EnableSSA = cbEnableSSA.Checked;
-			Compiler.CompilerOptions.EnableIROptimizations = cbEnableIROptimizations.Checked;
+			Compiler.CompilerOptions.EnableBasicOptimizations = cbEnableBasicOptimizations.Checked;
 			Compiler.CompilerOptions.EnableValueNumbering = cbEnableValueNumbering.Checked;
 			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = cbEnableSparseConditionalConstantPropagation.Checked;
 			Compiler.CompilerOptions.EmitBinary = cbEnableBinaryCodeGeneration.Checked;
-			Compiler.CompilerOptions.EnableInlinedMethods = cbEnableInlinedMethods.Checked;
+			Compiler.CompilerOptions.EnableInlineMethods = cbEnableInlinedMethods.Checked;
 			Compiler.CompilerOptions.InlineOnlyExplicit = cbInlineOnlyExplicit.Checked;
 			Compiler.CompilerOptions.EnableLongExpansion = cbEnableLongExpansion.Checked;
-			Compiler.CompilerOptions.InlinedIRMaximum = 12;
+			Compiler.CompilerOptions.InlineMaximum = 12;
+			Compiler.CompilerOptions.InlineAggressiveMaximum = 24;
 			Compiler.CompilerOptions.TwoPassOptimizations = cbEnableTwoPassOptimizations.Checked;
 			Compiler.CompilerOptions.EnableMethodScanner = cbEnableMethodScanner.Checked;
 			Compiler.CompilerOptions.TraceLevel = 8;
@@ -1013,7 +1014,7 @@ namespace Mosa.Tool.Explorer
 		private void ToggleOptimization(bool state)
 		{
 			cbEnableSSA.Checked = state;
-			cbEnableIROptimizations.Checked = state;
+			cbEnableBasicOptimizations.Checked = state;
 			cbEnableValueNumbering.Checked = state;
 			cbEnableSparseConditionalConstantPropagation.Checked = state;
 			cbEnableBinaryCodeGeneration.Checked = state;

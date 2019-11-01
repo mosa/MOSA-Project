@@ -73,7 +73,7 @@ namespace Mosa.Tool.Compiler
 		public bool EnableSSATrue { set { EnableSSA = value; } }
 
 		[Option("optimize-ir", HelpText = "Performs ir-level optimizations.")]
-		public bool EnableIROptimizaion { set { CompilerOptions.EnableIROptimizations = value; } }
+		public bool EnableIROptimizaion { set { CompilerOptions.EnableBasicOptimizations = value; } }
 
 		[Option("enable-ir-optimizations", HelpText = "Performs ir-level optimizations.")]
 		public bool EnableIROptimizaionAlt { set { EnableIROptimizaion = value; } }
@@ -83,9 +83,6 @@ namespace Mosa.Tool.Compiler
 
 		[Option("emit-static-relocations", HelpText = "Emits the static symbols in Relocation Table.")]
 		public bool EmitStaticRelocations { set { CompilerOptions.EmitStaticRelocations = value; } }
-
-		[Option("x86-irq-methods", HelpText = "Emits x86 interrupt methods.")]
-		public bool EmitX86IRQMethods { set { CompilerOptions.SetCustomOption("x86.irq-methods", value ? "true" : "false"); } }
 
 		[Option("base-address", HelpText = "Specify the base address.")]
 		public string BaseAddress { set { CompilerOptions.BaseAddress = value.ParseHexOrInteger(); } }
