@@ -6,9 +6,6 @@ using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Diagnostics;
-using System.IO;
-using YamlDotNet.RepresentationModel;
-using YamlDotNet.Serialization;
 
 namespace Mosa.Workspace.Experiment.Debug
 {
