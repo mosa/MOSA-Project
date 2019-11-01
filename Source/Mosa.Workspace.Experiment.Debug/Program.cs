@@ -135,36 +135,8 @@ namespace Mosa.Workspace.Experiment.Debug
 				case "x86": return Platform.x86.Architecture.CreateArchitecture(Platform.x86.ArchitectureFeatureFlags.AutoDetect);
 				case "x64": return Platform.x64.Architecture.CreateArchitecture(Platform.x64.ArchitectureFeatureFlags.AutoDetect);
 				case "armv8a32": return Platform.ARMv8A32.Architecture.CreateArchitecture(Platform.ARMv8A32.ArchitectureFeatureFlags.AutoDetect);
-				default: throw new NotImplementCompilerException(string.Format("Unknown or unsupported Architecture {0}.", architecture));
+				default: throw new NotImplementCompilerException($"Unknown or unsupported Architecture {architecture}.");
 			}
-		}
-
-		private static void Test()
-		{ // Setup the input
-			var file = File.ReadAllText(".mosa-global.yml");
-
-			var input = new StringReader(file);
-
-			var yaml = new YamlStream();
-			yaml.Load(input);
-
-			var mapping = (YamlMappingNode)yaml.Documents[0].RootNode;
-
-			foreach (var entry in mapping.Children)
-			{
-				Console.WriteLine(((YamlScalarNode)entry.Key).Value);
-			}
-
-			var child = mapping["Optimizations"];
-			var child2 = child["IROptimizations"];
-
-			var query = new YamlQuery(mapping).On("Optimizations").On("IROptimizations").AsString;
-
-			bool it = false;
-
-			YamlQuery.Query(mapping).On("Optimizations").On("IROptimizations").Update(ref it);
-
-			return;
 		}
 	}
 }
