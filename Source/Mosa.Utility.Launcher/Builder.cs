@@ -64,20 +64,6 @@ namespace Mosa.Utility.Launcher
 			Counters.Add(data);
 		}
 
-		private FileInfo HuntFor(string filename)
-		{
-			var directory = Hunt(filename);
-
-			if (directory == null)
-				return null;
-
-			var full = Path.Combine(directory, filename);
-
-			var file = new FileInfo(full);
-
-			return file;
-		}
-
 		private List<BaseCompilerExtension> GetCompilerExtensions()
 		{
 			return new List<BaseCompilerExtension>()
@@ -167,11 +153,13 @@ namespace Mosa.Utility.Launcher
 				compiler.CompilerOptions.AddSourceFile(LauncherOptions.SourceFile);
 				compiler.CompilerOptions.AddSearchPaths(LauncherOptions.Paths);
 
+				var fileHunter = new FileHunter(Path.GetDirectoryName(LauncherOptions.SourceFile));
+
 				var inputFiles = new List<FileInfo>
 				{
-					(LauncherOptions.HuntForCorLib) ? HuntFor("mscorlib.dll") : null,
-					(LauncherOptions.PlugKorlib) ? HuntFor("Mosa.Plug.Korlib.dll") : null,
-					(LauncherOptions.PlugKorlib) ? HuntFor("Mosa.Plug.Korlib." + LauncherOptions.PlatformType.ToString() + ".dll"): null,
+					(LauncherOptions.HuntForCorLib) ? fileHunter.HuntFile("mscorlib.dll") : null,
+					(LauncherOptions.PlugKorlib) ? fileHunter.HuntFile("Mosa.Plug.Korlib.dll") : null,
+					(LauncherOptions.PlugKorlib) ? fileHunter.HuntFile("Mosa.Plug.Korlib." + LauncherOptions.PlatformType.ToString() + ".dll"): null,
 				};
 
 				compiler.CompilerOptions.AddSourceFiles(inputFiles);
@@ -605,63 +593,6 @@ namespace Mosa.Utility.Launcher
 			}
 		}
 
-		private static bool Check(string directory, string filename)
-		{
-			return File.Exists(Path.GetFullPath(Path.Combine(directory, filename)));
-		}
 
-		private string Hunt(string filename)
-		{
-			// Only hunt if it's not in any of the path directories already, or the source directory
-
-			// let's check the source directory
-			string path = Path.GetDirectoryName(LauncherOptions.SourceFile);
-
-			if (Check(path, filename))
-				return path;
-
-			// check current directory
-			if (Check(Environment.CurrentDirectory, filename))
-			{
-				return Environment.CurrentDirectory;
-			}
-
-			// check within packages directory in 1 or 2 directories back
-			// this is how VS organizes projects and packages
-
-			var result = SearchSubdirectories(Path.Combine(Path.GetDirectoryName(LauncherOptions.SourceFile), "..", "packages"), filename);
-
-			if (result != null)
-				return result;
-
-			result = SearchSubdirectories(Path.Combine(Path.GetDirectoryName(LauncherOptions.SourceFile), "..", "..", "packages"), filename);
-
-			if (result != null)
-				return result;
-
-			result = SearchSubdirectories(Path.Combine(Environment.CurrentDirectory, "..", "packages"), filename);
-
-			if (result != null)
-				return result;
-
-			result = SearchSubdirectories(Path.Combine(Environment.CurrentDirectory, "..", "..", "packages"), filename);
-
-			return result;
-		}
-
-		private static string SearchSubdirectories(string path, string filename)
-		{
-			if (Directory.Exists(path))
-			{
-				var result = Directory.GetFiles(path, filename, SearchOption.AllDirectories);
-
-				if (result?.Length >= 1)
-				{
-					return Path.GetDirectoryName(result[0]);
-				}
-			}
-
-			return null;
-		}
 	}
 }
