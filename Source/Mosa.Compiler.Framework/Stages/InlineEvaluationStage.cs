@@ -15,15 +15,15 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		public static string InlineMethodAttribute = "System.Runtime.CompilerServices.MethodImplAttribute";
 
-		private readonly Counter InlinedMethodsCount = new Counter("InlineMethodEvaluationStage.InlinedMethods");
-		private readonly Counter ReversedInlinedMethodsCount = new Counter("InlineMethodEvaluationStage.ReversedInlinedMethods");
+		private readonly Counter InlineCount = new Counter("InlineMethodEvaluationStage.Inline");
+		private readonly Counter ReversedInlineCount = new Counter("InlineMethodEvaluationStage.ReversedInline");
 
 		public const int MaximumCompileCount = 10;
 
 		protected override void Initialize()
 		{
-			Register(InlinedMethodsCount);
-			Register(ReversedInlinedMethodsCount);
+			Register(InlineCount);
+			Register(ReversedInlineCount);
 		}
 
 		protected override void Run()
@@ -139,15 +139,15 @@ namespace Mosa.Compiler.Framework.Stages
 			trace?.Log($"IRInstructionCount: {MethodData.IRInstructionCount}");
 			trace?.Log($"IRStackParameterInstructionCount: {MethodData.IRStackParameterInstructionCount}");
 			trace?.Log($"InlinedIRMaximum: {CompilerOptions.InlineMaximum}");
-			trace?.Log($"InlineOnlyExplicit: {CompilerOptions.InlineOnlyExplicit}");
+			trace?.Log($"InlineExplicitOnly: {CompilerOptions.InlineExplicitOnly}");
 			trace?.Log($"NonIRInstructionCount: {MethodData.NonIRInstructionCount}");
 			trace?.Log($"HasAddressOfInstruction: {MethodData.HasAddressOfInstruction}");
 			trace?.Log($"HasLoops: {MethodData.HasLoops}");
 			trace?.Log($"** Dynamically Evaluated");
 			trace?.Log($"Inlined: {MethodData.Inlined}");
 
-			InlinedMethodsCount.Set(inline);
-			ReversedInlinedMethodsCount.Set(MethodData.Version >= MaximumCompileCount);
+			InlineCount.Set(inline);
+			ReversedInlineCount.Set(MethodData.Version >= MaximumCompileCount);
 
 			//Debug.WriteLine($">Inlined: {(inline ? "Yes" : "No")}"); //DEBUGREMOVE
 		}
@@ -182,7 +182,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool StaticCanNotInline(MethodData methodData)
 		{
-			if (CompilerOptions.InlineOnlyExplicit && !methodData.HasAggressiveInliningAttribute)
+			if (CompilerOptions.InlineExplicitOnly && !methodData.HasAggressiveInliningAttribute)
 				return true;
 
 			if (methodData.HasDoNotInlineAttribute)

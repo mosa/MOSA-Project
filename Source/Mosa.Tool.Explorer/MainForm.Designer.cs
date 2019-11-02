@@ -54,8 +54,8 @@
 			this.cbEnableBasicOptimizations = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbEnableValueNumbering = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbEnableSparseConditionalConstantPropagation = new System.Windows.Forms.ToolStripMenuItem();
-			this.cbEnableInlinedMethods = new System.Windows.Forms.ToolStripMenuItem();
-			this.cbInlineOnlyExplicit = new System.Windows.Forms.ToolStripMenuItem();
+			this.cbEnableInline = new System.Windows.Forms.ToolStripMenuItem();
+			this.cbInlineExplicitOnly = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbEnableLongExpansion = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbLoopInvariantCodeMotion = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbEnableBitTracker = new System.Windows.Forms.ToolStripMenuItem();
@@ -259,8 +259,8 @@
             this.cbEnableBasicOptimizations,
             this.cbEnableValueNumbering,
             this.cbEnableSparseConditionalConstantPropagation,
-            this.cbEnableInlinedMethods,
-            this.cbInlineOnlyExplicit,
+            this.cbEnableInline,
+            this.cbInlineExplicitOnly,
             this.cbEnableLongExpansion,
             this.cbLoopInvariantCodeMotion,
             this.cbEnableBitTracker,
@@ -326,21 +326,21 @@
 			this.cbEnableSparseConditionalConstantPropagation.Size = new System.Drawing.Size(293, 22);
 			this.cbEnableSparseConditionalConstantPropagation.Text = "Enable Conditional Constant Propagation";
 			// 
-			// cbEnableInlinedMethods
+			// cbEnableInline
 			// 
-			this.cbEnableInlinedMethods.Checked = true;
-			this.cbEnableInlinedMethods.CheckOnClick = true;
-			this.cbEnableInlinedMethods.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbEnableInlinedMethods.Name = "cbEnableInlinedMethods";
-			this.cbEnableInlinedMethods.Size = new System.Drawing.Size(293, 22);
-			this.cbEnableInlinedMethods.Text = "Enable Inlined Methods";
+			this.cbEnableInline.Checked = true;
+			this.cbEnableInline.CheckOnClick = true;
+			this.cbEnableInline.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbEnableInline.Name = "cbEnableInline";
+			this.cbEnableInline.Size = new System.Drawing.Size(293, 22);
+			this.cbEnableInline.Text = "Enable Inlined Methods";
 			// 
-			// cbInlineOnlyExplicit
+			// cbInlineExplicitOnly
 			// 
-			this.cbInlineOnlyExplicit.CheckOnClick = true;
-			this.cbInlineOnlyExplicit.Name = "cbInlineOnlyExplicit";
-			this.cbInlineOnlyExplicit.Size = new System.Drawing.Size(293, 22);
-			this.cbInlineOnlyExplicit.Text = "Inline Only Explicit";
+			this.cbInlineExplicitOnly.CheckOnClick = true;
+			this.cbInlineExplicitOnly.Name = "cbInlineExplicitOnly";
+			this.cbInlineExplicitOnly.Size = new System.Drawing.Size(293, 22);
+			this.cbInlineExplicitOnly.Text = "Inline Only Explicit";
 			// 
 			// cbEnableLongExpansion
 			// 
@@ -850,7 +850,7 @@
 		private System.Windows.Forms.ToolStripProgressBar toolStripProgressBar1;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
 		private System.Windows.Forms.ToolStripMenuItem cbEnableSparseConditionalConstantPropagation;
-		private System.Windows.Forms.ToolStripMenuItem cbEnableInlinedMethods;
+		private System.Windows.Forms.ToolStripMenuItem cbEnableInline;
 		private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog1;
 		private System.Windows.Forms.ToolStripMenuItem advanceToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem dumpAllMethodStagesToolStripMenuItem;
@@ -884,7 +884,7 @@
 		private System.Windows.Forms.ToolStripMenuItem CBEnableMultithreading;
 		private System.Windows.Forms.ToolStripMenuItem cbLoopInvariantCodeMotion;
 		private System.Windows.Forms.ToolStripMenuItem cbPlatformOptimizations;
-		private System.Windows.Forms.ToolStripMenuItem cbInlineOnlyExplicit;
+		private System.Windows.Forms.ToolStripMenuItem cbInlineExplicitOnly;
 		private System.Windows.Forms.ToolStripMenuItem cbEnableAllOptimizations;
 		private System.Windows.Forms.ToolStripMenuItem cbDisableAllOptimizations;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;

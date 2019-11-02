@@ -11,12 +11,12 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class InlineStage : BaseMethodCompilerStage
 	{
-		private readonly Counter InlinedMethodsCount = new Counter("InlineStage.MethodsWithInlinedCallSites");
+		private readonly Counter InlineCount = new Counter("InlineStage.MethodsWithInlinedCallSites");
 		private readonly Counter InlinedCallSitesCount = new Counter("InlineStage.InlinedCallSites");
 
 		protected override void Initialize()
 		{
-			Register(InlinedMethodsCount);
+			Register(InlineCount);
 			Register(InlinedCallSitesCount);
 		}
 
@@ -70,7 +70,7 @@ namespace Mosa.Compiler.Framework.Stages
 				//Debug.WriteLine($" -> Inlined: [{callee.Version}] {callee.Method}");//DEBUGREMOVE
 			}
 
-			InlinedMethodsCount.Set(1);
+			InlineCount.Set(1);
 			InlinedCallSitesCount.Set(callSiteCount);
 		}
 

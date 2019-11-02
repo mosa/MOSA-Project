@@ -1,5 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using DiscUtils.Fat;
+using DiscUtils.Partitions;
+using DiscUtils.Raw;
+using DiscUtils.Streams;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
@@ -100,7 +104,7 @@ namespace Mosa.Utility.Launcher
 				compiler.CompilerOptions.EnableBasicOptimizations = LauncherOptions.EnableBasicOptimizations;
 				compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = LauncherOptions.EnableSparseConditionalConstantPropagation;
 				compiler.CompilerOptions.EnableInlineMethods = LauncherOptions.EnableInlineMethods;
-				compiler.CompilerOptions.InlineOnlyExplicit = LauncherOptions.InlineOnlyExplicit;
+				compiler.CompilerOptions.InlineExplicitOnly = LauncherOptions.InlineExplicitOnly;
 				compiler.CompilerOptions.InlineMaximum = LauncherOptions.InlineMaximum;
 				compiler.CompilerOptions.InlineAggressiveMaximum = LauncherOptions.InlineMaximum * 2;
 				compiler.CompilerOptions.EnableLongExpansion = LauncherOptions.EnableLongExpansion;
@@ -285,6 +289,105 @@ namespace Mosa.Utility.Launcher
 			bootImageOptions.BootLoader = LauncherOptions.BootLoader;
 
 			Generator.Create(bootImageOptions);
+		}
+
+		private void CreateDiskImageV2(string compiledFile)
+		{
+			var SectorSize = 512;
+			var files = new List<IncludeFile>();
+			byte[] mbr = null;
+			byte[] fatBootCode = null;
+
+			// Determine Image File Name
+			var vmext = ".img";
+
+			//switch (LauncherOptions.ImageFormat)
+			//{
+			//	case ImageFormat.VHD: vmext = ".vhd"; break;
+			//	case ImageFormat.VDI: vmext = ".vdi"; break;
+			//	default: break;
+			//}
+
+			ImageFile = Path.Combine(LauncherOptions.DestinationDirectory, Path.GetFileNameWithoutExtension(LauncherOptions.SourceFile) + vmext);
+
+			if (File.Exists(ImageFile))
+			{
+				File.Delete(ImageFile);
+			}
+
+			// Get Files
+			if (LauncherOptions.BootLoader == BootLoader.Syslinux_6_03)
+			{
+				mbr = GetResource(@"syslinux\6.03", "mbr.bin");
+				fatBootCode = GetResource(@"syslinux\6.03", "ldlinux.bin");
+
+				files.Add(new IncludeFile("ldlinux.sys", GetResource(@"syslinux\6.03", "ldlinux.sys")));
+				files.Add(new IncludeFile("mboot.c32", GetResource(@"syslinux\6.03", "mboot.c32")));
+			}
+			else if (LauncherOptions.BootLoader == BootLoader.Syslinux_3_72)
+			{
+				mbr = GetResource(@"syslinux\3.72", "mbr.bin");
+				fatBootCode = GetResource(@"syslinux\3.72", "ldlinux.bin");
+
+				files.Add(new IncludeFile("ldlinux.sys", GetResource(@"syslinux\3.72", "ldlinux.sys")));
+				files.Add(new IncludeFile("mboot.c32", GetResource(@"syslinux\3.72", "mboot.c32")));
+			}
+
+			files.Add(new IncludeFile("syslinux.cfg", GetResource("syslinux", "syslinux.cfg")));
+			files.Add(new IncludeFile(compiledFile, "main.exe"));
+
+			files.Add(new IncludeFile("TEST.TXT", Encoding.ASCII.GetBytes("This is a test file.")));
+
+			foreach (var include in LauncherOptions.IncludeFiles)
+			{
+				files.Add(include);
+			}
+
+			// Estimate file system size
+			var blockCount = 8400 + 1;
+			foreach (var file in files)
+			{
+				blockCount += (file.Content.Length / SectorSize) + 1;
+			}
+
+			using (var imageStream = new MemoryStream())
+			{
+				var disk = Disk.Initialize(imageStream, Ownership.Dispose, blockCount * SectorSize);
+
+				BiosPartitionTable.Initialize(disk, WellKnownPartitionType.WindowsFat);
+
+				disk.SetMasterBootRecord(mbr);
+
+				using (var fs = FatFileSystem.FormatPartition(disk, 0, null))
+				{
+					foreach (var file in files)
+					{
+						var directory = Path.GetFullPath(file.Filename);
+
+						if (!string.IsNullOrWhiteSpace(directory) && !fs.DirectoryExists(directory))
+						{
+							fs.CreateDirectory(directory);
+						}
+
+						using (var f = fs.OpenFile(file.Filename, FileMode.Create))
+						{
+							f.Write(file.Content);
+							f.Close();
+						}
+					}
+				}
+
+				using (var partition = disk.Partitions.Partitions[0].Open())
+				{
+					partition.Seek(0x03, SeekOrigin.Begin);
+					partition.Write(fatBootCode, 0, 3);
+					partition.Seek(0x3E, SeekOrigin.Begin);
+					partition.Write(fatBootCode, 0x3E, Math.Max(448, fatBootCode.Length - 0x3E));
+					partition.Close();
+				}
+
+				imageStream.WriteTo(File.Create(ImageFile));
+			}
 		}
 
 		private void CreateISOImageWithSyslinux(string compiledFile)

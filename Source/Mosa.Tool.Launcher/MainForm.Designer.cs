@@ -75,14 +75,14 @@
 			this.cbPlatformOptimizations = new MetroFramework.Controls.MetroCheckBox();
 			this.cbLoopInvariantCodeMotion = new MetroFramework.Controls.MetroCheckBox();
 			this.cbTwoPassOptimizations = new MetroFramework.Controls.MetroCheckBox();
-			this.cbInlineOnlyExplicit = new MetroFramework.Controls.MetroCheckBox();
+			this.cbInlineExplicitOnly = new MetroFramework.Controls.MetroCheckBox();
 			this.cbBitTracker = new MetroFramework.Controls.MetroCheckBox();
 			this.cbValueNumbering = new MetroFramework.Controls.MetroCheckBox();
 			this.cbLongExpansion = new MetroFramework.Controls.MetroCheckBox();
 			this.cbEnableSparseConditionalConstantPropagation = new MetroFramework.Controls.MetroCheckBox();
 			this.cbEnableIROptimizations = new MetroFramework.Controls.MetroCheckBox();
 			this.cbEnableSSA = new MetroFramework.Controls.MetroCheckBox();
-			this.cbInlinedMethods = new MetroFramework.Controls.MetroCheckBox();
+			this.cbInline = new MetroFramework.Controls.MetroCheckBox();
 			this.tabAdvanced = new MetroFramework.Controls.MetroTabPage();
 			this.groupBox16 = new System.Windows.Forms.GroupBox();
 			this.cbGenerateNASMFile = new MetroFramework.Controls.MetroCheckBox();
@@ -737,14 +737,14 @@
 			this.groupBox1.Controls.Add(this.cbPlatformOptimizations);
 			this.groupBox1.Controls.Add(this.cbLoopInvariantCodeMotion);
 			this.groupBox1.Controls.Add(this.cbTwoPassOptimizations);
-			this.groupBox1.Controls.Add(this.cbInlineOnlyExplicit);
+			this.groupBox1.Controls.Add(this.cbInlineExplicitOnly);
 			this.groupBox1.Controls.Add(this.cbBitTracker);
 			this.groupBox1.Controls.Add(this.cbValueNumbering);
 			this.groupBox1.Controls.Add(this.cbLongExpansion);
 			this.groupBox1.Controls.Add(this.cbEnableSparseConditionalConstantPropagation);
 			this.groupBox1.Controls.Add(this.cbEnableIROptimizations);
 			this.groupBox1.Controls.Add(this.cbEnableSSA);
-			this.groupBox1.Controls.Add(this.cbInlinedMethods);
+			this.groupBox1.Controls.Add(this.cbInline);
 			this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.groupBox1.Location = new System.Drawing.Point(5, 203);
 			this.groupBox1.Name = "groupBox1";
@@ -795,19 +795,19 @@
 			this.cbTwoPassOptimizations.UseCustomBackColor = true;
 			this.cbTwoPassOptimizations.UseSelectable = true;
 			// 
-			// cbInlineOnlyExplicit
+			// cbInlineExplicitOnly
 			// 
-			this.cbInlineOnlyExplicit.AutoSize = true;
-			this.cbInlineOnlyExplicit.Checked = true;
-			this.cbInlineOnlyExplicit.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbInlineOnlyExplicit.Location = new System.Drawing.Point(6, 186);
-			this.cbInlineOnlyExplicit.Name = "cbInlineOnlyExplicit";
-			this.cbInlineOnlyExplicit.Size = new System.Drawing.Size(121, 15);
-			this.cbInlineOnlyExplicit.Style = MetroFramework.MetroColorStyle.Blue;
-			this.cbInlineOnlyExplicit.TabIndex = 14;
-			this.cbInlineOnlyExplicit.Text = "Inline Only Explicit";
-			this.cbInlineOnlyExplicit.UseCustomBackColor = true;
-			this.cbInlineOnlyExplicit.UseSelectable = true;
+			this.cbInlineExplicitOnly.AutoSize = true;
+			this.cbInlineExplicitOnly.Checked = true;
+			this.cbInlineExplicitOnly.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbInlineExplicitOnly.Location = new System.Drawing.Point(6, 186);
+			this.cbInlineExplicitOnly.Name = "cbInlineExplicitOnly";
+			this.cbInlineExplicitOnly.Size = new System.Drawing.Size(121, 15);
+			this.cbInlineExplicitOnly.Style = MetroFramework.MetroColorStyle.Blue;
+			this.cbInlineExplicitOnly.TabIndex = 14;
+			this.cbInlineExplicitOnly.Text = "Inline Explicit Only";
+			this.cbInlineExplicitOnly.UseCustomBackColor = true;
+			this.cbInlineExplicitOnly.UseSelectable = true;
 			// 
 			// cbBitTracker
 			// 
@@ -893,19 +893,19 @@
 			this.cbEnableSSA.UseCustomBackColor = true;
 			this.cbEnableSSA.UseSelectable = true;
 			// 
-			// cbInlinedMethods
+			// cbInline
 			// 
-			this.cbInlinedMethods.AutoSize = true;
-			this.cbInlinedMethods.Checked = true;
-			this.cbInlinedMethods.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbInlinedMethods.Location = new System.Drawing.Point(6, 165);
-			this.cbInlinedMethods.Name = "cbInlinedMethods";
-			this.cbInlinedMethods.Size = new System.Drawing.Size(109, 15);
-			this.cbInlinedMethods.Style = MetroFramework.MetroColorStyle.Blue;
-			this.cbInlinedMethods.TabIndex = 9;
-			this.cbInlinedMethods.Text = "Inlined Methods";
-			this.cbInlinedMethods.UseCustomBackColor = true;
-			this.cbInlinedMethods.UseSelectable = true;
+			this.cbInline.AutoSize = true;
+			this.cbInline.Checked = true;
+			this.cbInline.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbInline.Location = new System.Drawing.Point(6, 165);
+			this.cbInline.Name = "cbInline";
+			this.cbInline.Size = new System.Drawing.Size(52, 15);
+			this.cbInline.Style = MetroFramework.MetroColorStyle.Blue;
+			this.cbInline.TabIndex = 9;
+			this.cbInline.Text = "Inline";
+			this.cbInline.UseCustomBackColor = true;
+			this.cbInline.UseSelectable = true;
 			// 
 			// tabAdvanced
 			// 
@@ -1724,7 +1724,7 @@
 		private System.Windows.Forms.ToolStripStatusLabel tsStatusLabel;
 		private System.Windows.Forms.GroupBox groupBox12;
 		private MetroFramework.Controls.MetroCheckBox cbCompilerUsesMultipleThreads;
-		private MetroFramework.Controls.MetroCheckBox cbInlinedMethods;
+		private MetroFramework.Controls.MetroCheckBox cbInline;
 		private MetroFramework.Controls.MetroLabel label1;
 		private MetroFramework.Controls.MetroComboBox cbBootLoader;
 		private MetroFramework.Controls.MetroCheckBox cbVBEVideo;
@@ -1764,7 +1764,7 @@
 		private MetroFramework.Controls.MetroCheckBox cbBitTracker;
 		private MetroFramework.Controls.MetroLabel metroLabel1;
 		private MetroFramework.Controls.MetroTextBox tbOsName;
-		private MetroFramework.Controls.MetroCheckBox cbInlineOnlyExplicit;
+		private MetroFramework.Controls.MetroCheckBox cbInlineExplicitOnly;
 		private MetroFramework.Controls.MetroCheckBox cbPlatformOptimizations;
 		private MetroFramework.Controls.MetroCheckBox cbLoopInvariantCodeMotion;
 	}

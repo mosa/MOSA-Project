@@ -85,7 +85,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets or sets a value indicating whether only methods are inline marked as AgressiveInlining.
 		/// </summary>
-		public bool InlineOnlyExplicit { get; set; }
+		public bool InlineExplicitOnly { get; set; }
 
 		/// <summary>
 		/// Gets or sets the maximum IR instructions for inline optimization.
@@ -175,7 +175,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets or sets a value indicating whether [emit inline methods].
 		/// </summary>
-		public bool EmitInlinedMethods { get; set; }
+		public bool EmitInline { get; set; }
 
 		/// <summary>
 		/// Adds additional sections to the Elf-File.
@@ -360,7 +360,7 @@ namespace Mosa.Compiler.Framework
 			EnablePlatformOptimizations = true;
 			EnableMethodScanner = false;
 			EnableBitTracker = true;
-			EmitInlinedMethods = false;
+			EmitInline = false;
 			EmitShortSymbolNames = true;
 		}
 	}
