@@ -833,24 +833,18 @@ namespace Mosa.Compiler.Framework
 
 			if (ConditionCode != ConditionCode.Undefined)
 			{
-				sb.Append(" [");
-				sb.Append(ConditionCode.GetConditionString());
-				sb.Append("]");
+				sb.Append($" [{ConditionCode.GetConditionString()}]");
 			}
 
 			if (Instruction.Modifier != null)
 			{
-				sb.Append(" [");
-				sb.Append(Instruction.Modifier);
-				sb.Append("]");
+				sb.Append($" [{Instruction.Modifier}]");
 			}
 
 			for (int i = 0; i < ResultCount; i++)
 			{
 				var op = GetResult(i);
-				sb.Append(" ");
-				sb.Append(op == null ? "[NULL]" : op.ToString(false));
-				sb.Append(",");
+				sb.Append($" {(op == null ? "[NULL]" : op.ToString(false))},");
 			}
 
 			if (ResultCount > 0)
@@ -866,9 +860,7 @@ namespace Mosa.Compiler.Framework
 			for (int i = 0; i < OperandCount; i++)
 			{
 				var op = GetOperand(i);
-				sb.Append(" ");
-				sb.Append(op == null ? "[NULL]" : op.ToString(false));
-				sb.Append(",");
+				sb.Append($" {(op == null ? "[NULL]" : op.ToString(false))},");
 			}
 
 			if (OperandCount > 0)
@@ -909,23 +901,17 @@ namespace Mosa.Compiler.Framework
 
 			if (InvokeMethod != null)
 			{
-				sb.Append(" {m:");
-				sb.Append(InvokeMethod.FullName);
-				sb.Append("}");
+				sb.Append($" {{m={InvokeMethod.DeclaringType.Name}.{InvokeMethod.Name}}}");
 			}
 
 			if (MosaType != null)
 			{
-				sb.Append(" {t:");
-				sb.Append(MosaType.FullName);
-				sb.Append("}");
+				sb.Append($" {{t={MosaType.Name}}}");
 			}
 
 			if (MosaField != null)
 			{
-				sb.Append(" {f:");
-				sb.Append(MosaField.FullName);
-				sb.Append("}");
+				sb.Append($" {{f={MosaField.DeclaringType.Name}.{MosaField.Name}}}");
 			}
 
 			return sb.ToString();
@@ -938,29 +924,6 @@ namespace Mosa.Compiler.Framework
 		public void ReplaceInstruction(BaseInstruction instruction)
 		{
 			Instruction = instruction;
-		}
-
-		private void ReplaceOperand(Operand target, Operand replacement)
-		{
-			for (int i = 0; i < OperandCount; i++)
-			{
-				var operand = GetOperand(i);
-
-				if (target == operand)
-				{
-					SetOperand(i, replacement);
-				}
-			}
-
-			//for (int i = 0; i < ResultCount; i++)
-			//{
-			//	var operand = GetResult(i);
-
-			//	if (target == operand)
-			//	{
-			//		SetResult(i, replacement);
-			//	}
-			//}
 		}
 
 		/// <summary>

@@ -73,8 +73,8 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 		public static readonly BaseTransformation IR_ConstantFolding_IfThenElse64AlwaysTrue = new IR.ConstantFolding.IfThenElse64AlwaysTrue();
 		public static readonly BaseTransformation IR_ConstantFolding_IfThenElse32AlwaysFalse = new IR.ConstantFolding.IfThenElse32AlwaysFalse();
 		public static readonly BaseTransformation IR_ConstantFolding_IfThenElse64AlwaysFalse = new IR.ConstantFolding.IfThenElse64AlwaysFalse();
-		public static readonly BaseTransformation IR_Simplification_Move32Propogation = new IR.Simplification.Move32Propogation();
-		public static readonly BaseTransformation IR_Simplification_Move64Propogation = new IR.Simplification.Move64Propogation();
+		public static readonly BaseTransformation IR_Simplification_Move32Propagation = new IR.Simplification.Move32Propagation();
+		public static readonly BaseTransformation IR_Simplification_Move64Propagation = new IR.Simplification.Move64Propagation();
 		public static readonly BaseTransformation IR_Simplification_Not32Twice = new IR.Simplification.Not32Twice();
 		public static readonly BaseTransformation IR_Simplification_Not64Twice = new IR.Simplification.Not64Twice();
 		public static readonly BaseTransformation IR_Simplification_Add32Combine = new IR.Simplification.Add32Combine();

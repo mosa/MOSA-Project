@@ -17,8 +17,6 @@ namespace Mosa.Platform.Intel.Stages
 	{
 		#region Abstract Methods
 
-		protected abstract bool IsNop(BaseInstruction instruction);
-
 		protected abstract bool IsMov(BaseInstruction instruction);
 
 		#endregion Abstract Methods
@@ -59,13 +57,6 @@ namespace Mosa.Platform.Intel.Stages
 					{
 						if (node.IsEmpty)
 							continue;
-
-						// Remove Nop instructions
-						if (IsNop(node.Instruction))
-						{
-							node.Empty();
-							continue;
-						}
 
 						if (IsMov(node.Instruction))
 						{

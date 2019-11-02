@@ -4,18 +4,18 @@
 			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Move32",
-			"SubName": "Propogation",
+			"SubName": "Propagation",
 			"Expression": "IR.Move32 (IR.Move32 a)",
-			"Filter": "",
+			"Filter": "!IsCPURegister(a)",
 			"Result": "(IR.Move32 a)"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "Simplification",
 			"Name": "Move64",
-			"SubName": "Propogation",
+			"SubName": "Propagation",
 			"Expression": "IR.Move64 (IR.Move64 a)",
-			"Filter": "",
+			"Filter": "!IsCPURegister(a)",
 			"Result": "(IR.Move64 a)"
 		},
 		{

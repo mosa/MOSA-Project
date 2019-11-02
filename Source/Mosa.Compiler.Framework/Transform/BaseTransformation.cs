@@ -89,6 +89,11 @@ namespace Mosa.Compiler.Framework.Transform
 			return operand.IsConstant;
 		}
 
+		protected static bool IsCPURegister(Operand operand)
+		{
+			return operand.IsCPURegister;
+		}
+
 		protected static bool IsFloatingPoint(Operand operand)
 		{
 			return operand.IsFloatingPoint;
@@ -243,6 +248,26 @@ namespace Mosa.Compiler.Framework.Transform
 			return GetPowerOfTwo(operand.ConstantUnsigned64);
 		}
 
+		protected static uint Max32(uint a, uint b)
+		{
+			return Math.Max(a, b);
+		}
+
+		protected static ulong Max64(ulong a, ulong b)
+		{
+			return Math.Max(a, b);
+		}
+
+		protected static uint Min32(uint a, uint b)
+		{
+			return Math.Min(a, b);
+		}
+
+		protected static ulong Min64(ulong a, ulong b)
+		{
+			return Math.Min(a, b);
+		}
+
 		protected static long ModSigned32(long a, long b)
 		{
 			return a % b;
@@ -301,26 +326,6 @@ namespace Mosa.Compiler.Framework.Transform
 		protected static ulong Not64(ulong a)
 		{
 			return ~a;
-		}
-
-		protected static uint Max32(uint a, uint b)
-		{
-			return Math.Max(a, b);
-		}
-
-		protected static ulong Max64(ulong a, ulong b)
-		{
-			return Math.Max(a, b);
-		}
-
-		protected static uint Min32(uint a, uint b)
-		{
-			return Math.Min(a, b);
-		}
-
-		protected static ulong Min64(ulong a, ulong b)
-		{
-			return Math.Min(a, b);
 		}
 
 		protected static uint Or32(uint a, uint b)

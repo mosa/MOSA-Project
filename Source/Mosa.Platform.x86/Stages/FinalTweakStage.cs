@@ -24,7 +24,6 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.MovStore8, MovStore8);
 			AddVisitation(X86.Movzx16To32, Movzx16To32);
 			AddVisitation(X86.Movzx8To32, Movzx8To32);
-			AddVisitation(X86.Nop, Nop);
 			AddVisitation(X86.Setcc, Setcc);
 		}
 
@@ -235,11 +234,6 @@ namespace Mosa.Platform.x86.Stages
 			{
 				context.SetInstruction(X86.And32, result, result, CreateConstant(0xFF));
 			}
-		}
-
-		public void Nop(Context context)
-		{
-			context.Empty();
 		}
 
 		public void Setcc(Context context)
