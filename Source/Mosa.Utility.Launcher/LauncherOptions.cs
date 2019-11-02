@@ -96,10 +96,10 @@ namespace Mosa.Utility.Launcher
 		public bool EnableInlineMethods { get; set; }
 
 		[Option("inline-off")]
-		public bool EnableInlinedMethodsFalse { set { EnableInlineMethods = false; } }
+		public bool EnableInlineFalse { set { EnableInlineMethods = false; } }
 
 		[Option("inline-explicit")]
-		public bool InlineOnlyExplicit { get; set; }
+		public bool InlineExplicitOnly { get; set; }
 
 		[Option("long-expansion")]
 		public bool EnableLongExpansion { get; set; }

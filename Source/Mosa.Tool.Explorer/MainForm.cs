@@ -224,7 +224,7 @@ namespace Mosa.Tool.Explorer
 			if (options == null)
 				return;
 
-			cbEnableInlinedMethods.Checked = !options.InlineOff;
+			cbEnableInline.Checked = !options.InlineOff;
 			cbEnableBinaryCodeGeneration.Checked = !options.NoCode;
 			cbEnableSSA.Checked = !options.NoSSA;
 			cbEnableBasicOptimizations.Checked = !options.NoIROptimizations;
@@ -465,8 +465,8 @@ namespace Mosa.Tool.Explorer
 			Compiler.CompilerOptions.EnableValueNumbering = cbEnableValueNumbering.Checked;
 			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = cbEnableSparseConditionalConstantPropagation.Checked;
 			Compiler.CompilerOptions.EmitBinary = cbEnableBinaryCodeGeneration.Checked;
-			Compiler.CompilerOptions.EnableInlineMethods = cbEnableInlinedMethods.Checked;
-			Compiler.CompilerOptions.InlineOnlyExplicit = cbInlineOnlyExplicit.Checked;
+			Compiler.CompilerOptions.EnableInlineMethods = cbEnableInline.Checked;
+			Compiler.CompilerOptions.InlineExplicitOnly = cbInlineExplicitOnly.Checked;
 			Compiler.CompilerOptions.EnableLongExpansion = cbEnableLongExpansion.Checked;
 			Compiler.CompilerOptions.InlineMaximum = 12;
 			Compiler.CompilerOptions.InlineAggressiveMaximum = 24;
@@ -1018,7 +1018,7 @@ namespace Mosa.Tool.Explorer
 			cbEnableValueNumbering.Checked = state;
 			cbEnableSparseConditionalConstantPropagation.Checked = state;
 			cbEnableBinaryCodeGeneration.Checked = state;
-			cbEnableInlinedMethods.Checked = state;
+			cbEnableInline.Checked = state;
 			cbEnableLongExpansion.Checked = state;
 			cbEnableTwoPassOptimizations.Checked = state;
 

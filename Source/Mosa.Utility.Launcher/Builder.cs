@@ -104,7 +104,7 @@ namespace Mosa.Utility.Launcher
 				compiler.CompilerOptions.EnableBasicOptimizations = LauncherOptions.EnableBasicOptimizations;
 				compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = LauncherOptions.EnableSparseConditionalConstantPropagation;
 				compiler.CompilerOptions.EnableInlineMethods = LauncherOptions.EnableInlineMethods;
-				compiler.CompilerOptions.InlineOnlyExplicit = LauncherOptions.InlineOnlyExplicit;
+				compiler.CompilerOptions.InlineExplicitOnly = LauncherOptions.InlineExplicitOnly;
 				compiler.CompilerOptions.InlineMaximum = LauncherOptions.InlineMaximum;
 				compiler.CompilerOptions.InlineAggressiveMaximum = LauncherOptions.InlineMaximum * 2;
 				compiler.CompilerOptions.EnableLongExpansion = LauncherOptions.EnableLongExpansion;

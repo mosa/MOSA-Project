@@ -558,13 +558,13 @@ namespace Mosa.Compiler.Framework
 				foreach (var overrideTarget in method.Overrides)
 				{
 					// Get clean name for overrideTarget
-					var cleanOverrideTargetName = GetCleanMethodName(overrideTarget.Name);
+					var cleanOverrideTargetName = GetNonExplicitMethodName(overrideTarget);
 
 					int slot = 0;
 					foreach (var interfaceMethod in interfaceType.Methods)
 					{
 						// Get clean name for interfaceMethod
-						var cleanInterfaceMethodName = GetCleanMethodName(interfaceMethod.Name);
+						var cleanInterfaceMethodName = GetNonExplicitMethodName(interfaceMethod);
 
 						// Check that the signatures match, the types and the names
 						if (overrideTarget.Equals(interfaceMethod) && overrideTarget.DeclaringType.Equals(interfaceType) && cleanOverrideTargetName.Equals(cleanInterfaceMethodName))
@@ -586,14 +586,17 @@ namespace Mosa.Compiler.Framework
 				methodFound = FindImplicitInterfaceMethod(type.BaseType, interfaceMethod);
 			}
 
-			var cleanInterfaceMethodName = GetCleanMethodName(interfaceMethod.Name);
+			var cleanInterfaceMethodName = GetNonExplicitMethodName(interfaceMethod);
 
 			foreach (var method in type.Methods)
 			{
-				if (IsExplicitInterfaceMethod(method.FullName) && methodFound != null)
+				if (method.HasOpenGenericParams)
 					continue;
 
-				string cleanMethodName = GetCleanMethodName(method.Name);
+				if (IsExplicitInterfaceMethod(method) && methodFound != null)
+					continue;
+
+				string cleanMethodName = GetNonExplicitMethodName(method);
 
 				if (cleanInterfaceMethodName.Equals(cleanMethodName))
 				{
@@ -619,14 +622,17 @@ namespace Mosa.Compiler.Framework
 		{
 			MosaMethod methodFound = null;
 
-			var cleanInterfaceMethodName = GetCleanMethodName(interfaceMethod.Name);
+			var cleanInterfaceMethodName = GetNonExplicitMethodName(interfaceMethod);
 
 			foreach (var method in type.Methods)
 			{
-				if (IsExplicitInterfaceMethod(method.FullName))
+				if (method.HasOpenGenericParams)
 					continue;
 
-				string cleanMethodName = GetCleanMethodName(method.Name);
+				if (IsExplicitInterfaceMethod(method))
+					continue;
+
+				string cleanMethodName = GetNonExplicitMethodName(method);
 
 				if (cleanInterfaceMethodName.Equals(cleanMethodName))
 				{
@@ -645,19 +651,24 @@ namespace Mosa.Compiler.Framework
 			return methodFound;
 		}
 
-		private string GetCleanMethodName(string fullName)
+		private string GetNonExplicitMethodName(MosaMethod method)
 		{
-			if (!fullName.Contains("."))
-				return fullName;
-			return fullName.Substring(fullName.LastIndexOf(".") + 1);
+			if (!IsExplicitInterfaceMethod(method))
+				return method.Name;
+
+			int pos = method.Name.LastIndexOf(".");
+
+			var name = method.Name.Substring(pos + 1);
+
+			return name;
 		}
 
-		private bool IsExplicitInterfaceMethod(string fullname)
+		private bool IsExplicitInterfaceMethod(MosaMethod method)
 		{
-			if (fullname.Contains(":"))
-				fullname = fullname.Substring(fullname.LastIndexOf(":") + 1);
+			if (method.IsConstructor || method.IsTypeConstructor)
+				return false;
 
-			return fullname.Contains(".");
+			return method.Name.Contains(".");
 		}
 
 		#endregion Internal - Interface
