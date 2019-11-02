@@ -473,7 +473,9 @@ namespace Mosa.Platform.x86.Stages
 
 		private void Nop(Context context)
 		{
-			context.SetInstruction(X86.Nop);
+			context.Empty();
+
+			//context.SetInstruction(X86.Nop);
 		}
 
 		private void RemSigned32(Context context)

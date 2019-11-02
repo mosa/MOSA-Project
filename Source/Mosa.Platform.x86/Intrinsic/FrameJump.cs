@@ -44,7 +44,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			{
 				if (!context.IsEmpty)
 				{
-					context.SetInstruction(X86.Nop);
+					context.Empty();
 				}
 				context.GotoNext();
 			}

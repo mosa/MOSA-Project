@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 {
 	/// <summary>
-	/// Move64Propogation
+	/// Move32Propagation
 	/// </summary>
-	public sealed class Move64Propogation : BaseTransformation
+	public sealed class Move32Propagation : BaseTransformation
 	{
-		public Move64Propogation() : base(IRInstruction.Move64)
+		public Move32Propagation() : base(IRInstruction.Move32)
 		{
 		}
 
@@ -23,7 +23,10 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Move64)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Move32)
+				return false;
+
+			if (IsCPURegister(context.Operand1.Definitions[0].Operand1))
 				return false;
 
 			return true;
@@ -35,7 +38,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 
 			var t1 = context.Operand1.Definitions[0].Operand1;
 
-			context.SetInstruction(IRInstruction.Move64, result, t1);
+			context.SetInstruction(IRInstruction.Move32, result, t1);
 		}
 	}
 }

@@ -12,11 +12,6 @@ namespace Mosa.Platform.x64.Stages
 	/// <seealso cref="Mosa.Platform.Intel.Stages.SimpleDeadCodeRemovalStage" />
 	public sealed class SimpleDeadCodeRemovalStage : Intel.Stages.SimpleDeadCodeRemovalStage
 	{
-		protected override bool IsNop(BaseInstruction instruction)
-		{
-			return instruction == X64.Nop;
-		}
-
 		protected override bool IsMov(BaseInstruction instruction)
 		{
 			return instruction == X64.Mov32 || instruction == X64.Mov64 || instruction == X64.Movsd || instruction == X64.Movss;
