@@ -7,7 +7,8 @@ jobs:
     name: Linux Test
     runs-on: ubuntu-18.04
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v1
         with:
           submodules: recursive      
       - name: Update Package Respository
@@ -22,19 +23,24 @@ jobs:
         run: dotnet restore Source/Mosa.LinuxCI.sln
       - name: Build
         run: msbuild /verbosity:minimal Source/Mosa.LinuxCI.sln
-      - name: Test 1
+      - name: Operating System Test
         run: bin/Mosa.Tool.Mosactl test
-      - name: Test 2
-        run: bin/Mosa.Tool.Mosactl test
+      - name: Unit Test
+        run: bin/Mosa.Tool.Mosactl unittest
 
   build-mswin:
     name: Windows Test
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v1
+      - name: Checkout
+        uses: actions/checkout@v1
         with:
-          submodules: recursive      
+          submodules: recursive
+      - name: Setup MSBuild
+        uses: warrenbuckley/Setup-MSBuild@v1          
       #- uses: crazy-max/ghaction-chocolatey@v1
       - name: Restore nuget packages
         run: dotnet restore Mosa.sln
         working-directory: Source
+      - name: Build
+        uses: msbuild Source/Mosa.sln
