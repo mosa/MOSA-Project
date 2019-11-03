@@ -314,7 +314,7 @@ namespace Mosa.Tool.Mosactl
 			var testSuccess = false;
 			if (!CallQemu(true, (line, proc) =>
 			 {
-				 if (line == "<SELFTEST:PASS_ED>")
+				 if (line == "<SELFTEST:PASSED>")
 				 {
 					 testSuccess = true;
 					 proc.Kill();

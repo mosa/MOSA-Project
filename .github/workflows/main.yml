@@ -19,13 +19,11 @@ jobs:
         run: sudo apt-get install -y git wget qemu qemu-system qemu-system-x86
       - name: Restore nuget Packages
         run: dotnet restore Source/Mosa.LinuxCI.sln
-      - name: Restore nuget Packages
-        run: dotnet restore Source/Mosa.LinuxCI.sln
       - name: Build
         run: msbuild /verbosity:minimal Source/Mosa.LinuxCI.sln
-      - name: Operating System Test
+      - name: Testing Operating Systems
         run: bin/Mosa.Tool.Mosactl test
-      - name: Unit Test
+      - name: Unit Tests
         run: bin/Mosa.Tool.Mosactl unittest
 
   build-mswin:
@@ -44,3 +42,7 @@ jobs:
         working-directory: Source
       - name: Build
         run: msbuild Source/Mosa.sln
+      - name: Testing Operating Systems
+        run: bin/Mosa.Tool.Mosactl test
+      - name: Unit Tests
+        run: bin/Mosa.Tool.Mosactl unittest
