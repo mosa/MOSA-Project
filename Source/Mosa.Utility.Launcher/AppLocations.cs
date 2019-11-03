@@ -239,6 +239,8 @@ namespace Mosa.Utility.Launcher
 				MsBuild = TryFind(
 					new string[] { "msbuild.exe", "msbuild" },
 					new string[] {
+						CombineParameterAndDirectory("ProgramFiles(x86)", @"Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin\amd64"),
+						CombineParameterAndDirectory("ProgramFiles(x86)", @"Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\Bin"),
 						CombineParameterAndDirectory("ProgramFiles(x86)", @"Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin\amd64"),
 						CombineParameterAndDirectory("ProgramFiles(x86)", @"Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin\amd64"),
 						CombineParameterAndDirectory("ProgramFiles(x86)", @"Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\Bin"),
