@@ -1,4 +1,4 @@
-[![Build status][build-status-image]][build-status]   [![License][github-license]][github-license-link]  [![Issues][github-issues]][github-issues-link]  [![Stars][github-stars]][github-stars-link]  [![Forks][github-forks]][github-forks-link]  [![Gitter Chat][gitter-image]][gitter-chat]
+[![Build status][build-status-image]][build-status] [![Actions Status](https://github.com/mosa/MOSA-Project/workflows/Tests/badge.svg)](https://github.com/mosa/MOSA-Project/actions) [![License][github-license]][github-license-link]  [![Issues][github-issues]][github-issues-link]  [![Stars][github-stars]][github-stars-link]  [![Forks][github-forks]][github-forks-link]  [![Gitter Chat][gitter-image]][gitter-chat]
 
 [![Bountysource][bounty-image]][bounty-issues]  
 
