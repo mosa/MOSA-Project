@@ -1,0 +1,40 @@
+name: Tests
+# This workflow is triggered on pushes to the repository.
+on: [push]
+
+jobs:
+  build-unix:
+    name: Linux Test
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          submodules: recursive      
+      - name: Update Package Respository
+        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
+      - name: Upgrade Packages
+        run: sudo apt-get upgrade -y
+      - name: Install New Packages
+        run: sudo apt-get install -y git wget qemu qemu-system qemu-system-x86
+      - name: Restore nuget Packages
+        run: dotnet restore Source/Mosa.LinuxCI.sln
+      - name: Restore nuget Packages
+        run: dotnet restore Source/Mosa.LinuxCI.sln
+      - name: Build
+        run: msbuild /verbosity:minimal Source/Mosa.LinuxCI.sln
+      - name: Test 1
+        run: bin/Mosa.Tool.Mosactl test
+      - name: Test 2
+        run: bin/Mosa.Tool.Mosactl test
+
+  build-mswin:
+    name: Windows Test
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v1
+        with:
+          submodules: recursive      
+      #- uses: crazy-max/ghaction-chocolatey@v1
+      - name: Restore nuget packages
+        run: dotnet restore Source/Mosa.sln
+        working-directory: Source
