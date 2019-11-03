@@ -43,4 +43,4 @@ jobs:
         run: dotnet restore Mosa.sln
         working-directory: Source
       - name: Build
-        uses: msbuild Source/Mosa.sln
+        run: msbuild Source/Mosa.sln
