@@ -1,6 +1,8 @@
 name: Tests
-# This workflow is triggered on pushes to the repository.
-on: [push]
+
+on:
+  push:
+  pull_request:
 
 jobs:
   build-unix:
@@ -10,11 +12,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
         with:
-          submodules: recursive      
+          submodules: recursive
       - name: Update Package Respository
         run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
-      # - name: Upgrade Packages
-      #   run: sudo apt-get upgrade -y
       - name: Install New Packages
         run: sudo apt-get install -y git wget qemu qemu-system qemu-system-x86
       - name: Restore nuget Packages
@@ -35,8 +35,7 @@ jobs:
         with:
           submodules: recursive
       - name: Setup MSBuild
-        uses: warrenbuckley/Setup-MSBuild@v1          
-      #- uses: crazy-max/ghaction-chocolatey@v1
+        uses: warrenbuckley/Setup-MSBuild@v1
       - name: Restore nuget packages
         run: dotnet restore Mosa.sln
         working-directory: Source
