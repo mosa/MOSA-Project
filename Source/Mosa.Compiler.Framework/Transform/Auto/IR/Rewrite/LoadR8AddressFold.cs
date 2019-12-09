@@ -20,6 +20,12 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Rewrite
 			if (!context.Operand1.IsVirtualRegister)
 				return false;
 
+			if (!context.Operand2.IsResolvedConstant)
+				return false;
+
+			if (context.Operand2.ConstantUnsigned64 != 0L)
+				return false;
+
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
