@@ -33,7 +33,7 @@ namespace Mosa.Utility.UnitTests
 
 		private readonly object _lock = new object();
 
-		private volatile bool Aborted = false;
+		internal volatile bool Aborted = false;
 		private volatile bool Ready = false;
 
 		private const int MaxSentQueue = 10000;
@@ -57,14 +57,14 @@ namespace Mosa.Utility.UnitTests
 		{
 			LauncherOptions = new LauncherOptions()
 			{
-				EnableSSA = true,
-				EnableBasicOptimizations = true,
-				EnableSparseConditionalConstantPropagation = true,
-				EnableInlineMethods = true,
-				EnableLongExpansion = true,
-				EnableValueNumbering = true,
-				TwoPassOptimizations = true,
-				EnableBitTracker = true,
+				EnableSSA = false,
+				EnableBasicOptimizations = false,
+				EnableSparseConditionalConstantPropagation = false,
+				EnableInlineMethods = false,
+				EnableLongExpansion = false,
+				EnableValueNumbering = false,
+				TwoPassOptimizations = false,
+				EnableBitTracker = false,
 
 				EnableMultiThreading = false,
 				EnableMethodScanner = false,
@@ -96,6 +96,7 @@ namespace Mosa.Utility.UnitTests
 				GenerateMapFile = true,
 				GenerateDebugFile = true,
 				PlugKorlib = true,
+				HuntForCorLib = true,
 				NoDisplay = !display
 			};
 
@@ -516,7 +517,8 @@ namespace Mosa.Utility.UnitTests
 
 		void IBuilderEvent.NewStatus(string status)
 		{
-			//Console.WriteLine(status);
+			// Do not hide exceptions by default!
+			Console.WriteLine(status);
 		}
 
 		void IBuilderEvent.UpdateProgress(int total, int at)

@@ -34,6 +34,12 @@ namespace Mosa.Utility.UnitTests
 			Console.WriteLine("Elapsed: " + (elapsedCompile / 1000.0).ToString("F2") + " secs");
 			Console.WriteLine();
 
+			if(unitTestEngine.Aborted)
+			{
+				Console.WriteLine("Compilation aborted");
+				return 1;
+			}
+
 			Console.WriteLine("Preparing Unit Tests...");
 			var unitTests = PrepareUnitTest(discoveredUnitTests, unitTestEngine.TypeSystem, unitTestEngine.Linker);
 			var elapsedPreparing = stopwatch.ElapsedMilliseconds - elapsedDiscovery - elapsedCompile;
@@ -102,7 +108,16 @@ namespace Mosa.Utility.UnitTests
 
 			foreach (var unitTestInfo in discoveredUnitTests)
 			{
-				var linkerMethodInfo = Linker.GetMethodInfo(typeSystem, linker, unitTestInfo);
+				LinkerMethodInfo linkerMethodInfo;
+				try
+				{
+					linkerMethodInfo = Linker.GetMethodInfo(typeSystem, linker, unitTestInfo);
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine($"Error while resolving method '{unitTestInfo.FullMethodName}'");
+					throw;
+				}
 
 				var unitTest = new UnitTest(unitTestInfo, linkerMethodInfo);
 
