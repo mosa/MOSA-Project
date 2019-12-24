@@ -21,6 +21,18 @@ namespace Mosa.Plug.Korlib.System.Threading.x86
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		[Plug("System.Threading.Monitor::ReliableEnter")]
+		internal static void ReliableEnter(Object obj, ref bool lockTaken)
+		{
+			var sync = Intrinsic.GetObjectAddress(obj) + IntPtr.Size;
+
+			while (Native.CmpXChgLoad32(sync.ToInt32(), 1, 0) != 0)
+			{ }
+
+			lockTaken = true;
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[Plug("System.Threading.Monitor::Exit")]
 		internal static void Exit(Object obj)
 		{
