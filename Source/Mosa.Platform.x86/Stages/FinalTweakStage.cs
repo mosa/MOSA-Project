@@ -23,7 +23,9 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(X86.MovStore16, MovStore16);
 			AddVisitation(X86.MovStore8, MovStore8);
 			AddVisitation(X86.Movzx16To32, Movzx16To32);
+			AddVisitation(X86.Movsx16To32, Movsx16To32);
 			AddVisitation(X86.Movzx8To32, Movzx8To32);
+			AddVisitation(X86.Movsx8To32, Movsx8To32);
 			AddVisitation(X86.Setcc, Setcc);
 		}
 
@@ -133,7 +135,7 @@ namespace Mosa.Platform.x86.Stages
 				var dest = context.Operand1;
 				var offset = context.Operand2;
 
-				Operand temporaryRegister = null;
+				Operand temporaryRegister;
 
 				if (dest.Register != GeneralPurposeRegister.EAX && offset.Register != GeneralPurposeRegister.EAX)
 				{
@@ -167,7 +169,7 @@ namespace Mosa.Platform.x86.Stages
 				var dest = context.Operand1;
 				var offset = context.Operand2;
 
-				Operand temporaryRegister = null;
+				Operand temporaryRegister;
 
 				if (dest.Register != GeneralPurposeRegister.EAX && offset.Register != GeneralPurposeRegister.EAX)
 				{
@@ -196,21 +198,48 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Debug.Assert(context.Result.IsCPURegister);
 
-			// Movzx8To32 can not use with ESI or EDI registers
-			if (context.Operand1.Register != GeneralPurposeRegister.ESI && context.Operand1.Register != GeneralPurposeRegister.EDI)
-				return;
-
 			var result = context.Result;
 			var source = context.Operand1;
 
-			if (source.Register != result.Register)
+			// Movzx8To32 can not use with ESI or EDI registers as source registers
+			if (result.Register != GeneralPurposeRegister.ESI && result.Register != GeneralPurposeRegister.EDI)
+				return;
+
+			if (source.Register == result.Register)
+			{
+				context.SetInstruction(X86.And32, result, result, CreateConstant(0xFFFF));
+			}
+			else
 			{
 				context.SetInstruction(X86.Mov32, result, source);
 				context.AppendInstruction(X86.And32, result, result, CreateConstant(0xFFFF));
 			}
+		}
+
+		public void Movsx16To32(Context context)
+		{
+			Debug.Assert(context.Result.IsCPURegister);
+
+			var result = context.Result;
+			var source = context.Operand1;
+
+			// Movsx16To32 can not use with ESI or EDI registers as source registers
+			if (source.Register != GeneralPurposeRegister.ESI && source.Register != GeneralPurposeRegister.EDI)
+				return;
+
+			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+
+			if (source.Register == result.Register)
+			{
+				context.SetInstruction2(X86.XChg32, eax, source, source, eax);
+				context.AppendInstruction(X86.Movsx16To32, eax, eax);
+				context.AppendInstruction2(X86.XChg32, source, eax, eax, source);
+			}
 			else
 			{
-				context.SetInstruction(X86.And32, result, result, CreateConstant(0xFFFF));
+				context.SetInstruction2(X86.XChg32, eax, source, source, eax);
+				context.AppendInstruction(X86.Movsx16To32, result, eax);
+				context.AppendInstruction2(X86.XChg32, source, eax, eax, source);
 			}
 		}
 
@@ -218,21 +247,48 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Debug.Assert(context.Result.IsCPURegister);
 
-			// Movzx8To32 can not use with ESI or EDI registers
-			if (context.Operand1.Register != GeneralPurposeRegister.ESI && context.Operand1.Register != GeneralPurposeRegister.EDI)
-				return;
-
 			var result = context.Result;
 			var source = context.Operand1;
 
-			if (source.Register != result.Register)
+			// Movzx8To32 can not use with ESI or EDI registers as source registers
+			if (source.Register != GeneralPurposeRegister.ESI && source.Register != GeneralPurposeRegister.EDI)
+				return;
+
+			if (source.Register == result.Register)
+			{
+				context.SetInstruction(X86.And32, result, result, CreateConstant(0xFF));
+			}
+			else
 			{
 				context.SetInstruction(X86.Mov32, result, source);
 				context.AppendInstruction(X86.And32, result, result, CreateConstant(0xFF));
 			}
+		}
+
+		public void Movsx8To32(Context context)
+		{
+			Debug.Assert(context.Result.IsCPURegister);
+
+			var result = context.Result;
+			var source = context.Operand1;
+
+			// Movsx8To32 can not use with ESI or EDI registers as source registers
+			if (source.Register != GeneralPurposeRegister.ESI && source.Register != GeneralPurposeRegister.EDI)
+				return;
+
+			var eax = Operand.CreateCPURegister(TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
+
+			if (source.Register == result.Register)
+			{
+				context.SetInstruction2(X86.XChg32, eax, source, source, eax);
+				context.AppendInstruction(X86.Movsx8To32, eax, eax);
+				context.AppendInstruction2(X86.XChg32, source, eax, eax, source);
+			}
 			else
 			{
-				context.SetInstruction(X86.And32, result, result, CreateConstant(0xFF));
+				context.SetInstruction2(X86.XChg32, eax, source, source, eax);
+				context.AppendInstruction(X86.Movsx8To32, result, eax);
+				context.AppendInstruction2(X86.XChg32, source, eax, eax, source);
 			}
 		}
 
@@ -245,7 +301,7 @@ namespace Mosa.Platform.x86.Stages
 
 			Debug.Assert(result.IsCPURegister);
 
-			// SETcc can not use with ESI or EDI registers
+			// SETcc can not use with ESI or EDI registers as source registers
 			if (result.Register == GeneralPurposeRegister.ESI || result.Register == GeneralPurposeRegister.EDI)
 			{
 				var condition = context.ConditionCode;
