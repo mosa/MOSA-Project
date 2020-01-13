@@ -139,7 +139,8 @@ namespace Mosa.Compiler.Framework
 			return new List<BaseCompilerStage> {
 				new UnitTestStage(),
 				new TypeInitializerStage(),
-				new DevirtualizationStage(),
+
+				//new DevirtualizationStage(),
 				new StaticFieldStage(),
 				new MethodTableStage(),
 				new ExceptionTableStage(),

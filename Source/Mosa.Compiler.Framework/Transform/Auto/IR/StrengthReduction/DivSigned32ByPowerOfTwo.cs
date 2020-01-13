@@ -26,6 +26,9 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			if (IsZero(context.Operand2))
 				return false;
 
+			if (IsOne(context.Operand2))
+				return false;
+
 			return true;
 		}
 

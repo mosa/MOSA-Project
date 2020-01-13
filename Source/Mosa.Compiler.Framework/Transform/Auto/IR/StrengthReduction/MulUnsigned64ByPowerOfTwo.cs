@@ -23,6 +23,12 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			if (!IsPowerOfTwo64(context.Operand2))
 				return false;
 
+			if (IsZero(context.Operand2))
+				return false;
+
+			if (IsOne(context.Operand2))
+				return false;
+
 			return true;
 		}
 

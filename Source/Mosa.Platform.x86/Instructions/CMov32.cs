@@ -13,7 +13,7 @@ namespace Mosa.Platform.x86.Instructions
 	public sealed class CMov32 : X86Instruction
 	{
 		internal CMov32()
-			: base(1, 1)
+			: base(1, 2)
 		{
 		}
 
@@ -34,14 +34,14 @@ namespace Mosa.Platform.x86.Instructions
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
 			emitter.OpcodeEncoder.Append8Bits(0x0F);
 			emitter.OpcodeEncoder.Append4Bits(0b0100);
 			emitter.OpcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 			emitter.OpcodeEncoder.Append2Bits(0b11);
 			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+			emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
 		}
 	}
 }
