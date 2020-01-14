@@ -237,10 +237,154 @@
 		{
 			"FamilyName": "IR",
 			"Type": "StrengthReduction",
+			"Name": "MulSigned32",
+			"SubName": "ByZero",
+			"Expression": "IR.MulSigned32 a 0u",
+			"Filter": "",
+			"Result": "(IR.Move32 0)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "MulSigned64",
+			"SubName": "ByZero",
+			"Expression": "IR.MulSigned64 a 0",
+			"Filter": "",
+			"Result": "(IR.Move64 0)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "MulSigned32",
+			"SubName": "ByZeroB",
+			"Expression": "IR.MulSigned32 0u b",
+			"Filter": "",
+			"Result": "(IR.Move32 0)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "MulSigned64",
+			"SubName": "ByZeroB",
+			"Expression": "IR.MulSigned64 0 b",
+			"Filter": "",
+			"Result": "(IR.Move64 0)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "MulUnsigned32",
+			"SubName": "ByZero",
+			"Expression": "IR.MulUnsigned32 a 0u",
+			"Filter": "",
+			"Result": "(IR.Move32 0)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "MulUnsigned64",
+			"SubName": "ByZero",
+			"Expression": "IR.MulUnsigned64 a 0",
+			"Filter": "",
+			"Result": "(IR.Move64 0)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "MulUnsigned32",
+			"SubName": "ByZeroB",
+			"Expression": "IR.MulUnsigned32 0u b",
+			"Filter": "",
+			"Result": "(IR.Move32 0)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "MulUnsigned64",
+			"SubName": "ByZeroB",
+			"Expression": "IR.MulUnsigned64 0 b",
+			"Filter": "",
+			"Result": "(IR.Move64 0)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "MulSigned32",
+			"SubName": "ByOne",
+			"Expression": "IR.MulSigned32 a 1u",
+			"Filter": "",
+			"Result": "(IR.Move32 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "MulSigned64",
+			"SubName": "ByOne",
+			"Expression": "IR.MulSigned64 a 1",
+			"Filter": "",
+			"Result": "(IR.Move64 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "MulSigned32",
+			"SubName": "ByOneB",
+			"Expression": "IR.MulSigned32 1u b",
+			"Filter": "",
+			"Result": "(IR.Move32 b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "MulSigned64",
+			"SubName": "ByOneB",
+			"Expression": "IR.MulSigned64 1 b",
+			"Filter": "",
+			"Result": "(IR.Move64 b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "MulUnsigned32",
+			"SubName": "ByOne",
+			"Expression": "IR.MulUnsigned32 a 1u",
+			"Filter": "",
+			"Result": "(IR.Move32 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "MulUnsigned64",
+			"SubName": "ByOne",
+			"Expression": "IR.MulUnsigned64 a 1",
+			"Filter": "",
+			"Result": "(IR.Move64 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "MulUnsigned32",
+			"SubName": "ByOneB",
+			"Expression": "IR.MulUnsigned32 1u b",
+			"Filter": "",
+			"Result": "(IR.Move32 b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "MulUnsigned64",
+			"SubName": "ByOneB",
+			"Expression": "IR.MulUnsigned64 1 b",
+			"Filter": "",
+			"Result": "(IR.Move64 b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
 			"Name": "MulUnsigned32",
 			"SubName": "ByPowerOfTwo",
 			"Expression": "IR.MulUnsigned32 x c",
-			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo32(c)",
+			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo32(c) & !IsZero(c) & !IsOne(c)",
 			"Result": "(IR.ShiftLeft32 x [GetPowerOfTwo(To32(c))])"
 		},
 		{
@@ -249,7 +393,7 @@
 			"Name": "MulUnsigned64",
 			"SubName": "ByPowerOfTwo",
 			"Expression": "IR.MulUnsigned64 x c",
-			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo64(c)",
+			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo64(c) & !IsZero(c) & !IsOne(c)",
 			"Result": "(IR.ShiftLeft64 x [GetPowerOfTwo(To32(c))])"
 		},
 		{
@@ -258,7 +402,7 @@
 			"Name": "MulSigned32",
 			"SubName": "ByPowerOfTwo",
 			"Expression": "IR.MulSigned32 x c",
-			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo32(c)",
+			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo32(c) & !IsZero(c) & !IsOne(c)",
 			"Result": "(IR.ShiftLeft32 x [GetPowerOfTwo(To32(c))])"
 		},
 		{
@@ -267,8 +411,62 @@
 			"Name": "MulSigned64",
 			"SubName": "ByPowerOfTwo",
 			"Expression": "IR.MulSigned64 x c",
-			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo64(c)",
+			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo64(c) & !IsZero(c) & !IsOne(c)",
 			"Result": "(IR.ShiftLeft64 x [GetPowerOfTwo(To32(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "DivSigned32",
+			"SubName": "ByZero",
+			"Expression": "IR.DivSigned32 0 x",
+			"Filter": "",
+			"Result": "(IR.Move32 0)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "DivSigned64",
+			"SubName": "ByZero",
+			"Expression": "IR.DivSigned64 0 x",
+			"Filter": "",
+			"Result": "(IR.Move64 0)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "DivSigned32",
+			"SubName": "ByOne",
+			"Expression": "IR.DivSigned32 a 1",
+			"Filter": "",
+			"Result": "(IR.Move32 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "DivSigned64",
+			"SubName": "ByOne",
+			"Expression": "IR.DivSigned64 a 1",
+			"Filter": "",
+			"Result": "(IR.Move64 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "DivUnsigned32",
+			"SubName": "ByOne",
+			"Expression": "IR.DivUnsigned32 a 1",
+			"Filter": "",
+			"Result": "(IR.Move32 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "DivUnsigned64",
+			"SubName": "ByOne",
+			"Expression": "IR.DivUnsigned64 a 1",
+			"Filter": "",
+			"Result": "(IR.Move64 a)"
 		},
 		{
 			"FamilyName": "IR",
@@ -276,7 +474,7 @@
 			"Name": "DivUnsigned32",
 			"SubName": "ByPowerOfTwo",
 			"Expression": "IR.DivUnsigned32 x c",
-			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo32(c) & !IsZero(c)",
+			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo32(c) & !IsZero(c) & !IsOne(c)",
 			"Result": "(IR.ShiftRight32 x [GetPowerOfTwo(To32(c))])"
 		},
 		{
@@ -285,7 +483,7 @@
 			"Name": "DivUnsigned64",
 			"SubName": "ByPowerOfTwo",
 			"Expression": "IR.DivUnsigned64 x c",
-			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo64(c) & !IsZero(c)",
+			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo64(c) & !IsZero(c) & !IsOne(c)",
 			"Result": "(IR.ShiftRight64 x [GetPowerOfTwo(To32(c))])"
 		},
 		{
@@ -294,7 +492,7 @@
 			"Name": "DivSigned32",
 			"SubName": "ByPowerOfTwo",
 			"Expression": "IR.DivSigned32 x c",
-			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo32(c) & !IsZero(c)",
+			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo32(c) & !IsZero(c) & !IsOne(c)",
 			"Result": "(IR.ShiftRight32 x [GetPowerOfTwo(To32(c))])"
 		},
 		{
@@ -303,7 +501,7 @@
 			"Name": "DivSigned64",
 			"SubName": "ByPowerOfTwo",
 			"Expression": "IR.DivSigned64 x c",
-			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo64(c) & !IsZero(c)",
+			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo64(c) & !IsZero(c) & !IsOne(c)",
 			"Result": "(IR.ShiftRight64 x [GetPowerOfTwo(To32(c))])"
 		},
 		{

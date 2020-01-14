@@ -7,26 +7,20 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 {
 	/// <summary>
-	/// DivUnsigned64ByPowerOfTwo
+	/// MulSigned64ByOne
 	/// </summary>
-	public sealed class DivUnsigned64ByPowerOfTwo : BaseTransformation
+	public sealed class MulSigned64ByOne : BaseTransformation
 	{
-		public DivUnsigned64ByPowerOfTwo() : base(IRInstruction.DivUnsigned64)
+		public MulSigned64ByOne() : base(IRInstruction.MulSigned64)
 		{
 		}
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{
-			if (!IsResolvedConstant(context.Operand2))
+			if (!context.Operand2.IsResolvedConstant)
 				return false;
 
-			if (!IsPowerOfTwo64(context.Operand2))
-				return false;
-
-			if (IsZero(context.Operand2))
-				return false;
-
-			if (IsOne(context.Operand2))
+			if (context.Operand2.ConstantUnsigned64 != 0L)
 				return false;
 
 			return true;
@@ -37,11 +31,8 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			var result = context.Result;
 
 			var t1 = context.Operand1;
-			var t2 = context.Operand2;
 
-			var e1 = transformContext.CreateConstant(GetPowerOfTwo(To32(t2)));
-
-			context.SetInstruction(IRInstruction.ShiftRight64, result, t1, e1);
+			context.SetInstruction(IRInstruction.Move64, result, t1);
 		}
 	}
 }

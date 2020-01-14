@@ -149,6 +149,11 @@ namespace Mosa.Compiler.Framework.Transform
 			return operand.IsConstantZero;
 		}
 
+		protected static bool IsOne(Operand operand)
+		{
+			return operand.IsConstantOne;
+		}
+
 		#endregion Filter Methods
 
 		#region Expression Methods

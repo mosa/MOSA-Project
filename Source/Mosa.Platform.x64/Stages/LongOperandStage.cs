@@ -179,8 +179,8 @@ namespace Mosa.Platform.x64.Stages
 			var operand2 = context.Operand2;
 
 			context.SetInstruction(X64.Cmp64, null, operand1, ConstantZero64);
-			context.AppendInstruction(X64.CMov64, ConditionCode.NotEqual, result, operand1);    // true
-			context.AppendInstruction(X64.CMov64, ConditionCode.Equal, result, operand2);       // false
+			context.AppendInstruction(X64.CMov64, ConditionCode.NotEqual, result, operand1);        // true
+			context.AppendInstruction(X64.CMov64, ConditionCode.Equal, result, result, operand2);   // false
 		}
 
 		private void Load64(Context context)

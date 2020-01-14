@@ -74,8 +74,8 @@ namespace Mosa.Compiler.Framework.Stages
 			public bool AreUpper32BitsKnown { get { return (BitsKnown & Upper32BitsSet) == Upper32BitsSet; } }
 			public bool AreRangeValuesIndeterminate { get { return !AreRangeValuesDeterminate; } }
 			public ulong BitsKnown { get { return BitsSet | BitsClear; } }
-			public bool Is32Bit { set { IsEvaluated = value; Set32Bit(); } }
-			public bool Is64Bit { set { IsEvaluated = value; } }
+			public bool Is32Bit { set { IsEvaluated = true; Set32Bit(); } }
+			public bool Is64Bit { set { IsEvaluated = true; } }
 			public bool IsEvaluated { get; private set; }
 			public bool IsIndeterminate { get { return AreRangeValuesIndeterminate && AreBitsIndeterminate; } }
 

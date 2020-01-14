@@ -3505,13 +3505,13 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "Conditional",
-			"OperandCount": 1,
+			"OperandCount": 2,
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x86],operand-prefix=0x0F,opcode=|0b0100|conditional,mod=11,reg=reg3:r,rm=reg3:o1"
+					"Encoding": "[x86],operand-prefix=0x0F,opcode=|0b0100|conditional,mod=11,reg=reg3:r,rm=reg3:o2"
 				}
 			]
 		},

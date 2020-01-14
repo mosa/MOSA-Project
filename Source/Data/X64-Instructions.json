@@ -7,8 +7,8 @@
 
 		"[x64-branch]=[x64],operand-prefix=0x0F,opcode=[opcode-branch],immediate=rel32:label",
 		"[x64-setbyteif]=[x64-rex64],operand-prefix=0x0F,opcode=[opcode-setbyteif],mod=11,reg=000,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r",
-		"[x64-cmov32]=[x64-rex32],operand-prefix=0x0F,opcode=[opcode-cmov],mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1",
-		"[x64-cmov64]=[x64-rex64],operand-prefix=0x0F,opcode=[opcode-cmov],mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1",
+		"[x64-cmov32]=[x64-rex32],operand-prefix=0x0F,opcode=[opcode-cmov],mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2",
+		"[x64-cmov64]=[x64-rex64],operand-prefix=0x0F,opcode=[opcode-cmov],mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2",
 
 		"[x64-rex32-base-load-ebp+zero]=[x64-rex32],mod=01,reg=reg3:[dest],rm=101,immediate=0x00,rex.r=reg4x:[dest],rex.x=0,rex.b=0",
 		"[x64-rex32-base-load-ebp+register]=[x64-rex32],mod=01,reg=reg3:[dest],rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00,rex.r=reg4x:[dest],rex.x=reg4x:[membase],rex.b=0",
@@ -4958,13 +4958,13 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "Conditional",
-			"OperandCount": 1,
+			"OperandCount": 2,
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex32],operand-prefix=0x0F,opcode=|0b0100|conditional,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+					"Encoding": "[x64-rex32],operand-prefix=0x0F,opcode=|0b0100|conditional,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
@@ -4978,13 +4978,13 @@
 			"FlagsUnchanged": "ZCSOP",
 			"FlagsUndefined": "",
 			"FlagsUsed": "Conditional",
-			"OperandCount": 1,
+			"OperandCount": 2,
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"Encoding": "[x64-rex64],operand-prefix=0x0F,opcode=|0b0100|conditional,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+					"Encoding": "[x64-rex64],operand-prefix=0x0F,opcode=|0b0100|conditional,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
 				}
 			]
 		},
