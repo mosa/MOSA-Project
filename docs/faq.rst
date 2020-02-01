@@ -6,17 +6,17 @@ These are questions we're frequently answering in our IRC channel, the mailing l
 What does MOSA stand for?
 -------------------------
 
-Managed Operation System Alliance. It was an alliance with the SharpOS project to create a .NET based operating system. As operating systems share a lot of common groundwork MOSA aims to standardize interfaces in order to foster portability and to provide both projects with basic implementations of these interfaces.
+Managed Operation System Alliance. It was an alliance with the SharpOS project to create a .NET based operating system and toolsets. As operating systems share a lot of common groundwork MOSA aims to standardize interfaces in order to foster portability and to provide both projects with basic implementations of these interfaces.
 
 Who can join?
 -------------
 
-Anyone who is interested in operating system or .NET development can join the alliance. You have to keep in mind our [[New BSD License|License]] for your contributions though.
+Anyone who is interested in operating system or .NET development can join. You have to keep in mind our :doc:`New BSD License <license>` for your contributions though.
 
 What kind of .NET runtime will be available?
 --------------------------------------------
 
-We are developing an entirely new Runtime as part of the MOSA effort. This runtime is developed along the CIL specifications published by ECMA. We are building our own runtime with pluggable algorithms in order to be very flexible and usable for research.
+We are developing an entirely new runtime as part of the MOSA effort. This runtime is developed along the CIL specifications published by ECMA. We are building our own runtime with pluggable algorithms in order to be very flexible and usable for research.
 
 How is the Cosmos project different than MOSA?
 ----------------------------------------------
@@ -30,4 +30,4 @@ Another important difference is Cosmos compiles to Assembly ASM and uses Netwide
 Are Cosmos and MOSA working together?
 -------------------------------------
 
-No; Cosmos and MOSA are independent projects. 
+No; Cosmos and MOSA are seperate and independent projects. 

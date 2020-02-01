@@ -9,7 +9,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	static partial class IntrinsicMethods
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:CpuId")]
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::CpuId")]
 		private static void CpuId(Context context, MethodCompiler methodCompiler)
 		{
 			context.SetInstruction(X86.CpuId, context.Result, context.Operand1);

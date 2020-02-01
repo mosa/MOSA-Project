@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.0</TargetFramework>
+		<OutputType>Exe</OutputType>
+		<Title>Mosa.Tool.Launcher.Console</Title>
+		<Company>MOSA Project</Company>
+		<Copyright>Copyright © 2020</Copyright>
+		<LangVersion>8.0</LangVersion>
+		<DebugType>full</DebugType>
+		<OutputPath>..\..\bin\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<WarningLevel>2</WarningLevel>
+		<DebugSymbols>True</DebugSymbols>
+	</PropertyGroup>
+	<PropertyGroup>
+		<StartupObject>Mosa.Tool.Launcher.Console.Program</StartupObject>
+		<AssemblyName>Mosa.Tool.Launcher.Console</AssemblyName>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
+		<ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
+		<ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
+	</ItemGroup>
+</Project>

@@ -5,9 +5,9 @@
 # saner programming env: these switches turn some bugs into errors
 set -o errexit -o pipefail -o noclobber -o nounset
 
-! getopt --test > /dev/null 
+! getopt -test > /dev/null 
 if [[ ${PIPESTATUS[0]} -ne 4 ]]; then
-    echo "I’m sorry, `getopt --test` failed in this environment."
+    echo "I’m sorry, `getopt -test` failed in this environment."
     exit 1
 fi
 
@@ -16,31 +16,31 @@ LONGOPTS=assembly:,emulator:
 
 # -use ! and PIPESTATUS to get exit code with errexit set
 # -temporarily store output to be able to check for errors
-# -activate quoting/enhanced mode (e.g. by writing out “--options”)
-# -pass arguments only via   -- "$@"   to separate them correctly
-! PARSED=$(getopt --options=$OPTIONS --longoptions=$LONGOPTS --name "$0" -- "$@")
+# -activate quoting/enhanced mode (e.g. by writing out “-options”)
+# -pass arguments only via   - "$@"   to separate them correctly
+! PARSED=$(getopt -options=$OPTIONS -longoptions=$LONGOPTS -name "$0" - "$@")
 if [[ ${PIPESTATUS[0]} -ne 0 ]]; then
     # e.g. return value is 1
     #  then getopt has complained about wrong arguments to stdout
     exit 2
 fi
 # read getopt’s output this way to handle the quoting right:
-eval set -- "$PARSED"
+eval set - "$PARSED"
 
 assembly=
 emulator=qemu
-# now enjoy the options in order and nicely split until we see --
+# now enjoy the options in order and nicely split until we see -
 while true; do
     case "$1" in
-        -a|--assembly)
+        -a|-assembly)
             assembly="$2"
             shift 2
             ;;
-        -e|--emulator)
+        -e|-emulator)
             emulator="$2"
             shift 2
             ;;
-        --)
+        -)
             shift
             break
             ;;
@@ -67,19 +67,19 @@ fi
 
 absfile=$(realpath $assembly)
 
-name=$(basename -- "$absfile")
+name=$(basename - "$absfile")
 name="${name%.*}"
 
 cd $(dirname $0)/../../bin
 
-mono --debug Mosa.Tool.Compiler.exe \
+mono -debug Mosa.Tool.Compiler.exe \
 	-o ${name}.bin \
 	-a x64 \
-	--format elf32 \
-	--mboot v1 \
-	--x86-irq-methods \
-	--base-address 0x00500000 \
-	--map ${name}.map \
+	-format elf32 \
+	-mboot v1 \
+	-x86-irq-methods \
+	-base-address 0x00500000 \
+	-map ${name}.map \
 	${absfile} \
 	mscorlib.dll \
 	Mosa.Plug.Korlib.dll \
@@ -91,15 +91,15 @@ then
 	exit
 fi
 
-mono --debug Mosa.Tool.CreateBootImage.exe \
+mono -debug Mosa.Tool.CreateBootImage.exe \
 	-o ${name}.img \
-	--mbr ../Tools/syslinux/3.72/mbr.bin \
-	--boot ../Tools/syslinux/3.72/ldlinux.bin \
-	--syslinux \
-	--volume-label MOSABOOT \
-	--blocks 25000 \
-	--filesystem fat16 \
-	--format img \
+	-mbr ../Tools/syslinux/3.72/mbr.bin \
+	-boot ../Tools/syslinux/3.72/ldlinux.bin \
+	-syslinux \
+	-volume-label MOSABOOT \
+	-blocks 25000 \
+	-filesystem fat16 \
+	-format img \
 	../Tools/syslinux/3.72/ldlinux.sys \
 	../Tools/syslinux/3.72/mboot.c32 \
 	../Demos/unix/syslinux.cfg \

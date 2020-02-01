@@ -83,10 +83,10 @@ namespace Mosa.Platform.Intel.CompilerStages
 
 		protected override void Initialization()
 		{
-			HasVideo = CompilerOptions.GetCustomOptionAsBoolean("multiboot.video", false);
-			Width = CompilerOptions.GetCustomOptionAsInteger("multiboot.width", 0);
-			Height = CompilerOptions.GetCustomOptionAsInteger("multiboot.height", 0);
-			Depth = CompilerOptions.GetCustomOptionAsInteger("multiboot.depth", 0);
+			HasVideo = CompilerSettings.Settings.GetValue("Multiboot.Video", false);
+			Width = CompilerSettings.Settings.GetValue("Multiboot.Video.Width", 0);
+			Height = CompilerSettings.Settings.GetValue("Multiboot.Video.Geight", 0);
+			Depth = CompilerSettings.Settings.GetValue("Multiboot.Video.Depth", 0);
 		}
 
 		protected override void Setup()

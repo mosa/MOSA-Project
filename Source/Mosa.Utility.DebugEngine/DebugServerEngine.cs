@@ -15,12 +15,14 @@ namespace Mosa.Utility.DebugEngine
 		private readonly Dictionary<int, DebugMessage> pending = new Dictionary<int, DebugMessage>();
 		private int nextID = 0;
 
-		private List<byte> buffer = new List<byte>();
+		private readonly List<byte> buffer = new List<byte>();
 
 		private CallBack globalDispatch;
 		private readonly byte[] receivedData = new byte[2000];
 
 		private const int MaxBufferSize = (64 * 1024) + 64;
+
+		private static int packetCnt = 0;
 
 		public Stream Stream
 		{
@@ -76,8 +78,6 @@ namespace Mosa.Utility.DebugEngine
 
 			return true;
 		}
-
-		private static int packetCnt = 0;
 
 		public bool SendCommand2(List<DebugMessage> messages)
 		{

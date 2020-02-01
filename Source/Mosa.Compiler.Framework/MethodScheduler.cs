@@ -199,7 +199,7 @@ namespace Mosa.Compiler.Framework
 
 			if (action)
 			{
-				Compiler.PostCompilerTraceEvent(CompilerEvent.InlineMethodsScheduled);
+				Compiler.PostEvent(CompilerEvent.InlineMethodsScheduled);
 			}
 		}
 	}

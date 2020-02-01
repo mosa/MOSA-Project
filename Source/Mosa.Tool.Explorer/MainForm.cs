@@ -1,11 +1,14 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using CommandLine;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.CompilerStages;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Tool.Explorer.Stages;
+using Mosa.Utility.Configuration;
 using Mosa.Utility.Launcher;
 using System;
 using System.Collections.Generic;
@@ -13,16 +16,17 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using static Mosa.Compiler.Framework.CompilerHooks;
 
 namespace Mosa.Tool.Explorer
 {
-	public partial class MainForm : Form, ITraceListener
+	public partial class MainForm : Form
 	{
-		private readonly CodeForm form = new CodeForm();
+		private readonly Settings Settings = new Settings();
 
 		private DateTime compileStartTime;
 
-		public readonly MosaCompiler Compiler = new MosaCompiler(new List<BaseCompilerExtension>() { new ExplorerCompilerExtension() });
+		private MosaCompiler Compiler = null;
 
 		private readonly MethodStore methodStore = new MethodStore();
 
@@ -41,9 +45,6 @@ namespace Mosa.Tool.Explorer
 		private bool DirtyLogDropDown = true;
 		private bool DirtyLog = true;
 
-		private string LastAssemblyFilename = null;
-		private string LastIncludeDirectory = null;
-
 		public MainForm()
 		{
 			InitializeComponent();
@@ -58,7 +59,18 @@ namespace Mosa.Tool.Explorer
 			tbLogs.Width = tabControl.Width - 4;
 			tbLogs.Height = tabControl.Height - (22 + 32 + 8);
 
-			ClearAllLogs();
+			cbPlatform.SelectedIndex = 0;
+
+			ClearAll();
+
+			RegisterPlatforms();
+		}
+
+		private static void RegisterPlatforms()
+		{
+			PlatformRegistry.Add(new Platform.x86.Architecture());
+			PlatformRegistry.Add(new Platform.x64.Architecture());
+			PlatformRegistry.Add(new Platform.ARMv8A32.Architecture());
 		}
 
 		private void ClearAllLogs()
@@ -202,84 +214,19 @@ namespace Mosa.Tool.Explorer
 		{
 			if (openFileDialog.ShowDialog() == DialogResult.OK)
 			{
-				LoadAssembly(openFileDialog.FileName);
+				UpdateSettings();
+
+				UpdateSettings(openFileDialog.FileName);
+
+				LoadAssembly();
 			}
-		}
-
-		private Options ParseOptions(string[] args)
-		{
-			var result = new Parser(config => config.HelpWriter = Console.Out).ParseArguments<Options>(args);
-
-			if (result.Tag == ParserResultType.NotParsed)
-			{
-				return null;
-			}
-
-			return ((Parsed<Options>)result).Value;
-		}
-
-		public void LoadArguments(string[] args)
-		{
-			var options = ParseOptions(args);
-
-			if (options == null)
-				return;
-
-			cbEnableInline.Checked = !options.InlineOff;
-			cbEnableBinaryCodeGeneration.Checked = !options.NoCode;
-			cbEnableSSA.Checked = !options.NoSSA;
-			cbEnableBasicOptimizations.Checked = !options.NoIROptimizations;
-			cbEnableSparseConditionalConstantPropagation.Checked = !options.NoSparse;
-			cbEnableMethodScanner.Checked = options.EnableMethodScanner;
-
-			tbFilter.Text = options.Filter;
-
-			if (options.X86)
-				cbPlatform.SelectedIndex = 0;
-			else if (options.X64)
-				cbPlatform.SelectedIndex = 1;
-			else if (options.ARMv8A32)
-				cbPlatform.SelectedIndex = 2;
-			else
-				cbPlatform.SelectedIndex = 0;
-
-			var files = (IList<string>)options.Files;
-
-			if (files.Count == 1)
-			{
-				string file = files[0];
-
-				if (file.IndexOf(Path.DirectorySeparatorChar) >= 0)
-				{
-					LoadAssembly(file);
-				}
-				else
-				{
-					LoadAssembly(Path.Combine(Directory.GetCurrentDirectory(), file));
-				}
-			}
-		}
-
-		public void LoadAssembly(string filename, string includeDirectory = null)
-		{
-			LastAssemblyFilename = filename;
-			LastIncludeDirectory = includeDirectory;
-
-			ClearAllLogs();
-			methodStore.Clear();
-
-			if (filename == null)
-				return;
-
-			LoadAssembly(filename, cbPlatform.Text, includeDirectory);
-
-			CreateTree();
-
-			SetStatus("Assemblies Loaded!");
 		}
 
 		protected void CreateTree()
 		{
+			if (Compiler == null)
+				return;
+
 			if (Compiler.TypeSystem == null || Compiler.TypeLayout == null)
 			{
 				typeSystemTree = null;
@@ -405,11 +352,6 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		protected void UpdateTree(MosaMethod method)
-		{
-			typeSystemTree.Update(method);
-		}
-
 		private void QuitToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Application.Exit();
@@ -424,16 +366,13 @@ namespace Mosa.Tool.Explorer
 
 		private string CreateTimeStampedLog(CompilerEvent compilerEvent, string message, int threadID = 0)
 		{
-			return $"{(DateTime.Now - compileStartTime).TotalSeconds:0.00} [{threadID.ToString()}] {compilerEvent.ToText()}: {message}";
+			message = string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}";
+
+			return $"{(DateTime.Now - compileStartTime).TotalSeconds:0.00} [{threadID.ToString()}] {compilerEvent.ToText()}{message}";
 		}
 
 		private void SubmitTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
-			if (compilerEvent == CompilerEvent.StatusUpdate)
-			{
-				return;
-			}
-
 			var log = CreateTimeStampedLog(compilerEvent, message, threadID);
 
 			lock (compilerStageLock)
@@ -459,44 +398,24 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		private void SetCompilerOptions()
-		{
-			Compiler.CompilerOptions.EnableSSA = cbEnableSSA.Checked;
-			Compiler.CompilerOptions.EnableBasicOptimizations = cbEnableBasicOptimizations.Checked;
-			Compiler.CompilerOptions.EnableValueNumbering = cbEnableValueNumbering.Checked;
-			Compiler.CompilerOptions.EnableSparseConditionalConstantPropagation = cbEnableSparseConditionalConstantPropagation.Checked;
-			Compiler.CompilerOptions.EmitBinary = cbEnableBinaryCodeGeneration.Checked;
-			Compiler.CompilerOptions.EnableInlineMethods = cbEnableInline.Checked;
-			Compiler.CompilerOptions.InlineExplicitOnly = cbInlineExplicitOnly.Checked;
-			Compiler.CompilerOptions.EnableLongExpansion = cbEnableLongExpansion.Checked;
-			Compiler.CompilerOptions.InlineMaximum = 12;
-			Compiler.CompilerOptions.InlineAggressiveMaximum = 24;
-			Compiler.CompilerOptions.TwoPassOptimizations = cbEnableTwoPassOptimizations.Checked;
-			Compiler.CompilerOptions.EnableMethodScanner = cbEnableMethodScanner.Checked;
-			Compiler.CompilerOptions.TraceLevel = 8;
-			Compiler.CompilerOptions.LinkerFormatType = LinkerFormatType.Elf32;
-			Compiler.CompilerOptions.EnableBitTracker = cbEnableBitTracker.Checked;
-
-			Compiler.CompilerOptions.EnableLoopInvariantCodeMotion = cbLoopInvariantCodeMotion.Checked;
-			Compiler.CompilerOptions.EnablePlatformOptimizations = cbPlatformOptimizations.Checked;
-
-			Compiler.CompilerTrace.SetTraceListener(this);
-		}
-
 		private void CompileAll()
 		{
+			if (Compiler == null)
+				return;
+
 			compileStartTime = DateTime.Now;
-			SetCompilerOptions();
 
 			Compiler.ScheduleAll();
 
 			toolStrip1.Enabled = false;
 
-			ThreadPool.QueueUserWorkItem(new WaitCallback(delegate
+			var multithread = CBEnableMultithreading.Checked;
+
+			ThreadPool.QueueUserWorkItem(state =>
 			{
 				try
 				{
-					if (CBEnableMultithreading.Checked)
+					if (multithread)
 						Compiler.ThreadedCompile();
 					else
 						Compiler.Compile();
@@ -505,15 +424,10 @@ namespace Mosa.Tool.Explorer
 				{
 					OnCompileCompleted();
 				}
-			}));
+			});
 		}
 
-		private void OnCompileCompleted()
-		{
-			MethodInvoker call = CompileCompleted;
-
-			Invoke(call);
-		}
+		private void OnCompileCompleted() => Invoke((MethodInvoker)(() => CompileCompleted()));
 
 		private void CompileCompleted()
 		{
@@ -522,17 +436,6 @@ namespace Mosa.Tool.Explorer
 			SetStatus("Compiled!");
 
 			UpdateTree();
-		}
-
-		private static BaseArchitecture GetArchitecture(string platform)
-		{
-			switch (platform.ToLower())
-			{
-				case "x86": return Platform.x86.Architecture.CreateArchitecture(Platform.x86.ArchitectureFeatureFlags.AutoDetect);
-				case "x64": return Platform.x64.Architecture.CreateArchitecture(Platform.x64.ArchitectureFeatureFlags.AutoDetect);
-				case "armv8a32": return Platform.ARMv8A32.Architecture.CreateArchitecture(Platform.ARMv8A32.ArchitectureFeatureFlags.AutoDetect);
-				default: return Platform.x86.Architecture.CreateArchitecture(Platform.x86.ArchitectureFeatureFlags.AutoDetect);
-			}
 		}
 
 		private void NowToolStripMenuItem_Click(object sender, EventArgs e)
@@ -721,6 +624,9 @@ namespace Mosa.Tool.Explorer
 
 		private void NodeSelected()
 		{
+			if (Compiler == null)
+				return;
+
 			tbInstructions.Text = string.Empty;
 
 			var method = CurrentMethodSelected;
@@ -729,8 +635,6 @@ namespace Mosa.Tool.Explorer
 				return;
 
 			compileStartTime = DateTime.Now;
-
-			SetCompilerOptions();
 
 			Compiler.CompileSingleMethod(method);
 		}
@@ -754,45 +658,64 @@ namespace Mosa.Tool.Explorer
 			UpdateDebugResults();
 		}
 
-		private void SnippetToolStripMenuItem_Click(object sender, EventArgs e)
+		private void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline)
 		{
-			ShowCodeForm();
+			pipeline.InsertAfterFirst<TypeInitializerStage>(
+					new ExplorerMethodCompileTimeStage()
+			);
 		}
 
-		private void ToolStripButton2_Click(object sender, EventArgs e)
+		private void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline)
 		{
-			ShowCodeForm();
+			pipeline.Add(new DisassemblyStage());
+			pipeline.Add(new DebugInfoStage());
+
+			//pipeline.InsertBefore<GreedyRegisterAllocatorStage>(new StopStage());
+
+			//pipeline.InsertBefore<EnterSSAStage>(new DominanceOutputStage());
+			//pipeline.InsertBefore<EnterSSAStage>(new GraphVizStage());
 		}
 
-		protected void LoadAssembly(string filename, string platform, string includeDirectory = null)
+		private CompilerHooks CreateCompilerHook()
 		{
-			Compiler.CompilerOptions.Architecture = GetArchitecture(platform);
-			Compiler.CompilerOptions.MultibootSpecification = MultibootSpecification.V1;
+			var compilerHooks = new CompilerHooks
+			{
+				ExtendCompilerPipeline = ExtendCompilerPipeline,
+				ExtendMethodCompilerPipeline = ExtendMethodCompilerPipeline,
 
-			Compiler.CompilerOptions.SearchPaths.Clear();
-			Compiler.CompilerOptions.SourceFiles.Clear();
+				NotifyProgress = NotifyProgress,
+				NotifyEvent = NotifyEvent,
+				NotifyTraceLog = NotifyTraceLog,
+				NotifyMethodCompiled = NotifyMethodCompiled,
+				NotifyMethodInstructionTrace = NotifyMethodInstructionTrace
+			};
 
-			var sourceDirectory = Path.GetDirectoryName(filename);
-			Compiler.CompilerOptions.AddSearchPath(includeDirectory);
-			Compiler.CompilerOptions.AddSearchPath(sourceDirectory);
+			return compilerHooks;
+		}
 
-			var fileHunter = new FileHunter(sourceDirectory);
-			Compiler.CompilerOptions.AddSourceFile(filename);
-			Compiler.CompilerOptions.AddSourceFile(fileHunter.HuntFile("Mosa.Plug.Korlib.dll")?.FullName);
-			Compiler.CompilerOptions.AddSourceFile(fileHunter.HuntFile("Mosa.Plug.Korlib." + platform + ".dll")?.FullName);
-			Compiler.CompilerOptions.AddSourceFile(fileHunter.HuntFile("Mosa.Runtime." + platform + ".dll")?.FullName);
+		public NotifyTraceLogHandler NotifyMethodInstructionTrace(MosaMethod method)
+		{
+			if (method != CurrentMethodSelected)
+				return null;
+
+			return NotifyMethodInstructionTraceResponse;
+		}
+
+		public void LoadAssembly()
+		{
+			ClearAll();
+
+			UpdateSettings();
+
+			var compilerHooks = CreateCompilerHook();
+
+			Compiler = new MosaCompiler(Settings, compilerHooks);
 
 			Compiler.Load();
-		}
 
-		private void ShowCodeForm()
-		{
-			form.ShowDialog();
+			CreateTree();
 
-			if (form.DialogResult == DialogResult.OK && !string.IsNullOrEmpty(form.Assembly))
-			{
-				LoadAssembly(form.Assembly, AppDomain.CurrentDomain.BaseDirectory);
-			}
+			SetStatus("Assemblies Loaded!");
 		}
 
 		private void CbLabels_SelectedIndexChanged(object sender, EventArgs e)
@@ -826,23 +749,27 @@ namespace Mosa.Tool.Explorer
 			toolStripProgressBar1.Value = CompletedMethods;
 		}
 
-		void ITraceListener.OnCompilerEvent(CompilerEvent compilerEvent, string message, int threadID)
+		private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
+			message = string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}";
+
+			var status = $"{compilerEvent.ToText()}{message}";
+
 			lock (_statusLock)
 			{
-				Status = compilerEvent.ToText() + ": " + message;
+				Status = status;
 			}
 
 			SubmitTraceEvent(compilerEvent, message, threadID);
 		}
 
-		void ITraceListener.OnProgress(int totalMethods, int completedMethods)
+		private void NotifyProgress(int totalMethods, int completedMethods)
 		{
 			TotalMethods = totalMethods;
 			CompletedMethods = completedMethods;
 		}
 
-		void ITraceListener.OnTraceLog(TraceLog traceLog)
+		private void NotifyTraceLog(TraceLog traceLog)
 		{
 			if (traceLog.Type == TraceType.MethodDebug)
 			{
@@ -862,7 +789,7 @@ namespace Mosa.Tool.Explorer
 			}
 			else if (traceLog.Type == TraceType.MethodInstructions)
 			{
-				methodStore.SetInstructionTraceInformation(traceLog.Method, traceLog.Stage, traceLog.Lines, traceLog.Version);
+				NotifyMethodInstructionTraceResponse(traceLog);
 			}
 			else if (traceLog.Type == TraceType.GlobalDebug)
 			{
@@ -870,7 +797,15 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		void ITraceListener.OnMethodCompiled(MosaMethod method)
+		private void NotifyMethodInstructionTraceResponse(TraceLog traceLog)
+		{
+			//if (traceLog.Method != CurrentMethodSelected)
+			//	return;
+
+			methodStore.SetInstructionTraceInformation(traceLog.Method, traceLog.Stage, traceLog.Lines, traceLog.Version);
+		}
+
+		private void NotifyMethodCompiled(MosaMethod method)
 		{
 			if (method == CurrentMethodSelected)
 			{
@@ -932,15 +867,22 @@ namespace Mosa.Tool.Explorer
 			}
 		}
 
-		private void CbPlatform_SelectedIndexChanged(object sender, EventArgs e)
-		{
-			// reload assembly
-			LoadAssembly(LastAssemblyFilename, LastIncludeDirectory);
-		}
-
 		private void showSizesToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			CreateTree();
+		}
+
+		private void ClearAll()
+		{
+			Compiler = null;
+			typeSystemTree = null;
+
+			treeView.Nodes.Clear();
+			tbInstructions.Text = string.Empty;
+			tbDebugResult.Text = string.Empty;
+			methodStore.Clear();
+
+			ClearAllLogs();
 		}
 
 		private void padInstructions_CheckStateChanged(object sender, EventArgs e)
@@ -1024,12 +966,157 @@ namespace Mosa.Tool.Explorer
 			cbEnableInline.Checked = state;
 			cbEnableLongExpansion.Checked = state;
 			cbEnableTwoPassOptimizations.Checked = state;
-
-			//cbEnableMethodScanner.Checked = state;
 			cbEnableBitTracker.Checked = state;
-
 			cbLoopInvariantCodeMotion.Checked = state;
 			cbPlatformOptimizations.Checked = state;
+		}
+
+		public void LoadArguments(string[] args)
+		{
+			SetDefaultSettings();
+
+			var arguments = SettingsLoader.RecursiveReader(args);
+
+			Settings.Merge(arguments);
+
+			UpdateDisplay();
+
+			var sourcefiles = Settings.GetValueList("Compiler.SourceFiles");
+
+			if (sourcefiles != null && sourcefiles.Count >= 1)
+			{
+				UpdateSettings(Path.GetFullPath(sourcefiles[0]));
+
+				LoadAssembly();
+			}
+		}
+
+		private void SetDefaultSettings()
+		{
+			Settings.SetValue("Compiler.BaseAddress", 0x00400000);
+			Settings.SetValue("Compiler.Binary", true);
+			Settings.SetValue("Compiler.MethodScanner", false);
+			Settings.SetValue("Compiler.Multithreading", true);
+			Settings.SetValue("Compiler.Platform", "x86");
+			Settings.SetValue("Compiler.TraceLevel", 10);
+			Settings.SetValue("Launcher.PlugKorlib", true);
+			Settings.SetValue("CompilerDebug.DebugFile", string.Empty);
+			Settings.SetValue("CompilerDebug.AsmFile", string.Empty);
+			Settings.SetValue("CompilerDebug.MapFile", string.Empty);
+			Settings.SetValue("CompilerDebug.NasmFile", string.Empty);
+			Settings.SetValue("Optimizations.Basic", true);
+			Settings.SetValue("Optimizations.BitTracker", true);
+			Settings.SetValue("Optimizations.Inline", true);
+			Settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
+			Settings.SetValue("Optimizations.Inline.ExplicitOnly", false);
+			Settings.SetValue("Optimizations.Inline.Maximum", 12);
+			Settings.SetValue("Optimizations.LongExpansion", true);
+			Settings.SetValue("Optimizations.LoopInvariantCodeMotion", true);
+			Settings.SetValue("Optimizations.Platform", true);
+			Settings.SetValue("Optimizations.SCCP", true);
+			Settings.SetValue("Optimizations.Devirtualization", true);
+			Settings.SetValue("Optimizations.SSA", true);
+			Settings.SetValue("Optimizations.TwoPass", true);
+			Settings.SetValue("Optimizations.ValueNumbering", true);
+			Settings.SetValue("Image.BootLoader", "syslinux3.72");
+			Settings.SetValue("Image.Folder", Path.Combine(Path.GetTempPath(), "MOSA"));
+			Settings.SetValue("Image.Format", "IMG");
+			Settings.SetValue("Image.FileSystem", "FAT16");
+			Settings.SetValue("Multiboot.Version", "v1");
+			Settings.SetValue("Multiboot.Video", false);
+			Settings.SetValue("Multiboot.Video.Width", 640);
+			Settings.SetValue("Multiboot.Video.Height", 480);
+			Settings.SetValue("Multiboot.Video.Depth", 32);
+			Settings.SetValue("Emulator", "Qemu");
+			Settings.SetValue("Emulator.Memory", 128);
+			Settings.SetValue("Emulator.Serial", "none");
+			Settings.SetValue("Emulator.Serial.Host", "127.0.0.1");
+			Settings.SetValue("Emulator.Serial.Port", 9999);
+			Settings.SetValue("Emulator.Serial.Pipe", "MOSA");
+			Settings.SetValue("Launcher.Start", false);
+			Settings.SetValue("Launcher.Launch", false);
+			Settings.SetValue("Launcher.Exit", false);
+			Settings.SetValue("Launcher.HuntForCorLib", true);
+		}
+
+		private void UpdateSettings()
+		{
+			Settings.SetValue("Compiler.MethodScanner", cbEnableMethodScanner.Checked);
+			Settings.SetValue("Compiler.Binary", cbEnableBinaryCodeGeneration.Checked);
+			Settings.SetValue("Compiler.TraceLevel", 10);
+			Settings.SetValue("Compiler.Platform", cbPlatform.Text);
+			Settings.SetValue("Compiler.Multithreading", CBEnableMultithreading.Checked);
+			Settings.SetValue("Optimizations.SSA", cbEnableSSA.Checked);
+			Settings.SetValue("Optimizations.Basic", cbEnableBasicOptimizations.Checked);
+			Settings.SetValue("Optimizations.ValueNumbering", cbEnableValueNumbering.Checked);
+			Settings.SetValue("Optimizations.SCCP", cbEnableSparseConditionalConstantPropagation.Checked);
+			Settings.SetValue("Optimizations.Devirtualization", cbEnableDevirtualization.Checked);
+			Settings.SetValue("Optimizations.BitTracker", cbEnableBitTracker.Checked);
+			Settings.SetValue("Optimizations.LoopInvariantCodeMotion", cbLoopInvariantCodeMotion.Checked);
+			Settings.SetValue("Optimizations.LongExpansion", cbEnableLongExpansion.Checked);
+			Settings.SetValue("Optimizations.TwoPass", cbEnableTwoPassOptimizations.Checked);
+			Settings.SetValue("Optimizations.Platform", cbPlatformOptimizations.Checked);
+			Settings.SetValue("Optimizations.Inline", cbEnableInline.Checked);
+			Settings.SetValue("Optimizations.Inline.ExplicitOnly", cbInlineExplicitOnly.Checked);
+			Settings.SetValue("Optimizations.Inline.Maximum", 12);
+			Settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
+			Settings.SetValue("Multiboot.Version", "v1");
+		}
+
+		private void UpdateSettings(string filename)
+		{
+			var sourceDirectory = Path.GetDirectoryName(filename);
+			var fileHunter = new FileHunter(sourceDirectory);
+
+			var platform = Settings.GetValue("Compiler.Platform");
+
+			// Source Files
+			Settings.ClearProperty("Compiler.SourceFiles");
+			Settings.AddPropertyListValue("Compiler.SourceFiles", filename);
+			Settings.AddPropertyListValue("Compiler.SourceFiles", fileHunter.HuntFile("Mosa.Plug.Korlib.dll")?.FullName);
+			Settings.AddPropertyListValue("Compiler.SourceFiles", fileHunter.HuntFile("Mosa.Plug.Korlib." + platform + ".dll")?.FullName);
+			Settings.AddPropertyListValue("Compiler.SourceFiles", fileHunter.HuntFile("Mosa.Runtime." + platform + ".dll")?.FullName);
+
+			// Search Paths
+			Settings.ClearProperty("SearchPaths");
+			Settings.AddPropertyListValue("SearchPaths", Path.GetDirectoryName(filename));
+		}
+
+		private void UpdateDisplay()
+		{
+			cbEnableInline.Checked = Settings.GetValue("Optimizations.Inline", cbEnableInline.Checked);
+			cbEnableSSA.Checked = Settings.GetValue("Optimizations.SSA", cbEnableSSA.Checked);
+			cbEnableBasicOptimizations.Checked = Settings.GetValue("Optimizations.Basic", cbEnableBasicOptimizations.Checked);
+			cbEnableSparseConditionalConstantPropagation.Checked = Settings.GetValue("Optimizations.SCCP", cbEnableSparseConditionalConstantPropagation.Checked);
+			cbEnableDevirtualization.Checked = Settings.GetValue("Optimizations.Devirtualization", cbEnableDevirtualization.Checked);
+			cbInlineExplicitOnly.Checked = Settings.GetValue("Optimizations.Inline.ExplicitOnly", cbInlineExplicitOnly.Checked);
+			cbPlatformOptimizations.Checked = Settings.GetValue("Optimizations.Platform", cbPlatformOptimizations.Checked);
+			cbEnableLongExpansion.Checked = Settings.GetValue("Optimizations.LongExpansion", cbEnableLongExpansion.Checked);
+			cbEnableTwoPassOptimizations.Checked = Settings.GetValue("Optimizations.TwoPass", cbEnableTwoPassOptimizations.Checked);
+			cbLoopInvariantCodeMotion.Checked = Settings.GetValue("Optimizations.LoopInvariantCodeMotion", cbLoopInvariantCodeMotion.Checked);
+			cbEnableValueNumbering.Checked = Settings.GetValue("Optimizations.ValueNumbering", cbEnableValueNumbering.Checked);
+			cbEnableBitTracker.Checked = Settings.GetValue("Optimizations.BitTracker", cbEnableBitTracker.Checked);
+			cbEnableBinaryCodeGeneration.Checked = Settings.GetValue("Compiler.Binary", cbEnableBinaryCodeGeneration.Checked);
+			cbEnableMethodScanner.Checked = Settings.GetValue("Compiler.MethodScanner", cbEnableMethodScanner.Checked);
+
+			tbFilter.Text = Settings.GetValue("Explorer.Filter", tbFilter.Text);
+
+			var platform = Settings.GetValue("Compiler.Platform");
+
+			if (platform != null)
+			{
+				if (platform.ToLower() == "x86")
+					cbPlatform.SelectedIndex = 0;
+				else if (platform.ToLower() == "x64")
+					cbPlatform.SelectedIndex = 1;
+				else if (platform.ToLower() == "armv8a32")
+					cbPlatform.SelectedIndex = 2;
+			}
+		}
+
+		private void cbPlatform_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			ClearAll();
 		}
 	}
 }

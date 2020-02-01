@@ -9,7 +9,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	static partial class IntrinsicMethods
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Nop")]
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Nop")]
 		private static void Nop(Context context, MethodCompiler methodCompiler)
 		{
 			context.SetInstruction(X86.Nop);

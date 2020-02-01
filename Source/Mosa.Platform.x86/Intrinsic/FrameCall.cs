@@ -9,7 +9,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	static partial class IntrinsicMethods
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:FrameCall")]
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::FrameCall")]
 		private static void FrameCall(Context context, MethodCompiler methodCompiler)
 		{
 			context.SetInstruction(X86.Call, null, context.Operand1);

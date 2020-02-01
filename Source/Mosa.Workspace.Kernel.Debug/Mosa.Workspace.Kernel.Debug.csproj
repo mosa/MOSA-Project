@@ -5,7 +5,7 @@
     <AssemblyTitle>Mosa.Workspace.Kernel.Debug</AssemblyTitle>
     <Company>MOSA Project</Company>
     <Product>Mosa.Workspace.Kernel.Debug</Product>
-    <Copyright>Copyright © 2019</Copyright>
+    <Copyright>Copyright © 2020</Copyright>
     <DebugType>full</DebugType>
     <LangVersion>8.0</LangVersion>
     <OutputPath>..\..\bin\</OutputPath>

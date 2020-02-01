@@ -3,7 +3,6 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Common;
-using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using Priority_Queue;
@@ -12,6 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using static Mosa.Compiler.Framework.BaseMethodCompilerStage;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
@@ -45,15 +45,15 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private readonly List<SlotIndex> KillAll;
 
-		protected readonly ITraceFactory TraceFactory;
+		protected readonly CreateTraceHandler CreateTrace;
 
 		protected readonly TraceLog Trace;
 
 		private readonly List<InstructionNode> SlotsToNodes;
 
-		protected BaseRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, AddStackLocalDelegate addStackLocal, Operand stackFrame, ITraceFactory traceFactory)
+		protected BaseRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, AddStackLocalDelegate addStackLocal, Operand stackFrame, CreateTraceHandler createTrace)
 		{
-			TraceFactory = traceFactory;
+			CreateTrace = createTrace;
 
 			BasicBlocks = basicBlocks;
 			Architecture = architecture;
@@ -68,7 +68,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			VirtualRegisters = new List<VirtualRegister>(RegisterCount);
 			ExtendedBlocks = new List<ExtendedBlock>(basicBlocks.Count);
 
-			Trace = CreateTraceLog("Main", 7);
+			Trace = CreateTrace("Main", 7);
 
 			StackFrameRegister = architecture.StackFrameRegister;
 			StackPointerRegister = architecture.StackPointerRegister;
@@ -99,11 +99,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			KillAll = new List<SlotIndex>();
 
 			SlotsToNodes = new List<InstructionNode>(512);
-		}
-
-		protected TraceLog CreateTraceLog(string name, int traceLevel)
-		{
-			return TraceFactory.CreateTraceLog(name, traceLevel);
 		}
 
 		public virtual void Start()
@@ -193,7 +188,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void TraceBlocks()
 		{
-			var extendedBlockTrace = CreateTraceLog("Extended Blocks", 9);
+			var extendedBlockTrace = CreateTrace("Extended Blocks", 9);
 
 			if (extendedBlockTrace == null)
 				return;
@@ -210,7 +205,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void TraceLiveIntervals(string stage, bool operand)
 		{
-			var registerTrace = CreateTraceLog(stage, 9);
+			var registerTrace = CreateTrace(stage, 9);
 
 			if (registerTrace == null)
 				return;
@@ -343,7 +338,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void TraceNumberInstructions()
 		{
-			var numberTrace = CreateTraceLog("InstructionNumber", 9);
+			var numberTrace = CreateTrace("InstructionNumber", 9);
 
 			if (numberTrace == null)
 				return;
@@ -372,7 +367,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void TraceDefAndUseLocations()
 		{
-			var locationTrace = CreateTraceLog("DefAndUseLocations", 9);
+			var locationTrace = CreateTrace("DefAndUseLocations", 9);
 
 			if (locationTrace == null)
 				return;
@@ -436,7 +431,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void TraceUsageMap(string stage)
 		{
-			var usageMap = CreateTraceLog("TraceUsageMap-" + stage, 9);
+			var usageMap = CreateTrace("TraceUsageMap-" + stage, 9);
 
 			if (usageMap == null)
 				return;
@@ -512,7 +507,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 							{
 								if (r.Contains(innerslot))
 								{
-									string s = row[index] ?? string.Empty;
+									var s = row[index] ?? string.Empty;
 
 									if (vr.IsPhysicalRegister)
 									{
@@ -541,7 +536,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 										{
 											int index2 = r.AssignedPhysicalRegister.Index;
 
-											string s2 = row[index2] ?? string.Empty;
+											var s2 = row[index2] ?? string.Empty;
 
 											s2 += vr.ToString();
 
@@ -551,7 +546,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 								}
 								else if (r.End == innerslot)
 								{
-									string s = row[index] ?? string.Empty;
+									var s = row[index] ?? string.Empty;
 									s += ")";
 									row[index] = s;
 								}
@@ -598,7 +593,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void ComputeLocalLiveSets()
 		{
-			var liveSetTrace = CreateTraceLog("ComputeLocalLiveSets", 9);
+			var liveSetTrace = CreateTrace("ComputeLocalLiveSets", 9);
 
 			foreach (var block in ExtendedBlocks)
 			{
@@ -743,7 +738,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		private void BuildLiveIntervals()
 		{
-			var intervalTrace = CreateTraceLog("BuildLiveIntervals", 9);
+			var intervalTrace = CreateTrace("BuildLiveIntervals", 9);
 
 			for (int b = BasicBlocks.Count - 1; b >= 0; b--)
 			{
@@ -1408,7 +1403,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected void ResolveDataFlow()
 		{
-			var resolverTrace = CreateTraceLog("ResolveDataFlow", 9);
+			var resolverTrace = CreateTrace("ResolveDataFlow", 9);
 
 			var moveResolvers = new MoveResolver[2, BasicBlocks.Count];
 
@@ -1487,7 +1482,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		protected void InsertRegisterMoves()
 		{
-			var insertTrace = CreateTraceLog("InsertRegisterMoves", 9);
+			var insertTrace = CreateTrace("InsertRegisterMoves", 9);
 
 			var moves = GetRegisterMoves();
 

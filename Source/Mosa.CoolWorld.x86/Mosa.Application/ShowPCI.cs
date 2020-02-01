@@ -3,7 +3,6 @@
 using Mosa.AppSystem;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
-using Mosa.Kernel.x86;
 
 namespace Mosa.Application
 {

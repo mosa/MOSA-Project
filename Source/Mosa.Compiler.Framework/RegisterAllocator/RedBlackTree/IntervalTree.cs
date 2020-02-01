@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 	{
 		private Node<T> Sentinel = new Node<T>(new Interval(-1, -1), null);
 
-		private Node<T> Root { get; set; }
+		private Node<T> Root;
 
 		public IntervalTree()
 		{

@@ -20,12 +20,11 @@ namespace Mosa.Tool.Mosactl
 		private string RootDir;
 		private string SourceDir;
 
-		private static Utility.Launcher.AppLocations appLocations;
+		private static AppLocations appLocations;
 
 		public MosaCtl()
 		{
-			appLocations = new Utility.Launcher.AppLocations();
-			appLocations.FindApplications();
+			appLocations = new AppLocations();
 
 			RootDir = GetEnv("MOSA_ROOT");
 			BinDir = GetEnv("MOSA_BIN");
@@ -436,7 +435,7 @@ namespace Mosa.Tool.Mosactl
 
 			if (IsWin)
 			{
-				CallProcess(BinDir, GetEnv("${MOSA_BIN}/Mosa.Tool.GDBDebugger${MOSA_TOOL_EXT}"), "--image", ExpandKernelBinPath(OsName) + ".bin", "--autostart", "--debugfile", ExpandKernelBinPath(OsName) + ".debug");
+				CallProcess(BinDir, GetEnv("${MOSA_BIN}/Mosa.Tool.Debugger${MOSA_TOOL_EXT}"), "--image", ExpandKernelBinPath(OsName) + ".bin", "--autostart", "--debugfile", ExpandKernelBinPath(OsName) + ".debug");
 			}
 			else
 			{
@@ -487,7 +486,7 @@ namespace Mosa.Tool.Mosactl
 					return false;
 				if (IsWin)
 				{
-					if (!CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), "Mosa.Tool.GDBDebugger/Mosa.Tool.GDBDebugger.csproj"))
+					if (!CallProcess(SourceDir, GetEnv("MOSA_MSBUILD"), "Mosa.Tool.Debugger/Mosa.Tool.Debugger.csproj"))
 						return false;
 				}
 			}

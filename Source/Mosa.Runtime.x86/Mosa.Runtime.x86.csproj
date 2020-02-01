@@ -8,7 +8,6 @@
     <DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <NuspecFile>Mosa.Runtime.x86.nuspec</NuspecFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DocumentationFile />

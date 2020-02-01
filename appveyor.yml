@@ -1,4 +1,4 @@
-version: '1.9.7.{build}'
+version: '2.0.0.{build}'
 
 configuration: Release
 platform: Any CPU
@@ -53,16 +53,16 @@ for:
     - cmd: dotnet pack Source/Mosa.Runtime/Mosa.Runtime.csproj -p:NuspecProperties=\"version=%APPVEYOR_BUILD_VERSION%\"
     - cmd: dotnet pack Source/Mosa.Kernel.x86/Mosa.Kernel.x86.csproj -p:NuspecProperties=\"version=%APPVEYOR_BUILD_VERSION%\"
     - cmd: dotnet pack Source/Mosa.Runtime.x86/Mosa.Runtime.x86.csproj -p:NuspecProperties=\"version=%APPVEYOR_BUILD_VERSION%\"
-    - cmd: dotnet pack Source/Mosa.ClassLib/Mosa.ClassLib.csproj -p:NuspecProperties=\"version=%APPVEYOR_BUILD_VERSION%\"
     - cmd: dotnet pack Source/Mosa.Tools.Package/Mosa.Tools.Package.csproj -p:NuspecProperties=\"version=%APPVEYOR_BUILD_VERSION%\"
     - cmd: ISCC.exe "/DMyAppVersion=%APPVEYOR_BUILD_VERSION%" Source/Inno-Setup-Script/Mosa-Installer.iss
-#   - ps: ./mosactl.ps1 unittest
-#   - ps: ./mosactl.ps1 test
+    - cmd: bin\Mosa.Utility.UnitTests.exe -settings tests\UnitTest.settings
+#    - cmd: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.TestWorld.x86.exe -s Launcher.MonitorTest=true
+#    - cmd: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.HelloWorld.x86.exe -s Launcher.MonitorTest=true
+#    - cmd: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.CoolWorld.x86.exe -s Launcher.MonitorTest=true
 
     build_script:
 
     test_script:
-#    - cmd: ./mosactl.ps1 test
 
     after_test:
 
@@ -125,13 +125,13 @@ for:
     - sh: sudo apt-get install -y git wget qemu qemu-system qemu-system-x86
 
     before_build:
-    - sh: dotnet restore $APPVEYOR_BUILD_FOLDER/Source/Mosa.LinuxCI.sln
+    - sh: dotnet restore $APPVEYOR_BUILD_FOLDER/Source/Mosa.sln
 
     build: off
 
     build_script:
-    - sh: msbuild /verbosity:minimal $APPVEYOR_BUILD_FOLDER/Source/Mosa.LinuxCI.sln
+    - sh: msbuild /verbosity:minimal $APPVEYOR_BUILD_FOLDER/Source/Mosa.sln
 
     test_script:
-    - sh: $APPVEYOR_BUILD_FOLDER/bin/Mosa.Tool.Mosactl test
-    - sh: $APPVEYOR_BUILD_FOLDER/bin/Mosa.Tool.Mosactl unittest
+#    - sh: $APPVEYOR_BUILD_FOLDER/bin/Mosa.Tool.Mosactl test
+#    - sh: $APPVEYOR_BUILD_FOLDER/bin/Mosa.Tool.Mosactl unittest

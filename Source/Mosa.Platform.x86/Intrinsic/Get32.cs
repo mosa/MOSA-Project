@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal static partial class IntrinsicMethods
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Get32")]
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Get32")]
 		private static void Get32(Context context, MethodCompiler methodCompiler)
 		{
 			Debug.Assert(context.Result.IsI4 || context.Result.IsU4);

@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.IR;
 using System;
 using System.Collections.Generic;
 
@@ -11,8 +10,8 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	/// </summary>
 	static partial class IntrinsicMethods
 	{
-		[IntrinsicMethod("Mosa.Runtime.Intrinsic:GetObjectAddress")]
-		[IntrinsicMethod("Mosa.Runtime.Intrinsic:GetValueTypeAddress")]
+		[IntrinsicMethod("Mosa.Runtime.Intrinsic::GetObjectAddress")]
+		[IntrinsicMethod("Mosa.Runtime.Intrinsic::GetValueTypeAddress")]
 		private static void GetObjectAddress(Context context, MethodCompiler methodCompiler)
 		{
 			var result = context.Result;

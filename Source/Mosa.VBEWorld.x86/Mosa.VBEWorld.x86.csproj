@@ -18,7 +18,6 @@
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj" />
     <ProjectReference Include="..\Mosa.DeviceDriver\Mosa.DeviceDriver.csproj" />
     <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj" />
     <ProjectReference Include="..\Mosa.Kernel.x86\Mosa.Kernel.x86.csproj" />

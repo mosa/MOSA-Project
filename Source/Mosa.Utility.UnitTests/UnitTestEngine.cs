@@ -1,8 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common.Configuration;
+using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
+using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.Utility.BootImage;
 using Mosa.Utility.DebugEngine;
 using Mosa.Utility.Launcher;
 using System;
@@ -15,25 +17,25 @@ using System.Threading;
 
 namespace Mosa.Utility.UnitTests
 {
-	public class UnitTestEngine : IBuilderEvent, IStarterEvent, IDisposable
+	public class UnitTestEngine : IDisposable
 	{
-		public LauncherOptions LauncherOptions { get; }
 		public string TestAssemblyPath { get; set; }
-		public string Platform { get; set; }
+
 		public string TestSuiteFile { get; set; }
-		public AppLocations AppLocations { get; set; }
 
 		public TypeSystem TypeSystem { get; internal set; }
+
 		public MosaLinker Linker { get; internal set; }
 
 		protected DebugServerEngine DebugServerEngine;
 		protected Starter Starter;
 		protected Process Process;
-		protected string ImageFile;
+
+		private Settings Settings;
 
 		private readonly object _lock = new object();
 
-		private volatile bool Aborted = false;
+		internal volatile bool Aborted = false;
 		private volatile bool Ready = false;
 
 		private const int MaxSentQueue = 10000;
@@ -53,66 +55,70 @@ namespace Mosa.Utility.UnitTests
 		private int SendOneCount = -1;
 		private int Errors = 0;
 
-		public UnitTestEngine(bool display = false)
+		private DateTime CompileStartTime;
+
+		public UnitTestEngine(Settings settings)
 		{
-			LauncherOptions = new LauncherOptions()
-			{
-				EnableSSA = true,
-				EnableBasicOptimizations = true,
-				EnableSparseConditionalConstantPropagation = true,
-				EnableInlineMethods = true,
-				EnableLongExpansion = true,
-				EnableValueNumbering = true,
-				TwoPassOptimizations = true,
-				EnableBitTracker = true,
+			Settings = AppLocationsSettings.GetAppLocations();
 
-				EnableMultiThreading = false,
-				EnableMethodScanner = false,
+			Settings.SetValue("Compiler.MethodScanner", false);
+			Settings.SetValue("Compiler.Multithreading", true);
+			Settings.SetValue("Compiler.Platform", "x86");
+			Settings.SetValue("CompilerDebug.DebugFile", "%DEFAULT%");
+			Settings.SetValue("CompilerDebug.AsmFile", "%DEFAULT%");
+			Settings.SetValue("CompilerDebug.MapFile", "%DEFAULT%");
+			Settings.SetValue("CompilerDebug.InlinedFile", "%DEFAULT%");
+			Settings.SetValue("CompilerDebug.NasmFile", string.Empty);
 
-				Emulator = EmulatorType.Qemu,
-				ImageFormat = ImageFormat.IMG,
-				MultibootSpecification = Compiler.Framework.MultibootSpecification.V1,
-				PlatformType = PlatformType.x86,
-				LinkerFormatType = LinkerFormatType.Elf32,
-				EmulatorMemoryInMB = 128,
-				DestinationDirectory = Path.Combine(Path.GetTempPath(), "MOSA-UnitTest"),
-				FileSystem = BootImage.FileSystem.FAT16,
-				InlineMaximum = 12,
-				BootLoader = BootLoader.Syslinux_3_72,
-				VBEVideo = false,
-				Width = 640,
-				Height = 480,
-				Depth = 32,
-				BaseAddress = 0x00500000,
-				EmitStaticRelocations = false,
-				EmitAllSymbols = false,
-				SerialConnectionOption = SerialConnectionOption.TCPServer,
-				SerialConnectionPort = 9999,
-				SerialConnectionHost = "127.0.0.1",
-				SerialPipeName = "MOSA",
-				ExitOnLaunch = true,
-				GenerateNASMFile = false,
-				GenerateASMFile = true,
-				GenerateMapFile = true,
-				GenerateDebugFile = true,
-				PlugKorlib = true,
-				NoDisplay = !display
-			};
+			Settings.SetValue("Optimizations.Basic", true);
+			Settings.SetValue("Optimizations.BitTracker", true);
+			Settings.SetValue("Optimizations.Inline", true);
+			Settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
+			Settings.SetValue("Optimizations.Inline.ExplicitOnly", false);
+			Settings.SetValue("Optimizations.Inline.Maximum", 12);
+			Settings.SetValue("Optimizations.LongExpansion", true);
+			Settings.SetValue("Optimizations.LoopInvariantCodeMotion", true);
+			Settings.SetValue("Optimizations.Platform", true);
+			Settings.SetValue("Optimizations.SCCP", true);
+			Settings.SetValue("Optimizations.Devirtualization", true);
+			Settings.SetValue("Optimizations.SSA", true);
+			Settings.SetValue("Optimizations.TwoPass", true);
+			Settings.SetValue("Optimizations.ValueNumbering", true);
 
-			AppLocations = new AppLocations();
+			Settings.SetValue("Multiboot.Video", false);
+			Settings.SetValue("Multiboot.Video.Width", 640);
+			Settings.SetValue("Multiboot.Video.Height", 480);
+			Settings.SetValue("Multiboot.Video.Depth", 32);
+			Settings.SetValue("Emulator.Display", true);
 
-			AppLocations.FindApplications();
+			Settings.Merge(settings);
+
+			Settings.SetValue("Compiler.BaseAddress", 0x00500000);
+			Settings.SetValue("Compiler.Binary", true);
+			Settings.SetValue("Compiler.TraceLevel", 0);
+			Settings.SetValue("Launcher.PlugKorlib", true);
+			Settings.SetValue("Multiboot.Version", "v1");
+			Settings.SetValue("Emulator", "Qemu");
+			Settings.SetValue("Emulator.Memory", 128);
+			Settings.SetValue("Emulator.Serial", "TCPServer");
+			Settings.SetValue("Emulator.Serial.Host", "127.0.0.1");
+			Settings.SetValue("Emulator.Serial.Port", new Random().Next(11111, 22222));
+			Settings.SetValue("Emulator.Serial.Pipe", "MOSA");
+			Settings.SetValue("Launcher.Start", false);
+			Settings.SetValue("Launcher.Launch", false);
+			Settings.SetValue("Launcher.Exit", true);
+			Settings.SetValue("Launcher.HuntForCorLib", true);
+			Settings.SetValue("Image.BootLoader", "syslinux3.72");
+			Settings.SetValue("Image.Folder", Path.Combine(Path.GetTempPath(), "MOSA-UnitTest"));
+			Settings.SetValue("Image.Format", "IMG");
+			Settings.SetValue("Image.FileSystem", "FAT16");
+			Settings.SetValue("Image.ImageFile", "%DEFAULT%");
 
 			Initialize();
 		}
 
 		private void Initialize()
 		{
-			if (Platform == null)
-			{
-				Platform = "x86";
-			}
-
 			if (TestAssemblyPath == null)
 			{
 #if __MonoCS__
@@ -124,7 +130,9 @@ namespace Mosa.Utility.UnitTests
 
 			if (TestSuiteFile == null)
 			{
-				TestSuiteFile = "Mosa.UnitTests." + Platform + ".exe";
+				var platform = Settings.GetValue("Compiler.Platform", "x86");
+
+				TestSuiteFile = $"Mosa.UnitTests.{platform}.exe";
 			}
 
 			Aborted = !Compile();
@@ -256,29 +264,67 @@ namespace Mosa.Utility.UnitTests
 
 		public bool Compile()
 		{
-			LauncherOptions.Paths.Add(TestAssemblyPath);
-			LauncherOptions.SourceFile = Path.Combine(TestAssemblyPath, TestSuiteFile);
+			CompileStartTime = DateTime.Now;
 
-			var builder = new Builder(LauncherOptions, AppLocations, this);
+			Settings.AddPropertyListValue("SearchPaths", TestAssemblyPath);
 
-			builder.Compile();
+			Settings.ClearProperty("Compiler.SourceFiles");
+			Settings.AddPropertyListValue("Compiler.SourceFiles", Path.Combine(TestAssemblyPath, TestSuiteFile));
+
+			var compilerHook = CreateCompilerHook();
+
+			var builder = new Builder(Settings, compilerHook);
+
+			builder.Build();
 
 			Linker = builder.Linker;
 			TypeSystem = builder.TypeSystem;
-			ImageFile = LauncherOptions.BootLoaderImage ?? builder.ImageFile;
+			Settings = builder.Settings;
 
 			return !builder.HasCompileError;
+		}
+
+		private CompilerHooks CreateCompilerHook()
+		{
+			var compilerHooks = new CompilerHooks
+			{
+				NotifyEvent = NotifyEvent,
+				NotifyProgress = NotifyProgress
+			};
+
+			return compilerHooks;
+		}
+
+		private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
+		{
+			if (compilerEvent != CompilerEvent.MethodCompileEnd
+				&& compilerEvent != CompilerEvent.MethodCompileStart
+				&& compilerEvent != CompilerEvent.Counter
+				&& compilerEvent != CompilerEvent.SetupStageStart
+				&& compilerEvent != CompilerEvent.SetupStageEnd
+				&& compilerEvent != CompilerEvent.FinalizationStageStart
+				&& compilerEvent != CompilerEvent.FinalizationStageEnd
+				)
+			{
+				message = string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}";
+				Console.WriteLine($"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} [{threadID.ToString()}] {compilerEvent.ToText()}{message}");
+			}
+		}
+
+		private void NotifyProgress(int totalMethods, int completedMethods)
+		{
 		}
 
 		public bool LaunchVirtualMachine()
 		{
 			if (Starter == null)
 			{
-				LauncherOptions.ImageFile = ImageFile;
-				Starter = new Starter(LauncherOptions, AppLocations, this);
+				var compilerHook = CreateCompilerHook();
+
+				Starter = new Starter(Settings, compilerHook);
 			}
 
-			LauncherOptions.SerialConnectionPort++;
+			//Settings.SetValue("Emulator.Serial.Port", new Random().Next(11111, 22222));
 
 			Process = Starter.Launch();
 
@@ -316,16 +362,24 @@ namespace Mosa.Utility.UnitTests
 
 		private void Connect()
 		{
-			if (LauncherOptions.SerialConnectionOption == SerialConnectionOption.TCPServer)
+			var serial = Settings.GetValue("Emulator.Serial", string.Empty).ToLower();
+
+			switch (serial)
 			{
-				var client = new TcpClient(LauncherOptions.SerialConnectionHost, LauncherOptions.SerialConnectionPort);
-				DebugServerEngine.Stream = new DebugNetworkStream(client.Client, true);
-			}
-			else if (LauncherOptions.SerialConnectionOption == SerialConnectionOption.Pipe)
-			{
-				var pipeStream = new NamedPipeClientStream(".", LauncherOptions.SerialPipeName, PipeDirection.InOut);
-				pipeStream.Connect();
-				DebugServerEngine.Stream = pipeStream;
+				case "tcpserver":
+					{
+						var client = new TcpClient(Settings.GetValue("Emulator.Serial.Host", "localhost"), Settings.GetValue("Emulator.Serial.Port", 1234));
+						DebugServerEngine.Stream = new DebugNetworkStream(client.Client, true);
+						break;
+					}
+
+				case "pipe":
+					{
+						var pipeStream = new NamedPipeClientStream(".", Settings.GetValue("Emulator.Serial.Pipe", "MOSA"), PipeDirection.InOut);
+						pipeStream.Connect();
+						DebugServerEngine.Stream = pipeStream;
+						break;
+					}
 			}
 		}
 
@@ -452,6 +506,9 @@ namespace Mosa.Utility.UnitTests
 					SendOneCount = 10;
 
 					Console.WriteLine("Re-starting Engine...");
+
+					//Settings.SetValue("Emulator.Serial.Port", Settings.GetValue("Emulator.Serial.Port", 1234) + 1);
+
 					StartEngine();
 				}
 			}
@@ -512,20 +569,6 @@ namespace Mosa.Utility.UnitTests
 
 				//Console.WriteLine("RECD: " + unitTest.MethodTypeName + "." + unitTest.MethodName);
 			}
-		}
-
-		void IBuilderEvent.NewStatus(string status)
-		{
-			//Console.WriteLine(status);
-		}
-
-		void IBuilderEvent.UpdateProgress(int total, int at)
-		{
-		}
-
-		void IStarterEvent.NewStatus(string status)
-		{
-			//Console.WriteLine(status);
 		}
 
 		void IDisposable.Dispose()

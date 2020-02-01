@@ -9,7 +9,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	static partial class IntrinsicMethods
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Int")]
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Int")]
 		private static void Int(Context context, MethodCompiler methodCompiler)
 		{
 			Helper.FoldOperand1ToConstant(context);

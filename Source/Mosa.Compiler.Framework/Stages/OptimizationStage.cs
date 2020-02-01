@@ -4,7 +4,6 @@ using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.Framework.Transform;
 using Mosa.Compiler.Framework.Transform.Auto;
 using Mosa.Compiler.Framework.Transform.Manual;
-using System;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages

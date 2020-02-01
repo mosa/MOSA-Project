@@ -9,7 +9,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	static partial class IntrinsicMethods
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Lidt")]
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Lidt")]
 		private static void Lidt(Context context, MethodCompiler methodCompiler)
 		{
 			//Helper.FoldOperand1ToConstant(context);

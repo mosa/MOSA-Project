@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
+using Mosa.Utility.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -16,8 +17,10 @@ namespace Mosa.Utility.UnitTests
 		public static Type CombinationType = Assembly.Load("Mosa.Utility.UnitTests").GetTypes().First(t => t.Name == "Combinations");
 		public static Type SeriesType = Assembly.Load("Mosa.Utility.UnitTests").GetTypes().First(t => t.Name == "Series2");
 
-		public static int Start(bool display)
+		public static int Start(string[] args)
 		{
+			var settings = SettingsLoader.RecursiveReader(args);
+
 			var stopwatch = new Stopwatch();
 			stopwatch.Start();
 
@@ -29,10 +32,16 @@ namespace Mosa.Utility.UnitTests
 			Console.WriteLine();
 
 			Console.WriteLine("Starting Unit Test Engine...");
-			var unitTestEngine = new UnitTestEngine(display);
+			var unitTestEngine = new UnitTestEngine(settings);
 			var elapsedCompile = stopwatch.ElapsedMilliseconds - elapsedDiscovery;
 			Console.WriteLine("Elapsed: " + (elapsedCompile / 1000.0).ToString("F2") + " secs");
 			Console.WriteLine();
+
+			if (unitTestEngine.Aborted)
+			{
+				Console.WriteLine("Compilation aborted!");
+				return 1;
+			}
 
 			Console.WriteLine("Preparing Unit Tests...");
 			var unitTests = PrepareUnitTest(discoveredUnitTests, unitTestEngine.TypeSystem, unitTestEngine.Linker);
@@ -102,7 +111,18 @@ namespace Mosa.Utility.UnitTests
 
 			foreach (var unitTestInfo in discoveredUnitTests)
 			{
-				var linkerMethodInfo = Linker.GetMethodInfo(typeSystem, linker, unitTestInfo);
+				LinkerMethodInfo linkerMethodInfo;
+
+				try
+				{
+					linkerMethodInfo = Linker.GetMethodInfo(typeSystem, linker, unitTestInfo);
+				}
+				catch (Exception ex)
+				{
+					Console.WriteLine($"Error while resolving method '{unitTestInfo.FullMethodName}'");
+
+					throw;
+				}
 
 				var unitTest = new UnitTest(unitTestInfo, linkerMethodInfo);
 

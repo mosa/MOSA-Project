@@ -1,10 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.MosaTypeSystem;
-using Mosa.UnitTests;
 using System;
-using System.Collections.Generic;
-using System.Reflection;
 
 namespace Mosa.Utility.UnitTests
 {

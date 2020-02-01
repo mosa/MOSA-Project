@@ -5,7 +5,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <Title>Mosa.Tool.Explorer</Title>
     <Company>MOSA Project</Company>
-    <Copyright>Copyright © 2019</Copyright>
+    <Copyright>Copyright © 2020</Copyright>
     <LangVersion>8.0</LangVersion>
     <DebugType>full</DebugType>
     <OutputPath>..\..\bin\</OutputPath>
@@ -20,21 +20,12 @@
     <ApplicationIcon>magnifier.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Update="CodeForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Update="CodeForm.Designer.cs">
-      <DependentUpon>CodeForm.cs</DependentUpon>
-    </Compile>
     <Compile Update="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <EmbeddedResource Update="CodeForm.resx">
-      <DependentUpon>CodeForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Update="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -46,16 +37,15 @@
     <ProjectReference Include="..\Mosa.Platform.ARMv8A32\Mosa.Platform.ARMv8A32.csproj" />
     <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj" />
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
-    <ProjectReference Include="..\Mosa.Utility.CodeCompiler\Mosa.Utility.CodeCompiler.csproj" />
+    <ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
     <ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="magnifier.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.ComponentModel.Composition" Version="4.6.0" />
-    <PackageReference Include="CommandLineParser" Version="2.6.0" />
-    <PackageReference Include="dnlib" Version="3.2.0" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="4.7.0" />
+    <PackageReference Include="dnlib" Version="3.3.1" />
     <PackageReference Include="SharpDisasm" Version="1.1.11" />
   </ItemGroup>
   <ItemGroup>

@@ -3,7 +3,6 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.CIL;
-using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
@@ -21,6 +20,8 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </remarks>
 	public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	{
+		private Dictionary<MosaMethod, IntrinsicMethodDelegate> InstrinsicMap = new Dictionary<MosaMethod, IntrinsicMethodDelegate>();
+
 		protected override void PopulateVisitationDictionary()
 		{
 			AddVisitation(CILInstruction.Add, Add);
@@ -415,7 +416,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Call(Context context)
 		{
-			if (ProcessExternalCall(context.Node))
+			if (ProcessExternalCall(context))
 				return;
 
 			var method = context.InvokeMethod;
@@ -471,7 +472,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void Callvirt(Context context)
 		{
-			if (ProcessExternalCall(context.Node))
+			if (ProcessExternalCall(context))
 				return;
 
 			var method = context.InvokeMethod;
@@ -2082,10 +2083,47 @@ namespace Mosa.Compiler.Framework.Stages
 			throw new CompilerException();
 		}
 
+		private IntrinsicMethodDelegate ResolveIntrinsicDelegateMethod(MosaMethod method)
+		{
+			IntrinsicMethodDelegate intrinsic = null;
+
+			if (InstrinsicMap.TryGetValue(method, out intrinsic))
+			{
+				return intrinsic;
+			}
+
+			if (method.IsExternal)
+			{
+				intrinsic = Architecture.GetInstrinsicMethod(method.ExternMethodModule);
+			}
+			else if (method.IsInternal)
+			{
+				var methodName = $"{method.DeclaringType.FullName}::{method.Name}";
+
+				intrinsic = MethodCompiler.Compiler.GetInstrincMethod(methodName);
+
+				if (intrinsic == null)
+				{
+					// special case for plugging constructors
+					intrinsic = MethodCompiler.Compiler.GetInstrincMethod($"{method.DeclaringType.FullName}::{method.Name}");
+				}
+			}
+			else
+			{
+				var methodName = $"{method.DeclaringType.FullName}::{method.Name}";
+
+				intrinsic = MethodCompiler.Compiler.GetInstrincMethod(methodName);
+			}
+
+			InstrinsicMap.Add(method, intrinsic);
+
+			return intrinsic;
+		}
+
 		/// <summary>
 		/// Processes external method calls.
 		/// </summary>
-		/// <param name="node">The transformation context.</param>
+		/// <param name="context">The transformation context.</param>
 		/// <returns>
 		///   <c>true</c> if the method was replaced by an intrinsic; <c>false</c> otherwise.
 		/// </returns>
@@ -2094,42 +2132,33 @@ namespace Mosa.Compiler.Framework.Stages
 		/// the current architecture. If it has, the method call is replaced by the specified
 		/// native instruction.
 		/// </remarks>
-		private bool ProcessExternalCall(InstructionNode node)
+		private bool ProcessExternalCall(Context context)
 		{
-			if (node.InvokeMethod.IsExternal)
+			var intrinsic = ResolveIntrinsicDelegateMethod(context.InvokeMethod);
+
+			if (intrinsic == null)
+				return false;
+
+			if (context.InvokeMethod.IsExternal)
 			{
-				var intrinsic = Architecture.GetInstrinsicMethod(node.InvokeMethod.ExternMethodModule);
+				var operands = context.GetOperands();
+				operands.Insert(0, Operand.CreateSymbolFromMethod(context.InvokeMethod, TypeSystem));
+				context.SetInstruction(IRInstruction.IntrinsicMethodCall, context.Result, operands);
 
-				if (intrinsic != null)
-				{
-					var operands = node.GetOperands();
-					operands.Insert(0, Operand.CreateSymbolFromMethod(node.InvokeMethod, TypeSystem));
-					node.SetInstruction(IRInstruction.IntrinsicMethodCall, node.Result, operands);
-
-					return true;
-				}
+				return true;
 			}
-			else if (node.InvokeMethod.IsInternal)
+			else if (context.InvokeMethod.IsInternal)
 			{
-				var methodName = $"{node.InvokeMethod.DeclaringType.FullName}:{node.InvokeMethod.Name}";
+				intrinsic(context, MethodCompiler);
 
-				var intrinsic = MethodCompiler.Compiler.GetInstrincMethod(methodName);
-
-				if (intrinsic == null)
-				{
-					// special case for plugging constructors
-					intrinsic = MethodCompiler.Compiler.GetInstrincMethod($"{node.InvokeMethod.DeclaringType.FullName}::{node.InvokeMethod.Name}");
-				}
-
-				if (intrinsic != null)
-				{
-					intrinsic(new Context(node), MethodCompiler);
-
-					return true;
-				}
+				return true;
 			}
+			else
+			{
+				intrinsic(context, MethodCompiler);
 
-			return false;
+				return true;
+			}
 		}
 
 		/// <summary>

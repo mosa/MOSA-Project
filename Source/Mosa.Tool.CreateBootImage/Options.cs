@@ -49,20 +49,6 @@ namespace Mosa.Tool.CreateBootImage
 			get { return options.PatchSyslinuxOption; }
 		}
 
-		[Option("guid")]
-		public string GUID
-		{
-			set { options.MediaGuid = new Guid(value); }
-			get { return options.MediaGuid.ToString(); }
-		}
-
-		[Option("snapguid")]
-		public string SnapGUID
-		{
-			set { options.MediaLastSnapGuid = new Guid(value); }
-			get { return options.MediaLastSnapGuid.ToString(); }
-		}
-
 		[Option("filesystem", HelpText = "FileSystem [fat12|fat16|fat32]")]
 		public string FileSystem
 		{
@@ -129,7 +115,7 @@ namespace Mosa.Tool.CreateBootImage
 
 		public override string ToString()
 		{
-			StringBuilder sb = new StringBuilder();
+			var sb = new StringBuilder();
 			sb.Append(" > Output file: ").AppendLine(options.DiskImageFileName);
 			sb.Append(" > Input file(s): ").AppendLine(string.Join(", ", new List<string>(options.IncludeFiles.Select(f => f.SourceFileName).ToArray())));
 			sb.Append(" > ImageFormat: ").AppendLine(options.ImageFormat.ToString());

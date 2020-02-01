@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	static partial class IntrinsicMethods
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:FrameJump")]
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::FrameJump")]
 		private static void FrameJump(Context context, MethodCompiler methodCompiler)
 		{
 			var v0 = context.Operand1;

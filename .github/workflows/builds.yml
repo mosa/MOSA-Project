@@ -1,0 +1,75 @@
+name: Builds
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-mswin:
+    name: Windows Build
+    runs-on: windows-latest
+    env:
+      BUILD_VERSION: 2.0.0.0
+    steps:
+      - name: Set Build Version
+        run: echo ${{ env.BUILD_VERSION }}
+      - name: Checkout
+        uses: actions/checkout@v1
+        with:
+          submodules: recursive
+      - name: Setup MSBuild
+        uses: warrenbuckley/Setup-MSBuild@v1
+      - name: Setup Nuget.exe
+        uses: warrenbuckley/Setup-Nuget@v1
+      - name: Restore nuget Packages
+        run: dotnet restore Mosa.sln
+        working-directory: Source
+      - name: Build
+        run: msbuild Source/Mosa.sln
+      - name: Unit Tests - All Performance Optimizations
+        run: bin\Mosa.Utility.UnitTests.exe -oMax -s Emulator.Display=false
+      - name: Unit Tests - No Optimizations
+        run: bin\Mosa.Utility.UnitTests.exe -oNone -s Emulator.Display=false
+      - name: Create Installer
+        run: ISCC.exe /DMyAppVersion=2.0.0.0 Source/Inno-Setup-Script/Mosa-Installer.iss
+      - name: Create Package - Mosa.Tools.Package
+        run: nuget pack Source\Mosa.Packages\Mosa.Tools.Package.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
+      - name: Create Package - Mosa.Korlib
+        run: nuget pack Source\Mosa.Packages\Mosa.Korlib.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
+      - name: Create Package - Mosa.Runtime
+        run: nuget pack Source\Mosa.Packages\Mosa.Runtime.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
+      - name: Create Package - Mosa.Runtime.x86
+        run: nuget pack Source\Mosa.Packages\Mosa.Platform.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
+      - name: Create Package - Mosa.Kernel.x86
+        run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
+      - name: Create Package - Mosa.Runtime.x64
+        run: nuget pack Source\Mosa.Packages\Mosa.Platform.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
+      - name: Create Package - Mosa.Kernel.x64
+        run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
+      - name: Publish Nuget Artifacts
+        uses: actions/upload-artifact@master
+        with:
+          name: Packages-nupkg
+          path: bin\nupkg
+
+
+  build-unix:
+    name: Linux Build
+    runs-on: ubuntu-18.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+        with:
+          submodules: recursive
+      - name: Update Package Respository
+        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
+      - name: Install New Packages
+        run: sudo apt-get install -y git wget qemu qemu-system qemu-system-x86
+      - name: Restore nuget Packages
+        run: dotnet restore Source/Mosa.Linux.sln
+      - name: Build
+        run: msbuild /verbosity:minimal Source/Mosa.Linux.sln
+      - name: Unit Tests - All Performance Optimizations
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -oMax -s Emulator.Display=false
+      - name: Unit Tests - No Optimizations
+        run: dotnet bin/Mosa.Utility.UnitTests.dll -oNone -s Emulator.Display=false

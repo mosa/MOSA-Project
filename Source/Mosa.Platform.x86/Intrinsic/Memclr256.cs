@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal static partial class IntrinsicMethods
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Memclr256")]
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Memclr256")]
 		private static void Memclr256(Context context, MethodCompiler methodCompiler)
 		{
 			var dest = context.Operand1;
