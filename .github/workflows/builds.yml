@@ -25,7 +25,7 @@ jobs:
         run: dotnet restore Mosa.sln
         working-directory: Source
       - name: Build
-        run: msbuild Source/Mosa.sln
+        run: msbuild Source/Mosa.sln /p:Version=${{ env.BUILD_VERSION }}
       - name: Unit Tests - All Performance Optimizations
         run: bin\Mosa.Utility.UnitTests.exe -oMax -s Emulator.Display=false
       - name: Unit Tests - No Optimizations
