@@ -193,6 +193,9 @@ namespace Mosa.Utility.UnitTests
 						CheckEngine();
 					}
 
+					if (Aborted)
+						return;
+
 					bool sendFlag = Queue.Count > 0 && Pending.Count < MaxSentQueue;
 
 					if ((MaxSentQueue - Pending.Count < MinSend) && Queue.Count > MinSend)
@@ -388,11 +391,12 @@ namespace Mosa.Utility.UnitTests
 			if (Process == null)
 				return;
 
-			if (Process.HasExited)
-				return;
+			if (!Process.HasExited)
+			{
+				Process.Kill();
+				Process.WaitForExit(5000); // wait for up to 5000 milliseconds
+			}
 
-			Process.Kill();
-			Process.WaitForExit(5000); // wait for up to 5000 milliseconds
 			Process = null;
 		}
 
@@ -460,6 +464,9 @@ namespace Mosa.Utility.UnitTests
 
 			lock (_lock)
 			{
+				if (Aborted)
+					return;
+
 				// Has the process not started? If yes, start
 				if (Process == null)
 				{
@@ -509,7 +516,7 @@ namespace Mosa.Utility.UnitTests
 
 					//Settings.SetValue("Emulator.Serial.Port", Settings.GetValue("Emulator.Serial.Port", 1234) + 1);
 
-					StartEngine();
+					Aborted = StartEngine();
 				}
 			}
 		}
@@ -564,7 +571,9 @@ namespace Mosa.Utility.UnitTests
 					Console.WriteLine("ERROR: " + UnitTestSystem.OutputUnitTestResult(unitTest));
 
 					if (Errors == MaxErrors)
+					{
 						Aborted = true;
+					}
 				}
 
 				//Console.WriteLine("RECD: " + unitTest.MethodTypeName + "." + unitTest.MethodName);
