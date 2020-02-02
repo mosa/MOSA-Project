@@ -65,22 +65,25 @@ namespace Mosa.Utility.UnitTests
 			int passed = 0;
 			int skipped = 0;
 
-			foreach (var unitTest in unitTests)
+			if (!unitTestEngine.Aborted)
 			{
-				if (unitTest.Status == UnitTestStatus.Passed)
+				foreach (var unitTest in unitTests)
 				{
-					passed++;
-					continue;
-				}
+					if (unitTest.Status == UnitTestStatus.Passed)
+					{
+						passed++;
+						continue;
+					}
 
-				if (unitTest.Status == UnitTestStatus.Skipped)
-				{
-					skipped++;
-					continue;
-				}
+					if (unitTest.Status == UnitTestStatus.Skipped)
+					{
+						skipped++;
+						continue;
+					}
 
-				failures++;
-				Console.WriteLine(OutputUnitTestResult(unitTest));
+					failures++;
+					Console.WriteLine(OutputUnitTestResult(unitTest));
+				}
 			}
 
 			Console.WriteLine();

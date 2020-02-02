@@ -295,7 +295,8 @@ namespace Mosa.Utility.UnitTests
 			var compilerHooks = new CompilerHooks
 			{
 				NotifyEvent = NotifyEvent,
-				NotifyProgress = NotifyProgress
+				NotifyProgress = NotifyProgress,
+				NotifyStatus = NotifyStatus,
 			};
 
 			return compilerHooks;
@@ -321,6 +322,11 @@ namespace Mosa.Utility.UnitTests
 		{
 		}
 
+		private void NotifyStatus(string status)
+		{
+			//Console.WriteLine($"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} [{status}]");
+		}
+
 		public bool LaunchVirtualMachine()
 		{
 			if (Starter == null)
@@ -330,7 +336,7 @@ namespace Mosa.Utility.UnitTests
 				Starter = new Starter(Settings, compilerHook);
 			}
 
-			//Settings.SetValue("Emulator.Serial.Port", new Random().Next(11111, 22222));
+			Settings.SetValue("Emulator.Serial.Port", Settings.GetValue("Emulator.Serial.Port", new Random().Next(11111, 22222)) + 1);
 
 			Process = Starter.Launch();
 
@@ -516,8 +522,6 @@ namespace Mosa.Utility.UnitTests
 					SendOneCount = 10;
 
 					Console.WriteLine("Re-starting Engine...");
-
-					//Settings.SetValue("Emulator.Serial.Port", Settings.GetValue("Emulator.Serial.Port", 1234) + 1);
 
 					if (!StartEngine())
 					{

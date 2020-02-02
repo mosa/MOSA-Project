@@ -10,7 +10,7 @@ jobs:
     runs-on: windows-latest
     env:
       BUILD_VERSION: 2.0.0.0
-      BUILD_VNUMBER: b1
+      BUILD_NUMBER: b1
     steps:
       - name: Set Build Version
         run: echo ${{ env.BUILD_VERSION }}
@@ -30,19 +30,19 @@ jobs:
       - name: Create Installer
         run: ISCC.exe /DMyAppVersion=2.0.0.0 Source/Inno-Setup-Script/Mosa-Installer.iss
       - name: Create Package - Mosa.Tools.Package
-        run: nuget pack Source\Mosa.Packages\Mosa.Tools.Package.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }} -Suffix ${{ env.BUILD_VNUMBER }}
+        run: nuget pack Source\Mosa.Packages\Mosa.Tools.Package.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }} -Suffix ${{ env.BUILD_NUMBER }}
       - name: Create Package - Mosa.Korlib
-        run: nuget pack Source\Mosa.Packages\Mosa.Korlib.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }} -Suffix ${{ env.BUILD_VNUMBER }}
+        run: nuget pack Source\Mosa.Packages\Mosa.Korlib.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }} -Suffix ${{ env.BUILD_NUMBER }}
       - name: Create Package - Mosa.Runtime
-        run: nuget pack Source\Mosa.Packages\Mosa.Runtime.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }} -Suffix ${{ env.BUILD_VNUMBER }}
+        run: nuget pack Source\Mosa.Packages\Mosa.Runtime.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }} -Suffix ${{ env.BUILD_NUMBER }}
       - name: Create Package - Mosa.Runtime.x86
-        run: nuget pack Source\Mosa.Packages\Mosa.Platform.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }} -Suffix ${{ env.BUILD_VNUMBER }}
+        run: nuget pack Source\Mosa.Packages\Mosa.Platform.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }} -Suffix ${{ env.BUILD_NUMBER }}
       - name: Create Package - Mosa.Kernel.x86
-        run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }} -Suffix ${{ env.BUILD_VNUMBER }}
+        run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x86.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }} -Suffix ${{ env.BUILD_NUMBER }}
       - name: Create Package - Mosa.Runtime.x64
-        run: nuget pack Source\Mosa.Packages\Mosa.Platform.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }} -Suffix ${{ env.BUILD_VNUMBER }}
+        run: nuget pack Source\Mosa.Packages\Mosa.Platform.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }} -Suffix ${{ env.BUILD_NUMBER }}
       - name: Create Package - Mosa.Kernel.x64
-        run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }} -Suffix ${{ env.BUILD_VNUMBER }}
+        run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }} -Suffix ${{ env.BUILD_NUMBER }}
       - name: Publish Installer
         uses: actions/upload-artifact@master
         with:
