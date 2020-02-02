@@ -16,12 +16,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-        with:
-          submodules: recursive
       - name: Setup MSBuild
         uses: warrenbuckley/Setup-MSBuild@v1
       - name: Setup Nuget.exe
-        uses: warrenbuckley/Setup-Nuget@v1
+        uses: nuget/setup-nuget@v1
       - name: Restore nuget Packages
         run: dotnet restore Mosa.sln
         working-directory: Source
