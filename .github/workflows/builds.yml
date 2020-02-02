@@ -16,7 +16,7 @@ jobs:
       - name: Set Build Version
         run: echo $BUILD_VERSION_NUMBER
         env:
-           $BUILD_VERSION_NUMBER: ${{ env.BUILD_VERSION }}.${{ steps.my-project-build-number.outputs.build-number }}
+           BUILD_VERSION_NUMBER: ${{ env.BUILD_VERSION }}.${{ steps.my-project-build-number.outputs.build-number }}
       - name: Checkout
         uses: actions/checkout@v1
       - name: Setup MSBuild
@@ -31,7 +31,7 @@ jobs:
       - name: Create Installer
         run: ISCC.exe /DMyAppVersion=${{ env.$BUILD_VERSION_NUMBER }} Source/Inno-Setup-Script/Mosa-Installer.iss
         env:
-           $BUILD_VERSION_NUMBER: ${{ env.BUILD_VERSION }}.${{ steps.my-project-build-number.outputs.build-number }}
+           BUILD_VERSION_NUMBER: ${{ env.BUILD_VERSION }}.${{ steps.my-project-build-number.outputs.build-number }}
       - name: Create Package - Mosa.Tools.Package
         run: nuget pack Source\Mosa.Packages\Mosa.Tools.Package.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
       - name: Create Package - Mosa.Korlib
