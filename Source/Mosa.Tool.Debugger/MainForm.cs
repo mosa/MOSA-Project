@@ -215,10 +215,12 @@ namespace Mosa.Tool.Debugger
 
 			symbolView.Show(dockPanel, DockState.Document);
 
-			instructionView.Show(symbolView.PanelPane, DockAlignment.Right, 0.35);
+			methodParametersView.Show(symbolView.PanelPane, DockAlignment.Right, 0.35);
+
+			instructionView.Show(methodParametersView.PanelPane, DockAlignment.Bottom, 0.85);
 			methodView.Show(instructionView.PanelPane, instructionView);
+
 			callStackView.Show(instructionView.PanelPane, DockAlignment.Bottom, 0.25);
-			methodParametersView.Show(callStackView.Pane, callStackView);
 
 			registersView.Show();
 			launchView.Show();

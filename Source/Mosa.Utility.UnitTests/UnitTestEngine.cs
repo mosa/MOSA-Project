@@ -355,27 +355,32 @@ namespace Mosa.Utility.UnitTests
 
 			for (int attempt = 0; attempt < 100; attempt++)
 			{
-				Thread.Sleep(100);
-
-				if (DebugServerEngine.IsConnected)
-					return true;
-
 				try
 				{
+					Thread.Sleep(250);
+
 					Connect();
+
+					if (DebugServerEngine.IsConnected)
+					{
+						Console.WriteLine("> Connected!");
+						return true;
+					}
 				}
 				catch
 				{
 				}
 			}
 
-			Console.Write("Unable to connect to DebugEngine");
+			Console.Write("> Unable to connect");
 
 			return false;
 		}
 
 		private void Connect()
 		{
+			DebugServerEngine.Stream = null;
+
 			var serial = Settings.GetValue("Emulator.Serial", string.Empty).ToLower();
 
 			switch (serial)
@@ -417,6 +422,7 @@ namespace Mosa.Utility.UnitTests
 			{
 				if (Ready)
 				{
+					Console.WriteLine("> Ready!");
 					LastResponse = (int)StopWatch.ElapsedMilliseconds;
 					return true;
 				}
@@ -433,17 +439,16 @@ namespace Mosa.Utility.UnitTests
 			{
 				for (int attempt = 0; attempt < 5; attempt++)
 				{
-					Console.Write("Starting Engine...");
+					Console.WriteLine("Starting Engine...");
 
 					if (StartEngineEx())
 					{
-						Console.WriteLine();
 						return true;
 					}
 					else
 					{
 						KillVirtualMachine();
-						Console.WriteLine("Failed");
+						Console.WriteLine("> Failed");
 					}
 
 					Thread.Sleep(250);
@@ -543,8 +548,6 @@ namespace Mosa.Utility.UnitTests
 			{
 				Ready = true;
 			}
-
-			//Console.WriteLine(response.ToString());
 		}
 
 		private void MessageCallBack(DebugMessage response)
@@ -600,11 +603,6 @@ namespace Mosa.Utility.UnitTests
 				Process.Kill();
 				Process = null;
 			}
-
-			//if (ProcessThread?.IsAlive == true)
-			//{
-			//	ProcessThread.Abort();
-			//}
 		}
 	}
 }
