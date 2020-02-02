@@ -50,7 +50,7 @@ jobs:
         uses: actions/upload-artifact@master
         with:
           name: MOSA-Installer-${{ env.BUILD_VERSION }}.exe
-          path: MOSA-Installer-${{ env.BUILD_VERSION }}.exe
+          path: bin\MOSA-Installer-${{ env.BUILD_VERSION }}.exe
       - name: Publish Nuget Packages
         uses: actions/upload-artifact@master
         with:
