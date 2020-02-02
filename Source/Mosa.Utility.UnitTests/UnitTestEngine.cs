@@ -35,7 +35,7 @@ namespace Mosa.Utility.UnitTests
 
 		private readonly object _lock = new object();
 
-		internal volatile bool Aborted = false;
+		private volatile bool Aborted = false;
 		private volatile bool Ready = false;
 
 		private const int MaxSentQueue = 10000;
@@ -56,6 +56,8 @@ namespace Mosa.Utility.UnitTests
 		private int Errors = 0;
 
 		private DateTime CompileStartTime;
+
+		public bool IsAborted { get { return Aborted; } }
 
 		public UnitTestEngine(Settings settings)
 		{
@@ -336,7 +338,7 @@ namespace Mosa.Utility.UnitTests
 				Starter = new Starter(Settings, compilerHook);
 			}
 
-			Settings.SetValue("Emulator.Serial.Port", Settings.GetValue("Emulator.Serial.Port", new Random().Next(11111, 22222)) + 1);
+			Settings.SetValue("Emulator.Serial.Port", Settings.GetValue("Emulator.Serial.Port", 11110) + 1);
 
 			Process = Starter.Launch();
 
@@ -380,7 +382,7 @@ namespace Mosa.Utility.UnitTests
 			{
 				case "tcpserver":
 					{
-						var client = new TcpClient(Settings.GetValue("Emulator.Serial.Host", "localhost"), Settings.GetValue("Emulator.Serial.Port", 1234));
+						var client = new TcpClient(Settings.GetValue("Emulator.Serial.Host", "localhost"), Settings.GetValue("Emulator.Serial.Port", 11110));
 						DebugServerEngine.Stream = new DebugNetworkStream(client.Client, true);
 						break;
 					}
@@ -599,10 +601,10 @@ namespace Mosa.Utility.UnitTests
 				Process = null;
 			}
 
-			if (ProcessThread?.IsAlive == true)
-			{
-				ProcessThread.Join();
-			}
+			//if (ProcessThread?.IsAlive == true)
+			//{
+			//	ProcessThread.Abort();
+			//}
 		}
 	}
 }

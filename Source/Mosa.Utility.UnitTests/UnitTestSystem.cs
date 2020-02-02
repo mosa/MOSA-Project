@@ -37,7 +37,7 @@ namespace Mosa.Utility.UnitTests
 			Console.WriteLine("Elapsed: " + (elapsedCompile / 1000.0).ToString("F2") + " secs");
 			Console.WriteLine();
 
-			if (unitTestEngine.Aborted)
+			if (unitTestEngine.IsAborted)
 			{
 				Console.WriteLine("Compilation aborted!");
 				return 1;
@@ -65,7 +65,7 @@ namespace Mosa.Utility.UnitTests
 			int passed = 0;
 			int skipped = 0;
 
-			if (!unitTestEngine.Aborted)
+			if (!unitTestEngine.IsAborted)
 			{
 				foreach (var unitTest in unitTests)
 				{
@@ -94,7 +94,7 @@ namespace Mosa.Utility.UnitTests
 			Console.WriteLine($"   Total:    {passed + skipped + failures}");
 			Console.WriteLine();
 
-			if (unitTestEngine.Aborted)
+			if (unitTestEngine.IsAborted)
 			{
 				Console.WriteLine("Unit tests aborted due to failures!");
 				return 1;
