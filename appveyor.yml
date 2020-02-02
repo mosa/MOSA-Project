@@ -125,12 +125,12 @@ for:
     - sh: sudo apt-get install -y git wget qemu qemu-system qemu-system-x86
 
     before_build:
-    - sh: dotnet restore $APPVEYOR_BUILD_FOLDER/Source/Mosa.sln
+    - sh: dotnet restore $APPVEYOR_BUILD_FOLDER/Source/Mosa.Linux.sln
 
     build: off
 
     build_script:
-    - sh: msbuild /verbosity:minimal $APPVEYOR_BUILD_FOLDER/Source/Mosa.sln
+    - sh: msbuild /verbosity:minimal $APPVEYOR_BUILD_FOLDER/Source/Mosa.Linux.sln
 
     test_script:
 #    - sh: $APPVEYOR_BUILD_FOLDER/bin/Mosa.Tool.Mosactl test
