@@ -9,16 +9,14 @@ jobs:
     name: Windows Build
     runs-on: windows-latest
     env:
-      BUILD_VERSION: 2.0.0.1
+      BUILD_VERSION: 2.0.1
     steps:
       - uses: travisj/build-number-action@v1
         id: my-project-build-number
-      - name: Echo Build Number
-        run: echo $BUILD_NUMBER
-        env:
-          BUILD_NUMBER: ${{ steps.my-project-build-number.outputs.build-number }}
       - name: Set Build Version
-        run: echo ${{ env.BUILD_VERSION }} ${{ steps.my-project-build-number.outputs.build-number }}
+        run: echo $BUILD_VERSION_NUMBER
+        env:
+           $BUILD_VERSION_NUMBER: ${{ env.BUILD_VERSION }}.${{ steps.my-project-build-number.outputs.build-number }}
       - name: Checkout
         uses: actions/checkout@v1
       - name: Setup MSBuild
@@ -31,7 +29,9 @@ jobs:
       - name: Build
         run: msbuild Source/Mosa.sln /p:Version=${{ env.BUILD_VERSION }}
       - name: Create Installer
-        run: ISCC.exe /DMyAppVersion=2.0.0.0 Source/Inno-Setup-Script/Mosa-Installer.iss
+        run: ISCC.exe /DMyAppVersion=${{ env.$BUILD_VERSION_NUMBER }} Source/Inno-Setup-Script/Mosa-Installer.iss
+        env:
+           $BUILD_VERSION_NUMBER: ${{ env.BUILD_VERSION }}.${{ steps.my-project-build-number.outputs.build-number }}
       - name: Create Package - Mosa.Tools.Package
         run: nuget pack Source\Mosa.Packages\Mosa.Tools.Package.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
       - name: Create Package - Mosa.Korlib
@@ -49,8 +49,11 @@ jobs:
       - name: Publish Installer
         uses: actions/upload-artifact@master
         with:
-          name: MOSA-Installer-${{ env.BUILD_VERSION }}.exe
+          name: MOSA-Installer-$BUILD_VERSION.exe
           path: bin\MOSA-Installer-${{ env.BUILD_VERSION }}.exe
+        env:
+           BUILD_VERSION_NUMBER: ${{ env.BUILD_VERSION }}.${{ steps.my-project-build-number.outputs.build-number }}
+
       - name: Publish Nuget Packages
         uses: actions/upload-artifact@master
         with:
