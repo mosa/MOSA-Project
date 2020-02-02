@@ -11,9 +11,10 @@ jobs:
     env:
       BUILD_VERSION: 2.0.1
     steps:
-      - uses: travisj/build-number-action@v1
-        id: my-project-build-number
       - name: Set Build Version
+      - uses: travisj/build-number-action@v1
+        id: mosa-project-build-number
+      - name: View Build Version
         run: echo ${{ env.BUILD_VERSION }}.${{ steps.my-project-build-number.outputs.build-number }}
       - name: Checkout
         uses: actions/checkout@v1
