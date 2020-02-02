@@ -10,15 +10,15 @@ jobs:
     runs-on: windows-latest
     env:
       BUILD_VERSION: 2.0.0.1
-      BUILD_NUMBER: 1
     steps:
-      - name: Generate Build Number
-        id: buildnumber
-        uses: einaregilsson/build-number@v2 
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: travisj/build-number-action@v1
+        id: my-project-build-number
+      - name: Echo Build Number
+        run: echo $BUILD_NUMBER
+        env:
+          BUILD_NUMBER: ${{ steps.my-project-build-number.outputs.build-number }}
       - name: Set Build Version
-        run: echo ${{ env.BUILD_VERSION }} ${{ steps.buildnumber.outputs.build_number }}
+        run: echo ${{ env.BUILD_VERSION }} ${{ steps.my-project-build-number.outputs.build-number }}
       - name: Checkout
         uses: actions/checkout@v1
       - name: Setup MSBuild
