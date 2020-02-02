@@ -16,7 +16,7 @@ jobs:
         id: buildnumber
         uses: einaregilsson/build-number@v2 
         with:
-          token: ${{secrets.github_token}}
+          token: ${{ secrets.GITHUB_TOKEN }}
       - name: Set Build Version
         run: echo ${{ env.BUILD_VERSION }} ${{ steps.buildnumber.outputs.build_number }}
       - name: Checkout
