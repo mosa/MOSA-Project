@@ -589,8 +589,6 @@ namespace Mosa.Utility.UnitTests
 
 		void IDisposable.Dispose()
 		{
-			Aborted = true;
-
 			if (Process?.HasExited == false)
 			{
 				Process.Kill();
