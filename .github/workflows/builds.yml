@@ -46,12 +46,16 @@ jobs:
         run: nuget pack Source\Mosa.Packages\Mosa.Platform.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
       - name: Create Package - Mosa.Kernel.x64
         run: nuget pack Source\Mosa.Packages\Mosa.Kernel.x64.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}
-      - name: Publish Nuget Artifacts
+      - name: Publish Installer
         uses: actions/upload-artifact@master
         with:
-          name: Packages-nupkg
+          name: MOSA-Installer-${{ env.BUILD_VERSION }}.exe
+          path: MOSA-Installer-${{ env.BUILD_VERSION }}.exe
+      - name: Publish Nuget Packages
+        uses: actions/upload-artifact@master
+        with:
+          name: Nuget Packages
           path: bin\nupkg
-
 
   build-unix:
     name: Linux Build

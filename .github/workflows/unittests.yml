@@ -11,7 +11,7 @@ jobs:
 
     strategy:
        matrix:
-         levels: [-oMax, -oNone, -oFast, -oSize, -o0, -o1, -o2, -o3, -o4, -o5, -o6, -o7, -o8, -o9]
+         levels: [-o0, -o1, -o2, -o3, -o4, -o5, -o6, -o7, -o8, -o9, -oFast, -oSize]
 
     steps:
       - name: Checkout
@@ -36,7 +36,7 @@ jobs:
 
     strategy:
        matrix:
-         levels: [-oMax, -oNone, -oFast, -oSize, -o0, -o1, -o2, -o3, -o4, -o5, -o6, -o7, -o8, -o9]
+         levels: [-o0, -o1, -o2, -o3, -o4, -o5, -o6, -o7, -o8, -o9, -oFast, -oSize]
 
     steps:
       - name: Checkout
