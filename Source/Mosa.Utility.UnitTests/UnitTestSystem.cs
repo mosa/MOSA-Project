@@ -91,6 +91,12 @@ namespace Mosa.Utility.UnitTests
 			Console.WriteLine($"   Total:    {passed + skipped + failures}");
 			Console.WriteLine();
 
+			if (unitTestEngine.Aborted)
+			{
+				Console.WriteLine("Unit tests aborted due to failures!");
+				return 1;
+			}
+
 			if (failures == 0)
 			{
 				Console.WriteLine("All unit tests passed successfully!");

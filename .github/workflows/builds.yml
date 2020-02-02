@@ -26,10 +26,6 @@ jobs:
         working-directory: Source
       - name: Build
         run: msbuild Source/Mosa.sln /p:Version=${{ env.BUILD_VERSION }}
-      - name: Unit Tests - All Performance Optimizations
-        run: bin\Mosa.Utility.UnitTests.exe -oMax -s Emulator.Display=false
-      - name: Unit Tests - No Optimizations
-        run: bin\Mosa.Utility.UnitTests.exe -oNone -s Emulator.Display=false
       - name: Create Installer
         run: ISCC.exe /DMyAppVersion=2.0.0.0 Source/Inno-Setup-Script/Mosa-Installer.iss
       - name: Create Package - Mosa.Tools.Package
@@ -56,6 +52,10 @@ jobs:
         with:
           name: Nuget Packages
           path: bin\nupkg
+      - name: Unit Tests - All Performance Optimizations
+        run: bin\Mosa.Utility.UnitTests.exe -oMax -s Emulator.Display=false
+      - name: Unit Tests - No Optimizations
+        run: bin\Mosa.Utility.UnitTests.exe -oNone -s Emulator.Display=false
 
   build-unix:
     name: Linux Build

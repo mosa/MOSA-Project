@@ -137,15 +137,15 @@ namespace Mosa.Utility.UnitTests
 
 			Aborted = !Compile();
 
-			if (!Aborted)
-			{
-				ProcessThread = new Thread(ProcessQueueLaunch)
-				{
-					Name = "ProcessQueue"
-				};
+			if (Aborted)
+				return;
 
-				ProcessThread.Start();
-			}
+			ProcessThread = new Thread(ProcessQueueLaunch)
+			{
+				Name = "ProcessQueue"
+			};
+
+			ProcessThread.Start();
 		}
 
 		private void ProcessQueueLaunch()
@@ -255,6 +255,9 @@ namespace Mosa.Utility.UnitTests
 		{
 			while (true)
 			{
+				if (Aborted)
+					return;
+
 				lock (Queue)
 				{
 					if (Queue.Count == 0 && Pending.Count == 0)
@@ -420,7 +423,7 @@ namespace Mosa.Utility.UnitTests
 		{
 			lock (_lock)
 			{
-				for (int attempt = 0; attempt < 10; attempt++)
+				for (int attempt = 0; attempt < 5; attempt++)
 				{
 					Console.Write("Starting Engine...");
 
@@ -516,7 +519,11 @@ namespace Mosa.Utility.UnitTests
 
 					//Settings.SetValue("Emulator.Serial.Port", Settings.GetValue("Emulator.Serial.Port", 1234) + 1);
 
-					Aborted = StartEngine();
+					if (!StartEngine())
+					{
+						KillVirtualMachine();
+						Aborted = true;
+					}
 				}
 			}
 		}
