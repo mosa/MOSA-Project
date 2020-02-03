@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.IR;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Intrinsic
@@ -12,7 +11,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	static partial class IntrinsicMethods
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:GetIDTJumpLocation")]
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::GetIDTJumpLocation")]
 		private static void GetIDTJumpLocation(Context context, MethodCompiler methodCompiler)
 		{
 			var operand = context.Operand1;

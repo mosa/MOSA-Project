@@ -1,12 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Trace;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using static Mosa.Compiler.Framework.BaseMethodCompilerStage;
 
 namespace Mosa.Compiler.Framework.Analysis
 {
@@ -234,18 +234,18 @@ namespace Mosa.Compiler.Framework.Analysis
 		private readonly HashSet<InstructionNode> executedStatements;
 
 		private readonly BasicBlocks BasicBlocks;
-		private readonly ITraceFactory TraceFactory;
+		private readonly CreateTraceHandler CreateTrace;
 		private readonly TraceLog MainTrace;
 
 		private readonly KeyedList<BasicBlock, InstructionNode> phiStatements;
 
-		public SparseConditionalConstantPropagation(BasicBlocks basicBlocks, ITraceFactory traceFactory)
+		public SparseConditionalConstantPropagation(BasicBlocks basicBlocks, CreateTraceHandler createTrace)
 		{
 			// Method is empty - must be a plugged method
 			if (basicBlocks.HeadBlocks.Count == 0)
 				return;
 
-			TraceFactory = traceFactory;
+			CreateTrace = createTrace;
 			BasicBlocks = basicBlocks;
 
 			variableStates = new Dictionary<Operand, VariableState>();
@@ -314,11 +314,6 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 
 			return list;
-		}
-
-		private TraceLog CreateTrace(string name, int traceLevel)
-		{
-			return TraceFactory.CreateTraceLog(name, traceLevel);
 		}
 
 		private VariableState GetVariableState(Operand operand)

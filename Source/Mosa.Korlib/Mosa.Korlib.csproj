@@ -15,6 +15,5 @@
     <SkipCommonResourcesIncludes>true</SkipCommonResourcesIncludes>
     <NoWarn>$(NoWarn),0419,0649,1573,1591,3021,CA2002</NoWarn>
     <RuntimeMetadataVersion>v4.0.30319</RuntimeMetadataVersion>
-    <NuspecFile>Mosa.Korlib.nuspec</NuspecFile>
   </PropertyGroup>
 </Project>

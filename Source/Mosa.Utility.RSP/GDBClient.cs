@@ -5,6 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.Threading;
 
 namespace Mosa.Utility.RSP
 {
@@ -204,7 +205,10 @@ namespace Mosa.Utility.RSP
 				currentCommand = null;
 				receivedData.Clear();
 
-				cmd.Callback?.Invoke(cmd);
+				if (cmd.Callback != null)
+				{
+					ThreadPool.QueueUserWorkItem(state => { cmd.Callback.Invoke(cmd); });
+				}
 
 				return;
 			}

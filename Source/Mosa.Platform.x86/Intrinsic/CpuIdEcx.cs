@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal static partial class IntrinsicMethods
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:CpuIdEcx")]
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::CpuIdEcx")]
 		private static void CpuIdEcx(Context context, MethodCompiler methodCompiler)
 		{
 			var result = context.Result;

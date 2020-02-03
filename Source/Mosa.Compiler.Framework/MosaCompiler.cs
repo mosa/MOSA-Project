@@ -1,53 +1,39 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common.Configuration;
+
 using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
-using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework
 {
-	public class MosaCompiler
+	public sealed class MosaCompiler
 	{
-		public enum CompileStage { Initial, Loaded, Initialized, Ready, Executing, Completed }
-
-		public CompileStage Stage { get; private set; } = CompileStage.Initial;
-
-		public CompilerOptions CompilerOptions { get; }
-
-		public CompilerTrace CompilerTrace { get; }
+		public CompilerSettings CompilerSettings { get; }
 
 		public TypeSystem TypeSystem { get; private set; }
 
 		public MosaTypeLayout TypeLayout { get; private set; }
 
-		public MosaLinker Linker { get; private set; }
+		public BaseArchitecture Platform { get; private set; }
 
-		public List<BaseCompilerExtension> CompilerExtensions { get; } = new List<BaseCompilerExtension>();
+		public MosaLinker Linker { get { return Compiler.Linker; } }
 
-		public int MaxThreads { get; }
+		public CompilerHooks CompilerHooks { get; }
 
-		protected Compiler Compiler { get; private set; }
+		private enum CompileStage { Initial, Loaded, Initialized, Ready, Executing, Completed }
+
+		private CompileStage Stage = CompileStage.Initial;
+
+		private Compiler Compiler;
 
 		private readonly object _lock = new object();
 
-		public MosaCompiler(List<BaseCompilerExtension> compilerExtensions = null, int maxThreads = 0)
-			: this(null, compilerExtensions, maxThreads)
+		public MosaCompiler(Settings settings, CompilerHooks compilerHook)
 		{
-		}
-
-		public MosaCompiler(CompilerOptions compilerOptions = null, List<BaseCompilerExtension> compilerExtensions = null, int maxThreads = 0)
-		{
-			MaxThreads = (maxThreads == 0) ? Environment.ProcessorCount * 2 : maxThreads;
-
-			CompilerOptions = compilerOptions ?? new CompilerOptions();
-			CompilerTrace = new CompilerTrace(CompilerOptions);
-
-			if (compilerExtensions != null)
-			{
-				CompilerExtensions.AddRange(compilerExtensions);
-			}
+			CompilerSettings = new CompilerSettings(settings.Clone());
+			CompilerHooks = compilerHook;
 		}
 
 		public void Load()
@@ -56,8 +42,8 @@ namespace Mosa.Compiler.Framework
 			{
 				var moduleLoader = new MosaModuleLoader();
 
-				moduleLoader.AddSearchPaths(CompilerOptions.SearchPaths);
-				moduleLoader.LoadModuleFromFiles(CompilerOptions.SourceFiles);
+				moduleLoader.AddSearchPaths(CompilerSettings.SearchPaths);
+				moduleLoader.LoadModuleFromFiles(CompilerSettings.SourceFiles);
 
 				var typeSystem = TypeSystem.Load(moduleLoader.CreateMetadata());
 
@@ -70,9 +56,10 @@ namespace Mosa.Compiler.Framework
 			lock (_lock)
 			{
 				TypeSystem = typeSystem;
-				TypeLayout = new MosaTypeLayout(typeSystem, CompilerOptions.Architecture.NativePointerSize, CompilerOptions.Architecture.NativeAlignment);
 
-				Linker = null;
+				Platform = PlatformRegistry.GetPlatform(CompilerSettings.Platform);
+				TypeLayout = new MosaTypeLayout(typeSystem, Platform.NativePointerSize, Platform.NativeAlignment);
+
 				Compiler = null;
 
 				Stage = CompileStage.Loaded;
@@ -86,7 +73,6 @@ namespace Mosa.Compiler.Framework
 				if (Stage != CompileStage.Loaded)
 					return;
 
-				Linker = new MosaLinker(CompilerOptions.BaseAddress, CompilerOptions.Architecture.ElfMachineType, CompilerOptions.EmitAllSymbols, CompilerOptions.EmitStaticRelocations, CompilerOptions.EmitShortSymbolNames, CompilerOptions.LinkerFormatType, CompilerOptions.CreateExtraSections, CompilerOptions.CreateExtraProgramHeaders);
 				Compiler = new Compiler(this);
 
 				Stage = CompileStage.Initialized;
@@ -143,7 +129,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Setup();
 
-			if (!CompilerOptions.EnableMethodScanner)
+			if (!CompilerSettings.MethodScanner)
 			{
 				ScheduleAll();
 			}
@@ -173,7 +159,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Setup();
 
-			if (!CompilerOptions.EnableMethodScanner)
+			if (!CompilerSettings.MethodScanner)
 			{
 				ScheduleAll();
 			}
@@ -186,7 +172,9 @@ namespace Mosa.Compiler.Framework
 				Stage = CompileStage.Executing;
 			}
 
-			Compiler.ExecuteThreadedCompile(MaxThreads);
+			var maxThreads = CompilerSettings.MaxThreads != 0 ? CompilerSettings.MaxThreads : Environment.ProcessorCount;
+
+			Compiler.ExecuteThreadedCompile(maxThreads);
 
 			lock (_lock)
 			{

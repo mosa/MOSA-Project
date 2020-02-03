@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var liveAnalysisGCEnvironment = new GCEnvironment(BasicBlocks, Architecture, MethodCompiler.LocalStack);
 
-			LiveAnalysis = new LivenessAnalysis(liveAnalysisGCEnvironment, this, true);
+			LiveAnalysis = new LivenessAnalysis(liveAnalysisGCEnvironment, CreateTraceLog, true);
 
 			if (trace != null)
 			{

@@ -1,3 +1,3 @@
 cd %~dp0
 cd ..\bin
-start Mosa.Tool.Launcher.exe --q --autostart --output-map --output-asm --output-debug --threading-off --inline-off Mosa.CoolWorld.x86.exe
+start Mosa.Tool.Launcher.exe -autostart -autoexit -autolaunch -output-map -output-asm -output-debug -output-inlined -threading-off -inline-off Mosa.CoolWorld.x86.exe

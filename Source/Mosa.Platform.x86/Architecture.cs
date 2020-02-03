@@ -2,14 +2,12 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CompilerStages;
-using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Linker.Elf;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Platform.Intel;
 using Mosa.Platform.x86.CompilerStages;
 using Mosa.Platform.x86.Stages;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Platform.x86
 {
@@ -53,20 +51,6 @@ namespace Mosa.Platform.x86
 			SSE2Register.XMM6,
 			SSE2Register.XMM7
 		};
-
-		/// <summary>
-		/// Specifies the architecture features to use in generated code.
-		/// </summary>
-		private readonly ArchitectureFeatureFlags architectureFeatures;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Architecture"/> class.
-		/// </summary>
-		/// <param name="architectureFeatures">The features this architecture supports.</param>
-		private Architecture(ArchitectureFeatureFlags architectureFeatures)
-		{
-			this.architectureFeatures = architectureFeatures;
-		}
 
 		/// <summary>
 		/// Gets the native size of architecture in bytes.
@@ -145,26 +129,12 @@ namespace Mosa.Platform.x86
 		public override List<BaseInstruction> Instructions { get { return X86Instructions.List; } }
 
 		/// <summary>
-		/// Factory method for the Architecture class.
-		/// </summary>
-		/// <returns>The created architecture instance.</returns>
-		/// <param name="architectureFeatures">The features available in the architecture and code generation.</param>
-		/// <remarks>
-		/// This method creates an instance of an appropriate architecture class, which supports the specific
-		/// architecture features.
-		/// </remarks>
-		public static BaseArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
-		{
-			return new Architecture(architectureFeatures);
-		}
-
-		/// <summary>
 		/// Extends the compiler pipeline with x86 compiler stages.
 		/// </summary>
 		/// <param name="pipeline">The pipeline to extend.</param>
-		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline, CompilerOptions compilerOptions)
+		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline, CompilerSettings compilerSettings)
 		{
-			if (compilerOptions.MultibootSpecification == MultibootSpecification.V1)
+			if (compilerSettings.Settings.GetValue("Multiboot.Version", string.Empty).ToLower() == "v1")
 			{
 				pipeline.InsertAfterFirst<TypeInitializerStage>(
 					new MultibootV1Stage()
@@ -178,8 +148,8 @@ namespace Mosa.Platform.x86
 		/// Extends the method compiler pipeline with x86 specific stages.
 		/// </summary>
 		/// <param name="pipeline">The method compiler pipeline to extend.</param>
-		/// <param name="compilerOptions">The compiler options.</param>
-		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerOptions compilerOptions)
+		/// <param name="compilerSettings">The compiler options.</param>
+		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerSettings compilerSettings)
 		{
 			pipeline.InsertBefore<CallStage>(
 				new Stages.RuntimeCallStage()
@@ -190,10 +160,10 @@ namespace Mosa.Platform.x86
 				{
 					new LongOperandStage(),
 					new IRTransformationStage(),
-					compilerOptions.EnablePlatformOptimizations ? new Stages.OptimizationStage() : null,
+					compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
 					new TweakStage(),
 					new FixedRegisterAssignmentStage(),
-					compilerOptions.EnablePlatformOptimizations ? new SimpleDeadCodeRemovalStage() : null,
+					compilerSettings.PlatformOptimizations ? new SimpleDeadCodeRemovalStage() : null,
 					new AddressModeConversionStage(),
 					new FloatingPointStage(),
 				});
@@ -206,7 +176,7 @@ namespace Mosa.Platform.x86
 				new BaseMethodCompilerStage[]
 				{
 					new FinalTweakStage(),
-					compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
+					compilerSettings.PlatformOptimizations ? new PostOptimizationStage() : null,
 				});
 
 			pipeline.InsertBefore<CodeGenerationStage>(

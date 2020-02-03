@@ -33,12 +33,13 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine("namespace Mosa.Compiler.Framework.IR");
 			Lines.AppendLine("{");
 			Lines.AppendLine("\t/// <summary>");
-			Lines.AppendLine($"\t/// {node.Name}");
+			Lines.Append($"\t/// {node.Name}");
 
 			if (!string.IsNullOrWhiteSpace(node.Description))
 			{
-				Lines.AppendLine("\t\t/// " + node.Description);
+				Lines.Append($" - {node.Description}");
 			}
+			Lines.AppendLine();
 
 			Lines.AppendLine("\t/// </summary>");
 			Lines.AppendLine("\t/// <seealso cref=\"Mosa.Compiler.Framework.IR.BaseIRInstruction\" />");

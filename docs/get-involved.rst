@@ -8,7 +8,8 @@ We need your help!
 Contribution process
 ********************
 
-If you are interested in supporting this project, join the project itself. Start downloading the code, look at the documentation provided and join our IRC channel (#mosa on Freenode).
+If you are interested in supporting this project, join the project itself. Start downloading the code, look at the documentation provided and join us on `Gitter chat <https://gitter.im/mosa/MOSA-Project>`__. This is the most interactive way to connect to MOSA's development team.
+
 
 ****
 Jobs
@@ -25,5 +26,5 @@ We are open to contributions from all areas. There are some exceptions though, w
 - have inspected proprietary code with Reflector, ildasm or similar tools and you plan on providing MOSA an implementation of that.
 - have access to proprietary code related to operating system development, managed code or runtime implementations for managed environments.
 
-Please be careful with any contribution you make regarding to patents, other open source licenses and any potential restrictions. We can only accept contributions compatiable with the `New BSD License <http://en.wikipedia.org/wiki/BSD_licenses>`__. MIT license is a compatible license, while GNU licenses are incomparable. Read more about our :doc:`license` policy.
+Please be careful with any contribution you make regarding to patents, other open source licenses and any potential restrictions. We can only accept contributions compatible with the `New BSD License <http://en.wikipedia.org/wiki/BSD_licenses>`__. MIT license is a compatible license, while GNU licenses are incomparable. Read more about our :doc:`license` policy.
 

@@ -22,6 +22,17 @@ namespace System.Runtime.CompilerServices
 			throw new PlatformNotSupportedException();
 		}
 
+		/// <summary>
+		/// Returns the size of an object of the given type parameter.
+		/// </summary>
+		[Intrinsic]
+		[NonVersionable]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static int SizeOf<T>()
+		{
+			throw new PlatformNotSupportedException();
+		}
+
 		//[Intrinsic]
 		//[NonVersionable]
 		//[MethodImpl(MethodImplOptions.AggressiveInlining)]

@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using System;
 using System.IO;
 
@@ -66,15 +65,14 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 		/// <summary>
 		/// This member holds the number of entries in the program header table. Thus the
-		/// product of ProgramHeaderEntrySize and ProgramHeaderNumber gives the table's size in bytes. If a file
-		/// has no program header table,  ProgramHeaderNumber holds the value zero.
+		/// product of ProgramHeaderEntrySize and ProgramHeaderNumber gives the table's size in bytes.
 		/// </summary>
 		public ushort ProgramHeaderNumber;
 
 		/// <summary>
 		/// This member holds the number of entries in the section header table. Thus the
 		/// product of SectionHeaderEntrySize and SectionHeaderNumber gives the section header table's size in
-		/// bytes. If a file has no section header table,  SectionHeaderNumber holds the value zero.
+		/// bytes.
 		/// </summary>
 		public ushort SectionHeaderNumber;
 
@@ -156,38 +154,6 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			writer.Write(SectionHeaderEntry.EntrySize64);   // shentsize
 			writer.Write((ushort)SectionHeaderNumber);      // shnum
 			writer.Write((ushort)SectionHeaderStringIndex); // shstrndx
-		}
-
-		/// <summary>
-		/// Reads elf header
-		/// </summary>
-		/// <param name="reader">The reader.</param>
-		public void Read32(BinaryReader reader)
-		{
-			Ident = reader.ReadBytes(16);
-
-			// Check for magic number
-			if (Ident[0] != MagicNumber[0] || Ident[1] != MagicNumber[1] || Ident[2] != MagicNumber[2] || Ident[3] != MagicNumber[3])
-			{
-				// Magic number not present, so it seems to be an invalid ELF file
-				throw new NotSupportedException("This is not a valid ELF file");
-			}
-
-			Type = (FileType)reader.ReadUInt16();
-			Machine = (MachineType)reader.ReadUInt16();
-			Version = (Version)reader.ReadUInt32();
-			EntryAddress = reader.ReadUInt32();
-			ProgramHeaderOffset = reader.ReadUInt32();
-			SectionHeaderOffset = reader.ReadUInt32();
-			Flags = reader.ReadUInt32();
-
-			//ElfHeaderSize = reader.ReadUInt16();
-			//ProgramHeaderEntrySize = reader.ReadUInt16();
-			ProgramHeaderNumber = reader.ReadUInt16();
-
-			//SectionHeaderEntrySize = reader.ReadUInt16();
-			SectionHeaderNumber = reader.ReadUInt16();
-			SectionHeaderStringIndex = reader.ReadUInt16();
 		}
 
 		/// <summary>

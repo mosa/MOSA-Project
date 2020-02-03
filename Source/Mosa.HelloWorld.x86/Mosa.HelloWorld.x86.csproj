@@ -12,7 +12,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj" />
     <ProjectReference Include="..\Mosa.Kernel.x86\Mosa.Kernel.x86.csproj" />
     <ProjectReference Include="..\Mosa.Runtime.x86\Mosa.Runtime.x86.csproj" />
     <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />

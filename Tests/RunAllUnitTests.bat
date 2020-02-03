@@ -1,4 +1,1 @@
-
-cd ..\bin
-
-Mosa.Utility.UnitTests.exe -display
+..\bin\Mosa.Utility.UnitTests.exe -settings UnitTest.settings

@@ -5,7 +5,7 @@
     <UseWindowsForms>true</UseWindowsForms>
     <Title>Mosa.Tool.Launcher</Title>
     <Company>MOSA Project</Company>
-    <Copyright>Copyright © 2019</Copyright>
+    <Copyright>Copyright © 2020</Copyright>
     <LangVersion>8.0</LangVersion>
     <DebugType>full</DebugType>
     <OutputPath>..\..\bin\</OutputPath>
@@ -36,6 +36,7 @@
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
     <ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj" />
+    <ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
     <ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -47,8 +48,7 @@
     <Content Include="rocket.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.ComponentModel.Composition" Version="4.6.0" />
-    <PackageReference Include="CommandLineParser" Version="2.6.0" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="4.7.0" />
     <PackageReference Include="MetroModernUI" Version="1.4.0" />
   </ItemGroup>
 </Project>

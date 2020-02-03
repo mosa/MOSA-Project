@@ -18,7 +18,6 @@ namespace Mosa.Tool.Launcher
 			Application.SetCompatibleTextRenderingDefault(false);
 
 			var main = new MainForm();
-
 			main.LoadArguments(args);
 
 			Application.Run(main);

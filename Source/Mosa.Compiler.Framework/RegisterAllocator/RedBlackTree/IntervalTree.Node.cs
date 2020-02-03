@@ -10,14 +10,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 		/// <typeparam name="N">type of interval bounds</typeparam>
 		private class Node<N> where N : class
 		{
-			public Node<N> Left { get; set; }
-			public Node<N> Right { get; set; }
-			public Node<N> Parent { get; set; }
+			public Node<N> Left;
+			public Node<N> Right;
+			public Node<N> Parent;
 
 			/// <summary>
 			/// Maximum "end" value of interval in node subtree
 			/// </summary>
-			public int MaxEnd { get; set; }
+			public int MaxEnd;
 
 			/// <summary>
 			/// The interval
@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 			/// <summary>
 			/// Color of the node used for R-B implementation
 			/// </summary>
-			public Color Color { get; set; }
+			public Color Color;
 
 			public Node()
 			{

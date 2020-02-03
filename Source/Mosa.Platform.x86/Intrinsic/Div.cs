@@ -9,7 +9,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	static partial class IntrinsicMethods
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:Div")]
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Div")]
 		private static void Div(Context context, MethodCompiler methodCompiler)
 		{
 			Operand n = context.Operand1;

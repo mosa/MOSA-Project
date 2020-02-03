@@ -2,7 +2,6 @@
 
 using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
-using Mosa.UnitTests;
 
 namespace Mosa.UnitTests.x86
 {

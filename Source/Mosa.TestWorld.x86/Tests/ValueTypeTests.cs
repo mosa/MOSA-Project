@@ -1,7 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
 namespace Mosa.TestWorld.x86.Tests
 {
 	public class ValueTypeTests

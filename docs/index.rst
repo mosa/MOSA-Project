@@ -7,12 +7,17 @@ Contents
    intro
    faq
    tools
-   compiler-tool
-   boot-image-tool
-   flash-drive-installation
+   tool-compiler
    compiler-design
+   compiler-optimizations
+   settings-options
+   command-line-arguments
+   usb-flash-drive-installation
+   tool-boot-explorer
+   tool-boot-launcher
+   tool-debugger
+   tool-boot-image
    tests
    get-involved
    authors
    license
-   about-this-documentation

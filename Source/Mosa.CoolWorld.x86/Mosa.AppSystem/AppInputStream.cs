@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.IO;
-using System.Collections.Generic;
 
 namespace Mosa.AppSystem
 {

@@ -17,6 +17,9 @@ namespace Mosa.Tool.Explorer.Stages
 		{
 			var trace = CreateTraceLog("Instructions");
 
+			if (trace == null)
+				return;
+
 			trace.Log("Label\tAddress\tLength\tStartLine\tEndLine\tStartColumn\tEndColumn\tInstruction\tDocument");
 
 			foreach (var block in BasicBlocks)

@@ -145,6 +145,9 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var loopTrace = CreateTraceLog("Loops");
 
+			if (loopTrace == null)
+				return;
+
 			foreach (var loop in loops)
 			{
 				loopTrace.Log($"Header: {loop.Header}");

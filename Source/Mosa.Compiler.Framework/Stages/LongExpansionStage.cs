@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -14,6 +13,16 @@ namespace Mosa.Compiler.Framework.Stages
 	public sealed class LongExpansionStage : BaseCodeTransformationStage
 	{
 		private Operand Constant4;
+
+		private bool SSA;
+
+		protected override void Initialize()
+		{
+			base.Initialize();
+
+			// cache for performance
+			SSA = CompilerSettings.SSA;
+		}
 
 		protected override void PopulateVisitationDictionary()
 		{
@@ -273,7 +282,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (CompilerOptions.EnableSSA)
+			if (SSA)
 			{
 				Compareeger64x32SSA(context);
 			}

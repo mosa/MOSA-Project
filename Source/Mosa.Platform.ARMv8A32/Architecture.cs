@@ -26,27 +26,14 @@ namespace Mosa.Platform.ARMv8A32
 		public override string PlatformName { get { return "ARMv8A32"; } }
 
 		/// <summary>
-		/// Factory method for the Architecture class.
-		/// </summary>
-		/// <returns>The created architecture instance.</returns>
-		/// <param name="architectureFeatures">The features available in the architecture and code generation.</param>
-		public static BaseArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
-		{
-			if (architectureFeatures == ArchitectureFeatureFlags.AutoDetect)
-				architectureFeatures = ArchitectureFeatureFlags.ARM; // TODO
-
-			return new Architecture(architectureFeatures);
-		}
-
-		/// <summary>
 		/// Gets the register set of the architecture.
 		/// </summary>
 		private static readonly PhysicalRegister[] registers = new PhysicalRegister[]
 		{
-   			////////////////////////////////////////////////////////
-            // 32-bit general purpose registers
-   			////////////////////////////////////////////////////////
-            GeneralPurposeRegister.R0,
+			////////////////////////////////////////////////////////
+			// 32-bit general purpose registers
+			////////////////////////////////////////////////////////
+			GeneralPurposeRegister.R0,
 			GeneralPurposeRegister.R1,
 			GeneralPurposeRegister.R2,
 			GeneralPurposeRegister.R3,
@@ -63,20 +50,6 @@ namespace Mosa.Platform.ARMv8A32
 			GeneralPurposeRegister.LR,
 			GeneralPurposeRegister.PC
 		};
-
-		/// <summary>
-		/// Specifies the architecture features to use in generated code.
-		/// </summary>
-		private readonly ArchitectureFeatureFlags architectureFeatures;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Architecture"/> class.
-		/// </summary>
-		/// <param name="architectureFeatures">The features this architecture supports.</param>
-		private Architecture(ArchitectureFeatureFlags architectureFeatures)
-		{
-			this.architectureFeatures = architectureFeatures;
-		}
 
 		/// <summary>
 		/// Gets the native size of architecture in bytes.
@@ -146,7 +119,7 @@ namespace Mosa.Platform.ARMv8A32
 		/// Extends the compiler pipeline with ARMv8A32 specific stages.
 		/// </summary>
 		/// <param name="pipeline">The pipeline to extend.</param>
-		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline, CompilerOptions compilerOptions)
+		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline, CompilerSettings compilerSettings)
 		{
 		}
 
@@ -154,8 +127,8 @@ namespace Mosa.Platform.ARMv8A32
 		/// Extends the method compiler pipeline with ARMv8A32 specific stages.
 		/// </summary>
 		/// <param name="pipeline">The method compiler pipeline to extend.</param>
-		/// <param name="compilerOptions">The compiler options.</param>
-		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerOptions compilerOptions)
+		/// <param name="compilerSettings">The compiler options.</param>
+		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerSettings compilerSettings)
 		{
 			pipeline.InsertBefore<GreedyRegisterAllocatorStage>(
 				new StopStage()
@@ -171,7 +144,7 @@ namespace Mosa.Platform.ARMv8A32
 					new LongOperandStage(),
 					new IRTransformationStage(),
 
-			//		compilerOptions.EnablePlatformOptimizations ? new OptimizationStage() : null,
+			//		compilerSettings.EnablePlatformOptimizations ? new OptimizationStage() : null,
 			//		new TweakStage(),
 			//		new FixedRegisterAssignmentStage(),
 			//		new SimpleDeadCodeRemovalStage(),
@@ -187,7 +160,7 @@ namespace Mosa.Platform.ARMv8A32
 			//	new BaseMethodCompilerStage[]
 			//	{
 			//		new FinalTweakStage(),
-			//		compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
+			//		compilerSettings.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
 			//	});
 
 			//pipeline.InsertBefore<CodeGenerationStage>(

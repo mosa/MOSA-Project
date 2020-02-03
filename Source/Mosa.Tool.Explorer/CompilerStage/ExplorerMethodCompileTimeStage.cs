@@ -25,7 +25,7 @@ namespace Mosa.Tool.Explorer.Stages
 				log.Log($"{data.ElapsedTicks}{'\t'}{data.ElapsedTicks / TimeSpan.TicksPerMillisecond}{'\t'}{data.Version}{'\t'}{data.Method.FullName}");
 			}
 
-			PostTrace(log);
+			PostTraceLog(log);
 		}
 	}
 }

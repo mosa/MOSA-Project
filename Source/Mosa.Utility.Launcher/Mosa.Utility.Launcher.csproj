@@ -4,7 +4,7 @@
     <AssemblyTitle>Mosa.Utility.Launcher</AssemblyTitle>
     <Company>MOSA Project</Company>
     <Product>Mosa.Utility.Launcher</Product>
-    <Copyright>Copyright © 2019</Copyright>
+    <Copyright>Copyright © 2020</Copyright>
     <DebugType>full</DebugType>
     <LangVersion>8.0</LangVersion>
     <OutputPath>..\..\bin\</OutputPath>
@@ -13,19 +13,6 @@
     <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.6.0" />
-    <PackageReference Include="Discutils" Version="0.15.1-ci0002" />
-    <PackageReference Include="DiscUtils.Containers" Version="0.15.1-ci0002" />
-    <PackageReference Include="DiscUtils.Core" Version="0.15.1-ci0002" />
-    <PackageReference Include="DiscUtils.Ext" Version="0.15.1-ci0002" />
-    <PackageReference Include="DiscUtils.Fat" Version="0.15.1-ci0002" />
-    <PackageReference Include="DiscUtils.FileSystems" Version="0.15.1-ci0002" />
-    <PackageReference Include="DiscUtils.Iso9660" Version="0.15.1-ci0002" />
-    <PackageReference Include="DiscUtils.Streams" Version="0.15.1-ci0002" />
-    <PackageReference Include="DiscUtils.Vdi" Version="0.15.1-ci0002" />
-    <PackageReference Include="DiscUtils.Vhd" Version="0.15.1-ci0002" />
-    <PackageReference Include="DiscUtils.Vhdx" Version="0.15.1-ci0002" />
-    <PackageReference Include="DiscUtils.Vmdk" Version="0.15.1-ci0002" />
     <PackageReference Include="SharpDisasm" Version="1.1.11" />
   </ItemGroup>
   <ItemGroup>
@@ -35,7 +22,6 @@
     <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj" />
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
     <ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj" />
-    <ProjectReference Include="..\Mosa.Compiler.Extension.Dwarf\Mosa.Compiler.Extension.Dwarf.csproj" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\..\Tools\syslinux\6.03\mbr.bin">

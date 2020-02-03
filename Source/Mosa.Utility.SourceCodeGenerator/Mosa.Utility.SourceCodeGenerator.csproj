@@ -5,7 +5,7 @@
     <AssemblyTitle>Mosa.Utility.SourceCodeGenerator</AssemblyTitle>
     <Company>MOSA Project</Company>
     <Product>Mosa.Utility.SourceCodeGenerator</Product>
-    <Copyright>Copyright © 2019</Copyright>
+    <Copyright>Copyright © 2020</Copyright>
     <DebugType>full</DebugType>
     <LangVersion>8.0</LangVersion>
     <OutputPath>..\..\bin\</OutputPath>

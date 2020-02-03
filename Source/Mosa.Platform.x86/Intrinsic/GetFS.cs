@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	static partial class IntrinsicMethods
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:GetFS")]
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::GetFS")]
 		private static void GetFS(Context context, MethodCompiler methodCompiler)
 		{
 			context.SetInstruction(X86.MovLoadSeg32, context.Result, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, SegmentRegister.FS));

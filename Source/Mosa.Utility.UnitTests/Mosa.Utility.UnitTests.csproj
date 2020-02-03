@@ -5,7 +5,7 @@
     <AssemblyTitle>Mosa.Utility.UnitTests</AssemblyTitle>
     <Company>MOSA Project</Company>
     <Product>Mosa.Utility.UnitTests</Product>
-    <Copyright>Copyright © 2019</Copyright>
+    <Copyright>Copyright © 2020</Copyright>
     <DebugType>full</DebugType>
     <LangVersion>8.0</LangVersion>
     <OutputPath>..\..\bin\</OutputPath>
@@ -17,10 +17,12 @@
     <StartupObject>Mosa.Utility.UnitTests.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
     <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
     <ProjectReference Include="..\Mosa.UnitTests\Mosa.UnitTests.csproj" />
     <ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj" />
+    <ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
     <ProjectReference Include="..\Mosa.Utility.DebugEngine\Mosa.Utility.DebugEngine.csproj" />
     <ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
   </ItemGroup>

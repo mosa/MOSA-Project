@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 	{
 		protected override void Finalization()
 		{
-			if (string.IsNullOrEmpty(CompilerOptions.OutputFile))
+			if (string.IsNullOrEmpty(CompilerSettings.OutputFile))
 				return;
 
 			Linker.FinalizeLayout();

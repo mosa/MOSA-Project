@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
-
 namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 {
 	public sealed partial class IntervalTree<T>
@@ -11,17 +9,17 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 		/// </summary>
 		private struct Interval
 		{
-			public int Start { get; set; }
+			public int Start;
 
-			public int End { get; set; }
+			public int End;
 
 			public Interval(int start, int end)
 			{
 				Start = start;
 				End = end;
 
-				Debug.Assert(End >= Start);
-				Debug.Assert(Start.CompareTo(End) <= 0);
+				//Debug.Assert(End >= Start);
+				//Debug.Assert(Start.CompareTo(End) <= 0);
 			}
 
 			public int Length { get { return End - Start; } }

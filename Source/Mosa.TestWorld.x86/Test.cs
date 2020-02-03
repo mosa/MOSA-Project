@@ -1,11 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Versioning;
-using System.Text;
 
 namespace Mosa.TestWorld.x86
 {
