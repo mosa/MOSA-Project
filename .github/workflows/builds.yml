@@ -62,6 +62,24 @@ jobs:
       - name: Publish Package - Mosa.Tools.Package
         run: dotnet nuget push bin\nupkg\Mosa.Tools.Package.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
         if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
+      - name: Publish Package - Mosa.Korlib.Package
+        run: dotnet nuget push bin\nupkg\Mosa.Korlib.Package.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+        if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
+      - name: Publish Package - Mosa.Runtime.Package
+        run: dotnet nuget push bin\nupkg\Mosa.Runtime.Package.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+        if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
+      - name: Publish Package - Mosa.Runtime.x86.Package
+        run: dotnet nuget push bin\nupkg\Mosa.Runtime.x86.Package.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+        if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
+      - name: Publish Package - Mosa.Kernel.x86.Package
+        run: dotnet nuget push bin\nupkg\Mosa.Kernel.x86.Package.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+        if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
+      - name: Publish Package - Mosa.Runtime.x64.Package
+        run: dotnet nuget push bin\nupkg\Mosa.Runtime.x64.Package.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+        if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
+      - name: Publish Package - Mosa.Kernel.x64.Package
+        run: dotnet nuget push bin\nupkg\Mosa.Kernel.x64.Package.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+        if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
 
   build-unix:
     name: Linux Build
