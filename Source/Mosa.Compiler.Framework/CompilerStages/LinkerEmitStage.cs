@@ -13,22 +13,22 @@ namespace Mosa.Compiler.Framework.CompilerStages
 	{
 		protected override void Finalization()
 		{
-			if (!CompilerOptions.EmitBinary)
+			if (!CompilerSettings.EmitBinary)
 				return;
 
-			if (string.IsNullOrEmpty(CompilerOptions.OutputFile))
+			if (string.IsNullOrEmpty(CompilerSettings.OutputFile))
 				return;
 
-			Compiler.PostCompilerTraceEvent(CompilerEvent.LinkingStart);
+			Compiler.PostEvent(CompilerEvent.LinkingStart);
 
-			File.Delete(CompilerOptions.OutputFile);
+			File.Delete(CompilerSettings.OutputFile);
 
-			using (var file = new FileStream(CompilerOptions.OutputFile, FileMode.Create))
+			using (var file = new FileStream(CompilerSettings.OutputFile, FileMode.Create))
 			{
 				Linker.Emit(file);
 			}
 
-			Compiler.PostCompilerTraceEvent(CompilerEvent.LinkingEnd);
+			Compiler.PostEvent(CompilerEvent.LinkingEnd);
 		}
 	}
 }

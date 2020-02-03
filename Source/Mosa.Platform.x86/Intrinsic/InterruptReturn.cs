@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	static partial class IntrinsicMethods
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:InterruptReturn")]
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::InterruptReturn")]
 		private static void InterruptReturn(Context context, MethodCompiler methodCompiler)
 		{
 			Operand v0 = context.Operand1;

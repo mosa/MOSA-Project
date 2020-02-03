@@ -30,7 +30,7 @@ source_parsers = {
 master_doc = 'index'
 project = u'Mosa Project Documentation'
 copyright = '2008-{}, Mosa Project & contributors'.format(
-    2019
+    2020
 )
 
 exclude_patterns = ['_build']

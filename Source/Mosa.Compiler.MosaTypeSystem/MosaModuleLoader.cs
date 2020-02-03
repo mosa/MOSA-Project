@@ -75,6 +75,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public void AddSearchPaths(List<string> paths)
 		{
+			if (paths == null)
+				return;
+
 			foreach (var path in paths)
 			{
 				AddSearchPath(path);

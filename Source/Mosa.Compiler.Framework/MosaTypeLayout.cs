@@ -140,6 +140,8 @@ namespace Mosa.Compiler.Framework
 			ResolveLayouts();
 		}
 
+		#region Public Methods
+
 		/// <summary>
 		/// Gets the method slot number
 		/// </summary>
@@ -265,6 +267,8 @@ namespace Mosa.Compiler.Framework
 			{
 				ResolveType(type);
 
+				// TODO: Cache this
+
 				var methodTable = new MosaMethod[interfaceType.Methods.Count];
 
 				// Implicit Interface Methods
@@ -356,6 +360,42 @@ namespace Mosa.Compiler.Framework
 
 			return null;
 		}
+
+		public static bool CanFitInRegister(MosaType type)
+		{
+			var basetype = GetTypeForRegister(type);
+
+			var fits = FitsInRegister(basetype);
+
+			return fits;
+		}
+
+		public static MosaType GetTypeForRegister(MosaType type)
+		{
+			if (type.IsValueType)
+			{
+				if (type.Fields != null)
+				{
+					var nonStaticFields = type.Fields.Where(x => !x.IsStatic).ToList();
+
+					if (nonStaticFields.Count != 1)
+						return null;
+
+					var basetype = nonStaticFields[0].FieldType;
+
+					if (!basetype.IsUserValueType)
+						return basetype;
+
+					var result = GetTypeForRegister(basetype);
+
+					return result;
+				}
+			}
+
+			return type;
+		}
+
+		#endregion Public Methods
 
 		#region Internal - Layout
 
@@ -615,7 +655,7 @@ namespace Mosa.Compiler.Framework
 			if (methodFound != null)
 				return methodFound;
 
-			throw new InvalidOperationException("Failed to find implicit interface implementation for type " + type + " and interface method " + interfaceMethod);
+			throw new InvalidOperationException($"Failed to find implicit interface implementation for type {type} and interface method {interfaceMethod}");
 		}
 
 		private MosaMethod FindImplicitInterfaceMethod(MosaType type, MosaMethod interfaceMethod)
@@ -756,7 +796,7 @@ namespace Mosa.Compiler.Framework
 			return methodTable;
 		}
 
-		private int FindOverrideSlot(IList<MosaMethod> methodTable, MosaMethod method)
+		private int FindOverrideSlot(List<MosaMethod> methodTable, MosaMethod method)
 		{
 			int slot = -1;
 
@@ -818,17 +858,6 @@ namespace Mosa.Compiler.Framework
 			children.Add(child);
 		}
 
-		#endregion Internal
-
-		public static bool CanFitInRegister(MosaType type)
-		{
-			var basetype = GetTypeForRegister(type);
-
-			var fits = FitsInRegister(basetype);
-
-			return fits;
-		}
-
 		private static bool FitsInRegister(MosaType type)
 		{
 			if (type == null)
@@ -873,29 +902,6 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public static MosaType GetTypeForRegister(MosaType type)
-		{
-			if (type.IsValueType)
-			{
-				if (type.Fields != null)
-				{
-					var nonStaticFields = type.Fields.Where(x => !x.IsStatic).ToList();
-
-					if (nonStaticFields.Count != 1)
-						return null;
-
-					var basetype = nonStaticFields[0].FieldType;
-
-					if (!basetype.IsUserValueType)
-						return basetype;
-
-					var result = GetTypeForRegister(basetype);
-
-					return result;
-				}
-			}
-
-			return type;
-		}
+		#endregion Internal
 	}
 }

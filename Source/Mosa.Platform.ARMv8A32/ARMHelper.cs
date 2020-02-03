@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework;
-
 namespace Mosa.Platform.ARMv8A32
 {
 	public static class ARMHelper

@@ -121,7 +121,7 @@ namespace Mosa.Compiler.Framework
 
 		#region Members
 
-		protected Dictionary<string, InstrinsicMethodDelegate> PlatformIntrinsicMethods { get; }
+		protected Dictionary<string, IntrinsicMethodDelegate> PlatformIntrinsicMethods { get; }
 
 		#endregion Members
 
@@ -140,14 +140,14 @@ namespace Mosa.Compiler.Framework
 		/// Extends the compiler pipeline with architecture specific compiler stages.
 		/// </summary>
 		/// <param name="pipeline">The pipeline to extend.</param>
-		public abstract void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline, CompilerOptions compilerOptions);
+		public abstract void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline, CompilerSettings compilerSettings);
 
 		/// <summary>
 		///	Requests the architecture to add architecture specific compilation stages to the pipeline. These
 		/// may depend upon the current state of the pipeline.</summary>
 		/// <param name="pipeline">The pipeline of the method compiler to add architecture specific compilation stages to.</param>
-		/// <param name="compilerOptions">The compiler options.</param>
-		public abstract void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerOptions compilerOptions);
+		/// <param name="compilerSettings">The compiler options.</param>
+		public abstract void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerSettings compilerSettings);
 
 		/// <summary>
 		/// Create platform move.
@@ -202,16 +202,16 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		public InstrinsicMethodDelegate GetInstrinsicMethod(string name)
+		public IntrinsicMethodDelegate GetInstrinsicMethod(string name)
 		{
-			PlatformIntrinsicMethods.TryGetValue(name, out InstrinsicMethodDelegate value);
+			PlatformIntrinsicMethods.TryGetValue(name, out IntrinsicMethodDelegate value);
 
 			return value;
 		}
 
-		protected Dictionary<string, InstrinsicMethodDelegate> GetPlatformIntrinsicMethods()
+		protected Dictionary<string, IntrinsicMethodDelegate> GetPlatformIntrinsicMethods()
 		{
-			var platformIntrinsicMethods = new Dictionary<string, InstrinsicMethodDelegate>();
+			var platformIntrinsicMethods = new Dictionary<string, IntrinsicMethodDelegate>();
 
 			foreach (var type in GetType().Assembly.GetTypes())
 			{
@@ -225,7 +225,7 @@ namespace Mosa.Compiler.Framework
 
 					for (int i = 0; i < attributes.Length; i++)
 					{
-						var d = (InstrinsicMethodDelegate)Delegate.CreateDelegate(typeof(InstrinsicMethodDelegate), method);
+						var d = (IntrinsicMethodDelegate)Delegate.CreateDelegate(typeof(IntrinsicMethodDelegate), method);
 
 						// Finally add the dictionary entry mapping the target name and the delegate
 						platformIntrinsicMethods.Add(attributes[i].Target, d);

@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <Title>Mosa.Tool.CreateBootImage</Title>
     <Company>MOSA Project</Company>
-    <Copyright>Copyright © 2019</Copyright>
+    <Copyright>Copyright © 2020</Copyright>
     <LangVersion>8.0</LangVersion>
     <DebugType>full</DebugType>
     <OutputPath>..\..\bin\</OutputPath>
@@ -20,6 +20,6 @@
     <ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.6.0" />
+    <PackageReference Include="CommandLineParser" Version="2.7.82" />
   </ItemGroup>
 </Project>

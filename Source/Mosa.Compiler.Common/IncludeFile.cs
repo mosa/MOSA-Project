@@ -42,7 +42,6 @@ namespace Mosa.Compiler.Common
 		public IncludeFile(string filename, string newname)
 		{
 			SourceFileName = filename;
-
 			Filename = newname;
 
 			Content = File.ReadAllBytes(filename);

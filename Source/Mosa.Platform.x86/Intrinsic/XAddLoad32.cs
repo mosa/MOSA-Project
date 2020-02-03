@@ -9,7 +9,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	internal static partial class IntrinsicMethods
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:XAddLoad32")]
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::XAddLoad32")]
 		private static void XAddLoad32(Context context, MethodCompiler methodCompiler)
 		{
 			var location = context.Operand1;

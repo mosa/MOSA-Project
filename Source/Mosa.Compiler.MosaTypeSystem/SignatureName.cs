@@ -21,7 +21,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				}
 				result.Append(")");
 
-				result.Append(" : ");
+				result.Append(":");
 				result.Append(sig.ReturnType.ShortName);
 
 				return result.ToString();
@@ -38,7 +38,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 				}
 				result.Append(")");
 
-				result.Append(" : ");
+				result.Append(":");
 				result.Append(sig.ReturnType.FullName);
 
 				return result.ToString();

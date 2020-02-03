@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using Mosa.DeviceSystem;
 using Mosa.FileSystem.FAT;
 using System;

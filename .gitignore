@@ -55,3 +55,7 @@ docs/build
 
 # except build/, which is used as an MSBuild target.
 !**/packages/build/
+/Source/Mosa.Tool.Explorer/Properties/launchSettings.json
+/Source/Mosa.Tool.GDBDebugger/Properties/launchSettings.json
+/Source/Mosa.Tool.Launcher/Properties/launchSettings.json
+/Source/Mosa.Utility.UnitTests/Properties/launchSettings.json

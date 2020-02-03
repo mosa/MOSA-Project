@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Trace;
+using static Mosa.Compiler.Framework.BaseMethodCompilerStage;
 
 namespace Mosa.Compiler.Framework.RegisterAllocator
 {
@@ -10,8 +10,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 	/// <seealso cref="Mosa.Compiler.Framework.RegisterAllocator.BaseRegisterAllocator" />
 	public class BasicRegisterAllocator : BaseRegisterAllocator
 	{
-		public BasicRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, AddStackLocalDelegate addStackLocal, Operand stackFrame, ITraceFactory traceFactory)
-			: base(basicBlocks, virtualRegisters, architecture, addStackLocal, stackFrame, traceFactory)
+		public BasicRegisterAllocator(BasicBlocks basicBlocks, VirtualRegisters virtualRegisters, BaseArchitecture architecture, AddStackLocalDelegate addStackLocal, Operand stackFrame, CreateTraceHandler createTrace)
+			: base(basicBlocks, virtualRegisters, architecture, addStackLocal, stackFrame, createTrace)
 		{
 		}
 

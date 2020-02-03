@@ -10,8 +10,6 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 	/// </summary>
 	public class Section
 	{
-		public delegate void EmitSectionMethod(Section section, BinaryWriter writer);
-
 		public int Index { get; set; }
 
 		public string Name { get; set; }
@@ -32,7 +30,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 		public Section Info { get; set; }
 
-		public ulong AddressAlignment { get; set; }
+		public ulong AddressAlignment { get; set; } = 0x1000;
 
 		public uint EntrySize { get; set; }
 
@@ -40,7 +38,9 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 		public List<Section> Dependencies { get; }
 
-		public EmitSectionMethod EmitMethod { get; set; }
+		public SectionEmitter Emitter { get; set; }
+
+		public Stream Stream { get; set; }
 
 		public SectionKind SectionKind { get; set; }
 

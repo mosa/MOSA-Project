@@ -29,25 +29,25 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		public int StartValue { get { return LiveRange.Start.Value; } }
 		public int EndValue { get { return LiveRange.End.Value; } }
 
-		public int SpillValue { get; set; }
+		public int SpillValue;
 
 		public int SpillCost { get { return NeverSpill || TooSmallToSplit ? int.MaxValue : (SpillValue / (Length + 1)); } }
 
-		public LiveIntervalTrack LiveIntervalTrack { get; set; }
+		public LiveIntervalTrack LiveIntervalTrack;
 
-		public AllocationStage Stage { get; set; }
+		public AllocationStage Stage;
 
 		public bool IsPhysicalRegister { get { return VirtualRegister.IsPhysicalRegister; } }
 
 		public PhysicalRegister AssignedPhysicalRegister { get { return LiveIntervalTrack?.Register; } }
 
-		public Operand AssignedPhysicalOperand { get; set; }
+		public Operand AssignedPhysicalOperand;
 
 		public Operand AssignedOperand { get { return (AssignedPhysicalRegister != null) ? AssignedPhysicalOperand : VirtualRegister.SpillSlotOperand; } }
 
-		public bool ForceSpilled { get; set; }
+		public bool ForceSpilled;
 
-		public bool NeverSpill { get; set; }
+		public bool NeverSpill;
 
 		public bool TooSmallToSplit { get; }
 

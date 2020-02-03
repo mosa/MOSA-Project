@@ -1,13 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System;
 using System.IO;
-using System.Text;
 
 namespace Mosa.Utility.Launcher
 {
 	public class FileHunter
 	{
-
 		public string SourceDirectory { get; set; }
 
 		public FileHunter(string sourceDirectory)
@@ -86,6 +85,5 @@ namespace Mosa.Utility.Launcher
 
 			return null;
 		}
-
 	}
 }

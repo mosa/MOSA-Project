@@ -11,7 +11,7 @@ namespace Mosa.Runtime.ARMv8A32
 	{
 		#region Intrinsic
 
-		[DllImport("Mosa.Platform.ARMv8A32.Intrinsic.Nop")]
+		[DllImport("Mosa.Platform.ARMv8A32.Intrinsic::Nop")]
 		public extern static void Nop();
 
 		#endregion Intrinsic

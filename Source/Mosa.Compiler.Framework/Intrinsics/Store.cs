@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common.Exceptions;
-using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Intrinsics
 {
@@ -10,7 +9,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	/// </summary>
 	internal static partial class IntrinsicMethods
 	{
-		[IntrinsicMethod("Mosa.Runtime.Intrinsic:Store")]
+		[IntrinsicMethod("Mosa.Runtime.Intrinsic::Store")]
 		private static void Store(Context context, MethodCompiler methodCompiler)
 		{
 			if (context.OperandCount == 2)

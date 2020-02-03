@@ -12,6 +12,6 @@
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="dnlib" Version="3.2.0" />
+    <PackageReference Include="dnlib" Version="3.3.1" />
   </ItemGroup>
 </Project>

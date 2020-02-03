@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.IR;
 using System.Diagnostics;
 
 namespace Mosa.Platform.x64.Stages
@@ -179,8 +178,8 @@ namespace Mosa.Platform.x64.Stages
 			var operand2 = context.Operand2;
 
 			context.SetInstruction(X64.Cmp64, null, operand1, ConstantZero64);
-			context.AppendInstruction(X64.CMov64, ConditionCode.NotEqual, result, operand1);        // true
-			context.AppendInstruction(X64.CMov64, ConditionCode.Equal, result, result, operand2);   // false
+			context.AppendInstruction(X64.CMov64, ConditionCode.NotEqual, result, result, operand1);    // true
+			context.AppendInstruction(X64.CMov64, ConditionCode.Equal, result, result, operand2);       // false
 		}
 
 		private void Load64(Context context)

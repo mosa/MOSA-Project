@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.IR;
-
 namespace Mosa.Compiler.Framework.Intrinsics
 {
 	/// <summary>
@@ -11,7 +9,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	{
 		private const string StringClassTypeDefinitionSymbolName = Metadata.TypeDefinition + "System.String";
 
-		[IntrinsicMethod("Mosa.Runtime.Intrinsic:GetStringType")]
+		[IntrinsicMethod("Mosa.Runtime.Intrinsic::GetStringType")]
 		private static void GetStringType(Context context, MethodCompiler methodCompiler)
 		{
 			var typeDef = Operand.CreateUnmanagedSymbolPointer(StringClassTypeDefinitionSymbolName, methodCompiler.TypeSystem);

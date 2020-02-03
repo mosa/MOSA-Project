@@ -4,7 +4,7 @@ using System;
 
 namespace Mosa.Compiler.Framework
 {
-	public delegate void InstrinsicMethodDelegate(Context context, MethodCompiler methodCompiler);
+	public delegate void IntrinsicMethodDelegate(Context context, MethodCompiler methodCompiler);
 
 	/// <summary>
 	/// Used for defining targets when using intrinsic replacements

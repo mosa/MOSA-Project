@@ -5,7 +5,6 @@ using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
 using Mosa.TestWorld.x86.Tests;
-using Mosa.UnitTests;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -262,14 +261,11 @@ namespace Mosa.TestWorld.x86
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void UnitTest()
 		{
-			ReflectionTests.FindTypeOfTest();
 		}
 
-		[MethodImpl(MethodImplOptions.NoInlining)]
-		private static void EnableExecutionProtectionInternal()
+		public static int Test1()
 		{
-			const uint EFER = 0xC0000080;
-			Native.WrMSR(EFER, Native.RdMSR(EFER) | 0b11);
+			return Unsafe.SizeOf<int>();
 		}
 	}
 }

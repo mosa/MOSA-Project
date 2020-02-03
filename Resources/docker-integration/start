@@ -1,5 +1,0 @@
-#!/bin/bash
-
-git clone https://github.com/mosa/MOSA-Project.git 
-cd MOSA-Project
-./mosactl test

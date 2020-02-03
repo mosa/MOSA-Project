@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	static partial class IntrinsicMethods
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:GetCS")]
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::GetCS")]
 		private static void GetCS(Context context, MethodCompiler methodCompiler)
 		{
 			context.SetInstruction(X86.MovLoadSeg32, context.Result, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, SegmentRegister.CS));

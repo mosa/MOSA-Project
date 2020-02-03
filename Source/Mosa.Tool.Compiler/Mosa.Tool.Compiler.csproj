@@ -4,7 +4,7 @@
     <OutputType>Exe</OutputType>
     <Title>Mosa.Tool.Compiler</Title>
     <Company>MOSA Project</Company>
-    <Copyright>Copyright © 2019</Copyright>
+    <Copyright>Copyright © 2020</Copyright>
     <LangVersion>8.0</LangVersion>
     <DebugType>full</DebugType>
     <OutputPath>..\..\bin\</OutputPath>
@@ -22,9 +22,6 @@
     <ProjectReference Include="..\Mosa.Platform.ARMv8A32\Mosa.Platform.ARMv8A32.csproj" />
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
     <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj" />
-    <ProjectReference Include="..\Mosa.Compiler.Extension.Dwarf\Mosa.Compiler.Extension.Dwarf.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="CommandLineParser" Version="2.6.0" />
+    <ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
   </ItemGroup>
 </Project>

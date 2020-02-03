@@ -14,12 +14,12 @@ namespace Mosa.Compiler.Framework.CompilerStages
 	{
 		protected override void Finalization()
 		{
-			if (string.IsNullOrEmpty(CompilerOptions.CompileTimeFile))
+			if (string.IsNullOrEmpty(CompilerSettings.CompileTimeFile))
 				return;
 
 			var methods = GetAndSortMethodData();
 
-			using (var writer = new StreamWriter(CompilerOptions.CompileTimeFile))
+			using (var writer = new StreamWriter(CompilerSettings.CompileTimeFile))
 			{
 				writer.WriteLine("Ticks\tMilliseconds\tCompiler Count\tMethod");
 

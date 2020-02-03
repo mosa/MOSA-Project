@@ -10,7 +10,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	static partial class IntrinsicMethods
 	{
-		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic:SetSegments")]
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::SetSegments")]
 		private static void SetSegments(Context context, MethodCompiler methodCompiler)
 		{
 			var operand1 = context.Operand1;

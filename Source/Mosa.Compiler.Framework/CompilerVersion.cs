@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Reflection;
 using System;
+using System.Reflection;
 
 namespace Mosa.Compiler.Framework
 {
@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Framework
 			if (version.Build == 0)
 			{
 				// Revision and build number are reversed by design
-				version = new Version(1, 9, 2, 0);
+				version = new Version(2, 0, 0, 0);
 			}
 
 			return version;

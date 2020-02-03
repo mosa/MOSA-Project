@@ -72,20 +72,6 @@ namespace Mosa.Platform.x64
 		};
 
 		/// <summary>
-		/// Specifies the architecture features to use in generated code.
-		/// </summary>
-		private readonly ArchitectureFeatureFlags architectureFeatures;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Architecture"/> class.
-		/// </summary>
-		/// <param name="architectureFeatures">The features this architecture supports.</param>
-		private Architecture(ArchitectureFeatureFlags architectureFeatures)
-		{
-			this.architectureFeatures = architectureFeatures;
-		}
-
-		/// <summary>
 		/// Gets the native size of architecture in bytes.
 		/// </summary>
 		/// <value>This property always returns 8.</value>
@@ -152,22 +138,12 @@ namespace Mosa.Platform.x64
 		public override List<BaseInstruction> Instructions { get { return X64Instructions.List; } }
 
 		/// <summary>
-		/// Factory method for the Architecture class.
-		/// </summary>
-		/// <returns>The created architecture instance.</returns>
-		/// <param name="architectureFeatures">The features available in the architecture and code generation.</param>
-		public static BaseArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
-		{
-			return new Architecture(architectureFeatures);
-		}
-
-		/// <summary>
 		/// Extends the compiler pipeline with x64 specific stages.
 		/// </summary>
 		/// <param name="pipeline">The pipeline to extend.</param>
-		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline, CompilerOptions compilerOptions)
+		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline, CompilerSettings compilerSettings)
 		{
-			if (compilerOptions.MultibootSpecification == MultibootSpecification.V1)
+			if (compilerSettings.Settings.GetValue("Multiboot.Version", string.Empty).ToLower() == "v1")
 			{
 				pipeline.InsertAfterFirst<TypeInitializerStage>(
 					new MultibootV1Stage()
@@ -182,8 +158,8 @@ namespace Mosa.Platform.x64
 		/// <summary>
 		/// Extends the method compiler pipeline with x64 specific stages.</summary>
 		/// <param name="pipeline">The method compiler pipeline to extend.</param>
-		/// <param name="compilerOptions"></param>
-		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerOptions compilerOptions)
+		/// <param name="compilerSettings"></param>
+		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerSettings compilerSettings)
 		{
 			pipeline.InsertBefore<Compiler.Framework.Stages.RuntimeCallStage>(
 				new Stages.RuntimeCallStage()
@@ -194,10 +170,10 @@ namespace Mosa.Platform.x64
 				{
 					new LongOperandStage(),
 					new IRTransformationStage(),
-					compilerOptions.EnablePlatformOptimizations ? new Stages.OptimizationStage() : null,
+					compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
 					new TweakStage(),
 					new FixedRegisterAssignmentStage(),
-					compilerOptions.EnablePlatformOptimizations ? new SimpleDeadCodeRemovalStage() : null,
+					compilerSettings.PlatformOptimizations ? new SimpleDeadCodeRemovalStage() : null,
 					new AddressModeConversionStage(),
 					new FloatingPointStage(),
 				});
@@ -210,7 +186,7 @@ namespace Mosa.Platform.x64
 				new BaseMethodCompilerStage[]
 				{
 					new FinalTweakStage(),
-					compilerOptions.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
+					compilerSettings.PlatformOptimizations ? new PostOptimizationStage() : null,
 				});
 
 			pipeline.InsertBefore<CodeGenerationStage>(

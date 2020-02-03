@@ -1,0 +1,53 @@
+name: Unit Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build-mswin:
+    name: Win - Unit Tests
+    runs-on: windows-latest
+
+    strategy:
+       matrix:
+         levels: [-o0, -o1, -o2, -o3, -o4, -o5, -o6, -o7, -o8, -o9, -oFast, -oSize]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      - name: Setup MSBuild
+        uses: warrenbuckley/Setup-MSBuild@v1
+      - name: Setup Nuget.exe
+        uses: nuget/setup-nuget@v1
+      - name: Restore nuget Packages
+        run: dotnet restore Mosa.sln
+        working-directory: Source
+      - name: Build
+        run: msbuild Source/Mosa.sln
+      - name: Unit Tests
+        run: bin\Mosa.Utility.UnitTests.exe ${{ matrix.level }} -s Emulator.Display=false
+
+  build-unix:
+    name: Linux - Unit Tests
+    runs-on: ubuntu-18.04
+
+    strategy:
+       matrix:
+         levels: [-o0, -o1, -o2, -o3, -o4, -o5, -o6, -o7, -o8, -o9, -oFast, -oSize]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+        with:
+          submodules: recursive
+      - name: Update Package Respository
+        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
+      - name: Install New Packages
+        run: sudo apt-get install -y git wget qemu qemu-system qemu-system-x86
+      - name: Restore nuget Packages
+        run: dotnet restore Source/Mosa.Linux.sln
+      - name: Build
+        run: msbuild /verbosity:minimal Source/Mosa.Linux.sln
+      - name: Unit Tests
+        run: dotnet bin/Mosa.Utility.UnitTests.dll ${{ matrix.level }} -s Emulator.Display=false

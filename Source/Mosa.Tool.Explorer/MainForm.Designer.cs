@@ -92,12 +92,12 @@
 			this.cbPlatform = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
 			this.timer1 = new System.Windows.Forms.Timer(this.components);
+			this.cbEnableDevirtualization = new System.Windows.Forms.ToolStripMenuItem();
 			label4 = new System.Windows.Forms.Label();
 			label3 = new System.Windows.Forms.Label();
 			stageLabel = new System.Windows.Forms.Label();
@@ -247,7 +247,6 @@
 			this.snippetToolStripMenuItem.Name = "snippetToolStripMenuItem";
 			this.snippetToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
 			this.snippetToolStripMenuItem.Text = "Snippet";
-			this.snippetToolStripMenuItem.Click += new System.EventHandler(this.SnippetToolStripMenuItem_Click);
 			// 
 			// optionsToolStripMenuItem
 			// 
@@ -259,6 +258,7 @@
             this.cbEnableBasicOptimizations,
             this.cbEnableValueNumbering,
             this.cbEnableSparseConditionalConstantPropagation,
+            this.cbEnableDevirtualization,
             this.cbEnableInline,
             this.cbInlineExplicitOnly,
             this.cbEnableLongExpansion,
@@ -299,12 +299,12 @@
 			this.cbEnableSSA.Size = new System.Drawing.Size(293, 22);
 			this.cbEnableSSA.Text = "Enable SSA";
 			// 
-			// cbEnableIROptimizations
+			// cbEnableBasicOptimizations
 			// 
 			this.cbEnableBasicOptimizations.Checked = true;
 			this.cbEnableBasicOptimizations.CheckOnClick = true;
 			this.cbEnableBasicOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbEnableBasicOptimizations.Name = "cbEnableIROptimizations";
+			this.cbEnableBasicOptimizations.Name = "cbEnableBasicOptimizations";
 			this.cbEnableBasicOptimizations.Size = new System.Drawing.Size(293, 22);
 			this.cbEnableBasicOptimizations.Text = "Enable Optimizations";
 			// 
@@ -546,7 +546,7 @@
 			this.tabControl.Name = "tabControl";
 			this.tabControl.Padding = new System.Drawing.Point(0, 0);
 			this.tabControl.SelectedIndex = 0;
-			this.tabControl.Size = new System.Drawing.Size(592, 403);
+			this.tabControl.Size = new System.Drawing.Size(586, 403);
 			this.tabControl.TabIndex = 38;
 			this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
 			// 
@@ -561,7 +561,7 @@
 			this.tabStages.Location = new System.Drawing.Point(4, 25);
 			this.tabStages.Margin = new System.Windows.Forms.Padding(0);
 			this.tabStages.Name = "tabStages";
-			this.tabStages.Size = new System.Drawing.Size(584, 374);
+			this.tabStages.Size = new System.Drawing.Size(578, 374);
 			this.tabStages.TabIndex = 0;
 			this.tabStages.Text = "Instructions";
 			// 
@@ -614,7 +614,7 @@
 			this.tabStageDebug.Location = new System.Drawing.Point(4, 25);
 			this.tabStageDebug.Margin = new System.Windows.Forms.Padding(0);
 			this.tabStageDebug.Name = "tabStageDebug";
-			this.tabStageDebug.Size = new System.Drawing.Size(584, 374);
+			this.tabStageDebug.Size = new System.Drawing.Size(578, 374);
 			this.tabStageDebug.TabIndex = 1;
 			this.tabStageDebug.Text = "Debug";
 			// 
@@ -651,7 +651,7 @@
 			this.tabMethodCounters.Location = new System.Drawing.Point(4, 25);
 			this.tabMethodCounters.Margin = new System.Windows.Forms.Padding(0);
 			this.tabMethodCounters.Name = "tabMethodCounters";
-			this.tabMethodCounters.Size = new System.Drawing.Size(584, 374);
+			this.tabMethodCounters.Size = new System.Drawing.Size(578, 374);
 			this.tabMethodCounters.TabIndex = 6;
 			this.tabMethodCounters.Text = "Counters";
 			// 
@@ -677,7 +677,7 @@
 			this.tabLogs.Location = new System.Drawing.Point(4, 25);
 			this.tabLogs.Margin = new System.Windows.Forms.Padding(0);
 			this.tabLogs.Name = "tabLogs";
-			this.tabLogs.Size = new System.Drawing.Size(584, 374);
+			this.tabLogs.Size = new System.Drawing.Size(578, 374);
 			this.tabLogs.TabIndex = 7;
 			this.tabLogs.Text = "Logs";
 			// 
@@ -713,7 +713,6 @@
             this.cbPlatform,
             this.toolStripSeparator3,
             this.toolStripButton1,
-            this.toolStripButton2,
             this.toolStripSeparator2,
             this.toolStripButton4,
             this.toolStripSeparator1});
@@ -734,6 +733,7 @@
             "ARMv8A32"});
 			this.cbPlatform.Name = "cbPlatform";
 			this.cbPlatform.Size = new System.Drawing.Size(90, 25);
+			this.cbPlatform.SelectedIndexChanged += new System.EventHandler(this.cbPlatform_SelectedIndexChanged);
 			// 
 			// toolStripSeparator3
 			// 
@@ -748,16 +748,6 @@
 			this.toolStripButton1.Size = new System.Drawing.Size(56, 22);
 			this.toolStripButton1.Text = "Open";
 			this.toolStripButton1.Click += new System.EventHandler(this.ToolStripButton1_Click);
-			// 
-			// toolStripButton2
-			// 
-			this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
-			this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButton2.Name = "toolStripButton2";
-			this.toolStripButton2.Size = new System.Drawing.Size(67, 22);
-			this.toolStripButton2.Text = "Snippet";
-			this.toolStripButton2.Visible = false;
-			this.toolStripButton2.Click += new System.EventHandler(this.ToolStripButton2_Click);
 			// 
 			// toolStripSeparator2
 			// 
@@ -786,6 +776,14 @@
 			// 
 			this.timer1.Enabled = true;
 			this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
+			// 
+			// cbEnableDevirtualization
+			// 
+			this.cbEnableDevirtualization.Checked = true;
+			this.cbEnableDevirtualization.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbEnableDevirtualization.Name = "cbEnableDevirtualization";
+			this.cbEnableDevirtualization.Size = new System.Drawing.Size(293, 22);
+			this.cbEnableDevirtualization.Text = "Enable Devirtualization";
 			// 
 			// MainForm
 			// 
@@ -840,7 +838,6 @@
 		private System.Windows.Forms.ToolStripMenuItem snippetToolStripMenuItem;
 		private System.Windows.Forms.ToolStrip toolStrip1;
 		private System.Windows.Forms.ToolStripButton toolStripButton1;
-		private System.Windows.Forms.ToolStripButton toolStripButton2;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripButton toolStripButton4;
 		private System.Windows.Forms.ToolStripMenuItem cbEnableSSA;
@@ -888,5 +885,6 @@
 		private System.Windows.Forms.ToolStripMenuItem cbEnableAllOptimizations;
 		private System.Windows.Forms.ToolStripMenuItem cbDisableAllOptimizations;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+		private System.Windows.Forms.ToolStripMenuItem cbEnableDevirtualization;
 	}
 }

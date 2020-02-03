@@ -24,10 +24,10 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		protected override void Finalization()
 		{
-			if (string.IsNullOrEmpty(CompilerOptions.DebugFile))
+			if (string.IsNullOrEmpty(CompilerSettings.DebugFile))
 				return;
 
-			using (writer = new StreamWriter(CompilerOptions.DebugFile))
+			using (writer = new StreamWriter(CompilerSettings.DebugFile))
 			{
 				EmitSections();
 				EmitSymbols();
@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				writer.WriteLine(
 					"{0:x8}\t{1}\t{2}\t{3}\t{4}",
 					linkerSection.VirtualAddress,
-					linkerSection.FileOffset,
+					0, //linkerSection.FileOffset,
 					linkerSection.Size,
 					linkerSection.SectionKind.ToString(),
 					linkerSection.Name);
@@ -99,8 +99,8 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				if (type.IsModule)
 					continue;
 
-				if (!Linker.IsSymbolDefined(type.FullName))
-					continue;
+				//if (!Linker.IsSymbolDefined(type.FullName))
+				//	continue;
 
 				writer.WriteLine(
 					"{0}\t{1:x8}\t{2}\t{3}\t{4}\t{5}\t{6}",
@@ -153,7 +153,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private void EmitParameters()
 		{
 			writer.WriteLine("[Parameters]");
-			writer.WriteLine("MethodID\tIndex\tOffset\tName\tFullName\tParameterTypeID\tAttributes");
+			writer.WriteLine("MethodID\tIndex\tOffset\tName\tFullName\tParameterTypeID\tAttributes\tSize");
 
 			foreach (var type in TypeSystem.AllTypes)
 			{
@@ -164,18 +164,23 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				{
 					int index = 0;
 
+					var methodData = Compiler.GetMethodData(method);
+
 					foreach (var parameter in method.Signature.Parameters)
 					{
 						writer.WriteLine(
-							"{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}",
+							"{0}\t{1}\t{2}\t{3}\t{4}\t{5}\t{6}\t{7}",
 							method.ID,
-							index++,
-							0,  // todo: offset to parameter
+							index,
+							methodData == null || methodData.ParameterOffsets == null ? 0 : methodData.ParameterOffsets[index],
 							parameter.Name,
 							parameter.FullName,
 							parameter.ParameterType.ID,
-							(int)parameter.ParameterAttributes
+							(int)parameter.ParameterAttributes,
+							methodData == null || methodData.ParameterSizes == null ? 0 : methodData.ParameterSizes[index]
 						);
+
+						index++;
 					}
 				}
 			}

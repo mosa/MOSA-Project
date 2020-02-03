@@ -38,9 +38,9 @@ namespace Mosa.Compiler.Framework
 			Compiler = compiler;
 			TypeSystem = compiler.TypeSystem;
 			TypeLayout = compiler.TypeLayout;
-			IsEnabled = compiler.CompilerOptions.EnableMethodScanner;
+			IsEnabled = compiler.CompilerSettings.MethodScanner;
 
-			if (Compiler.CompilerTrace.IsTraceable(TraceLevel))
+			if (Compiler.IsTraceable(TraceLevel))
 			{
 				trace = new TraceLog(TraceType.GlobalDebug, null, null, "MethodScanner");
 			}
@@ -53,7 +53,7 @@ namespace Mosa.Compiler.Framework
 			if (!IsEnabled)
 				return;
 
-			if (!Compiler.CompilerOptions.EnableStatistics)
+			if (!Compiler.Statistics)
 				return;
 
 			MoreLogInfo();
@@ -88,7 +88,7 @@ namespace Mosa.Compiler.Framework
 			Compiler.GlobalCounters.Update("MethodScanner.AccessedFields", accessedFields.Count);
 			Compiler.GlobalCounters.Update("MethodScanner.InvokedInterfaceType", invokedInteraceTypes.Count);
 
-			Compiler.PostTrace(trace);
+			Compiler.PostTraceLog(trace);
 		}
 
 		private void MarkMethodInvoked(MosaMethod method)
@@ -148,18 +148,18 @@ namespace Mosa.Compiler.Framework
 				return;
 
 			// find all interfaces methods for this type
-			foreach (var itype in type.Interfaces)
+			foreach (var interfaceType in type.Interfaces)
 			{
-				if (!invokedInteraceTypes.Contains(itype))
+				if (!invokedInteraceTypes.Contains(interfaceType))
 					continue;
 
-				var imethods = TypeLayout.GetInterfaceTable(type, itype);
+				var interfaceMethodTable = TypeLayout.GetInterfaceTable(type, interfaceType);
 
-				var list = interfaceSlots.Get(itype);
+				var list = interfaceSlots.Get(interfaceType);
 
 				foreach (var slot in list)
 				{
-					var imethod = imethods[slot];
+					var imethod = interfaceMethodTable[slot];
 
 					ScheduleMethod(imethod);
 				}
@@ -228,9 +228,9 @@ namespace Mosa.Compiler.Framework
 							continue;
 					}
 
-					var imethods = TypeLayout.GetInterfaceTable(type, interfaceType); // this can be slow
+					var interfaceMethodTable = TypeLayout.GetInterfaceTable(type, interfaceType); // this can be slow
 
-					var imethod = imethods[slot];
+					var imethod = interfaceMethodTable[slot];
 
 					// schedule this type's interface method implementation
 					ScheduleMethod(imethod);
@@ -355,11 +355,6 @@ namespace Mosa.Compiler.Framework
 			{
 				if (scheduledMethods.Contains(method))
 					return;
-
-				if (method.FullName.Contains("Mosa.UnitTests.GenericInterfaceTestClass`1<System.Int32>::Mosa.UnitTests.IInterfaceBB<T>.Get"))
-				{
-					trace?.Log("TEST");
-				}
 
 				scheduledMethods.Add(method);
 

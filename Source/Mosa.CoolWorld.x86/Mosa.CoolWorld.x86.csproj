@@ -21,7 +21,6 @@
     <NoWarn>1685</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj" />
     <ProjectReference Include="..\Mosa.DeviceDriver\Mosa.DeviceDriver.csproj" />
     <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj" />
     <ProjectReference Include="..\Mosa.FileSystem\Mosa.FileSystem.csproj" />

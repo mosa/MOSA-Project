@@ -1,8 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Exceptions;
-using Mosa.Compiler.Framework.IR;
-
 namespace Mosa.Compiler.Framework.Intrinsics
 {
 	/// <summary>
@@ -10,7 +7,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	/// </summary>
 	static partial class IntrinsicMethods
 	{
-		[IntrinsicMethod("Mosa.Runtime.Intrinsic:GetStackPointer")]
+		[IntrinsicMethod("Mosa.Runtime.Intrinsic::GetStackPointer")]
 		private static void GetStackPointer(Context context, MethodCompiler methodCompiler)
 		{
 			var instruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.Move32 : IRInstruction.Move64;

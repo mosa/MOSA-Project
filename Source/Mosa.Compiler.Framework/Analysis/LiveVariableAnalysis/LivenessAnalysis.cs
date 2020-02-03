@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.Trace;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using static Mosa.Compiler.Framework.BaseMethodCompilerStage;
 
 // INCOMPLETE
 
@@ -19,20 +19,15 @@ namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 		protected BasicBlocks BasicBlocks { get { return Environment.BasicBlocks; } }
 		protected int IndexCount { get { return Environment.IndexCount; } }
 
-		protected readonly ITraceFactory TraceFactory;
-
 		protected List<ExtendedBlock2> ExtendedBlocks;
-		public LiveRanges[] LiveRanges; // protected
+		public LiveRanges[] LiveRanges;
 
-		protected TraceLog CreateTraceLog(string name, int tracelevel)
-		{
-			return TraceFactory.CreateTraceLog(name, tracelevel);
-		}
+		private readonly CreateTraceHandler CreateTrace;
 
-		public LivenessAnalysis(BaseLivenessAnalysisEnvironment environment, ITraceFactory traceFactory, bool numberInstructions)
+		public LivenessAnalysis(BaseLivenessAnalysisEnvironment environment, CreateTraceHandler createTrace, bool numberInstructions)
 		{
 			Environment = environment;
-			TraceFactory = traceFactory;
+			CreateTrace = createTrace;
 
 			LiveRanges = new LiveRanges[IndexCount];
 
@@ -82,7 +77,7 @@ namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 
 		private void TraceNumberInstructions()
 		{
-			var numberTrace = CreateTraceLog("InstructionNumber", 9);
+			var numberTrace = CreateTrace("InstructionNumber", 9);
 
 			if (numberTrace == null)
 				return;
@@ -126,7 +121,7 @@ namespace Mosa.Compiler.Framework.Analysis.LiveVariableAnalysis
 
 		protected void ComputeLocalLiveSets()
 		{
-			var liveSetTrace = CreateTraceLog("ComputeLocalLiveSets", 9);
+			var liveSetTrace = CreateTrace("ComputeLocalLiveSets", 9);
 
 			foreach (var block in ExtendedBlocks)
 			{

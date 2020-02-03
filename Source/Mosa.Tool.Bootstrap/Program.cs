@@ -25,7 +25,7 @@ namespace Mosa.Tool.Bootstrap
 
 			if (location == null)
 			{
-				var status = new StatusForm("Unable to find Mosa.Launcher.Tool.exe.");
+				var status = new StatusForm("Unable to find Mosa.Launcher.Tool.exe!");
 
 				Application.Run(status);
 			}

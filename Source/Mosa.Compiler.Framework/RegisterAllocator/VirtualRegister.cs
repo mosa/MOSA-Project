@@ -27,13 +27,13 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 		public LiveInterval FirstRange { get { return LiveIntervals.Count == 0 ? null : LiveIntervals[0]; } set { LiveIntervals[0] = value; } }
 
-		public Operand SpillSlotOperand { get; set; }
+		public Operand SpillSlotOperand;
 
 		public bool IsFloatingPoint { get { return VirtualRegisterOperand.IsR; } }
 
 		public bool IsReserved { get; }
 
-		public bool IsSpilled { get; set; }
+		public bool IsSpilled;
 
 		public bool IsUsed { get { return Count != 0; } }
 
