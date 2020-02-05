@@ -378,11 +378,6 @@ namespace Mosa.Utility.Launcher
 
 			File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.cfg"), GetResource("syslinux", "syslinux.cfg"));
 
-			//foreach (var include in IncludeFiles)
-			//{
-			//	File.WriteAllBytes(Path.Combine(isoDirectory, include.Filename), include.Content);
-			//}
-
 			File.Copy(LauncherSettings.OutputFile, Path.Combine(isoDirectory, "main.exe"));
 
 			var arg = $"-relaxed-filenames -J -R -o {Quote(LauncherSettings.ImageFile)} -b isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table {Quote(isoDirectory)}";
@@ -426,11 +421,6 @@ namespace Mosa.Utility.Launcher
 
 				archive.ExtractToDirectory(Path.Combine(isoDirectory, "boot", "grub"));
 			}
-
-			//foreach (var include in IncludeFiles)
-			//{
-			//	File.WriteAllBytes(Path.Combine(isoDirectory, include.Filename), include.Content);
-			//}
 
 			File.Copy(LauncherSettings.OutputFile, Path.Combine(isoDirectory, "boot", "main.exe"));
 
