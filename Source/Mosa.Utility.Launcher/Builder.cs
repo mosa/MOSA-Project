@@ -370,7 +370,7 @@ namespace Mosa.Utility.Launcher
 				File.WriteAllBytes(Path.Combine(isoDirectory, "ldlinux.c32"), GetResource(@"syslinux\6.03", "ldlinux.c32"));
 				File.WriteAllBytes(Path.Combine(isoDirectory, "libcom32.c32"), GetResource(@"syslinux\6.03", "libcom32.c32"));
 			}
-			else if (LauncherSettings.ImageBootLoader == "Syslinux3.72")
+			else if (LauncherSettings.ImageBootLoader == "syslinux3.72")
 			{
 				File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.bin"), GetResource(@"syslinux\3.72", "isolinux.bin"));
 				File.WriteAllBytes(Path.Combine(isoDirectory, "mboot.c32"), GetResource(@"syslinux\3.72", "mboot.c32"));
@@ -385,7 +385,7 @@ namespace Mosa.Utility.Launcher
 
 			File.Copy(LauncherSettings.OutputFile, Path.Combine(isoDirectory, "main.exe"));
 
-			string arg = $"-relaxed-filenames -J -R -o {Quote(LauncherSettings.ImageFile)} -b isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table {Quote(isoDirectory)}";
+			var arg = $"-relaxed-filenames -J -R -o {Quote(LauncherSettings.ImageFile)} -b isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table {Quote(isoDirectory)}";
 
 			LaunchApplication(LauncherSettings.Mkisofs, arg, true);
 		}
@@ -434,7 +434,7 @@ namespace Mosa.Utility.Launcher
 
 			File.Copy(LauncherSettings.OutputFile, Path.Combine(isoDirectory, "boot", "main.exe"));
 
-			string arg = $"-relaxed-filenames -J -R -o {Quote(LauncherSettings.ImageFile)} -b {Quote(loader)} -no-emul-boot -boot-load-size 4 -boot-info-table {Quote(isoDirectory)}";
+			var arg = $"-relaxed-filenames -J -R -o {Quote(LauncherSettings.ImageFile)} -b {Quote(loader)} -no-emul-boot -boot-load-size 4 -boot-info-table {Quote(isoDirectory)}";
 
 			LaunchApplication(LauncherSettings.Mkisofs, arg, true);
 		}
