@@ -133,7 +133,7 @@ Image Settings
 
     Image.Format,"Format of the vritual image file BIN, IMG, VHD, VDI, ISO, VMDK"
     Image.FileSystem,"File system of the primary partition in the image file FAT12, FAT16, FAT32, ISO????"
-    Image.BootLoader,"Type of bootloader grub_v0.97, grub_v2.00, syslinux_v6.03, syslinux_v3.72"
+    Image.BootLoader,"Type of bootloader grub0.97, grub2.00, syslinux6.03, syslinux3.72"
     Image.Destination,Destination directory of the image file
     Image.ImageFile,Filename of the image file
 
