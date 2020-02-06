@@ -17,15 +17,19 @@ namespace Mosa.Utility.Launcher
 
 		public LauncherSettings LauncherSettings { get; }
 
-		public Settings Settings { get { return LauncherSettings.Settings; } }
+		public Settings Settings { get; }
 
 		public BaseLauncher(Settings settings, CompilerHooks compilerHook)
 		{
 			CompilerHooks = compilerHook;
 
-			LauncherSettings = new LauncherSettings(settings);
+			Settings = new Settings();
 
 			SetDefaultSettings();
+
+			Settings.Merge(settings);
+
+			LauncherSettings = new LauncherSettings(Settings);
 
 			NormalizeSettings();
 

@@ -2,7 +2,7 @@
 MOSA Compiler
 #############
 
-The **MOSA Compiler** is a command line application used to compile a .NET application to a binary object file.
+The **MOSA Compiler** is a console application used to compile a .NET application to a binary object file.
 
 The compiler is invoked via Command Line:
 
