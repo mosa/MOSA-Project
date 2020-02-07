@@ -8,7 +8,6 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
-
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
@@ -50,7 +49,6 @@ namespace Mosa.Utility.Launcher
 
 		public void Build()
 		{
-			Log.Clear();
 			Counters.Clear();
 			HasCompileError = true;
 
@@ -70,12 +68,12 @@ namespace Mosa.Utility.Launcher
 
 				if (string.IsNullOrEmpty(LauncherSettings.SourceFiles[0]))
 				{
-					AddOutput("ERROR: Missing source file");
+					Output("ERROR: Missing source file");
 					return;
 				}
 				else if (!File.Exists(LauncherSettings.SourceFiles[0]))
 				{
-					AddOutput($"File {LauncherSettings.SourceFiles[0]} does not exists");
+					Output($"File {LauncherSettings.SourceFiles[0]} does not exists");
 					return;
 				}
 
@@ -98,7 +96,7 @@ namespace Mosa.Utility.Launcher
 			catch (Exception e)
 			{
 				HasCompileError = true;
-				AddOutput($"Exception: {e.ToString()}");
+				Output($"Exception: {e.ToString()}");
 			}
 			finally
 			{
@@ -168,7 +166,7 @@ namespace Mosa.Utility.Launcher
 			if (string.IsNullOrWhiteSpace(LauncherSettings.ImageFormat))
 				return;
 
-			AddOutput($"Generating Image: {LauncherSettings.ImageFormat}");
+			Output($"Generating Image: {LauncherSettings.ImageFormat}");
 
 			if (LauncherSettings.ImageFormat == "iso")
 			{
@@ -546,7 +544,7 @@ namespace Mosa.Utility.Launcher
 				if (!string.IsNullOrEmpty(message))
 					status += $"- { message}";
 
-				AddOutput(status);
+				Output(status);
 			}
 			else if (compilerEvent == CompilerEvent.Counter)
 			{

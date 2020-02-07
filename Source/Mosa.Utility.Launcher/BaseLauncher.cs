@@ -13,42 +13,38 @@ namespace Mosa.Utility.Launcher
 	{
 		public CompilerHooks CompilerHooks { get; }
 
-		public List<string> Log { get; }
-
 		public LauncherSettings LauncherSettings { get; }
 
-		public Settings Settings { get; }
+		public Settings Settings { get { return LauncherSettings.Settings; } }
 
 		public BaseLauncher(Settings settings, CompilerHooks compilerHook)
 		{
 			CompilerHooks = compilerHook;
 
-			Settings = new Settings();
+			var startSettings = new Settings();
 
-			SetDefaultSettings();
+			SetDefaultSettings(startSettings);
 
-			Settings.Merge(settings);
+			startSettings.Merge(settings);
 
-			LauncherSettings = new LauncherSettings(Settings);
+			LauncherSettings = new LauncherSettings(startSettings);
 
 			NormalizeSettings();
 
 			SetDefaults();
-
-			Log = new List<string>();
 		}
 
-		private void SetDefaultSettings()
+		private void SetDefaultSettings(Settings settings)
 		{
-			Settings.SetValue("Emulator", "Qemu");
-			Settings.SetValue("Emulator.Memory", 128);
+			settings.SetValue("Emulator", "Qemu");
+			settings.SetValue("Emulator.Memory", 128);
 
-			//Settings.SetValue("Emulator.Serial", "none");
-			Settings.SetValue("Emulator.Serial.Host", "127.0.0.1");
-			Settings.SetValue("Emulator.Serial.Port", 9999);
-			Settings.SetValue("Emulator.Serial.Pipe", "MOSA");
-			Settings.SetValue("Launcher.PlugKorlib", true);
-			Settings.SetValue("Launcher.HuntForCorLib", true);
+			//settings.SetValue("Emulator.Serial", "none");
+			settings.SetValue("Emulator.Serial.Host", "127.0.0.1");
+			settings.SetValue("Emulator.Serial.Port", 9999);
+			settings.SetValue("Emulator.Serial.Pipe", "MOSA");
+			settings.SetValue("Launcher.PlugKorlib", true);
+			settings.SetValue("Launcher.HuntForCorLib", true);
 		}
 
 		protected void NormalizeSettings()
@@ -158,12 +154,10 @@ namespace Mosa.Utility.Launcher
 			}
 		}
 
-		protected void AddOutput(string status)
+		protected void Output(string status)
 		{
 			if (status == null)
 				return;
-
-			Log.Add(status);
 
 			OutputEvent(status);
 		}
@@ -194,8 +188,8 @@ namespace Mosa.Utility.Launcher
 
 		protected Process LaunchApplication(string app, string args)
 		{
-			AddOutput("Launching Application: " + app);
-			AddOutput("Arguments: " + args);
+			Output($"Launching Application: {app}");
+			Output("Arguments: " + args);
 
 			var start = new ProcessStartInfo
 			{
@@ -212,8 +206,8 @@ namespace Mosa.Utility.Launcher
 
 		protected Process LaunchConsoleApplication(string app, string args)
 		{
-			AddOutput("Launching Application: " + app);
-			AddOutput("Arguments: " + args);
+			Output($"Launching Application: {app}");
+			Output("Arguments: " + args);
 
 			var start = new ProcessStartInfo
 			{
@@ -246,7 +240,7 @@ namespace Mosa.Utility.Launcher
 			if (getOutput)
 			{
 				var output = GetOutput(process);
-				AddOutput(output);
+				Output(output);
 			}
 
 			return process;

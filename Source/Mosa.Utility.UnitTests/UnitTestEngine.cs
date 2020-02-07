@@ -326,7 +326,7 @@ namespace Mosa.Utility.UnitTests
 
 		private void NotifyStatus(string status)
 		{
-			//Console.WriteLine($"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} [{status}]");
+			Console.WriteLine($"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} [{status}]");
 		}
 
 		public bool LaunchVirtualMachine()
@@ -336,6 +336,7 @@ namespace Mosa.Utility.UnitTests
 				var compilerHook = CreateCompilerHook();
 
 				Starter = new Starter(Settings, compilerHook);
+				Settings = Starter.Settings;
 			}
 
 			Settings.SetValue("Emulator.Serial.Port", Settings.GetValue("Emulator.Serial.Port", 11110) + 1);
