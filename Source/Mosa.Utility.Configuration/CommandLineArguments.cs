@@ -152,12 +152,12 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-launch-gdb-debugger", Setting = "Launcher.LaunchDebugger", Value="true"},
 
 				new Argument() { Name = "-bootloader", Setting = "Image.BootLoader"},
-				new Argument() { Name = "-grub", Setting = "Image.BootLoader", Value = "grub_v0.97"},
-				new Argument() { Name = "-grub-0.97", Setting = "Image.BootLoader", Value = "grub_v0.97"},
-				new Argument() { Name = "-grub2", Setting = "Image.BootLoader", Value = "grub_v2.00"},
-				new Argument() { Name = "-syslinux", Setting = "Image.BootLoader", Value = "syslinux_v3.72"},
-				new Argument() { Name = "-syslinux-3.72", Setting = "Image.BootLoader", Value = "syslinux_v3.72"},
-				new Argument() { Name = "-syslinux-6.0", Setting = "Image.BootLoader", Value = "syslinux_v6.03"},
+				new Argument() { Name = "-grub", Setting = "Image.BootLoader", Value = "grub0.97"},
+				new Argument() { Name = "-grub0.97", Setting = "Image.BootLoader", Value = "grub0.97"},
+				new Argument() { Name = "-grub2.00", Setting = "Image.BootLoader", Value = "grub2.00"},
+				new Argument() { Name = "-syslinux", Setting = "Image.BootLoader", Value = "syslinux3.72"},
+				new Argument() { Name = "-syslinux3.72", Setting = "Image.BootLoader", Value = "syslinux3.72"},
+				new Argument() { Name = "-syslinux6.0", Setting = "Image.BootLoader", Value = "syslinux6.03"},
 
 				// Launcher - Serial:
 				new Argument() { Name = "-hunt-corlib", Setting = "Launcher.HuntForCorLib", Value = "true"},
@@ -298,7 +298,7 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-o9", Setting = "Optimizations.LoopInvariantCodeMotion", Value = "true"},
 				new Argument() { Name = "-o9", Setting = "Optimizations.BitTracker", Value = "true"},
 				new Argument() { Name = "-o9", Setting = "Optimizations.TwoPass", Value = "true"},
-				new Argument() { Name = "-o9", Setting = "Optimizations.Inline.Maximum", Value = "15"},
+				new Argument() { Name = "-o9", Setting = "Optimizations.Inline.Maximum", Value = "12"},
 
 				new Argument() { Name = "-oNone", Setting = "Optimizations.Basic", Value = "false"},
 				new Argument() { Name = "-oNone", Setting = "Optimizations.SSA", Value = "false"},
@@ -324,7 +324,7 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-oMax", Setting = "Optimizations.LoopInvariantCodeMotion", Value = "true"},
 				new Argument() { Name = "-oMax", Setting = "Optimizations.BitTracker", Value = "true"},
 				new Argument() { Name = "-oMax", Setting = "Optimizations.TwoPass", Value = "true"},
-				new Argument() { Name = "-oMax", Setting = "Optimizations.Inline.Maximum", Value = "15"},
+				new Argument() { Name = "-oMax", Setting = "Optimizations.Inline.Maximum", Value = "12"},
 
 				new Argument() { Name = "-oSize", Setting = "Optimizations.Basic", Value = "true"},
 				new Argument() { Name = "-oSize", Setting = "Optimizations.SSA", Value = "true"},

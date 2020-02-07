@@ -1,1 +1,1 @@
-..\bin\Mosa.Utility.UnitTests.exe -settings UnitTest.settings
+..\bin\Mosa.Utility.UnitTests.exe -o9

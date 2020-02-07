@@ -49,7 +49,7 @@ namespace Mosa.Utility.Launcher
 			if (!LauncherSettings.LauncherExit)
 			{
 				var output = GetOutput(process);
-				AddOutput(output);
+				Output(output);
 			}
 
 			return process;
@@ -70,7 +70,7 @@ namespace Mosa.Utility.Launcher
 
 						var line = process.StandardOutput.ReadLine();
 
-						AddOutput($"VM Output: {line}");
+						Output($"VM Output: {line}");
 
 						if (line == successText)
 						{
@@ -88,7 +88,7 @@ namespace Mosa.Utility.Launcher
 					Thread.Sleep(timeoutMS);
 					if (!process.HasExited)
 					{
-						AddOutput("Test Timeout");
+						Output("Test Timeout");
 						process.Kill();
 					}
 				});
@@ -96,13 +96,13 @@ namespace Mosa.Utility.Launcher
 
 				process.WaitForExit();
 
-				AddOutput($"VM Exit Code: {process.ExitCode}");
+				Output($"VM Exit Code: {process.ExitCode}");
 			}
 
 			if (success)
-				AddOutput("Test PASSED");
+				Output("Test PASSED");
 			else
-				AddOutput("Test FAILED");
+				Output("Test FAILED");
 
 			if (LauncherSettings.LauncherExit)
 			{
@@ -319,10 +319,10 @@ namespace Mosa.Utility.Launcher
 
 			File.WriteAllText(gdbscript, sb.ToString());
 
-			AddOutput("Created configuration file: " + gdbscript);
-			AddOutput("==================");
-			AddOutput(sb.ToString());
-			AddOutput("==================");
+			Output($"Created configuration file: {gdbscript}");
+			Output("==================");
+			Output(sb.ToString());
+			Output("==================");
 
 			LaunchConsoleApplication(LauncherSettings.GDB, arg);
 		}

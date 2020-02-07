@@ -13,8 +13,9 @@ Contents
    settings-options
    command-line-arguments
    usb-flash-drive-installation
-   tool-boot-explorer
-   tool-boot-launcher
+   tool-launcher
+   tool-launcher-console
+   tool-explorer
    tool-debugger
    tool-boot-image
    tests

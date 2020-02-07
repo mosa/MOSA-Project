@@ -139,12 +139,12 @@ Below are the command line arguments available:
     -launch-gdb-debugger,Launcher.LaunchDebugger,true
 
     -bootloader,Image.BootLoader,{value}
-    -grub,Image.BootLoader,grub_v0.97
-    -grub-0.97,Image.BootLoader,grub_v0.97
-    -grub2,Image.BootLoader,grub_v2.00
+    -grub,Image.BootLoader,grub0.97
+    -grub0.97,Image.BootLoader,grub0.97
+    -grub2.00,Image.BootLoader,grub2.00
     -syslinux,Image.BootLoader,syslinux_v3.72
-    -syslinux-3.72,Image.BootLoader,syslinux_v3.72
-    -syslinux-6.0,Image.BootLoader,syslinux_v6.03
+    -syslinux3.72,Image.BootLoader,syslinux3.72
+    -syslinux6.0,Image.BootLoader,syslinux6.03
 
     // Launcher - Advance:
     -hunt-corlib,Launcher.HuntForCorLib,true

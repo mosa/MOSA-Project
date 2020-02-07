@@ -8,7 +8,6 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
-
 using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
@@ -50,7 +49,6 @@ namespace Mosa.Utility.Launcher
 
 		public void Build()
 		{
-			Log.Clear();
 			Counters.Clear();
 			HasCompileError = true;
 
@@ -70,12 +68,12 @@ namespace Mosa.Utility.Launcher
 
 				if (string.IsNullOrEmpty(LauncherSettings.SourceFiles[0]))
 				{
-					AddOutput("ERROR: Missing source file");
+					Output("ERROR: Missing source file");
 					return;
 				}
 				else if (!File.Exists(LauncherSettings.SourceFiles[0]))
 				{
-					AddOutput($"File {LauncherSettings.SourceFiles[0]} does not exists");
+					Output($"File {LauncherSettings.SourceFiles[0]} does not exists");
 					return;
 				}
 
@@ -98,7 +96,7 @@ namespace Mosa.Utility.Launcher
 			catch (Exception e)
 			{
 				HasCompileError = true;
-				AddOutput($"Exception: {e.ToString()}");
+				Output($"Exception: {e.ToString()}");
 			}
 			finally
 			{
@@ -168,7 +166,7 @@ namespace Mosa.Utility.Launcher
 			if (string.IsNullOrWhiteSpace(LauncherSettings.ImageFormat))
 				return;
 
-			AddOutput($"Generating Image: {LauncherSettings.ImageFormat}");
+			Output($"Generating Image: {LauncherSettings.ImageFormat}");
 
 			if (LauncherSettings.ImageFormat == "iso")
 			{
@@ -370,7 +368,7 @@ namespace Mosa.Utility.Launcher
 				File.WriteAllBytes(Path.Combine(isoDirectory, "ldlinux.c32"), GetResource(@"syslinux\6.03", "ldlinux.c32"));
 				File.WriteAllBytes(Path.Combine(isoDirectory, "libcom32.c32"), GetResource(@"syslinux\6.03", "libcom32.c32"));
 			}
-			else if (LauncherSettings.ImageBootLoader == "Syslinux3.72")
+			else if (LauncherSettings.ImageBootLoader == "syslinux3.72")
 			{
 				File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.bin"), GetResource(@"syslinux\3.72", "isolinux.bin"));
 				File.WriteAllBytes(Path.Combine(isoDirectory, "mboot.c32"), GetResource(@"syslinux\3.72", "mboot.c32"));
@@ -378,14 +376,9 @@ namespace Mosa.Utility.Launcher
 
 			File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.cfg"), GetResource("syslinux", "syslinux.cfg"));
 
-			//foreach (var include in IncludeFiles)
-			//{
-			//	File.WriteAllBytes(Path.Combine(isoDirectory, include.Filename), include.Content);
-			//}
-
 			File.Copy(LauncherSettings.OutputFile, Path.Combine(isoDirectory, "main.exe"));
 
-			string arg = $"-relaxed-filenames -J -R -o {Quote(LauncherSettings.ImageFile)} -b isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table {Quote(isoDirectory)}";
+			var arg = $"-relaxed-filenames -J -R -o {Quote(LauncherSettings.ImageFile)} -b isolinux.bin -no-emul-boot -boot-load-size 4 -boot-info-table {Quote(isoDirectory)}";
 
 			LaunchApplication(LauncherSettings.Mkisofs, arg, true);
 		}
@@ -427,14 +420,9 @@ namespace Mosa.Utility.Launcher
 				archive.ExtractToDirectory(Path.Combine(isoDirectory, "boot", "grub"));
 			}
 
-			//foreach (var include in IncludeFiles)
-			//{
-			//	File.WriteAllBytes(Path.Combine(isoDirectory, include.Filename), include.Content);
-			//}
-
 			File.Copy(LauncherSettings.OutputFile, Path.Combine(isoDirectory, "boot", "main.exe"));
 
-			string arg = $"-relaxed-filenames -J -R -o {Quote(LauncherSettings.ImageFile)} -b {Quote(loader)} -no-emul-boot -boot-load-size 4 -boot-info-table {Quote(isoDirectory)}";
+			var arg = $"-relaxed-filenames -J -R -o {Quote(LauncherSettings.ImageFile)} -b {Quote(loader)} -no-emul-boot -boot-load-size 4 -boot-info-table {Quote(isoDirectory)}";
 
 			LaunchApplication(LauncherSettings.Mkisofs, arg, true);
 		}
@@ -556,7 +544,7 @@ namespace Mosa.Utility.Launcher
 				if (!string.IsNullOrEmpty(message))
 					status += $"- { message}";
 
-				AddOutput(status);
+				Output(status);
 			}
 			else if (compilerEvent == CompilerEvent.Counter)
 			{
