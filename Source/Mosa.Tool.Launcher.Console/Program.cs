@@ -38,6 +38,7 @@ namespace Mosa.Tool.Launcher.Console
 				if (Builder.HasCompileError)
 				{
 					NotifyStatus($"A build error has occurred.");
+					return 1;
 				}
 				else
 				{
