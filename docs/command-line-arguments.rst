@@ -2,9 +2,9 @@
 Command Line Arguments
 ######################
 
-The command line arguments serve as shortcuts to common set of :doc:`settings-options` used by the MOSA tool sets.
+The command line arguments serve as shortcuts to the common set of :doc:`settings-options` used by the MOSA tools.
 
-.. tip:: Specific settings may also be specified on the command line using the ``-setting`` argument. For example to set the ``Compiler.OutputFile`` settings with ``Mosa.HelloWorld.x86.bin``, pass the following two arguments ``-setting Compiler.OutputFile=Mosa.HelloWorld.x86.bin`` on the command line.
+.. tip:: Specific settings may also be specified on the command line using the ``-setting`` or ``-s`` arguments. For example to set the ``Compiler.OutputFile`` settings with ``Mosa.HelloWorld.x86.bin``, pass the following two arguments ``-setting Compiler.OutputFile=Mosa.HelloWorld.x86.bin`` on the command line.
 
 Below are the command line arguments available:
 
@@ -12,8 +12,10 @@ Below are the command line arguments available:
    :header: "Argument","Setting","Value Set"
    :widths: 100, 100, 50
    
+   Compiler:
     {none},Compiler.SourceFiles,{value}
     -settings,Settings,{value}
+    -s,Settings,{value}
     -o,Compiler.OutputFile,{value}
     -threading,Compiler.Multithreading,true
     -threading-off,Compiler.Multithreading,false
@@ -46,7 +48,13 @@ Below are the command line arguments available:
     -devirtualization,Optimizations.Devirtualization,true
     -devirtualization-off,Optimizations.Devirtualization,false
     -inline-level,Optimizations.Inline.Maximum,{value}
+    
+    -platform,Compiler.Platform,{value}
+    -x86,Compiler.Platform,x86
+    -x64,Compiler.Platform,x64
+    -armv8a32,Compiler.Platform,armv8a32
 
+    Compiler - Debug Output Information:
     -output-nasm,CompilerDebug.NasmFile,%DEFAULT%
     -output-asm,CompilerDebug.AsmFile,%DEFAULT%
     -output-map,CompilerDebug.MapFile,%DEFAULT%
@@ -56,14 +64,10 @@ Below are the command line arguments available:
     -output-hash,CompilerDebug.PreLinkHashFile,%DEFAULT%
     -output-hash,CompilerDebug.PostLinkHashFile,%DEFAULT%
 
-    -platform,Compiler.Platform,{value}
-    -x86,Compiler.Platform,x86
-    -x64,Compiler.Platform,x64
-    -armv8a32,Compiler.Platform,armv8a32
-
+    Compiler - X86:
     -interrupt-method,X86.InterruptMethodName,{value}
 
-    // Linker:
+    Linker:
     -emit-all-symbols,Linker.Symbols,true
     -emit-all-symbols-off,Linker.Symbols,false
     -emit-relocations,Linker.StaticRelocations,true
@@ -73,53 +77,50 @@ Below are the command line arguments available:
     -emit-drawf-off,Linker.Drawf,false
     -drawf,Linker.Drawf,true
 
-    // Explorer:
+    Explorer:
     -filter,Explorer.Filter,{value}
 
-    // Launcher:
+    Launcher:
     -autoexit,Launcher.Exit,true
     -autoexit-off,Launcher.Exit,false
     -autostart,Launcher.Start,true
     -autostart-off,Launcher.Start,false
     -autolaunch,Launcher.Launch,true
     -autolaunch-off,Launcher.Launch,false
-
-    -destination,Image.Folder,{value}
-    -dest,Image.Folder,{value}
-
     -launch,Launcher.Launch,true
     -launch-off,Launcher.Launch,false
 
-    // Launcher - Emulator:
+    Launcher - Emulator:
     -emulator,Emulator,
     -qemu,Emulator,qemu
     -vmware,Emulator,vmware
     -bochs,Emulator,bochs
     -display,Emulator.Display,on
     -display-off,Emulator.Display,off
-    -emulator-memory,Emulator.Memory,
+    -memory,Emulator.Memory,
     -qemu-gdb,Emulator.GDB,false
 
-    // Launcher - Image:
+    Launcher - Image:
+    -image,Image.ImageFile,{value}
+    -destination,Image.Folder,{value}
+    -dest,Image.Folder,{value}
     -vhd,Image.Format,vhd
     -img,Image.Format,img
     -vdi,Image.Format,vdi
     -iso,Image.Format,iso
     -vmdk,Image.Format,vmdk
-    -image,Image.ImageFile,{value}
-
     -blocks,Image.DiskBlocks,
     -volume-label,Image.VolumeLabel,
     -mbr,Image.MasterBootRecordFile,
     -boot,Image.BootBlockFile,
 
-    // Launcher - Boot:
+    Launcher - Boot:
     -multiboot-v1,Multiboot.Version,v1
     -multiboot-v2,Multiboot.Version,v2
     -multiboot-none,Multiboot.Version,
     -multiboot,Multiboot.Version,{value}
 
-    // Launcher - Serial:
+    Launcher - Serial:
     -serial-connection,Emulator.Serial,
     -serial-pipe,Emulator.Serial,pipe
     -serial-tcpclient,Emulator.Serial,tcpclient
@@ -127,17 +128,16 @@ Below are the command line arguments available:
     -serial-connection-port,Emulator.Serial.Port,{value}
     -serial-connection-host,Emulator.Serial.Host,{value}
 
+    Launcher - Video BIOS Extension (VBE):
     -video,Multiboot.Video,true
     -video-width,Multiboot.Video.Width,{value}
     -video-height,Multiboot.Video.Height,{value}
     -video-depth,Multiboot.Video.Depth,{value}
 
-    -gdb,Launcher.LaunchDebugger,true
-    -gdb-port,GDB.Port,{value}
-    -gdb-host,GDB.Host,{value}
-
+    Launcher - GDB:
     -launch-gdb-debugger,Launcher.LaunchDebugger,true
 
+    Launcher - Boot Loader:
     -bootloader,Image.BootLoader,{value}
     -grub,Image.BootLoader,grub0.97
     -grub0.97,Image.BootLoader,grub0.97
@@ -146,15 +146,22 @@ Below are the command line arguments available:
     -syslinux3.72,Image.BootLoader,syslinux3.72
     -syslinux6.0,Image.BootLoader,syslinux6.03
 
-    // Launcher - Advance:
+    Launcher - Advance:
     -hunt-corlib,Launcher.HuntForCorLib,true
     -plug-korlib,Launcher.PlugKorlib,true
 
-    // Debugger:
+    Launcher - GDB
+    -gdb,Launcher.LaunchDebugger,true
+
+    Launcher & Debugger - GDB
+    -gdb-port,GDB.Port,{value}
+    -gdb-host,GDB.Host,{value}
+
+    Debugger:
     -breakpoints,Debugger.BreakpointFile,{value}
     -watch,Debugger.WatchFile,{value}
 
-    // Optimization Levels:
+    Optimization Levels:
     -o0,Optimizations.Basic,false
     -o0,Optimizations.SSA,false
     -o0,Optimizations.ValueNumbering,false

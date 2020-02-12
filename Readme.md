@@ -1,9 +1,11 @@
-[![Actions Status](https://github.com/mosa/MOSA-Project/workflows/Tests/badge.svg)](https://github.com/mosa/MOSA-Project/actions) [![Build status][build-status-image]][build-status] [![License][github-license]][github-license-link]  [![Issues][github-issues]][github-issues-link]  [![Stars][github-stars]][github-stars-link]  [![Forks][github-forks]][github-forks-link]  [![Gitter Chat][gitter-image]][gitter-chat]
+[![Build status][build-status-image]][build-status]  [![Test status][test-status-image]][test-status]  [![License][github-license]][github-license-link]  [![Issues][github-issues]][github-issues-link]  [![Stars][github-stars]][github-stars-link]  [![Forks][github-forks]][github-forks-link]  
 
-[![Bountysource][bounty-image]][bounty-issues]  
+[![Gitter Chat][gitter-image]][gitter-chat]  [![Bountysource][bounty-image]][bounty-issues]  
 
-[build-status-image]: https://ci.appveyor.com/api/projects/status/gmeosk7sa6su8rb3/branch/master?svg=true
-[build-status]: https://ci.appveyor.com/project/MOSA/mosa-project
+[build-status-image]: https://github.com/mosa/MOSA-Project/workflows/Build/badge.svg
+[build-status]: https://github.com/mosa/MOSA-Project/actions
+[tests-status-image]: https://github.com/mosa/MOSA-Project/workflows/Unit%20Tests/badge.svg
+[tests-status]: https://github.com/mosa/MOSA-Project/actions
 [pull-requests-image]: http://www.issuestats.com/github/mosa/mosa-project/badge/pr
 [pull-requests]: http://www.issuestats.com/github/mosa/mosa-project
 [issues-closed-image]: http://www.issuestats.com/github/mosa/mosa-project/badge/issue

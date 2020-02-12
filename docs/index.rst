@@ -2,7 +2,7 @@ Contents
 ========
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 1
 
    intro
    faq
@@ -12,13 +12,13 @@ Contents
    compiler-optimizations
    settings-options
    command-line-arguments
-   usb-flash-drive-installation
    tool-launcher
    tool-launcher-console
    tool-explorer
    tool-debugger
    tool-boot-image
    tests
+   usb-flash-drive-installation
    get-involved
    authors
    license

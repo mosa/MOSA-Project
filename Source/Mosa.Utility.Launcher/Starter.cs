@@ -30,7 +30,7 @@ namespace Mosa.Utility.Launcher
 		{
 			var process = LaunchVM();
 
-			if (LauncherSettings.MonitorTest)
+			if (LauncherSettings.LauncherTest)
 			{
 				MonitorTest(process, 5000, "<SELFTEST:PASSED>");
 				return process;
@@ -136,13 +136,13 @@ namespace Mosa.Utility.Launcher
 
 			//arg = arg + " -vga vmware";
 
-			if (!LauncherSettings.EmulatorDisplay || LauncherSettings.MonitorTest)
+			if (!LauncherSettings.EmulatorDisplay || LauncherSettings.LauncherTest)
 			{
 				arg.Append(" -display none");
 			}
 
 			// COM1 = Kernel Log
-			if (LauncherSettings.MonitorTest)
+			if (LauncherSettings.LauncherTest)
 			{
 				arg.Append(" -serial stdio");
 			}
