@@ -1,6 +1,6 @@
 [![Build status][build-status-image]][build-status]  [![Test status][test-status-image]][test-status]  [![License][github-license]][github-license-link]  [![Issues][github-issues]][github-issues-link]  [![Stars][github-stars]][github-stars-link]  [![Forks][github-forks]][github-forks-link]  
 
-[![Gitter Chat][gitter-image]][gitter-chat]  [![Bountysource][bounty-image]][bounty-issues]  
+[![Gitter Chat][gitter-image]][gitter-chat]
 
 [build-status-image]: https://github.com/mosa/MOSA-Project/workflows/Builds/badge.svg
 [build-status]: https://github.com/mosa/MOSA-Project/actions
@@ -34,7 +34,7 @@ The MOSA project consists of:
 * Device Drivers Framework - a modular, device drivers framework and device drivers
 * Debugger - QEMU-based debugger
 
-Read our [Frequently Asked Questions](https://github.com/mosa/MOSA-Project/wiki/Frequently-Asked-Questions) for more information about this project.
+Read our [Documentation](http://docs.mosa-project.org/en/latest/index.html) for more information about this project.
 
 ### Current Status
 
