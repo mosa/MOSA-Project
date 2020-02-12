@@ -2,7 +2,7 @@
 
 [![Gitter Chat][gitter-image]][gitter-chat]  [![Bountysource][bounty-image]][bounty-issues]  
 
-[build-status-image]: https://github.com/mosa/MOSA-Project/workflows/Build/badge.svg
+[build-status-image]: https://github.com/mosa/MOSA-Project/workflows/Builds/badge.svg
 [build-status]: https://github.com/mosa/MOSA-Project/actions
 [tests-status-image]: https://github.com/mosa/MOSA-Project/workflows/Unit%20Tests/badge.svg
 [tests-status]: https://github.com/mosa/MOSA-Project/actions
