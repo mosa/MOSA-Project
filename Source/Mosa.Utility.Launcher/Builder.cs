@@ -28,7 +28,7 @@ namespace Mosa.Utility.Launcher
 
 		public DateTime CompileStartTime { get; private set; }
 
-		public bool HasCompileError { get; private set; }
+		public bool IsSucccessful { get; private set; }
 
 		public MosaLinker Linker { get; private set; }
 
@@ -50,7 +50,7 @@ namespace Mosa.Utility.Launcher
 		public void Build()
 		{
 			Counters.Clear();
-			HasCompileError = true;
+			IsSucccessful = false;
 
 			CompileStartTime = DateTime.Now;
 
@@ -91,11 +91,11 @@ namespace Mosa.Utility.Launcher
 					GenerateASMFile();
 				}
 
-				HasCompileError = false;
+				IsSucccessful = true;
 			}
 			catch (Exception e)
 			{
-				HasCompileError = true;
+				IsSucccessful = false;
 				Output($"Exception: {e.ToString()}");
 			}
 			finally

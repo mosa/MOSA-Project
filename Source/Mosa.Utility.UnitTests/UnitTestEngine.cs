@@ -289,7 +289,7 @@ namespace Mosa.Utility.UnitTests
 			TypeSystem = builder.TypeSystem;
 			Settings = builder.Settings;
 
-			return !builder.HasCompileError;
+			return builder.IsSucccessful;
 		}
 
 		private CompilerHooks CreateCompilerHook()
@@ -341,9 +341,14 @@ namespace Mosa.Utility.UnitTests
 
 			Settings.SetValue("Emulator.Serial.Port", Settings.GetValue("Emulator.Serial.Port", 11110) + 1);
 
-			Process = Starter.Launch();
-
-			return Process != null || !Process.HasExited;
+			if (Starter.Launch())
+			{
+				return Starter.Process != null || !Starter.Process.HasExited;
+			}
+			else
+			{
+				return false;
+			}
 		}
 
 		public bool ConnectToDebugEngine()

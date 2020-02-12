@@ -193,7 +193,7 @@ namespace Mosa.Tool.Launcher
 				}
 				finally
 				{
-					if (Builder != null && !Builder.HasCompileError)
+					if (Builder != null && Builder.IsSucccessful)
 					{
 						OnCompileCompleted();
 					}

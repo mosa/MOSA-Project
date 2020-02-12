@@ -35,9 +35,9 @@ namespace Mosa.Tool.Launcher.Console
 
 				Builder.Build();
 
-				if (Builder.HasCompileError)
+				if (!Builder.IsSucccessful)
 				{
-					NotifyStatus($"A build error has occurred.");
+					NotifyStatus($"Aborting! A build error has occurred.");
 					return 1;
 				}
 				else
@@ -46,7 +46,11 @@ namespace Mosa.Tool.Launcher.Console
 					{
 						var starter = new Starter(Builder.Settings, compilerHooks, Builder.Linker);
 
-						starter.Launch();
+						if (!starter.Launch())
+						{
+							NotifyStatus($"Aborting! A launch error has occurred.");
+							return 1;
+						}
 					}
 				}
 			}

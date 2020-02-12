@@ -15,6 +15,10 @@ namespace Mosa.Utility.Launcher
 	{
 		public MosaLinker Linker { get; }
 
+		public bool IsSucccessful { get; private set; }
+
+		public Process Process { get; private set; }
+
 		public Starter(Settings settings, CompilerHooks compilerHooks)
 			: base(settings, compilerHooks)
 		{
@@ -26,33 +30,46 @@ namespace Mosa.Utility.Launcher
 			Linker = linker;
 		}
 
-		public Process Launch()
+		public bool Launch()
 		{
-			var process = LaunchVM();
+			IsSucccessful = false;
+			Process = null;
 
-			if (LauncherSettings.LauncherTest)
+			try
 			{
-				MonitorTest(process, 5000, "<SELFTEST:PASSED>");
-				return process;
+				Process = LaunchVM();
+
+				if (LauncherSettings.LauncherTest)
+				{
+					IsSucccessful = true;
+					MonitorTest(Process, 5000, "<SELFTEST:PASSED>");
+				}
+
+				if (LauncherSettings.LaunchDebugger)
+				{
+					LaunchDebugger();
+					IsSucccessful = true;
+				}
+
+				if (LauncherSettings.LaunchGDB)
+				{
+					LaunchGDB();
+					IsSucccessful = true;
+				}
+
+				if (!LauncherSettings.LauncherExit)
+				{
+					var output = GetOutput(Process);
+					Output(output);
+				}
+			}
+			catch (Exception e)
+			{
+				IsSucccessful = false;
+				Output($"Exception: {e.ToString()}");
 			}
 
-			if (LauncherSettings.LaunchDebugger)
-			{
-				LaunchDebugger();
-			}
-
-			if (LauncherSettings.LaunchGDB)
-			{
-				LaunchGDB();
-			}
-
-			if (!LauncherSettings.LauncherExit)
-			{
-				var output = GetOutput(process);
-				Output(output);
-			}
-
-			return process;
+			return IsSucccessful;
 		}
 
 		private bool MonitorTest(Process process, int timeoutMS, string successText)
