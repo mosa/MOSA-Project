@@ -331,6 +331,8 @@ namespace Mosa.Utility.UnitTests
 
 		public bool LaunchVirtualMachine()
 		{
+			Process = null;
+
 			if (Starter == null)
 			{
 				var compilerHook = CreateCompilerHook();
@@ -341,14 +343,18 @@ namespace Mosa.Utility.UnitTests
 
 			Settings.SetValue("Emulator.Serial.Port", Settings.GetValue("Emulator.Serial.Port", 11110) + 1);
 
-			if (Starter.Launch())
-			{
-				return Starter.Process != null || !Starter.Process.HasExited;
-			}
-			else
-			{
+			if (!Starter.Launch())
 				return false;
-			}
+
+			if (Starter.Process == null)
+				return false;
+
+			if (Starter.Process.HasExited)
+				return false;
+
+			Process = Starter.Process;
+
+			return true;
 		}
 
 		public bool ConnectToDebugEngine()
@@ -453,8 +459,8 @@ namespace Mosa.Utility.UnitTests
 					}
 					else
 					{
-						KillVirtualMachine();
 						Console.WriteLine("> Failed");
+						KillVirtualMachine();
 					}
 
 					Thread.Sleep(250);

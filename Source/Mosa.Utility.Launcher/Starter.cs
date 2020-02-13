@@ -41,20 +41,18 @@ namespace Mosa.Utility.Launcher
 
 				if (LauncherSettings.LauncherTest)
 				{
-					IsSucccessful = true;
-					MonitorTest(Process, 5000, "<SELFTEST:PASSED>");
+					IsSucccessful = MonitorTest(Process, 5000, "<SELFTEST:PASSED>");
+					return IsSucccessful;
 				}
 
 				if (LauncherSettings.LaunchDebugger)
 				{
 					LaunchDebugger();
-					IsSucccessful = true;
 				}
 
 				if (LauncherSettings.LaunchGDB)
 				{
 					LaunchGDB();
-					IsSucccessful = true;
 				}
 
 				if (!LauncherSettings.LauncherExit)
@@ -62,10 +60,13 @@ namespace Mosa.Utility.Launcher
 					var output = GetOutput(Process);
 					Output(output);
 				}
+
+				IsSucccessful = true;
 			}
 			catch (Exception e)
 			{
 				IsSucccessful = false;
+				Process = null;
 				Output($"Exception: {e.ToString()}");
 			}
 
