@@ -115,8 +115,9 @@ MOSA is licensed under the `New BSD License <http://en.wikipedia.org/wiki/New_BS
 
 .. toctree::
    :maxdepth: 2
+   :hidden:
 
-   intro
+   index
    faq
    tools
    tool-compiler
