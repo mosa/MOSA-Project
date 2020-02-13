@@ -15,6 +15,10 @@ namespace Mosa.Utility.Launcher
 	{
 		public MosaLinker Linker { get; }
 
+		public bool IsSucccessful { get; private set; }
+
+		public Process Process { get; private set; }
+
 		public Starter(Settings settings, CompilerHooks compilerHooks)
 			: base(settings, compilerHooks)
 		{
@@ -26,33 +30,47 @@ namespace Mosa.Utility.Launcher
 			Linker = linker;
 		}
 
-		public Process Launch()
+		public bool Launch()
 		{
-			var process = LaunchVM();
+			IsSucccessful = false;
+			Process = null;
 
-			if (LauncherSettings.MonitorTest)
+			try
 			{
-				MonitorTest(process, 5000, "<SELFTEST:PASSED>");
-				return process;
+				Process = LaunchVM();
+
+				if (LauncherSettings.LauncherTest)
+				{
+					IsSucccessful = MonitorTest(Process, 5000, "<SELFTEST:PASSED>");
+					return IsSucccessful;
+				}
+
+				if (LauncherSettings.LaunchDebugger)
+				{
+					LaunchDebugger();
+				}
+
+				if (LauncherSettings.LaunchGDB)
+				{
+					LaunchGDB();
+				}
+
+				if (!LauncherSettings.LauncherExit)
+				{
+					var output = GetOutput(Process);
+					Output(output);
+				}
+
+				IsSucccessful = true;
+			}
+			catch (Exception e)
+			{
+				IsSucccessful = false;
+				Process = null;
+				Output($"Exception: {e.ToString()}");
 			}
 
-			if (LauncherSettings.LaunchDebugger)
-			{
-				LaunchDebugger();
-			}
-
-			if (LauncherSettings.LaunchGDB)
-			{
-				LaunchGDB();
-			}
-
-			if (!LauncherSettings.LauncherExit)
-			{
-				var output = GetOutput(process);
-				Output(output);
-			}
-
-			return process;
+			return IsSucccessful;
 		}
 
 		private bool MonitorTest(Process process, int timeoutMS, string successText)
@@ -136,13 +154,13 @@ namespace Mosa.Utility.Launcher
 
 			//arg = arg + " -vga vmware";
 
-			if (!LauncherSettings.EmulatorDisplay || LauncherSettings.MonitorTest)
+			if (!LauncherSettings.EmulatorDisplay || LauncherSettings.LauncherTest)
 			{
 				arg.Append(" -display none");
 			}
 
 			// COM1 = Kernel Log
-			if (LauncherSettings.MonitorTest)
+			if (LauncherSettings.LauncherTest)
 			{
 				arg.Append(" -serial stdio");
 			}

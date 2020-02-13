@@ -35,11 +35,23 @@ namespace Mosa.Tool.Launcher.Console
 
 				Builder.Build();
 
-				if (Settings.GetValue("Launcher.Launch", false))
+				if (!Builder.IsSucccessful)
 				{
-					var starter = new Starter(Builder.Settings, compilerHooks, Builder.Linker);
+					NotifyStatus($"Aborting! A build error has occurred.");
+					return 1;
+				}
+				else
+				{
+					if (Settings.GetValue("Launcher.Launch", false))
+					{
+						var starter = new Starter(Builder.Settings, compilerHooks, Builder.Linker);
 
-					starter.Launch();
+						if (!starter.Launch())
+						{
+							NotifyStatus($"Aborting! A launch error has occurred.");
+							return 1;
+						}
+					}
 				}
 			}
 			catch (Exception e)

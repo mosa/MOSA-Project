@@ -275,10 +275,10 @@ namespace Mosa.Utility.Launcher
 			set { Settings.SetValue("AppLocation.QemuImg", value); }
 		}
 
-		public bool MonitorTest
+		public bool LauncherTest
 		{
-			get { return Settings.GetValue("Launcher.MonitorTest", false); }
-			set { Settings.SetValue("Launcher.MonitorTest", value); }
+			get { return Settings.GetValue("Launcher.Test", false); }
+			set { Settings.SetValue("Launcher.Test", value); }
 		}
 
 		public List<string> SearchPaths { get { return Settings.GetValueList("SearchPaths"); } }

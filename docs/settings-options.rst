@@ -122,7 +122,7 @@ Launcher Settings
     Launcher.HuntForCorLib,"If true, search for CoreLib in various directories"
     Launcher.LaunchGDB,"If true, launch the GNU GDB application after VM launch"
     Launcher.LaunchDebugger,"If true, launch the MOSA debugger application after VM launch"
-    Launcher.MonitorTest,"If true, monitors VM serial for success of failure messages"
+    Launcher.Test,"If true, monitors VM serial for success or failure messages"
 
 Image Settings
 --------------
@@ -148,7 +148,7 @@ Emulator Settings
     Emulator,"Type of Emulator Qemu, VMware, Bochs"
     Emulator.Memory,Amount of memory for the virtual machine in MB
     Emulator.Display,"If true, show the video display"
-    Emulator.GDB,"If true, enable GDB within emulator"
+    Emulator.GDB,"If true, enables GDB within emulator"
     Emulator.Serial,"Serial Emulation type None, Pipe, TCPServer, TCPClient"
     Emulator.Serial.Host,Serial Host Name or IP address
     Emulator.Serial.Port,Serial Port
