@@ -117,7 +117,6 @@ MOSA is licensed under the `New BSD License <http://en.wikipedia.org/wiki/New_BS
    :maxdepth: 2
    :hidden:
 
-   index
    faq
    tools
    tool-compiler
