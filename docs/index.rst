@@ -134,4 +134,4 @@ MOSA is licensed under the `New BSD License <http://en.wikipedia.org/wiki/New_BS
    usb-flash-drive-installation
    get-involved
    authors
-   license
+   bsd-license
