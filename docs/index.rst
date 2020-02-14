@@ -85,11 +85,8 @@ Mac
 
 Install `Mono <http://www.mono-project.com>`__ and `Qemu <http://wiki.qemu.org/Main_Page>`__.
 
-Running
-=======
-
-Windows
--------
+Running on Windows
+==================
 
 Double click on the "Compile.bat" script in the root directory to compile all the tools, sample kernels, and demos.
 
@@ -113,12 +110,15 @@ License
 
 MOSA is licensed under the `New BSD License <http://en.wikipedia.org/wiki/New_BSD>`__.
 
+########
+Contents
+########
+
 .. toctree::
    :maxdepth: 1
    :hidden:
    :caption: Introduction
 
-   index
    faq
 
 .. toctree::
@@ -155,7 +155,7 @@ MOSA is licensed under the `New BSD License <http://en.wikipedia.org/wiki/New_BS
    :hidden:
    :caption: Advanced
 
-   tests
+   unit-tests
    usb-flash-drive-installation
 
 

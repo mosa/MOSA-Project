@@ -1,6 +1,6 @@
-#####
-Tests
-#####
+##########
+Unit Tests
+##########
 
 Execute the script ``RunAllUnitTestsWithPause.bat`` in the ``/Tests`` subdirectory. 
 
