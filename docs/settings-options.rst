@@ -194,7 +194,7 @@ Application Location Settings
    :header: "Settings", "Description"
    :widths: 50, 200
 
-    AppLocation.Bochs,Location of the BOCH application
+    AppLocation.Bochs,Location of the BOCHS application
     AppLocation.Qemu,Location of the QEMU application
     AppLocation.QemuBIOS,Location of the QEMU BIOS
     AppLocation.QemuImg,Location of the QEMUImg application

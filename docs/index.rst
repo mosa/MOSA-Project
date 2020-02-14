@@ -110,20 +110,18 @@ License
 
 MOSA is licensed under the `New BSD License <http://en.wikipedia.org/wiki/New_BSD>`__.
 
-########
-Contents
-########
+#############
+Documentation
+#############
 
 .. toctree::
    :maxdepth: 1
-   :hidden:
    :caption: Introduction
 
    faq
 
 .. toctree::
    :maxdepth: 2
-   :hidden:
    :caption: Compiler
 
    compiler-design
@@ -131,7 +129,6 @@ Contents
 
 .. toctree::
    :maxdepth: 1
-   :hidden:
    :caption: Settings
 
    settings-options
@@ -139,7 +136,6 @@ Contents
 
 .. toctree::
    :maxdepth: 2
-   :hidden:
    :caption: Tools
 
    tools
@@ -152,7 +148,6 @@ Contents
 
 .. toctree::
    :maxdepth: 1
-   :hidden:
    :caption: Advanced
 
    unit-tests
@@ -161,7 +156,6 @@ Contents
 
 .. toctree::
    :maxdepth: 1
-   :hidden:
    :caption: Contribute
 
    get-involved
