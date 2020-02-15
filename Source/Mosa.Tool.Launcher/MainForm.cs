@@ -222,11 +222,11 @@ namespace Mosa.Tool.Launcher
 				var starter = new Starter(Builder.Settings, compilerHooks, Builder.Linker);
 
 				starter.Launch();
-			}
 
-			if (Settings.GetValue("Launcher.Exit", false))
-			{
-				Application.Exit();
+				if (Settings.GetValue("Launcher.Exit", false))
+				{
+					Application.Exit();
+				}
 			}
 		}
 
@@ -264,6 +264,10 @@ namespace Mosa.Tool.Launcher
 						Settings.AddPropertyListValue("SearchPaths", path);
 					}
 				}
+			}
+			else
+			{
+				Settings.SetValue("Launcher.Start", false);
 			}
 		}
 
@@ -520,8 +524,8 @@ namespace Mosa.Tool.Launcher
 			lbDestinationDirectory.Text = Settings.GetValue("Image.Folder", string.Empty); ;
 
 			var sourcefiles = Settings.GetValueList("Compiler.SourceFiles");
-			var sourcefile = sourcefiles[0];
 
+			var sourcefile = sourcefiles == null ? null : sourcefiles[0];
 			string filename = sourcefiles != null && sourcefiles.Count >= 1 ? sourcefile : null;
 
 			//lbSourceDirectory.Text = (filename != null) ? Path.GetDirectoryName(filename) : string.Empty;

@@ -19,22 +19,22 @@ Output:
     Copyright 2020 by the MOSA Project. Licensed under the New BSD License.
 
     Parsing options...
-     > Output file: _main.exe
+     > Output file: Mosa.HelloWorld.x86.bin
      > Input file(s): Mosa.HelloWorld.x86.exe
      > Platform: x86
 
     Compiling ...
 
-    0.56 [0] Compile Started
-    0.59 [0] Setup Started
-    0.60 [0] Setup Completed
-    0.60 [0] Compiling Methods
-    2.97 [0] Compiling Methods Completed
-    2.97 [0] Finalization Started
-    3.06 [0] Linking Started
-    3.08 [0] Linking Completed
-    3.10 [0] Finalization Completed
-    3.10 [0] Compile Completed
+    0.38 [0] Compile Started
+    0.41 [0] Setup Started
+    0.42 [0] Setup Completed
+    0.42 [0] Compiling Methods
+    2.79 [0] Compiling Methods Completed
+    2.79 [0] Finalization Started
+    2.88 [0] Linking Started
+    2.89 [0] Linking Completed
+    2.92 [0] Finalization Completed
+    2.92 [0] Compile Completed
 
 Command Line Options
 --------------------

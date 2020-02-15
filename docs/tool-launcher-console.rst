@@ -32,5 +32,3 @@ Command Line Options
 
 See the :doc:`command line arguments<command-line-arguments>` for a list of available options. Here are the most common options available:
 
-
-
