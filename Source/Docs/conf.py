@@ -27,7 +27,7 @@ source_parsers = {
     '.md': CommonMarkParser,
 }
 
-master_doc = 'index'
+master_doc = 'default'
 project = u'Mosa Project Documentation'
 copyright = '2008-{}, Mosa Project & contributors'.format(
     2020
@@ -40,11 +40,11 @@ intersphinx_mapping = {
 }
 htmlhelp_basename = 'MosaDoc'
 latex_documents = [
-    ('index', 'mosa.tex', u'Mosa Project Documentation',
+    ('default', 'mosa.tex', u'Mosa Project Documentation',
      u'', 'manual'),
 ]
 man_pages = [
-    ('index', 'mosa', u'Mosa Project Documentation',
+    ('default', 'mosa', u'Mosa Project Documentation',
      [u''], 1)
 ]
 
