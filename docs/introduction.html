@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>MOSA Launcher &mdash; Mosa Project Documentation  documentation</title>
+  <title>Introduction &mdash; Mosa Project Documentation  documentation</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="_static/css/sphinx_prompt_css.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="MOSA Launcher Console" href="tool-launcher-console.html" />
-    <link rel="prev" title="MOSA Compiler" href="tool-compiler.html" /> 
+    <link rel="next" title="Getting Started" href="getting-started.html" />
+    <link rel="prev" title="Introduction" href="index.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -82,8 +82,11 @@
             
             
               <p class="caption"><span class="caption-text">Introduction</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#current-status">Current Status</a></li>
+</ul>
+</li>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
 </ul>
 <ul>
@@ -100,13 +103,10 @@
 <li class="toctree-l1"><a class="reference internal" href="command-line-arguments.html">Command Line Arguments</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tools</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">MOSA Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool-compiler.html">MOSA Compiler</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">MOSA Launcher</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#command-line-options">Command Line Options</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="tool-launcher.html">MOSA Launcher</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">MOSA Launcher Console</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool-explorer.html">MOSA Explorer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">MOSA Debugger</a></li>
@@ -167,13 +167,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>MOSA Launcher</li>
+      <li>Introduction</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/tool-launcher.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/introduction.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -186,21 +186,43 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="mosa-launcher">
-<h1>MOSA Launcher<a class="headerlink" href="#mosa-launcher" title="Permalink to this headline">¶</a></h1>
-<p>The <strong>MOSA Launcher</strong> is GUI application used to select various compiler and build options. Once options are select, the tool automates the entire build process including launching of a virtual machine.</p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>See <a class="reference internal" href="tool-launcher-console.html"><span class="doc">MOSA Launch</span></a> for a console version of this application.</p>
-</div>
-<p>The <strong>MOSA Launcher</strong> can be launched by executing <cite>Mosa.Tool.Launcher.exe</cite>.</p>
-<p>In addition, the tool can be launched from the command line with arguments:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Mosa.Tool.Launcher.exe Mosa.HelloWorld.x86.exe
-</pre></div>
-</div>
-<div class="section" id="command-line-options">
-<h2>Command Line Options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h2>
-<p>See the <a class="reference internal" href="command-line-arguments.html"><span class="doc">command line arguments</span></a> for a list of available options. Here are the most common options available:</p>
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this headline">¶</a></h1>
+<p>MOSA is an open source software project that natively executes .NET applications within a virtual hypervisor or on bare metal hardware!</p>
+<p>The MOSA project consists of:</p>
+<ul class="simple">
+<li><p>Compiler - a high quality, multithreaded, cross-platform, optimizing .NET compiler</p></li>
+<li><p>Kernel - a small kernel operating system</p></li>
+<li><p>Device Drivers Framework - a modular, device drivers framework and device drivers</p></li>
+<li><p>Debugger - QEMU-based debugger</p></li>
+</ul>
+<div class="section" id="current-status">
+<h2>Current Status<a class="headerlink" href="#current-status" title="Permalink to this headline">¶</a></h2>
+<p>The target platforms are:</p>
+<ul class="simple">
+<li><p>Intel X86/32-bit (stable)</p></li>
+<li><p>Intel X64 (in development)</p></li>
+<li><p>ARM v6 (in early development)</p></li>
+</ul>
+<p>The MOSA compiler supports nearly all and object oriented non-object oriented code, including:</p>
+<ul class="simple">
+<li><p>Generic Code (example: List&lt;T&gt;)</p></li>
+<li><p>Delegates (static and non-static) and with optional parameters</p></li>
+<li><p>Exception Handling (try, finally, and catch code blocks)</p></li>
+</ul>
+<p>The MOSA compiler seeks to provide high quality code generation using the following optimizations:</p>
+<ul class="simple">
+<li><p>Constant Folding and Propagation</p></li>
+<li><p>Strength Reduction optimization</p></li>
+<li><p>Dead Code Elimination</p></li>
+<li><p>Single Static Assignment (SSA)</p></li>
+<li><p>Global Value Numbering / Common Subexpession Elimination</p></li>
+<li><p>Sparse Conditional Constant Propagation</p></li>
+<li><p>Inlined Expansion</p></li>
+<li><p>Loop-Invariant Code Motion</p></li>
+<li><p>Block Reordering</p></li>
+<li><p>Greedy Register Allocation</p></li>
+</ul>
 </div>
 </div>
 
@@ -212,10 +234,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="tool-launcher-console.html" class="btn btn-neutral float-right" title="MOSA Launcher Console" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="getting-started.html" class="btn btn-neutral float-right" title="Getting Started" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="tool-compiler.html" class="btn btn-neutral float-left" title="MOSA Compiler" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

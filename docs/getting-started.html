@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>MOSA Launcher &mdash; Mosa Project Documentation  documentation</title>
+  <title>Getting Started &mdash; Mosa Project Documentation  documentation</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="_static/css/sphinx_prompt_css.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="MOSA Launcher Console" href="tool-launcher-console.html" />
-    <link rel="prev" title="MOSA Compiler" href="tool-compiler.html" /> 
+    <link rel="next" title="Frequently Asked Questions (FAQs)" href="faq.html" />
+    <link rel="prev" title="Introduction" href="introduction.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -82,9 +82,19 @@
             
             
               <p class="caption"><span class="caption-text">Introduction</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#download">Download</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#windows">Windows</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#linux">Linux</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#mac">Mac</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#running-on-windows">Running on Windows</a></li>
+</ul>
+</li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions (FAQs)</a></li>
@@ -100,13 +110,10 @@
 <li class="toctree-l1"><a class="reference internal" href="command-line-arguments.html">Command Line Arguments</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Tools</span></p>
-<ul class="current">
+<ul>
 <li class="toctree-l1"><a class="reference internal" href="tools.html">MOSA Tools</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool-compiler.html">MOSA Compiler</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">MOSA Launcher</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#command-line-options">Command Line Options</a></li>
-</ul>
-</li>
+<li class="toctree-l1"><a class="reference internal" href="tool-launcher.html">MOSA Launcher</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">MOSA Launcher Console</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool-explorer.html">MOSA Explorer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">MOSA Debugger</a></li>
@@ -167,13 +174,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>MOSA Launcher</li>
+      <li>Getting Started</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/tool-launcher.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/getting-started.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -186,21 +193,48 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="mosa-launcher">
-<h1>MOSA Launcher<a class="headerlink" href="#mosa-launcher" title="Permalink to this headline">¶</a></h1>
-<p>The <strong>MOSA Launcher</strong> is GUI application used to select various compiler and build options. Once options are select, the tool automates the entire build process including launching of a virtual machine.</p>
-<div class="admonition tip">
-<p class="admonition-title">Tip</p>
-<p>See <a class="reference internal" href="tool-launcher-console.html"><span class="doc">MOSA Launch</span></a> for a console version of this application.</p>
-</div>
-<p>The <strong>MOSA Launcher</strong> can be launched by executing <cite>Mosa.Tool.Launcher.exe</cite>.</p>
-<p>In addition, the tool can be launched from the command line with arguments:</p>
-<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Mosa.Tool.Launcher.exe Mosa.HelloWorld.x86.exe
+  <div class="section" id="getting-started">
+<h1>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="download">
+<h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
+<p>The MOSA project is available as a <a class="reference external" href="https://github.com/mosa/MOSA-Project/archive/master.zip">zip download</a> or via git:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/mosa/MOSA-Project.git
 </pre></div>
 </div>
-<div class="section" id="command-line-options">
-<h2>Command Line Options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h2>
-<p>See the <a class="reference internal" href="command-line-arguments.html"><span class="doc">command line arguments</span></a> for a list of available options. Here are the most common options available:</p>
+</div>
+<div class="section" id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
+<p>You will also need the following prerequisites:</p>
+<div class="section" id="windows">
+<h3>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h3>
+<p>Install any <a class="reference external" href="http://www.visualstudio.com">Visual Studio</a> version 2019 or newer. All editions are supported including the fully-featured free <a class="reference external" href="https://www.visualstudio.com/products/visual-studio-community-vs">Community Edition</a>.</p>
+<p>Note: The MOSA source code repository includes <a class="reference external" href="http://wiki.qemu.org/Main_Page">Qemu</a> virtual emulator for Windows.</p>
+<p>The <a class="reference external" href="http://www.codemaid.net">CodeMaid</a> Visual Studio Extension is strongly recommended for MOSA contributors.</p>
+</div>
+<div class="section" id="linux">
+<h3>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h3>
+<p>Install <a class="reference external" href="http://www.mono-project.com">Mono</a> and <a class="reference external" href="http://wiki.qemu.org/Main_Page">Qemu</a>.</p>
+<p>The minimum supported version of Mono is 5.16.</p>
+<p>If using the APT package manager you can use the following command to quickly set up QEMU and Mono:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt-get -y install mono-devel qemu qemu-system qemu-system-x86
+</pre></div>
+</div>
+</div>
+<div class="section" id="mac">
+<h3>Mac<a class="headerlink" href="#mac" title="Permalink to this headline">¶</a></h3>
+<p>Install <a class="reference external" href="http://www.mono-project.com">Mono</a> and <a class="reference external" href="http://wiki.qemu.org/Main_Page">Qemu</a>.</p>
+</div>
+</div>
+<div class="section" id="running-on-windows">
+<h2>Running on Windows<a class="headerlink" href="#running-on-windows" title="Permalink to this headline">¶</a></h2>
+<p>Double click on the “Compile.bat” script in the root directory to compile all the tools, sample kernels, and demos.</p>
+<p>Next double click on the “Launcher.bat” script, which will bring up the MOSA Launcher tool (screenshot below) that can:</p>
+<ul class="simple">
+<li><p>Compile the operating system</p></li>
+<li><p>Create a virtual disk image, with the compiled binary and boot loader</p></li>
+<li><p>Launch a virtual machine instance (QEMU by default)</p></li>
+</ul>
+<p>By default, the CoolWorld operating system demo is pre-selected. Click the “Compile and Run” button to compile and launch the demo.</p>
 </div>
 </div>
 
@@ -212,10 +246,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="tool-launcher-console.html" class="btn btn-neutral float-right" title="MOSA Launcher Console" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="faq.html" class="btn btn-neutral float-right" title="Frequently Asked Questions (FAQs)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="tool-compiler.html" class="btn btn-neutral float-left" title="MOSA Compiler" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
