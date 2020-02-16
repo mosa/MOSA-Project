@@ -115,28 +115,29 @@ Documentation
 #############
 
 .. toctree::
-   :maxdepth: 1
+   :hidden:
    :caption: Introduction
+   :maxdepth: 1
 
    faq
 
 .. toctree::
-   :maxdepth: 2
    :caption: Compiler
+   :maxdepth: 2
 
    compiler-design
    compiler-optimizations
 
 .. toctree::
-   :maxdepth: 1
    :caption: Settings
+   :maxdepth: 1
 
    settings-options
    command-line-arguments
 
 .. toctree::
-   :maxdepth: 2
    :caption: Tools
+   :maxdepth: 2
 
    tools
    tool-compiler
@@ -147,17 +148,17 @@ Documentation
    tool-boot-image
 
 .. toctree::
-   :maxdepth: 1
    :caption: Advanced
+   :maxdepth: 1
 
    unit-tests
    usb-flash-drive-installation
 
 
 .. toctree::
-   :maxdepth: 1
    :caption: Contribute
+   :maxdepth: 1
 
    get-involved
    authors
-   bsd-license
+   license

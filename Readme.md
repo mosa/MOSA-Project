@@ -58,7 +58,7 @@ The MOSA compiler seeks to provide high quality code generation using the follow
 * Single Static Assignment (SSA)
 * Global Value Numbering / Common Subexpession Elimination
 * Sparse Conditional Constant Propagation
-* Inlined Expansion
+* Inline Expansion
 * Loop-Invariant Code Motion
 * Block Reordering
 * Greedy Register Allocation
