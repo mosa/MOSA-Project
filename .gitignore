@@ -39,26 +39,15 @@ build.force
 /tags
 /.vs/
 .vs/
-/Tests/BootImage/
-/Installer/installer
 .gdb_history
 NuGetUpgradeLog.html
 MigrationBackup/
 .test/
-docs/build
-
-# NuGet Packages
-*.nupkg
-
-# The packages folder can be ignored because of Package Restore
-**/packages/*
-
-# except build/, which is used as an MSBuild target.
-!**/packages/build/
-/Source/Mosa.Tool.Explorer/Properties/launchSettings.json
-/Source/Mosa.Tool.GDBDebugger/Properties/launchSettings.json
-/Source/Mosa.Tool.Launcher/Properties/launchSettings.json
-/Source/Mosa.Utility.UnitTests/Properties/launchSettings.json
-
 /Source/Docs/build
+/docs/build
 /docs/_sources
+**/packages/*
+/Source/*/Properties/launchSettings.json
+
+
+

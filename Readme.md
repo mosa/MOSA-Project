@@ -79,7 +79,7 @@ You will also need the following prerequisites:
 
 **Windows**
 
-Install any [Visual Studio](http://www.visualstudio.com) version 2018 or newer. All editions are supported including the fully-featured free [Community Edition](https://www.visualstudio.com/products/visual-studio-community-vs).
+Install any [Visual Studio](http://www.visualstudio.com) version 2019 or newer. All editions are supported including the fully-featured free [Community Edition](https://www.visualstudio.com/products/visual-studio-community-vs).
 
 Note: The MOSA source code repository includes [Qemu](http://wiki.qemu.org/Main_Page) virtual emulator for Windows.
 
@@ -91,7 +91,7 @@ Install [Mono](http://www.mono-project.com) and [Qemu](http://wiki.qemu.org/Main
 
 The minimum supported version of Mono is 5.16.
 
-If using the APT package manager you can use the following command to quickly set up QEMU and Mono
+If using the APT package manager you can use the following command to quickly set up QEMU and Mono:
 <pre>
 sudo apt-get -y install mono-devel qemu
 </pre>
