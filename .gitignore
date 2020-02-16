@@ -59,6 +59,7 @@ docs/build
 /Source/Mosa.Tool.GDBDebugger/Properties/launchSettings.json
 /Source/Mosa.Tool.Launcher/Properties/launchSettings.json
 /Source/Mosa.Utility.UnitTests/Properties/launchSettings.json
+
 /Source/Docs/build
 /Source/Docs/docs
 /docs/_sources

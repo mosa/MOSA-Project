@@ -27,16 +27,16 @@ source_parsers = {
     '.md': CommonMarkParser,
 }
 
-master_doc = 'default'
+master_doc = 'index'
 project = u'Mosa Project Documentation'
 copyright = '2008-{}, Mosa Project & contributors'.format(
     2020
 )
 
 exclude_patterns = ['_build']
-default_role = 'obj'
+index_role = 'obj'
 intersphinx_mapping = {
-    'mosa': ('http://docs.mosa-project.org/en/latest/', None),
+    'mosa': ('http://mosa.github.io/MOSA-Project', None),
 }
 htmlhelp_basename = 'MosaDoc'
 latex_documents = [
