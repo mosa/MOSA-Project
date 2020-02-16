@@ -1,0 +1,754 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Settings Options &mdash; Mosa Project Documentation  documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/css/sphinx_prompt_css.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Command Line Arguments" href="command-line-arguments.html" />
+    <link rel="prev" title="Compiler Optimizations" href="compiler-optimizations.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="default.html" class="icon icon-home"> Mosa Project Documentation
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions (FAQs)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Compiler</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="compiler-design.html">Compiler Design</a></li>
+<li class="toctree-l1"><a class="reference internal" href="compiler-optimizations.html">Compiler Optimizations</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Settings</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Settings Options</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#compiler-settings">Compiler Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#compiler-optimizations-settings">Compiler Optimizations Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#linker-settings">Linker Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#common-settings">Common Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#compiler-debug-settings">Compiler Debug Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#compiler-x86-settings">Compiler X86 Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#explorer-settings">Explorer Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#launcher-settings">Launcher Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#image-settings">Image Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#emulator-settings">Emulator Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#gdb-settings">GDB Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#multiboot-settings">Multiboot Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#debugger-settings">Debugger Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#application-location-settings">Application Location Settings</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#import-settings">Import Settings</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="command-line-arguments.html">Command Line Arguments</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Tools</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="tools.html">MOSA Tools</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-compiler.html">MOSA Compiler</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-launcher.html">MOSA Launcher</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">MOSA Launcher Console</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-explorer.html">MOSA Explorer</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">MOSA Debugger</a></li>
+<li class="toctree-l1"><a class="reference internal" href="tool-boot-image.html">MOSA Boot Image Tool</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Advanced</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="unit-tests.html">Unit Tests</a></li>
+<li class="toctree-l1"><a class="reference internal" href="usb-flash-drive-installation.html">USB Flash Drive Installation</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Contribute</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="get-involved.html">Get Involved</a></li>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+<li class="toctree-l1"><a class="reference internal" href="bsd-license.html">New BSD License</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="default.html">Mosa Project Documentation</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="default.html">Docs</a> &raquo;</li>
+        
+      <li>Settings Options</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/settings-options.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="settings-options">
+<h1>Settings Options<a class="headerlink" href="#settings-options" title="Permalink to this headline">¶</a></h1>
+<p>Here are the setting options for the compiler tools:</p>
+<div class="section" id="compiler-settings">
+<h2>Compiler Settings<a class="headerlink" href="#compiler-settings" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Settings</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Compiler.Platform</p></td>
+<td><p>Platform x86, x64, ARMv8A32</p></td>
+</tr>
+<tr class="row-odd"><td><p>Compiler.BaseAddress</p></td>
+<td><p>Base address of the compiled application</p></td>
+</tr>
+<tr class="row-even"><td><p>Compiler.TraceLevel</p></td>
+<td><p>Trace level for debugging</p></td>
+</tr>
+<tr class="row-odd"><td><p>Compiler.MethodScanner</p></td>
+<td><p>If true, enable the experimental method scanner</p></td>
+</tr>
+<tr class="row-even"><td><p>Compiler.Multithreading</p></td>
+<td><p>If true, enables multithreading during compiling process</p></td>
+</tr>
+<tr class="row-odd"><td><p>Compiler.Multithreading.MaxThreads</p></td>
+<td><p>Maximum number of threads used by the compiler</p></td>
+</tr>
+<tr class="row-even"><td><p>Compiler.Binary</p></td>
+<td><p>If true, emits object file, otherwise no object file is created</p></td>
+</tr>
+<tr class="row-odd"><td><p>Compiler.EmitInline</p></td>
+<td><p>If true, emits all inlined methods into the object file</p></td>
+</tr>
+<tr class="row-even"><td><p>Compiler.OutputFile</p></td>
+<td><p>Filename of the object file</p></td>
+</tr>
+<tr class="row-odd"><td><p>Compiler.SourceFiles</p></td>
+<td><p>Filename(s) of the source files</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="compiler-optimizations-settings">
+<h2>Compiler Optimizations Settings<a class="headerlink" href="#compiler-optimizations-settings" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Settings</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Optimizations.Basic</p></td>
+<td><p>If true, enables prebuilt transformation optimizations, like constant folding and strength reduction</p></td>
+</tr>
+<tr class="row-odd"><td><p>Optimizations.SSA</p></td>
+<td><p>If true, transforms instructions to Single Static Assignment (SSA) form</p></td>
+</tr>
+<tr class="row-even"><td><p>Optimizations.SCCP</p></td>
+<td><p>If true, enables Sparse Conditional Constant Propagation (SCCP) optimizations</p></td>
+</tr>
+<tr class="row-odd"><td><p>Optimizations.ValueNumbering</p></td>
+<td><p>If true, enables the Value Numbering (VN) optimizations</p></td>
+</tr>
+<tr class="row-even"><td><p>Optimizations.LongExpansion</p></td>
+<td><p>If true, transforms some 64-bit instructions into 32-bit instructions prior to platform transformations</p></td>
+</tr>
+<tr class="row-odd"><td><p>Optimizations.BitTracker</p></td>
+<td><p>If true, enables the bit tracker optimizations</p></td>
+</tr>
+<tr class="row-even"><td><p>Optimizations.LoopInvariantCodeMotion</p></td>
+<td><p>If true, enables the loop invariant code motion optimizations</p></td>
+</tr>
+<tr class="row-odd"><td><p>Optimizations.Devirtualization</p></td>
+<td><p>If true, transforms virtual methods calls into static method calls</p></td>
+</tr>
+<tr class="row-even"><td><p>Optimizations.Platform</p></td>
+<td><p>If true, enable platform specific optimizations</p></td>
+</tr>
+<tr class="row-odd"><td><p>Optimizations.Inline</p></td>
+<td><p>If true, small methods can be inlined</p></td>
+</tr>
+<tr class="row-even"><td><p>Optimizations.Inline.Maximum</p></td>
+<td><p>Maximun number of instructions that can be inlined within a method</p></td>
+</tr>
+<tr class="row-odd"><td><p>Optimizations.Inline.AggressiveMaximum</p></td>
+<td><p>Maximun number of instructions that can be inlined when a method is explicited marked to be inlined</p></td>
+</tr>
+<tr class="row-even"><td><p>Optimizations.Inline.ExplicitOnly</p></td>
+<td><p>If true, only explicitly marked methods are inlined</p></td>
+</tr>
+<tr class="row-odd"><td><p>Optimizations.TwoPass</p></td>
+<td><p>If true, some optimization stages are executed twice</p></td>
+</tr>
+<tr class="row-even"><td><p>Optimizations.Inline.Aggressive</p></td>
+<td><p>Methods to be aggressively inline</p></td>
+</tr>
+<tr class="row-odd"><td><p>Optimizations.Inline.Exclude</p></td>
+<td><p>Methods that may not be inlined</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="linker-settings">
+<h2>Linker Settings<a class="headerlink" href="#linker-settings" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Settings</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Linker.Format</p></td>
+<td><p>Type of ELF object file elf32 or elf64</p></td>
+</tr>
+<tr class="row-odd"><td><p>Linker.Symbols</p></td>
+<td><p>If true, emits the symbols into the object  file</p></td>
+</tr>
+<tr class="row-even"><td><p>Linker.StaticRelocations</p></td>
+<td><p>If true, emits static relocation information into the object file</p></td>
+</tr>
+<tr class="row-odd"><td><p>Linker.Drawf</p></td>
+<td><p>If true, emits DWARF debug information into the object file</p></td>
+</tr>
+<tr class="row-even"><td><p>Linker.ShortSymbolNames</p></td>
+<td><p>If true, emits short symbol names into the object file</p></td>
+</tr>
+<tr class="row-odd"><td><p>Linker.CustomSections.{Name}.SectionName</p></td>
+<td><p>Emits a custom linker section with this section name</p></td>
+</tr>
+<tr class="row-even"><td><p>Linker.CustomSections.{Name}.SourceFile</p></td>
+<td><p>Emits a custom linker section using the specific file</p></td>
+</tr>
+<tr class="row-odd"><td><p>Linker.CustomSections.{Name}.Address</p></td>
+<td><p>Emits a custom linker section with this address</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="common-settings">
+<h2>Common Settings<a class="headerlink" href="#common-settings" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Settings</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>SearchPaths</p></td>
+<td><p>Folder to search for files</p></td>
+</tr>
+<tr class="row-odd"><td><p>DefaultFolder</p></td>
+<td><p>Default folder to output files</p></td>
+</tr>
+<tr class="row-even"><td><p>TemporaryFolder</p></td>
+<td><p>Specifies a temporary folder</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="compiler-debug-settings">
+<h2>Compiler Debug Settings<a class="headerlink" href="#compiler-debug-settings" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Settings</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>CompilerDebug.Statistics</p></td>
+<td><p>If true, enables statistics gathering</p></td>
+</tr>
+<tr class="row-odd"><td><p>CompilerDebug.DebugFile</p></td>
+<td><p>Filename to emit a MOSA specific debug information</p></td>
+</tr>
+<tr class="row-even"><td><p>CompilerDebug.MapFile</p></td>
+<td><p>Filename to emit a map of all symbols</p></td>
+</tr>
+<tr class="row-odd"><td><p>CompilerDebug.CompileTimeFile</p></td>
+<td><p>Filename to emit compile times for each method</p></td>
+</tr>
+<tr class="row-even"><td><p>CompilerDebug.AsmFile</p></td>
+<td><p>Filename to emit ASM disassembly</p></td>
+</tr>
+<tr class="row-odd"><td><p>CompilerDebug.NasmFile</p></td>
+<td><p>Filename to emit disassembly using the NASM tool</p></td>
+</tr>
+<tr class="row-even"><td><p>CompilerDebug.InlinedFile</p></td>
+<td><p>Filename to emit a list of all methods that were inlined</p></td>
+</tr>
+<tr class="row-odd"><td><p>CompilerDebug.PreLinkHashFile</p></td>
+<td><p>Filename to emit a list of all methods with their hash value prior to linking</p></td>
+</tr>
+<tr class="row-even"><td><p>CompilerDebug.PostLinkHashFile</p></td>
+<td><p>Filename to emit a list of all methods with their hash value after linking</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="compiler-x86-settings">
+<h2>Compiler X86 Settings<a class="headerlink" href="#compiler-x86-settings" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Settings</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>X86.InterruptMethodName</p></td>
+<td><p>Name of the method that handles interrupts</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="explorer-settings">
+<h2>Explorer Settings<a class="headerlink" href="#explorer-settings" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Settings</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Explorer.Filter</p></td>
+<td><p>Specifies the default method filter name when Explorer is launched</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="launcher-settings">
+<h2>Launcher Settings<a class="headerlink" href="#launcher-settings" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Settings</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Launcher.Start</p></td>
+<td><p>If true, immediately start the compiler upon launch</p></td>
+</tr>
+<tr class="row-odd"><td><p>Launcher.Launch</p></td>
+<td><p>If true, launch a virtual machine after compiling the application and generating the virtual machine image</p></td>
+</tr>
+<tr class="row-even"><td><p>Launcher.Exit</p></td>
+<td><p>If true, exit immediately after launch</p></td>
+</tr>
+<tr class="row-odd"><td><p>Launcher.PlugKorlib</p></td>
+<td><p>If true, automatically include the plugs for CoreLib</p></td>
+</tr>
+<tr class="row-even"><td><p>Launcher.HuntForCorLib</p></td>
+<td><p>If true, search for CoreLib in various directories</p></td>
+</tr>
+<tr class="row-odd"><td><p>Launcher.LaunchGDB</p></td>
+<td><p>If true, launch the GNU GDB application after VM launch</p></td>
+</tr>
+<tr class="row-even"><td><p>Launcher.LaunchDebugger</p></td>
+<td><p>If true, launch the MOSA debugger application after VM launch</p></td>
+</tr>
+<tr class="row-odd"><td><p>Launcher.Test</p></td>
+<td><p>If true, monitors VM serial for success or failure messages</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="image-settings">
+<h2>Image Settings<a class="headerlink" href="#image-settings" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Settings</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Image.Format</p></td>
+<td><p>Format of the vritual image file BIN, IMG, VHD, VDI, ISO, VMDK</p></td>
+</tr>
+<tr class="row-odd"><td><p>Image.FileSystem</p></td>
+<td><p>File system of the primary partition in the image file FAT12, FAT16, FAT32, ISO????</p></td>
+</tr>
+<tr class="row-even"><td><p>Image.BootLoader</p></td>
+<td><p>Type of bootloader grub0.97, grub2.00, syslinux6.03, syslinux3.72</p></td>
+</tr>
+<tr class="row-odd"><td><p>Image.Destination</p></td>
+<td><p>Destination directory of the image file</p></td>
+</tr>
+<tr class="row-even"><td><p>Image.ImageFile</p></td>
+<td><p>Filename of the image file</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="emulator-settings">
+<h2>Emulator Settings<a class="headerlink" href="#emulator-settings" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Settings</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Emulator</p></td>
+<td><p>Type of Emulator Qemu, VMware, Bochs</p></td>
+</tr>
+<tr class="row-odd"><td><p>Emulator.Memory</p></td>
+<td><p>Amount of memory for the virtual machine in MB</p></td>
+</tr>
+<tr class="row-even"><td><p>Emulator.Display</p></td>
+<td><p>If true, show the video display</p></td>
+</tr>
+<tr class="row-odd"><td><p>Emulator.GDB</p></td>
+<td><p>If true, enables GDB within emulator</p></td>
+</tr>
+<tr class="row-even"><td><p>Emulator.Serial</p></td>
+<td><p>Serial Emulation type None, Pipe, TCPServer, TCPClient</p></td>
+</tr>
+<tr class="row-odd"><td><p>Emulator.Serial.Host</p></td>
+<td><p>Serial Host Name or IP address</p></td>
+</tr>
+<tr class="row-even"><td><p>Emulator.Serial.Port</p></td>
+<td><p>Serial Port</p></td>
+</tr>
+<tr class="row-odd"><td><p>Emulator.Serial.Pipe</p></td>
+<td><p>Serial Pipename</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="gdb-settings">
+<h2>GDB Settings<a class="headerlink" href="#gdb-settings" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Settings</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>GDB.Host</p></td>
+<td><p>Host IP or Name for GDB</p></td>
+</tr>
+<tr class="row-odd"><td><p>GDB.Port</p></td>
+<td><p>Port Number for GDB</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="multiboot-settings">
+<h2>Multiboot Settings<a class="headerlink" href="#multiboot-settings" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Settings</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Multiboot.Version</p></td>
+<td><p>Multiboot version none, v1, v2</p></td>
+</tr>
+<tr class="row-odd"><td><p>Multiboot.Video</p></td>
+<td><p>If true, enable VGA BIOS Extension (VBE)</p></td>
+</tr>
+<tr class="row-even"><td><p>Multiboot.Video.Width</p></td>
+<td><p>Video Width</p></td>
+</tr>
+<tr class="row-odd"><td><p>Multiboot.Video.Height</p></td>
+<td><p>Video Height</p></td>
+</tr>
+<tr class="row-even"><td><p>Multiboot.Video.Depth</p></td>
+<td><p>Video Depth</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="debugger-settings">
+<h2>Debugger Settings<a class="headerlink" href="#debugger-settings" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Settings</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Debugger.WatchFile</p></td>
+<td><p>Filename of the watch file</p></td>
+</tr>
+<tr class="row-odd"><td><p>Debugger.BreakpointFile</p></td>
+<td><p>Filename of the breakpoint file</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="application-location-settings">
+<h2>Application Location Settings<a class="headerlink" href="#application-location-settings" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Settings</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>AppLocation.Bochs</p></td>
+<td><p>Location of the BOCHS application</p></td>
+</tr>
+<tr class="row-odd"><td><p>AppLocation.Qemu</p></td>
+<td><p>Location of the QEMU application</p></td>
+</tr>
+<tr class="row-even"><td><p>AppLocation.QemuBIOS</p></td>
+<td><p>Location of the QEMU BIOS</p></td>
+</tr>
+<tr class="row-odd"><td><p>AppLocation.QemuImg</p></td>
+<td><p>Location of the QEMUImg application</p></td>
+</tr>
+<tr class="row-even"><td><p>AppLocation.VmwarePlayer</p></td>
+<td><p>Location of the VMPlayer application</p></td>
+</tr>
+<tr class="row-odd"><td><p>AppLocation.Ndisasm</p></td>
+<td><p>Location of the Ndisasm application</p></td>
+</tr>
+<tr class="row-even"><td><p>AppLocation.Mkisofs</p></td>
+<td><p>Location of the Mkisofs application</p></td>
+</tr>
+<tr class="row-odd"><td><p>AppLocation.GDB</p></td>
+<td><p>Location of the QEMU application</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="import-settings">
+<h2>Import Settings<a class="headerlink" href="#import-settings" title="Permalink to this headline">¶</a></h2>
+<table class="colwidths-given docutils align-default">
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 80%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Settings</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Import</p></td>
+<td><p>Filename of another settings file to import</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="command-line-arguments.html" class="btn btn-neutral float-right" title="Command Line Arguments" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="compiler-optimizations.html" class="btn btn-neutral float-left" title="Compiler Optimizations" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2008-2020, Mosa Project &amp; contributors
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
