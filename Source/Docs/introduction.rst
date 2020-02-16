@@ -1,3 +1,6 @@
+
+.. include:: build-status.rst
+
 ############
 Introduction
 ############

@@ -114,9 +114,9 @@ Next double click on the "Launcher.bat" script, which will bring up the MOSA Lau
 
 By default, the CoolWorld operating system demo is pre-selected. Click the "Compile and Run" button to compile and launch the demo.
 
-![MOSA Launcher](Documentation/Screenshots/MOSA%20Launcher.png)
+![MOSA Launcher](Source/Docs/images/mosa-launcher.png)
 
-![MOSA CoolWorld Demo](Documentation/Screenshots/MOSA%20QEMU%20CoolWorld.png)
+![MOSA CoolWorld Demo](Source/Docs/images/Mmosa-coolworld.png)
 
 ### Join the Discussion
 
