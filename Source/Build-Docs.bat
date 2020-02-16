@@ -2,7 +2,7 @@ cd Docs
 
 call make html
 
-rmdir /S ../../docs
+rmdir /S /Q ..\..\docs
 
 cd build
 rename html docs
