@@ -19,20 +19,19 @@ The **Method Compiler Pipeline** is used to compile a single method by progressi
 All the stages can be grouped into one or more of these categories:
 
 Decoding Stage
-  Creates an instruction stream for a method from the source representation, such as a method from a .NET application 
+	Creates an instruction stream for a method from the source representation, such as a method from a .NET application 
 
 Transformation Stages
-  Transforms the instruction stream between various representations, usually from a higher level to a lower level representations
+	Transforms the instruction stream between various representations, usually from a higher level to a lower level representations
 
 Optimization Stages
-  Transforms instructions intended to optimize the code to execute faster
+	Transforms instructions intended to optimize the code to execute faster
 
 Register Allocation Stage
-  Allocates the virtual registers in the instruction stream to platform specific physical registers
+	Allocates the virtual registers in the instruction stream to platform specific physical registers
 
 Platform Specific Transformation Stages
-  Transforms the instructions in the stream into specific platform opcodes
-
+	Transforms the instructions in the stream into specific platform opcodes
 
 Intermediate Representations
 ----------------------------

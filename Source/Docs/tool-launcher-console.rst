@@ -30,5 +30,9 @@ A quick example that compiles `Mosa.TestWorld.x86.exe` demo with `-oMax` (all op
 Command Line Options
 --------------------
 
-See the :doc:`command line arguments<command-line-arguments>` for a list of available options. Here are the most common options available:
+See the :doc:`command line arguments<command-line-arguments>` for a list of available options.
 
+Here are the most common options available:
+
+`-autostart-off`
+	Does not immediate start the compiler

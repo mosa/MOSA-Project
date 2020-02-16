@@ -10,4 +10,4 @@ move docs ../../../docs
 
 cd ../..
 
-echo "" > ..\docs\.nojekyll
+echo ''> ..\docs\.nojekyll
