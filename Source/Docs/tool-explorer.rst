@@ -12,9 +12,14 @@ In addition, the tool can be launched from the command line with arguments:
 
 .. code-block:: text
 
-	Mosa.Tool.Explorer.exe Mosa.HelloWorld.x86.exe
+	Mosa.Tool.Explorer.exe Mosa.HelloWorld.x86.exe -filter System.String::get_Length
 
 Command Line Options
 --------------------
 
-See the :doc:`command line arguments<command-line-arguments>` for a list of available options. Here are the most common options available:
+See the :doc:`command line arguments<command-line-arguments>` for a list of available options.
+
+Here are the most common options available:
+
+`-filter`
+	Specifies the default method filter name when Explorer is launched

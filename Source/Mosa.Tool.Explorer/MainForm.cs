@@ -198,6 +198,15 @@ namespace Mosa.Tool.Explorer
 			Text = "MOSA Explorer v" + CompilerVersion.VersionString;
 
 			SetStatus("Ready!");
+
+			var sourcefiles = Settings.GetValueList("Compiler.SourceFiles");
+
+			if (sourcefiles != null && sourcefiles.Count >= 1)
+			{
+				UpdateSettings(Path.GetFullPath(sourcefiles[0]));
+
+				LoadAssembly();
+			}
 		}
 
 		private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
@@ -980,15 +989,6 @@ namespace Mosa.Tool.Explorer
 			Settings.Merge(arguments);
 
 			UpdateDisplay();
-
-			var sourcefiles = Settings.GetValueList("Compiler.SourceFiles");
-
-			if (sourcefiles != null && sourcefiles.Count >= 1)
-			{
-				UpdateSettings(Path.GetFullPath(sourcefiles[0]));
-
-				LoadAssembly();
-			}
 		}
 
 		private void SetDefaultSettings()
