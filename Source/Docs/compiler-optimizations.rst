@@ -33,10 +33,10 @@ Block Reordering
   Basic block reordering organizaze block of instructions to maximize the number of fall-through branches.
 
 Greedy Register Allocation
-  Greed Register Allocation is a form of register allocation that allocates registers based on live ranges and spill weights. 
+  Greedy Register Allocation is a form of register allocation that allocates registers based on live ranges and spill weights. 
 
 Long Expansion
-  Expands 64-bit instructions into 32-bit components for platforms without native 64-bit instructions.
+  Long expansion is the transformation of 64-bit instructions into 32-bit components for platforms without native 64-bit instructions. This may result in further optimization opportunities.
 
 Two Pass Optimizations
   This options causes the optimization stages to be executed again, possibility unlocked additional optimizations.
