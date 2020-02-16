@@ -13,6 +13,9 @@ Join us on `Gitter chat <https://gitter.im/mosa/MOSA-Project>`__. This is the mo
 License
 *******
 
-MOSA is licensed under the `New BSD License <http://en.wikipedia.org/wiki/New_BSD>`__.
+MOSA is licensed under the :doc:`New BSD License <license>`.
 
 .. include:: contents.txt
+
+
+

@@ -28,7 +28,7 @@ source_parsers = {
 }
 
 master_doc = 'index'
-project = u'Mosa Project Documentation'
+project = u'Mosa Project'
 copyright = '2008-{}, Mosa Project & contributors'.format(
     2020
 )
@@ -36,15 +36,15 @@ copyright = '2008-{}, Mosa Project & contributors'.format(
 exclude_patterns = ['_build']
 index_role = 'obj'
 intersphinx_mapping = {
-    'mosa': ('http://mosa.github.io/MOSA-Project', None),
+    'mosa': ('http://www.mosa-project.org/', None),
 }
 htmlhelp_basename = 'MosaDoc'
 latex_documents = [
-    ('default', 'mosa.tex', u'Mosa Project Documentation',
+    ('default', 'mosa.tex', u'Mosa Project',
      u'', 'manual'),
 ]
 man_pages = [
-    ('default', 'mosa', u'Mosa Project Documentation',
+    ('default', 'mosa', u'Mosa Project',
      [u''], 1)
 ]
 
