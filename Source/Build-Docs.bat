@@ -10,3 +10,4 @@ move docs ../../../docs
 
 cd ../..
 
+echo "" > ..\docs\.nojekyll
