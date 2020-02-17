@@ -21,7 +21,7 @@
 	</ItemGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<StartAction>Program</StartAction>
-		<StartProgram>C:\Program Files (x86)\MOSA-Project\bin\Mosa.Tool.Bootstrap.exe</StartProgram>
+		<StartProgram>C:\Program Files (x86)\MOSA-Project\tools\Mosa.Tool.Bootstrap.exe</StartProgram>
 		<StartArguments>$safeprojectname$.exe</StartArguments>
 	</PropertyGroup>
 </Project>
