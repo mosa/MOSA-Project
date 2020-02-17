@@ -15,24 +15,13 @@
 	<ItemGroup>
 		<PackageReference Include="Mosa.Korlib" Version="*" />
 		<PackageReference Include="Mosa.Kernel.x86" Version="*" />
+		<PackageReference Include="Mosa.Platform.x86" Version="*" />
 		<PackageReference Include="Mosa.Runtime" Version="*" />
-		<PackageReference Include="Mosa.Runtime.x86" Version="*" />
 		<PackageReference Include="Mosa.Tools.Package" Version="*" />
-	</ItemGroup>
-	<ItemGroup>
-		<Reference Include="Mosa.Kernel.x86, Version=0.0.0.0, Culture=neutral">
-			<Private>True</Private>
-		</Reference>
-		<Reference Include="Mosa.Runtime, Version=0.0.0.0, Culture=neutral">
-			<Private>True</Private>
-		</Reference>
-		<Reference Include="Mosa.Runtime.x86, Version=0.0.0.0, Culture=neutral">
-			<Private>True</Private>
-		</Reference>
 	</ItemGroup>
 	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
 		<StartAction>Program</StartAction>
 		<StartProgram>C:\Program Files (x86)\MOSA-Project\bin\Mosa.Tool.Bootstrap.exe</StartProgram>
-		<StartArguments>--q --a $safeprojectname$.exe</StartArguments>
+		<StartArguments>$safeprojectname$.exe</StartArguments>
 	</PropertyGroup>
 </Project>

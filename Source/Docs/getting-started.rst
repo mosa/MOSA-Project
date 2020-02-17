@@ -46,12 +46,12 @@ Install `Mono <http://www.mono-project.com>`__ and `Qemu <http://wiki.qemu.org/M
 Running on Windows
 ==================
 
-Double click on the "Compile.bat" script in the root directory to compile all the tools, sample kernels, and demos.
+Double click on the ``Compile.bat`` script in the root directory to compile all the tools, sample kernels, and demos.
 
-Next double click on the "Launcher.bat" script, which will bring up the MOSA Launcher tool (screenshot below) that can:
+Next double click on the ``Launcher.bat`` script, which will bring up the :doc:`MOSA Launcher Tool<tool-launcher>` that can:
 
 - Compile the operating system
 - Create a virtual disk image, with the compiled binary and boot loader
-- Launch a virtual machine instance (QEMU by default)
+- Launch a virtual machine instance (using QEMU by default)
 
-By default, the CoolWorld operating system demo is pre-selected. Click the "Compile and Run" button to compile and launch the demo.
+By default, the CoolWorld operating system demo is pre-selected. Click the ``Compile and Run`` button to compile and launch the demo.
