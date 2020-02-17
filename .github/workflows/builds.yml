@@ -32,7 +32,7 @@ jobs:
       - name: Create Installer
         run: ISCC.exe /DMyAppVersion=${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }} Source/Inno-Setup-Script/Mosa-Installer.iss
       - name: Create Package - Mosa.Tools.Package
-        run: nuget pack Source\Mosa.Packages\Mosa.Tools.Package.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}
+        run: nuget pack Source\Mosa.Packages\Mosa.Tools.Package.nuspec -Tool -OutputDirectory bin\nupkg-Version ${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}
       - name: Create Package - Mosa.Korlib
         run: nuget pack Source\Mosa.Packages\Mosa.Korlib.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}
       - name: Create Package - Mosa.Runtime

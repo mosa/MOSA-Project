@@ -11,11 +11,12 @@
     <ProvideDefaultName>true</ProvideDefaultName>
     <LocationField>Enabled</LocationField>
     <EnableLocationBrowseButton>true</EnableLocationBrowseButton>
+    <CreateInPlace>true</CreateInPlace>
     <Icon>__TemplateIcon.ico</Icon>
   </TemplateData>
   <TemplateContent>
-    <Project ReplaceParameters="true" TargetFileName="$safeprojectname$.csproj" File="Mosa.Starter.x86.csproj">
-      <ProjectItem ReplaceParameters="true" TargetFileName="app.config">app.config</ProjectItem>
+    <Project TargetFileName="$safeprojectname$.csproj" File="$safeprojectname$.csproj" ReplaceParameters="true">
+      <Folder Name=".vs" TargetFolderName=".vs" />
       <ProjectItem ReplaceParameters="true" TargetFileName="Boot.cs">Boot.cs</ProjectItem>
       <ProjectItem ReplaceParameters="true" TargetFileName="Program.cs">Program.cs</ProjectItem>
     </Project>
