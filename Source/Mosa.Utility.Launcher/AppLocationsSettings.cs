@@ -36,6 +36,7 @@ namespace Mosa.Utility.Launcher
 					@"Tools\QEMU",
 					CombineParameterAndDirectory("ProgramFiles","qemu"),
 					CombineParameterAndDirectory("ProgramFiles(x86)","qemu"),
+					CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools\qemu"),
 					"/bin",
 					"/usr/bin"
 				},
@@ -61,7 +62,7 @@ namespace Mosa.Utility.Launcher
 					@"C:\cygwin\bin",
 					@"C:\mingw32\bin",
 					@"C:\mingw\bin",
-					CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools"),
+					CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools\gdb"),
 					"/bin"
 				},
 				new string[]
@@ -85,7 +86,7 @@ namespace Mosa.Utility.Launcher
 					CombineParameterAndDirectory("MOSA","mkisofs"),
 					@"..\Tools\mkisofs",
 					@"Tools\mkisofs",
-					CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools"),
+					CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools\mkisofs"),
 					"/bin"
 				},
 				new string[]
@@ -105,7 +106,7 @@ namespace Mosa.Utility.Launcher
 					CombineParameterAndDirectory("MOSA","ndisasm"),
 					@"..\Tools\ndisasm",
 					@"Tools\ndisasm",
-					CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools"),
+					CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools\ndisasm"),
 					"/bin"
 				},
 				new string[]
@@ -147,6 +148,7 @@ namespace Mosa.Utility.Launcher
 					CombineParameterAndDirectory("MOSA","Bochs"),
 					@"..\Tools\Bochs",
 					@"Tools\Bochs",
+					CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools\Bochs"),
 					"/bin",
 					"/usr/bin"
 				},
@@ -170,6 +172,7 @@ namespace Mosa.Utility.Launcher
 					@"Tools\QEMU",
 					CombineParameterAndDirectory("ProgramFiles", "qemu"),
 					CombineParameterAndDirectory("ProgramFiles(x86)", "qemu"),
+					CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools\qemu"),
 					"/bin"
 				},
 				new string[]
@@ -191,6 +194,8 @@ namespace Mosa.Utility.Launcher
 					new string[] {
 						Path.GetDirectoryName(qemu),
 						Path.Combine(Path.GetDirectoryName(qemu), "bios"),
+						CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools\qemu"),
+						CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools\qemu\bios"),
 						"/usr/share/qemu",
 						"/usr/share/seabios"
 					},
@@ -251,7 +256,7 @@ namespace Mosa.Utility.Launcher
 				}
 			}
 
-			return string.Empty;
+			return null;
 		}
 
 		private static bool TryFind(string file, string directory, out string location)

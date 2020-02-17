@@ -56,34 +56,43 @@ Source: "..\Mosa.VisualStudio.ProjectTemplate\MyTemplate.vstemplate"; DestDir: "
 Source: "..\Mosa.VisualStudio.ProjectTemplate\Program.cs"; DestDir: "{userdocs}\Visual Studio 2019\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
 Source: "..\Mosa.VisualStudio.ProjectTemplate\__TemplateIcon.ico"; DestDir: "{userdocs}\Visual Studio 2019\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
 
-Source: "..\..\bin\Mosa.Tool.Bootstrap.exe"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Compiler.Common.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Compiler.Framework.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Compiler.MosaTypeSystem.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Platform.ARMv8A32.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Platform.Intel.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Platform.x86.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Platform.x64.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Tool.Explorer.exe"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Tool.Debugger.exe"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Tool.Launcher.exe"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Tool.Compiler.exe"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Tool.Launcher.Console.exe"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Utility.BootImage.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Utility.Configuration.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Utility.DebugEngine.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Utility.FileSystem.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Utility.Launcher.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Utility.RSP.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\dnlib.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\SharpDisasm.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\CommandLine.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\Priority Queue.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\MetroFramework.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\MetroFramework.Design.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\MetroFramework.Fonts.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\WeifenLuo.WinFormsUI.Docking.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
-Source: "..\..\bin\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll"; DestDir: "{app}\tools"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Tool.Bootstrap.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Compiler.Common.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Compiler.Framework.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Compiler.MosaTypeSystem.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Platform.ARMv8A32.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Platform.Intel.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Platform.x86.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Platform.x64.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Tool.Explorer.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Tool.Debugger.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Tool.Launcher.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Tool.Compiler.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Tool.Launcher.Console.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Utility.BootImage.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Utility.Configuration.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Utility.DebugEngine.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Utility.FileSystem.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Utility.Launcher.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Utility.RSP.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\dnlib.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\SharpDisasm.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\CommandLine.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Priority Queue.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\MetroFramework.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\MetroFramework.Design.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\MetroFramework.Fonts.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\WeifenLuo.WinFormsUI.Docking.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+
+Source: "..\..\Tools\qemu\*.*"; DestDir: "{app}\Tools\qemu"; Flags: ignoreversion
+Source: "..\..\Tools\wget\*.*"; DestDir: "{app}\Tools\wget"; Flags: ignoreversion
+Source: "..\..\Tools\nasm\*.*"; DestDir: "{app}\Tools\nasm"; Flags: ignoreversion
+Source: "..\..\Tools\ndisasm\*.*"; DestDir: "{app}\Tools\ndisasm"; Flags: ignoreversion
+Source: "..\..\Tools\Bochs\*.*"; DestDir: "{app}\Tools\Bochs"; Flags: ignoreversion
+Source: "..\..\Tools\7zip\*.*"; DestDir: "{app}\Tools\7zip"; Flags: ignoreversion
+Source: "..\..\Tools\mkisofs\*.*"; DestDir: "{app}\Tools\mkisofs"; Flags: ignoreversion
+;Source: "..\..\Tools\rufus\*.*"; DestDir: "{app}\Tools\rufus"; Flags: ignoreversion
 
 [ThirdParty]
 UseRelativePaths=True

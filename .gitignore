@@ -48,6 +48,6 @@ MigrationBackup/
 /docs/_sources
 **/packages/*
 /Source/*/Properties/launchSettings.json
-
-
+stderr.txt
+stdout.txt
 

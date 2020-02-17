@@ -13,17 +13,19 @@ namespace Mosa.Tool.Bootstrap
 	/// </summary>
 	internal static class Program
 	{
-		private static readonly string InstalledMosaTool = @"%programfiles(x86)%\MOSA-Project\tools";
+		private static readonly string InstalledMosaTool = @"%programfiles(x86)%\MOSA-Project\bin";
 		private static readonly string LauncherFileName = "Mosa.Tool.Launcher.exe";
 
-		private static readonly string GlobalPackageDirectory = @"%userprofile%\.nuget\packages";
+		private static readonly string GlobalPackageDirectory = @".nuget\packages";
 		private static readonly string ToolsPackage = "mosa.tools.package";
 
 		private static readonly string Korlib = "mscorlib.dll";
 
 		internal static void Main(string[] args)
 		{
-			var location = FindLauncher(args);
+			var source = args[0];
+
+			var location = FindLauncher(source);
 
 			if (location == null)
 			{
@@ -46,7 +48,8 @@ namespace Mosa.Tool.Bootstrap
 					FileName = location,
 					Arguments = sb.ToString().Trim(),
 					UseShellExecute = false,
-					CreateNoWindow = true,
+					CreateNoWindow = false,
+					WorkingDirectory = Environment.CurrentDirectory,
 				};
 
 				Process.Start(start);
@@ -55,7 +58,7 @@ namespace Mosa.Tool.Bootstrap
 			return;
 		}
 
-		internal static string FindLauncher(string[] args)
+		internal static string FindLauncher(string source)
 		{
 			var location = FindLauncherInCurrentDirectory();
 
@@ -66,7 +69,7 @@ namespace Mosa.Tool.Bootstrap
 
 			if (targetVersion == null)
 			{
-				targetVersion = GetIdealFileVersion(args[args.Length - 1]);
+				targetVersion = GetIdealFileVersion(source);
 			}
 
 			location = FindLauncherInGlobalCatalog(targetVersion);
@@ -81,20 +84,20 @@ namespace Mosa.Tool.Bootstrap
 
 		internal static string FindLauncherInCurrentDirectory()
 		{
-			return FindLauncher(InstalledMosaTool);
+			return CheckLauncher(InstalledMosaTool);
 		}
 
 		internal static string FindInstalledLauncher()
 		{
-			return FindLauncher(Environment.CurrentDirectory);
+			return CheckLauncher(Environment.CurrentDirectory);
 		}
 
 		internal static string FindLauncherExecutionPath()
 		{
-			return FindLauncher(Application.ExecutablePath);
+			return CheckLauncher(Application.ExecutablePath);
 		}
 
-		internal static string FindLauncher(string directory)
+		internal static string CheckLauncher(string directory)
 		{
 			if (directory == null)
 				return null;
@@ -109,7 +112,9 @@ namespace Mosa.Tool.Bootstrap
 
 		internal static string FindLauncherInGlobalCatalog(FileVersionInfo targetVersion)
 		{
-			var globalPackageDirectory = Path.Combine(GlobalPackageDirectory, ToolsPackage);
+			var userProfile = Environment.GetEnvironmentVariable("userprofile");
+
+			var globalPackageDirectory = Path.Combine(userProfile, GlobalPackageDirectory, ToolsPackage);
 
 			if (!Directory.Exists(globalPackageDirectory))
 				return null;
