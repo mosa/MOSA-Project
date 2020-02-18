@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Compiler Design &mdash; Mosa Project  documentation</title>
+  <title>Demos &mdash; Mosa Project  documentation</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="_static/css/sphinx_prompt_css.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Compiler Optimizations" href="compiler-optimizations.html" />
-    <link rel="prev" title="Frequently Asked Questions (FAQs)" href="faq.html" /> 
+    <link rel="next" title="Frequently Asked Questions (FAQs)" href="faq.html" />
+    <link rel="prev" title="Getting Started" href="getting-started.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -82,22 +82,22 @@
             
             
               <p class="caption"><span class="caption-text">Introduction</span></p>
-<ul>
+<ul class="current">
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
 <li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Demos</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#helloworld">HelloWorld</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#testworld">TestWorld</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#coolworld">CoolWorld</a></li>
+</ul>
+</li>
 </ul>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions (FAQs)</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Compiler</span></p>
-<ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Compiler Design</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#compiler-pipeline">Compiler Pipeline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#method-compiler-pipeline">Method Compiler Pipeline</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#intermediate-representations">Intermediate Representations</a></li>
-</ul>
-</li>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="compiler-design.html">Compiler Design</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compiler-optimizations.html">Compiler Optimizations</a></li>
 <li class="toctree-l1"><a class="reference internal" href="compiler-transformations.html">Compiler Transformations</a></li>
 </ul>
@@ -171,13 +171,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Compiler Design</li>
+      <li>Demos</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/compiler-design.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/demos.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -190,40 +190,26 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="compiler-design">
-<h1>Compiler Design<a class="headerlink" href="#compiler-design" title="Permalink to this headline">¶</a></h1>
-<p>The MOSA Compiler framework is designed around two pipelines each with multiple stages.</p>
-<div class="section" id="compiler-pipeline">
-<h2>Compiler Pipeline<a class="headerlink" href="#compiler-pipeline" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>Compiler Pipeline</strong> is the primary pipeline that executes the steps necessary to compile an application, such as building the type system, compiling each method, linking, and emitting the final object file.</p>
-<p>One stage executes the <strong>Method Compiler Pipeline</strong> for each method in the application.</p>
+  <div class="section" id="demos">
+<h1>Demos<a class="headerlink" href="#demos" title="Permalink to this headline">¶</a></h1>
+<p>MOSA includes three demos applications to demostrate various capabilities of the MOSA project.</p>
+<div class="section" id="helloworld">
+<h2>HelloWorld<a class="headerlink" href="#helloworld" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>HelloWorld</strong> demo is the classic rendition of <a class="reference external" href="https://en.wikipedia.org/wiki/%22Hello,_World!%22_program">“Hello, World!”</a>:, except it doesn’t actually display those worlds. Instead it display basic information hardware information, such as the BIOS information, the CMOS time, and the Multiboot memory map.</p>
+<img alt="_images/mosa-demo-helloworld.png" src="_images/mosa-demo-helloworld.png" />
+<p>The demo can be started by executing the following script: <code class="docutils literal notranslate"><span class="pre">Demos\Run-HelloWorld.x86.bat</span></code>.</p>
 </div>
-<div class="section" id="method-compiler-pipeline">
-<h2>Method Compiler Pipeline<a class="headerlink" href="#method-compiler-pipeline" title="Permalink to this headline">¶</a></h2>
-<p>The <strong>Method Compiler Pipeline</strong> is used to compile a single method by progressively lowers the high level instruction representation to the final opcode instructions of the target platform. This pipeline is executed at least once for all methods in the application.</p>
-<p>All the stages can be grouped into one or more of these categories:</p>
-<dl class="simple">
-<dt>Decoding Stage</dt><dd><p>Creates an instruction stream for a method from the source representation, such as a method from a .NET application</p>
-</dd>
-<dt>Transformation Stages</dt><dd><p>Transforms the instruction stream between various representations, usually from a higher level to a lower level representations</p>
-</dd>
-<dt>Optimization Stages</dt><dd><p>Transforms instructions intended to optimize the code to execute faster</p>
-</dd>
-<dt>Register Allocation Stage</dt><dd><p>Allocates the virtual registers in the instruction stream to platform specific physical registers</p>
-</dd>
-<dt>Platform Specific Transformation Stages</dt><dd><p>Transforms the instructions in the stream into specific platform opcodes</p>
-</dd>
-</dl>
+<div class="section" id="testworld">
+<h2>TestWorld<a class="headerlink" href="#testworld" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>TestWorld</strong> demo performs version simple, basic tests to validate the compiler, runtime, and kernel functionality.</p>
+<img alt="_images/mosa-demo-testworld.png" src="_images/mosa-demo-testworld.png" />
+<p>The demo can be started by executing the following script: <code class="docutils literal notranslate"><span class="pre">Demos\Run-TestWorld.x86.bat</span></code>.</p>
 </div>
-<div class="section" id="intermediate-representations">
-<h2>Intermediate Representations<a class="headerlink" href="#intermediate-representations" title="Permalink to this headline">¶</a></h2>
-<p>The compiler framework uses a linear intermediate representation (vs an expression tree) to transform the source application into binary machine code. There are several levels of intermediate representations before code generation. These are:</p>
-<ul class="simple">
-<li><p>Common Intermediate Language (CIL)</p></li>
-<li><p>High-Level Intermediate Representation (IR)</p></li>
-<li><p>Machine specific Intermediate Representation (MIR)</p></li>
-</ul>
-<p>During compilation of an CIL method the instructions are represented by CIL instruction classes and moving forward, the linear instruction stream is modified to use instructions from the intermediate representation. In some cases an instruction from the intermediate representation can not be emitted directly to machine code and it is replaced by a sequence of machine specific instructions. The machine specific instruction classes are provided by the appropriate platform.</p>
+<div class="section" id="coolworld">
+<h2>CoolWorld<a class="headerlink" href="#coolworld" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>CoolWorld</strong> demo utilitizes the MOSA device drivers system to enumerate hardware devices and instantiate drivers, such as for the IDE hard drives and FAT file system.</p>
+<img alt="_images/mosa-demo-coolworld.png" src="_images/mosa-demo-coolworld.png" />
+<p>The demo can be started by executing the following script: <code class="docutils literal notranslate"><span class="pre">Demos\Run-CoolWorld.x86.bat</span></code>.</p>
 </div>
 </div>
 
@@ -235,10 +221,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="compiler-optimizations.html" class="btn btn-neutral float-right" title="Compiler Optimizations" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="faq.html" class="btn btn-neutral float-right" title="Frequently Asked Questions (FAQs)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="faq.html" class="btn btn-neutral float-left" title="Frequently Asked Questions (FAQs)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="getting-started.html" class="btn btn-neutral float-left" title="Getting Started" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

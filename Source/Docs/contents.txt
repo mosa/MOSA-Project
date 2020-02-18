@@ -6,6 +6,7 @@
 
    introduction
    getting-started
+   demos
 
 .. toctree::
    :hidden:
