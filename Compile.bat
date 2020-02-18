@@ -1,5 +1,5 @@
-cd Source
+CD Source
 CALL Compile-Debug.bat
-cd Inno-Setup-Script
+CALL Create-Docs.bat
 CALL Create-Installer.bat
-cd ..\..
+CD ..

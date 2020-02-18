@@ -223,9 +223,12 @@ namespace Mosa.Tool.Launcher
 
 				starter.Launch();
 
-				if (Settings.GetValue("Launcher.Exit", false))
+				if (starter.IsSucccessful)
 				{
-					Application.Exit();
+					if (Settings.GetValue("Launcher.Exit", false))
+					{
+						Application.Exit();
+					}
 				}
 			}
 		}

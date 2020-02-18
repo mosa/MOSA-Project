@@ -6,6 +6,7 @@
 
    introduction
    getting-started
+   demos
 
 .. toctree::
    :hidden:
@@ -50,6 +51,7 @@
 
    unit-tests
    usb-flash-drive-installation
+   baremetal
 
 .. toctree::
    :caption: Contribute

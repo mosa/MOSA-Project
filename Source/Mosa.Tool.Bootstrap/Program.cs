@@ -13,84 +13,164 @@ namespace Mosa.Tool.Bootstrap
 	/// </summary>
 	internal static class Program
 	{
+		private static readonly string InstalledMosaTool = @"%ProgramFiles(x86)%\MOSA-Project\bin";
 		private static readonly string LauncherFileName = "Mosa.Tool.Launcher.exe";
 
-		/// <summary>
-		/// Main entry point for the compiler.
-		/// </summary>
-		/// <param name="args">The command line arguments.</param>
-		internal static void Main(string[] args)
+		private static readonly string GlobalPackageDirectory = @".nuget\packages";
+		private static readonly string ToolsPackage = "mosa.tools.package";
+
+		private static readonly string Korlib = "mscorlib.dll";
+
+		internal static int Main(string[] args)
 		{
-			var location = FindLauncher();
+			var source = args[0];
+
+			var location = FindLauncher(source);
 
 			if (location == null)
 			{
 				var status = new StatusForm("Unable to find Mosa.Launcher.Tool.exe!");
 
 				Application.Run(status);
+
+				return 1;
 			}
-			else
+
+			var start = new ProcessStartInfo
 			{
-				var sb = new StringBuilder();
+				FileName = location,
 
-				foreach (var arg in args)
-				{
-					sb.Append(arg);
-					sb.Append(' ');
-				}
+				Arguments = string.Join(" ", args),
+				UseShellExecute = false,
+				CreateNoWindow = true,
 
-				var start = new ProcessStartInfo
-				{
-					FileName = location,
-					Arguments = sb.ToString(),
-					UseShellExecute = false,
-					CreateNoWindow = true,
-				};
+				WorkingDirectory = Environment.CurrentDirectory,
+			};
 
-				Process.Start(start);
-			}
+			var process = Process.Start(start);
 
-			return;
+			return 0;
 		}
 
-		internal static string FindLauncher()
+		internal static string FindLauncher(string source)
 		{
-			if (CheckDirectory(Environment.CurrentDirectory))
+			var location = FindLauncherInCurrentDirectory();
+
+			if (location != null)
+				return null;
+
+			var targetVersion = GetIdealFileVersion(Environment.CurrentDirectory);
+
+			if (targetVersion == null)
 			{
-				return Path.Combine(Environment.CurrentDirectory, LauncherFileName);
+				targetVersion = GetIdealFileVersion(source);
 			}
 
-			// check within packages directory in 1 or 2 directories back
-			// this is how VS organizes projects and packages
+			location = FindLauncherInGlobalCatalog(targetVersion);
 
-			var result = SearchSubdirectories(Path.Combine(Environment.CurrentDirectory, "..", "packages"));
+			if (location != null)
+				return location;
 
-			if (result != null)
-				return result;
+			location = FindInstalledLauncher();
 
-			result = SearchSubdirectories(Path.Combine(Environment.CurrentDirectory, "..", "..", "packages"));
-
-			return result;
+			return location;
 		}
 
-		internal static bool CheckDirectory(string directory)
+		internal static string FindInstalledLauncher()
 		{
-			return File.Exists(Path.Combine(directory, LauncherFileName));
+			return CheckLauncher(InstalledMosaTool.Replace("%ProgramFiles(x86)%", Environment.GetEnvironmentVariable("ProgramFiles(x86)")));
 		}
 
-		internal static string SearchSubdirectories(string path)
+		internal static string FindLauncherInCurrentDirectory()
 		{
-			if (Directory.Exists(path))
-			{
-				var result = Directory.GetFiles(path, LauncherFileName, SearchOption.AllDirectories);
+			return CheckLauncher(Environment.CurrentDirectory);
+		}
 
-				if (result?.Length >= 1)
-				{
-					return result[0];
-				}
-			}
+		internal static string FindLauncherExecutionPath()
+		{
+			return CheckLauncher(Application.ExecutablePath);
+		}
+
+		internal static string CheckLauncher(string directory)
+		{
+			if (directory == null)
+				return null;
+
+			var location = Path.Combine(directory, LauncherFileName);
+
+			if (File.Exists(location))
+				return location;
 
 			return null;
+		}
+
+		internal static string FindLauncherInGlobalCatalog(FileVersionInfo targetVersion)
+		{
+			var userProfile = Environment.GetEnvironmentVariable("userprofile");
+
+			var globalPackageDirectory = Path.Combine(userProfile, GlobalPackageDirectory, ToolsPackage);
+
+			if (!Directory.Exists(globalPackageDirectory))
+				return null;
+
+			string bestLocation = null;
+			FileVersionInfo bestVerion = null;
+
+			foreach (var directory in Directory.GetDirectories(globalPackageDirectory))
+			{
+				var location = Path.Combine(directory, "tools", LauncherFileName);
+
+				if (File.Exists(location))
+				{
+					if (targetVersion == null)
+						return location;
+
+					var locationVersion = FileVersionInfo.GetVersionInfo(location);
+
+					if (CompareTo(locationVersion, targetVersion) == 0)
+						return location;
+
+					if (bestLocation == null)
+					{
+						bestLocation = location;
+						bestVerion = locationVersion;
+					}
+					else if (CompareTo(locationVersion, bestVerion) == 1)
+					{
+						bestLocation = location;
+						bestVerion = locationVersion;
+					}
+				}
+			}
+
+			return bestLocation;
+		}
+
+		internal static FileVersionInfo GetIdealFileVersion(string directory)
+		{
+			var location = Path.Combine(directory, Korlib);
+
+			if (!File.Exists(location))
+				return null;
+
+			return FileVersionInfo.GetVersionInfo(location);
+		}
+
+		private static int CompareTo(FileVersionInfo older, FileVersionInfo newer)
+		{
+			if (newer.ProductMajorPart > older.ProductMajorPart) return 1;
+			if (newer.ProductMajorPart < older.ProductMajorPart) return -1;
+
+			if (newer.ProductMinorPart > older.ProductMinorPart) return 1;
+			if (newer.ProductMinorPart < older.ProductMinorPart) return -1;
+
+			if (newer.ProductBuildPart > older.ProductBuildPart) return 1;
+			if (newer.ProductBuildPart < older.ProductBuildPart) return -1;
+
+			if (newer.ProductPrivatePart == older.ProductPrivatePart)
+				return 0;
+
+			return newer.ProductPrivatePart > older.ProductPrivatePart ? 1 : -1;
 		}
 	}
 }
