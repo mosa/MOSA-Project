@@ -109,6 +109,8 @@
 <li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">MOSA Launcher Console</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool-explorer.html">MOSA Explorer</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">MOSA Debugger</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#features">Features</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#command-line-options">Command Line Options</a></li>
 </ul>
 </li>
@@ -193,10 +195,28 @@
 <h1>MOSA Debugger<a class="headerlink" href="#mosa-debugger" title="Permalink to this headline">¶</a></h1>
 <p>The <strong>MOSA Debugger</strong> is GUI application used to debug a MOSA compiled application using <a class="reference external" href="https://www.qemu.org">QEMU Virtual Machine Emulator</a>.</p>
 <img alt="_images/mosa-debugger.png" src="_images/mosa-debugger.png" />
-<p>The <strong>MOSA Debugger</strong> can be launched by executing <cite>Mosa.Tool.Debugger.exe</cite>.</p>
+<div class="section" id="features">
+<h2>Features<a class="headerlink" href="#features" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><p>Breakpoints</p></li>
+<li><p>Watchpoints</p></li>
+<li><p>Register View</p></li>
+<li><p>Stack Frame View</p></li>
+<li><p>Call Stack View</p></li>
+<li><p>Method View</p></li>
+<li><p>Source Code View</p></li>
+<li><p>Method Parameters View</p></li>
+<li><p>Memory Views</p></li>
+</ul>
+<p>Under the hood, <strong>MOSA Debugger</strong> utilitizes the QEMU virtual machine emulator and controls it with native GDB commands.</p>
+</div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>MOSA Debugger</strong> can be launched by executing <code class="docutils literal notranslate"><span class="pre">Mosa.Tool.Debugger.exe</span></code>.</p>
 <p>In addition, the tool can be launched from the command line with arguments:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Mosa.Tool.Launcher.exe Mosa.Debugger.x86.exe
 </pre></div>
+</div>
 </div>
 <div class="section" id="command-line-options">
 <h2>Command Line Options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h2>

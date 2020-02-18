@@ -109,7 +109,10 @@
 <li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">MOSA Launcher Console</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool-explorer.html">MOSA Explorer</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool-debugger.html">MOSA Debugger</a></li>
-<li class="toctree-l1 current"><a class="current reference internal" href="#">MOSA Boot Image Tool</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">MOSA Boot Image Tool</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
+</ul>
+</li>
 </ul>
 <p class="caption"><span class="caption-text">Advanced</span></p>
 <ul>
@@ -193,6 +196,8 @@
 <p class="admonition-title">Warning</p>
 <p>This tool has been superceded by the MOSA Launcher Tool which can automate the entire build chain functionality.</p>
 </div>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
 <p>The tool has several command line options. Example:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Mosa.Tool.CreateBootImage.exe -o bin/Mosa.HelloWorld.x86.img --mbr Tools/syslinux/3.72/mbr.bin --boot Tools/syslinux/3.72/ldlinux.bin --syslinux --volume-label MOSABOOT --blocks 25000 --filesystem fat16 --format img Tools/syslinux/3.72/ldlinux.sys Tools/syslinux/3.72/mboot.c32 Demos/unix/syslinux.cfg bin/Mosa.HelloWorld.x86.bin,main.exe
 </pre></div>
@@ -279,6 +284,7 @@
 </tr>
 </tbody>
 </table>
+</div>
 </div>
 
 

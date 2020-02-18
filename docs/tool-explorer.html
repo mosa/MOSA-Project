@@ -108,6 +108,7 @@
 <li class="toctree-l1"><a class="reference internal" href="tool-launcher.html">MOSA Launcher</a></li>
 <li class="toctree-l1"><a class="reference internal" href="tool-launcher-console.html">MOSA Launcher Console</a></li>
 <li class="toctree-l1 current"><a class="current reference internal" href="#">MOSA Explorer</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#usage">Usage</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#command-line-options">Command Line Options</a></li>
 </ul>
 </li>
@@ -193,10 +194,13 @@
 <h1>MOSA Explorer<a class="headerlink" href="#mosa-explorer" title="Permalink to this headline">¶</a></h1>
 <p>The <strong>MOSA Explorer</strong> is GUI application used to visualize the compiler transformation of a method from the highest respresentation to the lowest, lowest level. The instruction stream at each stage can be viewed. In addition, specific stage logs is also available. in some cases, these logs describe why certain transforms were made.</p>
 <img alt="_images/mosa-explorer.png" src="_images/mosa-explorer.png" />
-<p>The <strong>MOSA Explorer</strong> can be launched by executing <cite>Mosa.Tool.Explorer.exe</cite>.</p>
+<div class="section" id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this headline">¶</a></h2>
+<p>The <strong>MOSA Explorer</strong> can be launched by executing <code class="docutils literal notranslate"><span class="pre">Mosa.Tool.Explorer.exe</span></code>.</p>
 <p>In addition, the tool can be launched from the command line with arguments:</p>
 <div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Mosa.Tool.Explorer.exe Mosa.HelloWorld.x86.exe -filter System.String::get_Length
 </pre></div>
+</div>
 </div>
 <div class="section" id="command-line-options">
 <h2>Command Line Options<a class="headerlink" href="#command-line-options" title="Permalink to this headline">¶</a></h2>
