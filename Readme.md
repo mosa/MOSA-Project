@@ -116,7 +116,7 @@ By default, the CoolWorld operating system demo is pre-selected. Click the "Comp
 
 ![MOSA Launcher](Source/Docs/images/mosa-launcher.png)
 
-![MOSA CoolWorld Demo](Source/Docs/images/Mmosa-coolworld.png)
+![MOSA CoolWorld Demo](Source/Docs/images/mosa-coolworld.png)
 
 ### Join the Discussion
 
