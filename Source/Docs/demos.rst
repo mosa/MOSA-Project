@@ -8,7 +8,7 @@ MOSA includes three demos applications to demostrate various capabilities of the
 HelloWorld
 ==========
 
-The **HelloWorld** demo is the classic rendition of `"Hello, World!" <https://en.wikipedia.org/wiki/%22Hello,_World!%22_program>`__:, except it doesn't actually display those worlds. Instead it display basic information hardware information, such as the BIOS information, the CMOS time, and the Multiboot memory map.
+The **HelloWorld** demo is the classic rendition of `"Hello, World!" <https://en.wikipedia.org/wiki/%22Hello,_World!%22_program>`__, except it does not actually display those words. Instead it displays basic information hardware information, such as the BIOS information, the CMOS time, and the Multiboot memory map.
 
 .. image:: images/mosa-demo-helloworld.png
 
