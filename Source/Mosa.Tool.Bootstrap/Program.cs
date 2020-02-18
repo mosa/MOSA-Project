@@ -39,13 +39,17 @@ namespace Mosa.Tool.Bootstrap
 			var start = new ProcessStartInfo
 			{
 				FileName = location,
+
 				Arguments = string.Join(" ", args),
 				UseShellExecute = false,
 				CreateNoWindow = true,
+
 				WorkingDirectory = Environment.CurrentDirectory,
 			};
 
 			var process = Process.Start(start);
+
+			MessageBox.Show("4");
 
 			return 0;
 		}

@@ -55,6 +55,7 @@ Source: "..\Mosa.VisualStudio.ProjectTemplate\Mosa.Starter.x86.csproj"; DestDir:
 Source: "..\Mosa.VisualStudio.ProjectTemplate\MyTemplate.vstemplate"; DestDir: "{userdocs}\Visual Studio 2019\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
 Source: "..\Mosa.VisualStudio.ProjectTemplate\Program.cs"; DestDir: "{userdocs}\Visual Studio 2019\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
 Source: "..\Mosa.VisualStudio.ProjectTemplate\__TemplateIcon.ico"; DestDir: "{userdocs}\Visual Studio 2019\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
+Source: "..\Mosa.VisualStudio.ProjectTemplate\Properties\launchSettings.json"; DestDir: "{userdocs}\Visual Studio 2019\Templates\ProjectTemplates\Mosa Project\Properties"; Flags: ignoreversion
 
 Source: "..\..\bin\Mosa.Tool.Bootstrap.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Compiler.Common.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
