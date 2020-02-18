@@ -26,7 +26,7 @@ The demo can be started by executing the following script: ``Demos\Run-TestWorld
 CoolWorld
 =========
 
-The **CoolWorld** demo utilitizes the MOSA device drivers system to enumerate hardware devices and instantiate drivers, such as for the IDE hard drives and FAT file system.
+The **CoolWorld** demo utilitizes the MOSA device drivers system to enumerate hardware devices and instantiate drivers, such as for the IDE controller, disk devices, and FAT file system.
 
 .. image:: images/mosa-demo-coolworld.png
 
