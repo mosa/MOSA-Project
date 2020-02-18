@@ -24,13 +24,15 @@ Below are the steps for deploying a MOSA disk image to a USB flash drive:
 
   cd %TEMP%\MOSA 
 
-5. Connect the USB key you wish to ERASE and install the MOSA image onto.
+5. Connect the USB flash drive you wish to ERASE and install the MOSA image onto.
 
 .. danger:: Data on the USB flash drive will be lost!
 
 6. Determine the device path for the USB flash drive.
 
-Get a list all the block devices on your system by typing the command below. Find the one for the USB flash drive you just connected. Be careful, if you select or mistype the wrong device, you can corrupt your hard drive or other storage devices. Unless you understand these steps completely, do not proceed.
+Get a list all the block devices on your system by typing the command below. Find the one for the USB flash drive you just connected. 
+
+.. danger:: Be careful, if you mistype or select the wrong device, you can corrupt your hard drive or other storage devices. Unless you understand these steps completely, do not proceed.
 
 .. code-block:: text
 
@@ -42,7 +44,7 @@ Get a list all the block devices on your system by typing the command below. Fin
 
   dd of=\\?\Device\HarddiskX\PartitionX if=bootimage.img bs=512 –progress
 
-8. Wait until all the blocks are written to the USB key before disconnecting it.
+8. Wait until all the blocks are written to the USB flash drive before disconnecting it.
 
 9. Now boot a PC or laptop with the USB flash drive connected!
 
