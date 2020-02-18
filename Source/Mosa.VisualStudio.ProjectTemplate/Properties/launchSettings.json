@@ -1,0 +1,10 @@
+{
+	"profiles": {
+		"$safeprojectname$": {
+			"commandName": "Executable",
+			"executablePath": "C:\\Program Files (x86)\\MOSA-Project\\bin\\Mosa.Tool.Bootstrap.exe",
+			"commandLineArgs": "$safeprojectname$.exe",
+			"workingDirectory": "bin"
+		}
+	}
+}
