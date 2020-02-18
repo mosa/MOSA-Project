@@ -9,6 +9,14 @@ namespace Mosa.Utility.Launcher
 {
 	public static class AppLocationsSettings
 	{
+		private static readonly string MosaEnvironmentalVariable = Environment.GetEnvironmentVariable("MOSA");
+		private static readonly string ProgramFiles86 = Environment.GetEnvironmentVariable("ProgramFiles(x86)");
+		private static readonly string ProgramFiles = Environment.GetEnvironmentVariable("ProgramFiles");
+		private static readonly string UserProfile = Environment.GetEnvironmentVariable("UserProfile");
+		private static readonly string CurrentDirectory = Directory.GetCurrentDirectory();
+		private static readonly string AppDirectory = AppDomain.CurrentDomain.BaseDirectory;
+		private static readonly string MosaTools = @"%ProgramFiles(x86)%\MOSA-Project\Tools";
+
 		public static Settings GetAppLocations()
 		{
 			var settings = new Settings();
@@ -30,20 +38,17 @@ namespace Mosa.Utility.Launcher
 			return TryFind(
 				new string[] { "qemu-system-i386.exe", "qemu-system-i386", "qemu-system-x86_64", "qemu-system-x86_64.exe", },
 				new string[] {
-					CombineParameterAndDirectory("MOSA",@"Tools\QEMU"),
-					CombineParameterAndDirectory("MOSA","QEMU"),
-					@"..\Tools\QEMU",
-					@"Tools\QEMU",
-					CombineParameterAndDirectory("ProgramFiles","qemu"),
-					CombineParameterAndDirectory("ProgramFiles(x86)","qemu"),
-					CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools\qemu"),
+					@"%MOSA%\Tools\QEMU",
+					@"%CURRENT%\..\Tools\QEMU",
+					@"%CURRENT%\Tools\QEMU",
+					@"%APPDIR%\Tools\QEMU",
+					@"%APPDIR%\..\Tools\QEMU",
+					@"%MOSATOOLS%\QEMU",
+
+					@"%ProgramFiles%\qemu",
+					@"%ProgramFiles(x86)%\qemu",
 					"/bin",
 					"/usr/bin"
-				},
-				new string[]
-				{
-					@"..\packages",
-					@"..\..\packages",
 				}
 			);
 		}
@@ -53,22 +58,20 @@ namespace Mosa.Utility.Launcher
 			return TryFind(
 				new string[] { "gdb.exe" },
 				new string[] {
-					CombineParameterAndDirectory("MOSA",@"Tools\gdb"),
-					CombineParameterAndDirectory("MOSA","gdb"),
-					@"..\Tools\gdb",
-					@"Tools\gdb",
+					@"%MOSA%\Tools\gdb",
+					@"%CURRENT%\..\Tools\gdb",
+					@"%CURRENT%\Tools\gdb",
+					@"%APPDIR%\Tools\gdb",
+					@"%APPDIR%\..\Tools\gdb",
+					@"%MOSATOOLS%\gdb",
+
 					@"C:\cygwin64\bin",
 					@"C:\mingw64\bin",
 					@"C:\cygwin\bin",
-					@"C:\mingw32\bin",
 					@"C:\mingw\bin",
-					CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools\gdb"),
+					@"C:\mingw32\bin",
+
 					"/bin"
-				},
-				new string[]
-				{
-					@"..\packages",
-					@"..\..\packages",
 				}
 			);
 		}
@@ -78,21 +81,18 @@ namespace Mosa.Utility.Launcher
 			return TryFind(
 				new string[] { "mkisofs.exe", "mkisofs" },
 				new string[] {
-					CombineParameterAndDirectory("ProgramFiles",@"VMware\VMware Player"),
-					CombineParameterAndDirectory("ProgramFiles(x86)",@"VMware\VMware Player"),
-					CombineParameterAndDirectory("ProgramFiles","cdrtools"),
-					CombineParameterAndDirectory("ProgramFiles(x86)","cdrtools"),
-					CombineParameterAndDirectory("MOSA",@"Tools\mkisofs"),
-					CombineParameterAndDirectory("MOSA","mkisofs"),
-					@"..\Tools\mkisofs",
-					@"Tools\mkisofs",
-					CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools\mkisofs"),
+					@"%MOSA%\Tools\mkisofs",
+					@"%CURRENT%\..\Tools\mkisofs",
+					@"%CURRENT%\Tools\mkisofs",
+					@"%APPDIR%\Tools\mkisofs",
+					@"%APPDIR%\..\Tools\mkisofs",
+					@"%MOSATOOLS%\mkisofs",
+
+					@"%ProgramFiles%\VMware\VMware Player",
+					@"%ProgramFiles(x86)%\VMware\VMware Player",
+					@"%ProgramFiles%\cdrtools",
+					@"%ProgramFiles(x86)%\cdrtools",
 					"/bin"
-				},
-				new string[]
-				{
-					@"..\packages",
-					@"..\..\packages",
 				}
 			);
 		}
@@ -102,17 +102,14 @@ namespace Mosa.Utility.Launcher
 			return TryFind(
 				new string[] { "ndisasm.exe", "ndisasm" },
 				new string[] {
-					CombineParameterAndDirectory("MOSA",@"Tools\ndisasm"),
-					CombineParameterAndDirectory("MOSA","ndisasm"),
-					@"..\Tools\ndisasm",
-					@"Tools\ndisasm",
-					CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools\ndisasm"),
+					@"%MOSA%\Tools\ndisasm",
+					@"%CURRENT%\..\Tools\ndisasm",
+					@"%CURRENT%\Tools\ndisasm",
+					@"%APPDIR%\Tools\ndisasm",
+					@"%APPDIR%\..\Tools\ndisasm",
+					@"%MOSATOOLS%\ndisasm",
+
 					"/bin"
-				},
-				new string[]
-				{
-					@"..\packages",
-					@"..\..\packages",
 				}
 			);
 		}
@@ -122,10 +119,10 @@ namespace Mosa.Utility.Launcher
 			return TryFind(
 				new string[] { "vmplayer.exe", "vmplayer" },
 				new string[] {
-					CombineParameterAndDirectory("ProgramFiles",@"VMware\VMware Player"),
-					CombineParameterAndDirectory("ProgramFiles",@"VMware\VMware Workstation"),
-					CombineParameterAndDirectory("ProgramFiles(x86)",@"VMware\VMware Player"),
-					CombineParameterAndDirectory("ProgramFiles(x86)",@"VMware\VMware Workstation"),
+					@"%ProgramFiles%\VMware\VMware Player",
+					@"%ProgramFiles%\VMware\VMware Workstation",
+					@"%ProgramFiles(x86)%\VMware\VMware Player",
+					@"%ProgramFiles(x86)%\VMware\VMware Workstation",
 					"/bin"
 				}
 			);
@@ -136,26 +133,23 @@ namespace Mosa.Utility.Launcher
 			return TryFind(
 				new string[] { "bochs.exe", "bochs" },
 				new string[] {
-					CombineParameterAndDirectory("ProgramFiles","Bochs-2.6.9"),
-					CombineParameterAndDirectory("ProgramFiles(x86)","Bochs-2.6.9"),
-					CombineParameterAndDirectory("ProgramFiles","Bochs-2.6.8"),
-					CombineParameterAndDirectory("ProgramFiles(x86)","Bochs-2.6.8"),
-					CombineParameterAndDirectory("ProgramFiles","Bochs-2.6.5"),
-					CombineParameterAndDirectory("ProgramFiles(x86)","Bochs-2.6.5"),
-					CombineParameterAndDirectory("ProgramFiles","Bochs-2.6.2"),
-					CombineParameterAndDirectory("ProgramFiles(x86)","Bochs-2.6.2"),
-					CombineParameterAndDirectory("MOSA",@"Tools\Bochs"),
-					CombineParameterAndDirectory("MOSA","Bochs"),
-					@"..\Tools\Bochs",
-					@"Tools\Bochs",
-					CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools\Bochs"),
+					@"%MOSA%\Tools\Bochs",
+					@"%CURRENT%\..\Tools\Bochs",
+					@"%CURRENT%\Tools\Bochs",
+					@"%APPDIR%\Tools\Bochs",
+					@"%APPDIR%\..\Tools\Bochs",
+					@"%MOSATOOLS%\Bochs",
+
+					@"%ProgramFiles%\Bochs-2.6.9",
+					@"%ProgramFiles(x86)%\Bochs-2.6.9",
+					@"%ProgramFiles%\Bochs-2.6.8",
+					@"%ProgramFiles(x86)%\Bochs-2.6.8",
+					@"%ProgramFiles%\Bochs-2.6.5",
+					@"%ProgramFiles(x86)%\Bochs-2.6.5",
+					@"%ProgramFiles%\Bochs-2.6.2",
+					@"%ProgramFiles(x86)%\Bochs-2.6.2",
 					"/bin",
 					"/usr/bin"
-				},
-				new string[]
-				{
-					@"..\packages",
-					@"..\..\packages",
 				}
 			);
 		}
@@ -166,19 +160,17 @@ namespace Mosa.Utility.Launcher
 				new string[] { "qemu-img.exe", "qemu-img" },
 				new string[]
 				{
-					CombineParameterAndDirectory("MOSA", @"Tools\QEMU"),
-					CombineParameterAndDirectory("MOSA", "QEMU"),
-					@"..\Tools\QEMU",
-					@"Tools\QEMU",
-					CombineParameterAndDirectory("ProgramFiles", "qemu"),
-					CombineParameterAndDirectory("ProgramFiles(x86)", "qemu"),
-					CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools\qemu"),
+					@"%MOSA%\Tools\QEMU",
+					@"%CURRENT%\..\Tools\QEMU",
+					@"%CURRENT%\Tools\QEMU",
+					@"%APPDIR%\Tools\QEMU",
+					@"%APPDIR%\..\Tools\QEMU",
+					@"%MOSATOOLS%\QEMU",
+
+					@"%ProgramFiles%\qemu",
+					@"%ProgramFiles(x86)%\qemu",
+					@"%ProgramFiles(x86)%\Mosa-Project\Tools\qemu",
 					"/bin"
-				},
-				new string[]
-				{
-					@"..\packages",
-					@"..\..\packages",
 				}
 			);
 		}
@@ -194,15 +186,12 @@ namespace Mosa.Utility.Launcher
 					new string[] {
 						Path.GetDirectoryName(qemu),
 						Path.Combine(Path.GetDirectoryName(qemu), "bios"),
-						CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools\qemu"),
-						CombineParameterAndDirectory("ProgramFiles(x86)",@"Mosa-Project\Tools\qemu\bios"),
+
+						@"%MOSATOOLS%\qemu",
+						@"%MOSATOOLS%\qemu\bios",
+
 						"/usr/share/qemu",
 						"/usr/share/seabios"
-					},
-					new string[]
-					{
-						@"..\packages",
-						@"..\..\packages",
 					}
 				)
 			);
@@ -217,25 +206,55 @@ namespace Mosa.Utility.Launcher
 			property.Value = value;
 		}
 
-		private static string CombineParameterAndDirectory(string parameter, string subdirectory)
+		public static string ReplaceWithParameters(string directory)
 		{
-			var variable = Environment.GetEnvironmentVariable(parameter);
+			if (!string.IsNullOrWhiteSpace(MosaEnvironmentalVariable))
+				directory = directory.Replace("%MOSA%", MosaEnvironmentalVariable);
 
-			if (variable == null)
+			if (!string.IsNullOrWhiteSpace(MosaTools))
+				directory = directory.Replace("%MOSATOOLS%", MosaTools);
+
+			if (!string.IsNullOrWhiteSpace(ProgramFiles))
+				directory = directory.Replace("%PROGRAMFILES%", ProgramFiles);
+
+			if (!string.IsNullOrWhiteSpace(ProgramFiles86))
+				directory = directory.Replace("%PROGRAMFILES(x86)%", ProgramFiles86);
+
+			if (!string.IsNullOrWhiteSpace(ProgramFiles))
+				directory = directory.Replace("%ProgramFiles%", ProgramFiles);
+
+			if (!string.IsNullOrWhiteSpace(ProgramFiles86))
+				directory = directory.Replace("%ProgramFiles(x86)%", ProgramFiles86);
+
+			if (!string.IsNullOrWhiteSpace(UserProfile))
+				directory = directory.Replace("%USERPROFILE%", UserProfile);
+
+			if (!string.IsNullOrWhiteSpace(CurrentDirectory))
+				directory = directory.Replace("%CURRENT%", CurrentDirectory);
+
+			if (!string.IsNullOrWhiteSpace(AppDirectory))
+				directory = directory.Replace("%APPDIR%", AppDirectory);
+
+			if (directory.Contains("%"))
 				return null;
 
-			return Path.Combine(variable, subdirectory);
+			return directory;
 		}
 
-		private static string TryFind(IList<string> files, IList<string> directories, IList<string> searchdirectories = null)
+		private static string TryFind(IList<string> files, IList<string> searchdirectories = null)
 		{
 			if (searchdirectories != null)
 			{
 				foreach (var directory in searchdirectories)
 				{
+					var dir = ReplaceWithParameters(directory);
+
+					if (dir == null)
+						continue;
+
 					foreach (var file in files)
 					{
-						var location = SearchSubdirectories(directory, file);
+						var location = SearchSubdirectories(dir, file);
 
 						if (location != null)
 						{
@@ -245,36 +264,7 @@ namespace Mosa.Utility.Launcher
 				}
 			}
 
-			foreach (var directory in directories)
-			{
-				foreach (var file in files)
-				{
-					if (TryFind(file, directory, out string location))
-					{
-						return location;
-					}
-				}
-			}
-
 			return null;
-		}
-
-		private static bool TryFind(string file, string directory, out string location)
-		{
-			location = string.Empty;
-
-			if (directory == null)
-				return false;
-
-			string combine = Path.Combine(directory, file);
-
-			if (File.Exists(combine))
-			{
-				location = combine;
-				return true;
-			}
-
-			return false;
 		}
 
 		private static string SearchSubdirectories(string path, string filename)

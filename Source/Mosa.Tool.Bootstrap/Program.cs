@@ -21,7 +21,7 @@ namespace Mosa.Tool.Bootstrap
 
 		private static readonly string Korlib = "mscorlib.dll";
 
-		internal static void Main(string[] args)
+		internal static int Main(string[] args)
 		{
 			var source = args[0];
 
@@ -32,30 +32,22 @@ namespace Mosa.Tool.Bootstrap
 				var status = new StatusForm("Unable to find Mosa.Launcher.Tool.exe!");
 
 				Application.Run(status);
+
+				return 1;
 			}
-			else
+
+			var start = new ProcessStartInfo
 			{
-				var sb = new StringBuilder();
+				FileName = location,
+				Arguments = string.Join(" ", args),
+				UseShellExecute = false,
+				CreateNoWindow = true,
+				WorkingDirectory = Environment.CurrentDirectory,
+			};
 
-				foreach (var arg in args)
-				{
-					sb.Append(arg);
-					sb.Append(' ');
-				}
+			var process = Process.Start(start);
 
-				var start = new ProcessStartInfo
-				{
-					FileName = location,
-					Arguments = sb.ToString().Trim(),
-					UseShellExecute = false,
-					CreateNoWindow = false,
-					WorkingDirectory = Environment.CurrentDirectory,
-				};
-
-				Process.Start(start);
-			}
-
-			return;
+			return 0;
 		}
 
 		internal static string FindLauncher(string source)
