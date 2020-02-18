@@ -13,7 +13,7 @@ namespace Mosa.Tool.Bootstrap
 	/// </summary>
 	internal static class Program
 	{
-		private static readonly string InstalledMosaTool = @"%programfiles(x86)%\MOSA-Project\bin";
+		private static readonly string InstalledMosaTool = @"%ProgramFiles(x86)%\MOSA-Project\bin";
 		private static readonly string LauncherFileName = "Mosa.Tool.Launcher.exe";
 
 		private static readonly string GlobalPackageDirectory = @".nuget\packages";
@@ -49,8 +49,6 @@ namespace Mosa.Tool.Bootstrap
 
 			var process = Process.Start(start);
 
-			MessageBox.Show("4");
-
 			return 0;
 		}
 
@@ -78,12 +76,12 @@ namespace Mosa.Tool.Bootstrap
 			return location;
 		}
 
-		internal static string FindLauncherInCurrentDirectory()
+		internal static string FindInstalledLauncher()
 		{
-			return CheckLauncher(InstalledMosaTool);
+			return CheckLauncher(InstalledMosaTool.Replace("%ProgramFiles(x86)%", Environment.GetEnvironmentVariable("ProgramFiles(x86)")));
 		}
 
-		internal static string FindInstalledLauncher()
+		internal static string FindLauncherInCurrentDirectory()
 		{
 			return CheckLauncher(Environment.CurrentDirectory);
 		}
