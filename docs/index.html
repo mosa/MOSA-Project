@@ -83,7 +83,7 @@
               <p class="caption"><span class="caption-text">Introduction</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started On Windows</a></li>
 <li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
 </ul>
 <ul>
@@ -225,40 +225,21 @@
 <li><p>Greedy Register Allocation</p></li>
 </ul>
 </div>
-<div class="section" id="getting-started">
-<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="getting-started-on-windows">
+<h2>Getting Started On Windows<a class="headerlink" href="#getting-started-on-windows" title="Permalink to this headline">¶</a></h2>
+<div class="section" id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h3>
+<p>Install any edition of <a class="reference external" href="http://www.visualstudio.com">Visual Studio</a> version 2019 or newer, including fully-featured free <a class="reference external" href="https://www.visualstudio.com/products/visual-studio-community-vs">Community Edition</a> is supported!</p>
+<p>Note: The MOSA source code repository includes the <a class="reference external" href="http://wiki.qemu.org/Main_Page">Qemu</a> virtual emulator for Windows.</p>
 <div class="section" id="download">
-<h3>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h3>
+<h4>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h4>
 <p>The MOSA project is available as a <a class="reference external" href="https://github.com/mosa/MOSA-Project/archive/master.zip">zip download</a> or via git:</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/mosa/MOSA-Project.git
 </pre></div>
 </div>
 </div>
-<div class="section" id="prerequisites">
-<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h3>
-<p>You will also need the following prerequisites:</p>
-<div class="section" id="windows">
-<h4>Windows<a class="headerlink" href="#windows" title="Permalink to this headline">¶</a></h4>
-<p>Install any <a class="reference external" href="http://www.visualstudio.com">Visual Studio</a> version 2019 or newer. All editions are supported including the fully-featured free <a class="reference external" href="https://www.visualstudio.com/products/visual-studio-community-vs">Community Edition</a>.</p>
-<p>Note: The MOSA source code repository includes <a class="reference external" href="http://wiki.qemu.org/Main_Page">Qemu</a> virtual emulator for Windows.</p>
-<p>The <a class="reference external" href="http://www.codemaid.net">CodeMaid</a> Visual Studio Extension is strongly recommended for MOSA contributors.</p>
-</div>
-<div class="section" id="linux">
-<h4>Linux<a class="headerlink" href="#linux" title="Permalink to this headline">¶</a></h4>
-<p>Install <a class="reference external" href="http://www.mono-project.com">Mono</a> and <a class="reference external" href="http://wiki.qemu.org/Main_Page">Qemu</a>.</p>
-<p>The minimum supported version of Mono is 5.16.</p>
-<p>If using the APT package manager you can use the following command to quickly set up QEMU and Mono:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sudo apt-get -y install mono-devel qemu qemu-system qemu-system-x86
-</pre></div>
-</div>
-</div>
-<div class="section" id="mac">
-<h4>Mac<a class="headerlink" href="#mac" title="Permalink to this headline">¶</a></h4>
-<p>Install <a class="reference external" href="http://www.mono-project.com">Mono</a> and <a class="reference external" href="http://wiki.qemu.org/Main_Page">Qemu</a>.</p>
-</div>
-</div>
 <div class="section" id="running-on-windows">
-<h3>Running on Windows<a class="headerlink" href="#running-on-windows" title="Permalink to this headline">¶</a></h3>
+<h4>Running on Windows<a class="headerlink" href="#running-on-windows" title="Permalink to this headline">¶</a></h4>
 <p>Double click on the <code class="docutils literal notranslate"><span class="pre">Compile.bat</span></code> script in the root directory to compile all the tools, sample kernels, and demos.</p>
 <p>Next double click on the <code class="docutils literal notranslate"><span class="pre">Launcher.bat</span></code> script, which will bring up the <a class="reference internal" href="tool-launcher.html"><span class="doc">MOSA Launcher Tool</span></a> that can:</p>
 <ul class="simple">
@@ -267,6 +248,7 @@
 <li><p>Launch a virtual machine instance (using QEMU by default)</p></li>
 </ul>
 <p>By default, the CoolWorld operating system demo is pre-selected. Click the <code class="docutils literal notranslate"><span class="pre">Compile</span> <span class="pre">and</span> <span class="pre">Run</span></code> button to compile and launch the demo.</p>
+</div>
 </div>
 </div>
 <div class="section" id="join-the-discussion">

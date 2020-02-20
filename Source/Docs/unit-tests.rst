@@ -2,7 +2,7 @@
 Unit Tests
 ##########
 
-Execute the script ``RunAllUnitTestsWithPause.bat`` in the ``/Tests`` subdirectory. 
+Execute the script ``Tests\RunAllUnitTestsWithPause.bat``. 
 
 The unit tests will take a few minutes to execute on modern PC. The results will be automatically displayed on the screen. The last line shows the total number of tests and failed tests, and the total time. Similar to the following:
 
