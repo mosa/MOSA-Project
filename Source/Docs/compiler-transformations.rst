@@ -72,7 +72,7 @@ This is translated into the following C# code:
 Example #2
 ----------
 
-Here's an example of a rewrite optimization where three operations are rewriting into two:
+Here's an example of a rewrite optimization where three operations are reduce to two:
 
 .. code-block:: bash
 

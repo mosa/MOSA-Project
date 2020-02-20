@@ -40,5 +40,9 @@ The MOSA compiler seeks to provide high quality code generation using the follow
 - Sparse Conditional Constant Propagation
 - Inlined Expansion
 - Loop-Invariant Code Motion
+- Null Check Elimination
+- Devirtualization
 - Block Reordering
 - Greedy Register Allocation
+
+See the :doc:`Compiler Optimizations<compiler-optimizations>` for a description of each of these optimization methods. 

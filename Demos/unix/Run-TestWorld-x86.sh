@@ -2,4 +2,4 @@
 
 cd $(dirname $0)
 
-./Run-Demo.x86.sh ../../bin/Mosa.TestWorld.x86.exe
+./Run-Demo.x86.sh ../../bin/Mosa.Demo.TestWorld.x86.exe

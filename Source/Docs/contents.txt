@@ -6,13 +6,15 @@
 
    introduction
    getting-started
-   demos
+   faq
 
 .. toctree::
    :hidden:
-   :maxdepth: 0
+   :caption: Getting Started
+   :maxdepth: 1
 
-   faq
+   getting-started-windows
+   demos
 
 .. toctree::
    :caption: Compiler
