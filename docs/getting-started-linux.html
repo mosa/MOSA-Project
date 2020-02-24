@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Getting Started On Windows &mdash; Mosa Project  documentation</title>
+  <title>Getting Started On Linux &mdash; Mosa Project  documentation</title>
   
 
   
@@ -36,8 +36,8 @@
   <link rel="stylesheet" href="_static/css/sphinx_prompt_css.css" type="text/css" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Getting Started On Linux" href="getting-started-linux.html" />
-    <link rel="prev" title="Frequently Asked Questions (FAQs)" href="faq.html" /> 
+    <link rel="next" title="Demos" href="demos.html" />
+    <link rel="prev" title="Getting Started On Windows" href="getting-started-windows.html" /> 
 </head>
 
 <body class="wy-body-for-nav">
@@ -88,15 +88,13 @@
 </ul>
 <p class="caption"><span class="caption-text">Getting Started</span></p>
 <ul class="current">
-<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started On Windows</a><ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started-windows.html">Getting Started On Windows</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Getting Started On Linux</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#prerequisites">Prerequisites</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#download">Download</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#build">Build</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#launch">Launch</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#starter-project">Starter Project</a></li>
 </ul>
 </li>
-<li class="toctree-l1"><a class="reference internal" href="getting-started-linux.html">Getting Started On Linux</a></li>
 <li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Compiler</span></p>
@@ -176,13 +174,13 @@
     
       <li><a href="index.html">Docs</a> &raquo;</li>
         
-      <li>Getting Started On Windows</li>
+      <li>Getting Started On Linux</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="_sources/getting-started-windows.rst.txt" rel="nofollow"> View page source</a>
+            <a href="_sources/getting-started-linux.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -195,12 +193,33 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="getting-started-on-windows">
-<h1>Getting Started On Windows<a class="headerlink" href="#getting-started-on-windows" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="getting-started-on-linux">
+<h1>Getting Started On Linux<a class="headerlink" href="#getting-started-on-linux" title="Permalink to this headline">¶</a></h1>
 <div class="section" id="prerequisites">
 <h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this headline">¶</a></h2>
-<p>Install any edition of <a class="reference external" href="http://www.visualstudio.com">Visual Studio</a> version 2019 or newer.</p>
-<p>Note: The MOSA source code repository includes the <a class="reference external" href="http://wiki.qemu.org/Main_Page">Qemu</a> virtual emulator for Windows.</p>
+<p>You will also need the following prerequisites:</p>
+<p># <a class="reference external" href="https://www.qemu.org/">Qemu</a>.
+# <a class="reference external" href="https://git-scm.com/">Git</a>.
+# <a class="reference external" href="https://git-scm.com/">Microsoft .NET Core</a>.
+# <a class="reference external" href="http://www.mono-project.com">Mono</a></p>
+<p>If using the APT package manager you can use the following commands to quickly set everything up:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Register Microsoft package repository</span>
+wget -q https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+sudo dpkg -i packages-microsoft-prod.deb
+
+<span class="c1"># Install the .NET Core SDK</span>
+sudo add-apt-repository universe
+sudo apt-get update
+sudo apt-get install apt-transport-https
+sudo apt-get update
+sudo apt-get install dotnet-sdk-3.1
+sudo snap install dotnet-sdk --classic
+sudo snap <span class="nb">alias</span> dotnet-sdk.dotnet dotnet
+
+<span class="c1"># Intall QEMU and GIT</span>
+sudo apt-get -y install qemu qemu-system qemu-system-x86 git
+</pre></div>
+</div>
 </div>
 <div class="section" id="download">
 <h2>Download<a class="headerlink" href="#download" title="Permalink to this headline">¶</a></h2>
@@ -208,47 +227,14 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/mosa/MOSA-Project.git
 </pre></div>
 </div>
-<p>If download via zip, unzip the file.</p>
 </div>
 <div class="section" id="build">
 <h2>Build<a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h2>
-<p>Execute the <code class="docutils literal notranslate"><span class="pre">Compiler.bat</span></code> script in the base directory in the root directory to build and compile all the MOSA tools, kernels and demos.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Compiler.bat
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">cd</span> MOSA-Project
+dotnet restore Source/Mosa.Linux.sln
+dotnet msbuild /verbosity:minimal Source/Mosa.Linux.sln
 </pre></div>
 </div>
-<p>A successful build will display a <code class="docutils literal notranslate"><span class="pre">Build</span> <span class="pre">succedded</span></code> message (like below). Warnings may be ignored.</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>... lines removed...<span class="o">]</span>
-
-Build succeeded.
-
-<span class="o">[</span>... lines removed...<span class="o">]</span>
-
-<span class="m">1</span> Warning<span class="o">(</span>s<span class="o">)</span>
-<span class="m">0</span> Error<span class="o">(</span>s<span class="o">)</span>
-
-Time Elapsed <span class="m">00</span>:00:01.48
-</pre></div>
-</div>
-</div>
-<div class="section" id="launch">
-<h2>Launch<a class="headerlink" href="#launch" title="Permalink to this headline">¶</a></h2>
-<p>To launch one of the demo application, execute the <code class="docutils literal notranslate"><span class="pre">Launcher.bat</span></code> script to start the <a class="reference internal" href="tool-launcher.html"><span class="doc">MOSA Launcher Tool</span></a>. This tool:</p>
-<ul class="simple">
-<li><p>Compiles the operating system</p></li>
-<li><p>Creates a virtual disk image, with the compiled binary and boot loader</p></li>
-<li><p>Launches a virtual machine instance (using QEMU by default)</p></li>
-</ul>
-<p>By default, the CoolWorld demo operating system is pre-selected. Click the <code class="docutils literal notranslate"><span class="pre">Compile</span> <span class="pre">and</span> <span class="pre">Run</span></code> button to compile and launch the demo.</p>
-</div>
-<div class="section" id="starter-project">
-<h2>Starter Project<a class="headerlink" href="#starter-project" title="Permalink to this headline">¶</a></h2>
-<p>A pre-built starter C# project template is available for experimentation.</p>
-<p><strong>Option #1</strong> (Preferred - includes the entire MOSA project):</p>
-<p>Open the <code class="docutils literal notranslate"><span class="pre">Source\Mosa.sln</span></code> solution with Visual Studio and locate the <code class="docutils literal notranslate"><span class="pre">Mosa.Demo.MyWorld.x86</span></code> under <code class="docutils literal notranslate"><span class="pre">Demos</span></code>.</p>
-<p>Next, set the project as <code class="docutils literal notranslate"><span class="pre">Set</span> <span class="pre">as</span> <span class="pre">Startup</span> <span class="pre">Project</span></code>.</p>
-<p><strong>Option #2</strong> (Only the starter project):</p>
-<p>Open the <code class="docutils literal notranslate"><span class="pre">Source\Mosa.Demo.MyWorld.x86\Mosa.Demo.MyWorld.x86.csproj</span></code> project with Visual Studio.</p>
-<p>To compile and launch the application within a virtual machine, simply click on the <code class="docutils literal notranslate"><span class="pre">Start</span></code> button.</p>
 </div>
 </div>
 
@@ -260,10 +246,10 @@ Time Elapsed <span class="m">00</span>:00:01.48
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="getting-started-linux.html" class="btn btn-neutral float-right" title="Getting Started On Linux" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="demos.html" class="btn btn-neutral float-right" title="Demos" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="faq.html" class="btn btn-neutral float-left" title="Frequently Asked Questions (FAQs)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="getting-started-windows.html" class="btn btn-neutral float-left" title="Getting Started On Windows" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

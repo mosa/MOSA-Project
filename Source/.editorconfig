@@ -17,6 +17,9 @@ trim_trailing_whitespace = true
 [*.cs]
 indent_size = 4
 
+# CS0168: Variable is declared but never used
+dotnet_diagnostic.CS0168.severity = none
+
 [*.csproj]
 indent_size = 4
 
