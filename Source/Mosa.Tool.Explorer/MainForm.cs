@@ -978,6 +978,7 @@ namespace Mosa.Tool.Explorer
 			cbEnableBitTracker.Checked = state;
 			cbLoopInvariantCodeMotion.Checked = state;
 			cbPlatformOptimizations.Checked = state;
+			cbEnableDevirtualization.Checked = state;
 		}
 
 		public void LoadArguments(string[] args)

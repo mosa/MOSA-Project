@@ -88,7 +88,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packages", "Packages", "{52
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Setup", "Setup", "{624E8284-4F0A-4C3F-B5F2-271105E48ECF}"
 	ProjectSection(SolutionItems) = preProject
-		..\appveyor.yml = ..\appveyor.yml
 		..\.github\workflows\builds.yml = ..\.github\workflows\builds.yml
 		Inno-Setup-Script\Mosa-Installer.iss = Inno-Setup-Script\Mosa-Installer.iss
 		..\.github\workflows\unittests.yml = ..\.github\workflows\unittests.yml
