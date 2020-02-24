@@ -39,10 +39,10 @@ Long Expansion
 	Long Expansion is the transformation of 64-bit instructions into 32-bit instructions for platforms without native 64-bit instructions. This may result in further optimization opportunities.
 
 Devirtualization
-	Devirtualization is optimization where virtual method calls are translated into faster static method calls. Devirtualization can happen when the compiler can statically decide, at compile time, which method should be called, so it can produce a direct call to that method, or even inline it. 
+	Devirtualization is optimization where virtual method calls are translated into faster static method calls. Devirtualization can happen when the compiler can statically determine at compile which method should be called, so it can produce a direct call to that method, or even inline it. 
 
 Null Check Elimination
-	Null Check Elimination is an optimization that removes null checks instructions when the compiler can statically decide that the object reference is never null. 
+	Null Check Elimination is an optimization that removes null checks instructions when the compiler can statically determine at compile that the object reference is never null. 
 
 Two Pass Optimizations
 	This options causes most optimization stages to be executed again, possibility unlocked additional optimizations.

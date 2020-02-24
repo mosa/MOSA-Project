@@ -39,8 +39,8 @@ A successful build will display a ``Build succedded`` message (like below). Warn
 
 	[... lines removed...]
 
-    1 Warning(s)
-    0 Error(s)
+	1 Warning(s)
+	0 Error(s)
 
 	Time Elapsed 00:00:01.48
 
