@@ -163,7 +163,7 @@ namespace Mosa.Compiler.Framework
 				new ExceptionStage(),
 				new StackSetupStage(),
 				new StaticAllocationResolutionStage(),
-				new DevirtualizeCallStage(),
+				compilerSettings.Devirtualization ? new DevirtualizeCallStage() : null,
 				new PlugStage(),
 				new UnboxValueTypeStage(),
 				new RuntimeCallStage(),

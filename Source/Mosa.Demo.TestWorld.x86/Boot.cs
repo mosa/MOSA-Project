@@ -5,6 +5,7 @@ using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
 using Mosa.TestWorld.x86.Tests;
+using Mosa.UnitTests;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -261,6 +262,7 @@ namespace Mosa.Demo.TestWorld.x86
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void UnitTest()
 		{
+			//DevirtualizationTests.Test1();
 		}
 
 		public static int Test1()

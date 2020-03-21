@@ -85,33 +85,6 @@ namespace Mosa.Compiler.MosaTypeSystem
 		}
 
 		/// <summary>
-		/// Appends the given path to the assembly search path.
-		/// </summary>
-		/// <param name="path">The path to append to the assembly search path.</param>
-		public void __AddPath(string path)
-		{
-			if (!Resolver.PostSearchPaths.Contains(path))
-			{
-				Resolver.PostSearchPaths.Add(path);
-			}
-		}
-
-		/// <summary>
-		/// Appends the given paths to the assembly search path.
-		/// </summary>
-		/// <param name="paths">The assembly paths.</param>
-		public void __AddPath(IEnumerable<string> paths)
-		{
-			foreach (string path in paths)
-			{
-				if (path == null)
-					continue;
-
-				__AddPath(Path.GetDirectoryName(path));
-			}
-		}
-
-		/// <summary>
 		/// Loads the module.
 		/// </summary>
 		/// <param name="file">The file path of the module to load.</param>
