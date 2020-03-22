@@ -6,10 +6,10 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// New Object IR Stage
+	/// New Object Stage
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
-	public sealed class NewObjectIRStage : BaseCodeTransformationStage
+	public sealed class NewObjectStage : BaseCodeTransformationStage
 	{
 		protected override void PopulateVisitationDictionary()
 		{

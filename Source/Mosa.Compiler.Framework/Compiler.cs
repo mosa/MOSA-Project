@@ -191,7 +191,7 @@ namespace Mosa.Compiler.Framework
 				new DeadBlockStage(),
 				new BlockMergeStage(),
 				new IRCleanupStage(),
-				new NewObjectIRStage(),
+				new NewObjectStage(),
 				(compilerSettings.InlineMethods) ? new InlineEvaluationStage() : null,
 
 				//new StopStage(),

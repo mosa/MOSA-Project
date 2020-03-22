@@ -340,7 +340,7 @@ namespace Mosa.Tool.Launcher
 
 		private void UpdateSettings()
 		{
-			Settings.SetValue("Launcher.SSA", cbEnableSSA.Checked);
+			Settings.SetValue("Optimizations.SSA", cbEnableSSA.Checked);
 			Settings.SetValue("Optimizations.Basic", cbBasicOptimizations.Checked);
 			Settings.SetValue("Optimizations.SCCP", cbSparseConditionalConstantPropagation.Checked);
 			Settings.SetValue("Optimizations.Devirtualization", cbDevirtualization.Checked);
@@ -438,7 +438,7 @@ namespace Mosa.Tool.Launcher
 
 		private void UpdateDisplay()
 		{
-			cbEnableSSA.Checked = Settings.GetValue("Launcher.SSA", true);
+			cbEnableSSA.Checked = Settings.GetValue("Optimizations.SSA", true);
 			cbBasicOptimizations.Checked = Settings.GetValue("Optimizations.Basic", true);
 			cbSparseConditionalConstantPropagation.Checked = Settings.GetValue("Optimizations.SCCP", true);
 			cbEmitDwarf.Checked = Settings.GetValue("Linker.Drawf", cbEmitDwarf.Checked);

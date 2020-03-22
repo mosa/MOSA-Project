@@ -262,7 +262,7 @@ namespace Mosa.Demo.TestWorld.x86
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void UnitTest()
 		{
-			//DevirtualizationTests.Test1();
+			DevirtualizationTests.Test1();
 		}
 
 		public static int Test1()

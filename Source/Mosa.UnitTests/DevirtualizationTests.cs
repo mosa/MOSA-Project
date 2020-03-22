@@ -5,18 +5,18 @@
 
 namespace Mosa.UnitTests
 {
-	internal class Base
+	internal class DevirtualizationBase
 	{
 		public virtual int Foo()
 		{
 			return 33;
 		}
 
-		private static BaseSealed s_Default = new BaseSealed();
-		public static Base Default => s_Default;
+		private static DevirtualizationBaseSealed s_Default = new DevirtualizationBaseSealed();
+		public static DevirtualizationBase Default => s_Default;
 	}
 
-	internal sealed class BaseSealed : Base
+	internal sealed class DevirtualizationBaseSealed : DevirtualizationBase
 	{ }
 
 	public class DevirtualizationTests
@@ -24,7 +24,7 @@ namespace Mosa.UnitTests
 		[MosaUnitTest]
 		public static int Test1()
 		{
-			Base b = Base.Default;
+			DevirtualizationBase b = DevirtualizationBase.Default;
 			int x = b.Foo();
 			return (x == 33 ? 100 : -1);
 		}
