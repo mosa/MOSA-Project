@@ -248,16 +248,18 @@ namespace Mosa.Compiler.Framework
 
 			IsStopped = false;
 			IsExecutePipeline = true;
-			IsCILDecodeRequired = true;
-			IsStackFrameRequired = true;
 			IsMethodInlined = false;
+			IsCILDecodeRequired = !Method.IsCompilerGenerated;
 			HasProtectedRegions = Method.ExceptionHandlers.Count != 0;
 
 			MethodData = Compiler.GetMethodData(Method);
-			MethodData.Counters.Reset();
 
+			MethodData.Counters.Reset();
+			MethodData.HasCode = false;
 			MethodData.Version++;
 			MethodData.IsMethodImplementationReplaced = IsMethodPlugged;
+
+			IsStackFrameRequired = MethodData.StackFrameRequired;
 
 			if (Symbol == null)
 			{
@@ -396,16 +398,6 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public void Compile()
 		{
-			MethodData.HasCode = false;
-
-			if (Method.IsCompilerGenerated)
-			{
-				IsCILDecodeRequired = false;
-				IsStackFrameRequired = false;
-			}
-
-			//Debug.WriteLine($"{MethodScheduler.GetTimestamp()} - Compiling: [{MethodData.Version}] {Method}"); //DEBUGREMOVE
-
 			PlugMethod();
 
 			PatchDelegate();
@@ -415,8 +407,6 @@ namespace Mosa.Compiler.Framework
 			InternalMethod();
 
 			ExecutePipeline();
-
-			//Debug.WriteLine($"{MethodScheduler.GetTimestamp()} - Compiled: [{MethodData.Version}] {Method}"); //DEBUGREMOVE
 
 			Symbol.SetReplacementStatus(MethodData.Inlined);
 

@@ -19,7 +19,9 @@ namespace Mosa.Compiler.Framework
 
 		public Counters Counters { get; }
 
-		public bool IsLinkerGenerated { get; set; }
+		public bool IsCompilerGenerated { get; set; }
+
+		public bool StackFrameRequired { get; set; }
 
 		public bool HasProtectedRegions { get; set; }
 
@@ -93,6 +95,7 @@ namespace Mosa.Compiler.Framework
 			HasCode = false;
 			IsInvoked = false;
 			AggressiveInlineRequested = false;
+			StackFrameRequired = true;
 		}
 
 		#region Methods

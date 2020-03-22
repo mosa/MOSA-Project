@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		/// <summary>
 		/// Hold the current context
 		/// </summary>
-		private readonly Context start;
+		private readonly Context body;
 
 		/// <summary>
 		/// The basic blocks
@@ -48,21 +48,22 @@ namespace Mosa.Compiler.Framework.CompilerStages
 			var startBlock = basicBlocks.CreateBlock(BasicBlock.StartLabel);
 			var epilogueBlock = basicBlocks.CreateBlock(BasicBlock.EpilogueLabel);
 
-			// Create the prologue instructions
+			// Create the prologue block
 			basicBlocks.AddHeadBlock(prologueBlock);
 			var prologue = new Context(prologueBlock);
-			prologue.AppendInstruction(IRInstruction.Prologue);
+
+			//prologue.AppendInstruction(IRInstruction.Prologue);
 			prologue.Label = -1;
 			prologue.AppendInstruction(IRInstruction.Jmp, startBlock);
 
-			// Create the epilogue instruction
+			// Create the epilogue block
 			var epilogue = new Context(epilogueBlock);
-			epilogue.AppendInstruction(IRInstruction.Epilogue);
 
-			// create start instructions
-			start = new Context(startBlock);
-			start.AppendInstruction(IRInstruction.Jmp, epilogueBlock);
-			start.GotoPrevious();
+			//epilogue.AppendInstruction(IRInstruction.Epilogue);
+
+			body = new Context(startBlock);
+			body.AppendInstruction(IRInstruction.Jmp, epilogueBlock);
+			body.GotoPrevious();
 		}
 
 		#endregion Construction
@@ -115,7 +116,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		{
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
-			start.AppendInstruction(IRInstruction.CallStatic, null, symbol);
+			body.AppendInstruction(IRInstruction.CallStatic, null, symbol);
 		}
 
 		#endregion Private Methods
