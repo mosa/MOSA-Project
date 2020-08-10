@@ -34,7 +34,7 @@ The MOSA project consists of:
 * Device Drivers Framework - a modular, device drivers framework and device drivers
 * Debugger - QEMU-based debugger
 
-Visit our [Documentation](http://www.mosa-project.org/) for more information about this project.
+Visit our [Website](http://www.mosa-project.org/) for more information and documentation about this project.
 
 ### Join the Discussion
 
