@@ -163,7 +163,7 @@ namespace Mosa.Compiler.Framework
 				new ExceptionStage(),
 				new StackSetupStage(),
 				new StaticAllocationResolutionStage(),
-				new DevirtualizeCallStage(),
+				compilerSettings.Devirtualization ? new DevirtualizeCallStage() : null,
 				new PlugStage(),
 				new UnboxValueTypeStage(),
 				new RuntimeCallStage(),
@@ -191,7 +191,7 @@ namespace Mosa.Compiler.Framework
 				new DeadBlockStage(),
 				new BlockMergeStage(),
 				new IRCleanupStage(),
-				new NewObjectIRStage(),
+				new NewObjectStage(),
 				(compilerSettings.InlineMethods) ? new InlineEvaluationStage() : null,
 
 				//new StopStage(),

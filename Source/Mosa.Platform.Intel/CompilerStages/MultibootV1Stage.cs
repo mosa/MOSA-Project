@@ -97,10 +97,13 @@ namespace Mosa.Platform.Intel.CompilerStages
 			Linker.DefineSymbol(MultibootEBX, SectionKind.BSS, Architecture.NativeAlignment, Architecture.NativePointerSize);
 
 			multibootMethod = Compiler.CreateLinkerMethod("MultibootInit");
+			var methodData = Compiler.GetMethodData(multibootMethod);
+
+			methodData.DoNotInline = true;
+			methodData.StackFrameRequired = false;
 
 			Linker.EntryPoint = Linker.GetSymbol(multibootMethod.FullName);
 
-			Compiler.GetMethodData(multibootMethod).DoNotInline = true;
 			MethodScanner.MethodInvoked(multibootMethod, multibootMethod);
 
 			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");

@@ -84,11 +84,13 @@
               <p class="caption"><span class="caption-text">Introduction</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="introduction.html">Introduction</a></li>
-<li class="toctree-l1"><a class="reference internal" href="getting-started.html">Getting Started</a></li>
-<li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
-</ul>
-<ul>
 <li class="toctree-l1"><a class="reference internal" href="faq.html">Frequently Asked Questions (FAQs)</a></li>
+</ul>
+<p class="caption"><span class="caption-text">Getting Started</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="getting-started-windows.html">Getting Started On Windows</a></li>
+<li class="toctree-l1"><a class="reference internal" href="getting-started-linux.html">Getting Started On Linux</a></li>
+<li class="toctree-l1"><a class="reference internal" href="demos.html">Demos</a></li>
 </ul>
 <p class="caption"><span class="caption-text">Compiler</span></p>
 <ul class="current">
@@ -194,29 +196,33 @@
 <div class="section" id="optimizations">
 <h2>Optimizations<a class="headerlink" href="#optimizations" title="Permalink to this headline">¶</a></h2>
 <dl class="simple">
-<dt>Constant Folding and Propagation</dt><dd><p>Constant folding is the process of recognizing and evaluating constant expressions at compile time rather than computing them at runtime.</p>
+<dt>Constant Folding and Propagation</dt><dd><p>Constant Folding is the process of recognizing and evaluating constant expressions at compile time rather than computing them at runtime.</p>
 </dd>
-<dt>Strength Reduction</dt><dd><p>Strength reduction is a compiler optimization where expensive operations are replaced with equivalent but less expensive operations.</p>
+<dt>Strength Reduction</dt><dd><p>Strength Reduction is a compiler optimization where expensive operations are replaced with equivalent but less expensive operations.</p>
 </dd>
 <dt>Dead Code Elimination</dt><dd><p>Dead code elimination is an optimization to remove instructions which does not affect the results of a program.</p>
 </dd>
 <dt>Static Single Assignment Form</dt><dd><p>In Single Static Assignment (SSA) form, all virtual registers may only have one definition. While not an immediate optimization by itself, it enables other optimization opportunities by simultaneously simplifies and improves the results of the other compiler optimizations.</p>
 </dd>
-<dt>Sparse Conditional Constant Propagation</dt><dd><p>Sparse conditional constant propagation is an optimization applied after conversion to static single assignment form (SSA). It simultaneously removes dead code and propagates constants. It can finds more constant values, and thus more opportunities for improvement, than other optimizations.</p>
+<dt>Sparse Conditional Constant Propagation</dt><dd><p>Sparse Conditional Constant Propagation is an optimization applied after conversion to static single assignment form (SSA). It simultaneously removes dead code and propagates constants. It can finds more constant values, and thus more opportunities for improvement, than other optimizations.</p>
 </dd>
-<dt>Global Value Numbering</dt><dd><p>Global Value numbering is a technique of determining when two computations in a program are equivalent and eliminating one of them with while preserving the same semantics.</p>
+<dt>Global Value Numbering</dt><dd><p>Global Value Numbering is a technique of determining when two computations in a program are equivalent and eliminating one of them with while preserving the same semantics.</p>
 </dd>
 <dt>Inline Expansion</dt><dd><p>Inline Expansion replaces a methods call site with the body of the called method. This improves the performance, because calls can be expensive (storing the registers, placing the arguments onto stack, jumping to another location).</p>
 </dd>
 <dt>Bit Tracker</dt><dd><p>Bit Tracker tracks the known state of bits and value ranges thru the various operations. This may enables other optimizations and shortcuts.</p>
 </dd>
-<dt>Block Reordering</dt><dd><p>Basic block reordering organizaze block of instructions to maximize the number of fall-through branches.</p>
+<dt>Block Reordering</dt><dd><p>Basic Block Reordering organizaze block of instructions to maximize the number of fall-through branches.</p>
 </dd>
 <dt>Greedy Register Allocation</dt><dd><p>Greedy Register Allocation is a form of register allocation that allocates registers based on live ranges and spill weights.</p>
 </dd>
-<dt>Long Expansion</dt><dd><p>Long expansion is the transformation of 64-bit instructions into 32-bit components for platforms without native 64-bit instructions. This may result in further optimization opportunities.</p>
+<dt>Long Expansion</dt><dd><p>Long Expansion is the transformation of 64-bit instructions into 32-bit instructions for platforms without native 64-bit instructions. This may result in further optimization opportunities.</p>
 </dd>
-<dt>Two Pass Optimizations</dt><dd><p>This options causes the optimization stages to be executed again, possibility unlocked additional optimizations.</p>
+<dt>Devirtualization</dt><dd><p>Devirtualization is optimization where virtual method calls are translated into faster static method calls. Devirtualization can happen when the compiler can statically determine at compile which method should be called, so it can produce a direct call to that method, or even inline it.</p>
+</dd>
+<dt>Null Check Elimination</dt><dd><p>Null Check Elimination is an optimization that removes null checks instructions when the compiler can statically determine at compile that the object reference is never null.</p>
+</dd>
+<dt>Two Pass Optimizations</dt><dd><p>This options causes most optimization stages to be executed again, possibility unlocked additional optimizations.</p>
 </dd>
 </dl>
 </div>

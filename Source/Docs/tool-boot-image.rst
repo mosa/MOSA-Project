@@ -6,6 +6,9 @@ The Boot Image Tool is a command line application that can be used to create boo
 
 .. warning:: This tool has been superceded by the MOSA Launcher Tool which can automate the entire build chain functionality.
 
+Usage
+-----
+
 The tool has several command line options. Example:
 
 .. code-block:: text

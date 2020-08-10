@@ -6,8 +6,9 @@ The **MOSA Launcher Console** is a console application that automates the entire
 
 .. tip:: Check out the :doc:`MOSA Launcher <tool-launcher>` for a graphic user interface version of this console application.
 
-Example
---------------------
+Usage
+-----
+
 A quick example that compiles `Mosa.TestWorld.x86.exe` demo with `-oMax` (all optimization enabled) and launches it using `Qemu`:
 
 .. code-block:: text

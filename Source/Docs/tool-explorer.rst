@@ -6,7 +6,10 @@ The **MOSA Explorer** is GUI application used to visualize the compiler transfor
 
 .. image:: images/mosa-explorer.png
 
-The **MOSA Explorer** can be launched by executing `Mosa.Tool.Explorer.exe`. 
+Usage
+------
+
+The **MOSA Explorer** can be launched by executing ``Mosa.Tool.Explorer.exe``. 
 
 In addition, the tool can be launched from the command line with arguments:
 

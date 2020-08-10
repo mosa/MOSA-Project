@@ -26,15 +26,19 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (node.Instruction == IRInstruction.NewObject || node.Instruction == IRInstruction.NewArray)
 					{
-						PerformStaticAllocation(node);
+						PerformStaticAllocation(new Context(node));
 					}
 				}
 			}
 		}
 
-		private void PerformStaticAllocation(InstructionNode node)
+		private void PerformStaticAllocation(Context context)
 		{
-			var allocatedType = node.MosaType; // node.Result.Type;
+			var allocatedType = context.MosaType; // node.Result.Type;
+			var handle = context.Operand1;
+
+			bool newObject = context.Instruction == IRInstruction.NewObject;
+			int elements = 0;
 
 			//Debug.WriteLine($"Method: {Method} : {node}");
 			//Debug.WriteLine($"  --> {allocatedType}");
@@ -43,13 +47,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 			int allocationSize;
 
-			if (node.Instruction == IRInstruction.NewObject)
+			if (newObject)
 			{
 				allocationSize = TypeLayout.GetTypeSize(allocatedType);
 			}
 			else
 			{
-				var elements = (int)GetConstant(node.Operand3);
+				elements = (int)GetConstant(context.Operand3);
 				allocationSize = (TypeLayout.GetTypeSize(allocatedType.ElementType) * elements) + (TypeLayout.NativePointerSize * 3);
 			}
 
@@ -62,8 +66,15 @@ namespace Mosa.Compiler.Framework.Stages
 			var staticAddress = Operand.CreateSymbol(allocatedType, symbolName.Name);
 
 			var move = Is32BitPlatform ? (BaseInstruction)IRInstruction.Move32 : IRInstruction.Move64;
+			var store = Is32BitPlatform ? (BaseInstruction)IRInstruction.Store32 : IRInstruction.Store64;
 
-			node.SetInstruction(move, node.Result, staticAddress);
+			context.SetInstruction(move, context.Result, staticAddress);
+			context.AppendInstruction(store, null, staticAddress, ConstantZero, handle);
+
+			if (!newObject)
+			{
+				context.AppendInstruction(store, null, staticAddress, CreateConstant(2 * (Is32BitPlatform ? 4 : 8)), CreateConstant(elements));
+			}
 		}
 
 		private static long GetConstant(Operand operand)

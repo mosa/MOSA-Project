@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.Source
 			if (methodData.Method.HasImplementation
 				&& methodData.HasCode
 				&& !methodData.IsMethodImplementationReplaced
-				&& !methodData.IsLinkerGenerated)
+				&& !methodData.IsCompilerGenerated)
 			{
 				// Add method header
 				var regions = new List<SourceRegion>(methodData.LabelRegions.Count + 1);

@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			// No CIL decoding if this is a linker generated method
-			Debug.Assert(!Method.IsCompilerGenerated);
+			Debug.Assert(!MethodData.IsCompilerGenerated);
 
 			MethodCompiler.SetLocalVariables(Method.LocalVariables);
 

@@ -189,7 +189,7 @@ namespace Mosa.Utility.Launcher
 		protected Process LaunchApplication(string app, string args)
 		{
 			Output($"Launching Application: {app}");
-			Output("Arguments: " + args);
+			Output($"Arguments: {args}");
 
 			var start = new ProcessStartInfo
 			{
@@ -207,7 +207,7 @@ namespace Mosa.Utility.Launcher
 		protected Process LaunchConsoleApplication(string app, string args)
 		{
 			Output($"Launching Application: {app}");
-			Output("Arguments: " + args);
+			Output($"Arguments: {args}");
 
 			var start = new ProcessStartInfo
 			{

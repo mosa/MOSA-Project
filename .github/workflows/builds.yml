@@ -59,10 +59,10 @@ jobs:
         run: bin\Mosa.Utility.UnitTests.exe -oMax -s Emulator.Display=false
       - name: Unit Tests - No Optimizations
         run: bin\Mosa.Utility.UnitTests.exe -oNone -s Emulator.Display=false
-      - name: Test Demo - Mosa.HelloWorld.x86 
-        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.HelloWorld.x86.exe -s Launcher.Test=true
-      - name: Test Demo - Mosa.CoolWorld.x86 
-        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.CoolWorld.x86.exe -s Launcher.Test=true
+      - name: Test Demo - Mosa.Demo.HelloWorld.x86 
+        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.Demo.HelloWorld.x86.exe -s Launcher.Test=true
+      - name: Test Demo - Mosa.Demo.CoolWorld.x86 
+        run: bin\Mosa.Tool.Launcher.Console.exe bin\Mosa.Demo.CoolWorld.x86.exe -s Launcher.Test=true
       - name: Publish Package - Mosa.Tools.Package
         run: dotnet nuget push bin\nupkg\Mosa.Tools.Package.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
         if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'

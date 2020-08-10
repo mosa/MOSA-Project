@@ -25,6 +25,8 @@ namespace Mosa.Compiler.Framework.Linker
 
 		private readonly ElfLinker ElfLinker;
 
+		private LinkerSymbol FirstSymbol { get; set; }
+
 		public uint SectionAlignment { get { return ElfLinker.SectionAlignment; } }
 
 		public uint BaseFileOffset { get { return ElfLinker.BaseFileOffset; } }
@@ -146,8 +148,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public void SetFirst(LinkerSymbol symbol)
 		{
-			Symbols.Remove(symbol);
-			Symbols.Insert(0, symbol);
+			FirstSymbol = symbol;
 		}
 
 		public void FinalizeLayout()
@@ -160,6 +161,15 @@ namespace Mosa.Compiler.Framework.Linker
 		private void LayoutObjectsAndSections()
 		{
 			var virtualAddress = LinkerSettings.BaseAddress;
+
+			// Sort the list --- helpful for debugging
+			Symbols.Sort((y, x) => x.Name.CompareTo(y.Name));
+
+			if (FirstSymbol != null)
+			{
+				Symbols.Remove(FirstSymbol);
+				Symbols.Insert(0, FirstSymbol);
+			}
 
 			foreach (var section in SectionKinds)
 			{

@@ -54,7 +54,7 @@ namespace Mosa.Compiler.Framework
 					methodData = new MethodData(method)
 					{
 						HasProtectedRegions = method.ExceptionHandlers.Count != 0,
-						IsLinkerGenerated = method.IsCompilerGenerated,
+						IsCompilerGenerated = method.IsCompilerGenerated,
 						HasDoNotInlineAttribute = method.IsNoInlining,
 						HasAggressiveInliningAttribute = method.IsAggressiveInlining
 					};

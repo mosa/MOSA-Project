@@ -5,14 +5,16 @@
    :maxdepth: 1
 
    introduction
-   getting-started
-   demos
+   faq
 
 .. toctree::
    :hidden:
-   :maxdepth: 0
+   :caption: Getting Started
+   :maxdepth: 1
 
-   faq
+   getting-started-windows
+   getting-started-linux
+   demos
 
 .. toctree::
    :caption: Compiler

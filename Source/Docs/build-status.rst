@@ -8,10 +8,10 @@
 .. |unittests| image:: https://img.shields.io/github/workflow/status/mosa/MOSA-Project/Unit%20Tests
 	:target: https://github.com/mosa/MOSA-Project/actions
 
-.. |github-build| image:: https://github.com/mosa/MOSA-Project/workflows/Builds/badge.svg
+.. |github-build| image:: https://github.com/mosa/MOSA-Project/workflows/Builds/badge.svg?branch=master
 	:target: https://github.com/mosa/MOSA-Project/actions
 
-.. |github-unittests| image:: https://github.com/mosa/MOSA-Project/workflows/Unit%20Tests/badge.svg
+.. |github-unittests| image:: https://github.com/mosa/MOSA-Project/workflows/Unit%20Tests/badge.svg?branch=master
 	:target: https://github.com/mosa/MOSA-Project/actions
 
 .. |license| image:: https://img.shields.io/badge/License-New%20BSD-blue.svg
