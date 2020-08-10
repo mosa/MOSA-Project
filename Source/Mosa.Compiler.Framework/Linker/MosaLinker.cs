@@ -163,7 +163,7 @@ namespace Mosa.Compiler.Framework.Linker
 			var virtualAddress = LinkerSettings.BaseAddress;
 
 			// Sort the list --- helpful for debugging
-			//Symbols.Sort((x, y) => x.Name.CompareTo(y.Name));
+			Symbols.Sort((y, x) => x.Name.CompareTo(y.Name));
 
 			if (FirstSymbol != null)
 			{

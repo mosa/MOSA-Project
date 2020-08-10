@@ -83,6 +83,8 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 		public static string ComputeHash(Stream stream)
 		{
+			stream.Position = 0;
+
 			var sha = new SHA256Managed();
 			var hash = sha.ComputeHash(stream);
 			return BitConverter.ToString(hash);
