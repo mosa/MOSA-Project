@@ -1,0 +1,152 @@
+﻿{
+	"Commutative": [
+		"IR.Add32",
+		"IR.Add64",
+		"IR.AddR4",
+		"IR.AddR8",
+		"IR.And32",
+		"IR.And64",
+		"IR.Or32",
+		"IR.Or64",
+		"IR.Xor32",
+		"IR.Xor64",
+		"IR.MulR4",
+		"IR.MulR8",
+		"IR.MulUnsigned32",
+		"IR.MulUnsigned64",
+		"IR.MulSigned32",
+		"IR.MulSigned64",
+		"IR.AddCarryOut64",
+		"IR.AddCarryOut32",
+		"IR.AddCarryIn32",
+		"IR.AddCarryIn64"
+	],
+	"Optimizations": [
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "Add##",
+			"SubName": "x2",
+			"Expression": "IR.Add## (IR.Add## a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Add## a [Add##(To##(b), To##(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "AddR#",
+			"SubName": "x2",
+			"Expression": "IR.AddR# (IR.AddR# a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.AddR# a [AddR#(ToR#(b), ToR#(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "Sub##",
+			"SubName": "x2",
+			"Expression": "IR.Sub## (IR.Sub## a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Sub## a [Sub##(To##(b), To##(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SubR#",
+			"SubName": "x2",
+			"Expression": "IR.SubR# (IR.SubR# a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.SubR# a [SubR#(ToR#(b), ToR#(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "MulSigned##",
+			"SubName": "x2",
+			"Expression": "IR.MulSigned## (IR.MulSigned## a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.MulSigned## a [MulSigned##(ToSigned##(b), ToSigned##(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "MulR#",
+			"SubName": "x2",
+			"Expression": "IR.MulR# (IR.MulR# a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.MulR# a [MulR#(ToR#(b), ToR#(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "MulUnsigned##",
+			"SubName": "x2",
+			"Expression": "IR.MulUnsigned## (IR.MulUnsigned## a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.MulUnsigned## a [MulUnsigned##(To##(b), To##(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "Or##",
+			"SubName": "x2",
+			"Expression": "IR.Or## (IR.Or## a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Or## a [Or##(To##(b), To##(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "And##",
+			"SubName": "x2",
+			"Expression": "IR.And## (IR.And## a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.And## a [And##(To##(b), To##(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "Xor##",
+			"SubName": "x2",
+			"Expression": "IR.Xor## (IR.Xor## a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Xor## a [Xor##(To##(b), To##(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "AddSub##",
+			"SubName": "",
+			"Expression": "IR.Add## (IR.Sub## a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Sub## a [Add##(To##(b), To##(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "AddSubR#",
+			"SubName": "",
+			"Expression": "IR.AddR# (IR.SubR# a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.SubR# a [AddR#(ToR#(b), ToR#(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SubAdd##",
+			"SubName": "",
+			"Expression": "IR.Sub## (IR.Add## a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Add## a [Sub##(To##(b), To##(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SubAddR#",
+			"SubName": "",
+			"Expression": "IR.SubR# (IR.AddR# a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.AddR# a [SubR#(ToR#(b), ToR#(c))])"
+		}
+	]
+}

@@ -33,12 +33,22 @@ namespace Mosa.Utility.SourceCodeGenerator
 			).Execute();
 
 			new BuildTransformations(
-				Path.Combine(dataPath, @"IR-Optimizations-Reassociate.json"),
+				Path.Combine(dataPath, @"IR-Optimizations-Reorder.json"),
 				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto")
 			).Execute();
 
 			new BuildTransformations(
-				Path.Combine(dataPath, @"IR-Optimizations-Rewrite.json"),
+				Path.Combine(dataPath, @"IR-Optimizations-ConstantMove-Expression.json"),
+				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto")
+			).Execute();
+
+			new BuildTransformations(
+				Path.Combine(dataPath, @"IR-Optimizations-ConstantFolding-Expression.json"),
+				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto")
+			).Execute();
+
+			new BuildTransformations(
+				Path.Combine(dataPath, @"IR-Optimizations-ConstantFolding-MemoryAccess.json"),
 				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto")
 			).Execute();
 

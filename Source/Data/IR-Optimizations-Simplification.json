@@ -21,144 +21,12 @@
 		{
 			"FamilyName": "IR",
 			"Type": "Simplification",
-			"Name": "Add##",
-			"SubName": "Combine",
-			"Expression": "IR.Add## (IR.Add## a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.Add## a [Add##(To##(b), To##(c))])"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "Simplification",
-			"Name": "AddR#",
-			"SubName": "Combine",
-			"Expression": "IR.AddR# (IR.AddR# a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.AddR# a [AddR#(ToR#(b), ToR#(c))])"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "Simplification",
-			"Name": "Sub##",
-			"SubName": "Combine",
-			"Expression": "IR.Sub## (IR.Sub## a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.Sub## a [Sub##(To##(b), To##(c))])"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "Simplification",
-			"Name": "SubR#",
-			"SubName": "Combine",
-			"Expression": "IR.SubR# (IR.SubR# a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.SubR# a [SubR#(ToR#(b), ToR#(c))])"
-		},
-
-		{
-			"FamilyName": "IR",
-			"Type": "Simplification",
-			"Name": "MulSigned##",
-			"MulSignedName": "Combine",
-			"Expression": "IR.MulSigned## (IR.MulSigned## a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.MulSigned## a [MulSigned##(ToSigned##(b), ToSigned##(c))])"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "Simplification",
-			"Name": "MulR#",
-			"MulSignedName": "Combine",
-			"Expression": "IR.MulR# (IR.MulR# a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.MulR# a [MulR#(ToR#(b), ToR#(c))])"
-		},
-
-		{
-			"FamilyName": "IR",
-			"Type": "Simplification",
-			"Name": "MulUnsigned##",
-			"MulUnsignedName": "Combine",
-			"Expression": "IR.MulUnsigned## (IR.MulUnsigned## a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.MulUnsigned## a [MulUnsigned##(To##(b), To##(c))])"
-		},
-
-		{
-			"FamilyName": "IR",
-			"Type": "Simplification",
-			"Name": "Or##",
-			"SubName": "Combine",
-			"Expression": "IR.Or## (IR.Or## a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.Or## a [Or##(To##(b), To##(c))])"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "Simplification",
-			"Name": "And##",
-			"SubName": "Combine",
-			"Expression": "IR.And## (IR.And## a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.And## a [And##(To##(b), To##(c))])"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "Simplification",
-			"Name": "Xor##",
-			"SubName": "Combine",
-			"Expression": "IR.Xor## (IR.Xor## a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.Xor## a [Xor##(To##(b), To##(c))])"
-		},
-
-		{
-			"FamilyName": "IR",
-			"Type": "Simplification",
-			"Name": "AddSub##",
-			"SubName": "Combine",
-			"Expression": "IR.Add## (IR.Sub## a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.Sub## a [Add##(To##(b), To##(c))])"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "Simplification",
-			"Name": "AddSubR#",
-			"SubName": "Combine",
-			"Expression": "IR.AddR# (IR.SubR# a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.SubR# a [AddR#(ToR#(b), ToR#(c))])"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "Simplification",
-			"Name": "SubAdd##",
-			"SubName": "Combine",
-			"Expression": "IR.Sub## (IR.Add## a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.Add## a [Sub##(To##(b), To##(c))])"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "Simplification",
-			"Name": "SubAddR#",
-			"SubName": "Combine",
-			"Expression": "IR.SubR# (IR.AddR# a b) c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.AddR# a [SubR#(ToR#(b), ToR#(c))])"
-		},
-
-		{
-			"FamilyName": "IR",
-			"Type": "Simplification",
 			"Name": "GetLow64",
 			"SubName": "FromTo64",
 			"Expression": "IR.GetLow64 (IR.To64 a b))",
 			"Filter": "",
 			"Result": "(IR.Move32 a)"
 		},
-
 		{
 			"FamilyName": "IR",
 			"Type": "Simplification",
@@ -297,24 +165,6 @@
 		{
 			"FamilyName": "IR",
 			"Type": "Simplification",
-			"Name": "And##",
-			"SubName": "Not##Not##",
-			"Expression": "(IR.And## (IR.Not## a) (IR.Not## b))",
-			"Filter": "",
-			"Result": "(IR.Not## (IR.Or## a b))"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "Simplification",
-			"Name": "Or##",
-			"SubName": "Not##Not##",
-			"Expression": "(IR.Or## (IR.Not## a) (IR.Not## b))",
-			"Filter": "",
-			"Result": "(IR.Not## (IR.And## a b))"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "Simplification",
 			"Name": "Add##",
 			"SubName": "MultipleWithCommon",
 			"Expression": "IR.Add## (IR.MulUnsigned## x y) (IR.MulUnsigned## x z)",
@@ -329,6 +179,24 @@
 			"Expression": "IR.Sub## (IR.MulUnsigned## x y) (IR.MulUnsigned## x z)",
 			"Filter": "",
 			"Result": "(IR.MulUnsigned## x (IR.Sub## y z))"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "And##",
+			"SubName": "Not##Not##",
+			"Expression": "(IR.And## (IR.Not## a) (IR.Not## b))",
+			"Filter": "",
+			"Result": "(IR.Not## (IR.Or## a b))"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Or##",
+			"SubName": "Not##Not##",
+			"Expression": "(IR.Or## (IR.Not## a) (IR.Not## b))",
+			"Filter": "",
+			"Result": "(IR.Not## (IR.And## a b))"
 		}
 	]
 }
