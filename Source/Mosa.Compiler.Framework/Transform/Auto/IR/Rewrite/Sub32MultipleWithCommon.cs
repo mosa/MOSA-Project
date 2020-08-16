@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Rewrite
 	/// </summary>
 	public sealed class Sub32MultipleWithCommon : BaseTransformation
 	{
-		public Sub32MultipleWithCommon() : base(IRInstruction.Add32)
+		public Sub32MultipleWithCommon() : base(IRInstruction.Sub32)
 		{
 		}
 

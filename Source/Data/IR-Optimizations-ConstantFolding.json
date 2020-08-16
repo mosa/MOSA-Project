@@ -567,6 +567,7 @@
 			"Filter": "IsResolvedConstant(a) & IsZero(a)",
 			"Result": "(IR.Move64 c)"
 		},
+
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",

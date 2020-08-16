@@ -23,7 +23,7 @@
 			"Type": "Rewrite",
 			"Name": "Sub32",
 			"SubName": "MultipleWithCommon",
-			"Expression": "IR.Add32 (IR.MulUnsigned32 x y) (IR.MulUnsigned32 x z)",
+			"Expression": "IR.Sub32 (IR.MulUnsigned32 x y) (IR.MulUnsigned32 x z)",
 			"Filter": "",
 			"Result": "(IR.MulUnsigned32 x (IR.Sub32 y z))"
 		},
@@ -32,7 +32,7 @@
 			"Type": "Rewrite",
 			"Name": "Sub64",
 			"SubName": "MultipleWithCommon",
-			"Expression": "IR.Add64 (IR.MulUnsigned64 x y) (IR.MulUnsigned64 x z)",
+			"Expression": "IR.Sub64 (IR.MulUnsigned64 x y) (IR.MulUnsigned64 x z)",
 			"Filter": "",
 			"Result": "(IR.MulUnsigned64 x (IR.Sub64 y z))"
 		},
@@ -884,6 +884,7 @@
 			"Filter": "IsParameter(parameter)",
 			"Result": "(IR.LoadParamZeroExtend32x64 parameter)"
 		},
+
 		{
 			"FamilyName": "IR",
 			"Type": "Rewrite",
