@@ -378,6 +378,132 @@
 			"Expression": "IR.GetLow64 (IR.ShiftLeft64 a b)",
 			"Filter": "IsGreaterThanOrEqual(And32(To32(b),63u),32u)",
 			"Result": "(IR.Move32 0)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Truncate64x32Add64",
+			"SubName": "FromZeroExtended32x64",
+			"Expression": "(IR.Truncate64x32 (IR.Add64 (IR.ZeroExtend32x64 a) (IR.ZeroExtend32x64 b)))",
+			"Filter": "",
+			"Result": "(IR.Add32 a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Truncate64x32Sub64",
+			"SubName": "FromZeroExtended32x64",
+			"Expression": "(IR.Truncate64x32 (IR.Sub64 (IR.ZeroExtend32x64 a) (IR.ZeroExtend32x64 b)))",
+			"Filter": "",
+			"Result": "(IR.Sub32 a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Truncate64x32MulUnsigned64",
+			"SubName": "FromZeroExtended32x64",
+			"Expression": "(IR.Truncate64x32 (IR.MulUnsigned64 (IR.ZeroExtend32x64 a) (IR.ZeroExtend32x64 b)))",
+			"Filter": "",
+			"Result": "(IR.MulUnsigned32 a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Truncate64x32And64",
+			"SubName": "FromZeroExtended32x64",
+			"Expression": "(IR.Truncate64x32 (IR.And64 (IR.ZeroExtend32x64 a) (IR.ZeroExtend32x64 b)))",
+			"Filter": "",
+			"Result": "(IR.And32 a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Truncate64x32Or64",
+			"SubName": "FromZeroExtended32x64",
+			"Expression": "(IR.Truncate64x32 (IR.Or64 (IR.ZeroExtend32x64 a) (IR.ZeroExtend32x64 b)))",
+			"Filter": "",
+			"Result": "(IR.Or32 a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Truncate64x32Xor64",
+			"SubName": "FromZeroExtended32x64",
+			"Expression": "(IR.Truncate64x32 (IR.Xor64 (IR.ZeroExtend32x64 a) (IR.ZeroExtend32x64 b)))",
+			"Filter": "",
+			"Result": "(IR.Xor32 a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "And32",
+			"SubName": "Not32Not32",
+			"Expression": "(IR.And32 (IR.Not32 a) (IR.Not32 b))",
+			"Filter": "",
+			"Result": "(IR.Not32 (IR.Or32 a b))"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "And64",
+			"SubName": "Not64Not64",
+			"Expression": "(IR.And64 (IR.Not64 a) (IR.Not64 b))",
+			"Filter": "",
+			"Result": "(IR.Not64 (IR.Or64 a b))"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Or32",
+			"SubName": "Not32Not32",
+			"Expression": "(IR.Or32 (IR.Not32 a) (IR.Not32 b))",
+			"Filter": "",
+			"Result": "(IR.Not32 (IR.And32 a b))"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Or64",
+			"SubName": "Not64Not64",
+			"Expression": "(IR.Or64 (IR.Not64 a) (IR.Not64 b))",
+			"Filter": "",
+			"Result": "(IR.Not64 (IR.And32 a b))"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Add32",
+			"SubName": "MultipleWithCommon",
+			"Expression": "IR.Add32 (IR.MulUnsigned32 x y) (IR.MulUnsigned32 x z)",
+			"Filter": "",
+			"Result": "(IR.MulUnsigned32 x (IR.Add32 y z))"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Add64",
+			"SubName": "MultipleWithCommon",
+			"Expression": "IR.Add64 (IR.MulUnsigned64 x y) (IR.MulUnsigned64 x z)",
+			"Filter": "",
+			"Result": "(IR.MulUnsigned64 x (IR.Add64 y z))"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Sub32",
+			"SubName": "MultipleWithCommon",
+			"Expression": "IR.Sub32 (IR.MulUnsigned32 x y) (IR.MulUnsigned32 x z)",
+			"Filter": "",
+			"Result": "(IR.MulUnsigned32 x (IR.Sub32 y z))"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Sub64",
+			"SubName": "MultipleWithCommon",
+			"Expression": "IR.Sub64 (IR.MulUnsigned64 x y) (IR.MulUnsigned64 x z)",
+			"Filter": "",
+			"Result": "(IR.MulUnsigned64 x (IR.Sub64 y z))"
 		}
 	]
 }

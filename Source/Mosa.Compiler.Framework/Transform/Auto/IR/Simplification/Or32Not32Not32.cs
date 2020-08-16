@@ -4,7 +4,7 @@
 
 using Mosa.Compiler.Framework.IR;
 
-namespace Mosa.Compiler.Framework.Transform.Auto.IR.Rewrite
+namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 {
 	/// <summary>
 	/// Or32Not32Not32

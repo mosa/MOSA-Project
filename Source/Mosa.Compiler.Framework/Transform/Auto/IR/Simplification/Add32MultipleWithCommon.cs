@@ -4,14 +4,14 @@
 
 using Mosa.Compiler.Framework.IR;
 
-namespace Mosa.Compiler.Framework.Transform.Auto.IR.Rewrite
+namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 {
 	/// <summary>
-	/// And32Not32Not32
+	/// Add32MultipleWithCommon
 	/// </summary>
-	public sealed class And32Not32Not32 : BaseTransformation
+	public sealed class Add32MultipleWithCommon : BaseTransformation
 	{
-		public And32Not32Not32() : base(IRInstruction.And32)
+		public Add32MultipleWithCommon() : base(IRInstruction.Add32)
 		{
 		}
 
@@ -26,13 +26,16 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Rewrite
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Not32)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
 				return false;
 
 			if (context.Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.Not32)
+			if (context.Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+				return false;
+
+			if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1))
 				return false;
 
 			return true;
@@ -43,12 +46,13 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Rewrite
 			var result = context.Result;
 
 			var t1 = context.Operand1.Definitions[0].Operand1;
-			var t2 = context.Operand2.Definitions[0].Operand1;
+			var t2 = context.Operand1.Definitions[0].Operand2;
+			var t3 = context.Operand2.Definitions[0].Operand2;
 
 			var v1 = transformContext.AllocateVirtualRegister(transformContext.I4);
 
-			context.SetInstruction(IRInstruction.Or32, v1, t1, t2);
-			context.AppendInstruction(IRInstruction.Not32, result, v1);
+			context.SetInstruction(IRInstruction.Add32, v1, t2, t3);
+			context.AppendInstruction(IRInstruction.MulUnsigned32, result, t1, v1);
 		}
 	}
 }

@@ -18,6 +18,11 @@ namespace Mosa.Utility.SourceCodeGenerator
 			).Execute();
 
 			new BuildTransformations(
+				Path.Combine(dataPath, @"IR-Optimizations-ConstantMove.json"),
+				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto")
+			).Execute();
+
+			new BuildTransformations(
 				Path.Combine(dataPath, @"IR-Optimizations-Simplification.json"),
 				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto")
 			).Execute();
@@ -34,11 +39,6 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 			new BuildTransformations(
 				Path.Combine(dataPath, @"IR-Optimizations-Rewrite.json"),
-				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto")
-			).Execute();
-
-			new BuildTransformations(
-				Path.Combine(dataPath, @"IR-Optimizations-ConstantMove.json"),
 				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto")
 			).Execute();
 

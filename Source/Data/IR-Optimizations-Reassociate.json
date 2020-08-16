@@ -29,7 +29,8 @@
 			"SubName": "",
 			"Expression": "IR.Add## x (IR.Add## y c)",
 			"Filter": "!IsResolvedConstant(x) & IsResolvedConstant(c) & !IsResolvedConstant(y)",
-			"Result": "(IR.Add## (IR.Add## x y) c)"
+			"Result": "(IR.Add## (IR.Add## x y) c)",
+			"Reassociation": "Yes"
 		},
 		{
 			"FamilyName": "IR",

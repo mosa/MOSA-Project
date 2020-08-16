@@ -4,14 +4,14 @@
 
 using Mosa.Compiler.Framework.IR;
 
-namespace Mosa.Compiler.Framework.Transform.Auto.IR.Rewrite
+namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 {
 	/// <summary>
-	/// Or64Not64Not64
+	/// And64Not64Not64
 	/// </summary>
-	public sealed class Or64Not64Not64 : BaseTransformation
+	public sealed class And64Not64Not64 : BaseTransformation
 	{
-		public Or64Not64Not64() : base(IRInstruction.Or64)
+		public And64Not64Not64() : base(IRInstruction.And64)
 		{
 		}
 
@@ -45,9 +45,9 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Rewrite
 			var t1 = context.Operand1.Definitions[0].Operand1;
 			var t2 = context.Operand2.Definitions[0].Operand1;
 
-			var v1 = transformContext.AllocateVirtualRegister(transformContext.I4);
+			var v1 = transformContext.AllocateVirtualRegister(transformContext.I8);
 
-			context.SetInstruction(IRInstruction.And32, v1, t1, t2);
+			context.SetInstruction(IRInstruction.Or64, v1, t1, t2);
 			context.AppendInstruction(IRInstruction.Not64, result, v1);
 		}
 	}

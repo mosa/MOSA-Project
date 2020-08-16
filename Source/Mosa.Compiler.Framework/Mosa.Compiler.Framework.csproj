@@ -14,6 +14,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="IR\" />
-    <Folder Include="Transform\Auto\IR\Reassociate\" />
   </ItemGroup>
 </Project>

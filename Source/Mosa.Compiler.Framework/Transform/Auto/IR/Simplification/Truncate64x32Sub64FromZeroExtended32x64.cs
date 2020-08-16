@@ -4,14 +4,14 @@
 
 using Mosa.Compiler.Framework.IR;
 
-namespace Mosa.Compiler.Framework.Transform.Auto.IR.Rewrite
+namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 {
 	/// <summary>
-	/// Truncate64x32And64FromZeroExtended32x64
+	/// Truncate64x32Sub64FromZeroExtended32x64
 	/// </summary>
-	public sealed class Truncate64x32And64FromZeroExtended32x64 : BaseTransformation
+	public sealed class Truncate64x32Sub64FromZeroExtended32x64 : BaseTransformation
 	{
-		public Truncate64x32And64FromZeroExtended32x64() : base(IRInstruction.Truncate64x32)
+		public Truncate64x32Sub64FromZeroExtended32x64() : base(IRInstruction.Truncate64x32)
 		{
 		}
 
@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Rewrite
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.And64)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Sub64)
 				return false;
 
 			if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
@@ -54,7 +54,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Rewrite
 			var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 			var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
 
-			context.SetInstruction(IRInstruction.And32, result, t1, t2);
+			context.SetInstruction(IRInstruction.Sub32, result, t1, t2);
 		}
 	}
 }
