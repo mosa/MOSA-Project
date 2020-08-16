@@ -45,9 +45,9 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 			var t1 = context.Operand1.Definitions[0].Operand1;
 			var t2 = context.Operand2.Definitions[0].Operand1;
 
-			var v1 = transformContext.AllocateVirtualRegister(transformContext.I4);
+			var v1 = transformContext.AllocateVirtualRegister(transformContext.I8);
 
-			context.SetInstruction(IRInstruction.And32, v1, t1, t2);
+			context.SetInstruction(IRInstruction.And64, v1, t1, t2);
 			context.AppendInstruction(IRInstruction.Not64, result, v1);
 		}
 	}

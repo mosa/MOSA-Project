@@ -48,49 +48,50 @@ namespace Mosa.Utility.SourceCodeGenerator
 			string expression = node.Expression;
 			string filter = node.Filter;
 			string result = node.Result;
+			bool reassociate = (node.Reassociate != null && node.Reassociate == "Yes");
 
-			GenerateTranformations(name, familyName, type, subName, expression, filter, result);
+			GenerateTranformations(name, familyName, type, subName, expression, filter, result, reassociate);
 		}
 
-		private void GenerateTranformations(string name, string familyName, string type, string subName, string expression, string filter, string result)
+		private void GenerateTranformations(string name, string familyName, string type, string subName, string expression, string filter, string result, bool reassociate)
 		{
 			if (expression.Contains("R#"))
 			{
-				GenerateTransformation(R4(name), R4(familyName), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result)));
-				GenerateTransformation(R8(name), R8(familyName), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result)));
+				GenerateTransformation(R4(name), R4(familyName), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result)), reassociate);
+				GenerateTransformation(R8(name), R8(familyName), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result)), reassociate);
 			}
 			else if (expression.Contains("##"))
 			{
-				GenerateTransformation(To32(name), To32(familyName), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result)));
-				GenerateTransformation(To64(name), To64(familyName), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result)));
+				GenerateTransformation(To32(name), To32(familyName), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result)), reassociate);
+				GenerateTransformation(To64(name), To64(familyName), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result)), reassociate);
 			}
 			else
 			{
-				GenerateTransformation(name, familyName, type, subName, new Transformation(expression, filter, result));
+				GenerateTransformation(name, familyName, type, subName, new Transformation(expression, filter, result), reassociate);
 			}
 		}
 
 		private static string To32(string s)
 		{
-			return s.Replace("##", "32");
+			return (s == null) ? null : s.Replace("##", "32");
 		}
 
 		private static string To64(string s)
 		{
-			return s.Replace("##", "64");
+			return (s == null) ? null : s.Replace("##", "64");
 		}
 
 		private static string R4(string s)
 		{
-			return s.Replace("R#", "R4");
+			return (s == null) ? null : s.Replace("R#", "R4");
 		}
 
 		private static string R8(string s)
 		{
-			return s.Replace("R#", "R8");
+			return (s == null) ? null : s.Replace("R#", "R8");
 		}
 
-		private void GenerateTransformation(string name, string familyName, string type, string subName, Transformation transform)
+		private void GenerateTransformation(string name, string familyName, string type, string subName, Transformation transform, bool reassociate)
 		{
 			Lines.Clear();
 			First = true;
@@ -106,16 +107,19 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine($"namespace Mosa.Compiler.Framework.Transform.Auto.{familyName}.{type}");
 			Lines.AppendLine("{");
 
-			GenerateTransformations(name, familyName, type, subName, transform);
+			GenerateTransformations(name, familyName, type, subName, transform, reassociate);
 
 			Lines.AppendLine("}");
 
 			Save();
 		}
 
-		private void GenerateTransformations(string name, string familyName, string type, string subName, Transformation transform)
+		private void GenerateTransformations(string name, string familyName, string type, string subName, Transformation transform, bool reassociate)
 		{
 			GenerateTransformation2(name, familyName, type, subName, transform);
+
+			if (!reassociate)
+				return;
 
 			if (CommutativeInstructions == null || CommutativeInstructions.Count == 0)
 				return;
@@ -304,10 +308,6 @@ namespace Mosa.Utility.SourceCodeGenerator
 					{
 						sb.Append($"c{constantToConstantNbr[operand]}");
 					}
-					else if (operand.IsLong)
-					{
-						sb.Append($"c{constantToConstantNbr[operand]}");
-					}
 					else if (operand.IsDouble)
 					{
 						sb.Append($"c{constantToConstantNbr[operand]}");
@@ -370,10 +370,6 @@ namespace Mosa.Utility.SourceCodeGenerator
 				{
 					sb.Append(CreateConstantName(operand));
 				}
-				else if (operand.IsLong)
-				{
-					sb.Append(CreateConstantName(operand));
-				}
 				else if (operand.IsDouble)
 				{
 					sb.Append(CreateConstantName(operand));
@@ -403,16 +399,9 @@ namespace Mosa.Utility.SourceCodeGenerator
 			if (operand.IsInteger)
 			{
 				if (operand.Value.Contains("0x") || operand.Value.Contains("0b"))
-					return $"{operand.Value}u";
+					return $"{operand.Value}";
 
-				return $"{operand.Integer}u";
-			}
-			else if (operand.IsLong)
-			{
-				if (operand.Value.Contains("0x") || operand.Value.Contains("0b"))
-					return $"{operand.Value}L";
-
-				return $"{operand.Long}L";
+				return $"{operand.Integer}";
 			}
 			else if (operand.IsDouble)
 			{
@@ -517,12 +506,6 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 					sb.Append($"context.{parent}{operandName}");
 				}
-				else if (parameter.IsLong)
-				{
-					sb.Append(CreateConstantName(parameter));
-
-					// sb.Append(parameter.Long.ToString());
-				}
 				else if (parameter.IsInteger)
 				{
 					sb.Append(CreateConstantName(parameter));
@@ -591,19 +574,14 @@ namespace Mosa.Utility.SourceCodeGenerator
 				EmitCondition($"!context.{operandName}.IsVirtualRegister");
 			}
 
-			if (operand.IsLong || operand.IsDouble || operand.IsFloat || operand.IsInteger)
+			if (operand.IsDouble || operand.IsFloat || operand.IsInteger)
 			{
 				EmitCondition($"!context.{operandName}.IsResolvedConstant");
 			}
 
-			if (operand.IsLong)
-			{
-				EmitCondition($"context.{operandName}.ConstantUnsigned64 != {CreateConstantName(operand)}");
-			}
-
 			if (operand.IsInteger)
 			{
-				EmitCondition($"context.{operandName}.ConstantUnsigned32 != {CreateConstantName(operand)}");
+				EmitCondition($"context.{operandName}.ConstantUnsigned64 != {CreateConstantName(operand)}");
 			}
 
 			if (operand.IsDouble)

@@ -164,8 +164,8 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 		public static readonly BaseTransformation IR_StrengthReduction_Add32Zero = new IR.StrengthReduction.Add32Zero();
 		public static readonly BaseTransformation IR_StrengthReduction_Add64Zero = new IR.StrengthReduction.Add64Zero();
 		public static readonly BaseTransformation IR_StrengthReduction_ShiftRight32ZeroValue = new IR.StrengthReduction.ShiftRight32ZeroValue();
-		public static readonly BaseTransformation IR_StrengthReduction_ShiftRight32ByZero = new IR.StrengthReduction.ShiftRight32ByZero();
 		public static readonly BaseTransformation IR_StrengthReduction_ShiftRight64ZeroValue = new IR.StrengthReduction.ShiftRight64ZeroValue();
+		public static readonly BaseTransformation IR_StrengthReduction_ShiftRight32ByZero = new IR.StrengthReduction.ShiftRight32ByZero();
 		public static readonly BaseTransformation IR_StrengthReduction_ShiftRight64ByZero = new IR.StrengthReduction.ShiftRight64ByZero();
 		public static readonly BaseTransformation IR_StrengthReduction_ShiftLeft32ByZero = new IR.StrengthReduction.ShiftLeft32ByZero();
 		public static readonly BaseTransformation IR_StrengthReduction_ShiftLeft64ByZero = new IR.StrengthReduction.ShiftLeft64ByZero();

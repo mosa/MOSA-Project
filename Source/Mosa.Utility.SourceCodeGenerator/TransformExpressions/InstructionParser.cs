@@ -55,10 +55,6 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				{
 					node.Operands.Add(new Operand(token, node.Operands.Count));
 				}
-				else if (token.TokenType == TokenType.LongConstant)
-				{
-					node.Operands.Add(new Operand(token, node.Operands.Count));
-				}
 				else if (token.TokenType == TokenType.DoubleConstant)
 				{
 					node.Operands.Add(new Operand(token, node.Operands.Count));

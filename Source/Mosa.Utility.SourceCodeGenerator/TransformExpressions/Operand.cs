@@ -22,8 +22,6 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 
 		public bool IsVirtualRegister { get { return IsInstruction; } }
 
-		public bool IsLong { get { return Token != null && Token.TokenType == TokenType.LongConstant; } }
-
 		public bool IsInteger { get { return Token != null && Token.TokenType == TokenType.IntegerConstant; } }
 
 		public bool IsDouble { get { return Token != null && Token.TokenType == TokenType.DoubleConstant; } }
@@ -32,9 +30,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 
 		public bool IsAny { get { return Token != null && Token.TokenType == TokenType.Underscore; } }
 
-		public ulong Long { get { return Token.Long; } }
-
-		public uint Integer { get { return Token.Integer; } }
+		public ulong Integer { get { return Token.Integer; } }
 
 		public double Double { get { return Token.Double; } }
 
@@ -83,9 +79,6 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				return true;
 
 			if (IsInteger && other.IsInteger && Integer == other.Integer)
-				return true;
-
-			if (IsLong && other.IsLong && Long == other.Long)
 				return true;
 
 			if (IsFloat && other.IsFloat && Float == other.Float)

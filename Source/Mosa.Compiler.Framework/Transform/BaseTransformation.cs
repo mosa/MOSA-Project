@@ -396,6 +396,11 @@ namespace Mosa.Compiler.Framework.Transform
 			return a << (int)b;
 		}
 
+		protected static ulong ShiftLeft64(ulong a, ulong b)
+		{
+			return a << (int)b;
+		}
+
 		protected static uint ShiftRight32(uint a, long b)
 		{
 			return a >> (int)b;

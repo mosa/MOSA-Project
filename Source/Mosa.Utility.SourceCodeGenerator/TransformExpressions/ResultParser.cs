@@ -50,10 +50,6 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				{
 					node.Operands.Add(new Operand(token, node.Operands.Count));
 				}
-				else if (token.TokenType == TokenType.LongConstant)
-				{
-					node.Operands.Add(new Operand(token, node.Operands.Count));
-				}
 				else if (token.TokenType == TokenType.DoubleConstant)
 				{
 					node.Operands.Add(new Operand(token, node.Operands.Count));
@@ -127,10 +123,6 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 					}
 				}
 				else if (token.TokenType == TokenType.IntegerConstant)
-				{
-					method.Parameters.Add(new Operand(token, method.Parameters.Count));
-				}
-				else if (token.TokenType == TokenType.LongConstant)
 				{
 					method.Parameters.Add(new Operand(token, method.Parameters.Count));
 				}

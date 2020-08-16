@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 			if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand2.ConstantUnsigned32 != 32u)
+			if (context.Operand1.Definitions[0].Operand2.ConstantUnsigned64 != 32)
 				return false;
 
 			if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)

@@ -282,7 +282,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 						else
 						{
 							// except constants in expressions
-							if (!(operand.IsInteger || operand.IsLong || operand.IsFloat || operand.IsDouble))
+							if (!(operand.IsInteger || operand.IsFloat || operand.IsDouble))
 								result.Add(operand);
 						}
 					}

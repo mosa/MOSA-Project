@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Rewrite
 			if (!context.Operand2.IsResolvedConstant)
 				return false;
 
-			if (context.Operand2.ConstantUnsigned64 != 0L)
+			if (context.Operand2.ConstantUnsigned64 != 0)
 				return false;
 
 			if (context.Operand1.Definitions.Count != 1)

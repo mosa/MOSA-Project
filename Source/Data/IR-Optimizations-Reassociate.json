@@ -30,7 +30,7 @@
 			"Expression": "IR.Add## x (IR.Add## y c)",
 			"Filter": "!IsResolvedConstant(x) & IsResolvedConstant(c) & !IsResolvedConstant(y)",
 			"Result": "(IR.Add## (IR.Add## x y) c)",
-			"Reassociation": "Yes"
+			"Reassociate": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -39,7 +39,8 @@
 			"SubName": "",
 			"Expression": "IR.AddR# x (IR.AddR# y c)",
 			"Filter": "!IsResolvedConstant(x) & IsResolvedConstant(c) & !IsResolvedConstant(y)",
-			"Result": "(IR.AddR# (IR.AddR# x y) c)"
+			"Result": "(IR.AddR# (IR.AddR# x y) c)",
+			"Reassociate": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -48,7 +49,8 @@
 			"SubName": "",
 			"Expression": "IR.And## x (IR.And## y c)",
 			"Filter": "!IsResolvedConstant(x) & IsResolvedConstant(c) & !IsResolvedConstant(y)",
-			"Result": "(IR.And## (IR.And## x y) c)"
+			"Result": "(IR.And## (IR.And## x y) c)",
+			"Reassociate": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -57,7 +59,8 @@
 			"SubName": "",
 			"Expression": "IR.Or## x (IR.Or## y c)",
 			"Filter": "!IsResolvedConstant(x) & IsResolvedConstant(c) & !IsResolvedConstant(y)",
-			"Result": "(IR.Or## (IR.Or## x y) c)"
+			"Result": "(IR.Or## (IR.Or## x y) c)",
+			"Reassociate": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -66,7 +69,8 @@
 			"SubName": "",
 			"Expression": "IR.Xor## x (IR.Xor## y c)",
 			"Filter": "!IsResolvedConstant(x) & IsResolvedConstant(c) & !IsResolvedConstant(y)",
-			"Result": "(IR.Xor## (IR.Xor## x y) c)"
+			"Result": "(IR.Xor## (IR.Xor## x y) c)",
+			"Reassociate": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -75,7 +79,8 @@
 			"SubName": "",
 			"Expression": "IR.MulUnsigned## x (IR.MulUnsigned## y c)",
 			"Filter": "!IsResolvedConstant(x) & IsResolvedConstant(c) & !IsResolvedConstant(y)",
-			"Result": "(IR.MulUnsigned## (IR.MulUnsigned## x y) c)"
+			"Result": "(IR.MulUnsigned## (IR.MulUnsigned## x y) c)",
+			"Reassociate": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -84,7 +89,8 @@
 			"SubName": "",
 			"Expression": "IR.MulSigned## x (IR.MulSigned## y c)",
 			"Filter": "!IsResolvedConstant(x) & IsResolvedConstant(c) & !IsResolvedConstant(y)",
-			"Result": "(IR.MulSigned## (IR.MulSigned## x y) c)"
+			"Result": "(IR.MulSigned## (IR.MulSigned## x y) c)",
+			"Reassociate": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -93,7 +99,8 @@
 			"SubName": "",
 			"Expression": "IR.MulR# x (IR.MulR# y c)",
 			"Filter": "!IsResolvedConstant(x) & IsResolvedConstant(c) & !IsResolvedConstant(y)",
-			"Result": "(IR.MulR# (IR.MulR# x y) c)"
+			"Result": "(IR.MulR# (IR.MulR# x y) c)",
+			"Reassociate": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -102,7 +109,8 @@
 			"SubName": "Group",
 			"Expression": "IR.MulUnsigned## a (IR.ShiftLeft## b c)",
 			"Filter": "",
-			"Result": "(IR.ShiftLeft## (IR.MulUnsigned## a b) c)"
+			"Result": "(IR.ShiftLeft## (IR.MulUnsigned## a b) c)",
+			"Reassociate": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -111,7 +119,8 @@
 			"SubName": "Group",
 			"Expression": "IR.MulSigned## a (IR.ShiftLeft## b c)",
 			"Filter": "",
-			"Result": "(IR.ShiftLeft## (IR.MulSigned## a b) c)"
+			"Result": "(IR.ShiftLeft## (IR.MulSigned## a b) c)",
+			"Reassociate": "Yes"
 		}
 	]
 }
