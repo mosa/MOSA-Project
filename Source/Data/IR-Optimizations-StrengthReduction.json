@@ -97,7 +97,7 @@
 			"SubName": "ZeroValue",
 			"Expression": "IR.ShiftRight## 0 a",
 			"Filter": "",
-			"Result": "(IR.Move## 0)"
+			"Result": "(IR.Move## [To##(0)])"
 		},
 		{
 			"FamilyName": "IR",
@@ -241,7 +241,7 @@
 			"SubName": "ByZero",
 			"Expression": "IR.DivSigned## 0 c",
 			"Filter": "IsResolvedConstant(c) & !IsZero(c)",
-			"Result": "(IR.Move## 0)"
+			"Result": "(IR.Move## [To##(0)])"
 		},
 		{
 			"FamilyName": "IR",
