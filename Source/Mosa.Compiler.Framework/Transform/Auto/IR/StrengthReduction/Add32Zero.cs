@@ -35,4 +35,34 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			context.SetInstruction(IRInstruction.Move32, result, t1);
 		}
 	}
+
+	/// <summary>
+	/// Add32Zerov1
+	/// </summary>
+	public sealed class Add32Zerov1 : BaseTransformation
+	{
+		public Add32Zerov1() : base(IRInstruction.Add32)
+		{
+		}
+
+		public override bool Match(Context context, TransformContext transformContext)
+		{
+			if (!context.Operand1.IsResolvedConstant)
+				return false;
+
+			if (context.Operand1.ConstantUnsigned64 != 0)
+				return false;
+
+			return true;
+		}
+
+		public override void Transform(Context context, TransformContext transformContext)
+		{
+			var result = context.Result;
+
+			var t1 = context.Operand2;
+
+			context.SetInstruction(IRInstruction.Move32, result, t1);
+		}
+	}
 }

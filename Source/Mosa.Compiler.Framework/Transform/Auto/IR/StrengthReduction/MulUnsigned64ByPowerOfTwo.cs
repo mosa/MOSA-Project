@@ -44,4 +44,43 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			context.SetInstruction(IRInstruction.ShiftLeft64, result, t1, e1);
 		}
 	}
+
+	/// <summary>
+	/// MulUnsigned64ByPowerOfTwov1
+	/// </summary>
+	public sealed class MulUnsigned64ByPowerOfTwov1 : BaseTransformation
+	{
+		public MulUnsigned64ByPowerOfTwov1() : base(IRInstruction.MulUnsigned64)
+		{
+		}
+
+		public override bool Match(Context context, TransformContext transformContext)
+		{
+			if (!IsResolvedConstant(context.Operand1))
+				return false;
+
+			if (!IsPowerOfTwo64(context.Operand1))
+				return false;
+
+			if (IsZero(context.Operand1))
+				return false;
+
+			if (IsOne(context.Operand1))
+				return false;
+
+			return true;
+		}
+
+		public override void Transform(Context context, TransformContext transformContext)
+		{
+			var result = context.Result;
+
+			var t1 = context.Operand1;
+			var t2 = context.Operand2;
+
+			var e1 = transformContext.CreateConstant(GetPowerOfTwo(To32(t1)));
+
+			context.SetInstruction(IRInstruction.ShiftLeft64, result, t2, e1);
+		}
+	}
 }

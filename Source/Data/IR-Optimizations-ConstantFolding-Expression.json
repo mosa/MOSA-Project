@@ -169,7 +169,8 @@
 			"SubName": "x2",
 			"Expression": "IR.ShiftLeft## (IR.ShiftLeft## a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & IsIntegerBetween0And##(b) & IsIntegerBetween0And64(c)",
-			"Result": "(IR.ShiftLeft## a [Add##(To##(b),To##(c))])"
+			"Result": "(IR.ShiftLeft## a [Add##(To##(b),To##(c))])",
+			"Reassociate": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -178,7 +179,8 @@
 			"SubName": "x2",
 			"Expression": "IR.ShiftRight## (IR.ShiftRight## a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & IsIntegerBetween0And##(b) & IsIntegerBetween0And64(c)",
-			"Result": "(IR.ShiftRight## a [Add##(To##(b),To##(c))])"
+			"Result": "(IR.ShiftRight## a [Add##(To##(b),To##(c))])",
+			"Reassociate": "Yes"
 		}
 	]
 }

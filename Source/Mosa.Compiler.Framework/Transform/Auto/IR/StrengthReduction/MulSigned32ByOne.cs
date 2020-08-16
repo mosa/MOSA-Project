@@ -35,4 +35,34 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			context.SetInstruction(IRInstruction.Move32, result, t1);
 		}
 	}
+
+	/// <summary>
+	/// MulSigned32ByOnev1
+	/// </summary>
+	public sealed class MulSigned32ByOnev1 : BaseTransformation
+	{
+		public MulSigned32ByOnev1() : base(IRInstruction.MulSigned32)
+		{
+		}
+
+		public override bool Match(Context context, TransformContext transformContext)
+		{
+			if (!context.Operand1.IsResolvedConstant)
+				return false;
+
+			if (context.Operand1.ConstantUnsigned64 != 1)
+				return false;
+
+			return true;
+		}
+
+		public override void Transform(Context context, TransformContext transformContext)
+		{
+			var result = context.Result;
+
+			var t1 = context.Operand2;
+
+			context.SetInstruction(IRInstruction.Move32, result, t1);
+		}
+	}
 }
