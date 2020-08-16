@@ -25,7 +25,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected override void Iterator()
 		{
-			if (Entries.CommutativeInstructions != null)
+			if (Entries.Commutative != null)
 			{
 				foreach (string instruction in Entries.Commutative)
 				{

@@ -22,7 +22,6 @@
 		"IR.AddCarryIn64"
 	],
 	"Optimizations": [
-
 		{
 			"FamilyName": "IR",
 			"Type": "Reorder",

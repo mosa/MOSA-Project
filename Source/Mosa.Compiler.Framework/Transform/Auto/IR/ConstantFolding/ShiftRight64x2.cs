@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 {
 	/// <summary>
-	/// ShiftRight64Compound
+	/// ShiftRight64x2
 	/// </summary>
-	public sealed class ShiftRight64Compound : BaseTransformation
+	public sealed class ShiftRight64x2 : BaseTransformation
 	{
-		public ShiftRight64Compound() : base(IRInstruction.ShiftRight64)
+		public ShiftRight64x2() : base(IRInstruction.ShiftRight64)
 		{
 		}
 

@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 {
 	/// <summary>
-	/// ShiftLeft32Compound
+	/// ShiftRight32x2
 	/// </summary>
-	public sealed class ShiftLeft32Compound : BaseTransformation
+	public sealed class ShiftRight32x2 : BaseTransformation
 	{
-		public ShiftLeft32Compound() : base(IRInstruction.ShiftLeft32)
+		public ShiftRight32x2() : base(IRInstruction.ShiftRight32)
 		{
 		}
 
@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftRight32)
 				return false;
 
 			if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 
 			var e1 = transformContext.CreateConstant(Add32(To32(t2), To32(t3)));
 
-			context.SetInstruction(IRInstruction.ShiftLeft32, result, t1, e1);
+			context.SetInstruction(IRInstruction.ShiftRight32, result, t1, e1);
 		}
 	}
 }

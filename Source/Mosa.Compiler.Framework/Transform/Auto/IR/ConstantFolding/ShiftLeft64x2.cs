@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 {
 	/// <summary>
-	/// ShiftRight32Compound
+	/// ShiftLeft64x2
 	/// </summary>
-	public sealed class ShiftRight32Compound : BaseTransformation
+	public sealed class ShiftLeft64x2 : BaseTransformation
 	{
-		public ShiftRight32Compound() : base(IRInstruction.ShiftRight32)
+		public ShiftLeft64x2() : base(IRInstruction.ShiftLeft64)
 		{
 		}
 
@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftRight32)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftLeft64)
 				return false;
 
 			if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 			if (!IsResolvedConstant(context.Operand2))
 				return false;
 
-			if (!IsIntegerBetween0And32(context.Operand1.Definitions[0].Operand2))
+			if (!IsIntegerBetween0And64(context.Operand1.Definitions[0].Operand2))
 				return false;
 
 			if (!IsIntegerBetween0And64(context.Operand2))
@@ -49,9 +49,9 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 			var t2 = context.Operand1.Definitions[0].Operand2;
 			var t3 = context.Operand2;
 
-			var e1 = transformContext.CreateConstant(Add32(To32(t2), To32(t3)));
+			var e1 = transformContext.CreateConstant(Add64(To64(t2), To64(t3)));
 
-			context.SetInstruction(IRInstruction.ShiftRight32, result, t1, e1);
+			context.SetInstruction(IRInstruction.ShiftLeft64, result, t1, e1);
 		}
 	}
 }

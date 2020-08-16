@@ -48,4 +48,47 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 			context.SetInstruction(IRInstruction.SubR8, result, t1, e1);
 		}
 	}
+
+	/// <summary>
+	/// AddSubR8v1
+	/// </summary>
+	public sealed class AddSubR8v1 : BaseTransformation
+	{
+		public AddSubR8v1() : base(IRInstruction.AddR8)
+		{
+		}
+
+		public override bool Match(Context context, TransformContext transformContext)
+		{
+			if (!context.Operand2.IsVirtualRegister)
+				return false;
+
+			if (context.Operand2.Definitions.Count != 1)
+				return false;
+
+			if (context.Operand2.Definitions[0].Instruction != IRInstruction.SubR8)
+				return false;
+
+			if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand2))
+				return false;
+
+			if (!IsResolvedConstant(context.Operand1))
+				return false;
+
+			return true;
+		}
+
+		public override void Transform(Context context, TransformContext transformContext)
+		{
+			var result = context.Result;
+
+			var t1 = context.Operand1;
+			var t2 = context.Operand2.Definitions[0].Operand1;
+			var t3 = context.Operand2.Definitions[0].Operand2;
+
+			var e1 = transformContext.CreateConstant(AddR8(ToR8(t3), ToR8(t1)));
+
+			context.SetInstruction(IRInstruction.SubR8, result, t2, e1);
+		}
+	}
 }
