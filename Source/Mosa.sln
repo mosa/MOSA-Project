@@ -171,6 +171,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transforms", "Transforms", 
 	ProjectSection(SolutionItems) = preProject
 		Data\IR-Optimizations-ConstantFolding.json = Data\IR-Optimizations-ConstantFolding.json
 		Data\IR-Optimizations-ConstantMove.json = Data\IR-Optimizations-ConstantMove.json
+		Data\IR-Optimizations-Reassociate.json = Data\IR-Optimizations-Reassociate.json
 		Data\IR-Optimizations-Rewrite.json = Data\IR-Optimizations-Rewrite.json
 		Data\IR-Optimizations-Simplification.json = Data\IR-Optimizations-Simplification.json
 		Data\IR-Optimizations-StrengthReduction.json = Data\IR-Optimizations-StrengthReduction.json

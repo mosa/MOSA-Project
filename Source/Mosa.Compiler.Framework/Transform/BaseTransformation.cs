@@ -1,9 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.IR;
 using System;
-using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Transform
 {
@@ -99,6 +97,11 @@ namespace Mosa.Compiler.Framework.Transform
 			return operand.IsFloatingPoint;
 		}
 
+		protected static bool IsHigherVirtualNumber(Operand operand1, Operand operand2)
+		{
+			return operand1.IsVirtualRegister && operand2.IsVirtualRegister && operand1.Index > operand2.Index;
+		}
+
 		protected static bool IsGreaterThan(ulong a, ulong b)
 		{
 			return a > b;
@@ -152,6 +155,16 @@ namespace Mosa.Compiler.Framework.Transform
 		protected static bool IsOne(Operand operand)
 		{
 			return operand.IsConstantOne;
+		}
+
+		protected static bool IsIntegerBetween0And32(Operand operand)
+		{
+			return operand.IsInteger && operand.ConstantSigned64 >= 0 && operand.ConstantSigned64 <= 32;
+		}
+
+		protected static bool IsIntegerBetween0And64(Operand operand)
+		{
+			return operand.IsInteger && operand.ConstantSigned64 >= 0 && operand.ConstantSigned64 <= 64;
 		}
 
 		#endregion Filter Methods

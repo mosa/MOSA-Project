@@ -10,52 +10,147 @@ namespace Mosa.Utility.SourceCodeGenerator
 	{
 		public static List<string> Transformations = new List<string>();
 
-		public BuildTransformations(string jsonFile, string destinationPath)
-			: base(jsonFile, destinationPath)
-		{
-		}
+		protected List<string> CommutativeInstructions = new List<string>();
 
 		protected Dictionary<int, string> NodeNbrToNode = new Dictionary<int, string>();
 
 		protected Dictionary<string, string> OperandLabelToVariable = new Dictionary<string, string>();
 
+		protected bool First = true;
+
+		public BuildTransformations(string jsonFile, string destinationPath)
+			: base(jsonFile, destinationPath)
+		{
+		}
+
 		protected override void Iterator()
 		{
+			if (Entries.CommutativeInstructions != null)
+			{
+				foreach (string instruction in Entries.Commutative)
+				{
+					CommutativeInstructions.Add(instruction);
+				}
+			}
+
 			foreach (var entry in Entries.Optimizations)
 			{
-				Lines.Clear();
-
-				DestinationFile = $"{entry.FamilyName}\\{entry.Type}\\{entry.Name}{entry.SubName}.cs";
-				AddSourceHeader();
 				Body(entry);
-				Save();
 			}
 		}
 
 		protected override void Body(dynamic node = null)
 		{
-			Transformations.Add($"{node.FamilyName}.{node.Type}.{node.Name}{node.SubName}");
+			string name = node.Name;
+			string familyName = node.FamilyName;
+			string type = node.Type;
+			string subName = node.SubName;
+			string expression = node.Expression;
+			string filter = node.Filter;
+			string result = node.Result;
 
-			//Lines.AppendLine("using Mosa.Compiler.Framework;");
+			GenerateTranformations(name, familyName, type, subName, expression, filter, result);
+		}
+
+		private void GenerateTranformations(string name, string familyName, string type, string subName, string expression, string filter, string result)
+		{
+			if (expression.Contains("R#"))
+			{
+				GenerateTransformation(R4(name), R4(familyName), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result)));
+				GenerateTransformation(R8(name), R8(familyName), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result)));
+			}
+			else if (expression.Contains("##"))
+			{
+				GenerateTransformation(To32(name), To32(familyName), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result)));
+				GenerateTransformation(To64(name), To64(familyName), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result)));
+			}
+			else
+			{
+				GenerateTransformation(name, familyName, type, subName, new Transformation(expression, filter, result));
+			}
+		}
+
+		private static string To32(string s)
+		{
+			return s.Replace("##", "32");
+		}
+
+		private static string To64(string s)
+		{
+			return s.Replace("##", "64");
+		}
+
+		private static string R4(string s)
+		{
+			return s.Replace("R#", "R4");
+		}
+
+		private static string R8(string s)
+		{
+			return s.Replace("R#", "R8");
+		}
+
+		private void GenerateTransformation(string name, string familyName, string type, string subName, Transformation transform)
+		{
+			Lines.Clear();
+			First = true;
+
+			DestinationFile = $"{familyName}\\{type}\\{name}{subName}.cs";
+			AddSourceHeader();
+
+			Transformations.Add($"{familyName}.{type}.{name}{subName}");
+
 			Lines.AppendLine("using Mosa.Compiler.Framework.IR;");
 
-			//Lines.AppendLine("using Mosa.Compiler.Framework.Transform;");
-
 			Lines.AppendLine();
-			Lines.AppendLine($"namespace Mosa.Compiler.Framework.Transform.Auto.{node.FamilyName}.{node.Type}");
+			Lines.AppendLine($"namespace Mosa.Compiler.Framework.Transform.Auto.{familyName}.{type}");
 			Lines.AppendLine("{");
-			Lines.AppendLine("\t/// <summary>");
-			Lines.AppendLine($"\t/// {node.Name}{node.SubName}");
-			Lines.AppendLine("\t/// </summary>");
 
-			Lines.AppendLine($"\tpublic sealed class {node.Name}{node.SubName} : BaseTransformation");
-			Lines.AppendLine("\t{");
+			GenerateTransformations(name, familyName, type, subName, transform);
 
-			var transform = new Transformation(node.Expression, node.Filter, node.Result);
+			Lines.AppendLine("}");
+
+			Save();
+		}
+
+		private void GenerateTransformations(string name, string familyName, string type, string subName, Transformation transform)
+		{
+			GenerateTransformation2(name, familyName, type, subName, transform);
+
+			if (CommutativeInstructions == null || CommutativeInstructions.Count == 0)
+				return;
+
+			var variations = transform.DeriveVariations(CommutativeInstructions);
+
+			int index = 1;
+			foreach (var variation in variations)
+			{
+				GenerateTransformation2(name, familyName, type, $"{subName}v{index}", variation);
+				index++;
+			}
+		}
+
+		private void GenerateTransformation2(string name, string familyName, string type, string subName, Transformation transform)
+		{
 			var instructionName = transform.InstructionTree.InstructionName.Replace("IR.", "IRInstruction.");
 
-			// constructor
-			Lines.AppendLine($"\t\tpublic {node.Name}{node.SubName}() : base({instructionName})");
+			if (First)
+			{
+				First = false;
+			}
+			else
+			{
+				Lines.AppendLine();
+			}
+
+			Lines.AppendLine("\t/// <summary>");
+			Lines.AppendLine($"\t/// {name}{subName}");
+			Lines.AppendLine("\t/// </summary>");
+
+			Lines.AppendLine($"\tpublic sealed class {name}{subName} : BaseTransformation");
+			Lines.AppendLine("\t{");
+
+			Lines.AppendLine($"\t\tpublic {name}{subName}() : base({instructionName})");
 			Lines.AppendLine("\t\t{");
 			Lines.AppendLine("\t\t}");
 			Lines.AppendLine("");
@@ -80,7 +175,6 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 			Lines.AppendLine("\t\t}");
 			Lines.AppendLine("\t}");
-			Lines.AppendLine("}");
 
 			NodeNbrToNode.Clear();
 			OperandLabelToVariable.Clear();

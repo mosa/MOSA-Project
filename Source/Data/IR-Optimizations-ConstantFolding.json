@@ -78,7 +78,7 @@
 			"Name": "ShiftLeft32",
 			"SubName": "",
 			"Expression": "IR.ShiftLeft32 a b",
-			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b) ",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
 			"Result": "(IR.Move32 [ShiftLeft32(To32(a),ToSigned32(b))])"
 		},
 		{
@@ -566,6 +566,42 @@
 			"Expression": "IR.IfThenElse64 a b c",
 			"Filter": "IsResolvedConstant(a) & IsZero(a)",
 			"Result": "(IR.Move64 c)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "ShiftLeft32",
+			"SubName": "Compound",
+			"Expression": "IR.ShiftLeft32 (IR.ShiftLeft32 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & IsIntegerBetween0And32(b) & IsIntegerBetween0And64(c)",
+			"Result": "(IR.ShiftLeft32 a [Add32(To32(b),To32(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "ShiftLeft64",
+			"SubName": "Compound",
+			"Expression": "IR.ShiftLeft64 (IR.ShiftLeft64 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & IsIntegerBetween0And64(b) & IsIntegerBetween0And64(c)",
+			"Result": "(IR.ShiftLeft64 a [Add64(To64(b),To64(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "ShiftRight32",
+			"SubName": "Compound",
+			"Expression": "IR.ShiftRight32 (IR.ShiftRight32 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & IsIntegerBetween0And32(b) & IsIntegerBetween0And64(c)",
+			"Result": "(IR.ShiftRight32 a [Add32(To32(b),To32(c))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "ShiftRight64",
+			"SubName": "Compound",
+			"Expression": "IR.ShiftRight64 (IR.ShiftRight64 a b) c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & IsIntegerBetween0And64(b) & IsIntegerBetween0And64(c)",
+			"Result": "(IR.ShiftRight64 a [Add64(To64(b),To64(c))])"
 		}
 	]
 }
