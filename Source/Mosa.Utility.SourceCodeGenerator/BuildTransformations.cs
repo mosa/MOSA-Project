@@ -73,22 +73,22 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		private static string To32(string s)
 		{
-			return (s == null) ? null : s.Replace("##", "32");
+			return s?.Replace("##", "32");
 		}
 
 		private static string To64(string s)
 		{
-			return (s == null) ? null : s.Replace("##", "64");
+			return s?.Replace("##", "64");
 		}
 
 		private static string R4(string s)
 		{
-			return (s == null) ? null : s.Replace("R#", "R4");
+			return s?.Replace("R#", "R4");
 		}
 
 		private static string R8(string s)
 		{
-			return (s == null) ? null : s.Replace("R#", "R8");
+			return s?.Replace("R#", "R8");
 		}
 
 		private void GenerateTransformation(string name, string familyName, string type, string subName, Transformation transform, bool reassociate)

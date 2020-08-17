@@ -199,6 +199,10 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 		public static readonly BaseTransformation IR_ConstantMove_MulSigned64Expression = new IR.ConstantMove.MulSigned64Expression();
 		public static readonly BaseTransformation IR_ConstantMove_MulR4Expression = new IR.ConstantMove.MulR4Expression();
 		public static readonly BaseTransformation IR_ConstantMove_MulR8Expression = new IR.ConstantMove.MulR8Expression();
+		public static readonly BaseTransformation IR_ConstantFolding_MulSignedShiftLeft32 = new IR.ConstantFolding.MulSignedShiftLeft32();
+		public static readonly BaseTransformation IR_ConstantFolding_MulSignedShiftLeft64 = new IR.ConstantFolding.MulSignedShiftLeft64();
+		public static readonly BaseTransformation IR_ConstantFolding_MulUnsignedShiftLeft32 = new IR.ConstantFolding.MulUnsignedShiftLeft32();
+		public static readonly BaseTransformation IR_ConstantFolding_MulUnsignedShiftLeft64 = new IR.ConstantFolding.MulUnsignedShiftLeft64();
 		public static readonly BaseTransformation IR_ConstantFolding_Add32x2 = new IR.ConstantFolding.Add32x2();
 		public static readonly BaseTransformation IR_ConstantFolding_Add64x2 = new IR.ConstantFolding.Add64x2();
 		public static readonly BaseTransformation IR_ConstantFolding_AddR4x2 = new IR.ConstantFolding.AddR4x2();
@@ -325,5 +329,9 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 		public static readonly BaseTransformation IR_ConstantFolding_LoadZeroExtend8x64AddressFold = new IR.ConstantFolding.LoadZeroExtend8x64AddressFold();
 		public static readonly BaseTransformation IR_ConstantFolding_LoadZeroExtend16x64AddressFold = new IR.ConstantFolding.LoadZeroExtend16x64AddressFold();
 		public static readonly BaseTransformation IR_ConstantFolding_LoadZeroExtend32x64AddressFold = new IR.ConstantFolding.LoadZeroExtend32x64AddressFold();
+		public static readonly BaseTransformation IR_StrengthReduction_MulSigned32AABBPlus2AB = new IR.StrengthReduction.MulSigned32AABBPlus2AB();
+		public static readonly BaseTransformation IR_StrengthReduction_MulSigned64AABBPlus2AB = new IR.StrengthReduction.MulSigned64AABBPlus2AB();
+		public static readonly BaseTransformation IR_StrengthReduction_MulUnsigned32AABBPlus2AB = new IR.StrengthReduction.MulUnsigned32AABBPlus2AB();
+		public static readonly BaseTransformation IR_StrengthReduction_MulUnsigned64AABBPlus2AB = new IR.StrengthReduction.MulUnsigned64AABBPlus2AB();
 	}
 }

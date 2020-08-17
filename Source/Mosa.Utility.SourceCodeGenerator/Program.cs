@@ -52,6 +52,11 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto")
 			).Execute();
 
+			new BuildTransformations(
+				Path.Combine(dataPath, @"IR-Optimizations-StrengthReduction-Special.json"),
+				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto")
+			).Execute();
+
 			new BuildTransformationListFile(
 				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto"),
 				"AutoTransforms.cs",

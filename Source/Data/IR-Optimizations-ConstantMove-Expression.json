@@ -101,6 +101,28 @@
 			"Filter": "!IsResolvedConstant(x) & IsResolvedConstant(c) & !IsResolvedConstant(y)",
 			"Result": "(IR.MulR# (IR.MulR# x y) c)",
 			"Reassociate": "Yes"
+		},
+
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "MulSignedShiftLeft##",
+			"SubName": "",
+			"Expression": "IR.MulSigned## (IR.ShiftLeft## x c) y",
+			"Filter": "!IsResolvedConstant(x) & !IsResolvedConstant(y) & IsResolvedConstant(c)",
+			"Result": "(IR.ShiftLeft## (IR.MulSigned## x y) c)",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "MulUnsignedShiftLeft##",
+			"SubName": "",
+			"Expression": "IR.MulUnsigned## (IR.ShiftLeft## x c) y",
+			"Filter": "!IsResolvedConstant(x) & !IsResolvedConstant(y) & IsResolvedConstant(c)",
+			"Result": "(IR.ShiftLeft## (IR.MulUnsigned## x y) c)",
+			"Reassociate": "Yes"
 		}
+
 	]
 }

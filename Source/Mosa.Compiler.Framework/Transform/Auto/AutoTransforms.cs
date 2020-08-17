@@ -201,6 +201,10 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 			AutoInstance.IR_ConstantMove_MulSigned64Expression,
 			AutoInstance.IR_ConstantMove_MulR4Expression,
 			AutoInstance.IR_ConstantMove_MulR8Expression,
+			AutoInstance.IR_ConstantFolding_MulSignedShiftLeft32,
+			AutoInstance.IR_ConstantFolding_MulSignedShiftLeft64,
+			AutoInstance.IR_ConstantFolding_MulUnsignedShiftLeft32,
+			AutoInstance.IR_ConstantFolding_MulUnsignedShiftLeft64,
 			AutoInstance.IR_ConstantFolding_Add32x2,
 			AutoInstance.IR_ConstantFolding_Add64x2,
 			AutoInstance.IR_ConstantFolding_AddR4x2,
@@ -327,6 +331,10 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 			AutoInstance.IR_ConstantFolding_LoadZeroExtend8x64AddressFold,
 			AutoInstance.IR_ConstantFolding_LoadZeroExtend16x64AddressFold,
 			AutoInstance.IR_ConstantFolding_LoadZeroExtend32x64AddressFold,
+			AutoInstance.IR_StrengthReduction_MulSigned32AABBPlus2AB,
+			AutoInstance.IR_StrengthReduction_MulSigned64AABBPlus2AB,
+			AutoInstance.IR_StrengthReduction_MulUnsigned32AABBPlus2AB,
+			AutoInstance.IR_StrengthReduction_MulUnsigned64AABBPlus2AB,
 		};
 	}
 }
