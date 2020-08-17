@@ -122,7 +122,6 @@
 			"Result": "(IR.Not64 a)",
 			"Reassociate": "Yes"
 		},
-
 		{
 			"FamilyName": "IR",
 			"Type": "StrengthReduction",
