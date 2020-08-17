@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Kernel.BareMetal.Extension;
-using System;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal
 {
@@ -13,7 +12,7 @@ namespace Mosa.Kernel.BareMetal
 
 		public static ulong Mask { get { return (~(Size - 1)); } }
 
-		public static IntPtr ClearPage(IntPtr page)
+		public static Pointer ClearPage(Pointer page)
 		{
 			uint writes = Size / 8;
 

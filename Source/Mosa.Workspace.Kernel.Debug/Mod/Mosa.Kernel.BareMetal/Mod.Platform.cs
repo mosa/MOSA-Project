@@ -2,6 +2,7 @@
 
 using Mosa.Kernel.BareMetal.MultibootSpecification;
 using Mosa.Kernel.BareMetal.x86;
+using Mosa.Runtime;
 using System;
 
 namespace Mosa.Kernel.BareMetal
@@ -17,7 +18,7 @@ namespace Mosa.Kernel.BareMetal
 
 		public static void EntryPoint()
 		{
-			Multiboot.Setup(new IntPtr(Mosa.Workspace.Kernel.Emulate.Multiboot.MultibootStructure), MultibootV1.MultibootMagic);
+			Multiboot.Setup(new Pointer(Mosa.Workspace.Kernel.Emulate.Multiboot.MultibootStructure), MultibootV1.MultibootMagic);
 		}
 
 		public static AddressRange GetBootReservedRegion()
@@ -45,14 +46,19 @@ namespace Mosa.Kernel.BareMetal
 			//PlatformPlug.PageTableInitialize();
 		}
 
+		public static void PageTableEnable()
+		{
+			// TODO
+		}
+
 		public static void PageTableMapVirtualAddressToPhysical(uint virtualAddress, uint physicalAddress, bool present = true)
 		{
 			//PlatformPlug.PageTableMapVirtualAddressToPhysical(virtualAddress, physicalAddress, present);
 		}
 
-		public static IntPtr PageTableGetPhysicalAddressFromVirtual(IntPtr virtualAddress)
+		public static Pointer PageTableGetPhysicalAddressFromVirtual(IntPtr virtualAddress)
 		{
-			return new IntPtr(0);
+			return Pointer.Zero;
 
 			//return PlatformPlug.PageTableGetPhysicalAddressFromVirtual(virtualAddress);
 		}

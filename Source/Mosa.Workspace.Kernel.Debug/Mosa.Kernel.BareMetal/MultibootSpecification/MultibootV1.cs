@@ -1,14 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Kernel.BareMetal.Extension;
-using Mosa.Runtime.Extension;
-using System;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal.MultibootSpecification
 {
 	public /*readonly*/ struct MultibootV1
 	{
-		private static IntPtr Entry;
+		private static Pointer Entry;
 
 		/// <summary>
 		/// Magic value that indicates that kernel was loaded by a Multiboot V1 compliant boot loader
@@ -47,7 +45,7 @@ namespace Mosa.Kernel.BareMetal.MultibootSpecification
 
 		#endregion Multiboot Info Offsets
 
-		public MultibootV1(IntPtr entry)
+		public MultibootV1(Pointer entry)
 		{
 			Entry = entry;
 		}
@@ -55,7 +53,7 @@ namespace Mosa.Kernel.BareMetal.MultibootSpecification
 		/// <summary>
 		/// Gets a value indicating whether multiboot v1 is available.
 		/// </summary>
-		public bool IsAvailable => !Entry.IsNull();
+		public bool IsAvailable => !Entry.IsNull;
 
 		/// <summary>
 		/// Gets the flags.
@@ -65,12 +63,12 @@ namespace Mosa.Kernel.BareMetal.MultibootSpecification
 		/// <summary>
 		/// Gets the memory lower.
 		/// </summary>
-		public IntPtr MemoryLower { get { return Entry.LoadPointer(MultiBootInfoOffset.MemLower); } }
+		public Pointer MemoryLower { get { return Entry.LoadPointer(MultiBootInfoOffset.MemLower); } }
 
 		/// <summary>
 		/// Gets the memory upper.
 		/// </summary>
-		public IntPtr MemoryUpper { get { return Entry.LoadPointer(MultiBootInfoOffset.MemUpper); } }
+		public Pointer MemoryUpper { get { return Entry.LoadPointer(MultiBootInfoOffset.MemUpper); } }
 
 		/// <summary>
 		/// Gets the boot device.
@@ -80,7 +78,7 @@ namespace Mosa.Kernel.BareMetal.MultibootSpecification
 		/// <summary>
 		/// Gets the command line address.
 		/// </summary>
-		public IntPtr CommandLineAddress { get { return Entry.LoadPointer(MultiBootInfoOffset.CommandLine); } }
+		public Pointer CommandLineAddress { get { return Entry.LoadPointer(MultiBootInfoOffset.CommandLine); } }
 
 		/// <summary>
 		/// Gets the module count.
@@ -90,7 +88,7 @@ namespace Mosa.Kernel.BareMetal.MultibootSpecification
 		/// <summary>
 		/// Gets the module start.
 		/// </summary>
-		public IntPtr ModuleStart { get { return Entry.LoadPointer(MultiBootInfoOffset.ModuleAddress); } }
+		public Pointer ModuleStart { get { return Entry.LoadPointer(MultiBootInfoOffset.ModuleAddress); } }
 
 		/// <summary>
 		/// Gets the length of the memory map.
@@ -100,7 +98,7 @@ namespace Mosa.Kernel.BareMetal.MultibootSpecification
 		/// <summary>
 		/// Gets the memory map start.
 		/// </summary>
-		public IntPtr MemoryMapStart { get { return Entry.LoadPointer(MultiBootInfoOffset.MemMapAddress); } }
+		public Pointer MemoryMapStart { get { return Entry.LoadPointer(MultiBootInfoOffset.MemMapAddress); } }
 
 		/// <summary>
 		/// Gets the length of the drive.
@@ -125,7 +123,7 @@ namespace Mosa.Kernel.BareMetal.MultibootSpecification
 		/// <summary>
 		/// Gets the APM table.
 		/// </summary>
-		public IntPtr APMTable { get { return Entry.LoadPointer(MultiBootInfoOffset.ApmTable); } }
+		public Pointer APMTable { get { return Entry.LoadPointer(MultiBootInfoOffset.ApmTable); } }
 
 		/// <summary>
 		/// Gets the VBE control information.
@@ -135,7 +133,7 @@ namespace Mosa.Kernel.BareMetal.MultibootSpecification
 		/// <summary>
 		/// Gets the VBE mode info.
 		/// </summary>
-		public IntPtr VBEModeInfo { get { return Entry.LoadPointer(MultiBootInfoOffset.VbeModeInfo); } }
+		public Pointer VBEModeInfo { get { return Entry.LoadPointer(MultiBootInfoOffset.VbeModeInfo); } }
 
 		/// <summary>
 		/// Gets the VBE mode.

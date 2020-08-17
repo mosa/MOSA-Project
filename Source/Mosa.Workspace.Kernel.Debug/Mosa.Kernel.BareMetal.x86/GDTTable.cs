@@ -1,10 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Kernel.BareMetal.Extension;
 using Mosa.Runtime;
-using Mosa.Runtime.Extension;
 using Mosa.Runtime.x86;
-using System;
 using System.Runtime.CompilerServices;
 
 namespace Mosa.Kernel.BareMetal.x86
@@ -14,7 +11,7 @@ namespace Mosa.Kernel.BareMetal.x86
 	/// </summary>
 	public /*readonly*/ struct GDTTable
 	{
-		private /*readonly*/ IntPtr Entry;
+		private /*readonly*/ Pointer Entry;
 
 		#region GDT Entry Offsets
 
@@ -31,7 +28,7 @@ namespace Mosa.Kernel.BareMetal.x86
 
 		#endregion GDT Entry Offsets
 
-		public GDTTable(IntPtr entry)
+		public GDTTable(Pointer entry)
 		{
 			Entry = entry;
 		}
@@ -52,14 +49,16 @@ namespace Mosa.Kernel.BareMetal.x86
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		private void SetLgdt(IntPtr address)
+		private void SetLgdt(Pointer address)
 		{
 			Native.Lgdt((uint)address.ToInt32());
+			Native.SetSegments(0x10, 0x10, 0x10, 0x10, 0x10);
+			Native.FarJump();
 		}
 
 		private void Set(uint index, uint address, uint limit, byte access, byte granularity)
 		{
-			var entry = Entry + (int)(6 + (index * GDTEntryOffset.TotalSize));
+			var entry = Entry + (6 + (index * GDTEntryOffset.TotalSize));
 
 			entry.Store16(GDTEntryOffset.BaseLow, (ushort)(address & 0xFFFF));
 			entry.Store8(GDTEntryOffset.BaseMiddle, (byte)((address >> 16) & 0xFF));

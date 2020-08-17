@@ -1,8 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.BareMetal.MultibootSpecification;
-using Mosa.Runtime.Extension;
-using System;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal.BootMemory
 {
@@ -26,22 +25,22 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 			if (!Multiboot.IsAvailable)
 				return;
 
-			if (Multiboot.MultibootV1.MemoryMapStart.IsNull())
+			if (Multiboot.MultibootV1.MemoryMapStart.IsNull)
 				return;
 
-			var memoryMapEnd = Multiboot.MultibootV1.MemoryMapStart + (int)Multiboot.MultibootV1.MemoryMapLength;
+			var memoryMapEnd = Multiboot.MultibootV1.MemoryMapStart + Multiboot.MultibootV1.MemoryMapLength;
 
 			var entry = new MultibootV1MemoryMapEntry(Multiboot.MultibootV1.MemoryMapStart);
 
 			while (entry.IsAvailable)
 			{
-				BootMemoryMap.SetMemoryMap(entry.BaseAddr, entry.Length, entry.Type == 1 ? BootMemoryMapType.Available : BootMemoryMapType.Reserved);
+				SetMemoryMap(entry.BaseAddr, entry.Length, entry.Type == 1 ? BootMemoryMapType.Available : BootMemoryMapType.Reserved);
 
 				entry = entry.GetNext(memoryMapEnd);
 			}
 		}
 
-		public static BootMemoryMapEntry SetMemoryMap(IntPtr address, ulong size, BootMemoryMapType type)
+		public static BootMemoryMapEntry SetMemoryMap(Pointer address, ulong size, BootMemoryMapType type)
 		{
 			var entry = Map.GetBootMemoryMapEntry(Map.Count);
 
@@ -64,18 +63,18 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 			return Map.GetBootMemoryMapEntry(index);
 		}
 
-		public static IntPtr GetMaximumAddress()
+		public static Pointer GetMaximumAddress()
 		{
-			var max = IntPtr.Zero;
+			var max = Pointer.Zero;
 			var count = Map.Count;
 
 			for (uint i = 0; i < count; i++)
 			{
-				var entry = BootMemoryMap.GetBootMemoryMapEntry(i);
+				var entry = GetBootMemoryMapEntry(i);
 
 				var endAddress = entry.EndAddress;
 
-				if (endAddress.GreaterThan(max))
+				if (endAddress > max)
 					max = endAddress;
 			}
 

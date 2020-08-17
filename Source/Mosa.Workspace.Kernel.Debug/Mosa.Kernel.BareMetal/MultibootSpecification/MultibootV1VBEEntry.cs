@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Kernel.BareMetal.Extension;
-using Mosa.Runtime.Extension;
-using System;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal.MultibootSpecification
 {
@@ -11,7 +9,7 @@ namespace Mosa.Kernel.BareMetal.MultibootSpecification
 	/// </summary>
 	public /*readonly*/ struct MultibootV1VBEEntry
 	{
-		private readonly IntPtr Entry;
+		private readonly Pointer Entry;
 
 		#region VBE Mode Info Offsets
 
@@ -57,12 +55,12 @@ namespace Mosa.Kernel.BareMetal.MultibootSpecification
 		/// <summary>
 		/// Gets a value indicating whether VBE is available.
 		/// </summary>
-		public bool IsAvailable => !Entry.IsNull();
+		public bool IsAvailable => !Entry.IsNull;
 
 		/// <summary>
 		/// Setup Multiboot V1 VBE Entry.
 		/// </summary>
-		public MultibootV1VBEEntry(IntPtr entry)
+		public MultibootV1VBEEntry(Pointer entry)
 		{
 			Entry = entry;
 		}
@@ -125,7 +123,7 @@ namespace Mosa.Kernel.BareMetal.MultibootSpecification
 
 		public byte DirectColorAttributes { get { return Entry.Load8(VBEModeInfoOffset.DirectColorAttributes); } }
 
-		public IntPtr MemoryPhysicalLocation { get { return Entry.LoadPointer(VBEModeInfoOffset.PhysBase); } }
+		public Pointer MemoryPhysicalLocation { get { return Entry.LoadPointer(VBEModeInfoOffset.PhysBase); } }
 
 		public uint OffScreenMemoryOff { get { return Entry.Load32(VBEModeInfoOffset.OffScreenMemoryOff); } }
 

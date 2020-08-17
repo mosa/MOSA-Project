@@ -10,49 +10,49 @@ namespace Mosa.Runtime
 	{
 		#region Memory Manipulation
 
-		public static void MemoryCopy(IntPtr dest, IntPtr src, uint count)
+		public static void MemoryCopy(Pointer dest, Pointer src, uint count)
 		{
 			// FUTURE: Improve
 			for (int i = 0; i < count; i++)
 			{
-				byte value = Intrinsic.Load8(src, i);
-				Intrinsic.Store8(dest, i, value);
+				byte value = src.Load8(i);
+				dest.Store8(i, value);
 			}
 		}
 
-		public static void MemorySet(IntPtr dest, byte value, uint count)
+		public static void MemorySet(Pointer dest, byte value, uint count)
 		{
 			// FUTURE: Improve
 			for (int i = 0; i < count; i++)
 			{
-				Intrinsic.Store8(dest, i, value);
+				dest.Store8(i, value);
 			}
 		}
 
-		public static void MemorySet(IntPtr dest, ushort value, uint count)
+		public static void MemorySet(Pointer dest, ushort value, uint count)
 		{
 			// FUTURE: Improve
-			for (int i = 0; i < count; i = i + 2)
+			for (int i = 0; i < count; i += 2)
 			{
-				Intrinsic.Store16(dest, i, value);
+				dest.Store16(i, value);
 			}
 		}
 
-		public static void MemorySet(IntPtr dest, uint value, uint count)
+		public static void MemorySet(Pointer dest, uint value, uint count)
 		{
 			// FUTURE: Improve
-			for (int i = 0; i < count; i = i + 4)
+			for (int i = 0; i < count; i += 4)
 			{
-				Intrinsic.Store32(dest, i, value);
+				dest.Store32(i, value);
 			}
 		}
 
-		public static void MemoryClear(IntPtr dest, uint count)
+		public static void MemoryClear(Pointer dest, uint count)
 		{
 			// FUTURE: Improve
 			for (int i = 0; i < count; i++)
 			{
-				Intrinsic.Store8(dest, i, 0);
+				dest.Store8(i, 0);
 			}
 		}
 

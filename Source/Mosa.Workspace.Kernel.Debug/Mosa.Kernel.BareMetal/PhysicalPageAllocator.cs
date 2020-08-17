@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.BareMetal.BootMemory;
-using Mosa.Kernel.BareMetal.Extension;
+using Mosa.Runtime;
 using System;
 
 namespace Mosa.Kernel.BareMetal
@@ -103,7 +103,7 @@ namespace Mosa.Kernel.BareMetal
 
 		private static void SetPageBitMapEntry(uint start, uint count, bool set)
 		{
-			var indexShift = (IntPtr.Size == 4) ? 10 : 9;
+			var indexShift = (Pointer.Size == 4) ? 10 : 9;
 			var maskOffIndex = (uint)((1 << (indexShift + 1)) - 1);
 
 			var at = start;
@@ -163,31 +163,35 @@ namespace Mosa.Kernel.BareMetal
 			}
 		}
 
-		public static void ReleasePages(IntPtr page, uint count)
+		public static void ReleasePages(Pointer page, uint count)
 		{
 			SetPageBitMapEntry((uint)page.ToInt64() / Page.Size, count, true);
 		}
 
-		public static IntPtr ReservePage()
+		public static Pointer ReservePage()
 		{
 			return ReservePages(1, 1);
 		}
 
-		public static IntPtr ReservePages(uint count, uint alignment = 1)
+		public static Pointer ReservePages(uint count, uint alignment = 1)
 		{
+			Console.Write("z");
+
 			if (count == 0)
-				return IntPtr.Zero;
+				return Pointer.Zero;
 
 			if (alignment == 0)
 				alignment = 1;
 
 			// TODO: Acquire lock
+			Console.Write("y");
 
 			uint start = SearchNextStartPage;
 			uint at = start;
 
 			while (true)
 			{
+				Console.Write("x");
 				uint restartAt;
 
 				if (at % alignment != 0)
@@ -204,7 +208,7 @@ namespace Mosa.Kernel.BareMetal
 
 					SearchNextStartPage = restartAt;
 
-					return new IntPtr(at * Page.Size);
+					return new Pointer(at * Page.Size);
 				}
 				else
 				{
@@ -221,7 +225,7 @@ namespace Mosa.Kernel.BareMetal
 				{
 					// looped around in the search
 					// quit, as there are no free pages
-					return IntPtr.Zero;
+					return Pointer.Zero;
 				}
 
 				at = restartAt;
@@ -245,7 +249,7 @@ namespace Mosa.Kernel.BareMetal
 				return false;
 			}
 
-			var indexShift = (IntPtr.Size == 4) ? 10 : 9;
+			var indexShift = (Pointer.Size == 4) ? 10 : 9;
 			var maskOffIndex = (uint)((1 << (indexShift + 1)) - 1);
 
 			var at = start;
