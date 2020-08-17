@@ -289,6 +289,11 @@ namespace Mosa.UnitTests
 			return (a * a) + (b * b) + (2 * a * b);
 		}
 
+		public static int OptimizationTest23(int a, int b)
+		{
+			return (a * a) + (b * b) - (2 * a * b);
+		}
+
 		//[MosaUnitTest(0)]
 		//[MosaUnitTest(1)]
 		//[MosaUnitTest(2)]

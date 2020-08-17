@@ -329,9 +329,13 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 		public static readonly BaseTransformation IR_ConstantFolding_LoadZeroExtend8x64AddressFold = new IR.ConstantFolding.LoadZeroExtend8x64AddressFold();
 		public static readonly BaseTransformation IR_ConstantFolding_LoadZeroExtend16x64AddressFold = new IR.ConstantFolding.LoadZeroExtend16x64AddressFold();
 		public static readonly BaseTransformation IR_ConstantFolding_LoadZeroExtend32x64AddressFold = new IR.ConstantFolding.LoadZeroExtend32x64AddressFold();
-		public static readonly BaseTransformation IR_StrengthReduction_MulSigned32AABBPlus2AB = new IR.StrengthReduction.MulSigned32AABBPlus2AB();
-		public static readonly BaseTransformation IR_StrengthReduction_MulSigned64AABBPlus2AB = new IR.StrengthReduction.MulSigned64AABBPlus2AB();
-		public static readonly BaseTransformation IR_StrengthReduction_MulUnsigned32AABBPlus2AB = new IR.StrengthReduction.MulUnsigned32AABBPlus2AB();
-		public static readonly BaseTransformation IR_StrengthReduction_MulUnsigned64AABBPlus2AB = new IR.StrengthReduction.MulUnsigned64AABBPlus2AB();
+		public static readonly BaseTransformation IR_Algebraic_Signed32AABBPlus2AB = new IR.Algebraic.Signed32AABBPlus2AB();
+		public static readonly BaseTransformation IR_Algebraic_Signed64AABBPlus2AB = new IR.Algebraic.Signed64AABBPlus2AB();
+		public static readonly BaseTransformation IR_Algebraic_Unsigned32AABBPlus2AB = new IR.Algebraic.Unsigned32AABBPlus2AB();
+		public static readonly BaseTransformation IR_Algebraic_Unsigned64AABBPlus2AB = new IR.Algebraic.Unsigned64AABBPlus2AB();
+		public static readonly BaseTransformation IR_Algebraic_Unsigned32AABBMinus2AB = new IR.Algebraic.Unsigned32AABBMinus2AB();
+		public static readonly BaseTransformation IR_Algebraic_Unsigned64AABBMinus2AB = new IR.Algebraic.Unsigned64AABBMinus2AB();
+		public static readonly BaseTransformation IR_Algebraic_Signed32AABBMinus2AB = new IR.Algebraic.Signed32AABBMinus2AB();
+		public static readonly BaseTransformation IR_Algebraic_Signed64AABBMinus2AB = new IR.Algebraic.Signed64AABBMinus2AB();
 	}
 }

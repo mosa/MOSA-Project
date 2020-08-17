@@ -301,7 +301,12 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			foreach (var node in GetPreorder(InstructionTree))
 			{
 				if (cumulativeInstructions.Contains(node.InstructionName) && node.Operands.Count == 2)
-					bits++;
+				{
+					if (!node.Operands[0].IsSame(node.Operands[1]))
+					{
+						bits++;
+					}
+				}
 			}
 
 			int total = 1 << bits;
@@ -329,20 +334,20 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			{
 				if (cumulativeInstructions.Contains(node.InstructionName) && node.Operands.Count == 2)
 				{
-					if (node.Operands[0].IsSame(node.Operands[1]))
-						return null;
-
-					if (((index >> bit) & 1) == 1)
+					if (!node.Operands[0].IsSame(node.Operands[1]))
 					{
-						var temp = node.Operands[0];
-						node.Operands[0] = node.Operands[1];
-						node.Operands[1] = temp;
+						if (((index >> bit) & 1) == 1)
+						{
+							var temp = node.Operands[0];
+							node.Operands[0] = node.Operands[1];
+							node.Operands[1] = temp;
 
-						node.Operands[0].Index = 0;
-						node.Operands[1].Index = 1;
+							node.Operands[0].Index = 0;
+							node.Operands[1].Index = 1;
+						}
+
+						bit++;
 					}
-
-					bit++;
 				}
 			}
 

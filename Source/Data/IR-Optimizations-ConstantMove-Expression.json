@@ -102,7 +102,6 @@
 			"Result": "(IR.MulR# (IR.MulR# x y) c)",
 			"Reassociate": "Yes"
 		},
-
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
@@ -123,6 +122,5 @@
 			"Result": "(IR.ShiftLeft## (IR.MulUnsigned## x y) c)",
 			"Reassociate": "Yes"
 		}
-
 	]
 }
