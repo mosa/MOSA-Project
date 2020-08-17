@@ -167,6 +167,26 @@ namespace Mosa.Compiler.Framework.Transform
 			return operand.IsInteger && operand.ConstantSigned64 >= 0 && operand.ConstantSigned64 <= 64;
 		}
 
+		protected static bool IsNaturalSquareRoot32(Operand operand)
+		{
+			var value = operand.ConstantUnsigned32;
+
+			var sqrt = Sqrt32(value);
+			var s2 = sqrt * sqrt;
+
+			return value == s2;
+		}
+
+		protected static bool IsNaturalSquareRoot64(Operand operand)
+		{
+			var value = operand.ConstantUnsigned64;
+
+			var sqrt = Sqrt64(value);
+			var s2 = sqrt * sqrt;
+
+			return value == s2;
+		}
+
 		#endregion Filter Methods
 
 		#region Expression Methods
@@ -534,6 +554,45 @@ namespace Mosa.Compiler.Framework.Transform
 		protected static ulong Xor64(ulong a, ulong b)
 		{
 			return a ^ b;
+		}
+
+		protected static ulong Sqrt64(ulong num)
+		{
+			if (0 == num)
+				return 0;
+
+			ulong n = (num / 2) + 1;
+			ulong n1 = (n + (num / n)) / 2;
+
+			while (n1 < n)
+			{
+				n = n1;
+				n1 = (n + (num / n)) / 2;
+			}
+
+			return n;
+		}
+
+		protected static ulong Sqrt32(uint num)
+		{
+			if (0 == num)
+				return 0;
+
+			uint n = (num / 2) + 1;
+			uint n1 = (n + (num / n)) / 2;
+
+			while (n1 < n)
+			{
+				n = n1;
+				n1 = (n + (num / n)) / 2;
+			}
+
+			return n;
+		}
+
+		protected static ulong Square(uint n)
+		{
+			return n * n;
 		}
 
 		#endregion Expression Methods
