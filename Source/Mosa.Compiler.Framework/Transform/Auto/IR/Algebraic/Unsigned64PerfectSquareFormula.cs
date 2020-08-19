@@ -50,7 +50,16 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand2.Definitions[0].Operand2))
 				return false;
 
-			if (!IsEqual(To64(context.Operand2), Sqrt64(DivUnsigned64(To64(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1), 2))))
+			if (!IsResolvedConstant(context.Operand2))
+				return false;
+
+			if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1))
+				return false;
+
+			if (!IsEvenInteger(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1))
+				return false;
+
+			if (!IsEqual(To64(context.Operand2), Square64(DivUnsigned64(To64(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1), 2))))
 				return false;
 
 			return true;
@@ -118,7 +127,16 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (!AreSame(context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand2))
 				return false;
 
-			if (!IsEqual(To64(context.Operand1), Sqrt64(DivUnsigned64(To64(context.Operand2.Definitions[0].Operand2.Definitions[0].Operand1), 2))))
+			if (!IsResolvedConstant(context.Operand1))
+				return false;
+
+			if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand2.Definitions[0].Operand1))
+				return false;
+
+			if (!IsEvenInteger(context.Operand2.Definitions[0].Operand2.Definitions[0].Operand1))
+				return false;
+
+			if (!IsEqual(To64(context.Operand1), Square64(DivUnsigned64(To64(context.Operand2.Definitions[0].Operand2.Definitions[0].Operand1), 2))))
 				return false;
 
 			return true;
@@ -186,7 +204,16 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand1.Definitions[0].Operand2.Definitions[0].Operand2))
 				return false;
 
-			if (!IsEqual(To64(context.Operand2), Sqrt64(DivUnsigned64(To64(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1), 2))))
+			if (!IsResolvedConstant(context.Operand2))
+				return false;
+
+			if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1))
+				return false;
+
+			if (!IsEvenInteger(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1))
+				return false;
+
+			if (!IsEqual(To64(context.Operand2), Square64(DivUnsigned64(To64(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1), 2))))
 				return false;
 
 			return true;
@@ -254,7 +281,16 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (!AreSame(context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand2))
 				return false;
 
-			if (!IsEqual(To64(context.Operand1), Sqrt64(DivUnsigned64(To64(context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1), 2))))
+			if (!IsResolvedConstant(context.Operand1))
+				return false;
+
+			if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1))
+				return false;
+
+			if (!IsEvenInteger(context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1))
+				return false;
+
+			if (!IsEqual(To64(context.Operand1), Square64(DivUnsigned64(To64(context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1), 2))))
 				return false;
 
 			return true;
@@ -322,7 +358,16 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1))
 				return false;
 
-			if (!IsEqual(To64(context.Operand2), Sqrt64(DivUnsigned64(To64(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand2), 2))))
+			if (!IsResolvedConstant(context.Operand2))
+				return false;
+
+			if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand2))
+				return false;
+
+			if (!IsEvenInteger(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand2))
+				return false;
+
+			if (!IsEqual(To64(context.Operand2), Square64(DivUnsigned64(To64(context.Operand1.Definitions[0].Operand2.Definitions[0].Operand2), 2))))
 				return false;
 
 			return true;
@@ -390,7 +435,16 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (!AreSame(context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand1))
 				return false;
 
-			if (!IsEqual(To64(context.Operand1), Sqrt64(DivUnsigned64(To64(context.Operand2.Definitions[0].Operand2.Definitions[0].Operand2), 2))))
+			if (!IsResolvedConstant(context.Operand1))
+				return false;
+
+			if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand2.Definitions[0].Operand2))
+				return false;
+
+			if (!IsEvenInteger(context.Operand2.Definitions[0].Operand2.Definitions[0].Operand2))
+				return false;
+
+			if (!IsEqual(To64(context.Operand1), Square64(DivUnsigned64(To64(context.Operand2.Definitions[0].Operand2.Definitions[0].Operand2), 2))))
 				return false;
 
 			return true;
@@ -458,7 +512,16 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand2.Definitions[0].Operand2))
 				return false;
 
-			if (!IsEqual(To64(context.Operand2), Sqrt64(DivUnsigned64(To64(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2), 2))))
+			if (!IsResolvedConstant(context.Operand2))
+				return false;
+
+			if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
+				return false;
+
+			if (!IsEvenInteger(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
+				return false;
+
+			if (!IsEqual(To64(context.Operand2), Square64(DivUnsigned64(To64(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2), 2))))
 				return false;
 
 			return true;
@@ -526,7 +589,16 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (!AreSame(context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand2))
 				return false;
 
-			if (!IsEqual(To64(context.Operand1), Sqrt64(DivUnsigned64(To64(context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2), 2))))
+			if (!IsResolvedConstant(context.Operand1))
+				return false;
+
+			if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
+				return false;
+
+			if (!IsEvenInteger(context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
+				return false;
+
+			if (!IsEqual(To64(context.Operand1), Square64(DivUnsigned64(To64(context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2), 2))))
 				return false;
 
 			return true;

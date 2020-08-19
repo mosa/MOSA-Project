@@ -99,8 +99,6 @@ namespace Mosa.Utility.SourceCodeGenerator
 			DestinationFile = $"{familyName}\\{type}\\{name}{subName}.cs";
 			AddSourceHeader();
 
-			Transformations.Add($"{familyName}.{type}.{name}{subName}");
-
 			Lines.AppendLine("using Mosa.Compiler.Framework.IR;");
 
 			Lines.AppendLine();
@@ -137,6 +135,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 		private void GenerateTransformation2(string name, string familyName, string type, string subName, Transformation transform)
 		{
 			var instructionName = transform.InstructionTree.InstructionName.Replace("IR.", "IRInstruction.");
+
+			Transformations.Add($"{familyName}.{type}.{name}{subName}");
 
 			if (First)
 			{

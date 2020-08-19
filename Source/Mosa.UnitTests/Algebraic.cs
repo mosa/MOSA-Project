@@ -22,8 +22,32 @@ namespace Mosa.UnitTests
 			return (x * x) + (10 * x) + 25;
 		}
 
+		[MosaUnitTest(Series = "U4")]
+		public static uint PerfectSquareFormula2(uint x)
+		{
+			return (x * x) + (10 * x) + 25;
+		}
+
+		[MosaUnitTest(Series = "U4")]
+		public static uint PerfectSquareFormula3(uint x)
+		{
+			return (x * x) - (4 * x) - 16;
+		}
+
+		[MosaUnitTest(Series = "U4")]
+		public static uint PerfectSquareFormula4(uint x)
+		{
+			return (x * x) - (5 * x) - 25;
+		}
+
 		[MosaUnitTest(Series = "I4I4")]
 		public static int AAMinusBB(int a, int b)
+		{
+			return (a * a) - (b * b);
+		}
+
+		[MosaUnitTest(Series = "U4U4")]
+		public static uint AAMinusBB2(uint a, uint b)
 		{
 			return (a * a) - (b * b);
 		}

@@ -88,8 +88,18 @@
 			"Name": "Unsigned##",
 			"SubName": "PerfectSquareFormula",
 			"Expression": "IR.Add## (IR.Add## (IR.MulUnsigned## x x) (IR.MulUnsigned## b x)) c",
-			"Filter": "IsEqual(To##(c),Sqrt##(DivUnsigned##(To##(b),2)))",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b) & IsEvenInteger(b) & IsEqual(To##(c),Square##(DivUnsigned##(To##(b),2)))",
 			"Result": "(IR.MulUnsigned## (IR.Add## x [DivUnsigned##(To##(b),2)]) (IR.Add## x [DivUnsigned##(To##(b),2)]))",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Algebraic",
+			"Name": "Signed##",
+			"SubName": "PerfectSquareFormula",
+			"Expression": "IR.Add## (IR.Add## (IR.MulSigned## x x) (IR.MulSigned## b x)) c",
+			"Filter": "IsResolvedConstant(c) & IsResolvedConstant(b) & IsEvenInteger(b) & IsEqual(To##(c),Square##(DivUnsigned##(To##(b),2)))",
+			"Result": "(IR.MulSigned## (IR.Add## x [DivSigned##(ToSigned##(b),2)]) (IR.Add## x [DivSigned##(ToSigned##(b),2)]))",
 			"Reassociate": "Yes"
 		}
 	]

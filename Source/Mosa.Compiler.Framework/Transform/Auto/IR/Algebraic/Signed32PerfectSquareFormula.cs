@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 {
 	/// <summary>
-	/// Unsigned32PerfectSquareFormula
+	/// Signed32PerfectSquareFormula
 	/// </summary>
-	public sealed class Unsigned32PerfectSquareFormula : BaseTransformation
+	public sealed class Signed32PerfectSquareFormula : BaseTransformation
 	{
-		public Unsigned32PerfectSquareFormula() : base(IRInstruction.Add32)
+		public Signed32PerfectSquareFormula() : base(IRInstruction.Add32)
 		{
 		}
 
@@ -35,13 +35,13 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
 				return false;
 
 			if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulSigned32)
 				return false;
 
 			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
@@ -75,20 +75,20 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			var v1 = transformContext.AllocateVirtualRegister(transformContext.I4);
 			var v2 = transformContext.AllocateVirtualRegister(transformContext.I4);
 
-			var e1 = transformContext.CreateConstant(DivUnsigned32(To32(t2), 2));
+			var e1 = transformContext.CreateConstant(DivSigned32(ToSigned32(t2), 2));
 
 			context.SetInstruction(IRInstruction.Add32, v1, t1, e1);
 			context.AppendInstruction(IRInstruction.Add32, v2, t1, e1);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
+			context.AppendInstruction(IRInstruction.MulSigned32, result, v2, v1);
 		}
 	}
 
 	/// <summary>
-	/// Unsigned32PerfectSquareFormula_v1
+	/// Signed32PerfectSquareFormula_v1
 	/// </summary>
-	public sealed class Unsigned32PerfectSquareFormula_v1 : BaseTransformation
+	public sealed class Signed32PerfectSquareFormula_v1 : BaseTransformation
 	{
-		public Unsigned32PerfectSquareFormula_v1() : base(IRInstruction.Add32)
+		public Signed32PerfectSquareFormula_v1() : base(IRInstruction.Add32)
 		{
 		}
 
@@ -112,13 +112,13 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
 				return false;
 
 			if (context.Operand2.Definitions[0].Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulSigned32)
 				return false;
 
 			if (!AreSame(context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
@@ -152,20 +152,20 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			var v1 = transformContext.AllocateVirtualRegister(transformContext.I4);
 			var v2 = transformContext.AllocateVirtualRegister(transformContext.I4);
 
-			var e1 = transformContext.CreateConstant(DivUnsigned32(To32(t2), 2));
+			var e1 = transformContext.CreateConstant(DivSigned32(ToSigned32(t2), 2));
 
 			context.SetInstruction(IRInstruction.Add32, v1, t1, e1);
 			context.AppendInstruction(IRInstruction.Add32, v2, t1, e1);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
+			context.AppendInstruction(IRInstruction.MulSigned32, result, v2, v1);
 		}
 	}
 
 	/// <summary>
-	/// Unsigned32PerfectSquareFormula_v2
+	/// Signed32PerfectSquareFormula_v2
 	/// </summary>
-	public sealed class Unsigned32PerfectSquareFormula_v2 : BaseTransformation
+	public sealed class Signed32PerfectSquareFormula_v2 : BaseTransformation
 	{
-		public Unsigned32PerfectSquareFormula_v2() : base(IRInstruction.Add32)
+		public Signed32PerfectSquareFormula_v2() : base(IRInstruction.Add32)
 		{
 		}
 
@@ -189,13 +189,13 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
 				return false;
 
 			if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulSigned32)
 				return false;
 
 			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1))
@@ -229,20 +229,20 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			var v1 = transformContext.AllocateVirtualRegister(transformContext.I4);
 			var v2 = transformContext.AllocateVirtualRegister(transformContext.I4);
 
-			var e1 = transformContext.CreateConstant(DivUnsigned32(To32(t1), 2));
+			var e1 = transformContext.CreateConstant(DivSigned32(ToSigned32(t1), 2));
 
 			context.SetInstruction(IRInstruction.Add32, v1, t2, e1);
 			context.AppendInstruction(IRInstruction.Add32, v2, t2, e1);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
+			context.AppendInstruction(IRInstruction.MulSigned32, result, v2, v1);
 		}
 	}
 
 	/// <summary>
-	/// Unsigned32PerfectSquareFormula_v3
+	/// Signed32PerfectSquareFormula_v3
 	/// </summary>
-	public sealed class Unsigned32PerfectSquareFormula_v3 : BaseTransformation
+	public sealed class Signed32PerfectSquareFormula_v3 : BaseTransformation
 	{
-		public Unsigned32PerfectSquareFormula_v3() : base(IRInstruction.Add32)
+		public Signed32PerfectSquareFormula_v3() : base(IRInstruction.Add32)
 		{
 		}
 
@@ -266,13 +266,13 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
 				return false;
 
 			if (context.Operand2.Definitions[0].Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulSigned32)
 				return false;
 
 			if (!AreSame(context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand1))
@@ -306,20 +306,20 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			var v1 = transformContext.AllocateVirtualRegister(transformContext.I4);
 			var v2 = transformContext.AllocateVirtualRegister(transformContext.I4);
 
-			var e1 = transformContext.CreateConstant(DivUnsigned32(To32(t1), 2));
+			var e1 = transformContext.CreateConstant(DivSigned32(ToSigned32(t1), 2));
 
 			context.SetInstruction(IRInstruction.Add32, v1, t2, e1);
 			context.AppendInstruction(IRInstruction.Add32, v2, t2, e1);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
+			context.AppendInstruction(IRInstruction.MulSigned32, result, v2, v1);
 		}
 	}
 
 	/// <summary>
-	/// Unsigned32PerfectSquareFormula_v4
+	/// Signed32PerfectSquareFormula_v4
 	/// </summary>
-	public sealed class Unsigned32PerfectSquareFormula_v4 : BaseTransformation
+	public sealed class Signed32PerfectSquareFormula_v4 : BaseTransformation
 	{
-		public Unsigned32PerfectSquareFormula_v4() : base(IRInstruction.Add32)
+		public Signed32PerfectSquareFormula_v4() : base(IRInstruction.Add32)
 		{
 		}
 
@@ -343,13 +343,13 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
 				return false;
 
 			if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulSigned32)
 				return false;
 
 			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
@@ -383,20 +383,20 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			var v1 = transformContext.AllocateVirtualRegister(transformContext.I4);
 			var v2 = transformContext.AllocateVirtualRegister(transformContext.I4);
 
-			var e1 = transformContext.CreateConstant(DivUnsigned32(To32(t2), 2));
+			var e1 = transformContext.CreateConstant(DivSigned32(ToSigned32(t2), 2));
 
 			context.SetInstruction(IRInstruction.Add32, v1, t1, e1);
 			context.AppendInstruction(IRInstruction.Add32, v2, t1, e1);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
+			context.AppendInstruction(IRInstruction.MulSigned32, result, v2, v1);
 		}
 	}
 
 	/// <summary>
-	/// Unsigned32PerfectSquareFormula_v5
+	/// Signed32PerfectSquareFormula_v5
 	/// </summary>
-	public sealed class Unsigned32PerfectSquareFormula_v5 : BaseTransformation
+	public sealed class Signed32PerfectSquareFormula_v5 : BaseTransformation
 	{
-		public Unsigned32PerfectSquareFormula_v5() : base(IRInstruction.Add32)
+		public Signed32PerfectSquareFormula_v5() : base(IRInstruction.Add32)
 		{
 		}
 
@@ -420,13 +420,13 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
 				return false;
 
 			if (context.Operand2.Definitions[0].Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulSigned32)
 				return false;
 
 			if (!AreSame(context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1.Definitions[0].Operand2))
@@ -460,20 +460,20 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			var v1 = transformContext.AllocateVirtualRegister(transformContext.I4);
 			var v2 = transformContext.AllocateVirtualRegister(transformContext.I4);
 
-			var e1 = transformContext.CreateConstant(DivUnsigned32(To32(t2), 2));
+			var e1 = transformContext.CreateConstant(DivSigned32(ToSigned32(t2), 2));
 
 			context.SetInstruction(IRInstruction.Add32, v1, t1, e1);
 			context.AppendInstruction(IRInstruction.Add32, v2, t1, e1);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
+			context.AppendInstruction(IRInstruction.MulSigned32, result, v2, v1);
 		}
 	}
 
 	/// <summary>
-	/// Unsigned32PerfectSquareFormula_v6
+	/// Signed32PerfectSquareFormula_v6
 	/// </summary>
-	public sealed class Unsigned32PerfectSquareFormula_v6 : BaseTransformation
+	public sealed class Signed32PerfectSquareFormula_v6 : BaseTransformation
 	{
-		public Unsigned32PerfectSquareFormula_v6() : base(IRInstruction.Add32)
+		public Signed32PerfectSquareFormula_v6() : base(IRInstruction.Add32)
 		{
 		}
 
@@ -497,13 +497,13 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
 				return false;
 
 			if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulSigned32)
 				return false;
 
 			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1))
@@ -537,20 +537,20 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			var v1 = transformContext.AllocateVirtualRegister(transformContext.I4);
 			var v2 = transformContext.AllocateVirtualRegister(transformContext.I4);
 
-			var e1 = transformContext.CreateConstant(DivUnsigned32(To32(t2), 2));
+			var e1 = transformContext.CreateConstant(DivSigned32(ToSigned32(t2), 2));
 
 			context.SetInstruction(IRInstruction.Add32, v1, t1, e1);
 			context.AppendInstruction(IRInstruction.Add32, v2, t1, e1);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
+			context.AppendInstruction(IRInstruction.MulSigned32, result, v2, v1);
 		}
 	}
 
 	/// <summary>
-	/// Unsigned32PerfectSquareFormula_v7
+	/// Signed32PerfectSquareFormula_v7
 	/// </summary>
-	public sealed class Unsigned32PerfectSquareFormula_v7 : BaseTransformation
+	public sealed class Signed32PerfectSquareFormula_v7 : BaseTransformation
 	{
-		public Unsigned32PerfectSquareFormula_v7() : base(IRInstruction.Add32)
+		public Signed32PerfectSquareFormula_v7() : base(IRInstruction.Add32)
 		{
 		}
 
@@ -574,13 +574,13 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
 				return false;
 
 			if (context.Operand2.Definitions[0].Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand2.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulSigned32)
 				return false;
 
 			if (!AreSame(context.Operand2.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand2.Definitions[0].Operand1))
@@ -614,11 +614,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			var v1 = transformContext.AllocateVirtualRegister(transformContext.I4);
 			var v2 = transformContext.AllocateVirtualRegister(transformContext.I4);
 
-			var e1 = transformContext.CreateConstant(DivUnsigned32(To32(t2), 2));
+			var e1 = transformContext.CreateConstant(DivSigned32(ToSigned32(t2), 2));
 
 			context.SetInstruction(IRInstruction.Add32, v1, t1, e1);
 			context.AppendInstruction(IRInstruction.Add32, v2, t1, e1);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
+			context.AppendInstruction(IRInstruction.MulSigned32, result, v2, v1);
 		}
 	}
 }

@@ -41,6 +41,16 @@
 			"Filter": "",
 			"Result": "(IR.ShiftLeft## (IR.MulSigned## a b) c)",
 			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Reorder",
+			"Name": "SubToAdd##",
+			"SubName": "",
+			"Expression": "IR.Sub## a b",
+			"Filter": "IsResolvedConstant(b)",
+			"Result": "(IR.Add## a [Neg##(ToSigned##(b))])",
+			"Reassociate": "Yes"
 		}
 	]
 }
