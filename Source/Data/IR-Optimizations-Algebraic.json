@@ -30,7 +30,8 @@
 			"Expression": "IR.Add## (IR.Add## (IR.MulSigned## a a) (IR.MulSigned## b b)) (IR.ShiftLeft## (IR.MulSigned## a b) 1)",
 			"Filter": "",
 			"Result": "(IR.MulSigned## (IR.Add## a b) (IR.Add## a b))",
-			"Reassociate": "Yes"
+			"Reassociate": "Yes",
+			"Log": "Yes"
 		},
 		{
 			"FamilyName": "IR",

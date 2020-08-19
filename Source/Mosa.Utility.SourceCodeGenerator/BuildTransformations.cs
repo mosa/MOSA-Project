@@ -48,26 +48,27 @@ namespace Mosa.Utility.SourceCodeGenerator
 			string expression = node.Expression;
 			string filter = node.Filter;
 			string result = node.Result;
+			bool log = (node.Log != null && node.Log == "Yes");
 			bool reassociate = (node.Reassociate != null && node.Reassociate == "Yes");
 
-			GenerateTranformations(name, familyName, type, subName, expression, filter, result, reassociate);
+			GenerateTranformations(name, familyName, type, subName, expression, filter, result, reassociate, log);
 		}
 
-		private void GenerateTranformations(string name, string familyName, string type, string subName, string expression, string filter, string result, bool reassociate)
+		private void GenerateTranformations(string name, string familyName, string type, string subName, string expression, string filter, string result, bool reassociate, bool log)
 		{
 			if (expression.Contains("R#"))
 			{
-				GenerateTransformation(R4(name), R4(familyName), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result)), reassociate);
-				GenerateTransformation(R8(name), R8(familyName), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result)), reassociate);
+				GenerateTransformation(R4(name), R4(familyName), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result)), reassociate, log);
+				GenerateTransformation(R8(name), R8(familyName), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result)), reassociate, log);
 			}
 			else if (expression.Contains("##"))
 			{
-				GenerateTransformation(To32(name), To32(familyName), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result)), reassociate);
-				GenerateTransformation(To64(name), To64(familyName), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result)), reassociate);
+				GenerateTransformation(To32(name), To32(familyName), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result)), reassociate, log);
+				GenerateTransformation(To64(name), To64(familyName), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result)), reassociate, log);
 			}
 			else
 			{
-				GenerateTransformation(name, familyName, type, subName, new Transformation(expression, filter, result), reassociate);
+				GenerateTransformation(name, familyName, type, subName, new Transformation(expression, filter, result), reassociate, log);
 			}
 		}
 
@@ -91,7 +92,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			return s?.Replace("R#", "R8");
 		}
 
-		private void GenerateTransformation(string name, string familyName, string type, string subName, Transformation transform, bool reassociate)
+		private void GenerateTransformation(string name, string familyName, string type, string subName, Transformation transform, bool reassociate, bool log)
 		{
 			Lines.Clear();
 			First = true;
@@ -105,16 +106,16 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine($"namespace Mosa.Compiler.Framework.Transform.Auto.{familyName}.{type}");
 			Lines.AppendLine("{");
 
-			GenerateTransformations(name, familyName, type, subName, transform, reassociate);
+			GenerateTransformations(name, familyName, type, subName, transform, reassociate, log);
 
 			Lines.AppendLine("}");
 
 			Save();
 		}
 
-		private void GenerateTransformations(string name, string familyName, string type, string subName, Transformation transform, bool reassociate)
+		private void GenerateTransformations(string name, string familyName, string type, string subName, Transformation transform, bool reassociate, bool log)
 		{
-			GenerateTransformation2(name, familyName, type, subName, transform);
+			GenerateTransformation2(name, familyName, type, subName, transform, log);
 
 			if (!reassociate)
 				return;
@@ -127,12 +128,12 @@ namespace Mosa.Utility.SourceCodeGenerator
 			int index = 1;
 			foreach (var variation in variations)
 			{
-				GenerateTransformation2(name, familyName, type, $"{subName}_v{index}", variation);
+				GenerateTransformation2(name, familyName, type, $"{subName}_v{index}", variation, log);
 				index++;
 			}
 		}
 
-		private void GenerateTransformation2(string name, string familyName, string type, string subName, Transformation transform)
+		private void GenerateTransformation2(string name, string familyName, string type, string subName, Transformation transform, bool log)
 		{
 			var instructionName = transform.InstructionTree.InstructionName.Replace("IR.", "IRInstruction.");
 
