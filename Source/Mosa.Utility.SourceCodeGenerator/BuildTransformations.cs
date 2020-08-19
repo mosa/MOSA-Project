@@ -155,7 +155,11 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine($"\tpublic sealed class {name}{subName} : BaseTransformation");
 			Lines.AppendLine("\t{");
 
-			Lines.AppendLine($"\t\tpublic {name}{subName}() : base({instructionName})");
+			if (log)
+				Lines.AppendLine($"\t\tpublic {name}{subName}() : base({instructionName}, true)");
+			else
+				Lines.AppendLine($"\t\tpublic {name}{subName}() : base({instructionName})");
+
 			Lines.AppendLine("\t\t{");
 			Lines.AppendLine("\t\t}");
 			Lines.AppendLine("");
