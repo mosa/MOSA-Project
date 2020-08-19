@@ -54,11 +54,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantMove
 	}
 
 	/// <summary>
-	/// And32Expressionv1
+	/// And32Expression_v1
 	/// </summary>
-	public sealed class And32Expressionv1 : BaseTransformation
+	public sealed class And32Expression_v1 : BaseTransformation
 	{
-		public And32Expressionv1() : base(IRInstruction.And32)
+		public And32Expression_v1() : base(IRInstruction.And32)
 		{
 		}
 
@@ -101,11 +101,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantMove
 	}
 
 	/// <summary>
-	/// And32Expressionv2
+	/// And32Expression_v2
 	/// </summary>
-	public sealed class And32Expressionv2 : BaseTransformation
+	public sealed class And32Expression_v2 : BaseTransformation
 	{
-		public And32Expressionv2() : base(IRInstruction.And32)
+		public And32Expression_v2() : base(IRInstruction.And32)
 		{
 		}
 
@@ -148,11 +148,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantMove
 	}
 
 	/// <summary>
-	/// And32Expressionv3
+	/// And32Expression_v3
 	/// </summary>
-	public sealed class And32Expressionv3 : BaseTransformation
+	public sealed class And32Expression_v3 : BaseTransformation
 	{
-		public And32Expressionv3() : base(IRInstruction.And32)
+		public And32Expression_v3() : base(IRInstruction.And32)
 		{
 		}
 

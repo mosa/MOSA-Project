@@ -50,11 +50,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 	}
 
 	/// <summary>
-	/// MulR4x2v1
+	/// MulR4x2_v1
 	/// </summary>
-	public sealed class MulR4x2v1 : BaseTransformation
+	public sealed class MulR4x2_v1 : BaseTransformation
 	{
-		public MulR4x2v1() : base(IRInstruction.MulR4)
+		public MulR4x2_v1() : base(IRInstruction.MulR4)
 		{
 		}
 
@@ -93,11 +93,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 	}
 
 	/// <summary>
-	/// MulR4x2v2
+	/// MulR4x2_v2
 	/// </summary>
-	public sealed class MulR4x2v2 : BaseTransformation
+	public sealed class MulR4x2_v2 : BaseTransformation
 	{
-		public MulR4x2v2() : base(IRInstruction.MulR4)
+		public MulR4x2_v2() : base(IRInstruction.MulR4)
 		{
 		}
 
@@ -136,11 +136,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 	}
 
 	/// <summary>
-	/// MulR4x2v3
+	/// MulR4x2_v3
 	/// </summary>
-	public sealed class MulR4x2v3 : BaseTransformation
+	public sealed class MulR4x2_v3 : BaseTransformation
 	{
-		public MulR4x2v3() : base(IRInstruction.MulR4)
+		public MulR4x2_v3() : base(IRInstruction.MulR4)
 		{
 		}
 

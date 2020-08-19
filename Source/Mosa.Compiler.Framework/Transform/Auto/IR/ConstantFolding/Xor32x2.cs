@@ -50,11 +50,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 	}
 
 	/// <summary>
-	/// Xor32x2v1
+	/// Xor32x2_v1
 	/// </summary>
-	public sealed class Xor32x2v1 : BaseTransformation
+	public sealed class Xor32x2_v1 : BaseTransformation
 	{
-		public Xor32x2v1() : base(IRInstruction.Xor32)
+		public Xor32x2_v1() : base(IRInstruction.Xor32)
 		{
 		}
 
@@ -93,11 +93,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 	}
 
 	/// <summary>
-	/// Xor32x2v2
+	/// Xor32x2_v2
 	/// </summary>
-	public sealed class Xor32x2v2 : BaseTransformation
+	public sealed class Xor32x2_v2 : BaseTransformation
 	{
-		public Xor32x2v2() : base(IRInstruction.Xor32)
+		public Xor32x2_v2() : base(IRInstruction.Xor32)
 		{
 		}
 
@@ -136,11 +136,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 	}
 
 	/// <summary>
-	/// Xor32x2v3
+	/// Xor32x2_v3
 	/// </summary>
-	public sealed class Xor32x2v3 : BaseTransformation
+	public sealed class Xor32x2_v3 : BaseTransformation
 	{
-		public Xor32x2v3() : base(IRInstruction.Xor32)
+		public Xor32x2_v3() : base(IRInstruction.Xor32)
 		{
 		}
 

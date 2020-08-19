@@ -54,11 +54,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantMove
 	}
 
 	/// <summary>
-	/// AddR8Expressionv1
+	/// AddR8Expression_v1
 	/// </summary>
-	public sealed class AddR8Expressionv1 : BaseTransformation
+	public sealed class AddR8Expression_v1 : BaseTransformation
 	{
-		public AddR8Expressionv1() : base(IRInstruction.AddR8)
+		public AddR8Expression_v1() : base(IRInstruction.AddR8)
 		{
 		}
 
@@ -101,11 +101,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantMove
 	}
 
 	/// <summary>
-	/// AddR8Expressionv2
+	/// AddR8Expression_v2
 	/// </summary>
-	public sealed class AddR8Expressionv2 : BaseTransformation
+	public sealed class AddR8Expression_v2 : BaseTransformation
 	{
-		public AddR8Expressionv2() : base(IRInstruction.AddR8)
+		public AddR8Expression_v2() : base(IRInstruction.AddR8)
 		{
 		}
 
@@ -148,11 +148,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantMove
 	}
 
 	/// <summary>
-	/// AddR8Expressionv3
+	/// AddR8Expression_v3
 	/// </summary>
-	public sealed class AddR8Expressionv3 : BaseTransformation
+	public sealed class AddR8Expression_v3 : BaseTransformation
 	{
-		public AddR8Expressionv3() : base(IRInstruction.AddR8)
+		public AddR8Expression_v3() : base(IRInstruction.AddR8)
 		{
 		}
 

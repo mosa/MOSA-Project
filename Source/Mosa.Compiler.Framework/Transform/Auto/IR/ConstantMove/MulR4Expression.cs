@@ -54,11 +54,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantMove
 	}
 
 	/// <summary>
-	/// MulR4Expressionv1
+	/// MulR4Expression_v1
 	/// </summary>
-	public sealed class MulR4Expressionv1 : BaseTransformation
+	public sealed class MulR4Expression_v1 : BaseTransformation
 	{
-		public MulR4Expressionv1() : base(IRInstruction.MulR4)
+		public MulR4Expression_v1() : base(IRInstruction.MulR4)
 		{
 		}
 
@@ -101,11 +101,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantMove
 	}
 
 	/// <summary>
-	/// MulR4Expressionv2
+	/// MulR4Expression_v2
 	/// </summary>
-	public sealed class MulR4Expressionv2 : BaseTransformation
+	public sealed class MulR4Expression_v2 : BaseTransformation
 	{
-		public MulR4Expressionv2() : base(IRInstruction.MulR4)
+		public MulR4Expression_v2() : base(IRInstruction.MulR4)
 		{
 		}
 
@@ -148,11 +148,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantMove
 	}
 
 	/// <summary>
-	/// MulR4Expressionv3
+	/// MulR4Expression_v3
 	/// </summary>
-	public sealed class MulR4Expressionv3 : BaseTransformation
+	public sealed class MulR4Expression_v3 : BaseTransformation
 	{
-		public MulR4Expressionv3() : base(IRInstruction.MulR4)
+		public MulR4Expression_v3() : base(IRInstruction.MulR4)
 		{
 		}
 

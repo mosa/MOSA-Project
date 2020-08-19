@@ -26,8 +26,8 @@
 			"FamilyName": "IR",
 			"Type": "Algebraic",
 			"Name": "Signed##",
-			"SubName": "AABBPlus2AB",
-			"Expression": "IR.Add## (IR.Add## (IR.MulSigned## a a) (IR.MulSigned## b b)) (IR.ShiftLeft## (IR.MulSigned## a b) 1))",
+			"SubName": "AAPlusBBPlus2AB",
+			"Expression": "IR.Add## (IR.Add## (IR.MulSigned## a a) (IR.MulSigned## b b)) (IR.ShiftLeft## (IR.MulSigned## a b) 1)",
 			"Filter": "",
 			"Result": "(IR.MulSigned## (IR.Add## a b) (IR.Add## a b))",
 			"Reassociate": "Yes"
@@ -36,8 +36,8 @@
 			"FamilyName": "IR",
 			"Type": "Algebraic",
 			"Name": "Unsigned##",
-			"SubName": "AABBPlus2AB",
-			"Expression": "IR.Add## (IR.Add## (IR.MulUnsigned## a a) (IR.MulUnsigned## b b)) (IR.ShiftLeft## (IR.MulSigned## a b) 1))",
+			"SubName": "AAPlusBBPlus2AB",
+			"Expression": "IR.Add## (IR.Add## (IR.MulUnsigned## a a) (IR.MulUnsigned## b b)) (IR.ShiftLeft## (IR.MulSigned## a b) 1)",
 			"Filter": "",
 			"Result": "(IR.MulUnsigned## (IR.Add## a b) (IR.Add## a b))",
 			"Reassociate": "Yes"
@@ -45,9 +45,9 @@
 		{
 			"FamilyName": "IR",
 			"Type": "Algebraic",
-			"Name": "Unsigned##",
-			"SubName": "AABBMinus2AB",
-			"Expression": "IR.Sub## (IR.Add## (IR.MulSigned## a a) (IR.MulSigned## b b)) (IR.ShiftLeft## (IR.MulSigned## a b) 1))",
+			"Name": "Signed##",
+			"SubName": "AAPlusBBMinus2AB",
+			"Expression": "IR.Sub## (IR.Add## (IR.MulSigned## a a) (IR.MulSigned## b b)) (IR.ShiftLeft## (IR.MulSigned## a b) 1)",
 			"Filter": "",
 			"Result": "(IR.MulSigned## (IR.Sub## a b) (IR.Sub## a b))",
 			"Reassociate": "Yes"
@@ -55,11 +55,41 @@
 		{
 			"FamilyName": "IR",
 			"Type": "Algebraic",
-			"Name": "Signed##",
-			"SubName": "AABBMinus2AB",
-			"Expression": "IR.Sub## (IR.Add## (IR.MulUnsigned## a a) (IR.MulUnsigned## b b)) (IR.ShiftLeft## (IR.MulSigned## a b) 1))",
+			"Name": "Unsigned##",
+			"SubName": "AAPlusBBMinus2AB",
+			"Expression": "IR.Sub## (IR.Add## (IR.MulUnsigned## a a) (IR.MulUnsigned## b b)) (IR.ShiftLeft## (IR.MulSigned## a b) 1)",
 			"Filter": "",
 			"Result": "(IR.MulUnsigned## (IR.Sub## a b) (IR.Sub## a b))",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Algebraic",
+			"Name": "Signed##",
+			"SubName": "AAMinusBB",
+			"Expression": "IR.Sub## (IR.MulSigned## a a) (IR.MulSigned## b b)",
+			"Filter": "",
+			"Result": "(IR.MulSigned## (IR.Sub## a b) (IR.Add## a b))",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Algebraic",
+			"Name": "Unsigned##",
+			"SubName": "AAMinusBB",
+			"Expression": "IR.Sub## (IR.MulUnsigned## a a) (IR.MulUnsigned## b b)",
+			"Filter": "",
+			"Result": "(IR.MulUnsigned## (IR.Sub## a b) (IR.Add## a b))",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Algebraic",
+			"Name": "Unsigned##",
+			"SubName": "PerfectSquareFormula",
+			"Expression": "IR.Add## (IR.Add## (IR.MulUnsigned## x x) (IR.MulUnsigned## b x)) c",
+			"Filter": "IsEqual(To##(c),Sqrt##(DivUnsigned##(To##(b),2)))",
+			"Result": "(IR.MulUnsigned## (IR.Add## x [DivUnsigned##(To##(b),2)]) (IR.Add## x [DivUnsigned##(To##(b),2)]))",
 			"Reassociate": "Yes"
 		}
 	]

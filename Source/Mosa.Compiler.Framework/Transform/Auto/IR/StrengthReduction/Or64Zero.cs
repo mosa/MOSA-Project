@@ -37,11 +37,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 	}
 
 	/// <summary>
-	/// Or64Zerov1
+	/// Or64Zero_v1
 	/// </summary>
-	public sealed class Or64Zerov1 : BaseTransformation
+	public sealed class Or64Zero_v1 : BaseTransformation
 	{
-		public Or64Zerov1() : base(IRInstruction.Or64)
+		public Or64Zero_v1() : base(IRInstruction.Or64)
 		{
 		}
 

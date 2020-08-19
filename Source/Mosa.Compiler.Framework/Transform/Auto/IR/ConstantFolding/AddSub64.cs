@@ -50,11 +50,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 	}
 
 	/// <summary>
-	/// AddSub64v1
+	/// AddSub64_v1
 	/// </summary>
-	public sealed class AddSub64v1 : BaseTransformation
+	public sealed class AddSub64_v1 : BaseTransformation
 	{
-		public AddSub64v1() : base(IRInstruction.Add64)
+		public AddSub64_v1() : base(IRInstruction.Add64)
 		{
 		}
 

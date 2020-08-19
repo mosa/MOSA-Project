@@ -50,11 +50,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 	}
 
 	/// <summary>
-	/// AddR8x2v1
+	/// AddR8x2_v1
 	/// </summary>
-	public sealed class AddR8x2v1 : BaseTransformation
+	public sealed class AddR8x2_v1 : BaseTransformation
 	{
-		public AddR8x2v1() : base(IRInstruction.AddR8)
+		public AddR8x2_v1() : base(IRInstruction.AddR8)
 		{
 		}
 
@@ -93,11 +93,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 	}
 
 	/// <summary>
-	/// AddR8x2v2
+	/// AddR8x2_v2
 	/// </summary>
-	public sealed class AddR8x2v2 : BaseTransformation
+	public sealed class AddR8x2_v2 : BaseTransformation
 	{
-		public AddR8x2v2() : base(IRInstruction.AddR8)
+		public AddR8x2_v2() : base(IRInstruction.AddR8)
 		{
 		}
 
@@ -136,11 +136,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 	}
 
 	/// <summary>
-	/// AddR8x2v3
+	/// AddR8x2_v3
 	/// </summary>
-	public sealed class AddR8x2v3 : BaseTransformation
+	public sealed class AddR8x2_v3 : BaseTransformation
 	{
-		public AddR8x2v3() : base(IRInstruction.AddR8)
+		public AddR8x2_v3() : base(IRInstruction.AddR8)
 		{
 		}
 

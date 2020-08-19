@@ -37,11 +37,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 	}
 
 	/// <summary>
-	/// Or32Maxv1
+	/// Or32Max_v1
 	/// </summary>
-	public sealed class Or32Maxv1 : BaseTransformation
+	public sealed class Or32Max_v1 : BaseTransformation
 	{
-		public Or32Maxv1() : base(IRInstruction.Or32)
+		public Or32Max_v1() : base(IRInstruction.Or32)
 		{
 		}
 

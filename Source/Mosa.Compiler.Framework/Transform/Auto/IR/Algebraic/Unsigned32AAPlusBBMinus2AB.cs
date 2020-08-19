@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 {
 	/// <summary>
-	/// Unsigned32AABBMinus2AB
+	/// Unsigned32AAPlusBBMinus2AB
 	/// </summary>
-	public sealed class Unsigned32AABBMinus2AB : BaseTransformation
+	public sealed class Unsigned32AAPlusBBMinus2AB : BaseTransformation
 	{
-		public Unsigned32AABBMinus2AB() : base(IRInstruction.Sub32)
+		public Unsigned32AAPlusBBMinus2AB() : base(IRInstruction.Sub32)
 		{
 		}
 
@@ -38,13 +38,13 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
+			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
 				return false;
 
 			if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulSigned32)
+			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
 				return false;
 
 			if (context.Operand2.Definitions.Count != 1)
@@ -95,16 +95,16 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 
 			context.SetInstruction(IRInstruction.Sub32, v1, t1, t2);
 			context.AppendInstruction(IRInstruction.Sub32, v2, t1, t2);
-			context.AppendInstruction(IRInstruction.MulSigned32, result, v2, v1);
+			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
 		}
 	}
 
 	/// <summary>
-	/// Unsigned32AABBMinus2ABv1
+	/// Unsigned32AAPlusBBMinus2AB_v1
 	/// </summary>
-	public sealed class Unsigned32AABBMinus2ABv1 : BaseTransformation
+	public sealed class Unsigned32AAPlusBBMinus2AB_v1 : BaseTransformation
 	{
-		public Unsigned32AABBMinus2ABv1() : base(IRInstruction.Sub32)
+		public Unsigned32AAPlusBBMinus2AB_v1() : base(IRInstruction.Sub32)
 		{
 		}
 
@@ -131,13 +131,13 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
+			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
 				return false;
 
 			if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulSigned32)
+			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
 				return false;
 
 			if (context.Operand2.Definitions.Count != 1)
@@ -188,16 +188,16 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 
 			context.SetInstruction(IRInstruction.Sub32, v1, t1, t2);
 			context.AppendInstruction(IRInstruction.Sub32, v2, t1, t2);
-			context.AppendInstruction(IRInstruction.MulSigned32, result, v2, v1);
+			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
 		}
 	}
 
 	/// <summary>
-	/// Unsigned32AABBMinus2ABv2
+	/// Unsigned32AAPlusBBMinus2AB_v2
 	/// </summary>
-	public sealed class Unsigned32AABBMinus2ABv2 : BaseTransformation
+	public sealed class Unsigned32AAPlusBBMinus2AB_v2 : BaseTransformation
 	{
-		public Unsigned32AABBMinus2ABv2() : base(IRInstruction.Sub32)
+		public Unsigned32AAPlusBBMinus2AB_v2() : base(IRInstruction.Sub32)
 		{
 		}
 
@@ -224,13 +224,13 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
+			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
 				return false;
 
 			if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulSigned32)
+			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
 				return false;
 
 			if (context.Operand2.Definitions.Count != 1)
@@ -281,16 +281,16 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 
 			context.SetInstruction(IRInstruction.Sub32, v1, t2, t1);
 			context.AppendInstruction(IRInstruction.Sub32, v2, t2, t1);
-			context.AppendInstruction(IRInstruction.MulSigned32, result, v2, v1);
+			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
 		}
 	}
 
 	/// <summary>
-	/// Unsigned32AABBMinus2ABv3
+	/// Unsigned32AAPlusBBMinus2AB_v3
 	/// </summary>
-	public sealed class Unsigned32AABBMinus2ABv3 : BaseTransformation
+	public sealed class Unsigned32AAPlusBBMinus2AB_v3 : BaseTransformation
 	{
-		public Unsigned32AABBMinus2ABv3() : base(IRInstruction.Sub32)
+		public Unsigned32AAPlusBBMinus2AB_v3() : base(IRInstruction.Sub32)
 		{
 		}
 
@@ -317,13 +317,13 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
+			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
 				return false;
 
 			if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulSigned32)
+			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
 				return false;
 
 			if (context.Operand2.Definitions.Count != 1)
@@ -374,7 +374,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 
 			context.SetInstruction(IRInstruction.Sub32, v1, t2, t1);
 			context.AppendInstruction(IRInstruction.Sub32, v2, t2, t1);
-			context.AppendInstruction(IRInstruction.MulSigned32, result, v2, v1);
+			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
 		}
 	}
 }

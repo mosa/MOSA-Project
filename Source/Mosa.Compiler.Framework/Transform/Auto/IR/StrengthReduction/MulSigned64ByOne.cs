@@ -37,11 +37,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 	}
 
 	/// <summary>
-	/// MulSigned64ByOnev1
+	/// MulSigned64ByOne_v1
 	/// </summary>
-	public sealed class MulSigned64ByOnev1 : BaseTransformation
+	public sealed class MulSigned64ByOne_v1 : BaseTransformation
 	{
-		public MulSigned64ByOnev1() : base(IRInstruction.MulSigned64)
+		public MulSigned64ByOne_v1() : base(IRInstruction.MulSigned64)
 		{
 		}
 

@@ -50,11 +50,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 	}
 
 	/// <summary>
-	/// AddSubR4v1
+	/// AddSubR4_v1
 	/// </summary>
-	public sealed class AddSubR4v1 : BaseTransformation
+	public sealed class AddSubR4_v1 : BaseTransformation
 	{
-		public AddSubR4v1() : base(IRInstruction.AddR4)
+		public AddSubR4_v1() : base(IRInstruction.AddR4)
 		{
 		}
 

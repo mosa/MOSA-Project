@@ -54,11 +54,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantMove
 	}
 
 	/// <summary>
-	/// MulSigned32Expressionv1
+	/// MulSigned32Expression_v1
 	/// </summary>
-	public sealed class MulSigned32Expressionv1 : BaseTransformation
+	public sealed class MulSigned32Expression_v1 : BaseTransformation
 	{
-		public MulSigned32Expressionv1() : base(IRInstruction.MulSigned32)
+		public MulSigned32Expression_v1() : base(IRInstruction.MulSigned32)
 		{
 		}
 
@@ -101,11 +101,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantMove
 	}
 
 	/// <summary>
-	/// MulSigned32Expressionv2
+	/// MulSigned32Expression_v2
 	/// </summary>
-	public sealed class MulSigned32Expressionv2 : BaseTransformation
+	public sealed class MulSigned32Expression_v2 : BaseTransformation
 	{
-		public MulSigned32Expressionv2() : base(IRInstruction.MulSigned32)
+		public MulSigned32Expression_v2() : base(IRInstruction.MulSigned32)
 		{
 		}
 
@@ -148,11 +148,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantMove
 	}
 
 	/// <summary>
-	/// MulSigned32Expressionv3
+	/// MulSigned32Expression_v3
 	/// </summary>
-	public sealed class MulSigned32Expressionv3 : BaseTransformation
+	public sealed class MulSigned32Expression_v3 : BaseTransformation
 	{
-		public MulSigned32Expressionv3() : base(IRInstruction.MulSigned32)
+		public MulSigned32Expression_v3() : base(IRInstruction.MulSigned32)
 		{
 		}
 

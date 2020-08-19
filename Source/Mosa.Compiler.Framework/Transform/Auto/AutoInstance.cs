@@ -329,13 +329,19 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 		public static readonly BaseTransformation IR_ConstantFolding_LoadZeroExtend8x64AddressFold = new IR.ConstantFolding.LoadZeroExtend8x64AddressFold();
 		public static readonly BaseTransformation IR_ConstantFolding_LoadZeroExtend16x64AddressFold = new IR.ConstantFolding.LoadZeroExtend16x64AddressFold();
 		public static readonly BaseTransformation IR_ConstantFolding_LoadZeroExtend32x64AddressFold = new IR.ConstantFolding.LoadZeroExtend32x64AddressFold();
-		public static readonly BaseTransformation IR_Algebraic_Signed32AABBPlus2AB = new IR.Algebraic.Signed32AABBPlus2AB();
-		public static readonly BaseTransformation IR_Algebraic_Signed64AABBPlus2AB = new IR.Algebraic.Signed64AABBPlus2AB();
-		public static readonly BaseTransformation IR_Algebraic_Unsigned32AABBPlus2AB = new IR.Algebraic.Unsigned32AABBPlus2AB();
-		public static readonly BaseTransformation IR_Algebraic_Unsigned64AABBPlus2AB = new IR.Algebraic.Unsigned64AABBPlus2AB();
-		public static readonly BaseTransformation IR_Algebraic_Unsigned32AABBMinus2AB = new IR.Algebraic.Unsigned32AABBMinus2AB();
-		public static readonly BaseTransformation IR_Algebraic_Unsigned64AABBMinus2AB = new IR.Algebraic.Unsigned64AABBMinus2AB();
-		public static readonly BaseTransformation IR_Algebraic_Signed32AABBMinus2AB = new IR.Algebraic.Signed32AABBMinus2AB();
-		public static readonly BaseTransformation IR_Algebraic_Signed64AABBMinus2AB = new IR.Algebraic.Signed64AABBMinus2AB();
+		public static readonly BaseTransformation IR_Algebraic_Signed32AAPlusBBPlus2AB = new IR.Algebraic.Signed32AAPlusBBPlus2AB();
+		public static readonly BaseTransformation IR_Algebraic_Signed64AAPlusBBPlus2AB = new IR.Algebraic.Signed64AAPlusBBPlus2AB();
+		public static readonly BaseTransformation IR_Algebraic_Unsigned32AAPlusBBPlus2AB = new IR.Algebraic.Unsigned32AAPlusBBPlus2AB();
+		public static readonly BaseTransformation IR_Algebraic_Unsigned64AAPlusBBPlus2AB = new IR.Algebraic.Unsigned64AAPlusBBPlus2AB();
+		public static readonly BaseTransformation IR_Algebraic_Signed32AAPlusBBMinus2AB = new IR.Algebraic.Signed32AAPlusBBMinus2AB();
+		public static readonly BaseTransformation IR_Algebraic_Signed64AAPlusBBMinus2AB = new IR.Algebraic.Signed64AAPlusBBMinus2AB();
+		public static readonly BaseTransformation IR_Algebraic_Unsigned32AAPlusBBMinus2AB = new IR.Algebraic.Unsigned32AAPlusBBMinus2AB();
+		public static readonly BaseTransformation IR_Algebraic_Unsigned64AAPlusBBMinus2AB = new IR.Algebraic.Unsigned64AAPlusBBMinus2AB();
+		public static readonly BaseTransformation IR_Algebraic_Signed32AAMinusBB = new IR.Algebraic.Signed32AAMinusBB();
+		public static readonly BaseTransformation IR_Algebraic_Signed64AAMinusBB = new IR.Algebraic.Signed64AAMinusBB();
+		public static readonly BaseTransformation IR_Algebraic_Unsigned32AAMinusBB = new IR.Algebraic.Unsigned32AAMinusBB();
+		public static readonly BaseTransformation IR_Algebraic_Unsigned64AAMinusBB = new IR.Algebraic.Unsigned64AAMinusBB();
+		public static readonly BaseTransformation IR_Algebraic_Unsigned32PerfectSquareFormula = new IR.Algebraic.Unsigned32PerfectSquareFormula();
+		public static readonly BaseTransformation IR_Algebraic_Unsigned64PerfectSquareFormula = new IR.Algebraic.Unsigned64PerfectSquareFormula();
 	}
 }

@@ -50,11 +50,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 	}
 
 	/// <summary>
-	/// And32x2v1
+	/// And32x2_v1
 	/// </summary>
-	public sealed class And32x2v1 : BaseTransformation
+	public sealed class And32x2_v1 : BaseTransformation
 	{
-		public And32x2v1() : base(IRInstruction.And32)
+		public And32x2_v1() : base(IRInstruction.And32)
 		{
 		}
 
@@ -93,11 +93,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 	}
 
 	/// <summary>
-	/// And32x2v2
+	/// And32x2_v2
 	/// </summary>
-	public sealed class And32x2v2 : BaseTransformation
+	public sealed class And32x2_v2 : BaseTransformation
 	{
-		public And32x2v2() : base(IRInstruction.And32)
+		public And32x2_v2() : base(IRInstruction.And32)
 		{
 		}
 
@@ -136,11 +136,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 	}
 
 	/// <summary>
-	/// And32x2v3
+	/// And32x2_v3
 	/// </summary>
-	public sealed class And32x2v3 : BaseTransformation
+	public sealed class And32x2_v3 : BaseTransformation
 	{
-		public And32x2v3() : base(IRInstruction.And32)
+		public And32x2_v3() : base(IRInstruction.And32)
 		{
 		}
 

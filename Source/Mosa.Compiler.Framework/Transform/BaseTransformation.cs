@@ -102,6 +102,11 @@ namespace Mosa.Compiler.Framework.Transform
 			return operand1.IsVirtualRegister && operand2.IsVirtualRegister && operand1.Index > operand2.Index;
 		}
 
+		protected static bool IsEqual(ulong a, ulong b)
+		{
+			return a == b;
+		}
+
 		protected static bool IsGreaterThan(ulong a, ulong b)
 		{
 			return a > b;

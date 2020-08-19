@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 {
 	/// <summary>
-	/// Signed32AABBMinus2AB
+	/// Unsigned64AAPlusBBMinus2AB
 	/// </summary>
-	public sealed class Signed32AABBMinus2AB : BaseTransformation
+	public sealed class Unsigned64AAPlusBBMinus2AB : BaseTransformation
 	{
-		public Signed32AABBMinus2AB() : base(IRInstruction.Sub32)
+		public Unsigned64AAPlusBBMinus2AB() : base(IRInstruction.Sub64)
 		{
 		}
 
@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add32)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
 				return false;
 
 			if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
@@ -38,19 +38,19 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
 				return false;
 
 			if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
 				return false;
 
 			if (context.Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
+			if (context.Operand2.Definitions[0].Instruction != IRInstruction.ShiftLeft64)
 				return false;
 
 			if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
+			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned64)
 				return false;
 
 			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
@@ -90,21 +90,21 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 			var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
 
-			var v1 = transformContext.AllocateVirtualRegister(transformContext.I4);
-			var v2 = transformContext.AllocateVirtualRegister(transformContext.I4);
+			var v1 = transformContext.AllocateVirtualRegister(transformContext.I8);
+			var v2 = transformContext.AllocateVirtualRegister(transformContext.I8);
 
-			context.SetInstruction(IRInstruction.Sub32, v1, t1, t2);
-			context.AppendInstruction(IRInstruction.Sub32, v2, t1, t2);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
+			context.SetInstruction(IRInstruction.Sub64, v1, t1, t2);
+			context.AppendInstruction(IRInstruction.Sub64, v2, t1, t2);
+			context.AppendInstruction(IRInstruction.MulUnsigned64, result, v2, v1);
 		}
 	}
 
 	/// <summary>
-	/// Signed32AABBMinus2ABv1
+	/// Unsigned64AAPlusBBMinus2AB_v1
 	/// </summary>
-	public sealed class Signed32AABBMinus2ABv1 : BaseTransformation
+	public sealed class Unsigned64AAPlusBBMinus2AB_v1 : BaseTransformation
 	{
-		public Signed32AABBMinus2ABv1() : base(IRInstruction.Sub32)
+		public Unsigned64AAPlusBBMinus2AB_v1() : base(IRInstruction.Sub64)
 		{
 		}
 
@@ -119,7 +119,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add32)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
 				return false;
 
 			if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
@@ -131,19 +131,19 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
 				return false;
 
 			if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
 				return false;
 
 			if (context.Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
+			if (context.Operand2.Definitions[0].Instruction != IRInstruction.ShiftLeft64)
 				return false;
 
 			if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
@@ -158,7 +158,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
+			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned64)
 				return false;
 
 			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
@@ -183,21 +183,21 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 			var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
 
-			var v1 = transformContext.AllocateVirtualRegister(transformContext.I4);
-			var v2 = transformContext.AllocateVirtualRegister(transformContext.I4);
+			var v1 = transformContext.AllocateVirtualRegister(transformContext.I8);
+			var v2 = transformContext.AllocateVirtualRegister(transformContext.I8);
 
-			context.SetInstruction(IRInstruction.Sub32, v1, t1, t2);
-			context.AppendInstruction(IRInstruction.Sub32, v2, t1, t2);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
+			context.SetInstruction(IRInstruction.Sub64, v1, t1, t2);
+			context.AppendInstruction(IRInstruction.Sub64, v2, t1, t2);
+			context.AppendInstruction(IRInstruction.MulUnsigned64, result, v2, v1);
 		}
 	}
 
 	/// <summary>
-	/// Signed32AABBMinus2ABv2
+	/// Unsigned64AAPlusBBMinus2AB_v2
 	/// </summary>
-	public sealed class Signed32AABBMinus2ABv2 : BaseTransformation
+	public sealed class Unsigned64AAPlusBBMinus2AB_v2 : BaseTransformation
 	{
-		public Signed32AABBMinus2ABv2() : base(IRInstruction.Sub32)
+		public Unsigned64AAPlusBBMinus2AB_v2() : base(IRInstruction.Sub64)
 		{
 		}
 
@@ -212,7 +212,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add32)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
 				return false;
 
 			if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
@@ -224,19 +224,19 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
 				return false;
 
 			if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
 				return false;
 
 			if (context.Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
+			if (context.Operand2.Definitions[0].Instruction != IRInstruction.ShiftLeft64)
 				return false;
 
 			if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
@@ -251,7 +251,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
+			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned64)
 				return false;
 
 			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
@@ -276,21 +276,21 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 			var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
 
-			var v1 = transformContext.AllocateVirtualRegister(transformContext.I4);
-			var v2 = transformContext.AllocateVirtualRegister(transformContext.I4);
+			var v1 = transformContext.AllocateVirtualRegister(transformContext.I8);
+			var v2 = transformContext.AllocateVirtualRegister(transformContext.I8);
 
-			context.SetInstruction(IRInstruction.Sub32, v1, t2, t1);
-			context.AppendInstruction(IRInstruction.Sub32, v2, t2, t1);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
+			context.SetInstruction(IRInstruction.Sub64, v1, t2, t1);
+			context.AppendInstruction(IRInstruction.Sub64, v2, t2, t1);
+			context.AppendInstruction(IRInstruction.MulUnsigned64, result, v2, v1);
 		}
 	}
 
 	/// <summary>
-	/// Signed32AABBMinus2ABv3
+	/// Unsigned64AAPlusBBMinus2AB_v3
 	/// </summary>
-	public sealed class Signed32AABBMinus2ABv3 : BaseTransformation
+	public sealed class Unsigned64AAPlusBBMinus2AB_v3 : BaseTransformation
 	{
-		public Signed32AABBMinus2ABv3() : base(IRInstruction.Sub32)
+		public Unsigned64AAPlusBBMinus2AB_v3() : base(IRInstruction.Sub64)
 		{
 		}
 
@@ -305,7 +305,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add32)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
 				return false;
 
 			if (!context.Operand1.Definitions[0].Operand1.IsVirtualRegister)
@@ -317,19 +317,19 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand1.Definitions[0].Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand1.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
 				return false;
 
 			if (context.Operand1.Definitions[0].Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned32)
+			if (context.Operand1.Definitions[0].Operand2.Definitions[0].Instruction != IRInstruction.MulUnsigned64)
 				return false;
 
 			if (context.Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.ShiftLeft32)
+			if (context.Operand2.Definitions[0].Instruction != IRInstruction.ShiftLeft64)
 				return false;
 
 			if (!context.Operand2.Definitions[0].Operand1.IsVirtualRegister)
@@ -344,7 +344,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			if (context.Operand2.Definitions[0].Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned32)
+			if (context.Operand2.Definitions[0].Operand1.Definitions[0].Instruction != IRInstruction.MulSigned64)
 				return false;
 
 			if (!AreSame(context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1, context.Operand1.Definitions[0].Operand1.Definitions[0].Operand2))
@@ -369,12 +369,12 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 			var t1 = context.Operand1.Definitions[0].Operand1.Definitions[0].Operand1;
 			var t2 = context.Operand1.Definitions[0].Operand2.Definitions[0].Operand1;
 
-			var v1 = transformContext.AllocateVirtualRegister(transformContext.I4);
-			var v2 = transformContext.AllocateVirtualRegister(transformContext.I4);
+			var v1 = transformContext.AllocateVirtualRegister(transformContext.I8);
+			var v2 = transformContext.AllocateVirtualRegister(transformContext.I8);
 
-			context.SetInstruction(IRInstruction.Sub32, v1, t2, t1);
-			context.AppendInstruction(IRInstruction.Sub32, v2, t2, t1);
-			context.AppendInstruction(IRInstruction.MulUnsigned32, result, v2, v1);
+			context.SetInstruction(IRInstruction.Sub64, v1, t2, t1);
+			context.AppendInstruction(IRInstruction.Sub64, v2, t2, t1);
+			context.AppendInstruction(IRInstruction.MulUnsigned64, result, v2, v1);
 		}
 	}
 }

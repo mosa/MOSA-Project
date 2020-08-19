@@ -54,11 +54,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantMove
 	}
 
 	/// <summary>
-	/// Or64Expressionv1
+	/// Or64Expression_v1
 	/// </summary>
-	public sealed class Or64Expressionv1 : BaseTransformation
+	public sealed class Or64Expression_v1 : BaseTransformation
 	{
-		public Or64Expressionv1() : base(IRInstruction.Or64)
+		public Or64Expression_v1() : base(IRInstruction.Or64)
 		{
 		}
 
@@ -101,11 +101,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantMove
 	}
 
 	/// <summary>
-	/// Or64Expressionv2
+	/// Or64Expression_v2
 	/// </summary>
-	public sealed class Or64Expressionv2 : BaseTransformation
+	public sealed class Or64Expression_v2 : BaseTransformation
 	{
-		public Or64Expressionv2() : base(IRInstruction.Or64)
+		public Or64Expression_v2() : base(IRInstruction.Or64)
 		{
 		}
 
@@ -148,11 +148,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantMove
 	}
 
 	/// <summary>
-	/// Or64Expressionv3
+	/// Or64Expression_v3
 	/// </summary>
-	public sealed class Or64Expressionv3 : BaseTransformation
+	public sealed class Or64Expression_v3 : BaseTransformation
 	{
-		public Or64Expressionv3() : base(IRInstruction.Or64)
+		public Or64Expression_v3() : base(IRInstruction.Or64)
 		{
 		}
 

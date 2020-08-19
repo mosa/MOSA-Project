@@ -37,11 +37,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 	}
 
 	/// <summary>
-	/// And32Maxv1
+	/// And32Max_v1
 	/// </summary>
-	public sealed class And32Maxv1 : BaseTransformation
+	public sealed class And32Max_v1 : BaseTransformation
 	{
-		public And32Maxv1() : base(IRInstruction.And32)
+		public And32Max_v1() : base(IRInstruction.And32)
 		{
 		}
 

@@ -50,11 +50,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 	}
 
 	/// <summary>
-	/// Or64x2v1
+	/// Or64x2_v1
 	/// </summary>
-	public sealed class Or64x2v1 : BaseTransformation
+	public sealed class Or64x2_v1 : BaseTransformation
 	{
-		public Or64x2v1() : base(IRInstruction.Or64)
+		public Or64x2_v1() : base(IRInstruction.Or64)
 		{
 		}
 
@@ -93,11 +93,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 	}
 
 	/// <summary>
-	/// Or64x2v2
+	/// Or64x2_v2
 	/// </summary>
-	public sealed class Or64x2v2 : BaseTransformation
+	public sealed class Or64x2_v2 : BaseTransformation
 	{
-		public Or64x2v2() : base(IRInstruction.Or64)
+		public Or64x2_v2() : base(IRInstruction.Or64)
 		{
 		}
 
@@ -136,11 +136,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 	}
 
 	/// <summary>
-	/// Or64x2v3
+	/// Or64x2_v3
 	/// </summary>
-	public sealed class Or64x2v3 : BaseTransformation
+	public sealed class Or64x2_v3 : BaseTransformation
 	{
-		public Or64x2v3() : base(IRInstruction.Or64)
+		public Or64x2_v3() : base(IRInstruction.Or64)
 		{
 		}
 

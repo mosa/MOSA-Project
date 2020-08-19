@@ -50,11 +50,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 	}
 
 	/// <summary>
-	/// MulUnsigned64x2v1
+	/// MulUnsigned64x2_v1
 	/// </summary>
-	public sealed class MulUnsigned64x2v1 : BaseTransformation
+	public sealed class MulUnsigned64x2_v1 : BaseTransformation
 	{
-		public MulUnsigned64x2v1() : base(IRInstruction.MulUnsigned64)
+		public MulUnsigned64x2_v1() : base(IRInstruction.MulUnsigned64)
 		{
 		}
 
@@ -93,11 +93,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 	}
 
 	/// <summary>
-	/// MulUnsigned64x2v2
+	/// MulUnsigned64x2_v2
 	/// </summary>
-	public sealed class MulUnsigned64x2v2 : BaseTransformation
+	public sealed class MulUnsigned64x2_v2 : BaseTransformation
 	{
-		public MulUnsigned64x2v2() : base(IRInstruction.MulUnsigned64)
+		public MulUnsigned64x2_v2() : base(IRInstruction.MulUnsigned64)
 		{
 		}
 
@@ -136,11 +136,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 	}
 
 	/// <summary>
-	/// MulUnsigned64x2v3
+	/// MulUnsigned64x2_v3
 	/// </summary>
-	public sealed class MulUnsigned64x2v3 : BaseTransformation
+	public sealed class MulUnsigned64x2_v3 : BaseTransformation
 	{
-		public MulUnsigned64x2v3() : base(IRInstruction.MulUnsigned64)
+		public MulUnsigned64x2_v3() : base(IRInstruction.MulUnsigned64)
 		{
 		}
 

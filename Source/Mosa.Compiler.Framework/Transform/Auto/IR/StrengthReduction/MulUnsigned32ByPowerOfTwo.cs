@@ -46,11 +46,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 	}
 
 	/// <summary>
-	/// MulUnsigned32ByPowerOfTwov1
+	/// MulUnsigned32ByPowerOfTwo_v1
 	/// </summary>
-	public sealed class MulUnsigned32ByPowerOfTwov1 : BaseTransformation
+	public sealed class MulUnsigned32ByPowerOfTwo_v1 : BaseTransformation
 	{
-		public MulUnsigned32ByPowerOfTwov1() : base(IRInstruction.MulUnsigned32)
+		public MulUnsigned32ByPowerOfTwo_v1() : base(IRInstruction.MulUnsigned32)
 		{
 		}
 

@@ -45,11 +45,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Reorder
 	}
 
 	/// <summary>
-	/// MulUnsigned64WithShiftLeft64v1
+	/// MulUnsigned64WithShiftLeft64_v1
 	/// </summary>
-	public sealed class MulUnsigned64WithShiftLeft64v1 : BaseTransformation
+	public sealed class MulUnsigned64WithShiftLeft64_v1 : BaseTransformation
 	{
-		public MulUnsigned64WithShiftLeft64v1() : base(IRInstruction.MulUnsigned64)
+		public MulUnsigned64WithShiftLeft64_v1() : base(IRInstruction.MulUnsigned64)
 		{
 		}
 

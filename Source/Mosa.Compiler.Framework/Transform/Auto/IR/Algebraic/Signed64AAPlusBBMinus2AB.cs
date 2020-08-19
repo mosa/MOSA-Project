@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 {
 	/// <summary>
-	/// Unsigned64AABBMinus2AB
+	/// Signed64AAPlusBBMinus2AB
 	/// </summary>
-	public sealed class Unsigned64AABBMinus2AB : BaseTransformation
+	public sealed class Signed64AAPlusBBMinus2AB : BaseTransformation
 	{
-		public Unsigned64AABBMinus2AB() : base(IRInstruction.Sub64)
+		public Signed64AAPlusBBMinus2AB() : base(IRInstruction.Sub64)
 		{
 		}
 
@@ -100,11 +100,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 	}
 
 	/// <summary>
-	/// Unsigned64AABBMinus2ABv1
+	/// Signed64AAPlusBBMinus2AB_v1
 	/// </summary>
-	public sealed class Unsigned64AABBMinus2ABv1 : BaseTransformation
+	public sealed class Signed64AAPlusBBMinus2AB_v1 : BaseTransformation
 	{
-		public Unsigned64AABBMinus2ABv1() : base(IRInstruction.Sub64)
+		public Signed64AAPlusBBMinus2AB_v1() : base(IRInstruction.Sub64)
 		{
 		}
 
@@ -193,11 +193,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 	}
 
 	/// <summary>
-	/// Unsigned64AABBMinus2ABv2
+	/// Signed64AAPlusBBMinus2AB_v2
 	/// </summary>
-	public sealed class Unsigned64AABBMinus2ABv2 : BaseTransformation
+	public sealed class Signed64AAPlusBBMinus2AB_v2 : BaseTransformation
 	{
-		public Unsigned64AABBMinus2ABv2() : base(IRInstruction.Sub64)
+		public Signed64AAPlusBBMinus2AB_v2() : base(IRInstruction.Sub64)
 		{
 		}
 
@@ -286,11 +286,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Algebraic
 	}
 
 	/// <summary>
-	/// Unsigned64AABBMinus2ABv3
+	/// Signed64AAPlusBBMinus2AB_v3
 	/// </summary>
-	public sealed class Unsigned64AABBMinus2ABv3 : BaseTransformation
+	public sealed class Signed64AAPlusBBMinus2AB_v3 : BaseTransformation
 	{
-		public Unsigned64AABBMinus2ABv3() : base(IRInstruction.Sub64)
+		public Signed64AAPlusBBMinus2AB_v3() : base(IRInstruction.Sub64)
 		{
 		}
 

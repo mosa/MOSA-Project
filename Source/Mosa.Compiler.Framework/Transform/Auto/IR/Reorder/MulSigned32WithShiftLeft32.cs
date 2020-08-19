@@ -45,11 +45,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Reorder
 	}
 
 	/// <summary>
-	/// MulSigned32WithShiftLeft32v1
+	/// MulSigned32WithShiftLeft32_v1
 	/// </summary>
-	public sealed class MulSigned32WithShiftLeft32v1 : BaseTransformation
+	public sealed class MulSigned32WithShiftLeft32_v1 : BaseTransformation
 	{
-		public MulSigned32WithShiftLeft32v1() : base(IRInstruction.MulSigned32)
+		public MulSigned32WithShiftLeft32_v1() : base(IRInstruction.MulSigned32)
 		{
 		}
 

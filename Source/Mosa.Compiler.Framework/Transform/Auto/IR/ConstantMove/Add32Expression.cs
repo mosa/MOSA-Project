@@ -54,11 +54,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantMove
 	}
 
 	/// <summary>
-	/// Add32Expressionv1
+	/// Add32Expression_v1
 	/// </summary>
-	public sealed class Add32Expressionv1 : BaseTransformation
+	public sealed class Add32Expression_v1 : BaseTransformation
 	{
-		public Add32Expressionv1() : base(IRInstruction.Add32)
+		public Add32Expression_v1() : base(IRInstruction.Add32)
 		{
 		}
 
@@ -101,11 +101,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantMove
 	}
 
 	/// <summary>
-	/// Add32Expressionv2
+	/// Add32Expression_v2
 	/// </summary>
-	public sealed class Add32Expressionv2 : BaseTransformation
+	public sealed class Add32Expression_v2 : BaseTransformation
 	{
-		public Add32Expressionv2() : base(IRInstruction.Add32)
+		public Add32Expression_v2() : base(IRInstruction.Add32)
 		{
 		}
 
@@ -148,11 +148,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantMove
 	}
 
 	/// <summary>
-	/// Add32Expressionv3
+	/// Add32Expression_v3
 	/// </summary>
-	public sealed class Add32Expressionv3 : BaseTransformation
+	public sealed class Add32Expression_v3 : BaseTransformation
 	{
-		public Add32Expressionv3() : base(IRInstruction.Add32)
+		public Add32Expression_v3() : base(IRInstruction.Add32)
 		{
 		}
 

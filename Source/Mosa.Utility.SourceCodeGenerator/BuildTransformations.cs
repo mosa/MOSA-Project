@@ -129,7 +129,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			int index = 1;
 			foreach (var variation in variations)
 			{
-				GenerateTransformation2(name, familyName, type, $"{subName}v{index}", variation);
+				GenerateTransformation2(name, familyName, type, $"{subName}_v{index}", variation);
 				index++;
 			}
 		}
@@ -232,7 +232,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				Lines.AppendLine($"\t\t\tvar v{virtualRegisterNbr} = transformContext.AllocateVirtualRegister(transformContext.{resultType});");
 			}
 			if (virtualRegisterNbr != 0)
-				Lines.AppendLine("");
+				Lines.AppendLine();
 
 			// Create all the constants variables
 			var operandList = transform.GetAllOperands(transform.ResultInstructionTree);
@@ -278,8 +278,10 @@ namespace Mosa.Utility.SourceCodeGenerator
 					if (methodToExpressionText.TryGetValue(name, out int found))
 					{
 						methodToMethodNbr.Add(operand.Method, found);
-						Lines.AppendLine($"\t\t\tvar e{found} = transformContext.CreateConstant({name});");
 						continue;
+
+						//Lines.AppendLine($"\t\t\tvar e{found} = transformContext.CreateConstant({name});");
+						//continue;
 					}
 
 					methodNbr++;
