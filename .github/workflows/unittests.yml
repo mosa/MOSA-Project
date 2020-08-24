@@ -42,7 +42,7 @@ jobs:
         with:
           submodules: recursive
       - name: Update Package Respository
-        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
+        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update && sudo apt-get -y upgrade
       - name: Install New Packages
         run: sudo apt-get install -y git wget qemu qemu-system qemu-system-x86
       - name: Restore nuget Packages
