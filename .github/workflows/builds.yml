@@ -95,6 +95,8 @@ jobs:
         run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
       - name: Install New Packages
         run: sudo apt-get install -y git qemu qemu-system qemu-system-x86
+        run: sudo apt-get update
+        run: sudo apt-get upgrade
       - name: Restore nuget Packages
         run: dotnet restore Source/Mosa.Linux.sln
       - name: Build

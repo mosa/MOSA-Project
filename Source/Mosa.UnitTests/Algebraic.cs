@@ -51,5 +51,11 @@ namespace Mosa.UnitTests
 		{
 			return (a * a) - (b * b);
 		}
+
+		[MosaUnitTest(Series = "U4U4")]
+		public static uint AAAPlus3AABPlus3ABBPlusBBB(uint a, uint b)
+		{
+			return a * a * a + 3 * a * a * b + 3 * a * b * b + b * b * b;
+		}
 	}
 }
