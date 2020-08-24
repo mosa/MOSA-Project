@@ -48,6 +48,6 @@ jobs:
       - name: Restore nuget Packages
         run: dotnet restore Source/Mosa.Linux.sln
       - name: Build
-        run: msbuild /verbosity:minimal Source/Mosa.Linux.sln
+        run: msbuild /verbosity:normal Source/Mosa.Linux.sln
       - name: Unit Tests
         run: dotnet bin/Mosa.Utility.UnitTests.dll ${{ matrix.level }} -s Emulator.Display=false
