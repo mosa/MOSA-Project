@@ -1,10 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Kernel.BareMetal.Extension;
-using Mosa.Runtime;
-using Mosa.Runtime.x86;
-using System;
-
 namespace Mosa.Kernel.BareMetal.x86
 {
 	/// <summary>
@@ -12,7 +7,7 @@ namespace Mosa.Kernel.BareMetal.x86
 	/// </summary>
 	public static class VGAConsole
 	{
-		private enum ControlState { Normal, Escape, Color, Background };
+		private enum ControlState { Normal, Escape };
 
 		private static ControlState State = ControlState.Normal;
 
@@ -55,8 +50,6 @@ namespace Mosa.Kernel.BareMetal.x86
 			{
 				case ControlState.Normal: { Normal(b); return; }
 				case ControlState.Escape: { Escape(b); return; }
-				case ControlState.Color: { VGAText.SetColor(b); State = ControlState.Normal; return; }
-				case ControlState.Background: { VGAText.SetBackground(b); State = ControlState.Normal; ; return; }
 			}
 		}
 
@@ -75,8 +68,6 @@ namespace Mosa.Kernel.BareMetal.x86
 				case 0x0C: VGAText.Formfeed(); return;      // ascii
 				case 0x0D: VGAText.CarriageReturn(); return;// ascii
 				case 0x1b: State = ControlState.Escape; return;    // vt100
-				case 0x9E: State = ControlState.Color; return;
-				case 0x9F: State = ControlState.Background; return;
 				default: return;
 			}
 		}

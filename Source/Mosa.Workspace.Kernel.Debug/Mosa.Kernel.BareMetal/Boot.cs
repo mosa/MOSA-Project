@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.BareMetal.BootMemory;
-using Mosa.Kernel.BareMetal.MultibootSpecification;
-using Mosa.Runtime.Extension;
 using Mosa.Runtime.Plug;
 
 namespace Mosa.Kernel.BareMetal
@@ -31,12 +29,11 @@ namespace Mosa.Kernel.BareMetal
 			BootMemoryMap.ImportMultibootV1MemoryMap();
 			Console.Write("4...");
 
+			// TODO: PageFrameAllocator --- allocates single pages only
 			//PhysicalPageAllocator.Setup();
 
-			// TODO: PageFrameAllocator --- allocates single pages only
-
-			PageTable.Setup();
-			Console.Write("5...");
+			//PageTable.Setup();
+			//Console.Write("5...");
 
 			while (true)
 			{

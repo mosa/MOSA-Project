@@ -21,7 +21,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
       - name: Setup MSBuild
-        uses: warrenbuckley/Setup-MSBuild@v1
+        uses: microsoft/setup-msbuild@v1.0.1
       - name: Setup Nuget.exe
         uses: nuget/setup-nuget@v1
       - name: Restore nuget Packages
@@ -87,18 +87,20 @@ jobs:
 
   build-unix:
     name: Linux Build
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      - name: Update Package Respository
-        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
-      - name: Install New Packages
-        run: sudo apt-get install -y git qemu qemu-system qemu-system-x86
+#      - name: Update Package Respository
+#        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update && sudo apt-get -y upgrade
       - name: Restore nuget Packages
         run: dotnet restore Source/Mosa.Linux.sln
       - name: Build
-        run: msbuild /verbosity:minimal Source/Mosa.Linux.sln
+        run: dotnet build Source/Mosa.Linux.sln
+      - name: Update Package Respository
+        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
+      - name: Install Qemu
+        run: sudo apt-get install -y wget qemu qemu-system qemu-system-x86
       - name: Unit Tests - All Performance Optimizations
         run: dotnet bin/Mosa.Utility.UnitTests.dll -oMax -s Emulator.Display=false
       - name: Unit Tests - No Optimizations

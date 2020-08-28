@@ -3,147 +3,74 @@
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantMove",
-			"Name": "Add32",
+			"Name": "Add##",
 			"SubName": "",
-			"Expression": "IR.Add32 a b",
+			"Expression": "IR.Add## a b",
 			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.Add32 b a)"
+			"Result": "(IR.Add## b a)"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantMove",
-			"Name": "Add64",
+			"Name": "AddR#",
 			"SubName": "",
-			"Expression": "IR.Add64 a b",
+			"Expression": "IR.AddR# a b",
 			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.Add64 b a)"
+			"Result": "(IR.AddR# b a)"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantMove",
-			"Name": "AddR4",
+			"Name": "MulSigned##",
 			"SubName": "",
-			"Expression": "IR.AddR4 a b",
+			"Expression": "IR.MulSigned## a b",
 			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.AddR4 b a)"
+			"Result": "(IR.MulSigned## b a)"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantMove",
-			"Name": "AddR8",
+			"Name": "MulUnsigned##",
 			"SubName": "",
-			"Expression": "IR.Add64 a b",
+			"Expression": "IR.MulUnsigned## a b",
 			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.AddR8 b a)"
+			"Result": "(IR.MulUnsigned## b a)"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantMove",
-			"Name": "MulSigned32",
+			"Name": "MulR#",
 			"SubName": "",
-			"Expression": "IR.MulSigned32 a b",
+			"Expression": "IR.MulR# a b",
 			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.MulSigned32 b a)"
+			"Result": "(IR.MulR# b a)"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantMove",
-			"Name": "MulSigned64",
+			"Name": "And##",
 			"SubName": "",
-			"Expression": "IR.MulSigned64 a b",
+			"Expression": "IR.And## a b",
 			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.MulSigned64 b a)"
+			"Result": "(IR.And## b a)"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantMove",
-			"Name": "MulUnsigned32",
+			"Name": "Or##",
 			"SubName": "",
-			"Expression": "IR.MulUnsigned32 a b",
+			"Expression": "IR.Or## a b",
 			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.MulUnsigned32 b a)"
+			"Result": "(IR.Or## b a)"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantMove",
-			"Name": "MulUnsigned64",
+			"Name": "Xor##",
 			"SubName": "",
-			"Expression": "IR.MulUnsigned64 a b",
+			"Expression": "IR.Xor## a b",
 			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.MulUnsigned64 b a)"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "ConstantMove",
-			"Name": "MulR4",
-			"SubName": "",
-			"Expression": "IR.MulR4 a b",
-			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.MulR4 b a)"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "ConstantMove",
-			"Name": "MulR8",
-			"SubName": "",
-			"Expression": "IR.MulUnsigned64 a b",
-			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.MulR8 b a)"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "ConstantMove",
-			"Name": "And32",
-			"SubName": "",
-			"Expression": "IR.And32 a b",
-			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.And32 b a)"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "ConstantMove",
-			"Name": "And64",
-			"SubName": "",
-			"Expression": "IR.And64 a b",
-			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.And64 b a)"
-		},
-
-		{
-			"FamilyName": "IR",
-			"Type": "ConstantMove",
-			"Name": "Or32",
-			"SubName": "",
-			"Expression": "IR.Or32 a b",
-			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.Or32 b a)"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "ConstantMove",
-			"Name": "Or64",
-			"SubName": "",
-			"Expression": "IR.Or64 a b",
-			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.Or64 b a)"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "ConstantMove",
-			"Name": "Xor32",
-			"SubName": "",
-			"Expression": "IR.Xor32 a b",
-			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.Xor32 b a)"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "ConstantMove",
-			"Name": "Xor64",
-			"SubName": "",
-			"Expression": "IR.Xor64 a b",
-			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
-			"Result": "(IR.Xor64 b a)"
+			"Result": "(IR.Xor## b a)"
 		}
 	]
 }

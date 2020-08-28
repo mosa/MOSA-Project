@@ -140,9 +140,14 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			int length = part.Length;
 			char last = (length > 1) ? part[length - 1] : ' ';
 
-			if (last == 'd' || last == 'f' || last == 'l' || last == 'i' || last == 'u')
+			if (last == 'd' || last == 'f')
 			{
 				part = part.Substring(0, length - 1);
+			}
+
+			if (last == 'l' || last == 'i' || last == 'u')
+			{
+				;
 			}
 
 			if (last == 'd')
@@ -162,9 +167,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 
 				var value = ParseHex(part);
 
-				return (last == 'i' || last == 'u')
-					? new Token(TokenType.IntegerConstant, index, $"0x{part}", (uint)value)
-					: new Token(TokenType.LongConstant, index, $"0x{part}", value);
+				return new Token(TokenType.IntegerConstant, index, $"0x{part}", value);
 			}
 			else if (part.StartsWith("0b"))
 			{
@@ -173,17 +176,13 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 
 				var value = ParseBinary(part);
 
-				return (last == 'i')
-					? new Token(TokenType.IntegerConstant, index, $"0b{part}", (uint)value)
-					: new Token(TokenType.LongConstant, index, $"0b{part}", value);
+				return new Token(TokenType.IntegerConstant, index, $"0b{part}", value);
 			}
 
 			// integer
-			var l = long.Parse(part);
+			ulong l = ulong.Parse(part);
 
-			return (last == 'i' || last == 'u')
-				? new Token(TokenType.IntegerConstant, index, part, (uint)l)
-				: new Token(TokenType.LongConstant, index, part, l);
+			return new Token(TokenType.IntegerConstant, index, part, l);
 		}
 
 		public static ulong ParseBinary(string s)

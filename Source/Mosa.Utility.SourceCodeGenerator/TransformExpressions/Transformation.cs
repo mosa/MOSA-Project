@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
 using System.Collections.Generic;
 
 namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
@@ -30,13 +31,20 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			TokenizedResult = Tokenizer.Parse(ResultText);
 
 			InstructionTree = InstructionParser.Parse(TokenizedExpression);
-
-			LabelSet = new LabelSet(InstructionTree);
-
+			ResultInstructionTree = ResultParser.Parse(TokenizedResult);
 			Filters = FilterParser.ParseAll(TokenizedFilter);
 
-			ResultInstructionTree = ResultParser.Parse(TokenizedResult);
+			LabelSet = new LabelSet(InstructionTree);
+			LabelSet.AddUse(ResultInstructionTree);
+		}
 
+		private Transformation(InstructionNode instructionTree, InstructionNode resultInstructionTree, List<Method> filters)
+		{
+			InstructionTree = instructionTree;
+			ResultInstructionTree = resultInstructionTree;
+			Filters = filters;
+
+			LabelSet = new LabelSet(InstructionTree);
 			LabelSet.AddUse(ResultInstructionTree);
 		}
 
@@ -274,7 +282,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 						else
 						{
 							// except constants in expressions
-							if (!(operand.IsInteger || operand.IsLong || operand.IsFloat || operand.IsDouble))
+							if (!(operand.IsInteger || operand.IsFloat || operand.IsDouble))
 								result.Add(operand);
 						}
 					}
@@ -282,6 +290,68 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			}
 
 			return result;
+		}
+
+		public List<Transformation> DeriveVariations(List<string> cumulativeInstructions)
+		{
+			var variations = new List<Transformation>();
+
+			int bits = 0;
+
+			foreach (var node in GetPreorder(InstructionTree))
+			{
+				if (cumulativeInstructions.Contains(node.InstructionName) && node.Operands.Count == 2)
+				{
+					if (!node.Operands[0].IsSame(node.Operands[1]))
+					{
+						bits++;
+					}
+				}
+			}
+
+			int total = 1 << bits;
+
+			for (int index = 1; index < total; index++)
+			{
+				var variation = CreateVariation(cumulativeInstructions, index);
+
+				if (variation != null)
+					variations.Add(variation);
+			}
+
+			return variations;
+		}
+
+		private Transformation CreateVariation(List<string> cumulativeInstructions, int index)
+		{
+			var instructionTree = InstructionTree.Clone(null);
+
+			var instructionNodes = GetPreorder(instructionTree);
+
+			int bit = 0;
+
+			foreach (var node in instructionNodes)
+			{
+				if (cumulativeInstructions.Contains(node.InstructionName) && node.Operands.Count == 2)
+				{
+					if (!node.Operands[0].IsSame(node.Operands[1]))
+					{
+						if (((index >> bit) & 1) == 1)
+						{
+							var temp = node.Operands[0];
+							node.Operands[0] = node.Operands[1];
+							node.Operands[1] = temp;
+
+							node.Operands[0].Index = 0;
+							node.Operands[1].Index = 1;
+						}
+
+						bit++;
+					}
+				}
+			}
+
+			return new Transformation(instructionTree, ResultInstructionTree, Filters);
 		}
 	}
 }

@@ -17,6 +17,8 @@ namespace Mosa.Compiler.Framework.Transform
 
 		public TraceLog TraceLog { get; private set; }
 
+		public TraceLog SpecialTraceLog { get; private set; }
+
 		public Operand ConstantZero32 { get { return MethodCompiler.ConstantZero32; } }
 		public Operand ConstantZero64 { get { return MethodCompiler.ConstantZero64; } }
 		public Operand ConstantZeroR4 { get { return MethodCompiler.ConstantZeroR4; } }
@@ -30,10 +32,11 @@ namespace Mosa.Compiler.Framework.Transform
 
 		public VirtualRegisters VirtualRegisters { get; private set; }
 
-		public TransformContext(MethodCompiler methodCompiler, TraceLog traceLog = null)
+		public TransformContext(MethodCompiler methodCompiler, TraceLog traceLog = null, TraceLog specialTraceLog = null)
 		{
 			MethodCompiler = methodCompiler;
 			TraceLog = traceLog;
+			SpecialTraceLog = specialTraceLog;
 
 			VirtualRegisters = MethodCompiler.VirtualRegisters;
 
@@ -54,7 +57,7 @@ namespace Mosa.Compiler.Framework.Transform
 			if (!transformation.Match(context, this))
 				return false;
 
-			TraceBefore(context, transformation.Name);
+			TraceBefore(context, transformation);
 
 			if (virtualRegisters != null)
 			{
@@ -95,10 +98,13 @@ namespace Mosa.Compiler.Framework.Transform
 
 		#region Trace
 
-		public void TraceBefore(Context context, string name)
+		public void TraceBefore(Context context, BaseTransformation transformation)
 		{
-			if (name != null)
-				TraceLog?.Log($"*** {name}");
+			if (transformation.Name != null)
+				TraceLog?.Log($"*** {transformation.Name}");
+
+			if (transformation.Log)
+				SpecialTraceLog?.Log($"{transformation.Name}\t{MethodCompiler.Method.FullName} at {context}");
 
 			TraceLog?.Log($"BEFORE:\t{context}");
 		}

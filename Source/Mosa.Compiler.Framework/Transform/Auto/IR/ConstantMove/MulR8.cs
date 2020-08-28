@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantMove
 	/// </summary>
 	public sealed class MulR8 : BaseTransformation
 	{
-		public MulR8() : base(IRInstruction.MulUnsigned64)
+		public MulR8() : base(IRInstruction.MulR8)
 		{
 		}
 

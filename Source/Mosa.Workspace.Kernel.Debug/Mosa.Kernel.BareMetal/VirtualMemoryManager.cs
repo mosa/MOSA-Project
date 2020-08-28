@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal
 {
@@ -15,17 +15,17 @@ namespace Mosa.Kernel.BareMetal
 		{
 		}
 
-		public static IntPtr GetMemoryPages(int count)
+		public static Pointer GetMemoryPages(int count)
 		{
-			return IntPtr.Zero;
+			return Pointer.Zero;
 		}
 
-		public static void AllocatePage(IntPtr virtualPage)
+		public static void AllocatePage(Pointer virtualPage)
 		{
 			return;
 		}
 
-		public static void Map(IntPtr virtualPage, IntPtr physicalPage)
+		public static void Map(Pointer virtualPage, Pointer physicalPage)
 		{
 			return;
 		}

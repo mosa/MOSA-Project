@@ -1,9 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.IR;
 using System;
-using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Transform
 {
@@ -15,6 +13,8 @@ namespace Mosa.Compiler.Framework.Transform
 
 		public string Name { get; }
 
+		public bool Log { get; private set; } = false;
+
 		#endregion Properties
 
 		#region Constructors
@@ -23,6 +23,13 @@ namespace Mosa.Compiler.Framework.Transform
 			: this()
 		{
 			Instruction = instruction;
+		}
+
+		public BaseTransformation(BaseInstruction instruction, bool log = false)
+			: this()
+		{
+			Instruction = instruction;
+			Log = log;
 		}
 
 		protected BaseTransformation()
@@ -94,6 +101,16 @@ namespace Mosa.Compiler.Framework.Transform
 			return operand.IsCPURegister;
 		}
 
+		protected static bool IsEqual(ulong a, ulong b)
+		{
+			return a == b;
+		}
+
+		protected static bool IsEvenInteger(Operand operand)
+		{
+			return operand.IsInteger && ((operand.ConstantUnsigned64 & 1) == 0);
+		}
+
 		protected static bool IsFloatingPoint(Operand operand)
 		{
 			return operand.IsFloatingPoint;
@@ -109,9 +126,24 @@ namespace Mosa.Compiler.Framework.Transform
 			return a >= b;
 		}
 
+		protected static bool IsHigherVirtualNumber(Operand operand1, Operand operand2)
+		{
+			return operand1.IsVirtualRegister && operand2.IsVirtualRegister && operand1.Index > operand2.Index;
+		}
+
 		protected static bool IsInteger(Operand operand)
 		{
 			return operand.IsInteger;
+		}
+
+		protected static bool IsIntegerBetween0And32(Operand operand)
+		{
+			return operand.IsInteger && operand.ConstantSigned64 >= 0 && operand.ConstantSigned64 <= 32;
+		}
+
+		protected static bool IsIntegerBetween0And64(Operand operand)
+		{
+			return operand.IsInteger && operand.ConstantSigned64 >= 0 && operand.ConstantSigned64 <= 64;
 		}
 
 		protected static bool IsLessThan(ulong a, ulong b)
@@ -122,6 +154,36 @@ namespace Mosa.Compiler.Framework.Transform
 		protected static bool IsLessThanOrEqual(ulong a, ulong b)
 		{
 			return a <= b;
+		}
+
+		protected static bool IsNaturalSquareRoot32(Operand operand)
+		{
+			var value = operand.ConstantUnsigned32;
+
+			var sqrt = Sqrt32(value);
+			var s2 = sqrt * sqrt;
+
+			return value == s2;
+		}
+
+		protected static bool IsNaturalSquareRoot64(Operand operand)
+		{
+			var value = operand.ConstantUnsigned64;
+
+			var sqrt = Sqrt64(value);
+			var s2 = sqrt * sqrt;
+
+			return value == s2;
+		}
+
+		protected static bool IsOddInteger(Operand operand)
+		{
+			return operand.IsInteger && ((operand.ConstantUnsigned64 & 1) == 1);
+		}
+
+		protected static bool IsOne(Operand operand)
+		{
+			return operand.IsConstantOne;
 		}
 
 		protected static bool IsParameter(Operand operand)
@@ -144,14 +206,14 @@ namespace Mosa.Compiler.Framework.Transform
 			return operand.IsResolvedConstant;
 		}
 
+		protected static bool IsSignedIntegerPositive(Operand operand)
+		{
+			return operand.IsInteger && operand.ConstantSigned64 >= 0;
+		}
+
 		protected static bool IsZero(Operand operand)
 		{
 			return operand.IsConstantZero;
-		}
-
-		protected static bool IsOne(Operand operand)
-		{
-			return operand.IsConstantOne;
 		}
 
 		#endregion Filter Methods
@@ -323,6 +385,16 @@ namespace Mosa.Compiler.Framework.Transform
 			return a * b;
 		}
 
+		protected static int Neg32(int a)
+		{
+			return -a;
+		}
+
+		protected static long Neg64(long a)
+		{
+			return -a;
+		}
+
 		protected static uint Not32(uint a)
 		{
 			return ~a;
@@ -383,6 +455,11 @@ namespace Mosa.Compiler.Framework.Transform
 			return a << (int)b;
 		}
 
+		protected static ulong ShiftLeft64(ulong a, ulong b)
+		{
+			return a << (int)b;
+		}
+
 		protected static uint ShiftRight32(uint a, long b)
 		{
 			return a >> (int)b;
@@ -391,6 +468,67 @@ namespace Mosa.Compiler.Framework.Transform
 		protected static ulong ShiftRight64(ulong a, long b)
 		{
 			return a >> (int)b;
+		}
+
+		protected static ulong Sqrt32(uint num)
+		{
+			if (0 == num)
+				return 0;
+
+			uint n = (num / 2) + 1;
+			uint n1 = (n + (num / n)) / 2;
+
+			while (n1 < n)
+			{
+				n = n1;
+				n1 = (n + (num / n)) / 2;
+			}
+
+			return n;
+		}
+
+		protected static ulong Sqrt64(ulong num)
+		{
+			if (0 == num)
+				return 0;
+
+			ulong n = (num / 2) + 1;
+			ulong n1 = (n + (num / n)) / 2;
+
+			while (n1 < n)
+			{
+				n = n1;
+				n1 = (n + (num / n)) / 2;
+			}
+
+			return n;
+		}
+
+		protected static long Sqrt64(long num)
+		{
+			if (0 == num)
+				return 0;
+
+			long n = (num / 2) + 1;
+			long n1 = (n + (num / n)) / 2;
+
+			while (n1 < n)
+			{
+				n = n1;
+				n1 = (n + (num / n)) / 2;
+			}
+
+			return n;
+		}
+
+		protected static ulong Square32(uint n)
+		{
+			return n * n;
+		}
+
+		protected static ulong Square64(ulong n)
+		{
+			return n * n;
 		}
 
 		protected static uint Sub32(uint a, uint b)

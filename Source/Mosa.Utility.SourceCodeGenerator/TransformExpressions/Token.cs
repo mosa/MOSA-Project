@@ -8,15 +8,13 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 		public string Value { get; protected set; }
 		public int Position { get; protected set; } = -1;
 
-		public bool IsInteger { get { return TokenType == TokenType.IntegerConstant || TokenType == TokenType.LongConstant; } }
+		public bool IsInteger { get { return TokenType == TokenType.IntegerConstant; } }
 		public bool IsFloat { get { return TokenType == TokenType.FloatConstant; } }
 		public bool IsDouble { get { return TokenType == TokenType.DoubleConstant; } }
-
-		public ulong Long { get; set; }
+		public ulong Integer { get; set; }
 
 		public double Double { get; }
 		public double Float { get; }
-		public uint Integer { get { return (uint)Long; } set { Long = value; } }
 
 		public Token(TokenType tokenType, int index)
 		{
@@ -45,7 +43,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 		public Token(TokenType tokenType, int index, string value, ulong l)
 			: this(tokenType, index, value)
 		{
-			Long = l;
+			Integer = l;
 		}
 
 		public override string ToString()

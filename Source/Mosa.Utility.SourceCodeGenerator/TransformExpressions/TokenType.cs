@@ -29,8 +29,10 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 
 		Number,     // constants:
 		IntegerConstant,
-		LongConstant,
+
+		//LongConstant,
 		DoubleConstant,
+
 		FloatConstant,
 
 		And,    // boolean logic:

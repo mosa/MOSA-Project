@@ -919,9 +919,9 @@ namespace Mosa.Compiler.Framework
 				else if (IsBoolean || IsChar || IsPointer || IsInteger)
 				{
 					if (IsU8)
-						sb.AppendFormat("{0}", ConstantUnsigned64);
+						sb.AppendFormat("{0}", ConstantSigned64);
 					else
-						sb.AppendFormat("{0}", ConstantUnsigned32);
+						sb.AppendFormat("{0}", ConstantSigned32);
 				}
 				else if (IsR8)
 				{

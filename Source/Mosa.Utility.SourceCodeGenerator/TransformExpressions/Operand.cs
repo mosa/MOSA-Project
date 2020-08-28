@@ -6,13 +6,13 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 	{
 		public Token Token { get; set; }
 
-		public string Value { get { return Token.Value; } }
-
-		public int Index { get; }
+		public int Index { get; set; }
 
 		public InstructionNode InstructionNode { get; set; }
 
 		public Method Method { get; set; }
+
+		public string Value { get { return Token.Value; } }
 
 		public bool IsInstruction { get { return InstructionNode != null; } }
 
@@ -22,8 +22,6 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 
 		public bool IsVirtualRegister { get { return IsInstruction; } }
 
-		public bool IsLong { get { return Token != null && Token.TokenType == TokenType.LongConstant; } }
-
 		public bool IsInteger { get { return Token != null && Token.TokenType == TokenType.IntegerConstant; } }
 
 		public bool IsDouble { get { return Token != null && Token.TokenType == TokenType.DoubleConstant; } }
@@ -32,9 +30,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 
 		public bool IsAny { get { return Token != null && Token.TokenType == TokenType.Underscore; } }
 
-		public ulong Long { get { return Token.Long; } }
-
-		public uint Integer { get { return Token.Integer; } }
+		public ulong Integer { get { return Token.Integer; } }
 
 		public double Double { get { return Token.Double; } }
 
@@ -50,7 +46,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 
 		public Operand(InstructionNode instructionNode, int index)
 		{
-			this.InstructionNode = instructionNode;
+			InstructionNode = instructionNode;
 			Index = index;
 		}
 
@@ -58,6 +54,40 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 		{
 			Method = method;
 			Index = index;
+		}
+
+		public Operand Clone(InstructionNode parent)
+		{
+			var operand = new Operand(Token, Index);
+
+			if (InstructionNode != null)
+			{
+				operand.InstructionNode = InstructionNode.Clone(null);
+			}
+
+			if (Method != null)
+			{
+				operand.Method = Method;    // TODO - Okay for now since filters and results are not modified by variations
+			}
+
+			return operand;
+		}
+
+		public bool IsSame(Operand other)
+		{
+			if (IsLabel && other.IsLabel && LabelName == other.LabelName)
+				return true;
+
+			if (IsInteger && other.IsInteger && Integer == other.Integer)
+				return true;
+
+			if (IsFloat && other.IsFloat && Float == other.Float)
+				return true;
+
+			if (IsDouble && other.IsDouble && Double == other.Double)
+				return true;
+
+			return false;
 		}
 
 		public override string ToString()

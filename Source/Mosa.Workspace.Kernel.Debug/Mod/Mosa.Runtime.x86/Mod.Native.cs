@@ -23,6 +23,14 @@ namespace Mosa.Runtime.x86
 		{
 		}
 
+		public static void SetSegments(ushort ds, ushort es, ushort fs, ushort gs, ushort ss)
+		{
+		}
+
+		public static void FarJump()
+		{
+		}
+
 		public static void Jmp(uint address)
 		{
 		}

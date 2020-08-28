@@ -23,5 +23,23 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			else
 				return $"{NodeNbr} : {InstructionName}<{ResultType}>";
 		}
+
+		public InstructionNode Clone(InstructionNode parent)
+		{
+			var node = new InstructionNode()
+			{
+				InstructionName = InstructionName,
+				ResultType = ResultType,
+				NodeNbr = NodeNbr,
+				Parent = parent
+			};
+
+			foreach (var operand in Operands)
+			{
+				node.Operands.Add(operand.Clone(node));
+			}
+
+			return node;
+		}
 	}
 }

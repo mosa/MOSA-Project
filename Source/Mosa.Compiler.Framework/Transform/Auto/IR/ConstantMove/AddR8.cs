@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantMove
 	/// </summary>
 	public sealed class AddR8 : BaseTransformation
 	{
-		public AddR8() : base(IRInstruction.Add64)
+		public AddR8() : base(IRInstruction.AddR8)
 		{
 		}
 

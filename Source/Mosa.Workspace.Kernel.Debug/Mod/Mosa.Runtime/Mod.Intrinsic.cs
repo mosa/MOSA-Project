@@ -13,200 +13,200 @@ namespace Mosa.Runtime
 	{
 		#region Intrinsic
 
-		public static byte Load8(IntPtr address)
+		public static byte Load8(Pointer address)
 		{
 			return CPU.Read8((ulong)address.ToInt64());
 		}
 
-		public static byte Load8(IntPtr address, int offset)
+		public static byte Load8(Pointer address, int offset)
 		{
 			return CPU.Read8((ulong)(address.ToInt64() + offset));
 		}
 
-		public static byte Load8(IntPtr address, uint offset)
+		public static byte Load8(Pointer address, uint offset)
 		{
 			return CPU.Read8((ulong)(address.ToInt64() + offset));
 		}
 
-		public static ushort Load16(IntPtr address)
+		public static ushort Load16(Pointer address)
 		{
 			return CPU.Read16((ulong)address.ToInt64());
 		}
 
-		public static ushort Load16(IntPtr address, int offset)
+		public static ushort Load16(Pointer address, int offset)
 		{
 			return CPU.Read16((ulong)(address.ToInt64() + offset));
 		}
 
-		public static ushort Load16(IntPtr address, uint offset)
+		public static ushort Load16(Pointer address, uint offset)
 		{
 			return CPU.Read16((ulong)(address.ToInt64() + offset));
 		}
 
-		public static uint Load32(IntPtr address)
+		public static uint Load32(Pointer address)
 		{
 			return CPU.Read32((ulong)address.ToInt64());
 		}
 
-		public static IntPtr LoadPointer(IntPtr address)
+		public static Pointer LoadPointer(Pointer address)
 		{
 			if (CPU.Is32Bit)
-				return new IntPtr(Load32(address));
+				return new Pointer(Load32(address));
 			else
-				return new IntPtr((long)Load64(address));
+				return new Pointer((long)Load64(address));
 		}
 
-		public static IntPtr LoadPointer(IntPtr address, int offset)
+		public static Pointer LoadPointer(Pointer address, int offset)
 		{
 			if (CPU.Is32Bit)
-				return new IntPtr(Load32(address, offset));
+				return new Pointer(Load32(address, offset));
 			else
-				return new IntPtr((long)Load64(address, offset));
+				return new Pointer((long)Load64(address, offset));
 		}
 
-		public static IntPtr LoadPointer(IntPtr address, uint offset)
+		public static Pointer LoadPointer(Pointer address, uint offset)
 		{
 			if (CPU.Is32Bit)
-				return new IntPtr(Load32(address, offset));
+				return new Pointer(Load32(address, offset));
 			else
-				return new IntPtr((long)Load64(address, offset));
+				return new Pointer((long)Load64(address, offset));
 		}
 
-		public static uint Load32(IntPtr address, int offset)
+		public static uint Load32(Pointer address, int offset)
 		{
 			return CPU.Read32((ulong)(address.ToInt64() + offset));
 		}
 
-		public static uint Load32(IntPtr address, uint offset)
+		public static uint Load32(Pointer address, uint offset)
 		{
 			return CPU.Read32((ulong)(address.ToInt64() + offset));
 		}
 
-		public static ulong Load64(IntPtr address)
+		public static ulong Load64(Pointer address)
 		{
 			return CPU.Read64((ulong)address.ToInt64());
 		}
 
-		public static ulong Load64(IntPtr address, int offset)
+		public static ulong Load64(Pointer address, int offset)
 		{
 			return CPU.Read64((ulong)(address.ToInt64() + offset));
 		}
 
-		public static ulong Load64(IntPtr address, uint offset)
+		public static ulong Load64(Pointer address, uint offset)
 		{
 			return CPU.Read64((ulong)(address.ToInt64() + offset));
 		}
 
-		public static float LoadR4(IntPtr address)
+		public static float LoadR4(Pointer address)
 		{
 			// TODO
 			return 0;
 		}
 
-		public static float LoadR4(IntPtr address, uint offset)
+		public static float LoadR4(Pointer address, uint offset)
 		{
 			//TODO
 			return 0;
 		}
 
-		public static double LoadR8(IntPtr address)
+		public static double LoadR8(Pointer address)
 		{
 			//TODO
 			return 0;
 		}
 
-		public static double LoadR8(IntPtr address, uint offset)
+		public static double LoadR8(Pointer address, uint offset)
 		{
 			//TODO
 			return 0;
 		}
 
-		public static void Store8(IntPtr address, byte value)
+		public static void Store8(Pointer address, byte value)
 		{
 			CPU.Write8((ulong)address.ToInt64(), value);
 		}
 
-		public static void Store8(IntPtr address, int offset, byte value)
+		public static void Store8(Pointer address, int offset, byte value)
 		{
 			CPU.Write8((ulong)(address.ToInt64() + offset), value);
 		}
 
-		public static void Store8(IntPtr address, uint offset, byte value)
+		public static void Store8(Pointer address, uint offset, byte value)
 		{
 			CPU.Write8((ulong)(address.ToInt64() + offset), value);
 		}
 
-		public static void Store16(IntPtr address, ushort value)
+		public static void Store16(Pointer address, ushort value)
 		{
 			CPU.Write16((ulong)address.ToInt64(), value);
 		}
 
-		public static void Store16(IntPtr address, int offset, ushort value)
+		public static void Store16(Pointer address, int offset, ushort value)
 		{
 			CPU.Write16((ulong)(address.ToInt64() + offset), value);
 		}
 
-		public static void Store16(IntPtr address, uint offset, ushort value)
+		public static void Store16(Pointer address, uint offset, ushort value)
 		{
 			CPU.Write16((ulong)(address.ToInt64() + offset), value);
 		}
 
-		public static void Store32(IntPtr address, uint value)
+		public static void Store32(Pointer address, uint value)
 		{
 			CPU.Write32((ulong)address.ToInt64(), value);
 		}
 
-		public static void Store32(IntPtr address, int value)
+		public static void Store32(Pointer address, int value)
 		{
 			CPU.Write32((ulong)address.ToInt64(), (uint)value);
 		}
 
-		public static void Store32(IntPtr address, int offset, uint value)
+		public static void Store32(Pointer address, int offset, uint value)
 		{
 			CPU.Write32((ulong)(address.ToInt64() + offset), value);
 		}
 
-		public static void Store32(IntPtr address, int offset, int value)
+		public static void Store32(Pointer address, int offset, int value)
 		{
 			CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value);
 		}
 
-		public static void Store32(IntPtr address, uint offset, uint value)
+		public static void Store32(Pointer address, uint offset, uint value)
 		{
 			CPU.Write32((ulong)(address.ToInt64() + offset), value);
 		}
 
-		public static void Store32(IntPtr address, uint offset, int value)
+		public static void Store32(Pointer address, uint offset, int value)
 		{
 			CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value);
 		}
 
-		public static void Store64(IntPtr address, ulong value)
+		public static void Store64(Pointer address, ulong value)
 		{
 			CPU.Write64((ulong)address.ToInt64(), value);
 		}
 
-		public static void Store64(IntPtr address, int offset, ulong value)
+		public static void Store64(Pointer address, int offset, ulong value)
 		{
 			CPU.Write64((ulong)(address.ToInt64() + offset), value);
 		}
 
-		public static void Store64(IntPtr address, uint offset, ulong value)
+		public static void Store64(Pointer address, uint offset, ulong value)
 		{
 			CPU.Write64((ulong)(address.ToInt64() + offset), value);
 		}
 
-		public static void Store64(IntPtr address, int offset, long value)
+		public static void Store64(Pointer address, int offset, long value)
 		{
 			CPU.Write64((ulong)(address.ToInt64() + offset), (ulong)value);
 		}
 
-		public static void Store64(IntPtr address, uint offset, long value)
+		public static void Store64(Pointer address, uint offset, long value)
 		{
 			CPU.Write64((ulong)(address.ToInt64() + offset), (ulong)value);
 		}
 
-		public static void Store64(IntPtr address, IntPtr value)
+		public static void Store64(Pointer address, Pointer value)
 		{
 			if (CPU.Is32Bit)
 				CPU.Write64((ulong)address.ToInt64(), (uint)value.ToInt64());
@@ -214,116 +214,116 @@ namespace Mosa.Runtime
 				CPU.Write64((ulong)address.ToInt64(), (ulong)value.ToInt64());
 		}
 
-		public static void StoreR4(IntPtr address, float value)
+		public static void StoreR4(Pointer address, float value)
 		{
 			// TODO
 		}
 
-		public static void StoreR4(IntPtr address, int offset, float value)
+		public static void StoreR4(Pointer address, int offset, float value)
 		{
 			// TODO
 		}
 
-		public static void StoreR4(IntPtr address, uint offset, float value)
+		public static void StoreR4(Pointer address, uint offset, float value)
 		{
 			// TODO
 		}
 
-		public static void StoreR8(IntPtr address, double value)
+		public static void StoreR8(Pointer address, double value)
 		{
 			// TODO
 		}
 
-		public static void StoreR8(IntPtr address, int offset, double value)
+		public static void StoreR8(Pointer address, int offset, double value)
 		{
 			// TODO
 		}
 
-		public static void StoreR8(IntPtr address, uint offset, double value)
+		public static void StoreR8(Pointer address, uint offset, double value)
 		{
 			// TODO
 		}
 
-		public static void Store(IntPtr address, byte value)
+		public static void Store(Pointer address, byte value)
 		{
 			CPU.Write8((ulong)address.ToInt64(), value);
 		}
 
-		public static void Store(IntPtr address, sbyte value)
+		public static void Store(Pointer address, sbyte value)
 		{
 			CPU.Write8((ulong)address.ToInt64(), (byte)value);
 		}
 
-		public static void Store(IntPtr address, ushort value)
+		public static void Store(Pointer address, ushort value)
 		{
 		}
 
-		public static void Store(IntPtr address, short value)
+		public static void Store(Pointer address, short value)
 		{
 			CPU.Write16((ulong)address.ToInt64(), (ushort)value);
 		}
 
-		public static void Store(IntPtr address, uint value)
+		public static void Store(Pointer address, uint value)
 		{
 			CPU.Write32((ulong)address.ToInt64(), value);
 		}
 
-		public static void Store(IntPtr address, int value)
+		public static void Store(Pointer address, int value)
 		{
 			CPU.Write32((ulong)address.ToInt64(), (uint)value);
 		}
 
-		public static void Store(IntPtr address, ulong value)
+		public static void Store(Pointer address, ulong value)
 		{
 			CPU.Write64((ulong)address.ToInt64(), value);
 		}
 
-		public static void Store(IntPtr address, long value)
+		public static void Store(Pointer address, long value)
 		{
 			CPU.Write64((ulong)address.ToInt64(), (ulong)value);
 		}
 
-		public static void Store(IntPtr address, int offset, uint value)
+		public static void Store(Pointer address, int offset, uint value)
 		{
 			CPU.Write32((ulong)(address.ToInt64() + offset), value);
 		}
 
-		public static void Store(IntPtr address, int offset, int value)
+		public static void Store(Pointer address, int offset, int value)
 		{
 			CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value);
 		}
 
-		public static void Store(IntPtr address, uint offset, uint value)
+		public static void Store(Pointer address, uint offset, uint value)
 		{
 			CPU.Write32((ulong)(address.ToInt64() + offset), value);
 		}
 
-		public static void Store(IntPtr address, uint offset, int value)
+		public static void Store(Pointer address, uint offset, int value)
 		{
 			CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value);
 		}
 
-		public static void Store(IntPtr address, int offset, ulong value)
+		public static void Store(Pointer address, int offset, ulong value)
 		{
 			CPU.Write64((ulong)(address.ToInt64() + offset), value);
 		}
 
-		public static void Store(IntPtr address, int offset, long value)
+		public static void Store(Pointer address, int offset, long value)
 		{
 			CPU.Write64((ulong)(address.ToInt64() + offset), (ulong)value);
 		}
 
-		public static void Store(IntPtr address, uint offset, ulong value)
+		public static void Store(Pointer address, uint offset, ulong value)
 		{
 			CPU.Write64((ulong)(address.ToInt64() + offset), value);
 		}
 
-		public static void Store(IntPtr address, uint offset, long value)
+		public static void Store(Pointer address, uint offset, long value)
 		{
 			CPU.Write64((ulong)(address.ToInt64() + offset), (ulong)value);
 		}
 
-		public static void Store(IntPtr address, uint offset, IntPtr value)
+		public static void Store(Pointer address, uint offset, Pointer value)
 		{
 			if (CPU.Is32Bit)
 				CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value.ToInt64());
@@ -331,7 +331,7 @@ namespace Mosa.Runtime
 				CPU.Write64((ulong)(address.ToInt64() + offset), (ulong)value.ToInt64());
 		}
 
-		public static void Store(IntPtr address, int offset, IntPtr value)
+		public static void Store(Pointer address, int offset, Pointer value)
 		{
 			if (CPU.Is32Bit)
 				CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value.ToInt64());
@@ -339,7 +339,7 @@ namespace Mosa.Runtime
 				CPU.Write64((ulong)(address.ToInt64() + offset), (ulong)value.ToInt64());
 		}
 
-		public static void Store(IntPtr address, ulong offset, IntPtr value)
+		public static void Store(Pointer address, ulong offset, Pointer value)
 		{
 			if (CPU.Is32Bit)
 				CPU.Write32((ulong)address.ToInt64() + offset, (uint)value.ToInt64());
@@ -347,7 +347,7 @@ namespace Mosa.Runtime
 				CPU.Write64((ulong)address.ToInt64() + offset, (ulong)value.ToInt64());
 		}
 
-		public static void Store(IntPtr address, long offset, IntPtr value)
+		public static void Store(Pointer address, long offset, Pointer value)
 		{
 			if (CPU.Is32Bit)
 				CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value.ToInt64());
@@ -355,7 +355,7 @@ namespace Mosa.Runtime
 				CPU.Write64((ulong)(address.ToInt64() + offset), (ulong)value.ToInt64());
 		}
 
-		public static void StorePointer(IntPtr address, IntPtr value)
+		public static void StorePointer(Pointer address, Pointer value)
 		{
 			if (CPU.Is32Bit)
 				CPU.Write32((ulong)address.ToInt64(), (uint)value.ToInt64());
@@ -363,7 +363,7 @@ namespace Mosa.Runtime
 				CPU.Write64((ulong)address.ToInt64(), (ulong)value.ToInt64());
 		}
 
-		public static void StorePointer(IntPtr address, uint offset, IntPtr value)
+		public static void StorePointer(Pointer address, uint offset, Pointer value)
 		{
 			if (CPU.Is32Bit)
 				CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value.ToInt64());
@@ -371,7 +371,7 @@ namespace Mosa.Runtime
 				CPU.Write64((ulong)(address.ToInt64() + offset), (ulong)value.ToInt64());
 		}
 
-		public static void StorePointer(IntPtr address, int offset, IntPtr value)
+		public static void StorePointer(Pointer address, int offset, Pointer value)
 		{
 			if (CPU.Is32Bit)
 				CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value.ToInt64());
@@ -379,7 +379,7 @@ namespace Mosa.Runtime
 				CPU.Write64((ulong)(address.ToInt64() + offset), (ulong)value.ToInt64());
 		}
 
-		public static void StorePointer(IntPtr address, ulong offset, IntPtr value)
+		public static void StorePointer(Pointer address, ulong offset, Pointer value)
 		{
 			if (CPU.Is32Bit)
 				CPU.Write32((ulong)address.ToInt64() + offset, (uint)value.ToInt64());
@@ -387,7 +387,7 @@ namespace Mosa.Runtime
 				CPU.Write64((ulong)address.ToInt64() + offset, (ulong)value.ToInt64());
 		}
 
-		public static void StorePointer(IntPtr address, long offset, IntPtr value)
+		public static void StorePointer(Pointer address, long offset, Pointer value)
 		{
 			if (CPU.Is32Bit)
 				CPU.Write32((ulong)(address.ToInt64() + offset), (uint)value.ToInt64());

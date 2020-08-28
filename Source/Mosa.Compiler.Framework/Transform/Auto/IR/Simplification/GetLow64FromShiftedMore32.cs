@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 			if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftLeft64)
 				return false;
 
-			if (!IsGreaterThanOrEqual(And32(To32(context.Operand1.Definitions[0].Operand2), 63u), 32u))
+			if (!IsGreaterThanOrEqual(And32(To32(context.Operand1.Definitions[0].Operand2), 63), 32))
 				return false;
 
 			return true;
@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 		{
 			var result = context.Result;
 
-			var c1 = transformContext.CreateConstant(0L);
+			var c1 = transformContext.CreateConstant(0);
 
 			context.SetInstruction(IRInstruction.Move32, result, c1);
 		}

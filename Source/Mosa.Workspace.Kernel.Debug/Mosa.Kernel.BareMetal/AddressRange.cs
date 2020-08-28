@@ -1,15 +1,15 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal
 {
 	public struct AddressRange
 	{
-		public IntPtr Address { get; }
+		public Pointer Address { get; }
 		public ulong Size { get; }
 
-		public AddressRange(IntPtr address, uint size)
+		public AddressRange(Pointer address, uint size)
 		{
 			Address = address;
 			Size = size;
@@ -17,19 +17,19 @@ namespace Mosa.Kernel.BareMetal
 
 		public AddressRange(uint address, uint size)
 		{
-			Address = new IntPtr(address);
+			Address = new Pointer(address);
 			Size = size;
 		}
 
 		public AddressRange(ulong address, uint size)
 		{
-			Address = new IntPtr((long)address);
+			Address = new Pointer((long)address);
 			Size = size;
 		}
 
 		public AddressRange(ulong address, ulong size)
 		{
-			Address = new IntPtr((long)address);
+			Address = new Pointer((long)address);
 			Size = size;
 		}
 	}
