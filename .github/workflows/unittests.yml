@@ -47,6 +47,8 @@ jobs:
         run: dotnet restore Source/Mosa.Linux.sln
       - name: Build
         run: dotnet build Source/Mosa.Linux.sln
+      - name: Update Package Respository
+        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update
       - name: Install Qemu
         run: sudo apt-get install -y wget qemu qemu-system qemu-system-x86
       - name: Unit Tests
