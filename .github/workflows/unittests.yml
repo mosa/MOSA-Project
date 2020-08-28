@@ -30,7 +30,7 @@ jobs:
 
   build-unix:
     name: Linux - Unit Tests
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     strategy:
        matrix:
@@ -41,13 +41,13 @@ jobs:
         uses: actions/checkout@v1
         with:
           submodules: recursive
-      - name: Update Package Respository
-        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update && sudo apt-get -y upgrade
-      - name: Install New Packages
-        run: sudo apt-get install -y wget qemu qemu-system qemu-system-x86
+#      - name: Update Package Respository
+#        run: sudo apt-get -y -o Acquire::Check-Valid-Until=false update && sudo apt-get -y upgrade
       - name: Restore nuget Packages
         run: dotnet restore Source/Mosa.Linux.sln
       - name: Build
         run: dotnet build Source/Mosa.Linux.sln
+      - name: Install Qemu
+        run: sudo apt-get install -y wget qemu qemu-system qemu-system-x86
       - name: Unit Tests
         run: dotnet bin/Mosa.Utility.UnitTests.dll ${{ matrix.level }} -s Emulator.Display=false
