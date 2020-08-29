@@ -9,11 +9,11 @@ The **MOSA Launcher Console** is a console application that automates the entire
 Usage
 -----
 
-A quick example that compiles `Mosa.TestWorld.x86.exe` demo with `-oMax` (all optimization enabled) and launches it using `Qemu`:
+A quick example that compiles `Mosa.Demo.TestWorld.x86.exe` demo with `-oMax` (all optimization enabled) and launches it using `Qemu`:
 
 .. code-block:: text
 
-  Mosa.Tool.Launcher.Console.exe -oMax Mosa.TestWorld.x86.exe
+  Mosa.Tool.Launcher.Console.exe -oMax Mosa.Demo.TestWorld.x86.exe
 
 .. code-block:: text
 
@@ -26,7 +26,7 @@ A quick example that compiles `Mosa.TestWorld.x86.exe` demo with `-oMax` (all op
     Compiling: 4.66 secs: Compile Completed
     Generating Image: img
     Launching Application: ..\Tools\QEMU\qemu-system-i386.exe
-    Arguments:  -L "..\Tools\QEMU" -cpu qemu32,+sse4.1 -serial null -hda "C:\Users\phil\AppData\Local\Temp\MOSA\Mosa.TestWorld.x86.img"
+    Arguments:  -L "..\Tools\QEMU" -cpu qemu32,+sse4.1 -serial null -hda "C:\Users\phil\AppData\Local\Temp\MOSA\Mosa.Demo.TestWorld.x86.img"
 
 Command Line Options
 --------------------
