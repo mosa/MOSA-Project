@@ -23,7 +23,7 @@ namespace Mosa.Kernel.BareMetal
 			BootMemoryMap.Initialize();
 			Console.Write("2...");
 
-			Platform.UpdateBootMemoryMap();
+			BootMemoryMap.ImportPlatformMemoryMap();
 			Console.Write("3...");
 
 			BootMemoryMap.ImportMultibootV1MemoryMap();

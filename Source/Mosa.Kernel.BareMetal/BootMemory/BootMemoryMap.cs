@@ -44,6 +44,17 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 			}
 		}
 
+		public static void ImportPlatformMemoryMap()
+		{
+			SetMemoryMap(Platform.GetBootReservedRegion(), BootMemoryMapType.Kernel);
+			SetMemoryMap(Platform.GetInitialGCMemoryPool(), BootMemoryMapType.Kernel);
+		}
+
+		public static BootMemoryMapEntry SetMemoryMap(AddressRange range, BootMemoryMapType type)
+		{
+			return SetMemoryMap(range.Address, range.Size, type);
+		}
+
 		public static BootMemoryMapEntry SetMemoryMap(Pointer address, ulong size, BootMemoryMapType type)
 		{
 			var entry = Map.GetBootMemoryMapEntry(Map.Count);

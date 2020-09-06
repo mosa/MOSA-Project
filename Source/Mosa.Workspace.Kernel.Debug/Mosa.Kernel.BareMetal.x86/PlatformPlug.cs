@@ -36,11 +36,14 @@ namespace Mosa.Kernel.BareMetal.x86
 			return new AddressRange(BootReservedAddress, Page.Size);
 		}
 
-		[Plug("Mosa.Kernel.BareMetal.Platform::UpdateBootMemoryMap")]
-		public static void UpdateBootMemoryMap()
+		[Plug("Mosa.Kernel.BareMetal.Platform::GetPlatformReservedMemory")]
+		public static AddressRange GetPlatformReservedMemory(int slot)
 		{
-			// Reserve the first 1MB
-			BootMemoryMap.SetMemoryMap(new Pointer(0), 1024 * 1024, BootMemoryMapType.Reserved);
+			switch (slot)
+			{
+				case 0: return new AddressRange(new Pointer(0), 1024 * 1024);
+				default: return new AddressRange(new Pointer(0), 0);
+			}
 		}
 
 		[Plug("Mosa.Kernel.BareMetal.Platform::GetInitialGCMemoryPool")]

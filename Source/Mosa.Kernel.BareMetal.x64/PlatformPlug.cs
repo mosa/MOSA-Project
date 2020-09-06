@@ -9,7 +9,8 @@ namespace Mosa.Kernel.BareMetal.x64
 	public static class PlatformPlug
 	{
 		private const uint BootReservedAddress = 0x00007E00; // Size=Undefined
-		private const uint GCInitialAddress = 0x03000000;  // 48MB [Size=16MB]
+		private const uint InitialGCMemoryPoolAddress = 0x03000000;  // @ 48MB
+		private const uint InitialGCMemoryPoolSize = 16 * 1024 * 1024;  // [Size=16MB]
 
 		[Plug("Mosa.Kernel.BareMetal.Platform::GetPageShift")]
 		public static uint GetPageShift()
@@ -28,23 +29,26 @@ namespace Mosa.Kernel.BareMetal.x64
 			//SSE.Setup();
 		}
 
+		[Plug("Mosa.Kernel.BareMetal.Platform::GetPlatformReservedMemory")]
+		public static AddressRange GetPlatformReservedMemory(int slot)
+		{
+			switch (slot)
+			{
+				case 0: return new AddressRange(new Pointer(0), 1024 * 1024);
+				default: return new AddressRange(new Pointer(0), 0);
+			}
+		}
+
 		[Plug("Mosa.Kernel.BareMetal.Platform::GetBootReservedRegion")]
 		public static AddressRange GetBootReservedRegion()
 		{
 			return new AddressRange(BootReservedAddress, Page.Size);
 		}
 
-		[Plug("Mosa.Kernel.BareMetal.Platform::UpdateBootMemoryMap")]
-		public static void UpdateBootMemoryMap()
-		{
-			// Reserve the first 1MB
-			BootMemoryMap.SetMemoryMap(new Pointer(0), 1024 * 1024, BootMemoryMapType.Reserved);
-		}
-
 		[Plug("Mosa.Kernel.BareMetal.Platform::GetInitialGCMemoryPool")]
 		public static AddressRange GetInitialGCMemoryPool()
 		{
-			return new AddressRange(GCInitialAddress, 16 * 1024 * 1024); // 16MB @ 48MB
+			return new AddressRange(InitialGCMemoryPoolAddress, InitialGCMemoryPoolSize);
 		}
 
 		[Plug("Mosa.Kernel.BareMetal.Platform::PageTableSetup")]

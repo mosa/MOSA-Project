@@ -107,9 +107,6 @@ namespace Mosa.Kernel.BareMetal
 				SetPageBitMapEntry(startPage, pages, entry.IsAvailable);
 			}
 
-			// TODO - Reserve: Platform.GetBootReservedRegion()
-			// TODO - Reserve: Platform.GetInitialGCMemoryPool()
-			// TODO - Platform.UpdateBootMemoryMap
 			// TODO - reserve kernel code + memory
 
 			SearchNextStartPage = MinimumAvailablePage;

@@ -5,6 +5,7 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 	public enum BootMemoryMapType
 	{
 		Available,
-		Reserved
+		Reserved,
+		Kernel,
 	}
 }
