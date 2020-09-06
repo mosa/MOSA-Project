@@ -48,6 +48,16 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 		{
 			SetMemoryMap(Platform.GetBootReservedRegion(), BootMemoryMapType.Kernel);
 			SetMemoryMap(Platform.GetInitialGCMemoryPool(), BootMemoryMapType.Kernel);
+
+			for (int slot = 0; ; slot++)
+			{
+				var region = Platform.GetPlatformReservedMemory(slot);
+
+				if (region.Size == 0)
+					break;
+
+				SetMemoryMap(region, BootMemoryMapType.Kernel);
+			}
 		}
 
 		public static BootMemoryMapEntry SetMemoryMap(AddressRange range, BootMemoryMapType type)

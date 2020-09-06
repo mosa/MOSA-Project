@@ -9,12 +9,12 @@ using System.Text;
 namespace Mosa.Platform.Intel.CompilerStages
 {
 	/// <summary>
-	/// Writes a multiboot v0.6.95 header into the generated binary.
+	/// Writes a multiboot v0.6.96 header into the generated binary.
 	/// </summary>
 	/// <remarks>
 	/// This compiler stage writes a multiboot header into the
 	/// the data section of the binary file and also creates a multiboot
-	/// compliant entry point into the binary.<para/>
+	/// compliant entry point into the binary.
 	/// The header and entry point written by this stage is compliant with
 	/// the specification at
 	/// http://www.gnu.org/software/grub/manual/multiboot/multiboot.html.

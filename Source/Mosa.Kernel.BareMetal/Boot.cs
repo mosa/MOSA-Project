@@ -18,26 +18,27 @@ namespace Mosa.Kernel.BareMetal
 			Console.Write("Booting...");
 
 			BootPageAllocator.Setup();
+
 			Console.Write("1...");
-
 			BootMemoryMap.Initialize();
+
 			Console.Write("2...");
-
 			BootMemoryMap.ImportPlatformMemoryMap();
+
 			Console.Write("3...");
-
 			BootMemoryMap.ImportMultibootV1MemoryMap();
-			Console.Write("4...");
 
-			// TODO: PageFrameAllocator --- allocates single pages only
+			Console.Write("4...");
 			PhysicalPageAllocator.Setup();
 
-			//PageTable.Setup();
-			//Console.Write("5...");
+			Console.Write("5...");
+			PageTable.Setup();
 
-			//while (true)
-			//{
-			//}
+			Console.Write("6...");
+
+			while (true)
+			{
+			}
 		}
 	}
 }
