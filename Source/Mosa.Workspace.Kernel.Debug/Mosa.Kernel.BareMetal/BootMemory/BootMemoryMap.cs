@@ -9,6 +9,8 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 	{
 		private static BootMemoryMapTable Map;
 
+		private static Pointer AvailableMemory;
+
 		public static void Initialize()
 		{
 			var entry = BootPageAllocator.AllocatePage();
@@ -27,6 +29,8 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 
 			if (Multiboot.MultibootV1.MemoryMapStart.IsNull)
 				return;
+
+			AvailableMemory = new Pointer((Multiboot.MultibootV1.MemoryUpper * 1024) + (1024 * 1024));  // assuming all of lower memory
 
 			var memoryMapEnd = Multiboot.MultibootV1.MemoryMapStart + Multiboot.MultibootV1.MemoryMapLength;
 
@@ -63,22 +67,9 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 			return Map.GetBootMemoryMapEntry(index);
 		}
 
-		public static Pointer GetMaximumAddress()
+		public static Pointer GetAvailableMemory()
 		{
-			var max = Pointer.Zero;
-			var count = Map.Count;
-
-			for (uint i = 0; i < count; i++)
-			{
-				var entry = GetBootMemoryMapEntry(i);
-
-				var endAddress = entry.EndAddress;
-
-				if (endAddress > max)
-					max = endAddress;
-			}
-
-			return max;
+			return AvailableMemory;
 		}
 	}
 }

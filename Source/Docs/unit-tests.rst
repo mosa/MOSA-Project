@@ -2,9 +2,11 @@
 Unit Tests
 ##########
 
-Execute the script ``Tests\RunAllUnitTestsWithPause.bat``. 
+The MOSA project has an extensive set of unit tests to help validate that the MOSA compiler is emitting correct binary code. 
 
-The unit tests will take a few minutes to execute on modern PC. The results will be automatically displayed on the screen. The last line shows the total number of tests and failed tests, and the total time. Similar to the following:
+Execute the script ``Tests\RunAllUnitTestsWithPause.bat`` to run the unit tests.
+
+The unit tests take a few minutes to execute on modern PC. The results will be automatically displayed on the screen. The last line shows the total number of tests and failed tests, and the total time. Similar to the following:
 
 .. code-block:: text
   

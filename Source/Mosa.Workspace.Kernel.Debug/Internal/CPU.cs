@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Diagnostics;
+
 namespace Mosa.Workspace.Kernel.Internal
 {
 	public static class CPU
@@ -63,21 +65,25 @@ namespace Mosa.Workspace.Kernel.Internal
 		public static void Write64(ulong address, ulong value)
 		{
 			Memory.Write64(TranslateToPhysical(address), value);
+			Debug.Assert(Memory.Read64(TranslateToPhysical(address)) == value);
 		}
 
 		public static void Write32(ulong address, uint value)
 		{
 			Memory.Write32(TranslateToPhysical(address), value);
+			Debug.Assert(Memory.Read32(TranslateToPhysical(address)) == value);
 		}
 
 		public static void Write16(ulong address, ushort value)
 		{
 			Memory.Write16(TranslateToPhysical(address), value);
+			Debug.Assert(Memory.Read16(TranslateToPhysical(address)) == value);
 		}
 
 		public static void Write8(ulong address, byte value)
 		{
 			Memory.Write8(TranslateToPhysical(address), value);
+			Debug.Assert(Memory.Read8(TranslateToPhysical(address)) == value);
 		}
 	}
 }

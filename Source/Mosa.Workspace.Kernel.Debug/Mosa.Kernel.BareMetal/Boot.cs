@@ -30,14 +30,14 @@ namespace Mosa.Kernel.BareMetal
 			Console.Write("4...");
 
 			// TODO: PageFrameAllocator --- allocates single pages only
-			//PhysicalPageAllocator.Setup();
+			PhysicalPageAllocator.Setup();
 
 			//PageTable.Setup();
 			//Console.Write("5...");
 
-			while (true)
-			{
-			}
+			//while (true)
+			//{
+			//}
 		}
 	}
 }

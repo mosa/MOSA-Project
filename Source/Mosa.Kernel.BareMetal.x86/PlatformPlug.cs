@@ -10,7 +10,8 @@ namespace Mosa.Kernel.BareMetal.x86
 	public static class PlatformPlug
 	{
 		private const uint BootReservedAddress = 0x00007E00; // Size=Undefined
-		private const uint GCInitialAddress = 0x03000000;  // 48MB [Size=16MB]
+		private const uint InitialGCMemoryPoolAddress = 0x03000000;  // @ 48MB
+		private const uint InitialGCMemoryPoolSize = 16 * 1024 * 1024;  // [Size=16MB]
 
 		[Plug("Mosa.Kernel.BareMetal.Platform::GetPageShift")]
 		public static uint GetPageShift()
@@ -45,7 +46,7 @@ namespace Mosa.Kernel.BareMetal.x86
 		[Plug("Mosa.Kernel.BareMetal.Platform::GetInitialGCMemoryPool")]
 		public static AddressRange GetInitialGCMemoryPool()
 		{
-			return new AddressRange(GCInitialAddress, 16 * 1024 * 1024); // 16MB @ 48MB
+			return new AddressRange(InitialGCMemoryPoolAddress, InitialGCMemoryPoolSize);
 		}
 
 		[Plug("Mosa.Kernel.BareMetal.Platform::PageTableSetup")]

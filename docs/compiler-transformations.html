@@ -199,13 +199,13 @@
             
   <div class="section" id="compiler-transformations">
 <h1>Compiler Transformations<a class="headerlink" href="#compiler-transformations" title="Permalink to this headline">¶</a></h1>
-<p>MOSA compiler utilitizes a datebase of transformations to represent specific types of optimizations. To make it easy to add new optimizations to the compiler, these transformation are described in text files.</p>
-<p>A special parser program reads the json files and translates them into C# source code files, which are then included in the MOSA compiler.</p>
+<p>The MOSA compiler utilitizes a datebase of transformations to represent specific types of optimizations. These transformation are described in json formatted, text files to make it easy to add new optimizations to the compiler.</p>
+<p>A special parser program, called <code class="docutils literal notranslate"><span class="pre">Mosa.Utility.SourceCodeGenerator</span></code>, reads the text files and translates them into C# source code files, which are then included and compiled into the MOSA compiler.</p>
 <p>These files are located at <code class="docutils literal notranslate"><span class="pre">Source\Data\IR-Optimization-*.json</span></code>.</p>
 <div class="section" id="transformation">
 <h2>Transformation<a class="headerlink" href="#transformation" title="Permalink to this headline">¶</a></h2>
 <p>Each tranformation has three functional parts: <strong>Expression</strong>, <strong>Filter</strong>, and <strong>Rule</strong>.</p>
-<p>The <strong>expression</strong> describes the required expression tree necessary for the rule to execute. The <strong>filter</strong> describes specific attributes of operands in the expression tree that must also be satified for the rule to execute. And the <strong>rule</strong> represents the replacement expression tree.</p>
+<p>The <strong>expression</strong> describes the required expression tree necessary in order for the rule to execute. The <strong>filter</strong> describes the specific attributes of operands in the expression tree that must also be satified for the rule to execute. And the <strong>rule</strong> represents the new, replacement expression tree.</p>
 <div class="section" id="example-1">
 <h3>Example #1<a class="headerlink" href="#example-1" title="Permalink to this headline">¶</a></h3>
 <p>Here’s an example of a constant folding optimization where an add operation with two constants are translated into a simple move operation.</p>

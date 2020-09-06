@@ -12,10 +12,10 @@ namespace Mosa.Kernel.BareMetal
 
 		internal static void Setup()
 		{
-			var start = Platform.GetBootReservedRegion();
+			var region = Platform.GetBootReservedRegion();
 
-			BootReserveStartPage = start.Address;
-			BootReserveSize = (uint)start.Size / Page.Size;
+			BootReserveStartPage = region.Address;
+			BootReserveSize = (uint)region.Size / Page.Size;
 
 			UsedPages = 0;
 		}

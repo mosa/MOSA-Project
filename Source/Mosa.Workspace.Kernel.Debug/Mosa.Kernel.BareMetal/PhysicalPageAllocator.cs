@@ -10,6 +10,8 @@ namespace Mosa.Kernel.BareMetal
 	{
 		private static BitMapIndexTable BitMapIndexTable;
 
+		private static Pointer AvailableMemory;
+
 		private static uint TotalPages = 0;
 
 		private static uint MinimumAvailablePage = 0;
@@ -23,9 +25,9 @@ namespace Mosa.Kernel.BareMetal
 		{
 			BitMapIndexTable = new BitMapIndexTable(BootPageAllocator.AllocatePage());
 
-			var maximumMemoryAddress = BootMemoryMap.GetMaximumAddress();
+			AvailableMemory = BootMemoryMap.GetAvailableMemory();
 
-			TotalPages = (uint)(maximumMemoryAddress.ToInt64() / Page.Size);
+			TotalPages = (uint)(AvailableMemory.ToInt64() / Page.Size);
 			var bitMapCount = TotalPages / (Page.Size * 8);
 
 			for (uint i = 0; i < bitMapCount; i++)
@@ -35,6 +37,11 @@ namespace Mosa.Kernel.BareMetal
 
 				BitMapIndexTable.AddBitMapEntry(i, bitmap);
 			}
+
+			MinimumAvailablePage = TotalPages;
+			MaximumAvailablePage = 0;
+			MinimumReservedPage = TotalPages;
+			MaximumReservedPage = 0;
 
 			var entries = BootMemoryMap.GetBootMemoryMapEntryCount();
 
@@ -86,17 +93,24 @@ namespace Mosa.Kernel.BareMetal
 				MaximumReservedPage = Math.Max(MaximumReservedPage, endPage);
 
 				if (MinimumAvailablePage >= startPage && MinimumAvailablePage <= endPage)
-				{
 					MinimumAvailablePage = endPage + 1;
-				}
 
 				if (MaximumAvailablePage >= startPage && MaximumAvailablePage <= endPage)
-				{
 					MaximumAvailablePage = startPage - 1;
-				}
+
+				if (startPage >= TotalPages)
+					continue;
+
+				if (endPage > TotalPages)
+					pages = TotalPages - startPage;
 
 				SetPageBitMapEntry(startPage, pages, entry.IsAvailable);
 			}
+
+			// TODO - Reserve: Platform.GetBootReservedRegion()
+			// TODO - Reserve: Platform.GetInitialGCMemoryPool()
+			// TODO - Platform.UpdateBootMemoryMap
+			// TODO - reserve kernel code + memory
 
 			SearchNextStartPage = MinimumAvailablePage;
 		}
@@ -175,8 +189,6 @@ namespace Mosa.Kernel.BareMetal
 
 		public static Pointer ReservePages(uint count, uint alignment = 1)
 		{
-			Console.Write("z");
-
 			if (count == 0)
 				return Pointer.Zero;
 
@@ -184,14 +196,12 @@ namespace Mosa.Kernel.BareMetal
 				alignment = 1;
 
 			// TODO: Acquire lock
-			Console.Write("y");
 
 			uint start = SearchNextStartPage;
 			uint at = start;
 
 			while (true)
 			{
-				Console.Write("x");
 				uint restartAt;
 
 				if (at % alignment != 0)

@@ -32,7 +32,7 @@ Below are the steps for deploying a MOSA disk image to a USB flash drive:
 
 Get a list all the block devices on your system by typing the command below. Find the one for the USB flash drive you just connected. 
 
-.. danger:: Be careful, if you mistype or select the wrong device, you can corrupt your hard drive or other storage devices. Unless you understand these steps completely, do not proceed.
+.. danger:: Be careful! A mistype or wrong drive selection, may corrupt your hard drive or other storage devices. Do not proceed unless you completely understand these steps.
 
 .. code-block:: text
 
