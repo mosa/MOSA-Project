@@ -17,13 +17,18 @@ namespace Mosa.Kernel.BareMetal.x86
 		public static void Setup()
 		{
 			Console.Write("A");
+			var page = PhysicalPageAllocator.ReservePage();
 
-			GDTTable = new GDTTable(PhysicalPageAllocator.ReservePage());
 			Console.Write("B");
-			PageDirectory = PhysicalPageAllocator.ReservePage();
+			GDTTable = new GDTTable(page);
+
+			//Console.Write("A");
+			//GDTTable = new GDTTable(PhysicalPageAllocator.ReservePage());
 			Console.Write("C");
-			PageTables = PhysicalPageAllocator.ReservePages(Page.Size * 1024);
+			PageDirectory = PhysicalPageAllocator.ReservePage();
 			Console.Write("D");
+			PageTables = PhysicalPageAllocator.ReservePages(Page.Size * 1024);
+			Console.Write("E");
 		}
 
 		public static void Initialize()

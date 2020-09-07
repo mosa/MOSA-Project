@@ -21,12 +21,15 @@ namespace Mosa.Kernel.BareMetal
 
 			Console.Write("1...");
 			BootMemoryMap.Initialize();
+			BootMemoryMap.Dump();
 
 			Console.Write("2...");
 			BootMemoryMap.ImportPlatformMemoryMap();
+			BootMemoryMap.Dump();
 
 			Console.Write("3...");
 			BootMemoryMap.ImportMultibootV1MemoryMap();
+			BootMemoryMap.Dump();
 
 			Console.Write("4...");
 			PhysicalPageAllocator.Setup();

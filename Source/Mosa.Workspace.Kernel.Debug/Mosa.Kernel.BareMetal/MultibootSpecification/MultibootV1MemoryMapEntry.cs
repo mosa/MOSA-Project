@@ -47,14 +47,9 @@ namespace Mosa.Kernel.BareMetal.MultibootSpecification
 
 		public byte Next { get { return Entry.Load8(MultiBootMemoryMapOffset.Next); } }
 
-		public MultibootV1MemoryMapEntry GetNext(Pointer memoryMapEnd)
+		public MultibootV1MemoryMapEntry GetNext()
 		{
 			var next = Entry + Next + sizeof(int);
-
-			if (!(next < memoryMapEnd))
-			{
-				next = Pointer.Zero;
-			}
 
 			return new MultibootV1MemoryMapEntry(next);
 		}

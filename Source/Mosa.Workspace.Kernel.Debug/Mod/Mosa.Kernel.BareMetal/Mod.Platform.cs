@@ -65,7 +65,9 @@ namespace Mosa.Kernel.BareMetal
 
 		public static void ConsoleWrite(byte c)
 		{
-			VGAConsole.Write(c);
+			System.Console.Write((char)c);
+
+			//VGAConsole.Write(c);
 		}
 	}
 }

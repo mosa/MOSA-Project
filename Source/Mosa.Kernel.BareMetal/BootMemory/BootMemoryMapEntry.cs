@@ -35,7 +35,7 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 		public BootMemoryMapType Type
 		{
 			get { return (BootMemoryMapType)Entry.Load8(Pointer.Size + sizeof(ulong)); }
-			set { Entry.Store8(Pointer.Size, (byte)value); }
+			set { Entry.Store8(Pointer.Size + sizeof(ulong), (byte)value); }
 		}
 
 		public bool IsAvailable { get { return Type == BootMemoryMapType.Available; } }

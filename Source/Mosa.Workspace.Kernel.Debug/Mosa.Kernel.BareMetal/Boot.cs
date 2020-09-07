@@ -23,10 +23,10 @@ namespace Mosa.Kernel.BareMetal
 			BootMemoryMap.Initialize();
 			Console.Write("2...");
 
-			BootMemoryMap.ImportPlatformMemoryMap();
+			BootMemoryMap.ImportMultibootV1MemoryMap();
 			Console.Write("3...");
 
-			BootMemoryMap.ImportMultibootV1MemoryMap();
+			BootMemoryMap.ImportPlatformMemoryMap();
 			Console.Write("4...");
 
 			// TODO: PageFrameAllocator --- allocates single pages only

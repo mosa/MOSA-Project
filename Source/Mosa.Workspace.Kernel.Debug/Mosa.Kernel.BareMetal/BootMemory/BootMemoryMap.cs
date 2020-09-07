@@ -32,15 +32,15 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 
 			AvailableMemory = new Pointer((Multiboot.MultibootV1.MemoryUpper * 1024) + (1024 * 1024));  // assuming all of lower memory
 
-			var memoryMapEnd = Multiboot.MultibootV1.MemoryMapStart + Multiboot.MultibootV1.MemoryMapLength;
-
 			var entry = new MultibootV1MemoryMapEntry(Multiboot.MultibootV1.MemoryMapStart);
 
-			while (entry.IsAvailable)
+			uint length = Multiboot.MultibootV1.MemoryMapLength / 24;
+
+			for (int i = 0; i < length; i++)
 			{
 				SetMemoryMap(entry.BaseAddr, entry.Length, entry.Type == 1 ? BootMemoryMapType.Available : BootMemoryMapType.Reserved);
 
-				entry = entry.GetNext(memoryMapEnd);
+				entry = entry.GetNext();
 			}
 		}
 
@@ -91,6 +91,27 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 		public static Pointer GetAvailableMemory()
 		{
 			return AvailableMemory;
+		}
+
+		public static void Dump()
+		{
+			Console.WriteLine();
+			Console.WriteLine("BootMemoryMap - Dump:");
+			Console.WriteLine("=====================");
+			Console.Write("Entries: ");
+			Console.WriteValue(Map.Count);
+			Console.WriteLine();
+
+			for (uint slot = 0; slot < Map.Count; slot++)
+			{
+				var entry = GetBootMemoryMapEntry(slot);
+
+				Console.Write("Start: 0x");
+				Console.WriteValueAsHex(entry.StartAddress.ToUInt64(), 8);
+				Console.Write(" Size: 0x");
+				Console.WriteValueAsHex(entry.Size, 8);
+				Console.WriteLine();
+			}
 		}
 	}
 }
