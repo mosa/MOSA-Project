@@ -32,11 +32,11 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 
 			AvailableMemory = new Pointer((Multiboot.MultibootV1.MemoryUpper * 1024) + (1024 * 1024));  // assuming all of lower memory
 
+			var memoryMapEnd = Multiboot.MultibootV1.MemoryMapStart + Multiboot.MultibootV1.MemoryMapLength;
+
 			var entry = new MultibootV1MemoryMapEntry(Multiboot.MultibootV1.MemoryMapStart);
 
-			uint length = Multiboot.MultibootV1.MemoryMapLength / 24;
-
-			for (int i = 0; i < length; i++)
+			while (entry.Entry < memoryMapEnd)
 			{
 				SetMemoryMap(entry.BaseAddr, entry.Length, entry.Type == 1 ? BootMemoryMapType.Available : BootMemoryMapType.Reserved);
 

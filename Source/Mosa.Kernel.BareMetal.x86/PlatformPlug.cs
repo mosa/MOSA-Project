@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Kernel.BareMetal.BootMemory;
 using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
@@ -25,7 +24,7 @@ namespace Mosa.Kernel.BareMetal.x86
 			var eax = Native.GetMultibootEAX();
 			var ebx = Native.GetMultibootEBX();
 
-			Multiboot.Setup(new Pointer(eax), ebx);
+			Multiboot.Setup(new Pointer(ebx), eax);
 
 			SSE.Setup();
 		}

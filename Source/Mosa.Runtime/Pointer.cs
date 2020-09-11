@@ -69,6 +69,7 @@ namespace Mosa.Runtime
 			this.value = value;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public unsafe override bool Equals(Object obj)
 		{
 			if (obj is Pointer)
@@ -264,6 +265,7 @@ namespace Mosa.Runtime
 			return value;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public unsafe override string ToString()
 		{
 			return ((long)value).ToString();
@@ -275,6 +277,7 @@ namespace Mosa.Runtime
 			return b.ToInt64() - ToInt64();
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public ushort Load16()
 		{
 			return Intrinsic.Load16(this);
