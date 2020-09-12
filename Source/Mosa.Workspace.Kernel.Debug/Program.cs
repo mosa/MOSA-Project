@@ -11,11 +11,11 @@ namespace Mosa.Workspace.Kernel
 		{
 			Emulate.Multiboot.Setup(128 * 1024 * 1024); // 128 MB
 
+			Boot.PlatformInitialization();
+
 			Boot.GarbageCollectionInitialization();
 
 			Boot.EntryPoint();
-
-			BootMemoryMap.Dump();
 
 			var page1 = PhysicalPageAllocator.ReservePages(1, 0);
 			System.Console.WriteLine($"Page: {page1.ToInt32()}");

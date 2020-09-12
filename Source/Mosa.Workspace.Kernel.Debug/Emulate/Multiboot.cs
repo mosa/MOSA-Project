@@ -44,7 +44,7 @@ namespace Mosa.Workspace.Kernel.Emulate
 			multiboot = SetMemoryRegion(multiboot, 0x00000000, 0x009FC00, 1);
 			multiboot = SetMemoryRegion(multiboot, 0x0009FC00, 0x0000400, 2);
 			multiboot = SetMemoryRegion(multiboot, 0x000F0000, 0x0010000, 2);
-			multiboot = SetMemoryRegion(multiboot, 0x00100000, 0x7EE0000, 1);
+			multiboot = SetMemoryRegion(multiboot, 0x00100000, 0x7EE0000, 1);   // change - 0x7EE0000 to (total memory - starting address)
 			multiboot = SetMemoryRegion(multiboot, 0x07FE0000, 0x0020000, 2);
 			multiboot = SetMemoryRegion(multiboot, 0xFFFC0000, 0x0020000, 2);
 		}

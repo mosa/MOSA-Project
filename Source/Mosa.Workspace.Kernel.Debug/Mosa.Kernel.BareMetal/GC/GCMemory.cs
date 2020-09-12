@@ -35,7 +35,7 @@ namespace Mosa.Kernel.BareMetal.GC
 
 			if (heapStart.IsNull || (heapSize - heapUsed) < size)
 			{
-				// TODO - allocate memory
+				// TODO - allocate memory for new heap
 			}
 
 			var at = heapStart + heapUsed;

@@ -28,10 +28,10 @@ namespace Mosa.Kernel.BareMetal
 			Console.Write("1...");
 			BootMemoryMap.Initialize();
 
-			Console.Write("3...");
+			Console.Write("2...");
 			BootMemoryMap.ImportPlatformMemoryMap();
 
-			Console.Write("2...");
+			Console.Write("3...");
 			BootMemoryMap.ImportMultibootV1MemoryMap();
 			BootMemoryMap.Dump();
 
@@ -43,9 +43,9 @@ namespace Mosa.Kernel.BareMetal
 
 			Console.Write("6...");
 
-			while (true)
-			{
-			}
+			//while (true)
+			//{
+			//}
 		}
 
 		[Plug("Mosa.Runtime.StartUp::GarbageCollectionInitialization")]
