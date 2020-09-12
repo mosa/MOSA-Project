@@ -76,6 +76,8 @@ namespace Mosa.Demo.TestWorld.x86
 			KernelTest.RunTests();
 			StackTrace();
 
+			TestHash();
+
 			int value = CallReturn10();
 
 			Screen.Write("Return10 Test: ");
@@ -93,6 +95,14 @@ namespace Mosa.Demo.TestWorld.x86
 			{
 				Native.Hlt();
 			}
+		}
+
+		private static void TestHash()
+		{
+			int i = (10).GetHashCode();
+			Screen.Write("Hash:");
+			Screen.Write((uint)i, 10, 3);
+			Screen.WriteLine();
 		}
 
 		private static void StartThreadTest()

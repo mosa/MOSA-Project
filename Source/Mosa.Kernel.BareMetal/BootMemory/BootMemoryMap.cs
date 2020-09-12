@@ -73,7 +73,7 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 			entry.Size = size;
 			entry.Type = type;
 
-			Map.Count += 1;
+			Map.Count++;
 
 			return entry;
 		}
@@ -110,6 +110,8 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 				Console.WriteValueAsHex(entry.StartAddress.ToUInt64(), 8);
 				Console.Write(" Size: 0x");
 				Console.WriteValueAsHex(entry.Size, 8);
+				Console.Write(" Type: ");
+				Console.WriteValue((byte)entry.Type);
 				Console.WriteLine();
 			}
 		}

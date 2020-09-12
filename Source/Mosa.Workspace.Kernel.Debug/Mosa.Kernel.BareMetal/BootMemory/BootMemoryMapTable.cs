@@ -17,14 +17,13 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 
 		public uint Count
 		{
-			get { return Entry.Load32(Pointer.Size); }
-			set { Entry.Store32(Pointer.Size, value); }
+			get { return Entry.Load32(); }
+			set { Entry.Store32(value); }
 		}
 
 		public BootMemoryMapEntry GetBootMemoryMapEntry(uint index)
 		{
-			var offset = sizeof(int) + (BootMemoryMapEntry.EntrySize * index);
-			return new BootMemoryMapEntry(Entry + offset);
+			return new BootMemoryMapEntry(Entry + sizeof(uint) + (BootMemoryMapEntry.EntrySize * index));
 		}
 	}
 }

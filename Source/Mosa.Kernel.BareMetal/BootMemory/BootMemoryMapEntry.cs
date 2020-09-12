@@ -40,6 +40,6 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 
 		public bool IsAvailable { get { return Type == BootMemoryMapType.Available; } }
 
-		public static uint EntrySize = (uint)Pointer.Size + sizeof(ulong) + (sizeof(byte));
+		public static uint EntrySize => (uint)Pointer.Size + sizeof(ulong) + sizeof(byte);
 	}
 }
