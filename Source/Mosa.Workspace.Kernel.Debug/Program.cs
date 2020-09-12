@@ -11,6 +11,8 @@ namespace Mosa.Workspace.Kernel
 		{
 			Emulate.Multiboot.Setup(128 * 1024 * 1024); // 128 MB
 
+			Boot.GarbageCollectionInitialization();
+
 			Boot.EntryPoint();
 
 			BootMemoryMap.Dump();

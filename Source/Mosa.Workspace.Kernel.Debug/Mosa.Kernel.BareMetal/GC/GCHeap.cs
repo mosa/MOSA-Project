@@ -13,21 +13,27 @@ namespace Mosa.Kernel.BareMetal.GC
 			Entry = entry;
 		}
 
-		public Pointer StartAddress
+		public Pointer Address
 		{
 			get { return Entry.LoadPointer(); }
 			set { Entry.StorePointer(value); }
 		}
 
-		public ulong Size
+		public uint Size
 		{
-			get { return Entry.Load64(Pointer.Size); }
-			set { Entry.Store64(Pointer.Size, value); }
+			get { return Entry.Load32(Pointer.Size); }
+			set { Entry.Store32(Pointer.Size, value); }
+		}
+
+		public uint Used
+		{
+			get { return Entry.Load32(Pointer.Size + sizeof(uint)); }
+			set { Entry.Store32(Pointer.Size + sizeof(uint), value); }
 		}
 
 		public Pointer EndAddress
 		{
-			get { return StartAddress + Size; }
+			get { return Address + Size; }
 		}
 	}
 }

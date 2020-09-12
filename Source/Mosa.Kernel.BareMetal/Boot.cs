@@ -1,17 +1,23 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.BareMetal.BootMemory;
+using Mosa.Kernel.BareMetal.GC;
+using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 
 namespace Mosa.Kernel.BareMetal
 {
 	public static class Boot
 	{
-		[Plug("Mosa.Runtime.StartUp::KernelInitialization")]
-		public static void EntryPoint()
+		[Plug("Mosa.Runtime.StartUp::PlatformInitialization")]
+		public static void PlatformInitialization()
 		{
 			Platform.EntryPoint();
+		}
 
+		[Plug("Mosa.Runtime.StartUp::KernelEntryPoint")]
+		public static void EntryPoint()
+		{
 			Console.SetBackground(ConsoleColor.Blue);
 			Console.SetForground(ConsoleColor.White);
 			Console.ClearScreen();
@@ -42,12 +48,16 @@ namespace Mosa.Kernel.BareMetal
 			}
 		}
 
-		[Plug("Mosa.Runtime.StartUp::SetInitialMemory")]
-		public static void SetInitialMemory()
+		[Plug("Mosa.Runtime.StartUp::GarbageCollectionInitialization")]
+		public static void GarbageCollectionInitialization()
 		{
-			var region = Platform.GetInitialGCMemoryPool();
+			GCMemory.Initialize();
+		}
 
-			//KernelMemory.SetInitialMemory(region.Address, region.Size);
+		[Plug("Mosa.Runtime.GC::AllocateMemory")]
+		static private Pointer AllocateMemory(uint size)
+		{
+			return GCMemory.AllocateMemory(size);
 		}
 	}
 }

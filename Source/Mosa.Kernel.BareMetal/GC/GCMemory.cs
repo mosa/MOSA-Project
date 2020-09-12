@@ -18,6 +18,29 @@ namespace Mosa.Kernel.BareMetal.GC
 			{
 				Count = 0
 			};
+
+			var region = Platform.GetInitialGCMemoryPool();
+
+			CurrentHeap = HeapList.GetGCHeapEntry(HeapList.Count);
+
+			CurrentHeap.Address = region.Address;
+			CurrentHeap.Size = (uint)region.Size;
+		}
+
+		public static Pointer AllocateMemory(uint size)
+		{
+			var heapStart = CurrentHeap.Address;
+			var heapSize = CurrentHeap.Size;
+			var heapUsed = CurrentHeap.Used;
+
+			if (heapStart.IsNull || (heapSize - heapUsed) < size)
+			{
+				// TODO - allocate memory
+			}
+
+			var at = heapStart + heapUsed;
+			CurrentHeap.Used = heapUsed + size;
+			return at;
 		}
 	}
 }
