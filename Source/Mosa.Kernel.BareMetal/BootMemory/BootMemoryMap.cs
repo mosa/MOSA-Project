@@ -7,7 +7,7 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 {
 	public static class BootMemoryMap
 	{
-		private static BootMemoryMapTable Map;
+		private static BootMemoryList List;
 
 		private static Pointer AvailableMemory;
 
@@ -16,7 +16,7 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 			var entry = BootPageAllocator.AllocatePage();
 			Page.ClearPage(entry);
 
-			Map = new BootMemoryMapTable(entry)
+			List = new BootMemoryList(entry)
 			{
 				Count = 0
 			};
@@ -38,7 +38,7 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 
 			while (entry.Entry < memoryMapEnd)
 			{
-				SetMemoryMap(entry.BaseAddr, entry.Length, entry.Type == 1 ? BootMemoryMapType.Available : BootMemoryMapType.Reserved);
+				SetMemoryMap(entry.BaseAddr, entry.Length, entry.Type == 1 ? BootMemoryType.Available : BootMemoryType.Reserved);
 
 				entry = entry.GetNext();
 			}
@@ -46,8 +46,8 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 
 		public static void ImportPlatformMemoryMap()
 		{
-			SetMemoryMap(Platform.GetBootReservedRegion(), BootMemoryMapType.Kernel);
-			SetMemoryMap(Platform.GetInitialGCMemoryPool(), BootMemoryMapType.Kernel);
+			SetMemoryMap(Platform.GetBootReservedRegion(), BootMemoryType.Kernel);
+			SetMemoryMap(Platform.GetInitialGCMemoryPool(), BootMemoryType.Kernel);
 
 			for (int slot = 0; ; slot++)
 			{
@@ -56,36 +56,36 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 				if (region.Size == 0)
 					break;
 
-				SetMemoryMap(region, BootMemoryMapType.Kernel);
+				SetMemoryMap(region, BootMemoryType.Kernel);
 			}
 		}
 
-		public static BootMemoryMapEntry SetMemoryMap(AddressRange range, BootMemoryMapType type)
+		public static BootMemoryMapEntry SetMemoryMap(AddressRange range, BootMemoryType type)
 		{
 			return SetMemoryMap(range.Address, range.Size, type);
 		}
 
-		public static BootMemoryMapEntry SetMemoryMap(Pointer address, ulong size, BootMemoryMapType type)
+		public static BootMemoryMapEntry SetMemoryMap(Pointer address, ulong size, BootMemoryType type)
 		{
-			var entry = Map.GetBootMemoryMapEntry(Map.Count);
+			var entry = List.GetBootMemoryMapEntry(List.Count);
 
 			entry.StartAddress = address;
 			entry.Size = size;
 			entry.Type = type;
 
-			Map.Count++;
+			List.Count++;
 
 			return entry;
 		}
 
 		public static uint GetBootMemoryMapEntryCount()
 		{
-			return Map.Count;
+			return List.Count;
 		}
 
 		public static BootMemoryMapEntry GetBootMemoryMapEntry(uint index)
 		{
-			return Map.GetBootMemoryMapEntry(index);
+			return List.GetBootMemoryMapEntry(index);
 		}
 
 		public static Pointer GetAvailableMemory()
@@ -99,10 +99,10 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 			Console.WriteLine("BootMemoryMap - Dump:");
 			Console.WriteLine("=====================");
 			Console.Write("Entries: ");
-			Console.WriteValue(Map.Count);
+			Console.WriteValue(List.Count);
 			Console.WriteLine();
 
-			for (uint slot = 0; slot < Map.Count; slot++)
+			for (uint slot = 0; slot < List.Count; slot++)
 			{
 				var entry = GetBootMemoryMapEntry(slot);
 

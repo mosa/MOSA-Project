@@ -18,6 +18,11 @@
     <StartupObject>Mosa.Workspace.Kernel.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="GC\**" />
+    <EmbeddedResource Remove="GC\**" />
+    <None Remove="GC\**" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
     <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />

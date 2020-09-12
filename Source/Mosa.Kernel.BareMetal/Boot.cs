@@ -41,5 +41,13 @@ namespace Mosa.Kernel.BareMetal
 			{
 			}
 		}
+
+		[Plug("Mosa.Runtime.StartUp::SetInitialMemory")]
+		public static void SetInitialMemory()
+		{
+			var region = Platform.GetInitialGCMemoryPool();
+
+			//KernelMemory.SetInitialMemory(region.Address, region.Size);
+		}
 	}
 }

@@ -4,16 +4,14 @@ using Mosa.Runtime;
 
 namespace Mosa.Kernel.BareMetal.BootMemory
 {
-	public /*readonly*/ struct BootMemoryMapTable
+	public /*readonly*/ struct BootMemoryList
 	{
 		private readonly Pointer Entry;
 
-		public BootMemoryMapTable(Pointer entry)
+		public BootMemoryList(Pointer entry)
 		{
 			Entry = entry;
 		}
-
-		public bool IsNull => Entry.IsNull;
 
 		public uint Count
 		{
