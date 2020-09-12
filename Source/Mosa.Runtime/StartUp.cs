@@ -1,16 +1,37 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System;
+
 namespace Mosa.Runtime
 {
 	public static class StartUp
 	{
 		public static void Initialize()
 		{
-			KernelInitialization();
-			SetInitialMemory();
+			PlatformInitialization();
+			GarbageCollectionInitialization();
+
+			KernelInitialization();         // Legacy
+			SetInitialMemory();             // Legacy
+
 			InitializeAssembly();
 			InitializeRuntimeMetadata();
+
+			KernelEntryPoint();
+
 			StartApplication();
+		}
+
+		public static void PlatformInitialization()
+		{
+		}
+
+		public static void GarbageCollectionInitialization()
+		{
+		}
+
+		public static void KernelEntryPoint()
+		{
 		}
 
 		public static void KernelInitialization()
@@ -26,6 +47,10 @@ namespace Mosa.Runtime
 		}
 
 		public static void InitializeRuntimeMetadata()
+		{
+		}
+
+		public static void FinalKernelInitialization()
 		{
 		}
 

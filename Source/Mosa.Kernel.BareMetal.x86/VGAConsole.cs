@@ -55,7 +55,7 @@ namespace Mosa.Kernel.BareMetal.x86
 
 		private static void Normal(byte b)
 		{
-			if ((b >= 33 && b <= 126))
+			if ((b >= 32 && b <= 126))
 			{
 				VGAText.Write(b);
 				return;

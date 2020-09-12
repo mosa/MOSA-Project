@@ -7,14 +7,16 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 {
 	public static class BootMemoryMap
 	{
-		private static BootMemoryMapTable Map;
+		private static BootMemoryList List;
+
+		private static Pointer AvailableMemory;
 
 		public static void Initialize()
 		{
 			var entry = BootPageAllocator.AllocatePage();
 			Page.ClearPage(entry);
 
-			Map = new BootMemoryMapTable(entry)
+			List = new BootMemoryList(entry)
 			{
 				Count = 0
 			};
@@ -28,57 +30,90 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 			if (Multiboot.MultibootV1.MemoryMapStart.IsNull)
 				return;
 
+			AvailableMemory = new Pointer((Multiboot.MultibootV1.MemoryUpper * 1024) + (1024 * 1024));  // assuming all of lower memory
+
 			var memoryMapEnd = Multiboot.MultibootV1.MemoryMapStart + Multiboot.MultibootV1.MemoryMapLength;
 
 			var entry = new MultibootV1MemoryMapEntry(Multiboot.MultibootV1.MemoryMapStart);
 
-			while (entry.IsAvailable)
+			while (entry.Entry < memoryMapEnd)
 			{
-				SetMemoryMap(entry.BaseAddr, entry.Length, entry.Type == 1 ? BootMemoryMapType.Available : BootMemoryMapType.Reserved);
+				SetMemoryMap(entry.BaseAddr, entry.Length, entry.Type == 1 ? BootMemoryType.Available : BootMemoryType.Reserved);
 
-				entry = entry.GetNext(memoryMapEnd);
+				entry = entry.GetNext();
 			}
 		}
 
-		public static BootMemoryMapEntry SetMemoryMap(Pointer address, ulong size, BootMemoryMapType type)
+		public static void ImportPlatformMemoryMap()
 		{
-			var entry = Map.GetBootMemoryMapEntry(Map.Count);
+			SetMemoryMap(Platform.GetBootReservedRegion(), BootMemoryType.Kernel);
+			SetMemoryMap(Platform.GetInitialGCMemoryPool(), BootMemoryType.Kernel);
+
+			for (int slot = 0; ; slot++)
+			{
+				var region = Platform.GetPlatformReservedMemory(slot);
+
+				if (region.Size == 0)
+					break;
+
+				SetMemoryMap(region, BootMemoryType.Kernel);
+			}
+		}
+
+		public static BootMemoryMapEntry SetMemoryMap(AddressRange range, BootMemoryType type)
+		{
+			return SetMemoryMap(range.Address, range.Size, type);
+		}
+
+		public static BootMemoryMapEntry SetMemoryMap(Pointer address, ulong size, BootMemoryType type)
+		{
+			var entry = List.GetBootMemoryMapEntry(List.Count);
 
 			entry.StartAddress = address;
 			entry.Size = size;
 			entry.Type = type;
 
-			Map.Count += 1;
+			List.Count++;
 
 			return entry;
 		}
 
 		public static uint GetBootMemoryMapEntryCount()
 		{
-			return Map.Count;
+			return List.Count;
 		}
 
 		public static BootMemoryMapEntry GetBootMemoryMapEntry(uint index)
 		{
-			return Map.GetBootMemoryMapEntry(index);
+			return List.GetBootMemoryMapEntry(index);
 		}
 
-		public static Pointer GetMaximumAddress()
+		public static Pointer GetAvailableMemory()
 		{
-			var max = Pointer.Zero;
-			var count = Map.Count;
+			return AvailableMemory;
+		}
 
-			for (uint i = 0; i < count; i++)
+		public static void Dump()
+		{
+			Console.WriteLine();
+			Console.WriteLine("BootMemoryMap - Dump:");
+			Console.WriteLine("=====================");
+			Console.Write("Entries: ");
+			Console.WriteValue(List.Count);
+			Console.WriteLine();
+
+			for (uint slot = 0; slot < List.Count; slot++)
 			{
-				var entry = GetBootMemoryMapEntry(i);
+				var entry = GetBootMemoryMapEntry(slot);
 
-				var endAddress = entry.EndAddress;
-
-				if (endAddress > max)
-					max = endAddress;
+				Console.Write("Start: 0x");
+				Console.WriteValueAsHex(entry.StartAddress.ToUInt64(), 8);
+				Console.Write(" Size: 0x");
+				Console.WriteValueAsHex(entry.Size, 8);
+				Console.Write(" Type: ");
+				Console.WriteValue((byte)entry.Type);
+				Console.WriteLine();
 			}
-
-			return max;
 		}
 	}
 }

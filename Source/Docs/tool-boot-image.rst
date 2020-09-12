@@ -13,7 +13,7 @@ The tool has several command line options. Example:
 
 .. code-block:: text
 
-  Mosa.Tool.CreateBootImage.exe -o bin/Mosa.HelloWorld.x86.img --mbr Tools/syslinux/3.72/mbr.bin --boot Tools/syslinux/3.72/ldlinux.bin --syslinux --volume-label MOSABOOT --blocks 25000 --filesystem fat16 --format img Tools/syslinux/3.72/ldlinux.sys Tools/syslinux/3.72/mboot.c32 Demos/unix/syslinux.cfg bin/Mosa.HelloWorld.x86.bin,main.exe
+  Mosa.Tool.CreateBootImage.exe -o bin/Mosa.Demo.HelloWorld.x86.img --mbr Tools/syslinux/3.72/mbr.bin --boot Tools/syslinux/3.72/ldlinux.bin --syslinux --volume-label MOSABOOT --blocks 25000 --filesystem fat16 --format img Tools/syslinux/3.72/ldlinux.sys Tools/syslinux/3.72/mboot.c32 Demos/unix/syslinux.cfg bin/Mosa.Demo.HelloWorld.x86.bin,main.exe
 
 The following options are supported:
 

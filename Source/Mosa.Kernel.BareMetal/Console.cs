@@ -59,5 +59,83 @@ namespace Mosa.Kernel.BareMetal
 			Write((byte)((byte)'0' + (byte)(color) % 10));
 			Write("m");
 		}
+
+		/// <summary>
+		/// Writes the specified value.
+		/// </summary>
+		/// <param name="val">The value.</param>
+		public static void WriteValue(ulong value)
+		{
+			WriteValue(value, 10, -1);
+		}
+
+		/// <summary>
+		/// Writes the specified value.
+		/// </summary>
+		/// <param name="val">The value.</param>
+		public static void WriteValueAsHex(ulong value)
+		{
+			WriteValue(value, 16, -1);
+		}
+
+		/// <summary>
+		/// Writes the specified value.
+		/// </summary>
+		/// <param name="val">The value.</param>
+		public static void WriteValue(ulong value, int length)
+		{
+			WriteValue(value, 10, length);
+		}
+
+		/// <summary>
+		/// Writes the specified value.
+		/// </summary>
+		/// <param name="val">The value.</param>
+		public static void WriteValueAsHex(ulong value, int length)
+		{
+			WriteValue(value, 16, length);
+		}
+
+		private static void WriteValue(ulong value, byte @base, int length)
+		{
+			int minlength = (length >= 0) ? length : (int)GetValueLength(value, @base);
+
+			for (int i = minlength - 1; i >= 0; i--)
+			{
+				WriteValueDigit(value, i, @base);
+			}
+		}
+
+		private static uint GetValueLength(ulong value, byte @base)
+		{
+			uint length = 0;
+
+			do
+			{
+				value /= @base;
+				length++;
+			} while (value != 0);
+
+			return length;
+		}
+
+		private static void WriteValueDigit(ulong val, int position, byte @base)
+		{
+			int index = -1;
+			ulong digit;
+
+			do
+			{
+				digit = val % @base;
+				val /= @base;
+				index++;
+			}
+			while (index != position);
+
+			if (digit < 10)
+				Write((char)('0' + digit));
+			else
+				Write((char)('A' + digit - 10));
+		}
 	}
 }

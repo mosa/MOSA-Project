@@ -15,13 +15,11 @@ namespace Mosa.Workspace.Kernel.Emulate
 			CPU.Write32(0x200004, MultibootStructure);
 
 			uint multiboot = MultibootStructure;
-			uint mem_upper = totalMemory;
-
-			mem_upper = mem_upper - (1024 * 1024);
 
 			CPU.Write32(multiboot + 0, 0x01 | 0x40); // flags
-			CPU.Write32(multiboot + 4, 640);     // mem_lower - assuming at least 640k
-			CPU.Write32(multiboot + 8, mem_upper / 1024);    // mem_upper
+
+			CPU.Write32(multiboot + 4, 640);     // mem_lower - assuming at least 640k (in kilobytes)
+			CPU.Write32(multiboot + 8, (totalMemory - (1024 * 1024)) / 1024);    // mem_upper (in kilobytes)
 			CPU.Write32(multiboot + 12, 0x0);    // boot_device
 			CPU.Write32(multiboot + 16, 0x0);    // cmdline
 			CPU.Write32(multiboot + 20, 0x0);    // mods_count
@@ -46,7 +44,7 @@ namespace Mosa.Workspace.Kernel.Emulate
 			multiboot = SetMemoryRegion(multiboot, 0x00000000, 0x009FC00, 1);
 			multiboot = SetMemoryRegion(multiboot, 0x0009FC00, 0x0000400, 2);
 			multiboot = SetMemoryRegion(multiboot, 0x000F0000, 0x0010000, 2);
-			multiboot = SetMemoryRegion(multiboot, 0x00100000, 0x7EE0000, 1);
+			multiboot = SetMemoryRegion(multiboot, 0x00100000, 0x7EE0000, 1);   // change - 0x7EE0000 to (total memory - starting address)
 			multiboot = SetMemoryRegion(multiboot, 0x07FE0000, 0x0020000, 2);
 			multiboot = SetMemoryRegion(multiboot, 0xFFFC0000, 0x0020000, 2);
 		}

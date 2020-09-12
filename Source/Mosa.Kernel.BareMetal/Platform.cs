@@ -17,13 +17,14 @@ namespace Mosa.Kernel.BareMetal
 		{
 		}
 
-		public static AddressRange GetBootReservedRegion()
+		public static AddressRange GetPlatformReservedMemory(int slot)
 		{
 			return new AddressRange(0, 0);
 		}
 
-		public static void UpdateBootMemoryMap()
+		public static AddressRange GetBootReservedRegion()
 		{
+			return new AddressRange(0, 0);
 		}
 
 		public static AddressRange GetInitialGCMemoryPool()

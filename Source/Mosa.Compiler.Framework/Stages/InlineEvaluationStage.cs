@@ -147,7 +147,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			trace?.Log($"IRInstructionCount: {MethodData.IRInstructionCount}");
 			trace?.Log($"IRStackParameterInstructionCount: {MethodData.IRStackParameterInstructionCount}");
-			trace?.Log($"InlinedIRMaximum: {InlineMaximum}");
+			trace?.Log($"InlineAggressiveMaximum: {InlineAggressiveMaximum}");
+			trace?.Log($"InlineMaximum: {InlineMaximum}");
 			trace?.Log($"InlineExplicitOnly: {InlineExplicitOnly}");
 			trace?.Log($"NonIRInstructionCount: {MethodData.NonIRInstructionCount}");
 			trace?.Log($"HasAddressOfInstruction: {MethodData.HasAddressOfInstruction}");

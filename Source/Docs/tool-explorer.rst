@@ -15,7 +15,7 @@ In addition, the tool can be launched from the command line with arguments:
 
 .. code-block:: text
 
-	Mosa.Tool.Explorer.exe Mosa.HelloWorld.x86.exe -filter System.String::get_Length
+	Mosa.Tool.Explorer.exe Mosa.Demo.HelloWorld.x86.exe -filter System.String::get_Length
 
 Command Line Options
 --------------------

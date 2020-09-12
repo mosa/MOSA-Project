@@ -2,9 +2,9 @@
 Compiler Transformations
 ########################
 
-MOSA compiler utilitizes a datebase of transformations to represent specific types of optimizations. To make it easy to add new optimizations to the compiler, these transformation are described in text files.
+The MOSA compiler utilitizes a datebase of transformations to represent specific types of optimizations. These transformation are described in json formatted, text files to make it easy to add new optimizations to the compiler.
 
-A special parser program reads the json files and translates them into C# source code files, which are then included in the MOSA compiler.
+A special parser program, called ``Mosa.Utility.SourceCodeGenerator``, reads the text files and translates them into C# source code files, which are then included and compiled into the MOSA compiler.
 
 These files are located at ``Source\Data\IR-Optimization-*.json``.
 
@@ -13,7 +13,7 @@ Transformation
 
 Each tranformation has three functional parts: **Expression**, **Filter**, and **Rule**.
 
-The **expression** describes the required expression tree necessary for the rule to execute. The **filter** describes specific attributes of operands in the expression tree that must also be satified for the rule to execute. And the **rule** represents the replacement expression tree.
+The **expression** describes the required expression tree necessary in order for the rule to execute. The **filter** describes the specific attributes of operands in the expression tree that must also be satified for the rule to execute. And the **rule** represents the new, replacement expression tree.
 
 Example #1
 ----------

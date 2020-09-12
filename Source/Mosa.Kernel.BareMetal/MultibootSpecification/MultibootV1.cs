@@ -63,12 +63,12 @@ namespace Mosa.Kernel.BareMetal.MultibootSpecification
 		/// <summary>
 		/// Gets the memory lower.
 		/// </summary>
-		public Pointer MemoryLower { get { return Entry.LoadPointer(MultiBootInfoOffset.MemLower); } }
+		public uint MemoryLower { get { return Entry.Load32(MultiBootInfoOffset.MemLower); } }
 
 		/// <summary>
 		/// Gets the memory upper.
 		/// </summary>
-		public Pointer MemoryUpper { get { return Entry.LoadPointer(MultiBootInfoOffset.MemUpper); } }
+		public uint MemoryUpper { get { return Entry.Load32(MultiBootInfoOffset.MemUpper); } }
 
 		/// <summary>
 		/// Gets the boot device.

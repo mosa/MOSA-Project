@@ -45,7 +45,6 @@
 			this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.compileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.nowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-			this.snippetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbEnableAllOptimizations = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbDisableAllOptimizations = new System.Windows.Forms.ToolStripMenuItem();
@@ -229,8 +228,7 @@
 			// compileToolStripMenuItem
 			// 
 			this.compileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.nowToolStripMenuItem,
-            this.snippetToolStripMenuItem});
+            this.nowToolStripMenuItem});
 			this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
 			this.compileToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
 			this.compileToolStripMenuItem.Text = "Compile";
@@ -238,15 +236,9 @@
 			// nowToolStripMenuItem
 			// 
 			this.nowToolStripMenuItem.Name = "nowToolStripMenuItem";
-			this.nowToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
+			this.nowToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
 			this.nowToolStripMenuItem.Text = "Now";
 			this.nowToolStripMenuItem.Click += new System.EventHandler(this.NowToolStripMenuItem_Click);
-			// 
-			// snippetToolStripMenuItem
-			// 
-			this.snippetToolStripMenuItem.Name = "snippetToolStripMenuItem";
-			this.snippetToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
-			this.snippetToolStripMenuItem.Text = "Snippet";
 			// 
 			// optionsToolStripMenuItem
 			// 
@@ -555,7 +547,7 @@
 			this.tabControl.Name = "tabControl";
 			this.tabControl.Padding = new System.Drawing.Point(0, 0);
 			this.tabControl.SelectedIndex = 0;
-			this.tabControl.Size = new System.Drawing.Size(584, 403);
+			this.tabControl.Size = new System.Drawing.Size(582, 403);
 			this.tabControl.TabIndex = 38;
 			this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
 			// 
@@ -570,7 +562,7 @@
 			this.tabStages.Location = new System.Drawing.Point(4, 25);
 			this.tabStages.Margin = new System.Windows.Forms.Padding(0);
 			this.tabStages.Name = "tabStages";
-			this.tabStages.Size = new System.Drawing.Size(576, 374);
+			this.tabStages.Size = new System.Drawing.Size(574, 374);
 			this.tabStages.TabIndex = 0;
 			this.tabStages.Text = "Instructions";
 			// 
@@ -623,7 +615,7 @@
 			this.tabStageDebug.Location = new System.Drawing.Point(4, 25);
 			this.tabStageDebug.Margin = new System.Windows.Forms.Padding(0);
 			this.tabStageDebug.Name = "tabStageDebug";
-			this.tabStageDebug.Size = new System.Drawing.Size(576, 374);
+			this.tabStageDebug.Size = new System.Drawing.Size(574, 374);
 			this.tabStageDebug.TabIndex = 1;
 			this.tabStageDebug.Text = "Debug";
 			// 
@@ -660,7 +652,7 @@
 			this.tabMethodCounters.Location = new System.Drawing.Point(4, 25);
 			this.tabMethodCounters.Margin = new System.Windows.Forms.Padding(0);
 			this.tabMethodCounters.Name = "tabMethodCounters";
-			this.tabMethodCounters.Size = new System.Drawing.Size(576, 374);
+			this.tabMethodCounters.Size = new System.Drawing.Size(574, 374);
 			this.tabMethodCounters.TabIndex = 6;
 			this.tabMethodCounters.Text = "Counters";
 			// 
@@ -686,7 +678,7 @@
 			this.tabLogs.Location = new System.Drawing.Point(4, 25);
 			this.tabLogs.Margin = new System.Windows.Forms.Padding(0);
 			this.tabLogs.Name = "tabLogs";
-			this.tabLogs.Size = new System.Drawing.Size(576, 374);
+			this.tabLogs.Size = new System.Drawing.Size(574, 374);
 			this.tabLogs.TabIndex = 7;
 			this.tabLogs.Text = "Logs";
 			// 
@@ -836,7 +828,6 @@
 		private System.Windows.Forms.ToolStripMenuItem compileToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem nowToolStripMenuItem;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
-		private System.Windows.Forms.ToolStripMenuItem snippetToolStripMenuItem;
 		private System.Windows.Forms.ToolStrip toolStrip1;
 		private System.Windows.Forms.ToolStripButton toolStripButton1;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;

@@ -21,20 +21,20 @@ namespace Mosa.Kernel.BareMetal
 			Multiboot.Setup(new Pointer(Mosa.Workspace.Kernel.Emulate.Multiboot.MultibootStructure), MultibootV1.MultibootMagic);
 		}
 
+		public static AddressRange GetPlatformReservedMemory(int slot)
+		{
+			return PlatformPlug.GetPlatformReservedMemory(slot);
+		}
+
 		public static AddressRange GetBootReservedRegion()
 		{
-			// Approximately 120 x 4K pages
-			return new AddressRange(0x00007E00, 0x78000);
+			return PlatformPlug.GetBootReservedRegion();
 		}
 
-		public static void UpdateBootMemoryMap()
+		public static AddressRange GetInitialGCMemoryPool()
 		{
+			return PlatformPlug.GetInitialGCMemoryPool();
 		}
-
-		//public static AddressRange GetInitialGCMemoryPool()
-		//{
-		//	return PlatformPlug.GetInitialGCMemoryPool();
-		//}
 
 		public static void PageTableSetup()
 		{
@@ -65,7 +65,9 @@ namespace Mosa.Kernel.BareMetal
 
 		public static void ConsoleWrite(byte c)
 		{
-			VGAConsole.Write(c);
+			System.Console.Write((char)c);
+
+			//VGAConsole.Write(c);
 		}
 	}
 }

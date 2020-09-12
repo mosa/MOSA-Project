@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.BareMetal;
+using Mosa.Kernel.BareMetal.BootMemory;
 
 namespace Mosa.Workspace.Kernel
 {
@@ -9,6 +10,10 @@ namespace Mosa.Workspace.Kernel
 		private static void Main()
 		{
 			Emulate.Multiboot.Setup(128 * 1024 * 1024); // 128 MB
+
+			Boot.PlatformInitialization();
+
+			Boot.GarbageCollectionInitialization();
 
 			Boot.EntryPoint();
 
