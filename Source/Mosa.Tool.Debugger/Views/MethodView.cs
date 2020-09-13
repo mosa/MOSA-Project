@@ -1,7 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Tool.Debugger.DebugData;
-using SharpDisasm;
+using Mosa.Utility.Disassembler;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -152,44 +152,36 @@ namespace Mosa.Tool.Debugger.Views
 		{
 			instructions.Clear();
 
-			var mode = ArchitectureMode.x86_32; // todo:
+			var disassembler = new Disassembler("x86");
+			disassembler.SetMemory(memory, address);
 
-			using (var disasm = new Disassembler(memory, mode, address, true, Vendor.Any))
+			foreach (var instruction in disassembler.Decode())
 			{
-				var translator = new SharpDisasm.Translators.IntelTranslator()
+				var text = instruction.Instruction.Replace('\t', ' ');
+
+				var info = string.Empty;
+
+				var value = ParseAddress(text);
+
+				if (value != 0)
 				{
-					IncludeAddress = false,
-					IncludeBinary = false
+					var symbol = DebugSource.GetFirstSymbolsStartingAt(value);
+
+					if (symbol != null)
+					{
+						info = symbol.Name;
+					}
+				}
+
+				var entry = new MethodInstructionEntry()
+				{
+					IP = instruction.Address,   // Offset?
+					Length = instruction.Length,
+					Instruction = text,
+					Info = info
 				};
 
-				foreach (var instruction in disasm.Disassemble())
-				{
-					var text = translator.Translate(instruction);
-
-					var info = string.Empty;
-
-					var value = ParseAddress(text);
-
-					if (value != 0)
-					{
-						var symbol = DebugSource.GetFirstSymbolsStartingAt(value);
-
-						if (symbol != null)
-						{
-							info = symbol.Name;
-						}
-					}
-
-					var entry = new MethodInstructionEntry()
-					{
-						IP = instruction.Offset,
-						Length = instruction.Length,
-						Instruction = text,
-						Info = info
-					};
-
-					instructions.Add(entry);
-				}
+				instructions.Add(entry);
 			}
 		}
 
@@ -239,12 +231,15 @@ namespace Mosa.Tool.Debugger.Views
 			{
 				int space = decode.IndexOf(' ');
 
+				if (space < 0)
+					space = decode.IndexOf('\t');
+
 				if (space <= 0)
 					return 0;
 
 				var value = decode.Substring(space + 1).Trim();
 
-				var address = MainForm.ParseHexAddress(value);
+				var address = MainForm.ParseHexAddress("0x" + value);
 
 				return address;
 			}

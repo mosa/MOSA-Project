@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using SharpDisasm;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

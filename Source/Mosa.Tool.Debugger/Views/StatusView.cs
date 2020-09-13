@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using SharpDisasm;
+using Mosa.Utility.Disassembler;
 using System.Windows.Forms;
 
 namespace Mosa.Tool.Debugger.Views
@@ -45,29 +45,15 @@ namespace Mosa.Tool.Debugger.Views
 			if (address != InstructionPointer)
 				return;
 
-			var mode = ArchitectureMode.x86_32; // todo:
+			var disassembler = new Disassembler("x86");
+			disassembler.SetMemory(memory, address);
 
-			try
-			{
-				using (var disasm = new Disassembler(memory, mode, address, true))
-				{
-					var translator = new SharpDisasm.Translators.IntelTranslator()
-					{
-						IncludeAddress = false,
-						IncludeBinary = false
-					};
+			tbInstruction.Text = "Unable to decode!";
 
-					foreach (var instruction in disasm.Disassemble())
-					{
-						var asm = translator.Translate(instruction);
-						tbInstruction.Text = asm;
-						break;
-					}
-				}
-			}
-			catch
+			foreach (var instruction in disassembler.Decode())
 			{
-				tbInstruction.Text = "Unable to decode!";
+				tbInstruction.Text = instruction.Instruction;
+				break;
 			}
 		}
 	}

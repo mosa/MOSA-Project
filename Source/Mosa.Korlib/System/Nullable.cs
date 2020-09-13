@@ -77,10 +77,10 @@ namespace System
 		}
 	}
 
-	[System.Runtime.InteropServices.ComVisible(true)]
+	//[System.Runtime.InteropServices.ComVisible(true)]
 	public static class Nullable
 	{
-		[System.Runtime.InteropServices.ComVisible(true)]
+		//[System.Runtime.InteropServices.ComVisible(true)]
 		public static int Compare<T>(Nullable<T> n1, Nullable<T> n2) where T : struct
 		{
 			//if (n1.HasValue)
@@ -92,7 +92,7 @@ namespace System
 			return 0;
 		}
 
-		[System.Runtime.InteropServices.ComVisible(true)]
+		//[System.Runtime.InteropServices.ComVisible(true)]
 		public static bool Equals<T>(Nullable<T> n1, Nullable<T> n2) where T : struct
 		{
 			//if (n1.HasValue)

@@ -1,5 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Diagnostics.Contracts;
+
 namespace System.Collections.Generic
 {
 	/// <summary>
@@ -14,6 +16,8 @@ namespace System.Collections.Generic
 
 		private T[] _items;
 		private int _size;
+		private int _version;
+		private Object _syncRoot;
 
 		public List()
 		{
@@ -72,12 +76,16 @@ namespace System.Collections.Generic
 		{
 			get
 			{
+				Contract.Ensures(Contract.Result<int>() >= 0);
 				return _items.Length;
 			}
 			set
 			{
 				if (value < _size)
+					//ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument.value, ExceptionResource.ArgumentOutOfRange_SmallCapacity);
 					throw new ArgumentOutOfRangeException(nameof(value));
+
+				Contract.EndContractBlock();
 
 				if (value != _items.Length)
 				{
@@ -95,6 +103,116 @@ namespace System.Collections.Generic
 				}
 			}
 		}
+
+		public int Count
+		{
+			get
+			{
+				Contract.Ensures(Contract.Result<int>() >= 0);
+				return _size;
+			}
+		}
+
+		bool IList.IsFixedSize
+		{
+			get
+			{
+				return false;
+			}
+		}
+
+		bool ICollection<T>.IsReadOnly
+		{
+			get { return false; }
+		}
+
+		bool IList.IsReadOnly
+		{
+			get { return false; }
+		}
+
+		
+
+		bool ICollection.IsSynchronized
+		{
+			get { return false; }
+		}
+
+		object ICollection.SyncRoot
+		{
+			get
+			{
+				throw new NotImplementedException();
+				/*
+				 if( _syncRoot == null) {
+                    System.Threading.Interlocked.CompareExchange<Object>(ref _syncRoot, new Object(), null);    
+                }
+                return _syncRoot;*/
+			}
+		}
+
+		/// <summary>
+		/// Gets or sets the T at the specified index.
+		/// </summary>
+		/// <value></value>
+		public T this[int index]
+		{
+			get
+			{
+				if ((uint) index >= (uint)_size)
+				{
+					//  ThrowHelper.ThrowArgumentOutOfRange_IndexException();
+					throw new ArgumentOutOfRangeException();
+				}
+				Contract.EndContractBlock();
+				return _items[index];
+			}
+			set {
+				if ((uint)index >= (uint)_size)
+				{
+					//  ThrowHelper.ThrowArgumentOutOfRange_IndexException();
+					throw new ArgumentOutOfRangeException();
+				}
+				Contract.EndContractBlock();
+				_items[index] = value;
+				_version++;
+			}
+		}
+		//tt
+
+		private static bool IsCompatibleObject(object value)
+		{
+			// Non-null values are fine. Only accept nulls if T is a class or Nullable<U>.
+			// Note that default(T) is not equal to null for value types except when T is Nullable<U>.
+			return ( ( value is T ) || ( value == null && default(T) == null ) );
+		}
+
+		Object IList.this[int index]
+		{
+			get
+			{
+				return this[index];
+			}
+			set
+			{
+				//ThrowHelper.IfNullAndNullsAreIllegalThenThrow<T>(value, ExceptionArgument.value);
+
+				throw new ArgumentNullException();
+
+				//TODO fix
+				try
+				{
+					this[index] = (T)value;
+				}
+				catch (Exception e)
+				{
+					//ThrowHelper.ThrowWrongValueTypeArgumentException(value, typeof(T));
+				}
+			}
+		}
+
+
+
 
 		private void Copy(T[] source, int sourceIndex, T[] destination, int destinationIndex, int size)
 		{
@@ -114,64 +232,36 @@ namespace System.Collections.Generic
 			get { return _size; }
 		}
 
-		bool ICollection.IsSynchronized
+		public void Add(T item)
 		{
-			get { return false; }
+			if(_size == _items.Length) EnsureCapacity(_size + 1);
+
+			_items[_size++] = item;
+			_version++;
 		}
 
-		object ICollection.SyncRoot
+		int IList.Add(object value)
 		{
-			get
-			{
-				throw new NotImplementedException();
-			}
+			if (!IsCompatibleObject(value))
+				throw new ArgumentException("item is of a type that is not assignable to the IList", nameof(value));
+			Add((T)value);
+			return Count - 1;
 		}
 
-		bool IList.IsReadOnly
+
+		public void AddRange(IEnumerable<T> collection)
 		{
-			get { return false; }
+			Contract.Ensures(Count >= Contract.OldValue(Count));
+
+			InsertRange(_size, collection);
 		}
 
-		bool IList.IsFixedSize
+	/*	public IReadOnlyCollection<T> AsReadOnly()
 		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the T at the specified index.
-		/// </summary>
-		/// <value></value>
-		public T this[int index]
-		{
-			get { return _items[index]; }
-			set { _items[index] = value; }
-		}
-
-		public int Count
-		{
-			get { return _size; }
-		}
-
-		bool ICollection<T>.IsReadOnly
-		{
-			get { return false; }
-		}
-
-		object IList.this[int index]
-		{
-			get
-			{
-				throw new NotImplementedException();
-			}
-
-			set
-			{
-				throw new NotImplementedException();
-			}
-		}
+			Contract.Ensures(Contract.Result<ReadOnlyCollection<T>>() != null);
+			return new ReadOnlyCollection<T>(this);
+		}*/
+		//TODO FIXXXXXXXXXXXXXXXXXXXXX
 
 		private void EnsureCapacity(int size)
 		{
@@ -183,28 +273,14 @@ namespace System.Collections.Generic
 			}
 		}
 
-		private static bool IsCompatibleObject(object value)
-		{
-			// Non-null values are fine. Only accept nulls if T is a class or Nullable<U>.
-			// Note that default(T) is not equal to null for value types except when T is Nullable<U>.
-			return ((value is T) || (value == null && default(T) == null));
-		}
 
-		public void Add(T item)
-		{
-			EnsureCapacity(_size + 1);
 
-			_items[_size] = item;
-			_size++;
-		}
+	
 
-		int IList.Add(object value)
-		{
-			if (!IsCompatibleObject(value))
-				throw new ArgumentException("item is of a type that is not assignable to the IList", nameof(value));
-			Add((T)value);
-			return Count - 1;
-		}
+
+
+
+
 
 		public void Clear()
 		{
@@ -329,6 +405,101 @@ namespace System.Collections.Generic
 			_items[_size] = default(T);
 		}
 
+		
+
+		public T[] ToArray()
+		{
+			var array = new T[_size];
+			CopyTo(array, 0);
+			return array;
+		}
+
+		public void InsertRange(int index, IEnumerable<T> collection)
+		{
+			if (collection == null)
+			{
+				//ThrowHelper.ThrowArgumentNullException(ExceptionArgument.collection);
+				throw new ArgumentNullException();
+			}
+
+			if ((uint)index > (uint)_size)
+			{
+				//ThrowHelper.ThrowArgumentOutOfRange_IndexException();
+				throw new ArgumentOutOfRangeException();
+			}
+			Contract.EndContractBlock();
+
+			ICollection<T> c = collection as ICollection<T>;
+			if (c != null)
+			{    // if collection is ICollection<T>
+				int count = c.Count;
+				if (count > 0)
+				{
+					EnsureCapacity(_size + count);
+					if (index < _size)
+					{
+						Array.Copy(_items, index, _items, index + count, _size - index);
+					}
+
+					// If we're inserting a List into itself, we want to be able to deal with that.
+					if (this == c)
+					{
+						// Copy first part of _items to insert location
+						Array.Copy(_items, 0, _items, index, index);
+						// Copy last part of _items back to inserted location
+						Array.Copy(_items, index + count, _items, index * 2, _size - index);
+					}
+					else
+					{
+						c.CopyTo(_items, index);
+					}
+					_size += count;
+				}
+			}
+			else if (index < _size)
+			{
+				// We're inserting a lazy enumerable. Call Insert on each of the constituent items.
+				using (IEnumerator<T> en = collection.GetEnumerator())
+				{
+					while (en.MoveNext())
+					{
+						Insert(index++, en.Current);
+					}
+				}
+			}
+			else
+			{
+				// We're adding a lazy enumerable because the index is at the end of this list.
+				AddEnumerable(collection);
+			}
+			_version++;
+		}
+
+		private void AddEnumerable(IEnumerable<T> enumerable)
+		{
+			Contract.Assert(enumerable != null);
+			Contract.Assert(!( enumerable is ICollection<T> ), "We should have optimized for this beforehand.");
+
+			using (IEnumerator<T> en = enumerable.GetEnumerator())
+			{
+				_version++; // Even if the enumerable has no items, we can update _version.
+
+				while (en.MoveNext())
+				{
+					// Capture Current before doing anything else. If this throws
+					// an exception, we want to make a clean break.
+					T current = en.Current;
+
+					if (_size == _items.Length)
+					{
+						EnsureCapacity(_size + 1);
+					}
+
+					_items[_size++] = current;
+				}
+			}
+		}
+
 		public struct Enumerator : IEnumerator<T>, IEnumerator
 		{
 			private List<T> list;
@@ -360,7 +531,7 @@ namespace System.Collections.Generic
 			{
 				List<T> localList = list;
 
-				if (((uint)index < (uint)localList._size))
+				if (( (uint)index < (uint)localList._size ))
 				{
 					current = localList._items[index];
 					index++;
@@ -383,13 +554,5 @@ namespace System.Collections.Generic
 			}
 
 		}
-
-		public T[] ToArray()
-		{
-			var array = new T[_size];
-			CopyTo(array, 0);
-			return array;
-		}
-
 	}
 }

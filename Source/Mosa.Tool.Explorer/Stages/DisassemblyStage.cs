@@ -2,8 +2,13 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Trace;
-using SharpDisasm;
+using Mosa.Utility.Disassembler;
+
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.Design;
+using System.IO;
+using System.Text;
 
 namespace Mosa.Tool.Explorer.Stages
 {
@@ -25,58 +30,31 @@ namespace Mosa.Tool.Explorer.Stages
 			if (trace == null)
 				return;
 
-			// Determine the architecture mode
-			ArchitectureMode mode;
-
-			if (Architecture is Platform.x86.Architecture)
-			{
-				mode = ArchitectureMode.x86_32;
-			}
-			else if (Architecture is Platform.x64.Architecture)
-			{
-				mode = ArchitectureMode.x86_64;
-			}
-			else
-			{
-				trace.Log($"Unable to disassemble binary for machine type: {Architecture.ElfMachineType}");
-				return;
-			}
-
 			// Create a byte array from the symbol stream
 			var symbol = Linker.GetSymbol(Method.FullName);
 			var stream = symbol.Stream;
 			var oldPosition = stream.Position;
 			var length = (int)stream.Length;
-			var byteArray = new byte[length];
+			var memory = new byte[length];
 
 			stream.Position = 0;
-			stream.Read(byteArray, 0, length);
+			stream.Read(memory, 0, length);
 			stream.Position = oldPosition;
 
-			try
-			{
-				// Create the disassembler
-				using (var disasm = new Disassembler(byteArray, mode, 0, true))
-				{
-					// Need a new instance of translator every time as they aren't thread safe
-					var translator = new SharpDisasm.Translators.IntelTranslator()
-					{
-						// Configure the translator to output instruction addresses and instruction binary as hex
-						IncludeAddress = true,
-						IncludeBinary = true
-					};
+			var disassembler = new Disassembler(Architecture.PlatformName);
+			disassembler.SetMemory(memory, 0);
 
-					// Disassemble each instruction and output to trace
-					foreach (var instruction in disasm.Disassemble())
-					{
-						var asString = translator.Translate(instruction);
-						trace.Log(asString);
-					}
+			var list = disassembler.Decode();
+
+			if (list != null)
+			{
+				foreach (var instr in list)
+				{
+					trace.Log(instr.Full);
 				}
 			}
-			catch (Exception e)
+			else
 			{
-				trace.Log($"Unable to continue disassembly, error encountered\r\n{e}");
 				PostEvent(CompilerEvent.Error, $"Failed disassembly for method {MethodCompiler.Method}");
 			}
 		}

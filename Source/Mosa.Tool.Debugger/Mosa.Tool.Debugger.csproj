@@ -119,6 +119,7 @@
     <ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj" />
     <ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
     <ProjectReference Include="..\Mosa.Utility.DebugEngine\Mosa.Utility.DebugEngine.csproj" />
+    <ProjectReference Include="..\Mosa.Utility.Disassembler\Mosa.Utility.Disassembler.csproj" />
     <ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
     <ProjectReference Include="..\Mosa.Utility.RSP\Mosa.Utility.RSP.csproj" />
   </ItemGroup>
@@ -178,10 +179,9 @@
     <Content Include="bug.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="dnlib" Version="3.3.1" />
+    <PackageReference Include="dnlib" Version="3.3.2" />
     <PackageReference Include="DockPanelSuite" Version="3.0.6" />
     <PackageReference Include="DockPanelSuite.ThemeVS2015" Version="3.0.6" />
-    <PackageReference Include="SharpDisasm" Version="1.1.11" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="DebugVMImageWindow.cs" />

@@ -12,8 +12,7 @@ using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.BootImage;
-using SharpDisasm;
-using SharpDisasm.Translators;
+using Mosa.Utility.Disassembler;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -453,12 +452,6 @@ namespace Mosa.Utility.Launcher
 
 		private void GenerateASMFile()
 		{
-			var translator = new IntelTranslator()
-			{
-				IncludeAddress = true,
-				IncludeBinary = true
-			};
-
 			var map = new Dictionary<ulong, List<string>>();
 
 			foreach (var symbol in Linker.Symbols)
@@ -482,23 +475,16 @@ namespace Mosa.Utility.Launcher
 			var code = new byte[code2.Length];
 
 			for (ulong i = fileOffset; i < (ulong)code2.Length; i++)
-			{
 				code[i - fileOffset] = code2[i];
-			}
 
-			var mode = ArchitectureMode.x86_32;
+			var disassembler = new Disassembler.Disassembler(LauncherSettings.Platform);
+			disassembler.SetMemory(code, startingAddress);
 
-			switch (LauncherSettings.Platform)
+			using (var dest = File.CreateText(LauncherSettings.AsmFile))
 			{
-				case "x86": mode = ArchitectureMode.x86_32; break;
-				case "x64": mode = ArchitectureMode.x86_64; break;
-			}
-
-			using (var disasm = new Disassembler(code, mode, startingAddress, true, Vendor.Any))
-			{
-				using (var dest = File.CreateText(LauncherSettings.AsmFile))
+				foreach (var instruction in disassembler.Decode())
 				{
-					if (map.TryGetValue(startingAddress, out List<string> list))
+					if (map.TryGetValue(instruction.Address, out List<string> list))
 					{
 						foreach (var entry in list)
 						{
@@ -506,22 +492,10 @@ namespace Mosa.Utility.Launcher
 						}
 					}
 
-					foreach (var instruction in disasm.Disassemble())
-					{
-						var inst = translator.Translate(instruction);
-						dest.WriteLine(inst);
+					dest.WriteLine(instruction.Full);
 
-						if (map.TryGetValue(instruction.PC, out List<string> list2))
-						{
-							foreach (var entry in list2)
-							{
-								dest.WriteLine($"; {entry}");
-							}
-						}
-
-						if (instruction.PC > startingAddress + length)
-							break;
-					}
+					if (instruction.Address > startingAddress + length)
+						break;
 				}
 			}
 		}

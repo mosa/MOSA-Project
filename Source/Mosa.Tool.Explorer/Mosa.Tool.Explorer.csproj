@@ -38,6 +38,7 @@
     <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj" />
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
     <ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
+    <ProjectReference Include="..\Mosa.Utility.Disassembler\Mosa.Utility.Disassembler.csproj" />
     <ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -45,10 +46,26 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="System.ComponentModel.Composition" Version="4.7.0" />
-    <PackageReference Include="dnlib" Version="3.3.1" />
-    <PackageReference Include="SharpDisasm" Version="1.1.11" />
+    <PackageReference Include="dnlib" Version="3.3.2" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Properties\Settings.Designer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Reko">
+      <HintPath>..\..\3rdParty\Reko.dll</HintPath>
+    </Reference>
+    <Reference Include="Reko.Arch.Arm">
+      <HintPath>..\..\3rdParty\Reko.Arch.Arm.dll</HintPath>
+    </Reference>
+    <Reference Include="Reko.Arch.X86">
+      <HintPath>..\..\3rdParty\Reko.Arch.X86.dll</HintPath>
+    </Reference>
+    <Reference Include="Reko.Core">
+      <HintPath>..\..\3rdParty\Reko.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Reko.Libraries.Libc">
+      <HintPath>..\..\3rdParty\Reko.Libraries.Libc.dll</HintPath>
+    </Reference>
   </ItemGroup>
 </Project>
