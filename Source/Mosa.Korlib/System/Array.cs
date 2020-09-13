@@ -2,6 +2,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace System
@@ -20,6 +21,9 @@ namespace System
 				return length;
 			}
 		}
+
+		internal const int MaxArrayLength = 0X7FEFFFFF;
+		internal const int MaxByteArrayLength = 0x7FFFFFC7;
 
 		/// <summary>
 		/// Gets the rank (number of dimensions) of the Array. For example, a one-dimensional array returns 1, a two-dimensional array returns 2, and so on.

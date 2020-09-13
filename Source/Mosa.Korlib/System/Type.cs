@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Diagnostics;
+using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
 namespace System
@@ -156,6 +157,15 @@ namespace System
 			Debug.Assert(obj.TypeHandle != null, "obj.TypeHandle != null");
 
 			return obj.TypeHandle.Equals(TypeHandle);
+		}
+
+		public virtual bool IsSerializable
+		{
+			[Pure]
+			get
+			{
+				throw new NotImplementedException();
+			}
 		}
 
 		/// <summary>
