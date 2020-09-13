@@ -80,8 +80,8 @@
 			this.cbInline = new MetroFramework.Controls.MetroCheckBox();
 			this.tabAdvanced = new MetroFramework.Controls.MetroTabPage();
 			this.groupBox6 = new System.Windows.Forms.GroupBox();
-			this.tbVBEDepth = new MetroFramework.Controls.MetroLabel();
-			this.metroTextBox3 = new MetroFramework.Controls.MetroTextBox();
+			this.metroLabel8 = new MetroFramework.Controls.MetroLabel();
+			this.tbVBEDepth = new MetroFramework.Controls.MetroTextBox();
 			this.metroLabel4 = new MetroFramework.Controls.MetroLabel();
 			this.tbVBEHeight = new MetroFramework.Controls.MetroTextBox();
 			this.cbVBEVideo = new MetroFramework.Controls.MetroCheckBox();
@@ -196,7 +196,7 @@
 			this.tbTabs.Margin = new System.Windows.Forms.Padding(0);
 			this.tbTabs.Multiline = true;
 			this.tbTabs.Name = "tbTabs";
-			this.tbTabs.SelectedIndex = 3;
+			this.tbTabs.SelectedIndex = 1;
 			this.tbTabs.Size = new System.Drawing.Size(660, 440);
 			this.tbTabs.Style = MetroFramework.MetroColorStyle.Blue;
 			this.tbTabs.TabIndex = 22;
@@ -852,8 +852,8 @@
 			// groupBox6
 			// 
 			this.groupBox6.BackColor = System.Drawing.SystemColors.ControlLightLight;
+			this.groupBox6.Controls.Add(this.metroLabel8);
 			this.groupBox6.Controls.Add(this.tbVBEDepth);
-			this.groupBox6.Controls.Add(this.metroTextBox3);
 			this.groupBox6.Controls.Add(this.metroLabel4);
 			this.groupBox6.Controls.Add(this.tbVBEHeight);
 			this.groupBox6.Controls.Add(this.cbVBEVideo);
@@ -867,50 +867,50 @@
 			this.groupBox6.TabStop = false;
 			this.groupBox6.Text = "VESA BIOS Extensions (VBE)";
 			// 
+			// metroLabel8
+			// 
+			this.metroLabel8.AutoSize = true;
+			this.metroLabel8.FontSize = MetroFramework.MetroLabelSize.Small;
+			this.metroLabel8.FontWeight = MetroFramework.MetroLabelWeight.Regular;
+			this.metroLabel8.Location = new System.Drawing.Point(52, 105);
+			this.metroLabel8.Name = "metroLabel8";
+			this.metroLabel8.Size = new System.Drawing.Size(42, 15);
+			this.metroLabel8.TabIndex = 65;
+			this.metroLabel8.Text = "Depth:";
+			this.metroLabel8.UseCustomBackColor = true;
+			// 
 			// tbVBEDepth
 			// 
-			this.tbVBEDepth.AutoSize = true;
-			this.tbVBEDepth.FontSize = MetroFramework.MetroLabelSize.Small;
-			this.tbVBEDepth.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-			this.tbVBEDepth.Location = new System.Drawing.Point(52, 105);
-			this.tbVBEDepth.Name = "tbVBEDepth";
-			this.tbVBEDepth.Size = new System.Drawing.Size(42, 15);
-			this.tbVBEDepth.TabIndex = 65;
-			this.tbVBEDepth.Text = "Depth:";
-			this.tbVBEDepth.UseCustomBackColor = true;
-			// 
-			// metroTextBox3
 			// 
 			// 
 			// 
-			// 
-			this.metroTextBox3.CustomButton.Image = null;
-			this.metroTextBox3.CustomButton.Location = new System.Drawing.Point(36, 2);
-			this.metroTextBox3.CustomButton.Name = "";
-			this.metroTextBox3.CustomButton.Size = new System.Drawing.Size(15, 15);
-			this.metroTextBox3.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
-			this.metroTextBox3.CustomButton.TabIndex = 1;
-			this.metroTextBox3.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
-			this.metroTextBox3.CustomButton.UseSelectable = true;
-			this.metroTextBox3.CustomButton.Visible = false;
-			this.metroTextBox3.Lines = new string[] {
+			this.tbVBEDepth.CustomButton.Image = null;
+			this.tbVBEDepth.CustomButton.Location = new System.Drawing.Point(36, 2);
+			this.tbVBEDepth.CustomButton.Name = "";
+			this.tbVBEDepth.CustomButton.Size = new System.Drawing.Size(15, 15);
+			this.tbVBEDepth.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
+			this.tbVBEDepth.CustomButton.TabIndex = 1;
+			this.tbVBEDepth.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
+			this.tbVBEDepth.CustomButton.UseSelectable = true;
+			this.tbVBEDepth.CustomButton.Visible = false;
+			this.tbVBEDepth.Lines = new string[] {
         "32"};
-			this.metroTextBox3.Location = new System.Drawing.Point(100, 100);
-			this.metroTextBox3.MaxLength = 32767;
-			this.metroTextBox3.Name = "metroTextBox3";
-			this.metroTextBox3.PasswordChar = '\0';
-			this.metroTextBox3.ScrollBars = System.Windows.Forms.ScrollBars.None;
-			this.metroTextBox3.SelectedText = "";
-			this.metroTextBox3.SelectionLength = 0;
-			this.metroTextBox3.SelectionStart = 0;
-			this.metroTextBox3.ShortcutsEnabled = true;
-			this.metroTextBox3.Size = new System.Drawing.Size(54, 20);
-			this.metroTextBox3.TabIndex = 64;
-			this.metroTextBox3.Text = "32";
-			this.metroTextBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-			this.metroTextBox3.UseSelectable = true;
-			this.metroTextBox3.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
-			this.metroTextBox3.WaterMarkFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Pixel);
+			this.tbVBEDepth.Location = new System.Drawing.Point(100, 100);
+			this.tbVBEDepth.MaxLength = 32767;
+			this.tbVBEDepth.Name = "tbVBEDepth";
+			this.tbVBEDepth.PasswordChar = '\0';
+			this.tbVBEDepth.ScrollBars = System.Windows.Forms.ScrollBars.None;
+			this.tbVBEDepth.SelectedText = "";
+			this.tbVBEDepth.SelectionLength = 0;
+			this.tbVBEDepth.SelectionStart = 0;
+			this.tbVBEDepth.ShortcutsEnabled = true;
+			this.tbVBEDepth.Size = new System.Drawing.Size(54, 20);
+			this.tbVBEDepth.TabIndex = 64;
+			this.tbVBEDepth.Text = "32";
+			this.tbVBEDepth.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+			this.tbVBEDepth.UseSelectable = true;
+			this.tbVBEDepth.WaterMarkColor = System.Drawing.Color.FromArgb(((int)(((byte)(109)))), ((int)(((byte)(109)))), ((int)(((byte)(109)))));
+			this.tbVBEDepth.WaterMarkFont = new System.Drawing.Font("Segoe UI", 12F, System.Drawing.FontStyle.Italic, System.Drawing.GraphicsUnit.Pixel);
 			// 
 			// metroLabel4
 			// 
@@ -1248,7 +1248,6 @@
 			this.tbOSName.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
 			this.tbOSName.CustomButton.UseSelectable = true;
 			this.tbOSName.CustomButton.Visible = false;
-			this.tbOSName.Enabled = false;
 			this.tbOSName.Lines = new string[] {
         "MOSA"};
 			this.tbOSName.Location = new System.Drawing.Point(72, 39);
@@ -1866,8 +1865,8 @@
 		private MetroFramework.Controls.MetroCheckBox cbDevirtualization;
 		private MetroFramework.Controls.MetroCheckBox cbEmitDwarf;
 		private System.Windows.Forms.GroupBox groupBox6;
-		private MetroFramework.Controls.MetroLabel tbVBEDepth;
-		private MetroFramework.Controls.MetroTextBox metroTextBox3;
+		private MetroFramework.Controls.MetroLabel metroLabel8;
+		private MetroFramework.Controls.MetroTextBox tbVBEDepth;
 		private MetroFramework.Controls.MetroLabel metroLabel4;
 		private MetroFramework.Controls.MetroTextBox tbVBEHeight;
 		private MetroFramework.Controls.MetroLabel metroLabel3;

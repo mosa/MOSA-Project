@@ -38,7 +38,7 @@ namespace Mosa.Kernel.BareMetal
 
 		public static void PageTableSetup()
 		{
-			//PlatformPlug.PageTableSetup();
+			PlatformPlug.PageTableSetup();
 		}
 
 		public static void PageTableInitialize()

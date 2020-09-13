@@ -293,6 +293,12 @@ namespace Mosa.Utility.Launcher
 			set { Settings.SetValue("AppLocation.VmwarePlayer", value); }
 		}
 
+		public string OSName
+		{
+			get { return Settings.GetValue("OS.Name", null); }
+			set { Settings.SetValue("OS.Name", value); }
+		}
+
 		#endregion Properties
 
 		public LauncherSettings(Settings settings)

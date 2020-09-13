@@ -110,6 +110,7 @@ namespace Mosa.Compiler.Framework
 			Settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
 			Settings.SetValue("Multiboot.Version", "v1");
 			Settings.SetValue("Compiler.Platform", "x86");
+			Settings.SetValue("OS.Name", "MOSA");
 
 			Settings.Merge(settings);
 		}

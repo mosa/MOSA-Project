@@ -142,7 +142,7 @@ Below are the command line arguments available:
     -grub,Image.BootLoader,grub0.97
     -grub0.97,Image.BootLoader,grub0.97
     -grub2.00,Image.BootLoader,grub2.00
-    -syslinux,Image.BootLoader,syslinux_v3.72
+    -syslinux,Image.BootLoader,syslinux3.72
     -syslinux3.72,Image.BootLoader,syslinux3.72
     -syslinux6.0,Image.BootLoader,syslinux6.03
 
@@ -156,6 +156,9 @@ Below are the command line arguments available:
     Launcher & Debugger - GDB
     -gdb-port,GDB.Port,{value}
     -gdb-host,GDB.Host,{value}
+
+	Operating System:
+	-osname,OS.Name,{value}
 
     Debugger:
     -breakpoints,Debugger.BreakpointFile,{value}

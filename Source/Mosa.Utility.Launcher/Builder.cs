@@ -12,7 +12,6 @@ using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.BootImage;
-using Mosa.Utility.Disassembler;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -224,7 +223,8 @@ namespace Mosa.Utility.Launcher
 				bootImageOptions.PatchSyslinuxOption = false;
 			}
 
-			bootImageOptions.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetResource("syslinux", "syslinux.cfg")));
+			bootImageOptions.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetSyslinuxCFG()));
+
 			bootImageOptions.IncludeFiles.Add(new IncludeFile(LauncherSettings.OutputFile, "main.exe"));
 
 			bootImageOptions.IncludeFiles.Add(new IncludeFile("TEST.TXT", Encoding.ASCII.GetBytes("This is a test file.")));
@@ -260,6 +260,11 @@ namespace Mosa.Utility.Launcher
 			}
 
 			Generator.Create(bootImageOptions);
+		}
+
+		private byte[] GetSyslinuxCFG()
+		{
+			return Encoding.ASCII.GetBytes("DEFAULT {0}\nLABEL {0}\n  SAY Now trying to boot the {0} kernel...\n  KERNEL mboot.c32\n  APPEND main.exe\n".Replace("{0}", LauncherSettings.OSName));
 		}
 
 		//private void CreateDiskImageV2(string compiledFile)
@@ -373,7 +378,7 @@ namespace Mosa.Utility.Launcher
 				File.WriteAllBytes(Path.Combine(isoDirectory, "mboot.c32"), GetResource(@"syslinux\3.72", "mboot.c32"));
 			}
 
-			File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.cfg"), GetResource("syslinux", "syslinux.cfg"));
+			File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.cfg"), GetSyslinuxCFG());
 
 			File.Copy(LauncherSettings.OutputFile, Path.Combine(isoDirectory, "main.exe"));
 
@@ -402,12 +407,17 @@ namespace Mosa.Utility.Launcher
 			{
 				loader = "boot/grub/stage2_eltorito";
 				File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "stage2_eltorito"), GetResource(@"grub\0.97", "stage2_eltorito"));
-				File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "menu.lst"), GetResource(@"grub\0.97", "menu.lst"));
+
+				var menulist = Encoding.ASCII.GetBytes("default 0\ntimeout 1\n\ntitle {0} Live Disk\nkernel /boot/main.exe\n".Replace("{0}", LauncherSettings.OSName));
+				File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "menu.lst"), menulist);
 			}
 			else if (LauncherSettings.ImageBootLoader == "grub2.00")
 			{
 				loader = "boot/grub/i386-pc/eltorito.img";
-				File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "grub.cfg"), GetResource(@"grub\2.00", "grub.cfg"));
+
+				var grubcfg = Encoding.ASCII.GetBytes("set timeout=1\n\nmenuentry \"{0}\" {\n	multiboot /boot/main.exe\n}\n".Replace("{0}", LauncherSettings.OSName));
+
+				File.WriteAllBytes(Path.Combine(isoDirectory, "boot", "grub", "grub.cfg"), grubcfg);
 
 				Directory.CreateDirectory(Path.Combine(isoDirectory, "boot", "grub", "i386-pc"));
 

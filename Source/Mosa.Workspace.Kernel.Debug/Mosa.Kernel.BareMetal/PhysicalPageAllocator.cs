@@ -241,13 +241,6 @@ namespace Mosa.Kernel.BareMetal
 
 		private static bool CheckFreePage(uint start, uint count, out uint restartAt)
 		{
-			//if (start < MinimumAvailablePage)
-			//{
-			//	// should never happen
-			//	restartAt = MinimumAvailablePage;
-			//	return false;
-			//}
-
 			var end = start + count;
 
 			if (end > MaximumAvailablePage || end > TotalPages)

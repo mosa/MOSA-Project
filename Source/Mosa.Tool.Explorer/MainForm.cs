@@ -1038,6 +1038,7 @@ namespace Mosa.Tool.Explorer
 			Settings.SetValue("Launcher.Launch", false);
 			Settings.SetValue("Launcher.Exit", false);
 			Settings.SetValue("Launcher.HuntForCorLib", true);
+			Settings.SetValue("OS.Name", "MOSA");
 		}
 
 		private void UpdateSettings()
