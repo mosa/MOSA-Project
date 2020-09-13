@@ -24,9 +24,8 @@ namespace Mosa.Platform.x86.Instructions
 
 			if (node.Operand1.IsCPURegister)
 			{
-				emitter.OpcodeEncoder.Append8Bits(0xFF);
-				emitter.OpcodeEncoder.Append2Bits(0b11);
-				emitter.OpcodeEncoder.Append3Bits(0b110);
+				emitter.OpcodeEncoder.Append4Bits(0b0101);
+				emitter.OpcodeEncoder.Append1Bit(0b0);
 				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 				return;
 			}
