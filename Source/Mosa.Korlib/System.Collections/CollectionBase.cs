@@ -1,4 +1,6 @@
-﻿using System;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System;
 using System.Diagnostics.Contracts;
 
 namespace System.Collections
@@ -7,7 +9,7 @@ namespace System.Collections
 	[Serializable]
 	public abstract class CollectionBase : IList
 	{
-		ArrayList list;
+		private ArrayList list;
 
 		protected CollectionBase()
 		{
@@ -18,7 +20,6 @@ namespace System.Collections
 		{
 			list = new ArrayList(capacity);
 		}
-
 
 		protected ArrayList InnerList
 		{
@@ -47,7 +48,6 @@ namespace System.Collections
 			}
 		}
 
-
 		public int Count
 		{
 			get
@@ -67,6 +67,7 @@ namespace System.Collections
 		{
 			if (index < 0 || index >= Count)
 				throw new ArgumentOutOfRangeException();
+
 			//throw new ArgumentOutOfRangeException(nameof(index), Environment.GetResourceString("ArgumentOutOfRange_Index"));
 			Contract.EndContractBlock();
 			Object temp = InnerList[index];
@@ -80,9 +81,9 @@ namespace System.Collections
 			catch
 			{
 				InnerList.Insert(index, temp);
-				throw;
-			}
 
+				//throw; FIME: --- not support!
+			}
 		}
 
 		bool IList.IsReadOnly
@@ -116,6 +117,7 @@ namespace System.Collections
 			{
 				if (index < 0 || index >= Count)
 					throw new ArgumentOutOfRangeException();
+
 				//throw new ArgumentOutOfRangeException(nameof(index), Environment.GetResourceString("ArgumentOutOfRange_Index"));
 				Contract.EndContractBlock();
 				return InnerList[index];
@@ -124,7 +126,8 @@ namespace System.Collections
 			{
 				if (index < 0 || index >= Count)
 					throw new ArgumentOutOfRangeException();
-					//throw new ArgumentOutOfRangeException(nameof(index), Environment.GetResourceString("ArgumentOutOfRange_Index"));
+
+				//throw new ArgumentOutOfRangeException(nameof(index), Environment.GetResourceString("ArgumentOutOfRange_Index"));
 				Contract.EndContractBlock();
 				OnValidate(value);
 				Object temp = InnerList[index];
@@ -137,7 +140,8 @@ namespace System.Collections
 				catch
 				{
 					InnerList[index] = temp;
-					throw;
+
+					//throw; FIME: --- not support!
 				}
 			}
 		}
@@ -159,11 +163,11 @@ namespace System.Collections
 			catch
 			{
 				InnerList.RemoveAt(index);
-				throw;
+
+				//throw; FIME: --- not support!
 			}
 			return index;
 		}
-
 
 		void IList.Remove(Object value)
 		{
@@ -179,7 +183,8 @@ namespace System.Collections
 			catch
 			{
 				InnerList.Insert(index, value);
-				throw;
+
+				//throw; FIME: --- not support!
 			}
 		}
 
@@ -192,7 +197,8 @@ namespace System.Collections
 		{
 			if (index < 0 || index > Count)
 				throw new ArgumentOutOfRangeException();
-				//throw new ArgumentOutOfRangeException(nameof(index), Environment.GetResourceString("ArgumentOutOfRange_Index"));
+
+			//throw new ArgumentOutOfRangeException(nameof(index), Environment.GetResourceString("ArgumentOutOfRange_Index"));
 			Contract.EndContractBlock();
 			OnValidate(value);
 			OnInsert(index, value);
@@ -204,7 +210,8 @@ namespace System.Collections
 			catch
 			{
 				InnerList.RemoveAt(index);
-				throw;
+
+				//throw; FIME: --- not support!
 			}
 		}
 
@@ -250,6 +257,5 @@ namespace System.Collections
 		protected virtual void OnRemoveComplete(int index, Object value)
 		{
 		}
-
 	}
 }
