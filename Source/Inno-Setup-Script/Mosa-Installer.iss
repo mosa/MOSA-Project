@@ -77,7 +77,6 @@ Source: "..\..\bin\Mosa.Utility.FileSystem.dll"; DestDir: "{app}\bin"; Flags: ig
 Source: "..\..\bin\Mosa.Utility.Launcher.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Utility.RSP.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\dnlib.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "..\..\bin\SharpDisasm.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\CommandLine.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Priority Queue.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\MetroFramework.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
@@ -85,6 +84,12 @@ Source: "..\..\bin\MetroFramework.Design.dll"; DestDir: "{app}\bin"; Flags: igno
 Source: "..\..\bin\MetroFramework.Fonts.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\WeifenLuo.WinFormsUI.Docking.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+
+Source: "..\..\bin\Reko.Arch.Arm.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Reko.Arch.X86.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Reko.Core.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Reko.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Reko.Libraries.Libc.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 
 Source: "..\..\Tools\qemu\*.*"; DestDir: "{app}\Tools\qemu"; Flags: ignoreversion
 Source: "..\..\Tools\wget\*.*"; DestDir: "{app}\Tools\wget"; Flags: ignoreversion
