@@ -50,7 +50,7 @@ namespace Mosa.Tool.Explorer.Stages
 			{
 				foreach (var instr in list)
 				{
-					trace.Log(instr.Full.Replace('\t', ' '));
+					trace.Log(instr.Full);
 				}
 			}
 			else

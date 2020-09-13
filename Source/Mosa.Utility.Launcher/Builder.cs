@@ -482,18 +482,8 @@ namespace Mosa.Utility.Launcher
 
 			using (var dest = File.CreateText(LauncherSettings.AsmFile))
 			{
-				if (map.TryGetValue(startingAddress, out List<string> list))
-				{
-					foreach (var entry in list)
-					{
-						dest.WriteLine($"; {entry}");
-					}
-				}
-
 				foreach (var instruction in disassembler.Decode())
 				{
-					dest.WriteLine(instruction.Full.Replace('\t', ' '));
-
 					if (map.TryGetValue(instruction.Address, out List<string> list2))
 					{
 						foreach (var entry in list2)
@@ -501,6 +491,8 @@ namespace Mosa.Utility.Launcher
 							dest.WriteLine($"; {entry}");
 						}
 					}
+
+					dest.WriteLine(instruction.Full);
 
 					if (instruction.Address > startingAddress + length)
 						break;

@@ -1,29 +1,29 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework;
 using Reko.Arch.Arm;
 using Reko.Arch.X86;
 using Reko.Core;
-using Reko.Core.Machine;
-using Reko.Core.Types;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
-using System.IO;
+using System.Text;
 
 namespace Mosa.Utility.Disassembler
 {
 	public partial class Disassembler
 	{
+		private byte[] memory;
+		private ulong address;
+
 		public ulong Offset { get; set; } = 0;
 
 		private ProcessorArchitecture arch;
-		private MemoryArea mem;
+		private MemoryArea memoryArea;
 
 		public Disassembler(string platform)
 		{
-			switch (platform)
+			switch (platform.ToLower())
 			{
-				case "ARMv8A32": arch = new Arm32Architecture(new ServiceContainer(), "arm32"); break;
+				case "armv8a32": arch = new Arm32Architecture(new ServiceContainer(), "arm32"); break;
 				case "x86": arch = new X86ArchitectureFlat32(new ServiceContainer(), "x86-protected-32"); break;
 				case "x64": arch = arch = new X86ArchitectureFlat64(new ServiceContainer(), "x86-protected-64"); break;
 			}
@@ -31,7 +31,9 @@ namespace Mosa.Utility.Disassembler
 
 		public void SetMemory(byte[] memory, ulong address)
 		{
-			mem = new MemoryArea(Address.Ptr32((uint)address), memory);
+			this.memory = memory;
+			this.address = address;
+			memoryArea = new MemoryArea(Address.Ptr32((uint)address), memory);
 		}
 
 		public List<DecodedInstruction> Decode(int count = int.MaxValue)
@@ -40,29 +42,36 @@ namespace Mosa.Utility.Disassembler
 
 			try
 			{
-				var dasm = arch.CreateDisassembler(mem.CreateLeReader((uint)Offset));
+				var dasm = arch.CreateDisassembler(memoryArea.CreateLeReader((uint)Offset));
 
 				foreach (var instr in dasm)
 				{
-					Offset += (uint)instr.Length;
+					var len = instr.Length;
+					var address = instr.Address.Offset;
+					var instruction = instr.ToString().Replace('\t', ' ');
 
-					var sw = new StringWriter();
-					var renderer = new InstrWriter(sw);
+					var sb = new StringBuilder();
 
-					RenderInstruction(mem, arch, instr, renderer);
+					sb.AppendFormat("{0:x8}", address);
+					sb.Append(' ');
+					sb.Append(BytesToHex(memory, (uint)Offset, len));
+					sb.Append(string.Empty.PadRight(41 - sb.Length, ' '));
+					sb.Append(instruction);
 
 					decoded.Add(new DecodedInstruction()
 					{
-						Address = instr.Address.Offset,
-						Length = instr.Length,
-						Instruction = instr.ToString().Replace('\t', ' '),
-						Full = sw.ToString().Replace('\t', ' ')
+						Address = address,
+						Length = len,
+						Instruction = instruction,
+						Full = sb.ToString()
 					});
 
 					count--;
 
 					if (count == 0)
 						break;
+
+					Offset += (uint)len;
 				}
 
 				return decoded;
@@ -73,38 +82,23 @@ namespace Mosa.Utility.Disassembler
 			}
 		}
 
-		private bool RenderInstruction(MemoryArea mem, IProcessorArchitecture arch, MachineInstruction instr, InstrWriter writer)
+		private string BytesToHex(byte[] memory, uint offset, int length)
 		{
-			var instrAddress = instr.Address;
-			var addrBegin = instrAddress;
+			if (length == 0)
+				return string.Empty;
 
-			writer.WriteFormat("{0} ", addrBegin);
+			var sb = new StringBuilder();
 
-			WriteByteRange(mem, arch, instrAddress, instrAddress + instr.Length, writer);
-			if (instr.Length * 3 < 16)
+			for (uint i = 0; i < length; i++)
 			{
-				writer.WriteString(new string(' ', 16 - (instr.Length * 3)));
+				var b = memory[i + offset];
+
+				sb.AppendFormat("{0:x2} ", b);
 			}
 
-			writer.WriteString("\t");
-			writer.Address = instrAddress;
-			instr.Render(writer, MachineInstructionWriterOptions.ResolvePcRelativeAddress);
+			sb.Length--;
 
-			return true;
-		}
-
-		private void WriteByteRange(MemoryArea image, IProcessorArchitecture arch, Address begin, Address addrEnd, InstrWriter writer)
-		{
-			var rdr = arch.CreateImageReader(image, begin);
-			var byteSize = (7 + arch.InstructionBitSize) / 8;
-			string instrByteFormat = $"{{0:X{byteSize * 2}}} "; // each byte is two nybbles.
-			var instrByteSize = PrimitiveType.CreateWord(arch.InstructionBitSize);
-
-			while (rdr.Address < addrEnd)
-			{
-				if (rdr.TryRead(instrByteSize, out var v))
-					writer.WriteFormat(instrByteFormat, v.ToUInt64());
-			}
+			return sb.ToString();
 		}
 	}
 }
