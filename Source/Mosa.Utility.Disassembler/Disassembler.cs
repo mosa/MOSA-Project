@@ -3,6 +3,7 @@
 using Reko.Arch.Arm;
 using Reko.Arch.X86;
 using Reko.Core;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Text;
@@ -49,6 +50,12 @@ namespace Mosa.Utility.Disassembler
 					var len = instr.Length;
 					var address = instr.Address.Offset;
 					var instruction = instr.ToString().Replace('\t', ' ');
+
+					// preference
+					instruction = instruction.Replace(",", ", ");
+
+					// fix up
+					instruction = ChangeHex(instruction);
 
 					var sb = new StringBuilder();
 
@@ -97,6 +104,68 @@ namespace Mosa.Utility.Disassembler
 			}
 
 			sb.Length--;
+
+			return sb.ToString();
+		}
+
+		private bool IsHex(char c)
+		{
+			if (c >= '0' && c <= '9')
+				return true;
+
+			if (c >= 'a' && c <= 'f')
+				return true;
+
+			if (c >= 'A' && c <= 'F')
+				return true;
+
+			return false;
+		}
+
+		private bool IsNext8Hex(string s, int start)
+		{
+			if (start + 8 > s.Length)
+				return false;
+
+			for (int i = start; i < start + 8; i++)
+			{
+				char c = s[i];
+
+				if (!IsHex(c))
+					return false;
+			}
+
+			if (start + 8 == s.Length)
+				return true;
+
+			return !IsHex(s[start + 8]);
+		}
+
+		private string ChangeHex(string s)
+		{
+			var sb = new StringBuilder();
+
+			for (int i = 0; i < s.Length; i++)
+			{
+				char c = s[i];
+
+				if (!IsNext8Hex(s, i))
+				{
+					sb.Append(c);
+					continue;
+				}
+				else
+				{
+					string hex = s.Substring(i, 8);
+					uint value = uint.Parse(hex, System.Globalization.NumberStyles.HexNumber);
+					string hex2 = Convert.ToString(value, 16);
+
+					sb.Append("0x");
+					sb.Append(hex2);
+
+					i += 8;
+				}
+			}
 
 			return sb.ToString();
 		}

@@ -484,9 +484,9 @@ namespace Mosa.Utility.Launcher
 			{
 				foreach (var instruction in disassembler.Decode())
 				{
-					if (map.TryGetValue(instruction.Address, out List<string> list2))
+					if (map.TryGetValue(instruction.Address, out List<string> list))
 					{
-						foreach (var entry in list2)
+						foreach (var entry in list)
 						{
 							dest.WriteLine($"; {entry}");
 						}
