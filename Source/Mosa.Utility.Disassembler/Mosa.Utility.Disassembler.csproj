@@ -31,8 +31,5 @@
     <Reference Include="Reko.Core">
       <HintPath>..\..\3rdParty\Reko.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Reko.Libraries.Libc">
-      <HintPath>..\..\3rdParty\Reko.Libraries.Libc.dll</HintPath>
-    </Reference>
   </ItemGroup>
 </Project>

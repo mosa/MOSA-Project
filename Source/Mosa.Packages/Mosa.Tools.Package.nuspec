@@ -43,7 +43,6 @@
 		<file src="..\..\bin\Reko.Arch.X86.dll" target="tools" />
 		<file src="..\..\bin\Reko.Core.dll" target="tools" />
 		<file src="..\..\bin\Reko.dll" target="tools" />
-		<file src="..\..\bin\Reko.Libraries.Libc.dll" target="tools" />
 		<file src="..\..\bin\CommandLine.dll" target="tools" />
 		<file src="..\..\bin\PriorityQueue.dll" target="tools" />
 		<file src="..\..\bin\MetroFramework.dll" target="tools" />
