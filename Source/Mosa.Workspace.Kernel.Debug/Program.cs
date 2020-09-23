@@ -1,7 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.BareMetal;
-using Mosa.Kernel.BareMetal.BootMemory;
+using Mosa.Runtime;
 
 namespace Mosa.Workspace.Kernel
 {
@@ -17,14 +17,60 @@ namespace Mosa.Workspace.Kernel
 
 			Boot.EntryPoint();
 
-			var page1 = PhysicalPageAllocator.ReservePages(1, 0);
-			System.Console.WriteLine($"Page: {page1.ToInt32()}");
+			Console.WriteLine();
 
-			var page2 = PhysicalPageAllocator.ReservePages(65, 0);
-			System.Console.WriteLine($"Page: {page2.ToInt32()}");
+			Pointer page;
 
-			var page3 = PhysicalPageAllocator.ReservePages(1, 0);
-			System.Console.WriteLine($"Page: {page3.ToInt32()}");
+			page = PhysicalPageAllocator.ReservePages(1, 0);
+			Console.WriteLine($"Page:  0x{page.ToInt32():X8} {page.ToInt32() / Page.Size}");
+
+			page = PhysicalPageAllocator.ReservePages(64, 0);
+			Console.WriteLine($"Page:  0x{page.ToInt32():X8} {page.ToInt32() / Page.Size}");
+
+			page = PhysicalPageAllocator.ReservePages(1, 0);
+			Console.WriteLine($"Page:  0x{page.ToInt32():X8} {page.ToInt32() / Page.Size}");
+
+			page = PhysicalPageAllocator.ReservePages(1, 0);
+			Console.WriteLine($"Page:  0x{page.ToInt32():X8} {page.ToInt32() / Page.Size}");
+
+			page = PhysicalPageAllocator.ReservePages(1, 0);
+			Console.WriteLine($"Page:  0x{page.ToInt32():X8} {page.ToInt32() / Page.Size}");
+
+			page = PhysicalPageAllocator.ReservePages(1, 0);
+			Console.WriteLine($"Page:  0x{page.ToInt32():X8} {page.ToInt32() / Page.Size}");
+
+			page = PhysicalPageAllocator.ReservePages(1, 0);
+			Console.WriteLine($"Page: {page.ToInt32()} {page.ToInt32() / Page.Size}");
+
+			page = PhysicalPageAllocator.ReservePages(1, 0);
+			Console.WriteLine($"Page: {page.ToInt32()} {page.ToInt32() / Page.Size}");
+
+			page = PhysicalPageAllocator.ReservePages(1, 0);
+			Console.WriteLine($"Page: {page.ToInt32()} {page.ToInt32() / Page.Size}");
+
+			page = PhysicalPageAllocator.ReservePages(1, 0);
+			Console.WriteLine($"Page: {page.ToInt32()} {page.ToInt32() / Page.Size}");
+
+			page = PhysicalPageAllocator.ReservePages(1, 0);
+			Console.WriteLine($"Page: {page.ToInt32()} {page.ToInt32() / Page.Size}");
+
+			page = PhysicalPageAllocator.ReservePages(2, 0);
+			Console.WriteLine($"Page: {page.ToInt32()} {page.ToInt32() / Page.Size}");
+
+			page = PhysicalPageAllocator.ReservePages(4, 0);
+			Console.WriteLine($"Page: {page.ToInt32()} {page.ToInt32() / Page.Size}");
+
+			page = PhysicalPageAllocator.ReservePages(8, 0);
+			Console.WriteLine($"Page: {page.ToInt32()} {page.ToInt32() / Page.Size}");
+
+			page = PhysicalPageAllocator.ReservePages(16, 0);
+			Console.WriteLine($"Page: {page.ToInt32()} {page.ToInt32() / Page.Size}");
+
+			page = PhysicalPageAllocator.ReservePages(32, 0);
+			Console.WriteLine($"Page: {page.ToInt32()} {page.ToInt32() / Page.Size}");
+
+			page = PhysicalPageAllocator.ReservePages(1, 0);
+			Console.WriteLine($"Page: {page.ToInt32()} {page.ToInt32() / Page.Size}");
 
 			return;
 		}
