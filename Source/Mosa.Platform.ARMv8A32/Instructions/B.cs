@@ -13,14 +13,14 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	public sealed class B : ARMv8A32Instruction
 	{
 		internal B()
-			: base(0, 1)
+			: base(0, 0)
 		{
 		}
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
 			if (node.Operand1.IsConstant)
 			{

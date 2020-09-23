@@ -130,9 +130,9 @@ namespace Mosa.Platform.ARMv8A32
 		/// <param name="compilerSettings">The compiler options.</param>
 		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerSettings compilerSettings)
 		{
-			pipeline.InsertBefore<GreedyRegisterAllocatorStage>(
-				new StopStage()
-			);
+			//pipeline.InsertBefore<GreedyRegisterAllocatorStage>(
+			//	new StopStage()
+			//);
 
 			pipeline.InsertAfterFirst<CodeGenerationStage>(
 				new StopStage()
