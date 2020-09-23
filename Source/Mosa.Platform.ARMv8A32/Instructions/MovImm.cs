@@ -13,14 +13,14 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	public sealed class MovImm : ARMv8A32Instruction
 	{
 		internal MovImm()
-			: base(1, 2)
+			: base(1, 1)
 		{
 		}
 
 		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
 			if (node.Operand1.IsCPURegister && node.Operand2.IsConstant)
 			{
