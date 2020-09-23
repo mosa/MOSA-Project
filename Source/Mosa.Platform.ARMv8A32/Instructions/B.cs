@@ -22,15 +22,9 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-			if (node.Operand1.IsConstant)
-			{
-				emitter.OpcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
-				emitter.OpcodeEncoder.Append4Bits(0b1010);
-				emitter.OpcodeEncoder.EmitRelative24(node.BranchTargets[0].Label);
-				return;
-			}
-
-			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
+			emitter.OpcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
+			emitter.OpcodeEncoder.Append4Bits(0b1010);
+			emitter.OpcodeEncoder.EmitRelative24(node.BranchTargets[0].Label);
 		}
 	}
 }

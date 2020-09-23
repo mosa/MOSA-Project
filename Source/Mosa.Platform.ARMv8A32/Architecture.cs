@@ -134,9 +134,9 @@ namespace Mosa.Platform.ARMv8A32
 			//	new StopStage()
 			//);
 
-			pipeline.InsertAfterFirst<CodeGenerationStage>(
-				new StopStage()
-			);
+			//pipeline.InsertAfterFirst<CodeGenerationStage>(
+			//	new StopStage()
+			//);
 
 			pipeline.InsertBefore<CallStage>(
 				new Stages.RuntimeCallStage()

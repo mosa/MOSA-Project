@@ -57,6 +57,7 @@ namespace Mosa.Platform.ARMv8A32
 				case ConditionCode.NoOverflow: return 0b0111;
 				case ConditionCode.Positive: return 0b0101;
 
+				case ConditionCode.Undefined: return 0b1110;
 				default: throw new NotSupportedException();
 			}
 		}
