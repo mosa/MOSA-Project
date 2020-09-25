@@ -115,9 +115,9 @@ namespace Mosa.Platform.ARMv8A32
 		/// </value>
 		public override List<BaseInstruction> Instructions { get { return ARMv8A32Instructions.List; } }
 
-		public override OpcodeEncoder GetOpcodeEncoder(BaseCodeEmitter emitter)
+		public override OpcodeEncoder GetOpcodeEncoder()
 		{
-			return new OpcodeEncoder(emitter);
+			return new OpcodeEncoder();
 		}
 
 		/// <summary>

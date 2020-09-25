@@ -363,7 +363,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			if (node.StaticEmitMethod != null)
 			{
 				Lines.AppendLine();
-				Lines.AppendLine("\t\tpublic override void Emit(InstructionNode node, BaseCodeEmitter emitter)");
+				Lines.AppendLine("\t\tpublic override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)");
 				Lines.AppendLine("\t\t{");
 
 				if (node.VariableOperands == null || node.VariableOperands == "false")
@@ -380,7 +380,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			if (node.OpcodeEncoding != null)
 			{
 				Lines.AppendLine();
-				Lines.AppendLine("\t\tpublic override void Emit(InstructionNode node, BaseCodeEmitter emitter)");
+				Lines.AppendLine("\t\tpublic override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)");
 				Lines.AppendLine("\t\t{");
 				if (node.VariableOperands == null || node.VariableOperands == "false")
 				{
@@ -690,31 +690,31 @@ namespace Mosa.Utility.SourceCodeGenerator
 					switch (hex.Length)
 					{
 						case 1:
-							Lines.AppendLine("emitter.OpcodeEncoder.Append4Bits(0x" + hex + ");");
+							Lines.AppendLine("opcodeEncoder.Append4Bits(0x" + hex + ");");
 							break;
 
 						case 2:
-							Lines.AppendLine("emitter.OpcodeEncoder.Append8Bits(0x" + hex + ");");
+							Lines.AppendLine("opcodeEncoder.Append8Bits(0x" + hex + ");");
 							break;
 
 						case 3:
-							Lines.AppendLine("emitter.OpcodeEncoder.Append8Bits(0x" + hex.Substring(0, 2) + ");");
+							Lines.AppendLine("opcodeEncoder.Append8Bits(0x" + hex.Substring(0, 2) + ");");
 							Lines.Append(tabs);
-							Lines.AppendLine("emitter.OpcodeEncoder.Append4Bits(0x" + hex.Substring(1) + ");");
+							Lines.AppendLine("opcodeEncoder.Append4Bits(0x" + hex.Substring(1) + ");");
 							break;
 
 						case 4:
-							Lines.AppendLine("emitter.OpcodeEncoder.AppendShort(0x" + hex + ");");
+							Lines.AppendLine("opcodeEncoder.AppendShort(0x" + hex + ");");
 							break;
 
 						case 5:
-							Lines.AppendLine("emitter.OpcodeEncoder.AppendShort(0x" + hex.Substring(0, 4) + ");");
+							Lines.AppendLine("opcodeEncoder.AppendShort(0x" + hex.Substring(0, 4) + ");");
 							Lines.Append(tabs);
-							Lines.AppendLine("emitter.OpcodeEncoder.Append4Bits(0x" + hex.Substring(5) + ");");
+							Lines.AppendLine("opcodeEncoder.Append4Bits(0x" + hex.Substring(5) + ");");
 							break;
 
 						case 8:
-							Lines.AppendLine("emitter.OpcodeEncoder.Append32Bits(0x" + hex + ");");
+							Lines.AppendLine("opcodeEncoder.Append32Bits(0x" + hex + ");");
 							break;
 
 						default: throw new Exception("ERROR!");
@@ -736,43 +736,43 @@ namespace Mosa.Utility.SourceCodeGenerator
 					switch (binary.Length)
 					{
 						case 1:
-							Lines.AppendLine("emitter.OpcodeEncoder.Append1Bit(0b" + binary + ");");
+							Lines.AppendLine("opcodeEncoder.Append1Bit(0b" + binary + ");");
 							break;
 
 						case 2:
-							Lines.AppendLine("emitter.OpcodeEncoder.Append2Bits(0b" + binary + ");");
+							Lines.AppendLine("opcodeEncoder.Append2Bits(0b" + binary + ");");
 							break;
 
 						case 3:
-							Lines.AppendLine("emitter.OpcodeEncoder.Append3Bits(0b" + binary + ");");
+							Lines.AppendLine("opcodeEncoder.Append3Bits(0b" + binary + ");");
 							break;
 
 						case 4:
-							Lines.AppendLine("emitter.OpcodeEncoder.Append4Bits(0b" + binary + ");");
+							Lines.AppendLine("opcodeEncoder.Append4Bits(0b" + binary + ");");
 							break;
 
 						case 5:
-							Lines.AppendLine("emitter.OpcodeEncoder.Append4Bits(0b" + binary.Substring(0, 4) + ");");
+							Lines.AppendLine("opcodeEncoder.Append4Bits(0b" + binary.Substring(0, 4) + ");");
 							Lines.Append(tabs);
-							Lines.AppendLine("emitter.OpcodeEncoder.Append1Bit(0b" + binary.Substring(4) + ");");
+							Lines.AppendLine("opcodeEncoder.Append1Bit(0b" + binary.Substring(4) + ");");
 							break;
 
 						case 6:
-							Lines.AppendLine("emitter.OpcodeEncoder.Append4Bits(0b" + binary.Substring(0, 4) + ");");
+							Lines.AppendLine("opcodeEncoder.Append4Bits(0b" + binary.Substring(0, 4) + ");");
 							Lines.Append(tabs);
-							Lines.AppendLine("emitter.OpcodeEncoder.Append2Bits(0b" + binary.Substring(4) + ");");
+							Lines.AppendLine("opcodeEncoder.Append2Bits(0b" + binary.Substring(4) + ");");
 							break;
 
 						case 7:
-							Lines.AppendLine("emitter.OpcodeEncoder.Append4Bits(0b" + binary.Substring(0, 4) + ");");
+							Lines.AppendLine("opcodeEncoder.Append4Bits(0b" + binary.Substring(0, 4) + ");");
 							Lines.Append(tabs);
-							Lines.AppendLine("emitter.OpcodeEncoder.Append3Bits(0b" + binary.Substring(4) + ");");
+							Lines.AppendLine("opcodeEncoder.Append3Bits(0b" + binary.Substring(4) + ");");
 							break;
 
 						case 8:
-							Lines.AppendLine("emitter.OpcodeEncoder.Append4Bits(0b" + binary.Substring(0, 4) + ");");
+							Lines.AppendLine("opcodeEncoder.Append4Bits(0b" + binary.Substring(0, 4) + ");");
 							Lines.Append(tabs);
-							Lines.AppendLine("emitter.OpcodeEncoder.Append4Bits(0b" + binary.Substring(4) + ");");
+							Lines.AppendLine("opcodeEncoder.Append4Bits(0b" + binary.Substring(4) + ");");
 							break;
 
 						default: throw new Exception("ERROR!");
@@ -794,11 +794,11 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 					if (operand2 == null)
 					{
-						Lines.AppendLine("emitter.OpcodeEncoder." + code + "(" + operand + postcode + ");");
+						Lines.AppendLine("opcodeEncoder." + code + "(" + operand + postcode + ");");
 					}
 					else
 					{
-						Lines.AppendLine("emitter.OpcodeEncoder." + code + "(" + operand + postcode + ", " + operand2 + ");");
+						Lines.AppendLine("opcodeEncoder." + code + "(" + operand + postcode + ", " + operand2 + ");");
 					}
 				}
 			}

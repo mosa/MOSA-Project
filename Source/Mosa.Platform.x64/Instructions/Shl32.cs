@@ -29,7 +29,7 @@ namespace Mosa.Platform.x64.Instructions
 
 		public override bool IsParityFlagModified { get { return true; } }
 
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
@@ -39,47 +39,47 @@ namespace Mosa.Platform.x64.Instructions
 
 			if (node.Operand2.IsCPURegister)
 			{
-				emitter.OpcodeEncoder.SuppressByte(0x40);
-				emitter.OpcodeEncoder.Append4Bits(0b0100);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3) & 0x1);
-				emitter.OpcodeEncoder.Append8Bits(0xD3);
-				emitter.OpcodeEncoder.Append2Bits(0b11);
-				emitter.OpcodeEncoder.Append3Bits(0b100);
-				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				opcodeEncoder.SuppressByte(0x40);
+				opcodeEncoder.Append4Bits(0b0100);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3) & 0x1);
+				opcodeEncoder.Append8Bits(0xD3);
+				opcodeEncoder.Append2Bits(0b11);
+				opcodeEncoder.Append3Bits(0b100);
+				opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 				return;
 			}
 
 			if (node.Operand2.IsConstantOne)
 			{
-				emitter.OpcodeEncoder.SuppressByte(0x40);
-				emitter.OpcodeEncoder.Append4Bits(0b0100);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3) & 0x1);
-				emitter.OpcodeEncoder.Append8Bits(0xD1);
-				emitter.OpcodeEncoder.Append2Bits(0b11);
-				emitter.OpcodeEncoder.Append3Bits(0b100);
-				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				opcodeEncoder.SuppressByte(0x40);
+				opcodeEncoder.Append4Bits(0b0100);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3) & 0x1);
+				opcodeEncoder.Append8Bits(0xD1);
+				opcodeEncoder.Append2Bits(0b11);
+				opcodeEncoder.Append3Bits(0b100);
+				opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 				return;
 			}
 
 			if (node.Operand2.IsConstant)
 			{
-				emitter.OpcodeEncoder.SuppressByte(0x40);
-				emitter.OpcodeEncoder.Append4Bits(0b0100);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3) & 0x1);
-				emitter.OpcodeEncoder.Append8Bits(0xC1);
-				emitter.OpcodeEncoder.Append2Bits(0b11);
-				emitter.OpcodeEncoder.Append3Bits(0b100);
-				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append8BitImmediate(node.Operand2);
+				opcodeEncoder.SuppressByte(0x40);
+				opcodeEncoder.Append4Bits(0b0100);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append1Bit((node.Result.Register.RegisterCode >> 3) & 0x1);
+				opcodeEncoder.Append8Bits(0xC1);
+				opcodeEncoder.Append2Bits(0b11);
+				opcodeEncoder.Append3Bits(0b100);
+				opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				opcodeEncoder.Append8BitImmediate(node.Operand2);
 				return;
 			}
 

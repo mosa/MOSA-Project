@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#region Properties
 
-		private BaseCodeEmitter CodeEmitter;
+		private CodeEmitter CodeEmitter;
 
 		public bool EmitBinary { get; set; }
 
@@ -144,7 +144,7 @@ namespace Mosa.Compiler.Framework.Stages
 							labelStart = node.Offset;
 						}
 
-						baseInstruction.Emit(node, CodeEmitter);
+						baseInstruction.Emit(node, CodeEmitter.OpcodeEncoder);
 
 						GeneratedInstructionCount++;
 
@@ -170,10 +170,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private void BeginGenerate()
 		{
-			var opcodeEncoder = Architecture.GetOpcodeEncoder(CodeEmitter);
-
-			CodeEmitter = new BaseCodeEmitter();
-			CodeEmitter.Initialize(Method.FullName, Linker, codeStream, opcodeEncoder);
+			CodeEmitter = new CodeEmitter(Method.FullName, Linker, codeStream, Architecture.GetOpcodeEncoder());
 
 			MethodCompiler.Labels = CodeEmitter.Labels;
 		}

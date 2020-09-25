@@ -78,7 +78,7 @@ namespace Mosa.Compiler.Framework.Platform
 		/// </summary>
 		/// <param name="node">The node.</param>
 		/// <param name="emitter">The emitter.</param>
-		public abstract void Emit(InstructionNode node, BaseCodeEmitter emitter);
+		public abstract void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder);
 
 		#endregion Methods
 	}

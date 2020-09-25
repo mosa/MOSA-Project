@@ -17,20 +17,20 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 		{
 		}
 
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
 			if (node.Operand1.IsCPURegister)
 			{
-				emitter.OpcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
-				emitter.OpcodeEncoder.Append4Bits(0b0001);
-				emitter.OpcodeEncoder.Append4Bits(0b0010);
-				emitter.OpcodeEncoder.Append4Bits(0b1111);
-				emitter.OpcodeEncoder.Append4Bits(0b1111);
-				emitter.OpcodeEncoder.Append4Bits(0b0001);
-				emitter.OpcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
+				opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
+				opcodeEncoder.Append4Bits(0b0001);
+				opcodeEncoder.Append4Bits(0b0010);
+				opcodeEncoder.Append4Bits(0b1111);
+				opcodeEncoder.Append4Bits(0b1111);
+				opcodeEncoder.Append4Bits(0b0001);
+				opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
 				return;
 			}
 

@@ -19,134 +19,134 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override bool IsMemoryRead { get { return true; } }
 
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
 			if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 5) && node.Operand2.IsConstantZero)
 			{
-				emitter.OpcodeEncoder.Append8Bits(0xF2);
-				emitter.OpcodeEncoder.Append8Bits(0x0F);
-				emitter.OpcodeEncoder.Append8Bits(0x10);
-				emitter.OpcodeEncoder.Append2Bits(0b01);
-				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append3Bits(0b101);
-				emitter.OpcodeEncoder.Append8Bits(0x00);
+				opcodeEncoder.Append8Bits(0xF2);
+				opcodeEncoder.Append8Bits(0x0F);
+				opcodeEncoder.Append8Bits(0x10);
+				opcodeEncoder.Append2Bits(0b01);
+				opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				opcodeEncoder.Append3Bits(0b101);
+				opcodeEncoder.Append8Bits(0x00);
 				return;
 			}
 
 			if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4) && node.Operand2.IsConstantZero)
 			{
-				emitter.OpcodeEncoder.Append8Bits(0xF2);
-				emitter.OpcodeEncoder.Append8Bits(0x0F);
-				emitter.OpcodeEncoder.Append8Bits(0x10);
-				emitter.OpcodeEncoder.Append2Bits(0b00);
-				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append3Bits(0b100);
-				emitter.OpcodeEncoder.Append2Bits(0b00);
-				emitter.OpcodeEncoder.Append3Bits(0b100);
-				emitter.OpcodeEncoder.Append3Bits(0b100);
+				opcodeEncoder.Append8Bits(0xF2);
+				opcodeEncoder.Append8Bits(0x0F);
+				opcodeEncoder.Append8Bits(0x10);
+				opcodeEncoder.Append2Bits(0b00);
+				opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				opcodeEncoder.Append3Bits(0b100);
+				opcodeEncoder.Append2Bits(0b00);
+				opcodeEncoder.Append3Bits(0b100);
+				opcodeEncoder.Append3Bits(0b100);
 				return;
 			}
 
 			if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4) && (node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127))
 			{
-				emitter.OpcodeEncoder.Append8Bits(0xF2);
-				emitter.OpcodeEncoder.Append8Bits(0x0F);
-				emitter.OpcodeEncoder.Append8Bits(0x10);
-				emitter.OpcodeEncoder.Append2Bits(0b01);
-				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append3Bits(0b100);
-				emitter.OpcodeEncoder.Append2Bits(0b00);
-				emitter.OpcodeEncoder.Append3Bits(0b100);
-				emitter.OpcodeEncoder.Append3Bits(0b100);
-				emitter.OpcodeEncoder.Append8BitImmediate(node.Operand2);
+				opcodeEncoder.Append8Bits(0xF2);
+				opcodeEncoder.Append8Bits(0x0F);
+				opcodeEncoder.Append8Bits(0x10);
+				opcodeEncoder.Append2Bits(0b01);
+				opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				opcodeEncoder.Append3Bits(0b100);
+				opcodeEncoder.Append2Bits(0b00);
+				opcodeEncoder.Append3Bits(0b100);
+				opcodeEncoder.Append3Bits(0b100);
+				opcodeEncoder.Append8BitImmediate(node.Operand2);
 				return;
 			}
 
 			if ((node.Operand1.IsCPURegister && node.Operand1.Register.RegisterCode == 4) && node.Operand2.IsConstant)
 			{
-				emitter.OpcodeEncoder.Append8Bits(0xF2);
-				emitter.OpcodeEncoder.Append8Bits(0x0F);
-				emitter.OpcodeEncoder.Append8Bits(0x10);
-				emitter.OpcodeEncoder.Append2Bits(0b10);
-				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append3Bits(0b100);
-				emitter.OpcodeEncoder.Append8BitImmediate(node.Operand2);
+				opcodeEncoder.Append8Bits(0xF2);
+				opcodeEncoder.Append8Bits(0x0F);
+				opcodeEncoder.Append8Bits(0x10);
+				opcodeEncoder.Append2Bits(0b10);
+				opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				opcodeEncoder.Append3Bits(0b100);
+				opcodeEncoder.Append8BitImmediate(node.Operand2);
 				return;
 			}
 
 			if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister)
 			{
-				emitter.OpcodeEncoder.Append8Bits(0xF2);
-				emitter.OpcodeEncoder.Append8Bits(0x0F);
-				emitter.OpcodeEncoder.Append8Bits(0x10);
-				emitter.OpcodeEncoder.Append2Bits(0b00);
-				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append3Bits(0b100);
-				emitter.OpcodeEncoder.Append2Bits(0b00);
-				emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				opcodeEncoder.Append8Bits(0xF2);
+				opcodeEncoder.Append8Bits(0x0F);
+				opcodeEncoder.Append8Bits(0x10);
+				opcodeEncoder.Append2Bits(0b00);
+				opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				opcodeEncoder.Append3Bits(0b100);
+				opcodeEncoder.Append2Bits(0b00);
+				opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+				opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 				return;
 			}
 
 			if (node.Operand1.IsCPURegister && node.Operand2.IsConstantZero)
 			{
-				emitter.OpcodeEncoder.Append8Bits(0xF2);
-				emitter.OpcodeEncoder.Append8Bits(0x0F);
-				emitter.OpcodeEncoder.Append8Bits(0x10);
-				emitter.OpcodeEncoder.Append2Bits(0b00);
-				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				opcodeEncoder.Append8Bits(0xF2);
+				opcodeEncoder.Append8Bits(0x0F);
+				opcodeEncoder.Append8Bits(0x10);
+				opcodeEncoder.Append2Bits(0b00);
+				opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 				return;
 			}
 
 			if (node.Operand1.IsCPURegister && (node.Operand2.IsConstant && node.Operand2.ConstantSigned32 >= -128 && node.Operand2.ConstantSigned32 <= 127))
 			{
-				emitter.OpcodeEncoder.Append8Bits(0xF2);
-				emitter.OpcodeEncoder.Append8Bits(0x0F);
-				emitter.OpcodeEncoder.Append8Bits(0x10);
-				emitter.OpcodeEncoder.Append2Bits(0b01);
-				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append8BitImmediate(node.Operand2);
+				opcodeEncoder.Append8Bits(0xF2);
+				opcodeEncoder.Append8Bits(0x0F);
+				opcodeEncoder.Append8Bits(0x10);
+				opcodeEncoder.Append2Bits(0b01);
+				opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				opcodeEncoder.Append8BitImmediate(node.Operand2);
 				return;
 			}
 
 			if (node.Operand1.IsCPURegister && node.Operand2.IsConstant)
 			{
-				emitter.OpcodeEncoder.Append8Bits(0xF2);
-				emitter.OpcodeEncoder.Append8Bits(0x0F);
-				emitter.OpcodeEncoder.Append8Bits(0x10);
-				emitter.OpcodeEncoder.Append2Bits(0b10);
-				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append32BitImmediate(node.Operand2);
+				opcodeEncoder.Append8Bits(0xF2);
+				opcodeEncoder.Append8Bits(0x0F);
+				opcodeEncoder.Append8Bits(0x10);
+				opcodeEncoder.Append2Bits(0b10);
+				opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				opcodeEncoder.Append32BitImmediate(node.Operand2);
 				return;
 			}
 
 			if (node.Operand1.IsConstant && node.Operand2.IsConstantZero)
 			{
-				emitter.OpcodeEncoder.Append8Bits(0xF2);
-				emitter.OpcodeEncoder.Append8Bits(0x0F);
-				emitter.OpcodeEncoder.Append8Bits(0x10);
-				emitter.OpcodeEncoder.Append2Bits(0b00);
-				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append3Bits(0b101);
-				emitter.OpcodeEncoder.Append32BitImmediate(node.Operand1);
+				opcodeEncoder.Append8Bits(0xF2);
+				opcodeEncoder.Append8Bits(0x0F);
+				opcodeEncoder.Append8Bits(0x10);
+				opcodeEncoder.Append2Bits(0b00);
+				opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				opcodeEncoder.Append3Bits(0b101);
+				opcodeEncoder.Append32BitImmediate(node.Operand1);
 				return;
 			}
 
 			if (node.Operand1.IsConstant && node.Operand2.IsConstant)
 			{
-				emitter.OpcodeEncoder.Append8Bits(0xF2);
-				emitter.OpcodeEncoder.Append8Bits(0x0F);
-				emitter.OpcodeEncoder.Append8Bits(0x10);
-				emitter.OpcodeEncoder.Append2Bits(0b00);
-				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append3Bits(0b101);
-				emitter.OpcodeEncoder.Append32BitImmediateWithOffset(node.Operand1, node.Operand2);
+				opcodeEncoder.Append8Bits(0xF2);
+				opcodeEncoder.Append8Bits(0x0F);
+				opcodeEncoder.Append8Bits(0x10);
+				opcodeEncoder.Append2Bits(0b00);
+				opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				opcodeEncoder.Append3Bits(0b101);
+				opcodeEncoder.Append32BitImmediateWithOffset(node.Operand1, node.Operand2);
 				return;
 			}
 

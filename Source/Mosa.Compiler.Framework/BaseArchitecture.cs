@@ -136,7 +136,7 @@ namespace Mosa.Compiler.Framework
 
 		#region Methods
 
-		public abstract OpcodeEncoder GetOpcodeEncoder(BaseCodeEmitter emitter);
+		public abstract OpcodeEncoder GetOpcodeEncoder();
 
 		/// <summary>
 		/// Extends the compiler pipeline with architecture specific compiler stages.

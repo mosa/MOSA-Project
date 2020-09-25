@@ -17,15 +17,15 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
-			emitter.OpcodeEncoder.Append8Bits(0x8C);
-			emitter.OpcodeEncoder.Append2Bits(0b11);
-			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
-			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+			opcodeEncoder.Append8Bits(0x8C);
+			opcodeEncoder.Append2Bits(0b11);
+			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 		}
 	}
 }

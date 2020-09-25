@@ -19,15 +19,15 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override bool IsCommutative { get { return true; } }
 
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 2);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			emitter.OpcodeEncoder.Append8Bits(0x87);
-			emitter.OpcodeEncoder.Append2Bits(0b11);
-			emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
-			emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+			opcodeEncoder.Append8Bits(0x87);
+			opcodeEncoder.Append2Bits(0b11);
+			opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 		}
 	}
 }

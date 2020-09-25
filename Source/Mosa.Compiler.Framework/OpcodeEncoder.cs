@@ -6,9 +6,7 @@ namespace Mosa.Compiler.Framework
 {
 	public sealed class OpcodeEncoder
 	{
-		// Little Endian
-
-		private readonly BaseCodeEmitter Emitter;
+		private CodeEmitter Emitter;
 
 		private byte Bits;
 		private int BitsLength;
@@ -16,11 +14,15 @@ namespace Mosa.Compiler.Framework
 		private bool SuppressFlag;
 		private byte SuppressValue;
 
-		public OpcodeEncoder(BaseCodeEmitter emitter)
+		public OpcodeEncoder()
 		{
-			Emitter = emitter;
 			SuppressFlag = false;
 			Reset();
+		}
+
+		public void SetEmitter(CodeEmitter emitter)
+		{
+			Emitter = emitter;
 		}
 
 		private void Reset()

@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Base code emitter.
 	/// </summary>
-	public class BaseCodeEmitter
+	public sealed class CodeEmitter
 	{
 		#region Patch Type
 
@@ -97,15 +97,15 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Properties
 
-		#region Members
+		#region Constructor
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="BaseCodeEmitter" />.
+		/// Initializes a new instance of <see cref="CodeEmitter" />.
 		/// </summary>
 		/// <param name="methodName">Name of the method.</param>
 		/// <param name="linker">The linker.</param>
 		/// <param name="codeStream">The stream the machine code is written to.</param>
-		public void Initialize(string methodName, MosaLinker linker, Stream codeStream, OpcodeEncoder opcodeEncoder)
+		public CodeEmitter(string methodName, MosaLinker linker, Stream codeStream, OpcodeEncoder opcodeEncoder)
 		{
 			Debug.Assert(codeStream != null);
 			Debug.Assert(linker != null);
@@ -117,8 +117,14 @@ namespace Mosa.Compiler.Framework
 
 			Labels = new Dictionary<int, int>();
 
+			opcodeEncoder.SetEmitter(this);
+
 			//OpcodeEncoder = new OpcodeEncoder(this);
 		}
+
+		#endregion Constructor
+
+		#region Members
 
 		/// <summary>
 		/// Emits a label into the code stream.
@@ -151,7 +157,7 @@ namespace Mosa.Compiler.Framework
 			Patches.Add(new Patch(label, position));
 		}
 
-		public virtual void ResolvePatches()
+		public void ResolvePatches()
 		{
 			// Save the current position
 			long currentPosition = CodeStream.Position;

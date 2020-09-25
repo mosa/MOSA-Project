@@ -19,23 +19,23 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 
 		public override bool IsCommutative { get { return true; } }
 
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
 			if (node.Operand1.IsCPURegister)
 			{
-				emitter.OpcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
-				emitter.OpcodeEncoder.Append4Bits(0b1110);
-				emitter.OpcodeEncoder.Append4Bits(0b0101);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append4Bits(0b0001);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append2Bits(0b00);
-				emitter.OpcodeEncoder.Append1Bit(0b1);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
+				opcodeEncoder.Append4Bits(0b1110);
+				opcodeEncoder.Append4Bits(0b0101);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append4Bits(0b0001);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append2Bits(0b00);
+				opcodeEncoder.Append1Bit(0b1);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 				return;
 			}
 

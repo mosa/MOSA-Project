@@ -128,9 +128,9 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		public override List<BaseInstruction> Instructions { get { return X86Instructions.List; } }
 
-		public override OpcodeEncoder GetOpcodeEncoder(BaseCodeEmitter emitter)
+		public override OpcodeEncoder GetOpcodeEncoder()
 		{
-			return new OpcodeEncoder(emitter);
+			return new OpcodeEncoder();
 		}
 
 		/// <summary>

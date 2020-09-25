@@ -39,13 +39,13 @@ namespace Mosa.Platform.x64.Instructions
 
 		public override bool IsParityFlagUndefined { get { return true; } }
 
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-			emitter.OpcodeEncoder.Append8Bits(0xE9);
-			emitter.OpcodeEncoder.EmitRelative32(node.BranchTargets[0].Label);
+			opcodeEncoder.Append8Bits(0xE9);
+			opcodeEncoder.EmitRelative32(node.BranchTargets[0].Label);
 		}
 	}
 }

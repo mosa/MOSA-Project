@@ -27,7 +27,7 @@ namespace Mosa.Platform.x64.Instructions
 
 		public override bool IsParityFlagModified { get { return true; } }
 
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
@@ -35,9 +35,9 @@ namespace Mosa.Platform.x64.Instructions
 			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
 			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
-			emitter.OpcodeEncoder.Append4Bits(0b0100);
-			emitter.OpcodeEncoder.Append1Bit(0b1);
-			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+			opcodeEncoder.Append4Bits(0b0100);
+			opcodeEncoder.Append1Bit(0b1);
+			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
 		}
 	}
 }
