@@ -170,8 +170,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private void BeginGenerate()
 		{
+			var opcodeEncoder = Architecture.GetOpcodeEncoder(CodeEmitter);
+
 			CodeEmitter = new BaseCodeEmitter();
-			CodeEmitter.Initialize(Method.FullName, Linker, codeStream);
+			CodeEmitter.Initialize(Method.FullName, Linker, codeStream, opcodeEncoder);
 
 			MethodCompiler.Labels = CodeEmitter.Labels;
 		}

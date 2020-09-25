@@ -128,6 +128,11 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		public override List<BaseInstruction> Instructions { get { return X86Instructions.List; } }
 
+		public override OpcodeEncoder GetOpcodeEncoder(BaseCodeEmitter emitter)
+		{
+			return new OpcodeEncoder(emitter);
+		}
+
 		/// <summary>
 		/// Extends the compiler pipeline with x86 compiler stages.
 		/// </summary>

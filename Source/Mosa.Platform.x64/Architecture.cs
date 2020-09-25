@@ -137,6 +137,11 @@ namespace Mosa.Platform.x64
 		/// </summary>
 		public override List<BaseInstruction> Instructions { get { return X64Instructions.List; } }
 
+		public override OpcodeEncoder GetOpcodeEncoder(BaseCodeEmitter emitter)
+		{
+			return new OpcodeEncoder(emitter);
+		}
+
 		/// <summary>
 		/// Extends the compiler pipeline with x64 specific stages.
 		/// </summary>

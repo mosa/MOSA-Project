@@ -105,7 +105,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="methodName">Name of the method.</param>
 		/// <param name="linker">The linker.</param>
 		/// <param name="codeStream">The stream the machine code is written to.</param>
-		public void Initialize(string methodName, MosaLinker linker, Stream codeStream)
+		public void Initialize(string methodName, MosaLinker linker, Stream codeStream, OpcodeEncoder opcodeEncoder)
 		{
 			Debug.Assert(codeStream != null);
 			Debug.Assert(linker != null);
@@ -113,10 +113,11 @@ namespace Mosa.Compiler.Framework
 			MethodName = methodName;
 			Linker = linker;
 			CodeStream = codeStream;
+			OpcodeEncoder = opcodeEncoder;
 
 			Labels = new Dictionary<int, int>();
 
-			OpcodeEncoder = new OpcodeEncoder(this);
+			//OpcodeEncoder = new OpcodeEncoder(this);
 		}
 
 		/// <summary>
