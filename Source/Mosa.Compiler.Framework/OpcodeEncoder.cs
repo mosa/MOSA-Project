@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework
 		private ulong Bits;
 		private int BitsLength;
 
-		private int BitSegmentSize = 8;
+		private int SegmentSize = 8;
 
 		private bool SuppressFlag;
 		private byte SuppressValue;
@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework
 
 		private void WriteByte(byte b)
 		{
-			//	if (BitsLength != 0 && BitSegmentSize == 8)
+			//	if (BitsLength != 0 && SegmentSize == 8)
 			//	{
 			//		AppendBitsReversed(b, 8);
 			//		return;
@@ -49,24 +49,24 @@ namespace Mosa.Compiler.Framework
 					return;
 			}
 
-			Emitter.WriteByte((byte)b);
+			Emitter.WriteByte(b);
 		}
 
 		public void AppendBit(bool value)
 		{
 			if (value)
 			{
-				Bits |= (byte)(1u << (BitSegmentSize - 1 - BitsLength));
+				Bits |= (byte)(1u << (SegmentSize - 1 - BitsLength));
 			}
 
 			BitsLength++;
 
-			if (BitsLength == 8 && BitSegmentSize == 8)
+			if (BitsLength == 8 && SegmentSize == 8)
 			{
 				WriteByte((byte)Bits);
 				Reset();
 			}
-			else if (BitsLength == 32 && BitSegmentSize == 32)
+			else if (BitsLength == 32 && SegmentSize == 32)
 			{
 			}
 		}
@@ -106,17 +106,17 @@ namespace Mosa.Compiler.Framework
 
 		public void Append4Bits(byte value)
 		{
-			AppendNibble((uint)value);
+			AppendBits(value, 4);
 		}
 
 		public void Append4Bits(uint value)
 		{
-			AppendNibble(value);
+			AppendBits(value, 4);
 		}
 
 		public void AppendNibble(byte value)
 		{
-			AppendNibble((uint)value);
+			AppendBits(value, 4);
 		}
 
 		public void AppendNibble(uint value)
@@ -141,7 +141,7 @@ namespace Mosa.Compiler.Framework
 
 		public void Append8Bits(byte value)
 		{
-			AppendByte(value);
+			AppendBits(value, 8);
 		}
 
 		public void AppendByte(byte value)
@@ -151,7 +151,7 @@ namespace Mosa.Compiler.Framework
 
 		public void Append16Bits(ushort value)
 		{
-			AppendShort(value);
+			AppendBits(value, 16);
 		}
 
 		public void AppendShort(ushort value)
@@ -174,7 +174,12 @@ namespace Mosa.Compiler.Framework
 			AppendBits(value, 64);
 		}
 
-		public void AppendImmediateInteger(uint value)
+		public void Append64Bits(ulong value)
+		{
+			AppendBits(value, 64);
+		}
+
+		public void AppendImmediate32Bit(uint value)
 		{
 			AppendByte((byte)(value));
 			AppendByte((byte)(value >> 8));
@@ -182,7 +187,7 @@ namespace Mosa.Compiler.Framework
 			AppendByte((byte)(value >> 24));
 		}
 
-		public void AppendImmediateInteger(ulong value)
+		public void AppendImmediate64Bit(ulong value)
 		{
 			AppendByte((byte)(value));
 			AppendByte((byte)(value >> 8));
@@ -201,12 +206,12 @@ namespace Mosa.Compiler.Framework
 
 			if (operand.IsResolvedConstant)
 			{
-				AppendImmediateInteger(operand.ConstantUnsigned32 + offset.ConstantUnsigned32);
+				AppendImmediate32Bit(operand.ConstantUnsigned32 + offset.ConstantUnsigned32);
 			}
 			else
 			{
 				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, offset.ConstantSigned32);
-				WriteZeroBytes(4);
+				Append32Bits(0);
 			}
 		}
 
@@ -273,12 +278,12 @@ namespace Mosa.Compiler.Framework
 
 			if (operand.IsResolvedConstant)
 			{
-				AppendImmediateInteger(operand.ConstantUnsigned32);
+				AppendImmediate32Bit(operand.ConstantUnsigned32);
 			}
 			else
 			{
 				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);
-				WriteZeroBytes(4);
+				Append32Bits(0);
 			}
 		}
 
@@ -289,12 +294,12 @@ namespace Mosa.Compiler.Framework
 
 			if (operand.IsResolvedConstant)
 			{
-				AppendImmediateInteger(operand.ConstantUnsigned64 + offset.ConstantUnsigned64);
+				AppendImmediate64Bit(operand.ConstantUnsigned64 + offset.ConstantUnsigned64);
 			}
 			else
 			{
 				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I64, operand, 0, offset.ConstantSigned32);
-				WriteZeroBytes(8);
+				Append64Bits(0);
 			}
 		}
 
@@ -304,20 +309,12 @@ namespace Mosa.Compiler.Framework
 
 			if (operand.IsResolvedConstant)
 			{
-				AppendImmediateInteger(operand.ConstantUnsigned64);
+				AppendImmediate64Bit(operand.ConstantUnsigned64);
 			}
 			else
 			{
 				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I64, operand, 0, 0);
-				WriteZeroBytes(4);
-			}
-		}
-
-		private void WriteZeroBytes(int length)
-		{
-			for (int i = 0; i < length; i++)
-			{
-				WriteByte(0);
+				Append32Bits(0);
 			}
 		}
 
@@ -325,31 +322,31 @@ namespace Mosa.Compiler.Framework
 		{
 			// TODO
 			int offset = Emitter.EmitRelative(label, 4);
-			AppendImmediateInteger((uint)offset);
+			AppendImmediate32Bit((uint)offset);
 		}
 
 		public void EmitRelative32(int label)
 		{
 			int offset = Emitter.EmitRelative(label, 4);
-			AppendImmediateInteger((uint)offset);
+			AppendImmediate32Bit((uint)offset);
 		}
 
 		public void EmitRelative32(Operand operand)
 		{
 			Emitter.EmitRelative32(operand);
-			WriteZeroBytes(4);
+			Append32Bits(0);
 		}
 
 		public void EmitRelative64(Operand operand)
 		{
 			Emitter.EmitRelative64(operand);
-			WriteZeroBytes(8);
+			Append64Bits(0);
 		}
 
 		public void EmitForward32(int offset)
 		{
 			Emitter.EmitForwardLink(offset);
-			WriteZeroBytes(4);
+			Append32Bits(0);
 		}
 
 		public void SuppressByte(byte supressByte)
