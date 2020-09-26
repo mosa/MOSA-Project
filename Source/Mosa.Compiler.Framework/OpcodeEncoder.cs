@@ -8,8 +8,10 @@ namespace Mosa.Compiler.Framework
 	{
 		private CodeEmitter Emitter;
 
-		private byte Bits;
+		private ulong Bits;
 		private int BitsLength;
+
+		private int BitSegmentSize = 8;
 
 		private bool SuppressFlag;
 		private byte SuppressValue;
@@ -33,6 +35,12 @@ namespace Mosa.Compiler.Framework
 
 		private void WriteByte(byte b)
 		{
+			//	if (BitsLength != 0 && BitSegmentSize == 8)
+			//	{
+			//		AppendBitsReversed(b, 8);
+			//		return;
+			//	}
+
 			if (SuppressFlag)
 			{
 				SuppressFlag = false;
@@ -41,22 +49,33 @@ namespace Mosa.Compiler.Framework
 					return;
 			}
 
-			Emitter.WriteByte(b);
+			Emitter.WriteByte((byte)b);
 		}
 
 		public void AppendBit(bool value)
 		{
 			if (value)
 			{
-				Bits |= (byte)(1u << (7 - BitsLength));
+				Bits |= (byte)(1u << (BitSegmentSize - 1 - BitsLength));
 			}
 
 			BitsLength++;
 
-			if (BitsLength == 8)
+			if (BitsLength == 8 && BitSegmentSize == 8)
 			{
-				WriteByte(Bits);
+				WriteByte((byte)Bits);
 				Reset();
+			}
+			else if (BitsLength == 32 && BitSegmentSize == 32)
+			{
+			}
+		}
+
+		private void AppendBits(ulong value, int size)
+		{
+			for (int i = size - 1; i >= 0; i--)
+			{
+				AppendBit((byte)((value >> i) & 1));
 			}
 		}
 
@@ -136,22 +155,6 @@ namespace Mosa.Compiler.Framework
 			AppendBit(value & 0x1);
 		}
 
-		private void AppendBits(ulong value, int size)
-		{
-			for (int i = size - 1; i >= 0; i--)
-			{
-				AppendBit((byte)((value >> i) & 1));
-			}
-		}
-
-		private void AppendBitsReversed(ulong value, int size)
-		{
-			for (int i = 0; i < size; i++)
-			{
-				AppendBit((byte)((value >> i) & 1));
-			}
-		}
-
 		public void Append8Bits(byte value)
 		{
 			AppendByte(value);
@@ -175,91 +178,42 @@ namespace Mosa.Compiler.Framework
 
 		public void AppendShort(ushort value)
 		{
-			if (BitsLength == 0)
-			{
-				WriteByte((byte)(value >> 8));
-				WriteByte((byte)(value));
-				return;
-			}
-
 			AppendBits(value, 16);
 		}
 
 		public void Append24Bits(uint value)
 		{
-			if (BitsLength == 0)
-			{
-				WriteByte((byte)(value >> 16));
-				WriteByte((byte)(value >> 8));
-				WriteByte((byte)(value));
-				return;
-			}
-
 			AppendBits(value, 24);
 		}
 
 		public void Append32Bits(uint value)
 		{
-			if (BitsLength == 0)
-			{
-				WriteByte((byte)(value >> 24));
-				WriteByte((byte)(value >> 16));
-				WriteByte((byte)(value >> 8));
-				WriteByte((byte)(value));
-				return;
-			}
-
 			AppendBits(value, 32);
 		}
 
 		public void AppendLong(ulong value)
 		{
-			if (BitsLength == 0)
-			{
-				WriteByte((byte)(value >> 56));
-				WriteByte((byte)(value >> 48));
-				WriteByte((byte)(value >> 40));
-				WriteByte((byte)(value >> 32));
-				WriteByte((byte)(value >> 24));
-				WriteByte((byte)(value >> 16));
-				WriteByte((byte)(value >> 8));
-				WriteByte((byte)(value));
-				return;
-			}
-
 			AppendBits(value, 64);
 		}
 
 		public void AppendImmediateInteger(uint value)
 		{
-			if (BitsLength == 0)
-			{
-				WriteByte((byte)(value));
-				WriteByte((byte)(value >> 8));
-				WriteByte((byte)(value >> 16));
-				WriteByte((byte)(value >> 24));
-				return;
-			}
-
-			AppendBitsReversed(value, 32);
+			AppendByte((byte)(value));
+			AppendByte((byte)(value >> 8));
+			AppendByte((byte)(value >> 16));
+			AppendByte((byte)(value >> 24));
 		}
 
 		public void AppendImmediateInteger(ulong value)
 		{
-			if (BitsLength == 0)
-			{
-				WriteByte((byte)(value));
-				WriteByte((byte)(value >> 8));
-				WriteByte((byte)(value >> 16));
-				WriteByte((byte)(value >> 24));
-				WriteByte((byte)(value >> 32));
-				WriteByte((byte)(value >> 40));
-				WriteByte((byte)(value >> 48));
-				WriteByte((byte)(value >> 56));
-				return;
-			}
-
-			AppendBitsReversed(value, 64);
+			AppendByte((byte)(value));
+			AppendByte((byte)(value >> 8));
+			AppendByte((byte)(value >> 16));
+			AppendByte((byte)(value >> 24));
+			AppendByte((byte)(value >> 32));
+			AppendByte((byte)(value >> 40));
+			AppendByte((byte)(value >> 48));
+			AppendByte((byte)(value >> 56));
 		}
 
 		public void Append32BitImmediateWithOffset(Operand operand, Operand offset)
