@@ -117,7 +117,7 @@ namespace Mosa.Platform.ARMv8A32
 
 		public override OpcodeEncoder GetOpcodeEncoder()
 		{
-			return new OpcodeEncoder();
+			return new OpcodeEncoder(32);
 		}
 
 		/// <summary>

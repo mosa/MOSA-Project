@@ -11,13 +11,14 @@ namespace Mosa.Compiler.Framework
 		private ulong Bits;
 		private int BitsLength;
 
-		private int SegmentSize = 8;
+		private int Size = 8;
 
 		private bool SuppressFlag;
 		private byte SuppressValue;
 
-		public OpcodeEncoder()
+		public OpcodeEncoder(int size)
 		{
+			Size = size;
 			SuppressFlag = false;
 			Reset();
 		}
@@ -33,38 +34,38 @@ namespace Mosa.Compiler.Framework
 			BitsLength = 0;
 		}
 
-		private void EmitByte(byte b)
-		{
-			if (SuppressFlag)
-			{
-				SuppressFlag = false;
-
-				if (b == SuppressValue)
-					return;
-			}
-
-			Emitter.WriteByte(b);
-		}
-
 		private void Emit()
 		{
-			if (BitsLength == 8 && SegmentSize == 8)
+			if (BitsLength == 8 && Size == 8)
 			{
-				EmitByte((byte)Bits);
+				if (SuppressFlag)
+				{
+					SuppressFlag = false;
+
+					if (Bits == SuppressValue)
+						return;
+				}
+
+				Emitter.WriteByte((byte)Bits);
 				Reset();
 			}
-			else if (BitsLength == 32 && SegmentSize == 32)
+			else if (BitsLength == 32 && Size == 32)
 			{
-				// TODO
+				Emitter.WriteByte((byte)Bits);
+				Emitter.WriteByte((byte)(Bits >> 8));
+				Emitter.WriteByte((byte)(Bits >> 16));
+				Emitter.WriteByte((byte)(Bits >> 24));
+				Reset();
 			}
 		}
 
 		public void AppendBit(bool value)
 		{
 			BitsLength++;
+
 			if (value)
 			{
-				Bits |= (byte)(1u << (SegmentSize - BitsLength));
+				Bits |= 1u << (Size - BitsLength);
 			}
 
 			Emit();
@@ -72,23 +73,32 @@ namespace Mosa.Compiler.Framework
 
 		private void AppendBits(ulong value, int size)
 		{
-			for (int i = size - 1; i >= 0; i--)
+			if (BitsLength == 0 && size == 8)
 			{
-				AppendBit((byte)((value >> i) & 1));
+				Bits = value;
+				BitsLength = size;
+				Emit();
 			}
+			else
+			{
+				for (int i = size - 1; i >= 0; i--)
+				{
+					AppendBit((byte)((value >> i) & 1));
+				}
+			}
+		}
+
+		public void AppendBit(uint value)
+		{
+			AppendBit(value != 0);
 		}
 
 		public void Append1Bit(int value)
 		{
-			AppendBit((uint)value);
+			AppendBit(value != 0);
 		}
 
 		public void Append1Bit(uint value)
-		{
-			AppendBit(value);
-		}
-
-		public void AppendBit(uint value)
 		{
 			AppendBit(value != 0);
 		}

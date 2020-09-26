@@ -13,14 +13,14 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	public sealed class StrDownImm8 : ARMv8A32Instruction
 	{
 		internal StrDownImm8()
-			: base(0, 4)
+			: base(0, 3)
 		{
 		}
 
 		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 4);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 3);
 
 			if (node.Operand1.IsCPURegister && node.Operand2.IsConstant && node.Operand3.IsCPURegister)
 			{

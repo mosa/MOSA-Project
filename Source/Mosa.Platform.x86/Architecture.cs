@@ -130,7 +130,7 @@ namespace Mosa.Platform.x86
 
 		public override OpcodeEncoder GetOpcodeEncoder()
 		{
-			return new OpcodeEncoder();
+			return new OpcodeEncoder(8);
 		}
 
 		/// <summary>

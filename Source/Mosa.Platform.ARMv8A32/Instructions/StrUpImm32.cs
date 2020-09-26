@@ -13,14 +13,14 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	public sealed class StrUpImm32 : ARMv8A32Instruction
 	{
 		internal StrUpImm32()
-			: base(0, 4)
+			: base(0, 3)
 		{
 		}
 
 		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 4);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 3);
 
 			if (node.Operand1.IsCPURegister && node.Operand2.IsConstant && node.Operand3.IsCPURegister)
 			{
@@ -33,7 +33,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
-				opcodeEncoder.Append4Bits(node.GetOperand(3).Register.RegisterCode);
+				opcodeEncoder.Append4Bits(node.Operand3.Register.RegisterCode);
 				opcodeEncoder.Append1Bit(0b0);
 				return;
 			}

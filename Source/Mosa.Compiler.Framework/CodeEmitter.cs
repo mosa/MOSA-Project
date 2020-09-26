@@ -118,8 +118,6 @@ namespace Mosa.Compiler.Framework
 			Labels = new Dictionary<int, int>();
 
 			opcodeEncoder.SetEmitter(this);
-
-			//OpcodeEncoder = new OpcodeEncoder(this);
 		}
 
 		#endregion Constructor
