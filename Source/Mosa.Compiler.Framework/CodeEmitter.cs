@@ -209,15 +209,6 @@ namespace Mosa.Compiler.Framework
 
 		#region Emit Methods
 
-		/// <summary>
-		/// Emits the specified opcode.
-		/// </summary>
-		/// <param name="opcode">The opcode.</param>
-		public void Emit(BaseOpcodeEncoder opcode)
-		{
-			opcode.WriteTo(CodeStream);
-		}
-
 		public void EmitLink(int position, PatchType patchType, Operand symbolOperand, int patchOffset, int referenceOffset)
 		{
 			position += patchOffset;
