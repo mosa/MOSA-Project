@@ -33,14 +33,8 @@ namespace Mosa.Compiler.Framework
 			BitsLength = 0;
 		}
 
-		private void WriteByte(byte b)
+		private void EmitByte(byte b)
 		{
-			//	if (BitsLength != 0 && SegmentSize == 8)
-			//	{
-			//		AppendBitsReversed(b, 8);
-			//		return;
-			//	}
-
 			if (SuppressFlag)
 			{
 				SuppressFlag = false;
@@ -52,23 +46,28 @@ namespace Mosa.Compiler.Framework
 			Emitter.WriteByte(b);
 		}
 
-		public void AppendBit(bool value)
+		private void Emit()
 		{
-			if (value)
-			{
-				Bits |= (byte)(1u << (SegmentSize - 1 - BitsLength));
-			}
-
-			BitsLength++;
-
 			if (BitsLength == 8 && SegmentSize == 8)
 			{
-				WriteByte((byte)Bits);
+				EmitByte((byte)Bits);
 				Reset();
 			}
 			else if (BitsLength == 32 && SegmentSize == 32)
 			{
+				// TODO
 			}
+		}
+
+		public void AppendBit(bool value)
+		{
+			BitsLength++;
+			if (value)
+			{
+				Bits |= (byte)(1u << (SegmentSize - BitsLength));
+			}
+
+			Emit();
 		}
 
 		private void AppendBits(ulong value, int size)
@@ -179,7 +178,7 @@ namespace Mosa.Compiler.Framework
 			AppendBits(value, 64);
 		}
 
-		public void AppendImmediate32Bit(uint value)
+		public void Append32BitImmediate(uint value)
 		{
 			AppendByte((byte)(value));
 			AppendByte((byte)(value >> 8));
@@ -187,7 +186,7 @@ namespace Mosa.Compiler.Framework
 			AppendByte((byte)(value >> 24));
 		}
 
-		public void AppendImmediate64Bit(ulong value)
+		public void Append64BitImmediate(ulong value)
 		{
 			AppendByte((byte)(value));
 			AppendByte((byte)(value >> 8));
@@ -206,7 +205,7 @@ namespace Mosa.Compiler.Framework
 
 			if (operand.IsResolvedConstant)
 			{
-				AppendImmediate32Bit(operand.ConstantUnsigned32 + offset.ConstantUnsigned32);
+				Append32BitImmediate(operand.ConstantUnsigned32 + offset.ConstantUnsigned32);
 			}
 			else
 			{
@@ -269,7 +268,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Debug.Assert(operand.IsConstant);
 
-			AppendBits(operand.ConstantUnsigned32 & 0xFFF, 12);
+			AppendBits(operand.ConstantUnsigned32, 12);
 		}
 
 		public void Append32BitImmediate(Operand operand)
@@ -278,7 +277,7 @@ namespace Mosa.Compiler.Framework
 
 			if (operand.IsResolvedConstant)
 			{
-				AppendImmediate32Bit(operand.ConstantUnsigned32);
+				Append32BitImmediate(operand.ConstantUnsigned32);
 			}
 			else
 			{
@@ -294,7 +293,7 @@ namespace Mosa.Compiler.Framework
 
 			if (operand.IsResolvedConstant)
 			{
-				AppendImmediate64Bit(operand.ConstantUnsigned64 + offset.ConstantUnsigned64);
+				Append64BitImmediate(operand.ConstantUnsigned64 + offset.ConstantUnsigned64);
 			}
 			else
 			{
@@ -309,7 +308,7 @@ namespace Mosa.Compiler.Framework
 
 			if (operand.IsResolvedConstant)
 			{
-				AppendImmediate64Bit(operand.ConstantUnsigned64);
+				Append64BitImmediate(operand.ConstantUnsigned64);
 			}
 			else
 			{
@@ -322,13 +321,13 @@ namespace Mosa.Compiler.Framework
 		{
 			// TODO
 			int offset = Emitter.EmitRelative(label, 4);
-			AppendImmediate32Bit((uint)offset);
+			Append32BitImmediate((uint)offset);
 		}
 
 		public void EmitRelative32(int label)
 		{
 			int offset = Emitter.EmitRelative(label, 4);
-			AppendImmediate32Bit((uint)offset);
+			Append32BitImmediate((uint)offset);
 		}
 
 		public void EmitRelative32(Operand operand)
