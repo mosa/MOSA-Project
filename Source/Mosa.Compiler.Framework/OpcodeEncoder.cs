@@ -81,78 +81,62 @@ namespace Mosa.Compiler.Framework
 
 		public void Append1Bit(int value)
 		{
+			AppendBit((uint)value);
+		}
+
+		public void Append1Bit(uint value)
+		{
 			AppendBit(value);
 		}
 
-		public void AppendBit(int value)
+		public void AppendBit(uint value)
 		{
 			AppendBit(value != 0);
 		}
 
-		public void Append2Bits(int value)
+		public void Append2Bits(uint value)
 		{
-			AppendBit((value >> 1) & 0x1);
-			AppendBit(value & 0x1);
+			AppendBits(value, 2);
 		}
 
-		public void Append3Bits(int value)
+		public void Append3Bits(uint value)
 		{
-			AppendBit((value >> 2) & 0x1);
-			AppendBit((value >> 1) & 0x1);
-			AppendBit(value & 0x1);
+			AppendBits(value, 3);
 		}
 
 		public void Append4Bits(byte value)
 		{
-			AppendNibble((int)value);
+			AppendNibble((uint)value);
 		}
 
-		public void Append4Bits(int value)
+		public void Append4Bits(uint value)
 		{
 			AppendNibble(value);
 		}
 
 		public void AppendNibble(byte value)
 		{
-			AppendNibble((int)value);
+			AppendNibble((uint)value);
 		}
 
-		public void AppendNibble(int value)
+		public void AppendNibble(uint value)
 		{
-			AppendBit((value >> 3) & 0x1);
-			AppendBit((value >> 2) & 0x1);
-			AppendBit((value >> 1) & 0x1);
-			AppendBit(value & 0x1);
+			AppendBits(value, 4);
 		}
 
-		public void Append5Bits(int value)
+		public void Append5Bits(uint value)
 		{
-			AppendBit((value >> 4) & 0x1);
-			AppendBit((value >> 3) & 0x1);
-			AppendBit((value >> 2) & 0x1);
-			AppendBit((value >> 1) & 0x1);
-			AppendBit(value & 0x1);
+			AppendBits(value, 5);
 		}
 
-		public void Append6Bits(int value)
+		public void Append6Bits(uint value)
 		{
-			AppendBit((value >> 5) & 0x1);
-			AppendBit((value >> 4) & 0x1);
-			AppendBit((value >> 3) & 0x1);
-			AppendBit((value >> 2) & 0x1);
-			AppendBit((value >> 1) & 0x1);
-			AppendBit(value & 0x1);
+			AppendBits(value, 6);
 		}
 
-		public void Append7Bits(int value)
+		public void Append7Bits(uint value)
 		{
-			AppendBit((value >> 6) & 0x1);
-			AppendBit((value >> 5) & 0x1);
-			AppendBit((value >> 4) & 0x1);
-			AppendBit((value >> 3) & 0x1);
-			AppendBit((value >> 2) & 0x1);
-			AppendBit((value >> 1) & 0x1);
-			AppendBit(value & 0x1);
+			AppendBits(value, 7);
 		}
 
 		public void Append8Bits(byte value)
@@ -162,12 +146,6 @@ namespace Mosa.Compiler.Framework
 
 		public void AppendByte(byte value)
 		{
-			if (BitsLength == 0)
-			{
-				WriteByte(value);
-				return;
-			}
-
 			AppendBits(value, 8);
 		}
 
@@ -257,7 +235,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Debug.Assert(operand.IsConstant);
 
-			Append4Bits((byte)operand.ConstantUnsigned32 >> 4);
+			Append4Bits((byte)(operand.ConstantUnsigned32 >> 4));
 		}
 
 		public void Append5BitImmediate(Operand operand)

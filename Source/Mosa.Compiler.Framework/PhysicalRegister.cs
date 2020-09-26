@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the machine specific index or code of the register.
 		/// </summary>
-		public int RegisterCode { get; }
+		public uint RegisterCode { get; }
 
 		/// <summary>
 		/// Determines if this is a floating point register.
@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework
 		/// Initializes a new instance of <see cref="PhysicalRegister"/>.
 		/// </summary>
 		/// <param name="index">The numeric index of the register.</param>
-		public PhysicalRegister(int index, int registerCode, string name, bool isInteger, bool isFloatingPoint)
+		public PhysicalRegister(int index, uint registerCode, string name, bool isInteger, bool isFloatingPoint)
 		{
 			Index = index;
 			Name = name;
