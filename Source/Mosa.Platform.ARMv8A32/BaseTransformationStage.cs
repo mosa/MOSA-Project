@@ -205,16 +205,9 @@ namespace Mosa.Platform.ARMv8A32
 					return v1;
 				}
 
-				if (ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsigned32, out uint immediate, out _, out _))
+				if (ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsigned32, out uint immediate, out byte rotation4, out byte imm8))
 				{
-					before.SetInstruction(ARMv8A32.MovImmShift, v1, CreateConstant(immediate));
-
-					return v1;
-				}
-
-				if (ARMHelper.CalculateRotatedImmediateValue(~operand.ConstantUnsigned32, out uint immediate2, out _, out _))
-				{
-					before.SetInstruction(ARMv8A32.MvnImmShift, v1, CreateConstant(immediate2));
+					before.SetInstruction(ARMv8A32.MovImm, v1, CreateConstant(immediate));
 
 					return v1;
 				}

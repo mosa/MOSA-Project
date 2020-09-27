@@ -1576,11 +1576,11 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=0,offset=imm12:o2,u=1",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=0,u=1,offset=imm12:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-single-data-transfer-shift-register]"
+					"Encoding": "[arm-single-data-transfer-immediate]"
 				}
 			]
 		},
@@ -1597,11 +1597,11 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=0,offset=imm12:o2,u=0",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=0,u=0,offset=imm12:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-single-data-transfer-shift-register]"
+					"Encoding": "[arm-single-data-transfer-immediate]"
 				}
 			]
 		},
@@ -1618,11 +1618,11 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=1,offset=imm12:o2,u=1",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=1,u=1,offset=imm12:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-single-data-transfer-shift-register]"
+					"Encoding": "[arm-single-data-transfer-immediate]"
 				}
 			]
 		},
@@ -1639,11 +1639,11 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=1,offset=imm12:o2,u=0",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=1,u=0,offset=imm12:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "[arm-single-data-transfer-shift-register]"
+					"Encoding": "[arm-single-data-transfer-immediate]"
 				}
 			]
 		},
@@ -1912,7 +1912,7 @@
 			"OperandCount": 3,
 			"ResultCount": 0,
 			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,rd=reg4:o3,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,i=0,p=0,l=0,w=0,b=0,u=1",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=0,b=0,u=1,shiftamount=00000,shifttype=00,rm=reg4:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][register]",
@@ -1933,7 +1933,7 @@
 			"OperandCount": 3,
 			"ResultCount": 0,
 			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,rd=reg4:o3,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,i=0,p=0,l=0,w=0,b=0,u=0",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=0,b=0,u=0,shiftamount=00000,shifttype=00,rm=reg4:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][register]",
@@ -1954,7 +1954,7 @@
 			"OperandCount": 3,
 			"ResultCount": 0,
 			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,rd=reg4:o3,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,i=0,p=0,l=0,w=0,b=1,u=1",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=0,b=1,u=1,shiftamount=00000,shifttype=00,rm=reg4:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][register]",
@@ -1975,7 +1975,7 @@
 			"OperandCount": 3,
 			"ResultCount": 0,
 			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,rd=reg4:o3,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,i=0,p=0,l=0,w=0,b=1,u=0",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=0,b=1,u=0,shiftamount=00000,shifttype=00,rm=reg4:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][register]",
@@ -1996,7 +1996,7 @@
 			"OperandCount": 3,
 			"ResultCount": 0,
 			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=0,b=0,offset=imm12:o2,u=1",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=0,b=0,u=1,offset=imm12:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant][register]",
@@ -2017,7 +2017,7 @@
 			"OperandCount": 3,
 			"ResultCount": 0,
 			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,rd=reg3:o4,rn=reg4:o1,i=1,p=0,l=0,w=0,b=0,offset=imm12:o2,u=0",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg3:o4,rn=reg4:o1,i=1,p=0,l=0,w=0,b=0,u=0,offset=imm12:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant][register]",
@@ -2038,7 +2038,7 @@
 			"OperandCount": 3,
 			"ResultCount": 0,
 			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=0,b=1,offset=imm12:o2,u=1",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=0,b=1,u=1,offset=imm12:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant][register]",
@@ -2059,7 +2059,7 @@
 			"OperandCount": 3,
 			"ResultCount": 0,
 			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=0,b=1,offset=imm12:o2,u=0",
+			"OpcodeEncodingAppend": "s=status:status,rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=0,b=1,u=0,offset=imm12:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant][register]",
@@ -2838,12 +2838,12 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 2,
+			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "MovtImm",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][constant]",
+					"Condition": "[constant]",
 					"Encoding": "0x00000000"
 				}
 			]

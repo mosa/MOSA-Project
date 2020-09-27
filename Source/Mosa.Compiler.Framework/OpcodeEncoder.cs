@@ -188,6 +188,13 @@ namespace Mosa.Compiler.Framework
 			AppendBits(value, 64);
 		}
 
+		public void Append24BitImmediate(uint value)
+		{
+			AppendByte((byte)(value));
+			AppendByte((byte)(value >> 8));
+			AppendByte((byte)(value >> 16));
+		}
+
 		public void Append32BitImmediate(uint value)
 		{
 			AppendByte((byte)(value));
@@ -331,7 +338,7 @@ namespace Mosa.Compiler.Framework
 		{
 			// TODO
 			int offset = Emitter.EmitRelative(label, 4);
-			Append32BitImmediate((uint)offset);
+			Append24BitImmediate((uint)offset);
 		}
 
 		public void EmitRelative32(int label)
