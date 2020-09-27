@@ -337,13 +337,13 @@ namespace Mosa.Compiler.Framework
 		public void EmitRelative24(int label)
 		{
 			// TODO
-			int offset = Emitter.EmitRelative(label, 4);
+			int offset = Emitter.EmitRelative(label, 3, 3);
 			Append24BitImmediate((uint)offset);
 		}
 
 		public void EmitRelative32(int label)
 		{
-			int offset = Emitter.EmitRelative(label, 4);
+			int offset = Emitter.EmitRelative(label, 4, 4);
 			Append32BitImmediate((uint)offset);
 		}
 

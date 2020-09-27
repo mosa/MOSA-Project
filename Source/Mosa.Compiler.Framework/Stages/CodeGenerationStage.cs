@@ -148,7 +148,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 						GeneratedInstructionCount++;
 
-						trace?.Log($"{node.Offset} - /0x{node.Offset.ToString("X")} : {node}");
+						trace?.Log($"{node.Offset} - /0x{node.Offset:X} : {node}");
 					}
 					else
 					{

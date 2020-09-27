@@ -22,17 +22,6 @@ namespace Mosa.Compiler.Framework
 		protected struct Patch
 		{
 			/// <summary>
-			/// Initializes a new instance of the <see cref="Patch"/> struct.
-			/// </summary>
-			/// <param name="label">The label.</param>
-			/// <param name="position">The position.</param>
-			public Patch(int label, int position)
-			{
-				Label = label;
-				Position = position;
-			}
-
-			/// <summary>
 			/// Patch label
 			/// </summary>
 			public int Label;
@@ -41,6 +30,23 @@ namespace Mosa.Compiler.Framework
 			/// The patch's position in the stream
 			/// </summary>
 			public int Position;
+
+			/// <summary>
+			/// The patch size
+			/// </summary>
+			public int Size;
+
+			/// <summary>
+			/// Initializes a new instance of the <see cref="Patch"/> struct.
+			/// </summary>
+			/// <param name="label">The label.</param>
+			/// <param name="position">The position.</param>
+			public Patch(int label, int position, int size)
+			{
+				Label = label;
+				Position = position;
+				Size = size;
+			}
 
 			/// <summary>
 			/// Returns a <see cref="System.String"/> that represents this instance.
@@ -150,9 +156,9 @@ namespace Mosa.Compiler.Framework
 			return Labels.TryGetValue(label, out position);
 		}
 
-		protected void AddPatch(int label, int position)
+		protected void AddPatch(int label, int position, int size)
 		{
-			Patches.Add(new Patch(label, position));
+			Patches.Add(new Patch(label, position, size));
 		}
 
 		public void ResolvePatches()
@@ -174,7 +180,7 @@ namespace Mosa.Compiler.Framework
 
 				// Write relative offset to stream
 				var bytes = BitConverter.GetBytes(relOffset);
-				CodeStream.Write(bytes, 0, bytes.Length);
+				CodeStream.Write(bytes, 4 - p.Size, p.Size);
 			}
 
 			// Reset the position
@@ -269,7 +275,7 @@ namespace Mosa.Compiler.Framework
 			);
 		}
 
-		public int EmitRelative(int label, int offset)
+		public int EmitRelative(int label, int offset, int size)
 		{
 			if (TryGetLabel(label, out int position))
 			{
@@ -279,7 +285,7 @@ namespace Mosa.Compiler.Framework
 			else
 			{
 				// Forward jump, we can't resolve yet so store a patch
-				AddPatch(label, (int)CodeStream.Position);
+				AddPatch(label, (int)CodeStream.Position, size);
 
 				return 0;
 			}
