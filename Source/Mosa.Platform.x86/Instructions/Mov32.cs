@@ -17,27 +17,27 @@ namespace Mosa.Platform.x86.Instructions
 		{
 		}
 
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
 			if (node.Operand1.IsCPURegister)
 			{
-				emitter.OpcodeEncoder.Append8Bits(0x8B);
-				emitter.OpcodeEncoder.Append2Bits(0b11);
-				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				opcodeEncoder.Append8Bits(0x8B);
+				opcodeEncoder.Append2Bits(0b11);
+				opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
 				return;
 			}
 
 			if (node.Operand1.IsConstant)
 			{
-				emitter.OpcodeEncoder.Append8Bits(0xC7);
-				emitter.OpcodeEncoder.Append2Bits(0b11);
-				emitter.OpcodeEncoder.Append3Bits(0b000);
-				emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append32BitImmediate(node.Operand1);
+				opcodeEncoder.Append8Bits(0xC7);
+				opcodeEncoder.Append2Bits(0b11);
+				opcodeEncoder.Append3Bits(0b000);
+				opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				opcodeEncoder.Append32BitImmediate(node.Operand1);
 				return;
 			}
 

@@ -21,7 +21,7 @@ namespace Mosa.Kernel.BareMetal.x86
 			PageDirectory = PhysicalPageAllocator.ReservePage();
 
 			Console.Write("D");
-			PageTables = PhysicalPageAllocator.ReservePages(Page.Size * 1024);
+			PageTables = PhysicalPageAllocator.ReservePages(1024);
 			Console.Write("E");
 		}
 

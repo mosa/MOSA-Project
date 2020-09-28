@@ -33,15 +33,15 @@ namespace Mosa.Platform.x64.Instructions
 
 		public override bool AreFlagUseConditional { get { return true; } }
 
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 0);
 
-			emitter.OpcodeEncoder.Append8Bits(0x0F);
-			emitter.OpcodeEncoder.Append4Bits(0b1000);
-			emitter.OpcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
-			emitter.OpcodeEncoder.EmitRelative32(node.BranchTargets[0].Label);
+			opcodeEncoder.Append8Bits(0x0F);
+			opcodeEncoder.Append4Bits(0b1000);
+			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
+			opcodeEncoder.EmitRelative32(node.BranchTargets[0].Label);
 		}
 	}
 }

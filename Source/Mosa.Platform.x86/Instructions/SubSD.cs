@@ -21,7 +21,7 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override bool ThreeTwoAddressConversion { get { return true; } }
 
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
@@ -29,12 +29,12 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
 			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
-			emitter.OpcodeEncoder.Append8Bits(0xF2);
-			emitter.OpcodeEncoder.Append8Bits(0x0F);
-			emitter.OpcodeEncoder.Append8Bits(0x5C);
-			emitter.OpcodeEncoder.Append2Bits(0b11);
-			emitter.OpcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-			emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+			opcodeEncoder.Append8Bits(0xF2);
+			opcodeEncoder.Append8Bits(0x0F);
+			opcodeEncoder.Append8Bits(0x5C);
+			opcodeEncoder.Append2Bits(0b11);
+			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+			opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
 		}
 	}
 }

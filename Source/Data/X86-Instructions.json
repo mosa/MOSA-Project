@@ -417,7 +417,6 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"": "00001111|00101111|11|reg3:o1|reg3:o2",
 					"Encoding": "[x86],opcode=00001111,opcode2=00101111,mod=11,reg=reg3:o1,rm=reg3:o2"
 				}
 			]
@@ -456,7 +455,6 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"": "0xF2|0x0F|0x5A|11|reg3:o1|reg3:o2",
 					"Encoding": "[x86],opcode=0xF2,opcode2=0x0F,opcode3=0x5A,mod=11,reg=reg3:o1,rm=reg3:o2"
 				}
 			]
@@ -476,7 +474,6 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
-					"": "0xF2|0x0F|0x2A|11|reg3:r|reg3:o1",
 					"Encoding": "[x86],opcode=0xF2,opcode2=0x0F,opcode3=0x2A,mod=11,reg=reg3:r,rm=reg3:o1"
 				}
 			]
@@ -2808,7 +2805,8 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
-					"Encoding": "[x86],opcode=0xFF,mod=11,reg=110,rm=reg3:o1"
+					"Encoding": "01010|reg3:o1",
+					"ExpandedEncoding": "[x86],opcode=0xFF,mod=11,reg=110,rm=reg3:o1"
 				},
 				{
 					"Condition": "[constant]",

@@ -173,8 +173,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			// otherwise, place them into a register (or use CmpImm32, if possible)
 
 			context.SetInstruction(ARMv8A32.Cmp, null, operand1, operand2);
-			context.AppendInstruction(ARMv8A32.Mov, condition, result, CreateConstant(1));
-			context.AppendInstruction(ARMv8A32.Mov, condition.GetOpposite(), result, CreateConstant(0));
+			context.AppendInstruction(ARMv8A32.MovImm, condition, result, CreateConstant(1));
+			context.AppendInstruction(ARMv8A32.MovImm, condition.GetOpposite(), result, CreateConstant(0));
 		}
 
 		private void CompareBranch32(Context context)
@@ -411,12 +411,14 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void MulSigned32(Context context)
 		{
-			context.SetInstruction(ARMv8A32.Mul, context.Result, context.Operand1, context.Operand2);
+			var operand2 = MoveConstantToRegister(context, context.Operand2);
+			context.SetInstruction(ARMv8A32.Mul, context.Result, context.Operand1, operand2);
 		}
 
 		private void MulUnsigned32(Context context)
 		{
-			context.SetInstruction(ARMv8A32.Mul, context.Result, context.Operand1, context.Operand2);
+			var operand2 = MoveConstantToRegister(context, context.Operand2);
+			context.SetInstruction(ARMv8A32.Mul, context.Result, context.Operand1, operand2);
 		}
 
 		private void ShiftLeft32(Context context)

@@ -6,21 +6,26 @@ namespace Mosa.Compiler.Framework
 {
 	public sealed class OpcodeEncoder
 	{
-		// Little Endian
+		private CodeEmitter Emitter;
 
-		private readonly BaseCodeEmitter Emitter;
-
-		private byte Bits;
+		private ulong Bits;
 		private int BitsLength;
+
+		private int Size = 8;
 
 		private bool SuppressFlag;
 		private byte SuppressValue;
 
-		public OpcodeEncoder(BaseCodeEmitter emitter)
+		public OpcodeEncoder(int size)
 		{
-			Emitter = emitter;
+			Size = size;
 			SuppressFlag = false;
 			Reset();
+		}
+
+		public void SetEmitter(CodeEmitter emitter)
+		{
+			Emitter = emitter;
 		}
 
 		private void Reset()
@@ -29,235 +34,185 @@ namespace Mosa.Compiler.Framework
 			BitsLength = 0;
 		}
 
-		private void WriteByte(byte b)
+		private void Emit()
 		{
-			if (SuppressFlag)
+			if (BitsLength == 8 && Size == 8)
 			{
-				SuppressFlag = false;
+				if (SuppressFlag)
+				{
+					SuppressFlag = false;
 
-				if (b == SuppressValue)
-					return;
+					if (Bits == SuppressValue)
+						return;
+				}
+
+				Emitter.WriteByte((byte)Bits);
+				Reset();
 			}
-
-			Emitter.WriteByte(b);
-		}
-
-		public void AppendBit(bool value)
-		{
-			if (value)
+			else if (BitsLength == 32 && Size == 32)
 			{
-				Bits |= (byte)(1u << (7 - BitsLength));
-			}
-
-			BitsLength++;
-
-			if (BitsLength == 8)
-			{
-				WriteByte(Bits);
+				Emitter.WriteByte((byte)Bits);
+				Emitter.WriteByte((byte)(Bits >> 8));
+				Emitter.WriteByte((byte)(Bits >> 16));
+				Emitter.WriteByte((byte)(Bits >> 24));
 				Reset();
 			}
 		}
 
-		public void Append1Bit(int value)
+		public void AppendBit(bool value)
 		{
-			AppendBit(value);
-		}
+			BitsLength++;
 
-		public void AppendBit(int value)
-		{
-			AppendBit(value != 0);
-		}
+			if (value)
+			{
+				Bits |= 1u << (Size - BitsLength);
+			}
 
-		public void Append2Bits(int value)
-		{
-			AppendBit((value >> 1) & 0x1);
-			AppendBit(value & 0x1);
-		}
-
-		public void Append3Bits(int value)
-		{
-			AppendBit((value >> 2) & 0x1);
-			AppendBit((value >> 1) & 0x1);
-			AppendBit(value & 0x1);
-		}
-
-		public void Append4Bits(byte value)
-		{
-			AppendNibble((int)value);
-		}
-
-		public void Append4Bits(int value)
-		{
-			AppendNibble(value);
-		}
-
-		public void AppendNibble(byte value)
-		{
-			AppendNibble((int)value);
-		}
-
-		public void AppendNibble(int value)
-		{
-			AppendBit((value >> 3) & 0x1);
-			AppendBit((value >> 2) & 0x1);
-			AppendBit((value >> 1) & 0x1);
-			AppendBit(value & 0x1);
-		}
-
-		public void Append5Bits(int value)
-		{
-			AppendBit((value >> 4) & 0x1);
-			AppendBit((value >> 3) & 0x1);
-			AppendBit((value >> 2) & 0x1);
-			AppendBit((value >> 1) & 0x1);
-			AppendBit(value & 0x1);
-		}
-
-		public void Append6Bits(int value)
-		{
-			AppendBit((value >> 5) & 0x1);
-			AppendBit((value >> 4) & 0x1);
-			AppendBit((value >> 3) & 0x1);
-			AppendBit((value >> 2) & 0x1);
-			AppendBit((value >> 1) & 0x1);
-			AppendBit(value & 0x1);
-		}
-
-		public void Append7Bits(int value)
-		{
-			AppendBit((value >> 6) & 0x1);
-			AppendBit((value >> 5) & 0x1);
-			AppendBit((value >> 4) & 0x1);
-			AppendBit((value >> 3) & 0x1);
-			AppendBit((value >> 2) & 0x1);
-			AppendBit((value >> 1) & 0x1);
-			AppendBit(value & 0x1);
+			Emit();
 		}
 
 		private void AppendBits(ulong value, int size)
 		{
-			for (int i = size - 1; i >= 0; i--)
+			if (BitsLength == 0 && size == 8)
 			{
-				AppendBit((byte)((value >> i) & 1));
+				Bits = value;
+				BitsLength = size;
+				Emit();
+			}
+			else
+			{
+				for (int i = size - 1; i >= 0; i--)
+				{
+					AppendBit((byte)((value >> i) & 1));
+				}
 			}
 		}
 
-		private void AppendBitsReversed(ulong value, int size)
+		public void AppendBit(uint value)
 		{
-			for (int i = 0; i < size; i++)
-			{
-				AppendBit((byte)((value >> i) & 1));
-			}
+			AppendBit(value != 0);
+		}
+
+		public void Append1Bit(int value)
+		{
+			AppendBit(value != 0);
+		}
+
+		public void Append1Bit(uint value)
+		{
+			AppendBit(value != 0);
+		}
+
+		public void Append2Bits(uint value)
+		{
+			AppendBits(value, 2);
+		}
+
+		public void Append3Bits(uint value)
+		{
+			AppendBits(value, 3);
+		}
+
+		public void Append4Bits(byte value)
+		{
+			AppendBits(value, 4);
+		}
+
+		public void Append4Bits(uint value)
+		{
+			AppendBits(value, 4);
+		}
+
+		public void AppendNibble(byte value)
+		{
+			AppendBits(value, 4);
+		}
+
+		public void AppendNibble(uint value)
+		{
+			AppendBits(value, 4);
+		}
+
+		public void Append5Bits(uint value)
+		{
+			AppendBits(value, 5);
+		}
+
+		public void Append6Bits(uint value)
+		{
+			AppendBits(value, 6);
+		}
+
+		public void Append7Bits(uint value)
+		{
+			AppendBits(value, 7);
 		}
 
 		public void Append8Bits(byte value)
 		{
-			AppendByte(value);
+			AppendBits(value, 8);
 		}
 
 		public void AppendByte(byte value)
 		{
-			if (BitsLength == 0)
-			{
-				WriteByte(value);
-				return;
-			}
-
 			AppendBits(value, 8);
 		}
 
 		public void Append16Bits(ushort value)
 		{
-			AppendShort(value);
+			AppendBits(value, 16);
 		}
 
 		public void AppendShort(ushort value)
 		{
-			if (BitsLength == 0)
-			{
-				WriteByte((byte)(value >> 8));
-				WriteByte((byte)(value));
-				return;
-			}
-
 			AppendBits(value, 16);
 		}
 
 		public void Append24Bits(uint value)
 		{
-			if (BitsLength == 0)
-			{
-				WriteByte((byte)(value >> 16));
-				WriteByte((byte)(value >> 8));
-				WriteByte((byte)(value));
-				return;
-			}
-
 			AppendBits(value, 24);
 		}
 
 		public void Append32Bits(uint value)
 		{
-			if (BitsLength == 0)
-			{
-				WriteByte((byte)(value >> 24));
-				WriteByte((byte)(value >> 16));
-				WriteByte((byte)(value >> 8));
-				WriteByte((byte)(value));
-				return;
-			}
-
 			AppendBits(value, 32);
 		}
 
 		public void AppendLong(ulong value)
 		{
-			if (BitsLength == 0)
-			{
-				WriteByte((byte)(value >> 56));
-				WriteByte((byte)(value >> 48));
-				WriteByte((byte)(value >> 40));
-				WriteByte((byte)(value >> 32));
-				WriteByte((byte)(value >> 24));
-				WriteByte((byte)(value >> 16));
-				WriteByte((byte)(value >> 8));
-				WriteByte((byte)(value));
-				return;
-			}
-
 			AppendBits(value, 64);
 		}
 
-		public void AppendImmediateInteger(uint value)
+		public void Append64Bits(ulong value)
 		{
-			if (BitsLength == 0)
-			{
-				WriteByte((byte)(value));
-				WriteByte((byte)(value >> 8));
-				WriteByte((byte)(value >> 16));
-				WriteByte((byte)(value >> 24));
-				return;
-			}
-
-			AppendBitsReversed(value, 32);
+			AppendBits(value, 64);
 		}
 
-		public void AppendImmediateInteger(ulong value)
+		public void Append24BitImmediate(uint value)
 		{
-			if (BitsLength == 0)
-			{
-				WriteByte((byte)(value));
-				WriteByte((byte)(value >> 8));
-				WriteByte((byte)(value >> 16));
-				WriteByte((byte)(value >> 24));
-				WriteByte((byte)(value >> 32));
-				WriteByte((byte)(value >> 40));
-				WriteByte((byte)(value >> 48));
-				WriteByte((byte)(value >> 56));
-				return;
-			}
+			AppendByte((byte)(value));
+			AppendByte((byte)(value >> 8));
+			AppendByte((byte)(value >> 16));
+		}
 
-			AppendBitsReversed(value, 64);
+		public void Append32BitImmediate(uint value)
+		{
+			AppendByte((byte)(value));
+			AppendByte((byte)(value >> 8));
+			AppendByte((byte)(value >> 16));
+			AppendByte((byte)(value >> 24));
+		}
+
+		public void Append64BitImmediate(ulong value)
+		{
+			AppendByte((byte)(value));
+			AppendByte((byte)(value >> 8));
+			AppendByte((byte)(value >> 16));
+			AppendByte((byte)(value >> 24));
+			AppendByte((byte)(value >> 32));
+			AppendByte((byte)(value >> 40));
+			AppendByte((byte)(value >> 48));
+			AppendByte((byte)(value >> 56));
 		}
 
 		public void Append32BitImmediateWithOffset(Operand operand, Operand offset)
@@ -267,12 +222,12 @@ namespace Mosa.Compiler.Framework
 
 			if (operand.IsResolvedConstant)
 			{
-				AppendImmediateInteger(operand.ConstantUnsigned32 + offset.ConstantUnsigned32);
+				Append32BitImmediate(operand.ConstantUnsigned32 + offset.ConstantUnsigned32);
 			}
 			else
 			{
 				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, offset.ConstantSigned32);
-				WriteZeroBytes(4);
+				Append32Bits(0);
 			}
 		}
 
@@ -301,7 +256,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Debug.Assert(operand.IsConstant);
 
-			Append4Bits((byte)operand.ConstantUnsigned32 >> 4);
+			Append4Bits((byte)(operand.ConstantUnsigned32 >> 4));
 		}
 
 		public void Append5BitImmediate(Operand operand)
@@ -330,7 +285,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Debug.Assert(operand.IsConstant);
 
-			AppendBits(operand.ConstantUnsigned32 & 0xFFF, 12);
+			AppendBits(operand.ConstantUnsigned32, 12);
 		}
 
 		public void Append32BitImmediate(Operand operand)
@@ -339,12 +294,12 @@ namespace Mosa.Compiler.Framework
 
 			if (operand.IsResolvedConstant)
 			{
-				AppendImmediateInteger(operand.ConstantUnsigned32);
+				Append32BitImmediate(operand.ConstantUnsigned32);
 			}
 			else
 			{
 				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);
-				WriteZeroBytes(4);
+				Append32Bits(0);
 			}
 		}
 
@@ -355,12 +310,12 @@ namespace Mosa.Compiler.Framework
 
 			if (operand.IsResolvedConstant)
 			{
-				AppendImmediateInteger(operand.ConstantUnsigned64 + offset.ConstantUnsigned64);
+				Append64BitImmediate(operand.ConstantUnsigned64 + offset.ConstantUnsigned64);
 			}
 			else
 			{
 				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I64, operand, 0, offset.ConstantSigned32);
-				WriteZeroBytes(8);
+				Append64Bits(0);
 			}
 		}
 
@@ -370,52 +325,44 @@ namespace Mosa.Compiler.Framework
 
 			if (operand.IsResolvedConstant)
 			{
-				AppendImmediateInteger(operand.ConstantUnsigned64);
+				Append64BitImmediate(operand.ConstantUnsigned64);
 			}
 			else
 			{
 				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I64, operand, 0, 0);
-				WriteZeroBytes(4);
-			}
-		}
-
-		private void WriteZeroBytes(int length)
-		{
-			for (int i = 0; i < length; i++)
-			{
-				WriteByte(0);
+				Append32Bits(0);
 			}
 		}
 
 		public void EmitRelative24(int label)
 		{
 			// TODO
-			int offset = Emitter.EmitRelative(label, 4);
-			AppendImmediateInteger((uint)offset);
+			int offset = Emitter.EmitRelative(label, 3, 3);
+			Append24BitImmediate((uint)offset);
 		}
 
 		public void EmitRelative32(int label)
 		{
-			int offset = Emitter.EmitRelative(label, 4);
-			AppendImmediateInteger((uint)offset);
+			int offset = Emitter.EmitRelative(label, 4, 4);
+			Append32BitImmediate((uint)offset);
 		}
 
 		public void EmitRelative32(Operand operand)
 		{
 			Emitter.EmitRelative32(operand);
-			WriteZeroBytes(4);
+			Append32Bits(0);
 		}
 
 		public void EmitRelative64(Operand operand)
 		{
 			Emitter.EmitRelative64(operand);
-			WriteZeroBytes(8);
+			Append64Bits(0);
 		}
 
 		public void EmitForward32(int offset)
 		{
 			Emitter.EmitForwardLink(offset);
-			WriteZeroBytes(4);
+			Append32Bits(0);
 		}
 
 		public void SuppressByte(byte supressByte)

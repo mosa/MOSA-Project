@@ -149,6 +149,8 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-gdb-port", Setting = "GDB.Port"},
 				new Argument() { Name = "-gdb-host", Setting = "GDB.Host"},
 
+				new Argument() { Name = "-osname", Setting = "OS.Name"},
+
 				new Argument() { Name = "-launch-gdb-debugger", Setting = "Launcher.LaunchDebugger", Value="true"},
 
 				new Argument() { Name = "-bootloader", Setting = "Image.BootLoader"},

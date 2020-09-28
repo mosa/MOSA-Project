@@ -27,25 +27,25 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 
 		public override bool IsOverflowFlagModified { get { return true; } }
 
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
 			if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister)
 			{
-				emitter.OpcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
-				emitter.OpcodeEncoder.Append2Bits(0b00);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append4Bits(0b1010);
-				emitter.OpcodeEncoder.Append1Bit(0b1);
-				emitter.OpcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append4Bits(0b0000);
-				emitter.OpcodeEncoder.Append4Bits(0b0000);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append2Bits(0b00);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append4Bits(node.Operand2.Register.RegisterCode);
+				opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
+				opcodeEncoder.Append2Bits(0b00);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append4Bits(0b1010);
+				opcodeEncoder.Append1Bit(0b1);
+				opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
+				opcodeEncoder.Append4Bits(0b0000);
+				opcodeEncoder.Append4Bits(0b0000);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append2Bits(0b00);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append4Bits(node.Operand2.Register.RegisterCode);
 				return;
 			}
 

@@ -35,21 +35,21 @@ namespace Mosa.Platform.x64.Instructions
 
 		public override bool IsParityFlagUndefined { get { return true; } }
 
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 2);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			emitter.OpcodeEncoder.SuppressByte(0x40);
-			emitter.OpcodeEncoder.Append4Bits(0b0100);
-			emitter.OpcodeEncoder.Append1Bit(0b0);
-			emitter.OpcodeEncoder.Append1Bit(0b0);
-			emitter.OpcodeEncoder.Append1Bit(0b0);
-			emitter.OpcodeEncoder.Append1Bit((node.Operand2.Register.RegisterCode >> 3) & 0x1);
-			emitter.OpcodeEncoder.Append8Bits(0xF7);
-			emitter.OpcodeEncoder.Append2Bits(0b11);
-			emitter.OpcodeEncoder.Append3Bits(0b100);
-			emitter.OpcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+			opcodeEncoder.SuppressByte(0x40);
+			opcodeEncoder.Append4Bits(0b0100);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit(0b0);
+			opcodeEncoder.Append1Bit((node.Operand2.Register.RegisterCode >> 3) & 0x1);
+			opcodeEncoder.Append8Bits(0xF7);
+			opcodeEncoder.Append2Bits(0b11);
+			opcodeEncoder.Append3Bits(0b100);
+			opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
 		}
 	}
 }

@@ -89,7 +89,6 @@ Source: "..\..\bin\Reko.Arch.Arm.dll"; DestDir: "{app}\bin"; Flags: ignoreversio
 Source: "..\..\bin\Reko.Arch.X86.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Reko.Core.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Reko.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "..\..\bin\Reko.Libraries.Libc.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\Tools\qemu\*.*"; DestDir: "{app}\Tools\qemu"; Flags: ignoreversion
 Source: "..\..\Tools\wget\*.*"; DestDir: "{app}\Tools\wget"; Flags: ignoreversion
 Source: "..\..\Tools\nasm\*.*"; DestDir: "{app}\Tools\nasm"; Flags: ignoreversion

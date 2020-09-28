@@ -202,6 +202,15 @@ Application Location Settings
     AppLocation.Ndisasm,Location of the Ndisasm application
     AppLocation.Mkisofs,Location of the Mkisofs application
     AppLocation.GDB,Location of the QEMU application
+	
+OS Settings
+-----------------------------
+
+.. csv-table:: 
+   :header: "Settings", "Description"
+   :widths: 50, 200
+
+    OS.Name, Name of operating system
 
 Import Settings
 ---------------

@@ -14,7 +14,7 @@ namespace Mosa.Plug.Korlib.System.Runtime.CompilerServices
 		[Plug("System.Runtime.CompilerServices.RuntimeHelpers::GetHashCode")]
 		internal unsafe static int GetHashCode(Object o)
 		{
-			// For now use the obj location in memory as the hash code
+			// FIXME: For now use the obj location in memory as the hash code
 			return Intrinsic.GetObjectAddress(o).ToInt32();
 		}
 

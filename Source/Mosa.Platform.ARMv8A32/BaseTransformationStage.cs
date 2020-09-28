@@ -66,7 +66,7 @@ namespace Mosa.Platform.ARMv8A32
 			}
 			else
 			{
-				instruction = loadUpImm;
+				instruction = loadUp;
 			}
 
 			context.SetInstruction(instruction, ConditionCode.Always, result, operand1, operand2);
@@ -102,7 +102,12 @@ namespace Mosa.Platform.ARMv8A32
 			}
 			else
 			{
-				instruction = storeUpImm;
+				instruction = storeUp;
+			}
+
+			if (operand3.IsConstant)
+			{
+				operand3 = MoveConstantToRegister(context, operand3);
 			}
 
 			context.SetInstruction(instruction, ConditionCode.Always, null, operand1, operand2, operand3);
@@ -205,22 +210,15 @@ namespace Mosa.Platform.ARMv8A32
 					return v1;
 				}
 
-				if (ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsigned32, out uint immediate, out _, out _))
+				if (ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsigned32, out uint immediate, out byte rotation4, out byte imm8))
 				{
-					before.SetInstruction(ARMv8A32.MovImmShift, v1, CreateConstant(immediate));
-
-					return v1;
-				}
-
-				if (ARMHelper.CalculateRotatedImmediateValue(~operand.ConstantUnsigned32, out uint immediate2, out _, out _))
-				{
-					before.SetInstruction(ARMv8A32.MvnImmShift, v1, CreateConstant(immediate2));
+					before.SetInstruction(ARMv8A32.MovImm, v1, CreateConstant(immediate));
 
 					return v1;
 				}
 
 				before.SetInstruction(ARMv8A32.MovImm, v1, CreateConstant(operand.ConstantUnsigned32 & 0xFFFF));
-				before.AppendInstruction(ARMv8A32.MovtImm, v1, CreateConstant(operand.ConstantUnsigned32 >> 16));
+				before.AppendInstruction(ARMv8A32.MovtImm, v1, v1, CreateConstant(operand.ConstantUnsigned32 >> 16));
 
 				return v1;
 			}

@@ -60,6 +60,7 @@ namespace Mosa.Workspace.Experiment.Debug
 			settings.SetValue("Image.Folder", Path.Combine(Path.GetTempPath(), "MOSA-UnitTest"));
 			settings.SetValue("Image.Format", "IMG");
 			settings.SetValue("Image.FileSystem", "FAT16");
+			settings.SetValue("OS.Name", "MOSA");
 
 			settings.AddPropertyListValue("SearchPaths", AppContext.BaseDirectory);
 			settings.AddPropertyListValue("Compiler.SourceFiles", Path.Combine(AppContext.BaseDirectory, "Mosa.UnitTests.x86.exe"));

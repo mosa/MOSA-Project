@@ -108,6 +108,8 @@ namespace Mosa.Kernel.BareMetal.BootMemory
 
 				Console.Write("Start: 0x");
 				Console.WriteValueAsHex(entry.StartAddress.ToUInt64(), 8);
+				Console.Write(" End: 0x");
+				Console.WriteValueAsHex(entry.EndAddress.ToUInt64(), 8);
 				Console.Write(" Size: 0x");
 				Console.WriteValueAsHex(entry.Size, 8);
 				Console.Write(" Type: ");

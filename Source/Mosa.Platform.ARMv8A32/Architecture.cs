@@ -115,6 +115,11 @@ namespace Mosa.Platform.ARMv8A32
 		/// </value>
 		public override List<BaseInstruction> Instructions { get { return ARMv8A32Instructions.List; } }
 
+		public override OpcodeEncoder GetOpcodeEncoder()
+		{
+			return new OpcodeEncoder(32);
+		}
+
 		/// <summary>
 		/// Extends the compiler pipeline with ARMv8A32 specific stages.
 		/// </summary>
@@ -130,13 +135,13 @@ namespace Mosa.Platform.ARMv8A32
 		/// <param name="compilerSettings">The compiler options.</param>
 		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerSettings compilerSettings)
 		{
-			pipeline.InsertBefore<GreedyRegisterAllocatorStage>(
-				new StopStage()
-			);
+			//pipeline.InsertBefore<GreedyRegisterAllocatorStage>(
+			//	new StopStage()
+			//);
 
-			pipeline.InsertAfterFirst<CodeGenerationStage>(
-				new StopStage()
-			);
+			//pipeline.InsertAfterFirst<CodeGenerationStage>(
+			//	new StopStage()
+			//);
 
 			pipeline.InsertBefore<CallStage>(
 				new Stages.RuntimeCallStage()

@@ -76,8 +76,5 @@
     <EmbeddedResource Include="..\..\Tools\raspberrypi-firmware\start.elf">
       <Link>Resources\raspberrypi-firmware\start.elf</Link>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\grub\0.97\menu.lst" />
-    <EmbeddedResource Include="Resources\grub\2.00\grub.cfg" />
-    <EmbeddedResource Include="Resources\syslinux\syslinux.cfg" />
   </ItemGroup>
 </Project>

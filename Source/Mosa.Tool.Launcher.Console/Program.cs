@@ -114,6 +114,7 @@ namespace Mosa.Tool.Launcher.Console
 			Settings.SetValue("Launcher.PlugKorlib", true);
 			Settings.SetValue("Launcher.HuntForCorLib", true);
 			Settings.SetValue("Linker.Drawf", false);
+			Settings.SetValue("OS.Name", "MOSA");
 		}
 
 		public static void LoadArguments(string[] args)

@@ -325,6 +325,7 @@ namespace Mosa.Tool.Launcher
 			Settings.SetValue("Launcher.PlugKorlib", true);
 			Settings.SetValue("Launcher.HuntForCorLib", true);
 			Settings.SetValue("Linker.Drawf", false);
+			Settings.SetValue("OS.Name", "MOSA");
 		}
 
 		private void UpdateInterfaceAppLocations()
@@ -373,6 +374,7 @@ namespace Mosa.Tool.Launcher
 			Settings.SetValue("Optimizations.Platform", cbPlatformOptimizations.Checked);
 			Settings.SetValue("Optimizations.LoopInvariantCodeMotion", cbLoopInvariantCodeMotion.Checked);
 			Settings.SetValue("Launcher.Launch", true);
+			Settings.SetValue("OS.Name", tbOSName.Text);
 
 			try
 			{
@@ -472,6 +474,7 @@ namespace Mosa.Tool.Launcher
 			tbVBEWidth.Text = Settings.GetValue("Multiboot.Width", "640");
 			tbVBEHeight.Text = Settings.GetValue("Multiboot.Height", "480");
 			tbVBEDepth.Text = Settings.GetValue("Multiboot.Depth", "32");
+			tbOSName.Text = Settings.GetValue("OS.Name", "MOSA");
 
 			switch (Settings.GetValue("Image.Format", string.Empty).ToUpper())
 			{
@@ -503,8 +506,8 @@ namespace Mosa.Tool.Launcher
 			{
 				case "syslinux3.72": cbBootLoader.SelectedIndex = 0; break;
 				case "syslinux6.03": cbBootLoader.SelectedIndex = 1; break;
-				case "grub_0_97": cbBootLoader.SelectedIndex = 2; break;
-				case "grub_2_00": cbBootLoader.SelectedIndex = 3; break;
+				case "grub0.97": cbBootLoader.SelectedIndex = 2; break;
+				case "grub2.00": cbBootLoader.SelectedIndex = 3; break;
 				default: break;
 			}
 

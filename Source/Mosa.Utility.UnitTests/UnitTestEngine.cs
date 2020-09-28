@@ -92,6 +92,7 @@ namespace Mosa.Utility.UnitTests
 			Settings.SetValue("Multiboot.Video.Height", 480);
 			Settings.SetValue("Multiboot.Video.Depth", 32);
 			Settings.SetValue("Emulator.Display", true);
+			Settings.SetValue("OS.Name", "MOSA");
 
 			Settings.Merge(settings);
 

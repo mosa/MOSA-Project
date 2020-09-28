@@ -21,21 +21,21 @@ namespace Mosa.Platform.x86.Instructions
 
 		public override bool HasUnspecifiedSideEffect { get { return true; } }
 
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
 			if (node.Operand1.IsCPURegister)
 			{
-				emitter.OpcodeEncoder.Append8Bits(0xEE);
+				opcodeEncoder.Append8Bits(0xEE);
 				return;
 			}
 
 			if (node.Operand1.IsConstant)
 			{
-				emitter.OpcodeEncoder.Append8Bits(0xE6);
-				emitter.OpcodeEncoder.Append8BitImmediate(node.Operand1);
+				opcodeEncoder.Append8Bits(0xE6);
+				opcodeEncoder.Append8BitImmediate(node.Operand1);
 				return;
 			}
 

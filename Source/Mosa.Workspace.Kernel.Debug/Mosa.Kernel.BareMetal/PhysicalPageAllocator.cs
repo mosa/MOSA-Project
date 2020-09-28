@@ -23,12 +23,14 @@ namespace Mosa.Kernel.BareMetal
 
 		public static void Setup()
 		{
-			BitMapIndexTable = new BitMapIndexTable(BootPageAllocator.AllocatePage());
-
 			AvailableMemory = BootMemoryMap.GetAvailableMemory();
-
 			TotalPages = (uint)(AvailableMemory.ToInt64() / Page.Size);
+
 			var bitMapCount = TotalPages / (Page.Size * 8);
+
+			var table = BootPageAllocator.AllocatePages(bitMapCount);
+
+			BitMapIndexTable = new BitMapIndexTable(table);
 
 			for (uint i = 0; i < bitMapCount; i++)
 			{
@@ -67,7 +69,7 @@ namespace Mosa.Kernel.BareMetal
 				MinimumAvailablePage = Math.Min(MinimumAvailablePage, startPage);
 				MaximumAvailablePage = Math.Max(MaximumAvailablePage, endPage);
 
-				SetPageBitMapEntry(startPage, pages, entry.IsAvailable);
+				SetPageBitMapEntry32(startPage, pages, true);
 			}
 
 			// pass 1 - unmark reserved pages
@@ -104,79 +106,15 @@ namespace Mosa.Kernel.BareMetal
 				if (endPage > TotalPages)
 					pages = TotalPages - startPage;
 
-				SetPageBitMapEntry(startPage, pages, entry.IsAvailable);
+				SetPageBitMapEntry32(startPage, pages, false);
 			}
-
-			// TODO - reserve kernel code + memory
 
 			SearchNextStartPage = MinimumAvailablePage;
 		}
 
-		private static void SetPageBitMapEntry(uint start, uint count, bool set)
-		{
-			var indexShift = (Pointer.Size == 4) ? 10 : 9;
-			var maskOffIndex = (uint)((1 << (indexShift + 1)) - 1);
-
-			var at = start;
-
-			// TODO: Acquire lock
-
-			while (count > 0)
-			{
-				var index = (int)(at >> indexShift);
-
-				var bitmap = BitMapIndexTable.GetBitMapEntry((uint)index);
-
-				if (at % 64 == 0 && count >= 64)
-				{
-					// 64 bit update
-					var offset = (uint)((index & maskOffIndex) >> 6);
-
-					bitmap.Store64(offset, set ? ulong.MaxValue : 0);
-
-					at += 64;
-					count -= 64;
-				}
-				else if (at % 32 == 0 && count >= 32)
-				{
-					// 32 bit update
-					var offset = (uint)((index & maskOffIndex) >> 5);
-
-					bitmap.Store32(offset, set ? uint.MaxValue : 0);
-
-					at += 32;
-					count -= 32;
-				}
-				else if (at % 8 == 0 && count >= 8)
-				{
-					// 8 bit update
-					var offset = (uint)((index & maskOffIndex) >> 5);
-
-					bitmap.Store8(offset, set ? byte.MaxValue : (byte)0);
-
-					at += 8;
-					count -= 8;
-				}
-				else
-				{
-					// one bit update
-					var offset = (uint)((index & maskOffIndex) >> 3);
-					var value = bitmap.Load8(offset);
-
-					var bit = (byte)(1 << index & 0b111);
-					value = (byte)(set ? value | bit : value & bit);
-
-					bitmap.Store8(offset, value);
-
-					at += 1;
-					count -= 1;
-				}
-			}
-		}
-
 		public static void ReleasePages(Pointer page, uint count)
 		{
-			SetPageBitMapEntry((uint)page.ToInt64() / Page.Size, count, true);
+			SetPageBitMapEntry32((uint)page.ToInt64() / Page.Size, count, true);
 		}
 
 		public static Pointer ReservePage()
@@ -207,11 +145,11 @@ namespace Mosa.Kernel.BareMetal
 					// todo - skip to next aligned address
 					restartAt = at + 1;
 				}
-				else if (CheckFreePage(at, count, out restartAt))
+				else if (CheckFreePage32(at, count, out restartAt))
 				{
 					// found space!
 
-					SetPageBitMapEntry(at, count, true);
+					SetPageBitMapEntry32(at, count, true);
 
 					SearchNextStartPage = restartAt;
 
@@ -239,103 +177,94 @@ namespace Mosa.Kernel.BareMetal
 			}
 		}
 
-		private static bool CheckFreePage(uint start, uint count, out uint restartAt)
+		private static void SetPageBitMapEntry32(uint start2, uint count, bool set)
 		{
-			//if (start < MinimumAvailablePage)
-			//{
-			//	// should never happen
-			//	restartAt = MinimumAvailablePage;
-			//	return false;
-			//}
-
-			var end = start + count;
-
-			if (end > MaximumAvailablePage || end > TotalPages)
-			{
-				restartAt = MinimumAvailablePage;
-				return false;
-			}
-
-			var indexShift = (Pointer.Size == 4) ? 10 : 9;
-			var maskOffIndex = (uint)((1 << (indexShift + 1)) - 1);
-
-			var at = start;
+			uint at = start2;
 
 			while (count > 0)
 			{
-				var index = (int)(at >> indexShift);
+				uint index = at >> 17;
+				uint slot = index * 4;
 
-				var bitmap = BitMapIndexTable.GetBitMapEntry((uint)index);
+				var bitmap = BitMapIndexTable.GetBitMapEntry(slot);
 
-				if (at % 64 == 0 && count >= 64)
+				byte start = (byte)(at & 0b11111);
+				uint diff = start + count - 1;
+				byte end = (byte)(diff <= 31 ? diff : 31);
+				byte size = (byte)(end - start + 1);
+
+				uint mask = BitSet32(start, size);
+
+				uint offset32 = (at >> 10) & 0b11111;
+
+				var value = bitmap.Load32(offset32);
+
+				uint newvalue = set ? (value | mask) : (value & ~mask);
+
+				bitmap.Store32(offset32, newvalue);
+
+				count -= size;
+				at += size;
+			}
+		}
+
+		private static bool CheckFreePage32(uint at, uint count, out uint nextAt)
+		{
+			nextAt = at;
+
+			while (count > 0)
+			{
+				uint index = at >> 17;
+				uint slot = index * 4;
+
+				var bitmap = BitMapIndexTable.GetBitMapEntry(slot);
+
+				byte start = (byte)(at & 0b11111);
+				uint diff = start + count - 1;
+				byte end = (byte)(diff <= 31 ? diff : 31);
+				byte size = (byte)(end - start + 1);
+
+				uint mask = BitSet32(start, size);
+
+				uint offset32 = (at >> 10) & 0b11111;
+
+				var value = bitmap.Load32(offset32);
+
+				if ((value & mask) == 0)
 				{
-					// 64 bit check
-					var offset = (uint)((index & maskOffIndex) >> 6);
-
-					var value = bitmap.Load64(offset);
-
-					if (value != ulong.MaxValue)
-					{
-						restartAt = at + 64;
-						return false;
-					}
-
-					at += 64;
-					count -= 64;
-				}
-				else if (at % 32 == 0 && count >= 32)
-				{
-					// 32 bit check
-					var offset = (uint)((index & maskOffIndex) >> 5);
-
-					var value = bitmap.Load32(offset);
-
-					if (value != uint.MaxValue)
-					{
-						restartAt = at + 32;
-						return false;
-					}
-
-					at += 32;
-					count -= 32;
-				}
-				else if (at % 8 == 0 && count >= 8)
-				{
-					// 8 bit check
-					var offset = (uint)((index & maskOffIndex) >> 5);
-
-					var value = bitmap.Load8(offset);
-
-					if (value != byte.MaxValue)
-					{
-						restartAt = at + 8;
-						return false;
-					}
-					at += 8;
-					count -= 8;
+					nextAt = at + size;
+					count -= size;
+					at += size;
 				}
 				else
 				{
-					// one bit check
-					var offset = (uint)((index & maskOffIndex) >> 3);
-					var value = bitmap.Load8(offset);
-
-					var bit = (byte)(1 << index & 0b111) & value;
-
-					if (bit != 0)
-					{
-						restartAt = at + 1;
-						return false;
-					}
-
-					at += 1;
-					count -= 1;
+					nextAt = at + 1; // + GetLowestSetBit(value)
+					return false;
 				}
 			}
 
-			restartAt = start + count + 1;
-
 			return true;
+		}
+
+		private static uint BitSet32(byte start, byte size)
+		{
+			if (size == 32)
+				return uint.MaxValue;
+
+			return ~(uint.MaxValue << size) << start;
+		}
+
+		private static byte GetLowestSetBit(uint value)
+		{
+			byte index = 0;
+
+			while ((value & 1) == 0)
+			{
+				value >>= 1;
+				index++;
+			}
+
+			return index;
 		}
 	}
 }

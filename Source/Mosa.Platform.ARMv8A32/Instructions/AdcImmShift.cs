@@ -21,24 +21,24 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 
 		public override bool IsCarryFlagUsed { get { return true; } }
 
-		public override void Emit(InstructionNode node, BaseCodeEmitter emitter)
+		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 4);
 
 			if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister && node.Operand3.IsConstant && node.GetOperand(3).IsConstant)
 			{
-				emitter.OpcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
-				emitter.OpcodeEncoder.Append2Bits(0b00);
-				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append4Bits(0b0101);
-				emitter.OpcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.Update ? 1 : 0);
-				emitter.OpcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
-				emitter.OpcodeEncoder.Append5BitImmediate(node.Operand3);
-				emitter.OpcodeEncoder.Append2BitImmediate(node.GetOperand(3));
-				emitter.OpcodeEncoder.Append1Bit(0b0);
-				emitter.OpcodeEncoder.Append4Bits(node.Operand2.Register.RegisterCode);
+				opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
+				opcodeEncoder.Append2Bits(0b00);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append4Bits(0b0101);
+				opcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.Update ? 1 : 0);
+				opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
+				opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
+				opcodeEncoder.Append5BitImmediate(node.Operand3);
+				opcodeEncoder.Append2BitImmediate(node.GetOperand(3));
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append4Bits(node.Operand2.Register.RegisterCode);
 				return;
 			}
 

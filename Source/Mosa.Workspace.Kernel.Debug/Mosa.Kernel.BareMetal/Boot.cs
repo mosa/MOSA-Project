@@ -39,7 +39,8 @@ namespace Mosa.Kernel.BareMetal
 			PhysicalPageAllocator.Setup();
 
 			Console.Write("5...");
-			PageTable.Setup();
+
+			//PageTable.Setup();
 
 			Console.Write("6...");
 

@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Base code emitter.
 	/// </summary>
-	public class BaseCodeEmitter
+	public sealed class CodeEmitter
 	{
 		#region Patch Type
 
@@ -22,17 +22,6 @@ namespace Mosa.Compiler.Framework
 		protected struct Patch
 		{
 			/// <summary>
-			/// Initializes a new instance of the <see cref="Patch"/> struct.
-			/// </summary>
-			/// <param name="label">The label.</param>
-			/// <param name="position">The position.</param>
-			public Patch(int label, int position)
-			{
-				Label = label;
-				Position = position;
-			}
-
-			/// <summary>
 			/// Patch label
 			/// </summary>
 			public int Label;
@@ -41,6 +30,23 @@ namespace Mosa.Compiler.Framework
 			/// The patch's position in the stream
 			/// </summary>
 			public int Position;
+
+			/// <summary>
+			/// The patch size
+			/// </summary>
+			public int Size;
+
+			/// <summary>
+			/// Initializes a new instance of the <see cref="Patch"/> struct.
+			/// </summary>
+			/// <param name="label">The label.</param>
+			/// <param name="position">The position.</param>
+			public Patch(int label, int position, int size)
+			{
+				Label = label;
+				Position = position;
+				Size = size;
+			}
 
 			/// <summary>
 			/// Returns a <see cref="System.String"/> that represents this instance.
@@ -97,15 +103,15 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Properties
 
-		#region Members
+		#region Constructor
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="BaseCodeEmitter" />.
+		/// Initializes a new instance of <see cref="CodeEmitter" />.
 		/// </summary>
 		/// <param name="methodName">Name of the method.</param>
 		/// <param name="linker">The linker.</param>
 		/// <param name="codeStream">The stream the machine code is written to.</param>
-		public void Initialize(string methodName, MosaLinker linker, Stream codeStream)
+		public CodeEmitter(string methodName, MosaLinker linker, Stream codeStream, OpcodeEncoder opcodeEncoder)
 		{
 			Debug.Assert(codeStream != null);
 			Debug.Assert(linker != null);
@@ -113,11 +119,16 @@ namespace Mosa.Compiler.Framework
 			MethodName = methodName;
 			Linker = linker;
 			CodeStream = codeStream;
+			OpcodeEncoder = opcodeEncoder;
 
 			Labels = new Dictionary<int, int>();
 
-			OpcodeEncoder = new OpcodeEncoder(this);
+			opcodeEncoder.SetEmitter(this);
 		}
+
+		#endregion Constructor
+
+		#region Members
 
 		/// <summary>
 		/// Emits a label into the code stream.
@@ -145,12 +156,12 @@ namespace Mosa.Compiler.Framework
 			return Labels.TryGetValue(label, out position);
 		}
 
-		protected void AddPatch(int label, int position)
+		protected void AddPatch(int label, int position, int size)
 		{
-			Patches.Add(new Patch(label, position));
+			Patches.Add(new Patch(label, position, size));
 		}
 
-		public virtual void ResolvePatches()
+		public void ResolvePatches()
 		{
 			// Save the current position
 			long currentPosition = CodeStream.Position;
@@ -169,7 +180,7 @@ namespace Mosa.Compiler.Framework
 
 				// Write relative offset to stream
 				var bytes = BitConverter.GetBytes(relOffset);
-				CodeStream.Write(bytes, 0, bytes.Length);
+				CodeStream.Write(bytes, 4 - p.Size, p.Size);
 			}
 
 			// Reset the position
@@ -201,15 +212,6 @@ namespace Mosa.Compiler.Framework
 		#endregion Write Methods
 
 		#region Emit Methods
-
-		/// <summary>
-		/// Emits the specified opcode.
-		/// </summary>
-		/// <param name="opcode">The opcode.</param>
-		public void Emit(BaseOpcodeEncoder opcode)
-		{
-			opcode.WriteTo(CodeStream);
-		}
 
 		public void EmitLink(int position, PatchType patchType, Operand symbolOperand, int patchOffset, int referenceOffset)
 		{
@@ -273,7 +275,7 @@ namespace Mosa.Compiler.Framework
 			);
 		}
 
-		public int EmitRelative(int label, int offset)
+		public int EmitRelative(int label, int offset, int size)
 		{
 			if (TryGetLabel(label, out int position))
 			{
@@ -283,7 +285,7 @@ namespace Mosa.Compiler.Framework
 			else
 			{
 				// Forward jump, we can't resolve yet so store a patch
-				AddPatch(label, (int)CodeStream.Position);
+				AddPatch(label, (int)CodeStream.Position, size);
 
 				return 0;
 			}
