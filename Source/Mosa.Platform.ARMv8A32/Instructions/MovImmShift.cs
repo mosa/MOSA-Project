@@ -13,7 +13,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	public sealed class MovImmShift : ARMv8A32Instruction
 	{
 		internal MovImmShift()
-			: base(1, 4)
+			: base(1, 3)
 		{
 		}
 
@@ -22,9 +22,9 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 4);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 3);
 
-			if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister && node.Operand3.IsConstant && node.GetOperand(3).IsConstant)
+			if (node.Operand1.IsCPURegister && node.Operand2.IsConstant && node.Operand3.IsConstant)
 			{
 				opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 				opcodeEncoder.Append2Bits(0b00);

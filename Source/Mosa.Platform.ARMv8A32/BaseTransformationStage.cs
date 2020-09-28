@@ -66,7 +66,7 @@ namespace Mosa.Platform.ARMv8A32
 			}
 			else
 			{
-				instruction = loadUpImm;
+				instruction = loadUp;
 			}
 
 			context.SetInstruction(instruction, ConditionCode.Always, result, operand1, operand2);
@@ -102,7 +102,12 @@ namespace Mosa.Platform.ARMv8A32
 			}
 			else
 			{
-				instruction = storeUpImm;
+				instruction = storeUp;
+			}
+
+			if (operand3.IsConstant)
+			{
+				operand3 = MoveConstantToRegister(context, operand3);
 			}
 
 			context.SetInstruction(instruction, ConditionCode.Always, null, operand1, operand2, operand3);
@@ -213,7 +218,7 @@ namespace Mosa.Platform.ARMv8A32
 				}
 
 				before.SetInstruction(ARMv8A32.MovImm, v1, CreateConstant(operand.ConstantUnsigned32 & 0xFFFF));
-				before.AppendInstruction(ARMv8A32.MovtImm, v1, CreateConstant(operand.ConstantUnsigned32 >> 16));
+				before.AppendInstruction(ARMv8A32.MovtImm, v1, v1, CreateConstant(operand.ConstantUnsigned32 >> 16));
 
 				return v1;
 			}
