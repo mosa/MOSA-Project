@@ -155,9 +155,7 @@ namespace Mosa.Platform.ARMv8A32
 
 			//		compilerSettings.EnablePlatformOptimizations ? new OptimizationStage() : null,
 			//		new TweakStage(),
-			//		new FixedRegisterAssignmentStage(),
 			//		new SimpleDeadCodeRemovalStage(),
-			//		new AddressModeConversionStage(),
 			//		new FloatingPointStage(),
 				});
 
@@ -165,12 +163,13 @@ namespace Mosa.Platform.ARMv8A32
 			//	new BuildStackStage()
 			//);
 
-			//pipeline.InsertBefore<CodeGenerationStage>(
-			//	new BaseMethodCompilerStage[]
-			//	{
-			//		new FinalTweakStage(),
-			//		compilerSettings.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
-			//	});
+			pipeline.InsertBefore<CodeGenerationStage>(
+				new BaseMethodCompilerStage[]
+				{
+					new FinalTweakStage(),
+
+					//compilerSettings.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
+				});
 
 			//pipeline.InsertBefore<CodeGenerationStage>(
 			//	new JumpOptimizationStage()
