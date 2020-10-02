@@ -103,7 +103,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		{
 			var result2 = context.Result2;
 
-			TransformInstruction(context, ARMv8A32.Add, ARMv8A32.AddImm, context.Result, StatusRegister.Update, context.Operand1, context.Operand2);
+			TransformInstruction(context, ARMv8A32.Add, ARMv8A32.AddImm, context.Result, StatusRegister.Set, context.Operand1, context.Operand2);
 
 			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.Carry, result2, CreateConstant(1));
 			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.NoCarry, result2, CreateConstant(0));
@@ -169,10 +169,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			// TODO: operand1 and operand2 must be registers
-			// otherwise, place them into a register (or use CmpImm32, if possible)
+			TransformInstruction(context, ARMv8A32.Cmp, ARMv8A32.CmpImm, context.Result, StatusRegister.Set, context.Operand1);
 
-			context.SetInstruction(ARMv8A32.Cmp, null, operand1, operand2);
 			context.AppendInstruction(ARMv8A32.MovImm, condition, result, CreateConstant(1));
 			context.AppendInstruction(ARMv8A32.MovImm, condition.GetOpposite(), result, CreateConstant(0));
 		}
@@ -530,7 +528,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		{
 			var result2 = context.Result2;
 
-			TransformInstruction(context, ARMv8A32.Sub, ARMv8A32.SubImm, context.Result, StatusRegister.Update, context.Operand1, context.Operand2);
+			TransformInstruction(context, ARMv8A32.Sub, ARMv8A32.SubImm, context.Result, StatusRegister.Set, context.Operand1, context.Operand2);
 
 			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.Carry, result2, CreateConstant(1));
 			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.NoCarry, result2, CreateConstant(0));

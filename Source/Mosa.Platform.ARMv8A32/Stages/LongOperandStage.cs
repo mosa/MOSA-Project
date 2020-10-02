@@ -101,7 +101,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
 			SplitLongOperand(context.Operand2, out var op2L, out var op2H);
 
-			TransformInstruction(context, ARMv8A32.Add, ARMv8A32.AddImm, resultLow, StatusRegister.Update, op1L, op2L);
+			TransformInstruction(context, ARMv8A32.Add, ARMv8A32.AddImm, resultLow, StatusRegister.Set, op1L, op2L);
 			TransformInstruction(context.InsertAfter(), ARMv8A32.Adc, ARMv8A32.AdcImm, resultHigh, StatusRegister.NotSet, op1H, op2H);
 		}
 
@@ -110,7 +110,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
 			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
 
-			TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.Update, op1L);
+			TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.Set, op1L);
 			TransformInstruction(context.InsertAfter(), ARMv8A32.Mov, ARMv8A32.MovImm, resultHigh, StatusRegister.NotSet, op1H);
 		}
 
@@ -189,7 +189,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			var operand2 = context.Operand2;
 
 			context.SetInstruction(ARMv8A32.Rsb, v1, operand2, Constant32);
-			context.AppendInstruction(ARMv8A32.Sub, StatusRegister.Update, v2, operand2, Constant32);
+			context.AppendInstruction(ARMv8A32.Sub, StatusRegister.Set, v2, operand2, Constant32);
 			context.AppendInstruction(ARMv8A32.Lsr, v3, op1l, operand2);
 			context.AppendInstruction(ARMv8A32.Orr, v4, v3, op1h, v1, LSL);
 			context.AppendInstruction(ARMv8A32.Orr, ConditionCode.Zero, resultLow, v4, op1h, v2, ASR);
@@ -240,7 +240,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Result, out var resultLow, out _);
 			SplitLongOperand(context.Operand1, out _, out var op1H);
 
-			TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.Update, op1H);
+			TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.Set, op1H);
 		}
 
 		private void GetLow64(Context context)
@@ -248,7 +248,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
 			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
 
-			TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.Update, op1L);
+			TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.Set, op1L);
 		}
 
 		private void To64(Context context)
@@ -268,7 +268,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
 			SplitLongOperand(context.Operand2, out var op2L, out var op2H);
 
-			TransformInstruction(context, ARMv8A32.Sub, ARMv8A32.SubImm, resultLow, StatusRegister.Update, op1L, op2L);
+			TransformInstruction(context, ARMv8A32.Sub, ARMv8A32.SubImm, resultLow, StatusRegister.Set, op1L, op2L);
 			TransformInstruction(context.InsertAfter(), ARMv8A32.Sbc, ARMv8A32.SbcImm, resultHigh, StatusRegister.NotSet, op1H, op2H);
 		}
 

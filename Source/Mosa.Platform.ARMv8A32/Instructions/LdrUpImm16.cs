@@ -35,7 +35,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 				opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
 				opcodeEncoder.Append4BitImmediateHighNibble(node.Operand2);
 				opcodeEncoder.Append1Bit(0b1);
-				opcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.Update ? 1 : 0);
+				opcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.Set ? 1 : 0);
 				opcodeEncoder.Append1Bit(0b1);
 				opcodeEncoder.Append1Bit(0b1);
 				opcodeEncoder.Append4BitImmediate(node.Operand2);
