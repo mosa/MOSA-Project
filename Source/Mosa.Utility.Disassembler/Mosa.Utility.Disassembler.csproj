@@ -13,23 +13,12 @@
     <DebugSymbols>True</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Reko.Decompiler.Runtime" Version="0.9.2" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
     <ProjectReference Include="..\Mosa.Platform.ARMv8A32\Mosa.Platform.ARMv8A32.csproj" />
     <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj" />
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Reko">
-      <HintPath>..\..\3rdParty\Reko.dll</HintPath>
-    </Reference>
-    <Reference Include="Reko.Arch.Arm">
-      <HintPath>..\..\3rdParty\Reko.Arch.Arm.dll</HintPath>
-    </Reference>
-    <Reference Include="Reko.Arch.X86">
-      <HintPath>..\..\3rdParty\Reko.Arch.X86.dll</HintPath>
-    </Reference>
-    <Reference Include="Reko.Core">
-      <HintPath>..\..\3rdParty\Reko.Core.dll</HintPath>
-    </Reference>
   </ItemGroup>
 </Project>
