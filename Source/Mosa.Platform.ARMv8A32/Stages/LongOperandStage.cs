@@ -15,7 +15,16 @@ namespace Mosa.Platform.ARMv8A32.Stages
 	/// </remarks>
 	public sealed class LongOperandStage : BaseTransformationStage
 	{
+		private Operand Constant1;
+		private Operand Constant1F;
 		private Operand Constant4;
+		private Operand Constant32;
+		private Operand Constant64;
+
+		private Operand LSL;
+		private Operand LSR;
+		private Operand ASR;
+		private Operand ROR;
 
 		protected override void PopulateVisitationDictionary()
 		{
@@ -47,11 +56,12 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.Or64, Or64);
 			AddVisitation(IRInstruction.Xor64, Xor64);
 			AddVisitation(IRInstruction.Move64, Move64);
+			AddVisitation(IRInstruction.MulSigned64, MulSigned64);
+			AddVisitation(IRInstruction.MulUnsigned64, MulUnsigned64);
 
-			//AddVisitation(IRInstruction.MulSigned64, MulSigned64);
-			//AddVisitation(IRInstruction.MulUnsigned64, MulUnsigned64);
-			//AddVisitation(IRInstruction.ShiftLeft64, ShiftLeft64);
-			//AddVisitation(IRInstruction.ShiftRight64, ShiftRight64);
+			AddVisitation(IRInstruction.ShiftLeft64, ShiftLeft64);
+			AddVisitation(IRInstruction.ShiftRight64, ShiftRight64);
+
 			//AddVisitation(IRInstruction.SignExtend16x64, SignExtend16x64);
 			//AddVisitation(IRInstruction.SignExtend32x64, SignExtend32x64);
 			//AddVisitation(IRInstruction.SignExtend8x64, SignExtend8x64);
@@ -71,7 +81,16 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		protected override void Setup()
 		{
+			Constant1 = CreateConstant(1);
+			Constant1F = CreateConstant(0x1F);
 			Constant4 = CreateConstant(4);
+			Constant32 = CreateConstant(32);
+			Constant64 = CreateConstant(64);
+
+			LSL = CreateConstant(0b00);
+			LSR = CreateConstant(0b01);
+			ASR = CreateConstant(0b10);
+			ROR = CreateConstant(0b11);
 		}
 
 		#region Visitation Methods
@@ -93,6 +112,88 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 			TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.Update, op1L);
 			TransformInstruction(context.InsertAfter(), ARMv8A32.Mov, ARMv8A32.MovImm, resultHigh, StatusRegister.NotSet, op1H);
+		}
+
+		private void MulSigned64(Context context)
+		{
+			ExpandMul(context);
+		}
+
+		private void MulUnsigned64(Context context)
+		{
+			ExpandMul(context);
+		}
+
+		private void ShiftLeft64(Context context)
+		{
+			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
+			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
+
+			//shiftleft64(long long, int):
+			//		r0 (op1l), r1 (op1h), r2 (operand2)
+
+			//mov	v1, op1l
+			//sub	v2, operand2, #32
+			//rsb	v3, operand2, #32
+			//lsl	v4, op1L, op1L
+
+			//orr	v5, v4, v4, lsl v2
+			//lsl	resultLow, v1, operand2
+			//orr	resultHigh, v5, v1, lsr v3
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v4 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v5 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			var op1l = MoveConstantToRegister(context, op1L);
+			var op1h = MoveConstantToRegister(context, op1H);
+			var operand2 = context.Operand2;
+
+			context.SetInstruction(ARMv8A32.Mov, v1, op1l);
+			context.AppendInstruction(ARMv8A32.SubImm, v2, operand2, Constant32);
+			context.AppendInstruction(ARMv8A32.RsbImm, v3, operand2, Constant32);
+			context.AppendInstruction(ARMv8A32.Lsl, v4, op1h, operand2);
+
+			context.AppendInstruction(ARMv8A32.OrrRegShift, v5, v4, v4, v2, LSL);
+			context.AppendInstruction(ARMv8A32.Lsl, resultLow, v1, operand2);
+			context.AppendInstruction(ARMv8A32.OrrRegShift, resultHigh, v5, v1, v3, LSR);
+		}
+
+		private void ShiftRight64(Context context)
+		{
+			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
+			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
+			SplitLongOperand(context.Operand2, out var op2L, out var op2H);
+
+			//shiftright64(long long, int):
+			//		r0 (op1l), r1 (op1h), r2 (operand2)
+
+			//rsb	v1, operand2, #32
+			//subs	v2, operand2, #32
+			//lsr	v3, op1l, operand2
+
+			//orr	v4, v3, op1h, lsl v1
+			//orrpl	resultLow, v4, op1h, asr v2
+
+			//asr	resultHigh, op1h, operand2
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v4 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			var op1l = MoveConstantToRegister(context, op1L);
+			var op1h = MoveConstantToRegister(context, op1H);
+			var operand2 = context.Operand2;
+
+			context.SetInstruction(ARMv8A32.Rsb, v1, operand2, Constant32);
+			context.AppendInstruction(ARMv8A32.Sub, StatusRegister.Update, v2, operand2, Constant32);
+			context.AppendInstruction(ARMv8A32.Lsr, v3, op1l, operand2);
+			context.AppendInstruction(ARMv8A32.Orr, v4, v3, op1h, v1, LSL);
+			context.AppendInstruction(ARMv8A32.Orr, ConditionCode.Zero, resultLow, v4, op1h, v2, ASR);
+			context.AppendInstruction(ARMv8A32.Asr, resultHigh, op1h, operand2);
 		}
 
 		private void And64(Context context)
@@ -218,6 +319,29 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		}
 
 		#endregion Visitation Methods
+
+		private void ExpandMul(Context context)
+		{
+			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
+			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
+			SplitLongOperand(context.Operand2, out var op2L, out var op2H);
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			var op1l = MoveConstantToRegister(context, op1L);
+			var op1h = MoveConstantToRegister(context, op1H);
+			var op2l = MoveConstantToRegister(context, op2L);
+			var op2h = MoveConstantToRegister(context, op2H);
+
+			//umull		low, v1 <= op1l, op2l
+			//mla		v2, <= op1l, op2h, v1
+			//mla		high, <= op1h, op2l, v2
+
+			context.SetInstruction2(ARMv8A32.UMull, v1, resultLow, op1l, op2l);
+			context.AppendInstruction(ARMv8A32.Mla, v2, op1l, op2h, v1);
+			context.AppendInstruction(ARMv8A32.Mla, resultHigh, op1h, op2l, v2);
+		}
 
 		#region Utility Methods
 

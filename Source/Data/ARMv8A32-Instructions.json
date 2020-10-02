@@ -2362,7 +2362,7 @@
 			]
 		},
 		{
-			"Name": "Mull",
+			"Name": "UMull",
 			"Commutative": "false",
 			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
@@ -2373,8 +2373,8 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 2,
-			"Description": "",
-			"OpcodeEncodingAppend": "s=status:status,rdhi=reg4:r,rdlo=reg4:r2,rs=reg4:o1,rm=reg4:o2,a=0",
+			"Description": "Multiply Long",
+			"OpcodeEncodingAppend": "s=status:status,rdhi=reg4:r,rdlo=reg4:r2,rs=reg4:o1,rm=reg4:o2,a=0,u=0",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -2383,7 +2383,7 @@
 			]
 		},
 		{
-			"Name": "Mlal",
+			"Name": "UMlal",
 			"Commutative": "false",
 			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
@@ -2394,8 +2394,50 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 2,
-			"Description": "",
-			"OpcodeEncodingAppend": "s=status:status,rdhi=reg4:r,rdlo=reg4:r2,rs=reg4:o1,rm=reg4:o2,a=1",
+			"Description": "Multiply Long Accumulate",
+			"OpcodeEncodingAppend": "s=status:status,rdhi=reg4:r,rdlo=reg4:r2,rs=reg4:o1,rm=reg4:o2,a=1,u=0",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "conditional|00001|[u]|[a]|[s]|[rdhi]|[rdlo]|[rs]|1001|[rm]"
+				}
+			]
+		},
+		{
+			"Name": "SMull",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA",
+			"FlagsCleared": "",
+			"FlagsModified": "NZC",
+			"FlagsSet": "",
+			"FlagsUnchanged": "V",
+			"FlagsUndefined": "C",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 2,
+			"Description": "Multiply Signed Long",
+			"OpcodeEncodingAppend": "s=status:status,rdhi=reg4:r,rdlo=reg4:r2,rs=reg4:o1,rm=reg4:o2,a=0,u=1",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][register]",
+					"Encoding": "conditional|00001|[u]|[a]|[s]|[rdhi]|[rdlo]|[rs]|1001|[rm]"
+				}
+			]
+		},
+		{
+			"Name": "SMlal",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA",
+			"FlagsCleared": "",
+			"FlagsModified": "NZC",
+			"FlagsSet": "",
+			"FlagsUnchanged": "V",
+			"FlagsUndefined": "C",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 2,
+			"Description": "Multiply Signed Long Accumulate",
+			"OpcodeEncodingAppend": "s=status:status,rdhi=reg4:r,rdlo=reg4:r2,rs=reg4:o1,rm=reg4:o2,a=1,u=1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register][register]",
@@ -2880,7 +2922,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"Description": "",
+			"Description": "Mov",
 			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,shiftamount=00000,shifttype=00,rm=reg4:o1",
 			"OpcodeEncoding": [
 				{
@@ -2901,7 +2943,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 1,
 			"ResultCount": 1,
-			"Description": "",
+			"Description": "Move Immediate",
 			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,immediate12=imm12:o1",
 			"OpcodeEncoding": [
 				{
@@ -2922,7 +2964,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"Description": "",
+			"Description": "Move Immediate with Shift",
 			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,shiftamount=imm5:o2,shifttype=reg4:o3",
 			"OpcodeEncoding": [
 				{
@@ -2943,7 +2985,7 @@
 			"FlagsUsed": "",
 			"OperandCount": 3,
 			"ResultCount": 1,
-			"Description": "",
+			"Description": "Move Immediate with Register Shift",
 			"OpcodeEncodingAppend": "s=status:status,opcode=1101,rd=reg4:r,rn=0000,rm=reg4:o1,rs=reg4:o2,shifttype=reg4:o3",
 			"OpcodeEncoding": [
 				{

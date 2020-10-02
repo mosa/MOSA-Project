@@ -1065,6 +1065,12 @@ namespace Mosa.Compiler.Framework
 			Node.SetInstruction(instruction, result, operand1, operand2, operand3, operand4);
 		}
 
+		public void AppendInstruction(BaseInstruction instruction, ConditionCode conditionCode, Operand result, Operand operand1, Operand operand2, Operand operand3, Operand operand4)
+		{
+			AppendInstruction();
+			Node.SetInstruction(instruction, conditionCode, result, operand1, operand2, operand3, operand4);
+		}
+
 		#endregion Append Instruction Methods
 	}
 }

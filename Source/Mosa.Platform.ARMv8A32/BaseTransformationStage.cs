@@ -117,7 +117,7 @@ namespace Mosa.Platform.ARMv8A32
 		{
 			if (operand1.IsConstant)
 			{
-				operand1 = CreateRotatedImmediateOperand(context, operand1);
+				operand1 = CreateImmediateOperand(context, operand1);
 			}
 
 			if (operand1.IsVirtualRegister || operand1.IsCPURegister)
@@ -152,7 +152,7 @@ namespace Mosa.Platform.ARMv8A32
 
 			if (operand2.IsConstant)
 			{
-				operand2 = CreateRotatedImmediateOperand(context, operand2);
+				operand2 = CreateImmediateOperand(context, operand2);
 			}
 
 			Debug.Assert(operand1.IsVirtualRegister || operand1.IsCPURegister);
@@ -171,22 +171,19 @@ namespace Mosa.Platform.ARMv8A32
 			}
 		}
 
-		protected Operand CreateRotatedImmediateOperand(Context context, Operand operand)
+		protected Operand CreateImmediateOperand(Context context, Operand operand)
 		{
 			if (operand.IsVirtualRegister || operand.IsCPURegister)
 				return operand;
 
-			if (operand.IsResolvedConstant)
+			if (operand.IsResolvedConstant && ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsigned32, out uint immediate, out _, out _))
 			{
-				if (ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsigned32, out uint immediate, out _, out _))
+				if (operand.ConstantUnsigned64 == immediate)
 				{
-					if (operand.ConstantUnsigned64 == immediate)
-					{
-						return operand;
-					}
-
-					return CreateConstant(immediate);
+					return operand;
 				}
+
+				return CreateConstant(immediate);
 			}
 
 			return MoveConstantToRegister(context, operand);
@@ -306,7 +303,7 @@ namespace Mosa.Platform.ARMv8A32
 
 			if (operand2.IsConstant)
 			{
-				operand2 = CreateRotatedImmediateOperand(context, operand2);
+				operand2 = CreateImmediateOperand(context, operand2);
 			}
 
 			Debug.Assert(operand1.IsVirtualRegister || operand1.IsCPURegister);

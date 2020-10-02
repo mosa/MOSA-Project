@@ -16,7 +16,11 @@ namespace Mosa.Platform.x86.Stages
 	/// </remarks>
 	public sealed class LongOperandStage : BaseTransformationStage
 	{
+		private Operand Constant1;
+		private Operand Constant1F;
 		private Operand Constant4;
+		private Operand Constant32;
+		private Operand Constant64;
 
 		protected override void PopulateVisitationDictionary()
 		{
@@ -68,7 +72,11 @@ namespace Mosa.Platform.x86.Stages
 
 		protected override void Setup()
 		{
+			Constant1 = CreateConstant(1);
+			Constant1F = CreateConstant(0x1F);
 			Constant4 = CreateConstant(4);
+			Constant32 = CreateConstant(32);
+			Constant64 = CreateConstant(64);
 		}
 
 		#region Visitation Methods
@@ -102,11 +110,11 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[0].AppendInstruction(X86.Mov32, v3, count);
 			newBlocks[0].AppendInstruction(X86.Mov32, v2, op1H);
 			newBlocks[0].AppendInstruction(X86.Mov32, v1, op1L);
-			newBlocks[0].AppendInstruction(X86.Cmp32, null, v3, CreateConstant(64));
+			newBlocks[0].AppendInstruction(X86.Cmp32, null, v3, Constant64);
 			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].Block);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].Block);
 
-			newBlocks[1].AppendInstruction(X86.Cmp32, null, v3, CreateConstant(32));
+			newBlocks[1].AppendInstruction(X86.Cmp32, null, v3, Constant32);
 			newBlocks[1].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].Block);
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[2].Block);
 
@@ -115,12 +123,12 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[2].AppendInstruction(X86.Jmp, newBlocks[5].Block);
 
 			newBlocks[3].AppendInstruction(X86.Mov32, v1, v2);
-			newBlocks[3].AppendInstruction(X86.Sar32, v2, v2, CreateConstant(0x1F));
-			newBlocks[3].AppendInstruction(X86.And32, v3, v3, CreateConstant(0x1F));
+			newBlocks[3].AppendInstruction(X86.Sar32, v2, v2, Constant1F);
+			newBlocks[3].AppendInstruction(X86.And32, v3, v3, Constant1F);
 			newBlocks[3].AppendInstruction(X86.Sar32, v1, v1, v3);
 			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[5].Block);
 
-			newBlocks[4].AppendInstruction(X86.Sar32, v2, v2, CreateConstant(0x1F));
+			newBlocks[4].AppendInstruction(X86.Sar32, v2, v2, Constant1F);
 			newBlocks[4].AppendInstruction(X86.Mov32, v1, v2);
 			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].Block);
 
@@ -136,7 +144,7 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
 
 			context.SetInstruction(X86.Movdssi32, resultLow, operand1); // FIXME
-			context.AppendInstruction(X86.Pextrd32, resultHigh, operand1, CreateConstant(1));
+			context.AppendInstruction(X86.Pextrd32, resultHigh, operand1, Constant1);
 		}
 
 		private void BitCopy64ToFloatR8(Context context)
@@ -146,7 +154,7 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
 
 			context.SetInstruction(X86.Movdssi32, result, op1L);    // FIXME
-			context.AppendInstruction(X86.Pextrd32, result, op1H, CreateConstant(1));
+			context.AppendInstruction(X86.Pextrd32, result, op1H, Constant1);
 		}
 
 		private void Call(Context context)
@@ -168,7 +176,7 @@ namespace Mosa.Platform.x86.Stages
 		private void Compare32x64(Context context)
 		{
 			// FIXME!
-			Compare32x64(context);
+			//Compare32x64(context);
 		}
 
 		private void Compare64x32(Context context)
@@ -213,7 +221,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[3].Block);
 
 			// Success
-			newBlocks[2].AppendInstruction(X86.Mov32, result, CreateConstant(1));
+			newBlocks[2].AppendInstruction(X86.Mov32, result, Constant1);
 			newBlocks[2].AppendInstruction(X86.Jmp, nextBlock.Block);
 
 			// Failed

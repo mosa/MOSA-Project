@@ -1388,6 +1388,17 @@ namespace Mosa.Compiler.Framework
 			SetOperand(3, operand4);
 		}
 
+		public void SetInstruction(BaseInstruction instruction, ConditionCode conditionCode, Operand result, Operand operand1, Operand operand2, Operand operand3, Operand operand4)
+		{
+			SetInstruction(instruction, 4, (byte)((result == null) ? 0 : 1));
+			Result = result;
+			Operand1 = operand1;
+			Operand2 = operand2;
+			Operand3 = operand3;
+			ConditionCode = conditionCode;
+			SetOperand(3, operand4);
+		}
+
 		/// <summary>
 		/// Sets the instruction.
 		/// </summary>
