@@ -1,11 +1,10 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Framework.Trace;
 using System.Diagnostics;
 
-namespace Mosa.Platform.Intel.Stages
+namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// The simple dead code removal stage remove useless instructions
@@ -13,7 +12,7 @@ namespace Mosa.Platform.Intel.Stages
 	/// and a simple move propagation is performed as well.
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.Platform.BasePlatformTransformationStage" />
-	public abstract class SimpleDeadCodeRemovalStage : BasePlatformTransformationStage
+	public abstract class PlatformDeadCodeRemovalStage : BasePlatformTransformationStage
 	{
 		#region Abstract Methods
 

@@ -214,8 +214,8 @@ namespace Mosa.Platform.ARMv8A32
 					return v1;
 				}
 
-				before.SetInstruction(ARMv8A32.MovImm, v1, CreateConstant(operand.ConstantUnsigned32 & 0xFFFF));
-				before.AppendInstruction(ARMv8A32.MovtImm, v1, v1, CreateConstant(operand.ConstantUnsigned32 >> 16));
+				before.SetInstruction(ARMv8A32.Movw, v1, CreateConstant(operand.ConstantUnsigned32 & 0xFFFF));
+				before.AppendInstruction(ARMv8A32.Movt, v1, v1, CreateConstant(operand.ConstantUnsigned32 >> 16));
 
 				return v1;
 			}
@@ -225,8 +225,8 @@ namespace Mosa.Platform.ARMv8A32
 
 				var before = context.InsertBefore();
 
-				before.SetInstruction(ARMv8A32.MovImm, v1, operand);
-				before.AppendInstruction(ARMv8A32.MovtImm, v1, v1, operand);
+				before.SetInstruction(ARMv8A32.Movw, v1, operand);
+				before.AppendInstruction(ARMv8A32.Movt, v1, v1, operand);
 
 				return v1;
 			}

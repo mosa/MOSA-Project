@@ -169,7 +169,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			TransformInstruction(context, ARMv8A32.Cmp, ARMv8A32.CmpImm, context.Result, StatusRegister.Set, context.Operand1);
+			TransformInstruction(context, ARMv8A32.Cmp, ARMv8A32.CmpImm, null, StatusRegister.Set, operand1, operand2);
 
 			context.AppendInstruction(ARMv8A32.MovImm, condition, result, CreateConstant(1));
 			context.AppendInstruction(ARMv8A32.MovImm, condition.GetOpposite(), result, CreateConstant(0));

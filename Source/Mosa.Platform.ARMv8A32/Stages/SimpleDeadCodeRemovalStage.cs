@@ -3,7 +3,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 
-namespace Mosa.Platform.x86.Stages
+namespace Mosa.Platform.ARMv8A32.Stages
 {
 	/// <summary>
 	/// The simple dead code removal stage remove useless instructions
@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Stages
 	{
 		protected override bool IsMov(BaseInstruction instruction)
 		{
-			return instruction == X86.Mov32 || instruction == X86.Movsd || instruction == X86.Movss;
+			return instruction == ARMv8A32.Mov;
 		}
 	}
 }

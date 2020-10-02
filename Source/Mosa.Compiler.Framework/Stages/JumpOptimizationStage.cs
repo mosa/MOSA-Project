@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				var node = from.BeforeLast.GoBackwardsToNonEmpty();
 
-				Debug.Assert(node.Instruction.FlowControl == FlowControl.UnconditionalBranch);
+				//Debug.Assert(node.Instruction.FlowControl == FlowControl.UnconditionalBranch);
 				Debug.Assert(node.BranchTargetsCount != 0);
 
 				var target = node.BranchTargets[0];

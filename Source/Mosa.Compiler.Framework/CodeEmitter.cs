@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.Linker;
-using Mosa.Compiler.Framework.Platform;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

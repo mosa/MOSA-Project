@@ -1309,6 +1309,7 @@
 			"FlagsUnchanged": "CNZV",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
+			"FlowControl": "ConditionalBranch",
 			"OperandCount": 0,
 			"ResultCount": 0,
 			"Description": "Call a subroutine",
@@ -2871,7 +2872,7 @@
 			]
 		},
 		{
-			"Name": "MovtImm",
+			"Name": "Movt",
 			"Commutative": "false",
 			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
@@ -2882,16 +2883,18 @@
 			"FlagsUsed": "",
 			"OperandCount": 2,
 			"ResultCount": 1,
-			"Description": "MovtImm",
+			"Description": "Movt",
+			"OpcodeEncodingAppend": "s=0,opcode=1010,rd=reg4:r,rn=imm4hn:o2,immediate12=imm12:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][constant]",
-					"Encoding": "0x00000000"
+					"Encoding": "[arm-data-processing-immediate]",
+					"note": "conditional|00110100]|[immediate4]|[rd]|[immediate12]"
 				}
 			]
 		},
 		{
-			"Name": "MovkImm",
+			"Name": "Movw",
 			"Commutative": "false",
 			"FamilyName": "ARMv8xA",
 			"FlagsCleared": "",
@@ -2900,13 +2903,14 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 3,
+			"OperandCount": 1,
 			"ResultCount": 1,
-			"Description": "MovkImm",
+			"Description": "Movw",
+			"OpcodeEncodingAppend": "s=0,opcode=1101,rd=reg4:r,rn=imm4hn:o1,immediate12=imm12:o1",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][constant]",
-					"Encoding": "0x00000000"
+					"Condition": "[constant]",
+					"Encoding": "[arm-data-processing-immediate]"
 				}
 			]
 		},
