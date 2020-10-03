@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
 using System.Diagnostics;
 
@@ -202,8 +201,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void ArithShiftRight32(Context context)
 		{
-			//TransformInstruction(context, ARMv8A32.Asr, ARMv8A32.AsrImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
-
 			Translate(context, ARMv8A32.Asr);
 		}
 
@@ -226,8 +223,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 			operand1 = MoveConstantToRegister(context, operand1);
 			operand2 = MoveConstantToRegister(context, operand2);
-
-			//TransformInstruction(context, ARMv8A32.Cmp, ARMv8A32.CmpImm, null, StatusRegister.Set, operand1, operand2);
 
 			context.SetInstruction(ARMv8A32.Cmp, condition, null, operand1, operand2);
 			context.AppendInstruction(ARMv8A32.MovImm, condition, result, Constant1);
@@ -424,29 +419,21 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void And32(Context context)
 		{
-			//TransformInstruction(context, ARMv8A32.And, ARMv8A32.AndImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
-
 			Translate(context, ARMv8A32.And);
 		}
 
 		private void Not32(Context context)
 		{
-			//TransformInstruction(context, ARMv8A32.Mvn, ARMv8A32.MvnImm, context.Result, StatusRegister.NotSet, context.Operand1);
-
 			Translate1(context, ARMv8A32.Mvn);
 		}
 
 		private void Or32(Context context)
 		{
-			//TransformInstruction(context, ARMv8A32.Orr, ARMv8A32.OrrImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
-
 			Translate(context, ARMv8A32.Orr);
 		}
 
 		private void Xor32(Context context)
 		{
-			//TransformInstruction(context, ARMv8A32.Eor, ARMv8A32.EorImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
-
 			Translate(context, ARMv8A32.Eor);
 		}
 
@@ -462,8 +449,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void MoveInt32(Context context)
 		{
-			//TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, context.Result, StatusRegister.NotSet, context.Operand1);
-
 			Translate1(context, ARMv8A32.Mov);
 		}
 
@@ -479,45 +464,31 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void MulSigned32(Context context)
 		{
-			//var operand2 = MoveConstantToRegister(context, context.Operand2);
-			//context.SetInstruction(ARMv8A32.Mul, context.Result, context.Operand1, operand2);
-
 			Translate(context, ARMv8A32.Mul);
 		}
 
 		private void MulUnsigned32(Context context)
 		{
-			//var operand2 = MoveConstantToRegister(context, context.Operand2);
-			//context.SetInstruction(ARMv8A32.Mul, context.Result, context.Operand1, operand2);
-
 			Translate(context, ARMv8A32.Mul);
 		}
 
 		private void ShiftLeft32(Context context)
 		{
-			//TransformInstruction(context, ARMv8A32.Lsl, ARMv8A32.LslImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
-
 			Translate(context, ARMv8A32.Lsl);
 		}
 
 		private void ShiftRight32(Context context)
 		{
-			//TransformInstruction(context, ARMv8A32.Lsr, ARMv8A32.LsrImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
-
 			Translate(context, ARMv8A32.Lsr);
 		}
 
 		private void SignExtend16x32(Context context)
 		{
-			//TransformExtend(context, ARMv8A32.Sxth, context.Result, context.Operand1);
-
 			Translate1(context, ARMv8A32.Sxth);
 		}
 
 		private void SignExtend8x32(Context context)
 		{
-			//TransformExtend(context, ARMv8A32.Sxtb, context.Result, context.Operand1);
-
 			Translate1(context, ARMv8A32.Sxth);
 		}
 
@@ -603,20 +574,11 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void Sub32(Context context)
 		{
-			//TransformInstruction(context, ARMv8A32.Sub, ARMv8A32.SubImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
-
 			Translate(context, ARMv8A32.Sub);
 		}
 
 		private void SubCarryOut32(Context context)
 		{
-			//var result2 = context.Result2;
-
-			//TransformInstruction(context, ARMv8A32.Sub, ARMv8A32.SubImm, context.Result, StatusRegister.Set, context.Operand1, context.Operand2);
-
-			//context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.Carry, result2, CreateConstant(1));
-			//context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.NoCarry, result2, CreateConstant(0));
-
 			var result = context.Result;
 			var result2 = context.Result2;
 			var operand1 = context.Operand1;
@@ -642,25 +604,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void SubCarryIn32(Context context)
 		{
-			//var result = context.Result;
-			//var operand3 = context.Operand3;
-
-			//TransformInstruction(context, ARMv8A32.Sub, ARMv8A32.SubImm, context.Result, StatusRegister.NotSet, context.Operand1, context.Operand2);
-
-			//// FIXME: Operand3 may need fixup
-			//if (operand3.IsVirtualRegister)
-			//{
-			//	context.AppendInstruction(ARMv8A32.Sub, result, result, operand3);
-			//}
-			//else if (operand3.IsResolvedConstant)
-			//{
-			//	context.AppendInstruction(ARMv8A32.SubImm, result, result, operand3);
-			//}
-			//else
-			//{
-			//	throw new CompilerException("Error at {context} in {Method}");
-			//}
-
 			var result = context.Result;
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
@@ -678,19 +621,17 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void ZeroExtend16x32(Context context)
 		{
-			//TransformExtend(context, ARMv8A32.Uxth, context.Result, context.Operand1);
-
 			Translate1(context, ARMv8A32.Uxth);
 		}
 
 		private void ZeroExtend8x32(Context context)
 		{
-			//TransformExtend(context, ARMv8A32.Uxtb, context.Result, context.Operand1);
-
 			Translate1(context, ARMv8A32.Uxtb);
 		}
 
 		#endregion Visitation Methods
+
+		#region Helper Methods
 
 		private void Translate(Context context, BaseInstruction instruction)
 		{
@@ -713,8 +654,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 			context.SetInstruction(instruction, result, operand1);
 		}
-
-		#region Helper Methods
 
 		public static void OptimizeBranch(Context context)
 		{

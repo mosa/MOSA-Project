@@ -318,6 +318,7 @@ namespace Mosa.Compiler.Framework
 			if (operand.IsResolvedConstant)
 			{
 				AppendByte((byte)operand.ConstantUnsigned32);
+
 				//AppendBits(operand.ConstantUnsigned32, 8);
 			}
 			else
