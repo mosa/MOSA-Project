@@ -33,7 +33,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.BitCopyFloatR8To64, BitCopyFloatR8To64);
 			//AddVisitation(IRInstruction.BitCopy64ToFloatR8, BitCopy64ToFloatR8);
 			//AddVisitation(IRInstruction.ArithShiftRight64, ArithShiftRight64);
-			//AddVisitation(IRInstruction.Call, Call);
+			AddVisitation(IRInstruction.Call, Call);
+
 			//AddVisitation(IRInstruction.Compare32x64, Compare32x64);
 			//AddVisitation(IRInstruction.Compare64x32, Compare64x32);
 			//AddVisitation(IRInstruction.Compare64x64, Compare64x64);
@@ -43,6 +44,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.Convert64ToFloatR4, Convert64ToFloatR4);
 			//AddVisitation(IRInstruction.Convert64ToFloatR8, Convert64ToFloatR8);
 			//AddVisitation(IRInstruction.IfThenElse64, IfThenElse64);
+
 			//AddVisitation(IRInstruction.Load64, Load64);
 			//AddVisitation(IRInstruction.LoadParam64, LoadParam64);
 			//AddVisitation(IRInstruction.LoadParamSignExtend16x64, LoadParamSignExtend16x64);
@@ -101,8 +103,58 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
 			SplitLongOperand(context.Operand2, out var op2L, out var op2H);
 
-			TransformInstruction(context, ARMv8A32.Add, ARMv8A32.AddImm, resultLow, StatusRegister.Set, op1L, op2L);
-			TransformInstruction(context.InsertAfter(), ARMv8A32.Adc, ARMv8A32.AdcImm, resultHigh, StatusRegister.NotSet, op1H, op2H);
+			op1L = MoveConstantToRegister(context, op1L);
+			op1H = MoveConstantToRegister(context, op1H);
+			op2L = MoveConstantToRegister(context, op2L);
+			op2H = MoveConstantToRegister(context, op2H);
+
+			context.SetInstruction(ARMv8A32.Add, StatusRegister.Set, resultLow, op1L, op2L);
+			context.AppendInstruction(ARMv8A32.Adc, resultLow, op1H, op2H);
+
+			//TransformInstruction(context, ARMv8A32.Add, ARMv8A32.AddImm, resultLow, StatusRegister.Set, op1L, op2L);
+			//TransformInstruction(context.InsertAfter(), ARMv8A32.Adc, ARMv8A32.AdcImm, resultHigh, StatusRegister.NotSet, op1H, op2H);
+		}
+
+		private void Call(Context context)
+		{
+			if (context.Result?.Is64BitInteger == true)
+			{
+				SplitLongOperand(context.Result, out _, out _);
+			}
+
+			foreach (var operand in context.Operands)
+			{
+				if (operand.Is64BitInteger)
+				{
+					SplitLongOperand(operand, out _, out _);
+				}
+			}
+		}
+
+		private void IfThenElse64(Context context)
+		{
+			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
+			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
+			SplitLongOperand(context.Operand2, out var op2L, out var op2H);
+			SplitLongOperand(context.Operand3, out var op3L, out var op3H);
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			op1L = MoveConstantToRegister(context, op1L);
+			op1H = MoveConstantToRegister(context, op1H);
+			op2L = MoveConstantToRegister(context, op2L);
+			op2H = MoveConstantToRegister(context, op2H);
+			op3L = MoveConstantToRegister(context, op3L);
+			op3H = MoveConstantToRegister(context, op3H);
+
+			//TransformInstruction(context, ARMv8A32.Orr, ARMv8A32.OrrImm, v1, StatusRegister.NotSet, op1l, op1H);
+
+			context.SetInstruction(ARMv8A32.Orr, v1, op1L, op1H);
+			context.AppendInstruction(ARMv8A32.CmpImm, StatusRegister.Set, null, v1, ConstantZero32);
+			context.AppendInstruction(ARMv8A32.Mov, ConditionCode.NotEqual, resultLow, resultLow, op2L);
+			context.AppendInstruction(ARMv8A32.Mov, ConditionCode.NotEqual, resultHigh, resultHigh, op2H);
+			context.AppendInstruction(ARMv8A32.Mov, ConditionCode.Equal, resultLow, resultLow, op3L);
+			context.AppendInstruction(ARMv8A32.Mov, ConditionCode.Equal, resultHigh, resultHigh, op3H);
 		}
 
 		private void Move64(Context context)
@@ -110,8 +162,14 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
 			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
 
-			TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.Set, op1L);
-			TransformInstruction(context.InsertAfter(), ARMv8A32.Mov, ARMv8A32.MovImm, resultHigh, StatusRegister.NotSet, op1H);
+			op1L = MoveConstantToRegister(context, op1L);
+			op1H = MoveConstantToRegister(context, op1H);
+
+			context.SetInstruction(ARMv8A32.Mov, resultLow, op1L);
+			context.AppendInstruction(ARMv8A32.Mov, resultHigh, op1H);
+
+			//TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.Set, op1L);
+			//TransformInstruction(context.InsertAfter(), ARMv8A32.Mov, ARMv8A32.MovImm, resultHigh, StatusRegister.NotSet, op1H);
 		}
 
 		private void MulSigned64(Context context)
@@ -147,14 +205,15 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			var v4 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 			var v5 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			var op1l = MoveConstantToRegister(context, op1L);
-			var op1h = MoveConstantToRegister(context, op1H);
-			var operand2 = context.Operand2;
+			var operand2 = MoveConstantToRegister(context, context.Operand2);
 
-			context.SetInstruction(ARMv8A32.Mov, v1, op1l);
+			op1L = MoveConstantToRegister(context, op1L);
+			op1H = MoveConstantToRegister(context, op1H);
+
+			context.SetInstruction(ARMv8A32.Mov, v1, op1L);
 			context.AppendInstruction(ARMv8A32.SubImm, v2, operand2, Constant32);
 			context.AppendInstruction(ARMv8A32.RsbImm, v3, operand2, Constant32);
-			context.AppendInstruction(ARMv8A32.Lsl, v4, op1h, operand2);
+			context.AppendInstruction(ARMv8A32.Lsl, v4, op1H, operand2);
 
 			context.AppendInstruction(ARMv8A32.OrrRegShift, v5, v4, v4, v2, LSL);
 			context.AppendInstruction(ARMv8A32.Lsl, resultLow, v1, operand2);
@@ -202,8 +261,16 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
 			SplitLongOperand(context.Operand2, out var op2L, out var op2H);
 
-			TransformInstruction(context, ARMv8A32.And, ARMv8A32.AndImm, resultLow, StatusRegister.NotSet, op1L, op2L);
-			TransformInstruction(context.InsertAfter(), ARMv8A32.And, ARMv8A32.AndImm, resultHigh, StatusRegister.NotSet, op1H, op2H);
+			op1L = MoveConstantToRegister(context, op1L);
+			op1H = MoveConstantToRegister(context, op1H);
+			op2L = MoveConstantToRegister(context, op2L);
+			op2H = MoveConstantToRegister(context, op2H);
+
+			context.SetInstruction(ARMv8A32.And, resultLow, op1L, op2L);
+			context.AppendInstruction(ARMv8A32.And, resultHigh, op1H, op2H);
+
+			//TransformInstruction(context, ARMv8A32.And, ARMv8A32.AndImm, resultLow, StatusRegister.NotSet, op1L, op2L);
+			//TransformInstruction(context.InsertAfter(), ARMv8A32.And, ARMv8A32.AndImm, resultHigh, StatusRegister.NotSet, op1H, op2H);
 		}
 
 		private void Not64(Context context)
@@ -211,8 +278,14 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
 			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
 
-			TransformInstruction(context, ARMv8A32.Mvn, ARMv8A32.MvnImm, resultLow, StatusRegister.NotSet, op1L);
-			TransformInstruction(context.InsertAfter(), ARMv8A32.Mvn, ARMv8A32.MvnImm, resultHigh, StatusRegister.NotSet, op1H);
+			op1L = MoveConstantToRegister(context, op1L);
+			op1H = MoveConstantToRegister(context, op1H);
+
+			context.SetInstruction(ARMv8A32.Mvn, resultLow, op1L);
+			context.AppendInstruction(ARMv8A32.Mvn, resultHigh, op1H);
+
+			//TransformInstruction(context, ARMv8A32.Mvn, ARMv8A32.MvnImm, resultLow, StatusRegister.NotSet, op1L);
+			//TransformInstruction(context.InsertAfter(), ARMv8A32.Mvn, ARMv8A32.MvnImm, resultHigh, StatusRegister.NotSet, op1H);
 		}
 
 		private void Or64(Context context)
@@ -221,8 +294,16 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
 			SplitLongOperand(context.Operand2, out var op2L, out var op2H);
 
-			TransformInstruction(context, ARMv8A32.Orr, ARMv8A32.OrrImm, resultLow, StatusRegister.NotSet, op1L, op2L);
-			TransformInstruction(context.InsertAfter(), ARMv8A32.Orr, ARMv8A32.OrrImm, resultHigh, StatusRegister.NotSet, op1H, op2H);
+			op1L = MoveConstantToRegister(context, op1L);
+			op1H = MoveConstantToRegister(context, op1H);
+			op2L = MoveConstantToRegister(context, op2L);
+			op2H = MoveConstantToRegister(context, op2H);
+
+			context.SetInstruction(ARMv8A32.Orr, resultLow, op1L, op2L);
+			context.AppendInstruction(ARMv8A32.Orr, resultHigh, op1H, op2H);
+
+			//TransformInstruction(context, ARMv8A32.Orr, ARMv8A32.OrrImm, resultLow, StatusRegister.NotSet, op1L, op2L);
+			//TransformInstruction(context.InsertAfter(), ARMv8A32.Orr, ARMv8A32.OrrImm, resultHigh, StatusRegister.NotSet, op1H, op2H);
 		}
 
 		private void Xor64(Context context)
@@ -231,8 +312,16 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
 			SplitLongOperand(context.Operand2, out var op2L, out var op2H);
 
-			TransformInstruction(context, ARMv8A32.Eor, ARMv8A32.EorImm, resultLow, StatusRegister.NotSet, op1L, op2L);
-			TransformInstruction(context.InsertAfter(), ARMv8A32.Eor, ARMv8A32.EorImm, resultHigh, StatusRegister.NotSet, op1H, op2H);
+			op1L = MoveConstantToRegister(context, op1L);
+			op1H = MoveConstantToRegister(context, op1H);
+			op2L = MoveConstantToRegister(context, op2L);
+			op2H = MoveConstantToRegister(context, op2H);
+
+			context.SetInstruction(ARMv8A32.Eor, resultLow, op1L, op2L);
+			context.AppendInstruction(ARMv8A32.Eor, resultHigh, op1H, op2H);
+
+			//TransformInstruction(context, ARMv8A32.Eor, ARMv8A32.EorImm, resultLow, StatusRegister.NotSet, op1L, op2L);
+			//TransformInstruction(context.InsertAfter(), ARMv8A32.Eor, ARMv8A32.EorImm, resultHigh, StatusRegister.NotSet, op1H, op2H);
 		}
 
 		private void GetHigh64(Context context)
@@ -240,15 +329,23 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Result, out var resultLow, out _);
 			SplitLongOperand(context.Operand1, out _, out var op1H);
 
-			TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.Set, op1H);
+			op1H = MoveConstantToRegister(context, op1H);
+
+			context.SetInstruction(ARMv8A32.Mov, resultLow, op1H);
+
+			//TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.Set, op1H);
 		}
 
 		private void GetLow64(Context context)
 		{
-			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
-			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
+			SplitLongOperand(context.Result, out var resultLow, out _);
+			SplitLongOperand(context.Operand1, out var op1L, out _);
 
-			TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.Set, op1L);
+			op1L = MoveConstantToRegister(context, op1L);
+
+			context.SetInstruction(ARMv8A32.Mov, resultLow, op1L);
+
+			//TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.Set, op1L);
 		}
 
 		private void To64(Context context)
@@ -258,8 +355,14 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.NotSet, operand1);
-			TransformInstruction(context.InsertAfter(), ARMv8A32.Mov, ARMv8A32.MovImm, resultHigh, StatusRegister.NotSet, operand2);
+			operand1 = MoveConstantToRegister(context, operand1);
+			operand2 = MoveConstantToRegister(context, operand2);
+
+			context.SetInstruction(ARMv8A32.Mov, resultLow, operand1);
+			context.AppendInstruction(ARMv8A32.Mov, resultHigh, operand2);
+
+			//TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.NotSet, operand1);
+			//TransformInstruction(context.InsertAfter(), ARMv8A32.Mov, ARMv8A32.MovImm, resultHigh, StatusRegister.NotSet, operand2);
 		}
 
 		private void Sub64(Context context)
@@ -268,8 +371,16 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
 			SplitLongOperand(context.Operand2, out var op2L, out var op2H);
 
-			TransformInstruction(context, ARMv8A32.Sub, ARMv8A32.SubImm, resultLow, StatusRegister.Set, op1L, op2L);
-			TransformInstruction(context.InsertAfter(), ARMv8A32.Sbc, ARMv8A32.SbcImm, resultHigh, StatusRegister.NotSet, op1H, op2H);
+			op1L = MoveConstantToRegister(context, op1L);
+			op1H = MoveConstantToRegister(context, op1H);
+			op2L = MoveConstantToRegister(context, op2L);
+			op2H = MoveConstantToRegister(context, op2H);
+
+			context.SetInstruction(ARMv8A32.Sub, StatusRegister.Set, resultLow, op1L, op2L);
+			context.AppendInstruction(ARMv8A32.Sbc, resultHigh, op1H, op2H);
+
+			//TransformInstruction(context, ARMv8A32.Sub, ARMv8A32.SubImm, resultLow, StatusRegister.Set, op1L, op2L);
+			//TransformInstruction(context.InsertAfter(), ARMv8A32.Sbc, ARMv8A32.SbcImm, resultHigh, StatusRegister.NotSet, op1H, op2H);
 		}
 
 		private void Truncate64x32(Context context)
@@ -280,7 +391,11 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Result, out var resultLow, out _);
 			SplitLongOperand(context.Operand1, out var op1L, out _);
 
-			TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.NotSet, op1L);
+			op1L = MoveConstantToRegister(context, op1L);
+
+			context.SetInstruction(ARMv8A32.Mov, StatusRegister.Set, resultLow, op1L);
+
+			//TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.NotSet, op1L);
 		}
 
 		private void ZeroExtended16x64(Context context)
@@ -288,12 +403,14 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
 			SplitLongOperand(context.Operand1, out var op1L, out _);
 
-			TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.NotSet, op1L);
-
+			op1L = MoveConstantToRegister(context, op1L);
 			var operand1 = MoveConstantToRegister(context, CreateConstant((uint)0xFFFF));
-			context.AppendInstruction(ARMv8A32.And, resultLow, resultLow, operand1);
 
+			context.SetInstruction(ARMv8A32.Mov, resultLow, op1L);
+			context.AppendInstruction(ARMv8A32.And, resultLow, resultLow, operand1);
 			context.AppendInstruction(ARMv8A32.MovImm, resultHigh, ConstantZero32);
+
+			//TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.NotSet, op1L);
 		}
 
 		private void ZeroExtended32x64(Context context)
@@ -301,8 +418,13 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
 			SplitLongOperand(context.Operand1, out var op1L, out _);
 
-			TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.NotSet, op1L);
+			op1L = MoveConstantToRegister(context, op1L);
+
+			context.SetInstruction(ARMv8A32.Mov, resultLow, op1L);
 			context.AppendInstruction(ARMv8A32.MovImm, resultHigh, ConstantZero32);
+
+			//TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.NotSet, op1L);
+			//context.AppendInstruction(ARMv8A32.MovImm, resultHigh, ConstantZero32);
 		}
 
 		private void ZeroExtended8x64(Context context)
@@ -310,12 +432,19 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
 			SplitLongOperand(context.Operand1, out var op1L, out _);
 
-			TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.NotSet, op1L);
-
+			op1L = MoveConstantToRegister(context, op1L);
 			var operand1 = MoveConstantToRegister(context, CreateConstant((uint)0xFF));
-			context.AppendInstruction(ARMv8A32.And, resultLow, resultLow, operand1);
 
+			context.SetInstruction(ARMv8A32.Mov, resultLow, op1L);
+			context.AppendInstruction(ARMv8A32.And, resultLow, resultLow, operand1);
 			context.AppendInstruction(ARMv8A32.MovImm, resultHigh, ConstantZero32);
+
+			//TransformInstruction(context, ARMv8A32.Mov, ARMv8A32.MovImm, resultLow, StatusRegister.NotSet, op1L);
+
+			//var operand1 = MoveConstantToRegister(context, CreateConstant((uint)0xFF));
+			//context.AppendInstruction(ARMv8A32.And, resultLow, resultLow, operand1);
+
+			//context.AppendInstruction(ARMv8A32.MovImm, resultHigh, ConstantZero32);
 		}
 
 		#endregion Visitation Methods

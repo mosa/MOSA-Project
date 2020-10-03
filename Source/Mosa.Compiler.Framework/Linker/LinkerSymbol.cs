@@ -95,17 +95,21 @@ namespace Mosa.Compiler.Framework.Linker
 			}
 		}
 
-		public void ApplyPatch(long offset, ulong value, byte patchSize)
+		public void ApplyPatch(long offset, ulong value, byte patchSize, byte shift)
 		{
 			Stream.Position = offset;
+
+			if (shift != 0)
+				value >>= shift;
 
 			// Apply the patch
 			switch (patchSize)
 			{
-				case 8: Stream.WriteByte((byte)value); break;
-				case 16: Stream.Write((ushort)value); break;
-				case 32: Stream.Write((uint)value); break;
-				case 64: Stream.Write(value); break;
+				case 8: Stream.WriteByte((byte)value); return;
+				case 24: Stream.Write((ushort)value); Stream.Write((byte)value >> 16); return;
+				case 16: Stream.Write((ushort)value); return;
+				case 32: Stream.Write((uint)value); return;
+				case 64: Stream.Write(value); return;
 			}
 		}
 

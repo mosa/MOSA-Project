@@ -153,8 +153,9 @@ namespace Mosa.Platform.ARMv8A32
 					new LongOperandStage(),
 					new IRTransformationStage(),
 
-			//		compilerSettings.EnablePlatformOptimizations ? new OptimizationStage() : null,
-			//		new TweakStage(),
+					//compilerSettings.EnablePlatformOptimizations ? new OptimizationStage() : null,
+					//new TweakStage(),
+					new ImmediatePropagationStage(),
 					compilerSettings.PlatformOptimizations ? new SimpleDeadCodeRemovalStage() : null,
 				});
 

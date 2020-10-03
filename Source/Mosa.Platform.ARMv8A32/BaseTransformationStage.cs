@@ -29,12 +29,12 @@ namespace Mosa.Platform.ARMv8A32
 			}
 		}
 
-		protected void TransformExtend(Context context, BaseInstruction instruction, Operand result, Operand operand1)
-		{
-			operand1 = MoveConstantToRegister(context, operand1);
+		//protected void TransformExtend(Context context, BaseInstruction instruction, Operand result, Operand operand1)
+		//{
+		//	operand1 = MoveConstantToRegister(context, operand1);
 
-			context.SetInstruction(instruction, ConditionCode.Always, result, operand1);
-		}
+		//	context.SetInstruction(instruction, ConditionCode.Always, result, operand1);
+		//}
 
 		protected void TransformLoadInstruction(Context context, BaseInstruction loadUp, BaseInstruction loadUpImm, BaseInstruction loadDownImm, Operand result, Operand operand1, Operand operand2)
 		{
@@ -113,7 +113,7 @@ namespace Mosa.Platform.ARMv8A32
 			context.SetInstruction(instruction, ConditionCode.Always, null, operand1, operand2, operand3);
 		}
 
-		protected void TransformInstruction(Context context, BaseInstruction virtualInstruction, BaseInstruction immediateInstruction, Operand result, StatusRegister statusRegister, Operand operand1)
+		protected void __TransformInstruction(Context context, BaseInstruction virtualInstruction, BaseInstruction immediateInstruction, Operand result, StatusRegister statusRegister, Operand operand1)
 		{
 			if (operand1.IsConstant)
 			{
@@ -122,11 +122,11 @@ namespace Mosa.Platform.ARMv8A32
 
 			if (operand1.IsVirtualRegister || operand1.IsCPURegister)
 			{
-				context.SetInstruction(virtualInstruction, result, operand1);
+				context.SetInstruction(virtualInstruction, statusRegister, result, operand1);
 			}
 			else if (operand1.IsResolvedConstant)
 			{
-				context.SetInstruction(immediateInstruction, result, operand1);
+				context.SetInstruction(immediateInstruction, statusRegister, result, operand1);
 			}
 			else
 			{
@@ -134,7 +134,7 @@ namespace Mosa.Platform.ARMv8A32
 			}
 		}
 
-		protected void TransformInstruction(Context context, BaseInstruction virtualInstruction, BaseInstruction immediateInstruction, Operand result, StatusRegister statusRegister, Operand operand1, Operand operand2)
+		protected void __TransformInstruction(Context context, BaseInstruction virtualInstruction, BaseInstruction immediateInstruction, Operand result, StatusRegister statusRegister, Operand operand1, Operand operand2)
 		{
 			if (operand1.IsConstant)
 			{
