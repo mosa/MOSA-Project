@@ -20,7 +20,7 @@ namespace Mosa.Platform.ARMv8A32
 		{
 			var operand1 = context.Operand1;
 
-			if (operand1.IsConstant)
+			if (operand1.IsConstant && context.Instruction.IsCommutative)
 			{
 				var operand2 = context.Operand2;
 
@@ -29,146 +29,77 @@ namespace Mosa.Platform.ARMv8A32
 			}
 		}
 
-		//protected void TransformExtend(Context context, BaseInstruction instruction, Operand result, Operand operand1)
-		//{
-		//	operand1 = MoveConstantToRegister(context, operand1);
-
-		//	context.SetInstruction(instruction, ConditionCode.Always, result, operand1);
-		//}
-
-		protected void TransformLoadInstruction(Context context, BaseInstruction loadUp, BaseInstruction loadUpImm, BaseInstruction loadDownImm, Operand result, Operand operand1, Operand operand2)
+		protected void TransformLoadInstruction(Context context, BaseInstruction loadUp, BaseInstruction loadUpImm, BaseInstruction loadDownImm, Operand result, Operand baseOperand, Operand offsetOperand)
 		{
 			BaseInstruction instruction;
 
-			operand1 = MoveConstantToRegister(context, operand1);
+			baseOperand = MoveConstantToRegister(context, baseOperand);
 
-			if (operand2.IsResolvedConstant)
+			if (offsetOperand.IsResolvedConstant)
 			{
-				if (operand2.ConstantUnsigned64 >= 0 && operand2.ConstantSigned32 <= (1 << 13))
+				if (offsetOperand.ConstantUnsigned64 >= 0 && offsetOperand.ConstantSigned32 <= (1 << 13))
 				{
 					instruction = loadUpImm;
 				}
-				else if (operand2.ConstantUnsigned64 < 0 && -operand2.ConstantSigned32 <= (1 << 13))
+				else if (offsetOperand.ConstantUnsigned64 < 0 && -offsetOperand.ConstantSigned32 <= (1 << 13))
 				{
 					instruction = loadDownImm;
-					operand2 = CreateConstant((uint)-operand2.ConstantSigned32);
+					offsetOperand = CreateConstant((uint)-offsetOperand.ConstantSigned32);
 				}
 				else
 				{
 					instruction = loadDownImm;
-					operand2 = MoveConstantToRegister(context, operand2);
+					offsetOperand = MoveConstantToRegister(context, offsetOperand);
 				}
 			}
-			else if (operand2.IsUnresolvedConstant)
+			else if (offsetOperand.IsUnresolvedConstant)
 			{
 				instruction = loadUp;
-				operand2 = MoveConstantToRegister(context, operand2);
+				offsetOperand = MoveConstantToRegister(context, offsetOperand);
 			}
 			else
 			{
 				instruction = loadUp;
 			}
 
-			context.SetInstruction(instruction, ConditionCode.Always, result, operand1, operand2);
+			context.SetInstruction(instruction, ConditionCode.Always, result, baseOperand, offsetOperand);
 		}
 
-		protected void TransformStoreInstruction(Context context, BaseInstruction storeUp, BaseInstruction storeUpImm, BaseInstruction loadDownImm, Operand operand1, Operand operand2, Operand operand3)
+		protected void TransformStoreInstruction(Context context, BaseInstruction storeUp, BaseInstruction storeUpImm, BaseInstruction loadDownImm, Operand baseOperand, Operand offsetOperand, Operand sourceOperand)
 		{
 			BaseInstruction instruction;
 
-			operand1 = MoveConstantToRegister(context, operand1);
+			baseOperand = MoveConstantToRegister(context, baseOperand);
+			sourceOperand = MoveConstantToRegister(context, sourceOperand);
 
-			if (operand2.IsResolvedConstant)
+			if (offsetOperand.IsResolvedConstant)
 			{
-				if (operand2.ConstantUnsigned64 >= 0 && operand2.ConstantSigned32 <= (1 << 13))
+				if (offsetOperand.ConstantUnsigned64 >= 0 && offsetOperand.ConstantSigned32 <= (1 << 13))
 				{
 					instruction = storeUpImm;
 				}
-				else if (operand2.ConstantUnsigned64 < 0 && -operand2.ConstantSigned32 <= (1 << 13))
+				else if (offsetOperand.ConstantUnsigned64 < 0 && -offsetOperand.ConstantSigned32 <= (1 << 13))
 				{
 					instruction = loadDownImm;
-					operand2 = CreateConstant((uint)-operand2.ConstantSigned32);
+					offsetOperand = CreateConstant((uint)-offsetOperand.ConstantSigned32);
 				}
 				else
 				{
 					instruction = loadDownImm;
-					operand2 = MoveConstantToRegister(context, operand2);
+					offsetOperand = MoveConstantToRegister(context, offsetOperand);
 				}
 			}
-			else if (operand2.IsUnresolvedConstant)
+			else if (offsetOperand.IsUnresolvedConstant)
 			{
 				instruction = storeUp;
-				operand2 = MoveConstantToRegister(context, operand2);
+				offsetOperand = MoveConstantToRegister(context, offsetOperand);
 			}
 			else
 			{
 				instruction = storeUp;
 			}
 
-			if (operand3.IsConstant)
-			{
-				operand3 = MoveConstantToRegister(context, operand3);
-			}
-
-			context.SetInstruction(instruction, ConditionCode.Always, null, operand1, operand2, operand3);
-		}
-
-		protected void __TransformInstruction(Context context, BaseInstruction virtualInstruction, BaseInstruction immediateInstruction, Operand result, StatusRegister statusRegister, Operand operand1)
-		{
-			if (operand1.IsConstant)
-			{
-				operand1 = CreateImmediateOperand(context, operand1);
-			}
-
-			if (operand1.IsVirtualRegister || operand1.IsCPURegister)
-			{
-				context.SetInstruction(virtualInstruction, statusRegister, result, operand1);
-			}
-			else if (operand1.IsResolvedConstant)
-			{
-				context.SetInstruction(immediateInstruction, statusRegister, result, operand1);
-			}
-			else
-			{
-				throw new CompilerException("Error at {context} in {Method}");
-			}
-		}
-
-		protected void __TransformInstruction(Context context, BaseInstruction virtualInstruction, BaseInstruction immediateInstruction, Operand result, StatusRegister statusRegister, Operand operand1, Operand operand2)
-		{
-			if (operand1.IsConstant)
-			{
-				if (virtualInstruction.IsCommutative && !operand2.IsConstant)
-				{
-					var temp = operand1;
-					operand1 = operand2;
-					operand2 = temp;
-				}
-				else
-				{
-					operand1 = MoveConstantToRegister(context, operand1);
-				}
-			}
-
-			if (operand2.IsConstant)
-			{
-				operand2 = CreateImmediateOperand(context, operand2);
-			}
-
-			Debug.Assert(operand1.IsVirtualRegister || operand1.IsCPURegister);
-
-			if (operand2.IsVirtualRegister || operand2.IsCPURegister)
-			{
-				context.SetInstruction(virtualInstruction, statusRegister, result, operand1, operand2);
-			}
-			else if (operand2.IsResolvedConstant)
-			{
-				context.SetInstruction(immediateInstruction, statusRegister, result, operand1, operand2);
-			}
-			else
-			{
-				throw new CompilerException("Error at {context} in {Method}");
-			}
+			context.SetInstruction(instruction, ConditionCode.Always, null, baseOperand, offsetOperand, sourceOperand);
 		}
 
 		protected Operand CreateImmediateOperand(Context context, Operand operand)
