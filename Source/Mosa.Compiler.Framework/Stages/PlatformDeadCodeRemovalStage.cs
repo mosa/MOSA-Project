@@ -75,6 +75,9 @@ namespace Mosa.Compiler.Framework.Stages
 							|| node.Instruction.HasUnspecifiedSideEffect)
 							continue;
 
+						if (node.StatusRegister == StatusRegister.Set)
+							continue;
+
 						if (node.Instruction.FlowControl == FlowControl.Call)
 							continue;
 

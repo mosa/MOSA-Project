@@ -15,17 +15,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 	/// </remarks>
 	public sealed class LongOperandStage : BaseTransformationStage
 	{
-		private Operand Constant1;
-		private Operand Constant1F;
-		private Operand Constant4;
-		private Operand Constant32;
-		private Operand Constant64;
-
-		private Operand LSL;
-		private Operand LSR;
-		private Operand ASR;
-		private Operand ROR;
-
 		protected override void PopulateVisitationDictionary()
 		{
 			AddVisitation(IRInstruction.Add64, Add64);
@@ -45,14 +34,14 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.Convert64ToFloatR8, Convert64ToFloatR8);
 			//AddVisitation(IRInstruction.IfThenElse64, IfThenElse64);
 
-			//AddVisitation(IRInstruction.Load64, Load64);
-			//AddVisitation(IRInstruction.LoadParam64, LoadParam64);
-			//AddVisitation(IRInstruction.LoadParamSignExtend16x64, LoadParamSignExtend16x64);
-			//AddVisitation(IRInstruction.LoadParamSignExtend32x64, LoadParamSignExtend32x64);
-			//AddVisitation(IRInstruction.LoadParamSignExtend8x64, LoadParamSignExtend8x64);
-			//AddVisitation(IRInstruction.LoadParamZeroExtend16x64, LoadParamZeroExtended16x64);
-			//AddVisitation(IRInstruction.LoadParamZeroExtend32x64, LoadParamZeroExtended32x64);
-			//AddVisitation(IRInstruction.LoadParamZeroExtend8x64, LoadParamZeroExtended8x64);
+			AddVisitation(IRInstruction.Load64, Load64);
+			AddVisitation(IRInstruction.LoadParam64, LoadParam64);
+			AddVisitation(IRInstruction.LoadParamSignExtend16x64, LoadParamSignExtend16x64);
+			AddVisitation(IRInstruction.LoadParamSignExtend32x64, LoadParamSignExtend32x64);
+			AddVisitation(IRInstruction.LoadParamSignExtend8x64, LoadParamSignExtend8x64);
+			AddVisitation(IRInstruction.LoadParamZeroExtend16x64, LoadParamZeroExtended16x64);
+			AddVisitation(IRInstruction.LoadParamZeroExtend32x64, LoadParamZeroExtended32x64);
+			AddVisitation(IRInstruction.LoadParamZeroExtend8x64, LoadParamZeroExtended8x64);
 			AddVisitation(IRInstruction.And64, And64);
 			AddVisitation(IRInstruction.Not64, Not64);
 			AddVisitation(IRInstruction.Or64, Or64);
@@ -79,20 +68,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.ZeroExtend16x64, ZeroExtended16x64);
 			AddVisitation(IRInstruction.ZeroExtend32x64, ZeroExtended32x64);
 			AddVisitation(IRInstruction.ZeroExtend8x64, ZeroExtended8x64);
-		}
-
-		protected override void Setup()
-		{
-			Constant1 = CreateConstant(1);
-			Constant1F = CreateConstant(0x1F);
-			Constant4 = CreateConstant(4);
-			Constant32 = CreateConstant(32);
-			Constant64 = CreateConstant(64);
-
-			LSL = CreateConstant(0b00);
-			LSR = CreateConstant(0b01);
-			ASR = CreateConstant(0b10);
-			ROR = CreateConstant(0b11);
 		}
 
 		#region Visitation Methods
@@ -126,6 +101,113 @@ namespace Mosa.Platform.ARMv8A32.Stages
 					SplitLongOperand(operand, out _, out _);
 				}
 			}
+		}
+
+		private void Load64(Context context)
+		{
+			// TODO
+
+			//SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
+
+			//var address = context.Operand1;
+			//var offset = context.Operand2;
+
+			//context.SetInstruction(X86.MovLoad32, resultLow, address, offset);
+
+			//if (offset.IsResolvedConstant)
+			//{
+			//	var offset2 = offset.IsConstantZero ? Constant4 : CreateConstant(offset.Offset + NativePointerSize);
+			//	context.AppendInstruction(X86.MovLoad32, resultHigh, address, offset2);
+			//	return;
+			//}
+
+			//SplitLongOperand(offset, out var op2L, out _);
+
+			//var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+
+			//context.AppendInstruction(X86.Add32, v1, op2L, Constant4);
+			//context.AppendInstruction(X86.MovLoad32, resultHigh, address, v1);
+		}
+
+		private void LoadParam64(Context context)
+		{
+			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
+			SplitLongOperand(context.Operand1, out var lowOffset, out var highOffset);
+
+			TransformLoadInstruction(context, ARMv8A32.LdrUp32, ARMv8A32.LdrUpImm32, ARMv8A32.LdrDownImm32, resultLow, StackFrame, lowOffset);
+			TransformLoadInstruction(context.InsertAfter(), ARMv8A32.LdrUp32, ARMv8A32.LdrUpImm32, ARMv8A32.LdrDownImm32, resultHigh, StackFrame, highOffset);
+		}
+
+		private void LoadParamSignExtend16x64(Context context)
+		{
+			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
+			SplitLongOperand(context.Operand1, out var lowOffset, out var highOffset);
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			TransformLoadInstruction(context, ARMv8A32.LdrUpS16, ARMv8A32.LdrUpImmS16, ARMv8A32.LdrDownImmS16, resultLow, StackFrame, lowOffset);
+			context.AppendInstruction(ARMv8A32.Mov, v1, StackFrame, resultLow);
+
+			// TODO
+			context.AppendInstruction(ARMv8A32.Mov, v1, StackFrame, resultLow);
+		}
+
+		private void LoadParamSignExtend32x64(Context context)
+		{
+			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
+			SplitLongOperand(context.Operand1, out var lowOffset, out var highOffset);
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			TransformLoadInstruction(context, ARMv8A32.LdrUp32, ARMv8A32.LdrUpImm32, ARMv8A32.LdrDown32, resultLow, StackFrame, lowOffset);
+			context.AppendInstruction(ARMv8A32.Mov, v1, StackFrame, resultLow);
+
+			// TODO
+			context.AppendInstruction(ARMv8A32.Mov, v1, StackFrame, resultLow);
+		}
+
+		private void LoadParamSignExtend8x64(Context context)
+		{
+			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
+			SplitLongOperand(context.Operand1, out var lowOffset, out var highOffset);
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			TransformLoadInstruction(context, ARMv8A32.LdrUpS8, ARMv8A32.LdrUpImmS8, ARMv8A32.LdrDownImmS8, resultLow, StackFrame, lowOffset);
+			context.AppendInstruction(ARMv8A32.Mov, v1, StackFrame, resultLow);
+
+			// TODO
+			context.AppendInstruction(ARMv8A32.Mov, v1, StackFrame, resultLow);
+		}
+
+		private void LoadParamZeroExtended16x64(Context context)
+		{
+			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
+			SplitLongOperand(context.Operand1, out var lowOffset, out _);
+
+			TransformLoadInstruction(context, ARMv8A32.LdrUp16, ARMv8A32.LdrUpImm16, ARMv8A32.LdrDownImmS16, resultLow, StackFrame, lowOffset);
+			context.AppendInstruction(ARMv8A32.MovImm, resultHigh, ConstantZero32);
+		}
+
+		private void LoadParamZeroExtended32x64(Context context)
+		{
+			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
+			SplitLongOperand(context.Operand1, out var lowOffset, out _);
+
+			TransformLoadInstruction(context, ARMv8A32.LdrUp32, ARMv8A32.LdrUpImm32, ARMv8A32.LdrDownImm32, resultLow, StackFrame, lowOffset);
+			context.AppendInstruction(ARMv8A32.MovImm, resultHigh, ConstantZero32);
+		}
+
+		private void LoadParamZeroExtended8x64(Context context)
+		{
+			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
+			SplitLongOperand(context.Operand1, out var lowOffset, out _);
+
+			TransformLoadInstruction(context, ARMv8A32.LdrUp8, ARMv8A32.LdrUpImm8, ARMv8A32.LdrDownImm8, resultLow, StackFrame, lowOffset);
+			context.AppendInstruction(ARMv8A32.MovImm, resultHigh, ConstantZero32);
 		}
 
 		private void IfThenElse64(Context context)

@@ -14,6 +14,31 @@ namespace Mosa.Platform.ARMv8A32
 	{
 		protected override string Platform { get { return "ARMv8A32"; } }
 
+		protected Operand Constant1;
+		protected Operand Constant1F;
+		protected Operand Constant4;
+		protected Operand Constant32;
+		protected Operand Constant64;
+
+		protected Operand LSL;
+		protected Operand LSR;
+		protected Operand ASR;
+		protected Operand ROR;
+
+		protected override void Setup()
+		{
+			Constant1 = CreateConstant(1);
+			Constant1F = CreateConstant(0x1F);
+			Constant4 = CreateConstant(4);
+			Constant32 = CreateConstant(32);
+			Constant64 = CreateConstant(64);
+
+			LSL = CreateConstant(0b00);
+			LSR = CreateConstant(0b01);
+			ASR = CreateConstant(0b10);
+			ROR = CreateConstant(0b11);
+		}
+
 		#region Helper Methods
 
 		protected void SwapFirstTwoOperandsIfFirstConstant(Context context)

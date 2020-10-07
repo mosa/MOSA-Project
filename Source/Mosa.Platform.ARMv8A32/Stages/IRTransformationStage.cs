@@ -13,17 +13,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 	/// </remarks>
 	public sealed class IRTransformationStage : BaseTransformationStage
 	{
-		private Operand Constant1;
-		private Operand Constant1F;
-		private Operand Constant4;
-		private Operand Constant32;
-		private Operand Constant64;
-
-		private Operand LSL;
-		private Operand LSR;
-		private Operand ASR;
-		private Operand ROR;
-
 		protected override void PopulateVisitationDictionary()
 		{
 			AddVisitation(IRInstruction.AddR4, AddR4);
@@ -50,14 +39,14 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.Jmp, Jmp);
 			AddVisitation(IRInstruction.LoadR4, LoadR4);
 			AddVisitation(IRInstruction.LoadR8, LoadR8);
-			AddVisitation(IRInstruction.Load32, LoadInt32);
+			AddVisitation(IRInstruction.Load32, Load32);
 			AddVisitation(IRInstruction.LoadSignExtend8x32, LoadSignExtend8x32);
 			AddVisitation(IRInstruction.LoadSignExtend16x32, LoadSignExtend16x32);
 			AddVisitation(IRInstruction.LoadZeroExtend8x32, LoadZeroExtend8x32);
 			AddVisitation(IRInstruction.LoadZeroExtend16x32, LoadZeroExtend16x32);
 			AddVisitation(IRInstruction.LoadParamR4, LoadParamR4);
 			AddVisitation(IRInstruction.LoadParamR8, LoadParamR8);
-			AddVisitation(IRInstruction.LoadParam32, LoadParamInt32);
+			AddVisitation(IRInstruction.LoadParam32, LoadParam32);
 			AddVisitation(IRInstruction.LoadParamSignExtend8x32, LoadParamSignExtend8x32);
 			AddVisitation(IRInstruction.LoadParamSignExtend16x32, LoadParamSignExtend16x32);
 			AddVisitation(IRInstruction.LoadParamZeroExtend8x32, LoadParamZeroExtend8x32);
@@ -100,20 +89,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.Switch, Switch);
 			AddVisitation(IRInstruction.ZeroExtend16x32, ZeroExtend16x32);
 			AddVisitation(IRInstruction.ZeroExtend8x32, ZeroExtend8x32);
-		}
-
-		protected override void Setup()
-		{
-			Constant1 = CreateConstant(1);
-			Constant1F = CreateConstant(0x1F);
-			Constant4 = CreateConstant(4);
-			Constant32 = CreateConstant(32);
-			Constant64 = CreateConstant(64);
-
-			LSL = CreateConstant(0b00);
-			LSR = CreateConstant(0b01);
-			ASR = CreateConstant(0b10);
-			ROR = CreateConstant(0b11);
 		}
 
 		#region Visitation Methods
@@ -317,10 +292,12 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			context.SetInstruction(ARMv8A32.LdfUpOffset, context.Result, context.Operand1, context.Operand2);
 		}
 
-		private void LoadInt32(Context context)
+		private void Load32(Context context)
 		{
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
+
+			LoadStore.OrderLoadOperands(context, MethodCompiler);
 
 			TransformLoadInstruction(context, ARMv8A32.LdrUp32, ARMv8A32.LdrUpImm32, ARMv8A32.LdrDownImm32, context.Result, context.Operand1, context.Operand2);
 		}
@@ -345,7 +322,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			context.SetInstruction(ARMv8A32.LdfUpOffset, context.Result, StackFrame, context.Operand1);
 		}
 
-		private void LoadParamInt32(Context context)
+		private void LoadParam32(Context context)
 		{
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
@@ -390,6 +367,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
 
+			LoadStore.OrderLoadOperands(context, MethodCompiler);
+
 			TransformLoadInstruction(context, ARMv8A32.LdrUpS16, ARMv8A32.LdrUpImmS16, ARMv8A32.LdrDownImmS16, context.Result, StackFrame, context.Operand1);
 		}
 
@@ -397,6 +376,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		{
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
+
+			LoadStore.OrderLoadOperands(context, MethodCompiler);
 
 			TransformLoadInstruction(context, ARMv8A32.LdrUpS8, ARMv8A32.LdrUpImmS8, ARMv8A32.LdrDownImmS8, context.Result, StackFrame, context.Operand1);
 		}
@@ -406,6 +387,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
 
+			LoadStore.OrderLoadOperands(context, MethodCompiler);
+
 			TransformLoadInstruction(context, ARMv8A32.LdrUp16, ARMv8A32.LdrUpImm16, ARMv8A32.LdrDownImm16, context.Result, StackFrame, context.Operand1);
 		}
 
@@ -413,6 +396,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		{
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
+
+			LoadStore.OrderLoadOperands(context, MethodCompiler);
 
 			TransformLoadInstruction(context, ARMv8A32.LdrUp8, ARMv8A32.LdrUpImm8, ARMv8A32.LdrDownImm8, context.Result, StackFrame, context.Operand1);
 		}
