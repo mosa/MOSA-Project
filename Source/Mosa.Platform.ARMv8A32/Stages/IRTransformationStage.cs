@@ -118,7 +118,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			operand2 = MoveConstantToRegister(context, operand2);
 
 			context.SetInstruction(ARMv8A32.Add, StatusRegister.Set, result, operand1, operand2);
-			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.Carry, result2, Constant1);
+			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.Carry, result2, Constant_1);
 			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.NoCarry, result2, ConstantZero32);
 		}
 
@@ -200,7 +200,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			operand2 = MoveConstantToRegister(context, operand2);
 
 			context.SetInstruction(ARMv8A32.Cmp, condition, null, operand1, operand2);
-			context.AppendInstruction(ARMv8A32.MovImm, condition, result, Constant1);
+			context.AppendInstruction(ARMv8A32.MovImm, condition, result, Constant_1);
 			context.AppendInstruction(ARMv8A32.MovImm, condition.GetOpposite(), result, ConstantZero);
 		}
 
@@ -573,8 +573,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			operand2 = MoveConstantToRegister(context, operand2);
 
 			context.SetInstruction(ARMv8A32.Sub, StatusRegister.Set, result, operand1, operand2);
-			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.Carry, result2, Constant1);
-			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.NoCarry, result2, Constant1);
+			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.Carry, result2, Constant_1);
+			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.NoCarry, result2, Constant_1);
 		}
 
 		private void SubR4(Context context)

@@ -14,11 +14,12 @@ namespace Mosa.Platform.ARMv8A32
 	{
 		protected override string Platform { get { return "ARMv8A32"; } }
 
-		protected Operand Constant1;
-		protected Operand Constant1F;
-		protected Operand Constant4;
-		protected Operand Constant32;
-		protected Operand Constant64;
+		protected Operand Constant_1;
+		protected Operand Constant_1F;
+		protected Operand Constant_4;
+		protected Operand Constant_31;
+		protected Operand Constant_32;
+		protected Operand Constant_64;
 
 		protected Operand LSL;
 		protected Operand LSR;
@@ -27,11 +28,12 @@ namespace Mosa.Platform.ARMv8A32
 
 		protected override void Setup()
 		{
-			Constant1 = CreateConstant(1);
-			Constant1F = CreateConstant(0x1F);
-			Constant4 = CreateConstant(4);
-			Constant32 = CreateConstant(32);
-			Constant64 = CreateConstant(64);
+			Constant_1 = CreateConstant(1);
+			Constant_4 = CreateConstant(4);
+			Constant_31 = CreateConstant(31);
+			Constant_32 = CreateConstant(32);
+			Constant_64 = CreateConstant(64);
+			Constant_1F = Constant_31;
 
 			LSL = CreateConstant(0b00);
 			LSR = CreateConstant(0b01);
@@ -150,40 +152,31 @@ namespace Mosa.Platform.ARMv8A32
 			if (operand.IsVirtualRegister || operand.IsCPURegister)
 				return operand;
 
+			var before = context.InsertBefore();
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
 			if (operand.IsResolvedConstant)
 			{
-				var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-				var before = context.InsertBefore();
-
-				if (operand.ConstantUnsigned32 <= 0xFFFF)
+				if (ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsigned32, out uint immediate, out byte _, out byte _))
 				{
-					before.SetInstruction(ARMv8A32.MovImm, v1, operand);
-
+					before.SetInstruction(ARMv8A32.MovImm, v1, CreateConstant(immediate));
 					return v1;
 				}
 
-				if (ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsigned32, out uint immediate, out byte rotation4, out byte imm8))
+				if (ARMHelper.CalculateRotatedImmediateValue(~operand.ConstantUnsigned32, out uint immediate2, out byte _, out byte _))
 				{
-					before.SetInstruction(ARMv8A32.MovImm, v1, CreateConstant(immediate));
-
+					before.SetInstruction(ARMv8A32.MvnImm, v1, CreateConstant(immediate2));
 					return v1;
 				}
 
 				before.SetInstruction(ARMv8A32.Movw, v1, CreateConstant(operand.ConstantUnsigned32 & 0xFFFF));
 				before.AppendInstruction(ARMv8A32.Movt, v1, v1, CreateConstant(operand.ConstantUnsigned32 >> 16));
-
 				return v1;
 			}
 			else if (operand.IsUnresolvedConstant)
 			{
-				var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-				var before = context.InsertBefore();
-
 				before.SetInstruction(ARMv8A32.Movw, v1, operand);
 				before.AppendInstruction(ARMv8A32.Movt, v1, v1, operand);
-
 				return v1;
 			}
 

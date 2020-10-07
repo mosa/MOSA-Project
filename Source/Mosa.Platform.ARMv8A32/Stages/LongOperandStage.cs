@@ -21,7 +21,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 			//AddVisitation(IRInstruction.BitCopyFloatR8To64, BitCopyFloatR8To64);
 			//AddVisitation(IRInstruction.BitCopy64ToFloatR8, BitCopy64ToFloatR8);
-			//AddVisitation(IRInstruction.ArithShiftRight64, ArithShiftRight64);
+			AddVisitation(IRInstruction.ArithShiftRight64, ArithShiftRight64);
 			AddVisitation(IRInstruction.Call, Call);
 
 			//AddVisitation(IRInstruction.Compare32x64, Compare32x64);
@@ -85,6 +85,28 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 			context.SetInstruction(ARMv8A32.Add, StatusRegister.Set, resultLow, op1L, op2L);
 			context.AppendInstruction(ARMv8A32.Adc, resultLow, op1H, op2H);
+		}
+
+		private void ArithShiftRight64(Context context)
+		{
+			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
+			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
+			SplitLongOperand(context.Operand2, out var op2L, out var op2H);
+
+			op1L = MoveConstantToRegister(context, op1L);
+			op1H = MoveConstantToRegister(context, op1H);
+			op2L = MoveConstantToRegister(context, op2L);
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			context.SetInstruction(ARMv8A32.Asr, resultHigh, op1H, op2L);
+			context.AppendInstruction(ARMv8A32.SubImm, StatusRegister.Set, v1, op2L, ConstantZero32);
+			context.AppendInstruction(ARMv8A32.Lsr, resultLow, op1L, op2L);
+			context.AppendInstruction(ARMv8A32.Rsb, v2, op2L, ConstantZero32);
+			context.AppendInstruction(ARMv8A32.Asr, ConditionCode.Positive, resultHigh, op1H, Constant_1F);
+			context.AppendInstruction(ARMv8A32.OrrRegShift, resultLow, resultLow, op1H, v2, LSL);
+			context.AppendInstruction(ARMv8A32.Asr, ConditionCode.Positive, resultLow, op1H, v1);
 		}
 
 		private void Call(Context context)
@@ -285,8 +307,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			op1H = MoveConstantToRegister(context, op1H);
 
 			context.SetInstruction(ARMv8A32.Mov, v1, op1L);
-			context.AppendInstruction(ARMv8A32.SubImm, v2, operand2, Constant32);
-			context.AppendInstruction(ARMv8A32.RsbImm, v3, operand2, Constant32);
+			context.AppendInstruction(ARMv8A32.SubImm, v2, operand2, Constant_32);
+			context.AppendInstruction(ARMv8A32.RsbImm, v3, operand2, Constant_32);
 			context.AppendInstruction(ARMv8A32.Lsl, v4, op1H, operand2);
 
 			context.AppendInstruction(ARMv8A32.OrrRegShift, v5, v4, v4, v2, LSL);
@@ -321,8 +343,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			var op1h = MoveConstantToRegister(context, op1H);
 			var operand2 = context.Operand2;
 
-			context.SetInstruction(ARMv8A32.Rsb, v1, operand2, Constant32);
-			context.AppendInstruction(ARMv8A32.Sub, StatusRegister.Set, v2, operand2, Constant32);
+			context.SetInstruction(ARMv8A32.Rsb, v1, operand2, Constant_32);
+			context.AppendInstruction(ARMv8A32.Sub, StatusRegister.Set, v2, operand2, Constant_32);
 			context.AppendInstruction(ARMv8A32.Lsr, v3, op1l, operand2);
 			context.AppendInstruction(ARMv8A32.Orr, v4, v3, op1h, v1, LSL);
 			context.AppendInstruction(ARMv8A32.Orr, ConditionCode.Zero, resultLow, v4, op1h, v2, ASR);

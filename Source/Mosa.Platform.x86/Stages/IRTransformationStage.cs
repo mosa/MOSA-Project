@@ -706,7 +706,7 @@ namespace Mosa.Platform.x86.Stages
 						var newBlocks = CreateNewBlockContexts(2, context.Label);
 						var nextBlock = Split(context);
 
-						context.SetInstruction(X86.Mov32, result, CreateConstant(1));
+						context.SetInstruction(X86.Mov32, result, Constant_1);
 						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X86.Branch, ConditionCode.Parity, newBlocks[1].Block);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
@@ -731,7 +731,7 @@ namespace Mosa.Platform.x86.Stages
 						var newBlocks = CreateNewBlockContexts(1, context.Label);
 						var nextBlock = Split(context);
 
-						context.SetInstruction(X86.Mov32, result, CreateConstant(1));
+						context.SetInstruction(X86.Mov32, result, Constant_1);
 						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X86.Branch, ConditionCode.Parity, nextBlock.Block);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);

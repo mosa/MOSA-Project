@@ -59,12 +59,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 						if (IsMov(node.Instruction))
 						{
-							Move(node);
-
-							if (node.IsEmpty)
-								continue;
-
-							RemoveUseless(node);
+							SimpleForwardCopyPropagation(node);
 
 							continue;
 						}
@@ -102,26 +97,34 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected void RemoveUseless(InstructionNode node)
 		{
-			// Remove instruction, if useless
-			if (node.ResultCount == 1 && node.Result.Uses.Count == 0 && node.Result.IsVirtualRegister)
-			{
-				// Check is split child, if so check is parent in use (IR.Return for example)
-				if (node.Result.HasLongParent && node.Result.LongParent.Uses.Count != 0)
-					return;
+			if (node.StatusRegister == StatusRegister.Set)
+				return;
 
-				trace?.Log($"REMOVED:\t{node}");
+			if (node.ResultCount != 1)
+				return;
 
-				node.Empty();
-				changed = true;
-				IRInstructionRemovedCount++;
-			}
+			if (node.Result.IsCPURegister) /// same as if (!node.Result.IsVirtualRegister)
+				return;
+
+			if (node.Result.Uses.Count != 0)
+				return;
+
+			// Check is split child, if so check is parent in use (IR.Return for example)
+			if (node.Result.HasLongParent && node.Result.LongParent.Uses.Count != 0)
+				return;
+
+			trace?.Log($"REMOVED:\t{node}");
+
+			node.Empty();
+			changed = true;
+			IRInstructionRemovedCount++;
 		}
 
 		/// <summary>
 		/// Simple copy propagation.
 		/// </summary>
 		/// <param name="node">The node.</param>
-		protected void Move(InstructionNode node)
+		protected void SimpleForwardCopyPropagation(InstructionNode node)
 		{
 			var result = node.Result;
 			var source = node.Operand1;
@@ -138,7 +141,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (source.Definitions.Count != 1)
 				return;
 
-			if (source.IsResolvedConstant)
+			if (!source.IsResolvedConstant)
+				return;
+
+			if (node.StatusRegister == StatusRegister.Set)
 				return;
 
 			Debug.Assert(result != source);

@@ -16,12 +16,6 @@ namespace Mosa.Platform.x86.Stages
 	/// </remarks>
 	public sealed class LongOperandStage : BaseTransformationStage
 	{
-		private Operand Constant1;
-		private Operand Constant1F;
-		private Operand Constant4;
-		private Operand Constant32;
-		private Operand Constant64;
-
 		protected override void PopulateVisitationDictionary()
 		{
 			AddVisitation(IRInstruction.Add64, Add64);
@@ -70,15 +64,6 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.ZeroExtend8x64, ZeroExtended8x64);
 		}
 
-		protected override void Setup()
-		{
-			Constant1 = CreateConstant(1);
-			Constant1F = CreateConstant(0x1F);
-			Constant4 = CreateConstant(4);
-			Constant32 = CreateConstant(32);
-			Constant64 = CreateConstant(64);
-		}
-
 		#region Visitation Methods
 
 		private void Add64(Context context)
@@ -102,23 +87,10 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Sar32, v1, op1H, count);
 			context.AppendInstruction(X86.Shrd32, resultLow, op1L, op1H, count);
-			context.AppendInstruction(X86.Sar32, resultHigh, resultHigh, Constant1F);
+			context.AppendInstruction(X86.Sar32, resultHigh, resultHigh, Constant_1F);
 
-			if (!count.IsResolvedConstant)
-			{
-				if (!count.IsVirtualRegister)
-				{
-					var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-					context.AppendInstruction(X86.Mov32, v2, count);
-					count = v2;
-				}
-
-				context.AppendInstruction(X86.Test32, null, count, Constant32);
-				context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, resultLow, resultLow, v1);
-				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, resultHigh, resultHigh, v1);
-			}
-			else
+			/// Optimized when shift value is a constant
+			if (count.IsResolvedConstant)
 			{
 				if (count.ConstantUnsigned32 == 32)
 				{
@@ -128,7 +100,16 @@ namespace Mosa.Platform.x86.Stages
 				{
 					context.AppendInstruction(X86.Mov32, resultLow, v1);
 				}
+
+				return;
 			}
+
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			context.AppendInstruction(X86.Mov32, v2, count);
+			context.AppendInstruction(X86.Test32, null, v2, Constant_32);
+			context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, resultLow, resultLow, v1);
+			context.AppendInstruction(X86.CMov32, ConditionCode.Equal, resultHigh, resultHigh, v1);
 		}
 
 		private void BitCopyFloatR8To64(Context context)
@@ -138,7 +119,7 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
 
 			context.SetInstruction(X86.Movdssi32, resultLow, operand1); // FIXME
-			context.AppendInstruction(X86.Pextrd32, resultHigh, operand1, Constant1);
+			context.AppendInstruction(X86.Pextrd32, resultHigh, operand1, Constant_1);
 		}
 
 		private void BitCopy64ToFloatR8(Context context)
@@ -148,7 +129,7 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
 
 			context.SetInstruction(X86.Movdssi32, result, op1L);    // FIXME
-			context.AppendInstruction(X86.Pextrd32, result, op1H, Constant1);
+			context.AppendInstruction(X86.Pextrd32, result, op1H, Constant_1);
 		}
 
 		private void Call(Context context)
@@ -215,7 +196,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[3].Block);
 
 			// Success
-			newBlocks[2].AppendInstruction(X86.Mov32, result, Constant1);
+			newBlocks[2].AppendInstruction(X86.Mov32, result, Constant_1);
 			newBlocks[2].AppendInstruction(X86.Jmp, nextBlock.Block);
 
 			// Failed
@@ -346,7 +327,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (offset.IsResolvedConstant)
 			{
-				var offset2 = offset.IsConstantZero ? Constant4 : CreateConstant(offset.Offset + NativePointerSize);
+				var offset2 = offset.IsConstantZero ? Constant_4 : CreateConstant(offset.Offset + NativePointerSize);
 				context.AppendInstruction(X86.MovLoad32, resultHigh, address, offset2);
 				return;
 			}
@@ -355,7 +336,7 @@ namespace Mosa.Platform.x86.Stages
 
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-			context.AppendInstruction(X86.Add32, v1, op2L, Constant4);
+			context.AppendInstruction(X86.Add32, v1, op2L, Constant_4);
 			context.AppendInstruction(X86.MovLoad32, resultHigh, address, v1);
 		}
 
@@ -498,14 +479,14 @@ namespace Mosa.Platform.x86.Stages
 				// FUTURE: Optimization - Test32 and conditional moves are not necessary if the count is a resolved constant
 
 				context.AppendInstruction(X86.Mov32, v2, count);
-				context.AppendInstruction(X86.Test32, null, v2, CreateConstant(32));
+				context.AppendInstruction(X86.Test32, null, v2, Constant_32);
 				context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, resultHigh, resultHigh, v1);
 				context.AppendInstruction(X86.Mov32, resultLow, ConstantZero32);
 				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, resultLow, resultLow, v1);
 			}
 			else
 			{
-				context.AppendInstruction(X86.Test32, null, count, CreateConstant(32));
+				context.AppendInstruction(X86.Test32, null, count, Constant_32);
 				context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, resultHigh, resultHigh, v1);
 				context.AppendInstruction(X86.Mov32, resultLow, ConstantZero32);
 				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, resultLow, resultLow, v1);
@@ -557,7 +538,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Shrd32, resultLow, op1L, op1H, ECX);
 			context.AppendInstruction(X86.Shr32, resultHigh, op1H, ECX);
 
-			context.AppendInstruction(X86.Test32, null, ECX, CreateConstant(32));
+			context.AppendInstruction(X86.Test32, null, ECX, Constant_32);
 			context.AppendInstruction(X86.Branch, ConditionCode.Zero, nextBlock.Block);
 			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 
@@ -614,7 +595,7 @@ namespace Mosa.Platform.x86.Stages
 			{
 				var offset4 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-				context.AppendInstruction(X86.Add32, offset4, op2L, Constant4);
+				context.AppendInstruction(X86.Add32, offset4, op2L, Constant_4);
 				context.AppendInstruction(X86.MovStore32, null, address, offset4, op3H);
 			}
 		}
