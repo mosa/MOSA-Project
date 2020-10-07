@@ -99,42 +99,36 @@ namespace Mosa.Platform.x86.Stages
 			var count = context.Operand2;
 
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			var newBlocks = CreateNewBlockContexts(6, context.Label);
-			var nextBlock = Split(context);
+			context.SetInstruction(X86.Sar32, v1, op1H, count);
+			context.AppendInstruction(X86.Shrd32, resultLow, op1L, op1H, count);
+			context.AppendInstruction(X86.Sar32, resultHigh, resultHigh, Constant1F);
 
-			context.SetInstruction(X86.Jmp, newBlocks[0].Block);
+			if (!count.IsResolvedConstant)
+			{
+				if (!count.IsVirtualRegister)
+				{
+					var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
-			newBlocks[0].AppendInstruction(X86.Mov32, v3, count);
-			newBlocks[0].AppendInstruction(X86.Mov32, v2, op1H);
-			newBlocks[0].AppendInstruction(X86.Mov32, v1, op1L);
-			newBlocks[0].AppendInstruction(X86.Cmp32, null, v3, Constant64);
-			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].Block);
-			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].Block);
+					context.AppendInstruction(X86.Mov32, v2, count);
+					count = v2;
+				}
 
-			newBlocks[1].AppendInstruction(X86.Cmp32, null, v3, Constant32);
-			newBlocks[1].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].Block);
-			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[2].Block);
-
-			newBlocks[2].AppendInstruction(X86.Shrd32, v1, v1, v2, v3);
-			newBlocks[2].AppendInstruction(X86.Sar32, v2, v2, v3);
-			newBlocks[2].AppendInstruction(X86.Jmp, newBlocks[5].Block);
-
-			newBlocks[3].AppendInstruction(X86.Mov32, v1, v2);
-			newBlocks[3].AppendInstruction(X86.Sar32, v2, v2, Constant1F);
-			newBlocks[3].AppendInstruction(X86.And32, v3, v3, Constant1F);
-			newBlocks[3].AppendInstruction(X86.Sar32, v1, v1, v3);
-			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[5].Block);
-
-			newBlocks[4].AppendInstruction(X86.Sar32, v2, v2, Constant1F);
-			newBlocks[4].AppendInstruction(X86.Mov32, v1, v2);
-			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].Block);
-
-			newBlocks[5].AppendInstruction(X86.Mov32, resultHigh, v2);
-			newBlocks[5].AppendInstruction(X86.Mov32, resultLow, v1);
-			newBlocks[5].AppendInstruction(X86.Jmp, nextBlock.Block);
+				context.AppendInstruction(X86.Test32, null, count, Constant32);
+				context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, resultLow, resultLow, v1);
+				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, resultHigh, resultHigh, v1);
+			}
+			else
+			{
+				if (count.ConstantUnsigned32 == 32)
+				{
+					context.AppendInstruction(X86.Mov32, resultHigh, v1);
+				}
+				else
+				{
+					context.AppendInstruction(X86.Mov32, resultLow, v1);
+				}
+			}
 		}
 
 		private void BitCopyFloatR8To64(Context context)
