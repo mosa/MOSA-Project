@@ -15,11 +15,14 @@ namespace Mosa.Platform.ARMv8A32
 		protected override string Platform { get { return "ARMv8A32"; } }
 
 		protected Operand Constant_1;
-		protected Operand Constant_1F;
 		protected Operand Constant_4;
+		protected Operand Constant_16;
+		protected Operand Constant_24;
 		protected Operand Constant_31;
 		protected Operand Constant_32;
 		protected Operand Constant_64;
+
+		protected Operand Constant_1F;
 
 		protected Operand LSL;
 		protected Operand LSR;
@@ -30,6 +33,8 @@ namespace Mosa.Platform.ARMv8A32
 		{
 			Constant_1 = CreateConstant(1);
 			Constant_4 = CreateConstant(4);
+			Constant_16 = CreateConstant(16);
+			Constant_24 = CreateConstant(16);
 			Constant_31 = CreateConstant(31);
 			Constant_32 = CreateConstant(32);
 			Constant_64 = CreateConstant(64);
@@ -64,11 +69,11 @@ namespace Mosa.Platform.ARMv8A32
 
 			if (offsetOperand.IsResolvedConstant)
 			{
-				if (offsetOperand.ConstantUnsigned64 >= 0 && offsetOperand.ConstantSigned32 <= (1 << 13))
+				if (offsetOperand.ConstantUnsigned64 >= 0 && offsetOperand.ConstantSigned32 <= 0xFFF)
 				{
 					instruction = loadUpImm;
 				}
-				else if (offsetOperand.ConstantUnsigned64 < 0 && -offsetOperand.ConstantSigned32 <= (1 << 13))
+				else if (offsetOperand.ConstantUnsigned64 < 0 && -offsetOperand.ConstantSigned32 <= 0xFFF)
 				{
 					instruction = loadDownImm;
 					offsetOperand = CreateConstant((uint)-offsetOperand.ConstantSigned32);
@@ -127,24 +132,6 @@ namespace Mosa.Platform.ARMv8A32
 			}
 
 			context.SetInstruction(instruction, ConditionCode.Always, null, baseOperand, offsetOperand, sourceOperand);
-		}
-
-		protected Operand CreateImmediateOperand(Context context, Operand operand)
-		{
-			if (operand.IsVirtualRegister || operand.IsCPURegister)
-				return operand;
-
-			if (operand.IsResolvedConstant && ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsigned32, out uint immediate, out _, out _))
-			{
-				if (operand.ConstantUnsigned64 == immediate)
-				{
-					return operand;
-				}
-
-				return CreateConstant(immediate);
-			}
-
-			return MoveConstantToRegister(context, operand);
 		}
 
 		protected Operand MoveConstantToRegister(Context context, Operand operand)
@@ -222,6 +209,24 @@ namespace Mosa.Platform.ARMv8A32
 			}
 
 			return operand;
+		}
+
+		protected Operand CreateImmediateOperand(Context context, Operand operand)
+		{
+			if (operand.IsVirtualRegister || operand.IsCPURegister)
+				return operand;
+
+			if (operand.IsResolvedConstant && ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsigned32, out uint immediate, out _, out _))
+			{
+				if (operand.ConstantUnsigned64 == immediate)
+				{
+					return operand;
+				}
+
+				return CreateConstant(immediate);
+			}
+
+			return MoveConstantToRegister(context, operand);
 		}
 
 		protected void TransformInstructionXXX(Context context, BaseInstruction virtualInstruction, BaseInstruction immediateInstruction, Operand result, StatusRegister statusRegister, Operand operand1, Operand operand2)

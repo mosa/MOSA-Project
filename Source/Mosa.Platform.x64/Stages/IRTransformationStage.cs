@@ -300,7 +300,7 @@ namespace Mosa.Platform.x64.Stages
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-			context.SetInstruction(X64.Mov32, v1, ConstantZero64);
+			context.SetInstruction(X64.Mov32, v1, ConstantZero32);
 			context.AppendInstruction2(X64.Div32, v1, v2, v1, operand1, operand2);
 			context.AppendInstruction(X64.Mov32, result, v2);
 		}
@@ -504,7 +504,7 @@ namespace Mosa.Platform.x64.Stages
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-			context.SetInstruction(X64.Mov32, v1, ConstantZero64);
+			context.SetInstruction(X64.Mov32, v1, ConstantZero32);
 			context.AppendInstruction2(X64.Div32, result, v2, v1, operand1, operand2);
 		}
 
@@ -719,7 +719,7 @@ namespace Mosa.Platform.x64.Stages
 						newBlocks[0].AppendInstruction(X64.Branch, ConditionCode.NotEqual, newBlocks[1].Block);
 						newBlocks[0].AppendInstruction(X64.Jmp, nextBlock.Block);
 
-						newBlocks[1].AppendInstruction(X64.Mov32, result, ConstantZero64);
+						newBlocks[1].AppendInstruction(X64.Mov32, result, ConstantZero32);
 						newBlocks[1].AppendInstruction(X64.Jmp, nextBlock.Block);
 						break;
 					}
@@ -753,7 +753,7 @@ namespace Mosa.Platform.x64.Stages
 						//	ucomisd	xmm1, xmm0
 						//	seta	al
 
-						context.SetInstruction(X64.Mov64, result, ConstantZero64);
+						context.SetInstruction(X64.Mov64, result, ConstantZero32);
 						context.AppendInstruction(instruction, null, right, left);
 						context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreaterThan, result);
 						break;
@@ -765,7 +765,7 @@ namespace Mosa.Platform.x64.Stages
 						//	ucomisd	xmm0, xmm1
 						//	seta	al
 
-						context.SetInstruction(X64.Mov32, result, ConstantZero64);
+						context.SetInstruction(X64.Mov32, result, ConstantZero32);
 						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreaterThan, result);
 						break;
@@ -789,56 +789,13 @@ namespace Mosa.Platform.x64.Stages
 						//	ucomisd	xmm0, xmm1
 						//	setae	al
 
-						context.SetInstruction(X64.Mov32, result, ConstantZero64);
+						context.SetInstruction(X64.Mov32, result, ConstantZero32);
 						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreaterOrEqual, result);
 						break;
 					}
 			}
 		}
-
-		//private void CopyCompound(Context context, MosaType type, Operand destinationBase, Operand destination, Operand sourceBase, Operand source)
-		//{
-		//	int size = TypeLayout.GetTypeSize(type);
-		//	const int LargeAlignment = 16;
-		//	int alignedSize = size - (size % NativeAlignment);
-		//	int largeAlignedTypeSize = size - (size % LargeAlignment);
-
-		//	Debug.Assert(size > 0);
-
-		//	var srcReg = AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
-		//	var dstReg = AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
-
-		//	context.SetInstruction(IRInstruction.UnstableObjectTracking);
-
-		//	context.AppendInstruction(X64.Lea64, srcReg, sourceBase, source);
-		//	context.AppendInstruction(X64.Lea64, dstReg, destinationBase, destination);
-
-		//	var tmp = AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
-		//	var tmpLarge = AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.R8);
-
-		//	for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
-		//	{
-		//		// Large aligned moves allow 128bits to be copied at a time
-		//		var index = CreateConstant(i);
-		//		context.AppendInstruction(X64.MovupsLoad, tmpLarge, srcReg, index);
-		//		context.AppendInstruction(X64.MovupsStore, null, dstReg, index, tmpLarge);
-		//	}
-		//	for (int i = largeAlignedTypeSize; i < alignedSize; i += 8)
-		//	{
-		//		var index = CreateConstant(i);
-		//		context.AppendInstruction(X64.MovLoad64, tmp, srcReg, index);
-		//		context.AppendInstruction(X64.MovStore64, null, dstReg, index, tmp);
-		//	}
-		//	for (int i = alignedSize; i < size; i++)
-		//	{
-		//		var index = CreateConstant(i);
-		//		context.AppendInstruction(X64.MovLoad8, tmp, srcReg, index);
-		//		context.AppendInstruction(X64.MovStore8, null, dstReg, index, tmp);
-		//	}
-
-		//	context.AppendInstruction(IRInstruction.StableObjectTracking);
-		//}
 
 		#endregion Helper Methods
 	}
