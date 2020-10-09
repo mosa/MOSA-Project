@@ -22,7 +22,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 4);
 
-			if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister && node.Operand3.IsConstant && node.GetOperand(3).IsConstant)
+			if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister && node.Operand3.IsConstant)
 			{
 				opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 				opcodeEncoder.Append2Bits(0b00);
@@ -31,10 +31,10 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 				opcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.Set ? 1 : 0);
 				opcodeEncoder.Append4Bits(0b0000);
 				opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
-				opcodeEncoder.Append5BitImmediate(node.Operand3);
-				opcodeEncoder.Append2BitImmediate(node.GetOperand(3));
+				opcodeEncoder.Append5BitImmediate(node.Operand2);
+				opcodeEncoder.Append2BitImmediate(node.Operand3);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append4Bits(node.Operand2.Register.RegisterCode);
+				opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
 				return;
 			}
 

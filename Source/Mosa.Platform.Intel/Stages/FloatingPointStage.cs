@@ -83,7 +83,7 @@ namespace Mosa.Platform.Intel.Stages
 			{
 				var operand = node.GetOperand(i);
 
-				if (operand == null || !operand.IsConstant || !operand.IsR)
+				if (operand == null || !operand.IsConstant || !operand.IsFloatingPoint)
 					continue;
 
 				if (operand.IsUnresolvedConstant)

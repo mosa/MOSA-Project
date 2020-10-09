@@ -271,7 +271,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var first = context.Operand1;
 			var second = context.Operand2;
 
-			if (first.IsR)
+			if (first.IsFloatingPoint)
 			{
 				var result = AllocateVirtualRegister(Is32BitPlatform ? TypeSystem.BuiltIn.I4 : TypeSystem.BuiltIn.I8);
 				var instruction = (first.IsR4) ? (BaseInstruction)IRInstruction.CompareR4 : IRInstruction.CompareR8;

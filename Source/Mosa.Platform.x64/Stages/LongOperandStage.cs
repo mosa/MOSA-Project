@@ -130,7 +130,7 @@ namespace Mosa.Platform.x64.Stages
 
 		private void ConvertFloatR8ToInteger64(Context context)
 		{
-			Debug.Assert(context.Result.IsI1 || context.Result.IsI2 || context.Result.IsI4);
+			Debug.Assert(context.Result.IsInteger && !context.Result.IsFloatingPoint);
 			context.ReplaceInstruction(X64.Cvttss2si64);
 		}
 

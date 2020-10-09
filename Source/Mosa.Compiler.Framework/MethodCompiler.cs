@@ -241,7 +241,7 @@ namespace Mosa.Compiler.Framework
 			ConstantZeroR4 = CreateConstant(0.0f);
 			ConstantZeroR8 = CreateConstant(0.0d);
 
-			ConstantZero = Architecture.Is32BitPlatform ? ConstantZero32 : ConstantZero64;
+			ConstantZero = Architecture.Is32BitPlatform ? ConstantZero32 : ConstantZero64;  // FUTURE: This could just be Constant64 or Constant32 once the caling stage uses the method signature intead of the operand types
 
 			LocalVariables = emptyOperandList;
 			ThreadID = threadID;
@@ -310,6 +310,9 @@ namespace Mosa.Compiler.Framework
 			}
 
 			MethodData.ParameterStackSize = stacksize;
+
+			// FUTURE:
+			Debug.Assert(stacksize == TypeLayout.__GetMethodParameterStackSize(Method));
 		}
 
 		/// <summary>

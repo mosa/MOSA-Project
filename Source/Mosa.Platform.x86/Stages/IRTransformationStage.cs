@@ -239,7 +239,7 @@ namespace Mosa.Platform.x86.Stages
 
 		private void ConvertR4To32(Context context)
 		{
-			Debug.Assert(context.Result.IsI1 || context.Result.IsI2 || context.Result.IsI4);
+			Debug.Assert(context.Result.IsInteger && !context.Result.IsFloatingPoint);
 			context.ReplaceInstruction(X86.Cvttss2si32);
 		}
 
@@ -250,7 +250,7 @@ namespace Mosa.Platform.x86.Stages
 
 		private void ConvertR8To32(Context context)
 		{
-			Debug.Assert(context.Result.IsI1 || context.Result.IsI2 || context.Result.IsI4);
+			Debug.Assert(context.Result.IsInteger && !context.Result.IsFloatingPoint);
 			context.ReplaceInstruction(X86.Cvttsd2si32);
 		}
 

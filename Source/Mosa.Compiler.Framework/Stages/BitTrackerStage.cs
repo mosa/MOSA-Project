@@ -370,7 +370,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (Values[index].IsEvaluated)
 				return false;
 
-			if (virtualRegister.IsR || virtualRegister.Definitions.Count != 1 || virtualRegister.Definitions.Count == 0)
+			if (virtualRegister.IsFloatingPoint || virtualRegister.Definitions.Count != 1 || virtualRegister.Definitions.Count == 0)
 			{
 				if (virtualRegister.IsInteger)
 				{
@@ -501,7 +501,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Debug.Assert(!value.IsIndeterminate);
 			Debug.Assert(value.IsEvaluated);
-			Debug.Assert(!virtualRegister.IsR);
+			Debug.Assert(!virtualRegister.IsFloatingPoint);
 			Debug.Assert(virtualRegister.Definitions.Count == 1);
 
 			var node = virtualRegister.Definitions[0];

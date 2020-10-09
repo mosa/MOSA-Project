@@ -1,5 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
@@ -66,9 +67,19 @@ namespace Mosa.Compiler.Framework
 		private readonly Dictionary<MosaMethod, List<int>> parameterOffsets = new Dictionary<MosaMethod, List<int>>(new MosaMethodFullNameComparer());
 
 		/// <summary>
+		/// The parameter sizes
+		/// </summary>
+		private readonly Dictionary<MosaMethod, List<int>> parameterSizes = new Dictionary<MosaMethod, List<int>>(new MosaMethodFullNameComparer());
+
+		/// <summary>
 		/// The parameter stack size
 		/// </summary>
 		private readonly Dictionary<MosaMethod, int> parameterStackSize = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
+
+		/// <summary>
+		/// The parameter stack size
+		/// </summary>
+		private readonly Dictionary<MosaMethod, int> methodReturnSize = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
 
 		/// <summary>
 		/// The overridden methods
@@ -348,6 +359,21 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
+		public int __GetMethodParameterStackSize(MosaMethod method)
+		{
+			lock (_lock)
+			{
+				if (parameterStackSize.TryGetValue(method, out int value))
+				{
+					return value;
+				}
+
+				__ResolveMethodParameters(method);
+
+				return parameterStackSize[method];
+			}
+		}
+
 		public MosaType[] GetDerivedTypes(MosaType baseType)
 		{
 			lock (_lock)
@@ -409,6 +435,14 @@ namespace Mosa.Compiler.Framework
 			{
 				ResolveType(type);
 			}
+
+			//foreach (var type in TypeSystem.AllTypes)
+			//{
+			//	foreach (var method in type.Methods)
+			//	{
+			//		__ResolveMethodParameters(method);
+			//	}
+			//}
 		}
 
 		/// <summary>
@@ -467,6 +501,56 @@ namespace Mosa.Compiler.Framework
 			}
 
 			CreateMethodTable(type);
+		}
+
+		/// <summary>
+		/// Resolves the method parameters.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		private void __ResolveMethodParameters(MosaMethod method)
+		{
+			if (method.HasOpenGenericParams)
+				return;
+
+			if (parameterOffsets.ContainsKey(method))
+				return;
+
+			var parameters = method.Signature.Parameters;
+			int stacksize = 0;
+
+			var offsets = new List<int>(parameters.Count + ((method.HasThis) ? 1 : 0));
+			var sizes = new List<int>(parameters.Count + ((method.HasThis) ? 1 : 0));
+
+			if (method.HasThis)
+			{
+				offsets.Add(0);
+				stacksize = NativePointerSize;  // already aligned
+			}
+
+			foreach (var parameter in parameters)
+			{
+				var size = parameter.ParameterType.IsValueType ? GetTypeSize(parameter.ParameterType) : NativePointerAlignment;
+
+				offsets.Add(stacksize);
+				sizes.Add(size);
+
+				stacksize += Alignment.AlignUp(size, NativePointerAlignment);
+			}
+
+			int returnSize = 0;
+			var returnType = method.Signature.ReturnType;
+
+			if (FitsInRegister(returnType))
+			{
+				ResolveType(returnType);
+
+				typeSizes.TryGetValue(returnType, out returnSize);
+			}
+
+			parameterSizes.Add(method, sizes);
+			parameterOffsets.Add(method, offsets);
+			parameterStackSize.Add(method, stacksize);
+			methodReturnSize.Add(method, returnSize);
 		}
 
 		/// <summary>
@@ -866,14 +950,11 @@ namespace Mosa.Compiler.Framework
 			var typeCode = type.TypeCode;
 
 			if (typeCode == MosaTypeCode.ValueType)
-			{
 				return false; // no search
-			}
 
 			switch (typeCode)
 			{
 				case MosaTypeCode.Void: return true;
-				case MosaTypeCode.Var: return false;
 				case MosaTypeCode.MVar: return true;
 				case MosaTypeCode.Boolean: return true;
 				case MosaTypeCode.Char: return true;
@@ -898,6 +979,7 @@ namespace Mosa.Compiler.Framework
 				case MosaTypeCode.FunctionPointer: return true;
 				case MosaTypeCode.Object: return true;
 				case MosaTypeCode.SZArray: return true;
+				case MosaTypeCode.Var: return false;
 				default: return false;
 			}
 		}

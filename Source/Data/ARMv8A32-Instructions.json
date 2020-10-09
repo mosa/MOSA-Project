@@ -641,7 +641,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Not",
-			"OpcodeEncodingAppend": "s=status:status,opcode=1111,rd=reg4:r,rn=0000,immediate12=imm12:o2",
+			"OpcodeEncodingAppend": "s=status:status,opcode=1111,rd=reg4:r,rn=0000,immediate12=imm12:o1",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[constant]",
@@ -662,10 +662,10 @@
 			"OperandCount": 4,
 			"ResultCount": 1,
 			"Description": "Not",
-			"OpcodeEncodingAppend": "s=status:status,opcode=1111,rd=reg4:r,rn=0000,rm=reg4:o2,shiftamount=imm5:o3,shifttype=imm2:o4",
+			"OpcodeEncodingAppend": "s=status:status,opcode=1111,rd=reg4:r,rn=0000,rm=reg4:o1,shiftamount=imm5:o2,shifttype=imm2:o3",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][constant][constant]",
+					"Condition": "[register][register][constant]",
 					"Encoding": "[arm-data-processing-shift-amount]"
 				}
 			]
@@ -680,13 +680,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 4,
+			"OperandCount": 3,
 			"ResultCount": 1,
 			"Description": "Not",
-			"OpcodeEncodingAppend": "s=status:status,opcode=1111,rd=reg4:r,rn=0000,rm=reg4:o2,rs=reg4:o3,shifttype=imm2:o4",
+			"OpcodeEncodingAppend": "s=status:status,opcode=1111,rd=reg4:r,rn=0000,rm=reg4:o1,rs=reg4:o2,shifttype=imm2:o3",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][register][constant]",
+					"Condition": "[register][register][constant]",
 					"Encoding": "[arm-data-processing-shift-register]"
 				}
 			]
