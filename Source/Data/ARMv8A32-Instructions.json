@@ -3705,7 +3705,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Load Floating Point Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,fd=reg4:r,rn=reg4:o1,t1=0,t0=fp:o3,ls=1,p=1,wb=0,up=1,offset=0x00",
+			"OpcodeEncodingAppend": "s=status:status,fd=reg4:r,rn=reg4:o1,t1=0,t0=fp:r,ls=1,p=1,wb=0,up=1,offset=0x00",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3726,7 +3726,7 @@
 			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Load Floating Point Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,fd=reg4:r,rn=reg4:o1,t1=0,t0=fp:o3,ls=1,p=1,wb=0,up=0,offset=0x00",
+			"OpcodeEncodingAppend": "s=status:status,fd=reg4:r,rn=reg4:o1,t1=0,t0=fp:r,ls=1,p=1,wb=0,up=0,offset=0x00",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3747,7 +3747,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Load Floating Point Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,fd=reg4:r,rn=reg4:o1,t1=0,t0=fp:o3,ls=1,p=1,wb=0,up=1,offset=imm8:o2",
+			"OpcodeEncodingAppend": "s=status:status,fd=reg4:r,rn=reg4:o1,t1=0,t0=fp:r,ls=1,p=1,wb=0,up=1,offset=imm8:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3768,7 +3768,7 @@
 			"OperandCount": 2,
 			"ResultCount": 1,
 			"Description": "Load Floating Point Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,fd=reg4:r,rn=reg4:o1,t1=0,t0=fp:o3,ls=1,p=1,wb=0,up=0,offset=imm8:o2",
+			"OpcodeEncodingAppend": "s=status:status,fd=reg4:r,rn=reg4:o1,t1=0,t0=fp:r,ls=1,p=1,wb=0,up=0,offset=imm8:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
