@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Platform;
 using System.Collections.Generic;
 
 namespace Mosa.Platform.ARMv8A32.Stages
@@ -9,7 +10,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 	/// Runtime Call Stage
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
-	public sealed class ImmediatePropagationStage : BaseMethodCompilerStage
+	public sealed class ImmediatePropagationStage : BasePlatformTransformationStage
 	{
 		private static Dictionary<BaseInstruction, KeyValuePair<BaseInstruction, int>> Map = new Dictionary<BaseInstruction, KeyValuePair<BaseInstruction, int>>()
 		{
@@ -27,6 +28,11 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			{ ARMv8A32.Asr, new KeyValuePair<BaseInstruction, int>(ARMv8A32.AsrImm, 2) },
 			{ ARMv8A32.Cmp, new KeyValuePair<BaseInstruction, int>(ARMv8A32.CmpImm, 2) },
 		};
+
+		protected override void PopulateVisitationDictionary()
+		{
+			// Nothing to do
+		}
 
 		protected override void Run()
 		{
@@ -58,7 +64,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 							var operand = use.GetOperand(index);
 
-							if (operand != node.Operand1)
+							if (operand != node.Result)
 								continue;
 
 							if (!operand.IsVirtualRegister)

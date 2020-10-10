@@ -59,27 +59,32 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The method stack sizes
 		/// </summary>
-		private readonly Dictionary<MosaMethod, int> methodStackSizes = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
+		//private readonly Dictionary<MosaMethod, int> methodStackSizes = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
 
 		/// <summary>
 		/// The parameter offsets
 		/// </summary>
-		private readonly Dictionary<MosaMethod, List<int>> parameterOffsets = new Dictionary<MosaMethod, List<int>>(new MosaMethodFullNameComparer());
+		//private readonly Dictionary<MosaMethod, List<int>> parameterOffsets = new Dictionary<MosaMethod, List<int>>(new MosaMethodFullNameComparer());
 
 		/// <summary>
 		/// The parameter sizes
 		/// </summary>
-		private readonly Dictionary<MosaMethod, List<int>> parameterSizes = new Dictionary<MosaMethod, List<int>>(new MosaMethodFullNameComparer());
+		//private readonly Dictionary<MosaMethod, List<int>> parameterSizes = new Dictionary<MosaMethod, List<int>>();
 
 		/// <summary>
 		/// The parameter stack size
 		/// </summary>
-		private readonly Dictionary<MosaMethod, int> parameterStackSize = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
+		//private readonly Dictionary<MosaMethod, int> parameterStackSize = new Dictionary<MosaMethod, int>();
 
 		/// <summary>
 		/// The parameter stack size
 		/// </summary>
-		private readonly Dictionary<MosaMethod, int> methodReturnSize = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
+		//private readonly Dictionary<MosaMethod, int> methodReturnSize = new Dictionary<MosaMethod, int>();
+
+		/// <summary>
+		/// The parameter stack size
+		/// </summary>
+		private readonly Dictionary<MosaMethod, MethodInfo> methodData = new Dictionary<MosaMethod, MethodInfo>();
 
 		/// <summary>
 		/// The overridden methods
@@ -94,6 +99,21 @@ namespace Mosa.Compiler.Framework
 		private readonly object _lock = new object();
 
 		#endregion Data Members
+
+		#region Nested Class
+
+		public class MethodInfo
+		{
+			public int ReturnSize { get; set; }
+
+			public bool ReturnInRegister { get; set; }
+
+			public int ParameterStackSize { get; set; }
+			public List<int> ParameterOffsets { get; set; }
+			public List<int> ParameterSizes { get; set; }
+		}
+
+		#endregion Nested Class
 
 		#region Properties
 
@@ -359,18 +379,16 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public int __GetMethodParameterStackSize(MosaMethod method)
+		public MethodInfo __GetMethodInfo(MosaMethod method)
 		{
 			lock (_lock)
 			{
-				if (parameterStackSize.TryGetValue(method, out int value))
+				if (methodData.TryGetValue(method, out MethodInfo value))
 				{
 					return value;
 				}
 
-				__ResolveMethodParameters(method);
-
-				return parameterStackSize[method];
+				return __ResolveMethodParameters(method);
 			}
 		}
 
@@ -507,19 +525,19 @@ namespace Mosa.Compiler.Framework
 		/// Resolves the method parameters.
 		/// </summary>
 		/// <param name="method">The method.</param>
-		private void __ResolveMethodParameters(MosaMethod method)
+		private MethodInfo __ResolveMethodParameters(MosaMethod method)
 		{
 			if (method.HasOpenGenericParams)
-				return;
+				return null;
 
-			if (parameterOffsets.ContainsKey(method))
-				return;
+			if (methodData.ContainsKey(method))
+				return null;
 
 			var parameters = method.Signature.Parameters;
 			int stacksize = 0;
 
-			var offsets = new List<int>(parameters.Count + ((method.HasThis) ? 1 : 0));
-			var sizes = new List<int>(parameters.Count + ((method.HasThis) ? 1 : 0));
+			var offsets = new List<int>(parameters.Count + (method.HasThis ? 1 : 0));
+			var sizes = new List<int>(parameters.Count + (method.HasThis ? 1 : 0));
 
 			if (method.HasThis)
 			{
@@ -537,20 +555,24 @@ namespace Mosa.Compiler.Framework
 				stacksize += Alignment.AlignUp(size, NativePointerAlignment);
 			}
 
-			int returnSize = 0;
 			var returnType = method.Signature.ReturnType;
 
-			if (FitsInRegister(returnType))
+			ResolveType(returnType);
+
+			typeSizes.TryGetValue(returnType, out int returnSize);
+
+			var methodInfo = new MethodInfo
 			{
-				ResolveType(returnType);
+				ReturnSize = returnSize,
+				ParameterOffsets = offsets,
+				ParameterSizes = sizes,
+				ParameterStackSize = stacksize,
+				ReturnInRegister = FitsInRegister(returnType)
+			};
 
-				typeSizes.TryGetValue(returnType, out returnSize);
-			}
+			methodData.Add(method, methodInfo);
 
-			parameterSizes.Add(method, sizes);
-			parameterOffsets.Add(method, offsets);
-			parameterStackSize.Add(method, stacksize);
-			methodReturnSize.Add(method, returnSize);
+			return methodInfo;
 		}
 
 		/// <summary>

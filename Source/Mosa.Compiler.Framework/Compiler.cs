@@ -8,6 +8,7 @@ using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -392,15 +393,22 @@ namespace Mosa.Compiler.Framework
 			return CompileMethod(method, threadID);
 		}
 
-		public MosaMethod CompileMethod(MosaMethod method)
+		public void CompileMethod(MosaMethod method)
 		{
-			return CompileMethod(method, 0);
+			if (!MethodScheduler.IsCompilable(method))
+				return;
+
+			Debug.Assert(!method.HasOpenGenericParams);
+
+			CompileMethod(method, 0);
 		}
 
 		private MosaMethod CompileMethod(MosaMethod method, int threadID)
 		{
 			if (method.IsCompilerGenerated)
 				return method;
+
+			Debug.Assert(!method.HasOpenGenericParams);
 
 			lock (method)
 			{

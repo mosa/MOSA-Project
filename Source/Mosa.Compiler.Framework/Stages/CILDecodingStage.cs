@@ -223,11 +223,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (!variable.IsVirtualRegister)
 					continue;
 
-				if (variable.IsI4)
-				{
-					prologue.AppendInstruction(IRInstruction.Move32, variable, CreateConstant(0));
-				}
-				else if (variable.IsI8)
+				if (variable.Is64BitInteger)
 				{
 					prologue.AppendInstruction(IRInstruction.Move64, variable, CreateConstant(0ul));
 				}
@@ -242,10 +238,6 @@ namespace Mosa.Compiler.Framework.Stages
 				else if (variable.IsReferenceType)
 				{
 					prologue.AppendInstruction(Select(variable.Is64BitInteger, IRInstruction.Move32, IRInstruction.Move64), variable, Operand.GetNull(variable.Type));
-				}
-				else if (variable.Is64BitInteger)
-				{
-					prologue.AppendInstruction(IRInstruction.Move64, variable, CreateConstant(0ul));
 				}
 				else
 				{

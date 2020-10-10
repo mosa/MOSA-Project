@@ -67,15 +67,37 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public void Schedule(MosaType type)
+		public bool IsCompilable(MosaType type)
 		{
 			if (type.IsModule)
-				return;
+				return false;
 
 			if (type.IsInterface)
-				return;
+				return false;
 
 			if (type.HasOpenGenericParams || type.IsPointer)
+				return false;
+
+			return true;
+		}
+
+		public bool IsCompilable(MosaMethod method)
+		{
+			if (method.IsAbstract && !method.HasImplementation)
+				return false;
+
+			if (method.HasOpenGenericParams)
+				return false;
+
+			if (method.IsCompilerGenerated)
+				return false;
+
+			return true;
+		}
+		
+			public void Schedule(MosaType type)
+		{
+			if (!IsCompilable(type))
 				return;
 
 			foreach (var method in type.Methods)
@@ -86,13 +108,7 @@ namespace Mosa.Compiler.Framework
 
 		public void Schedule(MosaMethod method)
 		{
-			if (method.IsAbstract && !method.HasImplementation)
-				return;
-
-			if (method.HasOpenGenericParams)
-				return;
-
-			if (method.IsCompilerGenerated)
+			if (!IsCompilable(method))
 				return;
 
 			AddToQueue(method);
