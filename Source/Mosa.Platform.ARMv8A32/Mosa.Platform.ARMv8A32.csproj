@@ -23,4 +23,7 @@
     <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Instructions\" />
+  </ItemGroup>
 </Project>

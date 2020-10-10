@@ -95,12 +95,12 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		{
 			MoveConstantRight(context);
 
-			Translate2(context, ARMv8A32.Add);
+			Translate(context, ARMv8A32.Add, true);
 		}
 
 		private void AddCarryIn32(Context context)
 		{
-			MoveConstantRight(context);
+			//MoveConstantRight(context);
 
 			var result = context.Result;
 			var operand1 = context.Operand1;
@@ -108,8 +108,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			var operand3 = context.Operand3;
 
 			operand1 = MoveConstantToRegister(context, operand1);
-			operand2 = MoveConstantToRegister(context, operand2);
-			operand3 = MoveConstantToRegister(context, operand3);
+			operand2 = MoveConstantToRegisterOrImmediate(context, operand2);
+			operand3 = MoveConstantToRegisterOrImmediate(context, operand3);
 
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
@@ -119,7 +119,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void AddCarryOut32(Context context)
 		{
-			MoveConstantRight(context);
+			//MoveConstantRight(context);
 
 			var result = context.Result;
 			var result2 = context.Result2;
@@ -127,25 +127,25 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			var operand2 = context.Operand2;
 
 			operand1 = MoveConstantToRegister(context, operand1);
-			operand2 = MoveConstantToRegister(context, operand2);
+			operand2 = MoveConstantToRegisterOrImmediate(context, operand2);
 
 			context.SetInstruction(ARMv8A32.Add, StatusRegister.Set, result, operand1, operand2);
-			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.Carry, result2, Constant_1);
-			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.NoCarry, result2, Constant_0);
+			context.AppendInstruction(ARMv8A32.Mov, ConditionCode.Carry, result2, Constant_1);
+			context.AppendInstruction(ARMv8A32.Mov, ConditionCode.NoCarry, result2, Constant_0);
 		}
 
 		private void AddR4(Context context)
 		{
 			MoveConstantRight(context);
 
-			TranslateFloat2(context, ARMv8A32.Adf);
+			Translate(context, ARMv8A32.Adf, true);
 		}
 
 		private void AddR8(Context context)
 		{
 			MoveConstantRight(context);
 
-			TranslateFloat2(context, ARMv8A32.Adf);
+			Translate(context, ARMv8A32.Adf, true);
 		}
 
 		private void AddressOf(Context context)
@@ -155,7 +155,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			var result = context.Result;
 			var operand1 = context.Operand1;
 
-			operand1 = MoveConstantToRegister(context, operand1);
+			operand1 = MoveConstantToRegisterOrImmediate(context, operand1);
 
 			if (operand1.IsStaticField)
 			{
@@ -174,7 +174,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			else
 			{
 				var offset = CreateConstant(context.Operand1.Offset);
-				offset = MoveConstantToRegister(context, offset);
+
+				offset = MoveConstantToRegisterOrImmediate(context, offset);
 
 				context.SetInstruction(ARMv8A32.Add, result, StackFrame, offset);
 			}
@@ -184,32 +185,34 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		{
 			MoveConstantRight(context);
 
-			Translate2(context, ARMv8A32.And);
+			Translate(context, ARMv8A32.And, true);
 		}
 
 		private void ArithShiftRight32(Context context)
 		{
-			Translate2(context, ARMv8A32.Asr);
+			Translate(context, ARMv8A32.Asr, true);
 		}
 
 		private void Compare32x32(Context context)
 		{
+			MoveConstantRightForComparison(context);
+
 			var result = context.Result;
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 			var condition = context.ConditionCode;
 
 			operand1 = MoveConstantToRegister(context, operand1);
-			operand2 = MoveConstantToRegister(context, operand2);
+			operand2 = MoveConstantToRegisterOrImmediate(context, operand2);
 
 			context.SetInstruction(ARMv8A32.Cmp, condition, null, operand1, operand2);
-			context.AppendInstruction(ARMv8A32.MovImm, condition, result, Constant_1);
-			context.AppendInstruction(ARMv8A32.MovImm, condition.GetOpposite(), result, ConstantZero);
+			context.AppendInstruction(ARMv8A32.Mov, condition, result, Constant_1);
+			context.AppendInstruction(ARMv8A32.Mov, condition.GetOpposite(), result, ConstantZero);
 		}
 
 		private void CompareBranch32(Context context)
 		{
-			ConstantRightForComparison(context);
+			MoveConstantRightForComparison(context);
 
 			var target = context.BranchTargets[0];
 			var condition = context.ConditionCode;
@@ -217,7 +220,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			var operand2 = context.Operand2;
 
 			operand1 = MoveConstantToRegister(context, operand1);
-			operand2 = MoveConstantToRegister(context, operand2);
+			operand2 = MoveConstantToRegisterOrImmediate(context, operand2);
 
 			context.SetInstruction(ARMv8A32.Cmp, null, operand1, operand2);
 			context.AppendInstruction(ARMv8A32.B, condition, target);
@@ -225,17 +228,19 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void CompareR4(Context context)
 		{
+			MoveConstantRightForComparison(context);
+
 			var result = context.Result;
 			var condition = context.ConditionCode;
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
 			operand1 = MoveConstantToFloatRegister(context, operand1);
-			operand2 = MoveConstantToFloatRegister(context, operand2);
+			operand2 = MoveConstantToFloatRegisterOrImmediate(context, operand2);
 
 			context.SetInstruction(ARMv8A32.Cmf, null, operand1, operand2);
-			context.AppendInstruction(ARMv8A32.MovImm, condition, result, Constant_0);
-			context.AppendInstruction(ARMv8A32.MovImm, condition.GetOpposite(), result, Constant_1);
+			context.AppendInstruction(ARMv8A32.Mov, condition, result, Constant_0);
+			context.AppendInstruction(ARMv8A32.Mov, condition.GetOpposite(), result, Constant_1);
 		}
 
 		private void CompareR8(Context context)
@@ -245,32 +250,32 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void ConvertInt32ToR4(Context context)
 		{
-			Translate1(context, ARMv8A32.Flt);
+			Translate(context, ARMv8A32.Flt, false);
 		}
 
 		private void ConvertInt32ToR8(Context context)
 		{
-			Translate1(context, ARMv8A32.Flt);
+			Translate(context, ARMv8A32.Flt, false);
 		}
 
 		private void ConvertR4ToInt32(Context context)
 		{
-			TranslateFloat1(context, ARMv8A32.Fix);
+			Translate(context, ARMv8A32.Fix, true);
 		}
 
 		private void ConvertR8ToInt32(Context context)
 		{
-			TranslateFloat1(context, ARMv8A32.Fix);
+			Translate(context, ARMv8A32.Fix, true);
 		}
 
 		private void DivR4(Context context)
 		{
-			TranslateFloat2(context, ARMv8A32.Dvf);
+			Translate(context, ARMv8A32.Dvf, true);
 		}
 
 		private void DivR8(Context context)
 		{
-			TranslateFloat2(context, ARMv8A32.Dvf);
+			Translate(context, ARMv8A32.Dvf, true);
 		}
 
 		private void IfThenElse32(Context context)
@@ -281,10 +286,10 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			var operand3 = context.Operand3;
 
 			operand1 = MoveConstantToRegister(context, operand1);
-			operand2 = MoveConstantToRegister(context, operand2);
-			operand3 = MoveConstantToRegister(context, operand3);
+			operand2 = MoveConstantToRegisterOrImmediate(context, operand2);
+			operand3 = MoveConstantToRegisterOrImmediate(context, operand3);
 
-			context.SetInstruction(ARMv8A32.CmpImm, StatusRegister.Set, null, operand1, Constant_0);
+			context.SetInstruction(ARMv8A32.Cmp, StatusRegister.Set, null, operand1, Constant_0);
 			context.AppendInstruction(ARMv8A32.Mov, ConditionCode.Equal, result, operand2);
 			context.AppendInstruction(ARMv8A32.Mov, ConditionCode.NotEqual, result, operand3);
 		}
@@ -315,11 +320,10 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void LoadParamR4(Context context)
 		{
-			Debug.Assert(context.Result.IsR4);
 			Debug.Assert(context.Operand1.IsConstant);
 
 			var result = context.Result;
-			var operand1 = MoveConstantToRegister(context, context.Operand1);
+			var operand1 = MoveConstantToRegisterOrImmediate(context, context.Operand1);
 
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
@@ -329,16 +333,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void LoadParamR8(Context context)
 		{
-			Debug.Assert(context.Result.IsR8);
-			Debug.Assert(context.Operand1.IsConstant);
-
-			var result = context.Result;
-			var operand1 = MoveConstantToRegister(context, context.Operand1);
-
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-			context.SetInstruction(ARMv8A32.Add, v1, StackFrame, operand1);
-			context.AppendInstruction(ARMv8A32.LdfUp, result, v1);
+			LoadParamR4(context);
 		}
 
 		private void LoadParamSignExtend16x32(Context context)
@@ -375,13 +370,11 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void LoadR4(Context context)
 		{
-			Debug.Assert(context.Result.IsR4);
-
 			LoadStore.OrderLoadOperands(context, MethodCompiler);
 
 			var result = context.Result;
 			var operand1 = MoveConstantToRegister(context, context.Operand1);
-			var operand2 = MoveConstantToRegister(context, context.Operand2);
+			var operand2 = MoveConstantToRegisterOrImmediate(context, context.Operand2);
 
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
@@ -391,18 +384,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void LoadR8(Context context)
 		{
-			Debug.Assert(context.Result.IsR8);
-
-			LoadStore.OrderLoadOperands(context, MethodCompiler);
-
-			var result = context.Result;
-			var operand1 = MoveConstantToRegister(context, context.Operand1);
-			var operand2 = MoveConstantToRegister(context, context.Operand2);
-
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-			context.SetInstruction(ARMv8A32.Add, v1, operand1, operand2);
-			context.AppendInstruction(ARMv8A32.LdfUp, result, v1);
+			LoadR4(context);
 		}
 
 		private void LoadSignExtend16x32(Context context)
@@ -447,45 +429,45 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void MoveInt32(Context context)
 		{
-			Translate1(context, ARMv8A32.Mov);
+			Translate(context, ARMv8A32.Mov, true);
 		}
 
 		private void MoveR4(Context context)
 		{
-			TranslateFloat1(context, ARMv8A32.Mvf);
+			Translate(context, ARMv8A32.Mvf, true);
 		}
 
 		private void MoveR8(Context context)
 		{
-			TranslateFloat1(context, ARMv8A32.Mvf);
+			Translate(context, ARMv8A32.Mvf, true);
 		}
 
 		private void MulR4(Context context)
 		{
 			MoveConstantRight(context);
 
-			TranslateFloat2(context, ARMv8A32.Muf);
+			Translate(context, ARMv8A32.Muf, true);
 		}
 
 		private void MulR8(Context context)
 		{
 			MoveConstantRight(context);
 
-			TranslateFloat2(context, ARMv8A32.Muf);
+			Translate(context, ARMv8A32.Muf, true);
 		}
 
 		private void MulSigned32(Context context)
 		{
 			MoveConstantRight(context);
 
-			Translate2(context, ARMv8A32.Mul);
+			Translate(context, ARMv8A32.Mul, false);
 		}
 
 		private void MulUnsigned32(Context context)
 		{
 			MoveConstantRight(context);
 
-			Translate2(context, ARMv8A32.Mul);
+			Translate(context, ARMv8A32.Mul, false);
 		}
 
 		private void Nop(Context context)
@@ -495,34 +477,34 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void Not32(Context context)
 		{
-			Translate1(context, ARMv8A32.Mvn);
+			Translate(context, ARMv8A32.Mvn, true);
 		}
 
 		private void Or32(Context context)
 		{
 			MoveConstantRight(context);
 
-			Translate2(context, ARMv8A32.Orr);
+			Translate(context, ARMv8A32.Orr, true);
 		}
 
 		private void ShiftLeft32(Context context)
 		{
-			Translate2(context, ARMv8A32.Lsl);
+			Translate(context, ARMv8A32.Lsl, true);
 		}
 
 		private void ShiftRight32(Context context)
 		{
-			Translate2(context, ARMv8A32.Lsr);
+			Translate(context, ARMv8A32.Lsr, true);
 		}
 
 		private void SignExtend16x32(Context context)
 		{
-			Translate1(context, ARMv8A32.Sxth);
+			Translate(context, ARMv8A32.Sxth, false);
 		}
 
 		private void SignExtend8x32(Context context)
 		{
-			Translate1(context, ARMv8A32.Sxth);
+			Translate(context, ARMv8A32.Sxth, false);
 		}
 
 		private void StoreInt16(Context context)
@@ -559,8 +541,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		{
 			Debug.Assert(context.Operand2.IsR4);
 
-			var operand1 = MoveConstantToRegister(context, context.Operand1);
-			var operand2 = MoveConstantToRegister(context, context.Operand2);
+			var operand1 = MoveConstantToRegisterOrImmediate(context, context.Operand1);
+			var operand2 = MoveConstantToFloatRegister(context, context.Operand2);
 
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
@@ -570,24 +552,14 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void StoreParamR8(Context context)
 		{
-			Debug.Assert(context.Operand2.IsR4);
-
-			var operand1 = MoveConstantToRegister(context, context.Operand1);
-			var operand2 = MoveConstantToRegister(context, context.Operand2);
-
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-			context.SetInstruction(ARMv8A32.Add, v1, StackFrame, operand1);
-			context.AppendInstruction(ARMv8A32.StfUp, null, v1, operand2);
+			StoreParamR4(context);
 		}
 
 		private void StoreR4(Context context)
 		{
-			Debug.Assert(context.Operand3.IsR4);
-
 			var operand1 = MoveConstantToRegister(context, context.Operand1);
-			var operand2 = MoveConstantToRegister(context, context.Operand2);
-			var operand3 = MoveConstantToRegister(context, context.Operand3);
+			var operand2 = MoveConstantToRegisterOrImmediate(context, context.Operand2);
+			var operand3 = MoveConstantToFloatRegister(context, context.Operand3);
 
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
@@ -597,23 +569,14 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void StoreR8(Context context)
 		{
-			Debug.Assert(context.Operand3.IsR8);
-
-			var operand1 = MoveConstantToRegister(context, context.Operand1);
-			var operand2 = MoveConstantToRegister(context, context.Operand2);
-			var operand3 = MoveConstantToRegister(context, context.Operand3);
-
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-			context.SetInstruction(ARMv8A32.Add, v1, operand1, operand2);
-			context.AppendInstruction(ARMv8A32.StfUp, null, v1, operand3);
+			StoreR4(context);
 		}
 
 		private void Sub32(Context context)
 		{
 			MoveConstantRight(context);
 
-			Translate2(context, ARMv8A32.Sub);
+			Translate(context, ARMv8A32.Sub, true);
 		}
 
 		private void SubCarryIn32(Context context)
@@ -624,8 +587,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			var operand3 = context.Operand3;
 
 			operand1 = MoveConstantToRegister(context, operand1);
-			operand2 = MoveConstantToRegister(context, operand2);
-			operand3 = MoveConstantToRegister(context, operand3);
+			operand2 = MoveConstantToRegisterOrImmediate(context, operand2);
+			operand3 = MoveConstantToRegisterOrImmediate(context, operand3);
 
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
@@ -641,45 +604,45 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			var operand2 = context.Operand2;
 
 			operand1 = MoveConstantToRegister(context, operand1);
-			operand2 = MoveConstantToRegister(context, operand2);
+			operand2 = MoveConstantToRegisterOrImmediate(context, operand2);
 
 			context.SetInstruction(ARMv8A32.Sub, StatusRegister.Set, result, operand1, operand2);
-			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.Carry, result2, Constant_1);
-			context.AppendInstruction(ARMv8A32.MovImm, ConditionCode.NoCarry, result2, Constant_0);
+			context.AppendInstruction(ARMv8A32.Mov, ConditionCode.Carry, result2, Constant_1);
+			context.AppendInstruction(ARMv8A32.Mov, ConditionCode.NoCarry, result2, Constant_0);
 		}
 
 		private void SubR4(Context context)
 		{
-			TranslateFloat2(context, ARMv8A32.Suf);
+			Translate(context, ARMv8A32.Suf, true);
 		}
 
 		private void SubR8(Context context)
 		{
-			TranslateFloat2(context, ARMv8A32.Suf);
+			Translate(context, ARMv8A32.Suf, true);
 		}
 
 		private void Xor32(Context context)
 		{
 			MoveConstantRight(context);
 
-			Translate2(context, ARMv8A32.Eor);
+			Translate(context, ARMv8A32.Eor, true);
 		}
 
 		private void ZeroExtend16x32(Context context)
 		{
-			Translate1(context, ARMv8A32.Uxth);
+			Translate(context, ARMv8A32.Uxth, false);
 		}
 
 		private void ZeroExtend8x32(Context context)
 		{
-			Translate1(context, ARMv8A32.Uxtb);
+			Translate(context, ARMv8A32.Uxtb, false);
 		}
 
 		#endregion Visitation Methods
 
 		#region Helper Methods
 
-		public static void ConstantRightForComparison(Context context)
+		public static void MoveConstantRightForComparison(Context context)
 		{
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
@@ -693,48 +656,31 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			context.ConditionCode = context.ConditionCode.GetReverse();
 		}
 
-		private void Translate2(Context context, BaseInstruction instruction)
-		{
-			var result = context.Result;
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
-
-			operand1 = MoveConstantToRegister(context, operand1);
-			operand2 = MoveConstantToRegister(context, operand2);
-
-			context.SetInstruction(instruction, result, operand1, operand2);
-		}
-
-		private void Translate1(Context context, BaseInstruction instruction)
+		private void Translate(Context context, BaseInstruction instruction, bool allowImmediate)
 		{
 			var result = context.Result;
 			var operand1 = context.Operand1;
 
-			operand1 = MoveConstantToRegister(context, operand1);
+			if (context.OperandCount == 1)
+			{
+				operand1 = operand1.IsFloatingPoint
+					? MoveConstantToFloatRegisterOrImmediate(context, operand1, allowImmediate)
+					: MoveConstantToRegisterOrImmediate(context, operand1, allowImmediate);
 
-			context.SetInstruction(instruction, result, operand1);
-		}
+				context.SetInstruction(instruction, result, operand1);
+			}
+			else if (context.OperandCount == 2)
+			{
+				var operand2 = context.Operand2;
 
-		private void TranslateFloat2(Context context, BaseInstruction instruction)
-		{
-			var result = context.Result;
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
+				operand1 = MoveConstantToRegister(context, operand1);
 
-			operand1 = MoveConstantToFloatRegister(context, operand1);
-			operand2 = MoveConstantToFloatRegister(context, operand2);
+				operand2 = operand2.IsFloatingPoint
+					? MoveConstantToFloatRegisterOrImmediate(context, operand2, allowImmediate)
+					: MoveConstantToRegisterOrImmediate(context, operand2, allowImmediate);
 
-			context.SetInstruction(instruction, result, operand1, operand2);
-		}
-
-		private void TranslateFloat1(Context context, BaseInstruction instruction)
-		{
-			var result = context.Result;
-			var operand1 = context.Operand1;
-
-			operand1 = MoveConstantToFloatRegister(context, operand1);
-
-			context.SetInstruction(instruction, result, operand1);
+				context.SetInstruction(instruction, result, operand1, operand2);
+			}
 		}
 
 		#endregion Helper Methods

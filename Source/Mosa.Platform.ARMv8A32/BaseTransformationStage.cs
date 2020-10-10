@@ -52,6 +52,9 @@ namespace Mosa.Platform.ARMv8A32
 
 		protected void MoveConstantRight(Context context)
 		{
+			if (context.OperandCount != 2)
+				return;
+
 			var operand1 = context.Operand1;
 
 			if (operand1.IsConstant && context.Instruction.IsCommutative)
@@ -138,41 +141,80 @@ namespace Mosa.Platform.ARMv8A32
 
 		protected Operand MoveConstantToRegister(Context context, Operand operand)
 		{
+			return MoveConstantToRegisterOrImmediate(context, operand, false);
+		}
+
+		protected Operand MoveConstantToRegisterOrImmediate(Context context, Operand operand)
+		{
+			return MoveConstantToRegisterOrImmediate(context, operand, true);
+		}
+
+		protected Operand MoveConstantToRegisterOrImmediate(Context context, Operand operand, bool allowImmediate)
+		{
 			if (operand.IsVirtualRegister || operand.IsCPURegister)
 				return operand;
-
-			var before = context.InsertBefore();
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 
 			if (operand.IsResolvedConstant)
 			{
 				if (ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsigned32, out uint immediate, out byte _, out byte _))
 				{
-					before.SetInstruction(ARMv8A32.MovImm, v1, CreateConstant(immediate));
+					var constant = CreateConstant(immediate);
+
+					if (allowImmediate)
+						return constant;
+
+					var before = context.InsertBefore();
+					var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+					before.SetInstruction(ARMv8A32.Mov, v1, constant);
+
 					return v1;
 				}
 
 				if (ARMHelper.CalculateRotatedImmediateValue(~operand.ConstantUnsigned32, out uint immediate2, out byte _, out byte _))
 				{
-					before.SetInstruction(ARMv8A32.MvnImm, v1, CreateConstant(immediate2));
+					var constant = CreateConstant(immediate);
+
+					var before = context.InsertBefore();
+					var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+					before.SetInstruction(ARMv8A32.Mov, v1, constant);
+
 					return v1;
 				}
 
-				before.SetInstruction(ARMv8A32.Movw, v1, CreateConstant(operand.ConstantUnsigned32 & 0xFFFF));
-				before.AppendInstruction(ARMv8A32.Movt, v1, v1, CreateConstant(operand.ConstantUnsigned32 >> 16));
-				return v1;
+				{
+					var before = context.InsertBefore();
+
+					var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+					before.SetInstruction(ARMv8A32.Movw, v1, CreateConstant(operand.ConstantUnsigned32 & 0xFFFF));
+					before.AppendInstruction(ARMv8A32.Movt, v1, v1, CreateConstant(operand.ConstantUnsigned32 >> 16));
+
+					return v1;
+				}
 			}
 			else if (operand.IsUnresolvedConstant)
 			{
+				var before = context.InsertBefore();
+				var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
 				before.SetInstruction(ARMv8A32.Movw, v1, operand);
 				before.AppendInstruction(ARMv8A32.Movt, v1, v1, operand);
+
 				return v1;
 			}
 
 			throw new CompilerException("Error at {context} in {Method}");
 		}
 
+		protected Operand MoveConstantToFloatRegisterOrImmediate(Context context, Operand operand)
+		{
+			return MoveConstantToFloatRegisterOrImmediate(context, operand, true);
+		}
+
 		protected Operand MoveConstantToFloatRegister(Context context, Operand operand)
+		{
+			return MoveConstantToFloatRegisterOrImmediate(context, operand, false);
+		}
+
+		protected Operand MoveConstantToFloatRegisterOrImmediate(Context context, Operand operand, bool allowImmediate) // TODO Float
 		{
 			if (operand.IsVirtualRegister || operand.IsCPURegister)
 				return operand;
@@ -226,25 +268,7 @@ namespace Mosa.Platform.ARMv8A32
 				}
 			}
 
-			return operand;
-		}
-
-		protected Operand CreateImmediateOperand(Context context, Operand operand)
-		{
-			if (operand.IsVirtualRegister || operand.IsCPURegister)
-				return operand;
-
-			if (operand.IsResolvedConstant && ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsigned32, out uint immediate, out _, out _))
-			{
-				if (operand.ConstantUnsigned64 == immediate)
-				{
-					return operand;
-				}
-
-				return CreateConstant(immediate);
-			}
-
-			return MoveConstantToRegister(context, operand);
+			return null;
 		}
 
 		#endregion Helper Methods

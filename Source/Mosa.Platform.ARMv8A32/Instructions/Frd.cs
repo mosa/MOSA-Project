@@ -42,6 +42,24 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 				return;
 			}
 
+			if (node.Operand1.IsCPURegister && node.Operand2.IsConstant)
+			{
+				opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
+				opcodeEncoder.Append4Bits(0b1110);
+				opcodeEncoder.Append4Bits(0b1011);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				opcodeEncoder.Append4Bits(0b0001);
+				opcodeEncoder.Append1Bit(node.Result.IsR4 ? 0 : 1);
+				opcodeEncoder.Append2Bits(0b00);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append1Bit(0b1);
+				opcodeEncoder.Append4BitImmediate(node.Operand2);
+				return;
+			}
+
 			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 		}
 	}
