@@ -150,8 +150,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
 			SplitLongOperand(context.Operand1, out var lowOffset, out var highOffset);
 
-			TransformLoadInstruction(context, ARMv8A32.LdrUp32, ARMv8A32.LdrUpImm32, ARMv8A32.LdrDownImm32, resultLow, StackFrame, lowOffset);
-			TransformLoadInstruction(context.InsertAfter(), ARMv8A32.LdrUp32, ARMv8A32.LdrUpImm32, ARMv8A32.LdrDownImm32, resultHigh, StackFrame, highOffset);
+			TransformLoadInstruction(context, ARMv8A32.LdrUp32, ARMv8A32.LdrUp32, ARMv8A32.LdrDown32, resultLow, StackFrame, lowOffset);
+			TransformLoadInstruction(context.InsertAfter(), ARMv8A32.LdrUp32, ARMv8A32.LdrUp32, ARMv8A32.LdrDown32, resultHigh, StackFrame, highOffset);
 		}
 
 		private void LoadParamSignExtend16x64(Context context)
@@ -159,7 +159,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
 			SplitLongOperand(context.Operand1, out var lowOffset, out var highOffset);
 
-			TransformLoadInstruction(context, ARMv8A32.LdrUpS16, ARMv8A32.LdrUpImmS16, ARMv8A32.LdrDownImmS16, resultLow, StackFrame, lowOffset);
+			TransformLoadInstruction(context, ARMv8A32.LdrUpS16, ARMv8A32.LdrUpS16, ARMv8A32.LdrDownS16, resultLow, StackFrame, lowOffset);
 
 			context.AppendInstruction(ARMv8A32.Asr, resultHigh, resultLow, Constant_31);
 		}
@@ -169,7 +169,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
 			SplitLongOperand(context.Operand1, out var lowOffset, out var highOffset);
 
-			TransformLoadInstruction(context, ARMv8A32.LdrUp32, ARMv8A32.LdrUpImm32, ARMv8A32.LdrDown32, resultLow, StackFrame, lowOffset);
+			TransformLoadInstruction(context, ARMv8A32.LdrUp32, ARMv8A32.LdrUp32, ARMv8A32.LdrDown32, resultLow, StackFrame, lowOffset);
 			context.AppendInstruction(ARMv8A32.Asr, resultHigh, resultLow, Constant_31);
 		}
 
@@ -178,7 +178,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
 			SplitLongOperand(context.Operand1, out var lowOffset, out var highOffset);
 
-			TransformLoadInstruction(context, ARMv8A32.LdrUpS8, ARMv8A32.LdrUpImmS8, ARMv8A32.LdrDownImmS8, resultLow, StackFrame, lowOffset);
+			TransformLoadInstruction(context, ARMv8A32.LdrUpS8, ARMv8A32.LdrUpS8, ARMv8A32.LdrDownS8, resultLow, StackFrame, lowOffset);
 			context.AppendInstruction(ARMv8A32.Asr, resultHigh, resultLow, Constant_31);
 		}
 
@@ -187,7 +187,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
 			SplitLongOperand(context.Operand1, out var lowOffset, out _);
 
-			TransformLoadInstruction(context, ARMv8A32.LdrUp16, ARMv8A32.LdrUpImm16, ARMv8A32.LdrDownImmS16, resultLow, StackFrame, lowOffset);
+			TransformLoadInstruction(context, ARMv8A32.LdrUp16, ARMv8A32.LdrUp16, ARMv8A32.LdrDownS16, resultLow, StackFrame, lowOffset);
 			context.AppendInstruction(ARMv8A32.Mov, resultHigh, Constant_0);
 		}
 
@@ -196,7 +196,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
 			SplitLongOperand(context.Operand1, out var lowOffset, out _);
 
-			TransformLoadInstruction(context, ARMv8A32.LdrUp32, ARMv8A32.LdrUpImm32, ARMv8A32.LdrDownImm32, resultLow, StackFrame, lowOffset);
+			TransformLoadInstruction(context, ARMv8A32.LdrUp32, ARMv8A32.LdrUp32, ARMv8A32.LdrDown32, resultLow, StackFrame, lowOffset);
 			context.AppendInstruction(ARMv8A32.Mov, resultHigh, Constant_0);
 		}
 
@@ -205,7 +205,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
 			SplitLongOperand(context.Operand1, out var lowOffset, out _);
 
-			TransformLoadInstruction(context, ARMv8A32.LdrUp8, ARMv8A32.LdrUpImm8, ARMv8A32.LdrDownImm8, resultLow, StackFrame, lowOffset);
+			TransformLoadInstruction(context, ARMv8A32.LdrUp8, ARMv8A32.LdrUp8, ARMv8A32.LdrDown8, resultLow, StackFrame, lowOffset);
 			context.AppendInstruction(ARMv8A32.Mov, resultHigh, Constant_0);
 		}
 

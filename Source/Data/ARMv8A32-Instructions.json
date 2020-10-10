@@ -924,6 +924,10 @@
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
+					"Condition": "[register][constant]",
+					"Encoding": "[arm-single-data-transfer-immediate],s=status:status,rd=reg4:r,rn=reg4:o1,i=0,p=0,l=1,w=0,b=0,u=1,offset=imm12:o2"
+				},
+				{
 					"Condition": "[register][register]",
 					"Encoding": "[arm-single-data-transfer-shift-register],s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,i=0,p=0,l=1,w=0,b=0,u=1"
 				}
@@ -944,6 +948,10 @@
 			"Description": "Single Data Transfer",
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[arm-single-data-transfer-immediate],s=status:status,rd=reg4:r,rn=reg4:o1,i=0,p=0,l=1,w=0,b=0,u=0,offset=imm12:o2"
+				},
 				{
 					"Condition": "[register][register]",
 					"Encoding": "[arm-single-data-transfer-shift-register],s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,i=0,p=0,l=1,w=0,b=0,u=0"
@@ -966,6 +974,10 @@
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
+					"Condition": "[register][constant]",
+					"Encoding": "[arm-single-data-transfer-immediate],s=status:status,rd=reg4:r,rn=reg4:o1,i=0,p=0,l=1,w=0,b=1,u=1,offset=imm12:o2"
+				},
+				{
 					"Condition": "[register][register]",
 					"Encoding": "[arm-single-data-transfer-shift-register],s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,i=0,p=0,l=1,w=0,b=1,u=1"
 				}
@@ -987,92 +999,12 @@
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register]",
-					"Encoding": "[arm-single-data-transfer-shift-register],s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,i=0,p=0,l=1,w=0,b=1,u=0"
-				}
-			]
-		},
-		{
-			"Name": "LdrUpImm32",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-single-data-transfer-immediate],s=status:status,rd=reg4:r,rn=reg4:o1,i=0,p=0,l=1,w=0,b=0,u=1,offset=imm12:o2"
-				}
-			]
-		},
-		{
-			"Name": "LdrDownImm32",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-single-data-transfer-immediate],s=status:status,rd=reg4:r,rn=reg4:o1,i=0,p=0,l=1,w=0,b=0,u=0,offset=imm12:o2"
-				}
-			]
-		},
-		{
-			"Name": "LdrUpImm8",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-single-data-transfer-immediate],s=status:status,rd=reg4:r,rn=reg4:o1,i=0,p=0,l=1,w=0,b=1,u=1,offset=imm12:o2"
-				}
-			]
-		},
-		{
-			"Name": "LdrDownImm8",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
 					"Condition": "[register][constant]",
 					"Encoding": "[arm-single-data-transfer-immediate],s=status:status,rd=reg4:r,rn=reg4:o1,i=0,p=0,l=1,w=0,b=1,u=0,offset=imm12:o2"
+				},
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[arm-single-data-transfer-shift-register],s=status:status,rd=reg4:r,rn=reg4:o1,shiftamount=00000,shifttype=00,rm=reg4:o2,i=0,p=0,l=1,w=0,b=1,u=0"
 				}
 			]
 		},
@@ -1091,6 +1023,10 @@
 			"Description": "Halfword Data Transfer",
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=0,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=1,s=0,h=1"
+				},
 				{
 					"Condition": "[register][register]",
 					"Encoding": "[arm-halfword-data-transfer-register],s=status:status,rd=reg4:r,rn=reg4:o1,s=S,h=1,rm=reg4:o2,i=0,p=0,l=1,w=0,b=1,u=1,s=0,h=1"
@@ -1113,53 +1049,16 @@
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
+					"Condition": "[register][constant]",
+					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=0,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=0,s=0,h=1"
+				},
+				{
 					"Condition": "[register][register]",
 					"Encoding": "[arm-halfword-data-transfer-register],s=status:status,rd=reg4:r,rn=reg4:o1,s=S,h=1,rm=reg4:o2,i=0,p=0,l=1,w=0,b=1,u=0,s=0,h=1"
 				}
 			]
 		},
-		{
-			"Name": "LdrUpImm16",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Halfword Data Transfer",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=0,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=1,s=0,h=1"
-				}
-			]
-		},
-		{
-			"Name": "LdrDownImm16",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Halfword Data Transfer",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=0,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=0,s=0,h=1"
-				}
-			]
-		},
+		
 		{
 			"Name": "LdrUpS16",
 			"Commutative": "false",
@@ -1175,6 +1074,10 @@
 			"Description": "Halfword Data Transfer",
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=1,s=1,h=1"
+				},
 				{
 					"Condition": "[register][register]",
 					"Encoding": "[arm-halfword-data-transfer-register],s=status:status,rd=reg4:r,rn=reg4:o1,s=S,h=1,rm=reg4:o2,i=0,p=0,l=1,w=0,b=0,u=1,s=1,h=1"
@@ -1197,53 +1100,16 @@
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
+					"Condition": "[register][constant]",
+					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=0,s=1,h=1"
+				},
+				{
 					"Condition": "[register][register]",
 					"Encoding": "[arm-halfword-data-transfer-register],s=status:status,rd=reg4:r,rn=reg4:o1,s=S,h=1,rm=reg4:o2,i=0,p=0,l=1,w=0,b=0,u=0,s=1,h=1"
 				}
 			]
 		},
-		{
-			"Name": "LdrUpImmS16",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Halfword Data Transfer",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=1,s=1,h=1"
-				}
-			]
-		},
-		{
-			"Name": "LdrDownImmS16",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Halfword Data Transfer",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=0,s=1,h=1"
-				}
-			]
-		},
+		
 		{
 			"Name": "LdrUpS8",
 			"Commutative": "false",
@@ -1259,6 +1125,10 @@
 			"Description": "Byte Data Transfer",
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=1,s=1,h=0"
+				},
 				{
 					"Condition": "[register][register]",
 					"Encoding": "[arm-halfword-data-transfer-register],s=status:status,rd=reg4:r,rn=reg4:o1,s=S,h=0,rm=reg4:o2,i=0,p=0,l=1,w=0,b=0,u=1,s=1,h=0"
@@ -1281,53 +1151,16 @@
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
+					"Condition": "[register][constant]",
+					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=0,s=1,h=0"
+				},
+				{
 					"Condition": "[register][register]",
 					"Encoding": "[arm-halfword-data-transfer-register],s=status:status,rd=reg4:r,rn=reg4:o1,s=S,h=0,rm=reg4:o2,i=0,p=0,l=1,w=0,b=0,u=0,s=1,h=0"
 				}
 			]
 		},
-		{
-			"Name": "LdrUpImmS8",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Byte Data Transfer",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=1,s=1,h=0"
-				}
-			]
-		},
-		{
-			"Name": "LdrDownImmS8",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 2,
-			"ResultCount": 1,
-			"Description": "Byte Data Transfer",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:r,rn=reg4:o1,i=1,p=0,l=1,w=0,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=0,s=1,h=0"
-				}
-			]
-		},
+		
 		{
 			"Name": "StrUp32",
 			"Commutative": "false",
@@ -1343,6 +1176,10 @@
 			"Description": "Single Data Transfer",
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[arm-single-data-transfer-immediate],s=status:status,rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=0,b=0,u=1,offset=imm12:o2"
+				},
 				{
 					"Condition": "[register][register][register]",
 					"Encoding": "[arm-single-data-transfer-shift-register],s=status:status,rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=0,b=0,u=1,shiftamount=00000,shifttype=00,rm=reg4:o2"
@@ -1365,6 +1202,10 @@
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[arm-single-data-transfer-immediate],s=status:status,rd=reg3:o4,rn=reg4:o1,i=0,p=0,l=0,w=0,b=0,u=0,offset=imm12:o2"
+				},
+				{
 					"Condition": "[register][register][register]",
 					"Encoding": "[arm-single-data-transfer-shift-register],s=status:status,rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=0,b=0,u=0,shiftamount=00000,shifttype=00,rm=reg4:o2"
 				}
@@ -1385,6 +1226,10 @@
 			"Description": "Single Data Transfer",
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[arm-single-data-transfer-immediate],s=status:status,rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=0,b=1,u=1,offset=imm12:o2"
+				},
 				{
 					"Condition": "[register][register][register]",
 					"Encoding": "[arm-single-data-transfer-shift-register],s=status:status,rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=0,b=1,u=1,shiftamount=00000,shifttype=00,rm=reg4:o2"
@@ -1407,95 +1252,15 @@
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[arm-single-data-transfer-immediate],s=status:status,rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=0,b=1,u=0,offset=imm12:o2"
+				},
+				{
 					"Condition": "[register][register][register]",
 					"Encoding": "[arm-single-data-transfer-shift-register],s=status:status,rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=0,b=1,u=0,shiftamount=00000,shifttype=00,rm=reg4:o2"
 				}
 			]
-		},
-		{
-			"Name": "StrUpImm32",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 0,
-			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][constant][register]",
-					"Encoding": "[arm-single-data-transfer-immediate],s=status:status,rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=0,b=0,u=1,offset=imm12:o2"
-				}
-			]
-		},
-		{
-			"Name": "StrDownImm32",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 0,
-			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][constant][register]",
-					"Encoding": "[arm-single-data-transfer-immediate],s=status:status,rd=reg3:o4,rn=reg4:o1,i=0,p=0,l=0,w=0,b=0,u=0,offset=imm12:o2"
-				}
-			]
-		},
-		{
-			"Name": "StrUpImm8",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 0,
-			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][constant][register]",
-					"Encoding": "[arm-single-data-transfer-immediate],s=status:status,rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=0,b=1,u=1,offset=imm12:o2"
-				}
-			]
-		},
-		{
-			"Name": "StrDownImm8",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 0,
-			"Description": "Single Data Transfer",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][constant][register]",
-					"Encoding": "[arm-single-data-transfer-immediate],s=status:status,rd=reg4:o3,rn=reg4:o1,i=0,p=0,l=0,w=0,b=1,u=0,offset=imm12:o2"
-				}
-			]
-		},
+		},	
 		{
 			"Name": "StrUp16",
 			"Commutative": "false",
@@ -1511,6 +1276,10 @@
 			"Description": "Halfword Data Transfer",
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=0,b=0,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=1,s=0,h=1"
+				},
 				{
 					"Condition": "[register][register][register]",
 					"Encoding": "[arm-single-data-transfer-immediate],s=status:status,rd=reg4:o3,rn=reg4:o1,s=S,h=1,rm=reg4:o2,i=0,p=0,l=0,w=0,b=1,u=1,s=0,h=1"
@@ -1533,53 +1302,16 @@
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=0,b=0,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=0,s=0,h=1"
+				},
+				{
 					"Condition": "[register][register][register]",
 					"Encoding": "[arm-single-data-transfer-immediate],s=status:status,rd=reg4:o3,rn=reg4:o1,s=S,h=1,rm=reg4:o2,i=0,p=0,l=0,w=0,b=1,u=0,s=0,h=1"
 				}
 			]
 		},
-		{
-			"Name": "StrUpImm16",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 0,
-			"Description": "Halfword Data Transfer",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][constant][register]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=0,b=0,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=1,s=0,h=1"
-				}
-			]
-		},
-		{
-			"Name": "StrDownImm16",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 0,
-			"Description": "Halfword Data Transfer",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][constant][register]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=0,b=0,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=0,s=0,h=1"
-				}
-			]
-		},
+		
 		{
 			"Name": "StrUpS16",
 			"Commutative": "false",
@@ -1595,6 +1327,10 @@
 			"Description": "Halfword Data Transfer",
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=0,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=1,s=1,h=1"
+				},
 				{
 					"Condition": "[register][register][register]",
 					"Encoding": "[arm-halfword-data-transfer-register],s=status:status,rd=reg4:o3,rn=reg4:o1,s=S,h=1,rm=reg4:o2,i=0,p=0,l=0,w=0,b=0,u=1,s=1,h=1"
@@ -1617,50 +1353,12 @@
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][register][register]",
-					"Encoding": "[arm-halfword-data-transfer-register],s=status:status,rd=reg4:o3,rn=reg4:o1,s=S,h=1,rm=reg4:o2,i=0,p=0,l=0,w=0,b=0,u=0,s=1,h=1"
-				}
-			]
-		},
-		{
-			"Name": "StrUpImmS16",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 0,
-			"Description": "Halfword Data Transfer",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][constant][register]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=0,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=1,s=1,h=1"
-				}
-			]
-		},
-		{
-			"Name": "StrDownImmS16",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 0,
-			"Description": "Halfword Data Transfer",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
 					"Condition": "[register][constant][register]",
 					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=0,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=0,s=1,h=1"
+				},
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "[arm-halfword-data-transfer-register],s=status:status,rd=reg4:o3,rn=reg4:o1,s=S,h=1,rm=reg4:o2,i=0,p=0,l=0,w=0,b=0,u=0,s=1,h=1"
 				}
 			]
 		},
@@ -1679,6 +1377,10 @@
 			"Description": "Byte Data Transfer",
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=0,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=1,s=1,h=0"
+				},
 				{
 					"Condition": "[register][register][register]",
 					"Encoding": "[arm-halfword-data-transfer-register],s=status:status,rd=reg4:o3,rn=reg4:o1,s=S,h=0,rm=reg4:o2,i=0,p=0,l=0,w=0,b=0,u=1,s=1,h=0"
@@ -1701,53 +1403,16 @@
 			"OpcodeEncodingAppend": "",
 			"OpcodeEncoding": [
 				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=0,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=0,s=1,h=0"
+				},
+				{
 					"Condition": "[register][register][register]",
 					"Encoding": "[arm-halfword-data-transfer-register],s=status:status,rd=reg4:o3,rn=reg4:o1,s=S,h=0,rm=reg4:o2,i=0,p=0,l=0,w=0,b=0,u=0,s=1,h=0"
 				}
 			]
 		},
-		{
-			"Name": "StrUpImmS8",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 0,
-			"Description": "Byte Data Transfer",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][constant][register]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=0,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=1,s=1,h=0"
-				}
-			]
-		},
-		{
-			"Name": "StrDownImmS8",
-			"Commutative": "false",
-			"FamilyName": "ARMv8A32",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "CNZV",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 0,
-			"Description": "Byte Data Transfer",
-			"OpcodeEncodingAppend": "",
-			"OpcodeEncoding": [
-				{
-					"Condition": "[register][constant][register]",
-					"Encoding": "[arm-halfword-data-transfer-immediate],s=status:status,rd=reg4:o3,rn=reg4:o1,i=1,p=0,l=0,w=0,b=1,offsethigh=imm4hn:o2,offsetlow=imm4:o2,u=0,s=1,h=0"
-				}
-			]
-		},
+		
 		{
 			"Name": "Mul",
 			"Commutative": "false",
