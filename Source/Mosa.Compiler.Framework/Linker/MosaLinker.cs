@@ -284,7 +284,7 @@ namespace Mosa.Compiler.Framework.Linker
 		{
 			var data = BitConverter.GetBytes(value);
 
-			string name = "$double$";
+			var name = "$double$";
 
 			foreach (byte b in data)
 			{
@@ -305,7 +305,7 @@ namespace Mosa.Compiler.Framework.Linker
 		{
 			var data = BitConverter.GetBytes(value);
 
-			string name = "$float$";
+			var name = "$float$";
 
 			foreach (byte b in data)
 			{
@@ -324,7 +324,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public LinkerSymbol GetConstantSymbol(uint value)
 		{
-			string name = "$integer$" + value.ToString("x");
+			var name = "$integer$" + value.ToString("x");
 
 			var data = BitConverter.GetBytes(value);
 

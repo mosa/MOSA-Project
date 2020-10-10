@@ -13,7 +13,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	public sealed class Mvf : ARMv8A32Instruction
 	{
 		internal Mvf()
-			: base(1, 2)
+			: base(1, 1)
 		{
 		}
 
@@ -22,7 +22,7 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
 			if (node.Operand1.IsCPURegister)
 			{

@@ -13,12 +13,13 @@ namespace Mosa.Platform.ARMv8A32.Stages
 	{
 		protected override void PopulateVisitationDictionary()
 		{
-			AddVisitation(ARMv8A32.Mov, Mov);
+			AddVisitation(ARMv8A32.Mov, Move);
+			AddVisitation(ARMv8A32.Mvf, Move);
 		}
 
 		#region Visitation Methods
 
-		public void Mov(Context context)
+		public void Move(Context context)
 		{
 			var source = context.Operand1;
 			var result = context.Result;

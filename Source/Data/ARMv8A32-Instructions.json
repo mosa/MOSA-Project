@@ -1,7 +1,6 @@
 {
 	"Encoding": [
 		"[arm-data-processing-immediate]=           conditional|00|1|[opcode]|[s]|[rn]|[rd]|[immediate12]",
-		"[arm-data-processing-rotate-immediate]=    conditional|00|1|[opcode]|[s]|[rn]|[rd]|[rotate]|[immediate]",
 		"[arm-data-processing-shift-amount]=        conditional|00|0|[opcode]|[s]|[rn]|[rd]|[shiftamount]|[shifttype]|0|[rm]",
 		"[arm-data-processing-shift-register]=      conditional|00|0|[opcode]|[s]|[rn]|[rd]|[rs]|0|[shifttype]|1|[rm]",
 
@@ -3386,7 +3385,7 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 2,
+			"OperandCount": 1,
 			"ResultCount": 1,
 			"Description": "Move",
 			"OpcodeEncodingAppend": "opcode=0000,e=1,f=fp:r,j=0,gh=00,i=0,fd=reg3:r,fn=000,fm=reg3:o1",
@@ -3617,10 +3616,10 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 1,
-			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultCount": 0,
 			"Description": "Compare floating compare",
-			"OpcodeEncodingAppend": "opcode=100,e=0,f=fp:o1,gh=00,i=0,fn=reg3:r,fm=reg3:o1",
+			"OpcodeEncodingAppend": "opcode=100,e=0,f=fp:o1,gh=00,i=0,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3638,10 +3637,10 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 1,
-			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultCount": 0,
 			"Description": "Compare negated floating compare",
-			"OpcodeEncodingAppend": "opcode=101,e=0,f=fp:o1,gh=00,i=0,fn=reg3:r,fm=reg3:o1",
+			"OpcodeEncodingAppend": "opcode=101,e=0,f=fp:o1,gh=00,i=0,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3660,10 +3659,10 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 1,
-			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultCount": 0,
 			"Description": "Compare floating with exception compare",
-			"OpcodeEncodingAppend": "opcode=110,e=0,f=fp:o1,gh=00,i=0,fn=reg3:r,fm=reg3:o1",
+			"OpcodeEncodingAppend": "opcode=110,e=0,f=fp:o1,gh=00,i=0,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3681,10 +3680,10 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 1,
-			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultCount": 0,
 			"Description": "Compare negated floating with exception compare",
-			"OpcodeEncodingAppend": "opcode=111,e=0,f=fp:o1,gh=00,i=0,fn=reg3:r,fm=reg3:o1",
+			"OpcodeEncodingAppend": "opcode=111,e=0,f=fp:o1,gh=00,i=0,fn=reg3:o1,fm=reg3:o2",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
@@ -3789,7 +3788,7 @@
 			"OperandCount": 2,
 			"ResultCount": 0,
 			"Description": "Store Floating Point Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,fd=reg4:o2,rn=reg4:o1,t1=0,t0=fp:o3,ls=0,p=1,wb=0,up=1,offset=0x00",
+			"OpcodeEncodingAppend": "s=status:status,fd=reg4:o2,rn=reg4:o1,t1=0,t0=fp:o2,ls=0,p=1,wb=0,up=1,offset=0x00",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",
@@ -3810,7 +3809,7 @@
 			"OperandCount": 2,
 			"ResultCount": 0,
 			"Description": "Store Floating Point Data Transfer",
-			"OpcodeEncodingAppend": "s=status:status,fd=reg4:o2,rn=reg4:o1,t1=0,t0=fp:o3,ls=0,p=1,wb=0,up=0,offset=0x00",
+			"OpcodeEncodingAppend": "s=status:status,fd=reg4:o2,rn=reg4:o1,t1=0,t0=fp:o2,ls=0,p=1,wb=0,up=0,offset=0x00",
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register][register]",

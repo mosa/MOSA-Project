@@ -48,7 +48,19 @@ namespace Mosa.Platform.ARMv8A32
 			GeneralPurposeRegister.R12,
 			GeneralPurposeRegister.SP,
 			GeneralPurposeRegister.LR,
-			GeneralPurposeRegister.PC
+			GeneralPurposeRegister.PC,
+
+			////////////////////////////////////////////////////////
+			// Floating Point 128-bit floating point registers
+			////////////////////////////////////////////////////////
+			FloatingPointRegister.d0,
+			FloatingPointRegister.d1,
+			FloatingPointRegister.d2,
+			FloatingPointRegister.d3,
+			FloatingPointRegister.d4,
+			FloatingPointRegister.d5,
+			FloatingPointRegister.d6,
+			FloatingPointRegister.d7
 		};
 
 		/// <summary>
@@ -75,7 +87,7 @@ namespace Mosa.Platform.ARMv8A32
 		/// <summary>
 		/// Retrieves the scratch register of the ARMv8A32.
 		/// </summary>
-		public override PhysicalRegister ScratchRegister { get { return null; /* TODO */} }
+		public override PhysicalRegister ScratchRegister { get { return FloatingPointRegister.d7; } }
 
 		/// <summary>
 		/// Gets the return register.
@@ -90,7 +102,7 @@ namespace Mosa.Platform.ARMv8A32
 		/// <summary>
 		/// Gets the return floating point register.
 		/// </summary>
-		public override PhysicalRegister ReturnFloatingPointRegister { get { return null; /* TODO */} }
+		public override PhysicalRegister ReturnFloatingPointRegister { get { return FloatingPointRegister.d0; } }
 
 		/// <summary>
 		/// Retrieves the exception register of the architecture.

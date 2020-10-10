@@ -27,6 +27,22 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			{ ARMv8A32.Mvn, new KeyValuePair<BaseInstruction, int>(ARMv8A32.MvnImm, 2) },
 			{ ARMv8A32.Asr, new KeyValuePair<BaseInstruction, int>(ARMv8A32.AsrImm, 2) },
 			{ ARMv8A32.Cmp, new KeyValuePair<BaseInstruction, int>(ARMv8A32.CmpImm, 2) },
+			{ ARMv8A32.Adf, new KeyValuePair<BaseInstruction, int>(ARMv8A32.AdfImm, 2) },
+			{ ARMv8A32.Muf, new KeyValuePair<BaseInstruction, int>(ARMv8A32.MufImm, 2) },
+			{ ARMv8A32.Suf, new KeyValuePair<BaseInstruction, int>(ARMv8A32.SufImm, 2) },
+			{ ARMv8A32.Rsf, new KeyValuePair<BaseInstruction, int>(ARMv8A32.RsfImm, 2) },
+			{ ARMv8A32.Dvr, new KeyValuePair<BaseInstruction, int>(ARMv8A32.DvrImm, 2) },
+			{ ARMv8A32.Dvf, new KeyValuePair<BaseInstruction, int>(ARMv8A32.DvfImm, 2) },
+			{ ARMv8A32.Rmf, new KeyValuePair<BaseInstruction, int>(ARMv8A32.RmfImm, 2) },
+			{ ARMv8A32.Fml, new KeyValuePair<BaseInstruction, int>(ARMv8A32.FmlImm, 2) },
+			{ ARMv8A32.Fdv, new KeyValuePair<BaseInstruction, int>(ARMv8A32.FdvImm, 2) },
+			{ ARMv8A32.Frd, new KeyValuePair<BaseInstruction, int>(ARMv8A32.FrdImm, 2) },
+			{ ARMv8A32.Mvf, new KeyValuePair<BaseInstruction, int>(ARMv8A32.MvfImm, 1) },
+			{ ARMv8A32.Mnf, new KeyValuePair<BaseInstruction, int>(ARMv8A32.MnfImm, 1) },
+			{ ARMv8A32.Abs, new KeyValuePair<BaseInstruction, int>(ARMv8A32.AbsImm, 1) },
+			{ ARMv8A32.Rnd, new KeyValuePair<BaseInstruction, int>(ARMv8A32.RndImm, 1) },
+			{ ARMv8A32.Sqt, new KeyValuePair<BaseInstruction, int>(ARMv8A32.SqtImm, 1) },
+			{ ARMv8A32.Flt, new KeyValuePair<BaseInstruction, int>(ARMv8A32.FltImm, 2) },
 		};
 
 		protected override void PopulateVisitationDictionary()

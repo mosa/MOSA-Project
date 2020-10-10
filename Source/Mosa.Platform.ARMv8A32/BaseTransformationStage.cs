@@ -14,6 +14,7 @@ namespace Mosa.Platform.ARMv8A32
 	{
 		protected override string Platform { get { return "ARMv8A32"; } }
 
+		protected Operand Constant_0;
 		protected Operand Constant_1;
 		protected Operand Constant_4;
 		protected Operand Constant_16;
@@ -31,6 +32,7 @@ namespace Mosa.Platform.ARMv8A32
 
 		protected override void Setup()
 		{
+			Constant_0 = CreateConstant(1);
 			Constant_1 = CreateConstant(1);
 			Constant_4 = CreateConstant(4);
 			Constant_16 = CreateConstant(16);
@@ -48,7 +50,7 @@ namespace Mosa.Platform.ARMv8A32
 
 		#region Helper Methods
 
-		protected void SwapFirstTwoOperandsIfFirstConstant(Context context)
+		protected void MoveConstantRight(Context context)
 		{
 			var operand1 = context.Operand1;
 
@@ -170,6 +172,22 @@ namespace Mosa.Platform.ARMv8A32
 			throw new CompilerException("Error at {context} in {Method}");
 		}
 
+		protected Operand MoveConstantToFloatRegister(Context context, Operand operand)
+		{
+			if (operand.IsVirtualRegister || operand.IsCPURegister)
+				return operand;
+
+			var v1 = AllocateVirtualRegister(operand.IsR4 ? TypeSystem.BuiltIn.R4 : TypeSystem.BuiltIn.R8);
+
+			var symbol = operand.IsR4 ? Linker.GetConstantSymbol((float)operand.ConstantUnsigned64) : Linker.GetConstantSymbol((double)operand.ConstantUnsigned64);
+
+			var label = Operand.CreateLabel(v1.Type, symbol.Name);
+
+			context.InsertBefore().SetInstruction(ARMv8A32.LdfUp, v1, label);
+
+			return v1;
+		}
+
 		private Operand ConvertFloatToImm(Operand operand)
 		{
 			if (operand.IsCPURegister || operand.IsVirtualRegister)
@@ -227,53 +245,6 @@ namespace Mosa.Platform.ARMv8A32
 			}
 
 			return MoveConstantToRegister(context, operand);
-		}
-
-		protected void TransformInstructionXXX(Context context, BaseInstruction virtualInstruction, BaseInstruction immediateInstruction, Operand result, StatusRegister statusRegister, Operand operand1, Operand operand2)
-		{
-			// TODO!!!!!
-
-			// AddFloatR4 result, operand1, operand2
-
-			// TODO: (across all float instructions)
-			// if operand1 is constant
-			// if resolved & specific constant, then AdfImm
-			// else if resolved & non-specific constant, then LoadConstant, adf
-			// else if unresolved, throw not implemented
-
-			if (operand1.IsConstant)
-			{
-				if (virtualInstruction.IsCommutative && !operand2.IsConstant)
-				{
-					var temp = operand1;
-					operand1 = operand2;
-					operand2 = temp;
-				}
-				else
-				{
-					operand1 = MoveConstantToRegister(context, operand1);
-				}
-			}
-
-			if (operand2.IsConstant)
-			{
-				operand2 = CreateImmediateOperand(context, operand2);
-			}
-
-			Debug.Assert(operand1.IsVirtualRegister || operand1.IsCPURegister);
-
-			if (operand2.IsVirtualRegister || operand2.IsCPURegister)
-			{
-				context.SetInstruction(virtualInstruction, statusRegister, result, operand1, operand2);
-			}
-			else if (operand2.IsResolvedConstant)
-			{
-				context.SetInstruction(immediateInstruction, statusRegister, result, operand1, operand2);
-			}
-			else
-			{
-				throw new CompilerException("Error at {context} in {Method}");
-			}
 		}
 
 		#endregion Helper Methods

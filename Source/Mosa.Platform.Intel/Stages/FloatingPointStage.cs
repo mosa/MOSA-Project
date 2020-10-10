@@ -42,7 +42,7 @@ namespace Mosa.Platform.Intel.Stages
 
 					if (IsIntegerToFloating(node.Instruction) && node.Operand1.IsConstant)
 					{
-						FixConstantIntegerToFloat(node);
+						ConvertConstantIntegerToFloat(node);
 						continue;
 					}
 
@@ -54,7 +54,7 @@ namespace Mosa.Platform.Intel.Stages
 			}
 		}
 
-		protected void FixConstantIntegerToFloat(InstructionNode node)
+		protected void ConvertConstantIntegerToFloat(InstructionNode node)
 		{
 			var source = node.Operand1;
 			var result = node.Result;
