@@ -22,17 +22,17 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			if (node.Operand1.IsCPURegister && node.Operand2.IsConstant)
+			if (node.Operand1.IsConstant)
 			{
 				opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 				opcodeEncoder.Append3Bits(0b100);
-				opcodeEncoder.Append1Bit(0b1);
-				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b1);
+				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b1);
-				opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
-				opcodeEncoder.Append16BitImmediate(node.Operand2);
+				opcodeEncoder.Append1Bit(0b1);
+				opcodeEncoder.Append4Bits(0b1101);
+				opcodeEncoder.Append16BitImmediate(node.Operand1);
 				return;
 			}
 

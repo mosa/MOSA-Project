@@ -48,9 +48,6 @@ namespace Mosa.Platform.ARMv8A32
 		public static readonly Dmb Dmb = new Dmb();
 		public static readonly Dsb Dsb = new Dsb();
 		public static readonly Isb Isb = new Isb();
-		public static readonly Ldm Ldm = new Ldm();
-		public static readonly Ldmfd Ldmfd = new Ldmfd();
-		public static readonly Ldmia Ldmia = new Ldmia();
 		public static readonly Ldr32 Ldr32 = new Ldr32();
 		public static readonly Ldr8 Ldr8 = new Ldr8();
 		public static readonly Ldr16 Ldr16 = new Ldr16();
@@ -70,15 +67,14 @@ namespace Mosa.Platform.ARMv8A32
 		public static readonly Nop Nop = new Nop();
 		public static readonly Mrs Mrs = new Mrs();
 		public static readonly Msr Msr = new Msr();
+		public static readonly Ldm Ldm = new Ldm();
+		public static readonly Stm Stm = new Stm();
 		public static readonly Pop Pop = new Pop();
 		public static readonly Push Push = new Push();
 		public static readonly Rev Rev = new Rev();
 		public static readonly Rev16 Rev16 = new Rev16();
 		public static readonly Revsh Revsh = new Revsh();
 		public static readonly Sev Sev = new Sev();
-		public static readonly Stm Stm = new Stm();
-		public static readonly Stmea Stmea = new Stmea();
-		public static readonly Stmia Stmia = new Stmia();
 		public static readonly Svc Svc = new Svc();
 		public static readonly Swi Swi = new Swi();
 		public static readonly Sxtb Sxtb = new Sxtb();

@@ -81,6 +81,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				bool reserved = (physicalRegister == StackFrameRegister
 					|| physicalRegister == StackPointerRegister
+					|| (LinkRegister != null && physicalRegister == LinkRegister)
 					|| (ProgramCounter != null && physicalRegister == ProgramCounter));
 
 				VirtualRegisters.Add(new VirtualRegister(physicalRegister, reserved));

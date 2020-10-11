@@ -766,7 +766,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[register]",
-					"Encoding": "conditional|0001|0010|1111|1111|0001|reg4:o1"
+					"Encoding": "conditional|0001|0010|1111|1111|0001|reg3s1:o1|0"
 				}
 			]
 		},
@@ -843,66 +843,6 @@
 			"OperandCount": 3,
 			"ResultCount": 1,
 			"Description": "Instruction Synchronization Barrier",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Ldm",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Load Multiple",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Ldmfd",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Load Multiple Full Descending",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Ldmia",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Load Multiple Increment After",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",
@@ -1347,6 +1287,46 @@
 			]
 		},
 		{
+			"Name": "Ldm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"Description": "Block transfer multiple registers from memory",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[arm-block-transfer],p=0,u=updir:status,s=0,w=0,l=1,rn=reg4:o1,list=imm16:o2"
+				}
+			]
+		},
+		{
+			"Name": "Stm",
+			"Commutative": "false",
+			"FamilyName": "ARMv8xA",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"Description": "Block transfer multiple registers to memory",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[arm-block-transfer],p=1,u=updir:status,s=0,w=0,l=0,rn=reg4:o1,list=imm16:o2"
+				}
+			]
+		},
+		{
 			"Name": "Pop",
 			"Commutative": "false",
 			"FamilyName": "ARMv8xA",
@@ -1361,8 +1341,8 @@
 			"Description": "Pop multiple registers off the stack",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-block-transfer],p=1,u=0,s=0,w=1,l=1,rn=reg4:o1,list=imm16:o2"
+					"Condition": "[constant]",
+					"Encoding": "[arm-block-transfer],p=0,u=1,s=0,w=1,l=1,rn=0b1101,list=imm16:o1"
 				}
 			]
 		},
@@ -1381,8 +1361,8 @@
 			"Description": "Push multiple registers onto the stack",
 			"OpcodeEncoding": [
 				{
-					"Condition": "[register][constant]",
-					"Encoding": "[arm-block-transfer],p=1,u=0,s=0,w=1,l=0,rn=reg4:o1,list=imm16:o2"
+					"Condition": "[constant]",
+					"Encoding": "[arm-block-transfer],p=1,u=0,s=0,w=1,l=0,rn=0b1101,list=imm16:o1"
 				}
 			]
 		},
@@ -1446,7 +1426,6 @@
 				}
 			]
 		},
-
 		{
 			"Name": "Sev",
 			"Commutative": "false",
@@ -1460,66 +1439,6 @@
 			"OperandCount": 3,
 			"ResultCount": 1,
 			"Description": "Send Event",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Stm",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Store Multiple",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Stmea",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Store Multiple Empty Ascending",
-			"OpcodeEncoding": [
-				{
-					"Condition": "",
-					"Encoding": "0x00000000"
-				}
-			]
-		},
-		{
-			"Name": "Stmia",
-			"Commutative": "false",
-			"FamilyName": "ARMv8xA",
-			"FlagsCleared": "",
-			"FlagsModified": "",
-			"FlagsSet": "",
-			"FlagsUnchanged": "",
-			"FlagsUndefined": "",
-			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
-			"Description": "Store Multiple Increment After",
 			"OpcodeEncoding": [
 				{
 					"Condition": "",

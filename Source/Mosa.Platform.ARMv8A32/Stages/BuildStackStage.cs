@@ -15,7 +15,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		/// <param name="context">The context.</param>
 		protected override void AddPrologueInstructions(Context context)
 		{
-			context.SetInstruction(ARMv8A32.Push, null, StackPointer, CreateConstant((1 << (17 - StackFrame.Register.Index)) | (1 << (17 - LinkRegister.Register.Index))));
+			context.SetInstruction(ARMv8A32.Push, null, CreateConstant((1 << (17 - StackFrame.Register.Index)) | (1 << (17 - LinkRegister.Register.Index))));
 			context.AppendInstruction(ARMv8A32.Mov, StackFrame, StackPointer);
 
 			if (MethodCompiler.StackSize != 0)
@@ -37,7 +37,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 				context.AppendInstruction(ARMv8A32.Add, StackPointer, StackFrame, CreateConstant(-MethodCompiler.StackSize));
 			}
 
-			context.AppendInstruction(ARMv8A32.Pop, null, StackPointer, CreateConstant((1 << (17 - StackFrame.Register.Index)) | (1 << (17 - LinkRegister.Register.Index))));
+			context.AppendInstruction(ARMv8A32.Pop, null, CreateConstant((1 << (17 - StackFrame.Register.Index)) | (1 << (17 - LinkRegister.Register.Index))));
 			context.AppendInstruction(ARMv8A32.Mov, ProgramCounter, LinkRegister);
 		}
 	}
