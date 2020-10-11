@@ -27,7 +27,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.Compare32x64, Compare32x64);
 			//AddVisitation(IRInstruction.Compare64x32, Compare64x32);
 			//AddVisitation(IRInstruction.Compare64x64, Compare64x64);
-			//AddVisitation(IRInstruction.CompareBranch64, CompareBranch64);
+			//AddVisitation(IRInstruction.BranchCompare64, BranchCompare64);
 			//AddVisitation(IRInstruction.ConvertFloatR4To64, ConvertFloatR4To64);
 			//AddVisitation(IRInstruction.ConvertFloatR8To64, ConvertFloatR8ToInteger64);
 			//AddVisitation(IRInstruction.Convert64ToFloatR4, Convert64ToFloatR4);
@@ -85,7 +85,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			op2H = MoveConstantToRegisterOrImmediate(context, op2H);
 
 			context.SetInstruction(ARMv8A32.Add, StatusRegister.Set, resultLow, op1L, op2L);
-			context.AppendInstruction(ARMv8A32.Adc, resultLow, op1H, op2H);
+			context.AppendInstruction(ARMv8A32.Adc, resultHigh, op1H, op2H);
 		}
 
 		private void ArithShiftRight64(Context context)

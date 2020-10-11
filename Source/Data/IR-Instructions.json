@@ -174,14 +174,14 @@
 			"ResultType": "Boolean"
 		},
 		{
-			"Name": "CompareBranch32",
+			"Name": "BranchCompare32",
 			"FamilyName": "IR",
 			"ResultCount": 2,
 			"OperandCount": 0,
 			"FlowControl": "ConditionalBranch"
 		},
 		{
-			"Name": "CompareBranch64",
+			"Name": "BranchCompare64",
 			"FamilyName": "IR",
 			"ResultCount": 2,
 			"OperandCount": 0,

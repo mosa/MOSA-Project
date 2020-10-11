@@ -72,7 +72,7 @@ namespace Mosa.Compiler.Framework
 
 			var loadInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.Load32 : IRInstruction.Load64;
 			var compareInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.Compare32x32 : IRInstruction.Compare64x64;
-			var branchInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.CompareBranch32 : IRInstruction.CompareBranch64;
+			var branchInstruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.BranchCompare32 : IRInstruction.BranchCompare64;
 			var nativeIntegerType = methodCompiler.Architecture.Is32BitPlatform ? methodCompiler.TypeSystem.BuiltIn.U4 : methodCompiler.TypeSystem.BuiltIn.U8;
 
 			var methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");

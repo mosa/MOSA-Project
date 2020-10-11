@@ -13,14 +13,14 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	public sealed class Push : ARMv8A32Instruction
 	{
 		internal Push()
-			: base(0, 2)
+			: base(0, 1)
 		{
 		}
 
 		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
 			if (node.Operand1.IsConstant)
 			{

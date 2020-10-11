@@ -422,9 +422,9 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					var from = VirtualRegisters[GetIndex(node.Operand1)];
 					var to = VirtualRegisters[GetIndex(node.Result)];
 
-					int factor = (from.IsPhysicalRegister || to.IsPhysicalRegister) ? 150 : 125;
+					int factor = (from.IsPhysicalRegister || to.IsPhysicalRegister) ? 10 : 1;
 
-					int bonus = ExtendedBlocks[block.Sequence].LoopDepth;
+					int bonus = ExtendedBlocks[block.Sequence].LoopDepth * factor;
 
 					var slot = new SlotIndex(node);
 

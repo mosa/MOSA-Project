@@ -277,11 +277,11 @@ namespace Mosa.Compiler.Framework.Stages
 				var instruction = (first.IsR4) ? (BaseInstruction)IRInstruction.CompareR4 : IRInstruction.CompareR8;
 
 				context.SetInstruction(instruction, cc, result, first, second);
-				context.AppendInstruction(Select(result, IRInstruction.CompareBranch32, IRInstruction.CompareBranch64), ConditionCode.Equal, null, result, CreateConstant(1)); // TODO: Constant should be 64bit
+				context.AppendInstruction(Select(result, IRInstruction.BranchCompare32, IRInstruction.BranchCompare64), ConditionCode.Equal, null, result, CreateConstant(1)); // TODO: Constant should be 64bit
 			}
 			else
 			{
-				context.SetInstruction(Select(first, IRInstruction.CompareBranch32, IRInstruction.CompareBranch64), cc, null, first, second);
+				context.SetInstruction(Select(first, IRInstruction.BranchCompare32, IRInstruction.BranchCompare64), cc, null, first, second);
 			}
 
 			context.AddBranchTarget(target);
@@ -1600,13 +1600,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (opcode == OpCode.Brtrue || opcode == OpCode.Brtrue_s)
 			{
-				context.SetInstruction(Select(first, IRInstruction.CompareBranch32, IRInstruction.CompareBranch64), ConditionCode.NotEqual, null, first, second); // TODO: Constant should be 64bit
+				context.SetInstruction(Select(first, IRInstruction.BranchCompare32, IRInstruction.BranchCompare64), ConditionCode.NotEqual, null, first, second); // TODO: Constant should be 64bit
 				context.AddBranchTarget(target);
 				return;
 			}
 			else if (opcode == OpCode.Brfalse || opcode == OpCode.Brfalse_s)
 			{
-				context.SetInstruction(Select(first, IRInstruction.CompareBranch32, IRInstruction.CompareBranch64), ConditionCode.Equal, null, first, second); // TODO: Constant should be 64bit
+				context.SetInstruction(Select(first, IRInstruction.BranchCompare32, IRInstruction.BranchCompare64), ConditionCode.Equal, null, first, second); // TODO: Constant should be 64bit
 				context.AddBranchTarget(target);
 				return;
 			}
@@ -2004,7 +2004,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Now compare length with index
 			// If index is greater than or equal to the length then jump to exception block, otherwise jump to next block
-			before.AppendInstruction(Select(IRInstruction.CompareBranch32, IRInstruction.CompareBranch64), ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block);
+			before.AppendInstruction(Select(IRInstruction.BranchCompare32, IRInstruction.BranchCompare64), ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block);
 			before.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
 
 			// Build exception block which is just a call to throw exception

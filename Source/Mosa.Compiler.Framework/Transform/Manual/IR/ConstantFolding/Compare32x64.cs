@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.IR;
-
 namespace Mosa.Compiler.Framework.Transform.Manual.IR.ConstantFolding
 {
 	public sealed class Compare32x64 : BaseTransformation

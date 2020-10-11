@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.IR;
-
 namespace Mosa.Compiler.Framework.Transform.IR.Special
 {
 	public sealed class Deadcode : BaseTransformation

@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// CompareBranch64
+	/// BranchCompare32
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class CompareBranch64 : BaseIRInstruction
+	public sealed class BranchCompare32 : BaseIRInstruction
 	{
-		public CompareBranch64()
+		public BranchCompare32()
 			: base(0, 2)
 		{
 		}

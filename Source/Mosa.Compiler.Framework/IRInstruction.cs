@@ -36,8 +36,8 @@ namespace Mosa.Compiler.Framework
 		public static readonly Compare32x64 Compare32x64 = new Compare32x64();
 		public static readonly Compare64x32 Compare64x32 = new Compare64x32();
 		public static readonly Compare64x64 Compare64x64 = new Compare64x64();
-		public static readonly CompareBranch32 CompareBranch32 = new CompareBranch32();
-		public static readonly CompareBranch64 CompareBranch64 = new CompareBranch64();
+		public static readonly BranchCompare32 BranchCompare32 = new BranchCompare32();
+		public static readonly BranchCompare64 BranchCompare64 = new BranchCompare64();
 		public static readonly ConvertR4ToR8 ConvertR4ToR8 = new ConvertR4ToR8();
 		public static readonly ConvertR4To32 ConvertR4To32 = new ConvertR4To32();
 		public static readonly ConvertR4To64 ConvertR4To64 = new ConvertR4To64();

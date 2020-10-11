@@ -13,7 +13,6 @@
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="IR\" />
     <Folder Include="Transform\Auto\" />
   </ItemGroup>
 </Project>
