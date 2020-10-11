@@ -833,7 +833,13 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "supress8": code = "SuppressByte"; return;
 				case "conditional": code = "Append4Bits"; postcode = "GetConditionCode(node.ConditionCode)"; return;
 				case "status": code = "Append1Bit"; postcode = " == StatusRegister.Set ? 1 : 0"; return;
+				case "updir": code = "Append1Bit"; postcode = " == StatusRegister.UpDirection ? 1 : 0"; return;
+				case "downdir": code = "Append1Bit"; postcode = " == StatusRegister.DownDirection ? 1 : 0"; return;
 				case "fp": code = "Append1Bit"; postcode = ".IsR4 ? 0 : 1"; return;
+
+				//case "signed": code = "Append1Bit"; postcode = ".ConstantSigned64 < 0 ? 1 : 0"; return;
+				//case "imm12unsigned": code = "Append12BitImmediate"; postcode = ""; return;
+
 				case "": return;
 
 				default: break;

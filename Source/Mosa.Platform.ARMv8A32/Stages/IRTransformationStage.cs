@@ -305,9 +305,9 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
 
-			LoadStore.OrderLoadOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
-			TransformLoadInstruction(context, ARMv8A32.LdrUp32, ARMv8A32.LdrUp32, ARMv8A32.LdrDown32, context.Result, context.Operand1, context.Operand2);
+			TransformLoad(context, ARMv8A32.Ldr32, context.Result, context.Operand1, context.Operand2);
 		}
 
 		private void LoadParam32(Context context)
@@ -315,25 +315,21 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
 
-			TransformLoadInstruction(context, ARMv8A32.LdrUp32, ARMv8A32.LdrUp32, ARMv8A32.LdrDown32, context.Result, StackFrame, context.Operand1);
+			TransformLoad(context, ARMv8A32.Ldr32, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void LoadParamR4(Context context)
 		{
 			Debug.Assert(context.Operand1.IsConstant);
 
-			var result = context.Result;
-			var operand1 = MoveConstantToRegisterOrImmediate(context, context.Operand1);
-
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-			context.SetInstruction(ARMv8A32.Add, v1, StackFrame, operand1);
-			context.AppendInstruction(ARMv8A32.LdfUp, result, v1);
+			TransformLoad(context, ARMv8A32.Ldf, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void LoadParamR8(Context context)
 		{
-			LoadParamR4(context);
+			Debug.Assert(context.Operand1.IsConstant);
+
+			TransformLoad(context, ARMv8A32.Ldf, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void LoadParamSignExtend16x32(Context context)
@@ -341,7 +337,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
 
-			TransformLoadInstruction(context, ARMv8A32.LdrUpS16, ARMv8A32.LdrUpS16, ARMv8A32.LdrDownS16, context.Result, StackFrame, context.Operand1);
+			TransformLoad(context, ARMv8A32.LdrS16, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void LoadParamSignExtend8x32(Context context)
@@ -349,7 +345,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
 
-			TransformLoadInstruction(context, ARMv8A32.LdrUpS8, ARMv8A32.LdrUpS8, ARMv8A32.LdrDownS8, context.Result, StackFrame, context.Operand1);
+			TransformLoad(context, ARMv8A32.LdrS8, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void LoadParamZeroExtend16x32(Context context)
@@ -357,7 +353,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
 
-			TransformLoadInstruction(context, ARMv8A32.LdrUp16, ARMv8A32.LdrUp16, ARMv8A32.LdrDown16, context.Result, StackFrame, context.Operand1);
+			TransformLoad(context, ARMv8A32.Ldr16, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void LoadParamZeroExtend8x32(Context context)
@@ -365,21 +361,14 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
 
-			TransformLoadInstruction(context, ARMv8A32.LdrUp8, ARMv8A32.LdrUp8, ARMv8A32.LdrDown8, context.Result, StackFrame, context.Operand1);
+			TransformLoad(context, ARMv8A32.Ldr8, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void LoadR4(Context context)
 		{
-			LoadStore.OrderLoadOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
-			var result = context.Result;
-			var operand1 = MoveConstantToRegister(context, context.Operand1);
-			var operand2 = MoveConstantToRegisterOrImmediate(context, context.Operand2);
-
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-			context.SetInstruction(ARMv8A32.Add, v1, operand1, operand2);
-			context.AppendInstruction(ARMv8A32.LdfUp, result, v1);
+			TransformLoad(context, ARMv8A32.Ldf, context.Result, context.Operand1, context.Operand2);
 		}
 
 		private void LoadR8(Context context)
@@ -392,9 +381,9 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
 
-			LoadStore.OrderLoadOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
-			TransformLoadInstruction(context, ARMv8A32.LdrUpS16, ARMv8A32.LdrUpS16, ARMv8A32.LdrDownS16, context.Result, StackFrame, context.Operand1);
+			TransformLoad(context, ARMv8A32.LdrS16, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void LoadSignExtend8x32(Context context)
@@ -402,9 +391,9 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
 
-			LoadStore.OrderLoadOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
-			TransformLoadInstruction(context, ARMv8A32.LdrUpS8, ARMv8A32.LdrUpS8, ARMv8A32.LdrDownS8, context.Result, StackFrame, context.Operand1);
+			TransformLoad(context, ARMv8A32.LdrS8, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void LoadZeroExtend16x32(Context context)
@@ -412,9 +401,9 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
 
-			LoadStore.OrderLoadOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
-			TransformLoadInstruction(context, ARMv8A32.LdrUp16, ARMv8A32.LdrUp16, ARMv8A32.LdrDown16, context.Result, StackFrame, context.Operand1);
+			TransformLoad(context, ARMv8A32.Ldr16, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void LoadZeroExtend8x32(Context context)
@@ -422,9 +411,9 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
 
-			LoadStore.OrderLoadOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
-			TransformLoadInstruction(context, ARMv8A32.LdrUp8, ARMv8A32.LdrUp8, ARMv8A32.LdrDown8, context.Result, StackFrame, context.Operand1);
+			TransformLoad(context, ARMv8A32.Ldr8, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void MoveInt32(Context context)
@@ -509,73 +498,56 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void StoreInt16(Context context)
 		{
-			TransformStoreInstruction(context, ARMv8A32.StrUp16, ARMv8A32.StrUp16, ARMv8A32.StrDown16, context.Operand1, context.Operand2, context.Operand3);
+			TransformStore(context, ARMv8A32.Str16, context.Operand1, context.Operand2, context.Operand3);
 		}
 
 		private void StoreInt32(Context context)
 		{
-			TransformStoreInstruction(context, ARMv8A32.StrUp32, ARMv8A32.StrUp32, ARMv8A32.StrDown32, context.Operand1, context.Operand2, context.Operand3);
+			TransformStore(context, ARMv8A32.Str32, context.Operand1, context.Operand2, context.Operand3);
 		}
 
 		private void StoreInt8(Context context)
 		{
-			TransformStoreInstruction(context, ARMv8A32.StrUp8, ARMv8A32.StrUp8, ARMv8A32.StrDown8, context.Operand1, context.Operand2, context.Operand3);
+			TransformStore(context, ARMv8A32.Str8, context.Operand1, context.Operand2, context.Operand3);
 		}
 
 		private void StoreParamInt16(Context context)
 		{
-			TransformStoreInstruction(context, ARMv8A32.StrUp16, ARMv8A32.StrUp16, ARMv8A32.StrDown16, StackFrame, context.Operand1, context.Operand2);
+			TransformStore(context, ARMv8A32.Str16, StackFrame, context.Operand1, context.Operand2);
 		}
 
 		private void StoreParamInt32(Context context)
 		{
-			TransformStoreInstruction(context, ARMv8A32.StrUp32, ARMv8A32.StrUp32, ARMv8A32.StrDown32, StackFrame, context.Operand1, context.Operand2);
+			TransformStore(context, ARMv8A32.Str32, StackFrame, context.Operand1, context.Operand2);
 		}
 
 		private void StoreParamInt8(Context context)
 		{
-			TransformStoreInstruction(context, ARMv8A32.StrUp8, ARMv8A32.StrUp8, ARMv8A32.StrDown8, StackFrame, context.Operand1, context.Operand2);
+			TransformStore(context, ARMv8A32.Str8, StackFrame, context.Operand1, context.Operand2);
 		}
 
 		private void StoreParamR4(Context context)
 		{
-			Debug.Assert(context.Operand2.IsR4);
-
-			var operand1 = MoveConstantToRegisterOrImmediate(context, context.Operand1);
-			var operand2 = MoveConstantToFloatRegister(context, context.Operand2);
-
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-			context.SetInstruction(ARMv8A32.Add, v1, StackFrame, operand1);
-			context.AppendInstruction(ARMv8A32.StfUp, null, v1, operand2);
+			TransformStore(context, ARMv8A32.Stf, StackFrame, context.Operand1, context.Operand2);
 		}
 
 		private void StoreParamR8(Context context)
 		{
-			StoreParamR4(context);
+			TransformStore(context, ARMv8A32.Stf, StackFrame, context.Operand1, context.Operand2);
 		}
 
 		private void StoreR4(Context context)
 		{
-			var operand1 = MoveConstantToRegister(context, context.Operand1);
-			var operand2 = MoveConstantToRegisterOrImmediate(context, context.Operand2);
-			var operand3 = MoveConstantToFloatRegister(context, context.Operand3);
-
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-			context.SetInstruction(ARMv8A32.Add, v1, operand1, operand2);
-			context.AppendInstruction(ARMv8A32.StfUp, null, v1, operand3);
+			TransformStore(context, ARMv8A32.Stf, context.Operand1, context.Operand2, context.Operand3);
 		}
 
 		private void StoreR8(Context context)
 		{
-			StoreR4(context);
+			TransformStore(context, ARMv8A32.Stf, context.Operand1, context.Operand2, context.Operand3);
 		}
 
 		private void Sub32(Context context)
 		{
-			MoveConstantRight(context);
-
 			Translate(context, ARMv8A32.Sub, true);
 		}
 

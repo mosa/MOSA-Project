@@ -325,7 +325,7 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
 
-			LoadStore.OrderLoadOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X86.MovLoad32, context.Result, context.Operand1, context.Operand2);
 		}
@@ -385,28 +385,28 @@ namespace Mosa.Platform.x86.Stages
 
 		private void LoadSignExtend16x32(Context context)
 		{
-			LoadStore.OrderLoadOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X86.MovsxLoad16, context.Result, context.Operand1, context.Operand2);
 		}
 
 		private void LoadSignExtend8x32(Context context)
 		{
-			LoadStore.OrderLoadOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X86.MovsxLoad8, context.Result, context.Operand1, context.Operand2);
 		}
 
 		private void LoadZeroExtend16x32(Context context)
 		{
-			LoadStore.OrderLoadOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X86.MovzxLoad16, context.Result, context.Operand1, context.Operand2);
 		}
 
 		private void LoadZeroExtend8x32(Context context)
 		{
-			LoadStore.OrderLoadOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X86.MovzxLoad8, context.Result, context.Operand1, context.Operand2);
 		}
@@ -520,21 +520,21 @@ namespace Mosa.Platform.x86.Stages
 
 		private void Store32(Context context)
 		{
-			LoadStore.OrderStoreOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X86.MovStore32, null, context.Operand1, context.Operand2, context.Operand3);
 		}
 
 		private void StoreInt16(Context context)
 		{
-			LoadStore.OrderStoreOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X86.MovStore16, null, context.Operand1, context.Operand2, context.Operand3);
 		}
 
 		private void StoreInt8(Context context)
 		{
-			LoadStore.OrderStoreOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X86.MovStore8, null, context.Operand1, context.Operand2, context.Operand3);
 		}

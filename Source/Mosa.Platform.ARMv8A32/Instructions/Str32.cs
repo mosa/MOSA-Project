@@ -7,12 +7,12 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv8A32.Instructions
 {
 	/// <summary>
-	/// StrUp8 - Single Data Transfer
+	/// Str32 - Single Data Transfer
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
-	public sealed class StrUp8 : ARMv8A32Instruction
+	public sealed class Str32 : ARMv8A32Instruction
 	{
-		internal StrUp8()
+		internal Str32()
 			: base(0, 3)
 		{
 		}
@@ -28,8 +28,8 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 				opcodeEncoder.Append2Bits(0b01);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit(0b1);
-				opcodeEncoder.Append1Bit(0b1);
+				opcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.UpDirection ? 1 : 0);
+				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
@@ -44,8 +44,8 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 				opcodeEncoder.Append2Bits(0b01);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit(0b1);
-				opcodeEncoder.Append1Bit(0b1);
+				opcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.UpDirection ? 1 : 0);
+				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);

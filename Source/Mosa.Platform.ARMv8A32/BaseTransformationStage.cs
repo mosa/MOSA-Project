@@ -16,6 +16,8 @@ namespace Mosa.Platform.ARMv8A32
 
 		protected Operand Constant_0;
 		protected Operand Constant_1;
+		protected Operand Constant_2;
+		protected Operand Constant_3;
 		protected Operand Constant_4;
 		protected Operand Constant_16;
 		protected Operand Constant_24;
@@ -34,6 +36,8 @@ namespace Mosa.Platform.ARMv8A32
 		{
 			Constant_0 = CreateConstant(1);
 			Constant_1 = CreateConstant(1);
+			Constant_2 = CreateConstant(2);
+			Constant_3 = CreateConstant(3);
 			Constant_4 = CreateConstant(4);
 			Constant_16 = CreateConstant(16);
 			Constant_24 = CreateConstant(16);
@@ -42,18 +46,18 @@ namespace Mosa.Platform.ARMv8A32
 			Constant_64 = CreateConstant(64);
 			Constant_1F = Constant_31;
 
-			LSL = CreateConstant(0b00);
-			LSR = CreateConstant(0b01);
-			ASR = CreateConstant(0b10);
-			ROR = CreateConstant(0b11);
+			LSL = Constant_0;
+			LSR = Constant_1;
+			ASR = Constant_2;
+			ROR = Constant_3;
 		}
 
 		#region Helper Methods
 
-		protected void MoveConstantRight(Context context)
+		protected static void MoveConstantRight(Context context)
 		{
-			if (context.OperandCount != 2)
-				return;
+			Debug.Assert(context.OperandCount == 2);
+			Debug.Assert(context.Instruction.IsCommutative);
 
 			var operand1 = context.Operand1;
 
@@ -66,77 +70,64 @@ namespace Mosa.Platform.ARMv8A32
 			}
 		}
 
-		protected void TransformLoadInstruction(Context context, BaseInstruction loadUp, BaseInstruction loadUpImm, BaseInstruction loadDownImm, Operand result, Operand baseOperand, Operand offsetOperand)
+		protected void TransformLoad(Context context, BaseInstruction loadInstruction, Operand result, Operand baseOperand, Operand offsetOperand)
 		{
-			BaseInstruction instruction;
-
 			baseOperand = MoveConstantToRegister(context, baseOperand);
+			bool upDirection = true;
 
 			if (offsetOperand.IsResolvedConstant)
 			{
 				if (offsetOperand.ConstantUnsigned64 >= 0 && offsetOperand.ConstantSigned32 <= 0xFFF)
 				{
-					instruction = loadUpImm;
+					// Nothing
 				}
 				else if (offsetOperand.ConstantUnsigned64 < 0 && -offsetOperand.ConstantSigned32 <= 0xFFF)
 				{
-					instruction = loadDownImm;
+					upDirection = false;
 					offsetOperand = CreateConstant((uint)-offsetOperand.ConstantSigned32);
 				}
 				else
 				{
-					instruction = loadDownImm;
 					offsetOperand = MoveConstantToRegister(context, offsetOperand);
 				}
 			}
 			else if (offsetOperand.IsUnresolvedConstant)
 			{
-				instruction = loadUp;
 				offsetOperand = MoveConstantToRegister(context, offsetOperand);
 			}
-			else
-			{
-				instruction = loadUp;
-			}
 
-			context.SetInstruction(instruction, ConditionCode.Always, result, baseOperand, offsetOperand);
+			context.SetInstruction(loadInstruction, upDirection ? StatusRegister.UpDirection : StatusRegister.DownDirection, result, baseOperand, offsetOperand);
 		}
 
-		protected void TransformStoreInstruction(Context context, BaseInstruction storeUp, BaseInstruction storeUpImm, BaseInstruction loadDownImm, Operand baseOperand, Operand offsetOperand, Operand sourceOperand)
+		protected void TransformStore(Context context, BaseInstruction storeInstruction, Operand baseOperand, Operand offsetOperand, Operand sourceOperand)
 		{
-			BaseInstruction instruction;
-
 			baseOperand = MoveConstantToRegister(context, baseOperand);
 			sourceOperand = MoveConstantToRegister(context, sourceOperand);
 
+			bool upDirection = true;
+
 			if (offsetOperand.IsResolvedConstant)
 			{
-				if (offsetOperand.ConstantUnsigned64 >= 0 && offsetOperand.ConstantSigned32 <= (1 << 13))
+				if (offsetOperand.ConstantUnsigned64 >= 0 && offsetOperand.ConstantSigned32 <= 0xFFF)
 				{
-					instruction = storeUpImm;
+					// Nothing
 				}
-				else if (offsetOperand.ConstantUnsigned64 < 0 && -offsetOperand.ConstantSigned32 <= (1 << 13))
+				else if (offsetOperand.ConstantUnsigned64 < 0 && -offsetOperand.ConstantSigned32 <= 0xFFF)
 				{
-					instruction = loadDownImm;
 					offsetOperand = CreateConstant((uint)-offsetOperand.ConstantSigned32);
 				}
 				else
 				{
-					instruction = loadDownImm;
+					upDirection = false;
 					offsetOperand = MoveConstantToRegister(context, offsetOperand);
 				}
 			}
 			else if (offsetOperand.IsUnresolvedConstant)
 			{
-				instruction = storeUp;
 				offsetOperand = MoveConstantToRegister(context, offsetOperand);
 			}
-			else
-			{
-				instruction = storeUp;
-			}
 
-			context.SetInstruction(instruction, ConditionCode.Always, null, baseOperand, offsetOperand, sourceOperand);
+			context.SetInstruction(storeInstruction, upDirection ? StatusRegister.UpDirection : StatusRegister.DownDirection, null, baseOperand, offsetOperand, sourceOperand);
 		}
 
 		protected Operand MoveConstantToRegister(Context context, Operand operand)
@@ -214,10 +205,18 @@ namespace Mosa.Platform.ARMv8A32
 			return MoveConstantToFloatRegisterOrImmediate(context, operand, false);
 		}
 
-		protected Operand MoveConstantToFloatRegisterOrImmediate(Context context, Operand operand, bool allowImmediate) // TODO Float
+		protected Operand MoveConstantToFloatRegisterOrImmediate(Context context, Operand operand, bool allowImmediate)
 		{
 			if (operand.IsVirtualRegister || operand.IsCPURegister)
 				return operand;
+
+			if (allowImmediate)
+			{
+				var immediate = ConvertFloatToImm(operand);
+
+				if (immediate != null)
+					return immediate;
+			}
 
 			var v1 = AllocateVirtualRegister(operand.IsR4 ? TypeSystem.BuiltIn.R4 : TypeSystem.BuiltIn.R8);
 
@@ -225,14 +224,16 @@ namespace Mosa.Platform.ARMv8A32
 
 			var label = Operand.CreateLabel(v1.Type, symbol.Name);
 
-			context.InsertBefore().SetInstruction(ARMv8A32.LdfUp, v1, label);
+			var baseRegister = MoveConstantToRegister(context, label);
+
+			context.InsertBefore().SetInstruction(ARMv8A32.Ldf, v1, baseRegister, Constant_0);
 
 			return v1;
 		}
 
 		private Operand ConvertFloatToImm(Operand operand)
 		{
-			if (operand.IsCPURegister || operand.IsVirtualRegister)
+			if (operand.IsCPURegister || operand.IsVirtualRegister || operand.IsUnresolvedConstant)
 				return operand;
 
 			if (operand.IsR4)

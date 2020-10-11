@@ -187,7 +187,7 @@ namespace Mosa.Platform.x64.Stages
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
 
-			LoadStore.OrderLoadOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X64.MovLoad64, context.Result, context.Operand1, context.Operand2);
 		}
@@ -234,7 +234,7 @@ namespace Mosa.Platform.x64.Stages
 
 		private void LoadSignExtend32x64(Context context)
 		{
-			LoadStore.OrderLoadOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X64.MovzxLoad32, context.Result, context.Operand1, context.Operand2);
 		}
@@ -350,7 +350,7 @@ namespace Mosa.Platform.x64.Stages
 
 		private void Store64(Context context)
 		{
-			LoadStore.OrderStoreOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X64.MovStore64, null, context.Operand1, context.Operand2, context.Operand3);
 		}

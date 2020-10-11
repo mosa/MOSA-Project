@@ -250,6 +250,15 @@
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
+			"Name": "AddCarryIn##",
+			"SubName": "NoCarry",
+			"Expression": "IR.AddCarryIn## a b 0",
+			"Filter": "",
+			"Result": "(IR.Add## a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
 			"Name": "SubCarryIn##",
 			"SubName": "Inside",
 			"Expression": "IR.SubCarryIn## a b c",
@@ -273,6 +282,15 @@
 			"Expression": "IR.SubCarryIn## a b c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
 			"Result": "(IR.Sub## a [Sub##(To##(b),BoolTo##(To##(c)))])])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SubCarryIn##",
+			"SubName": "NoCarry",
+			"Expression": "IR.SubCarryIn## a b 0",
+			"Filter": "",
+			"Result": "(IR.Sub## a b)"
 		}
 	]
 }

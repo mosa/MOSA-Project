@@ -7,27 +7,27 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv8A32.Instructions
 {
 	/// <summary>
-	/// StfDownOffset - Store Floating Point Data Transfer
+	/// Stf - Store Floating Point Data Transfer
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
-	public sealed class StfDownOffset : ARMv8A32Instruction
+	public sealed class Stf : ARMv8A32Instruction
 	{
-		internal StfDownOffset()
-			: base(0, 2)
+		internal Stf()
+			: base(0, 3)
 		{
 		}
 
 		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 3);
 
-			if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister)
+			if (node.Operand1.IsCPURegister && node.Operand2.IsConstant && node.Operand3.IsCPURegister)
 			{
 				opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 				opcodeEncoder.Append3Bits(0b110);
 				opcodeEncoder.Append1Bit(0b1);
-				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append1Bit(node.Operand3.IsR4 ? 0 : 1);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);

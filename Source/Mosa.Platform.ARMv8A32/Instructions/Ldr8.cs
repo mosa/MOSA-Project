@@ -7,49 +7,49 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.ARMv8A32.Instructions
 {
 	/// <summary>
-	/// StrDown8 - Single Data Transfer
+	/// Ldr8 - Single Data Transfer
 	/// </summary>
 	/// <seealso cref="Mosa.Platform.ARMv8A32.ARMv8A32Instruction" />
-	public sealed class StrDown8 : ARMv8A32Instruction
+	public sealed class Ldr8 : ARMv8A32Instruction
 	{
-		internal StrDown8()
-			: base(0, 3)
+		internal Ldr8()
+			: base(1, 2)
 		{
 		}
 
 		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 3);
+			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			if (node.Operand1.IsCPURegister && node.Operand2.IsConstant && node.Operand3.IsCPURegister)
+			if (node.Operand1.IsCPURegister && node.Operand2.IsConstant)
 			{
 				opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 				opcodeEncoder.Append2Bits(0b01);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.UpDirection ? 1 : 0);
 				opcodeEncoder.Append1Bit(0b1);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append1Bit(0b1);
 				opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
-				opcodeEncoder.Append4Bits(node.Operand3.Register.RegisterCode);
+				opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
 				opcodeEncoder.Append12BitImmediate(node.Operand2);
 				return;
 			}
 
-			if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister && node.Operand3.IsCPURegister)
+			if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister)
 			{
 				opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
 				opcodeEncoder.Append2Bits(0b01);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append1Bit(node.StatusRegister == StatusRegister.UpDirection ? 1 : 0);
 				opcodeEncoder.Append1Bit(0b1);
 				opcodeEncoder.Append1Bit(0b0);
-				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append1Bit(0b1);
 				opcodeEncoder.Append4Bits(node.Operand1.Register.RegisterCode);
-				opcodeEncoder.Append4Bits(node.Operand3.Register.RegisterCode);
+				opcodeEncoder.Append4Bits(node.Result.Register.RegisterCode);
 				opcodeEncoder.Append4Bits(0b0000);
 				opcodeEncoder.Append1Bit(0b0);
 				opcodeEncoder.Append2Bits(0b00);
