@@ -1,12 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.IR;
-
 namespace Mosa.Compiler.Framework.Transform.Manual.IR.Rewrite
 {
-	public sealed class CompareBranch64From32 : BaseTransformation
+	public sealed class BranchCompare32Combine64x32 : BaseTransformation
 	{
-		public CompareBranch64From32() : base(IRInstruction.CompareBranch32)
+		public BranchCompare32Combine64x32() : base(IRInstruction.BranchCompare32)
 		{
 		}
 
@@ -21,13 +19,13 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.Rewrite
 			if (!IsResolvedConstant(context.Operand2))
 				return false;
 
-			if (context.Operand2.ConstantUnsigned64 != 0)
+			if (context.Operand2.ConstantUnsigned32 != 0)
 				return false;
 
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Compare32x64)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Compare64x32)
 				return false;
 
 			return true;
@@ -38,7 +36,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.Rewrite
 			var node2 = context.Operand1.Definitions[0];
 			var conditionCode = context.ConditionCode == ConditionCode.NotEqual ? node2.ConditionCode : node2.ConditionCode.GetOpposite();
 
-			context.SetInstruction(IRInstruction.CompareBranch32, conditionCode, null, node2.Operand1, node2.Operand2, context.BranchTargets[0]);
+			context.SetInstruction(IRInstruction.BranchCompare64, conditionCode, null, node2.Operand1, node2.Operand2, context.BranchTargets[0]);
 		}
 	}
 }

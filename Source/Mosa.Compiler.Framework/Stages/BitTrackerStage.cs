@@ -582,7 +582,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (node.Instruction == IRInstruction.Switch)
 					continue;
 
-				Debug.Assert(node.Instruction == IRInstruction.CompareBranch32 || node.Instruction == IRInstruction.CompareBranch64);
+				Debug.Assert(node.Instruction == IRInstruction.BranchCompare32 || node.Instruction == IRInstruction.BranchCompare64);
 
 				var result = EvaluateCompare(node);
 

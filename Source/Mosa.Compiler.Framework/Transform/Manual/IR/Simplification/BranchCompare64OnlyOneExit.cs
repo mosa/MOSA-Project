@@ -1,12 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.IR;
-
 namespace Mosa.Compiler.Framework.Transform.Manual.IR.Simplification
 {
-	public sealed class CompareBranch32OnlyOneExit : BaseTransformation
+	public sealed class BranchCompare64OnlyOneExit : BaseTransformation
 	{
-		public CompareBranch32OnlyOneExit() : base(IRInstruction.CompareBranch32)
+		public BranchCompare64OnlyOneExit() : base(IRInstruction.BranchCompare64)
 		{
 		}
 
@@ -20,7 +18,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.Simplification
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
-			context.SetInstruction(IRInstruction.Nop);
+			context.SetInstruction(IRInstruction.BranchCompare64, context.ConditionCode.GetReverse(), context.Result, context.Operand2, context.Operand1, context.BranchTargets[0]);
 		}
 	}
 }

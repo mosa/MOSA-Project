@@ -1336,7 +1336,7 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 2,
+			"OperandCount": 1,
 			"ResultCount": 0,
 			"Description": "Pop multiple registers off the stack",
 			"OpcodeEncoding": [
@@ -1356,7 +1356,7 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 2,
+			"OperandCount": 1,
 			"ResultCount": 0,
 			"Description": "Push multiple registers onto the stack",
 			"OpcodeEncoding": [

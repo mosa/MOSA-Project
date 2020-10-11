@@ -78,8 +78,8 @@ namespace Mosa.Compiler.Framework.Stages
 			var node = predecessor.BeforeLast;
 
 			while (node.IsEmptyOrNop
-				|| node.Instruction == IRInstruction.CompareBranch32
-				|| node.Instruction == IRInstruction.CompareBranch64
+				|| node.Instruction == IRInstruction.BranchCompare32
+				|| node.Instruction == IRInstruction.BranchCompare64
 				|| node.Instruction == IRInstruction.Jmp)
 			{
 				node = node.Previous;

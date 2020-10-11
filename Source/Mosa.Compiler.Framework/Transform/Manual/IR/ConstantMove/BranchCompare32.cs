@@ -1,12 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.IR;
-
 namespace Mosa.Compiler.Framework.Transform.Manual.IR.ConstantMove
 {
-	public sealed class CompareBranch64 : BaseTransformation
+	public sealed class BranchCompare32 : BaseTransformation
 	{
-		public CompareBranch64() : base(IRInstruction.CompareBranch64)
+		public BranchCompare32() : base(IRInstruction.BranchCompare32)
 		{
 		}
 
@@ -23,7 +21,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.ConstantMove
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
-			context.SetInstruction(IRInstruction.CompareBranch64, context.ConditionCode.GetReverse(), context.Result, context.Operand2, context.Operand1, context.BranchTargets[0]);
+			context.SetInstruction(IRInstruction.BranchCompare32, context.ConditionCode.GetReverse(), context.Result, context.Operand2, context.Operand1, context.BranchTargets[0]);
 		}
 	}
 }

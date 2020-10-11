@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			AddVisitation(IRInstruction.Add64, Add64);
 			AddVisitation(IRInstruction.Compare64x32, Compare64x32);
-			AddVisitation(IRInstruction.CompareBranch64, CompareBranch64);
+			AddVisitation(IRInstruction.BranchCompare64, BranchCompare64);
 			AddVisitation(IRInstruction.Load64, Load64); // exposes bug without this
 			AddVisitation(IRInstruction.LoadParam64, LoadParam64);
 			AddVisitation(IRInstruction.LoadParamSignExtend16x64, LoadParamSignExtend16x64);
@@ -195,7 +195,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 
-		private void CompareBranch64(Context context)
+		private void BranchCompare64(Context context)
 		{
 			//Debug.Assert(context.Operand1.Is64BitInteger);
 			//Debug.Assert(context.Operand2.Is64BitInteger);
@@ -231,15 +231,15 @@ namespace Mosa.Compiler.Framework.Stages
 			AppendGetHigh64(context, op1High, operand2);
 
 			// Compare high (equal)
-			context.AppendInstruction(IRInstruction.CompareBranch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
+			context.AppendInstruction(IRInstruction.BranchCompare32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
 			context.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
 
 			// Compare high
-			newBlocks[0].AppendInstruction(IRInstruction.CompareBranch32, branch, null, op0High, op1High, newBlocks[2].Block);
+			newBlocks[0].AppendInstruction(IRInstruction.BranchCompare32, branch, null, op0High, op1High, newBlocks[2].Block);
 			newBlocks[0].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 
 			// Compare low
-			newBlocks[1].AppendInstruction(IRInstruction.CompareBranch32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
+			newBlocks[1].AppendInstruction(IRInstruction.BranchCompare32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
 			newBlocks[1].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 
 			// Target
@@ -323,7 +323,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AppendGetHigh64(context, op1High, operand2);
 
 			// Compare high
-			context.AppendInstruction(IRInstruction.CompareBranch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
+			context.AppendInstruction(IRInstruction.BranchCompare32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
 			context.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
 
 			// Branch if check already gave results
@@ -333,12 +333,12 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				newBlocks[0].AppendInstruction(IRInstruction.CompareBranch32, branch, null, op0High, op1High, newBlocks[2].Block);
+				newBlocks[0].AppendInstruction(IRInstruction.BranchCompare32, branch, null, op0High, op1High, newBlocks[2].Block);
 				newBlocks[0].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
 			}
 
 			// Compare low
-			newBlocks[1].AppendInstruction(IRInstruction.CompareBranch32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
+			newBlocks[1].AppendInstruction(IRInstruction.BranchCompare32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
 			newBlocks[1].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
 
 			// Success
@@ -386,7 +386,7 @@ namespace Mosa.Compiler.Framework.Stages
 			AppendGetHigh64(context, op1High, operand2);
 
 			// Compare high
-			context.AppendInstruction(IRInstruction.CompareBranch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
+			context.AppendInstruction(IRInstruction.BranchCompare32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
 			context.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
 
 			// Branch if check already gave results
@@ -396,12 +396,12 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				newBlocks[0].AppendInstruction(IRInstruction.CompareBranch32, branch, null, op0High, op1High, newBlocks[2].Block);
+				newBlocks[0].AppendInstruction(IRInstruction.BranchCompare32, branch, null, op0High, op1High, newBlocks[2].Block);
 				newBlocks[0].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
 			}
 
 			// Compare low
-			newBlocks[1].AppendInstruction(IRInstruction.CompareBranch32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
+			newBlocks[1].AppendInstruction(IRInstruction.BranchCompare32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
 			newBlocks[1].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
 
 			// Success
