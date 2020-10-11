@@ -79,8 +79,6 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsBoolean { get; private set; }
 
-		public bool IsByte { get { return IsI1 || IsI2; } }
-
 		public bool IsChar { get; private set; }
 
 		/// <summary>
@@ -149,32 +147,18 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsEnum { get; private set; }
 
-		public bool IsFloatingPoint { get { return IsR; } }
+		public bool IsFloatingPoint { get; private set; }
 
 		public bool IsFunctionPointer { get; private set; }
 
 		public bool IsHigh { get { return LongParent.High == this; } }
 
-		public bool IsI { get; private set; }
-
-		public bool IsI1 { get; private set; }
-
-		public bool IsI2 { get; private set; }
-
-		public bool IsI4 { get; private set; }
-
-		public bool IsI8 { get; private set; }
-
-		public bool IsInt { get { return IsI4 | IsU4; } }
-
-		public bool IsInteger { get { return IsI1 || IsI2 || IsI4 || IsI8 || IsI || IsU1 || IsU2 || IsU4 || IsU8 || IsU; } }
+		public bool IsInteger { get; private set; }
 
 		/// <summary>
 		/// Determines if the operand is a label operand.
 		/// </summary>
 		public bool IsLabel { get; private set; }
-
-		public bool IsLong { get { return IsI8 | IsU8; } }
 
 		public bool IsLow { get { return LongParent.Low == this; } }
 
@@ -199,8 +183,6 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsPointer { get { return IsManagedPointer || IsUnmanagedPointer || IsFunctionPointer; } }
 
-		public bool IsR { get; private set; }
-
 		public bool IsR4 { get; private set; }
 
 		public bool IsR8 { get; private set; }
@@ -213,8 +195,6 @@ namespace Mosa.Compiler.Framework
 		/// Gets a value indicating whether this instance is resolved constant.
 		/// </summary>
 		public bool IsResolvedConstant { get { return IsConstant && IsResolved; } }
-
-		public bool IsShort { get { return IsU2 || IsI2; } }
 
 		/// <summary>
 		/// Determines if the operand is a local stack operand.
@@ -238,16 +218,6 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// </value>
 		public bool IsThis { get; private set; }
-
-		public bool IsU { get; private set; }
-
-		public bool IsU1 { get; private set; }
-
-		public bool IsU2 { get; private set; }
-
-		public bool IsU4 { get; private set; }
-
-		public bool IsU8 { get; private set; }
 
 		public bool IsUnmanagedPointer { get; private set; }
 
@@ -339,21 +309,9 @@ namespace Mosa.Compiler.Framework
 			//Debug.Assert(type != null);
 			Type = type;
 
-			IsR = type.IsR;
+			IsFloatingPoint = type.IsR;
 			IsR4 = type.IsR4;
 			IsR8 = type.IsR8;
-
-			IsI = type.IsI;
-			IsI1 = type.IsI1;
-			IsI2 = type.IsI2;
-			IsI4 = type.IsI4;
-			IsI8 = type.IsI8;
-
-			IsU = type.IsU;
-			IsU1 = type.IsU1;
-			IsU2 = type.IsU2;
-			IsU4 = type.IsU4;
-			IsU8 = type.IsU8;
 
 			IsArray = type.IsArray;
 			IsBoolean = type.IsBoolean;
@@ -366,7 +324,9 @@ namespace Mosa.Compiler.Framework
 			IsValueType = type.IsValueType;
 			IsFunctionPointer = type.IsFunctionPointer;
 
-			Is64BitInteger = IsU8 || IsI8 || Type.GetEnumUnderlyingType().IsUI8;
+			IsInteger = type.IsI1 || type.IsI2 || type.IsI4 || type.IsI8 || type.IsU1 || type.IsU2 || type.IsU4 || type.IsU8;
+
+			Is64BitInteger = type.IsUI8 || Type.GetEnumUnderlyingType().IsUI8;
 		}
 
 		#endregion Construction
@@ -912,16 +872,9 @@ namespace Mosa.Compiler.Framework
 				{
 					sb.Append("null");
 				}
-				else if (IsOnStack)
+				else if (IsOnStack || IsInteger || IsPointer || IsChar || IsBoolean)
 				{
 					sb.AppendFormat("{0}", ConstantSigned64);
-				}
-				else if (IsBoolean || IsChar || IsPointer || IsInteger)
-				{
-					if (IsU8)
-						sb.AppendFormat("{0}", ConstantSigned64);
-					else
-						sb.AppendFormat("{0}", ConstantSigned32);
 				}
 				else if (IsR8)
 				{

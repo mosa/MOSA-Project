@@ -501,8 +501,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (operand1.IsResolvedConstant
 				&& operand2.IsResolvedConstant
-				&& operand1.IsR
-				&& operand2.IsR
+				&& operand1.IsFloatingPoint
+				&& operand2.IsFloatingPoint
 				&& operand1.ConstantDouble == operand2.ConstantDouble)
 				return true;
 

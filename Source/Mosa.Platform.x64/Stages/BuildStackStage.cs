@@ -8,8 +8,7 @@ namespace Mosa.Platform.x64.Stages
 	/// <summary>
 	/// Completes the stack handling after register allocation
 	/// </summary>
-	/// <seealso cref="Mosa.Platform.Intel.Stages.BuildStackStage" />
-	public sealed class BuildStackStage : Intel.Stages.BuildStackStage
+	public sealed class BuildStackStage : Mosa.Compiler.Framework.Platform.BuildStackStage
 	{
 		/// <summary>
 		/// Adds the prologue instructions.
@@ -17,15 +16,12 @@ namespace Mosa.Platform.x64.Stages
 		/// <param name="context">The context.</param>
 		protected override void AddPrologueInstructions(Context context)
 		{
-			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, GeneralPurposeRegister.EBP);
-			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, GeneralPurposeRegister.ESP);
-
-			context.SetInstruction(X64.Push64, null, ebp);
-			context.AppendInstruction(X64.Mov64, ebp, esp);
+			context.SetInstruction(X64.Push64, null, StackFrame);
+			context.AppendInstruction(X64.Mov64, StackFrame, StackPointer);
 
 			if (MethodCompiler.StackSize != 0)
 			{
-				context.AppendInstruction(X64.Sub64, esp, esp, CreateConstant(-MethodCompiler.StackSize));
+				context.AppendInstruction(X64.Sub64, StackPointer, StackPointer, CreateConstant(-MethodCompiler.StackSize));
 			}
 		}
 
@@ -35,17 +31,14 @@ namespace Mosa.Platform.x64.Stages
 		/// <param name="context">The context.</param>
 		protected override void AddEpilogueInstructions(Context context)
 		{
-			var ebp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, GeneralPurposeRegister.EBP);
-			var esp = Operand.CreateCPURegister(TypeSystem.BuiltIn.I8, GeneralPurposeRegister.ESP);
-
 			context.Empty();
 
 			if (MethodCompiler.StackSize != 0)
 			{
-				context.AppendInstruction(X64.Add64, esp, esp, CreateConstant(-MethodCompiler.StackSize));
+				context.AppendInstruction(X64.Add64, StackPointer, StackPointer, CreateConstant(-MethodCompiler.StackSize));
 			}
 
-			context.AppendInstruction(X64.Pop64, ebp);
+			context.AppendInstruction(X64.Pop64, StackFrame);
 			context.AppendInstruction(X64.Ret);
 		}
 	}

@@ -225,7 +225,8 @@ namespace Mosa.Compiler.Framework.Linker
 			linkRequest.PatchSymbol.ApplyPatch(
 				linkRequest.PatchOffset,
 				value,
-				GetPatchTypeSize(linkRequest.PatchType)
+				GetPatchTypeSize(linkRequest.PatchType),
+				GetPatchTypeShift(linkRequest.PatchType)
 			);
 		}
 
@@ -235,6 +236,19 @@ namespace Mosa.Compiler.Framework.Linker
 			{
 				case PatchType.I32: return 32;
 				case PatchType.I64: return 64;
+				case PatchType.I24o8: return 24;
+			}
+
+			throw new CompilerException($"unknown patch type: {patchType}");
+		}
+
+		private static byte GetPatchTypeShift(PatchType patchType)
+		{
+			switch (patchType)
+			{
+				case PatchType.I32: return 0;
+				case PatchType.I64: return 0;
+				case PatchType.I24o8: return 8;
 			}
 
 			throw new CompilerException($"unknown patch type: {patchType}");
@@ -270,7 +284,7 @@ namespace Mosa.Compiler.Framework.Linker
 		{
 			var data = BitConverter.GetBytes(value);
 
-			string name = "$double$";
+			var name = "$double$";
 
 			foreach (byte b in data)
 			{
@@ -291,7 +305,7 @@ namespace Mosa.Compiler.Framework.Linker
 		{
 			var data = BitConverter.GetBytes(value);
 
-			string name = "$float$";
+			var name = "$float$";
 
 			foreach (byte b in data)
 			{
@@ -310,7 +324,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public LinkerSymbol GetConstantSymbol(uint value)
 		{
-			string name = "$integer$" + value.ToString("x");
+			var name = "$integer$" + value.ToString("x");
 
 			var data = BitConverter.GetBytes(value);
 

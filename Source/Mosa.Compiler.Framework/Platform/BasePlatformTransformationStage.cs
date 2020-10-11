@@ -14,7 +14,7 @@ namespace Mosa.Compiler.Framework.Platform
 		/// <value>
 		/// The platform.
 		/// </value>
-		protected virtual string Platform { get { return "Intel"; } }
+		protected virtual string Platform { get { return Architecture.PlatformName; } }
 
 		#region IPipelineStage Members
 

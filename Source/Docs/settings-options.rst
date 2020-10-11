@@ -70,7 +70,7 @@ Common Settings
    :widths: 50, 200
 
     SearchPaths,Folder to search for files
-    DefaultFolder,Default folder to output files
+    DefaultFolder,Default folder for output files
     TemporaryFolder,Specifies a temporary folder
 
 Compiler Debug Settings

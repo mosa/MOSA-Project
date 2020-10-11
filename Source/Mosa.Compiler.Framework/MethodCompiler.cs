@@ -241,7 +241,7 @@ namespace Mosa.Compiler.Framework
 			ConstantZeroR4 = CreateConstant(0.0f);
 			ConstantZeroR8 = CreateConstant(0.0d);
 
-			ConstantZero = Architecture.Is32BitPlatform ? ConstantZero32 : ConstantZero64;
+			ConstantZero = Architecture.Is32BitPlatform ? ConstantZero32 : ConstantZero64;  // FUTURE: This could just be Constant64 or Constant32 once the caling stage uses the method signature intead of the operand types
 
 			LocalVariables = emptyOperandList;
 			ThreadID = threadID;
@@ -272,9 +272,15 @@ namespace Mosa.Compiler.Framework
 				Symbol.RemovePatches();
 			}
 
-			EvaluateParameterOperands();
+			var methodInfo = TypeLayout.__GetMethodInfo(Method);
 
-			CalculateMethodParameterSize();
+			MethodData.ParameterSizes = methodInfo.ParameterSizes;
+			MethodData.ParameterOffsets = methodInfo.ParameterOffsets;
+			MethodData.ParameterStackSize = methodInfo.ParameterStackSize;
+			MethodData.ReturnSize = methodInfo.ReturnSize;
+			MethodData.ReturnInRegister = methodInfo.ReturnInRegister;
+
+			EvaluateParameterOperands();
 
 			MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.Ticks", (int)Stopwatch.ElapsedTicks);
 		}
@@ -282,35 +288,6 @@ namespace Mosa.Compiler.Framework
 		#endregion Construction
 
 		#region Methods
-
-		private void CalculateMethodParameterSize()
-		{
-			// Check if already computed
-			if (MethodData.ParameterStackSize != 0)
-				return;
-
-			int stacksize = 0;
-
-			MethodData.ParameterSizes = new List<int>(Method.Signature.Parameters.Count);
-			MethodData.ParameterOffsets = new List<int>(Method.Signature.Parameters.Count);
-
-			if (Method.HasThis)
-			{
-				stacksize = TypeLayout.NativePointerSize;
-			}
-
-			foreach (var parameter in Method.Signature.Parameters)
-			{
-				var size = parameter.ParameterType.IsValueType ? TypeLayout.GetTypeSize(parameter.ParameterType) : TypeLayout.NativePointerAlignment;
-
-				MethodData.ParameterSizes.Add(size);
-				MethodData.ParameterOffsets.Add(stacksize);
-
-				stacksize += Alignment.AlignUp(size, TypeLayout.NativePointerAlignment);
-			}
-
-			MethodData.ParameterStackSize = stacksize;
-		}
 
 		/// <summary>
 		/// Adds the stack local.
@@ -358,10 +335,14 @@ namespace Mosa.Compiler.Framework
 		{
 			int offset = Architecture.OffsetOfFirstParameter;
 
+			//offset += MethodData.ReturnInRegister ? MethodData.ReturnSize : 0;
+
 			if (!MosaTypeLayout.CanFitInRegister(Method.Signature.ReturnType))
 			{
 				offset += TypeLayout.GetTypeSize(Method.Signature.ReturnType);
 			}
+
+			//Debug.Assert((MethodData.ReturnInRegister ? MethodData.ReturnSize : 0) == TypeLayout.GetTypeSize(Method.Signature.ReturnType));
 
 			int index = 0;
 
@@ -645,12 +626,6 @@ namespace Mosa.Compiler.Framework
 		/// <param name="operandHigh">The operand high.</param>
 		public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 		{
-			//if (operand.IsParameter)
-			//{
-			//	operandLow = Operand.CreateStackParameter(TypeSystem.BuiltIn.U4, operand.Index, operand.Name + " (Low)", false, (int)operand.Offset);
-			//	operandHigh = Operand.CreateStackParameter(TypeSystem.BuiltIn.U4, operand.Index, operand.Name + " (High)", false, (int)operand.Offset + 4);
-			//}
-			//else
 			if (operand.Is64BitInteger)
 			{
 				SplitLongOperand(operand);

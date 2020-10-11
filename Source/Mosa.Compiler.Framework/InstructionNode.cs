@@ -1388,6 +1388,17 @@ namespace Mosa.Compiler.Framework
 			SetOperand(3, operand4);
 		}
 
+		public void SetInstruction(BaseInstruction instruction, ConditionCode conditionCode, Operand result, Operand operand1, Operand operand2, Operand operand3, Operand operand4)
+		{
+			SetInstruction(instruction, 4, (byte)((result == null) ? 0 : 1));
+			Result = result;
+			Operand1 = operand1;
+			Operand2 = operand2;
+			Operand3 = operand3;
+			ConditionCode = conditionCode;
+			SetOperand(3, operand4);
+		}
+
 		/// <summary>
 		/// Sets the instruction.
 		/// </summary>
@@ -1521,6 +1532,26 @@ namespace Mosa.Compiler.Framework
 			Operand1 = operand1;
 			Operand2 = operand2;
 			ConditionCode = condition;
+			StatusRegister = statusRegister;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="condition">The condition.</param>
+		/// <param name="updateStatus">if set to <c>true</c> [update status].</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		/// <param name="operand3">The operand3.</param>
+		public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result, Operand operand1, Operand operand2, Operand operand3)
+		{
+			SetInstruction(instruction, 3, (byte)((result == null) ? 0 : 1));
+			Result = result;
+			Operand1 = operand1;
+			Operand2 = operand2;
+			Operand3 = operand3;
 			StatusRegister = statusRegister;
 		}
 

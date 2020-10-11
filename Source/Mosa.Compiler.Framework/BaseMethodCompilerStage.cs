@@ -154,12 +154,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the 32-bit constant zero.
 		/// </summary>
-		protected Operand ConstantZero32 { get { return MethodCompiler.ConstantZero32; } }
+		protected Operand ConstantZero32 { get { return MethodCompiler.ConstantZero; } }
 
 		/// <summary>
 		/// Gets the 64-bit constant zero.
 		/// </summary>
-		protected Operand ConstantZero64 { get { return MethodCompiler.ConstantZero64; } }
+		protected Operand ConstantZero64 { get { return MethodCompiler.ConstantZero; } }
 
 		/// <summary>
 		/// Gets the stack frame.
@@ -170,6 +170,16 @@ namespace Mosa.Compiler.Framework
 		/// Gets the stack pointer.
 		/// </summary>
 		protected Operand StackPointer { get { return MethodCompiler.Compiler.StackPointer; } }
+
+		/// <summary>
+		/// Gets the link register.
+		/// </summary>
+		protected Operand LinkRegister { get { return MethodCompiler.Compiler.LinkRegister; } }
+
+		/// <summary>
+		/// Gets the program counter
+		/// </summary>
+		protected Operand ProgramCounter { get { return MethodCompiler.Compiler.ProgramCounter; } }
 
 		/// <summary>
 		/// Gets the exception register.

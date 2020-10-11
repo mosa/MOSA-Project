@@ -8,6 +8,7 @@ using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -110,6 +111,16 @@ namespace Mosa.Compiler.Framework
 		/// The stack frame
 		/// </summary>
 		internal Operand StackPointer { get; }
+
+		/// <summary>
+		/// The program counter
+		/// </summary>
+		internal Operand ProgramCounter { get; }
+
+		/// <summary>
+		/// The link register
+		/// </summary>
+		internal Operand LinkRegister { get; }
 
 		/// <summary>
 		/// The exception register
@@ -231,6 +242,9 @@ namespace Mosa.Compiler.Framework
 
 			StackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
 			StackPointer = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackPointerRegister);
+			LinkRegister = Architecture.LinkRegister == null ? null : Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.LinkRegister);
+			ProgramCounter = Architecture.ProgramCounter == null ? null : Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.ProgramCounter);
+
 			ExceptionRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.ExceptionRegister);
 			LeaveTargetRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.LeaveTargetRegister);
 
@@ -392,15 +406,22 @@ namespace Mosa.Compiler.Framework
 			return CompileMethod(method, threadID);
 		}
 
-		public MosaMethod CompileMethod(MosaMethod method)
+		public void CompileMethod(MosaMethod method)
 		{
-			return CompileMethod(method, 0);
+			if (!MethodScheduler.IsCompilable(method))
+				return;
+
+			Debug.Assert(!method.HasOpenGenericParams);
+
+			CompileMethod(method, 0);
 		}
 
 		private MosaMethod CompileMethod(MosaMethod method, int threadID)
 		{
 			if (method.IsCompilerGenerated)
 				return method;
+
+			Debug.Assert(!method.HasOpenGenericParams);
 
 			lock (method)
 			{

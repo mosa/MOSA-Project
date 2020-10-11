@@ -73,10 +73,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		public override PhysicalRegister StackPointerRegister { get { return GeneralPurposeRegister.ESP; } }
 
-		/// <summary>
-		/// Retrieves the scratch register of the x86.
-		/// </summary>
-		public override PhysicalRegister ScratchRegister { get { return GeneralPurposeRegister.EDX; } }
+		public override PhysicalRegister LinkRegister { get { return null; } }
 
 		/// <summary>
 		/// Gets the return32 bit register.

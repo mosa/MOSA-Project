@@ -760,7 +760,7 @@ namespace Mosa.Tool.Explorer
 
 		private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
-			message = string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}";
+			message = string.IsNullOrWhiteSpace(message) ? string.Empty : $"{message}";
 
 			var status = $"{compilerEvent.ToText()}{message}";
 

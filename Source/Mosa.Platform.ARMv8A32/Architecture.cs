@@ -44,11 +44,23 @@ namespace Mosa.Platform.ARMv8A32
 			GeneralPurposeRegister.R8,
 			GeneralPurposeRegister.R9,
 			GeneralPurposeRegister.R10,
-			GeneralPurposeRegister.R11,
+			GeneralPurposeRegister.FP,
 			GeneralPurposeRegister.R12,
 			GeneralPurposeRegister.SP,
 			GeneralPurposeRegister.LR,
-			GeneralPurposeRegister.PC
+			GeneralPurposeRegister.PC,
+
+			////////////////////////////////////////////////////////
+			// Floating Point 128-bit floating point registers
+			////////////////////////////////////////////////////////
+			FloatingPointRegister.d0,
+			FloatingPointRegister.d1,
+			FloatingPointRegister.d2,
+			FloatingPointRegister.d3,
+			FloatingPointRegister.d4,
+			FloatingPointRegister.d5,
+			FloatingPointRegister.d6,
+			FloatingPointRegister.d7
 		};
 
 		/// <summary>
@@ -65,7 +77,7 @@ namespace Mosa.Platform.ARMv8A32
 		/// <summary>
 		/// Retrieves the stack frame register of the ARMv8A32.
 		/// </summary>
-		public override PhysicalRegister StackFrameRegister { get { return GeneralPurposeRegister.LR; } }
+		public override PhysicalRegister StackFrameRegister { get { return GeneralPurposeRegister.FP; } }
 
 		/// <summary>
 		/// Retrieves the stack pointer register of the ARMv8A32.
@@ -73,14 +85,11 @@ namespace Mosa.Platform.ARMv8A32
 		public override PhysicalRegister StackPointerRegister { get { return GeneralPurposeRegister.SP; } }
 
 		/// <summary>
-		/// Retrieves the scratch register of the ARMv8A32.
-		/// </summary>
-		public override PhysicalRegister ScratchRegister { get { return null; /* TODO */} }
-
-		/// <summary>
 		/// Gets the return register.
 		/// </summary>
 		public override PhysicalRegister ReturnRegister { get { return GeneralPurposeRegister.R0; } }
+
+		public override PhysicalRegister LinkRegister { get { return GeneralPurposeRegister.LR; } }
 
 		/// <summary>
 		/// Gets the return register for the high portion of the 64bit result.
@@ -90,12 +99,12 @@ namespace Mosa.Platform.ARMv8A32
 		/// <summary>
 		/// Gets the return floating point register.
 		/// </summary>
-		public override PhysicalRegister ReturnFloatingPointRegister { get { return null; /* TODO */} }
+		public override PhysicalRegister ReturnFloatingPointRegister { get { return FloatingPointRegister.d0; } }
 
 		/// <summary>
 		/// Retrieves the exception register of the architecture.
 		/// </summary>
-		public override PhysicalRegister ExceptionRegister { get { return GeneralPurposeRegister.R10; } }
+		public override PhysicalRegister ExceptionRegister { get { return GeneralPurposeRegister.R8; } }
 
 		/// <summary>
 		/// Gets the finally return block register.
@@ -153,28 +162,26 @@ namespace Mosa.Platform.ARMv8A32
 					new LongOperandStage(),
 					new IRTransformationStage(),
 
-			//		compilerSettings.EnablePlatformOptimizations ? new OptimizationStage() : null,
-			//		new TweakStage(),
-			//		new FixedRegisterAssignmentStage(),
-			//		new SimpleDeadCodeRemovalStage(),
-			//		new AddressModeConversionStage(),
-			//		new FloatingPointStage(),
+					//compilerSettings.EnablePlatformOptimizations ? new OptimizationStage() : null,
+					//new TweakStage(),
+					compilerSettings.PlatformOptimizations ? new SimpleDeadCodeRemovalStage() : null,
 				});
 
-			//pipeline.InsertAfterLast<StackLayoutStage>(
-			//	new BuildStackStage()
-			//);
+			pipeline.InsertAfterLast<StackLayoutStage>(
+				new BuildStackStage()
+			);
 
-			//pipeline.InsertBefore<CodeGenerationStage>(
-			//	new BaseMethodCompilerStage[]
-			//	{
-			//		new FinalTweakStage(),
-			//		compilerSettings.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
-			//	});
+			pipeline.InsertBefore<CodeGenerationStage>(
+				new BaseMethodCompilerStage[]
+				{
+					new FinalTweakStage(),
 
-			//pipeline.InsertBefore<CodeGenerationStage>(
-			//	new JumpOptimizationStage()
-			//);
+					//compilerSettings.EnablePlatformOptimizations ? new PostOptimizationStage() : null,
+				});
+
+			pipeline.InsertBefore<CodeGenerationStage>(
+				new JumpOptimizationStage()
+			);
 		}
 
 		/// <summary>

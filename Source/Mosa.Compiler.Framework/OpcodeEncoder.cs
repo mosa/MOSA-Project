@@ -158,6 +158,11 @@ namespace Mosa.Compiler.Framework
 			AppendBits(value, 8);
 		}
 
+		public void Append12Bits(uint value)
+		{
+			AppendBits(value, 12);
+		}
+
 		public void Append16Bits(ushort value)
 		{
 			AppendBits(value, 16);
@@ -235,57 +240,124 @@ namespace Mosa.Compiler.Framework
 		{
 			Debug.Assert(operand.IsConstant);
 
-			AppendBits(operand.ConstantUnsigned32 & 0b1, 1);
+			if (operand.IsResolvedConstant)
+			{
+				AppendBits(operand.ConstantUnsigned32, 1);
+			}
+			else
+			{
+				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
+				AppendBits(0, 1);
+			}
 		}
 
 		public void Append2BitImmediate(Operand operand)
 		{
 			Debug.Assert(operand.IsConstant);
 
-			AppendBits(operand.ConstantUnsigned32 & 0b11, 2);
+			if (operand.IsResolvedConstant)
+			{
+				AppendBits(operand.ConstantUnsigned32, 2);
+			}
+			else
+			{
+				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
+				AppendBits(0, 2);
+			}
 		}
 
 		public void Append4BitImmediate(Operand operand)
 		{
 			Debug.Assert(operand.IsConstant);
 
-			Append4Bits((byte)operand.ConstantUnsigned32);
+			if (operand.IsResolvedConstant)
+			{
+				AppendBits(operand.ConstantUnsigned32, 4);
+			}
+			else
+			{
+				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
+				AppendBits(0, 4);
+			}
 		}
 
 		public void Append4BitImmediateHighNibble(Operand operand)
 		{
 			Debug.Assert(operand.IsConstant);
 
-			Append4Bits((byte)(operand.ConstantUnsigned32 >> 4));
+			if (operand.IsResolvedConstant)
+			{
+				AppendBits(operand.ConstantUnsigned32 >> 4, 4);
+			}
+			else
+			{
+				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
+				AppendBits(0, 4);
+			}
 		}
 
 		public void Append5BitImmediate(Operand operand)
 		{
 			Debug.Assert(operand.IsConstant);
 
-			AppendBits(operand.ConstantUnsigned32 & 0b11111, 5);
+			if (operand.IsResolvedConstant)
+			{
+				AppendBits(operand.ConstantUnsigned32, 5);
+			}
+			else
+			{
+				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
+				AppendBits(0, 5);
+			}
 		}
 
 		public void Append8BitImmediate(Operand operand)
 		{
 			Debug.Assert(operand.IsConstant);
 
-			AppendByte((byte)operand.ConstantUnsigned32);
+			if (operand.IsResolvedConstant)
+			{
+				AppendByte((byte)operand.ConstantUnsigned32);
+
+				//AppendBits(operand.ConstantUnsigned32, 8);
+			}
+			else
+			{
+				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
+				AppendBits(0, 8);
+			}
 		}
 
 		public void Append16BitImmediate(Operand operand)
 		{
 			Debug.Assert(operand.IsConstant);
 
-			AppendByte((byte)operand.ConstantUnsigned32);
-			AppendByte((byte)(operand.ConstantUnsigned32 >> 8));
+			if (operand.IsResolvedConstant)
+			{
+				//AppendBits(operand.ConstantUnsigned32, 16);
+				AppendByte((byte)operand.ConstantUnsigned32);
+				AppendByte((byte)(operand.ConstantUnsigned32 >> 8));
+			}
+			else
+			{
+				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
+				AppendBits(0, 16);
+			}
 		}
 
 		public void Append12BitImmediate(Operand operand)
 		{
 			Debug.Assert(operand.IsConstant);
 
-			AppendBits(operand.ConstantUnsigned32, 12);
+			if (operand.IsResolvedConstant)
+			{
+				AppendBits(operand.ConstantUnsigned32, 12);
+			}
+			else
+			{
+				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);    // FIXME
+				AppendBits(0, 12);
+			}
 		}
 
 		public void Append32BitImmediate(Operand operand)
@@ -299,7 +371,7 @@ namespace Mosa.Compiler.Framework
 			else
 			{
 				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);
-				Append32Bits(0);
+				AppendBits(0, 32);
 			}
 		}
 
@@ -315,7 +387,7 @@ namespace Mosa.Compiler.Framework
 			else
 			{
 				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I64, operand, 0, offset.ConstantSigned32);
-				Append64Bits(0);
+				AppendBits(0, 64);
 			}
 		}
 
@@ -325,12 +397,13 @@ namespace Mosa.Compiler.Framework
 
 			if (operand.IsResolvedConstant)
 			{
+				//AppendBits(operand.ConstantUnsigned64, 64);
 				Append64BitImmediate(operand.ConstantUnsigned64);
 			}
 			else
 			{
 				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I64, operand, 0, 0);
-				Append32Bits(0);
+				AppendBits(0, 64);
 			}
 		}
 

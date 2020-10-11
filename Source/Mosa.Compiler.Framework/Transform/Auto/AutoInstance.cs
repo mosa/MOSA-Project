@@ -123,12 +123,16 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 		public static readonly BaseTransformation IR_ConstantFolding_AddCarryIn64Outside1 = new IR.ConstantFolding.AddCarryIn64Outside1();
 		public static readonly BaseTransformation IR_ConstantFolding_AddCarryIn32Outside2 = new IR.ConstantFolding.AddCarryIn32Outside2();
 		public static readonly BaseTransformation IR_ConstantFolding_AddCarryIn64Outside2 = new IR.ConstantFolding.AddCarryIn64Outside2();
+		public static readonly BaseTransformation IR_ConstantFolding_AddCarryIn32NoCarry = new IR.ConstantFolding.AddCarryIn32NoCarry();
+		public static readonly BaseTransformation IR_ConstantFolding_AddCarryIn64NoCarry = new IR.ConstantFolding.AddCarryIn64NoCarry();
 		public static readonly BaseTransformation IR_ConstantFolding_SubCarryIn32Inside = new IR.ConstantFolding.SubCarryIn32Inside();
 		public static readonly BaseTransformation IR_ConstantFolding_SubCarryIn64Inside = new IR.ConstantFolding.SubCarryIn64Inside();
 		public static readonly BaseTransformation IR_ConstantFolding_SubCarryIn32Outside1 = new IR.ConstantFolding.SubCarryIn32Outside1();
 		public static readonly BaseTransformation IR_ConstantFolding_SubCarryIn64Outside1 = new IR.ConstantFolding.SubCarryIn64Outside1();
 		public static readonly BaseTransformation IR_ConstantFolding_SubCarryIn32Outside2 = new IR.ConstantFolding.SubCarryIn32Outside2();
 		public static readonly BaseTransformation IR_ConstantFolding_SubCarryIn64Outside2 = new IR.ConstantFolding.SubCarryIn64Outside2();
+		public static readonly BaseTransformation IR_ConstantFolding_SubCarryIn32NoCarry = new IR.ConstantFolding.SubCarryIn32NoCarry();
+		public static readonly BaseTransformation IR_ConstantFolding_SubCarryIn64NoCarry = new IR.ConstantFolding.SubCarryIn64NoCarry();
 		public static readonly BaseTransformation IR_StrengthReduction_Add32Zero = new IR.StrengthReduction.Add32Zero();
 		public static readonly BaseTransformation IR_StrengthReduction_Add32Zero_v1 = new IR.StrengthReduction.Add32Zero_v1();
 		public static readonly BaseTransformation IR_StrengthReduction_Add64Zero = new IR.StrengthReduction.Add64Zero();

@@ -17,6 +17,8 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 		{
 		}
 
+		public override FlowControl FlowControl { get { return FlowControl.ConditionalBranch; } }
+
 		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 0);

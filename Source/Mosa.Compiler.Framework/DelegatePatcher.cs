@@ -120,12 +120,11 @@ namespace Mosa.Compiler.Framework
 			var opCompare = methodCompiler.VirtualRegisters.Allocate(nativeIntegerType);
 
 			var opReturn = withReturn ? methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType) : null;
-			var c0 = methodCompiler.ConstantZero;
 
 			b0.AppendInstruction(loadInstruction, opMethod, thisOperand, methodPointerOffsetOperand);
 			b0.AppendInstruction(loadInstruction, opInstance, thisOperand, instanceOffsetOperand);
-			b0.AppendInstruction(compareInstruction, ConditionCode.Equal, opCompare, opInstance, c0);
-			b0.AppendInstruction(branchInstruction, ConditionCode.Equal, null, opCompare, c0);
+			b0.AppendInstruction(compareInstruction, ConditionCode.Equal, opCompare, opInstance, methodCompiler.ConstantZero);
+			b0.AppendInstruction(branchInstruction, ConditionCode.Equal, null, opCompare, methodCompiler.ConstantZero);
 			b0.AddBranchTarget(b2.Block);
 			b0.AppendInstruction(IRInstruction.Jmp, b1.Block);
 

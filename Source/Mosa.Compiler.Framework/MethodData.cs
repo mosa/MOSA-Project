@@ -53,6 +53,10 @@ namespace Mosa.Compiler.Framework
 
 		public List<int> ParameterOffsets { get; set; }
 
+		public int ReturnSize { get; set; }
+
+		public bool ReturnInRegister { get; set; }
+
 		public int LocalMethodStackSize { get; set; }
 
 		public List<LabelRegion> LabelRegions { get; }

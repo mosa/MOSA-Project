@@ -13,16 +13,30 @@ namespace Mosa.Platform.ARMv8A32.Instructions
 	public sealed class Push : ARMv8A32Instruction
 	{
 		internal Push()
-			: base(1, 3)
+			: base(0, 2)
 		{
 		}
 
 		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
-			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 3);
+			System.Diagnostics.Debug.Assert(node.ResultCount == 0);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			opcodeEncoder.Append32Bits(0x00000000);
+			if (node.Operand1.IsConstant)
+			{
+				opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
+				opcodeEncoder.Append3Bits(0b100);
+				opcodeEncoder.Append1Bit(0b1);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append1Bit(0b1);
+				opcodeEncoder.Append1Bit(0b0);
+				opcodeEncoder.Append4Bits(0b1101);
+				opcodeEncoder.Append16BitImmediate(node.Operand1);
+				return;
+			}
+
+			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 		}
 	}
 }

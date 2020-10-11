@@ -691,6 +691,21 @@ namespace Mosa.Compiler.Framework
 		/// Sets the instruction.
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>
+		/// <param name="statusRegister">if set to <c>true</c> [update status].</param>
+		/// <param name="condition">The condition.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		/// <param name="operand3">The operand3.</param>
+		public void SetInstruction(BaseInstruction instruction, StatusRegister statusRegister, Operand result, Operand operand1, Operand operand2, Operand operand3)
+		{
+			Node.SetInstruction(instruction, statusRegister, result, operand1, operand2, operand3);
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
 		/// <param name="result">The result.</param>
 		/// <param name="operand1">The operand1.</param>
 		/// <param name="operand2">The operand2.</param>
@@ -1063,6 +1078,12 @@ namespace Mosa.Compiler.Framework
 		{
 			AppendInstruction();
 			Node.SetInstruction(instruction, result, operand1, operand2, operand3, operand4);
+		}
+
+		public void AppendInstruction(BaseInstruction instruction, ConditionCode conditionCode, Operand result, Operand operand1, Operand operand2, Operand operand3, Operand operand4)
+		{
+			AppendInstruction();
+			Node.SetInstruction(instruction, conditionCode, result, operand1, operand2, operand3, operand4);
 		}
 
 		#endregion Append Instruction Methods

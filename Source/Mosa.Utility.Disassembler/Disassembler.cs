@@ -21,7 +21,8 @@ namespace Mosa.Utility.Disassembler
 
 		private ProcessorArchitecture arch;
 		private MemoryArea memoryArea;
-		private static MachineInstructionWriterOptions options = new MachineInstructionWriterOptions(syntax: "Nasm", operandSeparator: ", ");
+
+		//private static MachineInstructionWriterOptions options = new MachineInstructionWriterOptions(syntax: "Nasm", operandSeparator: ", ");
 
 		public Disassembler(string platform)
 		{

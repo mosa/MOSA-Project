@@ -40,6 +40,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 		private readonly PhysicalRegister StackFrameRegister;
 		private readonly PhysicalRegister StackPointerRegister;
 		private readonly PhysicalRegister ProgramCounter;
+		private readonly PhysicalRegister LinkRegister;
 
 		private readonly List<LiveInterval> SpilledIntervals;
 
@@ -73,12 +74,14 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			StackFrameRegister = architecture.StackFrameRegister;
 			StackPointerRegister = architecture.StackPointerRegister;
 			ProgramCounter = architecture.ProgramCounter;
+			LinkRegister = architecture.LinkRegister;
 
 			// Setup extended physical registers
 			foreach (var physicalRegister in architecture.RegisterSet)
 			{
 				bool reserved = (physicalRegister == StackFrameRegister
 					|| physicalRegister == StackPointerRegister
+					|| (LinkRegister != null && physicalRegister == LinkRegister)
 					|| (ProgramCounter != null && physicalRegister == ProgramCounter));
 
 				VirtualRegisters.Add(new VirtualRegister(physicalRegister, reserved));

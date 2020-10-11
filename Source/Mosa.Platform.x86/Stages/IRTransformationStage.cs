@@ -102,6 +102,17 @@ namespace Mosa.Platform.x86.Stages
 			context.ReplaceInstruction(X86.Add32);
 		}
 
+		private void AddCarryIn32(Context context)
+		{
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var operand3 = context.Operand3;
+
+			context.SetInstruction(X86.Add32, result, operand1, operand2);
+			context.AppendInstruction(X86.Add32, result, result, operand3);
+		}
+
 		private void AddCarryOut32(Context context)
 		{
 			var result = context.Result;
@@ -142,25 +153,19 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else if (context.Operand1.IsStackLocal)
 			{
-				context.SetInstruction(X86.Lea32, context.Result, StackFrame, context.Operand1);
+				context.SetInstruction(X86.Add32, context.Result, StackFrame, context.Operand1);
 			}
 			else
 			{
 				var offset = CreateConstant(context.Operand1.Offset);
 
-				context.SetInstruction(X86.Lea32, context.Result, StackFrame, offset);
+				context.SetInstruction(X86.Add32, context.Result, StackFrame, offset);
 			}
 		}
 
-		private void AddCarryIn32(Context context)
+		private void And32(Context context)
 		{
-			var result = context.Result;
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
-			var operand3 = context.Operand3;
-
-			context.SetInstruction(X86.Add32, result, operand1, operand2);
-			context.AppendInstruction(X86.Add32, result, result, operand3);
+			context.ReplaceInstruction(X86.And32);
 		}
 
 		private void ArithShiftRight32(Context context)
@@ -168,29 +173,19 @@ namespace Mosa.Platform.x86.Stages
 			context.ReplaceInstruction(X86.Sar32);
 		}
 
-		private void BitCopyR4To32(Context context)
-		{
-			context.ReplaceInstruction(X86.Movdssi32);
-		}
-
 		private void BitCopy32ToR4(Context context)
 		{
 			context.ReplaceInstruction(X86.Movdi32ss);
 		}
 
+		private void BitCopyR4To32(Context context)
+		{
+			context.ReplaceInstruction(X86.Movdssi32);
+		}
+
 		private void CallDirect(Context context)
 		{
 			context.ReplaceInstruction(X86.Call);
-		}
-
-		private void CompareR4(Context context)
-		{
-			FloatCompare(context, X86.Ucomiss);
-		}
-
-		private void CompareR8(Context context)
-		{
-			FloatCompare(context, X86.Ucomisd);
 		}
 
 		private void Compare32x32(Context context)
@@ -220,26 +215,14 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Branch, condition, target);
 		}
 
-		private void ConvertR4ToR8(Context context)
+		private void CompareR4(Context context)
 		{
-			context.ReplaceInstruction(X86.Cvtss2sd);
+			FloatCompare(context, X86.Ucomiss);
 		}
 
-		private void ConvertR4To32(Context context)
+		private void CompareR8(Context context)
 		{
-			Debug.Assert(context.Result.IsI1 || context.Result.IsI2 || context.Result.IsI4);
-			context.ReplaceInstruction(X86.Cvttss2si32);
-		}
-
-		private void ConvertR8ToR4(Context context)
-		{
-			context.ReplaceInstruction(X86.Cvtsd2ss);
-		}
-
-		private void ConvertR8To32(Context context)
-		{
-			Debug.Assert(context.Result.IsI1 || context.Result.IsI2 || context.Result.IsI4);
-			context.ReplaceInstruction(X86.Cvttsd2si32);
+			FloatCompare(context, X86.Ucomisd);
 		}
 
 		private void Convert32ToR4(Context context)
@@ -252,6 +235,28 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Debug.Assert(context.Result.IsR8);
 			context.ReplaceInstruction(X86.Cvtsi2sd32);
+		}
+
+		private void ConvertR4To32(Context context)
+		{
+			Debug.Assert(context.Result.IsInteger && !context.Result.IsFloatingPoint);
+			context.ReplaceInstruction(X86.Cvttss2si32);
+		}
+
+		private void ConvertR4ToR8(Context context)
+		{
+			context.ReplaceInstruction(X86.Cvtss2sd);
+		}
+
+		private void ConvertR8To32(Context context)
+		{
+			Debug.Assert(context.Result.IsInteger && !context.Result.IsFloatingPoint);
+			context.ReplaceInstruction(X86.Cvttsd2si32);
+		}
+
+		private void ConvertR8ToR4(Context context)
+		{
+			context.ReplaceInstruction(X86.Cvtsd2ss);
 		}
 
 		private void DivR4(Context context)
@@ -315,28 +320,19 @@ namespace Mosa.Platform.x86.Stages
 			context.ReplaceInstruction(X86.Jmp);
 		}
 
-		private void LoadR4(Context context)
-		{
-			Debug.Assert(context.Result.IsR4);
-
-			context.SetInstruction(X86.MovssLoad, context.Result, context.Operand1, context.Operand2);
-		}
-
-		private void LoadR8(Context context)
-		{
-			Debug.Assert(context.Result.IsR8);
-
-			context.SetInstruction(X86.MovsdLoad, context.Result, context.Operand1, context.Operand2);
-		}
-
 		private void Load32(Context context)
 		{
 			Debug.Assert(!context.Result.IsR4);
 			Debug.Assert(!context.Result.IsR8);
 
-			LoadStore.OrderLoadOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X86.MovLoad32, context.Result, context.Operand1, context.Operand2);
+		}
+
+		private void LoadParam32(Context context)
+		{
+			context.SetInstruction(X86.MovLoad32, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void LoadParamR4(Context context)
@@ -351,11 +347,6 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(context.Result.IsR8);
 
 			context.SetInstruction(X86.MovsdLoad, context.Result, StackFrame, context.Operand1);
-		}
-
-		private void LoadParam32(Context context)
-		{
-			context.SetInstruction(X86.MovLoad32, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void LoadParamSignExtend16x32(Context context)
@@ -378,52 +369,51 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.MovzxLoad8, context.Result, StackFrame, context.Operand1);
 		}
 
+		private void LoadR4(Context context)
+		{
+			Debug.Assert(context.Result.IsR4);
+
+			context.SetInstruction(X86.MovssLoad, context.Result, context.Operand1, context.Operand2);
+		}
+
+		private void LoadR8(Context context)
+		{
+			Debug.Assert(context.Result.IsR8);
+
+			context.SetInstruction(X86.MovsdLoad, context.Result, context.Operand1, context.Operand2);
+		}
+
 		private void LoadSignExtend16x32(Context context)
 		{
-			LoadStore.OrderLoadOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X86.MovsxLoad16, context.Result, context.Operand1, context.Operand2);
 		}
 
 		private void LoadSignExtend8x32(Context context)
 		{
-			LoadStore.OrderLoadOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X86.MovsxLoad8, context.Result, context.Operand1, context.Operand2);
 		}
 
 		private void LoadZeroExtend16x32(Context context)
 		{
-			LoadStore.OrderLoadOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X86.MovzxLoad16, context.Result, context.Operand1, context.Operand2);
 		}
 
 		private void LoadZeroExtend8x32(Context context)
 		{
-			LoadStore.OrderLoadOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X86.MovzxLoad8, context.Result, context.Operand1, context.Operand2);
 		}
 
-		private void And32(Context context)
+		private void Move32(Context context)
 		{
-			context.ReplaceInstruction(X86.And32);
-		}
-
-		private void Not32(Context context)
-		{
-			context.SetInstruction(X86.Not32, context.Result, context.Operand1);
-		}
-
-		private void Or32(Context context)
-		{
-			context.ReplaceInstruction(X86.Or32);
-		}
-
-		private void Xor32(Context context)
-		{
-			context.ReplaceInstruction(X86.Xor32);
+			context.ReplaceInstruction(X86.Mov32);
 		}
 
 		private void MoveR4(Context context)
@@ -434,11 +424,6 @@ namespace Mosa.Platform.x86.Stages
 		private void MoveR8(Context context)
 		{
 			context.ReplaceInstruction(X86.Movsd);
-		}
-
-		private void Move32(Context context)
-		{
-			context.ReplaceInstruction(X86.Mov32);
 		}
 
 		private void MulR4(Context context)
@@ -474,6 +459,16 @@ namespace Mosa.Platform.x86.Stages
 			context.Empty();
 
 			//context.SetInstruction(X86.Nop);
+		}
+
+		private void Not32(Context context)
+		{
+			context.SetInstruction(X86.Not32, context.Result, context.Operand1);
+		}
+
+		private void Or32(Context context)
+		{
+			context.ReplaceInstruction(X86.Or32);
 		}
 
 		private void RemSigned32(Context context)
@@ -523,35 +518,40 @@ namespace Mosa.Platform.x86.Stages
 			context.ReplaceInstruction(X86.Movsx8To32);
 		}
 
-		private void StoreR4(Context context)
-		{
-			context.SetInstruction(X86.MovssStore, null, context.Operand1, context.Operand2, context.Operand3);
-		}
-
-		private void StoreR8(Context context)
-		{
-			context.SetInstruction(X86.MovsdStore, null, context.Operand1, context.Operand2, context.Operand3);
-		}
-
-		private void StoreInt16(Context context)
-		{
-			LoadStore.OrderStoreOperands(context, MethodCompiler);
-
-			context.SetInstruction(X86.MovStore16, null, context.Operand1, context.Operand2, context.Operand3);
-		}
-
 		private void Store32(Context context)
 		{
-			LoadStore.OrderStoreOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X86.MovStore32, null, context.Operand1, context.Operand2, context.Operand3);
 		}
 
+		private void StoreInt16(Context context)
+		{
+			LoadStore.OrderOperands(context, MethodCompiler);
+
+			context.SetInstruction(X86.MovStore16, null, context.Operand1, context.Operand2, context.Operand3);
+		}
+
 		private void StoreInt8(Context context)
 		{
-			LoadStore.OrderStoreOperands(context, MethodCompiler);
+			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X86.MovStore8, null, context.Operand1, context.Operand2, context.Operand3);
+		}
+
+		private void StoreParam32(Context context)
+		{
+			context.SetInstruction(X86.MovStore32, null, StackFrame, context.Operand1, context.Operand2);
+		}
+
+		private void StoreParamInt16(Context context)
+		{
+			context.SetInstruction(X86.MovStore16, null, StackFrame, context.Operand1, context.Operand2);
+		}
+
+		private void StoreParamInt8(Context context)
+		{
+			context.SetInstruction(X86.MovStore8, null, StackFrame, context.Operand1, context.Operand2);
 		}
 
 		private void StoreParamR4(Context context)
@@ -564,24 +564,32 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.MovsdStore, null, StackFrame, context.Operand1, context.Operand2);
 		}
 
-		private void StoreParamInt16(Context context)
+		private void StoreR4(Context context)
 		{
-			context.SetInstruction(X86.MovStore16, null, StackFrame, context.Operand1, context.Operand2);
+			context.SetInstruction(X86.MovssStore, null, context.Operand1, context.Operand2, context.Operand3);
 		}
 
-		private void StoreParam32(Context context)
+		private void StoreR8(Context context)
 		{
-			context.SetInstruction(X86.MovStore32, null, StackFrame, context.Operand1, context.Operand2);
-		}
-
-		private void StoreParamInt8(Context context)
-		{
-			context.SetInstruction(X86.MovStore8, null, StackFrame, context.Operand1, context.Operand2);
+			context.SetInstruction(X86.MovsdStore, null, context.Operand1, context.Operand2, context.Operand3);
 		}
 
 		private void Sub32(Context context)
 		{
 			context.ReplaceInstruction(X86.Sub32);
+		}
+
+		private void SubCarryIn32(Context context)
+		{
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var operand3 = context.Operand3;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			context.SetInstruction(X86.Bt32, v1, operand3, CreateConstant((byte)0));
+			context.AppendInstruction(X86.Sbb32, result, operand1, operand2);
 		}
 
 		private void SubCarryOut32(Context context)
@@ -614,19 +622,6 @@ namespace Mosa.Platform.x86.Stages
 			context.ReplaceInstruction(X86.Subsd);
 		}
 
-		private void SubCarryIn32(Context context)
-		{
-			var result = context.Result;
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
-			var operand3 = context.Operand3;
-
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-
-			context.SetInstruction(X86.Bt32, v1, operand3, CreateConstant((byte)0));
-			context.AppendInstruction(X86.Sbb32, result, operand1, operand2);
-		}
-
 		private void Switch(Context context)
 		{
 			var targets = context.BranchTargets;
@@ -639,6 +634,11 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Cmp32, null, operand, CreateConstant(i));
 				context.AppendInstruction(X86.Branch, ConditionCode.Equal, targets[i]);
 			}
+		}
+
+		private void Xor32(Context context)
+		{
+			context.ReplaceInstruction(X86.Xor32);
 		}
 
 		private void ZeroExtend16x32(Context context)
@@ -706,7 +706,7 @@ namespace Mosa.Platform.x86.Stages
 						var newBlocks = CreateNewBlockContexts(2, context.Label);
 						var nextBlock = Split(context);
 
-						context.SetInstruction(X86.Mov32, result, CreateConstant(1));
+						context.SetInstruction(X86.Mov32, result, Constant_1);
 						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X86.Branch, ConditionCode.Parity, newBlocks[1].Block);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
@@ -731,7 +731,7 @@ namespace Mosa.Platform.x86.Stages
 						var newBlocks = CreateNewBlockContexts(1, context.Label);
 						var nextBlock = Split(context);
 
-						context.SetInstruction(X86.Mov32, result, CreateConstant(1));
+						context.SetInstruction(X86.Mov32, result, Constant_1);
 						context.AppendInstruction(instruction, null, left, right);
 						context.AppendInstruction(X86.Branch, ConditionCode.Parity, nextBlock.Block);
 						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
@@ -791,49 +791,6 @@ namespace Mosa.Platform.x86.Stages
 					}
 			}
 		}
-
-		//private void CopyCompound(Context context, MosaType type, Operand destinationBase, Operand destination, Operand sourceBase, Operand source)
-		//{
-		//	int size = TypeLayout.GetTypeSize(type);
-		//	const int LargeAlignment = 16;
-		//	int alignedSize = size - (size % NativeAlignment);
-		//	int largeAlignedTypeSize = size - (size % LargeAlignment);
-
-		//	Debug.Assert(size > 0);
-
-		//	var srcReg = AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
-		//	var dstReg = AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
-
-		//	context.SetInstruction(IRInstruction.UnstableObjectTracking);
-
-		//	context.AppendInstruction(X86.Lea32, srcReg, sourceBase, source);
-		//	context.AppendInstruction(X86.Lea32, dstReg, destinationBase, destination);
-
-		//	var tmp = AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
-		//	var tmpLarge = AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.R8);
-
-		//	for (int i = 0; i < largeAlignedTypeSize; i += LargeAlignment)
-		//	{
-		//		// Large aligned moves allow 128bits to be copied at a time
-		//		var index = CreateConstant(i);
-		//		context.AppendInstruction(X86.MovupsLoad, tmpLarge, srcReg, index);
-		//		context.AppendInstruction(X86.MovupsStore, null, dstReg, index, tmpLarge);
-		//	}
-		//	for (int i = largeAlignedTypeSize; i < alignedSize; i += 4)
-		//	{
-		//		var index = CreateConstant(i);
-		//		context.AppendInstruction(X86.MovLoad32, tmp, srcReg, index);
-		//		context.AppendInstruction(X86.MovStore32, null, dstReg, index, tmp);
-		//	}
-		//	for (int i = alignedSize; i < size; i++)
-		//	{
-		//		var index = CreateConstant(i);
-		//		context.AppendInstruction(X86.MovLoad8, tmp, srcReg, index);
-		//		context.AppendInstruction(X86.MovStore8, null, dstReg, index, tmp);
-		//	}
-
-		//	context.AppendInstruction(IRInstruction.StableObjectTracking);
-		//}
 
 		#endregion Helper Methods
 	}

@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 				throw new CompilerException();
 			}
 
-			LoadStore.OrderLoadOperands(context, methodCompiler);
+			LoadStore.OrderOperands(context, methodCompiler);
 		}
 	}
 }
