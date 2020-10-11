@@ -12,6 +12,8 @@
 
 		"[arm-extended-register]=                   conditional|01101|[s]|1|[b]|1111|[rd]|[rotate]|00|0111|[rm]",
 
+		"[arm-block-transfer]=                      conditional|100|[p]|[u]|[s]|[w]|[l]|[rn]|[list]",
+
 		"[arm-fp-data-processing]=                  conditional|1110|[opcode]|[e]|[fn]|0|[fd]|0001|[f]|[gh]|0|[i]|[fm]",
 		"[arm-fp-register-transfer]=                conditional|1110|[opcode]|[e]|[fn]|[rd]|0001|[f]|[gh]|1|[i]|[fm]",
 		"[arm-fp-comparision]=                      conditional|1110|[opcode]|1|[e]|[fn]|1111|0001|[f]|[gh]|1|[i]|[fm]",
@@ -1354,13 +1356,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultCount": 0,
 			"Description": "Pop multiple registers off the stack",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
-					"Encoding": "0x00000000"
+					"Condition": "[register][constant]",
+					"Encoding": "[arm-block-transfer],p=1,u=0,s=0,w=1,l=1,rn=reg4:o1,list=imm16:o2"
 				}
 			]
 		},
@@ -1374,13 +1376,13 @@
 			"FlagsUnchanged": "",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 3,
-			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultCount": 0,
 			"Description": "Push multiple registers onto the stack",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
-					"Encoding": "0x00000000"
+					"Condition": "[register][constant]",
+					"Encoding": "[arm-block-transfer],p=1,u=0,s=0,w=1,l=0,rn=reg4:o1,list=imm16:o2"
 				}
 			]
 		},
