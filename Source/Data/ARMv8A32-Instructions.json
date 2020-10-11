@@ -2168,7 +2168,7 @@
 				},
 				{
 					"Condition": "[constant]",
-					"Encoding": "[arm-fp-data-processing],opcode=0000,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm4:o2"
+					"Encoding": "[arm-fp-data-processing],opcode=0000,e=1,f=fp:r,j=0,gh=00,i=1,fd=reg3:r,fn=000,fm=imm4:o1"
 				}
 			]
 		},

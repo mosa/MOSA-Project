@@ -16,42 +16,42 @@ namespace Mosa.Platform.ARMv8A32
 		/// <summary>
 		/// Represents SSE2 register d0.
 		/// </summary>
-		public static readonly PhysicalRegister d0 = new PhysicalRegister(8, 0, "d0", false, true);
+		public static readonly PhysicalRegister d0 = new PhysicalRegister(16, 0, "d0", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register d1.
 		/// </summary>
-		public static readonly PhysicalRegister d1 = new PhysicalRegister(9, 1, "d1", false, true);
+		public static readonly PhysicalRegister d1 = new PhysicalRegister(17, 1, "d1", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register d2.
 		/// </summary>
-		public static readonly PhysicalRegister d2 = new PhysicalRegister(10, 2, "d2", false, true);
+		public static readonly PhysicalRegister d2 = new PhysicalRegister(18, 2, "d2", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register d3.
 		/// </summary>
-		public static readonly PhysicalRegister d3 = new PhysicalRegister(11, 3, "d3", false, true);
+		public static readonly PhysicalRegister d3 = new PhysicalRegister(19, 3, "d3", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register d4.
 		/// </summary>
-		public static readonly PhysicalRegister d4 = new PhysicalRegister(12, 4, "d4", false, true);
+		public static readonly PhysicalRegister d4 = new PhysicalRegister(20, 4, "d4", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register d5.
 		/// </summary>
-		public static readonly PhysicalRegister d5 = new PhysicalRegister(13, 5, "d5", false, true);
+		public static readonly PhysicalRegister d5 = new PhysicalRegister(21, 5, "d5", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register d6.
 		/// </summary>
-		public static readonly PhysicalRegister d6 = new PhysicalRegister(14, 6, "d6", false, true);
+		public static readonly PhysicalRegister d6 = new PhysicalRegister(22, 6, "d6", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register d7.
 		/// </summary>
-		public static readonly PhysicalRegister d7 = new PhysicalRegister(15, 7, "d7", false, true);
+		public static readonly PhysicalRegister d7 = new PhysicalRegister(23, 7, "d7", false, true);
 
 		/// <summary>
 		/// Represents SSE2 register d7.

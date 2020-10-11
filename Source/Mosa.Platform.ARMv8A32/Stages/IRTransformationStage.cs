@@ -100,8 +100,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void AddCarryIn32(Context context)
 		{
-			//MoveConstantRight(context);
-
 			var result = context.Result;
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
@@ -119,8 +117,6 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void AddCarryOut32(Context context)
 		{
-			//MoveConstantRight(context);
-
 			var result = context.Result;
 			var result2 = context.Result2;
 			var operand1 = context.Operand1;

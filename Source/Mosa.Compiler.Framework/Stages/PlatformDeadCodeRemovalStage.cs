@@ -147,6 +147,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.StatusRegister == StatusRegister.Set)
 				return;
 
+			if (node.ConditionCode != ConditionCode.Always)
+				return;
+
 			Debug.Assert(result != source);
 
 			changed = true;
