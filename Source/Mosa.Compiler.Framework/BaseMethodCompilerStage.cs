@@ -172,6 +172,16 @@ namespace Mosa.Compiler.Framework
 		protected Operand StackPointer { get { return MethodCompiler.Compiler.StackPointer; } }
 
 		/// <summary>
+		/// Gets the link register.
+		/// </summary>
+		protected Operand LinkRegister { get { return MethodCompiler.Compiler.LinkRegister; } }
+
+		/// <summary>
+		/// Gets the program counter
+		/// </summary>
+		protected Operand ProgramCounter { get { return MethodCompiler.Compiler.ProgramCounter; } }
+
+		/// <summary>
 		/// Gets the exception register.
 		/// </summary>
 		protected Operand ExceptionRegister { get { return MethodCompiler.Compiler.ExceptionRegister; } }

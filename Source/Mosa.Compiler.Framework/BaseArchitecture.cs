@@ -35,11 +35,6 @@ namespace Mosa.Compiler.Framework
 		public abstract PhysicalRegister StackPointerRegister { get; }
 
 		/// <summary>
-		/// Gets the scratch register.
-		/// </summary>
-		public abstract PhysicalRegister ScratchRegister { get; }
-
-		/// <summary>
 		/// Gets the return register.
 		/// </summary>
 		public abstract PhysicalRegister ReturnRegister { get; }
@@ -68,6 +63,11 @@ namespace Mosa.Compiler.Framework
 		/// Gets the finally return block register.
 		/// </summary>
 		public abstract PhysicalRegister LeaveTargetRegister { get; }
+
+		/// <summary>
+		/// Returns the link register register of the architecture.
+		/// </summary>
+		public abstract PhysicalRegister LinkRegister { get; }
 
 		/// <summary>
 		/// Gets the name of the platform.

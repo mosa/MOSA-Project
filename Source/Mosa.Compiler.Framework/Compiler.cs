@@ -113,6 +113,16 @@ namespace Mosa.Compiler.Framework
 		internal Operand StackPointer { get; }
 
 		/// <summary>
+		/// The program counter
+		/// </summary>
+		internal Operand ProgramCounter { get; }
+
+		/// <summary>
+		/// The link register
+		/// </summary>
+		internal Operand LinkRegister { get; }
+
+		/// <summary>
 		/// The exception register
 		/// </summary>
 		public Operand ExceptionRegister { get; }
@@ -232,6 +242,9 @@ namespace Mosa.Compiler.Framework
 
 			StackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
 			StackPointer = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackPointerRegister);
+			LinkRegister = Architecture.LinkRegister == null ? null : Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.LinkRegister);
+			ProgramCounter = Architecture.ProgramCounter == null ? null : Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.ProgramCounter);
+
 			ExceptionRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.ExceptionRegister);
 			LeaveTargetRegister = Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.LeaveTargetRegister);
 

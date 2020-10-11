@@ -44,7 +44,7 @@ namespace Mosa.Platform.ARMv8A32
 			GeneralPurposeRegister.R8,
 			GeneralPurposeRegister.R9,
 			GeneralPurposeRegister.R10,
-			GeneralPurposeRegister.R11,
+			GeneralPurposeRegister.FP,
 			GeneralPurposeRegister.R12,
 			GeneralPurposeRegister.SP,
 			GeneralPurposeRegister.LR,
@@ -77,7 +77,7 @@ namespace Mosa.Platform.ARMv8A32
 		/// <summary>
 		/// Retrieves the stack frame register of the ARMv8A32.
 		/// </summary>
-		public override PhysicalRegister StackFrameRegister { get { return GeneralPurposeRegister.LR; } }
+		public override PhysicalRegister StackFrameRegister { get { return GeneralPurposeRegister.FP; } }
 
 		/// <summary>
 		/// Retrieves the stack pointer register of the ARMv8A32.
@@ -85,14 +85,11 @@ namespace Mosa.Platform.ARMv8A32
 		public override PhysicalRegister StackPointerRegister { get { return GeneralPurposeRegister.SP; } }
 
 		/// <summary>
-		/// Retrieves the scratch register of the ARMv8A32.
-		/// </summary>
-		public override PhysicalRegister ScratchRegister { get { return FloatingPointRegister.d7; } }
-
-		/// <summary>
 		/// Gets the return register.
 		/// </summary>
 		public override PhysicalRegister ReturnRegister { get { return GeneralPurposeRegister.R0; } }
+
+		public override PhysicalRegister LinkRegister { get { return GeneralPurposeRegister.LR; } }
 
 		/// <summary>
 		/// Gets the return register for the high portion of the 64bit result.
@@ -107,7 +104,7 @@ namespace Mosa.Platform.ARMv8A32
 		/// <summary>
 		/// Retrieves the exception register of the architecture.
 		/// </summary>
-		public override PhysicalRegister ExceptionRegister { get { return GeneralPurposeRegister.R10; } }
+		public override PhysicalRegister ExceptionRegister { get { return GeneralPurposeRegister.R8; } }
 
 		/// <summary>
 		/// Gets the finally return block register.
@@ -167,13 +164,12 @@ namespace Mosa.Platform.ARMv8A32
 
 					//compilerSettings.EnablePlatformOptimizations ? new OptimizationStage() : null,
 					//new TweakStage(),
-					//new ImmediatePropagationStage(),
 					compilerSettings.PlatformOptimizations ? new SimpleDeadCodeRemovalStage() : null,
 				});
 
-			//pipeline.InsertAfterLast<StackLayoutStage>(
-			//	new BuildStackStage()
-			//);
+			pipeline.InsertAfterLast<StackLayoutStage>(
+				new BuildStackStage()
+			);
 
 			pipeline.InsertBefore<CodeGenerationStage>(
 				new BaseMethodCompilerStage[]

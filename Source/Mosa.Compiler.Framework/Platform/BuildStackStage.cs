@@ -1,10 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Platform;
 using System.Diagnostics;
 
-namespace Mosa.Platform.Intel.Stages
+namespace Mosa.Compiler.Framework.Platform
 {
 	/// <summary>
 	/// Completes the stack handling after register allocation

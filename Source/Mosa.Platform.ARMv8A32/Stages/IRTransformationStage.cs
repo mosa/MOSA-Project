@@ -22,8 +22,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.AddCarryOut32, AddCarryOut32);
 			AddVisitation(IRInstruction.AddCarryIn32, AddCarryIn32);
 			AddVisitation(IRInstruction.ArithShiftRight32, ArithShiftRight32);
-
-			//AddVisitation(IRInstruction.CallDirect, CallDirect);
+			AddVisitation(IRInstruction.CallDirect, CallDirect);
 			AddVisitation(IRInstruction.CompareR4, CompareR4);
 			AddVisitation(IRInstruction.CompareR8, CompareR8);
 			AddVisitation(IRInstruction.Compare32x32, Compare32x32);
@@ -187,6 +186,23 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		private void ArithShiftRight32(Context context)
 		{
 			Translate(context, ARMv8A32.Asr, true);
+		}
+
+		private void CallDirect(Context context)
+		{
+			var operand1 = context.Operand1;
+
+			if (operand1.IsCPURegister || operand1.IsVirtualRegister || operand1.IsResolvedConstant)
+			{
+				operand1 = MoveConstantToRegister(context, operand1);
+
+				context.SetInstruction(ARMv8A32.Add, LinkRegister, ProgramCounter, Constant_4);
+				context.AppendInstruction(ARMv8A32.Mov, ProgramCounter, operand1);
+			}
+			else
+			{
+				context.SetInstruction(ARMv8A32.Bl, operand1);
+			}
 		}
 
 		private void Compare32x32(Context context)

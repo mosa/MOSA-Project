@@ -69,7 +69,7 @@ namespace Mosa.Platform.ARMv8A32
 		/// <summary>
 		/// Represents the R11 register.
 		/// </summary>
-		public static readonly PhysicalRegister R11 = new PhysicalRegister(11, 11, "R11", true, false);
+		public static readonly PhysicalRegister FP = new PhysicalRegister(11, 11, "FP", true, false);
 
 		/// <summary>
 		/// Represents the R12 register.

@@ -2,7 +2,7 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86.Stages
+namespace Mosa.Platform.ARMv8A32.Stages
 {
 	/// <summary>
 	/// Completes the stack handling after register allocation
@@ -15,12 +15,12 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		protected override void AddPrologueInstructions(Context context)
 		{
-			context.SetInstruction(X86.Push32, null, StackFrame);
-			context.AppendInstruction(X86.Mov32, StackFrame, StackPointer);
+			context.SetInstruction(ARMv8A32.Push, null, StackFrame);    // FIXME
+			context.AppendInstruction(ARMv8A32.Mov, StackFrame, StackPointer);
 
 			if (MethodCompiler.StackSize != 0)
 			{
-				context.AppendInstruction(X86.Sub32, StackPointer, StackPointer, CreateConstant(-MethodCompiler.StackSize));
+				context.AppendInstruction(ARMv8A32.Sub, StackPointer, StackPointer, CreateConstant(-MethodCompiler.StackSize));
 			}
 		}
 
@@ -34,11 +34,12 @@ namespace Mosa.Platform.x86.Stages
 
 			if (MethodCompiler.StackSize != 0)
 			{
-				context.AppendInstruction(X86.Add32, StackPointer, StackPointer, CreateConstant(-MethodCompiler.StackSize));
+				context.AppendInstruction(ARMv8A32.Add, StackPointer, StackFrame, CreateConstant(-MethodCompiler.StackSize));
 			}
 
-			context.AppendInstruction(X86.Pop32, StackFrame);
-			context.AppendInstruction(X86.Ret);
+			context.AppendInstruction(ARMv8A32.Pop, StackFrame);    // FIXME
+
+			// context.AppendInstruction(X86.Ret);	// FIXME
 		}
 	}
 }
