@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <AssemblyName>mscorlib</AssemblyName>
     <RootNamespace>System</RootNamespace>
     <DebugType>full</DebugType>

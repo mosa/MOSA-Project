@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFramework>net472</TargetFramework>
     <OutputType>Exe</OutputType>
     <StartupObject>Mosa.Demo.TestWorld.x64.Boot</StartupObject>
     <DebugType>full</DebugType>
