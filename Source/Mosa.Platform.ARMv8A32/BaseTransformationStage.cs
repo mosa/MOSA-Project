@@ -218,6 +218,8 @@ namespace Mosa.Platform.ARMv8A32
 					return immediate;
 			}
 
+			// FUTURE: Load float bits (not double) into integer register, than fmov them into the floating point register (saves a memory load)
+
 			var v1 = AllocateVirtualRegister(operand.IsR4 ? TypeSystem.BuiltIn.R4 : TypeSystem.BuiltIn.R8);
 
 			var symbol = operand.IsR4 ? Linker.GetConstantSymbol((float)operand.ConstantUnsigned64) : Linker.GetConstantSymbol((double)operand.ConstantUnsigned64);

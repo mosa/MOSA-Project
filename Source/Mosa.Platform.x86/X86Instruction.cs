@@ -50,7 +50,7 @@ namespace Mosa.Platform.x86
 				case ConditionCode.LessOrEqual: return 0xE;    // LessOrEqual (ZF = 1 or SF <> OF)
 				case ConditionCode.LessThan: return 0xC;       // LessThan (SF <> OF)
 				case ConditionCode.UnsignedGreaterOrEqual: return 0x3; // UnsignedGreaterOrEqual (CF = 0)
-				case ConditionCode.UnsignedGreaterThan: return 0x7;    // UnsignedGreaterThan (CF = 0 and ZF = 0)
+				case ConditionCode.UnsignedGreaterThan: return 0x7;    // UnsignedGreaterThan (CF = 0 & ZF = 0)
 				case ConditionCode.UnsignedLessOrEqual: return 0x6;    // UnsignedLessOrEqual (CF = 1 or ZF = 1)
 				case ConditionCode.UnsignedLessThan: return 0x2;       // UnsignedLessThan (CF = 1)
 				case ConditionCode.Signed: return 0x8;         // Signed (SF = 1)
