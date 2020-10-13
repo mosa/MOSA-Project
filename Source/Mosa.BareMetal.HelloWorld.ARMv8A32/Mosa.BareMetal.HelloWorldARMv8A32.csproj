@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net48</TargetFramework>
     <AssemblyName>Mosa.BareMetal.HelloWorld.ARMv8A32</AssemblyName>
     <OutputType>Exe</OutputType>
     <RootNamespace>Mosa.BareMetal.HelloWorld.ARMv8A32</RootNamespace>
