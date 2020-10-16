@@ -1,98 +1,62 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Common.Exceptions;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	/// Ldarg Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.LoadInstruction" />
 	public sealed class LdargInstruction : LoadInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="LdargInstruction"/> class.
+		/// Initializes a new instance of the <see cref="LdargInstruction" /> class.
 		/// </summary>
+		/// <param name="opCode">The op code.</param>
 		public LdargInstruction(OpCode opCode)
 			: base(opCode, 1)
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
 		/// <summary>
 		/// Decodes the specified CIL instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
 		/// <remarks>
 		/// This method is used by instructions to retrieve immediate operands
 		/// From the instruction stream.
 		/// </remarks>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
-			ushort argIdx;
+			int index;
 
 			// Opcode specific handling
 			switch (opcode)
 			{
 				case OpCode.Ldarg:
-					argIdx = decoder.DecodeUShort();
-					break;
-
-				case OpCode.Ldarg_s:
-					argIdx = decoder.DecodeByte();
-					break;
-
-				case OpCode.Ldarg_0:
-					argIdx = 0;
-					break;
-
-				case OpCode.Ldarg_1:
-					argIdx = 1;
-					break;
-
-				case OpCode.Ldarg_2:
-					argIdx = 2;
-					break;
-
-				case OpCode.Ldarg_3:
-					argIdx = 3;
-					break;
-
-				default:
-					throw new System.NotImplementedException();
+				case OpCode.Ldarg_s: index = (int)decoder.Instruction.Operand; break;
+				case OpCode.Ldarg_0: index = 0; break;
+				case OpCode.Ldarg_1: index = 1; break;
+				case OpCode.Ldarg_2: index = 2; break;
+				case OpCode.Ldarg_3: index = 3; break;
+				default: throw new CompilerException();
 			}
 
-			// Push the loaded value onto the evaluation stack
-			Operand parameterOperand = decoder.Compiler.GetParameterOperand(argIdx);
-			Operand result = LoadInstruction.CreateResultOperand(decoder, parameterOperand.StackType, parameterOperand.Type);
+			var parameterOperand = decoder.MethodCompiler.Parameters[index];
 
-			ctx.Operand1 = parameterOperand;
-			ctx.Result = result;
-		}
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.Ldarg(context);
+			node.Operand1 = parameterOperand;
+			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, parameterOperand.Type);
 		}
 
 		#endregion Methods

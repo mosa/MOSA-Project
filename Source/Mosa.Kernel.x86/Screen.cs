@@ -1,37 +1,35 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.x86.Intrinsic;
+using Mosa.Runtime;
+using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86
 {
-
 	/// <summary>
-	/// 
+	/// Screen
 	/// </summary>
 	public static class Screen
 	{
-		public static uint column = 0;
-		public static uint row = 0;
-		private static byte color = 0;
+		private static uint column = 0;
+		private static uint row = 0;
+		private static byte color = 23;
 
 		/// <summary>
-		/// 
+		/// The columns
 		/// </summary>
 		public const uint Columns = 80;
 
 		/// <summary>
-		/// 
+		/// The rows
 		/// </summary>
-		public const uint Rows = 40;
+		public const uint Rows = 25;
 
 		/// <summary>
-		/// 
+		/// Gets or sets the column.
 		/// </summary>
+		/// <value>
+		/// The column.
+		/// </value>
 		public static uint Column
 		{
 			get { return column; }
@@ -39,8 +37,11 @@ namespace Mosa.Kernel.x86
 		}
 
 		/// <summary>
-		/// 
+		/// Gets or sets the row.
 		/// </summary>
+		/// <value>
+		/// The row.
+		/// </value>
 		public static uint Row
 		{
 			get { return row; }
@@ -60,16 +61,7 @@ namespace Mosa.Kernel.x86
 		}
 
 		/// <summary>
-		/// Gets the address.
-		/// </summary>
-		/// <returns></returns>
-		private static uint GetAddress()
-		{
-			return (0x0B8000 + ((Row * Columns + Column) * 2));
-		}
-
-		/// <summary>
-		/// Nexts 
+		/// Next Column
 		/// </summary>
 		private static void Next()
 		{
@@ -96,14 +88,27 @@ namespace Mosa.Kernel.x86
 		/// Writes the character.
 		/// </summary>
 		/// <param name="chr">The character.</param>
+		public static void RawWrite(uint row, uint column, char chr, byte color)
+		{
+			var address = new Pointer(0x0B8000 + ((row * Columns + column) * 2));
+
+			address.Store8((byte)chr);
+			address.Store8(1, color);
+		}
+
+		/// <summary>
+		/// Writes the character.
+		/// </summary>
+		/// <param name="chr">The character.</param>
 		public static void Write(char chr)
 		{
-			uint address = GetAddress();
+			var address = new Pointer(0x0B8000 + ((Row * Columns + Column) * 2));
 
-			Native.Set8(address, (byte)chr);
-			Native.Set8(address + 1, color);
+			address.Store8((byte)chr);
+			address.Store8(1, color);
 
 			Next();
+			UpdateCursor();
 		}
 
 		/// <summary>
@@ -126,6 +131,15 @@ namespace Mosa.Kernel.x86
 		{
 			Column = 0;
 			Row = 0;
+			UpdateCursor();
+		}
+
+		/// <summary>
+		/// Writes the line.
+		/// </summary>
+		public static void WriteLine()
+		{
+			NextLine();
 		}
 
 		/// <summary>
@@ -135,6 +149,17 @@ namespace Mosa.Kernel.x86
 		{
 			Column = 0;
 			Row++;
+			UpdateCursor();
+		}
+
+		/// <summary>
+		/// Writes the line.
+		/// </summary>
+		/// <param name="line">The line.</param>
+		public static void WriteLine(string line)
+		{
+			Write(line);
+			NextLine();
 		}
 
 		/// <summary>
@@ -145,7 +170,7 @@ namespace Mosa.Kernel.x86
 			GotoTop();
 
 			byte c = Color;
-			Color = 0x0A;
+			Color = 0x0;
 
 			for (int i = 0; i < Columns * Rows; i++)
 				Write(' ');
@@ -155,7 +180,7 @@ namespace Mosa.Kernel.x86
 		}
 
 		/// <summary>
-		/// Sets the cursor.
+		/// Goto the specified row and column.
 		/// </summary>
 		/// <param name="row">The row.</param>
 		/// <param name="col">The col.</param>
@@ -163,6 +188,43 @@ namespace Mosa.Kernel.x86
 		{
 			Row = row;
 			Column = col;
+			UpdateCursor();
+		}
+
+		/// <summary>
+		/// Sets the cursor.
+		/// </summary>
+		/// <param name="row">The row.</param>
+		/// <param name="column">The column.</param>
+		public static void SetCursor(uint row, uint column)
+		{
+			uint location = (row * Columns) + column;
+
+			Native.Out8(0x3D4, 0x0F);
+			Native.Out8(0x3D5, (byte)(location & 0xFF));
+
+			Native.Out8(0x3D4, 0x0E);
+			Native.Out8(0x3D5, (byte)((location >> 8) & 0xFF));
+		}
+
+		public static void UpdateCursor()
+		{
+			SetCursor(Row, Column);
+		}
+
+		public static void ClearRow()
+		{
+			uint c = Column;
+			uint r = Row;
+
+			Column = 0;
+
+			for (int i = 0; i < Columns; i++)
+			{
+				Write(' ');
+			}
+
+			Goto(r, c);
 		}
 
 		/// <summary>
@@ -180,10 +242,10 @@ namespace Mosa.Kernel.x86
 		/// <param name="val">The val.</param>
 		/// <param name="digits">The digits.</param>
 		/// <param name="size">The size.</param>
-		public static void Write(ulong val, byte digits, int size)
+		public static void Write(uint val, byte digits, int size)
 		{
 			uint count = 0;
-			ulong temp = val;
+			uint temp = val;
 
 			do
 			{
@@ -199,7 +261,7 @@ namespace Mosa.Kernel.x86
 
 			for (uint i = 0; i < count; i++)
 			{
-				uint digit = (uint)(val % digits);
+				uint digit = val % digits;
 				Column = x;
 				Row = y;
 				Skip(count - 1 - i);
@@ -213,7 +275,7 @@ namespace Mosa.Kernel.x86
 			Column = x;
 			Row = y;
 			Skip(count);
+			UpdateCursor();
 		}
-
 	}
 }

@@ -1,47 +1,44 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.DeviceSystem
 {
-
 	/// <summary>
 	/// Implements a text screen for a <see cref="ITextDevice"/>.
 	/// </summary>
 	public class TextScreen : ITextScreen
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ITextDevice textDevice;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ushort cursorX;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ushort cursorY;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected TextColor foreground;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected TextColor background;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ushort width;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ushort height;
 
@@ -96,23 +93,24 @@ namespace Mosa.DeviceSystem
 		/// <param name="character">The character.</param>
 		protected void InternalWrite(char character)
 		{
-			// TODO: handle character = newline!
-
-			textDevice.WriteChar(cursorX, cursorY, character, foreground, background);
-			cursorX++;
-
-			if (cursorX == width)
+			if (cursorX == width || character == '\n')
 			{
 				cursorY++;
+				cursorX = 0;
 
 				if (cursorY == height)
 				{
 					textDevice.ScrollUp();
 					cursorY--;
 				}
-
-				cursorX = 0;
 			}
+
+			if (character != '\n')
+			{
+				textDevice.WriteChar(cursorX, cursorY, character, foreground, background);
+				cursorX++;
+			}
+
 			SetCursor();
 		}
 
@@ -143,16 +141,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		public void WriteLine()
 		{
-			cursorY++;
-
-			if (cursorY == height)
-			{
-				textDevice.ScrollUp();
-				cursorY--;
-			}
-
-			cursorX = 0;
-			SetCursor();
+			Write('\n');
 		}
 
 		/// <summary>
@@ -161,8 +150,18 @@ namespace Mosa.DeviceSystem
 		/// <param name="text">The text.</param>
 		public void WriteLine(string text)
 		{
-			Write(text);
-			WriteLine();
+			Write(text + "\n");
+		}
+
+		/// <summary>
+		/// Sets the colors of the TextScreen for future writes.
+		/// </summary>
+		/// <param name="foreground">The text color.</param>
+		/// <param name="background">The background color.</param>
+		public void SetColor(TextColor foreground, TextColor background)
+		{
+			this.foreground = foreground;
+			this.background = background;
 		}
 	}
 }

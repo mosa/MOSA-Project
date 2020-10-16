@@ -1,31 +1,25 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	/// Calli Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.InvokeInstruction" />
 	public sealed class CalliInstruction : InvokeInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CalliInstruction"/> class.
+		/// Initializes a new instance of the <see cref="CalliInstruction" /> class.
 		/// </summary>
+		/// <param name="opcode">The opcode.</param>
 		public CalliInstruction(OpCode opcode)
 			: base(opcode)
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -38,21 +32,6 @@ namespace Mosa.Compiler.Framework.CIL
 			get { return InvokeSupportFlags.CallSite; }
 		}
 
-		#endregion // Properties
-
-		#region Method
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.Calli(context);
-		}
-
-		#endregion // Method
-
+		#endregion Properties
 	}
 }

@@ -1,16 +1,9 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	/// IDiskDevice
 	/// </summary>
 	public interface IDiskDevice
 	{
@@ -57,6 +50,5 @@ namespace Mosa.DeviceSystem
 		/// <param name="data">The data.</param>
 		/// <returns></returns>
 		bool WriteBlock(uint block, uint count, byte[] data);
-
 	}
 }

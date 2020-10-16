@@ -1,33 +1,24 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.Common.Exceptions;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
 	/// Intermediate representation for stobj and stind.* IL instructions.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BinaryInstruction" />
 	public sealed class StobjInstruction : BinaryInstruction
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// Specifies the type of the value.
 		/// </summary>
-		private readonly SigType valueType;
+		private readonly MosaTypeCode? elementType;
 
-		#endregion // Data members
+		#endregion Data Members
 
 		#region Construction
 
@@ -40,61 +31,36 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			switch (opcode)
 			{
-				case OpCode.Stind_i1:
-					valueType = BuiltInSigType.SByte;
-					break;
-				case OpCode.Stind_i2:
-					valueType = BuiltInSigType.Int16;
-					break;
-				case OpCode.Stind_i4:
-					valueType = BuiltInSigType.Int32;
-					break;
-				case OpCode.Stind_i8:
-					valueType = BuiltInSigType.Int64;
-					break;
-				case OpCode.Stind_r4:
-					valueType = BuiltInSigType.Single;
-					break;
-				case OpCode.Stind_r8:
-					valueType = BuiltInSigType.Double;
-					break;
-				case OpCode.Stind_i:
-					valueType = BuiltInSigType.IntPtr;
-					break;
-				case OpCode.Stind_ref: // FIXME: Really object?
-					valueType = BuiltInSigType.Object;
-					break;
-				case OpCode.Stobj:  // FIXME
-					valueType = null;
-					break;
-				default:
-					throw new NotImplementedException();
+				case OpCode.Stind_i1: elementType = MosaTypeCode.I1; break;
+				case OpCode.Stind_i2: elementType = MosaTypeCode.I2; break;
+				case OpCode.Stind_i4: elementType = MosaTypeCode.I4; break;
+				case OpCode.Stind_i8: elementType = MosaTypeCode.I8; break;
+				case OpCode.Stind_r4: elementType = MosaTypeCode.R4; break;
+				case OpCode.Stind_r8: elementType = MosaTypeCode.R8; break;
+				case OpCode.Stind_i: elementType = MosaTypeCode.I; break;
+				case OpCode.Stind_ref: elementType = MosaTypeCode.Object; break;
+				case OpCode.Stobj: elementType = null; break;
+				default: throw new NotImplementCompilerException();
 			}
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
-			// Do we have a type?
-			if (valueType == null)
-			{
-				// No, retrieve a type reference from the immediate argument
-				Token token = decoder.DecodeTokenType();
-				RuntimeType type = decoder.TypeModule.GetType(token);
-
-				ctx.Other = type;
-			}
+			node.MosaType = (elementType == null)
+				? (MosaType)decoder.Instruction.Operand
+				: decoder.MethodCompiler.Compiler.GetTypeFromTypeCode(elementType.Value);
 
 			// FIXME: Check the value/destinations
 		}
@@ -102,30 +68,13 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="compiler">The compiler.</param>
-		public override void Validate(Context ctx, IMethodCompiler compiler)
-		{
-			base.Validate(ctx, compiler);
-
-			//FIXME: Intent?
-			//SigType destType = ctx.Operand1.Type;
-
-			//Debug.Assert(destType is PtrSigType || destType is RefSigType, @"Destination operand not a pointer or reference.");
-			//if (!(destType is PtrSigType || destType is RefSigType))
-			//    throw new InvalidOperationException(@"Invalid operand.");
-		}
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
 		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
+		/// <param name="methodCompiler">The compiler.</param>
+		public override void Resolve(Context context, MethodCompiler methodCompiler)
 		{
-			visitor.Stobj(context);
+			base.Resolve(context, methodCompiler);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

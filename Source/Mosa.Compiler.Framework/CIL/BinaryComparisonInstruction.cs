@@ -1,21 +1,13 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
-
-using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	/// Binary Comparison Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BinaryInstruction" />
 	public sealed class BinaryComparisonInstruction : BinaryInstruction
 	{
 		#region Construction
@@ -29,53 +21,44 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			// Set the result
-			ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.Int32);
+			node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.MethodCompiler.Architecture.Is32BitPlatform ? decoder.TypeSystem.BuiltIn.I4 : decoder.TypeSystem.BuiltIn.I8);
 		}
 
 		/// <summary>
-		/// Gets the instruction modifier.
+		/// Gets the modifier.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <returns></returns>
-		protected override string GetModifier(Context context)
+		/// <exception cref="InvalidOperationException">Invalid opcode.</exception>
+		public override string Modifier
 		{
-			switch (((context.Instruction) as CIL.ICILInstruction).OpCode)
+			get
 			{
-				case OpCode.Ceq: return @"==";
-				case OpCode.Cgt: return @">";
-				case OpCode.Cgt_un: return @"> unordered";
-				case OpCode.Clt: return @"<";
-				case OpCode.Clt_un: return @"< unordered";
-				default: throw new InvalidOperationException(@"Invalid opcode.");
+				switch (OpCode)
+				{
+					case OpCode.Ceq: return "==";
+					case OpCode.Cgt: return ">";
+					case OpCode.Cgt_un: return "> unordered";
+					case OpCode.Clt: return "<";
+					case OpCode.Clt_un: return "< unordered";
+					default: throw new InvalidOperationException("Invalid opcode.");
+				}
 			}
 		}
 
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.BinaryComparison(context);
-		}
-
 		#endregion Methods
-
 	}
 }

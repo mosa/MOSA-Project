@@ -1,70 +1,54 @@
-using Mosa.Platform.x86.Intrinsic;
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Kernel.x86.Smbios
 {
 	/// <summary>
-	///
+	/// Cpu Structure
 	/// </summary>
 	public class CpuStructure : SmbiosStructure
 	{
 		/// <summary>
-		/// 
+		/// Gets the maximum speed.
 		/// </summary>
-		private string vendor = null;
-		/// <summary>
-		/// 
-		/// </summary>
-		private string version = null;
-		/// <summary>
-		///
-		/// </summary>
-		private uint maxSpeed = 0;
-		/// <summary>
-		///
-		/// </summary>
-		private string socket = null;
-		
-		/// <summary>
-		///
-		/// </summary>
-		public CpuStructure () : base (SmbiosManager.GetStructureOfType (0x04))
-		{
-			this.version = GetStringFromIndex(Native.Get8(address + 0x10u));
-			this.socket = GetStringFromIndex(Native.Get8(address + 0x04u));
-			this.maxSpeed = Native.Get16(address + 0x16u);
-			this.vendor = GetStringFromIndex(Native.Get8(address + 0x07u));
-		}
-		
-		/// <summary>
-		///
-		/// </summary>
-		public uint MaxSpeed
-		{
-			get { return this.maxSpeed; }
-		}
-		
-		/// <summary>
-		///
-		/// </summary>
-		public string Socket
-		{
-			get { return this.socket; }
-		}
-		
-		/// <summary>
-		///
-		/// </summary>
-		public string Vendor
-		{
-			get { return this.vendor; }
-		}
+		/// <value>
+		/// The maximum speed.
+		/// </value>
+		public uint MaxSpeed { get; private set; }
 
 		/// <summary>
-		///
+		/// Gets the socket.
 		/// </summary>
-		public string Version
+		/// <value>
+		/// The socket.
+		/// </value>
+		public string Socket { get; private set; }
+
+		/// <summary>
+		/// Gets the vendor.
+		/// </summary>
+		/// <value>
+		/// The vendor.
+		/// </value>
+		public string Vendor { get; private set; }
+
+		/// <summary>
+		/// Gets the version.
+		/// </summary>
+		/// <value>
+		/// The version.
+		/// </value>
+		public string Version { get; private set; }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CpuStructure"/> class.
+		/// </summary>
+		public CpuStructure()
+			: base(SmbiosManager.GetStructureOfType(0x04))
 		{
-			get { return this.version; }
+			Version = GetStringFromIndex(address.Load8(0x10u));
+			Socket = GetStringFromIndex(address.Load8(0x04u));
+			MaxSpeed = address.Load16(0x16u);
+			Vendor = GetStringFromIndex(address.Load8(0x07u));
 		}
 	}
 }

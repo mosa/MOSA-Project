@@ -1,12 +1,4 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.FileSystem
 {
@@ -15,19 +7,18 @@ namespace Mosa.FileSystem
 	/// </summary>
 	/// <remarks>
 	/// This base class holds properties and data members common to most file systems. A specialized
-	/// derived class should be created for specific file systems and its type should be returned from
-	/// IFileSystemService.SettingsType to allow mkfs style commands to automate most processing.
+	/// derived class should be created for specific file systems.
 	/// </remarks>
 	public class GenericFileSystemSettings
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// The volume label.
 		/// </summary>
-		public string VolumeLabel;
+		public string VolumeLabel { get; set; }
 
-		#endregion // Data members
+		#endregion Data Members
 
 		#region Construction
 
@@ -39,6 +30,6 @@ namespace Mosa.FileSystem
 			VolumeLabel = "New Volume";
 		}
 
-		#endregion // Construction
+		#endregion Construction
 	}
 }

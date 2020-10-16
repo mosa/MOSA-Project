@@ -1,12 +1,4 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.DeviceSystem.PCI
 {
@@ -19,10 +11,12 @@ namespace Mosa.DeviceSystem.PCI
 		/// Port IO Address Region
 		/// </summary>
 		IO,
+
 		/// <summary>
 		/// Memory Address Region
 		/// </summary>
 		Memory,
+
 		/// <summary>
 		/// Undefined Address Region
 		/// </summary>

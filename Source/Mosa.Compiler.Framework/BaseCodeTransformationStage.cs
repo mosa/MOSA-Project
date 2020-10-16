@@ -1,190 +1,59 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
- */
-
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Base class for code transformation stages.
 	/// </summary>
-	public abstract class BaseCodeTransformationStage : BaseMethodCompilerStage, IMethodCompilerStage, IVisitor
+	/// <seealso cref="Mosa.Compiler.Framework.BaseMethodCompilerStage" />
+	public abstract class BaseCodeTransformationStage : BaseMethodCompilerStage
 	{
+		private const int MaxInstructions = 1024;
 
-		#region IMethodCompilerStage Members
+		protected delegate void VisitationDelegate(Context context);
 
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		public virtual void Run()
+		protected VisitationDelegate[] visitations;
+
+		protected abstract void PopulateVisitationDictionary();
+
+		protected override void Initialize()
 		{
-			for (int index = 0; index < basicBlocks.Count; index++)
-				for (Context ctx = new Context(instructionSet, basicBlocks[index]); !ctx.EndOfInstruction; ctx.GotoNext())
-					if (ctx.Instruction != null)
-						ctx.Clone().Visit(this);
+			visitations = new VisitationDelegate[MaxInstructions];
+
+			PopulateVisitationDictionary();
 		}
 
-		#endregion // IMethodCompilerStage Members
-
-		#region Block Operations
-
-		/// <summary>
-		/// Links the blocks.
-		/// </summary>
-		/// <param name="source">The source.</param>
-		/// <param name="destination">The destination.</param>
-		protected void LinkBlocks(BasicBlock source, BasicBlock destination)
+		protected override void Run()
 		{
-			if (!source.NextBlocks.Contains(destination))
-				source.NextBlocks.Add(destination);
+			var context = new Context(null as InstructionNode);
 
-			if (!destination.PreviousBlocks.Contains(source))
-				destination.PreviousBlocks.Add(source);
-		}
-		/// <summary>
-		/// Links the blocks.
-		/// </summary>
-		/// <param name="source">The source.</param>
-		/// <param name="destination">The destination.</param>
-		protected void LinkBlocks(Context source, BasicBlock destination)
-		{
-			LinkBlocks(source.BasicBlock, destination);
-		}
-
-		/// <summary>
-		/// Links the blocks.
-		/// </summary>
-		/// <param name="source">The source.</param>
-		/// <param name="destination">The destination.</param>
-		protected void LinkBlocks(Context source, Context destination)
-		{
-			LinkBlocks(source.BasicBlock, destination.BasicBlock);
-		}
-
-		/// <summary>
-		/// Links the blocks.
-		/// </summary>
-		/// <param name="source">The source.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="destination2">The destination2.</param>
-		protected void LinkBlocks(Context source, Context destination, Context destination2)
-		{
-			LinkBlocks(source.BasicBlock, destination.BasicBlock);
-			LinkBlocks(source.BasicBlock, destination2.BasicBlock);
-		}
-
-		/// <summary>
-		/// Links the blocks.
-		/// </summary>
-		/// <param name="source">The source.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="destination2">The destination2.</param>
-		protected void LinkBlocks(Context source, Context destination, BasicBlock destination2)
-		{
-			LinkBlocks(source.BasicBlock, destination.BasicBlock);
-			LinkBlocks(source.BasicBlock, destination2);
-		}
-
-		/// <summary>
-		/// Links the blocks.
-		/// </summary>
-		/// <param name="source">The source.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="destination2">The destination2.</param>
-		protected void LinkBlocks(Context source, BasicBlock destination, BasicBlock destination2)
-		{
-			LinkBlocks(source.BasicBlock, destination);
-			LinkBlocks(source.BasicBlock, destination2);
-		}
-
-		/// <summary>
-		/// Create an empty block.
-		/// </summary>
-		/// <param name="label">The label.</param>
-		/// <returns></returns>
-		protected Context CreateEmptyBlockContext(int label)
-		{
-			Context ctx = new Context(instructionSet);
-			BasicBlock block = CreateBlock(basicBlocks.Count + 0x10000000);
-			ctx.BasicBlock = block;
-
-			// Need a dummy instruction at the start of each block to establish a starting point of the block
-			ctx.AppendInstruction(null);
-			ctx.Label = label;
-			block.Index = ctx.Index;
-			ctx.Ignore = true;
-
-			return ctx;
-		}
-
-		/// <summary>
-		/// Creates empty Blocks.
-		/// </summary>
-		/// <param name="blocks">The Blocks.</param>
-		/// <param name="label">The label.</param>
-		/// <returns></returns>
-		protected Context[] CreateEmptyBlockContexts(int label, int blocks)
-		{
-			// Allocate the block array
-			Context[] result = new Context[blocks];
-
-			for (int index = 0; index < blocks; index++)
-				result[index] = CreateEmptyBlockContext(label);
-
-			return result;
-		}
-
-		/// <summary>
-		/// Splits the block.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="addJump">if set to <c>true</c> [add jump].</param>
-		/// <returns></returns>
-		protected Context SplitContext(Context ctx, bool addJump)
-		{
-			Context current = ctx.Clone();
-
-			int label = basicBlocks.Count + 0x10000000;
-
-			BasicBlock nextBlock = CreateBlock(label);
-
-			foreach (BasicBlock block in current.BasicBlock.NextBlocks)
-				nextBlock.NextBlocks.Add(block);
-
-			current.BasicBlock.NextBlocks.Clear();
-
-			if (addJump)
+			for (int index = 0; index < BasicBlocks.Count; index++)
 			{
-				current.BasicBlock.NextBlocks.Add(nextBlock);
-				nextBlock.PreviousBlocks.Add(ctx.BasicBlock);
-			}
+				for (var node = BasicBlocks[index].AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+				{
+					if (node.IsEmptyOrNop)
+						continue;
 
-			if (current.IsLastInstruction)
-			{
-				current.AppendInstruction(null);
-				current.Ignore = true;
-				nextBlock.Index = current.Index;
-				current.SliceBefore();
-			}
-			else
-			{
-				nextBlock.Index = current.Next.Index;
-				current.SliceAfter();
-			}
+					if (node.Instruction.ID == 0)
+						continue; // no mapping
 
-			if (addJump)
-				current.AppendInstruction(IR.Instruction.JmpInstruction, nextBlock);
+					var visitationContext = visitations[node.Instruction.ID];
 
-			return CreateContext(nextBlock);
+					if (visitationContext == null)
+						continue;
+
+					context.Node = node;
+					visitationContext(context);
+				}
+
+				if (MethodCompiler.IsStopped)
+					return;
+			}
 		}
 
-		#endregion
-
+		protected void AddVisitation(BaseInstruction instruction, VisitationDelegate visitation)
+		{
+			visitations[instruction.ID] = visitation;
+		}
 	}
 }

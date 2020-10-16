@@ -1,32 +1,22 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class DirectoryEntry
 	{
-
 		#region Static data members
 
 		/// <summary>
 		/// Holds the current directory of the current thread.
 		/// </summary>
-		[System.ThreadStatic]
 		private static DirectoryEntry currentDirectory = null;
 
-		#endregion // Static data members
+		#endregion Static data members
 
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// References the inode that belongs to this name.
@@ -39,7 +29,7 @@ namespace Mosa.FileSystem.VFS
 		private string name;
 
 		/// <summary>
-		/// Ptr to the parent directory entry. 
+		/// Ptr to the parent directory entry.
 		/// </summary>
 		/// <remarks>
 		/// If _parent == this, we're at the root directory entry.
@@ -51,33 +41,34 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		private DirectoryEntry child, next;
 
-		#endregion // Data members
+		#endregion Data Members
 
 		#region Construction
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public DirectoryEntry()
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public string Name
 		{
 			get
 			{
-				return this.name;
+				return name;
 			}
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public IVfsNode Node
 		{
@@ -88,7 +79,7 @@ namespace Mosa.FileSystem.VFS
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public DirectoryEntry Parent
 		{
@@ -98,12 +89,12 @@ namespace Mosa.FileSystem.VFS
 			}
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="name"></param>
 		/// <returns></returns>
@@ -150,7 +141,7 @@ namespace Mosa.FileSystem.VFS
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="parent"></param>
 		/// <param name="name"></param>
@@ -184,12 +175,12 @@ namespace Mosa.FileSystem.VFS
 			parent = null;
 		}
 
-		#endregion // Methods
+		#endregion Methods
 
 		#region Child list functions
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="child"></param>
 		private void InsertChild(DirectoryEntry child)
@@ -222,13 +213,14 @@ namespace Mosa.FileSystem.VFS
 
 						_children.Insert(rmin, child);
 			 */
+
 			// FIXME: Thread safety
 			child.next = this.child;
 			this.child = child;
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="child"></param>
 		private void RemoveChild(DirectoryEntry child)
@@ -251,12 +243,12 @@ namespace Mosa.FileSystem.VFS
 			//			_children.Remove(child);
 		}
 
-		#endregion // Child list functions
+		#endregion Child list functions
 
 		#region Static methods
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public static DirectoryEntry CurrentDirectoryEntry
 		{
@@ -307,6 +299,7 @@ namespace Mosa.FileSystem.VFS
 
 			if (name.Length == 0)
 				throw new System.ArgumentException(@"Invalid directory entry name."); // , @"name"
+
 			// FIXME: Add precondition check for invalid characters
 			// FIXME: Localize exception messages
 			//#endif // #if VFS_NO_EXCEPTIONS
@@ -329,7 +322,7 @@ namespace Mosa.FileSystem.VFS
 		/// its parent is itself. This provides for the ability to cd .. on the root to stay on the root.
 		/// <para/>
 		/// The next ability is to create specialized root directories to isolate processes from the remainder
-		/// of the filesystem. Setting a root directory created using this method effectively limits the process
+		/// of the file system. Setting a root directory created using this method effectively limits the process
 		/// to access inside of the newly created namespace.
 		/// </remarks>
 		public static DirectoryEntry AllocateRoot(IVfsNode node)
@@ -343,6 +336,6 @@ namespace Mosa.FileSystem.VFS
 			return result;
 		}
 
-		#endregion // Static methods
+		#endregion Static methods
 	}
 }

@@ -1,47 +1,48 @@
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.x86.Intrinsic;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.x86.Smbios
 {
 	/// <summary>
-	///
+	/// Smbios Structure
 	/// </summary>
 	public abstract class SmbiosStructure
 	{
-		protected uint address = 0u;
-		protected uint length = 0u;
-		protected uint handle = 0u;
+		protected Pointer address;
+		protected uint length;
+		protected uint handle;
 
-		protected SmbiosStructure(uint address)
+		protected SmbiosStructure(Pointer address)
 		{
 			this.address = address;
-			this.length = Native.Get8(address + 0x01u);
-			this.handle = Native.Get16(address + 0x02u);
+			length = Intrinsic.Load8(address, 0x01u);
+			handle = Intrinsic.Load16(address, 0x02u);
 		}
 
-		protected string GetStringFromIndex(byte index)
+		protected unsafe string GetStringFromIndex(byte index)
 		{
 			if (index == 0)
 				return string.Empty;
 
-			uint stringStart = this.address + this.length;
-			int count = 1;
+			var first = address + length;
+			int offset = 0;
 
-			while (count++ != index)
-				while (Native.Get8(stringStart++) != 0x00u)
-					;
+			for (byte count = 1; count != index;)
+			{
+				if (first.Load8(offset++) == 0x00)
+					count++;
+			}
 
-			uint stringEnd = stringStart;
-			while (Native.Get8(++stringEnd) != 0x00u)
-				;
+			var start = first + offset;
+			var end = start;
+			int len = 0;
 
-			int stringLength = (int)(stringEnd - stringStart);
-			string result = string.Empty;
+			while (end.Load8(len++) != 0x00)
+			{
+			}
 
-			for (uint i = 0; i < stringLength; ++i)
-				result = string.Concat(result, new string((char)Native.Get8(stringStart + i), 1));
-
-			return result;
+			return new string((sbyte*)start.ToPointer(), 0, len);
 		}
 	}
 }

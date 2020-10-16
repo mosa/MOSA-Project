@@ -1,18 +1,11 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	/// No Prefix Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.PrefixInstruction" />
 	public sealed class NoPrefixInstruction : PrefixInstruction
 	{
 		#region Construction
@@ -26,27 +19,26 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods Overrides
 
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
-			byte nocheck= decoder.DecodeByte();
+			byte nocheck = (byte)decoder.Instruction.Operand;
 
-			ctx.Other = nocheck;
+			//FUTURE:
+			//ctx.Other = nocheck;
 		}
 
-		#endregion // Methods Overrides
-
-
+		#endregion Methods Overrides
 	}
 }

@@ -1,23 +1,13 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
-using Mosa.Compiler.Framework.Operands;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem.Generic;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	/// Ldflda Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryInstruction" />
 	public sealed class LdfldaInstruction : UnaryInstruction
 	{
 		#region Construction
@@ -31,53 +21,23 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
-			Token token = decoder.DecodeTokenType();
-			ctx.RuntimeField = decoder.Method.Module.GetField(token);
+			var field = (MosaField)decoder.Instruction.Operand;
 
-			if (ctx.RuntimeField.ContainsGenericParameter || ctx.RuntimeField.DeclaringType.ContainsOpenGenericParameters)
-			{
-				foreach (var field in decoder.Method.DeclaringType.Fields)
-				{
-					if (field.Name == ctx.RuntimeField.Name)
-					{
-						ctx.RuntimeField = field;
-						break;
-					}
-				}
-
-				if (ctx.RuntimeField.ContainsGenericParameter)
-				{
-					ctx.RuntimeField = decoder.GenericTypePatcher.PatchField(decoder.TypeModule, decoder.Method.DeclaringType as CilGenericType, ctx.RuntimeField);
-				}
-				decoder.Compiler.Scheduler.ScheduleTypeForCompilation(ctx.RuntimeField.DeclaringType);
-				Debug.Assert(!ctx.RuntimeField.ContainsGenericParameter);
-			}
-
-			SigType sigType = new RefSigType(ctx.RuntimeField.SignatureType);
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
-		}
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.Ldflda(context);
+			node.MosaField = field;
+			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, field.FieldType.ToManagedPointer());
 		}
 
 		#endregion Methods

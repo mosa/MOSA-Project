@@ -1,53 +1,44 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.FileSystem.FAT
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class FatFileLocation
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
-		public bool Valid;
+		public bool IsValid;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public uint FirstCluster;
 
 		/// <summary>
-		///  
+		///
 		/// </summary>
 		public uint DirectorySector;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public uint DirectorySectorIndex;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
-		private bool directory;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public bool IsDirectory { get { return directory; } }
+		public bool IsDirectory { get; private set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FatFileLocation"/> class.
 		/// </summary>
-		public FatFileLocation() { this.Valid = false; }
+		public FatFileLocation()
+		{
+			IsValid = false;
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FatFileLocation"/> class.
@@ -58,12 +49,11 @@ namespace Mosa.FileSystem.FAT
 		/// <param name="directory">if set to <c>true</c> [directory].</param>
 		public FatFileLocation(uint startCluster, uint directorySector, uint directoryIndex, bool directory)
 		{
-			this.Valid = true;
-			this.FirstCluster = startCluster;
-			this.DirectorySector = directorySector;
-			this.DirectorySectorIndex = directoryIndex;
-			this.directory = directory;
+			IsValid = true;
+			FirstCluster = startCluster;
+			DirectorySector = directorySector;
+			DirectorySectorIndex = directoryIndex;
+			IsDirectory = directory;
 		}
 	}
-
 }

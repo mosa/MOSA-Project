@@ -1,38 +1,34 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.MosaTypeSystem;
 using System;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	/// Neg Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryArithmeticInstruction" />
 	public sealed class NegInstruction : UnaryArithmeticInstruction
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// Holds the typecode validation table from ISO/IEC 23271:2006 (E),
 		/// Partition III, §1.5, Table 3.
 		/// </summary>
-		private static StackTypeCode[] _typeCodes = new StackTypeCode[] {
+		private static readonly StackTypeCode[] typeCodes = new StackTypeCode[] {
 			StackTypeCode.Unknown,
 			StackTypeCode.Int32,
 			StackTypeCode.Int64,
 			StackTypeCode.N,
 			StackTypeCode.F,
 			StackTypeCode.Unknown,
+			StackTypeCode.Unknown,
 			StackTypeCode.Unknown
 		};
 
-		#endregion // Data members
+		#endregion Data Members
 
 		#region Construction
 
@@ -45,38 +41,29 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="ctx"></param>
-		/// <param name="compiler">The compiler.</param>
-		public override void Validate(Context ctx, IMethodCompiler compiler)
+		/// <param name="context"></param>
+		/// <param name="methodCompiler">The compiler.</param>
+		public override void Resolve(Context context, MethodCompiler methodCompiler)
 		{
-			base.Validate(ctx, compiler);
+			base.Resolve(context, methodCompiler);
 
-			// Validate the operand
-			StackTypeCode result = _typeCodes[(int)ctx.Operand1.StackType];
+			var result = typeCodes[(int)methodCompiler.Compiler.GetStackTypeCode(context.Operand1.Type)];
+
 			if (StackTypeCode.Unknown == result)
-				throw new InvalidOperationException(@"Invalid operand to Neg instruction [" + result + "]");
+			{
+				throw new InvalidOperationException($"Invalid operand to Neg instruction [{result}]");
+			}
 
-			ctx.Result = compiler.CreateTemporary(ctx.Operand1.Type);
-		}
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.Neg(context);
+			context.Result = methodCompiler.CreateVirtualRegister(context.Operand1.Type);
 		}
 
 		#endregion Methods
-
 	}
 }

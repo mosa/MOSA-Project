@@ -1,13 +1,4 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.FileSystem.VFS
 {
@@ -20,8 +11,7 @@ namespace Mosa.FileSystem.VFS
 	/// </remarks>
 	public sealed class VirtualFileSystem : IFileSystem, IFileSystemService
 	{
-
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// The virtual root directory.
@@ -33,7 +23,7 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		private static DirectoryEntry rootNode;
 
-		#endregion // Data members
+		#endregion Data Members
 
 		#region Construction
 
@@ -52,7 +42,7 @@ namespace Mosa.FileSystem.VFS
 			// FIXME: Add an entry of the virtual file system to /system/filesystems
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Static Properties
 
@@ -60,7 +50,7 @@ namespace Mosa.FileSystem.VFS
 		// we have a process structure supporting jails.
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		public static DirectoryEntry RootDirectoryEntry
 		{
@@ -70,12 +60,12 @@ namespace Mosa.FileSystem.VFS
 			}
 		}
 
-		#endregion // Static members
+		#endregion Static Properties
 
 		#region Static Methods
 
 		/// <summary>
-		/// Checks if the caller has access to the inode 
+		/// Checks if the caller has access to the inode
 		/// </summary>
 		/// <param name="path">The resource to check permissions for.</param>
 		/// <param name="mode"></param>
@@ -92,16 +82,16 @@ namespace Mosa.FileSystem.VFS
 		}
 
 		/// <summary>
-		/// Creates a new node in the (virtual) filesystem.
+		/// Creates a new node in the (virtual) file system.
 		/// </summary>
 		/// <param name="path">The path to create.</param>
 		/// <param name="type">The type of the node to create.</param>
 		/// <param name="settings">Settings used to initialize the node.</param>
 		/// <param name="access">Requests the specified access modes on the created object.</param>
 		/// <param name="share">Requests the specified sharing settings on the object.</param>
-		/// <returns>The created filesystem object.</returns>
+		/// <returns>The created file system object.</returns>
 		/// <remarks>
-		/// This function creates new nodes in the virtual filesystem. In contrast to *nix this call
+		/// This function creates new nodes in the virtual file system. In contrast to *nix this call
 		/// creates all node types, e.g. files, directories, devices and more. Specific types may
 		/// require additional settings, which are specified in a settings object passed as the third
 		/// parameter.
@@ -116,6 +106,7 @@ namespace Mosa.FileSystem.VFS
 
 			// Yes, we do have write access. Create the new vfs node
 			IVfsNode node = parent.Node.Create(path, type, settings);
+
 			// FIXME: Assert(null != node);
 			DirectoryEntry entry = DirectoryEntry.Allocate(parent, path, node);
 
@@ -130,11 +121,12 @@ namespace Mosa.FileSystem.VFS
 		public static void ChangeDirectory(string path)
 		{
 			DirectoryEntry entry = PathResolver.Resolve(rootNode, ref path);
+
 			// FIXME: Set the current directory in the thread execution block
 		}
 
 		/// <summary>
-		/// Deletes the named node from the filesystem.
+		/// Deletes the named node from the file system.
 		/// </summary>
 		/// <param name="path">The path, which identifies a node.</param>
 		public static void Delete(string path)
@@ -143,6 +135,7 @@ namespace Mosa.FileSystem.VFS
 			if (null != entry)
 			{
 				AccessCheck.Perform(entry, AccessMode.Delete, AccessCheckFlags.None);
+
 				//entry.Node.Delete();
 				entry.Parent.Node.Delete(entry.Node, entry);
 				entry.Release();
@@ -152,8 +145,8 @@ namespace Mosa.FileSystem.VFS
 		/// <summary>
 		/// Mounts a new file system.
 		/// </summary>
-		/// <param name="source">The source of the filesystem. This is usually a device name, but can also be another directory.</param>
-		/// <param name="target">The path including the name of the mount point, where to mount the new filesystem.</param>
+		/// <param name="source">The source of the file system. This is usually a device name, but can also be another directory.</param>
+		/// <param name="target">The path including the name of the mount point, where to mount the new file system.</param>
 		public static void Mount(string source, string target)
 		{
 			// Retrieve the parent directory of the mount
@@ -162,17 +155,17 @@ namespace Mosa.FileSystem.VFS
 			if (parent == null)
 				throw new System.ArgumentException();
 
-			IFileSystem root = FileSystemFactory.CreateFileSystem(source);
+			var root = FileSystemFactory.CreateFileSystem(source);
 
 			if (root == null)
 				throw new System.ArgumentException();
 
-			PathSplitter path = new PathSplitter(target);
+			var path = new PathSplitter(target);
 			DirectoryEntry.Allocate(parent, path.Last, root.Root);
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="path"></param>
 		/// <param name="access"></param>
@@ -180,16 +173,16 @@ namespace Mosa.FileSystem.VFS
 		/// <returns></returns>
 		public static object Open(string path, System.IO.FileAccess access, System.IO.FileShare share)
 		{
-			DirectoryEntry entry = PathResolver.Resolve(rootNode, ref path);
+			var entry = PathResolver.Resolve(rootNode, ref path);
 
 			/* HINT:
-			 * 
-			 * 1. Do we really need to pass the FileShare flags down to the inode? 
+			 *
+			 * 1. Do we really need to pass the FileShare flags down to the inode?
 			 * 2. Shouldn't we have some sort of lock deamon governing shared access?
 			 *
-			 * Ansers:
+			 * Answers:
 			 * 1. Yes.
-			 * 2. Yes and no. A lock deamon would only work for local filesystems. For imported
+			 * 2. Yes and no. A lock deamon would only work for local file systems. For imported
 			 *    ones we need to notify the server of the sharing lock anyway, so that the IVfsNode
 			 *    (acting as a client to the server) is the best place to do it without giving the
 			 *    lock deamon knowledge of all file sharing protocols (afp, smb, ftp, name it.)
@@ -206,9 +199,11 @@ namespace Mosa.FileSystem.VFS
 				case System.IO.FileAccess.Read:
 					modeFlags = AccessMode.Read;
 					break;
+
 				case System.IO.FileAccess.Write:
 					modeFlags = AccessMode.Write;
 					break;
+
 				case System.IO.FileAccess.ReadWrite:
 					modeFlags = AccessMode.Read | AccessMode.Write;
 					break;
@@ -220,13 +215,13 @@ namespace Mosa.FileSystem.VFS
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="old"></param>
 		/// <param name="newname"></param>
 		public static void Rename(string old, string newname)
 		{
-			// FIXME: 
+			// FIXME:
 			throw new System.NotImplementedException();
 		}
 
@@ -255,7 +250,7 @@ namespace Mosa.FileSystem.VFS
 		//}
 
 		/// <summary>
-		/// Retrieves a 
+		/// Retrieves a
 		/// </summary>
 		/// <param name="path"></param>
 		/// <returns></returns>
@@ -267,11 +262,11 @@ namespace Mosa.FileSystem.VFS
 		}
 
 		/// <summary>
-		/// Unmounts the filesystem rooted at the given path.
+		/// Unmounts the file system rooted at the given path.
 		/// </summary>
-		/// <param name="path">The path identifying the filesystem to unmount.</param>
+		/// <param name="path">The path identifying the file system to unmount.</param>
 		/// <remarks>
-		/// In contrast to Posix this does not have to be the root directory of the filesystem. Any path in the filesystem will unmount the 
+		/// In contrast to Posix this does not have to be the root directory of the file system. Any path in the file system will unmount the
 		/// entire tree.
 		/// </remarks>
 		/// FIXME: Which exceptions can be thrown.
@@ -279,11 +274,11 @@ namespace Mosa.FileSystem.VFS
 		/// FIXME: We need to check the FS tree for in use status and throw an InvalidOperationException?
 		public static void Unmount(string path)
 		{
-			// FIXME: 
+			// FIXME:
 			throw new System.NotImplementedException();
 		}
 
-		#endregion // Methods
+		#endregion Static Methods
 
 		#region IFileSystem Members
 
@@ -294,7 +289,7 @@ namespace Mosa.FileSystem.VFS
 			get { return VirtualFileSystem.rootDirectory; }
 		}
 
-		#endregion // IFileSystem Members
+		#endregion IFileSystem Members
 
 		#region IFileSystemService Members
 
@@ -312,6 +307,6 @@ namespace Mosa.FileSystem.VFS
 			throw new System.NotSupportedException();
 		}
 
-		#endregion // IFileSystemService Members
+		#endregion IFileSystemService Members
 	}
 }

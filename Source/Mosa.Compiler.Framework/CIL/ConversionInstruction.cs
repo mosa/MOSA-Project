@@ -1,32 +1,16 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
-using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.Common.Exceptions;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
 	/// Implements the internal representation for the IL conversion instructions.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryArithmeticInstruction" />
 	public sealed class ConversionInstruction : UnaryArithmeticInstruction
 	{
-		#region Data members
-
-		// FIXME
-		private static StackTypeCode[] _conversionTable = new StackTypeCode[] {
-
-		};
-
-		#endregion // Data members
-
 		#region Construction
 
 		/// <summary>
@@ -38,93 +22,50 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="ctx"></param>
-		/// <param name="compiler">The compiler.</param>
-		public override void Validate(Context ctx, IMethodCompiler compiler)
+		/// <param name="context"></param>
+		/// <param name="methodCompiler">The compiler.</param>
+		public override void Resolve(Context context, MethodCompiler methodCompiler)
 		{
-			base.Validate(ctx, compiler);
+			base.Resolve(context, methodCompiler);
 
 			// Validate the typecode & determine the resulting stack type
-			SigType resultType;
+			MosaType resultType;
 
 			switch (opcode)
 			{
-				case OpCode.Conv_u: goto case OpCode.Conv_i;
-				case OpCode.Conv_i:
-					resultType = compiler.Architecture.NativeType;
-					break;
-
-				case OpCode.Conv_i1:
-					resultType = BuiltInSigType.SByte;
-					break;
-
-				case OpCode.Conv_i2:
-					resultType = BuiltInSigType.Int16;
-					break;
-
-				case OpCode.Conv_i4:
-					resultType = BuiltInSigType.Int32;
-					break;
-
-				case OpCode.Conv_i8:
-					resultType = BuiltInSigType.Int64;
-					break;
-
-				case OpCode.Conv_r4:
-					resultType = BuiltInSigType.Single;
-					break;
-
-				case OpCode.Conv_r8:
-					resultType = BuiltInSigType.Double;
-					break;
-
-				case OpCode.Conv_u1:
-					resultType = BuiltInSigType.Byte;
-					break;
-
-				case OpCode.Conv_u2:
-					resultType = BuiltInSigType.UInt16;
-					break;
-
-				case OpCode.Conv_u4:
-					resultType = BuiltInSigType.UInt32;
-					break;
-
-				case OpCode.Conv_u8:
-					resultType = BuiltInSigType.UInt64;
-					break;
-
+				case OpCode.Conv_u: resultType = methodCompiler.TypeSystem.BuiltIn.U; break;
+				case OpCode.Conv_i: resultType = methodCompiler.TypeSystem.BuiltIn.I; break;
+				case OpCode.Conv_i1: resultType = methodCompiler.TypeSystem.BuiltIn.I1; break;
+				case OpCode.Conv_i2: resultType = methodCompiler.TypeSystem.BuiltIn.I2; break;
+				case OpCode.Conv_i4: resultType = methodCompiler.TypeSystem.BuiltIn.I4; break;
+				case OpCode.Conv_i8: resultType = methodCompiler.TypeSystem.BuiltIn.I8; break;
+				case OpCode.Conv_r4: resultType = methodCompiler.TypeSystem.BuiltIn.R4; break;
+				case OpCode.Conv_r8: resultType = methodCompiler.TypeSystem.BuiltIn.R8; break;
+				case OpCode.Conv_u1: resultType = methodCompiler.TypeSystem.BuiltIn.U1; break;
+				case OpCode.Conv_u2: resultType = methodCompiler.TypeSystem.BuiltIn.U2; break;
+				case OpCode.Conv_u4: resultType = methodCompiler.TypeSystem.BuiltIn.U4; break;
+				case OpCode.Conv_u8: resultType = methodCompiler.TypeSystem.BuiltIn.U8; break;
 				case OpCode.Conv_ovf_i: goto case OpCode.Conv_i;
-				case OpCode.Conv_ovf_u: goto case OpCode.Conv_i;
-
+				case OpCode.Conv_ovf_u: goto case OpCode.Conv_u;
 				case OpCode.Conv_ovf_i_un: goto case OpCode.Conv_i;
-				case OpCode.Conv_ovf_u_un: goto case OpCode.Conv_i;
-
-				default:
-					throw new NotSupportedException(@"Overflow checking conversions not supported.");
+				case OpCode.Conv_ovf_u_un: goto case OpCode.Conv_u;
+				case OpCode.Conv_r_un: resultType = methodCompiler.TypeSystem.BuiltIn.R8; break;
+				default: throw new CompilerException("Overflow checking conversions not supported");
 			}
 
-			ctx.Result = compiler.CreateTemporary(resultType);
-		}
+			var result = methodCompiler.Compiler.GetStackType(resultType);
 
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.Conversion(context);
+			context.Result = methodCompiler.CreateVirtualRegister(resultType);
+			context.MosaType = resultType;
 		}
 
 		#endregion Methods
-
 	}
 }

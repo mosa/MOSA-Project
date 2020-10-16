@@ -1,23 +1,14 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	/// Sizeof Instruction
 	/// </summary>
-	public sealed class SizeofInstruction : BaseInstruction
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BaseCILInstruction" />
+	public sealed class SizeofInstruction : BaseCILInstruction
 	{
 		#region Construction
 
@@ -30,39 +21,25 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
-			Token token = decoder.DecodeTokenType();
-			RuntimeType type = decoder.TypeModule.GetType(token);
+			node.MosaType = (MosaType)decoder.Instruction.Operand;
 
-			uint size = (uint)decoder.Compiler.TypeLayout.GetTypeSize(type);
-
-			ctx.Result = new Operands.ConstantOperand(BuiltInSigType.UInt32, size);
-		}
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.Sizeof(context);
+			node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.MethodCompiler.Architecture.Is32BitPlatform ? decoder.TypeSystem.BuiltIn.I4 : decoder.TypeSystem.BuiltIn.I8);
 		}
 
 		#endregion Methods
-
 	}
 }

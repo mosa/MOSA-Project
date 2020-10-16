@@ -1,16 +1,7 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.FileSystem.VFS
 {
-
 	/// <summary>
 	/// Flags, which control the operation of the Mosa.Filesystem.VFS.PathResolver.
 	/// </summary>
@@ -42,5 +33,4 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		DoNotFollowSymbolicLinks = 0x00020000,
 	}
-
 }

@@ -1,12 +1,4 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.DeviceSystem
 {
@@ -19,10 +11,12 @@ namespace Mosa.DeviceSystem
 		/// Cylinder
 		/// </summary>
 		public ushort Cylinders;
+
 		/// <summary>
 		/// Head
 		/// </summary>
 		public byte Heads;
+
 		/// <summary>
 		/// Sector
 		/// </summary>
@@ -36,9 +30,9 @@ namespace Mosa.DeviceSystem
 		/// <param name="sectorsPerTrack">The sectors per track.</param>
 		public DiskGeometry(ushort cylinders, byte heads, ushort sectorsPerTrack)
 		{
-			this.Cylinders = cylinders;
-			this.Heads = heads;
-			this.SectorsPerTrack = sectorsPerTrack;
+			Cylinders = cylinders;
+			Heads = heads;
+			SectorsPerTrack = sectorsPerTrack;
 		}
 
 		/// <summary>
@@ -85,7 +79,5 @@ namespace Mosa.DeviceSystem
 
 			Cylinders = (ushort)(cylinderTimesHeads / Heads);
 		}
-
-
 	}
 }

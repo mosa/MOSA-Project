@@ -1,19 +1,11 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
 	/// Implements path resolution functionality for the Mosa.VFS.VirtualFileSystem.
 	/// </summary>
-	class PathResolver
+	internal class PathResolver
 	{
 		#region Constants
 
@@ -28,9 +20,9 @@ namespace Mosa.FileSystem.VFS
 		// </summary>
 		//private static readonly char[] splitChars = new char[] { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar };
 
-		#endregion // Constants
+		#endregion Constants
 
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// Reference to the root directory of the system.
@@ -47,7 +39,7 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		private int depth;
 
-		#endregion // Data members
+		#endregion Data Members
 
 		#region Construction
 
@@ -58,7 +50,7 @@ namespace Mosa.FileSystem.VFS
 			depth = PathResolver.MAX_SYMLINKS_TO_FOLLOW;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Static methods
 
@@ -67,19 +59,17 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		/// <param name="rootDirectory">The root directory.</param>
 		/// <param name="path">The path to resolve.</param>
-		/// <returns>The directory entry of the resolved path.</returns>
-		/// <exception cref="System.Security.SecurityException">The caller does not have access to the path or a component. For example the caller does not have the right to traverse the path.</exception>
-		/// <exception cref="System.IO.PathTooLongException">The path is too long to traverse. This can be the result of circular symbolic links in the path.</exception>
-		/// <exception cref="System.IO.FileNotFoundException">The file or folder path not found.</exception>
-		/// <exception cref="System.IO.DirectoryNotFoundException">A path component was not found.</exception>
+		/// <returns>
+		/// The directory entry of the resolved path.
+		/// </returns>
 		/// <remarks>
 		/// This call my result in other exceptions not specified in the above list. Other exceptions can be thrown by IVfsNode implementations, which are visited during the traversal
 		/// process. For example a network file system node may throw an exception, if the server is unreachable.
 		/// </remarks>
 		public static DirectoryEntry Resolve(DirectoryEntry rootDirectory, ref string path)
 		{
-			// FIXME: Remove the root argument. The filesystem root should be unique for a process as part of a security model similar to jails, e.g. give apps from
-			// untrusted sources their private filesystem regions.
+			// FIXME: Remove the root argument. The file system root should be unique for a process as part of a security model similar to jails, e.g. give apps from
+			// untrusted sources their private file system regions.
 
 			// FIXME: Get the root from the thread execution block
 			DirectoryEntry current = rootDirectory;
@@ -93,11 +83,9 @@ namespace Mosa.FileSystem.VFS
 		/// <param name="rootDirectory">The root directory.</param>
 		/// <param name="path">The path to resolve.</param>
 		/// <param name="flags">Controls aspects of the path lookup process.</param>
-		/// <returns>The directory entry of the resolved path.</returns>
-		/// <exception cref="System.Security.SecurityException">The caller does not have access to the path or a component. For example the caller does not have the right to traverse the path.</exception>
-		/// <exception cref="System.IO.PathTooLongException">The path is too long to traverse. This can be the result of circular symbolic links in the path.</exception>
-		/// <exception cref="System.IO.FileNotFoundException">The file or folder path was not found. This exception can be prevented by specifying PathResolutionFlags.DoNotThrowNotFoundException.</exception>
-		/// <exception cref="System.IO.DirectoryNotFoundException">A path component was not found. This exception can be prevented by specifying PathResolutionFlags.DoNotThrowNotFoundException.</exception>
+		/// <returns>
+		/// The directory entry of the resolved path.
+		/// </returns>
 		/// <remarks>
 		/// This call my result in other exceptions not specified in the above list. Other exceptions can be thrown by IVfsNode implementations, which are visited during the traversal
 		/// process. For example a network file system node may throw an exception, if the server is unreachable.
@@ -110,7 +98,7 @@ namespace Mosa.FileSystem.VFS
 			return resolver.Resolve(ref path, flags);
 		}
 
-		#endregion // Static methods
+		#endregion Static methods
 
 		#region Methods
 
@@ -119,11 +107,9 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		/// <param name="path">The path to lookup. This can be a relative or absolute path. Path.DirectorySeparatorChar or Path.AltDirectorySeparatorChar are valid delimiters.</param>
 		/// <param name="flags">The lookup flags, which control the lookup process.</param>
-		/// <returns>The directory entry of the resolved path.</returns>
-		/// <exception cref="System.Security.SecurityException">The caller does not have access to the path or a component. For example the caller does not have the right to traverse the path.</exception>
-		/// <exception cref="System.IO.PathTooLongException">The path is too long to traverse. This can be the result of circular symbolic links in the path.</exception>
-		/// <exception cref="System.IO.FileNotFoundException">The path or a component was not found. This exception can be prevented by specifying PathResolutionFlags.DoNotThrowNotFoundException.</exception>
-		/// <exception cref="System.IO.DirectoryNotFoundException">A path component was not found. This exception can be prevented by specifying PathResolutionFlags.DoNotThrowNotFoundException.</exception>
+		/// <returns>
+		/// The directory entry of the resolved path.
+		/// </returns>
 		/// <remarks>
 		/// This call may result in other exceptions not specified in the above list. Other exceptions can be thrown by IVfsNode implementations, which are visited during the traversal
 		/// process. For example a network file system node may throw an exception, if the server is unreachable.
@@ -141,8 +127,10 @@ namespace Mosa.FileSystem.VFS
 
 			// Current path component
 			string item;
+
 			// Loop index
 			int index = 0;
+
 			// Perform an access check on the root directory
 			AccessCheck.Perform(currentDirectory, AccessMode.Traverse, AccessCheckFlags.None);
 
@@ -230,6 +218,6 @@ namespace Mosa.FileSystem.VFS
 			return currentDirectory;
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

@@ -1,13 +1,4 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
-using Mosa.ClassLib;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.DeviceSystem
 {
@@ -33,41 +24,46 @@ namespace Mosa.DeviceSystem
 	{
 		internal const uint Status = 0x00; // 1
 		internal const uint FirstCRS = 0x01; // 3
-		internal const uint PartitionType = 0x04;	// 1
+		internal const uint PartitionType = 0x04;   // 1
 		internal const uint LastCRS = 0x05; // 3
 		internal const uint LBA = 0x08; // 4
 		internal const uint Sectors = 0x0C; // 4
 	}
 
-	#endregion
+	#endregion Definitions
 
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class MasterBootBlock
 	{
 		/// <summary>
-		/// 
+		/// The maximum MBR partitions
 		/// </summary>
 		public const uint MaxMBRPartitions = 4;
+
 		/// <summary>
-		/// 
+		/// The disk device
 		/// </summary>
 		protected IDiskDevice diskDevice;
+
 		/// <summary>
-		/// 
+		/// The partitions
 		/// </summary>
 		public GenericPartition[] Partitions;
+
 		/// <summary>
-		/// 
+		/// The disk signature
 		/// </summary>
 		protected uint diskSignature;
+
 		/// <summary>
-		/// 
+		/// The valid
 		/// </summary>
 		protected bool valid;
+
 		/// <summary>
-		/// 
+		/// The code
 		/// </summary>
 		protected byte[] code;
 
@@ -91,12 +87,15 @@ namespace Mosa.DeviceSystem
 		{
 			get
 			{
-				if (code == null) return null;
+				if (code == null)
+					return null;
 
-				byte[] copy = new byte[code.Length];
+				var copy = new byte[code.Length];
 
 				for (int i = 0; i < code.Length; i++)
+				{
 					copy[i] = code[i];
+				}
 
 				return copy;
 			}
@@ -111,7 +110,9 @@ namespace Mosa.DeviceSystem
 				code = new byte[value.Length];
 
 				for (int i = 0; i < value.Length; i++)
+				{
 					code[i] = value[i];
+				}
 			}
 		}
 
@@ -123,10 +124,17 @@ namespace Mosa.DeviceSystem
 		{
 			this.diskDevice = diskDevice;
 			Partitions = new GenericPartition[MaxMBRPartitions];
+
 			for (uint i = 0; i < MaxMBRPartitions; i++)
+			{
 				Partitions[i] = new GenericPartition(i);
+			}
+
 			Read();
 		}
+
+		public DataBlock masterboot;
+		public byte[] data;
 
 		/// <summary>
 		/// Reads the master boot block.
@@ -136,10 +144,11 @@ namespace Mosa.DeviceSystem
 		{
 			valid = false;
 
-			if (diskDevice.BlockSize != 512) return false;  // only going to work with 512 sector sizes
-			if (diskDevice.TotalBlocks < 3) return false;
+			if (diskDevice.BlockSize != 512 || diskDevice.TotalBlocks < 3)
+				return false;  // only going to work with 512 sector sizes and disks more than 2 blocks
 
-			BinaryFormat masterboot = new BinaryFormat(diskDevice.ReadBlock(0, 1));
+			data = diskDevice.ReadBlock(0, 1);
+			masterboot = new DataBlock(data);
 
 			if (masterboot.GetUShort(MBR.MBRSignature) != MBRConstant.MBRSignature)
 				return false;
@@ -152,25 +161,25 @@ namespace Mosa.DeviceSystem
 			{
 				uint offset = MBR.FirstPartition + (index * MBRConstant.PartitionSize);
 
-				GenericPartition partition = new GenericPartition(index);
-
-				partition.Bootable = masterboot.GetByte(offset + PartitionRecord.Status) == MBRConstant.Bootable;
-				partition.PartitionType = masterboot.GetByte(offset + PartitionRecord.PartitionType);
-				partition.StartLBA = masterboot.GetUInt(offset + PartitionRecord.LBA);
-				partition.TotalBlocks = masterboot.GetUInt(offset + PartitionRecord.Sectors);
-
-				Partitions[index] = partition;
+				Partitions[index] = new GenericPartition(index)
+				{
+					Bootable = masterboot.GetByte(offset + PartitionRecord.Status) == MBRConstant.Bootable,
+					PartitionType = masterboot.GetByte(offset + PartitionRecord.PartitionType),
+					StartLBA = masterboot.GetUInt(offset + PartitionRecord.LBA),
+					TotalBlocks = masterboot.GetUInt(offset + PartitionRecord.Sectors)
+				};
 			}
 
 			//TODO: Extended Partitions
 
 			code = new byte[MBRConstant.CodeAreaSize];
 			for (uint index = 0; index < MBRConstant.CodeAreaSize; index++)
+			{
 				code[index] = masterboot.GetByte(index);
+			}
 
 			return valid;
 		}
-
 
 		/// <summary>
 		/// Writes the master boot block.
@@ -178,18 +187,24 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public bool Write()
 		{
-			if (!diskDevice.CanWrite) { return false; }
+			if (!diskDevice.CanWrite)
+				return false;
 
-			BinaryFormat masterboot = new BinaryFormat(new byte[512]);
+			var masterboot = new DataBlock(512);
 
 			masterboot.SetUInt(MBR.DiskSignature, diskSignature);
 			masterboot.SetUShort(MBR.MBRSignature, MBRConstant.MBRSignature);
 
 			if (code != null)
+			{
 				for (uint index = 0; ((index < MBRConstant.CodeAreaSize) && (index < code.Length)); index++)
+				{
 					masterboot.SetByte(index, code[index]);
+				}
+			}
 
 			for (uint index = 0; index < MaxMBRPartitions; index++)
+			{
 				if (Partitions[index].TotalBlocks != 0)
 				{
 					uint offset = MBR.FirstPartition + (index * 16);
@@ -198,11 +213,11 @@ namespace Mosa.DeviceSystem
 					masterboot.SetUInt(offset + PartitionRecord.LBA, Partitions[index].StartLBA);
 					masterboot.SetUInt(offset + PartitionRecord.Sectors, Partitions[index].TotalBlocks);
 
-					DiskGeometry diskGeometry = new DiskGeometry();
+					var diskGeometry = new DiskGeometry();
 					diskGeometry.GuessGeometry(diskDevice.TotalBlocks);
 
-					CHS chsStart = new CHS();
-					CHS chsEnd = new CHS();
+					var chsStart = new CHS();
+					var chsEnd = new CHS();
 
 					chsStart.SetCHS(diskGeometry, Partitions[index].StartLBA);
 					chsEnd.SetCHS(diskGeometry, Partitions[index].StartLBA + Partitions[index].TotalBlocks - 1);
@@ -214,11 +229,11 @@ namespace Mosa.DeviceSystem
 					masterboot.SetByte(offset + PartitionRecord.LastCRS + 1, (byte)((chsEnd.Sector & 0x3F) | ((chsEnd.Cylinder >> 8) & 0x03)));
 					masterboot.SetByte(offset + PartitionRecord.LastCRS + 2, (byte)(chsEnd.Cylinder & 0xFF));
 				}
+			}
 
 			diskDevice.WriteBlock(0, 1, masterboot.Data);
 
 			return true;
 		}
-
 	}
 }

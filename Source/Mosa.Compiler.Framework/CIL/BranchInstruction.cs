@@ -1,20 +1,12 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
-
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	/// Branch Instruction
 	/// </summary>
-	public class BranchInstruction : BaseInstruction, IBranchInstruction
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BaseCILInstruction" />
+	public class BranchInstruction : BaseCILInstruction
 	{
 		#region Construction
 
@@ -23,11 +15,11 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public BranchInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 0)
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -40,60 +32,33 @@ namespace Mosa.Compiler.Framework.CIL
 		/// building. Any instruction that alters the control flow must override
 		/// this property and correctly identify its control flow modifications.
 		/// </remarks>
-		public override FlowControl FlowControl
-		{
-			get { return FlowControl.Branch; }
-		}
+		public override FlowControl FlowControl { get { return FlowControl.UnconditionalBranch; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
+
+		public override bool DecodeTargets(IInstructionDecoder decoder)
+		{
+			decoder.GetBlock((int)decoder.Instruction.Operand);
+			return true;
+		}
 
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode bases first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
-			switch (opcode)
-			{
-				case OpCode.Br_s:
-					{
-						sbyte target = decoder.DecodeSByte();
-						ctx.SetBranch(target);
-					}
-					break;
+			var block = decoder.GetBlock((int)decoder.Instruction.Operand);
 
-				case OpCode.Br:
-					{
-						int target = decoder.DecodeInt();
-						ctx.SetBranch(target);
-						break;
-					}
-			}
-		}
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.Branch(context);
+			node.AddBranchTarget(block);
 		}
 
 		#endregion Methods
-
-		/// <summary>
-		/// Determines if the branch is conditional.
-		/// </summary>
-		/// <value></value>
-		public bool IsConditional { get { return false; } }
-
 	}
 }

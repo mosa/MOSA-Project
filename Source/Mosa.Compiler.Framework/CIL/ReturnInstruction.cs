@@ -1,24 +1,15 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
-
-using Mosa.Compiler.Metadata;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	/// Return Instruction
 	/// </summary>
-	public sealed class ReturnInstruction : UnaryInstruction, IBranchInstruction
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryInstruction" />
+	public sealed class ReturnInstruction : UnaryInstruction
 	{
-
 		#region Construction
 
 		/// <summary>
@@ -30,7 +21,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -43,53 +34,36 @@ namespace Mosa.Compiler.Framework.CIL
 		/// building. Any instruction that alters the control flow must override
 		/// this property and correctly identify its control flow modifications.
 		/// </remarks>
-		public override FlowControl FlowControl
-		{
-			get { return FlowControl.Return; }
-		}
+		public override FlowControl FlowControl { get { return FlowControl.Return; } }
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		/// <exception cref="ArgumentException">Invalid opcode. - codeReader</exception>
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
 			if (OpCode.Ret != opcode)
-				throw new ArgumentException(@"Invalid opcode.", @"code");
+				throw new ArgumentException("Invalid opcode.", "codeReader");
 
-			if (decoder.Method.Signature.ReturnType.Type == CilElementType.Void)
-				ctx.OperandCount = 0;
+			if (decoder.Method.Signature.ReturnType.IsVoid)
+				node.OperandCount = 0;
 			else
-				ctx.OperandCount = 1;
+				node.OperandCount = 1;
 
-			ctx.SetBranch(Int32.MaxValue);
-		}
+			var block = decoder.GetBlock(BasicBlock.EpilogueLabel);
 
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.Ret(context);
+			node.AddBranchTarget(block);
 		}
 
 		#endregion Methods
-
-		/// <summary>
-		/// Determines if the branch is conditional.
-		/// </summary>
-		/// <value></value>
-		public bool IsConditional { get { return false; } }
-
 	}
 }

@@ -1,2 +1,1 @@
-nant
-cp ../3rdParty/*.dll ../bin/
+dotnet build Mosa.Linux.sln

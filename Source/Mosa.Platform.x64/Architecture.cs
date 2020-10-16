@@ -1,253 +1,313 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.Framework.CompilerStages;
+using Mosa.Compiler.Framework.Linker.Elf;
+using Mosa.Compiler.Framework.Stages;
+using Mosa.Platform.Intel;
+using Mosa.Platform.x64.CompilerStages;
+using Mosa.Platform.x64.Stages;
+using System.Collections.Generic;
 
 namespace Mosa.Platform.x64
 {
-
 	/// <summary>
 	/// This class provides a common base class for architecture
 	/// specific operations.
 	/// </summary>
-	public class Architecture : BasicArchitecture
+	public sealed class Architecture : BaseArchitecture
 	{
-
-		/// <summary>
-		/// Gets a value indicating whether this architecture is little-endian.
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if this instance is architecture is little-endian; otherwise, <c>false</c>.
-		/// </value>
-		public override bool IsLittleEndian { get { return true; } }
-
 		/// <summary>
 		/// Gets the type of the elf machine.
 		/// </summary>
-		/// <value>
-		/// The type of the elf machine.
-		/// </value>
-		public override ushort ElfMachineType { get { return 3; } }
-
-		/// <summary>
-		/// Holds the calling conversion
-		/// </summary>
-		private ICallingConvention callingConvention;
+		public override MachineType ElfMachineType { get { return MachineType.Intel386; } }
 
 		/// <summary>
 		/// Defines the register set of the target architecture.
 		/// </summary>
-		private static readonly Register[] Registers = new Register[]
+		private static readonly PhysicalRegister[] Registers = new PhysicalRegister[]
 		{
-			//TODO
+			////////////////////////////////////////////////////////
+			// 32-bit general purpose registers
+			////////////////////////////////////////////////////////
+			GeneralPurposeRegister.EAX,
+			GeneralPurposeRegister.ECX,
+			GeneralPurposeRegister.EDX,
+			GeneralPurposeRegister.EBX,
+			GeneralPurposeRegister.ESP,
+			GeneralPurposeRegister.EBP,
+			GeneralPurposeRegister.ESI,
+			GeneralPurposeRegister.EDI,
+
+			GeneralPurposeRegister.R8,
+			GeneralPurposeRegister.R9,
+			GeneralPurposeRegister.R10,
+			GeneralPurposeRegister.R11,
+			GeneralPurposeRegister.R12,
+			GeneralPurposeRegister.R13,
+			GeneralPurposeRegister.R14,
+			GeneralPurposeRegister.R15,
+
+			////////////////////////////////////////////////////////
+			// SSE 128-bit floating point registers
+			////////////////////////////////////////////////////////
+			SSE2Register.XMM0,
+			SSE2Register.XMM1,
+			SSE2Register.XMM2,
+			SSE2Register.XMM3,
+			SSE2Register.XMM4,
+			SSE2Register.XMM5,
+			SSE2Register.XMM6,
+			SSE2Register.XMM7,
+
+			SSE2Register.XMM8,
+			SSE2Register.XMM9,
+			SSE2Register.XMM10,
+			SSE2Register.XMM11,
+			SSE2Register.XMM12,
+			SSE2Register.XMM13,
+			SSE2Register.XMM14,
+			SSE2Register.XMM15
 		};
 
 		/// <summary>
-		/// Specifies the architecture features to use in generated code.
+		/// Gets the native size of architecture in bytes.
 		/// </summary>
-		private ArchitectureFeatureFlags architectureFeatures;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Architecture"/> class.
-		/// </summary>
-		/// <param name="architectureFeatures">The features this architecture supports.</param>
-		private Architecture(ArchitectureFeatureFlags architectureFeatures)
-		{
-			this.architectureFeatures = architectureFeatures;
-		}
-
-		/// <summary>
-		/// Retrieves the native integer size of the x64 platform.
-		/// </summary>
-		/// <value>This property always returns 64.</value>
-		public override int NativeIntegerSize
-		{
-			get { return 64; }
-		}
+		/// <value>This property always returns 8.</value>
+		public override int NativePointerSize { get { return 8; } }
 
 		/// <summary>
 		/// Retrieves the register set of the x64 platform.
 		/// </summary>
-		public override Register[] RegisterSet
+		public override PhysicalRegister[] RegisterSet { get { return Registers; } }
+
+		/// <summary>
+		/// Retrieves the stack frame register of the x86.
+		/// </summary>
+		public override PhysicalRegister StackFrameRegister { get { return GeneralPurposeRegister.EBP; } }
+
+		/// <summary>
+		/// Retrieves the stack pointer register of the x86.
+		/// </summary>
+		public override PhysicalRegister StackPointerRegister { get { return GeneralPurposeRegister.ESP; } }
+
+		/// <summary>
+		/// Gets the return register.
+		/// </summary>
+		public override PhysicalRegister ReturnRegister { get { return GeneralPurposeRegister.EAX; } }
+
+		public override PhysicalRegister LinkRegister { get { return null; } }
+
+		/// <summary>
+		/// Gets the return register for the high portion of the 64bit result.
+		/// </summary>
+		public override PhysicalRegister ReturnHighRegister { get { return null; } }
+
+		/// <summary>
+		/// Gets the return floating point register.
+		/// </summary>
+		public override PhysicalRegister ReturnFloatingPointRegister { get { return SSE2Register.XMM0; } }
+
+		/// <summary>
+		/// Retrieves the exception register of the architecture.
+		/// </summary>
+		public override PhysicalRegister ExceptionRegister { get { return GeneralPurposeRegister.EDI; } }
+
+		/// <summary>
+		/// Gets the finally return block register.
+		/// </summary>
+		public override PhysicalRegister LeaveTargetRegister { get { return GeneralPurposeRegister.ESI; } }
+
+		/// <summary>
+		/// Retrieves the program counter register of the x86.
+		/// </summary>
+		public override PhysicalRegister ProgramCounter { get { return null; } }
+
+		/// <summary>
+		/// Gets the name of the platform.
+		/// </summary>
+		public override string PlatformName { get { return "x64"; } }
+
+		/// <summary>
+		/// Gets the instructions.
+		/// </summary>
+		public override List<BaseInstruction> Instructions { get { return X64Instructions.List; } }
+
+		public override OpcodeEncoder GetOpcodeEncoder()
 		{
-			get { return Registers; }
+			return new OpcodeEncoder(8);
 		}
 
 		/// <summary>
-		/// Retrieves the stack frame register of the x64.
+		/// Extends the compiler pipeline with x64 specific stages.
 		/// </summary>
-		public override Register StackFrameRegister
+		/// <param name="pipeline">The pipeline to extend.</param>
+		public override void ExtendCompilerPipeline(Pipeline<BaseCompilerStage> pipeline, CompilerSettings compilerSettings)
 		{
-			get
+			if (compilerSettings.Settings.GetValue("Multiboot.Version", string.Empty).ToLower() == "v1")
+			{
+				pipeline.InsertAfterFirst<TypeInitializerStage>(
+					new MultibootV1Stage()
+				);
+			}
+
+			pipeline.Add(
+				new Intel.CompilerStages.StartUpStage()
+			);
+		}
+
+		/// <summary>
+		/// Extends the method compiler pipeline with x64 specific stages.</summary>
+		/// <param name="pipeline">The method compiler pipeline to extend.</param>
+		/// <param name="compilerSettings"></param>
+		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerSettings compilerSettings)
+		{
+			pipeline.InsertBefore<Compiler.Framework.Stages.RuntimeCallStage>(
+				new Stages.RuntimeCallStage()
+			);
+
+			pipeline.InsertAfterLast<PlatformIntrinsicStage>(
+				new BaseMethodCompilerStage[]
+				{
+					new LongOperandStage(),
+					new IRTransformationStage(),
+					compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
+					new TweakStage(),
+					new FixedRegisterAssignmentStage(),
+					compilerSettings.PlatformOptimizations ? new SimpleDeadCodeRemovalStage() : null,
+					new AddressModeConversionStage(),
+					new FloatingPointStage(),
+				});
+
+			pipeline.InsertAfterLast<StackLayoutStage>(
+				new BuildStackStage()
+			);
+
+			pipeline.InsertBefore<CodeGenerationStage>(
+				new BaseMethodCompilerStage[]
+				{
+					new FinalTweakStage(),
+					compilerSettings.PlatformOptimizations ? new PostOptimizationStage() : null,
+				});
+
+			pipeline.InsertBefore<CodeGenerationStage>(
+				new JumpOptimizationStage()
+			);
+		}
+
+		/// <summary>
+		/// Inserts the move instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		public override void InsertMoveInstruction(Context context, Operand destination, Operand source)
+		{
+			BaseInstruction instruction = X64.Mov64;
+
+			if (destination.IsR4)
+			{
+				instruction = X64.Movss;
+			}
+			else if (destination.IsR8)
+			{
+				instruction = X64.Movsd;
+			}
+
+			context.AppendInstruction(instruction, destination, source);
+		}
+
+		/// <summary>
+		/// Inserts the store instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
+		/// <exception cref="NotImplementCompilerException"></exception>
+		public override void InsertStoreInstruction(Context context, Operand destination, Operand offset, Operand value)
+		{
+			BaseInstruction instruction = X64.MovStore32;
+
+			if (value.IsR4)
+			{
+				instruction = X64.MovssStore;
+			}
+			else if (value.IsR8)
+			{
+				instruction = X64.MovsdStore;
+			}
+
+			context.AppendInstruction(instruction, null, destination, offset, value);
+		}
+
+		/// <summary>
+		/// Inserts the load instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		/// <param name="offset">The offset.</param>
+		/// <exception cref="NotImplementCompilerException"></exception>
+		public override void InsertLoadInstruction(Context context, Operand destination, Operand source, Operand offset)
+		{
+			BaseInstruction instruction = X64.MovLoad32;
+
+			if (destination.IsR4)
+			{
+				instruction = X64.MovssLoad;
+			}
+			else if (destination.IsR8)
+			{
+				instruction = X64.MovsdLoad;
+			}
+
+			context.AppendInstruction(instruction, destination, source, offset);
+		}
+
+		/// <summary>
+		/// Inserts the exchange instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		/// <param name="source">The source.</param>
+		public override void InsertExchangeInstruction(Context context, Operand destination, Operand source)
+		{
+			if (source.IsR4)
 			{
 				// TODO
-				return null;
-				// return GeneralPurposeRegister.EBP; 
+				throw new CompilerException("R4 not implemented in InsertExchangeInstruction method");
 			}
-		}
-
-		/// <summary>
-		/// Factory method for the Architecture class.
-		/// </summary>
-		/// <returns>The created architecture instance.</returns>
-		/// <param name="architectureFeatures">The features available in the architecture and code generation.</param>
-		/// <remarks>
-		/// This method creates an instance of an appropriate architecture class, which supports the specific
-		/// architecture features.
-		/// </remarks>
-		public static IArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
-		{
-			if (architectureFeatures == ArchitectureFeatureFlags.AutoDetect)
-				architectureFeatures = ArchitectureFeatureFlags.MMX | ArchitectureFeatureFlags.SSE | ArchitectureFeatureFlags.SSE2;
-
-			return new Architecture(architectureFeatures);
-		}
-
-		/// <summary>
-		/// Creates a new result operand of the requested type.
-		/// </summary>
-		/// <param name="signatureType">The type requested.</param>
-		/// <param name="instructionLabel">The label of the instruction requesting the operand.</param>
-		/// <param name="operandStackIndex">The stack index of the operand.</param>
-		/// <returns>A new operand usable as a result operand.</returns>
-		public override Operand CreateResultOperand(SigType signatureType, int instructionLabel, int operandStackIndex)
-		{
-			// TODO
-			return null;
-			//return new RegisterOperand(signatureType, GeneralPurposeRegister.EAX);
-		}
-
-		/// <summary>
-		/// Extends the assembly compiler pipeline with x64 specific stages.
-		/// </summary>
-		/// <param name="assemblyCompilerPipeline">The assembly compiler pipeline to extend.</param>
-		public override void ExtendAssemblyCompilerPipeline(CompilerPipeline assemblyCompilerPipeline)
-		{
-			//assemblyCompilerPipeline.InsertAfterFirst<IAssemblyCompilerStage>(
-			//    new InterruptVectorStage()
-			//);
-
-			//assemblyCompilerPipeline.InsertAfterFirst<InterruptVectorStage>(
-			//    new ExceptionVectorStage()
-			//);
-
-			//assemblyCompilerPipeline.InsertAfterLast<TypeLayoutStage>(
-			//    new MethodTableBuilderStage()
-			//);
-
-		}
-
-		/// <summary>
-		/// Extends the method compiler pipeline with x64 specific stages.
-		/// </summary>
-		/// <param name="methodCompilerPipeline">The method compiler pipeline to extend.</param>
-		public override void ExtendMethodCompilerPipeline(CompilerPipeline methodCompilerPipeline)
-		{
-
-			//methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
-			//    new IMethodCompilerStage[]
-			//    {
-			//        new LongOperandTransformationStage(),
-			//        new AddressModeConversionStage(),
-			//        new IRTransformationStage(),
-			//        new TweakTransformationStage(),
-			//        new MemToMemConversionStage(),
-			//    });
-
-			//methodCompilerPipeline.InsertAfterLast<IBlockOrderStage>(
-			//    new SimplePeepholeOptimizationStage()
-			//);
-
-			//methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
-			//    new ExceptionLayoutStage()
-			//);
-		}
-
-		/// <summary>
-		/// Retrieves a calling convention object for the requested calling convention.
-		/// </summary>
-		/// <returns>
-		/// An instance of <see cref="ICallingConvention"/>.
-		/// </returns>
-		public override ICallingConvention GetCallingConvention()
-		{
-			// TODO
-			if (callingConvention == null)
-				callingConvention = null; // new DefaultCallingConvention(this);
-
-			return callingConvention;
-		}
-
-		/// <summary>
-		/// Gets the type memory requirements.
-		/// </summary>
-		/// <param name="signatureType">The signature type.</param>
-		/// <param name="memorySize">Receives the memory size of the type.</param>
-		/// <param name="alignment">Receives alignment requirements of the type.</param>
-		public override void GetTypeRequirements(SigType signatureType, out int memorySize, out int alignment)
-		{
-			if (signatureType == null)
-				throw new ArgumentNullException("signatureType");
-
-			switch (signatureType.Type)
+			else if (source.IsR8)
 			{
-				case CilElementType.U1: memorySize = alignment = 4; break;
-				case CilElementType.U2: memorySize = alignment = 4; break;
-				case CilElementType.U4: memorySize = alignment = 4; break;
-				case CilElementType.U8: memorySize = 8; alignment = 4; break;
-				case CilElementType.I1: memorySize = alignment = 4; break;
-				case CilElementType.I2: memorySize = alignment = 4; break;
-				case CilElementType.I4: memorySize = alignment = 4; break;
-				case CilElementType.I8: memorySize = 8; alignment = 4; break;
-				case CilElementType.R4: memorySize = alignment = 4; break;
-				case CilElementType.R8: memorySize = alignment = 8; break;
-				case CilElementType.Boolean: memorySize = alignment = 4; break;
-				case CilElementType.Char: memorySize = alignment = 4; break;
-
-				// Platform specific
-				case CilElementType.Ptr: memorySize = alignment = 4; break;
-				case CilElementType.I: memorySize = alignment = 4; break;
-				case CilElementType.U: memorySize = alignment = 4; break;
-				case CilElementType.Object: memorySize = alignment = 4; break;
-				case CilElementType.Class: memorySize = alignment = 4; break;
-				case CilElementType.String: memorySize = alignment = 4; break;
-
-				default: memorySize = alignment = 4; break;
+				// TODO
+				throw new CompilerException("R8 not implemented in InsertExchangeInstruction method");
+			}
+			else
+			{
+				context.AppendInstruction2(X64.XChg64, destination, source, source, destination);
 			}
 		}
 
 		/// <summary>
-		/// Gets the intrinsic instruction by type
+		/// Inserts the jump instruction.
 		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
-		public override IIntrinsicMethod GetIntrinsicMethod(Type type)
+		/// <param name="context">The context.</param>
+		/// <param name="destination">The destination.</param>
+		public override void InsertJumpInstruction(Context context, BasicBlock destination)
 		{
-			// TODO
-			return null;
-			//return Intrinsic.Method.Get(type);
+			context.AppendInstruction(X64.Jmp, destination);
 		}
 
 		/// <summary>
-		/// Gets the code emitter.
+		/// Determines whether [is instruction move] [the specified instruction].
 		/// </summary>
+		/// <param name="instruction">The instruction.</param>
 		/// <returns></returns>
-		public override ICodeEmitter GetCodeEmitter()
+		public override bool IsInstructionMove(BaseInstruction instruction)
 		{
-			// TODO
-			return null;
-			//return new MachineCodeEmitter();
+			return instruction == X64.Mov64 || instruction == X64.Mov32 || instruction == X64.Movsd || instruction == X64.Movss;
 		}
 	}
 }

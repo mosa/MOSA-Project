@@ -1,0 +1,54 @@
+﻿<?xml version="1.0"?>
+<package>
+	<metadata>
+		<id>Mosa.Tools.Package</id>
+		<version>$version$</version>
+		<title>Mosa.Tools.Package</title>
+		<authors>MOSA Project</authors>
+		<owners>MOSA Project</owners>
+		<license type="expression">BSD-3-Clause-Clear</license>
+		<projectUrl>http://www.mosa-project.org</projectUrl>
+		<icon>images\Mosa Icon.png</icon>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<summary>MOSA Tools Package</summary>
+		<description>MOSA Tools Package</description>
+		<releaseNotes></releaseNotes>
+		<copyright>Copyright © 2020</copyright>
+		<tags>MOSA Compiler</tags>
+		<dependencies>
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="..\Art\Mosa Icon.png" target="images\" />
+		<file src="..\..\bin\Mosa.Compiler.Common.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Compiler.Framework.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Compiler.MosaTypeSystem.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Platform.ARMv8A32.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Platform.Intel.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Platform.x86.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Platform.x64.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Explorer.exe" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Debugger.exe" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Launcher.exe" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Compiler.exe" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Launcher.Console.exe" target="tools" />
+		<file src="..\..\bin\Mosa.Utility.BootImage.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Utility.Configuration.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Utility.DebugEngine.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Utility.FileSystem.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Utility.Launcher.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Utility.RSP.dll" target="tools" />
+		<file src="..\..\bin\dnlib.dll" target="tools" />
+		<file src="..\..\bin\Reko.Arch.Arm.dll" target="tools" />
+		<file src="..\..\bin\Reko.Arch.X86.dll" target="tools" />
+		<file src="..\..\bin\Reko.Core.dll" target="tools" />
+		<file src="..\..\bin\Reko.dll" target="tools" />
+		<file src="..\..\bin\CommandLine.dll" target="tools" />
+		<file src="..\..\bin\PriorityQueue.dll" target="tools" />
+		<file src="..\..\bin\MetroFramework.dll" target="tools" />
+		<file src="..\..\bin\MetroFramework.Design.dll" target="tools" />
+		<file src="..\..\bin\MetroFramework.Fonts.dll" target="tools" />
+		<file src="..\..\bin\WeifenLuo.WinFormsUI.Docking.dll" target="tools" />
+		<file src="..\..\bin\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll" target="tools" />
+	</files>
+</package>

@@ -1,12 +1,6 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System.IO;
 
 namespace Mosa.FileSystem.VFS
 {
@@ -19,29 +13,18 @@ namespace Mosa.FileSystem.VFS
 	/// </remarks>
 	public class DirectoryNode : NodeBase
 	{
-
-		#region Data members
-
-		/// <summary>
-		/// Holds all nodes added to the root vfs node.
-		/// </summary>
-		private System.Collections.ArrayList nodes;
-
-		#endregion // Data members
-
 		#region Construction
 
 		/// <summary>
 		/// Initializes a new instance of the DirectoryNode object.
 		/// </summary>
-		/// <param name="fs">The filesystem, which owns the node.</param>
+		/// <param name="fs">The file system, which owns the node.</param>
 		public DirectoryNode(IFileSystem fs)
 			: base(fs, VfsNodeType.Directory)
 		{
-			nodes = new System.Collections.ArrayList();
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region IVfsNode members
 
@@ -74,7 +57,7 @@ namespace Mosa.FileSystem.VFS
 		/// <param name="access">The access.</param>
 		/// <param name="sharing">The sharing.</param>
 		/// <returns></returns>
-		public override object Open(System.IO.FileAccess access, System.IO.FileShare sharing)
+		public override object Open(FileAccess access, FileShare sharing)
 		{
 			// FIXME: return something like: new System.IO.DirectoryInfo(VirtualFileSystem.GetPath(this));
 			//throw new NotImplementedException();
@@ -97,6 +80,6 @@ namespace Mosa.FileSystem.VFS
 			// FIXME: throw new NotImplementedException();
 		}
 
-		#endregion // IVfsNode members
+		#endregion IVfsNode members
 	}
 }

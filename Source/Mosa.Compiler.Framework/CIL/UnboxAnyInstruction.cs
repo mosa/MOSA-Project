@@ -1,21 +1,14 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	/// Unbox Any Instruction
 	/// </summary>
-	public sealed class UnboxAnyInstruction : UnaryInstruction
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryInstruction" />
+	internal sealed class UnboxAnyInstruction : UnaryInstruction
 	{
 		#region Construction
 
@@ -28,60 +21,23 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
-			// Retrieve the provider token to check against
-			var token = decoder.DecodeTokenType();
-			var type = decoder.TypeModule.GetType(token);
+			var type = (MosaType)decoder.Instruction.Operand;
 
-			if (type.FullName == "System.Boolean")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.Boolean);
-			else if (type.FullName == "System.SByte")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.SByte);
-			else if (type.FullName == "System.Int16")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.Int16);
-			else if (type.FullName == "System.Int32")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.Int32);
-			else if (type.FullName == "System.Int64")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.Int64);
-			else if (type.FullName == "System.Byte")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.Byte);
-			else if (type.FullName == "System.UInt16")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.UInt16);
-			else if (type.FullName == "System.UInt32")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.UInt32);
-			else if (type.FullName == "System.UInt64")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.UInt64);
-			else if (type.FullName == "System.Single")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.Single);
-			else if (type.FullName == "System.Double")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.Double);
-			else if (type.FullName == "System.Char")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.Char);
-			else
-				Console.WriteLine();
-
-			ctx.Other = type;
+			//Operand result = decoder.Compiler.CreateVirtualRegister(type);
+			//ctx.Result = result;
+			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, type);
+			node.MosaType = type;
 		}
 
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.UnboxAny(context);
-		}
-
-		#endregion // Methods
-
+		#endregion Methods
 	}
 }

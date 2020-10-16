@@ -1,0 +1,53 @@
+{
+	// Use IntelliSense to learn about possible attributes.
+	// Hover to view descriptions of existing attributes.
+	// For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+	"version": "0.2.0",
+	"configurations": [
+		{
+			"name": "Tool.Compiler",
+			"type": "mono",
+			"request": "launch",
+			"program": "${workspaceRoot}/../bin/Mosa.Tool.Compiler.exe",
+			"args": [
+				"-o",
+				"Mosa.HelloWorld.x86.bin",
+				"-a",
+				"x86",
+				"--mboot",
+				"v1",
+				"--map",
+				"Mosa.HelloWorld.x86.map",
+				"--debug-info",
+				"Mosa.HelloWorld.x86.debug",
+				"--x86-irq-methods",
+				"--base-address",
+				"0x00500000",
+				"mscorlib.dll",
+				"Mosa.Plug.Korlib.dll",
+				"Mosa.Plug.Korlib.x86.dll",
+				"Mosa.HelloWorld.x86.exe"
+			],
+			"cwd": "${workspaceRoot}/../bin",
+			"internalConsoleOptions": "openOnSessionStart"
+		},
+		{
+			"name": "Tool.Mosactl",
+			"type": "mono",
+			"request": "launch",
+			"program": "${workspaceRoot}/../bin/Mosa.Tool.Mosactl.exe",
+			"args": [],
+			"cwd": "${workspaceRoot}/../bin",
+			"internalConsoleOptions": "openOnSessionStart"
+		}
+		/*
+        {
+            "name": "Attach",
+            "type": "mono",
+            "request": "attach",
+            "address": "localhost",
+            "port": 55555
+        }
+        */
+	]
+}

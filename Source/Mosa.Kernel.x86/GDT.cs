@@ -1,25 +1,17 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.x86.Intrinsic;
+using Mosa.Runtime;
+using Mosa.Runtime.x86;
+using System.Runtime.CompilerServices;
 
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	/// 
+	/// GDT
 	/// </summary>
 	public static class GDT
 	{
-		private static uint _gdtTable = 0x1401000;
-		private static uint _gdtEntries = 0x1401000 + 6;
-
-		#region Data members
+		#region Data Members
 
 		internal struct Offset
 		{
@@ -32,41 +24,51 @@ namespace Mosa.Kernel.x86
 			internal const byte TotalSize = 0x08;
 		}
 
-		#endregion
+		#endregion Data Members
 
 		public static void Setup()
 		{
-			Memory.Clear(_gdtTable, 6);
-			Native.Set16(_gdtTable, (Offset.TotalSize * 3) - 1);
-			Native.Set32(_gdtTable + 2, _gdtEntries);
+			var gdt = new Pointer(Address.GDTTable);
+
+			Runtime.Internal.MemoryClear(gdt, 6);
+			gdt.Store16((Offset.TotalSize * 3) - 1);
+			gdt.Store32(2, Address.GDTTable + 6);
 
 			Set(0, 0, 0, 0, 0);                // Null segment
 			Set(1, 0, 0xFFFFFFFF, 0x9A, 0xCF); // Code segment
 			Set(2, 0, 0xFFFFFFFF, 0x92, 0xCF); // Data segment
 
-			Native.Lgdt(_gdtTable);
+			SetLgdt(gdt);
+		}
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		private static void SetLgdt(Pointer address)
+		{
+			Native.Lgdt((uint)address.ToInt32());
+			Native.SetSegments(0x10, 0x10, 0x10, 0x10, 0x10);
+			Native.FarJump();
+		}
+
+		/// <summary>
+		/// Gets the GTP entry location.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		private static Pointer GetEntryLocation(uint index)
+		{
+			return new Pointer(Address.GDTTable + 6 + (index * Offset.TotalSize));
 		}
 
 		private static void Set(uint index, uint address, uint limit, byte access, byte granularity)
 		{
-			uint entry = GetEntryLocation(index);
-			Native.Set16(entry + Offset.BaseLow, (ushort)(address & 0xFFFF));
-			Native.Set8(entry + Offset.BaseMiddle, (byte)((address >> 16) & 0xFF));
-			Native.Set8(entry + Offset.BaseHigh, (byte)((address >> 24) & 0xFF));
-			Native.Set16(entry + Offset.LimitLow, (ushort)(limit & 0xFFFF));
-			Native.Set8(entry + Offset.Granularity, (byte)(((byte)(limit >> 16) & 0x0F) | (granularity & 0xF0)));
-			Native.Set8(entry + Offset.Access, access);
-		}
+			var entry = GetEntryLocation(index);
 
-		/// <summary>
-		/// Gets the gdt entry location.
-		/// </summary>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		private static uint GetEntryLocation(uint index)
-		{
-			return (uint)(_gdtEntries + (index * Offset.TotalSize));
+			entry.Store16(Offset.BaseLow, (ushort)(address & 0xFFFF));
+			entry.Store8(Offset.BaseMiddle, (byte)((address >> 16) & 0xFF));
+			entry.Store8(Offset.BaseHigh, (byte)((address >> 24) & 0xFF));
+			entry.Store16(Offset.LimitLow, (ushort)(limit & 0xFFFF));
+			entry.Store8(Offset.Granularity, (byte)(((byte)(limit >> 16) & 0x0F) | (granularity & 0xF0)));
+			entry.Store8(Offset.Access, access);
 		}
-
 	}
 }

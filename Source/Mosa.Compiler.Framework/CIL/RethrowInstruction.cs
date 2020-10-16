@@ -1,19 +1,12 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
 	/// Intermediate representation of the IL rethrow instruction.
 	/// </summary>
-	public sealed class RethrowInstruction : BaseInstruction
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BaseCILInstruction" />
+	public sealed class RethrowInstruction : BaseCILInstruction
 	{
 		#region Construction
 
@@ -22,11 +15,11 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public RethrowInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 0)
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -39,26 +32,8 @@ namespace Mosa.Compiler.Framework.CIL
 		/// building. Any instruction that alters the control flow must override
 		/// this property and correctly identify its control flow modifications.
 		/// </remarks>
-		public override FlowControl FlowControl
-		{
-			get { return FlowControl.Throw; }
-		}
+		public override FlowControl FlowControl { get { return FlowControl.Throw; } }
 
-		#endregion // Properties
-
-		#region Methods
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.Rethrow(context);
-		}
-
-		#endregion // Methods
-
+		#endregion Properties
 	}
 }

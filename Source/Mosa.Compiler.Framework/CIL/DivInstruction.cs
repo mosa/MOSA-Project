@@ -1,18 +1,11 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	/// Div Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.ArithmeticInstruction" />
 	public sealed class DivInstruction : ArithmeticInstruction
 	{
 		#region Construction
@@ -26,21 +19,6 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
-
-		#region Methods
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.Div(context);
-		}
-
-		#endregion Methods
-
+		#endregion Construction
 	}
 }

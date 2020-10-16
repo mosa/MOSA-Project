@@ -1,21 +1,13 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
-using Mosa.Compiler.Metadata;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	/// Ldtoken Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.LoadInstruction" />
 	public sealed class LdtokenInstruction : LoadInstruction
 	{
 		#region Construction
@@ -29,98 +21,38 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
-			Token token = decoder.DecodeTokenType();
+			// See Partition III, 4.17 (ldtoken)
 
-			//ctx.Token = token;
-
-			throw new NotImplementedException();
-			/*
-			TypeReference typeRef;
-
-			// Determine the result type...
-			switch (TokenTypes.TableMask & token)
+			if (decoder.Instruction.Operand is MosaType)
 			{
-				case TokenTypes.TypeDef:
-					n = @"RuntimeTypeHandle";
-					break;
-
-				case TokenTypes.TypeRef:
-					n = @"RuntimeTypeHandle";
-					break;
-
-				case TokenTypes.TypeSpec:
-					n = @"RuntimeTypeHandle";
-					break;
-
-				case TokenTypes.MethodDef:
-					n = @"RuntimeMethodHandle";
-					break;
-
-				case TokenTypes.MemberRef:
-					// Field or Method
-					{
-						MemberReference memberRef = MetadataMemberReference.FromToken(decoder.Metadata, _token);
-						MemberDefinition memberDef = memberRef.Resolve();
-						if (memberDef is MethodDefinition)
-						{
-							n = @"RuntimeMethodHandle";
-						}
-						else if (memberDef is FieldDefinition)
-						{
-							n = @"RuntimeFieldHandle";
-						}
-						else
-						{
-							Debug.Assert(false, @"Failed to determine member reference type in ldtoken.");
-							throw new InvalidOperationException();
-						}
-					}
-					break;
-
-				case TokenTypes.MethodSpec:
-					n = @"RuntimeMethodHandle";
-					break;
-
-				case TokenTypes.Field:
-					n = @"RuntimeFieldHandle";
-					break;
-
-				default:
-					throw new NotImplementedException();
+				node.MosaType = (MosaType)decoder.Instruction.Operand;
+				node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
 			}
-
-			typeRef = MetadataTypeReference.FromName(decoder.Metadata, @"System", n);
-			if (null == typeRef)
-				typeRef = MetadataTypeDefinition.FromName(decoder.Metadata, @"System", n);
-
-			// Set the result
-			Debug.Assert(null != typeRef, @"ldtoken: Failed to retrieve type reference.");
-			_results[0] = CreateResultOperand(typeRef);
-			 */
-		}
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.Ldtoken(context);
+			else if (decoder.Instruction.Operand is MosaMethod)
+			{
+				node.InvokeMethod = (MosaMethod)decoder.Instruction.Operand;
+				node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeMethodHandle"));
+			}
+			else if (decoder.Instruction.Operand is MosaField)
+			{
+				node.MosaField = (MosaField)decoder.Instruction.Operand;
+				node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"));
+			}
+			node.OperandCount = 0;
 		}
 
 		#endregion Methods

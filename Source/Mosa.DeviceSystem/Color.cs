@@ -1,11 +1,4 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.DeviceSystem
 {
@@ -18,21 +11,24 @@ namespace Mosa.DeviceSystem
 		/// Red
 		/// </summary>
 		public byte Red;
+
 		/// <summary>
 		/// Green
 		/// </summary>
 		public byte Green;
+
 		/// <summary>
 		/// Blue
 		/// </summary>
 		public byte Blue;
+
 		/// <summary>
 		/// Alpha
 		/// </summary>
 		public byte Alpha;
 
 		/// <summary>
-		/// 
+		/// Transparent Color
 		/// </summary>
 		public static readonly Color Transparent = new Color(0, 0, 0, 0);
 
@@ -74,7 +70,7 @@ namespace Mosa.DeviceSystem
 		/// </returns>
 		public bool IsEqual(Color color)
 		{
-			return ((color.Red == this.Red) && (color.Green == this.Green) && (color.Blue == this.Blue) && (color.Alpha == this.Alpha));
+			return (color.Red == Red) && (color.Green == Green) && (color.Blue == Blue) && (color.Alpha == Alpha);
 		}
 	}
 }

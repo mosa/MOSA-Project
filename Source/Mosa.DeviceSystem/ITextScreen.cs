@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.DeviceSystem
 {
@@ -15,7 +8,7 @@ namespace Mosa.DeviceSystem
 	public interface ITextScreen
 	{
 		/// <summary>
-		/// Clears the screen scren.
+		/// Clears the screen.
 		/// </summary>
 		void ClearScreen();
 
@@ -23,7 +16,7 @@ namespace Mosa.DeviceSystem
 		/// Sets the cursor.
 		/// </summary>
 		/// <param name="cursorX">The cursor X.</param>
-		/// <param name="cursorY">The cursor Y.</param>	
+		/// <param name="cursorY">The cursor Y.</param>
 		void SetCursor(ushort cursorX, ushort cursorY);
 
 		/// <summary>

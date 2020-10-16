@@ -1,16 +1,9 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public interface IFrameBuffer
 	{
@@ -42,7 +35,16 @@ namespace Mosa.DeviceSystem
 		/// <param name="y">The y.</param>
 		void SetPixel(uint color, uint x, uint y);
 
+		/// <summary>
+		/// Fills a rectangle with color.
+		/// </summary>
+		/// <param name="color">The color.</param>
+		/// <param name="x">X of the top left of the rectangle.</param>
+		/// <param name="y">Y of the top left of the rectangle.</param>
+		/// <param name="w">Width of the rectangle.</param>
+		/// <param name="h">Width of the rectangle.</param>
+		void FillRectangle(uint color, uint x, uint y, uint w, uint h);
+
 		//TODO: Add more methods
 	}
-
 }

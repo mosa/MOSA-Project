@@ -1,14 +1,6 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -20,82 +12,40 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Gets the method compiler that is currently executing.
 		/// </summary>
-		IMethodCompiler Compiler { get; }
+		MethodCompiler MethodCompiler { get; }
 
 		/// <summary>
-		/// Gets the RuntimeMethod being compiled.
+		/// Gets the MosaMethod being compiled.
 		/// </summary>
-		RuntimeMethod Method { get; }
+		MosaMethod Method { get; }
 
 		/// <summary>
 		/// Gets the type system.
 		/// </summary>
-		/// <value>The type system.</value>
-		ITypeModule TypeModule { get; }
+		TypeSystem TypeSystem { get; }
 
 		/// <summary>
-		/// Gets the generic type patcher.
+		/// Gets the type system.
 		/// </summary>
-		IGenericTypePatcher GenericTypePatcher { get; }
+		MethodScanner MethodScanner { get; }
 
 		/// <summary>
-		/// Decodes the byte value from the instruction stream
+		/// Gets the instruction being decoded.
 		/// </summary>
+		MosaInstruction Instruction { get; }
+
+		/// <summary>
+		/// Gets the block.
+		/// </summary>
+		/// <param name="label">The label.</param>
 		/// <returns></returns>
-		byte DecodeByte();
+		BasicBlock GetBlock(int label);
 
 		/// <summary>
-		/// Decodes the sbyte value from the instruction stream
+		/// Converts the virtual register to stack local.
 		/// </summary>
+		/// <param name="virtualRegister">The virtual register.</param>
 		/// <returns></returns>
-		sbyte DecodeSByte();
-
-		/// <summary>
-		/// Decodes the short value from the instruction stream
-		/// </summary>
-		/// <returns></returns>
-		short DecodeShort();
-
-		/// <summary>
-		/// Decodes the ushort value from the instruction stream
-		/// </summary>
-		/// <returns></returns>
-		ushort DecodeUShort();
-
-		/// <summary>
-		/// Decodes the int value from the instruction stream
-		/// </summary>
-		/// <returns></returns>
-		int DecodeInt();
-
-		/// <summary>
-		/// Decodes the uint value from the instruction stream
-		/// </summary>
-		/// <returns></returns>
-		uint DecodeUInt();
-
-		/// <summary>
-		/// Decodes the long value from the instruction stream
-		/// </summary>
-		/// <returns></returns>
-		long DecodeLong();
-
-		/// <summary>
-		/// Decodes the float value from the instruction stream
-		/// </summary>
-		/// <returns></returns>
-		float DecodeFloat();
-
-		/// <summary>
-		/// Decodes the double value from the instruction stream
-		/// </summary>
-		/// <returns></returns>
-		double DecodeDouble();
-
-		/// <summary>
-		/// Decodes the tokentype from the instruction stream
-		/// </summary>
-		/// <returns></returns>
-		Token DecodeTokenType();
+		Operand ConvertVirtualRegisterToStackLocal(Operand virtualRegister);
 	}
 }

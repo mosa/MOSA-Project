@@ -1,17 +1,9 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	/// IDMAChannel
 	/// </summary>
 	public interface IDMAChannel
 	{
@@ -23,6 +15,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="auto">if set to <c>true</c> [auto].</param>
 		/// <param name="count">The count.</param>
 		void SetupChannel(DMAMode mode, DMATransferType type, bool auto, uint count);
+
 		/// <summary>
 		/// Transfers the out.
 		/// </summary>
@@ -31,6 +24,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="offset">The offset.</param>
 		/// <returns></returns>
 		bool TransferOut(uint count, byte[] data, uint offset);
+
 		/// <summary>
 		/// Transfers the in.
 		/// </summary>
@@ -42,41 +36,22 @@ namespace Mosa.DeviceSystem
 	}
 
 	/// <summary>
-	/// 
+	/// DMA Mode
 	/// </summary>
 	public enum DMAMode : byte
 	{
-		/// <summary>
-		/// 
-		/// </summary>
 		ReadFromMemory,
-		/// <summary>
-		/// 
-		/// </summary>
 		WriteToMemory
 	}
 
 	/// <summary>
-	/// 
+	/// DMA Transfer Type
 	/// </summary>
 	public enum DMATransferType : byte
 	{
-		/// <summary>
-		/// 
-		/// </summary>
 		OnDemand,
-		/// <summary>
-		/// 
-		/// </summary>
 		Single,
-		/// <summary>
-		/// 
-		/// </summary>
 		Block,
-		/// <summary>
-		/// 
-		/// </summary>
 		CascadeMode
 	}
-
 }

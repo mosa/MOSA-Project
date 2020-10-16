@@ -1,19 +1,14 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	/// Unbox Instruction
 	/// </summary>
-	public sealed class UnboxInstruction : BoxingInstruction
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryInstruction" />
+	public sealed class UnboxInstruction : UnaryInstruction
 	{
 		#region Construction
 
@@ -22,24 +17,27 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public UnboxInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 1)
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
-			visitor.Unbox(context);
+			// Decode base classes first
+			base.Decode(node, decoder);
+
+			var type = (MosaType)decoder.Instruction.Operand;
+
+			//Operand result = decoder.Compiler.CreateVirtualRegister(type);
+			//ctx.Result = result;
+			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, type);
+			node.MosaType = type;
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

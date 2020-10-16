@@ -1,16 +1,10 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System.IO;
 
 namespace Mosa.FileSystem.VFS
 {
-	class PathSplitter
+	internal class PathSplitter
 	{
 		protected string path;
 		protected int[] seperators;
@@ -33,7 +27,7 @@ namespace Mosa.FileSystem.VFS
 
 			int count = 0;
 			for (int i = 0; i < path.Length; i++)
-				if ((path[i] == System.IO.Path.DirectorySeparatorChar) || (path[i] == System.IO.Path.AltDirectorySeparatorChar))
+				if ((path[i] == Path.DirectorySeparatorChar) || (path[i] == Path.AltDirectorySeparatorChar))
 					count++;
 
 			seperators = new int[count];
@@ -46,7 +40,7 @@ namespace Mosa.FileSystem.VFS
 
 			count = 0;
 			for (int i = 0; i < path.Length; i++)
-				if ((path[i] == System.IO.Path.DirectorySeparatorChar) || (path[i] == System.IO.Path.AltDirectorySeparatorChar))
+				if ((path[i] == Path.DirectorySeparatorChar) || (path[i] == Path.AltDirectorySeparatorChar))
 					seperators[count++] = i;
 
 			if (seperators[count - 1] == path.Length - 1)
@@ -110,5 +104,4 @@ namespace Mosa.FileSystem.VFS
 			return -1;
 		}
 	}
-
 }

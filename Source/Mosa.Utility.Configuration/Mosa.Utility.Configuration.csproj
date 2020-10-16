@@ -1,0 +1,31 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <AssemblyTitle>Mosa.Utility.Compiler</AssemblyTitle>
+    <Company>MOSA Project</Company>
+    <Product>Mosa.Utility.Compiler</Product>
+    <Copyright>Copyright © 2020</Copyright>
+    <LangVersion>8.0</LangVersion>
+    <BaseAddress>285212672</BaseAddress>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <ConfigurationOverrideFile />
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <DebugType>full</DebugType>
+    <FileAlignment>4096</FileAlignment>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <DebugSymbols>True</DebugSymbols>
+    <WarningLevel>2</WarningLevel>
+    <OutputPath>..\..\bin\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AssemblyName>Mosa.Utility.Configuration</AssemblyName>
+    <RootNamespace>Mosa.Utility.Configuration</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
+    <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
+    <ProjectReference Include="..\Mosa.Platform.ARMv8A32\Mosa.Platform.ARMv8A32.csproj" />
+    <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj" />
+    <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
+  </ItemGroup>
+</Project>

@@ -1,12 +1,4 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -14,6 +6,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// Represents a unary instruction, which performs an operation on the operand and places
 	/// the result on the stack.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryInstruction" />
 	public class UnaryArithmeticInstruction : UnaryInstruction
 	{
 		#region Construction
@@ -27,34 +20,23 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods Overrides
 
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="compiler">The compiler.</param>
-		public override void Validate(Context ctx, IMethodCompiler compiler)
+		/// <param name="context">The context.</param>
+		/// <param name="methodCompiler">The compiler.</param>
+		public override void Resolve(Context context, MethodCompiler methodCompiler)
 		{
-			base.Validate(ctx, compiler);
+			base.Resolve(context, methodCompiler);
 
 			// Simple result is the same type as the unary argument
-			ctx.Result = compiler.CreateTemporary(ctx.Operand1.Type);
+			context.Result = methodCompiler.CreateVirtualRegister(context.Operand1.Type);
 		}
 
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.UnaryArithmetic(context);
-		}
-
-		#endregion // Methods Overrides
+		#endregion Methods Overrides
 	}
 }

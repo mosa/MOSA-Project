@@ -1,0 +1,76 @@
+﻿{
+	"Optimizations": [
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantMove",
+			"Name": "Add##",
+			"SubName": "",
+			"Expression": "IR.Add## a b",
+			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
+			"Result": "(IR.Add## b a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantMove",
+			"Name": "AddR#",
+			"SubName": "",
+			"Expression": "IR.AddR# a b",
+			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
+			"Result": "(IR.AddR# b a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantMove",
+			"Name": "MulSigned##",
+			"SubName": "",
+			"Expression": "IR.MulSigned## a b",
+			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
+			"Result": "(IR.MulSigned## b a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantMove",
+			"Name": "MulUnsigned##",
+			"SubName": "",
+			"Expression": "IR.MulUnsigned## a b",
+			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
+			"Result": "(IR.MulUnsigned## b a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantMove",
+			"Name": "MulR#",
+			"SubName": "",
+			"Expression": "IR.MulR# a b",
+			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
+			"Result": "(IR.MulR# b a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantMove",
+			"Name": "And##",
+			"SubName": "",
+			"Expression": "IR.And## a b",
+			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
+			"Result": "(IR.And## b a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantMove",
+			"Name": "Or##",
+			"SubName": "",
+			"Expression": "IR.Or## a b",
+			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
+			"Result": "(IR.Or## b a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantMove",
+			"Name": "Xor##",
+			"SubName": "",
+			"Expression": "IR.Xor## a b",
+			"Filter": "IsResolvedConstant(a) & !IsResolvedConstant(b)",
+			"Result": "(IR.Xor## b a)"
+		}
+	]
+}

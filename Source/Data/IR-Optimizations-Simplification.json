@@ -1,0 +1,296 @@
+﻿{
+	"Commutative": [
+		"IR.Add32",
+		"IR.Add64",
+		"IR.AddR4",
+		"IR.AddR8",
+		"IR.And32",
+		"IR.And64",
+		"IR.Or32",
+		"IR.Or64",
+		"IR.Xor32",
+		"IR.Xor64",
+		"IR.MulR4",
+		"IR.MulR8",
+		"IR.MulUnsigned32",
+		"IR.MulUnsigned64",
+		"IR.MulSigned32",
+		"IR.MulSigned64",
+		"IR.AddCarryOut64",
+		"IR.AddCarryOut32",
+		"IR.AddCarryIn32",
+		"IR.AddCarryIn64"
+	],
+	"Optimizations": [
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Move##",
+			"SubName": "Propagation",
+			"Expression": "IR.Move## (IR.Move## a)",
+			"Filter": "!IsCPURegister(a)",
+			"Result": "(IR.Move## a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Not##",
+			"SubName": "Twice",
+			"Expression": "IR.Not## (IR.Not## x)",
+			"Filter": "",
+			"Result": "(IR.Move## x)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "GetLow64",
+			"SubName": "FromTo64",
+			"Expression": "IR.GetLow64 (IR.To64 a b))",
+			"Filter": "",
+			"Result": "(IR.Move32 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "GetHigh64",
+			"SubName": "FromTo64",
+			"Expression": "IR.GetHigh64 (IR.To64 a b))",
+			"Filter": "",
+			"Result": "(IR.Move32 b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "GetHigh64",
+			"SubName": "To64",
+			"Expression": "IR.GetHigh64 (IR.To64 a b)",
+			"Filter": "",
+			"Result": "(IR.Move32 b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "GetLow64",
+			"SubName": "To64",
+			"Expression": "IR.GetLow64 (IR.To64 a b)",
+			"Filter": "",
+			"Result": "(IR.Move32 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "To64",
+			"SubName": "FromLowHigh",
+			"Expression": "IR.To64 (IR.GetLow64 a) (IR.GetHigh64 a)",
+			"Filter": "",
+			"Result": "(IR.Move32 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "GetLow64",
+			"SubName": "FromShiftedRight32",
+			"Expression": "IR.GetLow64 (IR.ShiftRight32 a 32)",
+			"Filter": "",
+			"Result": "(IR.Truncate64x32 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "GetLow64",
+			"SubName": "FromRightShiftAndTo64",
+			"Expression": "IR.GetLow64 (IR.ShiftRight64 (IR.To64 a b) 32)",
+			"Filter": "",
+			"Result": "(IR.Move32 b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "GetHigh64",
+			"SubName": "FromRightLeftAndTo64",
+			"Expression": "IR.GetHigh64 (IR.ShiftLeft64 (IR.To64 a b) 32)",
+			"Filter": "",
+			"Result": "(IR.Move32 a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "GetHigh64",
+			"SubName": "FromShiftedMore32",
+			"Expression": "IR.GetHigh64 (IR.ShiftRight64 a b)",
+			"Filter": "IsGreaterThanOrEqual(And32(To32(b),63),32)",
+			"Result": "(IR.Move32 0)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "GetLow64",
+			"SubName": "FromShiftedMore32",
+			"Expression": "IR.GetLow64 (IR.ShiftLeft64 a b)",
+			"Filter": "IsGreaterThanOrEqual(And32(To32(b),63),32)",
+			"Result": "(IR.Move32 0)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Truncate64x32Add64",
+			"SubName": "FromZeroExtended32x64",
+			"Expression": "(IR.Truncate64x32 (IR.Add64 (IR.ZeroExtend32x64 a) (IR.ZeroExtend32x64 b)))",
+			"Filter": "",
+			"Result": "(IR.Add32 a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Truncate64x32Sub64",
+			"SubName": "FromZeroExtended32x64",
+			"Expression": "(IR.Truncate64x32 (IR.Sub64 (IR.ZeroExtend32x64 a) (IR.ZeroExtend32x64 b)))",
+			"Filter": "",
+			"Result": "(IR.Sub32 a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Truncate64x32MulUnsigned64",
+			"SubName": "FromZeroExtended32x64",
+			"Expression": "(IR.Truncate64x32 (IR.MulUnsigned64 (IR.ZeroExtend32x64 a) (IR.ZeroExtend32x64 b)))",
+			"Filter": "",
+			"Result": "(IR.MulUnsigned32 a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Truncate64x32And64",
+			"SubName": "FromZeroExtended32x64",
+			"Expression": "(IR.Truncate64x32 (IR.And64 (IR.ZeroExtend32x64 a) (IR.ZeroExtend32x64 b)))",
+			"Filter": "",
+			"Result": "(IR.And32 a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Truncate64x32Or64",
+			"SubName": "FromZeroExtended32x64",
+			"Expression": "(IR.Truncate64x32 (IR.Or64 (IR.ZeroExtend32x64 a) (IR.ZeroExtend32x64 b)))",
+			"Filter": "",
+			"Result": "(IR.Or32 a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Truncate64x32Xor64",
+			"SubName": "FromZeroExtended32x64",
+			"Expression": "(IR.Truncate64x32 (IR.Xor64 (IR.ZeroExtend32x64 a) (IR.ZeroExtend32x64 b)))",
+			"Filter": "",
+			"Result": "(IR.Xor32 a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Add##",
+			"SubName": "MultipleWithCommon",
+			"Expression": "IR.Add## (IR.MulUnsigned## x y) (IR.MulUnsigned## x z)",
+			"Filter": "",
+			"Result": "(IR.MulUnsigned## x (IR.Add## y z))"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Sub##",
+			"SubName": "MultipleWithCommon",
+			"Expression": "IR.Sub## (IR.MulUnsigned## x y) (IR.MulUnsigned## x z)",
+			"Filter": "",
+			"Result": "(IR.MulUnsigned## x (IR.Sub## y z))"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "And##",
+			"SubName": "Not##Not##",
+			"Expression": "(IR.And## (IR.Not## a) (IR.Not## b))",
+			"Filter": "",
+			"Result": "(IR.Not## (IR.Or## a b))"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Or##",
+			"SubName": "Not##Not##",
+			"Expression": "(IR.Or## (IR.Not## a) (IR.Not## b))",
+			"Filter": "",
+			"Result": "(IR.Not## (IR.And## a b))"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "AddCarryIn##",
+			"SubName": "Inside",
+			"Expression": "IR.AddCarryIn## a b c",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.Add## [Add##(To##(a),To##(b))] c)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "AddCarryIn##",
+			"SubName": "Outside1",
+			"Expression": "IR.AddCarryIn## a b c",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(c)",
+			"Result": "(IR.Add## b [Add##(To##(a),BoolTo##(To##(c)))])])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "AddCarryIn##",
+			"SubName": "Outside2",
+			"Expression": "IR.AddCarryIn## a b c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Add## a [Add##(To##(b),BoolTo##(To##(c)))])])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "AddCarryIn##",
+			"SubName": "NoCarry",
+			"Expression": "IR.AddCarryIn## a b 0",
+			"Filter": "",
+			"Result": "(IR.Add## a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SubCarryIn##",
+			"SubName": "Inside",
+			"Expression": "IR.SubCarryIn## a b c",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.Sub## [Sub##(To##(a),To##(b))] c)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SubCarryIn##",
+			"SubName": "Outside1",
+			"Expression": "IR.SubCarryIn## a b c",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(c)",
+			"Result": "(IR.Sub## [Sub##(To##(a),BoolTo##(To##(c)))])] b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SubCarryIn##",
+			"SubName": "Outside2",
+			"Expression": "IR.SubCarryIn## a b c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Sub## a [Sub##(To##(b),BoolTo##(To##(c)))])])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SubCarryIn##",
+			"SubName": "NoCarry",
+			"Expression": "IR.SubCarryIn## a b 0",
+			"Filter": "",
+			"Result": "(IR.Sub## a b)"
+		}
+	]
+}

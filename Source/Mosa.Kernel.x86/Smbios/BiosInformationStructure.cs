@@ -1,57 +1,47 @@
-using Mosa.Platform.x86.Intrinsic;
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.x86.Smbios
 {
 	/// <summary>
-	///
+	/// Bios Information Structure
 	/// </summary>
 	public class BiosInformationStructure : SmbiosStructure
 	{
 		/// <summary>
-		///
+		/// Gets the bios vendor.
 		/// </summary>
-		private string biosVendor = string.Empty;
-		/// <summary>
-		///
-		/// </summary>
-		private string biosVersion = string.Empty;
-		/// <summary>
-		///
-		/// </summary>
-		private string biosDate = string.Empty;
-		
-		/// <summary>
-		///
-		/// </summary>
-		public BiosInformationStructure () : base (SmbiosManager.GetStructureOfType (0x00))
-		{
-			this.biosVendor = GetStringFromIndex (Native.Get8 (address + 0x04u));
-			this.biosVersion = GetStringFromIndex(Native.Get8(address + 0x05u));
-			this.biosDate = GetStringFromIndex(Native.Get8(address + 0x08u));
-		}
-		
-		/// <summary>
-		///
-		/// </summary>
-		public string BiosVendor
-		{
-			get { return this.biosVendor; }
-		}
+		/// <value>
+		/// The bios vendor.
+		/// </value>
+		public string BiosVendor { get; set; }
 
 		/// <summary>
-		///
+		/// Gets the bios version.
 		/// </summary>
-		public string BiosVersion
-		{
-			get { return this.biosVersion; }
-		}
+		/// <value>
+		/// The bios version.
+		/// </value>
+		public string BiosVersion { get; set; }
 
 		/// <summary>
-		///
+		/// Gets the bios date.
 		/// </summary>
-		public string BiosDate
+		/// <value>
+		/// The bios date.
+		/// </value>
+		public string BiosDate { get; set; }
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="BiosInformationStructure"/> class.
+		/// </summary>
+		public BiosInformationStructure()
+			: base(SmbiosManager.GetStructureOfType(0x00))
 		{
-			get { return this.biosDate; }
+			BiosVendor = GetStringFromIndex(Intrinsic.Load8(address, 0x04u));
+			BiosVersion = GetStringFromIndex(Intrinsic.Load8(address, 0x05u));
+			BiosDate = GetStringFromIndex(Intrinsic.Load8(address, 0x08u));
 		}
 	}
 }

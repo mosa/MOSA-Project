@@ -1,20 +1,11 @@
-/*
- * (c) 2011 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using System.IO;
 
 namespace Mosa.Compiler.Common
 {
 	public static class StreamExtension
 	{
-
 		/// <summary>
 		/// Writes the specified stream.
 		/// </summary>
@@ -41,121 +32,57 @@ namespace Mosa.Compiler.Common
 		/// </summary>
 		/// <param name="stream">The stream.</param>
 		/// <param name="memoryStream">The memory stream.</param>
-		public static void WriteTo(this Stream src, Stream dest)
+		public static void WriteTo(this Stream stream, Stream dest)
 		{
-			int size = (src.CanSeek) ? System.Math.Min((int)(src.Length - src.Position), 0x2000) : 0x2000;
+			int size = (stream.CanSeek) ? System.Math.Min((int)(stream.Length - stream.Position), 0x2000) : 0x2000;
 			byte[] buffer = new byte[size];
 			int n;
 			do
 			{
-				n = src.Read(buffer, 0, buffer.Length);
+				n = stream.Read(buffer, 0, buffer.Length);
 				dest.Write(buffer, 0, n);
 			} while (n != 0);
 		}
 
-		public static uint ReadUInt32(this Stream src, bool asLittleEndian)
+		public static void Write(this Stream stream, ushort value)
 		{
-			int a = src.ReadByte();
-			int b = src.ReadByte();
-			int c = src.ReadByte();
-			int d = src.ReadByte();
-
-			if (a == -1 || b == -1 || c == -1 || d == -1)
-				throw new EndOfStreamException();
-
-			if (asLittleEndian)
-				return (uint)(a | (b << 8) | (c << 16) | (d << 24));
-			else
-				return (uint)(d | (c << 8) | (b << 16) | (a << 24));
+			stream.WriteByte((byte)(value & 0xFF));
+			stream.WriteByte((byte)((value >> 8) & 0xFF));
 		}
 
-		public static ushort ReadUInt16(this Stream src, bool asLittleEndian)
+		public static void Write(this Stream stream, short value)
 		{
-			int a = src.ReadByte();
-			int b = src.ReadByte();
-
-			if (a == -1 || b == -1)
-				throw new EndOfStreamException();
-
-			if (asLittleEndian)
-				return (ushort)(a | (b << 8));
-			else
-				return (ushort)(b | (a << 8));
+			stream.Write((ushort)value);
 		}
 
-		public static void Write(this Stream src, ushort value, bool asLittleEndian)
+		public static void Write(this Stream stream, uint value)
 		{
-			if (asLittleEndian)
-			{
-				src.WriteByte((byte)(value & 0xFF));
-				src.WriteByte((byte)((value >> 8) & 0xFF));
-			}
-			else
-			{
-				src.WriteByte((byte)((value >> 8) & 0xFF));
-				src.WriteByte((byte)(value & 0xFF));
-			}
+			stream.WriteByte((byte)(value & 0xFF));
+			stream.WriteByte((byte)((value >> 8) & 0xFF));
+			stream.WriteByte((byte)((value >> 16) & 0xFF));
+			stream.WriteByte((byte)((value >> 24) & 0xFF));
 		}
 
-		public static void Write(this Stream src, short value, bool asLittleEndian)
+		public static void Write(this Stream stream, int value)
 		{
-			src.Write((ushort)value, asLittleEndian);
+			stream.Write((uint)value);
 		}
 
-		public static void Write(this Stream src, uint value, bool asLittleEndian)
+		public static void Write(this Stream stream, ulong value)
 		{
-			if (asLittleEndian)
-			{
-				src.WriteByte((byte)(value & 0xFF));
-				src.WriteByte((byte)((value >> 8) & 0xFF));
-				src.WriteByte((byte)((value >> 16) & 0xFF));
-				src.WriteByte((byte)((value >> 24) & 0xFF));
-			}
-			else
-			{
-				src.WriteByte((byte)((value >> 24) & 0xFF));
-				src.WriteByte((byte)((value >> 16) & 0xFF));
-				src.WriteByte((byte)((value >> 8) & 0xFF));
-				src.WriteByte((byte)(value & 0xFF));
-			}
+			stream.WriteByte((byte)(value & 0xFF));
+			stream.WriteByte((byte)((value >> 8) & 0xFF));
+			stream.WriteByte((byte)((value >> 16) & 0xFF));
+			stream.WriteByte((byte)((value >> 24) & 0xFF));
+			stream.WriteByte((byte)((value >> 32) & 0xFF));
+			stream.WriteByte((byte)((value >> 40) & 0xFF));
+			stream.WriteByte((byte)((value >> 48) & 0xFF));
+			stream.WriteByte((byte)((value >> 56) & 0xFF));
 		}
 
-		public static void Write(this Stream src, int value, bool asLittleEndian)
+		public static void Write(this Stream stream, long value)
 		{
-			src.Write((uint)value, asLittleEndian);
+			stream.Write((ulong)value);
 		}
-
-		public static void Write(this Stream src, ulong value, bool asLittleEndian)
-		{
-			if (asLittleEndian)
-			{
-				src.WriteByte((byte)(value & 0xFF));
-				src.WriteByte((byte)((value >> 8) & 0xFF));
-				src.WriteByte((byte)((value >> 16) & 0xFF));
-				src.WriteByte((byte)((value >> 24) & 0xFF));
-				src.WriteByte((byte)((value >> 32) & 0xFF));
-				src.WriteByte((byte)((value >> 40) & 0xFF));
-				src.WriteByte((byte)((value >> 48) & 0xFF));
-				src.WriteByte((byte)((value >> 56) & 0xFF));
-			}
-			else
-			{
-				src.WriteByte((byte)((value >> 56) & 0xFF));
-				src.WriteByte((byte)((value >> 48) & 0xFF));
-				src.WriteByte((byte)((value >> 40) & 0xFF));
-				src.WriteByte((byte)((value >> 32) & 0xFF));
-				src.WriteByte((byte)((value >> 24) & 0xFF));
-				src.WriteByte((byte)((value >> 16) & 0xFF));
-				src.WriteByte((byte)((value >> 8) & 0xFF));
-				src.WriteByte((byte)(value & 0xFF));
-			}
-		}
-
-		public static void Write(this Stream src, long value, bool asLittleEndian)
-		{
-			src.Write((ulong)value, asLittleEndian);
-		}
-
-
 	}
 }

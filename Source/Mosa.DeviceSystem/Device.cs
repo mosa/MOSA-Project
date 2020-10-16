@@ -1,50 +1,29 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System.Collections.Generic;
 
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// Abstract base class for a device
+	/// Device
 	/// </summary>
-	public abstract class Device : IDevice
+	public class Device
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		protected string name;
+		public string Name { get; set; }
+		public BaseDeviceDriver DeviceDriver { get; set; }
+		public DeviceStatus Status { get; set; }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		protected IDevice parent;
+		public Device Parent { get; set; }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		protected DeviceStatus deviceStatus;
+		//public IService Service { get; set; }
 
-		/// <summary>
-		/// Gets the name of the device.
-		/// </summary>
-		/// <value>The name.</value>
-		public string Name { get { return name; } }
+		public List<Device> Children { get; } = new List<Device>();
+		public HardwareResources Resources { get; set; }
+		public BaseDeviceConfiguration Configuration { get; set; }
 
-		/// <summary>
-		/// Gets the parent device, if any, of the device.
-		/// </summary>
-		/// <value>The parent.</value>
-		public IDevice Parent { get { return parent; } }
+		public ulong ComponentID { get; set; }
 
-		/// <summary>
-		/// Gets the status of the device.
-		/// </summary>
-		/// <value>The status.</value>
-		public DeviceStatus Status { get { return deviceStatus; } }
+		public DeviceDriverRegistryEntry DeviceDriverRegistryEntry { get; set; }
+		public DeviceService DeviceService { get; internal set; }
 	}
 }

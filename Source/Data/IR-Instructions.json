@@ -1,0 +1,1349 @@
+﻿{
+	"Instructions": [
+		{
+			"Name": "AddR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "AddR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "AddressOf",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "Add32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "Add64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "AddCarryOut32",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "AddCarryOut64",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "AddCarryIn32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 3,
+			"Commutative": "false"
+		},
+		{
+			"Name": "AddCarryIn64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 3,
+			"Commutative": "false"
+		},
+		{
+			"Name": "ArithShiftRight32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "ArithShiftRight64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "BlockEnd",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true"
+		},
+		{
+			"Name": "BlockStart",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true"
+		},
+		{
+			"Name": "Call",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "CallDirect",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "CallDynamic",
+			"Description": "The instruction represents a method called where method address is provide by a virtual register",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "CallInterface",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "CallStatic",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "CallVirtual",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "CompareR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultType": "Boolean"
+		},
+		{
+			"Name": "CompareR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultType": "Boolean"
+		},
+		{
+			"Name": "Compare32x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultType": "Boolean"
+		},
+		{
+			"Name": "Compare32x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultType": "Boolean"
+		},
+		{
+			"Name": "Compare64x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultType": "Boolean"
+		},
+		{
+			"Name": "Compare64x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultType": "Boolean"
+		},
+		{
+			"Name": "BranchCompare32",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 0,
+			"FlowControl": "ConditionalBranch"
+		},
+		{
+			"Name": "BranchCompare64",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 0,
+			"FlowControl": "ConditionalBranch"
+		},
+		{
+			"Name": "ConvertR4ToR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConvertR4To32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConvertR4To64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConvertR8ToR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConvertR8To32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConvertR8To64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "Convert32ToR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "Convert64ToR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "Convert32ToR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "Convert64ToR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "DivR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "DivR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "DivSigned32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "DivSigned64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "DivUnsigned32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "DivUnsigned64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "Epilogue",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0
+		},
+		{
+			"Name": "ExceptionEnd",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true"
+		},
+		{
+			"Name": "ExceptionStart",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true"
+		},
+		{
+			"Name": "FilterEnd",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0
+		},
+		{
+			"Name": "FilterStart",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true"
+		},
+		{
+			"Name": "FinallyEnd",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true"
+		},
+		{
+			"Name": "FinallyStart",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true"
+		},
+		{
+			"Name": "Flow",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true"
+		},
+		{
+			"Name": "Gen",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true",
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "GotoLeaveTarget",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0
+		},
+		{
+			"Name": "IntrinsicMethodCall",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "IsInstanceOfType",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "IsInstanceOfInterfaceType",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "Jmp",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"FlowControl": "UnconditionalBranch"
+		},
+		{
+			"Name": "Kill",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"IgnoreDuringCodeGeneration": "true",
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "KillAll",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true",
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "KillAllExcept",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"IgnoreDuringCodeGeneration": "true",
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "LoadConstant32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "LoadConstant64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "LoadCompound",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "Load32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "Load64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadSignExtend8x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadSignExtend16x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadSignExtend8x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadSignExtend16x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadSignExtend32x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadZeroExtend8x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadZeroExtend16x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadZeroExtend8x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadZeroExtend16x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadZeroExtend32x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadParamCompound",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
+		},
+		{
+			"Name": "LoadParamR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
+		},
+		{
+			"Name": "LoadParamR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
+		},
+		{
+			"Name": "LoadParam32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
+		},
+		{
+			"Name": "LoadParam64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
+		},
+		{
+			"Name": "LoadParamSignExtend8x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
+		},
+		{
+			"Name": "LoadParamSignExtend16x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
+		},
+		{
+			"Name": "LoadParamSignExtend8x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
+		},
+		{
+			"Name": "LoadParamSignExtend16x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
+		},
+		{
+			"Name": "LoadParamSignExtend32x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
+		},
+		{
+			"Name": "LoadParamZeroExtend8x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
+		},
+		{
+			"Name": "LoadParamZeroExtend16x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
+		},
+		{
+			"Name": "LoadParamZeroExtend8x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
+		},
+		{
+			"Name": "LoadParamZeroExtend16x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
+		},
+		{
+			"Name": "LoadParamZeroExtend32x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
+		},
+		{
+			"Name": "And32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "And64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "Not32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "Not64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "Or32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "Or64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "Xor32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "Xor64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "MemorySet",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 3
+		},
+		{
+			"Name": "MoveCompound",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "MoveR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "MoveR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "SignExtend8x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "SignExtend16x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "SignExtend8x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "SignExtend16x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "SignExtend32x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ZeroExtend8x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ZeroExtend16x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ZeroExtend8x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ZeroExtend16x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ZeroExtend32x64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "Move32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "Move64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "MulR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "MulR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "MulSigned32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "MulSigned64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "MulUnsigned64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "MulUnsigned32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "NewArray",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "NewObject",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "NewString",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "Nop",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0
+		},
+		{
+			"Name": "Phi32",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "Phi64",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "PhiR4",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "PhiR8",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
+		},
+		{
+			"Name": "Prologue",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0
+		},
+		{
+			"Name": "RemR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "RemR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "RemSigned32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "RemSigned64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "RemUnsigned32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "RemUnsigned64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "SetReturnR4",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"FlowControl": "Return"
+		},
+		{
+			"Name": "SetReturnR8",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"FlowControl": "Return"
+		},
+		{
+			"Name": "SetReturn32",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"FlowControl": "Return"
+		},
+		{
+			"Name": "SetReturn64",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"FlowControl": "Return"
+		},
+		{
+			"Name": "SetReturnCompound",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"FlowControl": "Return"
+		},
+		{
+			"Name": "SetLeaveTarget",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true"
+		},
+		{
+			"Name": "ShiftLeft32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "ShiftLeft64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "ShiftRight32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "ShiftRight64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "StableObjectTracking",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true",
+			"UnspecifiedSideEffect": "true"
+		},
+		{
+			"Name": "StoreCompound",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreR4",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreR8",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "Store8",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "Store16",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "Store32",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "Store64",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreParamCompound",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"MemoryWrite": "true",
+			"ParameterStore": "true"
+		},
+		{
+			"Name": "StoreParamR4",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"MemoryWrite": "true",
+			"ParameterStore": "true"
+		},
+		{
+			"Name": "StoreParamR8",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"MemoryWrite": "true",
+			"ParameterStore": "true"
+		},
+		{
+			"Name": "StoreParam8",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"ParameterStore": "true",
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "StoreParam16",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"MemoryWrite": "true",
+			"ParameterStore": "true"
+		},
+		{
+			"Name": "StoreParam32",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"MemoryWrite": "true",
+			"ParameterStore": "true"
+		},
+		{
+			"Name": "StoreParam64",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"MemoryWrite": "true",
+			"ParameterStore": "true"
+		},
+		{
+			"Name": "SubR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "SubR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "Sub32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "Sub64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "SubCarryOut32",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 2,
+			"Commutative": "false"
+		},
+		{
+			"Name": "SubCarryOut64",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 2,
+			"Commutative": "false"
+		},
+		{
+			"Name": "SubCarryIn32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 3,
+			"Commutative": "false"
+		},
+		{
+			"Name": "SubCarryIn64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 3,
+			"Commutative": "false"
+		},
+		{
+			"Name": "Switch",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"FlowControl": "Switch"
+		},
+		{
+			"Name": "Throw",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1
+		},
+		{
+			"Name": "Truncate64x32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "TryEnd",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true",
+			"IgnoreInstructionBasicBlockTargets": "true"
+		},
+		{
+			"Name": "TryStart",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true",
+			"IgnoreInstructionBasicBlockTargets": "true"
+		},
+		{
+			"Name": "UnstableObjectTracking",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"IgnoreDuringCodeGeneration": "true",
+			"UnspecifiedSideEffect": "true"
+		},
+		{
+			"Name": "Rethrow",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "GetVirtualFunctionPtr",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2
+		},
+		{
+			"Name": "MemoryCopy",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 3,
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "Box",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true",
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "Box32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true",
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "Box64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true",
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "BoxR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true",
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "BoxR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true",
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "Unbox",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true",
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "Unbox32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true",
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "Unbox64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true",
+			"MemoryWrite": "true"
+		},
+		{
+			"Name": "To64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultType": "UInt64"
+		},
+		{
+			"Name": "GetLow64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"ResultType": "UInt32",
+			"ResultType2": "UInt32"
+		},
+		{
+			"Name": "GetHigh64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"ResultType": "UInt32",
+			"ResultType2": "UInt32"
+		},
+		{
+			"Name": "IfThenElse32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 3
+		},
+		{
+			"Name": "IfThenElse64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 3
+		},
+		{
+			"Name": "BitCopyR4To32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "BitCopyR8To64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "BitCopy32ToR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "BitCopy64ToR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		}
+	]
+}

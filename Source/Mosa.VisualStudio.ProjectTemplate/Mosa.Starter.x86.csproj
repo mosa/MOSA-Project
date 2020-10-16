@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net472</TargetFramework>
+		<OutputType>Exe</OutputType>
+		<StartupObject>$safeprojectname$.Boot</StartupObject>
+		<DebugType>full</DebugType>
+		<LangVersion>8.0</LangVersion>
+		<OutputPath>bin\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
+		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+	<ItemGroup>
+		<PackageReference Include="Mosa.Korlib" Version="*" />
+		<PackageReference Include="Mosa.Kernel.x86" Version="*" />
+		<PackageReference Include="Mosa.Platform.x86" Version="*" />
+		<PackageReference Include="Mosa.Runtime" Version="*" />
+		<PackageReference Include="Mosa.Tools.Package" Version="*" />
+	</ItemGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<StartAction>Program</StartAction>
+		<StartProgram>C:\Program Files (x86)\MOSA-Project\bin\Mosa.Tool.Bootstrap.exe</StartProgram>
+		<StartArguments>$safeprojectname$.exe</StartArguments>
+	</PropertyGroup>
+</Project>

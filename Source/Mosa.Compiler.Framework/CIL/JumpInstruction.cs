@@ -1,18 +1,11 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
 	/// Represents a basic jump instruction.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.InvokeInstruction" />
 	/// <remarks>
 	/// Other more complex method invocation instructions derive from this class, specifically the CallInstruction,
 	/// the CalliInstruction and CallvirtInstruction classes. They share the features provided by the JumpInstruction.
@@ -22,14 +15,15 @@ namespace Mosa.Compiler.Framework.CIL
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="JumpInstruction"/> class.
+		/// Initializes a new instance of the <see cref="JumpInstruction" /> class.
 		/// </summary>
+		/// <param name="opCode">The op code.</param>
 		public JumpInstruction(OpCode opCode)
 			: base(opCode)
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -42,20 +36,6 @@ namespace Mosa.Compiler.Framework.CIL
 			get { return InvokeSupportFlags.MemberRef | InvokeSupportFlags.MethodDef; }
 		}
 
-		#endregion // Properties
-
-		#region Methods
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.Jmp(context);
-		}
-
-		#endregion // Methods
+		#endregion Properties
 	}
 }

@@ -1,38 +1,18 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Scott Balmos <sbalmos@fastmail.fm>
- */
-
-using System.Collections.Generic;
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Representations the x86 CPUID instruction.
+	/// IntrinsicMethods
 	/// </summary>
-	public sealed class CpuId : IIntrinsicMethod
+	static partial class IntrinsicMethods
 	{
-
-		#region Methods
-
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::CpuId")]
+		private static void CpuId(Context context, MethodCompiler methodCompiler)
 		{
-			context.SetInstruction(Instruction.CpuIdInstruction, context.Result, context.Operand1);
+			context.SetInstruction(X86.CpuId, context.Result, context.Operand1);
 		}
-
-		#endregion // Methods
-
 	}
 }

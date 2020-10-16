@@ -1,70 +1,72 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.ClassLib;
+using System.Collections.Generic;
 
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	/// NetworkDevicePacketBuffer
 	/// </summary>
 	public class NetworkDevicePacketBuffer
 	{
 		/// <summary>
-		/// Network Device Packet Buffer 
+		/// Network Device Packet Buffer
 		/// </summary>
 		/// <remarks>
 		/// This class setups a transmit and receive between buffers between the Network Device and the TCP stack.
-		/// Network devices will not have to setup their own in-memory buffers when hardware buffers become full. 
+		/// Network devices will not have to setup their own in-memory buffers when hardware buffers become full.
 		/// </remarks>
 		protected INetworkDevice networkDevice;
+
 		/// <summary>
-		/// 
+		/// The transmit queue
 		/// </summary>
 		protected LinkedList<byte[]> transmitQueue;
+
 		/// <summary>
-		/// 
+		/// The receive queue
 		/// </summary>
 		protected LinkedList<byte[]> receiveQueue;
+
 		/// <summary>
-		/// 
+		/// The maximum transmit queue
 		/// </summary>
 		protected uint maxTransmitQueue;
+
 		/// <summary>
-		/// 
+		/// The maximum receive queue
 		/// </summary>
 		protected uint maxReceiveQueue;
+
 		/// <summary>
-		/// 
+		/// The count transmit packets
 		/// </summary>
 		protected uint countTransmitPackets;
+
 		/// <summary>
-		/// 
+		/// The count receive packets
 		/// </summary>
 		protected uint countReceivePackets;
+
 		/// <summary>
-		/// 
+		/// The discarded transmit packets
 		/// </summary>
 		protected uint discardedTransmitPackets;
+
 		/// <summary>
-		/// 
+		/// The discarded receive packets
 		/// </summary>
 		protected uint discardedReceivePackets;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected SpinLock transmitLock;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected SpinLock receiveLock;
 
+		/// <summary>
+		/// The transmit lock
+		/// </summary>
+		protected object transmitLock = new object();
+
+		/// <summary>
+		/// The receive lock
+		/// </summary>
+		protected object receiveLock = new object();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="NetworkDevicePacketBuffer"/> class.
@@ -73,10 +75,10 @@ namespace Mosa.DeviceSystem
 		public NetworkDevicePacketBuffer(INetworkDevice networkDevice)
 		{
 			this.networkDevice = networkDevice;
-			this.maxTransmitQueue = 100;	// TODO: Lookup system default
-			this.maxReceiveQueue = 100;		// TODO: Lookup system default
-			this.transmitLock = new SpinLock();
-			this.receiveLock = new SpinLock();
+			maxTransmitQueue = 100;    // TODO: Lookup system default
+			maxReceiveQueue = 100;     // TODO: Lookup system default
+			transmitLock = new object();
+			receiveLock = new object();
 			countTransmitPackets = 0;
 			countReceivePackets = 0;
 			discardedTransmitPackets = 0;
@@ -94,8 +96,8 @@ namespace Mosa.DeviceSystem
 			this.networkDevice = networkDevice;
 			this.maxReceiveQueue = maxReceiveQueue;
 			this.maxTransmitQueue = maxTransmitQueue;
-			this.transmitLock = new SpinLock();
-			this.receiveLock = new SpinLock();
+			transmitLock = new object();
+			receiveLock = new object();
 			countTransmitPackets = 0;
 			countReceivePackets = 0;
 			discardedTransmitPackets = 0;
@@ -109,9 +111,8 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public bool SendPacketToDevice(byte[] data)
 		{
-			try
+			lock (transmitLock)
 			{
-				transmitLock.Enter();
 				if (transmitQueue.Count >= maxTransmitQueue)
 					return false;
 
@@ -119,10 +120,6 @@ namespace Mosa.DeviceSystem
 				countTransmitPackets++;
 
 				return true;
-			}
-			finally
-			{
-				transmitLock.Exit();
 			}
 		}
 
@@ -132,21 +129,15 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public byte[] GetPacketFromDevice()
 		{
-			try
+			lock (receiveLock)
 			{
-				receiveLock.Enter();
-
 				if (receiveQueue.Count == 0)
 					return null;
 
-				byte[] data = receiveQueue.First.value;
+				byte[] data = receiveQueue.First.Value;
 				receiveQueue.RemoveFirst();
 
 				return data;
-			}
-			finally
-			{
-				receiveLock.Exit();
 			}
 		}
 
@@ -157,10 +148,8 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public bool QueuePacketForStack(byte[] data)
 		{
-			try
+			lock (receiveLock)
 			{
-				receiveLock.Enter();
-
 				if (receiveQueue.Count > maxReceiveQueue)
 				{
 					discardedReceivePackets++;
@@ -171,10 +160,6 @@ namespace Mosa.DeviceSystem
 				countReceivePackets++;
 
 				return true;
-			}
-			finally
-			{
-				receiveLock.Exit();
 			}
 		}
 
@@ -192,23 +177,17 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		protected void SendPackets()
 		{
-			try
+			lock (receiveLock)
 			{
-				receiveLock.Enter();
-
 				while (receiveQueue.Count != 0)
 				{
-					byte[] data = receiveQueue.First.value;
+					byte[] data = receiveQueue.First.Value;
 
 					if (networkDevice.SendPacket(data))
 						receiveQueue.RemoveFirst();
 					else
 						return;
 				}
-			}
-			finally
-			{
-				receiveLock.Exit();
 			}
 		}
 	}

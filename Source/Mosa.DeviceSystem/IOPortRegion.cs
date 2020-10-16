@@ -1,38 +1,23 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	/// IO Port Region
 	/// </summary>
-	public class IOPortRegion : IIOPortRegion
+	public struct IOPortRegion
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		protected ushort baseIOPort;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected ushort size;
-
 		/// <summary>
 		/// Gets the base IO port.
 		/// </summary>
 		/// <value>The base IO port.</value>
-		public ushort BaseIOPort { get { return baseIOPort; } }
+		public ushort BaseIOPort { get; }
+
 		/// <summary>
 		/// Gets the size.
 		/// </summary>
 		/// <value>The size.</value>
-		public ushort Size { get { return size; } }
+		public ushort Size { get; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IOPortRegion"/> class.
@@ -41,10 +26,8 @@ namespace Mosa.DeviceSystem
 		/// <param name="size">The size.</param>
 		public IOPortRegion(ushort baseIOPort, ushort size)
 		{
-			this.baseIOPort = baseIOPort;
-			this.size = size;
+			BaseIOPort = baseIOPort;
+			Size = size;
 		}
-
 	}
-
 }

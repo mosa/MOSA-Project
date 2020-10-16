@@ -1,86 +1,81 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System.IO;
 
 namespace Mosa.FileSystem.FAT
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
-	public class FatFileStream : System.IO.Stream
+	public class FatFileStream : Stream
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint startCluster;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint currentCluster;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint directorySector;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint directorySectorIndex;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint nthCluster;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected long position;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected long length;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected long lengthOnDisk;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
-		protected bool read;
+		protected bool canRead;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
-		protected bool write;
+		protected bool canWrite;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected byte[] data;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
-		protected bool dirty;
+		protected bool isDirty;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint clusterSize;
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected FatFileSystem fs;
 
@@ -104,20 +99,20 @@ namespace Mosa.FileSystem.FAT
 		public FatFileStream(FatFileSystem fs, uint startCluster, uint directorySector, uint directorySectorIndex)
 		{
 			this.fs = fs;
-			this.clusterSize = fs.ClusterSizeInBytes;
-			this.data = new byte[clusterSize];
+			clusterSize = fs.ClusterSizeInBytes;
+			data = new byte[clusterSize];
 			this.startCluster = startCluster;
 			this.directorySector = directorySector;
 			this.directorySectorIndex = directorySectorIndex;
-			this.read = true;
-			this.write = false;
-			this.position = 0;
-			this.dirty = false;
+			position = 0;
+			canRead = true;
+			canWrite = true;
+			isDirty = false;
 
-			this.nthCluster = System.UInt32.MaxValue; // Not positioned yet 
+			nthCluster = System.UInt32.MaxValue; // Not positioned yet
 
-			this.lengthOnDisk = fs.GetFileSize(directorySector, directorySectorIndex);
-			this.length = this.lengthOnDisk;
+			lengthOnDisk = fs.GetFileSize(directorySector, directorySectorIndex);
+			length = lengthOnDisk;
 
 			currentCluster = 0;
 		}
@@ -128,7 +123,7 @@ namespace Mosa.FileSystem.FAT
 		/// <value></value>
 		/// <returns>true if the stream supports reading; otherwise, false.
 		/// </returns>
-		public override bool CanRead { get { return read; } }
+		public override bool CanRead { get { return canRead; } }
 
 		/// <summary>
 		/// When overridden in a derived class, gets a value indicating whether the current stream supports seeking.
@@ -144,7 +139,7 @@ namespace Mosa.FileSystem.FAT
 		/// <value></value>
 		/// <returns>true if the stream supports writing; otherwise, false.
 		/// </returns>
-		public override bool CanWrite { get { return write; } }
+		public override bool CanWrite { get { return canWrite; } }
 
 		/// <summary>
 		/// Gets a value that determines whether the current stream can time out.
@@ -177,7 +172,7 @@ namespace Mosa.FileSystem.FAT
 		/// <returns>
 		/// The current position within the stream.
 		/// </returns>
-		/// <exception cref="T:System.IO.IOException">
+		/// <exception cref="T:IOException">
 		/// An I/O error occurs.
 		/// </exception>
 		/// <exception cref="T:System.NotSupportedException">
@@ -194,25 +189,25 @@ namespace Mosa.FileSystem.FAT
 			}
 			set
 			{
-				Seek((long)value, System.IO.SeekOrigin.Begin);
+				Seek(value, SeekOrigin.Begin);
 			}
 		}
 
 		/// <summary>
 		/// When overridden in a derived class, clears all buffers for this stream and causes any buffered data to be written to the underlying device.
 		/// </summary>
-		/// <exception cref="T:System.IO.IOException">
+		/// <exception cref="T:IOException">
 		/// An I/O error occurs.
 		/// </exception>
 		public override void Flush()
 		{
-			if (!dirty)
+			if (!isDirty)
 				return;
 
 			fs.WriteCluster(currentCluster, data);
 			SetLength(length);
 
-			dirty = false;
+			isDirty = false;
 		}
 
 		/// <summary>
@@ -233,7 +228,7 @@ namespace Mosa.FileSystem.FAT
 		/// <exception cref="T:System.ArgumentOutOfRangeException">
 		/// 	<paramref name="offset"/> or <paramref name="count"/> is negative.
 		/// </exception>
-		/// <exception cref="T:System.IO.IOException">
+		/// <exception cref="T:IOException">
 		/// An I/O error occurs.
 		/// </exception>
 		/// <exception cref="T:System.NotSupportedException">
@@ -245,13 +240,14 @@ namespace Mosa.FileSystem.FAT
 		public override int Read(byte[] buffer, int offset, int count)
 		{
 			if (position >= length)
-				return -1;	// EOF
+				return -1;  // EOF
 
 			int index = 0;
 
-			// very slow
 			for (; (position < length) && (index < count); index++)
+			{
 				buffer[offset + index] = (byte)ReadByte();
+			}
 
 			return index;
 		}
@@ -271,28 +267,28 @@ namespace Mosa.FileSystem.FAT
 		public override int ReadByte()
 		{
 			if (position >= length)
-				return -1;	// EOF
+				return -1;  // EOF
 
 			uint index = (uint)(position % clusterSize);
-
-			if (index == 0)
-				NextCluster();
-
-			byte b = data[index];
 			position++;
 
-			return b;
+			if (index == 0)
+			{
+				NextCluster();
+			}
+
+			return data[index];
 		}
 
 		/// <summary>
 		/// When overridden in a derived class, sets the position within the current stream.
 		/// </summary>
 		/// <param name="offset">A byte offset relative to the <paramref name="origin"/> parameter.</param>
-		/// <param name="origin">A value of type <see cref="T:System.IO.SeekOrigin"/> indicating the reference point used to obtain the new position.</param>
+		/// <param name="origin">A value of type <see cref="T:SeekOrigin"/> indicating the reference point used to obtain the new position.</param>
 		/// <returns>
 		/// The new position within the current stream.
 		/// </returns>
-		/// <exception cref="T:System.IO.IOException">
+		/// <exception cref="T:IOException">
 		/// An I/O error occurs.
 		/// </exception>
 		/// <exception cref="T:System.NotSupportedException">
@@ -301,17 +297,15 @@ namespace Mosa.FileSystem.FAT
 		/// <exception cref="T:System.ObjectDisposedException">
 		/// Methods were called after the stream was closed.
 		/// </exception>
-		public override long Seek(long offset, System.IO.SeekOrigin origin)
+		public override long Seek(long offset, SeekOrigin origin)
 		{
-			// FIXME: off-by-one bug when new position modulus 512 = 0
-
 			long newposition = position;
 
 			switch (origin)
 			{
-				case System.IO.SeekOrigin.Begin: newposition = offset; break;
-				case System.IO.SeekOrigin.Current: newposition = position + offset; break;
-				case System.IO.SeekOrigin.End: newposition = length + offset; break;
+				case SeekOrigin.Begin: newposition = offset; break;
+				case SeekOrigin.Current: newposition = position + offset; break;
+				case SeekOrigin.End: newposition = length + offset; break;
 			}
 
 			// find cluster number of new position
@@ -325,18 +319,16 @@ namespace Mosa.FileSystem.FAT
 			{
 				newCluster = currentCluster;
 			}
-			else
-				if (newNthCluster > currentNthCluster)
-				{
-					newCluster = fs.FindNthCluster(currentCluster, (uint)diff);
-					currentNthCluster = currentNthCluster + (uint)diff;
-				}
-				else
-					if (newNthCluster < currentNthCluster)
-					{
-						newCluster = fs.FindNthCluster(this.startCluster, newNthCluster);
-						currentNthCluster = newNthCluster;
-					}
+			else if (newNthCluster > currentNthCluster)
+			{
+				newCluster = fs.FindNthCluster(currentCluster, (uint)diff);
+				currentNthCluster = currentNthCluster + (uint)diff;
+			}
+			else if (newNthCluster < currentNthCluster)
+			{
+				newCluster = fs.FindNthCluster(startCluster, newNthCluster);
+				currentNthCluster = newNthCluster;
+			}
 
 			ReadCluster(newCluster);
 			position = newposition;
@@ -348,12 +340,7 @@ namespace Mosa.FileSystem.FAT
 		/// </summary>
 		protected bool NextCluster()
 		{
-			uint newcluster = 0;
-
-			if (currentCluster == 0)
-				newcluster = startCluster;
-			else
-				newcluster = fs.GetNextCluster(currentCluster);
+			uint newcluster = (currentCluster == 0) ? startCluster : fs.GetNextCluster(currentCluster);
 
 			ReadCluster(newcluster);
 
@@ -381,7 +368,7 @@ namespace Mosa.FileSystem.FAT
 
 					startCluster = newCluster;
 					currentCluster = newCluster;
-					dirty = true;
+					isDirty = true;
 
 					// Clear cluster
 					for (int i = 0; i < clusterSize; i++)
@@ -404,7 +391,7 @@ namespace Mosa.FileSystem.FAT
 						return false;
 
 					currentCluster = newCluster;
-					dirty = true;
+					isDirty = true;
 
 					// Clear cluster
 					for (int i = 0; i < clusterSize; i++)
@@ -432,14 +419,13 @@ namespace Mosa.FileSystem.FAT
 
 			currentCluster = cluster;
 			fs.ReadCluster(cluster, data);
-			dirty = false;
 		}
 
 		/// <summary>
 		/// When overridden in a derived class, sets the length of the current stream.
 		/// </summary>
 		/// <param name="value">The desired length of the current stream in bytes.</param>
-		/// <exception cref="T:System.IO.IOException">
+		/// <exception cref="T:IOException">
 		/// An I/O error occurs.
 		/// </exception>
 		/// <exception cref="T:System.NotSupportedException">
@@ -473,7 +459,7 @@ namespace Mosa.FileSystem.FAT
 		/// <exception cref="T:System.ArgumentOutOfRangeException">
 		/// 	<paramref name="offset"/> or <paramref name="count"/> is negative.
 		/// </exception>
-		/// <exception cref="T:System.IO.IOException">
+		/// <exception cref="T:IOException">
 		/// An I/O error occurs.
 		/// </exception>
 		/// <exception cref="T:System.NotSupportedException">
@@ -488,42 +474,21 @@ namespace Mosa.FileSystem.FAT
 				return;
 
 			if (buffer.Length - offset < count)
+			{
 				count = buffer.Length - offset;
+			}
 
 			for (int i = 0; i < count; i++)
 			{
 				WriteByte(buffer[offset + i]);
 			}
-
-			//dirty = true;
-
-			//uint remaining = (uint)count;
-
-			//while (remaining != 0)
-			//{
-			//    uint clusterIndex = (uint)(position % clusterSize);
-
-			//    if (clusterIndex == 0)
-			//        NextClusterExpand();
-
-			//    uint clusterAvailable = clusterSize - clusterIndex;
-
-			//    uint size = System.Math.Min(remaining, clusterAvailable);
-
-			//    System.Array.Copy(buffer, offset, data, clusterIndex, size);
-
-			//    offset += (int)size;
-			//    position += size;
-			//    remaining -= size;
-			//}
-
 		}
 
 		/// <summary>
 		/// Writes a byte to the current position in the stream and advances the position within the stream by one byte.
 		/// </summary>
 		/// <param name="value">The byte to write to the stream.</param>
-		/// <exception cref="T:System.IO.IOException">
+		/// <exception cref="T:IOException">
 		/// An I/O error occurs.
 		/// </exception>
 		/// <exception cref="T:System.NotSupportedException">
@@ -537,14 +502,18 @@ namespace Mosa.FileSystem.FAT
 			uint index = (uint)(position % clusterSize);
 
 			if (index == 0)
+			{
 				NextClusterExpand();
+			}
 
-			dirty = true;
+			isDirty = true;
 			data[index] = value;
 			position++;
 
 			if (position > length)
+			{
 				length = position;
+			}
 		}
 	}
 }

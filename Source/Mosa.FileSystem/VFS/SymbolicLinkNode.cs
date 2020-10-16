@@ -1,32 +1,25 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public sealed class SymbolicLinkNode : NodeBase
 	{
-		#region Data members
+		#region Data Members
 
 		/// <summary>
 		/// The target of the symbolic link.
 		/// </summary>
 		private string target;
 
-		#endregion // Data members
+		#endregion Data Members
 
 		#region Construction
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="fs"></param>
 		/// <param name="target"></param>
@@ -36,7 +29,7 @@ namespace Mosa.FileSystem.VFS
 			this.target = target;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -51,11 +44,12 @@ namespace Mosa.FileSystem.VFS
 			}
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region IVfsNode Members
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="name"></param>
 		/// <param name="type"></param>
@@ -69,7 +63,7 @@ namespace Mosa.FileSystem.VFS
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="access"></param>
 		/// <param name="sharing"></param>
@@ -84,16 +78,16 @@ namespace Mosa.FileSystem.VFS
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="child"></param>
 		/// <param name="dentry"></param>
 		public override void Delete(IVfsNode child, DirectoryEntry dentry)
 		{
-			// FIXME: Delete the symbolic link from the filesystem, after all names have been dropped.
+			// FIXME: Delete the symbolic link from the file system, after all names have been dropped.
 			throw new System.NotSupportedException();
 		}
 
-		#endregion // IVfsNode Members
+		#endregion IVfsNode Members
 	}
 }

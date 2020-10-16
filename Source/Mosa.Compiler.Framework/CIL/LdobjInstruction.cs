@@ -1,29 +1,20 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
-using Mosa.Compiler.Framework.Operands;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.Common.Exceptions;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	/// Ldobj Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryInstruction" />
 	public sealed class LdobjInstruction : UnaryInstruction
 	{
 		/// <summary>
 		/// A fixed typeref for ldind.* instructions.
 		/// </summary>
-		private readonly SigType typeRef;
+		private readonly MosaTypeCode? elementType;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LdobjInstruction"/> class.
@@ -34,111 +25,60 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			switch (opcode)
 			{
-				case OpCode.Ldind_i1:
-					typeRef = BuiltInSigType.SByte;
-					break;
-				case OpCode.Ldind_i2:
-					typeRef = BuiltInSigType.Int16;
-					break;
-				case OpCode.Ldind_i4:
-					typeRef = BuiltInSigType.Int32;
-					break;
-				case OpCode.Ldind_i8:
-					typeRef = BuiltInSigType.Int64;
-					break;
-				case OpCode.Ldind_u1:
-					typeRef = BuiltInSigType.Byte;
-					break;
-				case OpCode.Ldind_u2:
-					typeRef = BuiltInSigType.UInt16;
-					break;
-				case OpCode.Ldind_u4:
-					typeRef = BuiltInSigType.UInt32;
-					break;
-				case OpCode.Ldind_i:
-					typeRef = BuiltInSigType.IntPtr;
-					break;
-				case OpCode.Ldind_r4:
-					typeRef = BuiltInSigType.Single;
-					break;
-				case OpCode.Ldind_r8:
-					typeRef = BuiltInSigType.Double;
-					break;
-				case OpCode.Ldind_ref: // FIXME: Really object?
-					typeRef = BuiltInSigType.Object;
-					break;
-				case OpCode.Ldobj: // FIXME
-					typeRef = null; // BuiltInSigType.Object;
-					break;
-				default:
-					throw new NotImplementedException();
+				case OpCode.Ldind_i1: elementType = MosaTypeCode.I1; break;
+				case OpCode.Ldind_i2: elementType = MosaTypeCode.I2; break;
+				case OpCode.Ldind_i4: elementType = MosaTypeCode.I4; break;
+				case OpCode.Ldind_i8: elementType = MosaTypeCode.I8; break;
+				case OpCode.Ldind_u1: elementType = MosaTypeCode.U1; break;
+				case OpCode.Ldind_u2: elementType = MosaTypeCode.U2; break;
+				case OpCode.Ldind_u4: elementType = MosaTypeCode.U4; break;
+				case OpCode.Ldind_i: elementType = MosaTypeCode.I; break;
+				case OpCode.Ldind_r4: elementType = MosaTypeCode.R4; break;
+				case OpCode.Ldind_r8: elementType = MosaTypeCode.R8; break;
+				case OpCode.Ldind_ref: elementType = MosaTypeCode.Object; break;
+				case OpCode.Ldobj: elementType = null; break;
+				default: throw new NotImplementCompilerException();
 			}
-		}
-
-		public SigType TypeReference
-		{
-			get { return typeRef; }
 		}
 
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
-			SigType sigType = typeRef;
-
-			// Do we have a type?
-			if (sigType == null)
-			{
-				// No, retrieve a type reference from the immediate argument
-				Token token = decoder.DecodeTokenType();
-				sigType = new ClassSigType(token);
-				ctx.Other = sigType;
-			}
-			else
-				ctx.Other = TypeReference;
+			var type = (elementType == null)
+				? (MosaType)decoder.Instruction.Operand
+				: decoder.MethodCompiler.Compiler.GetTypeFromTypeCode(elementType.Value);
 
 			// Push the loaded value
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
+			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, type);
+			node.MosaType = type;
+
+			//System.Diagnostics.Debug.WriteLine(decoder.Method.FullName); //temp - remove me
 		}
 
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="compiler">The compiler.</param>
-		public override void Validate(Context ctx, IMethodCompiler compiler)
+		/// <param name="context">The context.</param>
+		/// <param name="methodCompiler">The compiler.</param>
+		public override void Resolve(Context context, MethodCompiler methodCompiler)
 		{
-			base.Validate(ctx, compiler);
+			base.Resolve(context, methodCompiler);
 
 			// If we're ldind.i8, fix an IL deficiency that the result may be U8
-			if (opcode == OpCode.Ldind_i8 && typeRef.Type == CilElementType.I8)
+			if (opcode == OpCode.Ldind_i8 && elementType.Value == MosaTypeCode.I8)
 			{
-				SigType opType = ctx.Operand1.Type;
-				RefSigType rst = opType as RefSigType;
-				PtrSigType ptr = opType as PtrSigType;
-
-				if (rst != null && rst.ElementType.Type == CilElementType.U8
-					|| ptr != null && ptr.ElementType.Type == CilElementType.U8)
+				if (context.Operand1.Type.ElementType?.IsU8 == true)
 				{
-					ctx.Result = compiler.CreateTemporary(BuiltInSigType.UInt64);
+					context.Result = methodCompiler.CreateVirtualRegister(methodCompiler.TypeSystem.BuiltIn.U8);
 				}
 			}
-		}
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.Ldobj(context);
 		}
 	}
 }

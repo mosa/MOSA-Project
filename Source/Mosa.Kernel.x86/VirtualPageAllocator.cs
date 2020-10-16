@@ -1,13 +1,7 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.x86.Intrinsic;
+using Mosa.Kernel.x86.Helpers;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.x86
 {
@@ -19,19 +13,19 @@ namespace Mosa.Kernel.x86
 	/// </remarks>
 	public static class VirtualPageAllocator
 	{
-		// Location of bitmap starts at 21MB
-		private static uint _bitmap = 1024 * 1024 * 21; // 0x1500000
-		private static uint _pages;
+		private static uint pages;
+		private static bool initialized = false;
 
 		/// <summary>
 		/// Setups this instance.
 		/// </summary>
 		public static void Setup()
 		{
-			_pages = (PageFrameAllocator.TotalPages - PageFrameAllocator.ReserveMemory) / PageFrameAllocator.PageSize;
+			pages = (PageFrameAllocator.TotalPages - Address.ReserveMemory) / PageFrameAllocator.PageSize;
 
 			// Bits: 0 = Available, 1 = Not Available
-			Memory.Clear(_bitmap, _pages / 8);
+			Internal.MemoryClear(new Pointer(Address.VirtualPageAllocator), pages / 8);
+			initialized = true;
 		}
 
 		/// <summary>
@@ -39,9 +33,9 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <returns></returns>
-		private static unsafe uint GetPageIndex(void* address)
+		private static uint GetPageIndex(uint address)
 		{
-			return (((uint)address) - PageFrameAllocator.ReserveMemory) / PageFrameAllocator.PageSize;
+			return (address - Address.ReserveMemory) / PageFrameAllocator.PageSize;
 		}
 
 		/// <summary>
@@ -51,18 +45,18 @@ namespace Mosa.Kernel.x86
 		/// <param name="free">if set to <c>true</c> [free].</param>
 		private static void SetPageStatus(uint page, bool free)
 		{
-			uint at = (uint)(_bitmap + (page / 32));
+			var at = new Pointer(Address.VirtualPageAllocator + (page / 32));
 			byte bit = (byte)(page % 32);
 			uint mask = (byte)(1 << bit);
 
-			uint value = Native.Get32(at);
+			uint value = at.Load32();
 
 			if (free)
-				value = (uint)(value & ~mask);
+				value &= ~mask;
 			else
-				value = (uint)(value | mask);
+				value |= mask;
 
-			Native.Set32(at, value);
+			at.Store32(value);
 		}
 
 		/// <summary>
@@ -72,11 +66,11 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		private static bool GetPageStatus(uint page)  // true = available
 		{
-			uint at = (uint)(_bitmap + (page / 8));
+			var at = new Pointer(Address.VirtualPageAllocator + (page / 8));
 			byte bit = (byte)(page % 8);
 			byte mask = (byte)(1 << bit);
 
-			byte value = Native.Get8(at);
+			byte value = at.Load8();
 
 			return (value & mask) == 0;
 		}
@@ -88,29 +82,32 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		public static uint Reserve(uint size)
 		{
-			uint first = 0xFFFFFFFF; // Marker
-			uint pages = ((size - 1) / PageFrameAllocator.PageSize) + 1;
+			Assert.True(initialized, "VirtualPageAllocator is not initialized");
 
-			for (uint at = 0; at < _pages; at++)
+			uint first = 0xFFFFFFFF; // Marker
+			uint requested = ((size - 1) / PageFrameAllocator.PageSize) + 1;
+
+			for (uint at = 0; at < pages; at++)
 			{
 				if (GetPageStatus(at))
 				{
 					if (first == 0xFFFFFFFF)
 						first = at;
 
-					if (at - first == pages)
+					if (at - first == requested)
 					{
-
-						for (uint index = 0; index < pages; index++)
+						for (uint index = 0; index < requested; index++)
 							SetPageStatus(first + index, false);
 
-						return ((first * PageFrameAllocator.PageSize) + PageFrameAllocator.ReserveMemory);
+						return ((first * PageFrameAllocator.PageSize) + Address.ReserveMemory);
 					}
 				}
 				else
+				{
 					first = 0xFFFFFFFF;
+				}
 			}
-
+			Assert.True(false, "VirtualPageAllocator cannot reserve memory");
 			return 0;
 		}
 
@@ -119,12 +116,14 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <param name="count">The count.</param>
-		public static unsafe void Release(void* address, uint count)
+		public static void Release(uint address, uint count)
 		{
 			uint start = GetPageIndex(address);
-			for (uint index = 0; index < count; index++)
-				SetPageStatus(start + index, true);
-		}
 
+			for (uint index = 0; index < count; index++)
+			{
+				SetPageStatus(start + index, true);
+			}
+		}
 	}
 }

@@ -1,19 +1,11 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
- 
-using System;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	/// EndFilter Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryInstruction" />
 	public sealed class EndFilterInstruction : UnaryInstruction
 	{
 		#region Construction
@@ -27,33 +19,22 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
+
+		public override FlowControl FlowControl { get { return FlowControl.EndFilter; } }
 
 		#region Methods
 
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="compiler">The compiler.</param>
-		public override void Validate(Context ctx, IMethodCompiler compiler)
-		{
-			base.Validate(ctx, compiler);
-
-			throw new NotImplementedException();
-		}
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
 		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
+		/// <param name="methodCompiler">The compiler.</param>
+		public override void Resolve(Context context, MethodCompiler methodCompiler)
 		{
-			visitor.Endfilter(context);
+			base.Resolve(context, methodCompiler);
 		}
 
 		#endregion Methods
-
 	}
 }

@@ -1,0 +1,5050 @@
+{
+	"Encoding": [
+		"[x64]=[instruction-prefix]|[address-prefix]|[operand-prefix]|[opcode]|[opcode2]|[opcode3]|[opcode4]|[mod]|[reg]|[rm]|[scale]|[index]|[base]|[displacement]|[immediate]",
+		"[x64-rex]=[instruction-prefix]|[address-prefix]|[operand-prefix]|supress8:0x40|[rex.opcode]|[rex.w]|[rex.r]|[rex.x]|[rex.b]|[opcode]|[opcode2]|[opcode3]|[opcode4]|[mod]|[reg]|[rm]|[scale]|[index]|[base]|[displacement]|[immediate],rex.opcode=0100",
+		"[x64-rex32]=[x64-rex],rex.w=0",
+		"[x64-rex64]=[x64-rex],rex.w=1",
+
+		"[x64-branch]=[x64],operand-prefix=0x0F,opcode=[opcode-branch],immediate=rel32:label",
+		"[x64-setbyteif]=[x64-rex64],operand-prefix=0x0F,opcode=[opcode-setbyteif],mod=11,reg=000,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r",
+		"[x64-cmov32]=[x64-rex32],operand-prefix=0x0F,opcode=[opcode-cmov],mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2",
+		"[x64-cmov64]=[x64-rex64],operand-prefix=0x0F,opcode=[opcode-cmov],mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2",
+
+		"[x64-rex32-base-load-ebp+zero]=[x64-rex32],mod=01,reg=reg3:[dest],rm=101,immediate=0x00,rex.r=reg4x:[dest],rex.x=0,rex.b=0",
+		"[x64-rex32-base-load-ebp+register]=[x64-rex32],mod=01,reg=reg3:[dest],rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00,rex.r=reg4x:[dest],rex.x=reg4x:[membase],rex.b=0",
+		"[x64-rex32-base-load-esp+zero]=[x64-rex32],mod=00,reg=reg3:[dest],rm=100,scale=00,index=100,base=100,rex.r=reg4x:[dest],rex.x=0,rex.b=0",
+		"[x64-rex32-base-load-esp+sbyte]=[x64-rex32],mod=01,reg=reg3:[dest],rm=100,scale=00,index=100,base=100,immediate=imm8:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
+		"[x64-rex32-base-load-esp+constant]=[x64-rex32],mod=10,reg=reg3:[dest],rm=100,immediate=imm8:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
+		"[x64-rex32-base-load-register+register]=[x64-rex32],mod=00,reg=reg3:[dest],rm=100,scale=00,index=reg3:[offset],base=reg3:[membase],rex.r=reg4x:[dest],rex.x=reg4x:[membase],rex.b=0",
+		"[x64-rex32-base-load-register+zero]=[x64-rex32],mod=00,reg=reg3:[dest],rm=reg3:[membase],rex.r=reg4x:[dest],rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex32-base-load-register+sbyte]=[x64-rex32],mod=01,reg=reg3:[dest],rm=reg3:[membase],immediate=imm8:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex32-base-load-register+constant]=[x64-rex32],mod=10,reg=reg3:[dest],rm=reg3:[membase],immediate=imm32:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex32-base-load-constant+zero]=[x64-rex32],mod=00,reg=reg3:[dest],rm=101,immediate=imm32:[membase],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
+		"[x64-rex32-base-load-constant+constant]=[x64-rex32],mod=00,reg=reg3:[dest],rm=101,immediate=imm32+:[membase]:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
+
+		"[x64-rex32-common-load-ebp+zero]=[x64-rex32-base-load-ebp+zero],dest=r",
+		"[x64-rex32-common-load-ebp+register]=[x64-rex32-base-load-ebp+register],dest=r,membase=o2",
+		"[x64-rex32-common-load-esp+zero]=[x64-rex32-base-load-esp+zero],dest=r",
+		"[x64-rex32-common-load-esp+sbyte]=[x64-rex32-base-load-esp+sbyte],dest=r,offset=o2",
+		"[x64-rex32-common-load-esp+constant]=[x64-rex32-base-load-esp+constant],dest=r,offset=o2",
+		"[x64-rex32-common-load-register+register]=[x64-rex32-base-load-register+register],dest=r,membase=o1,offset=o2",
+		"[x64-rex32-common-load-register+zero]=[x64-rex32-base-load-register+zero],dest=r,membase=o1",
+		"[x64-rex32-common-load-register+sbyte]=[x64-rex32-base-load-register+sbyte],dest=r,membase=o1,offset=o2",
+		"[x64-rex32-common-load-register+constant]=[x64-rex32-base-load-register+constant],dest=r,membase=o1,offset=o2",
+		"[x64-rex32-common-load-constant+zero]=[x64-rex32-base-load-constant+zero],dest=r,membase=o1",
+		"[x64-rex32-common-load-constant+constant]=[x64-rex32-base-load-constant+constant],dest=r,membase=o1,offset=o2",
+
+		"[x64-rex32-base-store-register-ebp+zero]=[x64-rex32],mod=01,reg=reg3:[value],rm=101,displacement=0x00,rex.r=reg4x:[value],rex.x=0,rex.b=0",
+		"[x64-rex32-base-store-register-ebp+register]=[x64-rex32],mod=01,reg=reg3:[value],rm=100,scale=00,index=reg3:[membase],base=101,displacement=0x00,rex.r=reg4x:[value],rex.x=reg4x:[membase],rex.b=0",
+		"[x64-rex32-base-store-register-esp+zero]=[x64-rex32],mod=00,reg=reg3:[value],rm=100,scale=00,index=100,base=100,rex.r=reg4x:[value],rex.x=0,rex.b=0",
+		"[x64-rex32-base-store-register-esp+sbyte]=[x64-rex32],mod=01,reg=reg3:[value],rm=100,scale=00,index=100,base=100,displacement=imm8:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=0",
+		"[x64-rex32-base-store-register-esp+constant]=[x64-rex32],mod=10,reg=reg3:[value],rm=100,immediate=imm8:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=0",
+		"[x64-rex32-base-store-register-register+register]=[x64-rex32],mod=00,reg=reg3:[value],rm=100,scale=00,index=reg3:[offset],base=reg3:[membase],rex.r=reg4x:[value],rex.x=reg4x:[offset],rex.b=0",
+		"[x64-rex32-base-store-register-register+zero]=[x64-rex32],mod=00,reg=reg3:[value],rm=reg3:[membase],rex.r=reg4x:[value],rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex32-base-store-register-register+sbyte]=[x64-rex32],mod=01,reg=reg3:[value],rm=reg3:[membase],displacement=imm8:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex32-base-store-register-register+constant]=[x64-rex32],mod=10,reg=reg3:[value],rm=reg3:[membase],displacement=imm32:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex32-base-store-register-constant+zero]=[x64-rex32],mod=00,reg=reg3:[value],rm=101,displacement=imm32:[membase],rex.r=reg4x:[value],rex.x=0,rex.b=0",
+
+		"[x64-rex32-common-store-register-ebp+zero]=[x64-rex32-base-store-register-ebp+zero],opcode=[opcode-register],value=o3",
+		"[x64-rex32-common-store-register-ebp+register]=[x64-rex32-base-store-register-ebp+register],opcode=[opcode-register],value=o3,membase=o2",
+		"[x64-rex32-common-store-register-esp+zero]=[x64-rex32-base-store-register-esp+zero],opcode=[opcode-register],value=o3",
+		"[x64-rex32-common-store-register-esp+sbyte]=[x64-rex32-base-store-register-esp+sbyte],opcode=[opcode-register],value=o3,offset=o2",
+		"[x64-rex32-common-store-register-esp+constant]=[x64-rex32-base-store-register-esp+constant],opcode=[opcode-register],value=o3,offset=o2",
+		"[x64-rex32-common-store-register-register+register]=[x64-rex32-base-store-register-register+register],opcode=[opcode-register],value=o3,membase=o1,offset=o2",
+		"[x64-rex32-common-store-register-register+zero]=[x64-rex32-base-store-register-register+zero],opcode=[opcode-register],value=o3,membase=o1",
+		"[x64-rex32-common-store-register-register+sbyte]=[x64-rex32-base-store-register-register+sbyte],opcode=[opcode-register],value=o3,membase=o1,offset=o2",
+		"[x64-rex32-common-store-register-register+constant]=[x64-rex32-base-store-register-register+constant],opcode=[opcode-register],value=o3,membase=o1,offset=o2",
+		"[x64-rex32-common-store-register-constant+zero]=[x64-rex32-base-store-register-constant+zero],opcode=[opcode-register],value=o3,membase=o1",
+
+		"[x64-rex32-base-store-constant-ebp+zero]=[x64-rex32],mod=01,reg=000,rm=101,displacement=0x00,immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex32-base-store-constant-ebp+register]=[x64-rex32],mod=01,reg=000,rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00,immediate=imm[size]:[value],rex.r=0,rex.x=reg4x:[membase],rex.b=0",
+		"[x64-rex32-base-store-constant-esp+zero]=[x64-rex32],mod=00,reg=000,rm=100,scale=00,index=100,base=100,immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex32-base-store-constant-esp+sbyte]=[x64-rex32],mod=01,reg=000,rm=100,scale=00,index=100,base=100,displacement=imm8:[offset],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex32-base-store-constant-esp+constant]=[x64-rex32],mod=10,reg=000,rm=100,displacement=imm8:[offset],immediate=imm32:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex32-base-store-constant-register+register]=[x64-rex32],mod=00,reg=000,rm=100,scale=00,index=reg3:[offset],base=reg3:[membase],immediate=imm[size]:[value],rex.r=0,rex.x=reg4x:[offset],rex.b=0",
+		"[x64-rex32-base-store-constant-register+zero]=[x64-rex32],mod=00,reg=000,rm=reg3:[membase],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex32-base-store-constant-register+sbyte]=[x64-rex32],mod=01,reg=000,rm=reg3:[membase],displacement=imm8:[offset],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex32-base-store-constant-register+constant]=[x64-rex32],mod=10,reg=000,rm=reg3:[membase],displacement=imm32:[offset],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex32-base-store-constant-constant+zero]=[x64-rex32],mod=00,reg=000,rm=101,displacement=imm32:[membase],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex32-base-store-constant-constant+constant]=[x64-rex32],mod=00,reg=000,rm=101,displacement=imm32+:[membase]:[offset],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=0",
+
+		"[x64-rex32-common-store-constant-ebp+zero]=[x64-rex32-base-store-constant-ebp+zero],opcode=[opcode-constant],value=o3",
+		"[x64-rex32-common-store-constant-ebp+register]=[x64-rex32-base-store-constant-ebp+register],opcode=[opcode-constant],value=o3,membase=o2",
+		"[x64-rex32-common-store-constant-esp+zero]=[x64-rex32-base-store-constant-esp+zero],opcode=[opcode-constant],value=o3",
+		"[x64-rex32-common-store-constant-esp+sbyte]=[x64-rex32-base-store-constant-esp+sbyte],opcode=[opcode-constant],value=o3,offset=o2",
+		"[x64-rex32-common-store-constant-esp+constant]=[x64-rex32-base-store-constant-esp+constant],opcode=[opcode-constant],value=o3,offset=o2",
+		"[x64-rex32-common-store-constant-register+register]=[x64-rex32-base-store-constant-register+register],opcode=[opcode-constant],value=o3,membase=o1,offset=o2",
+		"[x64-rex32-common-store-constant-register+zero]=[x64-rex32-base-store-constant-register+zero],opcode=[opcode-constant],value=o3,membase=o1",
+		"[x64-rex32-common-store-constant-register+sbyte]=[x64-rex32-base-store-constant-register+sbyte],opcode=[opcode-constant],value=o3,membase=o1,offset=o2",
+		"[x64-rex32-common-store-constant-register+constant]=[x64-rex32-base-store-constant-register+constant],opcode=[opcode-constant],value=o3,membase=o1,offset=o2",
+		"[x64-rex32-common-store-constant-constant+zero]=[x64-rex32-base-store-constant-constant+zero],opcode=[opcode-constant],value=o3,membase=o1",
+		"[x64-rex32-common-store-constant-constant+constant]=[x64-rex32-base-store-constant-constant+constant],opcode=[opcode-constant],value=o3,membase=o1,offset=o2",
+
+		"[x64-rex64-base-load-ebp+zero]=[x64-rex64],mod=01,reg=reg3:[dest],rm=101,immediate=0x00,rex.r=reg4x:[dest],rex.x=0,rex.b=0",
+		"[x64-rex64-base-load-ebp+register]=[x64-rex64],mod=01,reg=reg3:[dest],rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00,rex.r=reg4x:[dest],rex.x=reg4x:[membase],rex.b=0",
+		"[x64-rex64-base-load-esp+zero]=[x64-rex64],mod=00,reg=reg3:[dest],rm=100,scale=00,index=100,base=100,rex.r=reg4x:[dest],rex.x=0,rex.b=0",
+		"[x64-rex64-base-load-esp+sbyte]=[x64-rex64],mod=01,reg=reg3:[dest],rm=100,scale=00,index=100,base=100,immediate=imm8:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
+		"[x64-rex64-base-load-esp+constant]=[x64-rex64],mod=10,reg=reg3:[dest],rm=100,immediate=imm8:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
+		"[x64-rex64-base-load-register+register]=[x64-rex64],mod=00,reg=reg3:[dest],rm=100,scale=00,index=reg3:[offset],base=reg3:[membase],rex.r=reg4x:[dest],rex.x=reg4x:[membase],rex.b=0",
+		"[x64-rex64-base-load-register+zero]=[x64-rex64],mod=00,reg=reg3:[dest],rm=reg3:[membase],rex.r=reg4x:[dest],rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex64-base-load-register+sbyte]=[x64-rex64],mod=01,reg=reg3:[dest],rm=reg3:[membase],immediate=imm8:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex64-base-load-register+constant]=[x64-rex64],mod=10,reg=reg3:[dest],rm=reg3:[membase],immediate=imm32:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex64-base-load-constant+zero]=[x64-rex64],mod=00,reg=reg3:[dest],rm=101,immediate=imm32:[membase],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
+		"[x64-rex64-base-load-constant+constant]=[x64-rex64],mod=00,reg=reg3:[dest],rm=101,immediate=imm32+:[membase]:[offset],rex.r=reg4x:[dest],rex.x=0,rex.b=0",
+
+		"[x64-rex64-common-load-ebp+zero]=[x64-rex64-base-load-ebp+zero],dest=r",
+		"[x64-rex64-common-load-ebp+register]=[x64-rex64-base-load-ebp+register],dest=r,membase=o2",
+		"[x64-rex64-common-load-esp+zero]=[x64-rex64-base-load-esp+zero],dest=r",
+		"[x64-rex64-common-load-esp+sbyte]=[x64-rex64-base-load-esp+sbyte],dest=r,offset=o2",
+		"[x64-rex64-common-load-esp+constant]=[x64-rex64-base-load-esp+constant],dest=r,offset=o2",
+		"[x64-rex64-common-load-register+register]=[x64-rex64-base-load-register+register],dest=r,membase=o1,offset=o2",
+		"[x64-rex64-common-load-register+zero]=[x64-rex64-base-load-register+zero],dest=r,membase=o1",
+		"[x64-rex64-common-load-register+sbyte]=[x64-rex64-base-load-register+sbyte],dest=r,membase=o1,offset=o2",
+		"[x64-rex64-common-load-register+constant]=[x64-rex64-base-load-register+constant],dest=r,membase=o1,offset=o2",
+		"[x64-rex64-common-load-constant+zero]=[x64-rex64-base-load-constant+zero],dest=r,membase=o1",
+		"[x64-rex64-common-load-constant+constant]=[x64-rex64-base-load-constant+constant],dest=r,membase=o1,offset=o2",
+
+		"[x64-rex64-base-store-register-ebp+zero]=[x64-rex64],mod=01,reg=reg3:[value],rm=101,displacement=0x00,rex.r=reg4x:[value],rex.x=0,rex.b=0",
+		"[x64-rex64-base-store-register-ebp+register]=[x64-rex64],mod=01,reg=reg3:[value],rm=100,scale=00,index=reg3:[membase],base=101,displacement=0x00,rex.r=reg4x:[value],rex.x=reg4x:[membase],rex.b=0",
+		"[x64-rex64-base-store-register-esp+zero]=[x64-rex64],mod=00,reg=reg3:[value],rm=100,scale=00,index=100,base=100,rex.r=reg4x:[value],rex.x=0,rex.b=0",
+		"[x64-rex64-base-store-register-esp+sbyte]=[x64-rex64],mod=01,reg=reg3:[value],rm=100,scale=00,index=100,base=100,displacement=imm8:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=0",
+		"[x64-rex64-base-store-register-esp+constant]=[x64-rex64],mod=10,reg=reg3:[value],rm=100,immediate=imm8:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=0",
+		"[x64-rex64-base-store-register-register+register]=[x64-rex64],mod=00,reg=reg3:[value],rm=100,scale=00,index=reg3:[offset],base=reg3:[membase],rex.r=reg4x:[value],rex.x=reg4x:[offset],rex.b=0",
+		"[x64-rex64-base-store-register-register+zero]=[x64-rex64],mod=00,reg=reg3:[value],rm=reg3:[membase],rex.r=reg4x:[value],rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex64-base-store-register-register+sbyte]=[x64-rex64],mod=01,reg=reg3:[value],rm=reg3:[membase],displacement=imm8:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex64-base-store-register-register+constant]=[x64-rex64],mod=10,reg=reg3:[value],rm=reg3:[membase],displacement=imm32:[offset],rex.r=reg4x:[value],rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex64-base-store-register-constant+zero]=[x64-rex64],mod=00,reg=reg3:[value],rm=101,displacement=imm32:[membase],rex.r=reg4x:[value],rex.x=0,rex.b=0",
+
+		"[x64-rex64-common-store-register-ebp+zero]=[x64-rex64-base-store-register-ebp+zero],opcode=[opcode-register],value=o3",
+		"[x64-rex64-common-store-register-ebp+register]=[x64-rex64-base-store-register-ebp+register],opcode=[opcode-register],value=o3,membase=o2",
+		"[x64-rex64-common-store-register-esp+zero]=[x64-rex64-base-store-register-esp+zero],opcode=[opcode-register],value=o3",
+		"[x64-rex64-common-store-register-esp+sbyte]=[x64-rex64-base-store-register-esp+sbyte],opcode=[opcode-register],value=o3,offset=o2",
+		"[x64-rex64-common-store-register-esp+constant]=[x64-rex64-base-store-register-esp+constant],opcode=[opcode-register],value=o3,offset=o2",
+		"[x64-rex64-common-store-register-register+register]=[x64-rex64-base-store-register-register+register],opcode=[opcode-register],value=o3,membase=o1,offset=o2",
+		"[x64-rex64-common-store-register-register+zero]=[x64-rex64-base-store-register-register+zero],opcode=[opcode-register],value=o3,membase=o1",
+		"[x64-rex64-common-store-register-register+sbyte]=[x64-rex64-base-store-register-register+sbyte],opcode=[opcode-register],value=o3,membase=o1,offset=o2",
+		"[x64-rex64-common-store-register-register+constant]=[x64-rex64-base-store-register-register+constant],opcode=[opcode-register],value=o3,membase=o1,offset=o2",
+		"[x64-rex64-common-store-register-constant+zero]=[x64-rex64-base-store-register-constant+zero],opcode=[opcode-register],value=o3,membase=o1",
+
+		"[x64-rex64-base-store-constant-ebp+zero]=[x64-rex64],mod=01,reg=000,rm=101,displacement=0x00,immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex64-base-store-constant-ebp+register]=[x64-rex64],mod=01,reg=000,rm=100,scale=00,index=reg3:[membase],base=101,immediate=0x00,immediate=imm[size]:[value],rex.r=0,rex.x=reg4x:[membase],rex.b=0",
+		"[x64-rex64-base-store-constant-esp+zero]=[x64-rex64],mod=00,reg=000,rm=100,scale=00,index=100,base=100,immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex64-base-store-constant-esp+sbyte]=[x64-rex64],mod=01,reg=000,rm=100,scale=00,index=100,base=100,displacement=imm8:[offset],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex64-base-store-constant-esp+constant]=[x64-rex64],mod=10,reg=000,rm=100,displacement=imm8:[offset],immediate=imm32:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex64-base-store-constant-register+register]=[x64-rex64],mod=00,reg=000,rm=100,scale=00,index=reg3:[offset],base=reg3:[membase],immediate=imm[size]:[value],rex.r=0,rex.x=reg4x:[offset],rex.b=0",
+		"[x64-rex64-base-store-constant-register+zero]=[x64-rex64],mod=00,reg=000,rm=reg3:[membase],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex64-base-store-constant-register+sbyte]=[x64-rex64],mod=01,reg=000,rm=reg3:[membase],displacement=imm8:[offset],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex64-base-store-constant-register+constant]=[x64-rex64],mod=10,reg=000,rm=reg3:[membase],displacement=imm32:[offset],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=reg4x:[membase]",
+		"[x64-rex64-base-store-constant-constant+zero]=[x64-rex64],mod=00,reg=000,rm=101,displacement=imm32:[membase],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=0",
+		"[x64-rex64-base-store-constant-constant+constant]=[x64-rex64],mod=00,reg=000,rm=101,displacement=imm32+:[membase]:[offset],immediate=imm[size]:[value],rex.r=0,rex.x=0,rex.b=0",
+
+		"[x64-rex64-common-store-constant-ebp+zero]=[x64-rex64-base-store-constant-ebp+zero],opcode=[opcode-constant],value=o3",
+		"[x64-rex64-common-store-constant-ebp+register]=[x64-rex64-base-store-constant-ebp+register],opcode=[opcode-constant],value=o3,membase=o2",
+		"[x64-rex64-common-store-constant-esp+zero]=[x64-rex64-base-store-constant-esp+zero],opcode=[opcode-constant],value=o3",
+		"[x64-rex64-common-store-constant-esp+sbyte]=[x64-rex64-base-store-constant-esp+sbyte],opcode=[opcode-constant],value=o3,offset=o2",
+		"[x64-rex64-common-store-constant-esp+constant]=[x64-rex64-base-store-constant-esp+constant],opcode=[opcode-constant],value=o3,offset=o2",
+		"[x64-rex64-common-store-constant-register+register]=[x64-rex64-base-store-constant-register+register],opcode=[opcode-constant],value=o3,membase=o1,offset=o2",
+		"[x64-rex64-common-store-constant-register+zero]=[x64-rex64-base-store-constant-register+zero],opcode=[opcode-constant],value=o3,membase=o1",
+		"[x64-rex64-common-store-constant-register+sbyte]=[x64-rex64-base-store-constant-register+sbyte],opcode=[opcode-constant],value=o3,membase=o1,offset=o2",
+		"[x64-rex64-common-store-constant-register+constant]=[x64-rex64-base-store-constant-register+constant],opcode=[opcode-constant],value=o3,membase=o1,offset=o2",
+		"[x64-rex64-common-store-constant-constant+zero]=[x64-rex64-base-store-constant-constant+zero],opcode=[opcode-constant],value=o3,membase=o1",
+		"[x64-rex64-common-store-constant-constant+constant]=[x64-rex64-base-store-constant-constant+constant],opcode=[opcode-constant],value=o3,membase=o1,offset=o2"
+	],
+	"Instructions": [
+		{
+			"Name": "Adc32",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex32],opcode=0x13,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Adc64",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex64],opcode=0x13,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm64:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Add32",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex32],opcode=0x03,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Add64",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex64],opcode=0x03,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=000,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Addsd",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x58,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "Addss",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x58,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "And32",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "ZC",
+			"FlagsModified": "SOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex32],opcode=0x23,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=100,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "And64",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "ZC",
+			"FlagsModified": "SOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex64],opcode=0x23,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=100,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Break",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 0,
+			"ResultCount": 0,
+			"UnspecifiedSideEffect": "true",
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],opcode=0xCC"
+				}
+			]
+		},
+		{
+			"Name": "Btr32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "C",
+			"FlagsSet": "",
+			"FlagsUnchanged": "Z",
+			"FlagsUndefined": "SOP",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xBA,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xB3,mod=11,reg=110,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Btr64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "C",
+			"FlagsSet": "",
+			"FlagsUnchanged": "Z",
+			"FlagsUndefined": "SOP",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xBA,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xB3,mod=11,reg=110,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Bt32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "C",
+			"FlagsSet": "",
+			"FlagsUnchanged": "Z",
+			"FlagsUndefined": "SOP",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xA3,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xBA,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Bt64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "C",
+			"FlagsSet": "",
+			"FlagsUnchanged": "Z",
+			"FlagsUndefined": "SOP",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xA3,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xBA,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Bts32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "C",
+			"FlagsSet": "",
+			"FlagsUnchanged": "Z",
+			"FlagsUndefined": "SOP",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xBA,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xAB,mod=11,reg=011,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Bts64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "C",
+			"FlagsSet": "",
+			"FlagsUnchanged": "Z",
+			"FlagsUndefined": "SOP",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xBA,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xAB,mod=11,reg=011,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Call",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZCSOP",
+			"FlagsUsed": "",
+			"FlowControl": "Call",
+			"OperandCount": 1,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[x64-rex32],opcode=0xFF,mod=11,reg=010,rm=reg3:o1,rex.r=0,rex.x=0,rex.b=reg4x:o1"
+				},
+				{
+					"Condition": "[constant]",
+					"Encoding": "[x64],opcode=0xE8,immediate=rel32:o1"
+				}
+			]
+		},
+		{
+			"Name": "Cdq32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 2,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],opcode=0x99"
+				}
+			]
+		},
+		{
+			"Name": "Cdq64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 2,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0x99,rex.r=0,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Cli",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 0,
+			"ResultCount": 0,
+			"UnspecifiedSideEffect": "true",
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],opcode=0xFA"
+				}
+			]
+		},
+		{
+			"Name": "Cmp32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZCSOP",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex32],opcode=0x3B,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=111,rm=reg3:o1,immediate=imm32:o2,rex.r=0,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Cmp64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZCSOP",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex64],opcode=0x3B,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=111,rm=reg3:o1,immediate=imm32:o2,rex.r=0,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "CmpXChgLoad32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZCSOP",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[eax][register][zero][register]",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xB1,mod=00,reg=reg3:o4,rm=reg3:o2,rex.r=reg4x:o4,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "CmpXChgLoad64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZCSOP",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 4,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[eax][register][zero][register]",
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xB1,mod=00,reg=reg3:o4,rm=reg3:o2,rex.r=reg4x:o4,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "Comisd",
+			"FamilyName": "X64",
+			"FlagsCleared": "SO",
+			"FlagsModified": "ZCP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=01100110,opcode2=00001111,opcode3=00101111,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "Comiss",
+			"FamilyName": "X64",
+			"FlagsCleared": "SO",
+			"FlagsModified": "ZCP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=00001111,opcode2=00101111,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "CpuId",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],opcode=0x0F,opcode2=0xA2"
+				}
+			]
+		},
+		{
+			"Name": "Cvtsd2ss",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x5A,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "Cvtsi2sd32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x2A,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Cvtsi2sd64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0xF2,opcode2=0x0F,opcode3=0x2A,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Cvtsi2ss32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x2A,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Cvtsi2ss64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0xF3,opcode2=0x0F,opcode3=0x2A,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Cvtss2sd",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x5A,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Cvttsd2si32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x2C,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Cvttsd2si64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0xF2,opcode2=0x0F,opcode3=0x2C,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Cvttss2si32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x2C,mod=11,reg=reg3:r,rm=reg3:o1,,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Cvttss2si64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0xF3,opcode2=0x0F,opcode3=0x2C,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Dec32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "C",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0100|1|reg3:r"
+				}
+			]
+		},
+		{
+			"Name": "Dec64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "C",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0100|1|reg3:r"
+				}
+			]
+		},
+		{
+			"Name": "Div32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZCSOP",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 2,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF7,mod=11,reg=110,rm=reg3:o3,rex.r=0,rex.x=0,rex.b=reg4x:o3"
+				}
+			]
+		},
+		{
+			"Name": "Div64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZCSOP",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 2,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0xF7,mod=11,reg=110,rm=reg3:o3,rex.r=0,rex.x=0,rex.b=reg4x:o3"
+				}
+			]
+		},
+		{
+			"Name": "Divsd",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x5E,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "Divss",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x5E,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "Hlt",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 0,
+			"ResultCount": 0,
+			"UnspecifiedSideEffect": "true",
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],opcode=0xF4"
+				}
+			]
+		},
+		{
+			"Name": "IDiv32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZCSOP",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 2,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF7,mod=11,reg=111,rm=reg3:o3,rex.r=0,rex.x=0,rex.b=reg4x:o3"
+				}
+			]
+		},
+		{
+			"Name": "IDiv64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZCSOP",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 2,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0xF7,mod=11,reg=111,rm=reg3:o3,rex.r=0,rex.x=0,rex.b=reg4x:o3"
+				}
+			]
+		},
+		{
+			"Name": "IMul32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "CO",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZSP",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xAF,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "IMul64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "CO",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZSP",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xAF,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "In8",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"IOOperation": "true",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"UnspecifiedSideEffect": "true",
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[x64],opcode=0xEC"
+				},
+				{
+					"Condition": "[constant]",
+					"Encoding": "[x64],opcode=0xE4,immediate=imm8:o1"
+				}
+			]
+		},
+		{
+			"Name": "In16",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"IOOperation": "true",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"UnspecifiedSideEffect": "true",
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[x64],operand-prefix=0x66,opcode=0xED"
+				},
+				{
+					"Condition": "[constant]",
+					"Encoding": "[x64],operand-prefix=0x66,opcode=0xE4,immediate=imm8:o1"
+				}
+			]
+		},
+		{
+			"Name": "In32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"IOOperation": "true",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"UnspecifiedSideEffect": "true",
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[x64],opcode=0xED"
+				},
+				{
+					"Condition": "[constant]",
+					"Encoding": "[x64],opcode=0xE5,immediate=imm8:o1"
+				}
+			]
+		},
+		{
+			"Name": "Inc32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "C",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0100|0|reg3:r"
+				}
+			]
+		},
+		{
+			"Name": "Inc64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "C",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "0100|0|reg3:r"
+				}
+			]
+		},
+		{
+			"Name": "Int",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZCSOP",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 0,
+			"UnspecifiedSideEffect": "true",
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],opcode=0xCD,immediate=imm8:o1"
+				}
+			]
+		},
+		{
+			"Name": "Invlpg",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 0,
+			"UnspecifiedSideEffect": "true",
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=reg3:o1,rex.r=0,rex.x=0,rex.b=reg4x:o1"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=101,immediate=imm64:o1"
+				}
+			]
+		},
+		{
+			"Name": "IRetd",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZCSOP",
+			"FlagsUsed": "",
+			"FlowControl": "Return",
+			"OperandCount": 0,
+			"ResultCount": 0,
+			"UnspecifiedSideEffect": "true",
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],opcode=0xCF"
+				}
+			]
+		},
+		{
+			"Name": "Jmp",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZCSOP",
+			"FlagsUsed": "",
+			"FlowControl": "UnconditionalBranch",
+			"OperandCount": 0,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"xExperimentalCondition": "HasBranchTarget",
+					"Encoding": "[x64],opcode=0xE9,immediate=rel32:label"
+				}
+			]
+		},
+		{
+			"Name": "JmpExternal",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZCSOP",
+			"FlagsUsed": "",
+			"FlowControl": "UnconditionalBranch",
+			"OperandCount": 1,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[x64-rex32],opcode=0xFF,mod=11,reg=100,rm=reg3:o1,rex.r=0,rex.x=0,rex.b=reg4x:o1"
+				},
+				{
+					"Condition": "[constant]",
+					"Encoding": "[x64],opcode=0xE9,immediate=rel32:o1"
+				}
+			]
+		},
+		{
+			"Name": "Lea32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "opcode=0x8D",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero]",
+					"Encoding": "[x64-rex32-common-load-ebp+zero]"
+				},
+				{
+					"Condition": "[ESP][zero]",
+					"Encoding": "[x64-rex32-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte]",
+					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant]",
+					"Encoding": "[x64-rex32-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[x64-rex32-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero]",
+					"Encoding": "[x64-rex32-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte]",
+					"Encoding": "[x64-rex32-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[x64-rex32-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero]",
+					"Encoding": "[x64-rex32-common-load-constant+zero]"
+				}
+			]
+		},
+		{
+			"Name": "Lea64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "opcode=0x8D",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero]",
+					"Encoding": "[x64-rex64-common-load-ebp+zero]"
+				},
+				{
+					"Condition": "[ESP][zero]",
+					"Encoding": "[x64-rex64-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte]",
+					"Encoding": "[x64-rex64-common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant]",
+					"Encoding": "[x64-rex64-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[x64-rex64-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero]",
+					"Encoding": "[x64-rex64-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte]",
+					"Encoding": "[x64-rex64-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[x64-rex64-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero]",
+					"Encoding": "[x64-rex64-common-load-constant+zero]"
+				}
+			]
+		},
+		{
+			"Name": "Leave",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZCSOP",
+			"FlagsUsed": "",
+			"OperandCount": 0,
+			"ResultCount": 0,
+			"UnspecifiedSideEffect": "true",
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],opcode=0xC9"
+				}
+			]
+		},
+		{
+			"Name": "Lgdt",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 0,
+			"UnspecifiedSideEffect": "true",
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=reg3:o1,rex.r=0,rex.x=0,rex.b=reg4x:o1"
+				},
+				{
+					"Condition": "[constant]",
+					"Encoding": "[x64],opcode=0x0F,opcode2=0x01,mod=00,reg=010,rm=101,immediate=imm64:o1"
+				}
+			]
+		},
+		{
+			"Name": "Lidt",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 0,
+			"UnspecifiedSideEffect": "true",
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x01,mod=00,reg=011,rm=reg3:o1,rex.r=0,rex.x=0,rex.b=reg4x:o1"
+				},
+				{
+					"Condition": "[constant]",
+					"Encoding": "[x64],opcode=0x0F,opcode2=0x01,mod=00,reg=011,rm=101,immediate=imm64:o1"
+				}
+			]
+		},
+		{
+			"Name": "Lock",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 0,
+			"ResultCount": 0,
+			"UnspecifiedSideEffect": "true",
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],opcode=0xF0"
+				}
+			]
+		},
+		{
+			"Name": "MovLoadSeg32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0x8C,mod=11,reg=reg3:o1,rm=reg3:r,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "MovLoadSeg64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0x8C,mod=11,reg=reg3:o1,rm=reg3:r,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "MovStoreSeg32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0x8E,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "MovStoreSeg64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0x8E,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Mov32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[x64-rex32],opcode=0x8B,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				},
+				{
+					"Condition": "[constant]",
+					"Encoding": "[x64-rex32],opcode=0xC7,mod=11,reg=000,rm=reg3:r,immediate=imm32:o1,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "Mov64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[x64-rex64],opcode=0x8B,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				},
+				{
+					"Condition": "[constant]",
+					"Encoding": "[x64-rex64],opcode=0xC7,mod=11,reg=000,rm=reg3:r,immediate=imm32:o1,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "Movaps",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x28,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "MovapsLoad",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncodingAppend": "opcode=0x0F,opcode2=0x29",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero]",
+					"Encoding": "[x64-rex32-common-load-ebp+zero]"
+				},
+				{
+					"Condition": "[ESP][zero]",
+					"Encoding": "[x64-rex32-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte]",
+					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant]",
+					"Encoding": "[x64-rex32-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[x64-rex32-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero]",
+					"Encoding": "[x64-rex32-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte]",
+					"Encoding": "[x64-rex32-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[x64-rex32-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero]",
+					"Encoding": "[x64-rex32-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-rex32-common-load-constant+constant]"
+				}
+			]
+		},
+		{
+			"Name": "MovCRLoad32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x20,mod=11,reg=reg3:o1,rm=reg3:r,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "MovCRLoad64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x20,mod=11,reg=reg3:o1,rm=reg3:r,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "MovCRStore32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryWrite": "true",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x22,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "MovCRStore64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryWrite": "true",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0x22,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "Movdsdi64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=01100110,opcode2=00001111,opcode3=0x6E,mod=11,reg=reg3:o1,rm=reg3:r,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "Movdi64sd",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=01100110,opcode2=00001111,opcode3=0x7E,mod=11,reg=reg3:o1,rm=reg3:r,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "MovLoad8",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "opcode=0x8A",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero]",
+					"Encoding": "[x64-rex32-common-load-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register]",
+					"Encoding": "[x64-rex32-common-load-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero]",
+					"Encoding": "[x64-rex32-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte]",
+					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant]",
+					"Encoding": "[x64-rex32-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[x64-rex32-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero]",
+					"Encoding": "[x64-rex32-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte]",
+					"Encoding": "[x64-rex32-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[x64-rex32-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero]",
+					"Encoding": "[x64-rex32-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-rex32-common-load-constant+constant]"
+				}
+			]
+		},
+		{
+			"Name": "MovLoad16",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "operand-prefix=0x66,opcode=0x8B",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero]",
+					"Encoding": "[x64-rex32-common-load-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register]",
+					"Encoding": "[x64-rex32-common-load-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero]",
+					"Encoding": "[x64-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte]",
+					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant]",
+					"Encoding": "[x64-rex32-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[x64-rex32-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero]",
+					"Encoding": "[x64-rex32-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte]",
+					"Encoding": "[x64-rex32-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[x64-rex32-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero]",
+					"Encoding": "[x64-rex32-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-rex32-common-load-constant+constant]"
+				}
+			]
+		},
+		{
+			"Name": "MovLoad32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "opcode=0x8B",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero]",
+					"Encoding": "[x64-rex32-common-load-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register]",
+					"Encoding": "[x64-rex32-common-load-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero]",
+					"Encoding": "[x64-rex32-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte]",
+					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant]",
+					"Encoding": "[x64-rex32-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[x64-rex32-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero]",
+					"Encoding": "[x64-rex32-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte]",
+					"Encoding": "[x64-rex32-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[x64-rex32-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero]",
+					"Encoding": "[x64-rex32-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-rex32-common-load-constant+constant]"
+				}
+			]
+		},
+		{
+			"Name": "MovLoad64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "opcode=0x8B",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero]",
+					"Encoding": "[x64-rex64-common-load-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register]",
+					"Encoding": "[x64-rex64-common-load-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero]",
+					"Encoding": "[x64-rex64-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte]",
+					"Encoding": "[x64-rex64-common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant]",
+					"Encoding": "[x64-rex64-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[x64-rex64-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero]",
+					"Encoding": "[x64-rex64-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte]",
+					"Encoding": "[x64-rex64-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[x64-rex64-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero]",
+					"Encoding": "[x64-rex64-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-rex64-common-load-constant+constant]"
+				}
+			]
+		},
+		{
+			"Name": "Movsd",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0xF2,opcode2=0x0F,opcode3=0x10,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "MovsdLoad",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "opcode=0xF2,opcode2=0x0F,opcode3=0x10",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero]",
+					"Encoding": "[x64-rex32-common-load-ebp+zero]"
+				},
+				{
+					"Condition": "[ESP][zero]",
+					"Encoding": "[x64-rex32-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte]",
+					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant]",
+					"Encoding": "[x64-rex32-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[x64-rex32-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero]",
+					"Encoding": "[x64-rex32-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte]",
+					"Encoding": "[x64-rex32-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[x64-rex32-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero]",
+					"Encoding": "[x64-rex32-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-rex32-common-load-constant+constant]"
+				}
+			]
+		},
+		{
+			"Name": "MovsdStore",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryWrite": "true",
+			"OperandCount": 3,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "operand-prefix=0xF2|0x0F,opcode-register=0x11",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register][register]",
+					"Encoding": "[x64-rex32-common-store-register-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][register]",
+					"Encoding": "[x64-rex32-common-store-register-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][register]",
+					"Encoding": "[x64-rex32-common-store-register-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+register]"
+				},
+				{
+					"Condition": "[register][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-constant+zero]"
+				}
+			]
+		},
+		{
+			"Name": "Movss",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x10,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "MovssLoad",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "opcode=0xF3,opcode2=0x0F,opcode3=0x10",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero]",
+					"Encoding": "[x64-rex32-common-load-ebp+zero]"
+				},
+				{
+					"Condition": "[ESP][zero]",
+					"Encoding": "[x64-rex32-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte]",
+					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant]",
+					"Encoding": "[x64-rex32-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[x64-rex32-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero]",
+					"Encoding": "[x64-rex32-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte]",
+					"Encoding": "[x64-rex32-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[x64-rex32-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero]",
+					"Encoding": "[x64-rex32-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-rex32-common-load-constant+constant]"
+				}
+			]
+		},
+		{
+			"Name": "MovssStore",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryWrite": "true",
+			"OperandCount": 3,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "operand-prefix=0xF3|0x0F,opcode-register=0x11",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register][register]",
+					"Encoding": "[x64-rex32-common-store-register-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][register]",
+					"Encoding": "[x64-rex32-common-store-register-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][register]",
+					"Encoding": "[x64-rex32-common-store-register-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+register]"
+				},
+				{
+					"Condition": "[register][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-constant+zero]"
+				}
+			]
+		},
+		{
+			"Name": "MovStore8",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryWrite": "true",
+			"OperandCount": 3,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "opcode-register=0x88,opcode-constant=0xC6,size=8",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register][register]",
+					"Encoding": "[x64-rex32-common-store-register-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][register]",
+					"Encoding": "[x64-rex32-common-store-register-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][register]",
+					"Encoding": "[x64-rex32-common-store-register-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+register]"
+				},
+				{
+					"Condition": "[register][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-constant+zero]"
+				},
+
+				{
+					"Condition": "[EBP][zero][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-ebp+zero]"
+				},
+				{
+					"Condition": "[EBP][register][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-register+register]"
+				},
+				{
+					"Condition": "[register][zero][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-constant+constant]"
+				},
+				{
+					"Condition": "[constant][constant][register]",
+					"Encoding": "[x64-rex32-common-store-constant-constant+register]"
+				}
+			]
+		},
+		{
+			"Name": "MovStore16",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryWrite": "true",
+			"OperandCount": 3,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "operand-prefix=0x66,opcode-register=0x89,opcode-constant=0xC7,size=16",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register][register]",
+					"Encoding": "[x64-rex32-common-store-register-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][register]",
+					"Encoding": "[x64-rex32-common-store-register-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][register]",
+					"Encoding": "[x64-rex32-common-store-register-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+register]"
+				},
+				{
+					"Condition": "[register][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-constant+zero]"
+				},
+
+				{
+					"Condition": "[EBP][zero][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-ebp+zero]"
+				},
+				{
+					"Condition": "[EBP][register][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-register+register]"
+				},
+				{
+					"Condition": "[register][zero][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-constant+constant]"
+				},
+				{
+					"Condition": "[constant][constant][register]",
+					"Encoding": "[x64-rex32-common-store-constant-constant+register]"
+				}
+			]
+		},
+		{
+			"Name": "MovStore32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryWrite": "true",
+			"OperandCount": 3,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "opcode-register=0x89,opcode-constant=0xC7,size=32",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register][register]",
+					"Encoding": "[x64-rex32-common-store-register-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][register]",
+					"Encoding": "[x64-rex32-common-store-register-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][register]",
+					"Encoding": "[x64-rex32-common-store-register-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+register]"
+				},
+				{
+					"Condition": "[register][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-constant+zero]"
+				},
+
+				{
+					"Condition": "[EBP][zero][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-ebp+zero]"
+				},
+				{
+					"Condition": "[EBP][register][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-register+register]"
+				},
+				{
+					"Condition": "[register][zero][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant][constant]",
+					"Encoding": "[x64-rex32-common-store-constant-constant+constant]"
+				},
+				{
+					"Condition": "[constant][constant][register]",
+					"Encoding": "[x64-rex32-common-store-constant-constant+register]"
+				}
+			]
+		},
+		{
+			"Name": "MovStore64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryWrite": "true",
+			"OperandCount": 3,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "opcode-register=0x89,opcode-constant=0xC7,size=32",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero][register]",
+					"Encoding": "[x64-rex64-common-store-register-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register][register]",
+					"Encoding": "[x64-rex64-common-store-register-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero][register]",
+					"Encoding": "[x64-rex64-common-store-register-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][register]",
+					"Encoding": "[x64-rex64-common-store-register-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][register]",
+					"Encoding": "[x64-rex64-common-store-register-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "[x64-rex64-common-store-register-register+register]"
+				},
+				{
+					"Condition": "[register][zero][register]",
+					"Encoding": "[x64-rex64-common-store-register-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][register]",
+					"Encoding": "[x64-rex64-common-store-register-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[x64-rex64-common-store-register-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][register]",
+					"Encoding": "[x64-rex64-common-store-register-constant+zero]"
+				},
+
+				{
+					"Condition": "[EBP][zero][constant]",
+					"Encoding": "[x64-rex64-common-store-constant-ebp+zero]"
+				},
+				{
+					"Condition": "[EBP][register][constant]",
+					"Encoding": "[x64-rex64-common-store-constant-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero][constant]",
+					"Encoding": "[x64-rex64-common-store-constant-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][constant]",
+					"Encoding": "[x64-rex64-common-store-constant-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][constant]",
+					"Encoding": "[x64-rex64-common-store-constant-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][constant]",
+					"Encoding": "[x64-rex64-common-store-constant-register+register]"
+				},
+				{
+					"Condition": "[register][zero][constant]",
+					"Encoding": "[x64-rex64-common-store-constant-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][constant]",
+					"Encoding": "[x64-rex64-common-store-constant-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][constant]",
+					"Encoding": "[x64-rex64-common-store-constant-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][constant]",
+					"Encoding": "[x64-rex64-common-store-constant-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant][constant]",
+					"Encoding": "[x64-rex64-common-store-constant-constant+constant]"
+				},
+				{
+					"Condition": "[constant][constant][register]",
+					"Encoding": "[x64-rex64-common-store-constant-constant+register]"
+				}
+			]
+		},
+		{
+			"Name": "Movsx8To32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=10111110,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Movsx8To64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=10111110,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Movsx16To32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=10111111,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Movsx16To64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=10111111,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Movsx32To64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=10111111,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "MovsxLoad8",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "opcode=0x0F,opcode2=0xBE",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero]",
+					"Encoding": "[x64-rex32-common-load-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register]",
+					"Encoding": "[x64-rex32-common-load-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero]",
+					"Encoding": "[x64-rex32-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte]",
+					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant]",
+					"Encoding": "[x64-rex32-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[x64-rex32-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero]",
+					"Encoding": "[x64-rex32-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte]",
+					"Encoding": "[x64-rex32-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[x64-rex32-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero]",
+					"Encoding": "[x64-rex32-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-rex32-common-load-constant+constant]"
+				}
+			]
+		},
+		{
+			"Name": "MovsxLoad16",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "opcode=0x0F,opcode2=0xBF",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero]",
+					"Encoding": "[x64-rex32-common-load-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register]",
+					"Encoding": "[x64-rex32-common-load-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero]",
+					"Encoding": "[x64-rex32-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte]",
+					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant]",
+					"Encoding": "[x64-rex32-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[x64-rex32-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero]",
+					"Encoding": "[x64-rex32-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte]",
+					"Encoding": "[x64-rex32-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[x64-rex32-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero]",
+					"Encoding": "[x64-rex32-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-rex32-common-load-constant+constant]"
+				}
+			]
+		},
+		{
+			"Name": "MovsxLoad32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "opcode=0x0F,opcode2=0xBF",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero]",
+					"Encoding": "[x64-rex32-common-load-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register]",
+					"Encoding": "[x64-rex32-common-load-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero]",
+					"Encoding": "[x64-rex32-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte]",
+					"Encoding": "[x64--rex32common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant]",
+					"Encoding": "[x64-rex32-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[x64-rex32-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero]",
+					"Encoding": "[x64-rex32-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte]",
+					"Encoding": "[x64-rex32-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[x64-rex32-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero]",
+					"Encoding": "[x64-rex32-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-rex32-common-load-constant+constant]"
+				}
+			]
+		},
+		{
+			"Name": "Movups",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x10,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "MovupsLoad",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "opcode=0x0F,opcode2=0x10",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero]",
+					"Encoding": "[x64-rex32-common-load-ebp+zero]"
+				},
+				{
+					"Condition": "[ESP][zero]",
+					"Encoding": "[x64-rex32-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte]",
+					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant]",
+					"Encoding": "[x64-rex32-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[x64-rex32-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero]",
+					"Encoding": "[x64-rex32-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte]",
+					"Encoding": "[x64-rex32-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[x64-rex32-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero]",
+					"Encoding": "[x64-rex32-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-rex32-common-load-constant+constant]"
+				}
+			]
+		},
+		{
+			"Name": "MovupsStore",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryWrite": "true",
+			"OperandCount": 3,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "operand-prefix=0x0F,opcode-register=0x11",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register][register]",
+					"Encoding": "[x64-rex32-common-store-register-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][register]",
+					"Encoding": "[x64-rex32-common-store-register-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][register]",
+					"Encoding": "[x64-rex32-common-store-register-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+register]"
+				},
+				{
+					"Condition": "[register][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[x64-rex32-common-store-register-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][register]",
+					"Encoding": "[x64-rex32-common-store-register-constant+zero]"
+				}
+			]
+		},
+		{
+			"Name": "Movzx8To32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=10110110,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Movzx8To64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=10110110,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Movzx16To32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=10110111,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Movzx16To64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=10110111,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Movzx32To64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=10110111,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "MovzxLoad8",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "opcode=0x0F,opcode2=0xB6",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero]",
+					"Encoding": "[x64-rex32-common-load-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register]",
+					"Encoding": "[x64-rex32-common-load-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero]",
+					"Encoding": "[x64-rex32-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte]",
+					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant]",
+					"Encoding": "[x64-rex32-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[x64-rex32-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero]",
+					"Encoding": "[x64-rex32-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte]",
+					"Encoding": "[x64-rex32-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[x64-rex32-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero]",
+					"Encoding": "[x64-rex32-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-rex32-common-load-constant+constant]"
+				}
+			]
+		},
+		{
+			"Name": "MovzxLoad16",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "opcode=0x0F,opcode2=0xB7",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero]",
+					"Encoding": "[x64-rex32-common-load-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register]",
+					"Encoding": "[x64-rex32-common-load-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero]",
+					"Encoding": "[x64-rex32-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte]",
+					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant]",
+					"Encoding": "[x64-rex32-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[x64-rex32-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero]",
+					"Encoding": "[x64-rex32-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte]",
+					"Encoding": "[x64-rex32-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[x64-rex32-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero]",
+					"Encoding": "[x64-rex32-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-rex32-common-load-constant+constant]"
+				}
+			]
+		},
+		{
+			"Name": "MovzxLoad32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "opcode=0x0F,opcode2=0xB7",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero]",
+					"Encoding": "[x64-rex32-common-load-ebp+zero]"
+				},
+
+				{
+					"Condition": "[EBP][register]",
+					"Encoding": "[x64-rex32-common-load-ebp+register]"
+				},
+				{
+					"Condition": "[ESP][zero]",
+					"Encoding": "[x64-rex32-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte]",
+					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant]",
+					"Encoding": "[x64-rex32-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register]",
+					"Encoding": "[x64-rex32-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero]",
+					"Encoding": "[x64-rex32-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte]",
+					"Encoding": "[x64-rex32-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[x64-rex32-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero]",
+					"Encoding": "[x64-rex32-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-rex32-common-load-constant+constant]"
+				}
+			]
+		},
+		{
+			"Name": "Mul32",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "CO",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZSP",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 2,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF7,mod=11,reg=100,rm=reg3:o2,rex.r=0,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "Mul64",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "CO",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZSP",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 2,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0xF7,mod=11,reg=100,rm=reg3:o2,rex.r=0,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "Mulsd",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x59,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "Mulss",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x59,mod=11,reg=reg3:r,rm=reg3:o2,,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "Neg32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZCSOP",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF7,mod=11,reg=011,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "Neg64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "ZCSOP",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0xF7,mod=11,reg=011,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "Nop",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 0,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],opcode=0x90"
+				}
+			]
+		},
+		{
+			"Name": "Not32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF7,mod=11,reg=010,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "Not64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0xF7,mod=11,reg=010,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "Or32",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "CO",
+			"FlagsModified": "ZSP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex32],opcode=0x0B,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=001,rm=reg3:r,immediate=imm32:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "Or64",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "CO",
+			"FlagsModified": "ZSP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex64],opcode=0x0B,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=001,rm=reg3:r,immediate=imm32:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "Out8",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"IOOperation": "true",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"UnspecifiedSideEffect": "true",
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[x64],opcode=0xEE"
+				},
+				{
+					"Condition": "[constant]",
+					"Encoding": "[x64],opcode=0xE6,immediate=imm8:o1"
+				}
+			]
+		},
+		{
+			"Name": "Out16",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"IOOperation": "true",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"UnspecifiedSideEffect": "true",
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[x64],opcode=0xEF"
+				},
+				{
+					"Condition": "[constant]",
+					"Encoding": "[x64],opcode=0xE7,immediate=imm8:o1"
+				}
+			]
+		},
+		{
+			"Name": "Out32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"IOOperation": "true",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"UnspecifiedSideEffect": "true",
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[x64],opcode=0xEF"
+				},
+				{
+					"Condition": "[constant]",
+					"Encoding": "[x64],opcode=0xE7,immediate=imm8:o1"
+				}
+			]
+		},
+		{
+			"Name": "Pause",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 0,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],opcode=0xF3,opcode2=0x90"
+				}
+			]
+		},
+		{
+			"Name": "Pextrd32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=01100110,opcode2=00001111,opcode3=00111010,opcode4=00010110,mod=11,reg=reg3:o1,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "Pextrd64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=01100110,opcode2=00001111,opcode3=00111010,opcode4=00010110,mod=11,reg=reg3:o1,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "Pop64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 0,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=01010|reg3:r,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Popad",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 0,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],opcode=0x61"
+				}
+			]
+		},
+		{
+			"Name": "Push64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register]",
+					"Encoding": "[x64-rex32],opcode=01010|reg3:o1,rex.r=reg4x:o1,rex.x=0,rex.b=0"
+				},
+				{
+					"Condition": "[constant]",
+					"Encoding": "[x64],opcode=0x68,immediate=imm64:o1"
+				}
+			]
+		},
+		{
+			"Name": "Pushad",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 0,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],opcode=0x60"
+				}
+			]
+		},
+		{
+			"Name": "PXor",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],operand-prefix=0x66,opcode=0x0F,opcode2=0xEF,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Rcr32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCO",
+			"FlagsSet": "",
+			"FlagsUnchanged": "SP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex32],opcode=0xD3,mod=11,reg=011,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				},
+				{
+					"Condition": "[#register][1]",
+					"Encoding": "[x64-rex32],opcode=0xD1,mod=11,reg=011,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex32],opcode=0xC1,mod=11,reg=011,rm=reg3:r,immediate=imm8:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "Rcr64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCO",
+			"FlagsSet": "",
+			"FlagsUnchanged": "SP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex64],opcode=0xD3,mod=11,reg=011,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				},
+				{
+					"Condition": "[#register][1]",
+					"Encoding": "[x64-rex64],opcode=0xD1,mod=11,reg=011,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex64],opcode=0xC1,mod=11,reg=011,rm=reg3:r,immediate=imm8:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "Ret",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"FlowControl": "Return",
+			"OperandCount": 0,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],opcode=0xC3"
+				}
+			]
+		},
+		{
+			"Name": "Roundsd",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],operand-prefix=0x66,opcode=0x0F,opcode2=0x3A,opcode3=0x0B,mod=11,reg=reg3:r,rm=reg3:o1,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Roundss",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],operand-prefix=0x66,opcode=0x0F,opcode2=0x3A,opcode3=0x0A,mod=11,reg=reg3:r,rm=reg3:o1,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "Sar32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex32],opcode=0xD3,mod=11,reg=111,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				},
+				{
+					"Condition": "[#register][1]",
+					"Encoding": "[x64-rex32],opcode=0xD1,mod=11,reg=111,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex32],opcode=0xC1,mod=11,reg=111,rm=reg3:r,immediate=imm8:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "Sar64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex64],opcode=0xD3,mod=11,reg=111,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				},
+				{
+					"Condition": "[#register][1]",
+					"Encoding": "[x64-rex64],opcode=0xD1,mod=11,reg=111,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex64],opcode=0xC1,mod=11,reg=111,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Sbb32",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex32],opcode=0x1B,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=011,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Sbb64",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "C",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex64],opcode=0x1B,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=011,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Shl32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex32],opcode=0xD3,mod=11,reg=100,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				},
+				{
+					"Condition": "[#register][1]",
+					"Encoding": "[x64-rex32],opcode=0xD1,mod=11,reg=100,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex32],opcode=0xC1,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "Shl64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex64],opcode=0xD3,mod=11,reg=100,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				},
+				{
+					"Condition": "[#register][1]",
+					"Encoding": "[x64-rex64],opcode=0xD1,mod=11,reg=100,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex64],opcode=0xC1,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Shld32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][#ignore][register]",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xA5,mod=11,reg=reg3:o2,rm=reg3:r,rex.r=reg4x:o2,rex.x=0,rex.b=reg4x:r"
+				},
+				{
+					"Condition": "[#register][#ignore][constant]",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xA4,mod=11,reg=reg3:o2,rm=reg3:r,immediate=imm8:o3,rex.r=reg4x:o2,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "Shld64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][#ignore][register]",
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xA5,mod=11,reg=reg3:o2,rm=reg3:r,rex.r=reg4x:o2,rex.x=0,rex.b=reg4x:r"
+				},
+				{
+					"Condition": "[#register][#ignore][constant]",
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xA4,mod=11,reg=reg3:o2,rm=reg3:r,immediate=imm8:o3,rex.r=reg4x:o2,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "Shr32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex64],opcode=0xD3,mod=11,reg=101,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				},
+				{
+					"Condition": "[#register][1]",
+					"Encoding": "[x64-rex64],opcode=0xD1,mod=11,reg=101,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex32],opcode=0xC1,mod=11,reg=101,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Shr64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex64],opcode=0xD3,mod=11,reg=101,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				},
+				{
+					"Condition": "[#register][1]",
+					"Encoding": "[x64-rex64],opcode=0xD1,mod=11,reg=101,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex64],opcode=0xC1,mod=11,reg=101,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Shrd32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xAD,mod=11,reg=reg3:o2,rm=reg3:r,rex.r=reg4x:o2,rex.x=0,rex.b=reg4x:r"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0xAC,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Shrd64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xAD,mod=11,reg=reg3:o2,rm=reg3:r,rex.r=reg4x:o2,rex.x=0,rex.b=reg4x:r"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex64],opcode=0x0F,opcode2=0xAC,mod=11,reg=100,rm=reg3:r,immediate=imm8:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Sti",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 0,
+			"ResultCount": 0,
+			"UnspecifiedSideEffect": "true",
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],opcode=0xFB"
+				}
+			]
+		},
+		{
+			"Name": "Sqrtss",
+			"Commutative": "true",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x51,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+
+		{
+			"Name": "Sqrtsd",
+			"Commutative": "true",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x51,mod=11,reg=reg3:r,rm=reg3:o1,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+
+		{
+			"Name": "Sub32",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex32],opcode=0x2B,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=101,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Sub64",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex64],opcode=0x2B,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex64],opcode=0x81,mod=11,reg=101,rm=reg3:r,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Subsd",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF2,opcode2=0x0F,opcode3=0x5C,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "Subss",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0xF3,opcode2=0x0F,opcode3=0x5C,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "Test32",
+			"FamilyName": "X64",
+			"FlagsCleared": "CO",
+			"FlagsModified": "ZSP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex32],opcode=0x85,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex32],opcode=0xF7,mod=11,reg=000,rm=reg3:o1,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Test64",
+			"FamilyName": "X64",
+			"FlagsCleared": "CO",
+			"FlagsModified": "ZSP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex64],opcode=0x85,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex64],opcode=0xF7,mod=11,reg=000,rm=reg3:o1,immediate=imm32:o2,rex.r=reg4x:r,rex.x=0,rex.b=0"
+				}
+			]
+		},
+		{
+			"Name": "Ucomisd",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],operand-prefix=0x66,opcode=0x0F,opcode2=0x2E,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "Ucomiss",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0x0F,opcode2=0x2E,mod=11,reg=reg3:o1,rm=reg3:o2,rex.r=reg4x:o1,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "XAddLoad32",
+			"Commutative": "false",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "operand-prefix=0x0F,opcode=0xC1",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero][register]",
+					"Encoding": "[x64-rex32-common-load-ebp+zero]"
+				},
+				{
+					"Condition": "[ESP][zero][register]",
+					"Encoding": "[x64-rex32-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][register]",
+					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][register]",
+					"Encoding": "[x64-rex32-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "[x64-rex32-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero][register]",
+					"Encoding": "[x64-rex32-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][register]",
+					"Encoding": "[x64-rex32-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[x64-rex32-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][register]",
+					"Encoding": "[x64-rex32-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-rex32-common-load-constant+constant]"
+				}
+			]
+		},
+		{
+			"Name": "XAddLoad64",
+			"Commutative": "false",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "ZCSOP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "operand-prefix=0x0F,opcode=0xC1",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero][register]",
+					"Encoding": "[x64-rex64-common-load-ebp+zero]"
+				},
+				{
+					"Condition": "[ESP][zero][register]",
+					"Encoding": "[x64-rex64-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][register]",
+					"Encoding": "[x64-rex64-common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][register]",
+					"Encoding": "[x64-rex64-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "[x64-rex64-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero][register]",
+					"Encoding": "[x64-rex64-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][register]",
+					"Encoding": "[x64-rex64-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[x64-rex64-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][register]",
+					"Encoding": "[x64-rex64-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-rex64-common-load-constant+constant]"
+				}
+			]
+		},
+		{
+			"Name": "XChg32",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 2,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],opcode=0x87,mod=11,reg=reg3:o2,rm=reg3:o1,rex.r=reg4x:o2,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "XChg64",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 2,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],opcode=0x87,mod=11,reg=reg3:o2,rm=reg3:o1,rex.r=reg4x:o2,rex.x=0,rex.b=reg4x:o1"
+				}
+			]
+		},
+		{
+			"Name": "XChgLoad32",
+			"Commutative": "false",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "opcode=0x87",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero][register]",
+					"Encoding": "[x64-rex32-common-load-ebp+zero]"
+				},
+				{
+					"Condition": "[ESP][zero][register]",
+					"Encoding": "[x64-rex32-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][register]",
+					"Encoding": "[x64-rex32-common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][register]",
+					"Encoding": "[x64-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "[x64-rex32-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero][register]",
+					"Encoding": "[x64-rex32-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][register]",
+					"Encoding": "[x64-rex32-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[x64-rex32-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][register]",
+					"Encoding": "[x64-rex32-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-rex32-common-load-constant+constant]"
+				}
+			]
+		},
+		{
+			"Name": "XChgLoad64",
+			"Commutative": "false",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"MemoryRead": "true",
+			"OperandCount": 3,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncodingAppend": "opcode=0x87",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[EBP][zero][register]",
+					"Encoding": "[x64-rex64-common-load-ebp+zero]"
+				},
+				{
+					"Condition": "[ESP][zero][register]",
+					"Encoding": "[x64-rex64-common-load-esp+zero]"
+				},
+				{
+					"Condition": "[ESP][sbyte][register]",
+					"Encoding": "[x64-rex64-common-load-esp+sbyte]"
+				},
+				{
+					"Condition": "[ESP][constant][register]",
+					"Encoding": "[x64-rex64-common-load-esp+constant]"
+				},
+				{
+					"Condition": "[register][register][register]",
+					"Encoding": "[x64-rex64-common-load-register+register]"
+				},
+				{
+					"Condition": "[register][zero][register]",
+					"Encoding": "[x64-rex64-common-load-register+zero]"
+				},
+				{
+					"Condition": "[register][sbyte][register]",
+					"Encoding": "[x64-rex64-common-load-register+sbyte]"
+				},
+				{
+					"Condition": "[register][constant][register]",
+					"Encoding": "[x64-rex64-common-load-register+constant]"
+				},
+				{
+					"Condition": "[constant][zero][register]",
+					"Encoding": "[x64-rex64-common-load-constant+zero]"
+				},
+				{
+					"Condition": "[constant][constant]",
+					"Encoding": "[x64-rex64-common-load-constant+constant]"
+				}
+			]
+		},
+		{
+			"Name": "Xor32",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "CO",
+			"FlagsModified": "ZSP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex32],opcode=0x33,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=110,rm=reg3:r,immediate=imm32:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "Xor64",
+			"Commutative": "true",
+			"FamilyName": "X64",
+			"FlagsCleared": "CO",
+			"FlagsModified": "ZSP",
+			"FlagsSet": "",
+			"FlagsUnchanged": "",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[#register][register]",
+					"Encoding": "[x64-rex32],opcode=0x33,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				},
+				{
+					"Condition": "[#register][constant]",
+					"Encoding": "[x64-rex32],opcode=0x81,mod=11,reg=110,rm=reg3:r,immediate=imm32:o2,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "Branch",
+			"AlternativeName": "Jxx",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "Conditional",
+			"FlowControl": "ConditionalBranch",
+			"OperandCount": 0,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],operand-prefix=0x0F,opcode=|0b1000|conditional,immediate=rel32:label"
+				}
+			]
+		},
+		{
+			"Name": "Setcc",
+			"AlternativeName": "Setcc",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "Conditional",
+			"OperandCount": 0,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],operand-prefix=0x0F,opcode=|0b1001|conditional,mod=11,reg=000,rm=reg3:r,rex.r=0,rex.x=0,rex.b=reg4x:r"
+				}
+			]
+		},
+		{
+			"Name": "CMov32",
+			"AlternativeName": "CMov",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "Conditional",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex32],operand-prefix=0x0F,opcode=|0b0100|conditional,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "CMov64",
+			"AlternativeName": "CMov",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "Conditional",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64-rex64],operand-prefix=0x0F,opcode=|0b0100|conditional,mod=11,reg=reg3:r,rm=reg3:o2,rex.r=reg4x:r,rex.x=0,rex.b=reg4x:o2"
+				}
+			]
+		},
+		{
+			"Name": "BochsDebug",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 0,
+			"ResultCount": 0,
+			"UnspecifiedSideEffect": "true",
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],operand-prefix=0x66,opcode=0x87,opcode2=0xdb"
+				}
+			]
+		},
+		{
+			"Name": "RdMSR",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 1,
+			"ResultCount": 2,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],operand-prefix=0x0F,opcode=0x32"
+				}
+			]
+		},
+		{
+			"Name": "WrMSR",
+			"FamilyName": "X64",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "",
+					"Encoding": "[x64],operand-prefix=0x0F,opcode=0x30"
+				}
+			]
+		}
+	]
+}

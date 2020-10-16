@@ -1,252 +1,225 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.x86.Intrinsic;
+using Mosa.Runtime;
+using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	/// Static class of helpful memory functions
+	/// Multiboot
 	/// </summary>
 	public static class Multiboot
 	{
-		private static uint _multibootptr = 0x200004;
-		private static uint _multibootsignature = 0x200000;
-
 		/// <summary>
-		/// Location of the Multiboot Structure 
-		/// </summary>
-		public static uint MultibootStructure {get ; private set; }
-
-		/// <summary>
-		/// Magic value that indicates that kernel was loaded by a Multiboot-compliant boot loader 
+		/// Magic value that indicates that kernel was loaded by a Multiboot-compliant boot loader
 		/// </summary>
 		public const uint MultibootMagic = 0x2BADB002;
 
+		#region MultiBootInfoOffset
+
+		private struct MultiBootInfoOffset
+		{
+			public const uint Flags = 0;
+			public const uint MemLower = 4;
+			public const uint MemUpper = 8;
+			public const uint BootDevice = 12;
+			public const uint CommandLine = 16;
+			public const uint ModuleCount = 20;
+			public const uint ModuleAddress = 24;
+			public const uint Syms1 = 28;
+			public const uint Syms2 = 32;
+			public const uint Syms3 = 36;
+			public const uint Syms4 = 40;
+			public const uint MemMapLength = 44;
+			public const uint MemMapAddress = 48;
+			public const uint DriveLength = 52;
+			public const uint DriveAddress = 56;
+			public const uint ConfigTable = 60;
+			public const uint BootLoaderName = 64;
+			public const uint ApmTable = 68;
+			public const uint VbeControlInfo = 72;
+			public const uint VbeModeInfo = 76;
+			public const uint VbeMode = 80;
+			public const uint VbeInterfaceSeg = 84;
+			public const uint VbeInterfaceOff = 88;
+			public const uint VbeInterfaceLength = 92;
+		}
+
+		#endregion MultiBootInfoOffset
+
+		#region MultiBootMemoryMapOffset
+
+		private struct MultiBootMemoryMapOffset
+		{
+			public const uint Size = 0;
+			public const uint BaseAddr = 4;
+			public const uint Length = 12;
+			public const uint Type = 20;
+			public const uint Next = 24;
+		}
+
+		#endregion MultiBootMemoryMapOffset
+
 		/// <summary>
-		/// 
+		/// Location of the Multiboot Structure
 		/// </summary>
-		private static uint _memoryMapCount = 0;
+		public static Pointer MultibootStructure { get; private set; }
 
 		/// <summary>
 		/// Gets the memory map count.
 		/// </summary>
 		/// <value>The memory map count.</value>
-		public static uint MemoryMapCount { get { return _memoryMapCount; } }
+		public static uint MemoryMapCount { get; internal set; }
 
 		/// <summary>
-		/// Setups this multiboot.
+		/// Setup multiboot.
 		/// </summary>
 		public static void Setup()
 		{
-			MultibootStructure = 0x0;
-			SetMultibootLocation(Native.Get32(_multibootptr), Native.Get32(_multibootsignature));
-		}
+			MultibootStructure = Pointer.Zero;
 
-		/// <summary>
-		/// Dumps multiboot info.
-		/// </summary>
-		public static void Dump(uint row, uint col)
-		{
-			uint location = MultibootStructure;
+			var magic = Native.GetMultibootEAX();
 
-			Screen.Row = row;
-			Screen.Column = col;
-			Screen.Color = 0x0A;
-			Screen.Write(@"Memory Dump");
-			Screen.NextLine();
-			Screen.NextLine();
-
-			for (uint i = 0; i < 80; i = i + 8)
-			{
-				Screen.Column = col;
-				Screen.Color = 0x0F;
-				Screen.Write(i, 10, 2);
-				Screen.Write(':');
-				Screen.Write(' ');
-				Screen.Color = 0x07;
-				Screen.Write(Native.Get32(location + i), 16, 16);
-				Screen.NextLine();
-			}
-		}
-
-		/// <summary>
-		/// Dumps this instance.
-		/// </summary>
-		public static void Dump2(uint row, uint col)
-		{
-			uint location = MemoryMapStart;
-
-			Screen.Row = row;
-			for (uint i = 0; i < 80; i = i + 4)
-			{
-				Screen.Column = col;
-				Screen.Write(i, 10, 2);
-				Screen.Write(':');
-				Screen.Write(' ');
-				Screen.Write(Native.Get32(location + i), 16, 8);
-				Screen.NextLine();
-			}
-		}
-
-		/// <summary>
-		/// Sets the multiboot location, if given the proper magic value
-		/// </summary>
-		/// <param name="address">The address.</param>
-		/// <param name="magic">The magic value.</param>
-		public static void SetMultibootLocation(uint address, uint magic)
-		{
 			if (magic == MultibootMagic)
-				SetMultibootLocation(address);
+			{
+				var address = Native.GetMultibootEBX();
+
+				MultibootStructure = new Pointer(address);// Intrinsic.LoadPointer(new Pointer(address));
+				CountMemoryMap();
+			}
 		}
 
 		/// <summary>
-		/// Sets the multiboot location.
+		/// Gets a value indicating whether multiboot is enabled.
 		/// </summary>
-		/// <param name="address">The address.</param>
-		public static void SetMultibootLocation(uint address)
+		public static bool IsMultibootAvailable => !MultibootStructure.IsNull;
+
+		private static uint GetValue(uint offset)
 		{
-			MultibootStructure = address;
-			CountMemoryMap();
+			return MultibootStructure.Load32(offset);
 		}
 
-		/// <summary>
-		/// Gets a value indicating whether this instance is multiboot enabled.
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if this instance is multiboot enabled; otherwise, <c>false</c>.
-		/// </value>
-		public static bool IsMultibootEnabled
+		private static Pointer GetPointer(uint offset)
 		{
-			get { return (MultibootStructure != 0x0); }
+			return MultibootStructure.LoadPointer(offset);
 		}
 
 		/// <summary>
 		/// Gets the flags.
 		/// </summary>
-		/// <value>The flags.</value>
-		public static uint Flags
-		{
-			get
-			{
-				return Native.Get32(MultibootStructure + 0);
-			}
-		}
+		public static uint Flags { get { return GetValue(MultiBootInfoOffset.Flags); } }
 
 		/// <summary>
 		/// Gets the memory lower.
 		/// </summary>
-		/// <value>The lower memory.</value>
-		public static uint MemoryLower
-		{
-			get
-			{
-				return Native.Get32(MultibootStructure + 4);
-			}
-		}
+		public static Pointer MemoryLower { get { return GetPointer(MultiBootInfoOffset.MemLower); } }
 
 		/// <summary>
 		/// Gets the memory upper.
 		/// </summary>
-		/// <value>The memory upper.</value>
-		public static uint MemoryUpper
-		{
-			get
-			{
-				return Native.Get32(MultibootStructure + 8);
-			}
-		}
+		public static Pointer MemoryUpper { get { return GetPointer(MultiBootInfoOffset.MemUpper); } }
 
 		/// <summary>
 		/// Gets the boot device.
 		/// </summary>
-		/// <value>The boot device.</value>
-		public static uint BootDevice
-		{
-			get
-			{
-				return Native.Get32(MultibootStructure + 12);
-			}
-		}
+		public static uint BootDevice { get { return GetValue(MultiBootInfoOffset.BootDevice); } }
 
 		/// <summary>
-		/// Gets the CMD line address.
+		/// Gets the command line address.
 		/// </summary>
-		/// <value>The CMD line address.</value>
-		public static uint CmdLineAddress
-		{
-			get
-			{
-				return Native.Get32(MultibootStructure + 16);
-			}
-		}
+		public static Pointer CommandLineAddress { get { return GetPointer(MultiBootInfoOffset.CommandLine); } }
 
 		/// <summary>
-		/// Gets the modules start.
+		/// Gets the module count.
 		/// </summary>
-		/// <value>The modules start.</value>
-		public static uint ModulesStart
-		{
-			get
-			{
-				return Native.Get32(MultibootStructure + 20);
-			}
-		}
+		public static uint ModuleCount { get { return GetValue(MultiBootInfoOffset.ModuleCount); } }
 
 		/// <summary>
-		/// Gets the modules count.
+		/// Gets the module start.
 		/// </summary>
-		/// <value>The modules count.</value>
-		public static uint ModulesCount
-		{
-			get
-			{
-				return Native.Get32(MultibootStructure + 24);
-			}
-		}
+		public static Pointer ModuleStart { get { return GetPointer(MultiBootInfoOffset.ModuleAddress); } }
 
 		/// <summary>
 		/// Gets the length of the memory map.
 		/// </summary>
-		/// <value>The length of the memory map.</value>
-		public static uint MemoryMapLength
-		{
-			get
-			{
-				return Native.Get32(MultibootStructure + 44);
-			}
-		}
+		public static uint MemoryMapLength { get { return GetValue(MultiBootInfoOffset.MemMapLength); } }
 
 		/// <summary>
 		/// Gets the memory map start.
 		/// </summary>
-		/// <value>The memory map start.</value>
-		public static uint MemoryMapStart
-		{
-			get
-			{
-				return Native.Get32(MultibootStructure + 48);
-			}
-		}
+		public static Pointer MemoryMapStart { get { return GetPointer(MultiBootInfoOffset.MemMapAddress); } }
+
+		/// <summary>
+		/// Gets the length of the drive.
+		/// </summary>
+		public static uint DriveLength { get { return GetValue(MultiBootInfoOffset.DriveLength); } }
+
+		/// <summary>
+		/// Gets the drive start.
+		/// </summary>
+		public static uint DriveStart { get { return GetValue(MultiBootInfoOffset.DriveAddress); } }
+
+		/// <summary>
+		/// Gets the configuration table.
+		/// </summary>
+		public static uint ConfigurationTable { get { return GetValue(MultiBootInfoOffset.ConfigTable); } }
+
+		/// <summary>
+		/// Gets the name of the boot loader address.
+		/// </summary>
+		public static uint BootLoaderName { get { return GetValue(MultiBootInfoOffset.BootLoaderName); } }
+
+		/// <summary>
+		/// Gets the APM table.
+		/// </summary>
+		public static Pointer APMTable { get { return GetPointer(MultiBootInfoOffset.ApmTable); } }
+
+		/// <summary>
+		/// Gets the VBE control information.
+		/// </summary>
+		public static uint VBEControlInformation { get { return GetValue(MultiBootInfoOffset.VbeControlInfo); } }
+
+		/// <summary>
+		/// Gets the VBE mode info.
+		/// </summary>
+		public static Pointer VBEModeInfo { get { return GetPointer(MultiBootInfoOffset.VbeModeInfo); } }
+
+		/// <summary>
+		/// Gets the VBE mode.
+		/// </summary>
+		public static uint VBEMode { get { return GetValue(MultiBootInfoOffset.VbeMode); } }
+
+		/// <summary>
+		/// Gets the VBE interface seg.
+		/// </summary>
+		public static uint VBEInterfaceSeg { get { return GetValue(MultiBootInfoOffset.VbeInterfaceSeg); } }
+
+		/// <summary>
+		/// Gets the VBE interface off.
+		/// </summary>
+		public static uint VBEInterfaceOff { get { return GetValue(MultiBootInfoOffset.VbeInterfaceOff); } }
+
+		/// <summary>
+		/// Gets the VBE interface len.
+		/// </summary>
+		public static uint VBEInterfaceLen { get { return GetValue(MultiBootInfoOffset.VbeInterfaceLength); } }
 
 		/// <summary>
 		/// Counts the memory map.
 		/// </summary>
 		private static void CountMemoryMap()
 		{
-			_memoryMapCount = 0;
-			uint location = MemoryMapStart;
+			MemoryMapCount = 0;
 
-			while (location < (MemoryMapStart + MemoryMapLength))
+			var location = MemoryMapStart;
+			var end = location + MemoryMapLength;
+
+			while (location < end)
 			{
-				_memoryMapCount++;
-				location = Native.Get32(location) + location + 4;
+				MemoryMapCount++;
+
+				var size = location.Load32(MultiBootMemoryMapOffset.Size) + 4;
+				location += size;
 			}
 		}
 
@@ -255,12 +228,16 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		private static uint GetMemoryMapIndexLocation(uint index)
+		private static Pointer GetMemoryMapIndexLocation(uint index)
 		{
-			uint location = MemoryMapStart;
+			var location = MemoryMapStart;
 
 			for (uint i = 0; i < index; i++)
-				location = location + Native.Get32(location) + 4;
+			{
+				var size = location.Load32(MultiBootMemoryMapOffset.Size) + 4;
+
+				location += size;
+			}
 
 			return location;
 		}
@@ -272,7 +249,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		public static uint GetMemoryMapBase(uint index)
 		{
-			return Native.Get32(GetMemoryMapIndexLocation(index) + 4);
+			return GetMemoryMapIndexLocation(index).Load32(MultiBootMemoryMapOffset.BaseAddr);
 		}
 
 		/// <summary>
@@ -280,9 +257,9 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public static ulong GetMemoryMapLength(uint index)
+		public static uint GetMemoryMapLength(uint index)
 		{
-			return Native.Get32(GetMemoryMapIndexLocation(index) + 12);
+			return GetMemoryMapIndexLocation(index).Load32(MultiBootMemoryMapOffset.Length);
 		}
 
 		/// <summary>
@@ -292,139 +269,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		public static byte GetMemoryMapType(uint index)
 		{
-			return Native.Get8(GetMemoryMapIndexLocation(index) + 20);
-		}
-
-		/// <summary>
-		/// Gets the length of the drive.
-		/// </summary>
-		/// <value>The length of the drive.</value>
-		public static uint DriveLength
-		{
-			get
-			{
-				return Native.Get32(MultibootStructure + 52);
-			}
-		}
-
-		/// <summary>
-		/// Gets the drive start.
-		/// </summary>
-		/// <value>The drive start.</value>
-		public static uint DriveStart
-		{
-			get
-			{
-				return Native.Get32(MultibootStructure + 56);
-			}
-		}
-
-		/// <summary>
-		/// Gets the configuration table.
-		/// </summary>
-		/// <value>The configuration table.</value>
-		public static uint ConfigurationTable
-		{
-			get
-			{
-				return Native.Get32(MultibootStructure + 60);
-			}
-		}
-
-		/// <summary>
-		/// Gets the name of the boot loader.
-		/// </summary>
-		/// <value>The name of the boot loader.</value>
-		public static uint BootLoaderName
-		{
-			get
-			{
-				return Native.Get32(MultibootStructure + 64);
-			}
-		}
-
-		/// <summary>
-		/// Gets the APM table.
-		/// </summary>
-		/// <value>The APM table.</value>
-		public static uint APMTable
-		{
-			get
-			{
-				return Native.Get32(MultibootStructure + 68);
-			}
-		}
-
-		/// <summary>
-		/// Gets the VBE control information.
-		/// </summary>
-		/// <value>The VBE control information.</value>
-		public static uint VBEControlInformation
-		{
-			get
-			{
-				return Native.Get32(MultibootStructure + 72);
-			}
-		}
-
-		/// <summary>
-		/// Gets the VBE mode info.
-		/// </summary>
-		/// <value>The VBE mode info.</value>
-		public static uint VBEModeInfo
-		{
-			get
-			{
-				return Native.Get32(MultibootStructure + 72);
-			}
-		}
-
-		/// <summary>
-		/// Gets the VBE mode.
-		/// </summary>
-		/// <value>The VBE mode.</value>
-		public static uint VBEMode
-		{
-			get
-			{
-				return Native.Get32(MultibootStructure + 76);
-			}
-		}
-
-		/// <summary>
-		/// Gets the VBE interface seg.
-		/// </summary>
-		/// <value>The VBE interface seg.</value>
-		public static uint VBEInterfaceSeg
-		{
-			get
-			{
-				return Native.Get32(MultibootStructure + 80);
-			}
-		}
-
-		/// <summary>
-		/// Gets the VBE interface off.
-		/// </summary>
-		/// <value>The VBE interface off.</value>
-		public static uint VBEInterfaceOff
-		{
-			get
-			{
-				return Native.Get32(MultibootStructure + 84);
-			}
-		}
-
-		/// <summary>
-		/// Gets the VBE interface len.
-		/// </summary>
-		/// <value>The VBE interface len.</value>
-		public static uint VBEInterfaceLen
-		{
-			get
-			{
-				return Native.Get32(MultibootStructure + 86);
-			}
+			return Intrinsic.Load8(GetMemoryMapIndexLocation(index), MultiBootMemoryMapOffset.Type);
 		}
 	}
 }

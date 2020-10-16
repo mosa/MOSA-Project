@@ -1,34 +1,31 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem.PCI
 {
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class BaseAddress
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
-		protected uint address;
+		protected Pointer address;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected uint size;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected AddressType region;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected bool prefetchable;
 
@@ -36,18 +33,18 @@ namespace Mosa.DeviceSystem.PCI
 		/// Gets the address.
 		/// </summary>
 		/// <value>The address.</value>
-		public uint Address { get { return address; } }
+		public Pointer Address { get { return address; } }
 
 		/// <summary>
 		/// Gets the size.
 		/// </summary>
-		/// <value>The size.</value>		
+		/// <value>The size.</value>
 		public uint Size { get { return size; } }
 
 		/// <summary>
 		/// Gets the region.
 		/// </summary>
-		/// <value>The region.</value>		
+		/// <value>The region.</value>
 		public AddressType Region { get { return region; } }
 
 		/// <summary>
@@ -63,7 +60,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <param name="prefetchable">if set to <c>true</c> [prefetchable].</param>
-		public BaseAddress(AddressType region, uint address, uint size, bool prefetchable)
+		public BaseAddress(AddressType region, Pointer address, uint size, bool prefetchable)
 		{
 			this.region = region;
 			this.address = address;
@@ -83,13 +80,12 @@ namespace Mosa.DeviceSystem.PCI
 				return string.Empty;
 
 			if (region == AddressType.IO)
-				return "I/O Port at 0x" + address.ToString("X") + " [size=" + size.ToString() + "]";
+				return "I/O Port at 0x" + address.ToInt32().ToString("X") + " [size=" + size.ToString() + "]";
 
 			if (prefetchable)
-				return "Memory at 0x" + address.ToString("X") + " [size=" + size.ToString() + "] (prefetchable)";
+				return "Memory at 0x" + address.ToInt32().ToString("X") + " [size=" + size.ToString() + "] (prefetchable)";
 
-			return "Memory at 0x" + address.ToString("X") + " [size=" + size.ToString() + "] (non-prefetchable)";
+			return "Memory at 0x" + address.ToInt32().ToString("X") + " [size=" + size.ToString() + "] (non-prefetchable)";
 		}
-
 	}
 }

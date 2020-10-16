@@ -1,157 +1,213 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using System;
 using System.Collections.Generic;
-
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// Represents a block of instructions with no internal jumps and only one
-	/// entry and exit.
+	/// Represents a block of instructions with no internal jumps and only one entry and exit.
 	/// </summary>
-	public class BasicBlock
+	public sealed class BasicBlock
 	{
-		#region Data members
+		public const int PrologueLabel = 0x10000;
+		public const int StartLabel = 0;
+		public const int EpilogueLabel = 0xFFFFF;
+		public const int CompilerBlockStartLabel = 0x10001;
+		public const int ReservedLabel = StartLabel - 1;
+
+		#region Data Fields
 
 		/// <summary>
-		/// The index of the block within the instruction set
+		/// The branch instructions
 		/// </summary>
-		private int index;
+		private readonly List<InstructionNode> branchInstructions = new List<InstructionNode>(2);
 
-		/// <summary>
-		/// The label of the block. (For simplicity this is actually the original instruction offset.)
-		/// </summary>
-		private int label;
-
-		/// <summary>
-		/// The creation sequence number of the block; unique within a method. (For use with stage that require an integer id for blocks starting from 0).
-		/// </summary>
-		private int sequence;
-
-		/// <summary>
-		/// Hints at which target the block will most likely branch to
-		/// </summary>
-		private int hintTarget;
-
-		/// <summary>
-		/// Links this block to all Blocks invoked by the final branch instruction.
-		/// </summary>
-		/// <remarks>
-		/// Usually there are two Blocks in this list: The branch destination and
-		/// the immediately following block. If the final branch instruction is a
-		/// switch, there are potentially more Blocks in this list.
-		/// </remarks>
-		private List<BasicBlock> nextBlocks;
-
-		/// <summary>
-		/// A list of all Blocks, whose final branch instruction refers to this block.
-		/// </summary>
-		private List<BasicBlock> previousBlocks;
-
-		#endregion
-
-		#region Construction
-
-		/// <summary>
-		/// Initializes common fields of the BasicBlock.
-		/// </summary>
-		/// <param name="sequence">The sequence.</param>
-		/// <param name="label">The label.</param>
-		/// <param name="index">The index.</param>
-		public BasicBlock(int sequence, int label, int index)
-		{
-			nextBlocks = new List<BasicBlock>(2);
-			previousBlocks = new List<BasicBlock>(2);
-			this.sequence = sequence;
-			this.label = label;
-			this.index = index;
-			this.hintTarget = -1;
-		}
-
-		#endregion
+		#endregion Data Fields
 
 		#region Properties
 
 		/// <summary>
-		/// The index of the block within the instruction set
+		/// Gets the first instruction node.
 		/// </summary>
-		public int Index
-		{
-			get { return index; }
-			set { index = value; }
-		}
+		public InstructionNode First { get; }
+
+		/// <summary>
+		/// Gets the last instruction node.
+		/// </summary>
+		public InstructionNode Last { get; }
+
+		/// <summary>
+		/// Gets the before last instruction node.
+		/// </summary>
+		public InstructionNode BeforeLast { get { return Last.Previous; } }
+
+		/// <summary>
+		/// Gets the instruction after the first instruction.
+		/// </summary>
+		public InstructionNode AfterFirst { get { return First.Next; } }
 
 		/// <summary>
 		/// Retrieves the label, which uniquely identifies this block.
 		/// </summary>
 		/// <value>The label.</value>
-		public int Label
-		{
-			get { return label; }
-		}
+		public int Label { get; }
 
 		/// <summary>
 		/// Retrieves the label, which uniquely identifies this block.
 		/// </summary>
 		/// <value>The label.</value>
-		public int Sequence
-		{
-			get { return sequence; }
-		}
+		public int Sequence { get; internal set; }
 
 		/// <summary>
 		/// Returns a list of all Blocks, which are potential branch targets
 		/// of the last instruction in this block.
 		/// </summary>
-		public List<BasicBlock> NextBlocks
-		{
-			get { return nextBlocks; }
-		}
+		public List<BasicBlock> NextBlocks { get; internal set; }
 
 		/// <summary>
 		/// Returns a list of all Blocks, which branch to this block.
 		/// </summary>
-		public List<BasicBlock> PreviousBlocks
-		{
-			get { return previousBlocks; }
-		}
+		public List<BasicBlock> PreviousBlocks { get; internal set; }
 
 		/// <summary>
 		/// <True/> if this Block has following blocks
 		/// </summary>
-		public bool HasNextBlocks
-		{
-			get { return NextBlocks.Count > 0; }
-		}
+		public bool HasNextBlocks { get { return NextBlocks.Count > 0; } }
 
 		/// <summary>
 		/// <True/> if this Block has previous blocks
 		/// </summary>
-		public bool HasPreviousBlocks
-		{
-			get { return PreviousBlocks.Count > 0; }
-		}
+		public bool HasPreviousBlocks { get { return PreviousBlocks.Count > 0; } }
 
 		/// <summary>
-		/// Hints at which target the block will most likely branch to
+		/// Gets a value indicating whether this instance is prologue.
 		/// </summary>
-		public int HintTarget
+		/// <value>
+		/// <c>true</c> if this instance is prologue; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsPrologue { get { return Label == PrologueLabel; } }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance is epilogue.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance is epilogue; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsEpilogue { get { return Label == EpilogueLabel; } }
+
+		/// <summary>
+		/// Gets a value indicating whether this instance is compiler block.
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if this instance is compiler block; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsCompilerBlock { get { return (Label >= CompilerBlockStartLabel) && (Label != EpilogueLabel) && (Label != PrologueLabel); } }
+
+		public bool IsHandlerHeadBlock { get; internal set; }
+
+		public bool IsTryHeadBlock { get; internal set; }
+
+		public bool IsHeadBlock { get; internal set; }
+
+		#endregion Properties
+
+		#region Construction
+
+		internal BasicBlock(int sequence, int blockLabel, int instructionLabel)
 		{
-			get { return hintTarget; }
-			set { hintTarget = value; }
+			Debug.Assert(blockLabel != ReservedLabel);
+
+			NextBlocks = new List<BasicBlock>(2);
+			PreviousBlocks = new List<BasicBlock>(1);
+			Label = blockLabel;
+			Sequence = sequence;
+
+			First = new InstructionNode(IRInstruction.BlockStart)
+			{
+				Label = instructionLabel,
+				Block = this
+			};
+
+			var middle = new InstructionNode()
+			{
+				Label = instructionLabel,
+				Block = this
+			};
+
+			Last = new InstructionNode(IRInstruction.BlockEnd)
+			{
+				Label = instructionLabel,
+				Block = this,
+			};
+
+			middle.Next = Last;
+			middle.Previous = First;
+
+			First.Next = middle;
+			Last.Previous = middle;
 		}
 
-		#endregion
+		#endregion Construction
 
 		#region Methods
+
+		internal void AddBranchInstruction(InstructionNode node)
+		{
+			if (node.Instruction?.IgnoreInstructionBasicBlockTargets == true)
+				return;
+
+			if (node.BranchTargets == null || node.BranchTargetsCount == 0)
+				return;
+
+			Debug.Assert(node.Block != null);
+
+			// Note: The list only has 1 unless it's a switch statement, so actual performance is very close to O(1) for non-switch statements
+
+			branchInstructions.AddIfNew(node);
+
+			var currentBlock = node.Block;
+
+			foreach (var target in node.BranchTargets)
+			{
+				currentBlock.NextBlocks.AddIfNew(target);
+				target.PreviousBlocks.AddIfNew(currentBlock);
+			}
+		}
+
+		internal void RemoveBranchInstruction(InstructionNode node)
+		{
+			if (node.BranchTargets == null || node.BranchTargetsCount == 0)
+				return;
+
+			branchInstructions.Remove(node);
+
+			var currentBlock = node.Block;
+
+			// Note: The list only has 1 or 2 entries, so actual performance is very close to O(1)
+
+			foreach (var target in node.BranchTargets)
+			{
+				if (!FindTarget(target))
+				{
+					currentBlock.NextBlocks.Remove(target);
+					target.PreviousBlocks.Remove(currentBlock);
+				}
+			}
+		}
+
+		private bool FindTarget(BasicBlock block)
+		{
+			foreach (var b in branchInstructions)
+			{
+				if (b.BranchTargets.Contains(block))
+					return true;
+			}
+
+			return false;
+		}
 
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
@@ -159,9 +215,40 @@ namespace Mosa.Compiler.Framework
 		/// <returns>The code as a string value.</returns>
 		public override string ToString()
 		{
-			return String.Format("L_{0:X4}", Label);
+			return String.Format("L_{0:X5}", Label);
 		}
 
-		#endregion
+		/// <summary>
+		/// Checks that all instructions are part of the block.
+		/// </summary>
+		public void DebugCheck()
+		{
+			Debug.Assert(First.Block == Last.Block);
+			Debug.Assert(First.Label == Last.Label);
+
+			var node = First;
+
+			while (!node.IsBlockEndInstruction)
+			{
+				Debug.Assert(node.Block == this);
+				node = node.Next;
+				Debug.Assert(node != null);
+			}
+
+			Debug.Assert(node == Last);
+
+			node = Last;
+
+			while (!node.IsBlockStartInstruction)
+			{
+				Debug.Assert(node.Block == this);
+				node = node.Previous;
+				Debug.Assert(node != null);
+			}
+
+			Debug.Assert(node == First);
+		}
+
+		#endregion Methods
 	}
 }

@@ -1,18 +1,11 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Platform.x86.Intrinsic;
+using Mosa.Runtime.x86;
 
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	/// 
+	/// Keyboard
 	/// </summary>
 	public static class Keyboard
 	{
@@ -24,6 +17,5 @@ namespace Mosa.Kernel.x86
 		{
 			return Native.In8(0x60);
 		}
-
 	}
 }

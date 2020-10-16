@@ -1,20 +1,14 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	/// Prefix Instruction
 	/// </summary>
-	public class PrefixInstruction : BaseInstruction
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BaseCILInstruction" />
+	public class PrefixInstruction : BaseCILInstruction
 	{
 		#region Properties
 
@@ -35,12 +29,12 @@ namespace Mosa.Compiler.Framework.CIL
 					case OpCode.PreUnaligned: return Prefix.Unaligned;
 					case OpCode.PreVolatile: return Prefix.Volatile;
 					default:
-						throw new InvalidOperationException(@"Unknown prefix instruction code.");
+						throw new InvalidOperationException("Unknown prefix instruction codeReader.");
 				}
 			}
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Construction
 
@@ -49,12 +43,10 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		protected PrefixInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 0)
 		{
 		}
 
-		#endregion // Construction
-
-
+		#endregion Construction
 	}
 }

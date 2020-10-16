@@ -1,41 +1,33 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.MosaTypeSystem;
 using System;
-using Mosa.Compiler.Framework.Operands;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.Metadata;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
 	/// Intermediate representation of a IL binary logic instruction.
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BinaryInstruction" />
 	public sealed class BinaryLogicInstruction : BinaryInstruction
 	{
-
 		#region Operand Table
 
 		/// <summary>
 		/// Operand table according to ISO/IEC 23271:2006 (E), Partition III, 1.5, Table 5.
 		/// </summary>
-		private static readonly StackTypeCode[][] _opTable = new StackTypeCode[][] {
-			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
-			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Int32,   StackTypeCode.Unknown, StackTypeCode.N,       StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
-			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Int64,   StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
-			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.N,       StackTypeCode.Unknown, StackTypeCode.N,       StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
-			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
-			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
-			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
+		private static readonly StackTypeCode[][] opTable = new StackTypeCode[][] {
+			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
+			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Int32,   StackTypeCode.Unknown, StackTypeCode.N,       StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
+			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Int64,   StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
+			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.N,       StackTypeCode.Unknown, StackTypeCode.N,       StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
+			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
+			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
+			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
+			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
 		};
 
-		#endregion // Operand Table
+		#endregion Operand Table
 
 		#region Construction
 
@@ -48,70 +40,32 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="compiler">The compiler.</param>
-		public override void Validate(Context ctx, IMethodCompiler compiler)
+		/// <param name="context">The context.</param>
+		/// <param name="methodCompiler">The compiler.</param>
+		public override void Resolve(Context context, MethodCompiler methodCompiler)
 		{
-			base.Validate(ctx, compiler);
+			base.Resolve(context, methodCompiler);
 
-			var stackTypeForOperand1 = ctx.Operand1.StackType;
-			var stackTypeForOperand2 = ctx.Operand2.StackType;
+			var stackTypeForOperand1 = methodCompiler.Compiler.GetStackTypeCode(context.Operand1.Type);
+			var stackTypeForOperand2 = methodCompiler.Compiler.GetStackTypeCode(context.Operand2.Type);
 
-			if (ctx.Operand1.Type is ValueTypeSigType)
-			{
-				var op1Type = compiler.Method.Module.GetType ((ctx.Operand1.Type as ValueTypeSigType).Token);
-				if (op1Type.BaseType.FullName == "System.Enum")
-					stackTypeForOperand1 = this.FromSigType (op1Type.Fields[0].SignatureType.Type);
-			}
-
-			if (ctx.Operand2.Type is ValueTypeSigType)
-			{
-				var op2Type = compiler.Method.Module.GetType ((ctx.Operand2.Type as ValueTypeSigType).Token);
-				if (op2Type.BaseType.FullName == "System.Enum")
-					stackTypeForOperand2 = this.FromSigType (op2Type.Fields[0].SignatureType.Type);
-			}
-
-			var result = _opTable[(int)stackTypeForOperand1][(int)stackTypeForOperand2];
+			var result = opTable[(int)stackTypeForOperand1][(int)stackTypeForOperand2];
 
 			if (result == StackTypeCode.Unknown)
-				throw new InvalidOperationException (@"Invalid stack result of instruction: " + result.ToString () + " (" + ctx.Operand1.ToString () + ")");
-
-			ctx.Result = compiler.CreateTemporary(Operand.SigTypeFromStackType(result));
-		}
-
-		private StackTypeCode FromSigType (CilElementType type)
-		{
-			switch(type)
 			{
-				case CilElementType.I1: goto case CilElementType.U4;
-				case CilElementType.I2: goto case CilElementType.U4;
-				case CilElementType.I4: goto case CilElementType.U4;
-				case CilElementType.U1: goto case CilElementType.U4;
-				case CilElementType.U2: goto case CilElementType.U4;
-				case CilElementType.U4: return StackTypeCode.Int32;
+				throw new InvalidOperationException($"Invalid virtualLocal result of instruction: {result} ({context.Operand1})");
 			}
 
-			throw new NotSupportedException ();
-		}
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.BinaryLogic(context);
+			context.Result = methodCompiler.CreateVirtualRegister(methodCompiler.Compiler.GetStackTypeFromCode(result));
 		}
 
 		#endregion Methods
-
 	}
 }

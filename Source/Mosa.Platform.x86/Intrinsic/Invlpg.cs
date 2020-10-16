@@ -1,36 +1,19 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Collections.Generic;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Representations the x86 Invlpg instruction.
+	/// IntrinsicMethods
 	/// </summary>
-	public sealed class Invlpg : IIntrinsicMethod
+	static partial class IntrinsicMethods
 	{
-
-		#region Methods
-
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::Invlpg")]
+		private static void Invlpg(Context context, MethodCompiler methodCompiler)
 		{
-			context.SetInstruction(Instruction.InvlpgInstruction, null, context.Operand1);
+			//Debug.Assert(context.Operand1.IsConstant);
+			context.SetInstruction(X86.Invlpg, null, context.Operand1);
 		}
-
-		#endregion // Methods
 	}
 }

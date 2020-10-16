@@ -1,6 +1,20 @@
-*.pdb
-*.vcproj.*.user
-*.resharper.user
+# User-specific files
+
+*.suo 
+*.user 
+*.userosscache 
+*.sln.docstates 
+
+# Build results
+
+[Oo]bj/
+[Bb]in/
+[Dd]ebug/
+[Rr]elease/
+[b]in - Copy/
+[b]in2/
+
+*.[Oo]bj
 *.suo
 *.ncb
 *.aps
@@ -12,24 +26,29 @@
 *.pidb
 *.userprefs
 *.FileListAbsolute.txt
-*.Cache
+*.[Cc]ache
 *.tlog
 *.vs10x
 *.exe.manifest
 *.mdb
 *.docstates
+*.vsp
 Thumbs.db
 build.force
-obj
-/bin
-/Bin
-/bin2
 /tmp
 /tags
+/.vs/
+.vs/
+.gdb_history
+NuGetUpgradeLog.html
+MigrationBackup/
+.test/
+/Source/Docs/build
+/docs/build
+/docs/_sources
+**/packages/*
+/Source/*/Properties/launchSettings.json
+stderr.txt
+stdout.txt
 
-/Tools/peter-bochs/gluegen-rt.dll
-/Tools/peter-bochs/jogl.dll
-/Tools/peter-bochs/jogl_awt.dll
-/Tools/peter-bochs/jogl_cg.dll
-/Tools/peter-bochs/os.log
-/Tools/peter-bochs/run.txt
+/docs/CNAME

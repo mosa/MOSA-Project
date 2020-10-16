@@ -1,58 +1,42 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Kernel.x86.Smbios;
+using Mosa.Runtime;
 
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
-	/// 
+	/// X86 Kernel
 	/// </summary>
 	public static class Kernel
 	{
-
 		public static void Setup()
 		{
-			SmbiosManager.Setup();
-			Screen.Clear();
-			Screen.Color = 0x0E;
-			Screen.Goto(24, 0);
-			//Screen.Write('1');
+			IDT.SetInterruptHandler(null);
+
+			// Initialize GDT before IDT, because IDT Entries requires a valid Segment Selector
 			Multiboot.Setup();
-			Screen.Goto(24, 1);
-			//Screen.Write('2');
-			ProgrammableInterruptController.Setup();
-			Screen.Goto(24, 2);
-			//Screen.Write('3');
 			GDT.Setup();
-			Screen.Goto(24, 3);
-			//Screen.Write('4');
+
+			// At this stage, allocating memory does not work, so you are only allowed to use ValueTypes or static classes.
+			Panic.Setup();
+
+			// Initialize interrupts
+			PIC.Setup();
 			IDT.Setup();
-			Screen.Goto(24, 4);
-			//Screen.Write('5');
+
+			// Initializing the memory management
 			PageFrameAllocator.Setup();
-			Screen.Goto(24, 5);
-			//Screen.Write('6');
 			PageTable.Setup();
-			Screen.Goto(24, 6);
-			//Screen.Write('7');
 			VirtualPageAllocator.Setup();
-			Screen.Goto(24, 7);
-			//Screen.Write('8');
-			Screen.Goto(24, 8);
-			ProcessManager.Setup();
-			//Screen.Write('9');
-			Screen.Goto(24, 9);
-			TaskManager.Setup();
-			//Screen.Write('A');
-			Screen.Goto(24, 10);
+			GC.Setup();
+
+			// At this point we can use objects
+			Scheduler.Setup();
 			SmbiosManager.Setup();
+			ConsoleManager.Setup();
+
+			Logger.Log("Kernel initialized");
 		}
 	}
 }

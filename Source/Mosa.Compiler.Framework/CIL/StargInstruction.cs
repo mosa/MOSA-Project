@@ -1,19 +1,11 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
-
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	/// Starg Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.StoreInstruction" />
 	public sealed class StargInstruction : StoreInstruction
 	{
 		#region Construction
@@ -27,7 +19,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
@@ -43,45 +35,21 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode the base first
-			base.Decode(ctx, decoder);
-
-			ushort argIdx;
-
-			// Opcode specific handling 
-			if (opcode == OpCode.Starg_s)
-			{
-				byte arg = decoder.DecodeByte();
-				argIdx = arg;
-			}
-			else
-			{
-				argIdx = decoder.DecodeUShort();
-			}
+			base.Decode(node, decoder);
 
 			// The argument is the result
-			ctx.Result = decoder.Compiler.GetParameterOperand(argIdx);
+			node.Result = decoder.MethodCompiler.Parameters[(int)decoder.Instruction.Operand];
 
 			// FIXME: Do some type compatibility checks
 			// See verification for this instruction and
 			// verification types.
 		}
 
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.Starg(context);
-		}
-
 		#endregion Methods
-
 	}
 }

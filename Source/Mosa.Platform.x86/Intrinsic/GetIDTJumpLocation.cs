@@ -1,57 +1,47 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.Collections.Generic;
+using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
-using IR = Mosa.Compiler.Framework.IR;
+using System.Diagnostics;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Representations a jump to the global interrupt handler.
+	/// IntrinsicMethods
 	/// </summary>
-	public sealed class GetIDTJumpLocation : IIntrinsicMethod
+	static partial class IntrinsicMethods
 	{
-		#region Methods
-
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::GetIDTJumpLocation")]
+		private static void GetIDTJumpLocation(Context context, MethodCompiler methodCompiler)
 		{
-			Context loadContext = new Context(context.InstructionSet, context.Operand1.Definitions[0]);
-			ConstantOperand op1 = loadContext.Operand1 as ConstantOperand;
+			var operand = context.Operand1;
 
-			if (op1 == null)
-				throw new InvalidOperationException();
+			if (!operand.IsResolvedConstant)
+			{
+				// try to find the constant - a bit of a hack
+				var ctx = new Context(operand.Definitions[0]);
 
-			int irq = -1;
+				if ((ctx.Instruction == IRInstruction.Move64 || ctx.Instruction == IRInstruction.Move32) && ctx.Operand1.IsConstant)
+				{
+					operand = ctx.Operand1;
+				}
+			}
 
-			object obj = op1.Value;
+			Debug.Assert(operand.IsResolvedConstant);
 
-			if ((obj is int) || (obj is uint))
-				irq = (int)obj;
-			else if (obj is sbyte)
-				irq = (sbyte)obj;
+			int irq = (int)operand.ConstantSigned64;
 
-			if ((irq > 256) || (irq < 0))
-				throw new InvalidOperationException();
+			// Find the method
+			var method = methodCompiler.TypeSystem.DefaultLinkerType.FindMethodByName("InterruptISR" + irq.ToString());
 
-			context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new SymbolOperand(BuiltInSigType.Ptr, @"Mosa.Tools.Compiler.LinkerGenerated.<$>InterruptISR" + irq.ToString() + "()"));
+			if (method == null)
+			{
+				throw new CompilerException();
+			}
+
+			context.SetInstruction(IRInstruction.Move32, context.Result, Operand.CreateSymbolFromMethod(method, methodCompiler.TypeSystem));
+
+			methodCompiler.MethodScanner.MethodInvoked(method, methodCompiler.Method);
 		}
-
-		#endregion // Methods
 	}
 }

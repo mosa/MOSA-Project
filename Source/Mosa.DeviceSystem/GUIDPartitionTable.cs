@@ -1,19 +1,9 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
-using Mosa.ClassLib;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.DeviceSystem
 {
-
 	/// <summary>
-	/// 
+	///
 	/// </summary>
 	public class GUIDPartitionTable
 	{
@@ -42,17 +32,12 @@ namespace Mosa.DeviceSystem
 			internal const uint SupportedRevision = 0x0100; // 1.0
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
 		protected bool valid;
-		/// <summary>
-		/// 
-		/// </summary>
+
 		protected IDiskDevice diskDevice;
 
 		/// <summary>
-		/// Gets a value indicating whether this <see cref="MasterBootBlock"/> is valid.
+		/// Gets a value indicating whether this <see cref="GUIDPartitionTable"/> is valid.
 		/// </summary>
 		/// <value><c>true</c> if valid; otherwise, <c>false</c>.</value>
 		public bool Valid { get { return valid; } }
@@ -86,7 +71,7 @@ namespace Mosa.DeviceSystem
 				(!mbr.Partitions[0].Bootable) || (mbr.Partitions[0].StartLBA != 1))
 				return false;
 
-			BinaryFormat gpt = new BinaryFormat(diskDevice.ReadBlock(1, 1));
+			var gpt = new DataBlock(diskDevice.ReadBlock(1, 1));
 
 			if ((gpt.GetByte(0) != 45) && (gpt.GetByte(1) != 46) && (gpt.GetByte(2) != 49) && (gpt.GetByte(3) != 20) &&
 				(gpt.GetByte(4) != 50) && (gpt.GetByte(5) != 41) && (gpt.GetByte(6) != 52) && (gpt.GetByte(7) != 54))

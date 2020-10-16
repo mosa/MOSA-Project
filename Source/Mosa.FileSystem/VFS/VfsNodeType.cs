@@ -1,12 +1,4 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.FileSystem.VFS
 {
@@ -15,7 +7,6 @@ namespace Mosa.FileSystem.VFS
 	/// </summary>
 	public enum VfsNodeType
 	{
-
 		/// <summary>
 		/// An unknown node type.
 		/// </summary>
@@ -32,7 +23,7 @@ namespace Mosa.FileSystem.VFS
 		Directory,
 
 		/// <summary>
-		/// A symbolic link in the (virtual) filesystem.
+		/// A symbolic link in the (virtual) file system.
 		/// </summary>
 		SymbolicLink,
 

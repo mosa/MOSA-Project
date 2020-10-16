@@ -1,12 +1,4 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.FileSystem.FAT
 {
@@ -19,14 +11,15 @@ namespace Mosa.FileSystem.FAT
 		/// Represents a 12-bit FAT.
 		/// </summary>
 		FAT12 = 12,
+
 		/// <summary>
 		/// Represents a 16-bit FAT.
 		/// </summary>
 		FAT16 = 16,
+
 		/// <summary>
 		/// Represents a 32-bit FAT.
 		/// </summary>
 		FAT32 = 32
 	}
-
 }

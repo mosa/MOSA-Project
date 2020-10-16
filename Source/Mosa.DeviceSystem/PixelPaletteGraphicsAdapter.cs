@@ -1,25 +1,19 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// Translates IPixelGraphicsDevice to PixelPaletteGraphicsAdapter
+	/// Translates IPixelPaletteGraphicsDevice to PixelPaletteGraphicsAdapter
 	/// </summary>
 	public class PixelPaletteGraphicsAdapter : IPixelGraphicsDevice
 	{
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected IPixelPaletteGraphicsDevice pixelPaletteGraphicsDevice;
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		protected ColorPalette colorPalette;
 
@@ -32,9 +26,9 @@ namespace Mosa.DeviceSystem
 			this.pixelPaletteGraphicsDevice = pixelPaletteGraphicsDevice;
 
 			if (pixelPaletteGraphicsDevice.PaletteSize == 256)
-				this.colorPalette = ColorPalette.CreateNetscape256ColorPalette();
+				colorPalette = ColorPalette.CreateNetscape256ColorPalette();
 			else
-				this.colorPalette = ColorPalette.CreateStandard16ColorPalette();
+				colorPalette = ColorPalette.CreateStandard16ColorPalette();
 		}
 
 		/// <summary>

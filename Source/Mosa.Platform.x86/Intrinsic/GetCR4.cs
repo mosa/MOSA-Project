@@ -1,28 +1,19 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.Compiler.Framework;
+using Mosa.Platform.Intel;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// 
+	/// IntrinsicMethods
 	/// </summary>
-	internal sealed class GetCR4 : GetControlRegisterBase
+	static partial class IntrinsicMethods
 	{
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="GetCR4"/> class.
-		/// </summary>
-		public GetCR4()
-			: base(ControlRegister.CR4)
+		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::GetCR4")]
+		private static void GetCR4(Context context, MethodCompiler methodCompiler)
 		{
+			context.SetInstruction(X86.MovCRLoad32, context.Result, Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.U4, ControlRegister.CR4));
 		}
-
 	}
 }

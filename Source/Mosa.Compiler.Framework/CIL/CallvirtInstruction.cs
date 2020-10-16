@@ -1,18 +1,11 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	/// Callvirt Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.InvokeInstruction" />
 	public sealed class CallvirtInstruction : InvokeInstruction
 	{
 		#region Construction
@@ -26,7 +19,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Properties
 
@@ -39,20 +32,15 @@ namespace Mosa.Compiler.Framework.CIL
 			get { return InvokeSupportFlags.MemberRef | InvokeSupportFlags.MethodDef | InvokeSupportFlags.MethodSpec; }
 		}
 
-		#endregion // Properties
+		#endregion Properties
 
 		#region Methods
 
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
-			visitor.Callvirt(context);
+			base.Decode(node, decoder);
 		}
 
-		#endregion // Methods
+		#endregion Methods
 	}
 }

@@ -1,21 +1,13 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	/// Newarr Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.UnaryInstruction" />
 	public sealed class NewarrInstruction : UnaryInstruction
 	{
 		#region Construction
@@ -25,50 +17,34 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public NewarrInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 1)
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region Methods
 
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="node">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(InstructionNode node, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(node, decoder);
 
-			// Read the type specification
-			Token token = decoder.DecodeTokenType();
-
-			// Patch usage of generic arguments
-			var enclosingType = decoder.Method.DeclaringType;
-			var signatureType = decoder.GenericTypePatcher.PatchSignatureType(decoder.TypeModule, enclosingType, token);
+			var type = (MosaType)decoder.Instruction.Operand;
 
 			// FIXME: If ctx.Operands1 is an integral constant, we can infer the maximum size of the array
 			// and instantiate an ArrayTypeSpecification with max. sizes. This way we could eliminate bounds
-			// checks in an optimization stage later on, if we find that a value never exceeds the array 
+			// checks in an optimization stage later on, if we find that a value never exceeds the array
 			// bounds.
-			var resultType = new SZArraySigType(null, signatureType);
-			ctx.Result = decoder.Compiler.CreateTemporary(resultType);
-		}
 
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.Newarr(context);
+			node.Result = decoder.MethodCompiler.CreateVirtualRegister(type);
 		}
 
 		#endregion Methods
-
 	}
 }

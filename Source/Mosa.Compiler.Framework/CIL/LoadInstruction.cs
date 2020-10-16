@@ -1,23 +1,12 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Michael Fröhlich (aka grover, Michael Ruck) <sharpos@michaelruck.de>
- *  
- */
-
-using Mosa.Compiler.Framework.Operands;
-using Mosa.Compiler.Metadata.Signatures;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	/// Load Instruction
 	/// </summary>
-	public class LoadInstruction : BaseInstruction
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BaseCILInstruction" />
+	public class LoadInstruction : BaseCILInstruction
 	{
 		#region Construction
 
@@ -40,22 +29,6 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
-
-		public static Operand CreateResultOperand(IInstructionDecoder decoder, StackTypeCode operandType, SigType operandSigType)
-		{
-			Operand result;
-
-			if (operandType == StackTypeCode.O || operandType == StackTypeCode.Ptr || operandType == StackTypeCode.F)
-			{
-				result = decoder.Compiler.CreateTemporary(operandSigType);
-			}
-			else
-			{
-				result = decoder.Compiler.CreateTemporary(Operand.SigTypeFromStackType(operandType));
-			}
-
-			return result;
-		}
+		#endregion Construction
 	}
 }

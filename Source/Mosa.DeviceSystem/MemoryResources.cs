@@ -1,48 +1,30 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.ClassLib;
+using System.Collections.Generic;
 
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	/// Memory Resources
 	/// </summary>
 	public class MemoryResources
 	{
+		/// <summary>
+		/// The memory regions
+		/// </summary>
+		protected LinkedList<AddressRegion> memoryRegions;
 
 		/// <summary>
-		/// 
+		/// The spin lock
 		/// </summary>
-		protected LinkedList<IMemoryRegion> memoryRegions;
-		/// <summary>
-		/// 
-		/// </summary>
-		protected SpinLock spinLock;
+		protected object _lock = new object();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MemoryResources"/> class.
 		/// </summary>
 		public MemoryResources()
 		{
-			memoryRegions = new LinkedList<IMemoryRegion>();
-		}
-
-		/// <summary>
-		/// Gets the memory.
-		/// </summary>
-		/// <param name="address">The address.</param>
-		/// <param name="size">The size.</param>
-		/// <returns></returns>
-		public IMemory GetMemory(uint address, uint size)
-		{
-			return HAL.RequestPhysicalMemory(address, size);
+			memoryRegions = new LinkedList<AddressRegion>();
 		}
 
 		/// <summary>
@@ -50,23 +32,26 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="hardwareResources">The hardware resources.</param>
 		/// <returns></returns>
-		public bool ClaimResources(IHardwareResources hardwareResources)
+		public bool ClaimResources(HardwareResources hardwareResources)
 		{
-			spinLock.Enter();
-
-			for (byte r = 0; r < hardwareResources.MemoryRegionCount; r++)
+			lock (_lock)
 			{
-				IMemoryRegion region = hardwareResources.GetMemoryRegion(r);
+				for (byte r = 0; r < hardwareResources.AddressRegionCount; r++)
+				{
+					var region = hardwareResources.GetMemoryRegion(r);
 
-				foreach (IMemoryRegion memoryRegion in memoryRegions)
-					if ((memoryRegion.Contains(region.BaseAddress) || memoryRegion.Contains(region.BaseAddress + region.Size)))
-						return false;
+					foreach (var memoryRegion in memoryRegions)
+					{
+						if (memoryRegion.Contains(region.Address) || memoryRegion.Contains(region.Address + region.Size))
+							return false;
+					}
+				}
+
+				for (byte r = 0; r < hardwareResources.AddressRegionCount; r++)
+				{
+					memoryRegions.AddLast(hardwareResources.GetMemoryRegion(r));
+				}
 			}
-
-			for (byte r = 0; r < hardwareResources.MemoryRegionCount; r++)
-				memoryRegions.Add(hardwareResources.GetMemoryRegion(r));
-
-			spinLock.Exit();
 
 			return true;
 		}
@@ -75,14 +60,15 @@ namespace Mosa.DeviceSystem
 		/// Releases the resources.
 		/// </summary>
 		/// <param name="hardwareResources">The hardware resources.</param>
-		public void ReleaseResources(IHardwareResources hardwareResources)
+		public void ReleaseResources(HardwareResources hardwareResources)
 		{
-			spinLock.Enter();
-
-			for (byte r = 0; r < hardwareResources.MemoryRegionCount; r++)
-				memoryRegions.Remove(hardwareResources.GetMemoryRegion(r));
-
-			spinLock.Exit();
+			lock (_lock)
+			{
+				for (byte r = 0; r < hardwareResources.AddressRegionCount; r++)
+				{
+					memoryRegions.Remove(hardwareResources.GetMemoryRegion(r));
+				}
+			}
 		}
 	}
 }

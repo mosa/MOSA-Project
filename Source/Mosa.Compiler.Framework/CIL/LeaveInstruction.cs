@@ -1,19 +1,11 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
-
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
-	/// 
+	/// Leave Instruction
 	/// </summary>
+	/// <seealso cref="Mosa.Compiler.Framework.CIL.BranchInstruction" />
 	public sealed class LeaveInstruction : BranchInstruction
 	{
 		#region Construction
@@ -27,50 +19,36 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
-		public override FlowControl FlowControl
-		{
-			get { return FlowControl.Leave; }
-		}
+		#region Properties
+
+		/// <summary>
+		/// Determines flow behavior of this instruction.
+		/// </summary>
+		/// <remarks>
+		/// Knowledge of control flow is required for correct basic block
+		/// building. Any instruction that alters the control flow must override
+		/// this property and correctly identify its control flow modifications.
+		/// </remarks>
+		public override FlowControl FlowControl { get { return FlowControl.Leave; } }
+
+		/// <summary>
+		/// Gets a value indicating whether to [ignore instruction's basic block].
+		/// </summary>
+		/// <value>
+		/// <c>true</c> if [ignore instruction basic block]; otherwise, <c>false</c>.
+		/// </value>
+		public override bool IgnoreInstructionBasicBlockTargets { get { return true; } }
+
+		#endregion Properties
 
 		#region Methods
 
-		/// <summary>
-		/// Decodes the specified instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override bool DecodeTargets(IInstructionDecoder decoder)
 		{
-			// Decode base classes first
-			base.Decode(ctx, decoder);
-
-			switch (opcode)
-			{
-				case OpCode.Leave_s:
-					{
-						sbyte sb = decoder.DecodeSByte();
-						ctx.SetBranch(sb);
-						break;
-					}
-				case OpCode.Leave:
-					{
-						int sb = decoder.DecodeInt();
-						ctx.SetBranch(sb);
-						break;
-					}
-			}
-		}
-
-		/// <summary>
-		/// Allows visitor based dispatch for this instruction object.
-		/// </summary>
-		/// <param name="visitor">The visitor.</param>
-		/// <param name="context">The context.</param>
-		public override void Visit(ICILVisitor visitor, Context context)
-		{
-			visitor.Leave(context);
+			decoder.GetBlock((int)decoder.Instruction.Operand);
+			return true;
 		}
 
 		#endregion Methods

@@ -1,31 +1,14 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.ClassLib;
+using Mosa.DeviceSystem;
 
 namespace Mosa.FileSystem.FAT.Find
 {
 	/// <summary>
-	/// 
+	/// Empty
 	/// </summary>
-	public class Empty : FatFileSystem.ICompare
+	internal class Empty : FatFileSystem.ICompare
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		protected uint cluster;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public Empty() { }
-
 		/// <summary>
 		/// Compares the specified data.
 		/// </summary>
@@ -35,7 +18,7 @@ namespace Mosa.FileSystem.FAT.Find
 		/// <returns></returns>
 		public bool Compare(byte[] data, uint offset, FatType type)
 		{
-			BinaryFormat entry = new BinaryFormat(data);
+			var entry = new DataBlock(data);
 
 			byte first = entry.GetByte(offset + Entry.DOSName);
 
@@ -48,5 +31,4 @@ namespace Mosa.FileSystem.FAT.Find
 			return false;
 		}
 	}
-
 }

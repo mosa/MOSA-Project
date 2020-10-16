@@ -1,4 +1,8 @@
 *.dll
 *.exe
 *.resources
-Mono.Cecil
+*.psess
+*.vspx
+*.CodeAnalysisLog.xml
+*.lastcodeanalysissucceeded
+/TestResults

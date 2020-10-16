@@ -1,0 +1,348 @@
+﻿{
+	"Optimizations": [
+
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "Add##",
+			"SubName": "",
+			"Expression": "IR.Add## a b",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.Move## [Add##(To##(a),To##(b))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "AddR#",
+			"SubName": "",
+			"Expression": "IR.AddR# a b",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.MoveR# [AddR#(ToR#(a),ToR#(b))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "AddCarryIn##",
+			"SubName": "",
+			"Expression": "IR.AddCarryIn## a b c",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Move## [Add##(Add##(To##(a),To##(b)),BoolTo##(To##(c)))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "ShiftRight##",
+			"SubName": "",
+			"Expression": "IR.ShiftRight## a b",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b) ",
+			"Result": "(IR.Move## [ShiftRight##(To##(a),ToSigned##(b))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "ShiftLeft##",
+			"SubName": "",
+			"Expression": "IR.ShiftLeft## a b",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.Move## [ShiftLeft##(To##(a),ToSigned##(b))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "DivUnsigned##",
+			"SubName": "",
+			"Expression": "IR.DivUnsigned## a b",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.Move## [DivUnsigned##(To##(a),To##(b))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "DivSigned##",
+			"SubName": "",
+			"Expression": "IR.DivSigned## a b",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.Move## [DivSigned##(ToSigned64(a),ToSigned64(b))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "DivR#",
+			"SubName": "",
+			"Expression": "IR.DivR# a b",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.MoveR# [DivR#(ToR#(a),ToR#(b))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "And##",
+			"SubName": "",
+			"Expression": "IR.And## a b",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.Move## [And##(To##(a),To##(b))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "Or##",
+			"SubName": "",
+			"Expression": "IR.Or## a b",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.Move## [Or##(To##(a),To##(b))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "Xor##",
+			"SubName": "",
+			"Expression": "IR.Xor## a b",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.Move## [Xor##(To##(a),To##(b))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "Not##",
+			"SubName": "",
+			"Expression": "IR.Not## a",
+			"Filter": "IsResolvedConstant(a) ",
+			"Result": "(IR.Move## [Not##(To##(a))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "MulUnsigned##",
+			"SubName": "",
+			"Expression": "IR.MulUnsigned## a b",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.Move## [MulUnsigned##(To##(a),To##(b))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "MulSigned##",
+			"SubName": "",
+			"Expression": "IR.MulSigned## a b",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.Move## [MulSigned##(ToSigned64(a),ToSigned64(b))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "MulR#",
+			"SubName": "",
+			"Expression": "IR.MulR# a b",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.MoveR# [MulR#(ToR#(a),ToR#(b))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "RemUnsigned##",
+			"SubName": "",
+			"Expression": "IR.RemUnsigned## a b",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.Move## [RemUnsigned##(To##(a),To##(b))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "RemSigned##",
+			"SubName": "",
+			"Expression": "IR.RemSigned## a b",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.Move## [RemSigned##(ToSigned64(a),ToSigned64(b))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "RemR#",
+			"SubName": "",
+			"Expression": "IR.RemR# a b",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.MoveR# [RemR#(ToR#(a),ToR#(b))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "Sub##",
+			"SubName": "",
+			"Expression": "IR.Sub## a b",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.Move## [Sub##(To##(a),To##(b))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SubR#",
+			"SubName": "",
+			"Expression": "IR.SubR# a b",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.MoveR# [SubR#(ToR#(a),ToR#(b))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SubCarryIn##",
+			"SubName": "",
+			"Expression": "IR.SubCarryIn## a b c",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Move## [Sub##(Sub##(To##(a),To##(b)),BoolTo##(To##(c)))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "IfThenElse##",
+			"SubName": "AlwaysTrue",
+			"Expression": "IR.IfThenElse## a b c",
+			"Filter": "IsResolvedConstant(a) & !IsZero(a)",
+			"Result": "(IR.Move## b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "IfThenElse##",
+			"SubName": "AlwaysFalse",
+			"Expression": "IR.IfThenElse## a b c",
+			"Filter": "IsResolvedConstant(a) & IsZero(a)",
+			"Result": "(IR.Move## c)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SignExtend16x32",
+			"SubName": "",
+			"Expression": "IR.SignExtend16x32 a",
+			"Filter": "IsResolvedConstant(a)",
+			"Result": "(IR.Move32 [SignExtend16x32(ToShort(a))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SignExtend16x64",
+			"SubName": "",
+			"Expression": "IR.SignExtend16x64 a",
+			"Filter": "IsResolvedConstant(a)",
+			"Result": "(IR.Move64 [SignExtend16x64(ToShort(a))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SignExtend32x64",
+			"SubName": "",
+			"Expression": "IR.SignExtend32x64 a",
+			"Filter": "IsResolvedConstant(a)",
+			"Result": "(IR.Move64 [SignExtend32x64(To32(a))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SignExtend8x32",
+			"SubName": "",
+			"Expression": "IR.SignExtend8x32 a",
+			"Filter": "IsResolvedConstant(a)",
+			"Result": "(IR.Move32 [SignExtend8x32(ToByte(a))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SignExtend8x64",
+			"SubName": "",
+			"Expression": "IR.SignExtend8x64 a",
+			"Filter": "IsResolvedConstant(a)",
+			"Result": "(IR.Move64 [SignExtend8x64(ToByte(a))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "ZeroExtend16x32",
+			"SubName": "",
+			"Expression": "IR.ZeroExtend16x32 a",
+			"Filter": "IsResolvedConstant(a)",
+			"Result": "(IR.Move32 [To32(ToShort(a))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "ZeroExtend16x64",
+			"SubName": "",
+			"Expression": "IR.ZeroExtend16x64 a",
+			"Filter": "IsResolvedConstant(a)",
+			"Result": "(IR.Move64 [To64(ToShort(a))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "ZeroExtend32x64",
+			"SubName": "",
+			"Expression": "IR.ZeroExtend32x64 a",
+			"Filter": "IsResolvedConstant(a)",
+			"Result": "(IR.Move64 [To64(To32(a))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "ZeroExtend8x32",
+			"SubName": "",
+			"Expression": "IR.ZeroExtend8x32 a",
+			"Filter": "IsResolvedConstant(a)",
+			"Result": "(IR.Move32 [To32(ToByte(a))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "ZeroExtend8x64",
+			"SubName": "",
+			"Expression": "IR.ZeroExtend8x64 a",
+			"Filter": "IsResolvedConstant(a)",
+			"Result": "(IR.Move64 [To64(ToByte(a))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "Convert32ToR#",
+			"SubName": "",
+			"Expression": "IR.Convert32ToR# a",
+			"Filter": "IsResolvedConstant(a)",
+			"Result": "(IR.MoveR# [ToR#(ToSigned32(a))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "Convert64ToR#",
+			"SubName": "",
+			"Expression": "IR.Convert64ToR# a",
+			"Filter": "IsResolvedConstant(a)",
+			"Result": "(IR.MoveR# [ToR#(ToSigned64(a))])"
+		},
+
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "GetHigh64",
+			"SubName": "",
+			"Expression": "IR.GetHigh64 a",
+			"Filter": "IsResolvedConstant(a)",
+			"Result": "(IR.Move32 [GetHigh64(To64(a))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "GetLow64",
+			"SubName": "",
+			"Expression": "IR.GetLow64 a",
+			"Filter": "IsResolvedConstant(a)",
+			"Result": "(IR.Move32 [To32(a)])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "To64",
+			"SubName": "",
+			"Expression": "IR.To64 a b",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.Move64 [To64(To32(a),To32(b))])"
+		}
+	]
+}

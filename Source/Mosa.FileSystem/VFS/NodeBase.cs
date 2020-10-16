@@ -1,27 +1,20 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System.IO;
 
 namespace Mosa.FileSystem.VFS
 {
 	/// <summary>
-	/// Provides a default implementation for INodes. A filesystem implementation
+	/// Provides a default implementation for INodes. A file system implementation
 	/// may choose to derive from BasicNode to receive a default implementation of
 	/// the interface.
 	/// </summary>
 	public abstract class NodeBase : IVfsNode
 	{
-
-		#region Data members
+		#region Data Members
 
 		/// <summary>
-		/// Holds the filesystem of the node.
+		/// Holds the file system of the node.
 		/// </summary>
 		private IFileSystem fs;
 
@@ -30,9 +23,10 @@ namespace Mosa.FileSystem.VFS
 		/// </summary>
 		private VfsNodeType type;
 
-		#endregion // Data members
+		#endregion Data Members
 
 		#region Construction
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="NodeBase"/> class.
 		/// </summary>
@@ -44,9 +38,10 @@ namespace Mosa.FileSystem.VFS
 			this.type = type;
 		}
 
-		#endregion // Construction
+		#endregion Construction
 
 		#region IVfsNode members
+
 		/// <summary>
 		/// Gets the file system.
 		/// </summary>
@@ -60,17 +55,17 @@ namespace Mosa.FileSystem.VFS
 		public VfsNodeType NodeType { get { return type; } }
 
 		/// <summary>
-		/// Creates a new filesystem entry of the given name and type.
+		/// Creates a new file system entry of the given name and type.
 		/// </summary>
-		/// <param name="name">The name of the filesystem entry to create.</param>
-		/// <param name="type">The type of the filesystem entry. See remarks.</param>
+		/// <param name="name">The name of the file system entry to create.</param>
+		/// <param name="type">The type of the file system entry. See remarks.</param>
 		/// <param name="settings">Potential settings for the file systeme entry.</param>
 		/// <returns>
 		/// The created file system node for the requested object.
 		/// </returns>
-		/// <exception cref="System.NotSupportedException">The specified nodetype is not supported in the filesystem owning the node. See remarks about this.</exception>
+		/// <exception cref="System.NotSupportedException">The specified nodetype is not supported in the file system owning the node. See remarks about this.</exception>
 		/// <remarks>
-		/// In theory every filesystem should support any VfsNodeType. Standard objects, such as directories and files are obvious. For other objects however, the
+		/// In theory every file system should support any VfsNodeType. Standard objects, such as directories and files are obvious. For other objects however, the
 		/// file system is encouraged to store the passed settings in a specially marked file and treat these files as the appropriate node type. Instances of these
 		/// objects can be retrieved using VfsObjectFactory.Create(settings).
 		/// <para/>
@@ -96,7 +91,7 @@ namespace Mosa.FileSystem.VFS
 		/// <param name="access">The access.</param>
 		/// <param name="sharing">The sharing.</param>
 		/// <returns></returns>
-		public abstract object Open(System.IO.FileAccess access, System.IO.FileShare sharing);
+		public abstract object Open(FileAccess access, FileShare sharing);
 
 		/// <summary>
 		/// Deletes the specified child.
@@ -105,6 +100,6 @@ namespace Mosa.FileSystem.VFS
 		/// <param name="entry">The entry.</param>
 		public abstract void Delete(IVfsNode child, DirectoryEntry entry);
 
-		#endregion // IVfsNode members
+		#endregion IVfsNode members
 	}
 }

@@ -1,0 +1,65 @@
+
+.. toctree::
+   :hidden:
+   :caption: Introduction
+   :maxdepth: 1
+
+   introduction
+   faq
+
+.. toctree::
+   :hidden:
+   :caption: Getting Started
+   :maxdepth: 1
+
+   getting-started-windows
+   getting-started-linux
+   demos
+
+.. toctree::
+   :caption: Compiler
+   :hidden:
+   :maxdepth: 2
+
+   compiler-design
+   compiler-optimizations
+   compiler-transformations
+
+.. toctree::
+   :caption: Settings
+   :hidden:
+   :maxdepth: 1
+
+   settings-options
+   command-line-arguments
+
+.. toctree::
+   :caption: Tools
+   :hidden:
+   :maxdepth: 2
+
+   tools
+   tool-compiler
+   tool-launcher
+   tool-launcher-console
+   tool-explorer
+   tool-debugger
+   tool-boot-image
+
+.. toctree::
+   :caption: Advanced
+   :hidden:
+   :maxdepth: 1
+
+   unit-tests
+   usb-flash-drive-installation
+   baremetal
+
+.. toctree::
+   :caption: Contribute
+   :hidden:
+   :maxdepth: 1
+
+   get-involved
+   authors
+   license

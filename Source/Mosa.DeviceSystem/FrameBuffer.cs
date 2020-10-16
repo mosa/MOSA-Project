@@ -1,42 +1,37 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// 
+	/// Frame Buffer
 	/// </summary>
+	/// <seealso cref="Mosa.DeviceSystem.IFrameBuffer" />
 	public abstract class FrameBuffer : IFrameBuffer
 	{
 		/// <summary>
-		/// 
+		/// The width
 		/// </summary>
 		protected uint width;
+
 		/// <summary>
-		/// 
+		/// The height
 		/// </summary>
 		protected uint height;
 
 		/// <summary>
-		/// 
+		/// The memory
 		/// </summary>
-		protected IMemory memory;
+		protected ConstrainedPointer buffer;
 
 		/// <summary>
-		/// 
+		/// The offset
 		/// </summary>
 		protected uint offset;
 
 		/// <summary>
-		/// 
+		/// The depth
 		/// </summary>
-		protected uint bytesPerLine;
+		protected uint depth;
 
 		/// <summary>
 		/// Gets the width.
@@ -73,6 +68,15 @@ namespace Mosa.DeviceSystem
 		/// <param name="x">The x.</param>
 		/// <param name="y">The y.</param>
 		public abstract void SetPixel(uint color, uint x, uint y);
-	}
 
+		/// <summary>
+		/// Fills a rectangle with color.
+		/// </summary>
+		/// <param name="color">The color.</param>
+		/// <param name="x">X of the top left of the rectangle.</param>
+		/// <param name="y">Y of the top left of the rectangle.</param>
+		/// <param name="w">Width of the rectangle.</param>
+		/// <param name="h">Width of the rectangle.</param>
+		public abstract void FillRectangle(uint color, uint x, uint y, uint w, uint h);
+	}
 }

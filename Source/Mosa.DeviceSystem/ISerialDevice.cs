@@ -1,11 +1,4 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 namespace Mosa.DeviceSystem
 {
@@ -20,6 +13,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="c">The character.</param>
 		void Write(byte c);
+
 		/// <summary>
 		/// Reads the byte.
 		/// </summary>
