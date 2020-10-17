@@ -11,9 +11,8 @@ namespace Mosa.Compiler.Framework.Transform
 
 		public BaseInstruction Instruction { get; private set; }
 
-		public string Name { get; }
-
 		public bool Log { get; private set; } = false;
+		public string Name { get; }
 
 		#endregion Properties
 
@@ -214,14 +213,14 @@ namespace Mosa.Compiler.Framework.Transform
 			return operand.IsResolvedConstant && operand.IsInteger && operand.ConstantSigned64 >= 0;
 		}
 
-		protected static bool IsZero(Operand operand)
-		{
-			return operand.IsConstantZero;
-		}
-
 		protected static bool IsUnsignedIntegerPositive(Operand operand)
 		{
 			return operand.IsResolvedConstant && operand.IsInteger && operand.ConstantUnsigned64 >= 0;
+		}
+
+		protected static bool IsZero(Operand operand)
+		{
+			return operand.IsConstantZero;
 		}
 
 		#endregion Filter Methods
@@ -313,6 +312,11 @@ namespace Mosa.Compiler.Framework.Transform
 			return (uint)(a >> 32);
 		}
 
+		protected static ulong GetHighestBitSet(ulong value)
+		{
+			return (ulong)BitTwiddling.GetHighestBitSet(value);
+		}
+
 		protected static uint GetPowerOfTwo(ulong value)
 		{
 			return BitTwiddling.GetPowerOfTwo(value);
@@ -378,14 +382,14 @@ namespace Mosa.Compiler.Framework.Transform
 			return a * b;
 		}
 
-		protected static long MulSigned64(long a, long b)
-		{
-			return a * b;
-		}
-
 		protected static long MulSigned32(ulong a, ulong b)
 		{
 			return (long)a * (long)b;
+		}
+
+		protected static long MulSigned64(long a, long b)
+		{
+			return a * b;
 		}
 
 		protected static long MulSigned64(ulong a, ulong b)

@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 	/// </summary>
 	public sealed class Compare32x64RemUnsigned64Sign : BaseTransformation
 	{
-		public Compare32x64RemUnsigned64Sign() : base(IRInstruction.Compare32x64)
+		public Compare32x64RemUnsigned64Sign() : base(IRInstruction.Compare32x64, true)
 		{
 		}
 
@@ -61,7 +61,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 	/// </summary>
 	public sealed class Compare32x64RemUnsigned64Sign_v1 : BaseTransformation
 	{
-		public Compare32x64RemUnsigned64Sign_v1() : base(IRInstruction.Compare32x64)
+		public Compare32x64RemUnsigned64Sign_v1() : base(IRInstruction.Compare32x64, true)
 		{
 		}
 

@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 	/// </summary>
 	public sealed class Compare64x32Add32UnsignedRange : BaseTransformation
 	{
-		public Compare64x32Add32UnsignedRange() : base(IRInstruction.Compare64x32)
+		public Compare64x32Add32UnsignedRange() : base(IRInstruction.Compare64x32, true)
 		{
 		}
 
@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 	/// </summary>
 	public sealed class Compare64x32Add32UnsignedRange_v1 : BaseTransformation
 	{
-		public Compare64x32Add32UnsignedRange_v1() : base(IRInstruction.Compare64x32)
+		public Compare64x32Add32UnsignedRange_v1() : base(IRInstruction.Compare64x32, true)
 		{
 		}
 
