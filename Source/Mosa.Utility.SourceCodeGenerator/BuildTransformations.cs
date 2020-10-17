@@ -352,11 +352,11 @@ namespace Mosa.Utility.SourceCodeGenerator
 					var instruction = node.InstructionName.Replace("IR.", "IRInstruction."); ;
 					var result = node == transform.ResultInstructionTree ? "result" : $"v{nodeNbrToVirtualRegisterNbr[node.NodeNbr]}";
 
-					Lines.AppendLine($"\t\t\tcontext.{operation}Instruction({instruction}, {result}, {condition}{operands});");
+					Lines.AppendLine($"\t\t\tcontext.{operation}Instruction({instruction}, {condition}{result}, {operands});");
 				}
 				else
 				{
-					Lines.AppendLine($"\t\t\tcontext.{operation}Instruction(GetMove(result), result, {condition}{operands});");
+					Lines.AppendLine($"\t\t\tcontext.{operation}Instruction(GetMove(result), {condition}result, {operands});");
 				}
 
 				firstInstruction = false;

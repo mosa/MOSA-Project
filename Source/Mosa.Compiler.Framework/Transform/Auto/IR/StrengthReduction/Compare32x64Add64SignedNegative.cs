@@ -59,22 +59,22 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{
-			if (context.ConditionCode != ConditionCode.LessOrEqual)
+			if (context.ConditionCode != ConditionCode.GreaterOrEqual)
 				return false;
 
-			if (!context.Operand1.IsVirtualRegister)
+			if (!context.Operand2.IsVirtualRegister)
 				return false;
 
-			if (context.Operand1.Definitions.Count != 1)
+			if (context.Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
+			if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add64)
 				return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2))
+			if (!AreSame(context.Operand1, context.Operand2.Definitions[0].Operand1))
 				return false;
 
-			if (!IsSignedIntegerPositive(context.Operand1.Definitions[0].Operand1))
+			if (!IsSignedIntegerPositive(context.Operand2.Definitions[0].Operand2))
 				return false;
 
 			return true;
@@ -113,10 +113,10 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
 				return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand2))
+			if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2))
 				return false;
 
-			if (!IsSignedIntegerPositive(context.Operand1.Definitions[0].Operand2))
+			if (!IsSignedIntegerPositive(context.Operand1.Definitions[0].Operand1))
 				return false;
 
 			return true;
@@ -143,22 +143,22 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{
-			if (context.ConditionCode != ConditionCode.LessOrEqual)
+			if (context.ConditionCode != ConditionCode.GreaterOrEqual)
 				return false;
 
-			if (!context.Operand1.IsVirtualRegister)
+			if (!context.Operand2.IsVirtualRegister)
 				return false;
 
-			if (context.Operand1.Definitions.Count != 1)
+			if (context.Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
+			if (context.Operand2.Definitions[0].Instruction != IRInstruction.Add64)
 				return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2))
+			if (!AreSame(context.Operand1, context.Operand2.Definitions[0].Operand2))
 				return false;
 
-			if (!IsSignedIntegerPositive(context.Operand1.Definitions[0].Operand1))
+			if (!IsSignedIntegerPositive(context.Operand2.Definitions[0].Operand1))
 				return false;
 
 			return true;

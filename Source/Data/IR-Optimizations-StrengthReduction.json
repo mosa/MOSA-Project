@@ -393,6 +393,48 @@
 			"Filter": "IsUnsignedIntegerPositive(C)",
 			"Result": "(IR.Move## 0)",
 			"Reassociate": "Yes"
+		},
+
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare32x##Add##",
+			"SubName": "UnsignedRange",
+			"Expression": "(IR.Compare32x## {==} (IR.DivUnsigned## a X) Y) ",
+			"Filter": "IsResolvedConstant(Y) & IsResolvedConstant(X) && !IsZero(X)",
+			"Result": "(IR.Compare32x## {< u} (IR.Sub## a [MulUnsigned##(To##(X),To##(Y))]) X)",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare64x##Add##",
+			"SubName": "UnsignedRange",
+			"Expression": "(IR.Compare64x## {==} (IR.DivUnsigned## a X) Y) ",
+			"Filter": "IsResolvedConstant(Y) & IsResolvedConstant(X) && !IsZero(X)",
+			"Result": "(IR.Compare64x## {< u} (IR.Sub## a [MulUnsigned##(To##(X),To##(Y))]) X)",
+			"Reassociate": "Yes"
+		},
+
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare32x##Add##",
+			"SubName": "SignedRange",
+			"Expression": "(IR.Compare32x## {==} (IR.DivSigned## a X) Y) ",
+			"Filter": "IsResolvedConstant(Y) & IsResolvedConstant(X) && !IsZero(X)",
+			"Result": "(IR.Compare32x## {< u} (IR.Sub## a [MulSigned##(To##(X),To##(Y))]) X)",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare64x##Add##",
+			"SubName": "SignedRange",
+			"Expression": "(IR.Compare64x## {==} (IR.DivSigned## a X) Y) ",
+			"Filter": "IsResolvedConstant(Y) & IsResolvedConstant(X) && !IsZero(X)",
+			"Result": "(IR.Compare64x## {< u} (IR.Sub## a [MulSigned##(To##(X),To##(Y))]) X)",
+			"Reassociate": "Yes"
 		}
 	]
 }

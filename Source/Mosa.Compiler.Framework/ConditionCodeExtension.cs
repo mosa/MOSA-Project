@@ -76,8 +76,6 @@ namespace Mosa.Compiler.Framework
 		{
 			switch (conditionCode)
 			{
-				case ConditionCode.Equal: return ConditionCode.Equal;
-				case ConditionCode.NotEqual: return ConditionCode.NotEqual;
 				case ConditionCode.GreaterOrEqual: return ConditionCode.LessOrEqual;
 				case ConditionCode.Greater: return ConditionCode.LessOrEqual;
 				case ConditionCode.LessOrEqual: return ConditionCode.GreaterOrEqual;
@@ -86,19 +84,7 @@ namespace Mosa.Compiler.Framework
 				case ConditionCode.UnsignedGreater: return ConditionCode.UnsignedLess;
 				case ConditionCode.UnsignedLessOrEqual: return ConditionCode.UnsignedGreaterOrEqual;
 				case ConditionCode.UnsignedLess: return ConditionCode.UnsignedGreater;
-				case ConditionCode.Signed: return ConditionCode.Signed;
-				case ConditionCode.NotSigned: return ConditionCode.NotSigned;
-				case ConditionCode.Carry: return ConditionCode.Carry;
-				case ConditionCode.NoCarry: return ConditionCode.NoCarry;
-				case ConditionCode.Overflow: return ConditionCode.Overflow;
-				case ConditionCode.NoOverflow: return ConditionCode.NoOverflow;
-				case ConditionCode.Positive: return ConditionCode.Positive;
-				case ConditionCode.Negative: return ConditionCode.Negative;
-				case ConditionCode.Always: return ConditionCode.Always;
-				case ConditionCode.Never: return ConditionCode.Never;
-				case ConditionCode.Parity: return ConditionCode.Parity;
-				case ConditionCode.NoParity: return ConditionCode.NoParity;
-				default: throw new NotSupportedException();
+				default: return conditionCode;
 			}
 		}
 

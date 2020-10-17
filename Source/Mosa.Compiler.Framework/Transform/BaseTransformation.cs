@@ -383,6 +383,16 @@ namespace Mosa.Compiler.Framework.Transform
 			return a * b;
 		}
 
+		protected static long MulSigned32(ulong a, ulong b)
+		{
+			return (long)a * (long)b;
+		}
+
+		protected static long MulSigned64(ulong a, ulong b)
+		{
+			return (long)a * (long)b;
+		}
+
 		protected static uint MulUnsigned32(uint a, uint b)
 		{
 			return a * b;

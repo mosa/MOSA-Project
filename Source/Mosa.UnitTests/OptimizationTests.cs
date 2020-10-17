@@ -284,40 +284,52 @@ namespace Mosa.UnitTests
 			return b != 0;
 		}
 
-		[MosaUnitTest(Series = "I4")]
+		[MosaUnitTest(Series = "U4")]
 		public static bool OptimizationTest22(uint a)
 		{
 			return a % 2 == 0;
 		}
 
-		[MosaUnitTest(Series = "I4")]
+		[MosaUnitTest(Series = "U4")]
 		public static bool OptimizationTest23(uint a)
 		{
 			return a + 10 > a;
 		}
 
-		[MosaUnitTest(Series = "I4")]
+		[MosaUnitTest(Series = "U4")]
 		public static bool OptimizationTest24(uint a)
 		{
 			return a + 10 <= a;
 		}
 
-		//[MosaUnitTest(0)]
-		//[MosaUnitTest(1)]
-		//[MosaUnitTest(2)]
-		//[MosaUnitTest(3)]
-		//public static int OptimizationTest22(int a)
-		//{
-		//	return a % 2 != 0 ? 4 : 2;
-		//}
+		[MosaUnitTest(Series = "I4")]
+		public static int OptimizationTest25(int a)
+		{
+			return a % 2 != 0 ? 4 : 2;
+		}
 
-		//[MosaUnitTest((uint)0)]
-		//[MosaUnitTest((uint)1)]
-		//[MosaUnitTest((uint)2)]
-		//[MosaUnitTest((uint)3)]
-		//public static uint OptimizationTest23(uint a)
-		//{
-		//	return a % 2 != 0 ? 4u : 2u;
-		//}
+		[MosaUnitTest(Series = "U4")]
+		public static uint OptimizationTest26(uint a)
+		{
+			return a % 2 != 0 ? 4u : 2u;
+		}
+
+		[MosaUnitTest(Series = "U4")]
+		public static bool OptimizationTest27(uint a)
+		{
+			return a / 12 == 15;
+		}
+
+		[MosaUnitTest(Series = "I4")]
+		public static bool OptimizationTest28(int a)
+		{
+			return a / 12 == 15;
+		}
+
+		[MosaUnitTest(Series = "I4")]
+		public static bool OptimizationTest29(int a)
+		{
+			return a / -12 == -15;
+		}
 	}
 }
