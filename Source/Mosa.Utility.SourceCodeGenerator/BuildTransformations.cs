@@ -343,16 +343,20 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 				var operation = firstInstruction ? "Set" : "Append";
 
+				var condition = GetConditionText(node);
+
+				condition = condition != null ? $"ConditionCode.{condition}, " : string.Empty;
+
 				if (!string.IsNullOrWhiteSpace(node.InstructionName))
 				{
 					var instruction = node.InstructionName.Replace("IR.", "IRInstruction."); ;
 					var result = node == transform.ResultInstructionTree ? "result" : $"v{nodeNbrToVirtualRegisterNbr[node.NodeNbr]}";
 
-					Lines.AppendLine($"\t\t\tcontext.{operation}Instruction({instruction}, {result}, {operands});");
+					Lines.AppendLine($"\t\t\tcontext.{operation}Instruction({instruction}, {result}, {condition}{operands});");
 				}
 				else
 				{
-					Lines.AppendLine($"\t\t\tcontext.{operation}Instruction(GetMove(result), result, {operands});");
+					Lines.AppendLine($"\t\t\tcontext.{operation}Instruction(GetMove(result), result, {condition}{operands});");
 				}
 
 				firstInstruction = false;
@@ -551,6 +555,11 @@ namespace Mosa.Utility.SourceCodeGenerator
 				NodeNbrToNode.Add(instructionNode.NodeNbr, string.Empty);
 			}
 
+			var condition = GetConditionText(instructionNode);
+
+			if (condition != null)
+				EmitCondition($"context.ConditionCode != ConditionCode.{condition}");
+
 			foreach (var operand in instructionNode.Operands)
 			{
 				ProcessConditions(operand, instructionNode);
@@ -559,6 +568,20 @@ namespace Mosa.Utility.SourceCodeGenerator
 			foreach (var operand in instructionNode.Operands)
 			{
 				ProcessNestedConditions(operand, instructionNode);
+			}
+		}
+
+		private static string GetConditionText(InstructionNode instructionNode)
+		{
+			switch (instructionNode.Condition)
+			{
+				case TokenType.Equal: return "Equal";
+				case TokenType.NotEqual: return "NotEqual";
+				case TokenType.Less: return "LessThan";
+				case TokenType.LessEqual: return "LessOrEqual";
+				case TokenType.Greater: return "GreaterThan";
+				case TokenType.GreaterEqual: return "GreaterOrEqual";
+				default: return null;
 			}
 		}
 

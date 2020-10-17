@@ -284,6 +284,12 @@ namespace Mosa.UnitTests
 			return b != 0;
 		}
 
+		[MosaUnitTest((byte)255)]
+		public static bool OptimizationTest22(uint a)
+		{
+			return a % 2 == 0;
+		}
+
 		//[MosaUnitTest(0)]
 		//[MosaUnitTest(1)]
 		//[MosaUnitTest(2)]

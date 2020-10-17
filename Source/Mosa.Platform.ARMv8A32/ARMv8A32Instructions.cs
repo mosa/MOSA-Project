@@ -121,6 +121,7 @@ namespace Mosa.Platform.ARMv8A32
 			ARMv8A32.Cnfe,
 			ARMv8A32.Ldf,
 			ARMv8A32.Stf,
+			ARMv8A32.Fmov,
 		};
 	}
 }

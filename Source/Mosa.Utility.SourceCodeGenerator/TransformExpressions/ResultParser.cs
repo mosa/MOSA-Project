@@ -74,7 +74,28 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				{
 					index++; // skip to next token, which should be label
 					node.ResultType = tokens[index].Value;
-					index++; // skip to next token, which should be less
+					index++; // skip to next token, which should be less than
+				}
+				else if (token.TokenType == TokenType.OpenCurly)
+				{
+					index++; // skip to next token, which should be label
+
+					for (var t = tokens[index].TokenType; t != TokenType.CloseCurly; index++)
+					{
+						if (node.Condition == TokenType.Always)
+						{
+							node.Condition = t;
+						}
+						else if (t == TokenType.Equal)
+						{
+							if (node.Condition == TokenType.Greater)
+								node.Condition = TokenType.GreaterEqual;
+							else if (node.Condition == TokenType.Less)
+								node.Condition = TokenType.LessEqual;
+							else if (node.Condition == TokenType.Not)
+								node.Condition = TokenType.NotEqual;
+						}
+					}
 				}
 				else
 				{

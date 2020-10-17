@@ -19,7 +19,11 @@
 		"IR.AddCarryOut64",
 		"IR.AddCarryOut32",
 		"IR.AddCarryIn32",
-		"IR.AddCarryIn64"
+		"IR.AddCarryIn64",
+		"IR.Compare32x32",
+		"IR.Compare32x64",
+		"IR.Compare64x32",
+		"IR.Compare64x64"
 	],
 	"Optimizations": [
 		{
@@ -289,6 +293,26 @@
 			"Expression": "IR.RemUnsigned## x c",
 			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo##(c) & !IsZero(c)",
 			"Result": "(IR.And## x [Sub##(ShiftLeft##(1,And##(GetPowerOfTwo(To32(c)),Sub##(##,1))),1)])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare32x##RemUnsigned##",
+			"SubName": "Sign",
+			"Expression": "(IR.Compare32x## {==} (IR.RemUnsigned## a 2) 0)",
+			"Filter": "",
+			"Result": "(IR.And## a 1)",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare64x##RemUnsigned##",
+			"SubName": "Sign",
+			"Expression": "(IR.Compare64x## {==} (IR.RemUnsigned## a 2) 0)",
+			"Filter": "",
+			"Result": "(IR.And## a 1)",
+			"Reassociate": "Yes"
 		}
 	]
 }
