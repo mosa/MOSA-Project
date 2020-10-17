@@ -21,12 +21,12 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.ConstantFolding
 				case ConditionCode.Equal: return true;
 				case ConditionCode.NotEqual: return true;
 				case ConditionCode.GreaterOrEqual: return true;
-				case ConditionCode.GreaterThan: return true;
+				case ConditionCode.Greater: return true;
 				case ConditionCode.LessOrEqual: return true;
-				case ConditionCode.LessThan: return true;
-				case ConditionCode.UnsignedGreaterThan: return true;
+				case ConditionCode.Less: return true;
+				case ConditionCode.UnsignedGreater: return true;
 				case ConditionCode.UnsignedGreaterOrEqual: return true;
-				case ConditionCode.UnsignedLessThan: return true;
+				case ConditionCode.UnsignedLess: return true;
 				case ConditionCode.UnsignedLessOrEqual: return true;
 				default: return false;
 			}
@@ -41,13 +41,13 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.ConstantFolding
 				case ConditionCode.Equal: compare = context.Operand1.ConstantUnsigned64 == context.Operand2.ConstantUnsigned64; break;
 				case ConditionCode.NotEqual: compare = context.Operand1.ConstantUnsigned64 != context.Operand2.ConstantUnsigned64; break;
 				case ConditionCode.GreaterOrEqual: compare = context.Operand1.ConstantUnsigned64 >= context.Operand2.ConstantUnsigned64; break;
-				case ConditionCode.GreaterThan: compare = context.Operand1.ConstantUnsigned64 > context.Operand2.ConstantUnsigned64; break;
+				case ConditionCode.Greater: compare = context.Operand1.ConstantUnsigned64 > context.Operand2.ConstantUnsigned64; break;
 				case ConditionCode.LessOrEqual: compare = context.Operand1.ConstantUnsigned64 <= context.Operand2.ConstantUnsigned64; break;
-				case ConditionCode.LessThan: compare = context.Operand1.ConstantUnsigned64 < context.Operand2.ConstantUnsigned64; break;
+				case ConditionCode.Less: compare = context.Operand1.ConstantUnsigned64 < context.Operand2.ConstantUnsigned64; break;
 
-				case ConditionCode.UnsignedGreaterThan: compare = context.Operand1.ConstantUnsigned64 > context.Operand2.ConstantUnsigned64; break;
+				case ConditionCode.UnsignedGreater: compare = context.Operand1.ConstantUnsigned64 > context.Operand2.ConstantUnsigned64; break;
 				case ConditionCode.UnsignedGreaterOrEqual: compare = context.Operand1.ConstantUnsigned64 >= context.Operand2.ConstantUnsigned64; break;
-				case ConditionCode.UnsignedLessThan: compare = context.Operand1.ConstantUnsigned64 < context.Operand2.ConstantUnsigned64; break;
+				case ConditionCode.UnsignedLess: compare = context.Operand1.ConstantUnsigned64 < context.Operand2.ConstantUnsigned64; break;
 				case ConditionCode.UnsignedLessOrEqual: compare = context.Operand1.ConstantUnsigned64 <= context.Operand2.ConstantUnsigned64; break;
 			}
 

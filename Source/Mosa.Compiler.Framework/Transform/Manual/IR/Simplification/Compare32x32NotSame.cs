@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.Simplification
 
 			var condition = context.ConditionCode;
 
-			return (condition == ConditionCode.NotEqual || condition == ConditionCode.GreaterThan || condition == ConditionCode.LessThan || condition == ConditionCode.UnsignedGreaterThan || condition == ConditionCode.UnsignedLessThan);
+			return (condition == ConditionCode.NotEqual || condition == ConditionCode.Greater || condition == ConditionCode.Less || condition == ConditionCode.UnsignedGreater || condition == ConditionCode.UnsignedLess);
 		}
 
 		public override void Transform(Context context, TransformContext transformContext)

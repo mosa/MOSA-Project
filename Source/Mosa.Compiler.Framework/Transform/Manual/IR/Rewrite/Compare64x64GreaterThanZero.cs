@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.Rewrite
 			if (context.Operand2.ConstantUnsigned64 != 0)
 				return false;
 
-			if (context.ConditionCode != ConditionCode.UnsignedGreaterThan)
+			if (context.ConditionCode != ConditionCode.UnsignedGreater)
 				return false;
 
 			return true;

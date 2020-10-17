@@ -211,12 +211,17 @@ namespace Mosa.Compiler.Framework.Transform
 
 		protected static bool IsSignedIntegerPositive(Operand operand)
 		{
-			return operand.IsInteger && operand.ConstantSigned64 >= 0;
+			return operand.IsResolvedConstant && operand.IsInteger && operand.ConstantSigned64 >= 0;
 		}
 
 		protected static bool IsZero(Operand operand)
 		{
 			return operand.IsConstantZero;
+		}
+
+		protected static bool IsUnsignedIntegerPositive(Operand operand)
+		{
+			return operand.IsResolvedConstant && operand.IsInteger && operand.ConstantUnsigned64 >= 0;
 		}
 
 		#endregion Filter Methods

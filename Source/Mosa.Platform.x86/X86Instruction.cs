@@ -46,13 +46,13 @@ namespace Mosa.Platform.x86
 				case ConditionCode.Zero: return 0x4;           // Zero (ZF = 1)
 				case ConditionCode.NotZero: return 0x5;        // NotEqual (ZF = 0)
 				case ConditionCode.GreaterOrEqual: return 0xD; // GreaterOrEqual (SF = OF)
-				case ConditionCode.GreaterThan: return 0xF;    // GreaterThan (ZF = 0 and SF = OF)
+				case ConditionCode.Greater: return 0xF;    // GreaterThan (ZF = 0 and SF = OF)
 				case ConditionCode.LessOrEqual: return 0xE;    // LessOrEqual (ZF = 1 or SF <> OF)
-				case ConditionCode.LessThan: return 0xC;       // LessThan (SF <> OF)
+				case ConditionCode.Less: return 0xC;       // LessThan (SF <> OF)
 				case ConditionCode.UnsignedGreaterOrEqual: return 0x3; // UnsignedGreaterOrEqual (CF = 0)
-				case ConditionCode.UnsignedGreaterThan: return 0x7;    // UnsignedGreaterThan (CF = 0 & ZF = 0)
+				case ConditionCode.UnsignedGreater: return 0x7;    // UnsignedGreaterThan (CF = 0 & ZF = 0)
 				case ConditionCode.UnsignedLessOrEqual: return 0x6;    // UnsignedLessOrEqual (CF = 1 or ZF = 1)
-				case ConditionCode.UnsignedLessThan: return 0x2;       // UnsignedLessThan (CF = 1)
+				case ConditionCode.UnsignedLess: return 0x2;       // UnsignedLessThan (CF = 1)
 				case ConditionCode.Signed: return 0x8;         // Signed (SF = 1)
 				case ConditionCode.NotSigned: return 0x9;      // NotSigned (SF = 0)
 				case ConditionCode.Carry: return 0x2;          // Carry (CF = 1)
@@ -71,16 +71,16 @@ namespace Mosa.Platform.x86
 				|| condition == ConditionCode.NotEqual
 				|| condition == ConditionCode.Zero
 				|| condition == ConditionCode.NotZero
-				|| condition == ConditionCode.UnsignedGreaterThan
+				|| condition == ConditionCode.UnsignedGreater
 				|| condition == ConditionCode.UnsignedLessOrEqual;
 		}
 
 		public static bool IsCarryFlagUsedWithCondition(ConditionCode condition)
 		{
 			return condition == ConditionCode.UnsignedGreaterOrEqual
-				|| condition == ConditionCode.UnsignedGreaterThan
+				|| condition == ConditionCode.UnsignedGreater
 				|| condition == ConditionCode.UnsignedLessOrEqual
-				|| condition == ConditionCode.UnsignedLessThan
+				|| condition == ConditionCode.UnsignedLess
 				|| condition == ConditionCode.Carry
 				|| condition == ConditionCode.NoCarry;
 		}
@@ -90,17 +90,17 @@ namespace Mosa.Platform.x86
 			return condition == ConditionCode.Overflow
 				|| condition == ConditionCode.NoOverflow
 				|| condition == ConditionCode.GreaterOrEqual
-				|| condition == ConditionCode.GreaterThan
+				|| condition == ConditionCode.Greater
 				|| condition == ConditionCode.LessOrEqual
-				|| condition == ConditionCode.LessThan;
+				|| condition == ConditionCode.Less;
 		}
 
 		public static bool IsSignFlagUsedWithCondition(ConditionCode condition)
 		{
 			return condition == ConditionCode.GreaterOrEqual
-				|| condition == ConditionCode.GreaterThan
+				|| condition == ConditionCode.Greater
 				|| condition == ConditionCode.LessOrEqual
-				|| condition == ConditionCode.LessThan
+				|| condition == ConditionCode.Less
 				|| condition == ConditionCode.Signed
 				|| condition == ConditionCode.NotSigned;
 		}

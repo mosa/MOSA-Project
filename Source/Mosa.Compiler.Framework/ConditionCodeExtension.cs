@@ -23,13 +23,13 @@ namespace Mosa.Compiler.Framework
 				case ConditionCode.Equal: break;
 				case ConditionCode.NotEqual: break;
 				case ConditionCode.GreaterOrEqual: return ConditionCode.UnsignedGreaterOrEqual;
-				case ConditionCode.GreaterThan: return ConditionCode.UnsignedGreaterThan;
+				case ConditionCode.Greater: return ConditionCode.UnsignedGreater;
 				case ConditionCode.LessOrEqual: return ConditionCode.UnsignedLessOrEqual;
-				case ConditionCode.LessThan: return ConditionCode.UnsignedLessThan;
+				case ConditionCode.Less: return ConditionCode.UnsignedLess;
 				case ConditionCode.UnsignedGreaterOrEqual: break;
-				case ConditionCode.UnsignedGreaterThan: break;
+				case ConditionCode.UnsignedGreater: break;
 				case ConditionCode.UnsignedLessOrEqual: break;
-				case ConditionCode.UnsignedLessThan: break;
+				case ConditionCode.UnsignedLess: break;
 				default: throw new NotSupportedException();
 			}
 
@@ -48,14 +48,14 @@ namespace Mosa.Compiler.Framework
 			{
 				case ConditionCode.Equal: return ConditionCode.NotEqual;
 				case ConditionCode.NotEqual: return ConditionCode.Equal;
-				case ConditionCode.GreaterOrEqual: return ConditionCode.LessThan;
-				case ConditionCode.GreaterThan: return ConditionCode.LessOrEqual;
-				case ConditionCode.LessOrEqual: return ConditionCode.GreaterThan;
-				case ConditionCode.LessThan: return ConditionCode.GreaterOrEqual;
-				case ConditionCode.UnsignedGreaterOrEqual: return ConditionCode.UnsignedLessThan;
-				case ConditionCode.UnsignedGreaterThan: return ConditionCode.UnsignedLessOrEqual;
-				case ConditionCode.UnsignedLessOrEqual: return ConditionCode.UnsignedGreaterThan;
-				case ConditionCode.UnsignedLessThan: return ConditionCode.UnsignedGreaterOrEqual;
+				case ConditionCode.GreaterOrEqual: return ConditionCode.Less;
+				case ConditionCode.Greater: return ConditionCode.LessOrEqual;
+				case ConditionCode.LessOrEqual: return ConditionCode.Greater;
+				case ConditionCode.Less: return ConditionCode.GreaterOrEqual;
+				case ConditionCode.UnsignedGreaterOrEqual: return ConditionCode.UnsignedLess;
+				case ConditionCode.UnsignedGreater: return ConditionCode.UnsignedLessOrEqual;
+				case ConditionCode.UnsignedLessOrEqual: return ConditionCode.UnsignedGreater;
+				case ConditionCode.UnsignedLess: return ConditionCode.UnsignedGreaterOrEqual;
 				case ConditionCode.Signed: return ConditionCode.NotSigned;
 				case ConditionCode.NotSigned: return ConditionCode.Signed;
 				case ConditionCode.Carry: return ConditionCode.NoCarry;
@@ -79,13 +79,13 @@ namespace Mosa.Compiler.Framework
 				case ConditionCode.Equal: return ConditionCode.Equal;
 				case ConditionCode.NotEqual: return ConditionCode.NotEqual;
 				case ConditionCode.GreaterOrEqual: return ConditionCode.LessOrEqual;
-				case ConditionCode.GreaterThan: return ConditionCode.LessOrEqual;
+				case ConditionCode.Greater: return ConditionCode.LessOrEqual;
 				case ConditionCode.LessOrEqual: return ConditionCode.GreaterOrEqual;
-				case ConditionCode.LessThan: return ConditionCode.GreaterThan;
+				case ConditionCode.Less: return ConditionCode.Greater;
 				case ConditionCode.UnsignedGreaterOrEqual: return ConditionCode.UnsignedLessOrEqual;
-				case ConditionCode.UnsignedGreaterThan: return ConditionCode.UnsignedLessThan;
+				case ConditionCode.UnsignedGreater: return ConditionCode.UnsignedLess;
 				case ConditionCode.UnsignedLessOrEqual: return ConditionCode.UnsignedGreaterOrEqual;
-				case ConditionCode.UnsignedLessThan: return ConditionCode.UnsignedGreaterThan;
+				case ConditionCode.UnsignedLess: return ConditionCode.UnsignedGreater;
 				case ConditionCode.Signed: return ConditionCode.Signed;
 				case ConditionCode.NotSigned: return ConditionCode.NotSigned;
 				case ConditionCode.Carry: return ConditionCode.Carry;
@@ -108,14 +108,14 @@ namespace Mosa.Compiler.Framework
 			{
 				case ConditionCode.Equal: return "==";
 				case ConditionCode.GreaterOrEqual: return ">=";
-				case ConditionCode.GreaterThan: return ">";
+				case ConditionCode.Greater: return ">";
 				case ConditionCode.LessOrEqual: return "<=";
-				case ConditionCode.LessThan: return "<";
+				case ConditionCode.Less: return "<";
 				case ConditionCode.NotEqual: return "!=";
 				case ConditionCode.UnsignedGreaterOrEqual: return ">= (U)";
-				case ConditionCode.UnsignedGreaterThan: return "> (U)";
+				case ConditionCode.UnsignedGreater: return "> (U)";
 				case ConditionCode.UnsignedLessOrEqual: return "<= (U)";
-				case ConditionCode.UnsignedLessThan: return "< (U)";
+				case ConditionCode.UnsignedLess: return "< (U)";
 				case ConditionCode.NotSigned: return "not signed";
 				case ConditionCode.Signed: return "signed";
 				case ConditionCode.Zero: return "zero";
@@ -126,7 +126,7 @@ namespace Mosa.Compiler.Framework
 				case ConditionCode.Parity: return "parity";
 				case ConditionCode.NoParity: return "no parity";
 				case ConditionCode.Positive: return "positive";
-				case ConditionCode.Negative: return "negative";					
+				case ConditionCode.Negative: return "negative";
 				default: throw new NotSupportedException();
 			}
 		}

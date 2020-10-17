@@ -10,7 +10,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 
 		public string ResultType { get; set; }
 
-		public TokenType Condition { get; set; } = TokenType.Always;
+		public ConditionCode Condition { get; set; } = ConditionCode.Always;
 
 		public List<Operand> Operands { get; } = new List<Operand>();
 

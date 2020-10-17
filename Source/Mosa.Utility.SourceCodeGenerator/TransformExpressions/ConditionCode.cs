@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 {
 	/// <summary>
 	/// Specifies condition codes for <see cref="ConditionCode" />.

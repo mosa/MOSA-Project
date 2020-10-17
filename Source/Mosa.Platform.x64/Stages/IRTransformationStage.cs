@@ -703,17 +703,17 @@ namespace Mosa.Platform.x64.Stages
 				context.AppendInstruction(X64.Movzx8To32, result, result);
 				return;
 			}
-			else if (condition == ConditionCode.GreaterThan || condition == ConditionCode.UnsignedGreaterThan)
+			else if (condition == ConditionCode.Greater || condition == ConditionCode.UnsignedGreater)
 			{
 				context.SetInstruction(instruction, null, operand1, operand2);
-				context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreaterThan, v1);
+				context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreater, v1);
 				context.AppendInstruction(X64.Movzx8To32, result, v1);
 				return;
 			}
-			else if (condition == ConditionCode.LessThan || condition == ConditionCode.UnsignedLessThan)
+			else if (condition == ConditionCode.Less || condition == ConditionCode.UnsignedLess)
 			{
 				context.SetInstruction(instruction, null, operand2, operand1);
-				context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreaterThan, v1);
+				context.AppendInstruction(X64.Setcc, ConditionCode.UnsignedGreater, v1);
 				context.AppendInstruction(X64.Movzx8To32, result, v1);
 				return;
 			}

@@ -313,6 +313,86 @@
 			"Filter": "",
 			"Result": "(IR.And## a 1)",
 			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare32x##Add##",
+			"SubName": "SignedPositive",
+			"Expression": "(IR.Compare32x## {>} (IR.Add## a C) a)",
+			"Filter": "IsSignedIntegerPositive(C)",
+			"Result": "(IR.Move## 1)",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare64x##Add##",
+			"SubName": "SignedPositive",
+			"Expression": "(IR.Compare64x## {>} (IR.Add## a C) a)",
+			"Filter": "IsSignedIntegerPositive(C)",
+			"Result": "(IR.Move## 1)",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare32x##Add##",
+			"SubName": "SignedNegative",
+			"Expression": "(IR.Compare32x## {<=} (IR.Add## a C) a)",
+			"Filter": "IsSignedIntegerPositive(C)",
+			"Result": "(IR.Move## 0)",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare64x##Add##",
+			"SubName": "SignedNegative",
+			"Expression": "(IR.Compare64x## {<=} (IR.Add## a C) a)",
+			"Filter": "IsSignedIntegerPositive(C)",
+			"Result": "(IR.Move## 0)",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare32x##Add##",
+			"SubName": "UnsignedPositive",
+			"Expression": "(IR.Compare32x## {> u} (IR.Add## a C) a)",
+			"Filter": "IsUnsignedIntegerPositive(C)",
+			"Result": "(IR.Move32 1)",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare64x##Add##",
+			"SubName": "UnsignedPositive",
+			"Expression": "(IR.Compare64x## {> u} (IR.Add## a C) a)",
+			"Filter": "IsUnsignedIntegerPositive(C)",
+			"Result": "(IR.Move## 1)",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare32x##Add##",
+			"SubName": "UnsignedNegative",
+			"Expression": "(IR.Compare32x## {<= u} (IR.Add## a C) a)",
+			"Filter": "IsUnsignedIntegerPositive(C)",
+			"Result": "(IR.Move## 0)",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare64x##Add##",
+			"SubName": "UnsignedNegative",
+			"Expression": "(IR.Compare64x## {<= u} (IR.Add## a C) a)",
+			"Filter": "IsUnsignedIntegerPositive(C)",
+			"Result": "(IR.Move## 0)",
+			"Reassociate": "Yes"
 		}
 	]
 }

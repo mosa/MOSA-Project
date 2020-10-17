@@ -284,10 +284,22 @@ namespace Mosa.UnitTests
 			return b != 0;
 		}
 
-		[MosaUnitTest((byte)255)]
+		[MosaUnitTest(Series = "I4")]
 		public static bool OptimizationTest22(uint a)
 		{
 			return a % 2 == 0;
+		}
+
+		[MosaUnitTest(Series = "I4")]
+		public static bool OptimizationTest23(uint a)
+		{
+			return a + 10 > a;
+		}
+
+		[MosaUnitTest(Series = "I4")]
+		public static bool OptimizationTest24(uint a)
+		{
+			return a + 10 <= a;
 		}
 
 		//[MosaUnitTest(0)]

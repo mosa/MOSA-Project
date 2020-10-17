@@ -575,12 +575,17 @@ namespace Mosa.Utility.SourceCodeGenerator
 		{
 			switch (instructionNode.Condition)
 			{
-				case TokenType.Equal: return "Equal";
-				case TokenType.NotEqual: return "NotEqual";
-				case TokenType.Less: return "LessThan";
-				case TokenType.LessEqual: return "LessOrEqual";
-				case TokenType.Greater: return "GreaterThan";
-				case TokenType.GreaterEqual: return "GreaterOrEqual";
+				case ConditionCode.Equal: return "Equal";
+				case ConditionCode.NotEqual: return "NotEqual";
+				case ConditionCode.Less: return "Less";
+				case ConditionCode.LessOrEqual: return "LessOrEqual";
+				case ConditionCode.Greater: return "Greater";
+				case ConditionCode.GreaterOrEqual: return "GreaterOrEqual";
+
+				case ConditionCode.UnsignedLess: return "UnsignedLess";
+				case ConditionCode.UnsignedLessOrEqual: return "UnsignedLessOrEqual";
+				case ConditionCode.UnsignedGreater: return "UnsignedGreater";
+				case ConditionCode.UnsignedGreaterOrEqual: return "UnsignedGreaterOrEqual";
 				default: return null;
 			}
 		}

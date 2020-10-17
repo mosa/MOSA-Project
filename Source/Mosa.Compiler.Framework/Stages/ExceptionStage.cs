@@ -156,7 +156,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var nextBlock = Split(context);
 
 				// compare LeaveTargetRegister > handlerBlock.End, then goto finally handler
-				context.AppendInstruction(Select(IRInstruction.BranchCompare32, IRInstruction.BranchCompare64), ConditionCode.GreaterThan, null, CreateConstant(handlerBlock.Label), LeaveTargetRegister, nextBlock.Block); // TODO: Constant should be 64bit
+				context.AppendInstruction(Select(IRInstruction.BranchCompare32, IRInstruction.BranchCompare64), ConditionCode.Greater, null, CreateConstant(handlerBlock.Label), LeaveTargetRegister, nextBlock.Block); // TODO: Constant should be 64bit
 				context.AppendInstruction(IRInstruction.Jmp, handlerBlock);
 
 				context = nextBlock;

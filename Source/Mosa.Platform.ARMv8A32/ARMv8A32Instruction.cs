@@ -56,13 +56,13 @@ namespace Mosa.Platform.ARMv8A32
 				case ConditionCode.NotEqual: return 0b0001;
 
 				case ConditionCode.GreaterOrEqual: return 0b1010;
-				case ConditionCode.GreaterThan: return 0b1100;
+				case ConditionCode.Greater: return 0b1100;
 				case ConditionCode.LessOrEqual: return 0b1101;
-				case ConditionCode.LessThan: return 0b1011;
+				case ConditionCode.Less: return 0b1011;
 				case ConditionCode.UnsignedGreaterOrEqual: return 0b0010;
-				case ConditionCode.UnsignedGreaterThan: return 0b1000;
+				case ConditionCode.UnsignedGreater: return 0b1000;
 				case ConditionCode.UnsignedLessOrEqual: return 0b1001;
-				case ConditionCode.UnsignedLessThan: return 0b0011;
+				case ConditionCode.UnsignedLess: return 0b0011;
 				case ConditionCode.Positive: return 0b0101;
 
 				case ConditionCode.Never: return 0b1111;
