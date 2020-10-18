@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 {
-	public sealed class Compare64x32EqualOrNot : BaseTransformation
+	public sealed class Compare64x32EqualOrNotEqual : BaseTransformation
 	{
-		public Compare64x32EqualOrNot() : base(IRInstruction.Compare64x32)
+		public Compare64x32EqualOrNotEqual() : base(IRInstruction.Compare64x32)
 		{
 		}
 

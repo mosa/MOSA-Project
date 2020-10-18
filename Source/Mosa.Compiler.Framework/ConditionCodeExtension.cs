@@ -77,7 +77,7 @@ namespace Mosa.Compiler.Framework
 			switch (conditionCode)
 			{
 				case ConditionCode.GreaterOrEqual: return ConditionCode.LessOrEqual;
-				case ConditionCode.Greater: return ConditionCode.LessOrEqual;
+				case ConditionCode.Greater: return ConditionCode.Less;
 				case ConditionCode.LessOrEqual: return ConditionCode.GreaterOrEqual;
 				case ConditionCode.Less: return ConditionCode.Greater;
 				case ConditionCode.UnsignedGreaterOrEqual: return ConditionCode.UnsignedLessOrEqual;

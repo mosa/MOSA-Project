@@ -2,6 +2,7 @@
 
 namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 {
+	// NOT WORKING!!!
 	public sealed class Compare64x32UnsignedGreater : BaseTransformation
 	{
 		public Compare64x32UnsignedGreater() : base(IRInstruction.Compare64x32, true)

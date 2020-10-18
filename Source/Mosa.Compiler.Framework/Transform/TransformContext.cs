@@ -32,8 +32,10 @@ namespace Mosa.Compiler.Framework.Transform
 		public MosaType O { get; private set; }
 
 		public VirtualRegisters VirtualRegisters { get; private set; }
+		public BasicBlocks BasicBlocks { get; set; }
 
 		public bool LowerTo32 { get; private set; }
+		public bool IsInSSAForm { get; private set; }
 
 		public TransformContext(MethodCompiler methodCompiler)
 		{
@@ -43,6 +45,7 @@ namespace Mosa.Compiler.Framework.Transform
 			TypeSystem = Compiler.TypeSystem;
 
 			VirtualRegisters = MethodCompiler.VirtualRegisters;
+			BasicBlocks = methodCompiler.BasicBlocks;
 
 			I4 = TypeSystem.BuiltIn.I4;
 			I8 = TypeSystem.BuiltIn.I8;
@@ -64,9 +67,10 @@ namespace Mosa.Compiler.Framework.Transform
 			SpecialTraceLog = specialTraceLog;
 		}
 
-		public void SetStageOptions(bool lowerTo32)
+		public void SetStageOptions(bool inSSAForm, bool lowerTo32)
 		{
 			LowerTo32 = Compiler.CompilerSettings.LongExpansion && lowerTo32;
+			IsInSSAForm = inSSAForm;
 		}
 
 		public Operand AllocateVirtualRegister(MosaType type)
@@ -253,6 +257,79 @@ namespace Mosa.Compiler.Framework.Transform
 		}
 
 		#endregion 64-Bit Helpers
+
+		#region Basic Block Helpers
+
+		/// <summary>
+		/// Splits the block.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <returns></returns>
+		public Context Split(Context context)
+		{
+			return new Context(Split(context.Node));
+		}
+
+		/// <summary>
+		/// Splits the block.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		/// <returns></returns>
+		public BasicBlock Split(InstructionNode node)
+		{
+			var newblock = CreateNewBlock(-1, node.Label);
+
+			node.Split(newblock);
+
+			return newblock;
+		}
+
+		/// <summary>
+		/// Creates the new block.
+		/// </summary>
+		/// <param name="blockLabel">The label.</param>
+		/// <param name="instructionLabel">The instruction label.</param>
+		/// <returns></returns>
+		private BasicBlock CreateNewBlock(int blockLabel, int instructionLabel)
+		{
+			return BasicBlocks.CreateBlock(blockLabel, instructionLabel);
+		}
+
+		/// <summary>
+		/// Creates empty blocks.
+		/// </summary>
+		/// <param name="blocks">The Blocks.</param>
+		/// <param name="instructionLabel">The instruction label.</param>
+		/// <returns></returns>
+		public Context[] CreateNewBlockContexts(int blocks, int instructionLabel)
+		{
+			// Allocate the context array
+			var result = new Context[blocks];
+
+			for (int index = 0; index < blocks; index++)
+			{
+				result[index] = CreateNewBlockContext(instructionLabel);
+			}
+
+			return result;
+		}
+
+		/// <summary>
+		/// Create an empty block.
+		/// </summary>
+		/// <param name="instructionLabel">The instruction label.</param>
+		/// <returns></returns>
+		private Context CreateNewBlockContext(int instructionLabel)
+		{
+			return new Context(CreateNewBlock(-1, instructionLabel));
+		}
+
+		#endregion Basic Block Helpers
+
+		public static void UpdatePhiInstructionTargets(List<BasicBlock> targets, BasicBlock source, BasicBlock newSource)
+		{
+			BaseMethodCompilerStage.UpdatePhiInstructionTargets(targets, source, newSource);
+		}
 
 		public void UpdatePHI(Context context)
 		{

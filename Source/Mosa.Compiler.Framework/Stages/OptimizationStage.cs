@@ -1,12 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.Framework.Transform;
 using Mosa.Compiler.Framework.Transform.Auto;
 using Mosa.Compiler.Framework.Transform.Manual;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -27,6 +25,15 @@ namespace Mosa.Compiler.Framework.Stages
 		private TraceLog trace;
 
 		private TraceLog specialTrace;
+
+		private bool IsInSSAForm;
+		private bool LowerTo32;
+
+		public OptimizationStage(bool inSSAForm, bool lowerTo32)
+		{
+			IsInSSAForm = inSSAForm;
+			LowerTo32 = lowerTo32;
+		}
 
 		protected override void Initialize()
 		{
@@ -63,6 +70,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
+			LowerTo32 = LowerTo32 && CompilerSettings.LongExpansion && Is32BitPlatform;
+
 			trace = CreateTraceLog(5);
 			specialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
 
@@ -78,40 +87,23 @@ namespace Mosa.Compiler.Framework.Stages
 
 			int pass = 0;
 			int maximumPasses = MaximumPasses;
-			bool longExpansion = CompilerSettings.LongExpansion;
 
-			bool done = false;
 			bool direction = true;
 
-			TransformContext.SetStageOptions(false);
+			TransformContext.SetStageOptions(IsInSSAForm, LowerTo32 && !TransformContext.LowerTo32);
 
-			while (!done)
+			var changed = true;
+
+			while (changed)
 			{
-				var changed = true;
+				pass++;
+				trace?.Log($"*** Pass # {pass}");
 
-				while (changed)
-				{
-					pass++;
-					trace?.Log($"*** Pass # {pass}");
-
-					changed = OptimizationPass(direction, context);
-
-					if (pass > maximumPasses)
-						break;
-				}
-
+				changed = OptimizationPass(direction, context);
 				direction = !direction;
 
-				if (longExpansion && !TransformContext.LowerTo32)
-				{
-					TransformContext.SetStageOptions(true);
-					maximumPasses += MaximumPasses;
-					direction = true;
-				}
-				else
-				{
-					done = true;
-				}
+				if (pass > maximumPasses)
+					break;
 			}
 		}
 

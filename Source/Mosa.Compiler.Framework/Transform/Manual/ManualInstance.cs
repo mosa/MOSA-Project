@@ -27,9 +27,15 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 
 		public static readonly BaseTransformation IR_LowerTo32_Add64 = new IR.LowerTo32.Add64();
 		public static readonly BaseTransformation IR_LowerTo32_And64 = new IR.LowerTo32.And64();
-		public static readonly BaseTransformation IR_LowerTo32_Compare64x32EqualOrNot = new IR.LowerTo32.Compare64x32EqualOrNot();
-		public static readonly BaseTransformation IR_LowerTo32_Compare64x32UnsignedGreater = new IR.LowerTo32.Compare64x32UnsignedGreater();
+		public static readonly BaseTransformation IR_LowerTo32_Compare64x32EqualOrNotEqual = new IR.LowerTo32.Compare64x32EqualOrNotEqual();
+
+		public static readonly BaseTransformation IR_LowerTo32_BranchCompare64 = new IR.LowerTo32.BranchCompare64();
+		public static readonly BaseTransformation IR_LowerTo32_Compare64x32Rest = new IR.LowerTo32.Compare64x32Rest();
+		public static readonly BaseTransformation IR_LowerTo32_Compare64x32RestInSSA = new IR.LowerTo32.Compare64x32RestInSSA();
+
+		//public static readonly BaseTransformation IR_LowerTo32_Compare64x32UnsignedGreater = new IR.LowerTo32.Compare64x32UnsignedGreater();
 		public static readonly BaseTransformation IR_LowerTo32_Load64 = new IR.LowerTo32.Load64();
+
 		public static readonly BaseTransformation IR_LowerTo32_LoadParam64 = new IR.LowerTo32.LoadParam64();
 		public static readonly BaseTransformation IR_LowerTo32_LoadParamSignExtend16x64 = new IR.LowerTo32.LoadParamSignExtend16x64();
 		public static readonly BaseTransformation IR_LowerTo32_LoadParamSignExtend32x64 = new IR.LowerTo32.LoadParamSignExtend32x64();

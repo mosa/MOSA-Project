@@ -583,7 +583,7 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(removedBlock.NextBlocks.Count == 0);
 		}
 
-		protected static void UpdatePhiInstructionTargets(List<BasicBlock> targets, BasicBlock source, BasicBlock newSource)
+		public static void UpdatePhiInstructionTargets(List<BasicBlock> targets, BasicBlock source, BasicBlock newSource)
 		{
 			foreach (var target in targets)
 			{
