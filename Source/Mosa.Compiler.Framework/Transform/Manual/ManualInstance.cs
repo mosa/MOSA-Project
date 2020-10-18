@@ -26,6 +26,30 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 		public static readonly BaseTransformation IR_Rewrite_Compare64x64 = new IR.Rewrite.Compare64x64GreaterThanZero();
 
 		public static readonly BaseTransformation IR_LowerTo32_Add64 = new IR.LowerTo32.Add64();
+		public static readonly BaseTransformation IR_LowerTo32_And64 = new IR.LowerTo32.And64();
+		public static readonly BaseTransformation IR_LowerTo32_Compare64x32EqualOrNot = new IR.LowerTo32.Compare64x32EqualOrNot();
+		public static readonly BaseTransformation IR_LowerTo32_Compare64x32UnsignedGreater = new IR.LowerTo32.Compare64x32UnsignedGreater();
+		public static readonly BaseTransformation IR_LowerTo32_Load64 = new IR.LowerTo32.Load64();
+		public static readonly BaseTransformation IR_LowerTo32_LoadParam64 = new IR.LowerTo32.LoadParam64();
+		public static readonly BaseTransformation IR_LowerTo32_LoadParamSignExtend16x64 = new IR.LowerTo32.LoadParamSignExtend16x64();
+		public static readonly BaseTransformation IR_LowerTo32_LoadParamSignExtend32x64 = new IR.LowerTo32.LoadParamSignExtend32x64();
+		public static readonly BaseTransformation IR_LowerTo32_LoadParamSignExtend8x64 = new IR.LowerTo32.LoadParamSignExtend8x64();
+		public static readonly BaseTransformation IR_LowerTo32_LoadParamZeroExtend16x64 = new IR.LowerTo32.LoadParamZeroExtend16x64();
+		public static readonly BaseTransformation IR_LowerTo32_LoadParamZeroExtend32x64 = new IR.LowerTo32.LoadParamZeroExtend32x64();
+		public static readonly BaseTransformation IR_LowerTo32_LoadParamZeroExtend8x64 = new IR.LowerTo32.LoadParamZeroExtend8x64();
+		public static readonly BaseTransformation IR_LowerTo32_Not64 = new IR.LowerTo32.Not64();
+		public static readonly BaseTransformation IR_LowerTo32_Or64 = new IR.LowerTo32.Or64();
+		public static readonly BaseTransformation IR_LowerTo32_SignExtend16x64 = new IR.LowerTo32.SignExtend16x64();
+		public static readonly BaseTransformation IR_LowerTo32_SignExtend32x64 = new IR.LowerTo32.SignExtend32x64();
+		public static readonly BaseTransformation IR_LowerTo32_SignExtend8x64 = new IR.LowerTo32.SignExtend8x64();
+		public static readonly BaseTransformation IR_LowerTo32_Store64 = new IR.LowerTo32.Store64();
+		public static readonly BaseTransformation IR_LowerTo32_StoreParam64 = new IR.LowerTo32.StoreParam64();
+		public static readonly BaseTransformation IR_LowerTo32_Sub64 = new IR.LowerTo32.Sub64();
+		public static readonly BaseTransformation IR_LowerTo32_Truncate64x32 = new IR.LowerTo32.Truncate64x32();
+		public static readonly BaseTransformation IR_LowerTo32_Xor64 = new IR.LowerTo32.Xor64();
+		public static readonly BaseTransformation IR_LowerTo32_ZeroExtend16x64 = new IR.LowerTo32.ZeroExtend16x64();
+		public static readonly BaseTransformation IR_LowerTo32_ZeroExtend32x64 = new IR.LowerTo32.ZeroExtend32x64();
+
 		public static readonly BaseTransformation IR_Special_CodeInDeadBlock = new Transform.IR.Special.CodeInDeadBlock();
 		public static readonly BaseTransformation IR_Special_Deadcode = new Transform.IR.Special.Deadcode();
 

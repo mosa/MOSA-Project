@@ -155,7 +155,7 @@ namespace Mosa.Platform.ARMv8A32
 						return constant;
 
 					var before = context.InsertBefore();
-					var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+					var v1 = AllocateVirtualRegister32();
 					before.SetInstruction(ARMv8A32.Mov, v1, constant);
 
 					return v1;
@@ -166,7 +166,7 @@ namespace Mosa.Platform.ARMv8A32
 					var constant = CreateConstant(immediate);
 
 					var before = context.InsertBefore();
-					var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+					var v1 = AllocateVirtualRegister32();
 					before.SetInstruction(ARMv8A32.Mov, v1, constant);
 
 					return v1;
@@ -175,7 +175,7 @@ namespace Mosa.Platform.ARMv8A32
 				{
 					var before = context.InsertBefore();
 
-					var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+					var v1 = AllocateVirtualRegister32();
 					before.SetInstruction(ARMv8A32.Movw, v1, CreateConstant(operand.ConstantUnsigned32 & 0xFFFF));
 					before.AppendInstruction(ARMv8A32.Movt, v1, v1, CreateConstant(operand.ConstantUnsigned32 >> 16));
 
@@ -185,7 +185,7 @@ namespace Mosa.Platform.ARMv8A32
 			else if (operand.IsUnresolvedConstant)
 			{
 				var before = context.InsertBefore();
-				var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+				var v1 = AllocateVirtualRegister32();
 				before.SetInstruction(ARMv8A32.Movw, v1, operand);
 				before.AppendInstruction(ARMv8A32.Movt, v1, v1, operand);
 
@@ -220,7 +220,7 @@ namespace Mosa.Platform.ARMv8A32
 
 			// FUTURE: Load float bits (not double) into integer register, than fmov them into the floating point register (saves a memory load)
 
-			var v1 = AllocateVirtualRegister(operand.IsR4 ? TypeSystem.BuiltIn.R4 : TypeSystem.BuiltIn.R8);
+			var v1 = operand.IsR4 ? AllocateVirtualRegisterR4() : AllocateVirtualRegisterR8();
 
 			var symbol = operand.IsR4 ? Linker.GetConstantSymbol((float)operand.ConstantUnsigned64) : Linker.GetConstantSymbol((double)operand.ConstantUnsigned64);
 

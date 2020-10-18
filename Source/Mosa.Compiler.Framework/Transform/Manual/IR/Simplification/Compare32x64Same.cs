@@ -20,8 +20,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.Simplification
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
-			var operand1 = transformContext.CreateConstant(1);
-			context.SetInstruction(IRInstruction.Move64, context.Result, operand1);
+			context.SetInstruction(IRInstruction.Move64, context.Result, transformContext.CreateConstant(1));
 		}
 	}
 }

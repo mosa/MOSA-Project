@@ -12,17 +12,18 @@ namespace Mosa.Compiler.Framework.Transform
 	public sealed class TransformContext
 	{
 		public MethodCompiler MethodCompiler { get; private set; }
+		public Compiler Compiler { get; private set; }
 
-		public TypeSystem TypeSystem { get { return MethodCompiler.TypeSystem; } }
+		public TypeSystem TypeSystem { get; private set; }
 
 		public TraceLog TraceLog { get; private set; }
 
 		public TraceLog SpecialTraceLog { get; private set; }
 
-		public Operand ConstantZero32 { get { return MethodCompiler.ConstantZero32; } }
-		public Operand ConstantZero64 { get { return MethodCompiler.ConstantZero64; } }
-		public Operand ConstantZeroR4 { get { return MethodCompiler.ConstantZeroR4; } }
-		public Operand ConstantZeroR8 { get { return MethodCompiler.ConstantZeroR8; } }
+		public Operand ConstantZero32 { get; private set; }
+		public Operand ConstantZero64 { get; private set; }
+		public Operand ConstantZeroR4 { get; private set; }
+		public Operand ConstantZeroR8 { get; private set; }
 
 		public MosaType I4 { get; private set; }
 		public MosaType I8 { get; private set; }
@@ -32,11 +33,14 @@ namespace Mosa.Compiler.Framework.Transform
 
 		public VirtualRegisters VirtualRegisters { get; private set; }
 
-		public TransformContext(MethodCompiler methodCompiler, TraceLog traceLog = null, TraceLog specialTraceLog = null)
+		public bool LowerTo32 { get; private set; }
+
+		public TransformContext(MethodCompiler methodCompiler)
 		{
 			MethodCompiler = methodCompiler;
-			TraceLog = traceLog;
-			SpecialTraceLog = specialTraceLog;
+			Compiler = methodCompiler.Compiler;
+
+			TypeSystem = Compiler.TypeSystem;
 
 			VirtualRegisters = MethodCompiler.VirtualRegisters;
 
@@ -45,11 +49,54 @@ namespace Mosa.Compiler.Framework.Transform
 			R4 = TypeSystem.BuiltIn.R4;
 			R8 = TypeSystem.BuiltIn.R8;
 			O = TypeSystem.BuiltIn.Object;
+
+			ConstantZero32 = MethodCompiler.ConstantZero32;
+			ConstantZero64 = MethodCompiler.ConstantZero64;
+			ConstantZeroR4 = MethodCompiler.ConstantZeroR4;
+			ConstantZeroR8 = MethodCompiler.ConstantZeroR8;
+
+			LowerTo32 = Compiler.CompilerSettings.LongExpansion;
+		}
+
+		public void SetLogs(TraceLog traceLog = null, TraceLog specialTraceLog = null)
+		{
+			TraceLog = traceLog;
+			SpecialTraceLog = specialTraceLog;
+		}
+
+		public void SetStageOptions(bool lowerTo32)
+		{
+			LowerTo32 = Compiler.CompilerSettings.LongExpansion && lowerTo32;
 		}
 
 		public Operand AllocateVirtualRegister(MosaType type)
 		{
 			return VirtualRegisters.Allocate(type);
+		}
+
+		public Operand AllocateVirtualRegister32()
+		{
+			return VirtualRegisters.Allocate(I4);
+		}
+
+		public Operand AllocateVirtualRegister64()
+		{
+			return VirtualRegisters.Allocate(I8);
+		}
+
+		public Operand AllocateVirtualRegisterR4()
+		{
+			return VirtualRegisters.Allocate(R4);
+		}
+
+		public Operand AllocateVirtualRegisterR8()
+		{
+			return VirtualRegisters.Allocate(R8);
+		}
+
+		public Operand AllocateVirtualRegisterObject()
+		{
+			return VirtualRegisters.Allocate(O);
 		}
 
 		public bool ApplyTransform(Context context, BaseTransformation transformation, List<Operand> virtualRegisters = null)
@@ -120,37 +167,37 @@ namespace Mosa.Compiler.Framework.Transform
 
 		public Operand CreateConstant(byte value)
 		{
-			return Operand.CreateConstant(TypeSystem.BuiltIn.U1, value);
+			return value == 0 ? ConstantZero32 : Operand.CreateConstant(TypeSystem.BuiltIn.U1, value);
 		}
 
 		public Operand CreateConstant(int value)
 		{
-			return Operand.CreateConstant(TypeSystem.BuiltIn.I4, value);
+			return value == 0 ? ConstantZero32 : Operand.CreateConstant(TypeSystem.BuiltIn.I4, value);
 		}
 
 		public Operand CreateConstant(uint value)
 		{
-			return Operand.CreateConstant(TypeSystem.BuiltIn.U4, value);
+			return value == 0 ? ConstantZero32 : Operand.CreateConstant(TypeSystem.BuiltIn.U4, value);
 		}
 
 		public Operand CreateConstant(long value)
 		{
-			return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
+			return value == 0 ? ConstantZero64 : Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
 		}
 
 		public Operand CreateConstant(ulong value)
 		{
-			return Operand.CreateConstant(TypeSystem.BuiltIn.U8, value);
+			return value == 0 ? ConstantZero64 : Operand.CreateConstant(TypeSystem.BuiltIn.U8, value);
 		}
 
 		public Operand CreateConstant(float value)
 		{
-			return Operand.CreateConstant(value, TypeSystem);
+			return value == 0 ? ConstantZeroR4 : Operand.CreateConstant(value, TypeSystem);
 		}
 
 		public Operand CreateConstant(double value)
 		{
-			return Operand.CreateConstant(value, TypeSystem);
+			return value == 0 ? ConstantZeroR4 : Operand.CreateConstant(value, TypeSystem);
 		}
 
 		#endregion Constant Helper Methods
@@ -236,6 +283,11 @@ namespace Mosa.Compiler.Framework.Transform
 			}
 
 			Debug.Assert(context.OperandCount == context.Block.PreviousBlocks.Count);
+		}
+
+		public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
+		{
+			MethodCompiler.SplitLongOperand(operand, out operandLow, out operandHigh);
 		}
 	}
 }

@@ -229,5 +229,28 @@ namespace Mosa.UnitTests
 		{
 			return (a ^ 0xF0000000) << 8;
 		}
+
+		[MosaUnitTest(Series = "I4I4")]
+		public static bool OptimizationTest35(int a, int b)
+		{
+			int x, y, z;
+
+			if (a > 3)
+			{
+				x = 4;
+				y = 1;
+				z = b & 0xFF00;
+			}
+			else
+			{
+				x = 9;
+				y = 2;
+				z = b << 8;
+			}
+
+			int p = (x * y) * 4;
+			int q = z & 0xF;
+			return p >= 16 && q == 0;
+		}
 	}
 }

@@ -34,7 +34,6 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			ManualInstance.IR_ConstantFolding_BranchCompare32,
 			ManualInstance.IR_ConstantFolding_BranchCompare64,
 
-			//ManualTransformation.IR_LowerTo32_Add64,
 			ManualInstance.IR_Special_CodeInDeadBlock,
 			ManualInstance.IR_Special_Deadcode,
 
@@ -105,6 +104,33 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 
 			ManualInstance.IR_Rewrite_Compare64x32SameHigh,
 			ManualInstance.IR_Rewrite_Compare64x32SameLow,
+
+			// LowerTo32
+			ManualInstance.IR_LowerTo32_Add64,
+			ManualInstance.IR_LowerTo32_And64,
+			ManualInstance.IR_LowerTo32_Compare64x32EqualOrNot,
+
+			//ManualInstance.IR_LowerTo32_Compare64x32UnsignedGreater,
+			ManualInstance.IR_LowerTo32_Load64,
+			ManualInstance.IR_LowerTo32_LoadParam64,
+			ManualInstance.IR_LowerTo32_LoadParamSignExtend16x64,
+			ManualInstance.IR_LowerTo32_LoadParamSignExtend32x64,
+			ManualInstance.IR_LowerTo32_LoadParamSignExtend8x64,
+			ManualInstance.IR_LowerTo32_LoadParamZeroExtend16x64,
+			ManualInstance.IR_LowerTo32_LoadParamZeroExtend32x64,
+			ManualInstance.IR_LowerTo32_LoadParamZeroExtend8x64,
+			ManualInstance.IR_LowerTo32_Not64,
+			ManualInstance.IR_LowerTo32_Or64,
+			ManualInstance.IR_LowerTo32_SignExtend16x64,
+			ManualInstance.IR_LowerTo32_SignExtend32x64,
+			ManualInstance.IR_LowerTo32_SignExtend8x64,
+			ManualInstance.IR_LowerTo32_Store64,
+			ManualInstance.IR_LowerTo32_StoreParam64,
+			ManualInstance.IR_LowerTo32_Sub64,
+			ManualInstance.IR_LowerTo32_Truncate64x32,
+			ManualInstance.IR_LowerTo32_Xor64,
+			ManualInstance.IR_LowerTo32_ZeroExtend16x64,
+			ManualInstance.IR_LowerTo32_ZeroExtend32x64,
 		};
 	}
 }

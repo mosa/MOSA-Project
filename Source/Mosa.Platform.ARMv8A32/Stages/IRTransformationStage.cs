@@ -108,7 +108,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			operand2 = MoveConstantToRegisterOrImmediate(context, operand2);
 			operand3 = MoveConstantToRegisterOrImmediate(context, operand3);
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister32();
 
 			context.SetInstruction(ARMv8A32.Add, v1, operand1, operand2);
 			context.AppendInstruction(ARMv8A32.Add, result, v1, operand3);
@@ -574,7 +574,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			operand2 = MoveConstantToRegisterOrImmediate(context, operand2);
 			operand3 = MoveConstantToRegisterOrImmediate(context, operand3);
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister32();
 
 			context.SetInstruction(ARMv8A32.Sub, v1, operand1, operand2);
 			context.AppendInstruction(ARMv8A32.Sub, result, v1, operand3);

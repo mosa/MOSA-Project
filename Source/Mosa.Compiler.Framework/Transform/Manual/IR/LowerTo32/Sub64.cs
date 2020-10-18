@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 {
-	public sealed class Add64 : BaseTransformation
+	public sealed class Sub64 : BaseTransformation
 	{
-		public Add64() : base(IRInstruction.Add64)
+		public Sub64() : base(IRInstruction.Sub64)
 		{
 		}
 
@@ -32,8 +32,8 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 			transformContext.AppendGetLow64(context, op1Low, operand2);
 			transformContext.AppendGetHigh64(context, op1High, operand2);
 
-			context.AppendInstruction2(IRInstruction.AddCarryOut32, resultLow, resultCarry, op0Low, op1Low);
-			context.AppendInstruction(IRInstruction.AddCarryIn32, resultHigh, op0High, op1High, resultCarry);
+			context.AppendInstruction2(IRInstruction.SubCarryOut32, resultLow, resultCarry, op0Low, op1Low);
+			context.AppendInstruction(IRInstruction.SubCarryIn32, resultHigh, op0High, op1High, resultCarry);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 	}

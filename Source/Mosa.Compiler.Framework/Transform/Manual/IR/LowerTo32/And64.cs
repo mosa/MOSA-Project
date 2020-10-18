@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 {
-	public sealed class Add64 : BaseTransformation
+	public sealed class And64 : BaseTransformation
 	{
-		public Add64() : base(IRInstruction.Add64)
+		public And64() : base(IRInstruction.And64)
 		{
 		}
 
@@ -25,15 +25,14 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 			var op1High = transformContext.AllocateVirtualRegister32();
 			var resultLow = transformContext.AllocateVirtualRegister32();
 			var resultHigh = transformContext.AllocateVirtualRegister32();
-			var resultCarry = transformContext.AllocateVirtualRegister32();
 
 			transformContext.SetGetLow64(context, op0Low, operand1);
 			transformContext.AppendGetHigh64(context, op0High, operand1);
 			transformContext.AppendGetLow64(context, op1Low, operand2);
 			transformContext.AppendGetHigh64(context, op1High, operand2);
 
-			context.AppendInstruction2(IRInstruction.AddCarryOut32, resultLow, resultCarry, op0Low, op1Low);
-			context.AppendInstruction(IRInstruction.AddCarryIn32, resultHigh, op0High, op1High, resultCarry);
+			context.AppendInstruction(IRInstruction.And32, resultLow, op0Low, op1Low);
+			context.AppendInstruction(IRInstruction.And32, resultHigh, op0High, op1High);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 	}

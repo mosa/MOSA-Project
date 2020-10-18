@@ -195,7 +195,7 @@ namespace Mosa.Platform.x86.Stages
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister32();
 
 			context.SetInstruction(X86.Cmp32, null, operand1, operand2);
 			context.AppendInstruction(X86.Setcc, condition, v1);
@@ -281,9 +281,9 @@ namespace Mosa.Platform.x86.Stages
 			var operand2 = context.Operand2;
 			var result = context.Result;
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister32();
+			var v2 = AllocateVirtualRegister32();
+			var v3 = AllocateVirtualRegister32();
 
 			context.SetInstruction2(X86.Cdq32, v1, v2, operand1);
 			context.AppendInstruction2(X86.IDiv32, v3, result, v1, v2, operand2);
@@ -295,8 +295,8 @@ namespace Mosa.Platform.x86.Stages
 			var operand2 = context.Operand2;
 			var result = context.Result;
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var v1 = AllocateVirtualRegister32();
+			var v2 = AllocateVirtualRegister32();
 
 			context.SetInstruction(X86.Mov32, v1, ConstantZero32);
 			context.AppendInstruction2(X86.Div32, v1, v2, v1, operand1, operand2);
@@ -444,13 +444,13 @@ namespace Mosa.Platform.x86.Stages
 
 		private void MulSigned32(Context context)
 		{
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var v1 = AllocateVirtualRegister32();
 			context.SetInstruction2(X86.Mul32, v1, context.Result, context.Operand1, context.Operand2);
 		}
 
 		private void MulUnsigned32(Context context)
 		{
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var v1 = AllocateVirtualRegister32();
 			context.SetInstruction2(X86.Mul32, v1, context.Result, context.Operand1, context.Operand2);
 		}
 
@@ -477,9 +477,9 @@ namespace Mosa.Platform.x86.Stages
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister32();
+			var v2 = AllocateVirtualRegister32();
+			var v3 = AllocateVirtualRegister32();
 
 			context.SetInstruction2(X86.Cdq32, v1, v2, operand1);
 			context.AppendInstruction2(X86.IDiv32, result, v3, v1, v2, operand2);
@@ -491,8 +491,8 @@ namespace Mosa.Platform.x86.Stages
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
-			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var v1 = AllocateVirtualRegister32();
+			var v2 = AllocateVirtualRegister32();
 
 			context.SetInstruction(X86.Mov32, v1, ConstantZero32);
 			context.AppendInstruction2(X86.Div32, result, v2, v1, operand1, operand2);
@@ -586,7 +586,7 @@ namespace Mosa.Platform.x86.Stages
 			var operand2 = context.Operand2;
 			var operand3 = context.Operand3;
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister32();
 
 			context.SetInstruction(X86.Bt32, v1, operand3, CreateConstant((byte)0));
 			context.AppendInstruction(X86.Sbb32, result, operand1, operand2);
@@ -676,7 +676,7 @@ namespace Mosa.Platform.x86.Stages
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister32();
 
 			if (condition == ConditionCode.Equal)
 			{

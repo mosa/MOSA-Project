@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Framework.Stages
 			public BaseInstruction Instruction;
 			public Operand Operand1;
 			public Operand Operand2;
-
+			public ConditionCode ConditionCode;
 			public Operand ValueNumber;
 		}
 
@@ -346,6 +346,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					Hash = hash,
 					Instruction = node.Instruction,
+					ConditionCode = node.ConditionCode,
 					Operand1 = node.Operand1,
 					Operand2 = node.Operand2,
 					ValueNumber = node.Result
@@ -363,6 +364,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						Hash = hash,
 						Instruction = node.Instruction,
+						ConditionCode = node.ConditionCode,
 						Operand1 = node.Operand2,
 						Operand2 = node.Operand1,
 						ValueNumber = node.Result
@@ -467,6 +469,8 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			int hash = node.Instruction.ID;
 
+			hash = hash | ((int)node.ConditionCode << 16);
+
 			if (node.Operand1.IsConstant)
 				hash = UpdateHash(hash, (int)node.Operand1.ConstantUnsigned64);
 			else if (node.Operand1.IsVirtualRegister || node.Operand1.IsStackLocal)
@@ -531,6 +535,7 @@ namespace Mosa.Compiler.Framework.Stages
 			foreach (var expression in expressions)
 			{
 				if (node.Instruction == expression.Instruction
+					&& node.ConditionCode == expression.ConditionCode
 					&& IsEqual(node.Operand1, expression.Operand1, node.Instruction)
 					&& (node.OperandCount == 1 || (node.OperandCount == 2 && IsEqual(node.Operand2, expression.Operand2))))
 				{
