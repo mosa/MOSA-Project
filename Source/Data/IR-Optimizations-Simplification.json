@@ -118,7 +118,7 @@
 			"Name": "GetHigh64",
 			"SubName": "FromShiftedMore32",
 			"Expression": "IR.GetHigh64 (IR.ShiftRight64 a b)",
-			"Filter": "IsGreaterThanOrEqual(And32(To32(b),63),32)",
+			"Filter": "IsGreaterOrEqual(And32(To32(b),63),32)",
 			"Result": "(IR.Move32 0)"
 		},
 		{
@@ -127,7 +127,7 @@
 			"Name": "GetLow64",
 			"SubName": "FromShiftedMore32",
 			"Expression": "IR.GetLow64 (IR.ShiftLeft64 a b)",
-			"Filter": "IsGreaterThanOrEqual(And32(To32(b),63),32)",
+			"Filter": "IsGreaterOrEqual(And32(To32(b),63),32)",
 			"Result": "(IR.Move32 0)"
 		},
 		{
@@ -219,78 +219,6 @@
 			"Expression": "(IR.Or## (IR.Not## a) (IR.Not## b))",
 			"Filter": "",
 			"Result": "(IR.Not## (IR.And## a b))"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "ConstantFolding",
-			"Name": "AddCarryIn##",
-			"SubName": "Inside",
-			"Expression": "IR.AddCarryIn## a b c",
-			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
-			"Result": "(IR.Add## [Add##(To##(a),To##(b))] c)"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "ConstantFolding",
-			"Name": "AddCarryIn##",
-			"SubName": "Outside1",
-			"Expression": "IR.AddCarryIn## a b c",
-			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(c)",
-			"Result": "(IR.Add## b [Add##(To##(a),BoolTo##(To##(c)))])])"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "ConstantFolding",
-			"Name": "AddCarryIn##",
-			"SubName": "Outside2",
-			"Expression": "IR.AddCarryIn## a b c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.Add## a [Add##(To##(b),BoolTo##(To##(c)))])])"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "ConstantFolding",
-			"Name": "AddCarryIn##",
-			"SubName": "NoCarry",
-			"Expression": "IR.AddCarryIn## a b 0",
-			"Filter": "",
-			"Result": "(IR.Add## a b)"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "ConstantFolding",
-			"Name": "SubCarryIn##",
-			"SubName": "Inside",
-			"Expression": "IR.SubCarryIn## a b c",
-			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
-			"Result": "(IR.Sub## [Sub##(To##(a),To##(b))] c)"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "ConstantFolding",
-			"Name": "SubCarryIn##",
-			"SubName": "Outside1",
-			"Expression": "IR.SubCarryIn## a b c",
-			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(c)",
-			"Result": "(IR.Sub## [Sub##(To##(a),BoolTo##(To##(c)))])] b)"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "ConstantFolding",
-			"Name": "SubCarryIn##",
-			"SubName": "Outside2",
-			"Expression": "IR.SubCarryIn## a b c",
-			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
-			"Result": "(IR.Sub## a [Sub##(To##(b),BoolTo##(To##(c)))])])"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "ConstantFolding",
-			"Name": "SubCarryIn##",
-			"SubName": "NoCarry",
-			"Expression": "IR.SubCarryIn## a b 0",
-			"Filter": "",
-			"Result": "(IR.Sub## a b)"
 		}
 	]
 }

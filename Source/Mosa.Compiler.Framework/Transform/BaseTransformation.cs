@@ -11,9 +11,8 @@ namespace Mosa.Compiler.Framework.Transform
 
 		public BaseInstruction Instruction { get; private set; }
 
-		public string Name { get; }
-
 		public bool Log { get; private set; } = false;
+		public string Name { get; }
 
 		#endregion Properties
 
@@ -119,19 +118,14 @@ namespace Mosa.Compiler.Framework.Transform
 			return operand.IsFloatingPoint;
 		}
 
-		protected static bool IsGreaterThan(ulong a, ulong b)
+		protected static bool IsGreater(ulong a, ulong b)
 		{
 			return a > b;
 		}
 
-		protected static bool IsGreaterThanOrEqual(ulong a, ulong b)
+		protected static bool IsGreaterOrEqual(ulong a, ulong b)
 		{
 			return a >= b;
-		}
-
-		protected static bool IsHigherVirtualNumber(Operand operand1, Operand operand2)
-		{
-			return operand1.IsVirtualRegister && operand2.IsVirtualRegister && operand1.Index > operand2.Index;
 		}
 
 		protected static bool IsInteger(Operand operand)
@@ -149,14 +143,14 @@ namespace Mosa.Compiler.Framework.Transform
 			return operand.IsInteger && operand.ConstantSigned64 >= 0 && operand.ConstantSigned64 <= 64;
 		}
 
+		protected static bool IsLessOrEqual(ulong a, ulong b)
+		{
+			return a <= b;
+		}
+
 		protected static bool IsLessThan(ulong a, ulong b)
 		{
 			return a < b;
-		}
-
-		protected static bool IsLessThanOrEqual(ulong a, ulong b)
-		{
-			return a <= b;
 		}
 
 		protected static bool IsNaturalSquareRoot32(Operand operand)
@@ -211,7 +205,12 @@ namespace Mosa.Compiler.Framework.Transform
 
 		protected static bool IsSignedIntegerPositive(Operand operand)
 		{
-			return operand.IsInteger && operand.ConstantSigned64 >= 0;
+			return operand.IsResolvedConstant && operand.IsInteger && operand.ConstantSigned64 >= 0;
+		}
+
+		protected static bool IsUnsignedIntegerPositive(Operand operand)
+		{
+			return operand.IsResolvedConstant && operand.IsInteger && operand.ConstantUnsigned64 >= 0;
 		}
 
 		protected static bool IsZero(Operand operand)
@@ -308,6 +307,16 @@ namespace Mosa.Compiler.Framework.Transform
 			return (uint)(a >> 32);
 		}
 
+		protected static ulong GetHighestSetBit(ulong value)
+		{
+			return (ulong)BitTwiddling.GetHighestSetBit(value);
+		}
+
+		protected static ulong GetLowestSetBit(ulong value)
+		{
+			return (ulong)BitTwiddling.GetLowestSetBit(value);
+		}
+
 		protected static uint GetPowerOfTwo(ulong value)
 		{
 			return BitTwiddling.GetPowerOfTwo(value);
@@ -373,9 +382,19 @@ namespace Mosa.Compiler.Framework.Transform
 			return a * b;
 		}
 
+		protected static long MulSigned32(ulong a, ulong b)
+		{
+			return (long)a * (long)b;
+		}
+
 		protected static long MulSigned64(long a, long b)
 		{
 			return a * b;
+		}
+
+		protected static long MulSigned64(ulong a, ulong b)
+		{
+			return (long)a * (long)b;
 		}
 
 		protected static uint MulUnsigned32(uint a, uint b)

@@ -1930,16 +1930,16 @@ namespace Mosa.Compiler.Framework.Stages
 				// Signed
 				case OpCode.Beq_s: return ConditionCode.Equal;
 				case OpCode.Bge_s: return ConditionCode.GreaterOrEqual;
-				case OpCode.Bgt_s: return ConditionCode.GreaterThan;
+				case OpCode.Bgt_s: return ConditionCode.Greater;
 				case OpCode.Ble_s: return ConditionCode.LessOrEqual;
-				case OpCode.Blt_s: return ConditionCode.LessThan;
+				case OpCode.Blt_s: return ConditionCode.Less;
 
 				// Unsigned
 				case OpCode.Bne_un_s: return ConditionCode.NotEqual;
 				case OpCode.Bge_un_s: return ConditionCode.UnsignedGreaterOrEqual;
-				case OpCode.Bgt_un_s: return ConditionCode.UnsignedGreaterThan;
+				case OpCode.Bgt_un_s: return ConditionCode.UnsignedGreater;
 				case OpCode.Ble_un_s: return ConditionCode.UnsignedLessOrEqual;
-				case OpCode.Blt_un_s: return ConditionCode.UnsignedLessThan;
+				case OpCode.Blt_un_s: return ConditionCode.UnsignedLess;
 
 				// Long form signed
 				case OpCode.Beq: goto case OpCode.Beq_s;
@@ -1957,10 +1957,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 				// Compare
 				case OpCode.Ceq: return ConditionCode.Equal;
-				case OpCode.Cgt: return ConditionCode.GreaterThan;
-				case OpCode.Cgt_un: return ConditionCode.UnsignedGreaterThan;
-				case OpCode.Clt: return ConditionCode.LessThan;
-				case OpCode.Clt_un: return ConditionCode.UnsignedLessThan;
+				case OpCode.Cgt: return ConditionCode.Greater;
+				case OpCode.Cgt_un: return ConditionCode.UnsignedGreater;
+				case OpCode.Clt: return ConditionCode.Less;
+				case OpCode.Clt_un: return ConditionCode.UnsignedLess;
 
 				default: throw new InvalidProgramException();
 			}

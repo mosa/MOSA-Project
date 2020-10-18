@@ -121,6 +121,78 @@
 			"Filter": "!IsResolvedConstant(x) & !IsResolvedConstant(y) & IsResolvedConstant(c)",
 			"Result": "(IR.ShiftLeft## (IR.MulUnsigned## x y) c)",
 			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "AddCarryIn##",
+			"SubName": "Inside",
+			"Expression": "IR.AddCarryIn## a b c",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.Add## [Add##(To##(a),To##(b))] c)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "AddCarryIn##",
+			"SubName": "Outside1",
+			"Expression": "IR.AddCarryIn## a b c",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(c)",
+			"Result": "(IR.Add## b [Add##(To##(a),BoolTo##(To##(c)))])])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "AddCarryIn##",
+			"SubName": "Outside2",
+			"Expression": "IR.AddCarryIn## a b c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Add## a [Add##(To##(b),BoolTo##(To##(c)))])])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "AddCarryIn##",
+			"SubName": "NoCarry",
+			"Expression": "IR.AddCarryIn## a b 0",
+			"Filter": "",
+			"Result": "(IR.Add## a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SubCarryIn##",
+			"SubName": "Inside",
+			"Expression": "IR.SubCarryIn## a b c",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.Sub## [Sub##(To##(a),To##(b))] c)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SubCarryIn##",
+			"SubName": "Outside1",
+			"Expression": "IR.SubCarryIn## a b c",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(c)",
+			"Result": "(IR.Sub## [Sub##(To##(a),BoolTo##(To##(c)))])] b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SubCarryIn##",
+			"SubName": "Outside2",
+			"Expression": "IR.SubCarryIn## a b c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Sub## a [Sub##(To##(b),BoolTo##(To##(c)))])])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SubCarryIn##",
+			"SubName": "NoCarry",
+			"Expression": "IR.SubCarryIn## a b 0",
+			"Filter": "",
+			"Result": "(IR.Sub## a b)"
 		}
 	]
 }

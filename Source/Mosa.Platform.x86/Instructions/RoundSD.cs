@@ -27,14 +27,20 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
 			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);
 
-			opcodeEncoder.Append8Bits(0x66);
-			opcodeEncoder.Append8Bits(0x0F);
-			opcodeEncoder.Append8Bits(0x3A);
-			opcodeEncoder.Append8Bits(0x0B);
-			opcodeEncoder.Append2Bits(0b11);
-			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-			opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
-			opcodeEncoder.Append8BitImmediate(node.Operand2);
+			if (node.Operand1.IsCPURegister && node.Operand2.IsConstant)
+			{
+				opcodeEncoder.Append8Bits(0x66);
+				opcodeEncoder.Append8Bits(0x0F);
+				opcodeEncoder.Append8Bits(0x3A);
+				opcodeEncoder.Append8Bits(0x0B);
+				opcodeEncoder.Append2Bits(0b11);
+				opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				opcodeEncoder.Append3Bits(node.Operand1.Register.RegisterCode);
+				opcodeEncoder.Append8BitImmediate(node.Operand2);
+				return;
+			}
+
+			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 		}
 	}
 }

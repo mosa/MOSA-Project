@@ -2465,6 +2465,31 @@
 					"Encoding": "[arm-fp-data-transfer-register],fd=reg4:o3,rn=reg4:o1,t1=fp:o3,t0=fp:o3,ls=0,p=1,wb=0,up=updir:status,offset=imm8:o2"
 				}
 			]
+		},
+		{
+			"Name": "Fmov",
+			"Commutative": "false",
+			"FamilyName": "ARMv8A32",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "CNZV",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"Description": "Copies aloating-point immediate constant into register",
+			"OpcodeEncodingAppend": "",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[constant]",
+					"Encoding": "00011110|0|[type]|1|[imm]|100|00000|[rd],type=fp:r,imm=imm8:o2,rn=reg4:r"
+				},
+				{
+					"Condition": "[register]",
+					"Encoding": "[sf]|0011110|[type]|1|0|[rmode1]|11|[opcode1]|00000|[rn]|[rd],rd=reg4:r,rn=reg4:o1"
+				}
+			]
 		}
 	]
 }

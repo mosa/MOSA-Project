@@ -67,6 +67,11 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				{
 					node.Operands.Add(new Operand(token, node.Operands.Count));
 				}
+				else if (token.TokenType == TokenType.OpenCurly)
+				{
+					index++; // skip to next token, which should be label
+					node.Condition = InstructionParser.ParseCondition(tokens, ref index);
+				}
 				else
 				{
 					throw new Exception($"parsing error {token}");
@@ -74,6 +79,82 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			}
 
 			throw new Exception($"parsing error incomplete");
+		}
+
+		public static ConditionCode ParseCondition(List<Token> tokens, ref int index)
+		{
+			var condition = ConditionCode.Always;
+
+			for (; ; index++)
+			{
+				var t = tokens[index].TokenType;
+
+				if (t == TokenType.CloseCurly)
+					break;
+
+				if (condition == ConditionCode.Always)
+				{
+					switch (t)
+					{
+						case TokenType.Greater:
+							condition = ConditionCode.Greater;
+							break;
+
+						case TokenType.Less:
+							condition = ConditionCode.Less;
+							break;
+
+						case TokenType.Not:
+							condition = ConditionCode.NotEqual;
+							break;
+
+						case TokenType.Equal:
+							condition = ConditionCode.Equal;
+							break;
+					}
+				}
+				else if (t == TokenType.Equal)
+				{
+					switch (condition)
+					{
+						case ConditionCode.Greater:
+							condition = ConditionCode.GreaterOrEqual;
+							break;
+
+						case ConditionCode.Less:
+							condition = ConditionCode.LessOrEqual;
+							break;
+					}
+				}
+				else if (t == TokenType.Word)
+				{
+					var text = tokens[index].Value.ToLower();
+
+					if (text == "u")
+					{
+						switch (condition)
+						{
+							case ConditionCode.Greater:
+								condition = ConditionCode.UnsignedGreater;
+								break;
+
+							case ConditionCode.Less:
+								condition = ConditionCode.UnsignedLess;
+								break;
+
+							case ConditionCode.GreaterOrEqual:
+								condition = ConditionCode.UnsignedGreaterOrEqual;
+								break;
+
+							case ConditionCode.LessOrEqual:
+								condition = ConditionCode.UnsignedLessOrEqual;
+								break;
+						}
+					}
+				}
+			}
+
+			return condition;
 		}
 	}
 }

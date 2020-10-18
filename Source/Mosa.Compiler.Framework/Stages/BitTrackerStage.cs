@@ -680,7 +680,7 @@ namespace Mosa.Compiler.Framework.Stages
 					result = true;
 				}
 			}
-			else if (conditionCode == ConditionCode.UnsignedGreaterThan)
+			else if (conditionCode == ConditionCode.UnsignedGreater)
 			{
 				if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 				{
@@ -693,7 +693,7 @@ namespace Mosa.Compiler.Framework.Stages
 					result = true;
 				}
 			}
-			else if (conditionCode == ConditionCode.UnsignedLessThan)
+			else if (conditionCode == ConditionCode.UnsignedLess)
 			{
 				if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 				{

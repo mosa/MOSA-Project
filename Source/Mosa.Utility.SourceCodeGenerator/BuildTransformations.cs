@@ -343,16 +343,20 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 				var operation = firstInstruction ? "Set" : "Append";
 
+				var condition = GetConditionText(node);
+
+				condition = condition != null ? $"ConditionCode.{condition}, " : string.Empty;
+
 				if (!string.IsNullOrWhiteSpace(node.InstructionName))
 				{
 					var instruction = node.InstructionName.Replace("IR.", "IRInstruction."); ;
 					var result = node == transform.ResultInstructionTree ? "result" : $"v{nodeNbrToVirtualRegisterNbr[node.NodeNbr]}";
 
-					Lines.AppendLine($"\t\t\tcontext.{operation}Instruction({instruction}, {result}, {operands});");
+					Lines.AppendLine($"\t\t\tcontext.{operation}Instruction({instruction}, {condition}{result}, {operands});");
 				}
 				else
 				{
-					Lines.AppendLine($"\t\t\tcontext.{operation}Instruction(GetMove(result), result, {operands});");
+					Lines.AppendLine($"\t\t\tcontext.{operation}Instruction(GetMove(result), {condition}result, {operands});");
 				}
 
 				firstInstruction = false;
@@ -551,6 +555,11 @@ namespace Mosa.Utility.SourceCodeGenerator
 				NodeNbrToNode.Add(instructionNode.NodeNbr, string.Empty);
 			}
 
+			var condition = GetConditionText(instructionNode);
+
+			if (condition != null)
+				EmitCondition($"context.ConditionCode != ConditionCode.{condition}");
+
 			foreach (var operand in instructionNode.Operands)
 			{
 				ProcessConditions(operand, instructionNode);
@@ -559,6 +568,25 @@ namespace Mosa.Utility.SourceCodeGenerator
 			foreach (var operand in instructionNode.Operands)
 			{
 				ProcessNestedConditions(operand, instructionNode);
+			}
+		}
+
+		private static string GetConditionText(InstructionNode instructionNode)
+		{
+			switch (instructionNode.Condition)
+			{
+				case ConditionCode.Equal: return "Equal";
+				case ConditionCode.NotEqual: return "NotEqual";
+				case ConditionCode.Less: return "Less";
+				case ConditionCode.LessOrEqual: return "LessOrEqual";
+				case ConditionCode.Greater: return "Greater";
+				case ConditionCode.GreaterOrEqual: return "GreaterOrEqual";
+
+				case ConditionCode.UnsignedLess: return "UnsignedLess";
+				case ConditionCode.UnsignedLessOrEqual: return "UnsignedLessOrEqual";
+				case ConditionCode.UnsignedGreater: return "UnsignedGreater";
+				case ConditionCode.UnsignedGreaterOrEqual: return "UnsignedGreaterOrEqual";
+				default: return null;
 			}
 		}
 

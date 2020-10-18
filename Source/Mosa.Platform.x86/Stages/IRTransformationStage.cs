@@ -672,123 +672,57 @@ namespace Mosa.Platform.x86.Stages
 		private void FloatCompare(Context context, X86Instruction instruction)
 		{
 			var result = context.Result;
-			var left = context.Operand1;
-			var right = context.Operand2;
 			var condition = context.ConditionCode;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
 
-			// normalize condition
-			switch (condition)
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+
+			if (condition == ConditionCode.Equal)
 			{
-				case ConditionCode.Equal: break;
-				case ConditionCode.NotEqual: break;
-				case ConditionCode.UnsignedGreaterOrEqual: condition = ConditionCode.GreaterOrEqual; break;
-				case ConditionCode.UnsignedGreaterThan: condition = ConditionCode.GreaterThan; break;
-				case ConditionCode.UnsignedLessOrEqual: condition = ConditionCode.LessOrEqual; break;
-				case ConditionCode.UnsignedLessThan: condition = ConditionCode.LessThan; break;
+				context.SetInstruction(instruction, null, operand1, operand2);
+				context.AppendInstruction(X86.Setcc, ConditionCode.NoParity, result);
+				context.AppendInstruction(X86.Mov32, v1, ConstantZero32);
+				context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, result, result, v1);
+				context.AppendInstruction(X86.Movzx8To32, result, result);
+				return;
 			}
-
-			Debug.Assert(!(left.IsR4 && right.IsR8));
-			Debug.Assert(!(left.IsR8 && right.IsR4));
-
-			switch (condition)
+			else if (condition == ConditionCode.NotEqual)
 			{
-				case ConditionCode.Equal:
-					{
-						//  a==b
-						//	mov	eax, 1
-						//	ucomisd	xmm0, xmm1
-						//	jp	L3
-						//	jne	L3
-						//	ret
-						//L3:
-						//	mov	eax, 0
-
-						var newBlocks = CreateNewBlockContexts(2, context.Label);
-						var nextBlock = Split(context);
-
-						context.SetInstruction(X86.Mov32, result, Constant_1);
-						context.AppendInstruction(instruction, null, left, right);
-						context.AppendInstruction(X86.Branch, ConditionCode.Parity, newBlocks[1].Block);
-						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
-
-						newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[1].Block);
-						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
-
-						newBlocks[1].AppendInstruction(X86.Mov32, result, ConstantZero32);
-						newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.Block);
-						break;
-					}
-				case ConditionCode.NotEqual:
-					{
-						//  a!=b
-						//	mov	eax, 1
-						//	ucomisd	xmm0, xmm1
-						//	jp	L5
-						//	setne	al
-						//	movzx	eax, al
-						//L5:
-
-						var newBlocks = CreateNewBlockContexts(1, context.Label);
-						var nextBlock = Split(context);
-
-						context.SetInstruction(X86.Mov32, result, Constant_1);
-						context.AppendInstruction(instruction, null, left, right);
-						context.AppendInstruction(X86.Branch, ConditionCode.Parity, nextBlock.Block);
-						context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
-						newBlocks[0].AppendInstruction(X86.Setcc, ConditionCode.NotEqual, result);
-
-						//newBlocks[0].AppendInstruction(X86.Movzx, InstructionSize.Size8, result, result);
-						newBlocks[0].AppendInstruction(X86.Jmp, nextBlock.Block);
-						break;
-					}
-				case ConditionCode.LessThan:
-					{
-						//	a<b
-						//	mov	eax, 0
-						//	ucomisd	xmm1, xmm0
-						//	seta	al
-
-						context.SetInstruction(X86.Mov32, result, ConstantZero32);
-						context.AppendInstruction(instruction, null, right, left);
-						context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterThan, result);
-						break;
-					}
-				case ConditionCode.GreaterThan:
-					{
-						//	a>b
-						//	mov	eax, 0
-						//	ucomisd	xmm0, xmm1
-						//	seta	al
-
-						context.SetInstruction(X86.Mov32, result, ConstantZero32);
-						context.AppendInstruction(instruction, null, left, right);
-						context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterThan, result);
-						break;
-					}
-				case ConditionCode.LessOrEqual:
-					{
-						//	a<=b
-						//	mov	eax, 0
-						//	ucomisd	xmm1, xmm0
-						//	setae	al
-
-						context.SetInstruction(X86.Mov32, result, ConstantZero32);
-						context.AppendInstruction(instruction, null, right, left);
-						context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterOrEqual, result);
-						break;
-					}
-				case ConditionCode.GreaterOrEqual:
-					{
-						//	a>=b
-						//	mov	eax, 0
-						//	ucomisd	xmm0, xmm1
-						//	setae	al
-
-						context.SetInstruction(X86.Mov32, result, ConstantZero32);
-						context.AppendInstruction(instruction, null, left, right);
-						context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreaterOrEqual, result);
-						break;
-					}
+				context.SetInstruction(instruction, null, operand1, operand2);
+				context.AppendInstruction(X86.Setcc, ConditionCode.Parity, result);
+				context.AppendInstruction(X86.Mov32, v1, Constant_1);
+				context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, result, result, v1);
+				context.AppendInstruction(X86.Movzx8To32, result, result);
+				return;
+			}
+			else if (condition == ConditionCode.Greater || condition == ConditionCode.UnsignedGreater)
+			{
+				context.SetInstruction(instruction, null, operand1, operand2);
+				context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreater, v1);
+				context.AppendInstruction(X86.Movzx8To32, result, v1);
+				return;
+			}
+			else if (condition == ConditionCode.Less || condition == ConditionCode.UnsignedLess)
+			{
+				context.SetInstruction(instruction, null, operand2, operand1);
+				context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedGreater, v1);
+				context.AppendInstruction(X86.Movzx8To32, result, v1);
+				return;
+			}
+			else if (condition == ConditionCode.GreaterOrEqual || condition == ConditionCode.UnsignedGreaterOrEqual)
+			{
+				context.SetInstruction(instruction, null, operand2, operand1);
+				context.AppendInstruction(X86.Setcc, ConditionCode.NoCarry, v1);
+				context.AppendInstruction(X86.Movzx8To32, result, v1);
+				return;
+			}
+			else if (condition == ConditionCode.LessOrEqual || condition == ConditionCode.UnsignedLessOrEqual)
+			{
+				context.SetInstruction(instruction, null, operand2, operand1);
+				context.AppendInstruction(X86.Setcc, ConditionCode.NoCarry, v1);
+				context.AppendInstruction(X86.Movzx8To32, result, v1);
+				return;
 			}
 		}
 

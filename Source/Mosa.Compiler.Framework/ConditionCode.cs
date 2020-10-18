@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Greater-than comparison.
 		/// </summary>
-		GreaterThan,
+		Greater,
 
 		/// <summary>
 		/// Greater-than or equal comparison.
@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Less-than comparison.
 		/// </summary>
-		LessThan,
+		Less,
 
 		/// <summary>
 		/// Less-than or equal comparison.
@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Unsigned greater than comparison.
 		/// </summary>
-		UnsignedGreaterThan,
+		UnsignedGreater,
 
 		/// <summary>
 		/// Unsigned greater than or equal comparison.
@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Unsigned less than comparison.
 		/// </summary>
-		UnsignedLessThan,
+		UnsignedLess,
 
 		/// <summary>
 		/// Unsigned less than or equal comparison.

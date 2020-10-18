@@ -1,0 +1,111 @@
+﻿{
+	"Commutative": [
+		"IR.Add32",
+		"IR.Add64",
+		"IR.AddR4",
+		"IR.AddR8",
+		"IR.And32",
+		"IR.And64",
+		"IR.Or32",
+		"IR.Or64",
+		"IR.Xor32",
+		"IR.Xor64",
+		"IR.MulR4",
+		"IR.MulR8",
+		"IR.MulUnsigned32",
+		"IR.MulUnsigned64",
+		"IR.MulSigned32",
+		"IR.MulSigned64",
+		"IR.AddCarryOut64",
+		"IR.AddCarryOut32",
+		"IR.AddCarryIn32",
+		"IR.AddCarryIn64",
+		"IR.Compare32x32",
+		"IR.Compare32x64",
+		"IR.Compare64x32",
+		"IR.Compare64x64"
+	],
+	"Optimizations": [
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare32x##Add##",
+			"SubName": "SignedPositive",
+			"Expression": "(IR.Compare32x## {>} (IR.Add## a C) a)",
+			"Filter": "IsSignedIntegerPositive(C)",
+			"Result": "(IR.Move## 1)",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare64x##Add##",
+			"SubName": "SignedPositive",
+			"Expression": "(IR.Compare64x## {>} (IR.Add## a C) a)",
+			"Filter": "IsSignedIntegerPositive(C)",
+			"Result": "(IR.Move## 1)",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare32x##Add##",
+			"SubName": "SignedNegative",
+			"Expression": "(IR.Compare32x## {<=} (IR.Add## a C) a)",
+			"Filter": "IsSignedIntegerPositive(C)",
+			"Result": "(IR.Move## 0)",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare64x##Add##",
+			"SubName": "SignedNegative",
+			"Expression": "(IR.Compare64x## {<=} (IR.Add## a C) a)",
+			"Filter": "IsSignedIntegerPositive(C)",
+			"Result": "(IR.Move## 0)",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare32x##Add##",
+			"SubName": "UnsignedPositive",
+			"Expression": "(IR.Compare32x## {> u} (IR.Add## a C) a)",
+			"Filter": "IsUnsignedIntegerPositive(C)",
+			"Result": "(IR.Move32 1)",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare64x##Add##",
+			"SubName": "UnsignedPositive",
+			"Expression": "(IR.Compare64x## {> u} (IR.Add## a C) a)",
+			"Filter": "IsUnsignedIntegerPositive(C)",
+			"Result": "(IR.Move## 1)",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare32x##Add##",
+			"SubName": "UnsignedNegative",
+			"Expression": "(IR.Compare32x## {<= u} (IR.Add## a C) a)",
+			"Filter": "IsUnsignedIntegerPositive(C)",
+			"Result": "(IR.Move## 0)",
+			"Reassociate": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Compare64x##Add##",
+			"SubName": "UnsignedNegative",
+			"Expression": "(IR.Compare64x## {<= u} (IR.Add## a C) a)",
+			"Filter": "IsUnsignedIntegerPositive(C)",
+			"Result": "(IR.Move## 0)",
+			"Reassociate": "Yes"
+		}
+
+	]
+}

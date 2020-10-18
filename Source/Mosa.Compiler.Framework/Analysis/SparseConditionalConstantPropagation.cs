@@ -620,7 +620,7 @@ namespace Mosa.Compiler.Framework.Analysis
 					return true;
 				}
 			}
-			else if (condition == ConditionCode.UnsignedGreaterThan)
+			else if (condition == ConditionCode.UnsignedGreater)
 			{
 				if (operand2.IsSingleConstant && operand2.ConstantSignedLongInteger == 0 && operand1.IsReferenceDefinedNotNull)
 				{
@@ -1083,14 +1083,14 @@ namespace Mosa.Compiler.Framework.Analysis
 				case ConditionCode.Equal: return operand1 == operand2;
 				case ConditionCode.NotEqual: return operand1 != operand2;
 				case ConditionCode.GreaterOrEqual: return operand1 >= operand2;
-				case ConditionCode.GreaterThan: return operand1 > operand2;
+				case ConditionCode.Greater: return operand1 > operand2;
 				case ConditionCode.LessOrEqual: return operand1 <= operand2;
-				case ConditionCode.LessThan: return operand1 < operand2;
+				case ConditionCode.Less: return operand1 < operand2;
 
 				case ConditionCode.UnsignedGreaterOrEqual: return operand1 >= operand2;
-				case ConditionCode.UnsignedGreaterThan: return operand1 > operand2;
+				case ConditionCode.UnsignedGreater: return operand1 > operand2;
 				case ConditionCode.UnsignedLessOrEqual: return operand1 <= operand2;
-				case ConditionCode.UnsignedLessThan: return operand1 < operand2;
+				case ConditionCode.UnsignedLess: return operand1 < operand2;
 
 				case ConditionCode.Always: return true;
 				case ConditionCode.Never: return false;

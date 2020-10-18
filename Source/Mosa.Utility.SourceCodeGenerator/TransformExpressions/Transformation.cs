@@ -334,10 +334,15 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			{
 				if (cumulativeInstructions.Contains(node.InstructionName) && node.Operands.Count == 2)
 				{
+					//if (node.InstructionName.Contains("Compare") && !(node.Condition == ConditionCode.Equal || node.Condition == ConditionCode.NotEqual))
+					//	continue;
+
 					if (!node.Operands[0].IsSame(node.Operands[1]))
 					{
 						if (((index >> bit) & 1) == 1)
 						{
+							node.Condition = GetReverse(node.Condition);
+
 							var temp = node.Operands[0];
 							node.Operands[0] = node.Operands[1];
 							node.Operands[1] = temp;
@@ -352,6 +357,22 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			}
 
 			return new Transformation(instructionTree, ResultInstructionTree, Filters);
+		}
+
+		public static ConditionCode GetReverse(ConditionCode conditionCode)
+		{
+			switch (conditionCode)
+			{
+				case ConditionCode.GreaterOrEqual: return ConditionCode.LessOrEqual;
+				case ConditionCode.Greater: return ConditionCode.LessOrEqual;
+				case ConditionCode.LessOrEqual: return ConditionCode.GreaterOrEqual;
+				case ConditionCode.Less: return ConditionCode.Greater;
+				case ConditionCode.UnsignedGreaterOrEqual: return ConditionCode.UnsignedLessOrEqual;
+				case ConditionCode.UnsignedGreater: return ConditionCode.UnsignedLess;
+				case ConditionCode.UnsignedLessOrEqual: return ConditionCode.UnsignedGreaterOrEqual;
+				case ConditionCode.UnsignedLess: return ConditionCode.UnsignedGreater;
+				default: return conditionCode;
+			}
 		}
 	}
 }

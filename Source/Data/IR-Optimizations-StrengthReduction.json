@@ -19,7 +19,11 @@
 		"IR.AddCarryOut64",
 		"IR.AddCarryOut32",
 		"IR.AddCarryIn32",
-		"IR.AddCarryIn64"
+		"IR.AddCarryIn64",
+		"IR.Compare32x32",
+		"IR.Compare32x64",
+		"IR.Compare64x32",
+		"IR.Compare64x64"
 	],
 	"Optimizations": [
 		{

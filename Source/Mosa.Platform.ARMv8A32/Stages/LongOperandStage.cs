@@ -51,18 +51,15 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.MulUnsigned64, MulUnsigned64);
 			AddVisitation(IRInstruction.ShiftLeft64, ShiftLeft64);
 			AddVisitation(IRInstruction.ShiftRight64, ShiftRight64);
-
 			AddVisitation(IRInstruction.SignExtend16x64, SignExtend16x64);
 			AddVisitation(IRInstruction.SignExtend32x64, SignExtend32x64);
 			AddVisitation(IRInstruction.SignExtend8x64, SignExtend8x64);
 			AddVisitation(IRInstruction.GetHigh64, GetHigh64);
 			AddVisitation(IRInstruction.GetLow64, GetLow64);
-
-			//AddVisitation(IRInstruction.Store64, Store64);
-			//AddVisitation(IRInstruction.StoreParam64, StoreParam64);
+			AddVisitation(IRInstruction.Store64, Store64);
+			AddVisitation(IRInstruction.StoreParam64, StoreParam64);
 			AddVisitation(IRInstruction.Sub64, Sub64);
 			AddVisitation(IRInstruction.To64, To64);
-
 			AddVisitation(IRInstruction.Truncate64x32, Truncate64x32);
 			AddVisitation(IRInstruction.ZeroExtend16x64, ZeroExtended16x64);
 			AddVisitation(IRInstruction.ZeroExtend32x64, ZeroExtended32x64);
@@ -435,6 +432,25 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			op1L = MoveConstantToRegisterOrImmediate(context, op1L);
 
 			context.SetInstruction(ARMv8A32.Mov, resultLow, op1L);
+		}
+
+		private void Store64(Context context)
+		{
+			SplitLongOperand(context.Operand1, out var baseLow, out var baseHigh);
+			SplitLongOperand(context.Operand2, out var lowOffset, out var highOffset);
+			SplitLongOperand(context.Operand3, out var valueLow, out var valueHigh);
+
+			TransformStore(context, ARMv8A32.Ldr32, baseLow, lowOffset, valueLow);
+			TransformStore(context.InsertAfter(), ARMv8A32.Ldr32, baseLow, highOffset, valueHigh);
+		}
+
+		private void StoreParam64(Context context)
+		{
+			SplitLongOperand(context.Operand1, out var lowOffset, out var highOffset);
+			SplitLongOperand(context.Operand2, out var valueLow, out var valueHigh);
+
+			TransformStore(context, ARMv8A32.Ldr32, StackFrame, lowOffset, valueLow);
+			TransformStore(context.InsertAfter(), ARMv8A32.Ldr32, StackFrame, highOffset, valueHigh);
 		}
 
 		private void To64(Context context)

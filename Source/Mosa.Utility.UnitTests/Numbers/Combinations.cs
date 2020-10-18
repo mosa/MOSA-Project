@@ -719,6 +719,16 @@ namespace Mosa.Utility.UnitTests.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> R4R4NoZero
+		{
+			get
+			{
+				foreach (var i1 in Series.R4)
+					foreach (var i2 in Numbers.R4.Series)
+						yield return new object[] { i1, i2 };
+			}
+		}
+
 		public static IEnumerable<object[]> R4R4
 		{
 			get
@@ -765,6 +775,16 @@ namespace Mosa.Utility.UnitTests.Numbers
 			{
 				foreach (var i1 in Series.R8NotNaN)
 					yield return new object[] { i1 };
+			}
+		}
+
+		public static IEnumerable<object[]> R8R8NoZero
+		{
+			get
+			{
+				foreach (var i1 in Series.R8)
+					foreach (var i2 in Numbers.R8.Series)
+						yield return new object[] { i1, i2 };
 			}
 		}
 

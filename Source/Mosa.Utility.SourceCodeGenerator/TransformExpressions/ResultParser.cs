@@ -74,7 +74,12 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				{
 					index++; // skip to next token, which should be label
 					node.ResultType = tokens[index].Value;
-					index++; // skip to next token, which should be less
+					index++; // skip to next token, which should be less than
+				}
+				else if (token.TokenType == TokenType.OpenCurly)
+				{
+					index++; // skip to next token, which should be label
+					node.Condition = InstructionParser.ParseCondition(tokens, ref index);
 				}
 				else
 				{

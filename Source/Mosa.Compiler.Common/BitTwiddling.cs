@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Common
 			return bits - 1;
 		}
 
-		public static int GetHighestBitSet(ulong value)
+		public static int GetHighestSetBit(ulong value)
 		{
 			int r = 0;
 			while (value != 0)
@@ -34,9 +34,20 @@ namespace Mosa.Compiler.Common
 			return r;
 		}
 
+		public static int GetLowestSetBit(ulong value)
+		{
+			int r = 0;
+			while (value != 0)
+			{
+				value <<= 1;
+				r++;
+			}
+			return r;
+		}
+
 		public static ulong GetClearBitsOver(ulong value)
 		{
-			var highest = GetHighestBitSet(value);
+			var highest = GetHighestSetBit(value);
 
 			if (highest == 32)
 				return 0;
