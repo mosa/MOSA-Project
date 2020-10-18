@@ -217,5 +217,17 @@ namespace Mosa.UnitTests
 		{
 			return (a ^ 0b11) >> 3;
 		}
+
+		[MosaUnitTest(Series = "U4")]
+		public static uint OptimizationTest33(uint a)
+		{
+			return (a | 0xF0000000) << 8;
+		}
+
+		[MosaUnitTest(Series = "U4")]
+		public static uint OptimizationTest34(uint a)
+		{
+			return (a ^ 0xF0000000) << 8;
+		}
 	}
 }

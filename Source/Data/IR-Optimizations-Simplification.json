@@ -118,7 +118,7 @@
 			"Name": "GetHigh64",
 			"SubName": "FromShiftedMore32",
 			"Expression": "IR.GetHigh64 (IR.ShiftRight64 a b)",
-			"Filter": "IsGreaterThanOrEqual(And32(To32(b),63),32)",
+			"Filter": "IsGreaterOrEqual(And32(To32(b),63),32)",
 			"Result": "(IR.Move32 0)"
 		},
 		{
@@ -127,7 +127,7 @@
 			"Name": "GetLow64",
 			"SubName": "FromShiftedMore32",
 			"Expression": "IR.GetLow64 (IR.ShiftLeft64 a b)",
-			"Filter": "IsGreaterThanOrEqual(And32(To32(b),63),32)",
+			"Filter": "IsGreaterOrEqual(And32(To32(b),63),32)",
 			"Result": "(IR.Move32 0)"
 		},
 		{

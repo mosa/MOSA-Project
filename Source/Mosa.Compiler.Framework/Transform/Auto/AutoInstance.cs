@@ -217,6 +217,14 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 		public static readonly BaseTransformation IR_StrengthReduction_UnlessXor32ShiftRight32_v1 = new IR.StrengthReduction.UnlessXor32ShiftRight32_v1();
 		public static readonly BaseTransformation IR_StrengthReduction_UnlessXor64ShiftRight64 = new IR.StrengthReduction.UnlessXor64ShiftRight64();
 		public static readonly BaseTransformation IR_StrengthReduction_UnlessXor64ShiftRight64_v1 = new IR.StrengthReduction.UnlessXor64ShiftRight64_v1();
+		public static readonly BaseTransformation IR_StrengthReduction_UnlessOr32ShiftLeft32 = new IR.StrengthReduction.UnlessOr32ShiftLeft32();
+		public static readonly BaseTransformation IR_StrengthReduction_UnlessOr32ShiftLeft32_v1 = new IR.StrengthReduction.UnlessOr32ShiftLeft32_v1();
+		public static readonly BaseTransformation IR_StrengthReduction_UnlessOr64ShiftLeft64 = new IR.StrengthReduction.UnlessOr64ShiftLeft64();
+		public static readonly BaseTransformation IR_StrengthReduction_UnlessOr64ShiftLeft64_v1 = new IR.StrengthReduction.UnlessOr64ShiftLeft64_v1();
+		public static readonly BaseTransformation IR_StrengthReduction_UnlessXor32ShiftLeft32 = new IR.StrengthReduction.UnlessXor32ShiftLeft32();
+		public static readonly BaseTransformation IR_StrengthReduction_UnlessXor32ShiftLeft32_v1 = new IR.StrengthReduction.UnlessXor32ShiftLeft32_v1();
+		public static readonly BaseTransformation IR_StrengthReduction_UnlessXor64ShiftLeft64 = new IR.StrengthReduction.UnlessXor64ShiftLeft64();
+		public static readonly BaseTransformation IR_StrengthReduction_UnlessXor64ShiftLeft64_v1 = new IR.StrengthReduction.UnlessXor64ShiftLeft64_v1();
 		public static readonly BaseTransformation IR_Reorder_MulUnsigned32WithShiftLeft32 = new IR.Reorder.MulUnsigned32WithShiftLeft32();
 		public static readonly BaseTransformation IR_Reorder_MulUnsigned32WithShiftLeft32_v1 = new IR.Reorder.MulUnsigned32WithShiftLeft32_v1();
 		public static readonly BaseTransformation IR_Reorder_MulUnsigned64WithShiftLeft64 = new IR.Reorder.MulUnsigned64WithShiftLeft64();

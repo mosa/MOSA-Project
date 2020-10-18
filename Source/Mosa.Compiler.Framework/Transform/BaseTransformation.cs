@@ -118,19 +118,14 @@ namespace Mosa.Compiler.Framework.Transform
 			return operand.IsFloatingPoint;
 		}
 
-		protected static bool IsGreaterThan(ulong a, ulong b)
+		protected static bool IsGreater(ulong a, ulong b)
 		{
 			return a > b;
 		}
 
-		protected static bool IsGreaterThanOrEqual(ulong a, ulong b)
+		protected static bool IsGreaterOrEqual(ulong a, ulong b)
 		{
 			return a >= b;
-		}
-
-		protected static bool IsHigherVirtualNumber(Operand operand1, Operand operand2)
-		{
-			return operand1.IsVirtualRegister && operand2.IsVirtualRegister && operand1.Index > operand2.Index;
 		}
 
 		protected static bool IsInteger(Operand operand)
@@ -148,14 +143,14 @@ namespace Mosa.Compiler.Framework.Transform
 			return operand.IsInteger && operand.ConstantSigned64 >= 0 && operand.ConstantSigned64 <= 64;
 		}
 
+		protected static bool IsLessOrEqual(ulong a, ulong b)
+		{
+			return a <= b;
+		}
+
 		protected static bool IsLessThan(ulong a, ulong b)
 		{
 			return a < b;
-		}
-
-		protected static bool IsLessThanOrEqual(ulong a, ulong b)
-		{
-			return a <= b;
 		}
 
 		protected static bool IsNaturalSquareRoot32(Operand operand)
@@ -312,9 +307,14 @@ namespace Mosa.Compiler.Framework.Transform
 			return (uint)(a >> 32);
 		}
 
-		protected static ulong GetHighestBitSet(ulong value)
+		protected static ulong GetHighestSetBit(ulong value)
 		{
-			return (ulong)BitTwiddling.GetHighestBitSet(value);
+			return (ulong)BitTwiddling.GetHighestSetBit(value);
+		}
+
+		protected static ulong GetLowestSetBit(ulong value)
+		{
+			return (ulong)BitTwiddling.GetLowestSetBit(value);
 		}
 
 		protected static uint GetPowerOfTwo(ulong value)

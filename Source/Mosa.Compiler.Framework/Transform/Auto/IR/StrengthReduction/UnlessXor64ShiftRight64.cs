@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 	/// </summary>
 	public sealed class UnlessXor64ShiftRight64 : BaseTransformation
 	{
-		public UnlessXor64ShiftRight64() : base(IRInstruction.ShiftRight64, true)
+		public UnlessXor64ShiftRight64() : base(IRInstruction.ShiftRight64)
 		{
 		}
 
@@ -32,7 +32,10 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			if (!IsConstant(context.Operand2))
 				return false;
 
-			if (!IsLessThanOrEqual(GetHighestBitSet(To64(context.Operand1.Definitions[0].Operand2)), To64(context.Operand2)))
+			if (IsZero(context.Operand2))
+				return false;
+
+			if (!IsLessOrEqual(GetHighestSetBit(To64(context.Operand1.Definitions[0].Operand2)), To64(context.Operand2)))
 				return false;
 
 			return true;
@@ -54,7 +57,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 	/// </summary>
 	public sealed class UnlessXor64ShiftRight64_v1 : BaseTransformation
 	{
-		public UnlessXor64ShiftRight64_v1() : base(IRInstruction.ShiftRight64, true)
+		public UnlessXor64ShiftRight64_v1() : base(IRInstruction.ShiftRight64)
 		{
 		}
 
@@ -75,7 +78,10 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			if (!IsConstant(context.Operand2))
 				return false;
 
-			if (!IsLessThanOrEqual(GetHighestBitSet(To64(context.Operand1.Definitions[0].Operand1)), To64(context.Operand2)))
+			if (IsZero(context.Operand2))
+				return false;
+
+			if (!IsLessOrEqual(GetHighestSetBit(To64(context.Operand1.Definitions[0].Operand1)), To64(context.Operand2)))
 				return false;
 
 			return true;
