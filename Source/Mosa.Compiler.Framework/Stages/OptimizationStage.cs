@@ -70,8 +70,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			LowerTo32 = LowerTo32 && CompilerSettings.LongExpansion && Is32BitPlatform;
-
 			trace = CreateTraceLog(5);
 			specialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
 
@@ -88,9 +86,7 @@ namespace Mosa.Compiler.Framework.Stages
 			int pass = 0;
 			int maximumPasses = MaximumPasses;
 
-			bool direction = true;
-
-			TransformContext.SetStageOptions(IsInSSAForm, LowerTo32 && !TransformContext.LowerTo32);
+			TransformContext.SetStageOptions(IsInSSAForm, LowerTo32 && CompilerSettings.LongExpansion && Is32BitPlatform);
 
 			var changed = true;
 
@@ -99,38 +95,25 @@ namespace Mosa.Compiler.Framework.Stages
 				pass++;
 				trace?.Log($"*** Pass # {pass}");
 
-				changed = OptimizationPass(direction, context);
-				direction = !direction;
+				changed = OptimizationPass(context);
 
 				if (pass > maximumPasses)
 					break;
 			}
 		}
 
-		private bool OptimizationPass(bool direction, Context context)
+		private bool OptimizationPass(Context context)
 		{
 			bool changed = false;
 
-			if (direction)
+			for (int i = 0; i < BasicBlocks.Count; i++)
 			{
-				for (int i = 0; i < BasicBlocks.Count; i++)
+				for (var node = BasicBlocks[i].AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					for (var node = BasicBlocks[i].AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
-					{
-						context.Node = node;
-						changed = changed || Process(context);
-					}
-				}
-			}
-			else
-			{
-				for (int i = BasicBlocks.Count - 1; i >= 0; i--)
-				{
-					for (var node = BasicBlocks[i].BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
-					{
-						context.Node = node;
-						changed = changed || Process(context);
-					}
+					context.Node = node;
+
+					var updated = Process(context);
+					changed = changed || updated;
 				}
 			}
 
