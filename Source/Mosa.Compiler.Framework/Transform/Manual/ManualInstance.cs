@@ -60,8 +60,12 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 		public static readonly BaseTransformation IR_LowerTo32_ZeroExtend16x64 = new IR.LowerTo32.ZeroExtend16x64();
 		public static readonly BaseTransformation IR_LowerTo32_ZeroExtend32x64 = new IR.LowerTo32.ZeroExtend32x64();
 
+		public static readonly BaseTransformation IR_LowerTo32_Move64 = new IR.LowerTo32.Move64();
+
 		public static readonly BaseTransformation IR_Special_CodeInDeadBlock = new Transform.IR.Special.CodeInDeadBlock();
 		public static readonly BaseTransformation IR_Special_Deadcode = new Transform.IR.Special.Deadcode();
+
+		public static readonly BaseTransformation IR_Special_GetLow64From32 = new Transform.IR.Special.GetLow64From32();
 
 		public static readonly BaseTransformation IR_Simplification_AddCarryOut32CarryNotUsed = new IR.Simplification.AddCarryOut32CarryNotUsed();
 		public static readonly BaseTransformation IR_Simplification_AddCarryOut64CarryNotUsed = new IR.Simplification.AddCarryOut64CarryNotUsed();

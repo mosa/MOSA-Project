@@ -72,7 +72,8 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 		public static readonly BaseTransformation IR_ConstantFolding_Convert64ToR8 = new IR.ConstantFolding.Convert64ToR8();
 		public static readonly BaseTransformation IR_ConstantFolding_GetHigh64 = new IR.ConstantFolding.GetHigh64();
 		public static readonly BaseTransformation IR_ConstantFolding_GetLow64 = new IR.ConstantFolding.GetLow64();
-		public static readonly BaseTransformation IR_ConstantFolding_To64 = new IR.ConstantFolding.To64();
+		public static readonly BaseTransformation IR_ConstantFolding_GetLow64FromTo64 = new IR.ConstantFolding.GetLow64FromTo64();
+		public static readonly BaseTransformation IR_ConstantFolding_GetHigh64FromTo64 = new IR.ConstantFolding.GetHigh64FromTo64();
 		public static readonly BaseTransformation IR_ConstantMove_Add32 = new IR.ConstantMove.Add32();
 		public static readonly BaseTransformation IR_ConstantMove_Add64 = new IR.ConstantMove.Add64();
 		public static readonly BaseTransformation IR_ConstantMove_AddR4 = new IR.ConstantMove.AddR4();
@@ -97,7 +98,6 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 		public static readonly BaseTransformation IR_Simplification_GetHigh64FromTo64 = new IR.Simplification.GetHigh64FromTo64();
 		public static readonly BaseTransformation IR_Simplification_GetHigh64To64 = new IR.Simplification.GetHigh64To64();
 		public static readonly BaseTransformation IR_Simplification_GetLow64To64 = new IR.Simplification.GetLow64To64();
-		public static readonly BaseTransformation IR_Simplification_To64FromLowHigh = new IR.Simplification.To64FromLowHigh();
 		public static readonly BaseTransformation IR_Simplification_GetLow64FromShiftedRight32 = new IR.Simplification.GetLow64FromShiftedRight32();
 		public static readonly BaseTransformation IR_Simplification_GetLow64FromRightShiftAndTo64 = new IR.Simplification.GetLow64FromRightShiftAndTo64();
 		public static readonly BaseTransformation IR_Simplification_GetHigh64FromRightLeftAndTo64 = new IR.Simplification.GetHigh64FromRightLeftAndTo64();

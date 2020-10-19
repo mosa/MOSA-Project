@@ -338,11 +338,20 @@
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
-			"Name": "To64",
-			"SubName": "",
-			"Expression": "IR.To64 a b",
-			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
-			"Result": "(IR.Move64 [To64(To32(a),To32(b))])"
+			"Name": "GetLow64",
+			"SubName": "FromTo64",
+			"Expression": "IR.GetLow64 (IR.To64 l h)",
+			"Filter": "IsResolvedConstant(l)",
+			"Result": "(IR.Move32 l)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "GetHigh64",
+			"SubName": "FromTo64",
+			"Expression": "IR.GetHigh64 (IR.To64 l h)",
+			"Filter": "IsResolvedConstant(h)",
+			"Result": "(IR.Move32 h)"
 		}
 	]
 }

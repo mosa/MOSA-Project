@@ -79,15 +79,6 @@
 		{
 			"FamilyName": "IR",
 			"Type": "Simplification",
-			"Name": "To64",
-			"SubName": "FromLowHigh",
-			"Expression": "IR.To64 (IR.GetLow64 a) (IR.GetHigh64 a)",
-			"Filter": "",
-			"Result": "(IR.Move32 a)"
-		},
-		{
-			"FamilyName": "IR",
-			"Type": "Simplification",
 			"Name": "GetLow64",
 			"SubName": "FromShiftedRight32",
 			"Expression": "IR.GetLow64 (IR.ShiftRight32 a 32)",

@@ -529,8 +529,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (!value.AreRangeValuesIndeterminate)
 				{
-					trace?.Log($"  MaxValue:  {value.MaxValue.ToString()}");
-					trace?.Log($"  MinValue:  {value.MinValue.ToString()}");
+					trace?.Log($"  MaxValue:  {value.MaxValue}");
+					trace?.Log($"  MinValue:  {value.MinValue}");
 				}
 
 				if (value.BitsKnown != 0)

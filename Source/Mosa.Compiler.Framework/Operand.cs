@@ -98,20 +98,16 @@ namespace Mosa.Compiler.Framework
 			{
 				if (!IsResolvedConstant)
 					return false;
-				else if (IsInteger || IsBoolean || IsChar || IsPointer)
+				else if (IsStackLocal || IsOnStack || IsParameter)
 					return ConstantUnsigned64 == 1;
-				else if (IsStackLocal)
-					return ConstantUnsigned64 == 1;
-				else if (IsParameter)
-					return ConstantUnsigned64 == 1;
+				else if (IsNull)
+					return false;
 				else if (IsR8)
 					return ConstantDouble == 1;
 				else if (IsR4)
 					return ConstantFloat == 1;
-				else if (IsNull)
-					return false;
-
-				throw new CompilerException();
+				else
+					return ConstantUnsigned64 == 1;
 			}
 		}
 
@@ -125,20 +121,16 @@ namespace Mosa.Compiler.Framework
 			{
 				if (!IsResolvedConstant)
 					return false;
-				else if (IsInteger || IsBoolean || IsChar || IsPointer)
+				else if (IsStackLocal || IsOnStack || IsParameter)
 					return ConstantUnsigned64 == 0;
-				else if (IsStackLocal)
-					return ConstantUnsigned64 == 0;
-				else if (IsParameter)
-					return ConstantUnsigned64 == 0;
+				else if (IsNull)
+					return true;
 				else if (IsR8)
 					return ConstantDouble == 0;
 				else if (IsR4)
 					return ConstantFloat == 0;
-				else if (IsNull)
-					return true;
-
-				throw new CompilerException();
+				else
+					return ConstantUnsigned64 == 0;
 			}
 		}
 
@@ -875,7 +867,7 @@ namespace Mosa.Compiler.Framework
 				{
 					sb.Append("null");
 				}
-				else if (IsOnStack || IsInteger || IsPointer || IsChar || IsBoolean)
+				else if (IsOnStack)
 				{
 					sb.AppendFormat("{0}", ConstantSigned64);
 				}
@@ -886,6 +878,10 @@ namespace Mosa.Compiler.Framework
 				else if (IsR4)
 				{
 					sb.AppendFormat("{0}", ConstantFloat);
+				}
+				else
+				{
+					sb.AppendFormat("{0}", ConstantSigned64);
 				}
 
 				sb.Append(' ');

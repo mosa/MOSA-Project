@@ -96,7 +96,7 @@
 			"Filter": "IsConstant(X) & IsConstant(N) & !IsZero(N) & IsGreaterOrEqual(GetLowestSetBit(To##(X)),To##(N))",
 			"Result": "(IR.ShiftLeft## a N)",
 			"Reassociate": "Yes",
-			"Log": "Yes"
+			"Log": "No"
 		},
 		{
 			"FamilyName": "IR",
@@ -107,7 +107,7 @@
 			"Filter": "IsConstant(X) & IsConstant(N) & !IsZero(N) & IsGreaterOrEqual(GetLowestSetBit(To##(X)),To##(N))",
 			"Result": "(IR.ShiftLeft## a N)",
 			"Reassociate": "Yes",
-			"Log": "Yes"
+			"Log": "No"
 		}
 	]
 }

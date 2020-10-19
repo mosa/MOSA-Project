@@ -7,20 +7,26 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 {
 	/// <summary>
-	/// To64
+	/// GetHigh64FromTo64
 	/// </summary>
-	public sealed class To64 : BaseTransformation
+	public sealed class GetHigh64FromTo64 : BaseTransformation
 	{
-		public To64() : base(IRInstruction.To64)
+		public GetHigh64FromTo64() : base(IRInstruction.GetHigh64)
 		{
 		}
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{
-			if (!IsResolvedConstant(context.Operand1))
+			if (!context.Operand1.IsVirtualRegister)
 				return false;
 
-			if (!IsResolvedConstant(context.Operand2))
+			if (context.Operand1.Definitions.Count != 1)
+				return false;
+
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.To64)
+				return false;
+
+			if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
 				return false;
 
 			return true;
@@ -30,12 +36,9 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 		{
 			var result = context.Result;
 
-			var t1 = context.Operand1;
-			var t2 = context.Operand2;
+			var t1 = context.Operand1.Definitions[0].Operand2;
 
-			var e1 = transformContext.CreateConstant(To64(To32(t1), To32(t2)));
-
-			context.SetInstruction(IRInstruction.Move64, result, e1);
+			context.SetInstruction(IRInstruction.Move32, result, t1);
 		}
 	}
 }

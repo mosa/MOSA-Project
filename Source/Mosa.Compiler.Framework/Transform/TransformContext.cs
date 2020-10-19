@@ -37,6 +37,8 @@ namespace Mosa.Compiler.Framework.Transform
 		public bool LowerTo32 { get; private set; }
 		public bool IsInSSAForm { get; private set; }
 
+		public bool Is32BitPlatform { get; private set; }
+
 		public TransformContext(MethodCompiler methodCompiler)
 		{
 			MethodCompiler = methodCompiler;
@@ -58,6 +60,7 @@ namespace Mosa.Compiler.Framework.Transform
 			ConstantZeroR4 = MethodCompiler.ConstantZeroR4;
 			ConstantZeroR8 = MethodCompiler.ConstantZeroR8;
 
+			Is32BitPlatform = Compiler.Architecture.Is32BitPlatform;
 			LowerTo32 = Compiler.CompilerSettings.LongExpansion;
 		}
 
