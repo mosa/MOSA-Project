@@ -1,12 +1,12 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 {
-	public sealed class Compare64x32Rest : BaseTransformation
+	public sealed class Compare64x64RestInSSA : BaseTransformation
 	{
-		public Compare64x32Rest() : base(IRInstruction.Compare64x32)
+		public Compare64x64RestInSSA() : base(IRInstruction.Compare64x64, true)
 		{
 		}
 
@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 			if (context.ConditionCode == ConditionCode.Equal || context.ConditionCode == ConditionCode.NotEqual)
 				return false;
 
-			if (transformContext.IsInSSAForm)
+			if (!transformContext.IsInSSAForm)
 				return false;
 
 			return transformContext.LowerTo32;
@@ -23,11 +23,11 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
-			Debug.Assert(context.ConditionCode != ConditionCode.Equal);
-
 			var result = context.Result;
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
+
+			transformContext.SplitLongOperand(result, out Operand resultLow, out Operand resultHigh);
 
 			var branch = context.ConditionCode;
 			var branchUnsigned = context.ConditionCode.GetUnsigned();
@@ -41,7 +41,6 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 			var op0High = transformContext.AllocateVirtualRegister32();
 			var op1Low = transformContext.AllocateVirtualRegister32();
 			var op1High = transformContext.AllocateVirtualRegister32();
-			var resultLow = transformContext.AllocateVirtualRegister32();
 
 			context.SetInstruction(IRInstruction.GetLow64, op0Low, operand1);
 			context.AppendInstruction(IRInstruction.GetHigh64, op0High, operand1);
@@ -52,23 +51,30 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 			context.AppendInstruction(IRInstruction.BranchCompare32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
 			context.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
 
-			newBlocks[0].AppendInstruction(IRInstruction.BranchCompare32, branch, null, op0High, op1High, newBlocks[2].Block);
-			newBlocks[0].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
+			// Branch if check already gave results
+			if (branch == ConditionCode.Equal)
+			{
+				newBlocks[0].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
+			}
+			else
+			{
+				newBlocks[0].AppendInstruction(IRInstruction.BranchCompare32, branch, null, op0High, op1High, newBlocks[2].Block);
+				newBlocks[0].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
+			}
 
 			// Compare low
 			newBlocks[1].AppendInstruction(IRInstruction.BranchCompare32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
 			newBlocks[1].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
 
 			// Success
-			newBlocks[2].AppendInstruction(IRInstruction.Move32, resultLow, transformContext.CreateConstant((uint)1));
 			newBlocks[2].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
 
 			// Failed
-			newBlocks[3].AppendInstruction(IRInstruction.Move32, resultLow, transformContext.ConstantZero32);
 			newBlocks[3].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
 
 			// Exit
-			newBlocks[4].AppendInstruction(IRInstruction.Move32, result, resultLow);
+			newBlocks[4].AppendInstruction(IRInstruction.Phi32, resultLow, transformContext.CreateConstant((uint)1), transformContext.ConstantZero32);
+			newBlocks[4].PhiBlocks = new List<BasicBlock>(2) { newBlocks[2].Block, newBlocks[3].Block };
 			newBlocks[4].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 		}
 	}

@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
-			transformContext.SetGetLow64(context, context.Result, context.Operand1);
+			context.SetInstruction(IRInstruction.GetLow64, context.Result, context.Operand1);
 		}
 	}
 }

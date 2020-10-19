@@ -206,58 +206,6 @@ namespace Mosa.Compiler.Framework.Transform
 
 		#endregion Constant Helper Methods
 
-		#region 64-Bit Helpers
-
-		public void SetGetLow64(Context context, Operand operand1, Operand operand2)
-		{
-			if (operand2.IsResolvedConstant)
-			{
-				context.SetInstruction(IRInstruction.Move32, operand1, CreateConstant(operand2.ConstantUnsigned32));
-			}
-			else
-			{
-				context.SetInstruction(IRInstruction.GetLow64, operand1, operand2);
-			}
-		}
-
-		public void SetGetHigh64(Context context, Operand operand1, Operand operand2)
-		{
-			if (operand2.IsResolvedConstant)
-			{
-				context.SetInstruction(IRInstruction.Move32, operand1, CreateConstant(operand2.ConstantUnsigned64 >> 32));
-			}
-			else
-			{
-				context.SetInstruction(IRInstruction.GetHigh64, operand1, operand2);
-			}
-		}
-
-		public void AppendGetLow64(Context context, Operand operand1, Operand operand2)
-		{
-			if (operand2.IsResolvedConstant)
-			{
-				context.AppendInstruction(IRInstruction.Move32, operand1, CreateConstant(operand2.ConstantUnsigned32));
-			}
-			else
-			{
-				context.AppendInstruction(IRInstruction.GetLow64, operand1, operand2);
-			}
-		}
-
-		public void AppendGetHigh64(Context context, Operand operand1, Operand operand2)
-		{
-			if (operand2.IsResolvedConstant)
-			{
-				context.AppendInstruction(IRInstruction.Move32, operand1, CreateConstant(operand2.ConstantUnsigned64 >> 32));
-			}
-			else
-			{
-				context.AppendInstruction(IRInstruction.GetHigh64, operand1, operand2);
-			}
-		}
-
-		#endregion 64-Bit Helpers
-
 		#region Basic Block Helpers
 
 		/// <summary>

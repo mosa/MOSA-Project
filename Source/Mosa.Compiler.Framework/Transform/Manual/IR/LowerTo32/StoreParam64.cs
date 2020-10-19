@@ -15,19 +15,19 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
+			var offset = context.Operand1;
+			var value = context.Operand2;
 
-			var op0Low = transformContext.AllocateVirtualRegister32();
-			var op0High = transformContext.AllocateVirtualRegister32();
+			var valueLow = transformContext.AllocateVirtualRegister32();
+			var valueHigh = transformContext.AllocateVirtualRegister32();
 
-			transformContext.SplitLongOperand(operand1, out Operand op1Low, out Operand op1High);
-			transformContext.SplitLongOperand(operand2, out Operand _, out Operand _);
+			transformContext.SplitLongOperand(offset, out Operand op1Low, out Operand op1High);
 
-			transformContext.SetGetLow64(context, op0Low, operand2);
-			transformContext.AppendGetHigh64(context, op0High, operand2);
-			context.AppendInstruction(IRInstruction.StoreParam32, null, op1Low, op0Low);
-			context.AppendInstruction(IRInstruction.StoreParam32, null, op1High, op0High);
+			context.SetInstruction(IRInstruction.GetLow64, valueLow, value);
+			context.AppendInstruction(IRInstruction.GetHigh64, valueHigh, value);
+
+			context.AppendInstruction(IRInstruction.StoreParam32, null, op1Low, valueLow);
+			context.AppendInstruction(IRInstruction.StoreParam32, null, op1High, valueHigh);
 		}
 	}
 }

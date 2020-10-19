@@ -75,6 +75,8 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public bool Is64BitInteger { get; private set; }
 
+		public bool Is32BitInteger { get; private set; }
+
 		public bool IsArray { get; private set; }
 
 		public bool IsBoolean { get; private set; }
@@ -327,6 +329,7 @@ namespace Mosa.Compiler.Framework
 			IsInteger = type.IsI1 || type.IsI2 || type.IsI4 || type.IsI8 || type.IsU1 || type.IsU2 || type.IsU4 || type.IsU8;
 
 			Is64BitInteger = type.IsUI8 || Type.GetEnumUnderlyingType().IsUI8;
+			Is32BitInteger = type.IsUI4 || Type.GetEnumUnderlyingType().IsUI4;
 		}
 
 		#endregion Construction

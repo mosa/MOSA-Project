@@ -108,10 +108,13 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			// LowerTo32
 			ManualInstance.IR_LowerTo32_Add64,
 			ManualInstance.IR_LowerTo32_And64,
-			ManualInstance.IR_LowerTo32_Compare64x32EqualOrNotEqual,
 			ManualInstance.IR_LowerTo32_BranchCompare64,
+			ManualInstance.IR_LowerTo32_Compare64x32EqualOrNotEqual,
 			ManualInstance.IR_LowerTo32_Compare64x32Rest,
 			ManualInstance.IR_LowerTo32_Compare64x32RestInSSA,
+			ManualInstance.IR_LowerTo32_Compare64x64EqualOrNotEqual,
+			ManualInstance.IR_LowerTo32_Compare64x64Rest,
+			ManualInstance.IR_LowerTo32_Compare64x64RestInSSA,
 
 			//ManualInstance.IR_LowerTo32_Compare64x32UnsignedGreater,
 			ManualInstance.IR_LowerTo32_Load64,

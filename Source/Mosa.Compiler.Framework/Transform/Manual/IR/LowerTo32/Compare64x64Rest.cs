@@ -4,9 +4,9 @@ using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 {
-	public sealed class Compare64x32Rest : BaseTransformation
+	public sealed class Compare64x64Rest : BaseTransformation
 	{
-		public Compare64x32Rest() : base(IRInstruction.Compare64x32)
+		public Compare64x64Rest() : base(IRInstruction.Compare64x64, true)
 		{
 		}
 
@@ -29,6 +29,8 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
+			transformContext.SplitLongOperand(result, out Operand resultLow, out Operand resultHigh);
+
 			var branch = context.ConditionCode;
 			var branchUnsigned = context.ConditionCode.GetUnsigned();
 
@@ -41,7 +43,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 			var op0High = transformContext.AllocateVirtualRegister32();
 			var op1Low = transformContext.AllocateVirtualRegister32();
 			var op1High = transformContext.AllocateVirtualRegister32();
-			var resultLow = transformContext.AllocateVirtualRegister32();
+			var tempLow = transformContext.AllocateVirtualRegister32();
 
 			context.SetInstruction(IRInstruction.GetLow64, op0Low, operand1);
 			context.AppendInstruction(IRInstruction.GetHigh64, op0High, operand1);
@@ -60,15 +62,16 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 			newBlocks[1].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
 
 			// Success
-			newBlocks[2].AppendInstruction(IRInstruction.Move32, resultLow, transformContext.CreateConstant((uint)1));
+			newBlocks[2].AppendInstruction(IRInstruction.Move32, tempLow, transformContext.CreateConstant((uint)1));
 			newBlocks[2].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
 
 			// Failed
-			newBlocks[3].AppendInstruction(IRInstruction.Move32, resultLow, transformContext.ConstantZero32);
+			newBlocks[3].AppendInstruction(IRInstruction.Move32, tempLow, transformContext.ConstantZero32);
 			newBlocks[3].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
 
 			// Exit
-			newBlocks[4].AppendInstruction(IRInstruction.Move32, result, resultLow);
+			newBlocks[4].AppendInstruction(IRInstruction.Move32, resultLow, tempLow);
+			newBlocks[4].AppendInstruction(IRInstruction.Move32, resultHigh, transformContext.ConstantZero32);
 			newBlocks[4].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 		}
 	}

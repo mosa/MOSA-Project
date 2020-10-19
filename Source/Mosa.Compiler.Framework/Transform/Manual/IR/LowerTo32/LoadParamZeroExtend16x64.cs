@@ -21,6 +21,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 			transformContext.SplitLongOperand(operand1, out Operand op0Low, out Operand _);
 
 			var resultLow = transformContext.AllocateVirtualRegister32();
+
 			context.SetInstruction(IRInstruction.LoadParamZeroExtend16x32, resultLow, op0Low);
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, transformContext.ConstantZero32);
 		}
