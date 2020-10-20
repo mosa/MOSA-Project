@@ -555,10 +555,19 @@ namespace Mosa.Utility.SourceCodeGenerator
 				NodeNbrToNode.Add(instructionNode.NodeNbr, string.Empty);
 			}
 
+			var path = NodeNbrToNode[instructionNode.NodeNbr];
+
+			if (instructionNode.InstructionName.StartsWith("IR.Phi"))
+			{
+				EmitCondition($"context.{path}OperandCount != {instructionNode.Operands.Count}");
+			}
+
 			var condition = GetConditionText(instructionNode);
 
 			if (condition != null)
-				EmitCondition($"context.ConditionCode != ConditionCode.{condition}");
+			{
+				EmitCondition($"context.{path}ConditionCode != ConditionCode.{condition}");
+			}
 
 			foreach (var operand in instructionNode.Operands)
 			{

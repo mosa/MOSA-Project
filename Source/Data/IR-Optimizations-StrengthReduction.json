@@ -300,10 +300,9 @@
 			"Name": "Or##And##",
 			"SubName": "ClearAndSet",
 			"Expression": "IR.Or## (IR.And## x c1) c2",
-			"Filter": "IsResolvedConstant(c1) & IsResolvedConstant(c2) & IsZero(Not##(Or##(To##(c1),To##(c2))))",
-			"Result": "(IR.Or## c1 x)",
-			"Reassociate": "Yes",
-			"Log": "Yes"
+			"Filter": "IsResolvedConstant(c2) & IsResolvedConstant(c1) & IsZero(Not##(Or##(To##(c1),To##(c2))))",
+			"Result": "(IR.Or## x c2)",
+			"Reassociate": "Yes"
 		}
 	]
 }

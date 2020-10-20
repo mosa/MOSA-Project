@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 	/// </summary>
 	public sealed class Or32And32ClearAndSet : BaseTransformation
 	{
-		public Or32And32ClearAndSet() : base(IRInstruction.Or32, true)
+		public Or32And32ClearAndSet() : base(IRInstruction.Or32)
 		{
 		}
 
@@ -26,10 +26,10 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
 				return false;
 
-			if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
+			if (!IsResolvedConstant(context.Operand2))
 				return false;
 
-			if (!IsResolvedConstant(context.Operand2))
+			if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
 				return false;
 
 			if (!IsZero(Not32(Or32(To32(context.Operand1.Definitions[0].Operand2), To32(context.Operand2)))))
@@ -43,9 +43,9 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			var result = context.Result;
 
 			var t1 = context.Operand1.Definitions[0].Operand1;
-			var t2 = context.Operand1.Definitions[0].Operand2;
+			var t2 = context.Operand2;
 
-			context.SetInstruction(IRInstruction.Or32, result, t2, t1);
+			context.SetInstruction(IRInstruction.Or32, result, t1, t2);
 		}
 	}
 
@@ -54,7 +54,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 	/// </summary>
 	public sealed class Or32And32ClearAndSet_v1 : BaseTransformation
 	{
-		public Or32And32ClearAndSet_v1() : base(IRInstruction.Or32, true)
+		public Or32And32ClearAndSet_v1() : base(IRInstruction.Or32)
 		{
 		}
 
@@ -69,10 +69,10 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			if (context.Operand2.Definitions[0].Instruction != IRInstruction.And32)
 				return false;
 
-			if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand2))
+			if (!IsResolvedConstant(context.Operand1))
 				return false;
 
-			if (!IsResolvedConstant(context.Operand1))
+			if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand2))
 				return false;
 
 			if (!IsZero(Not32(Or32(To32(context.Operand2.Definitions[0].Operand2), To32(context.Operand1)))))
@@ -85,8 +85,8 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 		{
 			var result = context.Result;
 
-			var t1 = context.Operand2.Definitions[0].Operand1;
-			var t2 = context.Operand2.Definitions[0].Operand2;
+			var t1 = context.Operand1;
+			var t2 = context.Operand2.Definitions[0].Operand1;
 
 			context.SetInstruction(IRInstruction.Or32, result, t2, t1);
 		}
@@ -97,7 +97,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 	/// </summary>
 	public sealed class Or32And32ClearAndSet_v2 : BaseTransformation
 	{
-		public Or32And32ClearAndSet_v2() : base(IRInstruction.Or32, true)
+		public Or32And32ClearAndSet_v2() : base(IRInstruction.Or32)
 		{
 		}
 
@@ -112,10 +112,10 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
 				return false;
 
-			if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand1))
+			if (!IsResolvedConstant(context.Operand2))
 				return false;
 
-			if (!IsResolvedConstant(context.Operand2))
+			if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand1))
 				return false;
 
 			if (!IsZero(Not32(Or32(To32(context.Operand1.Definitions[0].Operand1), To32(context.Operand2)))))
@@ -128,8 +128,8 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 		{
 			var result = context.Result;
 
-			var t1 = context.Operand1.Definitions[0].Operand1;
-			var t2 = context.Operand1.Definitions[0].Operand2;
+			var t1 = context.Operand1.Definitions[0].Operand2;
+			var t2 = context.Operand2;
 
 			context.SetInstruction(IRInstruction.Or32, result, t1, t2);
 		}
@@ -140,7 +140,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 	/// </summary>
 	public sealed class Or32And32ClearAndSet_v3 : BaseTransformation
 	{
-		public Or32And32ClearAndSet_v3() : base(IRInstruction.Or32, true)
+		public Or32And32ClearAndSet_v3() : base(IRInstruction.Or32)
 		{
 		}
 
@@ -155,10 +155,10 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			if (context.Operand2.Definitions[0].Instruction != IRInstruction.And32)
 				return false;
 
-			if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand1))
+			if (!IsResolvedConstant(context.Operand1))
 				return false;
 
-			if (!IsResolvedConstant(context.Operand1))
+			if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand1))
 				return false;
 
 			if (!IsZero(Not32(Or32(To32(context.Operand2.Definitions[0].Operand1), To32(context.Operand1)))))
@@ -171,10 +171,10 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 		{
 			var result = context.Result;
 
-			var t1 = context.Operand2.Definitions[0].Operand1;
+			var t1 = context.Operand1;
 			var t2 = context.Operand2.Definitions[0].Operand2;
 
-			context.SetInstruction(IRInstruction.Or32, result, t1, t2);
+			context.SetInstruction(IRInstruction.Or32, result, t2, t1);
 		}
 	}
 }
