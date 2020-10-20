@@ -100,7 +100,7 @@ namespace Mosa.Platform.x64.Stages
 				var offset = context.Operand2;
 
 				context.SetInstruction(X64.MovLoad32, result, source, offset);
-				context.AppendInstruction(X64.And32, result, result, CreateConstant(0x0000FFFF));
+				context.AppendInstruction(X64.And32, result, result, CreateConstant32(0x0000FFFF));
 			}
 		}
 
@@ -116,7 +116,7 @@ namespace Mosa.Platform.x64.Stages
 				var offset = context.Operand2;
 
 				context.SetInstruction(X64.MovLoad32, result, source, offset);
-				context.AppendInstruction(X64.And32, result, result, CreateConstant(0x000000FF));
+				context.AppendInstruction(X64.And32, result, result, CreateConstant32(0x000000FF));
 			}
 		}
 
@@ -224,11 +224,11 @@ namespace Mosa.Platform.x64.Stages
 			if (source.Register != result.Register)
 			{
 				context.SetInstruction(X64.Mov32, result, source);
-				context.AppendInstruction(X64.And32, result, result, CreateConstant(0xFFFF));
+				context.AppendInstruction(X64.And32, result, result, CreateConstant32(0xFFFF));
 			}
 			else
 			{
-				context.SetInstruction(X64.And32, result, result, CreateConstant(0xFFFF));
+				context.SetInstruction(X64.And32, result, result, CreateConstant32(0xFFFF));
 			}
 		}
 
@@ -246,11 +246,11 @@ namespace Mosa.Platform.x64.Stages
 			if (source.Register != result.Register)
 			{
 				context.SetInstruction(X64.Mov32, result, source);
-				context.AppendInstruction(X64.And32, result, result, CreateConstant(0xFF));
+				context.AppendInstruction(X64.And32, result, result, CreateConstant32(0xFF));
 			}
 			else
 			{
-				context.SetInstruction(X64.And32, result, result, CreateConstant(0xFF));
+				context.SetInstruction(X64.And32, result, result, CreateConstant32(0xFF));
 			}
 		}
 

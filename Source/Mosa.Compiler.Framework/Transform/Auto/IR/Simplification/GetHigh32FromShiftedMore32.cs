@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 {
 	/// <summary>
-	/// GetLow64FromShiftedMore32
+	/// GetHigh32FromShiftedMore32
 	/// </summary>
-	public sealed class GetLow64FromShiftedMore32 : BaseTransformation
+	public sealed class GetHigh32FromShiftedMore32 : BaseTransformation
 	{
-		public GetLow64FromShiftedMore32() : base(IRInstruction.GetLow64)
+		public GetHigh32FromShiftedMore32() : base(IRInstruction.GetHigh32)
 		{
 		}
 
@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftLeft64)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftRight64)
 				return false;
 
 			if (!IsGreaterOrEqual(And32(To32(context.Operand1.Definitions[0].Operand2), 63), 32))

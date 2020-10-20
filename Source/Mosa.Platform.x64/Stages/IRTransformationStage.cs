@@ -147,7 +147,7 @@ namespace Mosa.Platform.x64.Stages
 			}
 			else
 			{
-				var offset = CreateConstant(context.Operand1.Offset);
+				var offset = CreateConstant32(context.Operand1.Offset);
 
 				context.SetInstruction(X64.Lea64, context.Result, StackFrame, offset);
 			}
@@ -162,7 +162,7 @@ namespace Mosa.Platform.x64.Stages
 
 			var v1 = AllocateVirtualRegister32();
 
-			context.SetInstruction(X64.Bt32, v1, operand3, CreateConstant((byte)0));
+			context.SetInstruction(X64.Bt32, v1, operand3, ConstantZero64);
 			context.AppendInstruction(X64.Adc32, result, operand1, operand2);
 		}
 
@@ -628,7 +628,7 @@ namespace Mosa.Platform.x64.Stages
 
 			var v1 = AllocateVirtualRegister32();
 
-			context.SetInstruction(X64.Bt32, v1, operand3, CreateConstant((byte)0));
+			context.SetInstruction(X64.Bt32, v1, operand3, ConstantZero64);
 			context.AppendInstruction(X64.Sbb32, result, operand1, operand2);
 		}
 
@@ -641,7 +641,7 @@ namespace Mosa.Platform.x64.Stages
 
 			for (int i = 0; i < targets.Count - 1; ++i)
 			{
-				context.AppendInstruction(X64.Cmp32, null, operand, CreateConstant(i));
+				context.AppendInstruction(X64.Cmp32, null, operand, CreateConstant32(i));
 				context.AppendInstruction(X64.Branch, ConditionCode.Equal, targets[i]);
 			}
 		}
@@ -698,7 +698,7 @@ namespace Mosa.Platform.x64.Stages
 			{
 				context.SetInstruction(instruction, null, operand1, operand2);
 				context.AppendInstruction(X64.Setcc, ConditionCode.Parity, result);
-				context.AppendInstruction(X64.Mov32, v1, CreateConstant(1));
+				context.AppendInstruction(X64.Mov32, v1, CreateConstant32(1));
 				context.AppendInstruction(X64.CMov32, ConditionCode.NotEqual, result, result, v1);
 				context.AppendInstruction(X64.Movzx8To32, result, result);
 				return;

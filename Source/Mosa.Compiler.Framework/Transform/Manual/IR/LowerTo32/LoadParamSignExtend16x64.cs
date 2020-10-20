@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 			var resultHigh = transformContext.AllocateVirtualRegister32();
 
 			context.SetInstruction(IRInstruction.LoadParamSignExtend16x32, resultLow, op0Low);
-			context.AppendInstruction(IRInstruction.ArithShiftRight32, resultHigh, resultLow, transformContext.CreateConstant((byte)31));
+			context.AppendInstruction(IRInstruction.ArithShiftRight32, resultHigh, resultLow, transformContext.CreateConstant(31));
 			context.AppendInstruction(IRInstruction.To64, result, resultLow, resultHigh);
 		}
 	}

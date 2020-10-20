@@ -20,7 +20,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (MethodCompiler.StackSize != 0)
 			{
-				context.AppendInstruction(X86.Sub32, StackPointer, StackPointer, CreateConstant(-MethodCompiler.StackSize));
+				context.AppendInstruction(X86.Sub32, StackPointer, StackPointer, CreateConstant32(-MethodCompiler.StackSize));
 			}
 		}
 
@@ -34,7 +34,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (MethodCompiler.StackSize != 0)
 			{
-				context.AppendInstruction(X86.Add32, StackPointer, StackPointer, CreateConstant(-MethodCompiler.StackSize));
+				context.AppendInstruction(X86.Add32, StackPointer, StackPointer, CreateConstant32(-MethodCompiler.StackSize));
 			}
 
 			context.AppendInstruction(X86.Pop32, StackFrame);

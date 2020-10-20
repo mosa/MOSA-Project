@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 {
 	/// <summary>
-	/// GetLow64FromShiftedRight32
+	/// GetLow32FromShiftedMore32
 	/// </summary>
-	public sealed class GetLow64FromShiftedRight32 : BaseTransformation
+	public sealed class GetLow32FromShiftedMore32 : BaseTransformation
 	{
-		public GetLow64FromShiftedRight32() : base(IRInstruction.GetLow64)
+		public GetLow32FromShiftedMore32() : base(IRInstruction.GetLow32)
 		{
 		}
 
@@ -23,13 +23,10 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftRight32)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.ShiftLeft64)
 				return false;
 
-			if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
-				return false;
-
-			if (context.Operand1.Definitions[0].Operand2.ConstantUnsigned64 != 32)
+			if (!IsGreaterOrEqual(And32(To32(context.Operand1.Definitions[0].Operand2), 63), 32))
 				return false;
 
 			return true;
@@ -39,9 +36,9 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 		{
 			var result = context.Result;
 
-			var t1 = context.Operand1.Definitions[0].Operand1;
+			var c1 = transformContext.CreateConstant(0);
 
-			context.SetInstruction(IRInstruction.Truncate64x32, result, t1);
+			context.SetInstruction(IRInstruction.Move32, result, c1);
 		}
 	}
 }

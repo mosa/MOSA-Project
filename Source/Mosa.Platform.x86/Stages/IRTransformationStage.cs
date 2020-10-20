@@ -157,7 +157,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else
 			{
-				var offset = CreateConstant(context.Operand1.Offset);
+				var offset = CreateConstant32(context.Operand1.Offset);
 
 				context.SetInstruction(X86.Add32, context.Result, StackFrame, offset);
 			}
@@ -588,7 +588,7 @@ namespace Mosa.Platform.x86.Stages
 
 			var v1 = AllocateVirtualRegister32();
 
-			context.SetInstruction(X86.Bt32, v1, operand3, CreateConstant((byte)0));
+			context.SetInstruction(X86.Bt32, v1, operand3, ConstantZero32);
 			context.AppendInstruction(X86.Sbb32, result, operand1, operand2);
 		}
 
@@ -631,7 +631,7 @@ namespace Mosa.Platform.x86.Stages
 
 			for (int i = 0; i < targets.Count - 1; ++i)
 			{
-				context.AppendInstruction(X86.Cmp32, null, operand, CreateConstant(i));
+				context.AppendInstruction(X86.Cmp32, null, operand, CreateConstant32(i));
 				context.AppendInstruction(X86.Branch, ConditionCode.Equal, targets[i]);
 			}
 		}

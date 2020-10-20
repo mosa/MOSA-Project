@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 
 			ManualInstance.IR_Special_CodeInDeadBlock,
 			ManualInstance.IR_Special_Deadcode,
-			ManualInstance.IR_Special_GetLow64From32,
+			ManualInstance.IR_Special_GetLow32From32,
 
 			ManualInstance.IR_Simplification_AddCarryOut32CarryNotUsed,
 			ManualInstance.IR_Simplification_AddCarryOut64CarryNotUsed,

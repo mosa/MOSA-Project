@@ -24,13 +24,13 @@ namespace Mosa.Platform.x86
 
 		protected override void Setup()
 		{
-			Constant_1 = CreateConstant(1);
-			Constant_4 = CreateConstant(4);
-			Constant_16 = CreateConstant(16);
-			Constant_24 = CreateConstant(16);
-			Constant_31 = CreateConstant(31);
-			Constant_32 = CreateConstant(32);
-			Constant_64 = CreateConstant(64);
+			Constant_1 = CreateConstant32(1);
+			Constant_4 = CreateConstant32(4);
+			Constant_16 = CreateConstant32(16);
+			Constant_24 = CreateConstant32(16);
+			Constant_31 = CreateConstant32(31);
+			Constant_32 = CreateConstant32(32);
+			Constant_64 = CreateConstant32(64);
 			Constant_1F = Constant_31;
 		}
 	}

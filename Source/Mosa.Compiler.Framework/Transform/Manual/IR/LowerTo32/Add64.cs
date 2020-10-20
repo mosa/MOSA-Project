@@ -27,10 +27,10 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 			var resultHigh = transformContext.AllocateVirtualRegister32();
 			var resultCarry = transformContext.AllocateVirtualRegister32();
 
-			context.SetInstruction(IRInstruction.GetLow64, op0Low, operand1);
-			context.AppendInstruction(IRInstruction.GetHigh64, op0High, operand1);
-			context.AppendInstruction(IRInstruction.GetLow64, op1Low, operand2);
-			context.AppendInstruction(IRInstruction.GetHigh64, op1High, operand2);
+			context.SetInstruction(IRInstruction.GetLow32, op0Low, operand1);
+			context.AppendInstruction(IRInstruction.GetHigh32, op0High, operand1);
+			context.AppendInstruction(IRInstruction.GetLow32, op1Low, operand2);
+			context.AppendInstruction(IRInstruction.GetHigh32, op1High, operand2);
 
 			context.AppendInstruction2(IRInstruction.AddCarryOut32, resultLow, resultCarry, op0Low, op1Low);
 			context.AppendInstruction(IRInstruction.AddCarryIn32, resultHigh, op0High, op1High, resultCarry);

@@ -1294,7 +1294,7 @@
 			"ResultType": "UInt64"
 		},
 		{
-			"Name": "GetLow64",
+			"Name": "GetLow32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
@@ -1302,7 +1302,7 @@
 			"ResultType2": "UInt32"
 		},
 		{
-			"Name": "GetHigh64",
+			"Name": "GetHigh32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,

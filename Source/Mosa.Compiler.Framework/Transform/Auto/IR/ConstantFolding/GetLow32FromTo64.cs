@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 {
 	/// <summary>
-	/// GetHigh64FromTo64
+	/// GetLow32FromTo64
 	/// </summary>
-	public sealed class GetHigh64FromTo64 : BaseTransformation
+	public sealed class GetLow32FromTo64 : BaseTransformation
 	{
-		public GetHigh64FromTo64() : base(IRInstruction.GetHigh64)
+		public GetLow32FromTo64() : base(IRInstruction.GetLow32)
 		{
 		}
 
@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 			if (context.Operand1.Definitions[0].Instruction != IRInstruction.To64)
 				return false;
 
-			if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
+			if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand1))
 				return false;
 
 			return true;
@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 		{
 			var result = context.Result;
 
-			var t1 = context.Operand1.Definitions[0].Operand2;
+			var t1 = context.Operand1.Definitions[0].Operand1;
 
 			context.SetInstruction(IRInstruction.Move32, result, t1);
 		}

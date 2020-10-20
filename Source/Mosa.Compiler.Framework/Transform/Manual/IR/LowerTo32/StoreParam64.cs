@@ -23,8 +23,8 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 
 			transformContext.SplitLongOperand(offset, out Operand op1Low, out Operand op1High);
 
-			context.SetInstruction(IRInstruction.GetLow64, valueLow, value);
-			context.AppendInstruction(IRInstruction.GetHigh64, valueHigh, value);
+			context.SetInstruction(IRInstruction.GetLow32, valueLow, value);
+			context.AppendInstruction(IRInstruction.GetHigh32, valueHigh, value);
 
 			context.AppendInstruction(IRInstruction.StoreParam32, null, op1Low, valueLow);
 			context.AppendInstruction(IRInstruction.StoreParam32, null, op1High, valueHigh);

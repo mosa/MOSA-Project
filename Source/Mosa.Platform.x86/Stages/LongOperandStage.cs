@@ -52,8 +52,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.SignExtend16x64, SignExtend16x64);
 			AddVisitation(IRInstruction.SignExtend32x64, SignExtend32x64);
 			AddVisitation(IRInstruction.SignExtend8x64, SignExtend8x64);
-			AddVisitation(IRInstruction.GetHigh64, GetHigh64);
-			AddVisitation(IRInstruction.GetLow64, GetLow64);
+			AddVisitation(IRInstruction.GetHigh32, GetHigh32);
+			AddVisitation(IRInstruction.GetLow32, GetLow32);
 			AddVisitation(IRInstruction.Store64, Store64);
 			AddVisitation(IRInstruction.StoreParam64, StoreParam64);
 			AddVisitation(IRInstruction.Sub64, Sub64);
@@ -285,14 +285,14 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		private void GetHigh64(Context context)
+		private void GetHigh32(Context context)
 		{
 			SplitLongOperand(context.Operand1, out var _, out var op0H);
 
 			context.SetInstruction(X86.Mov32, context.Result, op0H);
 		}
 
-		private void GetLow64(Context context)
+		private void GetLow32(Context context)
 		{
 			SplitLongOperand(context.Operand1, out var op0L, out var _);
 
@@ -327,7 +327,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (offset.IsResolvedConstant)
 			{
-				var offset2 = offset.IsConstantZero ? Constant_4 : CreateConstant(offset.Offset + NativePointerSize);
+				var offset2 = offset.IsConstantZero ? Constant_4 : CreateConstant32(offset.Offset + NativePointerSize);
 				context.AppendInstruction(X86.MovLoad32, resultHigh, address, offset2);
 				return;
 			}
@@ -503,7 +503,7 @@ namespace Mosa.Platform.x86.Stages
 			/// Optimized shift when shift value is a constant and 32 or more, or zero
 			if (count.IsResolvedConstant)
 			{
-				var shift = count.ConstantUnsigned64 & 0b111111;
+				var shift = count.ConstantUnsigned32 & 0b111111;
 
 				if (shift == 0)
 				{
@@ -522,7 +522,7 @@ namespace Mosa.Platform.x86.Stages
 				else if (shift > 32)
 				{
 					// shift is greater than 32 bits
-					var newshift = CreateConstant(shift - 32);
+					var newshift = CreateConstant32(shift - 32);
 					context.SetInstruction(X86.Shr32, resultHigh, op1H, newshift);
 					context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero32);
 					return;
@@ -589,7 +589,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (offset.IsResolvedConstant)
 			{
-				context.AppendInstruction(X86.MovStore32, null, address, CreateConstant(offset.Offset + NativePointerSize), op3H);
+				context.AppendInstruction(X86.MovStore32, null, address, CreateConstant32(offset.Offset + NativePointerSize), op3H);
 			}
 			else
 			{

@@ -72,7 +72,7 @@ namespace Mosa.Platform.x64.Stages
 
 		protected override void Setup()
 		{
-			Constant4 = CreateConstant(4);
+			Constant4 = CreateConstant32(4);
 		}
 
 		#region Visitation Methods

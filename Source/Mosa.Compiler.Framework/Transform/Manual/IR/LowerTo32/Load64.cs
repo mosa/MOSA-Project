@@ -25,8 +25,8 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 			var addressLow = transformContext.AllocateVirtualRegister32();
 			var offset4 = transformContext.AllocateVirtualRegister32();
 
-			context.SetInstruction(IRInstruction.GetLow64, addressLow, address);
-			context.AppendInstruction(IRInstruction.GetLow64, offsetLow, offset);
+			context.SetInstruction(IRInstruction.GetLow32, addressLow, address);
+			context.AppendInstruction(IRInstruction.GetLow32, offsetLow, offset);
 
 			context.AppendInstruction(IRInstruction.Load32, resultLow, addressLow, offset);
 			context.AppendInstruction(IRInstruction.Add32, offset4, offsetLow, transformContext.CreateConstant((uint)4));

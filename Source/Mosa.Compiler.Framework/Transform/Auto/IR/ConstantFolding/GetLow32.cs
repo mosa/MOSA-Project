@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 {
 	/// <summary>
-	/// GetLow64
+	/// GetLow32
 	/// </summary>
-	public sealed class GetLow64 : BaseTransformation
+	public sealed class GetLow32 : BaseTransformation
 	{
-		public GetLow64() : base(IRInstruction.GetLow64)
+		public GetLow32() : base(IRInstruction.GetLow32)
 		{
 		}
 

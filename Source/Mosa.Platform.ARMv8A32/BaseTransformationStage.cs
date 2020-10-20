@@ -34,16 +34,16 @@ namespace Mosa.Platform.ARMv8A32
 
 		protected override void Setup()
 		{
-			Constant_0 = CreateConstant(1);
-			Constant_1 = CreateConstant(1);
-			Constant_2 = CreateConstant(2);
-			Constant_3 = CreateConstant(3);
-			Constant_4 = CreateConstant(4);
-			Constant_16 = CreateConstant(16);
-			Constant_24 = CreateConstant(16);
-			Constant_31 = CreateConstant(31);
-			Constant_32 = CreateConstant(32);
-			Constant_64 = CreateConstant(64);
+			Constant_0 = CreateConstant32(1);
+			Constant_1 = CreateConstant32(1);
+			Constant_2 = CreateConstant32(2);
+			Constant_3 = CreateConstant32(3);
+			Constant_4 = CreateConstant32(4);
+			Constant_16 = CreateConstant32(16);
+			Constant_24 = CreateConstant32(16);
+			Constant_31 = CreateConstant32(31);
+			Constant_32 = CreateConstant32(32);
+			Constant_64 = CreateConstant32(64);
 			Constant_1F = Constant_31;
 
 			LSL = Constant_0;
@@ -84,7 +84,7 @@ namespace Mosa.Platform.ARMv8A32
 				else if (offsetOperand.ConstantUnsigned64 < 0 && -offsetOperand.ConstantSigned32 <= 0xFFF)
 				{
 					upDirection = false;
-					offsetOperand = CreateConstant((uint)-offsetOperand.ConstantSigned32);
+					offsetOperand = CreateConstant32(-offsetOperand.ConstantSigned32);
 				}
 				else
 				{
@@ -114,7 +114,7 @@ namespace Mosa.Platform.ARMv8A32
 				}
 				else if (offsetOperand.ConstantUnsigned64 < 0 && -offsetOperand.ConstantSigned32 <= 0xFFF)
 				{
-					offsetOperand = CreateConstant((uint)-offsetOperand.ConstantSigned32);
+					offsetOperand = CreateConstant32(-offsetOperand.ConstantSigned32);
 				}
 				else
 				{
@@ -149,7 +149,7 @@ namespace Mosa.Platform.ARMv8A32
 			{
 				if (ARMHelper.CalculateRotatedImmediateValue(operand.ConstantUnsigned32, out uint immediate, out byte _, out byte _))
 				{
-					var constant = CreateConstant(immediate);
+					var constant = CreateConstant32(immediate);
 
 					if (allowImmediate)
 						return constant;
@@ -163,7 +163,7 @@ namespace Mosa.Platform.ARMv8A32
 
 				if (ARMHelper.CalculateRotatedImmediateValue(~operand.ConstantUnsigned32, out uint immediate2, out byte _, out byte _))
 				{
-					var constant = CreateConstant(immediate);
+					var constant = CreateConstant32(immediate);
 
 					var before = context.InsertBefore();
 					var v1 = AllocateVirtualRegister32();
@@ -176,8 +176,8 @@ namespace Mosa.Platform.ARMv8A32
 					var before = context.InsertBefore();
 
 					var v1 = AllocateVirtualRegister32();
-					before.SetInstruction(ARMv8A32.Movw, v1, CreateConstant(operand.ConstantUnsigned32 & 0xFFFF));
-					before.AppendInstruction(ARMv8A32.Movt, v1, v1, CreateConstant(operand.ConstantUnsigned32 >> 16));
+					before.SetInstruction(ARMv8A32.Movw, v1, CreateConstant32(operand.ConstantUnsigned32 & 0xFFFF));
+					before.AppendInstruction(ARMv8A32.Movt, v1, v1, CreateConstant32(operand.ConstantUnsigned32 >> 16));
 
 					return v1;
 				}
@@ -244,14 +244,14 @@ namespace Mosa.Platform.ARMv8A32
 
 				switch (value)
 				{
-					case 0.0f: return CreateConstant(0b1000);
-					case 1.0f: return CreateConstant(0b1001);
-					case 2.0f: return CreateConstant(0b1010);
-					case 3.0f: return CreateConstant(0b1011);
-					case 4.0f: return CreateConstant(0b1100);
-					case 5.0f: return CreateConstant(0b1101);
-					case 0.5f: return CreateConstant(0b1110);
-					case 10.0f: return CreateConstant(0b1111);
+					case 0.0f: return CreateConstant32(0b1000);
+					case 1.0f: return CreateConstant32(0b1001);
+					case 2.0f: return CreateConstant32(0b1010);
+					case 3.0f: return CreateConstant32(0b1011);
+					case 4.0f: return CreateConstant32(0b1100);
+					case 5.0f: return CreateConstant32(0b1101);
+					case 0.5f: return CreateConstant32(0b1110);
+					case 10.0f: return CreateConstant32(0b1111);
 				}
 			}
 			else if (operand.IsR4)
@@ -260,14 +260,14 @@ namespace Mosa.Platform.ARMv8A32
 
 				switch (value)
 				{
-					case 0.0d: return CreateConstant(0b1000);
-					case 1.0d: return CreateConstant(0b1001);
-					case 2.0d: return CreateConstant(0b1010);
-					case 3.0d: return CreateConstant(0b1011);
-					case 4.0d: return CreateConstant(0b1100);
-					case 5.0d: return CreateConstant(0b1101);
-					case 0.5d: return CreateConstant(0b1110);
-					case 10.0d: return CreateConstant(0b1111);
+					case 0.0d: return CreateConstant32(0b1000);
+					case 1.0d: return CreateConstant32(0b1001);
+					case 2.0d: return CreateConstant32(0b1010);
+					case 3.0d: return CreateConstant32(0b1011);
+					case 4.0d: return CreateConstant32(0b1100);
+					case 5.0d: return CreateConstant32(0b1101);
+					case 0.5d: return CreateConstant32(0b1110);
+					case 10.0d: return CreateConstant32(0b1111);
 				}
 			}
 

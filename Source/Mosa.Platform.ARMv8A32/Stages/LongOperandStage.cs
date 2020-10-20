@@ -54,8 +54,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.SignExtend16x64, SignExtend16x64);
 			AddVisitation(IRInstruction.SignExtend32x64, SignExtend32x64);
 			AddVisitation(IRInstruction.SignExtend8x64, SignExtend8x64);
-			AddVisitation(IRInstruction.GetHigh64, GetHigh64);
-			AddVisitation(IRInstruction.GetLow64, GetLow64);
+			AddVisitation(IRInstruction.GetHigh32, GetHigh32);
+			AddVisitation(IRInstruction.GetLow32, GetLow32);
 			AddVisitation(IRInstruction.Store64, Store64);
 			AddVisitation(IRInstruction.StoreParam64, StoreParam64);
 			AddVisitation(IRInstruction.Sub64, Sub64);
@@ -137,9 +137,9 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			var v2 = AllocateVirtualRegister32();
 
 			context.SetInstruction(ARMv8A32.Add, v1, address, offset);
-			context.AppendInstruction(ARMv8A32.Ldr32, resultLow, v1, ConstantZero);
+			context.AppendInstruction(ARMv8A32.Ldr32, resultLow, v1, ConstantZero32);
 			context.AppendInstruction(ARMv8A32.Add, v2, v1, Constant_4);
-			context.AppendInstruction(ARMv8A32.Ldr32, resultHigh, v2, ConstantZero);
+			context.AppendInstruction(ARMv8A32.Ldr32, resultHigh, v2, ConstantZero32);
 		}
 
 		private void LoadParam64(Context context)
@@ -414,7 +414,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			context.AppendInstruction(ARMv8A32.Eor, resultHigh, op1H, op2H);
 		}
 
-		private void GetHigh64(Context context)
+		private void GetHigh32(Context context)
 		{
 			SplitLongOperand(context.Result, out var resultLow, out _);
 			SplitLongOperand(context.Operand1, out _, out var op1H);
@@ -424,7 +424,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			context.SetInstruction(ARMv8A32.Mov, resultLow, op1H);
 		}
 
-		private void GetLow64(Context context)
+		private void GetLow32(Context context)
 		{
 			SplitLongOperand(context.Result, out var resultLow, out _);
 			SplitLongOperand(context.Operand1, out var op1L, out _);
@@ -502,7 +502,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 			op1L = MoveConstantToRegisterOrImmediate(context, op1L);
 
-			var operand1 = MoveConstantToRegister(context, CreateConstant((uint)0xFFFF));
+			var operand1 = MoveConstantToRegister(context, CreateConstant32((uint)0xFFFF));
 
 			context.SetInstruction(ARMv8A32.Mov, resultLow, op1L);
 			context.AppendInstruction(ARMv8A32.And, resultLow, resultLow, operand1);
@@ -528,7 +528,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			op1L = MoveConstantToRegisterOrImmediate(context, op1L);
 
 			context.SetInstruction(ARMv8A32.Mov, resultLow, op1L);
-			context.AppendInstruction(ARMv8A32.And, resultLow, resultLow, CreateConstant((uint)0xFF));
+			context.AppendInstruction(ARMv8A32.And, resultLow, resultLow, CreateConstant32((uint)0xFF));
 			context.AppendInstruction(ARMv8A32.Mov, resultHigh, Constant_0);
 		}
 

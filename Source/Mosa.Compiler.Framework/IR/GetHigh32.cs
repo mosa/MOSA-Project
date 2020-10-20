@@ -7,12 +7,12 @@ using Mosa.Compiler.MosaTypeSystem;
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// GetHigh64
+	/// GetHigh32
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class GetHigh64 : BaseIRInstruction
+	public sealed class GetHigh32 : BaseIRInstruction
 	{
-		public GetHigh64()
+		public GetHigh32()
 			: base(1, 1)
 		{
 		}

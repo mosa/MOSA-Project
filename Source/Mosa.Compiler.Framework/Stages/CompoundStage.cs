@@ -67,7 +67,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				int left = size - i;
 
-				var index = CreateConstant(i);
+				var index = CreateConstant32(i);
 
 				if (left >= 8 & !Is32BitPlatform)
 				{

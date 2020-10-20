@@ -62,7 +62,7 @@
 			"SubName": "",
 			"Expression": "IR.DivSigned## a b",
 			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
-			"Result": "(IR.Move## [DivSigned##(ToSigned64(a),ToSigned64(b))])"
+			"Result": "(IR.Move## [DivSigned##(ToSigned##(a),ToSigned##(b))])"
 		},
 		{
 			"FamilyName": "IR",
@@ -125,7 +125,7 @@
 			"SubName": "",
 			"Expression": "IR.MulSigned## a b",
 			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
-			"Result": "(IR.Move## [MulSigned##(ToSigned64(a),ToSigned64(b))])"
+			"Result": "(IR.Move## [MulSigned##(ToSigned##(a),ToSigned##(b))])"
 		},
 		{
 			"FamilyName": "IR",
@@ -152,7 +152,7 @@
 			"SubName": "",
 			"Expression": "IR.RemSigned## a b",
 			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
-			"Result": "(IR.Move## [RemSigned##(ToSigned64(a),ToSigned64(b))])"
+			"Result": "(IR.Move## [RemSigned##(ToSigned##(a),ToSigned##(b))])"
 		},
 		{
 			"FamilyName": "IR",
@@ -320,36 +320,36 @@
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
-			"Name": "GetHigh64",
+			"Name": "GetHigh32",
 			"SubName": "",
-			"Expression": "IR.GetHigh64 a",
+			"Expression": "IR.GetHigh32 a",
 			"Filter": "IsResolvedConstant(a)",
-			"Result": "(IR.Move32 [GetHigh64(To64(a))])"
+			"Result": "(IR.Move32 [GetHigh32(To64(a))])"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
-			"Name": "GetLow64",
+			"Name": "GetLow32",
 			"SubName": "",
-			"Expression": "IR.GetLow64 a",
+			"Expression": "IR.GetLow32 a",
 			"Filter": "IsResolvedConstant(a)",
 			"Result": "(IR.Move32 [To32(a)])"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
-			"Name": "GetLow64",
+			"Name": "GetLow32",
 			"SubName": "FromTo64",
-			"Expression": "IR.GetLow64 (IR.To64 l h)",
+			"Expression": "IR.GetLow32 (IR.To64 l h)",
 			"Filter": "IsResolvedConstant(l)",
 			"Result": "(IR.Move32 l)"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
-			"Name": "GetHigh64",
+			"Name": "GetHigh32",
 			"SubName": "FromTo64",
-			"Expression": "IR.GetHigh64 (IR.To64 l h)",
+			"Expression": "IR.GetHigh32 (IR.To64 l h)",
 			"Filter": "IsResolvedConstant(h)",
 			"Result": "(IR.Move32 h)"
 		}

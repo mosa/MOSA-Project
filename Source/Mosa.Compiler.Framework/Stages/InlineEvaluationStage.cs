@@ -311,7 +311,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var newNode = new InstructionNode(node.Instruction, node.OperandCount, node.ResultCount)
 					{
-						ConditionCode = node.ConditionCode
+						ConditionCode = node.ConditionCode,
+						InvokeMethod = node.InvokeMethod,
+						MosaField = node.MosaField,
+						MosaType = node.MosaType,
+
+						//Label = callSiteNode.Label,
 					};
 
 					if (node.BranchTargets != null)

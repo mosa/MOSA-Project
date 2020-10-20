@@ -168,7 +168,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			}
 			else
 			{
-				var offset = CreateConstant(context.Operand1.Offset);
+				var offset = CreateConstant32(context.Operand1.Offset);
 
 				offset = MoveConstantToRegisterOrImmediate(context, offset);
 
@@ -219,7 +219,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 			context.SetInstruction(ARMv8A32.Cmp, condition, null, operand1, operand2);
 			context.AppendInstruction(ARMv8A32.Mov, condition, result, Constant_1);
-			context.AppendInstruction(ARMv8A32.Mov, condition.GetOpposite(), result, ConstantZero);
+			context.AppendInstruction(ARMv8A32.Mov, condition.GetOpposite(), result, ConstantZero32);
 		}
 
 		private void BranchCompare32(Context context)

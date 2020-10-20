@@ -172,39 +172,34 @@ namespace Mosa.Compiler.Framework.Transform
 
 		#region Constant Helper Methods
 
-		public Operand CreateConstant(byte value)
-		{
-			return value == 0 ? ConstantZero32 : Operand.CreateConstant(TypeSystem.BuiltIn.U1, value);
-		}
-
 		public Operand CreateConstant(int value)
 		{
-			return value == 0 ? ConstantZero32 : Operand.CreateConstant(TypeSystem.BuiltIn.I4, value);
+			return value == 0 ? ConstantZero32 : Operand.CreateConstant(I4, value);
 		}
 
 		public Operand CreateConstant(uint value)
 		{
-			return value == 0 ? ConstantZero32 : Operand.CreateConstant(TypeSystem.BuiltIn.U4, value);
+			return value == 0 ? ConstantZero32 : Operand.CreateConstant(I4, value);
 		}
 
 		public Operand CreateConstant(long value)
 		{
-			return value == 0 ? ConstantZero64 : Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
+			return value == 0 ? ConstantZero64 : Operand.CreateConstant(I8, value);
 		}
 
 		public Operand CreateConstant(ulong value)
 		{
-			return value == 0 ? ConstantZero64 : Operand.CreateConstant(TypeSystem.BuiltIn.U8, value);
+			return value == 0 ? ConstantZero64 : Operand.CreateConstant(I8, value);
 		}
 
 		public Operand CreateConstant(float value)
 		{
-			return value == 0 ? ConstantZeroR4 : Operand.CreateConstant(value, TypeSystem);
+			return value == 0 ? ConstantZeroR4 : Operand.CreateConstant(R4, value);
 		}
 
 		public Operand CreateConstant(double value)
 		{
-			return value == 0 ? ConstantZeroR4 : Operand.CreateConstant(value, TypeSystem);
+			return value == 0 ? ConstantZeroR4 : Operand.CreateConstant(R8, value);
 		}
 
 		#endregion Constant Helper Methods

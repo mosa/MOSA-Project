@@ -5,11 +5,11 @@
 namespace Mosa.Compiler.Framework.Transform.IR.Special
 {
 	/// <summary>
-	/// GetLow64To64
+	/// GetLow32To64
 	/// </summary>
-	public sealed class GetLow64From32 : BaseTransformation
+	public sealed class GetLow32From32 : BaseTransformation
 	{
-		public GetLow64From32() : base(IRInstruction.GetLow64)
+		public GetLow32From32() : base(IRInstruction.GetLow32)
 		{
 		}
 
