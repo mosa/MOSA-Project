@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 {
 	/// <summary>
-	/// UnlessOr64ShiftLeft64
+	/// UselessAnd32ShiftRight32
 	/// </summary>
-	public sealed class UnlessOr64ShiftLeft64 : BaseTransformation
+	public sealed class UselessAnd32ShiftRight32 : BaseTransformation
 	{
-		public UnlessOr64ShiftLeft64() : base(IRInstruction.ShiftLeft64)
+		public UselessAnd32ShiftRight32() : base(IRInstruction.ShiftRight32, true)
 		{
 		}
 
@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Or64)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
 				return false;
 
 			if (!IsConstant(context.Operand1.Definitions[0].Operand2))
@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			if (IsZero(context.Operand2))
 				return false;
 
-			if (!IsGreaterOrEqual(GetLowestSetBit(To64(context.Operand1.Definitions[0].Operand2)), To64(context.Operand2)))
+			if (!IsLessOrEqual(GetHighestSetBit(To32(context.Operand1.Definitions[0].Operand2)), To32(context.Operand2)))
 				return false;
 
 			return true;
@@ -48,16 +48,16 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			var t1 = context.Operand1.Definitions[0].Operand1;
 			var t2 = context.Operand2;
 
-			context.SetInstruction(IRInstruction.ShiftLeft64, result, t1, t2);
+			context.SetInstruction(IRInstruction.ShiftRight32, result, t1, t2);
 		}
 	}
 
 	/// <summary>
-	/// UnlessOr64ShiftLeft64_v1
+	/// UselessAnd32ShiftRight32_v1
 	/// </summary>
-	public sealed class UnlessOr64ShiftLeft64_v1 : BaseTransformation
+	public sealed class UselessAnd32ShiftRight32_v1 : BaseTransformation
 	{
-		public UnlessOr64ShiftLeft64_v1() : base(IRInstruction.ShiftLeft64)
+		public UselessAnd32ShiftRight32_v1() : base(IRInstruction.ShiftRight32, true)
 		{
 		}
 
@@ -69,7 +69,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Or64)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
 				return false;
 
 			if (!IsConstant(context.Operand1.Definitions[0].Operand1))
@@ -81,7 +81,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			if (IsZero(context.Operand2))
 				return false;
 
-			if (!IsGreaterOrEqual(GetLowestSetBit(To64(context.Operand1.Definitions[0].Operand1)), To64(context.Operand2)))
+			if (!IsLessOrEqual(GetHighestSetBit(To32(context.Operand1.Definitions[0].Operand1)), To32(context.Operand2)))
 				return false;
 
 			return true;
@@ -94,7 +94,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			var t1 = context.Operand1.Definitions[0].Operand2;
 			var t2 = context.Operand2;
 
-			context.SetInstruction(IRInstruction.ShiftLeft64, result, t1, t2);
+			context.SetInstruction(IRInstruction.ShiftRight32, result, t1, t2);
 		}
 	}
 }

@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 {
 	/// <summary>
-	/// UnlessXor32ShiftLeft32
+	/// UselessAnd32ShiftLeft32
 	/// </summary>
-	public sealed class UnlessXor32ShiftLeft32 : BaseTransformation
+	public sealed class UselessAnd32ShiftLeft32 : BaseTransformation
 	{
-		public UnlessXor32ShiftLeft32() : base(IRInstruction.ShiftLeft32)
+		public UselessAnd32ShiftLeft32() : base(IRInstruction.ShiftLeft32, true)
 		{
 		}
 
@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Xor32)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
 				return false;
 
 			if (!IsConstant(context.Operand1.Definitions[0].Operand2))
@@ -53,11 +53,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 	}
 
 	/// <summary>
-	/// UnlessXor32ShiftLeft32_v1
+	/// UselessAnd32ShiftLeft32_v1
 	/// </summary>
-	public sealed class UnlessXor32ShiftLeft32_v1 : BaseTransformation
+	public sealed class UselessAnd32ShiftLeft32_v1 : BaseTransformation
 	{
-		public UnlessXor32ShiftLeft32_v1() : base(IRInstruction.ShiftLeft32)
+		public UselessAnd32ShiftLeft32_v1() : base(IRInstruction.ShiftLeft32, true)
 		{
 		}
 
@@ -69,7 +69,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Xor32)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.And32)
 				return false;
 
 			if (!IsConstant(context.Operand1.Definitions[0].Operand1))
