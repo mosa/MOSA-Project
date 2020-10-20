@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 	/// </summary>
 	public sealed class And64Same : BaseTransformation
 	{
-		public And64Same() : base(IRInstruction.And64, true)
+		public And64Same() : base(IRInstruction.And64)
 		{
 		}
 

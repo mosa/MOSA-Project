@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 	/// </summary>
 	public sealed class Or64Double : BaseTransformation
 	{
-		public Or64Double() : base(IRInstruction.Or64, true)
+		public Or64Double() : base(IRInstruction.Or64)
 		{
 		}
 
@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 	/// </summary>
 	public sealed class Or64Double_v1 : BaseTransformation
 	{
-		public Or64Double_v1() : base(IRInstruction.Or64, true)
+		public Or64Double_v1() : base(IRInstruction.Or64)
 		{
 		}
 
@@ -85,7 +85,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 	/// </summary>
 	public sealed class Or64Double_v2 : BaseTransformation
 	{
-		public Or64Double_v2() : base(IRInstruction.Or64, true)
+		public Or64Double_v2() : base(IRInstruction.Or64)
 		{
 		}
 
@@ -122,7 +122,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 	/// </summary>
 	public sealed class Or64Double_v3 : BaseTransformation
 	{
-		public Or64Double_v3() : base(IRInstruction.Or64, true)
+		public Or64Double_v3() : base(IRInstruction.Or64)
 		{
 		}
 

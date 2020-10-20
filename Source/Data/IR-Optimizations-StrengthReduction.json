@@ -293,6 +293,17 @@
 			"Expression": "IR.RemUnsigned## x c",
 			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo##(c) & !IsZero(c)",
 			"Result": "(IR.And## x [Sub##(ShiftLeft##(1,And##(GetPowerOfTwo(To32(c)),Sub##(##,1))),1)])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Or##And##",
+			"SubName": "ClearAndSet",
+			"Expression": "IR.Or## (IR.And## x c1) c2",
+			"Filter": "IsResolvedConstant(c1) & IsResolvedConstant(c2) & IsZero(Not##(Or##(To##(c1),To##(c2))))",
+			"Result": "(IR.Or## c1 x)",
+			"Reassociate": "Yes",
+			"Log": "Yes"
 		}
 	]
 }

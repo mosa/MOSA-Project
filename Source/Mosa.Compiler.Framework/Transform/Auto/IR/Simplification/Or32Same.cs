@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 	/// </summary>
 	public sealed class Or32Same : BaseTransformation
 	{
-		public Or32Same() : base(IRInstruction.Or32, true)
+		public Or32Same() : base(IRInstruction.Or32)
 		{
 		}
 

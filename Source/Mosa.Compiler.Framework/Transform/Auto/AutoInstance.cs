@@ -245,6 +245,14 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 		public static readonly BaseTransformation IR_StrengthReduction_DivSigned64ByPowerOfTwo = new IR.StrengthReduction.DivSigned64ByPowerOfTwo();
 		public static readonly BaseTransformation IR_StrengthReduction_RemUnsigned32ByPowerOfTwo = new IR.StrengthReduction.RemUnsigned32ByPowerOfTwo();
 		public static readonly BaseTransformation IR_StrengthReduction_RemUnsigned64ByPowerOfTwo = new IR.StrengthReduction.RemUnsigned64ByPowerOfTwo();
+		public static readonly BaseTransformation IR_StrengthReduction_Or32And32ClearAndSet = new IR.StrengthReduction.Or32And32ClearAndSet();
+		public static readonly BaseTransformation IR_StrengthReduction_Or32And32ClearAndSet_v1 = new IR.StrengthReduction.Or32And32ClearAndSet_v1();
+		public static readonly BaseTransformation IR_StrengthReduction_Or32And32ClearAndSet_v2 = new IR.StrengthReduction.Or32And32ClearAndSet_v2();
+		public static readonly BaseTransformation IR_StrengthReduction_Or32And32ClearAndSet_v3 = new IR.StrengthReduction.Or32And32ClearAndSet_v3();
+		public static readonly BaseTransformation IR_StrengthReduction_Or64And64ClearAndSet = new IR.StrengthReduction.Or64And64ClearAndSet();
+		public static readonly BaseTransformation IR_StrengthReduction_Or64And64ClearAndSet_v1 = new IR.StrengthReduction.Or64And64ClearAndSet_v1();
+		public static readonly BaseTransformation IR_StrengthReduction_Or64And64ClearAndSet_v2 = new IR.StrengthReduction.Or64And64ClearAndSet_v2();
+		public static readonly BaseTransformation IR_StrengthReduction_Or64And64ClearAndSet_v3 = new IR.StrengthReduction.Or64And64ClearAndSet_v3();
 		public static readonly BaseTransformation IR_StrengthReduction_Compare32x32RemUnsigned32Sign = new IR.StrengthReduction.Compare32x32RemUnsigned32Sign();
 		public static readonly BaseTransformation IR_StrengthReduction_Compare32x32RemUnsigned32Sign_v1 = new IR.StrengthReduction.Compare32x32RemUnsigned32Sign_v1();
 		public static readonly BaseTransformation IR_StrengthReduction_Compare32x64RemUnsigned64Sign = new IR.StrengthReduction.Compare32x64RemUnsigned64Sign();

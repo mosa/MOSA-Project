@@ -221,7 +221,7 @@
 			"Expression": "IR.MulSigned## a -1",
 			"Filter": "",
 			"Result": "(IR.Sub## [To##(0)] a)",
-			"Reassociate": "Yes",
+			"Reassociate": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -230,7 +230,7 @@
 			"SubName": "Same",
 			"Expression": "IR.And## a a",
 			"Filter": "",
-			"Result": "(IR.Move## a)",
+			"Result": "(IR.Move## a)"
 		},
 		{
 			"FamilyName": "IR",
@@ -240,7 +240,7 @@
 			"Expression": "IR.Or## a a",
 			"Filter": "",
 			"Result": "(IR.Move## a)",
-			"Reassociate": "Yes",
+			"Reassociate": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -250,7 +250,7 @@
 			"Expression": "IR.And## (IR.And## x y) x",
 			"Filter": "",
 			"Result": "(IR.And## x y)",
-			"Reassociate": "Yes",
+			"Reassociate": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -260,7 +260,7 @@
 			"Expression": "IR.Or## (IR.Or## x y) x",
 			"Filter": "",
 			"Result": "(IR.Or## x y)",
-			"Reassociate": "Yes",
+			"Reassociate": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -270,7 +270,7 @@
 			"Expression": "IR.Xor## (IR.Or## x y) x",
 			"Filter": "",
 			"Result": "(IR.Move## y)",
-			"Reassociate": "Yes",
+			"Reassociate": "Yes"
 		}
 	]
 }

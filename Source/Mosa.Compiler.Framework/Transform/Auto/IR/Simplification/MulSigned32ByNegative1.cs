@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 	/// </summary>
 	public sealed class MulSigned32ByNegative1 : BaseTransformation
 	{
-		public MulSigned32ByNegative1() : base(IRInstruction.MulSigned32, true)
+		public MulSigned32ByNegative1() : base(IRInstruction.MulSigned32)
 		{
 		}
 
@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 	/// </summary>
 	public sealed class MulSigned32ByNegative1_v1 : BaseTransformation
 	{
-		public MulSigned32ByNegative1_v1() : base(IRInstruction.MulSigned32, true)
+		public MulSigned32ByNegative1_v1() : base(IRInstruction.MulSigned32)
 		{
 		}
 

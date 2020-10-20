@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 	/// </summary>
 	public sealed class Xor32Double : BaseTransformation
 	{
-		public Xor32Double() : base(IRInstruction.Xor32, true)
+		public Xor32Double() : base(IRInstruction.Xor32)
 		{
 		}
 
@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 	/// </summary>
 	public sealed class Xor32Double_v1 : BaseTransformation
 	{
-		public Xor32Double_v1() : base(IRInstruction.Xor32, true)
+		public Xor32Double_v1() : base(IRInstruction.Xor32)
 		{
 		}
 
@@ -83,7 +83,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 	/// </summary>
 	public sealed class Xor32Double_v2 : BaseTransformation
 	{
-		public Xor32Double_v2() : base(IRInstruction.Xor32, true)
+		public Xor32Double_v2() : base(IRInstruction.Xor32)
 		{
 		}
 
@@ -119,7 +119,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 	/// </summary>
 	public sealed class Xor32Double_v3 : BaseTransformation
 	{
-		public Xor32Double_v3() : base(IRInstruction.Xor32, true)
+		public Xor32Double_v3() : base(IRInstruction.Xor32)
 		{
 		}
 

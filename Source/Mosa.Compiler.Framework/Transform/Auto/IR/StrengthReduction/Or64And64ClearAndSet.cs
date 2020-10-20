@@ -4,14 +4,14 @@
 
 using Mosa.Compiler.Framework.IR;
 
-namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
+namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 {
 	/// <summary>
-	/// And64Double
+	/// Or64And64ClearAndSet
 	/// </summary>
-	public sealed class And64Double : BaseTransformation
+	public sealed class Or64And64ClearAndSet : BaseTransformation
 	{
-		public And64Double() : base(IRInstruction.And64)
+		public Or64And64ClearAndSet() : base(IRInstruction.Or64, true)
 		{
 		}
 
@@ -26,7 +26,13 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 			if (context.Operand1.Definitions[0].Instruction != IRInstruction.And64)
 				return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand2))
+			if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand2))
+				return false;
+
+			if (!IsResolvedConstant(context.Operand2))
+				return false;
+
+			if (!IsZero(Not64(Or64(To64(context.Operand1.Definitions[0].Operand2), To64(context.Operand2)))))
 				return false;
 
 			return true;
@@ -39,16 +45,16 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 			var t1 = context.Operand1.Definitions[0].Operand1;
 			var t2 = context.Operand1.Definitions[0].Operand2;
 
-			context.SetInstruction(IRInstruction.And64, result, t1, t2);
+			context.SetInstruction(IRInstruction.Or64, result, t2, t1);
 		}
 	}
 
 	/// <summary>
-	/// And64Double_v1
+	/// Or64And64ClearAndSet_v1
 	/// </summary>
-	public sealed class And64Double_v1 : BaseTransformation
+	public sealed class Or64And64ClearAndSet_v1 : BaseTransformation
 	{
-		public And64Double_v1() : base(IRInstruction.And64)
+		public Or64And64ClearAndSet_v1() : base(IRInstruction.Or64, true)
 		{
 		}
 
@@ -63,7 +69,13 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 			if (context.Operand2.Definitions[0].Instruction != IRInstruction.And64)
 				return false;
 
-			if (!AreSame(context.Operand1, context.Operand2.Definitions[0].Operand1))
+			if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand2))
+				return false;
+
+			if (!IsResolvedConstant(context.Operand1))
+				return false;
+
+			if (!IsZero(Not64(Or64(To64(context.Operand2.Definitions[0].Operand2), To64(context.Operand1)))))
 				return false;
 
 			return true;
@@ -73,19 +85,19 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 		{
 			var result = context.Result;
 
-			var t1 = context.Operand1;
+			var t1 = context.Operand2.Definitions[0].Operand1;
 			var t2 = context.Operand2.Definitions[0].Operand2;
 
-			context.SetInstruction(IRInstruction.And64, result, t1, t2);
+			context.SetInstruction(IRInstruction.Or64, result, t2, t1);
 		}
 	}
 
 	/// <summary>
-	/// And64Double_v2
+	/// Or64And64ClearAndSet_v2
 	/// </summary>
-	public sealed class And64Double_v2 : BaseTransformation
+	public sealed class Or64And64ClearAndSet_v2 : BaseTransformation
 	{
-		public And64Double_v2() : base(IRInstruction.And64)
+		public Or64And64ClearAndSet_v2() : base(IRInstruction.Or64, true)
 		{
 		}
 
@@ -100,7 +112,13 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 			if (context.Operand1.Definitions[0].Instruction != IRInstruction.And64)
 				return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2))
+			if (!IsResolvedConstant(context.Operand1.Definitions[0].Operand1))
+				return false;
+
+			if (!IsResolvedConstant(context.Operand2))
+				return false;
+
+			if (!IsZero(Not64(Or64(To64(context.Operand1.Definitions[0].Operand1), To64(context.Operand2)))))
 				return false;
 
 			return true;
@@ -113,16 +131,16 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 			var t1 = context.Operand1.Definitions[0].Operand1;
 			var t2 = context.Operand1.Definitions[0].Operand2;
 
-			context.SetInstruction(IRInstruction.And64, result, t2, t1);
+			context.SetInstruction(IRInstruction.Or64, result, t1, t2);
 		}
 	}
 
 	/// <summary>
-	/// And64Double_v3
+	/// Or64And64ClearAndSet_v3
 	/// </summary>
-	public sealed class And64Double_v3 : BaseTransformation
+	public sealed class Or64And64ClearAndSet_v3 : BaseTransformation
 	{
-		public And64Double_v3() : base(IRInstruction.And64)
+		public Or64And64ClearAndSet_v3() : base(IRInstruction.Or64, true)
 		{
 		}
 
@@ -137,7 +155,13 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 			if (context.Operand2.Definitions[0].Instruction != IRInstruction.And64)
 				return false;
 
-			if (!AreSame(context.Operand1, context.Operand2.Definitions[0].Operand2))
+			if (!IsResolvedConstant(context.Operand2.Definitions[0].Operand1))
+				return false;
+
+			if (!IsResolvedConstant(context.Operand1))
+				return false;
+
+			if (!IsZero(Not64(Or64(To64(context.Operand2.Definitions[0].Operand1), To64(context.Operand1)))))
 				return false;
 
 			return true;
@@ -147,10 +171,10 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 		{
 			var result = context.Result;
 
-			var t1 = context.Operand1;
-			var t2 = context.Operand2.Definitions[0].Operand1;
+			var t1 = context.Operand2.Definitions[0].Operand1;
+			var t2 = context.Operand2.Definitions[0].Operand2;
 
-			context.SetInstruction(IRInstruction.And64, result, t1, t2);
+			context.SetInstruction(IRInstruction.Or64, result, t1, t2);
 		}
 	}
 }
