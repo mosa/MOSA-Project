@@ -334,9 +334,6 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			{
 				if (cumulativeInstructions.Contains(node.InstructionName) && node.Operands.Count == 2)
 				{
-					//if (node.InstructionName.Contains("Compare") && !(node.Condition == ConditionCode.Equal || node.Condition == ConditionCode.NotEqual))
-					//	continue;
-
 					if (!node.Operands[0].IsSame(node.Operands[1]))
 					{
 						if (((index >> bit) & 1) == 1)

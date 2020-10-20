@@ -492,7 +492,7 @@ namespace Mosa.Compiler.Framework
 		/// Empties the block of all instructions.
 		/// </summary>
 		/// <param name="block">The block.</param>
-		protected void EmptyBlockOfAllInstructions(BasicBlock block)
+		protected static void EmptyBlockOfAllInstructions(BasicBlock block)
 		{
 			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
