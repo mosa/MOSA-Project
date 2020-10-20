@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 {
 	/// <summary>
-	/// To64FromLowHigh
+	/// GetLow32FromTo64
 	/// </summary>
-	public sealed class To64FromLowHigh : BaseTransformation
+	public sealed class GetLow32FromTo64 : BaseTransformation
 	{
-		public To64FromLowHigh() : base(IRInstruction.To64)
+		public GetLow32FromTo64() : base(IRInstruction.GetLow32)
 		{
 		}
 
@@ -20,22 +20,10 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 			if (!context.Operand1.IsVirtualRegister)
 				return false;
 
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
-
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.GetLow64)
-				return false;
-
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.GetHigh64)
-				return false;
-
-			if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand2.Definitions[0].Operand1))
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.To64)
 				return false;
 
 			return true;

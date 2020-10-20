@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.Simplification
 {
 	/// <summary>
-	/// GetLow64FromTo64
+	/// GetLow32To64
 	/// </summary>
-	public sealed class GetLow64FromTo64 : BaseTransformation
+	public sealed class GetLow32To64 : BaseTransformation
 	{
-		public GetLow64FromTo64() : base(IRInstruction.GetLow64)
+		public GetLow32To64() : base(IRInstruction.GetLow32)
 		{
 		}
 

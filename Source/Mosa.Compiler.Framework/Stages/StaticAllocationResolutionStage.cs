@@ -73,7 +73,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (!newObject)
 			{
-				context.AppendInstruction(store, null, staticAddress, CreateConstant(2 * (Is32BitPlatform ? 4 : 8)), CreateConstant(elements));
+				context.AppendInstruction(store, null, staticAddress, CreateConstant32(2 * (Is32BitPlatform ? 4 : 8)), CreateConstant32(elements));
 			}
 		}
 

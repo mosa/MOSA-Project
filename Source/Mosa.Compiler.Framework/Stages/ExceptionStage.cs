@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var target = context.BranchTargets[0];
 
-			context.SetInstruction(Select(LeaveTargetRegister, IRInstruction.Move32, IRInstruction.Move64), LeaveTargetRegister, CreateConstant(target.Label));
+			context.SetInstruction(Select(LeaveTargetRegister, IRInstruction.Move32, IRInstruction.Move64), LeaveTargetRegister, CreateConstant32(target.Label));
 		}
 
 		private void ExceptionStartInstruction(Context context)
@@ -156,7 +156,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var nextBlock = Split(context);
 
 				// compare LeaveTargetRegister > handlerBlock.End, then goto finally handler
-				context.AppendInstruction(Select(IRInstruction.BranchCompare32, IRInstruction.BranchCompare64), ConditionCode.Greater, null, CreateConstant(handlerBlock.Label), LeaveTargetRegister, nextBlock.Block); // TODO: Constant should be 64bit
+				context.AppendInstruction(Select(IRInstruction.BranchCompare32, IRInstruction.BranchCompare64), ConditionCode.Greater, null, CreateConstant32(handlerBlock.Label), LeaveTargetRegister, nextBlock.Block); // TODO: Constant should be 64bit
 				context.AppendInstruction(IRInstruction.Jmp, handlerBlock);
 
 				context = nextBlock;
@@ -209,12 +209,12 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var newBlocks = CreateNewBlockContexts(targets.Count - 1, label);
 
-				context.AppendInstruction(Select(IRInstruction.BranchCompare32, IRInstruction.BranchCompare64), ConditionCode.Equal, null, LeaveTargetRegister, CreateConstant(targets[0].Label), targets[0]); // TODO: Constant should be 64bit
+				context.AppendInstruction(Select(IRInstruction.BranchCompare32, IRInstruction.BranchCompare64), ConditionCode.Equal, null, LeaveTargetRegister, CreateConstant32(targets[0].Label), targets[0]); // TODO: Constant should be 64bit
 				context.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
 
 				for (int b = 1; b < targets.Count - 2; b++)
 				{
-					newBlocks[b - 1].AppendInstruction(Select(IRInstruction.BranchCompare32, IRInstruction.BranchCompare64), ConditionCode.Equal, null, LeaveTargetRegister, CreateConstant(targets[b].Label), targets[b]); // TODO: Constant should be 64bit
+					newBlocks[b - 1].AppendInstruction(Select(IRInstruction.BranchCompare32, IRInstruction.BranchCompare64), ConditionCode.Equal, null, LeaveTargetRegister, CreateConstant32(targets[b].Label), targets[b]); // TODO: Constant should be 64bit
 					newBlocks[b - 1].AppendInstruction(IRInstruction.Jmp, newBlocks[b + 1].Block);
 				}
 

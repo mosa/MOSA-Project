@@ -16,8 +16,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 		{
 			base.Setup();
 
-			PushRegisterList = PushRegisterList ?? CreateConstant((1 << (17 - StackFrame.Register.Index)) | (1 << (17 - LinkRegister.Register.Index)));
-			PopRegisterList = PopRegisterList ?? CreateConstant((1 << (17 - StackFrame.Register.Index)) | (1 << (17 - ProgramCounter.Register.Index)));
+			PushRegisterList = PushRegisterList ?? CreateConstant32((1 << (17 - StackFrame.Register.Index)) | (1 << (17 - LinkRegister.Register.Index)));
+			PopRegisterList = PopRegisterList ?? CreateConstant32((1 << (17 - StackFrame.Register.Index)) | (1 << (17 - ProgramCounter.Register.Index)));
 		}
 
 		/// <summary>
@@ -31,7 +31,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 			if (MethodCompiler.StackSize != 0)
 			{
-				context.AppendInstruction(ARMv8A32.Sub, StackPointer, StackPointer, CreateConstant(-MethodCompiler.StackSize));
+				context.AppendInstruction(ARMv8A32.Sub, StackPointer, StackPointer, CreateConstant32(-MethodCompiler.StackSize));
 			}
 		}
 
@@ -45,7 +45,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 			if (MethodCompiler.StackSize != 0)
 			{
-				context.AppendInstruction(ARMv8A32.Add, StackPointer, StackFrame, CreateConstant(-MethodCompiler.StackSize));
+				context.AppendInstruction(ARMv8A32.Add, StackPointer, StackFrame, CreateConstant32(-MethodCompiler.StackSize));
 			}
 
 			context.AppendInstruction(ARMv8A32.Pop, null, PopRegisterList);

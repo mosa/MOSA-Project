@@ -7,20 +7,17 @@ using Mosa.Compiler.Framework.IR;
 namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 {
 	/// <summary>
-	/// To64
+	/// GetHigh32
 	/// </summary>
-	public sealed class To64 : BaseTransformation
+	public sealed class GetHigh32 : BaseTransformation
 	{
-		public To64() : base(IRInstruction.To64)
+		public GetHigh32() : base(IRInstruction.GetHigh32)
 		{
 		}
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{
 			if (!IsResolvedConstant(context.Operand1))
-				return false;
-
-			if (!IsResolvedConstant(context.Operand2))
 				return false;
 
 			return true;
@@ -31,11 +28,10 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.ConstantFolding
 			var result = context.Result;
 
 			var t1 = context.Operand1;
-			var t2 = context.Operand2;
 
-			var e1 = transformContext.CreateConstant(To64(To32(t1), To32(t2)));
+			var e1 = transformContext.CreateConstant(GetHigh32(To64(t1)));
 
-			context.SetInstruction(IRInstruction.Move64, result, e1);
+			context.SetInstruction(IRInstruction.Move32, result, e1);
 		}
 	}
 }

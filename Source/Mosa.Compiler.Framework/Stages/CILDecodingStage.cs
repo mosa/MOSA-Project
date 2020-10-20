@@ -225,15 +225,15 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (variable.Is64BitInteger)
 				{
-					prologue.AppendInstruction(IRInstruction.Move64, variable, CreateConstant(0ul));
+					prologue.AppendInstruction(IRInstruction.Move64, variable, ConstantZero64);
 				}
 				else if (variable.IsR4)
 				{
-					prologue.AppendInstruction(IRInstruction.MoveR4, variable, CreateConstant(0.0f));
+					prologue.AppendInstruction(IRInstruction.MoveR4, variable, CreateConstantR4(0.0f));
 				}
 				else if (variable.IsR8)
 				{
-					prologue.AppendInstruction(IRInstruction.MoveR8, variable, CreateConstant(0.0d));
+					prologue.AppendInstruction(IRInstruction.MoveR8, variable, CreateConstantR8(0.0d));
 				}
 				else if (variable.IsReferenceType)
 				{
@@ -241,7 +241,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				else
 				{
-					prologue.AppendInstruction(IRInstruction.Move32, variable, CreateConstant(0ul));
+					prologue.AppendInstruction(IRInstruction.Move32, variable, ConstantZero32);
 				}
 			}
 		}

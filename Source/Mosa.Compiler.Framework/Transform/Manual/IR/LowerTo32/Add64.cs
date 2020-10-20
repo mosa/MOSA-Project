@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{
-			return true;
+			return transformContext.LowerTo32;
 		}
 
 		public override void Transform(Context context, TransformContext transformContext)
@@ -19,19 +19,18 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			var op0Low = transformContext.AllocateVirtualRegister(transformContext.TypeSystem.BuiltIn.I4);
-			var op0High = transformContext.AllocateVirtualRegister(transformContext.TypeSystem.BuiltIn.I4);
-			var op1Low = transformContext.AllocateVirtualRegister(transformContext.TypeSystem.BuiltIn.I4);
-			var op1High = transformContext.AllocateVirtualRegister(transformContext.TypeSystem.BuiltIn.I4);
-			var resultLow = transformContext.AllocateVirtualRegister(transformContext.TypeSystem.BuiltIn.I4);
-			var resultHigh = transformContext.AllocateVirtualRegister(transformContext.TypeSystem.BuiltIn.I4);
+			var op0Low = transformContext.AllocateVirtualRegister32();
+			var op0High = transformContext.AllocateVirtualRegister32();
+			var op1Low = transformContext.AllocateVirtualRegister32();
+			var op1High = transformContext.AllocateVirtualRegister32();
+			var resultLow = transformContext.AllocateVirtualRegister32();
+			var resultHigh = transformContext.AllocateVirtualRegister32();
+			var resultCarry = transformContext.AllocateVirtualRegister32();
 
-			var resultCarry = transformContext.AllocateVirtualRegister(transformContext.TypeSystem.BuiltIn.Boolean);
-
-			transformContext.SetGetLow64(context, op0Low, operand1);
-			transformContext.AppendGetHigh64(context, op0High, operand1);
-			transformContext.AppendGetLow64(context, op1Low, operand2);
-			transformContext.AppendGetHigh64(context, op1High, operand2);
+			context.SetInstruction(IRInstruction.GetLow32, op0Low, operand1);
+			context.AppendInstruction(IRInstruction.GetHigh32, op0High, operand1);
+			context.AppendInstruction(IRInstruction.GetLow32, op1Low, operand2);
+			context.AppendInstruction(IRInstruction.GetHigh32, op1High, operand2);
 
 			context.AppendInstruction2(IRInstruction.AddCarryOut32, resultLow, resultCarry, op0Low, op1Low);
 			context.AppendInstruction(IRInstruction.AddCarryIn32, resultHigh, op0High, op1High, resultCarry);

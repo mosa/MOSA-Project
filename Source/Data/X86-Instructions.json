@@ -3508,7 +3508,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"Condition": "[register][register]",
 					"Encoding": "[x86],operand-prefix=0x0F,opcode=|0b0100|conditional,mod=11,reg=reg3:r,rm=reg3:o2"
 				}
 			]

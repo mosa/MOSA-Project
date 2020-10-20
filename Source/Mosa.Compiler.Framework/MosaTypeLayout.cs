@@ -104,6 +104,8 @@ namespace Mosa.Compiler.Framework
 
 		public class MethodInfo
 		{
+			public bool HasThis { get; set; }
+
 			public int ReturnSize { get; set; }
 
 			public bool ReturnInRegister { get; set; }
@@ -111,6 +113,8 @@ namespace Mosa.Compiler.Framework
 			public int ParameterStackSize { get; set; }
 			public List<int> ParameterOffsets { get; set; }
 			public List<int> ParameterSizes { get; set; }
+
+			public int ParameterCount { get { return ParameterSizes.Count; } }
 		}
 
 		#endregion Nested Class
@@ -542,6 +546,8 @@ namespace Mosa.Compiler.Framework
 			if (method.HasThis)
 			{
 				offsets.Add(0);
+				sizes.Add(NativePointerSize);
+
 				stacksize = NativePointerSize;  // already aligned
 			}
 
@@ -556,10 +562,14 @@ namespace Mosa.Compiler.Framework
 			}
 
 			var returnType = method.Signature.ReturnType;
+			int returnSize = 0;
 
-			ResolveType(returnType);
+			if (!returnType.IsVoid)
+			{
+				ResolveType(returnType);
 
-			typeSizes.TryGetValue(returnType, out int returnSize);
+				typeSizes.TryGetValue(returnType, out returnSize);
+			}
 
 			var methodInfo = new MethodInfo
 			{
@@ -567,7 +577,8 @@ namespace Mosa.Compiler.Framework
 				ParameterOffsets = offsets,
 				ParameterSizes = sizes,
 				ParameterStackSize = stacksize,
-				ReturnInRegister = FitsInRegister(returnType)
+				ReturnInRegister = !returnType.IsVoid && FitsInRegister(returnType),
+				HasThis = method.HasThis
 			};
 
 			methodData.Add(method, methodInfo);

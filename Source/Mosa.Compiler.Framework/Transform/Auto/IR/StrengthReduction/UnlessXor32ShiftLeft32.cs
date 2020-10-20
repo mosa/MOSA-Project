@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 	/// </summary>
 	public sealed class UnlessXor32ShiftLeft32 : BaseTransformation
 	{
-		public UnlessXor32ShiftLeft32() : base(IRInstruction.ShiftLeft32, true)
+		public UnlessXor32ShiftLeft32() : base(IRInstruction.ShiftLeft32)
 		{
 		}
 
@@ -57,7 +57,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.IR.StrengthReduction
 	/// </summary>
 	public sealed class UnlessXor32ShiftLeft32_v1 : BaseTransformation
 	{
-		public UnlessXor32ShiftLeft32_v1() : base(IRInstruction.ShiftLeft32, true)
+		public UnlessXor32ShiftLeft32_v1() : base(IRInstruction.ShiftLeft32)
 		{
 		}
 

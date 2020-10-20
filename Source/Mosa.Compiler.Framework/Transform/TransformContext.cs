@@ -12,17 +12,18 @@ namespace Mosa.Compiler.Framework.Transform
 	public sealed class TransformContext
 	{
 		public MethodCompiler MethodCompiler { get; private set; }
+		public Compiler Compiler { get; private set; }
 
-		public TypeSystem TypeSystem { get { return MethodCompiler.TypeSystem; } }
+		public TypeSystem TypeSystem { get; private set; }
 
 		public TraceLog TraceLog { get; private set; }
 
 		public TraceLog SpecialTraceLog { get; private set; }
 
-		public Operand ConstantZero32 { get { return MethodCompiler.ConstantZero32; } }
-		public Operand ConstantZero64 { get { return MethodCompiler.ConstantZero64; } }
-		public Operand ConstantZeroR4 { get { return MethodCompiler.ConstantZeroR4; } }
-		public Operand ConstantZeroR8 { get { return MethodCompiler.ConstantZeroR8; } }
+		public Operand ConstantZero32 { get; private set; }
+		public Operand ConstantZero64 { get; private set; }
+		public Operand ConstantZeroR4 { get; private set; }
+		public Operand ConstantZeroR8 { get; private set; }
 
 		public MosaType I4 { get; private set; }
 		public MosaType I8 { get; private set; }
@@ -31,25 +32,78 @@ namespace Mosa.Compiler.Framework.Transform
 		public MosaType O { get; private set; }
 
 		public VirtualRegisters VirtualRegisters { get; private set; }
+		public BasicBlocks BasicBlocks { get; set; }
 
-		public TransformContext(MethodCompiler methodCompiler, TraceLog traceLog = null, TraceLog specialTraceLog = null)
+		public bool LowerTo32 { get; private set; }
+		public bool IsInSSAForm { get; private set; }
+
+		public bool Is32BitPlatform { get; private set; }
+
+		public TransformContext(MethodCompiler methodCompiler)
 		{
 			MethodCompiler = methodCompiler;
-			TraceLog = traceLog;
-			SpecialTraceLog = specialTraceLog;
+			Compiler = methodCompiler.Compiler;
+
+			TypeSystem = Compiler.TypeSystem;
 
 			VirtualRegisters = MethodCompiler.VirtualRegisters;
+			BasicBlocks = methodCompiler.BasicBlocks;
 
 			I4 = TypeSystem.BuiltIn.I4;
 			I8 = TypeSystem.BuiltIn.I8;
 			R4 = TypeSystem.BuiltIn.R4;
 			R8 = TypeSystem.BuiltIn.R8;
 			O = TypeSystem.BuiltIn.Object;
+
+			ConstantZero32 = MethodCompiler.ConstantZero32;
+			ConstantZero64 = MethodCompiler.ConstantZero64;
+			ConstantZeroR4 = MethodCompiler.ConstantZeroR4;
+			ConstantZeroR8 = MethodCompiler.ConstantZeroR8;
+
+			Is32BitPlatform = Compiler.Architecture.Is32BitPlatform;
+			LowerTo32 = Compiler.CompilerSettings.LongExpansion;
+		}
+
+		public void SetLogs(TraceLog traceLog = null, TraceLog specialTraceLog = null)
+		{
+			TraceLog = traceLog;
+			SpecialTraceLog = specialTraceLog;
+		}
+
+		public void SetStageOptions(bool inSSAForm, bool lowerTo32)
+		{
+			LowerTo32 = Compiler.CompilerSettings.LongExpansion && lowerTo32;
+			IsInSSAForm = inSSAForm;
 		}
 
 		public Operand AllocateVirtualRegister(MosaType type)
 		{
 			return VirtualRegisters.Allocate(type);
+		}
+
+		public Operand AllocateVirtualRegister32()
+		{
+			return VirtualRegisters.Allocate(I4);
+		}
+
+		public Operand AllocateVirtualRegister64()
+		{
+			return VirtualRegisters.Allocate(I8);
+		}
+
+		public Operand AllocateVirtualRegisterR4()
+		{
+			return VirtualRegisters.Allocate(R4);
+		}
+
+		public Operand AllocateVirtualRegisterR8()
+		{
+			return VirtualRegisters.Allocate(R8);
+		}
+
+		public Operand AllocateVirtualRegisterObject()
+		{
+			return VirtualRegisters.Allocate(O);
 		}
 
 		public bool ApplyTransform(Context context, BaseTransformation transformation, List<Operand> virtualRegisters = null)
@@ -118,94 +172,110 @@ namespace Mosa.Compiler.Framework.Transform
 
 		#region Constant Helper Methods
 
-		public Operand CreateConstant(byte value)
-		{
-			return Operand.CreateConstant(TypeSystem.BuiltIn.U1, value);
-		}
-
 		public Operand CreateConstant(int value)
 		{
-			return Operand.CreateConstant(TypeSystem.BuiltIn.I4, value);
+			return value == 0 ? ConstantZero32 : Operand.CreateConstant(I4, value);
 		}
 
 		public Operand CreateConstant(uint value)
 		{
-			return Operand.CreateConstant(TypeSystem.BuiltIn.U4, value);
+			return value == 0 ? ConstantZero32 : Operand.CreateConstant(I4, value);
 		}
 
 		public Operand CreateConstant(long value)
 		{
-			return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
+			return value == 0 ? ConstantZero64 : Operand.CreateConstant(I8, value);
 		}
 
 		public Operand CreateConstant(ulong value)
 		{
-			return Operand.CreateConstant(TypeSystem.BuiltIn.U8, value);
+			return value == 0 ? ConstantZero64 : Operand.CreateConstant(I8, value);
 		}
 
 		public Operand CreateConstant(float value)
 		{
-			return Operand.CreateConstant(value, TypeSystem);
+			return value == 0 ? ConstantZeroR4 : Operand.CreateConstant(R4, value);
 		}
 
 		public Operand CreateConstant(double value)
 		{
-			return Operand.CreateConstant(value, TypeSystem);
+			return value == 0 ? ConstantZeroR4 : Operand.CreateConstant(R8, value);
 		}
 
 		#endregion Constant Helper Methods
 
-		#region 64-Bit Helpers
+		#region Basic Block Helpers
 
-		public void SetGetLow64(Context context, Operand operand1, Operand operand2)
+		/// <summary>
+		/// Splits the block.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <returns></returns>
+		public Context Split(Context context)
 		{
-			if (operand2.IsResolvedConstant)
-			{
-				context.SetInstruction(IRInstruction.Move32, operand1, CreateConstant(operand2.ConstantUnsigned32));
-			}
-			else
-			{
-				context.SetInstruction(IRInstruction.GetLow64, operand1, operand2);
-			}
+			return new Context(Split(context.Node));
 		}
 
-		public void SetGetHigh64(Context context, Operand operand1, Operand operand2)
+		/// <summary>
+		/// Splits the block.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		/// <returns></returns>
+		public BasicBlock Split(InstructionNode node)
 		{
-			if (operand2.IsResolvedConstant)
-			{
-				context.SetInstruction(IRInstruction.Move32, operand1, CreateConstant(operand2.ConstantUnsigned64 >> 32));
-			}
-			else
-			{
-				context.SetInstruction(IRInstruction.GetHigh64, operand1, operand2);
-			}
+			var newblock = CreateNewBlock(-1, node.Label);
+
+			node.Split(newblock);
+
+			return newblock;
 		}
 
-		public void AppendGetLow64(Context context, Operand operand1, Operand operand2)
+		/// <summary>
+		/// Creates the new block.
+		/// </summary>
+		/// <param name="blockLabel">The label.</param>
+		/// <param name="instructionLabel">The instruction label.</param>
+		/// <returns></returns>
+		private BasicBlock CreateNewBlock(int blockLabel, int instructionLabel)
 		{
-			if (operand2.IsResolvedConstant)
-			{
-				context.AppendInstruction(IRInstruction.Move32, operand1, CreateConstant(operand2.ConstantUnsigned32));
-			}
-			else
-			{
-				context.AppendInstruction(IRInstruction.GetLow64, operand1, operand2);
-			}
+			return BasicBlocks.CreateBlock(blockLabel, instructionLabel);
 		}
 
-		public void AppendGetHigh64(Context context, Operand operand1, Operand operand2)
+		/// <summary>
+		/// Creates empty blocks.
+		/// </summary>
+		/// <param name="blocks">The Blocks.</param>
+		/// <param name="instructionLabel">The instruction label.</param>
+		/// <returns></returns>
+		public Context[] CreateNewBlockContexts(int blocks, int instructionLabel)
 		{
-			if (operand2.IsResolvedConstant)
+			// Allocate the context array
+			var result = new Context[blocks];
+
+			for (int index = 0; index < blocks; index++)
 			{
-				context.AppendInstruction(IRInstruction.Move32, operand1, CreateConstant(operand2.ConstantUnsigned64 >> 32));
+				result[index] = CreateNewBlockContext(instructionLabel);
 			}
-			else
-			{
-				context.AppendInstruction(IRInstruction.GetHigh64, operand1, operand2);
-			}
+
+			return result;
 		}
 
-		#endregion 64-Bit Helpers
+		/// <summary>
+		/// Create an empty block.
+		/// </summary>
+		/// <param name="instructionLabel">The instruction label.</param>
+		/// <returns></returns>
+		private Context CreateNewBlockContext(int instructionLabel)
+		{
+			return new Context(CreateNewBlock(-1, instructionLabel));
+		}
+
+		#endregion Basic Block Helpers
+
+		public static void UpdatePhiInstructionTargets(List<BasicBlock> targets, BasicBlock source, BasicBlock newSource)
+		{
+			BaseMethodCompilerStage.UpdatePhiInstructionTargets(targets, source, newSource);
+		}
 
 		public void UpdatePHI(Context context)
 		{
@@ -236,6 +306,11 @@ namespace Mosa.Compiler.Framework.Transform
 			}
 
 			Debug.Assert(context.OperandCount == context.Block.PreviousBlocks.Count);
+		}
+
+		public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
+		{
+			MethodCompiler.SplitLongOperand(operand, out operandLow, out operandHigh);
 		}
 	}
 }

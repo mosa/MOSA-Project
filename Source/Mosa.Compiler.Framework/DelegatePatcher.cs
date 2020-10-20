@@ -124,8 +124,9 @@ namespace Mosa.Compiler.Framework
 			b0.AppendInstruction(loadInstruction, opMethod, thisOperand, methodPointerOffsetOperand);
 			b0.AppendInstruction(loadInstruction, opInstance, thisOperand, instanceOffsetOperand);
 			b0.AppendInstruction(compareInstruction, ConditionCode.Equal, opCompare, opInstance, methodCompiler.ConstantZero);
-			b0.AppendInstruction(branchInstruction, ConditionCode.Equal, null, opCompare, methodCompiler.ConstantZero);
-			b0.AddBranchTarget(b2.Block);
+			b0.AppendInstruction(branchInstruction, ConditionCode.Equal, null, opCompare, methodCompiler.ConstantZero, b2.Block);
+
+			//b0.AddBranchTarget(b2.Block);
 			b0.AppendInstruction(IRInstruction.Jmp, b1.Block);
 
 			var operands = new List<Operand>(methodCompiler.Parameters.Length + 1);
@@ -138,10 +139,12 @@ namespace Mosa.Compiler.Framework
 
 			// no instance
 			b1.AppendInstruction(IRInstruction.CallDynamic, result, opMethod, operands);
+			b1.InvokeMethod = methodCompiler.Method;
 			b1.AppendInstruction(IRInstruction.Jmp, b3.Block);
 
 			// instance
 			b2.AppendInstruction(IRInstruction.CallDynamic, result, opMethod, opInstance, operands);
+			b2.InvokeMethod = methodCompiler.Method;
 			b2.AppendInstruction(IRInstruction.Jmp, b3.Block);
 
 			// return

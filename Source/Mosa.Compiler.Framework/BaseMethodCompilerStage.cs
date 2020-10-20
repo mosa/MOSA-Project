@@ -295,6 +295,26 @@ namespace Mosa.Compiler.Framework
 			return MethodCompiler.VirtualRegisters.Allocate(type);
 		}
 
+		protected Operand AllocateVirtualRegister32()
+		{
+			return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I4);
+		}
+
+		protected Operand AllocateVirtualRegister64()
+		{
+			return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I8);
+		}
+
+		protected Operand AllocateVirtualRegisterR4()
+		{
+			return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.R4);
+		}
+
+		protected Operand AllocateVirtualRegisterR8()
+		{
+			return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.R8);
+		}
+
 		/// <summary>
 		/// Allocates the virtual register or stack slot.
 		/// </summary>
@@ -563,7 +583,7 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(removedBlock.NextBlocks.Count == 0);
 		}
 
-		protected static void UpdatePhiInstructionTargets(List<BasicBlock> targets, BasicBlock source, BasicBlock newSource)
+		public static void UpdatePhiInstructionTargets(List<BasicBlock> targets, BasicBlock source, BasicBlock newSource)
 		{
 			foreach (var target in targets)
 			{
@@ -1065,59 +1085,39 @@ namespace Mosa.Compiler.Framework
 
 		#region Constant Helper Methods
 
-		public Operand CreateConstant(byte value)
-		{
-			return Operand.CreateConstant(TypeSystem.BuiltIn.U1, value);
-		}
-
-		protected Operand CreateConstant(int value)
+		protected Operand CreateConstant32(int value)
 		{
 			return Operand.CreateConstant(TypeSystem.BuiltIn.I4, value);
 		}
 
-		protected Operand CreateConstant(uint value)
+		protected Operand CreateConstant32(uint value)
 		{
-			return Operand.CreateConstant(TypeSystem.BuiltIn.U4, value);
+			return Operand.CreateConstant(TypeSystem.BuiltIn.I4, value);
 		}
 
-		protected Operand CreateConstant(long value)
+		protected Operand CreateConstant32(long value)
 		{
 			return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
 		}
 
-		protected Operand CreateConstant(ulong value)
+		protected Operand CreateConstant64(ulong value)
 		{
-			return Operand.CreateConstant(TypeSystem.BuiltIn.U8, value);
+			return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
 		}
 
-		protected static Operand CreateConstant(MosaType type, long value)
+		protected Operand CreateConstantR4(float value)
 		{
-			return Operand.CreateConstant(type, (ulong)value);
+			return Operand.CreateConstant(TypeSystem.BuiltIn.R4, value);
+		}
+
+		protected Operand CreateConstantR8(double value)
+		{
+			return Operand.CreateConstant(TypeSystem.BuiltIn.R8, value);
 		}
 
 		protected static Operand CreateConstant(MosaType type, ulong value)
 		{
 			return Operand.CreateConstant(type, value);
-		}
-
-		protected static Operand CreateConstant(MosaType type, int value)
-		{
-			return Operand.CreateConstant(type, (long)value);
-		}
-
-		protected static Operand CreateConstant(MosaType type, uint value)
-		{
-			return Operand.CreateConstant(type, value);
-		}
-
-		protected Operand CreateConstant(float value)
-		{
-			return Operand.CreateConstant(value, TypeSystem);
-		}
-
-		protected Operand CreateConstant(double value)
-		{
-			return Operand.CreateConstant(value, TypeSystem);
 		}
 
 		#endregion Constant Helper Methods

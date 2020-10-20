@@ -56,8 +56,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (Is32BitPlatform)
 			{
-				context.SetInstruction(IRInstruction.GetLow64, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.ReturnRegister), operand);
-				context.AppendInstruction(IRInstruction.GetHigh64, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.ReturnHighRegister), operand);
+				context.SetInstruction(IRInstruction.GetLow32, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.ReturnRegister), operand);
+				context.AppendInstruction(IRInstruction.GetHigh32, Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.ReturnHighRegister), operand);
 			}
 			else
 			{
@@ -67,7 +67,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void SetReturnCompound(Context context)
 		{
-			var OffsetOfFirstParameterOperand = CreateConstant(Architecture.OffsetOfFirstParameter);
+			var OffsetOfFirstParameterOperand = CreateConstant32(Architecture.OffsetOfFirstParameter);
 			context.SetInstruction(IRInstruction.StoreCompound, null, StackFrame, OffsetOfFirstParameterOperand, context.Operand1);
 		}
 
@@ -90,7 +90,7 @@ namespace Mosa.Compiler.Framework.Stages
 			operands.RemoveAt(0);
 			context.Empty();
 
-			MakeCall(context, call, result, operands);
+			MakeCall(context, call, result, operands, method);
 
 			MethodScanner.MethodDirectInvoked(call.Method, Method);
 		}
@@ -99,17 +99,15 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var call = context.Operand1;
 			var result = context.Result;
+			var method = context.InvokeMethod;
 			var operands = context.GetOperands();
 
 			operands.RemoveAt(0);
 			context.Empty();
 
-			MakeCall(context, call, result, operands);
+			MakeCall(context, call, result, operands, method);
 
-			if (call.Method != null)
-			{
-				MethodScanner.MethodInvoked(call.Method, Method);
-			}
+			MethodScanner.MethodInvoked(call.Method, method);
 		}
 
 		private void CallVirtual(Context context)
@@ -136,9 +134,9 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction(loadInstruction, typeDefinition, thisPtr, ConstantZero);
 
 			// Get the address of the method
-			context.AppendInstruction(loadInstruction, callTarget, typeDefinition, CreateConstant(methodPointerOffset));
+			context.AppendInstruction(loadInstruction, callTarget, typeDefinition, CreateConstant32(methodPointerOffset));
 
-			MakeCall(context, callTarget, result, operands);
+			MakeCall(context, callTarget, result, operands, method);
 
 			MethodScanner.MethodInvoked(method, Method);
 		}
@@ -191,28 +189,37 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction(loadInstruction, typeDefinition, thisPtr, ConstantZero);
 
 			// Get the Interface Slot Table pointer
-			context.AppendInstruction(loadInstruction, interfaceSlotPtr, typeDefinition, CreateConstant(interfaceSlotTableOffset));
+			context.AppendInstruction(loadInstruction, interfaceSlotPtr, typeDefinition, CreateConstant32(interfaceSlotTableOffset));
 
 			// Get the Interface Method Table pointer
-			context.AppendInstruction(loadInstruction, interfaceMethodTablePtr, interfaceSlotPtr, CreateConstant(interfaceMethodTableOffset));
+			context.AppendInstruction(loadInstruction, interfaceMethodTablePtr, interfaceSlotPtr, CreateConstant32(interfaceMethodTableOffset));
 
 			// Get the MethodDef pointer
-			context.AppendInstruction(loadInstruction, methodDefinition, interfaceMethodTablePtr, CreateConstant(methodDefinitionOffset));
+			context.AppendInstruction(loadInstruction, methodDefinition, interfaceMethodTablePtr, CreateConstant32(methodDefinitionOffset));
 
 			// Get the address of the method
-			context.AppendInstruction(loadInstruction, callTarget, methodDefinition, CreateConstant(methodPointerOffset));
+			context.AppendInstruction(loadInstruction, callTarget, methodDefinition, CreateConstant32(methodPointerOffset));
 
-			MakeCall(context, callTarget, result, operands);
+			MakeCall(context, callTarget, result, operands, method);
 
 			MethodScanner.InterfaceMethodInvoked(method, Method);
 		}
 
-		private void MakeCall(Context context, Operand target, Operand result, List<Operand> operands)
+		private void MakeCall(Context context, Operand target, Operand result, List<Operand> operands, MosaMethod method)
 		{
+			Debug.Assert(method != null);
+
+			//var data = TypeLayout.__GetMethodInfo(method);
+
 			int stackSize = CalculateParameterStackSize(operands);
 			int returnSize = CalculateReturnSize(result);
 
 			int totalStack = returnSize + stackSize;
+
+			//if (data.ParameterStackSize != stackSize)
+			//{
+			//	int apple = 1;
+			//}
 
 			ReserveStackSizeForCall(context, totalStack);
 			PushOperands(context, operands, totalStack, StackPointer);
@@ -229,7 +236,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (stackSize == 0)
 				return;
 
-			context.AppendInstruction(Select(StackPointer, IRInstruction.Sub32, IRInstruction.Sub64), StackPointer, StackPointer, CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
+			context.AppendInstruction(Select(StackPointer, IRInstruction.Sub32, IRInstruction.Sub64), StackPointer, StackPointer, CreateConstant32(stackSize));
 		}
 
 		private void FreeStackAfterCall(Context context, int stackSize)
@@ -237,7 +244,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (stackSize == 0)
 				return;
 
-			context.AppendInstruction(Select(StackPointer, IRInstruction.Add32, IRInstruction.Add64), StackPointer, StackPointer, CreateConstant(TypeSystem.BuiltIn.I4, stackSize));
+			context.AppendInstruction(Select(StackPointer, IRInstruction.Add32, IRInstruction.Add64), StackPointer, StackPointer, CreateConstant32(stackSize));
 		}
 
 		private int CalculateParameterStackSize(List<Operand> operands)
@@ -285,7 +292,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void Push(Context context, Operand operand, int offset, Operand scratch)
 		{
-			var offsetOperand = CreateConstant(offset);
+			var offsetOperand = CreateConstant32(offset);
 
 			if (operand.IsInteger)
 			{

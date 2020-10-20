@@ -157,8 +157,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Register(IRInstruction.Truncate64x32, Truncate64x32);
 
-			Register(IRInstruction.GetLow64, GetLow64);
-			Register(IRInstruction.GetHigh64, GetHigh64);
+			Register(IRInstruction.GetLow32, GetLow32);
+			Register(IRInstruction.GetHigh32, GetHigh32);
 			Register(IRInstruction.To64, To64);
 
 			Register(IRInstruction.Or32, Or32);
@@ -529,8 +529,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (!value.AreRangeValuesIndeterminate)
 				{
-					trace?.Log($"  MaxValue:  {value.MaxValue.ToString()}");
-					trace?.Log($"  MinValue:  {value.MinValue.ToString()}");
+					trace?.Log($"  MaxValue:  {value.MaxValue}");
+					trace?.Log($"  MinValue:  {value.MinValue}");
 				}
 
 				if (value.BitsKnown != 0)
@@ -971,7 +971,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return new Value(result.Value ? 1u : 0u, true);
 		}
 
-		private Value GetHigh64(InstructionNode node)
+		private Value GetHigh32(InstructionNode node)
 		{
 			var value1 = node.Operand1.IsConstant ? new Value(node.Operand1.ConstantUnsigned64, true) : Values[node.Operand1.Index];
 
@@ -996,7 +996,7 @@ namespace Mosa.Compiler.Framework.Stages
 			};
 		}
 
-		private Value GetLow64(InstructionNode node)
+		private Value GetLow32(InstructionNode node)
 		{
 			var value1 = node.Operand1.IsConstant ? new Value(node.Operand1.ConstantUnsigned64, true) : Values[node.Operand1.Index];
 

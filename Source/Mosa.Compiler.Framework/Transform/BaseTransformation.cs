@@ -302,7 +302,7 @@ namespace Mosa.Compiler.Framework.Transform
 			return a / b;
 		}
 
-		protected static uint GetHigh64(ulong a)
+		protected static uint GetHigh32(ulong a)
 		{
 			return (uint)(a >> 32);
 		}
@@ -377,24 +377,14 @@ namespace Mosa.Compiler.Framework.Transform
 			return a * b;
 		}
 
-		protected static long MulSigned32(long a, long b)
+		protected static int MulSigned32(int a, int b)
 		{
 			return a * b;
-		}
-
-		protected static long MulSigned32(ulong a, ulong b)
-		{
-			return (long)a * (long)b;
 		}
 
 		protected static long MulSigned64(long a, long b)
 		{
 			return a * b;
-		}
-
-		protected static long MulSigned64(ulong a, ulong b)
-		{
-			return (long)a * (long)b;
 		}
 
 		protected static uint MulUnsigned32(uint a, uint b)

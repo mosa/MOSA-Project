@@ -52,8 +52,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.SignExtend16x64, SignExtend16x64);
 			AddVisitation(IRInstruction.SignExtend32x64, SignExtend32x64);
 			AddVisitation(IRInstruction.SignExtend8x64, SignExtend8x64);
-			AddVisitation(IRInstruction.GetHigh64, GetHigh64);
-			AddVisitation(IRInstruction.GetLow64, GetLow64);
+			AddVisitation(IRInstruction.GetHigh32, GetHigh32);
+			AddVisitation(IRInstruction.GetLow32, GetLow32);
 			AddVisitation(IRInstruction.Store64, Store64);
 			AddVisitation(IRInstruction.StoreParam64, StoreParam64);
 			AddVisitation(IRInstruction.Sub64, Sub64);
@@ -83,7 +83,7 @@ namespace Mosa.Platform.x86.Stages
 
 			var count = context.Operand2;
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister32();
 
 			context.SetInstruction(X86.Sar32, v1, op1H, count);
 			context.AppendInstruction(X86.Shrd32, resultLow, op1L, op1H, count);
@@ -104,7 +104,7 @@ namespace Mosa.Platform.x86.Stages
 				return;
 			}
 
-			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v2 = AllocateVirtualRegister32();
 
 			context.AppendInstruction(X86.Mov32, v2, count);
 			context.AppendInstruction(X86.Test32, null, v2, Constant_32);
@@ -266,10 +266,10 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
 			SplitLongOperand(context.Operand2, out var op2L, out var op2H);
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var v3 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var v4 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister32();
+			var v2 = AllocateVirtualRegister32();
+			var v3 = AllocateVirtualRegister32();
+			var v4 = AllocateVirtualRegister32();
 
 			context.SetInstruction(X86.Mov32, v1, op2L);
 			context.AppendInstruction2(X86.Mul32, v1, resultLow, op2L, op1L);
@@ -285,14 +285,14 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		private void GetHigh64(Context context)
+		private void GetHigh32(Context context)
 		{
 			SplitLongOperand(context.Operand1, out var _, out var op0H);
 
 			context.SetInstruction(X86.Mov32, context.Result, op0H);
 		}
 
-		private void GetLow64(Context context)
+		private void GetLow32(Context context)
 		{
 			SplitLongOperand(context.Operand1, out var op0L, out var _);
 
@@ -306,7 +306,7 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand2, out var op2L, out var op2H);
 			SplitLongOperand(context.Operand3, out var op3L, out var op3H);
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister32();
 
 			context.SetInstruction(X86.Or32, v1, op1L, op1H);
 			context.AppendInstruction(X86.Cmp32, null, v1, ConstantZero32);
@@ -327,14 +327,14 @@ namespace Mosa.Platform.x86.Stages
 
 			if (offset.IsResolvedConstant)
 			{
-				var offset2 = offset.IsConstantZero ? Constant_4 : CreateConstant(offset.Offset + NativePointerSize);
+				var offset2 = offset.IsConstantZero ? Constant_4 : CreateConstant32(offset.Offset + NativePointerSize);
 				context.AppendInstruction(X86.MovLoad32, resultHigh, address, offset2);
 				return;
 			}
 
 			SplitLongOperand(offset, out var op2L, out _);
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+			var v1 = AllocateVirtualRegister32();
 
 			context.AppendInstruction(X86.Add32, v1, op2L, Constant_4);
 			context.AppendInstruction(X86.MovLoad32, resultHigh, address, v1);
@@ -468,8 +468,8 @@ namespace Mosa.Platform.x86.Stages
 
 			var count = context.Operand2;
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister32();
+			var v2 = AllocateVirtualRegister32();
 
 			context.SetInstruction(X86.Shld32, resultHigh, op1H, op1L, count);
 			context.AppendInstruction(X86.Shl32, v1, op1L, count);
@@ -503,7 +503,7 @@ namespace Mosa.Platform.x86.Stages
 			/// Optimized shift when shift value is a constant and 32 or more, or zero
 			if (count.IsResolvedConstant)
 			{
-				var shift = count.ConstantUnsigned64 & 0b111111;
+				var shift = count.ConstantUnsigned32 & 0b111111;
 
 				if (shift == 0)
 				{
@@ -522,7 +522,7 @@ namespace Mosa.Platform.x86.Stages
 				else if (shift > 32)
 				{
 					// shift is greater than 32 bits
-					var newshift = CreateConstant(shift - 32);
+					var newshift = CreateConstant32(shift - 32);
 					context.SetInstruction(X86.Shr32, resultHigh, op1H, newshift);
 					context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero32);
 					return;
@@ -551,7 +551,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister32();
 
 			context.SetInstruction(X86.Movsx16To32, v1, context.Operand1);
 			context.AppendInstruction2(X86.Cdq32, resultHigh, resultLow, v1);
@@ -561,7 +561,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister32();
 
 			context.SetInstruction(X86.Mov32, v1, context.Operand1);
 			context.AppendInstruction2(X86.Cdq32, resultHigh, resultLow, v1);
@@ -571,7 +571,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister32();
 
 			context.SetInstruction(X86.Movsx8To32, v1, context.Operand1);
 			context.AppendInstruction2(X86.Cdq32, resultHigh, resultLow, v1);
@@ -589,11 +589,11 @@ namespace Mosa.Platform.x86.Stages
 
 			if (offset.IsResolvedConstant)
 			{
-				context.AppendInstruction(X86.MovStore32, null, address, CreateConstant(offset.Offset + NativePointerSize), op3H);
+				context.AppendInstruction(X86.MovStore32, null, address, CreateConstant32(offset.Offset + NativePointerSize), op3H);
 			}
 			else
 			{
-				var offset4 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+				var offset4 = AllocateVirtualRegister32();
 
 				context.AppendInstruction(X86.Add32, offset4, op2L, Constant_4);
 				context.AppendInstruction(X86.MovStore32, null, address, offset4, op3H);
