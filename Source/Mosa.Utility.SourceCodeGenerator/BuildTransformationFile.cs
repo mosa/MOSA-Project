@@ -5,13 +5,13 @@ using System.Text.RegularExpressions;
 
 namespace Mosa.Utility.SourceCodeGenerator
 {
-	public class BuildTransformationFile : BuildBaseTemplate
+	public class xBuildTransformationFile : BuildBaseTemplate
 	{
 		protected List<string> Filters;
 		protected string Namespace;
 		protected string Classname;
 
-		public BuildTransformationFile(string destinationPath, string destinationFile, string @namespace, string classname, List<string> filters)
+		public xBuildTransformationFile(string destinationPath, string destinationFile, string @namespace, string classname, List<string> filters)
 			: base(null, destinationPath, destinationFile)
 		{
 			Filters = filters;

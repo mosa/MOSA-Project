@@ -83,17 +83,6 @@ namespace Mosa.Utility.SourceCodeGenerator
 				}
 			).Execute();
 
-			new BuildTransformationFile(
-				Path.Combine(targetPath, @"Mosa.Compiler.Framework\Transform\Auto"),
-				"AutoInstance.cs",
-				"Mosa.Compiler.Framework.Transform.Auto",
-				"AutoInstance",
-				new List<string>()
-				{
-					"IR."
-				}
-			).Execute();
-
 			new BuildIRInstruction(
 				Path.Combine(dataPath, @"IR-Instructions.json"),
 				Path.Combine(targetPath, @"Mosa.Compiler.Framework\"),
