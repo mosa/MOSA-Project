@@ -280,6 +280,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (node.Instruction == IRInstruction.Move32
 					|| node.Instruction == IRInstruction.Move64
+					|| node.Instruction == IRInstruction.MoveObject
 					|| node.Instruction == IRInstruction.MoveR4
 					|| node.Instruction == IRInstruction.MoveR8)
 				{
@@ -649,7 +650,11 @@ namespace Mosa.Compiler.Framework.Stages
 						//Debug.Assert(IsPhiInstruction(node.Instruction));
 
 						if (!IsPhiInstruction(node.Instruction))
+						{
+							//MethodCompiler.Compiler.Stop();
+							//return;
 							throw new CompilerException("ValueNumbering Stage: Expected PHI instruction but found instead: " + node + " for " + operand);
+						}
 					}
 				}
 			}

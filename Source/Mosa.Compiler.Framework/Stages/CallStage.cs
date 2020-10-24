@@ -13,21 +13,13 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <seealso cref="Mosa.Compiler.Framework.BaseCodeTransformationStage" />
 	public sealed class CallStage : BaseCodeTransformationStage
 	{
-		private BaseInstruction loadInstruction;
-		private BaseInstruction moveInstruction;
-
-		protected override void Setup()
-		{
-			loadInstruction = Select(IRInstruction.Load32, IRInstruction.Load64);
-			moveInstruction = Select(IRInstruction.Move32, IRInstruction.Move64);
-		}
-
 		protected override void PopulateVisitationDictionary()
 		{
-			AddVisitation(IRInstruction.SetReturnR4, SetReturnR4);
-			AddVisitation(IRInstruction.SetReturnR8, SetReturnR8);
+			AddVisitation(IRInstruction.SetReturnObject, SetReturnObject);
 			AddVisitation(IRInstruction.SetReturn32, SetReturn32);
 			AddVisitation(IRInstruction.SetReturn64, SetReturn64);
+			AddVisitation(IRInstruction.SetReturnR4, SetReturnR4);
+			AddVisitation(IRInstruction.SetReturnR8, SetReturnR8);
 			AddVisitation(IRInstruction.SetReturnCompound, SetReturnCompound);
 			AddVisitation(IRInstruction.CallInterface, CallInterface);
 			AddVisitation(IRInstruction.CallStatic, CallStatic);
@@ -43,6 +35,11 @@ namespace Mosa.Compiler.Framework.Stages
 		private void SetReturnR8(Context context)
 		{
 			context.SetInstruction(IRInstruction.MoveR8, Operand.CreateCPURegister(context.Operand1.Type, Architecture.ReturnFloatingPointRegister), context.Operand1);
+		}
+
+		private void SetReturnObject(Context context)
+		{
+			context.SetInstruction(IRInstruction.MoveObject, Operand.CreateCPURegister(context.Operand1.Type, Architecture.ReturnRegister), context.Operand1);
 		}
 
 		private void SetReturn32(Context context)
@@ -131,10 +128,10 @@ namespace Mosa.Compiler.Framework.Stages
 			int methodPointerOffset = CalculateMethodTableOffset(method) + (NativePointerSize * 14);
 
 			// Get the TypeDef pointer
-			context.SetInstruction(loadInstruction, typeDefinition, thisPtr, ConstantZero);
+			context.SetInstruction(LoadInstruction, typeDefinition, thisPtr, ConstantZero);
 
 			// Get the address of the method
-			context.AppendInstruction(loadInstruction, callTarget, typeDefinition, CreateConstant32(methodPointerOffset));
+			context.AppendInstruction(LoadInstruction, callTarget, typeDefinition, CreateConstant32(methodPointerOffset));
 
 			MakeCall(context, callTarget, result, operands, method);
 
@@ -186,19 +183,19 @@ namespace Mosa.Compiler.Framework.Stages
 			var methodDefinition = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 
 			// Get the TypeDef pointer
-			context.SetInstruction(loadInstruction, typeDefinition, thisPtr, ConstantZero);
+			context.SetInstruction(LoadInstruction, typeDefinition, thisPtr, ConstantZero);
 
 			// Get the Interface Slot Table pointer
-			context.AppendInstruction(loadInstruction, interfaceSlotPtr, typeDefinition, CreateConstant32(interfaceSlotTableOffset));
+			context.AppendInstruction(LoadInstruction, interfaceSlotPtr, typeDefinition, CreateConstant32(interfaceSlotTableOffset));
 
 			// Get the Interface Method Table pointer
-			context.AppendInstruction(loadInstruction, interfaceMethodTablePtr, interfaceSlotPtr, CreateConstant32(interfaceMethodTableOffset));
+			context.AppendInstruction(LoadInstruction, interfaceMethodTablePtr, interfaceSlotPtr, CreateConstant32(interfaceMethodTableOffset));
 
 			// Get the MethodDef pointer
-			context.AppendInstruction(loadInstruction, methodDefinition, interfaceMethodTablePtr, CreateConstant32(methodDefinitionOffset));
+			context.AppendInstruction(LoadInstruction, methodDefinition, interfaceMethodTablePtr, CreateConstant32(methodDefinitionOffset));
 
 			// Get the address of the method
-			context.AppendInstruction(loadInstruction, callTarget, methodDefinition, CreateConstant32(methodPointerOffset));
+			context.AppendInstruction(LoadInstruction, callTarget, methodDefinition, CreateConstant32(methodPointerOffset));
 
 			MakeCall(context, callTarget, result, operands, method);
 
@@ -222,7 +219,7 @@ namespace Mosa.Compiler.Framework.Stages
 			//}
 
 			ReserveStackSizeForCall(context, totalStack);
-			PushOperands(context, operands, totalStack, StackPointer);
+			PushOperands(context, operands, totalStack);
 
 			// the mov/call two-instructions combo is to help facilitate the register allocator
 			context.AppendInstruction(IRInstruction.CallDirect, null, target);
@@ -236,7 +233,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (stackSize == 0)
 				return;
 
-			context.AppendInstruction(Select(StackPointer, IRInstruction.Sub32, IRInstruction.Sub64), StackPointer, StackPointer, CreateConstant32(stackSize));
+			context.AppendInstruction(SubInstruction, StackPointer, StackPointer, CreateConstant32(stackSize));
 		}
 
 		private void FreeStackAfterCall(Context context, int stackSize)
@@ -244,7 +241,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (stackSize == 0)
 				return;
 
-			context.AppendInstruction(Select(StackPointer, IRInstruction.Add32, IRInstruction.Add64), StackPointer, StackPointer, CreateConstant32(stackSize));
+			context.AppendInstruction(AddInstruction, StackPointer, StackPointer, CreateConstant32(stackSize));
 		}
 
 		private int CalculateParameterStackSize(List<Operand> operands)
@@ -277,7 +274,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return 0;
 		}
 
-		private void PushOperands(Context context, List<Operand> operands, int space, Operand scratch)
+		private void PushOperands(Context context, List<Operand> operands, int space)
 		{
 			for (int index = operands.Count - 1; index >= 0; index--)
 			{
@@ -286,34 +283,41 @@ namespace Mosa.Compiler.Framework.Stages
 				var size = GetTypeSize(operand.Type, true);
 				space -= size;
 
-				Push(context, operand, space, scratch);
+				Push(context, operand, space);
 			}
 		}
 
-		private void Push(Context context, Operand operand, int offset, Operand scratch)
+		private void Push(Context context, Operand operand, int offset)
 		{
 			var offsetOperand = CreateConstant32(offset);
 
-			if (operand.IsInteger)
+			if (operand.IsReferenceType)
 			{
-				context.AppendInstruction(Select(operand, IRInstruction.Store32, IRInstruction.Store64), null, scratch, offsetOperand, operand);
+				context.AppendInstruction(IRInstruction.StoreObject, null, StackPointer, offsetOperand, operand);
+			}
+			else if (operand.IsInteger32)
+			{
+				context.AppendInstruction(IRInstruction.Store32, null, StackPointer, offsetOperand, operand);
+			}
+			else if (operand.IsInteger64)
+			{
+				context.AppendInstruction(IRInstruction.Store64, null, StackPointer, offsetOperand, operand);
 			}
 			else if (operand.IsR4)
 			{
-				context.AppendInstruction(IRInstruction.StoreR4, null, scratch, offsetOperand, operand);
+				context.AppendInstruction(IRInstruction.StoreR4, null, StackPointer, offsetOperand, operand);
 			}
 			else if (operand.IsR8)
 			{
-				context.AppendInstruction(IRInstruction.StoreR8, null, scratch, offsetOperand, operand);
+				context.AppendInstruction(IRInstruction.StoreR8, null, StackPointer, offsetOperand, operand);
 			}
 			else if (!MosaTypeLayout.CanFitInRegister(operand.Type))
 			{
-				context.AppendInstruction(IRInstruction.StoreCompound, null, scratch, offsetOperand, operand);
+				context.AppendInstruction(IRInstruction.StoreCompound, null, StackPointer, offsetOperand, operand);
 			}
 			else
 			{
-				// note: same for integer logic (above)
-				context.AppendInstruction(Select(operand, IRInstruction.Store32, IRInstruction.Store64), null, scratch, offsetOperand, operand);
+				context.AppendInstruction(StoreInstruction, null, StackPointer, offsetOperand, operand);
 			}
 		}
 
@@ -322,7 +326,13 @@ namespace Mosa.Compiler.Framework.Stages
 			if (result == null)
 				return;
 
-			if (result.Is64BitInteger && Is32BitPlatform)
+			if (result.IsReferenceType)
+			{
+				var returnLow = Operand.CreateCPURegister(result.Type, Architecture.ReturnRegister);
+				context.AppendInstruction(IRInstruction.Gen, returnLow);
+				context.AppendInstruction(IRInstruction.MoveObject, result, returnLow);
+			}
+			else if (result.IsInteger64 && Is32BitPlatform)
 			{
 				var returnLow = Operand.CreateCPURegister(result.Type, Architecture.ReturnRegister);
 				var returnHigh = Operand.CreateCPURegister(TypeSystem.BuiltIn.U4, Architecture.ReturnHighRegister);
@@ -335,7 +345,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var returnLow = Operand.CreateCPURegister(result.Type, Architecture.ReturnRegister);
 				context.AppendInstruction(IRInstruction.Gen, returnLow);
-				context.AppendInstruction(moveInstruction, result, returnLow);
+				context.AppendInstruction(MoveInstruction, result, returnLow);
 			}
 			else if (result.IsR4)
 			{
@@ -359,7 +369,7 @@ namespace Mosa.Compiler.Framework.Stages
 				// note: same for integer logic (above)
 				var returnLow = Operand.CreateCPURegister(result.Type, Architecture.ReturnRegister);
 				context.AppendInstruction(IRInstruction.Gen, returnLow);
-				context.AppendInstruction(moveInstruction, result, returnLow);
+				context.AppendInstruction(MoveInstruction, result, returnLow);
 			}
 		}
 	}

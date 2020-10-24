@@ -96,11 +96,13 @@ namespace Mosa.Compiler.Framework.Stages
 							|| node.Instruction == IRInstruction.SetReturn64
 							|| node.Instruction == IRInstruction.SetReturnR4
 							|| node.Instruction == IRInstruction.SetReturnR8
-							|| node.Instruction == IRInstruction.LoadParamCompound
+							|| node.Instruction == IRInstruction.SetReturnObject
+							|| node.Instruction == IRInstruction.LoadParamObject
 							|| node.Instruction == IRInstruction.LoadParam32
 							|| node.Instruction == IRInstruction.LoadParam64
+							|| node.Instruction == IRInstruction.LoadParamCompound
 							|| node.Instruction == IRInstruction.LoadParamR4
-							|| node.Instruction == IRInstruction.LoadParamR4
+							|| node.Instruction == IRInstruction.LoadParamR8
 							|| node.Instruction == IRInstruction.LoadParamSignExtend16x32
 							|| node.Instruction == IRInstruction.LoadParamSignExtend16x64
 							|| node.Instruction == IRInstruction.LoadParamSignExtend32x64

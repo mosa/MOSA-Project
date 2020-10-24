@@ -34,6 +34,7 @@ namespace Mosa.Compiler.Framework.Transform.IR.Special
 				|| context.Instruction == IRInstruction.CallStatic
 				|| context.Instruction == IRInstruction.CallVirtual
 				|| context.Instruction == IRInstruction.NewObject
+				|| context.Instruction == IRInstruction.SetReturnObject         // these should not be necessary
 				|| context.Instruction == IRInstruction.SetReturn32         // these should not be necessary
 				|| context.Instruction == IRInstruction.SetReturn64         // these should not be necessary
 				|| context.Instruction == IRInstruction.SetReturnR4         // these should not be necessary

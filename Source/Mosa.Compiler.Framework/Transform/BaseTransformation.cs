@@ -77,12 +77,6 @@ namespace Mosa.Compiler.Framework.Transform
 				if (operand1.IsInteger && operand1.ConstantUnsigned64 == operand2.ConstantUnsigned64)
 					return true;
 
-				//if (operand1.IsLong && operand1.ConstantUnsigned64 == operand2.ConstantUnsigned64)
-				//	return true;
-
-				//if (operand1.IsInteger && operand1.ConstantUnsigned32 == operand2.ConstantUnsigned32)
-				//	return true;
-
 				if (operand1.IsR4 && operand1.IsR4 && operand1.ConstantDouble == operand2.ConstantDouble)
 					return true;
 
@@ -216,6 +210,11 @@ namespace Mosa.Compiler.Framework.Transform
 		protected static bool IsZero(Operand operand)
 		{
 			return operand.IsConstantZero;
+		}
+
+		protected static bool IsZero(ulong value)
+		{
+			return value == 0;
 		}
 
 		#endregion Filter Methods

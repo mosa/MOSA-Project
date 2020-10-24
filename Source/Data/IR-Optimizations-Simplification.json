@@ -34,6 +34,15 @@
 		{
 			"FamilyName": "IR",
 			"Type": "Simplification",
+			"Name": "MoveObject",
+			"SubName": "Propagation",
+			"Expression": "IR.MoveObject (IR.MoveObject a)",
+			"Filter": "",
+			"Result": "(IR.MoveObject a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
 			"Name": "Not##",
 			"SubName": "Twice",
 			"Expression": "IR.Not## (IR.Not## x)",
@@ -182,7 +191,8 @@
 			"SubName": "MultipleWithCommon",
 			"Expression": "IR.Add## (IR.MulUnsigned## x y) (IR.MulUnsigned## x z)",
 			"Filter": "",
-			"Result": "(IR.MulUnsigned## x (IR.Add## y z))"
+			"Result": "(IR.MulUnsigned## x (IR.Add## y z))",
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -191,7 +201,8 @@
 			"SubName": "MultipleWithCommon",
 			"Expression": "IR.Sub## (IR.MulUnsigned## x y) (IR.MulUnsigned## x z)",
 			"Filter": "",
-			"Result": "(IR.MulUnsigned## x (IR.Sub## y z))"
+			"Result": "(IR.MulUnsigned## x (IR.Sub## y z))",
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -210,6 +221,65 @@
 			"Expression": "(IR.Or## (IR.Not## a) (IR.Not## b))",
 			"Filter": "",
 			"Result": "(IR.Not## (IR.And## a b))"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "MulSigned##",
+			"SubName": "ByNegative1",
+			"Expression": "IR.MulSigned## a -1",
+			"Filter": "",
+			"Result": "(IR.Sub## [To##(0)] a)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "And##",
+			"SubName": "Same",
+			"Expression": "IR.And## a a",
+			"Filter": "",
+			"Result": "(IR.Move## a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Or##",
+			"SubName": "Same",
+			"Expression": "IR.Or## a a",
+			"Filter": "",
+			"Result": "(IR.Move## a)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "And##",
+			"SubName": "Double",
+			"Expression": "IR.And## (IR.And## x y) x",
+			"Filter": "",
+			"Result": "(IR.And## x y)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Or##",
+			"SubName": "Double",
+			"Expression": "IR.Or## (IR.Or## x y) x",
+			"Filter": "",
+			"Result": "(IR.Or## x y)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Xor##",
+			"SubName": "Double",
+			"Expression": "IR.Xor## (IR.Or## x y) x",
+			"Filter": "",
+			"Result": "(IR.Move## y)",
+			"Variations": "Yes"
 		}
 	]
 }

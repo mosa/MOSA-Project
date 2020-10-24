@@ -27,7 +27,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//AddVisitation(IRInstruction.Compare32x64, Compare32x64);
 			//AddVisitation(IRInstruction.Compare64x32, Compare64x32);
 			//AddVisitation(IRInstruction.Compare64x64, Compare64x64);
-			//AddVisitation(IRInstruction.BranchCompare64, BranchCompare64);
+			//AddVisitation(IRInstruction.Branch64, Branch64);
 			//AddVisitation(IRInstruction.ConvertFloatR4To64, ConvertFloatR4To64);
 			//AddVisitation(IRInstruction.ConvertFloatR8To64, ConvertFloatR8ToInteger64);
 			//AddVisitation(IRInstruction.Convert64ToFloatR4, Convert64ToFloatR4);
@@ -109,14 +109,14 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void Call(Context context)
 		{
-			if (context.Result?.Is64BitInteger == true)
+			if (context.Result?.IsInteger64 == true)
 			{
 				SplitLongOperand(context.Result, out _, out _);
 			}
 
 			foreach (var operand in context.Operands)
 			{
-				if (operand.Is64BitInteger)
+				if (operand.IsInteger64)
 				{
 					SplitLongOperand(operand, out _, out _);
 				}
@@ -484,8 +484,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 		private void Truncate64x32(Context context)
 		{
-			Debug.Assert(context.Operand1.Is64BitInteger);
-			Debug.Assert(!context.Result.Is64BitInteger);
+			Debug.Assert(context.Operand1.IsInteger64);
+			Debug.Assert(!context.Result.IsInteger64);
 
 			SplitLongOperand(context.Result, out var resultLow, out _);
 			SplitLongOperand(context.Operand1, out var op1L, out _);

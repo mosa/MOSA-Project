@@ -49,26 +49,26 @@ namespace Mosa.Utility.SourceCodeGenerator
 			string filter = node.Filter;
 			string result = node.Result;
 			bool log = (node.Log != null && node.Log == "Yes");
-			bool reassociate = (node.Reassociate != null && node.Reassociate == "Yes");
+			bool Variations = (node.Variations != null && node.Variations == "Yes");
 
-			GenerateTranformations(name, familyName, type, subName, expression, filter, result, reassociate, log);
+			GenerateTranformations(name, familyName, type, subName, expression, filter, result, Variations, log);
 		}
 
-		private void GenerateTranformations(string name, string familyName, string type, string subName, string expression, string filter, string result, bool reassociate, bool log)
+		private void GenerateTranformations(string name, string familyName, string type, string subName, string expression, string filter, string result, bool Variations, bool log)
 		{
 			if (expression.Contains("R#"))
 			{
-				GenerateTransformation(R4(name), R4(familyName), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result)), reassociate, log);
-				GenerateTransformation(R8(name), R8(familyName), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result)), reassociate, log);
+				GenerateTransformation(R4(name), R4(familyName), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result)), Variations, log);
+				GenerateTransformation(R8(name), R8(familyName), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result)), Variations, log);
 			}
 			else if (expression.Contains("##"))
 			{
-				GenerateTransformation(To32(name), To32(familyName), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result)), reassociate, log);
-				GenerateTransformation(To64(name), To64(familyName), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result)), reassociate, log);
+				GenerateTransformation(To32(name), To32(familyName), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result)), Variations, log);
+				GenerateTransformation(To64(name), To64(familyName), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result)), Variations, log);
 			}
 			else
 			{
-				GenerateTransformation(name, familyName, type, subName, new Transformation(expression, filter, result), reassociate, log);
+				GenerateTransformation(name, familyName, type, subName, new Transformation(expression, filter, result), Variations, log);
 			}
 		}
 
@@ -92,7 +92,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			return s?.Replace("R#", "R8");
 		}
 
-		private void GenerateTransformation(string name, string familyName, string type, string subName, Transformation transform, bool reassociate, bool log)
+		private void GenerateTransformation(string name, string familyName, string type, string subName, Transformation transform, bool Variations, bool log)
 		{
 			Lines.Clear();
 			First = true;
@@ -106,18 +106,18 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine($"namespace Mosa.Compiler.Framework.Transform.Auto.{familyName}.{type}");
 			Lines.AppendLine("{");
 
-			GenerateTransformations(name, familyName, type, subName, transform, reassociate, log);
+			GenerateTransformations(name, familyName, type, subName, transform, Variations, log);
 
 			Lines.AppendLine("}");
 
 			Save();
 		}
 
-		private void GenerateTransformations(string name, string familyName, string type, string subName, Transformation transform, bool reassociate, bool log)
+		private void GenerateTransformations(string name, string familyName, string type, string subName, Transformation transform, bool Variations, bool log)
 		{
 			GenerateTransformation2(name, familyName, type, subName, transform, log);
 
-			if (!reassociate)
+			if (!Variations)
 				return;
 
 			if (CommutativeInstructions == null || CommutativeInstructions.Count == 0)
@@ -555,10 +555,19 @@ namespace Mosa.Utility.SourceCodeGenerator
 				NodeNbrToNode.Add(instructionNode.NodeNbr, string.Empty);
 			}
 
+			var path = NodeNbrToNode[instructionNode.NodeNbr];
+
+			if (instructionNode.InstructionName.StartsWith("IR.Phi"))
+			{
+				EmitCondition($"context.{path}OperandCount != {instructionNode.Operands.Count}");
+			}
+
 			var condition = GetConditionText(instructionNode);
 
 			if (condition != null)
-				EmitCondition($"context.ConditionCode != ConditionCode.{condition}");
+			{
+				EmitCondition($"context.{path}ConditionCode != ConditionCode.{condition}");
+			}
 
 			foreach (var operand in instructionNode.Operands)
 			{

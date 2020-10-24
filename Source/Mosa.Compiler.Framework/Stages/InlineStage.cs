@@ -108,6 +108,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (node.Instruction == IRInstruction.SetReturn32
 						|| node.Instruction == IRInstruction.SetReturn64
+						|| node.Instruction == IRInstruction.SetReturnObject
 						|| node.Instruction == IRInstruction.SetReturnR4
 						|| node.Instruction == IRInstruction.SetReturnR8
 						|| node.Instruction == IRInstruction.SetReturnCompound)
@@ -122,6 +123,8 @@ namespace Mosa.Compiler.Framework.Stages
 								moveInstruction = IRInstruction.Move32;
 							else if (node.Instruction == IRInstruction.SetReturn64)
 								moveInstruction = IRInstruction.Move64;
+							else if (node.Instruction == IRInstruction.SetReturnObject)
+								moveInstruction = IRInstruction.MoveObject;
 							else if (node.Instruction == IRInstruction.SetReturnR4)
 								moveInstruction = IRInstruction.MoveR4;
 							else if (node.Instruction == IRInstruction.SetReturnR8)
@@ -232,6 +235,10 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				newNode.Instruction = IRInstruction.Move32;
 			}
+			else if (instruction == IRInstruction.LoadParamObject)
+			{
+				newNode.Instruction = IRInstruction.MoveObject;
+			}
 			else if (instruction == IRInstruction.LoadParam64
 				|| instruction == IRInstruction.LoadParamSignExtend8x64
 				|| instruction == IRInstruction.LoadParamSignExtend16x64
@@ -247,6 +254,10 @@ namespace Mosa.Compiler.Framework.Stages
 				|| instruction == IRInstruction.StoreParam32)
 			{
 				newNode.SetInstruction(IRInstruction.Move32, newNode.Operand1, newNode.Operand2);
+			}
+			else if (instruction == IRInstruction.StoreParamObject)
+			{
+				newNode.SetInstruction(IRInstruction.MoveObject, newNode.Operand1, newNode.Operand2);
 			}
 			else if (instruction == IRInstruction.StoreParam64)
 			{

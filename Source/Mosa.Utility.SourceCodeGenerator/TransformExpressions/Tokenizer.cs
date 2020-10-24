@@ -192,7 +192,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			}
 
 			// integer
-			ulong l = ulong.Parse(part);
+			ulong l = (ulong)long.Parse(part);
 
 			return new Token(TokenType.IntegerConstant, index, part, l);
 		}
