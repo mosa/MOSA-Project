@@ -34,7 +34,7 @@
 			"Expression": "IR.Compare32x## {==} (IR.RemUnsigned## a 2) 0",
 			"Filter": "",
 			"Result": "(IR.And## a 1)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -44,7 +44,7 @@
 			"Expression": "IR.Compare64x## {==} (IR.RemUnsigned## a 2) 0",
 			"Filter": "",
 			"Result": "(IR.And## a 1)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 
 		{
@@ -55,7 +55,7 @@
 			"Expression": "IR.Compare32x## {==} (IR.DivUnsigned## a X) Y",
 			"Filter": "IsResolvedConstant(Y) & IsResolvedConstant(X) & !IsZero(X)",
 			"Result": "(IR.Compare32x## {< u} (IR.Sub## a [MulUnsigned##(To##(X),To##(Y))]) X)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -65,7 +65,7 @@
 			"Expression": "IR.Compare64x## {==} (IR.DivUnsigned## a X) Y",
 			"Filter": "IsResolvedConstant(Y) & IsResolvedConstant(X) & !IsZero(X)",
 			"Result": "(IR.Compare64x## {< u} (IR.Sub## a [MulUnsigned##(To##(X),To##(Y))]) X)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -75,7 +75,7 @@
 			"Expression": "IR.ShiftRight## (IR.And## a X) N",
 			"Filter": "IsConstant(X) & IsConstant(N) & !IsZero(N) & IsLessOrEqual(GetHighestSetBit(To##(X)),To##(N))",
 			"Result": "(IR.ShiftRight## a N)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -85,7 +85,7 @@
 			"Expression": "IR.ShiftRight## (IR.Or## a X) N",
 			"Filter": "IsConstant(X) & IsConstant(N) & !IsZero(N) & IsLessOrEqual(GetHighestSetBit(To##(X)),To##(N))",
 			"Result": "(IR.ShiftRight## a N)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -95,7 +95,7 @@
 			"Expression": "IR.ShiftRight## (IR.Xor## a X) N",
 			"Filter": "IsConstant(X) & IsConstant(N) & !IsZero(N) & IsLessOrEqual(GetHighestSetBit(To##(X)),To##(N))",
 			"Result": "(IR.ShiftRight## a N)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -105,7 +105,7 @@
 			"Expression": "IR.ShiftLeft## (IR.And## a X) N",
 			"Filter": "IsConstant(X) & IsConstant(N) & !IsZero(N) & IsGreaterOrEqual(GetLowestSetBit(To##(X)),To##(N))",
 			"Result": "(IR.ShiftLeft## a N)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -115,7 +115,7 @@
 			"Expression": "IR.ShiftLeft## (IR.Or## a X) N",
 			"Filter": "IsConstant(X) & IsConstant(N) & !IsZero(N) & IsGreaterOrEqual(GetLowestSetBit(To##(X)),To##(N))",
 			"Result": "(IR.ShiftLeft## a N)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -125,7 +125,7 @@
 			"Expression": "IR.ShiftLeft## (IR.Xor## a X) N",
 			"Filter": "IsConstant(X) & IsConstant(N) & !IsZero(N) & IsGreaterOrEqual(GetLowestSetBit(To##(X)),To##(N))",
 			"Result": "(IR.ShiftLeft## a N)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		}
 	]
 }

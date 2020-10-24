@@ -19,13 +19,11 @@ namespace Mosa.Compiler.Framework
 
 		#region Data Members
 
-		protected string formattedStageName;
-
 		private List<TraceLog> traceLogs;
 
 		#endregion Data Members
 
-		#region Properties
+		#region Stage Properties
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
@@ -38,7 +36,23 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public string FormattedStageName { get; private set; }
 
-		#endregion Properties
+		#endregion Stage Properties
+
+		#region Instructions Properties
+
+		protected BaseInstruction LoadInstruction { get; private set; }
+
+		protected BaseInstruction StoreInstruction { get; private set; }
+
+		protected BaseInstruction MoveInstruction { get; private set; }
+
+		protected BaseInstruction SubInstruction { get; private set; }
+
+		protected BaseInstruction AddInstruction { get; private set; }
+
+		protected BaseInstruction BranchInstruction { get; private set; }
+
+		#endregion Instructions Properties
 
 		#region Compiler Properties
 
@@ -228,6 +242,25 @@ namespace Mosa.Compiler.Framework
 			NativeInstructionSize = Architecture.NativeInstructionSize;
 			Is32BitPlatform = Architecture.Is32BitPlatform;
 			Is64BitPlatform = Architecture.Is64BitPlatform;
+
+			if (Is32BitPlatform)
+			{
+				LoadInstruction = IRInstruction.Load32;
+				StoreInstruction = IRInstruction.Store32;
+				MoveInstruction = IRInstruction.Move32;
+				AddInstruction = IRInstruction.Add32;
+				SubInstruction = IRInstruction.Sub32;
+				BranchInstruction = IRInstruction.Branch32;
+			}
+			else
+			{
+				LoadInstruction = IRInstruction.Load64;
+				StoreInstruction = IRInstruction.Store64;
+				MoveInstruction = IRInstruction.Move64;
+				AddInstruction = IRInstruction.Add64;
+				SubInstruction = IRInstruction.Sub64;
+				BranchInstruction = IRInstruction.Branch64;
+			}
 
 			Initialize();
 		}
@@ -833,7 +866,9 @@ namespace Mosa.Compiler.Framework
 
 		protected BaseInstruction GetLoadInstruction(MosaType type)
 		{
-			if (type.IsPointer || type.IsReferenceType)
+			if (type.IsReferenceType)
+				return IRInstruction.LoadObject;
+			else if (type.IsPointer)
 				return Select(IRInstruction.Load32, IRInstruction.Load64);
 			if (type.IsPointer)
 				return Select(IRInstruction.Load32, IRInstruction.Load64);
@@ -867,7 +902,9 @@ namespace Mosa.Compiler.Framework
 
 		public BaseInstruction GetMoveInstruction(MosaType type)
 		{
-			if (type.IsPointer || type.IsReferenceType)
+			if (type.IsReferenceType)
+				return IRInstruction.MoveObject;
+			if (type.IsPointer)
 				return Select(IRInstruction.Move32, IRInstruction.Move64);
 			else if (type.IsI1)
 				return Select(IRInstruction.SignExtend8x32, IRInstruction.SignExtend8x64);
@@ -909,7 +946,9 @@ namespace Mosa.Compiler.Framework
 
 		public static BaseIRInstruction GetStoreParameterInstruction(MosaType type, bool is32bitPlatform)
 		{
-			if (type.IsR4)
+			if (type.IsReferenceType)
+				return IRInstruction.StoreParamObject;
+			else if (type.IsR4)
 				return IRInstruction.StoreParamR4;
 			else if (type.IsR8)
 				return IRInstruction.StoreParamR8;
@@ -931,7 +970,9 @@ namespace Mosa.Compiler.Framework
 
 		public static BaseIRInstruction GetLoadParameterInstruction(MosaType type, bool is32bitPlatform)
 		{
-			if (type.IsR4)
+			if (type.IsReferenceType)
+				return IRInstruction.LoadParamObject;
+			else if (type.IsR4)
 				return IRInstruction.LoadParamR4;
 			else if (type.IsR8)
 				return IRInstruction.LoadParamR8;
@@ -953,8 +994,7 @@ namespace Mosa.Compiler.Framework
 				return IRInstruction.LoadParam32;
 			else if (type.IsEnum && type.ElementType.IsUI8)
 				return IRInstruction.LoadParam64;
-
-			if (is32bitPlatform)
+			else if (is32bitPlatform)
 				return IRInstruction.LoadParam32;
 			else
 				return IRInstruction.LoadParam64;
@@ -965,18 +1005,17 @@ namespace Mosa.Compiler.Framework
 			if (type == null)
 				return null;
 
-			if (type.IsR4)
+			if (type.IsReferenceType)
+				return IRInstruction.SetReturnObject;
+			else if (type.IsR4)
 				return IRInstruction.SetReturnR4;
 			else if (type.IsR8)
 				return IRInstruction.SetReturnR8;
-
-			if (!is32bitPlatform)
+			else if (!is32bitPlatform)
 				return IRInstruction.SetReturn64;
-
-			if (type.IsUI8 || (type.IsEnum && type.ElementType.IsUI8))
+			else if (type.IsUI8 || (type.IsEnum && type.ElementType.IsUI8))
 				return IRInstruction.SetReturn64;
-
-			if (!MosaTypeLayout.CanFitInRegister(type))
+			else if (!MosaTypeLayout.CanFitInRegister(type))
 				return IRInstruction.SetReturnCompound;
 
 			return IRInstruction.SetReturn32;
@@ -984,7 +1023,9 @@ namespace Mosa.Compiler.Framework
 
 		public BaseIRInstruction GetStoreInstruction(MosaType type)
 		{
-			if (type.IsR4)
+			if (type.IsReferenceType)
+				return IRInstruction.StoreObject;
+			else if (type.IsR4)
 				return IRInstruction.StoreR4;
 			else if (type.IsR8)
 				return IRInstruction.StoreR8;
@@ -1004,25 +1045,16 @@ namespace Mosa.Compiler.Framework
 			throw new NotSupportedException();
 		}
 
-		public BaseInstruction Select(Operand operand, BaseInstruction instruction32, BaseInstruction instruction64)
-		{
-			return !operand.Is64BitInteger ? instruction32 : instruction64;
-		}
-
-		public BaseInstruction Select(BaseInstruction instruction32, BaseInstruction instruction64)
+		private BaseInstruction Select(BaseInstruction instruction32, BaseInstruction instruction64)
 		{
 			return Is32BitPlatform ? instruction32 : instruction64;
-		}
-
-		public BaseInstruction Select(bool is64bit, BaseInstruction instruction32, BaseInstruction instruction64)
-		{
-			return !is64bit ? instruction32 : instruction64;
 		}
 
 		public static bool IsSimpleIRMoveInstruction(BaseInstruction instruction)
 		{
 			return instruction == IRInstruction.Move32
 				|| instruction == IRInstruction.Move64
+				|| instruction == IRInstruction.MoveObject
 				|| instruction == IRInstruction.MoveR8
 				|| instruction == IRInstruction.MoveR4;
 		}

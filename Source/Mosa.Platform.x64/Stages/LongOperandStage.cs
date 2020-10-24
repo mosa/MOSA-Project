@@ -24,7 +24,7 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(IRInstruction.Compare32x64, Compare32x64);
 			AddVisitation(IRInstruction.Compare64x32, Compare64x32);
 			AddVisitation(IRInstruction.Compare64x64, Compare64x64);
-			AddVisitation(IRInstruction.BranchCompare64, BranchCompare64);
+			AddVisitation(IRInstruction.Branch64, Branch64);
 			AddVisitation(IRInstruction.ConvertR4To64, ConvertFloatR4To64);
 			AddVisitation(IRInstruction.ConvertR8To64, ConvertFloatR8ToInteger64);
 			AddVisitation(IRInstruction.Convert64ToR4, Convert64ToFloatR4);
@@ -110,7 +110,7 @@ namespace Mosa.Platform.x64.Stages
 			context.AppendInstruction(X64.Movzx8To64, resultOperand, v1);
 		}
 
-		private void BranchCompare64(Context context)
+		private void Branch64(Context context)
 		{
 			OptimizeBranch(context);
 

@@ -30,7 +30,7 @@
 			"Expression": "IR.MulUnsigned## a (IR.ShiftLeft## b c)",
 			"Filter": "",
 			"Result": "(IR.ShiftLeft## (IR.MulUnsigned## a b) c)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -40,7 +40,7 @@
 			"Expression": "IR.MulSigned## a (IR.ShiftLeft## b c)",
 			"Filter": "",
 			"Result": "(IR.ShiftLeft## (IR.MulSigned## a b) c)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -50,7 +50,7 @@
 			"Expression": "IR.Sub## a b",
 			"Filter": "IsResolvedConstant(b)",
 			"Result": "(IR.Add## a [Neg##(ToSigned##(b))])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		}
 	]
 }

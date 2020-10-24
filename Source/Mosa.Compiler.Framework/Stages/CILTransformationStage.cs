@@ -277,11 +277,11 @@ namespace Mosa.Compiler.Framework.Stages
 				var instruction = (first.IsR4) ? (BaseInstruction)IRInstruction.CompareR4 : IRInstruction.CompareR8;
 
 				context.SetInstruction(instruction, cc, result, first, second);
-				context.AppendInstruction(Select(result, IRInstruction.BranchCompare32, IRInstruction.BranchCompare64), ConditionCode.Equal, null, result, CreateConstant32(1), target); // TODO: Constant should be 64bit
+				context.AppendInstruction(Select(result, IRInstruction.Branch32, IRInstruction.Branch64), ConditionCode.Equal, null, result, CreateConstant32(1), target); // TODO: Constant should be 64bit
 			}
 			else
 			{
-				context.SetInstruction(Select(first, IRInstruction.BranchCompare32, IRInstruction.BranchCompare64), cc, null, first, second, target);
+				context.SetInstruction(Select(first, IRInstruction.Branch32, IRInstruction.Branch64), cc, null, first, second, target);
 			}
 
 			//context.AddBranchTarget(target);
@@ -300,18 +300,20 @@ namespace Mosa.Compiler.Framework.Stages
 
 			BaseInstruction instruction = IRInstruction.Compare32x32;
 
-			if (first.IsR4)
+			if (first.IsReferenceType)
+				instruction = IRInstruction.CompareObject;
+			else if (result.IsInteger64 && first.IsInteger64)
+				instruction = IRInstruction.Compare64x64;
+			else if (result.IsInteger64 && first.IsInteger32)
+				instruction = IRInstruction.Compare32x64;
+			else if (result.IsInteger32 && first.IsInteger64)
+				instruction = IRInstruction.Compare64x32;
+			else if (result.IsInteger32 && first.IsInteger32)
+				instruction = IRInstruction.Compare32x32;
+			else if (first.IsR4)
 				instruction = IRInstruction.CompareR4;
 			else if (first.IsR8)
 				instruction = IRInstruction.CompareR8;
-			else if (result.Is64BitInteger && first.Is64BitInteger)
-				instruction = IRInstruction.Compare64x64;
-			else if (result.Is64BitInteger && !first.Is64BitInteger)
-				instruction = IRInstruction.Compare32x64;
-			else if (!result.Is64BitInteger && first.Is64BitInteger)
-				instruction = IRInstruction.Compare64x32;
-			else if (!result.Is64BitInteger && !first.Is64BitInteger)
-				instruction = IRInstruction.Compare32x32;
 
 			node.SetInstruction(instruction, code, result, first, second);
 		}
@@ -566,7 +568,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			// TODO!
 			//ReplaceWithVmCall(context, VmCall.Castclass);
-			node.ReplaceInstruction(Select(node.Result, IRInstruction.Move32, IRInstruction.Move64)); // HACK!
+			node.ReplaceInstruction(IRInstruction.MoveObject); // HACK!
 		}
 
 		private ulong GetBitMask(int bits)
@@ -724,7 +726,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (type.IsReferenceType)
 			{
-				node.SetInstruction(Select(IRInstruction.Store32, IRInstruction.Store64), null, ptr, ConstantZero, Operand.GetNullObject(TypeSystem));
+				node.SetInstruction(IRInstruction.StoreObject, null, ptr, ConstantZero, Operand.GetNullObject(TypeSystem));
 				node.MosaType = type;
 			}
 			else
@@ -1102,7 +1104,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var symbolName = node.Operand1.Name;
 			var stringdata = node.Operand1.StringData;
 
-			node.SetInstruction(Select(node.Result, IRInstruction.Move32, IRInstruction.Move64), node.Result, node.Operand1);
+			node.SetInstruction(IRInstruction.MoveObject, node.Result, node.Operand1);
 
 			var symbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, NativeAlignment, (NativePointerSize * 2) + 4 + (stringdata.Length * 2));
 			var stream = symbol.Stream;
@@ -1598,14 +1600,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (opcode == OpCode.Brtrue || opcode == OpCode.Brtrue_s)
 			{
-				context.SetInstruction(Select(first, IRInstruction.BranchCompare32, IRInstruction.BranchCompare64), ConditionCode.NotEqual, null, first, ConstantZero, target); // TODO: Constant should be 64bit
+				context.SetInstruction(Select(first, IRInstruction.Branch32, IRInstruction.Branch64), ConditionCode.NotEqual, null, first, ConstantZero, target); // TODO: Constant should be 64bit
 
 				//context.AddBranchTarget(target);
 				return;
 			}
 			else if (opcode == OpCode.Brfalse || opcode == OpCode.Brfalse_s)
 			{
-				context.SetInstruction(Select(first, IRInstruction.BranchCompare32, IRInstruction.BranchCompare64), ConditionCode.Equal, null, first, ConstantZero, target); // TODO: Constant should be 64bit
+				context.SetInstruction(Select(first, IRInstruction.Branch32, IRInstruction.Branch64), ConditionCode.Equal, null, first, ConstantZero, target); // TODO: Constant should be 64bit
 
 				//context.AddBranchTarget(target);
 				return;
@@ -1679,7 +1681,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private static BaseIRInstruction Select(Operand operand, BaseIRInstruction instruction32, BaseIRInstruction instruction64)
 		{
-			return Select(operand.Is64BitInteger, instruction32, instruction64);
+			return Select(operand.IsInteger64, instruction32, instruction64);
 		}
 
 		private static BaseIRInstruction Select(bool is64Bit, BaseIRInstruction instruction32, BaseIRInstruction instruction64)
@@ -2004,7 +2006,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Now compare length with index
 			// If index is greater than or equal to the length then jump to exception block, otherwise jump to next block
-			before.AppendInstruction(Select(IRInstruction.BranchCompare32, IRInstruction.BranchCompare64), ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block);
+			before.AppendInstruction(BranchInstruction, ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block);
 			before.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
 
 			// Build exception block which is just a call to throw exception

@@ -32,12 +32,14 @@ namespace Mosa.Compiler.Framework
 		public static readonly CallVirtual CallVirtual = new CallVirtual();
 		public static readonly CompareR4 CompareR4 = new CompareR4();
 		public static readonly CompareR8 CompareR8 = new CompareR8();
+		public static readonly CompareObject CompareObject = new CompareObject();
 		public static readonly Compare32x32 Compare32x32 = new Compare32x32();
 		public static readonly Compare32x64 Compare32x64 = new Compare32x64();
 		public static readonly Compare64x32 Compare64x32 = new Compare64x32();
 		public static readonly Compare64x64 Compare64x64 = new Compare64x64();
-		public static readonly BranchCompare32 BranchCompare32 = new BranchCompare32();
-		public static readonly BranchCompare64 BranchCompare64 = new BranchCompare64();
+		public static readonly Branch32 Branch32 = new Branch32();
+		public static readonly Branch64 Branch64 = new Branch64();
+		public static readonly BranchObject BranchObject = new BranchObject();
 		public static readonly ConvertR4ToR8 ConvertR4ToR8 = new ConvertR4ToR8();
 		public static readonly ConvertR4To32 ConvertR4To32 = new ConvertR4To32();
 		public static readonly ConvertR4To64 ConvertR4To64 = new ConvertR4To64();
@@ -71,13 +73,12 @@ namespace Mosa.Compiler.Framework
 		public static readonly Kill Kill = new Kill();
 		public static readonly KillAll KillAll = new KillAll();
 		public static readonly KillAllExcept KillAllExcept = new KillAllExcept();
-		public static readonly LoadConstant32 LoadConstant32 = new LoadConstant32();
-		public static readonly LoadConstant64 LoadConstant64 = new LoadConstant64();
 		public static readonly LoadCompound LoadCompound = new LoadCompound();
 		public static readonly LoadR4 LoadR4 = new LoadR4();
 		public static readonly LoadR8 LoadR8 = new LoadR8();
 		public static readonly Load32 Load32 = new Load32();
 		public static readonly Load64 Load64 = new Load64();
+		public static readonly LoadObject LoadObject = new LoadObject();
 		public static readonly LoadSignExtend8x32 LoadSignExtend8x32 = new LoadSignExtend8x32();
 		public static readonly LoadSignExtend16x32 LoadSignExtend16x32 = new LoadSignExtend16x32();
 		public static readonly LoadSignExtend8x64 LoadSignExtend8x64 = new LoadSignExtend8x64();
@@ -89,6 +90,7 @@ namespace Mosa.Compiler.Framework
 		public static readonly LoadZeroExtend16x64 LoadZeroExtend16x64 = new LoadZeroExtend16x64();
 		public static readonly LoadZeroExtend32x64 LoadZeroExtend32x64 = new LoadZeroExtend32x64();
 		public static readonly LoadParamCompound LoadParamCompound = new LoadParamCompound();
+		public static readonly LoadParamObject LoadParamObject = new LoadParamObject();
 		public static readonly LoadParamR4 LoadParamR4 = new LoadParamR4();
 		public static readonly LoadParamR8 LoadParamR8 = new LoadParamR8();
 		public static readonly LoadParam32 LoadParam32 = new LoadParam32();
@@ -127,6 +129,7 @@ namespace Mosa.Compiler.Framework
 		public static readonly ZeroExtend32x64 ZeroExtend32x64 = new ZeroExtend32x64();
 		public static readonly Move32 Move32 = new Move32();
 		public static readonly Move64 Move64 = new Move64();
+		public static readonly MoveObject MoveObject = new MoveObject();
 		public static readonly MulR4 MulR4 = new MulR4();
 		public static readonly MulR8 MulR8 = new MulR8();
 		public static readonly MulSigned32 MulSigned32 = new MulSigned32();
@@ -152,6 +155,7 @@ namespace Mosa.Compiler.Framework
 		public static readonly SetReturnR8 SetReturnR8 = new SetReturnR8();
 		public static readonly SetReturn32 SetReturn32 = new SetReturn32();
 		public static readonly SetReturn64 SetReturn64 = new SetReturn64();
+		public static readonly SetReturnObject SetReturnObject = new SetReturnObject();
 		public static readonly SetReturnCompound SetReturnCompound = new SetReturnCompound();
 		public static readonly SetLeaveTarget SetLeaveTarget = new SetLeaveTarget();
 		public static readonly ShiftLeft32 ShiftLeft32 = new ShiftLeft32();
@@ -166,9 +170,11 @@ namespace Mosa.Compiler.Framework
 		public static readonly Store16 Store16 = new Store16();
 		public static readonly Store32 Store32 = new Store32();
 		public static readonly Store64 Store64 = new Store64();
+		public static readonly StoreObject StoreObject = new StoreObject();
 		public static readonly StoreParamCompound StoreParamCompound = new StoreParamCompound();
 		public static readonly StoreParamR4 StoreParamR4 = new StoreParamR4();
 		public static readonly StoreParamR8 StoreParamR8 = new StoreParamR8();
+		public static readonly StoreParamObject StoreParamObject = new StoreParamObject();
 		public static readonly StoreParam8 StoreParam8 = new StoreParam8();
 		public static readonly StoreParam16 StoreParam16 = new StoreParam16();
 		public static readonly StoreParam32 StoreParam32 = new StoreParam32();
@@ -203,6 +209,7 @@ namespace Mosa.Compiler.Framework
 		public static readonly GetHigh32 GetHigh32 = new GetHigh32();
 		public static readonly IfThenElse32 IfThenElse32 = new IfThenElse32();
 		public static readonly IfThenElse64 IfThenElse64 = new IfThenElse64();
+		public static readonly IfThenElseObject IfThenElseObject = new IfThenElseObject();
 		public static readonly BitCopyR4To32 BitCopyR4To32 = new BitCopyR4To32();
 		public static readonly BitCopyR8To64 BitCopyR8To64 = new BitCopyR8To64();
 		public static readonly BitCopy32ToR4 BitCopy32ToR4 = new BitCopy32ToR4();

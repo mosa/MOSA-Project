@@ -10,13 +10,13 @@ namespace Mosa.Compiler.Framework.Transform.IR.Special
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{
-			if (context.Result.Definitions.Count != 1)
+			if (!IsSSAForm(context.Result))
 				return false;
 
-			if (context.Operand1.Definitions.Count != 1)
+			if (!IsSSAForm(context.Operand1))
 				return false;
 
-			return context.Operand1.IsResolvedConstant || context.Operand1.IsVirtualRegister;
+			return true;
 		}
 
 		public override void Transform(Context context, TransformContext transformContext)

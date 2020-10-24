@@ -51,14 +51,14 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 			context.AppendInstruction(IRInstruction.GetHigh32, op1High, operand2);
 
 			// Compare high
-			context.AppendInstruction(IRInstruction.BranchCompare32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
+			context.AppendInstruction(IRInstruction.Branch32, ConditionCode.Equal, null, op0High, op1High, newBlocks[1].Block);
 			context.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
 
-			newBlocks[0].AppendInstruction(IRInstruction.BranchCompare32, branch, null, op0High, op1High, newBlocks[2].Block);
+			newBlocks[0].AppendInstruction(IRInstruction.Branch32, branch, null, op0High, op1High, newBlocks[2].Block);
 			newBlocks[0].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
 
 			// Compare low
-			newBlocks[1].AppendInstruction(IRInstruction.BranchCompare32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
+			newBlocks[1].AppendInstruction(IRInstruction.Branch32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
 			newBlocks[1].AppendInstruction(IRInstruction.Jmp, newBlocks[3].Block);
 
 			// Success

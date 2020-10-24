@@ -626,7 +626,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="operandHigh">The operand high.</param>
 		public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 		{
-			if (operand.Is64BitInteger)
+			if (operand.IsInteger64)
 			{
 				SplitLongOperand(operand);
 				operandLow = operand.Low;

@@ -92,6 +92,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 		public static readonly BaseTransformation IR_ConstantMove_Xor64 = new IR.ConstantMove.Xor64();
 		public static readonly BaseTransformation IR_Simplification_Move32Propagation = new IR.Simplification.Move32Propagation();
 		public static readonly BaseTransformation IR_Simplification_Move64Propagation = new IR.Simplification.Move64Propagation();
+		public static readonly BaseTransformation IR_Simplification_MoveObjectPropagation = new IR.Simplification.MoveObjectPropagation();
 		public static readonly BaseTransformation IR_Simplification_Not32Twice = new IR.Simplification.Not32Twice();
 		public static readonly BaseTransformation IR_Simplification_Not64Twice = new IR.Simplification.Not64Twice();
 		public static readonly BaseTransformation IR_Simplification_GetLow32FromTo64 = new IR.Simplification.GetLow32FromTo64();
@@ -573,6 +574,16 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 		public static readonly BaseTransformation IR_ConstantFolding_LoadZeroExtend8x64AddressFold = new IR.ConstantFolding.LoadZeroExtend8x64AddressFold();
 		public static readonly BaseTransformation IR_ConstantFolding_LoadZeroExtend16x64AddressFold = new IR.ConstantFolding.LoadZeroExtend16x64AddressFold();
 		public static readonly BaseTransformation IR_ConstantFolding_LoadZeroExtend32x64AddressFold = new IR.ConstantFolding.LoadZeroExtend32x64AddressFold();
+		public static readonly BaseTransformation IR_Rewrite_CompareObjectGreaterThanZero = new IR.Rewrite.CompareObjectGreaterThanZero();
+		public static readonly BaseTransformation IR_Rewrite_CompareObjectGreaterThanZero_v1 = new IR.Rewrite.CompareObjectGreaterThanZero_v1();
+		public static readonly BaseTransformation IR_Rewrite_Compare32x32GreaterThanZero = new IR.Rewrite.Compare32x32GreaterThanZero();
+		public static readonly BaseTransformation IR_Rewrite_Compare32x32GreaterThanZero_v1 = new IR.Rewrite.Compare32x32GreaterThanZero_v1();
+		public static readonly BaseTransformation IR_Rewrite_Compare32x64GreaterThanZero = new IR.Rewrite.Compare32x64GreaterThanZero();
+		public static readonly BaseTransformation IR_Rewrite_Compare32x64GreaterThanZero_v1 = new IR.Rewrite.Compare32x64GreaterThanZero_v1();
+		public static readonly BaseTransformation IR_Rewrite_Compare64x32GreaterThanZero = new IR.Rewrite.Compare64x32GreaterThanZero();
+		public static readonly BaseTransformation IR_Rewrite_Compare64x32GreaterThanZero_v1 = new IR.Rewrite.Compare64x32GreaterThanZero_v1();
+		public static readonly BaseTransformation IR_Rewrite_Compare64x64GreaterThanZero = new IR.Rewrite.Compare64x64GreaterThanZero();
+		public static readonly BaseTransformation IR_Rewrite_Compare64x64GreaterThanZero_v1 = new IR.Rewrite.Compare64x64GreaterThanZero_v1();
 		public static readonly BaseTransformation IR_Algebraic_Signed32AAPlusBBPlus2AB = new IR.Algebraic.Signed32AAPlusBBPlus2AB();
 		public static readonly BaseTransformation IR_Algebraic_Signed32AAPlusBBPlus2AB_v1 = new IR.Algebraic.Signed32AAPlusBBPlus2AB_v1();
 		public static readonly BaseTransformation IR_Algebraic_Signed32AAPlusBBPlus2AB_v2 = new IR.Algebraic.Signed32AAPlusBBPlus2AB_v2();

@@ -177,6 +177,7 @@ namespace Mosa.Platform.x86
 			pipeline.InsertBefore<CodeGenerationStage>(
 				new BaseMethodCompilerStage[]
 				{
+					//new StopStage(),
 					new FinalTweakStage(),
 					compilerSettings.PlatformOptimizations ? new PostOptimizationStage() : null,
 				});

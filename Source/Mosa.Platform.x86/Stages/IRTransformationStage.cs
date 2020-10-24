@@ -27,10 +27,12 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.BitCopyR4To32, BitCopyR4To32);
 			AddVisitation(IRInstruction.BitCopy32ToR4, BitCopy32ToR4);
 			AddVisitation(IRInstruction.CallDirect, CallDirect);
+			AddVisitation(IRInstruction.Branch32, Branch32);
+			AddVisitation(IRInstruction.BranchObject, BranchObject);
+			AddVisitation(IRInstruction.CompareObject, CompareObject);
 			AddVisitation(IRInstruction.CompareR4, CompareR4);
 			AddVisitation(IRInstruction.CompareR8, CompareR8);
 			AddVisitation(IRInstruction.Compare32x32, Compare32x32);
-			AddVisitation(IRInstruction.BranchCompare32, BranchCompare32);
 			AddVisitation(IRInstruction.ConvertR4ToR8, ConvertR4ToR8);
 			AddVisitation(IRInstruction.ConvertR4To32, ConvertR4To32);
 			AddVisitation(IRInstruction.ConvertR8ToR4, ConvertR8ToR4);
@@ -45,10 +47,12 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.Jmp, Jmp);
 			AddVisitation(IRInstruction.LoadR4, LoadR4);
 			AddVisitation(IRInstruction.LoadR8, LoadR8);
+			AddVisitation(IRInstruction.LoadObject, LoadObject);
 			AddVisitation(IRInstruction.Load32, Load32);
+			AddVisitation(IRInstruction.LoadParamObject, LoadParamObject);
+			AddVisitation(IRInstruction.LoadParam32, LoadParam32);
 			AddVisitation(IRInstruction.LoadParamR4, LoadParamR4);
 			AddVisitation(IRInstruction.LoadParamR8, LoadParamR8);
-			AddVisitation(IRInstruction.LoadParam32, LoadParam32);
 			AddVisitation(IRInstruction.LoadParamSignExtend16x32, LoadParamSignExtend16x32);
 			AddVisitation(IRInstruction.LoadParamSignExtend8x32, LoadParamSignExtend8x32);
 			AddVisitation(IRInstruction.LoadParamZeroExtend16x32, LoadParamZeroExtend16x32);
@@ -64,6 +68,7 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.MoveR4, MoveR4);
 			AddVisitation(IRInstruction.MoveR8, MoveR8);
 			AddVisitation(IRInstruction.Move32, Move32);
+			AddVisitation(IRInstruction.MoveObject, MoveObject);
 			AddVisitation(IRInstruction.MulR4, MulR4);
 			AddVisitation(IRInstruction.MulR8, MulR8);
 			AddVisitation(IRInstruction.MulSigned32, MulSigned32);
@@ -79,11 +84,13 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.StoreR8, StoreR8);
 			AddVisitation(IRInstruction.Store16, StoreInt16);
 			AddVisitation(IRInstruction.Store32, Store32);
+			AddVisitation(IRInstruction.StoreObject, StoreObject);
 			AddVisitation(IRInstruction.Store8, StoreInt8);
 			AddVisitation(IRInstruction.StoreParamR4, StoreParamR4);
 			AddVisitation(IRInstruction.StoreParamR8, StoreParamR8);
 			AddVisitation(IRInstruction.StoreParam16, StoreParamInt16);
 			AddVisitation(IRInstruction.StoreParam32, StoreParam32);
+			AddVisitation(IRInstruction.StoreParamObject, StoreParamObject);
 			AddVisitation(IRInstruction.StoreParam8, StoreParamInt8);
 			AddVisitation(IRInstruction.Sub32, Sub32);
 			AddVisitation(IRInstruction.SubCarryOut32, SubCarryOut32);
@@ -188,7 +195,33 @@ namespace Mosa.Platform.x86.Stages
 			context.ReplaceInstruction(X86.Call);
 		}
 
-		private void Compare32x32(Context context)
+		private void BranchObject(Context context)
+		{
+			MoveConstantRight(context);
+
+			var target = context.BranchTargets[0];
+			var condition = context.ConditionCode;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			context.SetInstruction(X86.Cmp32, null, operand1, operand2);
+			context.AppendInstruction(X86.Branch, condition, target);
+		}
+
+		private void Branch32(Context context)
+		{
+			MoveConstantRight(context);
+
+			var target = context.BranchTargets[0];
+			var condition = context.ConditionCode;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			context.SetInstruction(X86.Cmp32, null, operand1, operand2);
+			context.AppendInstruction(X86.Branch, condition, target);
+		}
+
+		private void CompareObject(Context context)
 		{
 			var condition = context.ConditionCode;
 			var result = context.Result;
@@ -202,17 +235,18 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Movzx8To32, result, v1);
 		}
 
-		private void BranchCompare32(Context context)
+		private void Compare32x32(Context context)
 		{
-			OptimizeBranch(context);
-
-			var target = context.BranchTargets[0];
 			var condition = context.ConditionCode;
+			var result = context.Result;
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
+			var v1 = AllocateVirtualRegister32();
+
 			context.SetInstruction(X86.Cmp32, null, operand1, operand2);
-			context.AppendInstruction(X86.Branch, condition, target);
+			context.AppendInstruction(X86.Setcc, condition, v1);
+			context.AppendInstruction(X86.Movzx8To32, result, v1);
 		}
 
 		private void CompareR4(Context context)
@@ -320,6 +354,16 @@ namespace Mosa.Platform.x86.Stages
 			context.ReplaceInstruction(X86.Jmp);
 		}
 
+		private void LoadObject(Context context)
+		{
+			Debug.Assert(!context.Result.IsR4);
+			Debug.Assert(!context.Result.IsR8);
+
+			LoadStore.OrderOperands(context, MethodCompiler);
+
+			context.SetInstruction(X86.MovLoad32, context.Result, context.Operand1, context.Operand2);
+		}
+
 		private void Load32(Context context)
 		{
 			Debug.Assert(!context.Result.IsR4);
@@ -328,6 +372,11 @@ namespace Mosa.Platform.x86.Stages
 			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X86.MovLoad32, context.Result, context.Operand1, context.Operand2);
+		}
+
+		private void LoadParamObject(Context context)
+		{
+			context.SetInstruction(X86.MovLoad32, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void LoadParam32(Context context)
@@ -409,6 +458,11 @@ namespace Mosa.Platform.x86.Stages
 			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X86.MovzxLoad8, context.Result, context.Operand1, context.Operand2);
+		}
+
+		private void MoveObject(Context context)
+		{
+			context.ReplaceInstruction(X86.Mov32);
 		}
 
 		private void Move32(Context context)
@@ -518,6 +572,13 @@ namespace Mosa.Platform.x86.Stages
 			context.ReplaceInstruction(X86.Movsx8To32);
 		}
 
+		private void StoreObject(Context context)
+		{
+			LoadStore.OrderOperands(context, MethodCompiler);
+
+			context.SetInstruction(X86.MovStore32, null, context.Operand1, context.Operand2, context.Operand3);
+		}
+
 		private void Store32(Context context)
 		{
 			LoadStore.OrderOperands(context, MethodCompiler);
@@ -537,6 +598,11 @@ namespace Mosa.Platform.x86.Stages
 			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X86.MovStore8, null, context.Operand1, context.Operand2, context.Operand3);
+		}
+
+		private void StoreParamObject(Context context)
+		{
+			context.SetInstruction(X86.MovStore32, null, StackFrame, context.Operand1, context.Operand2);
 		}
 
 		private void StoreParam32(Context context)
@@ -655,7 +721,7 @@ namespace Mosa.Platform.x86.Stages
 
 		#region Helper Methods
 
-		public static void OptimizeBranch(Context context)
+		public static void MoveConstantRight(Context context)
 		{
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;

@@ -374,7 +374,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (virtualRegister.IsInteger)
 				{
-					Values[index] = virtualRegister.Is64BitInteger ? Value.Any64 : Value.Any32;
+					Values[index] = virtualRegister.IsInteger64 ? Value.Any64 : Value.Any32;
 					return true;
 				}
 
@@ -459,7 +459,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (virtualRegister.IsInteger)
 			{
-				Values[index] = virtualRegister.Is64BitInteger ? Value.Any64 : Value.Any32;
+				Values[index] = virtualRegister.IsInteger64 ? Value.Any64 : Value.Any32;
 				return true;
 			}
 
@@ -582,7 +582,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (node.Instruction == IRInstruction.Switch)
 					continue;
 
-				Debug.Assert(node.Instruction == IRInstruction.BranchCompare32 || node.Instruction == IRInstruction.BranchCompare64);
+				Debug.Assert(node.Instruction == IRInstruction.Branch32 || node.Instruction == IRInstruction.Branch64 || node.Instruction == IRInstruction.BranchObject);
 
 				var result = EvaluateCompare(node);
 

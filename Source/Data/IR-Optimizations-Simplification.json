@@ -34,6 +34,15 @@
 		{
 			"FamilyName": "IR",
 			"Type": "Simplification",
+			"Name": "MoveObject",
+			"SubName": "Propagation",
+			"Expression": "IR.MoveObject (IR.MoveObject a)",
+			"Filter": "",
+			"Result": "(IR.MoveObject a)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
 			"Name": "Not##",
 			"SubName": "Twice",
 			"Expression": "IR.Not## (IR.Not## x)",
@@ -183,7 +192,7 @@
 			"Expression": "IR.Add## (IR.MulUnsigned## x y) (IR.MulUnsigned## x z)",
 			"Filter": "",
 			"Result": "(IR.MulUnsigned## x (IR.Add## y z))",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -193,7 +202,7 @@
 			"Expression": "IR.Sub## (IR.MulUnsigned## x y) (IR.MulUnsigned## x z)",
 			"Filter": "",
 			"Result": "(IR.MulUnsigned## x (IR.Sub## y z))",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -221,7 +230,7 @@
 			"Expression": "IR.MulSigned## a -1",
 			"Filter": "",
 			"Result": "(IR.Sub## [To##(0)] a)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -240,7 +249,7 @@
 			"Expression": "IR.Or## a a",
 			"Filter": "",
 			"Result": "(IR.Move## a)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -250,7 +259,7 @@
 			"Expression": "IR.And## (IR.And## x y) x",
 			"Filter": "",
 			"Result": "(IR.And## x y)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -260,7 +269,7 @@
 			"Expression": "IR.Or## (IR.Or## x y) x",
 			"Filter": "",
 			"Result": "(IR.Or## x y)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -270,7 +279,7 @@
 			"Expression": "IR.Xor## (IR.Or## x y) x",
 			"Filter": "",
 			"Result": "(IR.Move## y)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		}
 	]
 }

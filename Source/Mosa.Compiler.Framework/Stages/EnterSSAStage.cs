@@ -303,7 +303,7 @@ namespace Mosa.Compiler.Framework.Stages
 				context.AppendInstruction(IRInstruction.PhiR4, variable);
 			else if (variable.IsR8)
 				context.AppendInstruction(IRInstruction.PhiR8, variable);
-			else if (variable.Is64BitInteger)
+			else if (variable.IsInteger64)
 				context.AppendInstruction(IRInstruction.Phi64, variable);
 			else
 				context.AppendInstruction(IRInstruction.Phi32, variable);

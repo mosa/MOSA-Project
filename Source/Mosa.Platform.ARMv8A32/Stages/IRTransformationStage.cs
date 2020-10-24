@@ -26,7 +26,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.CompareR4, CompareR4);
 			AddVisitation(IRInstruction.CompareR8, CompareR8);
 			AddVisitation(IRInstruction.Compare32x32, Compare32x32);
-			AddVisitation(IRInstruction.BranchCompare32, BranchCompare32);
+			AddVisitation(IRInstruction.Branch32, Branch32);
 			AddVisitation(IRInstruction.IfThenElse32, IfThenElse32);
 			AddVisitation(IRInstruction.ConvertR4To32, ConvertR4ToInt32);
 			AddVisitation(IRInstruction.ConvertR8To32, ConvertR8ToInt32);
@@ -222,7 +222,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			context.AppendInstruction(ARMv8A32.Mov, condition.GetOpposite(), result, ConstantZero32);
 		}
 
-		private void BranchCompare32(Context context)
+		private void Branch32(Context context)
 		{
 			MoveConstantRightForComparison(context);
 

@@ -168,7 +168,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.BranchTargetsCount == 0)
 						continue;
 
-					if (node.Instruction == IRInstruction.BranchCompare32 || node.Instruction == IRInstruction.BranchCompare64)
+					if (node.Instruction == IRInstruction.Branch32 || node.Instruction == IRInstruction.Branch64)
 					{
 						trace?.Log("*** RemoveBranchesToDeadBlocks");
 						trace?.Log($"REMOVED:\t{node}");
