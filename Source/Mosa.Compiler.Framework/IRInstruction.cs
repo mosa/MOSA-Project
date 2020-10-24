@@ -140,6 +140,7 @@ namespace Mosa.Compiler.Framework
 		public static readonly NewObject NewObject = new NewObject();
 		public static readonly NewString NewString = new NewString();
 		public static readonly Nop Nop = new Nop();
+		public static readonly PhiObject PhiObject = new PhiObject();
 		public static readonly Phi32 Phi32 = new Phi32();
 		public static readonly Phi64 Phi64 = new Phi64();
 		public static readonly PhiR4 PhiR4 = new PhiR4();

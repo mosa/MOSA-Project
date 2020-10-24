@@ -525,14 +525,17 @@ namespace Mosa.Compiler.Framework
 		/// Empties the block of all instructions.
 		/// </summary>
 		/// <param name="block">The block.</param>
-		protected static void EmptyBlockOfAllInstructions(BasicBlock block)
+		protected static void EmptyBlockOfAllInstructions(BasicBlock block, bool useNop = false)
 		{
 			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
 				if (node.IsEmpty)
 					continue;
 
-				node.Empty();
+				if (!useNop)
+					node.Empty();
+				else if (!node.IsEmpty)
+					node.SetInstruction(IRInstruction.Nop);
 			}
 		}
 
@@ -566,7 +569,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		protected void RemoveEmptyBlockWithSingleJump(BasicBlock block)
+		protected void RemoveEmptyBlockWithSingleJump(BasicBlock block, bool useNop = false)
 		{
 			Debug.Assert(block.NextBlocks.Count == 1);
 
@@ -577,7 +580,7 @@ namespace Mosa.Compiler.Framework
 				ReplaceBranchTargets(previous, block, target);
 			}
 
-			EmptyBlockOfAllInstructions(block);
+			EmptyBlockOfAllInstructions(block, useNop);
 
 			Debug.Assert(block.PreviousBlocks.Count == 0);
 		}
@@ -591,7 +594,7 @@ namespace Mosa.Compiler.Framework
 					if (node.IsEmptyOrNop)
 						continue;
 
-					if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
+					if (!IsPhiInstruction(node.Instruction))
 						break;
 
 					var sourceBlocks = node.PhiBlocks;
@@ -627,7 +630,7 @@ namespace Mosa.Compiler.Framework
 					if (node.IsEmptyOrNop)
 						continue;
 
-					if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
+					if (!IsPhiInstruction(node.Instruction))
 						break;
 
 					int index = node.PhiBlocks.IndexOf(source);
@@ -808,7 +811,7 @@ namespace Mosa.Compiler.Framework
 
 		public static bool IsPhiInstruction(BaseInstruction instruction)
 		{
-			return instruction == IRInstruction.Phi32 || instruction == IRInstruction.Phi64 || instruction == IRInstruction.PhiR4 || instruction == IRInstruction.PhiR8;
+			return instruction == IRInstruction.Phi32 || instruction == IRInstruction.Phi64 || instruction == IRInstruction.PhiR4 || instruction == IRInstruction.PhiR8 || instruction == IRInstruction.PhiObject;
 		}
 
 		public static bool IsSSAForm(Operand operand)

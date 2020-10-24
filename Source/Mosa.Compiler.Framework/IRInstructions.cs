@@ -143,6 +143,7 @@ namespace Mosa.Compiler.Framework.IR
 			IRInstruction.NewObject,
 			IRInstruction.NewString,
 			IRInstruction.Nop,
+			IRInstruction.PhiObject,
 			IRInstruction.Phi32,
 			IRInstruction.Phi64,
 			IRInstruction.PhiR4,

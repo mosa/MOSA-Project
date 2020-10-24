@@ -177,10 +177,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (node.IsEmptyOrNop)
 					continue;
 
-				if (!(node.Instruction == IRInstruction.Phi32
-					|| node.Instruction == IRInstruction.Phi64
-					|| node.Instruction == IRInstruction.PhiR4
-					|| node.Instruction == IRInstruction.PhiR8))
+				if (!IsPhiInstruction(node.Instruction))
 				{
 					for (var i = 0; i < node.OperandCount; ++i)
 					{
@@ -226,7 +223,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmptyOrNop)
 						continue;
 
-					if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
+					if (!IsPhiInstruction(node.Instruction))
 						break;
 
 					var op = node.GetOperand(index);
@@ -299,7 +296,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var context = new Context(block);
 
-			if (variable.IsR4)
+			if (variable.IsReferenceType)
+				context.AppendInstruction(IRInstruction.PhiObject, variable);
+			else if (variable.IsR4)
 				context.AppendInstruction(IRInstruction.PhiR4, variable);
 			else if (variable.IsR8)
 				context.AppendInstruction(IRInstruction.PhiR8, variable);

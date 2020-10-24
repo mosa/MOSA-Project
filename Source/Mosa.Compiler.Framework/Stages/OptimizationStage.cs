@@ -18,6 +18,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Counter OptimizationsCount = new Counter("OptimizationStage.Optimizations");
 
+		private Counter EmptyBlocksRemovedCount = new Counter("OptimizationStage.EmptyBlocksRemoved");
+		private Counter SkipEmptyBlocksCount = new Counter("OptimizationStage.SkipEmptyBlocks");
+
 		private List<BaseTransformation>[] transformations = new List<BaseTransformation>[MaximumInstructionID];
 
 		private TransformContext TransformContext;
@@ -38,6 +41,8 @@ namespace Mosa.Compiler.Framework.Stages
 		protected override void Initialize()
 		{
 			Register(OptimizationsCount);
+			Register(EmptyBlocksRemovedCount);
+			Register(SkipEmptyBlocksCount);
 
 			CreateTransformationList(ManualTransforms.List);
 
@@ -95,7 +100,11 @@ namespace Mosa.Compiler.Framework.Stages
 				pass++;
 				trace?.Log($"*** Pass # {pass}");
 
-				changed = OptimizationPass(context);
+				var changed1 = OptimizationPass(context);
+
+				var changed2 = OptimizationBranchPass();
+
+				changed = changed1 || changed2;
 
 				if (pass > maximumPasses)
 					break;
@@ -169,6 +178,46 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			return false;
+		}
+
+		private bool OptimizationBranchPass()
+		{
+			bool changed = false;
+
+			//changed = SkipEmptyBlocks();
+
+			return changed;
+		}
+
+		private bool SkipEmptyBlocks()
+		{
+			bool changed = true;
+
+			foreach (var block in BasicBlocks)
+			{
+				if (block.IsPrologue || block.IsEpilogue)
+					continue;
+
+				if (block.IsHandlerHeadBlock || block.IsTryHeadBlock)
+					continue;
+
+				if (HasProtectedRegions && !block.IsCompilerBlock)
+					continue;
+
+				// don't remove block if it jumps back to itself
+				if (block.PreviousBlocks.Contains(block))
+					continue;
+
+				if (!IsEmptyBlockWithSingleJump(block))
+					continue;
+
+				RemoveEmptyBlockWithSingleJump(block);
+				changed = true;
+
+				SkipEmptyBlocksCount++;
+			}
+
+			return changed;
 		}
 	}
 }

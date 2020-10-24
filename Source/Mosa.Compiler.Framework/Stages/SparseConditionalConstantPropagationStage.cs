@@ -222,7 +222,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (IsSimpleIRMoveInstruction(node.Instruction))
 						continue; // sometimes PHI are converted to moves
 
-					if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
+					if (!IsPhiInstruction(node.Instruction))
 						break;
 
 					var sourceBlocks = node.PhiBlocks;
