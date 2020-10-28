@@ -5,6 +5,7 @@ using Mosa.Compiler.Framework.Transform;
 using Mosa.Compiler.Framework.Transform.Auto;
 using Mosa.Compiler.Framework.Transform.Manual;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -18,6 +19,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Counter OptimizationsCount = new Counter("OptimizationStage.Optimizations");
 
+		private Counter SkippedEmptyBlocksCount = new Counter("OptimizationStage.SkippedEmptyBlocks");
+		private Counter RemovedDeadBlocksCount = new Counter("OptimizationStage.RemovedDeadBlocks");
+
 		private List<BaseTransformation>[] transformations = new List<BaseTransformation>[MaximumInstructionID];
 
 		private TransformContext TransformContext;
@@ -29,18 +33,18 @@ namespace Mosa.Compiler.Framework.Stages
 		private bool IsInSSAForm;
 		private bool LowerTo32;
 
-		public OptimizationStage(bool inSSAForm, bool lowerTo32)
+		public OptimizationStage(bool lowerTo32)
 		{
-			IsInSSAForm = inSSAForm;
 			LowerTo32 = lowerTo32;
 		}
 
 		protected override void Initialize()
 		{
 			Register(OptimizationsCount);
+			Register(RemovedDeadBlocksCount);
+			Register(SkippedEmptyBlocksCount);
 
 			CreateTransformationList(ManualTransforms.List);
-
 			CreateTransformationList(AutoTransforms.List);
 		}
 
@@ -70,6 +74,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
+			IsInSSAForm = MethodCompiler.IsInSSAForm;
+
 			trace = CreateTraceLog(5);
 			specialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
 
@@ -77,6 +83,9 @@ namespace Mosa.Compiler.Framework.Stages
 			TransformContext.SetLogs(trace, specialTrace);
 
 			Optimize();
+
+			if (CompilerSettings.FullCheckMode)
+				CheckAllPhiInstructions();
 		}
 
 		private void Optimize()
@@ -95,9 +104,13 @@ namespace Mosa.Compiler.Framework.Stages
 				pass++;
 				trace?.Log($"*** Pass # {pass}");
 
-				changed = OptimizationPass(context);
+				var changed1 = OptimizationPass(context);
 
-				if (pass > maximumPasses)
+				var changed2 = !changed1 ? OptimizationBranchPass() : false;
+
+				changed = changed1 || changed2;
+
+				if (pass >= maximumPasses)
 					break;
 			}
 		}
@@ -164,11 +177,129 @@ namespace Mosa.Compiler.Framework.Stages
 				if (updated)
 				{
 					OptimizationsCount.Increment();
+
+					//if (CompilerSettings.FullValidationMode)
+					//	CheckAllPhiInstructions();
+
 					return true;
 				}
 			}
 
 			return false;
+		}
+
+		private bool OptimizationBranchPass()
+		{
+			var changed1 = RemoveDeadBlocks();
+			var changed2 = SkipEmptyBlocks();
+
+			return changed1 || changed2;
+		}
+
+		private bool RemoveDeadBlocks()
+		{
+			bool changed = true;
+			int removed = 0;
+
+			while (changed)
+			{
+				changed = false;
+
+				foreach (var block in BasicBlocks)
+				{
+					if (block.IsKnownEmpty)
+						continue;
+
+					if (block.IsPrologue || block.IsEpilogue)
+						continue;
+
+					if (block.IsHandlerHeadBlock || block.IsTryHeadBlock)
+						continue;
+
+					if (block.PreviousBlocks.Count != 0)
+						continue;
+
+					if (HasProtectedRegions && !block.IsCompilerBlock)
+						continue;
+
+					// don't remove block if it jumps back to itself
+					if (block.PreviousBlocks.Contains(block))
+						continue;
+
+					trace?.Log($"Removed Block: {block}");
+
+					if (IsInSSAForm)
+					{
+						RemoveBlocksFromPHIInstructions(block, block.NextBlocks.ToArray());
+					}
+
+					if (EmptyBlockOfAllInstructions(block, true))
+					{
+						changed = true;
+						removed++;
+					}
+
+					//if (CompilerSettings.FullValidationMode)
+					//	CheckAllPhiInstructions();
+				}
+			}
+
+			RemovedDeadBlocksCount += removed;
+
+			return removed != 0;
+		}
+
+		private bool SkipEmptyBlocks()
+		{
+			int emptied = 0;
+
+			foreach (var block in BasicBlocks)
+			{
+				if (block.IsKnownEmpty)
+					continue;
+
+				if (block.NextBlocks.Count != 1)
+					continue;
+
+				if (block.IsPrologue || block.IsEpilogue)
+					continue;
+
+				if (block.IsHandlerHeadBlock || block.IsTryHeadBlock)
+					continue;
+
+				if (HasProtectedRegions && !block.IsCompilerBlock)
+					continue;
+
+				if (block.PreviousBlocks.Count == 0)
+					continue;
+
+				if (block.PreviousBlocks.Contains(block))
+					continue;
+
+				if (IsInSSAForm && (block.PreviousBlocks.Count != 1 || block.NextBlocks[0].PreviousBlocks.Count != 1))
+					continue;
+
+				if (!IsEmptyBlockWithSingleJump(block))
+					continue;
+
+				trace?.Log($"Removed Block: {block} - Skipped to: {block.NextBlocks[0]}");
+
+				if (IsInSSAForm)
+				{
+					UpdatePHIInstructionTargets(block.NextBlocks, block, block.PreviousBlocks[0]);
+				}
+
+				RemoveEmptyBlockWithSingleJump(block, true);
+
+				emptied++;
+
+				//if (CompilerSettings.FullValidationMode)
+				//	CheckAllPhiInstructions();
+			}
+
+			SkippedEmptyBlocksCount += emptied;
+
+			return emptied != 0;
 		}
 	}
 }

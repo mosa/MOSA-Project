@@ -18,7 +18,12 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.Simplification
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
+			var target = context.BranchTargets[0];
+			var block = context.Block;
+
 			context.SetInstruction(IRInstruction.Nop);
+
+			TransformContext.RemoveBlockFromPHIInstructions(block, target);
 		}
 	}
 }

@@ -34,12 +34,12 @@ namespace Mosa.Compiler.Framework.Transform.IR.Special
 				|| context.Instruction == IRInstruction.CallStatic
 				|| context.Instruction == IRInstruction.CallVirtual
 				|| context.Instruction == IRInstruction.NewObject
-				|| context.Instruction == IRInstruction.SetReturnObject         // these should not be necessary
-				|| context.Instruction == IRInstruction.SetReturn32         // these should not be necessary
-				|| context.Instruction == IRInstruction.SetReturn64         // these should not be necessary
-				|| context.Instruction == IRInstruction.SetReturnR4         // these should not be necessary
-				|| context.Instruction == IRInstruction.SetReturnR8         // these should not be necessary
-				|| context.Instruction == IRInstruction.SetReturnCompound   // these should not be necessary
+				|| context.Instruction == IRInstruction.SetReturnObject     // should not be necessary
+				|| context.Instruction == IRInstruction.SetReturn32         // should not be necessary
+				|| context.Instruction == IRInstruction.SetReturn64         // should not be necessary
+				|| context.Instruction == IRInstruction.SetReturnR4         // should not be necessary
+				|| context.Instruction == IRInstruction.SetReturnR8         // should not be necessary
+				|| context.Instruction == IRInstruction.SetReturnCompound   // should not be necessary
 				|| context.Instruction == IRInstruction.IntrinsicMethodCall)
 				return false;
 

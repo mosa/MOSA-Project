@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 			var nextBlock = transformContext.Split(context);
 			var newBlocks = transformContext.CreateNewBlockContexts(5, context.Label);
 
-			TransformContext.UpdatePhiInstructionTargets(nextBlock.Block.NextBlocks, context.Block, nextBlock.Block);
+			TransformContext.UpdatePHIInstructionTargets(nextBlock.Block.NextBlocks, context.Block, nextBlock.Block);
 
 			var op0Low = transformContext.AllocateVirtualRegister32();
 			var op0High = transformContext.AllocateVirtualRegister32();
@@ -73,7 +73,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 			newBlocks[3].AppendInstruction(IRInstruction.Jmp, newBlocks[4].Block);
 
 			// Exit
-			newBlocks[4].AppendInstruction(IRInstruction.Phi32, resultLow, transformContext.CreateConstant((uint)1), transformContext.ConstantZero32);
+			newBlocks[4].AppendInstruction(IRInstruction.Phi64, resultLow, transformContext.CreateConstant((uint)1), transformContext.ConstantZero64);
 			newBlocks[4].PhiBlocks = new List<BasicBlock>(2) { newBlocks[2].Block, newBlocks[3].Block };
 			newBlocks[4].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
 		}

@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transform.Manual.IR.Simplification
 {
-	public sealed class Branch64OnlyOneExit : BaseTransformation
+	public sealed class BranchObjectOnlyOneExit : BaseTransformation
 	{
-		public Branch64OnlyOneExit() : base(IRInstruction.Branch64)
+		public BranchObjectOnlyOneExit() : base(IRInstruction.BranchObject)
 		{
 		}
 
@@ -18,12 +18,9 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.Simplification
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
-			var target = context.BranchTargets[0];
-			var block = context.Block;
-
 			context.SetInstruction(IRInstruction.Nop);
 
-			TransformContext.RemoveBlockFromPHIInstructions(block, target);
+			//context.SetInstruction(IRInstruction.Branch64, context.ConditionCode.GetReverse(), context.Result, context.Operand2, context.Operand1, context.BranchTargets[0]);
 		}
 	}
 }

@@ -544,7 +544,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				CompareOperation(node);
 			}
-			else if (instruction == IRInstruction.Phi32 || instruction == IRInstruction.Phi64 || instruction == IRInstruction.PhiR4 || instruction == IRInstruction.PhiR8)
+			else if (IsPhiInstruction(instruction))
 			{
 				Phi(node);
 			}

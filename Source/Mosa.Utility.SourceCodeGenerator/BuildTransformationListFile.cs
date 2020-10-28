@@ -54,10 +54,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 				if (include)
 				{
 					var newname = name.Replace(Namespace, string.Empty);
-					var newname2 = name.Replace(".", "_");
 
-					//Lines.AppendLine($"\t\t\tnew {newname}(),");
-					Lines.AppendLine($"\t\t\tAutoInstance.{newname2},");
+					Lines.AppendLine($"\t\t\t new {newname}(),");
 				}
 			}
 

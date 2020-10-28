@@ -313,6 +313,9 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateBranchInstructions();
 
 			DumpValues();
+
+			if (CompilerSettings.FullCheckMode)
+				CheckAllPhiInstructions();
 		}
 
 		private void DumpValues()

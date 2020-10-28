@@ -883,6 +883,13 @@
 			"OperandCount": 0
 		},
 		{
+			"Name": "PhiObject",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
+		},
+		{
 			"Name": "Phi32",
 			"FamilyName": "IR",
 			"ResultCount": 0,

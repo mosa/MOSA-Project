@@ -14,6 +14,7 @@ namespace Mosa.Compiler.Framework.Transform.IR.Special
 					context.Block.PreviousBlocks.Count == 0
 				&& !context.Block.IsHeadBlock
 				&& !context.Block.IsEpilogue
+				&& !context.Block.IsTryHeadBlock
 				&& !context.Block.IsHandlerHeadBlock
 				&& context.Instruction != IRInstruction.BlockStart
 				&& context.Instruction != IRInstruction.BlockEnd;

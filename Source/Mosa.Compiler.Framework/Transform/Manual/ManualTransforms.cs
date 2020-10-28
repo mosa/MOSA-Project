@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			new IR.ConstantFolding.Branch32(),
 			new IR.ConstantFolding.Branch64(),
 
-			new Transform.IR.Special.CodeInDeadBlock(),
+			//new Transform.IR.Special.CodeInDeadBlock(),
 			new Transform.IR.Special.Deadcode(),
 			new Transform.IR.Special.GetLow32From64(),
 
@@ -57,6 +57,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 
 			new IR.Special.Phi32Propagate(),
 			new IR.Special.Phi64Propagate(),
+			new IR.Special.PhiObjectPropagate(),
 			new IR.Special.PhiR4Propagate(),
 			new IR.Special.PhiR8Propagate(),
 
@@ -72,6 +73,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 
 			new IR.Simplification.Branch32OnlyOneExit(),
 			new IR.Simplification.Branch64OnlyOneExit(),
+			new IR.Simplification.BranchObjectOnlyOneExit(),
 
 			new IR.Rewrite.Branch32(),
 			new IR.Rewrite.Branch64(),

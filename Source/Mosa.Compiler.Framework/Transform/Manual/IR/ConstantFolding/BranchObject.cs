@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transform.Manual.IR.ConstantFolding
 {
-	public sealed class Branch64 : BaseTransformation
+	public sealed class BranchObject : BaseTransformation
 	{
-		public Branch64() : base(IRInstruction.Branch64)
+		public BranchObject() : base(IRInstruction.BranchObject)
 		{
 		}
 

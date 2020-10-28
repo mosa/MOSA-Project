@@ -272,16 +272,31 @@ namespace Mosa.Compiler.Framework.Transform
 
 		#endregion Basic Block Helpers
 
-		public static void UpdatePhiInstructionTargets(List<BasicBlock> targets, BasicBlock source, BasicBlock newSource)
+		public static void UpdatePHIInstructionTarget(BasicBlock target, BasicBlock source, BasicBlock newSource)
 		{
-			BaseMethodCompilerStage.UpdatePhiInstructionTargets(targets, source, newSource);
+			BaseMethodCompilerStage.UpdatePHIInstructionTarget(target, source, newSource);
+		}
+
+		public static void UpdatePHIInstructionTargets(List<BasicBlock> targets, BasicBlock source, BasicBlock newSource)
+		{
+			BaseMethodCompilerStage.UpdatePHIInstructionTargets(targets, source, newSource);
+		}
+
+		public static void RemoveBlocksFromPHIInstructions(BasicBlock removedBlock, BasicBlock[] nextBlocks)
+		{
+			BaseMethodCompilerStage.RemoveBlocksFromPHIInstructions(removedBlock, nextBlocks);
+		}
+
+		public static void RemoveBlockFromPHIInstructions(BasicBlock removedBlock, BasicBlock nextBlock)
+		{
+			BaseMethodCompilerStage.RemoveBlockFromPHIInstructions(removedBlock, nextBlock);
 		}
 
 		public void UpdatePHI(Context context)
 		{
 			Debug.Assert(context.OperandCount != context.Block.PreviousBlocks.Count);
 
-			// One of the previous blocks was removed, fix up the operand blocks
+			// One or more of the previous blocks was removed, fix up the operand blocks
 
 			var node = context.Node;
 			var previousBlocks = node.Block.PreviousBlocks;
@@ -303,6 +318,8 @@ namespace Mosa.Compiler.Framework.Transform
 
 				context.SetOperand(node.OperandCount - 1, null);
 				node.OperandCount--;
+
+				index--;
 			}
 
 			Debug.Assert(context.OperandCount == context.Block.PreviousBlocks.Count);
