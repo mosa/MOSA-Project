@@ -542,12 +542,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Replaces the branch targets.
 		/// </summary>
-		/// <param name="block">The current from block.</param>
+		/// <param name="target">The current from block.</param>
 		/// <param name="oldTarget">The current destination block.</param>
 		/// <param name="newTarget">The new target block.</param>
-		protected void ReplaceBranchTargets(BasicBlock block, BasicBlock oldTarget, BasicBlock newTarget)
+		protected void ReplaceBranchTargets(BasicBlock target, BasicBlock oldTarget, BasicBlock newTarget)
 		{
-			for (var node = block.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
+			for (var node = target.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
 			{
 				if (node.IsEmptyOrNop)
 					continue;
@@ -585,58 +585,70 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(block.PreviousBlocks.Count == 0);
 		}
 
-		protected static void RemoveBlockFromPhiInstructions(BasicBlock removedBlock, BasicBlock[] nextBlocks)
+		public static void RemoveBlockFromPHIInstructions(BasicBlock removedBlock, BasicBlock next)
+		{
+			for (var node = next.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+			{
+				if (node.IsEmptyOrNop)
+					continue;
+
+				if (!IsPhiInstruction(node.Instruction))
+					break;
+
+				var sourceBlocks = node.PhiBlocks;
+
+				int index = sourceBlocks.IndexOf(removedBlock);
+
+				if (index < 0)
+					continue;
+
+				sourceBlocks.RemoveAt(index);
+
+				for (int i = index; index < node.OperandCount - 1; index++)
+				{
+					node.SetOperand(i, node.GetOperand(i + 1));
+				}
+
+				node.SetOperand(node.OperandCount - 1, null);
+				node.OperandCount--;
+			}
+		}
+
+		public static void RemoveBlocksFromPHIInstructions(BasicBlock removedBlock, BasicBlock[] nextBlocks)
 		{
 			foreach (var next in nextBlocks)
 			{
-				for (var node = next.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
-				{
-					if (node.IsEmptyOrNop)
-						continue;
-
-					if (!IsPhiInstruction(node.Instruction))
-						break;
-
-					var sourceBlocks = node.PhiBlocks;
-
-					int index = sourceBlocks.IndexOf(removedBlock);
-
-					if (index < 0)
-						continue;
-
-					sourceBlocks.RemoveAt(index);
-
-					for (int i = index; index < node.OperandCount - 1; index++)
-					{
-						node.SetOperand(i, node.GetOperand(i + 1));
-					}
-
-					node.SetOperand(node.OperandCount - 1, null);
-					node.OperandCount--;
-				}
+				RemoveBlockFromPHIInstructions(removedBlock, next);
 			}
 
-			Debug.Assert(removedBlock.NextBlocks.Count == 0);
+			//Debug.Assert(removedBlock.NextBlocks.Count == 0);
 		}
 
-		public static void UpdatePhiInstructionTargets(List<BasicBlock> targets, BasicBlock source, BasicBlock newSource)
+		public static void UpdatePHIInstructionTargets(List<BasicBlock> targets, BasicBlock source, BasicBlock newSource)
 		{
 			foreach (var target in targets)
 			{
-				Debug.Assert(target.PreviousBlocks.Count > 0);
+				UpdatePHIInstructionTarget(target, source, newSource);
+			}
+		}
 
-				for (var node = target.First; !node.IsBlockEndInstruction; node = node.Next)
-				{
-					if (node.IsEmptyOrNop)
-						continue;
+		public static void UpdatePHIInstructionTarget(BasicBlock target, BasicBlock source, BasicBlock newSource)
+		{
+			Debug.Assert(target.PreviousBlocks.Count > 0);
 
-					if (!IsPhiInstruction(node.Instruction))
-						break;
+			for (var node = target.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+			{
+				if (node.IsEmptyOrNop)
+					continue;
 
-					int index = node.PhiBlocks.IndexOf(source);
+				if (!IsPhiInstruction(node.Instruction))
+					break;
 
-					node.PhiBlocks[index] = newSource;
-				}
+				int index = node.PhiBlocks.IndexOf(source);
+
+				//Debug.Assert(index >= 0);
+
+				node.PhiBlocks[index] = newSource;
 			}
 		}
 
@@ -809,9 +821,33 @@ namespace Mosa.Compiler.Framework
 
 		#region Helper Methods
 
+		public static bool IsMoveInstruction(BaseInstruction instruction)
+		{
+			return instruction == IRInstruction.Move32
+				|| instruction == IRInstruction.Move64
+				|| instruction == IRInstruction.MoveObject
+				|| instruction == IRInstruction.MoveR8
+				|| instruction == IRInstruction.MoveR4;
+		}
+
+		public static bool IsCompareInstruction(BaseInstruction instruction)
+		{
+			return instruction == IRInstruction.Compare32x32
+				|| instruction == IRInstruction.Compare32x64
+				|| instruction == IRInstruction.Compare64x32
+				|| instruction == IRInstruction.Compare64x64
+				|| instruction == IRInstruction.CompareObject
+				|| instruction == IRInstruction.CompareR4
+				|| instruction == IRInstruction.CompareR8;
+		}
+
 		public static bool IsPhiInstruction(BaseInstruction instruction)
 		{
-			return instruction == IRInstruction.Phi32 || instruction == IRInstruction.Phi64 || instruction == IRInstruction.PhiR4 || instruction == IRInstruction.PhiR8 || instruction == IRInstruction.PhiObject;
+			return instruction == IRInstruction.Phi32
+				|| instruction == IRInstruction.Phi64
+				|| instruction == IRInstruction.PhiObject
+				|| instruction == IRInstruction.PhiR4
+				|| instruction == IRInstruction.PhiR8;
 		}
 
 		public static bool IsSSAForm(Operand operand)
@@ -1053,15 +1089,6 @@ namespace Mosa.Compiler.Framework
 			return Is32BitPlatform ? instruction32 : instruction64;
 		}
 
-		public static bool IsSimpleIRMoveInstruction(BaseInstruction instruction)
-		{
-			return instruction == IRInstruction.Move32
-				|| instruction == IRInstruction.Move64
-				|| instruction == IRInstruction.MoveObject
-				|| instruction == IRInstruction.MoveR8
-				|| instruction == IRInstruction.MoveR4;
-		}
-
 		public static void ReplaceOperand(Operand target, Operand replacement)
 		{
 			foreach (var node in target.Uses.ToArray())
@@ -1162,6 +1189,32 @@ namespace Mosa.Compiler.Framework
 			MethodCompiler.Stop();
 			MethodCompiler.Compiler.Stop();
 			throw new CompilerException(exception);
+		}
+
+		protected bool CheckAllPhiInstructions()
+		{
+			foreach (var block in BasicBlocks)
+			{
+				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+				{
+					if (node.IsEmptyOrNop)
+						continue;
+
+					if (!IsPhiInstruction(node.Instruction))
+						break;
+
+					foreach (var phiblock in node.PhiBlocks)
+					{
+						if (!block.PreviousBlocks.Contains(phiblock))
+						{
+							throw new CompilerException("Something bad happened");
+							return false;
+						}
+					}
+				}
+			}
+
+			return true;
 		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common.Exceptions;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -27,7 +28,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var block in BasicBlocks)
 			{
-				for (var node = block.First.Next; !node.IsBlockEndInstruction; node = node.Next)
+				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
 					if (node.IsEmptyOrNop)
 						continue;
@@ -43,6 +44,8 @@ namespace Mosa.Compiler.Framework.Stages
 					ProcessPhiInstruction(node);
 				}
 			}
+
+			MethodCompiler.IsInSSAForm = false;
 		}
 
 		/// <summary>
@@ -77,13 +80,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var node = predecessor.BeforeLast;
 
-			while (node.IsEmptyOrNop
-				|| node.Instruction == IRInstruction.Branch32
-				|| node.Instruction == IRInstruction.Branch64
-				|| node.Instruction == IRInstruction.Jmp)
+			while (node.Instruction != IRInstruction.Jmp)
 			{
 				node = node.Previous;
 			}
+
+			node = node.Previous;
+
+			Debug.Assert(node.Instruction != IRInstruction.Branch32);
+			Debug.Assert(node.Instruction != IRInstruction.Branch64);
+			Debug.Assert(node.Instruction != IRInstruction.BranchObject);
 
 			var context = new Context(node);
 

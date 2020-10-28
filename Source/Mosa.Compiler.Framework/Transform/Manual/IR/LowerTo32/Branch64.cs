@@ -30,9 +30,13 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 			var branchUnsigned = context.ConditionCode.GetUnsigned();
 
 			var nextBlock = transformContext.Split(context);
-			var newBlocks = transformContext.CreateNewBlockContexts(3, context.Label);
+			var newBlocks = transformContext.CreateNewBlockContexts(4, context.Label);
 
-			TransformContext.UpdatePhiInstructionTargets(nextBlock.Block.NextBlocks, context.Block, nextBlock.Block);
+			// no branch
+			TransformContext.UpdatePHIInstructionTargets(nextBlock.Block.NextBlocks, context.Block, nextBlock.Block);
+
+			// Branch
+			TransformContext.UpdatePHIInstructionTarget(target, context.Block, newBlocks[3].Block);
 
 			var op0Low = transformContext.AllocateVirtualRegister32();
 			var op0High = transformContext.AllocateVirtualRegister32();
@@ -49,15 +53,18 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.LowerTo32
 			context.AppendInstruction(IRInstruction.Jmp, newBlocks[0].Block);
 
 			// Compare high
-			newBlocks[0].AppendInstruction(IRInstruction.Branch32, branch, null, op0High, op1High, newBlocks[2].Block);
-			newBlocks[0].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
+			newBlocks[0].AppendInstruction(IRInstruction.Branch32, branch, null, op0High, op1High, newBlocks[3].Block);
+			newBlocks[0].AppendInstruction(IRInstruction.Jmp, newBlocks[2].Block);
 
 			// Compare low
-			newBlocks[1].AppendInstruction(IRInstruction.Branch32, branchUnsigned, null, op0Low, op1Low, newBlocks[2].Block);
-			newBlocks[1].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
+			newBlocks[1].AppendInstruction(IRInstruction.Branch32, branchUnsigned, null, op0Low, op1Low, newBlocks[3].Block);
+			newBlocks[1].AppendInstruction(IRInstruction.Jmp, newBlocks[2].Block);
 
-			// Target
-			newBlocks[2].AppendInstruction(IRInstruction.Jmp, target);
+			// No branch
+			newBlocks[2].AppendInstruction(IRInstruction.Jmp, nextBlock.Block);
+
+			// Branch
+			newBlocks[3].AppendInstruction(IRInstruction.Jmp, target);
 		}
 	}
 }

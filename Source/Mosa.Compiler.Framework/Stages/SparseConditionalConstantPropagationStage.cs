@@ -56,6 +56,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			ConstantCount.Set(constants.Count);
 			DeadBlockCount.Set(deadBlocks.Count);
+
+			Debug.Assert(CheckAllPhiInstructions());    // comment me out --- otherwise this will be turtle
 		}
 
 		protected override void Finish()
@@ -73,7 +75,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected void ReplaceVirtualRegisterWithConstant(Operand target, ulong value)
 		{
-			trace?.Log($"{target} = {value.ToString()} Uses: {target.Uses.Count}");
+			trace?.Log($"{target} = {value} Uses: {target.Uses.Count}");
 
 			if (target.Definitions.Count == 0)
 				return;
@@ -135,20 +137,6 @@ namespace Mosa.Compiler.Framework.Stages
 			//}
 		}
 
-		//protected void RemoveDeadBlock(BasicBlock deadBlock)
-		//{
-		//	trace?.Log("*** RemoveBlock: " + deadBlock);
-
-		//	var nextBlocks = deadBlock.NextBlocks.ToArray();
-
-		//	EmptyBlockOfAllInstructions(deadBlock);
-
-		//	RemoveBlockFromPhiInstructions(deadBlock, nextBlocks);
-
-		//	Debug.Assert(deadBlock.NextBlocks.Count == 0);
-		//	Debug.Assert(deadBlock.PreviousBlocks.Count == 0);
-		//}
-
 		protected void RemoveBranchesToDeadBlocks(BasicBlock deadBlock)
 		{
 			foreach (var previous in deadBlock.PreviousBlocks.ToArray())
@@ -199,6 +187,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			EmptyBlockOfAllInstructions(block);
 
+			// FUTURE: Use the BaseMethodCompilerStage vesion
 			_RemoveBlockFromPhiInstructions(block, nextBlocks);
 
 			Debug.Assert(block.NextBlocks.Count == 0);
@@ -219,7 +208,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmptyOrNop)
 						continue;
 
-					if (IsSimpleIRMoveInstruction(node.Instruction))
+					if (IsMoveInstruction(node.Instruction))
 						continue; // sometimes PHI are converted to moves
 
 					if (!IsPhiInstruction(node.Instruction))

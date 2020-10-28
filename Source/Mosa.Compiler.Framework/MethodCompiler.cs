@@ -202,6 +202,8 @@ namespace Mosa.Compiler.Framework
 
 		public CompilerHooks CompilerHooks { get; }
 
+		public bool IsInSSAForm { get; set; }
+
 		#endregion Properties
 
 		#region Construction
@@ -229,6 +231,7 @@ namespace Mosa.Compiler.Framework
 
 			NotifyTraceLogHandler = GetMethodInstructionTraceHandler();
 			Statistics = compiler.Statistics;
+			IsInSSAForm = false;
 
 			BasicBlocks = basicBlocks ?? new BasicBlocks();
 			LocalStack = new List<Operand>();

@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class LoopInvariantCodeMotionStage : BaseMethodCompilerStage
 	{
-		private Counter PreHeadersCount = new Counter("LoopInvariantCodeMotionStage.PreHeaders");
+		private Counter LandingPadsCount = new Counter("LoopInvariantCodeMotionStage.LandingPads");
 		private Counter CodeMotionCount = new Counter("LoopInvariantCodeMotionStage.CodeMotion");
 		private Counter Methods = new Counter("LoopInvariantCodeMotionStage.Methods");
 
@@ -26,12 +26,15 @@ namespace Mosa.Compiler.Framework.Stages
 		protected override void Initialize()
 		{
 			Register(CodeMotionCount);
-			Register(PreHeadersCount);
+			Register(LandingPadsCount);
 			Register(Methods);
 		}
 
 		protected override void Run()
 		{
+			if (!MethodCompiler.IsInSSAForm)
+				return;
+
 			if (HasProtectedRegions)
 				return;
 
@@ -64,6 +67,8 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				Methods++;
 			}
+
+			Debug.Assert(CheckAllPhiInstructions());    // comment me out --- otherwise this will be turtle
 		}
 
 		protected override void Finish()
@@ -270,41 +275,37 @@ namespace Mosa.Compiler.Framework.Stages
 			var header = loop.Header;
 
 			// Create pre-header block
-			var preheaderBlock = CreateNewBlock();
-			var preheader = new Context(preheaderBlock);
+			var landingpadBlock = CreateNewBlock();
+			var landingpad = new Context(landingpadBlock);
 
-			foreach (var previous in header.PreviousBlocks.ToArray())
+			var previousBlocks = new List<BasicBlock>(header.PreviousBlocks);
+
+			foreach (var previous in previousBlocks)
 			{
 				if (!loop.Backedges.Contains(previous))
 				{
-					ReplaceBranchTargets(previous, header, preheaderBlock);
+					ReplaceBranchTargets(previous, header, landingpadBlock);
 				}
 			}
 
-			// PHIs in loop header
+			// Update and create PHIs in loop header and landing pads
 			for (var node = header.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
-				if (node.IsEmpty)
+				if (node.IsEmptyOrNop)
 					continue;
 
-				if (IsSimpleIRMoveInstruction(node.Instruction))
-					continue; // sometimes PHI are converted to moves
-
-				//if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
 				if (!IsPhiInstruction(node.Instruction))
 					break;
 
-				var phiInstruction = node.Instruction;
-
-				var internalSourceBlocks = new List<BasicBlock>(node.OperandCount);
-				var internalSourceOperands = new List<Operand>(node.OperandCount);
-				var externalSourceBlocks = new List<BasicBlock>(node.OperandCount);
-				var externalSourceOperands = new List<Operand>(node.OperandCount);
+				var landingpadSourceBlocks = new List<BasicBlock>(node.OperandCount);
+				var landingpadSourceOperands = new List<Operand>(node.OperandCount);
+				var headerSourceBlocks = new List<BasicBlock>(node.OperandCount);
+				var headerSourceOperands = new List<Operand>(node.OperandCount);
 
 				var transitionOperand = AllocateVirtualRegister(node.Result.Type);
 
-				internalSourceOperands.Add(transitionOperand);
-				internalSourceBlocks.Add(preheaderBlock);
+				headerSourceBlocks.Add(landingpadBlock);
+				headerSourceOperands.Add(transitionOperand);
 
 				for (int i = 0; i < node.PhiBlocks.Count; i++)
 				{
@@ -315,66 +316,31 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						Debug.Assert(loop.LoopBlocks.Contains(sourceBlock));
 
-						internalSourceBlocks.Add(sourceBlock);
-						internalSourceOperands.Add(sourceOperand);
+						headerSourceBlocks.Add(sourceBlock);
+						headerSourceOperands.Add(sourceOperand);
 					}
 					else
 					{
 						Debug.Assert(!loop.LoopBlocks.Contains(sourceBlock));
 
-						externalSourceBlocks.Add(sourceBlock);
-						externalSourceOperands.Add(sourceOperand);
+						landingpadSourceBlocks.Add(sourceBlock);
+						landingpadSourceOperands.Add(sourceOperand);
 					}
 				}
 
-				preheader.AppendInstruction(phiInstruction, transitionOperand, externalSourceOperands);
-				preheader.PhiBlocks = externalSourceBlocks;
+				landingpad.AppendInstruction(node.Instruction, transitionOperand, landingpadSourceOperands);
+				landingpad.PhiBlocks = landingpadSourceBlocks;
 
-				node.SetInstruction(phiInstruction, node.Result, internalSourceOperands);
-				node.PhiBlocks = internalSourceBlocks;
-
-				//OptimizePhi(preheader.Node);
-				//OptimizePhi(node);
+				node.SetInstruction(node.Instruction, node.Result, headerSourceOperands);
+				node.PhiBlocks = headerSourceBlocks;
 			}
 
-			preheader.AppendInstruction(IRInstruction.Jmp, header);
+			landingpad.AppendInstruction(IRInstruction.Jmp, header);
 
-			PreHeadersCount++;
+			LandingPadsCount++;
 
-			return preheaderBlock;
+			return landingpadBlock;
 		}
-
-		//private void OptimizePhi(InstructionNode node)
-		//{
-		//	var newInstruction = BuiltInOptimizations.PhiSimplication(node);
-		//	if (newInstruction != null)
-		//	{
-		//		if (IsPhiInstruction(newInstruction.Instruction))
-		//		{
-		//			node.SetInstruction(newInstruction);
-		//			return;
-		//		}
-
-		//		// move node after all other phi instructions
-		//		for (var at = node.Next; ; at = at.Next)
-		//		{
-		//			if (at.IsEmptyOrNop)
-		//				continue;
-
-		//			if (IsPhiInstruction(at.Instruction))
-		//				continue;
-
-		//			at = at.Previous;
-
-		//			node.Empty();
-
-		//			var context = new Context(at);
-		//			context.AppendInstruction(newInstruction);
-
-		//			return;
-		//		}
-		//	}
-		//}
 
 		private void MoveToPreHeader(List<InstructionNode> nodes, Loop loop)
 		{

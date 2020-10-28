@@ -78,6 +78,8 @@ namespace Mosa.Compiler.Framework.Stages
 			DetermineReadOnlyParameters();
 
 			ValueNumber();
+
+			Debug.Assert(CheckAllPhiInstructions());    // comment me out --- otherwise this will be turtle
 		}
 
 		protected override void Finish()
@@ -278,11 +280,7 @@ namespace Mosa.Compiler.Framework.Stages
 					node.Operand2 = operand1;
 				}
 
-				if (node.Instruction == IRInstruction.Move32
-					|| node.Instruction == IRInstruction.Move64
-					|| node.Instruction == IRInstruction.MoveObject
-					|| node.Instruction == IRInstruction.MoveR4
-					|| node.Instruction == IRInstruction.MoveR8)
+				if (IsMoveInstruction(node.Instruction))
 				{
 					if (node.Result.IsCPURegister || node.Operand1.IsCPURegister)
 					{
@@ -366,6 +364,21 @@ namespace Mosa.Compiler.Framework.Stages
 						Hash = hash,
 						Instruction = node.Instruction,
 						ConditionCode = node.ConditionCode,
+						Operand1 = node.Operand2,
+						Operand2 = node.Operand1,
+						ValueNumber = node.Result
+					};
+
+					AddExpressionToHashTable(newExpression2);
+					newExpressions.Add(newExpression2);
+				}
+				else if (IsCompareInstruction(node.Instruction) && node.Operand1 != node.Operand2 && node.ConditionCode != ConditionCode.Equal && node.ConditionCode != ConditionCode.NotEqual)
+				{
+					var newExpression2 = new Expression()
+					{
+						Hash = hash,
+						Instruction = node.Instruction,
+						ConditionCode = node.ConditionCode.GetReverse(),
 						Operand1 = node.Operand2,
 						Operand2 = node.Operand1,
 						ValueNumber = node.Result
@@ -644,17 +657,15 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					else
 					{
+						// value has not been encountered yet --- skip it for now
 						if (IsPhiInstruction(node.Instruction))
 							continue;
 
 						//Debug.Assert(IsPhiInstruction(node.Instruction));
 
-						if (!IsPhiInstruction(node.Instruction))
-						{
-							//MethodCompiler.Compiler.Stop();
-							//return;
-							throw new CompilerException("ValueNumbering Stage: Expected PHI instruction but found instead: " + node + " for " + operand);
-						}
+						//MethodCompiler.Compiler.Stop();
+						//return;
+						throw new CompilerException("ValueNumbering Stage: Expected PHI instruction but found instead: " + node + " for " + operand);
 					}
 				}
 			}

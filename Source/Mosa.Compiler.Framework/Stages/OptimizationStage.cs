@@ -5,6 +5,7 @@ using Mosa.Compiler.Framework.Transform;
 using Mosa.Compiler.Framework.Transform.Auto;
 using Mosa.Compiler.Framework.Transform.Manual;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -18,8 +19,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Counter OptimizationsCount = new Counter("OptimizationStage.Optimizations");
 
-		private Counter EmptyBlocksRemovedCount = new Counter("OptimizationStage.EmptyBlocksRemoved");
-		private Counter SkipEmptyBlocksCount = new Counter("OptimizationStage.SkipEmptyBlocks");
+		private Counter SkippedEmptyBlocksCount = new Counter("OptimizationStage.SkippedEmptyBlocks");
+		private Counter RemovedDeadBlocksCount = new Counter("OptimizationStage.RemovedDeadBlocks");
 
 		private List<BaseTransformation>[] transformations = new List<BaseTransformation>[MaximumInstructionID];
 
@@ -32,20 +33,20 @@ namespace Mosa.Compiler.Framework.Stages
 		private bool IsInSSAForm;
 		private bool LowerTo32;
 
-		public OptimizationStage(bool inSSAForm, bool lowerTo32)
+		private HashSet<BasicBlock> EmptiedBlocks;
+
+		public OptimizationStage(bool lowerTo32)
 		{
-			IsInSSAForm = inSSAForm;
 			LowerTo32 = lowerTo32;
 		}
 
 		protected override void Initialize()
 		{
 			Register(OptimizationsCount);
-			Register(EmptyBlocksRemovedCount);
-			Register(SkipEmptyBlocksCount);
+			Register(RemovedDeadBlocksCount);
+			Register(SkippedEmptyBlocksCount);
 
 			CreateTransformationList(ManualTransforms.List);
-
 			CreateTransformationList(AutoTransforms.List);
 		}
 
@@ -71,17 +72,24 @@ namespace Mosa.Compiler.Framework.Stages
 			TransformContext = null;
 			specialTrace = null;
 			trace = null;
+			EmptiedBlocks = null;
 		}
 
 		protected override void Run()
 		{
+			IsInSSAForm = MethodCompiler.IsInSSAForm;
+
 			trace = CreateTraceLog(5);
 			specialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
+
+			EmptiedBlocks = new HashSet<BasicBlock>();
 
 			TransformContext = new TransformContext(MethodCompiler);
 			TransformContext.SetLogs(trace, specialTrace);
 
 			Optimize();
+
+			Debug.Assert(CheckAllPhiInstructions());    // comment me out --- otherwise this will be turtle
 		}
 
 		private void Optimize()
@@ -102,11 +110,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 				var changed1 = OptimizationPass(context);
 
-				var changed2 = OptimizationBranchPass();
+				var changed2 = !changed1 ? OptimizationBranchPass() : false;
 
 				changed = changed1 || changed2;
 
-				if (pass > maximumPasses)
+				if (pass >= maximumPasses)
 					break;
 			}
 		}
@@ -173,6 +181,9 @@ namespace Mosa.Compiler.Framework.Stages
 				if (updated)
 				{
 					OptimizationsCount.Increment();
+
+					Debug.Assert(CheckAllPhiInstructions());    // comment me out --- otherwise this will be turtle
+
 					return true;
 				}
 			}
@@ -182,19 +193,74 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool OptimizationBranchPass()
 		{
-			bool changed = false;
+			var changed1 = RemoveDeadBlocks();
+			var changed2 = SkipEmptyBlocks();
 
-			//changed = SkipEmptyBlocks();
+			return changed1 || changed2;
+		}
 
-			return changed;
+		private bool RemoveDeadBlocks()
+		{
+			bool changed = true;
+			int removed = 0;
+
+			while (changed)
+			{
+				changed = false;
+
+				foreach (var block in BasicBlocks)
+				{
+					if (block.IsPrologue || block.IsEpilogue)
+						continue;
+
+					if (block.IsHandlerHeadBlock || block.IsTryHeadBlock)
+						continue;
+
+					if (block.PreviousBlocks.Count != 0)
+						continue;
+
+					if (HasProtectedRegions && !block.IsCompilerBlock)
+						continue;
+
+					if (EmptiedBlocks.Contains(block))
+						continue;
+
+					// don't remove block if it jumps back to itself
+					if (block.PreviousBlocks.Contains(block))
+						continue;
+
+					trace.Log($"Removed Block: {block}");
+
+					if (IsInSSAForm)
+					{
+						RemoveBlocksFromPHIInstructions(block, block.NextBlocks.ToArray());
+					}
+
+					EmptyBlockOfAllInstructions(block, true);
+
+					EmptiedBlocks.Add(block);
+
+					changed = true;
+					removed++;
+
+					Debug.Assert(CheckAllPhiInstructions());    // comment me out --- otherwise this will be turtle
+				}
+			}
+
+			RemovedDeadBlocksCount += removed;
+
+			return removed != 0;
 		}
 
 		private bool SkipEmptyBlocks()
 		{
-			bool changed = true;
+			int emptied = 0;
 
 			foreach (var block in BasicBlocks)
 			{
+				if (block.NextBlocks.Count != 1)
+					continue;
+
 				if (block.IsPrologue || block.IsEpilogue)
 					continue;
 
@@ -204,20 +270,37 @@ namespace Mosa.Compiler.Framework.Stages
 				if (HasProtectedRegions && !block.IsCompilerBlock)
 					continue;
 
-				// don't remove block if it jumps back to itself
+				if (block.PreviousBlocks.Count == 0)
+					continue;
+
 				if (block.PreviousBlocks.Contains(block))
+					continue;
+
+				if (IsInSSAForm && (block.PreviousBlocks.Count != 1 || block.NextBlocks[0].PreviousBlocks.Count != 1))
 					continue;
 
 				if (!IsEmptyBlockWithSingleJump(block))
 					continue;
 
-				RemoveEmptyBlockWithSingleJump(block);
-				changed = true;
+				trace.Log($"Removed Block: {block} - Skipped to: {block.NextBlocks[0]}");
 
-				SkipEmptyBlocksCount++;
+				if (IsInSSAForm)
+				{
+					UpdatePHIInstructionTargets(block.NextBlocks, block, block.PreviousBlocks[0]);
+				}
+
+				RemoveEmptyBlockWithSingleJump(block, true);
+
+				EmptiedBlocks.Add(block);
+
+				emptied++;
+
+				Debug.Assert(CheckAllPhiInstructions());    // comment me out --- otherwise this will be turtle
 			}
 
-			return changed;
+			SkippedEmptyBlocksCount += emptied;
+
+			return emptied != 0;
 		}
 	}
 }

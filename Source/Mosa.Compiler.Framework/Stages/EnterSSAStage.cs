@@ -56,6 +56,8 @@ namespace Mosa.Compiler.Framework.Stages
 			EnterSSA();
 
 			RemoveUselessPhiInstructions();
+
+			MethodCompiler.IsInSSAForm = true;
 		}
 
 		protected override void Finish()

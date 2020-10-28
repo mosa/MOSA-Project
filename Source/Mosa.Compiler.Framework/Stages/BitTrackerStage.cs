@@ -313,6 +313,8 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateBranchInstructions();
 
 			DumpValues();
+
+			Debug.Assert(CheckAllPhiInstructions());    // comment me out --- otherwise this will be turtle
 		}
 
 		private void DumpValues()

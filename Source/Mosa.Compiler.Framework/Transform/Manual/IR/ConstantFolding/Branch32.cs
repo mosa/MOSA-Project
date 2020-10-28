@@ -35,6 +35,9 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.ConstantFolding
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
+			var target = context.BranchTargets[0];
+			var block = context.Block;
+
 			bool compare = true;
 
 			switch (context.ConditionCode)
@@ -57,7 +60,6 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.ConstantFolding
 			}
 			else
 			{
-				var target = context.BranchTargets[0];
 				context.SetInstruction(IRInstruction.Jmp, target);
 
 				// rest of instructions in block are never used
@@ -71,6 +73,8 @@ namespace Mosa.Compiler.Framework.Transform.Manual.IR.ConstantFolding
 					context.GotoNext();
 				}
 			}
+
+			TransformContext.RemoveBlockFromPHIInstructions(block, target);
 		}
 	}
 }
