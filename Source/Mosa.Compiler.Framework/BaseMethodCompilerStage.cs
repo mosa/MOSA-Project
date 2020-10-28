@@ -525,18 +525,34 @@ namespace Mosa.Compiler.Framework
 		/// Empties the block of all instructions.
 		/// </summary>
 		/// <param name="block">The block.</param>
-		protected static void EmptyBlockOfAllInstructions(BasicBlock block, bool useNop = false)
+		protected static bool EmptyBlockOfAllInstructions(BasicBlock block, bool useNop = false)
 		{
+			if (block.IsKnownEmpty)
+				return true;
+
+			bool found = false;
+
 			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
 				if (node.IsEmpty)
 					continue;
 
-				if (!useNop)
-					node.Empty();
-				else if (!node.IsEmpty)
-					node.SetInstruction(IRInstruction.Nop);
+				if (node.IsNop)
+				{
+					if (!useNop)
+						node.Empty();
+
+					continue;
+				}
+
+				node.SetInstruction(IRInstruction.Nop);
+
+				found = true;
 			}
+
+			block.IsKnownEmpty = found;
+
+			return found;
 		}
 
 		/// <summary>

@@ -31,7 +31,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected void EmptyDeadBlocks()
 		{
-			HashSet<BasicBlock> emptiedBlocks = null;
 			bool changed = true;
 
 			while (changed)
@@ -40,6 +39,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 				foreach (var block in BasicBlocks)
 				{
+					if (block.IsKnownEmpty)
+						continue;
+
 					if (block.IsPrologue || block.IsEpilogue)
 						continue;
 
@@ -56,15 +58,11 @@ namespace Mosa.Compiler.Framework.Stages
 					if (block.PreviousBlocks.Contains(block))
 						continue;
 
-					if (emptiedBlocks != null && emptiedBlocks.Contains(block))
-						continue;
-
-					EmptyBlockOfAllInstructions(block);
-
-					(emptiedBlocks ?? (emptiedBlocks = new HashSet<BasicBlock>())).Add(block);
-					changed = true;
-
-					EmptyBlocksRemovedCount++;
+					if (EmptyBlockOfAllInstructions(block))
+					{
+						EmptyBlocksRemovedCount++;
+						changed = true;
+					}
 				}
 			}
 		}
@@ -73,6 +71,9 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var block in BasicBlocks)
 			{
+				if (block.IsKnownEmpty)
+					continue;
+
 				if (block.IsPrologue || block.IsEpilogue)
 					continue;
 
@@ -115,10 +116,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			DeadBlocksRemovedCount.Count = BasicBlocks.Count - list.Count;
 
-			if (list.Count != BasicBlocks.Count)
-			{
-				BasicBlocks.ReorderBlocks(list);
-			}
+			if (list.Count == BasicBlocks.Count)
+				return;
+
+			BasicBlocks.ReorderBlocks(list);
 		}
 	}
 }

@@ -33,8 +33,6 @@ namespace Mosa.Compiler.Framework.Stages
 		private bool IsInSSAForm;
 		private bool LowerTo32;
 
-		private HashSet<BasicBlock> EmptiedBlocks;
-
 		public OptimizationStage(bool lowerTo32)
 		{
 			LowerTo32 = lowerTo32;
@@ -72,7 +70,6 @@ namespace Mosa.Compiler.Framework.Stages
 			TransformContext = null;
 			specialTrace = null;
 			trace = null;
-			EmptiedBlocks = null;
 		}
 
 		protected override void Run()
@@ -81,8 +78,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			trace = CreateTraceLog(5);
 			specialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
-
-			EmptiedBlocks = new HashSet<BasicBlock>();
 
 			TransformContext = new TransformContext(MethodCompiler);
 			TransformContext.SetLogs(trace, specialTrace);
@@ -212,6 +207,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 				foreach (var block in BasicBlocks)
 				{
+					if (block.IsKnownEmpty)
+						continue;
+
 					if (block.IsPrologue || block.IsEpilogue)
 						continue;
 
@@ -224,26 +222,22 @@ namespace Mosa.Compiler.Framework.Stages
 					if (HasProtectedRegions && !block.IsCompilerBlock)
 						continue;
 
-					if (EmptiedBlocks.Contains(block))
-						continue;
-
 					// don't remove block if it jumps back to itself
 					if (block.PreviousBlocks.Contains(block))
 						continue;
 
-					trace.Log($"Removed Block: {block}");
+					trace?.Log($"Removed Block: {block}");
 
 					if (IsInSSAForm)
 					{
 						RemoveBlocksFromPHIInstructions(block, block.NextBlocks.ToArray());
 					}
 
-					EmptyBlockOfAllInstructions(block, true);
-
-					EmptiedBlocks.Add(block);
-
-					changed = true;
-					removed++;
+					if (EmptyBlockOfAllInstructions(block, true))
+					{
+						changed = true;
+						removed++;
+					}
 
 					//if (CompilerSettings.FullValidationMode)
 					//	CheckAllPhiInstructions();
@@ -261,6 +255,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var block in BasicBlocks)
 			{
+				if (block.IsKnownEmpty)
+					continue;
+
 				if (block.NextBlocks.Count != 1)
 					continue;
 
@@ -285,7 +282,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (!IsEmptyBlockWithSingleJump(block))
 					continue;
 
-				trace.Log($"Removed Block: {block} - Skipped to: {block.NextBlocks[0]}");
+				trace?.Log($"Removed Block: {block} - Skipped to: {block.NextBlocks[0]}");
 
 				if (IsInSSAForm)
 				{
@@ -293,8 +290,6 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 
 				RemoveEmptyBlockWithSingleJump(block, true);
-
-				EmptiedBlocks.Add(block);
 
 				emptied++;
 
