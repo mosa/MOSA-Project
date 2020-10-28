@@ -89,7 +89,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Optimize();
 
-			Debug.Assert(CheckAllPhiInstructions());    // comment me out --- otherwise this will be turtle
+			if (CompilerSettings.FullCheckMode)
+				CheckAllPhiInstructions();
 		}
 
 		private void Optimize()
@@ -182,7 +183,8 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					OptimizationsCount.Increment();
 
-					Debug.Assert(CheckAllPhiInstructions());    // comment me out --- otherwise this will be turtle
+					//if (CompilerSettings.FullValidationMode)
+					//	CheckAllPhiInstructions();
 
 					return true;
 				}
@@ -243,7 +245,8 @@ namespace Mosa.Compiler.Framework.Stages
 					changed = true;
 					removed++;
 
-					Debug.Assert(CheckAllPhiInstructions());    // comment me out --- otherwise this will be turtle
+					//if (CompilerSettings.FullValidationMode)
+					//	CheckAllPhiInstructions();
 				}
 			}
 
@@ -295,7 +298,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 				emptied++;
 
-				Debug.Assert(CheckAllPhiInstructions());    // comment me out --- otherwise this will be turtle
+				//if (CompilerSettings.FullValidationMode)
+				//	CheckAllPhiInstructions();
 			}
 
 			SkippedEmptyBlocksCount += emptied;

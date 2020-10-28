@@ -68,7 +68,8 @@ namespace Mosa.Compiler.Framework.Stages
 				Methods++;
 			}
 
-			Debug.Assert(CheckAllPhiInstructions());    // comment me out --- otherwise this will be turtle
+			if (CompilerSettings.FullCheckMode)
+				CheckAllPhiInstructions();
 		}
 
 		protected override void Finish()

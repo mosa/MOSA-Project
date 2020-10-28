@@ -1207,8 +1207,7 @@ namespace Mosa.Compiler.Framework
 					{
 						if (!block.PreviousBlocks.Contains(phiblock))
 						{
-							throw new CompilerException("Something bad happened");
-							return false;
+							throw new CompilerException("CheckAllPhiInstructions() failed in block: {block} at {node}!");
 						}
 					}
 				}

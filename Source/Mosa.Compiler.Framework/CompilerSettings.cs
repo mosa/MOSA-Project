@@ -84,6 +84,8 @@ namespace Mosa.Compiler.Framework
 
 		public List<string> InlineExcludeList { get { return Settings.GetValueList("Optimizations.Inline.Exclude"); } }
 
+		public bool FullCheckMode { get { return Settings.GetValue("CompilerDebug.FullCheckMode", false); } }
+
 		#endregion Properties
 
 		public CompilerSettings(Settings settings)

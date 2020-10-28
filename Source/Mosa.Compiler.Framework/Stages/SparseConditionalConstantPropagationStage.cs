@@ -57,7 +57,8 @@ namespace Mosa.Compiler.Framework.Stages
 			ConstantCount.Set(constants.Count);
 			DeadBlockCount.Set(deadBlocks.Count);
 
-			Debug.Assert(CheckAllPhiInstructions());    // comment me out --- otherwise this will be turtle
+			if (CompilerSettings.FullCheckMode)
+				CheckAllPhiInstructions();
 		}
 
 		protected override void Finish()

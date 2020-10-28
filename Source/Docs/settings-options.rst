@@ -88,7 +88,8 @@ Compiler Debug Settings
     CompilerDebug.NasmFile,Filename to emit disassembly using the NASM tool
     CompilerDebug.InlinedFile,Filename to emit a list of all methods that were inlined
     CompilerDebug.PreLinkHashFile,Filename to emit a list of all methods with their hash value prior to linking 
-    CompilerDebug.PostLinkHashFile,Filename to emit a list of all methods with their hash value after linking 
+    CompilerDebug.PostLinkHashFile,Filename to emit a list of all methods with their hash value after linking
+	CompilerDebug.FullCheckMode,"If true, causes the compiler to run internal validate checks (used to test the compiler)"
 
 Compiler X86 Settings
 ---------------------

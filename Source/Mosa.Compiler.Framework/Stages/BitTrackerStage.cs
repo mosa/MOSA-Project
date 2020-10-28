@@ -314,7 +314,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			DumpValues();
 
-			Debug.Assert(CheckAllPhiInstructions());    // comment me out --- otherwise this will be turtle
+			if (CompilerSettings.FullCheckMode)
+				CheckAllPhiInstructions();
 		}
 
 		private void DumpValues()
