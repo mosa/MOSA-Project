@@ -6,6 +6,7 @@ using Mosa.Compiler.Framework.Trace;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -41,6 +42,9 @@ namespace Mosa.Compiler.Framework.Stages
 		protected override void Run()
 		{
 			if (!HasCode)
+				return;
+
+			if (!MethodCompiler.IsInSSAForm)
 				return;
 
 			if (HasProtectedRegions)
@@ -131,11 +135,6 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				RemoveBranchesToDeadBlocks(block);
 			}
-
-			//foreach (var block in deadBlocks)
-			//{
-			//	RemoveDeadBlock(block);
-			//}
 		}
 
 		protected void RemoveBranchesToDeadBlocks(BasicBlock deadBlock)
@@ -157,20 +156,25 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.BranchTargetsCount == 0)
 						continue;
 
-					if (node.Instruction == IRInstruction.Branch32 || node.Instruction == IRInstruction.Branch64)
+					if (node.Instruction == IRInstruction.Branch32 || node.Instruction == IRInstruction.Branch64 || node.Instruction == IRInstruction.BranchObject)
 					{
 						trace?.Log("*** RemoveBranchesToDeadBlocks");
 						trace?.Log($"REMOVED:\t{node}");
 						node.SetInstruction(IRInstruction.Nop);
 						InstructionsRemovedCount++;
+						continue;
 					}
-					else if (node.Instruction == IRInstruction.Jmp)
+
+					if (node.Instruction == IRInstruction.Jmp)
 					{
 						trace?.Log("*** RemoveBranchesToDeadBlocks");
 						trace?.Log($"BEFORE:\t{node}");
 						node.UpdateBranchTarget(0, otherBlock);
 						trace?.Log($"AFTER: \t{node}");
+						continue;
 					}
+
+					break;
 				}
 			}
 
@@ -182,59 +186,18 @@ namespace Mosa.Compiler.Framework.Stages
 			if (block.PreviousBlocks.Count != 0 || block.IsHeadBlock)
 				return;
 
-			trace?.Log($"*** RemoveBlock: {block}");
+			trace?.Log($"*** Removed Block: {block}");
 
 			var nextBlocks = block.NextBlocks.ToArray();
 
 			EmptyBlockOfAllInstructions(block);
 
-			// FUTURE: Use the BaseMethodCompilerStage vesion
-			_RemoveBlockFromPhiInstructions(block, nextBlocks);
-
-			Debug.Assert(block.NextBlocks.Count == 0);
-			Debug.Assert(block.PreviousBlocks.Count == 0);
+			BaseMethodCompilerStage.RemoveBlocksFromPHIInstructions(block, nextBlocks);
 
 			foreach (var next in nextBlocks)
 			{
 				CheckAndClearEmptyBlock(next);
 			}
-		}
-
-		protected void _RemoveBlockFromPhiInstructions(BasicBlock removedBlock, BasicBlock[] nextBlocks)
-		{
-			foreach (var next in nextBlocks)
-			{
-				for (var node = next.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
-				{
-					if (node.IsEmptyOrNop)
-						continue;
-
-					if (IsMoveInstruction(node.Instruction))
-						continue; // sometimes PHI are converted to moves
-
-					if (!IsPhiInstruction(node.Instruction))
-						break;
-
-					var sourceBlocks = node.PhiBlocks;
-
-					int index = sourceBlocks.IndexOf(removedBlock);
-
-					if (index < 0)
-						continue;
-
-					sourceBlocks.RemoveAt(index);
-
-					for (int i = index; i < node.OperandCount - 1; i++)
-					{
-						node.SetOperand(i, node.GetOperand(i + 1));
-					}
-
-					node.SetOperand(node.OperandCount - 1, null);
-					node.OperandCount--;
-				}
-			}
-
-			Debug.Assert(removedBlock.NextBlocks.Count == 0);
 		}
 	}
 }
