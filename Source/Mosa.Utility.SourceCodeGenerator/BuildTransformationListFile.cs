@@ -21,7 +21,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected override void Body()
 		{
-			//Lines.AppendLine("using Mosa.Compiler.Framework;");
+			Lines.AppendLine("using Mosa.Compiler.Framework.Transform;");
 			Lines.AppendLine("using System.Collections.Generic;");
 			Lines.AppendLine();
 
@@ -53,7 +53,11 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 				if (include)
 				{
-					var newname = name.Replace(Namespace, string.Empty);
+					var pos = name.IndexOf('.');
+
+					//var newname = name.Replace(Namespace, string.Empty);
+					//var newname = name;
+					var newname = name.Substring(pos + 1);
 
 					Lines.AppendLine($"\t\t\t new {newname}(),");
 				}

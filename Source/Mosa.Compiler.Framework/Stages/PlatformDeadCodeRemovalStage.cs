@@ -109,7 +109,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Result.Uses.Count != 0)
 				return;
 
-			// Check is split child, if so check is parent in use (IR.Return for example)
+			// Check is split child, if so check is parent in use (Manual.Return for example)
 			if (node.Result.HasLongParent && node.Result.LongParent.Uses.Count != 0)
 				return;
 

@@ -18,9 +18,14 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected bool First = true;
 
-		public BuildTransformations(string jsonFile, string destinationPath)
+		protected string Namespace;
+		protected string Path;
+
+		public BuildTransformations(string jsonFile, string destinationPath, string path, string name)
 			: base(jsonFile, destinationPath)
 		{
+			this.Namespace = name;
+			this.Path = path;
 		}
 
 		protected override void Iterator()
@@ -97,13 +102,19 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.Clear();
 			First = true;
 
-			DestinationFile = $"{familyName}\\{type}\\{name}{subName}.cs";
+			DestinationFile = $"{type}\\{name}{subName}.cs";
 			AddSourceHeader();
 
-			Lines.AppendLine("using Mosa.Compiler.Framework.IR;");
+			Lines.AppendLine($"using {Namespace};");
+
+			if (!Namespace.Contains("Framework"))
+			{
+				Lines.AppendLine($"using Mosa.Compiler.Framework;");
+				Lines.AppendLine($"using Mosa.Compiler.Framework.Transform;");
+			}
 
 			Lines.AppendLine();
-			Lines.AppendLine($"namespace Mosa.Compiler.Framework.Transform.Auto.{familyName}.{type}");
+			Lines.AppendLine($"namespace {Path}.Transform.Auto.{type}");
 			Lines.AppendLine("{");
 
 			GenerateTransformations(name, familyName, type, subName, transform, Variations, log);

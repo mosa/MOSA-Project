@@ -13,7 +13,7 @@ using System.Text;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// Transforms CIL instructions into their appropriate IR.
+	/// Transforms CIL instructions into their appropriate Manual.
 	/// </summary>
 	/// <remarks>
 	/// This transformation stage transforms CIL instructions into their equivalent IR sequences.
