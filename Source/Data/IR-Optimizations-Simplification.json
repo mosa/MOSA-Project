@@ -280,6 +280,71 @@
 			"Filter": "",
 			"Result": "(IR.Move## y)",
 			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "CompareObject",
+			"SubName": "SameAndEqual",
+			"Expression": "IR.CompareObject {==, >=, <=, >= u, <= u} a a",
+			"Filter": "",
+			"Result": "(IR.Move32 [To32(1)])",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "CompareObject",
+			"SubName": "SameAndNotEqual",
+			"Expression": "IR.CompareObject {!=, >, <, > u, < u} a a",
+			"Filter": "",
+			"Result": "(IR.Move32 [To32(0)])",
+			"Variations": "Yes"
+			
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Compare32x##",
+			"SubName": "SameAndEqual",
+			"Expression": "IR.Compare32x## {==, >=, <=, >= u, <= u} a a",
+			"Filter": "",
+			"Result": "(IR.Move## [To##(1)])",
+			"Variations": "Yes"
+			
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Compare64x##",
+			"SubName": "SameAndEqual",
+			"Expression": "IR.Compare64x## {==, >=, <=, >= u, <= u} a a",
+			"Filter": "",
+			"Result": "(IR.Move## [To##(1)])",
+			"Variations": "Yes"
+			
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Compare32x##",
+			"SubName": "SameAndNotEqual",
+			"Expression": "IR.Compare32x## {!=, >, <, > u, < u} a a",
+			"Filter": "",
+			"Result": "(IR.Move## [To##(0)])",
+			"Variations": "Yes"
+			
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Compare64x##",
+			"SubName": "SameAndNotEqual",
+			"Expression": "IR.Compare64x## {!=, >, <, > u, < u} a a",
+			"Filter": "",
+			"Result": "(IR.Move## [To##(0)])",
+			"Variations": "Yes"
+			
 		}
 	]
 }
