@@ -4,9 +4,6 @@
 
 namespace Mosa.Compiler.Framework.Transform.Manual.IR.Simplification
 {
-	/// <summary>
-	/// Add64MultipleWithCommon
-	/// </summary>
 	public sealed class Compare64x32SameHigh : BaseTransformation
 	{
 		public Compare64x32SameHigh() : base(IRInstruction.Compare64x32)

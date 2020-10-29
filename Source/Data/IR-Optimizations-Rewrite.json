@@ -57,5 +57,6 @@
 			"Result": "(IR.Compare64x## {!= u} a b)",
 			"Variations": "Yes"
 		}
+
 	]
 }

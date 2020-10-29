@@ -38,15 +38,15 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			new IR.Simplification.SubCarryOut32CarryNotUsed(),
 			new IR.Simplification.SubCarryOut64CarryNotUsed(),
 
-			new IR.Simplification.Compare32x32Same(),
-			new IR.Simplification.Compare32x64Same(),
-			new IR.Simplification.Compare64x32Same(),
-			new IR.Simplification.Compare64x64Same(),
+			//new IR.Simplification.Compare32x32Same(),
+			//new IR.Simplification.Compare32x64Same(),
+			//new IR.Simplification.Compare64x32Same(),
+			//new IR.Simplification.Compare64x64Same(),
 
-			new IR.Simplification.Compare32x32NotSame(),
-			new IR.Simplification.Compare32x64NotSame(),
-			new IR.Simplification.Compare64x32NotSame(),
-			new IR.Simplification.Compare64x64NotSame(),
+			//new IR.Simplification.Compare32x32NotSame(),
+			//new IR.Simplification.Compare32x64NotSame(),
+			//new IR.Simplification.Compare64x32NotSame(),
+			//new IR.Simplification.Compare64x64NotSame(),
 
 			new Transform.IR.Special.Move32Propagate(),
 			new Transform.IR.Special.Move32PropagateConstant(),
@@ -106,7 +106,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			new IR.Rewrite.Branch64Combine64x64(),
 
 			new IR.Simplification.Compare64x32SameHigh(),
-			new  IR.Simplification.Compare64x32SameLow(),
+			new IR.Simplification.Compare64x32SameLow(),
 
 			// LowerTo32
 			new IR.LowerTo32.Add64(),
