@@ -30,7 +30,7 @@ namespace Mosa.Platform.x86.Transform.Manual.Special
 				return false;
 
 			if (context.Instruction.IsIOOperation
-				|| context.Instruction.IsMemoryRead
+				//|| context.Instruction.IsMemoryRead
 				|| context.Instruction.IsMemoryWrite
 				|| context.Instruction.HasUnspecifiedSideEffect)
 				return false;
@@ -41,7 +41,7 @@ namespace Mosa.Platform.x86.Transform.Manual.Special
 
 			var instruction = context.Instruction;
 
-			if (instruction == null)
+			if (!instruction.IsPlatformInstruction)
 				return false;
 
 			// a more complex analysis would tracks the flag usage down the basic block to determine if the flags are used

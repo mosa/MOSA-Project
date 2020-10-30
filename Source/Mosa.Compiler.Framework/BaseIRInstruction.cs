@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public override string FamilyName { get { return "IR"; } }
 
-		public override bool IsIRInstruction { get { return false; } }
+		public override bool IsIRInstruction { get { return true; } }
 
 		#endregion Properties
 	}
