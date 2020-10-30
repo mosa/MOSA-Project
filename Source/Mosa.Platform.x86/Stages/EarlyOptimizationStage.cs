@@ -6,17 +6,18 @@ using Mosa.Platform.x86.Transform.Manual;
 namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
-	/// X86 Post Optimization Stage
+	/// X86 Optimization Stage
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.Stages.BaseTransformationStage" />
-	public sealed class PostOptimizationStage : BaseOptimizationStage
+	public sealed class EarlyOptimizationStage : BaseOptimizationStage
 	{
 		public override string Name { get { return "X86." + GetType().Name; } }
 
-		public PostOptimizationStage()
+		public EarlyOptimizationStage()
 			: base(false)
 		{
-			AddTranformation(new Mov32ToXor32());
+			AddTranformation(new Add32ToLea32());
+			AddTranformation(new Sub32ToLea32());
 		}
 
 		protected override void CustomizeTransformationContract()

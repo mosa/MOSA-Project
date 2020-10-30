@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.Platform;
 using System;
 
 namespace Mosa.Compiler.Framework.Transform
@@ -697,6 +698,82 @@ namespace Mosa.Compiler.Framework.Transform
 		}
 
 		#endregion SignExtend Helpers
+
+		#region Status Helpers
+
+		public enum TriState { Yes, No, Unknown };
+
+		public static TriState AreStatusFlagsUsed(InstructionNode start)
+		{
+			var first = start.Instruction as BasePlatformInstruction;
+
+			var zeroModified = first.IsZeroFlagModified && !first.IsZeroFlagUndefined;
+			var carryModified = first.IsCarryFlagModified && !first.IsCarryFlagUndefined;
+			var signModified = first.IsSignFlagModified && !first.IsSignFlagUndefined;
+			var overflowModified = first.IsOverflowFlagSet && !first.IsOverflowFlagUndefined;
+			var parityModified = first.IsParityFlagModified && !first.IsParityFlagUndefined;
+
+			return AreStatusFlagsUsed(start.Next, zeroModified, carryModified, signModified, overflowModified, parityModified);
+		}
+
+		public static TriState AreStatusFlagsUsed(InstructionNode start, bool zeroModified, bool carryModified, bool signModified, bool overflowModified, bool parityModified)
+		{
+			// if none are modified (or not undefined), then they can't be used later
+			if (!zeroModified && !carryModified && !signModified && !overflowModified && !parityModified)
+				return TriState.No;
+
+			for (var at = start; ; at = at.Next)
+			{
+				if (at.IsEmptyOrNop)
+					continue;
+
+				if (at.IsBlockEndInstruction)
+					return TriState.Unknown;
+
+				if (at.Instruction == IRInstruction.StableObjectTracking
+					|| at.Instruction == IRInstruction.UnstableObjectTracking
+					|| at.Instruction == IRInstruction.Kill
+					|| at.Instruction == IRInstruction.KillAll
+					|| at.Instruction == IRInstruction.KillAllExcept
+					|| at.Instruction == IRInstruction.Gen)
+					continue;
+
+				if (at.Instruction.FlowControl != FlowControl.Next)
+					return TriState.Unknown; // Flow direction changed
+
+				var instruction = at.Instruction as BasePlatformInstruction;
+
+				if (instruction == null)
+					return TriState.Unknown; // Unknown IR instruction
+
+				if ((zeroModified && instruction.IsZeroFlagUsed)
+					|| (carryModified && instruction.IsCarryFlagUsed)
+					|| (signModified && instruction.IsSignFlagUsed)
+					|| (overflowModified && instruction.IsOverflowFlagUsed)
+					|| (parityModified && instruction.IsParityFlagUsed))
+					return TriState.Yes;
+
+				if (zeroModified && (instruction.IsZeroFlagCleared || instruction.IsZeroFlagSet || instruction.IsZeroFlagUndefined || instruction.IsZeroFlagModified))
+					zeroModified = false;
+
+				if (carryModified && (instruction.IsCarryFlagCleared || instruction.IsCarryFlagSet || instruction.IsCarryFlagUndefined || instruction.IsCarryFlagModified))
+					carryModified = false;
+
+				if (signModified && (instruction.IsSignFlagCleared || instruction.IsSignFlagSet || instruction.IsSignFlagUndefined || instruction.IsSignFlagModified))
+					signModified = false;
+
+				if (overflowModified && (instruction.IsOverflowFlagCleared || instruction.IsOverflowFlagSet || instruction.IsOverflowFlagUndefined || instruction.IsOverflowFlagModified))
+					overflowModified = false;
+
+				if (parityModified && (instruction.IsParityFlagCleared || instruction.IsParityFlagSet || instruction.IsParityFlagUndefined || instruction.IsParityFlagModified))
+					parityModified = false;
+
+				if (!zeroModified && !carryModified && !signModified && !overflowModified && !parityModified)
+					return TriState.No;
+			}
+		}
+
+		#endregion Status Helpers
 
 		protected static bool IsSSAForm(Operand operand)
 		{
