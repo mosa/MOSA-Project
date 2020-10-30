@@ -3,16 +3,6 @@
 		"x86.Add32"
 	],
 	"Optimizations": [
-		{
-			"FamilyName": "x86",
-			"Type": "Reduction",
-			"Name": "Inc32",
-			"SubName": "",
-			"Expression": "X86.Add32 a 1",
-			"Filter": "",
-			"Result": "(X86.Inc32 a)",
-			"Variations": "Yes",
-			"Log": "Yes"
-		}
+
 	]
 }

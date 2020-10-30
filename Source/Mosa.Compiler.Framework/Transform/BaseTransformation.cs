@@ -738,6 +738,18 @@ namespace Mosa.Compiler.Framework.Transform
 					|| at.Instruction == IRInstruction.Gen)
 					continue;
 
+				if (at.Instruction.FlowControl == FlowControl.Return)
+					return TriState.No;
+
+				if (at.Instruction.FlowControl == FlowControl.Throw)
+					return TriState.No;
+
+				if (at.Instruction.FlowControl == FlowControl.UnconditionalBranch && at.Block.NextBlocks.Count == 1)
+				{
+					at = at.BranchTargets[0].First;
+					continue;
+				}
+
 				if (at.Instruction.FlowControl != FlowControl.Next)
 					return TriState.Unknown; // Flow direction changed
 

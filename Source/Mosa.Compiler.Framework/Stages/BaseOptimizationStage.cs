@@ -2,10 +2,7 @@
 
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.Framework.Transform;
-using Mosa.Compiler.Framework.Transform.Auto;
-using Mosa.Compiler.Framework.Transform.Manual;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -48,7 +45,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Register(SkippedEmptyBlocksCount);
 		}
 
-		protected void CreateTransformationList(List<BaseTransformation> list)
+		protected void AddTranformations(List<BaseTransformation> list)
 		{
 			foreach (var transformation in list)
 			{

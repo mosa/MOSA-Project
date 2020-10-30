@@ -13,7 +13,7 @@ namespace Mosa.Platform.x86.Transform.Manual
 
 	public sealed class Add32ToLea32 : BaseTransformation
 	{
-		public Add32ToLea32() : base(X86.Add32, true)
+		public Add32ToLea32() : base(X86.Add32)
 		{
 		}
 
@@ -25,7 +25,7 @@ namespace Mosa.Platform.x86.Transform.Manual
 			if (context.Operand2.IsCPURegister)
 				return false;
 
-			if (AreStatusFlagsUsed(context.Node) != TriState.No)
+			if (!(AreStatusFlagsUsed(context.Node) == TriState.No))
 				return false;
 
 			return true;

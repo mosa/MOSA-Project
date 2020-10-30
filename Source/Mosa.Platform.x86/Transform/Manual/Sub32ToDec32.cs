@@ -6,14 +6,14 @@ using Mosa.Platform.x86;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transform;
 
-namespace Mosa.Platform.x86.Transform.Auto.Reduction
+namespace Mosa.Platform.x86.Transform.Manual
 {
 	/// <summary>
-	/// Inc32
+	/// Dec32
 	/// </summary>
-	public sealed class Inc32 : BaseTransformation
+	public sealed class Sub32ToDec32 : BaseTransformation
 	{
-		public Inc32() : base(X86.Add32, true)
+		public Sub32ToDec32() : base(X86.Sub32, true)
 		{
 		}
 
@@ -25,6 +25,9 @@ namespace Mosa.Platform.x86.Transform.Auto.Reduction
 			if (context.Operand2.ConstantUnsigned64 != 1)
 				return false;
 
+			if (!(AreStatusFlagsUsed(context.Node.Next, true, false, true, true, true) == TriState.No))
+				return false;
+
 			return true;
 		}
 
@@ -34,7 +37,7 @@ namespace Mosa.Platform.x86.Transform.Auto.Reduction
 
 			var t1 = context.Operand1;
 
-			context.SetInstruction(X86.Inc32, result, t1);
+			context.SetInstruction(X86.Dec32, result, t1, t1);
 		}
 	}
 }

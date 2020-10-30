@@ -13,7 +13,7 @@ namespace Mosa.Platform.x86.Transform.Manual
 
 	public sealed class Sub32ToLea32 : BaseTransformation
 	{
-		public Sub32ToLea32() : base(X86.Sub32, true)
+		public Sub32ToLea32() : base(X86.Sub32)
 		{
 		}
 
@@ -25,7 +25,7 @@ namespace Mosa.Platform.x86.Transform.Manual
 			if (!context.Operand2.IsResolvedConstant)
 				return false;
 
-			if (AreStatusFlagsUsed(context.Node) != TriState.No)
+			if (!(AreStatusFlagsUsed(context.Node) == TriState.No))
 				return false;
 
 			return true;

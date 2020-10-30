@@ -1,11 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.Framework.Transform;
 using Mosa.Compiler.Framework.Transform.Auto;
 using Mosa.Compiler.Framework.Transform.Manual;
-using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -20,8 +17,8 @@ namespace Mosa.Compiler.Framework.Stages
 			: base(true)
 		{
 			LowerTo32 = lowerTo32;
-			CreateTransformationList(ManualTransforms.List);
-			CreateTransformationList(AutoTransforms.List);
+			AddTranformations(ManualTransforms.List);
+			AddTranformations(AutoTransforms.List);
 		}
 
 		protected override void CustomizeTransformationContract()

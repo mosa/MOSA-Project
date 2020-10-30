@@ -1,7 +1,9 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.Stages;
+using Mosa.Platform.x86.Transform.Auto;
 using Mosa.Platform.x86.Transform.Manual;
+using Mosa.Platform.x86.Transform.Manual.Special;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -16,6 +18,11 @@ namespace Mosa.Platform.x86.Stages
 		public PostOptimizationStage()
 			: base(false)
 		{
+			AddTranformations(AutoTransforms.List);
+
+			//AddTranformation(new Add32ToInc32());
+
+			AddTranformation(new Deadcode());
 			AddTranformation(new Mov32ToXor32());
 		}
 

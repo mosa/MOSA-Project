@@ -12,8 +12,8 @@ namespace Mosa.Platform.x86.Transform.Auto
 	/// </summary>
 	public static class AutoTransforms
 	{
-		public static readonly List<BaseTransformation> List = new List<BaseTransformation> {
-			 new Reduction.Inc32(),
+		public static readonly List<BaseTransformation> List = new List<BaseTransformation>
+		{
 		};
 	}
 }

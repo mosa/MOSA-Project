@@ -165,7 +165,6 @@ namespace Mosa.Platform.x86
 					compilerSettings.PlatformOptimizations ? new EarlyOptimizationStage() : null,
 					new TweakStage(),
 					new FixedRegisterAssignmentStage(),
-					compilerSettings.PlatformOptimizations ? new SimpleDeadCodeRemovalStage() : null,
 					new AddressModeConversionStage(),
 					new FloatingPointStage(),
 				});
