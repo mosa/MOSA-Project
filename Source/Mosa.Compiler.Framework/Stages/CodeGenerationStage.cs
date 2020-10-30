@@ -131,7 +131,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					node.Offset = CodeEmitter.CurrentPosition;
 
-					if (node.Instruction is BasePlatformInstruction baseInstruction)
+					if (node.Instruction.IsPlatformInstruction)
 					{
 						if (node.Label != labelCurrent)
 						{
@@ -144,7 +144,7 @@ namespace Mosa.Compiler.Framework.Stages
 							labelStart = node.Offset;
 						}
 
-						baseInstruction.Emit(node, CodeEmitter.OpcodeEncoder);
+						node.Instruction.Emit(node, CodeEmitter.OpcodeEncoder);
 
 						GeneratedInstructionCount++;
 

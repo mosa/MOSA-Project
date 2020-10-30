@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Special
 			if (context.ResultCount == 2 && context.Result2.Uses.Count != 0)
 				return false;
 
-			if (!(context.Instruction is BaseIRInstruction))
+			if (!(context.Instruction.IsIRInstruction))
 				return false;
 
 			if (context.Instruction == IRInstruction.CallDynamic

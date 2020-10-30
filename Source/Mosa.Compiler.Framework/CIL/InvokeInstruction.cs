@@ -126,7 +126,7 @@ namespace Mosa.Compiler.Framework.CIL
 			if (!method.Signature.ReturnType.IsVoid)
 			{
 				node.ResultCount = 1;
-				node.Result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, method.Signature.ReturnType);
+				node.Result = decoder.MethodCompiler.AllocateVirtualRegisterOrStackSlot(method.Signature.ReturnType);
 			}
 			else
 			{

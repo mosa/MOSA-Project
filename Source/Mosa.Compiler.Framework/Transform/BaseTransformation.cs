@@ -705,7 +705,7 @@ namespace Mosa.Compiler.Framework.Transform
 
 		public static TriState AreStatusFlagsUsed(InstructionNode start)
 		{
-			var first = start.Instruction as BasePlatformInstruction;
+			var first = start.Instruction;
 
 			var zeroModified = first.IsZeroFlagModified && !first.IsZeroFlagUndefined;
 			var carryModified = first.IsCarryFlagModified && !first.IsCarryFlagUndefined;
@@ -741,8 +741,8 @@ namespace Mosa.Compiler.Framework.Transform
 				if (at.Instruction.FlowControl == FlowControl.Return)
 					return TriState.No;
 
-				if (at.Instruction.FlowControl == FlowControl.Throw)
-					return TriState.No;
+				//if (at.Instruction.FlowControl == FlowControl.Throw)
+				//	return TriState.No;
 
 				if (at.Instruction.FlowControl == FlowControl.UnconditionalBranch && at.Block.NextBlocks.Count == 1)
 				{
@@ -753,9 +753,9 @@ namespace Mosa.Compiler.Framework.Transform
 				if (at.Instruction.FlowControl != FlowControl.Next)
 					return TriState.Unknown; // Flow direction changed
 
-				var instruction = at.Instruction as BasePlatformInstruction;
+				var instruction = at.Instruction;
 
-				if (instruction == null)
+				if (!instruction.IsPlatformInstruction)
 					return TriState.Unknown; // Unknown IR instruction
 
 				if ((zeroModified && instruction.IsZeroFlagUsed)

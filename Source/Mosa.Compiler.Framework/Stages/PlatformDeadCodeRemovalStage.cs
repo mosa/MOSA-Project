@@ -76,10 +76,10 @@ namespace Mosa.Compiler.Framework.Stages
 						if (node.Instruction.FlowControl == FlowControl.Call)
 							continue;
 
-						var instruction = node.Instruction as BasePlatformInstruction;
-
-						if (instruction == null)
+						if (!node.Instruction.IsPlatformInstruction)
 							continue;
+
+						var instruction = node.Instruction;
 
 						// a more complex analysis would tracks the flag usage down the basic block to determine if the flags are used
 						if (instruction.IsCarryFlagModified

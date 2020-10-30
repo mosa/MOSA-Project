@@ -110,11 +110,6 @@ namespace Mosa.Compiler.Framework.CIL
 			get { return true; }
 		}
 
-		public static Operand AllocateVirtualRegisterOrStackSlot(MethodCompiler compiler, MosaType type)
-		{
-			return compiler.AllocateVirtualRegisterOrStackSlot(type);
-		}
-
 		/// <summary>
 		/// Validates the specified instruction.
 		/// </summary>

@@ -39,7 +39,7 @@ namespace Mosa.Platform.x86.Transform.Manual.Special
 			if (context.Result.HasLongParent && context.Result.LongParent.Uses.Count != 0)
 				return false;
 
-			var instruction = context.Instruction as BasePlatformInstruction;
+			var instruction = context.Instruction;
 
 			if (instruction == null)
 				return false;
