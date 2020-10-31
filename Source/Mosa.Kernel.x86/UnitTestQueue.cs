@@ -13,7 +13,7 @@ namespace Mosa.Kernel.x86
 		private static Pointer queueCurrent;
 		private static uint count = 0;
 
-		private static uint TestQueueSize = 0x00100000;
+		private static readonly uint TestQueueSize = 0x00100000;
 
 		public static void Setup()
 		{

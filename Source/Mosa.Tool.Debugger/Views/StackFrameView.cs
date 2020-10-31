@@ -10,7 +10,7 @@ namespace Mosa.Tool.Debugger.Views
 {
 	public partial class StackFrameView : DebugDockContent
 	{
-		private BindingList<StackEntry> stackentries = new BindingList<StackEntry>();
+		private readonly BindingList<StackEntry> stackentries = new BindingList<StackEntry>();
 
 		private class StackEntry
 		{

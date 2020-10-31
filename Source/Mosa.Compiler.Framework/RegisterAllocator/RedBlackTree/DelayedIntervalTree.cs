@@ -9,7 +9,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 	/// </summary>
 	public sealed class DelayedIntervalTree<T> where T : class
 	{
-		private IntervalTree<T> tree = new IntervalTree<T>();
+		private readonly IntervalTree<T> tree = new IntervalTree<T>();
 
 		private bool delayedDelete = false;
 		private bool delayedAdd = false;

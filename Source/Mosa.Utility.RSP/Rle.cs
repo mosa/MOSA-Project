@@ -27,7 +27,7 @@ namespace Mosa.Utility.RSP
 					return null; // error --- repeat character can not at the start
 
 				var repeated = data[i - 1];
-				int len = ((byte)data[i + 1]) - 28;
+				int len = data[i + 1] - 28;
 
 				if (!(len >= 4 && len <= 97 && len != 6 && len != 7))
 					return null; // error --- invalid length

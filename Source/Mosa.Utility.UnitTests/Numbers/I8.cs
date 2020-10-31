@@ -59,7 +59,7 @@ namespace Mosa.Utility.UnitTests.Numbers
 			foreach (var value in list.ToArray())
 			{
 				if (value > 0)
-					list.Add((long)-value);
+					list.Add(-value);
 			}
 		}
 	}

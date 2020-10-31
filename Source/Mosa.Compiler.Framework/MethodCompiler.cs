@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework
 
 		private readonly Stopwatch Stopwatch;
 
-		private NotifyTraceLogHandler NotifyTraceLogHandler;
+		private readonly NotifyTraceLogHandler NotifyTraceLogHandler;
 
 		private readonly bool Statistics;
 

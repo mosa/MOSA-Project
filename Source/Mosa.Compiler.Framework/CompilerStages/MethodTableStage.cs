@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 
 			// 1. Number of methods
 			int count = 0;
-			writer.Write((int)0);
+			writer.Write(0);
 
 			foreach (var module in TypeSystem.Modules)
 			{

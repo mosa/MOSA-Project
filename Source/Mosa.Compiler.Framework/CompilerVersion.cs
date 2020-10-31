@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public static class CompilerVersion
 	{
-		private static Version Version = GetVersion();
+		private static readonly Version Version = GetVersion();
 
 		public static Version GetVersion()
 		{

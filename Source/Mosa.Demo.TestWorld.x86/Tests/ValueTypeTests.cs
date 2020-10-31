@@ -25,7 +25,7 @@ namespace Mosa.TestWorld.x86.Tests
 
 	public struct ValueType
 	{
-		private int z;
+		private readonly int z;
 
 		public ValueType(int x)
 		{

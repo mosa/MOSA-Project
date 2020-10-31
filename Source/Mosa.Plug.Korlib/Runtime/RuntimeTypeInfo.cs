@@ -10,7 +10,7 @@ namespace Mosa.Plug.Korlib.Runtime
 {
 	public sealed unsafe class RuntimeTypeInfo : TypeInfo
 	{
-		private TypeDefinition typeDefinition;
+		private readonly TypeDefinition typeDefinition;
 		private readonly TypeCode typeCode;
 		private readonly Type baseType;
 		private readonly Type elementType;

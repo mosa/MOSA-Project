@@ -17,7 +17,7 @@ namespace Mosa.Utility.Disassembler
 
 		public ulong Offset { get; set; } = 0;
 
-		private ProcessorArchitecture arch;
+		private readonly ProcessorArchitecture arch;
 		private MemoryArea memoryArea;
 
 		//private static MachineInstructionWriterOptions options = new MachineInstructionWriterOptions(syntax: "Nasm", operandSeparator: ", ");

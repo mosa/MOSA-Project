@@ -40,9 +40,9 @@ namespace Mosa.Compiler.Framework.Analysis
 		/// <summary>
 		/// The post order
 		/// </summary>
-		private List<BasicBlock> reversePostOrder;
+		private readonly List<BasicBlock> reversePostOrder;
 
-		private int[] blockToPostorderIndex;
+		private readonly int[] blockToPostorderIndex;
 
 		#endregion Data Members
 

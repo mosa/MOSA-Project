@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				writer.WriteLine();
 				writer.WriteLine("Timestamp is {0}", DateTime.Now);
 				writer.WriteLine();
-				writer.WriteLine("Preferred load address is {0:x16}", (object)Linker.LinkerSettings.BaseAddress);
+				writer.WriteLine("Preferred load address is {0:x16}", Linker.LinkerSettings.BaseAddress);
 				writer.WriteLine();
 
 				// Emit the sections

@@ -48,7 +48,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public class Mutator : MosaUnit.MutatorBase
 		{
-			private MosaProperty property;
+			private readonly MosaProperty property;
 
 			internal Mutator(MosaProperty property)
 				: base(property)

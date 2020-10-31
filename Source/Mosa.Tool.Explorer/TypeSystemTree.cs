@@ -14,12 +14,12 @@ namespace Mosa.Tool.Explorer
 		public TypeSystem TypeSystem;
 		public MosaTypeLayout TypeLayout;
 
-		private bool ShowSizes = true;
+		private readonly bool ShowSizes = true;
 
-		private Dictionary<object, TreeNode> map = new Dictionary<object, TreeNode>();
-		private HashSet<object> contains = new HashSet<object>();
+		private readonly Dictionary<object, TreeNode> map = new Dictionary<object, TreeNode>();
+		private readonly HashSet<object> contains = new HashSet<object>();
 
-		private HashSet<MosaUnit> Include;
+		private readonly HashSet<MosaUnit> Include;
 
 		public bool HasFilter { get { return Include != null && Include.Count != 0; } }
 

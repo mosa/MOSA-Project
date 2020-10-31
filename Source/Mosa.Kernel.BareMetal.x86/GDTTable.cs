@@ -11,7 +11,7 @@ namespace Mosa.Kernel.BareMetal.x86
 	/// </summary>
 	public /*readonly*/ struct GDTTable
 	{
-		private /*readonly*/ Pointer Entry;
+		private /*readonly*/ readonly Pointer Entry;
 
 		#region GDT Entry Offsets
 

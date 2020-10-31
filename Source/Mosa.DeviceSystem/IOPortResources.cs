@@ -28,7 +28,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		public bool[] portUsed;
 
-		private object _lock = new object();
+		private readonly object _lock = new object();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IOPortResources"/> class.

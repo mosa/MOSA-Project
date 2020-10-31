@@ -9,13 +9,13 @@ namespace Mosa.Plug.Korlib.Runtime
 {
 	public sealed unsafe class RuntimeType : Type
 	{
-		private TypeDefinition typeDefinition;
-		private string assemblyQualifiedName;
-		private string name;
-		private string @namespace;
-		private string fullname;
+		private readonly TypeDefinition typeDefinition;
+		private readonly string assemblyQualifiedName;
+		private readonly string name;
+		private readonly string @namespace;
+		private readonly string fullname;
 		private RuntimeTypeHandle handle;
-		private TypeCode typeCode;
+		private readonly TypeCode typeCode;
 		internal TypeAttributes attributes; // FIXME: this should be private, only temporarily internal
 		private RuntimeTypeHandle declaringTypeHandle;
 		private RuntimeTypeHandle elementTypeHandle;

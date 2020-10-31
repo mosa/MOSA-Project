@@ -27,7 +27,7 @@ namespace Mosa.FileSystem.VFS
 		/// <summary>
 		/// Reference to the root directory of the system.
 		/// </summary>
-		private DirectoryEntry rootDirectory;
+		private readonly DirectoryEntry rootDirectory;
 
 		/// <summary>
 		/// Reference to the current directory of the system.

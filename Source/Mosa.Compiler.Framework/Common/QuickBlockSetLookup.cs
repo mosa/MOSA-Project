@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Common
 {
 	public sealed class QuickBlockSetLookup
 	{
-		private BitArray array;
+		private readonly BitArray array;
 
 		public QuickBlockSetLookup(BasicBlocks basicBlocks)
 		{

@@ -12,7 +12,7 @@ namespace Mosa.Kernel.x86
 	{
 		private const uint MaxParameters = 8; // max 32-bit parameters
 
-		private static uint counter = 0;
+		private static readonly uint counter = 0;
 
 		private static int testReady = 0;
 		private static int testResultReady = 0;
@@ -50,7 +50,7 @@ namespace Mosa.Kernel.x86
 			uint esp = Native.AllocateStackSpace(MaxParameters * 4);
 
 			Screen.Write("Stack @ ");
-			Screen.Write((uint)esp, 16, 8);
+			Screen.Write(esp, 16, 8);
 
 			Screen.NextLine();
 			Screen.NextLine();

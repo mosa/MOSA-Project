@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				}
 			}
 
-			methods.Sort((MethodData x, MethodData y) => (int)(String.Compare(x.Method.FullName, y.Method.FullName)));
+			methods.Sort((MethodData x, MethodData y) => String.Compare(x.Method.FullName, y.Method.FullName));
 
 			return methods;
 		}

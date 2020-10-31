@@ -7,7 +7,7 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class Logger
 	{
-		private static bool initialized = false;
+		private static readonly bool initialized = false;
 
 		public static void Log(string message)
 		{

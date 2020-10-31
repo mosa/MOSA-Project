@@ -9,7 +9,7 @@ namespace Mosa.Tool.Debugger.Views
 {
 	public partial class SymbolView : DebugDockContent
 	{
-		private BindingList<SymbolEntry> symbols = new BindingList<SymbolEntry>();
+		private readonly BindingList<SymbolEntry> symbols = new BindingList<SymbolEntry>();
 
 		private class SymbolEntry
 		{

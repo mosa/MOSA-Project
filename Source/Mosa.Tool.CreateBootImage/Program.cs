@@ -12,7 +12,7 @@ namespace Mosa.Tool.CreateBootImage
 	/// </summary>
 	internal static class Program
 	{
-		private static string UsageString;
+		private static readonly string UsageString;
 
 		static Program()
 		{
