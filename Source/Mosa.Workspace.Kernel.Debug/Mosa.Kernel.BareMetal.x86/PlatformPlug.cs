@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Kernel.BareMetal.BootMemory;
 using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
@@ -33,7 +32,7 @@ namespace Mosa.Kernel.BareMetal.x86
 		[Plug("Mosa.Kernel.BareMetal.Platform::GetBootReservedRegion")]
 		public static AddressRange GetBootReservedRegion()
 		{
-			return new AddressRange(BootReservedAddress, (Page.Size * (32 + 32)));	// 4GB = 32 (on x86), 2GB = 16 (on x64), 64GB = 16 * 32
+			return new AddressRange(BootReservedAddress, (Page.Size * (32 + 32)));  // 4GB = 32 (on x86), 2GB = 16 (on x64), 64GB = 16 * 32
 		}
 
 		[Plug("Mosa.Kernel.BareMetal.Platform::GetPlatformReservedMemory")]

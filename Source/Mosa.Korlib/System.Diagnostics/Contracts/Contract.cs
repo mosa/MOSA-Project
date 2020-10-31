@@ -324,7 +324,7 @@ namespace System.Diagnostics.Contracts
 
 		[Pure]
 		public static T ValueAtReturn<T>(out T value) { value = default(T); return value; }
-		
+
 		[Pure]
 		public static T OldValue<T>(T value) { return default(T); }
 

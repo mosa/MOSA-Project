@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Demo.VBEWorld.x86.HAL;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.x86;
-using Mosa.Demo.VBEWorld.x86.HAL;
 
 namespace Mosa.Demo.VBEWorld.x86
 {

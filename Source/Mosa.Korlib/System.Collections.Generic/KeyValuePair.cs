@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace System.Collections.Generic
+﻿namespace System.Collections.Generic
 {
 	// Provides the Create factory method for KeyValuePair<TKey, TValue>.
 	public static class KeyValuePair

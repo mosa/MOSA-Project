@@ -1,12 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
 namespace Mosa.UnitTests
 {
-	public static class ConvTests 
+	public static class ConvTests
 	{
-	
+
 		[MosaUnitTest("U1", "U1")]
 		public static bool ConvU1U1(byte expect, byte a)
 		{

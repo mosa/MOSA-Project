@@ -14,9 +14,6 @@
 ===========================================================*/
 namespace System
 {
-
-	using System;
-
 	// This attribute is attached to members that are not to be used any longer.
 	// Message is some human readable explanation of what to use
 	// Error indicates if the compiler should treat usage of such a method as an

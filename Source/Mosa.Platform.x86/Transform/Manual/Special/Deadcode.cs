@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Framework.Transform;
 
 namespace Mosa.Platform.x86.Transform.Manual.Special
@@ -30,6 +29,7 @@ namespace Mosa.Platform.x86.Transform.Manual.Special
 				return false;
 
 			if (context.Instruction.IsIOOperation
+
 				//|| context.Instruction.IsMemoryRead
 				|| context.Instruction.IsMemoryWrite
 				|| context.Instruction.HasUnspecifiedSideEffect)
