@@ -177,7 +177,6 @@ namespace Mosa.Platform.x64
 					new FixedRegisterAssignmentStage(),
 					compilerSettings.PlatformOptimizations ? new SimpleDeadCodeRemovalStage() : null,
 					new AddressModeConversionStage(),
-					new FloatingPointStage(),
 				});
 
 			pipeline.InsertAfterLast<StackLayoutStage>(

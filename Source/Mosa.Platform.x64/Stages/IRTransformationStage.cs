@@ -119,18 +119,26 @@ namespace Mosa.Platform.x64.Stages
 
 		private void AddR4(Context context)
 		{
-			Debug.Assert(context.Result.IsR4);
-			Debug.Assert(context.Operand1.IsR4);
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
 
-			context.ReplaceInstruction(X64.Addss);
+			operand1 = MoveConstantToFloatRegister(context, operand1);
+			operand2 = MoveConstantToFloatRegister(context, operand2);
+
+			context.SetInstruction(X64.Addss, result, operand1, operand2);
 		}
 
 		private void AddR8(Context context)
 		{
-			Debug.Assert(context.Result.IsR8);
-			Debug.Assert(context.Operand1.IsR8);
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
 
-			context.ReplaceInstruction(X64.Addsd);
+			operand1 = MoveConstantToFloatRegister(context, operand1);
+			operand2 = MoveConstantToFloatRegister(context, operand2);
+
+			context.SetInstruction(X64.Addsd, result, operand1, operand2);
 		}
 
 		private void AddressOf(Context context)
@@ -216,7 +224,7 @@ namespace Mosa.Platform.x64.Stages
 
 		private void Branch32(Context context)
 		{
-			OptimizeBranch(context);
+			MoveConstantRight(context);
 
 			var target = context.BranchTargets[0];
 			var condition = context.ConditionCode;
@@ -229,30 +237,54 @@ namespace Mosa.Platform.x64.Stages
 
 		private void ConvertR4ToR8(Context context)
 		{
-			context.ReplaceInstruction(X64.Cvtss2sd);
+			var result = context.Result;
+			var operand1 = context.Operand1;
+
+			operand1 = MoveConstantToFloatRegister(context, operand1);
+
+			context.SetInstruction(X64.Cvtss2sd, result, operand1);
 		}
 
 		private void ConvertR4To32(Context context)
 		{
-			Debug.Assert(context.Result.IsInteger && !context.Result.IsFloatingPoint);
-			context.ReplaceInstruction(X64.Cvttss2si32);
+			var result = context.Result;
+			var operand1 = context.Operand1;
+
+			operand1 = MoveConstantToFloatRegister(context, operand1);
+
+			context.SetInstruction(X64.Cvttss2si32, result, operand1);
 		}
 
 		private void ConvertR8ToR4(Context context)
 		{
-			context.ReplaceInstruction(X64.Cvtsd2ss);
+			Debug.Assert(context.Result.IsInteger && !context.Result.IsFloatingPoint);
+
+			var result = context.Result;
+			var operand1 = context.Operand1;
+
+			operand1 = MoveConstantToFloatRegister(context, operand1);
+
+			context.SetInstruction(X64.Cvttsd2si32, result, operand1);
 		}
 
 		private void ConvertR8To32(Context context)
 		{
-			Debug.Assert(context.Result.IsInteger && !context.Result.IsFloatingPoint);
-			context.ReplaceInstruction(X64.Cvttsd2si32);
+			var result = context.Result;
+			var operand1 = context.Operand1;
+
+			operand1 = MoveConstantToFloatRegister(context, operand1);
+
+			context.SetInstruction(X64.Cvttsd2si32, result, operand1);
 		}
 
 		private void Convert32ToR4(Context context)
 		{
-			Debug.Assert(context.Result.IsR4);
-			context.ReplaceInstruction(X64.Cvtsi2ss32);
+			var result = context.Result;
+			var operand1 = context.Operand1;
+
+			operand1 = MoveConstantToFloatRegister(context, operand1);
+
+			context.SetInstruction(X64.Cvtsd2ss, result, operand1);
 		}
 
 		private void Convert32ToR8(Context context)
@@ -263,18 +295,26 @@ namespace Mosa.Platform.x64.Stages
 
 		private void DivR4(Context context)
 		{
-			Debug.Assert(context.Result.IsR4);
-			Debug.Assert(context.Operand1.IsR4);
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
 
-			context.ReplaceInstruction(X64.Divss);
+			operand1 = MoveConstantToFloatRegister(context, operand1);
+			operand2 = MoveConstantToFloatRegister(context, operand2);
+
+			context.SetInstruction(X64.Divss, result, operand1, operand2);
 		}
 
 		private void DivR8(Context context)
 		{
-			Debug.Assert(context.Result.IsR8);
-			Debug.Assert(context.Operand1.IsR8);
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
 
-			context.ReplaceInstruction(X64.Divsd);
+			operand1 = MoveConstantToFloatRegister(context, operand1);
+			operand2 = MoveConstantToFloatRegister(context, operand2);
+
+			context.SetInstruction(X64.Divsd, result, operand1, operand2);
 		}
 
 		private void DivSigned32(Context context)
@@ -435,12 +475,22 @@ namespace Mosa.Platform.x64.Stages
 
 		private void MoveR4(Context context)
 		{
-			context.ReplaceInstruction(X64.Movss);
+			var result = context.Result;
+			var operand1 = context.Operand1;
+
+			operand1 = MoveConstantToFloatRegister(context, operand1);
+
+			context.SetInstruction(X64.Movss, result, operand1);
 		}
 
 		private void MoveR8(Context context)
 		{
-			context.ReplaceInstruction(X64.Movsd);
+			var result = context.Result;
+			var operand1 = context.Operand1;
+
+			operand1 = MoveConstantToFloatRegister(context, operand1);
+
+			context.SetInstruction(X64.Movsd, result, operand1);
 		}
 
 		private void Move32(Context context)
@@ -450,18 +500,26 @@ namespace Mosa.Platform.x64.Stages
 
 		private void MulR4(Context context)
 		{
-			Debug.Assert(context.Result.IsR4);
-			Debug.Assert(context.Operand1.IsR4);
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
 
-			context.ReplaceInstruction(X64.Mulss);
+			operand1 = MoveConstantToFloatRegister(context, operand1);
+			operand2 = MoveConstantToFloatRegister(context, operand2);
+
+			context.SetInstruction(X64.Mulss, result, operand1, operand2);
 		}
 
 		private void MulR8(Context context)
 		{
-			Debug.Assert(context.Result.IsR8);
-			Debug.Assert(context.Operand1.IsR8);
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
 
-			context.ReplaceInstruction(X64.Mulsd);
+			operand1 = MoveConstantToFloatRegister(context, operand1);
+			operand2 = MoveConstantToFloatRegister(context, operand2);
+
+			context.SetInstruction(X64.Mulsd, result, operand1, operand2);
 		}
 
 		private void MulSigned32(Context context)
@@ -530,12 +588,24 @@ namespace Mosa.Platform.x64.Stages
 
 		private void StoreR4(Context context)
 		{
-			context.SetInstruction(X64.MovssStore, null, context.Operand1, context.Operand2, context.Operand3);
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var operand3 = context.Operand3;
+
+			operand3 = MoveConstantToFloatRegister(context, operand3);
+
+			context.SetInstruction(X64.MovssStore, null, operand1, operand2, operand3);
 		}
 
 		private void StoreR8(Context context)
 		{
-			context.SetInstruction(X64.MovsdStore, null, context.Operand1, context.Operand2, context.Operand3);
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var operand3 = context.Operand3;
+
+			operand3 = MoveConstantToFloatRegister(context, operand3);
+
+			context.SetInstruction(X64.MovsdStore, null, operand1, operand2, operand3);
 		}
 
 		private void StoreInt16(Context context)
@@ -561,12 +631,22 @@ namespace Mosa.Platform.x64.Stages
 
 		private void StoreParamR4(Context context)
 		{
-			context.SetInstruction(X64.MovssStore, null, StackFrame, context.Operand1, context.Operand2);
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			operand2 = MoveConstantToFloatRegister(context, operand2);
+
+			context.SetInstruction(X64.MovssStore, null, StackFrame, operand1, operand2);
 		}
 
 		private void StoreParamR8(Context context)
 		{
-			context.SetInstruction(X64.MovsdStore, null, StackFrame, context.Operand1, context.Operand2);
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			operand2 = MoveConstantToFloatRegister(context, operand2);
+
+			context.SetInstruction(X64.MovsdStore, null, StackFrame, operand1, operand2);
 		}
 
 		private void StoreParamInt16(Context context)
@@ -605,18 +685,26 @@ namespace Mosa.Platform.x64.Stages
 
 		private void SubR4(Context context)
 		{
-			Debug.Assert(context.Result.IsR4);
-			Debug.Assert(context.Operand1.IsR4);
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
 
-			context.ReplaceInstruction(X64.Subss);
+			operand1 = MoveConstantToFloatRegister(context, operand1);
+			operand2 = MoveConstantToFloatRegister(context, operand2);
+
+			context.SetInstruction(X64.Subss, result, operand1, operand2);
 		}
 
 		private void SubR8(Context context)
 		{
-			Debug.Assert(context.Result.IsR8);
-			Debug.Assert(context.Operand1.IsR8);
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
 
-			context.ReplaceInstruction(X64.Subsd);
+			operand1 = MoveConstantToFloatRegister(context, operand1);
+			operand2 = MoveConstantToFloatRegister(context, operand2);
+
+			context.SetInstruction(X64.Subsd, result, operand1, operand2);
 		}
 
 		private void SubCarryIn32(Context context)
@@ -660,7 +748,7 @@ namespace Mosa.Platform.x64.Stages
 
 		#region Helper Methods
 
-		public static void OptimizeBranch(Context context)
+		public static void MoveConstantRight(Context context)
 		{
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
@@ -681,7 +769,8 @@ namespace Mosa.Platform.x64.Stages
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			// normalize
+			operand1 = MoveConstantToFloatRegister(context, operand1);
+			operand2 = MoveConstantToFloatRegister(context, operand2);
 
 			var v1 = AllocateVirtualRegister32();
 
@@ -731,8 +820,24 @@ namespace Mosa.Platform.x64.Stages
 				context.AppendInstruction(X64.Movzx8To32, result, v1);
 				return;
 			}
+		}
 
-			return;
+		private Operand MoveConstantToFloatRegister(Context context, Operand operand)
+		{
+			if (!operand.IsConstant)
+				return operand;
+
+			var v1 = operand.IsR4 ? AllocateVirtualRegisterR4() : AllocateVirtualRegisterR8();
+
+			var symbol = operand.IsR4 ? Linker.GetConstantSymbol(operand.ConstantFloat) : Linker.GetConstantSymbol(operand.ConstantDouble);
+
+			var label = Operand.CreateLabel(v1.Type, symbol.Name);
+
+			var instruction = operand.IsR4 ? (BaseInstruction)X64.MovssLoad : X64.MovsdLoad;
+
+			context.InsertBefore().SetInstruction(instruction, v1, label, ConstantZero);
+
+			return v1;
 		}
 
 		#endregion Helper Methods

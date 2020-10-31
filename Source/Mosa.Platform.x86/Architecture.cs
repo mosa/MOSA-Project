@@ -166,7 +166,6 @@ namespace Mosa.Platform.x86
 					new TweakStage(),
 					new FixedRegisterAssignmentStage(),
 					new AddressModeConversionStage(),
-					new FloatingPointStage(),
 				});
 
 			pipeline.InsertAfterLast<StackLayoutStage>(

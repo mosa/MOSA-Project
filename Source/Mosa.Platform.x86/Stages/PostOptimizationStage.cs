@@ -18,7 +18,7 @@ namespace Mosa.Platform.x86.Stages
 		public PostOptimizationStage()
 			: base(false)
 		{
-			AddTranformations(AutoTransforms.List);
+			//AddTranformations(AutoTransforms.List);
 
 			//AddTranformation(new Add32ToInc32());
 

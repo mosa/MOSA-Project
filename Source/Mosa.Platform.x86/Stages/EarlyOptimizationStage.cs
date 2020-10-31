@@ -18,7 +18,7 @@ namespace Mosa.Platform.x86.Stages
 		public EarlyOptimizationStage()
 			: base(false)
 		{
-			AddTranformations(AutoTransforms.List);
+			//AddTranformations(AutoTransforms.List);
 
 			AddTranformation(new Deadcode());
 
@@ -27,6 +27,8 @@ namespace Mosa.Platform.x86.Stages
 
 			AddTranformation(new Add32ToLea32());
 			AddTranformation(new Sub32ToLea32());
+
+			//AddTranformation(new Mov32Propagate());
 		}
 
 		protected override void CustomizeTransformationContract()

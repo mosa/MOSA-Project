@@ -108,7 +108,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			).Execute();
 
 			new BuildTransformations(
-				Path.Combine(dataPath, @"X86-Optimizations-Early.json"),
+				Path.Combine(dataPath, @"X86-Optimizations-Standard.json"),
 				Path.Combine(targetPath, @"Mosa.Platform.x86\Transform\Auto"),
 				"Mosa.Platform.x86",
 				"Mosa.Platform.x86"

@@ -98,6 +98,11 @@ namespace Mosa.Compiler.Framework.Transform
 			return operand.IsCPURegister;
 		}
 
+		protected static bool IsVirtualRegister(Operand operand)
+		{
+			return operand.IsVirtualRegister;
+		}
+
 		protected static bool IsEqual(ulong a, ulong b)
 		{
 			return a == b;
