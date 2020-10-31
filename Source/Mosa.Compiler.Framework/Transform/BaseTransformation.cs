@@ -268,7 +268,7 @@ namespace Mosa.Compiler.Framework.Transform
 
 		protected static long BoolTo64(bool b)
 		{
-			return b ? (long)1 : 0;
+			return b ? 1 : 0;
 		}
 
 		protected static ulong BoolTo64(ulong a)
@@ -579,7 +579,7 @@ namespace Mosa.Compiler.Framework.Transform
 
 		protected static ulong To64(uint low, uint high)
 		{
-			return ((ulong)high << 32) | (ulong)low;
+			return ((ulong)high << 32) | low;
 		}
 
 		protected static ulong To64(Operand operand)
@@ -614,12 +614,12 @@ namespace Mosa.Compiler.Framework.Transform
 
 		protected static float ToR4(int a)
 		{
-			return (float)a;
+			return a;
 		}
 
 		protected static float ToR4(long a)
 		{
-			return (float)a;
+			return a;
 		}
 
 		protected static double ToR8(Operand operand)
@@ -634,12 +634,12 @@ namespace Mosa.Compiler.Framework.Transform
 
 		protected static double ToR8(int a)
 		{
-			return (double)a;
+			return a;
 		}
 
 		protected static double ToR8(long a)
 		{
-			return (double)a;
+			return a;
 		}
 
 		protected static ushort ToShort(ulong value)

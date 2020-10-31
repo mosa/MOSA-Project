@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		// WARNING!!!! This stage is not PHI instruction aware!
 
-		private Counter DeadBlocksRemovedCount = new Counter("DeadBlockStage.DeadBlocksRemoved");
+		private readonly Counter DeadBlocksRemovedCount = new Counter("DeadBlockStage.DeadBlocksRemoved");
 		private Counter EmptyBlocksRemovedCount = new Counter("DeadBlockStage.EmptyBlocksRemoved");
 		private Counter SkipEmptyBlocksCount = new Counter("DeadBlockStage.SkipEmptyBlocks");
 

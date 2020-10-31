@@ -32,7 +32,7 @@ namespace System.Collections
 
 		protected IList List
 		{
-			get { return (IList)this; }
+			get { return this; }
 		}
 
 		public int Capacity

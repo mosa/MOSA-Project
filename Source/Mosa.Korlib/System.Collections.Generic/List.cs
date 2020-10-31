@@ -17,7 +17,7 @@ namespace System.Collections.Generic
 		private T[] _items;
 		private int _size;
 		private int _version;
-		private Object _syncRoot;
+		private readonly Object _syncRoot;
 
 		public List()
 		{
@@ -503,7 +503,7 @@ namespace System.Collections.Generic
 
 		public struct Enumerator : IEnumerator<T>, IEnumerator
 		{
-			private List<T> list;
+			private readonly List<T> list;
 			private int index;
 			private T current;
 

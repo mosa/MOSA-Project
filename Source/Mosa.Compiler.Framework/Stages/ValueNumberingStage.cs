@@ -25,11 +25,11 @@ namespace Mosa.Compiler.Framework.Stages
 		private BitArray ParamReadOnly;
 
 		private Counter InstructionRemovalCount = new Counter("ValueNumberingStage.IRInstructionRemoved");
-		private Counter ConstantFoldingAndStrengthReductionCount = new Counter("ValueNumberingStage.ConstantFoldingAndStrengthReduction");
+		private readonly Counter ConstantFoldingAndStrengthReductionCount = new Counter("ValueNumberingStage.ConstantFoldingAndStrengthReduction");
 		private Counter SubexpressionEliminationCount = new Counter("ValueNumberingStage.SubexpressionElimination");
 		private Counter ParameterLoadEliminationCount = new Counter("ValueNumberingStage.ParameterLoadElimination");
-		private Counter DeadCodeEliminationCount = new Counter("ValueNumberingStage.DeadCodeElimination");
-		private Counter StrengthReductionAndSimplificationCount = new Counter("ValueNumberingStage.StrengthReductionAndSimplification");
+		private readonly Counter DeadCodeEliminationCount = new Counter("ValueNumberingStage.DeadCodeElimination");
+		private readonly Counter StrengthReductionAndSimplificationCount = new Counter("ValueNumberingStage.StrengthReductionAndSimplification");
 
 		private class Expression
 		{

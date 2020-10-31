@@ -13,9 +13,9 @@ namespace System
 	[Serializable]
 	public class Object
 	{
-		private IntPtr typeDefinitionPtr;
+		private readonly IntPtr typeDefinitionPtr;
 
-		private IntPtr syncBlock;
+		private readonly IntPtr syncBlock;
 
 		/// <summary>
 		/// Initializes a new instance of the System.Object class.

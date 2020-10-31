@@ -7,7 +7,7 @@ namespace System
 	/// </summary>
 	public sealed class CLSCompliantAttribute : Attribute
 	{
-		private bool is_compliant;
+		private readonly bool is_compliant;
 
 		public CLSCompliantAttribute(bool isCompliant)
 		{

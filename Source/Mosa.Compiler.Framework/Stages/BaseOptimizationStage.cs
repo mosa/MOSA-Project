@@ -14,11 +14,11 @@ namespace Mosa.Compiler.Framework.Stages
 		private const int MaximumInstructionID = 1000;
 		private const int MaximumPasses = 20;
 
-		private Counter OptimizationsCount;
+		private readonly Counter OptimizationsCount;
 		private Counter SkippedEmptyBlocksCount;
 		private Counter RemovedDeadBlocksCount;
 
-		private List<BaseTransformation>[] transformations = new List<BaseTransformation>[MaximumInstructionID];
+		private readonly List<BaseTransformation>[] transformations = new List<BaseTransformation>[MaximumInstructionID];
 
 		protected TransformContext TransformContext;
 

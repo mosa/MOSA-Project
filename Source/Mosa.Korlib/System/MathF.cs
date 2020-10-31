@@ -25,7 +25,7 @@ namespace System
 		private const int maxRoundingDigits = 6;
 
 		// This table is required for the Round function which can specify the number of digits to round to
-		private static float[] roundPower10Single = new float[] {
+		private static readonly float[] roundPower10Single = new float[] {
 			1e0f, 1e1f, 1e2f, 1e3f, 1e4f, 1e5f, 1e6f
 		};
 
@@ -270,7 +270,7 @@ namespace System
 			// If the number has no fractional part do nothing
 			// This shortcut is necessary to workaround precision loss in borderline cases on some platforms
 
-			if (x == (float)((int)x))
+			if (x == (int)x)
 			{
 				return x;
 			}

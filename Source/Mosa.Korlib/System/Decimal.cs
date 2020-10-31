@@ -246,7 +246,7 @@ namespace System
 			this.lo = lo;
 			this.mid = mid;
 			this.hi = hi;
-			flags = ((int)scale) << 16;
+			flags = scale << 16;
 			if (isNegative)
 				flags |= SignMask;
 		}

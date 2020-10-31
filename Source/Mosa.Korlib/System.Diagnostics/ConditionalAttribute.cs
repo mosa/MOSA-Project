@@ -5,7 +5,7 @@ namespace System.Diagnostics
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Method, AllowMultiple = true)]
 	public sealed class ConditionalAttribute : Attribute
 	{
-		private string conditionString;
+		private readonly string conditionString;
 
 		public string ConditionString
 		{

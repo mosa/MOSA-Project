@@ -11,7 +11,7 @@ namespace System
 	/// </summary>
 	public abstract class Array : ICloneable, IList, ICollection, IEnumerable, IStructuralComparable, IStructuralEquatable
 	{
-		private int length;
+		private readonly int length;
 
 		public int Length
 		{
@@ -195,9 +195,9 @@ namespace System
 		[Serializable]
 		private sealed class SZArrayEnumerator : IEnumerator
 		{
-			private Array array;
+			private readonly Array array;
 			private int currentPosition;
-			private int length;
+			private readonly int length;
 
 			public SZArrayEnumerator(Array array)
 			{
@@ -376,9 +376,9 @@ namespace System
 			[Serializable]
 			private sealed class SZGenericArrayEnumerator<T> : IEnumerator<T>
 			{
-				private T[] array;
+				private readonly T[] array;
 				private int currentPosition;
-				private int length;
+				private readonly int length;
 
 				internal static readonly SZGenericArrayEnumerator<T> Empty = new SZGenericArrayEnumerator<T>(null, -1);
 

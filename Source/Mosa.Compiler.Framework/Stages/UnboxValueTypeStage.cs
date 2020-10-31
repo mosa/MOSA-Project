@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class UnboxValueTypeStage : BaseMethodCompilerStage
 	{
-		private Counter TriggeredCount = new Counter("UnboxValueTypeStage.Triggered");
+		private readonly Counter TriggeredCount = new Counter("UnboxValueTypeStage.Triggered");
 
 		protected override void Run()
 		{

@@ -12,7 +12,7 @@ namespace System.Collections
 		[ContractPublicPropertyName("Count")]
 		private int _size;
 		private int _version;
-		private Object _syncRoot;
+		private readonly Object _syncRoot;
 
 		private const int _defaultCapacity = 4;
 		private static readonly Object[] emptyArray = EmptyArray<Object>.Value;
@@ -772,7 +772,7 @@ namespace System.Collections
 		[Serializable]
 		private class IListWrapper : ArrayList
 		{
-			private IList _list;
+			private readonly IList _list;
 
 			internal IListWrapper(IList list)
 			{
@@ -1229,8 +1229,8 @@ namespace System.Collections
 		[Serializable]
 		private class SyncArrayList : ArrayList
 		{
-			private ArrayList _list;
-			private Object _root;
+			private readonly ArrayList _list;
+			private readonly Object _root;
 
 			internal SyncArrayList(ArrayList list)
 				: base(false)
@@ -1585,8 +1585,8 @@ namespace System.Collections
 		[Serializable]
 		private class SyncIList : IList
 		{
-			private IList _list;
-			private Object _root;
+			private readonly IList _list;
+			private readonly Object _root;
 
 			internal SyncIList(IList list)
 			{
@@ -1715,7 +1715,7 @@ namespace System.Collections
 		[Serializable]
 		private class FixedSizeList : IList
 		{
-			private IList _list;
+			private readonly IList _list;
 
 			internal FixedSizeList(IList l)
 			{
@@ -2029,7 +2029,7 @@ namespace System.Collections
 		[Serializable]
 		private class ReadOnlyList : IList
 		{
-			private IList _list;
+			private readonly IList _list;
 
 			internal ReadOnlyList(IList l)
 			{
@@ -2343,12 +2343,12 @@ namespace System.Collections
 		[Serializable]
 		private sealed class ArrayListEnumerator : IEnumerator, ICloneable
 		{
-			private ArrayList list;
+			private readonly ArrayList list;
 			private int index;
-			private int endIndex;       // Where to stop.
-			private int version;
+			private readonly int endIndex;       // Where to stop.
+			private readonly int version;
 			private Object currentElement;
-			private int startIndex;     // Save this for Reset.
+			private readonly int startIndex;     // Save this for Reset.
 
 			internal ArrayListEnumerator(ArrayList list, int index, int count)
 			{
@@ -2408,7 +2408,7 @@ namespace System.Collections
 		private class Range : ArrayList
 		{
 			private ArrayList _baseList;
-			private int _baseIndex;
+			private readonly int _baseIndex;
 			[ContractPublicPropertyName("Count")]
 			private int _baseSize;
 			private int _baseVersion;
@@ -2833,13 +2833,13 @@ namespace System.Collections
 		[Serializable]
 		private sealed class ArrayListEnumeratorSimple : IEnumerator, ICloneable
 		{
-			private ArrayList list;
+			private readonly ArrayList list;
 			private int index;
-			private int version;
+			private readonly int version;
 			private Object currentElement;
-			private bool isArrayList;
+			private readonly bool isArrayList;
 			// this object is used to indicate enumeration has not started or has terminated
-			static Object dummyObject = new Object();
+			static readonly Object dummyObject = new Object();
 
 			internal ArrayListEnumeratorSimple(ArrayList list)
 			{
@@ -2927,7 +2927,7 @@ namespace System.Collections
 
 		internal class ArrayListDebugView
 		{
-			private ArrayList arrayList;
+			private readonly ArrayList arrayList;
 
 			public ArrayListDebugView(ArrayList arrayList)
 			{

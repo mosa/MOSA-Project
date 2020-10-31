@@ -27,8 +27,8 @@ namespace System
 	//[System.Runtime.InteropServices.ComVisible(true)]
 	public sealed class ObsoleteAttribute : Attribute
 	{
-		private String _message;
-		private bool _error;
+		private readonly String _message;
+		private readonly bool _error;
 
 		public ObsoleteAttribute()
 		{

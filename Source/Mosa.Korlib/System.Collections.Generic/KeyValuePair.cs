@@ -16,8 +16,8 @@
 	[Serializable]
 	public struct KeyValuePair<TKey, TValue>
 	{
-		private TKey key;
-		private TValue value;
+		private readonly TKey key;
+		private readonly TValue value;
 
 		public KeyValuePair(TKey key, TValue value)
 		{
