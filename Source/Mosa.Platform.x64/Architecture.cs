@@ -170,7 +170,6 @@ namespace Mosa.Platform.x64
 			pipeline.InsertAfterLast<PlatformIntrinsicStage>(
 				new BaseMethodCompilerStage[]
 				{
-					new LongOperandStage(),
 					new IRTransformationStage(),
 					compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
 					new TweakStage(),
