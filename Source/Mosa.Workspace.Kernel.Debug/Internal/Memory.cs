@@ -10,7 +10,7 @@ namespace Mosa.Workspace.Kernel.Internal
 	{
 		public uint BlockSize = 4096;
 
-		private Dictionary<ulong, uint[]> MemoryBlocks = new Dictionary<ulong, uint[]>();
+		private readonly Dictionary<ulong, uint[]> MemoryBlocks = new Dictionary<ulong, uint[]>();
 
 		#region Private
 

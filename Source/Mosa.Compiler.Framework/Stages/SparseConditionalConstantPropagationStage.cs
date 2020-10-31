@@ -6,7 +6,6 @@ using Mosa.Compiler.Framework.Trace;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Net;
 
 namespace Mosa.Compiler.Framework.Stages
 {

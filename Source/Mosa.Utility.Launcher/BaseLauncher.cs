@@ -2,7 +2,6 @@
 
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;

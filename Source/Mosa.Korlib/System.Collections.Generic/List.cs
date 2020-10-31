@@ -17,7 +17,7 @@ namespace System.Collections.Generic
 		private T[] _items;
 		private int _size;
 		private int _version;
-		private Object _syncRoot;
+		private readonly Object _syncRoot;
 
 		public List()
 		{
@@ -131,7 +131,7 @@ namespace System.Collections.Generic
 			get { return false; }
 		}
 
-		
+
 
 		bool ICollection.IsSynchronized
 		{
@@ -159,7 +159,7 @@ namespace System.Collections.Generic
 		{
 			get
 			{
-				if ((uint) index >= (uint)_size)
+				if ((uint)index >= (uint)_size)
 				{
 					//  ThrowHelper.ThrowArgumentOutOfRange_IndexException();
 					throw new ArgumentOutOfRangeException();
@@ -167,7 +167,8 @@ namespace System.Collections.Generic
 				Contract.EndContractBlock();
 				return _items[index];
 			}
-			set {
+			set
+			{
 				if ((uint)index >= (uint)_size)
 				{
 					//  ThrowHelper.ThrowArgumentOutOfRange_IndexException();
@@ -184,7 +185,7 @@ namespace System.Collections.Generic
 		{
 			// Non-null values are fine. Only accept nulls if T is a class or Nullable<U>.
 			// Note that default(T) is not equal to null for value types except when T is Nullable<U>.
-			return ( ( value is T ) || ( value == null && default(T) == null ) );
+			return ((value is T) || (value == null && default(T) == null));
 		}
 
 		Object IList.this[int index]
@@ -234,7 +235,7 @@ namespace System.Collections.Generic
 
 		public void Add(T item)
 		{
-			if(_size == _items.Length) EnsureCapacity(_size + 1);
+			if (_size == _items.Length) EnsureCapacity(_size + 1);
 
 			_items[_size++] = item;
 			_version++;
@@ -256,11 +257,11 @@ namespace System.Collections.Generic
 			InsertRange(_size, collection);
 		}
 
-	/*	public IReadOnlyCollection<T> AsReadOnly()
-		{
-			Contract.Ensures(Contract.Result<ReadOnlyCollection<T>>() != null);
-			return new ReadOnlyCollection<T>(this);
-		}*/
+		/*	public IReadOnlyCollection<T> AsReadOnly()
+			{
+				Contract.Ensures(Contract.Result<ReadOnlyCollection<T>>() != null);
+				return new ReadOnlyCollection<T>(this);
+			}*/
 		//TODO FIXXXXXXXXXXXXXXXXXXXXX
 
 		private void EnsureCapacity(int size)
@@ -275,7 +276,7 @@ namespace System.Collections.Generic
 
 
 
-	
+
 
 
 
@@ -405,7 +406,7 @@ namespace System.Collections.Generic
 			_items[_size] = default(T);
 		}
 
-		
+
 
 		public T[] ToArray()
 		{
@@ -478,7 +479,7 @@ namespace System.Collections.Generic
 		private void AddEnumerable(IEnumerable<T> enumerable)
 		{
 			Contract.Assert(enumerable != null);
-			Contract.Assert(!( enumerable is ICollection<T> ), "We should have optimized for this beforehand.");
+			Contract.Assert(!(enumerable is ICollection<T>), "We should have optimized for this beforehand.");
 
 			using (IEnumerator<T> en = enumerable.GetEnumerator())
 			{
@@ -502,7 +503,7 @@ namespace System.Collections.Generic
 
 		public struct Enumerator : IEnumerator<T>, IEnumerator
 		{
-			private List<T> list;
+			private readonly List<T> list;
 			private int index;
 			private T current;
 
@@ -531,7 +532,7 @@ namespace System.Collections.Generic
 			{
 				List<T> localList = list;
 
-				if (( (uint)index < (uint)localList._size ))
+				if (((uint)index < (uint)localList._size))
 				{
 					current = localList._items[index];
 					index++;

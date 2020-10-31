@@ -37,9 +37,9 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 
 		private static readonly string[] SectionNames = { ".text", ".data", ".rodata", ".bss" };
 
-		private MachineType MachineType;
+		private readonly MachineType MachineType;
 
-		private bool EmitShortSymbolName;
+		private readonly bool EmitShortSymbolName;
 
 		#endregion Data Members
 

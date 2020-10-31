@@ -16,12 +16,12 @@ namespace Mosa.FileSystem.VFS
 		/// <summary>
 		/// Holds the file system of the node.
 		/// </summary>
-		private IFileSystem fs;
+		private readonly IFileSystem fs;
 
 		/// <summary>
 		/// Holds the type of the IVfsNode represented by this instance.
 		/// </summary>
-		private VfsNodeType type;
+		private readonly VfsNodeType type;
 
 		#endregion Data Members
 

@@ -160,14 +160,11 @@ namespace Mosa.Platform.x86
 			pipeline.InsertAfterLast<PlatformIntrinsicStage>(
 				new BaseMethodCompilerStage[]
 				{
-					new LongOperandStage(),
 					new IRTransformationStage(),
-					compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
+					compilerSettings.PlatformOptimizations ? new EarlyOptimizationStage() : null,
 					new TweakStage(),
 					new FixedRegisterAssignmentStage(),
-					compilerSettings.PlatformOptimizations ? new SimpleDeadCodeRemovalStage() : null,
 					new AddressModeConversionStage(),
-					new FloatingPointStage(),
 				});
 
 			pipeline.InsertAfterLast<StackLayoutStage>(

@@ -73,7 +73,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 		/// <param name="writer">The writer.</param>
 		protected void Write64(BinaryWriter writer)
 		{
-			writer.Write((ulong)Offset);
+			writer.Write(Offset);
 			writer.Write((ulong)Info64);
 		}
 	}

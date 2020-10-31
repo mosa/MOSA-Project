@@ -11,7 +11,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 	/// </summary>
 	internal class GenericArgumentResolver
 	{
-		private GenericArguments genericArguments;
+		private readonly GenericArguments genericArguments;
 		private RecursionCounter recursionCounter;
 
 		/// <summary>
@@ -162,7 +162,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					{
 						genArgs.Add(ResolveGenericArgs(ga));
 					}
-					result = new GenericInstSig(ResolveGenericArgs((TypeSig)gis.GenericType) as ClassOrValueTypeSig, genArgs);
+					result = new GenericInstSig(ResolveGenericArgs(gis.GenericType) as ClassOrValueTypeSig, genArgs);
 					break;
 
 				default:

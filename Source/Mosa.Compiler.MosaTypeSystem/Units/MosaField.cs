@@ -40,7 +40,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public class Mutator : MosaUnit.MutatorBase
 		{
-			private MosaField field;
+			private readonly MosaField field;
 
 			internal Mutator(MosaField field)
 				: base(field)

@@ -226,9 +226,7 @@ namespace Mosa.Platform.ARMv8A32
 
 			var label = Operand.CreateLabel(v1.Type, symbol.Name);
 
-			var baseRegister = MoveConstantToRegister(context, label);
-
-			context.InsertBefore().SetInstruction(ARMv8A32.Ldf, v1, baseRegister, Constant_0);
+			context.InsertBefore().SetInstruction(ARMv8A32.Ldf, v1, label, Constant_0);
 
 			return v1;
 		}

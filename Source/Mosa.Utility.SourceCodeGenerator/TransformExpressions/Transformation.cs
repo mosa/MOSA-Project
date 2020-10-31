@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using System.Collections.Generic;
 
 namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
@@ -300,7 +299,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 
 			foreach (var node in GetPreorder(InstructionTree))
 			{
-				if (cumulativeInstructions.Contains(node.InstructionName) && node.Operands.Count == 2)
+				if (cumulativeInstructions.Contains(node.InstructionName) && node.Operands.Count == 2 && node.Conditions.Count == 1)
 				{
 					if (!node.Operands[0].IsSame(node.Operands[1]))
 					{
@@ -332,7 +331,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 
 			foreach (var node in instructionNodes)
 			{
-				if (cumulativeInstructions.Contains(node.InstructionName) && node.Operands.Count == 2)
+				if (cumulativeInstructions.Contains(node.InstructionName) && node.Operands.Count == 2 && node.Conditions.Count == 1)
 				{
 					if (!node.Operands[0].IsSame(node.Operands[1]))
 					{

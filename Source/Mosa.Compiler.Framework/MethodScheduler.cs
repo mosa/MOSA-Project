@@ -94,8 +94,8 @@ namespace Mosa.Compiler.Framework
 
 			return true;
 		}
-		
-			public void Schedule(MosaType type)
+
+		public void Schedule(MosaType type)
 		{
 			if (!IsCompilable(type))
 				return;

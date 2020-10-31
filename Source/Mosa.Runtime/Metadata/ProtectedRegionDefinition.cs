@@ -14,7 +14,7 @@ namespace Mosa.Runtime.Metadata
 
 		#endregion layout
 
-		private Pointer Ptr;
+		private readonly Pointer Ptr;
 
 		public ProtectedRegionDefinition(Pointer ptr)
 		{

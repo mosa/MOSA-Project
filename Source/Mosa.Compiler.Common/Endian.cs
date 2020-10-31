@@ -1,8 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-using System.Runtime.InteropServices;
-
 namespace Mosa.Compiler.Common
 {
 	public static class Endian

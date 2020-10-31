@@ -6,13 +6,13 @@ namespace System.IO
 {
 	public class MemoryStream : Stream
 	{
-		private byte[] internalBuffer;
-		private int initialIndex;
-		private int position;
-		private int count;
-		private bool writable;
-		private bool publiclyVisible;
-		private bool streamClosed;
+		private readonly byte[] internalBuffer;
+		private readonly int initialIndex;
+		private readonly int position;
+		private readonly int count;
+		private readonly bool writable;
+		private readonly bool publiclyVisible;
+		private readonly bool streamClosed;
 
 		public MemoryStream(byte[] buffer, int index, int count, bool writable, bool publiclyVisible)
 		{

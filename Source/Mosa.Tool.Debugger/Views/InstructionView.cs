@@ -1,16 +1,16 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Utility.Disassembler;
 using System;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Windows.Forms;
-using Mosa.Utility.Disassembler;
 
 namespace Mosa.Tool.Debugger.Views
 {
 	public partial class InstructionView : DebugDockContent
 	{
-		private BindingList<InstructionEntry> instructions = new BindingList<InstructionEntry>();
+		private readonly BindingList<InstructionEntry> instructions = new BindingList<InstructionEntry>();
 
 		private class InstructionEntry
 		{

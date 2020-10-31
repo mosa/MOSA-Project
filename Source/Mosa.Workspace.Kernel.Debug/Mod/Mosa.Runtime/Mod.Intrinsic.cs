@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Workspace.Kernel.Internal;
-using System;
-using System.Runtime.CompilerServices;
 
 namespace Mosa.Runtime
 {

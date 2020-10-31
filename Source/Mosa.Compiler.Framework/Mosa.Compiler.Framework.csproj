@@ -12,4 +12,7 @@
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Transform\Auto\" />
+  </ItemGroup>
 </Project>

@@ -5,7 +5,7 @@ namespace System.Runtime.InteropServices
 	[AttributeUsage(AttributeTargets.Class | AttributeTargets.Struct, Inherited = false)]
 	public sealed class StructLayoutAttribute : Attribute
 	{
-		private LayoutKind lkind;
+		private readonly LayoutKind lkind;
 		public int Pack = 8;
 		public int Size = 0;
 

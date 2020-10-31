@@ -26,8 +26,8 @@ namespace System.Reflection
 
 		#region Private Data Members
 
-		private object m_value;
-		private Type m_argumentType;
+		private readonly object m_value;
+		private readonly Type m_argumentType;
 
 		#endregion Private Data Members
 

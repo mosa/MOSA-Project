@@ -6,7 +6,7 @@ namespace System.Runtime.CompilerServices
 	[Serializable]
 	public sealed class MethodImplAttribute : Attribute
 	{
-		private MethodImplOptions options;
+		private readonly MethodImplOptions options;
 
 		public MethodImplAttribute()
 		{

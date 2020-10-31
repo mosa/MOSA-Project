@@ -179,6 +179,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transforms", "Transforms", 
 		Data\IR-Optimizations-Simplification.json = Data\IR-Optimizations-Simplification.json
 		Data\IR-Optimizations-StrengthReduction-Complex.json = Data\IR-Optimizations-StrengthReduction-Complex.json
 		Data\IR-Optimizations-StrengthReduction.json = Data\IR-Optimizations-StrengthReduction.json
+		Data\X86-Optimizations-Standard.json = Data\X86-Optimizations-Standard.json
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Compiler.Experimental.TypeSystem", "Mosa.Compiler.Experimental.TypeSystem\Mosa.Compiler.Experimental.TypeSystem.csproj", "{A5FE7166-31EA-44D1-A065-3AA793696F71}"

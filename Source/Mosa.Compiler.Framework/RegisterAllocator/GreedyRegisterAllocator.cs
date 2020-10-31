@@ -406,7 +406,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 			{
 				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty || node.IsBlockEndInstruction)
+					if (node.IsEmpty)
 						continue;
 
 					if (!Architecture.IsInstructionMove(node.Instruction))
@@ -422,7 +422,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					var from = VirtualRegisters[GetIndex(node.Operand1)];
 					var to = VirtualRegisters[GetIndex(node.Result)];
 
-					int factor = (from.IsPhysicalRegister || to.IsPhysicalRegister) ? 10 : 1;
+					int factor = (from.IsPhysicalRegister ? 5 : 1) + (to.IsPhysicalRegister ? 20 : 1);
 
 					int bonus = ExtendedBlocks[block.Sequence].LoopDepth * factor;
 

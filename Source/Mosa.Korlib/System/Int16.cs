@@ -73,7 +73,7 @@ namespace System
 
 			for (int i = z; i < s.Length; i++)
 			{
-				int ind = (int)digits.IndexOf(s[i]);
+				int ind = digits.IndexOf(s[i]);
 				if (ind == -1)
 				{
 					throw new Exception("Format is incorrect");

@@ -16,7 +16,7 @@ namespace Mosa.Demo.AppSystem
 
 		public bool EnableEcho { get; set; } = true;
 
-		private char[] buffer;
+		private readonly char[] buffer;
 		private int bufferlen;
 
 		public AppConsole()

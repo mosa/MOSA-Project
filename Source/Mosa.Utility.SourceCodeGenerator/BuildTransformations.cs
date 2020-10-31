@@ -18,9 +18,14 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected bool First = true;
 
-		public BuildTransformations(string jsonFile, string destinationPath)
+		protected string Namespace;
+		protected string Path;
+
+		public BuildTransformations(string jsonFile, string destinationPath, string path, string name)
 			: base(jsonFile, destinationPath)
 		{
+			this.Namespace = name;
+			this.Path = path;
 		}
 
 		protected override void Iterator()
@@ -97,13 +102,19 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.Clear();
 			First = true;
 
-			DestinationFile = $"{familyName}\\{type}\\{name}{subName}.cs";
+			DestinationFile = $"{type}\\{name}{subName}.cs";
 			AddSourceHeader();
 
-			Lines.AppendLine("using Mosa.Compiler.Framework.IR;");
+			Lines.AppendLine($"using {Namespace};");
+
+			if (!Namespace.Contains("Framework"))
+			{
+				Lines.AppendLine($"using Mosa.Compiler.Framework;");
+				Lines.AppendLine($"using Mosa.Compiler.Framework.Transform;");
+			}
 
 			Lines.AppendLine();
-			Lines.AppendLine($"namespace Mosa.Compiler.Framework.Transform.Auto.{familyName}.{type}");
+			Lines.AppendLine($"namespace {Path}.Transform.Auto.{type}");
 			Lines.AppendLine("{");
 
 			GenerateTransformations(name, familyName, type, subName, transform, Variations, log);
@@ -343,7 +354,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 				var operation = firstInstruction ? "Set" : "Append";
 
-				var condition = GetConditionText(node);
+				var condition = GetConditionText(node.Condition);
 
 				condition = condition != null ? $"ConditionCode.{condition}, " : string.Empty;
 
@@ -562,12 +573,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				EmitCondition($"context.{path}OperandCount != {instructionNode.Operands.Count}");
 			}
 
-			var condition = GetConditionText(instructionNode);
-
-			if (condition != null)
-			{
-				EmitCondition($"context.{path}ConditionCode != ConditionCode.{condition}");
-			}
+			EmitConditions(instructionNode, path);
 
 			foreach (var operand in instructionNode.Operands)
 			{
@@ -580,9 +586,39 @@ namespace Mosa.Utility.SourceCodeGenerator
 			}
 		}
 
-		private static string GetConditionText(InstructionNode instructionNode)
+		private void EmitConditions(InstructionNode node, string path)
 		{
-			switch (instructionNode.Condition)
+			if (node.Condition == ConditionCode.Always)
+				return;
+
+			if (node.Conditions.Count == 1)
+			{
+				EmitCondition($"context.{path}ConditionCode != ConditionCode.{GetConditionText(node.Condition)}");
+			}
+			else
+			{
+				EmitConditionStatement(path);
+
+				var sb = new StringBuilder();
+
+				bool after = false;
+				foreach (var condition in node.Conditions)
+				{
+					if (after)
+						sb.Append(" || ");
+
+					sb.Append($"context.{path}ConditionCode == ConditionCode.{GetConditionText(condition)}");
+
+					after = true;
+				}
+
+				EmitCondition($"!({sb})");
+			}
+		}
+
+		private static string GetConditionText(ConditionCode condition)
+		{
+			switch (condition)
 			{
 				case ConditionCode.Equal: return "Equal";
 				case ConditionCode.NotEqual: return "NotEqual";
@@ -595,8 +631,15 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case ConditionCode.UnsignedLessOrEqual: return "UnsignedLessOrEqual";
 				case ConditionCode.UnsignedGreater: return "UnsignedGreater";
 				case ConditionCode.UnsignedGreaterOrEqual: return "UnsignedGreaterOrEqual";
+
 				default: return null;
 			}
+		}
+
+		private void EmitConditionStatement(string path)
+		{
+			Lines.AppendLine($"\t\t\tvar condition = context.{path}ConditionCode;");
+			Lines.AppendLine("");
 		}
 
 		private void EmitCondition(string condition)

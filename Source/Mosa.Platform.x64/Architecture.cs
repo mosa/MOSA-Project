@@ -163,21 +163,19 @@ namespace Mosa.Platform.x64
 		/// <param name="compilerSettings"></param>
 		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerSettings compilerSettings)
 		{
-			pipeline.InsertBefore<Compiler.Framework.Stages.RuntimeCallStage>(
+			pipeline.InsertBefore<Stages.RuntimeCallStage>(
 				new Stages.RuntimeCallStage()
 			);
 
 			pipeline.InsertAfterLast<PlatformIntrinsicStage>(
 				new BaseMethodCompilerStage[]
 				{
-					new LongOperandStage(),
 					new IRTransformationStage(),
 					compilerSettings.PlatformOptimizations ? new Stages.OptimizationStage() : null,
 					new TweakStage(),
 					new FixedRegisterAssignmentStage(),
 					compilerSettings.PlatformOptimizations ? new SimpleDeadCodeRemovalStage() : null,
 					new AddressModeConversionStage(),
-					new FloatingPointStage(),
 				});
 
 			pipeline.InsertAfterLast<StackLayoutStage>(
@@ -189,11 +187,8 @@ namespace Mosa.Platform.x64
 				{
 					new FinalTweakStage(),
 					compilerSettings.PlatformOptimizations ? new PostOptimizationStage() : null,
+					new JumpOptimizationStage()
 				});
-
-			pipeline.InsertBefore<CodeGenerationStage>(
-				new JumpOptimizationStage()
-			);
 		}
 
 		/// <summary>

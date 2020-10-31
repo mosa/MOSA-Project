@@ -4,7 +4,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 {
 	internal class CLRMetadata : IMetadata
 	{
-		private MosaModuleLoader moduleLoader;
+		private readonly MosaModuleLoader moduleLoader;
 
 		public CLRMetadata(MosaModuleLoader loader)
 		{

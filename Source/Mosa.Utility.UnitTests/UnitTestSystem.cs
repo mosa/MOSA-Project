@@ -236,15 +236,15 @@ namespace Mosa.Utility.UnitTests
 			}
 			else if (parameter is SByte)
 			{
-				cmd.Add((int)(sbyte)parameter);
+				cmd.Add((sbyte)parameter);
 			}
 			else if (parameter is Int16)
 			{
-				cmd.Add((int)(short)parameter);
+				cmd.Add((short)parameter);
 			}
 			else if (parameter is int)
 			{
-				cmd.Add((int)(int)parameter);
+				cmd.Add((int)parameter);
 			}
 			else if (parameter is Byte)
 			{

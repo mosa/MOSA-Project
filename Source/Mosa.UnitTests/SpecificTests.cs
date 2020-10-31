@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Runtime.CompilerServices;
-
 namespace Mosa.UnitTests
 {
 	public static class SpecificTests

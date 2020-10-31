@@ -70,8 +70,8 @@ namespace dnlib.DotNet
 	/// </summary>
 	internal sealed class GenericArguments
 	{
-		private GenericArgumentsStack typeArgsStack = new GenericArgumentsStack(true);
-		private GenericArgumentsStack methodArgsStack = new GenericArgumentsStack(false);
+		private readonly GenericArgumentsStack typeArgsStack = new GenericArgumentsStack(true);
+		private readonly GenericArgumentsStack methodArgsStack = new GenericArgumentsStack(false);
 
 		/// <summary>
 		/// Pushes generic arguments

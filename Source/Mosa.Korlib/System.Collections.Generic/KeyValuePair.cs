@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace System.Collections.Generic
+﻿namespace System.Collections.Generic
 {
 	// Provides the Create factory method for KeyValuePair<TKey, TValue>.
 	public static class KeyValuePair
@@ -20,8 +16,8 @@ namespace System.Collections.Generic
 	[Serializable]
 	public struct KeyValuePair<TKey, TValue>
 	{
-		private TKey key;
-		private TValue value;
+		private readonly TKey key;
+		private readonly TValue value;
 
 		public KeyValuePair(TKey key, TValue value)
 		{

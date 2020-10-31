@@ -10,7 +10,7 @@ namespace Mosa.Demo.AppSystem
 	public class AppInputStream : Stream
 	{
 		// todo: replace with specialized buffer class
-		private byte[] buffer;
+		private readonly byte[] buffer;
 
 		private int position;
 		private int length;

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Runtime;
-using System.Security;
-using System.Security.Permissions;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
+﻿using System.Diagnostics;
 //using System.Runtime.Serialization;
 //using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
@@ -17,7 +12,7 @@ namespace System.Collections
 		[ContractPublicPropertyName("Count")]
 		private int _size;
 		private int _version;
-		private Object _syncRoot;
+		private readonly Object _syncRoot;
 
 		private const int _defaultCapacity = 4;
 		private static readonly Object[] emptyArray = EmptyArray<Object>.Value;
@@ -287,7 +282,7 @@ namespace System.Collections
 			else
 			{
 				for (int i = 0; i < _size; i++)
-					if (( _items[i] != null ) && ( _items[i].Equals(item) ))
+					if ((_items[i] != null) && (_items[i].Equals(item)))
 						return true;
 				return false;
 			}
@@ -306,7 +301,7 @@ namespace System.Collections
 		//
 		public virtual void CopyTo(Array array, int arrayIndex)
 		{
-			if (( array != null ) && ( array.Rank != 1 ))
+			if ((array != null) && (array.Rank != 1))
 				throw new ArgumentException();//(Environment.GetResourceString("Arg_RankMultiDimNotSupported"));
 			Contract.EndContractBlock();
 			// Delegate rest of error checking to Array.Copy.
@@ -321,7 +316,7 @@ namespace System.Collections
 		{
 			if (_size - index < count)
 				throw new ArgumentException();//(Environment.GetResourceString("Argument_InvalidOffLen"));
-			if (( array != null ) && ( array.Rank != 1 ))
+			if ((array != null) && (array.Rank != 1))
 				throw new ArgumentException();//(Environment.GetResourceString("Arg_RankMultiDimNotSupported"));
 			Contract.EndContractBlock();
 			// Delegate rest of error checking to Array.Copy.
@@ -336,7 +331,7 @@ namespace System.Collections
 		{
 			if (_items.Length < min)
 			{
-				int newCapacity = _items.Length == 0? _defaultCapacity: _items.Length * 2;
+				int newCapacity = _items.Length == 0 ? _defaultCapacity : _items.Length * 2;
 				// Allow the list to grow to maximum possible capacity (~2G elements) before encountering overflow.
 				// Note that this check works even when _items.Length overflowed thanks to the (uint) cast
 				if ((uint)newCapacity > Array.MaxArrayLength) newCapacity = Array.MaxArrayLength;
@@ -447,7 +442,7 @@ namespace System.Collections
 		{
 			// Note that insertions at the end are legal.
 			if (index < 0 || index > _size) throw new ArgumentOutOfRangeException();//(nameof(index), Environment.GetResourceString("ArgumentOutOfRange_ArrayListInsert"));
-			//Contract.Ensures(Count == Contract.OldValue(Count) + 1);
+																					//Contract.Ensures(Count == Contract.OldValue(Count) + 1);
 			Contract.EndContractBlock();
 
 			if (_size == _items.Length) EnsureCapacity(_size + 1);
@@ -470,7 +465,7 @@ namespace System.Collections
 			if (c == null)
 				throw new ArgumentNullException();//(nameof(c), Environment.GetResourceString("ArgumentNull_Collection"));
 			if (index < 0 || index > _size) throw new ArgumentOutOfRangeException();//(nameof(index), Environment.GetResourceString("ArgumentOutOfRange_Index"));
-			//Contract.Ensures(Count == Contract.OldValue(Count) + c.Count);
+																					//Contract.Ensures(Count == Contract.OldValue(Count) + c.Count);
 			Contract.EndContractBlock();
 
 			int count = c.Count;
@@ -631,7 +626,7 @@ namespace System.Collections
 			Contract.Ensures(Contract.Result<ArrayList>() != null);
 			Contract.EndContractBlock();
 
-			ArrayList list = new ArrayList((count>_defaultCapacity)?count:_defaultCapacity);
+			ArrayList list = new ArrayList((count > _defaultCapacity) ? count : _defaultCapacity);
 			for (int i = 0; i < count; i++)
 				list.Add(value);
 			return list;
@@ -713,7 +708,7 @@ namespace System.Collections
 
 		// Returns a thread-safe wrapper around an IList.
 		//
-	//	[HostProtection(Synchronization = true)]
+		//	[HostProtection(Synchronization = true)]
 		public static IList Synchronized(IList list)
 		{
 			if (list == null)
@@ -777,7 +772,7 @@ namespace System.Collections
 		[Serializable]
 		private class IListWrapper : ArrayList
 		{
-			private IList _list;
+			private readonly IList _list;
 
 			internal IListWrapper(IList list)
 			{
@@ -862,7 +857,7 @@ namespace System.Collections
 				int mid;
 				while (lo <= hi)
 				{
-					mid = ( lo + hi ) / 2;
+					mid = (lo + hi) / 2;
 					int r = comparer.Compare(value, _list[mid]);
 					if (r == 0)
 						return mid;
@@ -1186,7 +1181,7 @@ namespace System.Collections
 				{
 					// We must clone the underlying enumerator, I think.
 					IListWrapperEnumWrapper clone = new IListWrapperEnumWrapper();
-					clone._en = (IEnumerator)( (ICloneable)_en ).Clone();
+					clone._en = (IEnumerator)((ICloneable)_en).Clone();
 					clone._initialStartIndex = _initialStartIndex;
 					clone._initialCount = _initialCount;
 					clone._remaining = _remaining;
@@ -1234,8 +1229,8 @@ namespace System.Collections
 		[Serializable]
 		private class SyncArrayList : ArrayList
 		{
-			private ArrayList _list;
-			private Object _root;
+			private readonly ArrayList _list;
+			private readonly Object _root;
 
 			internal SyncArrayList(ArrayList list)
 				: base(false)
@@ -1339,7 +1334,7 @@ namespace System.Collections
 				}
 			}
 
-		//	[SuppressMessage("Microsoft.Contracts", "CC1055")]  // Skip extra error checking to avoid *potential* AppCompat problems.
+			//	[SuppressMessage("Microsoft.Contracts", "CC1055")]  // Skip extra error checking to avoid *potential* AppCompat problems.
 			public override int BinarySearch(int index, int count, Object value, IComparer comparer)
 			{
 				lock (_root)
@@ -1465,7 +1460,7 @@ namespace System.Collections
 				}
 			}
 
-		//	[SuppressMessage("Microsoft.Contracts", "CC1055")]  // Skip extra error checking to avoid *potential* AppCompat problems.
+			//	[SuppressMessage("Microsoft.Contracts", "CC1055")]  // Skip extra error checking to avoid *potential* AppCompat problems.
 			public override int LastIndexOf(Object value, int startIndex)
 			{
 				lock (_root)
@@ -1590,8 +1585,8 @@ namespace System.Collections
 		[Serializable]
 		private class SyncIList : IList
 		{
-			private IList _list;
-			private Object _root;
+			private readonly IList _list;
+			private readonly Object _root;
 
 			internal SyncIList(IList list)
 			{
@@ -1720,7 +1715,7 @@ namespace System.Collections
 		[Serializable]
 		private class FixedSizeList : IList
 		{
-			private IList _list;
+			private readonly IList _list;
 
 			internal FixedSizeList(IList l)
 			{
@@ -2000,7 +1995,7 @@ namespace System.Collections
 				return new Range(this, index, count);
 			}
 
-		//	[SuppressMessage("Microsoft.Contracts", "CC1055")]  // Skip extra error checking to avoid *potential* AppCompat problems.
+			//	[SuppressMessage("Microsoft.Contracts", "CC1055")]  // Skip extra error checking to avoid *potential* AppCompat problems.
 			public override void Reverse(int index, int count)
 			{
 				_list.Reverse(index, count);
@@ -2034,7 +2029,7 @@ namespace System.Collections
 		[Serializable]
 		private class ReadOnlyList : IList
 		{
-			private IList _list;
+			private readonly IList _list;
 
 			internal ReadOnlyList(IList l)
 			{
@@ -2304,7 +2299,7 @@ namespace System.Collections
 			public override ArrayList GetRange(int index, int count)
 			{
 				if (index < 0 || count < 0)
-					throw new ArgumentOutOfRangeException(( index < 0 ? nameof(index) : nameof(count) ), "ArgumentOutOfRange_NeedNonNegNum");
+					throw new ArgumentOutOfRangeException((index < 0 ? nameof(index) : nameof(count)), "ArgumentOutOfRange_NeedNonNegNum");
 				if (Count - index < count)
 					throw new ArgumentException("Argument_InvalidOffLen");
 				Contract.EndContractBlock();
@@ -2348,12 +2343,12 @@ namespace System.Collections
 		[Serializable]
 		private sealed class ArrayListEnumerator : IEnumerator, ICloneable
 		{
-			private ArrayList list;
+			private readonly ArrayList list;
 			private int index;
-			private int endIndex;       // Where to stop.
-			private int version;
+			private readonly int endIndex;       // Where to stop.
+			private readonly int version;
 			private Object currentElement;
-			private int startIndex;     // Save this for Reset.
+			private readonly int startIndex;     // Save this for Reset.
 
 			internal ArrayListEnumerator(ArrayList list, int index, int count)
 			{
@@ -2413,7 +2408,7 @@ namespace System.Collections
 		private class Range : ArrayList
 		{
 			private ArrayList _baseList;
-			private int _baseIndex;
+			private readonly int _baseIndex;
 			[ContractPublicPropertyName("Count")]
 			private int _baseSize;
 			private int _baseVersion;
@@ -2470,7 +2465,7 @@ namespace System.Collections
 			public override int BinarySearch(int index, int count, Object value, IComparer comparer)
 			{
 				if (index < 0 || count < 0)
-					throw new ArgumentOutOfRangeException(( index < 0 ? nameof(index) : nameof(count) ), "ArgumentOutOfRange_NeedNonNegNum");
+					throw new ArgumentOutOfRangeException((index < 0 ? nameof(index) : nameof(count)), "ArgumentOutOfRange_NeedNonNegNum");
 				if (_baseSize - index < count)
 					throw new ArgumentException("Argument_InvalidOffLen");
 				Contract.EndContractBlock();
@@ -2510,7 +2505,7 @@ namespace System.Collections
 			public override Object Clone()
 			{
 				InternalUpdateRange();
-				Range arrayList = new Range(_baseList,_baseIndex,_baseSize);
+				Range arrayList = new Range(_baseList, _baseIndex, _baseSize);
 				arrayList._baseList = (ArrayList)_baseList.Clone();
 				return arrayList;
 			}
@@ -2557,7 +2552,7 @@ namespace System.Collections
 				if (array.Rank != 1)
 					throw new ArgumentException("Arg_RankMultiDimNotSupported");
 				if (index < 0 || count < 0)
-					throw new ArgumentOutOfRangeException(( index < 0 ? nameof(index) : nameof(count) ), "ArgumentOutOfRange_NeedNonNegNum");
+					throw new ArgumentOutOfRangeException((index < 0 ? nameof(index) : nameof(count)), "ArgumentOutOfRange_NeedNonNegNum");
 				if (array.Length - arrayIndex < count)
 					throw new ArgumentException("Argument_InvalidOffLen");
 				if (_baseSize - index < count)
@@ -2600,7 +2595,7 @@ namespace System.Collections
 			public override IEnumerator GetEnumerator(int index, int count)
 			{
 				if (index < 0 || count < 0)
-					throw new ArgumentOutOfRangeException(( index < 0 ? nameof(index) : nameof(count) ), "ArgumentOutOfRange_NeedNonNegNum");
+					throw new ArgumentOutOfRangeException((index < 0 ? nameof(index) : nameof(count)), "ArgumentOutOfRange_NeedNonNegNum");
 				if (_baseSize - index < count)
 					throw new ArgumentException("Argument_InvalidOffLen");
 				Contract.EndContractBlock();
@@ -2612,7 +2607,7 @@ namespace System.Collections
 			public override ArrayList GetRange(int index, int count)
 			{
 				if (index < 0 || count < 0)
-					throw new ArgumentOutOfRangeException(( index < 0 ? nameof(index) : nameof(count) ), "ArgumentOutOfRange_NeedNonNegNum");
+					throw new ArgumentOutOfRangeException((index < 0 ? nameof(index) : nameof(count)), "ArgumentOutOfRange_NeedNonNegNum");
 				if (_baseSize - index < count)
 					throw new ArgumentException("Argument_InvalidOffLen");
 				Contract.EndContractBlock();
@@ -2657,7 +2652,7 @@ namespace System.Collections
 				if (startIndex < 0 || startIndex > _baseSize)
 					throw new ArgumentOutOfRangeException(nameof(startIndex), "ArgumentOutOfRange_Index");
 
-				if (count < 0 || ( startIndex > _baseSize - count ))
+				if (count < 0 || (startIndex > _baseSize - count))
 					throw new ArgumentOutOfRangeException(nameof(count), "ArgumentOutOfRange_Count");
 				Contract.EndContractBlock();
 
@@ -2744,7 +2739,7 @@ namespace System.Collections
 			public override void RemoveRange(int index, int count)
 			{
 				if (index < 0 || count < 0)
-					throw new ArgumentOutOfRangeException(( index < 0 ? nameof(index) : nameof(count) ), "ArgumentOutOfRange_NeedNonNegNum");
+					throw new ArgumentOutOfRangeException((index < 0 ? nameof(index) : nameof(count)), "ArgumentOutOfRange_NeedNonNegNum");
 				if (_baseSize - index < count)
 					throw new ArgumentException("Argument_InvalidOffLen");
 				Contract.EndContractBlock();
@@ -2763,7 +2758,7 @@ namespace System.Collections
 			public override void Reverse(int index, int count)
 			{
 				if (index < 0 || count < 0)
-					throw new ArgumentOutOfRangeException(( index < 0 ? nameof(index) : nameof(count) ), "ArgumentOutOfRange_NeedNonNegNum");
+					throw new ArgumentOutOfRangeException((index < 0 ? nameof(index) : nameof(count)), "ArgumentOutOfRange_NeedNonNegNum");
 				if (_baseSize - index < count)
 					throw new ArgumentException("Argument_InvalidOffLen");
 				Contract.EndContractBlock();
@@ -2788,7 +2783,7 @@ namespace System.Collections
 			public override void Sort(int index, int count, IComparer comparer)
 			{
 				if (index < 0 || count < 0)
-					throw new ArgumentOutOfRangeException(( index < 0 ? nameof(index) : nameof(count) ), "ArgumentOutOfRange_NeedNonNegNum");
+					throw new ArgumentOutOfRangeException((index < 0 ? nameof(index) : nameof(count)), "ArgumentOutOfRange_NeedNonNegNum");
 				if (_baseSize - index < count)
 					throw new ArgumentException("Argument_InvalidOffLen");
 				Contract.EndContractBlock();
@@ -2838,20 +2833,20 @@ namespace System.Collections
 		[Serializable]
 		private sealed class ArrayListEnumeratorSimple : IEnumerator, ICloneable
 		{
-			private ArrayList list;
+			private readonly ArrayList list;
 			private int index;
-			private int version;
+			private readonly int version;
 			private Object currentElement;
-			private bool isArrayList;
+			private readonly bool isArrayList;
 			// this object is used to indicate enumeration has not started or has terminated
-			static Object dummyObject = new Object();
+			static readonly Object dummyObject = new Object();
 
 			internal ArrayListEnumeratorSimple(ArrayList list)
 			{
 				this.list = list;
 				this.index = -1;
 				version = list._version;
-				isArrayList = ( list.GetType() == typeof(ArrayList) );
+				isArrayList = (list.GetType() == typeof(ArrayList));
 				currentElement = dummyObject;
 			}
 
@@ -2932,7 +2927,7 @@ namespace System.Collections
 
 		internal class ArrayListDebugView
 		{
-			private ArrayList arrayList;
+			private readonly ArrayList arrayList;
 
 			public ArrayListDebugView(ArrayList arrayList)
 			{

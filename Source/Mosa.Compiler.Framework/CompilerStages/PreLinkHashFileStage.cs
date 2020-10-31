@@ -76,7 +76,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 				}
 			}
 
-			info.Sort((HashInfo x, HashInfo y) => (int)string.Compare(y.Name, x.Name));
+			info.Sort((HashInfo x, HashInfo y) => string.Compare(y.Name, x.Name));
 
 			return info;
 		}

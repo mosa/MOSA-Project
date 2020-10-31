@@ -132,7 +132,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private delegate (Value, Value) NodeVisitationDelegate2(InstructionNode node);
 
-		private HashSet<BaseInstruction> IntegerLoads = new HashSet<BaseInstruction>();
+		private readonly HashSet<BaseInstruction> IntegerLoads = new HashSet<BaseInstruction>();
 
 		protected override void Finish()
 		{
@@ -741,7 +741,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private static bool IsMultiplyOverflow(uint a, uint b)
 		{
-			var r = (ulong)a * (ulong)b;
+			var r = a * (ulong)b;
 
 			return r > uint.MaxValue;
 		}
@@ -1079,7 +1079,7 @@ namespace Mosa.Compiler.Framework.Stages
 				MinValue = 0,
 				AreRangeValuesDeterminate = true,
 				BitsSet = 0,
-				BitsClear = ~(ulong)(uint.MaxValue),
+				BitsClear = ~uint.MaxValue,
 				Is32Bit = false
 			};
 		}
@@ -1144,7 +1144,7 @@ namespace Mosa.Compiler.Framework.Stages
 				MinValue = 0,
 				AreRangeValuesDeterminate = true,
 				BitsSet = 0,
-				BitsClear = ~(ulong)(uint.MaxValue),
+				BitsClear = ~uint.MaxValue,
 				Is32Bit = false
 			};
 		}
@@ -2041,7 +2041,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				return new Value()
 				{
-					MaxValue = (ulong)int.MaxValue,
+					MaxValue = int.MaxValue,
 					MinValue = unchecked((ulong)int.MinValue),
 					AreRangeValuesDeterminate = false, // ??
 					BitsSet = value1.BitsSet32 | (signed ? Upper56BitsSet : 0),
@@ -2053,7 +2053,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				return new Value()
 				{
-					MaxValue = (ulong)int.MaxValue,
+					MaxValue = int.MaxValue,
 					MinValue = unchecked((ulong)int.MinValue),
 					AreRangeValuesDeterminate = false, // ??
 					BitsSet = value1.BitsSet32 | (signed ? Upper56BitsSet : 0),

@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime.x86;
-
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
@@ -9,7 +7,7 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class Logger
 	{
-		private static bool initialized = false;
+		private static readonly bool initialized = false;
 
 		public static void Log(string message)
 		{

@@ -78,7 +78,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (node.IsEmpty)
 							continue;
 
-						if (node.Instruction is BaseIRInstruction)
+						if (node.Instruction.IsIRInstruction)
 						{
 							totalIRCount++;
 						}

@@ -13,7 +13,7 @@ namespace Mosa.Tool.CreateBootImage
 {
 	internal class Options
 	{
-		private BootImageOptions options;
+		private readonly BootImageOptions options;
 
 		[Option('m', "mbr", HelpText = "MBR file")]
 		public string MBRFile

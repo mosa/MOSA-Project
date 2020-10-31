@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Framework.CIL
 			Debug.Assert(field.IsStatic, "Static field access on non-static field.");
 
 			node.MosaField = field;
-			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, field.FieldType);
+			node.Result = decoder.MethodCompiler.AllocateVirtualRegisterOrStackSlot(field.FieldType);
 		}
 
 		#endregion Methods

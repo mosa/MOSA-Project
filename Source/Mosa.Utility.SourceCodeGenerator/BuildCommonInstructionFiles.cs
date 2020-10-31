@@ -12,7 +12,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected string NormalizedPlatform { get { return Platform.Substring(0, 1).ToUpper() + Platform.Substring(1); } }
 
-		private Dictionary<string, string> EncodingTemplates = new Dictionary<string, string>();
+		private readonly Dictionary<string, string> EncodingTemplates = new Dictionary<string, string>();
 
 		public BuildCommonInstructionFiles(string jsonFile, string destinationPath)
 			: base(jsonFile, destinationPath)

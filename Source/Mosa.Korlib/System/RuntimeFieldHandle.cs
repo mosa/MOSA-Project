@@ -12,7 +12,7 @@ namespace System
 			m_ptr = handle;
 		}
 
-		private IntPtr m_ptr;
+		private readonly IntPtr m_ptr;
 
 		/// <summary>
 		/// Gets a handle to the type represented by this instance.

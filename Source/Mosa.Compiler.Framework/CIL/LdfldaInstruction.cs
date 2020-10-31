@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Framework.CIL
 			var field = (MosaField)decoder.Instruction.Operand;
 
 			node.MosaField = field;
-			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, field.FieldType.ToManagedPointer());
+			node.Result = decoder.MethodCompiler.AllocateVirtualRegisterOrStackSlot(field.FieldType.ToManagedPointer());
 		}
 
 		#endregion Methods

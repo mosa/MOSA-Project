@@ -13,14 +13,14 @@ using System.Text;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// Transforms CIL instructions into their appropriate IR.
+	/// Transforms CIL instructions into their appropriate Manual.
 	/// </summary>
 	/// <remarks>
 	/// This transformation stage transforms CIL instructions into their equivalent IR sequences.
 	/// </remarks>
 	public sealed class CILTransformationStage : BaseCodeTransformationStageLegacy
 	{
-		private Dictionary<MosaMethod, IntrinsicMethodDelegate> InstrinsicMap = new Dictionary<MosaMethod, IntrinsicMethodDelegate>();
+		private readonly Dictionary<MosaMethod, IntrinsicMethodDelegate> InstrinsicMap = new Dictionary<MosaMethod, IntrinsicMethodDelegate>();
 
 		protected override void PopulateVisitationDictionary()
 		{

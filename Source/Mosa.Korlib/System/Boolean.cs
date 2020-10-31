@@ -5,7 +5,7 @@ namespace System
 	/// <summary>
 	///
 	/// </summary>
-	public struct Boolean 
+	public struct Boolean
 	{
 		//
 		// Member Variables
@@ -26,7 +26,7 @@ namespace System
 
 		// The internal string representation of true.
 		// 
-		internal const String TrueLiteral  = "True";
+		internal const String TrueLiteral = "True";
 
 		// The internal string representation of false.
 		// 
@@ -38,7 +38,7 @@ namespace System
 
 		// The public string representation of true.
 		// 
-		public static readonly String TrueString  = TrueLiteral;
+		public static readonly String TrueString = TrueLiteral;
 
 		// The public string representation of false.
 		// 
@@ -46,7 +46,7 @@ namespace System
 
 		public override int GetHashCode()
 		{
-			return ( m_value ) ? True : False;
+			return (m_value) ? True : False;
 		}
 
 		public override string ToString()

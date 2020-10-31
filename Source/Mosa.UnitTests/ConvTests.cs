@@ -1,16 +1,14 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
 namespace Mosa.UnitTests
 {
-	public static class ConvTests 
+	public static class ConvTests
 	{
-	
+
 		[MosaUnitTest("U1", "U1")]
 		public static bool ConvU1U1(byte expect, byte a)
 		{
-			return expect == (byte)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("U1", "U2")]
@@ -58,13 +56,13 @@ namespace Mosa.UnitTests
 		[MosaUnitTest("U2", "U1")]
 		public static bool ConvU2U1(ushort expect, byte a)
 		{
-			return expect == (ushort)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("U2", "U2")]
 		public static bool ConvU2U2(ushort expect, ushort a)
 		{
-			return expect == (ushort)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("U2", "U4")]
@@ -106,19 +104,19 @@ namespace Mosa.UnitTests
 		[MosaUnitTest("U4", "U1")]
 		public static bool ConvU4U1(uint expect, byte a)
 		{
-			return expect == (uint)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("U4", "U2")]
 		public static bool ConvU4U2(uint expect, ushort a)
 		{
-			return expect == (uint)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("U4", "U4")]
 		public static bool ConvU4U4(uint expect, uint a)
 		{
-			return expect == (uint)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("U4", "U8")]
@@ -154,25 +152,25 @@ namespace Mosa.UnitTests
 		[MosaUnitTest("U8", "U1")]
 		public static bool ConvU8U1(ulong expect, byte a)
 		{
-			return expect == (ulong)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("U8", "U2")]
 		public static bool ConvU8U2(ulong expect, ushort a)
 		{
-			return expect == (ulong)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("U8", "U4")]
 		public static bool ConvU8U4(ulong expect, uint a)
 		{
-			return expect == (ulong)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("U8", "U8")]
 		public static bool ConvU8U8(ulong expect, ulong a)
 		{
-			return expect == (ulong)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("U8", "I1")]
@@ -226,7 +224,7 @@ namespace Mosa.UnitTests
 		[MosaUnitTest("I1", "I1")]
 		public static bool ConvI1I1(sbyte expect, sbyte a)
 		{
-			return expect == (sbyte)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("I1", "I2")]
@@ -250,7 +248,7 @@ namespace Mosa.UnitTests
 		[MosaUnitTest("I2", "U1")]
 		public static bool ConvI2U1(short expect, byte a)
 		{
-			return expect == (short)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("I2", "U2")]
@@ -274,13 +272,13 @@ namespace Mosa.UnitTests
 		[MosaUnitTest("I2", "I1")]
 		public static bool ConvI2I1(short expect, sbyte a)
 		{
-			return expect == (short)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("I2", "I2")]
 		public static bool ConvI2I2(short expect, short a)
 		{
-			return expect == (short)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("I2", "I4")]
@@ -298,13 +296,13 @@ namespace Mosa.UnitTests
 		[MosaUnitTest("I4", "U1")]
 		public static bool ConvI4U1(int expect, byte a)
 		{
-			return expect == (int)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("I4", "U2")]
 		public static bool ConvI4U2(int expect, ushort a)
 		{
-			return expect == (int)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("I4", "U4")]
@@ -322,19 +320,19 @@ namespace Mosa.UnitTests
 		[MosaUnitTest("I4", "I1")]
 		public static bool ConvI4I1(int expect, sbyte a)
 		{
-			return expect == (int)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("I4", "I2")]
 		public static bool ConvI4I2(int expect, short a)
 		{
-			return expect == (int)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("I4", "I4")]
 		public static bool ConvI4I4(int expect, int a)
 		{
-			return expect == (int)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("I4", "I8")]
@@ -346,19 +344,19 @@ namespace Mosa.UnitTests
 		[MosaUnitTest("I8", "U1")]
 		public static bool ConvI8U1(long expect, byte a)
 		{
-			return expect == (long)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("I8", "U2")]
 		public static bool ConvI8U2(long expect, ushort a)
 		{
-			return expect == (long)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("I8", "U4")]
 		public static bool ConvI8U4(long expect, uint a)
 		{
-			return expect == (long)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("I8", "U8")]
@@ -370,25 +368,25 @@ namespace Mosa.UnitTests
 		[MosaUnitTest("I8", "I1")]
 		public static bool ConvI8I1(long expect, sbyte a)
 		{
-			return expect == (long)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("I8", "I2")]
 		public static bool ConvI8I2(long expect, short a)
 		{
-			return expect == (long)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("I8", "I4")]
 		public static bool ConvI8I4(long expect, int a)
 		{
-			return expect == (long)a;
+			return expect == a;
 		}
 
 		[MosaUnitTest("I8", "I8")]
 		public static bool ConvI8I8(long expect, long a)
 		{
-			return expect == (long)a;
+			return expect == a;
 		}
 	}
 }

@@ -8,9 +8,9 @@ namespace System.Reflection
 	[Serializable]
 	public struct CustomAttributeNamedArgument
 	{
-		private string memberName;
-		private CustomAttributeTypedArgument typedArgument;
-		private bool isField;
+		private readonly string memberName;
+		private readonly CustomAttributeTypedArgument typedArgument;
+		private readonly bool isField;
 
 		public CustomAttributeNamedArgument(string memberName, CustomAttributeTypedArgument typedArgument, bool isField)
 		{

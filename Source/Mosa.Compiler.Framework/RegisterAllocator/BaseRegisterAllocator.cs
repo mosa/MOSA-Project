@@ -992,8 +992,6 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			track.Add(liveInterval);
 
-			//Trace?.Log("    Track: " + track.ToString2());
-
 			return true;
 		}
 

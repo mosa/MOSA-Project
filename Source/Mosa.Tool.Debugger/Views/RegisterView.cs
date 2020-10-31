@@ -8,7 +8,7 @@ namespace Mosa.Tool.Debugger.Views
 {
 	public partial class RegisterView : DebugDockContent
 	{
-		private BindingList<RegisterEntry> registers = new BindingList<RegisterEntry>();
+		private readonly BindingList<RegisterEntry> registers = new BindingList<RegisterEntry>();
 
 		private class RegisterEntry
 		{
