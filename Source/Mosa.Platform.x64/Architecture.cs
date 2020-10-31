@@ -163,7 +163,7 @@ namespace Mosa.Platform.x64
 		/// <param name="compilerSettings"></param>
 		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerSettings compilerSettings)
 		{
-			pipeline.InsertBefore<Compiler.Framework.Stages.RuntimeCallStage>(
+			pipeline.InsertBefore<Stages.RuntimeCallStage>(
 				new Stages.RuntimeCallStage()
 			);
 
@@ -187,7 +187,7 @@ namespace Mosa.Platform.x64
 				{
 					new FinalTweakStage(),
 					compilerSettings.PlatformOptimizations ? new PostOptimizationStage() : null,
-				new JumpOptimizationStage()
+					new JumpOptimizationStage()
 				});
 		}
 
