@@ -119,7 +119,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (ssaOperand == null)
 			{
-				ssaOperand = AllocateVirtualRegister(operand.Type);
+				ssaOperand = AllocateVirtualRegister(operand);
 				ssaArray[version] = ssaOperand;
 
 				parentOperand.Add(ssaOperand, operand);

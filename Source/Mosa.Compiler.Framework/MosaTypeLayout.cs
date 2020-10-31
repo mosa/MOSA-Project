@@ -409,6 +409,11 @@ namespace Mosa.Compiler.Framework
 			return null;
 		}
 
+		public static bool CanFitInRegister(Operand operand)
+		{
+			return CanFitInRegister(operand.Type);
+		}
+
 		public static bool CanFitInRegister(MosaType type)
 		{
 			var basetype = GetTypeForRegister(type);

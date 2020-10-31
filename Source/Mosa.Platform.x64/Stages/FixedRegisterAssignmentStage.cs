@@ -156,7 +156,7 @@ namespace Mosa.Platform.x64.Stages
 			if (!context.Operand2.IsConstant)
 				return;
 
-			var v1 = AllocateVirtualRegister(context.Operand2.Type);
+			var v1 = AllocateVirtualRegister(context.Operand2);
 			var operand2 = context.Operand2;
 
 			context.Operand2 = v1;
@@ -228,7 +228,7 @@ namespace Mosa.Platform.x64.Stages
 			var result = context.Result;
 			var operand1 = context.Operand1;
 
-			var v1 = AllocateVirtualRegister(operand1.Type);
+			var v1 = AllocateVirtualRegister(operand1);
 
 			context.SetInstruction(X64.Mov32, v1, operand1);
 			context.AppendInstruction(X64.MovStoreSeg32, result, v1);
@@ -457,7 +457,7 @@ namespace Mosa.Platform.x64.Stages
 			if (!context.Operand2.IsConstant)
 				return;
 
-			var v1 = AllocateVirtualRegister(context.Operand2.Type);
+			var v1 = AllocateVirtualRegister(context.Operand2);
 			var operand2 = context.Operand2;
 
 			context.Operand2 = v1;
@@ -472,7 +472,7 @@ namespace Mosa.Platform.x64.Stages
 			var result = context.Result;
 			var operand1 = context.Operand1;
 
-			var v1 = AllocateVirtualRegister(operand1.Type);
+			var v1 = AllocateVirtualRegister(operand1);
 
 			context.SetInstruction(X64.Mov64, v1, operand1);
 			context.AppendInstruction(X64.MovStoreSeg64, result, v1);

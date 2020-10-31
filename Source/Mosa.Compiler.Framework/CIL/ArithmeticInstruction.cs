@@ -126,7 +126,7 @@ namespace Mosa.Compiler.Framework.CIL
 				throw new CompilerException($"Invalid operand types passed to {opcode}");
 			}
 
-			MosaType resultType = null;
+			MosaType resultType;
 
 			if (StackTypeCode.UnmanagedPointer != result)
 			{

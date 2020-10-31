@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return false;
 			}
 
-			if (!MosaTypeLayout.CanFitInRegister(operand.Type))
+			if (!MosaTypeLayout.CanFitInRegister(operand))
 			{
 				trace?.Log($"incompatible type: {operand}");
 				return false;
@@ -133,7 +133,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected void Promote(Operand operand)
 		{
-			var virtualRegister = AllocateVirtualRegister(operand.Type);
+			var virtualRegister = AllocateVirtualRegister(operand);
 			TemporariesPromoted++;
 
 			trace?.Log($"VR: {virtualRegister}");

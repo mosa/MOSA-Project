@@ -318,14 +318,14 @@ namespace Mosa.Compiler.Framework
 			traceLogs = null;
 		}
 
-		/// <summary>
-		/// Allocates the virtual register.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
 		protected Operand AllocateVirtualRegister(MosaType type)
 		{
 			return MethodCompiler.VirtualRegisters.Allocate(type);
+		}
+
+		protected Operand AllocateVirtualRegister(Operand operand)
+		{
+			return MethodCompiler.VirtualRegisters.Allocate(operand.Type);
 		}
 
 		protected Operand AllocateVirtualRegister32()

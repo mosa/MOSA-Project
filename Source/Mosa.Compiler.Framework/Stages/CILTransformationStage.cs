@@ -606,7 +606,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (mask == 0 && conversion.PostInstruction != null)
 			{
-				var temp = AllocateVirtualRegister(result.Type);
+				var temp = AllocateVirtualRegister(result);
 
 				context.SetInstruction(conversion.Instruction, temp, source);
 				context.AppendInstruction(conversion.PostInstruction, result, temp);
@@ -621,7 +621,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				var temp = AllocateVirtualRegister(result.Type);
+				var temp = AllocateVirtualRegister(result);
 
 				context.SetInstruction(conversion.Instruction, temp, source);
 				context.AppendInstruction(conversion.PostInstruction, result, temp, CreateConstant64(mask));
