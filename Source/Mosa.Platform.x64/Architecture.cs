@@ -187,11 +187,8 @@ namespace Mosa.Platform.x64
 				{
 					new FinalTweakStage(),
 					compilerSettings.PlatformOptimizations ? new PostOptimizationStage() : null,
-				});
-
-			pipeline.InsertBefore<CodeGenerationStage>(
 				new JumpOptimizationStage()
-			);
+				});
 		}
 
 		/// <summary>
