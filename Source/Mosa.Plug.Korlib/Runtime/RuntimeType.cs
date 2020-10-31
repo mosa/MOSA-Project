@@ -14,11 +14,11 @@ namespace Mosa.Plug.Korlib.Runtime
 		private readonly string name;
 		private readonly string @namespace;
 		private readonly string fullname;
-		private RuntimeTypeHandle handle;
+		private readonly RuntimeTypeHandle handle;
 		private readonly TypeCode typeCode;
 		internal TypeAttributes attributes; // FIXME: this should be private, only temporarily internal
-		private RuntimeTypeHandle declaringTypeHandle;
-		private RuntimeTypeHandle elementTypeHandle;
+		private readonly RuntimeTypeHandle declaringTypeHandle;
+		private readonly RuntimeTypeHandle elementTypeHandle;
 		private Type declaringType = null;
 		private Type elementType = null;
 
