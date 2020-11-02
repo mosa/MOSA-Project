@@ -1178,6 +1178,11 @@ namespace Mosa.Compiler.Framework
 			return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
 		}
 
+		protected Operand CreateConstant64(long value)
+		{
+			return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
+		}
+
 		protected Operand CreateConstant64(ulong value)
 		{
 			return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);

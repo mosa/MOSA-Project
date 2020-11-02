@@ -277,7 +277,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var instruction = (first.IsR4) ? (BaseInstruction)IRInstruction.CompareR4 : IRInstruction.CompareR8;
 
 				context.SetInstruction(instruction, cc, result, first, second);
-				context.AppendInstruction(Select(result, IRInstruction.Branch32, IRInstruction.Branch64), ConditionCode.Equal, null, result, CreateConstant32(1), target); // TODO: Constant should be 64bit
+				context.AppendInstruction(Select(result, IRInstruction.Branch32, IRInstruction.Branch64), ConditionCode.NotEqual, null, result, ConstantZero32, target); // TODO: Constant should be 64bit
 			}
 			else
 			{
@@ -1671,7 +1671,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			if (!MethodCompiler.IsCILDecodeRequired)
+			if (!MethodCompiler.IsCILStream)
 				return;
 
 			base.Run();

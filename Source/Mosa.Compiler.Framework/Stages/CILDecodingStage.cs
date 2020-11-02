@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
-			if (!MethodCompiler.IsCILDecodeRequired)
+			if (!MethodCompiler.IsCILStream)
 				return;
 
 			// No CIL decoding if this is a linker generated method
