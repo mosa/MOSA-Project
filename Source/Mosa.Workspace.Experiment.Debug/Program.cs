@@ -89,7 +89,7 @@ namespace Mosa.Workspace.Experiment.Debug
 
 			//compiler.Execute();
 
-			Console.WriteLine($"Elapsed: {(stopwatch.Elapsed.TotalSeconds - start).ToString("F2")} secs");
+			Console.WriteLine($"Elapsed: {stopwatch.Elapsed.TotalSeconds - start:F2} secs");
 
 			Console.ReadKey();
 		}
@@ -133,9 +133,9 @@ namespace Mosa.Workspace.Experiment.Debug
 
 			double avg = total / iterations;
 
-			Console.WriteLine($"Elapsed: {max.ToString("F2")} ms (worst)");
-			Console.WriteLine($"Elapsed: {avg.ToString("F2")} ms (average)");
-			Console.WriteLine($"Elapsed: {min.ToString("F2")} ms (best)");
+			Console.WriteLine($"Elapsed: {max:F2} ms (worst)");
+			Console.WriteLine($"Elapsed: {avg:F2} ms (average)");
+			Console.WriteLine($"Elapsed: {min:F2} ms (best)");
 		}
 
 		private static MosaMethod GetMethod(string partial, TypeSystem typeSystem)

@@ -35,10 +35,16 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(IRInstruction.IfThenElse32, IfThenElse32);
 			AddVisitation(IRInstruction.ConvertR4ToR8, ConvertR4ToR8);
 			AddVisitation(IRInstruction.ConvertR8ToR4, ConvertR8ToR4);
-			AddVisitation(IRInstruction.ConvertR4To32, ConvertR4To32);
-			AddVisitation(IRInstruction.ConvertR8To32, ConvertR8To32);
-			AddVisitation(IRInstruction.Convert32ToR4, Convert32ToR4);
-			AddVisitation(IRInstruction.Convert32ToR8, Convert32ToR8);
+			AddVisitation(IRInstruction.ConvertR4ToI32, ConvertR4ToI32);
+			AddVisitation(IRInstruction.ConvertR8ToI32, ConvertR8ToI32);
+			AddVisitation(IRInstruction.ConvertI32ToR4, ConvertI32ToR4);
+			AddVisitation(IRInstruction.ConvertI32ToR8, ConvertI32ToR8);
+
+			//AddVisitation(IRInstruction.ConvertR4ToU32, ConvertR4ToU32);
+			//AddVisitation(IRInstruction.ConvertR8ToU32, ConvertR8ToU32);
+			//AddVisitation(IRInstruction.ConvertU32ToR4, ConvertU32ToR4);
+			//AddVisitation(IRInstruction.ConvertU32ToR8, ConvertU32ToR8);
+
 			AddVisitation(IRInstruction.DivR4, DivR4);
 			AddVisitation(IRInstruction.DivR8, DivR8);
 			AddVisitation(IRInstruction.DivSigned32, DivSigned32);
@@ -103,10 +109,16 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(IRInstruction.Compare64x32, Compare64x32);
 			AddVisitation(IRInstruction.Compare64x64, Compare64x64);
 			AddVisitation(IRInstruction.Branch64, Branch64);
-			AddVisitation(IRInstruction.ConvertR4To64, ConvertFloatR4To64);
-			AddVisitation(IRInstruction.ConvertR8To64, ConvertFloatR8ToInteger64);
-			AddVisitation(IRInstruction.Convert64ToR4, Convert64ToFloatR4);
-			AddVisitation(IRInstruction.Convert64ToR8, Convert64ToFloatR8);
+			AddVisitation(IRInstruction.ConvertR4ToI64, ConvertR4ToI64);
+			AddVisitation(IRInstruction.ConvertR8ToI64, ConvertR8ToI64);
+			AddVisitation(IRInstruction.ConvertI64ToR4, ConvertI64ToR4);
+			AddVisitation(IRInstruction.ConvertI64ToR8, ConvertI64ToR8);
+
+			//AddVisitation(IRInstruction.ConvertR4ToI64, ConvertR4ToI64);
+			//AddVisitation(IRInstruction.ConvertR8ToI64, ConvertR8ToI64);
+			//AddVisitation(IRInstruction.ConvertU64ToR4, ConvertU64ToR4);
+			//AddVisitation(IRInstruction.ConvertU64ToR8, ConvertU64ToR8);
+
 			AddVisitation(IRInstruction.IfThenElse64, IfThenElse64);
 			AddVisitation(IRInstruction.Load64, Load64);
 			AddVisitation(IRInstruction.LoadSignExtend32x64, LoadSignExtend32x64);
@@ -297,7 +309,7 @@ namespace Mosa.Platform.x64.Stages
 			context.SetInstruction(X64.Cvtss2sd, result, operand1);
 		}
 
-		private void ConvertR4To32(Context context)
+		private void ConvertR4ToI32(Context context)
 		{
 			var result = context.Result;
 			var operand1 = context.Operand1;
@@ -316,10 +328,10 @@ namespace Mosa.Platform.x64.Stages
 
 			operand1 = MoveConstantToFloatRegister(context, operand1);
 
-			context.SetInstruction(X64.Cvttsd2si32, result, operand1);
+			context.SetInstruction(X64.Cvtsd2ss, result, operand1); // FIXME!
 		}
 
-		private void ConvertR8To32(Context context)
+		private void ConvertR8ToI32(Context context)
 		{
 			var result = context.Result;
 			var operand1 = context.Operand1;
@@ -329,7 +341,7 @@ namespace Mosa.Platform.x64.Stages
 			context.SetInstruction(X64.Cvttsd2si32, result, operand1);
 		}
 
-		private void Convert32ToR4(Context context)
+		private void ConvertI32ToR4(Context context)
 		{
 			var result = context.Result;
 			var operand1 = context.Operand1;
@@ -339,7 +351,7 @@ namespace Mosa.Platform.x64.Stages
 			context.SetInstruction(X64.Cvtsd2ss, result, operand1);
 		}
 
-		private void Convert32ToR8(Context context)
+		private void ConvertI32ToR8(Context context)
 		{
 			Debug.Assert(context.Result.IsR8);
 			context.ReplaceInstruction(X64.Cvtsi2sd32);
@@ -798,6 +810,8 @@ namespace Mosa.Platform.x64.Stages
 
 		#endregion 32-bit Transformations
 
+		#region 64-bit Transformations
+
 		private void Add64(Context context)
 		{
 			context.ReplaceInstruction(X64.Add64);
@@ -844,23 +858,23 @@ namespace Mosa.Platform.x64.Stages
 			context.AppendInstruction(X64.Branch, condition, target);
 		}
 
-		private void ConvertFloatR4To64(Context context)
+		private void ConvertR4ToI64(Context context)
 		{
 			context.ReplaceInstruction(X64.Cvtss2sd);
 		}
 
-		private void ConvertFloatR8ToInteger64(Context context)
+		private void ConvertR8ToI64(Context context)
 		{
 			Debug.Assert(context.Result.IsInteger && !context.Result.IsFloatingPoint);
 			context.ReplaceInstruction(X64.Cvttss2si64);
 		}
 
-		private void Convert64ToFloatR4(Context context)
+		private void ConvertI64ToR4(Context context)
 		{
 			context.SetInstruction(X64.Cvtsi2ss64, context.Result, context.Operand1);
 		}
 
-		private void Convert64ToFloatR8(Context context)
+		private void ConvertI64ToR8(Context context)
 		{
 			context.SetInstruction(X64.Cvtsi2sd64, context.Result, context.Operand1);
 		}
@@ -1105,6 +1119,8 @@ namespace Mosa.Platform.x64.Stages
 		{
 			context.ReplaceInstruction(X64.Movzx8To64);
 		}
+
+		#endregion 64-bit Transformations
 
 		#region Helper Methods
 

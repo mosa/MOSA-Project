@@ -277,7 +277,7 @@ namespace Mosa.Compiler.Framework
 
 			traceLogs = new List<TraceLog>();
 
-			FormattedStageName = $"[{position.ToString("00")}] {Name}";
+			FormattedStageName = $"[{position:00}] {Name}";
 
 			Setup();
 		}

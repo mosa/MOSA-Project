@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 {
 	/// <summary>
-	/// Convert32ToR4
+	/// ConvertI64ToR4
 	/// </summary>
-	public sealed class Convert32ToR4 : BaseTransformation
+	public sealed class ConvertI64ToR4 : BaseTransformation
 	{
-		public Convert32ToR4() : base(IRInstruction.Convert32ToR4)
+		public ConvertI64ToR4() : base(IRInstruction.ConvertI64ToR4)
 		{
 		}
 
@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 
 			var t1 = context.Operand1;
 
-			var e1 = transformContext.CreateConstant(ToR4(ToSigned32(t1)));
+			var e1 = transformContext.CreateConstant(ToR4(ToSigned64(t1)));
 
 			context.SetInstruction(IRInstruction.MoveR4, result, e1);
 		}
