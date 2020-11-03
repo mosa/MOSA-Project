@@ -258,12 +258,12 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Ckfinite: return false;
 				case OpCode.Clt: return Compare(context, stack, ConditionCode.Less);
 				case OpCode.Clt_un: return Compare(context, stack, ConditionCode.Less);
-				case OpCode.Conv_i: return false;
+				case OpCode.Conv_i: return ConvertI(context, stack);
 				case OpCode.Conv_i1: return ConvertI1(context, stack);
 				case OpCode.Conv_i2: return ConvertI2(context, stack);
 				case OpCode.Conv_i4: return ConvertI4(context, stack);
 				case OpCode.Conv_i8: return ConvertI8(context, stack);
-				case OpCode.Conv_ovf_i: return false;
+				case OpCode.Conv_ovf_i: return ConvertI(context, stack);    // TODO: implement overflow check
 				case OpCode.Conv_ovf_i_un: return false;
 				case OpCode.Conv_ovf_i1: return ConvertI1(context, stack);  // TODO: implement overflow check
 				case OpCode.Conv_ovf_i1_un: return false;
@@ -273,7 +273,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Conv_ovf_i4_un: return false;
 				case OpCode.Conv_ovf_i8: return ConvertI8(context, stack);  // TODO: implement overflow check
 				case OpCode.Conv_ovf_i8_un: return false;
-				case OpCode.Conv_ovf_u: return false;
+				case OpCode.Conv_ovf_u: return ConvertU(context, stack);    // TODO: implement overflow check
 				case OpCode.Conv_ovf_u_un: return false;
 				case OpCode.Conv_ovf_u1: return ConvertU1(context, stack);  // TODO: implement overflow check
 				case OpCode.Conv_ovf_u1_un: return false;
@@ -286,7 +286,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Conv_r_un: return false;
 				case OpCode.Conv_r4: return false;
 				case OpCode.Conv_r8: return false;
-				case OpCode.Conv_u: return false;
+				case OpCode.Conv_u: return ConvertU(context, stack);
 				case OpCode.Conv_u1: return ConvertU1(context, stack);
 				case OpCode.Conv_u2: return ConvertU2(context, stack);
 				case OpCode.Conv_u4: return ConvertU4(context, stack);
@@ -1162,13 +1162,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (entry1.StackType == StackType.R4)
 				{
-					context.AppendInstruction(IRInstruction.ConvertR4ToI32, result, entry1.Operand);
+					context.AppendInstruction(IRInstruction.ConvertR4ToU32, result, entry1.Operand);
 					return true;
 				}
 
 				if (entry1.StackType == StackType.R8)
 				{
-					context.AppendInstruction(IRInstruction.ConvertR8ToI32, result, entry1.Operand);
+					context.AppendInstruction(IRInstruction.ConvertR8ToU32, result, entry1.Operand);
 					return true;
 				}
 
@@ -1192,13 +1192,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (entry1.StackType == StackType.R4)
 				{
-					context.AppendInstruction(IRInstruction.ConvertR4ToI64, result, entry1.Operand);
+					context.AppendInstruction(IRInstruction.ConvertR4ToU64, result, entry1.Operand);
 					return true;
 				}
 
 				if (entry1.StackType == StackType.R8)
 				{
-					context.AppendInstruction(IRInstruction.ConvertR8ToI64, result, entry1.Operand);
+					context.AppendInstruction(IRInstruction.ConvertR8ToU64, result, entry1.Operand);
 					return true;
 				}
 
@@ -1232,7 +1232,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (entry1.StackType == StackType.R4)
 			{
 				var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-				context.AppendInstruction(IRInstruction.ConvertR4ToI32, v1, entry1.Operand);
+				context.AppendInstruction(IRInstruction.ConvertR4ToU32, v1, entry1.Operand);
 				context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFF));
 				return true;
 			}
@@ -1240,7 +1240,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (entry1.StackType == StackType.R8)
 			{
 				var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-				context.AppendInstruction(IRInstruction.ConvertR8ToI32, v1, entry1.Operand);
+				context.AppendInstruction(IRInstruction.ConvertR8ToU32, v1, entry1.Operand);
 				context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFF));
 				return true;
 			}
@@ -1272,7 +1272,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (entry1.StackType == StackType.R4)
 			{
 				var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
-				context.AppendInstruction(IRInstruction.ConvertR4ToI32, v1, entry1.Operand);
+				context.AppendInstruction(IRInstruction.ConvertR4ToU32, v1, entry1.Operand);
 				context.AppendInstruction(IRInstruction.And32, result, v1, CreateConstant32(0xFFFF));
 
 				return true;
@@ -1311,13 +1311,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (entry1.StackType == StackType.R4)
 			{
-				context.AppendInstruction(IRInstruction.ConvertR4ToI32, result, entry1.Operand);
+				context.AppendInstruction(IRInstruction.ConvertR4ToU32, result, entry1.Operand);
 				return true;
 			}
 
 			if (entry1.StackType == StackType.R8)
 			{
-				context.AppendInstruction(IRInstruction.ConvertR8ToI32, result, entry1.Operand);
+				context.AppendInstruction(IRInstruction.ConvertR8ToU32, result, entry1.Operand);
 				return true;
 			}
 
@@ -1346,13 +1346,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (entry1.StackType == StackType.R4)
 			{
-				context.AppendInstruction(IRInstruction.ConvertR4ToI64, result, entry1.Operand);
+				context.AppendInstruction(IRInstruction.ConvertR4ToU64, result, entry1.Operand);
 				return true;
 			}
 
 			if (entry1.StackType == StackType.R8)
 			{
-				context.AppendInstruction(IRInstruction.ConvertR8ToI64, result, entry1.Operand);
+				context.AppendInstruction(IRInstruction.ConvertR8ToU64, result, entry1.Operand);
 				return true;
 			}
 
