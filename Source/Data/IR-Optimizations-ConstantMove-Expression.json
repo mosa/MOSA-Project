@@ -30,7 +30,7 @@
 			"Expression": "IR.Add## x (IR.Add## y c)",
 			"Filter": "!IsResolvedConstant(x) & IsResolvedConstant(c) & !IsResolvedConstant(y)",
 			"Result": "(IR.Add## (IR.Add## x y) c)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -40,7 +40,7 @@
 			"Expression": "IR.AddR# x (IR.AddR# y c)",
 			"Filter": "!IsResolvedConstant(x) & IsResolvedConstant(c) & !IsResolvedConstant(y)",
 			"Result": "(IR.AddR# (IR.AddR# x y) c)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -50,7 +50,7 @@
 			"Expression": "IR.And## x (IR.And## y c)",
 			"Filter": "!IsResolvedConstant(x) & IsResolvedConstant(c) & !IsResolvedConstant(y)",
 			"Result": "(IR.And## (IR.And## x y) c)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -60,7 +60,7 @@
 			"Expression": "IR.Or## x (IR.Or## y c)",
 			"Filter": "!IsResolvedConstant(x) & IsResolvedConstant(c) & !IsResolvedConstant(y)",
 			"Result": "(IR.Or## (IR.Or## x y) c)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -70,7 +70,7 @@
 			"Expression": "IR.Xor## x (IR.Xor## y c)",
 			"Filter": "!IsResolvedConstant(x) & IsResolvedConstant(c) & !IsResolvedConstant(y)",
 			"Result": "(IR.Xor## (IR.Xor## x y) c)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -80,7 +80,7 @@
 			"Expression": "IR.MulUnsigned## x (IR.MulUnsigned## y c)",
 			"Filter": "!IsResolvedConstant(x) & IsResolvedConstant(c) & !IsResolvedConstant(y)",
 			"Result": "(IR.MulUnsigned## (IR.MulUnsigned## x y) c)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -90,7 +90,7 @@
 			"Expression": "IR.MulSigned## x (IR.MulSigned## y c)",
 			"Filter": "!IsResolvedConstant(x) & IsResolvedConstant(c) & !IsResolvedConstant(y)",
 			"Result": "(IR.MulSigned## (IR.MulSigned## x y) c)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -100,7 +100,7 @@
 			"Expression": "IR.MulR# x (IR.MulR# y c)",
 			"Filter": "!IsResolvedConstant(x) & IsResolvedConstant(c) & !IsResolvedConstant(y)",
 			"Result": "(IR.MulR# (IR.MulR# x y) c)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -110,7 +110,7 @@
 			"Expression": "IR.MulSigned## (IR.ShiftLeft## x c) y",
 			"Filter": "!IsResolvedConstant(x) & !IsResolvedConstant(y) & IsResolvedConstant(c)",
 			"Result": "(IR.ShiftLeft## (IR.MulSigned## x y) c)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -120,7 +120,79 @@
 			"Expression": "IR.MulUnsigned## (IR.ShiftLeft## x c) y",
 			"Filter": "!IsResolvedConstant(x) & !IsResolvedConstant(y) & IsResolvedConstant(c)",
 			"Result": "(IR.ShiftLeft## (IR.MulUnsigned## x y) c)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "AddCarryIn##",
+			"SubName": "Inside",
+			"Expression": "IR.AddCarryIn## a b c",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.Add## [Add##(To##(a),To##(b))] c)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "AddCarryIn##",
+			"SubName": "Outside1",
+			"Expression": "IR.AddCarryIn## a b c",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(c)",
+			"Result": "(IR.Add## b [Add##(To##(a),BoolTo##(To##(c)))])])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "AddCarryIn##",
+			"SubName": "Outside2",
+			"Expression": "IR.AddCarryIn## a b c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Add## a [Add##(To##(b),BoolTo##(To##(c)))])])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "AddCarryIn##",
+			"SubName": "NoCarry",
+			"Expression": "IR.AddCarryIn## a b 0",
+			"Filter": "",
+			"Result": "(IR.Add## a b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SubCarryIn##",
+			"SubName": "Inside",
+			"Expression": "IR.SubCarryIn## a b c",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(b)",
+			"Result": "(IR.Sub## [Sub##(To##(a),To##(b))] c)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SubCarryIn##",
+			"SubName": "Outside1",
+			"Expression": "IR.SubCarryIn## a b c",
+			"Filter": "IsResolvedConstant(a) & IsResolvedConstant(c)",
+			"Result": "(IR.Sub## [Sub##(To##(a),BoolTo##(To##(c)))])] b)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SubCarryIn##",
+			"SubName": "Outside2",
+			"Expression": "IR.SubCarryIn## a b c",
+			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
+			"Result": "(IR.Sub## a [Sub##(To##(b),BoolTo##(To##(c)))])])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "SubCarryIn##",
+			"SubName": "NoCarry",
+			"Expression": "IR.SubCarryIn## a b 0",
+			"Filter": "",
+			"Result": "(IR.Sub## a b)"
 		}
 	]
 }

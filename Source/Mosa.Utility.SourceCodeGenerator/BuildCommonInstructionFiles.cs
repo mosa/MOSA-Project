@@ -12,7 +12,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected string NormalizedPlatform { get { return Platform.Substring(0, 1).ToUpper() + Platform.Substring(1); } }
 
-		private Dictionary<string, string> EncodingTemplates = new Dictionary<string, string>();
+		private readonly Dictionary<string, string> EncodingTemplates = new Dictionary<string, string>();
 
 		public BuildCommonInstructionFiles(string jsonFile, string destinationPath)
 			: base(jsonFile, destinationPath)
@@ -830,6 +830,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "rel24": code = "EmitRelative24"; return;
 				case "rel32": code = "EmitRelative32"; return;
 				case "rel64": code = "EmitRelative64"; return;
+
 				case "forward32": code = "EmitForward32"; return;
 				case "supress8": code = "SuppressByte"; return;
 				case "conditional": code = "Append4Bits"; postcode = "GetConditionCode(node.ConditionCode)"; return;
@@ -837,6 +838,8 @@ namespace Mosa.Utility.SourceCodeGenerator
 				case "updir": code = "Append1Bit"; postcode = " == StatusRegister.UpDirection ? 1 : 0"; return;
 				case "downdir": code = "Append1Bit"; postcode = " == StatusRegister.DownDirection ? 1 : 0"; return;
 				case "fp": code = "Append1Bit"; postcode = ".IsR4 ? 0 : 1"; return;
+				case "int": code = "Append1Bit"; postcode = ".IsInteger ? 1 : 0"; return;
+				case "float": code = "Append1Bit"; postcode = ".IsFloatingPoint ? 1 : 0"; return;
 
 				//case "signed": code = "Append1Bit"; postcode = ".ConstantSigned64 < 0 ? 1 : 0"; return;
 				//case "imm12unsigned": code = "Append12BitImmediate"; postcode = ""; return;

@@ -115,7 +115,7 @@ namespace Mosa.UnitTests
 		{
 			InterfaceTestClassY y = new InterfaceTestClassY();
 
-			return (y as IInterfaceA) == null;
+			return y == null;
 		}
 
 		[MosaUnitTest]
@@ -123,7 +123,7 @@ namespace Mosa.UnitTests
 		{
 			InterfaceTestClassZ z = new InterfaceTestClassZ();
 
-			return (z as IInterfaceA) == null;
+			return z == null;
 		}
 
 		[MosaUnitTest]
@@ -131,7 +131,7 @@ namespace Mosa.UnitTests
 		{
 			InterfaceTestClassZ2 z = new InterfaceTestClassZ2();
 
-			return (z as IInterfaceA) == null;
+			return z == null;
 		}
 	}
 }

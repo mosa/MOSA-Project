@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			var field = (MosaField)decoder.Instruction.Operand;
 
-			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, field.FieldType);
+			node.Result = decoder.MethodCompiler.AllocateVirtualRegisterOrStackSlot(field.FieldType);
 			node.MosaField = field;
 		}
 

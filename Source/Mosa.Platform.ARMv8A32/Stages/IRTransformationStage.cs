@@ -26,7 +26,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			AddVisitation(IRInstruction.CompareR4, CompareR4);
 			AddVisitation(IRInstruction.CompareR8, CompareR8);
 			AddVisitation(IRInstruction.Compare32x32, Compare32x32);
-			AddVisitation(IRInstruction.BranchCompare32, BranchCompare32);
+			AddVisitation(IRInstruction.Branch32, Branch32);
 			AddVisitation(IRInstruction.IfThenElse32, IfThenElse32);
 			AddVisitation(IRInstruction.ConvertR4To32, ConvertR4ToInt32);
 			AddVisitation(IRInstruction.ConvertR8To32, ConvertR8ToInt32);
@@ -108,7 +108,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			operand2 = MoveConstantToRegisterOrImmediate(context, operand2);
 			operand3 = MoveConstantToRegisterOrImmediate(context, operand3);
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister32();
 
 			context.SetInstruction(ARMv8A32.Add, v1, operand1, operand2);
 			context.AppendInstruction(ARMv8A32.Add, result, v1, operand3);
@@ -168,7 +168,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			}
 			else
 			{
-				var offset = CreateConstant(context.Operand1.Offset);
+				var offset = CreateConstant32(context.Operand1.Offset);
 
 				offset = MoveConstantToRegisterOrImmediate(context, offset);
 
@@ -219,10 +219,10 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 			context.SetInstruction(ARMv8A32.Cmp, condition, null, operand1, operand2);
 			context.AppendInstruction(ARMv8A32.Mov, condition, result, Constant_1);
-			context.AppendInstruction(ARMv8A32.Mov, condition.GetOpposite(), result, ConstantZero);
+			context.AppendInstruction(ARMv8A32.Mov, condition.GetOpposite(), result, ConstantZero32);
 		}
 
-		private void BranchCompare32(Context context)
+		private void Branch32(Context context)
 		{
 			MoveConstantRightForComparison(context);
 
@@ -574,7 +574,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			operand2 = MoveConstantToRegisterOrImmediate(context, operand2);
 			operand3 = MoveConstantToRegisterOrImmediate(context, operand3);
 
-			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.I4);
+			var v1 = AllocateVirtualRegister32();
 
 			context.SetInstruction(ARMv8A32.Sub, v1, operand1, operand2);
 			context.AppendInstruction(ARMv8A32.Sub, result, v1, operand3);

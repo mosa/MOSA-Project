@@ -15,16 +15,16 @@ namespace Mosa.Tool.Debugger.Views
 		protected byte height;
 		protected byte width;
 
-		private Bitmap bitmap;
-		private Graphics graphic;
+		private readonly Bitmap bitmap;
+		private readonly Graphics graphic;
 
-		private Font font;
-		private int fontWidth;
-		private int fontHeight;
+		private readonly Font font;
+		private readonly int fontWidth;
+		private readonly int fontHeight;
 
 		#region Definitions
 
-		private static byte[,] palette = new byte[,]
+		private static readonly byte[,] palette = new byte[,]
 		{
 			{0, 0, 0, 0},
 			{1, 0, 0, 170},

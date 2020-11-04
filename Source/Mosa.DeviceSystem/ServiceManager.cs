@@ -17,8 +17,8 @@ namespace Mosa.DeviceSystem
 
 		private readonly List<ServiceEvent> events;
 
-		private object _lockServices = new object();
-		private object _lockEvents = new object();
+		private readonly object _lockServices = new object();
+		private readonly object _lockEvents = new object();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ServiceManager" /> class.
@@ -89,7 +89,7 @@ namespace Mosa.DeviceSystem
 				}
 			}
 
-			return (T)null;
+			return null;
 		}
 
 		public List<BaseService> GetAllServices()

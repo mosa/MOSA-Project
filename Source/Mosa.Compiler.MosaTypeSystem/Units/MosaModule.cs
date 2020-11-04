@@ -21,7 +21,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public class Mutator : MosaUnit.MutatorBase
 		{
-			private MosaModule module;
+			private readonly MosaModule module;
 
 			internal Mutator(MosaModule module)
 				: base(module)

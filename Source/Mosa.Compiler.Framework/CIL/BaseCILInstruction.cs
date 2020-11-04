@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.MosaTypeSystem;
-
 namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
@@ -108,11 +106,6 @@ namespace Mosa.Compiler.Framework.CIL
 		public virtual bool PushResult
 		{
 			get { return true; }
-		}
-
-		public static Operand AllocateVirtualRegisterOrStackSlot(MethodCompiler compiler, MosaType type)
-		{
-			return compiler.AllocateVirtualRegisterOrStackSlot(type);
 		}
 
 		/// <summary>

@@ -10,9 +10,9 @@ namespace Mosa.Tool.Debugger.Views
 {
 	public partial class LaunchView : DebugDockContent
 	{
-		private BindingList<LaunchEntry> launchEntries = new BindingList<LaunchEntry>();
+		private readonly BindingList<LaunchEntry> launchEntries = new BindingList<LaunchEntry>();
 
-		private List<string> ImageExtensions = new List<string>() { ".img", ".iso" };
+		private readonly List<string> ImageExtensions = new List<string>() { ".img", ".iso" };
 
 		private class LaunchEntry
 		{

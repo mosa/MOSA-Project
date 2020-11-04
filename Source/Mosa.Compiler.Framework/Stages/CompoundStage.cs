@@ -52,22 +52,22 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var addInstruction = Is32BitPlatform ? (BaseInstruction)IRInstruction.Add32 : IRInstruction.Add64;
 
-			var srcReg = AllocateVirtualRegister(Is32BitPlatform ? destinationBase.Type.TypeSystem.BuiltIn.I4 : destinationBase.Type.TypeSystem.BuiltIn.I8);
-			var dstReg = AllocateVirtualRegister(Is32BitPlatform ? destinationBase.Type.TypeSystem.BuiltIn.I4 : destinationBase.Type.TypeSystem.BuiltIn.I8);
+			var srcReg = Is32BitPlatform ? AllocateVirtualRegister32() : AllocateVirtualRegister64();
+			var dstReg = Is32BitPlatform ? AllocateVirtualRegister32() : AllocateVirtualRegister64();
 
 			context.SetInstruction(IRInstruction.UnstableObjectTracking);
 
 			context.AppendInstruction(addInstruction, srcReg, sourceBase, source);
 			context.AppendInstruction(addInstruction, dstReg, destinationBase, destination);
 
-			var tmp = AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I4);
-			var tmpLarge = Is32BitPlatform && size >= 8 ? null : AllocateVirtualRegister(destinationBase.Type.TypeSystem.BuiltIn.I8);
+			var tmp = AllocateVirtualRegister32();
+			var tmpLarge = Is32BitPlatform && size >= 8 ? null : AllocateVirtualRegister64();
 
 			for (int i = 0; i < size;)
 			{
 				int left = size - i;
 
-				var index = CreateConstant(i);
+				var index = CreateConstant32(i);
 
 				if (left >= 8 & !Is32BitPlatform)
 				{

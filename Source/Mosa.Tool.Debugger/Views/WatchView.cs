@@ -11,7 +11,7 @@ namespace Mosa.Tool.Debugger.Views
 {
 	public partial class WatchView : DebugDockContent
 	{
-		private BindingList<WatchEntry> Watches = new BindingList<WatchEntry>();
+		private readonly BindingList<WatchEntry> Watches = new BindingList<WatchEntry>();
 
 		private class WatchEntry
 		{

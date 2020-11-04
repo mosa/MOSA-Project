@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			// Push the loaded value onto the evaluation stack
 			var local = decoder.MethodCompiler.LocalVariables[index];
-			var result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, local.Type);
+			var result = decoder.MethodCompiler.AllocateVirtualRegisterOrStackSlot(local.Type);
 
 			node.Operand1 = local;
 			node.Result = result;

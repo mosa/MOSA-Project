@@ -563,7 +563,7 @@
 			"FlagsUnchanged": "C",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 1,
+			"OperandCount": 2,
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
@@ -792,7 +792,7 @@
 			"FlagsUnchanged": "C",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 1,
+			"OperandCount": 2,
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
@@ -2913,7 +2913,7 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"Condition": "[register][constant]",
 					"Encoding": "[x86],operand-prefix=0x66,opcode=0x0F,opcode2=0x3A,opcode4=0x0B,mod=11,reg=reg3:r,rm=reg3:o1,immediate=imm8:o2"
 				}
 			]
@@ -2932,7 +2932,7 @@
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"Condition": "[register][constant]",
 					"Encoding": "[x86],operand-prefix=0x66,opcode=0x0F,opcode2=0x3A,opcode4=0x0A,mod=11,reg=reg3:r,rm=reg3:o1,immediate=imm8:o2"
 				}
 			]
@@ -3508,7 +3508,7 @@
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [
 				{
-					"Condition": "",
+					"Condition": "[register][register]",
 					"Encoding": "[x86],operand-prefix=0x0F,opcode=|0b0100|conditional,mod=11,reg=reg3:r,rm=reg3:o2"
 				}
 			]

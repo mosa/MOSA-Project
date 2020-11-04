@@ -139,7 +139,7 @@ namespace Mosa.Utility.DebugEngine
 
 			if (message.CommandData == null)
 			{
-				packet.Add((int)0);  // length
+				packet.Add(0);  // length
 			}
 			else
 			{

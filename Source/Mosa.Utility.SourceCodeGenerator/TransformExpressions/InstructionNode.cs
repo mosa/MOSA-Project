@@ -10,6 +10,10 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 
 		public string ResultType { get; set; }
 
+		public ConditionCode Condition { get; set; } = ConditionCode.Always;
+
+		public List<ConditionCode> Conditions { get; set; } = new List<ConditionCode>() { ConditionCode.Always };
+
 		public List<Operand> Operands { get; } = new List<Operand>();
 
 		public int NodeNbr { get; set; }
@@ -31,7 +35,9 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				InstructionName = InstructionName,
 				ResultType = ResultType,
 				NodeNbr = NodeNbr,
-				Parent = parent
+				Parent = parent,
+				Condition = Condition,
+				Conditions = Conditions
 			};
 
 			foreach (var operand in Operands)

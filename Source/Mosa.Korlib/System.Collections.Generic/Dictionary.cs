@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace System.System.Collections.Generic
+﻿namespace System.System.Collections.Generic
 {
 	/*
 	public class Dictionary<TKey, TValue> where TKey : IEquatable<TKey>

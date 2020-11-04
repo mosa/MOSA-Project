@@ -25,11 +25,11 @@ namespace Mosa.Compiler.Framework.Stages
 		private BitArray ParamReadOnly;
 
 		private Counter InstructionRemovalCount = new Counter("ValueNumberingStage.IRInstructionRemoved");
-		private Counter ConstantFoldingAndStrengthReductionCount = new Counter("ValueNumberingStage.ConstantFoldingAndStrengthReduction");
+		private readonly Counter ConstantFoldingAndStrengthReductionCount = new Counter("ValueNumberingStage.ConstantFoldingAndStrengthReduction");
 		private Counter SubexpressionEliminationCount = new Counter("ValueNumberingStage.SubexpressionElimination");
 		private Counter ParameterLoadEliminationCount = new Counter("ValueNumberingStage.ParameterLoadElimination");
-		private Counter DeadCodeEliminationCount = new Counter("ValueNumberingStage.DeadCodeElimination");
-		private Counter StrengthReductionAndSimplificationCount = new Counter("ValueNumberingStage.StrengthReductionAndSimplification");
+		private readonly Counter DeadCodeEliminationCount = new Counter("ValueNumberingStage.DeadCodeElimination");
+		private readonly Counter StrengthReductionAndSimplificationCount = new Counter("ValueNumberingStage.StrengthReductionAndSimplification");
 
 		private class Expression
 		{
@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Framework.Stages
 			public BaseInstruction Instruction;
 			public Operand Operand1;
 			public Operand Operand2;
-
+			public ConditionCode ConditionCode;
 			public Operand ValueNumber;
 		}
 
@@ -78,6 +78,9 @@ namespace Mosa.Compiler.Framework.Stages
 			DetermineReadOnlyParameters();
 
 			ValueNumber();
+
+			if (CompilerSettings.FullCheckMode)
+				CheckAllPhiInstructions();
 		}
 
 		protected override void Finish()
@@ -278,10 +281,7 @@ namespace Mosa.Compiler.Framework.Stages
 					node.Operand2 = operand1;
 				}
 
-				if (node.Instruction == IRInstruction.Move32
-					|| node.Instruction == IRInstruction.Move64
-					|| node.Instruction == IRInstruction.MoveR4
-					|| node.Instruction == IRInstruction.MoveR8)
+				if (IsMoveInstruction(node.Instruction))
 				{
 					if (node.Result.IsCPURegister || node.Operand1.IsCPURegister)
 					{
@@ -346,6 +346,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					Hash = hash,
 					Instruction = node.Instruction,
+					ConditionCode = node.ConditionCode,
 					Operand1 = node.Operand1,
 					Operand2 = node.Operand2,
 					ValueNumber = node.Result
@@ -363,6 +364,22 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						Hash = hash,
 						Instruction = node.Instruction,
+						ConditionCode = node.ConditionCode,
+						Operand1 = node.Operand2,
+						Operand2 = node.Operand1,
+						ValueNumber = node.Result
+					};
+
+					AddExpressionToHashTable(newExpression2);
+					newExpressions.Add(newExpression2);
+				}
+				else if (IsCompareInstruction(node.Instruction) && node.Operand1 != node.Operand2 && node.ConditionCode != ConditionCode.Equal && node.ConditionCode != ConditionCode.NotEqual)
+				{
+					var newExpression2 = new Expression()
+					{
+						Hash = hash,
+						Instruction = node.Instruction,
+						ConditionCode = node.ConditionCode.GetReverse(),
 						Operand1 = node.Operand2,
 						Operand2 = node.Operand1,
 						ValueNumber = node.Result
@@ -467,6 +484,8 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			int hash = node.Instruction.ID;
 
+			hash = hash | ((int)node.ConditionCode << 16);
+
 			if (node.Operand1.IsConstant)
 				hash = UpdateHash(hash, (int)node.Operand1.ConstantUnsigned64);
 			else if (node.Operand1.IsVirtualRegister || node.Operand1.IsStackLocal)
@@ -531,6 +550,7 @@ namespace Mosa.Compiler.Framework.Stages
 			foreach (var expression in expressions)
 			{
 				if (node.Instruction == expression.Instruction
+					&& node.ConditionCode == expression.ConditionCode
 					&& IsEqual(node.Operand1, expression.Operand1, node.Instruction)
 					&& (node.OperandCount == 1 || (node.OperandCount == 2 && IsEqual(node.Operand2, expression.Operand2))))
 				{
@@ -638,13 +658,15 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 					else
 					{
+						// value has not been encountered yet --- skip it for now
 						if (IsPhiInstruction(node.Instruction))
 							continue;
 
 						//Debug.Assert(IsPhiInstruction(node.Instruction));
 
-						if (!IsPhiInstruction(node.Instruction))
-							throw new CompilerException("ValueNumbering Stage: Expected PHI instruction but found instead: " + node + " for " + operand);
+						//MethodCompiler.Compiler.Stop();
+						//return;
+						throw new CompilerException("ValueNumbering Stage: Expected PHI instruction but found instead: " + node + " for " + operand);
 					}
 				}
 			}

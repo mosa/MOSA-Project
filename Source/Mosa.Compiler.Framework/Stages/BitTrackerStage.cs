@@ -132,7 +132,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private delegate (Value, Value) NodeVisitationDelegate2(InstructionNode node);
 
-		private HashSet<BaseInstruction> IntegerLoads = new HashSet<BaseInstruction>();
+		private readonly HashSet<BaseInstruction> IntegerLoads = new HashSet<BaseInstruction>();
 
 		protected override void Finish()
 		{
@@ -157,8 +157,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Register(IRInstruction.Truncate64x32, Truncate64x32);
 
-			Register(IRInstruction.GetLow64, GetLow64);
-			Register(IRInstruction.GetHigh64, GetHigh64);
+			Register(IRInstruction.GetLow32, GetLow32);
+			Register(IRInstruction.GetHigh32, GetHigh32);
 			Register(IRInstruction.To64, To64);
 
 			Register(IRInstruction.Or32, Or32);
@@ -313,6 +313,9 @@ namespace Mosa.Compiler.Framework.Stages
 			UpdateBranchInstructions();
 
 			DumpValues();
+
+			if (CompilerSettings.FullCheckMode)
+				CheckAllPhiInstructions();
 		}
 
 		private void DumpValues()
@@ -374,7 +377,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (virtualRegister.IsInteger)
 				{
-					Values[index] = virtualRegister.Is64BitInteger ? Value.Any64 : Value.Any32;
+					Values[index] = virtualRegister.IsInteger64 ? Value.Any64 : Value.Any32;
 					return true;
 				}
 
@@ -459,7 +462,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (virtualRegister.IsInteger)
 			{
-				Values[index] = virtualRegister.Is64BitInteger ? Value.Any64 : Value.Any32;
+				Values[index] = virtualRegister.IsInteger64 ? Value.Any64 : Value.Any32;
 				return true;
 			}
 
@@ -529,8 +532,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (!value.AreRangeValuesIndeterminate)
 				{
-					trace?.Log($"  MaxValue:  {value.MaxValue.ToString()}");
-					trace?.Log($"  MinValue:  {value.MinValue.ToString()}");
+					trace?.Log($"  MaxValue:  {value.MaxValue}");
+					trace?.Log($"  MinValue:  {value.MinValue}");
 				}
 
 				if (value.BitsKnown != 0)
@@ -582,7 +585,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (node.Instruction == IRInstruction.Switch)
 					continue;
 
-				Debug.Assert(node.Instruction == IRInstruction.BranchCompare32 || node.Instruction == IRInstruction.BranchCompare64);
+				Debug.Assert(node.Instruction == IRInstruction.Branch32 || node.Instruction == IRInstruction.Branch64 || node.Instruction == IRInstruction.BranchObject);
 
 				var result = EvaluateCompare(node);
 
@@ -680,7 +683,7 @@ namespace Mosa.Compiler.Framework.Stages
 					result = true;
 				}
 			}
-			else if (conditionCode == ConditionCode.UnsignedGreaterThan)
+			else if (conditionCode == ConditionCode.UnsignedGreater)
 			{
 				if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 				{
@@ -693,7 +696,7 @@ namespace Mosa.Compiler.Framework.Stages
 					result = true;
 				}
 			}
-			else if (conditionCode == ConditionCode.UnsignedLessThan)
+			else if (conditionCode == ConditionCode.UnsignedLess)
 			{
 				if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 				{
@@ -738,7 +741,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private static bool IsMultiplyOverflow(uint a, uint b)
 		{
-			var r = (ulong)a * (ulong)b;
+			var r = a * (ulong)b;
 
 			return r > uint.MaxValue;
 		}
@@ -971,7 +974,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return new Value(result.Value ? 1u : 0u, true);
 		}
 
-		private Value GetHigh64(InstructionNode node)
+		private Value GetHigh32(InstructionNode node)
 		{
 			var value1 = node.Operand1.IsConstant ? new Value(node.Operand1.ConstantUnsigned64, true) : Values[node.Operand1.Index];
 
@@ -996,7 +999,7 @@ namespace Mosa.Compiler.Framework.Stages
 			};
 		}
 
-		private Value GetLow64(InstructionNode node)
+		private Value GetLow32(InstructionNode node)
 		{
 			var value1 = node.Operand1.IsConstant ? new Value(node.Operand1.ConstantUnsigned64, true) : Values[node.Operand1.Index];
 
@@ -1076,7 +1079,7 @@ namespace Mosa.Compiler.Framework.Stages
 				MinValue = 0,
 				AreRangeValuesDeterminate = true,
 				BitsSet = 0,
-				BitsClear = ~(ulong)(uint.MaxValue),
+				BitsClear = ~uint.MaxValue,
 				Is32Bit = false
 			};
 		}
@@ -1141,7 +1144,7 @@ namespace Mosa.Compiler.Framework.Stages
 				MinValue = 0,
 				AreRangeValuesDeterminate = true,
 				BitsSet = 0,
-				BitsClear = ~(ulong)(uint.MaxValue),
+				BitsClear = ~uint.MaxValue,
 				Is32Bit = false
 			};
 		}
@@ -2038,7 +2041,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				return new Value()
 				{
-					MaxValue = (ulong)int.MaxValue,
+					MaxValue = int.MaxValue,
 					MinValue = unchecked((ulong)int.MinValue),
 					AreRangeValuesDeterminate = false, // ??
 					BitsSet = value1.BitsSet32 | (signed ? Upper56BitsSet : 0),
@@ -2050,7 +2053,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				return new Value()
 				{
-					MaxValue = (ulong)int.MaxValue,
+					MaxValue = int.MaxValue,
 					MinValue = unchecked((ulong)int.MinValue),
 					AreRangeValuesDeterminate = false, // ??
 					BitsSet = value1.BitsSet32 | (signed ? Upper56BitsSet : 0),

@@ -33,7 +33,7 @@ namespace System.Reflection
 		/// <returns>True if obj equals the type and value of this instance; otherwise, False.</returns>
 		public override bool Equals(object obj)
 		{
-			return (object)this == obj;
+			return this == obj;
 		}
 
 		/// <summary>

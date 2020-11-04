@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator.RedBlackTree
 	/// </summary>
 	public sealed partial class IntervalTree<T> where T : class
 	{
-		private Node<T> Sentinel = new Node<T>(new Interval(-1, -1), null);
+		private readonly Node<T> Sentinel = new Node<T>(new Interval(-1, -1), null);
 
 		private Node<T> Root;
 

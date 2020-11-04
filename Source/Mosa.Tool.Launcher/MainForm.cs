@@ -17,7 +17,7 @@ namespace Mosa.Tool.Launcher
 {
 	public partial class MainForm : MetroForm
 	{
-		private Settings Settings;
+		private readonly Settings Settings;
 
 		public Builder Builder;
 

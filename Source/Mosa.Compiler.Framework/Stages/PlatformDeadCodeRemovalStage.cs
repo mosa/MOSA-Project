@@ -76,10 +76,10 @@ namespace Mosa.Compiler.Framework.Stages
 						if (node.Instruction.FlowControl == FlowControl.Call)
 							continue;
 
-						var instruction = node.Instruction as BasePlatformInstruction;
-
-						if (instruction == null)
+						if (!node.Instruction.IsPlatformInstruction)
 							continue;
+
+						var instruction = node.Instruction;
 
 						// a more complex analysis would tracks the flag usage down the basic block to determine if the flags are used
 						if (instruction.IsCarryFlagModified
@@ -109,7 +109,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.Result.Uses.Count != 0)
 				return;
 
-			// Check is split child, if so check is parent in use (IR.Return for example)
+			// Check is split child, if so check is parent in use (Manual.Return for example)
 			if (node.Result.HasLongParent && node.Result.LongParent.Uses.Count != 0)
 				return;
 

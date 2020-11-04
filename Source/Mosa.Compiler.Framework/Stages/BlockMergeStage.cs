@@ -31,6 +31,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 				foreach (var block in BasicBlocks)
 				{
+					if (block.NextBlocks.Count != 1)
+						continue;
+
 					if (block.IsEpilogue
 						|| block.IsPrologue
 						|| block.IsTryHeadBlock
@@ -38,7 +41,8 @@ namespace Mosa.Compiler.Framework.Stages
 						|| (!block.IsCompilerBlock && HasProtectedRegions))
 						continue;
 
-					if (block.NextBlocks.Count != 1)
+					// don't remove block if it jumps back to itself
+					if (block.PreviousBlocks.Contains(block))
 						continue;
 
 					var next = block.NextBlocks[0];

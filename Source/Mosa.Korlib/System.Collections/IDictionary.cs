@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics.Contracts;
-
-namespace System.Collections
+﻿namespace System.Collections
 {
 	// An IDictionary is a possibly unordered set of key-value pairs.
 	// Keys can be any non-null object.  Values can be any object.

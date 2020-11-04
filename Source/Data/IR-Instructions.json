@@ -146,6 +146,13 @@
 			"ResultType": "Boolean"
 		},
 		{
+			"Name": "CompareObject",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"ResultType": "Boolean"
+		},
+		{
 			"Name": "Compare32x32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
@@ -174,14 +181,21 @@
 			"ResultType": "Boolean"
 		},
 		{
-			"Name": "BranchCompare32",
+			"Name": "Branch32",
 			"FamilyName": "IR",
 			"ResultCount": 2,
 			"OperandCount": 0,
 			"FlowControl": "ConditionalBranch"
 		},
 		{
-			"Name": "BranchCompare64",
+			"Name": "Branch64",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 0,
+			"FlowControl": "ConditionalBranch"
+		},
+		{
+			"Name": "BranchObject",
 			"FamilyName": "IR",
 			"ResultCount": 2,
 			"OperandCount": 0,
@@ -404,18 +418,6 @@
 			"VariableOperands": "true"
 		},
 		{
-			"Name": "LoadConstant32",
-			"FamilyName": "IR",
-			"ResultCount": 1,
-			"OperandCount": 1
-		},
-		{
-			"Name": "LoadConstant64",
-			"FamilyName": "IR",
-			"ResultCount": 1,
-			"OperandCount": 1
-		},
-		{
 			"Name": "LoadCompound",
 			"FamilyName": "IR",
 			"ResultCount": 1,
@@ -445,6 +447,13 @@
 		},
 		{
 			"Name": "Load64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 2,
+			"MemoryRead": "true"
+		},
+		{
+			"Name": "LoadObject",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,
@@ -522,6 +531,14 @@
 		},
 		{
 			"Name": "LoadParamCompound",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1,
+			"MemoryRead": "true",
+			"ParameterLoad": "true"
+		},
+		{
+			"Name": "LoadParamObject",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
@@ -791,6 +808,12 @@
 			"OperandCount": 1
 		},
 		{
+			"Name": "MoveObject",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
 			"Name": "MulR4",
 			"FamilyName": "IR",
 			"ResultCount": 1,
@@ -858,6 +881,13 @@
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0
+		},
+		{
+			"Name": "PhiObject",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 0,
+			"VariableOperands": "true"
 		},
 		{
 			"Name": "Phi32",
@@ -952,6 +982,13 @@
 		},
 		{
 			"Name": "SetReturn64",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 1,
+			"FlowControl": "Return"
+		},
+		{
+			"Name": "SetReturnObject",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 1,
@@ -1053,6 +1090,13 @@
 			"MemoryWrite": "true"
 		},
 		{
+			"Name": "StoreObject",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 3,
+			"MemoryWrite": "true"
+		},
+		{
 			"Name": "StoreParamCompound",
 			"FamilyName": "IR",
 			"ResultCount": 0,
@@ -1070,6 +1114,14 @@
 		},
 		{
 			"Name": "StoreParamR8",
+			"FamilyName": "IR",
+			"ResultCount": 0,
+			"OperandCount": 2,
+			"MemoryWrite": "true",
+			"ParameterStore": "true"
+		},
+		{
+			"Name": "StoreParamObject",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 2,
@@ -1294,7 +1346,7 @@
 			"ResultType": "UInt64"
 		},
 		{
-			"Name": "GetLow64",
+			"Name": "GetLow32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
@@ -1302,7 +1354,7 @@
 			"ResultType2": "UInt32"
 		},
 		{
-			"Name": "GetHigh64",
+			"Name": "GetHigh32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1,
@@ -1317,6 +1369,12 @@
 		},
 		{
 			"Name": "IfThenElse64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 3
+		},
+		{
+			"Name": "IfThenElseObject",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 3

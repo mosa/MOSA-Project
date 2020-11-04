@@ -7,7 +7,7 @@ namespace System
 	/// </summary>
 	public struct RuntimeTypeHandle
 	{
-		private IntPtr m_type;
+		private readonly IntPtr m_type;
 
 		public RuntimeTypeHandle(IntPtr handle) // FIXME: hack - should be internal
 		{

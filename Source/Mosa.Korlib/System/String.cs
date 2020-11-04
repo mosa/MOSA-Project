@@ -19,7 +19,7 @@ namespace System
 		/// </summary>
 		internal int length;
 
-		private char start_char;
+		private readonly char start_char;
 
 		public int Length { get { return length; } }
 

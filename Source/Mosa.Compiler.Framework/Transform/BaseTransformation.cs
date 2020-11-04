@@ -11,9 +11,8 @@ namespace Mosa.Compiler.Framework.Transform
 
 		public BaseInstruction Instruction { get; private set; }
 
-		public string Name { get; }
-
 		public bool Log { get; private set; } = false;
+		public string Name { get; }
 
 		#endregion Properties
 
@@ -78,12 +77,6 @@ namespace Mosa.Compiler.Framework.Transform
 				if (operand1.IsInteger && operand1.ConstantUnsigned64 == operand2.ConstantUnsigned64)
 					return true;
 
-				//if (operand1.IsLong && operand1.ConstantUnsigned64 == operand2.ConstantUnsigned64)
-				//	return true;
-
-				//if (operand1.IsInteger && operand1.ConstantUnsigned32 == operand2.ConstantUnsigned32)
-				//	return true;
-
 				if (operand1.IsR4 && operand1.IsR4 && operand1.ConstantDouble == operand2.ConstantDouble)
 					return true;
 
@@ -104,6 +97,11 @@ namespace Mosa.Compiler.Framework.Transform
 			return operand.IsCPURegister;
 		}
 
+		protected static bool IsVirtualRegister(Operand operand)
+		{
+			return operand.IsVirtualRegister;
+		}
+
 		protected static bool IsEqual(ulong a, ulong b)
 		{
 			return a == b;
@@ -119,19 +117,14 @@ namespace Mosa.Compiler.Framework.Transform
 			return operand.IsFloatingPoint;
 		}
 
-		protected static bool IsGreaterThan(ulong a, ulong b)
+		protected static bool IsGreater(ulong a, ulong b)
 		{
 			return a > b;
 		}
 
-		protected static bool IsGreaterThanOrEqual(ulong a, ulong b)
+		protected static bool IsGreaterOrEqual(ulong a, ulong b)
 		{
 			return a >= b;
-		}
-
-		protected static bool IsHigherVirtualNumber(Operand operand1, Operand operand2)
-		{
-			return operand1.IsVirtualRegister && operand2.IsVirtualRegister && operand1.Index > operand2.Index;
 		}
 
 		protected static bool IsInteger(Operand operand)
@@ -149,14 +142,14 @@ namespace Mosa.Compiler.Framework.Transform
 			return operand.IsInteger && operand.ConstantSigned64 >= 0 && operand.ConstantSigned64 <= 64;
 		}
 
+		protected static bool IsLessOrEqual(ulong a, ulong b)
+		{
+			return a <= b;
+		}
+
 		protected static bool IsLessThan(ulong a, ulong b)
 		{
 			return a < b;
-		}
-
-		protected static bool IsLessThanOrEqual(ulong a, ulong b)
-		{
-			return a <= b;
 		}
 
 		protected static bool IsNaturalSquareRoot32(Operand operand)
@@ -211,12 +204,22 @@ namespace Mosa.Compiler.Framework.Transform
 
 		protected static bool IsSignedIntegerPositive(Operand operand)
 		{
-			return operand.IsInteger && operand.ConstantSigned64 >= 0;
+			return operand.IsResolvedConstant && operand.IsInteger && operand.ConstantSigned64 >= 0;
+		}
+
+		protected static bool IsUnsignedIntegerPositive(Operand operand)
+		{
+			return operand.IsResolvedConstant && operand.IsInteger && operand.ConstantUnsigned64 >= 0;
 		}
 
 		protected static bool IsZero(Operand operand)
 		{
 			return operand.IsConstantZero;
+		}
+
+		protected static bool IsZero(ulong value)
+		{
+			return value == 0;
 		}
 
 		#endregion Filter Methods
@@ -265,7 +268,7 @@ namespace Mosa.Compiler.Framework.Transform
 
 		protected static long BoolTo64(bool b)
 		{
-			return b ? (long)1 : 0;
+			return b ? 1 : 0;
 		}
 
 		protected static ulong BoolTo64(ulong a)
@@ -303,9 +306,19 @@ namespace Mosa.Compiler.Framework.Transform
 			return a / b;
 		}
 
-		protected static uint GetHigh64(ulong a)
+		protected static uint GetHigh32(ulong a)
 		{
 			return (uint)(a >> 32);
+		}
+
+		protected static ulong GetHighestSetBit(ulong value)
+		{
+			return (ulong)BitTwiddling.GetHighestSetBit(value);
+		}
+
+		protected static ulong GetLowestSetBit(ulong value)
+		{
+			return (ulong)BitTwiddling.GetLowestSetBit(value);
 		}
 
 		protected static uint GetPowerOfTwo(ulong value)
@@ -368,7 +381,7 @@ namespace Mosa.Compiler.Framework.Transform
 			return a * b;
 		}
 
-		protected static long MulSigned32(long a, long b)
+		protected static int MulSigned32(int a, int b)
 		{
 			return a * b;
 		}
@@ -566,7 +579,7 @@ namespace Mosa.Compiler.Framework.Transform
 
 		protected static ulong To64(uint low, uint high)
 		{
-			return ((ulong)high << 32) | (ulong)low;
+			return ((ulong)high << 32) | low;
 		}
 
 		protected static ulong To64(Operand operand)
@@ -601,12 +614,12 @@ namespace Mosa.Compiler.Framework.Transform
 
 		protected static float ToR4(int a)
 		{
-			return (float)a;
+			return a;
 		}
 
 		protected static float ToR4(long a)
 		{
-			return (float)a;
+			return a;
 		}
 
 		protected static double ToR8(Operand operand)
@@ -621,12 +634,12 @@ namespace Mosa.Compiler.Framework.Transform
 
 		protected static double ToR8(int a)
 		{
-			return (double)a;
+			return a;
 		}
 
 		protected static double ToR8(long a)
 		{
-			return (double)a;
+			return a;
 		}
 
 		protected static ushort ToShort(ulong value)
@@ -689,6 +702,94 @@ namespace Mosa.Compiler.Framework.Transform
 		}
 
 		#endregion SignExtend Helpers
+
+		#region Status Helpers
+
+		public enum TriState { Yes, No, Unknown };
+
+		public static TriState AreStatusFlagsUsed(InstructionNode start)
+		{
+			var first = start.Instruction;
+
+			var zeroModified = first.IsZeroFlagModified && !first.IsZeroFlagUndefined;
+			var carryModified = first.IsCarryFlagModified && !first.IsCarryFlagUndefined;
+			var signModified = first.IsSignFlagModified && !first.IsSignFlagUndefined;
+			var overflowModified = first.IsOverflowFlagSet && !first.IsOverflowFlagUndefined;
+			var parityModified = first.IsParityFlagModified && !first.IsParityFlagUndefined;
+
+			return AreStatusFlagsUsed(start.Next, zeroModified, carryModified, signModified, overflowModified, parityModified);
+		}
+
+		public static TriState AreStatusFlagsUsed(InstructionNode start, bool zeroModified, bool carryModified, bool signModified, bool overflowModified, bool parityModified)
+		{
+			// if none are modified (or not undefined), then they can't be used later
+			if (!zeroModified && !carryModified && !signModified && !overflowModified && !parityModified)
+				return TriState.No;
+
+			for (var at = start; ; at = at.Next)
+			{
+				if (at.IsEmptyOrNop)
+					continue;
+
+				if (at.IsBlockEndInstruction)
+					return TriState.Unknown;
+
+				if (at.Instruction == IRInstruction.StableObjectTracking
+					|| at.Instruction == IRInstruction.UnstableObjectTracking
+					|| at.Instruction == IRInstruction.Kill
+					|| at.Instruction == IRInstruction.KillAll
+					|| at.Instruction == IRInstruction.KillAllExcept
+					|| at.Instruction == IRInstruction.Gen)
+					continue;
+
+				if (at.Instruction.FlowControl == FlowControl.Return)
+					return TriState.No;
+
+				//if (at.Instruction.FlowControl == FlowControl.Throw)
+				//	return TriState.No;
+
+				if (at.Instruction.FlowControl == FlowControl.UnconditionalBranch && at.Block.NextBlocks.Count == 1)
+				{
+					at = at.BranchTargets[0].First;
+					continue;
+				}
+
+				if (at.Instruction.FlowControl != FlowControl.Next)
+					return TriState.Unknown; // Flow direction changed
+
+				var instruction = at.Instruction;
+
+				if (!instruction.IsPlatformInstruction)
+					return TriState.Unknown; // Unknown IR instruction
+
+				if ((zeroModified && instruction.IsZeroFlagUsed)
+					|| (carryModified && instruction.IsCarryFlagUsed)
+					|| (signModified && instruction.IsSignFlagUsed)
+					|| (overflowModified && instruction.IsOverflowFlagUsed)
+					|| (parityModified && instruction.IsParityFlagUsed))
+					return TriState.Yes;
+
+				if (zeroModified && (instruction.IsZeroFlagCleared || instruction.IsZeroFlagSet || instruction.IsZeroFlagUndefined || instruction.IsZeroFlagModified))
+					zeroModified = false;
+
+				if (carryModified && (instruction.IsCarryFlagCleared || instruction.IsCarryFlagSet || instruction.IsCarryFlagUndefined || instruction.IsCarryFlagModified))
+					carryModified = false;
+
+				if (signModified && (instruction.IsSignFlagCleared || instruction.IsSignFlagSet || instruction.IsSignFlagUndefined || instruction.IsSignFlagModified))
+					signModified = false;
+
+				if (overflowModified && (instruction.IsOverflowFlagCleared || instruction.IsOverflowFlagSet || instruction.IsOverflowFlagUndefined || instruction.IsOverflowFlagModified))
+					overflowModified = false;
+
+				if (parityModified && (instruction.IsParityFlagCleared || instruction.IsParityFlagSet || instruction.IsParityFlagUndefined || instruction.IsParityFlagModified))
+					parityModified = false;
+
+				if (!zeroModified && !carryModified && !signModified && !overflowModified && !parityModified)
+					return TriState.No;
+			}
+		}
+
+		#endregion Status Helpers
 
 		protected static bool IsSSAForm(Operand operand)
 		{

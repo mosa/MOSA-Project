@@ -11,7 +11,7 @@ namespace Mosa.DeviceSystem
 		private uint startLBA;
 		private uint totalBlocks;
 		private byte type;
-		private uint index;
+		private readonly uint index;
 
 		/// <summary>
 		/// for Guid Partition Table (GPT)

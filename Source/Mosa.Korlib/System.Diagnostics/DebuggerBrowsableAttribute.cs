@@ -1,7 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
-
 namespace System.Diagnostics
 {
 	public enum DebuggerBrowsableState
@@ -20,7 +18,7 @@ namespace System.Diagnostics
 	[AttributeUsage(AttributeTargets.Field | AttributeTargets.Property, AllowMultiple = false)]
 	public sealed class DebuggerBrowsableAttribute : Attribute
 	{
-		private DebuggerBrowsableState state;
+		private readonly DebuggerBrowsableState state;
 
 		public DebuggerBrowsableAttribute(DebuggerBrowsableState state)
 		{

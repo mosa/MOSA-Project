@@ -88,10 +88,10 @@ namespace Mosa.Plug.Korlib.Runtime
 			{
 				// 1 byte
 				case TypeCode.Boolean:
-					return (bool)(valuePtr.Load8() != 0);
+					return valuePtr.Load8() != 0;
 
 				case TypeCode.U1:
-					return (byte)valuePtr.Load8();
+					return valuePtr.Load8();
 
 				case TypeCode.I1:
 					return (sbyte)valuePtr.Load8();
@@ -101,14 +101,14 @@ namespace Mosa.Plug.Korlib.Runtime
 					return (char)valuePtr.Load16();
 
 				case TypeCode.U2:
-					return (ushort)valuePtr.Load16();
+					return valuePtr.Load16();
 
 				case TypeCode.I2:
 					return (short)valuePtr.Load16();
 
 				// 4 bytes
 				case TypeCode.U4:
-					return (uint)valuePtr.Load32();
+					return valuePtr.Load32();
 
 				case TypeCode.I4:
 					return (int)valuePtr.Load32();
@@ -118,7 +118,7 @@ namespace Mosa.Plug.Korlib.Runtime
 
 				// 8 bytes
 				case TypeCode.U8:
-					return (ulong)valuePtr.Load64();
+					return valuePtr.Load64();
 
 				case TypeCode.I8:
 					return (long)valuePtr.Load64();

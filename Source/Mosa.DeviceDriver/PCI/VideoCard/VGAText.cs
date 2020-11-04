@@ -386,7 +386,7 @@ namespace Mosa.DeviceDriver.ISA
 
 		#region Modes
 
-		private static byte[] VGAText80x25 = new byte[] {
+		private static readonly byte[] VGAText80x25 = new byte[] {
 		/* MISC */
 			0x67,
 		/* SEQ */

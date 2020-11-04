@@ -24,7 +24,6 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-settings", Setting = "Settings", Value = null, IsList = true},
 
 				new Argument() { Name = "-o", Setting = "Compiler.OutputFile"},
-				new Argument() { Name = "-o", Setting = "Compiler.OutputFile"},
 
 				new Argument() { Name = "-base", Setting = "Compiler.BaseAddress"},
 				new Argument() { Name = "-scanner", Setting = "Compiler.MethodScanner", Value = "true"},
@@ -65,6 +64,8 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-output-inlined", Setting = "CompilerDebug.InlinedFile", Value = "%DEFAULT%"},
 				new Argument() { Name = "-output-hash", Setting = "CompilerDebug.PreLinkHashFile", Value = "%DEFAULT%"},
 				new Argument() { Name = "-output-hash", Setting = "CompilerDebug.PostLinkHashFile", Value = "%DEFAULT%"},
+
+				new Argument() { Name = "-check", Setting = "CompilerDebug.FullCheckMode", Value = "true"},
 
 				new Argument() { Name = "-platform", Setting = "Compiler.Platform"},
 				new Argument() { Name = "-x86", Setting = "Compiler.Platform", Value = "x86"},

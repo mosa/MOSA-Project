@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace System.Collections
+﻿namespace System.Collections
 {
 	public interface IDictionaryEnumerator : IEnumerator
 	{

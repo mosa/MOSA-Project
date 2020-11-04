@@ -12,7 +12,7 @@ namespace Mosa.UnitTests
 			return 33;
 		}
 
-		private static DevirtualizationBaseSealed s_Default = new DevirtualizationBaseSealed();
+		private static readonly DevirtualizationBaseSealed s_Default = new DevirtualizationBaseSealed();
 		public static DevirtualizationBase Default => s_Default;
 	}
 

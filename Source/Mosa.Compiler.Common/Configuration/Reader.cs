@@ -7,7 +7,7 @@ namespace Mosa.Compiler.Common.Configuration
 {
 	public static class Reader
 	{
-		private static char[] Whitespace = new char[] { '\t', ' ' };
+		private static readonly char[] Whitespace = new char[] { '\t', ' ' };
 
 		public static Settings Import(string filename)
 		{

@@ -30,7 +30,7 @@
 			"Expression": "IR.Add## (IR.Add## a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
 			"Result": "(IR.Add## a [Add##(To##(b), To##(c))])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -40,7 +40,7 @@
 			"Expression": "IR.AddR# (IR.AddR# a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
 			"Result": "(IR.AddR# a [AddR#(ToR#(b), ToR#(c))])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -50,7 +50,7 @@
 			"Expression": "IR.Sub## (IR.Sub## a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
 			"Result": "(IR.Sub## a [Sub##(To##(b), To##(c))])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -60,7 +60,7 @@
 			"Expression": "IR.SubR# (IR.SubR# a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
 			"Result": "(IR.SubR# a [SubR#(ToR#(b), ToR#(c))])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -70,7 +70,7 @@
 			"Expression": "IR.MulSigned## (IR.MulSigned## a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
 			"Result": "(IR.MulSigned## a [MulSigned##(ToSigned##(b), ToSigned##(c))])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -80,7 +80,7 @@
 			"Expression": "IR.MulR# (IR.MulR# a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
 			"Result": "(IR.MulR# a [MulR#(ToR#(b), ToR#(c))])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -90,7 +90,7 @@
 			"Expression": "IR.MulUnsigned## (IR.MulUnsigned## a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
 			"Result": "(IR.MulUnsigned## a [MulUnsigned##(To##(b), To##(c))])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -100,7 +100,7 @@
 			"Expression": "IR.Or## (IR.Or## a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
 			"Result": "(IR.Or## a [Or##(To##(b), To##(c))])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -110,7 +110,7 @@
 			"Expression": "IR.And## (IR.And## a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
 			"Result": "(IR.And## a [And##(To##(b), To##(c))])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -120,7 +120,7 @@
 			"Expression": "IR.Xor## (IR.Xor## a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
 			"Result": "(IR.Xor## a [Xor##(To##(b), To##(c))])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -130,7 +130,7 @@
 			"Expression": "IR.Add## (IR.Sub## a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
 			"Result": "(IR.Sub## a [Add##(To##(b), To##(c))])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -140,7 +140,7 @@
 			"Expression": "IR.AddR# (IR.SubR# a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
 			"Result": "(IR.SubR# a [AddR#(ToR#(b), ToR#(c))])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -150,7 +150,7 @@
 			"Expression": "IR.Sub## (IR.Add## a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
 			"Result": "(IR.Add## a [Sub##(To##(b), To##(c))])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -160,7 +160,7 @@
 			"Expression": "IR.SubR# (IR.AddR# a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c)",
 			"Result": "(IR.AddR# a [SubR#(ToR#(b), ToR#(c))])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -170,7 +170,7 @@
 			"Expression": "IR.ShiftLeft## (IR.ShiftLeft## a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & IsIntegerBetween0And##(b) & IsIntegerBetween0And64(c)",
 			"Result": "(IR.ShiftLeft## a [Add##(To##(b),To##(c))])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -180,7 +180,7 @@
 			"Expression": "IR.ShiftRight## (IR.ShiftRight## a b) c",
 			"Filter": "IsResolvedConstant(b) & IsResolvedConstant(c) & IsIntegerBetween0And##(b) & IsIntegerBetween0And64(c)",
 			"Result": "(IR.ShiftRight## a [Add##(To##(b),To##(c))])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		}
 	]
 }

@@ -63,6 +63,7 @@ Below are the command line arguments available:
     -output-inlined,CompilerDebug.InlinedFile,%DEFAULT%
     -output-hash,CompilerDebug.PreLinkHashFile,%DEFAULT%
     -output-hash,CompilerDebug.PostLinkHashFile,%DEFAULT%
+	-check,CompilerDebug.FullCheckMode,true
 
     Compiler - X86:
     -interrupt-method,X86.InterruptMethodName,{value}

@@ -11,10 +11,10 @@ namespace Mosa.Tool.Debugger.Views
 {
 	public partial class MethodView : DebugDockContent
 	{
-		private BindingList<MethodInstructionEntry> instructions = new BindingList<MethodInstructionEntry>();
+		private readonly BindingList<MethodInstructionEntry> instructions = new BindingList<MethodInstructionEntry>();
 		private SymbolInfo methodSymbol;
 		private byte[] buffer;
-		private List<ulong> addresses = new List<ulong>();
+		private readonly List<ulong> addresses = new List<ulong>();
 
 		private class MethodInstructionEntry
 		{
@@ -109,7 +109,7 @@ namespace Mosa.Tool.Debugger.Views
 			int MaxMemoryQuery = 1024;
 
 			ulong at = symbol.Address;
-			ulong end = symbol.Address + (ulong)symbol.Length;
+			ulong end = symbol.Address + symbol.Length;
 
 			buffer = new byte[end - at];
 

@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceDriver.PCI.Intel;
 using Mosa.DeviceDriver.PCI.Intel.QuarkSoC;
 using Mosa.DeviceSystem;

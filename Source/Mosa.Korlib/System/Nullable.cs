@@ -11,7 +11,7 @@ namespace System
 	public struct Nullable<T> where T : struct
 	{
 		internal T value;
-		private bool hasValue;
+		private readonly bool hasValue;
 
 		public Nullable(T value)
 		{

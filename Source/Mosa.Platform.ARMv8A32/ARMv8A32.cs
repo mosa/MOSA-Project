@@ -119,5 +119,6 @@ namespace Mosa.Platform.ARMv8A32
 		public static readonly Cnfe Cnfe = new Cnfe();
 		public static readonly Ldf Ldf = new Ldf();
 		public static readonly Stf Stf = new Stf();
+		public static readonly Fmov Fmov = new Fmov();
 	}
 }

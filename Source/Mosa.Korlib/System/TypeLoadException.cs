@@ -8,7 +8,7 @@ namespace System
 	[Serializable]
 	public class TypeLoadException : SystemException
 	{
-		private string typeName;
+		private readonly string typeName;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TypeLoadException"/> class.

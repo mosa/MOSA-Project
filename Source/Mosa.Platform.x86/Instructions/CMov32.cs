@@ -36,12 +36,18 @@ namespace Mosa.Platform.x86.Instructions
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
 			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
 
-			opcodeEncoder.Append8Bits(0x0F);
-			opcodeEncoder.Append4Bits(0b0100);
-			opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
-			opcodeEncoder.Append2Bits(0b11);
-			opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
-			opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+			if (node.Operand1.IsCPURegister && node.Operand2.IsCPURegister)
+			{
+				opcodeEncoder.Append8Bits(0x0F);
+				opcodeEncoder.Append4Bits(0b0100);
+				opcodeEncoder.Append4Bits(GetConditionCode(node.ConditionCode));
+				opcodeEncoder.Append2Bits(0b11);
+				opcodeEncoder.Append3Bits(node.Result.Register.RegisterCode);
+				opcodeEncoder.Append3Bits(node.Operand2.Register.RegisterCode);
+				return;
+			}
+
+			throw new Compiler.Common.Exceptions.CompilerException("Invalid Opcode");
 		}
 	}
 }

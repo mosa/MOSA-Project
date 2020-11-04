@@ -34,7 +34,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		private readonly List<Device> pendingOnChange;
 
-		private object _lock = new object();
+		private readonly object _lock = new object();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DeviceService" /> class.

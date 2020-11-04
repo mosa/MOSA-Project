@@ -14,9 +14,6 @@
 ===========================================================*/
 namespace System
 {
-
-	using System;
-
 	// This attribute is attached to members that are not to be used any longer.
 	// Message is some human readable explanation of what to use
 	// Error indicates if the compiler should treat usage of such a method as an
@@ -30,8 +27,8 @@ namespace System
 	//[System.Runtime.InteropServices.ComVisible(true)]
 	public sealed class ObsoleteAttribute : Attribute
 	{
-		private String _message;
-		private bool _error;
+		private readonly String _message;
+		private readonly bool _error;
 
 		public ObsoleteAttribute()
 		{

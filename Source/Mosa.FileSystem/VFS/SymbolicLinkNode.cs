@@ -12,7 +12,7 @@ namespace Mosa.FileSystem.VFS
 		/// <summary>
 		/// The target of the symbolic link.
 		/// </summary>
-		private string target;
+		private readonly string target;
 
 		#endregion Data Members
 

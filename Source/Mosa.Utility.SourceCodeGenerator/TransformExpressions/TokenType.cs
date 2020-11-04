@@ -24,8 +24,15 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 		Hash,
 		Minus,
 		Dollar,
+
 		Greater,
 		Less,
+		Equal,
+
+		GreaterEqual,
+		LessEqual,
+		NotEqual,
+		Always,
 
 		Number,     // constants:
 		IntegerConstant,
@@ -39,34 +46,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 		Or,
 		Not,
 
-		//Questionmark,
-		//Colon,
-
-		//Addition,   // math:
-		//Subtract,
-		//Multiplication,
-		//Division,
-		//Modulus,
-		//Negate,
-
-		//CompareEqual,   // comparisons:
-		//CompareNotEqual,
-		//CompareGreaterThanOrEqual,
-		//CompareLessThanOrEqual,
-		//CompareLessThan,
-		//CompareGreaterThan,
-
-		//If,
-		//ShiftRight,
-		//ShiftLeft,
-
-		//Instruction,
-		//TypeVariable,
-		//OperandVariable,
-
-		//PhysicalRegister,
-		//VirtualRegister,
-
-		//Null,
+		OpenCurly,
+		CloseCurly,
 	}
 }

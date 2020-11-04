@@ -37,7 +37,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public class Mutator : MutatorBase
 		{
-			private MosaParameter parameter;
+			private readonly MosaParameter parameter;
 
 			internal Mutator(MosaParameter parameter)
 				: base(parameter)

@@ -5,9 +5,9 @@ namespace System.Collections
 	[Serializable]
 	internal class CompatibleComparer : IEqualityComparer
 	{
-		IComparer _comparer;
+		readonly IComparer _comparer;
 #pragma warning disable 618
-		IHashCodeProvider _hcp;
+		readonly IHashCodeProvider _hcp;
 
 		internal CompatibleComparer(IComparer comparer, IHashCodeProvider hashCodeProvider)
 		{

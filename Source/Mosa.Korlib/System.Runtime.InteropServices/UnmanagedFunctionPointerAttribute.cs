@@ -5,7 +5,7 @@ namespace System.Runtime.InteropServices
 	[AttributeUsage(AttributeTargets.Delegate, Inherited = false, AllowMultiple = false), ComVisible(true)]
 	public sealed class UnmanagedFunctionPointerAttribute : Attribute
 	{
-		private CallingConvention call_conv;
+		private readonly CallingConvention call_conv;
 
 		public CallingConvention CallingConvention { get { return call_conv; } }
 

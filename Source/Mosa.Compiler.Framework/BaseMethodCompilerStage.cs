@@ -19,13 +19,11 @@ namespace Mosa.Compiler.Framework
 
 		#region Data Members
 
-		protected string formattedStageName;
-
 		private List<TraceLog> traceLogs;
 
 		#endregion Data Members
 
-		#region Properties
+		#region Stage Properties
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
@@ -38,7 +36,23 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public string FormattedStageName { get; private set; }
 
-		#endregion Properties
+		#endregion Stage Properties
+
+		#region Instructions Properties
+
+		protected BaseInstruction LoadInstruction { get; private set; }
+
+		protected BaseInstruction StoreInstruction { get; private set; }
+
+		protected BaseInstruction MoveInstruction { get; private set; }
+
+		protected BaseInstruction SubInstruction { get; private set; }
+
+		protected BaseInstruction AddInstruction { get; private set; }
+
+		protected BaseInstruction BranchInstruction { get; private set; }
+
+		#endregion Instructions Properties
 
 		#region Compiler Properties
 
@@ -229,6 +243,25 @@ namespace Mosa.Compiler.Framework
 			Is32BitPlatform = Architecture.Is32BitPlatform;
 			Is64BitPlatform = Architecture.Is64BitPlatform;
 
+			if (Is32BitPlatform)
+			{
+				LoadInstruction = IRInstruction.Load32;
+				StoreInstruction = IRInstruction.Store32;
+				MoveInstruction = IRInstruction.Move32;
+				AddInstruction = IRInstruction.Add32;
+				SubInstruction = IRInstruction.Sub32;
+				BranchInstruction = IRInstruction.Branch32;
+			}
+			else
+			{
+				LoadInstruction = IRInstruction.Load64;
+				StoreInstruction = IRInstruction.Store64;
+				MoveInstruction = IRInstruction.Move64;
+				AddInstruction = IRInstruction.Add64;
+				SubInstruction = IRInstruction.Sub64;
+				BranchInstruction = IRInstruction.Branch64;
+			}
+
 			Initialize();
 		}
 
@@ -293,6 +326,26 @@ namespace Mosa.Compiler.Framework
 		protected Operand AllocateVirtualRegister(MosaType type)
 		{
 			return MethodCompiler.VirtualRegisters.Allocate(type);
+		}
+
+		protected Operand AllocateVirtualRegister32()
+		{
+			return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I4);
+		}
+
+		protected Operand AllocateVirtualRegister64()
+		{
+			return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I8);
+		}
+
+		protected Operand AllocateVirtualRegisterR4()
+		{
+			return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.R4);
+		}
+
+		protected Operand AllocateVirtualRegisterR8()
+		{
+			return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.R8);
 		}
 
 		/// <summary>
@@ -472,26 +525,45 @@ namespace Mosa.Compiler.Framework
 		/// Empties the block of all instructions.
 		/// </summary>
 		/// <param name="block">The block.</param>
-		protected void EmptyBlockOfAllInstructions(BasicBlock block)
+		protected static bool EmptyBlockOfAllInstructions(BasicBlock block, bool useNop = false)
 		{
+			if (block.IsKnownEmpty)
+				return true;
+
+			bool found = false;
+
 			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
 				if (node.IsEmpty)
 					continue;
 
-				node.Empty();
+				if (node.IsNop)
+				{
+					if (!useNop)
+						node.Empty();
+
+					continue;
+				}
+
+				node.SetInstruction(IRInstruction.Nop);
+
+				found = true;
 			}
+
+			block.IsKnownEmpty = found;
+
+			return found;
 		}
 
 		/// <summary>
 		/// Replaces the branch targets.
 		/// </summary>
-		/// <param name="block">The current from block.</param>
+		/// <param name="target">The current from block.</param>
 		/// <param name="oldTarget">The current destination block.</param>
 		/// <param name="newTarget">The new target block.</param>
-		protected void ReplaceBranchTargets(BasicBlock block, BasicBlock oldTarget, BasicBlock newTarget)
+		protected void ReplaceBranchTargets(BasicBlock target, BasicBlock oldTarget, BasicBlock newTarget)
 		{
-			for (var node = block.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
+			for (var node = target.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
 			{
 				if (node.IsEmptyOrNop)
 					continue;
@@ -513,7 +585,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		protected void RemoveEmptyBlockWithSingleJump(BasicBlock block)
+		protected void RemoveEmptyBlockWithSingleJump(BasicBlock block, bool useNop = false)
 		{
 			Debug.Assert(block.NextBlocks.Count == 1);
 
@@ -524,63 +596,75 @@ namespace Mosa.Compiler.Framework
 				ReplaceBranchTargets(previous, block, target);
 			}
 
-			EmptyBlockOfAllInstructions(block);
+			EmptyBlockOfAllInstructions(block, useNop);
 
 			Debug.Assert(block.PreviousBlocks.Count == 0);
 		}
 
-		protected static void RemoveBlockFromPhiInstructions(BasicBlock removedBlock, BasicBlock[] nextBlocks)
+		public static void RemoveBlockFromPHIInstructions(BasicBlock removedBlock, BasicBlock next)
+		{
+			for (var node = next.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+			{
+				if (node.IsEmptyOrNop)
+					continue;
+
+				if (!IsPhiInstruction(node.Instruction))
+					break;
+
+				var sourceBlocks = node.PhiBlocks;
+
+				int index = sourceBlocks.IndexOf(removedBlock);
+
+				if (index < 0)
+					continue;
+
+				sourceBlocks.RemoveAt(index);
+
+				for (int i = index; index < node.OperandCount - 1; index++)
+				{
+					node.SetOperand(i, node.GetOperand(i + 1));
+				}
+
+				node.SetOperand(node.OperandCount - 1, null);
+				node.OperandCount--;
+			}
+		}
+
+		public static void RemoveBlocksFromPHIInstructions(BasicBlock removedBlock, BasicBlock[] nextBlocks)
 		{
 			foreach (var next in nextBlocks)
 			{
-				for (var node = next.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
-				{
-					if (node.IsEmptyOrNop)
-						continue;
-
-					if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
-						break;
-
-					var sourceBlocks = node.PhiBlocks;
-
-					int index = sourceBlocks.IndexOf(removedBlock);
-
-					if (index < 0)
-						continue;
-
-					sourceBlocks.RemoveAt(index);
-
-					for (int i = index; index < node.OperandCount - 1; index++)
-					{
-						node.SetOperand(i, node.GetOperand(i + 1));
-					}
-
-					node.SetOperand(node.OperandCount - 1, null);
-					node.OperandCount--;
-				}
+				RemoveBlockFromPHIInstructions(removedBlock, next);
 			}
 
-			Debug.Assert(removedBlock.NextBlocks.Count == 0);
+			//Debug.Assert(removedBlock.NextBlocks.Count == 0);
 		}
 
-		protected static void UpdatePhiInstructionTargets(List<BasicBlock> targets, BasicBlock source, BasicBlock newSource)
+		public static void UpdatePHIInstructionTargets(List<BasicBlock> targets, BasicBlock source, BasicBlock newSource)
 		{
 			foreach (var target in targets)
 			{
-				Debug.Assert(target.PreviousBlocks.Count > 0);
+				UpdatePHIInstructionTarget(target, source, newSource);
+			}
+		}
 
-				for (var node = target.First; !node.IsBlockEndInstruction; node = node.Next)
-				{
-					if (node.IsEmptyOrNop)
-						continue;
+		public static void UpdatePHIInstructionTarget(BasicBlock target, BasicBlock source, BasicBlock newSource)
+		{
+			Debug.Assert(target.PreviousBlocks.Count > 0);
 
-					if (node.Instruction != IRInstruction.Phi32 && node.Instruction != IRInstruction.Phi64 && node.Instruction != IRInstruction.PhiR4 && node.Instruction != IRInstruction.PhiR8)
-						break;
+			for (var node = target.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+			{
+				if (node.IsEmptyOrNop)
+					continue;
 
-					int index = node.PhiBlocks.IndexOf(source);
+				if (!IsPhiInstruction(node.Instruction))
+					break;
 
-					node.PhiBlocks[index] = newSource;
-				}
+				int index = node.PhiBlocks.IndexOf(source);
+
+				//Debug.Assert(index >= 0);
+
+				node.PhiBlocks[index] = newSource;
 			}
 		}
 
@@ -753,9 +837,33 @@ namespace Mosa.Compiler.Framework
 
 		#region Helper Methods
 
+		public static bool IsMoveInstruction(BaseInstruction instruction)
+		{
+			return instruction == IRInstruction.Move32
+				|| instruction == IRInstruction.Move64
+				|| instruction == IRInstruction.MoveObject
+				|| instruction == IRInstruction.MoveR8
+				|| instruction == IRInstruction.MoveR4;
+		}
+
+		public static bool IsCompareInstruction(BaseInstruction instruction)
+		{
+			return instruction == IRInstruction.Compare32x32
+				|| instruction == IRInstruction.Compare32x64
+				|| instruction == IRInstruction.Compare64x32
+				|| instruction == IRInstruction.Compare64x64
+				|| instruction == IRInstruction.CompareObject
+				|| instruction == IRInstruction.CompareR4
+				|| instruction == IRInstruction.CompareR8;
+		}
+
 		public static bool IsPhiInstruction(BaseInstruction instruction)
 		{
-			return instruction == IRInstruction.Phi32 || instruction == IRInstruction.Phi64 || instruction == IRInstruction.PhiR4 || instruction == IRInstruction.PhiR8;
+			return instruction == IRInstruction.Phi32
+				|| instruction == IRInstruction.Phi64
+				|| instruction == IRInstruction.PhiObject
+				|| instruction == IRInstruction.PhiR4
+				|| instruction == IRInstruction.PhiR8;
 		}
 
 		public static bool IsSSAForm(Operand operand)
@@ -813,7 +921,9 @@ namespace Mosa.Compiler.Framework
 
 		protected BaseInstruction GetLoadInstruction(MosaType type)
 		{
-			if (type.IsPointer || type.IsReferenceType)
+			if (type.IsReferenceType)
+				return IRInstruction.LoadObject;
+			else if (type.IsPointer)
 				return Select(IRInstruction.Load32, IRInstruction.Load64);
 			if (type.IsPointer)
 				return Select(IRInstruction.Load32, IRInstruction.Load64);
@@ -847,7 +957,9 @@ namespace Mosa.Compiler.Framework
 
 		public BaseInstruction GetMoveInstruction(MosaType type)
 		{
-			if (type.IsPointer || type.IsReferenceType)
+			if (type.IsReferenceType)
+				return IRInstruction.MoveObject;
+			if (type.IsPointer)
 				return Select(IRInstruction.Move32, IRInstruction.Move64);
 			else if (type.IsI1)
 				return Select(IRInstruction.SignExtend8x32, IRInstruction.SignExtend8x64);
@@ -889,7 +1001,9 @@ namespace Mosa.Compiler.Framework
 
 		public static BaseIRInstruction GetStoreParameterInstruction(MosaType type, bool is32bitPlatform)
 		{
-			if (type.IsR4)
+			if (type.IsReferenceType)
+				return IRInstruction.StoreParamObject;
+			else if (type.IsR4)
 				return IRInstruction.StoreParamR4;
 			else if (type.IsR8)
 				return IRInstruction.StoreParamR8;
@@ -911,7 +1025,9 @@ namespace Mosa.Compiler.Framework
 
 		public static BaseIRInstruction GetLoadParameterInstruction(MosaType type, bool is32bitPlatform)
 		{
-			if (type.IsR4)
+			if (type.IsReferenceType)
+				return IRInstruction.LoadParamObject;
+			else if (type.IsR4)
 				return IRInstruction.LoadParamR4;
 			else if (type.IsR8)
 				return IRInstruction.LoadParamR8;
@@ -933,8 +1049,7 @@ namespace Mosa.Compiler.Framework
 				return IRInstruction.LoadParam32;
 			else if (type.IsEnum && type.ElementType.IsUI8)
 				return IRInstruction.LoadParam64;
-
-			if (is32bitPlatform)
+			else if (is32bitPlatform)
 				return IRInstruction.LoadParam32;
 			else
 				return IRInstruction.LoadParam64;
@@ -945,18 +1060,17 @@ namespace Mosa.Compiler.Framework
 			if (type == null)
 				return null;
 
-			if (type.IsR4)
+			if (type.IsReferenceType)
+				return IRInstruction.SetReturnObject;
+			else if (type.IsR4)
 				return IRInstruction.SetReturnR4;
 			else if (type.IsR8)
 				return IRInstruction.SetReturnR8;
-
-			if (!is32bitPlatform)
+			else if (!is32bitPlatform)
 				return IRInstruction.SetReturn64;
-
-			if (type.IsUI8 || (type.IsEnum && type.ElementType.IsUI8))
+			else if (type.IsUI8 || (type.IsEnum && type.ElementType.IsUI8))
 				return IRInstruction.SetReturn64;
-
-			if (!MosaTypeLayout.CanFitInRegister(type))
+			else if (!MosaTypeLayout.CanFitInRegister(type))
 				return IRInstruction.SetReturnCompound;
 
 			return IRInstruction.SetReturn32;
@@ -964,7 +1078,9 @@ namespace Mosa.Compiler.Framework
 
 		public BaseIRInstruction GetStoreInstruction(MosaType type)
 		{
-			if (type.IsR4)
+			if (type.IsReferenceType)
+				return IRInstruction.StoreObject;
+			else if (type.IsR4)
 				return IRInstruction.StoreR4;
 			else if (type.IsR8)
 				return IRInstruction.StoreR8;
@@ -984,27 +1100,9 @@ namespace Mosa.Compiler.Framework
 			throw new NotSupportedException();
 		}
 
-		public BaseInstruction Select(Operand operand, BaseInstruction instruction32, BaseInstruction instruction64)
-		{
-			return !operand.Is64BitInteger ? instruction32 : instruction64;
-		}
-
-		public BaseInstruction Select(BaseInstruction instruction32, BaseInstruction instruction64)
+		private BaseInstruction Select(BaseInstruction instruction32, BaseInstruction instruction64)
 		{
 			return Is32BitPlatform ? instruction32 : instruction64;
-		}
-
-		public BaseInstruction Select(bool is64bit, BaseInstruction instruction32, BaseInstruction instruction64)
-		{
-			return !is64bit ? instruction32 : instruction64;
-		}
-
-		public static bool IsSimpleIRMoveInstruction(BaseInstruction instruction)
-		{
-			return instruction == IRInstruction.Move32
-				|| instruction == IRInstruction.Move64
-				|| instruction == IRInstruction.MoveR8
-				|| instruction == IRInstruction.MoveR4;
 		}
 
 		public static void ReplaceOperand(Operand target, Operand replacement)
@@ -1065,59 +1163,39 @@ namespace Mosa.Compiler.Framework
 
 		#region Constant Helper Methods
 
-		public Operand CreateConstant(byte value)
-		{
-			return Operand.CreateConstant(TypeSystem.BuiltIn.U1, value);
-		}
-
-		protected Operand CreateConstant(int value)
+		protected Operand CreateConstant32(int value)
 		{
 			return Operand.CreateConstant(TypeSystem.BuiltIn.I4, value);
 		}
 
-		protected Operand CreateConstant(uint value)
+		protected Operand CreateConstant32(uint value)
 		{
-			return Operand.CreateConstant(TypeSystem.BuiltIn.U4, value);
+			return Operand.CreateConstant(TypeSystem.BuiltIn.I4, value);
 		}
 
-		protected Operand CreateConstant(long value)
+		protected Operand CreateConstant32(long value)
 		{
 			return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
 		}
 
-		protected Operand CreateConstant(ulong value)
+		protected Operand CreateConstant64(ulong value)
 		{
-			return Operand.CreateConstant(TypeSystem.BuiltIn.U8, value);
+			return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
 		}
 
-		protected static Operand CreateConstant(MosaType type, long value)
+		protected Operand CreateConstantR4(float value)
 		{
-			return Operand.CreateConstant(type, (ulong)value);
+			return Operand.CreateConstant(TypeSystem.BuiltIn.R4, value);
+		}
+
+		protected Operand CreateConstantR8(double value)
+		{
+			return Operand.CreateConstant(TypeSystem.BuiltIn.R8, value);
 		}
 
 		protected static Operand CreateConstant(MosaType type, ulong value)
 		{
 			return Operand.CreateConstant(type, value);
-		}
-
-		protected static Operand CreateConstant(MosaType type, int value)
-		{
-			return Operand.CreateConstant(type, (long)value);
-		}
-
-		protected static Operand CreateConstant(MosaType type, uint value)
-		{
-			return Operand.CreateConstant(type, value);
-		}
-
-		protected Operand CreateConstant(float value)
-		{
-			return Operand.CreateConstant(value, TypeSystem);
-		}
-
-		protected Operand CreateConstant(double value)
-		{
-			return Operand.CreateConstant(value, TypeSystem);
 		}
 
 		#endregion Constant Helper Methods
@@ -1127,6 +1205,31 @@ namespace Mosa.Compiler.Framework
 			MethodCompiler.Stop();
 			MethodCompiler.Compiler.Stop();
 			throw new CompilerException(exception);
+		}
+
+		protected bool CheckAllPhiInstructions()
+		{
+			foreach (var block in BasicBlocks)
+			{
+				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+				{
+					if (node.IsEmptyOrNop)
+						continue;
+
+					if (!IsPhiInstruction(node.Instruction))
+						break;
+
+					foreach (var phiblock in node.PhiBlocks)
+					{
+						if (!block.PreviousBlocks.Contains(phiblock))
+						{
+							throw new CompilerException("CheckAllPhiInstructions() failed in block: {block} at {node}!");
+						}
+					}
+				}
+			}
+
+			return true;
 		}
 	}
 }

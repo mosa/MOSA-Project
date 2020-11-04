@@ -109,7 +109,7 @@ namespace Mosa.UnitTests
 		[MosaUnitTest(Series = "I4")]
 		public static bool IsInstI4ToI4(int i)
 		{
-			object o = (int)i;
+			object o = i;
 			return (o is int);
 		}
 

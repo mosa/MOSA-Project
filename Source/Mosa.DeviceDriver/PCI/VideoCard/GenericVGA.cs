@@ -439,7 +439,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 
 		#region Modes
 
-		private static byte[] VGA320x200x4 = new byte[] {
+		private static readonly byte[] VGA320x200x4 = new byte[] {
 			/* MISC */
 			0x63,
 			/* SEQ */
@@ -458,7 +458,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 			0x01, 0x00, 0x03, 0x00, 0x00
 		};
 
-		private static byte[] VGA640x480x2 = new byte[] {
+		private static readonly byte[] VGA640x480x2 = new byte[] {
 			/* MISC */
 			0xE3,
 			/* SEQ */
@@ -477,7 +477,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 			0x01, 0x00, 0x0F, 0x00, 0x00
 		};
 
-		private static byte[] VGA720x480x16 = new byte[]    {
+		private static readonly byte[] VGA720x480x16 = new byte[]    {
 			/* MISC */
 			0xE7,
 			/* SEQ */
@@ -496,7 +496,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 			0x01, 0x00, 0x0F, 0x00, 0x00,
 		};
 
-		private static byte[] VGA320x200x256 = new byte[] {
+		private static readonly byte[] VGA320x200x256 = new byte[] {
 			/* MISC */
 			0x63,
 			/* SEQ */
@@ -515,7 +515,7 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 			0x41, 0x00, 0x0F, 0x00, 0x00
 		};
 
-		private static byte[] VGA640x480x16 = new byte[] {
+		private static readonly byte[] VGA640x480x16 = new byte[] {
 			/* MISC */
 			0xE3,
 			/* SEQ */

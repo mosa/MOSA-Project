@@ -56,7 +56,7 @@ namespace Mosa.Compiler.Framework.CIL
 			var parameterOperand = decoder.MethodCompiler.Parameters[index];
 
 			node.Operand1 = parameterOperand;
-			node.Result = AllocateVirtualRegisterOrStackSlot(decoder.MethodCompiler, parameterOperand.Type);
+			node.Result = decoder.MethodCompiler.AllocateVirtualRegisterOrStackSlot(parameterOperand.Type);
 		}
 
 		#endregion Methods

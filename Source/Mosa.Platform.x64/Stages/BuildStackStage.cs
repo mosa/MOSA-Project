@@ -1,7 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Platform.Intel;
 
 namespace Mosa.Platform.x64.Stages
 {
@@ -21,7 +20,7 @@ namespace Mosa.Platform.x64.Stages
 
 			if (MethodCompiler.StackSize != 0)
 			{
-				context.AppendInstruction(X64.Sub64, StackPointer, StackPointer, CreateConstant(-MethodCompiler.StackSize));
+				context.AppendInstruction(X64.Sub64, StackPointer, StackPointer, CreateConstant32(-MethodCompiler.StackSize));
 			}
 		}
 
@@ -35,7 +34,7 @@ namespace Mosa.Platform.x64.Stages
 
 			if (MethodCompiler.StackSize != 0)
 			{
-				context.AppendInstruction(X64.Add64, StackPointer, StackPointer, CreateConstant(-MethodCompiler.StackSize));
+				context.AppendInstruction(X64.Add64, StackPointer, StackPointer, CreateConstant32(-MethodCompiler.StackSize));
 			}
 
 			context.AppendInstruction(X64.Pop64, StackFrame);

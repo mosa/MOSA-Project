@@ -47,7 +47,7 @@ namespace System
 			set { inherited = value; }
 		}
 
-		private AttributeTargets validOn;
+		private readonly AttributeTargets validOn;
 
 		/// <summary>
 		/// Gets a set of values identifying which program elements that the indicated

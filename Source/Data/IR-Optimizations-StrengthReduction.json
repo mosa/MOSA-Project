@@ -19,7 +19,11 @@
 		"IR.AddCarryOut64",
 		"IR.AddCarryOut32",
 		"IR.AddCarryIn32",
-		"IR.AddCarryIn64"
+		"IR.AddCarryIn64",
+		"IR.Compare32x32",
+		"IR.Compare32x64",
+		"IR.Compare64x32",
+		"IR.Compare64x64"
 	],
 	"Optimizations": [
 		{
@@ -30,7 +34,7 @@
 			"Expression": "IR.Add## a 0",
 			"Filter": "",
 			"Result": "(IR.Move## a)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -40,7 +44,7 @@
 			"Expression": "IR.And## a 0",
 			"Filter": "",
 			"Result": "(IR.Move## [To##(0)])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -50,7 +54,7 @@
 			"Expression": "IR.And32 a 0xFFFFFFFF",
 			"Filter": "",
 			"Result": "(IR.Move32 a)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -60,7 +64,7 @@
 			"Expression": "IR.And64 a 0xFFFFFFFFFFFFFFFF",
 			"Filter": "",
 			"Result": "(IR.Move64 a)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -70,7 +74,7 @@
 			"Expression": "IR.Or32 a 0xFFFFFFFF",
 			"Filter": "",
 			"Result": "(IR.Move32 [To32(0xFFFFFFFF)])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -80,7 +84,7 @@
 			"Expression": "IR.Or64 a 0xFFFFFFFFFFFFFFFF",
 			"Filter": "",
 			"Result": "(IR.Move64 0xFFFFFFFFFFFFFFFF)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -90,7 +94,7 @@
 			"Expression": "IR.Or## a 0",
 			"Filter": "",
 			"Result": "(IR.Move## a)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -100,7 +104,7 @@
 			"Expression": "IR.Xor## a 0",
 			"Filter": "",
 			"Result": "(IR.Move## a)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -110,7 +114,7 @@
 			"Expression": "IR.Xor32 a 0xFFFFFFFF",
 			"Filter": "",
 			"Result": "(IR.Not32 a)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -120,7 +124,7 @@
 			"Expression": "IR.Xor64 a 0xFFFFFFFFFFFFFFFF",
 			"Filter": "",
 			"Result": "(IR.Not64 a)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -184,7 +188,7 @@
 			"Expression": "IR.MulSigned## a 0",
 			"Filter": "",
 			"Result": "(IR.Move## [To##(0)])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -194,7 +198,7 @@
 			"Expression": "IR.MulUnsigned## a 0",
 			"Filter": "",
 			"Result": "(IR.Move## [To##(0)])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -204,7 +208,7 @@
 			"Expression": "IR.MulSigned## a 1",
 			"Filter": "",
 			"Result": "(IR.Move## a)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -214,7 +218,7 @@
 			"Expression": "IR.MulUnsigned## a 1",
 			"Filter": "",
 			"Result": "(IR.Move## a)",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -224,7 +228,7 @@
 			"Expression": "IR.MulUnsigned## x c",
 			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo##(c) & !IsZero(c) & !IsOne(c)",
 			"Result": "(IR.ShiftLeft## x [GetPowerOfTwo(To32(c))])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -234,7 +238,7 @@
 			"Expression": "IR.MulSigned## x c",
 			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo##(c) & !IsZero(c) & !IsOne(c)",
 			"Result": "(IR.ShiftLeft## x [GetPowerOfTwo(To32(c))])",
-			"Reassociate": "Yes"
+			"Variations": "Yes"
 		},
 		{
 			"FamilyName": "IR",
@@ -289,6 +293,16 @@
 			"Expression": "IR.RemUnsigned## x c",
 			"Filter": "IsResolvedConstant(c) & IsPowerOfTwo##(c) & !IsZero(c)",
 			"Result": "(IR.And## x [Sub##(ShiftLeft##(1,And##(GetPowerOfTwo(To32(c)),Sub##(##,1))),1)])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Or##And##",
+			"SubName": "ClearAndSet",
+			"Expression": "IR.Or## (IR.And## x c1) c2",
+			"Filter": "IsResolvedConstant(c2) & IsResolvedConstant(c1) & IsZero(Not##(Or##(To##(c1),To##(c2))))",
+			"Result": "(IR.Or## x c2)",
+			"Variations": "Yes"
 		}
 	]
 }

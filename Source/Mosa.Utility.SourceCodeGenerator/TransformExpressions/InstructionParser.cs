@@ -67,6 +67,12 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				{
 					node.Operands.Add(new Operand(token, node.Operands.Count));
 				}
+				else if (token.TokenType == TokenType.OpenCurly)
+				{
+					index++; // skip to next token, which should be label
+					node.Conditions = InstructionParser.ParseConditions(tokens, ref index);
+					node.Condition = node.Conditions[0];
+				}
 				else
 				{
 					throw new Exception($"parsing error {token}");
@@ -74,6 +80,117 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			}
 
 			throw new Exception($"parsing error incomplete");
+		}
+
+		public static List<ConditionCode> ParseConditions(List<Token> tokens, ref int index)
+		{
+			var conditions = new List<ConditionCode>();
+
+			while (true)
+			{
+				var condition = ParseCondition(tokens, ref index);
+
+				conditions.Add(condition);
+
+				if (tokens[index].TokenType == TokenType.Comma)
+				{
+					index++;
+					continue;
+				}
+
+				break;
+			}
+
+			if (conditions.Count == 0)
+			{
+				conditions.Add(ConditionCode.Always);
+			}
+
+			return conditions;
+		}
+
+		public static ConditionCode ParseCondition(List<Token> tokens, ref int index)
+		{
+			var condition = ConditionCode.Always;
+
+			for (; ; index++)
+			{
+				var t = tokens[index].TokenType;
+
+				if (t == TokenType.Comma)
+					return condition;
+
+				if (t == TokenType.CloseCurly)
+					break;
+
+				if (condition == ConditionCode.Always)
+				{
+					switch (t)
+					{
+						case TokenType.Greater:
+							condition = ConditionCode.Greater;
+							break;
+
+						case TokenType.Less:
+							condition = ConditionCode.Less;
+							break;
+
+						case TokenType.Not:
+							condition = ConditionCode.NotEqual;
+							break;
+
+						case TokenType.Equal:
+							condition = ConditionCode.Equal;
+							break;
+					}
+				}
+				else if (t == TokenType.Equal)
+				{
+					switch (condition)
+					{
+						case ConditionCode.Greater:
+							condition = ConditionCode.GreaterOrEqual;
+							break;
+
+						case ConditionCode.Less:
+							condition = ConditionCode.LessOrEqual;
+							break;
+					}
+				}
+				else if (t == TokenType.Word)
+				{
+					var text = tokens[index].Value.ToLower();
+
+					if (text == "u")
+					{
+						switch (condition)
+						{
+							case ConditionCode.Greater:
+								condition = ConditionCode.UnsignedGreater;
+								break;
+
+							case ConditionCode.Less:
+								condition = ConditionCode.UnsignedLess;
+								break;
+
+							case ConditionCode.GreaterOrEqual:
+								condition = ConditionCode.UnsignedGreaterOrEqual;
+								break;
+
+							case ConditionCode.LessOrEqual:
+								condition = ConditionCode.UnsignedLessOrEqual;
+								break;
+						}
+					}
+
+					//else if (text == "set-equal")
+					//	return ConditionCode.SetWithEqual;
+					//else if (text == "set-noequal")
+					//	return ConditionCode.SetWithNoEqual;
+				}
+			}
+
+			return condition;
 		}
 	}
 }

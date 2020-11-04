@@ -98,7 +98,7 @@ namespace Mosa.Kernel.x86
 				{
 					uint len = ctrl >> 5;
 
-					uint reference = (uint)(oidx - ((ctrl & 0x1f) << 8) - 1);
+					uint reference = oidx - ((ctrl & 0x1f) << 8) - 1;
 
 					if (len == 7)
 					{

@@ -29,14 +29,14 @@ namespace Mosa.DeviceDriver.ISA
 
 		internal struct StatusRegister
 		{
-			internal const byte Busy = (byte)(1 << 7);
-			internal const byte DriveReady = (byte)(1 << 6);
-			internal const byte DriveWriteFault = (byte)(1 << 5);
-			internal const byte DriveSeekComplete = (byte)(1 << 4);
-			internal const byte DataRequest = (byte)(1 << 3);
-			internal const byte CorrectedData = (byte)(1 << 2);
-			internal const byte Index = (byte)(1 << 1);
-			internal const byte Error = (byte)(1 << 0);
+			internal const byte Busy = 1 << 7;
+			internal const byte DriveReady = 1 << 6;
+			internal const byte DriveWriteFault = 1 << 5;
+			internal const byte DriveSeekComplete = 1 << 4;
+			internal const byte DataRequest = 1 << 3;
+			internal const byte CorrectedData = 1 << 2;
+			internal const byte Index = 1 << 1;
+			internal const byte Error = 1 << 0;
 		}
 
 		/// <summary>

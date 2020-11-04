@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework
 		private ulong Bits;
 		private int BitsLength;
 
-		private int Size = 8;
+		private readonly int Size = 8;
 
 		private bool SuppressFlag;
 		private byte SuppressValue;

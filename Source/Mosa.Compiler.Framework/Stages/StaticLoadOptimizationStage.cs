@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// HARD CODED
 			if (operand1.Field.DeclaringType.IsValueType && (operand1.Field.DeclaringType.Name == "System.IntPtr" || operand1.Field.DeclaringType.Name == "System.UIntPtr") && operand1.Field.Name == "Zero")
 			{
-				context.SetInstruction(IRInstruction.Move32, context.Result, ConstantZero);
+				context.SetInstruction(IRInstruction.Move32, context.Result, ConstantZero32);
 				return;
 			}
 		}
@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// HARD CODED
 			if (operand1.Field.DeclaringType.IsValueType && (operand1.Field.DeclaringType.Name == "System.IntPtr" || operand1.Field.DeclaringType.Name == "System.UIntPtr") && operand1.Field.Name == "Zero")
 			{
-				context.SetInstruction(IRInstruction.Move64, context.Result, ConstantZero);
+				context.SetInstruction(IRInstruction.Move64, context.Result, ConstantZero64);
 				return;
 			}
 		}

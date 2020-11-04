@@ -129,7 +129,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			writer.Write(ProgramHeader.EntrySize32);   // phentsize
 			writer.Write(ProgramHeaderNumber);      // phnum
 			writer.Write(SectionHeaderEntry.EntrySize32);   // shentsize
-			writer.Write((ushort)SectionHeaderNumber);      // shnum
+			writer.Write(SectionHeaderNumber);      // shnum
 			writer.Write((ushort)SectionHeaderStringIndex); // shstrndx
 		}
 
@@ -152,7 +152,7 @@ namespace Mosa.Compiler.Framework.Linker.Elf
 			writer.Write(ProgramHeader.EntrySize64);   // phentsize
 			writer.Write(ProgramHeaderNumber);      // phnum
 			writer.Write(SectionHeaderEntry.EntrySize64);   // shentsize
-			writer.Write((ushort)SectionHeaderNumber);      // shnum
+			writer.Write(SectionHeaderNumber);      // shnum
 			writer.Write((ushort)SectionHeaderStringIndex); // shstrndx
 		}
 

@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace System.System
+﻿namespace System.System
 {
 	public interface IObserver<in T>
 	{

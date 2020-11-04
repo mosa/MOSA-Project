@@ -7,8 +7,8 @@ namespace Mosa.Compiler.Common.Configuration
 {
 	public sealed class Settings
 	{
-		private List<Property> Properties = new List<Property>();
-		private Dictionary<string, Property> Lookups = new Dictionary<string, Property>();
+		private readonly List<Property> Properties = new List<Property>();
+		private readonly Dictionary<string, Property> Lookups = new Dictionary<string, Property>();
 
 		public Settings Clone()
 		{

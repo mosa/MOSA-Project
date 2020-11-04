@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework
 
 		private readonly Stopwatch Stopwatch;
 
-		private NotifyTraceLogHandler NotifyTraceLogHandler;
+		private readonly NotifyTraceLogHandler NotifyTraceLogHandler;
 
 		private readonly bool Statistics;
 
@@ -202,6 +202,8 @@ namespace Mosa.Compiler.Framework
 
 		public CompilerHooks CompilerHooks { get; }
 
+		public bool IsInSSAForm { get; set; }
+
 		#endregion Properties
 
 		#region Construction
@@ -229,6 +231,7 @@ namespace Mosa.Compiler.Framework
 
 			NotifyTraceLogHandler = GetMethodInstructionTraceHandler();
 			Statistics = compiler.Statistics;
+			IsInSSAForm = false;
 
 			BasicBlocks = basicBlocks ?? new BasicBlocks();
 			LocalStack = new List<Operand>();
@@ -626,7 +629,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="operandHigh">The operand high.</param>
 		public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 		{
-			if (operand.Is64BitInteger)
+			if (operand.IsInteger64)
 			{
 				SplitLongOperand(operand);
 				operandLow = operand.Low;

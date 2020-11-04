@@ -3,11 +3,9 @@
 using Reko.Arch.Arm;
 using Reko.Arch.X86;
 using Reko.Core;
-using Reko.Core.Machine;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
-using System.IO;
 using System.Text;
 
 namespace Mosa.Utility.Disassembler
@@ -19,7 +17,7 @@ namespace Mosa.Utility.Disassembler
 
 		public ulong Offset { get; set; } = 0;
 
-		private ProcessorArchitecture arch;
+		private readonly ProcessorArchitecture arch;
 		private MemoryArea memoryArea;
 
 		//private static MachineInstructionWriterOptions options = new MachineInstructionWriterOptions(syntax: "Nasm", operandSeparator: ", ");

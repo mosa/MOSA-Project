@@ -18,9 +18,14 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 		protected bool First = true;
 
-		public BuildTransformations(string jsonFile, string destinationPath)
+		protected string Namespace;
+		protected string Path;
+
+		public BuildTransformations(string jsonFile, string destinationPath, string path, string name)
 			: base(jsonFile, destinationPath)
 		{
+			this.Namespace = name;
+			this.Path = path;
 		}
 
 		protected override void Iterator()
@@ -49,26 +54,26 @@ namespace Mosa.Utility.SourceCodeGenerator
 			string filter = node.Filter;
 			string result = node.Result;
 			bool log = (node.Log != null && node.Log == "Yes");
-			bool reassociate = (node.Reassociate != null && node.Reassociate == "Yes");
+			bool Variations = (node.Variations != null && node.Variations == "Yes");
 
-			GenerateTranformations(name, familyName, type, subName, expression, filter, result, reassociate, log);
+			GenerateTranformations(name, familyName, type, subName, expression, filter, result, Variations, log);
 		}
 
-		private void GenerateTranformations(string name, string familyName, string type, string subName, string expression, string filter, string result, bool reassociate, bool log)
+		private void GenerateTranformations(string name, string familyName, string type, string subName, string expression, string filter, string result, bool Variations, bool log)
 		{
 			if (expression.Contains("R#"))
 			{
-				GenerateTransformation(R4(name), R4(familyName), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result)), reassociate, log);
-				GenerateTransformation(R8(name), R8(familyName), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result)), reassociate, log);
+				GenerateTransformation(R4(name), R4(familyName), R4(type), R4(subName), new Transformation(R4(expression), R4(filter), R4(result)), Variations, log);
+				GenerateTransformation(R8(name), R8(familyName), R8(type), R8(subName), new Transformation(R8(expression), R8(filter), R8(result)), Variations, log);
 			}
 			else if (expression.Contains("##"))
 			{
-				GenerateTransformation(To32(name), To32(familyName), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result)), reassociate, log);
-				GenerateTransformation(To64(name), To64(familyName), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result)), reassociate, log);
+				GenerateTransformation(To32(name), To32(familyName), To32(type), To32(subName), new Transformation(To32(expression), To32(filter), To32(result)), Variations, log);
+				GenerateTransformation(To64(name), To64(familyName), To64(type), To64(subName), new Transformation(To64(expression), To64(filter), To64(result)), Variations, log);
 			}
 			else
 			{
-				GenerateTransformation(name, familyName, type, subName, new Transformation(expression, filter, result), reassociate, log);
+				GenerateTransformation(name, familyName, type, subName, new Transformation(expression, filter, result), Variations, log);
 			}
 		}
 
@@ -92,32 +97,38 @@ namespace Mosa.Utility.SourceCodeGenerator
 			return s?.Replace("R#", "R8");
 		}
 
-		private void GenerateTransformation(string name, string familyName, string type, string subName, Transformation transform, bool reassociate, bool log)
+		private void GenerateTransformation(string name, string familyName, string type, string subName, Transformation transform, bool Variations, bool log)
 		{
 			Lines.Clear();
 			First = true;
 
-			DestinationFile = $"{familyName}\\{type}\\{name}{subName}.cs";
+			DestinationFile = $"{type}\\{name}{subName}.cs";
 			AddSourceHeader();
 
-			Lines.AppendLine("using Mosa.Compiler.Framework.IR;");
+			Lines.AppendLine($"using {Namespace};");
+
+			if (!Namespace.Contains("Framework"))
+			{
+				Lines.AppendLine($"using Mosa.Compiler.Framework;");
+				Lines.AppendLine($"using Mosa.Compiler.Framework.Transform;");
+			}
 
 			Lines.AppendLine();
-			Lines.AppendLine($"namespace Mosa.Compiler.Framework.Transform.Auto.{familyName}.{type}");
+			Lines.AppendLine($"namespace {Path}.Transform.Auto.{type}");
 			Lines.AppendLine("{");
 
-			GenerateTransformations(name, familyName, type, subName, transform, reassociate, log);
+			GenerateTransformations(name, familyName, type, subName, transform, Variations, log);
 
 			Lines.AppendLine("}");
 
 			Save();
 		}
 
-		private void GenerateTransformations(string name, string familyName, string type, string subName, Transformation transform, bool reassociate, bool log)
+		private void GenerateTransformations(string name, string familyName, string type, string subName, Transformation transform, bool Variations, bool log)
 		{
 			GenerateTransformation2(name, familyName, type, subName, transform, log);
 
-			if (!reassociate)
+			if (!Variations)
 				return;
 
 			if (CommutativeInstructions == null || CommutativeInstructions.Count == 0)
@@ -343,16 +354,20 @@ namespace Mosa.Utility.SourceCodeGenerator
 
 				var operation = firstInstruction ? "Set" : "Append";
 
+				var condition = GetConditionText(node.Condition);
+
+				condition = condition != null ? $"ConditionCode.{condition}, " : string.Empty;
+
 				if (!string.IsNullOrWhiteSpace(node.InstructionName))
 				{
 					var instruction = node.InstructionName.Replace("IR.", "IRInstruction."); ;
 					var result = node == transform.ResultInstructionTree ? "result" : $"v{nodeNbrToVirtualRegisterNbr[node.NodeNbr]}";
 
-					Lines.AppendLine($"\t\t\tcontext.{operation}Instruction({instruction}, {result}, {operands});");
+					Lines.AppendLine($"\t\t\tcontext.{operation}Instruction({instruction}, {condition}{result}, {operands});");
 				}
 				else
 				{
-					Lines.AppendLine($"\t\t\tcontext.{operation}Instruction(GetMove(result), result, {operands});");
+					Lines.AppendLine($"\t\t\tcontext.{operation}Instruction(GetMove(result), {condition}result, {operands});");
 				}
 
 				firstInstruction = false;
@@ -551,6 +566,15 @@ namespace Mosa.Utility.SourceCodeGenerator
 				NodeNbrToNode.Add(instructionNode.NodeNbr, string.Empty);
 			}
 
+			var path = NodeNbrToNode[instructionNode.NodeNbr];
+
+			if (instructionNode.InstructionName.StartsWith("IR.Phi"))
+			{
+				EmitCondition($"context.{path}OperandCount != {instructionNode.Operands.Count}");
+			}
+
+			EmitConditions(instructionNode, path);
+
 			foreach (var operand in instructionNode.Operands)
 			{
 				ProcessConditions(operand, instructionNode);
@@ -560,6 +584,62 @@ namespace Mosa.Utility.SourceCodeGenerator
 			{
 				ProcessNestedConditions(operand, instructionNode);
 			}
+		}
+
+		private void EmitConditions(InstructionNode node, string path)
+		{
+			if (node.Condition == ConditionCode.Always)
+				return;
+
+			if (node.Conditions.Count == 1)
+			{
+				EmitCondition($"context.{path}ConditionCode != ConditionCode.{GetConditionText(node.Condition)}");
+			}
+			else
+			{
+				EmitConditionStatement(path);
+
+				var sb = new StringBuilder();
+
+				bool after = false;
+				foreach (var condition in node.Conditions)
+				{
+					if (after)
+						sb.Append(" || ");
+
+					sb.Append($"context.{path}ConditionCode == ConditionCode.{GetConditionText(condition)}");
+
+					after = true;
+				}
+
+				EmitCondition($"!({sb})");
+			}
+		}
+
+		private static string GetConditionText(ConditionCode condition)
+		{
+			switch (condition)
+			{
+				case ConditionCode.Equal: return "Equal";
+				case ConditionCode.NotEqual: return "NotEqual";
+				case ConditionCode.Less: return "Less";
+				case ConditionCode.LessOrEqual: return "LessOrEqual";
+				case ConditionCode.Greater: return "Greater";
+				case ConditionCode.GreaterOrEqual: return "GreaterOrEqual";
+
+				case ConditionCode.UnsignedLess: return "UnsignedLess";
+				case ConditionCode.UnsignedLessOrEqual: return "UnsignedLessOrEqual";
+				case ConditionCode.UnsignedGreater: return "UnsignedGreater";
+				case ConditionCode.UnsignedGreaterOrEqual: return "UnsignedGreaterOrEqual";
+
+				default: return null;
+			}
+		}
+
+		private void EmitConditionStatement(string path)
+		{
+			Lines.AppendLine($"\t\t\tvar condition = context.{path}ConditionCode;");
+			Lines.AppendLine("");
 		}
 
 		private void EmitCondition(string condition)

@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public static class CompilerVersion
 	{
-		private static Version Version = GetVersion();
+		private static readonly Version Version = GetVersion();
 
 		public static Version GetVersion()
 		{
@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Framework
 			if (version.Build == 0)
 			{
 				// Revision and build number are reversed by design
-				version = new Version(2, 0, 0, 1);
+				version = new Version(2, 0, 0, 2);
 			}
 
 			return version;

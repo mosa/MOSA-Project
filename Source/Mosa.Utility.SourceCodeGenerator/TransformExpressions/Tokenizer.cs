@@ -126,6 +126,18 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				{
 					tokens.Add(new Token(TokenType.Comma, index++, ","));
 				}
+				else if (c == '=')
+				{
+					tokens.Add(new Token(TokenType.Equal, index++, "="));
+				}
+				else if (c == '{')
+				{
+					tokens.Add(new Token(TokenType.OpenCurly, index++, "{"));
+				}
+				else if (c == '}')
+				{
+					tokens.Add(new Token(TokenType.CloseCurly, index++, "}"));
+				}
 				else
 				{
 					throw new CompilerException($"tokensizer: syntax error at {index}");
@@ -180,7 +192,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 			}
 
 			// integer
-			ulong l = ulong.Parse(part);
+			ulong l = (ulong)long.Parse(part);
 
 			return new Token(TokenType.IntegerConstant, index, part, l);
 		}

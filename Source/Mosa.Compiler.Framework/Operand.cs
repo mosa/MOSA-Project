@@ -73,7 +73,9 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets a value indicating whether [is 64 bit integer].
 		/// </summary>
-		public bool Is64BitInteger { get; private set; }
+		public bool IsInteger64 { get; private set; }
+
+		public bool IsInteger32 { get; private set; }
 
 		public bool IsArray { get; private set; }
 
@@ -96,20 +98,16 @@ namespace Mosa.Compiler.Framework
 			{
 				if (!IsResolvedConstant)
 					return false;
-				else if (IsInteger || IsBoolean || IsChar || IsPointer)
+				else if (IsStackLocal || IsOnStack || IsParameter)
 					return ConstantUnsigned64 == 1;
-				else if (IsStackLocal)
-					return ConstantUnsigned64 == 1;
-				else if (IsParameter)
-					return ConstantUnsigned64 == 1;
+				else if (IsNull)
+					return false;
 				else if (IsR8)
 					return ConstantDouble == 1;
 				else if (IsR4)
 					return ConstantFloat == 1;
-				else if (IsNull)
-					return false;
-
-				throw new CompilerException();
+				else
+					return ConstantUnsigned64 == 1;
 			}
 		}
 
@@ -123,20 +121,16 @@ namespace Mosa.Compiler.Framework
 			{
 				if (!IsResolvedConstant)
 					return false;
-				else if (IsInteger || IsBoolean || IsChar || IsPointer)
+				else if (IsStackLocal || IsOnStack || IsParameter)
 					return ConstantUnsigned64 == 0;
-				else if (IsStackLocal)
-					return ConstantUnsigned64 == 0;
-				else if (IsParameter)
-					return ConstantUnsigned64 == 0;
+				else if (IsNull)
+					return true;
 				else if (IsR8)
 					return ConstantDouble == 0;
 				else if (IsR4)
 					return ConstantFloat == 0;
-				else if (IsNull)
-					return true;
-
-				throw new CompilerException();
+				else
+					return ConstantUnsigned64 == 0;
 			}
 		}
 
@@ -326,7 +320,8 @@ namespace Mosa.Compiler.Framework
 
 			IsInteger = type.IsI1 || type.IsI2 || type.IsI4 || type.IsI8 || type.IsU1 || type.IsU2 || type.IsU4 || type.IsU8;
 
-			Is64BitInteger = type.IsUI8 || Type.GetEnumUnderlyingType().IsUI8;
+			IsInteger64 = type.IsUI8 || Type.GetEnumUnderlyingType().IsUI8;
+			IsInteger32 = type.IsUI4 || Type.GetEnumUnderlyingType().IsUI4;
 		}
 
 		#endregion Construction
@@ -536,7 +531,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateHighSplitForLong(Operand longOperand, int index, TypeSystem typeSystem)
 		{
-			Debug.Assert(longOperand.Is64BitInteger);
+			Debug.Assert(longOperand.IsInteger64);
 			Debug.Assert(longOperand.LongParent == null || longOperand.LongParent == longOperand);
 			Debug.Assert(longOperand.High == null);
 
@@ -611,7 +606,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateLowSplitForLong(Operand longOperand, int index, TypeSystem typeSystem)
 		{
-			Debug.Assert(longOperand.Is64BitInteger);
+			Debug.Assert(longOperand.IsInteger64);
 			Debug.Assert(longOperand.LongParent == null);
 			Debug.Assert(longOperand.Low == null);
 
@@ -872,7 +867,7 @@ namespace Mosa.Compiler.Framework
 				{
 					sb.Append("null");
 				}
-				else if (IsOnStack || IsInteger || IsPointer || IsChar || IsBoolean)
+				else if (IsOnStack)
 				{
 					sb.AppendFormat("{0}", ConstantSigned64);
 				}
@@ -883,6 +878,10 @@ namespace Mosa.Compiler.Framework
 				else if (IsR4)
 				{
 					sb.AppendFormat("{0}", ConstantFloat);
+				}
+				else
+				{
+					sb.AppendFormat("{0}", ConstantSigned64);
 				}
 
 				sb.Append(' ');

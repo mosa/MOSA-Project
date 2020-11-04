@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System;
 using System.Diagnostics.Contracts;
 
 namespace System.Collections
@@ -33,7 +32,7 @@ namespace System.Collections
 
 		protected IList List
 		{
-			get { return (IList)this; }
+			get { return this; }
 		}
 
 		public int Capacity
