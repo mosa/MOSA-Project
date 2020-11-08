@@ -22,6 +22,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		Object,
 		IntPtr,
 		UIntPtr,
-		TypedReference
+		TypedReference,
+		ValueType,
 	}
 }

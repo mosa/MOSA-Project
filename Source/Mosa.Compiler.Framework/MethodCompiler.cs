@@ -83,7 +83,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the local variables.
 		/// </summary>
-		public Operand[] LocalVariables { get; private set; }
+		public Operand[] LocalVariables { get; set; }
 
 		/// <summary>
 		/// Gets the assembly compiler.

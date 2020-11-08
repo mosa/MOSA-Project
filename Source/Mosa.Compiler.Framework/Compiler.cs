@@ -167,11 +167,14 @@ namespace Mosa.Compiler.Framework
 		private static List<BaseMethodCompilerStage> GetDefaultMethodPipeline(CompilerSettings compilerSettings, bool is64BitPlatform)
 		{
 			return new List<BaseMethodCompilerStage>() {
-				new CILDecodingStage(),
-				new CILOperandAssignmentStage(),
-				new CILProtectedRegionStage(),
-				new CILTransformationStage(),
-				new ExceptionStage(),
+				new CILDecodingStageV2(),
+
+				//new CILDecodingStage(),
+				//new CILOperandAssignmentStage(),
+				//new CILProtectedRegionStage(),
+				//new CILTransformationStage(),
+				//new ExceptionStage(),
+
 				new StackSetupStage(),
 				new StaticAllocationResolutionStage(),
 				compilerSettings.Devirtualization ? new DevirtualizeCallStage() : null,

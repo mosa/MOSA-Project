@@ -3,6 +3,7 @@
 using Mosa.Compiler.Common.Exceptions;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.MosaTypeSystem;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
