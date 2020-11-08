@@ -273,7 +273,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (first.IsFloatingPoint)
 			{
-				var result = Is32BitPlatform ? AllocateVirtualRegister32() : AllocateVirtualRegister64();
+				var result = Is32BitPlatform ? AllocateVirtualRegisterI32() : AllocateVirtualRegisterI64();
 				var instruction = (first.IsR4) ? (BaseInstruction)IRInstruction.CompareR4 : IRInstruction.CompareR8;
 
 				context.SetInstruction(instruction, cc, result, first, second);
@@ -1999,7 +1999,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var nextContext = Split(before);
 
 			// Get array length
-			var lengthOperand = AllocateVirtualRegister32();
+			var lengthOperand = AllocateVirtualRegisterI32();
 			var fixedOffset = CreateConstant32(NativePointerSize * 2);
 
 			before.SetInstruction(Select(lengthOperand, IRInstruction.Load32, IRInstruction.Load64), lengthOperand, arrayOperand, fixedOffset);
@@ -2029,7 +2029,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var size = GetTypeSize(arrayType.ElementType, false);
 
-			var elementOffset = Is32BitPlatform ? AllocateVirtualRegister32() : AllocateVirtualRegister64();
+			var elementOffset = Is32BitPlatform ? AllocateVirtualRegisterI32() : AllocateVirtualRegisterI64();
 			var elementSize = CreateConstant32(size);
 
 			var context = new Context(node).InsertBefore();
@@ -2050,7 +2050,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private Operand CalculateTotalArrayOffset(InstructionNode node, Operand elementOffset)
 		{
 			var fixedOffset = CreateConstant32(NativePointerSize * 3);
-			var arrayElement = Is32BitPlatform ? AllocateVirtualRegister32() : AllocateVirtualRegister64();
+			var arrayElement = Is32BitPlatform ? AllocateVirtualRegisterI32() : AllocateVirtualRegisterI64();
 
 			var context = new Context(node).InsertBefore();
 			context.AppendInstruction(Select(arrayElement, IRInstruction.Add32, IRInstruction.Add64), arrayElement, elementOffset, fixedOffset);

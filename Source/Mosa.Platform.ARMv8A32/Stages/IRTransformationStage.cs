@@ -169,7 +169,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			operand2 = MoveConstantToRegisterOrImmediate(context, operand2);
 			operand3 = MoveConstantToRegisterOrImmediate(context, operand3);
 
-			var v1 = AllocateVirtualRegister32();
+			var v1 = AllocateVirtualRegisterI32();
 
 			context.SetInstruction(ARMv8A32.Add, v1, operand1, operand2);
 			context.AppendInstruction(ARMv8A32.Add, result, v1, operand3);
@@ -635,7 +635,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			operand2 = MoveConstantToRegisterOrImmediate(context, operand2);
 			operand3 = MoveConstantToRegisterOrImmediate(context, operand3);
 
-			var v1 = AllocateVirtualRegister32();
+			var v1 = AllocateVirtualRegisterI32();
 
 			context.SetInstruction(ARMv8A32.Sub, v1, operand1, operand2);
 			context.AppendInstruction(ARMv8A32.Sub, result, v1, operand3);
@@ -714,8 +714,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			op1H = MoveConstantToRegister(context, op1H);
 			op2L = MoveConstantToRegister(context, op2L);
 
-			var v1 = AllocateVirtualRegister32();
-			var v2 = AllocateVirtualRegister32();
+			var v1 = AllocateVirtualRegisterI32();
+			var v2 = AllocateVirtualRegisterI32();
 
 			context.SetInstruction(ARMv8A32.Asr, resultHigh, op1H, op2L);
 			context.AppendInstruction(ARMv8A32.Sub, StatusRegister.Set, v1, op2L, Constant_0);
@@ -752,8 +752,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			address = MoveConstantToRegister(context, address);
 			offset = MoveConstantToRegisterOrImmediate(context, offset);
 
-			var v1 = AllocateVirtualRegister32();
-			var v2 = AllocateVirtualRegister32();
+			var v1 = AllocateVirtualRegisterI32();
+			var v2 = AllocateVirtualRegisterI32();
 
 			context.SetInstruction(ARMv8A32.Add, v1, address, offset);
 			context.AppendInstruction(ARMv8A32.Ldr32, resultLow, v1, ConstantZero32);
@@ -832,7 +832,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Operand2, out var op2L, out var op2H);
 			SplitLongOperand(context.Operand3, out var op3L, out var op3H);
 
-			var v1 = AllocateVirtualRegister32();
+			var v1 = AllocateVirtualRegisterI32();
 
 			op1L = MoveConstantToRegister(context, op1L);
 			op1H = MoveConstantToRegisterOrImmediate(context, op1H);
@@ -888,11 +888,11 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			//lsl	resultLow, v1, operand2
 			//orr	resultHigh, v5, v1, lsr v3
 
-			var v1 = AllocateVirtualRegister32();
-			var v2 = AllocateVirtualRegister32();
-			var v3 = AllocateVirtualRegister32();
-			var v4 = AllocateVirtualRegister32();
-			var v5 = AllocateVirtualRegister32();
+			var v1 = AllocateVirtualRegisterI32();
+			var v2 = AllocateVirtualRegisterI32();
+			var v3 = AllocateVirtualRegisterI32();
+			var v4 = AllocateVirtualRegisterI32();
+			var v5 = AllocateVirtualRegisterI32();
 
 			var operand2 = MoveConstantToRegister(context, context.Operand2);
 
@@ -927,10 +927,10 @@ namespace Mosa.Platform.ARMv8A32.Stages
 
 			//asr	resultHigh, op1h, operand2
 
-			var v1 = AllocateVirtualRegister32();
-			var v2 = AllocateVirtualRegister32();
-			var v3 = AllocateVirtualRegister32();
-			var v4 = AllocateVirtualRegister32();
+			var v1 = AllocateVirtualRegisterI32();
+			var v2 = AllocateVirtualRegisterI32();
+			var v3 = AllocateVirtualRegisterI32();
+			var v4 = AllocateVirtualRegisterI32();
 
 			op1L = MoveConstantToRegister(context, op1L);
 			op1H = MoveConstantToRegister(context, op1H);
@@ -1159,8 +1159,8 @@ namespace Mosa.Platform.ARMv8A32.Stages
 			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
 			SplitLongOperand(context.Operand2, out var op2L, out var op2H);
 
-			var v1 = AllocateVirtualRegister32();
-			var v2 = AllocateVirtualRegister32();
+			var v1 = AllocateVirtualRegisterI32();
+			var v2 = AllocateVirtualRegisterI32();
 
 			op1L = MoveConstantToRegister(context, op1L);
 			op1H = MoveConstantToRegister(context, op1H);

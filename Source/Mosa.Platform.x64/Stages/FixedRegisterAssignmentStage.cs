@@ -103,7 +103,7 @@ namespace Mosa.Platform.x64.Stages
 			}
 			else
 			{
-				var v3 = AllocateVirtualRegister32();
+				var v3 = AllocateVirtualRegisterI32();
 				context.AppendInstruction(X64.Mov32, v3, operand3);
 				context.AppendInstruction2(X64.Div32, EDX, EAX, EDX, EAX, v3);
 			}
@@ -142,7 +142,7 @@ namespace Mosa.Platform.x64.Stages
 			}
 			else
 			{
-				var v3 = AllocateVirtualRegister32();
+				var v3 = AllocateVirtualRegisterI32();
 				context.AppendInstruction(X64.Mov32, v3, operand3);
 				context.AppendInstruction2(X64.IDiv32, EDX, EAX, EDX, EAX, v3);
 			}
@@ -257,7 +257,7 @@ namespace Mosa.Platform.x64.Stages
 
 			if (operand2.IsConstant)
 			{
-				Operand v3 = AllocateVirtualRegister32();
+				Operand v3 = AllocateVirtualRegisterI32();
 				context.AppendInstruction(X64.Mov32, v3, operand2);
 				operand2 = v3;
 			}
@@ -404,7 +404,7 @@ namespace Mosa.Platform.x64.Stages
 			}
 			else
 			{
-				var v3 = AllocateVirtualRegister32();
+				var v3 = AllocateVirtualRegisterI32();
 				context.AppendInstruction(X64.Mov64, v3, operand3);
 				context.AppendInstruction2(X64.Div64, EDX, EAX, EDX, EAX, v3);
 			}
@@ -443,7 +443,7 @@ namespace Mosa.Platform.x64.Stages
 			}
 			else
 			{
-				var v3 = AllocateVirtualRegister32();
+				var v3 = AllocateVirtualRegisterI32();
 				context.AppendInstruction(X64.Mov64, v3, operand3);
 				context.AppendInstruction2(X64.IDiv64, EDX, EAX, EDX, EAX, v3);
 			}
@@ -501,7 +501,7 @@ namespace Mosa.Platform.x64.Stages
 
 			if (operand2.IsConstant)
 			{
-				Operand v3 = AllocateVirtualRegister32();
+				Operand v3 = AllocateVirtualRegisterI32();
 				context.AppendInstruction(X64.Mov64, v3, operand2);
 				operand2 = v3;
 			}

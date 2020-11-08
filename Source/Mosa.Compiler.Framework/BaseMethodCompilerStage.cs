@@ -328,12 +328,12 @@ namespace Mosa.Compiler.Framework
 			return MethodCompiler.VirtualRegisters.Allocate(operand.Type);
 		}
 
-		protected Operand AllocateVirtualRegister32()
+		protected Operand AllocateVirtualRegisterI32()
 		{
 			return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I4);
 		}
 
-		protected Operand AllocateVirtualRegister64()
+		protected Operand AllocateVirtualRegisterI64()
 		{
 			return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I8);
 		}
