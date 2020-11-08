@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.0</TargetFramework>
     <AssemblyTitle>Mosa.Workspace.Kernel.Debug</AssemblyTitle>
     <Company>MOSA Project</Company>
     <Product>Mosa.Workspace.Kernel.Debug</Product>

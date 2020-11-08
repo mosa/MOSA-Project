@@ -79,14 +79,14 @@ namespace Mosa.Tool.Debugger.Views
 
 			var clickedEntry = dataGridView1.Rows[e.RowIndex].DataBoundItem as BreakPointEntry;
 
-			var menu = new MenuItem(clickedEntry.Address + " - " + clickedEntry.Name)
+			var menu = new ToolStripMenuItem(clickedEntry.Address + " - " + clickedEntry.Name)
 			{
 				Enabled = false
 			};
-			var m = new ContextMenu();
-			m.MenuItems.Add(menu);
-			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MainForm.OnCopyToClipboardAsBreakPoint)) { Tag = clickedEntry.BreakPoint });
-			m.MenuItems.Add(new MenuItem("&Delete breakpoint", new EventHandler(MainForm.OnRemoveBreakPoint)) { Tag = clickedEntry.BreakPoint });
+			var m = new ContextMenuStrip();
+			m.Items.Add(menu);
+			m.Items.Add(new ToolStripMenuItem("Copy to &Clipboard", null, new EventHandler(MainForm.OnCopyToClipboardAsBreakPoint)) { Tag = clickedEntry.BreakPoint });;
+			m.Items.Add(new ToolStripMenuItem("&Delete breakpoint", null, new EventHandler(MainForm.OnRemoveBreakPoint)) { Tag = clickedEntry.BreakPoint });
 
 			m.Show(dataGridView1, relativeMousePosition);
 		}

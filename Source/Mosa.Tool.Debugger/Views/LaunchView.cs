@@ -62,11 +62,11 @@ namespace Mosa.Tool.Debugger.Views
 
 			var clickedEntry = dataGridView1.Rows[e.RowIndex].DataBoundItem as LaunchEntry;
 
-			var menu = new MenuItem(clickedEntry.Image);
+			var menu = new ToolStripMenuItem(clickedEntry.Image);
 			menu.Enabled = false;
-			var m = new ContextMenu();
-			m.MenuItems.Add(menu);
-			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MainForm.OnCopyToClipboard)) { Tag = clickedEntry.Image });
+			var m = new ContextMenuStrip();
+			m.Items.Add(menu);
+			m.Items.Add(new ToolStripMenuItem("Copy to &Clipboard", null, new EventHandler(MainForm.OnCopyToClipboard)) { Tag = clickedEntry.Image });
 
 			m.Show(dataGridView1, relativeMousePosition);
 		}

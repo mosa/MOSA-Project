@@ -157,13 +157,13 @@ namespace Mosa.Tool.Debugger.Views
 
 			var clickedEntry = dataGridView1.Rows[e.RowIndex].DataBoundItem as StackEntry;
 
-			var menu = new MenuItem(clickedEntry.Offset + " - " + clickedEntry.HexValue);
+			var menu = new ToolStripMenuItem(clickedEntry.Offset + " - " + clickedEntry.HexValue);
 			menu.Enabled = false;
-			var m = new ContextMenu();
-			m.MenuItems.Add(menu);
-			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MainForm.OnCopyToClipboard)) { Tag = clickedEntry.HexValue });
-			m.MenuItems.Add(new MenuItem("Add to &Watch List", new EventHandler(MainForm.OnAddWatch)) { Tag = new AddWatchArgs(null, clickedEntry.Value, 4) });
-			m.MenuItems.Add(new MenuItem("Set &Breakpoint", new EventHandler(MainForm.OnAddBreakPoint)) { Tag = new AddBreakPointArgs(null, clickedEntry.Value) });
+			var m = new ContextMenuStrip();
+			m.Items.Add(menu);
+			m.Items.Add(new ToolStripMenuItem("Copy to &Clipboard", null, new EventHandler(MainForm.OnCopyToClipboard)) { Tag = clickedEntry.HexValue });
+			m.Items.Add(new ToolStripMenuItem("Add to &Watch List", null, new EventHandler(MainForm.OnAddWatch)) { Tag = new AddWatchArgs(null, clickedEntry.Value, 4) });
+			m.Items.Add(new ToolStripMenuItem("Set &Breakpoint", null, new EventHandler(MainForm.OnAddBreakPoint)) { Tag = new AddBreakPointArgs(null, clickedEntry.Value) });
 
 			m.Show(dataGridView1, relativeMousePosition);
 		}

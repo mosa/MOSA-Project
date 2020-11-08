@@ -137,13 +137,13 @@ namespace Mosa.Tool.Debugger.Views
 
 			var relativeMousePosition = treeView1.PointToClient(Cursor.Position);
 
-			var menu = new MenuItem(clickedEntry.Text);
+			var menu = new ToolStripMenuItem(clickedEntry.Text);
 			menu.Enabled = false;
 
-			var m = new ContextMenu();
-			m.MenuItems.Add(menu);
-			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MainForm.OnCopyToClipboard)) { Tag = clickedEntry.HexAddress });
-			m.MenuItems.Add(new MenuItem("Set &Breakpoint", new EventHandler(MainForm.OnAddBreakPoint)) { Tag = new AddBreakPointArgs(null, clickedEntry.Address) });
+			var m = new ContextMenuStrip();
+			m.Items.Add(menu);
+			m.Items.Add(new ToolStripMenuItem("Copy to &Clipboard", null, new EventHandler(MainForm.OnCopyToClipboard)) { Tag = clickedEntry.HexAddress });
+			m.Items.Add(new ToolStripMenuItem("Set &Breakpoint", null, new EventHandler(MainForm.OnAddBreakPoint)) { Tag = new AddBreakPointArgs(null, clickedEntry.Address) });
 			m.Show(treeView1, relativeMousePosition);
 		}
 	}

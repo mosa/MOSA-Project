@@ -509,7 +509,7 @@ namespace Mosa.Tool.Debugger
 
 		public void OnAddBreakPoint(Object sender, EventArgs e)
 		{
-			var args = (sender as Menu).Tag as AddBreakPointArgs;
+			var args = (sender as ToolStripDropDownMenu).Tag as AddBreakPointArgs;
 
 			if (string.IsNullOrWhiteSpace(args.Name))
 			{
@@ -523,35 +523,35 @@ namespace Mosa.Tool.Debugger
 
 		public void OnCopyToClipboardAsBreakPoint(Object sender, EventArgs e)
 		{
-			var text = (((sender as Menu).Tag) as BreakPoint).Name;
+			var text = (((sender as ToolStripDropDownMenu).Tag) as BreakPoint).Name;
 
 			Clipboard.SetText(text);
 		}
 
 		public void OnCopyToClipboard(Object sender, EventArgs e)
 		{
-			var text = (((sender as Menu).Tag) as string);
+			var text = (((sender as ToolStripDropDownMenu).Tag) as string);
 
 			Clipboard.SetText(text);
 		}
 
 		public void OnRemoveBreakPoint(Object sender, EventArgs e)
 		{
-			var breakpoint = (sender as Menu).Tag as BreakPoint;
+			var breakpoint = (sender as ToolStripDropDownMenu).Tag as BreakPoint;
 
 			RemoveBreakPoint(breakpoint);
 		}
 
 		public void OnAddWatch(Object sender, EventArgs e)
 		{
-			var args = (sender as Menu).Tag as AddWatchArgs;
+			var args = (sender as ToolStripDropDownMenu).Tag as AddWatchArgs;
 
 			AddWatch(args.Name, args.Address, args.Length);
 		}
 
 		public void OnRemoveWatch(Object sender, EventArgs e)
 		{
-			var watch = (sender as Menu).Tag as Watch;
+			var watch = (sender as ToolStripDropDownMenu).Tag as Watch;
 
 			RemoveWatch(watch);
 		}
