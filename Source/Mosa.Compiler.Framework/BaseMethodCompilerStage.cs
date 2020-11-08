@@ -348,6 +348,11 @@ namespace Mosa.Compiler.Framework
 			return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.R8);
 		}
 
+		protected Operand AllocateVirtualRegisterObject()
+		{
+			return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.Object);
+		}
+
 		/// <summary>
 		/// Allocates the virtual register or stack slot.
 		/// </summary>
