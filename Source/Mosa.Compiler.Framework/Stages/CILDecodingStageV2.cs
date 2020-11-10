@@ -262,9 +262,9 @@ namespace Mosa.Compiler.Framework.Stages
 			for (int index = 0; index < count; index++)
 			{
 				var type = Method.LocalVariables[index];
-				var registerType = MosaTypeLayout.GetTypeForRegister(type.Type);
+				var underlyingType = GetUnderlyingType(type.Type);
 
-				var stackType = ConvertToStackType(registerType);
+				var stackType = GetStackType(underlyingType);
 				LocalStackType[index] = stackType;
 
 				if (stackType == StackType.ValueType || arg[index] || type.IsPinned)
@@ -461,7 +461,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Ldind_u1: return LdindU1(context, stack);
 				case OpCode.Ldind_u2: return LdindU2(context, stack);
 				case OpCode.Ldind_u4: return LdindI4(context, stack);
-				case OpCode.Ldlen: return false;
+				case OpCode.Ldlen: return Ldlen(context, stack);
 				case OpCode.Ldloc: return LoadLocal(context, stack, (int)instruction.Operand);
 				case OpCode.Ldloc_0: return LoadLocal(context, stack, 0);
 				case OpCode.Ldloc_1: return LoadLocal(context, stack, 0);
@@ -533,7 +533,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Stloc_2: return SaveLocal(context, stack, 2);
 				case OpCode.Stloc_3: return SaveLocal(context, stack, 3);
 				case OpCode.Stloc_s: return SaveLocal(context, stack, 4);
-				case OpCode.Stobj: return false;
+				case OpCode.Stobj: return Stobj(context, stack, instruction);
 				case OpCode.Stsfld: return false;
 				case OpCode.Sub: return Sub(context, stack);
 				case OpCode.Sub_ovf: return Sub(context, stack);        // TODO: implement overflow check
@@ -558,6 +558,11 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		#region Helpers
+
+		private static MosaType GetUnderlyingType(MosaType type)
+		{
+			return MosaTypeLayout.GetUnderlyingType(type);
+		}
 
 		private static bool IsBranch(OpCode opcode)
 		{
@@ -591,28 +596,49 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private StackType ConvertToStackType(MosaType type)
+		private static bool IsCompoundType(MosaType underlyingType)
 		{
-			if (type.IsReferenceType)
-				return StackType.Object;
-			else if (type.IsI1 || type.IsI2 || type.IsI4 || type.IsU1 || type.IsU2 || type.IsU4 || type.IsChar || type.IsBoolean)
-				return StackType.Int32;
-			else if (type.IsI8 || type.IsU8)
-				return StackType.Int64;
-			else if (type.IsR8)
-				return StackType.Int64;
-			else if (type.IsR4)
-				return StackType.R4;
+			return MosaTypeLayout.IsCompoundType(underlyingType);
+		}
 
-			if (type.IsI)
-				return Is32BitPlatform ? StackType.Int32 : StackType.Int64;
+		private MosaType ConvertStackTypeToType(StackType stackType)
+		{
+			switch (stackType)
+			{
+				case StackType.Int32: return TypeSystem.BuiltIn.I4;
+				case StackType.Int64: return TypeSystem.BuiltIn.I8;
+				case StackType.R4: return TypeSystem.BuiltIn.R4;
+				case StackType.R8: return TypeSystem.BuiltIn.R8;
+				case StackType.Object: return TypeSystem.BuiltIn.Object;
+				default: return null;
+			}
+		}
 
-			// TODO --- enums and other value types that fit into 32 or 64 bit register
+		private StackEntry CreateOperand(MosaType type)
+		{
+			if (type == null)
+				return null;
 
-			if (type.IsValueType)
-				return StackType.ValueType;
+			var registerType = GetUnderlyingType(type);
+			var stackType = GetStackType(registerType);
 
-			throw new CompilerException($"Can not translate to stacktype {type}");
+			var operand = CreateOperand(type, stackType);
+
+			return (stackType == StackType.ValueType) ? new StackEntry(stackType, operand, type) : new StackEntry(stackType, operand);
+		}
+
+		private Operand CreateOperand(MosaType type, StackType stackType)
+		{
+			switch (stackType)
+			{
+				case StackType.ValueType: return MethodCompiler.AddStackLocal(type);
+				case StackType.Int32: return AllocateVirtualRegisterI32();
+				case StackType.Int64: return AllocateVirtualRegisterI64();
+				case StackType.R4: return AllocateVirtualRegisterR4();
+				case StackType.R8: return AllocateVirtualRegisterR8();
+				case StackType.Object: return AllocateVirtualRegisterObject();
+				default: throw new CompilerException("Not implemented yet");
+			}
 		}
 
 		private string EmitString(string data, uint token)
@@ -657,17 +683,28 @@ namespace Mosa.Compiler.Framework.Stages
 			return Operand.CreateSymbol(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), Metadata.TypeDefinition + runtimeType.FullName);
 		}
 
-		private MosaType ConvertStackTypeToType(StackType stackType)
+		private StackType GetStackType(MosaType type)
 		{
-			switch (stackType)
-			{
-				case StackType.Int32: return TypeSystem.BuiltIn.I4;
-				case StackType.Int64: return TypeSystem.BuiltIn.I8;
-				case StackType.R4: return TypeSystem.BuiltIn.R4;
-				case StackType.R8: return TypeSystem.BuiltIn.R8;
-				case StackType.Object: return TypeSystem.BuiltIn.Object;
-				default: return null;
-			}
+			if (type.IsReferenceType)
+				return StackType.Object;
+			else if (type.IsI1 || type.IsI2 || type.IsI4 || type.IsU1 || type.IsU2 || type.IsU4 || type.IsChar || type.IsBoolean)
+				return StackType.Int32;
+			else if (type.IsI8 || type.IsU8)
+				return StackType.Int64;
+			else if (type.IsR8)
+				return StackType.Int64;
+			else if (type.IsR4)
+				return StackType.R4;
+
+			if (type.IsI)
+				return Is32BitPlatform ? StackType.Int32 : StackType.Int64;
+
+			// TODO --- enums and other value types that fit into 32 or 64 bit register
+
+			if (type.IsValueType)
+				return StackType.ValueType;
+
+			throw new CompilerException($"Can not translate to stacktype {type}");
 		}
 
 		private MosaType GetType(StackEntry stackEntry)
@@ -676,33 +713,6 @@ namespace Mosa.Compiler.Framework.Stages
 				return stackEntry.Type;
 
 			return ConvertStackTypeToType(stackEntry.StackType);
-		}
-
-		private StackEntry CreateOperand(MosaType type)
-		{
-			if (type == null)
-				return null;
-
-			var registerType = MosaTypeLayout.GetTypeForRegister(type);
-			var stackType = ConvertToStackType(registerType);
-
-			var operand = CreateOperand(type, stackType);
-
-			return (stackType == StackType.ValueType) ? new StackEntry(stackType, operand, type) : new StackEntry(stackType, operand);
-		}
-
-		private Operand CreateOperand(MosaType type, StackType stackType)
-		{
-			switch (stackType)
-			{
-				case StackType.ValueType: return MethodCompiler.AddStackLocal(type);
-				case StackType.Int32: return AllocateVirtualRegisterI32();
-				case StackType.Int64: return AllocateVirtualRegisterI64();
-				case StackType.R4: return AllocateVirtualRegisterR4();
-				case StackType.R8: return AllocateVirtualRegisterR8();
-				case StackType.Object: return AllocateVirtualRegisterObject();
-				default: throw new CompilerException("Not implemented yet");
-			}
 		}
 
 		private void SaveEvaluationStack(BasicBlock block, Stack<StackEntry> stack)
@@ -1053,6 +1063,56 @@ namespace Mosa.Compiler.Framework.Stages
 				default:
 					return false;
 			}
+		}
+
+		private bool Callvirt(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var method = (MosaMethod)instruction.Operand;
+
+			var operands = new List<Operand>();
+
+			int paramCount = method.Signature.Parameters.Count;
+
+			for (int i = 0; i < paramCount; i++)
+			{
+				var param = stack.Pop();
+				operands.Add(param.Operand);
+			}
+
+			// TODO: when type.IsValueType & ConstrainedPrefixInstruction
+
+			Operand result = null;
+
+			if (!method.Signature.ReturnType.IsVoid)
+			{
+				var resultStackType = CreateOperand(method.Signature.ReturnType);
+
+				result = resultStackType.Operand;
+
+				stack.Push(resultStackType);
+			}
+
+			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+
+			if (method.IsVirtual)
+			{
+				if (method.DeclaringType.IsInterface)
+				{
+					context.SetInstruction(IRInstruction.CallInterface, result, symbol, operands);
+				}
+				else
+				{
+					context.SetInstruction(IRInstruction.CallVirtual, result, symbol, operands);
+				}
+			}
+			else
+			{
+				context.SetInstruction(IRInstruction.CallStatic, result, symbol, operands);
+			}
+
+			context.InvokeMethod = method;
+
+			return true;
 		}
 
 		private bool Castclass(Context context, Stack<StackEntry> stack)
@@ -1754,7 +1814,6 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				case StackType.Int32:
 					{
-						var v1 = AllocateVirtualRegisterI32();
 						context.AppendInstruction(IRInstruction.And32, result, entry1.Operand, CreateConstant32(0xFF));
 						return true;
 					}
@@ -2073,6 +2132,174 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
+		private bool LdindI(Context context, Stack<StackEntry> stack)
+		{
+			var entry1 = stack.Pop();
+
+			if (Is32BitPlatform)
+			{
+				var result = AllocateVirtualRegisterI32();
+
+				context.AppendInstruction(IRInstruction.Load32, result, entry1.Operand, ConstantZero);
+
+				stack.Push(new StackEntry(StackType.Int32, result));
+			}
+			else if (Is64BitPlatform)
+			{
+				var result = AllocateVirtualRegisterI64();
+
+				context.AppendInstruction(IRInstruction.Load64, result, entry1.Operand, ConstantZero);
+
+				stack.Push(new StackEntry(StackType.Int64, result));
+			}
+
+			return true;
+		}
+
+		private bool LdindI1(Context context, Stack<StackEntry> stack)
+		{
+			var entry1 = stack.Pop();
+
+			var result = AllocateVirtualRegisterI32();
+
+			context.AppendInstruction(IRInstruction.LoadSignExtend8x32, result, entry1.Operand, ConstantZero);
+
+			stack.Push(new StackEntry(StackType.Int32, result));
+
+			return true;
+		}
+
+		private bool LdindI2(Context context, Stack<StackEntry> stack)
+		{
+			var entry1 = stack.Pop();
+
+			var result = AllocateVirtualRegisterI32();
+
+			context.AppendInstruction(IRInstruction.LoadSignExtend16x32, result, entry1.Operand, ConstantZero);
+
+			stack.Push(new StackEntry(StackType.Int32, result));
+
+			return true;
+		}
+
+		private bool LdindI4(Context context, Stack<StackEntry> stack)
+		{
+			var entry1 = stack.Pop();
+
+			var result = AllocateVirtualRegisterI32();
+
+			context.AppendInstruction(IRInstruction.Load32, result, entry1.Operand, ConstantZero);
+
+			stack.Push(new StackEntry(StackType.Int32, result));
+
+			return true;
+		}
+
+		private bool Ldlen(Context context, Stack<StackEntry> stack)
+		{
+			var entry1 = stack.Pop();
+
+			var offset = CreateConstant32(NativePointerSize * 2);
+
+			if (entry1.StackType == StackType.Object)
+			{
+				if (Is32BitPlatform)
+				{
+					var result = AllocateVirtualRegisterI32();
+					context.SetInstruction(IRInstruction.Load32, result, entry1.Operand, offset);
+					stack.Push(new StackEntry(StackType.Int32, result));
+					return true;
+				}
+				else
+				{
+					var result = AllocateVirtualRegisterI64();
+					context.SetInstruction(IRInstruction.Load64, result, entry1.Operand, offset);
+					stack.Push(new StackEntry(StackType.Int64, result));
+					return true;
+				}
+			}
+
+			return false;
+		}
+
+		private bool LdindI8(Context context, Stack<StackEntry> stack)
+		{
+			var entry1 = stack.Pop();
+
+			var result = AllocateVirtualRegisterI64();
+
+			context.AppendInstruction(IRInstruction.Load64, result, entry1.Operand, ConstantZero);
+
+			stack.Push(new StackEntry(StackType.Int64, result));
+
+			return true;
+		}
+
+		private bool LdindObject(Context context, Stack<StackEntry> stack)
+		{
+			var entry1 = stack.Pop();
+
+			var result = AllocateVirtualRegisterObject();
+
+			context.AppendInstruction(IRInstruction.LoadObject, result, entry1.Operand, ConstantZero);
+
+			stack.Push(new StackEntry(StackType.Object, result));
+
+			return true;
+		}
+
+		private bool LdindR4(Context context, Stack<StackEntry> stack)
+		{
+			var entry1 = stack.Pop();
+
+			var result = AllocateVirtualRegisterR4();
+
+			context.AppendInstruction(IRInstruction.LoadR4, result, entry1.Operand, ConstantZero);
+
+			stack.Push(new StackEntry(StackType.R4, result));
+
+			return true;
+		}
+
+		private bool LdindR8(Context context, Stack<StackEntry> stack)
+		{
+			var entry1 = stack.Pop();
+
+			var result = AllocateVirtualRegisterR8();
+
+			context.AppendInstruction(IRInstruction.LoadR8, result, entry1.Operand, ConstantZero);
+
+			stack.Push(new StackEntry(StackType.R8, result));
+
+			return true;
+		}
+
+		private bool LdindU1(Context context, Stack<StackEntry> stack)
+		{
+			var entry1 = stack.Pop();
+
+			var result = AllocateVirtualRegisterI32();
+
+			context.AppendInstruction(IRInstruction.LoadZeroExtend8x32, result, entry1.Operand, ConstantZero);
+
+			stack.Push(new StackEntry(StackType.Int32, result));
+
+			return true;
+		}
+
+		private bool LdindU2(Context context, Stack<StackEntry> stack)
+		{
+			var entry1 = stack.Pop();
+
+			var result = AllocateVirtualRegisterI32();
+
+			context.AppendInstruction(IRInstruction.LoadZeroExtend16x32, result, entry1.Operand, ConstantZero);
+
+			stack.Push(new StackEntry(StackType.Int32, result));
+
+			return true;
+		}
+
 		private bool Ldstr(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
 		{
 			var result = AllocateVirtualRegister(TypeSystem.BuiltIn.String);
@@ -2097,7 +2324,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (type.IsValueType)
 			{
-				var basetype = MosaTypeLayout.GetTypeForRegister(type);
+				var basetype = MosaTypeLayout.GetUnderlyingType(type);
 
 				if (MosaTypeLayout.CanFitInRegister(basetype))
 				{
@@ -2403,6 +2630,116 @@ namespace Mosa.Compiler.Framework.Stages
 				default:
 					return false;
 			}
+		}
+
+		private bool NewArray(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var elements = stack.Pop();
+
+			var arrayType = (MosaType)instruction.Operand;
+
+			var elementSize = GetTypeSize(arrayType.ElementType, false);
+			var runtimeTypeHandle = GetRuntimeTypeHandle(arrayType);
+			var size = CreateConstant32(elementSize);
+			var result = AllocateVirtualRegisterObject();
+
+			context.SetInstruction(IRInstruction.NewArray, result, runtimeTypeHandle, size, elements.Operand);
+			context.MosaType = arrayType;
+
+			stack.Push(new StackEntry(StackType.Object, result));
+
+			return true;
+		}
+
+		private bool NewObject(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var method = (MosaMethod)instruction.Operand;
+			var classType = method.DeclaringType;
+			int paramCount = method.Signature.Parameters.Count;
+
+			var registerType = MosaTypeLayout.GetUnderlyingType(classType);
+			var stackType = GetStackType(registerType);
+
+			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+
+			var operands = new List<Operand>();
+
+			for (int i = 0; i < paramCount; i++)
+			{
+				var param = stack.Pop();
+				operands.Add(param.Operand);
+			}
+
+			if (stackType == StackType.Object)
+			{
+				var result = AllocateVirtualRegisterObject();
+
+				var runtimeTypeHandle = GetRuntimeTypeHandle(classType);
+				var size = CreateConstant32(TypeLayout.GetTypeSize(classType));
+
+				context.AppendInstruction(IRInstruction.NewObject, result, runtimeTypeHandle, size);
+
+				operands.Insert(0, result);
+
+				context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
+				context.InvokeMethod = method;
+
+				stack.Push(new StackEntry(StackType.Object, result));
+
+				return true;
+			}
+			else if (stackType == StackType.ValueType)
+			{
+				var newThisLocal = MethodCompiler.AddStackLocal(classType);
+				var newThis = MethodCompiler.CreateVirtualRegister(classType.ToManagedPointer());
+
+				context.AppendInstruction(IRInstruction.AddressOf, newThis, newThisLocal);
+
+				operands.Insert(0, newThis);
+
+				context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
+				context.InvokeMethod = method;
+
+				stack.Push(new StackEntry(StackType.ManagedPointer, newThis));   // ManagedPointer??
+			}
+			else if (stackType == StackType.Int32)
+			{
+				// INCOMPLETE
+
+				var newThisLocal = MethodCompiler.AddStackLocal(classType);
+				var newThis = MethodCompiler.CreateVirtualRegister(classType.ToManagedPointer());
+
+				context.AppendInstruction(IRInstruction.AddressOf, newThis, newThisLocal);
+
+				//context.AppendInstruction(IRInstruction.Load32,  )
+
+				operands.Insert(0, newThis);
+
+				context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
+				context.InvokeMethod = method;
+
+				stack.Push(new StackEntry(StackType.ManagedPointer, newThis));   // ManagedPointer??
+			}
+			else if (stackType != StackType.ValueType)
+			{
+				// INCOMPLETE
+
+				var newThisLocal = MethodCompiler.AddStackLocal(classType);
+				var newThis = MethodCompiler.CreateVirtualRegister(classType.ToManagedPointer());
+
+				context.AppendInstruction(IRInstruction.AddressOf, newThis, newThisLocal);
+
+				// TODO: unboxing it (kinda of)
+
+				operands.Insert(0, newThis);
+
+				context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
+				context.InvokeMethod = method;
+
+				stack.Push(new StackEntry(StackType.ManagedPointer, newThis));   // ManagedPointer??
+			}
+
+			return false;
 		}
 
 		private bool Not(Context context, Stack<StackEntry> stack)
@@ -2879,6 +3216,207 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
+		private bool StindI(Context context, Stack<StackEntry> stack)
+		{
+			var entry1 = stack.Pop();
+			var entry2 = stack.Pop();
+
+			var address = entry2.Operand;
+			var value = entry1.Operand;
+
+			switch (entry2.StackType)
+			{
+				case StackType.Int32 when entry1.StackType == StackType.Int32:
+					context.AppendInstruction(IRInstruction.Store32, null, address, ConstantZero, value);
+					return true;
+
+				case StackType.Int64 when entry1.StackType == StackType.Int64:
+					context.AppendInstruction(IRInstruction.Store64, null, address, ConstantZero, value);
+					return true;
+			}
+
+			return false;
+		}
+
+		private bool StindI1(Context context, Stack<StackEntry> stack)
+		{
+			var entry1 = stack.Pop();
+			var entry2 = stack.Pop();
+
+			var address = entry2.Operand;
+			var value = entry1.Operand;
+
+			if (entry2.StackType == StackType.Int32)
+			{
+				context.AppendInstruction(IRInstruction.Store8, null, address, ConstantZero, value);
+				return true;
+			}
+
+			return false;
+		}
+
+		private bool StindI2(Context context, Stack<StackEntry> stack)
+		{
+			var entry1 = stack.Pop();
+			var entry2 = stack.Pop();
+
+			var address = entry2.Operand;
+			var value = entry1.Operand;
+
+			if (entry2.StackType == StackType.Int32)
+			{
+				context.AppendInstruction(IRInstruction.Store16, null, address, ConstantZero, value);
+				return true;
+			}
+
+			return false;
+		}
+
+		private bool StindI4(Context context, Stack<StackEntry> stack)
+		{
+			var entry1 = stack.Pop();
+			var entry2 = stack.Pop();
+
+			var address = entry2.Operand;
+			var value = entry1.Operand;
+
+			switch (entry2.StackType)
+			{
+				case StackType.Int32:
+					context.AppendInstruction(IRInstruction.Store32, null, address, ConstantZero, value);
+					return true;
+
+				case StackType.ManagedPointer:
+					context.AppendInstruction(IRInstruction.Store32, null, address, ConstantZero, value);
+					return true;
+
+				default:
+					return false;
+			}
+		}
+
+		private bool StindI8(Context context, Stack<StackEntry> stack)
+		{
+			var entry1 = stack.Pop();
+			var entry2 = stack.Pop();
+
+			var address = entry2.Operand;
+			var value = entry1.Operand;
+
+			switch (entry2.StackType)
+			{
+				case StackType.Int64:
+					context.AppendInstruction(IRInstruction.Store64, null, address, ConstantZero, value);
+					return true;
+
+				case StackType.ManagedPointer:
+					context.AppendInstruction(IRInstruction.Store64, null, address, ConstantZero, value);
+					return true;
+
+				default:
+					return false;
+			}
+		}
+
+		private bool StindObject(Context context, Stack<StackEntry> stack)
+		{
+			var entry1 = stack.Pop();
+			var entry2 = stack.Pop();
+
+			var address = entry2.Operand;
+			var value = entry1.Operand;
+
+			if (entry2.StackType == StackType.Object)
+			{
+				context.AppendInstruction(IRInstruction.StoreObject, null, address, ConstantZero, value);
+				return true;
+			}
+
+			return false;
+		}
+
+		private bool StindR4(Context context, Stack<StackEntry> stack)
+		{
+			var entry1 = stack.Pop();
+			var entry2 = stack.Pop();
+
+			var address = entry2.Operand;
+			var value = entry1.Operand;
+
+			if (entry2.StackType == StackType.R4)
+			{
+				context.AppendInstruction(IRInstruction.StoreR4, null, address, ConstantZero, value);
+				return true;
+			}
+
+			return false;
+		}
+
+		private bool StindR8(Context context, Stack<StackEntry> stack)
+		{
+			var entry1 = stack.Pop();
+			var entry2 = stack.Pop();
+
+			var address = entry2.Operand;
+			var value = entry1.Operand;
+
+			if (entry2.StackType == StackType.R8)
+			{
+				context.AppendInstruction(IRInstruction.StoreR8, null, address, ConstantZero, value);
+				return true;
+			}
+
+			return false;
+		}
+
+		private bool Stobj(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var entry1 = stack.Pop();
+			var entry2 = stack.Pop();
+
+			var address = entry2.Operand;
+			var value = entry1.Operand;
+
+			var type = (MosaType)instruction.Operand;
+			var underlyingType = GetUnderlyingType(type);
+			bool compound = IsCompoundType(underlyingType);
+
+			if (compound)
+			{
+				context.AppendInstruction(IRInstruction.StoreCompound, null, address, ConstantZero, value);
+				return true;
+			}
+			else
+			{
+				var stackType = GetStackType(underlyingType);
+
+				switch (stackType)
+				{
+					case StackType.Int32:
+						context.AppendInstruction(IRInstruction.Store32, null, address, ConstantZero, value);
+						return true;
+
+					case StackType.Int64:
+						context.AppendInstruction(IRInstruction.Store64, null, address, ConstantZero, value);
+						return true;
+
+					case StackType.R4:
+						context.AppendInstruction(IRInstruction.StoreR4, null, address, ConstantZero, value);
+						return true;
+
+					case StackType.R8:
+						context.AppendInstruction(IRInstruction.StoreR8, null, address, ConstantZero, value);
+						return true;
+
+					case StackType.Object:
+						context.AppendInstruction(IRInstruction.StoreObject, null, address, ConstantZero, value);
+						return true;
+				}
+			}
+
+			return false;
+		}
+
 		private bool Sub(Context context, Stack<StackEntry> stack)
 		{
 			var entry1 = stack.Pop();
@@ -3056,460 +3594,6 @@ namespace Mosa.Compiler.Framework.Stages
 				default:
 					return false;
 			}
-		}
-
-		private bool NewArray(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
-		{
-			var elements = stack.Pop();
-
-			var arrayType = (MosaType)instruction.Operand;
-
-			var elementSize = GetTypeSize(arrayType.ElementType, false);
-			var runtimeTypeHandle = GetRuntimeTypeHandle(arrayType);
-			var size = CreateConstant32(elementSize);
-			var result = AllocateVirtualRegisterObject();
-
-			context.SetInstruction(IRInstruction.NewArray, result, runtimeTypeHandle, size, elements.Operand);
-			context.MosaType = arrayType;
-
-			stack.Push(new StackEntry(StackType.Object, result));
-
-			return true;
-		}
-
-		private bool NewObject(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
-		{
-			var method = (MosaMethod)instruction.Operand;
-			var classType = method.DeclaringType;
-			int paramCount = method.Signature.Parameters.Count;
-
-			var registerType = MosaTypeLayout.GetTypeForRegister(classType);
-			var stackType = ConvertToStackType(registerType);
-
-			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
-
-			var operands = new List<Operand>();
-
-			for (int i = 0; i < paramCount; i++)
-			{
-				var param = stack.Pop();
-				operands.Add(param.Operand);
-			}
-
-			if (stackType == StackType.Object)
-			{
-				var result = AllocateVirtualRegisterObject();
-
-				var runtimeTypeHandle = GetRuntimeTypeHandle(classType);
-				var size = CreateConstant32(TypeLayout.GetTypeSize(classType));
-
-				context.AppendInstruction(IRInstruction.NewObject, result, runtimeTypeHandle, size);
-
-				operands.Insert(0, result);
-
-				context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
-				context.InvokeMethod = method;
-
-				stack.Push(new StackEntry(StackType.Object, result));
-
-				return true;
-			}
-			else if (stackType == StackType.ValueType)
-			{
-				var newThisLocal = MethodCompiler.AddStackLocal(classType);
-				var newThis = MethodCompiler.CreateVirtualRegister(classType.ToManagedPointer());
-
-				context.AppendInstruction(IRInstruction.AddressOf, newThis, newThisLocal);
-
-				operands.Insert(0, newThis);
-
-				context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
-				context.InvokeMethod = method;
-
-				stack.Push(new StackEntry(StackType.ManagedPointer, newThis));   // ManagedPointer??
-			}
-			else if (stackType == StackType.Int32)
-			{
-				// INCOMPLETE
-
-				var newThisLocal = MethodCompiler.AddStackLocal(classType);
-				var newThis = MethodCompiler.CreateVirtualRegister(classType.ToManagedPointer());
-
-				context.AppendInstruction(IRInstruction.AddressOf, newThis, newThisLocal);
-
-				//context.AppendInstruction(IRInstruction.Load32,  )
-
-				operands.Insert(0, newThis);
-
-				context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
-				context.InvokeMethod = method;
-
-				stack.Push(new StackEntry(StackType.ManagedPointer, newThis));   // ManagedPointer??
-			}
-			else if (stackType != StackType.ValueType)
-			{
-				// INCOMPLETE
-
-				var newThisLocal = MethodCompiler.AddStackLocal(classType);
-				var newThis = MethodCompiler.CreateVirtualRegister(classType.ToManagedPointer());
-
-				context.AppendInstruction(IRInstruction.AddressOf, newThis, newThisLocal);
-
-				// TODO: unboxing it (kinda of)
-
-				operands.Insert(0, newThis);
-
-				context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
-				context.InvokeMethod = method;
-
-				stack.Push(new StackEntry(StackType.ManagedPointer, newThis));   // ManagedPointer??
-			}
-
-			return false;
-		}
-
-		private bool Callvirt(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
-		{
-			var method = (MosaMethod)instruction.Operand;
-
-			var operands = new List<Operand>();
-
-			int paramCount = method.Signature.Parameters.Count;
-
-			for (int i = 0; i < paramCount; i++)
-			{
-				var param = stack.Pop();
-				operands.Add(param.Operand);
-			}
-
-			// TODO: when type.IsValueType & ConstrainedPrefixInstruction
-
-			Operand result = null;
-
-			if (!method.Signature.ReturnType.IsVoid)
-			{
-				var resultStackType = CreateOperand(method.Signature.ReturnType);
-
-				result = resultStackType.Operand;
-
-				stack.Push(resultStackType);
-			}
-
-			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
-
-			if (method.IsVirtual)
-			{
-				if (method.DeclaringType.IsInterface)
-				{
-					context.SetInstruction(IRInstruction.CallInterface, result, symbol, operands);
-				}
-				else
-				{
-					context.SetInstruction(IRInstruction.CallVirtual, result, symbol, operands);
-				}
-			}
-			else
-			{
-				context.SetInstruction(IRInstruction.CallStatic, result, symbol, operands);
-			}
-
-			context.InvokeMethod = method;
-
-			return true;
-		}
-
-		private bool LdindI1(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-
-			var result = AllocateVirtualRegisterI32();
-
-			context.AppendInstruction(IRInstruction.LoadSignExtend8x32, result, entry1.Operand, ConstantZero);
-
-			stack.Push(new StackEntry(StackType.Int32, result));
-
-			return true;
-		}
-
-		private bool LdindU1(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-
-			var result = AllocateVirtualRegisterI32();
-
-			context.AppendInstruction(IRInstruction.LoadZeroExtend8x32, result, entry1.Operand, ConstantZero);
-
-			stack.Push(new StackEntry(StackType.Int32, result));
-
-			return true;
-		}
-
-		private bool LdindI2(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-
-			var result = AllocateVirtualRegisterI32();
-
-			context.AppendInstruction(IRInstruction.LoadSignExtend16x32, result, entry1.Operand, ConstantZero);
-
-			stack.Push(new StackEntry(StackType.Int32, result));
-
-			return true;
-		}
-
-		private bool LdindU2(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-
-			var result = AllocateVirtualRegisterI32();
-
-			context.AppendInstruction(IRInstruction.LoadZeroExtend16x32, result, entry1.Operand, ConstantZero);
-
-			stack.Push(new StackEntry(StackType.Int32, result));
-
-			return true;
-		}
-
-		private bool LdindI4(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-
-			var result = AllocateVirtualRegisterI32();
-
-			context.AppendInstruction(IRInstruction.Load32, result, entry1.Operand, ConstantZero);
-
-			stack.Push(new StackEntry(StackType.Int32, result));
-
-			return true;
-		}
-
-		private bool LdindI8(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-
-			var result = AllocateVirtualRegisterI64();
-
-			context.AppendInstruction(IRInstruction.Load64, result, entry1.Operand, ConstantZero);
-
-			stack.Push(new StackEntry(StackType.Int64, result));
-
-			return true;
-		}
-
-		private bool LdindR4(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-
-			var result = AllocateVirtualRegisterR4();
-
-			context.AppendInstruction(IRInstruction.LoadR4, result, entry1.Operand, ConstantZero);
-
-			stack.Push(new StackEntry(StackType.R4, result));
-
-			return true;
-		}
-
-		private bool LdindR8(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-
-			var result = AllocateVirtualRegisterR8();
-
-			context.AppendInstruction(IRInstruction.LoadR8, result, entry1.Operand, ConstantZero);
-
-			stack.Push(new StackEntry(StackType.R8, result));
-
-			return true;
-		}
-
-		private bool LdindI(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-
-			if (Is32BitPlatform)
-			{
-				var result = AllocateVirtualRegisterI32();
-
-				context.AppendInstruction(IRInstruction.Load32, result, entry1.Operand, ConstantZero);
-
-				stack.Push(new StackEntry(StackType.Int32, result));
-			}
-			else if (Is64BitPlatform)
-			{
-				var result = AllocateVirtualRegisterI64();
-
-				context.AppendInstruction(IRInstruction.Load64, result, entry1.Operand, ConstantZero);
-
-				stack.Push(new StackEntry(StackType.Int64, result));
-			}
-
-			return true;
-		}
-
-		private bool LdindObject(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-
-			var result = AllocateVirtualRegisterObject();
-
-			context.AppendInstruction(IRInstruction.LoadObject, result, entry1.Operand, ConstantZero);
-
-			stack.Push(new StackEntry(StackType.Object, result));
-
-			return true;
-		}
-
-		private bool StindI1(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-			var entry2 = stack.Pop();
-
-			var address = entry2.Operand;
-			var value = entry1.Operand;
-
-			if (entry2.StackType == StackType.Int32)
-			{
-				context.AppendInstruction(IRInstruction.Store8, null, address, ConstantZero, value);
-				return true;
-			}
-
-			return false;
-		}
-
-		private bool StindI2(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-			var entry2 = stack.Pop();
-
-			var address = entry2.Operand;
-			var value = entry1.Operand;
-
-			if (entry2.StackType == StackType.Int32)
-			{
-				context.AppendInstruction(IRInstruction.Store16, null, address, ConstantZero, value);
-				return true;
-			}
-
-			return false;
-		}
-
-		private bool StindI4(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-			var entry2 = stack.Pop();
-
-			var address = entry2.Operand;
-			var value = entry1.Operand;
-
-			switch (entry2.StackType)
-			{
-				case StackType.Int32:
-					context.AppendInstruction(IRInstruction.Store32, null, address, ConstantZero, value);
-					return true;
-
-				case StackType.ManagedPointer:
-					context.AppendInstruction(IRInstruction.Store32, null, address, ConstantZero, value);
-					return true;
-
-				default:
-					return false;
-			}
-		}
-
-		private bool StindI(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-			var entry2 = stack.Pop();
-
-			var address = entry2.Operand;
-			var value = entry1.Operand;
-
-			switch (entry2.StackType)
-			{
-				case StackType.Int32 when entry1.StackType == StackType.Int32:
-					context.AppendInstruction(IRInstruction.Store32, null, address, ConstantZero, value);
-					return true;
-
-				case StackType.Int64 when entry1.StackType == StackType.Int64:
-					context.AppendInstruction(IRInstruction.Store64, null, address, ConstantZero, value);
-					return true;
-			}
-
-			return false;
-		}
-
-		private bool StindI8(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-			var entry2 = stack.Pop();
-
-			var address = entry2.Operand;
-			var value = entry1.Operand;
-
-			switch (entry2.StackType)
-			{
-				case StackType.Int64:
-					context.AppendInstruction(IRInstruction.Store64, null, address, ConstantZero, value);
-					return true;
-
-				case StackType.ManagedPointer:
-					context.AppendInstruction(IRInstruction.Store64, null, address, ConstantZero, value);
-					return true;
-
-				default:
-					return false;
-			}
-		}
-
-		private bool StindR4(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-			var entry2 = stack.Pop();
-
-			var address = entry2.Operand;
-			var value = entry1.Operand;
-
-			if (entry2.StackType == StackType.R4)
-			{
-				context.AppendInstruction(IRInstruction.StoreR4, null, address, ConstantZero, value);
-				return true;
-			}
-
-			return false;
-		}
-
-		private bool StindR8(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-			var entry2 = stack.Pop();
-
-			var address = entry2.Operand;
-			var value = entry1.Operand;
-
-			if (entry2.StackType == StackType.R8)
-			{
-				context.AppendInstruction(IRInstruction.StoreR8, null, address, ConstantZero, value);
-				return true;
-			}
-
-			return false;
-		}
-
-		private bool StindObject(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-			var entry2 = stack.Pop();
-
-			var address = entry2.Operand;
-			var value = entry1.Operand;
-
-			if (entry2.StackType == StackType.Object)
-			{
-				context.AppendInstruction(IRInstruction.StoreObject, null, address, ConstantZero, value);
-				return true;
-			}
-
-			return false;
 		}
 
 		#endregion CIL

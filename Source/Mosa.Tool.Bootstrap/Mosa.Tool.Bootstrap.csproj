@@ -17,9 +17,7 @@
     <StartupObject>Mosa.Tool.Bootstrap.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Update="StatusForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="StatusForm.cs" />
     <Compile Update="StatusForm.Designer.cs">
       <DependentUpon>StatusForm.cs</DependentUpon>
     </Compile>

@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
@@ -320,28 +321,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Determines whether [is compound type] [the specified type].
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns>
-		///   <c>true</c> if [is compound type] [the specified type]; otherwise, <c>false</c>.
-		/// </returns>
-		public bool IsCompoundType(MosaType type)
-		{
-			// i.e. whether copying of the type requires multiple move
-			int? primitiveSize = type.GetPrimitiveSize(NativePointerSize);
-
-			if (primitiveSize != null && primitiveSize > 8)
-				return true;
-
-			if (!type.IsUserValueType)
-				return false;
-
-			int typeSize = GetTypeSize(type);
-			return typeSize > NativePointerSize;
-		}
-
-		/// <summary>
 		/// Determines whether [is method overridden] [the specified method].
 		/// </summary>
 		/// <param name="method">The method.</param>
@@ -416,14 +395,30 @@ namespace Mosa.Compiler.Framework
 
 		public static bool CanFitInRegister(MosaType type)
 		{
-			var basetype = GetTypeForRegister(type);
+			var basetype = GetUnderlyingType(type);
 
 			var fits = FitsInRegister(basetype);
 
 			return fits;
 		}
 
-		public static MosaType GetTypeForRegister(MosaType type)
+		public static bool IsCompoundType(MosaType underlyingType)
+		{
+			if (underlyingType == null)
+				return false;
+
+			var typeCode = underlyingType.TypeCode;
+
+			if (typeCode == MosaTypeCode.ValueType)
+				return false; // no search
+
+			if (typeCode == MosaTypeCode.Var)
+				return false;
+
+			return true;
+		}
+
+		public static MosaType GetUnderlyingType(MosaType type)
 		{
 			if (type.IsValueType)
 			{
@@ -439,7 +434,7 @@ namespace Mosa.Compiler.Framework
 					if (!basetype.IsUserValueType)
 						return basetype;
 
-					var result = GetTypeForRegister(basetype);
+					var result = GetUnderlyingType(basetype);
 
 					return result;
 				}
