@@ -353,6 +353,11 @@ namespace Mosa.Compiler.Framework
 			return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.Object);
 		}
 
+		protected Operand AllocateVirtualRegisterI()
+		{
+			return Is32BitPlatform ? MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I4) : MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I8);
+		}
+
 		/// <summary>
 		/// Allocates the virtual register or stack slot.
 		/// </summary>
