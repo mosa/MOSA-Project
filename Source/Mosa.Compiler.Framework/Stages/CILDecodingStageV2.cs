@@ -8,6 +8,7 @@ using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -51,6 +52,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Operand[] LocalStack;
 		private StackType[] LocalStackType;
+
+		private enum ElementType { I1, I2, I4, I8, U1, U2, U4, U8, R4, R8, I, Ref };
 
 		protected override void Finish()
 		{
@@ -273,7 +276,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 				else
 				{
-					LocalStack[index] = CreateOperand(type.Type, stackType);
+					LocalStack[index] = CreateOperand(stackType, type.Type);
 				}
 			}
 		}
@@ -409,7 +412,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Extop: return false;
 				case OpCode.Initblk: return false;
 				case OpCode.InitObj: return false;
-				case OpCode.Isinst: return false;
+				case OpCode.Isinst: return Isinst(context, stack, instruction);
 				case OpCode.Jmp: return false;
 				case OpCode.Ldarg: return LoadArgument(context, stack, (int)instruction.Operand);
 				case OpCode.Ldarg_0: return LoadArgument(context, stack, 0);
@@ -434,18 +437,18 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Ldc_i8: return Constant64(context, stack, (long)instruction.Operand);
 				case OpCode.Ldc_r4: return ConstantR4(context, stack, (float)instruction.Operand);
 				case OpCode.Ldc_r8: return ConstantR8(context, stack, (double)instruction.Operand);
-				case OpCode.Ldelem: return false;
-				case OpCode.Ldelem_i: return false;
-				case OpCode.Ldelem_i1: return false;
-				case OpCode.Ldelem_i2: return false;
-				case OpCode.Ldelem_i4: return false;
-				case OpCode.Ldelem_i8: return false;
-				case OpCode.Ldelem_r4: return false;
-				case OpCode.Ldelem_r8: return false;
-				case OpCode.Ldelem_ref: return false;
-				case OpCode.Ldelem_u1: return false;
-				case OpCode.Ldelem_u2: return false;
-				case OpCode.Ldelem_u4: return false;
+				case OpCode.Ldelem: return Ldelem(context, stack, instruction);
+				case OpCode.Ldelem_i: return Ldelem(context, stack, instruction, ElementType.I);
+				case OpCode.Ldelem_i1: return Ldelem(context, stack, instruction, ElementType.I1);
+				case OpCode.Ldelem_i2: return Ldelem(context, stack, instruction, ElementType.I2);
+				case OpCode.Ldelem_i4: return Ldelem(context, stack, instruction, ElementType.I4);
+				case OpCode.Ldelem_i8: return Ldelem(context, stack, instruction, ElementType.I8);
+				case OpCode.Ldelem_r4: return Ldelem(context, stack, instruction, ElementType.R4);
+				case OpCode.Ldelem_r8: return Ldelem(context, stack, instruction, ElementType.R8);
+				case OpCode.Ldelem_ref: return Ldelem(context, stack, instruction, ElementType.Ref);
+				case OpCode.Ldelem_u1: return Ldelem(context, stack, instruction, ElementType.U1);
+				case OpCode.Ldelem_u2: return Ldelem(context, stack, instruction, ElementType.U2);
+				case OpCode.Ldelem_u4: return Ldelem(context, stack, instruction, ElementType.U4);
 				case OpCode.Ldelema: return false;
 				case OpCode.Ldfld: return false;
 				case OpCode.Ldflda: return false;
@@ -519,14 +522,14 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Stelem_r8: return false;
 				case OpCode.Stelem_ref: return false;
 				case OpCode.Stfld: return false;
-				case OpCode.Stind_i: return StindI(context, stack);
-				case OpCode.Stind_i1: return StindI1(context, stack);
-				case OpCode.Stind_i2: return StindI2(context, stack);
-				case OpCode.Stind_i4: return StindI4(context, stack);
-				case OpCode.Stind_i8: return StindI8(context, stack);
-				case OpCode.Stind_r4: return StindR4(context, stack);
-				case OpCode.Stind_r8: return StindR8(context, stack);
-				case OpCode.Stind_ref: return StindObject(context, stack);
+				case OpCode.Stind_i: return Stind(context, stack, ElementType.I);
+				case OpCode.Stind_i1: return Stind(context, stack, ElementType.I1);
+				case OpCode.Stind_i2: return Stind(context, stack, ElementType.I2);
+				case OpCode.Stind_i4: return Stind(context, stack, ElementType.I4);
+				case OpCode.Stind_i8: return Stind(context, stack, ElementType.I8);
+				case OpCode.Stind_r4: return Stind(context, stack, ElementType.R4);
+				case OpCode.Stind_r8: return Stind(context, stack, ElementType.R8);
+				case OpCode.Stind_ref: return Stind(context, stack, ElementType.Ref);
 				case OpCode.Stloc: return SaveLocal(context, stack, (int)instruction.Operand);
 				case OpCode.Stloc_0: return SaveLocal(context, stack, 0);
 				case OpCode.Stloc_1: return SaveLocal(context, stack, 1);
@@ -596,25 +599,31 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private static bool IsCompoundType(MosaType underlyingType)
+		private static bool IsPrimitive(MosaType underlyingType)
 		{
-			return MosaTypeLayout.IsCompoundType(underlyingType);
+			return MosaTypeLayout.IsPrimitive(underlyingType);
 		}
 
-		private MosaType ConvertStackTypeToType(StackType stackType)
+		private static bool IsCompoundType(MosaType underlyingType)
+		{
+			return !IsPrimitive(underlyingType);
+		}
+
+		private Operand CreateOperand(StackType stackType, MosaType type = null)
 		{
 			switch (stackType)
 			{
-				case StackType.Int32: return TypeSystem.BuiltIn.I4;
-				case StackType.Int64: return TypeSystem.BuiltIn.I8;
-				case StackType.R4: return TypeSystem.BuiltIn.R4;
-				case StackType.R8: return TypeSystem.BuiltIn.R8;
-				case StackType.Object: return TypeSystem.BuiltIn.Object;
-				default: return null;
+				case StackType.Int32: return AllocateVirtualRegisterI32();
+				case StackType.Int64: return AllocateVirtualRegisterI64();
+				case StackType.R4: return AllocateVirtualRegisterR4();
+				case StackType.R8: return AllocateVirtualRegisterR8();
+				case StackType.Object: return AllocateVirtualRegisterObject();
+				case StackType.ValueType: return MethodCompiler.AddStackLocal(type);
+				default: throw new CompilerException("Not implemented yet");
 			}
 		}
 
-		private StackEntry CreateOperand(MosaType type)
+		private StackEntry CreateStateEntry(MosaType type)
 		{
 			if (type == null)
 				return null;
@@ -622,23 +631,9 @@ namespace Mosa.Compiler.Framework.Stages
 			var registerType = GetUnderlyingType(type);
 			var stackType = GetStackType(registerType);
 
-			var operand = CreateOperand(type, stackType);
+			var operand = CreateOperand(stackType, type);
 
 			return (stackType == StackType.ValueType) ? new StackEntry(stackType, operand, type) : new StackEntry(stackType, operand);
-		}
-
-		private Operand CreateOperand(MosaType type, StackType stackType)
-		{
-			switch (stackType)
-			{
-				case StackType.ValueType: return MethodCompiler.AddStackLocal(type);
-				case StackType.Int32: return AllocateVirtualRegisterI32();
-				case StackType.Int64: return AllocateVirtualRegisterI64();
-				case StackType.R4: return AllocateVirtualRegisterR4();
-				case StackType.R8: return AllocateVirtualRegisterR8();
-				case StackType.Object: return AllocateVirtualRegisterObject();
-				default: throw new CompilerException("Not implemented yet");
-			}
 		}
 
 		private string EmitString(string data, uint token)
@@ -652,6 +647,20 @@ namespace Mosa.Compiler.Framework.Stages
 			var stringData = Encoding.Unicode.GetBytes(data);
 			stream.Write(stringData);
 			return symbolName;
+		}
+
+		private ElementType GetElementType(StackType stackType)
+		{
+			switch (stackType)
+			{
+				case StackType.Int32: return ElementType.I4;
+				case StackType.Int64: return ElementType.I8;
+				case StackType.Object: return ElementType.Ref;
+				case StackType.R4: return ElementType.Ref;
+				case StackType.R8: return ElementType.R8;
+			}
+
+			throw new CompilerException($"Unable to convert stacktype ({stackType}) to element type");
 		}
 
 		private Stack<StackEntry> GetEvaluationStack(BasicBlock block)
@@ -704,7 +713,76 @@ namespace Mosa.Compiler.Framework.Stages
 			if (type.IsValueType)
 				return StackType.ValueType;
 
-			throw new CompilerException($"Can not translate to stacktype {type}");
+			throw new CompilerException($"Cannot translate to stacktype {type}");
+		}
+
+		private ElementType GetElementType(MosaType type)
+		{
+			if (type.IsReferenceType)
+				return ElementType.Ref;
+			else if (type.IsI1)
+				return ElementType.I1;
+			else if (type.IsI2)
+				return ElementType.I2;
+			else if (type.IsI4)
+				return ElementType.I4;
+			else if (type.IsI8)
+				return ElementType.I8;
+			else if (type.IsU1)
+				return ElementType.U1;
+			else if (type.IsU2)
+				return ElementType.U2;
+			else if (type.IsU4)
+				return ElementType.U4;
+			else if (type.IsU8)
+				return ElementType.U8;
+			else if (type.IsR8)
+				return ElementType.R8;
+			else if (type.IsR4)
+				return ElementType.R4;
+			else if (type.IsBoolean)
+				return ElementType.U1;
+			else if (type.IsChar)
+				return ElementType.U2;
+			else if (type.IsI)
+				return Is32BitPlatform ? ElementType.I4 : ElementType.I8;
+
+			// TODO --- enums?
+
+			throw new CompilerException($"Cannot translate to Type {type} to ElementType");
+		}
+
+		private StackType GetStackType(ElementType elementType)
+		{
+			switch (elementType)
+			{
+				case ElementType.I1: return StackType.Int32;
+				case ElementType.I2: return StackType.Int32;
+				case ElementType.I4: return StackType.Int32;
+				case ElementType.I8: return StackType.Int64;
+				case ElementType.U1: return StackType.Int32;
+				case ElementType.U2: return StackType.Int32;
+				case ElementType.U4: return StackType.Int32;
+				case ElementType.U8: return StackType.Int64;
+				case ElementType.Ref: return StackType.Object;
+				case ElementType.R4: return StackType.R4;
+				case ElementType.R8: return StackType.R8;
+			}
+
+			throw new CompilerException($"Cannot translate to ElementType {elementType} to StackType");
+		}
+
+		private MosaType GetType(StackType stackType)
+		{
+			switch (stackType)
+			{
+				case StackType.Int32: return TypeSystem.BuiltIn.I4;
+				case StackType.Int64: return TypeSystem.BuiltIn.I8;
+				case StackType.R4: return TypeSystem.BuiltIn.R4;
+				case StackType.R8: return TypeSystem.BuiltIn.R8;
+				case StackType.Object: return TypeSystem.BuiltIn.Object;
+				default: return null;
+			}
 		}
 
 		private MosaType GetType(StackEntry stackEntry)
@@ -712,7 +790,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (stackEntry.StackType == StackType.ValueType)
 				return stackEntry.Type;
 
-			return ConvertStackTypeToType(stackEntry.StackType);
+			return GetType(stackEntry.StackType);
 		}
 
 		private void SaveEvaluationStack(BasicBlock block, Stack<StackEntry> stack)
@@ -728,6 +806,98 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		#endregion Helpers
+
+		#region Instruction Maps
+
+		private BaseInstruction GetLoadInstruction(ElementType elementType)
+		{
+			switch (elementType)
+			{
+				case ElementType.I1: return IRInstruction.LoadSignExtend8x32;
+				case ElementType.U1: return IRInstruction.LoadZeroExtend8x32;
+				case ElementType.I2: return IRInstruction.LoadSignExtend16x32;
+				case ElementType.U2: return IRInstruction.LoadZeroExtend16x32;
+				case ElementType.I4: return IRInstruction.Load32;
+				case ElementType.U4: return IRInstruction.Load32;
+				case ElementType.I8: return IRInstruction.Load64;
+				case ElementType.U8: return IRInstruction.Load64;
+				case ElementType.R4: return IRInstruction.LoadR4;
+				case ElementType.R8: return IRInstruction.LoadR8;
+				case ElementType.Ref: return IRInstruction.LoadObject;
+				case ElementType.I when Is32BitPlatform: return IRInstruction.Load32;
+				case ElementType.I when Is64BitPlatform: return IRInstruction.Load64;
+			}
+
+			throw new CompilerException($"Invalid ElementType {elementType}");
+		}
+
+		private BaseInstruction GetLoadParamInstruction(ElementType elementType)
+		{
+			switch (elementType)
+			{
+				case ElementType.I1: return IRInstruction.LoadParamSignExtend8x32;
+				case ElementType.U1: return IRInstruction.LoadParamZeroExtend8x32;
+				case ElementType.I2: return IRInstruction.LoadParamSignExtend16x32;
+				case ElementType.U2: return IRInstruction.LoadParamZeroExtend16x32;
+				case ElementType.I4: return IRInstruction.LoadParam32;
+				case ElementType.U4: return IRInstruction.LoadParam32;
+				case ElementType.I8: return IRInstruction.LoadParam64;
+				case ElementType.U8: return IRInstruction.LoadParam64;
+				case ElementType.R4: return IRInstruction.LoadParamR4;
+				case ElementType.R8: return IRInstruction.LoadParamR8;
+				case ElementType.Ref: return IRInstruction.LoadParamObject;
+				case ElementType.I when Is32BitPlatform: return IRInstruction.LoadParam32;
+				case ElementType.I when Is64BitPlatform: return IRInstruction.LoadParam64;
+			}
+
+			throw new CompilerException($"Invalid ElementType {elementType}");
+		}
+
+		private BaseInstruction GetStoreInstruction(ElementType elementType)
+		{
+			switch (elementType)
+			{
+				case ElementType.I1: return IRInstruction.Store8;
+				case ElementType.U1: return IRInstruction.Store8;
+				case ElementType.I2: return IRInstruction.Store16;
+				case ElementType.U2: return IRInstruction.Store16;
+				case ElementType.I4: return IRInstruction.Store32;
+				case ElementType.U4: return IRInstruction.Store32;
+				case ElementType.I8: return IRInstruction.Store64;
+				case ElementType.U8: return IRInstruction.Store64;
+				case ElementType.R4: return IRInstruction.StoreR4;
+				case ElementType.R8: return IRInstruction.StoreR8;
+				case ElementType.Ref: return IRInstruction.StoreObject;
+				case ElementType.I when Is32BitPlatform: return IRInstruction.Store32;
+				case ElementType.I when Is64BitPlatform: return IRInstruction.Store64;
+			}
+
+			throw new CompilerException($"Invalid ElementType {elementType}");
+		}
+
+		private BaseInstruction GetStoreParamInstruction(ElementType elementType)
+		{
+			switch (elementType)
+			{
+				case ElementType.I1: return IRInstruction.StoreParam8;
+				case ElementType.U1: return IRInstruction.StoreParam8;
+				case ElementType.I2: return IRInstruction.StoreParam16;
+				case ElementType.U2: return IRInstruction.StoreParam16;
+				case ElementType.I4: return IRInstruction.StoreParam32;
+				case ElementType.U4: return IRInstruction.StoreParam32;
+				case ElementType.I8: return IRInstruction.StoreParam64;
+				case ElementType.U8: return IRInstruction.StoreParam64;
+				case ElementType.R4: return IRInstruction.StoreParamR4;
+				case ElementType.R8: return IRInstruction.StoreParamR8;
+				case ElementType.Ref: return IRInstruction.StoreParamObject;
+				case ElementType.I when Is32BitPlatform: return IRInstruction.StoreParam32;
+				case ElementType.I when Is64BitPlatform: return IRInstruction.StoreParam64;
+			}
+
+			throw new CompilerException($"Invalid ElementType {elementType}");
+		}
+
+		#endregion Instruction Maps
 
 		#region CIL Shortcuts
 
@@ -1085,7 +1255,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (!method.Signature.ReturnType.IsVoid)
 			{
-				var resultStackType = CreateOperand(method.Signature.ReturnType);
+				var resultStackType = CreateStateEntry(method.Signature.ReturnType);
 
 				result = resultStackType.Operand;
 
@@ -2132,6 +2302,100 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
+		private bool Isinst(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var entry1 = stack.Pop();
+			var type = (MosaType)instruction.Operand;
+
+			var result = AllocateVirtualRegisterI32();
+
+			// TODO: non-nullable ValueTypes
+
+			if (!type.IsInterface)
+			{
+				context.SetInstruction(IRInstruction.IsInstanceOfType, result, GetRuntimeTypeHandle(type), entry1.Operand);
+			}
+			else
+			{
+				int slot = TypeLayout.GetInterfaceSlot(type);
+				context.SetInstruction(IRInstruction.IsInstanceOfInterfaceType, result, CreateConstant32(slot), entry1.Operand);
+			}
+
+			stack.Push(new StackEntry(StackType.Int32, result));
+
+			return true;
+		}
+
+		private bool Ldelem(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var entry1 = stack.Pop();
+			var entry2 = stack.Pop();
+
+			var type = (MosaType)instruction.Operand;
+			var underlyingType = GetUnderlyingType(type.ElementType);
+			var isCompound = !IsPrimitive(underlyingType);
+
+			var index = entry1.Operand;
+			var array = entry2.Operand;
+
+			AddArrayBoundsCheck(context, array, index);
+
+			var elementOffset = CalculateArrayElementOffset(context, type, index);
+			var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
+
+			if (isCompound)
+			{
+				var result = CreateOperand(StackType.ValueType, type.ElementType);
+
+				context.AppendInstruction(IRInstruction.LoadCompound, result, array, totalElementOffset);
+				context.MosaType = type.ElementType;
+
+				stack.Push(new StackEntry(StackType.ValueType, result, type.ElementType));
+
+				return true;
+			}
+			else
+			{
+				var stacktype = GetStackType(type.ElementType);
+				var result = CreateOperand(stacktype);
+				stack.Push(new StackEntry(stacktype, result));
+
+				var elementType = GetElementType(stacktype);
+				var loadInstruction = GetLoadInstruction(elementType);
+
+				context.AppendInstruction(loadInstruction, result, array, totalElementOffset);
+
+				return true;
+			}
+		}
+
+		private bool Ldelem(Context context, Stack<StackEntry> stack, MosaInstruction instruction, ElementType elementType)
+		{
+			var entry1 = stack.Pop();
+			var entry2 = stack.Pop();
+
+			var type = (MosaType)instruction.Operand;
+			var underlyingType = GetUnderlyingType(type.ElementType);
+
+			var index = entry1.Operand;
+			var array = entry2.Operand;
+
+			AddArrayBoundsCheck(context, array, index);
+
+			var elementOffset = CalculateArrayElementOffset(context, type, index);
+			var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
+
+			var stacktype = GetStackType(underlyingType);
+			var result = CreateOperand(stacktype);
+			stack.Push(new StackEntry(stacktype, result));
+
+			var loadInstruction = GetLoadInstruction(elementType);
+
+			context.AppendInstruction(loadInstruction, result, array, totalElementOffset);
+
+			return true;
+		}
+
 		private bool LdindI(Context context, Stack<StackEntry> stack)
 		{
 			var entry1 = stack.Pop();
@@ -2193,33 +2457,6 @@ namespace Mosa.Compiler.Framework.Stages
 			stack.Push(new StackEntry(StackType.Int32, result));
 
 			return true;
-		}
-
-		private bool Ldlen(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-
-			var offset = CreateConstant32(NativePointerSize * 2);
-
-			if (entry1.StackType == StackType.Object)
-			{
-				if (Is32BitPlatform)
-				{
-					var result = AllocateVirtualRegisterI32();
-					context.SetInstruction(IRInstruction.Load32, result, entry1.Operand, offset);
-					stack.Push(new StackEntry(StackType.Int32, result));
-					return true;
-				}
-				else
-				{
-					var result = AllocateVirtualRegisterI64();
-					context.SetInstruction(IRInstruction.Load64, result, entry1.Operand, offset);
-					stack.Push(new StackEntry(StackType.Int64, result));
-					return true;
-				}
-			}
-
-			return false;
 		}
 
 		private bool LdindI8(Context context, Stack<StackEntry> stack)
@@ -2300,6 +2537,33 @@ namespace Mosa.Compiler.Framework.Stages
 			return true;
 		}
 
+		private bool Ldlen(Context context, Stack<StackEntry> stack)
+		{
+			var entry1 = stack.Pop();
+
+			var offset = CreateConstant32(NativePointerSize * 2);
+
+			if (entry1.StackType == StackType.Object)
+			{
+				if (Is32BitPlatform)
+				{
+					var result = AllocateVirtualRegisterI32();
+					context.SetInstruction(IRInstruction.Load32, result, entry1.Operand, offset);
+					stack.Push(new StackEntry(StackType.Int32, result));
+					return true;
+				}
+				else
+				{
+					var result = AllocateVirtualRegisterI64();
+					context.SetInstruction(IRInstruction.Load64, result, entry1.Operand, offset);
+					stack.Push(new StackEntry(StackType.Int64, result));
+					return true;
+				}
+			}
+
+			return false;
+		}
+
 		private bool Ldstr(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
 		{
 			var result = AllocateVirtualRegister(TypeSystem.BuiltIn.String);
@@ -2321,135 +2585,30 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var parameter = MethodCompiler.Parameters[index];
 			var type = parameter.Type;
+			var underlyingType = GetUnderlyingType(type);
+			var isCompound = !IsPrimitive(underlyingType);
 
-			if (type.IsValueType)
+			if (isCompound)
 			{
-				var basetype = MosaTypeLayout.GetUnderlyingType(type);
-
-				if (MosaTypeLayout.CanFitInRegister(basetype))
-				{
-					return LoadArgumentByType(context, stack, parameter, basetype);
-				}
-				else
-				{
-					var result = AllocateVirtualRegister(TypeSystem.BuiltIn.ValueType);
-					context.AppendInstruction(IRInstruction.LoadParamCompound, result, parameter);
-					context.MosaType = type;
-					stack.Push(new StackEntry(StackType.ValueType, result, type));
-					return true;
-				}
-			}
-
-			return LoadArgumentByType(context, stack, parameter, type);
-		}
-
-		private bool LoadArgumentByType(Context context, Stack<StackEntry> stack, Operand parameter, MosaType type)
-		{
-			if (type.IsU1 || type.IsBoolean)
-			{
-				var result = AllocateVirtualRegisterI32();
-				context.AppendInstruction(IRInstruction.LoadParamZeroExtend8x32, result, parameter);
-				stack.Push(new StackEntry(StackType.Int32, result));
+				var result = AllocateVirtualRegister(TypeSystem.BuiltIn.ValueType);
+				context.AppendInstruction(IRInstruction.LoadParamCompound, result, parameter);
+				context.MosaType = type;
+				stack.Push(new StackEntry(StackType.ValueType, result, type));
 				return true;
 			}
-
-			if (type.IsI1)
+			else
 			{
-				var result = AllocateVirtualRegisterI32();
-				context.AppendInstruction(IRInstruction.LoadParamSignExtend8x32, result, parameter);
-				stack.Push(new StackEntry(StackType.Int32, result));
+				var elementType = GetElementType(underlyingType);
+				var stacktype = GetStackType(elementType);
+				var result = CreateOperand(stacktype);
+
+				stack.Push(new StackEntry(stacktype, result));
+
+				var loadInstruction = GetLoadParamInstruction(elementType);
+				context.AppendInstruction(loadInstruction, result, parameter);
+
 				return true;
 			}
-
-			if (type.IsU2 || type.IsChar)
-			{
-				var result = AllocateVirtualRegisterI32();
-				context.AppendInstruction(IRInstruction.LoadParamZeroExtend16x32, result, parameter);
-				stack.Push(new StackEntry(StackType.Int32, result));
-				return true;
-			}
-
-			if (type.IsI2)
-			{
-				var result = AllocateVirtualRegisterI32();
-				context.AppendInstruction(IRInstruction.LoadParamSignExtend16x32, result, parameter);
-				stack.Push(new StackEntry(StackType.Int32, result));
-				return true;
-			}
-
-			if (type.IsU4 || type.IsI4 || (type.IsEnum && (type.ElementType.IsI4 || type.ElementType.IsU4)))
-			{
-				var result = AllocateVirtualRegisterI32();
-				context.AppendInstruction(IRInstruction.LoadParam32, result, parameter);
-				stack.Push(new StackEntry(StackType.Int32, result));
-				return true;
-			}
-
-			if (type.IsU8 || type.IsI8 || (type.IsEnum && (type.ElementType.IsI8 || type.ElementType.IsU8)))
-			{
-				var result = AllocateVirtualRegisterI64();
-				context.AppendInstruction(IRInstruction.LoadParam64, result, parameter);
-				stack.Push(new StackEntry(StackType.Int64, result));
-				return true;
-			}
-
-			if (type.IsR4)
-			{
-				var result = AllocateVirtualRegister(TypeSystem.BuiltIn.R4);
-				context.AppendInstruction(IRInstruction.LoadParamR4, result, parameter);
-				stack.Push(new StackEntry(StackType.R4, result));
-				return true;
-			}
-
-			if (type.IsR8)
-			{
-				var result = AllocateVirtualRegisterR8();
-				context.AppendInstruction(IRInstruction.LoadParamR8, result, parameter);
-				stack.Push(new StackEntry(StackType.R8, result));
-				return true;
-			}
-
-			if (type.IsReferenceType)
-			{
-				var result = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
-				context.AppendInstruction(IRInstruction.LoadParamObject, result, parameter);
-				stack.Push(new StackEntry(StackType.Object, result));
-				return true;
-			}
-
-			if ((type.IsI || type.IsU) && Is32BitPlatform)
-			{
-				var result = AllocateVirtualRegisterI32();
-				context.AppendInstruction(IRInstruction.LoadParam32, result, parameter);
-				stack.Push(new StackEntry(StackType.Int32, result));
-				return true;
-			}
-
-			if ((type.IsI || type.IsU) && Is64BitPlatform)
-			{
-				var result = AllocateVirtualRegisterI64();
-				context.AppendInstruction(IRInstruction.LoadParam64, result, parameter);
-				stack.Push(new StackEntry(StackType.Int64, result));
-				return true;
-			}
-
-			if ((type.IsManagedPointer || type.IsU) && Is32BitPlatform)
-			{
-				var result = AllocateVirtualRegisterI32();
-				context.AppendInstruction(IRInstruction.LoadParam32, result, parameter);
-				stack.Push(new StackEntry(StackType.ManagedPointer, result));
-				return true;
-			}
-
-			if ((type.IsManagedPointer || type.IsU) && Is64BitPlatform)
-			{
-				var result = AllocateVirtualRegisterI64();
-				context.AppendInstruction(IRInstruction.LoadParam64, result, parameter);
-				stack.Push(new StackEntry(StackType.ManagedPointer, result));
-				return true;
-			}
-
-			return false;
 		}
 
 		private bool LoadLocal(Context context, Stack<StackEntry> stack, int index)
@@ -2468,7 +2627,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return true;
 			}
 
-			var resultType = ConvertStackTypeToType(stacktype);
+			var resultType = GetType(stacktype);
 			var result = AllocateVirtualRegister(resultType);
 
 			stack.Push(new StackEntry(stacktype, result));
@@ -2657,8 +2816,9 @@ namespace Mosa.Compiler.Framework.Stages
 			var classType = method.DeclaringType;
 			int paramCount = method.Signature.Parameters.Count;
 
-			var registerType = MosaTypeLayout.GetUnderlyingType(classType);
-			var stackType = GetStackType(registerType);
+			var underlyingYype = MosaTypeLayout.GetUnderlyingType(classType);
+			var isCompound = !IsPrimitive(underlyingYype);
+			var stackType = GetStackType(underlyingYype);
 
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
@@ -2688,7 +2848,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				return true;
 			}
-			else if (stackType == StackType.ValueType)
+			else if (stackType == StackType.ValueType)  // iscompound?
 			{
 				var newThisLocal = MethodCompiler.AddStackLocal(classType);
 				var newThis = MethodCompiler.CreateVirtualRegister(classType.ToManagedPointer());
@@ -3216,7 +3376,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private bool StindI(Context context, Stack<StackEntry> stack)
+		private bool Stind(Context context, Stack<StackEntry> stack, ElementType elementType)
 		{
 			var entry1 = stack.Pop();
 			var entry2 = stack.Pop();
@@ -3224,149 +3384,10 @@ namespace Mosa.Compiler.Framework.Stages
 			var address = entry2.Operand;
 			var value = entry1.Operand;
 
-			switch (entry2.StackType)
-			{
-				case StackType.Int32 when entry1.StackType == StackType.Int32:
-					context.AppendInstruction(IRInstruction.Store32, null, address, ConstantZero, value);
-					return true;
+			var storeInstruction = GetStoreInstruction(elementType);
+			context.AppendInstruction(storeInstruction, null, address, ConstantZero, value);
 
-				case StackType.Int64 when entry1.StackType == StackType.Int64:
-					context.AppendInstruction(IRInstruction.Store64, null, address, ConstantZero, value);
-					return true;
-			}
-
-			return false;
-		}
-
-		private bool StindI1(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-			var entry2 = stack.Pop();
-
-			var address = entry2.Operand;
-			var value = entry1.Operand;
-
-			if (entry2.StackType == StackType.Int32)
-			{
-				context.AppendInstruction(IRInstruction.Store8, null, address, ConstantZero, value);
-				return true;
-			}
-
-			return false;
-		}
-
-		private bool StindI2(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-			var entry2 = stack.Pop();
-
-			var address = entry2.Operand;
-			var value = entry1.Operand;
-
-			if (entry2.StackType == StackType.Int32)
-			{
-				context.AppendInstruction(IRInstruction.Store16, null, address, ConstantZero, value);
-				return true;
-			}
-
-			return false;
-		}
-
-		private bool StindI4(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-			var entry2 = stack.Pop();
-
-			var address = entry2.Operand;
-			var value = entry1.Operand;
-
-			switch (entry2.StackType)
-			{
-				case StackType.Int32:
-					context.AppendInstruction(IRInstruction.Store32, null, address, ConstantZero, value);
-					return true;
-
-				case StackType.ManagedPointer:
-					context.AppendInstruction(IRInstruction.Store32, null, address, ConstantZero, value);
-					return true;
-
-				default:
-					return false;
-			}
-		}
-
-		private bool StindI8(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-			var entry2 = stack.Pop();
-
-			var address = entry2.Operand;
-			var value = entry1.Operand;
-
-			switch (entry2.StackType)
-			{
-				case StackType.Int64:
-					context.AppendInstruction(IRInstruction.Store64, null, address, ConstantZero, value);
-					return true;
-
-				case StackType.ManagedPointer:
-					context.AppendInstruction(IRInstruction.Store64, null, address, ConstantZero, value);
-					return true;
-
-				default:
-					return false;
-			}
-		}
-
-		private bool StindObject(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-			var entry2 = stack.Pop();
-
-			var address = entry2.Operand;
-			var value = entry1.Operand;
-
-			if (entry2.StackType == StackType.Object)
-			{
-				context.AppendInstruction(IRInstruction.StoreObject, null, address, ConstantZero, value);
-				return true;
-			}
-
-			return false;
-		}
-
-		private bool StindR4(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-			var entry2 = stack.Pop();
-
-			var address = entry2.Operand;
-			var value = entry1.Operand;
-
-			if (entry2.StackType == StackType.R4)
-			{
-				context.AppendInstruction(IRInstruction.StoreR4, null, address, ConstantZero, value);
-				return true;
-			}
-
-			return false;
-		}
-
-		private bool StindR8(Context context, Stack<StackEntry> stack)
-		{
-			var entry1 = stack.Pop();
-			var entry2 = stack.Pop();
-
-			var address = entry2.Operand;
-			var value = entry1.Operand;
-
-			if (entry2.StackType == StackType.R8)
-			{
-				context.AppendInstruction(IRInstruction.StoreR8, null, address, ConstantZero, value);
-				return true;
-			}
-
-			return false;
+			return true;
 		}
 
 		private bool Stobj(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
@@ -3379,9 +3400,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var type = (MosaType)instruction.Operand;
 			var underlyingType = GetUnderlyingType(type);
-			bool compound = IsCompoundType(underlyingType);
+			bool isCompound = !IsPrimitive(underlyingType);
 
-			if (compound)
+			if (isCompound)
 			{
 				context.AppendInstruction(IRInstruction.StoreCompound, null, address, ConstantZero, value);
 				return true;
@@ -3389,32 +3410,12 @@ namespace Mosa.Compiler.Framework.Stages
 			else
 			{
 				var stackType = GetStackType(underlyingType);
+				var elementType = GetElementType(stackType);
+				var storeInstruction = GetStoreInstruction(elementType);
 
-				switch (stackType)
-				{
-					case StackType.Int32:
-						context.AppendInstruction(IRInstruction.Store32, null, address, ConstantZero, value);
-						return true;
-
-					case StackType.Int64:
-						context.AppendInstruction(IRInstruction.Store64, null, address, ConstantZero, value);
-						return true;
-
-					case StackType.R4:
-						context.AppendInstruction(IRInstruction.StoreR4, null, address, ConstantZero, value);
-						return true;
-
-					case StackType.R8:
-						context.AppendInstruction(IRInstruction.StoreR8, null, address, ConstantZero, value);
-						return true;
-
-					case StackType.Object:
-						context.AppendInstruction(IRInstruction.StoreObject, null, address, ConstantZero, value);
-						return true;
-				}
+				context.AppendInstruction(storeInstruction, null, address, ConstantZero, value);
+				return true;
 			}
-
-			return false;
 		}
 
 		private bool Sub(Context context, Stack<StackEntry> stack)
@@ -3597,5 +3598,105 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		#endregion CIL
+
+		#region Array Helpers
+
+		/// <summary>
+		/// Adds bounds check to the array access.
+		/// </summary>
+		/// <param name="context">The node.</param>
+		/// <param name="arrayOperand">The array operand.</param>
+		/// <param name="arrayIndexOperand">The index operand.</param>
+		private void AddArrayBoundsCheck(Context context, Operand arrayOperand, Operand arrayIndexOperand)
+		{
+			// First create new block and split current block
+			var exceptionContext = CreateNewBlockContexts(1, context.Label)[0];
+			var nextContext = Split(context);
+
+			Operand lengthOperand;
+			Operand fixedOffset;
+
+			if (Is32BitPlatform)
+			{
+				lengthOperand = AllocateVirtualRegisterI32();
+				fixedOffset = CreateConstant32(NativePointerSize * 2);
+
+				context.AppendInstruction(IRInstruction.Load32, lengthOperand, arrayOperand, fixedOffset);
+			}
+			else
+			{
+				lengthOperand = AllocateVirtualRegisterI64();
+				fixedOffset = CreateConstant64(NativePointerSize * 2);
+
+				context.AppendInstruction(IRInstruction.Load64, lengthOperand, arrayOperand, fixedOffset);
+			}
+
+			// Now compare length with index
+			// If index is greater than or equal to the length then jump to exception block, otherwise jump to next block
+			context.AppendInstruction(BranchInstruction, ConditionCode.UnsignedGreaterOrEqual, null, arrayIndexOperand, lengthOperand, exceptionContext.Block);
+			context.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
+
+			// Build exception block which is just a call to throw exception
+			var method = InternalRuntimeType.FindMethodByName("ThrowIndexOutOfRangeException");
+			var symbolOperand = Operand.CreateSymbolFromMethod(method, TypeSystem);
+
+			exceptionContext.AppendInstruction(IRInstruction.CallStatic, null, symbolOperand);
+		}
+
+		/// <summary>
+		/// Calculates the element offset for the specified index.
+		/// </summary>
+		/// <param name="context">The node.</param>
+		/// <param name="arrayType">The array type.</param>
+		/// <param name="index">The index operand.</param>
+		/// <returns>
+		/// Element offset operand.
+		/// </returns>
+		private Operand CalculateArrayElementOffset(Context context, MosaType arrayType, Operand index)
+		{
+			var size = GetTypeSize(arrayType.ElementType, false);
+
+			if (Is32BitPlatform)
+			{
+				var elementOffset = AllocateVirtualRegisterI32();
+				var elementSize = CreateConstant32(size);
+
+				context.AppendInstruction(IRInstruction.MulUnsigned32, elementOffset, index, elementSize);
+
+				return elementOffset;
+			}
+			else
+			{
+				var elementOffset = AllocateVirtualRegisterI64();
+				var elementSize = CreateConstant64(size);
+
+				context.AppendInstruction(IRInstruction.MulUnsigned64, elementOffset, index, elementSize);
+
+				return elementOffset;
+			}
+		}
+
+		/// <summary>
+		/// Calculates the base of the array elements.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		/// <param name="elementOffset">The array.</param>
+		/// <returns>
+		/// Base address for array elements.
+		/// </returns>
+		private Operand CalculateTotalArrayOffset(Context context, Operand elementOffset)
+		{
+			var fixedOffset = CreateConstant32(NativePointerSize * 3);
+			var arrayElement = Is32BitPlatform ? AllocateVirtualRegisterI32() : AllocateVirtualRegisterI64();
+
+			if (Is32BitPlatform)
+				context.AppendInstruction(IRInstruction.Add32, arrayElement, elementOffset, fixedOffset);
+			else
+				context.AppendInstruction(IRInstruction.Add64, arrayElement, elementOffset, fixedOffset);
+
+			return arrayElement;
+		}
+
+		#endregion Array Helpers
 	}
 }

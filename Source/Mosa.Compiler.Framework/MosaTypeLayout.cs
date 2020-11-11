@@ -402,7 +402,7 @@ namespace Mosa.Compiler.Framework
 			return fits;
 		}
 
-		public static bool IsCompoundType(MosaType underlyingType)
+		public static bool IsPrimitive(MosaType underlyingType)
 		{
 			if (underlyingType == null)
 				return false;
@@ -416,6 +416,22 @@ namespace Mosa.Compiler.Framework
 				return false;
 
 			return true;
+		}
+
+		public static bool IsCompoundType(MosaType underlyingType)
+		{
+			if (underlyingType == null)
+				return false;
+
+			var typeCode = underlyingType.TypeCode;
+
+			if (typeCode == MosaTypeCode.ValueType)
+				return true; // no search
+
+			if (typeCode == MosaTypeCode.Var)
+				return true;
+
+			return false;
 		}
 
 		public static MosaType GetUnderlyingType(MosaType type)
