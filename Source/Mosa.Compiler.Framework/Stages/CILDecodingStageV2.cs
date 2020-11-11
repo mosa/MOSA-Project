@@ -438,17 +438,17 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Ldc_r4: return ConstantR4(context, stack, (float)instruction.Operand);
 				case OpCode.Ldc_r8: return ConstantR8(context, stack, (double)instruction.Operand);
 				case OpCode.Ldelem: return Ldelem(context, stack, instruction);
-				case OpCode.Ldelem_i: return Ldelem(context, stack, instruction, ElementType.I);
-				case OpCode.Ldelem_i1: return Ldelem(context, stack, instruction, ElementType.I1);
-				case OpCode.Ldelem_i2: return Ldelem(context, stack, instruction, ElementType.I2);
-				case OpCode.Ldelem_i4: return Ldelem(context, stack, instruction, ElementType.I4);
-				case OpCode.Ldelem_i8: return Ldelem(context, stack, instruction, ElementType.I8);
-				case OpCode.Ldelem_r4: return Ldelem(context, stack, instruction, ElementType.R4);
-				case OpCode.Ldelem_r8: return Ldelem(context, stack, instruction, ElementType.R8);
-				case OpCode.Ldelem_ref: return Ldelem(context, stack, instruction, ElementType.Ref);
-				case OpCode.Ldelem_u1: return Ldelem(context, stack, instruction, ElementType.U1);
-				case OpCode.Ldelem_u2: return Ldelem(context, stack, instruction, ElementType.U2);
-				case OpCode.Ldelem_u4: return Ldelem(context, stack, instruction, ElementType.U4);
+				case OpCode.Ldelem_i: return Ldelem(context, stack, ElementType.I);
+				case OpCode.Ldelem_i1: return Ldelem(context, stack, ElementType.I1);
+				case OpCode.Ldelem_i2: return Ldelem(context, stack, ElementType.I2);
+				case OpCode.Ldelem_i4: return Ldelem(context, stack, ElementType.I4);
+				case OpCode.Ldelem_i8: return Ldelem(context, stack, ElementType.I8);
+				case OpCode.Ldelem_r4: return Ldelem(context, stack, ElementType.R4);
+				case OpCode.Ldelem_r8: return Ldelem(context, stack, ElementType.R8);
+				case OpCode.Ldelem_ref: return Ldelem(context, stack, ElementType.Ref);
+				case OpCode.Ldelem_u1: return Ldelem(context, stack, ElementType.U1);
+				case OpCode.Ldelem_u2: return Ldelem(context, stack, ElementType.U2);
+				case OpCode.Ldelem_u4: return Ldelem(context, stack, ElementType.U4);
 				case OpCode.Ldelema: return false;
 				case OpCode.Ldfld: return false;
 				case OpCode.Ldflda: return false;
@@ -467,9 +467,9 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Ldlen: return Ldlen(context, stack);
 				case OpCode.Ldloc: return LoadLocal(context, stack, (int)instruction.Operand);
 				case OpCode.Ldloc_0: return LoadLocal(context, stack, 0);
-				case OpCode.Ldloc_1: return LoadLocal(context, stack, 0);
-				case OpCode.Ldloc_2: return LoadLocal(context, stack, 0);
-				case OpCode.Ldloc_3: return LoadLocal(context, stack, 0);
+				case OpCode.Ldloc_1: return LoadLocal(context, stack, 1);
+				case OpCode.Ldloc_2: return LoadLocal(context, stack, 2);
+				case OpCode.Ldloc_3: return LoadLocal(context, stack, 3);
 				case OpCode.Ldloc_s: return LoadLocal(context, stack, (int)instruction.Operand);
 				case OpCode.Ldloca: return false;
 				case OpCode.Ldloca_s: return false;
@@ -512,15 +512,15 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Sizeof: return false;
 				case OpCode.Starg: return false;
 				case OpCode.Starg_s: return false;
-				case OpCode.Stelem: return false;
-				case OpCode.Stelem_i: return false;
-				case OpCode.Stelem_i1: return false;
-				case OpCode.Stelem_i2: return false;
-				case OpCode.Stelem_i4: return false;
-				case OpCode.Stelem_i8: return false;
-				case OpCode.Stelem_r4: return false;
-				case OpCode.Stelem_r8: return false;
-				case OpCode.Stelem_ref: return false;
+				case OpCode.Stelem: return Stelem(context, stack, instruction);
+				case OpCode.Stelem_i: return Stelem(context, stack, ElementType.I);
+				case OpCode.Stelem_i1: return Stelem(context, stack, ElementType.I1);
+				case OpCode.Stelem_i2: return Stelem(context, stack, ElementType.I2);
+				case OpCode.Stelem_i4: return Stelem(context, stack, ElementType.I4);
+				case OpCode.Stelem_i8: return Stelem(context, stack, ElementType.I8);
+				case OpCode.Stelem_r4: return Stelem(context, stack, ElementType.R4);
+				case OpCode.Stelem_r8: return Stelem(context, stack, ElementType.R8);
+				case OpCode.Stelem_ref: return Stelem(context, stack, ElementType.Ref);
 				case OpCode.Stfld: return false;
 				case OpCode.Stind_i: return Stind(context, stack, ElementType.I);
 				case OpCode.Stind_i1: return Stind(context, stack, ElementType.I1);
@@ -535,7 +535,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Stloc_1: return SaveLocal(context, stack, 1);
 				case OpCode.Stloc_2: return SaveLocal(context, stack, 2);
 				case OpCode.Stloc_3: return SaveLocal(context, stack, 3);
-				case OpCode.Stloc_s: return SaveLocal(context, stack, 4);
+				case OpCode.Stloc_s: return SaveLocal(context, stack, (int)instruction.Operand);
 				case OpCode.Stobj: return Stobj(context, stack, instruction);
 				case OpCode.Stsfld: return false;
 				case OpCode.Sub: return Sub(context, stack);
@@ -770,6 +770,26 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			throw new CompilerException($"Cannot translate to ElementType {elementType} to StackType");
+		}
+
+		private int GetSize(ElementType elementType)
+		{
+			switch (elementType)
+			{
+				case ElementType.I1: return 1;
+				case ElementType.I2: return 2;
+				case ElementType.I4: return 4;
+				case ElementType.I8: return 8;
+				case ElementType.U1: return 1;
+				case ElementType.U2: return 2;
+				case ElementType.U4: return 4;
+				case ElementType.U8: return 8;
+				case ElementType.R4: return 4;
+				case ElementType.R8: return 8;
+				case ElementType.Ref: return Is32BitPlatform ? 4 : 8;
+			}
+
+			throw new CompilerException($"Cannot get size of {elementType}");
 		}
 
 		private MosaType GetType(StackType stackType)
@@ -2331,16 +2351,16 @@ namespace Mosa.Compiler.Framework.Stages
 			var entry1 = stack.Pop();
 			var entry2 = stack.Pop();
 
+			var index = entry1.Operand;
+			var array = entry2.Operand;
+
 			var type = (MosaType)instruction.Operand;
 			var underlyingType = GetUnderlyingType(type.ElementType);
 			var isCompound = !IsPrimitive(underlyingType);
 
-			var index = entry1.Operand;
-			var array = entry2.Operand;
-
 			AddArrayBoundsCheck(context, array, index);
 
-			var elementOffset = CalculateArrayElementOffset(context, type, index);
+			var elementOffset = CalculateArrayElementOffset(context, type.ElementType, index);
 			var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
 
 			if (isCompound)
@@ -2358,34 +2378,93 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var stacktype = GetStackType(type.ElementType);
 				var result = CreateOperand(stacktype);
-				stack.Push(new StackEntry(stacktype, result));
-
 				var elementType = GetElementType(stacktype);
 				var loadInstruction = GetLoadInstruction(elementType);
 
 				context.AppendInstruction(loadInstruction, result, array, totalElementOffset);
 
+				stack.Push(new StackEntry(stacktype, result));
+
 				return true;
 			}
 		}
 
-		private bool Ldelem(Context context, Stack<StackEntry> stack, MosaInstruction instruction, ElementType elementType)
+		private bool Stelem(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var entry1 = stack.Pop();
+			var entry2 = stack.Pop();
+			var entry3 = stack.Pop();
+
+			var index = entry3.Operand;
+			var array = entry2.Operand;
+			var value = entry1.Operand;
+
+			var type = (MosaType)instruction.Operand;
+			var underlyingType = GetUnderlyingType(type.ElementType);
+			var isCompound = !IsPrimitive(underlyingType);
+
+			AddArrayBoundsCheck(context, array, index);
+
+			var elementOffset = CalculateArrayElementOffset(context, type.ElementType, index);
+			var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
+
+			if (isCompound)
+			{
+				context.AppendInstruction(IRInstruction.StoreCompound, null, array, totalElementOffset);
+				context.MosaType = type.ElementType;
+
+				return true;
+			}
+			else
+			{
+				var stacktype = GetStackType(type.ElementType);
+				var elementType = GetElementType(stacktype);
+				var storeInstruction = GetStoreInstruction(elementType);
+
+				context.AppendInstruction(storeInstruction, null, array, totalElementOffset, value);
+
+				return true;
+			}
+		}
+
+		private bool Stelem(Context context, Stack<StackEntry> stack, ElementType elementType)
+		{
+			var entry1 = stack.Pop();
+			var entry2 = stack.Pop();
+			var entry3 = stack.Pop();
+
+			var index = entry3.Operand;
+			var array = entry2.Operand;
+			var value = entry1.Operand;
+
+			AddArrayBoundsCheck(context, array, index);
+
+			var elementOffset = CalculateArrayElementOffset(context, GetSize(elementType), index);
+			var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
+
+			var storeInstruction = GetStoreInstruction(elementType);
+
+			context.AppendInstruction(storeInstruction, null, array, totalElementOffset, value);
+
+			return true;
+		}
+
+		private bool Ldelem(Context context, Stack<StackEntry> stack, ElementType elementType)
 		{
 			var entry1 = stack.Pop();
 			var entry2 = stack.Pop();
 
-			var type = (MosaType)instruction.Operand;
-			var underlyingType = GetUnderlyingType(type.ElementType);
-
 			var index = entry1.Operand;
 			var array = entry2.Operand;
 
+			//var underlyingType = GetUnderlyingType(type.ElementType);
+
 			AddArrayBoundsCheck(context, array, index);
 
-			var elementOffset = CalculateArrayElementOffset(context, type, index);
+			var elementOffset = CalculateArrayElementOffset(context, GetSize(elementType), index);
 			var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
 
-			var stacktype = GetStackType(underlyingType);
+			var stacktype = GetStackType(elementType);
 			var result = CreateOperand(stacktype);
 			stack.Push(new StackEntry(stacktype, result));
 
@@ -3647,15 +3726,29 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Calculates the element offset for the specified index.
 		/// </summary>
 		/// <param name="context">The node.</param>
-		/// <param name="arrayType">The array type.</param>
+		/// <param name="elementType">The array type.</param>
 		/// <param name="index">The index operand.</param>
 		/// <returns>
 		/// Element offset operand.
 		/// </returns>
-		private Operand CalculateArrayElementOffset(Context context, MosaType arrayType, Operand index)
+		private Operand CalculateArrayElementOffset(Context context, MosaType elementType, Operand index)
 		{
-			var size = GetTypeSize(arrayType.ElementType, false);
+			var size = GetTypeSize(elementType, false);
 
+			return CalculateArrayElementOffset(context, size, index);
+		}
+
+		/// <summary>
+		/// Calculates the element offset for the specified index.
+		/// </summary>
+		/// <param name="context">The node.</param>
+		/// <param name="size">The element size.</param>
+		/// <param name="index">The index operand.</param>
+		/// <returns>
+		/// Element offset operand.
+		/// </returns>
+		private Operand CalculateArrayElementOffset(Context context, int size, Operand index)
+		{
 			if (Is32BitPlatform)
 			{
 				var elementOffset = AllocateVirtualRegisterI32();
