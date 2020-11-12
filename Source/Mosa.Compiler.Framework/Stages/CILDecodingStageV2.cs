@@ -7,8 +7,6 @@ using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
 using System.Text;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -211,8 +209,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 				UpdateLabel(context.Node, label, endNode);
 				endNode = context.Node;
-
-				//if (IsBranch(opcode) || opcode == OpCode.Br || opcode == OpCode.Throw || opcode == OpCode.Endfilter || opcode == OpCode.Endfinally || opcode == OpCode.Ret)
 
 				if (block.HasNextBlocks || opcode == OpCode.Throw || opcode == OpCode.Endfilter || opcode == OpCode.Endfinally)
 				{
@@ -543,7 +539,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Sub_ovf_un: return Sub(context, stack);     // TODO: implement overflow check
 				case OpCode.Switch: return false;
 				case OpCode.Throw: return Throw(context, stack);
-				case OpCode.Unbox: return false;
+				case OpCode.Unbox: return Unbox(context, stack, instruction);
 				case OpCode.Unbox_any: return false;
 				case OpCode.Xor: return Xor(context, stack);
 
@@ -942,6 +938,29 @@ namespace Mosa.Compiler.Framework.Stages
 			throw new CompilerException($"Invalid ElementType {elementType}");
 		}
 
+		private BaseIRInstruction GetBoxInstruction(ElementType elementType)
+		{
+			switch (elementType)
+			{
+				case ElementType.R4: return IRInstruction.BoxR4;
+				case ElementType.R8: return IRInstruction.BoxR8;
+				case ElementType.U4: return IRInstruction.Box32;
+				case ElementType.I4: return IRInstruction.Box32;
+				case ElementType.U8: return IRInstruction.Box64;
+				case ElementType.I8: return IRInstruction.Box64;
+
+				case ElementType.I1: return IRInstruction.Box32;
+				case ElementType.U1: return IRInstruction.Box32;
+				case ElementType.I2: return IRInstruction.Box32;
+				case ElementType.U2: return IRInstruction.Box32;
+
+				case ElementType.I when Is32BitPlatform: return IRInstruction.Box32;
+				case ElementType.I when Is64BitPlatform: return IRInstruction.Box64;
+			}
+
+			throw new InvalidOperationException();
+		}
+
 		#endregion Instruction Maps
 
 		#region CIL Shortcuts
@@ -1145,47 +1164,72 @@ namespace Mosa.Compiler.Framework.Stages
 			var entry = stack.Pop();
 			var type = (MosaType)instruction.Operand;
 
-			var result = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
+			var result = AllocateVirtualRegisterObject();
 			stack.Push(new StackEntry(StackType.Object, result));
 
-			// TODO: if the HasValue property is false, then return null reference
-
-			if (!type.IsValueType)
+			if (type.IsReferenceType)
 			{
-				var moveInstruction = GetMoveInstruction(type);
-				context.AppendInstruction(moveInstruction, context.Result, context.Operand1);
 				return true;
 			}
 
-			var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
 			var runtimeType = GetRuntimeTypeHandle(type);
+			var isPrimitive = IsPrimitive(type);
 
-			if (typeSize <= 8 || type.IsR)
+			var elementType = GetElementType(type);
+
+			if (isPrimitive)
 			{
-				BaseIRInstruction boxInstruction;
-
-				if (type.IsR4)
-					boxInstruction = IRInstruction.BoxR4;
-				else if (type.IsR8)
-					boxInstruction = IRInstruction.BoxR8;
-				else if (typeSize <= 4)
-					boxInstruction = IRInstruction.Box32;
-				else if (typeSize == 8)
-					boxInstruction = IRInstruction.Box64;
-				else
-					throw new InvalidOperationException();
-
+				var boxInstruction = GetBoxInstruction(elementType);
 				context.AppendInstruction(boxInstruction, result, runtimeType, entry.Operand);
+				return true;
 			}
 			else
 			{
-				var adr = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+				var address = AllocateVirtualRegisterI();
+				var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
 
-				context.AppendInstruction(IRInstruction.AddressOf, adr, entry.Operand);
-				context.AppendInstruction(IRInstruction.Box, result, runtimeType, adr, CreateConstant32(typeSize));
+				context.AppendInstruction(IRInstruction.AddressOf, address, entry.Operand);
+				context.AppendInstruction(IRInstruction.Box, result, runtimeType, address, CreateConstant32(typeSize));
+				return true;
+			}
+		}
+
+		private bool Unbox(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var entry = stack.Pop();
+
+			var type = (MosaType)instruction.Operand;
+
+			if (type.IsReferenceType)
+			{
+				stack.Push(entry);
+				return true;
 			}
 
-			return true;
+			var isPrimitive = IsPrimitive(type);
+			var elementType = GetElementType(type);
+
+			Operand result = null; // FIXME
+
+			stack.Push(new StackEntry(StackType.ManagedPointer, result));
+
+			var runtimeType = GetRuntimeTypeHandle(type);
+
+			if (isPrimitive)
+			{
+				var boxInstruction = GetBoxInstruction(elementType);
+				context.AppendInstruction(boxInstruction, result, runtimeType, entry.Operand);
+				return true;
+			}
+			else
+			{
+				var address = AllocateVirtualRegisterI();
+				var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
+
+				context.AppendInstruction(IRInstruction.AddressOf, address, entry.Operand);
+				context.AppendInstruction(IRInstruction.Box, result, runtimeType, address, CreateConstant32(typeSize));
+				return true;
+			}
 		}
 
 		private bool Branch(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
@@ -2282,6 +2326,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var entry = stack.Peek();
 			stack.Push(entry);
+			return true;
 		}
 
 		private bool Isinst(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
@@ -2709,15 +2754,6 @@ namespace Mosa.Compiler.Framework.Stages
 				default:
 					return false;
 			}
-		}
-
-		private bool Box(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
-		{
-			var entry = stack.Pop();
-
-			var value = entry.Operand;
-
-			var type = (MosaType)instruction.Operand;
 		}
 
 		private bool Newarr(Context context, Stack<StackEntry> stack, MosaInstruction instruction)

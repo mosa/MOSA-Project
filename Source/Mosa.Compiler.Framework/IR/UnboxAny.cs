@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// Unbox32
+	/// UnboxAny
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class Unbox32 : BaseIRInstruction
+	public sealed class UnboxAny : BaseIRInstruction
 	{
-		public Unbox32()
+		public UnboxAny()
 			: base(2, 1)
 		{
 		}

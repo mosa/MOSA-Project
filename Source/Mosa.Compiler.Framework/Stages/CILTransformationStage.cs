@@ -1626,14 +1626,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (typeSize <= 8)
 			{
-				context.SetInstruction(typeSize != 8 ? (BaseIRInstruction)IRInstruction.Unbox32 : IRInstruction.Unbox64, tmp, value);
+				context.SetInstruction(IRInstruction.Unbox, tmp, value);
 			}
 			else
 			{
 				var adr = AllocateVirtualRegister(type.ToManagedPointer());
 
 				context.SetInstruction(IRInstruction.AddressOf, adr, MethodCompiler.AddStackLocal(type));
-				context.AppendInstruction(IRInstruction.Unbox, tmp, value, adr, CreateConstant32(typeSize));
+				context.AppendInstruction(IRInstruction.UnboxAny, tmp, value, adr, CreateConstant32(typeSize));
 			}
 
 			if (!MosaTypeLayout.CanFitInRegister(type))

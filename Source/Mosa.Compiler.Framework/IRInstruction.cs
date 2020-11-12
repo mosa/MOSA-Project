@@ -211,8 +211,7 @@ namespace Mosa.Compiler.Framework
 		public static readonly BoxR4 BoxR4 = new BoxR4();
 		public static readonly BoxR8 BoxR8 = new BoxR8();
 		public static readonly Unbox Unbox = new Unbox();
-		public static readonly Unbox32 Unbox32 = new Unbox32();
-		public static readonly Unbox64 Unbox64 = new Unbox64();
+		public static readonly UnboxAny UnboxAny = new UnboxAny();
 		public static readonly To64 To64 = new To64();
 		public static readonly GetLow32 GetLow32 = new GetLow32();
 		public static readonly GetHigh32 GetHigh32 = new GetHigh32();
