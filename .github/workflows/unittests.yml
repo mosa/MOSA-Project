@@ -14,8 +14,14 @@ jobs:
          levels: [-o0, -o1, -o2, -o3, -o4, -o5, -o6, -o7, -o8, -o9, -oFast, -oSize]
 
     steps:
+      - name: Set net5.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x'
       - name: Checkout
         uses: actions/checkout@v1
+        with:
+          submodules: recursive
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1.0.1
       - name: Setup Nuget.exe
@@ -37,6 +43,10 @@ jobs:
          levels: [-o0, -o1, -o2, -o3, -o4, -o5, -o6, -o7, -o8, -o9, -oFast, -oSize]
 
     steps:
+      - name: Set net5.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x'
       - name: Checkout
         uses: actions/checkout@v1
         with:

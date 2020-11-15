@@ -24,6 +24,8 @@ jobs:
         run: echo repository=${{ github.repository }} event_name=${{ github.event_name }} ref=${{ github.ref }} head_ref=${{ github.head_ref }} base_ref=${{ github.base_ref }}
       - name: Checkout
         uses: actions/checkout@v1
+        with:
+          submodules: recursive
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
       - name: Setup Nuget.exe
@@ -99,6 +101,8 @@ jobs:
           dotnet-version: '5.0.x'
       - name: Checkout
         uses: actions/checkout@v1
+        with:
+          submodules: recursive
       - name: Restore nuget Packages
         run: dotnet restore Source/Mosa.Linux.sln
       - name: Build
