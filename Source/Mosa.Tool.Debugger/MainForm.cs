@@ -191,6 +191,7 @@ namespace Mosa.Tool.Debugger
 			Text = "MOSA GDB Debugger v" + CompilerVersion.VersionString;
 
 			dockPanel.SuspendLayout(true);
+			dockPanel.Theme = new VS2015DarkTheme();
 			dockPanel.DockTopPortion = 54;
 
 			controlView.Show(dockPanel, DockState.DockTop);
