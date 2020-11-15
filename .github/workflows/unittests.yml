@@ -22,15 +22,13 @@ jobs:
         uses: actions/checkout@v1
         with:
           submodules: recursive
-      - name: Setup MSBuild
-        uses: microsoft/setup-msbuild@v1.0.1
       - name: Setup Nuget.exe
         uses: nuget/setup-nuget@v1
       - name: Restore nuget Packages
         run: dotnet restore Mosa.sln
         working-directory: Source
       - name: Build
-        run: msbuild Source/Mosa.sln
+        run: dotnet build Source/Mosa.sln
       - name: Unit Tests
         run: bin\Mosa.Utility.UnitTests.exe ${{ matrix.level }} -s Emulator.Display=false
 
