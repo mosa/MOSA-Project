@@ -43,7 +43,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 		public MosaType TypedRef { get; }
 
 		public MosaType Pointer { get; }
-		public MosaType ValueType { get; }
+
+		//public MosaType ValueType { get; }
 
 		public BuiltInTypes(TypeSystem typeSystem, MosaModule corlib)
 		{
@@ -67,7 +68,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			TypedRef = typeSystem.GetTypeByName(corlib, "System", "TypedReference");
 			Pointer = Void.ToUnmanagedPointer();
 
-			ValueType = typeSystem.GetTypeByName(corlib, "System", "ValueType");
+			//ValueType = typeSystem.GetTypeByName(corlib, "System", "ValueType");
 		}
 
 		public MosaType GetType(BuiltInType builtInType)
@@ -92,7 +93,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 				case BuiltInType.IntPtr: return I;
 				case BuiltInType.UIntPtr: return U;
 				case BuiltInType.TypedReference: return TypedRef;
-				case BuiltInType.ValueType: return ValueType;
+
+				//case BuiltInType.ValueType: return ValueType;
 				default: throw new CompilerException("Invalid BuildInType");
 			}
 		}
