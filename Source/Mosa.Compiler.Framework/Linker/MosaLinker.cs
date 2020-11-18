@@ -289,7 +289,7 @@ namespace Mosa.Compiler.Framework.Linker
 		{
 			var data = BitConverter.GetBytes(value);
 
-			return (uint)(data[0] | (data[1] << 8) | (data[2] << 16) | (data[4] << 24));
+			return (uint)(data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24));
 		}
 
 		public LinkerSymbol GetConstantSymbol(float value)
