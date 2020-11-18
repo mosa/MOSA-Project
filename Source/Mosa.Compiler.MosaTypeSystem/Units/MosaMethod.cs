@@ -2,10 +2,12 @@
 
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Text;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
+
 	public sealed class MosaMethod : MosaUnit, IEquatable<MosaMethod>
 	{
 		public MosaModule Module { get; private set; }
@@ -42,9 +44,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool HasImplementation { get { return Code.Count != 0; } }
 
-		private List<MosaType> genericArguments;
+		private GenericArgumentsCollection genericArguments;
 
-		public IList<MosaType> GenericArguments { get; private set; }
+		public IReadOnlyList<MosaType> GenericArguments { get; private set; }
 
 		private List<MosaLocal> localVars;
 		private List<MosaInstruction> instructions;
@@ -76,7 +78,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		internal MosaMethod()
 		{
-			GenericArguments = (genericArguments = new List<MosaType>()).AsReadOnly();
+			GenericArguments = (genericArguments = new GenericArgumentsCollection());
 
 			LocalVariables = (localVars = new List<MosaLocal>()).AsReadOnly();
 			Code = (instructions = new List<MosaInstruction>()).AsReadOnly();
@@ -89,7 +91,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 			var result = (MosaMethod)base.MemberwiseClone();
 
-			result.GenericArguments = (result.genericArguments = new List<MosaType>(genericArguments)).AsReadOnly();
+			result.GenericArguments = (result.genericArguments = new GenericArgumentsCollection(genericArguments));
 
 			result.LocalVariables = (result.localVars = new List<MosaLocal>(localVars)).AsReadOnly();
 			result.Code = (result.instructions = new List<MosaInstruction>(instructions)).AsReadOnly();
@@ -149,7 +151,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public bool HasOpenGenericParams { set { method.HasOpenGenericParams = value; } }
 
-			public IList<MosaType> GenericArguments { get { return method.genericArguments; } }
+			public GenericArgumentsCollection GenericArguments { get { return method.genericArguments; } }
 
 			public MosaMethodAttributes MethodAttributes { set { method.MethodAttributes = value; } }
 
