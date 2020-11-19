@@ -96,9 +96,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool HasOpenGenericParams { get; private set; }
 
-		private List<MosaType> genericArguments;
+		private GenericArgumentsCollection genericArguments;
 
-		public IList<MosaType> GenericArguments { get; private set; }
+		public IReadOnlyList<MosaType> GenericArguments { get; private set; }
 
 		public bool IsUI1 { get { return IsU1 || IsI1; } }
 
@@ -172,7 +172,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			Properties = (properties = new List<MosaProperty>()).AsReadOnly();
 			Interfaces = (interfaces = new List<MosaType>()).AsReadOnly();
 
-			GenericArguments = (genericArguments = new List<MosaType>()).AsReadOnly();
+			GenericArguments = (genericArguments = new GenericArgumentsCollection());
 		}
 
 		internal MosaType Clone()
@@ -184,7 +184,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			result.Properties = (result.properties = new List<MosaProperty>(properties)).AsReadOnly();
 			result.Interfaces = (result.interfaces = new List<MosaType>(interfaces)).AsReadOnly();
 
-			result.GenericArguments = (result.genericArguments = new List<MosaType>(genericArguments)).AsReadOnly();
+			result.GenericArguments = (result.genericArguments = new GenericArgumentsCollection(genericArguments));
 
 			return result;
 		}
@@ -270,7 +270,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 			public bool HasOpenGenericParams { set { type.HasOpenGenericParams = value; } }
 
-			public IList<MosaType> GenericArguments { get { return type.genericArguments; } }
+			public GenericArgumentsCollection GenericArguments { get { return type.genericArguments; } }
 
 			public MosaType ElementType { set { type.ElementType = value; } }
 
