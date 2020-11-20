@@ -215,7 +215,7 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -platform x86 Mosa.He
 		{
 			compiler.Load();
 
-			compiler.ThreadedCompile();
+			compiler.Compile();
 		}
 
 		private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)

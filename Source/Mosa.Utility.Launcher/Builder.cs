@@ -12,6 +12,7 @@ using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Utility.BootImage;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -145,15 +146,7 @@ namespace Mosa.Utility.Launcher
 			compiler.Load();
 			compiler.Initialize();
 			compiler.Setup();
-
-			if (LauncherSettings.Multithreading)
-			{
-				compiler.ThreadedCompile();
-			}
-			else
-			{
-				compiler.Compile();
-			}
+			compiler.Compile();
 
 			Linker = compiler.Linker;
 			TypeSystem = compiler.TypeSystem;
