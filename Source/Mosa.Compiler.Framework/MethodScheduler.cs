@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The queued methods.
 		/// </value>
-		public int TotalQueuedMethods => _totalMethods;
+		public int TotalQueuedMethods => _totalQueued;
 
 		#endregion Properties
 
@@ -124,7 +124,7 @@ namespace Mosa.Compiler.Framework
 
 		public void AddToQueue(CompilerResult compilerResult)
 		{
-			if (compilerResult.Attemps == 0)
+			if (compilerResult.Attemps == 0) //Count the method only on first try
 				Interlocked.Increment(ref _totalMethods);
 
 			if (compilerResult.Attemps++ > 5)
