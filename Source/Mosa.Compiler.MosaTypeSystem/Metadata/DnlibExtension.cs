@@ -116,6 +116,18 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			return property.GetUnderlyingObject<UnitDesc<PropertyDef, PropertySig>>().Signature;
 		}
 
+		public static IList<TypeSig> GetGenericArguments(this IReadOnlyList<MosaType> types)
+		{
+			var result = new List<TypeSig>();
+
+			foreach (var type in types)
+			{
+				result.Add(type.GetTypeSig());
+			}
+
+			return result;
+		}
+
 		public static IList<TypeSig> GetGenericArguments(this IList<MosaType> types)
 		{
 			var result = new List<TypeSig>();

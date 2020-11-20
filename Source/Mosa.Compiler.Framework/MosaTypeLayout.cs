@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.MosaTypeSystem;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -843,51 +844,29 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var method in type.Methods)
 			{
-				if (method.IsVirtual)
+				int slot = methodTable.Count;
+				if (method.IsVirtual && !method.IsNewSlot)
 				{
-					if (method.IsNewSlot)
+					var newSlot = FindOverrideSlot(methodTable, method);
+					if (newSlot != -1)
 					{
-						int slot = methodTable.Count;
-						methodTable.Add(method);
-						methodSlots.Add(method, slot);
-					}
-					else
-					{
-						int slot = FindOverrideSlot(methodTable, method);
-						if (slot != -1)
-						{
-							methodTable[slot] = method;
-							methodSlots.Add(method, slot);
-							SetMethodOverridden(method, slot);
-						}
-						else
-						{
-							slot = methodTable.Count;
-							methodTable.Add(method);
-							methodSlots.Add(method, slot);
-						}
+						SetMethodOverridden(method, newSlot);
+						slot = newSlot;
 					}
 				}
+				else if (!method.IsInternal && !method.IsExternal)
+				{
+					// HACK
+					if (methodSlots.ContainsKey(method))
+						continue;
+				}
+
+				if (methodTable.Count > slot)
+					methodTable[slot] = method;
 				else
-				{
-					if (method.IsStatic && method.IsRTSpecialName)
-					{
-						int slot = methodTable.Count;
-						methodTable.Add(method);
-						methodSlots.Add(method, slot);
-					}
-					else if (!method.IsInternal && !method.IsExternal)
-					{
-						// HACK
-						if (methodSlots.ContainsKey(method))
-							continue;
+					methodTable.Add(method);
 
-						int slot = methodTable.Count;
-						methodTable.Add(method);
-
-						methodSlots.Add(method, slot);
-					}
-				}
+				methodSlots[method] = slot;
 			}
 
 			typeMethodTables.Add(type, methodTable);
