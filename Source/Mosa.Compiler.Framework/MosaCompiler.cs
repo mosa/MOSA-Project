@@ -142,7 +142,7 @@ namespace Mosa.Compiler.Framework
 				Stage = CompileStage.Executing;
 			}
 
-			Compiler.ExecuteCompile();
+			Compiler.ExecuteThreadedCompile(0);
 
 			lock (_lock)
 			{
