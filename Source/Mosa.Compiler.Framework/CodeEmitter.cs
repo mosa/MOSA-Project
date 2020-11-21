@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Patch
 		/// </summary>
-		protected struct Patch
+		private struct Patch
 		{
 			/// <summary>
 			/// Patch label
@@ -66,12 +66,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The stream used to write machine code bytes to.
 		/// </summary>
-		protected Stream CodeStream;
+		private readonly Stream CodeStream;
 
 		/// <summary>
 		/// Holds the linker used to resolve externals.
 		/// </summary>
-		protected MosaLinker Linker;
+		private readonly MosaLinker Linker;
 
 		/// <summary>
 		/// Gets the name of the method.
@@ -81,7 +81,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Patches we need to perform.
 		/// </summary>
-		protected readonly List<Patch> Patches = new List<Patch>();
+		private readonly List<Patch> Patches = new List<Patch>();
 
 		#endregion Data Members
 
@@ -150,12 +150,12 @@ namespace Mosa.Compiler.Framework
 			Labels.Add(label, (int)CodeStream.Position);
 		}
 
-		protected bool TryGetLabel(int label, out int position)
+		private bool TryGetLabel(int label, out int position)
 		{
 			return Labels.TryGetValue(label, out position);
 		}
 
-		protected void AddPatch(int label, int position, int size)
+		private void AddPatch(int label, int position, int size)
 		{
 			Patches.Add(new Patch(label, position, size));
 		}

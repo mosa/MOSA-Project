@@ -155,7 +155,7 @@ namespace Mosa.Platform.ARMv8A32
 						return constant;
 
 					var before = context.InsertBefore();
-					var v1 = AllocateVirtualRegister32();
+					var v1 = AllocateVirtualRegisterI32();
 					before.SetInstruction(ARMv8A32.Mov, v1, constant);
 
 					return v1;
@@ -166,7 +166,7 @@ namespace Mosa.Platform.ARMv8A32
 					var constant = CreateConstant32(immediate);
 
 					var before = context.InsertBefore();
-					var v1 = AllocateVirtualRegister32();
+					var v1 = AllocateVirtualRegisterI32();
 					before.SetInstruction(ARMv8A32.Mov, v1, constant);
 
 					return v1;
@@ -175,7 +175,7 @@ namespace Mosa.Platform.ARMv8A32
 				{
 					var before = context.InsertBefore();
 
-					var v1 = AllocateVirtualRegister32();
+					var v1 = AllocateVirtualRegisterI32();
 					before.SetInstruction(ARMv8A32.Movw, v1, CreateConstant32(operand.ConstantUnsigned32 & 0xFFFF));
 					before.AppendInstruction(ARMv8A32.Movt, v1, v1, CreateConstant32(operand.ConstantUnsigned32 >> 16));
 
@@ -185,7 +185,7 @@ namespace Mosa.Platform.ARMv8A32
 			else if (operand.IsUnresolvedConstant)
 			{
 				var before = context.InsertBefore();
-				var v1 = AllocateVirtualRegister32();
+				var v1 = AllocateVirtualRegisterI32();
 				before.SetInstruction(ARMv8A32.Movw, v1, operand);
 				before.AppendInstruction(ARMv8A32.Movt, v1, v1, operand);
 

@@ -5,18 +5,14 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// Unbox64
+	/// ConvertR4ToI32
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class Unbox64 : BaseIRInstruction
+	public sealed class ConvertR4ToI32 : BaseIRInstruction
 	{
-		public Unbox64()
-			: base(2, 1)
+		public ConvertR4ToI32()
+			: base(1, 1)
 		{
 		}
-
-		public override bool IsMemoryWrite { get { return true; } }
-
-		public override bool IsMemoryRead { get { return true; } }
 	}
 }

@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.Framework.Transform.Auto.ConstantFolding
 {
 	/// <summary>
-	/// Convert32ToR8
+	/// ConvertI32ToR8
 	/// </summary>
-	public sealed class Convert32ToR8 : BaseTransformation
+	public sealed class ConvertI32ToR8 : BaseTransformation
 	{
-		public Convert32ToR8() : base(IRInstruction.Convert32ToR8)
+		public ConvertI32ToR8() : base(IRInstruction.ConvertI32ToR8)
 		{
 		}
 

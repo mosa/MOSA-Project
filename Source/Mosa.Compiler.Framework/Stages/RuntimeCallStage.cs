@@ -26,9 +26,8 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(IRInstruction.Box64, Box64);
 			AddVisitation(IRInstruction.BoxR4, BoxR4);
 			AddVisitation(IRInstruction.BoxR8, BoxR8);
+			AddVisitation(IRInstruction.UnboxAny, UnboxAny);
 			AddVisitation(IRInstruction.Unbox, Unbox);
-			AddVisitation(IRInstruction.Unbox32, Unbox32);
-			AddVisitation(IRInstruction.Unbox64, Unbox64);
 		}
 
 		private MosaMethod GetVMCallMethod(VmCall vmcall)
@@ -37,7 +36,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var method = InternalRuntimeType.FindMethodByName(methodName) ?? PlatformInternalRuntimeType.FindMethodByName(methodName);
 
-			Debug.Assert(method != null, "Cannot find method: " + methodName);
+			Debug.Assert(method != null, $"Cannot find method: {methodName}");
 
 			MethodScanner.MethodInvoked(method, Method);
 
@@ -107,19 +106,14 @@ namespace Mosa.Compiler.Framework.Stages
 			SetVMCall(context, VmCall.BoxR8, context.Result, context.GetOperands());
 		}
 
+		private void UnboxAny(Context context)
+		{
+			SetVMCall(context, VmCall.UnboxAny, context.Result, context.GetOperands());
+		}
+
 		private void Unbox(Context context)
 		{
 			SetVMCall(context, VmCall.Unbox, context.Result, context.GetOperands());
-		}
-
-		private void Unbox32(Context context)
-		{
-			SetVMCall(context, VmCall.Unbox32, context.Result, context.GetOperands());
-		}
-
-		private void Unbox64(Context context)
-		{
-			SetVMCall(context, VmCall.Unbox64, context.Result, context.GetOperands());
 		}
 	}
 }

@@ -159,7 +159,6 @@ namespace Mosa.Platform.ARMv8A32
 			pipeline.InsertAfterLast<PlatformIntrinsicStage>(
 				new BaseMethodCompilerStage[]
 				{
-					new LongOperandStage(),
 					new IRTransformationStage(),
 
 					//compilerSettings.EnablePlatformOptimizations ? new OptimizationStage() : null,

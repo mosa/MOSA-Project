@@ -98,8 +98,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (AreRangeValuesDeterminate)
 				{
-					sb.Append($" MaxValue: {MaxValue.ToString()}");
-					sb.Append($" MinValue: {MinValue.ToString()}");
+					sb.Append($" MaxValue: {MaxValue}");
+					sb.Append($" MinValue: {MinValue}");
 				}
 
 				if (AreBitsDeterminate)
@@ -332,11 +332,11 @@ namespace Mosa.Compiler.Framework.Stages
 				var virtualRegister = MethodCompiler.VirtualRegisters[i];
 				var value = Values[virtualRegister.Index];
 
-				valueTrace?.Log($"Virtual Register: {virtualRegister.ToString()}");
+				valueTrace?.Log($"Virtual Register: {virtualRegister}");
 
 				if (virtualRegister.Definitions.Count == 1)
 				{
-					valueTrace?.Log($"Definition: {virtualRegister.Definitions[0].ToString()}");
+					valueTrace?.Log($"Definition: {virtualRegister.Definitions[0]}");
 				}
 
 				if (!value.IsEvaluated)
@@ -351,8 +351,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (value.AreRangeValuesDeterminate)
 				{
-					valueTrace?.Log($"  MaxValue:  {value.MaxValue.ToString()}");
-					valueTrace?.Log($"  MinValue:  {value.MinValue.ToString()}");
+					valueTrace?.Log($"  MaxValue:  {value.MaxValue}");
+					valueTrace?.Log($"  MinValue:  {value.MinValue}");
 				}
 
 				if (value.AreBitsDeterminate)

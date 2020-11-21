@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		protected override void Run()
 		{
-			if (!MethodCompiler.IsCILDecodeRequired)
+			if (!MethodCompiler.IsCILStream)
 				return;
 
 			InsertBlockProtectInstructions();
@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (handler.ExceptionHandlerType == ExceptionHandlerType.Finally)
 				{
 					var exceptionObject = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
-					var finallyOperand = Is32BitPlatform ? AllocateVirtualRegister32() : AllocateVirtualRegister64();
+					var finallyOperand = Is32BitPlatform ? AllocateVirtualRegisterI32() : AllocateVirtualRegisterI64();
 
 					context.AppendInstruction2(IRInstruction.FinallyStart, exceptionObject, finallyOperand);
 				}

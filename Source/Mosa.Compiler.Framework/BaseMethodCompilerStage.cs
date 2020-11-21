@@ -277,7 +277,7 @@ namespace Mosa.Compiler.Framework
 
 			traceLogs = new List<TraceLog>();
 
-			FormattedStageName = $"[{position.ToString("00")}] {Name}";
+			FormattedStageName = $"[{position:00}] {Name}";
 
 			Setup();
 		}
@@ -318,22 +318,22 @@ namespace Mosa.Compiler.Framework
 			traceLogs = null;
 		}
 
-		/// <summary>
-		/// Allocates the virtual register.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
 		protected Operand AllocateVirtualRegister(MosaType type)
 		{
 			return MethodCompiler.VirtualRegisters.Allocate(type);
 		}
 
-		protected Operand AllocateVirtualRegister32()
+		protected Operand AllocateVirtualRegister(Operand operand)
+		{
+			return MethodCompiler.VirtualRegisters.Allocate(operand.Type);
+		}
+
+		protected Operand AllocateVirtualRegisterI32()
 		{
 			return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I4);
 		}
 
-		protected Operand AllocateVirtualRegister64()
+		protected Operand AllocateVirtualRegisterI64()
 		{
 			return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I8);
 		}
@@ -346,6 +346,21 @@ namespace Mosa.Compiler.Framework
 		protected Operand AllocateVirtualRegisterR8()
 		{
 			return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.R8);
+		}
+
+		protected Operand AllocateVirtualRegisterObject()
+		{
+			return MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.Object);
+		}
+
+		protected Operand AllocateVirtualRegisterManagedPointer()
+		{
+			return AllocateVirtualRegisterI(); // temp
+		}
+		
+		protected Operand AllocateVirtualRegisterI()
+		{
+			return Is32BitPlatform ? MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I4) : MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I8);
 		}
 
 		/// <summary>
@@ -1174,6 +1189,11 @@ namespace Mosa.Compiler.Framework
 		}
 
 		protected Operand CreateConstant32(long value)
+		{
+			return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
+		}
+
+		protected Operand CreateConstant64(long value)
 		{
 			return Operand.CreateConstant(TypeSystem.BuiltIn.I8, value);
 		}

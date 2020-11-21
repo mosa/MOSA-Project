@@ -26,7 +26,7 @@ namespace Mosa.Platform.x64.Stages
 			if (!context.Operand1.IsCPURegister)
 			{
 				var before = context.InsertBefore();
-				var v1 = AllocateVirtualRegister(context.Operand1.Type);
+				var v1 = AllocateVirtualRegister(context.Operand1);
 
 				before.SetInstruction(X64.Mov64, v1, context.Operand1);
 				context.Operand1 = v1;
@@ -39,7 +39,7 @@ namespace Mosa.Platform.x64.Stages
 
 			if (left.IsConstant)
 			{
-				var v1 = AllocateVirtualRegister(left.Type);
+				var v1 = AllocateVirtualRegister(left);
 
 				context.InsertBefore().AppendInstruction(X64.Mov32, v1, left);
 				context.Operand1 = v1;
@@ -52,7 +52,7 @@ namespace Mosa.Platform.x64.Stages
 
 			if (left.IsConstant)
 			{
-				var v1 = AllocateVirtualRegister(left.Type);
+				var v1 = AllocateVirtualRegister(left);
 
 				context.InsertBefore().AppendInstruction(X64.Mov64, v1, left);
 				context.Operand1 = v1;

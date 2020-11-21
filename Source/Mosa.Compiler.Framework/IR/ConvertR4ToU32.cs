@@ -5,12 +5,12 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// ConvertR8To64
+	/// ConvertR4ToU32
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.IR.BaseIRInstruction" />
-	public sealed class ConvertR8To64 : BaseIRInstruction
+	public sealed class ConvertR4ToU32 : BaseIRInstruction
 	{
-		public ConvertR8To64()
+		public ConvertR4ToU32()
 			: base(1, 1)
 		{
 		}

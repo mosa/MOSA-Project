@@ -45,9 +45,7 @@
     <Compile Update="Views\DisplayView.designer.cs">
       <DependentUpon>DisplayView.cs</DependentUpon>
     </Compile>
-    <Compile Update="Views\LaunchView.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="Views\LaunchView.cs" />
     <Compile Update="Views\LaunchView.designer.cs">
       <DependentUpon>LaunchView.cs</DependentUpon>
     </Compile>

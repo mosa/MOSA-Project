@@ -283,7 +283,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var newOperand = Operand.CreateVirtualRegister(operand.Type, -operand.Index);
 
-					var moveInstruction = !MosaTypeLayout.CanFitInRegister(newOperand.Type)
+					var moveInstruction = !MosaTypeLayout.CanFitInRegister(newOperand)
 						? IRInstruction.MoveCompound
 						: GetMoveInstruction(newOperand.Type);
 

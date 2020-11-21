@@ -83,7 +83,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the local variables.
 		/// </summary>
-		public Operand[] LocalVariables { get; private set; }
+		public Operand[] LocalVariables { get; set; }
 
 		/// <summary>
 		/// Gets the assembly compiler.
@@ -168,7 +168,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets or sets a value indicating whether this method requires CIL decoding .
 		/// </summary>
-		public bool IsCILDecodeRequired { get; set; }
+		public bool IsCILStream { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether this method is plugged.
@@ -252,7 +252,7 @@ namespace Mosa.Compiler.Framework
 			IsStopped = false;
 			IsExecutePipeline = true;
 			IsMethodInlined = false;
-			IsCILDecodeRequired = !Method.IsCompilerGenerated;
+			IsCILStream = !Method.IsCompilerGenerated;
 			HasProtectedRegions = Method.ExceptionHandlers.Count != 0;
 
 			MethodData = Compiler.GetMethodData(Method);
@@ -491,7 +491,7 @@ namespace Mosa.Compiler.Framework
 			Compiler.MethodScanner.MethodInvoked(plugMethod, Method);
 
 			IsMethodPlugged = true;
-			IsCILDecodeRequired = false;
+			IsCILStream = false;
 			IsExecutePipeline = false;
 			IsStackFrameRequired = false;
 
@@ -525,7 +525,7 @@ namespace Mosa.Compiler.Framework
 			if (!DelegatePatcher.PatchDelegate(this))
 				return;
 
-			IsCILDecodeRequired = false;
+			IsCILStream = false;
 			IsExecutePipeline = true;
 
 			if (IsTraceable(5))
@@ -541,7 +541,7 @@ namespace Mosa.Compiler.Framework
 			if (!Method.IsExternal)
 				return;
 
-			IsCILDecodeRequired = false;
+			IsCILStream = false;
 			IsExecutePipeline = false;
 			IsStackFrameRequired = false;
 			MethodData.IsMethodImplementationReplaced = false;
@@ -579,7 +579,7 @@ namespace Mosa.Compiler.Framework
 			if (!Method.IsInternal)
 				return;
 
-			IsCILDecodeRequired = false;
+			IsCILStream = false;
 			IsExecutePipeline = false;
 			IsStackFrameRequired = false;
 
