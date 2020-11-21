@@ -369,7 +369,7 @@ namespace Mosa.Tool.Launcher
 			Settings.SetValue("Linker.StaticRelocations", cbRelocationTable.Checked);
 			Settings.SetValue("Linker.Drawf", cbEmitDwarf.Checked);
 			Settings.SetValue("Compiler.MethodScanner", cbEnableMethodScanner.Checked);
-			Settings.SetValue("CompilerDebug.CompileTimeFile", cbGenerateCompilerTime.Checked);
+			Settings.SetValue("CompilerDebug.CompileTimeFile", cbGenerateCompilerTime.Checked ? "%DEFAULT%" : string.Empty);
 			Settings.SetValue("Optimizations.BitTracker", cbBitTracker.Checked);
 			Settings.SetValue("Optimizations.Platform", cbPlatformOptimizations.Checked);
 			Settings.SetValue("Optimizations.LoopInvariantCodeMotion", cbLoopInvariantCodeMotion.Checked);
@@ -467,7 +467,7 @@ namespace Mosa.Tool.Launcher
 			cbTwoPassOptimizations.Checked = Settings.GetValue("Optimizations.TwoPass", true);
 			cbValueNumbering.Checked = Settings.GetValue("Optimizations.ValueNumbering", true);
 			cbEnableMethodScanner.Checked = Settings.GetValue("Compiler.MethodScanner", false);
-			cbGenerateCompilerTime.Checked = Settings.GetValue("CompilerDebug.CompileTimeFile", false);
+			cbGenerateCompilerTime.Checked = Settings.GetValue("CompilerDebug.CompileTimeFile", string.Empty) == "%DEFAULT%";
 			cbBitTracker.Checked = Settings.GetValue("Optimizations.BitTracker", false);
 			cbPlatformOptimizations.Checked = Settings.GetValue("Optimizations.Platform", false);
 			cbLoopInvariantCodeMotion.Checked = Settings.GetValue("Optimizations.LoopInvariantCodeMotion", false);
