@@ -142,39 +142,9 @@ namespace Mosa.Compiler.Framework
 				Stage = CompileStage.Executing;
 			}
 
-			Compiler.ExecuteCompile();
-
-			lock (_lock)
-			{
-				Stage = CompileStage.Ready;
-			}
-
-			if (!skipFinalization)
-			{
-				Finalization();
-			}
-		}
-
-		public void ThreadedCompile(bool skipFinalization = false)
-		{
-			Setup();
-
-			if (!CompilerSettings.MethodScanner)
-			{
-				ScheduleAll();
-			}
-
-			lock (_lock)
-			{
-				if (Stage != CompileStage.Ready)
-					return;
-
-				Stage = CompileStage.Executing;
-			}
-
 			var maxThreads = CompilerSettings.MaxThreads != 0 ? CompilerSettings.MaxThreads : Environment.ProcessorCount;
 
-			Compiler.ExecuteThreadedCompile(maxThreads);
+			Compiler.ExecuteCompile(maxThreads);
 
 			lock (_lock)
 			{
@@ -186,7 +156,7 @@ namespace Mosa.Compiler.Framework
 				Finalization();
 			}
 		}
-
+		
 		public void CompileSingleMethod(MosaMethod method)
 		{
 			Setup();

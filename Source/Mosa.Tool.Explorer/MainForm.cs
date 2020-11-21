@@ -10,12 +10,14 @@ using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Tool.Explorer.Stages;
 using Mosa.Utility.Configuration;
 using Mosa.Utility.Launcher;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+
 using static Mosa.Compiler.Framework.CompilerHooks;
 
 namespace Mosa.Tool.Explorer
@@ -418,16 +420,11 @@ namespace Mosa.Tool.Explorer
 
 			toolStrip1.Enabled = false;
 
-			var multithread = CBEnableMultithreading.Checked;
-
 			ThreadPool.QueueUserWorkItem(state =>
 			{
 				try
 				{
-					if (multithread)
-						Compiler.ThreadedCompile();
-					else
-						Compiler.Compile();
+					Compiler.Compile();
 				}
 				finally
 				{
