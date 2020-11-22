@@ -38,6 +38,7 @@
 		<file src="..\..\bin\Mosa.Utility.FileSystem.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.Launcher.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.RSP.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Utility.Disassembler.dll" target="tools" />
 		<file src="..\..\bin\dnlib.dll" target="tools" />
 		<file src="..\..\bin\Reko.Arch.Arm.dll" target="tools" />
 		<file src="..\..\bin\Reko.Arch.X86.dll" target="tools" />

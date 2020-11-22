@@ -48,7 +48,7 @@
     <Content Include="rocket.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.ComponentModel.Composition" Version="4.7.0" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" />
     <PackageReference Include="MetroModernUI" Version="1.4.0" />
   </ItemGroup>
 </Project>
