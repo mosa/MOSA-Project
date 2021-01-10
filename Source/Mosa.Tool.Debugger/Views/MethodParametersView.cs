@@ -52,19 +52,18 @@ namespace Mosa.Tool.Debugger.Views
 
 		public override void OnRunning()
 		{
+			ClearDisplay();
+		}
+
+		protected override void ClearDisplay()
+		{
 			stackentries.Clear();
 		}
 
-		public override void OnPause()
+		protected override void UpdateDisplay()
 		{
-			this.method = null;
-			stackentries.Clear();
-
-			if (Platform == null)
-				return;
-
-			if (Platform.Registers == null)
-				return;
+			method = null;
+			ClearDisplay();
 
 			if (StackFrame == 0 || StackPointer == 0)
 				return;

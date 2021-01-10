@@ -69,7 +69,7 @@ namespace Mosa.Tool.Debugger.Views
 			}
 		}
 
-		private void dataGridView1_CellMouseClick(object sender, System.Windows.Forms.DataGridViewCellMouseEventArgs e)
+		private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)
 		{
 			if (e.Button != MouseButtons.Right)
 				return;

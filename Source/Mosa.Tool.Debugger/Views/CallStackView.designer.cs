@@ -35,9 +35,9 @@ namespace Mosa.Tool.Debugger.Views
 			this.treeView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-			this.treeView1.Location = new System.Drawing.Point(0, 0);
+			this.treeView1.Location = new System.Drawing.Point(0, -2);
 			this.treeView1.Name = "treeView1";
-			this.treeView1.Size = new System.Drawing.Size(221, 160);
+			this.treeView1.Size = new System.Drawing.Size(221, 164);
 			this.treeView1.TabIndex = 1;
 			this.treeView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.treeView1_MouseClick);
 			// 
@@ -52,7 +52,6 @@ namespace Mosa.Tool.Debugger.Views
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(10, 10);
 			this.Name = "CallStackView";
-			this.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
 			this.ShowHint = WeifenLuo.WinFormsUI.Docking.DockState.DockLeft;
 			this.TabText = "Call Stack";
 			this.Text = "Call Stack";

@@ -27,7 +27,7 @@ namespace Mosa.Tool.Debugger.Views
 
 		private void toolStripButton2_Click(object sender, EventArgs e)
 		{
-			if (saveFileDialog1.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+			if (saveFileDialog1.ShowDialog() != DialogResult.OK)
 				return;
 
 			if (string.IsNullOrEmpty(saveFileDialog1.FileName))

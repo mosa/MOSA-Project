@@ -37,6 +37,9 @@ namespace Mosa.Tool.Debugger.Views
 			this.cbKind = new System.Windows.Forms.ToolStripComboBox();
 			this.toolStripLabel4 = new System.Windows.Forms.ToolStripLabel();
 			this.cbLength = new System.Windows.Forms.ToolStripComboBox();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -51,7 +54,7 @@ namespace Mosa.Tool.Debugger.Views
 			this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.dataGridView1.Location = new System.Drawing.Point(0, 56);
+			this.dataGridView1.Location = new System.Drawing.Point(0, 30);
 			this.dataGridView1.Margin = new System.Windows.Forms.Padding(0);
 			this.dataGridView1.MultiSelect = false;
 			this.dataGridView1.Name = "dataGridView1";
@@ -61,43 +64,48 @@ namespace Mosa.Tool.Debugger.Views
 			this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
 			this.dataGridView1.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 8F);
 			this.dataGridView1.RowTemplate.Height = 18;
-			this.dataGridView1.Size = new System.Drawing.Size(890, 204);
+			this.dataGridView1.Size = new System.Drawing.Size(890, 230);
 			this.dataGridView1.TabIndex = 2;
 			this.dataGridView1.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseClick);
 			// 
 			// toolStrip1
 			// 
+			this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStrip1.ImageScalingSize = new System.Drawing.Size(36, 36);
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripSeparator2,
             this.toolStripLabel1,
             this.toolStripSeparator1,
             this.toolStripLabel2,
             this.toolStripTextBox1,
+            this.toolStripSeparator4,
             this.toolStripLabel3,
             this.cbKind,
+            this.toolStripSeparator3,
             this.toolStripLabel4,
             this.cbLength});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(890, 56);
+			this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 2, 2, 0);
+			this.toolStrip1.Size = new System.Drawing.Size(890, 30);
 			this.toolStrip1.TabIndex = 5;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
 			// toolStripLabel1
 			// 
 			this.toolStripLabel1.Name = "toolStripLabel1";
-			this.toolStripLabel1.Size = new System.Drawing.Size(82, 50);
+			this.toolStripLabel1.Size = new System.Drawing.Size(36, 25);
 			this.toolStripLabel1.Text = "Filter:";
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 56);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 28);
 			// 
 			// toolStripLabel2
 			// 
 			this.toolStripLabel2.Name = "toolStripLabel2";
-			this.toolStripLabel2.Size = new System.Drawing.Size(200, 50);
+			this.toolStripLabel2.Size = new System.Drawing.Size(90, 25);
 			this.toolStripLabel2.Text = "Symbols Name:";
 			// 
 			// toolStripTextBox1
@@ -106,13 +114,13 @@ namespace Mosa.Tool.Debugger.Views
 			this.toolStripTextBox1.Font = new System.Drawing.Font("Segoe UI", 9F);
 			this.toolStripTextBox1.Margin = new System.Windows.Forms.Padding(1, 3, 1, 2);
 			this.toolStripTextBox1.Name = "toolStripTextBox1";
-			this.toolStripTextBox1.Size = new System.Drawing.Size(200, 51);
+			this.toolStripTextBox1.Size = new System.Drawing.Size(200, 23);
 			this.toolStripTextBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
 			// 
 			// toolStripLabel3
 			// 
 			this.toolStripLabel3.Name = "toolStripLabel3";
-			this.toolStripLabel3.Size = new System.Drawing.Size(171, 50);
+			this.toolStripLabel3.Size = new System.Drawing.Size(76, 25);
 			this.toolStripLabel3.Text = "Section Kind:";
 			// 
 			// cbKind
@@ -124,13 +132,13 @@ namespace Mosa.Tool.Debugger.Views
             "BSS",
             "ROData"});
 			this.cbKind.Name = "cbKind";
-			this.cbKind.Size = new System.Drawing.Size(75, 56);
+			this.cbKind.Size = new System.Drawing.Size(75, 28);
 			this.cbKind.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox1_SelectedIndexChanged);
 			// 
 			// toolStripLabel4
 			// 
 			this.toolStripLabel4.Name = "toolStripLabel4";
-			this.toolStripLabel4.Size = new System.Drawing.Size(105, 37);
+			this.toolStripLabel4.Size = new System.Drawing.Size(47, 25);
 			this.toolStripLabel4.Text = "Length:";
 			// 
 			// cbLength
@@ -143,8 +151,23 @@ namespace Mosa.Tool.Debugger.Views
             "4-Integer",
             "8-Long"});
 			this.cbLength.Name = "cbLength";
-			this.cbLength.Size = new System.Drawing.Size(75, 45);
+			this.cbLength.Size = new System.Drawing.Size(75, 28);
 			this.cbLength.SelectedIndexChanged += new System.EventHandler(this.toolStripComboBox2_SelectedIndexChanged);
+			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 28);
+			// 
+			// toolStripSeparator3
+			// 
+			this.toolStripSeparator3.Name = "toolStripSeparator3";
+			this.toolStripSeparator3.Size = new System.Drawing.Size(6, 28);
+			// 
+			// toolStripSeparator4
+			// 
+			this.toolStripSeparator4.Name = "toolStripSeparator4";
+			this.toolStripSeparator4.Size = new System.Drawing.Size(6, 28);
 			// 
 			// SymbolView
 			// 
@@ -176,7 +199,8 @@ namespace Mosa.Tool.Debugger.Views
 		private System.Windows.Forms.ToolStripLabel toolStripLabel3;
 		private System.Windows.Forms.ToolStripLabel toolStripLabel4;
 		private System.Windows.Forms.ToolStripComboBox cbLength;
-
-
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
 	}
 }

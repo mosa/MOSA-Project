@@ -14,7 +14,7 @@ namespace Mosa.Tool.Debugger.Views
 
 		private class BreakPointEntry
 		{
-			public string Address { get { return "0x" + BreakPoint.Address.ToString((BreakPoint.Address <= uint.MaxValue) ? "X4" : "X8"); } }
+			public string Address { get { return DebugDockContent.ToHex(BreakPoint.Address); } }
 
 			public string Name { get { return BreakPoint.Name; } }
 

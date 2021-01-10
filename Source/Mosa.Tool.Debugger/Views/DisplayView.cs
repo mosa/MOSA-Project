@@ -60,11 +60,11 @@ namespace Mosa.Tool.Debugger.Views
 			fontWidth = (int)font.SizeInPoints;
 			fontHeight = (int)font.SizeInPoints + 5;
 
-			bitmap = new System.Drawing.Bitmap(fontWidth * width, fontHeight * height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
+			bitmap = new Bitmap(fontWidth * width, fontHeight * height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
 			graphic = Graphics.FromImage(bitmap);
 		}
 
-		public override void OnPause()
+		protected override void UpdateDisplay()
 		{
 			MemoryCache.ReadMemory(StandardAddressBase, (uint)(width * height * 2), OnMemoryRead);
 		}

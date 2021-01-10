@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Tool.Debugger.DebugData;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
@@ -8,13 +9,15 @@ namespace Mosa.Tool.Debugger.Views
 {
 	public partial class SourceView : DebugDockContent
 	{
-		private SourceLocation lastSourceLocation;
+		private readonly SourceLocation lastSourceLocation;
 		private string lastFileContent;
+		private readonly List<int> lines = new List<int>();
 
 		public SourceView(MainForm mainForm)
 			: base(mainForm)
 		{
 			InitializeComponent();
+			ClearDisplay();
 		}
 
 		public override void OnRunning()
@@ -22,22 +25,15 @@ namespace Mosa.Tool.Debugger.Views
 			// Clear
 		}
 
-		public override void OnPause()
+		protected override void ClearDisplay()
 		{
-			Query();
+			rtbSource.Text = string.Empty;
+			toolStripStatusLabel1.Text = string.Empty;
+			lbSourceFilename.Text = string.Empty;
 		}
 
-		private void Query()
+		protected override void UpdateDisplay()
 		{
-			if (!IsConnected || !IsPaused)
-				return;
-
-			if (Platform == null)
-				return;
-
-			if (Platform.Registers == null)
-				return;
-
 			var sourceLocation = Source.Find(DebugSource, InstructionPointer);
 
 			if (sourceLocation == null)
@@ -48,25 +44,18 @@ namespace Mosa.Tool.Debugger.Views
 
 			string fileContent = string.Empty;
 
-			if (sourceLocation.SourceFilename != null)
+			if (lastSourceLocation != null && lastSourceLocation.SourceFilename == sourceLocation.SourceFilename)
 			{
-				if (lastSourceLocation != null && lastSourceLocation.SourceFilename == sourceLocation.SourceFilename)
-				{
-					fileContent = lastFileContent;
-				}
-				else
-				{
-					fileContent = File.ReadAllText(sourceLocation.SourceFilename);
-					lastFileContent = fileContent;
-				}
+				fileContent = lastFileContent;
+			}
+			else
+			{
+				fileContent = File.ReadAllText(sourceLocation.SourceFilename);
+				lastFileContent = fileContent;
 			}
 
-			lbSourceFilename.Text = sourceLocation.SourceFilename != null ? sourceLocation.SourceFilename : string.Empty;
+			lbSourceFilename.Text = Path.GetFileName(sourceLocation.SourceFilename);
 			rtbSource.Text = fileContent;
-			toolStripStatusLabel1.Text = string.Empty;
-
-			if (sourceLocation.SourceFilename == null)
-				return;
 
 			int length = fileContent.Length;
 			int startPosition = -1;
@@ -77,16 +66,24 @@ namespace Mosa.Tool.Debugger.Views
 
 			int at = 0;
 			int currentLine = 1;
+			int startLine = 0;
+
+			lines.Clear();
+			lines.Add(0);
 
 			while (at < length)
 			{
-				char c = fileContent[at++];
+				var c = fileContent[at++];
 
 				if (c == '\n')
+				{
 					currentLine++;
+					lines.Add(at);
+				}
 
 				if (currentLine == sourceLocation.StartLine && startPosition < 0)
 				{
+					startLine = currentLine;
 					startPosition = at + sourceLocation.StartColumn - 1;
 					currentLineAtStart = currentLine;
 				}
@@ -106,15 +103,23 @@ namespace Mosa.Tool.Debugger.Views
 			if (endPosition > length)
 				endPosition = length;
 
-			rtbSource.Select(startPosition - currentLineAtStart + 1, endPosition - startPosition - (currentLineAtEnd - currentLineAtStart));
-			rtbSource.SelectionBackColor = Color.Blue;
-			rtbSource.SelectionColor = Color.White;
-			lbSourceFilename.Text = Path.GetFileName(sourceLocation.SourceFilename);
-			toolStripStatusLabel1.Text = "Label: " + sourceLocation.Label + " / " + sourceLocation.SourceLabel + " - Lines " + sourceLocation.StartLine + "." + sourceLocation.StartColumn + "  to " + sourceLocation.EndLine + "." + sourceLocation.EndColumn;
+			// capture the number of visible lines
+			int totallines = rtbSource.Height / rtbSource.Font.Height;
 
+			// Visible text position at 25% of height of control (if possible)
+			int targetLine = startLine - (totallines / 4);
+			int target = lines[targetLine < 0 ? 0 : targetLine];
+			rtbSource.Select(target, 1);
 			rtbSource.ScrollToCaret();
 
-			lastSourceLocation = sourceLocation;
+			int start = startPosition - currentLineAtStart + 1;
+			int len = endPosition - startPosition - (currentLineAtEnd - currentLineAtStart);
+			rtbSource.Select(start, len);
+
+			rtbSource.SelectionBackColor = Color.Blue;
+			rtbSource.SelectionColor = Color.White;
+
+			toolStripStatusLabel1.Text = $"Label: {sourceLocation.Label}:{sourceLocation.SourceLabel} - Lines: {sourceLocation.StartLine}:{sourceLocation.StartColumn}  to {sourceLocation.EndLine}:{sourceLocation.EndColumn}";
 		}
 	}
 }
