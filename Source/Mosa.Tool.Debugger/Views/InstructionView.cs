@@ -17,7 +17,7 @@ namespace Mosa.Tool.Debugger.Views
 			[Browsable(false)]
 			public ulong IP { get; set; }
 
-			public string Address { get { return "0x" + IP.ToString((IP <= uint.MaxValue) ? "X4" : "X8"); } }
+			public string Address { get { return DebugDockContent.ToHex(IP); } }
 
 			public string Instruction { get; set; }
 
@@ -39,22 +39,14 @@ namespace Mosa.Tool.Debugger.Views
 			instructions.Clear();
 		}
 
-		public override void OnPause()
+		protected override void ClearDisplay()
 		{
-			if (Platform == null)
-				return;
-
-			if (Platform.Registers == null)
-				return;
-
-			tbAddress.Text = Platform.InstructionPointer.ToHex();
-			Query();
+			tbAddress.Text = string.Empty;
 		}
 
-		private void Query()
+		protected override void UpdateDisplay()
 		{
-			if (!IsConnected || !IsPaused)
-				return;
+			tbAddress.Text = ToHex(InstructionPointer);
 
 			var address = MainForm.ParseHexAddress(tbAddress.Text);
 			uint bytes = 512;
@@ -86,7 +78,8 @@ namespace Mosa.Tool.Debugger.Views
 
 		private void toolStripButton1_Click(object sender, System.EventArgs e)
 		{
-			Query();
+			if (IsReady)
+				UpdateDisplay();
 		}
 
 		private void dataGridView1_CellMouseClick(object sender, DataGridViewCellMouseEventArgs e)

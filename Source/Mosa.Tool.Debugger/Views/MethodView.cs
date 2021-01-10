@@ -21,7 +21,7 @@ namespace Mosa.Tool.Debugger.Views
 			[Browsable(false)]
 			public ulong IP { get; set; }
 
-			public string Address { get { return "0x" + IP.ToString((IP <= uint.MaxValue) ? "X4" : "X8"); } }
+			public string Address { get { return DebugDockContent.ToHex(IP); } }
 
 			public string Instruction { get; set; }
 
@@ -42,14 +42,13 @@ namespace Mosa.Tool.Debugger.Views
 			dataGridView1.Columns[2].Width = 400;
 		}
 
-		public override void OnPause()
+		protected override void ClearDisplay()
 		{
-			if (Platform == null)
-				return;
+			instructions.Clear();
+		}
 
-			if (Platform.Registers == null)
-				return;
-
+		protected override void UpdateDisplay()
+		{
 			var symbol = DebugSource.GetFirstSymbol(InstructionPointer);
 
 			tbMethod.Text = symbol == null ? string.Empty : symbol.CommonName;

@@ -15,7 +15,7 @@ namespace Mosa.Tool.Debugger.Views
 
 		private class WatchEntry
 		{
-			public string Address { get { return "0x" + Watch.Address.ToString((Watch.Address <= uint.MaxValue) ? "X4" : "X8"); } }
+			public string Address { get { return DebugDockContent.ToHex(Watch.Address); } }
 
 			public string Name { get { return Watch.Name; } }
 
@@ -167,7 +167,7 @@ namespace Mosa.Tool.Debugger.Views
 
 		private void toolStripButton1_Click(object sender, EventArgs e)
 		{
-			if (MainForm.WatchFile != null)
+			if (MainForm.WatchFile == null)
 			{
 				if (MainForm.ImageFile != null)
 				{
