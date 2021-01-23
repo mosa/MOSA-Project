@@ -49,18 +49,4 @@
   <ItemGroup>
     <Compile Remove="Properties\Settings.Designer.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Reko">
-      <HintPath>..\..\3rdParty\Reko.dll</HintPath>
-    </Reference>
-    <Reference Include="Reko.Arch.Arm">
-      <HintPath>..\..\3rdParty\Reko.Arch.Arm.dll</HintPath>
-    </Reference>
-    <Reference Include="Reko.Arch.X86">
-      <HintPath>..\..\3rdParty\Reko.Arch.X86.dll</HintPath>
-    </Reference>
-    <Reference Include="Reko.Core">
-      <HintPath>..\..\3rdParty\Reko.Core.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 </Project>
