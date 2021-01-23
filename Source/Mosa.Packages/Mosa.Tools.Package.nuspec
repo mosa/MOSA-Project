@@ -51,7 +51,5 @@
 		<file src="..\..\bin\MetroFramework.Fonts.dll" target="tools" />
 		<file src="..\..\bin\WinFormsUI.dll" target="tools" />
 		<file src="..\..\bin\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll" target="tools" />
-		<file src="..\..\bin\System.Threading.Channels.dll" target="tools" />
-		<file src="..\..\bin\System.Threading.Tasks.Extensions.dll" target="tools" />
 	</files>
 </package>
