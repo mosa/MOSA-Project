@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyTitle>Mosa.Workspace.Kernel.Debug</AssemblyTitle>
     <Company>MOSA Project</Company>
     <Product>Mosa.Workspace.Kernel.Debug</Product>
