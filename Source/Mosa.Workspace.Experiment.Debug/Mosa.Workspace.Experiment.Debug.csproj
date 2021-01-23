@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <OutputType>Exe</OutputType>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
     <AssemblyTitle>Mosa.Workspace.Experiment.Debug</AssemblyTitle>
     <Company>MOSA Project</Company>
     <Product>Mosa.Workspace.Experiment.Debug</Product>
@@ -16,12 +17,6 @@
   <PropertyGroup>
     <StartupObject>Mosa.Workspace.Experiment.Debug.Program</StartupObject>
   </PropertyGroup>
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.FxCopAnalyzers" Version="3.3.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
     <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />

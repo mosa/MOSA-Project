@@ -10,32 +10,18 @@ namespace Mosa.Tool.Debugger.Views
 			InitializeComponent();
 		}
 
-		public override void OnRunning()
-		{
-			// Clear
-		}
-
-		public override void OnPause()
-		{
-			Query();
-		}
-
-		private void Query()
+		protected override void ClearDisplay()
 		{
 			lbMethodID.Text = string.Empty;
 			lbOffset.Text = string.Empty;
 
 			dataGridView1.Enabled = false;
 			dataGridView2.Enabled = false;
+		}
 
-			if (!IsConnected || !IsPaused)
-				return;
-
-			if (Platform == null)
-				return;
-
-			if (Platform.Registers == null)
-				return;
+		protected override void UpdateDisplay()
+		{
+			ClearDisplay();
 
 			var method = DebugSource.GetMethod(InstructionPointer);
 

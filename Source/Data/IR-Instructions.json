@@ -208,13 +208,13 @@
 			"OperandCount": 1
 		},
 		{
-			"Name": "ConvertR4To32",
+			"Name": "ConvertR4ToI32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "ConvertR4To64",
+			"Name": "ConvertR4ToI64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
@@ -226,41 +226,90 @@
 			"OperandCount": 1
 		},
 		{
-			"Name": "ConvertR8To32",
+			"Name": "ConvertR8ToI32",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "ConvertR8To64",
+			"Name": "ConvertR8ToI64",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "Convert32ToR4",
+			"Name": "ConvertI32ToR4",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "Convert64ToR4",
+			"Name": "ConvertI64ToR4",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "Convert32ToR8",
+			"Name": "ConvertI32ToR8",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
 		{
-			"Name": "Convert64ToR8",
+			"Name": "ConvertI64ToR8",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
 		},
+		{
+			"Name": "ConvertR4ToU32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConvertR4ToU64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConvertR8ToU32",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConvertR8ToU64",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConvertU32ToR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConvertU64ToR4",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConvertU32ToR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+		{
+			"Name": "ConvertU64ToR8",
+			"FamilyName": "IR",
+			"ResultCount": 1,
+			"OperandCount": 1
+		},
+
 		{
 			"Name": "DivR4",
 			"FamilyName": "IR",
@@ -1323,15 +1372,7 @@
 			"MemoryWrite": "true"
 		},
 		{
-			"Name": "Unbox32",
-			"FamilyName": "IR",
-			"ResultCount": 1,
-			"OperandCount": 2,
-			"MemoryRead": "true",
-			"MemoryWrite": "true"
-		},
-		{
-			"Name": "Unbox64",
+			"Name": "UnboxAny",
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 2,

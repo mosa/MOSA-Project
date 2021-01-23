@@ -28,6 +28,7 @@ namespace Mosa.Tool.Debugger.Views
 		private void InitializeComponent()
 		{
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
 			this.tbAddress = new System.Windows.Forms.ToolStripTextBox();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -39,22 +40,30 @@ namespace Mosa.Tool.Debugger.Views
 			// 
 			// toolStrip1
 			// 
+			this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripSeparator2,
             this.toolStripLabel1,
             this.tbAddress,
             this.toolStripSeparator1,
             this.toolStripButton1});
-			this.toolStrip1.Location = new System.Drawing.Point(0, 2);
+			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(456, 56);
+			this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 2, 2, 0);
+			this.toolStrip1.Size = new System.Drawing.Size(456, 25);
 			this.toolStrip1.TabIndex = 4;
 			this.toolStrip1.Text = "toolStrip1";
+			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 23);
 			// 
 			// toolStripLabel1
 			// 
 			this.toolStripLabel1.Name = "toolStripLabel1";
-			this.toolStripLabel1.Size = new System.Drawing.Size(45, 50);
+			this.toolStripLabel1.Size = new System.Drawing.Size(20, 20);
 			this.toolStripLabel1.Text = "IP:";
 			// 
 			// tbAddress
@@ -62,21 +71,22 @@ namespace Mosa.Tool.Debugger.Views
 			this.tbAddress.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
 			this.tbAddress.MaxLength = 20;
 			this.tbAddress.Name = "tbAddress";
-			this.tbAddress.Size = new System.Drawing.Size(100, 56);
+			this.tbAddress.Size = new System.Drawing.Size(100, 23);
 			this.tbAddress.Text = "0x200000";
 			this.tbAddress.TextBoxTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 56);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 23);
 			// 
 			// toolStripButton1
 			// 
-			this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.toolStripButton1.Image = global::Mosa.Tool.Debugger.Properties.Resources.page_refresh;
+			this.toolStripButton1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Black;
 			this.toolStripButton1.Name = "toolStripButton1";
-			this.toolStripButton1.Size = new System.Drawing.Size(107, 50);
+			this.toolStripButton1.Size = new System.Drawing.Size(66, 20);
 			this.toolStripButton1.Text = "Refresh";
 			this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
 			// 
@@ -90,7 +100,7 @@ namespace Mosa.Tool.Debugger.Views
 			this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.dataGridView1.Location = new System.Drawing.Point(0, 58);
+			this.dataGridView1.Location = new System.Drawing.Point(0, 25);
 			this.dataGridView1.Margin = new System.Windows.Forms.Padding(0);
 			this.dataGridView1.MultiSelect = false;
 			this.dataGridView1.Name = "dataGridView1";
@@ -100,7 +110,7 @@ namespace Mosa.Tool.Debugger.Views
 			this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
 			this.dataGridView1.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 8F);
 			this.dataGridView1.RowTemplate.Height = 18;
-			this.dataGridView1.Size = new System.Drawing.Size(456, 162);
+			this.dataGridView1.Size = new System.Drawing.Size(456, 197);
 			this.dataGridView1.TabIndex = 5;
 			this.dataGridView1.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseClick);
 			// 
@@ -116,7 +126,6 @@ namespace Mosa.Tool.Debugger.Views
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(235, 200);
 			this.Name = "InstructionView";
-			this.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
 			this.RightToLeftLayout = true;
 			this.ShowHint = WeifenLuo.WinFormsUI.Docking.DockState.DockLeft;
 			this.TabText = "Instructions";
@@ -139,5 +148,6 @@ namespace Mosa.Tool.Debugger.Views
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripButton toolStripButton1;
 		private System.Windows.Forms.DataGridView dataGridView1;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 	}
 }

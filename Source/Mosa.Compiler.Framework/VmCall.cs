@@ -94,9 +94,8 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Unboxes a value type.
 		/// </summary>
-		Unbox32,
-
-		Unbox64,
 		Unbox,
+
+		UnboxAny,
 	}
 }

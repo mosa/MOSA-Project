@@ -57,7 +57,7 @@ namespace Mosa.Tool.Bootstrap
 			var location = FindLauncherInCurrentDirectory();
 
 			if (location != null)
-				return null;
+				return location;
 
 			var targetVersion = GetIdealFileVersion(Environment.CurrentDirectory);
 

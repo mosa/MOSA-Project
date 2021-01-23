@@ -2,10 +2,22 @@
 
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
+
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.Threading;
+using System.Threading.Channels;
 
 namespace Mosa.Compiler.Framework
 {
+	public class CompilerResult
+	{
+		public MosaMethod Method { get; set; }
+		public MosaMethod CompiledMethod { get; set; }
+		public string Result { get; set; }
+		public int Attemps { get; set; }
+	}
+
 	/// <summary>
 	/// Schedules compilation of types/methods.
 	/// </summary>
@@ -14,19 +26,10 @@ namespace Mosa.Compiler.Framework
 		#region Data Members
 
 		public Compiler Compiler;
-		private int Timestamp;
 
-		private readonly Queue<MosaMethod> scheduleQueue = new Queue<MosaMethod>();
-
-		private readonly HashSet<MosaMethod> scheduleSet = new HashSet<MosaMethod>();
-
-		private readonly HashSet<MosaMethod> methods = new HashSet<MosaMethod>();
-
-		//private readonly Dictionary<MosaMethod, int> inlineQueue = new Dictionary<MosaMethod, int>();
-
-		private readonly HashSet<MosaMethod> recompileSet = new HashSet<MosaMethod>();
-
-		private readonly object _timestamplock = new object();
+		private readonly Channel<CompilerResult> _channel;
+		private int _totalMethods;
+		private int _totalQueued;
 
 		#endregion Data Members
 
@@ -40,7 +43,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The total methods.
 		/// </value>
-		public int TotalMethods { get { lock (methods) { return methods.Count; } } }
+		public int TotalMethods => _totalMethods;
 
 		/// <summary>
 		/// Gets the queued methods.
@@ -48,15 +51,15 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The queued methods.
 		/// </value>
-		public int TotalQueuedMethods { get { lock (scheduleQueue) { return scheduleQueue.Count; } } }
+		public int TotalQueuedMethods => _totalQueued;
 
 		#endregion Properties
 
 		public MethodScheduler(Compiler compiler)
 		{
+			_channel = Channel.CreateUnbounded<CompilerResult>(new UnboundedChannelOptions { SingleWriter = false, SingleReader = false });
 			Compiler = compiler;
 			PassCount = 0;
-			Timestamp = 0;
 		}
 
 		public void ScheduleAll(TypeSystem typeSystem)
@@ -112,111 +115,54 @@ namespace Mosa.Compiler.Framework
 				return;
 
 			AddToQueue(method);
-
-			lock (methods)
-			{
-				if (!methods.Contains(method))
-				{
-					methods.Add(method);
-				}
-			}
 		}
 
 		private void AddToQueue(MosaMethod method)
 		{
-			lock (scheduleQueue)
+			AddToQueue(new CompilerResult { Method = method });
+		}
+
+		public void AddToQueue(CompilerResult compilerResult)
+		{
+			if (compilerResult.Attemps == 0) //Count the method only on first try
+				Interlocked.Increment(ref _totalMethods);
+
+			if (compilerResult.Attemps++ > 5)
+				compilerResult.Result = "Method exceeded compile attemps: " + compilerResult.Result;
+			else
 			{
-				if (!scheduleSet.Contains(method))
+				Interlocked.Increment(ref _totalQueued);
+				if (!_channel.Writer.TryWrite(compilerResult))
 				{
-					scheduleSet.Add(method);
-					scheduleQueue.Enqueue(method);
+					Debug.Assert(false);
 				}
 			}
 		}
 
-		public MosaMethod GetMethodToCompile()
+		public CompilerResult GetMethodToCompile()
 		{
-			var method = GetScheduledMethod();
-
-			if (method != null)
-				return method;
-
-			FlushInlineQueue();
-
-			method = GetScheduledMethod();
-
-			return method;
+			return GetScheduledMethod();
 		}
 
-		private MosaMethod GetScheduledMethod()
+		private CompilerResult GetScheduledMethod()
 		{
-			lock (scheduleQueue)
+			if (_channel.Reader.TryRead(out var result))
 			{
-				if (scheduleQueue.Count == 0)
-					return null;
+				Interlocked.Decrement(ref _totalQueued);
+			};
 
-				var method = scheduleQueue.Dequeue();
-				scheduleSet.Remove(method);
-
-				return method;
-			}
-		}
-
-		public void DescheduledAllMethods()
-		{
-			lock (scheduleQueue)
-			{
-				scheduleQueue.Clear();
-				scheduleSet.Clear();
-			}
-		}
-
-		public int GetTimestamp()
-		{
-			lock (_timestamplock)
-			{
-				return ++Timestamp;
-			}
+			return result;
 		}
 
 		public void AddToRecompileQueue(HashSet<MosaMethod> methods)
 		{
-			lock (recompileSet)
-			{
-				recompileSet.UnionWith(methods);
-			}
+			foreach (var method in methods)
+				AddToQueue(method);
 		}
 
 		public void AddToRecompileQueue(MosaMethod method)
 		{
-			lock (recompileSet)
-			{
-				recompileSet.Add(method);
-			}
-		}
-
-		public void FlushInlineQueue()
-		{
-			bool action = false;
-
-			lock (recompileSet)
-			{
-				foreach (var method in recompileSet)
-				{
-					lock (scheduleQueue)
-					{
-						AddToQueue(method);
-					}
-				}
-
-				recompileSet.Clear();
-				action = recompileSet.Count != 0;
-			}
-
-			if (action)
-			{
-				Compiler.PostEvent(CompilerEvent.InlineMethodsScheduled);
-			}
+			AddToQueue(method);
 		}
 	}
 }

@@ -13,7 +13,7 @@ namespace Mosa.Tool.Debugger.Views
 
 		private class SymbolEntry
 		{
-			public string Address { get { return "0x" + Symbol.Address.ToString((Symbol.Address <= uint.MaxValue) ? "X4" : "X8"); } }
+			public string Address { get { return DebugDockContent.ToHex(Symbol.Address); } }
 
 			public string Name { get { return Symbol.CommonName; } }
 
@@ -44,7 +44,7 @@ namespace Mosa.Tool.Debugger.Views
 
 		private void SymbolView_Load(object sender, EventArgs e)
 		{
-			cbKind.SelectedIndex = 0;
+			cbKind.SelectedIndex = 1;
 			cbLength.SelectedIndex = 0;
 		}
 

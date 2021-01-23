@@ -303,7 +303,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var headerSourceBlocks = new List<BasicBlock>(node.OperandCount);
 				var headerSourceOperands = new List<Operand>(node.OperandCount);
 
-				var transitionOperand = AllocateVirtualRegister(node.Result.Type);
+				var transitionOperand = AllocateVirtualRegister(node.Result);
 
 				headerSourceBlocks.Add(landingpadBlock);
 				headerSourceOperands.Add(transitionOperand);

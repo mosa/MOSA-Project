@@ -19,19 +19,16 @@ namespace Mosa.Tool.Debugger.Views
 
 		public override void OnRunning()
 		{
+			ClearDisplay();
+		}
+
+		protected override void ClearDisplay()
+		{
 			lbMemory.Clear();
 		}
 
-		public override void OnPause()
+		protected override void UpdateDisplay()
 		{
-			Query();
-		}
-
-		private void Query()
-		{
-			if (!IsConnected || !IsPaused)
-				return;
-
 			Columns = 6 * 4; // (lbMemory.Width - 100) / ((int)lbMemory.Font.Size * 3);
 			Rows = lbMemory.Height / (lbMemory.Font.Height + 2);
 
@@ -89,19 +86,22 @@ namespace Mosa.Tool.Debugger.Views
 
 		private void toolStripButton1_Click(object sender, EventArgs e)
 		{
-			Query();
+			if (IsReady)
+				UpdateDisplay();
 		}
 
 		private void MemoryView_Load(object sender, EventArgs e)
 		{
-			Query();
+			if (IsReady)
+				UpdateDisplay();
 		}
 
 		private void tbMemory_KeyDown(object sender, KeyEventArgs e)
 		{
 			if (e.KeyCode == Keys.Enter)
 			{
-				Query();
+				if (IsReady)
+					UpdateDisplay();
 			}
 		}
 	}

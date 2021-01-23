@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -13,15 +14,30 @@ namespace Mosa.Compiler.Framework.Stages
 		private readonly Counter InlineCount = new Counter("InlineStage.MethodsWithInlinedCallSites");
 		private readonly Counter InlinedCallSitesCount = new Counter("InlineStage.InlinedCallSites");
 
+		private Dictionary<MosaMethod, KeyValuePair<MethodData, InlineMethodData>> cache;
+
 		protected override void Initialize()
 		{
 			Register(InlineCount);
 			Register(InlinedCallSitesCount);
 		}
 
+		protected override void Finish()
+		{
+			if (cache.Count != 0)
+			{
+				cache = null;
+			}
+		}
+
 		protected override void Run()
 		{
 			var trace = CreateTraceLog("Inlined");
+
+			if (cache == null || cache.Count != 0)
+			{
+				cache = new Dictionary<MosaMethod, KeyValuePair<MethodData, InlineMethodData>>();
+			}
 
 			int callSiteCount = 0;
 
@@ -52,25 +68,40 @@ namespace Mosa.Compiler.Framework.Stages
 
 				Debug.Assert(callSiteNode.Operand1.IsSymbol);
 
-				var callee = MethodCompiler.Compiler.GetMethodData(invokedMethod);
-
-				var inlineMethodData = callee.GetInlineMethodDataForUseBy(Method);
+				(MethodData Callee, InlineMethodData InlineMethodData) result = GetCalleeData(invokedMethod);
 
 				//Debug.WriteLine($"{MethodScheduler.GetTimestamp()} - Inline: {(inlineMethodData.IsInlined ? "Inlined" : "NOT Inlined")} [{MethodData.Version}] {Method} -> [{inlineMethodData.Version}] {callee.Method}"); //DEBUGREMOVE
 
-				if (!inlineMethodData.IsInlined)
+				if (!result.InlineMethodData.IsInlined)
 					continue;
 
-				Inline(callSiteNode, inlineMethodData.BasicBlocks);
+				Inline(callSiteNode, result.InlineMethodData.BasicBlocks);
 				callSiteCount++;
 
-				trace?.Log($" -> Inlined: [{callee.Version}] {callee.Method}");
+				trace?.Log($" -> Inlined: [{result.Callee.Version}] {result.Callee.Method}");
 
 				//Debug.WriteLine($" -> Inlined: [{callee.Version}] {callee.Method}");//DEBUGREMOVE
 			}
 
 			InlineCount.Set(1);
 			InlinedCallSitesCount.Set(callSiteCount);
+		}
+
+		private (MethodData, InlineMethodData) GetCalleeData(MosaMethod invokedMethod)
+		{
+			if (cache.TryGetValue(invokedMethod, out KeyValuePair<MethodData, InlineMethodData> found))
+			{
+				return (found.Key, found.Value);
+			}
+			else
+			{
+				var callee = MethodCompiler.Compiler.GetMethodData(invokedMethod);
+				var inlineMethodData = callee.GetInlineMethodDataForUseBy(Method);
+
+				cache.Add(invokedMethod, new KeyValuePair<MethodData, InlineMethodData>(callee, inlineMethodData));
+
+				return (callee, inlineMethodData);
+			}
 		}
 
 		protected void Inline(InstructionNode callSiteNode, BasicBlocks blocks)
@@ -319,7 +350,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (operand.IsVirtualRegister)
 			{
-				mappedOperand = AllocateVirtualRegister(operand.Type);
+				mappedOperand = AllocateVirtualRegister(operand);
 			}
 			else if (operand.IsStaticField)
 			{

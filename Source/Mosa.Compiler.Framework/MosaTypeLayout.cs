@@ -1,7 +1,9 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.MosaTypeSystem;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -320,28 +322,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Determines whether [is compound type] [the specified type].
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns>
-		///   <c>true</c> if [is compound type] [the specified type]; otherwise, <c>false</c>.
-		/// </returns>
-		public bool IsCompoundType(MosaType type)
-		{
-			// i.e. whether copying of the type requires multiple move
-			int? primitiveSize = type.GetPrimitiveSize(NativePointerSize);
-
-			if (primitiveSize != null && primitiveSize > 8)
-				return true;
-
-			if (!type.IsUserValueType)
-				return false;
-
-			int typeSize = GetTypeSize(type);
-			return typeSize > NativePointerSize;
-		}
-
-		/// <summary>
 		/// Determines whether [is method overridden] [the specified method].
 		/// </summary>
 		/// <param name="method">The method.</param>
@@ -409,16 +389,53 @@ namespace Mosa.Compiler.Framework
 			return null;
 		}
 
+		public static bool CanFitInRegister(Operand operand)
+		{
+			return CanFitInRegister(operand.Type);
+		}
+
 		public static bool CanFitInRegister(MosaType type)
 		{
-			var basetype = GetTypeForRegister(type);
+			var basetype = GetUnderlyingType(type);
 
 			var fits = FitsInRegister(basetype);
 
 			return fits;
 		}
 
-		public static MosaType GetTypeForRegister(MosaType type)
+		public static bool IsPrimitive(MosaType underlyingType)
+		{
+			if (underlyingType == null)
+				return false;
+
+			var typeCode = underlyingType.TypeCode;
+
+			if (typeCode == MosaTypeCode.ValueType)
+				return false; // no search
+
+			if (typeCode == MosaTypeCode.Var)
+				return false;
+
+			return true;
+		}
+
+		public static bool IsCompoundType(MosaType underlyingType)
+		{
+			if (underlyingType == null)
+				return false;
+
+			var typeCode = underlyingType.TypeCode;
+
+			if (typeCode == MosaTypeCode.ValueType)
+				return true; // no search
+
+			if (typeCode == MosaTypeCode.Var)
+				return true;
+
+			return false;
+		}
+
+		public static MosaType GetUnderlyingType(MosaType type)
 		{
 			if (type.IsValueType)
 			{
@@ -434,7 +451,7 @@ namespace Mosa.Compiler.Framework
 					if (!basetype.IsUserValueType)
 						return basetype;
 
-					var result = GetTypeForRegister(basetype);
+					var result = GetUnderlyingType(basetype);
 
 					return result;
 				}
@@ -843,51 +860,29 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var method in type.Methods)
 			{
-				if (method.IsVirtual)
+				int slot = methodTable.Count;
+				if (method.IsVirtual && !method.IsNewSlot)
 				{
-					if (method.IsNewSlot)
+					var newSlot = FindOverrideSlot(methodTable, method);
+					if (newSlot != -1)
 					{
-						int slot = methodTable.Count;
-						methodTable.Add(method);
-						methodSlots.Add(method, slot);
-					}
-					else
-					{
-						int slot = FindOverrideSlot(methodTable, method);
-						if (slot != -1)
-						{
-							methodTable[slot] = method;
-							methodSlots.Add(method, slot);
-							SetMethodOverridden(method, slot);
-						}
-						else
-						{
-							slot = methodTable.Count;
-							methodTable.Add(method);
-							methodSlots.Add(method, slot);
-						}
+						SetMethodOverridden(method, newSlot);
+						slot = newSlot;
 					}
 				}
+				else if (!method.IsInternal && !method.IsExternal)
+				{
+					// HACK
+					if (methodSlots.ContainsKey(method))
+						continue;
+				}
+
+				if (methodTable.Count > slot)
+					methodTable[slot] = method;
 				else
-				{
-					if (method.IsStatic && method.IsRTSpecialName)
-					{
-						int slot = methodTable.Count;
-						methodTable.Add(method);
-						methodSlots.Add(method, slot);
-					}
-					else if (!method.IsInternal && !method.IsExternal)
-					{
-						// HACK
-						if (methodSlots.ContainsKey(method))
-							continue;
+					methodTable.Add(method);
 
-						int slot = methodTable.Count;
-						methodTable.Add(method);
-
-						methodSlots.Add(method, slot);
-					}
-				}
+				methodSlots[method] = slot;
 			}
 
 			typeMethodTables.Add(type, methodTable);

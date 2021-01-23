@@ -20,9 +20,7 @@
     <ApplicationIcon>magnifier.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Update="MainForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
+    <Compile Update="MainForm.cs" />
     <Compile Update="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
@@ -45,7 +43,7 @@
     <Content Include="magnifier.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.ComponentModel.Composition" Version="4.7.0" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" />
     <PackageReference Include="dnlib" Version="3.3.2" />
   </ItemGroup>
   <ItemGroup>

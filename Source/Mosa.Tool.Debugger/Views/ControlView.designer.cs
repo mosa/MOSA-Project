@@ -27,19 +27,39 @@ namespace Mosa.Tool.Debugger.Views
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ControlView));
+			this.tbSteps = new System.Windows.Forms.TextBox();
+			this.btnStepOut = new System.Windows.Forms.Button();
 			this.btnPause = new System.Windows.Forms.Button();
 			this.btnStart = new System.Windows.Forms.Button();
 			this.btnRestart = new System.Windows.Forms.Button();
 			this.btnStepN = new System.Windows.Forms.Button();
-			this.tbSteps = new System.Windows.Forms.TextBox();
 			this.btnStep = new System.Windows.Forms.Button();
-			this.btnStepOut = new System.Windows.Forms.Button();
 			this.SuspendLayout();
+			// 
+			// tbSteps
+			// 
+			this.tbSteps.Location = new System.Drawing.Point(496, 7);
+			this.tbSteps.Name = "tbSteps";
+			this.tbSteps.Size = new System.Drawing.Size(55, 20);
+			this.tbSteps.TabIndex = 20;
+			this.tbSteps.Text = "1000";
+			// 
+			// btnStepOut
+			// 
+			this.btnStepOut.Image = global::Mosa.Tool.Debugger.Properties.Resources.control_eject;
+			this.btnStepOut.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.btnStepOut.Location = new System.Drawing.Point(248, 5);
+			this.btnStepOut.Name = "btnStepOut";
+			this.btnStepOut.Size = new System.Drawing.Size(80, 23);
+			this.btnStepOut.TabIndex = 26;
+			this.btnStepOut.Text = "Step Out";
+			this.btnStepOut.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+			this.btnStepOut.UseVisualStyleBackColor = true;
+			this.btnStepOut.Click += new System.EventHandler(this.btnStepOut_Click);
 			// 
 			// btnPause
 			// 
-			this.btnPause.Image = ((System.Drawing.Image)(resources.GetObject("btnPause.Image")));
+			this.btnPause.Image = global::Mosa.Tool.Debugger.Properties.Resources.control_pause;
 			this.btnPause.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnPause.Location = new System.Drawing.Point(167, 5);
 			this.btnPause.Name = "btnPause";
@@ -52,7 +72,7 @@ namespace Mosa.Tool.Debugger.Views
 			// 
 			// btnStart
 			// 
-			this.btnStart.Image = ((System.Drawing.Image)(resources.GetObject("btnStart.Image")));
+			this.btnStart.Image = global::Mosa.Tool.Debugger.Properties.Resources.control_play;
 			this.btnStart.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnStart.Location = new System.Drawing.Point(86, 5);
 			this.btnStart.Name = "btnStart";
@@ -65,7 +85,7 @@ namespace Mosa.Tool.Debugger.Views
 			// 
 			// btnRestart
 			// 
-			this.btnRestart.Image = ((System.Drawing.Image)(resources.GetObject("btnRestart.Image")));
+			this.btnRestart.Image = global::Mosa.Tool.Debugger.Properties.Resources.control_power;
 			this.btnRestart.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnRestart.Location = new System.Drawing.Point(5, 5);
 			this.btnRestart.Name = "btnRestart";
@@ -78,7 +98,7 @@ namespace Mosa.Tool.Debugger.Views
 			// 
 			// btnStepN
 			// 
-			this.btnStepN.Image = ((System.Drawing.Image)(resources.GetObject("btnStepN.Image")));
+			this.btnStepN.Image = global::Mosa.Tool.Debugger.Properties.Resources.control_fastforward;
 			this.btnStepN.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnStepN.Location = new System.Drawing.Point(410, 5);
 			this.btnStepN.Name = "btnStepN";
@@ -89,17 +109,9 @@ namespace Mosa.Tool.Debugger.Views
 			this.btnStepN.UseVisualStyleBackColor = true;
 			this.btnStepN.Click += new System.EventHandler(this.btnStepN_Click);
 			// 
-			// tbSteps
-			// 
-			this.tbSteps.Location = new System.Drawing.Point(496, 7);
-			this.tbSteps.Name = "tbSteps";
-			this.tbSteps.Size = new System.Drawing.Size(55, 20);
-			this.tbSteps.TabIndex = 20;
-			this.tbSteps.Text = "1000";
-			// 
 			// btnStep
 			// 
-			this.btnStep.Image = ((System.Drawing.Image)(resources.GetObject("btnStep.Image")));
+			this.btnStep.Image = global::Mosa.Tool.Debugger.Properties.Resources.control_end;
 			this.btnStep.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
 			this.btnStep.Location = new System.Drawing.Point(329, 5);
 			this.btnStep.Name = "btnStep";
@@ -109,19 +121,6 @@ namespace Mosa.Tool.Debugger.Views
 			this.btnStep.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
 			this.btnStep.UseVisualStyleBackColor = true;
 			this.btnStep.Click += new System.EventHandler(this.btnStep_Click);
-			// 
-			// btnStepOut
-			// 
-			this.btnStepOut.Image = ((System.Drawing.Image)(resources.GetObject("btnStepOut.Image")));
-			this.btnStepOut.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.btnStepOut.Location = new System.Drawing.Point(248, 5);
-			this.btnStepOut.Name = "btnStepOut";
-			this.btnStepOut.Size = new System.Drawing.Size(80, 23);
-			this.btnStepOut.TabIndex = 26;
-			this.btnStepOut.Text = "Step Out";
-			this.btnStepOut.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-			this.btnStepOut.UseVisualStyleBackColor = true;
-			this.btnStepOut.Click += new System.EventHandler(this.btnStepOut_Click);
 			// 
 			// ControlView
 			// 
@@ -144,7 +143,6 @@ namespace Mosa.Tool.Debugger.Views
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(0, 75);
 			this.Name = "ControlView";
-			this.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
 			this.ShowHint = WeifenLuo.WinFormsUI.Docking.DockState.DockLeft;
 			this.TabText = "Control Panel";
 			this.Text = "Control Panel";

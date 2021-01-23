@@ -30,13 +30,14 @@ namespace Mosa.Tool.Debugger.Views
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
 			System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(OutputView));
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.richTextBox1 = new System.Windows.Forms.RichTextBox();
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
 			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -106,32 +107,47 @@ namespace Mosa.Tool.Debugger.Views
 			// 
 			// toolStrip1
 			// 
+			this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripSeparator1,
             this.toolStripButton1,
+            this.toolStripSeparator2,
             this.toolStripButton2});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
+			this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 2, 2, 0);
 			this.toolStrip1.Size = new System.Drawing.Size(890, 25);
 			this.toolStrip1.TabIndex = 5;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
 			// toolStripButton1
 			// 
-			this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
+			this.toolStripButton1.Image = global::Mosa.Tool.Debugger.Properties.Resources.font_red_delete;
+			this.toolStripButton1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton1.Name = "toolStripButton1";
-			this.toolStripButton1.Size = new System.Drawing.Size(54, 22);
+			this.toolStripButton1.Size = new System.Drawing.Size(54, 20);
 			this.toolStripButton1.Text = "Clear";
 			this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
 			// 
 			// toolStripButton2
 			// 
-			this.toolStripButton2.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton2.Image")));
+			this.toolStripButton2.Image = global::Mosa.Tool.Debugger.Properties.Resources.save_document;
 			this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton2.Name = "toolStripButton2";
-			this.toolStripButton2.Size = new System.Drawing.Size(51, 22);
+			this.toolStripButton2.Size = new System.Drawing.Size(51, 20);
 			this.toolStripButton2.Text = "Save";
 			this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
+			// 
+			// toolStripSeparator1
+			// 
+			this.toolStripSeparator1.Name = "toolStripSeparator1";
+			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 23);
+			// 
+			// toolStripSeparator2
+			// 
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 23);
 			// 
 			// OutputView
 			// 
@@ -141,7 +157,6 @@ namespace Mosa.Tool.Debugger.Views
 			this.Controls.Add(this.richTextBox1);
 			this.Controls.Add(this.dataGridView1);
 			this.Controls.Add(this.toolStrip1);
-			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.Name = "OutputView";
 			this.TabText = "Output";
 			this.Text = "Output";
@@ -160,7 +175,7 @@ namespace Mosa.Tool.Debugger.Views
 		private System.Windows.Forms.SaveFileDialog saveFileDialog1;
 		private System.Windows.Forms.ToolStripButton toolStripButton1;
 		private System.Windows.Forms.ToolStripButton toolStripButton2;
-
-
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 	}
 }

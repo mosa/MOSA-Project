@@ -38,6 +38,7 @@
 		<file src="..\..\bin\Mosa.Utility.FileSystem.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.Launcher.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.RSP.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Utility.Disassembler.dll" target="tools" />
 		<file src="..\..\bin\dnlib.dll" target="tools" />
 		<file src="..\..\bin\Reko.Arch.Arm.dll" target="tools" />
 		<file src="..\..\bin\Reko.Arch.X86.dll" target="tools" />
@@ -50,5 +51,7 @@
 		<file src="..\..\bin\MetroFramework.Fonts.dll" target="tools" />
 		<file src="..\..\bin\WeifenLuo.WinFormsUI.Docking.dll" target="tools" />
 		<file src="..\..\bin\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll" target="tools" />
+		<file src="..\..\bin\System.Threading.Channels.dll" target="tools" />
+		<file src="..\..\bin\System.Threading.Tasks.Extensions.dll" target="tools" />
 	</files>
 </package>

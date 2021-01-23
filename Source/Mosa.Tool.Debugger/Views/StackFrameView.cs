@@ -43,18 +43,20 @@ namespace Mosa.Tool.Debugger.Views
 			stackentries.Clear();
 		}
 
+		protected override void ClearDisplay()
+		{
+			lbAddress.Text = "";
+			stackentries.Clear();
+		}
+
 		public override void OnPause()
 		{
-			stackentries.Clear();
-
-			if (Platform == null)
-				return;
-
-			if (Platform.Registers == null)
-				return;
+			ClearDisplay();
 
 			if (StackFrame == 0 || StackPointer == 0)
 				return;
+
+			lbAddress.Text = ToHex(StackFrame);
 
 			var span = StackFrame - StackPointer;
 

@@ -158,28 +158,13 @@ namespace Mosa.Runtime
 			return memory;
 		}
 
-		public static Pointer Unbox8(Pointer box)
-		{
-			return box + (Pointer.Size * 2);
-		}
-
-		public static Pointer Unbox16(Pointer box)
-		{
-			return box + (Pointer.Size * 2);
-		}
-
-		public static Pointer Unbox32(Pointer box)
-		{
-			return box + (Pointer.Size * 2);
-		}
-
-		public static Pointer Unbox64(Pointer box)
+		public static Pointer Unbox(Pointer box)
 		{
 			return box + (Pointer.Size * 2);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static Pointer Unbox(Pointer box, Pointer vt, uint size)
+		public static Pointer UnboxAny(Pointer box, Pointer vt, uint size)
 		{
 			MemoryCopy(vt, box + (Pointer.Size * 2), size);
 

@@ -181,19 +181,7 @@ namespace Mosa.Compiler.Framework.CIL
 		Refanyval = 0x0C2,
 		Ckfinite = 0x0C3,
 		Mkrefany = 0x0C6,
-		/* 0x0C7-0x0CF: Not valid for MSIL binaries. Opcodes used in IR transforms. */
-
-		//Ann_call = 0x0C7,
-		//Ann_catch = 0x0C8,
-		//Ann_dead = 0x0C9,
-		//Ann_hoisted = 0x0CA,
-		//Ann_hoistedcall = 0x0CB,
-		//Ann_lab = 0x0CC,
-		//Ann_def = 0x0CD,
-		//Ann_ref_s = 0x0CE,
-		//Ann_phi = 0x0CF,
 		Ldtoken = 0x0D0,
-
 		Conv_u2 = 0x0D1,
 		Conv_u1 = 0x0D2,
 		Conv_i = 0x0D3,

@@ -27,12 +27,14 @@ namespace Mosa.Tool.Debugger.Views
 		/// </summary>
 		private void InitializeComponent()
 		{
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(LaunchView));
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
 			this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-			this.btnLaunch = new System.Windows.Forms.ToolStripButton();
+			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.btnAdd = new System.Windows.Forms.ToolStripButton();
 			this.odfVMImage = new System.Windows.Forms.OpenFileDialog();
+			this.btnLaunch = new System.Windows.Forms.ToolStripButton();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
@@ -47,7 +49,7 @@ namespace Mosa.Tool.Debugger.Views
 			this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dataGridView1.Dock = System.Windows.Forms.DockStyle.Fill;
-			this.dataGridView1.Location = new System.Drawing.Point(0, 288);
+			this.dataGridView1.Location = new System.Drawing.Point(0, 25);
 			this.dataGridView1.Margin = new System.Windows.Forms.Padding(0);
 			this.dataGridView1.MultiSelect = false;
 			this.dataGridView1.Name = "dataGridView1";
@@ -58,44 +60,45 @@ namespace Mosa.Tool.Debugger.Views
 			this.dataGridView1.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 8F);
 			this.dataGridView1.RowTemplate.Height = 18;
 			this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-			this.dataGridView1.Size = new System.Drawing.Size(2968, 542);
+			this.dataGridView1.Size = new System.Drawing.Size(1319, 346);
 			this.dataGridView1.TabIndex = 5;
 			this.dataGridView1.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseClick);
 			this.dataGridView1.CellMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridView1_CellMouseDoubleClick);
 			// 
 			// toolStrip1
 			// 
+			this.toolStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Hidden;
 			this.toolStrip1.ImageScalingSize = new System.Drawing.Size(24, 24);
 			this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripSeparator2,
             this.btnLaunch,
             this.toolStripSeparator1,
             this.btnAdd});
-			this.toolStrip1.Location = new System.Drawing.Point(0, 2);
+			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(2968, 126);
+			this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 2, 2, 0);
+			this.toolStrip1.Size = new System.Drawing.Size(1319, 25);
 			this.toolStrip1.TabIndex = 4;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
-			// btnLaunch
+			// toolStripSeparator2
 			// 
-			this.btnLaunch.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-			this.btnLaunch.ImageTransparentColor = System.Drawing.Color.Black;
-			this.btnLaunch.Name = "btnLaunch";
-			this.btnLaunch.Size = new System.Drawing.Size(105, 41);
-			this.btnLaunch.Text = "Launch";
-			this.btnLaunch.Click += new System.EventHandler(this.btnLaunch_Click);
+			this.toolStripSeparator2.Name = "toolStripSeparator2";
+			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 23);
 			// 
 			// toolStripSeparator1
 			// 
 			this.toolStripSeparator1.Name = "toolStripSeparator1";
-			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 47);
+			this.toolStripSeparator1.Size = new System.Drawing.Size(6, 23);
 			// 
 			// btnAdd
 			// 
-			this.btnAdd.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+			this.btnAdd.ForeColor = System.Drawing.SystemColors.ControlText;
+			this.btnAdd.Image = global::Mosa.Tool.Debugger.Properties.Resources.layer_add;
+			this.btnAdd.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
 			this.btnAdd.ImageTransparentColor = System.Drawing.Color.Black;
 			this.btnAdd.Name = "btnAdd";
-			this.btnAdd.Size = new System.Drawing.Size(70, 41);
+			this.btnAdd.Size = new System.Drawing.Size(49, 20);
 			this.btnAdd.Text = "Add";
 			this.btnAdd.Click += new System.EventHandler(this.btnAdd_Click);
 			// 
@@ -103,6 +106,16 @@ namespace Mosa.Tool.Debugger.Views
 			// 
 			this.odfVMImage.DefaultExt = "img";
 			this.odfVMImage.Filter = "Image File|*.img|All Files|*.*";
+			// 
+			// btnLaunch
+			// 
+			this.btnLaunch.Image = ((System.Drawing.Image)(resources.GetObject("btnLaunch.Image")));
+			this.btnLaunch.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+			this.btnLaunch.ImageTransparentColor = System.Drawing.Color.Black;
+			this.btnLaunch.Name = "btnLaunch";
+			this.btnLaunch.Size = new System.Drawing.Size(66, 20);
+			this.btnLaunch.Text = "Launch";
+			this.btnLaunch.Click += new System.EventHandler(this.btnLaunch_Click);
 			// 
 			// LaunchView
 			// 
@@ -116,7 +129,6 @@ namespace Mosa.Tool.Debugger.Views
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(235, 200);
 			this.Name = "LaunchView";
-			this.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
 			this.RightToLeftLayout = true;
 			this.ShowHint = WeifenLuo.WinFormsUI.Docking.DockState.DockLeft;
 			this.TabText = "Launch";
@@ -139,5 +151,6 @@ namespace Mosa.Tool.Debugger.Views
 		private System.Windows.Forms.ToolStripButton btnAdd;
 		private System.Windows.Forms.OpenFileDialog odfVMImage;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 	}
 }

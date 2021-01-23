@@ -168,7 +168,8 @@ namespace Mosa.Tool.Debugger
 			//scriptView = new ScriptView(this);
 
 			sourceView = new SourceView(this);
-			sourceDataView = new SourceDataView(this);
+
+			//sourceDataView = new SourceDataView(this);	// only useful when debugging this tool
 
 			launchView = new LaunchView(this);
 
@@ -209,7 +210,8 @@ namespace Mosa.Tool.Debugger
 			stackFrameView.Show(registersView.Pane, DockAlignment.Bottom, 0.5);
 
 			sourceView.Show(dockPanel, DockState.Document);
-			sourceDataView.Show(dockPanel, DockState.Document);
+
+			//sourceDataView.Show(dockPanel, DockState.Document);
 
 			var memoryView = new MemoryView(this);
 			memoryView.Show(dockPanel, DockState.Document);
@@ -262,6 +264,7 @@ namespace Mosa.Tool.Debugger
 			{
 				if (dock.DockHandler.Content is DebugDockContent debugdock)
 				{
+					debugdock.UpdateDockFocus();
 					debugdock.OnPause();
 				}
 			}
@@ -343,7 +346,7 @@ namespace Mosa.Tool.Debugger
 
 			if (!GDBConnector.IsConnected)
 			{
-				MessageBox.Show($"Could not connect to '{GDBConnector.ConnectionHost}' on port {GDBConnector.ConnectionPort.ToString()}.");
+				MessageBox.Show($"Could not connect to '{GDBConnector.ConnectionHost}' on port {GDBConnector.ConnectionPort}.");
 				return;
 			}
 
@@ -804,8 +807,33 @@ namespace Mosa.Tool.Debugger
 			}
 		}
 
-		private void toolStripButton3_Click(object sender, EventArgs e)
+		public void SetFocus(ulong instructionPointer, ulong stackFrame, ulong stackPointer)
 		{
+			sourceView.InstructionPointer = instructionPointer;
+			sourceView.StackFrame = stackFrame;
+			sourceView.StackPointer = stackPointer;
+
+			methodView.InstructionPointer = instructionPointer;
+			methodView.StackFrame = stackFrame;
+			methodView.StackPointer = stackPointer;
+
+			instructionView.InstructionPointer = instructionPointer;
+			instructionView.StackFrame = stackFrame;
+			instructionView.StackPointer = stackPointer;
+
+			methodParametersView.InstructionPointer = instructionPointer;
+			methodParametersView.StackFrame = stackFrame;
+			methodParametersView.StackPointer = stackPointer;
+
+			stackFrameView.InstructionPointer = instructionPointer;
+			stackFrameView.StackFrame = stackFrame;
+			stackFrameView.StackPointer = stackPointer;
+
+			methodView.OnPause();
+			instructionView.OnPause();
+			sourceView.OnPause();
+			methodParametersView.OnPause();
+			stackFrameView.OnPause();
 		}
 	}
 }

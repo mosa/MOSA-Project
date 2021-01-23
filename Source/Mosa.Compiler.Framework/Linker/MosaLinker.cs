@@ -283,52 +283,23 @@ namespace Mosa.Compiler.Framework.Linker
 		public LinkerSymbol GetConstantSymbol(double value)
 		{
 			return GetConstantSymbol(BitConverter.DoubleToInt64Bits(value));
+		}
 
-			//var data = BitConverter.GetBytes(value);
+		private static uint SingleToInt32Bits(float value)
+		{
+			var data = BitConverter.GetBytes(value);
 
-			//var name = "$double$";
-
-			//foreach (byte b in data)
-			//{
-			//	name += b.ToString("x");
-			//}
-
-			//lock (_cacheLock)
-			//{
-			//	var symbol = DefineSymbol(name, SectionKind.ROData, 1, 8);
-
-			//	symbol.SetData(data);
-
-			//	return symbol;
-			//}
+			return (uint)(data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24));
 		}
 
 		public LinkerSymbol GetConstantSymbol(float value)
 		{
-			//return GetConstantSymbol(BitConverter.SingleToInt64Bits(value));
-
-			var data = BitConverter.GetBytes(value);
-
-			var name = "$float$";
-
-			foreach (byte b in data)
-			{
-				name += b.ToString("x");
-			}
-
-			lock (_cacheLock)
-			{
-				var symbol = DefineSymbol(name, SectionKind.ROData, 1, 4);
-
-				symbol.SetData(data);
-
-				return symbol;
-			}
+			return GetConstantSymbol(/*BitConverter.*/SingleToInt32Bits(value));
 		}
 
 		public LinkerSymbol GetConstantSymbol(uint value)
 		{
-			var name = "$integer$" + value.ToString("x");
+			var name = "$const32$" + value.ToString("x");
 
 			var data = BitConverter.GetBytes(value);
 
@@ -344,7 +315,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public LinkerSymbol GetConstantSymbol(ulong value)
 		{
-			string name = "$long$" + value.ToString("x");
+			string name = "$const64$" + value.ToString("x");
 
 			var data = BitConverter.GetBytes(value);
 

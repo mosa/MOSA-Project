@@ -272,6 +272,8 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public List<InstructionNode> Uses { get; }
 
+		public int Size { get; private set; }
+
 		#endregion Properties
 
 		#region Construction
@@ -325,6 +327,136 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion Construction
+
+		#region Static Factory Constructors v2 [Experimental]
+
+		public static Operand CreateVirtual32(int index)
+		{
+			return new Operand()
+			{
+				IsVirtualRegister = true,
+				IsConstant = false,
+				IsResolved = false,
+				IsInteger = true,
+				IsInteger32 = true,
+				Size = 4,
+				Index = index,
+			};
+		}
+
+		public static Operand CreateVirtual64(int index)
+		{
+			return new Operand()
+			{
+				IsVirtualRegister = true,
+				IsInteger = true,
+				IsInteger64 = true,
+				Size = 8,
+				Index = index,
+			};
+		}
+
+		public static Operand CreateVirtualR4(int index)
+		{
+			return new Operand()
+			{
+				IsVirtualRegister = true,
+				IsFloatingPoint = true,
+				IsR4 = true,
+				Size = 4,
+				Index = index,
+			};
+		}
+
+		public static Operand CreateVirtualR8(int index)
+		{
+			return new Operand()
+			{
+				IsVirtualRegister = true,
+				IsFloatingPoint = true,
+				IsR8 = true,
+				Size = 8,
+				Index = index,
+			};
+		}
+
+		public static Operand CreateVirtualObject(int index)
+		{
+			return new Operand()
+			{
+				IsVirtualRegister = true,
+				IsReferenceType = true,
+				Size = 0,
+				Index = index,
+			};
+		}
+
+		public static Operand CreateConstant32(uint value)
+		{
+			return new Operand()
+			{
+				IsConstant = true,
+				ConstantUnsigned32 = value,
+				IsResolved = true,
+				IsInteger = true,
+				IsInteger32 = true,
+				Size = 4,
+			};
+		}
+
+		public static Operand CreateConstant64(ulong value)
+		{
+			return new Operand()
+			{
+				IsConstant = true,
+				ConstantUnsigned64 = value,
+				IsResolved = true,
+				IsInteger = true,
+				IsInteger64 = true,
+				Size = 8,
+			};
+		}
+
+		public static Operand CreateConstantR4(float value)
+		{
+			return new Operand()
+			{
+				IsConstant = true,
+				ConstantFloat = value,
+				IsResolved = true,
+				IsFloatingPoint = true,
+				IsR8 = false,
+				Size = 4,
+			};
+		}
+
+		public static Operand CreateConstantR8(double value)
+		{
+			return new Operand()
+			{
+				IsConstant = true,
+				ConstantDouble = value,
+				IsResolved = true,
+				IsFloatingPoint = true,
+				IsR8 = false,
+				Size = 8,
+			};
+		}
+
+		public static Operand CreateObjectNull()
+		{
+			return new Operand()
+			{
+				IsConstant = true,
+				ConstantUnsigned64 = 0,
+				IsNull = true,
+				IsResolved = true,
+				IsReferenceType = true,
+				Size = 0, // depends on platform
+			};
+		}
+
+		#endregion Static Factory Constructors v2 [Experimental]
 
 		#region Static Factory Constructors
 
@@ -822,23 +954,6 @@ namespace Mosa.Compiler.Framework
 				IsNull = true,
 				IsConstant = true,
 				IsResolved = true
-			};
-		}
-
-		/// <summary>
-		/// Creates the symbol.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="name">The name.</param>
-		/// <returns></returns>
-		private static Operand CreateManagedSymbolPointer(MosaType type, string name)
-		{
-			// NOTE: Not being used
-			return new Operand(type.ToManagedPointer())
-			{
-				IsSymbol = true,
-				Name = name,
-				IsConstant = true
 			};
 		}
 

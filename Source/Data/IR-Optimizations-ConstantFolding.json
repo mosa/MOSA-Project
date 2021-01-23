@@ -301,22 +301,39 @@
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
-			"Name": "Convert32ToR#",
+			"Name": "ConvertI32ToR#",
 			"SubName": "",
-			"Expression": "IR.Convert32ToR# a",
+			"Expression": "IR.ConvertI32ToR# a",
 			"Filter": "IsResolvedConstant(a)",
 			"Result": "(IR.MoveR# [ToR#(ToSigned32(a))])"
 		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
-			"Name": "Convert64ToR#",
+			"Name": "ConvertI64ToR#",
 			"SubName": "",
-			"Expression": "IR.Convert64ToR# a",
+			"Expression": "IR.ConvertI64ToR# a",
 			"Filter": "IsResolvedConstant(a)",
 			"Result": "(IR.MoveR# [ToR#(ToSigned64(a))])"
 		},
-
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "ConvertU32ToR#",
+			"SubName": "",
+			"Expression": "IR.ConvertI32ToR# a",
+			"Filter": "IsResolvedConstant(a)",
+			"Result": "(IR.MoveR# [ToR#(To32(a))])"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "ConvertU64ToR#",
+			"SubName": "",
+			"Expression": "IR.ConvertU64ToR# a",
+			"Filter": "IsResolvedConstant(a)",
+			"Result": "(IR.MoveR# [ToR#(To64(a))])"
+		},
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",

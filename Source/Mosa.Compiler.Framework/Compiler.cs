@@ -6,10 +6,12 @@ using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
+
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 
@@ -167,11 +169,15 @@ namespace Mosa.Compiler.Framework
 		private static List<BaseMethodCompilerStage> GetDefaultMethodPipeline(CompilerSettings compilerSettings, bool is64BitPlatform)
 		{
 			return new List<BaseMethodCompilerStage>() {
+
+				//new CILDecodingStageV2(),
+
 				new CILDecodingStage(),
 				new CILOperandAssignmentStage(),
 				new CILProtectedRegionStage(),
 				new CILTransformationStage(),
 				new ExceptionStage(),
+
 				new StackSetupStage(),
 				new StaticAllocationResolutionStage(),
 				compilerSettings.Devirtualization ? new DevirtualizeCallStage() : null,
@@ -399,14 +405,28 @@ namespace Mosa.Compiler.Framework
 			PostEvent(CompilerEvent.CompilingMethodsCompleted);
 		}
 
-		private MosaMethod ProcessQueue(int threadID = 0)
+		private CompilerResult ProcessQueue(int threadID = 0)
 		{
-			var method = MethodScheduler.GetMethodToCompile();
+			CompilerResult method = default;
 
-			if (method == null)
-				return null;
+			try
+			{
+				method = MethodScheduler.GetMethodToCompile();
 
-			return CompileMethod(method, threadID);
+				if (method == null)
+					return null;
+
+				method.CompiledMethod = CompileMethod(method.Method, threadID);
+				method.Result = "OK";
+				return method;
+			}
+			catch (Exception e)
+			{
+				method.Result = e.Message;
+				MethodScheduler.AddToQueue(method);
+			}
+
+			return method;
 		}
 
 		public void CompileMethod(MosaMethod method)
@@ -436,85 +456,46 @@ namespace Mosa.Compiler.Framework
 			return method;
 		}
 
-		public void ExecuteThreadedCompile(int maxThreads)
+		public void ExecuteCompile(int maxThreads)
 		{
 			PostEvent(CompilerEvent.CompilingMethods);
 
-			ExecuteThreadedCompilePass(maxThreads);
+			if (maxThreads > 0)
+			{
+				var threads = Enumerable
+					.Range(0, maxThreads)
+					.Select(x => new Thread(CompilePass))
+					.ToList();
+
+				threads.ForEach(x => x.Start());
+				threads.ForEach(x => x.Join());
+			}
+			else
+				CompilePass();
 
 			PostEvent(CompilerEvent.CompilingMethodsCompleted);
 		}
 
-		private void ExecuteThreadedCompilePass(int maxThreads)
+		private void CompilePass() //TODO: Add IProgress<> to report progress
 		{
-			//maxThreads = 512;
-
-			int threadLaunched = 0;
-
-			var threadIDs = new Stack<int>();
-
-			for (var i = 1; i <= maxThreads; i++)
-			{
-				threadIDs.Push(i);
-			}
-
+			var threadID = Thread.CurrentThread.ManagedThreadId;
+			int success = 0;
+			
 			while (true)
 			{
-				int launched;
+				var result = ProcessQueue(threadID);
+				if (result == null)
+					return;
 
-				lock (threadIDs)
+				if (result.Result != "OK")
 				{
-					launched = threadLaunched;
-				}
-
-				// are available threads?
-				if (launched < maxThreads)
-				{
-					// Yes - is there a method to compile
-					var method = MethodScheduler.GetMethodToCompile();
-
-					if (method != null)
-					{
-						int threadID;
-
-						lock (threadIDs)
-						{
-							threadID = threadIDs.Pop();
-							threadLaunched++;
-						}
-
-						ThreadPool.QueueUserWorkItem((state) =>
-						{
-							CompileMethod(method, threadID);
-
-							// lets check for another one
-							while (true)
-							{
-								var method2 = MethodScheduler.GetMethodToCompile();
-
-								if (method2 == null)
-									break;
-
-								CompileMethod(method2, threadID);
-							}
-
-							lock (threadIDs)
-							{
-								threadIDs.Push(threadID);
-								threadLaunched--;
-							}
-						});
-					}
-					else
-					{
-						if (launched == 0)
-							return; // all done
-					}
+					//var msg = $"{result.Method.FullName}-{result.Attemps}: {result.Result}{Environment.NewLine}";
+					//File.AppendAllText($"Exception{threadID}.txt", msg);
 				}
 				else
-				{
-					Thread.Yield();
-				}
+					success++; // get some stats here only
+
+				// Would report progress here
 			}
 		}
 

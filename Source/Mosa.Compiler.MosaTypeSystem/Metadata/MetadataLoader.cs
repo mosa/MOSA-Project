@@ -1,7 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using dnlib.DotNet;
+
 using Mosa.Compiler.Common.Exceptions;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -391,7 +393,9 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 
 				foreach (var genericArg in typeSig.GenericArguments)
 				{
-					resultType.GenericArguments.Add(GetType(genericArg));
+					var t = GetType(genericArg);
+					if (!resultType.GenericArguments.Contains(t))
+						resultType.GenericArguments.Add(t);
 				}
 
 				metadata.Resolver.EnqueueForResolve(result);
@@ -535,7 +539,9 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				foreach (var genericArg in genericArgs)
 				{
 					hasOpening |= genericArg.HasOpenGenericParameter();
-					_mosaMethod.GenericArguments.Add(GetType(genericArg));
+					var t = GetType(genericArg);
+					if (!_mosaMethod.GenericArguments.Contains(t))
+						_mosaMethod.GenericArguments.Add(t);
 				}
 
 				_mosaMethod.UnderlyingObject = desc.Clone(newSig);
