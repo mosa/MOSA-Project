@@ -83,7 +83,7 @@ Source: "..\..\bin\PriorityQueue.dll"; DestDir: "{app}\bin"; Flags: ignoreversio
 Source: "..\..\bin\MetroFramework.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\MetroFramework.Design.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\MetroFramework.Fonts.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "..\..\bin\WeifenLuo.WinFormsUI.Docking.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\WinFormsUI.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Reko.Arch.Arm.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Reko.Arch.X86.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
