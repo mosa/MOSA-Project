@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <LangVersion>8.0</LangVersion>
     <DebugType>full</DebugType>

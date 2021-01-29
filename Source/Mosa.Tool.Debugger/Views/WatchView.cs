@@ -123,12 +123,12 @@ namespace Mosa.Tool.Debugger.Views
 
 			var clickedEntry = dataGridView1.Rows[e.RowIndex].DataBoundItem as WatchEntry;
 
-			var menu = new MenuItem(clickedEntry.HexValue + " - " + clickedEntry.Name);
+			var menu = new ToolStripMenuItem(clickedEntry.HexValue + " - " + clickedEntry.Name);
 			menu.Enabled = false;
-			var m = new ContextMenu();
-			m.MenuItems.Add(menu);
-			m.MenuItems.Add(new MenuItem("Copy to &Clipboard", new EventHandler(MainForm.OnCopyToClipboard)) { Tag = clickedEntry.Address });
-			m.MenuItems.Add(new MenuItem("&Delete watch", new EventHandler(MainForm.OnRemoveWatch)) { Tag = clickedEntry.Watch });
+			var m = new ContextMenuStrip();
+			m.Items.Add(menu);
+			m.Items.Add(new ToolStripMenuItem("Copy to &Clipboard", null, new EventHandler(MainForm.OnCopyToClipboard)) { Tag = clickedEntry.Address });
+			m.Items.Add(new ToolStripMenuItem("&Delete watch", null, new EventHandler(MainForm.OnRemoveWatch)) { Tag = clickedEntry.Watch });
 
 			m.Show(dataGridView1, relativeMousePosition);
 		}

@@ -11,6 +11,10 @@ jobs:
     env:
       BUILD_VERSION: 2.0.0
     steps:
+      - name: Set net5.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x'
       - name: Set Build Version
         uses: travisj/build-number-action@v1
         id: mosa-project-build-number
@@ -20,6 +24,8 @@ jobs:
         run: echo repository=${{ github.repository }} event_name=${{ github.event_name }} ref=${{ github.ref }} head_ref=${{ github.head_ref }} base_ref=${{ github.base_ref }}
       - name: Checkout
         uses: actions/checkout@v1
+        with:
+          submodules: recursive
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v1
       - name: Setup Nuget.exe
@@ -28,7 +34,7 @@ jobs:
         run: dotnet restore Mosa.sln
         working-directory: Source
       - name: Build
-        run: msbuild Source/Mosa.sln /p:Version=${{ env.BUILD_VERSION }}
+        run: dotnet build Source/Mosa.sln /p:Version=${{ env.BUILD_VERSION }}
       - name: Create Installer
         run: ISCC.exe /DMyAppVersion=${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }} Source/Inno-Setup-Script/Mosa-Installer.iss
       - name: Create Package - Mosa.Tools.Package
@@ -89,8 +95,14 @@ jobs:
     name: Linux Build
     runs-on: ubuntu-latest
     steps:
+      - name: Set net5.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '5.0.x'
       - name: Checkout
         uses: actions/checkout@v1
+        with:
+          submodules: recursive
       - name: Restore nuget Packages
         run: dotnet restore Source/Mosa.Linux.sln
       - name: Build
