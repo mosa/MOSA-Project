@@ -3,6 +3,7 @@
 using Reko.Arch.Arm;
 using Reko.Arch.X86;
 using Reko.Core;
+using Reko.Core.Memory;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
@@ -24,11 +25,13 @@ namespace Mosa.Utility.Disassembler
 
 		public Disassembler(string platform)
 		{
+			var services = new ServiceContainer();
+			var options = new Dictionary<string, object>();
 			switch (platform.ToLower())
 			{
-				case "armv8a32": arch = new Arm32Architecture(new ServiceContainer(), "arm32"); break;
-				case "x86": arch = new X86ArchitectureFlat32(new ServiceContainer(), "x86-protected-32"); break;
-				case "x64": arch = arch = new X86ArchitectureFlat64(new ServiceContainer(), "x86-protected-64"); break;
+				case "armv8a32": arch = new Arm32Architecture(services, "arm32", options); break;
+				case "x86": arch = new X86ArchitectureFlat32(services, "x86-protected-32", options); break;
+				case "x64": arch = arch = new X86ArchitectureFlat64(services, "x86-protected-64", options); break;
 			}
 		}
 
@@ -36,7 +39,7 @@ namespace Mosa.Utility.Disassembler
 		{
 			this.memory = memory;
 			this.address = address;
-			memoryArea = new MemoryArea(Address.Ptr32((uint)address), memory);
+			memoryArea = new ByteMemoryArea(Address.Ptr32((uint)address), memory);
 		}
 
 		public List<DecodedInstruction> Decode(int count = int.MaxValue)
