@@ -44,7 +44,7 @@ namespace Mosa.Kernel.x86
 			public const int DirectColorAttributes = 39;
 			public const int PhysBase = 40;
 			public const int OffScreenMemoryOff = 44;
-			public const int OffScreenMemorSize = 48;
+			public const int OffScreenMemorySize = 48;
 			public const int Reserved1 = 50;
 		}
 
@@ -146,6 +146,6 @@ namespace Mosa.Kernel.x86
 
 		public static uint OffScreenMemoryOff { get { return GetValue32(VBEModeInfoOffset.OffScreenMemoryOff); } }
 
-		public static ushort OffScreenMemorSize { get { return GetValue16(VBEModeInfoOffset.OffScreenMemorSize); } }
+		public static ushort OffScreenMemorySize { get { return GetValue16(VBEModeInfoOffset.OffScreenMemorySize); } }
 	}
 }
