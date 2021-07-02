@@ -66,8 +66,11 @@ Open the ``Source\Mosa.sln`` solution with Visual Studio and locate the ``Mosa.D
 
 Next, set the project as ``Set as Startup Project``.
 
+To compile and launch the application within a virtual machine, select from the ``Debug`` menu the ``Start Without Debugging`` option, or press ``CTRL+F5``.
+
 **Option #2** (Only the starter project):
 
 Open the ``Source\Mosa.Demo.MyWorld.x86\Mosa.Demo.MyWorld.x86.csproj`` project with Visual Studio.
 
-To compile and launch the application within a virtual machine, simply click on the ``Start`` button.
+To compile and launch the application within a virtual machine, select from the ``Debug`` menu the ``Start Without Debugging`` option, or press ``CTRL+F5``.
+
