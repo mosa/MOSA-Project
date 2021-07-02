@@ -2,7 +2,7 @@
 Compiler Transformations
 ########################
 
-The MOSA compiler utilitizes a datebase of transformations to represent specific types of optimizations. These transformation are described in json formatted, text files to make it easy to add new optimizations to the compiler.
+The MOSA compiler utilitizes a datebase of transformations to represent specific types of optimizations. These transformation are described in json formatted text files to make it easy to add new optimizations to the compiler.
 
 A special parser program, called ``Mosa.Utility.SourceCodeGenerator``, reads the text files and translates them into C# source code files, which are then included and compiled into the MOSA compiler.
 

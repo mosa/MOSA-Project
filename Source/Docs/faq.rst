@@ -11,7 +11,7 @@ Managed Operation System Alliance. It was an alliance with the SharpOS project t
 Who can join?
 -------------
 
-Anyone who is interested in operating system or .NET development can join. You have to keep in mind our :doc:`New BSD License <bsd-license>` for your contributions though.
+Anyone who is interested in operating system or .NET development can join. You have to keep in mind our :doc:`New BSD License <license>` for your contributions though.
 
 What kind of .NET runtime will be available?
 --------------------------------------------
