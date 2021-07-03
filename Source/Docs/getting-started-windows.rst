@@ -18,7 +18,7 @@ The MOSA project is available as a `zip download <https://github.com/mosa/MOSA-P
 
    git clone https://github.com/mosa/MOSA-Project.git
 
-If download via zip, unzip the file.
+If downloaded via zip, unzip the file.
 
 Build
 =====
@@ -29,17 +29,20 @@ Execute the ``Compiler.bat`` script in the base directory in the root directory 
 
 	Compiler.bat
 
-A successful build will display a ``Build succedded`` message (like below). Warnings may be ignored.
+or compiled from the command line:
+
+.. code-block:: bash
+
+	dotnet build Source\Mosa.sln
+
+A successful build will display a ``Build succedded`` message (like below). Any warnings may be ignored.
 
 .. code-block:: bash
 
 	[... lines removed...]
 
 	Build succeeded.
-
-	[... lines removed...]
-
-	1 Warning(s)
+	0 Warning(s)
 	0 Error(s)
 
 	Time Elapsed 00:00:01.48

@@ -24,9 +24,6 @@ extensions = [
 templates_path = ['_templates']
 
 source_suffix = ['.rst', '.md']
-source_parsers = {
-    '.md': CommonMarkParser,
-}
 
 master_doc = 'index'
 project = 'Mosa Project'
