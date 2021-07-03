@@ -7,4 +7,3 @@ xcopy /S build\html ..\..\docs\
 copy /Y *.nojekyll ..\..\docs
 echo www.mosa-project.org > ..\..\docs\CNAME
 cd ..
-
