@@ -5,14 +5,13 @@ Getting Started On Linux
 Prerequisites
 =============
 
-You will also need the following prerequisites:
+The following prerequisites are necessary:
 
-# `Qemu <https://www.qemu.org/>`__.
-# `Git <https://git-scm.com/>`__.
-# `Microsoft .NET Core <https://git-scm.com/>`__.
-# `Mono <http://www.mono-project.com>`__
+* `Microsoft .NET Core <https://git-scm.com/>`__
+* `Git <https://git-scm.com/>`__
+* `Qemu <https://www.qemu.org/>`__
 
-If using the APT package manager you can use the following commands to quickly set everything up:
+If using the APT package manager, you can use the following commands to quickly set everything up:
 
 .. code-block:: bash
 
@@ -25,7 +24,7 @@ If using the APT package manager you can use the following commands to quickly s
 	sudo apt-get update
 	sudo apt-get install apt-transport-https
 	sudo apt-get update
-	sudo apt-get install dotnet-sdk-3.1
+	sudo apt-get install dotnet-sdk-5.0
 	sudo snap install dotnet-sdk --classic
 	sudo snap alias dotnet-sdk.dotnet dotnet
 
@@ -44,8 +43,18 @@ The MOSA project is available as a `zip download <https://github.com/mosa/MOSA-P
 Build
 =====
 
+Next, compile the tool set:
+
 .. code-block:: bash
 
 	cd MOSA-Project
-	dotnet restore Source/Mosa.Linux.sln
-	dotnet msbuild /verbosity:minimal Source/Mosa.Linux.sln
+	dotnet build Source/Mosa.Linux.sln
+
+Test
+====
+
+To validate everything is working properly, execute the unit tests:
+
+.. code-block:: bash
+
+	dotnet bin/Mosa.Utility.UnitTests.dll -oMax -s Emulator.Display=false
