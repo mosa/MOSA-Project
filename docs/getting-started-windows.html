@@ -208,7 +208,7 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/mosa/MOSA-Project.git
 </pre></div>
 </div>
-<p>If download via zip, unzip the file.</p>
+<p>If downloaded via zip, unzip the file.</p>
 </div>
 <div class="section" id="build">
 <h2>Build<a class="headerlink" href="#build" title="Permalink to this headline">¶</a></h2>
@@ -216,14 +216,15 @@
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>Compiler.bat
 </pre></div>
 </div>
-<p>A successful build will display a <code class="docutils literal notranslate"><span class="pre">Build</span> <span class="pre">succedded</span></code> message (like below). Warnings may be ignored.</p>
+<p>or compiled from the command line:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>dotnet build Source<span class="se">\M</span>osa.sln
+</pre></div>
+</div>
+<p>A successful build will display a <code class="docutils literal notranslate"><span class="pre">Build</span> <span class="pre">succedded</span></code> message (like below). Any warnings may be ignored.</p>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="o">[</span>... lines removed...<span class="o">]</span>
 
 Build succeeded.
-
-<span class="o">[</span>... lines removed...<span class="o">]</span>
-
-<span class="m">1</span> Warning<span class="o">(</span>s<span class="o">)</span>
+<span class="m">0</span> Warning<span class="o">(</span>s<span class="o">)</span>
 <span class="m">0</span> Error<span class="o">(</span>s<span class="o">)</span>
 
 Time Elapsed <span class="m">00</span>:00:01.48
