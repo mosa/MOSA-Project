@@ -1,8 +1,6 @@
 
 .. include:: introduction.rst
 
-.. include:: getting-started.rst
-
 *******************
 Join the Discussion
 *******************
@@ -16,6 +14,3 @@ License
 MOSA is licensed under the :doc:`New BSD License <license>`.
 
 .. include:: contents.txt
-
-
-

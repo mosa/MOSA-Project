@@ -32,7 +32,6 @@ namespace Mosa.FileSystem.VFS
 		/// <param name="mode">The access mode to check.</param>
 		/// <param name="flags">Flags, which control the operation.</param>
 		/// <returns>True if the caller has the requested permissions on the given directory entry.</returns>
-		/// <exception cref="System.Security.SecurityException">This exception is thrown for failed access checks unless the caller has specified AccessCheckFlags.NoThrow.</exception>
 		/// <remarks>
 		/// This function only checks the permissions on the dentry itself. It does not traverse the directory tree towards the root
 		/// to check the entire tree. Tree checking is automatically performed by Lookup and related functions.
