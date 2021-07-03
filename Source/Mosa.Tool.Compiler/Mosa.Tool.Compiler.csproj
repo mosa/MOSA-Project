@@ -22,5 +22,6 @@
     <ProjectReference Include="..\Mosa.Platform.ARMv8A32\Mosa.Platform.ARMv8A32.csproj" />
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
     <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj" />
+    <ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
   </ItemGroup>
 </Project>
