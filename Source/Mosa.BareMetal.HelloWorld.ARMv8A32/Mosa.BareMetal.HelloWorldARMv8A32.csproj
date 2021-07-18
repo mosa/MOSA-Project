@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <AssemblyName>Mosa.BareMetal.HelloWorld.ARMv8A32</AssemblyName>
     <OutputType>Exe</OutputType>
     <RootNamespace>Mosa.BareMetal.HelloWorld.ARMv8A32</RootNamespace>
@@ -16,6 +16,7 @@
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Kernel.BareMetal.x86\Mosa.Kernel.BareMetal.x86.csproj" />
     <ProjectReference Include="..\Mosa.Kernel.BareMetal\Mosa.Kernel.BareMetal.csproj" />
+    <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
     <ProjectReference Include="..\Mosa.UnitTests\Mosa.UnitTests.csproj" />
   </ItemGroup>
 </Project>

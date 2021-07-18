@@ -11,13 +11,13 @@ The **MOSA Launcher** is GUI application used to select various compiler and bui
 Usage
 -----
 
-The **MOSA Launcher** can be launched by executing ``Mosa.Tool.Launcher.exe``. 
+The **MOSA Launcher** can be launched by executing ``Mosa.Tool.Launcher.exe``.
 
 In addition, the tool can be launched from the command line with arguments:
 
 .. code-block:: text
 
-	Mosa.Tool.Launcher.exe Mosa.Demo.HelloWorld.x86.exe
+	Mosa.Tool.Launcher.exe Mosa.Demo.HelloWorld.x86.dll
 
 
 Command Line Options

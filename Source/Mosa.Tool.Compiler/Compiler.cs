@@ -46,7 +46,7 @@ namespace Mosa.Tool.Compiler
 		{
 			usageString = @"Usage: Mosa.Tool.Compiler.exe -o outputfile --platform [x86|x64] {additional options} inputfiles.
 
-Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -platform x86 Mosa.HelloWorld.x86.exe mscorlib.dll Mosa.Plug.Korlib.dll Mosa.Plug.Korlib.x86.dll";
+Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -platform x86 Mosa.HelloWorld.x86.dll System.Runtime.dll Mosa.Plug.Korlib.dll Mosa.Plug.Korlib.x86.dll";
 		}
 
 		#endregion Constructors

@@ -22,7 +22,7 @@
 	</metadata>
 	<files>
 		<file src="..\Art\Mosa Icon.png" target="images\" />
-		<file src="..\..\bin\Mosa.Runtime.x64.dll" target="lib\net472" />
-		<file src="..\..\bin\Mosa.Plug.Korlib.x64.dll" target="lib\net472" />
+		<file src="..\..\bin\Mosa.Runtime.x64.dll" target="lib\net5.0" />
+		<file src="..\..\bin\Mosa.Plug.Korlib.x64.dll" target="lib\net5.0" />
 	</files>
 </package>

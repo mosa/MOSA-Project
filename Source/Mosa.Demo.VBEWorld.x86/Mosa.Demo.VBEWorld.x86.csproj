@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <OutputType>Exe</OutputType>
     <StartupObject>Mosa.Demo.VBEWorld.x86.Boot</StartupObject>
     <DebugType>full</DebugType>
@@ -21,6 +21,7 @@
     <ProjectReference Include="..\Mosa.DeviceDriver\Mosa.DeviceDriver.csproj" />
     <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj" />
     <ProjectReference Include="..\Mosa.Kernel.x86\Mosa.Kernel.x86.csproj" />
+    <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
     <ProjectReference Include="..\Mosa.Runtime.x86\Mosa.Runtime.x86.csproj" />
     <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
   </ItemGroup>

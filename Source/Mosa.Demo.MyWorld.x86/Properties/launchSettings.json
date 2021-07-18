@@ -3,7 +3,7 @@
     "Mosa.Demo.MyWorld.x86": {
       "commandName": "Executable",
       "executablePath": "..\\bin\\Mosa.Tool.Launcher.exe",
-      "commandLineArgs": "Mosa.Demo.MyWorld.x86.exe",
+      "commandLineArgs": "Mosa.Demo.MyWorld.x86.dll",
       "workingDirectory": "..\\..\\bin"
     }
   }
