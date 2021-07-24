@@ -27,6 +27,20 @@
     <EmbeddedResource Update="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
@@ -45,8 +59,5 @@
   <ItemGroup>
     <PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" />
     <PackageReference Include="dnlib" Version="3.3.2" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="Properties\Settings.Designer.cs" />
   </ItemGroup>
 </Project>

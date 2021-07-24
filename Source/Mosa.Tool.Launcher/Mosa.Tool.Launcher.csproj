@@ -24,6 +24,9 @@
     <Compile Update="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Update="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Update="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -49,16 +52,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="rocket.ico" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="System.ComponentModel.Composition" Version="4.7.0" />
     <PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" />
-    <PackageReference Include="System.Runtime" Version="4.3.1" />
   </ItemGroup>
 </Project>

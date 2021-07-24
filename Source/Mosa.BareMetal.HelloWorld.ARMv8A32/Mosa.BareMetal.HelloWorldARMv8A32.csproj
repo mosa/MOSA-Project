@@ -1,9 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <AssemblyName>Mosa.BareMetal.HelloWorld.ARMv8A32</AssemblyName>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Mosa.BareMetal.HelloWorld.ARMv8A32</RootNamespace>
     <StartupObject>Mosa.BareMetal.HelloWorld.ARMv8A32.Boot</StartupObject>
     <DebugType>full</DebugType>
     <LangVersion>8.0</LangVersion>
@@ -11,6 +9,7 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+    <UseAppHost>false</UseAppHost>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
