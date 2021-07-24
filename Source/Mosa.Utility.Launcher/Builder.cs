@@ -109,12 +109,12 @@ namespace Mosa.Utility.Launcher
 
 			if (LauncherSettings.HuntForCorLib)
 			{
-				var fileCorlib = fileHunter.HuntFile("mscorlib.dll");
+				// var fileCorlib = fileHunter.HuntFile("mscorlib.dll");
 
-				if (fileCorlib != null)
-				{
-					Settings.AddPropertyListValue("Compiler.SourceFiles", fileCorlib.FullName);
-				}
+				// if (fileCorlib != null)
+				// {
+				// 	Settings.AddPropertyListValue("Compiler.SourceFiles", fileCorlib.FullName);
+				// }
 			}
 
 			if (LauncherSettings.PlugKorlib)

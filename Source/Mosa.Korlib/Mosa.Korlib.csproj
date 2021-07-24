@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
-    <AssemblyName>mscorlib</AssemblyName>
+    <TargetFramework>net5.0</TargetFramework>
+    <AssemblyName>System.Runtime</AssemblyName>
     <RootNamespace>System</RootNamespace>
     <DebugType>full</DebugType>
     <LangVersion>8.0</LangVersion>
@@ -15,5 +15,6 @@
     <SkipCommonResourcesIncludes>true</SkipCommonResourcesIncludes>
     <NoWarn>$(NoWarn),0419,0649,1573,1591,3021,CA2002</NoWarn>
     <RuntimeMetadataVersion>v4.0.30319</RuntimeMetadataVersion>
+    <AssemblyVersion>5.0.0.0</AssemblyVersion>
   </PropertyGroup>
 </Project>

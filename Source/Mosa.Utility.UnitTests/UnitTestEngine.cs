@@ -135,7 +135,7 @@ namespace Mosa.Utility.UnitTests
 			{
 				var platform = Settings.GetValue("Compiler.Platform", "x86");
 
-				TestSuiteFile = $"Mosa.UnitTests.{platform}.exe";
+				TestSuiteFile = $"Mosa.UnitTests.{platform}.dll";
 			}
 
 			Aborted = !Compile();

@@ -63,7 +63,7 @@ namespace Mosa.Workspace.Experiment.Debug
 			settings.SetValue("OS.Name", "MOSA");
 
 			settings.AddPropertyListValue("SearchPaths", AppContext.BaseDirectory);
-			settings.AddPropertyListValue("Compiler.SourceFiles", Path.Combine(AppContext.BaseDirectory, "Mosa.UnitTests.x86.exe"));
+			settings.AddPropertyListValue("Compiler.SourceFiles", Path.Combine(AppContext.BaseDirectory, "Mosa.UnitTests.x86.dll"));
 			settings.AddPropertyListValue("Compiler.SourceFiles", Path.Combine(AppContext.BaseDirectory, "Mosa.Plug.Korlib.dll"));
 			settings.AddPropertyListValue("Compiler.SourceFiles", Path.Combine(AppContext.BaseDirectory, "Mosa.Plug.Korlib.x86.dll"));
 

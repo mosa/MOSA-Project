@@ -24,14 +24,37 @@
     <Compile Update="ConnectWindow.Designer.cs">
       <DependentUpon>ConnectWindow.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Update="ConnectWindow.resx">
+      <DependentUpon>ConnectWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Update="DebugAppLocationsWindow.cs" />
     <Compile Update="DebugAppLocationsWindow.Designer.cs">
       <DependentUpon>DebugAppLocationsWindow.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Update="DebugAppLocationsWindow.resx">
+      <DependentUpon>DebugAppLocationsWindow.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Update="DebugDockContent.cs" />
+    <Compile Update="DebugDockContent.designer.cs">
+      <DependentUpon>DebugDockContent.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="DebugDockContent.resx">
+      <DependentUpon>DebugDockContent.cs</DependentUpon>
+    </EmbeddedResource>
+    <Compile Update="MainForm.cs" />
+    <Compile Update="MainForm.designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Update="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Update="Views\BreakpointView.cs" />
     <Compile Update="Views\BreakpointView.designer.cs">
       <DependentUpon>BreakpointView.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Update="Views\BreakpointView.resx">
+      <DependentUpon>BreakpointView.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Update="Views\CallStackView.cs" />
     <Compile Update="Views\CallStackView.designer.cs">
       <DependentUpon>CallStackView.cs</DependentUpon>
@@ -48,14 +71,23 @@
     <Compile Update="Views\SourceDataView.designer.cs">
       <DependentUpon>SourceDataView.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Update="Views\SourceDataView.resx">
+      <DependentUpon>SourceDataView.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Update="Views\SourceView.cs" />
     <Compile Update="Views\SourceView.designer.cs">
       <DependentUpon>SourceView.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Update="Views\SourceView.resx">
+      <DependentUpon>SourceView.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Update="Views\MethodView.cs" />
     <Compile Update="Views\MethodView.designer.cs">
       <DependentUpon>MethodView.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Update="Views\MethodView.resx">
+      <DependentUpon>MethodView.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Update="Views\InstructionView.cs" />
     <Compile Update="Views\InstructionView.designer.cs">
       <DependentUpon>InstructionView.cs</DependentUpon>
@@ -68,35 +100,34 @@
     <Compile Update="Views\SymbolView.designer.cs">
       <DependentUpon>SymbolView.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Update="Views\SymbolView.resx">
+      <DependentUpon>SymbolView.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Update="Views\WatchView.cs" />
     <Compile Update="Views\WatchView.designer.cs">
       <DependentUpon>WatchView.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Update="Views\WatchView.resx">
+      <DependentUpon>WatchView.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Update="Views\ControlView.cs" />
     <Compile Update="Views\ControlView.designer.cs">
       <DependentUpon>ControlView.cs</DependentUpon>
-    </Compile>
-    <Compile Update="MainForm.cs" />
-    <Compile Update="MainForm.designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
     <Compile Update="Views\MemoryView.cs" />
     <Compile Update="Views\MemoryView.designer.cs">
       <DependentUpon>MemoryView.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Update="Views\MemoryView.resx">
+      <DependentUpon>MemoryView.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Update="Views\OutputView.cs" />
     <Compile Update="Views\OutputView.designer.cs">
       <DependentUpon>OutputView.cs</DependentUpon>
     </Compile>
-    <Compile Update="DebugDockContent.cs" />
-    <Compile Update="DebugDockContent.designer.cs">
-      <DependentUpon>DebugDockContent.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
+    <EmbeddedResource Update="Views\OutputView.resx">
+      <DependentUpon>OutputView.cs</DependentUpon>
+    </EmbeddedResource>
     <Compile Update="Views\RegisterView.cs" />
     <Compile Update="Views\RegisterView.designer.cs">
       <DependentUpon>RegisterView.cs</DependentUpon>
@@ -104,6 +135,11 @@
     <Compile Update="Views\StatusView.cs" />
     <Compile Update="Views\StatusView.designer.cs">
       <DependentUpon>StatusView.cs</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -123,55 +159,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="ConnectWindow.resx">
-      <DependentUpon>ConnectWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="DebugAppLocationsWindow.resx">
-      <DependentUpon>DebugAppLocationsWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\BreakpointView.resx">
-      <DependentUpon>BreakpointView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="DebugDockContent.resx">
-      <DependentUpon>DebugDockContent.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\SourceDataView.resx">
-      <DependentUpon>SourceDataView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\SourceView.resx">
-      <DependentUpon>SourceView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\MethodView.resx">
-      <DependentUpon>MethodView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\MemoryView.resx">
-      <DependentUpon>MemoryView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\OutputView.resx">
-      <DependentUpon>OutputView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\SymbolView.resx">
-      <DependentUpon>SymbolView.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Views\WatchView.resx">
-      <DependentUpon>WatchView.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="bug.ico" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="dnlib" Version="3.3.2" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Remove="DebugVMImageWindow.cs" />
-    <Compile Remove="DebugInfo\DebugSource.cs" />
   </ItemGroup>
 </Project>

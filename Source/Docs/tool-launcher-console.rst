@@ -2,18 +2,18 @@
 MOSA Launcher Console
 #####################
 
-The **MOSA Launcher Console** is a console application that automates the entire build process including launching of a virtual machine. 
+The **MOSA Launcher Console** is a console application that automates the entire build process including launching of a virtual machine.
 
 .. tip:: Check out the :doc:`MOSA Launcher <tool-launcher>` for a graphic user interface version of this console application.
 
 Usage
 -----
 
-A quick example that compiles `Mosa.Demo.TestWorld.x86.exe` demo with `-oMax` (all optimization enabled) and launches it using `Qemu`:
+A quick example that compiles `Mosa.Demo.TestWorld.x86.dll` demo with `-oMax` (all optimization enabled) and launches it using `Qemu`:
 
 .. code-block:: text
 
-  Mosa.Tool.Launcher.Console.exe -oMax Mosa.Demo.TestWorld.x86.exe
+  Mosa.Tool.Launcher.Console.exe -oMax Mosa.Demo.TestWorld.x86.dll
 
 .. code-block:: text
 

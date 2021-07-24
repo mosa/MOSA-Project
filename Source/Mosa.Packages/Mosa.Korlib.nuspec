@@ -18,7 +18,7 @@
 	</metadata>
 	<files>
 		<file src="..\Art\Mosa Icon.png" target="images\" />
-		<file src="..\..\bin\mscorlib.dll" target="lib\net472" />
-		<file src="..\..\bin\Mosa.Plug.Korlib.dll" target="lib\net472" />
+		<file src="..\..\bin\System.Runtime.dll" target="lib\net5.0" />
+		<file src="..\..\bin\Mosa.Plug.Korlib.dll" target="lib\net5.0" />
 	</files>
 </package>

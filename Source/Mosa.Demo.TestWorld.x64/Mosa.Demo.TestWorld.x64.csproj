@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <OutputType>Exe</OutputType>
     <StartupObject>Mosa.Demo.TestWorld.x64.Boot</StartupObject>
     <DebugType>full</DebugType>
@@ -9,9 +9,8 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+    <UseAppHost>false</UseAppHost>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-    <AssemblyName>Mosa.Demo.TestWorld.x64</AssemblyName>
-    <RootNamespace>Mosa.Demo.TestWorld.x64</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Kernel.x64\Mosa.Kernel.x64.csproj" />
