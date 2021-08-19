@@ -1,6 +1,8 @@
-﻿using System.Diagnostics.Contracts;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace System.System
+using System.Diagnostics.Contracts;
+
+namespace System
 {
 	public interface IFormattable
 	{

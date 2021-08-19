@@ -1,4 +1,6 @@
-﻿namespace System.System
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+namespace System
 {
 	public interface IObservable<out T>
 	{

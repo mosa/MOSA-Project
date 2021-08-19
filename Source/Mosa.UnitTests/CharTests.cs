@@ -144,6 +144,13 @@ namespace Mosa.UnitTests
 			return arr[index] == value;
 		}
 
+		[MosaUnitTest]
+		public static bool BitConversion()
+		{
+			byte[] bytes = System.BitConverter.GetBytes('a');
+			return bytes[0] == 97;
+		}
+
 		private static void SetValueInRefValue(ref char destination, char value)
 		{
 			destination = value;

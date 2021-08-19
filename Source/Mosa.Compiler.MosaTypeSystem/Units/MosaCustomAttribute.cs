@@ -50,6 +50,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 	public class MosaCustomAttributeList : List<MosaCustomAttribute>
 	{
+		public MosaCustomAttributeList() : base()
+		{
+		}
+
+		public MosaCustomAttributeList(IEnumerable<MosaCustomAttribute> collection) : base(collection)
+		{
+		}
+
 		// This implementation isn't perfect but covers most cases
 		public override bool Equals(object obj)
 		{

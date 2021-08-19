@@ -21,14 +21,23 @@ namespace Mosa.Compiler.MosaTypeSystem
 
 		public bool IsCompilerGenerated { get; private set; }
 
-		private readonly MosaCustomAttributeList customAttributes;
+		private MosaCustomAttributeList customAttributes;
 
-		public IList<MosaCustomAttribute> CustomAttributes { get; }
+		public IList<MosaCustomAttribute> CustomAttributes { get; private set; }
 
 		internal MosaUnit()
 		{
 			CustomAttributes = (customAttributes = new MosaCustomAttributeList()).AsReadOnly();
 			Name = "";
+		}
+
+		virtual internal MosaUnit Clone()
+		{
+			var result = (MosaUnit)base.MemberwiseClone();
+
+			result.CustomAttributes = (result.customAttributes = new MosaCustomAttributeList(customAttributes)).AsReadOnly();
+
+			return result;
 		}
 
 		public T GetUnderlyingObject<T>()

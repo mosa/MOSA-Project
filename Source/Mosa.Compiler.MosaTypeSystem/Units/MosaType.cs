@@ -175,9 +175,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 			GenericArguments = (genericArguments = new GenericArgumentsCollection());
 		}
 
-		internal MosaType Clone()
+		override internal MosaType Clone()
 		{
-			var result = (MosaType)base.MemberwiseClone();
+			var result = (MosaType)base.Clone();
 
 			result.Methods = (result.methods = new List<MosaMethod>(methods)).AsReadOnly();
 			result.Fields = (result.fields = new List<MosaField>(fields)).AsReadOnly();

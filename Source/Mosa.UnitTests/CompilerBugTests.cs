@@ -21,6 +21,18 @@ namespace Mosa.UnitTests
 
 			return proc.ProcessID == 2;
 		}
+
+		[MosaUnitTest]
+		public unsafe static bool TestSpan()
+		{
+			var alloc = stackalloc byte[12];
+
+			var span1 = new Span<int>(alloc, 3);
+			span1[2] = 42;
+
+			var span2 = new Span<int>(alloc, 3);
+			return span2[2] == 42;
+		}
 	}
 
 	internal static class ProcessManager

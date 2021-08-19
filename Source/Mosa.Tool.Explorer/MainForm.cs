@@ -51,16 +51,6 @@ namespace Mosa.Tool.Explorer
 		{
 			InitializeComponent();
 
-			tbInstructions.Width = tabControl.Width - 12;
-			tbInstructions.Height = tabControl.Height - 52;
-			tbDebugResult.Width = tabControl.Width - 12;
-			tbDebugResult.Height = tabControl.Height - 52;
-			tbMethodCounters.Width = tabControl.Width - 12;
-			tbMethodCounters.Height = tabControl.Height - 22;
-
-			tbLogs.Width = tabControl.Width - 4;
-			tbLogs.Height = tabControl.Height - (22 + 32 + 8);
-
 			cbPlatform.SelectedIndex = 0;
 
 			ClearAll();

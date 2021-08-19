@@ -11,18 +11,24 @@ namespace System.Runtime.CompilerServices
 		public static extern void InitializeArray(Array array, RuntimeFieldHandle fldHandle);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
-		public static extern int GetHashCode(Object o);
+		public static extern int GetHashCode(object o);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
-		public new static extern bool Equals(Object o1, Object o2);
+		public new static extern bool Equals(object o1, object o2);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
-		internal static extern T UnsafeCast<T>(Object o) where T : class;
+		internal static extern T UnsafeCast<T>(object o) where T : class;
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		internal static extern IEnumerable<Assembly> GetAssemblies();
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		internal static extern object CreateInstance(Type type, params object[] args);
+
+		[Intrinsic]
+		public static bool IsReferenceOrContainsReferences<T>()
+		{
+			throw new InvalidOperationException();
+		}
 	}
 }

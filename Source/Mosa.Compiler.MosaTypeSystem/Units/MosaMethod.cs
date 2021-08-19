@@ -7,7 +7,6 @@ using System.Text;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
-
 	public sealed class MosaMethod : MosaUnit, IEquatable<MosaMethod>
 	{
 		public MosaModule Module { get; private set; }
@@ -87,9 +86,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 			Overrides = (overrides = new List<MosaMethod>()).AsReadOnly();
 		}
 
-		internal MosaMethod Clone()
+		override internal MosaMethod Clone()
 		{
-			var result = (MosaMethod)base.MemberwiseClone();
+			var result = (MosaMethod)base.Clone();
 
 			result.GenericArguments = (result.genericArguments = new GenericArgumentsCollection(genericArguments));
 
