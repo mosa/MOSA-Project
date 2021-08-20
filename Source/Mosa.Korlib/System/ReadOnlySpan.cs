@@ -7,13 +7,13 @@ using System.Runtime.Versioning;
 namespace System
 {
 	[NonVersionable]
-	public readonly ref struct Span<T>
+	public readonly ref struct ReadOnlySpan<T>
 	{
 		internal readonly ByReference<T> _pointer;
 		private readonly int _length;
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public unsafe Span(void* pointer, int length)
+		public unsafe ReadOnlySpan(void* pointer, int length)
 		{
 			if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
 			{
@@ -29,7 +29,7 @@ namespace System
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		internal Span(ref T ptr, int length)
+		internal ReadOnlySpan(ref T ptr, int length)
 		{
 			Debug.Assert(length >= 0);
 
@@ -37,7 +37,7 @@ namespace System
 			_length = length;
 		}
 
-		public ref T this[int index]
+		public ref readonly T this[int index]
 		{
 			[Intrinsic]
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -65,9 +65,9 @@ namespace System
 			get => 0 >= (uint)_length;
 		}
 
-		public static bool operator !=(Span<T> left, Span<T> right) => !(left == right);
+		public static bool operator !=(ReadOnlySpan<T> left, ReadOnlySpan<T> right) => !(left == right);
 
-		public static bool operator ==(Span<T> left, Span<T> right) =>
+		public static bool operator ==(ReadOnlySpan<T> left, ReadOnlySpan<T> right) =>
 			left._length == right._length &&
 			Unsafe.AreSame<T>(ref left._pointer.Value, ref right._pointer.Value);
 
@@ -77,17 +77,17 @@ namespace System
 		public override int GetHashCode() =>
 			throw new NotSupportedException();
 
-		public static Span<T> Empty => default;
+		public static ReadOnlySpan<T> Empty => default;
 
 		public Enumerator GetEnumerator() => new Enumerator(this);
 
 		public ref struct Enumerator
 		{
-			private readonly Span<T> _span;
+			private readonly ReadOnlySpan<T> _span;
 			private int _index;
 
 			[MethodImpl(MethodImplOptions.AggressiveInlining)]
-			internal Enumerator(Span<T> span)
+			internal Enumerator(ReadOnlySpan<T> span)
 			{
 				_span = span;
 				_index = -1;
@@ -106,36 +106,33 @@ namespace System
 				return false;
 			}
 
-			public ref T Current
+			public ref readonly T Current
 			{
 				[MethodImpl(MethodImplOptions.AggressiveInlining)]
 				get => ref _span[_index];
 			}
 		}
 
-		public static implicit operator ReadOnlySpan<T>(Span<T> span) =>
-			new ReadOnlySpan<T>(ref span._pointer.Value, span._length);
-
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public Span<T> Slice(int start)
+		public ReadOnlySpan<T> Slice(int start)
 		{
 			if ((uint)start > (uint)_length)
 			{
 				throw new ArgumentOutOfRangeException();
 			}
 
-			return new Span<T>(ref Unsafe.Add(ref _pointer.Value, (nint)(uint)start), _length - start);
+			return new ReadOnlySpan<T>(ref Unsafe.Add(ref _pointer.Value, (nint)(uint)start), _length - start);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public Span<T> Slice(int start, int length)
+		public ReadOnlySpan<T> Slice(int start, int length)
 		{
 			if ((ulong)(uint)start + (ulong)(uint)length > (ulong)(uint)_length)
 			{
 				throw new ArgumentOutOfRangeException();
 			}
 
-			return new Span<T>(ref Unsafe.Add(ref _pointer.Value, (nint)(uint)start), length);
+			return new ReadOnlySpan<T>(ref Unsafe.Add(ref _pointer.Value, (nint)(uint)start), length);
 		}
 	}
 }

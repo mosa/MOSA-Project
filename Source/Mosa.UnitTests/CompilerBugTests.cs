@@ -23,16 +23,54 @@ namespace Mosa.UnitTests
 		}
 
 		[MosaUnitTest]
-		public unsafe static bool TestSpan()
+		public unsafe static bool TestSpan1()
 		{
 			var myArray = new int[3];
 			fixed (int* ptr = &myArray[0])
 			{
 				var span1 = new Span<int>(ptr, 3);
-				span1[2] = 42;
+				span1[1] = 42;
 
 				var span2 = new Span<int>(ptr, 3);
-				return span2[2] == 42;
+				return span2[1] == 42;
+			}
+		}
+
+		[MosaUnitTest]
+		public unsafe static bool TestSpan2()
+		{
+			var myArray = new int[3];
+			myArray[1] = 42;
+			fixed (int* ptr = &myArray[0])
+			{
+				var span = new Span<int>(ptr, 3);
+				return span[1] == 42;
+			}
+		}
+
+		[MosaUnitTest]
+		public unsafe static bool TestReadOnlySpan1()
+		{
+			var myArray = new int[3];
+			fixed (int* ptr = &myArray[0])
+			{
+				var span1 = new Span<int>(ptr, 3);
+				span1[1] = 42;
+
+				var span2 = new ReadOnlySpan<int>(ptr, 3);
+				return span2[1] == 42;
+			}
+		}
+
+		[MosaUnitTest]
+		public unsafe static bool TestReadOnlySpan2()
+		{
+			var myArray = new int[3];
+			myArray[1] = 19;
+			fixed (int* ptr = &myArray[0])
+			{
+				var span = new ReadOnlySpan<int>(ptr, 3);
+				return span[1] == 19;
 			}
 		}
 	}
