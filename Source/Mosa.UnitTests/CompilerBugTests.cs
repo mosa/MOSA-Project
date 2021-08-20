@@ -25,13 +25,15 @@ namespace Mosa.UnitTests
 		[MosaUnitTest]
 		public unsafe static bool TestSpan()
 		{
-			var alloc = stackalloc byte[12];
+			var myArray = new int[3];
+			fixed (int* ptr = &myArray[0])
+			{
+				var span1 = new Span<int>(ptr, 3);
+				span1[2] = 42;
 
-			var span1 = new Span<int>(alloc, 3);
-			span1[2] = 42;
-
-			var span2 = new Span<int>(alloc, 3);
-			return span2[2] == 42;
+				var span2 = new Span<int>(ptr, 3);
+				return span2[2] == 42;
+			}
 		}
 	}
 
