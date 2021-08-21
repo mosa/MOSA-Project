@@ -29,6 +29,8 @@ namespace Mosa.Tool.Debugger.Views
 
 			public string Type { get; set; }
 
+			public string Info { get; set; }
+
 			[Browsable(false)]
 			public string Address { get; set; }
 
@@ -48,6 +50,7 @@ namespace Mosa.Tool.Debugger.Views
 			dataGridView1.Columns[3].Width = 200;
 			dataGridView1.Columns[4].Width = 40;
 			dataGridView1.Columns[5].Width = 200;
+			dataGridView1.Columns[6].Width = 200;
 		}
 
 		public override void OnRunning()
@@ -132,10 +135,11 @@ namespace Mosa.Tool.Debugger.Views
 						? "+" + BasePlatform.ToHex(offset + parameter.Offset, 1)
 						: "-" + BasePlatform.ToHex(-offset + parameter.Offset, 1)),
 					Address = BasePlatform.ToHex(StackFrame + parameter.Offset, size),
-					HexValue = BasePlatform.ToHex(value, size),
 					Size = size,
 					Value = value,
-					Type = type.FullName
+					HexValue = BasePlatform.ToHex(value, size),
+					Type = type.FullName,
+					Info = MainForm.GetAddressInfo(value)
 				};
 
 				stackentries.Add(entry);

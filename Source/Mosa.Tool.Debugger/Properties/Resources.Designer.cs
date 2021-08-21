@@ -399,5 +399,18 @@ namespace Mosa.Tool.Debugger.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-    }
+
+		/// <summary>
+		///   Looks up a localized resource of type System.Drawing.Bitmap.
+		/// </summary>
+		internal static System.Drawing.Bitmap control_stop_blue
+		{
+			get
+			{
+				object obj = ResourceManager.GetObject("control_stop_blue", resourceCulture);
+				return ((System.Drawing.Bitmap)(obj));
+			}
+		}
+
+	}
 }

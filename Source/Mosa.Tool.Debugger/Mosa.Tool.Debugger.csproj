@@ -1,167 +1,180 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
-    <OutputType>WinExe</OutputType>
-    <UseWindowsForms>true</UseWindowsForms>
-    <Title>Mosa.Tool.Debugger</Title>
-    <Company>MOSA Project</Company>
-    <Copyright>Copyright © 2020</Copyright>
-    <LangVersion>8.0</LangVersion>
-    <DebugType>full</DebugType>
-    <OutputPath>..\..\bin\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <WarningLevel>2</WarningLevel>
-    <DebugSymbols>True</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>Mosa.Tool.Debugger.Program</StartupObject>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>bug.ico</ApplicationIcon>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Update="ConnectWindow.cs" />
-    <Compile Update="ConnectWindow.Designer.cs">
-      <DependentUpon>ConnectWindow.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Update="ConnectWindow.resx">
-      <DependentUpon>ConnectWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <Compile Update="DebugAppLocationsWindow.cs" />
-    <Compile Update="DebugAppLocationsWindow.Designer.cs">
-      <DependentUpon>DebugAppLocationsWindow.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Update="DebugAppLocationsWindow.resx">
-      <DependentUpon>DebugAppLocationsWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <Compile Update="DebugDockContent.cs" />
-    <Compile Update="DebugDockContent.designer.cs">
-      <DependentUpon>DebugDockContent.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Update="DebugDockContent.resx">
-      <DependentUpon>DebugDockContent.cs</DependentUpon>
-    </EmbeddedResource>
-    <Compile Update="MainForm.cs" />
-    <Compile Update="MainForm.designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Update="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <Compile Update="Views\BreakpointView.cs" />
-    <Compile Update="Views\BreakpointView.designer.cs">
-      <DependentUpon>BreakpointView.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Update="Views\BreakpointView.resx">
-      <DependentUpon>BreakpointView.cs</DependentUpon>
-    </EmbeddedResource>
-    <Compile Update="Views\CallStackView.cs" />
-    <Compile Update="Views\CallStackView.designer.cs">
-      <DependentUpon>CallStackView.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Views\DisplayView.cs" />
-    <Compile Update="Views\DisplayView.designer.cs">
-      <DependentUpon>DisplayView.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Views\LaunchView.cs" />
-    <Compile Update="Views\LaunchView.designer.cs">
-      <DependentUpon>LaunchView.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Views\SourceDataView.cs" />
-    <Compile Update="Views\SourceDataView.designer.cs">
-      <DependentUpon>SourceDataView.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Update="Views\SourceDataView.resx">
-      <DependentUpon>SourceDataView.cs</DependentUpon>
-    </EmbeddedResource>
-    <Compile Update="Views\SourceView.cs" />
-    <Compile Update="Views\SourceView.designer.cs">
-      <DependentUpon>SourceView.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Update="Views\SourceView.resx">
-      <DependentUpon>SourceView.cs</DependentUpon>
-    </EmbeddedResource>
-    <Compile Update="Views\MethodView.cs" />
-    <Compile Update="Views\MethodView.designer.cs">
-      <DependentUpon>MethodView.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Update="Views\MethodView.resx">
-      <DependentUpon>MethodView.cs</DependentUpon>
-    </EmbeddedResource>
-    <Compile Update="Views\InstructionView.cs" />
-    <Compile Update="Views\InstructionView.designer.cs">
-      <DependentUpon>InstructionView.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Views\StackFrameView.cs" />
-    <Compile Update="Views\StackFrameView.designer.cs">
-      <DependentUpon>StackFrameView.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Views\SymbolView.cs" />
-    <Compile Update="Views\SymbolView.designer.cs">
-      <DependentUpon>SymbolView.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Update="Views\SymbolView.resx">
-      <DependentUpon>SymbolView.cs</DependentUpon>
-    </EmbeddedResource>
-    <Compile Update="Views\WatchView.cs" />
-    <Compile Update="Views\WatchView.designer.cs">
-      <DependentUpon>WatchView.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Update="Views\WatchView.resx">
-      <DependentUpon>WatchView.cs</DependentUpon>
-    </EmbeddedResource>
-    <Compile Update="Views\ControlView.cs" />
-    <Compile Update="Views\ControlView.designer.cs">
-      <DependentUpon>ControlView.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Views\MemoryView.cs" />
-    <Compile Update="Views\MemoryView.designer.cs">
-      <DependentUpon>MemoryView.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Update="Views\MemoryView.resx">
-      <DependentUpon>MemoryView.cs</DependentUpon>
-    </EmbeddedResource>
-    <Compile Update="Views\OutputView.cs" />
-    <Compile Update="Views\OutputView.designer.cs">
-      <DependentUpon>OutputView.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Update="Views\OutputView.resx">
-      <DependentUpon>OutputView.cs</DependentUpon>
-    </EmbeddedResource>
-    <Compile Update="Views\RegisterView.cs" />
-    <Compile Update="Views\RegisterView.designer.cs">
-      <DependentUpon>RegisterView.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Views\StatusView.cs" />
-    <Compile Update="Views\StatusView.designer.cs">
-      <DependentUpon>StatusView.cs</DependentUpon>
-    </Compile>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
-    <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
-    <ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj" />
-    <ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
-    <ProjectReference Include="..\Mosa.Utility.DebugEngine\Mosa.Utility.DebugEngine.csproj" />
-    <ProjectReference Include="..\Mosa.Utility.Disassembler\Mosa.Utility.Disassembler.csproj" />
-    <ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
-    <ProjectReference Include="..\Mosa.Utility.RSP\Mosa.Utility.RSP.csproj" />
-    <Reference Include="DockPanelSuite">
-      <HintPath>..\External\WinFormsUI.dll</HintPath>
-    </Reference>
-    <Reference Include="DockPanelSuite.ThemeVS2015">
-      <HintPath>..\External\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll</HintPath>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="bug.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="dnlib" Version="3.3.2" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net5.0-windows</TargetFramework>
+		<OutputType>WinExe</OutputType>
+		<UseWindowsForms>true</UseWindowsForms>
+		<Title>Mosa.Tool.Debugger</Title>
+		<Company>MOSA Project</Company>
+		<Copyright>Copyright © 2021</Copyright>
+		<LangVersion>8.0</LangVersion>
+		<DebugType>full</DebugType>
+		<OutputPath>..\..\bin\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<WarningLevel>2</WarningLevel>
+		<DebugSymbols>True</DebugSymbols>
+	</PropertyGroup>
+	<PropertyGroup>
+		<StartupObject>Mosa.Tool.Debugger.Program</StartupObject>
+	</PropertyGroup>
+	<PropertyGroup>
+		<ApplicationIcon>bug.ico</ApplicationIcon>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Update="ConnectWindow.cs" />
+		<Compile Update="ConnectWindow.Designer.cs">
+			<DependentUpon>ConnectWindow.cs</DependentUpon>
+		</Compile>
+		<Compile Update="DebugAppLocationsWindow.cs" />
+		<Compile Update="DebugAppLocationsWindow.Designer.cs">
+			<DependentUpon>DebugAppLocationsWindow.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Views\BreakpointView.cs" />
+		<Compile Update="Views\BreakpointView.designer.cs">
+			<DependentUpon>BreakpointView.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Views\CallStackView.cs" />
+		<Compile Update="Views\CallStackView.designer.cs">
+			<DependentUpon>CallStackView.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Views\DisplayView.cs" />
+		<Compile Update="Views\DisplayView.designer.cs">
+			<DependentUpon>DisplayView.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Views\LaunchView.cs" />
+		<Compile Update="Views\LaunchView.designer.cs">
+			<DependentUpon>LaunchView.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Views\SourceDataView.cs" />
+		<Compile Update="Views\SourceDataView.designer.cs">
+			<DependentUpon>SourceDataView.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Views\SourceView.cs" />
+		<Compile Update="Views\SourceView.designer.cs">
+			<DependentUpon>SourceView.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Views\MethodView.cs" />
+		<Compile Update="Views\MethodView.designer.cs">
+			<DependentUpon>MethodView.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Views\InstructionView.cs" />
+		<Compile Update="Views\InstructionView.designer.cs">
+			<DependentUpon>InstructionView.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Views\StackFrameView.cs" />
+		<Compile Update="Views\StackFrameView.designer.cs">
+			<DependentUpon>StackFrameView.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Views\SymbolView.cs" />
+		<Compile Update="Views\SymbolView.designer.cs">
+			<DependentUpon>SymbolView.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Views\WatchView - Copy.cs">
+		  <SubType>Form</SubType>
+		</Compile>
+		<Compile Update="Views\WatchView - Copy.designer.cs">
+		  <DependentUpon>WatchView.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Views\WatchView.cs" />
+		<Compile Update="Views\WatchView.designer.cs">
+			<DependentUpon>WatchView.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Views\ControlView.cs" />
+		<Compile Update="Views\ControlView.designer.cs">
+			<DependentUpon>ControlView.cs</DependentUpon>
+		</Compile>
+		<Compile Update="MainForm.cs" />
+		<Compile Update="MainForm.designer.cs">
+			<DependentUpon>MainForm.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Views\MemoryView.cs" />
+		<Compile Update="Views\MemoryView.designer.cs">
+			<DependentUpon>MemoryView.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Views\OutputView.cs" />
+		<Compile Update="Views\OutputView.designer.cs">
+			<DependentUpon>OutputView.cs</DependentUpon>
+		</Compile>
+		<Compile Update="DebugDockContent.cs" />
+		<Compile Update="DebugDockContent.designer.cs">
+			<DependentUpon>DebugDockContent.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Views\RegisterView.cs" />
+		<Compile Update="Views\RegisterView.designer.cs">
+			<DependentUpon>RegisterView.cs</DependentUpon>
+		</Compile>
+		<Compile Update="Views\StatusView.cs" />
+		<Compile Update="Views\StatusView.designer.cs">
+			<DependentUpon>StatusView.cs</DependentUpon>
+		</Compile>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
+		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
+		<ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj" />
+		<ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
+		<ProjectReference Include="..\Mosa.Utility.DebugEngine\Mosa.Utility.DebugEngine.csproj" />
+		<ProjectReference Include="..\Mosa.Utility.Disassembler\Mosa.Utility.Disassembler.csproj" />
+		<ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
+		<ProjectReference Include="..\Mosa.Utility.RSP\Mosa.Utility.RSP.csproj" />
+		<Reference Include="DockPanelSuite">
+			<HintPath>..\External\WinFormsUI.dll</HintPath>
+			<Private>true</Private>
+		</Reference>
+		<Reference Include="DockPanelSuite.ThemeVS2015">
+			<HintPath>..\External\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll</HintPath>
+			<Private>true</Private>
+		</Reference>
+	</ItemGroup>
+	<ItemGroup>
+		<EmbeddedResource Update="ConnectWindow.resx">
+			<DependentUpon>ConnectWindow.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="DebugAppLocationsWindow.resx">
+			<DependentUpon>DebugAppLocationsWindow.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Views\BreakpointView.resx">
+			<DependentUpon>BreakpointView.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="MainForm.resx">
+			<DependentUpon>MainForm.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="DebugDockContent.resx">
+			<DependentUpon>DebugDockContent.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Views\SourceDataView.resx">
+			<DependentUpon>SourceDataView.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Views\SourceView.resx">
+			<DependentUpon>SourceView.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Views\MethodView.resx">
+			<DependentUpon>MethodView.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Views\MemoryView.resx">
+			<DependentUpon>MemoryView.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Views\OutputView.resx">
+			<DependentUpon>OutputView.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Views\SymbolView.resx">
+			<DependentUpon>SymbolView.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Views\WatchView - Copy.resx">
+		  <DependentUpon>WatchView.cs</DependentUpon>
+		</EmbeddedResource>
+		<EmbeddedResource Update="Views\WatchView.resx">
+			<DependentUpon>WatchView.cs</DependentUpon>
+		</EmbeddedResource>
+	</ItemGroup>
+	<ItemGroup>
+		<Content Include="bug.ico" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="dnlib" Version="3.3.2" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="DebugVMImageWindow.cs" />
+		<Compile Remove="DebugInfo\DebugSource.cs" />
+	</ItemGroup>
 </Project>
+

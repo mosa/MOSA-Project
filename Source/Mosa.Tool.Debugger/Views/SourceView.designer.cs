@@ -53,6 +53,7 @@ namespace Mosa.Tool.Debugger.Views
 			this.rtbSource.Size = new System.Drawing.Size(537, 237);
 			this.rtbSource.TabIndex = 0;
 			this.rtbSource.Text = "";
+			this.rtbSource.WordWrap = false;
 			// 
 			// statusStrip1
 			// 

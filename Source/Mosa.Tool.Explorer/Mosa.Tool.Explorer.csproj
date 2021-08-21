@@ -1,63 +1,50 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
-    <OutputType>WinExe</OutputType>
-    <UseWindowsForms>true</UseWindowsForms>
-    <Title>Mosa.Tool.Explorer</Title>
-    <Company>MOSA Project</Company>
-    <Copyright>Copyright © 2020</Copyright>
-    <LangVersion>8.0</LangVersion>
-    <DebugType>full</DebugType>
-    <OutputPath>..\..\bin\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <WarningLevel>2</WarningLevel>
-    <DebugSymbols>True</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>Mosa.Tool.Explorer.Program</StartupObject>
-  </PropertyGroup>
-  <PropertyGroup>
-    <ApplicationIcon>magnifier.ico</ApplicationIcon>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Update="MainForm.cs" />
-    <Compile Update="MainForm.Designer.cs">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </Compile>
-    <EmbeddedResource Update="MainForm.resx">
-      <DependentUpon>MainForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <None Update="Properties\Settings.settings">
-      <Generator>SettingsSingleFileGenerator</Generator>
-      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
-    </None>
-    <Compile Update="Properties\Settings.Designer.cs">
-      <DesignTimeSharedInput>True</DesignTimeSharedInput>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Settings.settings</DependentUpon>
-    </Compile>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
-    <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
-    <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
-    <ProjectReference Include="..\Mosa.Platform.ARMv8A32\Mosa.Platform.ARMv8A32.csproj" />
-    <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj" />
-    <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
-    <ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
-    <ProjectReference Include="..\Mosa.Utility.Disassembler\Mosa.Utility.Disassembler.csproj" />
-    <ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="magnifier.ico" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" />
-    <PackageReference Include="dnlib" Version="3.3.2" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net5.0-windows</TargetFramework>
+		<OutputType>WinExe</OutputType>
+		<UseWindowsForms>true</UseWindowsForms>
+		<Title>Mosa.Tool.Explorer</Title>
+		<Company>MOSA Project</Company>
+		<Copyright>Copyright © 2021</Copyright>
+		<LangVersion>8.0</LangVersion>
+		<DebugType>full</DebugType>
+		<OutputPath>..\..\bin\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<WarningLevel>2</WarningLevel>
+		<DebugSymbols>True</DebugSymbols>
+	</PropertyGroup>
+	<PropertyGroup>
+		<StartupObject>Mosa.Tool.Explorer.Program</StartupObject>
+	</PropertyGroup>
+	<PropertyGroup>
+		<ApplicationIcon>magnifier.ico</ApplicationIcon>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Update="MainForm.cs" />
+		<Compile Update="MainForm.Designer.cs">
+			<DependentUpon>MainForm.cs</DependentUpon>
+		</Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
+		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
+		<ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
+		<ProjectReference Include="..\Mosa.Platform.ARMv8A32\Mosa.Platform.ARMv8A32.csproj" />
+		<ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj" />
+		<ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
+		<ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
+		<ProjectReference Include="..\Mosa.Utility.Disassembler\Mosa.Utility.Disassembler.csproj" />
+		<ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Content Include="magnifier.ico" />
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" />
+		<PackageReference Include="dnlib" Version="3.3.2" />
+	</ItemGroup>
+	<ItemGroup>
+		<Compile Remove="Properties\Settings.Designer.cs" />
+	</ItemGroup>
 </Project>

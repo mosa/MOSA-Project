@@ -40,6 +40,8 @@ namespace Mosa.Tool.Debugger.DebugData
 		private int cachedParametersMethodID;
 		private List<ParameterInfo> cacheParameters;
 
+		private Dictionary<ulong, SymbolInfo> cachedSymbols2 = new Dictionary<ulong, SymbolInfo>();
+
 		public void Add(SymbolInfo symbol)
 		{
 			Symbols.Add(symbol);
@@ -152,10 +154,14 @@ namespace Mosa.Tool.Debugger.DebugData
 
 		public SymbolInfo GetFirstSymbol(ulong address)
 		{
+			if (cachedSymbols2.TryGetValue(address, out SymbolInfo value))
+				return value;
+
 			if (cachedSymbol != null)
 			{
 				if (address >= cachedSymbol.Address && address < (cachedSymbol.Address + cachedSymbol.Length))
 				{
+					cachedSymbols2.Add(address, cachedSymbol);
 					return cachedSymbol;
 				}
 			}
@@ -165,10 +171,12 @@ namespace Mosa.Tool.Debugger.DebugData
 				if (address >= symbol.Address && address < (symbol.Address + symbol.Length))
 				{
 					cachedSymbol = symbol;
+					cachedSymbols2.Add(address, symbol);
 					return symbol;
 				}
 			}
 
+			cachedSymbols2.Add(address, null);
 			return null;
 		}
 

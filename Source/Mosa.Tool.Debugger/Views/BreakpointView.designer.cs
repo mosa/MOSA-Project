@@ -36,10 +36,9 @@ namespace Mosa.Tool.Debugger.Views
 			this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
 			this.btnDeleteAll = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
+			this.btnLoad = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-			this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
-			this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+			this.btnSave = new System.Windows.Forms.ToolStripButton();
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
 			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
@@ -60,10 +59,9 @@ namespace Mosa.Tool.Debugger.Views
             this.toolStripSeparator4,
             this.btnDeleteAll,
             this.toolStripSeparator2,
-            this.toolStripButton2,
+            this.btnLoad,
             this.toolStripSeparator3,
-            this.toolStripButton1,
-            this.toolStripSeparator5});
+            this.btnSave});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 0);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 2, 2, 0);
@@ -84,7 +82,7 @@ namespace Mosa.Tool.Debugger.Views
 			// 
 			// tbAddress
 			// 
-			this.tbAddress.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold);
+			this.tbAddress.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
 			this.tbAddress.MaxLength = 20;
 			this.tbAddress.Name = "tbAddress";
 			this.tbAddress.Size = new System.Drawing.Size(100, 23);
@@ -126,36 +124,31 @@ namespace Mosa.Tool.Debugger.Views
 			this.toolStripSeparator2.Name = "toolStripSeparator2";
 			this.toolStripSeparator2.Size = new System.Drawing.Size(6, 23);
 			// 
-			// toolStripButton2
+			// btnLoad
 			// 
-			this.toolStripButton2.Image = global::Mosa.Tool.Debugger.Properties.Resources.layer_open;
-			this.toolStripButton2.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-			this.toolStripButton2.ImageTransparentColor = System.Drawing.Color.Black;
-			this.toolStripButton2.Name = "toolStripButton2";
-			this.toolStripButton2.Size = new System.Drawing.Size(53, 20);
-			this.toolStripButton2.Text = "Load";
-			this.toolStripButton2.TextAlign = System.Drawing.ContentAlignment.BottomRight;
-			this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
+			this.btnLoad.Image = global::Mosa.Tool.Debugger.Properties.Resources.layer_open;
+			this.btnLoad.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+			this.btnLoad.ImageTransparentColor = System.Drawing.Color.Black;
+			this.btnLoad.Name = "btnLoad";
+			this.btnLoad.Size = new System.Drawing.Size(53, 20);
+			this.btnLoad.Text = "Load";
+			this.btnLoad.TextAlign = System.Drawing.ContentAlignment.BottomRight;
+			this.btnLoad.Click += new System.EventHandler(this.toolStripButton2_Click);
 			// 
 			// toolStripSeparator3
 			// 
 			this.toolStripSeparator3.Name = "toolStripSeparator3";
 			this.toolStripSeparator3.Size = new System.Drawing.Size(6, 23);
 			// 
-			// toolStripButton1
+			// btnSave
 			// 
-			this.toolStripButton1.Image = global::Mosa.Tool.Debugger.Properties.Resources.layer_save;
-			this.toolStripButton1.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
-			this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Black;
-			this.toolStripButton1.Name = "toolStripButton1";
-			this.toolStripButton1.Size = new System.Drawing.Size(51, 20);
-			this.toolStripButton1.Text = "Save";
-			this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
-			// 
-			// toolStripSeparator5
-			// 
-			this.toolStripSeparator5.Name = "toolStripSeparator5";
-			this.toolStripSeparator5.Size = new System.Drawing.Size(6, 23);
+			this.btnSave.Image = global::Mosa.Tool.Debugger.Properties.Resources.layer_save;
+			this.btnSave.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
+			this.btnSave.ImageTransparentColor = System.Drawing.Color.Black;
+			this.btnSave.Name = "btnSave";
+			this.btnSave.Size = new System.Drawing.Size(51, 20);
+			this.btnSave.Text = "Save";
+			this.btnSave.Click += new System.EventHandler(this.toolStripButton1_Click);
 			// 
 			// dataGridView1
 			// 
@@ -174,7 +167,7 @@ namespace Mosa.Tool.Debugger.Views
 			this.dataGridView1.RowHeadersVisible = false;
 			this.dataGridView1.RowHeadersWidth = 92;
 			this.dataGridView1.RowHeadersWidthSizeMode = System.Windows.Forms.DataGridViewRowHeadersWidthSizeMode.DisableResizing;
-			this.dataGridView1.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 8F);
+			this.dataGridView1.RowTemplate.DefaultCellStyle.Font = new System.Drawing.Font("Consolas", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
 			this.dataGridView1.RowTemplate.Height = 18;
 			this.dataGridView1.Size = new System.Drawing.Size(570, 187);
 			this.dataGridView1.TabIndex = 6;
@@ -220,12 +213,11 @@ namespace Mosa.Tool.Debugger.Views
 		private System.Windows.Forms.ToolStripButton btnAdd;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
-		private System.Windows.Forms.ToolStripButton toolStripButton1;
+		private System.Windows.Forms.ToolStripButton btnSave;
 		private System.Windows.Forms.SaveFileDialog saveFileDialog1;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
-		private System.Windows.Forms.ToolStripButton toolStripButton2;
+		private System.Windows.Forms.ToolStripButton btnLoad;
 		private System.Windows.Forms.OpenFileDialog openFileDialog1;
-		private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
 	}
 }

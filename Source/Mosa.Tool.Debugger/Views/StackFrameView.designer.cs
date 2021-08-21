@@ -45,6 +45,9 @@ namespace Mosa.Tool.Debugger.Views
 			this.dataGridView1.AllowUserToDeleteRows = false;
 			this.dataGridView1.AllowUserToOrderColumns = true;
 			this.dataGridView1.AllowUserToResizeRows = false;
+			this.dataGridView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
 			this.dataGridView1.BackgroundColor = System.Drawing.SystemColors.Control;
 			this.dataGridView1.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
 			dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
@@ -95,7 +98,7 @@ namespace Mosa.Tool.Debugger.Views
             this.lbAddress});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 2);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Padding = new System.Windows.Forms.Padding(0, 2, 2, 0);
+			this.toolStrip1.Padding = new System.Windows.Forms.Padding(0);
 			this.toolStrip1.Size = new System.Drawing.Size(258, 25);
 			this.toolStrip1.TabIndex = 5;
 			this.toolStrip1.Text = "toolStrip1";
@@ -134,7 +137,6 @@ namespace Mosa.Tool.Debugger.Views
 			this.MinimizeBox = false;
 			this.MinimumSize = new System.Drawing.Size(235, 200);
 			this.Name = "StackFrameView";
-			this.Padding = new System.Windows.Forms.Padding(0, 2, 0, 2);
 			this.ShowHint = WeifenLuo.WinFormsUI.Docking.DockState.DockLeft;
 			this.TabText = "Stack Frame";
 			this.Text = "Stack Frame";

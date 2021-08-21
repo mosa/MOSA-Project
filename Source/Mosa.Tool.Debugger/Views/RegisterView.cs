@@ -21,19 +21,15 @@ namespace Mosa.Tool.Debugger.Views
 			[Browsable(false)]
 			public uint Size { get; set; }
 
-			//private Register Register { get; set; }
+			public string Info { get; set; }
 
-			//public RegisterEntry(Register register)
-			//{
-			//	Register = register;
-			//}
-
-			public RegisterEntry(string register, ulong value, string hexValue, uint size)
+			public RegisterEntry(string register, ulong value, string hexValue, uint size, string info = null)
 			{
 				Register = register;
 				Value = value;
 				HexValue = hexValue;
 				Size = size;
+				Info = info;
 			}
 		}
 
@@ -46,6 +42,7 @@ namespace Mosa.Tool.Debugger.Views
 			dataGridView1.Columns[0].Width = 75;
 			dataGridView1.Columns[1].Width = 75;
 			dataGridView1.Columns[2].Width = 75;
+			dataGridView1.Columns[3].Width = 200;
 		}
 
 		public override void OnRunning()
@@ -65,7 +62,9 @@ namespace Mosa.Tool.Debugger.Views
 
 			foreach (var register in Platform.Registers)
 			{
-				registers.Add(new RegisterEntry(register.Name, register.Value, register.ToHex(), register.Size));
+				var info = MainForm.GetAddressInfo(register.Value);
+
+				registers.Add(new RegisterEntry(register.Name, register.Value, register.ToHex(), register.Size, info));
 			}
 		}
 

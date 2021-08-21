@@ -35,12 +35,6 @@ namespace Mosa.Tool.Debugger.Views
 			var address = MainForm.ParseHexAddress(tbAddress.Text);
 			uint bytes = (uint)(Rows * Columns);
 
-			//if (bytes > 0x800)
-			//{
-			//	Rows = 0x800 / Columns;
-			//	bytes = (uint)(Rows * Columns);
-			//}
-
 			MemoryCache.ReadMemory(address, bytes, OnMemoryRead);
 		}
 

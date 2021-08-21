@@ -155,7 +155,7 @@ namespace Mosa.Tool.Debugger.Views
 
 				var m = new ContextMenuStrip();
 				m.Items.Add(menu);
-				m.Items.Add(new ToolStripMenuItem("Copy to &Clipboard", null, new EventHandler(MainForm.OnCopyToClipboard)) { Tag = clickedEntry.InstructionPointer });
+				m.Items.Add(new ToolStripMenuItem("Copy to &Clipboard", null, new EventHandler(MainForm.OnCopyToClipboard)) { Tag = ToHex(clickedEntry.InstructionPointer) });
 				m.Items.Add(new ToolStripMenuItem("Set &Breakpoint", null, new EventHandler(MainForm.OnAddBreakPoint)) { Tag = new AddBreakPointArgs(null, clickedEntry.InstructionPointer) });
 				m.Show(treeView1, relativeMousePosition);
 			}

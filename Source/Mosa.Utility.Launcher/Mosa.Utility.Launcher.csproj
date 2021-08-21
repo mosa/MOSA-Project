@@ -4,7 +4,7 @@
     <AssemblyTitle>Mosa.Utility.Launcher</AssemblyTitle>
     <Company>MOSA Project</Company>
     <Product>Mosa.Utility.Launcher</Product>
-    <Copyright>Copyright © 2020</Copyright>
+    <Copyright>Copyright © 2021</Copyright>
     <DebugType>full</DebugType>
     <LangVersion>8.0</LangVersion>
     <OutputPath>..\..\bin\</OutputPath>
@@ -19,6 +19,7 @@
     <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj" />
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
     <ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj" />
+    <ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
     <ProjectReference Include="..\Mosa.Utility.Disassembler\Mosa.Utility.Disassembler.csproj" />
   </ItemGroup>
   <ItemGroup>
