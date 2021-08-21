@@ -177,9 +177,9 @@ namespace Mosa.Utility.UnitTests
 					0
 				};
 
-			foreach (var parm in unitTest.Values)
+			foreach (var param in unitTest.Values)
 			{
-				AddParameters(cmd, parm);
+				AddParameters(cmd, param);
 			}
 
 			cmd[2] = cmd.Count - 3;
@@ -410,6 +410,113 @@ namespace Mosa.Utility.UnitTests
 				return "NULL";
 			else
 				return o.ToString();
+		}
+
+		private static void Dump(List<UnitTest> unitTests)
+		{
+			var sb = new StringBuilder();
+
+			foreach (var unitTest in unitTests)
+			{
+				sb.Append($"{unitTest.MethodTypeName}.{unitTest.MethodName}");
+
+				sb.Append("(");
+
+				foreach (var param in unitTest.Values)
+				{
+					sb.Append(ParamToString(param));
+					sb.Append(",");
+				}
+
+				if (unitTest.Values.Length > 0)
+				{
+					sb.Length--;
+				}
+
+				sb.Append(");");
+				sb.AppendLine();
+			}
+
+			Debug.WriteLine(sb.ToString());
+		}
+
+		private static string ParamToString(object parameter)
+		{
+			if (parameter is Boolean)
+			{
+				return (bool)parameter ? "false" : "true";
+			}
+			else if (parameter is Char)
+			{
+				char c = (char)parameter;
+
+				if (Char.IsLetterOrDigit(c) || char.IsSymbol(c))
+					return $"'{c}'";
+				else
+					return $"(char){(int)c}";
+			}
+			else if (parameter is SByte)
+			{
+				return $"{(sbyte)parameter}";
+			}
+			else if (parameter is Int16)
+			{
+				return $"{(short)parameter}";
+			}
+			else if (parameter is Int32)
+			{
+				return $"{(int)parameter}";
+			}
+			else if (parameter is Byte)
+			{
+				return $"{(byte)parameter}";
+			}
+			else if (parameter is UInt16)
+			{
+				return $"{(ushort)parameter}";
+			}
+			else if (parameter is UInt32)
+			{
+				return $"{(uint)parameter}U";
+			}
+			else if (parameter is UInt64)
+			{
+				return $"{(ulong)parameter}UL";
+			}
+			else if (parameter is Int64)
+			{
+				return $"{(long)parameter}L";
+			}
+			else if (parameter is Single)
+			{
+				float f = (float)parameter;
+
+				if (Single.IsNaN(f))
+					return "Single.NaN";
+				else if (Single.IsNegativeInfinity(f))
+					return "Single.NegativeInfinity";
+				else if (Single.IsPositiveInfinity(f))
+					return "Single.PositiveInfinity";
+				else
+					return $"{f}f";
+			}
+			else if (parameter is Double)
+			{
+				double d = (double)parameter;
+
+				if (Double.IsNaN(d))
+					return "Double.NaN";
+				else if (Double.IsNegativeInfinity(d))
+					return "Double.NegativeInfinity";
+				else if (Double.IsPositiveInfinity(d))
+					return "Double.PositiveInfinity";
+				else
+					return $"{d}d";
+			}
+			else
+			{
+				throw new InvalidProgramException();
+			}
 		}
 	}
 }

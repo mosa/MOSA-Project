@@ -28,8 +28,6 @@ namespace Mosa.Tool.Compiler
 
 		private DateTime CompileStartTime;
 
-		private readonly string codeName = "Neptune";
-
 		/// <summary>
 		/// A string holding a simple usage description.
 		/// </summary>

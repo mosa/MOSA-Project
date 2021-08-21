@@ -20,6 +20,8 @@ namespace Mosa.Tool.Debugger.Views
 
 			public ulong Value { get; set; }
 
+			public string Info { get; set; }
+
 			[Browsable(false)]
 			public string Address { get; set; }
 
@@ -36,6 +38,7 @@ namespace Mosa.Tool.Debugger.Views
 			dataGridView1.Columns[0].Width = 75;
 			dataGridView1.Columns[1].Width = 75;
 			dataGridView1.Columns[2].Width = 75;
+			dataGridView1.Columns[3].Width = 200;
 		}
 
 		public override void OnRunning()
@@ -92,6 +95,7 @@ namespace Mosa.Tool.Debugger.Views
 						? "-" + BasePlatform.ToHex(offset, 1)
 						: "+" + BasePlatform.ToHex(-(long)offset, 1)),
 					Index = stackentries.Count,
+					Info = MainForm.GetAddressInfo(value)
 				};
 
 				stackentries.Add(entry);

@@ -3,6 +3,7 @@
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Linker;
+using Mosa.Utility.Configuration;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -306,10 +307,12 @@ namespace Mosa.Utility.Launcher
 		private void LaunchDebugger()
 		{
 			// FIXME!!!
-			var arg = $" -debugfile {Path.Combine(LauncherSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile) + ".debug")}";
-			arg += $" -port {LauncherSettings.GDBPort}";
-			arg += $" -connect";
-			arg += $" -image {Quote(LauncherSettings.ImageFile)}";
+			var argMap = CommandLineArguments.Map;
+
+			var arg = $" {argMap.Find((x) => x.Setting == "CompilerDebug.DebugFile").Name} {Path.Combine(LauncherSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile) + ".debug")}";
+			arg += $" {argMap.Find((x) => x.Setting == "GDB.Host").Name} {LauncherSettings.GDBHost}";
+			arg += $" {argMap.Find((x) => x.Setting == "GDB.Port").Name} {LauncherSettings.GDBPort}";
+			arg += $" {argMap.Find((x) => x.Setting == "Image.ImageFile").Name} {Quote(LauncherSettings.ImageFile)}";
 
 			LaunchApplication("Mosa.Tool.Debugger.exe", arg);
 		}

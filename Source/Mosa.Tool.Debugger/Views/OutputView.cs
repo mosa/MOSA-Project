@@ -13,7 +13,7 @@ namespace Mosa.Tool.Debugger.Views
 			InitializeComponent();
 		}
 
-		public void AddOutput(string data)
+		public void LogEvent(string data)
 		{
 			richTextBox1.AppendText(data);
 			richTextBox1.AppendText("\n");

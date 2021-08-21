@@ -14,19 +14,17 @@ namespace Mosa.Utility.Disassembler
 	public partial class Disassembler
 	{
 		private byte[] memory;
-		private ulong address;
 
 		public ulong Offset { get; set; } = 0;
 
 		private readonly ProcessorArchitecture arch;
 		private MemoryArea memoryArea;
 
-		//private static MachineInstructionWriterOptions options = new MachineInstructionWriterOptions(syntax: "Nasm", operandSeparator: ", ");
-
 		public Disassembler(string platform)
 		{
 			var services = new ServiceContainer();
 			var options = new Dictionary<string, object>();
+
 			switch (platform.ToLower())
 			{
 				case "armv8a32": arch = new Arm32Architecture(services, "arm32", options); break;
@@ -38,7 +36,6 @@ namespace Mosa.Utility.Disassembler
 		public void SetMemory(byte[] memory, ulong address)
 		{
 			this.memory = memory;
-			this.address = address;
 			memoryArea = new ByteMemoryArea(Address.Ptr32((uint)address), memory);
 		}
 

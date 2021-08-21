@@ -37,7 +37,7 @@ namespace Mosa.Tool.Debugger.Views
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.treeView1.Location = new System.Drawing.Point(0, -2);
 			this.treeView1.Name = "treeView1";
-			this.treeView1.Size = new System.Drawing.Size(221, 164);
+			this.treeView1.Size = new System.Drawing.Size(264, 163);
 			this.treeView1.TabIndex = 1;
 			this.treeView1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.treeView1_MouseClick);
 			// 

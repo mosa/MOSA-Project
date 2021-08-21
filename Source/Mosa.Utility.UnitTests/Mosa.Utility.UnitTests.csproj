@@ -1,96 +1,95 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <OutputType>Exe</OutputType>
-    <AssemblyTitle>Mosa.Utility.UnitTests</AssemblyTitle>
-    <Company>MOSA Project</Company>
-    <Product>Mosa.Utility.UnitTests</Product>
-    <Copyright>Copyright © 2020</Copyright>
-    <DebugType>full</DebugType>
-    <LangVersion>8.0</LangVersion>
-    <OutputPath>..\..\bin\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <NoWarn>NU1702</NoWarn>
-    <DebugSymbols>True</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>Mosa.Utility.UnitTests.Program</StartupObject>
-  </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="..\Mosa.UnitTests\Algebraic.cs" Link="Tests\Algebraic.cs" />
-    <Compile Include="..\Mosa.UnitTests\ArrayLayoutTests.cs" Link="Tests\ArrayLayoutTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\ArrayTest.cs" Link="Tests\ArrayTest.cs" />
-    <Compile Include="..\Mosa.UnitTests\BooleanTests.cs" Link="Tests\BooleanTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\BoxingTests.cs" Link="Tests\BoxingTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\CallOrderTests.cs" Link="Tests\CallOrderTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\CallTests.cs" Link="Tests\CallTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\CallVirtualTests.cs" Link="Tests\CallVirtualTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\CharTests.cs" Link="Tests\CharTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\ComparisonTests.cs" Link="Tests\ComparisonTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\CompilerBugTests.cs" Link="Tests\CompilerBugTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\CompilerTests.cs" Link="Tests\CompilerTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\ComplexOptimizationTests.cs" Link="Tests\ComplexOptimizationTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\ConvTests.cs" Link="Tests\ConvTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\DelegateTests.cs" Link="Tests\DelegateTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\DerivedNewObjectTests.cs" Link="Tests\DerivedNewObjectTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\DevirtualizationTests.cs" Link="Tests\DevirtualizationTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\DoubleTests.cs" Link="Tests\DoubleTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\EnumTests.cs" Link="Tests\EnumTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\ExceptionHandlingTests.cs" Link="Tests\ExceptionHandlingTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\FibonacciTests.cs" Link="Tests\FibonacciTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\FinallyTests.cs" Link="Tests\FinallyTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\ForeachTests.cs" Link="Tests\ForeachTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\GenericCallTests.cs" Link="Tests\GenericCallTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\GenericInterfaceTests.cs" Link="Tests\GenericInterfaceTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\GenericMethodTests.cs" Link="Tests\GenericMethodTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\InitStructTests.cs" Link="Tests\InitStructTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\Int16Tests.cs" Link="Tests\Int16Tests.cs" />
-    <Compile Include="..\Mosa.UnitTests\Int32Tests.cs" Link="Tests\Int32Tests.cs" />
-    <Compile Include="..\Mosa.UnitTests\Int64Tests.cs" Link="Tests\Int64Tests.cs" />
-    <Compile Include="..\Mosa.UnitTests\Int8Tests.cs" Link="Tests\Int8Tests.cs" />
-    <Compile Include="..\Mosa.UnitTests\InterfaceTests.cs" Link="Tests\InterfaceTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\IsInstTests.cs" Link="Tests\IsInstTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\LargeSwitchTest.cs" Link="Tests\LargeSwitchTest.cs" />
-    <Compile Include="..\Mosa.UnitTests\LdargaTests.cs" Link="Tests\LdargaTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\LdlocaTests.cs" Link="Tests\LdlocaTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\LinkedList.cs" Link="Tests\LinkedList.cs" />
-    <Compile Include="..\Mosa.UnitTests\LinkedListNode.cs" Link="Tests\LinkedListNode.cs" />
-    <Compile Include="..\Mosa.UnitTests\LinkedListTests.cs" Link="Tests\LinkedListTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\ListTests.cs" Link="Tests\ListTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\MosaUnitTestAttribute.cs" Link="Tests\MosaUnitTestAttribute.cs" />
-    <Compile Include="..\Mosa.UnitTests\NewObjectTests.cs" Link="Tests\NewObjectTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\NullCheckOptimizationTests.cs" Link="Tests\NullCheckOptimizationTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\OptimizationTests.cs" Link="Tests\OptimizationTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\QuickSort.cs" Link="Tests\QuickSort.cs" />
-    <Compile Include="..\Mosa.UnitTests\ReflectionTests.cs" Link="Tests\ReflectionTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\RegisterAllocatorTests.cs" Link="Tests\RegisterAllocatorTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\RemTests.cs" Link="Tests\RemTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\SingleTests.cs" Link="Tests\SingleTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\SpecificTests.cs" Link="Tests\SpecificTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\StaticFieldTests.cs" Link="Tests\StaticFieldTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\StringTests.cs" Link="Tests\StringTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\StructTests.cs" Link="Tests\StructTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\SwitchTests.cs" Link="Tests\SwitchTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\UInt16Tests.cs" Link="Tests\UInt16Tests.cs" />
-    <Compile Include="..\Mosa.UnitTests\UInt32Tests.cs" Link="Tests\UInt32Tests.cs" />
-    <Compile Include="..\Mosa.UnitTests\UInt64Tests.cs" Link="Tests\UInt64Tests.cs" />
-    <Compile Include="..\Mosa.UnitTests\UInt8Tests.cs" Link="Tests\UInt8Tests.cs" />
-    <Compile Include="..\Mosa.UnitTests\ValueTypeTests.cs" Link="Tests\ValueTypeTests.cs" />
-    <Compile Include="..\Mosa.UnitTests\WhileTests.cs" Link="Tests\WhileTests.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
-    <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
-    <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
-    <ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj" />
-    <ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
-    <ProjectReference Include="..\Mosa.Utility.DebugEngine\Mosa.Utility.DebugEngine.csproj" />
-    <ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Tests\" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<OutputType>Exe</OutputType>
+		<AssemblyTitle>Mosa.Utility.UnitTests</AssemblyTitle>
+		<Company>MOSA Project</Company>
+		<Product>Mosa.Utility.UnitTests</Product>
+		<Copyright>Copyright © 2020</Copyright>
+		<DebugType>full</DebugType>
+		<LangVersion>8.0</LangVersion>
+		<OutputPath>..\..\bin\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<NoWarn>NU1702</NoWarn>
+		<DebugSymbols>True</DebugSymbols>
+	</PropertyGroup>
+	<PropertyGroup>
+		<StartupObject>Mosa.Utility.UnitTests.Program</StartupObject>
+	</PropertyGroup>
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+	<ItemGroup>
+		<Compile Include="..\Mosa.UnitTests\Algebraic.cs" Link="Tests\Algebraic.cs" />
+		<Compile Include="..\Mosa.UnitTests\ArrayLayoutTests.cs" Link="Tests\ArrayLayoutTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\ArrayTest.cs" Link="Tests\ArrayTest.cs" />
+		<Compile Include="..\Mosa.UnitTests\BooleanTests.cs" Link="Tests\BooleanTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\BoxingTests.cs" Link="Tests\BoxingTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\CallOrderTests.cs" Link="Tests\CallOrderTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\CallTests.cs" Link="Tests\CallTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\CallVirtualTests.cs" Link="Tests\CallVirtualTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\CharTests.cs" Link="Tests\CharTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\ComparisonTests.cs" Link="Tests\ComparisonTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\CompilerBugTests.cs" Link="Tests\CompilerBugTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\ComplexOptimizationTests.cs" Link="Tests\ComplexOptimizationTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\ConvTests.cs" Link="Tests\ConvTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\DelegateTests.cs" Link="Tests\DelegateTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\DerivedNewObjectTests.cs" Link="Tests\DerivedNewObjectTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\DevirtualizationTests.cs" Link="Tests\DevirtualizationTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\DoubleTests.cs" Link="Tests\DoubleTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\EnumTests.cs" Link="Tests\EnumTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\ExceptionHandlingTests.cs" Link="Tests\ExceptionHandlingTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\FibonacciTests.cs" Link="Tests\FibonacciTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\FinallyTests.cs" Link="Tests\FinallyTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\ForeachTests.cs" Link="Tests\ForeachTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\GenericCallTests.cs" Link="Tests\GenericCallTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\GenericInterfaceTests.cs" Link="Tests\GenericInterfaceTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\GenericMethodTests.cs" Link="Tests\GenericMethodTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\InitStructTests.cs" Link="Tests\InitStructTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\Int16Tests.cs" Link="Tests\Int16Tests.cs" />
+		<Compile Include="..\Mosa.UnitTests\Int32Tests.cs" Link="Tests\Int32Tests.cs" />
+		<Compile Include="..\Mosa.UnitTests\Int64Tests.cs" Link="Tests\Int64Tests.cs" />
+		<Compile Include="..\Mosa.UnitTests\Int8Tests.cs" Link="Tests\Int8Tests.cs" />
+		<Compile Include="..\Mosa.UnitTests\InterfaceTests.cs" Link="Tests\InterfaceTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\IsInstTests.cs" Link="Tests\IsInstTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\LargeSwitchTest.cs" Link="Tests\LargeSwitchTest.cs" />
+		<Compile Include="..\Mosa.UnitTests\LdargaTests.cs" Link="Tests\LdargaTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\LdlocaTests.cs" Link="Tests\LdlocaTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\LinkedList.cs" Link="Tests\LinkedList.cs" />
+		<Compile Include="..\Mosa.UnitTests\LinkedListNode.cs" Link="Tests\LinkedListNode.cs" />
+		<Compile Include="..\Mosa.UnitTests\LinkedListTests.cs" Link="Tests\LinkedListTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\ListTests.cs" Link="Tests\ListTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\MosaUnitTestAttribute.cs" Link="Tests\MosaUnitTestAttribute.cs" />
+		<Compile Include="..\Mosa.UnitTests\NewObjectTests.cs" Link="Tests\NewObjectTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\NullCheckOptimizationTests.cs" Link="Tests\NullCheckOptimizationTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\OptimizationTests.cs" Link="Tests\OptimizationTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\QuickSort.cs" Link="Tests\QuickSort.cs" />
+		<Compile Include="..\Mosa.UnitTests\ReflectionTests.cs" Link="Tests\ReflectionTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\RegisterAllocatorTests.cs" Link="Tests\RegisterAllocatorTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\RemTests.cs" Link="Tests\RemTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\SingleTests.cs" Link="Tests\SingleTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\SpecificTests.cs" Link="Tests\SpecificTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\StaticFieldTests.cs" Link="Tests\StaticFieldTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\StringTests.cs" Link="Tests\StringTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\StructTests.cs" Link="Tests\StructTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\SwitchTests.cs" Link="Tests\SwitchTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\UInt16Tests.cs" Link="Tests\UInt16Tests.cs" />
+		<Compile Include="..\Mosa.UnitTests\UInt32Tests.cs" Link="Tests\UInt32Tests.cs" />
+		<Compile Include="..\Mosa.UnitTests\UInt64Tests.cs" Link="Tests\UInt64Tests.cs" />
+		<Compile Include="..\Mosa.UnitTests\UInt8Tests.cs" Link="Tests\UInt8Tests.cs" />
+		<Compile Include="..\Mosa.UnitTests\ValueTypeTests.cs" Link="Tests\ValueTypeTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\WhileTests.cs" Link="Tests\WhileTests.cs" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
+		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
+		<ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
+		<ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj" />
+		<ProjectReference Include="..\Mosa.Utility.Configuration\Mosa.Utility.Configuration.csproj" />
+		<ProjectReference Include="..\Mosa.Utility.DebugEngine\Mosa.Utility.DebugEngine.csproj" />
+		<ProjectReference Include="..\Mosa.Utility.Launcher\Mosa.Utility.Launcher.csproj" />
+	</ItemGroup>
+	<ItemGroup>
+		<Folder Include="Tests\" />
+	</ItemGroup>
 </Project>

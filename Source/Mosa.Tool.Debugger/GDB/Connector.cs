@@ -3,6 +3,7 @@
 using Mosa.Utility.RSP;
 using Mosa.Utility.RSP.Command;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Sockets;
 using System.Threading;
 
@@ -233,6 +234,8 @@ namespace Mosa.Tool.Debugger.GDB
 
 		private void OnMemoryRead(GDBCommand command)
 		{
+			//Debug.WriteLine($"Processing: {command}");
+
 			var bytes = command.GetAllBytes();
 
 			var invoke = OnMemoryReadMap[command];
