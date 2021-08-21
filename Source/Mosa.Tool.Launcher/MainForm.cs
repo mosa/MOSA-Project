@@ -425,6 +425,7 @@ namespace Mosa.Tool.Launcher
 			{
 				case 0: Settings.SetValue("Compiler.Platform", "x86"); break;
 				case 1: Settings.SetValue("Compiler.Platform", "x64"); break;
+				case 2: Settings.SetValue("Compiler.Platform", "ARMv8A32"); break;
 				default: Settings.SetValue("Compiler.Platform", "x86"); break;
 			}
 
@@ -515,6 +516,7 @@ namespace Mosa.Tool.Launcher
 			{
 				case "x86": cbPlatform.SelectedIndex = 0; break;
 				case "x64": cbPlatform.SelectedIndex = 1; break;
+				case "armv8a32": cbPlatform.SelectedIndex = 2; break;
 				default: cbPlatform.SelectedIndex = 0; break;
 			}
 
