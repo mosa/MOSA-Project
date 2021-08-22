@@ -30,7 +30,7 @@ namespace Mosa.Tool.Debugger.Views
 			this.tbSteps = new System.Windows.Forms.TextBox();
 			this.btnStepOut = new System.Windows.Forms.Button();
 			this.btnPause = new System.Windows.Forms.Button();
-			this.btnStart = new System.Windows.Forms.Button();
+			this.btnContinue = new System.Windows.Forms.Button();
 			this.btnRestart = new System.Windows.Forms.Button();
 			this.btnStepN = new System.Windows.Forms.Button();
 			this.btnStep = new System.Windows.Forms.Button();
@@ -70,18 +70,18 @@ namespace Mosa.Tool.Debugger.Views
 			this.btnPause.UseVisualStyleBackColor = true;
 			this.btnPause.Click += new System.EventHandler(this.btnStop_Click);
 			// 
-			// btnStart
+			// btnContinue
 			// 
-			this.btnStart.Image = global::Mosa.Tool.Debugger.Properties.Resources.control_play;
-			this.btnStart.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
-			this.btnStart.Location = new System.Drawing.Point(86, 5);
-			this.btnStart.Name = "btnStart";
-			this.btnStart.Size = new System.Drawing.Size(80, 23);
-			this.btnStart.TabIndex = 24;
-			this.btnStart.Text = "Continue";
-			this.btnStart.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
-			this.btnStart.UseVisualStyleBackColor = true;
-			this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
+			this.btnContinue.Image = global::Mosa.Tool.Debugger.Properties.Resources.control_play;
+			this.btnContinue.ImageAlign = System.Drawing.ContentAlignment.MiddleRight;
+			this.btnContinue.Location = new System.Drawing.Point(86, 5);
+			this.btnContinue.Name = "btnContinue";
+			this.btnContinue.Size = new System.Drawing.Size(80, 23);
+			this.btnContinue.TabIndex = 24;
+			this.btnContinue.Text = "Continue";
+			this.btnContinue.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageBeforeText;
+			this.btnContinue.UseVisualStyleBackColor = true;
+			this.btnContinue.Click += new System.EventHandler(this.btnStart_Click);
 			// 
 			// btnRestart
 			// 
@@ -129,7 +129,7 @@ namespace Mosa.Tool.Debugger.Views
 			this.CloseButtonVisible = false;
 			this.Controls.Add(this.btnStepOut);
 			this.Controls.Add(this.btnPause);
-			this.Controls.Add(this.btnStart);
+			this.Controls.Add(this.btnContinue);
 			this.Controls.Add(this.btnRestart);
 			this.Controls.Add(this.btnStepN);
 			this.Controls.Add(this.tbSteps);
@@ -156,7 +156,7 @@ namespace Mosa.Tool.Debugger.Views
 		private System.Windows.Forms.TextBox tbSteps;
 		private System.Windows.Forms.Button btnStepN;
 		private System.Windows.Forms.Button btnRestart;
-		private System.Windows.Forms.Button btnStart;
+		private System.Windows.Forms.Button btnContinue;
 		private System.Windows.Forms.Button btnPause;
 		private System.Windows.Forms.Button btnStepOut;
 	}

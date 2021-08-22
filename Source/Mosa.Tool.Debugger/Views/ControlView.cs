@@ -16,8 +16,15 @@ namespace Mosa.Tool.Debugger.Views
 			InitializeComponent();
 		}
 
+		public override void OnRunning()
+		{
+			btnPause.Enabled = true;
+			btnContinue.Enabled = false;
+		}
+
 		public override void OnPause()
 		{
+			btnContinue.Enabled = true;
 			btnPause.Enabled = false;
 
 			ReturnAddress = 0;
@@ -63,7 +70,8 @@ namespace Mosa.Tool.Debugger.Views
 				return;
 
 			ReturnAddress = ip;
-			btnPause.Enabled = true;
+
+			//btnPause.Enabled = true;
 		}
 
 		private void UpdateDisplayPrologue(ulong address, byte[] memory)
@@ -78,7 +86,8 @@ namespace Mosa.Tool.Debugger.Views
 				return;
 
 			ReturnAddress = ip;
-			btnPause.Enabled = true;
+
+			//btnPause.Enabled = true;
 		}
 
 		private void btnStep_Click(object sender, EventArgs e)

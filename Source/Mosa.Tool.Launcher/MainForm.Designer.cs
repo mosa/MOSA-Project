@@ -405,7 +405,8 @@
             this.cbPlatform.ItemHeight = 19;
             this.cbPlatform.Items.AddRange(new object[] {
             "x86",
-            "ARMv6"});
+			"x64",
+			"ARMv8A32"});
             this.cbPlatform.Location = new System.Drawing.Point(162, 35);
             this.cbPlatform.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
             this.cbPlatform.Name = "cbPlatform";

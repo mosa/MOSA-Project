@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Tool.Debugger.DebugData;
-using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 
@@ -9,9 +8,15 @@ namespace Mosa.Tool.Debugger.Views
 {
 	public partial class SourceView : DebugDockContent
 	{
-		private readonly SourceLocation lastSourceLocation;
+		private SourceLocation lastSourceLocation;
 		private string lastFileContent;
-		private readonly List<int> lines = new List<int>();
+
+		private struct LineInfo
+		{
+			public string Line { get; set; }
+			public int LineNbr { get; set; }
+			public int Index { get; set; }
+		}
 
 		public SourceView(MainForm mainForm)
 			: base(mainForm)
@@ -34,6 +39,9 @@ namespace Mosa.Tool.Debugger.Views
 
 		protected override void UpdateDisplay()
 		{
+			// capture the number of visible lines
+			int totalLines = rtbSource.Height / rtbSource.Font.Height;
+
 			var sourceLocation = Source.Find(DebugSource, InstructionPointer);
 
 			if (sourceLocation == null)
@@ -52,74 +60,75 @@ namespace Mosa.Tool.Debugger.Views
 			{
 				fileContent = File.ReadAllText(sourceLocation.SourceFilename);
 				lastFileContent = fileContent;
+				lastSourceLocation = sourceLocation;
 			}
 
 			lbSourceFilename.Text = Path.GetFileName(sourceLocation.SourceFilename);
 			rtbSource.Text = fileContent;
 
-			int length = fileContent.Length;
-			int startPosition = -1;
-			int endPosition = -1;
+			// Visible text position at 25% of height of control (if possible)
+			int caretLine = sourceLocation.StartLine - (totalLines / 4);
 
-			int currentLineAtStart = 0;
-			int currentLineAtEnd = 0;
+			if (caretLine < 0)
+				caretLine = 0;
 
-			int at = 0;
+			int startPosition = 0;
+			int endPosition = 0;
+			int caretPosition = 0;
+
 			int currentLine = 1;
-			int startLine = 0;
 
-			lines.Clear();
-			lines.Add(0);
+			int length = fileContent.Length;
 
-			while (at < length)
+			for (int at = 0; at < length; at++)
 			{
-				var c = fileContent[at++];
+				var c = fileContent[at];
 
 				if (c == '\n')
 				{
 					currentLine++;
-					lines.Add(at);
-				}
 
-				if (currentLine == sourceLocation.StartLine && startPosition < 0)
-				{
-					startLine = currentLine;
-					startPosition = at + sourceLocation.StartColumn - 1;
-					currentLineAtStart = currentLine;
-				}
-				else if (currentLine == sourceLocation.EndLine && endPosition < 0)
-				{
-					endPosition = at + sourceLocation.EndColumn - 1;
-					currentLineAtEnd = currentLine;
+					if (currentLine == caretLine && caretPosition == 0)
+					{
+						caretPosition = at;
+					}
+
+					if (currentLine == sourceLocation.StartLine && startPosition == 0)
+					{
+						startPosition = at;
+					}
+
+					if (currentLine == sourceLocation.EndLine && endPosition == 0)
+					{
+						endPosition = at;
+					}
 				}
 			}
 
-			if (startPosition < 0)
-				return;
-
-			if (endPosition < 0)
+			if (startPosition == 0 || endPosition == 0)
 				return;
 
 			if (endPosition > length)
 				endPosition = length;
 
-			// capture the number of visible lines
-			int totallines = rtbSource.Height / rtbSource.Font.Height;
+			var caretIndex = caretPosition - caretLine;
 
-			// Visible text position at 25% of height of control (if possible)
-			int targetLine = startLine - (totallines / 4);
-			int target = lines[targetLine < 0 ? 0 : targetLine];
-			rtbSource.Select(target, 1);
+			if (caretIndex < 0)
+				caretIndex = 0;
+
+			rtbSource.Select(caretIndex, 1);
 			rtbSource.ScrollToCaret();
 
-			int start = startPosition - currentLineAtStart + 1;
-			int len = endPosition - startPosition - (currentLineAtEnd - currentLineAtStart);
-			rtbSource.Select(start, len);
+			var selectPosition = startPosition + sourceLocation.StartColumn + 1;
+			var selectLength = endPosition + sourceLocation.EndColumn - startPosition - sourceLocation.StartColumn;
+			var selectIndex = selectPosition - sourceLocation.StartLine;
+
+			rtbSource.Select(selectIndex, selectLength);
 
 			rtbSource.SelectionBackColor = Color.Blue;
 			rtbSource.SelectionColor = Color.White;
 
-			toolStripStatusLabel1.Text = $"Label: {sourceLocation.Label}:{sourceLocation.SourceLabel} - Lines: {sourceLocation.StartLine}:{sourceLocation.StartColumn}  to {sourceLocation.EndLine}:{sourceLocation.EndColumn}";
+			toolStripStatusLabel1.Text = $"Label: {sourceLocation.Label}:{sourceLocation.SourceLabel} - Lines: {sourceLocation.StartLine}:{sourceLocation.StartColumn} to {sourceLocation.EndLine}:{sourceLocation.EndColumn} - SelectLine/Select/CaretLine/Caret: {sourceLocation.StartLine},{selectPosition},{caretLine},{caretPosition}";
 		}
 	}
 }

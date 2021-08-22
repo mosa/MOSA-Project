@@ -4,7 +4,7 @@
     <AssemblyTitle>Mosa.Utility.Compiler</AssemblyTitle>
     <Company>MOSA Project</Company>
     <Product>Mosa.Utility.Compiler</Product>
-    <Copyright>Copyright © 2020</Copyright>
+    <Copyright>Copyright © 2021</Copyright>
     <LangVersion>8.0</LangVersion>
     <BaseAddress>285212672</BaseAddress>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

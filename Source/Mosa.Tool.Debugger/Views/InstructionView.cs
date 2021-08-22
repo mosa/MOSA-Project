@@ -48,10 +48,10 @@ namespace Mosa.Tool.Debugger.Views
 		{
 			tbAddress.Text = ToHex(InstructionPointer);
 
-			var address = MainForm.ParseHexAddress(tbAddress.Text);
-			uint bytes = 512;
+			//var address = MainForm.ParseHexAddress(tbAddress.Text);
+			//uint bytes = 512;
 
-			MemoryCache.ReadMemory(address, bytes, OnMemoryRead);
+			MemoryCache.ReadMemory((uint)InstructionPointer, 512, OnMemoryRead);
 		}
 
 		private void OnMemoryRead(ulong address, byte[] bytes) => Invoke((MethodInvoker)(() => UpdateDisplay(address, bytes)));

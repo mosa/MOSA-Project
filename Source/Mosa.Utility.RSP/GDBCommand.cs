@@ -1,11 +1,14 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Text;
+using System.Threading;
 
 namespace Mosa.Utility.RSP
 {
 	public abstract class GDBCommand
 	{
+		public int ID { get; protected set; }
+
 		public string CommandName { get; protected set; }
 
 		public string Pack { get { return CommandName + PackArguments; } }
@@ -20,8 +23,16 @@ namespace Mosa.Utility.RSP
 
 		public CallBack Callback { get; }
 
+		private static int sequence = 0;
+
+		public override string ToString()
+		{
+			return $"[{ID}] {CommandName}";
+		}
+
 		protected GDBCommand(string commandName, CallBack callBack)
 		{
+			ID = Interlocked.Increment(ref sequence);
 			CommandName = commandName;
 			Callback = callBack;
 		}

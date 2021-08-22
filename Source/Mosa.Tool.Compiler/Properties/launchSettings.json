@@ -1,8 +1,7 @@
 {
-	"profiles": {
-		"Mosa.Tool.Compiler": {
-			"commandName": "Project",
-			"commandLineArgs": "--drawf --output-asm --output-map --emit-relocations Mosa.TestWorld.x86.dll mscorlib.dll Mosa.Plug.Korlib.dll Mosa.Plug.Korlib.x86.dll"
-		}
-	}
+  "profiles": {
+    "Mosa.Tool.Compiler": {
+      "commandName": "Project"
+    }
+  }
 }
