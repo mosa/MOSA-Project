@@ -16,7 +16,6 @@ namespace Mosa.Tool.Explorer
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
 
 			var main = new MainForm();
 

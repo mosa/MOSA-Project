@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 namespace Mosa.UnitTests
 {
@@ -49,6 +50,24 @@ namespace Mosa.UnitTests
 		}
 
 		[MosaUnitTest]
+		public unsafe static bool TestSpan3()
+		{
+			var myArray = new int[3];
+			fixed (int* ptr = &myArray[0])
+			{
+				var span = new Span<int>(ptr, 3);
+				TestSpan3Inner(span);
+				return span[1] == 42;
+			}
+		}
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		internal unsafe static void TestSpan3Inner(Span<int> span)
+		{
+			span[1] = 42;
+		}
+
+		[MosaUnitTest]
 		public unsafe static bool TestReadOnlySpan1()
 		{
 			var myArray = new int[3];
@@ -66,11 +85,11 @@ namespace Mosa.UnitTests
 		public unsafe static bool TestReadOnlySpan2()
 		{
 			var myArray = new int[3];
-			myArray[1] = 19;
+			myArray[1] = 42;
 			fixed (int* ptr = &myArray[0])
 			{
 				var span = new ReadOnlySpan<int>(ptr, 3);
-				return span[1] == 19;
+				return span[1] == 42;
 			}
 		}
 	}
