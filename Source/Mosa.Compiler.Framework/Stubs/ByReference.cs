@@ -26,6 +26,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			// Store value inside instance
 			var store = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.Store32 : IRInstruction.Store64;
 			context.AppendInstruction(store, null, opInstance, methodCompiler.ConstantZero, opValue);
+			context.MosaType = methodCompiler.TypeSystem.BuiltIn.I;
 
 			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
@@ -44,6 +45,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			// Load value from instance into return operand
 			var loadValue = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.Load32 : IRInstruction.Load64;
 			context.AppendInstruction(loadValue, opReturn, opInstance, methodCompiler.ConstantZero);
+			context.MosaType = methodCompiler.TypeSystem.BuiltIn.I;
 
 			// Set return
 			var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(opReturn.Type, methodCompiler.Architecture.Is32BitPlatform);

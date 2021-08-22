@@ -92,6 +92,25 @@ namespace Mosa.UnitTests
 				return span[1] == 42;
 			}
 		}
+
+		public unsafe struct TestRefStoreStruct
+		{
+			public int a;
+		}
+
+		[MosaUnitTest]
+		public unsafe static bool TestRefStore()
+		{
+			var value = new TestRefStoreStruct();
+			var ptr = 42;
+			TestRefStoreInner(ref value, ref ptr);
+			return value.a == ptr;
+		}
+
+		internal unsafe static void TestRefStoreInner(ref TestRefStoreStruct value, ref int ptr)
+		{
+			value.a = ptr;
+		}
 	}
 
 	internal static class ProcessManager

@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		public static void Unsafe_AreSame(Context context, MethodCompiler methodCompiler)
 		{
 			var left = methodCompiler.Parameters[0];
-			var right = methodCompiler.Parameters[0];
+			var right = methodCompiler.Parameters[1];
 			var opLeft = methodCompiler.AllocateVirtualRegisterOrStackSlot(left.Type);
 			var opRight = methodCompiler.AllocateVirtualRegisterOrStackSlot(right.Type);
 			var opReturn = methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType);
@@ -74,7 +74,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		public static void Unsafe_AddByteOffset(Context context, MethodCompiler methodCompiler)
 		{
 			var source = methodCompiler.Parameters[0];
-			var byteOffset = methodCompiler.Parameters[0];
+			var byteOffset = methodCompiler.Parameters[1];
 			var opSource = methodCompiler.AllocateVirtualRegisterOrStackSlot(source.Type);
 			var opByteOffset = methodCompiler.AllocateVirtualRegisterOrStackSlot(byteOffset.Type);
 			var opReturn = methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType);
