@@ -24,6 +24,13 @@ namespace Mosa.UnitTests
 		}
 
 		[MosaUnitTest]
+		public unsafe static bool TestMethodGeneric()
+		{
+			_ = new Span<byte>();
+			return true;
+		}
+
+		[MosaUnitTest]
 		public unsafe static bool TestSpan1()
 		{
 			var myArray = new int[3];
