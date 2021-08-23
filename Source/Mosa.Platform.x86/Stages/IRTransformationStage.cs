@@ -228,13 +228,13 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else if (context.Operand1.IsStackLocal)
 			{
-				context.SetInstruction(X86.Add32, context.Result, StackFrame, context.Operand1);
+				context.SetInstruction(X86.Lea32, context.Result, StackFrame, context.Operand1);
 			}
 			else
 			{
 				var offset = CreateConstant32(context.Operand1.Offset);
 
-				context.SetInstruction(X86.Add32, context.Result, StackFrame, offset);
+				context.SetInstruction(X86.Lea32, context.Result, StackFrame, offset);
 			}
 		}
 

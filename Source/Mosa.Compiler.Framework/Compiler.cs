@@ -30,6 +30,8 @@ namespace Mosa.Compiler.Framework
 
 		private Dictionary<string, IntrinsicMethodDelegate> InternalIntrinsicMethods { get; } = new Dictionary<string, IntrinsicMethodDelegate>();
 
+		private Dictionary<string, StubMethodDelegate> InternalStubMethods { get; } = new Dictionary<string, StubMethodDelegate>();
+
 		#endregion Data Members
 
 		#region Properties
@@ -272,14 +274,25 @@ namespace Mosa.Compiler.Framework
 				foreach (var method in type.GetRuntimeMethods())
 				{
 					// Now get all the IntrinsicMethodAttribute attributes
-					var attributes = (IntrinsicMethodAttribute[])method.GetCustomAttributes(typeof(IntrinsicMethodAttribute), true);
+					var intrinsicMethodAttributes = (IntrinsicMethodAttribute[])method.GetCustomAttributes(typeof(IntrinsicMethodAttribute), true);
 
-					for (int i = 0; i < attributes.Length; i++)
+					for (int i = 0; i < intrinsicMethodAttributes.Length; i++)
 					{
 						var d = (IntrinsicMethodDelegate)Delegate.CreateDelegate(typeof(IntrinsicMethodDelegate), method);
 
 						// Finally add the dictionary entry mapping the target name and the delegate
-						InternalIntrinsicMethods.Add(attributes[i].Target, d);
+						InternalIntrinsicMethods.Add(intrinsicMethodAttributes[i].Target, d);
+					}
+
+					// Now get all the StubMethodAttribute attributes
+					var stubMethodAttributes = (StubMethodAttribute[])method.GetCustomAttributes(typeof(StubMethodAttribute), true);
+
+					for (int i = 0; i < stubMethodAttributes.Length; i++)
+					{
+						var d = (StubMethodDelegate)Delegate.CreateDelegate(typeof(StubMethodDelegate), method);
+
+						// Finally add the dictionary entry mapping the target name and the delegate
+						InternalStubMethods.Add(stubMethodAttributes[i].Target, d);
 					}
 				}
 			}
@@ -480,7 +493,7 @@ namespace Mosa.Compiler.Framework
 		{
 			var threadID = Thread.CurrentThread.ManagedThreadId;
 			int success = 0;
-			
+
 			while (true)
 			{
 				var result = ProcessQueue(threadID);
@@ -543,6 +556,13 @@ namespace Mosa.Compiler.Framework
 		public IntrinsicMethodDelegate GetInstrincMethod(string name)
 		{
 			InternalIntrinsicMethods.TryGetValue(name, out IntrinsicMethodDelegate value);
+
+			return value;
+		}
+
+		public StubMethodDelegate GetStubMethod(string name)
+		{
+			InternalStubMethods.TryGetValue(name, out StubMethodDelegate value);
 
 			return value;
 		}

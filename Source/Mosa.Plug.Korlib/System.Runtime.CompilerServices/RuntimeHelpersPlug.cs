@@ -12,14 +12,14 @@ namespace Mosa.Plug.Korlib.System.Runtime.CompilerServices
 	internal static class RuntimeHelpersPlug
 	{
 		[Plug("System.Runtime.CompilerServices.RuntimeHelpers::GetHashCode")]
-		internal unsafe static int GetHashCode(Object o)
+		internal unsafe static int GetHashCode(object o)
 		{
 			// FIXME: For now use the obj location in memory as the hash code
 			return Intrinsic.GetObjectAddress(o).ToInt32();
 		}
 
 		[Plug("System.Runtime.CompilerServices.RuntimeHelpers::Equals")]
-		internal new static bool Equals(Object o1, Object o2)
+		internal new static bool Equals(object o1, object o2)
 		{
 			// For now just compare the object locations
 			// This will become more sophisticated when we introduce remote objects in the distant future
@@ -40,7 +40,7 @@ namespace Mosa.Plug.Korlib.System.Runtime.CompilerServices
 		}
 
 		[Plug("System.Runtime.CompilerServices.RuntimeHelpers::UnsafeCast")]
-		internal unsafe static Object UnsafeCast(Object o)
+		internal unsafe static object UnsafeCast(object o)
 		{
 			return o;
 		}
