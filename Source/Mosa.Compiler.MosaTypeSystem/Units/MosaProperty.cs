@@ -36,9 +36,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 		}
 
-		internal MosaProperty Clone()
+		override internal MosaProperty Clone()
 		{
-			return (MosaProperty)base.MemberwiseClone();
+			return (MosaProperty)base.Clone();
 		}
 
 		public bool Equals(MosaProperty other)

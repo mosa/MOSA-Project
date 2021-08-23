@@ -209,6 +209,22 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				method.ExternMethodModule = methodDef.ImplMap.Module.Name;
 				method.ExternMethodName = methodDef.ImplMap.Name;
 			}
+
+			if (methodDef.HasGenericParameters)
+			{
+				foreach (var genericParam in methodDef.GenericParameters)
+				{
+					var genericArg = LoadGenericParam(new GenericMVar(genericParam.Number));
+					method.GenericArguments.Add(genericArg);
+				}
+			}
+
+			// Special treatment for SZArrayHelper constructor
+			if (methodDef.DeclaringType.Name == "SZArrayHelper" && methodDef.Name == ".ctor")
+			{
+				var genericArg = LoadGenericParam(new GenericMVar(0));
+				method.GenericArguments.Add(genericArg);
+			}
 		}
 
 		private void LoadProperty(MosaType declType, MosaProperty.Mutator property, PropertyDef propertyDef)
@@ -485,13 +501,13 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			if (mosaMethod == null)
 				throw new AssemblyLoadException();
 
-			var genericArgs = new List<TypeSig>();
+			var resolvedGenericArguments = new List<TypeSig>();
 			foreach (var genericArg in genericArguments)
 			{
-				genericArgs.Add(resolver.Resolve(genericArg));
+				resolvedGenericArguments.Add(resolver.Resolve(genericArg));
 			}
 
-			resolver.PushMethodGenericArguments(genericArgs);
+			resolver.PushMethodGenericArguments(resolvedGenericArguments);
 
 			// Check for existing generic method instance
 			var newSig = resolver.Resolve(method.MethodSig);
@@ -506,10 +522,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 				if (mDesc.Definition != desc.Definition || !comparer.Equals(mDesc.Signature, newSig))
 					continue;
 
-				if (newSig.ContainsGenericParameter || newSig.GenParamCount > 0)
-					continue;
-
-				if (m.GenericArguments.Count != genericArgs.Count)
+				if (m.GenericArguments.Count != resolvedGenericArguments.Count)
 					continue;
 
 				if (m.GenericArguments.Count > 0)
@@ -517,7 +530,7 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 					var failedGenericArgumentMatch = false;
 					for (var i = 0; i < m.GenericArguments.Count; i++)
 					{
-						if (comparer.Equals(genericArguments[i], m.GenericArguments[i].GetTypeSig()))
+						if (comparer.Equals(resolvedGenericArguments[i], m.GenericArguments[i].GetTypeSig()))
 							continue;
 
 						failedGenericArgumentMatch = true;
@@ -536,12 +549,12 @@ namespace Mosa.Compiler.MosaTypeSystem.Metadata
 			using (var _mosaMethod = metadata.Controller.MutateMethod(mosaMethod))
 			{
 				bool hasOpening = mosaMethod.DeclaringType.HasOpenGenericParams;
-				foreach (var genericArg in genericArgs)
+				_mosaMethod.GenericArguments.Clear();
+				foreach (var resolvedGenericArg in resolvedGenericArguments)
 				{
-					hasOpening |= genericArg.HasOpenGenericParameter();
-					var t = GetType(genericArg);
-					if (!_mosaMethod.GenericArguments.Contains(t))
-						_mosaMethod.GenericArguments.Add(t);
+					hasOpening |= resolvedGenericArg.HasOpenGenericParameter();
+					var t = GetType(resolvedGenericArg);
+					_mosaMethod.GenericArguments.Add(t);
 				}
 
 				_mosaMethod.UnderlyingObject = desc.Clone(newSig);

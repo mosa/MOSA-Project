@@ -28,9 +28,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 		}
 
-		internal MosaField Clone()
+		override internal MosaField Clone()
 		{
-			return (MosaField)base.MemberwiseClone();
+			return (MosaField)base.Clone();
 		}
 
 		public bool Equals(MosaField other)

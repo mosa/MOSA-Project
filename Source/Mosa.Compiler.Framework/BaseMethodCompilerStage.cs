@@ -357,7 +357,7 @@ namespace Mosa.Compiler.Framework
 		{
 			return AllocateVirtualRegisterI(); // temp
 		}
-		
+
 		protected Operand AllocateVirtualRegisterI()
 		{
 			return Is32BitPlatform ? MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I4) : MethodCompiler.VirtualRegisters.Allocate(TypeSystem.BuiltIn.I8);
@@ -939,8 +939,6 @@ namespace Mosa.Compiler.Framework
 			if (type.IsReferenceType)
 				return IRInstruction.LoadObject;
 			else if (type.IsPointer)
-				return Select(IRInstruction.Load32, IRInstruction.Load64);
-			if (type.IsPointer)
 				return Select(IRInstruction.Load32, IRInstruction.Load64);
 			else if (type.IsI1)
 				return Select(IRInstruction.LoadSignExtend8x32, IRInstruction.LoadSignExtend8x64);

@@ -390,6 +390,8 @@ namespace Mosa.Compiler.Framework
 
 			InternalMethod();
 
+			StubMethod();
+
 			ExecutePipeline();
 
 			Symbol.SetReplacementStatus(MethodData.Inlined);
@@ -585,8 +587,46 @@ namespace Mosa.Compiler.Framework
 
 			if (NotifyTraceLogHandler != null)
 			{
-				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-External Method", MethodData.Version);
+				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-Internal Method", MethodData.Version);
 				traceLog?.Log($"This method is an internal method");
+				NotifyTraceLogHandler.Invoke(traceLog);
+			}
+		}
+
+		private void StubMethod()
+		{
+			var intrinsicAttribute = Method.FindCustomAttribute("System.Runtime.CompilerServices.IntrinsicAttribute");
+
+			if (intrinsicAttribute == null)
+				return;
+
+			var methodName = $"{Method.DeclaringType.Namespace}.{Method.DeclaringType.Name}::{Method.Name}";
+			var stub = Compiler.GetStubMethod(methodName);
+
+			if (stub == null)
+				return;
+
+			IsCILStream = false;
+			IsExecutePipeline = true;
+
+			// Create the prologue block
+			var prologue = BasicBlocks.CreateBlock(BasicBlock.PrologueLabel);
+			BasicBlocks.AddHeadBlock(prologue);
+
+			// Create the epilogue block
+			var epilogue = BasicBlocks.CreateBlock(BasicBlock.EpilogueLabel);
+
+			var start = BasicBlocks.CreateBlock(BasicBlock.StartLabel);
+
+			// Add a jump instruction to the first block from the prologue
+			prologue.First.Insert(new InstructionNode(IRInstruction.Jmp, start));
+
+			stub(new Context(start), this);
+
+			if (NotifyTraceLogHandler != null)
+			{
+				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-Stubbed Method", MethodData.Version);
+				traceLog?.Log($"This method is a stubbed method");
 				NotifyTraceLogHandler.Invoke(traceLog);
 			}
 		}

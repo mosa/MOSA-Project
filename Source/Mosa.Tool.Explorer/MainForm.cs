@@ -569,11 +569,14 @@ namespace Mosa.Tool.Explorer
 			cbLabels.Items.Clear();
 			cbLabels.Items.Add("All");
 
-			foreach (var line in lines)
+			if (lines != null)
 			{
-				if (line.StartsWith("Block #"))
+				foreach (var line in lines)
 				{
-					cbLabels.Items.Add(line.Substring(line.IndexOf("L_")));
+					if (line.StartsWith("Block #"))
+					{
+						cbLabels.Items.Add(line.Substring(line.IndexOf("L_")));
+					}
 				}
 			}
 		}

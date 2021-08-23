@@ -2086,18 +2086,6 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				intrinsic = Architecture.GetInstrinsicMethod(method.ExternMethodModule);
 			}
-			else if (method.IsInternal)
-			{
-				var methodName = $"{method.DeclaringType.FullName}::{method.Name}";
-
-				intrinsic = MethodCompiler.Compiler.GetInstrincMethod(methodName);
-
-				if (intrinsic == null)
-				{
-					// special case for plugging constructors
-					intrinsic = MethodCompiler.Compiler.GetInstrincMethod($"{method.DeclaringType.FullName}::{method.Name}");
-				}
-			}
 			else
 			{
 				var methodName = $"{method.DeclaringType.FullName}::{method.Name}";
@@ -2134,12 +2122,6 @@ namespace Mosa.Compiler.Framework.Stages
 				var operands = context.GetOperands();
 				operands.Insert(0, Operand.CreateSymbolFromMethod(context.InvokeMethod, TypeSystem));
 				context.SetInstruction(IRInstruction.IntrinsicMethodCall, context.Result, operands);
-
-				return true;
-			}
-			else if (context.InvokeMethod.IsInternal)
-			{
-				intrinsic(context, MethodCompiler);
 
 				return true;
 			}

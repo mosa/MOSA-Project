@@ -16,9 +16,9 @@ namespace Mosa.Compiler.MosaTypeSystem
 		{
 		}
 
-		internal MosaParameter Clone()
+		override internal MosaParameter Clone()
 		{
-			return (MosaParameter)base.MemberwiseClone();
+			return (MosaParameter)base.Clone();
 		}
 
 		public bool Equals(MosaParameter parameter)
