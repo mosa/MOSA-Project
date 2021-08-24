@@ -3,6 +3,7 @@
 
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 namespace System.Numerics
 {
@@ -40,8 +41,7 @@ namespace System.Numerics
             if (values.Length < 2)
                 throw new IndexOutOfRangeException("values has an insufficient amount of elements, 2 are required");
 
-            float ptr = values.Pointer;
-            this = Unsafe.As<byte, Vector2>(ref Unsafe.As<float, byte>(ref ptr));
+            this = Unsafe.ReadUnaligned<Vector2>(ref Unsafe.As<float, byte>(ref MemoryMarshal.GetReference(values)));
         }
 
         /// <summary>Returns a vector whose 2 elements are equal to zero.</summary>
@@ -542,8 +542,7 @@ namespace System.Numerics
             if (destination.Length < 2)
                 throw new ArgumentException("Destination is too short.");
 
-            float ptr = destination.Pointer;
-            Unsafe.As<byte, Vector2>(ref Unsafe.As<float, byte>(ref ptr)) = this;
+            Unsafe.WriteUnaligned(ref Unsafe.As<float, byte>(ref MemoryMarshal.GetReference(destination)), this);
         }
 
         /// <summary>Attempts to copy the vector to the given <see cref="Span{Single}" />. The length of the destination span must be at least 2.</summary>
@@ -554,8 +553,7 @@ namespace System.Numerics
             if (destination.Length < 2)
                 return false;
 
-            float ptr = destination.Pointer;
-            Unsafe.As<byte, Vector2>(ref Unsafe.As<float, byte>(ref ptr)) = this;
+            Unsafe.WriteUnaligned(ref Unsafe.As<float, byte>(ref MemoryMarshal.GetReference(destination)), this);
 
             return true;
         }
