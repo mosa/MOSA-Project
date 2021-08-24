@@ -108,20 +108,20 @@ namespace System.Runtime.CompilerServices
 		}
 
 		[Intrinsic]
-        [NonVersionable]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static void WriteUnaligned<T>(ref byte destination, T value)
-        {
-        	As<byte, T>(ref destination) = value;
-        }
+		[NonVersionable]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static void WriteUnaligned<T>(ref byte destination, T value)
+		{
+			As<byte, T>(ref destination) = value;
+		}
 
-        [Intrinsic]
-        [NonVersionable]
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        public static T ReadUnaligned<T>(ref byte source)
-        {
-        	return As<byte, T>(ref source);
-        }
+		[Intrinsic]
+		[NonVersionable]
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static T ReadUnaligned<T>(ref byte source)
+		{
+			return As<byte, T>(ref source);
+		}
 
 		//[Intrinsic]
 		//[NonVersionable]
