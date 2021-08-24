@@ -739,6 +739,29 @@ namespace Mosa.Utility.UnitTests.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> R4R4R4
+		{
+			get
+			{
+				foreach (var i1 in Numbers.R4.Series)
+					foreach (var i2 in Numbers.R4.Series)
+						foreach (var i3 in Numbers.R4.Series)
+							yield return new object[] { i1, i2, i3 };
+			}
+		}
+
+		public static IEnumerable<object[]> R4R4R4R4
+		{
+			get
+			{
+				foreach (var i1 in Numbers.R4.Series)
+					foreach (var i2 in Numbers.R4.Series)
+						foreach (var i3 in Numbers.R4.Series)
+							foreach (var i4 in Numbers.R4.Series)
+								yield return new object[] { i1, i2, i3, i4 };
+			}
+		}
+
 		public static IEnumerable<object[]> R4MiniR4MiniR4Mini
 		{
 			get
@@ -795,6 +818,29 @@ namespace Mosa.Utility.UnitTests.Numbers
 				foreach (var i1 in Numbers.R8.Series)
 					foreach (var i2 in Numbers.R8.Series)
 						yield return new object[] { i1, i2 };
+			}
+		}
+
+		public static IEnumerable<object[]> R8R8R8
+		{
+			get
+			{
+				foreach (var i1 in Numbers.R8.Series)
+					foreach (var i2 in Numbers.R8.Series)
+						foreach (var i3 in Numbers.R8.Series)
+							yield return new object[] { i1, i2, i3 };
+			}
+		}
+
+		public static IEnumerable<object[]> R8R8R8R8
+		{
+			get
+			{
+				foreach (var i1 in Numbers.R8.Series)
+					foreach (var i2 in Numbers.R8.Series)
+						foreach (var i3 in Numbers.R8.Series)
+							foreach (var i4 in Numbers.R8.Series)
+								yield return new object[] { i1, i2, i3, i4 };
 			}
 		}
 
