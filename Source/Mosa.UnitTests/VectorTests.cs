@@ -76,7 +76,7 @@ namespace Mosa.UnitTests
 		{
 			var vector = new Vector4(x, y, z, w);
 
-			return vector.X == x && vector.Y == y && vector.Z == z && vector.W == w;
+			return vector.X == x && vector.Y == y && vector.Z == x && vector.W == y;
 		}
 
 		[MosaUnitTest(Series = "R4R4")]
