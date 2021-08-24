@@ -74,7 +74,7 @@ namespace Mosa.UnitTests
 		[MosaUnitTest(Series = "R4R4")]
 		public static bool TestVector8(float x, float y)
 		{
-			var vector = new Vector4(x, y, z, w);
+			var vector = new Vector4(x, y, x, y);
 
 			return vector.X == x && vector.Y == y && vector.Z == x && vector.W == y;
 		}
