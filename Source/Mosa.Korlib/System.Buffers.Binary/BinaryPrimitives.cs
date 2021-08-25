@@ -5,6 +5,16 @@ namespace System.Buffers.Binary
 {
 	public class BinaryPrimitives
 	{
+		public static ushort ReadUInt16BigEndian(Span<byte> source)
+		{
+			ushort result = MemoryMarshal.Read<ushort>(source);
+
+			if (BitConverter.IsLittleEndian)
+				result = ReverseEndianness(result);
+
+			return result;
+		}
+		
 		public static ushort ReadUInt16BigEndian(ReadOnlySpan<byte> source)
 		{
 			ushort result = MemoryMarshal.Read<ushort>(source);

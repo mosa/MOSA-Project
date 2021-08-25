@@ -31,5 +31,21 @@ namespace System.Runtime.InteropServices
 
 			return Unsafe.ReadUnaligned<T>(ref GetReference(source));
 		}
+
+		/// <summary>
+		/// Reads a structure of type T out of a span of bytes.
+		/// </summary>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public static T Read<T>(Span<byte> source)
+			where T : struct
+		{
+			if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
+				throw new Exception("Type is reference or contains references."); //ThrowHelper.ThrowInvalidTypeWithPointersNotSupported(typeof(T));
+
+			if (Unsafe.SizeOf<T>() > source.Length)
+				throw new Exception("Type length is above source length."); //ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument.length);
+
+			return Unsafe.ReadUnaligned<T>(ref GetReference(source));
+		}
 	}
 }
