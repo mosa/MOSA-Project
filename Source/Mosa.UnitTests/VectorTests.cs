@@ -43,25 +43,25 @@ namespace Mosa.UnitTests
 			return true;
 		}
 
-		[MosaUnitTest(Series = "R4R4R4")]
-		public static bool TestVector5(float x, float y, float z)
+		[MosaUnitTest(Series = "R4R4")]
+		public static bool TestVector5(float x, float y)
 		{
-			var vector = new Vector3(x, y, z);
+			var vector = new Vector3(x, y, y);
 
-			return vector.X == x && vector.Y == y && vector.Z == z;
+			return vector.X == x && vector.Y == y && vector.Z == y;
 		}
 
-		[MosaUnitTest(Series = "R4R4R4")]
-		public static bool TestVector6(float x, float y, float z)
+		[MosaUnitTest(Series = "R4R4")]
+		public static bool TestVector6(float x, float y)
 		{
-			var vector1 = new Vector3(x, 92.1f, z);
+			var vector1 = new Vector3(x, 92.1f, y);
 			var vector2 = new Vector3(74.0f, y, 36.7f);
 
 			vector2.X = vector1.Y;
 			vector1.X = vector2.Y;
 			vector2.Z = vector1.Z;
 
-			return vector2.X == 92.1f && vector1.X == y && vector2.Z == z;
+			return vector2.X == 92.1f && vector1.X == y && vector2.Z == y;
 		}
 
 		[MosaUnitTest]
@@ -71,26 +71,26 @@ namespace Mosa.UnitTests
 			return true;
 		}
 
-		[MosaUnitTest(Series = "R4R4R4R4")]
-		public static bool TestVector8(float x, float y, float z, float w)
+		[MosaUnitTest(Series = "R4R4")]
+		public static bool TestVector8(float x, float y)
 		{
-			var vector = new Vector4(x, y, z, w);
+			var vector = new Vector4(x, y, x, y);
 
-			return vector.X == x && vector.Y == y && vector.Z == z && vector.W == w;
+			return vector.X == x && vector.Y == y && vector.Z == x && vector.W == y;
 		}
 
-		[MosaUnitTest(Series = "R4R4R4R4")]
-		public static bool TestVector9(float x, float y, float z, float w)
+		[MosaUnitTest(Series = "R4R4")]
+		public static bool TestVector9(float x, float y)
 		{
-			var vector1 = new Vector4(x, 92.1f, z, 25.8f);
-			var vector2 = new Vector4(74.0f, y, 36.7f, w);
+			var vector1 = new Vector4(x, 92.1f, y, 25.8f);
+			var vector2 = new Vector4(74.0f, y, 36.7f, x);
 
 			vector2.X = vector1.Y;
 			vector1.X = vector2.Y;
 			vector2.Z = vector1.Z;
 			vector1.W = vector2.W;
 
-			return vector2.X == 92.1f && vector1.X == y && vector2.Z == z && vector1.W == w;
+			return vector2.X == 92.1f && vector1.X == y && vector2.Z == y && vector1.W == x;
 		}
 	}
 }
