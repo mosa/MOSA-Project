@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.Analysis;
+using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.MosaTypeSystem;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -59,37 +60,26 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmpty)
 						continue;
 
-					if (node.Instruction is CIL.LeaveInstruction)
+					if (node.Instruction == CILInstruction.Leave || node.Instruction == CILInstruction.Leave_s)
 					{
 						var leaveBlock = node.BranchTargets[0];
 
+						// Traverse to the header block
+						var headerBlock = TraverseBackToNativeBlock(node.Block);
+
 						// Find enclosing try or finally handler
-						var exceptionContext = FindImmediateExceptionContext(TraverseBackToNonCompilerBlock(node.Block).Label);
+						var exceptionHandler = FindImmediateExceptionHandler(headerBlock.Label);
+						bool InTry = exceptionHandler.IsLabelWithinTry(headerBlock.Label);
 
-						bool InTryContext = exceptionContext.IsLabelWithinTry(TraverseBackToNonCompilerBlock(node.Block).Label);
+						var instruction = InTry ? (BaseInstruction)IRInstruction.TryEnd : IRInstruction.ExceptionEnd;
 
-						var ctx = new Context(node);
-
-						if (!InTryContext)
-						{
-							// Within exception handler
-							ctx.SetInstruction(IRInstruction.ExceptionEnd);
-						}
-						else
-						{
-							ctx.SetInstruction(IRInstruction.TryEnd);
-						}
-						ctx.AppendInstruction(IRInstruction.SetLeaveTarget, leaveBlock);
-						ctx.AppendInstruction(IRInstruction.GotoLeaveTarget);
+						node.SetInstruction(instruction, leaveBlock);  // added header block
 					}
-					else if (node.Instruction is CIL.EndFinallyInstruction)
+					else if (node.Instruction == CILInstruction.Endfinally)
 					{
-						var ctx = new Context(node);
-
-						ctx.SetInstruction(IRInstruction.FinallyEnd);
-						ctx.AppendInstruction(IRInstruction.GotoLeaveTarget);
+						node.SetInstruction(IRInstruction.FinallyEnd);
 					}
-					else if (node.Instruction is CIL.ThrowInstruction)
+					else if (node.Instruction == CILInstruction.Throw)
 					{
 						node.SetInstruction(IRInstruction.Throw, node.Result, node.Operand1);
 					}

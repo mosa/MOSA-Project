@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework.IR
 	public sealed class ExceptionEnd : BaseIRInstruction
 	{
 		public ExceptionEnd()
-			: base(0, 0)
+			: base(1, 0)
 		{
 		}
 

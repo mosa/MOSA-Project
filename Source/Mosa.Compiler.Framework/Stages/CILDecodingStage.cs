@@ -291,7 +291,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var block in BasicBlocks)
 			{
-				var label = TraverseBackToNonCompilerBlock(block).Label;
+				var label = TraverseBackToNativeBlock(block).Label;
 
 				for (var node = block.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
 				{
@@ -311,7 +311,7 @@ namespace Mosa.Compiler.Framework.Stages
 						continue;
 					}
 
-					var entry = FindImmediateExceptionContext(label);
+					var entry = FindImmediateExceptionHandler(label);
 
 					if (!entry.IsLabelWithinTry(label))
 						break;
