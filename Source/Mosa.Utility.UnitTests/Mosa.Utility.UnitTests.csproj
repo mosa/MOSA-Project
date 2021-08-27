@@ -78,6 +78,7 @@
 		<Compile Include="..\Mosa.UnitTests\UInt64Tests.cs" Link="Tests\UInt64Tests.cs" />
 		<Compile Include="..\Mosa.UnitTests\UInt8Tests.cs" Link="Tests\UInt8Tests.cs" />
 		<Compile Include="..\Mosa.UnitTests\ValueTypeTests.cs" Link="Tests\ValueTypeTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\VectorTests.cs" Link="Tests\VectorTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\WhileTests.cs" Link="Tests\WhileTests.cs" />
 	</ItemGroup>
 	<ItemGroup>
