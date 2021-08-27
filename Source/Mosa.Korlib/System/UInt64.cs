@@ -33,5 +33,27 @@ namespace System
 		{
 			return (int)_value;
 		}
+		
+		public override unsafe string ToString()
+        {
+            int count = 0;
+            ulong tmp = this;
+            do
+            {
+                tmp /= 10;
+                count++;
+            } while (tmp != 0);
+
+            string s = String.InternalAllocateString(count);
+            ulong temp = this;
+
+            for (int i = count - 1; i >= 0; i--)
+            {
+                s.first_char[i] = (char)((temp % 10) + 0x30);
+                temp /= 10;
+            }
+
+            return s;
+        }
 	}
 }
