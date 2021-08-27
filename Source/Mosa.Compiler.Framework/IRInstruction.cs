@@ -73,7 +73,6 @@ namespace Mosa.Compiler.Framework
 		public static readonly FinallyStart FinallyStart = new FinallyStart();
 		public static readonly Flow Flow = new Flow();
 		public static readonly Gen Gen = new Gen();
-		public static readonly GotoLeaveTarget GotoLeaveTarget = new GotoLeaveTarget();
 		public static readonly IntrinsicMethodCall IntrinsicMethodCall = new IntrinsicMethodCall();
 		public static readonly IsInstanceOfType IsInstanceOfType = new IsInstanceOfType();
 		public static readonly IsInstanceOfInterfaceType IsInstanceOfInterfaceType = new IsInstanceOfInterfaceType();
@@ -166,7 +165,6 @@ namespace Mosa.Compiler.Framework
 		public static readonly SetReturn64 SetReturn64 = new SetReturn64();
 		public static readonly SetReturnObject SetReturnObject = new SetReturnObject();
 		public static readonly SetReturnCompound SetReturnCompound = new SetReturnCompound();
-		public static readonly SetLeaveTarget SetLeaveTarget = new SetLeaveTarget();
 		public static readonly ShiftLeft32 ShiftLeft32 = new ShiftLeft32();
 		public static readonly ShiftLeft64 ShiftLeft64 = new ShiftLeft64();
 		public static readonly ShiftRight32 ShiftRight32 = new ShiftRight32();

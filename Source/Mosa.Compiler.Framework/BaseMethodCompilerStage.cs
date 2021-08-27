@@ -687,7 +687,7 @@ namespace Mosa.Compiler.Framework
 
 		#region Protected Region Methods
 
-		protected MosaExceptionHandler FindImmediateExceptionContext(int label)
+		protected MosaExceptionHandler FindImmediateExceptionHandler(int label)
 		{
 			foreach (var handler in Method.ExceptionHandlers)
 			{
@@ -700,18 +700,17 @@ namespace Mosa.Compiler.Framework
 			return null;
 		}
 
-		protected MosaExceptionHandler FindNextEnclosingFinallyContext(MosaExceptionHandler exceptionContext)
+		protected MosaExceptionHandler FindNextEnclosingFinallyHandler(MosaExceptionHandler exceptionHandler)
 		{
-			int index = Method.ExceptionHandlers.IndexOf(exceptionContext);
+			var index = Method.ExceptionHandlers.IndexOf(exceptionHandler);
+			var at = exceptionHandler.TryStart;
 
 			for (int i = index + 1; i < Method.ExceptionHandlers.Count; i++)
 			{
 				var entry = Method.ExceptionHandlers[i];
 
-				if (!entry.IsLabelWithinTry(exceptionContext.TryStart))
-					return null;
-
-				if (entry.ExceptionHandlerType != ExceptionHandlerType.Finally)
+				if (entry.ExceptionHandlerType != ExceptionHandlerType.Finally
+				|| !entry.IsLabelWithinTry(at))
 					continue;
 
 				return entry;
@@ -720,25 +719,47 @@ namespace Mosa.Compiler.Framework
 			return null;
 		}
 
-		protected MosaExceptionHandler _NOT_USED_FindFinallyExceptionContext(InstructionNode node)
+		protected MosaExceptionHandler FindNextEnclosingExceptionHandler(MosaExceptionHandler exceptionHandler)
 		{
-			int label = node.Block.Label;
+			var index = Method.ExceptionHandlers.IndexOf(exceptionHandler);
+			var at = exceptionHandler.TryStart;
 
-			foreach (var handler in Method.ExceptionHandlers)
+			for (int i = index + 1; i < Method.ExceptionHandlers.Count; i++)
 			{
-				if (handler.IsLabelWithinHandler(label))
-				{
-					return handler;
-				}
+				var entry = Method.ExceptionHandlers[i];
+
+				if (!entry.IsLabelWithinTry(at))
+					continue;
+
+				return entry;
 			}
 
 			return null;
 		}
 
+		protected BasicBlock TraverseBackToNativeBlock(BasicBlock block)
+		{
+			var start = block;
+
+			while (start.IsCompilerBlock)
+			{
+				if (!start.HasPreviousBlocks)
+					return null;
+
+				start = start.PreviousBlocks[0]; // any one
+			}
+
+			return start;
+		}
+
+		#endregion Protected Region Methods
+
+		#region Protected Region Methods (Legacy)
+
 		protected bool IsSourceAndTargetWithinSameTryOrException(InstructionNode node)
 		{
-			int leaveLabel = TraverseBackToNonCompilerBlock(node.Block).Label;
-			int targetLabel = TraverseBackToNonCompilerBlock(node.BranchTargets[0]).Label;
+			int leaveLabel = TraverseBackToNativeBlock(node.Block).Label;
+			int targetLabel = TraverseBackToNativeBlock(node.BranchTargets[0]).Label;
 
 			foreach (var handler in Method.ExceptionHandlers)
 			{
@@ -786,7 +807,7 @@ namespace Mosa.Compiler.Framework
 			return start;
 		}
 
-		#endregion Protected Region Methods
+		#endregion Protected Region Methods (Legacy)
 
 		#region Trace Helper Methods
 
