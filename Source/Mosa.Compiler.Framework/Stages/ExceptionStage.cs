@@ -247,12 +247,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (node.Instruction == IRInstruction.ExceptionEnd || node.Instruction == IRInstruction.TryEnd)
 				{
-					//var target = TraverseBackToNativeBlock(block);
-					//var exceptionHandler = FindImmediateExceptionHandler(target.Label);
-					//var handlerBlock = BasicBlocks.GetByLabel(exceptionHandler.HandlerStart);
-
-					//leaveTargetsBySource.Add(handlerBlock, node.BranchTargets[0]);
-
 					leaveTargets.AddIfNew(node.BranchTargets[0]);
 				}
 			}
