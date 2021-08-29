@@ -24,13 +24,13 @@ namespace Mosa.Compiler.Framework.CompilerStages
 						continue;
 
 					var section = field.Data != null ? SectionKind.ROData : SectionKind.BSS;
-					int size = TypeLayout.GetFieldSize(field);
+					uint size = TypeLayout.GetFieldSize(field);
 
 					var symbol = Compiler.Linker.DefineSymbol(field.FullName, section, Architecture.NativeAlignment, size);
 
 					if (field.Data != null)
 					{
-						symbol.Stream.Write(field.Data, 0, size);
+						symbol.Stream.Write(field.Data, 0, (int)size);
 					}
 				}
 			}

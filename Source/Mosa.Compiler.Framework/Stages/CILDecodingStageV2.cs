@@ -710,13 +710,14 @@ namespace Mosa.Compiler.Framework.Stages
 		private string EmitString(string data, uint token)
 		{
 			string symbolName = $"$ldstr${Method.Module.Name}${token}";
-			var linkerSymbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, NativeAlignment, (NativePointerSize * 2) + 4 + (data.Length * 2));
+			var linkerSymbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, NativeAlignment, ObjectHeaderSize + NativePointerSize + ((uint)data.Length * 2));
 			var stream = linkerSymbol.Stream;
-			Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, linkerSymbol, 0, $"{Metadata.TypeDefinition}System.String", 0);
-			stream.WriteZeroBytes(NativePointerSize * 2);
+
+			stream.WriteZeroBytes(NativePointerSize);
+			Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, linkerSymbol, stream.Position, Metadata.TypeDefinition + "System.String", 0);
+			stream.WriteZeroBytes(NativePointerSize);
 			stream.Write(BitConverter.GetBytes(data.Length), 0, 4);
-			var stringData = Encoding.Unicode.GetBytes(data);
-			stream.Write(stringData);
+			stream.Write(Encoding.Unicode.GetBytes(data));
 			return symbolName;
 		}
 
@@ -799,12 +800,17 @@ namespace Mosa.Compiler.Framework.Stages
 			return block;
 		}
 
+		private Operand GetMethodTablePointer(MosaType runtimeType)
+		{
+			return Operand.CreateSymbol(TypeSystem.BuiltIn.Pointer, Metadata.TypeDefinition + runtimeType.FullName);
+		}
+
 		private Operand GetRuntimeTypeHandle(MosaType runtimeType)
 		{
 			return Operand.CreateSymbol(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), Metadata.TypeDefinition + runtimeType.FullName);
 		}
 
-		private int GetSize(ElementType elementType)
+		private uint GetSize(ElementType elementType)
 		{
 			switch (elementType)
 			{
@@ -818,7 +824,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case ElementType.U8: return 8;
 				case ElementType.R4: return 4;
 				case ElementType.R8: return 8;
-				case ElementType.Ref: return Is32BitPlatform ? 4 : 8;
+				case ElementType.Ref: return Is32BitPlatform ? 4 : 8u;
 			}
 
 			throw new CompilerException($"Cannot get size of {elementType}");
@@ -1252,7 +1258,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return true;
 			}
 
-			var runtimeType = GetRuntimeTypeHandle(type);
+			var methodTable = GetMethodTablePointer(type);
 			var isPrimitive = IsPrimitive(type);
 
 			var elementType = GetElementType(type);
@@ -1260,16 +1266,16 @@ namespace Mosa.Compiler.Framework.Stages
 			if (isPrimitive)
 			{
 				var boxInstruction = GetBoxInstruction(elementType);
-				context.AppendInstruction(boxInstruction, result, runtimeType, entry.Operand);
+				context.AppendInstruction(boxInstruction, result, methodTable, entry.Operand);
 				return true;
 			}
 			else
 			{
 				var address = AllocateVirtualRegisterManagedPointer();
-				var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
+				var typeSize = Alignment.AlignUp((uint)TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
 
 				context.AppendInstruction(IRInstruction.AddressOf, address, entry.Operand);
-				context.AppendInstruction(IRInstruction.Box, result, runtimeType, address, CreateConstant32(typeSize));
+				context.AppendInstruction(IRInstruction.Box, result, methodTable, address, CreateConstant32(typeSize));
 				return true;
 			}
 		}
@@ -2412,7 +2418,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				int slot = TypeLayout.GetInterfaceSlot(type);
+				uint slot = TypeLayout.GetInterfaceSlot(type);
 				context.AppendInstruction(IRInstruction.IsInstanceOfInterfaceType, result, CreateConstant32(slot), entry.Operand);
 			}
 
@@ -2538,7 +2544,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var entry = stack.Pop();
 
 			var field = (MosaField)instruction.Operand;
-			int offset = TypeLayout.GetFieldOffset(field);
+			uint offset = TypeLayout.GetFieldOffset(field);
 			var type = field.FieldType;
 
 			switch (entry.StackType)
@@ -2604,21 +2610,19 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var entry = stack.Pop();
 
-			var offset = CreateConstant32(NativePointerSize * 2);
-
 			if (entry.StackType == StackType.Object)
 			{
 				if (Is32BitPlatform)
 				{
 					var result = AllocateVirtualRegisterI32();
-					context.AppendInstruction(IRInstruction.Load32, result, entry.Operand, offset);
+					context.AppendInstruction(IRInstruction.Load32, result, entry.Operand, ConstantZero);
 					stack.Push(new StackEntry(StackType.Int32, result));
 					return true;
 				}
 				else
 				{
 					var result = AllocateVirtualRegisterI64();
-					context.AppendInstruction(IRInstruction.Load64, result, entry.Operand, offset);
+					context.AppendInstruction(IRInstruction.Load64, result, entry.Operand, ConstantZero);
 					stack.Push(new StackEntry(StackType.Int64, result));
 					return true;
 				}
@@ -2831,11 +2835,11 @@ namespace Mosa.Compiler.Framework.Stages
 			var arrayType = (MosaType)instruction.Operand;
 
 			var elementSize = GetTypeSize(arrayType.ElementType, false);
-			var runtimeTypeHandle = GetRuntimeTypeHandle(arrayType);
+			var methodTable = GetMethodTablePointer(arrayType);
 			var size = CreateConstant32(elementSize);
 			var result = AllocateVirtualRegisterObject();
 
-			context.AppendInstruction(IRInstruction.NewArray, result, runtimeTypeHandle, size, elements.Operand);
+			context.AppendInstruction(IRInstruction.NewArray, result, methodTable, size, elements.Operand);
 			context.MosaType = arrayType;
 
 			stack.Push(new StackEntry(StackType.Object, result));
@@ -2867,10 +2871,10 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var result = AllocateVirtualRegisterObject();
 
-				var runtimeTypeHandle = GetRuntimeTypeHandle(classType);
+				var methodTable = GetMethodTablePointer(classType);
 				var size = CreateConstant32(TypeLayout.GetTypeSize(classType));
 
-				context.AppendInstruction(IRInstruction.NewObject, result, runtimeTypeHandle, size);
+				context.AppendInstruction(IRInstruction.NewObject, result, methodTable, size);
 
 				operands.Insert(0, result);
 
@@ -3344,7 +3348,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var type = (MosaType)instruction.Operand;
 			var result = AllocateVirtualRegisterI32();
 
-			var size = type.IsPointer ? NativePointerSize : MethodCompiler.TypeLayout.GetTypeSize(type);
+			var size = type.IsPointer ? NativePointerSize : (uint)MethodCompiler.TypeLayout.GetTypeSize(type);
 
 			context.AppendInstruction(IRInstruction.Move32, result, CreateConstant32(size));
 
@@ -3691,7 +3695,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var type = (MosaType)instruction.Operand;
 
 			// FUTURE: Check for valid cast
-			var runtimeType = GetRuntimeTypeHandle(type);
+			var methodTable = GetMethodTablePointer(type);
 
 			var result = AllocatedOperand(StackType.ManagedPointer);
 			stack.Push(new StackEntry(StackType.ManagedPointer, result));
@@ -3711,7 +3715,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var type = (MosaType)instruction.Operand;
 
 			// FUTURE: Check for valid cast
-			var runtimeType = GetRuntimeTypeHandle(type);
+			var methodTable = GetMethodTablePointer(type);
 
 			if (type.IsReferenceType)
 			{
@@ -3814,21 +3818,18 @@ namespace Mosa.Compiler.Framework.Stages
 			var nextContext = Split(context);
 
 			Operand lengthOperand;
-			Operand fixedOffset;
 
 			if (Is32BitPlatform)
 			{
 				lengthOperand = AllocateVirtualRegisterI32();
-				fixedOffset = CreateConstant32(NativePointerSize * 2);
 
-				context.AppendInstruction(IRInstruction.Load32, lengthOperand, arrayOperand, fixedOffset);
+				context.AppendInstruction(IRInstruction.Load32, lengthOperand, arrayOperand, ConstantZero32);
 			}
 			else
 			{
 				lengthOperand = AllocateVirtualRegisterI64();
-				fixedOffset = CreateConstant64(NativePointerSize * 2);
 
-				context.AppendInstruction(IRInstruction.Load64, lengthOperand, arrayOperand, fixedOffset);
+				context.AppendInstruction(IRInstruction.Load64, lengthOperand, arrayOperand, ConstantZero64);
 			}
 
 			// Now compare length with index
@@ -3868,7 +3869,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <returns>
 		/// Element offset operand.
 		/// </returns>
-		private Operand CalculateArrayElementOffset(Context context, int size, Operand index)
+		private Operand CalculateArrayElementOffset(Context context, uint size, Operand index)
 		{
 			if (Is32BitPlatform)
 			{

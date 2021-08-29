@@ -17,11 +17,11 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			var isReferenceOrContainsReferences = type.IsReferenceType;
 
 			// Move constant into return operand
-			var move = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.Move32 : IRInstruction.Move64;
+			var move = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Move32 : IRInstruction.Move64;
 			context.AppendInstruction(move, opReturn, methodCompiler.CreateConstant(isReferenceOrContainsReferences ? 1 : 0));
 
 			// Set return
-			var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(opReturn.Type, methodCompiler.Architecture.Is32BitPlatform);
+			var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(opReturn.Type, methodCompiler.Is32BitPlatform);
 			context.AppendInstruction(setReturn, null, opReturn);
 
 			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);

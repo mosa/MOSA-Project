@@ -1,27 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <OutputType>Exe</OutputType>
-    <AssemblyTitle>Mosa.Workspace.Experiment.Debug</AssemblyTitle>
-    <Company>MOSA Project</Company>
-    <Product>Mosa.Workspace.Experiment.Debug</Product>
-    <Copyright>Copyright © 2020</Copyright>
-    <DebugType>full</DebugType>
-    <LangVersion>8.0</LangVersion>
-    <OutputPath>..\..\bin\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <NoWarn>1591</NoWarn>
-    <DebugSymbols>True</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>Mosa.Workspace.Experiment.Debug.Program</StartupObject>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
-    <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
-    <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
-    <ProjectReference Include="..\Mosa.Platform.ARMv8A32\Mosa.Platform.ARMv8A32.csproj" />
-    <ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj" />
-    <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net5.0</TargetFramework>
+		<AssemblyTitle>Mosa.Workspace.Experiment.Debug</AssemblyTitle>
+		<Company>MOSA Project</Company>
+		<Product>Mosa.Workspace.Experiment.Debug</Product>
+		<Copyright>Copyright © 2021</Copyright>
+		<DebugType>full</DebugType>
+		<LangVersion>8.0</LangVersion>
+		<OutputPath>..\..\bin\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<NoWarn>1591</NoWarn>
+		<DebugSymbols>True</DebugSymbols>
+	</PropertyGroup>
+	<PropertyGroup>
+		<StartupObject>Mosa.Workspace.Experiment.Debug.Program</StartupObject>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
+		<ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj" />
+		<ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
+		<ProjectReference Include="..\Mosa.Platform.ARMv8A32\Mosa.Platform.ARMv8A32.csproj" />
+		<ProjectReference Include="..\Mosa.Platform.x64\Mosa.Platform.x64.csproj" />
+		<ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj" />
+	</ItemGroup>
 </Project>

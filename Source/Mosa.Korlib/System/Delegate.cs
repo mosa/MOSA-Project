@@ -7,14 +7,14 @@ namespace System
 	/// </summary>
 	public class Delegate
 	{
-		protected uint methodPointer = 0;
+		protected IntPtr methodPointer;
 		protected object instance = null;
 
 		internal Delegate()
 		{
 		}
 
-		internal Delegate(object instance, uint methodPointer)
+		internal Delegate(object instance, IntPtr methodPointer)
 		{
 			this.instance = instance;
 			this.methodPointer = methodPointer;

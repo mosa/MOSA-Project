@@ -11,6 +11,8 @@ namespace Mosa.Plug.Korlib.System
 		[Plug("System.String::InternalAllocateString")]
 		internal static string InternalAllocateString(int length)
 		{
+			// Future: Lookup TypeDef/MethodPointer on String.Empty (for example)
+
 			var v = Mosa.Runtime.Internal.AllocateString(Intrinsic.GetStringType(), (uint)length);
 
 			var s = Intrinsic.GetObjectFromAddress(v);

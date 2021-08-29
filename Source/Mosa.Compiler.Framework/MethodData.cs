@@ -49,9 +49,9 @@ namespace Mosa.Compiler.Framework
 
 		public int ParameterStackSize { get; set; }
 
-		public List<int> ParameterSizes { get; set; }
+		public List<uint> ParameterSizes { get; set; }
 
-		public List<int> ParameterOffsets { get; set; }
+		public List<uint> ParameterOffsets { get; set; }
 
 		public int ReturnSize { get; set; }
 

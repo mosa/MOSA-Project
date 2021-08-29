@@ -188,25 +188,18 @@ namespace Mosa.Compiler.Framework.Analysis
 			public override string ToString()
 			{
 				var sb = new StringBuilder();
-				sb.Append(Operand);
-				sb.Append(" : ");
-				sb.Append(Status.ToString());
+				sb.Append($"{Operand} : {Status}");
 
 				if (IsSingleConstant)
 				{
-					sb.Append(" = ");
-					sb.Append(ConstantUnsignedLongInteger.ToString());
+					sb.Append($" = {ConstantUnsignedLongInteger}");
 				}
 				else if (HasMultipleConstants)
 				{
-					sb.Append(" (");
-					sb.Append(constants.Count.ToString());
-					sb.Append(") =");
-					foreach (ulong i in constants)
+					sb.Append($" ({constants.Count}) =");
+					foreach (var i in constants)
 					{
-						sb.Append(' ');
-						sb.Append(i.ToString());
-						sb.Append(',');
+						sb.Append($" {i},");
 					}
 					sb.Length--;
 				}
@@ -218,7 +211,7 @@ namespace Mosa.Compiler.Framework.Analysis
 					sb.Append("NotNull");
 				else if (IsReferenceDefinedUnknown)
 					sb.Append("Unknown");
-				sb.Append("]");
+				sb.Append(']');
 
 				return sb.ToString();
 			}
@@ -263,16 +256,8 @@ namespace Mosa.Compiler.Framework.Analysis
 				blockStates[i] = false;
 			}
 
-			// Initialize
-			foreach (var block in BasicBlocks.HeadBlocks)
-			{
-				AddExecutionBlock(block);
-			}
-
-			foreach (var block in BasicBlocks.HandlerHeadBlocks)
-			{
-				AddExecutionBlock(block);
-			}
+			AddExecutionBlocks(BasicBlocks.HeadBlocks);
+			AddExecutionBlocks(BasicBlocks.HandlerHeadBlocks);
 
 			while (blockWorklist.Count > 0 || instructionWorkList.Count > 0)
 			{
@@ -353,6 +338,12 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 		}
 
+		private void AddExecutionBlocks(List<BasicBlock> blocks)
+		{
+			foreach (var block in blocks)
+				AddExecutionBlock(block);
+		}
+
 		private void AddExecutionBlock(BasicBlock block)
 		{
 			if (blockStates[block.Sequence])
@@ -399,7 +390,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			ProcessInstructionsContinuiously(block.First);
 
-			// re-analysis phi statements
+			// re-analyze phi statements
 			var phiUse = phiStatements.Get(block);
 
 			if (phiUse == null)
@@ -450,7 +441,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private bool ProcessInstruction(InstructionNode node)
 		{
-			//MainTrace?.Log(context.ToString());
+			//MainTrace?.Log(node.ToString());
 
 			var instruction = node.Instruction;
 
@@ -1124,7 +1115,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private void Phi(InstructionNode node)
 		{
-			//if (Trace.Active) Trace.Log(node.ToString());
+			MainTrace?.Log(node.ToString());
 
 			var result = GetVariableState(node.Result);
 
@@ -1134,7 +1125,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			var sourceBlocks = node.PhiBlocks;
 			var currentBlock = node.Block;
 
-			//if (Trace.Active) Trace.Log("Loop: " + currentBlock.PreviousBlocks.Count.ToString());
+			MainTrace?.Log($"Loop: {currentBlock.PreviousBlocks.Count}");
 
 			for (var index = 0; index < currentBlock.PreviousBlocks.Count; index++)
 			{
@@ -1144,7 +1135,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 				bool executable = blockStates[predecessor.Sequence];
 
-				//if (Trace.Active) Trace.Log("# " + index.ToString() + ": " + predecessor.ToString() + " " + (executable ? "Yes" : "No"));
+				MainTrace?.Log($"# {index}: {predecessor} {(executable ? "Yes" : "No")}");
 
 				if (!executable)
 					continue;
@@ -1156,7 +1147,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 				var operand = GetVariableState(op);
 
-				//if (Trace.Active) Trace.Log("# " + index.ToString() + ": " + operand.ToString());
+				MainTrace?.Log($"# {index}: {operand}");
 
 				CheckAndUpdateNullAssignment(result, operand);
 

@@ -13,7 +13,7 @@
 		<summary>MOSA Platform Libraries x64</summary>
 		<description>MOSA platform libraries for x64</description>
 		<releaseNotes></releaseNotes>
-		<copyright>Copyright © 2020</copyright>
+		<copyright>Copyright © 2021</copyright>
 		<tags>MOSA Compiler</tags>
 		<dependencies>
 			<dependency id="Mosa.Korlib" version="$version$" />

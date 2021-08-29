@@ -6,15 +6,12 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="OptimizedPriorityQueue" Version="5.0.0" />
+    <PackageReference Include="OptimizedPriorityQueue" Version="5.1.0" />
     <PackageReference Include="System.Runtime" Version="4.3.1" />
     <PackageReference Include="System.Threading.Channels" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.MosaTypeSystem\Mosa.Compiler.MosaTypeSystem.csproj" />
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Transform\Auto\" />
   </ItemGroup>
 </Project>

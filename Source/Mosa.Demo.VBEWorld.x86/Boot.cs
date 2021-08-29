@@ -2,6 +2,7 @@
 
 using Mosa.Demo.VBEWorld.x86.HAL;
 using Mosa.Kernel.x86;
+using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
 
 namespace Mosa.Demo.VBEWorld.x86
@@ -14,6 +15,12 @@ namespace Mosa.Demo.VBEWorld.x86
 		public static ConsoleSession Console;
 
 		private static Hardware _hal;
+
+		[Plug("Mosa.Runtime.StartUp::SetInitialMemory")]
+		public static void SetInitialMemory()
+		{
+			KernelMemory.SetInitialMemory(Address.GCInitialMemory, 0x01000000);
+		}
 
 		/// <summary>
 		/// Main

@@ -25,7 +25,7 @@ namespace Mosa.Runtime.x86
 					Runtime.Internal.Fault(0XBAD00002, i);
 				}
 
-				var exceptionType = new TypeDefinition(exceptionObject.LoadPointer());
+				var exceptionType = new TypeDefinition(Mosa.Runtime.Internal.GetTypeDefinition(exceptionObject));
 
 				var methodDef = Runtime.Internal.GetMethodDefinitionViaMethodExceptionLookup(returnAddress);
 

@@ -1,6 +1,8 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Linker;
+using Mosa.Compiler.Framework.Trace;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -55,7 +57,7 @@ namespace Mosa.Compiler.Framework
 			/// </returns>
 			public override string ToString()
 			{
-				return "[@" + Position.ToString() + " -> " + Label.ToString() + "]";
+				return $"[{Position} -> {Label}]";
 			}
 		}
 
@@ -160,26 +162,30 @@ namespace Mosa.Compiler.Framework
 			Patches.Add(new Patch(label, position, size));
 		}
 
-		public void ResolvePatches()
+		public void ResolvePatches(TraceLog trace)
 		{
 			// Save the current position
 			long currentPosition = CodeStream.Position;
 
-			foreach (var p in Patches)
+			foreach (var patch in Patches)
 			{
-				if (!TryGetLabel(p.Label, out int labelPosition))
+				if (!TryGetLabel(patch.Label, out int labelPosition))
 				{
-					throw new ArgumentException("Missing label while resolving patches.", "label=" + labelPosition.ToString());
+					throw new ArgumentException("Missing label while resolving patches.", $"label={labelPosition}");
 				}
 
-				CodeStream.Position = p.Position;
+				CodeStream.Position = patch.Position;
 
 				// Compute relative branch offset
-				int relOffset = labelPosition - (p.Position + 4);
+				int relOffset = labelPosition - (patch.Position + 4);
 
 				// Write relative offset to stream
-				var bytes = BitConverter.GetBytes(relOffset);
-				CodeStream.Write(bytes, 4 - p.Size, p.Size);
+				CodeStream.Write(relOffset);
+
+				//var bytes = BitConverter.GetBytes(relOffset);
+				//CodeStream.Write(bytes, 4 - patch.Size, patch.Size);
+
+				trace?.Log($"Patch L_{patch.Label:X5} @ {patch.Position} with 0x{relOffset:X8}");
 			}
 
 			// Reset the position

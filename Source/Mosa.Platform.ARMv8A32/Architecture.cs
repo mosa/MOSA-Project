@@ -67,7 +67,7 @@ namespace Mosa.Platform.ARMv8A32
 		/// Gets the native size of architecture in bytes.
 		/// </summary>
 		/// <value>This property always returns 4.</value>
-		public override int NativePointerSize { get { return 4; } }
+		public override uint NativePointerSize { get { return 4; } }
 
 		/// <summary>
 		/// Retrieves the register set of the ARMv8A32 platform.

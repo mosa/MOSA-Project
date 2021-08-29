@@ -37,7 +37,7 @@ namespace Mosa.Runtime
 		public static extern object GetObjectFromAddress(Pointer address);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
-		public extern static RuntimeTypeHandle GetStringType();
+		public extern static Pointer GetStringType();
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern Pointer GetValueTypeAddress<T>(T obj) where T : struct;

@@ -6,11 +6,12 @@ namespace Mosa.Runtime
 	{
 		public static void Initialize()
 		{
+			SetInitialMemory();             // Legacy
+
 			PlatformInitialization();
 			GarbageCollectionInitialization();
 
 			KernelInitialization();         // Legacy
-			SetInitialMemory();             // Legacy
 
 			InitializeAssembly();
 			InitializeRuntimeMetadata();

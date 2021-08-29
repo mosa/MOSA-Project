@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Decode(node, decoder);
 
 			// Set the result
-			node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.MethodCompiler.Architecture.Is32BitPlatform ? decoder.TypeSystem.BuiltIn.I4 : decoder.TypeSystem.BuiltIn.I8);
+			node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.MethodCompiler.Is32BitPlatform ? decoder.TypeSystem.BuiltIn.I4 : decoder.TypeSystem.BuiltIn.I8);
 		}
 
 		/// <summary>

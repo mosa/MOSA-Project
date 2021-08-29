@@ -847,39 +847,21 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates the string symbol with data.
-		/// </summary>
-		/// <param name="name">The name.</param>
-		/// <param name="data">The string data.</param>
-		/// <param name="typeSystem">The type system.</param>
-		/// <returns></returns>
-		public static Operand CreateStringSymbol(string name, string data, TypeSystem typeSystem)
-		{
-			Debug.Assert(data != null);
-
-			return new Operand(typeSystem.BuiltIn.String)
-			{
-				IsSymbol = true,
-				Name = name,
-				StringData = data,
-				IsString = true,
-				IsConstant = true
-			};
-		}
-
-		/// <summary>
 		/// Creates the symbol.
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		public static Operand CreateSymbol(MosaType type, string name)
+		public static Operand CreateSymbol(MosaType type, string name, uint offset = 0, string data = null)
 		{
 			return new Operand(type)
 			{
 				IsSymbol = true,
 				Name = name,
-				IsConstant = true
+				IsConstant = true,
+				Offset = offset,
+				StringData = data,
+				IsString = data != null,
 			};
 		}
 
@@ -977,6 +959,10 @@ namespace Mosa.Compiler.Framework
 				if (!IsResolved)
 				{
 					sb.Append("unresolved");
+
+					if (ConstantSigned64 != 0)
+
+						sb.AppendFormat(" offset={0}", ConstantSigned64);
 				}
 				else if (IsNull)
 				{

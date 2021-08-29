@@ -44,7 +44,7 @@ namespace System
 			int offset = 0;
 
 			uint uvalue = value;
-			ushort divisor = hex ? (ushort)16 : (ushort)10;
+			var divisor = hex ? 16u : 10;
 			int length = 0;
 			int count = 0;
 			uint temp;
@@ -67,9 +67,9 @@ namespace System
 			while (temp != 0);
 
 			length = count;
-			String result = String.InternalAllocateString(length);
+			var result = String.InternalAllocateString(length);
 
-			char* chars = result.first_char;
+			var chars = result.first_char;
 
 			if (negative)
 			{
@@ -78,9 +78,9 @@ namespace System
 				count--;
 			}
 
-			for (int i = 0; i < count; i++)
+			for (var i = 0; i < count; i++)
 			{
-				uint remainder = uvalue % divisor;
+				var remainder = uvalue % divisor;
 
 				if (remainder < 10)
 					*(chars + offset + count - 1 - i) = (char)('0' + remainder);

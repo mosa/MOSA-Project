@@ -75,7 +75,7 @@ namespace Mosa.Platform.x64
 		/// Gets the native size of architecture in bytes.
 		/// </summary>
 		/// <value>This property always returns 8.</value>
-		public override int NativePointerSize { get { return 8; } }
+		public override uint NativePointerSize { get { return 8; } }
 
 		/// <summary>
 		/// Retrieves the register set of the x64 platform.

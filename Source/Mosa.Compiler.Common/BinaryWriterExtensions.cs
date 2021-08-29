@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Common
 				writer.Write((byte)0);
 		}
 
-		public static void Write(this BinaryWriter writer, byte[] value, int nativeSize)
+		public static void Write(this BinaryWriter writer, byte[] value, uint nativeSize)
 		{
 			var bytesToWrite = new byte[nativeSize];
 
@@ -41,52 +41,52 @@ namespace Mosa.Compiler.Common
 			writer.Write(bytesToWrite);
 		}
 
-		public static void Write(this BinaryWriter writer, bool value, int nativeSize)
+		public static void Write(this BinaryWriter writer, bool value, uint nativeSize)
 		{
 			Write(writer, BitConverter.GetBytes(value), nativeSize);
 		}
 
-		public static void Write(this BinaryWriter writer, sbyte value, int nativeSize)
+		public static void Write(this BinaryWriter writer, sbyte value, uint nativeSize)
 		{
 			Write(writer, BitConverter.GetBytes(value), nativeSize);
 		}
 
-		public static void Write(this BinaryWriter writer, char value, int nativeSize)
+		public static void Write(this BinaryWriter writer, char value, uint nativeSize)
 		{
 			Write(writer, BitConverter.GetBytes(value), nativeSize);
 		}
 
-		public static void Write(this BinaryWriter writer, short value, int nativeSize)
+		public static void Write(this BinaryWriter writer, short value, uint nativeSize)
 		{
 			Write(writer, BitConverter.GetBytes(value), nativeSize);
 		}
 
-		public static void Write(this BinaryWriter writer, int value, int nativeSize)
+		public static void Write(this BinaryWriter writer, int value, uint nativeSize)
 		{
 			Write(writer, BitConverter.GetBytes(value), nativeSize);
 		}
 
-		public static void Write(this BinaryWriter writer, long value, int nativeSize)
+		public static void Write(this BinaryWriter writer, long value, uint nativeSize)
 		{
 			Write(writer, BitConverter.GetBytes(value), nativeSize);
 		}
 
-		public static void Write(this BinaryWriter writer, byte value, int nativeSize)
+		public static void Write(this BinaryWriter writer, byte value, uint nativeSize)
 		{
 			Write(writer, BitConverter.GetBytes(value), nativeSize);
 		}
 
-		public static void Write(this BinaryWriter writer, ushort value, int nativeSize)
+		public static void Write(this BinaryWriter writer, ushort value, uint nativeSize)
 		{
 			Write(writer, BitConverter.GetBytes(value), nativeSize);
 		}
 
-		public static void Write(this BinaryWriter writer, uint value, int nativeSize)
+		public static void Write(this BinaryWriter writer, uint value, uint nativeSize)
 		{
 			Write(writer, BitConverter.GetBytes(value), nativeSize);
 		}
 
-		public static void Write(this BinaryWriter writer, ulong value, int nativeSize)
+		public static void Write(this BinaryWriter writer, ulong value, uint nativeSize)
 		{
 			Write(writer, BitConverter.GetBytes(value), nativeSize);
 		}
@@ -100,6 +100,5 @@ namespace Mosa.Compiler.Common
 		{
 			stream.Write((byte)value);
 		}
-
 	}
 }

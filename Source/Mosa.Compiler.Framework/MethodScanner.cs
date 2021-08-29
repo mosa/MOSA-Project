@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework
 		private readonly HashSet<MosaField> accessedFields = new HashSet<MosaField>();
 
 		private readonly HashSet<MosaType> invokedInteraceTypes = new HashSet<MosaType>();
-		private readonly KeyedList<MosaType, int> interfaceSlots = new KeyedList<MosaType, int>();
+		private readonly KeyedList<MosaType, uint> interfaceSlots = new KeyedList<MosaType, uint>();
 
 		private MosaMethod lastSource;
 
@@ -208,7 +208,7 @@ namespace Mosa.Compiler.Framework
 			{
 				invokedInteraceTypes.Add(method.DeclaringType);
 
-				int slot = TypeLayout.GetMethodSlot(method);
+				var slot = TypeLayout.GetMethodSlot(method);
 				var interfaceType = method.DeclaringType;
 
 				interfaceSlots.AddIfNew(interfaceType, slot);
@@ -281,12 +281,12 @@ namespace Mosa.Compiler.Framework
 
 					var slot = TypeLayout.GetMethodSlot(method);
 
-					ScheduleDerivedMethods(method.DeclaringType, slot);
+					ScheduleDerivedMethods(method.DeclaringType, (uint)slot);
 				}
 			}
 		}
 
-		private void ScheduleDerivedMethods(MosaType type, int slot)
+		private void ScheduleDerivedMethods(MosaType type, uint slot)
 		{
 			var children = TypeLayout.GetDerivedTypes(type);
 
@@ -334,7 +334,7 @@ namespace Mosa.Compiler.Framework
 
 					if (contains)
 					{
-						int slot = TypeLayout.GetMethodSlot(method);
+						var slot = TypeLayout.GetMethodSlot(method);
 
 						if (slots[slot])
 							continue;

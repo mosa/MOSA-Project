@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		[IntrinsicMethod("Mosa.Runtime.Intrinsic::GetExceptionRegister")]
 		private static void GetExceptionRegister(Context context, MethodCompiler methodCompiler)
 		{
-			var instruction = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.Move32 : IRInstruction.Move64;
+			var instruction = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Move32 : IRInstruction.Move64;
 
 			context.SetInstruction(instruction, context.Result, methodCompiler.Compiler.ExceptionRegister);
 		}

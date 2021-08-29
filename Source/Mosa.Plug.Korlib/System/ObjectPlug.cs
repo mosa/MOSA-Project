@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using System;
 
@@ -42,9 +41,7 @@ namespace Mosa.Plug.Korlib.System
 		[Plug("System.Object::GetTypeHandle")]
 		internal static RuntimeTypeHandle GetTypeHandle(object obj)
 		{
-			var o = Intrinsic.GetObjectAddress(obj);
-
-			return new RuntimeTypeHandle(o.LoadPointer().ToIntPtr());
+			return new RuntimeTypeHandle(Mosa.Runtime.Internal.GetTypeDefinition(obj).ToIntPtr());
 		}
 	}
 }

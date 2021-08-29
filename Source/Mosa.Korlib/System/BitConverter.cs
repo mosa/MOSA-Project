@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Diagnostics;
 using System.Runtime.CompilerServices;
 
 namespace System

@@ -356,7 +356,7 @@
 			"Name": "ExceptionEnd",
 			"FamilyName": "IR",
 			"ResultCount": 0,
-			"OperandCount": 0,
+			"OperandCount": 1,
 			"IgnoreDuringCodeGeneration": "true"
 		},
 		{
@@ -407,12 +407,6 @@
 			"OperandCount": 0,
 			"IgnoreDuringCodeGeneration": "true",
 			"VariableOperands": "true"
-		},
-		{
-			"Name": "GotoLeaveTarget",
-			"FamilyName": "IR",
-			"ResultCount": 0,
-			"OperandCount": 0
 		},
 		{
 			"Name": "IntrinsicMethodCall",
@@ -1049,13 +1043,6 @@
 			"ResultCount": 0,
 			"OperandCount": 1,
 			"FlowControl": "Return"
-		},
-		{
-			"Name": "SetLeaveTarget",
-			"FamilyName": "IR",
-			"ResultCount": 0,
-			"OperandCount": 0,
-			"IgnoreDuringCodeGeneration": "true"
 		},
 		{
 			"Name": "ShiftLeft32",

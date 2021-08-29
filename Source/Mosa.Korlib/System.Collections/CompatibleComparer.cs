@@ -1,19 +1,22 @@
-﻿using System.Diagnostics.Contracts;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System.Diagnostics.Contracts;
 
 namespace System.Collections
 {
 	[Serializable]
 	internal class CompatibleComparer : IEqualityComparer
 	{
-		readonly IComparer _comparer;
+		private readonly IComparer _comparer;
 #pragma warning disable 618
-		readonly IHashCodeProvider _hcp;
+		private readonly IHashCodeProvider _hcp;
 
 		internal CompatibleComparer(IComparer comparer, IHashCodeProvider hashCodeProvider)
 		{
 			_comparer = comparer;
 			_hcp = hashCodeProvider;
 		}
+
 #pragma warning restore 618
 
 		public int Compare(Object a, Object b)
@@ -58,7 +61,10 @@ namespace System.Collections
 		}
 
 		// These are helpers for the Hashtable to query the IKeyComparer infrastructure.
+#pragma warning disable CS0618 // Type or member is obsolete
+
 		internal IHashCodeProvider HashCodeProvider
+#pragma warning restore CS0618 // Type or member is obsolete
 		{
 			get
 			{

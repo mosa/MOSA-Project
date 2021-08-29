@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 
-namespace Mosa.TestWorld.x86.Tests
+namespace Mosa.Demo.TestWorld.x86.Tests
 {
 	public class OtherTest : KernelTest
 	{
@@ -326,7 +326,7 @@ namespace Mosa.TestWorld.x86.Tests
 
 		public static bool BoxTestEqualsI4()
 		{
-			return UnitTests.BoxingTests.EqualsI4(10);
+			return Mosa.UnitTests.BoxingTests.EqualsI4(10);
 		}
 
 		public static bool MethodScanner()

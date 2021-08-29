@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.TestWorld.x86.Tests
+namespace Mosa.Demo.TestWorld.x86.Tests
 {
 	public class GenericTest : KernelTest
 	{

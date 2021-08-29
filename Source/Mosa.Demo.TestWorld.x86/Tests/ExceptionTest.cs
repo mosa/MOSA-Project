@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Mosa.TestWorld.x86.Tests
+namespace Mosa.Demo.TestWorld.x86.Tests
 {
 	public class ExceptionTest : KernelTest
 	{

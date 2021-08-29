@@ -22,6 +22,8 @@ namespace Mosa.Runtime.Metadata
 		// 11:Pointer slotTable;
 		// 12:Pointer bitmap;
 		// 13:uint numberOfMethods;
+		// 14:Pointer method table
+		// 15:Pointer method defination table
 
 		#endregion layout
 

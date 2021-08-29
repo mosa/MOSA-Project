@@ -42,7 +42,7 @@
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" />
-		<PackageReference Include="dnlib" Version="3.3.2" />
+		<PackageReference Include="dnlib" Version="3.3.4" />
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Remove="Properties\Settings.Designer.cs" />

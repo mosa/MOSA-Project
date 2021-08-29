@@ -2,7 +2,7 @@
 
 using Mosa.Runtime.Plug;
 
-namespace Mosa.TestWorld.x86.Tests
+namespace Mosa.Demo.TestWorld.x86.Tests
 {
 	internal class PlugTestCase
 	{
@@ -23,22 +23,22 @@ namespace Mosa.TestWorld.x86.Tests
 		}
 	}
 
-	//[Type("Mosa.TestWorld.x86.Tests.PlugTestCase")]
+	//[Type("Mosa.Demo.TestWorld.x86.Tests.PlugTestCase")]
 	internal static class PlugTestImplementation
 	{
-		[Plug("Mosa.TestWorld.x86.Tests.PlugTestCase::AddOne")]
+		[Plug("Mosa.Demo.TestWorld.x86.Tests.PlugTestCase::AddOne")]
 		public static int AddOne(int a)
 		{
 			return a + 1;
 		}
 
-		[Plug("Mosa.TestWorld.x86.Tests.PlugTestCase::Double")]
+		[Plug("Mosa.Demo.TestWorld.x86.Tests.PlugTestCase::Double")]
 		public static int Double(int a)
 		{
 			return a + a;
 		}
 
-		[Plug("Mosa.TestWorld.x86.Tests.PlugTestCase::AddZ2Z")]
+		[Plug("Mosa.Demo.TestWorld.x86.Tests.PlugTestCase::AddZ2Z")]
 		public static int AddZ2Z(ref PlugTestCase plugTestCase, int z)
 		{
 			return z + z;

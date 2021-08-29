@@ -201,6 +201,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 		Docs\compiler-design.rst = Docs\compiler-design.rst
 		Docs\compiler-optimizations.rst = Docs\compiler-optimizations.rst
 		Docs\compiler-transformations.rst = Docs\compiler-transformations.rst
+		Docs\conf.py = Docs\conf.py
 		Docs\demos.rst = Docs\demos.rst
 		Docs\faq.rst = Docs\faq.rst
 		Docs\get-involved.rst = Docs\get-involved.rst
@@ -222,6 +223,15 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documentation", "Documentat
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Utility.Disassembler", "Mosa.Utility.Disassembler\Mosa.Utility.Disassembler.csproj", "{E45FBA9E-6F57-4511-8977-D8045DE09622}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Graphs", "Graphs", "{D0A13A1A-5E3D-4D30-9A88-14C7A27ADDE1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runtime Tables", "Runtime Tables", "{455DE7A9-EEBF-4D04-A297-BC46A37E303C}"
+	ProjectSection(SolutionItems) = preProject
+		Documentation\Runtime\MOSA-Runtime-Tables.gv = Documentation\Runtime\MOSA-Runtime-Tables.gv
+		Documentation\Runtime\MOSA-Runtime-Tables.png = Documentation\Runtime\MOSA-Runtime-Tables.png
+		Documentation\Runtime\MOSA-Runtime-Tables.svg = Documentation\Runtime\MOSA-Runtime-Tables.svg
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1311,6 +1321,8 @@ Global
 		{E00A8BFB-59CA-443A-A1ED-B9162D7BDF88} = {1AB7FA6A-829C-4DCF-BCA6-A27156D8DA26}
 		{A4028807-1B21-4D14-9CE3-5FD1AAD9EDD7} = {F0EFF742-92D5-4219-939A-8F6F8DAB24E5}
 		{E45FBA9E-6F57-4511-8977-D8045DE09622} = {90065B0F-1BFE-40D8-AED5-11096B2535B0}
+		{D0A13A1A-5E3D-4D30-9A88-14C7A27ADDE1} = {F0EFF742-92D5-4219-939A-8F6F8DAB24E5}
+		{455DE7A9-EEBF-4D04-A297-BC46A37E303C} = {D0A13A1A-5E3D-4D30-9A88-14C7A27ADDE1}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C22A5C94-6B05-4B1B-845A-A2EA7615E093}

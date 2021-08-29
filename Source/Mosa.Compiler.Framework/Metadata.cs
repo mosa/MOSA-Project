@@ -10,6 +10,7 @@ namespace Mosa.Compiler.Framework
 
 		public const string AssemblyDefinition = "$AssemblyDef$";
 		public const string TypeDefinition = "$TypeDef$";
+		public const string MethodDefinitionTable = "$MethodDefTable$";
 		public const string MethodDefinition = "$MethodDef$";
 		public const string FieldDefinition = "$FieldDef$";
 		public const string FieldsTable = "$FieldsTable$";
@@ -20,14 +21,15 @@ namespace Mosa.Compiler.Framework
 		public const string CustomAttribute = "$CustomAttribute$";
 		public const string CustomAttributeArgument = "$CustomAttributeArgument$";
 
-		public const string InterfaceMethodTable = "$IMethodTable$";
-
 		public const string InterfaceSlotTable = "$InterfaceSlotTable$";
+		public const string InterfaceMethodTable = "$InterfaceMethodTable$";
 		public const string InterfaceBitmap = "$InterfaceBitmap$";
 
 		public const string ProtectedRegionTable = "$ProtectedRegionTable$";
 
 		public const string MethodLookupTable = "<$>MethodLookupTable";
 		public const string MethodExceptionLookupTable = "<$>MethodExceptionLookupTable";
+
+		public const string StaticSymbolPrefix = "$static$";
 	}
 }

@@ -290,6 +290,12 @@ namespace Mosa.Runtime
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public ushort Load16(int offset)
+		{
+			return Intrinsic.Load16(this, offset);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public uint Load24(uint offset)
 		{
 			return Intrinsic.Load16(this, offset) | (uint)(Intrinsic.Load8(this, offset + 2) << 16);

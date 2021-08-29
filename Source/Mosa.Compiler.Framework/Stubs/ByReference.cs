@@ -16,15 +16,15 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			var opValue = methodCompiler.AllocateVirtualRegisterOrStackSlot(value.Type);
 
 			// Load instance parameter
-			var loadInstance = BaseMethodCompilerStage.GetLoadParameterInstruction(instance.Type, methodCompiler.Architecture.Is32BitPlatform);
+			var loadInstance = BaseMethodCompilerStage.GetLoadParameterInstruction(instance.Type, methodCompiler.Is32BitPlatform);
 			context.AppendInstruction(loadInstance, opInstance, instance);
 
 			// Load value parameter
-			var loadValue = BaseMethodCompilerStage.GetLoadParameterInstruction(value.Type, methodCompiler.Architecture.Is32BitPlatform);
+			var loadValue = BaseMethodCompilerStage.GetLoadParameterInstruction(value.Type, methodCompiler.Is32BitPlatform);
 			context.AppendInstruction(loadValue, opValue, value);
 
 			// Store value inside instance
-			var store = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.Store32 : IRInstruction.Store64;
+			var store = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Store32 : IRInstruction.Store64;
 			context.AppendInstruction(store, null, opInstance, methodCompiler.ConstantZero, opValue);
 			context.MosaType = methodCompiler.TypeSystem.BuiltIn.I;
 
@@ -39,16 +39,16 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			var opReturn = methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType);
 
 			// Load instance parameter
-			var loadInstance = BaseMethodCompilerStage.GetLoadParameterInstruction(instance.Type, methodCompiler.Architecture.Is32BitPlatform);
+			var loadInstance = BaseMethodCompilerStage.GetLoadParameterInstruction(instance.Type, methodCompiler.Is32BitPlatform);
 			context.AppendInstruction(loadInstance, opInstance, instance);
 
 			// Load value from instance into return operand
-			var loadValue = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.Load32 : IRInstruction.Load64;
+			var loadValue = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Load32 : IRInstruction.Load64;
 			context.AppendInstruction(loadValue, opReturn, opInstance, methodCompiler.ConstantZero);
 			context.MosaType = methodCompiler.TypeSystem.BuiltIn.I;
 
 			// Set return
-			var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(opReturn.Type, methodCompiler.Architecture.Is32BitPlatform);
+			var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(opReturn.Type, methodCompiler.Is32BitPlatform);
 			context.AppendInstruction(setReturn, null, opReturn);
 
 			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);

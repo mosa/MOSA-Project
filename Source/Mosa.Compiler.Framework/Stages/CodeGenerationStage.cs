@@ -147,7 +147,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 						GeneratedInstructionCount++;
 
-						trace?.Log($"{node.Offset} - /0x{node.Offset:X} : {node}");
+						trace?.Log($"0x{node.Offset:X8} {node.Offset} = {node}");
 					}
 					else
 					{
@@ -198,7 +198,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private void EndGenerate()
 		{
-			CodeEmitter.ResolvePatches();
+			var trace = CreateTraceLog("Patches", 9);
+
+			CodeEmitter.ResolvePatches(trace);
 		}
 
 		#endregion Methods

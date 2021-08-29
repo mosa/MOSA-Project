@@ -56,7 +56,7 @@ namespace Mosa.Platform.x86
 		/// Gets the native size of architecture in bytes.
 		/// </summary>
 		/// <value>This property always returns 4.</value>
-		public override int NativePointerSize { get { return 4; } }
+		public override uint NativePointerSize { get { return 4; } }
 
 		/// <summary>
 		/// Retrieves the register set of the x86 platform.
@@ -104,16 +104,6 @@ namespace Mosa.Platform.x86
 		/// Retrieves the program counter register of the x86.
 		/// </summary>
 		public override PhysicalRegister ProgramCounter { get { return null; } }
-
-		/// <summary>
-		/// Gets the offset of first local.
-		/// </summary>
-		public override int OffsetOfFirstLocal { get { return 0; } }
-
-		/// <summary>
-		/// Gets the offset of first parameter.
-		/// </summary>
-		public override int OffsetOfFirstParameter { get { return 8; } }
 
 		/// <summary>
 		/// Gets the name of the platform.

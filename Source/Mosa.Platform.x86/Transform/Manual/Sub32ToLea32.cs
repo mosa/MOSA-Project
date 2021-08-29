@@ -5,11 +5,11 @@ using Mosa.Compiler.Framework.Transform;
 
 namespace Mosa.Platform.x86.Transform.Manual
 {
-	// This transformation can reduces restrictions placed on the register allocator.
-	// The LEA does not change any of the status flags, however, the add instruction some flags (carry, zero, etc.)
+	// This transformation can reduce restrictions placed on the register allocator.
+	// The LEA does not change any of the status flags, however, the sub instruction does modify some flags (carry, zero, etc.)
 	// Therefore, this transformation can only occur if the status flags are unused later.
-	// A search is required to determine if a status flag is used
-	// The search may not be conclusive; when so, the transformation is not made.
+	// A search is required to determine if a status flag is used.
+	// However, if the search is not conclusive, the transformation is not made.
 
 	public sealed class Sub32ToLea32 : BaseTransformation
 	{

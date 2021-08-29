@@ -22,7 +22,9 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class Compiler
 	{
-		private const int MaxThreads = 1024;
+		public const uint ObjectHeaderSizeInNativeIntegers = 2;
+
+		private const uint MaxThreads = 1024;
 
 		#region Data Members
 
@@ -142,6 +144,8 @@ namespace Mosa.Compiler.Framework
 
 		public bool Statistics { get; }
 
+		public uint ObjectHeaderSize { get; }
+
 		#endregion Properties
 
 		#region Static Methods
@@ -181,10 +185,11 @@ namespace Mosa.Compiler.Framework
 				new ExceptionStage(),
 
 				new StackSetupStage(),
-				new StaticAllocationResolutionStage(),
+
+				//new StaticAllocationResolutionStage(),
 				compilerSettings.Devirtualization ? new DevirtualizeCallStage() : null,
 				new PlugStage(),
-				new UnboxValueTypeStage(),
+
 				new RuntimeCallStage(),
 				(compilerSettings.InlineMethods) ? new InlineStage() : null,
 				(compilerSettings.InlineMethods) ? new BlockMergeStage() : null,
@@ -251,6 +256,8 @@ namespace Mosa.Compiler.Framework
 
 			Linker = new MosaLinker(this);
 
+			ObjectHeaderSize = (uint)Architecture.NativePointerSize * ObjectHeaderSizeInNativeIntegers;
+
 			StackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
 			StackPointer = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackPointerRegister);
 			LinkRegister = Architecture.LinkRegister == null ? null : Operand.CreateCPURegister(TypeSystem.BuiltIn.Object, Architecture.LinkRegister);
@@ -278,7 +285,7 @@ namespace Mosa.Compiler.Framework
 
 					for (int i = 0; i < intrinsicMethodAttributes.Length; i++)
 					{
-						var d = (IntrinsicMethodDelegate)Delegate.CreateDelegate(typeof(IntrinsicMethodDelegate), method);
+						var d = (IntrinsicMethodDelegate)System.Delegate.CreateDelegate(typeof(IntrinsicMethodDelegate), method);
 
 						// Finally add the dictionary entry mapping the target name and the delegate
 						InternalIntrinsicMethods.Add(intrinsicMethodAttributes[i].Target, d);
@@ -289,7 +296,7 @@ namespace Mosa.Compiler.Framework
 
 					for (int i = 0; i < stubMethodAttributes.Length; i++)
 					{
-						var d = (StubMethodDelegate)Delegate.CreateDelegate(typeof(StubMethodDelegate), method);
+						var d = (StubMethodDelegate)System.Delegate.CreateDelegate(typeof(StubMethodDelegate), method);
 
 						// Finally add the dictionary entry mapping the target name and the delegate
 						InternalStubMethods.Add(stubMethodAttributes[i].Target, d);
@@ -418,28 +425,22 @@ namespace Mosa.Compiler.Framework
 			PostEvent(CompilerEvent.CompilingMethodsCompleted);
 		}
 
-		private CompilerResult ProcessQueue(int threadID = 0)
+		private MosaMethod ProcessQueue(int threadID = 0)
 		{
-			CompilerResult method = default;
-
 			try
 			{
-				method = MethodScheduler.GetMethodToCompile();
+				var method = MethodScheduler.GetMethodToCompile();
 
 				if (method == null)
 					return null;
 
-				method.CompiledMethod = CompileMethod(method.Method, threadID);
-				method.Result = "OK";
+				CompileMethod(method, threadID);
 				return method;
 			}
 			catch (Exception e)
 			{
-				method.Result = e.Message;
-				MethodScheduler.AddToQueue(method);
+				return null;
 			}
-
-			return method;
 		}
 
 		public void CompileMethod(MosaMethod method)
@@ -497,18 +498,11 @@ namespace Mosa.Compiler.Framework
 			while (true)
 			{
 				var result = ProcessQueue(threadID);
+
 				if (result == null)
 					return;
 
-				if (result.Result != "OK")
-				{
-					//var msg = $"{result.Method.FullName}-{result.Attemps}: {result.Result}{Environment.NewLine}";
-					//File.AppendAllText($"Exception{threadID}.txt", msg);
-				}
-				else
-					success++; // get some stats here only
-
-				// Would report progress here
+				success++;
 			}
 		}
 
