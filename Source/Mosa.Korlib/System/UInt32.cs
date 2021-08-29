@@ -75,6 +75,7 @@ namespace System
 				if (s[i] != '\0')
 				{
 					uint newN = n + (uint)(s[i] - '0');
+
 					// Detect an overflow here...
 					if (newN < n)
 					{
