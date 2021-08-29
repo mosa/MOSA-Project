@@ -1,29 +1,29 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <OutputType>Exe</OutputType>
-    <StartupObject>Mosa.Demo.VBEWorld.x86.Boot</StartupObject>
-    <DebugType>full</DebugType>
-    <LangVersion>8.0</LangVersion>
-    <OutputPath>..\..\bin\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
-    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-    <UseAppHost>false</UseAppHost>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugType>full</DebugType>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Mosa.DeviceDriver\Mosa.DeviceDriver.csproj" />
-    <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj" />
-    <ProjectReference Include="..\Mosa.Kernel.x86\Mosa.Kernel.x86.csproj" />
-    <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
-    <ProjectReference Include="..\Mosa.Runtime.x86\Mosa.Runtime.x86.csproj" />
-    <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<OutputType>Exe</OutputType>
+		<StartupObject>Mosa.Demo.VBEWorld.x86.Boot</StartupObject>
+		<DebugType>full</DebugType>
+		<LangVersion>8.0</LangVersion>
+		<OutputPath>..\..\bin\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
+		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+		<UseAppHost>false</UseAppHost>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+		<DebugType>full</DebugType>
+	</PropertyGroup>
+	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+		<DebugType>pdbonly</DebugType>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Mosa.DeviceDriver\Mosa.DeviceDriver.csproj" />
+		<ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj" />
+		<ProjectReference Include="..\Mosa.Kernel.x86\Mosa.Kernel.x86.csproj" />
+		<ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
+		<ProjectReference Include="..\Mosa.Runtime.x86\Mosa.Runtime.x86.csproj" />
+		<ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
+	</ItemGroup>
 </Project>

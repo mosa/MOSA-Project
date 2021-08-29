@@ -286,7 +286,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		protected bool IsSourceAndTargetWithinSameTryOrException(InstructionNode node)
+		private bool IsSourceAndTargetWithinSameTryOrException(InstructionNode node)
 		{
 			int leaveLabel = TraverseBackToNativeBlock(node.Block).Label;
 			int targetLabel = TraverseBackToNativeBlock(node.BranchTargets[0]).Label;

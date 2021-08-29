@@ -180,9 +180,10 @@ namespace Mosa.Compiler.Framework
 				int relOffset = labelPosition - (patch.Position + 4);
 
 				// Write relative offset to stream
-				//CodeStream.Write(relOffset);
-				var bytes = BitConverter.GetBytes(relOffset);
-				CodeStream.Write(bytes, 4 - patch.Size, patch.Size);
+				CodeStream.Write(relOffset);
+
+				//var bytes = BitConverter.GetBytes(relOffset);
+				//CodeStream.Write(bytes, 4 - patch.Size, patch.Size);
 
 				trace?.Log($"Patch L_{patch.Label:X5} @ {patch.Position} with 0x{relOffset:X8}");
 			}

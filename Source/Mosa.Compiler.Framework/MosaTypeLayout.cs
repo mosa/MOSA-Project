@@ -31,7 +31,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the method table slot index
 		/// </summary>
-		private readonly Dictionary<MosaMethod, int> methodSlots = new Dictionary<MosaMethod, int>();
+		private readonly Dictionary<MosaMethod, uint> methodSlots = new Dictionary<MosaMethod, uint>();
 
 		/// <summary>
 		/// Holds the slot value for each interface
@@ -857,7 +857,8 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var method in type.Methods)
 			{
-				int slot = methodTable.Count;
+				var slot = methodTable.Count;
+
 				if (method.IsVirtual && !method.IsNewSlot)
 				{
 					var newSlot = FindOverrideSlot(methodTable, method);
@@ -879,7 +880,7 @@ namespace Mosa.Compiler.Framework
 				else
 					methodTable.Add(method);
 
-				methodSlots[method] = slot;
+				methodSlots[method] = (uint)slot;
 			}
 
 			typeMethodTables.Add(type, methodTable);
@@ -911,13 +912,12 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var baseMethod in methodTable)
 			{
-				//if (baseMethod.Name.Equals(method.Name) && baseMethod.Equals(method))
 				if (method.SameNameAndSignature(baseMethod))
 				{
 					if (baseMethod.GenericArguments.Count == 0)
-						return methodSlots[baseMethod];
+						return (int)methodSlots[baseMethod];
 					else
-						slot = methodSlots[baseMethod];
+						slot = (int)methodSlots[baseMethod];
 				}
 			}
 
