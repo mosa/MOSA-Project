@@ -529,7 +529,7 @@ namespace Mosa.Compiler.Framework
 			if (!Method.DeclaringType.IsDelegate)
 				return;
 
-			if (!Framework.Delegate.Patch(this))
+			if (!Framework.DelegatePatcher.Patch(this))
 				return;
 
 			IsCILStream = false;

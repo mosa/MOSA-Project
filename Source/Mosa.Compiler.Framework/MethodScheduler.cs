@@ -50,7 +50,6 @@ namespace Mosa.Compiler.Framework
 
 		public MethodScheduler(Compiler compiler)
 		{
-			//_channel = Channel.CreateUnbounded<MosaMethod>(new UnboundedChannelOptions { SingleWriter = false, SingleReader = false });
 			Compiler = compiler;
 			PassCount = 0;
 		}

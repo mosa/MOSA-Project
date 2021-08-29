@@ -27,6 +27,7 @@ namespace Mosa.Compiler.Common
 				stream.WriteByte(0);
 		}
 
+		/// <summary>
 		/// Writes to from MemoryStream to stream
 		/// </summary>
 		/// <param name="stream">The stream.</param>

@@ -11,7 +11,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Patches delegates
 	/// </summary>
-	public static class Delegate
+	public static class DelegatePatcher
 	{
 		public static bool Patch(MethodCompiler methodCompiler)
 		{
