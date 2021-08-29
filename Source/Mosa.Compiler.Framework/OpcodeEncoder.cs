@@ -370,7 +370,7 @@ namespace Mosa.Compiler.Framework
 			}
 			else
 			{
-				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, 0);
+				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I32, operand, 0, operand.ConstantSigned32);
 				AppendBits(0, 32);
 			}
 		}
@@ -402,6 +402,7 @@ namespace Mosa.Compiler.Framework
 			}
 			else
 			{
+				Debug.Assert(operand.Offset == 0);  // REMOVE ME
 				Emitter.EmitLink(Emitter.CurrentPosition, PatchType.I64, operand, 0, 0);
 				AppendBits(0, 64);
 			}

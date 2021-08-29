@@ -7,16 +7,16 @@ namespace Mosa.Compiler.Framework.Intrinsics
 	/// </summary>
 	static partial class IntrinsicMethods
 	{
-		private const string StringClassTypeDefinitionSymbolName = Metadata.TypeDefinition + "System.String";
-
 		[IntrinsicMethod("Mosa.Runtime.Intrinsic::GetStringType")]
 		private static void GetStringType(Context context, MethodCompiler methodCompiler)
 		{
-			var typeDef = Operand.CreateUnmanagedSymbolPointer(StringClassTypeDefinitionSymbolName, methodCompiler.TypeSystem);
+			var result = context.Result;
 
-			var move = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.Move32 : IRInstruction.Move64;
+			var typeDef = Operand.CreateUnmanagedSymbolPointer(Metadata.TypeDefinition + "System.String", methodCompiler.TypeSystem);
 
-			context.SetInstruction(move, context.Result, typeDef);
+			var move = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Move32 : IRInstruction.Move64;
+
+			context.SetInstruction(move, result, typeDef);
 		}
 	}
 }

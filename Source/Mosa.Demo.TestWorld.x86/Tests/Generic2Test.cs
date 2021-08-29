@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.TestWorld.x86.Tests
+namespace Mosa.Demo.TestWorld.x86.Tests
 {
 	public class Generic2Test : KernelTest
 	{

@@ -204,6 +204,9 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsInSSAForm { get; set; }
 
+		public bool Is32BitPlatform { get; }
+		public bool Is64BitPlatform { get; }
+
 		#endregion Properties
 
 		#region Construction
@@ -228,6 +231,8 @@ namespace Mosa.Compiler.Framework
 			Linker = compiler.Linker;
 			MethodScanner = compiler.MethodScanner;
 			CompilerHooks = compiler.CompilerHooks;
+			Is32BitPlatform = Architecture.Is32BitPlatform;
+			Is64BitPlatform = Architecture.Is64BitPlatform;
 
 			NotifyTraceLogHandler = GetMethodInstructionTraceHandler();
 			Statistics = compiler.Statistics;
@@ -244,7 +249,7 @@ namespace Mosa.Compiler.Framework
 			ConstantZeroR4 = CreateConstant(0.0f);
 			ConstantZeroR8 = CreateConstant(0.0d);
 
-			ConstantZero = Architecture.Is32BitPlatform ? ConstantZero32 : ConstantZero64;  // FUTURE: This could just be Constant64 or Constant32 once the caling stage uses the method signature intead of the operand types
+			ConstantZero = Is32BitPlatform ? ConstantZero32 : ConstantZero64;  // FUTURE: This could just be Constant64 or Constant32 once the caling stage uses the method signature intead of the operand types
 
 			LocalVariables = emptyOperandList;
 			ThreadID = threadID;
@@ -342,7 +347,7 @@ namespace Mosa.Compiler.Framework
 
 			if (!MosaTypeLayout.CanFitInRegister(Method.Signature.ReturnType))
 			{
-				offset += TypeLayout.GetTypeSize(Method.Signature.ReturnType);
+				offset += (int)TypeLayout.GetTypeSize(Method.Signature.ReturnType);
 			}
 
 			//Debug.Assert((MethodData.ReturnInRegister ? MethodData.ReturnSize : 0) == TypeLayout.GetTypeSize(Method.Signature.ReturnType));
@@ -357,14 +362,14 @@ namespace Mosa.Compiler.Framework
 					SetStackParameter(index++, ptr, "this", true, offset);
 
 					var size = GetReferenceOrTypeSize(ptr, true);
-					offset += size;
+					offset += (int)size;
 				}
 				else
 				{
 					SetStackParameter(index++, Method.DeclaringType, "this", true, offset);
 
 					var size = GetReferenceOrTypeSize(Method.DeclaringType, true);
-					offset += size;
+					offset += (int)size;
 				}
 			}
 
@@ -373,7 +378,7 @@ namespace Mosa.Compiler.Framework
 				SetStackParameter(index++, parameter.ParameterType, parameter.Name, false, offset);
 
 				var size = GetReferenceOrTypeSize(parameter.ParameterType, true);
-				offset += size;
+				offset += (int)size;
 			}
 		}
 
@@ -524,7 +529,7 @@ namespace Mosa.Compiler.Framework
 			if (!Method.DeclaringType.IsDelegate)
 				return;
 
-			if (!DelegatePatcher.PatchDelegate(this))
+			if (!Framework.Delegate.Patch(this))
 				return;
 
 			IsCILStream = false;
@@ -689,14 +694,14 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public Operand AllocateVirtualRegisterOrStackSlot(MosaType type)
 		{
-			if (!MosaTypeLayout.CanFitInRegister(type))
-			{
-				return AddStackLocal(type);
-			}
-			else
+			if (MosaTypeLayout.CanFitInRegister(type))
 			{
 				var resultType = Compiler.GetStackType(type);
 				return CreateVirtualRegister(resultType);
+			}
+			else
+			{
+				return AddStackLocal(type);
 			}
 		}
 
@@ -711,14 +716,14 @@ namespace Mosa.Compiler.Framework
 			int index = 0;
 			foreach (var local in locals)
 			{
-				if (!MosaTypeLayout.CanFitInRegister(local.Type) || local.IsPinned)
-				{
-					LocalVariables[index++] = AddStackLocal(local.Type, local.IsPinned);
-				}
-				else
+				if (MosaTypeLayout.CanFitInRegister(local.Type) && !local.IsPinned)
 				{
 					var stacktype = Compiler.GetStackType(local.Type);
 					LocalVariables[index++] = CreateVirtualRegister(stacktype);
+				}
+				else
+				{
+					LocalVariables[index++] = AddStackLocal(local.Type, local.IsPinned);
 				}
 			}
 		}
@@ -729,7 +734,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="type">The type.</param>
 		/// <param name="aligned">if set to <c>true</c> [aligned].</param>
 		/// <returns></returns>
-		public int GetReferenceOrTypeSize(MosaType type, bool aligned)
+		public uint GetReferenceOrTypeSize(MosaType type, bool aligned)
 		{
 			if (type.IsValueType)
 			{

@@ -31,27 +31,27 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the method table slot index
 		/// </summary>
-		private readonly Dictionary<MosaMethod, int> methodSlots = new Dictionary<MosaMethod, int>(new MosaMethodFullNameComparer());
+		private readonly Dictionary<MosaMethod, int> methodSlots = new Dictionary<MosaMethod, int>();
 
 		/// <summary>
 		/// Holds the slot value for each interface
 		/// </summary>
-		private readonly Dictionary<MosaType, int> interfaceSlots = new Dictionary<MosaType, int>();
+		private readonly Dictionary<MosaType, uint> interfaceSlots = new Dictionary<MosaType, uint>();
 
 		/// <summary>
 		/// Holds the size of each type
 		/// </summary>
-		private readonly Dictionary<MosaType, int> typeSizes = new Dictionary<MosaType, int>();
+		private readonly Dictionary<MosaType, uint> typeSizes = new Dictionary<MosaType, uint>();
 
 		/// <summary>
 		/// Holds the size of each field
 		/// </summary>
-		private readonly Dictionary<MosaField, int> fieldSizes = new Dictionary<MosaField, int>();
+		private readonly Dictionary<MosaField, uint> fieldSizes = new Dictionary<MosaField, uint>();
 
 		/// <summary>
 		/// Holds the offset for each field
 		/// </summary>
-		private readonly Dictionary<MosaField, int> fieldOffsets = new Dictionary<MosaField, int>();
+		private readonly Dictionary<MosaField, uint> fieldOffsets = new Dictionary<MosaField, uint>();
 
 		/// <summary>
 		/// Holds a list of methods for each type
@@ -91,7 +91,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The overridden methods
 		/// </summary>
-		private readonly HashSet<MosaMethod> overriddenMethods = new HashSet<MosaMethod>(new MosaMethodFullNameComparer());
+		private readonly HashSet<MosaMethod> overriddenMethods = new HashSet<MosaMethod>();
 
 		/// <summary>
 		/// The derived children of the base type
@@ -113,8 +113,8 @@ namespace Mosa.Compiler.Framework
 			public bool ReturnInRegister { get; set; }
 
 			public int ParameterStackSize { get; set; }
-			public List<int> ParameterOffsets { get; set; }
-			public List<int> ParameterSizes { get; set; }
+			public List<uint> ParameterOffsets { get; set; }
+			public List<uint> ParameterSizes { get; set; }
 
 			public int ParameterCount { get { return ParameterSizes.Count; } }
 		}
@@ -133,13 +133,13 @@ namespace Mosa.Compiler.Framework
 		/// Gets the size of the native pointer.
 		/// </summary>
 		/// <value>The size of the native pointer.</value>
-		public int NativePointerSize { get; }
+		public uint NativePointerSize { get; }
 
 		/// <summary>
 		/// Gets the native pointer alignment.
 		/// </summary>
 		/// <value>The native pointer alignment.</value>
-		public int NativePointerAlignment { get; }
+		public uint NativePointerAlignment { get; }
 
 		/// <summary>
 		/// Get a list of interfaces
@@ -166,7 +166,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="typeSystem">The type system.</param>
 		/// <param name="nativePointerSize">Size of the native pointer.</param>
 		/// <param name="nativePointerAlignment">The native pointer alignment.</param>
-		public MosaTypeLayout(TypeSystem typeSystem, int nativePointerSize, int nativePointerAlignment)
+		public MosaTypeLayout(TypeSystem typeSystem, uint nativePointerSize, uint nativePointerAlignment)
 		{
 			Debug.Assert(nativePointerSize == 4 || nativePointerSize == 8);
 
@@ -184,16 +184,16 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="method">The method.</param>
 		/// <returns></returns>
-		public int GetMethodSlot(MosaMethod method)
+		public uint GetMethodSlot(MosaMethod method)
 		{
 			lock (_lock)
 			{
 				ResolveType(method.DeclaringType);
-				return methodSlots[method];
+				return (uint)methodSlots[method];
 			}
 		}
 
-		public MosaMethod GetMethodBySlot(MosaType type, int slot)
+		public MosaMethod GetMethodBySlot(MosaType type, uint slot)
 		{
 			lock (_lock)
 			{
@@ -201,7 +201,7 @@ namespace Mosa.Compiler.Framework
 
 				var methodTable = GetMethodTable(type);
 
-				return methodTable[slot];
+				return methodTable[(int)slot];
 			}
 		}
 
@@ -210,7 +210,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public int GetInterfaceSlot(MosaType type)
+		public uint GetInterfaceSlot(MosaType type)
 		{
 			lock (_lock)
 			{
@@ -224,13 +224,13 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public int GetTypeSize(MosaType type)
+		public uint GetTypeSize(MosaType type)
 		{
 			lock (_lock)
 			{
 				ResolveType(type);
 
-				typeSizes.TryGetValue(type, out int size);
+				typeSizes.TryGetValue(type, out uint size);
 
 				return size;
 			}
@@ -241,7 +241,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="field">The field.</param>
 		/// <returns></returns>
-		public int GetFieldSize(MosaField field)
+		public uint GetFieldSize(MosaField field)
 		{
 			lock (_lock)
 			{
@@ -254,13 +254,13 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="field">The field.</param>
 		/// <returns></returns>
-		public int GetFieldOffset(MosaField field)
+		public uint GetFieldOffset(MosaField field)
 		{
 			lock (_lock)
 			{
 				ResolveType(field.DeclaringType);
 
-				fieldOffsets.TryGetValue(field, out int offset);
+				fieldOffsets.TryGetValue(field, out uint offset);
 
 				return offset;
 			}
@@ -337,7 +337,7 @@ namespace Mosa.Compiler.Framework
 				if (overriddenMethods.Contains(method))
 					return true;
 
-				int slot = methodSlots[method];
+				var slot = methodSlots[method];
 				var type = method.DeclaringType.BaseType;
 
 				while (type != null)
@@ -347,7 +347,7 @@ namespace Mosa.Compiler.Framework
 					if (slot >= table.Count)
 						return false;
 
-					method = table[slot];
+					method = table[(int)slot];
 
 					if (overriddenMethods.Contains(method))
 					{
@@ -555,10 +555,10 @@ namespace Mosa.Compiler.Framework
 				return null;
 
 			var parameters = method.Signature.Parameters;
-			int stacksize = 0;
+			uint stacksize = 0;
 
-			var offsets = new List<int>(parameters.Count + (method.HasThis ? 1 : 0));
-			var sizes = new List<int>(parameters.Count + (method.HasThis ? 1 : 0));
+			var offsets = new List<uint>(parameters.Count + (method.HasThis ? 1 : 0));
+			var sizes = new List<uint>(parameters.Count + (method.HasThis ? 1 : 0));
 
 			if (method.HasThis)
 			{
@@ -579,7 +579,7 @@ namespace Mosa.Compiler.Framework
 			}
 
 			var returnType = method.Signature.ReturnType;
-			int returnSize = 0;
+			uint returnSize = 0;
 
 			if (!returnType.IsVoid)
 			{
@@ -590,10 +590,10 @@ namespace Mosa.Compiler.Framework
 
 			var methodInfo = new MethodInfo
 			{
-				ReturnSize = returnSize,
+				ReturnSize = (int)returnSize,
 				ParameterOffsets = offsets,
 				ParameterSizes = sizes,
-				ParameterStackSize = stacksize,
+				ParameterStackSize = (int)stacksize,
 				ReturnInRegister = !returnType.IsVoid && FitsInRegister(returnType),
 				HasThis = method.HasThis
 			};
@@ -621,7 +621,7 @@ namespace Mosa.Compiler.Framework
 				return;
 
 			interfaces.Add(type);
-			interfaceSlots.Add(type, interfaceSlots.Count);
+			interfaceSlots.Add(type, (uint)interfaceSlots.Count);
 		}
 
 		private void ComputeSequentialLayout(MosaType type)
@@ -632,10 +632,10 @@ namespace Mosa.Compiler.Framework
 				return;
 
 			// Instance size
-			int typeSize = 0;
+			uint typeSize = 0;
 
 			// Receives the size/alignment
-			int packingSize = type.PackingSize ?? NativePointerAlignment;
+			var packingSize = (uint?)type.PackingSize ?? NativePointerAlignment;
 
 			if (type.BaseType != null)
 			{
@@ -652,19 +652,19 @@ namespace Mosa.Compiler.Framework
 					// Set the field address
 					fieldOffsets.Add(field, typeSize);
 
-					int fieldSize = GetFieldSize(field);
+					uint fieldSize = GetFieldSize(field);
 					typeSize += fieldSize;
 
 					// Pad the field in the type
 					if (packingSize != 0)
 					{
-						int padding = (packingSize - (typeSize % packingSize)) % packingSize;
+						uint padding = (packingSize - (typeSize % packingSize)) % packingSize;
 						typeSize += padding;
 					}
 				}
 			}
 
-			typeSizes.Add(type, (type.ClassSize == null || type.ClassSize == -1) ? typeSize : (int)type.ClassSize);
+			typeSizes.Add(type, (type.ClassSize == null || type.ClassSize == -1) ? typeSize : (uint)type.ClassSize);
 		}
 
 		/// <summary>
@@ -677,13 +677,13 @@ namespace Mosa.Compiler.Framework
 
 			//Debug.Assert(type.BaseType.LayoutSize != 0, @"Type size not set for explicit layout.");
 
-			int size = 0;
+			uint size = 0;
 			foreach (var field in type.Fields)
 			{
 				if (field.Offset == null)
 					continue;
 
-				int offset = (int)field.Offset.Value;
+				uint offset = field.Offset.Value;
 				fieldOffsets.Add(field, offset);
 				size = Math.Max(size, offset + ComputeFieldSize(field));
 
@@ -692,12 +692,12 @@ namespace Mosa.Compiler.Framework
 				Debug.Assert(fieldSizes[field] != 0, "Non-static field doesn't have layout!");
 			}
 
-			typeSizes.Add(type, (type.ClassSize == null || type.ClassSize == -1) ? size : (int)type.ClassSize);
+			typeSizes.Add(type, (type.ClassSize == null || type.ClassSize == -1) ? size : (uint)type.ClassSize);
 		}
 
-		private int ComputeFieldSize(MosaField field)
+		private uint ComputeFieldSize(MosaField field)
 		{
-			if (fieldSizes.TryGetValue(field, out int size))
+			if (fieldSizes.TryGetValue(field, out uint size))
 			{
 				return size;
 			}
@@ -741,7 +741,7 @@ namespace Mosa.Compiler.Framework
 						var cleanInterfaceMethodName = GetNonExplicitMethodName(interfaceMethod);
 
 						// Check that the signatures match, the types and the names
-						if (overrideTarget.Equals(interfaceMethod) && overrideTarget.DeclaringType.Equals(interfaceType) && cleanOverrideTargetName.Equals(cleanInterfaceMethodName))
+						if (overrideTarget.SameSignature(interfaceMethod) && overrideTarget.DeclaringType.Equals(interfaceType) && cleanOverrideTargetName.Equals(cleanInterfaceMethodName))
 						{
 							methodTable[slot] = method;
 						}
@@ -774,7 +774,7 @@ namespace Mosa.Compiler.Framework
 
 				if (cleanInterfaceMethodName.Equals(cleanMethodName))
 				{
-					if (interfaceMethod.Equals(method))
+					if (interfaceMethod.SameSignature(method))
 					{
 						return method;
 					}
@@ -808,12 +808,9 @@ namespace Mosa.Compiler.Framework
 
 				string cleanMethodName = GetNonExplicitMethodName(method);
 
-				if (cleanInterfaceMethodName.Equals(cleanMethodName))
+				if (cleanInterfaceMethodName.Equals(cleanMethodName) && interfaceMethod.SameSignature(method))
 				{
-					if (interfaceMethod.Equals(method))
-					{
-						return method;
-					}
+					return method;
 				}
 			}
 
@@ -914,7 +911,8 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var baseMethod in methodTable)
 			{
-				if (baseMethod.Name.Equals(method.Name) && baseMethod.Equals(method))
+				//if (baseMethod.Name.Equals(method.Name) && baseMethod.Equals(method))
+				if (method.SameNameAndSignature(baseMethod))
 				{
 					if (baseMethod.GenericArguments.Count == 0)
 						return methodSlots[baseMethod];

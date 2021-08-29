@@ -68,7 +68,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				var size = GetTypeSize(local.Type, true);
 
-				offset -= size;
+				offset -= (int)size;
 
 				local.Offset = offset;
 				local.IsResolved = true;

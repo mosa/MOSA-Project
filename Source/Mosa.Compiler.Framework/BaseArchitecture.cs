@@ -77,12 +77,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the native alignment of the architecture in bytes.
 		/// </summary>
-		public int NativeAlignment { get { return NativePointerSize; } }
+		public uint NativeAlignment { get { return NativePointerSize; } }
 
 		/// <summary>
 		/// Gets the native size of architecture in bytes.
 		/// </summary>
-		public abstract int NativePointerSize { get; }
+		public abstract uint NativePointerSize { get; }
 
 		/// <summary>
 		/// Gets the size of the native instruction.
@@ -110,7 +110,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the offset of first parameter.
 		/// </summary>
-		public virtual int OffsetOfFirstParameter { get { return NativePointerSize * 2; } }
+		public virtual int OffsetOfFirstParameter { get { return (int)NativePointerSize * 2; } }
 
 		/// <summary>
 		/// Gets the instructions.
@@ -227,7 +227,7 @@ namespace Mosa.Compiler.Framework
 
 					for (int i = 0; i < attributes.Length; i++)
 					{
-						var d = (IntrinsicMethodDelegate)Delegate.CreateDelegate(typeof(IntrinsicMethodDelegate), method);
+						var d = (IntrinsicMethodDelegate)System.Delegate.CreateDelegate(typeof(IntrinsicMethodDelegate), method);
 
 						// Finally add the dictionary entry mapping the target name and the delegate
 						platformIntrinsicMethods.Add(attributes[i].Target, d);

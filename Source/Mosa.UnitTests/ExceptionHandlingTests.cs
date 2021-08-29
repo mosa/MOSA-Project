@@ -7,6 +7,27 @@ namespace Mosa.UnitTests
 	public static class _ExceptionHandlingTests
 	{
 		[MosaUnitTest]
+		public static int ExceptionTest0()
+		{
+			int a = 10;
+
+			try
+			{
+				a = a + 10;
+			}
+			catch
+			{
+				a = a + 20;
+			}
+			finally
+			{
+				a = a + 40;
+			}
+
+			return a;
+		}
+
+		[MosaUnitTest]
 		public static int ExceptionTest1()
 		{
 			int a = 10;

@@ -84,12 +84,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the native pointer size
 		/// </summary>
-		protected int NativePointerSize { get; private set; }
+		protected uint NativePointerSize { get; private set; }
 
 		/// <summary>
 		/// Holds the native alignment
 		/// </summary>
-		protected int NativeAlignment { get; private set; }
+		protected uint NativeAlignment { get; private set; }
 
 		/// <summary>
 		/// Gets the size of the native instruction.
@@ -220,6 +220,8 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private readonly List<Counter> Counters = new List<Counter>();
 
+		protected uint ObjectHeaderSize;
+
 		#endregion Method Properties
 
 		#region Methods
@@ -242,6 +244,8 @@ namespace Mosa.Compiler.Framework
 			NativeInstructionSize = Architecture.NativeInstructionSize;
 			Is32BitPlatform = Architecture.Is32BitPlatform;
 			Is64BitPlatform = Architecture.Is64BitPlatform;
+
+			ObjectHeaderSize = compiler.ObjectHeaderSize;
 
 			if (Is32BitPlatform)
 			{
@@ -719,24 +723,6 @@ namespace Mosa.Compiler.Framework
 			return null;
 		}
 
-		protected MosaExceptionHandler FindNextEnclosingExceptionHandler(MosaExceptionHandler exceptionHandler)
-		{
-			var index = Method.ExceptionHandlers.IndexOf(exceptionHandler);
-			var at = exceptionHandler.TryStart;
-
-			for (int i = index + 1; i < Method.ExceptionHandlers.Count; i++)
-			{
-				var entry = Method.ExceptionHandlers[i];
-
-				if (!entry.IsLabelWithinTry(at))
-					continue;
-
-				return entry;
-			}
-
-			return null;
-		}
-
 		protected BasicBlock TraverseBackToNativeBlock(BasicBlock block)
 		{
 			var start = block;
@@ -753,61 +739,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion Protected Region Methods
-
-		#region Protected Region Methods (Legacy)
-
-		protected bool IsSourceAndTargetWithinSameTryOrException(InstructionNode node)
-		{
-			int leaveLabel = TraverseBackToNativeBlock(node.Block).Label;
-			int targetLabel = TraverseBackToNativeBlock(node.BranchTargets[0]).Label;
-
-			foreach (var handler in Method.ExceptionHandlers)
-			{
-				bool one = handler.IsLabelWithinTry(leaveLabel);
-				bool two = handler.IsLabelWithinTry(targetLabel);
-
-				if (one && !two)
-					return false;
-
-				if (!one && two)
-					return false;
-
-				if (one && two)
-					return true;
-
-				one = handler.IsLabelWithinHandler(leaveLabel);
-				two = handler.IsLabelWithinHandler(targetLabel);
-
-				if (one && !two)
-					return false;
-
-				if (!one && two)
-					return false;
-
-				if (one && two)
-					return true;
-			}
-
-			// very odd
-			return true;
-		}
-
-		protected BasicBlock TraverseBackToNonCompilerBlock(BasicBlock block)
-		{
-			var start = block;
-
-			while (start.IsCompilerBlock)
-			{
-				if (!start.HasPreviousBlocks)
-					return null;
-
-				start = start.PreviousBlocks[0]; // any one
-			}
-
-			return start;
-		}
-
-		#endregion Protected Region Methods (Legacy)
 
 		#region Trace Helper Methods
 
@@ -922,7 +853,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="type">The type.</param>
 		/// <param name="align">if set to <c>true</c> [align].</param>
 		/// <returns></returns>
-		public int GetTypeSize(MosaType type, bool align)
+		public uint GetTypeSize(MosaType type, bool align)
 		{
 			return MethodCompiler.GetReferenceOrTypeSize(type, align);
 		}

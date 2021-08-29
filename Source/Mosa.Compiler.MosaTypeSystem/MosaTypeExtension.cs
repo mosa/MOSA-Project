@@ -252,7 +252,7 @@ namespace Mosa.Compiler.MosaTypeSystem
 			}
 		}
 
-		public static int? GetPrimitiveSize(this MosaType type, int nativeSize)
+		public static uint? GetPrimitiveSize(this MosaType type, uint nativeSize)
 		{
 			if (type.IsEnum)
 				return type.GetEnumUnderlyingType().GetPrimitiveSize(nativeSize);

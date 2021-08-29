@@ -77,6 +77,8 @@ Source: "..\..\bin\Mosa.Utility.FileSystem.dll"; DestDir: "{app}\bin"; Flags: ig
 Source: "..\..\bin\Mosa.Utility.Launcher.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Utility.RSP.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Utility.Disassembler.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+;Source: "..\..\bin\System.Threading.Channels.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+;Source: "..\..\bin\System.Threading.Tasks.Extensions.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\dnlib.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\CommandLine.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\PriorityQueue.dll"; DestDir: "{app}\bin"; Flags: ignoreversion

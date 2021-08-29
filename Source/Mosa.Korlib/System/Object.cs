@@ -13,10 +13,6 @@ namespace System
 	[Serializable]
 	public class Object
 	{
-		private readonly IntPtr typeDefinitionPtr;
-
-		private readonly IntPtr syncBlock;
-
 		/// <summary>
 		/// Initializes a new instance of the System.Object class.
 		/// </summary>

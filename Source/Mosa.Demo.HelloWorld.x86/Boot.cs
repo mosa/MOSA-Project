@@ -2,6 +2,7 @@
 
 using Mosa.Kernel.x86;
 using Mosa.Kernel.x86.Smbios;
+using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
 using System;
 
@@ -13,6 +14,12 @@ namespace Mosa.Demo.HelloWorld.x86
 	public static class Boot
 	{
 		public static ConsoleSession Console;
+
+		[Plug("Mosa.Runtime.StartUp::SetInitialMemory")]
+		public static void SetInitialMemory()
+		{
+			KernelMemory.SetInitialMemory(Address.GCInitialMemory, 0x01000000);
+		}
 
 		/// <summary>
 		/// Main

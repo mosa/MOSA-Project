@@ -69,9 +69,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 						// Find enclosing try or finally handler
 						var exceptionHandler = FindImmediateExceptionHandler(headerBlock.Label);
-						bool isTry = exceptionHandler.IsLabelWithinTry(headerBlock.Label);
+						bool InTry = exceptionHandler.IsLabelWithinTry(headerBlock.Label);
 
-						var instruction = isTry ? (BaseInstruction)IRInstruction.TryEnd : IRInstruction.ExceptionEnd;
+						var instruction = InTry ? (BaseInstruction)IRInstruction.TryEnd : IRInstruction.ExceptionEnd;
 
 						node.SetInstruction(instruction, leaveBlock);  // added header block
 					}

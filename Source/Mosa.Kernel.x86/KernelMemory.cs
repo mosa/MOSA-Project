@@ -10,9 +10,9 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class KernelMemory
 	{
-		static private uint heapStart = Address.GCInitialMemory;
-		static private uint heapSize = 0x02000000;
-		static private uint heapUsed = 0;
+		static private uint heapStart;
+		static private uint heapSize;
+		static private uint heapUsed;
 
 		[Plug("Mosa.Runtime.GC::AllocateMemory")]
 		static unsafe private Pointer _AllocateMemory(uint size)

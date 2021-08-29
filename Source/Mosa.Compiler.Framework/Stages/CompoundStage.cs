@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void CopyCompound(Context context, MosaType type, Operand destinationBase, Operand destination, Operand sourceBase, Operand source)
 		{
-			int size = TypeLayout.GetTypeSize(type);
+			var size = TypeLayout.GetTypeSize(type);
 
 			Debug.Assert(size > 0);
 
@@ -63,9 +63,9 @@ namespace Mosa.Compiler.Framework.Stages
 			var tmp = AllocateVirtualRegisterI32();
 			var tmpLarge = Is32BitPlatform && size >= 8 ? null : AllocateVirtualRegisterI64();
 
-			for (int i = 0; i < size;)
+			for (var i = 0; i < size;)
 			{
-				int left = size - i;
+				var left = size - i;
 
 				var index = CreateConstant32(i);
 

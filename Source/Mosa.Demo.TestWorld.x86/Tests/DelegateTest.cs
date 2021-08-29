@@ -2,7 +2,7 @@
 
 using Mosa.UnitTests;
 
-namespace Mosa.TestWorld.x86.Tests
+namespace Mosa.Demo.TestWorld.x86.Tests
 {
 	public class DelegateTest : KernelTest
 	{
@@ -13,8 +13,7 @@ namespace Mosa.TestWorld.x86.Tests
 			testMethods.Add(DelegateTest2);
 			testMethods.Add(DelegateTest3);
 			testMethods.Add(DelegateTest4);
-
-			//testMethods.Add(DelegateTest5);
+			testMethods.Add(DelegateTest5);
 			testMethods.Add(DelegateTest6);
 			testMethods.Add(DelegateTest7);
 		}

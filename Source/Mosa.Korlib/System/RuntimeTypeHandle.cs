@@ -9,7 +9,7 @@ namespace System
 	{
 		private readonly IntPtr m_type;
 
-		public RuntimeTypeHandle(IntPtr handle) // FIXME: hack - should be internal
+		public RuntimeTypeHandle(IntPtr handle) // FIXME: hack - should be internal, but the plug needs access
 		{
 			m_type = handle;
 		}

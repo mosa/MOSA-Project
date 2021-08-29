@@ -8,7 +8,7 @@ namespace System
 	[Serializable]
 	public class NotImplementedException : SystemException
 	{
-		private readonly string message;
+		//private readonly string message;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="NotImplementedException"/> class.

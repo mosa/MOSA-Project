@@ -2,7 +2,7 @@
 
 namespace Mosa.UnitTests
 {
-	public static class CompilerTests
+	public static class RemAndModTests
 	{
 		[MosaUnitTest(Series = "I4")]
 		public static int even_mod(int n)

@@ -217,7 +217,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns>The code as a string value.</returns>
 		public override string ToString()
 		{
-			return String.Format("L_{0:X5}", Label);
+			return $"L_{Label:X5}";
 		}
 
 		/// <summary>

@@ -29,7 +29,7 @@ namespace Mosa.Runtime.Metadata
 
 		public string Name => (string)Intrinsic.GetObjectFromAddress(Ptr.LoadPointer());
 
-		public uint StackSize => Ptr.Load32(Pointer.Size * 3);
+		public uint StackSize => Ptr.Load16(Pointer.Size * 3);
 
 		public Pointer Method => Ptr.LoadPointer(Pointer.Size * 4);
 

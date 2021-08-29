@@ -25,6 +25,7 @@ namespace Mosa.Plug.Korlib.Runtime
 				if (customAttributesData == null)
 				{
 					// Custom Attributes Data - Lazy load
+					// FIXME: Race condition
 					if (!assemblyDefinition.CustomAttributes.IsNull)
 					{
 						var customAttributesTablePtr = assemblyDefinition.CustomAttributes;
@@ -93,7 +94,7 @@ namespace Mosa.Plug.Korlib.Runtime
 			typeList = new List<RuntimeType>();
 			typeHandles = new List<RuntimeTypeHandle>();
 
-			uint typeCount = assemblyDefinition.NumberOfTypes;
+			var typeCount = assemblyDefinition.NumberOfTypes;
 
 			for (uint i = 0; i < typeCount; i++)
 			{
@@ -102,16 +103,12 @@ namespace Mosa.Plug.Korlib.Runtime
 				if (typeHandles.Contains(handle))
 					continue;
 
-				ProcessType(handle);
-			}
-		}
+				typeHandles.Add(handle);
 
-		internal RuntimeType ProcessType(RuntimeTypeHandle handle)
-		{
-			typeHandles.Add(handle);
-			var type = new RuntimeType(handle);
-			typeList.Add(type);
-			return type;
+				var type = new RuntimeType(handle);
+
+				typeList.Add(type);
+			}
 		}
 	}
 }

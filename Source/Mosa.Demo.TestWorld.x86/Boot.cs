@@ -4,7 +4,7 @@ using Mosa.Kernel.x86;
 using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
-using Mosa.TestWorld.x86.Tests;
+using Mosa.Demo.TestWorld.x86.Tests;
 using Mosa.UnitTests;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -71,17 +71,35 @@ namespace Mosa.Demo.TestWorld.x86
 			Screen.WriteLine();
 			Screen.WriteLine();
 
-			UnitTest();
+			//Screen.Write("CompilerBugTests: ");
+
+			//bool value1 = Test1();
+
+			//if (value1)
+			//	Screen.WriteLine("Ok");
+			//else
+			//	Screen.WriteLine("Failed");
+
+			//Screen.Write("FindTypeOfTest: ");
+
+			//bool value3 = Test3();
+
+			//if (value3)
+			//	Screen.WriteLine("Ok");
+			//else
+			//	Screen.WriteLine("Failed");
+
+			//UnitTest();
 
 			KernelTest.RunTests();
 			StackTrace();
 
 			TestHash();
 
-			int value = CallReturn10();
+			int value2 = CallReturn10();
 
 			Screen.Write("Return10 Test: ");
-			if (value == 10)
+			if (value2 == 10)
 				Screen.WriteLine("Ok");
 			else
 				Screen.WriteLine("Failed");
@@ -270,14 +288,21 @@ namespace Mosa.Demo.TestWorld.x86
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static void UnitTest()
+		public static bool Test1()
 		{
-			DevirtualizationTests.Test1();
+			return CompilerBugTests.Test();
 		}
 
-		public static int Test1()
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static int Test2()
 		{
 			return Unsafe.SizeOf<int>();
+		}
+
+		[MethodImpl(MethodImplOptions.NoInlining)]
+		public static bool Test3()
+		{
+			return ReflectionTests.FindTypeOfTest();
 		}
 	}
 }

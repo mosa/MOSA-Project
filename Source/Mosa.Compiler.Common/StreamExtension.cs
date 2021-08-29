@@ -21,13 +21,12 @@ namespace Mosa.Compiler.Common
 		/// </summary>
 		/// <param name="stream">The stream.</param>
 		/// <param name="size">The size.</param>
-		public static void WriteZeroBytes(this Stream stream, int size)
+		public static void WriteZeroBytes(this Stream stream, uint size)
 		{
 			for (int i = 0; i < size; i++)
 				stream.WriteByte(0);
 		}
 
-		/// <summary>
 		/// Writes to from MemoryStream to stream
 		/// </summary>
 		/// <param name="stream">The stream.</param>

@@ -1,4 +1,23 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+	<PropertyGroup>
+		<TargetFramework>net472</TargetFramework>
+		<OutputType>Exe</OutputType>
+		<StartupObject>Mosa.UnitTests.x86.Boot</StartupObject>
+		<DebugType>full</DebugType>
+		<LangVersion>8.0</LangVersion>
+		<OutputPath>..\..\bin\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
+		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Mosa.Kernel.x86\Mosa.Kernel.x86.csproj" />
+		<ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
+		<ProjectReference Include="..\Mosa.Runtime.x86\Mosa.Runtime.x86.csproj" />
+		<ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
+		<ProjectReference Include="..\Mosa.UnitTests\Mosa.UnitTests.csproj" />
+	</ItemGroup>
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <OutputType>Exe</OutputType>

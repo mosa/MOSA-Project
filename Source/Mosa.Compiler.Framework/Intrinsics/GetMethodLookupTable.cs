@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		[IntrinsicMethod("Mosa.Runtime.Intrinsic::GetMethodLookupTable")]
 		private static void GetMethodLookupTable(Context context, MethodCompiler methodCompiler)
 		{
-			var move = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.Move32 : IRInstruction.Move64;
+			var move = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Move32 : IRInstruction.Move64;
 
 			context.SetInstruction(move, context.Result, Operand.CreateUnmanagedSymbolPointer(Metadata.MethodLookupTable, methodCompiler.TypeSystem));
 		}

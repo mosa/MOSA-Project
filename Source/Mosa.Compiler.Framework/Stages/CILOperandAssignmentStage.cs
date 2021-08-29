@@ -157,14 +157,14 @@ namespace Mosa.Compiler.Framework.Stages
 				var source = sourceOperands[i];
 				var destination = destinationOperands[i];
 
-				if (!MosaTypeLayout.CanFitInRegister(source.Type))
-				{
-					context.AppendInstruction(IRInstruction.MoveCompound, destination, source);
-				}
-				else
+				if (MosaTypeLayout.CanFitInRegister(source.Type))
 				{
 					var moveInstruction = GetMoveInstruction(source.Type);
 					context.AppendInstruction(moveInstruction, destination, source);
+				}
+				else
+				{
+					context.AppendInstruction(IRInstruction.MoveCompound, destination, source);
 				}
 			}
 		}
@@ -237,7 +237,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			currentStack.Push(ctx.Result);
 
-			if (ctx.Instruction is CIL.DupInstruction)
+			if (ctx.Instruction == CILInstruction.Dup)
 			{
 				currentStack.Push(ctx.Result);
 				dupNodes.Add(ctx.Node);
@@ -251,7 +251,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var node in dupNodes)
 			{
-				Debug.Assert(node.Instruction is CIL.DupInstruction);
+				Debug.Assert(node.Instruction == CILInstruction.Dup);
 				Debug.Assert(node.Result == node.Operand1);
 
 				node.Empty();

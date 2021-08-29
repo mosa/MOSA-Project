@@ -1,22 +1,22 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <OutputType>Exe</OutputType>
-    <AssemblyTitle>Mosa.Workspace.GDB.Debug</AssemblyTitle>
-    <Company>MOSA Project</Company>
-    <Product>Mosa.Workspace.GDB.Debug</Product>
-    <Copyright>Copyright © 2020</Copyright>
-    <DebugType>full</DebugType>
-    <LangVersion>8.0</LangVersion>
-    <OutputPath>..\..\bin\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <NoWarn>1591</NoWarn>
-    <DebugSymbols>True</DebugSymbols>
-  </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject>Mosa.Workspace.UnitTest.Debug.Program</StartupObject>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Mosa.Utility.RSP\Mosa.Utility.RSP.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<OutputType>Exe</OutputType>
+		<TargetFramework>net5.0</TargetFramework>
+		<AssemblyTitle>Mosa.Workspace.GDB.Debug</AssemblyTitle>
+		<Company>MOSA Project</Company>
+		<Product>Mosa.Workspace.GDB.Debug</Product>
+		<Copyright>Copyright © 2021</Copyright>
+		<DebugType>full</DebugType>
+		<LangVersion>8.0</LangVersion>
+		<OutputPath>..\..\bin\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<NoWarn>1591</NoWarn>
+		<DebugSymbols>True</DebugSymbols>
+	</PropertyGroup>
+	<PropertyGroup>
+		<StartupObject>Mosa.Workspace.UnitTest.Debug.Program</StartupObject>
+	</PropertyGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Mosa.Utility.RSP\Mosa.Utility.RSP.csproj" />
+	</ItemGroup>
 </Project>

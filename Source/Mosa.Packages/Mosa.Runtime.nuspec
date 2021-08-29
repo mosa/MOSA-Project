@@ -13,7 +13,7 @@
 		<summary>MOSA Runtime Library</summary>
 		<description>MOSA Runtime Library</description>
 		<releaseNotes></releaseNotes>
-		<copyright>Copyright © 2020</copyright>
+		<copyright>Copyright © 2021</copyright>
 		<tags>MOSA Compiler</tags>
 		<dependencies>
 			<dependency id="Mosa.Korlib" version="$version$" />

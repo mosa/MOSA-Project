@@ -2,20 +2,63 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.TestWorld.x86.Tests
+namespace Mosa.Demo.TestWorld.x86.Tests
 {
 	public class ArrayTest : KernelTest
 	{
 		public ArrayTest()
 			: base("Array")
 		{
-			testMethods.Add(GenericInterfaceTest);
+			testMethods.Add(ArrayTest1);
+			testMethods.Add(ArrayTest2);
+			testMethods.Add(ArrayTest3);
+			testMethods.Add(ArrayIListTest2);
 			testMethods.Add(ArrayBoundsCheck);
 
 			// TODO: add more tests
 		}
 
-		public static bool GenericInterfaceTest()
+		public static bool ArrayTest1()
+		{
+			int[] list = new int[3];
+			list[0] = 1;
+			list[1] = 3;
+			list[2] = 5;
+
+			int result = 0;
+
+			for (int i = 0; i < 3; i++)
+				result += list[i];
+
+			return result == 9;
+		}
+
+		public static bool ArrayTest2()
+		{
+			int[] list = new int[3];
+			list[0] = 1;
+			list[1] = 3;
+			list[2] = 5;
+
+			int result = 0;
+			foreach (var i in list)
+				result += i;
+
+			return result == 9;
+		}
+
+		public static bool ArrayTest3()
+		{
+			int[] list = new int[] { 1, 3, 5 };
+
+			int result = 0;
+			foreach (var i in list)
+				result += i;
+
+			return result == 9;
+		}
+
+		public static bool ArrayIListTest2()
 		{
 			int[] list = new int[] { 1, 3, 5 };
 			IList<int> iList = list;
@@ -24,23 +67,6 @@ namespace Mosa.TestWorld.x86.Tests
 			foreach (var i in iList)
 				result += i;
 			return result == 9;
-		}
-
-		public static bool GenericInterfaceTest2()
-		{
-			return GenericInterfaceTest2a() == 9;
-		}
-
-		private static int GenericInterfaceTest2a()
-		{
-			int[] list = new int[] { 1, 3, 5 };
-			IList<int> iList = list;
-
-			int result = 0;
-			foreach (var i in iList)
-				result += i;
-
-			return result;
 		}
 
 		public static bool ArrayBoundsCheck()

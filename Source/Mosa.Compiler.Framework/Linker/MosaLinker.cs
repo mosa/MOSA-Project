@@ -117,7 +117,7 @@ namespace Mosa.Compiler.Framework.Linker
 			}
 		}
 
-		public LinkerSymbol DefineSymbol(string name, SectionKind kind, int alignment, int size)
+		public LinkerSymbol DefineSymbol(string name, SectionKind kind, uint alignment, uint size)
 		{
 			uint aligned = alignment != 0 ? (uint)alignment : 1;
 
@@ -135,7 +135,7 @@ namespace Mosa.Compiler.Framework.Linker
 				symbol.Alignment = aligned;
 				symbol.SectionKind = kind;
 
-				symbol.Stream = (size == 0) ? new MemoryStream() : new MemoryStream(size);
+				symbol.Stream = (size == 0) ? new MemoryStream() : new MemoryStream((int)size);
 
 				if (size != 0)
 				{

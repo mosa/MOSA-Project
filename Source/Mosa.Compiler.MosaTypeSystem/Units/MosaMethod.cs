@@ -2,12 +2,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Text;
 
 namespace Mosa.Compiler.MosaTypeSystem
 {
-	public sealed class MosaMethod : MosaUnit, IEquatable<MosaMethod>
+	public sealed class MosaMethod : MosaUnit//, IEquatable<MosaMethod>
 	{
 		public MosaModule Module { get; private set; }
 
@@ -101,11 +100,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 			return result;
 		}
 
-		public bool Equals(MosaMethod other)
+		public bool SameSignature(MosaMethod other)
 		{
 			return SignatureComparer.Equals(Signature, other.Signature);
+		}
 
-			//return SignatureEquals(other) && this.DeclaringType.FullName == other.DeclaringType.FullName && this.Name == other.Name;
+		public bool SameNameAndSignature(MosaMethod other)
+		{
+			return other.Name.Equals(Name) && SignatureComparer.Equals(Signature, other.Signature);
 		}
 
 		public class Mutator : MosaUnit.MutatorBase
@@ -178,14 +180,14 @@ namespace Mosa.Compiler.MosaTypeSystem
 					methodName.Append(method.Name);
 					if (GenericArguments.Count > 0)
 					{
-						methodName.Append("<");
+						methodName.Append('<');
 						for (int i = 0; i < GenericArguments.Count; i++)
 						{
 							if (i != 0)
 								methodName.Append(", ");
 							methodName.Append(GenericArguments[i].FullName);
 						}
-						methodName.Append(">");
+						methodName.Append('>');
 					}
 
 					method.ShortName = SignatureName.GetSignature(methodName.ToString(), method.Signature, true);

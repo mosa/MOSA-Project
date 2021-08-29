@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			string symbolName = $"$ldstr${decoder.Method.Module.Name}${token}";
 
-			node.Operand1 = Operand.CreateStringSymbol(symbolName, data, decoder.TypeSystem);
+			node.Operand1 = Operand.CreateSymbol(decoder.TypeSystem.BuiltIn.String, symbolName, decoder.MethodCompiler.Compiler.ObjectHeaderSize, data);
 
 			node.Result = decoder.MethodCompiler.CreateVirtualRegister(decoder.TypeSystem.BuiltIn.String);
 		}

@@ -68,11 +68,11 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction(IRInstruction.StoreCompound, null, StackFrame, OffsetOfFirstParameterOperand, context.Operand1);
 		}
 
-		private int CalculateMethodTableOffset(MosaMethod invokeTarget)
+		private uint CalculateMethodTableOffset(MosaMethod invokeTarget)
 		{
-			int slot = TypeLayout.GetMethodSlot(invokeTarget);
+			var slot = (uint)TypeLayout.GetMethodSlot(invokeTarget);
 
-			return NativePointerSize * slot;
+			return NativePointerSize * (slot + 14); // 14 is the offset into the TypeDef to the start of the MethodTable
 		}
 
 		private void CallStatic(Context context)
@@ -116,36 +116,53 @@ namespace Mosa.Compiler.Framework.Stages
 			var operands = context.GetOperands();
 
 			Debug.Assert(method != null);
+			Debug.Assert(!method.DeclaringType.IsInterface);
 
 			operands.RemoveAt(0);
 
-			var typeDefinition = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+			// Offset to TypeDef/MethodTable from thisPtr
+			var typeDefOffset = CreateConstant32(-NativePointerSize);
+
+			// Offset to the method pointer on the MethodTable
+			var methodPointerOffset = CreateConstant32(CalculateMethodTableOffset(method));
+
+			var typeDef = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 			var callTarget = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 
-			Debug.Assert(!method.DeclaringType.IsInterface);
-
-			// Same as above except for methodPointer
-			int methodPointerOffset = CalculateMethodTableOffset(method) + (NativePointerSize * 14);
-
-			// Get the TypeDef pointer
-			context.SetInstruction(LoadInstruction, typeDefinition, thisPtr, ConstantZero);
+			// Get the Method Table pointer
+			context.SetInstruction(LoadInstruction, typeDef, thisPtr, typeDefOffset);
 
 			// Get the address of the method
-			context.AppendInstruction(LoadInstruction, callTarget, typeDefinition, CreateConstant32(methodPointerOffset));
+			context.AppendInstruction(LoadInstruction, callTarget, typeDef, methodPointerOffset);
 
 			MakeCall(context, callTarget, result, operands, method);
 
 			MethodScanner.MethodInvoked(method, Method);
 		}
 
-		private int CalculateInterfaceSlot(MosaType interaceType)
+		private uint CalculateInterfaceSlot(MosaType interaceType)
 		{
 			return TypeLayout.GetInterfaceSlot(interaceType);
 		}
 
-		private int CalculateInterfaceSlotOffset(MosaMethod invokeTarget)
+		private uint CalculateInterfaceSlotOffset(MosaMethod invokeTarget)
 		{
-			return CalculateInterfaceSlot(invokeTarget.DeclaringType) * NativePointerSize;
+			var slot = CalculateInterfaceSlot(invokeTarget.DeclaringType);
+
+			// Skip the first entry (Count)
+			slot += 1;
+
+			return slot * NativePointerSize;
+		}
+
+		private uint CalculateInterfaceMethodTableOffset(MosaMethod invokeTarget)
+		{
+			var slot = (uint)TypeLayout.GetMethodSlot(invokeTarget);
+
+			// Skip the first two entries (TypeDef and Count)
+			slot += 2;
+
+			return NativePointerSize * slot;
 		}
 
 		private void CallInterface(Context context)
@@ -160,42 +177,47 @@ namespace Mosa.Compiler.Framework.Stages
 
 			operands.RemoveAt(0);
 
-			var typeDefinition = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
-			var callTarget = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
-
 			Debug.Assert(method.DeclaringType.IsInterface);
 
-			// Offset for InterfaceSlotTable in TypeDef
-			int interfaceSlotTableOffset = (NativePointerSize * 11);
+			// FUTURE: This can be optimized to skip Method Definition lookup.
+
+			// Offset to MethodTable from thisPtr
+			var typeDefOffset = CreateConstant32(-NativePointerSize);
+
+			// Offset for InterfaceSlotTable in TypeDef/MethodTable
+			var interfaceSlotTableOffset = CreateConstant32(NativePointerSize * 11);
 
 			// Offset for InterfaceMethodTable in InterfaceSlotTable
-			int interfaceMethodTableOffset = (NativePointerSize * 1) + CalculateInterfaceSlotOffset(method);
+			var interfaceMethodTableOffset = CreateConstant32(CalculateInterfaceSlotOffset(method));
 
-			// Offset for MethodDef in InterfaceMethodTable
-			int methodDefinitionOffset = (NativePointerSize * 2) + CalculateMethodTableOffset(method);
+			// Offset for Method Def in InterfaceMethodTable
+			var methodDefinitionOffset = CreateConstant32(CalculateInterfaceMethodTableOffset(method));
 
 			// Offset for Method pointer in MethodDef
-			int methodPointerOffset = (NativePointerSize * 4);
+			var methodPointerOffset = CreateConstant32(NativePointerSize * 4);
 
 			// Operands to hold pointers
+			var typeDef = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+			var callTarget = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
+
 			var interfaceSlotPtr = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 			var interfaceMethodTablePtr = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 			var methodDefinition = AllocateVirtualRegister(TypeSystem.BuiltIn.Pointer);
 
-			// Get the TypeDef pointer
-			context.SetInstruction(LoadInstruction, typeDefinition, thisPtr, ConstantZero);
+			// Get the MethodTable pointer
+			context.SetInstruction(LoadInstruction, typeDef, thisPtr, typeDefOffset);
 
-			// Get the Interface Slot Table pointer
-			context.AppendInstruction(LoadInstruction, interfaceSlotPtr, typeDefinition, CreateConstant32(interfaceSlotTableOffset));
+			// Get the InterfaceSlotTable pointer
+			context.AppendInstruction(LoadInstruction, interfaceSlotPtr, typeDef, interfaceSlotTableOffset);
 
-			// Get the Interface Method Table pointer
-			context.AppendInstruction(LoadInstruction, interfaceMethodTablePtr, interfaceSlotPtr, CreateConstant32(interfaceMethodTableOffset));
+			// Get the InterfaceMethodTable pointer
+			context.AppendInstruction(LoadInstruction, interfaceMethodTablePtr, interfaceSlotPtr, interfaceMethodTableOffset);
 
 			// Get the MethodDef pointer
-			context.AppendInstruction(LoadInstruction, methodDefinition, interfaceMethodTablePtr, CreateConstant32(methodDefinitionOffset));
+			context.AppendInstruction(LoadInstruction, methodDefinition, interfaceMethodTablePtr, methodDefinitionOffset);
 
 			// Get the address of the method
-			context.AppendInstruction(LoadInstruction, callTarget, methodDefinition, CreateConstant32(methodPointerOffset));
+			context.AppendInstruction(LoadInstruction, callTarget, methodDefinition, methodPointerOffset);
 
 			MakeCall(context, callTarget, result, operands, method);
 
@@ -208,10 +230,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			//var data = TypeLayout.__GetMethodInfo(method);
 
-			int stackSize = CalculateParameterStackSize(operands);
-			int returnSize = CalculateReturnSize(result);
+			uint stackSize = CalculateParameterStackSize(operands);
+			uint returnSize = CalculateReturnSize(result);
 
-			int totalStack = returnSize + stackSize;
+			uint totalStack = returnSize + stackSize;
 
 			//if (data.ParameterStackSize != stackSize)
 			//{
@@ -228,7 +250,7 @@ namespace Mosa.Compiler.Framework.Stages
 			FreeStackAfterCall(context, totalStack);
 		}
 
-		private void ReserveStackSizeForCall(Context context, int stackSize)
+		private void ReserveStackSizeForCall(Context context, uint stackSize)
 		{
 			if (stackSize == 0)
 				return;
@@ -236,7 +258,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(SubInstruction, StackPointer, StackPointer, CreateConstant32(stackSize));
 		}
 
-		private void FreeStackAfterCall(Context context, int stackSize)
+		private void FreeStackAfterCall(Context context, uint stackSize)
 		{
 			if (stackSize == 0)
 				return;
@@ -244,9 +266,9 @@ namespace Mosa.Compiler.Framework.Stages
 			context.AppendInstruction(AddInstruction, StackPointer, StackPointer, CreateConstant32(stackSize));
 		}
 
-		private int CalculateParameterStackSize(List<Operand> operands)
+		private uint CalculateParameterStackSize(List<Operand> operands)
 		{
-			int stackSize = 0;
+			uint stackSize = 0;
 
 			for (int index = operands.Count - 1; index >= 0; index--)
 			{
@@ -259,7 +281,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return stackSize;
 		}
 
-		private int CalculateReturnSize(Operand result)
+		private uint CalculateReturnSize(Operand result)
 		{
 			if (result == null)
 				return 0;
@@ -274,7 +296,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return 0;
 		}
 
-		private void PushOperands(Context context, List<Operand> operands, int space)
+		private void PushOperands(Context context, List<Operand> operands, uint space)
 		{
 			for (int index = operands.Count - 1; index >= 0; index--)
 			{
@@ -287,7 +309,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private void Push(Context context, Operand operand, int offset)
+		private void Push(Context context, Operand operand, uint offset)
 		{
 			var offsetOperand = CreateConstant32(offset);
 

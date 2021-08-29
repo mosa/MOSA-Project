@@ -14,7 +14,7 @@ namespace Mosa.Plug.Korlib.System.Threading.x64
 		[Plug("System.Threading.Monitor::Enter")]
 		internal static void Enter(Object obj)
 		{
-			var sync = Intrinsic.GetObjectAddress(obj) + IntPtr.Size;
+			var sync = Runtime.Internal.GetObjectHeaderAddress(obj);
 
 			while (Native.CmpXChgLoad64(sync.ToInt64(), 1, 0) != 0)
 			{ }
@@ -24,7 +24,7 @@ namespace Mosa.Plug.Korlib.System.Threading.x64
 		[Plug("System.Threading.Monitor::Exit")]
 		internal static void Exit(Object obj)
 		{
-			var sync = Intrinsic.GetObjectAddress(obj) + IntPtr.Size;
+			var sync = Runtime.Internal.GetObjectHeaderAddress(obj);
 
 			Native.XAddLoad64(sync.ToInt64(), -1);
 		}

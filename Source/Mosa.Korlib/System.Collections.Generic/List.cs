@@ -17,7 +17,8 @@ namespace System.Collections.Generic
 		private T[] _items;
 		private int _size;
 		private int _version;
-		private readonly Object _syncRoot;
+
+		//private readonly Object _syncRoot;
 
 		public List()
 		{
@@ -82,6 +83,7 @@ namespace System.Collections.Generic
 			set
 			{
 				if (value < _size)
+
 					//ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument.value, ExceptionResource.ArgumentOutOfRange_SmallCapacity);
 					throw new ArgumentOutOfRangeException(nameof(value));
 
@@ -131,8 +133,6 @@ namespace System.Collections.Generic
 			get { return false; }
 		}
 
-
-
 		bool ICollection.IsSynchronized
 		{
 			get { return false; }
@@ -145,7 +145,7 @@ namespace System.Collections.Generic
 				throw new NotImplementedException();
 				/*
 				 if( _syncRoot == null) {
-                    System.Threading.Interlocked.CompareExchange<Object>(ref _syncRoot, new Object(), null);    
+                    System.Threading.Interlocked.CompareExchange<Object>(ref _syncRoot, new Object(), null);
                 }
                 return _syncRoot;*/
 			}
@@ -179,6 +179,7 @@ namespace System.Collections.Generic
 				_version++;
 			}
 		}
+
 		//tt
 
 		private static bool IsCompatibleObject(object value)
@@ -200,20 +201,17 @@ namespace System.Collections.Generic
 
 				throw new ArgumentNullException();
 
-				//TODO fix
-				try
-				{
-					this[index] = (T)value;
-				}
-				catch (Exception e)
-				{
-					//ThrowHelper.ThrowWrongValueTypeArgumentException(value, typeof(T));
-				}
+				////TODO fix
+				//try
+				//{
+				//	this[index] = (T)value;
+				//}
+				//catch (Exception e)
+				//{
+				//	//ThrowHelper.ThrowWrongValueTypeArgumentException(value, typeof(T));
+				//}
 			}
 		}
-
-
-
 
 		private void Copy(T[] source, int sourceIndex, T[] destination, int destinationIndex, int size)
 		{
@@ -249,7 +247,6 @@ namespace System.Collections.Generic
 			return Count - 1;
 		}
 
-
 		public void AddRange(IEnumerable<T> collection)
 		{
 			Contract.Ensures(Count >= Contract.OldValue(Count));
@@ -262,6 +259,7 @@ namespace System.Collections.Generic
 				Contract.Ensures(Contract.Result<ReadOnlyCollection<T>>() != null);
 				return new ReadOnlyCollection<T>(this);
 			}*/
+
 		//TODO FIXXXXXXXXXXXXXXXXXXXXX
 
 		private void EnsureCapacity(int size)
@@ -273,15 +271,6 @@ namespace System.Collections.Generic
 				Capacity = newCapacity;
 			}
 		}
-
-
-
-
-
-
-
-
-
 
 		public void Clear()
 		{
@@ -406,8 +395,6 @@ namespace System.Collections.Generic
 			_items[_size] = default(T);
 		}
 
-
-
 		public T[] ToArray()
 		{
 			var array = new T[_size];
@@ -447,6 +434,7 @@ namespace System.Collections.Generic
 					{
 						// Copy first part of _items to insert location
 						Array.Copy(_items, 0, _items, index, index);
+
 						// Copy last part of _items back to inserted location
 						Array.Copy(_items, index + count, _items, index * 2, _size - index);
 					}
@@ -553,7 +541,6 @@ namespace System.Collections.Generic
 				index = 0;
 				current = default(T);
 			}
-
 		}
 	}
 }

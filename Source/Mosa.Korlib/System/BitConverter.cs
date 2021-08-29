@@ -19,35 +19,38 @@ namespace System
 		// Converts a char into an array of bytes with length two.
 		public static byte[] GetBytes(char value)
 		{
-			byte[] bytes = new byte[sizeof(char)];
-			Unsafe.As<byte, char>(ref bytes[0]) = value;
-			return bytes;
+			return GetBytes((short)value);
 		}
 
-		// Converts a short into an array of bytes with length
-		// two.
-		public static byte[] GetBytes(short value)
+		// Converts a short into an array of bytes with length two.
+		public unsafe static byte[] GetBytes(short value)
 		{
-			byte[] bytes = new byte[sizeof(short)];
-			Unsafe.As<byte, short>(ref bytes[0]) = value;
+			//byte[] bytes = new byte[sizeof(short)];
+			//Unsafe.As<byte, short>(ref bytes[0]) = value;
+			//return bytes;
+			byte[] bytes = new byte[2];
+			fixed (byte* b = bytes)
+				*((short*)b) = value;
 			return bytes;
 		}
 
 		// Converts an int into an array of bytes with length
 		// four.
-		public static byte[] GetBytes(int value)
+		public unsafe static byte[] GetBytes(int value)
 		{
-			byte[] bytes = new byte[sizeof(int)];
-			Unsafe.As<byte, int>(ref bytes[0]) = value;
+			byte[] bytes = new byte[4];
+			fixed (byte* b = bytes)
+				*((int*)b) = value;
 			return bytes;
 		}
 
 		// Converts a long into an array of bytes with length
 		// eight.
-		public static byte[] GetBytes(long value)
+		public unsafe static byte[] GetBytes(long value)
 		{
-			byte[] bytes = new byte[sizeof(long)];
-			Unsafe.As<byte, long>(ref bytes[0]) = value;
+			byte[] bytes = new byte[8];
+			fixed (byte* b = bytes)
+				*((long*)b) = value;
 			return bytes;
 		}
 
@@ -55,45 +58,35 @@ namespace System
 		// length two.
 		public static byte[] GetBytes(ushort value)
 		{
-			byte[] bytes = new byte[sizeof(ushort)];
-			Unsafe.As<byte, ushort>(ref bytes[0]) = value;
-			return bytes;
+			return GetBytes((short)value);
 		}
 
 		// Converts an uint into an array of bytes with
 		// length four.
 		public static byte[] GetBytes(uint value)
 		{
-			byte[] bytes = new byte[sizeof(uint)];
-			Unsafe.As<byte, uint>(ref bytes[0]) = value;
-			return bytes;
+			return GetBytes((int)value);
 		}
 
 		// Converts an unsigned long into an array of bytes with
 		// length eight.
 		public static byte[] GetBytes(ulong value)
 		{
-			byte[] bytes = new byte[sizeof(ulong)];
-			Unsafe.As<byte, ulong>(ref bytes[0]) = value;
-			return bytes;
+			return GetBytes((long)value);
 		}
 
 		// Converts a float into an array of bytes with length
 		// four.
-		public static byte[] GetBytes(float value)
+		public unsafe static byte[] GetBytes(float value)
 		{
-			byte[] bytes = new byte[sizeof(float)];
-			Unsafe.As<byte, float>(ref bytes[0]) = value;
-			return bytes;
+			return GetBytes(*(int*)&value);
 		}
 
 		// Converts a double into an array of bytes with length
 		// eight.
-		public static byte[] GetBytes(double value)
+		public unsafe static byte[] GetBytes(double value)
 		{
-			byte[] bytes = new byte[sizeof(double)];
-			Unsafe.As<byte, double>(ref bytes[0]) = value;
-			return bytes;
+			return GetBytes(*(long*)&value);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

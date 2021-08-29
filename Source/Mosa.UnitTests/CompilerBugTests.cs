@@ -12,6 +12,7 @@ namespace Mosa.UnitTests
 		public static bool Test()
 		{
 			ProcessManager.ProcessList = new List<Process>();
+
 			ProcessManager.ProcessList.Add(new Process { ProcessID = 0 });
 			ProcessManager.ProcessList.Add(new Process { ProcessID = 1 });
 			ProcessManager.ProcessList.Add(new Process { ProcessID = 2 });
@@ -130,6 +131,7 @@ namespace Mosa.UnitTests
 				for (var i = 0; i < ProcessList.Count; i++)
 					if (ProcessList[i].ProcessID == processID)
 						return ProcessList[i];
+
 			return null;
 		}
 	}

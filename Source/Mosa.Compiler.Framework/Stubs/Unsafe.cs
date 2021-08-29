@@ -15,11 +15,11 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			var opReturn = methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType);
 
 			// Move constant into return operand
-			var move = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.Move32 : IRInstruction.Move64;
+			var move = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Move32 : IRInstruction.Move64;
 			context.AppendInstruction(move, opReturn, methodCompiler.CreateConstant(size));
 
 			// Set return
-			var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(opReturn.Type, methodCompiler.Architecture.Is32BitPlatform);
+			var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(opReturn.Type, methodCompiler.Is32BitPlatform);
 			context.AppendInstruction(setReturn, null, opReturn);
 
 			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
@@ -33,11 +33,11 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			var opReturn = methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType);
 
 			// Load source into return operand
-			var loadSource = BaseMethodCompilerStage.GetLoadParameterInstruction(source.Type, methodCompiler.Architecture.Is32BitPlatform);
+			var loadSource = BaseMethodCompilerStage.GetLoadParameterInstruction(source.Type, methodCompiler.Is32BitPlatform);
 			context.AppendInstruction(loadSource, opReturn, source);
 
 			// Set return
-			var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(opReturn.Type, methodCompiler.Architecture.Is32BitPlatform);
+			var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(opReturn.Type, methodCompiler.Is32BitPlatform);
 			context.AppendInstruction(setReturn, null, opReturn);
 
 			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
@@ -53,18 +53,18 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			var opReturn = methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType);
 
 			// Load left parameter
-			var loadLeft = BaseMethodCompilerStage.GetLoadParameterInstruction(left.Type, methodCompiler.Architecture.Is32BitPlatform);
+			var loadLeft = BaseMethodCompilerStage.GetLoadParameterInstruction(left.Type, methodCompiler.Is32BitPlatform);
 			context.AppendInstruction(loadLeft, opLeft, left);
 
 			// Load right parameter
-			var loadRight = BaseMethodCompilerStage.GetLoadParameterInstruction(right.Type, methodCompiler.Architecture.Is32BitPlatform);
+			var loadRight = BaseMethodCompilerStage.GetLoadParameterInstruction(right.Type, methodCompiler.Is32BitPlatform);
 			context.AppendInstruction(loadRight, opRight, right);
 
 			// Compare and store into result operand
 			context.AppendInstruction(IRInstruction.CompareObject, ConditionCode.Equal, opReturn, opLeft, opRight);
 
 			// Set return
-			var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(opReturn.Type, methodCompiler.Architecture.Is32BitPlatform);
+			var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(opReturn.Type, methodCompiler.Is32BitPlatform);
 			context.AppendInstruction(setReturn, null, opReturn);
 
 			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
@@ -80,19 +80,19 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			var opReturn = methodCompiler.AllocateVirtualRegisterOrStackSlot(methodCompiler.Method.Signature.ReturnType);
 
 			// Load left parameter
-			var loadSource = BaseMethodCompilerStage.GetLoadParameterInstruction(source.Type, methodCompiler.Architecture.Is32BitPlatform);
+			var loadSource = BaseMethodCompilerStage.GetLoadParameterInstruction(source.Type, methodCompiler.Is32BitPlatform);
 			context.AppendInstruction(loadSource, opSource, source);
 
 			// Load right parameter
-			var loadByteOffset = BaseMethodCompilerStage.GetLoadParameterInstruction(byteOffset.Type, methodCompiler.Architecture.Is32BitPlatform);
+			var loadByteOffset = BaseMethodCompilerStage.GetLoadParameterInstruction(byteOffset.Type, methodCompiler.Is32BitPlatform);
 			context.AppendInstruction(loadByteOffset, opByteOffset, byteOffset);
 
 			// Compare and store into result operand
-			var add = methodCompiler.Architecture.Is32BitPlatform ? (BaseInstruction)IRInstruction.Add32 : IRInstruction.Add64;
+			var add = methodCompiler.Is32BitPlatform ? (BaseInstruction)IRInstruction.Add32 : IRInstruction.Add64;
 			context.AppendInstruction(add, opReturn, opSource, opByteOffset);
 
 			// Return comparison result
-			var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(opReturn.Type, methodCompiler.Architecture.Is32BitPlatform);
+			var setReturn = BaseMethodCompilerStage.GetSetReturnInstruction(opReturn.Type, methodCompiler.Is32BitPlatform);
 			context.AppendInstruction(setReturn, null, opReturn);
 
 			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
