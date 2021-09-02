@@ -24,7 +24,7 @@ namespace Mosa.Platform.x64.Stages
 			Debug.Assert(context.Result.IsR4);
 			Debug.Assert(context.Operand1.IsR4);
 
-			ReplaceWithCall(context, "Mosa.Runtime.Math.x86", "Division", "RemR4");
+			ReplaceWithCall(context, "Mosa.Runtime.Math.x64", "Division", "RemR4");
 		}
 
 		private void RemFloatR8(Context context)
@@ -32,7 +32,7 @@ namespace Mosa.Platform.x64.Stages
 			Debug.Assert(context.Result.IsR8);
 			Debug.Assert(context.Operand1.IsR8);
 
-			ReplaceWithCall(context, "Mosa.Runtime.Math.x86", "Division", "RemR8");
+			ReplaceWithCall(context, "Mosa.Runtime.Math.x64", "Division", "RemR8");
 		}
 
 		#endregion Visitation Methods

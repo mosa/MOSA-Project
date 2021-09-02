@@ -177,6 +177,7 @@ Multiboot Settings
     Multiboot.Video.Width,Video Width
     Multiboot.Video.Height,Video Height
     Multiboot.Video.Depth,Video Depth
+	Multiboot.InitialStackAddress,Initial Stack Address
 
 Debugger Settings
 -----------------

@@ -21,12 +21,11 @@ namespace Mosa.Platform.Intel.CompilerStages
 	/// </remarks>
 	public abstract class MultibootV1Stage : BaseCompilerStage
 	{
-		protected abstract void CreateMultibootMethod();
-
 		private const string MultibootHeaderSymbolName = "<$>mosa-multiboot-header";
 
 		public const string MultibootEAX = "<$>mosa-multiboot-eax";
 		public const string MultibootEBX = "<$>mosa-multiboot-ebx";
+		public const string MultibootEntry = "<$>mosa-multiboot-entry";
 
 		#region Constants
 
@@ -79,12 +78,13 @@ namespace Mosa.Platform.Intel.CompilerStages
 		/// </summary>
 		protected LinkerSymbol multibootHeader;
 
-		#endregion Data Members
-
 		public bool HasVideo { get; set; }
 		public int Width { get; set; }
 		public int Height { get; set; }
 		public int Depth { get; set; }
+		public long InitialStackAddress { get; set; }
+
+		#endregion Data Members
 
 		protected override void Initialization()
 		{
@@ -92,6 +92,8 @@ namespace Mosa.Platform.Intel.CompilerStages
 			Width = CompilerSettings.Settings.GetValue("Multiboot.Video.Width", 0);
 			Height = CompilerSettings.Settings.GetValue("Multiboot.Video.Geight", 0);
 			Depth = CompilerSettings.Settings.GetValue("Multiboot.Video.Depth", 0);
+
+			InitialStackAddress = CompilerSettings.Settings.GetValue("Multiboot.InitialStackAddress", STACK_ADDRESS);
 		}
 
 		protected override void Setup()
@@ -117,15 +119,6 @@ namespace Mosa.Platform.Intel.CompilerStages
 			Compiler.GetMethodData(initializeMethod).DoNotInline = true;
 
 			MethodScanner.MethodInvoked(initializeMethod, multibootMethod);
-		}
-
-		protected override void Finalization()
-		{
-			CreateMultibootMethod();
-
-			var entryPoint = Linker.EntryPoint;
-
-			WriteMultibootHeader(entryPoint);
 		}
 
 		#region Internals

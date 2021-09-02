@@ -8,7 +8,14 @@ namespace Mosa.Platform.x86.CompilerStages
 {
 	public sealed class MultibootV1Stage : Intel.CompilerStages.MultibootV1Stage
 	{
-		protected override void CreateMultibootMethod()
+		protected override void Finalization()
+		{
+			CreateMultibootMethod();
+
+			WriteMultibootHeader(Linker.EntryPoint);
+		}
+
+		private void CreateMultibootMethod()
 		{
 			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
 			var initializeMethod = startUpType.FindMethodByName("Initialize");
@@ -25,7 +32,7 @@ namespace Mosa.Platform.x86.CompilerStages
 			var multibootEAX = Operand.CreateUnmanagedSymbolPointer(MultibootEAX, TypeSystem);
 			var multibootEBX = Operand.CreateUnmanagedSymbolPointer(MultibootEBX, TypeSystem);
 
-			var stackTop = CreateConstant(STACK_ADDRESS);
+			var stackTop = CreateConstant(InitialStackAddress);
 			var zero = CreateConstant(0);
 			var offset = CreateConstant(4);
 

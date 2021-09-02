@@ -156,7 +156,7 @@ namespace Mosa.Compiler.Framework
 				Finalization();
 			}
 		}
-		
+
 		public void CompileSingleMethod(MosaMethod method)
 		{
 			Setup();
