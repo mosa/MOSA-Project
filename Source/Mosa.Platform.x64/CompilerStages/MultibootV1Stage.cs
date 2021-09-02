@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using Mosa.Platform.Intel;
 
@@ -8,7 +9,16 @@ namespace Mosa.Platform.x64.CompilerStages
 {
 	public sealed class MultibootV1Stage : Intel.CompilerStages.MultibootV1Stage
 	{
-		protected override void CreateMultibootMethod()
+		protected override void Finalization()
+		{
+			var multibootEntry = CreateMultibootEntry();
+
+			CreateMultibootMethod();
+
+			WriteMultibootHeader(multibootEntry);
+		}
+
+		private void CreateMultibootMethod()
 		{
 			var startUpType = TypeSystem.GetTypeByName("Mosa.Runtime", "StartUp");
 			var initializeMethod = startUpType.FindMethodByName("Initialize");
@@ -25,7 +35,7 @@ namespace Mosa.Platform.x64.CompilerStages
 			var multibootEAX = Operand.CreateUnmanagedSymbolPointer(MultibootEAX, TypeSystem);
 			var multibootEBX = Operand.CreateUnmanagedSymbolPointer(MultibootEBX, TypeSystem);
 
-			var stackTop = CreateConstant(STACK_ADDRESS);
+			var stackTop = CreateConstant(InitialStackAddress);
 			var zero = CreateConstant(0);
 			var offset = CreateConstant(8);
 
@@ -48,6 +58,28 @@ namespace Mosa.Platform.x64.CompilerStages
 			ctx.AppendInstruction(X64.Ret);
 
 			Compiler.CompileMethod(multibootMethod, basicBlocks);
+		}
+
+		private LinkerSymbol CreateMultibootEntry()
+		{
+			var data = new byte[]
+			{
+				0x68, 0x00, 0x00, 0x00, 0x00, // ba 00 00 00 00     0:  push  { entry point }
+				0x68, 0x00, 0x00, 0x00, 0x00, // ba 00 00 00 00     5:  push  0x0 - allows for 64-bit return later
+				0xe9, 0x00, 0x00, 0x00, 0x00, // e9 00 00 00 00     10: jmp	{ enter long mode code }
+			};
+
+			var symbol = Linker.DefineSymbol(MultibootEntry, SectionKind.Text, 0, (uint)data.Length);
+
+			symbol.SetData(data);
+
+			var type = TypeSystem.GetTypeByName("Mosa.Runtime.x64.Boot", "LongMode");
+			var method = type.FindMethodByName("EnterLongMode");
+
+			Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, symbol, 1, Linker.EntryPoint, 0);
+			Linker.Link(LinkType.RelativeOffset, PatchType.I32, symbol, 11, method.FullName, 0);
+
+			return symbol;
 		}
 	}
 }

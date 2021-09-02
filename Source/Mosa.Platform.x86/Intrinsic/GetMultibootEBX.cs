@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework;
-using Mosa.Platform.x86.CompilerStages;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -13,7 +12,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		[IntrinsicMethod("Mosa.Platform.x86.Intrinsic::GetMultibootEBX")]
 		private static void GetMultibootEBX(Context context, MethodCompiler methodCompiler)
 		{
-			var MultibootEBX = Operand.CreateUnmanagedSymbolPointer(MultibootV1Stage.MultibootEBX, methodCompiler.TypeSystem);
+			var MultibootEBX = Operand.CreateUnmanagedSymbolPointer(Intel.CompilerStages.MultibootV1Stage.MultibootEBX, methodCompiler.TypeSystem);
 
 			context.SetInstruction(IRInstruction.Load32, context.Result, MultibootEBX, methodCompiler.ConstantZero32);
 		}

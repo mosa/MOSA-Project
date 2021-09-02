@@ -107,8 +107,6 @@ namespace Mosa.Runtime.x64
 		[DllImport("Mosa.Platform.x64.Intrinsic::Set32")]
 		public extern static void Set32(ulong address, uint value);
 
-		[DllImport("Mosa.Platform.x64.Intrinsic::GetEBP")]
-		public extern static Pointer GetEBP();
 
 		[DllImport("Mosa.Platform.x64.Intrinsic::GetFS")]
 		public extern static ulong GetFS();
@@ -143,20 +141,8 @@ namespace Mosa.Runtime.x64
 		[DllImport("Mosa.Platform.x64.Intrinsic::Pause")]
 		public extern static void Pause();
 
-		[DllImport("Mosa.Platform.x64.Intrinsic::GetExceptionRegister")]
-		public extern static long GetExceptionRegister();
-
 		[DllImport("Mosa.Platform.x64.Intrinsic::GetIDTJumpLocation")]
 		public extern static long GetIDTJumpLocation(uint irq);
-
-		[DllImport("Mosa.Platform.x64.Intrinsic::GetAssemblyListTable")]
-		public extern static long GetAssemblyListTable();
-
-		[DllImport("Mosa.Platform.x64.Intrinsic::GetMethodLookupTable")]
-		public extern static Pointer GetMethodLookupTable();
-
-		[DllImport("Mosa.Platform.x64.Intrinsic::GetMethodExceptionLookupTable")]
-		public extern static Pointer GetMethodExceptionLookupTable();
 
 		[DllImport("Mosa.Platform.x64.Intrinsic::GetMultibootEAX")]
 		public extern static ulong GetMultibootEAX();
@@ -169,9 +155,6 @@ namespace Mosa.Runtime.x64
 
 		[DllImport("Mosa.Platform.x64.Intrinsic::FrameCall")]
 		public extern static void FrameCall(ulong eip);
-
-		[DllImport("Mosa.Platform.x64.Intrinsic::FrameCallRetU4")]
-		public extern static ulong FrameCallRetU4(ulong eip);
 
 		[DllImport("Mosa.Platform.x64.Intrinsic::FrameCallRetU8")]
 		public extern static ulong FrameCallRetU8(ulong eip);

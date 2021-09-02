@@ -163,7 +163,7 @@ namespace Mosa.Platform.x64
 		/// <param name="compilerSettings"></param>
 		public override void ExtendMethodCompilerPipeline(Pipeline<BaseMethodCompilerStage> pipeline, CompilerSettings compilerSettings)
 		{
-			pipeline.InsertBefore<Stages.RuntimeCallStage>(
+			pipeline.InsertBefore<CallStage>(
 				new Stages.RuntimeCallStage()
 			);
 

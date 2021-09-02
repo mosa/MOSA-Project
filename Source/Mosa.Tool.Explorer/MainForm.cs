@@ -369,7 +369,7 @@ namespace Mosa.Tool.Explorer
 		{
 			message = string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}";
 
-			return $"{(DateTime.Now - compileStartTime).TotalSeconds:0.00} [{threadID.ToString()}] {compilerEvent.ToText()}{message}";
+			return $"{(DateTime.Now - compileStartTime).TotalSeconds:0.00} [{threadID}] {compilerEvent.ToText()}{message}";
 		}
 
 		private void SubmitTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
@@ -753,7 +753,7 @@ namespace Mosa.Tool.Explorer
 
 		private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
-			message = string.IsNullOrWhiteSpace(message) ? string.Empty : $" => {message}";
+			message = string.IsNullOrWhiteSpace(message) ? string.Empty : $"{message}";
 
 			var status = $"{compilerEvent.ToText()}{message}";
 

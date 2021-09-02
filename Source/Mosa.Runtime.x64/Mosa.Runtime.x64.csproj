@@ -1,16 +1,26 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-    <DebugType>full</DebugType>
-    <LangVersion>8.0</LangVersion>
-    <OutputPath>..\..\bin\</OutputPath>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
-    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
-    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-  </PropertyGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
-    <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+		<DebugType>full</DebugType>
+		<LangVersion>8.0</LangVersion>
+		<OutputPath>..\..\bin\</OutputPath>
+		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+		<DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
+		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+	</PropertyGroup>
+	<ItemGroup>
+		<Content Include="Boot\Asm\EnterLongMode.o">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Content>
+	</ItemGroup>
+	<ItemGroup>
+		<Resource Include="Boot\Asm\EnterLongMode.o">
+			<CopyToOutputDirectory>Always</CopyToOutputDirectory>
+		</Resource>
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
+		<ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
+	</ItemGroup>
 </Project>

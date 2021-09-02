@@ -227,7 +227,7 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -platform x86 Mosa.He
 				&& compilerEvent != CompilerEvent.FinalizationStageEnd)
 			{
 				message = string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}";
-				Console.WriteLine($"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} [{threadID.ToString()}] {compilerEvent.ToText()}{message}");
+				Console.WriteLine($"{(DateTime.Now - CompileStartTime).TotalSeconds:0.00} [{threadID}] {compilerEvent.ToText()}{message}");
 			}
 		}
 

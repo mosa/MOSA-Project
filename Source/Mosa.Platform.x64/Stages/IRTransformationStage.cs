@@ -32,6 +32,9 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(IRInstruction.CompareR8, CompareR8);
 			AddVisitation(IRInstruction.Compare32x32, Compare32x32);
 			AddVisitation(IRInstruction.Branch32, Branch32);
+			AddVisitation(IRInstruction.Branch64, Branch64);
+			AddVisitation(IRInstruction.BranchObject, BranchObject);
+			AddVisitation(IRInstruction.CompareObject, CompareObject);
 			AddVisitation(IRInstruction.IfThenElse32, IfThenElse32);
 			AddVisitation(IRInstruction.ConvertR4ToR8, ConvertR4ToR8);
 			AddVisitation(IRInstruction.ConvertR8ToR4, ConvertR8ToR4);
@@ -52,7 +55,11 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(IRInstruction.Jmp, Jmp);
 			AddVisitation(IRInstruction.LoadR4, LoadR4);
 			AddVisitation(IRInstruction.LoadR8, LoadR8);
+			AddVisitation(IRInstruction.LoadObject, LoadObject);
+
 			AddVisitation(IRInstruction.Load32, Load32);
+			AddVisitation(IRInstruction.LoadParamObject, LoadParamObject);
+
 			AddVisitation(IRInstruction.LoadSignExtend8x32, LoadSignExtend8x32);
 			AddVisitation(IRInstruction.LoadSignExtend16x32, LoadSignExtend16x32);
 			AddVisitation(IRInstruction.LoadZeroExtend8x32, LoadZeroExtend8x32);
@@ -71,6 +78,8 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(IRInstruction.MoveR4, MoveR4);
 			AddVisitation(IRInstruction.MoveR8, MoveR8);
 			AddVisitation(IRInstruction.Move32, Move32);
+			AddVisitation(IRInstruction.Move64, Move64);
+			AddVisitation(IRInstruction.MoveObject, MoveObject);
 			AddVisitation(IRInstruction.SignExtend8x32, SignExtend8x32);
 			AddVisitation(IRInstruction.SignExtend16x32, SignExtend16x32);
 			AddVisitation(IRInstruction.ZeroExtend8x32, ZeroExtend8x32);
@@ -86,6 +95,7 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(IRInstruction.ShiftRight32, ShiftRight32);
 			AddVisitation(IRInstruction.StoreR4, StoreR4);
 			AddVisitation(IRInstruction.StoreR8, StoreR8);
+			AddVisitation(IRInstruction.StoreObject, StoreObject);
 			AddVisitation(IRInstruction.Store8, StoreInt8);
 			AddVisitation(IRInstruction.Store16, StoreInt16);
 			AddVisitation(IRInstruction.Store32, Store32);
@@ -94,6 +104,7 @@ namespace Mosa.Platform.x64.Stages
 			AddVisitation(IRInstruction.StoreParam8, StoreParamInt8);
 			AddVisitation(IRInstruction.StoreParam16, StoreParamInt16);
 			AddVisitation(IRInstruction.StoreParam32, StoreParam32);
+			AddVisitation(IRInstruction.StoreParamObject, StoreParamObject);
 			AddVisitation(IRInstruction.SubR4, SubR4);
 			AddVisitation(IRInstruction.SubR8, SubR8);
 			AddVisitation(IRInstruction.Sub32, Sub32);
@@ -167,6 +178,19 @@ namespace Mosa.Platform.x64.Stages
 			context.ReplaceInstruction(X64.Add32);
 		}
 
+		private void AddCarryIn32(Context context)
+		{
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var operand3 = context.Operand3;
+
+			var v1 = AllocateVirtualRegisterI32();
+
+			context.SetInstruction(X64.Bt32, v1, operand3, ConstantZero64);
+			context.AppendInstruction(X64.Adc32, result, operand1, operand2);
+		}
+
 		private void AddCarryOut32(Context context)
 		{
 			var result = context.Result;
@@ -225,27 +249,9 @@ namespace Mosa.Platform.x64.Stages
 			}
 		}
 
-		private void AddCarryIn32(Context context)
+		private void And32(Context context)
 		{
-			var result = context.Result;
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
-			var operand3 = context.Operand3;
-
-			var v1 = AllocateVirtualRegisterI32();
-
-			context.SetInstruction(X64.Bt32, v1, operand3, ConstantZero64);
-			context.AppendInstruction(X64.Adc32, result, operand1, operand2);
-		}
-
-		private void BitCopyR8To64(Context context)
-		{
-			context.ReplaceInstruction(X64.Movdsdi64);
-		}
-
-		private void BitCopy64ToR8(Context context)
-		{
-			context.ReplaceInstruction(X64.Movdi64sd);
+			context.ReplaceInstruction(X64.And32);
 		}
 
 		private void ArithShiftRight32(Context context)
@@ -253,37 +259,14 @@ namespace Mosa.Platform.x64.Stages
 			context.ReplaceInstruction(X64.Sar32);
 		}
 
-		private void Break(Context context)
+		private void BitCopy64ToR8(Context context)
 		{
-			context.SetInstruction(X64.Break);
+			context.ReplaceInstruction(X64.Movdi64sd);
 		}
 
-		private void CallDirect(Context context)
+		private void BitCopyR8To64(Context context)
 		{
-			context.ReplaceInstruction(X64.Call);
-		}
-
-		private void CompareR4(Context context)
-		{
-			FloatCompare(context, X64.Ucomiss);
-		}
-
-		private void CompareR8(Context context)
-		{
-			FloatCompare(context, X64.Ucomisd);
-		}
-
-		private void Compare32x32(Context context)
-		{
-			var condition = context.ConditionCode;
-			var resultOperand = context.Result;
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
-
-			var v1 = AllocateVirtualRegisterI32();
-			context.SetInstruction(X64.Cmp32, null, operand1, operand2);
-			context.AppendInstruction(X64.Setcc, condition, v1);
-			context.AppendInstruction(X64.Movzx8To32, resultOperand, v1);
+			context.ReplaceInstruction(X64.Movdsdi64);
 		}
 
 		private void Branch32(Context context)
@@ -299,14 +282,50 @@ namespace Mosa.Platform.x64.Stages
 			context.AppendInstruction(X64.Branch, condition, target);
 		}
 
-		private void ConvertR4ToR8(Context context)
+		private void Break(Context context)
 		{
-			var result = context.Result;
+			context.SetInstruction(X64.Break);
+		}
+
+		private void CallDirect(Context context)
+		{
+			context.ReplaceInstruction(X64.Call);
+		}
+
+		private void Compare32x32(Context context)
+		{
+			var condition = context.ConditionCode;
+			var resultOperand = context.Result;
 			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
 
-			operand1 = MoveConstantToFloatRegister(context, operand1);
+			var v1 = AllocateVirtualRegisterI32();
+			context.SetInstruction(X64.Cmp32, null, operand1, operand2);
+			context.AppendInstruction(X64.Setcc, condition, v1);
+			context.AppendInstruction(X64.Movzx8To32, resultOperand, v1);
+		}
 
-			context.SetInstruction(X64.Cvtss2sd, result, operand1);
+		private void CompareR4(Context context)
+		{
+			FloatCompare(context, X64.Ucomiss);
+		}
+
+		private void CompareR8(Context context)
+		{
+			FloatCompare(context, X64.Ucomisd);
+		}
+
+		private void ConvertI32ToR4(Context context)
+		{
+			Debug.Assert(context.Result.IsR4);
+
+			context.ReplaceInstruction(X64.Cvtsi2ss32);
+		}
+
+		private void ConvertI32ToR8(Context context)
+		{
+			Debug.Assert(context.Result.IsR8);
+			context.ReplaceInstruction(X64.Cvtsi2sd32);
 		}
 
 		private void ConvertR4ToI32(Context context)
@@ -319,16 +338,14 @@ namespace Mosa.Platform.x64.Stages
 			context.SetInstruction(X64.Cvttss2si32, result, operand1);
 		}
 
-		private void ConvertR8ToR4(Context context)
+		private void ConvertR4ToR8(Context context)
 		{
-			Debug.Assert(context.Result.IsInteger && !context.Result.IsFloatingPoint);
-
 			var result = context.Result;
 			var operand1 = context.Operand1;
 
 			operand1 = MoveConstantToFloatRegister(context, operand1);
 
-			context.SetInstruction(X64.Cvtsd2ss, result, operand1); // FIXME!
+			context.SetInstruction(X64.Cvtss2sd, result, operand1);
 		}
 
 		private void ConvertR8ToI32(Context context)
@@ -341,20 +358,16 @@ namespace Mosa.Platform.x64.Stages
 			context.SetInstruction(X64.Cvttsd2si32, result, operand1);
 		}
 
-		private void ConvertI32ToR4(Context context)
+		private void ConvertR8ToR4(Context context)
 		{
+			Debug.Assert(context.Result.IsInteger && !context.Result.IsFloatingPoint);
+
 			var result = context.Result;
 			var operand1 = context.Operand1;
 
 			operand1 = MoveConstantToFloatRegister(context, operand1);
 
 			context.SetInstruction(X64.Cvtsd2ss, result, operand1);
-		}
-
-		private void ConvertI32ToR8(Context context)
-		{
-			Debug.Assert(context.Result.IsR8);
-			context.ReplaceInstruction(X64.Cvtsi2sd32);
 		}
 
 		private void DivR4(Context context)
@@ -426,20 +439,6 @@ namespace Mosa.Platform.x64.Stages
 			context.ReplaceInstruction(X64.Jmp);
 		}
 
-		private void LoadR4(Context context)
-		{
-			Debug.Assert(context.Result.IsR4);
-
-			context.SetInstruction(X64.MovssLoad, context.Result, context.Operand1, context.Operand2);
-		}
-
-		private void LoadR8(Context context)
-		{
-			Debug.Assert(context.Result.IsR8);
-
-			context.SetInstruction(X64.MovsdLoad, context.Result, context.Operand1, context.Operand2);
-		}
-
 		private void Load32(Context context)
 		{
 			Debug.Assert(!context.Result.IsR4);
@@ -448,6 +447,11 @@ namespace Mosa.Platform.x64.Stages
 			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X64.MovLoad32, context.Result, context.Operand1, context.Operand2);
+		}
+
+		private void LoadParam32(Context context)
+		{
+			context.SetInstruction(X64.MovLoad32, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void LoadParamR4(Context context)
@@ -462,11 +466,6 @@ namespace Mosa.Platform.x64.Stages
 			Debug.Assert(context.Result.IsR8);
 
 			context.SetInstruction(X64.MovsdLoad, context.Result, StackFrame, context.Operand1);
-		}
-
-		private void LoadParam32(Context context)
-		{
-			context.SetInstruction(X64.MovLoad32, context.Result, StackFrame, context.Operand1);
 		}
 
 		private void LoadParamSignExtend16x32(Context context)
@@ -487,6 +486,20 @@ namespace Mosa.Platform.x64.Stages
 		private void LoadParamZeroExtend8x32(Context context)
 		{
 			context.SetInstruction(X64.MovzxLoad8, context.Result, StackFrame, context.Operand1);
+		}
+
+		private void LoadR4(Context context)
+		{
+			Debug.Assert(context.Result.IsR4);
+
+			context.SetInstruction(X64.MovssLoad, context.Result, context.Operand1, context.Operand2);
+		}
+
+		private void LoadR8(Context context)
+		{
+			Debug.Assert(context.Result.IsR8);
+
+			context.SetInstruction(X64.MovsdLoad, context.Result, context.Operand1, context.Operand2);
 		}
 
 		private void LoadSignExtend16x32(Context context)
@@ -517,24 +530,9 @@ namespace Mosa.Platform.x64.Stages
 			context.SetInstruction(X64.MovzxLoad8, context.Result, context.Operand1, context.Operand2);
 		}
 
-		private void And32(Context context)
+		private void Move32(Context context)
 		{
-			context.ReplaceInstruction(X64.And32);
-		}
-
-		private void Not32(Context context)
-		{
-			context.SetInstruction(X64.Not32, context.Result, context.Operand1);
-		}
-
-		private void Or32(Context context)
-		{
-			context.ReplaceInstruction(X64.Or32);
-		}
-
-		private void Xor32(Context context)
-		{
-			context.ReplaceInstruction(X64.Xor32);
+			context.ReplaceInstruction(X64.Mov32);
 		}
 
 		private void MoveR4(Context context)
@@ -555,11 +553,6 @@ namespace Mosa.Platform.x64.Stages
 			operand1 = MoveConstantToFloatRegister(context, operand1);
 
 			context.SetInstruction(X64.Movsd, result, operand1);
-		}
-
-		private void Move32(Context context)
-		{
-			context.ReplaceInstruction(X64.Mov32);
 		}
 
 		private void MulR4(Context context)
@@ -601,6 +594,16 @@ namespace Mosa.Platform.x64.Stages
 		private void Nop(Context context)
 		{
 			context.SetInstruction(X64.Nop);
+		}
+
+		private void Not32(Context context)
+		{
+			context.SetInstruction(X64.Not32, context.Result, context.Operand1);
+		}
+
+		private void Or32(Context context)
+		{
+			context.ReplaceInstruction(X64.Or32);
 		}
 
 		private void RemSigned32(Context context)
@@ -650,26 +653,11 @@ namespace Mosa.Platform.x64.Stages
 			context.ReplaceInstruction(X64.Movsx8To32);
 		}
 
-		private void StoreR4(Context context)
+		private void Store32(Context context)
 		{
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
-			var operand3 = context.Operand3;
+			LoadStore.OrderOperands(context, MethodCompiler);
 
-			operand3 = MoveConstantToFloatRegister(context, operand3);
-
-			context.SetInstruction(X64.MovssStore, null, operand1, operand2, operand3);
-		}
-
-		private void StoreR8(Context context)
-		{
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
-			var operand3 = context.Operand3;
-
-			operand3 = MoveConstantToFloatRegister(context, operand3);
-
-			context.SetInstruction(X64.MovsdStore, null, operand1, operand2, operand3);
+			context.SetInstruction(X64.MovStore32, null, context.Operand1, context.Operand2, context.Operand3);
 		}
 
 		private void StoreInt16(Context context)
@@ -679,18 +667,26 @@ namespace Mosa.Platform.x64.Stages
 			context.SetInstruction(X64.MovStore16, null, context.Operand1, context.Operand2, context.Operand3);
 		}
 
-		private void Store32(Context context)
-		{
-			LoadStore.OrderOperands(context, MethodCompiler);
-
-			context.SetInstruction(X64.MovStore32, null, context.Operand1, context.Operand2, context.Operand3);
-		}
-
 		private void StoreInt8(Context context)
 		{
 			LoadStore.OrderOperands(context, MethodCompiler);
 
 			context.SetInstruction(X64.MovStore8, null, context.Operand1, context.Operand2, context.Operand3);
+		}
+
+		private void StoreParam32(Context context)
+		{
+			context.SetInstruction(X64.MovStore32, null, StackFrame, context.Operand1, context.Operand2);
+		}
+
+		private void StoreParamInt16(Context context)
+		{
+			context.SetInstruction(X64.MovStore16, null, StackFrame, context.Operand1, context.Operand2);
+		}
+
+		private void StoreParamInt8(Context context)
+		{
+			context.SetInstruction(X64.MovStore8, null, StackFrame, context.Operand1, context.Operand2);
 		}
 
 		private void StoreParamR4(Context context)
@@ -713,24 +709,44 @@ namespace Mosa.Platform.x64.Stages
 			context.SetInstruction(X64.MovsdStore, null, StackFrame, operand1, operand2);
 		}
 
-		private void StoreParamInt16(Context context)
+		private void StoreR4(Context context)
 		{
-			context.SetInstruction(X64.MovStore16, null, StackFrame, context.Operand1, context.Operand2);
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var operand3 = context.Operand3;
+
+			operand3 = MoveConstantToFloatRegister(context, operand3);
+
+			context.SetInstruction(X64.MovssStore, null, operand1, operand2, operand3);
 		}
 
-		private void StoreParam32(Context context)
+		private void StoreR8(Context context)
 		{
-			context.SetInstruction(X64.MovStore32, null, StackFrame, context.Operand1, context.Operand2);
-		}
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var operand3 = context.Operand3;
 
-		private void StoreParamInt8(Context context)
-		{
-			context.SetInstruction(X64.MovStore8, null, StackFrame, context.Operand1, context.Operand2);
+			operand3 = MoveConstantToFloatRegister(context, operand3);
+
+			context.SetInstruction(X64.MovsdStore, null, operand1, operand2, operand3);
 		}
 
 		private void Sub32(Context context)
 		{
 			context.ReplaceInstruction(X64.Sub32);
+		}
+
+		private void SubCarryIn32(Context context)
+		{
+			var result = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+			var operand3 = context.Operand3;
+
+			var v1 = AllocateVirtualRegisterI32();
+
+			context.SetInstruction(X64.Bt32, v1, operand3, ConstantZero64);
+			context.AppendInstruction(X64.Sbb32, result, operand1, operand2);
 		}
 
 		private void SubCarryOut32(Context context)
@@ -771,19 +787,6 @@ namespace Mosa.Platform.x64.Stages
 			context.SetInstruction(X64.Subsd, result, operand1, operand2);
 		}
 
-		private void SubCarryIn32(Context context)
-		{
-			var result = context.Result;
-			var operand1 = context.Operand1;
-			var operand2 = context.Operand2;
-			var operand3 = context.Operand3;
-
-			var v1 = AllocateVirtualRegisterI32();
-
-			context.SetInstruction(X64.Bt32, v1, operand3, ConstantZero64);
-			context.AppendInstruction(X64.Sbb32, result, operand1, operand2);
-		}
-
 		private void Switch(Context context)
 		{
 			var targets = context.BranchTargets;
@@ -796,6 +799,11 @@ namespace Mosa.Platform.x64.Stages
 				context.AppendInstruction(X64.Cmp32, null, operand, CreateConstant32(i));
 				context.AppendInstruction(X64.Branch, ConditionCode.Equal, targets[i]);
 			}
+		}
+
+		private void Xor32(Context context)
+		{
+			context.ReplaceInstruction(X64.Xor32);
 		}
 
 		private void ZeroExtend16x32(Context context)
@@ -817,9 +825,40 @@ namespace Mosa.Platform.x64.Stages
 			context.ReplaceInstruction(X64.Add64);
 		}
 
+		private void And64(Context context)
+		{
+			context.ReplaceInstruction(X64.And64);
+		}
+
 		private void ArithShiftRight64(Context context)
 		{
 			context.ReplaceInstruction(X64.Sar64);
+		}
+
+		private void Branch64(Context context)
+		{
+			MoveConstantRight(context);
+
+			var target = context.BranchTargets[0];
+			var condition = context.ConditionCode;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			context.SetInstruction(X64.Cmp64, null, operand1, operand2);
+			context.AppendInstruction(X64.Branch, condition, target);
+		}
+
+		private void BranchObject(Context context)
+		{
+			MoveConstantRight(context);
+
+			var target = context.BranchTargets[0];
+			var condition = context.ConditionCode;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			context.SetInstruction(X64.Cmp64, null, operand1, operand2);
+			context.AppendInstruction(X64.Branch, condition, target);
 		}
 
 		private void Compare32x64(Context context)
@@ -845,17 +884,28 @@ namespace Mosa.Platform.x64.Stages
 			context.AppendInstruction(X64.Movzx8To64, resultOperand, v1);
 		}
 
-		private void Branch64(Context context)
+		private void CompareObject(Context context)
 		{
-			MoveConstantRight(context);
-
-			var target = context.BranchTargets[0];
 			var condition = context.ConditionCode;
+			var result = context.Result;
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
+			var v1 = AllocateVirtualRegisterI32();
+
 			context.SetInstruction(X64.Cmp64, null, operand1, operand2);
-			context.AppendInstruction(X64.Branch, condition, target);
+			context.AppendInstruction(X64.Setcc, condition, v1);
+			context.AppendInstruction(X64.Movzx8To64, result, v1);
+		}
+
+		private void ConvertI64ToR4(Context context)
+		{
+			context.SetInstruction(X64.Cvtsi2ss64, context.Result, context.Operand1);
+		}
+
+		private void ConvertI64ToR8(Context context)
+		{
+			context.SetInstruction(X64.Cvtsi2sd64, context.Result, context.Operand1);
 		}
 
 		private void ConvertR4ToI64(Context context)
@@ -867,16 +917,6 @@ namespace Mosa.Platform.x64.Stages
 		{
 			Debug.Assert(context.Result.IsInteger && !context.Result.IsFloatingPoint);
 			context.ReplaceInstruction(X64.Cvttss2si64);
-		}
-
-		private void ConvertI64ToR4(Context context)
-		{
-			context.SetInstruction(X64.Cvtsi2ss64, context.Result, context.Operand1);
-		}
-
-		private void ConvertI64ToR8(Context context)
-		{
-			context.SetInstruction(X64.Cvtsi2sd64, context.Result, context.Operand1);
 		}
 
 		private void DivSigned64(Context context)
@@ -927,7 +967,22 @@ namespace Mosa.Platform.x64.Stages
 			context.SetInstruction(X64.MovLoad64, context.Result, context.Operand1, context.Operand2);
 		}
 
+		private void LoadObject(Context context)
+		{
+			Debug.Assert(!context.Result.IsR4);
+			Debug.Assert(!context.Result.IsR8);
+
+			LoadStore.OrderOperands(context, MethodCompiler);
+
+			context.SetInstruction(X64.MovLoad64, context.Result, context.Operand1, context.Operand2);
+		}
+
 		private void LoadParam64(Context context)
+		{
+			context.SetInstruction(X64.MovLoad64, context.Result, StackFrame, context.Operand1);
+		}
+
+		private void LoadParamObject(Context context)
 		{
 			context.SetInstruction(X64.MovLoad64, context.Result, StackFrame, context.Operand1);
 		}
@@ -994,29 +1049,14 @@ namespace Mosa.Platform.x64.Stages
 			context.ReplaceInstruction(X64.MovzxLoad8);
 		}
 
-		private void And64(Context context)
-		{
-			context.ReplaceInstruction(X64.And64);
-		}
-
-		private void Not64(Context context)
-		{
-			context.SetInstruction(X64.Mov64, context.Result, context.Operand1);
-		}
-
-		private void Or64(Context context)
-		{
-			context.ReplaceInstruction(X64.Or64);
-		}
-
-		private void Xor64(Context context)
-		{
-			context.ReplaceInstruction(X64.Xor64);
-		}
-
 		private void Move64(Context context)
 		{
 			context.ReplaceInstruction(X64.Mov64);
+		}
+
+		private void MoveObject(Context context)
+		{
+			context.ReplaceInstruction(X64.Mov32);
 		}
 
 		private void MulSigned64(Context context)
@@ -1029,6 +1069,16 @@ namespace Mosa.Platform.x64.Stages
 		{
 			var v1 = AllocateVirtualRegisterI32();
 			context.SetInstruction2(X64.Mul64, v1, context.Result, context.Operand1, context.Operand2);
+		}
+
+		private void Not64(Context context)
+		{
+			context.SetInstruction(X64.Mov64, context.Result, context.Operand1);
+		}
+
+		private void Or64(Context context)
+		{
+			context.ReplaceInstruction(X64.Or64);
 		}
 
 		private void RemSigned64(Context context)
@@ -1090,7 +1140,19 @@ namespace Mosa.Platform.x64.Stages
 			context.SetInstruction(X64.MovStore64, null, context.Operand1, context.Operand2, context.Operand3);
 		}
 
+		private void StoreObject(Context context)
+		{
+			LoadStore.OrderOperands(context, MethodCompiler);
+
+			context.SetInstruction(X64.MovStore64, null, context.Operand1, context.Operand2, context.Operand3);
+		}
+
 		private void StoreParam64(Context context)
+		{
+			context.SetInstruction(X64.MovStore64, null, StackFrame, context.Operand1, context.Operand2);
+		}
+
+		private void StoreParamObject(Context context)
 		{
 			context.SetInstruction(X64.MovStore64, null, StackFrame, context.Operand1, context.Operand2);
 		}
@@ -1103,6 +1165,11 @@ namespace Mosa.Platform.x64.Stages
 		private void Truncate64x32(Context context)
 		{
 			context.ReplaceInstruction(X64.Movzx32To64);
+		}
+
+		private void Xor64(Context context)
+		{
+			context.ReplaceInstruction(X64.Xor64);
 		}
 
 		private void ZeroExtended16x64(Context context)

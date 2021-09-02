@@ -227,11 +227,6 @@ namespace Mosa.Runtime.x86
 		{
 		}
 
-		public static uint GetExceptionRegister()
-		{
-			return 0;
-		}
-
 		public static uint GetIDTJumpLocation(uint irq)
 		{
 			return 0;
