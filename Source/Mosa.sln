@@ -17,9 +17,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{90065B0F-1BFE-40D8-AED5-11096B2535B0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runtimes", "Runtimes", "{3C5A2C4B-FD05-42B3-B6C6-C366DF978A62}"
-	ProjectSection(SolutionItems) = preProject
-		Mosa.Packages\Mosa.Platform.x86.nuspec = Mosa.Packages\Mosa.Platform.x86.nuspec
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Workspaces", "Workspaces", "{AC7C3CDA-E0E8-408C-BB32-DBCBB905E3E1}"
 EndProject

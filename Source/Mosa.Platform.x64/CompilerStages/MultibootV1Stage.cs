@@ -66,8 +66,8 @@ namespace Mosa.Platform.x64.CompilerStages
 
 			var data = new byte[]
 			{
-				0x68, 0x00, 0x00,  0x00, 0x00, // ba 00 00 00 00          0: push  { entry point }
-				0x68, 0x00, 0x00,  0x00, 0x00, // ba 00 00 00 00          5: push  0x0 - allows for 64-bit return later
+				0x68, 0x00, 0x00,  0x00, 0x00, // ba 00 00 00 00          0:  push  { entry point }
+				0x68, 0x00, 0x00,  0x00, 0x00, // ba 00 00 00 00          5:  push  0x0 - allows for 64-bit return later
 				0xe9, 0x00, 0x00,  0x00, 0x00, // e9 00 00 00 00		  10: jmp	{ enter long mode code }
 			};
 

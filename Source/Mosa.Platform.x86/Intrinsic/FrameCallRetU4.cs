@@ -15,7 +15,6 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			var result = context.Result;
 			var methodAddress = context.Operand1;
-			var newESP = context.Operand2;
 
 			var eax = Operand.CreateCPURegister(methodCompiler.TypeSystem.BuiltIn.I4, GeneralPurposeRegister.EAX);
 
