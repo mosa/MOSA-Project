@@ -62,18 +62,18 @@ namespace Mosa.Platform.x64.CompilerStages
 
 		private LinkerSymbol CreateMultibootEntry()
 		{
-			var symbol = Linker.GetSymbol(MultibootEntry);
-
 			var data = new byte[]
 			{
-				0x68, 0x00, 0x00,  0x00, 0x00, // ba 00 00 00 00          0:  push  { entry point }
-				0x68, 0x00, 0x00,  0x00, 0x00, // ba 00 00 00 00          5:  push  0x0 - allows for 64-bit return later
-				0xe9, 0x00, 0x00,  0x00, 0x00, // e9 00 00 00 00		  10: jmp	{ enter long mode code }
+				0x68, 0x00, 0x00, 0x00, 0x00, // ba 00 00 00 00     0:  push  { entry point }
+				0x68, 0x00, 0x00, 0x00, 0x00, // ba 00 00 00 00     5:  push  0x0 - allows for 64-bit return later
+				0xe9, 0x00, 0x00, 0x00, 0x00, // e9 00 00 00 00     10: jmp	{ enter long mode code }
 			};
+
+			var symbol = Linker.DefineSymbol(MultibootEntry, SectionKind.Text, 0, (uint)data.Length);
 
 			symbol.SetData(data);
 
-			var type = TypeSystem.GetTypeByName("Mosa.Runtime.Boot.LongMode", "LongMode");
+			var type = TypeSystem.GetTypeByName("Mosa.Runtime.x64.Boot", "LongMode");
 			var method = type.FindMethodByName("EnterLongMode");
 
 			Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, symbol, 1, Linker.EntryPoint, 0);

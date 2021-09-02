@@ -107,8 +107,6 @@ namespace Mosa.Runtime.x64
 		[DllImport("Mosa.Platform.x64.Intrinsic::Set32")]
 		public extern static void Set32(ulong address, uint value);
 
-		[DllImport("Mosa.Platform.x64.Intrinsic::GetEBP")]
-		public extern static Pointer GetEBP();
 
 		[DllImport("Mosa.Platform.x64.Intrinsic::GetFS")]
 		public extern static ulong GetFS();
@@ -145,15 +143,6 @@ namespace Mosa.Runtime.x64
 
 		[DllImport("Mosa.Platform.x64.Intrinsic::GetIDTJumpLocation")]
 		public extern static long GetIDTJumpLocation(uint irq);
-
-		[DllImport("Mosa.Platform.x64.Intrinsic::GetAssemblyListTable")]
-		public extern static long GetAssemblyListTable();
-
-		[DllImport("Mosa.Platform.x64.Intrinsic::GetMethodLookupTable")]
-		public extern static Pointer GetMethodLookupTable();
-
-		[DllImport("Mosa.Platform.x64.Intrinsic::GetMethodExceptionLookupTable")]
-		public extern static Pointer GetMethodExceptionLookupTable();
 
 		[DllImport("Mosa.Platform.x64.Intrinsic::GetMultibootEAX")]
 		public extern static ulong GetMultibootEAX();

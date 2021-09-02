@@ -317,12 +317,9 @@ namespace Mosa.Platform.x64.Stages
 
 		private void ConvertI32ToR4(Context context)
 		{
-			var result = context.Result;
-			var operand1 = context.Operand1;
+			Debug.Assert(context.Result.IsR4);
 
-			operand1 = MoveConstantToFloatRegister(context, operand1);
-
-			context.SetInstruction(X64.Cvtsd2ss, result, operand1);
+			context.ReplaceInstruction(X64.Cvtsi2ss32);
 		}
 
 		private void ConvertI32ToR8(Context context)
@@ -370,7 +367,7 @@ namespace Mosa.Platform.x64.Stages
 
 			operand1 = MoveConstantToFloatRegister(context, operand1);
 
-			context.SetInstruction(X64.Cvtsd2ss, result, operand1); // FIXME!
+			context.SetInstruction(X64.Cvtsd2ss, result, operand1);
 		}
 
 		private void DivR4(Context context)

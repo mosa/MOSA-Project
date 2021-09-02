@@ -2,11 +2,11 @@
 
 using System.Runtime.InteropServices;
 
-namespace Mosa.Runtime.Boot
+namespace Mosa.Runtime.x64.Boot
 {
 	internal static class LongMode
 	{
-		[DllImport("Asm/EnterLongMode.o", EntryPoint = "EnterLongMode")]
+		[DllImport("Boot/Asm/EnterLongMode.o", EntryPoint = "EnterLongMode")]
 		public static extern void EnterLongMode();
 	}
 }
