@@ -1,4 +1,6 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Diagnostics.CodeAnalysis;
@@ -48,7 +50,6 @@ namespace System.Numerics
 		/// <value>A vector whose two elements are equal to zero (that is, it returns the vector <c>(0,0)</c>.</value>
 		public static Vector2 Zero
 		{
-
 			get => default;
 		}
 
@@ -56,7 +57,6 @@ namespace System.Numerics
 		/// <value>A vector whose two elements are equal to one (that is, it returns the vector <c>(1,1)</c>.</value>
 		public static Vector2 One
 		{
-
 			get => new Vector2(1.0f);
 		}
 

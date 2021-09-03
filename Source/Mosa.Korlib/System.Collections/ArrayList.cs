@@ -1,16 +1,20 @@
-﻿using System.Diagnostics;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System.Diagnostics;
+
 //using System.Runtime.Serialization;
 //using System.Diagnostics.CodeAnalysis;
 using System.Diagnostics.Contracts;
 
 namespace System.Collections
 {
-
 	public class ArrayList : IList, ICloneable
 	{
 		private Object[] _items;
+
 		[ContractPublicPropertyName("Count")]
 		private int _size;
+
 		private int _version;
 		private readonly Object _syncRoot;
 
@@ -34,7 +38,7 @@ namespace System.Collections
 		// Constructs a ArrayList with a given initial capacity. The list is
 		// initially empty, but will have room for the given number of elements
 		// before any reallocations are required.
-		// 
+		//
 		public ArrayList(int capacity)
 		{
 			if (capacity < 0)
@@ -50,7 +54,7 @@ namespace System.Collections
 		// Constructs a ArrayList, copying the contents of the given collection. The
 		// size and capacity of the new list will both be equal to the size of the
 		// given collection.
-		// 
+		//
 		public ArrayList(ICollection c)
 		{
 			if (c == null)
@@ -70,9 +74,9 @@ namespace System.Collections
 		}
 
 		// Gets and sets the capacity of this list.  The capacity is the size of
-		// the internal array used to hold items.  When set, the internal 
+		// the internal array used to hold items.  When set, the internal
 		// array of the list is reallocated to the given capacity.
-		// 
+		//
 		public virtual int Capacity
 		{
 			get
@@ -88,6 +92,7 @@ namespace System.Collections
 				}
 				Contract.Ensures(Capacity >= 0);
 				Contract.EndContractBlock();
+
 				// We don't want to update the version number when we change the capacity.
 				// Some existing applications have dependency on this.
 				if (value != _items.Length)
@@ -124,7 +129,6 @@ namespace System.Collections
 			get { return false; }
 		}
 
-
 		// Is this ArrayList read-only?
 		public virtual bool IsReadOnly
 		{
@@ -151,7 +155,7 @@ namespace System.Collections
 		}
 
 		// Sets or Gets the element at the given index.
-		// 
+		//
 		public virtual Object this[int index]
 		{
 			get
@@ -224,10 +228,10 @@ namespace System.Collections
 		// is larger than the given search value. This is also the index at which
 		// the search value should be inserted into the list in order for the list
 		// to remain sorted.
-		// 
+		//
 		// The method uses the Array.BinarySearch method to perform the
 		// search.
-		// 
+		//
 		public virtual int BinarySearch(int index, int count, Object value, IComparer comparer)
 		{
 			throw new Exception("unimplemented");
@@ -245,7 +249,6 @@ namespace System.Collections
 			return BinarySearch(0, Count, value, comparer);
 		}
 
-
 		// Clears the contents of ArrayList.
 		public virtual void Clear()
 		{
@@ -253,7 +256,7 @@ namespace System.Collections
 		}
 
 		// Clones this ArrayList, doing a shallow copy.  (A copy is made of all
-		// Object references in the ArrayList, but the Objects pointed to 
+		// Object references in the ArrayList, but the Objects pointed to
 		// are not cloned).
 		public virtual Object Clone()
 		{
@@ -264,7 +267,6 @@ namespace System.Collections
 			Array.Copy(_items, 0, la._items, 0, _size);
 			return la;
 		}
-
 
 		// Contains returns true if the specified element is in the ArrayList.
 		// It does a linear, O(n) search.  Equality is determined by calling
@@ -288,30 +290,31 @@ namespace System.Collections
 			}
 		}
 
-		// Copies this ArrayList into array, which must be of a 
-		// compatible array type.  
+		// Copies this ArrayList into array, which must be of a
+		// compatible array type.
 		//
 		public virtual void CopyTo(Array array)
 		{
 			CopyTo(array, 0);
 		}
 
-		// Copies this ArrayList into array, which must be of a 
-		// compatible array type.  
+		// Copies this ArrayList into array, which must be of a
+		// compatible array type.
 		//
 		public virtual void CopyTo(Array array, int arrayIndex)
 		{
 			if ((array != null) && (array.Rank != 1))
 				throw new ArgumentException();//(Environment.GetResourceString("Arg_RankMultiDimNotSupported"));
 			Contract.EndContractBlock();
+
 			// Delegate rest of error checking to Array.Copy.
 			Array.Copy(_items, 0, array, arrayIndex, _size);
 		}
 
 		// Copies a section of this list to the given array at the given index.
-		// 
+		//
 		// The method uses the Array.Copy method to copy the elements.
-		// 
+		//
 		public virtual void CopyTo(int index, Array array, int arrayIndex, int count)
 		{
 			if (_size - index < count)
@@ -319,6 +322,7 @@ namespace System.Collections
 			if ((array != null) && (array.Rank != 1))
 				throw new ArgumentException();//(Environment.GetResourceString("Arg_RankMultiDimNotSupported"));
 			Contract.EndContractBlock();
+
 			// Delegate rest of error checking to Array.Copy.
 			Array.Copy(_items, index, array, arrayIndex, count);
 		}
@@ -332,6 +336,7 @@ namespace System.Collections
 			if (_items.Length < min)
 			{
 				int newCapacity = _items.Length == 0 ? _defaultCapacity : _items.Length * 2;
+
 				// Allow the list to grow to maximum possible capacity (~2G elements) before encountering overflow.
 				// Note that this check works even when _items.Length overflowed thanks to the (uint) cast
 				if ((uint)newCapacity > Array.MaxArrayLength) newCapacity = Array.MaxArrayLength;
@@ -365,8 +370,8 @@ namespace System.Collections
 		}
 
 		// Returns an enumerator for this list with the given
-		// permission for removal of elements. If modifications made to the list 
-		// while an enumeration is in progress, the MoveNext and 
+		// permission for removal of elements. If modifications made to the list
+		// while an enumeration is in progress, the MoveNext and
 		// GetObject methods of the enumerator will throw an exception.
 		//
 		public virtual IEnumerator GetEnumerator()
@@ -376,8 +381,8 @@ namespace System.Collections
 		}
 
 		// Returns an enumerator for a section of this list with the given
-		// permission for removal of elements. If modifications made to the list 
-		// while an enumeration is in progress, the MoveNext and 
+		// permission for removal of elements. If modifications made to the list
+		// while an enumeration is in progress, the MoveNext and
 		// GetObject methods of the enumerator will throw an exception.
 		//
 		public virtual IEnumerator GetEnumerator(int index, int count)
@@ -398,10 +403,10 @@ namespace System.Collections
 		// this list. The list is searched forwards from beginning to end.
 		// The elements of the list are compared to the given value using the
 		// Object.Equals method.
-		// 
+		//
 		// This method uses the Array.IndexOf method to perform the
 		// search.
-		// 
+		//
 		public virtual int IndexOf(Object value)
 		{
 			throw new Exception("unimplemented");
@@ -412,10 +417,10 @@ namespace System.Collections
 		// startIndex and ending at count number of elements. The
 		// elements of the list are compared to the given value using the
 		// Object.Equals method.
-		// 
+		//
 		// This method uses the Array.IndexOf method to perform the
 		// search.
-		// 
+		//
 		public virtual int IndexOf(Object value, int startIndex)
 		{
 			throw new Exception("unimplemented");
@@ -426,23 +431,25 @@ namespace System.Collections
 		// startIndex and upto count number of elements. The
 		// elements of the list are compared to the given value using the
 		// Object.Equals method.
-		// 
+		//
 		// This method uses the Array.IndexOf method to perform the
 		// search.
-		// 
+		//
 		public virtual int IndexOf(Object value, int startIndex, int count)
 		{
 			throw new Exception("unimplemented");
 		}
+
 		// Inserts an element into this list at a given index. The size of the list
 		// is increased by one. If required, the capacity of the list is doubled
 		// before inserting the new element.
-		// 
+		//
 		public virtual void Insert(int index, Object value)
 		{
 			// Note that insertions at the end are legal.
 			if (index < 0 || index > _size) throw new ArgumentOutOfRangeException();//(nameof(index), Environment.GetResourceString("ArgumentOutOfRange_ArrayListInsert"));
-																					//Contract.Ensures(Count == Contract.OldValue(Count) + 1);
+
+			//Contract.Ensures(Count == Contract.OldValue(Count) + 1);
 			Contract.EndContractBlock();
 
 			if (_size == _items.Length) EnsureCapacity(_size + 1);
@@ -465,13 +472,15 @@ namespace System.Collections
 			if (c == null)
 				throw new ArgumentNullException();//(nameof(c), Environment.GetResourceString("ArgumentNull_Collection"));
 			if (index < 0 || index > _size) throw new ArgumentOutOfRangeException();//(nameof(index), Environment.GetResourceString("ArgumentOutOfRange_Index"));
-																					//Contract.Ensures(Count == Contract.OldValue(Count) + c.Count);
+
+			//Contract.Ensures(Count == Contract.OldValue(Count) + c.Count);
 			Contract.EndContractBlock();
 
 			int count = c.Count;
 			if (count > 0)
 			{
 				EnsureCapacity(_size + count);
+
 				// shift existing items
 				if (index < _size)
 				{
@@ -487,13 +496,13 @@ namespace System.Collections
 		}
 
 		// Returns the index of the last occurrence of a given value in a range of
-		// this list. The list is searched backwards, starting at the end 
-		// and ending at the first element in the list. The elements of the list 
+		// this list. The list is searched backwards, starting at the end
+		// and ending at the first element in the list. The elements of the list
 		// are compared to the given value using the Object.Equals method.
-		// 
+		//
 		// This method uses the Array.LastIndexOf method to perform the
 		// search.
-		// 
+		//
 		public virtual int LastIndexOf(Object value)
 		{
 			Contract.Ensures(Contract.Result<int>() < _size);
@@ -502,13 +511,13 @@ namespace System.Collections
 
 		// Returns the index of the last occurrence of a given value in a range of
 		// this list. The list is searched backwards, starting at index
-		// startIndex and ending at the first element in the list. The 
-		// elements of the list are compared to the given value using the 
+		// startIndex and ending at the first element in the list. The
+		// elements of the list are compared to the given value using the
 		// Object.Equals method.
-		// 
+		//
 		// This method uses the Array.LastIndexOf method to perform the
 		// search.
-		// 
+		//
 		public virtual int LastIndexOf(Object value, int startIndex)
 		{
 			if (startIndex >= _size)
@@ -523,10 +532,10 @@ namespace System.Collections
 		// startIndex and upto count elements. The elements of
 		// the list are compared to the given value using the Object.Equals
 		// method.
-		// 
+		//
 		// This method uses the Array.LastIndexOf method to perform the
 		// search.
-		// 
+		//
 		public virtual int LastIndexOf(Object value, int startIndex, int count)
 		{
 			throw new Exception("unimplemented");
@@ -537,6 +546,7 @@ namespace System.Collections
 #if FEATURE_CORECLR
         [FriendAccessAllowed]
 #endif
+
 		public static IList ReadOnly(IList list)
 		{
 			if (list == null)
@@ -559,12 +569,13 @@ namespace System.Collections
 
 		// Removes the element at the given index. The size of the list is
 		// decreased by one.
-		// 
+		//
 		public virtual void Remove(Object obj)
 		{
 			Contract.Ensures(Count >= 0);
 
 			int index = IndexOf(obj);
+
 			//TODO WTF-
 			//BCLDebug.Correctness(index >= 0 || !( obj is Int32 ), "You passed an Int32 to Remove that wasn't in the ArrayList." + Environment.NewLine + "Did you mean RemoveAt?  int: " + obj + "  Count: " + Count);
 			if (index >= 0)
@@ -573,11 +584,12 @@ namespace System.Collections
 
 		// Removes the element at the given index. The size of the list is
 		// decreased by one.
-		// 
+		//
 		public virtual void RemoveAt(int index)
 		{
 			if (index < 0 || index >= _size) throw new ArgumentOutOfRangeException();//(nameof(index), Environment.GetResourceString("ArgumentOutOfRange_Index"));
 			Contract.Ensures(Count >= 0);
+
 			//Contract.Ensures(Count == Contract.OldValue(Count) - 1);
 			Contract.EndContractBlock();
 
@@ -591,7 +603,7 @@ namespace System.Collections
 		}
 
 		// Removes a range of elements from this list.
-		// 
+		//
 		public virtual void RemoveRange(int index, int count)
 		{
 			if (index < 0)
@@ -601,6 +613,7 @@ namespace System.Collections
 			if (_size - index < count)
 				throw new ArgumentException();//(Environment.GetResourceString("Argument_InvalidOffLen"));
 			Contract.Ensures(Count >= 0);
+
 			//Contract.Ensures(Count == Contract.OldValue(Count) - count);
 			Contract.EndContractBlock();
 
@@ -642,10 +655,10 @@ namespace System.Collections
 		// method, an element in the range given by index and count
 		// which was previously located at index i will now be located at
 		// index index + (index + count - i - 1).
-		// 
+		//
 		// This method uses the Array.Reverse method to reverse the
 		// elements.
-		// 
+		//
 		public virtual void Reverse(int index, int count)
 		{
 			throw new Exception("unimplemented");
@@ -679,7 +692,7 @@ namespace System.Collections
 			return new Range(this, index, count);
 		}
 
-		// Sorts the elements in this list.  Uses the default comparer and 
+		// Sorts the elements in this list.  Uses the default comparer and
 		// Array.Sort.
 		public virtual void Sort()
 		{//Comparer.Default
@@ -698,9 +711,9 @@ namespace System.Collections
 		// comparer is null, the elements are compared to each other using
 		// the IComparable interface, which in that case must be implemented by all
 		// elements of the list.
-		// 
+		//
 		// This method uses the Array.Sort method to sort the elements.
-		// 
+		//
 		public virtual void Sort(int index, int count, IComparer comparer)
 		{
 			throw new Exception("unimplemented");
@@ -741,7 +754,7 @@ namespace System.Collections
 			return array;
 		}
 
-		// ToArray returns a new array of a particular type containing the contents 
+		// ToArray returns a new array of a particular type containing the contents
 		// of the ArrayList.  This requires copying the ArrayList and potentially
 		// downcasting all elements.  This copy may fail and is an O(n) operation.
 		// Internally, this implementation calls Array.Copy.
@@ -757,15 +770,14 @@ namespace System.Collections
 		// new elements will be added to the list. To completely clear a list and
 		// release all memory referenced by the list, execute the following
 		// statements:
-		// 
+		//
 		// list.Clear();
 		// list.TrimToSize();
-		// 
+		//
 		public virtual void TrimToSize()
 		{
 			Capacity = _size;
 		}
-
 
 		// This class wraps an IList, exposing it as a ArrayList
 		// Note this requires reimplementing half of ArrayList...
@@ -782,7 +794,10 @@ namespace System.Collections
 
 			public override int Capacity
 			{
-				get { return _list.Count; }
+				get
+				{
+					return _list.Count;
+				}
 				set
 				{
 					if (value < Count) throw new ArgumentOutOfRangeException();//(nameof(value), Environment.GetResourceString("ArgumentOutOfRange_SmallCapacity"));
@@ -804,7 +819,6 @@ namespace System.Collections
 			{
 				get { return _list.IsFixedSize; }
 			}
-
 
 			public override bool IsSynchronized
 			{
@@ -866,6 +880,7 @@ namespace System.Collections
 					else
 						lo = mid + 1;
 				}
+
 				// return bitwise complement of the first element greater than value.
 				// Since hi is less than lo now, ~lo is the correct item.
 				return ~lo;
@@ -990,7 +1005,7 @@ namespace System.Collections
 					ArrayList al = _list as ArrayList;
 					if (al != null)
 					{
-						// We need to special case ArrayList. 
+						// We need to special case ArrayList.
 						// When c is a range of _list, we need to handle this in a special way.
 						// See ArrayList.InsertRange for details.
 						al.InsertRange(index, c);
@@ -1133,7 +1148,6 @@ namespace System.Collections
 				throw new Exception("unimplemented");
 			}
 
-
 			public override Object[] ToArray()
 			{
 				Object[] array = new Object[Count];
@@ -1225,7 +1239,6 @@ namespace System.Collections
 			}
 		}
 
-
 		[Serializable]
 		private class SyncArrayList : ArrayList
 		{
@@ -1248,6 +1261,7 @@ namespace System.Collections
 						return _list.Capacity;
 					}
 				}
+
 				//[SuppressMessage("Microsoft.Contracts", "CC1055")]  // Skip extra error checking to avoid *potential* AppCompat problems.
 				set
 				{
@@ -1272,7 +1286,6 @@ namespace System.Collections
 			{
 				get { return _list.IsFixedSize; }
 			}
-
 
 			public override bool IsSynchronized
 			{
@@ -1581,7 +1594,6 @@ namespace System.Collections
 			}
 		}
 
-
 		[Serializable]
 		private class SyncIList : IList
 		{
@@ -1608,7 +1620,6 @@ namespace System.Collections
 			{
 				get { return _list.IsFixedSize; }
 			}
-
 
 			public virtual bool IsSynchronized
 			{
@@ -1645,7 +1656,6 @@ namespace System.Collections
 					return _list.Add(value);
 				}
 			}
-
 
 			public virtual void Clear()
 			{
@@ -1873,6 +1883,7 @@ namespace System.Collections
 			public override int Capacity
 			{
 				get { return _list.Capacity; }
+
 				//[SuppressMessage("Microsoft.Contracts", "CC1055")]  // Skip extra error checking to avoid *potential* AppCompat problems.
 				set { throw new NotSupportedException("NotSupported_FixedSizeCollection"); }
 			}
@@ -2182,10 +2193,10 @@ namespace System.Collections
 				return _list.BinarySearch(index, count, value, comparer);
 			}
 
-
 			public override int Capacity
 			{
 				get { return _list.Capacity; }
+
 				//[SuppressMessage("Microsoft.Contracts", "CC1055")]  // Skip extra error checking to avoid *potential* AppCompat problems.
 				set { throw new NotSupportedException("NotSupported_ReadOnlyCollection"); }
 			}
@@ -2336,7 +2347,6 @@ namespace System.Collections
 			}
 		}
 
-
 		// Implements an enumerator for a ArrayList. The enumerator uses the
 		// internal version number of the list to ensure that no modifications are
 		// made to the list while an enumeration is in progress.
@@ -2409,8 +2419,10 @@ namespace System.Collections
 		{
 			private ArrayList _baseList;
 			private readonly int _baseIndex;
+
 			[ContractPublicPropertyName("Count")]
 			private int _baseSize;
+
 			private int _baseVersion;
 
 			internal Range(ArrayList list, int index, int count) : base(false)
@@ -2419,6 +2431,7 @@ namespace System.Collections
 				_baseIndex = index;
 				_baseSize = count;
 				_baseVersion = list._version;
+
 				// we also need to update _version field to make Range of Range work
 				_version = list._version;
 			}
@@ -2461,7 +2474,7 @@ namespace System.Collections
 				}
 			}
 
-			// Other overloads with automatically work 
+			// Other overloads with automatically work
 			public override int BinarySearch(int index, int count, Object value, IComparer comparer)
 			{
 				if (index < 0 || count < 0)
@@ -2489,7 +2502,6 @@ namespace System.Collections
 					Contract.EndContractBlock();
 				}
 			}
-
 
 			public override void Clear()
 			{
@@ -2624,7 +2636,6 @@ namespace System.Collections
 				}
 			}
 
-
 			public override int IndexOf(Object value)
 			{
 				InternalUpdateRange();
@@ -2745,8 +2756,9 @@ namespace System.Collections
 				Contract.EndContractBlock();
 
 				InternalUpdateRange();
+
 				// No need to call _bastList.RemoveRange if count is 0.
-				// In addition, _baseList won't change the vresion number if count is 0. 
+				// In addition, _baseList won't change the vresion number if count is 0.
 				if (count > 0)
 				{
 					_baseList.RemoveRange(_baseIndex + index, count);
@@ -2838,8 +2850,9 @@ namespace System.Collections
 			private readonly int version;
 			private Object currentElement;
 			private readonly bool isArrayList;
+
 			// this object is used to indicate enumeration has not started or has terminated
-			static readonly Object dummyObject = new Object();
+			private static readonly Object dummyObject = new Object();
 
 			internal ArrayListEnumeratorSimple(ArrayList list)
 			{

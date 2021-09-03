@@ -12,12 +12,12 @@ namespace System
 		//
 		internal bool m_value;
 
-		// The true value. 
-		// 
+		// The true value.
+		//
 		internal const int True = 1;
 
 		// The false value.
-		// 
+		//
 		internal const int False = 0;
 
 		//
@@ -25,11 +25,11 @@ namespace System
 		//
 
 		// The internal string representation of true.
-		// 
+		//
 		internal const String TrueLiteral = "True";
 
 		// The internal string representation of false.
-		// 
+		//
 		internal const String FalseLiteral = "False";
 
 		//
@@ -37,11 +37,11 @@ namespace System
 		//
 
 		// The public string representation of true.
-		// 
+		//
 		public static readonly String TrueString = TrueLiteral;
 
 		// The public string representation of false.
-		// 
+		//
 		public static readonly String FalseString = FalseLiteral;
 
 		public override int GetHashCode()

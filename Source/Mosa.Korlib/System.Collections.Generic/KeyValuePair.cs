@@ -1,4 +1,6 @@
-﻿namespace System.Collections.Generic
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+namespace System.Collections.Generic
 {
 	// Provides the Create factory method for KeyValuePair<TKey, TValue>.
 	public static class KeyValuePair

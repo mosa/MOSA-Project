@@ -1,4 +1,4 @@
-|source| |license| |gitter|
+|source| |license| |discord|
 
 |github-build| |github-unittests| |issues| |forks| |stars|
 
@@ -26,8 +26,8 @@
 .. |stars| image:: https://img.shields.io/github/stars/mosa/MOSA-Project.svg
 	:target: https://github.com/mosa/MOSA-Project/stargazers
 
-.. |gitter| image:: https://img.shields.io/badge/Chat-On%20Gitter%20-blue.svg
-	:target: https://gitter.im/mosa/MOSA-Project
+.. |discord| image:: https://img.shields.io/badge/Chat-On%20Discord%20-blue.svg
+	:target: https://discord.com/channels/881374816052068362/881374816052068365
 
 .. |source| image:: https://img.shields.io/badge/Source%20Code-GitHub%20Repository-yellow.svg
 	:target: https://github.com/mosa/MOSA-Project

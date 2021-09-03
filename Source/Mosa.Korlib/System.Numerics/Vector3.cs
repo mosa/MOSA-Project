@@ -1,4 +1,6 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System.Diagnostics.CodeAnalysis;
@@ -61,7 +63,6 @@ namespace System.Numerics
 		/// <value>A vector whose three elements are equal to zero (that is, it returns the vector <c>(0,0,0)</c>.</value>
 		public static Vector3 Zero
 		{
-
 			get => default;
 		}
 
@@ -69,7 +70,6 @@ namespace System.Numerics
 		/// <value>A vector whose three elements are equal to one (that is, it returns the vector <c>(1,1,1)</c>.</value>
 		public static Vector3 One
 		{
-
 			get => new Vector3(1.0f);
 		}
 

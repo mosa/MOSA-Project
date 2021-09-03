@@ -1,4 +1,6 @@
-﻿namespace System.System.Collections.Generic
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+namespace System.System.Collections.Generic
 {
 	/*
 	public class Dictionary<TKey, TValue> where TKey : IEquatable<TKey>
@@ -7,7 +9,6 @@
 		const double MaxLoadFactor = 0.75;
 
 		List<KeyValuePair<TKey, TValue>>[] container;
-
 
 		double LoadFactor { get => Count / Capacity; }
 
@@ -33,11 +34,13 @@
 			list is null
 			? -1
 			: list.FindIndex(pair => pair.Key.Equals(key));
+
 		//^ find index is broken
 		int FindListIndexByValue(List<KeyValuePair<TKey, TValue>> list, TValue value) =>
 			list is null
 			? -1
 			: list.FindIndex(pair => pair.Value.Equals(value));
+
 		//^ find index is broken
 
 		TValue GetValue(TKey key)
@@ -48,6 +51,7 @@
 			if (listIndex < 0)
 			{
 				throw new KeyNotFoundException("key doesn`t exist");
+
 				//^ KeyNotFoundException is broken
 			}
 
@@ -170,11 +174,11 @@
 				if (list is null) continue;
 
 				result.AddRange(list);
+
 				//^ AddRange is broken
 			}
 			return result;
 		}
-
 	}
 	*/
 }

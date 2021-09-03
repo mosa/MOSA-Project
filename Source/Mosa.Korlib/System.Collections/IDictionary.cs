@@ -1,4 +1,6 @@
-﻿namespace System.Collections
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+namespace System.Collections
 {
 	// An IDictionary is a possibly unordered set of key-value pairs.
 	// Keys can be any non-null object.  Values can be any object.
@@ -8,7 +10,7 @@
 	public interface IDictionary : ICollection
 	{
 		// Interfaces are not serializable
-		// The Item property provides methods to read and edit entries 
+		// The Item property provides methods to read and edit entries
 		// in the Dictionary.
 		Object this[Object key]
 		{
@@ -33,7 +35,7 @@
 		bool Contains(Object key);
 
 		// Adds a key-value pair to the dictionary.
-		// 
+		//
 		void Add(Object key, Object value);
 
 		// Removes all pairs from the dictionary.

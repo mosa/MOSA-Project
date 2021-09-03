@@ -21,16 +21,22 @@ namespace System.Globalization
 		{
 			[FieldOffset(0)]
 			internal char TableName;
+
 			[FieldOffset(32)]
 			internal ushort version;
+
 			[FieldOffset(40)]
 			internal uint OffsetToCategoriesIndex;
+
 			[FieldOffset(44)]
 			internal uint OffsetToCategoriesValue;
+
 			[FieldOffset(48)]
 			internal uint OffsetToNumbericIndex;
+
 			[FieldOffset(52)]
 			internal uint OffsetToDigitValue;
+
 			[FieldOffset(56)]
 			internal uint OffsetToNumbericValue;
 		}

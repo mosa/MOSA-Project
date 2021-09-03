@@ -1,3 +1,5 @@
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
 using System.Runtime.CompilerServices;
 
 namespace System.Runtime.InteropServices
