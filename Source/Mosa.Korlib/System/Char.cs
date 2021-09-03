@@ -34,11 +34,11 @@ namespace System
 
 		public static bool IsUpper(char c)
 		{
-			unsafe
-			{
-				var value = (ushort)c;
-				return value >= 65 && value <= 90;
-			}
+			/*plug 
+			 * IsAscii
+			 * IsLatin1
+			 */
+			return c >= 'A' && c <= 'Z';
 		}
 
 		public static bool IsUpper(string s, int index)
@@ -48,11 +48,11 @@ namespace System
 
 		public static bool IsLower(char c)
 		{
-			unsafe
-			{
-				var value = (ushort)c;
-				return value >= 97 && value <= 122;
-			}
+			/*plug 
+			 * IsAscii
+			 * IsLatin1
+			 */
+			return c >= 'a' && c <= 'z';
 		}
 
 		public static bool IsLower(string s, int index)
@@ -88,6 +88,9 @@ namespace System
 			}
 			return (false);
 		}
+		private static bool IsLatin1(char ch) => ch <= 'ÿ';
+
+		private static bool IsAscii(char ch) => ch <= '\u007F';
 
 		public static bool IsWhiteSpace(char c)
 		{
@@ -96,20 +99,17 @@ namespace System
 
 		public static bool IsLetter(char c)
 		{
-			unsafe
-			{
-				var value = (ushort)c;
-				return ((value >= 65 && value <= 90) || (value >= 97 && value <= 122));
-			}
+			/*plug 
+			 * IsAscii
+			 * IsLatin1
+			 */
+			c |= ' ';
+			return c >= 'a' && c <= 'z';
 		}
 
 		public static bool IsDigit(char c)
 		{
-			unsafe
-			{
-				var value = (ushort)c;
-				return (value >= 48 && value <= 57);
-			}
+			return c >= '0' && c <= '9';
 		}
 
 		public static bool IsLetterOrDigit(char c)
@@ -119,6 +119,7 @@ namespace System
 
 		public static char ToUpper(char c)
 		{
+
 			if (IsUpper(c) || !IsLetter(c))
 				return c;
 
@@ -131,6 +132,54 @@ namespace System
 				return c;
 
 			return (char)(c + 32);
+		}
+
+		public static bool IsSurrogate(char c)
+		{
+			return c >= 0x00d800 && c <= 0x00dfff;
+		}
+
+		public static bool IsSurrogate(string s, int index)
+		{
+			if (s == null)
+				throw new ArgumentNullException(nameof(s));
+
+			if (((uint)index) >= ((uint)s.Length))
+				throw new ArgumentOutOfRangeException(nameof(index));
+
+			return IsSurrogate(s[index]);
+		}
+
+		public static bool IsHighSurrogate(char c)
+		{
+			return (c >= '\ud800') && (c <= '\udbff');
+		}
+
+		public static bool IsHighSurrogate(string s, int index)
+		{
+			if (s == null)
+				throw new ArgumentNullException(nameof(s));
+
+			if (index < 0 || index >= s.Length)
+				throw new ArgumentOutOfRangeException(nameof(index));
+
+			return IsHighSurrogate(s[index]);
+		}
+
+		public static bool IsLowSurrogate(char c)
+		{
+			return (c >= '\udc00') && (c <= '\udfff');
+		}
+
+		public static bool IsLowSurrogate(string s, int index)
+		{
+			if (s == null)
+				throw new ArgumentNullException(nameof(s));
+
+			if (index < 0 || index >= s.Length)
+				throw new ArgumentOutOfRangeException(nameof(index));
+
+			return IsLowSurrogate(s[index]);
 		}
 	}
 }
