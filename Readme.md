@@ -40,7 +40,7 @@ Visit our [Website](http://www.mosa-project.org/) for more information about thi
 
 ### Join the Discussion
 
-Join us on [Discord chat][discord-chat]. This is the most interactive way to connect to MOSA's development team.
+Join us on [Discord][discord-chat]. This is the most interactive way to connect to MOSA's development team.
 
 ### License
 
