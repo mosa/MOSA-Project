@@ -1,6 +1,6 @@
 [![Build status][build-status-image]][build-status]  [![Test status][test-status-image]][test-status]  [![License][github-license]][github-license-link]  [![Issues][github-issues]][github-issues-link]  [![Stars][github-stars]][github-stars-link]  [![Forks][github-forks]][github-forks-link]  
 
-[![Gitter Chat][gitter-image]][gitter-chat]
+[![Discord Chat][discord-image]][discord-chat]
 
 [build-status-image]: https://github.com/mosa/MOSA-Project/workflows/Builds/badge.svg
 [build-status]: https://github.com/mosa/MOSA-Project/actions
@@ -24,6 +24,8 @@
 [github-forks-link]: https://github.com/mosa/MOSA-Project/network
 [github-issues-link]: https://github.com/mosa/MOSA-Project/issues
 [github-license-link]: https://raw.githubusercontent.com/mosa/MOSA-Project/master/LICENSE.txt
+[discord-image]: https://img.shields.io/badge/discord-join%20chat%20-blue.svg
+[discord-chat]: https://discord.com/channels/881374816052068362/881374816052068365
 
 MOSA is an open source software project that natively executes .NET applications within a virtual hypervisor or on bare metal hardware!
 
@@ -38,7 +40,7 @@ Visit our [Website](http://www.mosa-project.org/) for more information about thi
 
 ### Join the Discussion
 
-Join us on [Gitter chat][gitter-chat]. This is the most interactive way to connect to MOSA's development team.
+Join us on [Discord chat][discord-chat]. This is the most interactive way to connect to MOSA's development team.
 
 ### License
 
