@@ -1,4 +1,5 @@
-﻿using System.Runtime.CompilerServices;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
 using System.Runtime.InteropServices;
 
 namespace System.Buffers.Binary
@@ -14,7 +15,7 @@ namespace System.Buffers.Binary
 
 			return result;
 		}
-		
+
 		public static ushort ReadUInt16BigEndian(ReadOnlySpan<byte> source)
 		{
 			ushort result = MemoryMarshal.Read<ushort>(source);

@@ -1,4 +1,6 @@
-﻿using System.Diagnostics.Contracts;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System.Diagnostics.Contracts;
 
 namespace System.Collections
 {
@@ -6,7 +8,6 @@ namespace System.Collections
 	[Serializable]
 	internal sealed class EmptyReadOnlyDictionaryInternal : IDictionary
 	{
-
 		// Note that this class must be agile with respect to AppDomains.  See its usage in
 		// System.Exception to understand why this is the case.
 
@@ -167,7 +168,6 @@ namespace System.Collections
 
 		private sealed class NodeEnumerator : IDictionaryEnumerator
 		{
-
 			public NodeEnumerator()
 			{
 			}

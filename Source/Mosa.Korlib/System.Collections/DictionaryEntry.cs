@@ -1,4 +1,6 @@
-﻿namespace System.Collections
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+namespace System.Collections
 {
 	public struct DictionaryEntry
 	{

@@ -1,4 +1,6 @@
-﻿using System.Diagnostics;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System.Diagnostics;
 
 namespace System.System.Collections
 {

@@ -34,7 +34,7 @@ namespace System
 
 		public static bool IsUpper(char c)
 		{
-			/*plug 
+			/*plug
 			 * IsAscii
 			 * IsLatin1
 			 */
@@ -48,7 +48,7 @@ namespace System
 
 		public static bool IsLower(char c)
 		{
-			/*plug 
+			/*plug
 			 * IsAscii
 			 * IsLatin1
 			 */
@@ -88,6 +88,7 @@ namespace System
 			}
 			return (false);
 		}
+
 		private static bool IsLatin1(char ch) => ch <= 'ÿ';
 
 		private static bool IsAscii(char ch) => ch <= '\u007F';
@@ -99,7 +100,7 @@ namespace System
 
 		public static bool IsLetter(char c)
 		{
-			/*plug 
+			/*plug
 			 * IsAscii
 			 * IsLatin1
 			 */
@@ -119,7 +120,6 @@ namespace System
 
 		public static char ToUpper(char c)
 		{
-
 			if (IsUpper(c) || !IsLetter(c))
 				return c;
 

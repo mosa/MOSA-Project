@@ -1,4 +1,6 @@
-﻿namespace System.Collections
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+namespace System.Collections
 {
 	public interface IDictionaryEnumerator : IEnumerator
 	{
@@ -7,7 +9,7 @@
 		// a call to GetNext that returned false. Multiple calls to
 		// GetKey with no intervening calls to GetNext will return
 		// the same object.
-		// 
+		//
 		Object Key
 		{
 			get;
@@ -18,7 +20,7 @@
 		// following a call to GetNext that returned false. Multiple calls
 		// to GetValue with no intervening calls to GetNext will
 		// return the same object.
-		// 
+		//
 		Object Value
 		{
 			get;
@@ -28,7 +30,7 @@
 		// fill up the array, or if there aren't enough elements, it will
 		// copy as much as possible into the Array.  The number of elements
 		// copied is returned.
-		// 
+		//
 		DictionaryEntry Entry
 		{
 			get;

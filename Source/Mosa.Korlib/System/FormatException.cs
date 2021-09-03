@@ -7,7 +7,6 @@ namespace System
 	/// </summary>
 	public class FormatException : Exception
 	{
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FormatException"/> class.
 		/// </summary>
@@ -22,6 +21,5 @@ namespace System
 		public FormatException(string message)
 			: base(message)
 		{ }
-
 	}
 }

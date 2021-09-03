@@ -1,4 +1,6 @@
-﻿namespace System
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+namespace System
 {
 	/// <summary>Represents the method that defines a set of criteria and determines whether the specified object meets those criteria.</summary>
 	/// <param name="obj">The object to compare against the criteria defined within the method represented by this delegate.</param>

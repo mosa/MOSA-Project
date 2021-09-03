@@ -25,7 +25,7 @@ namespace System.Collections
 
 		public Stack(int initialCapacity)
 		{
-			if (initialCapacity < 0)											/*Environment.GetResourceString*/
+			if (initialCapacity < 0)                                            /*Environment.GetResourceString*/
 				throw new ArgumentOutOfRangeException(nameof(initialCapacity), "ArgumentOutOfRange_NeedNonNegNum");
 			if (initialCapacity < 10)
 				initialCapacity = 10;
@@ -63,12 +63,13 @@ namespace System.Collections
 		}
 
 		/*Array.Clear missing!*/
+
 		public virtual void Clear()
 		{
 			//Array.Clear?
 			/*
 			 *   Array.Clear((Array) this._array, 0, this._size);
-			 * 
+			 *
 			 */
 			for (uint i = 0; i < _size; ++i)
 			{
@@ -153,6 +154,7 @@ namespace System.Collections
 		}
 
 		/* [HostProtection(SecurityAction.LinkDemand, Synchronization = true)] */
+
 		public static Stack Synchronized(Stack stack) => stack != null ? (Stack)new Stack.SyncStack(stack) : throw new ArgumentNullException(nameof(stack));
 
 		public virtual object[] ToArray()
@@ -243,6 +245,7 @@ namespace System.Collections
 		}
 
 		/*Serializable*/
+
 		public class StackEnumerator : IEnumerator, ICloneable
 		{
 			private Stack _stack;
@@ -299,6 +302,7 @@ namespace System.Collections
 				currentElement = (object)null;
 			}
 		}
+
 		/*
 		 * StackDebugView Skipped, implement later.
 		 */

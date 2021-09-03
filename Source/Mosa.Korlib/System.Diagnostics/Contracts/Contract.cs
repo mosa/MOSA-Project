@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System.Collections.Generic;
 
 namespace System.Diagnostics.Contracts
 {
-
 	#region Attributes
+
 	/// <summary>
 	/// Methods and classes marked with this attribute can be used within calls to Contract methods. Such methods not make any visible state changes.
 	/// </summary>
@@ -13,7 +15,9 @@ namespace System.Diagnostics.Contracts
 	{
 		private readonly bool _sophisticated;
 
-		public PureAttribute() { }
+		public PureAttribute()
+		{
+		}
 
 		public PureAttribute(bool sophisticated)
 		{
@@ -72,7 +76,7 @@ namespace System.Diagnostics.Contracts
 	/// method for a class. The method can have any name, but it must
 	/// return "void" and take no parameters. The body of the method
 	/// must consist solely of one or more calls to the method
-	/// Contract.Invariant. A suggested name for the method is 
+	/// Contract.Invariant. A suggested name for the method is
 	/// "ObjectInvariant".
 	/// </summary>
 	[Conditional("CONTRACTS_FULL")]
@@ -109,7 +113,10 @@ namespace System.Diagnostics.Contracts
 	{
 		private readonly bool _value;
 
-		public ContractVerificationAttribute(bool value) { _value = value; }
+		public ContractVerificationAttribute(bool value)
+		{
+			_value = value;
+		}
 
 		public bool Value
 		{
@@ -200,11 +207,10 @@ namespace System.Diagnostics.Contracts
 		}
 	}
 
-	#endregion
+	#endregion Attributes
 
 	public static partial class Contract
 	{
-
 		#region User Methods
 
 		#region Assume
@@ -283,8 +289,6 @@ namespace System.Diagnostics.Contracts
 			AssertMustUseRewriter(ContractFailureKind.Precondition, "Requires<TException>");
 		}
 
-
-
 		#endregion Requires
 
 		#region Ensures
@@ -328,7 +332,6 @@ namespace System.Diagnostics.Contracts
 		[Pure]
 		public static T OldValue<T>(T value) { return default(T); }
 
-
 		#endregion Old, Result, and Out Parameters
 
 		#endregion Ensures
@@ -348,8 +351,6 @@ namespace System.Diagnostics.Contracts
 		{
 			AssertMustUseRewriter(ContractFailureKind.Invariant, "Invariant");
 		}
-
-
 
 		#endregion Invariant
 
@@ -419,14 +420,13 @@ namespace System.Diagnostics.Contracts
 			return false;
 		}
 
-
 		#endregion Exists
 
 		#endregion Quantifiers
 
 		#region Pointers
 
-		static readonly ulong MaxWritableExtent = (UIntPtr.Size == 4) ? UInt32.MaxValue : UInt64.MaxValue;
+		private static readonly ulong MaxWritableExtent = (UIntPtr.Size == 4) ? UInt32.MaxValue : UInt64.MaxValue;
 
 		[CLSCompliant(false)]
 		[Pure]
@@ -462,7 +462,6 @@ namespace System.Diagnostics.Contracts
 		 * unsafe public static ulong ReadableBytes(void* startAddress) { return MaxWritableExtent - (ulong)startAddress; }
 		 */
 
-
 		#endregion Pointers
 
 		#region Misc.
@@ -484,9 +483,6 @@ namespace System.Diagnostics.Contracts
 		static partial void AssertMustUseRewriter(ContractFailureKind kind, String contractKind);
 
 		#endregion Failure Behavior
-
-
-
 	}
 
 	public enum ContractFailureKind
@@ -502,6 +498,7 @@ namespace System.Diagnostics.Contracts
 
 //left out some stuff.
 /*
+
  // Note: In .NET FX 4.5, we duplicated the ContractHelper class in the System.Runtime.CompilerServices
 // namespace to remove an ugly wart of a namespace from the Windows 8 profile.  But we still need the
 // old locations left around, so we can support rewritten .NET FX 4.0 libraries.  Consider removing
@@ -545,7 +542,6 @@ namespace System.Diagnostics.Contracts.Internal
     }
 }  // namespace System.Diagnostics.Contracts.Internal
 
-
 namespace System.Runtime.CompilerServices
 {
     public static partial class ContractHelper
@@ -569,7 +565,6 @@ namespace System.Runtime.CompilerServices
             RaiseContractFailedEventImplementation(failureKind, userMessage, conditionText, innerException, ref resultFailureMessage);
             return resultFailureMessage;
         }
-
 
         /// <summary>
         /// Rewriter calls this method to get the default failure behavior.
