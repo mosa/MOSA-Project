@@ -2,7 +2,6 @@
 
 namespace Mosa.UnitTests
 {
-
 	public static class StaticFieldTestU1
 	{
 		private static byte field;

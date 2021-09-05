@@ -2,10 +2,8 @@
 
 namespace Mosa.UnitTests
 {
-
 	public class StructTests
 	{
-
 		[MosaUnitTest(Series = "U1")]
 		public static bool StructTestSet1U1(byte one)
 		{
@@ -368,7 +366,6 @@ namespace Mosa.UnitTests
 
 			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
-
 	}
 
 	internal struct Struct1U1
@@ -388,6 +385,7 @@ namespace Mosa.UnitTests
 		public byte Two;
 		public byte Three;
 	}
+
 	internal struct Struct1U2
 	{
 		public ushort One;
@@ -405,6 +403,7 @@ namespace Mosa.UnitTests
 		public ushort Two;
 		public ushort Three;
 	}
+
 	internal struct Struct1U4
 	{
 		public uint One;
@@ -422,6 +421,7 @@ namespace Mosa.UnitTests
 		public uint Two;
 		public uint Three;
 	}
+
 	internal struct Struct1U8
 	{
 		public ulong One;
@@ -439,6 +439,7 @@ namespace Mosa.UnitTests
 		public ulong Two;
 		public ulong Three;
 	}
+
 	internal struct Struct1I1
 	{
 		public sbyte One;
@@ -456,6 +457,7 @@ namespace Mosa.UnitTests
 		public sbyte Two;
 		public sbyte Three;
 	}
+
 	internal struct Struct1I2
 	{
 		public short One;
@@ -473,6 +475,7 @@ namespace Mosa.UnitTests
 		public short Two;
 		public short Three;
 	}
+
 	internal struct Struct1I4
 	{
 		public int One;
@@ -490,6 +493,7 @@ namespace Mosa.UnitTests
 		public int Two;
 		public int Three;
 	}
+
 	internal struct Struct1I8
 	{
 		public long One;
@@ -507,6 +511,7 @@ namespace Mosa.UnitTests
 		public long Two;
 		public long Three;
 	}
+
 	internal struct Struct1R4
 	{
 		public float One;
@@ -524,6 +529,7 @@ namespace Mosa.UnitTests
 		public float Two;
 		public float Three;
 	}
+
 	internal struct Struct1R8
 	{
 		public double One;
@@ -541,6 +547,7 @@ namespace Mosa.UnitTests
 		public double Two;
 		public double Three;
 	}
+
 	internal struct Struct1C
 	{
 		public char One;

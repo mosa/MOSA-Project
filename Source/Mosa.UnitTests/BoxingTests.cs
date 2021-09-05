@@ -4,7 +4,6 @@ namespace Mosa.UnitTests
 {
 	public static class BoxingTests
 	{
-
 		[MosaUnitTest(Series = "U1")]
 		public static byte BoxU1(byte value)
 		{

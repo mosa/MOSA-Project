@@ -2,10 +2,8 @@
 
 namespace Mosa.UnitTests
 {
-
 	public static class ForeachTests
 	{
-
 		[MosaUnitTest]
 		public static byte ForeachU1()
 		{
@@ -127,4 +125,3 @@ namespace Mosa.UnitTests
 		}
 	}
 }
-

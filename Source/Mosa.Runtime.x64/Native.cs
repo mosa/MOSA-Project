@@ -107,7 +107,6 @@ namespace Mosa.Runtime.x64
 		[DllImport("Mosa.Platform.x64.Intrinsic::Set32")]
 		public extern static void Set32(ulong address, uint value);
 
-
 		[DllImport("Mosa.Platform.x64.Intrinsic::GetFS")]
 		public extern static ulong GetFS();
 

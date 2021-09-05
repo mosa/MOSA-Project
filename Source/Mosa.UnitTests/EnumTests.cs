@@ -2,7 +2,7 @@
 
 namespace Mosa.UnitTests
 {
-	enum EnumU1Type : byte
+	internal enum EnumU1Type : byte
 	{
 		Positive49 = 49,
 		Positive50,
@@ -274,10 +274,9 @@ namespace Mosa.UnitTests
 		{
 			return InternalPositiveLessThanOrEqual(EnumU1Type.Positive50, 49);
 		}
-
 	}
 
-	enum EnumU2Type : ushort
+	internal enum EnumU2Type : ushort
 	{
 		Positive49 = 49,
 		Positive50,
@@ -549,10 +548,9 @@ namespace Mosa.UnitTests
 		{
 			return InternalPositiveLessThanOrEqual(EnumU2Type.Positive50, 49);
 		}
-
 	}
 
-	enum EnumU4Type : uint
+	internal enum EnumU4Type : uint
 	{
 		Positive49 = 49,
 		Positive50,
@@ -824,10 +822,9 @@ namespace Mosa.UnitTests
 		{
 			return InternalPositiveLessThanOrEqual(EnumU4Type.Positive50, 49);
 		}
-
 	}
 
-	enum EnumU8Type : ulong
+	internal enum EnumU8Type : ulong
 	{
 		Positive49 = 49,
 		Positive50,
@@ -1099,10 +1096,9 @@ namespace Mosa.UnitTests
 		{
 			return InternalPositiveLessThanOrEqual(EnumU8Type.Positive50, 49);
 		}
-
 	}
 
-	enum EnumI1Type : sbyte
+	internal enum EnumI1Type : sbyte
 	{
 		Negative51 = -51,
 		Negative50,
@@ -1641,10 +1637,9 @@ namespace Mosa.UnitTests
 		{
 			return InternalNegativeLessThanOrEqual(EnumI1Type.Negative50, -51);
 		}
-
 	}
 
-	enum EnumI2Type : short
+	internal enum EnumI2Type : short
 	{
 		Negative51 = -51,
 		Negative50,
@@ -2183,10 +2178,9 @@ namespace Mosa.UnitTests
 		{
 			return InternalNegativeLessThanOrEqual(EnumI2Type.Negative50, -51);
 		}
-
 	}
 
-	enum EnumI4Type : int
+	internal enum EnumI4Type : int
 	{
 		Negative51 = -51,
 		Negative50,
@@ -2725,10 +2719,9 @@ namespace Mosa.UnitTests
 		{
 			return InternalNegativeLessThanOrEqual(EnumI4Type.Negative50, -51);
 		}
-
 	}
 
-	enum EnumI8Type : long
+	internal enum EnumI8Type : long
 	{
 		Negative51 = -51,
 		Negative50,
@@ -3267,7 +3260,5 @@ namespace Mosa.UnitTests
 		{
 			return InternalNegativeLessThanOrEqual(EnumI8Type.Negative50, -51);
 		}
-
 	}
-
 }

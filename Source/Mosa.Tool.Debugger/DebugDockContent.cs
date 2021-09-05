@@ -2,7 +2,6 @@
 
 using Mosa.Tool.Debugger.DebugData;
 using Mosa.Tool.Debugger.GDB;
-using Mosa.Utility.Launcher;
 using WeifenLuo.WinFormsUI.Docking;
 
 namespace Mosa.Tool.Debugger

@@ -4,7 +4,6 @@ using MetroFramework.Forms;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Common.Configuration;
 using Mosa.Compiler.Framework;
-using Mosa.Utility.BootImage;
 using Mosa.Utility.Configuration;
 using Mosa.Utility.Launcher;
 using System;

@@ -2,10 +2,8 @@
 
 namespace Mosa.UnitTests
 {
-
 	public static class LdlocaTests
 	{
-
 		[MosaUnitTest(Series = "U1")]
 		public static bool LdlocaCheckValueU1(byte expect)
 		{

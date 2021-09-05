@@ -3,7 +3,6 @@
 using Mosa.Utility.RSP;
 using Mosa.Utility.RSP.Command;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Net.Sockets;
 using System.Threading;
 
