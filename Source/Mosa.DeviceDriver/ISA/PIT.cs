@@ -122,11 +122,11 @@ namespace Mosa.DeviceDriver.ISA
 		/// Waits for a specific time, in milliseconds.
 		/// </summary>
 		public void Wait(uint ms)
-        {
-            Ticks = 0;
-            IsWaiting = true;
-            while (Ticks < ms);
-            IsWaiting = false;
-        }
+		{
+			Ticks = 0;
+			IsWaiting = true;
+			while (Ticks < ms);
+			IsWaiting = false;
+		}
 	}
 }
