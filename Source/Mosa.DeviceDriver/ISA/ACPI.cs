@@ -117,10 +117,10 @@ namespace Mosa.DeviceDriver.ISA
 		public fixed uint PointerToOtherSDT[8]; // This is problematic, we need a way to statically initialize this array's size with h.Length and stuff
 
 		/*public void Init()
-        {
-            fixed (uint* ptr = new uint[(int)((h.Length - sizeof(ACPISDTHeader)) / 4)])
-                PointerToOtherSDT = ptr;
-        }*/
+		{
+			fixed (uint* ptr = new uint[(int)((h.Length - sizeof(ACPISDTHeader)) / 4)])
+				PointerToOtherSDT = ptr;
+		}*/
 	}
 
 	public unsafe class ACPI : BaseDeviceDriver
