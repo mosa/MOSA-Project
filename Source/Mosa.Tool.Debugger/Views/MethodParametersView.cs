@@ -4,7 +4,6 @@ using Mosa.Tool.Debugger.DebugData;
 using Mosa.Tool.Debugger.GDB;
 using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Windows.Forms;
 
 namespace Mosa.Tool.Debugger.Views

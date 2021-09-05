@@ -1,6 +1,5 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-
 // No run-time tests
 
 namespace Mosa.UnitTests
@@ -106,6 +105,5 @@ namespace Mosa.UnitTests
 			InitStruct d = new InitStruct();
 			return d.ValueC;
 		}
-
 	}
 }

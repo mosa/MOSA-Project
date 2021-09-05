@@ -1,9 +1,9 @@
 {
-  "profiles": {
-    "Mosa.Tool.Launcher.Console": {
-      "commandName": "Project",
-      "commandLineArgs": "Mosa.TestWorld.x86.dll -vmware -o7",
-      "workingDirectory": "X:\\MOSA-Project-tgiphil\\bin"
-    }
-  }
+	"profiles": {
+		"Mosa.Tool.Launcher.Console": {
+			"commandName": "Project",
+			"commandLineArgs": "Mosa.TestWorld.x86.dll -vmware -o7",
+			"workingDirectory": "X:\\MOSA-Project-tgiphil\\bin"
+		}
+	}
 }

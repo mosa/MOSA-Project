@@ -2,10 +2,8 @@
 
 namespace Mosa.UnitTests
 {
-
 	public static class CallTests
 	{
-
 		[MosaUnitTest(Series = "U1")]
 		public static bool CallU1(byte value)
 		{

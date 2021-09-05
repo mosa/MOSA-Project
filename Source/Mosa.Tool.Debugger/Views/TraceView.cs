@@ -3,8 +3,6 @@
 using Mosa.Tool.Debugger.GDB;
 using Mosa.Utility.Disassembler;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
 using System.Text;
 using System.Windows.Forms;

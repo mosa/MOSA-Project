@@ -2,10 +2,8 @@
 
 namespace Mosa.UnitTests
 {
-
 	public static class ComparisonTests
 	{
-
 		[MosaUnitTest(Series = "U1U1")]
 		public static bool CompareEqualU1(byte a, byte b)
 		{

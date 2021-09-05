@@ -2,10 +2,8 @@
 
 namespace Mosa.UnitTests
 {
-
 	public static class LdargaTests
 	{
-
 		[MosaUnitTest(Series = "U1")]
 		public static byte LdargaCheckValueU1(byte a)
 		{

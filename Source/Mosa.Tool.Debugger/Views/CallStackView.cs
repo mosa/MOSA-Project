@@ -2,7 +2,6 @@
 
 using Mosa.Tool.Debugger.DebugData;
 using System;
-using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace Mosa.Tool.Debugger.Views
