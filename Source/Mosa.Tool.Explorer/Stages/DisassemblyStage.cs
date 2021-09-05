@@ -4,12 +4,6 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Utility.Disassembler;
 
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.Design;
-using System.IO;
-using System.Text;
-
 namespace Mosa.Tool.Explorer.Stages
 {
 	public class DisassemblyStage : BaseMethodCompilerStage
@@ -70,7 +64,7 @@ namespace Mosa.Tool.Explorer.Stages
 
 			foreach (var request in symbol.GetLinkRequests())
 			{
-				trace.Log($"{request.PatchOffset:x8} -> [{request.LinkType.ToString()}] +{request.ReferenceOffset:x} [{request.ReferenceSymbol.SectionKind.ToString()}] {request.ReferenceSymbol.Name}");
+				trace.Log($"{request.PatchOffset:x8} -> [{request.LinkType}] +{request.ReferenceOffset:x} [{request.ReferenceSymbol.SectionKind}] {request.ReferenceSymbol.Name}");
 			}
 		}
 	}
