@@ -15,6 +15,14 @@ namespace Mosa.DeviceDriver
 			{
 				new ISADeviceDriverRegistryEntry()
 				{
+					Name = "ACPI",
+					Platforms = PlatformArchitecture.X86,
+					AutoLoad = true,
+					Factory = delegate { return new ISA.ACPI(); }
+				},
+
+				new ISADeviceDriverRegistryEntry()
+				{
 					Name = "CMOS",
 					Platforms = PlatformArchitecture.X86,
 					AutoLoad = true,

@@ -65,7 +65,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// Gets the minute.
 		/// </summary>
 		/// <value>The minute.</value>
-		public byte GetMinute() => Read(2);
+		public byte Minute => Read(2);
 
 		/// <summary>
 		/// Gets the hour.

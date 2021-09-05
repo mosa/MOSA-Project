@@ -54,7 +54,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="port">The port number.</param>
 		/// <returns></returns>
-		internal static BaseIOPortReadWrite GetReadWriteIOPort(ushort port)
+		public static BaseIOPortReadWrite GetReadWriteIOPort(ushort port)
 		{
 			return hardwareAbstraction.GetReadWriteIOPort(port);
 		}
@@ -64,7 +64,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="port">The port number.</param>
 		/// <returns></returns>
-		internal static BaseIOPortRead GetReadIOPort(ushort port)
+		public static BaseIOPortRead GetReadIOPort(ushort port)
 		{
 			return hardwareAbstraction.GetReadIOPort(port);
 		}
@@ -74,7 +74,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="port">The port number.</param>
 		/// <returns></returns>
-		internal static BaseIOPortWrite GetWriteIOPort(ushort port)
+		public static BaseIOPortWrite GetWriteIOPort(ushort port)
 		{
 			return hardwareAbstraction.GetWriteIOPort(port);
 		}

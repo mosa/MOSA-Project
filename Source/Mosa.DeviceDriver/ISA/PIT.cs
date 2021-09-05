@@ -28,7 +28,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		///
 		/// </summary>
-		private const ushort Hz = 100;
+		private const ushort Hz = 1000;
 
 		#endregion Definitions
 
@@ -46,6 +46,16 @@ namespace Mosa.DeviceDriver.ISA
 		///
 		/// </summary>
 		protected uint tickCount;
+
+		/// <summary>
+		///
+		/// </summary>
+		public bool IsWaiting;
+
+		/// <summary>
+		///
+		/// </summary>
+		public ulong Ticks;
 
 		/// <summary>
 		/// Initializes this device.
@@ -92,7 +102,10 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		public override bool OnInterrupt()
 		{
-			tickCount++;
+			if (IsWaiting)
+				Ticks += 1000 / Hz;
+			tickCount += 1000 / Hz;
+
 			return true;
 		}
 
@@ -104,5 +117,16 @@ namespace Mosa.DeviceDriver.ISA
 		{
 			return tickCount;
 		}
+
+		/// <summary>
+		/// Waits for a specific time, in milliseconds.
+		/// </summary>
+		public void Wait(uint ms)
+        {
+            Ticks = 0;
+            IsWaiting = true;
+            while (Ticks < ms);
+            IsWaiting = false;
+        }
 	}
 }
