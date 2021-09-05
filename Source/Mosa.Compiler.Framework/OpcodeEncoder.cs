@@ -43,7 +43,10 @@ namespace Mosa.Compiler.Framework
 					SuppressFlag = false;
 
 					if (Bits == SuppressValue)
+					{
+						Reset();
 						return;
+					}
 				}
 
 				Emitter.WriteByte((byte)Bits);
