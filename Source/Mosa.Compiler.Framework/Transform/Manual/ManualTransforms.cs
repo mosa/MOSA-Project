@@ -131,6 +131,11 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			new LowerTo32.ZeroExtend32x64(),
 
 			new LowerTo32.Move64(),
+
+			new Memory.RedundantStoreLoadParam32(),
+			new Memory.RedundantStoreLoadParam64(),
+			new Memory.RedundantStoreLoadParamR4(),
+			new Memory.RedundantStoreLoadParamR8(),
 		};
 	}
 }

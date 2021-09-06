@@ -11,7 +11,7 @@ namespace Mosa.Platform.ARMv8A32.Stages
 	/// and a simple move propagation is performed as well.
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.Platform.PlatformDeadCodeRemovalStage" />
-	public sealed class SimpleDeadCodeRemovalStage : PlatformDeadCodeRemovalStage
+	public sealed class SimpleDeadCodeRemovalStage : BasePlatformDeadCodeRemovalStage
 	{
 		protected override bool IsMov(BaseInstruction instruction)
 		{

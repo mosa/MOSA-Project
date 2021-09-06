@@ -95,7 +95,7 @@ namespace Mosa.Utility.Launcher
 			catch (Exception e)
 			{
 				IsSucccessful = false;
-				Output($"Exception: {e.ToString()}");
+				Output($"Exception: {e}");
 			}
 			finally
 			{
@@ -442,7 +442,7 @@ namespace Mosa.Utility.Launcher
 			var startingAddress = LauncherSettings.BaseAddress + MultibootHeaderLength;
 			var fileOffset = Linker.BaseFileOffset + MultibootHeaderLength;
 
-			string arg = $"-b 32 -o0x{startingAddress.ToString("x")} -e0x{fileOffset.ToString("x")} {Quote(LauncherSettings.OutputFile)}";
+			string arg = $"-b 32 -o0x{startingAddress:x} -e0x{fileOffset:x} {Quote(LauncherSettings.OutputFile)}";
 
 			//var nasmfile = Path.Combine(LauncherSettings.ImageFolder, $"{Path.GetFileNameWithoutExtension(LauncherSettings.SourceFiles[0])}.nasm");
 

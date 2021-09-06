@@ -29,7 +29,4 @@
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</None>
 	</ItemGroup>
-	<ItemGroup>
-		<Compile Remove="Tests\Generics.cs" />
-	</ItemGroup>
 </Project>

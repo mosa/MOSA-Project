@@ -252,5 +252,17 @@ namespace Mosa.UnitTests
 			int q = z & 0xF;
 			return p >= 16 && q == 0;
 		}
+
+		//[MosaUnitTest(1)] // inifinit loop --- so can not uncomment the test
+		public static bool will_it_bend(int x)
+		{
+			while (true)
+			{
+				x++;
+				x--;
+				if (x == 1000)
+					return true;
+			}
+		}
 	}
 }

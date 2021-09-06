@@ -8,11 +8,10 @@ namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// The simple dead code removal stage remove useless instructions
-	/// and NOP instructions are moved
-	/// and a simple move propagation is performed as well.
+	/// and NOP instructions are moved and a simple move propagation is performed as well.
 	/// </summary>
 	/// <seealso cref="Mosa.Compiler.Framework.Platform.BasePlatformTransformationStage" />
-	public abstract class PlatformDeadCodeRemovalStage : BasePlatformTransformationStage
+	public abstract class BasePlatformDeadCodeRemovalStage : BasePlatformTransformationStage
 	{
 		#region Abstract Methods
 

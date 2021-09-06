@@ -30,7 +30,4 @@
 		<ProjectReference Include="..\Mosa.Runtime.x86\Mosa.Runtime.x86.csproj" />
 		<ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
 	</ItemGroup>
-	<ItemGroup>
-		<Compile Remove="Mosa.Application\ShowMem.cs" />
-	</ItemGroup>
 </Project>
