@@ -136,6 +136,11 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			new Memory.RedundantStoreLoadParam64(),
 			new Memory.RedundantStoreLoadParamR4(),
 			new Memory.RedundantStoreLoadParamR8(),
+
+			new Memory.RedundantLoadStoreParam32(),
+			new Memory.RedundantLoadStoreParam64(),
+			new Memory.RedundantLoadStoreParamR4(),
+			new Memory.RedundantLoadStoreParamR8(),
 		};
 	}
 }
