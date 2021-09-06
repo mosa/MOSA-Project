@@ -1,21 +1,20 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+/*
+ * (c) 2021 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  */
-using Mosa.Platform.x86;
+
 using Mosa.Kernel;
 using Mosa.Kernel.x86;
 using System;
-using Mosa.ClassLib;
 
 namespace Mosa.HelloWorld.Tests
 {
-
 	public class Generics
 	{
-
 		public interface IMyInterface<T>
 		{
 			T ReturnIt();
@@ -24,7 +23,11 @@ namespace Mosa.HelloWorld.Tests
 		public class MyGenericClass<T> : IMyInterface<T>
 		{
 			public T value;
-			public T ReturnIt() { return value; }
+
+			public T ReturnIt()
+			{
+				return value;
+			}
 		}
 
 		public class MyObject
@@ -36,6 +39,7 @@ namespace Mosa.HelloWorld.Tests
 				A = a;
 			}
 		}
+
 		public static void Test()
 		{
 			MyGenericClass<object> genericObject = new MyGenericClass<object>();
@@ -65,8 +69,5 @@ namespace Mosa.HelloWorld.Tests
 			genericObject.value = 10;
 			IMyInterface<int> genericInterface = genericObject;
 		}
-
 	}
-
-
 }

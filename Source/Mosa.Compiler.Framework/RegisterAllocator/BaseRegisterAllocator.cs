@@ -198,7 +198,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			foreach (var block in ExtendedBlocks)
 			{
-				extendedBlockTrace.Log($"Block # {block.BasicBlock} [{block.BasicBlock.Sequence.ToString()}] ({block.Start} destination {block.End})");
+				extendedBlockTrace.Log($"Block # {block.BasicBlock} [{block.BasicBlock.Sequence}] ({block.Start} destination {block.End})");
 				extendedBlockTrace.Log($" LiveIn:   {block.LiveIn.ToString2()}");
 				extendedBlockTrace.Log($" LiveGen:  {block.LiveGen.ToString2()}");
 				extendedBlockTrace.Log($" LiveKill: {block.LiveKill.ToString2()}");
@@ -353,7 +353,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 					if (node.IsEmpty)
 						continue;
 
-					string log = node.Offset.ToString() + " = " + node;
+					string log = $"{node.Offset} = {node}";
 
 					if (node.IsBlockStartInstruction)
 					{
@@ -1091,7 +1091,7 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 
 			//Debug.Assert(!liveInterval.IsSplit);
 
-			Trace?.Log($"Processing Interval: {liveInterval} / Length: {liveInterval.Length} / Spill Cost: {liveInterval.SpillCost} / Stage: {liveInterval.Stage.ToString()}");
+			Trace?.Log($"Processing Interval: {liveInterval} / Length: {liveInterval.Length} / Spill Cost: {liveInterval.SpillCost} / Stage: {liveInterval.Stage}");
 			Trace?.Log($"  Defs ({liveInterval.LiveRange.DefCount}): {SlotsToString(liveInterval.DefPositions)}");
 			Trace?.Log($"  Uses ({liveInterval.LiveRange.UseCount}): {SlotsToString(liveInterval.UsePositions)}");
 
@@ -1441,8 +1441,8 @@ namespace Mosa.Compiler.Framework.RegisterAllocator
 						if (fromLiveInterval.AssignedPhysicalRegister != toLiveInterval.AssignedPhysicalRegister)
 						{
 							resolverTrace?.Log($"REGISTER: {fromLiveInterval.VirtualRegister}");
-							resolverTrace?.Log($"    FROM: {from.ToString().PadRight(7)} {fromLiveInterval.AssignedOperand}");
-							resolverTrace?.Log($"      TO: {to.ToString().PadRight(7)} {toLiveInterval.AssignedOperand}");
+							resolverTrace?.Log($"    FROM: {from,-7} {fromLiveInterval.AssignedOperand}");
+							resolverTrace?.Log($"      TO: {to,-7} {toLiveInterval.AssignedOperand}");
 
 							resolverTrace?.Log($"  INSERT: {(fromAnchorFlag ? "FROM (bottom)" : "TO (Before)")}{((toLiveInterval.AssignedPhysicalOperand == null) ? "  ****SKIPPED***" : string.Empty)}");
 							resolverTrace?.Log();

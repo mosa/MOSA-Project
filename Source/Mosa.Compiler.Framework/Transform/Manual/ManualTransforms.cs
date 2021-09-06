@@ -131,6 +131,16 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			new LowerTo32.ZeroExtend32x64(),
 
 			new LowerTo32.Move64(),
+
+			new Memory.StoreLoadParam32(),
+			new Memory.StoreLoadParam64(),
+			new Memory.StoreLoadParamR4(),
+			new Memory.StoreLoadParamR8(),
+
+			new Memory.LoadStoreParam32(),
+			new Memory.LoadStoreParam64(),
+			new Memory.LoadStoreParamR4(),
+			new Memory.LoadStoreParamR8(),
 		};
 	}
 }

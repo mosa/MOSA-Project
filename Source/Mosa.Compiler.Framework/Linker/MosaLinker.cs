@@ -218,7 +218,7 @@ namespace Mosa.Compiler.Framework.Linker
 				if (linkRequest.LinkType == LinkType.RelativeOffset)
 				{
 					// Change the absolute into a relative offset
-					value -= (linkRequest.PatchSymbol.VirtualAddress + (ulong)linkRequest.PatchOffset);
+					value -= linkRequest.PatchSymbol.VirtualAddress + (ulong)linkRequest.PatchOffset;
 				}
 			}
 
@@ -299,7 +299,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public LinkerSymbol GetConstantSymbol(uint value)
 		{
-			var name = "$const32$" + value.ToString("x");
+			var name = $"$const32${value:x}";
 
 			var data = BitConverter.GetBytes(value);
 
@@ -315,7 +315,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public LinkerSymbol GetConstantSymbol(ulong value)
 		{
-			string name = "$const64$" + value.ToString("x");
+			string name = $"$const64${value:x}";
 
 			var data = BitConverter.GetBytes(value);
 

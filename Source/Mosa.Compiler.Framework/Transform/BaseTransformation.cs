@@ -795,5 +795,17 @@ namespace Mosa.Compiler.Framework.Transform
 		{
 			return operand.Definitions.Count == 1;
 		}
+
+		protected static InstructionNode GetPreviousNode(Context context)
+		{
+			var previous = context.Node.Previous;
+
+			while (previous.IsEmptyOrNop)
+			{
+				previous = previous.Previous;
+			}
+
+			return previous.IsBlockStartInstruction ? null : previous;
+		}
 	}
 }

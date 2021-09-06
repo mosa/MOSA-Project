@@ -12,7 +12,7 @@ namespace Mosa.UnitTests
 
 	public class VirtualDerived : VirtualBase
 	{
-		public static VirtualDerived Instance;// = new VirtualDerived();
+		public static VirtualDerived Instance;
 
 		[MosaUnitTest]
 		public static int TestVirtualCall()
