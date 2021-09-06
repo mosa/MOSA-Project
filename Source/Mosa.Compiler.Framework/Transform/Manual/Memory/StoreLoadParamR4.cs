@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 {
-	public sealed class RedundantStoreLoadParam64 : BaseTransformation
+	public sealed class StoreLoadParamR4 : BaseTransformation
 	{
-		public RedundantStoreLoadParam64() : base(IRInstruction.StoreParam64)
+		public StoreLoadParamR4() : base(IRInstruction.StoreParamR4)
 		{
 		}
 
@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 			if (previous == null)
 				return false;
 
-			if (previous.Instruction != IRInstruction.LoadParam64)
+			if (previous.Instruction != IRInstruction.LoadParamR4)
 				return false;
 
 			if (previous.Operand1 != context.Operand1)

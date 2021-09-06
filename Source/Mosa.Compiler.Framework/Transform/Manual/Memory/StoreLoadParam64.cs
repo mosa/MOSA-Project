@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 {
-	public sealed class RedundantLoadStoreParam64 : BaseTransformation
+	public sealed class StoreLoadParam64 : BaseTransformation
 	{
-		public RedundantLoadStoreParam64() : base(IRInstruction.LoadParam64)
+		public StoreLoadParam64() : base(IRInstruction.StoreParam64)
 		{
 		}
 
@@ -26,9 +26,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
-			var previous = GetPreviousNode(context);
-
-			context.SetInstruction(IRInstruction.Move64, context.Result, previous.Operand2);
+			context.SetInstruction(IRInstruction.Nop);
 		}
 	}
 }

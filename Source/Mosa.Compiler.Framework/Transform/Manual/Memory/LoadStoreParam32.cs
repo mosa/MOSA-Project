@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 {
-	public sealed class RedundantLoadStoreParam32 : BaseTransformation
+	public sealed class LoadStoreParam32 : BaseTransformation
 	{
-		public RedundantLoadStoreParam32() : base(IRInstruction.LoadParam32)
+		public LoadStoreParam32() : base(IRInstruction.LoadParam32)
 		{
 		}
 

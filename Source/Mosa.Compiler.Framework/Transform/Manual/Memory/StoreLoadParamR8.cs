@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 {
-	public sealed class RedundantLoadStoreParamR8 : BaseTransformation
+	public sealed class StoreLoadParamR8 : BaseTransformation
 	{
-		public RedundantLoadStoreParamR8() : base(IRInstruction.LoadParamR8)
+		public StoreLoadParamR8() : base(IRInstruction.StoreParamR8)
 		{
 		}
 
@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 			if (previous == null)
 				return false;
 
-			if (previous.Instruction != IRInstruction.StoreParamR8)
+			if (previous.Instruction != IRInstruction.LoadParamR8)
 				return false;
 
 			if (previous.Operand1 != context.Operand1)
@@ -26,9 +26,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
-			var previous = GetPreviousNode(context);
-
-			context.SetInstruction(IRInstruction.MoveR8, context.Result, previous.Operand2);
+			context.SetInstruction(IRInstruction.Nop);
 		}
 	}
 }
