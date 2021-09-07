@@ -1360,7 +1360,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (MosaTypeLayout.CanFitInRegister(node.Operand1.Type))
 			{
-				var storeInstruction = GetStoreParameterInstruction(node.Operand1.Type);
+				var storeInstruction = GetStoreParameterInstruction(node.Result.Type);
 				node.SetInstruction(storeInstruction, null, node.Result, node.Operand1);
 			}
 			else
