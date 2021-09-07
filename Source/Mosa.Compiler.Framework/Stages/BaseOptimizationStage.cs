@@ -283,10 +283,12 @@ namespace Mosa.Compiler.Framework.Stages
 				if (block.PreviousBlocks.Contains(block))
 					continue;
 
-				if (IsInSSAForm && (block.PreviousBlocks.Count != 1 || block.NextBlocks[0].PreviousBlocks.Count != 1))
+				if (!IsEmptyBlockWithSingleJump(block))
 					continue;
 
-				if (!IsEmptyBlockWithSingleJump(block))
+				var hasPhi = IsInSSAForm && HasPhiInstruction(block.NextBlocks[0]);
+
+				if (hasPhi && IsInSSAForm && (block.PreviousBlocks.Count != 1 || block.NextBlocks[0].PreviousBlocks.Count != 1))
 					continue;
 
 				trace?.Log($"Removed Block: {block} - Skipped to: {block.NextBlocks[0]}");

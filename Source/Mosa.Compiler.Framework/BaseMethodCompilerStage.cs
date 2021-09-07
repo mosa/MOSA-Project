@@ -687,6 +687,22 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
+		public static bool HasPhiInstruction(BasicBlock target)
+		{
+			for (var node = target.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+			{
+				if (node.IsEmptyOrNop)
+					continue;
+
+				if (IsPhiInstruction(node.Instruction))
+					return true;
+
+				return false;
+			}
+
+			return false;
+		}
+
 		#endregion Block Operations
 
 		#region Protected Region Methods
