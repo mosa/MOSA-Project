@@ -2,23 +2,23 @@
 
 namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 {
-	public sealed class StoreLoadParam32 : BaseTransformation
+	public sealed class DoubleStoreParam64 : BaseTransformation
 	{
-		public StoreLoadParam32() : base(IRInstruction.StoreParam32)
+		public DoubleStoreParam64() : base(IRInstruction.StoreParam64)
 		{
 		}
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{
-			var previous = GetPreviousNode(context);
+			var next = GetNextNode(context);
 
-			if (previous == null)
+			if (next == null)
 				return false;
 
-			if (previous.Instruction != IRInstruction.StoreParam32)
+			if (next.Instruction != IRInstruction.StoreParam64)
 				return false;
 
-			if (previous.Operand1 != context.Operand1)
+			if (next.Operand1 != context.Operand1)
 				return false;
 
 			return true;

@@ -807,5 +807,18 @@ namespace Mosa.Compiler.Framework.Transform
 
 			return previous.IsBlockStartInstruction ? null : previous;
 		}
+
+
+		protected static InstructionNode GetNextNode(Context context)
+		{
+			var next = context.Node.Next;
+
+			while (next.IsEmptyOrNop)
+			{
+				next = next.Next;
+			}
+
+			return next.IsBlockEndInstruction ? null : next;
+		}
 	}
 }
