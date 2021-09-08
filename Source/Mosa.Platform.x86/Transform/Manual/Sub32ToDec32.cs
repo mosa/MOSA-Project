@@ -7,9 +7,6 @@ using Mosa.Compiler.Framework.Transform;
 
 namespace Mosa.Platform.x86.Transform.Manual
 {
-	/// <summary>
-	/// Dec32
-	/// </summary>
 	public sealed class Sub32ToDec32 : BaseTransformation
 	{
 		public Sub32ToDec32() : base(X86.Sub32, true)
@@ -24,7 +21,13 @@ namespace Mosa.Platform.x86.Transform.Manual
 			if (context.Operand2.ConstantUnsigned64 != 1)
 				return false;
 
-			if (!(AreStatusFlagsUsed(context.Node.Next, true, false, true, true, true) == TriState.No))
+			if (context.Operand1.IsCPURegister)
+				return false;
+
+			if (context.Operand1 != context.Result)
+				return false;
+
+			if (!(AreStatusFlagsUsed(context.Node.Next, false, true, false, false, false) == TriState.No))
 				return false;
 
 			return true;
@@ -36,7 +39,7 @@ namespace Mosa.Platform.x86.Transform.Manual
 
 			var t1 = context.Operand1;
 
-			context.SetInstruction(X86.Dec32, result, t1, t1);
+			context.SetInstruction(X86.Dec32, result, t1);
 		}
 	}
 }

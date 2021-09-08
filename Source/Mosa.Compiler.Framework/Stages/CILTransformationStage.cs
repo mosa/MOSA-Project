@@ -1242,7 +1242,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The context.</param>
 		private void Nop(InstructionNode node)
 		{
-			node.SetInstruction(IRInstruction.Nop);
+			node.SetNop();
 		}
 
 		/// <summary>
@@ -1280,7 +1280,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void PreReadOnly(Context context)
 		{
-			context.SetInstruction(IRInstruction.Nop);
+			context.SetNop();
 		}
 
 		/// <summary>

@@ -246,7 +246,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 						trace?.Log($"Removed Unless PHI: {node}");
 
-						node.SetInstruction(IRInstruction.Nop);
+						node.SetNop();
 						InstructionRemovalCount++;
 						continue;
 					}
@@ -261,7 +261,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 						trace?.Log($"Removed Redundant PHI: {node}");
 
-						node.SetInstruction(IRInstruction.Nop);
+						node.SetNop();
 						InstructionRemovalCount++;
 						continue;
 					}
@@ -297,7 +297,7 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 
 					SetValueNumber(node.Result, node.Operand1);
-					node.SetInstruction(IRInstruction.Nop);
+					node.SetNop();
 					InstructionRemovalCount++;
 					continue;
 				}
@@ -332,7 +332,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.Instruction.IsParameterLoad)
 						ParameterLoadEliminationCount++;
 
-					node.SetInstruction(IRInstruction.Nop);
+					node.SetNop();
 					InstructionRemovalCount++;
 					SubexpressionEliminationCount++;
 					continue;

@@ -1082,6 +1082,11 @@ namespace Mosa.Compiler.Framework
 
 		#region SetInstructions
 
+		public void SetNop()
+		{
+			SetInstruction(IRInstruction.Nop);
+		}
+
 		/// <summary>
 		/// Sets the instruction.
 		/// </summary>

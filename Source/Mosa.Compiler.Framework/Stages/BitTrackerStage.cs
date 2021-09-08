@@ -561,7 +561,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(virtualRegister.Uses.Count == 0);
 
 			trace?.Log($"REMOVED:\t{node}");
-			node.SetInstruction(IRInstruction.Nop);
+			node.SetNop();
 			trace?.Log();
 
 			InstructionsRemovedCount++;
@@ -595,7 +595,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var newBranch = node.BranchTargets[0];
 
 				trace?.Log($"REMOVED:\t{node}");
-				node.SetInstruction(IRInstruction.Nop);
+				node.SetNop();
 				InstructionsRemovedCount++;
 				BranchesRemovedCount++;
 

@@ -13,7 +13,7 @@ namespace Mosa.Platform.x86.Instructions
 	public sealed class Dec32 : X86Instruction
 	{
 		internal Dec32()
-			: base(1, 2)
+			: base(1, 1)
 		{
 		}
 
@@ -30,7 +30,7 @@ namespace Mosa.Platform.x86.Instructions
 		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 			System.Diagnostics.Debug.Assert(node.Result.IsCPURegister);
 			System.Diagnostics.Debug.Assert(node.Operand1.IsCPURegister);
 			System.Diagnostics.Debug.Assert(node.Result.Register == node.Operand1.Register);

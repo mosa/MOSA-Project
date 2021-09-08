@@ -206,6 +206,11 @@ namespace Mosa.Compiler.Framework
 
 		#region Methods
 
+		public void SetNop()
+		{
+			Node.SetNop();
+		}
+
 		/// <summary>
 		/// Clones this instance.
 		/// </summary>
