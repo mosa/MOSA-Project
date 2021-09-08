@@ -1,8 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Platform.x86.Transform.Manual;
-using Mosa.Platform.x86.Transform.Manual.Special;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -12,17 +10,18 @@ namespace Mosa.Platform.x86.Stages
 	/// <seealso cref="Mosa.Compiler.Framework.Stages.BaseTransformationStage" />
 	public sealed class PostOptimizationStage : BaseOptimizationStage
 	{
-		public override string Name { get { return "X86." + GetType().Name; } }
+		public override string Name { get { return "x86." + GetType().Name; } }
 
 		public PostOptimizationStage()
 			: base(false)
 		{
 			//AddTranformations(AutoTransforms.List);
 
-			//AddTranformation(new Add32ToInc32());
+			AddTranformation(new Transform.Manual.Special.Deadcode());
+			AddTranformation(new Transform.Manual.Mov32ToXor32());
 
-			AddTranformation(new Deadcode());
-			AddTranformation(new Mov32ToXor32());
+			AddTranformation(new Transform.Manual.Add32ToInc32());
+			AddTranformation(new Transform.Manual.Sub32ToDec32());
 		}
 
 		protected override void CustomizeTransformationContract()

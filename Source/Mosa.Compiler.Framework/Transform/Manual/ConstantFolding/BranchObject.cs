@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.ConstantFolding
 
 			if (!compare)
 			{
-				context.SetInstruction(IRInstruction.Nop);
+				context.SetNop();
 			}
 			else
 			{
@@ -67,7 +67,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.ConstantFolding
 				{
 					if (!context.IsEmptyOrNop)
 					{
-						context.SetInstruction(IRInstruction.Nop);
+						context.SetNop();
 					}
 					context.GotoNext();
 				}

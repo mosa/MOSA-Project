@@ -13,7 +13,7 @@ namespace Mosa.Platform.x86.Instructions
 	public sealed class Inc32 : X86Instruction
 	{
 		internal Inc32()
-			: base(1, 2)
+			: base(1, 1)
 		{
 		}
 
@@ -28,7 +28,7 @@ namespace Mosa.Platform.x86.Instructions
 		public override void Emit(InstructionNode node, OpcodeEncoder opcodeEncoder)
 		{
 			System.Diagnostics.Debug.Assert(node.ResultCount == 1);
-			System.Diagnostics.Debug.Assert(node.OperandCount == 2);
+			System.Diagnostics.Debug.Assert(node.OperandCount == 1);
 
 			opcodeEncoder.Append4Bits(0b0100);
 			opcodeEncoder.Append1Bit(0b0);

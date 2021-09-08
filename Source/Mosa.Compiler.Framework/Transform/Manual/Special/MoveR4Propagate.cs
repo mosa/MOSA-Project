@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Special
 				}
 			}
 
-			context.SetInstruction(IRInstruction.Nop);
+			context.SetNop();
 		}
 	}
 }

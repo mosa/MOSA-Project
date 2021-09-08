@@ -563,7 +563,7 @@
 			"FlagsUnchanged": "C",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 2,
+			"OperandCount": 1,
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "true",
 			"OpcodeEncoding": [
@@ -792,7 +792,7 @@
 			"FlagsUnchanged": "C",
 			"FlagsUndefined": "",
 			"FlagsUsed": "",
-			"OperandCount": 2,
+			"OperandCount": 1,
 			"ResultCount": 1,
 			"ThreeTwoAddressConversion": "false",
 			"OpcodeEncoding": [

@@ -21,7 +21,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Simplification
 			var target = context.BranchTargets[0];
 			var block = context.Block;
 
-			context.SetInstruction(IRInstruction.Nop);
+			context.SetNop();
 
 			TransformContext.RemoveBlockFromPHIInstructions(block, target);
 		}

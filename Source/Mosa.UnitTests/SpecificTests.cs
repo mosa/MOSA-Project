@@ -4,6 +4,18 @@ namespace Mosa.UnitTests
 {
 	public static class SpecificTests
 	{
+		[MosaUnitTest(Series = "I4")]
+		public static int IncBy1(int a)
+		{
+			return a + 1;
+		}
+
+		[MosaUnitTest(Series = "I4")]
+		public static int DecBy1(int a)
+		{
+			return a - 1;
+		}
+
 		[MosaUnitTest((byte)0)]
 		[MosaUnitTest((byte)1)]
 		[MosaUnitTest((byte)2)]

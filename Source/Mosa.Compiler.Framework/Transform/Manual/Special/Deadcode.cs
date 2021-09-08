@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Special
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
-			context.SetInstruction(IRInstruction.Nop);
+			context.SetNop();
 		}
 	}
 }

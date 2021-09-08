@@ -7,9 +7,6 @@ using Mosa.Compiler.Framework.Transform;
 
 namespace Mosa.Platform.x86.Transform.Manual
 {
-	/// <summary>
-	/// Inc32
-	/// </summary>
 	public sealed class Add32ToInc32 : BaseTransformation
 	{
 		public Add32ToInc32() : base(X86.Add32, true)
@@ -24,7 +21,10 @@ namespace Mosa.Platform.x86.Transform.Manual
 			if (context.Operand2.ConstantUnsigned64 != 1)
 				return false;
 
-			if (!(AreStatusFlagsUsed(context.Node.Next, true, false, true, true, true) == TriState.No))
+			if (context.Operand1 != context.Result)
+				return false;
+
+			if (!(AreStatusFlagsUsed(context.Node.Next, false, true, false, false, false) == TriState.No))
 				return false;
 
 			return true;
@@ -36,7 +36,7 @@ namespace Mosa.Platform.x86.Transform.Manual
 
 			var t1 = context.Operand1;
 
-			context.SetInstruction(X86.Inc32, result, t1, t1);
+			context.SetInstruction(X86.Inc32, result, t1);
 		}
 	}
 }

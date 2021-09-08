@@ -124,7 +124,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var defNode = target.Definitions[0];
 
 			trace?.Log($"REMOVED:\t{defNode}");
-			defNode.SetInstruction(IRInstruction.Nop);
+			defNode.SetNop();
 			InstructionsRemovedCount++;
 		}
 
@@ -159,7 +159,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						trace?.Log("*** RemoveBranchesToDeadBlocks");
 						trace?.Log($"REMOVED:\t{node}");
-						node.SetInstruction(IRInstruction.Nop);
+						node.SetNop();
 						InstructionsRemovedCount++;
 						continue;
 					}

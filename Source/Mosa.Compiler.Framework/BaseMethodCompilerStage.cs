@@ -564,7 +564,7 @@ namespace Mosa.Compiler.Framework
 					continue;
 				}
 
-				node.SetInstruction(IRInstruction.Nop);
+				node.SetNop();
 
 				found = true;
 			}
