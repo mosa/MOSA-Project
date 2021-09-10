@@ -25,7 +25,7 @@ namespace Mosa.Runtime.x86
 					Runtime.Internal.Fault(0XBAD00002, i);
 				}
 
-				var exceptionType = new TypeDefinition(Mosa.Runtime.Internal.GetTypeDefinition(exceptionObject));
+				var exceptionType = new TypeDefinition(Runtime.Internal.GetTypeDefinition(exceptionObject));
 
 				var methodDef = Runtime.Internal.GetMethodDefinitionViaMethodExceptionLookup(returnAddress);
 
@@ -42,7 +42,7 @@ namespace Mosa.Runtime.x86
 						var jumpTarget = methodStart + handlerOffset;
 
 						uint stackSize = methodDef.StackSize & 0xFFFF; // lower 16-bits only
-						var previousFrame = Mosa.Runtime.Internal.GetPreviousStackFrame(stackFrame);
+						var previousFrame = Runtime.Internal.GetPreviousStackFrame(stackFrame);
 						var newStack = previousFrame - stackSize;
 
 						Native.FrameJump(jumpTarget, newStack, previousFrame, exceptionObject.ToInt32());

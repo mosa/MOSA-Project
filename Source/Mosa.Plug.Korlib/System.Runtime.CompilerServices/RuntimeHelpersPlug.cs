@@ -6,16 +6,18 @@ using Mosa.Runtime.Plug;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading;
 
 namespace Mosa.Plug.Korlib.System.Runtime.CompilerServices
 {
 	internal static class RuntimeHelpersPlug
 	{
+		internal static int ObjectSequence = 0;
+
 		[Plug("System.Runtime.CompilerServices.RuntimeHelpers::GetHashCode")]
 		internal unsafe static int GetHashCode(object o)
 		{
-			// FIXME: For now use the obj location in memory as the hash code
-			return Intrinsic.GetObjectAddress(o).ToInt32();
+			return (int)Mosa.Runtime.Internal.GetObjectHashValue(o);
 		}
 
 		[Plug("System.Runtime.CompilerServices.RuntimeHelpers::Equals")]

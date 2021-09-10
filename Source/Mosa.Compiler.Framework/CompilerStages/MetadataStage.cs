@@ -44,20 +44,18 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private LinkerSymbol EmitStringWithLength(string name, string data)
 		{
 			// Strings are now going to be embedded objects since they are immutable
-			var symbol = Linker.DefineSymbol(name, SectionKind.ROData, TypeLayout.NativePointerAlignment, Compiler.ObjectHeaderSize + NativePointerSize + ((uint)data.Length * 2));
+			var symbol = Linker.DefineSymbol(name, SectionKind.ROData, TypeLayout.NativePointerAlignment, (uint)(Compiler.ObjectHeaderSize + NativePointerSize + (data.Length * 2)));
 			var writer = new BinaryWriter(symbol.Stream);
 
+			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, Compiler.ObjectHeaderSize - NativePointerSize, Metadata.TypeDefinition + "System.String", 0);
+
 			// 1. Object Header
-			writer.WriteZeroBytes(NativePointerSize);
+			writer.WriteZeroBytes(Compiler.ObjectHeaderSize);
 
-			// 2. Method Table Pointers
-			Linker.Link(LinkType.AbsoluteAddress, NativePatchType, symbol, writer.GetPosition(), Metadata.TypeDefinition + "System.String", 0);
-			writer.WriteZeroBytes(NativePointerSize);
-
-			// 3. Length
+			// 2. Length
 			writer.Write(data.Length, NativePointerSize);
 
-			// 4. Unicode
+			// 3. Unicode
 			writer.Write(Encoding.Unicode.GetBytes(data));
 
 			return symbol;

@@ -22,8 +22,6 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class Compiler
 	{
-		public const uint ObjectHeaderSizeInNativeIntegers = 2;
-
 		private const uint MaxThreads = 1024;
 
 		#region Data Members
@@ -256,7 +254,7 @@ namespace Mosa.Compiler.Framework
 
 			Linker = new MosaLinker(this);
 
-			ObjectHeaderSize = (uint)Architecture.NativePointerSize * ObjectHeaderSizeInNativeIntegers;
+			ObjectHeaderSize = Architecture.NativePointerSize * 4 + 4; // Hash Value (32-bit) + Lock & Status (32-bit) + Method Table
 
 			StackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
 			StackPointer = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackPointerRegister);

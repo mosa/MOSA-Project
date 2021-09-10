@@ -8,6 +8,7 @@ using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Text;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -1057,22 +1058,19 @@ namespace Mosa.Compiler.Framework.Stages
 			var symbolName = node.Operand1.Name;
 			var data = node.Operand1.StringData;
 
-			// FUTURE: Add to linkers to allow for deduplicate of internal strings
-			var symbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, NativeAlignment, ObjectHeaderSize + NativePointerSize + ((uint)data.Length * 2));
-			var stream = symbol.Stream;
+			var symbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, NativeAlignment, (uint)(ObjectHeaderSize + NativePointerSize + (data.Length * 2)));
+			var writer = new BinaryWriter(symbol.Stream);
 
-			// Header Block
-			stream.WriteZeroBytes(NativePointerSize);
+			Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, symbol, ObjectHeaderSize - NativePointerSize, Metadata.TypeDefinition + "System.String", 0);
 
-			// Type Definition
-			Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, symbol, stream.Position, Metadata.TypeDefinition + "System.String", 0);
-			stream.WriteZeroBytes(NativePointerSize);
+			// 1. Object Header
+			writer.WriteZeroBytes(ObjectHeaderSize);
 
-			// String length field
-			stream.Write(BitConverter.GetBytes(data.Length), 0, 4);
+			// 2. Length
+			writer.Write(data.Length, NativePointerSize);
 
-			// String data
-			stream.Write(Encoding.Unicode.GetBytes(data));
+			// 3. Unicode
+			writer.Write(Encoding.Unicode.GetBytes(data));
 
 			node.SetInstruction(IRInstruction.MoveObject, node.Result, node.Operand1);
 		}

@@ -4,43 +4,46 @@ using Mosa.Runtime.Metadata;
 using System;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Threading;
 
 namespace Mosa.Runtime
 {
 	public static class Internal
 	{
+		#region Data Members
+
+		internal static int objectSequence = 0;
+
+		#endregion Data Members
+
 		#region Allocation
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static Pointer AllocateObject(Pointer methodTable, uint classSize)
 		{
+			var hashvalue = Interlocked.Increment(ref objectSequence);
+
 			// An object has the following memory layout:
 			//   - Object Header
-			//   - MethodTable (Object references point here, so this is relative 0)
+			//		- Hash Value (32-bit)
+			//		- Lock & Status (32-bit)
+			//		- MethodTable (Object references point here, so this is relative 0)
 			//   - 0 .. n object data fields
 
-			var allocationSize = (uint)((Pointer.Size * 2) + classSize);
+			var allocationSize = 4 + 4 + Pointer.Size + classSize;
 
-			//			allocationSize = Pointer.Size == 4
-			//				? (allocationSize + 3) & ~3u     // Align to 4-bytes boundary
-			//				: (allocationSize + 7) & ~7u;    // Align to 8-bytes boundary
+			var memory = GC.AllocateObject((uint)allocationSize);
 
-			var memory = GC.AllocateObject(allocationSize);
+			// Hash
+			memory.Store32(0, hashvalue);
 
-			// Set Object Header
-			if (Pointer.Size == 4)
-			{
-				memory.Store32(0, 0);
-			}
-			else
-			{
-				memory.Store64(0, 0ul);
-			}
+			// Lock & Status
+			memory.Store32(4, 0);
 
-			// Set TypeDef pointer
-			memory.StorePointer(Pointer.Size, methodTable);
+			// Set MethodTable
+			memory.StorePointer(8, methodTable);
 
-			return memory + (Pointer.Size * 2);
+			return memory + 8 + Pointer.Size;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -54,35 +57,24 @@ namespace Mosa.Runtime
 		{
 			// An array has the following memory layout:
 			//   - Object Header
-			//   - MethodTable
-			//   - Length (4-bytes padded to 8-bytes on 64bit architectures)
+			//		- Hash Value (32-bit)
+			//		- Lock & Status (32-bit)
+			//		- MethodTable (Object references point here, so this is relative 0)
+			//   - Length (native int)
 			//   - ElementType[length] elements
-			//   - Padding
 
-			var allocationSize = ((uint)Pointer.Size * 3) + (elements * elementSize);
+			var memory = AllocateObject(methodTable, (uint)(Pointer.Size + (elements * elementSize)));
 
-			//			allocationSize = Pointer.Size == 4
-			//				? (allocationSize + 3) & ~3u     // Align to 4-bytes boundary
-			//				: (allocationSize + 7) & ~7u;    // Align to 8-bytes boundary
-
-			var memory = GC.AllocateObject(allocationSize);
-
-			// Set Object Header && initial size
 			if (Pointer.Size == 4)
 			{
-				memory.Store32(0, 0);
-				memory.Store32(Pointer.Size * 2, elements);
+				memory.Store32(0, elements);
 			}
 			else
 			{
-				memory.Store64(0, 0ul);
-				memory.Store64(Pointer.Size * 2, elements);
+				memory.Store64(0u, elements);
 			}
 
-			// Set TypeDef pointer
-			memory.StorePointer(Pointer.Size, methodTable);
-
-			return memory + (Pointer.Size * 2);
+			return memory;
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
@@ -243,11 +235,18 @@ namespace Mosa.Runtime
 			return obj.LoadPointer(-Pointer.Size);
 		}
 
-		public static Pointer GetObjectHeaderAddress(object obj)
+		public static Pointer GetObjectLockAndStatus(object obj)
 		{
 			var address = Intrinsic.GetObjectAddress(obj);
 
-			return address - (Pointer.Size * 2);
+			return address - Pointer.Size - 4;
+		}
+
+		public static Pointer GetObjectHashValue(object obj)
+		{
+			var address = Intrinsic.GetObjectAddress(obj);
+
+			return address - Pointer.Size - 4 - 4;
 		}
 
 		public static bool IsTypeInInheritanceChain(TypeDefinition typeDefinition, TypeDefinition chain)
@@ -538,7 +537,7 @@ namespace Mosa.Runtime
 
 		public static void Fault(uint code, uint extra = 0)
 		{
-			Debug.Fail("Fault: " + ((int)code).ToString("hex") + " , Extra: " + ((int)extra).ToString("hex"));
+			Debug.Fail("Fault: " + ((int)code).ToString("x") + " , Extra: " + ((int)extra).ToString("x"));
 		}
 
 		public static void ThrowIndexOutOfRangeException()
