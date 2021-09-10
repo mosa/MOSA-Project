@@ -453,6 +453,12 @@ namespace Mosa.Runtime
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public void Store32(int value)
+		{
+			Intrinsic.Store32(this, value);
+		}
+
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Store64(uint offset, ulong value)
 		{
 			Intrinsic.Store64(this, offset, value);

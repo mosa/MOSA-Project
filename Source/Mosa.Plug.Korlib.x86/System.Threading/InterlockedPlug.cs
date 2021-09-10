@@ -2,6 +2,7 @@
 
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
+using System;
 
 namespace Mosa.Plug.Korlib.System.Threading.x86
 {
@@ -23,6 +24,14 @@ namespace Mosa.Plug.Korlib.System.Threading.x86
 		internal static int ExchangeAdd(ref int location1, int value)
 		{
 			return Native.XAddLoad32(ref location1, value);
+		}
+
+		[Plug("System.Threading.Interlocked::CompareExchange")]
+		public static IntPtr CompareExchange(ref IntPtr location1, IntPtr value, IntPtr comparand)
+		{
+			var address = location1.ToInt32();
+
+			return new IntPtr(CompareExchange(ref address, value.ToInt32(), comparand.ToInt32()));
 		}
 	}
 }

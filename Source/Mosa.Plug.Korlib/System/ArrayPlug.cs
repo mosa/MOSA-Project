@@ -18,10 +18,10 @@ namespace Mosa.Plug.Korlib.System
 			var destinationArrayPtr = Intrinsic.GetObjectAddress<Array>(destinationArray);
 
 			// TODO: add more checks, allow type up-casting, add multi dimensional array support
-			if (sourceArrayPtr == null)
+			if (sourceArrayPtr.IsNull)
 				throw new ArgumentNullException(nameof(sourceArrayPtr));
 
-			if (destinationArrayPtr == null)
+			if (destinationArrayPtr.IsNull)
 				throw new ArgumentNullException(nameof(destinationArrayPtr));
 
 			if (length < 0)

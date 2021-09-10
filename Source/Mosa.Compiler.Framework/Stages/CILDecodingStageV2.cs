@@ -7,6 +7,7 @@ using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -377,10 +378,10 @@ namespace Mosa.Compiler.Framework.Stages
 			switch (opcode)
 			{
 				case OpCode.Add: return Add(context, stack);
-				case OpCode.Add_ovf: return Add(context, stack);        // TODO: implement overflow check
-				case OpCode.Add_ovf_un: return Add(context, stack);     // TODO: implement overflow check
+				case OpCode.Add_ovf: return Add(context, stack);                    // TODO: implement overflow check
+				case OpCode.Add_ovf_un: return Add(context, stack);                 // TODO: implement overflow check
 				case OpCode.And: return And(context, stack);
-				case OpCode.Arglist: return false;
+				case OpCode.Arglist: return false;                                  // TODO
 				case OpCode.Beq: return Branch(context, stack, ConditionCode.Equal, instruction);
 				case OpCode.Beq_s: return Branch(context, stack, ConditionCode.Equal, instruction);
 				case OpCode.Bge: return Branch(context, stack, ConditionCode.GreaterOrEqual, instruction);
@@ -404,19 +405,19 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Box: return Box(context, stack, instruction);
 				case OpCode.Br: return Branch(context, stack, instruction);
 				case OpCode.Br_s: return Branch(context, stack, instruction);
-				case OpCode.Break: return true;
+				case OpCode.Break: return true;                                     // TODO
 				case OpCode.Brfalse: return Branch1(context, stack, ConditionCode.Equal, instruction);
 				case OpCode.Brfalse_s: return Branch1(context, stack, ConditionCode.Equal, instruction);
 				case OpCode.Brtrue: return Branch1(context, stack, ConditionCode.NotEqual, instruction);
 				case OpCode.Brtrue_s: return Branch1(context, stack, ConditionCode.NotEqual, instruction);
 				case OpCode.Call: return Call(context, stack, instruction);
-				case OpCode.Calli: return false;
+				case OpCode.Calli: return false;                                    // TODO
 				case OpCode.Callvirt: return Callvirt(context, stack, instruction);
 				case OpCode.Castclass: return Castclass(context, stack);
 				case OpCode.Ceq: return Compare(context, stack, ConditionCode.Equal);
 				case OpCode.Cgt: return Compare(context, stack, ConditionCode.Greater);
 				case OpCode.Cgt_un: return Compare(context, stack, ConditionCode.UnsignedGreater);
-				case OpCode.Ckfinite: return false;
+				case OpCode.Ckfinite: return false;                                 // TODO
 				case OpCode.Clt: return Compare(context, stack, ConditionCode.Less);
 				case OpCode.Clt_un: return Compare(context, stack, ConditionCode.UnsignedLess);
 				case OpCode.Conv_i: return ConvertI(context, stack);
@@ -425,7 +426,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Conv_i4: return ConvertI4(context, stack);
 				case OpCode.Conv_i8: return ConvertI8(context, stack);
 				case OpCode.Conv_ovf_i: return ConvertI(context, stack);            // TODO: implement overflow check
-				case OpCode.Conv_ovf_i_un: return false;
+				case OpCode.Conv_ovf_i_un: return false;                            // TODO
 				case OpCode.Conv_ovf_i1: return ConvertI1(context, stack);          // TODO: implement overflow check
 				case OpCode.Conv_ovf_i1_un: return ConvertUToI1(context, stack);    // TODO: implement overflow check
 				case OpCode.Conv_ovf_i2: return ConvertI2(context, stack);          // TODO: implement overflow check
@@ -435,7 +436,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Conv_ovf_i8: return ConvertI8(context, stack);          // TODO: implement overflow check
 				case OpCode.Conv_ovf_i8_un: return ConvertUToI8(context, stack);    // TODO: implement overflow check
 				case OpCode.Conv_ovf_u: return ConvertU(context, stack);            // TODO: implement overflow check
-				case OpCode.Conv_ovf_u_un: return false;
+				case OpCode.Conv_ovf_u_un: return false;                            // TODO
 				case OpCode.Conv_ovf_u1: return ConvertU1(context, stack);          // TODO: implement overflow check
 				case OpCode.Conv_ovf_u1_un: return ConvertUToU1(context, stack);    // TODO: implement overflow check
 				case OpCode.Conv_ovf_u2: return ConvertU2(context, stack);          // TODO: implement overflow check
@@ -457,13 +458,13 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Div: return Div(context, stack);
 				case OpCode.Div_un: return DivUnsigned(context, stack);
 				case OpCode.Dup: return Dup(context, stack);
-				case OpCode.Endfilter: return false;
-				case OpCode.Endfinally: return false;
-				case OpCode.Extop: return false;
-				case OpCode.Initblk: return false;
-				case OpCode.InitObj: return false;
+				case OpCode.Endfilter: return false;                            // TODO
+				case OpCode.Endfinally: return false;                           // TODO
+				case OpCode.Extop: return false;                                // TODO
+				case OpCode.Initblk: return false;                              // TODO
+				case OpCode.InitObj: return false;                              // TODO
 				case OpCode.Isinst: return Isinst(context, stack, instruction);
-				case OpCode.Jmp: return false;
+				case OpCode.Jmp: return false;                                  // TODO
 				case OpCode.Ldarg: return Ldarg(context, stack, (int)instruction.Operand);
 				case OpCode.Ldarg_0: return Ldarg(context, stack, 0);
 				case OpCode.Ldarg_1: return Ldarg(context, stack, 1);
@@ -499,10 +500,10 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Ldelem_u1: return Ldelem(context, stack, ElementType.U1);
 				case OpCode.Ldelem_u2: return Ldelem(context, stack, ElementType.U2);
 				case OpCode.Ldelem_u4: return Ldelem(context, stack, ElementType.U4);
-				case OpCode.Ldelema: return false;
+				case OpCode.Ldelema: return false;                                  // TODO
 				case OpCode.Ldfld: return Ldfld(context, stack, instruction);
-				case OpCode.Ldflda: return false;
-				case OpCode.Ldftn: return false;
+				case OpCode.Ldflda: return false;                                   // TODO
+				case OpCode.Ldftn: return false;                                    // TODO
 				case OpCode.Ldind_i: return Ldind(context, stack, ElementType.I);
 				case OpCode.Ldind_i1: return Ldind(context, stack, ElementType.I1);
 				case OpCode.Ldind_i2: return Ldind(context, stack, ElementType.I2);
@@ -521,19 +522,19 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Ldloc_2: return Ldloc(context, stack, 2);
 				case OpCode.Ldloc_3: return Ldloc(context, stack, 3);
 				case OpCode.Ldloc_s: return Ldloc(context, stack, (int)instruction.Operand);
-				case OpCode.Ldloca: return false;
-				case OpCode.Ldloca_s: return false;
+				case OpCode.Ldloca: return false;                                   // TODO
+				case OpCode.Ldloca_s: return false;                                 // TODO
 				case OpCode.Ldnull: return Ldnull(context, stack);
 				case OpCode.Ldobj: return Ldobj(context, stack, instruction);
-				case OpCode.Ldsfld: return false;
-				case OpCode.Ldsflda: return false;
+				case OpCode.Ldsfld: return false;                                   // TODO
+				case OpCode.Ldsflda: return false;                                  // TODO
 				case OpCode.Ldstr: return Ldstr(context, stack, instruction);
-				case OpCode.Ldtoken: return false;
-				case OpCode.Ldvirtftn: return false;
-				case OpCode.Leave: return false;
-				case OpCode.Leave_s: return false;
-				case OpCode.Localalloc: return false;
-				case OpCode.Mkrefany: return false;
+				case OpCode.Ldtoken: return false;                                  // TODO
+				case OpCode.Ldvirtftn: return false;                                // TODO
+				case OpCode.Leave: return false;                                    // TODO
+				case OpCode.Leave_s: return false;                                  // TODO
+				case OpCode.Localalloc: return false;                               // TODO
+				case OpCode.Mkrefany: return false;                                 // TODO
 				case OpCode.Mul: return Mul(context, stack);
 				case OpCode.Mul_ovf: return Mul(context, stack);        // TODO: implement overflow check
 				case OpCode.Mul_ovf_un: return Mul(context, stack);     // TODO: implement overflow check
@@ -544,18 +545,18 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Not: return Not(context, stack);
 				case OpCode.Or: return Or(context, stack);
 				case OpCode.Pop: return Pop(context, stack);
-				case OpCode.PreConstrained: return false;
-				case OpCode.PreNo: return false;
-				case OpCode.PreReadOnly: return false;
-				case OpCode.PreTail: return false;
-				case OpCode.PreUnaligned: return false;
-				case OpCode.PreVolatile: return false;
-				case OpCode.Refanytype: return false;
-				case OpCode.Refanyval: return false;
+				case OpCode.PreConstrained: return false;                           // TODO
+				case OpCode.PreNo: return false;                                    // TODO
+				case OpCode.PreReadOnly: return false;                              // TODO
+				case OpCode.PreTail: return false;                                  // TODO
+				case OpCode.PreUnaligned: return false;                             // TODO
+				case OpCode.PreVolatile: return false;                              // TODO
+				case OpCode.Refanytype: return false;                               // TODO
+				case OpCode.Refanyval: return false;                                // TODO
 				case OpCode.Rem: return RemOperand(context, stack);
 				case OpCode.Rem_un: return RemUnsigned(context, stack);
 				case OpCode.Ret: return Ret(context, stack);
-				case OpCode.Rethrow: return false;
+				case OpCode.Rethrow: return false;                                  // TODO
 				case OpCode.Shl: return Shl(context, stack, instruction);
 				case OpCode.Shr: return Shr(context, stack, instruction);
 				case OpCode.Shr_un: return ShrU(context, stack, instruction);
@@ -571,7 +572,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Stelem_r4: return Stelem(context, stack, ElementType.R4);
 				case OpCode.Stelem_r8: return Stelem(context, stack, ElementType.R8);
 				case OpCode.Stelem_ref: return Stelem(context, stack, ElementType.Ref);
-				case OpCode.Stfld: return false;
+				case OpCode.Stfld: return false;                                    // TODO
 				case OpCode.Stind_i: return Stind(context, stack, ElementType.I);
 				case OpCode.Stind_i1: return Stind(context, stack, ElementType.I1);
 				case OpCode.Stind_i2: return Stind(context, stack, ElementType.I2);
@@ -587,11 +588,11 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Stloc_3: return Stloc(context, stack, 3);
 				case OpCode.Stloc_s: return Stloc(context, stack, (int)instruction.Operand);
 				case OpCode.Stobj: return Stobj(context, stack, instruction);
-				case OpCode.Stsfld: return false;
+				case OpCode.Stsfld: return false;                               // TODO
 				case OpCode.Sub: return Sub(context, stack);
-				case OpCode.Sub_ovf: return Sub(context, stack);        // TODO: implement overflow check
-				case OpCode.Sub_ovf_un: return Sub(context, stack);     // TODO: implement overflow check
-				case OpCode.Switch: return false;
+				case OpCode.Sub_ovf: return Sub(context, stack);                // TODO: implement overflow check
+				case OpCode.Sub_ovf_un: return Sub(context, stack);             // TODO: implement overflow check
+				case OpCode.Switch: return false;                               // TODO
 				case OpCode.Throw: return Throw(context, stack);
 				case OpCode.Unbox: return Unbox(context, stack, instruction);
 				case OpCode.Unbox_any: return UnboxAny(context, stack, instruction);
@@ -710,14 +711,14 @@ namespace Mosa.Compiler.Framework.Stages
 		private string EmitString(string data, uint token)
 		{
 			string symbolName = $"$ldstr${Method.Module.Name}${token}";
-			var linkerSymbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, NativeAlignment, ObjectHeaderSize + NativePointerSize + ((uint)data.Length * 2));
-			var stream = linkerSymbol.Stream;
+			var linkerSymbol = Linker.DefineSymbol(symbolName, SectionKind.ROData, NativeAlignment, (uint)(ObjectHeaderSize + NativePointerSize + (data.Length * 2)));
+			var writer = new BinaryWriter(linkerSymbol.Stream);
 
-			stream.WriteZeroBytes(NativePointerSize);
-			Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, linkerSymbol, stream.Position, Metadata.TypeDefinition + "System.String", 0);
-			stream.WriteZeroBytes(NativePointerSize);
-			stream.Write(BitConverter.GetBytes(data.Length), 0, 4);
-			stream.Write(Encoding.Unicode.GetBytes(data));
+			Linker.Link(LinkType.AbsoluteAddress, PatchType.I32, linkerSymbol, ObjectHeaderSize - NativePointerSize, Metadata.TypeDefinition + "System.String", 0);
+
+			writer.WriteZeroBytes(ObjectHeaderSize);
+			writer.Write(data.Length, NativePointerSize);
+			writer.Write(Encoding.Unicode.GetBytes(data));
 			return symbolName;
 		}
 

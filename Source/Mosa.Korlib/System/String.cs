@@ -267,9 +267,15 @@ namespace System
 			return true;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public override int GetHashCode()
 		{
 			return base.GetHashCode();
+
+			//ulong seed = Marvin.DefaultSeed;
+
+			//// Multiplication below will not overflow since going from positive Int32 to UInt32.
+			//return Marvin.ComputeHash32(ref Unsafe.As<char, byte>(ref _firstChar), (uint)_stringLength * 2 /* in bytes, not chars */, (uint)seed, (uint)(seed >> 32));
 		}
 
 		public override string ToString()

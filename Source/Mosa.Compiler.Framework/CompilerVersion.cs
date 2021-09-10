@@ -19,7 +19,7 @@ namespace Mosa.Compiler.Framework
 			if (version.Build == 0)
 			{
 				// Revision and build number are reversed by design
-				version = new Version(2, 0, 1, 3);
+				version = new Version(2, 0, 2, 0);
 			}
 
 			return version;
