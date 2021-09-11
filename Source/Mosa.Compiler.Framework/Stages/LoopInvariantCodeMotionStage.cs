@@ -1,5 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Common;
 using Mosa.Compiler.Framework.Trace;
@@ -20,6 +21,8 @@ namespace Mosa.Compiler.Framework.Stages
 		private Counter Methods = new Counter("LoopInvariantCodeMotionStage.Methods");
 
 		private SimpleFastDominance AnalysisDominance;
+
+		private HashSet<Operand> ParamStoreSet = new HashSet<Operand>();
 
 		private TraceLog trace;
 
@@ -46,6 +49,8 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			trace = CreateTraceLog(5);
+
+			ParamStoreSet = CollectParamStores();
 
 			AnalysisDominance = new SimpleFastDominance(BasicBlocks, BasicBlocks.PrologueBlock);
 
@@ -74,6 +79,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
+			ParamStoreSet = null;
 			AnalysisDominance = null;
 		}
 
@@ -215,14 +221,14 @@ namespace Mosa.Compiler.Framework.Stages
 							|| node.OperandCount == 0
 							|| node.OperandCount > 2
 							|| node.Instruction.IsMemoryWrite
-							|| node.Instruction.IsMemoryRead
 							|| node.Instruction.IsIOOperation
 							|| node.Instruction.HasUnspecifiedSideEffect
 							|| node.Instruction.VariableOperands
 							|| node.Instruction.FlowControl != FlowControl.Next
 							|| node.Instruction.IgnoreDuringCodeGeneration
 							|| node.Operand1.IsUnresolvedConstant
-							|| (node.OperandCount == 2 && node.Operand2.IsUnresolvedConstant))
+							|| (node.OperandCount == 2 && node.Operand2.IsUnresolvedConstant)
+							|| (node.Instruction.IsMemoryRead && !(node.Instruction.IsParameterLoad && !ParamStoreSet.Contains(node.Operand1))))
 							continue;
 
 						if (invariantsSet.Contains(node))
@@ -369,6 +375,27 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			CodeMotionCount += nodes.Count;
+		}
+
+		private HashSet<Operand> CollectParamStores()
+		{
+			var paramSet = new HashSet<Operand>();
+
+			foreach (var block in BasicBlocks)
+			{
+				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+				{
+					if (node.IsEmptyOrNop)
+						continue;
+
+					if (node.Instruction.IsParameterStore)
+					{
+						paramSet.AddIfNew(node.Operand1);
+					}
+				}
+			}
+
+			return paramSet;
 		}
 	}
 }
