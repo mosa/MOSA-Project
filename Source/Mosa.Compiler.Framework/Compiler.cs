@@ -254,7 +254,7 @@ namespace Mosa.Compiler.Framework
 
 			Linker = new MosaLinker(this);
 
-			ObjectHeaderSize = Architecture.NativePointerSize * 4 + 4; // Hash Value (32-bit) + Lock & Status (32-bit) + Method Table
+			ObjectHeaderSize = Architecture.NativePointerSize + 4 + 4; // Hash Value (32-bit) + Lock & Status (32-bit) + Method Table
 
 			StackFrame = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackFrameRegister);
 			StackPointer = Operand.CreateCPURegister(TypeSystem.BuiltIn.Pointer, Architecture.StackPointerRegister);
