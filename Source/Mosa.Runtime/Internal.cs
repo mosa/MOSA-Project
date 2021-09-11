@@ -174,6 +174,7 @@ namespace Mosa.Runtime
 
 		#region Memory Manipulation
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemoryCopy(Pointer dest, Pointer src, uint count)
 		{
 			// FUTURE: Improve
@@ -184,36 +185,36 @@ namespace Mosa.Runtime
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemorySet(Pointer dest, byte value, uint count)
 		{
-			// FUTURE: Improve
 			for (int i = 0; i < count; i++)
 			{
 				dest.Store8(i, value);
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemorySet(Pointer dest, ushort value, uint count)
 		{
-			// FUTURE: Improve
 			for (int i = 0; i < count; i += 2)
 			{
 				dest.Store16(i, value);
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemorySet(Pointer dest, uint value, uint count)
 		{
-			// FUTURE: Improve
 			for (int i = 0; i < count; i += 4)
 			{
 				dest.Store32(i, value);
 			}
 		}
 
+		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemoryClear(Pointer dest, uint count)
 		{
-			// FUTURE: Improve
 			for (int i = 0; i < count; i++)
 			{
 				dest.Store8(i, 0);

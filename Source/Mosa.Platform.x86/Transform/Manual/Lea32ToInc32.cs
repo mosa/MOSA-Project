@@ -28,7 +28,7 @@ namespace Mosa.Platform.x86.Transform.Manual
 			if (context.Operand1.Register == GeneralPurposeRegister.ESP)
 				return false;
 
-			if (!(AreStatusFlagsUsed(context.Node.Next, true, false, true, true, true) == TriState.No))
+			if (!(AreStatusFlagsUsed(context.Node.Next, false, true, false, false, false) == TriState.No))
 				return false;
 
 			return true;

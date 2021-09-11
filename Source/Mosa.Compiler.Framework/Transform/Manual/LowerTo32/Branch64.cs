@@ -4,6 +4,8 @@ namespace Mosa.Compiler.Framework.Transform.Manual.LowerTo32
 {
 	public sealed class Branch64 : BaseTransformation
 	{
+		private Branch64Extends branch64Extends = new Branch64Extends();
+
 		public Branch64() : base(IRInstruction.Branch64)
 		{
 		}
@@ -11,6 +13,9 @@ namespace Mosa.Compiler.Framework.Transform.Manual.LowerTo32
 		public override bool Match(Context context, TransformContext transformContext)
 		{
 			if (context.Block.NextBlocks.Count == 1)
+				return false;
+
+			if (branch64Extends.Match(context, transformContext))
 				return false;
 
 			return transformContext.LowerTo32;

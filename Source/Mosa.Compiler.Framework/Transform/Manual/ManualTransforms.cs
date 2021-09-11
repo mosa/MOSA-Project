@@ -94,19 +94,20 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			new Rewrite.Branch64Combine64x32(),
 			new Rewrite.Branch64Combine64x64(),
 
+			new Rewrite.Compare64x32ZeroExtend(),
+			new Rewrite.Compare64x32SignExtended(),
+			new Rewrite.Compare64x32SignZeroExtend(),
+			new Rewrite.Compare64x32ZeroSignExtend(),
+
 			new Simplification.Compare64x32SameHigh(),
 			new Simplification.Compare64x32SameLow(),
 
 			// LowerTo32
 			new LowerTo32.Add64(),
 			new LowerTo32.And64(),
-			new LowerTo32.Branch64(),
+			new LowerTo32.Branch64Extends(),
 			new LowerTo32.Compare64x32EqualOrNotEqual(),
-			new LowerTo32.Compare64x32Rest(),
-			new LowerTo32.Compare64x32RestInSSA(),
 			new LowerTo32.Compare64x64EqualOrNotEqual(),
-			new LowerTo32.Compare64x64Rest(),
-			new LowerTo32.Compare64x64RestInSSA(),
 
 			//LowerTo32.Compare64x32UnsignedGreater(),
 			new LowerTo32.Load64(),
@@ -131,6 +132,13 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			new LowerTo32.ZeroExtend32x64(),
 
 			new LowerTo32.Move64(),
+
+			// LowerTo32 -- but try other transformations first!
+			new LowerTo32.Compare64x32Rest(),
+			new LowerTo32.Compare64x32RestInSSA(),
+			new LowerTo32.Compare64x64Rest(),
+			new LowerTo32.Compare64x64RestInSSA(),
+			new LowerTo32.Branch64(),
 
 			new Memory.StoreLoadParam32(),
 			new Memory.StoreLoadParam64(),
