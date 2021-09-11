@@ -22,6 +22,8 @@ namespace Mosa.Platform.x86.Stages
 
 			AddTranformation(new Transform.Manual.Add32ToInc32());
 			AddTranformation(new Transform.Manual.Sub32ToDec32());
+			AddTranformation(new Transform.Manual.Lea32ToInc32());
+			AddTranformation(new Transform.Manual.Lea32ToDec32());
 		}
 
 		protected override void CustomizeTransformationContract()

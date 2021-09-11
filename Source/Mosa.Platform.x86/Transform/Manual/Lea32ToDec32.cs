@@ -8,9 +8,9 @@ using Mosa.Platform.Intel;
 
 namespace Mosa.Platform.x86.Transform.Manual
 {
-	public sealed class Add32ToInc32 : BaseTransformation
+	public sealed class Lea32ToDec32 : BaseTransformation
 	{
-		public Add32ToInc32() : base(X86.Add32)
+		public Lea32ToDec32() : base(X86.Lea32)
 		{
 		}
 
@@ -19,13 +19,13 @@ namespace Mosa.Platform.x86.Transform.Manual
 			if (!context.Operand2.IsResolvedConstant)
 				return false;
 
-			if (context.Operand2.ConstantUnsigned64 != 1)
-				return false;
-
-			if (context.Operand1.Register == GeneralPurposeRegister.ESP)
+			if (context.Operand2.ConstantSigned64 != -1)
 				return false;
 
 			if (context.Operand1 != context.Result)
+				return false;
+
+			if (context.Operand1.Register == GeneralPurposeRegister.ESP)
 				return false;
 
 			if (!(AreStatusFlagsUsed(context.Node.Next, false, true, false, false, false) == TriState.No))
@@ -38,7 +38,7 @@ namespace Mosa.Platform.x86.Transform.Manual
 		{
 			var result = context.Result;
 
-			context.SetInstruction(X86.Inc32, result, result);
+			context.SetInstruction(X86.Dec32, result, result);
 		}
 	}
 }

@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transform;
+using Mosa.Platform.Intel;
 
 namespace Mosa.Platform.x86.Transform.Manual
 {
@@ -23,6 +24,9 @@ namespace Mosa.Platform.x86.Transform.Manual
 				return false;
 
 			if (!context.Operand2.IsResolvedConstant)
+				return false;
+
+			if (context.Operand1.Register == GeneralPurposeRegister.ESP)
 				return false;
 
 			if (context.Operand2.IsResolvedConstant && context.Operand2.ConstantUnsigned64 == 1 && context.Operand1 == context.Result)
