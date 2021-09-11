@@ -52,10 +52,10 @@ namespace Mosa.Compiler.Framework.Trace
 				case CompilerEvent.CompileEnd: return "Compile Complete";
 
 				case CompilerEvent.CompilingMethods: return "Compiling Methods";
-				case CompilerEvent.CompilingMethodsCompleted: return "Compiling Methods Completed";
+				case CompilerEvent.CompilingMethodsCompleted: return "Compiling Methods Complete";
 
 				case CompilerEvent.MethodCompileStart: return "Method Compile Start";
-				case CompilerEvent.MethodCompileEnd: return "Method Compile Complet";
+				case CompilerEvent.MethodCompileEnd: return "Method Compile Complete";
 
 				case CompilerEvent.MethodScheduled: return "Method Scheduled";
 				case CompilerEvent.InlineMethodsScheduled: return "Inline Methods Schedule";
