@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Transform.Manual.Stack
 	/// </summary>
 	public sealed class Add32 : BaseTransformation
 	{
-		public Add32() : base(X86.Add32, true)
+		public Add32() : base(X86.Add32)
 		{
 		}
 

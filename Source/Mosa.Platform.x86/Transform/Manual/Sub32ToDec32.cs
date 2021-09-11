@@ -4,12 +4,13 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Transform;
+using Mosa.Platform.Intel;
 
 namespace Mosa.Platform.x86.Transform.Manual
 {
 	public sealed class Sub32ToDec32 : BaseTransformation
 	{
-		public Sub32ToDec32() : base(X86.Sub32, true)
+		public Sub32ToDec32() : base(X86.Sub32)
 		{
 		}
 
@@ -21,10 +22,10 @@ namespace Mosa.Platform.x86.Transform.Manual
 			if (context.Operand2.ConstantUnsigned64 != 1)
 				return false;
 
-			if (context.Operand1.IsCPURegister)
+			if (context.Operand1 != context.Result)
 				return false;
 
-			if (context.Operand1 != context.Result)
+			if (context.Operand1.Register == GeneralPurposeRegister.ESP)
 				return false;
 
 			if (!(AreStatusFlagsUsed(context.Node.Next, false, true, false, false, false) == TriState.No))
@@ -37,9 +38,7 @@ namespace Mosa.Platform.x86.Transform.Manual
 		{
 			var result = context.Result;
 
-			var t1 = context.Operand1;
-
-			context.SetInstruction(X86.Dec32, result, t1);
+			context.SetInstruction(X86.Dec32, result, result);
 		}
 	}
 }
