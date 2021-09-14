@@ -39,9 +39,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 				foreach (var block in BasicBlocks)
 				{
-					if (block.IsKnownEmpty)
-						continue;
-
 					if (block.IsPrologue || block.IsEpilogue)
 						continue;
 
@@ -71,9 +68,6 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var block in BasicBlocks)
 			{
-				if (block.IsKnownEmpty)
-					continue;
-
 				if (block.IsPrologue || block.IsEpilogue)
 					continue;
 

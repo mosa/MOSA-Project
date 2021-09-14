@@ -546,9 +546,6 @@ namespace Mosa.Compiler.Framework
 		/// <param name="block">The block.</param>
 		protected static bool EmptyBlockOfAllInstructions(BasicBlock block, bool useNop = false)
 		{
-			if (block.IsKnownEmpty)
-				return true;
-
 			bool found = false;
 
 			for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
@@ -568,8 +565,6 @@ namespace Mosa.Compiler.Framework
 
 				found = true;
 			}
-
-			block.IsKnownEmpty = found;
 
 			return found;
 		}

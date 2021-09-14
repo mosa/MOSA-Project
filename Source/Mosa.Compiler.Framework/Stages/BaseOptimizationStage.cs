@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.Framework.Transform;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -16,7 +17,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private readonly Counter OptimizationsCount;
 		private Counter SkippedEmptyBlocksCount;
-		private Counter RemovedDeadBlocksCount;
+		private Counter RemoveUnreachableBlocksCount;
 
 		private readonly List<BaseTransformation>[] transformations = new List<BaseTransformation>[MaximumInstructionID];
 
@@ -29,20 +30,22 @@ namespace Mosa.Compiler.Framework.Stages
 		protected bool IsInSSAForm;
 		protected bool EnableBlockOptimizations;
 
+		protected BitArray EmptyBlocks;
+
 		public BaseOptimizationStage(bool enableBlockOptimizations = false)
 		{
 			EnableBlockOptimizations = enableBlockOptimizations;
 
 			OptimizationsCount = new Counter($"{Name}.Optimizations");
 			SkippedEmptyBlocksCount = new Counter($"{Name}.SkippedEmptyBlocks");
-			RemovedDeadBlocksCount = new Counter($"{Name}.RemovedDeadBlocks");
+			RemoveUnreachableBlocksCount = new Counter($"{Name}.RemoveUnreachableBlocks");
 		}
 
 		protected override void Initialize()
 		{
 			Register(OptimizationsCount);
-			Register(RemovedDeadBlocksCount);
 			Register(SkippedEmptyBlocksCount);
+			Register(RemoveUnreachableBlocksCount);
 		}
 
 		protected void AddTranformations(List<BaseTransformation> list)
@@ -69,6 +72,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			MethodCompiler.Compiler.PostTraceLog(specialTrace);
 
+			EmptyBlocks = null;
 			TransformContext = null;
 			specialTrace = null;
 			trace = null;
@@ -110,7 +114,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				var changed1 = OptimizationPass(context);
 
-				var changed2 = !changed1 ? OptimizationBranchPass() : false;
+				var changed2 = !changed1 && OptimizationBranchPass();
 
 				changed = changed1 || changed2;
 
@@ -197,63 +201,73 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!EnableBlockOptimizations)
 				return false;
 
-			var changed1 = RemoveDeadBlocks();
+			if (EmptyBlocks == null)
+				EmptyBlocks = new BitArray(BasicBlocks.Count, false);
+
+			var changed1 = RemoveUnreachableBlocks();
 			var changed2 = SkipEmptyBlocks();
 
-			return changed1 || changed2;
+			return changed1 || changed2;// || changed3;
 		}
 
-		private bool RemoveDeadBlocks()
+		public bool RemoveUnreachableBlocks()
 		{
-			bool changed = true;
-			int removed = 0;
+			int emptied = 0;
 
-			while (changed)
+			var stack = new Stack<BasicBlock>();
+			var bitmap = new BitArray(BasicBlocks.Count, false);
+
+			foreach (var block in BasicBlocks)
 			{
-				changed = false;
-
-				foreach (var block in BasicBlocks)
+				if (block.IsHeadBlock || block.IsHandlerHeadBlock || block.IsTryHeadBlock)
 				{
-					if (block.IsKnownEmpty)
-						continue;
-
-					if (block.IsPrologue || block.IsEpilogue)
-						continue;
-
-					if (block.IsHandlerHeadBlock || block.IsTryHeadBlock)
-						continue;
-
-					if (block.PreviousBlocks.Count != 0)
-						continue;
-
-					if (HasProtectedRegions && !block.IsCompilerBlock)
-						continue;
-
-					// don't remove block if it jumps back to itself
-					if (block.PreviousBlocks.Contains(block))
-						continue;
-
-					trace?.Log($"Removed Block: {block}");
-
-					if (IsInSSAForm)
-					{
-						RemoveBlocksFromPHIInstructions(block, block.NextBlocks.ToArray());
-					}
-
-					if (EmptyBlockOfAllInstructions(block, true))
-					{
-						changed = true;
-						removed++;
-					}
-
-					//if (CompilerSettings.FullValidationMode)
-					//	CheckAllPhiInstructions();
+					bitmap.Set(block.Sequence, true);
+					stack.Push(block);
 				}
 			}
 
-			RemovedDeadBlocksCount += removed;
+			while (stack.Count != 0)
+			{
+				var block = stack.Pop();
 
-			return removed != 0;
+				//trace?.Log($"Used Block: {block}");
+
+				foreach (var next in block.NextBlocks)
+				{
+					//trace?.Log($"Visited Block: {block}");
+
+					if (!bitmap.Get(next.Sequence))
+					{
+						bitmap.Set(next.Sequence, true);
+						stack.Push(next);
+					}
+				}
+			}
+
+			foreach (var block in BasicBlocks)
+			{
+				if (bitmap.Get(block.Sequence))
+					continue;
+
+				if (block.IsHandlerHeadBlock || block.IsTryHeadBlock)
+					continue;
+
+				if (HasProtectedRegions && !block.IsCompilerBlock)
+					continue;
+
+				if (EmptyBlocks.Get(block.Sequence))
+					continue;
+
+				EmptyBlockOfAllInstructions(block, true);
+
+				EmptyBlocks.Set(block.Sequence, true);
+
+				trace?.Log($"Removed Unreachable Block: {block}");
+			}
+
+			RemoveUnreachableBlocksCount += emptied;
+
+			return emptied != 0;
 		}
 
 		private bool SkipEmptyBlocks()
@@ -262,9 +276,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var block in BasicBlocks)
 			{
-				if (block.IsKnownEmpty)
-					continue;
-
 				if (block.NextBlocks.Count != 1)
 					continue;
 
@@ -278,6 +289,9 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 
 				if (block.PreviousBlocks.Count == 0)
+					continue;
+
+				if (EmptyBlocks.Get(block.Sequence))
 					continue;
 
 				if (block.PreviousBlocks.Contains(block))
@@ -299,6 +313,8 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 
 				RemoveEmptyBlockWithSingleJump(block, true);
+
+				EmptyBlocks.Set(block.Sequence, true);
 
 				emptied++;
 
