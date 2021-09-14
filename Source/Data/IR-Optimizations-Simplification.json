@@ -300,7 +300,7 @@
 			"Filter": "",
 			"Result": "(IR.Move32 [To32(0)])",
 			"Variations": "Yes"
-			
+
 		},
 		{
 			"FamilyName": "IR",
@@ -311,7 +311,7 @@
 			"Filter": "",
 			"Result": "(IR.Move## [To##(1)])",
 			"Variations": "Yes"
-			
+
 		},
 		{
 			"FamilyName": "IR",
@@ -322,7 +322,7 @@
 			"Filter": "",
 			"Result": "(IR.Move## [To##(1)])",
 			"Variations": "Yes"
-			
+
 		},
 		{
 			"FamilyName": "IR",
@@ -333,7 +333,7 @@
 			"Filter": "",
 			"Result": "(IR.Move## [To##(0)])",
 			"Variations": "Yes"
-			
+
 		},
 		{
 			"FamilyName": "IR",
@@ -344,7 +344,26 @@
 			"Filter": "",
 			"Result": "(IR.Move## [To##(0)])",
 			"Variations": "Yes"
-			
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Reassociation",
+			"Name": "Add##",
+			"SubName": "v1",
+			"Expression": "IR.Add## (IR.Sub## a b) b)",
+			"Filter": "",
+			"Result": "(IR.Move## b)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Reassociation",
+			"Name": "Sub##",
+			"SubName": "v1",
+			"Expression": "IR.Sub## (IR.Add## a b) a)",
+			"Filter": "",
+			"Result": "(IR.Move## b)",
+			"Variations": "Yes"
 		}
 	]
 }
