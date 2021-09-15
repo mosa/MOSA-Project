@@ -808,7 +808,6 @@ namespace Mosa.Compiler.Framework.Transform
 			return previous.IsBlockStartInstruction ? null : previous;
 		}
 
-
 		protected static InstructionNode GetNextNode(Context context)
 		{
 			var next = context.Node.Next;
@@ -819,6 +818,42 @@ namespace Mosa.Compiler.Framework.Transform
 			}
 
 			return next.IsBlockEndInstruction ? null : next;
+		}
+
+		protected static bool Compare64(Context context)
+		{
+			switch (context.ConditionCode)
+			{
+				case ConditionCode.Equal: return context.Operand1.ConstantSigned64 == context.Operand2.ConstantSigned64;
+				case ConditionCode.NotEqual: return context.Operand1.ConstantSigned64 != context.Operand2.ConstantSigned64;
+				case ConditionCode.GreaterOrEqual: return context.Operand1.ConstantSigned64 >= context.Operand2.ConstantSigned64;
+				case ConditionCode.Greater: return context.Operand1.ConstantSigned64 > context.Operand2.ConstantSigned64;
+				case ConditionCode.LessOrEqual: return context.Operand1.ConstantSigned64 <= context.Operand2.ConstantSigned64;
+				case ConditionCode.Less: return context.Operand1.ConstantSigned64 < context.Operand2.ConstantSigned64;
+				case ConditionCode.UnsignedGreater: return context.Operand1.ConstantUnsigned64 > context.Operand2.ConstantUnsigned64;
+				case ConditionCode.UnsignedGreaterOrEqual: return context.Operand1.ConstantUnsigned64 >= context.Operand2.ConstantUnsigned64;
+				case ConditionCode.UnsignedLess: return context.Operand1.ConstantUnsigned64 < context.Operand2.ConstantUnsigned64;
+				case ConditionCode.UnsignedLessOrEqual: return context.Operand1.ConstantUnsigned64 <= context.Operand2.ConstantUnsigned64;
+				default: throw new InvalidOperationException();
+			}
+		}
+
+		protected static bool Compare32(Context context)
+		{
+			switch (context.ConditionCode)
+			{
+				case ConditionCode.Equal: return context.Operand1.ConstantSigned32 == context.Operand2.ConstantSigned32;
+				case ConditionCode.NotEqual: return context.Operand1.ConstantSigned32 != context.Operand2.ConstantSigned32;
+				case ConditionCode.GreaterOrEqual: return context.Operand1.ConstantSigned32 >= context.Operand2.ConstantSigned32;
+				case ConditionCode.Greater: return context.Operand1.ConstantSigned32 > context.Operand2.ConstantSigned32;
+				case ConditionCode.LessOrEqual: return context.Operand1.ConstantSigned32 <= context.Operand2.ConstantSigned32;
+				case ConditionCode.Less: return context.Operand1.ConstantSigned32 < context.Operand2.ConstantSigned32;
+				case ConditionCode.UnsignedGreater: return context.Operand1.ConstantUnsigned32 > context.Operand2.ConstantUnsigned32;
+				case ConditionCode.UnsignedGreaterOrEqual: return context.Operand1.ConstantUnsigned32 >= context.Operand2.ConstantUnsigned32;
+				case ConditionCode.UnsignedLess: return context.Operand1.ConstantUnsigned32 < context.Operand2.ConstantUnsigned32;
+				case ConditionCode.UnsignedLessOrEqual: return context.Operand1.ConstantUnsigned32 <= context.Operand2.ConstantUnsigned32;
+				default: throw new InvalidOperationException();
+			}
 		}
 	}
 }

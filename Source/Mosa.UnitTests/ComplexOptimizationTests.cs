@@ -264,5 +264,51 @@ namespace Mosa.UnitTests
 					return true;
 			}
 		}
+
+		[MosaUnitTest]
+		public static int OptimizationTest75()
+		{
+			int q = -1;
+			int value = 10;
+
+		top:
+			if (q > 0)
+			{
+				while (true)
+				{
+					value++;
+					goto top;
+				}
+			}
+			else
+			{
+				value = 30;
+			}
+
+			return value;
+		}
+
+		//[MosaUnitTest]
+		public static int OptimizationTest76()
+		{
+			int q = -1;
+			int value = 10;
+
+		top:
+			if (q > 0)
+			{
+				value = 30;
+			}
+			else
+			{
+				while (true)
+				{
+					value++;
+					goto top;
+				}
+			}
+
+			return value;
+		}
 	}
 }

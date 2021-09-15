@@ -35,21 +35,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.ConstantFolding
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
-			bool compare = true;
-
-			switch (context.ConditionCode)
-			{
-				case ConditionCode.Equal: compare = context.Operand1.ConstantUnsigned32 == context.Operand2.ConstantUnsigned32; break;
-				case ConditionCode.NotEqual: compare = context.Operand1.ConstantUnsigned32 != context.Operand2.ConstantUnsigned32; break;
-				case ConditionCode.GreaterOrEqual: compare = context.Operand1.ConstantUnsigned32 >= context.Operand2.ConstantUnsigned32; break;
-				case ConditionCode.Greater: compare = context.Operand1.ConstantUnsigned32 > context.Operand2.ConstantUnsigned32; break;
-				case ConditionCode.LessOrEqual: compare = context.Operand1.ConstantUnsigned32 <= context.Operand2.ConstantUnsigned32; break;
-				case ConditionCode.Less: compare = context.Operand1.ConstantUnsigned32 < context.Operand2.ConstantUnsigned32; break;
-				case ConditionCode.UnsignedGreater: compare = context.Operand1.ConstantUnsigned32 > context.Operand2.ConstantUnsigned32; break;
-				case ConditionCode.UnsignedGreaterOrEqual: compare = context.Operand1.ConstantUnsigned32 >= context.Operand2.ConstantUnsigned32; break;
-				case ConditionCode.UnsignedLess: compare = context.Operand1.ConstantUnsigned32 < context.Operand2.ConstantUnsigned32; break;
-				case ConditionCode.UnsignedLessOrEqual: compare = context.Operand1.ConstantUnsigned32 <= context.Operand2.ConstantUnsigned32; break;
-			}
+			var compare = Compare32(context);
 
 			var e1 = transformContext.CreateConstant(BoolTo32(compare));
 
