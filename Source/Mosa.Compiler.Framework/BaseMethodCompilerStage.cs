@@ -871,27 +871,28 @@ namespace Mosa.Compiler.Framework
 
 		public List<BasicBlock> AddMissingBlocksIfRequired(List<BasicBlock> blocks)
 		{
-			// make a copy
+			if (blocks.Count == BasicBlocks.Count)
+				return blocks;
+
+			if (!HasProtectedRegions)
+				return blocks;
+
 			var list = new List<BasicBlock>(blocks.Count);
 
 			foreach (var block in blocks)
 			{
-				if (block != null)
-				{
-					list.Add(block);
-				}
+				if (block == null)
+					continue;
+
+				list.Add(block);
 			}
 
 			foreach (var block in BasicBlocks)
 			{
-				if (!blocks.Contains(block))
-				{
-					// FUTURE:
-					//if (HasProtectedRegions && block.IsCompilerBlock)
-					//	continue;
+				if (blocks.Contains(block))
+					continue;
 
-					list.Add(block);
-				}
+				list.Add(block);
 			}
 
 			return list;

@@ -29,13 +29,15 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected TraceLog specialTrace;
 
-		protected bool IsInSSAForm;
+		protected bool EnableTransformationOptimizations;
 		protected bool EnableBlockOptimizations;
+		protected bool IsInSSAForm;
 
 		protected BitArray EmptyBlocks;
 
-		public BaseOptimizationStage(bool enableBlockOptimizations = false)
+		public BaseOptimizationStage(bool enableTransformationOptimizations = false, bool enableBlockOptimizations = false)
 		{
+			EnableTransformationOptimizations = enableTransformationOptimizations;
 			EnableBlockOptimizations = enableBlockOptimizations;
 
 			OptimizationsCount = new Counter($"{Name}.Optimizations");
@@ -85,10 +87,6 @@ namespace Mosa.Compiler.Framework.Stages
 		protected override void Run()
 		{
 			trace = CreateTraceLog(5);
-			specialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
-
-			TransformContext = new TransformContext(MethodCompiler);
-			TransformContext.SetLogs(trace, specialTrace);
 
 			IsInSSAForm = MethodCompiler.IsInSSAForm;
 
@@ -98,38 +96,50 @@ namespace Mosa.Compiler.Framework.Stages
 				CheckAllPhiInstructions();
 		}
 
-		protected abstract void CustomizeTransformationContract();
+		protected virtual void CustomizeTransformation()
+		{ }
 
 		private void Optimize()
 		{
-			var context = new Context(BasicBlocks.PrologueBlock);
-
-			int pass = 0;
 			int maximumPasses = MaximumPasses;
-
-			CustomizeTransformationContract();
+			int pass = 1;
 
 			var changed = true;
 
 			while (changed)
 			{
-				pass++;
 				trace?.Log($"*** Pass # {pass}");
 
-				var changed1 = OptimizationPass(context);
-
-				var changed2 = !changed1 && OptimizationBranchPass();
+				var changed1 = InstructionTransformationPass();
+				var changed2 = (!changed1 || pass == 1) && BranchOptimizationPass();
 
 				changed = changed1 || changed2;
+
+				pass++;
 
 				if (pass >= maximumPasses)
 					break;
 			}
 		}
 
-		private bool OptimizationPass(Context context)
+		private bool InstructionTransformationPass()
 		{
-			bool changed = false;
+			if (!EnableTransformationOptimizations)
+				return false;
+
+			if (TransformContext == null)
+			{
+				specialTrace = new TraceLog(TraceType.GlobalDebug, null, null, "Special Optimizations");
+
+				TransformContext = new TransformContext(MethodCompiler);
+				TransformContext.SetLogs(trace, specialTrace);
+
+				CustomizeTransformation();
+			}
+
+			var context = new Context(BasicBlocks.PrologueBlock);
+
+			var changed = false;
 
 			for (int i = 0; i < BasicBlocks.Count; i++)
 			{
@@ -200,13 +210,15 @@ namespace Mosa.Compiler.Framework.Stages
 			return false;
 		}
 
-		private bool OptimizationBranchPass()
+		private bool BranchOptimizationPass()
 		{
 			if (!EnableBlockOptimizations)
 				return false;
 
 			if (EmptyBlocks == null)
+			{
 				EmptyBlocks = new BitArray(BasicBlocks.Count, false);
+			}
 
 			var changed1 = MergeBlocks();
 			var changed2 = RemoveUnreachableBlocks();
@@ -215,7 +227,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return changed1 || changed2 || changed3;
 		}
 
-		public bool RemoveUnreachableBlocks()
+		protected bool RemoveUnreachableBlocks()
 		{
 			int emptied = 0;
 
@@ -275,7 +287,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return emptied != 0;
 		}
 
-		private bool SkipEmptyBlocks()
+		protected bool SkipEmptyBlocks()
 		{
 			int emptied = 0;
 
@@ -332,7 +344,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return emptied != 0;
 		}
 
-		private bool MergeBlocks()
+		protected bool MergeBlocks()
 		{
 			int emptied = 0;
 			var changed = true;

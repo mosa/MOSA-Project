@@ -7,31 +7,19 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// IR Cleanup Stage
 	/// </summary>
-	public class IRCleanupStage : DeadBlockStage
+	public class IRCleanupStage : BaseOptimizationStage
 	{
+		public IRCleanupStage() : base(false, true)
+		{
+		}
+
 		protected override void Run()
 		{
 			RemoveNops();
-			EmptyDeadBlocks();
-			SkipEmptyBlocks();
+
+			base.Run();
+
 			OrderBlocks();
-		}
-
-		private void OrderBlocks()
-		{
-			//var blockOrderAnalysis = new LoopAwareBlockOrder();
-			var blockOrderAnalysis = new SimpleTraceBlockOrder();   // faster than others
-
-			blockOrderAnalysis.Analyze(BasicBlocks);
-
-			var newBlockOrder = blockOrderAnalysis.NewBlockOrder;
-
-			if (newBlockOrder.Count != BasicBlocks.Count && HasProtectedRegions)
-			{
-				newBlockOrder = AddMissingBlocksIfRequired(newBlockOrder);
-			}
-
-			BasicBlocks.ReorderBlocks(newBlockOrder);
 		}
 
 		private void RemoveNops()
@@ -40,15 +28,25 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				for (var node = block.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 				{
-					if (node.IsEmpty)
+					if (node.IsEmpty || !node.IsNop)
 						continue;
 
-					if (node.IsNop)
-					{
-						node.Empty();
-					}
+					node.Empty();
 				}
 			}
+		}
+
+		private void OrderBlocks()
+		{
+			var blockOrderAnalysis = new SimpleTraceBlockOrder();
+
+			blockOrderAnalysis.Analyze(BasicBlocks);
+
+			var newBlockOrder = blockOrderAnalysis.NewBlockOrder;
+
+			newBlockOrder = AddMissingBlocksIfRequired(newBlockOrder);
+
+			BasicBlocks.ReorderBlocks(newBlockOrder);
 		}
 	}
 }
