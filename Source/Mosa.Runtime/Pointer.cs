@@ -238,7 +238,7 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static unsafe Pointer operator ++(Pointer pointer)
 		{
-			return new Pointer(pointer.ToUInt64() + 1);
+			return new Pointer(pointer.ToInt64() + 1);
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
