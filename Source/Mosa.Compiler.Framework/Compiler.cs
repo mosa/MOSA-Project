@@ -181,19 +181,14 @@ namespace Mosa.Compiler.Framework
 				new CILProtectedRegionStage(),
 				new CILTransformationStage(),
 				new ExceptionStage(),
-
 				new StackSetupStage(),
-
-				//new StaticAllocationResolutionStage(),
 				compilerSettings.Devirtualization ? new DevirtualizeCallStage() : null,
 				new PlugStage(),
-
 				new RuntimeCallStage(),
 				(compilerSettings.InlineMethods) ? new InlineStage() : null,
-				(compilerSettings.InlineMethods) ? new BlockMergeStage() : null,
-				(compilerSettings.InlineMethods) ? new DeadBlockStage() : null,
 				new PromoteTemporaryVariables(),
 				new StaticLoadOptimizationStage(),
+
 				(compilerSettings.BasicOptimizations) ? new OptimizationStage(false) : null,
 				(compilerSettings.SSA) ? new EdgeSplitStage() : null,
 				(compilerSettings.SSA) ? new EnterSSAStage() : null,
@@ -210,8 +205,6 @@ namespace Mosa.Compiler.Framework
 				(compilerSettings.TwoPass && compilerSettings.BasicOptimizations && compilerSettings.SSA) ? new OptimizationStage(compilerSettings.LongExpansion) : null,
 
 				(compilerSettings.SSA) ? new ExitSSAStage() : null,
-				new DeadBlockStage(),
-				new BlockMergeStage(),
 				new IRCleanupStage(),
 				new NewObjectStage(),
 				(compilerSettings.InlineMethods) ? new InlineEvaluationStage() : null,

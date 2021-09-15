@@ -4,6 +4,7 @@ using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.Framework.Transform;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -16,8 +17,9 @@ namespace Mosa.Compiler.Framework.Stages
 		private const int MaximumPasses = 20;
 
 		private readonly Counter OptimizationsCount;
-		private Counter SkippedEmptyBlocksCount;
-		private Counter RemoveUnreachableBlocksCount;
+		private readonly Counter SkippedEmptyBlocksCount;
+		private readonly Counter RemoveUnreachableBlocksCount;
+		private readonly Counter BlocksMergedCount;
 
 		private readonly List<BaseTransformation>[] transformations = new List<BaseTransformation>[MaximumInstructionID];
 
@@ -39,6 +41,7 @@ namespace Mosa.Compiler.Framework.Stages
 			OptimizationsCount = new Counter($"{Name}.Optimizations");
 			SkippedEmptyBlocksCount = new Counter($"{Name}.SkippedEmptyBlocks");
 			RemoveUnreachableBlocksCount = new Counter($"{Name}.RemoveUnreachableBlocks");
+			BlocksMergedCount = new Counter($"{Name}.BlockMergeStage.BlocksMerged");
 		}
 
 		protected override void Initialize()
@@ -46,6 +49,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Register(OptimizationsCount);
 			Register(SkippedEmptyBlocksCount);
 			Register(RemoveUnreachableBlocksCount);
+			Register(BlocksMergedCount);
 		}
 
 		protected void AddTranformations(List<BaseTransformation> list)
@@ -204,10 +208,11 @@ namespace Mosa.Compiler.Framework.Stages
 			if (EmptyBlocks == null)
 				EmptyBlocks = new BitArray(BasicBlocks.Count, false);
 
-			var changed1 = RemoveUnreachableBlocks();
-			var changed2 = SkipEmptyBlocks();
+			var changed1 = MergeBlocks();
+			var changed2 = RemoveUnreachableBlocks();
+			var changed3 = SkipEmptyBlocks();
 
-			return changed1 || changed2;// || changed3;
+			return changed1 || changed2 || changed3;
 		}
 
 		public bool RemoveUnreachableBlocks()
@@ -265,7 +270,7 @@ namespace Mosa.Compiler.Framework.Stages
 				trace?.Log($"Removed Unreachable Block: {block}");
 			}
 
-			RemoveUnreachableBlocksCount += emptied;
+			RemoveUnreachableBlocksCount.Increment(emptied);
 
 			return emptied != 0;
 		}
@@ -322,7 +327,72 @@ namespace Mosa.Compiler.Framework.Stages
 				//	CheckAllPhiInstructions();
 			}
 
-			SkippedEmptyBlocksCount += emptied;
+			SkippedEmptyBlocksCount.Increment(emptied);
+
+			return emptied != 0;
+		}
+
+		private bool MergeBlocks()
+		{
+			int emptied = 0;
+			var changed = true;
+
+			while (changed)
+			{
+				changed = false;
+
+				foreach (var block in BasicBlocks)
+				{
+					if (block.NextBlocks.Count != 1)
+						continue;
+
+					if (block.IsEpilogue
+						|| block.IsPrologue
+						|| block.IsTryHeadBlock
+						|| block.IsHandlerHeadBlock
+						|| (!block.IsCompilerBlock && HasProtectedRegions))
+						continue;
+
+					// don't remove block if it jumps back to itself
+					if (block.PreviousBlocks.Contains(block))
+						continue;
+
+					var next = block.NextBlocks[0];
+
+					if (next.PreviousBlocks.Count != 1)
+						continue;
+
+					if (next.IsEpilogue
+						|| next.IsPrologue
+						|| next.IsTryHeadBlock
+						|| next.IsHandlerHeadBlock)
+						continue;
+
+					trace?.Log($"Merge Blocking: {block} with: {next}");
+
+					if (IsInSSAForm)
+					{
+						UpdatePHIInstructionTargets(next.NextBlocks, next, block);
+					}
+
+					var insertPoint = block.BeforeLast.GoBackwardsToNonEmpty();
+
+					var beforeInsertPoint = insertPoint.Previous.GoBackwardsToNonEmpty();
+
+					if (beforeInsertPoint.BranchTargetsCount != 0)
+					{
+						Debug.Assert(beforeInsertPoint.BranchTargets[0] == next);
+						beforeInsertPoint.Empty();
+					}
+
+					insertPoint.Empty();
+					insertPoint.CutFrom(next.AfterFirst.GoForwardToNonEmpty(), next.Last.Previous.GoBackwardsToNonEmpty());
+					emptied++;
+					changed = true;
+				}
+			}
+
+			BlocksMergedCount.Increment(emptied);
 
 			return emptied != 0;
 		}
