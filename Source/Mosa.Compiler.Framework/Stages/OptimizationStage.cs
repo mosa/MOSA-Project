@@ -14,14 +14,14 @@ namespace Mosa.Compiler.Framework.Stages
 		private readonly bool LowerTo32;
 
 		public OptimizationStage(bool lowerTo32)
-			: base(true)
+			: base(true, true)
 		{
 			LowerTo32 = lowerTo32;
 			AddTranformations(ManualTransforms.List);
 			AddTranformations(AutoTransforms.List);
 		}
 
-		protected override void CustomizeTransformationContract()
+		protected override void CustomizeTransformation()
 		{
 			TransformContext.SetStageOptions(IsInSSAForm, LowerTo32 && CompilerSettings.LongExpansion && Is32BitPlatform);
 		}

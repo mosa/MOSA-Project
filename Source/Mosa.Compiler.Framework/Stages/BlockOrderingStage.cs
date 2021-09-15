@@ -17,10 +17,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var newBlockOrder = blockOrderAnalysis.NewBlockOrder;
 
-			if (HasProtectedRegions)
-			{
-				newBlockOrder = AddMissingBlocksIfRequired(newBlockOrder);
-			}
+			newBlockOrder = AddMissingBlocksIfRequired(newBlockOrder);
 
 			BasicBlocks.ReorderBlocks(newBlockOrder);
 
