@@ -110,7 +110,7 @@ namespace Mosa.Compiler.Framework
 		{
 			get
 			{
-				return prologueBlock ?? (prologueBlock = GetByLabel(BasicBlock.PrologueLabel));
+				return prologueBlock ??= GetByLabel(BasicBlock.PrologueLabel);
 			}
 		}
 
@@ -121,7 +121,7 @@ namespace Mosa.Compiler.Framework
 		{
 			get
 			{
-				return epilogueBlock ?? (epilogueBlock = GetByLabel(BasicBlock.EpilogueLabel));
+				return epilogueBlock ??= GetByLabel(BasicBlock.EpilogueLabel);
 			}
 		}
 
