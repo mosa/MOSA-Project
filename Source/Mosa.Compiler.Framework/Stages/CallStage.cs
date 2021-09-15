@@ -235,11 +235,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			uint totalStack = returnSize + stackSize;
 
-			//if (data.ParameterStackSize != stackSize)
-			//{
-			//	int apple = 1;
-			//}
-
 			ReserveStackSizeForCall(context, totalStack);
 			PushOperands(context, operands, totalStack);
 

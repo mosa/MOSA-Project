@@ -12,9 +12,9 @@ namespace Mosa.Compiler.Framework
 			Name = name;
 		}
 
-		public void Increment()
+		public void Increment(int value = 1)
 		{
-			Count++;
+			Count = Count + value;
 		}
 
 		public void Reset()
