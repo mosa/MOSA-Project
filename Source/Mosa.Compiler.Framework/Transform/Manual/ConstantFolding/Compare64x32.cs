@@ -24,7 +24,6 @@ namespace Mosa.Compiler.Framework.Transform.Manual.ConstantFolding
 				case ConditionCode.Greater: return true;
 				case ConditionCode.LessOrEqual: return true;
 				case ConditionCode.Less: return true;
-
 				case ConditionCode.UnsignedGreater: return true;
 				case ConditionCode.UnsignedGreaterOrEqual: return true;
 				case ConditionCode.UnsignedLess: return true;
