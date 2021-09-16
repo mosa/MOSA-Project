@@ -14,6 +14,9 @@ namespace Mosa.Platform.x86.Transform.Auto
 	{
 		public static readonly List<BaseTransformation> List = new List<BaseTransformation> {
 			 new Standard.Mov32Consolidate(),
+			 new StrengthReduction.Add32ByZero(),
+			 new StrengthReduction.Add32ByZero_v1(),
+			 new StrengthReduction.Sub32ByZero(),
 		};
 	}
 }

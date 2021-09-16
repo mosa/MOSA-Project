@@ -161,6 +161,24 @@
 		{
 			"FamilyName": "IR",
 			"Type": "ConstantFolding",
+			"Name": "AddCarryIn##",
+			"SubName": "Zero1",
+			"Expression": "IR.AddCarryIn## 0 a c",
+			"Filter": "",
+			"Result": "(IR.Add## a c)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
+			"Name": "AddCarryIn##",
+			"SubName": "Zero2",
+			"Expression": "IR.AddCarryIn## a 0 c",
+			"Filter": "",
+			"Result": "(IR.Add## a c)"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "ConstantFolding",
 			"Name": "SubCarryIn##",
 			"SubName": "Inside",
 			"Expression": "IR.SubCarryIn## a b c",

@@ -22,6 +22,8 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 
 		public bool IsVirtualRegister { get { return IsInstruction; } }
 
+		public bool IsAt { get { return Token != null && Token.TokenType == TokenType.At; } }
+
 		public bool IsInteger { get { return Token != null && Token.TokenType == TokenType.IntegerConstant; } }
 
 		public bool IsDouble { get { return Token != null && Token.TokenType == TokenType.DoubleConstant; } }

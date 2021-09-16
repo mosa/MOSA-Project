@@ -510,6 +510,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			var sb = new StringBuilder();
 
 			sb.Append(filter.MethodName);
+
 			sb.Append('(');
 
 			foreach (var parameter in filter.Parameters)
@@ -527,6 +528,10 @@ namespace Mosa.Utility.SourceCodeGenerator
 					var operandName = GetOperandName(first.OperandIndex);
 
 					sb.Append($"context.{parent}{operandName}");
+				}
+				else if (parameter.IsAt)
+				{
+					sb.Append("context");
 				}
 				else if (parameter.IsInteger)
 				{
