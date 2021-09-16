@@ -100,14 +100,14 @@ namespace System.Runtime.CompilerServices
         /// Initializes a block of memory at the given location with a given initial value
         /// without assuming architecture dependent alignment of the address.
         /// </summary>
-        /*[Intrinsic]
+        [Intrinsic]
         [NonVersionable]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void InitBlockUnaligned(ref byte startAddress, byte value, uint byteCount)
         {
             for (uint i = 0; i < byteCount; i++)
                 AddByteOffset(ref startAddress, i) = value;
-        }*/
+        }
 
 		/// <summary>
 		/// Adds an byte offset to the given reference.
@@ -123,13 +123,14 @@ namespace System.Runtime.CompilerServices
 		/// <summary>
         /// Adds an byte offset to the given reference.
         /// </summary>
-        /*[Intrinsic]
+		// TODO: Implement nuint
+        [Intrinsic]
         [NonVersionable]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static ref T AddByteOffset<T>(ref T source, nuint byteOffset)
         {
             return ref AddByteOffset(ref source, (IntPtr)(void*)byteOffset);
-        }*/
+        }
 
 		[Intrinsic]
 		[NonVersionable]
@@ -142,13 +143,13 @@ namespace System.Runtime.CompilerServices
 		/// <summary>
         /// Writes a value of type <typeparamref name="T"/> to the given location.
         /// </summary>
-        /*[Intrinsic]
+        [Intrinsic]
         [NonVersionable]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void WriteUnaligned<T>(void* destination, T value)
         {
         	As<byte, T>(ref *(byte*)destination) = value;
-        }*/
+        }
 
 		[Intrinsic]
 		[NonVersionable]
@@ -161,24 +162,24 @@ namespace System.Runtime.CompilerServices
 		/// <summary>
         /// Reads a value of type <typeparamref name="T"/> from the given location.
         /// </summary>
-        /*[Intrinsic]
+        [Intrinsic]
         [NonVersionable]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T ReadUnaligned<T>(void* source)
         {
         	return As<byte, T>(ref *(byte*)source);
-        }*/
+        }
 
         /// <summary>
         /// Reads a value of type <typeparamref name="T"/> from the given location.
         /// </summary>
-        /*[Intrinsic]
+        [Intrinsic]
         [NonVersionable]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Read<T>(void* source)
         {
             return As<byte, T>(ref *(byte*)source);
-        }*/
+        }
 
         /// <summary>
         /// Reads a value of type <typeparamref name="T"/> from the given location.
@@ -194,13 +195,13 @@ namespace System.Runtime.CompilerServices
 		/// <summary>
         /// Writes a value of type <typeparamref name="T"/> to the given location.
         /// </summary>
-        /*[Intrinsic]
+        [Intrinsic]
         [NonVersionable]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Write<T>(void* destination, T value)
         {
             As<byte, T>(ref *(byte*)destination) = value;
-        }*/
+        }
 
         /// <summary>
         /// Writes a value of type <typeparamref name="T"/> to the given location.
