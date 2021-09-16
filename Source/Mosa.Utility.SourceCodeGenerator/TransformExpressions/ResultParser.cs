@@ -46,6 +46,10 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				{
 					node.Operands.Add(new Operand(new Token(TokenType.Label, token.Position, token.Value), node.Operands.Count));
 				}
+				else if (token.TokenType == TokenType.At)
+				{
+					node.Operands.Add(new Operand(new Token(TokenType.At, token.Position, token.Value), node.Operands.Count));
+				}
 				else if (token.TokenType == TokenType.IntegerConstant)
 				{
 					node.Operands.Add(new Operand(token, node.Operands.Count));

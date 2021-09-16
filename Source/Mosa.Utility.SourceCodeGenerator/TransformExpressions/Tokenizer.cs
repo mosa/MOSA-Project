@@ -138,6 +138,10 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				{
 					tokens.Add(new Token(TokenType.CloseCurly, index++, "}"));
 				}
+				else if (c == '@')
+				{
+					tokens.Add(new Token(TokenType.At, index++, "@"));
+				}
 				else
 				{
 					throw new CompilerException($"tokensizer: syntax error at {index}");

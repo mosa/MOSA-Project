@@ -300,7 +300,6 @@
 			"Filter": "",
 			"Result": "(IR.Move32 [To32(0)])",
 			"Variations": "Yes"
-
 		},
 		{
 			"FamilyName": "IR",
@@ -311,7 +310,6 @@
 			"Filter": "",
 			"Result": "(IR.Move## [To##(1)])",
 			"Variations": "Yes"
-
 		},
 		{
 			"FamilyName": "IR",
@@ -322,7 +320,6 @@
 			"Filter": "",
 			"Result": "(IR.Move## [To##(1)])",
 			"Variations": "Yes"
-
 		},
 		{
 			"FamilyName": "IR",
@@ -333,7 +330,6 @@
 			"Filter": "",
 			"Result": "(IR.Move## [To##(0)])",
 			"Variations": "Yes"
-
 		},
 		{
 			"FamilyName": "IR",
