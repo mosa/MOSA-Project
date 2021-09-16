@@ -124,13 +124,13 @@ namespace System.Runtime.CompilerServices
         /// Adds an byte offset to the given reference.
         /// </summary>
 		// TODO: Implement nuint
-        [Intrinsic]
+        /*[Intrinsic]
         [NonVersionable]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         internal static ref T AddByteOffset<T>(ref T source, nuint byteOffset)
         {
             return ref AddByteOffset(ref source, (IntPtr)(void*)byteOffset);
-        }
+        }*/
 
 		[Intrinsic]
 		[NonVersionable]
