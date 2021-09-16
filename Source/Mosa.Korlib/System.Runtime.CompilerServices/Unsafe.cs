@@ -100,14 +100,14 @@ namespace System.Runtime.CompilerServices
         /// Initializes a block of memory at the given location with a given initial value
         /// without assuming architecture dependent alignment of the address.
         /// </summary>
-        [Intrinsic]
+        /*[Intrinsic]
         [NonVersionable]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void InitBlockUnaligned(ref byte startAddress, byte value, uint byteCount)
         {
             for (uint i = 0; i < byteCount; i++)
                 AddByteOffset(ref startAddress, i) = value;
-        }
+        }*/
 
 		/// <summary>
 		/// Adds an byte offset to the given reference.
