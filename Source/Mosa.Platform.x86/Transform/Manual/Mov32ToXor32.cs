@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Transform.Manual
 			if (!context.Operand1.IsConstantZero)
 				return false;
 
-			if (!(AreStatusFlagsUsed(context.Node.Next, true, true, true, true, true) == TriState.No))
+			if (IsStatusFlagUsed(context))
 				return false;
 
 			return true;
