@@ -142,13 +142,13 @@ namespace System.Runtime.CompilerServices
 		/// <summary>
         /// Writes a value of type <typeparamref name="T"/> to the given location.
         /// </summary>
-        [Intrinsic]
+        /*[Intrinsic]
         [NonVersionable]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void WriteUnaligned<T>(void* destination, T value)
         {
         	As<byte, T>(ref *(byte*)destination) = value;
-        }
+        }*/
 
 		[Intrinsic]
 		[NonVersionable]
@@ -161,24 +161,24 @@ namespace System.Runtime.CompilerServices
 		/// <summary>
         /// Reads a value of type <typeparamref name="T"/> from the given location.
         /// </summary>
-        [Intrinsic]
+        /*[Intrinsic]
         [NonVersionable]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T ReadUnaligned<T>(void* source)
         {
         	return As<byte, T>(ref *(byte*)source);
-        }
+        }*/
 
         /// <summary>
         /// Reads a value of type <typeparamref name="T"/> from the given location.
         /// </summary>
-        [Intrinsic]
+        /*[Intrinsic]
         [NonVersionable]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static T Read<T>(void* source)
         {
             return As<byte, T>(ref *(byte*)source);
-        }
+        }*/
 
         /// <summary>
         /// Reads a value of type <typeparamref name="T"/> from the given location.
@@ -194,13 +194,13 @@ namespace System.Runtime.CompilerServices
 		/// <summary>
         /// Writes a value of type <typeparamref name="T"/> to the given location.
         /// </summary>
-        [Intrinsic]
+        /*[Intrinsic]
         [NonVersionable]
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static void Write<T>(void* destination, T value)
         {
             As<byte, T>(ref *(byte*)destination) = value;
-        }
+        }*/
 
         /// <summary>
         /// Writes a value of type <typeparamref name="T"/> to the given location.
