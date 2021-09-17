@@ -46,6 +46,19 @@ namespace Mosa.DeviceDriver
 
 				new ISADeviceDriverRegistryEntry()
 				{
+					Name = "StandardMouse",
+					Platforms = PlatformArchitecture.X86AndX64,
+					AutoLoad = true,
+					BasePort = 0x60,
+					PortRange = 1,
+					AltBasePort = 0x64,
+					AltPortRange = 1,
+					IRQ = 12,
+					Factory = delegate { return new ISA.StandardMouse(); }
+				},
+
+				new ISADeviceDriverRegistryEntry()
+				{
 					Name = "PCIController",
 					Platforms = PlatformArchitecture.X86AndX64,
 					AutoLoad = true,

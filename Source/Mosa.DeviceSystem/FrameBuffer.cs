@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
+
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
@@ -34,6 +36,16 @@ namespace Mosa.DeviceSystem
 		protected uint depth;
 
 		/// <summary>
+		/// Is double buffering
+		/// </summary>
+		protected bool doubleBuffering;
+
+		/// <summary>
+		/// Second buffer for double buffering
+		/// </summary>
+		protected ConstrainedPointer secondBuffer;
+
+		/// <summary>
 		/// Gets the width.
 		/// </summary>
 		/// <value>The width.</value>
@@ -44,6 +56,12 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <value>The height.</value>
 		public uint Height { get { return height; } }
+
+		/// <summary>
+		/// Checks if the frame buffer is double buffered.
+		/// </summary>
+		/// <value>The height.</value>
+		public bool DoubleBuffering { get { return doubleBuffering; } }
 
 		/// <summary>
 		/// Gets the offset.
@@ -78,5 +96,25 @@ namespace Mosa.DeviceSystem
 		/// <param name="w">Width of the rectangle.</param>
 		/// <param name="h">Width of the rectangle.</param>
 		public abstract void FillRectangle(uint color, uint x, uint y, uint w, uint h);
+
+		/// <summary>
+		/// If using double buffering, copies the second buffer to the screen.
+		/// </summary>
+		public void Update()
+		{
+			if (doubleBuffering)
+				Internal.MemoryCopy(buffer.Address, secondBuffer.Address, buffer.Size);
+		}
+
+		/// <summary>
+		/// Clears the screen with a specified color.
+		/// </summary>
+		public void Clear(uint color)
+		{
+			if (doubleBuffering)
+				Internal.MemoryClear(secondBuffer.Address, secondBuffer.Size, color);
+			else
+				Internal.MemoryClear(buffer.Address, buffer.Size, color);
+		}
 	}
 }

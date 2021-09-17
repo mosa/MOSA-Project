@@ -1,10 +1,10 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
 using Mosa.Kernel.x86;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
-using System;
 
 namespace Mosa.Demo.VBEWorld.x86.HAL
 {
@@ -68,6 +68,7 @@ namespace Mosa.Demo.VBEWorld.x86.HAL
 		/// <param name="milliseconds">The milliseconds.</param>
 		public override void Sleep(uint milliseconds)
 		{
+			
 		}
 
 		/// <summary>
@@ -100,7 +101,7 @@ namespace Mosa.Demo.VBEWorld.x86.HAL
 		/// <returns></returns>
 		public override BaseIOPortReadWrite GetReadWriteIOPort(ushort port)
 		{
-			throw new NotImplementedException();
+			return new X86IOPortReadWrite(port);
 		}
 
 		/// <summary>
@@ -110,7 +111,7 @@ namespace Mosa.Demo.VBEWorld.x86.HAL
 		/// <returns></returns>
 		public override BaseIOPortRead GetReadIOPort(ushort port)
 		{
-			throw new NotImplementedException();
+			return new X86IOPortReadWrite(port);
 		}
 
 		/// <summary>
@@ -120,7 +121,7 @@ namespace Mosa.Demo.VBEWorld.x86.HAL
 		/// <returns></returns>
 		public override BaseIOPortWrite GetWriteIOPort(ushort port)
 		{
-			throw new NotImplementedException();
+			return new X86IOPortWrite(port);
 		}
 
 		/// <summary>
@@ -155,7 +156,7 @@ namespace Mosa.Demo.VBEWorld.x86.HAL
 		/// </summary>
 		public override void Pause()
 		{
-			for (var i = Scheduler.ClockTicks + 25; i > Scheduler.ClockTicks;) { }
+			for (var i = Scheduler.ClockTicks + 5; i > Scheduler.ClockTicks;) { }
 		}
 	}
 }
