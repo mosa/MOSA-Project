@@ -213,11 +213,11 @@ namespace Mosa.Runtime
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static void MemoryClear(Pointer dest, uint count)
+		public static void MemoryClear(Pointer dest, uint count, uint value = 0)
 		{
 			for (int i = 0; i < count; i++)
 			{
-				dest.Store8(i, 0);
+				dest.Store8(i, (byte)value);
 			}
 		}
 

@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
+
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
@@ -15,13 +17,17 @@ namespace Mosa.DeviceSystem
 		/// <param name="height">The height.</param>
 		/// <param name="offset">The offset.</param>
 		/// <param name="depth">The depth.</param>
-		public FrameBuffer32bpp(ConstrainedPointer buffer, uint width, uint height, uint offset, uint depth)
+		public FrameBuffer32bpp(ConstrainedPointer buffer, uint width, uint height, uint offset, uint depth, bool doubleBuffering = true)
 		{
 			this.buffer = buffer;
 			this.width = width;
 			this.height = height;
 			this.offset = offset;
 			this.depth = depth;
+			this.doubleBuffering = doubleBuffering;
+
+			if (doubleBuffering)
+				secondBuffer = new ConstrainedPointer(GC.AllocateObject(buffer.Size), buffer.Size);
 		}
 
 		/// <summary>
@@ -43,7 +49,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public override uint GetPixel(uint x, uint y)
 		{
-			return buffer.Read32(GetOffset(x, y));
+			return doubleBuffering ? secondBuffer.Read32(GetOffset(x, y)) : buffer.Read32(GetOffset(x, y));
 		}
 
 		/// <summary>
@@ -54,7 +60,10 @@ namespace Mosa.DeviceSystem
 		/// <param name="y">The y.</param>
 		public override void SetPixel(uint color, uint x, uint y)
 		{
-			buffer.Write32(GetOffset(x, y), color);
+			if (doubleBuffering)
+				secondBuffer.Write32(GetOffset(x, y), color);
+			else
+				buffer.Write32(GetOffset(x, y), color);
 		}
 
 		/// <summary>
@@ -73,7 +82,10 @@ namespace Mosa.DeviceSystem
 			{
 				for (uint offsetX = 0; offsetX < w; offsetX++)
 				{
-					buffer.Write32(startAddress + (offsetX << 2), color);
+					if (doubleBuffering)
+						secondBuffer.Write32(startAddress + (offsetX << 2), color);
+					else
+						buffer.Write32(startAddress + (offsetX << 2), color);
 				}
 
 				startAddress += depth;

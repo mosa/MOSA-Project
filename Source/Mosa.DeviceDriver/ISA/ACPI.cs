@@ -174,7 +174,7 @@ namespace Mosa.DeviceDriver.ISA
 				{
 					if (S5Addr.Load32() == 0x5f35535f) //_S5_
 						break;
-					S5Addr += 1;
+					S5Addr++;
 				}
 
 				if (dsdtLength > 0)
@@ -183,11 +183,11 @@ namespace Mosa.DeviceDriver.ISA
 						S5Addr += 5;
 						S5Addr += ((S5Addr.Load32() & 0xC0) >> 6) + 2;
 						if (S5Addr.Load8() == 0x0A)
-							S5Addr += 1;
+							S5Addr++;
 						SLP_TYPa = (short)(S5Addr.Load16() << 10);
-						S5Addr += 1;
+						S5Addr++;
 						if (S5Addr.Load8() == 0x0A)
-							S5Addr += 1;
+							S5Addr++;
 						SLP_TYPb = (short)(S5Addr.Load16() << 10);
 						SLP_EN = 1 << 13;
 
@@ -198,23 +198,39 @@ namespace Mosa.DeviceDriver.ISA
 			}
 		}
 
+		/// <summary>
+		/// Probes this instance.
+		/// </summary>
+		/// <remarks>
+		/// Override for ISA devices, if example
+		/// </remarks>
+		public override void Probe() => Device.Status = DeviceStatus.Available;
+
+		/// <summary>
+		/// Starts this hardware device.
+		/// </summary>
 		public override void Start()
 		{
-			SMI_CommandPort.Write8(FADT->AcpiEnable);//Native.Out8((ushort)FADT->SMI_CommandPort, FADT->AcpiEnable);
+			SMI_CommandPort.Write8(FADT->AcpiEnable);
 			HAL.Sleep(3000);
+			Device.Status = DeviceStatus.Online;
 		}
 
+		/// <summary>
+		/// Stops this hardware device.
+		/// </summary>
 		public override void Stop()
 		{
-			SMI_CommandPort.Write8(FADT->AcpiDisable);//Native.Out8((ushort)FADT->SMI_CommandPort, FADT->AcpiDisable);
+			SMI_CommandPort.Write8(FADT->AcpiDisable);
 			HAL.Sleep(3000);
+			Device.Status = DeviceStatus.Offline;
 		}
 
 		public void Shutdown()
 		{
-			PM1aControlBlock.Write16((ushort)(SLP_TYPa | SLP_EN));//Native.Out16((ushort)FADT->PM1aControlBlock, (ushort)(SLP_TYPa | SLP_EN));
+			PM1aControlBlock.Write16((ushort)(SLP_TYPa | SLP_EN));
 			if (FADT->PM1bControlBlock != 0)
-				PM1bControlBlock.Write16((ushort)(SLP_TYPb | SLP_EN));//Native.Out16((ushort)FADT->PM1aControlBlock, (ushort)(SLP_TYPb | SLP_EN));
+				PM1bControlBlock.Write16((ushort)(SLP_TYPb | SLP_EN));
 
 			HAL.Pause();
 			HAL.Abort("ACPI shutdown failed!");

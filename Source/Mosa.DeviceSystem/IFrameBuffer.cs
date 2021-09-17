@@ -45,6 +45,16 @@ namespace Mosa.DeviceSystem
 		/// <param name="h">Width of the rectangle.</param>
 		void FillRectangle(uint color, uint x, uint y, uint w, uint h);
 
+		/// <summary>
+		/// If using double buffering, copies the second buffer to the screen.
+		/// </summary>
+		void Update();
+
+		/// <summary>
+		/// Clears the screen with a specified color.
+		/// </summary>
+		void Clear(uint color);
+
 		//TODO: Add more methods
 	}
 }
