@@ -1035,6 +1035,21 @@ namespace Mosa.Compiler.Framework
 		/// <param name="operand1">The operand1.</param>
 		/// <param name="operand2">The operand2.</param>
 		/// <param name="block">The block.</param>
+		public void AppendInstruction(BaseInstruction instruction, ConditionCode condition, Operand result, Operand operand1, Operand operand2, Operand operand3)
+		{
+			AppendInstruction();
+			Node.SetInstruction(instruction, condition, result, operand1, operand2, operand3);
+		}
+
+		/// <summary>
+		/// Appends the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="condition">The condition.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		/// <param name="block">The block.</param>
 		public void AppendInstruction(BaseInstruction instruction, ConditionCode condition, Operand result, Operand operand1, Operand operand2, BasicBlock block)
 		{
 			AppendInstruction();
