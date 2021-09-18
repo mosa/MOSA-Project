@@ -857,5 +857,23 @@ namespace Mosa.Compiler.Framework.Transform
 				default: throw new InvalidOperationException();
 			}
 		}
+
+		protected static bool IsNormal(ConditionCode conditionCode)
+		{
+			switch (conditionCode)
+			{
+				case ConditionCode.Equal: return true;
+				case ConditionCode.NotEqual: return true;
+				case ConditionCode.GreaterOrEqual: return true;
+				case ConditionCode.Greater: return true;
+				case ConditionCode.LessOrEqual: return true;
+				case ConditionCode.Less: return true;
+				case ConditionCode.UnsignedGreater: return true;
+				case ConditionCode.UnsignedGreaterOrEqual: return true;
+				case ConditionCode.UnsignedLess: return true;
+				case ConditionCode.UnsignedLessOrEqual: return true;
+				default: return false;
+			}
+		}
 	}
 }

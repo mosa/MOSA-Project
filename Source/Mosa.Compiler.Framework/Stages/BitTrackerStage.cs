@@ -716,61 +716,6 @@ namespace Mosa.Compiler.Framework.Stages
 			return result;
 		}
 
-		#region Helpers
-
-		private static bool IsAddOverflow(ulong a, ulong b)
-		{
-			return ((b > 0) && (a > (ulong.MaxValue - b)));
-		}
-
-		private static bool IsAddOverflow(uint a, uint b)
-		{
-			return ((b > 0) && (a > (uint.MaxValue - b)));
-		}
-
-		private static bool IsAddOverflow(uint a, uint b, bool carry)
-		{
-			if (IsAddOverflow(a, b))
-				return true;
-
-			if (carry == true & (a + b) == uint.MaxValue)
-				return true;
-
-			return false;
-		}
-
-		private static bool IsMultiplyOverflow(uint a, uint b)
-		{
-			var r = a * (ulong)b;
-
-			return r > uint.MaxValue;
-		}
-
-		private static bool IsMultiplyOverflow(int a, int b)
-		{
-			var z = a * b;
-			return (b < 0 && a == Int32.MinValue) | (b != 0 && z / b != a);
-		}
-
-		private static bool IsMultiplyOverflow(ulong a, ulong b)
-		{
-			if (a == 0 | b == 0)
-				return false;
-
-			var r = a * b;
-			var r2 = r / b;
-
-			return r2 == a;
-		}
-
-		private static bool IsMultiplyOverflow(long a, long b)
-		{
-			var z = a * b;
-			return (b < 0 && a == long.MinValue) | (b != 0 && z / b != a);
-		}
-
-		#endregion Helpers
-
 		#region IR Instructions
 
 		private Value Add32(InstructionNode node)
@@ -797,7 +742,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				MaxValue = value1.MaxValue + value2.MaxValue,
 				MinValue = value1.MinValue + value2.MinValue,
-				AreRangeValuesDeterminate = value1.AreRangeValuesDeterminate && value2.AreRangeValuesDeterminate && !IsAddOverflow((uint)value1.MaxValue, (uint)value2.MaxValue),
+				AreRangeValuesDeterminate = value1.AreRangeValuesDeterminate && value2.AreRangeValuesDeterminate && !IntegerTwiddling.IsAddOverflow((uint)value1.MaxValue, (uint)value2.MaxValue),
 				BitsSet = 0,
 				BitsClear = Upper32BitsSet | ((value1.AreRangeValuesIndeterminate || value2.AreRangeValuesIndeterminate) ? 0 : BitTwiddling.GetClearBitsOver((value1.MaxValue + value2.MaxValue))),
 				Is32Bit = true
@@ -828,7 +773,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				MaxValue = value1.MaxValue + value2.MaxValue,
 				MinValue = value1.MinValue + value2.MinValue,
-				AreRangeValuesDeterminate = value1.AreRangeValuesDeterminate && value2.AreRangeValuesDeterminate && !IsAddOverflow(value1.MaxValue, value2.MaxValue),
+				AreRangeValuesDeterminate = value1.AreRangeValuesDeterminate && value2.AreRangeValuesDeterminate && !IntegerTwiddling.IsAddOverflow(value1.MaxValue, value2.MaxValue),
 				BitsSet = 0,
 				BitsClear = (value1.AreRangeValuesIndeterminate || value2.AreRangeValuesIndeterminate) ? 0 : BitTwiddling.GetClearBitsOver(value1.MaxValue + value2.MaxValue),
 				Is64Bit = true
@@ -860,7 +805,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				MaxValue = value1.MaxValue + value2.MaxValue + value3.MaxValue,
 				MinValue = value1.MinValue + value2.MinValue + value3.MaxValue,
-				AreRangeValuesDeterminate = value1.AreRangeValuesDeterminate && value2.AreRangeValuesDeterminate && !IsAddOverflow((uint)value1.MaxValue, (uint)value2.MaxValue, true),
+				AreRangeValuesDeterminate = value1.AreRangeValuesDeterminate && value2.AreRangeValuesDeterminate && !IntegerTwiddling.IsAddOverflow((uint)value1.MaxValue, (uint)value2.MaxValue, true),
 				BitsSet = 0,
 				BitsClear = Upper32BitsSet | ((value1.AreRangeValuesIndeterminate || value2.AreRangeValuesIndeterminate) ? 0 : BitTwiddling.GetClearBitsOver(value1.MaxValue + value2.MaxValue + 1)),
 				Is32Bit = true
@@ -1432,7 +1377,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// TODO: Special power of two handling for bits, handle similar to shift left
 
-			if (value1.AreRangeValuesDeterminate && value2.AreRangeValuesDeterminate && !IsMultiplyOverflow((int)value1.MaxValue, (int)value2.MaxValue) && !IsMultiplyOverflow((int)value1.MinValue, (int)value2.MinValue))
+			if (value1.AreRangeValuesDeterminate && value2.AreRangeValuesDeterminate && !IntegerTwiddling.IsMultiplyOverflow((int)value1.MaxValue, (int)value2.MaxValue) && !IntegerTwiddling.IsMultiplyOverflow((int)value1.MinValue, (int)value2.MinValue))
 			{
 				return new Value()
 				{
@@ -1484,7 +1429,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				MaxValue = value1.MaxValue * value2.MaxValue,
 				MinValue = value1.MinValue * value2.MinValue,
-				AreRangeValuesDeterminate = value1.AreRangeValuesDeterminate && value2.AreRangeValuesDeterminate && !IsMultiplyOverflow((uint)value1.MaxValue, (uint)value2.MaxValue),
+				AreRangeValuesDeterminate = value1.AreRangeValuesDeterminate && value2.AreRangeValuesDeterminate && !IntegerTwiddling.IsMultiplyOverflow((uint)value1.MaxValue, (uint)value2.MaxValue),
 				BitsSet = 0,
 				BitsClear = Upper32BitsSet | ((value1.AreRangeValuesIndeterminate || value2.AreRangeValuesIndeterminate) ? 0 : BitTwiddling.GetClearBitsOver(value1.MaxValue * value2.MaxValue)),
 				Is32Bit = true
@@ -1527,7 +1472,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				MaxValue = value1.MaxValue * value2.MaxValue,
 				MinValue = value1.MinValue * value2.MinValue,
-				AreRangeValuesDeterminate = value1.AreRangeValuesDeterminate && value2.AreRangeValuesDeterminate && !IsMultiplyOverflow(value1.MaxValue, value2.MaxValue),
+				AreRangeValuesDeterminate = value1.AreRangeValuesDeterminate && value2.AreRangeValuesDeterminate && !IntegerTwiddling.IsMultiplyOverflow(value1.MaxValue, value2.MaxValue),
 				BitsSet = 0,
 				BitsClear = (value1.AreRangeValuesIndeterminate || value2.AreRangeValuesIndeterminate) ? 0 : BitTwiddling.GetClearBitsOver(value1.MaxValue * value2.MaxValue),
 				Is64Bit = true

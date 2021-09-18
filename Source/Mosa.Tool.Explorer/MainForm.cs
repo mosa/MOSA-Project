@@ -366,7 +366,7 @@ namespace Mosa.Tool.Explorer
 
 		private string CreateTimeStampedLog(CompilerEvent compilerEvent, string message, int threadID = 0)
 		{
-			message = string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}";
+			message = string.IsNullOrWhiteSpace(message) ? string.Empty : message;
 
 			return $"{(DateTime.Now - compileStartTime).TotalSeconds:0.00} [{threadID}] {compilerEvent.ToText()}{message}";
 		}
