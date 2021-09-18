@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.Framework.Transform.Auto.Rewrite
 {
 	/// <summary>
-	/// IfThenElse64v4
+	/// IfThenElse64Compare64v4
 	/// </summary>
-	public sealed class IfThenElse64v4 : BaseTransformation
+	public sealed class IfThenElse64Compare64v4 : BaseTransformation
 	{
-		public IfThenElse64v4() : base(IRInstruction.IfThenElse64)
+		public IfThenElse64Compare64v4() : base(IRInstruction.IfThenElse64)
 		{
 		}
 
@@ -51,11 +51,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Rewrite
 	}
 
 	/// <summary>
-	/// IfThenElse64v4_v1
+	/// IfThenElse64Compare64v4_v1
 	/// </summary>
-	public sealed class IfThenElse64v4_v1 : BaseTransformation
+	public sealed class IfThenElse64Compare64v4_v1 : BaseTransformation
 	{
-		public IfThenElse64v4_v1() : base(IRInstruction.IfThenElse64)
+		public IfThenElse64Compare64v4_v1() : base(IRInstruction.IfThenElse64)
 		{
 		}
 
