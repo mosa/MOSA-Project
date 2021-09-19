@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Common
 
 		public static bool IsMultiplyOverflow(uint a, uint b)
 		{
-			var r = a * (ulong)b;
+			var r = (ulong)a * (ulong)b;
 
 			return r > uint.MaxValue;
 		}

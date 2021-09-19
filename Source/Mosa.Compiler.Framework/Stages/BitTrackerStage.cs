@@ -1329,15 +1329,28 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// TODO: Special power of two handling for bits, handle similar to shift left
 
-			if (value1.AreRangeValuesDeterminate && value2.AreRangeValuesDeterminate && !IntegerTwiddling.IsMultiplyOverflow((int)value1.MaxValue, (int)value2.MaxValue) && !IntegerTwiddling.IsMultiplyOverflow((int)value1.MinValue, (int)value2.MinValue))
+			if (value1.AreRangeValuesDeterminate
+				&& value2.AreRangeValuesDeterminate
+				&& !IntegerTwiddling.IsMultiplyOverflow((int)value1.MaxValue, (int)value2.MaxValue)
+				&& !IntegerTwiddling.IsMultiplyOverflow((int)value1.MinValue, (int)value2.MinValue)
+				&& !IntegerTwiddling.IsMultiplyOverflow((int)value1.MaxValue, (int)value2.MinValue)
+				&& !IntegerTwiddling.IsMultiplyOverflow((int)value1.MinValue, (int)value2.MaxValue))
 			{
+				var a = (int)value1.MaxValue * (int)value2.MaxValue;
+				var b = (int)value1.MinValue * (int)value2.MinValue;
+				var c = (int)value1.MinValue * (int)value2.MaxValue;
+				var d = (int)value1.MaxValue * (int)value2.MinValue;
+
+				var max = Math.Max(a, Math.Max(b, Math.Max(c, d)));
+				var min = Math.Min(a, Math.Min(b, Math.Min(c, d)));
+
 				return new Value()
 				{
-					MaxValue = (ulong)((int)value1.MaxValue * (int)value2.MaxValue),
-					MinValue = (ulong)((int)value1.MinValue * (int)value2.MinValue),
-					AreRangeValuesDeterminate = false,  // NOT YET
+					MaxValue = (uint)max,
+					MinValue = (uint)min,
+					AreRangeValuesDeterminate = true,
 					BitsSet = 0,
-					BitsClear = 0,
+					BitsClear = 0, // Upper32BitsSet, // | BitTwiddling.GetClearBitsOver((uint)max),
 					Is64Bit = false
 				};
 			}
@@ -1377,15 +1390,28 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// TODO: Special power of two handling for bits, handle similar to shift left
 
-			if (value1.AreRangeValuesDeterminate && value2.AreRangeValuesDeterminate && !IntegerTwiddling.IsMultiplyOverflow((int)value1.MaxValue, (int)value2.MaxValue) && !IntegerTwiddling.IsMultiplyOverflow((int)value1.MinValue, (int)value2.MinValue))
+			if (value1.AreRangeValuesDeterminate
+				&& value2.AreRangeValuesDeterminate
+				&& !IntegerTwiddling.IsMultiplyOverflow((long)value1.MaxValue, (long)value2.MaxValue)
+				&& !IntegerTwiddling.IsMultiplyOverflow((long)value1.MinValue, (long)value2.MinValue)
+				&& !IntegerTwiddling.IsMultiplyOverflow((long)value1.MaxValue, (long)value2.MinValue)
+				&& !IntegerTwiddling.IsMultiplyOverflow((long)value1.MinValue, (long)value2.MaxValue))
 			{
+				var a = (long)value1.MaxValue * (long)value2.MaxValue;
+				var b = (long)value1.MinValue * (long)value2.MinValue;
+				var c = (long)value1.MinValue * (long)value2.MaxValue;
+				var d = (long)value1.MaxValue * (long)value2.MinValue;
+
+				var max = Math.Max(a, Math.Max(b, Math.Max(c, d)));
+				var min = Math.Min(a, Math.Min(b, Math.Min(c, d)));
+
 				return new Value()
 				{
-					MaxValue = (ulong)((int)value1.MaxValue * (int)value2.MaxValue),
-					MinValue = (ulong)((int)value1.MinValue * (int)value2.MinValue),
-					AreRangeValuesDeterminate = false,  // NOT YET
+					MaxValue = (ulong)max,
+					MinValue = (ulong)min,
+					AreRangeValuesDeterminate = false,      // Not working... :(
 					BitsSet = 0,
-					BitsClear = 0,
+					BitsClear = 0, // BitTwiddling.GetClearBitsOver((ulong)max),
 					Is64Bit = true
 				};
 			}
