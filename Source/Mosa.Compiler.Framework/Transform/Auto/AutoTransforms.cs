@@ -81,6 +81,8 @@ namespace Mosa.Compiler.Framework.Transform.Auto
 			 new ConstantFolding.GetLow32(),
 			 new ConstantFolding.GetLow32FromTo64(),
 			 new ConstantFolding.GetHigh32FromTo64(),
+			 new ConstantFolding.ArithShiftRight32(),
+			 new ConstantFolding.ArithShiftRight64(),
 			 new ConstantMove.Add32(),
 			 new ConstantMove.Add64(),
 			 new ConstantMove.AddR4(),

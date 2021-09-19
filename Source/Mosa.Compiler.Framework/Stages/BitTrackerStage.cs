@@ -221,6 +221,9 @@ namespace Mosa.Compiler.Framework.Stages
 			Register(IRInstruction.RemUnsigned32, RemUnsigned32);
 			Register(IRInstruction.RemUnsigned64, RemUnsigned64);
 
+			Register(IRInstruction.IfThenElse32, IfThenElse32);
+			Register(IRInstruction.IfThenElse64, IfThenElse64);
+
 			// TODO:
 
 			// AddCarryOut32
@@ -230,9 +233,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// DivUnsigned32
 			// DivUnsigned64
-
-			// IfThenElse32
-			// IfThenElse64
 
 			// LoadParamSignExtend16x32
 			// LoadParamSignExtend16x64
@@ -1329,18 +1329,18 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// TODO: Special power of two handling for bits, handle similar to shift left
 
-			//if (value1.AreRangeValuesDeterminate && value2.AreRangeValuesDeterminate && !IsMultiplyOverflow((long)value1.MaxValue, (long)value2.MaxValue) && !IsMultiplyOverflow((long)value1.MinValue, (long)value2.MinValue))
-			//{
-			//	return new Value()
-			//	{
-			//		MaxValue = (ulong)((long)value1.MaxValue * (long)value2.MaxValue),
-			//		MinValue = (ulong)((long)value1.MinValue * (long)value2.MinValue),
-			//		AreRangeValuesDeterminate = false,
-			//		BitsSet = 0,
-			//		BitsClear = 0,
-			//		Is32Bit = true
-			//	};
-			//}
+			if (value1.AreRangeValuesDeterminate && value2.AreRangeValuesDeterminate && !IntegerTwiddling.IsMultiplyOverflow((int)value1.MaxValue, (int)value2.MaxValue) && !IntegerTwiddling.IsMultiplyOverflow((int)value1.MinValue, (int)value2.MinValue))
+			{
+				return new Value()
+				{
+					MaxValue = (ulong)((int)value1.MaxValue * (int)value2.MaxValue),
+					MinValue = (ulong)((int)value1.MinValue * (int)value2.MinValue),
+					AreRangeValuesDeterminate = false,  // NOT YET
+					BitsSet = 0,
+					BitsClear = 0,
+					Is64Bit = false
+				};
+			}
 
 			return Value.Indeterminate;
 		}
@@ -1383,7 +1383,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					MaxValue = (ulong)((int)value1.MaxValue * (int)value2.MaxValue),
 					MinValue = (ulong)((int)value1.MinValue * (int)value2.MinValue),
-					AreRangeValuesDeterminate = false,
+					AreRangeValuesDeterminate = false,  // NOT YET
 					BitsSet = 0,
 					BitsClear = 0,
 					Is64Bit = true
@@ -2242,6 +2242,48 @@ namespace Mosa.Compiler.Framework.Stages
 		private Value ZeroExtend8x64(InstructionNode node)
 		{
 			return ZeroExtend8x32(node);
+		}
+
+		private Value IfThenElse32(InstructionNode node)
+		{
+			var value1 = node.Operand2.IsConstant ? new Value(node.Operand2.ConstantUnsigned32, true) : Values[node.Operand2.Index];
+			var value2 = node.Operand3.IsConstant ? new Value(node.Operand3.ConstantUnsigned32, true) : Values[node.Operand3.Index];
+
+			if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
+			{
+				return new Value()
+				{
+					MaxValue = Math.Max(value1.MaxValue, value2.MaxValue),
+					MinValue = Math.Min(value1.MinValue, value2.MinValue),
+					AreRangeValuesDeterminate = true,
+					BitsSet = value1.MaxValue & value2.MaxValue,
+					BitsClear = ~value1.MaxValue & ~value2.MaxValue,
+					Is32Bit = true
+				};
+			}
+
+			return Value.Indeterminate;
+		}
+
+		private Value IfThenElse64(InstructionNode node)
+		{
+			var value1 = node.Operand2.IsConstant ? new Value(node.Operand2.ConstantUnsigned64, true) : Values[node.Operand2.Index];
+			var value2 = node.Operand3.IsConstant ? new Value(node.Operand3.ConstantUnsigned64, true) : Values[node.Operand3.Index];
+
+			if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+			{
+				return new Value()
+				{
+					MaxValue = Math.Max(value1.MaxValue, value2.MaxValue),
+					MinValue = Math.Min(value1.MinValue, value2.MinValue),
+					AreRangeValuesDeterminate = true,
+					BitsSet = value1.MaxValue & value2.MaxValue,
+					BitsClear = ~value1.MaxValue & ~value2.MaxValue,
+					Is32Bit = false
+				};
+			}
+
+			return Value.Indeterminate;
 		}
 
 		#endregion IR Instructions

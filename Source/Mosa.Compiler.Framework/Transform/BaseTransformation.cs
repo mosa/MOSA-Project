@@ -496,6 +496,16 @@ namespace Mosa.Compiler.Framework.Transform
 			return a >> (int)b;
 		}
 
+		protected static uint ArithmeticShiftRight32(uint a, int b)
+		{
+			return (uint)(((int)a) >> (int)b);
+		}
+
+		protected static ulong ArithmeticShiftRight64(ulong a, long b)
+		{
+			return (ulong)(((long)a) >> (int)b);
+		}
+
 		protected static ulong Sqrt32(uint num)
 		{
 			if (0 == num)

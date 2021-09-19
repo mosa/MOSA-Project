@@ -52,15 +52,15 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Special
 			var condition = ctx.ConditionCode;
 			var instruction = ctx.Instruction;
 			var branch = ctx.BranchTargets[0];
+
 			var resultCondition = transformContext.AllocateVirtualRegister(result.Type);
-
 			var conditionInstruction = (instruction == IRInstruction.Branch32) ? (BaseInstruction)IRInstruction.Compare32x32 : IRInstruction.Compare64x64;
-
 			var swap = block1 == branch;
 
-			ctx.SetInstruction(conditionInstruction, condition, resultCondition, op1Condition, op2Condition);
+			ctx.GotoPrevious();
+
+			ctx.AppendInstruction(conditionInstruction, condition, resultCondition, op1Condition, op2Condition);
 			ctx.AppendInstruction(IRInstruction.IfThenElse32, result, resultCondition, swap ? op1 : op2, swap ? op2 : op1);
-			ctx.AppendInstruction(instruction, ConditionCode.Equal, null, resultCondition, transformContext.ConstantZero32, branch);
 
 			context.SetNop();
 		}
