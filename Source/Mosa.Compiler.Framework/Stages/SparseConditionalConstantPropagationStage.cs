@@ -189,7 +189,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var nextBlocks = block.NextBlocks.ToArray();
 
-			EmptyBlockOfAllInstructions(block);
+			EmptyBlockOfAllInstructions(block, true);
 
 			BaseMethodCompilerStage.RemoveBlocksFromPHIInstructions(block, nextBlocks);
 
