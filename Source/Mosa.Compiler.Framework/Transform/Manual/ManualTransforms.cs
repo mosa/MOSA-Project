@@ -18,6 +18,9 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			new ConstantMove.Compare64x32(),
 			new ConstantMove.Compare64x64(),
 
+			new ConstantFolding.AddCarryOut32(),
+			new ConstantFolding.AddCarryOut64(),
+
 			new ConstantMove.Branch32(),
 			new ConstantMove.Branch64(),
 
@@ -154,6 +157,8 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			new Memory.DoubleStoreParam64(),
 			new Memory.DoubleStoreParamR4(),
 			new Memory.DoubleStoreParamR8(),
+
+			//new Special.Phi32Conditional(),
 		};
 	}
 }

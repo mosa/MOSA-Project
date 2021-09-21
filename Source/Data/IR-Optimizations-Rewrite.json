@@ -56,7 +56,46 @@
 			"Filter": "IsZero(b)",
 			"Result": "(IR.Compare64x## {!= u} a b)",
 			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Rewrite",
+			"Name": "IfThenElse##",
+			"SubName": "Compare##v1",
+			"Expression": "IR.IfThenElse## (IR.Compare##x## {==} a 0) x y",
+			"Filter": "",
+			"Result": "(IR.IfThenElse## a y x)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Rewrite",
+			"Name": "IfThenElse##",
+			"SubName": "Compare##v2",
+			"Expression": "IR.IfThenElse## (IR.Compare##x## {==} 0 a) x y",
+			"Filter": "",
+			"Result": "(IR.IfThenElse## a y x)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Rewrite",
+			"Name": "IfThenElse##",
+			"SubName": "Compare##v3",
+			"Expression": "IR.IfThenElse## (IR.Compare##x## {!=} 0 a) x y",
+			"Filter": "",
+			"Result": "(IR.IfThenElse## a x y)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Rewrite",
+			"Name": "IfThenElse##",
+			"SubName": "Compare##v4",
+			"Expression": "IR.IfThenElse## (IR.Compare##x## {!=} 0 a) x y",
+			"Filter": "",
+			"Result": "(IR.IfThenElse## a x y)",
+			"Variations": "Yes"
 		}
-
 	]
 }
