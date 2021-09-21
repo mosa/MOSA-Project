@@ -1331,23 +1331,19 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (value1.AreRangeValuesDeterminate
 				&& value2.AreRangeValuesDeterminate
-				&& !IntegerTwiddling.IsMultiplyOverflow((int)value1.MaxValue, (int)value2.MaxValue)
-				&& !IntegerTwiddling.IsMultiplyOverflow((int)value1.MinValue, (int)value2.MinValue)
-				&& !IntegerTwiddling.IsMultiplyOverflow((int)value1.MaxValue, (int)value2.MinValue)
-				&& !IntegerTwiddling.IsMultiplyOverflow((int)value1.MinValue, (int)value2.MaxValue))
+				&& !IntegerTwiddling.HasSignBitSet(value1.MaxValue)
+				&& !IntegerTwiddling.HasSignBitSet(value2.MaxValue)
+				&& !IntegerTwiddling.HasSignBitSet(value1.MinValue)
+				&& !IntegerTwiddling.HasSignBitSet(value2.MinValue)
+				&& !IntegerTwiddling.IsMultiplyOverflow((int)value1.MaxValue, (int)value2.MaxValue))
 			{
-				var a = (int)value1.MaxValue * (int)value2.MaxValue;
-				var b = (int)value1.MinValue * (int)value2.MinValue;
-				var c = (int)value1.MinValue * (int)value2.MaxValue;
-				var d = (int)value1.MaxValue * (int)value2.MinValue;
-
-				var max = Math.Max(a, Math.Max(b, Math.Max(c, d)));
-				var min = Math.Min(a, Math.Min(b, Math.Min(c, d)));
+				var max = Math.Max(value1.MaxValue, value2.MaxValue);
+				var min = Math.Min(value1.MinValue, value2.MinValue);
 
 				return new Value()
 				{
-					MaxValue = (uint)max,
-					MinValue = (uint)min,
+					MaxValue = (uint)(max * max),
+					MinValue = (uint)(min * min),
 					AreRangeValuesDeterminate = true,
 					BitsSet = 0,
 					BitsClear = 0, // Upper32BitsSet, // | BitTwiddling.GetClearBitsOver((uint)max),
@@ -1392,23 +1388,19 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (value1.AreRangeValuesDeterminate
 				&& value2.AreRangeValuesDeterminate
-				&& !IntegerTwiddling.IsMultiplyOverflow((long)value1.MaxValue, (long)value2.MaxValue)
-				&& !IntegerTwiddling.IsMultiplyOverflow((long)value1.MinValue, (long)value2.MinValue)
-				&& !IntegerTwiddling.IsMultiplyOverflow((long)value1.MaxValue, (long)value2.MinValue)
-				&& !IntegerTwiddling.IsMultiplyOverflow((long)value1.MinValue, (long)value2.MaxValue))
+				&& !IntegerTwiddling.HasSignBitSet(value1.MaxValue)
+				&& !IntegerTwiddling.HasSignBitSet(value2.MaxValue)
+				&& !IntegerTwiddling.HasSignBitSet(value1.MinValue)
+				&& !IntegerTwiddling.HasSignBitSet(value2.MinValue)
+				&& !IntegerTwiddling.IsMultiplyOverflow((long)value1.MaxValue, (long)value2.MaxValue))
 			{
-				var a = (long)value1.MaxValue * (long)value2.MaxValue;
-				var b = (long)value1.MinValue * (long)value2.MinValue;
-				var c = (long)value1.MinValue * (long)value2.MaxValue;
-				var d = (long)value1.MaxValue * (long)value2.MinValue;
-
-				var max = Math.Max(a, Math.Max(b, Math.Max(c, d)));
-				var min = Math.Min(a, Math.Min(b, Math.Min(c, d)));
+				var max = Math.Max(value1.MaxValue, value2.MaxValue);
+				var min = Math.Min(value1.MinValue, value2.MinValue);
 
 				return new Value()
 				{
-					MaxValue = (ulong)max,
-					MinValue = (ulong)min,
+					MaxValue = (ulong)(max * max),
+					MinValue = (ulong)(min * min),
 					AreRangeValuesDeterminate = false,      // Not working... :(
 					BitsSet = 0,
 					BitsClear = 0, // BitTwiddling.GetClearBitsOver((ulong)max),

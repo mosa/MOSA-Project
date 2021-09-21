@@ -82,5 +82,15 @@ namespace Mosa.Compiler.Common
 			var z = a * b;
 			return (b < 0 && a == long.MinValue) | (b != 0 && z / b != a);
 		}
+
+		public static bool HasSignBitSet(long a)
+		{
+			return a <= 0;
+		}
+
+		public static bool HasSignBitSet(ulong a)
+		{
+			return HasSignBitSet((long)a);
+		}
 	}
 }
