@@ -102,5 +102,10 @@ namespace Mosa.DeviceSystem
 		/// Pause
 		/// </summary>
 		public abstract void Pause();
+
+		/// <summary>
+		/// Halt the CPU.
+		/// </summary>
+		public abstract void HaltCPU();
 	}
 }

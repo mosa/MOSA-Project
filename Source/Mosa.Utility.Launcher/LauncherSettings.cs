@@ -70,6 +70,12 @@ namespace Mosa.Utility.Launcher
 			set { Settings.SetValue("Emulator.Memory", value); }
 		}
 
+		public int EmulatorCores
+		{
+			get { return Settings.GetValue("Emulator.Cores", 1); }
+			set { Settings.SetValue("Emulator.Cores", value); }
+		}
+
 		public string EmulatorSerial
 		{
 			get { return Settings.GetValue("Emulator.Serial", null); }

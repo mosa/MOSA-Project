@@ -19,5 +19,15 @@ namespace System
 			this.instance = instance;
 			this.methodPointer = methodPointer;
 		}
+
+		// TODO
+		public static Delegate Combine(Delegate a, Delegate b)
+		{
+			return b;
+		}
+		public static Delegate Remove(Delegate source, Delegate value)
+		{
+			return null;
+		}
 	}
 }

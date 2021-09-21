@@ -885,5 +885,64 @@ namespace System
 				return string.Ctor(this, start, len);
 			}
 		}
+
+		public unsafe static string FromPointer(byte* p, int size)
+		{
+			string s = "";
+			for (int i = 0; i < size; i++)
+			{
+				s += ((char)p[i]).ToString();
+			}
+			return s;
+		}
+
+		public unsafe static string FromPointer(byte* p, int size,byte ignore)
+		{
+			string s = "";
+			for (int i = 0; i < size; i++)
+			{
+				if ((char)p[i] == ignore) continue;
+				s += ((char)p[i]).ToString();
+			}
+			return s;
+		}
+
+		public static string Format(string format, params object[] args)
+		{
+			string result = "";
+			for (int i = 0; i < format.Length; i++)
+			{
+				if (format[i] == '{' && format[i + 2] == '}')
+				{
+					//ASCII
+					result += args[(format[i + 1] - 0x30)];
+					i += 2;
+					continue;
+				}
+				result += format[i];
+			}
+			return result;
+		}
+
+		public string Replace(string dest, string oldValue, string newValue)
+		{
+			while (dest.IndexOf(oldValue) != -1)
+			{
+				int xIndex = dest.IndexOf(oldValue);
+				dest = dest.Remove(dest, xIndex, oldValue.Length);
+				dest = dest.Insert(dest, xIndex, newValue);
+			}
+			return dest;
+		}
+
+		public string Insert(string dest, int aStartPos, string aValue)
+		{
+			return dest.Substring(0, aStartPos) + aValue + dest.Substring(aStartPos);
+		}
+
+		public string Remove(string dest, int aStart, int aCount)
+		{
+			return dest.Substring(0, aStart) + dest.Substring(aStart + aCount, dest.Length - (aStart + aCount));
+		}
 	}
 }

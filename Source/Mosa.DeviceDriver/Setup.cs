@@ -44,6 +44,19 @@ namespace Mosa.DeviceDriver
 					Factory = delegate { return new ISA.StandardKeyboard(); }
 				},
 
+				// TODO
+				/*new ISADeviceDriverRegistryEntry()
+				{
+					Name = "PIT",
+					Platforms = PlatformArchitecture.X86AndX64,
+					AutoLoad = true,
+					BasePort = 0x40,
+					PortRange = 1,
+					AltBasePort = 0x43,
+					AltPortRange = 1,
+					Factory = delegate { return new ISA.PIT(); }
+				},*/
+
 				new ISADeviceDriverRegistryEntry()
 				{
 					Name = "StandardMouse",
@@ -181,27 +194,17 @@ namespace Mosa.DeviceDriver
 					Factory = delegate { return new Intel440FX(); }
 				},
 
-				new PCIDeviceDriverRegistryEntry()
+				// TODO: Somehow add more DeviceIDs for this product family
+				/*new PCIDeviceDriverRegistryEntry()
 				{
-					Name = "Intel82540EM",
+					Name = "Intel825XX",
 					Platforms = PlatformArchitecture.X86AndX64,
 					BusType = DeviceBusType.PCI,
 					VendorID = 0x8086,
 					DeviceID = 0x100E,
 					PCIFields = PCIField.VendorID | PCIField.DeviceID,
-					Factory = delegate { return new Intel82540EM(); }
-				},
-
-				new PCIDeviceDriverRegistryEntry()
-				{
-					Name = "Intel82541EI",
-					Platforms = PlatformArchitecture.X86AndX64,
-					BusType = DeviceBusType.PCI,
-					VendorID = 0x8086,
-					DeviceID = 0x1013,
-					PCIFields = PCIField.VendorID | PCIField.DeviceID,
-					Factory = delegate { return new Intel82541EI(); }
-				},
+					Factory = delegate { return new Intel825XX(); }
+				},*/
 
 				new PCIDeviceDriverRegistryEntry()
 				{

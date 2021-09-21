@@ -25,7 +25,6 @@
     <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="ISA\PIT.cs" />
     <Compile Remove="ISA\Serial.cs" />
     <Compile Remove="ISA\VGAText.cs" />
     <Compile Remove="PCI\Intel4SeriesChipsetDRAMController.cs" />

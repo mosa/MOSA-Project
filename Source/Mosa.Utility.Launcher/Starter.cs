@@ -149,26 +149,20 @@ namespace Mosa.Utility.Launcher
 			arg.Append(" -L " + Quote(LauncherSettings.QEMUBios));
 
 			if (LauncherSettings.Platform == "x86")
-			{
 				arg.Append(" -cpu qemu32,+sse4.1");
-			}
 
-			//arg = arg + " -vga vmware";
+			arg.Append($" -soundhw sb16 -m {LauncherSettings.EmulatorMemory}M -smp sockets=1,cores={LauncherSettings.EmulatorCores},threads=1");
+
+			//arg.Append(" -vga vmware");
 
 			if (!LauncherSettings.EmulatorDisplay || LauncherSettings.LauncherTest)
-			{
 				arg.Append(" -display none");
-			}
 
 			// COM1 = Kernel Log
 			if (LauncherSettings.LauncherTest)
-			{
 				arg.Append(" -serial stdio");
-			}
 			else
-			{
 				arg.Append(" -serial null");
-			}
 
 			// COM2 = Mosa Internal Debugger
 			if (!string.IsNullOrWhiteSpace(LauncherSettings.EmulatorSerial))
@@ -222,10 +216,12 @@ namespace Mosa.Utility.Launcher
 
 			var sb = new StringBuilder();
 
+			// TODO: Add Sound Blaster 16 option here
 			sb.AppendLine($"megs: {LauncherSettings.EmulatorMemory}");
-			sb.AppendLine($"ata0: enabled=1,ioaddr1=0x1f0,ioaddr2=0x3f0,irq=14");
+			sb.AppendLine("ata0: enabled=1,ioaddr1=0x1f0,ioaddr2=0x3f0,irq=14");
+			sb.AppendLine($"cpu: count={LauncherSettings.EmulatorCores}");
 			sb.AppendLine($"cpuid: mmx=1,sep=1,{simd}=sse4_2,apic=xapic,aes=1,movbe=1,xsave=1");
-			sb.AppendLine($"boot: cdrom,disk");
+			sb.AppendLine("boot: cdrom,disk");
 			sb.AppendLine($"log: {Quote(logfile)}");
 			sb.AppendLine($"romimage: file={Quote(Path.Combine(bochsdirectory, "BIOS-bochs-latest"))}");
 			sb.AppendLine($"vgaromimage: file={Quote(Path.Combine(bochsdirectory, "VGABIOS-lgpl-latest"))}");
@@ -265,11 +261,14 @@ namespace Mosa.Utility.Launcher
 			sb.AppendLine("config.version = \"8\"");
 			sb.AppendLine("virtualHW.version = \"4\"");
 			sb.AppendLine($"memsize = {Quote(LauncherSettings.EmulatorMemory.ToString())}");
+			sb.AppendLine($"maxvcpus = {Quote(LauncherSettings.EmulatorCores.ToString())}");
 			sb.AppendLine($"displayName = \"MOSA - {Path.GetFileNameWithoutExtension(LauncherSettings.SourceFiles[0])}\"");
 			sb.AppendLine("guestOS = \"other\"");
 			sb.AppendLine("priority.grabbed = \"normal\"");
 			sb.AppendLine("priority.ungrabbed = \"normal\"");
 			sb.AppendLine("virtualHW.productCompatibility = \"hosted\"");
+			sb.AppendLine("sound.present = \"TRUE\"");
+			sb.AppendLine("sound.virtualDev = \"sb16\"");
 			sb.AppendLine("ide0:0.present = \"TRUE\"");
 			sb.AppendLine($"ide0:0.fileName = {Quote(LauncherSettings.ImageFile)}");
 

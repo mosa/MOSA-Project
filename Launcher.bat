@@ -1,1 +1,1 @@
-start bin\Mosa.Tool.Launcher.exe -autostart-off bin\Mosa.Demo.CoolWorld.x86.dll
+start bin\Mosa.Tool.Launcher.exe -autostart-off bin\Mosa.Demo.x86.dll

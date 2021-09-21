@@ -17,7 +17,7 @@ namespace Mosa.Tool.Launcher
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
 
-			var main = new MainForm();
+			var main = new Launcher();
 			main.LoadArguments(args);
 
 			Application.Run(main);
