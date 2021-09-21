@@ -82,9 +82,6 @@ Source: "..\..\bin\Mosa.Utility.Disassembler.dll"; DestDir: "{app}\bin"; Flags: 
 Source: "..\..\bin\dnlib.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\CommandLine.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\PriorityQueue.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "..\..\bin\MetroFramework.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "..\..\bin\MetroFramework.Design.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "..\..\bin\MetroFramework.Fonts.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\WinFormsUI.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\WeifenLuo.WinFormsUI.Docking.ThemeVS2015.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Reko.Arch.Arm.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
