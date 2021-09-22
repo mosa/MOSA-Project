@@ -14,6 +14,18 @@ namespace Mosa.Runtime
 
 		internal static int objectSequence = 0;
 
+		/// <summary>
+		/// An object header the following memory layout:
+		///   - Hash Value (32-bit)
+		///   - Lock & Status (32-bit)
+		///   - MethodTable (native int)
+		/// </summary>
+		internal static int ObjectHeaderSize
+		{
+			[MethodImpl(MethodImplOptions.AggressiveInlining)]
+			get => 4 + 4 + Pointer.Size;
+		}
+
 		#endregion Data Members
 
 		#region Allocation
@@ -25,12 +37,12 @@ namespace Mosa.Runtime
 
 			// An object has the following memory layout:
 			//   - Object Header
-			//		- Hash Value (32-bit)
-			//		- Lock & Status (32-bit)
-			//		- MethodTable (Object references point here, so this is relative 0)
 			//   - 0 .. n object data fields
+			//
+			// Object references point to the end of the header
+			// so accessing the header requires negative offsets from the object reference
 
-			var allocationSize = 4 + 4 + Pointer.Size + classSize;
+			var allocationSize = ObjectHeaderSize + classSize;
 
 			var memory = GC.AllocateObject((uint)allocationSize);
 
@@ -43,7 +55,7 @@ namespace Mosa.Runtime
 			// Set MethodTable
 			memory.StorePointer(8, methodTable);
 
-			return memory + 8 + Pointer.Size;
+			return memory + ObjectHeaderSize;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -57,11 +69,11 @@ namespace Mosa.Runtime
 		{
 			// An array has the following memory layout:
 			//   - Object Header
-			//		- Hash Value (32-bit)
-			//		- Lock & Status (32-bit)
-			//		- MethodTable (Object references point here, so this is relative 0)
 			//   - Length (native int)
 			//   - ElementType[length] elements
+			//
+			// Object references point to the end of the header
+			// so accessing the header requires negative offsets from the object reference
 
 			var memory = AllocateObject(methodTable, (uint)(Pointer.Size + (elements * elementSize)));
 
@@ -544,6 +556,11 @@ namespace Mosa.Runtime
 		public static void ThrowIndexOutOfRangeException()
 		{
 			throw new IndexOutOfRangeException();
+		}
+
+		public static void ThrowOverflowException()
+		{
+			throw new OverflowException();
 		}
 	}
 }

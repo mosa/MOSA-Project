@@ -29,6 +29,7 @@
 		<Compile Include="..\Mosa.UnitTests\CallTests.cs" Link="Tests\CallTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\CallVirtualTests.cs" Link="Tests\CallVirtualTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\CharTests.cs" Link="Tests\CharTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\CheckedTests.cs" Link="Tests\CheckedTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\ComparisonTests.cs" Link="Tests\ComparisonTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\CompilerBugTests.cs" Link="Tests\CompilerBugTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\ComplexOptimizationTests.cs" Link="Tests\ComplexOptimizationTests.cs" />

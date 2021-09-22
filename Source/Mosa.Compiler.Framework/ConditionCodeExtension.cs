@@ -108,6 +108,8 @@ namespace Mosa.Compiler.Framework
 				case ConditionCode.NotZero: return "not zero";
 				case ConditionCode.Carry: return "carry";
 				case ConditionCode.NoCarry: return "no carry";
+				case ConditionCode.Overflow: return "overflow";
+				case ConditionCode.NoOverflow: return "no overflow";
 				case ConditionCode.Always: return "always";
 				case ConditionCode.Parity: return "parity";
 				case ConditionCode.NoParity: return "no parity";
