@@ -496,6 +496,16 @@ namespace Mosa.Compiler.Framework.Transform
 			return a >> (int)b;
 		}
 
+		protected static uint ArithmeticShiftRight32(uint a, int b)
+		{
+			return (uint)(((int)a) >> (int)b);
+		}
+
+		protected static ulong ArithmeticShiftRight64(ulong a, long b)
+		{
+			return (ulong)(((long)a) >> (int)b);
+		}
+
 		protected static ulong Sqrt32(uint num)
 		{
 			if (0 == num)
@@ -855,6 +865,24 @@ namespace Mosa.Compiler.Framework.Transform
 				case ConditionCode.UnsignedLess: return context.Operand1.ConstantUnsigned32 < context.Operand2.ConstantUnsigned32;
 				case ConditionCode.UnsignedLessOrEqual: return context.Operand1.ConstantUnsigned32 <= context.Operand2.ConstantUnsigned32;
 				default: throw new InvalidOperationException();
+			}
+		}
+
+		protected static bool IsNormal(ConditionCode conditionCode)
+		{
+			switch (conditionCode)
+			{
+				case ConditionCode.Equal: return true;
+				case ConditionCode.NotEqual: return true;
+				case ConditionCode.GreaterOrEqual: return true;
+				case ConditionCode.Greater: return true;
+				case ConditionCode.LessOrEqual: return true;
+				case ConditionCode.Less: return true;
+				case ConditionCode.UnsignedGreater: return true;
+				case ConditionCode.UnsignedGreaterOrEqual: return true;
+				case ConditionCode.UnsignedLess: return true;
+				case ConditionCode.UnsignedLessOrEqual: return true;
+				default: return false;
 			}
 		}
 	}

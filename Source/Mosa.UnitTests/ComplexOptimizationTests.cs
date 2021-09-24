@@ -32,7 +32,7 @@ namespace Mosa.UnitTests
 		}
 
 		[MosaUnitTest(1, true)]
-		public static int OptimizationTest14(int j, bool b1)
+		public static int OptimizationTest15(int j, bool b1)
 		{
 			int i = j;
 			int a = 4 * i;
