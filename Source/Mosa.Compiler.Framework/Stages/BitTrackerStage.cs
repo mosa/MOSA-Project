@@ -1132,8 +1132,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Value And32(InstructionNode node)
 		{
-			var value1 = GetValue64(node.Operand1);
-			var value2 = GetValue64(node.Operand2);
+			var value1 = GetValue32(node.Operand1);
+			var value2 = GetValue32(node.Operand2);
 
 			if (value1.AreLower32BitsKnown && (value1.BitsSet & ulong.MaxValue) == 0)
 			{
@@ -1184,7 +1184,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Value Not32(InstructionNode node)
 		{
-			var value1 = GetValue64(node.Operand1);
+			var value1 = GetValue32(node.Operand1);
 
 			if (value1.AreLower32BitsKnown)
 			{
@@ -1224,8 +1224,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Value Or32(InstructionNode node)
 		{
-			var value1 = GetValue64(node.Operand1);
-			var value2 = GetValue64(node.Operand2);
+			var value1 = GetValue32(node.Operand1);
+			var value2 = GetValue32(node.Operand2);
 
 			if (value1.AreLower32BitsKnown && value1.BitsSet32 == uint.MaxValue)
 			{
@@ -1276,8 +1276,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Value Xor32(InstructionNode node)
 		{
-			var value1 = GetValue64(node.Operand1);
-			var value2 = GetValue64(node.Operand2);
+			var value1 = GetValue32(node.Operand1);
+			var value2 = GetValue32(node.Operand2);
 
 			ulong bitsKnown = value1.BitsKnown & value2.BitsKnown & uint.MaxValue;
 
@@ -1335,8 +1335,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Value MulSigned32(InstructionNode node)
 		{
-			var value1 = GetValue64(node.Operand1);
-			var value2 = GetValue64(node.Operand2);
+			var value1 = GetValue32(node.Operand1);
+			var value2 = GetValue32(node.Operand2);
 
 			if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
 			{
@@ -1451,8 +1451,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Value MulUnsigned32(InstructionNode node)
 		{
-			var value1 = GetValue64(node.Operand1);
-			var value2 = GetValue64(node.Operand2);
+			var value1 = GetValue32(node.Operand1);
+			var value2 = GetValue32(node.Operand2);
 
 			if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
 			{
@@ -1583,8 +1583,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Value RemUnsigned32(InstructionNode node)
 		{
-			var value1 = GetValue64(node.Operand1);
-			var value2 = GetValue64(node.Operand2);
+			var value1 = GetValue32(node.Operand1);
+			var value2 = GetValue32(node.Operand2);
 
 			if (value2.AreLower32BitsKnown && value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
 			{
@@ -1620,8 +1620,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Value RemUnsigned64(InstructionNode node)
 		{
-			var value1 = GetValue64(node.Operand1);
-			var value2 = GetValue64(node.Operand2);
+			var value1 = GetValue32(node.Operand1);
+			var value2 = GetValue32(node.Operand2);
 
 			if (value2.AreAll64BitsKnown && value2.AreAll64BitsKnown && value2.BitsSet32 == 0)
 			{
@@ -1657,8 +1657,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Value ShiftLeft32(InstructionNode node)
 		{
-			var value1 = GetValue64(node.Operand1);
-			var value2 = GetValue64(node.Operand2);
+			var value1 = GetValue32(node.Operand1);
+			var value2 = GetValue32(node.Operand2);
 
 			var shift = (int)(value2.BitsSet & 0b11111);
 
@@ -1750,8 +1750,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Value ShiftRight32(InstructionNode node)
 		{
-			var value1 = GetValue64(node.Operand1);
-			var value2 = GetValue64(node.Operand2);
+			var value1 = GetValue32(node.Operand1);
+			var value2 = GetValue32(node.Operand2);
 
 			var shift = (int)(value2.BitsSet & 0b11111);
 
@@ -1871,7 +1871,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Value SignExtend16x32(InstructionNode node)
 		{
-			var value1 = GetValue64(node.Operand1);
+			var value1 = GetValue32(node.Operand1);
 
 			if (value1.AreLower16BitsKnown)
 			{
@@ -2066,7 +2066,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Value SignExtend8x32(InstructionNode node)
 		{
-			var value1 = GetValue64(node.Operand1);
+			var value1 = GetValue32(node.Operand1);
 
 			if (value1.AreLower8BitsKnown)
 			{
@@ -2196,8 +2196,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Value To64(InstructionNode node)
 		{
-			var value1 = GetValue64(node.Operand1);
-			var value2 = GetValue64(node.Operand2);
+			var value1 = GetValue32(node.Operand1);
+			var value2 = GetValue32(node.Operand2);
 
 			if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
 			{
@@ -2232,7 +2232,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Value ZeroExtend16x32(InstructionNode node)
 		{
-			var value1 = GetValue64(node.Operand1);
+			var value1 = GetValue32(node.Operand1);
 
 			if (value1.AreLower16BitsKnown)
 			{
@@ -2257,7 +2257,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Value ZeroExtend32x64(InstructionNode node)
 		{
-			var value1 = GetValue64(node.Operand1);
+			var value1 = GetValue32(node.Operand1);
 
 			if (value1.AreLower32BitsKnown)
 			{
@@ -2277,7 +2277,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Value ZeroExtend8x32(InstructionNode node)
 		{
-			var value1 = GetValue64(node.Operand1);
+			var value1 = GetValue32(node.Operand1);
 
 			if (value1.AreLower8BitsKnown)
 			{
