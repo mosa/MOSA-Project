@@ -275,8 +275,9 @@ namespace Mosa.Compiler.Framework.Stages
 		private void AddOverflow(InstructionNode node)
 		{
 			var overflowResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
-			node.ReplaceInstruction(Select(node.Result, IRInstruction.AddOverflowOut32, IRInstruction.AddOverflowOut64));
-			node.SetResult(1, overflowResult);
+
+			node.SetInstruction2(Select(node.Result, IRInstruction.AddOverflowOut32, IRInstruction.AddOverflowOut64), node.Result, overflowResult, node.Operand1, node.Operand2);
+
 			AddOverflowCheck(node, overflowResult);
 		}
 
@@ -287,8 +288,9 @@ namespace Mosa.Compiler.Framework.Stages
 		private void AddOverflowUnsigned(InstructionNode node)
 		{
 			var carryResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
-			node.ReplaceInstruction(Select(node.Result, IRInstruction.AddCarryOut32, IRInstruction.AddCarryOut64));
-			node.SetResult(1, carryResult);
+
+			node.SetInstruction2(Select(node.Result, IRInstruction.AddCarryOut32, IRInstruction.AddCarryOut64), node.Result, carryResult, node.Operand1, node.Operand2);
+
 			AddOverflowCheck(node, carryResult);
 		}
 
@@ -1605,8 +1607,9 @@ namespace Mosa.Compiler.Framework.Stages
 		private void SubOverflow(InstructionNode node)
 		{
 			var overflowResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
-			node.ReplaceInstruction(Select(node.Result, IRInstruction.SubOverflowOut32, IRInstruction.SubOverflowOut64));
-			node.SetResult(1, overflowResult);
+
+			node.SetInstruction2(Select(node.Result, IRInstruction.SubOverflowOut32, IRInstruction.SubOverflowOut64), node.Result, overflowResult, node.Operand1, node.Operand2);
+
 			AddOverflowCheck(node, overflowResult);
 		}
 
@@ -1617,8 +1620,9 @@ namespace Mosa.Compiler.Framework.Stages
 		private void SubOverflowUnsigned(InstructionNode node)
 		{
 			var carryResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
-			node.ReplaceInstruction(Select(node.Result, IRInstruction.SubCarryOut32, IRInstruction.SubCarryOut64));
-			node.SetResult(1, carryResult);
+
+			node.SetInstruction2(Select(node.Result, IRInstruction.SubCarryOut32, IRInstruction.SubCarryOut64), node.Result, carryResult, node.Operand1, node.Operand2);
+
 			AddOverflowCheck(node, carryResult);
 		}
 
@@ -2040,7 +2044,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var nextContext = Split(after);
 
 			// If result is equal to true then jump to exception block, otherwise jump to next block
-			after.SetInstruction(BranchInstruction, ConditionCode.Equal, null, resultOperand, CreateConstant(TypeSystem.BuiltIn.Boolean, 1), exceptionContext.Block);
+			after.SetInstruction(BranchInstruction, ConditionCode.NotEqual, null, resultOperand, ConstantZero, exceptionContext.Block);
 			after.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
 
 			// Build exception block which is just a call to throw exception
