@@ -24,10 +24,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private BitArray ParamReadOnly;
 
-		private Counter InstructionRemovalCount = new Counter("ValueNumberingStage.IRInstructionRemoved");
+		private readonly Counter InstructionRemovalCount = new Counter("ValueNumberingStage.IRInstructionRemoved");
 		private readonly Counter ConstantFoldingAndStrengthReductionCount = new Counter("ValueNumberingStage.ConstantFoldingAndStrengthReduction");
-		private Counter SubexpressionEliminationCount = new Counter("ValueNumberingStage.SubexpressionElimination");
-		private Counter ParameterLoadEliminationCount = new Counter("ValueNumberingStage.ParameterLoadElimination");
+		private readonly Counter SubexpressionEliminationCount = new Counter("ValueNumberingStage.SubexpressionElimination");
+		private readonly Counter ParameterLoadEliminationCount = new Counter("ValueNumberingStage.ParameterLoadElimination");
 		private readonly Counter DeadCodeEliminationCount = new Counter("ValueNumberingStage.DeadCodeElimination");
 		private readonly Counter StrengthReductionAndSimplificationCount = new Counter("ValueNumberingStage.StrengthReductionAndSimplification");
 
@@ -247,7 +247,7 @@ namespace Mosa.Compiler.Framework.Stages
 						trace?.Log($"Removed Unless PHI: {node}");
 
 						node.SetNop();
-						InstructionRemovalCount++;
+						InstructionRemovalCount.Increment();
 						continue;
 					}
 
@@ -262,7 +262,7 @@ namespace Mosa.Compiler.Framework.Stages
 						trace?.Log($"Removed Redundant PHI: {node}");
 
 						node.SetNop();
-						InstructionRemovalCount++;
+						InstructionRemovalCount.Increment();
 						continue;
 					}
 
@@ -298,7 +298,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					SetValueNumber(node.Result, node.Operand1);
 					node.SetNop();
-					InstructionRemovalCount++;
+					InstructionRemovalCount.Increment();
 					continue;
 				}
 
@@ -330,11 +330,11 @@ namespace Mosa.Compiler.Framework.Stages
 					SetValueNumber(node.Result, w);
 
 					if (node.Instruction.IsParameterLoad)
-						ParameterLoadEliminationCount++;
+						ParameterLoadEliminationCount.Increment();
 
 					node.SetNop();
-					InstructionRemovalCount++;
-					SubexpressionEliminationCount++;
+					InstructionRemovalCount.Increment();
+					SubexpressionEliminationCount.Increment();
 					continue;
 				}
 				else

@@ -97,8 +97,6 @@ namespace Mosa.Compiler.Framework.Stages
 			public ushort BitsClear16 { get { return (ushort)BitsClear; } }
 			public ushort BitsSet16 { get { return (ushort)BitsSet; } }
 
-			//public ulong BitsKnown32 { get { return (uint)BitsKnown; } }
-
 			public override string ToString()
 			{
 				if (!IsEvaluated)
