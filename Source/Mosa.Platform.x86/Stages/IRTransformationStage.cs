@@ -465,9 +465,33 @@ namespace Mosa.Platform.x86.Stages
 			var operand2 = context.Operand2;
 			var operand3 = context.Operand3;
 
-			context.SetInstruction(X86.Cmp32, null, operand1, ConstantZero32);
-			context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, result, result, operand2);    // true
-			context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, result, operand3);       // false
+			if (operand2.IsConstant && operand3.IsConstant)
+			{
+				var v1 = AllocateVirtualRegister(result.Type);
+
+				context.SetInstruction(X86.Cmp32, null, operand1, ConstantZero32);
+				context.AppendInstruction(X86.Mov32, result, operand2);										// true
+				context.AppendInstruction(X86.Mov32, v1, operand3);											// true
+				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, result, v1);				// false
+			}
+			else if (operand2.IsConstant && !operand3.IsConstant)
+			{
+				context.SetInstruction(X86.Cmp32, null, operand1, ConstantZero32);
+				context.AppendInstruction(X86.Mov32,  result,  operand2);									// true
+				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, result, operand3);		// false
+			}
+			else if (!operand2.IsConstant && operand3.IsConstant)
+			{
+				context.SetInstruction(X86.Cmp32, null, operand1, ConstantZero32);
+				context.AppendInstruction(X86.Mov32, result, operand3);										// true
+				context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, result, result, operand2);	// false
+			}
+			else if (!operand2.IsConstant && !operand3.IsConstant)
+			{
+				context.SetInstruction(X86.Cmp32, null, operand1, ConstantZero32);
+				context.AppendInstruction(X86.Mov32, result, operand2);										// true
+				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, result, operand3);		// false
+			}
 		}
 
 		private void Jmp(Context context)

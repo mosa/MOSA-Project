@@ -570,6 +570,11 @@ namespace Mosa.Compiler.Framework.Analysis
 			{
 				Switch(node);
 			}
+			else if (instruction == IRInstruction.IfThenElse32
+				|| instruction == IRInstruction.IfThenElse64)
+			{
+				IfThenElse(node);
+			}
 			else if (instruction == IRInstruction.FinallyStart)
 			{
 				FinallyStart(node);
@@ -1111,6 +1116,48 @@ namespace Mosa.Compiler.Framework.Analysis
 		{
 			// no optimization attempted
 			Branch(node);
+		}
+
+		private void IfThenElse(InstructionNode node)
+		{
+			MainTrace?.Log(node.ToString());
+
+			var result = GetVariableState(node.Result);
+			var operand1 = GetVariableState(node.Operand2);
+			var operand2 = GetVariableState(node.Operand3);
+
+			if (result.IsOverDefined)
+				return;
+
+			if (operand1.IsOverDefined || operand1.IsOverDefined)
+			{
+				UpdateToOverDefined(result);
+			}
+			else if (operand1.HasOnlyConstants && operand2.HasOnlyConstants)
+			{
+				foreach (var c in operand1.Constants)
+				{
+					UpdateToConstant(result, c);
+
+					if (result.IsOverDefined)
+						return;
+				}
+				foreach (var c in operand2.Constants)
+				{
+					UpdateToConstant(result, c);
+
+					if (result.IsOverDefined)
+						return;
+				}
+			}
+			else if (operand1.IsUnknown || operand2.IsUnknown)
+			{
+				Debug.Assert(result.IsUnknown);
+			}
+			else
+			{
+				UpdateToOverDefined(result);
+			}
 		}
 
 		private void Phi(InstructionNode node)
