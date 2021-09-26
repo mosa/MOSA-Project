@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#region Internal Value Class
 
-		private struct /*sealed class*/ Value
+		private sealed class Value
 		{
 			public static Value Indeterminate = new Value() { AreRangeValuesDeterminate = false, BitsSet = 0, BitsClear = 0, };
 
@@ -43,9 +43,9 @@ namespace Mosa.Compiler.Framework.Stages
 			public ulong MinValue;
 			public bool AreRangeValuesDeterminate;
 
-			//public Value()
-			//{
-			//}
+			public Value()
+			{
+			}
 
 			public Value(ulong value, bool is32Bit)
 			{
@@ -339,6 +339,12 @@ namespace Mosa.Compiler.Framework.Stages
 					valueTrace?.Log($"Definition: {virtualRegister.Definitions[0]}");
 				}
 
+				if (value == null)
+				{
+					valueTrace?.Log($"*** INDETERMINATE (NULL)");
+					continue;
+				}
+
 				if (value.IsIndeterminate)
 				{
 					valueTrace?.Log($"*** INDETERMINATE");
@@ -365,6 +371,10 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			int index = virtualRegister.Index;
 
+			// already evaluated
+			if (Values[index] != null)
+				return false;
+
 			if (virtualRegister.IsFloatingPoint || virtualRegister.Definitions.Count != 1 || virtualRegister.Definitions.Count == 0)
 			{
 				if (virtualRegister.IsInteger)
@@ -389,6 +399,9 @@ namespace Mosa.Compiler.Framework.Stages
 					if (operand.IsVirtualRegister)
 					{
 						var operandValue = Values[operand.Index];
+
+						if (operandValue != null)
+							continue;
 
 						return false; // can not evaluate yet
 					}
@@ -484,6 +497,14 @@ namespace Mosa.Compiler.Framework.Stages
 				// cycle detected - exit
 				if (startedAt == evaluated)
 				{
+					for (int i = 0; i < count; i++)
+					{
+						if (Values[i] == null)
+						{
+							Values[i] = MethodCompiler.VirtualRegisters[i].IsInteger64 ? Value.Any64 : Value.Any32;
+						}
+					}
+
 					return;
 				}
 			}
