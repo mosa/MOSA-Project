@@ -26,16 +26,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private sealed class Value
 		{
-			public static Value Indeterminate = new Value() { AreRangeValuesDeterminate = false, BitsSet = 0, BitsClear = 0, };
+			public static readonly Value Indeterminate = new Value() { AreRangeValuesDeterminate = false, BitsSet = 0, BitsClear = 0, MaxValue = ulong.MaxValue, MinValue = 0 };
 
-			public static Value Any32 = new Value() { MaxValue = uint.MaxValue, MinValue = 0, AreRangeValuesDeterminate = true, BitsSet = 0, BitsClear = 0 };
-			public static Value Any64 = new Value() { MaxValue = ulong.MaxValue, MinValue = 0, AreRangeValuesDeterminate = true, BitsSet = 0, BitsClear = 0 };
+			public static readonly Value Any32 = new Value() { MaxValue = uint.MaxValue, MinValue = 0, AreRangeValuesDeterminate = true, BitsSet = 0, BitsClear = 0, Is32Bit = true };
+			public static readonly Value Any64 = new Value() { MaxValue = ulong.MaxValue, MinValue = 0, AreRangeValuesDeterminate = true, BitsSet = 0, BitsClear = 0 };
 
-			public static Value Zero32 = new Value((uint)0, true);
-			public static Value Zero64 = new Value((ulong)0, false);
+			public static readonly Value Zero32 = new Value((uint)0, true);
+			public static readonly Value Zero64 = new Value((ulong)0, false);
 
-			public static Value One32 = new Value((uint)1, true);
-			public static Value One64 = new Value((ulong)1, false);
+			public static readonly Value One32 = new Value((uint)1, true);
+			public static readonly Value One64 = new Value((ulong)1, false);
 
 			public ulong BitsClear;
 			public ulong BitsSet;
@@ -133,6 +133,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private delegate (Value, Value) NodeVisitationDelegate2(InstructionNode node);
 
 		private readonly HashSet<BaseInstruction> IntegerLoads = new HashSet<BaseInstruction>();
+		private readonly HashSet<BaseInstruction> AnyValue = new HashSet<BaseInstruction>();
 
 		protected override void Finish()
 		{
@@ -280,6 +281,12 @@ namespace Mosa.Compiler.Framework.Stages
 			IntegerLoads.Add(IRInstruction.Load64);
 			IntegerLoads.Add(IRInstruction.LoadParam32);
 			IntegerLoads.Add(IRInstruction.LoadParam64);
+
+			AnyValue.Add(IRInstruction.CallStatic);
+			AnyValue.Add(IRInstruction.CallDirect);
+			AnyValue.Add(IRInstruction.Call);
+			AnyValue.Add(IRInstruction.CallInterface);
+			AnyValue.Add(IRInstruction.CallVirtual);
 		}
 
 		private void Register(BaseInstruction instruction, NodeVisitationDelegate method)
@@ -375,7 +382,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (Values[index] != null)
 				return false;
 
-			if (virtualRegister.IsFloatingPoint || virtualRegister.Definitions.Count != 1 || virtualRegister.Definitions.Count == 0)
+			if (virtualRegister.IsFloatingPoint || virtualRegister.Definitions.Count != 1)
 			{
 				if (virtualRegister.IsInteger)
 				{
@@ -389,9 +396,17 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var node = virtualRegister.Definitions[0];
 
-			var integerLoad = node.Result.IsInteger && IntegerLoads.Contains(node.Instruction);
+			if (!node.Result.IsInteger)
+			{
+				Values[index] = Value.Indeterminate;
+				return true;
+			}
 
-			if (!integerLoad)
+			var anyLoad = AnyValue.Contains(node.Instruction);
+
+			var integerLoad = !anyLoad && IntegerLoads.Contains(node.Instruction);
+
+			if (!integerLoad && !anyLoad)
 			{
 				// check dependencies
 				foreach (var operand in node.Operands)
@@ -436,39 +451,10 @@ namespace Mosa.Compiler.Framework.Stages
 			else if (node.ResultCount == 2)
 			{
 				// TODO: This is a little more complicated
-
-				//var method2 = visitation2[node.Instruction.ID];
-
-				//if (method2 != null)
-				//{
-				//	var values = method2.Invoke(node);
-				//	var value1 = values.Item1;
-				//	var value2 = values.Item1;
-
-				//Values[index] = value1;
-				//Values[index] = value2;
-
-				//if (!value1.IsIndeterminate)
-				//{
-				//	UpdateInstruction(node.Result, value1);
-				//}
-
-				//if (!value2.IsIndeterminate)
-				//{
-				//	UpdateInstruction(node.Result2, value2);
-				//}
-
-				//return true;
-				//}
 			}
 
-			if (virtualRegister.IsInteger)
-			{
-				Values[index] = virtualRegister.IsInteger64 ? Value.Any64 : Value.Any32;
-				return true;
-			}
+			Values[index] = virtualRegister.IsInteger64 ? Value.Any64 : Value.Any32;
 
-			Values[index] = Value.Indeterminate;
 			return true;
 		}
 
@@ -497,11 +483,11 @@ namespace Mosa.Compiler.Framework.Stages
 				// cycle detected - exit
 				if (startedAt == evaluated)
 				{
-					for (int i = 0; i < count; i++)
+					for (int index = 0; index < count; index++)
 					{
-						if (Values[i] == null)
+						if (Values[index] == null)
 						{
-							Values[i] = MethodCompiler.VirtualRegisters[i].IsInteger64 ? Value.Any64 : Value.Any32;
+							Values[index] = MethodCompiler.VirtualRegisters[index].IsInteger64 ? Value.Any64 : Value.Any32;
 						}
 					}
 
@@ -1531,44 +1517,69 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Debug.Assert(node.OperandCount != 0);
 
-			var value = GetValue32(node.Operand1);
+			var value1 = GetValue32(node.Operand1);
+
+			ulong max = value1.MaxValue;
+			ulong min = value1.MinValue;
+			bool range = value1.AreRangeValuesIndeterminate;
+			ulong bitsset = value1.BitsSet;
+			ulong bitsclear = value1.BitsClear;
 
 			for (int i = 1; i < node.OperandCount; i++)
 			{
 				var operand = node.GetOperand(i);
-				var value2 = operand.IsConstant ? new Value(operand.ConstantUnsigned32, false) : Values[operand.Index];
+				var value = GetValue32(operand);
 
-				value.MaxValue = Math.Max(value.MaxValue, value2.MaxValue);
-				value.MinValue = Math.Min(value.MinValue, value2.MinValue);
-				value.AreRangeValuesDeterminate = value.AreRangeValuesDeterminate && value2.AreRangeValuesDeterminate;
-				value.BitsSet &= value2.BitsSet;
-				value.BitsClear &= value2.BitsClear;
+				max = Math.Max(max, value.MaxValue);
+				min = Math.Min(min, value.MinValue);
+				range = range && value.AreRangeValuesDeterminate;
+				bitsset &= value.BitsSet;
+				bitsclear &= value.BitsClear;
 			}
 
-			value.Is32Bit = true;
-
-			return value;
+			return new Value()
+			{
+				MaxValue = max,
+				MinValue = min,
+				AreRangeValuesDeterminate = range,
+				BitsSet = bitsset,
+				BitsClear = bitsclear,
+				Is32Bit = true,
+			};
 		}
 
 		private Value Phi64(InstructionNode node)
 		{
 			Debug.Assert(node.OperandCount != 0);
 
-			var value = GetValue64(node.Operand1);
+			var value1 = GetValue64(node.Operand1);
+
+			ulong max = value1.MaxValue;
+			ulong min = value1.MaxValue;
+			bool range = value1.AreRangeValuesIndeterminate;
+			ulong bitsset = value1.BitsSet;
+			ulong bitsclear = value1.BitsClear;
 
 			for (int i = 1; i < node.OperandCount; i++)
 			{
 				var operand = node.GetOperand(i);
-				var value2 = operand.IsConstant ? new Value(operand.ConstantUnsigned64, false) : Values[operand.Index];
+				var value = GetValue64(operand);
 
-				value.MaxValue = Math.Max(value.MaxValue, value2.MaxValue);
-				value.MinValue = Math.Min(value.MinValue, value2.MinValue);
-				value.AreRangeValuesDeterminate = value.AreRangeValuesDeterminate && value2.AreRangeValuesDeterminate;
-				value.BitsSet &= value2.BitsSet;
-				value.BitsClear &= value2.BitsClear;
+				max = Math.Max(max, value.MaxValue);
+				min = Math.Min(min, value.MinValue);
+				range = range && value.AreRangeValuesDeterminate;
+				bitsset &= value.BitsSet;
+				bitsclear &= value.BitsClear;
 			}
 
-			return value;
+			return new Value()
+			{
+				MaxValue = max,
+				MinValue = min,
+				AreRangeValuesDeterminate = range,
+				BitsSet = bitsset,
+				BitsClear = bitsclear,
+			};
 		}
 
 		private Value RemUnsigned32(InstructionNode node)
