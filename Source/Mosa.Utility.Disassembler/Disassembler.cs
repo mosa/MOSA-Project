@@ -25,7 +25,7 @@ namespace Mosa.Utility.Disassembler
 			var services = new ServiceContainer();
 			var options = new Dictionary<string, object>();
 
-			switch (platform.ToLower())
+			switch (platform.ToLowerInvariant())
 			{
 				case "armv8a32": arch = new Arm32Architecture(services, "arm32", options); break;
 				case "x86": arch = new X86ArchitectureFlat32(services, "x86-protected-32", options); break;

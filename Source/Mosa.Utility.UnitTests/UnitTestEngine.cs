@@ -394,7 +394,7 @@ namespace Mosa.Utility.UnitTests
 		{
 			DebugServerEngine.Stream = null;
 
-			var serial = Settings.GetValue("Emulator.Serial", string.Empty).ToLower();
+			var serial = Settings.GetValue("Emulator.Serial", string.Empty).ToLowerInvariant();
 
 			switch (serial)
 			{

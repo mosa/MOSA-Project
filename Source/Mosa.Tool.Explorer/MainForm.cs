@@ -1100,11 +1100,11 @@ namespace Mosa.Tool.Explorer
 
 			if (platform != null)
 			{
-				if (platform.ToLower() == "x86")
+				if (platform.ToLowerInvariant() == "x86")
 					cbPlatform.SelectedIndex = 0;
-				else if (platform.ToLower() == "x64")
+				else if (platform.ToLowerInvariant() == "x64")
 					cbPlatform.SelectedIndex = 1;
-				else if (platform.ToLower() == "armv8a32")
+				else if (platform.ToLowerInvariant() == "armv8a32")
 					cbPlatform.SelectedIndex = 2;
 			}
 		}

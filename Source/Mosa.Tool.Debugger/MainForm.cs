@@ -353,7 +353,7 @@ namespace Mosa.Tool.Debugger
 
 		public static ulong ParseHexAddress(string input)
 		{
-			string nbr = input.ToLower().Trim().Trim(',').Trim('[').Trim('[');
+			string nbr = input.ToLowerInvariant().Trim().Trim(',').Trim('[').Trim('[');
 
 			int where = nbr.IndexOf('x');
 
@@ -633,7 +633,7 @@ namespace Mosa.Tool.Debugger
 
 		private static string GetFormat(string fileName)
 		{
-			switch (Path.GetExtension(fileName).ToLower())
+			switch (Path.GetExtension(fileName).ToLowerInvariant())
 			{
 				case ".bin": return "BIN";
 				case ".img": return "IMG";

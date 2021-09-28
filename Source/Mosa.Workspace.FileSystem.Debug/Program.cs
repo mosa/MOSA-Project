@@ -114,7 +114,7 @@ namespace Mosa.Workspace.FileSystem.Debug
 				if (includeFile.Hidden) fileAttributes |= FatFileAttributes.Hidden;
 				if (includeFile.System) fileAttributes |= FatFileAttributes.System;
 
-				string newname = (Path.GetFileNameWithoutExtension(includeFile.Filename).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Filename).PadRight(4).Substring(1, 3)).ToUpper();
+				string newname = (Path.GetFileNameWithoutExtension(includeFile.Filename).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Filename).PadRight(4).Substring(1, 3)).ToUpperInvariant();
 				var location = fat.CreateFile(newname, fileAttributes);
 
 				if (!location.IsValid)
