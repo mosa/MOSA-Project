@@ -476,7 +476,7 @@ namespace Mosa.Tool.Launcher
 			tbVBEDepth.Text = Settings.GetValue("Multiboot.Depth", "32");
 			tbOSName.Text = Settings.GetValue("OS.Name", "MOSA");
 
-			switch (Settings.GetValue("Image.Format", string.Empty).ToUpper())
+			switch (Settings.GetValue("Image.Format", string.Empty).ToUpperInvariant())
 			{
 				case "IMG": cbImageFormat.SelectedIndex = 0; break;
 				case "ISO": cbImageFormat.SelectedIndex = 1; break;
@@ -486,7 +486,7 @@ namespace Mosa.Tool.Launcher
 				default: break;
 			}
 
-			switch (Settings.GetValue("Emulator", string.Empty).ToLower())
+			switch (Settings.GetValue("Emulator", string.Empty).ToLowerInvariant())
 			{
 				case "qemu": cbEmulator.SelectedIndex = 0; break;
 				case "bochs": cbEmulator.SelectedIndex = 1; break;
@@ -494,7 +494,7 @@ namespace Mosa.Tool.Launcher
 				default: cbEmulator.SelectedIndex = -1; break;
 			}
 
-			switch (Settings.GetValue("Image.FileSystem", string.Empty).ToLower())
+			switch (Settings.GetValue("Image.FileSystem", string.Empty).ToLowerInvariant())
 			{
 				case "fat12": cbBootFileSystem.SelectedIndex = 0; break;
 				case "fat16": cbBootFileSystem.SelectedIndex = 1; break;
@@ -502,7 +502,7 @@ namespace Mosa.Tool.Launcher
 				default: break;
 			}
 
-			switch (Settings.GetValue("Image.BootLoader", string.Empty).ToLower())
+			switch (Settings.GetValue("Image.BootLoader", string.Empty).ToLowerInvariant())
 			{
 				case "syslinux3.72": cbBootLoader.SelectedIndex = 0; break;
 				case "syslinux6.03": cbBootLoader.SelectedIndex = 1; break;
@@ -511,7 +511,7 @@ namespace Mosa.Tool.Launcher
 				default: break;
 			}
 
-			switch (Settings.GetValue("Compiler.Platform", string.Empty).ToLower())
+			switch (Settings.GetValue("Compiler.Platform", string.Empty).ToLowerInvariant())
 			{
 				case "x86": cbPlatform.SelectedIndex = 0; break;
 				case "x64": cbPlatform.SelectedIndex = 1; break;
@@ -519,7 +519,7 @@ namespace Mosa.Tool.Launcher
 				default: cbPlatform.SelectedIndex = 0; break;
 			}
 
-			switch (Settings.GetValue("Emulator.Serial", string.Empty).ToLower())
+			switch (Settings.GetValue("Emulator.Serial", string.Empty).ToLowerInvariant())
 			{
 				case "none": cbDebugConnectionOption.SelectedIndex = 0; break;
 				case "pipe": cbDebugConnectionOption.SelectedIndex = 1; break;

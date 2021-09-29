@@ -89,7 +89,7 @@ namespace Mosa.Tool.Debugger.Views
 					Address = BasePlatform.ToHex(at, NativeIntegerSize),
 					HexValue = BasePlatform.ToHex(value, NativeIntegerSize),
 					Value = value,
-					Offset = Platform.StackFrame.Name.ToUpper() +
+					Offset = Platform.StackFrame.Name.ToUpperInvariant() +
 						(offset >= 0
 						? "-" + BasePlatform.ToHex(offset, 1)
 						: "+" + BasePlatform.ToHex(-(long)offset, 1)),

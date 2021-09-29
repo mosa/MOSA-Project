@@ -8,7 +8,7 @@ namespace Mosa.Compiler.Common
 	{
 		public static ulong ParseHexOrInteger(this string value)
 		{
-			string nbr = value.ToUpper().Trim();
+			string nbr = value.ToUpperInvariant().Trim();
 			int digits = 10;
 			int where = nbr.IndexOf('X');
 
@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Common
 
 		public static ulong ParseHex(this string value)
 		{
-			string nbr = value.ToUpper().Trim();
+			string nbr = value.ToUpperInvariant().Trim();
 			int where = nbr.IndexOf('X');
 
 			if (where >= 0)

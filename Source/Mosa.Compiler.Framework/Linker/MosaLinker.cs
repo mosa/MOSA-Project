@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 			LinkerSettings = new LinkerSettings(compiler.CompilerSettings.Settings);
 
-			LinkerFormatType = LinkerSettings.LinkerFormat.ToLower() == "elf64" ? LinkerFormatType.Elf64 : LinkerFormatType.Elf32;
+			LinkerFormatType = LinkerSettings.LinkerFormat.ToLowerInvariant() == "elf64" ? LinkerFormatType.Elf64 : LinkerFormatType.Elf32;
 
 			ElfLinker = new ElfLinker(this, LinkerFormatType, compiler.Architecture.ElfMachineType);
 

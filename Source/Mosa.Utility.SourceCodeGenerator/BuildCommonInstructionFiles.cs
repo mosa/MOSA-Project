@@ -10,7 +10,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 	{
 		protected virtual string Platform { get; }
 
-		protected string NormalizedPlatform { get { return Platform.Substring(0, 1).ToUpper() + Platform.Substring(1); } }
+		protected string NormalizedPlatform { get { return Platform.Substring(0, 1).ToUpperInvariant() + Platform.Substring(1); } }
 
 		private readonly Dictionary<string, string> EncodingTemplates = new Dictionary<string, string>();
 
@@ -87,11 +87,11 @@ namespace Mosa.Utility.SourceCodeGenerator
 			Lines.AppendLine("\t\t{");
 			Lines.AppendLine("\t\t}");
 
-			var FlagsUsed = node.FlagsUsed == null ? string.Empty : node.FlagsUsed.ToUpper(); // tested_f
-			var FlagsSet = node.FlagsSet == null ? string.Empty : node.FlagsSet.ToUpper(); // values_f (upper=set, lower=cleared)
-			var FlagsCleared = node.FlagsCleared == null ? string.Empty : node.FlagsCleared.ToUpper(); // above
-			var FlagsModified = node.FlagsModified == null ? string.Empty : node.FlagsModified.ToUpper(); // modif_f
-			var FlagsUndefined = node.FlagsUndefined == null ? string.Empty : node.FlagsUndefined.ToUpper(); // undef_f
+			var FlagsUsed = node.FlagsUsed == null ? string.Empty : node.FlagsUsed.ToUpperInvariant(); // tested_f
+			var FlagsSet = node.FlagsSet == null ? string.Empty : node.FlagsSet.ToUpperInvariant(); // values_f (upper=set, lower=cleared)
+			var FlagsCleared = node.FlagsCleared == null ? string.Empty : node.FlagsCleared.ToUpperInvariant(); // above
+			var FlagsModified = node.FlagsModified == null ? string.Empty : node.FlagsModified.ToUpperInvariant(); // modif_f
+			var FlagsUndefined = node.FlagsUndefined == null ? string.Empty : node.FlagsUndefined.ToUpperInvariant(); // undef_f
 
 			if (node.AlternativeName != null)
 			{
@@ -547,7 +547,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 			for (int i = 0; i < parts.Length; i++)
 			{
 				var part = parts[i];
-				var normalized = part.Replace(" ", string.Empty).TrimStart('[').ToLower();
+				var normalized = part.Replace(" ", string.Empty).TrimStart('[').ToLowerInvariant();
 
 				if (string.IsNullOrWhiteSpace(normalized))
 					continue;
@@ -582,7 +582,7 @@ namespace Mosa.Utility.SourceCodeGenerator
 					string cond2 = string.Empty;
 					string cond3 = string.Empty;
 
-					switch (subpart2.ToLower())
+					switch (subpart2.ToLowerInvariant())
 					{
 						case "skip": continue;
 						case "ignore": continue;

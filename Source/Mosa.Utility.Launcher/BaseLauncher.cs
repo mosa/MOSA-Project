@@ -49,12 +49,12 @@ namespace Mosa.Utility.Launcher
 		protected void NormalizeSettings()
 		{
 			// Normalize inputs
-			LauncherSettings.ImageBootLoader = LauncherSettings.ImageBootLoader == null ? string.Empty : LauncherSettings.ImageBootLoader.ToLower();
-			LauncherSettings.ImageFormat = LauncherSettings.ImageFormat == null ? string.Empty : LauncherSettings.ImageFormat.ToLower();
-			LauncherSettings.FileSystem = LauncherSettings.FileSystem == null ? string.Empty : LauncherSettings.FileSystem.ToLower();
-			LauncherSettings.EmulatorSerial = LauncherSettings.EmulatorSerial == null ? string.Empty : LauncherSettings.EmulatorSerial.ToLower();
-			LauncherSettings.Emulator = LauncherSettings.Emulator == null ? string.Empty : LauncherSettings.Emulator.ToLower();
-			LauncherSettings.Platform = LauncherSettings.Platform.ToLower();
+			LauncherSettings.ImageBootLoader = LauncherSettings.ImageBootLoader == null ? string.Empty : LauncherSettings.ImageBootLoader.ToLowerInvariant();
+			LauncherSettings.ImageFormat = LauncherSettings.ImageFormat == null ? string.Empty : LauncherSettings.ImageFormat.ToLowerInvariant();
+			LauncherSettings.FileSystem = LauncherSettings.FileSystem == null ? string.Empty : LauncherSettings.FileSystem.ToLowerInvariant();
+			LauncherSettings.EmulatorSerial = LauncherSettings.EmulatorSerial == null ? string.Empty : LauncherSettings.EmulatorSerial.ToLowerInvariant();
+			LauncherSettings.Emulator = LauncherSettings.Emulator == null ? string.Empty : LauncherSettings.Emulator.ToLowerInvariant();
+			LauncherSettings.Platform = LauncherSettings.Platform.ToLowerInvariant();
 		}
 
 		private void SetDefaults()

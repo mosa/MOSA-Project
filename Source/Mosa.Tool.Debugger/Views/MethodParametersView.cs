@@ -129,7 +129,7 @@ namespace Mosa.Tool.Debugger.Views
 				{
 					Index = (int)parameter.Index,
 					Name = parameter.Name,
-					Offset = Platform.StackFrame.Name.ToUpper() +
+					Offset = Platform.StackFrame.Name.ToUpperInvariant() +
 						(offset >= 0
 						? "+" + BasePlatform.ToHex(offset + parameter.Offset, 1)
 						: "-" + BasePlatform.ToHex(-offset + parameter.Offset, 1)),
