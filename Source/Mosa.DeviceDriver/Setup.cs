@@ -106,13 +106,13 @@ namespace Mosa.DeviceDriver
 
 				new PCIDeviceDriverRegistryEntry()
 				{
-					Name = "VMwareSGAII",
+					Name = "VMwareSVGA2",
 					Platforms = PlatformArchitecture.X86AndX64,
 					BusType = DeviceBusType.PCI,
 					VendorID = 0x15AD,
 					DeviceID = 0x0405,
 					PCIFields = PCIField.VendorID | PCIField.DeviceID,
-					Factory = delegate { return new PCI.VMware.VMwareSVGAII(); }
+					Factory = delegate { return new PCI.VMware.VMwareSVGA2(); }
 				},
 
 				new PCIDeviceDriverRegistryEntry()

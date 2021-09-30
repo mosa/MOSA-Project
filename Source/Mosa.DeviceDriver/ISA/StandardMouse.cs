@@ -59,7 +59,7 @@ namespace Mosa.DeviceDriver.ISA
 			WriteRegister(0xF3);
 			WriteRegister(100);
 
-			// Set sample rate to 800 Hz
+			// Set sample rate to 80 Hz
 			// We're done!
 			WriteRegister(0xF3);
 			WriteRegister(80);
