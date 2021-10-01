@@ -12,6 +12,7 @@ namespace Mosa.Compiler.Common
 		public static uint GetPowerOfTwo(ulong n)
 		{
 			uint bits = 0;
+
 			while (n != 0)
 			{
 				bits++;
@@ -24,22 +25,26 @@ namespace Mosa.Compiler.Common
 		public static int GetHighestSetBit(ulong value)
 		{
 			int r = 0;
+
 			while (value != 0)
 			{
 				value >>= 1;
 				r++;
 			}
+
 			return r;
 		}
 
 		public static int GetLowestSetBit(ulong value)
 		{
 			int r = 0;
+
 			while (value != 0)
 			{
 				value <<= 1;
 				r++;
 			}
+
 			return r;
 		}
 
@@ -51,6 +56,32 @@ namespace Mosa.Compiler.Common
 				return 0;
 
 			return ~((1uL << (highest + 1)) - 1uL);
+		}
+
+		public static int CountConsecutiveLowestSetBits(ulong value)
+		{
+			int r = 0;
+
+			while ((value & 1) != 0)
+			{
+				value >>= 1;
+				r++;
+			}
+
+			return r;
+		}
+
+		public static int CountConsecutiveHighestSetBits(ulong value)
+		{
+			int r = 0;
+
+			while ((value & (1u << 63)) != 0)
+			{
+				value <<= 1;
+				r++;
+			}
+
+			return r;
 		}
 	}
 }
