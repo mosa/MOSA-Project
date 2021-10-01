@@ -474,7 +474,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 			SVGASetMode(ScreenWidth, ScreenHeight);
 
-			FIFOCmdDefineScreen(0, 0, ScreenWidth, ScreenHeight, SVGA_CONSTANTS.SVGA_SCREEN_HAS_ROOT | SVGA_CONSTANTS.SVGA_SCREEN_IS_PRIMARY);
+			//FIFOCmdDefineScreen(0, 0, ScreenWidth - 1, ScreenHeight - 1, SVGA_CONSTANTS.SVGA_SCREEN_HAS_ROOT | SVGA_CONSTANTS.SVGA_SCREEN_IS_PRIMARY);
 			UpdateScreen();
 
 			videoRamSize = SVGAGetRegister(SVGA_REGISTERS.VRamSize);
@@ -496,13 +496,14 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 			Device.Status = DeviceStatus.Online;
 
-			FIFOCmdDefineGMRFB(ScreenWidth * 4, 32, 32);
+			//FIFOCmdDefineGMRFB(ScreenWidth * 4, 32, 32);
+			//offset = SVGAGetRegister(SVGA_REGISTERS.FrameBufferOffset);
 
-			Clear(new Color(0xff, 0x00, 0x00));
+			Clear(new Color(0xff, 0xff, 0xff, 0x80));
 
-			FIFOMoveCursor(1, ScreenWidth / 2, ScreenHeight / 2);
+			//FIFOMoveCursor(1, ScreenWidth / 2, ScreenHeight / 2);
 
-			FIFOCmdBlitGMRFBToScreen(0, 0, 0, 0, ScreenWidth, ScreenHeight, 0);
+			//FIFOCmdBlitGMRFBToScreen(0, 0, 0, 0, ScreenWidth - 1, ScreenHeight - 1, 0);
 
 			UpdateScreen();
 		}
@@ -512,9 +513,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			return false;
 		}
 
-		/// <summary>
-		/// Sends the command.
-		/// </summary>
+		/// <summary>Sends the command.</summary>
 		/// <param name="command">The command.</param>
 		/// <param name="value">The value.</param>
 		protected void SVGASetRegister(uint command, uint value)
@@ -523,9 +522,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			valuePort.Write32(value);
 		}
 
-		/// <summary>
-		/// Gets the value.
-		/// </summary>
+		/// <summary>Gets the value.</summary>
 		/// <param name="command">The command.</param>
 		/// <returns></returns>
 		protected uint SVGAGetRegister(uint command)
@@ -552,6 +549,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			SVGASetRegister(SVGA_REGISTERS.Width, width);
 			SVGASetRegister(SVGA_REGISTERS.BitsPerPixel, bitsPerPixel);
 			SVGASetRegister(SVGA_REGISTERS.Enable, 1);
+			SVGASetRegister(SVGA_REGISTERS.ConfigDone, 1);
 
 			// get the frame buffer offset
 			offset = SVGAGetRegister(SVGA_REGISTERS.FrameBufferOffset);
@@ -561,10 +559,10 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 			switch (bitsPerPixel)
 			{
-				case 8: frameBuffer = new FrameBuffer8bpp(memory, width, height, offset, 1); break;
-				case 16: frameBuffer = new FrameBuffer16bpp(memory, width, height, offset, 2); break;
-				case 24: frameBuffer = new FrameBuffer24bpp(memory, width, height, offset, 3); break;
-				case 32: frameBuffer = new FrameBuffer32bpp(memory, width, height, offset, 4); break;
+				case 8: frameBuffer = new FrameBuffer8bpp(memory, width, height, offset, 1, false); break;
+				case 16: frameBuffer = new FrameBuffer16bpp(memory, width, height, offset, 2, false); break;
+				case 24: frameBuffer = new FrameBuffer24bpp(memory, width, height, offset, 3, false); break;
+				case 32: frameBuffer = new FrameBuffer32bpp(memory, width, height, offset, 4, false); break;
 				default: return false;
 			}
 

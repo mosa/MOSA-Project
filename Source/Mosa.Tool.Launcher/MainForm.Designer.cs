@@ -116,7 +116,7 @@
             this.lbmkisofsExecutable = new MetroFramework.Controls.MetroLabel();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
             this.button4 = new MetroFramework.Controls.MetroButton();
-            this.lbVMwarePlayerExecutable = new MetroFramework.Controls.MetroLabel();
+            this.lbVMwareExecutable = new MetroFramework.Controls.MetroLabel();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.button6 = new MetroFramework.Controls.MetroButton();
             this.lbBOCHSExecutable = new MetroFramework.Controls.MetroLabel();
@@ -172,10 +172,10 @@
             // 
             this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.progressBar1.Location = new System.Drawing.Point(0, 121);
-            this.progressBar1.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.progressBar1.Location = new System.Drawing.Point(0, 73);
+            this.progressBar1.Margin = new System.Windows.Forms.Padding(4);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(1100, 38);
+            this.progressBar1.Size = new System.Drawing.Size(770, 23);
             this.progressBar1.Step = 1;
             this.progressBar1.Style = MetroFramework.MetroColorStyle.Blue;
             this.progressBar1.TabIndex = 3;
@@ -193,13 +193,13 @@
             this.tbTabs.Controls.Add(this.tabOutput);
             this.tbTabs.HotTrack = true;
             this.tbTabs.ItemSize = new System.Drawing.Size(48, 18);
-            this.tbTabs.Location = new System.Drawing.Point(0, 165);
+            this.tbTabs.Location = new System.Drawing.Point(0, 99);
             this.tbTabs.Margin = new System.Windows.Forms.Padding(0);
             this.tbTabs.Multiline = true;
             this.tbTabs.Name = "tbTabs";
             this.tbTabs.Padding = new System.Drawing.Point(6, 8);
             this.tbTabs.SelectedIndex = 1;
-            this.tbTabs.Size = new System.Drawing.Size(1100, 846);
+            this.tbTabs.Size = new System.Drawing.Size(770, 508);
             this.tbTabs.Style = MetroFramework.MetroColorStyle.Blue;
             this.tbTabs.TabIndex = 22;
             this.tbTabs.UseSelectable = true;
@@ -218,24 +218,24 @@
             this.tabOptions.Controls.Add(this.groupBox1);
             this.tabOptions.HorizontalScrollbarBarColor = true;
             this.tabOptions.HorizontalScrollbarHighlightOnWheel = false;
-            this.tabOptions.HorizontalScrollbarSize = 19;
+            this.tabOptions.HorizontalScrollbarSize = 11;
             this.tabOptions.Location = new System.Drawing.Point(4, 22);
             this.tabOptions.Margin = new System.Windows.Forms.Padding(0);
             this.tabOptions.Name = "tabOptions";
-            this.tabOptions.Size = new System.Drawing.Size(1092, 820);
+            this.tabOptions.Size = new System.Drawing.Size(762, 482);
             this.tabOptions.TabIndex = 0;
             this.tabOptions.Text = "Compile Options";
             this.tabOptions.VerticalScrollbarBarColor = true;
             this.tabOptions.VerticalScrollbarHighlightOnWheel = false;
-            this.tabOptions.VerticalScrollbarSize = 17;
+            this.tabOptions.VerticalScrollbarSize = 12;
             // 
             // cbExitOnLaunch
             // 
             this.cbExitOnLaunch.AutoSize = true;
             this.cbExitOnLaunch.Checked = true;
             this.cbExitOnLaunch.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbExitOnLaunch.Location = new System.Drawing.Point(800, 654);
-            this.cbExitOnLaunch.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbExitOnLaunch.Location = new System.Drawing.Point(560, 392);
+            this.cbExitOnLaunch.Margin = new System.Windows.Forms.Padding(4);
             this.cbExitOnLaunch.Name = "cbExitOnLaunch";
             this.cbExitOnLaunch.Size = new System.Drawing.Size(101, 15);
             this.cbExitOnLaunch.Style = MetroFramework.MetroColorStyle.Blue;
@@ -246,10 +246,10 @@
             // 
             // btnCompileAndRun
             // 
-            this.btnCompileAndRun.Location = new System.Drawing.Point(753, 696);
-            this.btnCompileAndRun.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.btnCompileAndRun.Location = new System.Drawing.Point(527, 418);
+            this.btnCompileAndRun.Margin = new System.Windows.Forms.Padding(4);
             this.btnCompileAndRun.Name = "btnCompileAndRun";
-            this.btnCompileAndRun.Size = new System.Drawing.Size(280, 44);
+            this.btnCompileAndRun.Size = new System.Drawing.Size(196, 26);
             this.btnCompileAndRun.TabIndex = 39;
             this.btnCompileAndRun.Text = "Compile and Run (F5)";
             this.btnCompileAndRun.UseSelectable = true;
@@ -269,11 +269,11 @@
             this.groupBox17.Controls.Add(this.label5);
             this.groupBox17.Controls.Add(this.cbPlatform);
             this.groupBox17.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBox17.Location = new System.Drawing.Point(713, 235);
-            this.groupBox17.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.groupBox17.Location = new System.Drawing.Point(499, 141);
+            this.groupBox17.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox17.Name = "groupBox17";
-            this.groupBox17.Padding = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.groupBox17.Size = new System.Drawing.Size(357, 304);
+            this.groupBox17.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox17.Size = new System.Drawing.Size(250, 182);
             this.groupBox17.TabIndex = 33;
             this.groupBox17.TabStop = false;
             this.groupBox17.Text = "Target:";
@@ -283,8 +283,8 @@
             this.metroLabel2.AutoSize = true;
             this.metroLabel2.FontSize = MetroFramework.MetroLabelSize.Small;
             this.metroLabel2.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.metroLabel2.Location = new System.Drawing.Point(10, 163);
-            this.metroLabel2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.metroLabel2.Location = new System.Drawing.Point(7, 98);
+            this.metroLabel2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.metroLabel2.Name = "metroLabel2";
             this.metroLabel2.Size = new System.Drawing.Size(58, 15);
             this.metroLabel2.TabIndex = 38;
@@ -296,8 +296,8 @@
             this.label6.AutoSize = true;
             this.label6.FontSize = MetroFramework.MetroLabelSize.Small;
             this.label6.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.label6.Location = new System.Drawing.Point(10, 217);
-            this.label6.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label6.Location = new System.Drawing.Point(7, 130);
+            this.label6.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(55, 15);
             this.label6.TabIndex = 37;
@@ -307,8 +307,8 @@
             // nmMemory
             // 
             this.nmMemory.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.nmMemory.Location = new System.Drawing.Point(162, 217);
-            this.nmMemory.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.nmMemory.Location = new System.Drawing.Point(113, 130);
+            this.nmMemory.Margin = new System.Windows.Forms.Padding(4);
             this.nmMemory.Maximum = new decimal(new int[] {
             2048,
             0,
@@ -320,7 +320,7 @@
             0,
             0});
             this.nmMemory.Name = "nmMemory";
-            this.nmMemory.Size = new System.Drawing.Size(93, 26);
+            this.nmMemory.Size = new System.Drawing.Size(65, 20);
             this.nmMemory.TabIndex = 36;
             this.nmMemory.Value = new decimal(new int[] {
             128,
@@ -339,10 +339,10 @@
             "QEMU",
             "Bochs",
             "VMware"});
-            this.cbEmulator.Location = new System.Drawing.Point(162, 154);
-            this.cbEmulator.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbEmulator.Location = new System.Drawing.Point(113, 92);
+            this.cbEmulator.Margin = new System.Windows.Forms.Padding(4);
             this.cbEmulator.Name = "cbEmulator";
-            this.cbEmulator.Size = new System.Drawing.Size(179, 25);
+            this.cbEmulator.Size = new System.Drawing.Size(126, 25);
             this.cbEmulator.Style = MetroFramework.MetroColorStyle.Blue;
             this.cbEmulator.TabIndex = 35;
             this.cbEmulator.UseCustomBackColor = true;
@@ -360,10 +360,10 @@
             "Microsoft (.vhd)",
             "Virtual Box (.vdi)",
             "VMware (.vmdk)"});
-            this.cbImageFormat.Location = new System.Drawing.Point(162, 94);
-            this.cbImageFormat.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbImageFormat.Location = new System.Drawing.Point(113, 56);
+            this.cbImageFormat.Margin = new System.Windows.Forms.Padding(4);
             this.cbImageFormat.Name = "cbImageFormat";
-            this.cbImageFormat.Size = new System.Drawing.Size(179, 25);
+            this.cbImageFormat.Size = new System.Drawing.Size(126, 25);
             this.cbImageFormat.Style = MetroFramework.MetroColorStyle.Blue;
             this.cbImageFormat.TabIndex = 34;
             this.cbImageFormat.UseCustomBackColor = true;
@@ -374,8 +374,8 @@
             this.label3.AutoSize = true;
             this.label3.FontSize = MetroFramework.MetroLabelSize.Small;
             this.label3.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.label3.Location = new System.Drawing.Point(10, 104);
-            this.label3.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label3.Location = new System.Drawing.Point(7, 62);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(84, 15);
             this.label3.TabIndex = 33;
@@ -388,8 +388,8 @@
             this.label5.AutoSize = true;
             this.label5.FontSize = MetroFramework.MetroLabelSize.Small;
             this.label5.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.label5.Location = new System.Drawing.Point(10, 44);
-            this.label5.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label5.Location = new System.Drawing.Point(7, 26);
+            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(56, 15);
             this.label5.TabIndex = 32;
@@ -405,12 +405,12 @@
             this.cbPlatform.ItemHeight = 19;
             this.cbPlatform.Items.AddRange(new object[] {
             "x86",
-			"x64",
-			"ARMv8A32"});
-            this.cbPlatform.Location = new System.Drawing.Point(162, 35);
-            this.cbPlatform.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            "x64",
+            "ARMv8A32"});
+            this.cbPlatform.Location = new System.Drawing.Point(113, 21);
+            this.cbPlatform.Margin = new System.Windows.Forms.Padding(4);
             this.cbPlatform.Name = "cbPlatform";
-            this.cbPlatform.Size = new System.Drawing.Size(179, 25);
+            this.cbPlatform.Size = new System.Drawing.Size(126, 25);
             this.cbPlatform.Style = MetroFramework.MetroColorStyle.Blue;
             this.cbPlatform.TabIndex = 31;
             this.cbPlatform.UseCustomBackColor = true;
@@ -422,11 +422,11 @@
             this.groupBox12.Controls.Add(this.cbEnableMethodScanner);
             this.groupBox12.Controls.Add(this.cbCompilerUsesMultipleThreads);
             this.groupBox12.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBox12.Location = new System.Drawing.Point(440, 548);
-            this.groupBox12.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.groupBox12.Location = new System.Drawing.Point(308, 329);
+            this.groupBox12.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox12.Name = "groupBox12";
-            this.groupBox12.Padding = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.groupBox12.Size = new System.Drawing.Size(263, 198);
+            this.groupBox12.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox12.Size = new System.Drawing.Size(184, 119);
             this.groupBox12.TabIndex = 30;
             this.groupBox12.TabStop = false;
             this.groupBox12.Text = "Misc Options:";
@@ -436,8 +436,8 @@
             this.cbEnableMethodScanner.AutoSize = true;
             this.cbEnableMethodScanner.Checked = true;
             this.cbEnableMethodScanner.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbEnableMethodScanner.Location = new System.Drawing.Point(12, 77);
-            this.cbEnableMethodScanner.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbEnableMethodScanner.Location = new System.Drawing.Point(8, 46);
+            this.cbEnableMethodScanner.Margin = new System.Windows.Forms.Padding(4);
             this.cbEnableMethodScanner.Name = "cbEnableMethodScanner";
             this.cbEnableMethodScanner.Size = new System.Drawing.Size(148, 30);
             this.cbEnableMethodScanner.Style = MetroFramework.MetroColorStyle.Blue;
@@ -453,8 +453,8 @@
             this.cbCompilerUsesMultipleThreads.AutoSize = true;
             this.cbCompilerUsesMultipleThreads.Checked = true;
             this.cbCompilerUsesMultipleThreads.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbCompilerUsesMultipleThreads.Location = new System.Drawing.Point(12, 37);
-            this.cbCompilerUsesMultipleThreads.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbCompilerUsesMultipleThreads.Location = new System.Drawing.Point(8, 22);
+            this.cbCompilerUsesMultipleThreads.Margin = new System.Windows.Forms.Padding(4);
             this.cbCompilerUsesMultipleThreads.Name = "cbCompilerUsesMultipleThreads";
             this.cbCompilerUsesMultipleThreads.Size = new System.Drawing.Size(133, 15);
             this.cbCompilerUsesMultipleThreads.Style = MetroFramework.MetroColorStyle.Blue;
@@ -469,17 +469,17 @@
             this.statusStrip1.ImageScalingSize = new System.Drawing.Size(20, 20);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tsStatusLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 798);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 460);
             this.statusStrip1.Name = "statusStrip1";
-            this.statusStrip1.Padding = new System.Windows.Forms.Padding(2, 0, 23, 0);
-            this.statusStrip1.Size = new System.Drawing.Size(1092, 22);
+            this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
+            this.statusStrip1.Size = new System.Drawing.Size(762, 22);
             this.statusStrip1.TabIndex = 32;
             this.statusStrip1.Text = "statusStrip1";
             // 
             // tsStatusLabel
             // 
             this.tsStatusLabel.Name = "tsStatusLabel";
-            this.tsStatusLabel.Size = new System.Drawing.Size(0, 15);
+            this.tsStatusLabel.Size = new System.Drawing.Size(0, 17);
             // 
             // groupBox2
             // 
@@ -492,11 +492,11 @@
             this.groupBox2.Controls.Add(this.cbGenerateASMFile);
             this.groupBox2.Controls.Add(this.cbGenerateMapFile);
             this.groupBox2.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBox2.Location = new System.Drawing.Point(440, 235);
-            this.groupBox2.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.groupBox2.Location = new System.Drawing.Point(308, 141);
+            this.groupBox2.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Padding = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.groupBox2.Size = new System.Drawing.Size(263, 304);
+            this.groupBox2.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox2.Size = new System.Drawing.Size(184, 182);
             this.groupBox2.TabIndex = 29;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Diagnostic Output:";
@@ -504,8 +504,8 @@
             // cbGenerateHashFiles
             // 
             this.cbGenerateHashFiles.AutoSize = true;
-            this.cbGenerateHashFiles.Location = new System.Drawing.Point(10, 265);
-            this.cbGenerateHashFiles.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbGenerateHashFiles.Location = new System.Drawing.Point(7, 159);
+            this.cbGenerateHashFiles.Margin = new System.Windows.Forms.Padding(4);
             this.cbGenerateHashFiles.Name = "cbGenerateHashFiles";
             this.cbGenerateHashFiles.Size = new System.Drawing.Size(76, 15);
             this.cbGenerateHashFiles.Style = MetroFramework.MetroColorStyle.Blue;
@@ -517,8 +517,8 @@
             // cbGenerateInlineFile
             // 
             this.cbGenerateInlineFile.AutoSize = true;
-            this.cbGenerateInlineFile.Location = new System.Drawing.Point(10, 188);
-            this.cbGenerateInlineFile.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbGenerateInlineFile.Location = new System.Drawing.Point(7, 113);
+            this.cbGenerateInlineFile.Margin = new System.Windows.Forms.Padding(4);
             this.cbGenerateInlineFile.Name = "cbGenerateInlineFile";
             this.cbGenerateInlineFile.Size = new System.Drawing.Size(101, 15);
             this.cbGenerateInlineFile.Style = MetroFramework.MetroColorStyle.Blue;
@@ -530,8 +530,8 @@
             // cbGenerateNASMFile
             // 
             this.cbGenerateNASMFile.AutoSize = true;
-            this.cbGenerateNASMFile.Location = new System.Drawing.Point(10, 112);
-            this.cbGenerateNASMFile.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbGenerateNASMFile.Location = new System.Drawing.Point(7, 67);
+            this.cbGenerateNASMFile.Margin = new System.Windows.Forms.Padding(4);
             this.cbGenerateNASMFile.Name = "cbGenerateNASMFile";
             this.cbGenerateNASMFile.Size = new System.Drawing.Size(78, 15);
             this.cbGenerateNASMFile.Style = MetroFramework.MetroColorStyle.Blue;
@@ -543,8 +543,8 @@
             // cbGenerateCompilerTime
             // 
             this.cbGenerateCompilerTime.AutoSize = true;
-            this.cbGenerateCompilerTime.Location = new System.Drawing.Point(10, 227);
-            this.cbGenerateCompilerTime.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbGenerateCompilerTime.Location = new System.Drawing.Point(7, 136);
+            this.cbGenerateCompilerTime.Margin = new System.Windows.Forms.Padding(4);
             this.cbGenerateCompilerTime.Name = "cbGenerateCompilerTime";
             this.cbGenerateCompilerTime.Size = new System.Drawing.Size(118, 15);
             this.cbGenerateCompilerTime.Style = MetroFramework.MetroColorStyle.Blue;
@@ -556,8 +556,8 @@
             // cbGenerateDebugInfoFile
             // 
             this.cbGenerateDebugInfoFile.AutoSize = true;
-            this.cbGenerateDebugInfoFile.Location = new System.Drawing.Point(10, 150);
-            this.cbGenerateDebugInfoFile.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbGenerateDebugInfoFile.Location = new System.Drawing.Point(7, 90);
+            this.cbGenerateDebugInfoFile.Margin = new System.Windows.Forms.Padding(4);
             this.cbGenerateDebugInfoFile.Name = "cbGenerateDebugInfoFile";
             this.cbGenerateDebugInfoFile.Size = new System.Drawing.Size(79, 15);
             this.cbGenerateDebugInfoFile.Style = MetroFramework.MetroColorStyle.Blue;
@@ -569,8 +569,8 @@
             // cbGenerateASMFile
             // 
             this.cbGenerateASMFile.AutoSize = true;
-            this.cbGenerateASMFile.Location = new System.Drawing.Point(10, 73);
-            this.cbGenerateASMFile.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbGenerateASMFile.Location = new System.Drawing.Point(7, 44);
+            this.cbGenerateASMFile.Margin = new System.Windows.Forms.Padding(4);
             this.cbGenerateASMFile.Name = "cbGenerateASMFile";
             this.cbGenerateASMFile.Size = new System.Drawing.Size(69, 15);
             this.cbGenerateASMFile.Style = MetroFramework.MetroColorStyle.Blue;
@@ -582,8 +582,8 @@
             // cbGenerateMapFile
             // 
             this.cbGenerateMapFile.AutoSize = true;
-            this.cbGenerateMapFile.Location = new System.Drawing.Point(10, 35);
-            this.cbGenerateMapFile.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbGenerateMapFile.Location = new System.Drawing.Point(7, 21);
+            this.cbGenerateMapFile.Margin = new System.Windows.Forms.Padding(4);
             this.cbGenerateMapFile.Name = "cbGenerateMapFile";
             this.cbGenerateMapFile.Size = new System.Drawing.Size(70, 15);
             this.cbGenerateMapFile.Style = MetroFramework.MetroColorStyle.Blue;
@@ -600,21 +600,21 @@
             this.groupBox4.Controls.Add(this.btnSource);
             this.groupBox4.Controls.Add(this.lbSource);
             this.groupBox4.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBox4.Location = new System.Drawing.Point(8, 13);
-            this.groupBox4.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.groupBox4.Location = new System.Drawing.Point(6, 8);
+            this.groupBox4.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Padding = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.groupBox4.Size = new System.Drawing.Size(1062, 102);
+            this.groupBox4.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox4.Size = new System.Drawing.Size(743, 61);
             this.groupBox4.TabIndex = 25;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Source:";
             // 
             // btnSource
             // 
-            this.btnSource.Location = new System.Drawing.Point(17, 37);
-            this.btnSource.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.btnSource.Location = new System.Drawing.Point(12, 22);
+            this.btnSource.Margin = new System.Windows.Forms.Padding(4);
             this.btnSource.Name = "btnSource";
-            this.btnSource.Size = new System.Drawing.Size(172, 44);
+            this.btnSource.Size = new System.Drawing.Size(120, 26);
             this.btnSource.TabIndex = 18;
             this.btnSource.Text = "Source:";
             this.btnSource.UseSelectable = true;
@@ -624,8 +624,8 @@
             // 
             this.lbSource.AutoSize = true;
             this.lbSource.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.lbSource.Location = new System.Drawing.Point(198, 40);
-            this.lbSource.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lbSource.Location = new System.Drawing.Point(139, 24);
+            this.lbSource.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbSource.Name = "lbSource";
             this.lbSource.Size = new System.Drawing.Size(47, 15);
             this.lbSource.TabIndex = 17;
@@ -641,21 +641,21 @@
             this.groupBox3.Controls.Add(this.btnDestination);
             this.groupBox3.Controls.Add(this.lbDestinationDirectory);
             this.groupBox3.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBox3.Location = new System.Drawing.Point(8, 121);
-            this.groupBox3.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.groupBox3.Location = new System.Drawing.Point(6, 73);
+            this.groupBox3.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Padding = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.groupBox3.Size = new System.Drawing.Size(1062, 102);
+            this.groupBox3.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox3.Size = new System.Drawing.Size(743, 61);
             this.groupBox3.TabIndex = 24;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Output:";
             // 
             // btnDestination
             // 
-            this.btnDestination.Location = new System.Drawing.Point(10, 35);
-            this.btnDestination.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.btnDestination.Location = new System.Drawing.Point(7, 21);
+            this.btnDestination.Margin = new System.Windows.Forms.Padding(4);
             this.btnDestination.Name = "btnDestination";
-            this.btnDestination.Size = new System.Drawing.Size(178, 44);
+            this.btnDestination.Size = new System.Drawing.Size(125, 26);
             this.btnDestination.TabIndex = 17;
             this.btnDestination.Text = "Destination:";
             this.btnDestination.UseSelectable = true;
@@ -665,8 +665,8 @@
             // 
             this.lbDestinationDirectory.AutoSize = true;
             this.lbDestinationDirectory.FontSize = MetroFramework.MetroLabelSize.Small;
-            this.lbDestinationDirectory.Location = new System.Drawing.Point(198, 38);
-            this.lbDestinationDirectory.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lbDestinationDirectory.Location = new System.Drawing.Point(139, 23);
+            this.lbDestinationDirectory.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbDestinationDirectory.Name = "lbDestinationDirectory";
             this.lbDestinationDirectory.Size = new System.Drawing.Size(118, 15);
             this.lbDestinationDirectory.TabIndex = 14;
@@ -690,11 +690,11 @@
             this.groupBox1.Controls.Add(this.cbEnableSSA);
             this.groupBox1.Controls.Add(this.cbInline);
             this.groupBox1.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBox1.Location = new System.Drawing.Point(8, 235);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.groupBox1.Location = new System.Drawing.Point(6, 141);
+            this.groupBox1.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.groupBox1.Size = new System.Drawing.Size(422, 512);
+            this.groupBox1.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox1.Size = new System.Drawing.Size(295, 307);
             this.groupBox1.TabIndex = 22;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Optimizations:";
@@ -704,8 +704,8 @@
             this.cbDevirtualization.AutoSize = true;
             this.cbDevirtualization.Checked = true;
             this.cbDevirtualization.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbDevirtualization.Location = new System.Drawing.Point(10, 79);
-            this.cbDevirtualization.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbDevirtualization.Location = new System.Drawing.Point(7, 47);
+            this.cbDevirtualization.Margin = new System.Windows.Forms.Padding(4);
             this.cbDevirtualization.Name = "cbDevirtualization";
             this.cbDevirtualization.Size = new System.Drawing.Size(105, 15);
             this.cbDevirtualization.Style = MetroFramework.MetroColorStyle.Blue;
@@ -719,8 +719,8 @@
             this.cbPlatformOptimizations.AutoSize = true;
             this.cbPlatformOptimizations.Checked = true;
             this.cbPlatformOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbPlatformOptimizations.Location = new System.Drawing.Point(10, 463);
-            this.cbPlatformOptimizations.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbPlatformOptimizations.Location = new System.Drawing.Point(7, 278);
+            this.cbPlatformOptimizations.Margin = new System.Windows.Forms.Padding(4);
             this.cbPlatformOptimizations.Name = "cbPlatformOptimizations";
             this.cbPlatformOptimizations.Size = new System.Drawing.Size(146, 15);
             this.cbPlatformOptimizations.Style = MetroFramework.MetroColorStyle.Blue;
@@ -734,8 +734,8 @@
             this.cbLoopInvariantCodeMotion.AutoSize = true;
             this.cbLoopInvariantCodeMotion.Checked = true;
             this.cbLoopInvariantCodeMotion.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbLoopInvariantCodeMotion.Location = new System.Drawing.Point(10, 233);
-            this.cbLoopInvariantCodeMotion.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbLoopInvariantCodeMotion.Location = new System.Drawing.Point(7, 140);
+            this.cbLoopInvariantCodeMotion.Margin = new System.Windows.Forms.Padding(4);
             this.cbLoopInvariantCodeMotion.Name = "cbLoopInvariantCodeMotion";
             this.cbLoopInvariantCodeMotion.Size = new System.Drawing.Size(172, 15);
             this.cbLoopInvariantCodeMotion.Style = MetroFramework.MetroColorStyle.Blue;
@@ -749,8 +749,8 @@
             this.cbTwoPassOptimizations.AutoSize = true;
             this.cbTwoPassOptimizations.Checked = true;
             this.cbTwoPassOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbTwoPassOptimizations.Location = new System.Drawing.Point(10, 425);
-            this.cbTwoPassOptimizations.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbTwoPassOptimizations.Location = new System.Drawing.Point(7, 255);
+            this.cbTwoPassOptimizations.Margin = new System.Windows.Forms.Padding(4);
             this.cbTwoPassOptimizations.Name = "cbTwoPassOptimizations";
             this.cbTwoPassOptimizations.Size = new System.Drawing.Size(153, 15);
             this.cbTwoPassOptimizations.Style = MetroFramework.MetroColorStyle.Blue;
@@ -764,8 +764,8 @@
             this.cbInlineExplicitOnly.AutoSize = true;
             this.cbInlineExplicitOnly.Checked = true;
             this.cbInlineExplicitOnly.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbInlineExplicitOnly.Location = new System.Drawing.Point(10, 387);
-            this.cbInlineExplicitOnly.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbInlineExplicitOnly.Location = new System.Drawing.Point(7, 232);
+            this.cbInlineExplicitOnly.Margin = new System.Windows.Forms.Padding(4);
             this.cbInlineExplicitOnly.Name = "cbInlineExplicitOnly";
             this.cbInlineExplicitOnly.Size = new System.Drawing.Size(121, 15);
             this.cbInlineExplicitOnly.Style = MetroFramework.MetroColorStyle.Blue;
@@ -779,8 +779,8 @@
             this.cbBitTracker.AutoSize = true;
             this.cbBitTracker.Checked = true;
             this.cbBitTracker.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbBitTracker.Location = new System.Drawing.Point(10, 271);
-            this.cbBitTracker.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbBitTracker.Location = new System.Drawing.Point(7, 163);
+            this.cbBitTracker.Margin = new System.Windows.Forms.Padding(4);
             this.cbBitTracker.Name = "cbBitTracker";
             this.cbBitTracker.Size = new System.Drawing.Size(77, 15);
             this.cbBitTracker.Style = MetroFramework.MetroColorStyle.Blue;
@@ -794,8 +794,8 @@
             this.cbValueNumbering.AutoSize = true;
             this.cbValueNumbering.Checked = true;
             this.cbValueNumbering.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbValueNumbering.Location = new System.Drawing.Point(10, 156);
-            this.cbValueNumbering.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbValueNumbering.Location = new System.Drawing.Point(7, 94);
+            this.cbValueNumbering.Margin = new System.Windows.Forms.Padding(4);
             this.cbValueNumbering.Name = "cbValueNumbering";
             this.cbValueNumbering.Size = new System.Drawing.Size(115, 15);
             this.cbValueNumbering.Style = MetroFramework.MetroColorStyle.Blue;
@@ -809,8 +809,8 @@
             this.cbLongExpansion.AutoSize = true;
             this.cbLongExpansion.Checked = true;
             this.cbLongExpansion.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbLongExpansion.Location = new System.Drawing.Point(10, 310);
-            this.cbLongExpansion.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbLongExpansion.Location = new System.Drawing.Point(7, 186);
+            this.cbLongExpansion.Margin = new System.Windows.Forms.Padding(4);
             this.cbLongExpansion.Name = "cbLongExpansion";
             this.cbLongExpansion.Size = new System.Drawing.Size(107, 15);
             this.cbLongExpansion.Style = MetroFramework.MetroColorStyle.Blue;
@@ -824,8 +824,8 @@
             this.cbSparseConditionalConstantPropagation.AutoSize = true;
             this.cbSparseConditionalConstantPropagation.Checked = true;
             this.cbSparseConditionalConstantPropagation.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbSparseConditionalConstantPropagation.Location = new System.Drawing.Point(10, 194);
-            this.cbSparseConditionalConstantPropagation.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbSparseConditionalConstantPropagation.Location = new System.Drawing.Point(7, 116);
+            this.cbSparseConditionalConstantPropagation.Margin = new System.Windows.Forms.Padding(4);
             this.cbSparseConditionalConstantPropagation.Name = "cbSparseConditionalConstantPropagation";
             this.cbSparseConditionalConstantPropagation.Size = new System.Drawing.Size(241, 15);
             this.cbSparseConditionalConstantPropagation.Style = MetroFramework.MetroColorStyle.Blue;
@@ -839,8 +839,8 @@
             this.cbBasicOptimizations.AutoSize = true;
             this.cbBasicOptimizations.Checked = true;
             this.cbBasicOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbBasicOptimizations.Location = new System.Drawing.Point(10, 40);
-            this.cbBasicOptimizations.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbBasicOptimizations.Location = new System.Drawing.Point(7, 24);
+            this.cbBasicOptimizations.Margin = new System.Windows.Forms.Padding(4);
             this.cbBasicOptimizations.Name = "cbBasicOptimizations";
             this.cbBasicOptimizations.Size = new System.Drawing.Size(127, 15);
             this.cbBasicOptimizations.Style = MetroFramework.MetroColorStyle.Blue;
@@ -854,8 +854,8 @@
             this.cbEnableSSA.AutoSize = true;
             this.cbEnableSSA.Checked = true;
             this.cbEnableSSA.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbEnableSSA.Location = new System.Drawing.Point(10, 117);
-            this.cbEnableSSA.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbEnableSSA.Location = new System.Drawing.Point(7, 70);
+            this.cbEnableSSA.Margin = new System.Windows.Forms.Padding(4);
             this.cbEnableSSA.Name = "cbEnableSSA";
             this.cbEnableSSA.Size = new System.Drawing.Size(184, 15);
             this.cbEnableSSA.Style = MetroFramework.MetroColorStyle.Blue;
@@ -869,8 +869,8 @@
             this.cbInline.AutoSize = true;
             this.cbInline.Checked = true;
             this.cbInline.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbInline.Location = new System.Drawing.Point(10, 348);
-            this.cbInline.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbInline.Location = new System.Drawing.Point(7, 209);
+            this.cbInline.Margin = new System.Windows.Forms.Padding(4);
             this.cbInline.Name = "cbInline";
             this.cbInline.Size = new System.Drawing.Size(52, 15);
             this.cbInline.Style = MetroFramework.MetroColorStyle.Blue;
@@ -888,17 +888,17 @@
             this.tabAdvanced.Controls.Add(this.groupBox13);
             this.tabAdvanced.HorizontalScrollbarBarColor = true;
             this.tabAdvanced.HorizontalScrollbarHighlightOnWheel = false;
-            this.tabAdvanced.HorizontalScrollbarSize = 19;
+            this.tabAdvanced.HorizontalScrollbarSize = 11;
             this.tabAdvanced.Location = new System.Drawing.Point(4, 22);
             this.tabAdvanced.Margin = new System.Windows.Forms.Padding(0);
             this.tabAdvanced.Name = "tabAdvanced";
-            this.tabAdvanced.Size = new System.Drawing.Size(1092, 820);
+            this.tabAdvanced.Size = new System.Drawing.Size(762, 482);
             this.tabAdvanced.TabIndex = 4;
             this.tabAdvanced.Text = "Advanced Options";
             this.tabAdvanced.UseVisualStyleBackColor = true;
             this.tabAdvanced.VerticalScrollbarBarColor = true;
             this.tabAdvanced.VerticalScrollbarHighlightOnWheel = false;
-            this.tabAdvanced.VerticalScrollbarSize = 17;
+            this.tabAdvanced.VerticalScrollbarSize = 12;
             // 
             // groupBox6
             // 
@@ -911,11 +911,11 @@
             this.groupBox6.Controls.Add(this.metroLabel3);
             this.groupBox6.Controls.Add(this.tbVBEWidth);
             this.groupBox6.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBox6.Location = new System.Drawing.Point(13, 312);
-            this.groupBox6.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.groupBox6.Location = new System.Drawing.Point(9, 187);
+            this.groupBox6.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Padding = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.groupBox6.Size = new System.Drawing.Size(333, 252);
+            this.groupBox6.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox6.Size = new System.Drawing.Size(233, 151);
             this.groupBox6.TabIndex = 59;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "VESA BIOS Extensions (VBE)";
@@ -925,8 +925,8 @@
             this.metroLabel8.AutoSize = true;
             this.metroLabel8.FontSize = MetroFramework.MetroLabelSize.Small;
             this.metroLabel8.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.metroLabel8.Location = new System.Drawing.Point(87, 202);
-            this.metroLabel8.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.metroLabel8.Location = new System.Drawing.Point(61, 121);
+            this.metroLabel8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.metroLabel8.Name = "metroLabel8";
             this.metroLabel8.Size = new System.Drawing.Size(42, 15);
             this.metroLabel8.TabIndex = 65;
@@ -939,10 +939,10 @@
             // 
             // 
             this.tbVBEDepth.CustomButton.Image = null;
-            this.tbVBEDepth.CustomButton.Location = new System.Drawing.Point(90, 4);
-            this.tbVBEDepth.CustomButton.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.tbVBEDepth.CustomButton.Location = new System.Drawing.Point(41, 1);
+            this.tbVBEDepth.CustomButton.Margin = new System.Windows.Forms.Padding(4);
             this.tbVBEDepth.CustomButton.Name = "";
-            this.tbVBEDepth.CustomButton.Size = new System.Drawing.Size(55, 63);
+            this.tbVBEDepth.CustomButton.Size = new System.Drawing.Size(21, 21);
             this.tbVBEDepth.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
             this.tbVBEDepth.CustomButton.TabIndex = 1;
             this.tbVBEDepth.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
@@ -950,8 +950,8 @@
             this.tbVBEDepth.CustomButton.Visible = false;
             this.tbVBEDepth.Lines = new string[] {
         "32"};
-            this.tbVBEDepth.Location = new System.Drawing.Point(167, 192);
-            this.tbVBEDepth.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.tbVBEDepth.Location = new System.Drawing.Point(117, 115);
+            this.tbVBEDepth.Margin = new System.Windows.Forms.Padding(4);
             this.tbVBEDepth.MaxLength = 32767;
             this.tbVBEDepth.Name = "tbVBEDepth";
             this.tbVBEDepth.PasswordChar = '\0';
@@ -960,7 +960,7 @@
             this.tbVBEDepth.SelectionLength = 0;
             this.tbVBEDepth.SelectionStart = 0;
             this.tbVBEDepth.ShortcutsEnabled = true;
-            this.tbVBEDepth.Size = new System.Drawing.Size(90, 38);
+            this.tbVBEDepth.Size = new System.Drawing.Size(63, 23);
             this.tbVBEDepth.TabIndex = 64;
             this.tbVBEDepth.Text = "32";
             this.tbVBEDepth.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -973,8 +973,8 @@
             this.metroLabel4.AutoSize = true;
             this.metroLabel4.FontSize = MetroFramework.MetroLabelSize.Small;
             this.metroLabel4.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.metroLabel4.Location = new System.Drawing.Point(80, 152);
-            this.metroLabel4.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.metroLabel4.Location = new System.Drawing.Point(56, 91);
+            this.metroLabel4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.metroLabel4.Name = "metroLabel4";
             this.metroLabel4.Size = new System.Drawing.Size(46, 15);
             this.metroLabel4.TabIndex = 63;
@@ -987,10 +987,10 @@
             // 
             // 
             this.tbVBEHeight.CustomButton.Image = null;
-            this.tbVBEHeight.CustomButton.Location = new System.Drawing.Point(90, 4);
-            this.tbVBEHeight.CustomButton.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.tbVBEHeight.CustomButton.Location = new System.Drawing.Point(41, 1);
+            this.tbVBEHeight.CustomButton.Margin = new System.Windows.Forms.Padding(4);
             this.tbVBEHeight.CustomButton.Name = "";
-            this.tbVBEHeight.CustomButton.Size = new System.Drawing.Size(55, 63);
+            this.tbVBEHeight.CustomButton.Size = new System.Drawing.Size(21, 21);
             this.tbVBEHeight.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
             this.tbVBEHeight.CustomButton.TabIndex = 1;
             this.tbVBEHeight.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
@@ -998,8 +998,8 @@
             this.tbVBEHeight.CustomButton.Visible = false;
             this.tbVBEHeight.Lines = new string[] {
         "480"};
-            this.tbVBEHeight.Location = new System.Drawing.Point(167, 142);
-            this.tbVBEHeight.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.tbVBEHeight.Location = new System.Drawing.Point(117, 85);
+            this.tbVBEHeight.Margin = new System.Windows.Forms.Padding(4);
             this.tbVBEHeight.MaxLength = 32767;
             this.tbVBEHeight.Name = "tbVBEHeight";
             this.tbVBEHeight.PasswordChar = '\0';
@@ -1008,7 +1008,7 @@
             this.tbVBEHeight.SelectionLength = 0;
             this.tbVBEHeight.SelectionStart = 0;
             this.tbVBEHeight.ShortcutsEnabled = true;
-            this.tbVBEHeight.Size = new System.Drawing.Size(90, 38);
+            this.tbVBEHeight.Size = new System.Drawing.Size(63, 23);
             this.tbVBEHeight.TabIndex = 62;
             this.tbVBEHeight.Text = "480";
             this.tbVBEHeight.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -1019,8 +1019,8 @@
             // cbVBEVideo
             // 
             this.cbVBEVideo.AutoSize = true;
-            this.cbVBEVideo.Location = new System.Drawing.Point(10, 44);
-            this.cbVBEVideo.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbVBEVideo.Location = new System.Drawing.Point(7, 26);
+            this.cbVBEVideo.Margin = new System.Windows.Forms.Padding(4);
             this.cbVBEVideo.Name = "cbVBEVideo";
             this.cbVBEVideo.Size = new System.Drawing.Size(117, 15);
             this.cbVBEVideo.TabIndex = 57;
@@ -1033,8 +1033,8 @@
             this.metroLabel3.AutoSize = true;
             this.metroLabel3.FontSize = MetroFramework.MetroLabelSize.Small;
             this.metroLabel3.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.metroLabel3.Location = new System.Drawing.Point(87, 102);
-            this.metroLabel3.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.metroLabel3.Location = new System.Drawing.Point(61, 61);
+            this.metroLabel3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.metroLabel3.Name = "metroLabel3";
             this.metroLabel3.Size = new System.Drawing.Size(42, 15);
             this.metroLabel3.TabIndex = 61;
@@ -1047,10 +1047,10 @@
             // 
             // 
             this.tbVBEWidth.CustomButton.Image = null;
-            this.tbVBEWidth.CustomButton.Location = new System.Drawing.Point(90, 4);
-            this.tbVBEWidth.CustomButton.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.tbVBEWidth.CustomButton.Location = new System.Drawing.Point(41, 1);
+            this.tbVBEWidth.CustomButton.Margin = new System.Windows.Forms.Padding(4);
             this.tbVBEWidth.CustomButton.Name = "";
-            this.tbVBEWidth.CustomButton.Size = new System.Drawing.Size(55, 63);
+            this.tbVBEWidth.CustomButton.Size = new System.Drawing.Size(21, 21);
             this.tbVBEWidth.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
             this.tbVBEWidth.CustomButton.TabIndex = 1;
             this.tbVBEWidth.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
@@ -1058,8 +1058,8 @@
             this.tbVBEWidth.CustomButton.Visible = false;
             this.tbVBEWidth.Lines = new string[] {
         "640"};
-            this.tbVBEWidth.Location = new System.Drawing.Point(167, 92);
-            this.tbVBEWidth.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.tbVBEWidth.Location = new System.Drawing.Point(117, 55);
+            this.tbVBEWidth.Margin = new System.Windows.Forms.Padding(4);
             this.tbVBEWidth.MaxLength = 32767;
             this.tbVBEWidth.Name = "tbVBEWidth";
             this.tbVBEWidth.PasswordChar = '\0';
@@ -1068,7 +1068,7 @@
             this.tbVBEWidth.SelectionLength = 0;
             this.tbVBEWidth.SelectionStart = 0;
             this.tbVBEWidth.ShortcutsEnabled = true;
-            this.tbVBEWidth.Size = new System.Drawing.Size(90, 38);
+            this.tbVBEWidth.Size = new System.Drawing.Size(63, 23);
             this.tbVBEWidth.TabIndex = 60;
             this.tbVBEWidth.Text = "640";
             this.tbVBEWidth.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -1086,11 +1086,11 @@
             this.groupBox5.Controls.Add(this.cbBootFormat);
             this.groupBox5.Controls.Add(this.label2);
             this.groupBox5.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBox5.Location = new System.Drawing.Point(720, 35);
-            this.groupBox5.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.groupBox5.Location = new System.Drawing.Point(504, 21);
+            this.groupBox5.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Padding = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.groupBox5.Size = new System.Drawing.Size(333, 265);
+            this.groupBox5.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox5.Size = new System.Drawing.Size(233, 159);
             this.groupBox5.TabIndex = 50;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Image:";
@@ -1106,10 +1106,10 @@
             "Syslinux 6.03",
             "Grub 0.97",
             "Grub 2.00"});
-            this.cbBootLoader.Location = new System.Drawing.Point(153, 158);
-            this.cbBootLoader.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbBootLoader.Location = new System.Drawing.Point(107, 95);
+            this.cbBootLoader.Margin = new System.Windows.Forms.Padding(4);
             this.cbBootLoader.Name = "cbBootLoader";
-            this.cbBootLoader.Size = new System.Drawing.Size(159, 25);
+            this.cbBootLoader.Size = new System.Drawing.Size(112, 25);
             this.cbBootLoader.Style = MetroFramework.MetroColorStyle.Blue;
             this.cbBootLoader.TabIndex = 55;
             this.cbBootLoader.UseCustomBackColor = true;
@@ -1120,8 +1120,8 @@
             this.label1.AutoSize = true;
             this.label1.FontSize = MetroFramework.MetroLabelSize.Small;
             this.label1.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.label1.Location = new System.Drawing.Point(10, 167);
-            this.label1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label1.Location = new System.Drawing.Point(7, 100);
+            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(74, 15);
             this.label1.TabIndex = 56;
@@ -1133,8 +1133,8 @@
             this.label4.AutoSize = true;
             this.label4.FontSize = MetroFramework.MetroLabelSize.Small;
             this.label4.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.label4.Location = new System.Drawing.Point(10, 44);
-            this.label4.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label4.Location = new System.Drawing.Point(7, 26);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(69, 15);
             this.label4.TabIndex = 54;
@@ -1150,10 +1150,10 @@
             this.cbBootFileSystem.Items.AddRange(new object[] {
             "FAT12",
             "FAT16"});
-            this.cbBootFileSystem.Location = new System.Drawing.Point(153, 35);
-            this.cbBootFileSystem.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbBootFileSystem.Location = new System.Drawing.Point(107, 21);
+            this.cbBootFileSystem.Margin = new System.Windows.Forms.Padding(4);
             this.cbBootFileSystem.Name = "cbBootFileSystem";
-            this.cbBootFileSystem.Size = new System.Drawing.Size(159, 25);
+            this.cbBootFileSystem.Size = new System.Drawing.Size(112, 25);
             this.cbBootFileSystem.Style = MetroFramework.MetroColorStyle.Blue;
             this.cbBootFileSystem.TabIndex = 53;
             this.cbBootFileSystem.UseCustomBackColor = true;
@@ -1167,10 +1167,10 @@
             this.cbBootFormat.ItemHeight = 19;
             this.cbBootFormat.Items.AddRange(new object[] {
             "Multiboot v1"});
-            this.cbBootFormat.Location = new System.Drawing.Point(153, 98);
-            this.cbBootFormat.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbBootFormat.Location = new System.Drawing.Point(107, 59);
+            this.cbBootFormat.Margin = new System.Windows.Forms.Padding(4);
             this.cbBootFormat.Name = "cbBootFormat";
-            this.cbBootFormat.Size = new System.Drawing.Size(159, 25);
+            this.cbBootFormat.Size = new System.Drawing.Size(112, 25);
             this.cbBootFormat.Style = MetroFramework.MetroColorStyle.Blue;
             this.cbBootFormat.TabIndex = 51;
             this.cbBootFormat.UseCustomBackColor = true;
@@ -1181,8 +1181,8 @@
             this.label2.AutoSize = true;
             this.label2.FontSize = MetroFramework.MetroLabelSize.Small;
             this.label2.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.label2.Location = new System.Drawing.Point(10, 108);
-            this.label2.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label2.Location = new System.Drawing.Point(7, 65);
+            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(76, 15);
             this.label2.TabIndex = 52;
@@ -1198,11 +1198,11 @@
             this.groupBox15.Controls.Add(this.cbLaunchGDB);
             this.groupBox15.Controls.Add(this.cbEnableQemuGDB);
             this.groupBox15.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBox15.Location = new System.Drawing.Point(13, 35);
-            this.groupBox15.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.groupBox15.Location = new System.Drawing.Point(9, 21);
+            this.groupBox15.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox15.Name = "groupBox15";
-            this.groupBox15.Padding = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.groupBox15.Size = new System.Drawing.Size(333, 265);
+            this.groupBox15.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox15.Size = new System.Drawing.Size(233, 159);
             this.groupBox15.TabIndex = 44;
             this.groupBox15.TabStop = false;
             this.groupBox15.Text = "Debugger:";
@@ -1219,10 +1219,10 @@
             "Pipe",
             "TCP Server",
             "TCP Client"});
-            this.cbDebugConnectionOption.Location = new System.Drawing.Point(140, 183);
-            this.cbDebugConnectionOption.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbDebugConnectionOption.Location = new System.Drawing.Point(98, 110);
+            this.cbDebugConnectionOption.Margin = new System.Windows.Forms.Padding(4);
             this.cbDebugConnectionOption.Name = "cbDebugConnectionOption";
-            this.cbDebugConnectionOption.Size = new System.Drawing.Size(167, 25);
+            this.cbDebugConnectionOption.Size = new System.Drawing.Size(118, 25);
             this.cbDebugConnectionOption.Style = MetroFramework.MetroColorStyle.Blue;
             this.cbDebugConnectionOption.TabIndex = 38;
             this.cbDebugConnectionOption.UseCustomBackColor = true;
@@ -1233,8 +1233,8 @@
             this.label8.AutoSize = true;
             this.label8.FontSize = MetroFramework.MetroLabelSize.Small;
             this.label8.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.label8.Location = new System.Drawing.Point(10, 192);
-            this.label8.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label8.Location = new System.Drawing.Point(7, 115);
+            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(72, 15);
             this.label8.TabIndex = 37;
@@ -1246,8 +1246,8 @@
             this.cbLaunchMosaDebugger.AutoSize = true;
             this.cbLaunchMosaDebugger.Checked = true;
             this.cbLaunchMosaDebugger.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbLaunchMosaDebugger.Location = new System.Drawing.Point(12, 146);
-            this.cbLaunchMosaDebugger.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbLaunchMosaDebugger.Location = new System.Drawing.Point(8, 88);
+            this.cbLaunchMosaDebugger.Margin = new System.Windows.Forms.Padding(4);
             this.cbLaunchMosaDebugger.Name = "cbLaunchMosaDebugger";
             this.cbLaunchMosaDebugger.Size = new System.Drawing.Size(154, 15);
             this.cbLaunchMosaDebugger.Style = MetroFramework.MetroColorStyle.Blue;
@@ -1261,8 +1261,8 @@
             this.cbLaunchGDB.AutoSize = true;
             this.cbLaunchGDB.Checked = true;
             this.cbLaunchGDB.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbLaunchGDB.Location = new System.Drawing.Point(12, 100);
-            this.cbLaunchGDB.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbLaunchGDB.Location = new System.Drawing.Point(8, 60);
+            this.cbLaunchGDB.Margin = new System.Windows.Forms.Padding(4);
             this.cbLaunchGDB.Name = "cbLaunchGDB";
             this.cbLaunchGDB.Size = new System.Drawing.Size(88, 15);
             this.cbLaunchGDB.Style = MetroFramework.MetroColorStyle.Blue;
@@ -1276,8 +1276,8 @@
             this.cbEnableQemuGDB.AutoSize = true;
             this.cbEnableQemuGDB.Checked = true;
             this.cbEnableQemuGDB.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbEnableQemuGDB.Location = new System.Drawing.Point(12, 54);
-            this.cbEnableQemuGDB.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbEnableQemuGDB.Location = new System.Drawing.Point(8, 32);
+            this.cbEnableQemuGDB.Margin = new System.Windows.Forms.Padding(4);
             this.cbEnableQemuGDB.Name = "cbEnableQemuGDB";
             this.cbEnableQemuGDB.Size = new System.Drawing.Size(121, 15);
             this.cbEnableQemuGDB.Style = MetroFramework.MetroColorStyle.Blue;
@@ -1293,11 +1293,11 @@
             this.groupBox14.Controls.Add(this.tbOSName);
             this.groupBox14.Controls.Add(this.cbPlugKorlib);
             this.groupBox14.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBox14.Location = new System.Drawing.Point(365, 312);
-            this.groupBox14.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.groupBox14.Location = new System.Drawing.Point(256, 187);
+            this.groupBox14.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox14.Name = "groupBox14";
-            this.groupBox14.Padding = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.groupBox14.Size = new System.Drawing.Size(333, 135);
+            this.groupBox14.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox14.Size = new System.Drawing.Size(233, 81);
             this.groupBox14.TabIndex = 43;
             this.groupBox14.TabStop = false;
             this.groupBox14.Text = "Other:";
@@ -1307,8 +1307,8 @@
             this.metroLabel1.AutoSize = true;
             this.metroLabel1.FontSize = MetroFramework.MetroLabelSize.Small;
             this.metroLabel1.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.metroLabel1.Location = new System.Drawing.Point(10, 81);
-            this.metroLabel1.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.metroLabel1.Location = new System.Drawing.Point(7, 49);
+            this.metroLabel1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.metroLabel1.Name = "metroLabel1";
             this.metroLabel1.Size = new System.Drawing.Size(60, 15);
             this.metroLabel1.TabIndex = 43;
@@ -1321,10 +1321,10 @@
             // 
             // 
             this.tbOSName.CustomButton.Image = null;
-            this.tbOSName.CustomButton.Location = new System.Drawing.Point(265, 4);
-            this.tbOSName.CustomButton.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.tbOSName.CustomButton.Location = new System.Drawing.Point(114, 1);
+            this.tbOSName.CustomButton.Margin = new System.Windows.Forms.Padding(4);
             this.tbOSName.CustomButton.Name = "";
-            this.tbOSName.CustomButton.Size = new System.Drawing.Size(55, 63);
+            this.tbOSName.CustomButton.Size = new System.Drawing.Size(21, 21);
             this.tbOSName.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
             this.tbOSName.CustomButton.TabIndex = 1;
             this.tbOSName.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
@@ -1332,8 +1332,8 @@
             this.tbOSName.CustomButton.Visible = false;
             this.tbOSName.Lines = new string[] {
         "MOSA"};
-            this.tbOSName.Location = new System.Drawing.Point(120, 75);
-            this.tbOSName.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.tbOSName.Location = new System.Drawing.Point(84, 45);
+            this.tbOSName.Margin = new System.Windows.Forms.Padding(4);
             this.tbOSName.MaxLength = 32767;
             this.tbOSName.Name = "tbOSName";
             this.tbOSName.PasswordChar = '\0';
@@ -1342,7 +1342,7 @@
             this.tbOSName.SelectionLength = 0;
             this.tbOSName.SelectionStart = 0;
             this.tbOSName.ShortcutsEnabled = true;
-            this.tbOSName.Size = new System.Drawing.Size(195, 38);
+            this.tbOSName.Size = new System.Drawing.Size(136, 23);
             this.tbOSName.TabIndex = 39;
             this.tbOSName.Text = "MOSA";
             this.tbOSName.UseSelectable = true;
@@ -1354,8 +1354,8 @@
             this.cbPlugKorlib.AutoSize = true;
             this.cbPlugKorlib.Checked = true;
             this.cbPlugKorlib.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbPlugKorlib.Location = new System.Drawing.Point(10, 37);
-            this.cbPlugKorlib.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbPlugKorlib.Location = new System.Drawing.Point(7, 22);
+            this.cbPlugKorlib.Margin = new System.Windows.Forms.Padding(4);
             this.cbPlugKorlib.Name = "cbPlugKorlib";
             this.cbPlugKorlib.Size = new System.Drawing.Size(81, 15);
             this.cbPlugKorlib.Style = MetroFramework.MetroColorStyle.Blue;
@@ -1373,11 +1373,11 @@
             this.groupBox13.Controls.Add(this.cbRelocationTable);
             this.groupBox13.Controls.Add(this.cbEmitSymbolTable);
             this.groupBox13.Font = new System.Drawing.Font("Segoe UI", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.groupBox13.Location = new System.Drawing.Point(365, 35);
-            this.groupBox13.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.groupBox13.Location = new System.Drawing.Point(256, 21);
+            this.groupBox13.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox13.Name = "groupBox13";
-            this.groupBox13.Padding = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.groupBox13.Size = new System.Drawing.Size(333, 265);
+            this.groupBox13.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox13.Size = new System.Drawing.Size(233, 159);
             this.groupBox13.TabIndex = 23;
             this.groupBox13.TabStop = false;
             this.groupBox13.Text = "Linker Options:";
@@ -1387,8 +1387,8 @@
             this.cbEmitDwarf.AutoSize = true;
             this.cbEmitDwarf.Checked = true;
             this.cbEmitDwarf.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbEmitDwarf.Location = new System.Drawing.Point(10, 138);
-            this.cbEmitDwarf.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbEmitDwarf.Location = new System.Drawing.Point(7, 83);
+            this.cbEmitDwarf.Margin = new System.Windows.Forms.Padding(4);
             this.cbEmitDwarf.Name = "cbEmitDwarf";
             this.cbEmitDwarf.Size = new System.Drawing.Size(147, 15);
             this.cbEmitDwarf.Style = MetroFramework.MetroColorStyle.Blue;
@@ -1402,8 +1402,8 @@
             this.label9.AutoSize = true;
             this.label9.FontSize = MetroFramework.MetroLabelSize.Small;
             this.label9.FontWeight = MetroFramework.MetroLabelWeight.Regular;
-            this.label9.Location = new System.Drawing.Point(10, 202);
-            this.label9.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.label9.Location = new System.Drawing.Point(7, 121);
+            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(79, 15);
             this.label9.TabIndex = 42;
@@ -1416,10 +1416,10 @@
             // 
             // 
             this.tbBaseAddress.CustomButton.Image = null;
-            this.tbBaseAddress.CustomButton.Location = new System.Drawing.Point(187, 4);
-            this.tbBaseAddress.CustomButton.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.tbBaseAddress.CustomButton.Location = new System.Drawing.Point(82, 1);
+            this.tbBaseAddress.CustomButton.Margin = new System.Windows.Forms.Padding(4);
             this.tbBaseAddress.CustomButton.Name = "";
-            this.tbBaseAddress.CustomButton.Size = new System.Drawing.Size(55, 63);
+            this.tbBaseAddress.CustomButton.Size = new System.Drawing.Size(21, 21);
             this.tbBaseAddress.CustomButton.Style = MetroFramework.MetroColorStyle.Blue;
             this.tbBaseAddress.CustomButton.TabIndex = 1;
             this.tbBaseAddress.CustomButton.Theme = MetroFramework.MetroThemeStyle.Light;
@@ -1427,8 +1427,8 @@
             this.tbBaseAddress.CustomButton.Visible = false;
             this.tbBaseAddress.Lines = new string[] {
         "0x00400000"};
-            this.tbBaseAddress.Location = new System.Drawing.Point(167, 202);
-            this.tbBaseAddress.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.tbBaseAddress.Location = new System.Drawing.Point(117, 121);
+            this.tbBaseAddress.Margin = new System.Windows.Forms.Padding(4);
             this.tbBaseAddress.MaxLength = 32767;
             this.tbBaseAddress.Name = "tbBaseAddress";
             this.tbBaseAddress.PasswordChar = '\0';
@@ -1437,7 +1437,7 @@
             this.tbBaseAddress.SelectionLength = 0;
             this.tbBaseAddress.SelectionStart = 0;
             this.tbBaseAddress.ShortcutsEnabled = true;
-            this.tbBaseAddress.Size = new System.Drawing.Size(148, 38);
+            this.tbBaseAddress.Size = new System.Drawing.Size(104, 23);
             this.tbBaseAddress.TabIndex = 41;
             this.tbBaseAddress.Text = "0x00400000";
             this.tbBaseAddress.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -1450,8 +1450,8 @@
             this.cbRelocationTable.AutoSize = true;
             this.cbRelocationTable.Checked = true;
             this.cbRelocationTable.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbRelocationTable.Location = new System.Drawing.Point(10, 98);
-            this.cbRelocationTable.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbRelocationTable.Location = new System.Drawing.Point(7, 59);
+            this.cbRelocationTable.Margin = new System.Windows.Forms.Padding(4);
             this.cbRelocationTable.Name = "cbRelocationTable";
             this.cbRelocationTable.Size = new System.Drawing.Size(143, 15);
             this.cbRelocationTable.Style = MetroFramework.MetroColorStyle.Blue;
@@ -1465,8 +1465,8 @@
             this.cbEmitSymbolTable.AutoSize = true;
             this.cbEmitSymbolTable.Checked = true;
             this.cbEmitSymbolTable.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.cbEmitSymbolTable.Location = new System.Drawing.Point(10, 54);
-            this.cbEmitSymbolTable.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.cbEmitSymbolTable.Location = new System.Drawing.Point(7, 32);
+            this.cbEmitSymbolTable.Margin = new System.Windows.Forms.Padding(4);
             this.cbEmitSymbolTable.Name = "cbEmitSymbolTable";
             this.cbEmitSymbolTable.Size = new System.Drawing.Size(112, 15);
             this.cbEmitSymbolTable.Style = MetroFramework.MetroColorStyle.Blue;
@@ -1484,17 +1484,17 @@
             this.tabAppLocations.Controls.Add(this.groupBox7);
             this.tabAppLocations.HorizontalScrollbarBarColor = true;
             this.tabAppLocations.HorizontalScrollbarHighlightOnWheel = false;
-            this.tabAppLocations.HorizontalScrollbarSize = 19;
+            this.tabAppLocations.HorizontalScrollbarSize = 11;
             this.tabAppLocations.Location = new System.Drawing.Point(4, 22);
             this.tabAppLocations.Margin = new System.Windows.Forms.Padding(0);
             this.tabAppLocations.Name = "tabAppLocations";
-            this.tabAppLocations.Size = new System.Drawing.Size(1092, 820);
+            this.tabAppLocations.Size = new System.Drawing.Size(762, 482);
             this.tabAppLocations.TabIndex = 3;
             this.tabAppLocations.Text = "App Locations";
             this.tabAppLocations.UseVisualStyleBackColor = true;
             this.tabAppLocations.VerticalScrollbarBarColor = true;
             this.tabAppLocations.VerticalScrollbarHighlightOnWheel = false;
-            this.tabAppLocations.VerticalScrollbarSize = 17;
+            this.tabAppLocations.VerticalScrollbarSize = 12;
             // 
             // groupBox11
             // 
@@ -1505,11 +1505,11 @@
             this.groupBox11.Controls.Add(this.lbmkisofsExecutable);
             this.groupBox11.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.groupBox11.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.groupBox11.Location = new System.Drawing.Point(8, 554);
-            this.groupBox11.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.groupBox11.Location = new System.Drawing.Point(6, 332);
+            this.groupBox11.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Padding = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.groupBox11.Size = new System.Drawing.Size(950, 96);
+            this.groupBox11.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox11.Size = new System.Drawing.Size(665, 58);
             this.groupBox11.TabIndex = 25;
             this.groupBox11.TabStop = false;
             this.groupBox11.Text = "mkisofs:";
@@ -1517,10 +1517,10 @@
             // button7
             // 
             this.button7.Enabled = false;
-            this.button7.Location = new System.Drawing.Point(10, 37);
-            this.button7.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.button7.Location = new System.Drawing.Point(7, 22);
+            this.button7.Margin = new System.Windows.Forms.Padding(4);
             this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(177, 44);
+            this.button7.Size = new System.Drawing.Size(124, 26);
             this.button7.TabIndex = 20;
             this.button7.Text = "Executable:";
             this.button7.UseSelectable = true;
@@ -1528,8 +1528,8 @@
             // lbmkisofsExecutable
             // 
             this.lbmkisofsExecutable.AutoSize = true;
-            this.lbmkisofsExecutable.Location = new System.Drawing.Point(197, 46);
-            this.lbmkisofsExecutable.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lbmkisofsExecutable.Location = new System.Drawing.Point(138, 28);
+            this.lbmkisofsExecutable.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbmkisofsExecutable.Name = "lbmkisofsExecutable";
             this.lbmkisofsExecutable.Size = new System.Drawing.Size(149, 19);
             this.lbmkisofsExecutable.TabIndex = 19;
@@ -1542,39 +1542,39 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox10.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.groupBox10.Controls.Add(this.button4);
-            this.groupBox10.Controls.Add(this.lbVMwarePlayerExecutable);
+            this.groupBox10.Controls.Add(this.lbVMwareExecutable);
             this.groupBox10.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.groupBox10.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.groupBox10.Location = new System.Drawing.Point(8, 446);
-            this.groupBox10.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.groupBox10.Location = new System.Drawing.Point(6, 268);
+            this.groupBox10.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Padding = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.groupBox10.Size = new System.Drawing.Size(950, 96);
+            this.groupBox10.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox10.Size = new System.Drawing.Size(665, 58);
             this.groupBox10.TabIndex = 24;
             this.groupBox10.TabStop = false;
-            this.groupBox10.Text = "VMware Player:";
+            this.groupBox10.Text = "VMware:";
             // 
             // button4
             // 
             this.button4.Enabled = false;
-            this.button4.Location = new System.Drawing.Point(10, 37);
-            this.button4.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.button4.Location = new System.Drawing.Point(7, 22);
+            this.button4.Margin = new System.Windows.Forms.Padding(4);
             this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(177, 44);
+            this.button4.Size = new System.Drawing.Size(124, 26);
             this.button4.TabIndex = 20;
             this.button4.Text = "Executable:";
             this.button4.UseSelectable = true;
             // 
-            // lbVMwarePlayerExecutable
+            // lbVMwareExecutable
             // 
-            this.lbVMwarePlayerExecutable.AutoSize = true;
-            this.lbVMwarePlayerExecutable.Location = new System.Drawing.Point(197, 46);
-            this.lbVMwarePlayerExecutable.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
-            this.lbVMwarePlayerExecutable.Name = "lbVMwarePlayerExecutable";
-            this.lbVMwarePlayerExecutable.Size = new System.Drawing.Size(171, 19);
-            this.lbVMwarePlayerExecutable.TabIndex = 19;
-            this.lbVMwarePlayerExecutable.Text = "{VMware Player Executable}";
-            this.lbVMwarePlayerExecutable.UseCustomBackColor = true;
+            this.lbVMwareExecutable.AutoSize = true;
+            this.lbVMwareExecutable.Location = new System.Drawing.Point(138, 28);
+            this.lbVMwareExecutable.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lbVMwareExecutable.Name = "lbVMwareExecutable";
+            this.lbVMwareExecutable.Size = new System.Drawing.Size(131, 19);
+            this.lbVMwareExecutable.TabIndex = 19;
+            this.lbVMwareExecutable.Text = "{VMware Executable}";
+            this.lbVMwareExecutable.UseCustomBackColor = true;
             // 
             // groupBox9
             // 
@@ -1585,11 +1585,11 @@
             this.groupBox9.Controls.Add(this.lbBOCHSExecutable);
             this.groupBox9.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.groupBox9.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.groupBox9.Location = new System.Drawing.Point(8, 338);
-            this.groupBox9.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.groupBox9.Location = new System.Drawing.Point(6, 203);
+            this.groupBox9.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Padding = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.groupBox9.Size = new System.Drawing.Size(950, 96);
+            this.groupBox9.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox9.Size = new System.Drawing.Size(665, 58);
             this.groupBox9.TabIndex = 23;
             this.groupBox9.TabStop = false;
             this.groupBox9.Text = "BOCHS:";
@@ -1597,10 +1597,10 @@
             // button6
             // 
             this.button6.Enabled = false;
-            this.button6.Location = new System.Drawing.Point(10, 37);
-            this.button6.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.button6.Location = new System.Drawing.Point(7, 22);
+            this.button6.Margin = new System.Windows.Forms.Padding(4);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(177, 44);
+            this.button6.Size = new System.Drawing.Size(124, 26);
             this.button6.TabIndex = 20;
             this.button6.Text = "Executable:";
             this.button6.UseSelectable = true;
@@ -1608,8 +1608,8 @@
             // lbBOCHSExecutable
             // 
             this.lbBOCHSExecutable.AutoSize = true;
-            this.lbBOCHSExecutable.Location = new System.Drawing.Point(197, 46);
-            this.lbBOCHSExecutable.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lbBOCHSExecutable.Location = new System.Drawing.Point(138, 28);
+            this.lbBOCHSExecutable.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbBOCHSExecutable.Name = "lbBOCHSExecutable";
             this.lbBOCHSExecutable.Size = new System.Drawing.Size(127, 19);
             this.lbBOCHSExecutable.TabIndex = 19;
@@ -1625,11 +1625,11 @@
             this.groupBox8.Controls.Add(this.lbNDISASMExecutable);
             this.groupBox8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.groupBox8.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.groupBox8.Location = new System.Drawing.Point(8, 27);
-            this.groupBox8.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.groupBox8.Location = new System.Drawing.Point(6, 16);
+            this.groupBox8.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Padding = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.groupBox8.Size = new System.Drawing.Size(950, 96);
+            this.groupBox8.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox8.Size = new System.Drawing.Size(665, 58);
             this.groupBox8.TabIndex = 1;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "NDISASM:";
@@ -1637,10 +1637,10 @@
             // button5
             // 
             this.button5.Enabled = false;
-            this.button5.Location = new System.Drawing.Point(10, 37);
-            this.button5.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.button5.Location = new System.Drawing.Point(7, 22);
+            this.button5.Margin = new System.Windows.Forms.Padding(4);
             this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(177, 44);
+            this.button5.Size = new System.Drawing.Size(124, 26);
             this.button5.TabIndex = 20;
             this.button5.Text = "Executable:";
             this.button5.UseSelectable = true;
@@ -1648,8 +1648,8 @@
             // lbNDISASMExecutable
             // 
             this.lbNDISASMExecutable.AutoSize = true;
-            this.lbNDISASMExecutable.Location = new System.Drawing.Point(197, 46);
-            this.lbNDISASMExecutable.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lbNDISASMExecutable.Location = new System.Drawing.Point(138, 28);
+            this.lbNDISASMExecutable.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbNDISASMExecutable.Name = "lbNDISASMExecutable";
             this.lbNDISASMExecutable.Size = new System.Drawing.Size(140, 19);
             this.lbNDISASMExecutable.TabIndex = 19;
@@ -1669,11 +1669,11 @@
             this.groupBox7.Controls.Add(this.lbQEMUExecutable);
             this.groupBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.groupBox7.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.groupBox7.Location = new System.Drawing.Point(8, 135);
-            this.groupBox7.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.groupBox7.Location = new System.Drawing.Point(6, 81);
+            this.groupBox7.Margin = new System.Windows.Forms.Padding(4);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Padding = new System.Windows.Forms.Padding(5, 6, 5, 6);
-            this.groupBox7.Size = new System.Drawing.Size(950, 192);
+            this.groupBox7.Padding = new System.Windows.Forms.Padding(4);
+            this.groupBox7.Size = new System.Drawing.Size(665, 115);
             this.groupBox7.TabIndex = 0;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "QEMU:";
@@ -1681,8 +1681,8 @@
             // lbQEMUImgApplication
             // 
             this.lbQEMUImgApplication.AutoSize = true;
-            this.lbQEMUImgApplication.Location = new System.Drawing.Point(197, 142);
-            this.lbQEMUImgApplication.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lbQEMUImgApplication.Location = new System.Drawing.Point(138, 85);
+            this.lbQEMUImgApplication.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbQEMUImgApplication.Name = "lbQEMUImgApplication";
             this.lbQEMUImgApplication.Size = new System.Drawing.Size(163, 19);
             this.lbQEMUImgApplication.TabIndex = 24;
@@ -1692,10 +1692,10 @@
             // button8
             // 
             this.button8.Enabled = false;
-            this.button8.Location = new System.Drawing.Point(10, 133);
-            this.button8.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.button8.Location = new System.Drawing.Point(7, 80);
+            this.button8.Margin = new System.Windows.Forms.Padding(4);
             this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(177, 44);
+            this.button8.Size = new System.Drawing.Size(124, 26);
             this.button8.TabIndex = 23;
             this.button8.Text = "QEMU Image:";
             this.button8.UseSelectable = true;
@@ -1703,8 +1703,8 @@
             // lbQEMUBIOSDirectory
             // 
             this.lbQEMUBIOSDirectory.AutoSize = true;
-            this.lbQEMUBIOSDirectory.Location = new System.Drawing.Point(197, 94);
-            this.lbQEMUBIOSDirectory.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lbQEMUBIOSDirectory.Location = new System.Drawing.Point(138, 56);
+            this.lbQEMUBIOSDirectory.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbQEMUBIOSDirectory.Name = "lbQEMUBIOSDirectory";
             this.lbQEMUBIOSDirectory.Size = new System.Drawing.Size(147, 19);
             this.lbQEMUBIOSDirectory.TabIndex = 22;
@@ -1714,10 +1714,10 @@
             // button3
             // 
             this.button3.Enabled = false;
-            this.button3.Location = new System.Drawing.Point(10, 85);
-            this.button3.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.button3.Location = new System.Drawing.Point(7, 51);
+            this.button3.Margin = new System.Windows.Forms.Padding(4);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(177, 44);
+            this.button3.Size = new System.Drawing.Size(124, 26);
             this.button3.TabIndex = 21;
             this.button3.Text = "BIOS Directory:";
             this.button3.UseSelectable = true;
@@ -1725,10 +1725,10 @@
             // button2
             // 
             this.button2.Enabled = false;
-            this.button2.Location = new System.Drawing.Point(10, 37);
-            this.button2.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.button2.Location = new System.Drawing.Point(7, 22);
+            this.button2.Margin = new System.Windows.Forms.Padding(4);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(177, 44);
+            this.button2.Size = new System.Drawing.Size(124, 26);
             this.button2.TabIndex = 20;
             this.button2.Text = "Executable:";
             this.button2.UseSelectable = true;
@@ -1736,8 +1736,8 @@
             // lbQEMUExecutable
             // 
             this.lbQEMUExecutable.AutoSize = true;
-            this.lbQEMUExecutable.Location = new System.Drawing.Point(197, 46);
-            this.lbQEMUExecutable.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.lbQEMUExecutable.Location = new System.Drawing.Point(138, 28);
+            this.lbQEMUExecutable.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.lbQEMUExecutable.Name = "lbQEMUExecutable";
             this.lbQEMUExecutable.Size = new System.Drawing.Size(122, 19);
             this.lbQEMUExecutable.TabIndex = 19;
@@ -1749,17 +1749,17 @@
             this.tabCounters.Controls.Add(this.rtbCounters);
             this.tabCounters.HorizontalScrollbarBarColor = true;
             this.tabCounters.HorizontalScrollbarHighlightOnWheel = false;
-            this.tabCounters.HorizontalScrollbarSize = 19;
+            this.tabCounters.HorizontalScrollbarSize = 11;
             this.tabCounters.Location = new System.Drawing.Point(4, 22);
             this.tabCounters.Margin = new System.Windows.Forms.Padding(0);
             this.tabCounters.Name = "tabCounters";
-            this.tabCounters.Size = new System.Drawing.Size(1092, 820);
+            this.tabCounters.Size = new System.Drawing.Size(762, 482);
             this.tabCounters.TabIndex = 2;
             this.tabCounters.Text = "Counters";
             this.tabCounters.UseVisualStyleBackColor = true;
             this.tabCounters.VerticalScrollbarBarColor = true;
             this.tabCounters.VerticalScrollbarHighlightOnWheel = false;
-            this.tabCounters.VerticalScrollbarSize = 17;
+            this.tabCounters.VerticalScrollbarSize = 12;
             // 
             // rtbCounters
             // 
@@ -1767,11 +1767,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rtbCounters.Font = new System.Drawing.Font("Consolas", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.rtbCounters.Location = new System.Drawing.Point(0, 2);
+            this.rtbCounters.Location = new System.Drawing.Point(0, 1);
             this.rtbCounters.Margin = new System.Windows.Forms.Padding(0);
             this.rtbCounters.Name = "rtbCounters";
             this.rtbCounters.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.rtbCounters.Size = new System.Drawing.Size(1089, 798);
+            this.rtbCounters.Size = new System.Drawing.Size(764, 480);
             this.rtbCounters.TabIndex = 2;
             this.rtbCounters.Text = "";
             this.rtbCounters.WordWrap = false;
@@ -1781,17 +1781,17 @@
             this.tabOutput.Controls.Add(this.rtbOutput);
             this.tabOutput.HorizontalScrollbarBarColor = true;
             this.tabOutput.HorizontalScrollbarHighlightOnWheel = false;
-            this.tabOutput.HorizontalScrollbarSize = 19;
+            this.tabOutput.HorizontalScrollbarSize = 11;
             this.tabOutput.Location = new System.Drawing.Point(4, 22);
             this.tabOutput.Margin = new System.Windows.Forms.Padding(0);
             this.tabOutput.Name = "tabOutput";
-            this.tabOutput.Size = new System.Drawing.Size(1092, 820);
+            this.tabOutput.Size = new System.Drawing.Size(762, 482);
             this.tabOutput.TabIndex = 1;
             this.tabOutput.Text = "Output";
             this.tabOutput.UseVisualStyleBackColor = true;
             this.tabOutput.VerticalScrollbarBarColor = true;
             this.tabOutput.VerticalScrollbarHighlightOnWheel = false;
-            this.tabOutput.VerticalScrollbarSize = 17;
+            this.tabOutput.VerticalScrollbarSize = 12;
             // 
             // rtbOutput
             // 
@@ -1799,11 +1799,11 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.rtbOutput.Font = new System.Drawing.Font("Consolas", 8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.rtbOutput.Location = new System.Drawing.Point(0, 2);
+            this.rtbOutput.Location = new System.Drawing.Point(0, 1);
             this.rtbOutput.Margin = new System.Windows.Forms.Padding(0);
             this.rtbOutput.Name = "rtbOutput";
             this.rtbOutput.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.rtbOutput.Size = new System.Drawing.Size(1084, 798);
+            this.rtbOutput.Size = new System.Drawing.Size(760, 480);
             this.rtbOutput.TabIndex = 0;
             this.rtbOutput.Text = "";
             this.rtbOutput.WordWrap = false;
@@ -1821,15 +1821,15 @@
             // 
             // MainForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1097, 1012);
+            this.ClientSize = new System.Drawing.Size(768, 607);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.tbTabs);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Margin = new System.Windows.Forms.Padding(5, 6, 5, 6);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "MainForm";
-            this.Padding = new System.Windows.Forms.Padding(33, 115, 33, 38);
+            this.Padding = new System.Windows.Forms.Padding(23, 69, 23, 23);
             this.Resizable = false;
             this.ShadowType = MetroFramework.Forms.MetroFormShadowType.AeroShadow;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
@@ -1916,7 +1916,7 @@
 		private MetroFramework.Controls.MetroLabel lbBOCHSExecutable;
 		private System.Windows.Forms.GroupBox groupBox10;
 		private MetroFramework.Controls.MetroButton button4;
-		private MetroFramework.Controls.MetroLabel lbVMwarePlayerExecutable;
+		private MetroFramework.Controls.MetroLabel lbVMwareExecutable;
 		private System.Windows.Forms.GroupBox groupBox11;
 		private MetroFramework.Controls.MetroButton button7;
 		private MetroFramework.Controls.MetroLabel lbmkisofsExecutable;
