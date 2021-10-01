@@ -666,6 +666,59 @@ namespace Mosa.Compiler.Framework.Stages
 						return true;
 					}
 					break;
+
+				case ConditionCode.UnsignedGreaterOrEqual:
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+					{
+						return value1.MaxValue <= value2.MaxValue;
+					}
+					else if (value1.AreAll64BitsKnown && value1.MaxValue == 0 && value2.BitsSet != 0)
+					{
+						return true;
+					}
+					break;
+
+				case ConditionCode.UnsignedLessOrEqual:
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+					{
+						return value1.MaxValue <= value2.MaxValue;
+					}
+					else if (value1.AreAll64BitsKnown && value1.MaxValue == 0 && value2.BitsSet != 0)
+					{
+						return true;
+					}
+					break;
+
+				case ConditionCode.Greater:
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+					{
+						return (long)value1.MaxValue > (long)value2.MaxValue;
+					}
+					break;
+
+				case ConditionCode.Less:
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+					{
+						return (long)value1.MaxValue < (long)value2.MaxValue;
+					}
+					break;
+
+				case ConditionCode.GreaterOrEqual:
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+					{
+						return (long)value1.MaxValue >= (long)value2.MaxValue;
+					}
+					break;
+
+				case ConditionCode.LessOrEqual:
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+					{
+						return (long)value1.MaxValue <= (long)value2.MaxValue;
+					}
+					break;
+
+				default:
+					return null;
 			}
 
 			return null;
@@ -746,7 +799,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
 			{
-				return value2;
+				return value1;
 			}
 
 			return new Value(
@@ -807,7 +860,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
 			{
-				return new Value(0);
+				return Value.Zero32;
 			}
 
 			if (value2.AreLower5BitsKnown && knownSignedBit && shift == 0)
@@ -847,7 +900,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 			{
-				return new Value(0);
+				return Value.Zero64;
 			}
 
 			if (value2.AreAll64BitsKnown && knownSignedBit && shift == 0)
@@ -906,7 +959,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (value1.MaxValue <= uint.MaxValue)
 			{
-				return new Value(0, true);
+				return Value.Zero32;
 			}
 
 			return new Value(
@@ -1065,12 +1118,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (value1.AreLower32BitsKnown && (value1.BitsSet & ulong.MaxValue) == 0)
 			{
-				return new Value(0, true);
+				return Value.Zero32;
 			}
 
 			if (value2.AreLower32BitsKnown && (value2.BitsSet & ulong.MaxValue) == 0)
 			{
-				return new Value(0, true);
+				return Value.Zero32;
 			}
 
 			return new Value(
@@ -1090,12 +1143,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 			{
-				return new Value(0, true);
+				return Value.Zero64;
 			}
 
 			if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
 			{
-				return new Value(0, true);
+				return Value.Zero64;
 			}
 
 			return new Value(
@@ -1267,12 +1320,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
 			{
-				return new Value(0);
+				return Value.Zero32;
 			}
 
 			if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
 			{
-				return new Value(0);
+				return Value.Zero32;
 			}
 
 			if (value1.AreLower32BitsKnown && value1.BitsSet32 == 1)
@@ -1322,12 +1375,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 			{
-				return new Value(0);
+				return Value.Zero64;
 			}
 
 			if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
 			{
-				return new Value(0);
+				return Value.Zero64;
 			}
 
 			if (value1.AreAll64BitsKnown && value1.BitsSet == 1)
@@ -1377,12 +1430,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
 			{
-				return new Value(0);
+				return Value.Zero32;
 			}
 
 			if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
 			{
-				return new Value(0);
+				return Value.Zero32;
 			}
 
 			if (value1.AreLower32BitsKnown && value1.BitsSet32 == 1)
@@ -1419,12 +1472,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 			{
-				return new Value(0);
+				return Value.Zero64;
 			}
 
 			if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
 			{
-				return new Value(0);
+				return Value.Zero64;
 			}
 
 			if (value1.AreAll64BitsKnown && value1.BitsSet == 1)
@@ -1531,7 +1584,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
 			{
-				return new Value(0, true);
+				return Value.Zero32;
 			}
 
 			if (value2.AreLower32BitsKnown && value2.BitsSet32 != 0)
@@ -1567,7 +1620,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
 			{
-				return new Value(0, true);
+				return Value.Zero64;
 			}
 
 			if (value2.AreAll64BitsKnown && value2.BitsSet32 != 0)
@@ -1599,7 +1652,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
 			{
-				return new Value(0, true);
+				return Value.Zero32;
 			}
 
 			if (value2.AreLower5BitsKnown && shift == 0)
@@ -1638,7 +1691,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 			{
-				return new Value(0);
+				return Value.Zero64;
 			}
 
 			if (value2.AreLower6BitsKnown && shift == 0)
@@ -1689,7 +1742,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
 			{
-				return new Value(0);
+				return Value.Zero32;
 			}
 
 			if (value2.AreLower5BitsKnown && shift == 0)
@@ -1742,7 +1795,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 			{
-				return new Value(0);
+				return Value.Zero64;
 			}
 
 			if (value2.AreLower6BitsKnown && shift == 0)
@@ -1818,40 +1871,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 			bool signed = ((value1.BitsSet >> 15) & 1) == 1 || ((value1.BitsClear >> 15) & 1) != 1;
 
-			if (!signed)
-			{
-				return new Value(
-					bitsSet: value1.BitsSet16 | (signed ? Upper48BitsSet : 0),
-					bitsClear: value1.BitsClear16 | (signed ? 0 : Upper48BitsSet),
-					maxValue: value1.MaxValue,
-					minValue: value1.MinValue,
-					rangeDeterminate: false, // ??
-					is32Bit: true
-				);
-			}
-
-			if (!signed)
-			{
-				return new Value(
-					bitsSet: value1.BitsSet16 | (signed ? Upper48BitsSet : 0),
-					bitsClear: value1.BitsClear16 | (signed ? 0 : Upper48BitsSet),
-					maxValue: (ulong)short.MaxValue,
-					minValue: unchecked((ulong)short.MinValue),
-					rangeDeterminate: false, // ??
-					is32Bit: true
-				);
-			}
-			else
-			{
-				return new Value(
-					bitsSet: value1.BitsSet16 | (signed ? Upper48BitsSet : 0),
-					bitsClear: value1.BitsClear16 | (signed ? 0 : Upper48BitsSet),
-					maxValue: (ulong)short.MaxValue,
-					minValue: unchecked((ulong)short.MinValue),
-					rangeDeterminate: false, // ??
-					is32Bit: true
-				);
-			}
+			return new Value(
+				bitsSet: value1.BitsSet16 | (signed ? Upper48BitsSet : 0),
+				bitsClear: value1.BitsClear16 | (signed ? 0 : Upper48BitsSet),
+				maxValue: 0,
+				minValue: 0,
+				rangeDeterminate: false,
+				is32Bit: true
+			);
 		}
 
 		private Value SignExtend16x64(InstructionNode node)
@@ -1879,40 +1906,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 			bool signed = ((value1.BitsSet >> 15) & 1) == 1 || ((value1.BitsClear >> 15) & 1) != 1;
 
-			if (!signed)
-			{
-				return new Value(
-					bitsSet: value1.BitsSet16 | (signed ? Upper48BitsSet : 0),
-					bitsClear: value1.BitsClear16 | (signed ? 0 : Upper48BitsSet),
-					maxValue: value1.MaxValue,
-					minValue: value1.MinValue,
-					rangeDeterminate: false, // ??
-					is32Bit: false
-				);
-			}
-
-			if (!signed)
-			{
-				return new Value(
-					bitsSet: value1.BitsSet16 | (signed ? Upper48BitsSet : 0),
-					bitsClear: value1.BitsClear16 | (signed ? 0 : Upper48BitsSet),
-					maxValue: (ulong)short.MaxValue,
-					minValue: unchecked((ulong)short.MinValue),
-					rangeDeterminate: false, // ??
-					is32Bit: false
-				);
-			}
-			else
-			{
-				return new Value(
-					bitsSet: value1.BitsSet16 | (signed ? Upper48BitsSet : 0),
-					bitsClear: value1.BitsClear16 | (signed ? 0 : Upper48BitsSet),
-					maxValue: (ulong)short.MaxValue,
-					minValue: unchecked((ulong)short.MinValue),
-					rangeDeterminate: false, // ??
-					is32Bit: false
-				);
-			}
+			return new Value(
+				bitsSet: value1.BitsSet16 | (signed ? Upper48BitsSet : 0),
+				bitsClear: value1.BitsClear16 | (signed ? 0 : Upper48BitsSet),
+				maxValue: 0,
+				minValue: 0,
+				rangeDeterminate: false,
+				is32Bit: false
+			);
 		}
 
 		private Value SignExtend32x64(InstructionNode node)
@@ -1940,40 +1941,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 			bool signed = ((value1.BitsSet >> 31) & 1) == 1 || ((value1.BitsClear >> 31) & 1) != 1;
 
-			if (!signed)
-			{
-				return new Value(
-					bitsSet: value1.BitsSet32 | (signed ? Upper56BitsSet : 0),
-					bitsClear: value1.BitsClear32 | (signed ? 0 : Upper56BitsSet),
-					maxValue: value1.MaxValue,
-					minValue: value1.MinValue,
-					rangeDeterminate: false, // ??
-					is32Bit: false
-				);
-			}
-
-			if (!signed)
-			{
-				return new Value(
-					bitsSet: value1.BitsSet32 | (signed ? Upper56BitsSet : 0),
-					bitsClear: value1.BitsClear32 | (signed ? 0 : Upper56BitsSet),
-					maxValue: int.MaxValue,
-					minValue: unchecked((ulong)int.MinValue),
-					rangeDeterminate: false, // ??
-					is32Bit: false
-				);
-			}
-			else
-			{
-				return new Value(
-					bitsSet: value1.BitsSet32 | (signed ? Upper56BitsSet : 0),
-					bitsClear: value1.BitsClear32 | (signed ? 0 : Upper56BitsSet),
-					maxValue: int.MaxValue,
-					minValue: unchecked((ulong)int.MinValue),
-					rangeDeterminate: false, // ??
-					is32Bit: false
-				);
-			}
+			return new Value(
+				bitsSet: value1.BitsSet32 | (signed ? Upper56BitsSet : 0),
+				bitsClear: value1.BitsClear32 | (signed ? 0 : Upper56BitsSet),
+				maxValue: 0,
+				minValue: 0,
+				rangeDeterminate: false,
+				is32Bit: false
+			);
 		}
 
 		private Value SignExtend8x32(InstructionNode node)
@@ -1990,51 +1965,25 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!knownSignedBit)
 			{
 				return new Value(
+					bitsSet: value1.BitsSet8,
+					bitsClear: value1.BitsClear8,
 					maxValue: 0,
 					minValue: 0,
 					rangeDeterminate: false,
-					bitsSet: value1.BitsSet8,
-					bitsClear: value1.BitsClear8,
 					is32Bit: true
 			);
 			}
 
 			bool signed = ((value1.BitsSet >> 7) & 1) == 1 || ((value1.BitsClear >> 7) & 1) != 1;
 
-			if (!signed)
-			{
-				return new Value(
-					bitsSet: value1.BitsSet8 | (signed ? Upper56BitsSet : 0),
-					bitsClear: value1.BitsClear8 | (signed ? 0 : Upper56BitsSet),
-					maxValue: value1.MaxValue,
-					minValue: value1.MinValue,
-					rangeDeterminate: false, // ??
-					is32Bit: true
-			);
-			}
-
-			if (!signed)
-			{
-				return new Value(
-					bitsSet: value1.BitsSet8 | (signed ? Upper56BitsSet : 0),
-					bitsClear: value1.BitsClear8 | (signed ? 0 : Upper56BitsSet),
-					maxValue: (ulong)sbyte.MaxValue,
-					minValue: unchecked((ulong)sbyte.MinValue),
-					rangeDeterminate: false, // ??
-					is32Bit: true
-			);
-			}
-			else
-			{
-				return new Value(
-					bitsSet: value1.BitsSet8 | (signed ? Upper56BitsSet : 0),
-					bitsClear: value1.BitsClear8 | (signed ? 0 : Upper56BitsSet),
-						maxValue: (ulong)sbyte.MaxValue,
-					minValue: unchecked((ulong)sbyte.MinValue),
-					rangeDeterminate: false, // ??
+			return new Value(
+				bitsSet: value1.BitsSet8 | (signed ? Upper56BitsSet : 0),
+				bitsClear: value1.BitsClear8 | (signed ? 0 : Upper56BitsSet),
+				maxValue: 0,
+				minValue: 0,
+				rangeDeterminate: false,
 				is32Bit: true
 			);
-			}
 		}
 
 		private Value SignExtend8x64(InstructionNode node)
@@ -2057,45 +2006,19 @@ namespace Mosa.Compiler.Framework.Stages
 					minValue: 0,
 					rangeDeterminate: false,
 					is32Bit: false
-			);
+				);
 			}
 
 			bool signed = ((value1.BitsSet >> 7) & 1) == 1 || ((value1.BitsClear >> 7) & 1) != 1;
 
-			if (!signed)
-			{
-				return new Value(
-					bitsSet: value1.BitsSet8 | (signed ? Upper56BitsSet : 0),
-					bitsClear: value1.BitsClear8 | (signed ? 0 : Upper56BitsSet),
-					maxValue: value1.MaxValue,
-					minValue: value1.MinValue,
-					rangeDeterminate: false, // ??
-					is32Bit: false
-				);
-			}
-
-			if (!signed)
-			{
-				return new Value(
-					bitsSet: value1.BitsSet8 | (signed ? Upper56BitsSet : 0),
-					bitsClear: value1.BitsClear8 | (signed ? 0 : Upper56BitsSet),
-					maxValue: (ulong)sbyte.MaxValue,
-					minValue: unchecked((ulong)sbyte.MinValue),
-					rangeDeterminate: false, // ??
-					is32Bit: false
-				);
-			}
-			else
-			{
-				return new Value(
-					bitsSet: value1.BitsSet8 | (signed ? Upper56BitsSet : 0),
-					bitsClear: value1.BitsClear8 | (signed ? 0 : Upper56BitsSet),
-					maxValue: (ulong)sbyte.MaxValue,
-					minValue: unchecked((ulong)sbyte.MinValue),
-					rangeDeterminate: false, // ??
-					is32Bit: false
-				);
-			}
+			return new Value(
+				bitsSet: value1.BitsSet8 | (signed ? Upper56BitsSet : 0),
+				bitsClear: value1.BitsClear8 | (signed ? 0 : Upper56BitsSet),
+				maxValue: 0,
+				minValue: 0,
+				rangeDeterminate: false,
+				is32Bit: false
+			);
 		}
 
 		private Value To64(InstructionNode node)
@@ -2125,8 +2048,8 @@ namespace Mosa.Compiler.Framework.Stages
 			return new Value(
 				bitsSet: value1.BitsSet,
 				bitsClear: value1.BitsClear | Upper32BitsSet,
-				maxValue: value1.MaxValue,
-				minValue: value1.MinValue,
+				maxValue: value1.MaxValue & uint.MaxValue,
+				minValue: value1.MinValue & uint.MaxValue,
 				rangeDeterminate: true,
 				is32Bit: true
 			);
@@ -2213,7 +2136,7 @@ namespace Mosa.Compiler.Framework.Stages
 					minValue: Math.Min(value1.MinValue, value2.MinValue),
 					rangeDeterminate: true,
 					is32Bit: true
-			);
+				);
 			}
 
 			return Value.Any32;
