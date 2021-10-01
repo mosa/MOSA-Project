@@ -287,6 +287,12 @@ namespace Mosa.Tool.Compiler
 			set { Settings.SetValue("AppLocation.VmwarePlayer", value); }
 		}
 
+		public string VMwareWorkstation
+		{
+			get { return Settings.GetValue("AppLocation.VmwareWorkstation", null); }
+			set { Settings.SetValue("AppLocation.VmwareWorkstation", value); }
+		}
+
 		#endregion Properties
 
 		public CompilerToolSettings(Settings settings)

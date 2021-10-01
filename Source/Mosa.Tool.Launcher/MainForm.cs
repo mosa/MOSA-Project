@@ -334,7 +334,14 @@ namespace Mosa.Tool.Launcher
 			lbQEMUExecutable.Text = Settings.GetValue("AppLocation.Qemu", string.Empty);
 			lbQEMUBIOSDirectory.Text = Settings.GetValue("AppLocation.QemuBIOS", string.Empty);
 			lbQEMUImgApplication.Text = Settings.GetValue("AppLocation.QemuImg", string.Empty);
-			lbVMwarePlayerExecutable.Text = Settings.GetValue("AppLocation.VmwarePlayer", string.Empty);
+
+			string VMwareExecutable = Settings.GetValue("AppLocation.VmwareWorkstation", string.Empty);
+			if (String.IsNullOrWhiteSpace(VMwareExecutable))
+			{
+				VMwareExecutable = Settings.GetValue("AppLocation.VmwarePlayer", string.Empty);
+			}
+			lbVMwareExecutable.Text = VMwareExecutable;
+
 			lbmkisofsExecutable.Text = Settings.GetValue("AppLocation.Mkisofs", string.Empty);
 		}
 
