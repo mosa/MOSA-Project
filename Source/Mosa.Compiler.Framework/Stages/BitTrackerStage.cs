@@ -40,8 +40,6 @@ namespace Mosa.Compiler.Framework.Stages
 			public ulong MaxValue { get; private set; }
 			public ulong MinValue { get; private set; }
 
-			public bool AreRangeValuesDeterminate = true;
-
 			public Value()
 			{
 			}
@@ -96,9 +94,7 @@ namespace Mosa.Compiler.Framework.Stages
 			public bool AreUpper32BitsKnown { get { return (BitsKnown & Upper32BitsSet) == Upper32BitsSet; } }
 			public ulong BitsKnown { get { return BitsSet | BitsClear; } }
 
-			public bool AreBitsDeterminate { get { return !(BitsClear == 0 && BitsSet == 0); } }
-
-			public bool IsIndeterminate { get { return !AreRangeValuesDeterminate && !AreBitsDeterminate; } }
+			public bool AreAnyBitsKnown { get { return BitsClear != 0 || BitsSet != 0; } }
 
 			public uint BitsClear32 { get { return (uint)BitsClear; } }
 			public uint BitsSet32 { get { return (uint)BitsSet; } }
@@ -114,12 +110,9 @@ namespace Mosa.Compiler.Framework.Stages
 				sb.Append($" MaxValue: {MaxValue}");
 				sb.Append($" MinValue: {MinValue}");
 
-				if (AreBitsDeterminate)
-				{
-					sb.Append($" BitsSet: {Convert.ToString((long)BitsSet, 2).PadLeft(64, '0')}");
-					sb.Append($" BitsClear: {Convert.ToString((long)BitsClear, 2).PadLeft(64, '0')}");
-					sb.Append($" BitsKnown: {Convert.ToString((long)BitsKnown, 2).PadLeft(64, '0')}");
-				}
+				sb.Append($" BitsSet: {Convert.ToString((long)BitsSet, 2).PadLeft(64, '0')}");
+				sb.Append($" BitsClear: {Convert.ToString((long)BitsClear, 2).PadLeft(64, '0')}");
+				sb.Append($" BitsKnown: {Convert.ToString((long)BitsKnown, 2).PadLeft(64, '0')}");
 
 				return sb.ToString();
 			}
@@ -367,20 +360,11 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 				}
 
-				if (value.IsIndeterminate)
-				{
-					valueTrace?.Log($"*** INDETERMINATE");
-				}
-
 				valueTrace?.Log($"  MaxValue:  {value.MaxValue}");
 				valueTrace?.Log($"  MinValue:  {value.MinValue}");
-
-				if (value.AreBitsDeterminate)
-				{
-					valueTrace?.Log($"  BitsSet:   {Convert.ToString((long)value.BitsSet, 2).PadLeft(64, '0')}");
-					valueTrace?.Log($"  BitsClear: {Convert.ToString((long)value.BitsClear, 2).PadLeft(64, '0')}");
-					valueTrace?.Log($"  BitsKnown: {Convert.ToString((long)value.BitsKnown, 2).PadLeft(64, '0')}");
-				}
+				valueTrace?.Log($"  BitsSet:   {Convert.ToString((long)value.BitsSet, 2).PadLeft(64, '0')}");
+				valueTrace?.Log($"  BitsClear: {Convert.ToString((long)value.BitsClear, 2).PadLeft(64, '0')}");
+				valueTrace?.Log($"  BitsKnown: {Convert.ToString((long)value.BitsKnown, 2).PadLeft(64, '0')}");
 
 				valueTrace?.Log();
 			}
@@ -452,10 +436,7 @@ namespace Mosa.Compiler.Framework.Stages
 					var value = method.Invoke(node);
 					Values[index] = value;
 
-					if (!value.IsIndeterminate)
-					{
-						UpdateInstruction(node.Result, value);
-					}
+					UpdateInstruction(node.Result, value);
 
 					return true;
 				}
@@ -510,7 +491,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void UpdateInstruction(Operand virtualRegister, Value value)
 		{
-			Debug.Assert(!value.IsIndeterminate);
+			//Debug.Assert(!value.IsIndeterminate);
 			Debug.Assert(!virtualRegister.IsFloatingPoint);
 			Debug.Assert(virtualRegister.Definitions.Count == 1);
 
@@ -628,100 +609,66 @@ namespace Mosa.Compiler.Framework.Stages
 			var value1 = GetValue64(node.Operand1);
 			var value2 = GetValue64(node.Operand2);
 
-			var conditionCode = node.ConditionCode;
-
-			bool hasResult = false;
-			bool result = false;
-
-			ulong maxValue1 = value1.MaxValue;
-			ulong maxValue2 = value2.MaxValue;
-			ulong minValue1 = value1.MinValue;
-			ulong minValue2 = value2.MinValue;
-
-			ulong bitsSet1 = value1.BitsSet;
-			ulong bitsSet2 = value2.BitsSet;
-
-			ulong bitsClear1 = value1.BitsClear;
-			ulong bitsClear2 = value2.BitsClear;
-
-			bool areRangeValuesDeterminate1 = true;
-			bool areRangeValuesDeterminate2 = true;
-
-			bool areBitsIndeterminate1 = !value1.AreBitsDeterminate;
-			bool areBitsIndeterminate2 = !value2.AreBitsDeterminate;
-
-			if (conditionCode == ConditionCode.Equal)
+			switch (node.ConditionCode)
 			{
-				if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
-				{
-					hasResult = true;
-					result = maxValue1 == maxValue2;
-				}
-				else if (areRangeValuesDeterminate1 && areRangeValuesDeterminate2 && maxValue1 == minValue1 && maxValue1 == maxValue2 && minValue1 == minValue2)
-				{
-					hasResult = true;
-					result = true;
-				}
-				else if ((((bitsSet1 & bitsSet2) != bitsSet1) || ((bitsClear1 & bitsClear2) != bitsClear1)) && areBitsIndeterminate1 && areBitsIndeterminate2)
-				{
-					hasResult = true;
-					result = false;
-				}
-			}
-			else if (conditionCode == ConditionCode.NotEqual)
-			{
-				if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
-				{
-					hasResult = true;
-					result = maxValue1 != maxValue2;
-				}
-				else if (areRangeValuesDeterminate1 && areRangeValuesDeterminate2 && maxValue1 == minValue1 && maxValue1 == maxValue2 && minValue1 == minValue2)
-				{
-					hasResult = true;
-					result = false;
-				}
-				else if (value1.AreAll64BitsKnown && maxValue1 == 0 && bitsSet2 != 0)
-				{
-					hasResult = true;
-					result = true;
-				}
-				else if (value2.AreAll64BitsKnown && maxValue2 == 0 && bitsSet1 != 0)
-				{
-					hasResult = true;
-					result = true;
-				}
-			}
-			else if (conditionCode == ConditionCode.UnsignedGreater)
-			{
-				if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
-				{
-					hasResult = true;
-					result = maxValue1 > maxValue2;
-				}
-				else if (value2.AreAll64BitsKnown && maxValue2 == 0 && bitsSet1 != 0)
-				{
-					hasResult = true;
-					result = true;
-				}
-			}
-			else if (conditionCode == ConditionCode.UnsignedLess)
-			{
-				if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
-				{
-					hasResult = true;
-					result = maxValue1 < maxValue2;
-				}
-				else if (value1.AreAll64BitsKnown && maxValue1 == 0 && bitsSet2 != 0)
-				{
-					hasResult = true;
-					result = true;
-				}
+				case ConditionCode.Equal:
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+					{
+						return value1.MaxValue == value2.MaxValue;
+					}
+					else if (value1.MaxValue == value1.MinValue && value1.MaxValue == value2.MaxValue && value1.MinValue == value2.MinValue)
+					{
+						return true;
+					}
+					else if (((value1.BitsSet & value2.BitsSet) != value1.BitsSet || (value1.BitsClear & value2.BitsClear) != value1.BitsClear) && !value1.AreAnyBitsKnown && !value2.AreAnyBitsKnown)
+					{
+						return false;
+					}
+					break;
+
+				case ConditionCode.NotEqual:
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+					{
+						return value1.MaxValue != value2.MaxValue;
+					}
+					else if (value1.MaxValue == value1.MinValue && value1.MaxValue == value2.MaxValue && value1.MinValue == value2.MinValue)
+					{
+						return false;
+					}
+					else if (value1.AreAll64BitsKnown && value1.MaxValue == 0 && value2.BitsSet != 0)
+					{
+						return true;
+					}
+					else if (value2.AreAll64BitsKnown && value2.MaxValue == 0 && value1.BitsSet != 0)
+					{
+						return true;
+					}
+					break;
+
+				case ConditionCode.UnsignedGreater:
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+					{
+						return value1.MaxValue > value2.MaxValue;
+					}
+					else if (value2.AreAll64BitsKnown && value2.MaxValue == 0 && value1.BitsSet != 0)
+					{
+						return true;
+					}
+					break;
+
+				case ConditionCode.UnsignedLess:
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+					{
+						return value1.MaxValue < value2.MaxValue;
+					}
+					else if (value1.AreAll64BitsKnown && value1.MaxValue == 0 && value2.BitsSet != 0)
+					{
+						return true;
+					}
+					break;
 			}
 
-			if (!hasResult)
-				return null;
-
-			return result;
+			return null;
 		}
 
 		private Value GetValue32(Operand operand)
@@ -774,7 +721,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return new Value(
 				bitsSet: 0,
-				bitsClear: Upper32BitsSet | ((!value1.AreRangeValuesDeterminate || !value2.AreRangeValuesDeterminate) ? 0 : BitTwiddling.GetClearBitsOver((value1.MaxValue + value2.MaxValue))),
+				bitsClear: Upper32BitsSet | BitTwiddling.GetClearBitsOver((value1.MaxValue + value2.MaxValue)),
 				maxValue: value1.MaxValue + value2.MaxValue,
 				minValue: value1.MinValue + value2.MinValue,
 				rangeDeterminate: !IntegerTwiddling.IsAddOverflow((uint)value1.MaxValue, (uint)value2.MaxValue),
@@ -804,7 +751,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return new Value(
 				bitsSet: 0,
-				bitsClear: (!value1.AreRangeValuesDeterminate || !value2.AreRangeValuesDeterminate) ? 0 : BitTwiddling.GetClearBitsOver(value1.MaxValue + value2.MaxValue),
+				bitsClear: BitTwiddling.GetClearBitsOver(value1.MaxValue + value2.MaxValue),
 				maxValue: value1.MaxValue + value2.MaxValue,
 				minValue: value1.MinValue + value2.MinValue,
 				rangeDeterminate: !IntegerTwiddling.IsAddOverflow(value1.MaxValue, value2.MaxValue),
@@ -835,7 +782,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return new Value(
 				bitsSet: 0,
-				bitsClear: Upper32BitsSet | ((!value1.AreRangeValuesDeterminate || !value2.AreRangeValuesDeterminate) ? 0 : BitTwiddling.GetClearBitsOver(value1.MaxValue + value2.MaxValue + 1)),
+				bitsClear: Upper32BitsSet | BitTwiddling.GetClearBitsOver(value1.MaxValue + value2.MaxValue + 1),
 				maxValue: value1.MaxValue + value2.MaxValue + value3.MaxValue,
 				minValue: value1.MinValue + value2.MinValue + value3.MaxValue,
 				rangeDeterminate: !IntegerTwiddling.IsAddOverflow((uint)value1.MaxValue, (uint)value2.MaxValue, true),
@@ -957,7 +904,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return new Value(value1.BitsSet >> 32, true);
 			}
 
-			if (value1.AreRangeValuesDeterminate && value1.MaxValue <= uint.MaxValue)
+			if (value1.MaxValue <= uint.MaxValue)
 			{
 				return new Value(0, true);
 			}
@@ -1452,10 +1399,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return new Value(
 				bitsSet: 0,
-				bitsClear: Upper32BitsSet | ((!value1.AreRangeValuesDeterminate || !value2.AreRangeValuesDeterminate) ? 0 : BitTwiddling.GetClearBitsOver(value1.MaxValue * value2.MaxValue)),
+				bitsClear: Upper32BitsSet | BitTwiddling.GetClearBitsOver(value1.MaxValue * value2.MaxValue),
 				maxValue: (uint)(value1.MaxValue * value2.MaxValue),
 				minValue: (uint)(value1.MinValue * value2.MinValue),
-				rangeDeterminate: value1.AreRangeValuesDeterminate && value2.AreRangeValuesDeterminate && !IntegerTwiddling.IsMultiplyOverflow((uint)value1.MaxValue, (uint)value2.MaxValue),
+				rangeDeterminate: !IntegerTwiddling.IsMultiplyOverflow((uint)value1.MaxValue, (uint)value2.MaxValue),
 				is32Bit: true
 			);
 		}
@@ -1494,7 +1441,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return new Value(
 				bitsSet: 0,
-				bitsClear: (!value1.AreRangeValuesDeterminate || !value2.AreRangeValuesDeterminate) ? 0 : BitTwiddling.GetClearBitsOver(value1.MaxValue * value2.MaxValue),
+				bitsClear: BitTwiddling.GetClearBitsOver(value1.MaxValue * value2.MaxValue),
 				maxValue: value1.MaxValue * value2.MaxValue,
 				minValue: value1.MinValue * value2.MinValue,
 				rangeDeterminate: !IntegerTwiddling.IsMultiplyOverflow(value1.MaxValue, value2.MaxValue),
