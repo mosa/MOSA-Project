@@ -67,7 +67,7 @@ namespace Mosa.Runtime
 
 			if (Pointer.Size == 4)
 			{
-				memory.Store32(0, elements);
+				memory.Store32(0u, elements);
 			}
 			else
 			{

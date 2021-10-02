@@ -275,11 +275,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (EmptyBlocks.Get(block.Sequence))
 					continue;
 
-				var nextBlocks = block.NextBlocks.ToArray();
-
 				EmptyBlockOfAllInstructions(block, true);
-
-				RemoveBlocksFromPHIInstructions(block, nextBlocks);
 
 				EmptyBlocks.Set(block.Sequence, true);
 
