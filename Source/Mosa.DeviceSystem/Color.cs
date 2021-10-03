@@ -43,7 +43,7 @@ namespace Mosa.DeviceSystem
 			Red = red;
 			Green = green;
 			Blue = blue;
-			Alpha = 255;
+			Alpha = 0xff;
 		}
 
 		/// <summary>
