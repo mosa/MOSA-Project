@@ -773,19 +773,14 @@ namespace Mosa.Compiler.Framework.Stages
 				return value1;
 			}
 
-			if (!IntegerTwiddling.IsAddOverflow(value1.MaxValue, value2.MaxValue))
-			{
-				return new Value(
-					bitsSet: 0,
-					bitsClear: Upper32BitsSet | BitTwiddling.GetClearBitsOver(value1.MaxValue + value2.MaxValue),
-					maxValue: value1.MaxValue + value2.MaxValue,
-					minValue: value1.MinValue + value2.MinValue,
-					rangeDeterminate: true,
-					is32Bit: true
-				);
-			}
-
-			return Value.Any32;
+			return new Value(
+				bitsSet: 0,
+				bitsClear: Upper32BitsSet | BitTwiddling.GetClearBitsOver((value1.MaxValue + value2.MaxValue)),
+				maxValue: value1.MaxValue + value2.MaxValue,
+				minValue: value1.MinValue + value2.MinValue,
+				rangeDeterminate: !IntegerTwiddling.IsAddOverflow((uint)value1.MaxValue, (uint)value2.MaxValue),
+				is32Bit: true
+			);
 		}
 
 		private Value Add64(InstructionNode node)
@@ -808,19 +803,14 @@ namespace Mosa.Compiler.Framework.Stages
 				return value1;
 			}
 
-			if (!IntegerTwiddling.IsAddOverflow(value1.MaxValue, value2.MaxValue))
-			{
-				return new Value(
-					bitsSet: 0,
-					bitsClear: BitTwiddling.GetClearBitsOver(value1.MaxValue + value2.MaxValue),
-					maxValue: value1.MaxValue + value2.MaxValue,
-					minValue: value1.MinValue + value2.MinValue,
-					rangeDeterminate: true,
-					is32Bit: false
-				);
-			}
-
-			return Value.Any64;
+			return new Value(
+				bitsSet: 0,
+				bitsClear: BitTwiddling.GetClearBitsOver(value1.MaxValue + value2.MaxValue),
+				maxValue: value1.MaxValue + value2.MaxValue,
+				minValue: value1.MinValue + value2.MinValue,
+				rangeDeterminate: !IntegerTwiddling.IsAddOverflow(value1.MaxValue, value2.MaxValue),
+				is32Bit: false
+			);
 		}
 
 		private Value AddCarryIn32(InstructionNode node)
