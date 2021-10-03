@@ -86,13 +86,13 @@ namespace Mosa.Demo.VBEWorld.x86
 		{
 			for (; ; )
 			{
-				VBEDisplay.Framebuffer.Clear(0x00555555);
+				VBEDisplay.Framebuffer.ClearScreen(0x00555555);
 				VBEDisplay.Framebuffer.FillRectangle(0x0, 50, 50, 130, 80);
 
 				MosaLogo.Draw(VBEDisplay.Framebuffer, 10);
 				DrawMouse();
 
-				VBEDisplay.Framebuffer.Update();
+				VBEDisplay.Framebuffer.SwapBuffers();
 			}
 		}
 

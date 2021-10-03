@@ -13,8 +13,7 @@ namespace Mosa.Demo.VBEWorld.x86
 
 		public static bool InitVBE(BaseHardwareAbstraction hal)
 		{
-			if (!VBE.IsVBEAvailable)
-				return false;
+			if (!VBE.IsVBEAvailable) { return false; }
 
 			uint memorySize = (uint)(VBE.ScreenWidth * VBE.ScreenHeight * (VBE.BitsPerPixel / 8));
 			_lfb = hal.GetPhysicalMemory(VBE.MemoryPhysicalLocation, memorySize);
