@@ -34,7 +34,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="h">Width of the rectangle.</param>
 		public void FillRectangle(uint color, uint x, uint y, uint w, uint h);
 
-		/// <summary>If using double buffering, copies the second buffer to first buffer (screen).s</summary>
+		/// <summary>If using double buffering, copies the second buffer to first buffer (screen).</summary>
 		public void SwapBuffers();
 
 		/// <summary>Clears the screen with a specified color.</summary>
