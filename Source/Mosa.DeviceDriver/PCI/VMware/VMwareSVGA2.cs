@@ -17,6 +17,7 @@
 // https://sourceforge.net/p/vmware-svga/git/ci/master/tree/lib/refdriver/svga.c
 // https://github.com/prepare/vmware-svga
 
+using System;
 using Mosa.DeviceSystem;
 
 namespace Mosa.DeviceDriver.PCI.VMware
@@ -444,7 +445,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		{
 			const ushort ScreenWidth = 1366;
 			const ushort ScreenHeight = 768;
-			const byte BitsPerPixel = 0;		// Use the hosts bitsperpixel
+			const byte BitsPerPixel = 0;        // Use the hosts bitsperpixel
 
 			if (Device.Status != DeviceStatus.Available) { return; }
 
@@ -484,6 +485,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 			Device.Status = DeviceStatus.Online;
 
+			Mandelbrot();
 			MosaLogoDraw(frameBuffer, 10);
 		}
 
@@ -745,7 +747,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		/// <param name="color">The color.</param>
 		public void Clear(Color color)
 		{
-			uint ClearColor = 0x000000;
+			uint ClearColor = 0x00000000;
 
 			frameBuffer.FillRectangle(ClearColor, 0, 0, (uint)width / 2, (uint)height / 2);
 
@@ -774,9 +776,66 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 					if ((data & mask) == mask)
 					{
-						frameBuffer.FillRectangle(colors[tx / 6], (uint)(positionX + (tileSize * tx)), (uint)(positionY + (tileSize * ty)), tileSize, tileSize); //Each pixel is aprox 5 tiles in width
+						frameBuffer.FillRectangle(colors[tx / 6], (uint)(positionX + (tileSize * tx)), (uint)(positionY + (tileSize * ty)) + 50, tileSize, tileSize); //Each pixel is aprox 5 tiles in width
 					}
 				}
+			}
+
+			UpdateScreen();
+		}
+
+		public void Mandelbrot()
+		{
+			double xmin = -2.1;
+			double ymin = -1.3;
+			double xmax = 1;
+			double ymax = 1.3;
+
+			int Width = height;
+			int Height = height;
+			uint GapLeft = (uint)(width - height) / 2;
+
+			double x, y, x1, y1, xx;
+
+			uint looper, s, z = 0;
+			double intigralX, intigralY = 0.0;
+
+			intigralX = (xmax - xmin) / Width; // Make it fill the whole window
+			intigralY = (ymax - ymin) / Height;
+			x = xmin;
+
+			for (s = 1; s < Width; s++)
+			{
+				y = ymin;
+
+				for (z = 1; z < Height; z++)
+				{
+					x1 = 0;
+					y1 = 0;
+					looper = 0;
+					while (looper < 100 && Math.Sqrt((x1 * x1) + (y1 * y1)) < 2)
+					{
+						looper++;
+
+						xx = (x1 * x1) - (y1 * y1) + x;
+						y1 = 2 * x1 * y1 + y;
+						x1 = xx;
+					}
+
+					// Get the percent of where the looper stopped
+					double perc = looper / (100.0);
+
+					// Get that part of a 255 scale
+					uint val = ((uint)(perc * 0x00ffffff));
+
+					// Use that number to set the color
+
+					frameBuffer.SetPixel(val, z + GapLeft, s);
+
+					y += intigralY;
+				}
+
+				x += intigralX;
 			}
 
 			UpdateScreen();
