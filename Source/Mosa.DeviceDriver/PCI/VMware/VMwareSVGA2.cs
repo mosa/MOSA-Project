@@ -828,10 +828,10 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			double x, y, x1, y1, xx;
 
 			uint looper, s, z = 0;
-			double intigralX, intigralY = 0.0;
+			double integralX, integralY = 0.0;
 
-			intigralX = (xmax - xmin) / Width; // Make it fill the whole window
-			intigralY = (ymax - ymin) / Height;
+			integralX = (xmax - xmin) / Width; // Make it fill the whole window
+			integralY = (ymax - ymin) / Height;
 			x = xmin;
 
 			for (s = 1; s < Width; s++)
@@ -857,10 +857,10 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 					frameBuffer.SetPixel(color, z + GapLeft, s);
 
-					y += intigralY;
+					y += integralY;
 				}
 
-				x += intigralX;
+				x += integralX;
 			}
 
 			UpdateScreen(GapLeft, 0, (ushort)height, (ushort)height);
