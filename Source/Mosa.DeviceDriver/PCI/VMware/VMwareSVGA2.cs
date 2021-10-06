@@ -485,8 +485,8 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 			Device.Status = DeviceStatus.Online;
 
-			MandelbrotAnimate();
-			//MosaLogoDraw(frameBuffer, 10);
+			Mandelbrot();
+			MosaLogoDraw(frameBuffer, 10);
 		}
 
 		public override bool OnInterrupt()
@@ -809,12 +809,13 @@ namespace Mosa.DeviceDriver.PCI.VMware
 				MandelbrotColor(106, 52, 3, 255)
 		};
 
-		public void Mandelbrot(double XMin, double YMin, double XMax, double YMax)
+		public void Mandelbrot()
 		{
-			double xmin = XMin;
-			double ymin = YMin;
-			double xmax = XMax;
-			double ymax = YMax;
+			const double xmin = -2.1;
+			const double ymin = -1.3;
+
+			const double xmax = 1;
+			const double ymax = 1.3;
 
 			const uint maxIterations = 100;
 
@@ -854,7 +855,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 					color = palette[looper % 16];
 
-					frameBuffer.SetPixel(color, s + GapLeft, z);
+					frameBuffer.SetPixel(color, z + GapLeft, s);
 
 					y += intigralY;
 				}
@@ -863,23 +864,6 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			}
 
 			UpdateScreen(GapLeft, 0, (ushort)height, (ushort)height);
-		}
-
-		public void MandelbrotAnimate()
-		{
-			const double xmin = -2.1;
-			const double ymin = -1.3;
-
-			const double xmax = 1;
-			const double ymax = 1.3;
-
-			const double xstep = 0.01;
-			const double ystep = 0.01;
-
-			for (uint step = 0; step < 100; step++)
-			{
-				Mandelbrot(xmin + step*xstep, ymin + step*ystep, xmax - step*xstep, ymax - step*ystep);
-			}
 		}
 	}
 }
