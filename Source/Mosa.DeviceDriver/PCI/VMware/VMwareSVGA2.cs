@@ -784,24 +784,54 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			UpdateScreen();
 		}
 
+		public static uint MandelbrotColor (byte Red, byte Green, byte Blue, byte Alpha)
+		{
+			return (uint)(Alpha << 24 | Red << 16 | Green << 8 | Blue << 0);
+		}
+
+		uint[] palette =
+		{
+				MandelbrotColor(66, 30, 15, 255),
+				MandelbrotColor(25, 7, 26, 255),
+				MandelbrotColor(9, 1, 47, 255),
+				MandelbrotColor(4, 4, 73, 255),
+				MandelbrotColor(0, 7, 100, 255),
+				MandelbrotColor(12, 44, 138, 255),
+				MandelbrotColor(24, 82, 177, 255),
+				MandelbrotColor(57, 125, 209, 255),
+				MandelbrotColor(134, 181, 229, 255),
+				MandelbrotColor(211, 236, 248, 255),
+				MandelbrotColor(241, 233, 191, 255),
+				MandelbrotColor(248, 201, 95, 255),
+				MandelbrotColor(255, 170, 0, 255),
+				MandelbrotColor(204, 128, 0, 255),
+				MandelbrotColor(153, 87, 0, 255),
+				MandelbrotColor(106, 52, 3, 255)
+		};
+
 		public void Mandelbrot()
 		{
-			double xmin = -2.1;
-			double ymin = -1.3;
-			double xmax = 1;
-			double ymax = 1.3;
+			const double xmin = -2.1;
+			const double ymin = -1.3;
+
+			const double xmax = 1;
+			const double ymax = 1.3;
+
+			const uint maxIterations = 100;
+
+			uint color = 0;
 
 			int Width = height;
 			int Height = height;
-			uint GapLeft = (uint)(width - height) / 2;
+			ushort GapLeft = (ushort)(((ushort)width - (ushort)height) / 2);
 
 			double x, y, x1, y1, xx;
 
 			uint looper, s, z = 0;
-			double intigralX, intigralY = 0.0;
+			double integralX, integralY = 0.0;
 
-			intigralX = (xmax - xmin) / Width; // Make it fill the whole window
-			intigralY = (ymax - ymin) / Height;
+			integralX = (xmax - xmin) / Width; // Make it fill the whole window
+			integralY = (ymax - ymin) / Height;
 			x = xmin;
 
 			for (s = 1; s < Width; s++)
@@ -813,7 +843,8 @@ namespace Mosa.DeviceDriver.PCI.VMware
 					x1 = 0;
 					y1 = 0;
 					looper = 0;
-					while (looper < 100 && Math.Sqrt((x1 * x1) + (y1 * y1)) < 2)
+
+					while (looper < maxIterations && Math.Sqrt((x1 * x1) + (y1 * y1)) < 2)
 					{
 						looper++;
 
@@ -822,23 +853,17 @@ namespace Mosa.DeviceDriver.PCI.VMware
 						x1 = xx;
 					}
 
-					// Get the percent of where the looper stopped
-					double perc = looper / (100.0);
+					color = palette[looper % 16];
 
-					// Get that part of a 255 scale
-					uint val = ((uint)(perc * 0x00ffffff));
+					frameBuffer.SetPixel(color, z + GapLeft, s);
 
-					// Use that number to set the color
-
-					frameBuffer.SetPixel(val, z + GapLeft, s);
-
-					y += intigralY;
+					y += integralY;
 				}
 
-				x += intigralX;
+				x += integralX;
 			}
 
-			UpdateScreen();
+			UpdateScreen(GapLeft, 0, (ushort)height, (ushort)height);
 		}
 	}
 }

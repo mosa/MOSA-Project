@@ -177,18 +177,25 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemoryCopy(Pointer dest, Pointer src, uint count)
 		{
-			// FUTURE: Improve
-			for (int i = 0; i < count; i++)
+			uint count32 = count >> 2;
+			for (uint i = 0; i < count32; i++)
 			{
-				byte value = src.Load8(i);
-				dest.Store8(i, value);
+				uint value = src.Load32(i << 2);
+				dest.Store32(i << 2, value);
+			}
+
+			uint count8 = count & 0x03;
+			for (uint i = 0; i < count8; i++)
+			{
+				byte value = src.Load8(count32 + i);
+				dest.Store8(count32 + i, value);
 			}
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemorySet(Pointer dest, byte value, uint count)
 		{
-			for (int i = 0; i < count; i++)
+			for (uint i = 0; i < count; i++)
 			{
 				dest.Store8(i, value);
 			}
@@ -197,7 +204,7 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemorySet(Pointer dest, ushort value, uint count)
 		{
-			for (int i = 0; i < count; i += 2)
+			for (uint i = 0; i < count; i += 2)
 			{
 				dest.Store16(i, value);
 			}
@@ -206,7 +213,7 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemorySet(Pointer dest, uint value, uint count)
 		{
-			for (int i = 0; i < count; i += 4)
+			for (uint i = 0; i < count; i += 4)
 			{
 				dest.Store32(i, value);
 			}
@@ -215,7 +222,7 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemoryClear(Pointer dest, uint count, uint value = 0)
 		{
-			for (int i = 0; i < count; i++)
+			for (uint i = 0; i < count; i++)
 			{
 				dest.Store8(i, (byte)value);
 			}
