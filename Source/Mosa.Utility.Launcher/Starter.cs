@@ -153,7 +153,14 @@ namespace Mosa.Utility.Launcher
 				arg.Append(" -cpu qemu32,+sse4.1");
 			}
 
-			//arg = arg + " -vga vmware";
+			if (!string.IsNullOrWhiteSpace(LauncherSettings.EmulatorSVGA))
+			{
+				switch (LauncherSettings.EmulatorSerial.ToLowerInvariant())
+				{
+					case "vmware": arg.Append(" -vga vmware"); break;
+					default: break;
+				}
+			}
 
 			if (!LauncherSettings.EmulatorDisplay || LauncherSettings.LauncherTest)
 			{

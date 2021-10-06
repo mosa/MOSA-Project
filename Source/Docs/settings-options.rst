@@ -133,7 +133,7 @@ Image Settings
    :widths: 50, 200
 
     Image.Format,"Format of the vritual image file BIN, IMG, VHD, VDI, ISO, VMDK"
-    Image.FileSystem,"File system of the primary partition in the image file FAT12, FAT16, FAT32, ISO????"
+    Image.FileSystem,"File system of the primary partition in the image file FAT12, FAT16, FAT32, ISO"
     Image.BootLoader,"Type of bootloader grub0.97, grub2.00, syslinux6.03, syslinux3.72"
     Image.Destination,Destination directory of the image file
     Image.ImageFile,Filename of the image file
@@ -149,6 +149,7 @@ Emulator Settings
     Emulator,"Type of Emulator Qemu, VMware, Bochs"
     Emulator.Memory,Amount of memory for the virtual machine in MB
     Emulator.Display,"If true, show the video display"
+	Emulator.SVGA,"SVGA mode: std or vmware"
     Emulator.GDB,"If true, enables GDB within emulator"
     Emulator.Serial,"Serial Emulation type None, Pipe, TCPServer, TCPClient"
     Emulator.Serial.Host,Serial Host Name or IP address
