@@ -158,6 +158,17 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			new Memory.DoubleStoreParamR4(),
 			new Memory.DoubleStoreParamR8(),
 
+			new Memory.LoadStore32(),
+			new Memory.LoadStore64(),
+			new Memory.LoadStoreR4(),
+			new Memory.LoadStoreR8(),
+			new Memory.StoreLoad32(),
+			new Memory.StoreLoad64(),
+			new Memory.StoreLoadR4(),
+			new Memory.StoreLoadR8(),
+
+			new Memory.DoubleStore32(),
+
 			//new Special.Phi32Conditional(),
 		};
 	}

@@ -304,5 +304,17 @@ namespace Mosa.Demo.TestWorld.x86
 		{
 			return ReflectionTests.FindTypeOfTest();
 		}
+
+		public class Interesting
+		{
+			public int X;
+
+			public void B()
+			{
+				X++;
+				X++;
+				X++;
+			}
+		}
 	}
 }
