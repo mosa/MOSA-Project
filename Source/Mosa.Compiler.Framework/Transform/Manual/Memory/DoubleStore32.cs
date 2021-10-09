@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 {
-	public sealed class StoreLoad32 : BaseTransformation
+	public sealed class DoubleStore32 : BaseTransformation
 	{
-		public StoreLoad32() : base(IRInstruction.Store32)
+		public DoubleStore32() : base(IRInstruction.Store32)
 		{
 		}
 
@@ -13,21 +13,21 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 			if (!context.Operand2.IsResolvedConstant)
 				return false;
 
-			var previous = GetPreviousNode(context);
+			var next = GetNextNode(context);
 
-			if (previous == null)
+			if (next == null)
 				return false;
 
-			if (previous.Instruction != IRInstruction.Load32)
+			if (next.Instruction != IRInstruction.Store32)
 				return false;
 
-			if (!previous.Operand2.IsResolvedConstant)
+			if (!next.Operand2.IsResolvedConstant)
 				return false;
 
-			if (previous.Operand1 != context.Operand1)
+			if (next.Operand1 != context.Operand1)
 				return false;
 
-			if (previous.Operand2.ConstantUnsigned64 != context.Operand2.ConstantUnsigned64)
+			if (next.Operand2.ConstantUnsigned64 != context.Operand2.ConstantUnsigned64)
 				return false;
 
 			return true;
