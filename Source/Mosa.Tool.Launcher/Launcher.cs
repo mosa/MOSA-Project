@@ -334,7 +334,11 @@ namespace Mosa.Tool.Launcher
 			lblQemu.Text = Settings.GetValue("AppLocation.Qemu", string.Empty);
 			lblBios.Text = Settings.GetValue("AppLocation.QemuBIOS", string.Empty);
 			lblImage.Text = Settings.GetValue("AppLocation.QemuImg", string.Empty);
-			lblVmware.Text = Settings.GetValue("AppLocation.VmwarePlayer", string.Empty);
+
+			string VMWareWorkstation = Settings.GetValue("AppLocation.VmwareWorkstation", string.Empty);
+			string VMWarePlayer = Settings.GetValue("AppLocation.VmwarePlayer", string.Empty);
+			lblVmware.Text = String.IsNullOrWhiteSpace(VMWareWorkstation) ? VMWarePlayer : VMWareWorkstation;
+
 			lblIso.Text = Settings.GetValue("AppLocation.Mkisofs", string.Empty);
 		}
 
@@ -481,7 +485,7 @@ namespace Mosa.Tool.Launcher
 			numDepth.Value = Settings.GetValue("Multiboot.Depth", 32);
 			txtOS.Text = Settings.GetValue("OS.Name", "MOSA");
 
-			switch (Settings.GetValue("Image.Format", string.Empty).ToUpper())
+			switch (Settings.GetValue("Image.Format", string.Empty).ToUpperInvariant())
 			{
 				case "ISO": cmbImage.SelectedIndex = 0; break;
 				case "IMG": cmbImage.SelectedIndex = 1; break;
@@ -491,7 +495,7 @@ namespace Mosa.Tool.Launcher
 				default: break;
 			}
 
-			switch (Settings.GetValue("Emulator", string.Empty).ToLower())
+			switch (Settings.GetValue("Emulator", string.Empty).ToLowerInvariant())
 			{
 				case "qemu": cmbEmulator.SelectedIndex = 0; break;
 				case "bochs": cmbEmulator.SelectedIndex = 1; break;
@@ -500,7 +504,7 @@ namespace Mosa.Tool.Launcher
 				default: cmbEmulator.SelectedIndex = -1; break;
 			}
 
-			switch (Settings.GetValue("Image.FileSystem", string.Empty).ToLower())
+			switch (Settings.GetValue("Image.FileSystem", string.Empty).ToLowerInvariant())
 			{
 				case "fat12": cmbFile.SelectedIndex = 0; break;
 				case "fat16": cmbFile.SelectedIndex = 1; break;
@@ -508,7 +512,7 @@ namespace Mosa.Tool.Launcher
 				default: break;
 			}
 
-			switch (Settings.GetValue("Image.BootLoader", string.Empty).ToLower())
+			switch (Settings.GetValue("Image.BootLoader", string.Empty).ToLowerInvariant())
 			{
 				case "grub2.00": cmbLoader.SelectedIndex = 0; break;
 				case "grub0.97": cmbLoader.SelectedIndex = 1; break;
@@ -517,7 +521,7 @@ namespace Mosa.Tool.Launcher
 				default: break;
 			}
 
-			switch (Settings.GetValue("Compiler.Platform", string.Empty).ToLower())
+			switch (Settings.GetValue("Compiler.Platform", string.Empty).ToLowerInvariant())
 			{
 				case "x86": cmbPlatform.SelectedIndex = 0; break;
 				case "x64": cmbPlatform.SelectedIndex = 1; break;
@@ -525,7 +529,7 @@ namespace Mosa.Tool.Launcher
 				default: cmbPlatform.SelectedIndex = 0; break;
 			}
 
-			switch (Settings.GetValue("Emulator.Serial", string.Empty).ToLower())
+			switch (Settings.GetValue("Emulator.Serial", string.Empty).ToLowerInvariant())
 			{
 				case "none": cmbConnection.SelectedIndex = 0; break;
 				case "pipe": cmbConnection.SelectedIndex = 1; break;
