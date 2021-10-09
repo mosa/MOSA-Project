@@ -195,18 +195,36 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemorySet(Pointer dest, byte value, uint count)
 		{
-			for (uint i = 0; i < count; i++)
+			uint value32 = (uint)(value << 24 | value << 16 | value << 8 | value << 0);
+
+			uint count32 = count >> 2;
+			for (uint i = 0; i < count32; i++)
 			{
-				dest.Store8(i, value);
+				dest.Store32(i << 2, value32);
+			}
+
+			uint count8 = count & 0x03;
+			for (uint i = 0; i < count8; i++)
+			{
+				dest.Store8(count32 + i, value);
 			}
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemorySet(Pointer dest, ushort value, uint count)
 		{
-			for (uint i = 0; i < count; i += 2)
+			uint value32 = (uint)(value << 16 | value << 0);
+
+			uint count32 = count >> 1;
+			for (uint i = 0; i < count32; i++)
 			{
-				dest.Store16(i, value);
+				dest.Store32(i << 1, value32);
+			}
+
+			uint count16 = count & 0x01;
+			for (uint i = 0; i < count16; i++)
+			{
+				dest.Store16(count32 + i, value);
 			}
 		}
 
