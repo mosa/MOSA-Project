@@ -11,7 +11,7 @@ namespace Mosa.DeviceDriver.ISA
 	/// Programmable Interval Timer (PIT) Device Driver
 	/// </summary>
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x40, PortRange = 4, IRQ = 0, Platforms = PlatformArchitecture.X86AndX64)]
-	public class PIT : DeviceSystem.DeviceDriver
+	public class PIT : BaseDeviceDriver
 	{
 		#region Definitions
 
@@ -35,12 +35,12 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		///
 		/// </summary>
-		protected IOPortReadWrite modeControlPort;
+		protected BaseIOPortReadWrite modeControlPort;
 
 		/// <summary>
 		///
 		/// </summary>
-		protected IOPortReadWrite counter0Divisor;
+		protected BaseIOPortReadWrite counter0Divisor;
 
 		/// <summary>
 		///
@@ -60,12 +60,12 @@ namespace Mosa.DeviceDriver.ISA
 		/// <summary>
 		/// Initializes this device.
 		/// </summary>
-		protected override void Initialize()
+		public override void Initialize()
 		{
 			Device.Name = "PIT_0x" + Device.Resources.GetIOPortRegion(0).BaseIOPort.ToString("X");
 
-			modeControlPort = Device.Resources.GetIOPortReadWrite(0, 3);
-			counter0Divisor = Device.Resources.GetIOPortReadWrite(0, 0);
+			counter0Divisor = Device.Resources.GetIOPortReadWrite(0, 0); // 0x40
+			modeControlPort = Device.Resources.GetIOPortReadWrite(1, 0); // 0x43
 		}
 
 		/// <summary>

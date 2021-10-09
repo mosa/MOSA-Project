@@ -24,6 +24,6 @@ namespace Mosa.DeviceSystem
 		/// Assigns the packet buffer to the device
 		/// </summary>
 		/// <param name="packetBuffer">The packet buffer.</param>
-		void AssignPacketBuffer(NetworkDevicePacketBuffer packetBuffer);
+		//void AssignPacketBuffer(NetworkDevicePacketBuffer packetBuffer);
 	}
 }
