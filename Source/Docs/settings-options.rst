@@ -201,6 +201,7 @@ Application Location Settings
     AppLocation.Qemu,Location of the QEMU application
     AppLocation.QemuBIOS,Location of the QEMU BIOS
     AppLocation.QemuImg,Location of the QEMUImg application
+	AppLocation.VmwareWorkstation, Location of the VMWorkstation application
     AppLocation.VmwarePlayer,Location of the VMPlayer application
     AppLocation.Ndisasm,Location of the Ndisasm application
     AppLocation.Mkisofs,Location of the Mkisofs application
