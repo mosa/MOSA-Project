@@ -1340,7 +1340,7 @@ namespace Mosa.Tool.Launcher
 			this.txtCounters.Multiline = true;
 			this.txtCounters.Name = "txtCounters";
 			this.txtCounters.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.txtCounters.Size = new System.Drawing.Size(730, 374);
+			this.txtCounters.Size = new System.Drawing.Size(735, 374);
 			this.txtCounters.TabIndex = 0;
 			// 
 			// tabPage5
@@ -1363,7 +1363,7 @@ namespace Mosa.Tool.Launcher
 			this.txtOutput.Multiline = true;
 			this.txtOutput.Name = "txtOutput";
 			this.txtOutput.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-			this.txtOutput.Size = new System.Drawing.Size(730, 374);
+			this.txtOutput.Size = new System.Drawing.Size(735, 374);
 			this.txtOutput.TabIndex = 1;
 			// 
 			// openFileDialog1

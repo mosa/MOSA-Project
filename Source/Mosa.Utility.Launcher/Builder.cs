@@ -182,6 +182,8 @@ namespace Mosa.Utility.Launcher
 			{
 				CreateDiskImage(LauncherSettings.ImageFile);
 			}
+
+			//Output($"Image Generated");
 		}
 
 		private void AddCounters(string data)
@@ -455,6 +457,8 @@ namespace Mosa.Utility.Launcher
 
 		private void GenerateASMFile()
 		{
+			//Output($"Creating ASM File");
+
 			var map = new Dictionary<ulong, List<string>>();
 
 			foreach (var symbol in Linker.Symbols)
@@ -501,6 +505,8 @@ namespace Mosa.Utility.Launcher
 						break;
 				}
 			}
+
+			//Output($"ASM File Created");
 		}
 
 		private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)

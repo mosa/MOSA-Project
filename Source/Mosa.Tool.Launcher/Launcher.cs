@@ -45,8 +45,9 @@ namespace Mosa.Tool.Launcher
 
 			AddOutput($"Current Directory: {Environment.CurrentDirectory}");
 
-			cmbFormat.SelectedIndex = 0;
 			lbName.Text = "MOSA Launcher v" + CompilerVersion.VersionString;
+
+			cmbFormat.SelectedIndex = 0;
 
 			RegisterPlatforms();
 		}
