@@ -2,23 +2,32 @@
 
 namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 {
-	public sealed class StoreLoadParam32 : BaseTransformation
+	public sealed class StoreLoad32 : BaseTransformation
 	{
-		public StoreLoadParam32() : base(IRInstruction.StoreParam32)
+		public StoreLoad32() : base(IRInstruction.Store32)
 		{
 		}
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{
+			if (!context.Operand2.IsResolvedConstant)
+				return false;
+
 			var previous = GetPreviousNode(context);
 
 			if (previous == null)
 				return false;
 
-			if (previous.Instruction != IRInstruction.LoadParam32)
+			if (previous.Instruction != IRInstruction.Load32)
+				return false;
+
+			if (!previous.Operand2.IsResolvedConstant)
 				return false;
 
 			if (previous.Operand1 != context.Operand1)
+				return false;
+
+			if (previous.Operand2.ConstantUnsigned32 != context.Operand2.ConstantUnsigned32)
 				return false;
 
 			return true;
