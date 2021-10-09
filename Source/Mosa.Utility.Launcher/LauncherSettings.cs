@@ -76,6 +76,12 @@ namespace Mosa.Utility.Launcher
 			set { Settings.SetValue("Emulator.Serial", value); }
 		}
 
+		public string EmulatorSVGA
+		{
+			get { return Settings.GetValue("Emulator.SVGA", "std"); }
+			set { Settings.SetValue("Emulator.SVGA", value); }
+		}
+
 		public string EmulatorSerialHost
 		{
 			get { return Settings.GetValue("Emulator.Serial.Host", null); }
