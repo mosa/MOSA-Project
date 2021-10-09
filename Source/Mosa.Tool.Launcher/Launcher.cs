@@ -319,7 +319,7 @@ namespace Mosa.Tool.Launcher
 			Settings.SetValue("Emulator.Serial.Pipe", "MOSA");
 			Settings.SetValue("Emulator.Display", true);
 			Settings.SetValue("Launcher.Start", false);
-			Settings.SetValue("Launcher.Launch", false);
+			Settings.SetValue("Launcher.Launch", true);
 			Settings.SetValue("Launcher.Exit", true);
 			Settings.SetValue("Launcher.PlugKorlib", true);
 			Settings.SetValue("Launcher.HuntForCorLib", true);
@@ -340,10 +340,10 @@ namespace Mosa.Tool.Launcher
 
 		private void UpdateSettings()
 		{
-			Settings.SetValue("Optimizations.SSA", checkBox3.Checked);
-			Settings.SetValue("Optimizations.Basic", checkBox1.Checked);
-			Settings.SetValue("Optimizations.SCCP", checkBox5.Checked);
-			Settings.SetValue("Optimizations.Devirtualization", checkBox2.Checked);
+			Settings.SetValue("Optimizations.SSA", chkSSA.Checked);
+			Settings.SetValue("Optimizations.Basic", chkBasicOptimizations.Checked);
+			Settings.SetValue("Optimizations.SCCP", chkSCCP.Checked);
+			Settings.SetValue("Optimizations.Devirtualization", chkDevirtualization.Checked);
 			Settings.SetValue("CompilerDebug.NasmFile", chkNasm.Checked ? "%DEFAULT%" : string.Empty);
 			Settings.SetValue("CompilerDebug.AsmFile", chkAsm.Checked ? "%DEFAULT%" : string.Empty);
 			Settings.SetValue("CompilerDebug.MapFile", chkMap.Checked ? "%DEFAULT%" : string.Empty);
@@ -359,20 +359,20 @@ namespace Mosa.Tool.Launcher
 			Settings.SetValue("Compiler.Multithreading.MaxThreads", 0);
 			Settings.SetValue("Emulator.Memory", Settings.GetValue("Emulator.Memory", 128));
 			Settings.SetValue("Emulator.Cores", Settings.GetValue("Emulator.Cores", 1));
-			Settings.SetValue("Optimizations.Inline", checkBox9.Checked);
-			Settings.SetValue("Optimizations.Inline.ExplicitOnly", checkBox10.Checked);
+			Settings.SetValue("Optimizations.Inline", chkInline.Checked);
+			Settings.SetValue("Optimizations.Inline.ExplicitOnly", chkInlineExplicitOnly.Checked);
 			Settings.SetValue("Multiboot.Video", chkVbe.Checked);
-			Settings.SetValue("Optimizations.LongExpansion", checkBox8.Checked);
-			Settings.SetValue("Optimizations.TwoPass", checkBox11.Checked);
-			Settings.SetValue("Optimizations.ValueNumbering", checkBox4.Checked);
+			Settings.SetValue("Optimizations.LongExpansion", chkLongExpansion.Checked);
+			Settings.SetValue("Optimizations.TwoPass", chkTwoPass.Checked);
+			Settings.SetValue("Optimizations.ValueNumbering", cbValueNumbering.Checked);
 			Settings.SetValue("Compiler.BaseAddress", (uint)txtBase.Text.ParseHexOrInteger());
-			Settings.SetValue("Linker.Symbols", chkAll.Checked);
-			Settings.SetValue("Linker.StaticRelocations", chkStatic.Checked);
+			Settings.SetValue("Linker.Symbols", chkSymbols.Checked);
+			Settings.SetValue("Linker.StaticRelocations", chkStaticRelocations.Checked);
 			Settings.SetValue("Linker.Drawf", chkDwarf.Checked);
 			Settings.SetValue("Compiler.MethodScanner", chkScanner.Checked);
 			Settings.SetValue("CompilerDebug.CompileTimeFile", chkCompile.Checked ? "%DEFAULT%" : string.Empty);
-			Settings.SetValue("Optimizations.BitTracker", checkBox7.Checked);
-			Settings.SetValue("Optimizations.Platform", checkBox12.Checked);
+			Settings.SetValue("Optimizations.BitTracker", chkBitTracker.Checked);
+			Settings.SetValue("Optimizations.Platform", chkPlatformOptimizations.Checked);
 			Settings.SetValue("Optimizations.LoopInvariantCodeMotion", checkBox6.Checked);
 			Settings.SetValue("Launcher.Launch", true);
 			Settings.SetValue("OS.Name", txtOS.Text);
@@ -444,11 +444,11 @@ namespace Mosa.Tool.Launcher
 
 		private void UpdateDisplay()
 		{
-			checkBox3.Checked = Settings.GetValue("Optimizations.SSA", true);
-			checkBox1.Checked = Settings.GetValue("Optimizations.Basic", true);
-			checkBox5.Checked = Settings.GetValue("Optimizations.SCCP", true);
+			chkSSA.Checked = Settings.GetValue("Optimizations.SSA", true);
+			chkBasicOptimizations.Checked = Settings.GetValue("Optimizations.Basic", true);
+			chkSCCP.Checked = Settings.GetValue("Optimizations.SCCP", true);
 			chkDwarf.Checked = Settings.GetValue("Linker.Drawf", chkDwarf.Checked);
-			checkBox2.Checked = Settings.GetValue("Optimizations.Devirtualization", checkBox2.Checked);
+			chkDevirtualization.Checked = Settings.GetValue("Optimizations.Devirtualization", chkDevirtualization.Checked);
 			chkNasm.Checked = Settings.GetValue("CompilerDebug.NasmFile", string.Empty) == "%DEFAULT%";
 			chkAsm.Checked = Settings.GetValue("CompilerDebug.AsmFile", string.Empty) == "%DEFAULT%";
 			chkMap.Checked = Settings.GetValue("CompilerDebug.MapFile", string.Empty) == "%DEFAULT%";
@@ -459,22 +459,22 @@ namespace Mosa.Tool.Launcher
 			chkQemu.Checked = Settings.GetValue("Emulator.GDB", false);
 			chkGdb.Checked = Settings.GetValue("Launcher.LaunchGDB", false);
 			chkMosa.Checked = Settings.GetValue("Launcher.LaunchDebugger", false);
-			checkBox9.Checked = Settings.GetValue("Optimizations.Inline", true);
-			checkBox10.Checked = Settings.GetValue("Optimizations.Inline.ExplicitOnly", false);
+			chkInline.Checked = Settings.GetValue("Optimizations.Inline", true);
+			chkInlineExplicitOnly.Checked = Settings.GetValue("Optimizations.Inline.ExplicitOnly", false);
 			chkThreads.Checked = Settings.GetValue("Compiler.Multithreading", false);
 			numMemory.Value = Settings.GetValue("Emulator.Memory", 128);
 			numCores.Value = Settings.GetValue("Emulator.Cores", 1);
 			chkVbe.Checked = Settings.GetValue("Multiboot.Video", false);
 			txtBase.Text = "0x" + Settings.GetValue("Compiler.BaseAddress", 0x00400000).ToString("x8");
-			chkStatic.Checked = Settings.GetValue("Linker.StaticRelocations", false);
-			chkAll.Checked = Settings.GetValue("Linker.Symbols", false);
-			checkBox8.Checked = Settings.GetValue("Optimizations.LongExpansion", true);
-			checkBox11.Checked = Settings.GetValue("Optimizations.TwoPass", true);
-			checkBox4.Checked = Settings.GetValue("Optimizations.ValueNumbering", true);
+			chkStaticRelocations.Checked = Settings.GetValue("Linker.StaticRelocations", false);
+			chkSymbols.Checked = Settings.GetValue("Linker.Symbols", false);
+			chkLongExpansion.Checked = Settings.GetValue("Optimizations.LongExpansion", true);
+			chkTwoPass.Checked = Settings.GetValue("Optimizations.TwoPass", true);
+			cbValueNumbering.Checked = Settings.GetValue("Optimizations.ValueNumbering", true);
 			chkScanner.Checked = Settings.GetValue("Compiler.MethodScanner", false);
 			chkCompile.Checked = Settings.GetValue("CompilerDebug.CompileTimeFile", string.Empty) == "%DEFAULT%";
-			checkBox7.Checked = Settings.GetValue("Optimizations.BitTracker", false);
-			checkBox12.Checked = Settings.GetValue("Optimizations.Platform", false);
+			chkBitTracker.Checked = Settings.GetValue("Optimizations.BitTracker", false);
+			chkPlatformOptimizations.Checked = Settings.GetValue("Optimizations.Platform", false);
 			checkBox6.Checked = Settings.GetValue("Optimizations.LoopInvariantCodeMotion", false);
 			numWidth.Value = Settings.GetValue("Multiboot.Width", 640);
 			numHeight.Value = Settings.GetValue("Multiboot.Height", 480);

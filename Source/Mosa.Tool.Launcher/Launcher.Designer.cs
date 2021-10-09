@@ -57,18 +57,18 @@ namespace Mosa.Tool.Launcher
 			this.chkAsm = new System.Windows.Forms.CheckBox();
 			this.chkMap = new System.Windows.Forms.CheckBox();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
-			this.checkBox12 = new System.Windows.Forms.CheckBox();
-			this.checkBox11 = new System.Windows.Forms.CheckBox();
-			this.checkBox10 = new System.Windows.Forms.CheckBox();
-			this.checkBox9 = new System.Windows.Forms.CheckBox();
-			this.checkBox8 = new System.Windows.Forms.CheckBox();
-			this.checkBox7 = new System.Windows.Forms.CheckBox();
+			this.chkPlatformOptimizations = new System.Windows.Forms.CheckBox();
+			this.chkTwoPass = new System.Windows.Forms.CheckBox();
+			this.chkInlineExplicitOnly = new System.Windows.Forms.CheckBox();
+			this.chkInline = new System.Windows.Forms.CheckBox();
+			this.chkLongExpansion = new System.Windows.Forms.CheckBox();
+			this.chkBitTracker = new System.Windows.Forms.CheckBox();
 			this.checkBox6 = new System.Windows.Forms.CheckBox();
-			this.checkBox5 = new System.Windows.Forms.CheckBox();
-			this.checkBox4 = new System.Windows.Forms.CheckBox();
-			this.checkBox3 = new System.Windows.Forms.CheckBox();
-			this.checkBox2 = new System.Windows.Forms.CheckBox();
-			this.checkBox1 = new System.Windows.Forms.CheckBox();
+			this.chkSCCP = new System.Windows.Forms.CheckBox();
+			this.cbValueNumbering = new System.Windows.Forms.CheckBox();
+			this.chkSSA = new System.Windows.Forms.CheckBox();
+			this.chkDevirtualization = new System.Windows.Forms.CheckBox();
+			this.chkBasicOptimizations = new System.Windows.Forms.CheckBox();
 			this.lblDest = new System.Windows.Forms.Label();
 			this.btnDest = new System.Windows.Forms.Button();
 			this.lblSource = new System.Windows.Forms.Label();
@@ -97,8 +97,8 @@ namespace Mosa.Tool.Launcher
 			this.txtBase = new System.Windows.Forms.TextBox();
 			this.label8 = new System.Windows.Forms.Label();
 			this.chkDwarf = new System.Windows.Forms.CheckBox();
-			this.chkStatic = new System.Windows.Forms.CheckBox();
-			this.chkAll = new System.Windows.Forms.CheckBox();
+			this.chkStaticRelocations = new System.Windows.Forms.CheckBox();
+			this.chkSymbols = new System.Windows.Forms.CheckBox();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
 			this.cmbConnection = new System.Windows.Forms.ComboBox();
 			this.label7 = new System.Windows.Forms.Label();
@@ -503,18 +503,18 @@ namespace Mosa.Tool.Launcher
 			// 
 			// groupBox1
 			// 
-			this.groupBox1.Controls.Add(this.checkBox12);
-			this.groupBox1.Controls.Add(this.checkBox11);
-			this.groupBox1.Controls.Add(this.checkBox10);
-			this.groupBox1.Controls.Add(this.checkBox9);
-			this.groupBox1.Controls.Add(this.checkBox8);
-			this.groupBox1.Controls.Add(this.checkBox7);
+			this.groupBox1.Controls.Add(this.chkPlatformOptimizations);
+			this.groupBox1.Controls.Add(this.chkTwoPass);
+			this.groupBox1.Controls.Add(this.chkInlineExplicitOnly);
+			this.groupBox1.Controls.Add(this.chkInline);
+			this.groupBox1.Controls.Add(this.chkLongExpansion);
+			this.groupBox1.Controls.Add(this.chkBitTracker);
 			this.groupBox1.Controls.Add(this.checkBox6);
-			this.groupBox1.Controls.Add(this.checkBox5);
-			this.groupBox1.Controls.Add(this.checkBox4);
-			this.groupBox1.Controls.Add(this.checkBox3);
-			this.groupBox1.Controls.Add(this.checkBox2);
-			this.groupBox1.Controls.Add(this.checkBox1);
+			this.groupBox1.Controls.Add(this.chkSCCP);
+			this.groupBox1.Controls.Add(this.cbValueNumbering);
+			this.groupBox1.Controls.Add(this.chkSSA);
+			this.groupBox1.Controls.Add(this.chkDevirtualization);
+			this.groupBox1.Controls.Add(this.chkBasicOptimizations);
 			this.groupBox1.Location = new System.Drawing.Point(8, 66);
 			this.groupBox1.Name = "groupBox1";
 			this.groupBox1.Size = new System.Drawing.Size(261, 299);
@@ -524,73 +524,73 @@ namespace Mosa.Tool.Launcher
 			// 
 			// checkBox12
 			// 
-			this.checkBox12.AutoSize = true;
-			this.checkBox12.Checked = true;
-			this.checkBox12.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox12.Location = new System.Drawing.Point(6, 264);
-			this.checkBox12.Name = "checkBox12";
-			this.checkBox12.Size = new System.Drawing.Size(149, 19);
-			this.checkBox12.TabIndex = 16;
-			this.checkBox12.Text = "Platform Optimizations";
-			this.checkBox12.UseVisualStyleBackColor = true;
+			this.chkPlatformOptimizations.AutoSize = true;
+			this.chkPlatformOptimizations.Checked = true;
+			this.chkPlatformOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkPlatformOptimizations.Location = new System.Drawing.Point(6, 264);
+			this.chkPlatformOptimizations.Name = "checkBox12";
+			this.chkPlatformOptimizations.Size = new System.Drawing.Size(149, 19);
+			this.chkPlatformOptimizations.TabIndex = 16;
+			this.chkPlatformOptimizations.Text = "Platform Optimizations";
+			this.chkPlatformOptimizations.UseVisualStyleBackColor = true;
 			// 
 			// checkBox11
 			// 
-			this.checkBox11.AutoSize = true;
-			this.checkBox11.Checked = true;
-			this.checkBox11.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox11.Location = new System.Drawing.Point(6, 242);
-			this.checkBox11.Name = "checkBox11";
-			this.checkBox11.Size = new System.Drawing.Size(156, 19);
-			this.checkBox11.TabIndex = 15;
-			this.checkBox11.Text = "Two Optimization Passes";
-			this.checkBox11.UseVisualStyleBackColor = true;
+			this.chkTwoPass.AutoSize = true;
+			this.chkTwoPass.Checked = true;
+			this.chkTwoPass.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkTwoPass.Location = new System.Drawing.Point(6, 242);
+			this.chkTwoPass.Name = "checkBox11";
+			this.chkTwoPass.Size = new System.Drawing.Size(156, 19);
+			this.chkTwoPass.TabIndex = 15;
+			this.chkTwoPass.Text = "Two Optimization Passes";
+			this.chkTwoPass.UseVisualStyleBackColor = true;
 			// 
 			// checkBox10
 			// 
-			this.checkBox10.AutoSize = true;
-			this.checkBox10.Location = new System.Drawing.Point(6, 220);
-			this.checkBox10.Name = "checkBox10";
-			this.checkBox10.Size = new System.Drawing.Size(124, 19);
-			this.checkBox10.TabIndex = 14;
-			this.checkBox10.Text = "Inline Explicit Only";
-			this.checkBox10.UseVisualStyleBackColor = true;
+			this.chkInlineExplicitOnly.AutoSize = true;
+			this.chkInlineExplicitOnly.Location = new System.Drawing.Point(6, 220);
+			this.chkInlineExplicitOnly.Name = "checkBox10";
+			this.chkInlineExplicitOnly.Size = new System.Drawing.Size(124, 19);
+			this.chkInlineExplicitOnly.TabIndex = 14;
+			this.chkInlineExplicitOnly.Text = "Inline Explicit Only";
+			this.chkInlineExplicitOnly.UseVisualStyleBackColor = true;
 			// 
 			// checkBox9
 			// 
-			this.checkBox9.AutoSize = true;
-			this.checkBox9.Checked = true;
-			this.checkBox9.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox9.Location = new System.Drawing.Point(6, 198);
-			this.checkBox9.Name = "checkBox9";
-			this.checkBox9.Size = new System.Drawing.Size(55, 19);
-			this.checkBox9.TabIndex = 13;
-			this.checkBox9.Text = "Inline";
-			this.checkBox9.UseVisualStyleBackColor = true;
+			this.chkInline.AutoSize = true;
+			this.chkInline.Checked = true;
+			this.chkInline.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkInline.Location = new System.Drawing.Point(6, 198);
+			this.chkInline.Name = "checkBox9";
+			this.chkInline.Size = new System.Drawing.Size(55, 19);
+			this.chkInline.TabIndex = 13;
+			this.chkInline.Text = "Inline";
+			this.chkInline.UseVisualStyleBackColor = true;
 			// 
 			// checkBox8
 			// 
-			this.checkBox8.AutoSize = true;
-			this.checkBox8.Checked = true;
-			this.checkBox8.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox8.Location = new System.Drawing.Point(6, 176);
-			this.checkBox8.Name = "checkBox8";
-			this.checkBox8.Size = new System.Drawing.Size(110, 19);
-			this.checkBox8.TabIndex = 12;
-			this.checkBox8.Text = "Long Expansion";
-			this.checkBox8.UseVisualStyleBackColor = true;
+			this.chkLongExpansion.AutoSize = true;
+			this.chkLongExpansion.Checked = true;
+			this.chkLongExpansion.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkLongExpansion.Location = new System.Drawing.Point(6, 176);
+			this.chkLongExpansion.Name = "checkBox8";
+			this.chkLongExpansion.Size = new System.Drawing.Size(110, 19);
+			this.chkLongExpansion.TabIndex = 12;
+			this.chkLongExpansion.Text = "Long Expansion";
+			this.chkLongExpansion.UseVisualStyleBackColor = true;
 			// 
 			// checkBox7
 			// 
-			this.checkBox7.AutoSize = true;
-			this.checkBox7.Checked = true;
-			this.checkBox7.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox7.Location = new System.Drawing.Point(6, 154);
-			this.checkBox7.Name = "checkBox7";
-			this.checkBox7.Size = new System.Drawing.Size(80, 19);
-			this.checkBox7.TabIndex = 11;
-			this.checkBox7.Text = "Bit Tracker";
-			this.checkBox7.UseVisualStyleBackColor = true;
+			this.chkBitTracker.AutoSize = true;
+			this.chkBitTracker.Checked = true;
+			this.chkBitTracker.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkBitTracker.Location = new System.Drawing.Point(6, 154);
+			this.chkBitTracker.Name = "checkBox7";
+			this.chkBitTracker.Size = new System.Drawing.Size(80, 19);
+			this.chkBitTracker.TabIndex = 11;
+			this.chkBitTracker.Text = "Bit Tracker";
+			this.chkBitTracker.UseVisualStyleBackColor = true;
 			// 
 			// checkBox6
 			// 
@@ -606,63 +606,63 @@ namespace Mosa.Tool.Launcher
 			// 
 			// checkBox5
 			// 
-			this.checkBox5.AutoSize = true;
-			this.checkBox5.Checked = true;
-			this.checkBox5.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox5.Location = new System.Drawing.Point(6, 110);
-			this.checkBox5.Name = "checkBox5";
-			this.checkBox5.Size = new System.Drawing.Size(244, 19);
-			this.checkBox5.TabIndex = 9;
-			this.checkBox5.Text = "Sparse Conditional Constant Propagation";
-			this.checkBox5.UseVisualStyleBackColor = true;
+			this.chkSCCP.AutoSize = true;
+			this.chkSCCP.Checked = true;
+			this.chkSCCP.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkSCCP.Location = new System.Drawing.Point(6, 110);
+			this.chkSCCP.Name = "checkBox5";
+			this.chkSCCP.Size = new System.Drawing.Size(244, 19);
+			this.chkSCCP.TabIndex = 9;
+			this.chkSCCP.Text = "Sparse Conditional Constant Propagation";
+			this.chkSCCP.UseVisualStyleBackColor = true;
 			// 
 			// checkBox4
 			// 
-			this.checkBox4.AutoSize = true;
-			this.checkBox4.Checked = true;
-			this.checkBox4.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox4.Location = new System.Drawing.Point(6, 88);
-			this.checkBox4.Name = "checkBox4";
-			this.checkBox4.Size = new System.Drawing.Size(118, 19);
-			this.checkBox4.TabIndex = 8;
-			this.checkBox4.Text = "Value Numbering";
-			this.checkBox4.UseVisualStyleBackColor = true;
+			this.cbValueNumbering.AutoSize = true;
+			this.cbValueNumbering.Checked = true;
+			this.cbValueNumbering.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbValueNumbering.Location = new System.Drawing.Point(6, 88);
+			this.cbValueNumbering.Name = "checkBox4";
+			this.cbValueNumbering.Size = new System.Drawing.Size(118, 19);
+			this.cbValueNumbering.TabIndex = 8;
+			this.cbValueNumbering.Text = "Value Numbering";
+			this.cbValueNumbering.UseVisualStyleBackColor = true;
 			// 
 			// checkBox3
 			// 
-			this.checkBox3.AutoSize = true;
-			this.checkBox3.Checked = true;
-			this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox3.Location = new System.Drawing.Point(6, 66);
-			this.checkBox3.Name = "checkBox3";
-			this.checkBox3.Size = new System.Drawing.Size(187, 19);
-			this.checkBox3.TabIndex = 7;
-			this.checkBox3.Text = "Static Single Assignment (SSA)";
-			this.checkBox3.UseVisualStyleBackColor = true;
+			this.chkSSA.AutoSize = true;
+			this.chkSSA.Checked = true;
+			this.chkSSA.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkSSA.Location = new System.Drawing.Point(6, 66);
+			this.chkSSA.Name = "checkBox3";
+			this.chkSSA.Size = new System.Drawing.Size(187, 19);
+			this.chkSSA.TabIndex = 7;
+			this.chkSSA.Text = "Static Single Assignment (SSA)";
+			this.chkSSA.UseVisualStyleBackColor = true;
 			// 
 			// checkBox2
 			// 
-			this.checkBox2.AutoSize = true;
-			this.checkBox2.Checked = true;
-			this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox2.Location = new System.Drawing.Point(6, 44);
-			this.checkBox2.Name = "checkBox2";
-			this.checkBox2.Size = new System.Drawing.Size(108, 19);
-			this.checkBox2.TabIndex = 6;
-			this.checkBox2.Text = "Devirtualization";
-			this.checkBox2.UseVisualStyleBackColor = true;
+			this.chkDevirtualization.AutoSize = true;
+			this.chkDevirtualization.Checked = true;
+			this.chkDevirtualization.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkDevirtualization.Location = new System.Drawing.Point(6, 44);
+			this.chkDevirtualization.Name = "checkBox2";
+			this.chkDevirtualization.Size = new System.Drawing.Size(108, 19);
+			this.chkDevirtualization.TabIndex = 6;
+			this.chkDevirtualization.Text = "Devirtualization";
+			this.chkDevirtualization.UseVisualStyleBackColor = true;
 			// 
 			// checkBox1
 			// 
-			this.checkBox1.AutoSize = true;
-			this.checkBox1.Checked = true;
-			this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.checkBox1.Location = new System.Drawing.Point(6, 22);
-			this.checkBox1.Name = "checkBox1";
-			this.checkBox1.Size = new System.Drawing.Size(130, 19);
-			this.checkBox1.TabIndex = 5;
-			this.checkBox1.Text = "Basic Optimizations";
-			this.checkBox1.UseVisualStyleBackColor = true;
+			this.chkBasicOptimizations.AutoSize = true;
+			this.chkBasicOptimizations.Checked = true;
+			this.chkBasicOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.chkBasicOptimizations.Location = new System.Drawing.Point(6, 22);
+			this.chkBasicOptimizations.Name = "checkBox1";
+			this.chkBasicOptimizations.Size = new System.Drawing.Size(130, 19);
+			this.chkBasicOptimizations.TabIndex = 5;
+			this.chkBasicOptimizations.Text = "Basic Optimizations";
+			this.chkBasicOptimizations.UseVisualStyleBackColor = true;
 			// 
 			// lblDest
 			// 
@@ -981,8 +981,8 @@ namespace Mosa.Tool.Launcher
 			this.groupBox6.Controls.Add(this.txtBase);
 			this.groupBox6.Controls.Add(this.label8);
 			this.groupBox6.Controls.Add(this.chkDwarf);
-			this.groupBox6.Controls.Add(this.chkStatic);
-			this.groupBox6.Controls.Add(this.chkAll);
+			this.groupBox6.Controls.Add(this.chkStaticRelocations);
+			this.groupBox6.Controls.Add(this.chkSymbols);
 			this.groupBox6.Location = new System.Drawing.Point(232, 6);
 			this.groupBox6.Name = "groupBox6";
 			this.groupBox6.Size = new System.Drawing.Size(238, 135);
@@ -1021,23 +1021,23 @@ namespace Mosa.Tool.Launcher
 			// 
 			// chkStatic
 			// 
-			this.chkStatic.AutoSize = true;
-			this.chkStatic.Location = new System.Drawing.Point(12, 48);
-			this.chkStatic.Name = "chkStatic";
-			this.chkStatic.Size = new System.Drawing.Size(146, 19);
-			this.chkStatic.TabIndex = 1;
-			this.chkStatic.Text = "Emit Static Relocations";
-			this.chkStatic.UseVisualStyleBackColor = true;
+			this.chkStaticRelocations.AutoSize = true;
+			this.chkStaticRelocations.Location = new System.Drawing.Point(12, 48);
+			this.chkStaticRelocations.Name = "chkStatic";
+			this.chkStaticRelocations.Size = new System.Drawing.Size(146, 19);
+			this.chkStaticRelocations.TabIndex = 1;
+			this.chkStaticRelocations.Text = "Emit Static Relocations";
+			this.chkStaticRelocations.UseVisualStyleBackColor = true;
 			// 
 			// chkAll
 			// 
-			this.chkAll.AutoSize = true;
-			this.chkAll.Location = new System.Drawing.Point(12, 23);
-			this.chkAll.Name = "chkAll";
-			this.chkAll.Size = new System.Drawing.Size(115, 19);
-			this.chkAll.TabIndex = 0;
-			this.chkAll.Text = "Emit All Symbols";
-			this.chkAll.UseVisualStyleBackColor = true;
+			this.chkSymbols.AutoSize = true;
+			this.chkSymbols.Location = new System.Drawing.Point(12, 23);
+			this.chkSymbols.Name = "chkAll";
+			this.chkSymbols.Size = new System.Drawing.Size(115, 19);
+			this.chkSymbols.TabIndex = 0;
+			this.chkSymbols.Text = "Emit All Symbols";
+			this.chkSymbols.UseVisualStyleBackColor = true;
 			// 
 			// groupBox5
 			// 
@@ -1523,18 +1523,18 @@ namespace Mosa.Tool.Launcher
 		private System.Windows.Forms.CheckBox chkAsm;
 		private System.Windows.Forms.CheckBox chkMap;
 		private System.Windows.Forms.GroupBox groupBox1;
-		private System.Windows.Forms.CheckBox checkBox12;
-		private System.Windows.Forms.CheckBox checkBox11;
-		private System.Windows.Forms.CheckBox checkBox10;
-		private System.Windows.Forms.CheckBox checkBox9;
-		private System.Windows.Forms.CheckBox checkBox8;
-		private System.Windows.Forms.CheckBox checkBox7;
+		private System.Windows.Forms.CheckBox chkPlatformOptimizations;
+		private System.Windows.Forms.CheckBox chkTwoPass;
+		private System.Windows.Forms.CheckBox chkInlineExplicitOnly;
+		private System.Windows.Forms.CheckBox chkInline;
+		private System.Windows.Forms.CheckBox chkLongExpansion;
+		private System.Windows.Forms.CheckBox chkBitTracker;
 		private System.Windows.Forms.CheckBox checkBox6;
-		private System.Windows.Forms.CheckBox checkBox5;
-		private System.Windows.Forms.CheckBox checkBox4;
-		private System.Windows.Forms.CheckBox checkBox3;
-		private System.Windows.Forms.CheckBox checkBox2;
-		private System.Windows.Forms.CheckBox checkBox1;
+		private System.Windows.Forms.CheckBox chkSCCP;
+		private System.Windows.Forms.CheckBox cbValueNumbering;
+		private System.Windows.Forms.CheckBox chkSSA;
+		private System.Windows.Forms.CheckBox chkDevirtualization;
+		private System.Windows.Forms.CheckBox chkBasicOptimizations;
 		private System.Windows.Forms.GroupBox groupBox4;
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.Button btnCompile;
@@ -1558,8 +1558,8 @@ namespace Mosa.Tool.Launcher
 		private System.Windows.Forms.TextBox txtBase;
 		private System.Windows.Forms.Label label8;
 		private System.Windows.Forms.CheckBox chkDwarf;
-		private System.Windows.Forms.CheckBox chkStatic;
-		private System.Windows.Forms.CheckBox chkAll;
+		private System.Windows.Forms.CheckBox chkStaticRelocations;
+		private System.Windows.Forms.CheckBox chkSymbols;
 		private System.Windows.Forms.GroupBox groupBox7;
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.ComboBox cmbLoader;
