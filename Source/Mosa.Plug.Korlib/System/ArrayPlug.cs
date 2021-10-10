@@ -95,5 +95,11 @@ namespace Mosa.Plug.Korlib.System
 		{
 			return 0; // TODO
 		}
+
+		[Plug("System.Array::IndexOf")]
+		internal static int IndexOf(Array array, object value, int startIndex, int count)
+		{
+			return -1; // TODO
+		}
 	}
 }

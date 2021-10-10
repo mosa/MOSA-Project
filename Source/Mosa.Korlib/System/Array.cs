@@ -21,6 +21,9 @@ namespace System
 			}
 		}
 
+		// TODO: Detect if it's a byte array, if yes then use MaxByteArrayLength, else just use MaxArrayLength
+		public static int MaxLength => MaxArrayLength;
+
 		internal const int MaxArrayLength = 0X7FEFFFFF;
 		internal const int MaxByteArrayLength = 0x7FFFFFC7;
 
@@ -80,6 +83,20 @@ namespace System
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern int GetLowerBound(int dimension);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern int IndexOf(Array array, object value, int startIndex, int count);
+
+		// I think this could be done a bit better, NOT the official implementation
+		public static void Resize<T>(ref T[] array, int newSize)
+		{
+			T[] temp = new T[newSize];
+
+			for (int i = 0; i < array.Length; i++)
+				temp[i] = array[i];
+
+			array = temp;
+		}
 
 		public int GetUpperBound(int dimension)
 		{
