@@ -420,7 +420,7 @@ namespace System.Collections.Generic
 			private readonly Queue<T> _q;
 			private readonly int _version;
 			private int _index;   // -1 = not started, -2 = ended/disposed
-			private T? _currentElement;
+			private T _currentElement;
  
 			internal Enumerator(Queue<T> q)
 			{
@@ -492,7 +492,7 @@ namespace System.Collections.Generic
 				throw new InvalidOperationException(_index == -1 ? "Invalid operation, enumeration not started" : "Invalid operation, enumeration ended");
 			}
  
-			object? IEnumerator.Current
+			object IEnumerator.Current
 			{
 				get { return Current; }
 			}
