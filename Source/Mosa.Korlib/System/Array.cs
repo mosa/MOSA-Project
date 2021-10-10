@@ -63,6 +63,9 @@ namespace System
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		private static extern void Copy(Array sourceArray, int sourceIndex, Array destinationArray, int destinationIndex, int length, bool reliable);
 
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Clear(Array array, int index, int length);
+
 		/// <summary>
 		/// Copies a range of elements from an Array starting at the specified source index and pastes them to another Array starting at the specified destination index.
 		/// The length and the indexes are specified as 32-bit integers.

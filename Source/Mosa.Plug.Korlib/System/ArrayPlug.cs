@@ -37,14 +37,49 @@ namespace Mosa.Plug.Korlib.System
 				throw new ArgumentOutOfRangeException(nameof(length));
 
 			// Get type info
-			var typeStruct = new TypeDefinition(new Pointer(sourceArrayPtr.ToIntPtr()));
+			// Broken! (Size property loads at an invalid address most likely)
+			/*var typeStruct = new TypeDefinition(new Pointer(sourceArrayPtr.ToIntPtr()));
 			var typeCode = typeStruct.TypeCode;
 
-			var size = (typeCode == TypeCode.ReferenceType) ? IntPtr.Size : (int)typeStruct.Size;
+			var size = (typeCode == TypeCode.ReferenceType) ? IntPtr.Size : (int)typeStruct.Size;*/
+
+			var size = IntPtr.Size;
 
 			Mosa.Runtime.Internal.MemoryCopy(
 				destinationArrayPtr + (IntPtr.Size * 2) + (destinationIndex * size),
 				sourceArrayPtr + (IntPtr.Size * 2) + (sourceIndex * size),
+				(uint)(length * size)
+			);
+		}
+
+		[Plug("System.Array::Clear")]
+		internal static void Clear(Array array, int index, int length)
+		{
+			var arrayPtr = Intrinsic.GetObjectAddress<Array>(array);
+
+			// TODO: add more checks, allow type up-casting, add multi dimensional array support
+			if (arrayPtr.IsNull)
+				throw new ArgumentNullException(nameof(arrayPtr));
+
+			if (length < 0)
+				throw new ArgumentOutOfRangeException(nameof(length));
+
+			var sourceLength = GetLength(arrayPtr.ToIntPtr(), 0);
+
+			if (sourceLength - index < length)
+				throw new ArgumentOutOfRangeException(nameof(length));
+
+			// Get type info
+			// Broken! (Size property loads at an invalid address most likely)
+			/*var typeStruct = new TypeDefinition(new Pointer(arrayPtr.ToIntPtr()));
+			var typeCode = typeStruct.TypeCode;
+
+			var size = (typeCode == TypeCode.ReferenceType) ? IntPtr.Size : (int)typeStruct.Size;*/
+
+			var size = IntPtr.Size;
+
+			Mosa.Runtime.Internal.MemoryClear(
+				arrayPtr + (IntPtr.Size * 2) + (index * size),
 				(uint)(length * size)
 			);
 		}
