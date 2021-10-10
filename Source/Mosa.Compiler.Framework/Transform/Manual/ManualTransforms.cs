@@ -178,6 +178,16 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			new Memory.DoubleStoreR8(),
 			new Memory.DoubleStoreObject(),
 
+			new Memory.LoadZeroExtend16x32Store16(),
+			new Memory.LoadZeroExtend16x64Store16(),
+			new Memory.LoadZeroExtend8x32Store8(),
+			new Memory.LoadZeroExtend8x64Store8(),
+
+			new Memory.LoadSignExtend16x32Store16(),
+			new Memory.LoadSignExtend16x64Store16(),
+			new Memory.LoadSignExtend8x32Store8(),
+			new Memory.LoadSignExtend8x64Store8(),
+
 			//new Special.Phi32Conditional(),
 		};
 	}
