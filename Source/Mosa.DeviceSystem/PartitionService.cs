@@ -52,7 +52,7 @@ namespace Mosa.DeviceSystem
 						ReadOnly = false,
 					};
 
-					DeviceService.Initialize(new PartitionDeviceDriver(), device, configuration, null, null);
+					DeviceService.Initialize(new PartitionDeviceDriver(), device, true, configuration, null, null);
 				}
 			}
 		}

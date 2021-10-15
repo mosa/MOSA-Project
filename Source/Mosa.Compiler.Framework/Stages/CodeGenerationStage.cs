@@ -145,7 +145,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 						node.Instruction.Emit(node, CodeEmitter.OpcodeEncoder);
 
-						GeneratedInstructionCount++;
+						GeneratedInstructionCount.Increment();
 
 						trace?.Log($"0x{node.Offset:X8} {node.Offset} = {node}");
 					}
@@ -158,7 +158,7 @@ namespace Mosa.Compiler.Framework.Stages
 				block.Last.Offset = CodeEmitter.CurrentPosition;
 
 				BlockEnd(block);
-				GeneratedBlockCount++;
+				GeneratedBlockCount.Increment();
 			}
 
 			MethodData.AddLabelRegion(labelCurrent, labelStart, CodeEmitter.CurrentPosition - labelStart);

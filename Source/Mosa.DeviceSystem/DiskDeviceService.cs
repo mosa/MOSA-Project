@@ -41,7 +41,7 @@ namespace Mosa.DeviceSystem
 					ReadOnly = false
 				};
 
-				deviceService.Initialize(new DiskDeviceDriver(), device, configuration);
+				deviceService.Initialize(new DiskDeviceDriver(), device, true, configuration);
 			}
 		}
 	}

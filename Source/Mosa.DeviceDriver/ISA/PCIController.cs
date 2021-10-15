@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.DeviceDriver.ISA
 {
@@ -8,7 +9,7 @@ namespace Mosa.DeviceDriver.ISA
 	/// PCI Controller
 	/// </summary>
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x0CF8, PortRange = 8, Platforms = PlatformArchitecture.X86AndX64)]
-	public class PCIController : BaseDeviceDriver, IPCIController
+	public sealed class PCIController : BaseDeviceDriver, IPCIControllerLegacy, IPCIController
 	{
 		#region Definitions
 
@@ -92,7 +93,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <param name="function">The function.</param>
 		/// <param name="register">The register.</param>
 		/// <returns></returns>
-		uint IPCIController.ReadConfig32(byte bus, byte slot, byte function, byte register)
+		uint IPCIControllerLegacy.ReadConfig32(byte bus, byte slot, byte function, byte register)
 		{
 			configAddress.Write32(GetIndex(bus, slot, function, register));
 			return configData.Read32();
@@ -106,7 +107,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <param name="function">The function.</param>
 		/// <param name="register">The register.</param>
 		/// <returns></returns>
-		ushort IPCIController.ReadConfig16(byte bus, byte slot, byte function, byte register)
+		ushort IPCIControllerLegacy.ReadConfig16(byte bus, byte slot, byte function, byte register)
 		{
 			configAddress.Write32(GetIndex(bus, slot, function, register));
 			return (ushort)((configData.Read32() >> ((register % 4) * 8)) & 0xFFFF);
@@ -120,7 +121,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <param name="function">The function.</param>
 		/// <param name="register">The register.</param>
 		/// <returns></returns>
-		byte IPCIController.ReadConfig8(byte bus, byte slot, byte function, byte register)
+		byte IPCIControllerLegacy.ReadConfig8(byte bus, byte slot, byte function, byte register)
 		{
 			configAddress.Write32(GetIndex(bus, slot, function, register));
 			return (byte)((configData.Read32() >> ((register % 4) * 8)) & 0xFF);
@@ -134,7 +135,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <param name="function">The function.</param>
 		/// <param name="register">The register.</param>
 		/// <param name="value">The value.</param>
-		void IPCIController.WriteConfig32(byte bus, byte slot, byte function, byte register, uint value)
+		void IPCIControllerLegacy.WriteConfig32(byte bus, byte slot, byte function, byte register, uint value)
 		{
 			configAddress.Write32(GetIndex(bus, slot, function, register));
 			configData.Write32(value);
@@ -148,7 +149,7 @@ namespace Mosa.DeviceDriver.ISA
 		/// <param name="function">The function.</param>
 		/// <param name="register">The register.</param>
 		/// <param name="value">The value.</param>
-		void IPCIController.WriteConfig16(byte bus, byte slot, byte function, byte register, ushort value)
+		void IPCIControllerLegacy.WriteConfig16(byte bus, byte slot, byte function, byte register, ushort value)
 		{
 			configAddress.Write32(GetIndex(bus, slot, function, register));
 			configData.Write16(value);
@@ -162,12 +163,88 @@ namespace Mosa.DeviceDriver.ISA
 		/// <param name="function">The function.</param>
 		/// <param name="register">The register.</param>
 		/// <param name="value">The value.</param>
-		void IPCIController.WriteConfig8(byte bus, byte slot, byte function, byte register, byte value)
+		void IPCIControllerLegacy.WriteConfig8(byte bus, byte slot, byte function, byte register, byte value)
 		{
 			configAddress.Write32(GetIndex(bus, slot, function, register));
 			configData.Write8(value);
 		}
 
 		#endregion IPCIController
+
+		#region IPCIController v2
+
+		/// <summary>
+		/// Reads from configuration space
+		/// </summary>
+		/// <param name="pciDevice">The PCI Device.</param>
+		/// <param name="register">The register.</param>
+		/// <returns></returns>
+		uint IPCIController.ReadConfig32(PCIDevice pciDevice, byte register)
+		{
+			configAddress.Write32(GetIndex(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, register));
+			return configData.Read32();
+		}
+
+		/// <summary>
+		/// Reads from configuration space
+		/// </summary>
+		/// <param name="pciDevice">The PCI Device.</param>
+		/// <param name="register">The register.</param>
+		/// <returns></returns>
+		ushort IPCIController.ReadConfig16(PCIDevice pciDevice, byte register)
+		{
+			configAddress.Write32(GetIndex(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, register));
+			return (ushort)((configData.Read32() >> ((register % 4) * 8)) & 0xFFFF);
+		}
+
+		/// <summary>
+		/// Reads from configuration space
+		/// </summary>
+		/// <param name="pciDevice">The PCI Device.</param>
+		/// <param name="register">The register.</param>
+		/// <returns></returns>
+		byte IPCIController.ReadConfig8(PCIDevice pciDevice, byte register)
+		{
+			configAddress.Write32(GetIndex(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, register));
+			return (byte)((configData.Read32() >> ((register % 4) * 8)) & 0xFF);
+		}
+
+		/// <summary>
+		/// Writes to configuration space
+		/// </summary>
+		/// <param name="pciDevice">The PCI Device.</param>
+		/// <param name="register">The register.</param>
+		/// <param name="value">The value.</param>
+		void IPCIController.WriteConfig32(PCIDevice pciDevice, byte register, uint value)
+		{
+			configAddress.Write32(GetIndex(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, register));
+			configData.Write32(value);
+		}
+
+		/// <summary>
+		/// Writes to configuration space
+		/// </summary>
+		/// <param name="pciDevice">The PCI Device.</param>
+		/// <param name="register">The register.</param>
+		/// <param name="value">The value.</param>
+		void IPCIController.WriteConfig16(PCIDevice pciDevice, byte register, ushort value)
+		{
+			configAddress.Write32(GetIndex(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, register));
+			configData.Write16(value);
+		}
+
+		/// <summary>
+		/// Writes to configuration space
+		/// </summary>
+		/// <param name="pciDevice">The PCI Device.</param>
+		/// <param name="register">The register.</param>
+		/// <param name="value">The value.</param>
+		void IPCIController.WriteConfig8(PCIDevice pciDevice, byte register, byte value)
+		{
+			configAddress.Write32(GetIndex(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, register));
+			configData.Write8(value);
+		}
+
+		#endregion IPCIController v2
 	}
 }

@@ -108,7 +108,7 @@ namespace Mosa.Compiler.Framework.Stages
 						trace?.Log("*** ConditionalConstantPropagation");
 						trace?.Log($"BEFORE:\t{node}");
 						node.SetOperand(i, constant);
-						ConditionalConstantPropagationCount++;
+						ConditionalConstantPropagationCount.Increment();
 						trace?.Log($"AFTER: \t{node}");
 
 						changed = true;
@@ -125,7 +125,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			trace?.Log($"REMOVED:\t{defNode}");
 			defNode.SetNop();
-			InstructionsRemovedCount++;
+			InstructionsRemovedCount.Increment();
 		}
 
 		protected void RemoveDeadBlocks(List<BasicBlock> deadBlocks)
@@ -160,7 +160,7 @@ namespace Mosa.Compiler.Framework.Stages
 						trace?.Log("*** RemoveBranchesToDeadBlocks");
 						trace?.Log($"REMOVED:\t{node}");
 						node.SetNop();
-						InstructionsRemovedCount++;
+						InstructionsRemovedCount.Increment();
 						continue;
 					}
 

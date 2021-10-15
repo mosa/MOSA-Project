@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.DeviceSystem.PCI;
+
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
@@ -10,32 +12,26 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// Reads from configuration space
 		/// </summary>
-		/// <param name="bus">The bus.</param>
-		/// <param name="slot">The slot.</param>
-		/// <param name="function">The function.</param>
+		/// <param name="pciDevice">The PCI Device.</param>
 		/// <param name="register">The register.</param>
 		/// <returns></returns>
-		uint ReadConfig32(byte bus, byte slot, byte function, byte register);
+		uint ReadConfig32(PCIDevice pciDevice, byte register);
 
 		/// <summary>
 		/// Reads from configuration space
 		/// </summary>
-		/// <param name="bus">The bus.</param>
-		/// <param name="slot">The slot.</param>
-		/// <param name="function">The function.</param>
+		/// <param name="pciDevice">The PCI Device.</param>
 		/// <param name="register">The register.</param>
 		/// <returns></returns>
-		ushort ReadConfig16(byte bus, byte slot, byte function, byte register);
+		ushort ReadConfig16(PCIDevice pciDevice, byte register);
 
 		/// <summary>
 		/// Reads from configuration space
 		/// </summary>
-		/// <param name="bus">The bus.</param>
-		/// <param name="slot">The slot.</param>
-		/// <param name="function">The function.</param>
+		/// <param name="pciDevice">The PCI Device.</param>
 		/// <param name="register">The register.</param>
 		/// <returns></returns>
-		byte ReadConfig8(byte bus, byte slot, byte function, byte register);
+		byte ReadConfig8(PCIDevice pciDevice, byte register);
 
 		/// <summary>
 		/// Writes to configuration space
@@ -45,26 +41,22 @@ namespace Mosa.DeviceSystem
 		/// <param name="function">The function.</param>
 		/// <param name="register">The register.</param>
 		/// <param name="value">The value.</param>
-		void WriteConfig32(byte bus, byte slot, byte function, byte register, uint value);
+		void WriteConfig32(PCIDevice pciDevice, byte register, uint value);
 
 		/// <summary>
 		/// Writes to configuration space
 		/// </summary>
-		/// <param name="bus">The bus.</param>
-		/// <param name="slot">The slot.</param>
-		/// <param name="function">The function.</param>
+		/// <param name="pciDevice">The PCI Device.</param>
 		/// <param name="register">The register.</param>
 		/// <param name="value">The value.</param>
-		void WriteConfig16(byte bus, byte slot, byte function, byte register, ushort value);
+		void WriteConfig16(PCIDevice pciDevice, byte register, ushort value);
 
 		/// <summary>
 		/// Writes to configuration space
 		/// </summary>
-		/// <param name="bus">The bus.</param>
-		/// <param name="slot">The slot.</param>
-		/// <param name="function">The function.</param>
+		/// <param name="pciDevice">The PCI Device.</param>
 		/// <param name="register">The register.</param>
 		/// <param name="value">The value.</param>
-		void WriteConfig8(byte bus, byte slot, byte function, byte register, byte value);
+		void WriteConfig8(PCIDevice pciDevice, byte register, byte value);
 	}
 }

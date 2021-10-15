@@ -1,4 +1,6 @@
-﻿using Mosa.DeviceSystem;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.DeviceSystem;
 using Mosa.Runtime;
 using System.Runtime.InteropServices;
 
@@ -88,6 +90,7 @@ namespace Mosa.DeviceDriver.ISA
 
 		// 64bit pointers - Available on ACPI 2.0+
 		public ulong X_FirmwareControl;
+
 		public ulong X_Dsdt;
 
 		public GenericAddressStructure X_PM1aEventBlock;
@@ -123,7 +126,7 @@ namespace Mosa.DeviceDriver.ISA
 		}*/
 	}
 
-	public unsafe class ACPI : BaseDeviceDriver
+	public unsafe class ACPI : BaseDeviceDriver, IAPCI
 	{
 		private RSDPDescriptor* Descriptor;
 		private FADT* FADT;
@@ -256,12 +259,7 @@ namespace Mosa.DeviceDriver.ISA
 
 		private string ToStringFromCharPointer(int length, sbyte* pointer)
 		{
-			string str = string.Empty;
-
-			for (int i = 0; i < length; i++)
-				str += (char)pointer[i];
-
-			return str;
+			return new string(pointer, 0, length);
 		}
 	}
 }

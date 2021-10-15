@@ -45,12 +45,9 @@ namespace Mosa.Compiler.Framework.Transform
 		{
 			string name = GetType().FullName;
 
-			int offset1 = name.IndexOf('.');
-			int offset2 = name.IndexOf('.', offset1 + 1);
-			int offset3 = name.IndexOf('.', offset2 + 1);
-			int offset4 = name.IndexOf('.', offset3 + 1);
+			var transform = name.Replace("Mosa.Platform.", string.Empty).Replace("Mosa.Compiler.Framework.", string.Empty).Replace("Transform.", string.Empty);
 
-			return name.Substring(offset4 + 1);
+			return transform;
 		}
 
 		#endregion Internals
@@ -830,6 +827,40 @@ namespace Mosa.Compiler.Framework.Transform
 			}
 
 			return next.IsBlockEndInstruction ? null : next;
+		}
+
+		protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, out bool immediatePrevious, int lookback = 1)
+		{
+			var previous = context.Node.Previous;
+			int count = 0;
+			immediatePrevious = false;
+
+			while (count < lookback)
+			{
+				if (previous.IsEmptyOrNop)
+				{
+					previous = previous.Previous;
+					continue;
+				}
+
+				if (previous.Instruction == untilInstruction)
+				{
+					immediatePrevious = count == 0;
+					return previous;
+				}
+
+				if (previous.IsBlockStartInstruction
+					|| previous.Instruction.IsMemoryRead
+					|| previous.Instruction.IsMemoryWrite
+					|| previous.Instruction.IsIOOperation
+					|| previous.Instruction.FlowControl != FlowControl.Next)
+					return null;
+
+				previous = previous.Previous;
+				count++;
+			}
+
+			return null;
 		}
 
 		protected static bool Compare64(Context context)
