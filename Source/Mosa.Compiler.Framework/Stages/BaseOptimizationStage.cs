@@ -35,6 +35,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected BitArray EmptyBlocks;
 
+		protected Dictionary<string, Counter> transformationsCounts = new Dictionary<string, Counter>();
+
+		protected bool CountTransformations = false;
+
 		public BaseOptimizationStage(bool enableTransformationOptimizations = false, bool enableBlockOptimizations = false)
 		{
 			EnableTransformationOptimizations = enableTransformationOptimizations;
@@ -52,6 +56,8 @@ namespace Mosa.Compiler.Framework.Stages
 			Register(SkippedEmptyBlocksCount);
 			Register(RemoveUnreachableBlocksCount);
 			Register(BlocksMergedCount);
+
+			CountTransformations = CompilerSettings.TraceLevel >= 9;
 		}
 
 		protected void AddTranformations(List<BaseTransformation> list)
@@ -200,6 +206,9 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					OptimizationsCount.Increment();
 
+					if (CountTransformations)
+						CountTransformation(transformation);
+
 					if (CompilerSettings.FullCheckMode)
 						CheckAllPhiInstructions();
 
@@ -208,6 +217,21 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			return false;
+		}
+
+		private void CountTransformation(BaseTransformation transformation)
+		{
+			var name = transformation.Name;
+
+			if (!transformationsCounts.TryGetValue(name, out Counter counter))
+			{
+				counter = new Counter($"Transform-{name}");
+
+				transformationsCounts.Add(name, counter);
+				Register(counter);
+			}
+
+			counter.Increment();
 		}
 
 		private bool BranchOptimizationPass()

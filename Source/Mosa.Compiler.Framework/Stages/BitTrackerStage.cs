@@ -545,7 +545,7 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 				}
 				trace?.Log($"AFTER: \t{node2}");
-				InstructionsUpdatedCount++;
+				InstructionsUpdatedCount.Increment();
 			}
 
 			Debug.Assert(virtualRegister.Uses.Count == 0);
@@ -554,7 +554,7 @@ namespace Mosa.Compiler.Framework.Stages
 			node.SetNop();
 			trace?.Log();
 
-			InstructionsRemovedCount++;
+			InstructionsRemovedCount.Increment();
 		}
 
 		private void UpdateBranchInstructions()
@@ -586,8 +586,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 				trace?.Log($"REMOVED:\t{node}");
 				node.SetNop();
-				InstructionsRemovedCount++;
-				BranchesRemovedCount++;
+				InstructionsRemovedCount.Increment();
+				BranchesRemovedCount.Increment();
 
 				if (!result.Value)
 				{

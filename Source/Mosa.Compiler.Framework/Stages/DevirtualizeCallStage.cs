@@ -56,7 +56,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			trace?.Log($"De-virtualize: {method}");
 
-			DevirtualizedMethodCallsCount++;
+			DevirtualizedMethodCallsCount.Increment();
 
 			context.SetInstruction(IRInstruction.CallStatic, context.Result, symbol, operands);
 

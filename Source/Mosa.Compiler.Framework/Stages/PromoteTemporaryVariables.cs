@@ -134,7 +134,7 @@ namespace Mosa.Compiler.Framework.Stages
 		protected void Promote(Operand operand)
 		{
 			var virtualRegister = AllocateVirtualRegister(operand);
-			TemporariesPromoted++;
+			TemporariesPromoted.Increment();
 
 			trace?.Log($"VR: {virtualRegister}");
 

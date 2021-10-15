@@ -49,6 +49,9 @@ namespace Mosa.DeviceSystem
 				if (!(driver is PCIDeviceDriverRegistryEntry pciDriver))
 					continue;
 
+				if (!IsMatch(pciDriver, pciDevice))
+					continue;
+
 				int priority = GetMatchedPriority(pciDriver, pciDevice);
 
 				if (priority <= 0)
@@ -96,7 +99,7 @@ namespace Mosa.DeviceSystem
 
 			var hardwareResources = new HardwareResources(ioPortRegions, memoryRegions, pciDevice.IRQ);
 
-			DeviceService.Initialize(driver, device, null, hardwareResources);
+			DeviceService.Initialize(driver, device, driver.AutoStart, null, hardwareResources);
 		}
 
 		private bool HasFlag(PCIField list, PCIField match)
@@ -104,16 +107,45 @@ namespace Mosa.DeviceSystem
 			return (int)(list & match) != 0;
 		}
 
+		protected bool IsMatch(PCIDeviceDriverRegistryEntry driver, PCIDevice pciDevice)
+		{
+			if (HasFlag(driver.PCIFields, PCIField.VendorID) && driver.VendorID != pciDevice.VendorID)
+				return false;
+
+			if (HasFlag(driver.PCIFields, PCIField.DeviceID) && driver.DeviceID != pciDevice.DeviceID)
+				return false;
+
+			if (HasFlag(driver.PCIFields, PCIField.SubSystemID) && driver.SubSystemID != pciDevice.SubSystemID)
+				return false;
+
+			if (HasFlag(driver.PCIFields, PCIField.SubSystemVendorID) && driver.SubSystemVendorID != pciDevice.SubSystemVendorID)
+				return false;
+
+			if (HasFlag(driver.PCIFields, PCIField.ClassCode) && driver.ClassCode != pciDevice.ClassCode)
+				return false;
+
+			if (HasFlag(driver.PCIFields, PCIField.SubClassCode) && driver.SubClassCode != pciDevice.SubClassCode)
+				return false;
+
+			if (HasFlag(driver.PCIFields, PCIField.ProgIF) && driver.ProgIF != pciDevice.ProgIF)
+				return false;
+
+			if (HasFlag(driver.PCIFields, PCIField.RevisionID) && driver.RevisionID != pciDevice.RevisionID)
+				return false;
+
+			return true;
+		}
+
 		protected int GetMatchedPriority(PCIDeviceDriverRegistryEntry driver, PCIDevice pciDevice)
 		{
-			bool VendorID = HasFlag(driver.PCIFields, PCIField.VendorID) && driver.VendorID == pciDevice.VendorID;
-			bool DeviceID = HasFlag(driver.PCIFields, PCIField.DeviceID) && driver.DeviceID == pciDevice.DeviceID;
-			bool SubSystemID = HasFlag(driver.PCIFields, PCIField.SubSystemID) && driver.SubSystemID == pciDevice.SubSystemID;
-			bool SubSystemVendorID = HasFlag(driver.PCIFields, PCIField.SubSystemVendorID) && driver.SubSystemVendorID == pciDevice.SubSystemVendorID;
-			bool ClassCode = HasFlag(driver.PCIFields, PCIField.ClassCode) && driver.ClassCode == pciDevice.ClassCode;
-			bool SubClassCode = HasFlag(driver.PCIFields, PCIField.SubClassCode) && driver.SubClassCode == pciDevice.SubClassCode;
-			bool ProgIF = HasFlag(driver.PCIFields, PCIField.ProgIF) && driver.ProgIF == pciDevice.ProgIF;
-			bool RevisionID = HasFlag(driver.PCIFields, PCIField.RevisionID) && driver.RevisionID == pciDevice.RevisionID;
+			bool VendorID = HasFlag(driver.PCIFields, PCIField.VendorID);
+			bool DeviceID = HasFlag(driver.PCIFields, PCIField.DeviceID);
+			bool SubSystemID = HasFlag(driver.PCIFields, PCIField.SubSystemID);
+			bool SubSystemVendorID = HasFlag(driver.PCIFields, PCIField.SubSystemVendorID);
+			bool ClassCode = HasFlag(driver.PCIFields, PCIField.ClassCode);
+			bool SubClassCode = HasFlag(driver.PCIFields, PCIField.SubClassCode);
+			bool ProgIF = HasFlag(driver.PCIFields, PCIField.ProgIF);
+			bool RevisionID = HasFlag(driver.PCIFields, PCIField.RevisionID);
 
 			if (VendorID && DeviceID && ClassCode && SubClassCode && ProgIF && RevisionID)
 				return 1;
