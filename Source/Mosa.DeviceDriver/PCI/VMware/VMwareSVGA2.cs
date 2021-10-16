@@ -18,6 +18,7 @@
 // https://github.com/prepare/vmware-svga
 
 using System;
+using System.Drawing;
 using Mosa.DeviceSystem;
 
 namespace Mosa.DeviceDriver.PCI.VMware
@@ -683,9 +684,9 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			return (uint)
 			(
 				((color.Alpha << alphaMaskShift) & alphaMask) |
-				((color.Red << redMaskShift) & redMask) |
-				((color.Green << greenMaskShift) & greenMask) |
-				((color.Blue << blueMaskShift) & blueMask)
+				((color.R << redMaskShift) & redMask) |
+				((color.G << greenMaskShift) & greenMask) |
+				((color.B << blueMaskShift) & blueMask)
 			);
 		}
 

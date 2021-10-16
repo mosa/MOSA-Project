@@ -3,7 +3,7 @@
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
 
-namespace Mosa.DeviceDriver.PCI.Intel
+namespace Mosa.DeviceSystem.PCI
 {
 	/// <summary>
 	/// Generic PCI Host Bridge Controller
@@ -11,20 +11,22 @@ namespace Mosa.DeviceDriver.PCI.Intel
 	//[PCIDeviceDriver(ClassCode = 0x06, SubClassCode = 0x00, Platforms = PlatformArchitecture.X86AndX64)]
 	public class PCIGenericHostBridgeController : BaseDeviceDriver, IHostBridgeController
 	{
-		protected int ResetAddress { get; set; }
-		protected int ResetValue { get; set; }
+		protected ushort ResetAddress { get; set; }
+		protected byte ResetValue { get; set; }
 
 		public override void Initialize()
 		{
 			Device.Name = "PCIGenericHostBridgeController";
 		}
 
-		bool IHostBridgeController.CPUReset()
+		public bool CPUReset()
 		{
-			return false;
+			
+			
+			return true;
 		}
 
-		void IHostBridgeController.SetCPUResetInformation(int address, int value)
+		public void SetCPUResetInformation(ushort address, byte value)
 		{
 			ResetAddress = address;
 			ResetValue = value;

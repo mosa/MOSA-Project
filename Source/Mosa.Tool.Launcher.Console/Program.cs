@@ -69,7 +69,6 @@ namespace Mosa.Tool.Launcher.Console
 			Settings.SetValue("Compiler.Multithreading", true);
 			Settings.SetValue("Compiler.Platform", "x86");
 			Settings.SetValue("Compiler.TraceLevel", 0);
-			Settings.SetValue("Compiler.Multithreading", true);
 			Settings.SetValue("CompilerDebug.DebugFile", string.Empty);
 			Settings.SetValue("CompilerDebug.AsmFile", string.Empty);
 			Settings.SetValue("CompilerDebug.MapFile", string.Empty);
@@ -94,6 +93,7 @@ namespace Mosa.Tool.Launcher.Console
 			Settings.SetValue("Image.Format", "IMG");
 			Settings.SetValue("Image.FileSystem", "FAT16");
 			Settings.SetValue("Image.ImageFile", "%DEFAULT%");
+			Settings.SetValue("Image.FileSystem.RootInclude", "Tools/include"); // Base directory is the root MOSA directory
 			Settings.SetValue("Multiboot.Version", "v1");
 			Settings.SetValue("Multiboot.Video", false);
 			Settings.SetValue("Multiboot.Video.Width", 640);

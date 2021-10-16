@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
+using System;
 
 namespace Mosa.DeviceSystem
 {
@@ -44,6 +45,9 @@ namespace Mosa.DeviceSystem
 		/// <param name="y">The y.</param>
 		public override void SetPixel(uint color, uint x, uint y)
 		{
+			if (x < 0 || y < 0 || x >= width || y >= height)
+				return;
+
 			if (doubleBuffering)
 				secondBuffer.Write32(GetOffset(x, y), color);
 			else
@@ -55,6 +59,9 @@ namespace Mosa.DeviceSystem
 		/// <param name="y">The y.</param>
 		public override uint GetPixel(uint x, uint y)
 		{
+			if (x < 0 || y < 0 || x >= width || y >= height)
+				return 0;
+
 			return doubleBuffering ? secondBuffer.Read32(GetOffset(x, y)) : firstBuffer.Read32(GetOffset(x, y));
 		}
 
@@ -66,6 +73,12 @@ namespace Mosa.DeviceSystem
 		/// <param name="h">Width of the rectangle.</param>
 		public override void FillRectangle(uint color, uint x, uint y, uint w, uint h)
 		{
+			w = Math.Clamp(w, 0, width - x);
+            h = Math.Clamp(h, 0, height - y);
+
+            if (x < 0 || y < 0 || x >= width || y >= height)
+                return;
+
 			uint startAddress = GetOffset(x, y);
 
 			if (doubleBuffering)

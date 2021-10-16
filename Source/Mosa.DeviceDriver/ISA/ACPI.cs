@@ -3,11 +3,12 @@
 using Mosa.DeviceSystem;
 using Mosa.Runtime;
 using System.Runtime.InteropServices;
+using System;
+using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.DeviceDriver.ISA
 {
 	// Portions of this code are from Cosmos
-	// This code only really works on x86, we need to access other addresses to make it work on x86-64
 
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public unsafe struct RSDPDescriptor
@@ -17,6 +18,17 @@ namespace Mosa.DeviceDriver.ISA
 		public fixed sbyte OEMID[6];
 		public byte Revision;
 		public uint RsdtAddress;
+	}
+
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	public unsafe struct RSDPDescriptor20
+	{
+		public RSDPDescriptor FirstPart;
+
+		public uint Length;
+		public ulong XsdtAddress;
+		public byte ExtendedChecksum;
+		public fixed byte Reserved[3];
 	}
 
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -126,19 +138,39 @@ namespace Mosa.DeviceDriver.ISA
 		}*/
 	}
 
-	public unsafe class ACPI : BaseDeviceDriver, IAPCI
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	public unsafe struct XSDT
+	{
+		public ACPISDTHeader h;
+		public fixed ulong PointerToOtherSDT[16]; // This is problematic, we need a way to statically initialize this array's size with h.Length and stuff
+
+		/*public void Init()
+		{
+			fixed (ulong* ptr = new ulong[(int)((h.Length - sizeof(ACPISDTHeader)) / 8)])
+				PointerToOtherSDT = ptr;
+		}*/
+	}
+
+	public unsafe class ACPI : BaseDeviceDriver, IACPI
 	{
 		private RSDPDescriptor* Descriptor;
+		private RSDPDescriptor20* Descriptor20;
+
 		private FADT* FADT;
 		private RSDT* RSDT;
-
-		private short SLP_TYPa;
-		private short SLP_TYPb;
-		private short SLP_EN;
+		private XSDT* XSDT;
 
 		private BaseIOPortWrite SMI_CommandPort;
-		private BaseIOPortWrite PM1aControlBlock;
-		private BaseIOPortWrite PM1bControlBlock;
+
+		public short SLP_TYPa { get; set; }
+		public short SLP_TYPb { get; set; }
+		public short SLP_EN { get; set; }
+
+		public BaseIOPortWrite ResetAddress { get; set; }
+		public BaseIOPortWrite PM1aControlBlock { get; set; }
+		public BaseIOPortWrite PM1bControlBlock { get; set; }
+
+		public byte ResetValue { get; set; }
 
 		public override void Initialize()
 		{
@@ -157,12 +189,27 @@ namespace Mosa.DeviceDriver.ISA
 			if (Descriptor == null)
 				return;
 
-			RSDT = (RSDT*)HAL.GetPhysicalMemory((Pointer)Descriptor->RsdtAddress, 0xFFFF).Address;
+			/*if (Descriptor->Revision == 2) // ACPI v2.0+
+			{
+				Descriptor20 = (RSDPDescriptor20*)rsdpPtr;
 
-			// Won't work, we need to initialize array the same time we cast to RSDT*
-			//RSDT->Init();
+				XSDT = (XSDT*)HAL.GetPhysicalMemory((Pointer)Descriptor20->XsdtAddress, 0xFFFF).Address;
 
-			FADT = (FADT*)HAL.GetPhysicalMemory((Pointer)FindBySignature(RSDT, "FACP"), 0xFFFF).Address;
+				// Won't work, we need to initialize array the same time we cast to XSDT*
+				//XSDT->Init();
+
+				FADT = (FADT*)HAL.GetPhysicalMemory((Pointer)FindBySignatureXSDT(XSDT, "FACP"), 0xFFFF).Address;
+			}
+			else
+			{*/
+				RSDT = (RSDT*)HAL.GetPhysicalMemory((Pointer)Descriptor->RsdtAddress, 0xFFFF).Address;
+
+				// Won't work, we need to initialize array the same time we cast to RSDT*
+				//RSDT->Init();
+
+				FADT = (FADT*)HAL.GetPhysicalMemory((Pointer)FindBySignatureRSDT(RSDT, "FACP"), 0xFFFF).Address;
+			//}
+
 			if (FADT == null)
 				return;
 
@@ -195,8 +242,30 @@ namespace Mosa.DeviceDriver.ISA
 						SLP_EN = 1 << 13;
 
 						SMI_CommandPort = HAL.GetWriteIOPort((ushort)FADT->SMI_CommandPort);
-						PM1aControlBlock = HAL.GetWriteIOPort((ushort)FADT->PM1aControlBlock);
-						PM1bControlBlock = HAL.GetWriteIOPort((ushort)FADT->PM1bControlBlock);
+
+						bool has64BitPtr = false;
+
+						if (Descriptor->Revision == 2)
+						{
+							ResetAddress = HAL.GetWriteIOPort((ushort)FADT->ResetReg.Address);
+							ResetValue = FADT->ResetValue;
+							
+							if (Pointer.Size == 8) // 64-bit
+							{
+								has64BitPtr = true;
+
+								PM1aControlBlock = HAL.GetWriteIOPort((ushort)FADT->X_PM1aControlBlock.Address);
+								if (FADT->X_PM1bControlBlock.Address != 0)
+									PM1bControlBlock = HAL.GetWriteIOPort((ushort)FADT->X_PM1bControlBlock.Address);
+							}
+						}
+
+						if (!has64BitPtr)
+						{
+							PM1aControlBlock = HAL.GetWriteIOPort((ushort)FADT->PM1aControlBlock);
+							if (FADT->PM1bControlBlock != 0)
+								PM1bControlBlock = HAL.GetWriteIOPort((ushort)FADT->PM1bControlBlock);
+						}
 					}
 			}
 		}
@@ -229,17 +298,7 @@ namespace Mosa.DeviceDriver.ISA
 			Device.Status = DeviceStatus.Offline;
 		}
 
-		public void Shutdown()
-		{
-			PM1aControlBlock.Write16((ushort)(SLP_TYPa | SLP_EN));
-			if (FADT->PM1bControlBlock != 0)
-				PM1bControlBlock.Write16((ushort)(SLP_TYPb | SLP_EN));
-
-			HAL.Pause();
-			HAL.Abort("ACPI shutdown failed!");
-		}
-
-		private void* FindBySignature(void* RootSDT, string signature)
+		private void* FindBySignatureRSDT(void* RootSDT, string signature)
 		{
 			RSDT* rsdt = (RSDT*)RootSDT;
 
@@ -248,6 +307,24 @@ namespace Mosa.DeviceDriver.ISA
 			for (int i = 0; i < entries; i++)
 			{
 				ACPISDTHeader* h = (ACPISDTHeader*)rsdt->PointerToOtherSDT[i];
+
+				if (h != null && ToStringFromCharPointer(4, h->Signature) == signature)
+					return h;
+			}
+
+			// No SDT found (by signature)
+			return null;
+		}
+
+		private void* FindBySignatureXSDT(void* RootSDT, string signature)
+		{
+			XSDT* xsdt = (XSDT*)RootSDT;
+
+			//int entries = (int)((xsdt->h.Length - sizeof(ACPISDTHeader)) / 8);
+			int entries = 8;
+			for (int i = 0; i < entries; i++)
+			{
+				ACPISDTHeader* h = (ACPISDTHeader*)xsdt->PointerToOtherSDT[i];
 
 				if (h != null && ToStringFromCharPointer(4, h->Signature) == signature)
 					return h;

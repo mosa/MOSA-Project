@@ -11,7 +11,7 @@ namespace Mosa.DeviceDriver.PCI.Intel
 	/// <summary>
 	/// </summary>
 	//[PCIDeviceDriver(VendorID = 0x8086, DeviceID = 0x1237, Platforms = PlatformArchitecture.X86AndX64)]
-	public class Intel440FX : PCIGenericHostBridgeController, IHostBridgeController
+	public class Intel440FX : PCIGenericHostBridgeController
 	{
 		public override void Initialize()
 		{

@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem.PCI;
+using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem
 {
@@ -24,23 +25,32 @@ namespace Mosa.DeviceSystem
 
 		public bool Reset()
 		{
-			var acpi = DeviceService.GetFirstDevice<IAPCI>(DeviceStatus.Online);
+			var acpi = DeviceService.GetFirstDevice<IACPI>(DeviceStatus.Online).DeviceDriver as IACPI;
 
 			if (acpi == null)
 				return false;
 
-			// TODO: Get Reset information (type, address, value) from ACPI
-			int type = 0;
-			int address = 0;
-			int value = 0;
+			BaseIOPortWrite address = acpi.ResetAddress;
+			byte value = acpi.ResetValue;
 
-			// If via PCI Bus, get Host bridge controller:
+			if (address != null)
 			{
-				var device = DeviceService.GetDevices<IHostBridgeController>(DeviceStatus.Online);
-				var controller = device as IHostBridgeController;
+				address.Write8(value);
 
-				controller.SetCPUResetInformation(address, value);
-				return controller.CPUReset();
+				// Map memory
+				Pointer ptr = HAL.GetPhysicalMemory((Pointer)(uint)address.Address, 1).Address;
+				BaseIOPortWrite mappedResetReg = HAL.GetWriteIOPort((ushort)ptr);
+
+				mappedResetReg.Write8(value);
+
+				// Write to PCI Configuration Space (we're actually writing on the host bridge controller)
+				// TODO: Fix
+				/*var controller = DeviceService.GetFirstDevice<PCIGenericHostBridgeController>(DeviceStatus.Online).DeviceDriver as PCIGenericHostBridgeController;
+
+				controller.SetCPUResetInformation(address.Address, value);
+				controller.CPUReset();*/
+
+				return true;
 			}
 
 			return false;
@@ -48,8 +58,16 @@ namespace Mosa.DeviceSystem
 
 		public bool Shutdown()
 		{
-			// TODO
-			return Reset();
+			var acpi = DeviceService.GetFirstDevice<IACPI>(DeviceStatus.Online).DeviceDriver as IACPI;
+
+			if (acpi == null)
+				return false;
+
+			acpi.PM1aControlBlock.Write16((ushort)(acpi.SLP_TYPa | acpi.SLP_EN));
+			if (acpi.PM1bControlBlock != null)
+				acpi.PM1bControlBlock.Write16((ushort)(acpi.SLP_TYPb | acpi.SLP_EN));
+
+			return true;
 		}
 	}
 }
