@@ -30,14 +30,14 @@ namespace Mosa.DeviceSystem
 				return false;
 
 			// TODO: Get Reset information (type, address, value) from ACPI
-			int type = 0;
-			int address = 0;
-			int value = 0;
+			byte type = 0;
+			byte address = 0;
+			byte value = 0;
 
 			// If via PCI Bus, get Host bridge controller:
 			{
-				var device = DeviceService.GetDevices<IHostBridgeController>(DeviceStatus.Online);
-				var controller = device as IHostBridgeController;
+				var device = DeviceService.GetFirstDevice<IHostBridgeController>(DeviceStatus.Online);
+				var controller = device.DeviceDriver as IHostBridgeController;
 
 				controller.SetCPUResetInformation(address, value);
 				return controller.CPUReset();

@@ -9,6 +9,6 @@ namespace Mosa.DeviceSystem.PCI
 	{
 		bool CPUReset();
 
-		void SetCPUResetInformation(int address, int value);
+		void SetCPUResetInformation(byte address, byte value);
 	}
 }
