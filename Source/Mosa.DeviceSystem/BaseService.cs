@@ -39,9 +39,6 @@ namespace Mosa.DeviceSystem
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		protected Device MatchEvent<SERVICE>(ServiceEvent serviceEvent, ServiceEventType eventType) where SERVICE : class
 		{
-			//HAL.DebugWriteLine("BaseService:MatchEvent()-A");
-			//HAL.Pause();
-
 			if (serviceEvent.ServiceEventType != eventType)
 				return null;
 

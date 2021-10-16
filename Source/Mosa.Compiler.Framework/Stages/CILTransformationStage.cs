@@ -939,7 +939,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				methodData.HasMethodPointerReferenced = true;
 
-				MethodScheduler.AddToRecompileQueue(invokedMethod); // FUTURE: Optimize this not to re-schedule when not necessary
+				MethodScheduler.AddToRecompileQueue(methodData); // FUTURE: Optimize this not to re-schedule when not necessary
 
 				//Debug.WriteLine($" Method Reference: [{MethodData.Version}] {invokedMethod}"); //DEBUGREMOVE
 			}
