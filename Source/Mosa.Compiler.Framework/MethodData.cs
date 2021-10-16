@@ -73,6 +73,8 @@ namespace Mosa.Compiler.Framework
 
 		public MosaMethod ReplacedBy { get; set; }
 
+		public int VirtualCodeSize { get; set; }
+
 		public bool IsInvoked { get; set; }
 
 		#endregion Properties

@@ -66,14 +66,16 @@ namespace Mosa.Compiler.Framework.Source
 
 				foreach (var labelRegion in methodData.LabelRegions)
 				{
-					foreach (var instruction in methodData.Method.Code)
+					var code = methodData.Method.Code;
+
+					foreach (var instruction in code)
 					{
 						// special case: the return label is always 0xFFFFF
 						var searchForLabel = labelRegion.Label;
 
 						if (labelRegion.Label == 0xFFFFF)
 						{
-							searchForLabel = methodData.Method.Code.Last().Offset;
+							searchForLabel = code.Last().Offset;
 						}
 
 						if (instruction.StartLine > 0)

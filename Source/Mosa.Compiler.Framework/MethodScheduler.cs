@@ -1,7 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.MosaTypeSystem;
-
+using Priority_Queue;
 using System.Collections.Generic;
 using System.Threading;
 
@@ -16,8 +16,9 @@ namespace Mosa.Compiler.Framework
 
 		public Compiler Compiler;
 
-		private HashSet<MosaMethod> workingSet = new HashSet<MosaMethod>();
-		private Queue<MosaMethod> queue = new Queue<MosaMethod>();
+		private HashSet<MethodData> workingSet = new HashSet<MethodData>();
+
+		private SimplePriorityQueue<MethodData> queue = new SimplePriorityQueue<MethodData>();
 
 		private int totalMethods;
 		private int totalQueued;
@@ -109,11 +110,17 @@ namespace Mosa.Compiler.Framework
 
 		private void AddToQueue(MosaMethod method)
 		{
+			var methodData = Compiler.GetMethodData(method);
+			AddToQueue(methodData);
+		}
+
+		private void AddToQueue(MethodData methodData)
+		{
 			lock (workingSet)
 			{
-				if (!workingSet.Contains(method))
+				if (!workingSet.Contains(methodData))
 				{
-					workingSet.Add(method);
+					workingSet.Add(methodData);
 
 					Interlocked.Increment(ref totalMethods);
 				}
@@ -121,7 +128,7 @@ namespace Mosa.Compiler.Framework
 
 			lock (queue)
 			{
-				if (queue.Contains(method))
+				if (queue.Contains(methodData))
 				{
 					//Debug.WriteLine($"Already in Queue: {method}");
 
@@ -129,24 +136,25 @@ namespace Mosa.Compiler.Framework
 				}
 
 				//Debug.WriteLine($"Queued: {method}");
+				var priority = GetCompilePriorityLevel(methodData);
 
-				queue.Enqueue(method);
+				queue.Enqueue(methodData, priority);
 
 				Interlocked.Increment(ref totalQueued);
 			}
 		}
 
-		public MosaMethod GetMethodToCompile()
+		public MethodData GetMethodToCompile()
 		{
 			lock (queue)
 			{
-				if (queue.TryDequeue(out var method))
+				if (queue.TryDequeue(out var methodData))
 				{
 					Interlocked.Decrement(ref totalQueued);
 
 					//Debug.WriteLine($"Dequeued: {method}");
 
-					return method;
+					return methodData;
 				}
 				else
 				{
@@ -158,12 +166,85 @@ namespace Mosa.Compiler.Framework
 		public void AddToRecompileQueue(HashSet<MosaMethod> methods)
 		{
 			foreach (var method in methods)
+			{
 				AddToQueue(method);
+			}
+		}
+
+		public void AddToRecompileQueue(HashSet<MethodData> methodDatas)
+		{
+			foreach (var methodData in methodDatas)
+			{
+				AddToQueue(methodData);
+			}
 		}
 
 		public void AddToRecompileQueue(MosaMethod method)
 		{
 			AddToQueue(method);
+		}
+
+		public void AddToRecompileQueue(MethodData methodData)
+		{
+			AddToQueue(methodData);
+		}
+
+		private static int GetCompilePriorityLevel(MethodData methodData)
+		{
+			if (methodData.DoNotInline)
+				return 200;
+
+			int adjustment = 0;
+
+			if (methodData.HasAggressiveInliningAttribute)
+				adjustment += 75;
+
+			if (methodData.Inlined)
+				adjustment += 20;
+
+			if (methodData.Method.DeclaringType.IsValueType)
+				adjustment += 15;
+
+			if (methodData.Method.IsStatic)
+				adjustment += 5;
+
+			if (methodData.HasProtectedRegions)
+				adjustment -= 10;
+
+			if (methodData.VirtualCodeSize > 100)
+				adjustment -= 75;
+
+			if (methodData.VirtualCodeSize > 50)
+				adjustment -= 50;
+
+			if (methodData.VirtualCodeSize < 50)
+				adjustment += 5;
+
+			if (methodData.VirtualCodeSize < 30)
+				adjustment += 5;
+
+			if (methodData.VirtualCodeSize < 10)
+				adjustment += 10;
+
+			if (methodData.AggressiveInlineRequested)
+				adjustment += 20;
+
+			if (methodData.Method.IsConstructor)
+				adjustment += 10;
+
+			if (methodData.Method.IsTypeConstructor)
+				adjustment += 3;
+
+			if (methodData.Version > 3)
+				adjustment -= 7;
+
+			if (methodData.Version > 5)
+				adjustment -= 15;
+
+			//if (methodData.Method.FullName.StartsWith("System."))
+			//	adjustment += 5;
+
+			return 100 - adjustment;
 		}
 	}
 }

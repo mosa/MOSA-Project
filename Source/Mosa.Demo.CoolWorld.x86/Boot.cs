@@ -62,14 +62,14 @@ namespace Mosa.Demo.CoolWorld.x86
 			var partitionService = new PartitionService();
 			var pciControllerService = new PCIControllerService();
 			var pciDeviceService = new PCIDeviceService();
-			var restartService = new RestartService();
+			var pcService = new PCService();
 
 			serviceManager.AddService(deviceService);
 			serviceManager.AddService(diskDeviceService);
 			serviceManager.AddService(partitionService);
 			serviceManager.AddService(pciControllerService);
 			serviceManager.AddService(pciDeviceService);
-			serviceManager.AddService(restartService);
+			serviceManager.AddService(pcService);
 
 			Console.WriteLine("> Initializing hardware abstraction layer...");
 

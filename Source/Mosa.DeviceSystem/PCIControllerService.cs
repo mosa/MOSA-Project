@@ -26,9 +26,6 @@ namespace Mosa.DeviceSystem
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public override void PostEvent(ServiceEvent serviceEvent)
 		{
-			//HAL.DebugWriteLine("PCIControllerService:PostEvent()");
-			//HAL.Pause();
-
 			var device = MatchEvent<IPCIControllerLegacy>(serviceEvent, ServiceEventType.Start);
 
 			if (device == null)

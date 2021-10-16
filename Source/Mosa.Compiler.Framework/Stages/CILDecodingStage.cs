@@ -127,9 +127,11 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			bool branched = false;
 
-			for (int i = 0; i < Method.Code.Count; i++)
+			var code = Method.Code;
+
+			for (int i = 0; i < code.Count; i++)
 			{
-				instruction = Method.Code[i];
+				instruction = code[i];
 
 				if (branched)
 				{
@@ -156,9 +158,11 @@ namespace Mosa.Compiler.Framework.Stages
 			// Prefix instruction
 			bool prefix = false;
 
-			for (int i = 0; i < Method.Code.Count; i++)
+			var code = Method.Code;
+
+			for (int i = 0; i < code.Count; i++)
 			{
-				instruction = Method.Code[i];
+				instruction = code[i];
 
 				block = BasicBlocks.GetByLabel(instruction.Offset) ?? block;
 
@@ -186,7 +190,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (flow == FlowControl.Next || flow == FlowControl.Call || flow == FlowControl.ConditionalBranch || flow == FlowControl.Switch)
 				{
-					var nextInstruction = Method.Code[i + 1];
+					var nextInstruction = code[i + 1];
 
 					if (BasicBlocks.GetByLabel(nextInstruction.Offset) != null)
 					{

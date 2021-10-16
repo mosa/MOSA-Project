@@ -418,13 +418,14 @@ namespace Mosa.Compiler.Framework
 		{
 			try
 			{
-				var method = MethodScheduler.GetMethodToCompile();
+				var methodData = MethodScheduler.GetMethodToCompile();
 
-				if (method == null)
+				if (methodData == null)
 					return null;
 
-				CompileMethod(method, threadID);
-				return method;
+				CompileMethod(methodData.Method, threadID);
+
+				return methodData.Method;
 			}
 			catch (Exception e)
 			{
