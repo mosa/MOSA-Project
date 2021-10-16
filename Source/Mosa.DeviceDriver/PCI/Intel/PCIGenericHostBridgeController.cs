@@ -11,8 +11,8 @@ namespace Mosa.DeviceDriver.PCI.Intel
 	//[PCIDeviceDriver(ClassCode = 0x06, SubClassCode = 0x00, Platforms = PlatformArchitecture.X86AndX64)]
 	public class PCIGenericHostBridgeController : BaseDeviceDriver, IHostBridgeController
 	{
-		protected int ResetAddress { get; set; }
-		protected int ResetValue { get; set; }
+		protected byte ResetAddress { get; set; }
+		protected uint ResetValue { get; set; }
 
 		public override void Initialize()
 		{
@@ -21,10 +21,22 @@ namespace Mosa.DeviceDriver.PCI.Intel
 
 		bool IHostBridgeController.CPUReset()
 		{
+			var pciDevice = Device.Parent.DeviceDriver as PCIDevice;
+
+			if (pciDevice == null)
+				return false;
+
+			var pciController = Device.Parent.Parent.DeviceDriver as IPCIControllerLegacy;
+
+			if (pciController == null)
+				return false;
+
+			pciController.WriteConfig32(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, ResetAddress, ResetValue);
+
 			return false;
 		}
 
-		void IHostBridgeController.SetCPUResetInformation(int address, int value)
+		void IHostBridgeController.SetCPUResetInformation(byte address, uint value)
 		{
 			ResetAddress = address;
 			ResetValue = value;
