@@ -36,8 +36,8 @@ namespace Mosa.DeviceSystem
 
 			// If via PCI Bus, get Host bridge controller:
 			{
-				var device = DeviceService.GetDevices<IHostBridgeController>(DeviceStatus.Online);
-				var controller = device as IHostBridgeController;
+				var device = DeviceService.GetFirstDevice<IHostBridgeController>(DeviceStatus.Online);
+				var controller = device.DeviceDriver as IHostBridgeController;
 
 				controller.SetCPUResetInformation(address, value);
 				return controller.CPUReset();
