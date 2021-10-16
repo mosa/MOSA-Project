@@ -29,7 +29,7 @@ namespace Mosa.Utility.BootImage
 
 			if (blockCount == 0)
 			{
-				blockCount = (2048 * 2) + 1;
+				blockCount = (2048 * 4) + 1;
 				foreach (var file in options.IncludeFiles)
 				{
 					blockCount += ((uint)file.Content.Length / SectorSize) + 10;
