@@ -1,22 +1,13 @@
-﻿// ================================================================================================
-// Copyright (c) MOSA Project. Licensed under the New BSD License.
-// ================================================================================================
-// AUTHOR       : TAYLAN INAN
-// E-MAIL       : taylaninan@yahoo.com
-// GITHUB       : www.github.com/taylaninan/
-// ================================================================================================
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
 using System.Collections;
 
 namespace Mosa.Collections.Generic
 {
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // STACKNODE<>
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    #region STACKNODE...
+    // StackNode<AnyType>
+
+    #region StackNode<AnyType>
     public class StackNode<AnyType>
     {
         public AnyType Data;
@@ -41,12 +32,9 @@ namespace Mosa.Collections.Generic
     }
     #endregion
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // STACK<>
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    #region STACK...
+    // Stack<AnyType>
+
+    #region Stack<AnyType>
     public class Stack<AnyType> : IEnumerable, IEnumerator where AnyType : IComparable
     {
         protected StackNode<AnyType> FirstNode = null;

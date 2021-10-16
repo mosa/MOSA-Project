@@ -1,23 +1,14 @@
-﻿// ================================================================================================
-// Copyright (c) MOSA Project. Licensed under the New BSD License.
-// ================================================================================================
-// AUTHOR       : TAYLAN INAN
-// E-MAIL       : taylaninan@yahoo.com
-// GITHUB       : www.github.com/taylaninan/
-// ================================================================================================
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
 using System.Collections;
 
 namespace Mosa.Collections.Generic
 {
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // QUEUENODE<>
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    #region QUEUENODE...
-    public class QueueNode<AnyType>
+	// QueueNode<AnyType>
+
+	#region QueueNode<AnyType>
+	public class QueueNode<AnyType>
     {
         public AnyType Data;
         public QueueNode<AnyType> Next = null;
@@ -39,15 +30,12 @@ namespace Mosa.Collections.Generic
             Prev = null;
         }
     }
-    #endregion
+	#endregion
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // QUEUE<>
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    #region QUEUE...
-    public class Queue<AnyType> : IEnumerable, IEnumerator where AnyType : IComparable
+	// Queue<AnyType>
+
+	#region Queue<AnyType>
+	public class Queue<AnyType> : IEnumerable, IEnumerator where AnyType : IComparable
     {
         protected QueueNode<AnyType> FirstNode = null;
         protected QueueNode<AnyType> LastNode = null;

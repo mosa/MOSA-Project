@@ -1,21 +1,12 @@
-﻿// ================================================================================================
-// Copyright (c) MOSA Project. Licensed under the New BSD License.
-// ================================================================================================
-// AUTHOR       : TAYLAN INAN
-// E-MAIL       : taylaninan@yahoo.com
-// GITHUB       : www.github.com/taylaninan/
-// ================================================================================================
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
 
 namespace Mosa.Collections.Generic
 {
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // BITFLAGS
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    #region BITFLAGS...
+    // BitFlags
+
+    #region BitFlags
     public class BitFlags
     {
         private const byte MaxFlags = 64;

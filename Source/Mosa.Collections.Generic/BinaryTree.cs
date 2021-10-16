@@ -1,24 +1,12 @@
-﻿// ================================================================================================
-// Copyright (c) MOSA Project. Licensed under the New BSD License.
-// ================================================================================================
-// AUTHOR       : TAYLAN INAN
-// E-MAIL       : taylaninan@yahoo.com
-// GITHUB       : www.github.com/taylaninan/
-// ================================================================================================
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
 
 namespace Mosa.Collections.Generic
 {
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // BINARYTREENODE<>
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    // TODO: Add deletion of a single node
-    ///////////////////////////////////////////////////////////////////////////
+    // BinaryTreeNode<AnyType>
     
-    #region BINARYTREENODE...
+    #region BinaryTreeNode<AnyType>
     public class BinaryTreeNode<AnyType>
     {
         public AnyType Data;
@@ -71,15 +59,13 @@ namespace Mosa.Collections.Generic
             this.Count = 0;
         }
     }
-    #endregion
+	#endregion
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // BINARYTREE<>
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    #region BINARYTREE...
-    public class BinaryTree<AnyType> where AnyType : IComparable
+	// BinaryTree<AnyType>
+	// TODO: Add deletion of a single node
+
+	#region BinaryTree<AnyType>
+	public class BinaryTree<AnyType> where AnyType : IComparable
     {
         private BinaryTreeNode<AnyType> RootNode = null;
         private uint TotalSize = 0;

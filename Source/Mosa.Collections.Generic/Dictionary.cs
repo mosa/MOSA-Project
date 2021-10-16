@@ -1,22 +1,13 @@
-﻿// ================================================================================================
-// Copyright (c) MOSA Project. Licensed under the New BSD License.
-// ================================================================================================
-// AUTHOR       : TAYLAN INAN
-// E-MAIL       : taylaninan@yahoo.com
-// GITHUB       : www.github.com/taylaninan/
-// ================================================================================================
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System;
 using System.Collections;
 
 namespace Mosa.Collections.Generic
 {
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // DICTIONARYNODE<,>
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    #region DICTIONARYNODE...
+    // DictionaryNode<TKey, TValue>
+
+    #region DictionaryNode<TKey, TValue>
     public class DictionaryNode<TKey, TValue>
     {
         public TKey Key;
@@ -41,15 +32,12 @@ namespace Mosa.Collections.Generic
             this.Prev = null;
         }
     }
-    #endregion
+	#endregion
 
-    ///////////////////////////////////////////////////////////////////////////
-    //
-    // DICTIONARY<,>
-    //
-    ///////////////////////////////////////////////////////////////////////////
-    #region DICTIONARY...
-    public class Dictionary<TKey, TValue> : IEnumerable, IEnumerator where TKey : IComparable
+	// Dictionary<TKey, TValue>
+
+	#region Dictionary<TKey, TValue>
+	public class Dictionary<TKey, TValue> : IEnumerable, IEnumerator where TKey : IComparable
     {
         protected DictionaryNode<TKey, TValue> FirstNode = null;
         protected DictionaryNode<TKey, TValue> LastNode = null;
