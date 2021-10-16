@@ -30,9 +30,9 @@ namespace Mosa.DeviceSystem
 				return false;
 
 			// TODO: Get Reset information (type, address, value) from ACPI
-			int type = 0;
+			byte type = 0;
 			byte address = 0;
-			uint value = 0;
+			byte value = 0;
 
 			// If via PCI Bus, get Host bridge controller:
 			{
