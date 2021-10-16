@@ -273,15 +273,57 @@ namespace Mosa.Collections.Generic
                 if (NodePointer.Data.CompareTo(Data) == 0)
                 {
                     Delete(NodePointer);
-                }
 
-                Size--;
+					Size--;
+                }
 
                 NodePointer = BackupNode;
             }
         }
 
-        public bool Delete(QueueNode<AnyType> Node)
+		public bool DeleteFirst(AnyType Data)
+		{
+			QueueNode<AnyType> NodePointer = FirstNode;
+
+			while (NodePointer != null)
+			{
+				if (NodePointer.Data.CompareTo(Data) == 0)
+				{
+					Delete(NodePointer);
+
+					Size--;
+
+					return true;
+				}
+
+				NodePointer = NodePointer.Next;
+			}
+
+			return false;
+		}
+
+		public bool DeleteLast(AnyType Data)
+		{
+			QueueNode<AnyType> NodePointer = LastNode;
+
+			while (NodePointer != null)
+			{
+				if (NodePointer.Data.CompareTo(Data) == 0)
+				{
+					Delete(NodePointer);
+
+					Size--;
+
+					return true;
+				}
+
+				NodePointer = NodePointer.Prev;
+			}
+
+			return false;
+		}
+
+		public bool Delete(QueueNode<AnyType> Node)
         {
             if (Node == null)
             {

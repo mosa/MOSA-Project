@@ -145,25 +145,6 @@ namespace Mosa.Collections.Generic
 
         public StackNode<AnyType> FindFirst(AnyType Data)
         {
-            StackNode<AnyType> NodePointer = FirstNode;
-
-            while (NodePointer != null)
-            {
-                if (NodePointer.Data.CompareTo(Data) == 0)
-                {
-                    return NodePointer;
-                }
-                else
-                {
-                    NodePointer = NodePointer.Next;
-                }
-            }
-
-            return NodePointer;
-        }
-
-        public StackNode<AnyType> FindLast(AnyType Data)
-        {
             StackNode<AnyType> NodePointer = LastNode;
 
             while (NodePointer != null)
@@ -175,6 +156,25 @@ namespace Mosa.Collections.Generic
                 else
                 {
                     NodePointer = NodePointer.Prev;
+                }
+            }
+
+            return NodePointer;
+        }
+
+        public StackNode<AnyType> FindLast(AnyType Data)
+        {
+            StackNode<AnyType> NodePointer = FirstNode;
+
+            while (NodePointer != null)
+            {
+                if (NodePointer.Data.CompareTo(Data) == 0)
+                {
+                    return NodePointer;
+                }
+                else
+                {
+                    NodePointer = NodePointer.Next;
                 }
             }
 
@@ -193,25 +193,6 @@ namespace Mosa.Collections.Generic
 
         public StackNode<AnyType> FindFirst(StackNode<AnyType> Node)
         {
-            StackNode<AnyType> NodePointer = FirstNode;
-
-            while (NodePointer != null)
-            {
-                if (NodePointer == Node)
-                {
-                    return NodePointer;
-                }
-                else
-                {
-                    NodePointer = NodePointer.Next;
-                }
-            }
-
-            return NodePointer;
-        }
-
-        public StackNode<AnyType> FindLast(StackNode<AnyType> Node)
-        {
             StackNode<AnyType> NodePointer = LastNode;
 
             while (NodePointer != null)
@@ -223,6 +204,25 @@ namespace Mosa.Collections.Generic
                 else
                 {
                     NodePointer = NodePointer.Prev;
+                }
+            }
+
+            return NodePointer;
+        }
+
+        public StackNode<AnyType> FindLast(StackNode<AnyType> Node)
+        {
+            StackNode<AnyType> NodePointer = FirstNode;
+
+            while (NodePointer != null)
+            {
+                if (NodePointer == Node)
+                {
+                    return NodePointer;
+                }
+                else
+                {
+                    NodePointer = NodePointer.Next;
                 }
             }
 
@@ -273,15 +273,57 @@ namespace Mosa.Collections.Generic
                 if (NodePointer.Data.CompareTo(Data) == 0)
                 {
                     Delete(NodePointer);
-                }
 
-                Size--;
+					Size--;
+				}
 
-                NodePointer = BackupNode;
+				NodePointer = BackupNode;
             }
         }
 
-        public bool Delete(StackNode<AnyType> Node)
+		public bool DeleteFirst(AnyType Data)
+		{
+			StackNode<AnyType> NodePointer = LastNode;
+
+			while (NodePointer != null)
+			{
+				if (NodePointer.Data.CompareTo(Data) == 0)
+				{
+					Delete(NodePointer);
+
+					Size--;
+
+					return true;
+				}
+
+				NodePointer = NodePointer.Prev;
+			}
+
+			return false;
+		}
+
+		public bool DeleteLast(AnyType Data)
+		{
+			StackNode<AnyType> NodePointer = FirstNode;
+
+			while (NodePointer != null)
+			{
+				if (NodePointer.Data.CompareTo(Data) == 0)
+				{
+					Delete(NodePointer);
+
+					Size--;
+
+					return true;
+				}
+
+				NodePointer = NodePointer.Next;
+			}
+
+			return false;
+		}
+
+		public bool Delete(StackNode<AnyType> Node)
         {
             if (Node == null)
             {
