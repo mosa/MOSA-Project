@@ -829,13 +829,18 @@ namespace Mosa.Compiler.Framework.Transform
 			return next.IsBlockEndInstruction ? null : next;
 		}
 
-		protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, out bool immediate, Operand operand = null, int lookback = 20)
+		protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, int window, Operand operand = null)
+		{
+			return GetPreviousNodeUntil(context, untilInstruction, window, out _, operand);
+		}
+
+		protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, int window, out bool immediate, Operand operand = null)
 		{
 			var previous = context.Node.Previous;
 			int count = 0;
 			immediate = false;
 
-			while (count < lookback)
+			while (count < window)
 			{
 				if (previous.IsEmptyOrNop)
 				{
@@ -872,13 +877,18 @@ namespace Mosa.Compiler.Framework.Transform
 			return null;
 		}
 
-		protected static InstructionNode GetNextNodeUntil(Context context, BaseInstruction untilInstruction, out bool immediate, Operand operand = null, int lookback = 20)
+		protected static InstructionNode GetNextNodeUntil(Context context, BaseInstruction untilInstruction, int window, Operand operand = null)
+		{
+			return GetNextNodeUntil(context, untilInstruction, window, out _, operand);
+		}
+
+		protected static InstructionNode GetNextNodeUntil(Context context, BaseInstruction untilInstruction, int window, out bool immediate, Operand operand = null)
 		{
 			var next = context.Node.Next;
 			int count = 0;
 			immediate = false;
 
-			while (count < lookback)
+			while (count < window)
 			{
 				if (next.IsEmptyOrNop)
 				{

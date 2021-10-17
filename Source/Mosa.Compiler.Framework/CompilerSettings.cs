@@ -52,6 +52,8 @@ namespace Mosa.Compiler.Framework
 
 		public bool BitTracker { get { return Settings.GetValue("Optimizations.BitTracker", true); } }
 
+		public int PeepholeWindow { get { return Settings.GetValue("Optimizations.Peephole.Window", 5); } }
+
 		public int InlineMaximum { get { return Settings.GetValue("Optimizations.Inline.Maximum", 12); } }
 
 		public int InlineAggressiveMaximum { get { return Settings.GetValue("Optimizations.Inline.AggressiveMaximum", 24); } }

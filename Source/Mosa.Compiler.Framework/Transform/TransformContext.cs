@@ -3,6 +3,7 @@
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -38,6 +39,8 @@ namespace Mosa.Compiler.Framework.Transform
 
 		public bool Is32BitPlatform { get; private set; }
 
+		public int Window { get; private set; }
+
 		public TransformContext(MethodCompiler methodCompiler)
 		{
 			MethodCompiler = methodCompiler;
@@ -61,6 +64,8 @@ namespace Mosa.Compiler.Framework.Transform
 
 			Is32BitPlatform = Compiler.Architecture.Is32BitPlatform;
 			LowerTo32 = Compiler.CompilerSettings.LongExpansion;
+
+			Window = Math.Min(Compiler.CompilerSettings.PeepholeWindow, 1);
 		}
 
 		public void SetLogs(TraceLog traceLog = null, TraceLog specialTraceLog = null)

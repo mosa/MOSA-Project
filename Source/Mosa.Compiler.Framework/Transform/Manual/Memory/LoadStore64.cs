@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 			if (!context.Operand2.IsResolvedConstant)
 				return false;
 
-			var previous = GetPreviousNodeUntil(context, IRInstruction.Store64, out bool immediate);
+			var previous = GetPreviousNodeUntil(context, IRInstruction.Store64, transformContext.Window, out bool immediate);
 
 			if (previous == null)
 				return false;
@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
-			var previous = GetPreviousNodeUntil(context, IRInstruction.Store64, out _);
+			var previous = GetPreviousNodeUntil(context, IRInstruction.Store64, transformContext.Window);
 
 			context.SetInstruction(IRInstruction.Move32, context.Result, previous.Operand3);
 		}
