@@ -25,26 +25,20 @@ namespace System
 			}
 		}
 
-		public bool Equals(byte obj)
+		public bool Equals(byte value)
 		{
-			return (this.m_value == obj);
+			return (m_value == value);
 		}
 
 		public int CompareTo(object value)
 		{
-			if (value == null)
-			{
-				return 1;
-			}
+			if (value == null) { return 1; }
 
-			if (!(value is byte))
-			{
-				throw new ArgumentException("Argument Type Must Be Byte", "value");
-			}
+			if (!(value is byte)) { throw new ArgumentException("Argument Type Must Be Byte", "value"); }
 
-			if (this.m_value < (((byte)value).m_value)) return -1;
+			if (m_value < (((byte)value).m_value)) return -1;
 
-			if (this.m_value > (((byte)value).m_value)) return 1;
+			if (m_value > (((byte)value).m_value)) return 1;
 
 			return 0;
 		}

@@ -5,43 +5,60 @@ namespace System
 	/// <summary>
 	///
 	/// </summary>
-	public struct UInt32
+	public struct UInt32: IComparable, IComparable<uint>
 	{
 		public const uint MaxValue = 0xffffffff;
 		public const uint MinValue = 0;
 
-		internal uint _value;
+		internal uint m_value;
 
-		public int CompareTo(uint value)
+		public int CompareTo(object value)
 		{
-			if (_value < value) return -1;
-			else if (_value > value) return 1;
+			if (value == null) { return 1; }
+
+			if (!(value is uint)) { throw new ArgumentException("Argument Type Must Be UInt32", "value"); }
+
+			uint u_value = ((uint)value).m_value;
+
+			if (m_value < u_value) return -1;
+			if (m_value > u_value) return 1;
+
 			return 0;
 		}
 
-		public bool Equals(uint obj)
+		public int CompareTo(uint value)
 		{
-			return Equals((object)obj);
+			if (m_value < value) return -1;
+			if (m_value > value) return 1;
+
+			return 0;
 		}
 
 		public override bool Equals(object obj)
 		{
-			return ((uint)obj) == _value;
+			if (!(obj is uint)) { return false; }
+
+			return m_value == ((uint)obj).m_value;
+		}
+
+		public bool Equals(uint value)
+		{
+			return m_value == value;
 		}
 
 		public override string ToString()
 		{
-			return int.CreateString(_value, false, false);
+			return int.CreateString(m_value, false, false);
 		}
 
 		public string ToString(string format)
 		{
-			return int.CreateString(_value, false, true);
+			return int.CreateString(m_value, false, true);
 		}
 
 		public override int GetHashCode()
 		{
-			return (int)_value;
+			return (int)m_value;
 		}
 
 		public static uint Parse(string s)

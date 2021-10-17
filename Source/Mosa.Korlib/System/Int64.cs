@@ -5,33 +5,50 @@ namespace System
 	/// <summary>
 	///
 	/// </summary>
-	public struct Int64
+	public struct Int64: IComparable, IComparable<long>
 	{
 		public const long MaxValue = 0x7fffffffffffffff;
 		public const long MinValue = -9223372036854775808;
 
-		internal long _value;
+		internal long m_value;
 
-		public int CompareTo(long value)
+		public int CompareTo(object value)
 		{
-			if (_value < value) return -1;
-			else if (_value > value) return 1;
+			if (value == null) { return 1; }
+
+			if (!(value is long)) { throw new ArgumentException("Argument Type Must Be Int64", "value"); }
+
+			long l_value = ((long)value).m_value;
+
+			if (m_value < l_value) return -1;
+			if (m_value > l_value) return 1;
+
 			return 0;
 		}
 
-		public bool Equals(long obj)
+		public int CompareTo(long value)
 		{
-			return Equals((object)obj);
+			if (m_value < value) return -1;
+			if (m_value > value) return 1;
+
+			return 0;
 		}
 
 		public override bool Equals(object obj)
 		{
-			return ((long)obj) == _value;
+			if (!(obj is long)) { return false; }
+
+			return m_value == ((long)obj).m_value;
+		}
+
+		public bool Equals(long obj)
+		{
+			return m_value == obj;
 		}
 
 		public override int GetHashCode()
 		{
-			return (int)_value;
+			return unchecked((int)m_value) ^ (int)(m_value >> 32);
 		}
 
 		public static bool TryParse(string s, out long result)
