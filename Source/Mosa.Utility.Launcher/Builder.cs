@@ -225,7 +225,7 @@ namespace Mosa.Utility.Launcher
 
 			bootImageOptions.IncludeFiles.Add(new IncludeFile("TEST.TXT", Encoding.ASCII.GetBytes("This is a test file.")));
 
-			var dir = Path.Combine(Environment.CurrentDirectory.Replace("bin", string.Empty), LauncherSettings.IncludePath);
+			var dir = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), LauncherSettings.IncludePath);
 			foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories))
 			{
 				var name = Path.GetFileName(file).ToUpper();
@@ -383,7 +383,7 @@ namespace Mosa.Utility.Launcher
 				File.WriteAllBytes(Path.Combine(isoDirectory, "mboot.c32"), GetResource(@"syslinux\3.72", "mboot.c32"));
 			}
 
-			var dir = Path.Combine(Environment.CurrentDirectory.Replace("bin", string.Empty), LauncherSettings.IncludePath);
+			var dir = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), LauncherSettings.IncludePath);
 			foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories))
 			{
 				var name = Path.GetFileName(file).ToUpper();
@@ -443,7 +443,7 @@ namespace Mosa.Utility.Launcher
 				archive.ExtractToDirectory(Path.Combine(isoDirectory, "boot", "grub"));
 			}
 
-			var dir = Path.Combine(Environment.CurrentDirectory.Replace("bin", string.Empty), LauncherSettings.IncludePath);
+			var dir = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), LauncherSettings.IncludePath);
 			foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories))
 			{
 				var name = Path.GetFileName(file).ToUpper();
