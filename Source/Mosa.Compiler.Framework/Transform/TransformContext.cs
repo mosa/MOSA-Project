@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework.Transform
 			Is32BitPlatform = Compiler.Architecture.Is32BitPlatform;
 			LowerTo32 = Compiler.CompilerSettings.LongExpansion;
 
-			Window = Math.Min(Compiler.CompilerSettings.PeepholeWindow, 1);
+			Window = Math.Max(Compiler.CompilerSettings.OptimizationWindow, 1);
 		}
 
 		public void SetLogs(TraceLog traceLog = null, TraceLog specialTraceLog = null)

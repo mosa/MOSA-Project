@@ -40,6 +40,7 @@ Compiler Optimizations Settings
     Optimizations.Platform,"If true, enable platform specific optimizations"
     Optimizations.Inline,"If true, small methods can be inlined"
     Optimizations.Inline.Maximum,Maximun number of instructions that can be inlined within a method
+	Optimizations.Basic.Window,Maximun instruction window for the optimizer to review
     Optimizations.Inline.AggressiveMaximum,Maximun number of instructions that can be inlined when a method is explicited marked to be inlined
     Optimizations.Inline.ExplicitOnly,"If true, only explicitly marked methods are inlined"
     Optimizations.TwoPass,"If true, some optimization stages are executed twice"

@@ -52,7 +52,7 @@ namespace Mosa.Compiler.Framework
 
 		public bool BitTracker { get { return Settings.GetValue("Optimizations.BitTracker", true); } }
 
-		public int PeepholeWindow { get { return Settings.GetValue("Optimizations.Peephole.Window", 5); } }
+		public int OptimizationWindow { get { return Settings.GetValue("Optimizations.Basic.Window", 5); } }
 
 		public int InlineMaximum { get { return Settings.GetValue("Optimizations.Inline.Maximum", 12); } }
 
@@ -111,6 +111,7 @@ namespace Mosa.Compiler.Framework
 			Settings.SetValue("Optimizations.Inline", true);
 			Settings.SetValue("Optimizations.Inline.ExplicitOnly", false);
 			Settings.SetValue("Optimizations.Inline.Maximum", 12);
+			Settings.SetValue("Optimizations.Basic.Window", 5);
 			Settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
 			Settings.SetValue("Multiboot.Version", "v1");
 			Settings.SetValue("Compiler.Platform", "x86");

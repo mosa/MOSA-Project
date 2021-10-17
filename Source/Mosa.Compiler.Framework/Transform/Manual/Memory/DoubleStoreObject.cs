@@ -24,6 +24,9 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 			if (!next.Operand2.IsResolvedConstant)
 				return false;
 
+			if (next.Operand1 != context.Operand1)
+				return false;
+
 			if (next.Operand2.ConstantUnsigned64 != context.Operand2.ConstantUnsigned64)
 				return false;
 
