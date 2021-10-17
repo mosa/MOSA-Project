@@ -7,7 +7,7 @@ namespace System
 	/// <summary>
 	/// Single
 	/// </summary>
-	public struct Single
+	public struct Single: IComparable, IComparable<float>
 	{
 		public const float Epsilon = 1.4e-45f;
 		public const float MaxValue = 3.40282346638528859e38f;
@@ -18,13 +18,13 @@ namespace System
 
 		internal const float NegativeZero = (float)-0.0;
 
-		internal float _value;
+		internal float m_value;
 
 		public static bool IsNaN(float s)
 		{
 #pragma warning disable 1718
 			return (s != s);
-#pragma warning restore
+#pragma warning restore 1718
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -50,54 +50,96 @@ namespace System
 			return IsNegativeInfinity(s) || IsPositiveInfinity(s);
 		}
 
-		public int CompareTo(float value)
+		public int CompareTo(object value)
 		{
-			if (IsPositiveInfinity(_value) && IsPositiveInfinity(value))
-				return 0;
-			if (IsNegativeInfinity(_value) && IsNegativeInfinity(value))
+			if (value == null) { return 1; }
+
+			if (!(value is float))
+			{
+				throw new ArgumentException("Argument Type Must Be Single", "value");
+			}
+
+			float f_value = ((float)value).m_value;
+
+			if (IsPositiveInfinity(m_value) && IsPositiveInfinity(f_value))
 				return 0;
 
-			if (IsNaN(value))
-				if (IsNaN(_value))
+			if (IsNegativeInfinity(m_value) && IsNegativeInfinity(f_value))
+				return 0;
+
+			if (IsNaN(f_value))
+			{
+				if (IsNaN(m_value))
 					return 0;
 				else
 					return 1;
+			}
 
-			if (IsNaN(_value))
+			if (IsNaN(m_value))
+			{
+				if (IsNaN(f_value))
+					return 0;
+				else
+					return -1;
+			}
+
+			if (m_value < f_value) { return -1; }
+			if (m_value > f_value) { return 1; }
+
+			return 0;
+		}
+
+		public int CompareTo(float value)
+		{
+			if (IsPositiveInfinity(m_value) && IsPositiveInfinity(value))
+				return 0;
+
+			if (IsNegativeInfinity(m_value) && IsNegativeInfinity(value))
+				return 0;
+
+			if (IsNaN(value))
+			{
+				if (IsNaN(m_value))
+					return 0;
+				else
+					return 1;
+			}
+
+			if (IsNaN(m_value))
+			{
 				if (IsNaN(value))
 					return 0;
 				else
 					return -1;
+			}
 
-			if (_value > value)
-				return 1;
-			else if (_value < value)
-				return -1;
-			else
-				return 0;
-		}
+			if (m_value > value) { return 1; }
+			if (m_value < value) { return -1; }
 
-		public bool Equals(float value)
-		{
-			if (IsNaN(value))
-				return IsNaN(_value);
-
-			return (value == _value);
+			return 0;
 		}
 
 		public override bool Equals(object obj)
 		{
-			float value = (float)obj;
+			if (!(obj is Single)) { return false; }
 
-			if (IsNaN(value))
-				return IsNaN(_value);
+			float value = ((float)obj).m_value;
 
-			return (value == _value);
+			if (m_value == value) { return true; }
+
+			return (IsNaN(m_value) && IsNaN(value));
+		}
+
+		public bool Equals(float value)
+		{
+			if (m_value == value) { return true; }
+
+			return (IsNaN(m_value) && IsNaN(value));
 		}
 
 		public override int GetHashCode()
 		{
-			var bits = BitConverter.SingleToInt32Bits(_value);
+			var bits = BitConverter.SingleToInt32Bits(m_value);
 
 			if (((bits - 1) & 0x7FFFFFFF) >= 0x7F800000)
 			{

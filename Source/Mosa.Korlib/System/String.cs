@@ -225,15 +225,14 @@ namespace System
 			return result;
 		}
 
-		public bool Equals(string i)
+		public bool Equals(string s)
 		{
-			return Equals(this, i);
+			return Equals(this, s);
 		}
 
 		public override bool Equals(object obj)
 		{
-			if (!(obj is string))
-				return false;
+			if (!(obj is string)) { return false; }
 
 			string other = (string)obj;
 			return other == this;
