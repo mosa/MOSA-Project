@@ -11,7 +11,7 @@ namespace Mosa.DeviceSystem.PCI
 	//[PCIDeviceDriver(ClassCode = 0x06, SubClassCode = 0x00, Platforms = PlatformArchitecture.X86AndX64)]
 	public class PCIGenericHostBridgeController : BaseDeviceDriver, IHostBridgeController
 	{
-		protected ushort ResetAddress { get; set; }
+		protected byte ResetAddress { get; set; }
 		protected byte ResetValue { get; set; }
 
 		public override void Initialize()
@@ -19,14 +19,14 @@ namespace Mosa.DeviceSystem.PCI
 			Device.Name = "PCIGenericHostBridgeController";
 		}
 
-		public bool CPUReset()
+		bool IHostBridgeController.CPUReset()
 		{
 			
 			
 			return true;
 		}
 
-		public void SetCPUResetInformation(ushort address, byte value)
+		void IHostBridgeController.SetCPUResetInformation(byte address, byte value)
 		{
 			ResetAddress = address;
 			ResetValue = value;

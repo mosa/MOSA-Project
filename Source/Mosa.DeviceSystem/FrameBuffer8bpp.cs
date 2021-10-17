@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
+using System;
 
 namespace Mosa.DeviceSystem
 {
@@ -43,7 +44,7 @@ namespace Mosa.DeviceSystem
 		public override uint GetPixel(uint x, uint y)
 		{
 			if (x < 0 || y < 0 || x >= width || y >= height)
-				return;
+				return 0;
 
 			return doubleBuffering ? secondBuffer.Read8(GetOffset(x, y)) : firstBuffer.Read8(GetOffset(x, y));
 		}

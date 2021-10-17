@@ -47,7 +47,7 @@ namespace Mosa.DeviceSystem
 				// TODO: Fix
 				/*var controller = DeviceService.GetFirstDevice<IHostBridgeController>(DeviceStatus.Online).DeviceDriver as IHostBridgeController;
 
-				controller.SetCPUResetInformation(address.Address, value);
+				controller.SetCPUResetInformation((byte)address.Address, value);
 				controller.CPUReset();*/
 
 				return true;
