@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 {
-	public sealed class LoadZeroExtend32x64Store32 : BaseTransformation
+	public sealed class DoubleLoad32 : BaseTransformation
 	{
-		public LoadZeroExtend32x64Store32() : base(IRInstruction.LoadZeroExtend32x64)
+		public DoubleLoad32() : base(IRInstruction.Load32)
 		{
 		}
 
@@ -13,12 +13,9 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 			if (!context.Operand2.IsResolvedConstant)
 				return false;
 
-			var previous = GetPreviousNodeUntil(context, IRInstruction.Store32, out bool immediate);
+			var previous = GetPreviousNodeUntil(context, IRInstruction.Load32, out _, context.Result);
 
 			if (previous == null)
-				return false;
-
-			if (!immediate && !IsSSAForm(previous.Operand3))
 				return false;
 
 			if (!previous.Operand2.IsResolvedConstant)
@@ -27,7 +24,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 			if (previous.Operand1 != context.Operand1)
 				return false;
 
-			if (previous.Operand2.ConstantUnsigned32 != context.Operand2.ConstantUnsigned32)
+			if (previous.Operand2.ConstantUnsigned64 != context.Operand2.ConstantUnsigned64)
 				return false;
 
 			return true;
@@ -35,9 +32,9 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
-			var previous = GetPreviousNodeUntil(context, IRInstruction.Store32, out _);
+			var previous = GetPreviousNodeUntil(context, IRInstruction.Load32, out _);
 
-			context.SetInstruction(IRInstruction.ZeroExtend32x64, context.Result, previous.Operand3);
+			context.SetInstruction(IRInstruction.Move32, context.Result, previous.Result);
 		}
 	}
 }

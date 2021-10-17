@@ -829,11 +829,11 @@ namespace Mosa.Compiler.Framework.Transform
 			return next.IsBlockEndInstruction ? null : next;
 		}
 
-		protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, out bool immediatePrevious, Operand operand = null, int lookback = 20)
+		protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, out bool immediate, Operand operand = null, int lookback = 20)
 		{
 			var previous = context.Node.Previous;
 			int count = 0;
-			immediatePrevious = false;
+			immediate = false;
 
 			while (count < lookback)
 			{
@@ -845,7 +845,7 @@ namespace Mosa.Compiler.Framework.Transform
 
 				if (previous.Instruction == untilInstruction)
 				{
-					immediatePrevious = count == 0;
+					immediate = count == 0;
 					return previous;
 				}
 
@@ -853,6 +853,7 @@ namespace Mosa.Compiler.Framework.Transform
 					|| previous.Instruction.IsMemoryRead
 					|| previous.Instruction.IsMemoryWrite
 					|| previous.Instruction.IsIOOperation
+					|| previous.Instruction.HasUnspecifiedSideEffect
 					|| previous.Instruction.FlowControl != FlowControl.Next)
 					return null;
 
@@ -865,6 +866,49 @@ namespace Mosa.Compiler.Framework.Transform
 				}
 
 				previous = previous.Previous;
+				count++;
+			}
+
+			return null;
+		}
+
+		protected static InstructionNode GetNextNodeUntil(Context context, BaseInstruction untilInstruction, out bool immediate, Operand operand = null, int lookback = 20)
+		{
+			var next = context.Node.Next;
+			int count = 0;
+			immediate = false;
+
+			while (count < lookback)
+			{
+				if (next.IsEmptyOrNop)
+				{
+					next = next.Next;
+					continue;
+				}
+
+				if (next.Instruction == untilInstruction)
+				{
+					immediate = count == 0;
+					return next;
+				}
+
+				if (next.IsBlockEndInstruction
+					|| next.Instruction.IsMemoryRead
+					|| next.Instruction.IsMemoryWrite
+					|| next.Instruction.IsIOOperation
+					|| next.Instruction.HasUnspecifiedSideEffect
+					|| next.Instruction.FlowControl != FlowControl.Next)
+					return null;
+
+				if (operand != null)
+				{
+					if ((next.ResultCount >= 1 && next.Result == operand)
+					|| (next.ResultCount >= 2 && next.Result2 == operand))
+
+						return null;
+				}
+
+				next = next.Next;
 				count++;
 			}
 

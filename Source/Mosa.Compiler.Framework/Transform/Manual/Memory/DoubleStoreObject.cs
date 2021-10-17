@@ -13,13 +13,11 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 			if (!context.Operand2.IsResolvedConstant)
 				return false;
 
-			var next = GetNextNode(context);
+			var next = GetNextNodeUntil(context, IRInstruction.StoreObject, out _);
 
 			if (next == null)
 				return false;
 
-			if (next.Instruction != IRInstruction.StoreObject)
-				return false;
 
 			if (!next.Operand2.IsResolvedConstant)
 				return false;
