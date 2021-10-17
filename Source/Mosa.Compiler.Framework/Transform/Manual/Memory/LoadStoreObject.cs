@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 {
-	public sealed class LoadZeroExtend8x64Store8 : BaseTransformation
+	public sealed class LoadStoreObject : BaseTransformation
 	{
-		public LoadZeroExtend8x64Store8() : base(IRInstruction.LoadZeroExtend8x64)
+		public LoadStoreObject() : base(IRInstruction.LoadObject)
 		{
 		}
 
@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 			if (!context.Operand2.IsResolvedConstant)
 				return false;
 
-			var previous = GetPreviousNodeUntil(context, IRInstruction.Store8, transformContext.Window, out bool immediate);
+			var previous = GetPreviousNodeUntil(context, IRInstruction.StoreObject, transformContext.Window, out bool immediate);
 
 			if (previous == null)
 				return false;
@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 			if (previous.Operand1 != context.Operand1)
 				return false;
 
-			if (previous.Operand2.ConstantUnsigned64 != context.Operand2.ConstantUnsigned64)
+			if (previous.Operand2.ConstantUnsigned32 != context.Operand2.ConstantUnsigned32)
 				return false;
 
 			return true;
@@ -38,9 +38,9 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
-			var previous = GetPreviousNodeUntil(context, IRInstruction.Store8, transformContext.Window);
+			var previous = GetPreviousNodeUntil(context, IRInstruction.StoreObject, transformContext.Window);
 
-			context.SetInstruction(IRInstruction.ZeroExtend8x64, context.Result, previous.Operand3);
+			context.SetInstruction(IRInstruction.MoveObject, context.Result, previous.Operand3);
 		}
 	}
 }

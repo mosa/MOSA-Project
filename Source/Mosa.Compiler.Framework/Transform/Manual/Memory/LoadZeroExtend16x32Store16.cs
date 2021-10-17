@@ -10,6 +10,9 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{
+			if (!IsSSAForm(context.Operand1))
+				return false;
+
 			if (!context.Operand2.IsResolvedConstant)
 				return false;
 

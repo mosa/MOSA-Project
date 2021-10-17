@@ -165,6 +165,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			new Memory.LoadStore64(),
 			new Memory.LoadStoreR4(),
 			new Memory.LoadStoreR8(),
+			new Memory.LoadStoreObject(),
 
 			new Memory.StoreLoad32(),
 			new Memory.StoreLoad64(),
