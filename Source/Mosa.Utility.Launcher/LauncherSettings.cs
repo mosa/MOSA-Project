@@ -293,6 +293,12 @@ namespace Mosa.Utility.Launcher
 
 		public List<string> SourceFiles { get { return Settings.GetValueList("Compiler.SourceFiles"); } }
 
+		public string FileSystemRootInclude
+		{
+			get { return Settings.GetValue("Image.FileSystem.RootInclude", null); }
+			set { Settings.SetValue("Image.FileSystem.RootInclude", value); }
+		}
+
 		public string VmwarePlayer
 		{
 			get { return Settings.GetValue("AppLocation.VmwarePlayer", null); }

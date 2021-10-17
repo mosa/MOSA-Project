@@ -8,6 +8,8 @@ using Mosa.DeviceSystem.PCI;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
+using Mosa.FileSystem.FAT;
+using System.Drawing;
 
 namespace Mosa.Demo.VBEWorld.x86
 {
@@ -19,8 +21,14 @@ namespace Mosa.Demo.VBEWorld.x86
 		public static ConsoleSession Console;
 		public static DeviceService DeviceService;
 
-		private static Hardware _hal;
-		private static StandardMouse _mouse;
+		private static Hardware hal;
+		private static StandardMouse mouse;
+
+		private static bool hasFS;
+
+		private static Image wallpaper;
+
+		private static uint black, gray;
 
 		[Plug("Mosa.Runtime.StartUp::SetInitialMemory")]
 		public static void SetInitialMemory()
@@ -38,11 +46,10 @@ namespace Mosa.Demo.VBEWorld.x86
 			Console = ConsoleManager.Controller.Boot;
 			Console.Clear();
 
-			IDT.SetInterruptHandler(ProcessInterrupt);
-
 			Serial.SetupPort(Serial.COM1);
-
-			_hal = new Hardware();
+			IDT.SetInterruptHandler(ProcessInterrupt);
+			
+			hal = new Hardware();
 
 			// Create Service manager and basic services
 			var serviceManager = new ServiceManager();
@@ -60,22 +67,47 @@ namespace Mosa.Demo.VBEWorld.x86
 			serviceManager.AddService(pciControllerService);
 			serviceManager.AddService(pciDeviceService);
 
-			DeviceSystem.Setup.Initialize(_hal, DeviceService.ProcessInterrupt);
+			DeviceSystem.Setup.Initialize(hal, DeviceService.ProcessInterrupt);
 
 			DeviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
 			DeviceService.Initialize(new X86System(), null);
 
+			partitionService.CreatePartitionDevices();
+			var partitions = DeviceService.GetDevices<IPartitionDevice>();
+
+			foreach (var partition in partitions)
+			{
+				var fat = new FatFileSystem(partition.DeviceDriver as IPartitionDevice);
+				hasFS = fat.IsValid;
+
+				if (hasFS)
+				{
+					var location = fat.FindEntry("WALLP.BMP");
+
+					if (location.IsValid)
+					{
+						var fatFileStream = new FatFileStream(fat, location);
+						var _wall = new byte[(uint)fatFileStream.Length];
+
+						for (int k = 0; k < _wall.Length; k++)
+							_wall[k] = (byte)(char)fatFileStream.ReadByte();
+
+						wallpaper = new Bitmap(_wall);
+					}
+				}
+			}
+
 			var standardMice = DeviceService.GetDevices("StandardMouse");
 			if (standardMice.Count == 0)
 			{
-				_hal.Pause();
-				_hal.Abort("Catastrophic failure, mouse and/or PIT not found.");
+				hal.Pause();
+				hal.Abort("Catastrophic failure, mouse and/or PIT not found.");
 			}
 
-			_mouse = standardMice[0].DeviceDriver as StandardMouse;
-			_mouse.SetScreenResolution(VBE.ScreenWidth, VBE.ScreenHeight);
+			mouse = standardMice[0].DeviceDriver as StandardMouse;
+			mouse.SetScreenResolution(VBE.ScreenWidth, VBE.ScreenHeight);
 
-			if (VBEDisplay.InitVBE(_hal))
+			if (VBEDisplay.InitVBE(hal))
 			{
 				Log("VBE setup OK!");
 				DoGraphics();
@@ -84,10 +116,15 @@ namespace Mosa.Demo.VBEWorld.x86
 
 		private static void DoGraphics()
 		{
+			black = (uint)Color.Black.ToArgb();
+			gray = (uint)Color.Gray.ToArgb();
+
 			for (; ; )
 			{
-				VBEDisplay.Framebuffer.ClearScreen(0x00555555);
-				VBEDisplay.Framebuffer.FillRectangle(0x0, 50, 50, 130, 80);
+				if (hasFS)
+					VBEDisplay.Framebuffer.DrawImage(wallpaper, 0, 0, false);
+				else
+					VBEDisplay.Framebuffer.ClearScreen(gray);
 
 				MosaLogo.Draw(VBEDisplay.Framebuffer, 10);
 				DrawMouse();
@@ -98,10 +135,10 @@ namespace Mosa.Demo.VBEWorld.x86
 
 		private static void DrawMouse()
 		{
-			VBEDisplay.Framebuffer.SetPixel(0x0, (uint)_mouse.X, (uint)_mouse.Y);
-			VBEDisplay.Framebuffer.SetPixel(0x0, (uint)_mouse.X + 1, (uint)_mouse.Y);
-			VBEDisplay.Framebuffer.SetPixel(0x0, (uint)_mouse.X, (uint)_mouse.Y + 1);
-			VBEDisplay.Framebuffer.SetPixel(0x0, (uint)_mouse.X + 1, (uint)_mouse.Y + 1);
+			VBEDisplay.Framebuffer.SetPixel(black, (uint)mouse.X, (uint)mouse.Y);
+			VBEDisplay.Framebuffer.SetPixel(black, (uint)mouse.X + 1, (uint)mouse.Y);
+			VBEDisplay.Framebuffer.SetPixel(black, (uint)mouse.X, (uint)mouse.Y + 1);
+			VBEDisplay.Framebuffer.SetPixel(black, (uint)mouse.X + 1, (uint)mouse.Y + 1);
 		}
 
 		public static void Log(string line)
@@ -113,7 +150,7 @@ namespace Mosa.Demo.VBEWorld.x86
 		public static void ProcessInterrupt(uint interrupt, uint errorCode)
 		{
 			if (interrupt >= 0x20 && interrupt < 0x30)
-				_hal.ProcessInterrupt((byte)(interrupt - 0x20));
+				Mosa.DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
 		}
 	}
 }

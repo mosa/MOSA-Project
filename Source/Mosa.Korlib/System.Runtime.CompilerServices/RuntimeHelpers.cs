@@ -25,6 +25,15 @@ namespace System.Runtime.CompilerServices
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		internal static extern object CreateInstance(Type type, params object[] args);
 
+		// TODO: Implement?
+		[Intrinsic]
+        internal static bool EnumEquals<T>(T x, T y) where T : Enum
+        {
+            // The body of this function will be replaced by the EE with unsafe code
+            // See getILIntrinsicImplementation for how this happens.
+            return x.Equals(y);
+        }
+
 		[Intrinsic]
 		public static bool IsReferenceOrContainsReferences<T>()
 		{

@@ -69,6 +69,8 @@ namespace Mosa.Demo.Application
 				case "mem": return new Mem();
 				case "showpci": return new ShowPCI();
 				case "credits": return new Credits();
+				case "shutdown": return new Shutdown();
+				case "reboot": return new Reboot();
 				default: return null;
 			}
 		}

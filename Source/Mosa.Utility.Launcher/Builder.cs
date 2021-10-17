@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
+using System.Linq;
 
 namespace Mosa.Utility.Launcher
 {
@@ -224,6 +225,18 @@ namespace Mosa.Utility.Launcher
 
 			bootImageOptions.IncludeFiles.Add(new IncludeFile("TEST.TXT", Encoding.ASCII.GetBytes("This is a test file.")));
 
+			if (LauncherSettings.FileSystemRootInclude != null)
+			{
+				var dir = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), LauncherSettings.FileSystemRootInclude);
+				foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories))
+				{
+					var name = Path.GetFileName(file).ToUpper();
+
+					Console.WriteLine("Adding file: " + name);
+					bootImageOptions.IncludeFiles.Add(new IncludeFile(name, File.ReadAllBytes(file)));
+				}
+			}
+
 			bootImageOptions.VolumeLabel = "MOSA";
 			bootImageOptions.DiskImageFileName = imagefile;
 
@@ -373,6 +386,18 @@ namespace Mosa.Utility.Launcher
 				File.WriteAllBytes(Path.Combine(isoDirectory, "mboot.c32"), GetResource(@"syslinux\3.72", "mboot.c32"));
 			}
 
+			if (LauncherSettings.FileSystemRootInclude != null)
+			{
+				var dir = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), LauncherSettings.FileSystemRootInclude);
+				foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories))
+				{
+					var name = Path.GetFileName(file).ToUpper();
+
+					Console.WriteLine("Adding file: " + name);
+					File.Copy(file, Path.Combine(isoDirectory, name));
+				}
+			}
+
 			File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.cfg"), GetSyslinuxCFG());
 
 			File.Copy(LauncherSettings.OutputFile, Path.Combine(isoDirectory, "main.exe"));
@@ -422,6 +447,18 @@ namespace Mosa.Utility.Launcher
 				var archive = new ZipArchive(dataStream);
 
 				archive.ExtractToDirectory(Path.Combine(isoDirectory, "boot", "grub"));
+			}
+
+			if (LauncherSettings.FileSystemRootInclude != null)
+			{
+				var dir = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), LauncherSettings.FileSystemRootInclude);
+				foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories))
+				{
+					var name = Path.GetFileName(file).ToUpper();
+
+					Console.WriteLine("Adding file: " + name);
+					File.Copy(file, Path.Combine(isoDirectory, name));
+				}
 			}
 
 			File.Copy(LauncherSettings.OutputFile, Path.Combine(isoDirectory, "boot", "main.exe"));

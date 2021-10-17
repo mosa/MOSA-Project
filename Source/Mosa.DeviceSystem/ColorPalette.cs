@@ -1,5 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Drawing;
+
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
@@ -78,7 +80,7 @@ namespace Mosa.DeviceSystem
 					return i;
 
 				// very simple implementation
-				int dist = (colors[i].Red * color.Red) + (colors[i].Green * color.Green) + (colors[i].Blue * color.Blue);
+				int dist = (colors[i].R * color.R) + (colors[i].G * color.G) + (colors[i].B * color.B);
 
 				if (dist < bestDiff)
 				{

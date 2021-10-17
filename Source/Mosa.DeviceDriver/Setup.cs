@@ -3,6 +3,7 @@
 using Mosa.DeviceDriver.PCI.Intel;
 using Mosa.DeviceDriver.PCI.Intel.QuarkSoC;
 using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.PCI;
 using System.Collections.Generic;
 
 namespace Mosa.DeviceDriver
@@ -125,8 +126,9 @@ namespace Mosa.DeviceDriver
 					VendorID = 0x15AD,
 					DeviceID = 0x0405,
 					PCIFields = PCIField.VendorID | PCIField.DeviceID,
+
 					AutoStart = false,
-					Factory = delegate { return new PCI.VMware.VMwareSVGA2(); },
+					Factory = delegate { return new PCI.VMware.VMwareSVGA2(); }
 				},
 
 				new PCIDeviceDriverRegistryEntry()

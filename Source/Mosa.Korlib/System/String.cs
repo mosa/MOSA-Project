@@ -225,6 +225,24 @@ namespace System
 			return result;
 		}
 
+		public string[] Split(char c)
+		{
+			string str = this;
+			List<string> ls = new List<string>();
+			int indx;
+
+			while ((indx = str.IndexOf(c)) != -1)
+			{
+				ls.Add(str.Substring(0, indx));
+				str = str.Substring(indx + 1);
+			}
+
+			if (str.Length > 0)
+				ls.Add(str);
+
+			return ls.ToArray();
+		}
+
 		public bool Equals(string i)
 		{
 			return Equals(this, i);

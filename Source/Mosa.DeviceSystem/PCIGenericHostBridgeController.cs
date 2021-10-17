@@ -3,7 +3,7 @@
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
 
-namespace Mosa.DeviceDriver.PCI.Intel
+namespace Mosa.DeviceSystem.PCI
 {
 	/// <summary>
 	/// Generic PCI Host Bridge Controller
@@ -19,6 +19,7 @@ namespace Mosa.DeviceDriver.PCI.Intel
 			Device.Name = "PCIGenericHostBridgeController";
 		}
 
+		// TODO: We have to test
 		bool IHostBridgeController.CPUReset()
 		{
 			var pciDevice = Device.Parent.DeviceDriver as PCIDevice;
@@ -31,7 +32,7 @@ namespace Mosa.DeviceDriver.PCI.Intel
 			if (pciController == null)
 				return false;
 
-			pciController.WriteConfig8(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, ResetAddress, ResetValue);
+			pciController.WriteConfig8(pciDevice.Bus, (byte)((ResetAddress >> 32) & 0xFFFF), (byte)((ResetAddress >> 16) & 0xFFFF), (byte)(ResetAddress & 0xFFFF), ResetValue);
 
 			return false;
 		}
