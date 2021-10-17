@@ -125,7 +125,8 @@ namespace Mosa.DeviceDriver
 					VendorID = 0x15AD,
 					DeviceID = 0x0405,
 					PCIFields = PCIField.VendorID | PCIField.DeviceID,
-					Factory = delegate { return new PCI.VMware.VMwareSVGA2(); }
+					AutoStart = false,
+					Factory = delegate { return new PCI.VMware.VMwareSVGA2(); },
 				},
 
 				new PCIDeviceDriverRegistryEntry()
@@ -190,8 +191,21 @@ namespace Mosa.DeviceDriver
 					BusType = DeviceBusType.PCI,
 					VendorID = 0x8086,
 					DeviceID = 0x1237,
-					PCIFields = PCIField.VendorID | PCIField.DeviceID,
+					ClassCode = 0x06,
+					SubClassCode = 0x00,
+					PCIFields = PCIField.VendorID | PCIField.DeviceID | PCIField.ClassCode | PCIField.SubClassCode,
 					Factory = delegate { return new Intel440FX(); }
+				},
+
+				new PCIDeviceDriverRegistryEntry()
+				{
+					Name = "PCIGenericHostBridge",
+					Platforms = PlatformArchitecture.X86AndX64,
+					BusType = DeviceBusType.PCI,
+					ClassCode = 0x06,
+					SubClassCode = 0x00,
+					PCIFields =  PCIField.ClassCode | PCIField.SubClassCode,
+					Factory = delegate { return new PCIGenericHostBridgeController(); }
 				},
 
 				// TODO: Somehow add more DeviceIDs for this product family

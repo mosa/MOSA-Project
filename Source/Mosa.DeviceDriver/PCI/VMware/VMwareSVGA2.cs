@@ -50,6 +50,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		}
 
 		/* Port offsets, relative to BAR0 */
+
 		internal struct PORT
 		{
 			internal const byte Index = 0x00;
@@ -73,6 +74,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		 * Interrupts are only supported when the
 		 * SVGA_CAP_IRQMASK capability is present.
          */
+
 		internal struct IRQ_FLAGS
 		{
 			internal const byte AnyFence = 0x01;       /* Any fence was passed */
@@ -93,6 +95,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		 * cursor bypass mode. This is still supported, but no new guest
 		 * drivers should use it.
 		 */
+
 		internal struct CURSOR_ON
 		{
 			internal const byte Hide = 0x00;
@@ -147,6 +150,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 			// FrameBufferStart
 			internal const uint FBLegacyStart = 0x7EFC0000;
+
 			internal const uint FBLegacyBigMem = 0xE0000000;
 
 			internal const byte ScreenMustBeSet = 1 << 0;
@@ -485,8 +489,8 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 			Device.Status = DeviceStatus.Online;
 
-			Mandelbrot();
-			MosaLogoDraw(frameBuffer, 10);
+			//Mandelbrot();
+			//MosaLogoDraw(frameBuffer, 10);
 		}
 
 		public override bool OnInterrupt()
@@ -784,12 +788,12 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			UpdateScreen();
 		}
 
-		public static uint MandelbrotColor (byte Red, byte Green, byte Blue, byte Alpha)
+		public static uint MandelbrotColor(byte Red, byte Green, byte Blue, byte Alpha)
 		{
 			return (uint)(Alpha << 24 | Red << 16 | Green << 8 | Blue << 0);
 		}
 
-		uint[] palette =
+		private uint[] palette =
 		{
 				MandelbrotColor(66, 30, 15, 255),
 				MandelbrotColor(25, 7, 26, 255),

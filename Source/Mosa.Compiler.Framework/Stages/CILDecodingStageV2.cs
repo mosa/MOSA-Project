@@ -108,9 +108,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void CollectTargets()
 		{
-			for (int index = 0; index < Method.Code.Count; index++)
+			var code = Method.Code;
+
+			for (int index = 0; index < code.Count; index++)
 			{
-				var instruction = Method.Code[index];
+				var instruction = code[index];
 
 				var opcode = (OpCode)instruction.OpCode;
 
@@ -121,7 +123,7 @@ namespace Mosa.Compiler.Framework.Stages
 				else if (IsBranch(opcode))
 				{
 					AddTarget((int)instruction.Operand);
-					AddTarget(Method.Code[index + 1].Offset);
+					AddTarget(code[index + 1].Offset);
 				}
 				else if (opcode == OpCode.Switch)
 				{
@@ -130,7 +132,7 @@ namespace Mosa.Compiler.Framework.Stages
 						AddTarget((int)instruction.Operand);
 					}
 
-					AddTarget(Method.Code[index + 1].Offset);
+					AddTarget(code[index + 1].Offset);
 				}
 			}
 
@@ -243,9 +245,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 			InstructionNode endNode = block.First;
 
-			for (int index = 0; index < Method.Code.Count; index++)
+			var code = Method.Code;
+
+			for (int index = 0; index < code.Count; index++)
 			{
-				var instruction = Method.Code[index];
+				var instruction = code[index];
 				var opcode = (OpCode)instruction.OpCode;
 				var label = instruction.Offset;
 
@@ -290,9 +294,11 @@ namespace Mosa.Compiler.Framework.Stages
 			var arg = new bool[count];
 			var argCount = 0;
 
-			for (int label = 0; label < Method.Code.Count; label++)
+			var code = Method.Code;
+
+			for (int label = 0; label < code.Count; label++)
 			{
-				var instruction = Method.Code[label];
+				var instruction = code[label];
 
 				var opcode = (OpCode)instruction.OpCode;
 

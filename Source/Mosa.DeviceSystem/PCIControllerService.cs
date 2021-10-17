@@ -26,15 +26,12 @@ namespace Mosa.DeviceSystem
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public override void PostEvent(ServiceEvent serviceEvent)
 		{
-			//HAL.DebugWriteLine("PCIControllerService:PostEvent()");
-			//HAL.Pause();
-
-			var device = MatchEvent<IPCIController>(serviceEvent, ServiceEventType.Start);
+			var device = MatchEvent<IPCIControllerLegacy>(serviceEvent, ServiceEventType.Start);
 
 			if (device == null)
 				return;
 
-			var pciController = device.DeviceDriver as IPCIController;
+			var pciController = device.DeviceDriver as IPCIControllerLegacy;
 
 			CreatePCIDevices(device, pciController);
 		}
@@ -42,7 +39,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// Creates the partition devices.
 		/// </summary>
-		private void CreatePCIDevices(Device device, IPCIController pciController)
+		private void CreatePCIDevices(Device device, IPCIControllerLegacy pciController)
 		{
 			// For each controller
 			for (int bus = 0; bus < 255; bus++)
@@ -63,7 +60,7 @@ namespace Mosa.DeviceSystem
 							Function = (byte)fun
 						};
 
-						DeviceService.Initialize(new PCIDevice(), device, configuration, null, null);
+						DeviceService.Initialize(new PCIDevice(), device, true, configuration, null, null);
 					}
 				}
 			}
@@ -77,7 +74,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="slot">The slot.</param>
 		/// <param name="fun">The fun.</param>
 		/// <returns></returns>
-		protected bool ProbeDevice(IPCIController pciController, byte bus, byte slot, byte fun)
+		protected bool ProbeDevice(IPCIControllerLegacy pciController, byte bus, byte slot, byte fun)
 		{
 			uint value = pciController.ReadConfig32(bus, slot, fun, 0);
 

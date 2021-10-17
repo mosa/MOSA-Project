@@ -39,11 +39,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 								match = true;
 							}
 
-							//else
-							//{
-							//	match = Regex.Match(name, exclude).Success;
-							//}
-
 							if (match)
 							{
 								var methodData = Compiler.GetMethodData(method);
@@ -68,11 +63,6 @@ namespace Mosa.Compiler.Framework.CompilerStages
 							{
 								match = true;
 							}
-
-							//else
-							//{
-							//	match = Regex.Match(name, aggressive).Success;
-							//}
 
 							if (match)
 							{

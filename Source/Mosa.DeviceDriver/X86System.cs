@@ -31,7 +31,7 @@ namespace Mosa.DeviceDriver
 
 		protected void CreateISABusDevices()
 		{
-			DeviceService.Initialize(new ISABus(), Device, null, null, null);
+			DeviceService.Initialize(new ISABus(), Device, true, null, null, null);
 		}
 	}
 }

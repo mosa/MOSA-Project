@@ -48,32 +48,32 @@ namespace Mosa.Compiler.Framework.Trace
 		{
 			switch (stage)
 			{
-				case CompilerEvent.CompileStart: return "Compile Start";
-				case CompilerEvent.CompileEnd: return "Compile Complete";
+				case CompilerEvent.CompileStart: return "Compile Started";
+				case CompilerEvent.CompileEnd: return "Compile Completed";
 
 				case CompilerEvent.CompilingMethods: return "Compiling Methods";
-				case CompilerEvent.CompilingMethodsCompleted: return "Compiling Methods Complete";
+				case CompilerEvent.CompilingMethodsCompleted: return "Compiling Methods Completed";
 
-				case CompilerEvent.MethodCompileStart: return "Method Compile Start";
-				case CompilerEvent.MethodCompileEnd: return "Method Compile Complete";
+				case CompilerEvent.MethodCompileStart: return "Method Compile Started";
+				case CompilerEvent.MethodCompileEnd: return "Method Compile Completed";
 
 				case CompilerEvent.MethodScheduled: return "Method Scheduled";
-				case CompilerEvent.InlineMethodsScheduled: return "Inline Methods Schedule";
+				case CompilerEvent.InlineMethodsScheduled: return "Inline Methods Scheduled";
 
-				case CompilerEvent.LinkingStart: return "Linking Start";
-				case CompilerEvent.LinkingEnd: return "Linking Complete";
+				case CompilerEvent.LinkingStart: return "Linking Started";
+				case CompilerEvent.LinkingEnd: return "Linking Completed";
 
-				case CompilerEvent.SetupStart: return "Setup Start";
-				case CompilerEvent.SetupEnd: return "Setup Complete";
+				case CompilerEvent.SetupStart: return "Setup Started";
+				case CompilerEvent.SetupEnd: return "Setup Completed";
 
-				case CompilerEvent.FinalizationStart: return "Finalization Start";
-				case CompilerEvent.FinalizationEnd: return "Finalization Complete";
+				case CompilerEvent.FinalizationStart: return "Finalization Started";
+				case CompilerEvent.FinalizationEnd: return "Finalization Completed";
 
-				case CompilerEvent.SetupStageStart: return "Setup Stage Start";
-				case CompilerEvent.SetupStageEnd: return "Setup Stage Complete";
+				case CompilerEvent.SetupStageStart: return "Setup Stage Started";
+				case CompilerEvent.SetupStageEnd: return "Setup Stage Completed";
 
-				case CompilerEvent.FinalizationStageStart: return "Finalization Stage Start";
-				case CompilerEvent.FinalizationStageEnd: return "Finalization Stage Complete";
+				case CompilerEvent.FinalizationStageStart: return "Finalization Stage Started";
+				case CompilerEvent.FinalizationStageEnd: return "Finalization Stage Completed";
 
 				case CompilerEvent.DebugInfo: return "Debug Info";
 

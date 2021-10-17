@@ -62,12 +62,14 @@ namespace Mosa.Demo.CoolWorld.x86
 			var partitionService = new PartitionService();
 			var pciControllerService = new PCIControllerService();
 			var pciDeviceService = new PCIDeviceService();
+			var pcService = new PCService();
 
 			serviceManager.AddService(deviceService);
 			serviceManager.AddService(diskDeviceService);
 			serviceManager.AddService(partitionService);
 			serviceManager.AddService(pciControllerService);
 			serviceManager.AddService(pciDeviceService);
+			serviceManager.AddService(pcService);
 
 			Console.WriteLine("> Initializing hardware abstraction layer...");
 
@@ -305,57 +307,6 @@ namespace Mosa.Demo.CoolWorld.x86
 			Console.Row = r;
 			Console.Color = col;
 			Console.BackgroundColor = back;
-		}
-
-		public static void Mandelbrot()
-		{
-			double xmin = -2.1;
-			double ymin = -1.3;
-			double xmax = 1;
-			double ymax = 1.3;
-
-			int Width = 200;
-			int Height = 200;
-
-			double x, y, x1, y1, xx;
-
-			int looper, s, z = 0;
-			double intigralX, intigralY = 0.0;
-
-			intigralX = (xmax - xmin) / Width; // Make it fill the whole window
-			intigralY = (ymax - ymin) / Height;
-			x = xmin;
-
-			for (s = 1; s < Width; s++)
-			{
-				y = ymin;
-				for (z = 1; z < Height; z++)
-				{
-					x1 = 0;
-					y1 = 0;
-					looper = 0;
-					while (looper < 100 && Math.Sqrt((x1 * x1) + (y1 * y1)) < 2)
-					{
-						looper++;
-						xx = (x1 * x1) - (y1 * y1) + x;
-						y1 = 2 * x1 * y1 + y;
-						x1 = xx;
-					}
-
-					// Get the percent of where the looper stopped
-					double perc = looper / (100.0);
-
-					// Get that part of a 255 scale
-					int val = ((int)(perc * 255));
-
-					// Use that number to set the color
-
-					//map[s, z]= value;
-
-					y += intigralY;
-				}
-				x += intigralX;
-			}
 		}
 	}
 }

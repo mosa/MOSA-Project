@@ -24,6 +24,11 @@ namespace Mosa.DeviceSystem
 		X64 = 2,
 
 		/// <summary>
+		/// The ARMv8 32bit
+		/// </summary>
+		ARMv8A32 = 3,
+
+		/// <summary>
 		/// The X86 and X64
 		/// </summary>
 		X86AndX64 = PlatformArchitecture.X86 | PlatformArchitecture.X64,

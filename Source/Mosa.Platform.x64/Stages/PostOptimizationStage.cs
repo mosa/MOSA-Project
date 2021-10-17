@@ -35,7 +35,7 @@ namespace Mosa.Platform.x64.Stages
 			if (OptimizationStage.AreStatusFlagsUsed(context.Node.Next, true, true, true, true, true) == TriState.No)
 			{
 				context.SetInstruction(X64.Xor64, context.Result, context.Result, context.Result);
-				ZeroToXorSubstitutionCount++;
+				ZeroToXorSubstitutionCount.Increment();
 			}
 		}
 

@@ -15,5 +15,7 @@ namespace Mosa.DeviceSystem
 		public InstantiateDeviceDriver Factory { get; set; }
 
 		public byte IRQ { get; set; }
+
+		public bool AutoStart { get; set; } = true;
 	}
 }
