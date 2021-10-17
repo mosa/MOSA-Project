@@ -7,8 +7,11 @@ namespace System
 	/// <summary>
 	/// Double
 	/// </summary>
-	public struct Double: IComparable, IComparable<double>
+	[Serializable]
+	public struct Double: IComparable, IComparable<double>, IEquatable<double>
 	{
+		internal double m_value;
+
 		public const double Epsilon = 4.9406564584124650e-324d;
 		public const double MaxValue = 1.7976931348623157e308d;
 		public const double MinValue = -1.7976931348623157e308d;
@@ -17,8 +20,6 @@ namespace System
 		public const double PositiveInfinity = 1.0d / 0.0d;
 
 		internal const double NegativeZero = -0.0;
-
-		internal double m_value;
 
 		public static bool IsNaN(double d)
 		{

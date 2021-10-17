@@ -6,12 +6,12 @@ namespace System
 	///
 	/// </summary>
 	[Serializable]
-	public struct Byte: IComparable, IComparable<byte>
+	public struct Byte: IComparable, IComparable<byte>, IEquatable<byte>
 	{
+		internal byte m_value;
+
 		public const byte MinValue = 0;
 		public const byte MaxValue = 255;
-
-		internal byte m_value;
 
 		public override bool Equals(object obj)
 		{

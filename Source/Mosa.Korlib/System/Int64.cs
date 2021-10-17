@@ -5,7 +5,8 @@ namespace System
 	/// <summary>
 	///
 	/// </summary>
-	public struct Int64: IComparable, IComparable<long>
+	[Serializable]
+	public struct Int64: IComparable, IComparable<long>, IEquatable<long>
 	{
 		internal long m_value;
 

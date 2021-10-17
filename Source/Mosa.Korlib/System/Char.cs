@@ -9,12 +9,12 @@ namespace System
 	/// Char
 	/// </summary>
 	[Serializable]
-	public struct Char: IComparable, IComparable<char>
+	public struct Char: IComparable, IComparable<char>, IEquatable<char>
 	{
+		internal char m_value;
+
 		public const char MaxValue = (char)0xffff;
 		public const char MinValue = (char)0;
-
-		internal char m_value;
 
 		public override bool Equals(object obj)
 		{

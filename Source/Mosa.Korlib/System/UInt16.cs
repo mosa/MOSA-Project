@@ -5,12 +5,13 @@ namespace System
 	/// <summary>
 	///
 	/// </summary>
-	public struct UInt16: IComparable, IComparable<ushort>
+	[Serializable]
+	public struct UInt16: IComparable, IComparable<ushort>, IEquatable<ushort>
 	{
+		internal ushort m_value;
+
 		public const ushort MaxValue = 0xffff;
 		public const ushort MinValue = 0;
-
-		internal ushort m_value;
 
 		public int CompareTo(object value)
 		{

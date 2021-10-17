@@ -5,12 +5,13 @@ namespace System
 	/// <summary>
 	///
 	/// </summary>
-	public struct UInt32: IComparable, IComparable<uint>
+	[Serializable]
+	public struct UInt32: IComparable, IComparable<uint>, IEquatable<uint>
 	{
+		internal uint m_value;
+
 		public const uint MaxValue = 0xffffffff;
 		public const uint MinValue = 0;
-
-		internal uint m_value;
 
 		public int CompareTo(object value)
 		{

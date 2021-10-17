@@ -5,7 +5,8 @@ namespace System
 	/// <summary>
 	///
 	/// </summary>
-	public struct UInt64: IComparable, IComparable<ulong>
+	[Serializable]
+	public struct UInt64: IComparable, IComparable<ulong>, IEquatable<ulong>
 	{
 		internal ulong m_value;
 
@@ -43,7 +44,7 @@ namespace System
 
 		public bool Equals(ulong value)
 		{
-			return m_value == value;
+			return (m_value == value);
 		}
 
 		public override int GetHashCode()

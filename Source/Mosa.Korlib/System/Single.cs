@@ -7,8 +7,11 @@ namespace System
 	/// <summary>
 	/// Single
 	/// </summary>
-	public struct Single: IComparable, IComparable<float>
+	[Serializable]
+	public struct Single: IComparable, IComparable<float>, IEquatable<float>
 	{
+		internal float m_value;
+
 		public const float Epsilon = 1.4e-45f;
 		public const float MaxValue = 3.40282346638528859e38f;
 		public const float MinValue = -3.40282346638528859e38f;
@@ -17,8 +20,6 @@ namespace System
 		public const float NegativeInfinity = -1.0f / 0.0f;
 
 		internal const float NegativeZero = (float)-0.0;
-
-		internal float m_value;
 
 		public static bool IsNaN(float s)
 		{

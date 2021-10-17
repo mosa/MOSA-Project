@@ -5,12 +5,13 @@ namespace System
 	/// <summary>
 	///
 	/// </summary>
-	public struct SByte: IComparable, IComparable<sbyte>
+	[Serializable]
+	public struct SByte: IComparable, IComparable<sbyte>, IEquatable<sbyte>
 	{
+		internal sbyte m_value;
+
 		public const sbyte MinValue = -128;
 		public const sbyte MaxValue = 127;
-
-		internal sbyte m_value;
 
 		public int CompareTo(object value)
 		{
