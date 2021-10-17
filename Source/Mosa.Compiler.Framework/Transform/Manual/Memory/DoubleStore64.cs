@@ -10,15 +10,15 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{
+			if (!context.Operand1.IsVirtualRegister)
+				return false;
+
 			if (!context.Operand2.IsResolvedConstant)
 				return false;
 
-			var next = GetNextNode(context);
+			var next = GetNextNodeUntil(context, IRInstruction.Store64, transformContext.Window, context.Operand1);
 
 			if (next == null)
-				return false;
-
-			if (next.Instruction != IRInstruction.Store64)
 				return false;
 
 			if (!next.Operand2.IsResolvedConstant)

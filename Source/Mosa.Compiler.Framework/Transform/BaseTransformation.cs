@@ -829,13 +829,18 @@ namespace Mosa.Compiler.Framework.Transform
 			return next.IsBlockEndInstruction ? null : next;
 		}
 
-		protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, out bool immediatePrevious, int lookback = 1)
+		protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, int window, Operand operand1 = null, Operand operand2 = null)
+		{
+			return GetPreviousNodeUntil(context, untilInstruction, window, out _, operand1, operand2);
+		}
+
+		protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, int window, out bool immediate, Operand operand1 = null, Operand operand2 = null)
 		{
 			var previous = context.Node.Previous;
 			int count = 0;
-			immediatePrevious = false;
+			immediate = false;
 
-			while (count < lookback)
+			while (count < window)
 			{
 				if (previous.IsEmptyOrNop)
 				{
@@ -845,7 +850,7 @@ namespace Mosa.Compiler.Framework.Transform
 
 				if (previous.Instruction == untilInstruction)
 				{
-					immediatePrevious = count == 0;
+					immediate = count == 0;
 					return previous;
 				}
 
@@ -853,10 +858,75 @@ namespace Mosa.Compiler.Framework.Transform
 					|| previous.Instruction.IsMemoryRead
 					|| previous.Instruction.IsMemoryWrite
 					|| previous.Instruction.IsIOOperation
+					|| previous.Instruction.HasUnspecifiedSideEffect
 					|| previous.Instruction.FlowControl != FlowControl.Next)
 					return null;
 
+				if (operand1 != null)
+				{
+					if ((previous.ResultCount >= 1 && previous.Result == operand1)
+					|| (previous.ResultCount >= 2 && previous.Result2 == operand1))
+
+						return null;
+				}
+
+				if (operand2 != null)
+				{
+					if ((previous.ResultCount >= 1 && previous.Result == operand2)
+					|| (previous.ResultCount >= 2 && previous.Result2 == operand2))
+
+						return null;
+				}
+
 				previous = previous.Previous;
+				count++;
+			}
+
+			return null;
+		}
+
+		protected static InstructionNode GetNextNodeUntil(Context context, BaseInstruction untilInstruction, int window, Operand operand = null)
+		{
+			return GetNextNodeUntil(context, untilInstruction, window, out _, operand);
+		}
+
+		protected static InstructionNode GetNextNodeUntil(Context context, BaseInstruction untilInstruction, int window, out bool immediate, Operand operand = null)
+		{
+			var next = context.Node.Next;
+			int count = 0;
+			immediate = false;
+
+			while (count < window)
+			{
+				if (next.IsEmptyOrNop)
+				{
+					next = next.Next;
+					continue;
+				}
+
+				if (next.Instruction == untilInstruction)
+				{
+					immediate = count == 0;
+					return next;
+				}
+
+				if (next.IsBlockEndInstruction
+					|| next.Instruction.IsMemoryRead
+					|| next.Instruction.IsMemoryWrite
+					|| next.Instruction.IsIOOperation
+					|| next.Instruction.HasUnspecifiedSideEffect
+					|| next.Instruction.FlowControl != FlowControl.Next)
+					return null;
+
+				if (operand != null)
+				{
+					if ((next.ResultCount >= 1 && next.Result == operand)
+					|| (next.ResultCount >= 2 && next.Result2 == operand))
+
+						return null;
+				}
+
+				next = next.Next;
 				count++;
 			}
 

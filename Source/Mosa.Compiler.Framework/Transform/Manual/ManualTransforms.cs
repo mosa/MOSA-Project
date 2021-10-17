@@ -165,6 +165,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			new Memory.LoadStore64(),
 			new Memory.LoadStoreR4(),
 			new Memory.LoadStoreR8(),
+			new Memory.LoadStoreObject(),
 
 			new Memory.StoreLoad32(),
 			new Memory.StoreLoad64(),
@@ -182,7 +183,9 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			new Memory.LoadZeroExtend16x64Store16(),
 			new Memory.LoadZeroExtend8x32Store8(),
 			new Memory.LoadZeroExtend8x64Store8(),
+			new Memory.LoadZeroExtend32x64Store32(),
 
+			new Memory.LoadSignExtend32x64Store32(),
 			new Memory.LoadSignExtend16x32Store16(),
 			new Memory.LoadSignExtend16x64Store16(),
 			new Memory.LoadSignExtend8x32Store8(),
@@ -192,17 +195,24 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			new Memory.LoadParamSignExtend16x64Store16(),
 			new Memory.LoadParamSignExtend8x32Store8(),
 			new Memory.LoadParamSignExtend8x64Store8(),
-
+			new Memory.LoadParamSignExtend32x64Store32(),
 			new Memory.LoadParamZeroExtend16x32Store16(),
 			new Memory.LoadParamZeroExtend16x64Store16(),
 			new Memory.LoadParamZeroExtend8x32Store8(),
 			new Memory.LoadParamZeroExtend8x64Store8(),
-
-			new Memory.LoadZeroExtend32x64Store32(),
-			new Memory.LoadSignExtend32x64Store32(),
-
 			new Memory.LoadParamZeroExtend32x64Store32(),
-			new Memory.LoadParamSignExtend32x64Store32(),
+
+			new Memory.DoubleLoad32(),
+			new Memory.DoubleLoad64(),
+			new Memory.DoubleLoadR4(),
+			new Memory.DoubleLoadR8(),
+			new Memory.DoubleLoadParamObject(),
+
+			new Memory.DoubleLoadParam32(),
+			new Memory.DoubleLoadParam64(),
+			new Memory.DoubleLoadParamR4(),
+			new Memory.DoubleLoadParamR8(),
+			new Memory.DoubleLoadParamObject(),
 
 			//new Special.Phi32Conditional(),
 		};
