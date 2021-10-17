@@ -6,7 +6,7 @@ namespace System
 	///
 	/// </summary>
 	[Serializable]
-	public struct Boolean: IComparable, IComparable<bool>
+	public struct Boolean: IComparable, IComparable<bool>, IEquatable<bool>
 	{
 		//
 		// Member Variables
