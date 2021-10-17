@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 			if (!context.Operand2.IsResolvedConstant)
 				return false;
 
-			var previous = GetPreviousNodeUntil(context, IRInstruction.Load32, out _);
+			var previous = GetPreviousNodeUntil(context, IRInstruction.Load32, out _, context.Operand3);
 
 			if (previous == null)
 				return false;

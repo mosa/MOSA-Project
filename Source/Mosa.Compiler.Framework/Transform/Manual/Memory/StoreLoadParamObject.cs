@@ -10,7 +10,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Memory
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{
-			var previous = GetPreviousNodeUntil(context, IRInstruction.LoadParamObject, out _);
+			var previous = GetPreviousNodeUntil(context, IRInstruction.LoadParamObject, out _, context.Operand2);
 
 			if (previous == null)
 				return false;

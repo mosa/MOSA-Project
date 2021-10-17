@@ -829,7 +829,7 @@ namespace Mosa.Compiler.Framework.Transform
 			return next.IsBlockEndInstruction ? null : next;
 		}
 
-		protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, out bool immediatePrevious, int lookback = 1)
+		protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, out bool immediatePrevious, Operand operand = null, int lookback = 20)
 		{
 			var previous = context.Node.Previous;
 			int count = 0;
@@ -855,6 +855,14 @@ namespace Mosa.Compiler.Framework.Transform
 					|| previous.Instruction.IsIOOperation
 					|| previous.Instruction.FlowControl != FlowControl.Next)
 					return null;
+
+				if (operand != null)
+				{
+					if ((previous.ResultCount >= 1 && previous.Result == operand)
+					|| (previous.ResultCount >= 2 && previous.Result2 == operand))
+
+						return null;
+				}
 
 				previous = previous.Previous;
 				count++;

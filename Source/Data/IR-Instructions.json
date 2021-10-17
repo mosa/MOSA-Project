@@ -93,14 +93,16 @@
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"VariableOperands": "true"
+			"VariableOperands": "true",
+			"FlowControl": "Call"
 		},
 		{
 			"Name": "CallDirect",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"VariableOperands": "true"
+			"VariableOperands": "true",
+			"FlowControl": "Call"
 		},
 		{
 			"Name": "CallDynamic",
@@ -108,28 +110,32 @@
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"VariableOperands": "true"
+			"VariableOperands": "true",
+			"FlowControl": "Call"
 		},
 		{
 			"Name": "CallInterface",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"VariableOperands": "true"
+			"VariableOperands": "true",
+			"FlowControl": "Call"
 		},
 		{
 			"Name": "CallStatic",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"VariableOperands": "true"
+			"VariableOperands": "true",
+			"FlowControl": "Call"
 		},
 		{
 			"Name": "CallVirtual",
 			"FamilyName": "IR",
 			"ResultCount": 0,
 			"OperandCount": 0,
-			"VariableOperands": "true"
+			"VariableOperands": "true",
+			"FlowControl": "Call"
 		},
 		{
 			"Name": "CompareR4",
