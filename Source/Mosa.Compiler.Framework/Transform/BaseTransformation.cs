@@ -829,12 +829,12 @@ namespace Mosa.Compiler.Framework.Transform
 			return next.IsBlockEndInstruction ? null : next;
 		}
 
-		protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, int window, Operand operand = null)
+		protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, int window, Operand operand1 = null, Operand operand2 = null)
 		{
-			return GetPreviousNodeUntil(context, untilInstruction, window, out _, operand);
+			return GetPreviousNodeUntil(context, untilInstruction, window, out _, operand1, operand2);
 		}
 
-		protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, int window, out bool immediate, Operand operand = null)
+		protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, int window, out bool immediate, Operand operand1 = null, Operand operand2 = null)
 		{
 			var previous = context.Node.Previous;
 			int count = 0;
@@ -862,10 +862,18 @@ namespace Mosa.Compiler.Framework.Transform
 					|| previous.Instruction.FlowControl != FlowControl.Next)
 					return null;
 
-				if (operand != null)
+				if (operand1 != null)
 				{
-					if ((previous.ResultCount >= 1 && previous.Result == operand)
-					|| (previous.ResultCount >= 2 && previous.Result2 == operand))
+					if ((previous.ResultCount >= 1 && previous.Result == operand1)
+					|| (previous.ResultCount >= 2 && previous.Result2 == operand1))
+
+						return null;
+				}
+
+				if (operand2 != null)
+				{
+					if ((previous.ResultCount >= 1 && previous.Result == operand2)
+					|| (previous.ResultCount >= 2 && previous.Result2 == operand2))
 
 						return null;
 				}
