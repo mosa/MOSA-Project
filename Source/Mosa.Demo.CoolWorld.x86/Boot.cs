@@ -21,8 +21,6 @@ namespace Mosa.Demo.CoolWorld.x86
 	{
 		public static ConsoleSession Console, Debug;
 
-		public static ACPI ACPI;
-
 		public static DeviceService DeviceService;
 
 		[Plug("Mosa.Runtime.StartUp::SetInitialMemory")]
@@ -228,11 +226,6 @@ namespace Mosa.Demo.CoolWorld.x86
 					}
 				}
 			}
-
-			var acpi = DeviceService.GetDevices("ACPI");
-			if (acpi.Count == 0)
-				Console.WriteLine("No ACPI!");
-			else ACPI = acpi[0].DeviceDriver as ACPI;
 
 			// Get StandardKeyboard
 			var keyboards = DeviceService.GetDevices("StandardKeyboard");

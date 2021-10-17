@@ -21,8 +21,6 @@ namespace Mosa.Demo.VBEWorld.x86
 		public static ConsoleSession Console;
 		public static DeviceService DeviceService;
 
-		public static ACPI ACPI;
-
 		private static Hardware hal;
 		private static StandardMouse mouse;
 
@@ -73,11 +71,6 @@ namespace Mosa.Demo.VBEWorld.x86
 
 			DeviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
 			DeviceService.Initialize(new X86System(), null);
-
-			var acpi = DeviceService.GetDevices("ACPI");
-			if (acpi.Count == 0)
-				Log("No ACPI!");
-			else ACPI = acpi[0].DeviceDriver as ACPI;
 
 			partitionService.CreatePartitionDevices();
 			var partitions = DeviceService.GetDevices<IPartitionDevice>();
