@@ -225,13 +225,16 @@ namespace Mosa.Utility.Launcher
 
 			bootImageOptions.IncludeFiles.Add(new IncludeFile("TEST.TXT", Encoding.ASCII.GetBytes("This is a test file.")));
 
-			var dir = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), LauncherSettings.IncludePath);
-			foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories))
+			if (LauncherSettings.IncludePath != null)
 			{
-				var name = Path.GetFileName(file).ToUpper();
+				var dir = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), LauncherSettings.IncludePath);
+				foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories))
+				{
+					var name = Path.GetFileName(file).ToUpper();
 
-				Console.WriteLine("Adding file: " + name);
-				bootImageOptions.IncludeFiles.Add(new IncludeFile(name, File.ReadAllBytes(file)));
+					Console.WriteLine("Adding file: " + name);
+					bootImageOptions.IncludeFiles.Add(new IncludeFile(name, File.ReadAllBytes(file)));
+				}
 			}
 
 			bootImageOptions.VolumeLabel = "MOSA";
@@ -383,13 +386,16 @@ namespace Mosa.Utility.Launcher
 				File.WriteAllBytes(Path.Combine(isoDirectory, "mboot.c32"), GetResource(@"syslinux\3.72", "mboot.c32"));
 			}
 
-			var dir = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), LauncherSettings.IncludePath);
-			foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories))
+			if (LauncherSettings.IncludePath != null)
 			{
-				var name = Path.GetFileName(file).ToUpper();
+				var dir = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), LauncherSettings.IncludePath);
+				foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories))
+				{
+					var name = Path.GetFileName(file).ToUpper();
 
-				Console.WriteLine("Adding file: " + name);
-				File.Copy(file, Path.Combine(isoDirectory, name));
+					Console.WriteLine("Adding file: " + name);
+					File.Copy(file, Path.Combine(isoDirectory, name));
+				}
 			}
 
 			File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.cfg"), GetSyslinuxCFG());
@@ -443,13 +449,16 @@ namespace Mosa.Utility.Launcher
 				archive.ExtractToDirectory(Path.Combine(isoDirectory, "boot", "grub"));
 			}
 
-			var dir = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), LauncherSettings.IncludePath);
-			foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories))
+			if (LauncherSettings.IncludePath != null)
 			{
-				var name = Path.GetFileName(file).ToUpper();
+				var dir = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), LauncherSettings.IncludePath);
+				foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories))
+				{
+					var name = Path.GetFileName(file).ToUpper();
 
-				Console.WriteLine("Adding file: " + name);
-				File.Copy(file, Path.Combine(isoDirectory, name));
+					Console.WriteLine("Adding file: " + name);
+					File.Copy(file, Path.Combine(isoDirectory, name));
+				}
 			}
 
 			File.Copy(LauncherSettings.OutputFile, Path.Combine(isoDirectory, "boot", "main.exe"));

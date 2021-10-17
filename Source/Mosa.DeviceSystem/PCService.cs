@@ -45,10 +45,10 @@ namespace Mosa.DeviceSystem
 
 				// Write to PCI Configuration Space (we're actually writing on the host bridge controller)
 				// TODO: Fix
-				/*var controller = DeviceService.GetFirstDevice<IHostBridgeController>(DeviceStatus.Online).DeviceDriver as IHostBridgeController;
+				var controller = DeviceService.GetFirstDevice<IHostBridgeController>(DeviceStatus.Online).DeviceDriver as IHostBridgeController;
 
 				controller.SetCPUResetInformation((byte)address.Address, value);
-				controller.CPUReset();*/
+				controller.CPUReset();
 
 				return true;
 			}
