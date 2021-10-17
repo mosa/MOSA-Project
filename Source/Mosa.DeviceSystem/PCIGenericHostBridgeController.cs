@@ -19,11 +19,22 @@ namespace Mosa.DeviceSystem.PCI
 			Device.Name = "PCIGenericHostBridgeController";
 		}
 
+		// TODO: We have to test
 		bool IHostBridgeController.CPUReset()
 		{
-			
-			
-			return true;
+			var pciDevice = Device.Parent.DeviceDriver as PCIDevice;
+
+			if (pciDevice == null)
+				return false;
+
+			var pciController = Device.Parent.Parent.DeviceDriver as IPCIControllerLegacy;
+
+			if (pciController == null)
+				return false;
+
+			pciController.WriteConfig8(pciDevice.Bus, pciDevice.Slot, pciDevice.Function, ResetAddress, ResetValue);
+
+			return false;
 		}
 
 		void IHostBridgeController.SetCPUResetInformation(byte address, byte value)

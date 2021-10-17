@@ -8,7 +8,7 @@ namespace Mosa.DeviceSystem.PCI
 	public interface IHostBridgeController
 	{
 		bool CPUReset();
-		
+
 		void SetCPUResetInformation(byte address, byte value);
 	}
 }
