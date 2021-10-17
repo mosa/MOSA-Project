@@ -32,7 +32,7 @@ namespace Mosa.DeviceSystem.PCI
 			if (pciController == null)
 				return false;
 
-			pciController.WriteConfig8(pciDevice.Bus, (ResetAddress >> 32) & 0xFFFF, (ResetAddress >> 16) & 0xFFFF, ResetAddress & 0xFFFF, ResetValue);
+			pciController.WriteConfig8(pciDevice.Bus, (byte)((ResetAddress >> 32) & 0xFFFF), (byte)((ResetAddress >> 16) & 0xFFFF), (byte)(ResetAddress & 0xFFFF), ResetValue);
 
 			return false;
 		}
