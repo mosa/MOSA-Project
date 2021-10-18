@@ -1,5 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Collections.Generic;
+
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
@@ -32,9 +34,9 @@ namespace Mosa.DeviceSystem
 		public void DrawString(IFrameBuffer frameBuffer, uint color, uint x, uint y, string text)
 		{
 			int size8 = size / 8;
-			string[] lines = text.Split('\n');
+			List<string> lines = text.Split('\n', text);
 
-			for (int l = 0; l < lines.Length; l++)
+			for (int l = 0; l < lines.Count; l++)
 			{
 				int usedX = 0;
 				for (int i = 0; i < lines[l].Length; i++)

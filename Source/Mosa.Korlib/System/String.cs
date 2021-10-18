@@ -225,33 +225,14 @@ namespace System
 			return result;
 		}
 
-		public string[] Split(char c)
+		public bool Equals(string s)
 		{
-			string str = this;
-			List<string> ls = new List<string>();
-			int indx;
-
-			while ((indx = str.IndexOf(c)) != -1)
-			{
-				ls.Add(str.Substring(0, indx));
-				str = str.Substring(indx + 1);
-			}
-
-			if (str.Length > 0)
-				ls.Add(str);
-
-			return ls.ToArray();
-		}
-
-		public bool Equals(string i)
-		{
-			return Equals(this, i);
+			return Equals(this, s);
 		}
 
 		public override bool Equals(object obj)
 		{
-			if (!(obj is string))
-				return false;
+			if (!(obj is string)) { return false; }
 
 			string other = (string)obj;
 			return other == this;

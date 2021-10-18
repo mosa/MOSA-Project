@@ -5,38 +5,56 @@ namespace System
 	/// <summary>
 	///
 	/// </summary>
-	public struct SByte
+	[Serializable]
+	public struct SByte: IComparable, IComparable<sbyte>, IEquatable<sbyte>
 	{
+		internal sbyte m_value;
+
 		public const sbyte MinValue = -128;
 		public const sbyte MaxValue = 127;
 
-		internal sbyte _value;
-
-		public int CompareTo(SByte value)
+		public int CompareTo(object value)
 		{
-			if (_value < value) return -1;
-			else if (_value > value) return 1;
+			if (value == null) { return 1; }
+
+			if (!(value is sbyte)) { throw new ArgumentException("Argument Type Must Be SByte", "value"); }
+
+			sbyte s_value = ((sbyte)value).m_value;
+
+			if (m_value < s_value) return -1;
+			if (m_value > s_value) return 1;
+
 			return 0;
 		}
 
-		public bool Equals(sbyte obj)
+		public int CompareTo(sbyte value)
 		{
-			return Equals((object)obj);
+			if (m_value < value) return -1;
+			if (m_value > value) return 1;
+
+			return 0;
 		}
 
 		public override bool Equals(object obj)
 		{
-			return ((sbyte)obj) == _value;
+			if (!(obj is sbyte)) { return false; }
+
+			return m_value == ((sbyte)obj).m_value;
+		}
+
+		public bool Equals(sbyte obj)
+		{
+			return m_value == obj;
 		}
 
 		public override int GetHashCode()
 		{
-			return base.GetHashCode();
+			return m_value;
 		}
 
 		public override string ToString()
 		{
-			return int.CreateString((uint)_value, true, false);
+			return int.CreateString((uint)m_value, true, false);
 		}
 	}
 }

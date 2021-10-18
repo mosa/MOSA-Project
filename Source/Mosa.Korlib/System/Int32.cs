@@ -5,38 +5,56 @@ namespace System
 	/// <summary>
 	/// Int32
 	/// </summary>
-	public struct Int32
+	[Serializable]
+	public struct Int32: IComparable, IComparable<int>, IEquatable<int>
 	{
+		internal int m_value;
+
 		public const int MaxValue = 0x7fffffff;
 		public const int MinValue = -2147483648;
 
-		internal int _value;
-
-		public int CompareTo(int value)
+		public int CompareTo(object value)
 		{
-			if (_value < value) return -1;
-			else if (_value > value) return 1;
+			if (value == null) { return 1; }
+
+			if (!(value is int)) { throw new ArgumentException("Argument Type Must Be Int32", "value"); }
+
+			int i_value = ((int)value).m_value;
+
+			if (m_value < i_value) return -1;
+			if (m_value > i_value) return 1;
+
 			return 0;
 		}
 
-		public bool Equals(int obj)
+		public int CompareTo(int value)
 		{
-			return Equals((object)obj);
+			if (m_value < value) return -1;
+			if (m_value > value) return 1;
+
+			return 0;
 		}
 
 		public override bool Equals(object obj)
 		{
-			return ((int)obj) == _value;
+			if (!(obj is int)) { return false; }
+
+			return m_value == ((int)obj).m_value;
+		}
+
+		public bool Equals(int obj)
+		{
+			return m_value == obj;
 		}
 
 		public override string ToString()
 		{
-			return CreateString((uint)_value, true, false);
+			return CreateString((uint)m_value, true, false);
 		}
 
 		public string ToString(string format)
 		{
-			return CreateString((uint)_value, false, true);
+			return CreateString((uint)m_value, false, true);
 		}
 
 		unsafe internal static string CreateString(uint value, bool signed, bool hex)
@@ -95,7 +113,7 @@ namespace System
 
 		public override int GetHashCode()
 		{
-			return _value;
+			return m_value;
 		}
 
 		public static bool TryParse(string s, out int result)
