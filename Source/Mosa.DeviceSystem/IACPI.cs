@@ -16,5 +16,11 @@ namespace Mosa.DeviceSystem
 		short SLP_EN { get; set; }
 
 		byte ResetValue { get; set; }
+
+		byte[] ProcessorIDs { get; set; }
+		int ProcessorCount { get; set; }
+		
+		uint IOApicAddress { get; set; }
+		uint LocalApicAddress { get; set; }
 	}
 }

@@ -10,6 +10,9 @@ namespace Mosa.DeviceDriver.ISA
 {
 	// Portions of this code are from Cosmos
 
+	//https://wiki.osdev.org/ACPI
+	//https://wiki.osdev.org/MADT
+
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public unsafe struct RSDPDescriptor
 	{
@@ -151,6 +154,55 @@ namespace Mosa.DeviceDriver.ISA
 		}*/
 	}
 
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	public unsafe struct MADT
+	{
+		public ACPISDTHeader h;
+
+		public uint LocalApicAddress;
+		public uint Flags;
+	}
+
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	public unsafe struct MADTEntry
+	{
+		public byte Type;
+		public byte Length;
+	}
+
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	public unsafe struct ProcessorLocalAPICEntry
+	{
+		public MADTEntry Entry;
+
+		public byte AcpiProcessorID;
+		public byte ApicID;
+
+		public uint Flags;
+	}
+
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	public unsafe struct IOAPICEntry
+	{
+		public MADTEntry Entry;
+
+		public byte ApicID;
+		public byte Reserved;
+
+		public uint ApicAddress;
+		public uint GlobalSystemInterruptBase;
+	}
+
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	public unsafe struct LongLocalAPICEntry
+	{
+		public MADTEntry Entry;
+
+		public sbyte Reserved;
+
+		public ulong ApicAddress;
+	}
+
 	public unsafe class ACPI : BaseDeviceDriver, IACPI
 	{
 		private RSDPDescriptor* Descriptor;
@@ -159,6 +211,7 @@ namespace Mosa.DeviceDriver.ISA
 		private FADT* FADT;
 		private RSDT* RSDT;
 		private XSDT* XSDT;
+		private MADT* MADT;
 
 		private BaseIOPortWrite SMI_CommandPort;
 
@@ -171,6 +224,12 @@ namespace Mosa.DeviceDriver.ISA
 		public BaseIOPortWrite PM1bControlBlock { get; set; }
 
 		public byte ResetValue { get; set; }
+
+		public byte[] ProcessorIDs { get; set; }
+		public int ProcessorCount { get; set; }
+
+		public uint IOApicAddress { get; set; }
+		public uint LocalApicAddress { get; set; }
 
 		public override void Initialize()
 		{
@@ -194,24 +253,53 @@ namespace Mosa.DeviceDriver.ISA
 				Descriptor20 = (RSDPDescriptor20*)rsdpPtr;
 
 				XSDT = (XSDT*)HAL.GetPhysicalMemory((Pointer)Descriptor20->XsdtAddress, 0xFFFF).Address;
-
-				// Won't work, we need to initialize array the same time we cast to XSDT*
-				//XSDT->Init();
-
-				FADT = (FADT*)HAL.GetPhysicalMemory((Pointer)FindBySignatureXSDT(XSDT, "FACP"), 0xFFFF).Address;
+				FADT = (FADT*)HAL.GetPhysicalMemory((Pointer)FindBySignature("FACP", true), 0xFFFF).Address;
+				MADT = (MADT*)HAL.GetPhysicalMemory((Pointer)FindBySignature("APIC", true), 0xFFFF).Address;
 			}
 			else
 			{*/
 				RSDT = (RSDT*)HAL.GetPhysicalMemory((Pointer)Descriptor->RsdtAddress, 0xFFFF).Address;
-
-				// Won't work, we need to initialize array the same time we cast to RSDT*
-				//RSDT->Init();
-
-				FADT = (FADT*)HAL.GetPhysicalMemory((Pointer)FindBySignatureRSDT(RSDT, "FACP"), 0xFFFF).Address;
+				FADT = (FADT*)HAL.GetPhysicalMemory((Pointer)FindBySignature("FACP", false), 0xFFFF).Address;
+				MADT = (MADT*)HAL.GetPhysicalMemory((Pointer)FindBySignature("APIC", false), 0xFFFF).Address;
 			//}
 
 			if (FADT == null)
 				return;
+
+			if (MADT != null)
+			{
+				ProcessorIDs = new byte[256];
+				LocalApicAddress = MADT->LocalApicAddress;
+
+				Pointer ptr = (Pointer)MADT;
+				Pointer ptr2 = ptr + MADT->h.Length;
+
+				for (ptr += 0x2C; ptr < ptr2;)
+				{
+					MADTEntry* entry = (MADTEntry*)ptr;
+
+					switch (entry->Type)
+					{
+						case 0: // Processor Local APIC
+							ProcessorLocalAPICEntry* plan = (ProcessorLocalAPICEntry*)ptr;
+							if ((plan->Flags & 1) != 0)
+								ProcessorIDs[ProcessorCount++] = plan->ApicID;
+							break;
+
+						case 1: // I/O APIC
+							IOAPICEntry* ipe = (IOAPICEntry*)ptr;
+							IOApicAddress = ipe->ApicAddress;
+							break;
+
+						case 5: // 64-bit LAPIC
+							LongLocalAPICEntry* llpe = (LongLocalAPICEntry*)ptr;
+							LocalApicAddress = (uint)(llpe->ApicAddress);
+							break;
+					}
+
+					ptr += entry->Length;
+				}
+			}
 
 			Pointer dsdt = (Pointer)FADT->Dsdt;
 
@@ -298,33 +386,17 @@ namespace Mosa.DeviceDriver.ISA
 			Device.Status = DeviceStatus.Offline;
 		}
 
-		private void* FindBySignatureRSDT(void* RootSDT, string signature)
+		private void* FindBySignature(string signature, bool xsdt)
 		{
-			RSDT* rsdt = (RSDT*)RootSDT;
-
-			//int entries = (int)((rsdt->h.Length - sizeof(ACPISDTHeader)) / 4);
+			//int entries = (int)((rsdt->h.Length - sizeof(ACPISDTHeader)) / Pointer.Size);
 			int entries = 8;
 			for (int i = 0; i < entries; i++)
 			{
-				ACPISDTHeader* h = (ACPISDTHeader*)rsdt->PointerToOtherSDT[i];
-
-				if (h != null && ToStringFromCharPointer(4, h->Signature) == signature)
-					return h;
-			}
-
-			// No SDT found (by signature)
-			return null;
-		}
-
-		private void* FindBySignatureXSDT(void* RootSDT, string signature)
-		{
-			XSDT* xsdt = (XSDT*)RootSDT;
-
-			//int entries = (int)((xsdt->h.Length - sizeof(ACPISDTHeader)) / 8);
-			int entries = 8;
-			for (int i = 0; i < entries; i++)
-			{
-				ACPISDTHeader* h = (ACPISDTHeader*)xsdt->PointerToOtherSDT[i];
+				ACPISDTHeader* h;
+				if (xsdt)
+					h = (ACPISDTHeader*)(XSDT->PointerToOtherSDT[i]);
+				else
+					h = (ACPISDTHeader*)(RSDT->PointerToOtherSDT[i]);
 
 				if (h != null && ToStringFromCharPointer(4, h->Signature) == signature)
 					return h;
