@@ -59,7 +59,7 @@ namespace System
 		//
 		public override bool Equals(object obj)
 		{
-			if (this.GetType() == obj.GetType() && obj is Boolean)
+			if (obj is Boolean)
 			{
 				return (this.m_value == ((Boolean)obj).m_value);
 			}

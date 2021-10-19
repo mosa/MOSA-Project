@@ -15,7 +15,7 @@ namespace System
 
 		public override bool Equals(object obj)
 		{
-			if (this.GetType() == obj.GetType() && obj is Byte)
+			if (obj is Byte)
 			{
 				return (this.m_value == ((Byte)obj).m_value);
 			}

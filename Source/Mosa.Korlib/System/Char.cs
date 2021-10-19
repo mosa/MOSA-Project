@@ -18,7 +18,7 @@ namespace System
 
 		public override bool Equals(object obj)
 		{
-			if (this.GetType() == obj.GetType() && obj is Char)
+			if (obj is Char)
 			{
 				return (this.m_value == ((Char)obj).m_value);
 			}
