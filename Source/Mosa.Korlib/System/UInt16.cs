@@ -5,43 +5,61 @@ namespace System
 	/// <summary>
 	///
 	/// </summary>
-	public struct UInt16
+	[Serializable]
+	public struct UInt16: IComparable, IComparable<ushort>, IEquatable<ushort>
 	{
+		internal ushort m_value;
+
 		public const ushort MaxValue = 0xffff;
 		public const ushort MinValue = 0;
 
-		internal ushort _value;
-
-		public int CompareTo(ushort value)
+		public int CompareTo(object value)
 		{
-			if (_value < value) return -1;
-			else if (_value > value) return 1;
+			if (value == null) { return 1; }
+
+			if (!(value is ushort)) { throw new ArgumentException("Argument Type Must Be UInt16", "value"); }
+
+			ushort u_value = ((ushort)value).m_value;
+
+			if (m_value < u_value) return -1;
+			if (m_value > u_value) return 1;
+
 			return 0;
 		}
 
-		public bool Equals(ushort obj)
+		public int CompareTo(ushort value)
 		{
-			return Equals((object)obj);
+			if (m_value < value) return -1;
+		    if (m_value > value) return 1;
+
+			return 0;
 		}
 
 		public override bool Equals(object obj)
 		{
-			return ((ushort)obj) == _value;
+			if (!(obj is ushort)) { return false; }
+
+			return m_value == ((ushort)obj).m_value;
+		}
+
+		public bool Equals(ushort obj)
+		{
+			return m_value == obj;
 		}
 
 		public override string ToString()
 		{
-			return int.CreateString(_value, false, false);
+			return int.CreateString(m_value, false, false);
 		}
 
 		public string ToString(string format)
 		{
-			return int.CreateString(_value, false, true);
+			return int.CreateString(m_value, false, true);
 		}
 
 		public override int GetHashCode()
 		{
-			return _value;
+			return (int)m_value;
 		}
 	}
 }

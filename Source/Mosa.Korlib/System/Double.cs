@@ -7,8 +7,11 @@ namespace System
 	/// <summary>
 	/// Double
 	/// </summary>
-	public struct Double
+	[Serializable]
+	public struct Double: IComparable, IComparable<double>, IEquatable<double>
 	{
+		internal double m_value;
+
 		public const double Epsilon = 4.9406564584124650e-324d;
 		public const double MaxValue = 1.7976931348623157e308d;
 		public const double MinValue = -1.7976931348623157e308d;
@@ -18,13 +21,11 @@ namespace System
 
 		internal const double NegativeZero = -0.0;
 
-		internal double _value;
-
 		public static bool IsNaN(double d)
 		{
 #pragma warning disable 1718
 			return (d != d);
-#pragma warning restore
+#pragma warning restore 1718
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -51,55 +52,97 @@ namespace System
 			return IsNegativeInfinity(d) || IsPositiveInfinity(d);
 		}
 
-		public int CompareTo(double value)
+		public int CompareTo(object value)
 		{
-			if (IsPositiveInfinity(_value) && IsPositiveInfinity(value))
-				return 0;
-			if (IsNegativeInfinity(_value) && IsNegativeInfinity(value))
+			if (value == null) { return 1; }
+
+			if (!(value is double))
+			{
+				throw new ArgumentException("Argument Type Must Be Double", "value");
+			}
+
+			double d_value = ((double)value).m_value;
+
+			if (IsPositiveInfinity(m_value) && IsPositiveInfinity(d_value))
 				return 0;
 
-			if (IsNaN(value))
-				if (IsNaN(_value))
+			if (IsNegativeInfinity(m_value) && IsNegativeInfinity(d_value))
+				return 0;
+
+			if (IsNaN(d_value))
+			{
+				if (IsNaN(m_value))
 					return 0;
 				else
 					return 1;
+			}
 
-			if (IsNaN(_value))
+			if (IsNaN(m_value))
+			{
+				if (IsNaN(d_value))
+					return 0;
+				else
+					return -1;
+			}
+
+			if (m_value > d_value) { return 1; }
+			if (m_value < d_value) { return -1; }
+
+			return 0;
+		}
+
+		public int CompareTo(double value)
+		{
+			if (IsPositiveInfinity(m_value) && IsPositiveInfinity(value))
+				return 0;
+
+			if (IsNegativeInfinity(m_value) && IsNegativeInfinity(value))
+				return 0;
+
+			if (IsNaN(value))
+			{
+				if (IsNaN(m_value))
+					return 0;
+				else
+					return 1;
+			}
+
+			if (IsNaN(m_value))
+			{
 				if (IsNaN(value))
 					return 0;
 				else
 					return -1;
+			}
 
-			if (_value > value)
-				return 1;
-			else if (_value < value)
-				return -1;
-			else
-				return 0;
-		}
+			if (m_value > value) { return 1; }
+			if (m_value < value) { return -1; }
 
-		public bool Equals(double value)
-		{
-			if (IsNaN(value))
-				return IsNaN(_value);
-
-			return (value == _value);
+			return 0;
 		}
 
 		public override bool Equals(object obj)
 		{
-			double value = (double)obj;
+			if (!(obj is Double)) { return false; }
 
-			if (IsNaN(value))
-				return IsNaN(_value);
+			double value = ((double)obj).m_value;
 
-			return (value == _value);
+			if (m_value == value) { return true; }
+
+			return (IsNaN(m_value) && IsNaN(value));
+		}
+
+		public bool Equals(double value)
+		{
+			if (m_value == value) { return true; }
+
+			return (IsNaN(m_value) && IsNaN(value));
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)] // 64-bit constants make the IL unusually large that makes the inliner to reject the method
 		public override int GetHashCode()
 		{
-			var bits = BitConverter.DoubleToInt64Bits(_value);
+			long bits = BitConverter.DoubleToInt64Bits(m_value);
 
 			if (((bits - 1) & 0x7FFFFFFFFFFFFFFF) >= 0x7FF0000000000000)
 			{

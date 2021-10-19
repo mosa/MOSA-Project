@@ -5,43 +5,66 @@ namespace System
 	/// <summary>
 	///
 	/// </summary>
-	public struct Byte
+	[Serializable]
+	public struct Byte: IComparable, IComparable<byte>, IEquatable<byte>
 	{
+		internal byte m_value;
+
 		public const byte MinValue = 0;
 		public const byte MaxValue = 255;
 
-		internal byte _value;
-
-		public int CompareTo(byte value)
+		public override bool Equals(object obj)
 		{
-			if (_value < value) return -1;
-			else if (_value > value) return 1;
+			if (obj is Byte)
+			{
+				return (this.m_value == ((Byte)obj).m_value);
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		public bool Equals(byte value)
+		{
+			return (m_value == value);
+		}
+
+		public int CompareTo(object value)
+		{
+			if (value == null) { return 1; }
+
+			if (!(value is byte)) { throw new ArgumentException("Argument Type Must Be Byte", "value"); }
+
+			if (m_value < (((byte)value).m_value)) return -1;
+
+			if (m_value > (((byte)value).m_value)) return 1;
+
 			return 0;
 		}
 
-		public bool Equals(byte obj)
+		public int CompareTo(byte value)
 		{
-			return Equals((object)obj);
-		}
+			if (m_value < value) return -1;
 
-		public override bool Equals(object obj)
-		{
-			return ((byte)obj) == _value;
+			if (m_value > value) return 1;
+
+			return 0;
 		}
 
 		public override int GetHashCode()
 		{
-			return base.GetHashCode();
+			return m_value;
 		}
 
 		public override string ToString()
 		{
-			return int.CreateString(_value, false, false);
+			return int.CreateString(m_value, false, false);
 		}
 
 		public string ToString(string format)
 		{
-			return int.CreateString(_value, false, true);
+			return int.CreateString(m_value, false, true);
 		}
 	}
 }
