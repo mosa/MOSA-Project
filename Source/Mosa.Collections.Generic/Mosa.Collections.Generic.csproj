@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <DebugType>full</DebugType>
+    <LangVersion>8.0</LangVersion>
+    <OutputPath>..\..\bin\</OutputPath>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
+    <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+  </PropertyGroup>
+  <ItemGroup>
+	<ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
+   </ItemGroup>
+</Project>
