@@ -5,38 +5,56 @@ namespace System
 	/// <summary>
 	///
 	/// </summary>
-	public struct Int16
+	[Serializable]
+	public struct Int16: IComparable, IComparable<short>, IEquatable<short>
 	{
+		internal short m_value;
+
 		public const short MaxValue = 32767;
 		public const short MinValue = -32768;
 
-		internal short _value;
-
-		public int CompareTo(short value)
+		public int CompareTo(object value)
 		{
-			if (_value < value) return -1;
-			else if (_value > value) return 1;
+			if (value == null) { return 1; }
+
+			if (!(value is short)) { throw new ArgumentException("Argument Type Must Be Int16", "value"); }
+
+			short s_value = ((short)value).m_value;
+
+			if (m_value < s_value) return -1;
+			if (m_value > s_value) return 1;
+
 			return 0;
 		}
 
-		public bool Equals(short obj)
+		public int CompareTo(short value)
 		{
-			return Equals((object)obj);
+			if (m_value < value) return -1;
+			if (m_value > value) return 1;
+
+			return 0;
 		}
 
 		public override bool Equals(object obj)
 		{
-			return ((short)obj) == _value;
+			if (!(obj is short)) { return false; }
+
+			return m_value == ((short)obj).m_value;
+		}
+
+		public bool Equals(short obj)
+		{
+			return m_value == obj;
 		}
 
 		public override string ToString()
 		{
-			return int.CreateString((uint)_value, true, false);
+			return int.CreateString((uint)m_value, true, false);
 		}
 
 		public override int GetHashCode()
 		{
-			return _value;
+			return m_value;
 		}
 
 		public static bool TryParse(string s, out short result)
