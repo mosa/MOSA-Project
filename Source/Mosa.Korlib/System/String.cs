@@ -6,6 +6,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
 
 namespace System
 {
@@ -36,6 +38,9 @@ namespace System
 			}
 		}
 
+
+		internal unsafe ref char GetRawStringData() => ref *(first_char);
+
 		[IndexerName("Chars")]
 		public unsafe char this[int index]
 		{
@@ -50,6 +55,9 @@ namespace System
 				}
 			}
 		}
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public extern String(ReadOnlySpan<char> value);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern String(char c, int count);
@@ -77,6 +85,29 @@ namespace System
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		internal static extern string InternalAllocateString(int length);
+
+		private static unsafe string Ctor(ReadOnlySpan<char> value)
+		{
+			int len = value.Length;
+
+			if (len == 0)
+				return Empty;
+ 
+			// TODO: Actually move memory instead of copying it
+			string result = InternalAllocateString(len);
+			char* chars = result.first_char;
+
+			var pointer = MemoryMarshal.GetReference(value);
+			byte* ptr = (byte*)Unsafe.As<char, byte>(ref pointer);
+
+			for (int i = 0; i < len; i++)
+			{
+				*chars = (char)ptr[i];
+				chars++;
+			}
+
+			return result;
+		}
 
 		private static unsafe string Ctor(char c, int count)
 		{

@@ -398,6 +398,7 @@ namespace Mosa.DeviceDriver.ISA
 				else
 					h = (ACPISDTHeader*)(RSDT->PointerToOtherSDT[i]);
 
+				// TODO: Don't use ToStringFromCharPointer(), don't allocate for nothing!
 				if (h != null && ToStringFromCharPointer(4, h->Signature) == signature)
 					return h;
 			}

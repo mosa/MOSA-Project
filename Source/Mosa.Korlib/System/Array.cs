@@ -6,6 +6,24 @@ using System.Runtime.CompilerServices;
 
 namespace System
 {
+	// This is only for classes like ArraySegment that need to be API compatible and have a Array property
+	public static class ArrayAccess
+	{
+		/// <summary>
+		/// Copies a range of elements from an Array starting at the specified source index and pastes them to another Array starting at the specified destination index.
+		/// The length and the indexes are specified as 32-bit integers.
+		/// </summary>
+		public static void Copy(Array sourceArray, int sourceIndex, Array destinationArray, int destinationIndex, int length)
+		{
+			Array.Copy(sourceArray, sourceIndex, destinationArray, destinationIndex, length);
+		}
+
+		public static int IndexOf(Array array, object value, int startIndex, int count)
+		{
+			return Array.IndexOf(array, value, startIndex, count);
+		}
+	}
+
 	/// <summary>
 	/// Array
 	/// </summary>
