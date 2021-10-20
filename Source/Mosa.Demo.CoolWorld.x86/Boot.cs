@@ -10,6 +10,7 @@ using Mosa.FileSystem.FAT;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
+using Mosa.Runtime;
 using System;
 
 namespace Mosa.Demo.CoolWorld.x86
@@ -84,6 +85,14 @@ namespace Mosa.Demo.CoolWorld.x86
 			Console.WriteLine("> Starting devices...");
 
 			DeviceService.Initialize(new X86System(), null);
+
+			var acpi = DeviceService.GetFirstDevice<IACPI>().DeviceDriver as IACPI;
+
+			// Setup APIC
+			var localApic = Mosa.DeviceSystem.HAL.GetPhysicalMemory((Pointer)acpi.LocalApicAddress, 0xFFFF).Address;
+			var ioApic = Mosa.DeviceSystem.HAL.GetPhysicalMemory((Pointer)acpi.IOApicAddress, 0xFFFF).Address;
+
+			APIC.Setup(localApic, ioApic);
 
 			Console.Write("> Probing for ISA devices...");
 			var isaDevices = DeviceService.GetChildrenOf(DeviceService.GetFirstDevice<ISABus>());
