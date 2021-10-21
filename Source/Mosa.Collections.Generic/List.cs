@@ -77,6 +77,16 @@ namespace Mosa.Collections.Generic
             EnumNode = null;
         }
 
+		public List()
+		{
+			// Nothing to do here...
+		}
+
+		~List()
+		{
+			Clear();
+		}
+
 		public AnyType this [int Index]
 		{
 			get
@@ -94,7 +104,7 @@ namespace Mosa.Collections.Generic
 				}
 				else
 				{
-					throw new CollectionsDataOutOfRangeException("List.cs", "List<AnyType>", "this[index]", "index", "Index is out of range!");
+					throw new CollectionsDataOutOfRangeException("List.cs", "List<AnyType>", "this[Index]", "Index", "Index is out of range!");
 				}
 			}
 			set
@@ -112,20 +122,10 @@ namespace Mosa.Collections.Generic
 				}
 				else
 				{
-					throw new CollectionsDataOutOfRangeException("List.cs", "List<AnyType>", "this[index]", "index", "Index is out of range!");
+					throw new CollectionsDataOutOfRangeException("List.cs", "List<AnyType>", "this[Index]", "Index", "Index is out of range!");
 				}
 			}
 		}
-
-        public List()
-        {
-            // Nothing to do here...
-        }
-
-        ~List()
-        {
-            Clear();
-        }
 
         public void Clear()
         {
@@ -599,9 +599,8 @@ namespace Mosa.Collections.Generic
 
 		public bool RemoveAt(int Index)
 		{
-			int Counter = -1;
-
 			ListNode<AnyType> NodePointer = FirstNode;
+			int Counter = -1;
 
 			while (NodePointer != null)
 			{
@@ -763,8 +762,8 @@ namespace Mosa.Collections.Generic
 
 		public List<AnyType> Clone()
 		{
-			ListNode<AnyType> NodePointer = FirstNode;
 			List<AnyType> Cloned = new List<AnyType>();
+			ListNode<AnyType> NodePointer = FirstNode;
 
 			while (NodePointer != null)
 			{

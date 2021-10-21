@@ -174,24 +174,24 @@ namespace Mosa.Collections.Generic
             BTree.Add(TClass3);
             Test.IsEqual(BTree.GetTotalSize, 3, "BinaryTree<TClass>.GetTotalSize should be 3");
             Test.IsEqual(BTree.GetActiveSize, 3, "BinaryTree<TClass>.GetActiveSize should be 3");
-            Test.IsEqual(BTree.Find(TClass1).Count, 1, "BinaryTree<TClass>.Find(5).Count should be 1");
-            Test.IsEqual(BTree.Find(TClass2).Count, 1, "BinaryTree<uint>.Find(TClass).Count should be 1");
-            Test.IsEqual(BTree.Find(TClass3).Count, 1, "BinaryTree<uint>.Find(TClass).Count should be 1");
+            Test.IsEqual(BTree.Find(TClass1).Count, 1, "BinaryTree<TClass>.Find(TClass1).Count should be 1");
+            Test.IsEqual(BTree.Find(TClass2).Count, 1, "BinaryTree<uint>.Find(TClass2).Count should be 1");
+            Test.IsEqual(BTree.Find(TClass3).Count, 1, "BinaryTree<uint>.Find(TClass3).Count should be 1");
 
             BTree.Add(TClass1);
             BTree.Add(TClass3);
             Test.IsEqual(BTree.GetTotalSize, 3, "BinaryTree<TClass>.GetTotalSize should be 3");
             Test.IsEqual(BTree.GetActiveSize, 3, "BinaryTree<TClass>.GetActiveSize should be 3");
-            Test.IsEqual(BTree.Find(TClass1).Count, 2, "BinaryTree<TClass>.Find(5).Count should be 2");
-            Test.IsEqual(BTree.Find(TClass2).Count, 1, "BinaryTree<uint>.Find(TClass).Count should be 1");
-            Test.IsEqual(BTree.Find(TClass3).Count, 2, "BinaryTree<uint>.Find(TClass).Count should be 2");
+            Test.IsEqual(BTree.Find(TClass1).Count, 2, "BinaryTree<TClass>.Find(TClass1).Count should be 2");
+            Test.IsEqual(BTree.Find(TClass2).Count, 1, "BinaryTree<uint>.Find(TClass2).Count should be 1");
+            Test.IsEqual(BTree.Find(TClass3).Count, 2, "BinaryTree<uint>.Find(TClass3).Count should be 2");
 
             BTree.DeleteOne(TClass2);
             Test.IsEqual(BTree.GetTotalSize, 3, "BinaryTree<TClass>.GetTotalSize should be 3");
             Test.IsEqual(BTree.GetActiveSize, 2, "BinaryTree<TClass>.GetActiveSize should be 2");
-            Test.IsEqual(BTree.Find(TClass1).Count, 2, "BinaryTree<TClass>.Find(5).Count should be 2");
-            Test.IsEqual(BTree.Find(TClass2).Count, 0, "BinaryTree<uint>.Find(TClass).Count should be 0");
-            Test.IsEqual(BTree.Find(TClass3).Count, 2, "BinaryTree<uint>.Find(TClass).Count should be 2");
+            Test.IsEqual(BTree.Find(TClass1).Count, 2, "BinaryTree<TClass>.Find(TClass1).Count should be 2");
+            Test.IsEqual(BTree.Find(TClass2).Count, 0, "BinaryTree<uint>.Find(TClass2).Count should be 0");
+            Test.IsEqual(BTree.Find(TClass3).Count, 2, "BinaryTree<uint>.Find(TClass3).Count should be 2");
         }
 
         public static void BitFlags()
@@ -217,10 +217,10 @@ namespace Mosa.Collections.Generic
             MagicWords.Add(1, 0xCAFEBABE);
             MagicWords.Add(2, 0xDEADBEEF);
             MagicWords.Add(3, 0xDEADCAFE);
-            Test.IsEqual(MagicWords.GetSize, 3, "Dictionary<uint,uint>.GetSize should be 3");
-            Test.IsEqual(MagicWords.Get(1), 0xCAFEBABE, "Dictionary<uint,uint>.Get(1) should be 0xCAFEBABE");
-            Test.IsEqual(MagicWords.Get(2), 0xDEADBEEF, "Dictionary<uint,uint>.Get(2) should be 0xDEADBEEF");
-            Test.IsEqual(MagicWords.Get(3), 0xDEADCAFE, "Dictionary<uint,uint>.Get(3) should be 0xDEADCAFE");
+            Test.IsEqual(MagicWords.Count, 3, "Dictionary<uint,uint>.Count should be 3");
+            Test.IsEqual(MagicWords[1], 0xCAFEBABE, "Dictionary<uint,uint>[1] should be 0xCAFEBABE");
+            Test.IsEqual(MagicWords[2], 0xDEADBEEF, "Dictionary<uint,uint>[2] should be 0xDEADBEEF");
+            Test.IsEqual(MagicWords[3], 0xDEADCAFE, "Dictionary<uint,uint>[3] should be 0xDEADCAFE");
 
             MagicWords = null;
         }
@@ -238,15 +238,15 @@ namespace Mosa.Collections.Generic
             MagicWords.Add(1, TClass1);
             MagicWords.Add(2, TClass2);
             MagicWords.Add(3, TClass3);
-            Test.IsEqual(MagicWords.GetSize, 3, "Dictionary<uint, TClass>.Get should be 3");
-            Test.IsEqual(MagicWords.Get(1).Magic, 0xCAFEBABE, "Dictionary(uint, TClass>.Get(1).Magic should be 0xCAFEBABE");
-            Test.IsEqual(MagicWords.Get(2).Magic, 0xDEADBABE, "Dictionary(uint, TClass>.Get(2).Magic should be 0xDEADBABE");
-            Test.IsEqual(MagicWords.Get(3).Magic, 0xDEADBEEF, "Dictionary(uint, TClass>.Get(3).Magic should be 0xDEADBEEF");
+            Test.IsEqual(MagicWords.Count, 3, "Dictionary<uint, TClass>.Count should be 3");
+            Test.IsEqual(MagicWords[1].Magic, 0xCAFEBABE, "Dictionary<uint, TClass>[1].Magic should be 0xCAFEBABE");
+            Test.IsEqual(MagicWords[2].Magic, 0xDEADBABE, "Dictionary<uint, TClass>[2].Magic should be 0xDEADBABE");
+            Test.IsEqual(MagicWords[3].Magic, 0xDEADBEEF, "Dictionary<uint, TClass>[3].Magic should be 0xDEADBEEF");
 
             // Exception: Key not found
             try
             {
-                MagicWords.Get(4);
+				TClass Dummy = MagicWords[4];
             }
             catch (CollectionsDataNotFoundException Except) { }
 
@@ -258,7 +258,7 @@ namespace Mosa.Collections.Generic
             catch (CollectionsDataExistsException Except) { }
 
             MagicWords.Add(4, TClass4);
-            Test.IsEqual(MagicWords.Get(4).Magic, 0xCAFEBEEF, "Dictionary(uint, TClass>.Get(4).Magic should be 0xCAFEBEEF");
+            Test.IsEqual(MagicWords[4].Magic, 0xCAFEBEEF, "Dictionary<uint, TClass>[4].Magic should be 0xCAFEBEEF");
 
             MagicWords = null;
         }
@@ -366,7 +366,7 @@ namespace Mosa.Collections.Generic
 
             MagicWords.SortWithBinarySearchTree();
 
-            Test.IsEqual(MagicWords.GetSize, 3, "SortedDictionary<uint, uint>.GetSize should be 3");
+            Test.IsEqual(MagicWords.Count, 3, "SortedDictionary<uint, uint>.Count should be 3");
             Test.IsEqual(MagicWords.GetFirstNode.Value, 0xCAFEBABE, "SortedDictionary<uint, uint>.GetFirstNode.Value should be 0xCAFEBABE");
             Test.IsEqual(MagicWords.GetLastNode.Value, 0xDEADCAFE, "SortedDictionary<uint, uint>.GetLastNode.Value should be 0xDEADCAFE");
 
@@ -388,7 +388,7 @@ namespace Mosa.Collections.Generic
 
             MagicWords.SortWithBinarySearchTree();
 
-            Test.IsEqual(MagicWords.GetSize, 3, "SortedDictionary<uint, TClass>.GetSize should be 3");
+            Test.IsEqual(MagicWords.Count, 3, "SortedDictionary<uint, TClass>.Count should be 3");
             Test.IsEqual(MagicWords.GetFirstNode.Value.Magic, 0xCAFEBABE, "SortedDictionary<uint, TClass>.GetFirstNode.Value should be 0xCAFEBABE");
             Test.IsEqual(MagicWords.GetLastNode.Value.Magic, 0xDEADCAFE, "SortedDictionary<uint, TClass>.GetLastNode.Value should be 0xDEADCAFE");
 
@@ -438,8 +438,8 @@ namespace Mosa.Collections.Generic
             Classes.SortWithBinarySearchTree();
 
             Test.IsEqual(Classes.Count, 3, "SortedList<TClass>.Count should be 3");
-            Test.IsEqual(Classes.GetFirstNode.Data.Magic, 0xCAFEBABE, "SortedList<TClass>.GetFirstNode.Data should be 0xCAFEBABE");
-            Test.IsEqual(Classes.GetLastNode.Data.Magic, 0xDEADCAFE, "SortedList<TClass>.GetLastNode.Data should be 0xDEADCAFE");
+            Test.IsEqual(Classes.GetFirstNode.Data.Magic, 0xCAFEBABE, "SortedList<TClass>.GetFirstNode.Data.Magic should be 0xCAFEBABE");
+            Test.IsEqual(Classes.GetLastNode.Data.Magic, 0xDEADCAFE, "SortedList<TClass>.GetLastNode.Data.Magic should be 0xDEADCAFE");
 
             Classes = null;
         }
@@ -486,9 +486,9 @@ namespace Mosa.Collections.Generic
             Calculator.Push(Class1);
 
             Test.IsEqual(Calculator.GetSize, 3, "Stack<TClass>.GetSize should be 3");
-            Test.IsEqual(Calculator.Pop().Magic, 0xCAFEBABE, "Stack<TClass>.Pop should be 0xCAFEBABE");
-            Test.IsEqual(Calculator.Pop().Magic, 0xDEADBEEF, "Stack<TClass>.Pop should be 0xDEADBEEF");
-            Test.IsEqual(Calculator.Pop().Magic, 0xDEADCAFE, "Stack<TClass>.Pop should be 0xDEADCAFE");
+            Test.IsEqual(Calculator.Pop().Magic, 0xCAFEBABE, "Stack<TClass>.Pop().Magic should be 0xCAFEBABE");
+            Test.IsEqual(Calculator.Pop().Magic, 0xDEADBEEF, "Stack<TClass>.Pop().Magic should be 0xDEADBEEF");
+            Test.IsEqual(Calculator.Pop().Magic, 0xDEADCAFE, "Stack<TClass>.Pop().Magic should be 0xDEADCAFE");
             Test.IsEqual(Calculator.GetSize, 0, "Stack<TClass>.GetSize should be 0");
 
             // Exception: Data not found

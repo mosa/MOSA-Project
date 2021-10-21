@@ -37,25 +37,20 @@ namespace Mosa.Collections.Generic
 	// Dictionary<TKey, TValue>
 
 	#region Dictionary<TKey, TValue>
-	public class Dictionary<TKey, TValue> : IEnumerable, IEnumerator where TKey : IComparable
+	public class Dictionary<TKey, TValue>: IEnumerable, IEnumerator where TKey: IComparable
     {
         protected DictionaryNode<TKey, TValue> FirstNode = null;
         protected DictionaryNode<TKey, TValue> LastNode = null;
         protected DictionaryNode<TKey, TValue> CurrentNode = null;
         protected DictionaryNode<TKey, TValue> EnumNode = null;
-		public int Count { get; protected set; }
+		public int Count { get; protected set; } = 0;
 
-		public Dictionary()
-        {
-            // Nothing to do here...
-        }
+		public bool IsFixedSize => false;
+		public bool IsReadOnly => false;
+		public bool IsSynchronized => false;
+		public object SyncRoot => this;
 
-        ~Dictionary()
-        {
-            DeleteAll();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
+		IEnumerator IEnumerable.GetEnumerator()
         {
             return (IEnumerator)this;
         }
@@ -84,12 +79,65 @@ namespace Mosa.Collections.Generic
             EnumNode = null;
         }
 
-        public int GetSize
-        {
-            get { return Count; }
-        }
+		public Dictionary()
+		{
+			// Nothing to do here...
+		}
 
-        public bool IsEmpty
+		~Dictionary()
+		{
+			Clear();
+		}
+
+		public TValue this[TKey Key]
+		{
+			get
+			{
+				DictionaryNode<TKey, TValue> NodePointer = FindNode(Key);
+
+				if (NodePointer == null)
+				{
+					throw new CollectionsDataNotFoundException("Dictionary.cs", "Dictionary<TKey, TValue>", "this[Key]", "Key", "Key cannot be found!");
+				}
+
+				return NodePointer.Value;
+			}
+
+			set
+			{
+				DictionaryNode<TKey, TValue> NodePointer = FindNode(Key);
+
+				if (NodePointer == null)
+				{
+					throw new CollectionsDataNotFoundException("Dictionary.cs", "Dictionary<TKey, TValue>", "this[Key]", "Key", "Key cannot be found!");
+				}
+
+				NodePointer.Value = value;
+			}
+		}
+
+		public void Clear()
+		{
+			DictionaryNode<TKey, TValue> NodePointer = FirstNode;
+			DictionaryNode<TKey, TValue> BackupNode = null;
+
+			while (NodePointer != null && Count > 0)
+			{
+				BackupNode = NodePointer.Next;
+
+				NodePointer = null;
+				Count--;
+
+				NodePointer = BackupNode;
+			}
+
+			FirstNode = null;
+			LastNode = null;
+			CurrentNode = null;
+			Count = 0;
+		}
+
+		public bool IsEmpty
         {
             get { return (Count == 0 && FirstNode == null && LastNode == null); }
         }
@@ -99,36 +147,134 @@ namespace Mosa.Collections.Generic
             get { return (Count > 0 && FirstNode != null & LastNode != null); }
         }
 
-        public DictionaryNode<TKey, TValue> Find(TKey Key)
+		public DictionaryNode<TKey, TValue> GetFirstNode
+		{
+			get
+			{
+				CurrentNode = FirstNode;
+
+				return CurrentNode;
+			}
+		}
+
+		public DictionaryNode<TKey, TValue> GetPrevNode
+		{
+			get
+			{
+				if (CurrentNode != null)
+				{
+					CurrentNode = CurrentNode.Prev;
+				}
+
+				return CurrentNode;
+			}
+		}
+
+		public DictionaryNode<TKey, TValue> GetNextNode
+		{
+			get
+			{
+				if (CurrentNode != null)
+				{
+					CurrentNode = CurrentNode.Next;
+				}
+
+				return CurrentNode;
+			}
+		}
+
+		public DictionaryNode<TKey, TValue> GetLastNode
+		{
+			get
+			{
+				CurrentNode = LastNode;
+
+				return CurrentNode;
+			}
+		}
+
+		public List<TKey> KeysToList()
+		{
+			List<TKey> Keys = new List<TKey>();
+
+			DictionaryNode<TKey, TValue> NodePointer = FirstNode;
+
+			while (NodePointer != null)
+			{
+				Keys.AddLast(NodePointer.Key);
+
+				NodePointer = NodePointer.Next;
+			}
+
+			return Keys;
+		}
+
+		public TKey[] KeysToArray()
+		{
+			DictionaryNode<TKey, TValue> NodePointer = FirstNode;
+			TKey[] Keys = new TKey[Count];
+			int Counter = -1;
+
+			while (NodePointer != null)
+			{
+				Counter++;
+
+				Keys[Counter] = NodePointer.Key;
+
+				NodePointer = NodePointer.Next;
+			}
+
+			return Keys;
+		}
+
+		public TValue[] ValuesToArray()
+		{
+			DictionaryNode<TKey, TValue> NodePointer = FirstNode;
+			TValue[] Values = new TValue[Count];
+			int Counter = -1;
+
+			while (NodePointer != null)
+			{
+				Counter++;
+
+				Values[Counter] = NodePointer.Value;
+
+				NodePointer = NodePointer.Next;
+			}
+
+			return Values;
+		}
+
+		public DictionaryNode<TKey, TValue> FindNode(TKey Key)
+		{
+			DictionaryNode<TKey, TValue> NodePointer = FirstNode;
+
+			while (NodePointer != null)
+			{
+				if (NodePointer.Key.CompareTo(Key) == 0)
+				{
+					return NodePointer;
+				}
+				else
+				{
+					NodePointer = NodePointer.Next;
+				}
+			}
+
+			return NodePointer;
+		}
+
+		public bool Contains(TKey Key)
         {
-            DictionaryNode<TKey, TValue> NodePointer = FirstNode;
-
-            while (NodePointer != null)
-            {
-                if (NodePointer.Key.CompareTo(Key) == 0)
-                {
-                    return NodePointer;
-                }
-                else
-                {
-                    NodePointer = NodePointer.Next;
-                }
-            }
-
-            return NodePointer;
-        }
-
-        public bool Contains(TKey Key)
-        {
-            return (Find(Key) != null);
+            return (FindNode(Key) != null);
         }
 
         public bool NotContains(TKey Key)
         {
-            return (Find(Key) == null);
+            return (FindNode(Key) == null);
         }
 
-        public DictionaryNode<TKey, TValue> Find(DictionaryNode<TKey, TValue> Node)
+        public DictionaryNode<TKey, TValue> FindNode(DictionaryNode<TKey, TValue> Node)
         {
             DictionaryNode<TKey, TValue> NodePointer = FirstNode;
 
@@ -149,109 +295,12 @@ namespace Mosa.Collections.Generic
 
         public bool Contains(DictionaryNode<TKey, TValue> Node)
         {
-            return (Find(Node) != null);
+            return (FindNode(Node) != null);
         }
 
         public bool NotContains(DictionaryNode<TKey, TValue> Node)
         {
-            return (Find(Node) == null);
-        }
-
-        public void DeleteAll()
-        {
-            DictionaryNode<TKey, TValue> NodePointer = FirstNode;
-            DictionaryNode<TKey, TValue> BackupNode = null;
-
-            while (NodePointer != null && Count > 0)
-            {
-                BackupNode = NodePointer.Next;
-
-                NodePointer = null;
-                Count--;
-
-                NodePointer = BackupNode;
-            }
-
-            FirstNode = null;
-            LastNode = null;
-            CurrentNode = null;
-            Count = 0;
-        }
-
-        public DictionaryNode<TKey, TValue> GetFirstNode
-        {
-            get
-            {
-                CurrentNode = FirstNode;
-
-                return CurrentNode;
-            }
-        }
-
-        public DictionaryNode<TKey, TValue> GetPrevNode
-        {
-            get
-            {
-                if (CurrentNode != null)
-                {
-                    CurrentNode = CurrentNode.Prev;
-                }
-
-                return CurrentNode;
-            }
-        }
-
-        public DictionaryNode<TKey, TValue> GetNextNode
-        {
-            get
-            {
-                if (CurrentNode != null)
-                {
-                    CurrentNode = CurrentNode.Next;
-                }
-
-                return CurrentNode;
-            }
-        }
-
-        public DictionaryNode<TKey, TValue> GetLastNode
-        {
-            get
-            {
-                CurrentNode = LastNode;
-
-                return CurrentNode;
-            }
-        }
-
-        public DictionaryNode<TKey, TValue> Set(TKey Key, TValue Value)
-        {
-            DictionaryNode<TKey, TValue> SearchNode = Find(Key);
-
-            if (SearchNode != null)
-            {
-                SearchNode.Value = Value;
-
-                return SearchNode;
-            }
-            else
-            {
-                throw new CollectionsDataNotFoundException("Dictionary.cs", "Dictionary<TKey, TValue>", "Set", "Key", "Given key doesn't exist!");
-            }
-        }
-
-        public TValue Get(TKey Key)
-        {
-            DictionaryNode<TKey, TValue> SearchNode = Find(Key);
-
-            if (SearchNode != null)
-            {
-                return SearchNode.Value;
-            }
-            else
-            {
-                throw new CollectionsDataNotFoundException("Dictionary.cs", "Dictionary<TKey, TValue>", "Get", "Key", "Given key doesn't exist!");
-            }
+            return (FindNode(Node) == null);
         }
 
         public virtual DictionaryNode<TKey, TValue> Add(TKey Key, TValue Value)
@@ -516,29 +565,21 @@ namespace Mosa.Collections.Generic
             return null;
         }
 
-        public bool Delete(TKey Key)
+        public bool Remove(TKey Key)
         {
-            DictionaryNode<TKey, TValue> NodePointer = FirstNode;
-            bool IsNodeFound = false;
+			DictionaryNode<TKey, TValue> NodePointer = FindNode(Key);
 
-            while (NodePointer != null && IsNodeFound == false)
-            {
-                if (NodePointer.Key.CompareTo(Key) == 0)
-                {
-                    Delete(NodePointer);
-
-                    IsNodeFound = true;
-                }
-                else
-                {
-                    NodePointer = NodePointer.Next;
-                }
-            }
-
-            return IsNodeFound;
+			if (NodePointer != null)
+			{
+				return Remove(NodePointer);
+			}
+			else
+			{
+				return false;
+			}
         }
 
-        public bool Delete(DictionaryNode<TKey, TValue> Node)
+        public bool Remove(DictionaryNode<TKey, TValue> Node)
         {
             if (Node == null)
             {
@@ -597,14 +638,29 @@ namespace Mosa.Collections.Generic
             return false;
         }
 
-        public void CloneFrom(Dictionary<TKey, TValue> Source)
+		public Dictionary<TKey, TValue> Clone()
+		{
+			Dictionary<TKey, TValue> Cloned = new Dictionary<TKey, TValue>();
+			DictionaryNode<TKey, TValue> NodePointer = FirstNode;
+
+			while (NodePointer != null)
+			{
+				Cloned.AddLast(NodePointer.Key, NodePointer.Value);
+
+				NodePointer = NodePointer.Next;
+			}
+
+			return Cloned;
+		}
+
+		public void CloneFrom(Dictionary<TKey, TValue> Source)
         {
             if (Source == null)
             {
                 throw new CollectionsDataNullException("Dictionary.cs", "Dictionary<TKey, TValue>", "CloneFrom", "Source", "Source cannot be NULL!");
             }
 
-            DeleteAll();
+            Clear();
 
             DictionaryNode<TKey, TValue> NodePointer = Source.FirstNode;
 
@@ -623,7 +679,7 @@ namespace Mosa.Collections.Generic
                 throw new CollectionsDataNullException("Dictionary.cs", "Dictionary<TKey, TValue>", "CloneTo", "Destination", "Destination cannot be NULL!");
             }
 
-            Destination.DeleteAll();
+            Destination.Clear();
 
             DictionaryNode<TKey, TValue> NodePointer = FirstNode;
 
@@ -637,29 +693,29 @@ namespace Mosa.Collections.Generic
 
         public void SortWithBinarySearchTree()
         {
-            BinarySearchTree<TKey> BTree = new BinarySearchTree<TKey>();
+            BinarySearchTree<TKey> BSTree = new BinarySearchTree<TKey>();
             Dictionary<TKey, TValue> SortedDictionary = new Dictionary<TKey, TValue>();
 
             DictionaryNode<TKey, TValue> NodePointer = FirstNode;
 
             while (NodePointer != null)
             {
-                BTree.Add(NodePointer.Key);
+                BSTree.Add(NodePointer.Key);
 
                 NodePointer = NodePointer.Next;
             }
 
-			foreach (TKey Item in BTree.TraverseMinToMax())
+			foreach (TKey Item in BSTree.TraverseMinToMax())
             {
-                SortedDictionary.Add(Item, this.Get(Item));
+                SortedDictionary.Add(Item, this[Item]);
             }
 
             CloneFrom(SortedDictionary);
 
-            BTree.DeleteAll();
-            BTree = null;
+            BSTree.DeleteAll();
+            BSTree = null;
 
-            SortedDictionary.DeleteAll();
+            SortedDictionary.Clear();
             SortedDictionary = null;
         }
     }
