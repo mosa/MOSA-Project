@@ -128,12 +128,10 @@ namespace Mosa.Collections.Generic
             return IsEqual<char>(Actual, Expected, Message);
         }
 
-		/*
         public static bool IsEqual(string Actual, string Expected, string Message)
         {
             return IsEqual<string>(Actual, Expected, Message);
         }
-		*/
 
         public static bool IsNotEqual(bool Actual, bool Expected, string Message)
         {
@@ -185,11 +183,9 @@ namespace Mosa.Collections.Generic
             return IsNotEqual<char>(Actual, Expected, Message);
         }
 
-		/*
         public static bool IsNotEqual(string Actual, string Expected, string Message)
         {
             return IsNotEqual<string>(Actual, Expected, Message);
         }
-		*/
     }
 }

@@ -12,7 +12,7 @@ namespace System
 	/// <summary>
 	/// Implementation of the "System.String" class
 	/// </summary>
-	public sealed class String : IEnumerable, IEnumerable<char>
+	public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>, IComparable, IComparable<String>
 	{
 		/// <summary>
 		/// Length
@@ -243,18 +243,16 @@ namespace System
 			return ls.ToArray();
 		}
 
-		public bool Equals(string i)
+		public bool Equals(string s)
 		{
-			return Equals(this, i);
+			return Equals(this, s);
 		}
 
 		public override bool Equals(object obj)
 		{
-			if (!(obj is string))
-				return false;
+			if (!(obj is string)) { return false; }
 
-			string other = (string)obj;
-			return other == this;
+			return Equals(this, (string)obj);
 		}
 
 		public static bool operator ==(string a, string b)
@@ -269,20 +267,53 @@ namespace System
 
 		public static unsafe bool Equals(string a, string b)
 		{
-			if (a == null || b == null)
-				return false;
+			if (a == null || b == null) { return false; }
 
-			if (a.length != b.length)
-				return false;
+			if (a.length != b.length) { return false; }
 
 			char* pa = a.first_char;
 			char* pb = b.first_char;
 
 			for (int i = 0; i < a.Length; ++i)
-				if (pa[i] != pb[i])
-					return false;
+				if (pa[i] != pb[i]) { return false; }
 
 			return true;
+		}
+
+		// Favor Invariant Culture & Ignore Case
+		public int CompareTo(object obj)
+		{
+			if (object.ReferenceEquals(this, obj)) { return 0; }
+			if (obj == null) { return 1; }
+			if (!(obj is String)) { throw new ArgumentException("Argument Type Must Be String", "value"); }
+
+			return CompareTo((string)obj);
+		}
+
+		// Favor Invariant Culture & Ignore Case
+		public int CompareTo (string obj)
+		{
+			return Compare(this, obj);
+		}
+
+		// Favor Invariant Culture & Ignore Case
+		public int Compare (string left, string right)
+		{
+			left = left.ToLower();
+			right = right.ToLower();
+
+			if (Equals(left, right)) { return 0; }
+
+			for (int counter = 0; counter < Math.Min(left.Length, right.Length); counter++)
+			{
+				if (left[counter] < right[counter]) { return -1; }
+				if (left[counter] > right[counter]) { return 1; }
+			}
+
+			if (left.Length < right.Length) { return -1; }
+			if (left.Length > right.Length) { return 1; }
+
+			return 0;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]

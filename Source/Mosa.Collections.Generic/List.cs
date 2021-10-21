@@ -30,21 +30,26 @@ namespace Mosa.Collections.Generic
             Next = null;
         }
     }
-    #endregion
+	#endregion
 
-    // List<AnyType>
+	// List<AnyType>
 
-    #region List<AnyType>
-    public class List<AnyType> : IEnumerable, IEnumerator where AnyType : IComparable
-    {
-        protected ListNode<AnyType> FirstNode = null;
-        protected ListNode<AnyType> LastNode = null;
-        protected ListNode<AnyType> CurrentNode = null;
-        protected uint Size = 0;
-        protected ListNode<AnyType> EnumNode = null;
+	#region List<AnyType>
+	public class List<AnyType>: IEnumerable, IEnumerator where AnyType: IComparable
+	{
+		protected ListNode<AnyType> FirstNode = null;
+		protected ListNode<AnyType> LastNode = null;
+		protected ListNode<AnyType> CurrentNode = null;
+		protected ListNode<AnyType> EnumNode = null;
+		public int Count { get; protected set; } = 0;
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
+		public bool IsFixedSize => false;
+		public bool IsReadOnly => false;
+		public bool IsSynchronized => false;
+		public object SyncRoot => this;
+
+		IEnumerator IEnumerable.GetEnumerator()
+		{
             return (IEnumerator)this;
         }
 
@@ -72,6 +77,46 @@ namespace Mosa.Collections.Generic
             EnumNode = null;
         }
 
+		public AnyType this [int Index]
+		{
+			get
+			{
+				if (Index + 1 > 0 && Index + 1 <= Count && Count > 0)
+				{
+					ListNode<AnyType> NodePointer = FirstNode;
+
+					for (uint counter = 0; counter < Index; counter++)
+					{
+						NodePointer = NodePointer.Next;
+					}
+
+					return NodePointer.Data;
+				}
+				else
+				{
+					throw new CollectionsDataOutOfRangeException("List.cs", "List<AnyType>", "this[index]", "index", "Index is out of range!");
+				}
+			}
+			set
+			{
+				if (Index + 1 > 0 && Index + 1 <= Count && Count > 0)
+				{
+					ListNode<AnyType> NodePointer = FirstNode;
+
+					for (uint counter = 0; counter < Index; counter++)
+					{
+						NodePointer = NodePointer.Next;
+					}
+
+					NodePointer.Data = value;
+				}
+				else
+				{
+					throw new CollectionsDataOutOfRangeException("List.cs", "List<AnyType>", "this[index]", "index", "Index is out of range!");
+				}
+			}
+		}
+
         public List()
         {
             // Nothing to do here...
@@ -79,10 +124,10 @@ namespace Mosa.Collections.Generic
 
         ~List()
         {
-            DeleteAll();
+            Clear();
         }
 
-        public void DeleteAll()
+        public void Clear()
         {
             ListNode<AnyType> NodePointer = FirstNode;
             ListNode<AnyType> BackupPointer = null;
@@ -93,7 +138,7 @@ namespace Mosa.Collections.Generic
 
                 NodePointer = null;
 
-                Size--;
+                Count--;
 
                 NodePointer = BackupPointer;
             }
@@ -101,22 +146,17 @@ namespace Mosa.Collections.Generic
             FirstNode = null;
             LastNode = null;
             CurrentNode = null;
-            Size = 0;
-        }
-
-        public uint GetSize
-        {
-            get { return Size; }
+            Count = 0;
         }
 
         public bool IsEmpty
         {
-            get { return (Size == 0 && FirstNode == null && LastNode == null); }
+            get { return (Count == 0 && FirstNode == null && LastNode == null); }
         }
 
         public bool IsNotEmpty
         {
-            get { return (Size > 0 && FirstNode != null && LastNode != null); }
+            get { return (Count > 0 && FirstNode != null && LastNode != null); }
         }
 
         public ListNode<AnyType> GetFirstNode
@@ -164,6 +204,11 @@ namespace Mosa.Collections.Generic
                 return CurrentNode;
             }
         }
+
+		public ListNode<AnyType> Find(AnyType Data)
+		{
+			return FindFirst(Data);
+		}
 
         public ListNode<AnyType> FindFirst(AnyType Data)
         {
@@ -213,7 +258,58 @@ namespace Mosa.Collections.Generic
             return (FindFirst(Data) == null);
         }
 
-        public ListNode<AnyType> FindFirst(ListNode<AnyType> Node)
+		public int IndexOf (AnyType Data)
+		{
+			int Index = -1;
+
+			ListNode<AnyType> NodePointer = FirstNode;
+
+			while (NodePointer != null)
+			{
+				Index++;
+
+				if (NodePointer.Data.CompareTo(Data) == 0)
+				{
+					return Index;
+				}
+				else
+				{
+					NodePointer = NodePointer.Next;
+				}
+			}
+
+			return -1;
+		}
+
+		public int LastIndexOf(AnyType Data)
+		{
+			int Index = Count;
+
+			ListNode<AnyType> NodePointer = LastNode;
+
+			while (NodePointer != null)
+			{
+				Index--;
+
+				if (NodePointer.Data.CompareTo(Data) == 0)
+				{
+					return Index;
+				}
+				else
+				{
+					NodePointer = NodePointer.Prev;
+				}
+			}
+
+			return -1;
+		}
+
+		public ListNode<AnyType> Find(ListNode<AnyType> Node)
+		{
+			return FindFirst(Node);
+		}
+
+		public ListNode<AnyType> FindFirst(ListNode<AnyType> Node)
         {
             ListNode<AnyType> NodePointer = FirstNode;
 
@@ -270,7 +366,7 @@ namespace Mosa.Collections.Generic
         {
             ListNode<AnyType> NewNode = new ListNode<AnyType>(Data);
 
-            if (FirstNode == null && LastNode == null && Size == 0)
+            if (FirstNode == null && LastNode == null && Count == 0)
             {
                 NewNode.Prev = null;
                 NewNode.Next = null;
@@ -278,12 +374,12 @@ namespace Mosa.Collections.Generic
                 FirstNode = NewNode;
                 LastNode = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
 
-            if (FirstNode != null && LastNode != null && FirstNode == LastNode && Size == 1)
+            if (FirstNode != null && LastNode != null && FirstNode == LastNode && Count == 1)
             {
                 NewNode.Prev = null;
                 NewNode.Next = FirstNode;
@@ -292,12 +388,12 @@ namespace Mosa.Collections.Generic
                 LastNode = FirstNode;
                 FirstNode = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
 
-            if (FirstNode != null && LastNode != null && FirstNode != LastNode && Size > 1)
+            if (FirstNode != null && LastNode != null && FirstNode != LastNode && Count > 1)
             {
                 NewNode.Prev = null;
                 NewNode.Next = FirstNode;
@@ -305,7 +401,7 @@ namespace Mosa.Collections.Generic
 
                 FirstNode = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
@@ -317,7 +413,7 @@ namespace Mosa.Collections.Generic
         {
             ListNode<AnyType> NewNode = new ListNode<AnyType>(Data);
 
-            if (FirstNode == null && LastNode == null && Size == 0)
+            if (FirstNode == null && LastNode == null && Count == 0)
             {
                 NewNode.Prev = null;
                 NewNode.Next = null;
@@ -325,12 +421,12 @@ namespace Mosa.Collections.Generic
                 FirstNode = NewNode;
                 LastNode = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
 
-            if (FirstNode != null && LastNode != null && FirstNode == LastNode && Size == 1)
+            if (FirstNode != null && LastNode != null && FirstNode == LastNode && Count == 1)
             {
                 NewNode.Prev = LastNode;
                 NewNode.Next = null;
@@ -338,12 +434,12 @@ namespace Mosa.Collections.Generic
                 LastNode.Next = NewNode;
                 LastNode = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
 
-            if (FirstNode != null && LastNode != null && FirstNode != LastNode && Size > 1)
+            if (FirstNode != null && LastNode != null && FirstNode != LastNode && Count > 1)
             {
                 NewNode.Prev = LastNode;
                 NewNode.Next = null;
@@ -351,7 +447,7 @@ namespace Mosa.Collections.Generic
                 LastNode.Next = NewNode;
                 LastNode = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
@@ -373,7 +469,7 @@ namespace Mosa.Collections.Generic
 
             ListNode<AnyType> NewNode = new ListNode<AnyType>(Data);
 
-            if (Node == FirstNode && Node == LastNode && Size == 1)
+            if (Node == FirstNode && Node == LastNode && Count == 1)
             {
                 NewNode.Prev = null;
                 NewNode.Next = FirstNode;
@@ -381,12 +477,12 @@ namespace Mosa.Collections.Generic
 
                 FirstNode = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
 
-            if (Node == FirstNode && Node != LastNode && Size > 1)
+            if (Node == FirstNode && Node != LastNode && Count > 1)
             {
                 NewNode.Prev = null;
                 NewNode.Next = FirstNode;
@@ -394,12 +490,12 @@ namespace Mosa.Collections.Generic
 
                 FirstNode = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
 
-            if (Node != FirstNode && Node == LastNode && Size > 1)
+            if (Node != FirstNode && Node == LastNode && Count > 1)
             {
                 ListNode<AnyType> PrevNode = LastNode.Prev;
 
@@ -408,12 +504,12 @@ namespace Mosa.Collections.Generic
                 PrevNode.Next = NewNode;
                 LastNode.Prev = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
 
-            if (Node != FirstNode && Node != LastNode && Size > 2)
+            if (Node != FirstNode && Node != LastNode && Count > 2)
             {
                 ListNode<AnyType> PrevNode = Node.Prev;
 
@@ -422,7 +518,7 @@ namespace Mosa.Collections.Generic
                 PrevNode.Next = NewNode;
                 Node.Prev = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
@@ -444,7 +540,7 @@ namespace Mosa.Collections.Generic
 
             ListNode<AnyType> NewNode = new ListNode<AnyType>(Data);
 
-            if (Node == FirstNode && Node == LastNode && Size == 1)
+            if (Node == FirstNode && Node == LastNode && Count == 1)
             {
                 FirstNode.Next = NewNode;
                 NewNode.Prev = FirstNode;
@@ -452,12 +548,12 @@ namespace Mosa.Collections.Generic
 
                 LastNode = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
 
-            if (Node == FirstNode && Node != LastNode && Size > 1)
+            if (Node == FirstNode && Node != LastNode && Count > 1)
             {
                 ListNode<AnyType> NextNode = FirstNode.Next;
 
@@ -466,12 +562,12 @@ namespace Mosa.Collections.Generic
                 NewNode.Next = NextNode;
                 NextNode.Prev = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
 
-            if (Node != FirstNode && Node == LastNode && Size > 1)
+            if (Node != FirstNode && Node == LastNode && Count > 1)
             {
                 LastNode.Next = NewNode;
                 NewNode.Prev = LastNode;
@@ -479,12 +575,12 @@ namespace Mosa.Collections.Generic
 
                 LastNode = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
 
-            if (Node != FirstNode && Node != LastNode && Size > 2)
+            if (Node != FirstNode && Node != LastNode && Count > 2)
             {
                 ListNode<AnyType> NextNode = Node.Next;
 
@@ -493,7 +589,7 @@ namespace Mosa.Collections.Generic
                 NewNode.Next = NextNode;
                 NextNode.Prev = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
@@ -501,7 +597,30 @@ namespace Mosa.Collections.Generic
             return null;
         }
 
-        public bool Delete(ListNode<AnyType> Node)
+		public bool RemoveAt(int Index)
+		{
+			int Counter = -1;
+
+			ListNode<AnyType> NodePointer = FirstNode;
+
+			while (NodePointer != null)
+			{
+				Counter++;
+
+				if (Counter == Index)
+				{
+					return Remove(NodePointer);
+				}
+				else
+				{
+					NodePointer = NodePointer.Next;
+				}
+			}
+
+			return false;
+		}
+
+		public bool Remove(ListNode<AnyType> Node)
         {
             if (Node == null)
             {
@@ -513,46 +632,46 @@ namespace Mosa.Collections.Generic
                 throw new CollectionsDataNotFoundException("List.cs", "List<AnyType>", "Delete", "Node", "Node cannot be found in this List!");
             }
 
-            if (Node.Prev == null && Node.Next == null && Size == 1)
+            if (Node.Prev == null && Node.Next == null && Count == 1)
             {
                 FirstNode = null;
                 LastNode = null;
                 Node = null;
 
-                Size--;
+                Count--;
 
                 return true;
             }
 
-            if (Node.Prev == null && Node.Next != null && Size > 1)
+            if (Node.Prev == null && Node.Next != null && Count > 1)
             {
                 FirstNode = Node.Next;
                 FirstNode.Prev = null;
                 Node = null;
 
-                Size--;
+                Count--;
 
                 return true;
             }
 
-            if (Node.Prev != null && Node.Next == null && Size > 1)
+            if (Node.Prev != null && Node.Next == null && Count > 1)
             {
                 LastNode = Node.Prev;
                 LastNode.Next = null;
                 Node = null;
 
-                Size--;
+                Count--;
 
                 return true;
             }
 
-            if (Node.Prev != null && Node.Next != null && Size > 2)
+            if (Node.Prev != null && Node.Next != null && Count > 2)
             {
                 Node.Prev.Next = Node.Next;
                 Node.Next.Prev = Node.Prev;
                 Node = null;
 
-                Size--;
+                Count--;
 
                 return true;
             }
@@ -560,7 +679,7 @@ namespace Mosa.Collections.Generic
             return false;
         }
 
-        public bool DeleteFirst(AnyType Data)
+        public bool RemoveFirst(AnyType Data)
         {
             ListNode<AnyType> NodePointer = FirstNode;
             bool IsNodeFound = false;
@@ -569,7 +688,7 @@ namespace Mosa.Collections.Generic
             {
                 if (NodePointer.Data.CompareTo(Data) == 0)
                 {
-                    Delete(NodePointer);
+                    Remove(NodePointer);
 
                     IsNodeFound = true;
                 }
@@ -582,7 +701,7 @@ namespace Mosa.Collections.Generic
             return IsNodeFound;
         }
 
-        public bool DeleteLast(AnyType Data)
+        public bool RemoveLast(AnyType Data)
         {
             ListNode<AnyType> NodePointer = LastNode;
             bool IsNodeFound = false;
@@ -591,7 +710,7 @@ namespace Mosa.Collections.Generic
             {
                 if (NodePointer.Data.CompareTo(Data) == 0)
                 {
-                    Delete(NodePointer);
+                    Remove(NodePointer);
 
                     IsNodeFound = true;
                 }
@@ -604,7 +723,7 @@ namespace Mosa.Collections.Generic
             return IsNodeFound;
         }
 
-        public bool DeleteAll(AnyType Data)
+        public bool RemoveAll(AnyType Data)
         {
             ListNode<AnyType> NodePointer = FirstNode;
             ListNode<AnyType> NextNode = null;
@@ -616,7 +735,7 @@ namespace Mosa.Collections.Generic
 
                 if (NodePointer.Data.CompareTo(Data) == 0)
                 {
-                    Delete(NodePointer);
+                    Remove(NodePointer);
 
                     IsNodeFound = true;
                 }
@@ -627,14 +746,44 @@ namespace Mosa.Collections.Generic
             return IsNodeFound;
         }
 
-        public void CloneFrom(List<AnyType> Source)
+		public List<AnyType> Reverse()
+		{
+			ListNode<AnyType> NodePointer = LastNode;
+			List<AnyType> Reversed = new List<AnyType>();
+
+			while (NodePointer != null)
+			{
+				Reversed.Add(NodePointer.Data);
+
+				NodePointer = NodePointer.Prev;
+			}
+
+			return Reversed;
+		}
+
+		public List<AnyType> Clone()
+		{
+			ListNode<AnyType> NodePointer = FirstNode;
+			List<AnyType> Cloned = new List<AnyType>();
+
+			while (NodePointer != null)
+			{
+				Cloned.Add(NodePointer.Data);
+
+				NodePointer = NodePointer.Next;
+			}
+
+			return Cloned;
+		}
+
+		public void CloneFrom(List<AnyType> Source)
         {
             if (Source == null)
             {
                 throw new CollectionsDataNullException("List.cs", "List<AnyType>", "CloneFrom", "Source", "Source cannot be NULL!");
             }
 
-            DeleteAll();
+            Clear();
 
             ListNode<AnyType> NodePointer = Source.FirstNode;
 
@@ -653,7 +802,7 @@ namespace Mosa.Collections.Generic
                 throw new CollectionsDataNullException("List.cs", "List<AnyType>", "CloneTo", "Destination", "Destination cannot be NULL!");
             }
 
-            Destination.DeleteAll();
+            Destination.Clear();
 
             ListNode<AnyType> NodePointer = FirstNode;
 
@@ -699,7 +848,25 @@ namespace Mosa.Collections.Generic
             }
         }
 
-        public void SortWithBinaryTree()
+		public AnyType[] ToArray()
+		{
+			ListNode<AnyType> NodePointer = FirstNode;
+			AnyType[] ConvertedArray = new AnyType[Count];
+			int Counter = -1;
+
+			while (NodePointer != null)
+			{
+				Counter++;
+
+				ConvertedArray[Counter] = NodePointer.Data;
+
+				NodePointer = NodePointer.Next;
+			}
+
+			return ConvertedArray;
+		}
+
+        public void SortWithBinarySearchTree()
         {
             BinarySearchTree<AnyType> BTree = new BinarySearchTree<AnyType>();
             ListNode<AnyType> NodePointer = FirstNode;

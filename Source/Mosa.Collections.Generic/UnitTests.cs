@@ -281,46 +281,46 @@ namespace Mosa.Collections.Generic
             Primes.AddLast(13);
             Primes.AddLast(17);
             Primes.AddLast(19);
-            Test.IsEqual(Primes.GetSize, 13, "List<uint>.GetSize should be 13");
+            Test.IsEqual(Primes.Count, 13, "List<uint>.Count should be 13");
 
-            Primes.DeleteAll(1);
-            Test.IsEqual(Primes.GetSize, 10, "List<uint>.GetSize should be 10");
+            Primes.RemoveAll(1);
+            Test.IsEqual(Primes.Count, 10, "List<uint>.Count should be 10");
 
-            Primes.DeleteFirst(3);
-            Test.IsEqual(Primes.GetSize, 9, "List<uint>.GetSize should be 9");
+            Primes.RemoveFirst(3);
+            Test.IsEqual(Primes.Count, 9, "List<uint>.Count should be 9");
 
-            Primes.DeleteLast(3);
-            Test.IsEqual(Primes.GetSize, 8, "List<uint>.GetSize should be 8");
+            Primes.RemoveLast(3);
+            Test.IsEqual(Primes.Count, 8, "List<uint>.Count should be 8");
 
-            Primes.DeleteAll(3);
-            Test.IsEqual(Primes.GetSize, 7, "List<uint>.GetSize should be 7");
+            Primes.RemoveAll(3);
+            Test.IsEqual(Primes.Count, 7, "List<uint>.Count should be 7");
 
-            Primes.DeleteAll(7);
-            Test.IsEqual(Primes.GetSize, 6, "List<uint>.GetSize should be 6");
+            Primes.RemoveAll(7);
+            Test.IsEqual(Primes.Count, 6, "List<uint>.Count should be 6");
 
             Primes.AddAfter(Primes.FindFirst(2), 3);
-            Test.IsEqual(Primes.GetSize, 7, "List<uint>.GetSize should be 7");
+            Test.IsEqual(Primes.Count, 7, "List<uint>.Count should be 7");
 
             Primes.AddAfter(Primes.FindFirst(5), 7);
-            Test.IsEqual(Primes.GetSize, 8, "List<uint>.GetSize should be 8");
+            Test.IsEqual(Primes.Count, 8, "List<uint>.Count should be 8");
 
             Primes.AddAfter(Primes.FindFirst(19), 23);
-            Test.IsEqual(Primes.GetSize, 9, "List<uint>.GetSize should be 9");
+            Test.IsEqual(Primes.Count, 9, "List<uint>.Count should be 9");
 
-            Primes.DeleteAll(2);
-            Test.IsEqual(Primes.GetSize, 8, "List<uint>.GetSize should be 8");
+            Primes.RemoveAll(2);
+            Test.IsEqual(Primes.Count, 8, "List<uint>.Count should be 8");
 
-            Primes.DeleteAll(19);
-            Test.IsEqual(Primes.GetSize, 7, "List<uint>.GetSize should be 7");
+            Primes.RemoveAll(19);
+            Test.IsEqual(Primes.Count, 7, "List<uint>.Count should be 7");
 
             Primes.AddBefore(Primes.FindFirst(3), 2);
-            Test.IsEqual(Primes.GetSize, 8, "List<uint>.GetSize should be 8");
+            Test.IsEqual(Primes.Count, 8, "List<uint>.Count should be 8");
 
             Primes.AddBefore(Primes.FindFirst(23), 19);
-            Test.IsEqual(Primes.GetSize, 9, "List<uint>.GetSize should be 9");
+            Test.IsEqual(Primes.Count, 9, "List<uint>.Count should be 9");
 
-            Primes.DeleteAll();
-            Test.IsEqual(Primes.GetSize, 0, "List<uint>.GetSize should be 0");
+            Primes.Clear();
+            Test.IsEqual(Primes.Count, 0, "List<uint>.Count should be 0");
 
             Primes = null;
         }
@@ -338,19 +338,19 @@ namespace Mosa.Collections.Generic
             Classes.AddLast(Class2);
             Classes.AddLast(Class3);
             Classes.AddLast(Class1);
-            Test.IsEqual(Classes.GetSize, 4, "List<TClass>.GetSize should be 4");
+            Test.IsEqual(Classes.Count, 4, "List<TClass>.Count should be 4");
 
-            Classes.DeleteAll(Class1);
-            Test.IsEqual(Classes.GetSize, 2, "List<TClass>.GetSize should be 2");
+            Classes.RemoveAll(Class1);
+            Test.IsEqual(Classes.Count, 2, "List<TClass>.Count should be 2");
 
             Classes.AddBefore(Classes.FindFirst(Class2), Class1);
-            Test.IsEqual(Classes.GetSize, 3, "List<TClass>.GetSize should be 3");
+            Test.IsEqual(Classes.Count, 3, "List<TClass>.Count should be 3");
 
             Classes.AddAfter(Classes.FindLast(Class3), Class1);
-            Test.IsEqual(Classes.GetSize, 4, "List<TClass>.GetSize should be 4");
+            Test.IsEqual(Classes.Count, 4, "List<TClass>.Count should be 4");
 
-            Classes.DeleteAll();
-            Test.IsEqual(Classes.GetSize, 0, "List<TClass>.GetSize should be 0");
+            Classes.Clear();
+            Test.IsEqual(Classes.Count, 0, "List<TClass>.Count should be 0");
 
             Classes = null;
         }
@@ -364,7 +364,7 @@ namespace Mosa.Collections.Generic
             MagicWords.Add(2, 0xDEADBEEF);
             MagicWords.Add(1, 0xCAFEBABE);
 
-            MagicWords.SortWithBinaryTree();
+            MagicWords.SortWithBinarySearchTree();
 
             Test.IsEqual(MagicWords.GetSize, 3, "SortedDictionary<uint, uint>.GetSize should be 3");
             Test.IsEqual(MagicWords.GetFirstNode.Value, 0xCAFEBABE, "SortedDictionary<uint, uint>.GetFirstNode.Value should be 0xCAFEBABE");
@@ -386,7 +386,7 @@ namespace Mosa.Collections.Generic
             MagicWords.Add(2, Class2);
             MagicWords.Add(1, Class1);
 
-            MagicWords.SortWithBinaryTree();
+            MagicWords.SortWithBinarySearchTree();
 
             Test.IsEqual(MagicWords.GetSize, 3, "SortedDictionary<uint, TClass>.GetSize should be 3");
             Test.IsEqual(MagicWords.GetFirstNode.Value.Magic, 0xCAFEBABE, "SortedDictionary<uint, TClass>.GetFirstNode.Value should be 0xCAFEBABE");
@@ -413,9 +413,9 @@ namespace Mosa.Collections.Generic
             Primes.Add(7);
             Primes.Add(11);
 
-            Primes.SortWithBinaryTree();
+            Primes.SortWithBinarySearchTree();
 
-            Test.IsEqual(Primes.GetSize, 12, "SortedList<uint>.GetSize should be 12");
+            Test.IsEqual(Primes.Count, 12, "SortedList<uint>.Count should be 12");
             Test.IsEqual(Primes.GetFirstNode.Data, 2, "SortedList<uint>.GetFirstNode.Data should be 2");
             Test.IsEqual(Primes.GetLastNode.Data, 37, "SortedList<uint>.GetLastNode.Data should be 37");
 
@@ -435,9 +435,9 @@ namespace Mosa.Collections.Generic
             Classes.Add(Class2);
             Classes.Add(Class1);
 
-            Classes.SortWithBinaryTree();
+            Classes.SortWithBinarySearchTree();
 
-            Test.IsEqual(Classes.GetSize, 3, "SortedList<TClass>.GetSize should be 3");
+            Test.IsEqual(Classes.Count, 3, "SortedList<TClass>.Count should be 3");
             Test.IsEqual(Classes.GetFirstNode.Data.Magic, 0xCAFEBABE, "SortedList<TClass>.GetFirstNode.Data should be 0xCAFEBABE");
             Test.IsEqual(Classes.GetLastNode.Data.Magic, 0xDEADCAFE, "SortedList<TClass>.GetLastNode.Data should be 0xDEADCAFE");
 

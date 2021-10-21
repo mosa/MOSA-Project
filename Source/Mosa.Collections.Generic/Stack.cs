@@ -53,8 +53,8 @@ namespace Mosa.Collections.Generic
             DeleteAll();
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
+		IEnumerator IEnumerable.GetEnumerator()
+		{
             return (IEnumerator)this;
         }
 

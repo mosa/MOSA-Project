@@ -176,4 +176,24 @@ namespace Mosa.Collections.Generic
         { 
         }
     }
+
+	[Serializable]
+	public class CollectionsDataOutOfRangeException : CollectionsException
+	{
+		public CollectionsDataOutOfRangeException() : base()
+		{
+		}
+
+		public CollectionsDataOutOfRangeException(string Message) : base(Message)
+		{
+		}
+
+		public CollectionsDataOutOfRangeException(string Message, Exception Inner) : base(Message, Inner)
+		{
+		}
+
+		public CollectionsDataOutOfRangeException(string SourceCodeFileName, string ClassName, string FunctionName, string ParameterName, string Message) : base(0x08, "Data Out Of Range", SourceCodeFileName, ClassName, FunctionName, ParameterName, Message)
+		{
+		}
+	}
 }

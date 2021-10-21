@@ -42,10 +42,10 @@ namespace Mosa.Collections.Generic
         protected DictionaryNode<TKey, TValue> FirstNode = null;
         protected DictionaryNode<TKey, TValue> LastNode = null;
         protected DictionaryNode<TKey, TValue> CurrentNode = null;
-        protected uint Size = 0;
         protected DictionaryNode<TKey, TValue> EnumNode = null;
+		public int Count { get; protected set; }
 
-        public Dictionary()
+		public Dictionary()
         {
             // Nothing to do here...
         }
@@ -84,19 +84,19 @@ namespace Mosa.Collections.Generic
             EnumNode = null;
         }
 
-        public uint GetSize
+        public int GetSize
         {
-            get { return Size; }
+            get { return Count; }
         }
 
         public bool IsEmpty
         {
-            get { return (Size == 0 && FirstNode == null && LastNode == null); }
+            get { return (Count == 0 && FirstNode == null && LastNode == null); }
         }
 
         public bool IsNotEmpty
         {
-            get { return (Size > 0 && FirstNode != null & LastNode != null); }
+            get { return (Count > 0 && FirstNode != null & LastNode != null); }
         }
 
         public DictionaryNode<TKey, TValue> Find(TKey Key)
@@ -162,12 +162,12 @@ namespace Mosa.Collections.Generic
             DictionaryNode<TKey, TValue> NodePointer = FirstNode;
             DictionaryNode<TKey, TValue> BackupNode = null;
 
-            while (NodePointer != null && Size > 0)
+            while (NodePointer != null && Count > 0)
             {
                 BackupNode = NodePointer.Next;
 
                 NodePointer = null;
-                Size--;
+                Count--;
 
                 NodePointer = BackupNode;
             }
@@ -175,7 +175,7 @@ namespace Mosa.Collections.Generic
             FirstNode = null;
             LastNode = null;
             CurrentNode = null;
-            Size = 0;
+            Count = 0;
         }
 
         public DictionaryNode<TKey, TValue> GetFirstNode
@@ -269,7 +269,7 @@ namespace Mosa.Collections.Generic
             {
                 DictionaryNode<TKey, TValue> NewNode = new DictionaryNode<TKey, TValue>(Key, Value);
 
-                if (FirstNode == null && LastNode == null && Size == 0)
+                if (FirstNode == null && LastNode == null && Count == 0)
                 {
                     NewNode.Prev = null;
                     NewNode.Next = null;
@@ -277,12 +277,12 @@ namespace Mosa.Collections.Generic
                     FirstNode = NewNode;
                     LastNode = NewNode;
 
-                    Size++;
+                    Count++;
 
                     return NewNode;
                 }
 
-                if (FirstNode != null && LastNode != null && FirstNode == LastNode && Size == 1)
+                if (FirstNode != null && LastNode != null && FirstNode == LastNode && Count == 1)
                 {
                     NewNode.Prev = null;
                     NewNode.Next = FirstNode;
@@ -291,12 +291,12 @@ namespace Mosa.Collections.Generic
                     LastNode = FirstNode;
                     FirstNode = NewNode;
 
-                    Size++;
+                    Count++;
 
                     return NewNode;
                 }
 
-                if (FirstNode != null && LastNode != null && FirstNode != LastNode && Size > 1)
+                if (FirstNode != null && LastNode != null && FirstNode != LastNode && Count > 1)
                 {
                     NewNode.Prev = null;
                     NewNode.Next = FirstNode;
@@ -304,7 +304,7 @@ namespace Mosa.Collections.Generic
 
                     FirstNode = NewNode;
 
-                    Size++;
+                    Count++;
 
                     return NewNode;
                 }
@@ -323,7 +323,7 @@ namespace Mosa.Collections.Generic
             {
                 DictionaryNode<TKey, TValue> NewNode = new DictionaryNode<TKey, TValue>(Key, Value);
 
-                if (FirstNode == null && LastNode == null && Size == 0)
+                if (FirstNode == null && LastNode == null && Count == 0)
                 {
                     NewNode.Prev = null;
                     NewNode.Next = null;
@@ -331,12 +331,12 @@ namespace Mosa.Collections.Generic
                     FirstNode = NewNode;
                     LastNode = NewNode;
 
-                    Size++;
+                    Count++;
 
                     return NewNode;
                 }
 
-                if (FirstNode != null && LastNode != null && FirstNode == LastNode && Size == 1)
+                if (FirstNode != null && LastNode != null && FirstNode == LastNode && Count == 1)
                 {
                     NewNode.Prev = LastNode;
                     NewNode.Next = null;
@@ -344,12 +344,12 @@ namespace Mosa.Collections.Generic
                     LastNode.Next = NewNode;
                     LastNode = NewNode;
 
-                    Size++;
+                    Count++;
 
                     return NewNode;
                 }
 
-                if (FirstNode != null && LastNode != null && FirstNode != LastNode && Size > 1)
+                if (FirstNode != null && LastNode != null && FirstNode != LastNode && Count > 1)
                 {
                     NewNode.Prev = LastNode;
                     NewNode.Next = null;
@@ -357,7 +357,7 @@ namespace Mosa.Collections.Generic
                     LastNode.Next = NewNode;
                     LastNode = NewNode;
 
-                    Size++;
+                    Count++;
 
                     return NewNode;
                 }
@@ -385,7 +385,7 @@ namespace Mosa.Collections.Generic
 
             DictionaryNode<TKey, TValue> NewNode = new DictionaryNode<TKey, TValue>(Key, Value);
 
-            if (Node == FirstNode && Node == LastNode && Size == 1)
+            if (Node == FirstNode && Node == LastNode && Count == 1)
             {
                 NewNode.Prev = null;
                 NewNode.Next = FirstNode;
@@ -393,12 +393,12 @@ namespace Mosa.Collections.Generic
 
                 FirstNode = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
 
-            if (Node == FirstNode && Node != LastNode && Size > 1)
+            if (Node == FirstNode && Node != LastNode && Count > 1)
             {
                 NewNode.Prev = null;
                 NewNode.Next = FirstNode;
@@ -406,12 +406,12 @@ namespace Mosa.Collections.Generic
 
                 FirstNode = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
 
-            if (Node != FirstNode && Node == LastNode && Size > 1)
+            if (Node != FirstNode && Node == LastNode && Count > 1)
             {
                 DictionaryNode<TKey, TValue> PrevNode = LastNode.Prev;
                 NewNode.Prev = PrevNode;
@@ -419,12 +419,12 @@ namespace Mosa.Collections.Generic
                 PrevNode.Next = NewNode;
                 LastNode.Prev = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
 
-            if (Node != FirstNode && Node != LastNode && Size > 2)
+            if (Node != FirstNode && Node != LastNode && Count > 2)
             {
                 DictionaryNode<TKey, TValue> PrevNode = Node.Prev;
                 NewNode.Prev = PrevNode;
@@ -432,7 +432,7 @@ namespace Mosa.Collections.Generic
                 PrevNode.Next = NewNode;
                 Node.Prev = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
@@ -459,7 +459,7 @@ namespace Mosa.Collections.Generic
 
             DictionaryNode<TKey, TValue> NewNode = new DictionaryNode<TKey, TValue>(Key, Value);
 
-            if (Node == FirstNode && Node == LastNode && Size == 1)
+            if (Node == FirstNode && Node == LastNode && Count == 1)
             {
                 FirstNode.Next = NewNode;
                 NewNode.Prev = FirstNode;
@@ -467,12 +467,12 @@ namespace Mosa.Collections.Generic
 
                 LastNode = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
 
-            if (Node == FirstNode && Node != LastNode && Size > 1)
+            if (Node == FirstNode && Node != LastNode && Count > 1)
             {
                 DictionaryNode<TKey, TValue> NextNode = FirstNode.Next;
 
@@ -481,12 +481,12 @@ namespace Mosa.Collections.Generic
                 NewNode.Next = NextNode;
                 NextNode.Prev = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
 
-            if (Node != FirstNode && Node == LastNode && Size > 1)
+            if (Node != FirstNode && Node == LastNode && Count > 1)
             {
                 LastNode.Next = NewNode;
                 NewNode.Prev = LastNode;
@@ -494,12 +494,12 @@ namespace Mosa.Collections.Generic
 
                 LastNode = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
 
-            if (Node != FirstNode && Node != LastNode && Size > 2)
+            if (Node != FirstNode && Node != LastNode && Count > 2)
             {
                 DictionaryNode<TKey, TValue> NextNode = Node.Next;
 
@@ -508,7 +508,7 @@ namespace Mosa.Collections.Generic
                 NewNode.Next = NextNode;
                 NextNode.Prev = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
@@ -550,46 +550,46 @@ namespace Mosa.Collections.Generic
                 throw new CollectionsDataNullException("Dictionary.cs", "Dictionary<TKey, TValue>", "Delete", "Node", "Node cannot be found in this Dictionary!");
             }
 
-            if (Node.Prev == null && Node.Next == null && Size == 1)
+            if (Node.Prev == null && Node.Next == null && Count == 1)
             {
                 FirstNode = null;
                 LastNode = null;
                 Node = null;
 
-                Size--;
+                Count--;
 
                 return true;
             }
 
-            if (Node.Prev == null && Node.Next != null && Size > 1)
+            if (Node.Prev == null && Node.Next != null && Count > 1)
             {
                 FirstNode = Node.Next;
                 FirstNode.Prev = null;
                 Node = null;
 
-                Size--;
+                Count--;
 
                 return true;
             }
 
-            if (Node.Prev != null && Node.Next == null && Size > 1)
+            if (Node.Prev != null && Node.Next == null && Count > 1)
             {
                 LastNode = Node.Prev;
                 LastNode.Next = null;
                 Node = null;
 
-                Size--;
+                Count--;
 
                 return true;
             }
 
-            if (Node.Prev != null && Node.Next != null && Size > 2)
+            if (Node.Prev != null && Node.Next != null && Count > 2)
             {
                 Node.Prev.Next = Node.Next;
                 Node.Next.Prev = Node.Prev;
                 Node = null;
 
-                Size--;
+                Count--;
 
                 return true;
             }
@@ -635,7 +635,7 @@ namespace Mosa.Collections.Generic
             }
         }
 
-        public void SortWithBinaryTree()
+        public void SortWithBinarySearchTree()
         {
             BinarySearchTree<TKey> BTree = new BinarySearchTree<TKey>();
             Dictionary<TKey, TValue> SortedDictionary = new Dictionary<TKey, TValue>();
@@ -649,7 +649,7 @@ namespace Mosa.Collections.Generic
                 NodePointer = NodePointer.Next;
             }
 
-            foreach(TKey Item in BTree.TraverseMinToMax())
+			foreach (TKey Item in BTree.TraverseMinToMax())
             {
                 SortedDictionary.Add(Item, this.Get(Item));
             }
