@@ -9,11 +9,11 @@ namespace Mosa.Collections.Generic
     #region BinarySearchTreeNode<AnyType>
     public class BinarySearchTreeNode<AnyType>
     {
-        public AnyType Data;
-        public uint Count = 0;
-        public BinarySearchTreeNode<AnyType> Parent = null;
-        public BinarySearchTreeNode<AnyType> Left = null;
-        public BinarySearchTreeNode<AnyType> Right = null;
+		public BinarySearchTreeNode<AnyType> Parent = null;
+		public BinarySearchTreeNode<AnyType> Left = null;
+		public BinarySearchTreeNode<AnyType> Right = null;
+		public AnyType Data;
+        public uint CollisionCount { get; protected set; } = 0;
 
         public BinarySearchTreeNode()
         {
@@ -23,12 +23,24 @@ namespace Mosa.Collections.Generic
         public BinarySearchTreeNode(AnyType Data)
         {
             this.Data = Data;
-            this.Count = 1;
-        }
+            this.CollisionCount = 1;
+			this.Parent = null;
+			this.Left = null;
+			this.Right = null;
+		}
+
+		public BinarySearchTreeNode(AnyType Data, BinarySearchTreeNode<AnyType> Parent)
+		{
+			this.Data = Data;
+			this.CollisionCount = 1;
+			this.Parent = Parent;
+			this.Left = null;
+			this.Right = null;
+		}
 
         ~BinarySearchTreeNode()
         {
-            this.Count = 0;
+            this.CollisionCount = 0;
             this.Parent = null;
             this.Left = null;
             this.Right = null;
@@ -36,27 +48,27 @@ namespace Mosa.Collections.Generic
 
         public bool IsEmpty
         {
-            get { return (this.Count == 0); }
+            get { return (this.CollisionCount == 0); }
         }
 
         public bool IsNotEmpty
         {
-            get { return (this.Count > 0); }
+            get { return (this.CollisionCount > 0); }
         }
 
-        public void AddOne()
+        public void InsertOne()
         {
-            this.Count++;
+            this.CollisionCount++;
         }
 
-        public void DeleteOne()
+        public void RemoveOne()
         {
-            if (this.Count > 0) { this.Count--; }
+            if (this.CollisionCount > 0) { this.CollisionCount--; }
         }
 
-        public void DeleteAll()
+        public void RemoveAll()
         {
-            this.Count = 0;
+            this.CollisionCount = 0;
         }
     }
 	#endregion
@@ -78,7 +90,7 @@ namespace Mosa.Collections.Generic
 
         ~BinarySearchTree()
         {
-            DeleteAll();
+            Clear();
         }
 
         public uint GetTotalSize
@@ -115,13 +127,7 @@ namespace Mosa.Collections.Generic
         {
             if (SubTree == null)
             {
-                BinarySearchTreeNode<AnyType> NewNode = new BinarySearchTreeNode<AnyType>();
-
-                NewNode.Data = Data;
-                NewNode.Count = 1;
-                NewNode.Parent = null;
-                NewNode.Left = null;
-                NewNode.Right = null;
+				BinarySearchTreeNode<AnyType> NewNode = new BinarySearchTreeNode<AnyType>(Data, SubTree);
 
                 this.RootNode = NewNode;
 
@@ -136,13 +142,13 @@ namespace Mosa.Collections.Generic
                 {
                     if (SubTree.IsEmpty)
                     {
-                        SubTree.AddOne();
+                        SubTree.InsertOne();
 
                         this.ActiveSize++;
                     }
                     else
                     {
-                        SubTree.AddOne();
+                        SubTree.InsertOne();
                     }
 
                     return SubTree;
@@ -156,13 +162,7 @@ namespace Mosa.Collections.Generic
                     }
                     else
                     {
-                        BinarySearchTreeNode<AnyType> NewNode = new BinarySearchTreeNode<AnyType>();
-
-                        NewNode.Data = Data;
-                        NewNode.Count = 1;
-                        NewNode.Parent = SubTree;
-                        NewNode.Left = null;
-                        NewNode.Right = null;
+						BinarySearchTreeNode<AnyType> NewNode = new BinarySearchTreeNode<AnyType>(Data, SubTree);
 
                         SubTree.Left = NewNode;
 
@@ -181,13 +181,7 @@ namespace Mosa.Collections.Generic
                     }
                     else
                     {
-                        BinarySearchTreeNode<AnyType> NewNode = new BinarySearchTreeNode<AnyType>();
-
-                        NewNode.Data = Data;
-                        NewNode.Count = 1;
-                        NewNode.Parent = SubTree;
-                        NewNode.Left = null;
-                        NewNode.Right = null;
+						BinarySearchTreeNode<AnyType> NewNode = new BinarySearchTreeNode<AnyType>(Data, SubTree);
 
                         SubTree.Right = NewNode;
 
@@ -365,13 +359,13 @@ namespace Mosa.Collections.Generic
             return ResultNode;
         }
 
-        public void DeleteOne(AnyType Data)
+        public void Remove(AnyType Data)
         {
             BinarySearchTreeNode<AnyType> CurrentNode = Find(Data);
 
             if (CurrentNode != null)
             {
-                CurrentNode.DeleteOne();
+                CurrentNode.RemoveOne();
 
                 if (CurrentNode.IsEmpty)
                 {
@@ -380,28 +374,28 @@ namespace Mosa.Collections.Generic
             }
         }
 
-        public void DeleteAll(AnyType Data)
+        public void RemoveAll(AnyType Data)
         {
             BinarySearchTreeNode<AnyType> CurrentNode = Find(Data);
 
             if (CurrentNode != null)
             {
-                CurrentNode.DeleteAll();
+                CurrentNode.RemoveAll();
 
                 this.ActiveSize--;
             }
         }
 
-        public void DeleteAll()
+        public void Clear()
         {
-            DeleteTree(RootNode);
+            RemoveTree(RootNode);
 
             RootNode = null;
             TotalSize = 0;
             ActiveSize = 0;
         }
 
-        private void DeleteTree(BinarySearchTreeNode<AnyType> SubTree)
+        private void RemoveTree(BinarySearchTreeNode<AnyType> SubTree)
         {
             if (SubTree != null)
             {
@@ -411,12 +405,12 @@ namespace Mosa.Collections.Generic
                     if (SubTree.Parent.Right == SubTree) { SubTree.Parent.Right = null; }
                 }
 
-                if (SubTree.Left != null) { DeleteTree(SubTree.Left); }
-                if (SubTree.Right != null) { DeleteTree(SubTree.Right); }
+                if (SubTree.Left != null) { RemoveTree(SubTree.Left); }
+                if (SubTree.Right != null) { RemoveTree(SubTree.Right); }
 
                 if (SubTree.IsNotEmpty)
                 {
-                    SubTree.DeleteAll();
+                    SubTree.RemoveAll();
                     this.ActiveSize--;
                 }
 
@@ -441,7 +435,7 @@ namespace Mosa.Collections.Generic
             {
                 TraverseTreeMinToMax(Sorted, SubTree.Left);
 
-                for (uint counter = 0; counter < SubTree.Count; counter++)
+                for (uint counter = 0; counter < SubTree.CollisionCount; counter++)
                 {
                     Sorted.Add(SubTree.Data);
                 }
@@ -465,7 +459,7 @@ namespace Mosa.Collections.Generic
             {
                 TraverseTreeMaxToMin(Sorted, SubTree.Right);
 
-                for (uint counter = 0; counter < SubTree.Count; counter++)
+                for (uint counter = 0; counter < SubTree.CollisionCount; counter++)
                 {
                     Sorted.Add(SubTree.Data);
                 }
@@ -489,7 +483,7 @@ namespace Mosa.Collections.Generic
             {
                 ConvertTreeToDictionary(IndexAndCounts, SubTree.Left);
 
-                IndexAndCounts.Add(SubTree.Data, SubTree.Count);
+                IndexAndCounts.Add(SubTree.Data, SubTree.CollisionCount);
 
                 ConvertTreeToDictionary(IndexAndCounts, SubTree.Right);
             }

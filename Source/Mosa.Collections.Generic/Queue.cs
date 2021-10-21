@@ -35,23 +35,18 @@ namespace Mosa.Collections.Generic
 	// Queue<AnyType>
 
 	#region Queue<AnyType>
-	public class Queue<AnyType> : IEnumerable, IEnumerator where AnyType : IComparable
+	public class Queue<AnyType>: IEnumerable, IEnumerator where AnyType: IComparable
     {
         protected QueueNode<AnyType> FirstNode = null;
         protected QueueNode<AnyType> LastNode = null;
         protected QueueNode<AnyType> CurrentNode = null;
-        protected uint Size = 0;
-        protected QueueNode<AnyType> EnumNode = null;
+		protected QueueNode<AnyType> EnumNode = null;
+		public int Count { get; protected set; } = 0;
 
-        public Queue()
-        {
-            // Nothing to do here...
-        }
-
-        ~Queue()
-        {
-            DeleteAll();
-        }
+		public bool IsFixedSize => false;
+		public bool IsReadOnly => false;
+		public bool IsSynchronized => false;
+		public object SyncRoot => this;
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
@@ -82,19 +77,46 @@ namespace Mosa.Collections.Generic
             EnumNode = null;
         }
 
-        public uint GetSize
-        {
-            get { return Size; }
-        }
+		public Queue()
+		{
+			// Nothing to do here...
+		}
 
-        public bool IsEmpty
+		~Queue()
+		{
+			Clear();
+		}
+
+		public void Clear()
+		{
+			QueueNode<AnyType> NodePointer = FirstNode;
+			QueueNode<AnyType> BackupNode = null;
+
+			while (NodePointer != null && Count > 0)
+			{
+				BackupNode = NodePointer.Next;
+
+				NodePointer = null;
+
+				Count--;
+
+				NodePointer = BackupNode;
+			}
+
+			FirstNode = null;
+			LastNode = null;
+			CurrentNode = null;
+			Count = 0;
+		}
+
+		public bool IsEmpty
         {
-            get { return (FirstNode == null && LastNode == null && Size == 0); }
+            get { return (FirstNode == null && LastNode == null && Count == 0); }
         }
 
         public bool IsNotEmpty
         {
-            get { return (FirstNode != null && LastNode != null && Size > 0); }
+            get { return (FirstNode != null && LastNode != null && Count > 0); }
         }
 
         public QueueNode<AnyType> GetFirstNode
@@ -239,29 +261,7 @@ namespace Mosa.Collections.Generic
             return (FindFirst(Node) == null);
         }
 
-        public void DeleteAll()
-        {
-            QueueNode<AnyType> NodePointer = FirstNode;
-            QueueNode<AnyType> BackupNode = null;
-
-            while (NodePointer != null && Size > 0)
-            {
-                BackupNode = NodePointer.Next;
-
-                NodePointer = null;
-
-                Size--;
-
-                NodePointer = BackupNode;
-            }
-
-            FirstNode = null;
-            LastNode = null;
-            CurrentNode = null;
-            Size = 0;
-        }
-
-        public void DeleteAll(AnyType Data)
+        public void RemoveAll(AnyType Data)
         {
             QueueNode<AnyType> NodePointer = FirstNode;
             QueueNode<AnyType> BackupNode = null;
@@ -272,16 +272,16 @@ namespace Mosa.Collections.Generic
 
                 if (NodePointer.Data.CompareTo(Data) == 0)
                 {
-                    Delete(NodePointer);
+                    Remove(NodePointer);
 
-					Size--;
+					Count--;
                 }
 
                 NodePointer = BackupNode;
             }
         }
 
-		public bool DeleteFirst(AnyType Data)
+		public bool RemoveFirst(AnyType Data)
 		{
 			QueueNode<AnyType> NodePointer = FirstNode;
 
@@ -289,9 +289,9 @@ namespace Mosa.Collections.Generic
 			{
 				if (NodePointer.Data.CompareTo(Data) == 0)
 				{
-					Delete(NodePointer);
+					Remove(NodePointer);
 
-					Size--;
+					Count--;
 
 					return true;
 				}
@@ -302,7 +302,7 @@ namespace Mosa.Collections.Generic
 			return false;
 		}
 
-		public bool DeleteLast(AnyType Data)
+		public bool RemoveLast(AnyType Data)
 		{
 			QueueNode<AnyType> NodePointer = LastNode;
 
@@ -310,9 +310,9 @@ namespace Mosa.Collections.Generic
 			{
 				if (NodePointer.Data.CompareTo(Data) == 0)
 				{
-					Delete(NodePointer);
+					Remove(NodePointer);
 
-					Size--;
+					Count--;
 
 					return true;
 				}
@@ -323,7 +323,7 @@ namespace Mosa.Collections.Generic
 			return false;
 		}
 
-		public bool Delete(QueueNode<AnyType> Node)
+		public bool Remove(QueueNode<AnyType> Node)
         {
             if (Node == null)
             {
@@ -335,62 +335,62 @@ namespace Mosa.Collections.Generic
                 throw new CollectionsDataNotFoundException("Queue.cs", "Queue<AnyType>", "Delete", "Node", "Node cannot be found in this Queue!");
             }
 
-            if (Node.Prev == null && Node.Next == null && Size == 1)
+            if (Node.Prev == null && Node.Next == null && Count == 1)
             {
                 FirstNode = null;
                 LastNode = null;
 
                 Node = null;
 
-                Size--;
+                Count--;
 
                 return true;
             }
 
-            if (Node.Prev == null && Node.Next != null && Size > 1)
+            if (Node.Prev == null && Node.Next != null && Count > 1)
             {
                 FirstNode = Node.Next;
                 FirstNode.Prev = null;
 
                 Node = null;
 
-                Size--;
+                Count--;
 
                 return true;
             }
 
-            if (Node.Prev != null && Node.Next == null && Size > 1)
+            if (Node.Prev != null && Node.Next == null && Count > 1)
             {
                 LastNode = Node.Prev;
                 LastNode.Next = null;
 
                 Node = null;
 
-                Size--;
+                Count--;
 
                 return true;
             }
 
-            if (Node.Prev != null && Node.Next != null && Size > 2)
+            if (Node.Prev != null && Node.Next != null && Count > 2)
             {
                 Node.Prev.Next = Node.Next;
                 Node.Next.Prev = Node.Prev;
 
                 Node = null;
 
-                Size--;
+                Count--;
 
                 return true;
             }
 
             return false;
         }
-
+		
         public QueueNode<AnyType> Enqueue(AnyType Data)
         {
             QueueNode<AnyType> NewNode = new QueueNode<AnyType>(Data);
 
-            if (FirstNode == null && LastNode == null && Size == 0)
+            if (FirstNode == null && LastNode == null && Count == 0)
             {
                 NewNode.Prev = null;
                 NewNode.Next = null;
@@ -398,12 +398,12 @@ namespace Mosa.Collections.Generic
                 FirstNode = NewNode;
                 LastNode = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
 
-            if (FirstNode != null && LastNode != null && FirstNode == LastNode && Size == 1)
+            if (FirstNode != null && LastNode != null && FirstNode == LastNode && Count == 1)
             {
                 NewNode.Prev = LastNode;
                 NewNode.Next = null;
@@ -411,12 +411,12 @@ namespace Mosa.Collections.Generic
                 LastNode.Next = NewNode;
                 LastNode = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
 
-            if (FirstNode != null && LastNode != null && FirstNode != LastNode && Size > 1)
+            if (FirstNode != null && LastNode != null && FirstNode != LastNode && Count > 1)
             {
                 NewNode.Prev = LastNode;
                 NewNode.Next = null;
@@ -424,7 +424,7 @@ namespace Mosa.Collections.Generic
                 LastNode.Next = NewNode;
                 LastNode = NewNode;
 
-                Size++;
+                Count++;
 
                 return NewNode;
             }
@@ -434,24 +434,24 @@ namespace Mosa.Collections.Generic
 
         public AnyType Dequeue()
         {
-            if (FirstNode == null && LastNode == null && Size == 0)
+            if (FirstNode == null && LastNode == null && Count == 0)
             {
                 throw new CollectionsDataNotFoundException("Queue.cs", "Queue<AnyType>", "Dequeue", "", "Queue is empty! No data exists in Queue!");
             }
             
-            if (FirstNode != null && LastNode != null && FirstNode == LastNode && Size == 1)
+            if (FirstNode != null && LastNode != null && FirstNode == LastNode && Count == 1)
             {
                 AnyType Result = FirstNode.Data;
 
                 FirstNode = null;
                 LastNode = null;
 
-                Size--;
+                Count--;
 
                 return Result;
             }
 
-            if (FirstNode != null && LastNode != null && FirstNode != LastNode && Size > 1)
+            if (FirstNode != null && LastNode != null && FirstNode != LastNode && Count > 1)
             {
                 QueueNode<AnyType> BackupNode = FirstNode;
                 AnyType Result = FirstNode.Data;
@@ -461,7 +461,7 @@ namespace Mosa.Collections.Generic
 
                 BackupNode = null;
 
-                Size--;
+                Count--;
 
                 return Result;
             }
@@ -469,20 +469,92 @@ namespace Mosa.Collections.Generic
             throw new CollectionsUnknownErrorException("Queue.cs", "Queue<AnyType>", "Dequeue", "", "A Queue has either the size of 0, 1 or more than 1. This unknown exception should not execute!");
         }
 
-        public AnyType Peek()
+		public bool TryDequeue(out AnyType Item)
+		{
+			Item = default(AnyType);
+
+			if (FirstNode == null && LastNode == null && Count == 0)
+			{
+				return false;
+			}
+
+			if (FirstNode != null && LastNode != null && FirstNode == LastNode && Count == 1)
+			{
+				Item = FirstNode.Data;
+
+				FirstNode = null;
+				LastNode = null;
+
+				Count--;
+
+				return true;
+			}
+
+			if (FirstNode != null && LastNode != null && FirstNode != LastNode && Count > 1)
+			{
+				QueueNode<AnyType> BackupNode = FirstNode;
+				Item = FirstNode.Data;
+
+				FirstNode = FirstNode.Next;
+				FirstNode.Prev = null;
+
+				BackupNode = null;
+
+				Count--;
+
+				return true;
+			}
+
+			return false;
+		}
+
+		public AnyType Peek()
         {
-            if (FirstNode == null && LastNode == null && Size == 0)
+            if (FirstNode == null && LastNode == null && Count == 0)
             {
                 throw new CollectionsDataNotFoundException("Queue.cs", "Queue<AnyType>", "Peek", "", "Queue is empty! No data exists in Queue!");
             }
 
-            if (FirstNode != null && LastNode != null && Size > 0)
+            if (FirstNode != null && LastNode != null && Count > 0)
             {
                 return FirstNode.Data;
             }
 
             throw new CollectionsUnknownErrorException("Queue.cs", "Queue<AnyType>", "Peek", "", "A Queue has either the size of 0 or more than 0. This unknown exception should not execute!");
         }
+
+		public bool TryPeek(out AnyType Item)
+		{
+			Item = default(AnyType);
+
+			if (FirstNode == null && LastNode == null && Count == 0)
+			{
+				return false;
+			}
+
+			if (FirstNode != null && LastNode != null && Count > 0)
+			{
+				Item = FirstNode.Data;
+				return true;
+			}
+
+			return false;
+		}
+
+		public Queue<AnyType> Clone()
+		{
+			Queue<AnyType> Cloned = new Queue<AnyType>();
+			QueueNode<AnyType> NodePointer = FirstNode;
+
+			while (NodePointer != null)
+			{
+				Cloned.Enqueue(NodePointer.Data);
+
+				NodePointer = NodePointer.Next;
+			}
+
+			return Cloned;
+		}
 
         public void CloneFrom(Queue<AnyType> Source)
         {
@@ -491,7 +563,7 @@ namespace Mosa.Collections.Generic
                 throw new CollectionsDataNullException("Queue.cs", "Queue<AnyType>", "CloneFrom", "Source", "Source cannot be NULL!");
             }
 
-            DeleteAll();
+            Clear();
 
             QueueNode<AnyType> NodePointer = Source.FirstNode;
 
@@ -510,7 +582,7 @@ namespace Mosa.Collections.Generic
                 throw new CollectionsDataNullException("Queue.cs", "Queue<AnyType>", "CloneTo", "Destination", "Destination cannot be NULL!");
             }
 
-            Destination.DeleteAll();
+            Destination.Clear();
 
             QueueNode<AnyType> NodePointer = FirstNode;
 
@@ -555,6 +627,62 @@ namespace Mosa.Collections.Generic
                 NodePointer = NodePointer.Next;
             }
         }
-    }
+
+		public void SortWithBinarySearchTree()
+		{
+			BinarySearchTree<AnyType> BSTree = new BinarySearchTree<AnyType>();
+			QueueNode<AnyType> NodePointer = FirstNode;
+
+			while (NodePointer != null)
+			{
+				BSTree.Add(NodePointer.Data);
+
+				NodePointer = NodePointer.Next;
+			}
+
+			Clear();
+
+			foreach(AnyType ListItem in BSTree.TraverseMinToMax())
+			{
+				Enqueue(ListItem);
+			}
+
+			BSTree.Clear();
+			BSTree = null;
+		}
+
+		public AnyType[] ToArray()
+		{
+			AnyType[] ConvertedArray = new AnyType[Count];
+			QueueNode<AnyType> NodePointer = FirstNode;
+			int Counter = -1;
+
+			while (NodePointer != null)
+			{
+				Counter++;
+
+				ConvertedArray[Counter] = NodePointer.Data;
+
+				NodePointer = NodePointer.Next;
+			}
+
+			return ConvertedArray;
+		}
+
+		public Queue<AnyType> Reverse()
+		{
+			Queue<AnyType> Reversed = new Queue<AnyType>();
+			QueueNode<AnyType> NodePointer = LastNode;
+
+			while (NodePointer != null)
+			{
+				Reversed.Enqueue(NodePointer.Data);
+
+				NodePointer = NodePointer.Prev;
+			}
+
+			return Reversed;
+		}
+	}
     #endregion
 }

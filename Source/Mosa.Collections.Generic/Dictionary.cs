@@ -712,7 +712,7 @@ namespace Mosa.Collections.Generic
 
             CloneFrom(SortedDictionary);
 
-            BSTree.DeleteAll();
+            BSTree.Clear();
             BSTree = null;
 
             SortedDictionary.Clear();

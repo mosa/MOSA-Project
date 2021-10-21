@@ -118,46 +118,46 @@ namespace Mosa.Collections.Generic
             BTree.Add(1);
             Test.IsEqual(BTree.GetTotalSize, 4, "BinaryTree<uint>.GetTotalSize should be 4");
             Test.IsEqual(BTree.GetActiveSize, 4, "BinaryTree<uint>.GetActiveSize should be 4");
-            Test.IsEqual(BTree.Find(4).Count, 1, "BinaryTree<uint>.Find(4).Count should be 1");
-            Test.IsEqual(BTree.Find(3).Count, 3, "BinaryTree<uint>.Find(3).Count should be 3");
-            Test.IsEqual(BTree.Find(2).Count, 2, "BinaryTree<uint>.Find(2).Count should be 2");
-            Test.IsEqual(BTree.Find(1).Count, 1, "BinaryTree<uint>.Find(1).Count should be 1");
+            Test.IsEqual(BTree.Find(4).CollisionCount, 1, "BinaryTree<uint>.Find(4).Count should be 1");
+            Test.IsEqual(BTree.Find(3).CollisionCount, 3, "BinaryTree<uint>.Find(3).Count should be 3");
+            Test.IsEqual(BTree.Find(2).CollisionCount, 2, "BinaryTree<uint>.Find(2).Count should be 2");
+            Test.IsEqual(BTree.Find(1).CollisionCount, 1, "BinaryTree<uint>.Find(1).Count should be 1");
 
-            BTree.DeleteOne(4);
-            BTree.DeleteOne(3);
-            BTree.DeleteOne(2);
-            BTree.DeleteOne(1);
+            BTree.Remove(4);
+            BTree.Remove(3);
+            BTree.Remove(2);
+            BTree.Remove(1);
             Test.IsEqual(BTree.GetTotalSize, 4, "BinaryTree<uint>.GetTotalSize should be 4");
             Test.IsEqual(BTree.GetActiveSize, 2, "BinaryTree<uint>.GetActiveSize should be 2");
-            Test.IsEqual(BTree.Find(4).Count, 0, "BinaryTree<uint>.Find(4).Count should be 0");
-            Test.IsEqual(BTree.Find(3).Count, 2, "BinaryTree<uint>.Find(3).Count should be 2");
-            Test.IsEqual(BTree.Find(2).Count, 1, "BinaryTree<uint>.Find(2).Count should be 1");
-            Test.IsEqual(BTree.Find(1).Count, 0, "BinaryTree<uint>.Find(1).Count should be 0");
+            Test.IsEqual(BTree.Find(4).CollisionCount, 0, "BinaryTree<uint>.Find(4).Count should be 0");
+            Test.IsEqual(BTree.Find(3).CollisionCount, 2, "BinaryTree<uint>.Find(3).Count should be 2");
+            Test.IsEqual(BTree.Find(2).CollisionCount, 1, "BinaryTree<uint>.Find(2).Count should be 1");
+            Test.IsEqual(BTree.Find(1).CollisionCount, 0, "BinaryTree<uint>.Find(1).Count should be 0");
 
             BTree.Add(1);
             Test.IsEqual(BTree.GetTotalSize, 4, "BinaryTree<uint>.GetTotalSize should be 4");
             Test.IsEqual(BTree.GetActiveSize, 3, "BinaryTree<uint>.GetActiveSize should be 3");
-            Test.IsEqual(BTree.Find(4).Count, 0, "BinaryTree<uint>.Find(4).Count should be 0");
-            Test.IsEqual(BTree.Find(3).Count, 2, "BinaryTree<uint>.Find(3).Count should be 2");
-            Test.IsEqual(BTree.Find(2).Count, 1, "BinaryTree<uint>.Find(2).Count should be 1");
-            Test.IsEqual(BTree.Find(1).Count, 1, "BinaryTree<uint>.Find(1).Count should be 1");
+            Test.IsEqual(BTree.Find(4).CollisionCount, 0, "BinaryTree<uint>.Find(4).Count should be 0");
+            Test.IsEqual(BTree.Find(3).CollisionCount, 2, "BinaryTree<uint>.Find(3).Count should be 2");
+            Test.IsEqual(BTree.Find(2).CollisionCount, 1, "BinaryTree<uint>.Find(2).Count should be 1");
+            Test.IsEqual(BTree.Find(1).CollisionCount, 1, "BinaryTree<uint>.Find(1).Count should be 1");
 
-            BTree.DeleteAll(3);
+            BTree.RemoveAll(3);
             Test.IsEqual(BTree.GetTotalSize, 4, "BinaryTree<uint>.GetTotalSize should be 4");
             Test.IsEqual(BTree.GetActiveSize, 2, "BinaryTree<uint>.GetActiveSize should be 2");
-            Test.IsEqual(BTree.Find(4).Count, 0, "BinaryTree<uint>.Find(4).Count should be 0");
-            Test.IsEqual(BTree.Find(3).Count, 0, "BinaryTree<uint>.Find(3).Count should be 0");
-            Test.IsEqual(BTree.Find(2).Count, 1, "BinaryTree<uint>.Find(2).Count should be 1");
-            Test.IsEqual(BTree.Find(1).Count, 1, "BinaryTree<uint>.Find(1).Count should be 1");
+            Test.IsEqual(BTree.Find(4).CollisionCount, 0, "BinaryTree<uint>.Find(4).Count should be 0");
+            Test.IsEqual(BTree.Find(3).CollisionCount, 0, "BinaryTree<uint>.Find(3).Count should be 0");
+            Test.IsEqual(BTree.Find(2).CollisionCount, 1, "BinaryTree<uint>.Find(2).Count should be 1");
+            Test.IsEqual(BTree.Find(1).CollisionCount, 1, "BinaryTree<uint>.Find(1).Count should be 1");
 
             BTree.Add(5);
             Test.IsEqual(BTree.GetTotalSize, 5, "BinaryTree<uint>.GetTotalSize should be 5");
             Test.IsEqual(BTree.GetActiveSize, 3, "BinaryTree<uint>.GetActiveSize should be 3");
-            Test.IsEqual(BTree.Find(5).Count, 1, "BinaryTree<uint>.Find(5).Count should be 1");
-            Test.IsEqual(BTree.Find(4).Count, 0, "BinaryTree<uint>.Find(4).Count should be 0");
-            Test.IsEqual(BTree.Find(3).Count, 0, "BinaryTree<uint>.Find(3).Count should be 0");
-            Test.IsEqual(BTree.Find(2).Count, 1, "BinaryTree<uint>.Find(2).Count should be 1");
-            Test.IsEqual(BTree.Find(1).Count, 1, "BinaryTree<uint>.Find(1).Count should be 1");
+            Test.IsEqual(BTree.Find(5).CollisionCount, 1, "BinaryTree<uint>.Find(5).Count should be 1");
+            Test.IsEqual(BTree.Find(4).CollisionCount, 0, "BinaryTree<uint>.Find(4).Count should be 0");
+            Test.IsEqual(BTree.Find(3).CollisionCount, 0, "BinaryTree<uint>.Find(3).Count should be 0");
+            Test.IsEqual(BTree.Find(2).CollisionCount, 1, "BinaryTree<uint>.Find(2).Count should be 1");
+            Test.IsEqual(BTree.Find(1).CollisionCount, 1, "BinaryTree<uint>.Find(1).Count should be 1");
         }
 
         public static void BinaryTreeClass()
@@ -174,24 +174,24 @@ namespace Mosa.Collections.Generic
             BTree.Add(TClass3);
             Test.IsEqual(BTree.GetTotalSize, 3, "BinaryTree<TClass>.GetTotalSize should be 3");
             Test.IsEqual(BTree.GetActiveSize, 3, "BinaryTree<TClass>.GetActiveSize should be 3");
-            Test.IsEqual(BTree.Find(TClass1).Count, 1, "BinaryTree<TClass>.Find(TClass1).Count should be 1");
-            Test.IsEqual(BTree.Find(TClass2).Count, 1, "BinaryTree<uint>.Find(TClass2).Count should be 1");
-            Test.IsEqual(BTree.Find(TClass3).Count, 1, "BinaryTree<uint>.Find(TClass3).Count should be 1");
+            Test.IsEqual(BTree.Find(TClass1).CollisionCount, 1, "BinaryTree<TClass>.Find(TClass1).Count should be 1");
+            Test.IsEqual(BTree.Find(TClass2).CollisionCount, 1, "BinaryTree<uint>.Find(TClass2).Count should be 1");
+            Test.IsEqual(BTree.Find(TClass3).CollisionCount, 1, "BinaryTree<uint>.Find(TClass3).Count should be 1");
 
             BTree.Add(TClass1);
             BTree.Add(TClass3);
             Test.IsEqual(BTree.GetTotalSize, 3, "BinaryTree<TClass>.GetTotalSize should be 3");
             Test.IsEqual(BTree.GetActiveSize, 3, "BinaryTree<TClass>.GetActiveSize should be 3");
-            Test.IsEqual(BTree.Find(TClass1).Count, 2, "BinaryTree<TClass>.Find(TClass1).Count should be 2");
-            Test.IsEqual(BTree.Find(TClass2).Count, 1, "BinaryTree<uint>.Find(TClass2).Count should be 1");
-            Test.IsEqual(BTree.Find(TClass3).Count, 2, "BinaryTree<uint>.Find(TClass3).Count should be 2");
+            Test.IsEqual(BTree.Find(TClass1).CollisionCount, 2, "BinaryTree<TClass>.Find(TClass1).Count should be 2");
+            Test.IsEqual(BTree.Find(TClass2).CollisionCount, 1, "BinaryTree<uint>.Find(TClass2).Count should be 1");
+            Test.IsEqual(BTree.Find(TClass3).CollisionCount, 2, "BinaryTree<uint>.Find(TClass3).Count should be 2");
 
-            BTree.DeleteOne(TClass2);
+            BTree.Remove(TClass2);
             Test.IsEqual(BTree.GetTotalSize, 3, "BinaryTree<TClass>.GetTotalSize should be 3");
             Test.IsEqual(BTree.GetActiveSize, 2, "BinaryTree<TClass>.GetActiveSize should be 2");
-            Test.IsEqual(BTree.Find(TClass1).Count, 2, "BinaryTree<TClass>.Find(TClass1).Count should be 2");
-            Test.IsEqual(BTree.Find(TClass2).Count, 0, "BinaryTree<uint>.Find(TClass2).Count should be 0");
-            Test.IsEqual(BTree.Find(TClass3).Count, 2, "BinaryTree<uint>.Find(TClass3).Count should be 2");
+            Test.IsEqual(BTree.Find(TClass1).CollisionCount, 2, "BinaryTree<TClass>.Find(TClass1).Count should be 2");
+            Test.IsEqual(BTree.Find(TClass2).CollisionCount, 0, "BinaryTree<uint>.Find(TClass2).Count should be 0");
+            Test.IsEqual(BTree.Find(TClass3).CollisionCount, 2, "BinaryTree<uint>.Find(TClass3).Count should be 2");
         }
 
         public static void BitFlags()
@@ -520,7 +520,7 @@ namespace Mosa.Collections.Generic
             WaitingLine.Enqueue(31);
             WaitingLine.Enqueue(37);
 
-            Test.IsEqual(WaitingLine.GetSize, 13, "Queue<uint>.GetSize should be 13");
+            Test.IsEqual(WaitingLine.Count, 13, "Queue<uint>.Count should be 13");
             Test.IsEqual(WaitingLine.Dequeue(), 1, "Queue<uint>.Dequeue should be 1");
             Test.IsEqual(WaitingLine.Dequeue(), 2, "Queue<uint>.Dequeue should be 2");
             Test.IsEqual(WaitingLine.Dequeue(), 3, "Queue<uint>.Dequeue should be 3");
@@ -541,11 +541,11 @@ namespace Mosa.Collections.Generic
             WaitingLine.Enqueue(Class2);
             WaitingLine.Enqueue(Class3);
 
-            Test.IsEqual(WaitingLine.GetSize, 3, "Queue<TClass>.GetSize should be 3");
+            Test.IsEqual(WaitingLine.Count, 3, "Queue<TClass>.Count should be 3");
             Test.IsEqual(WaitingLine.Dequeue().Magic, 0xCAFEBABE, "Queue<TClass>.Dequeue should be 0xCAFEBABE");
             Test.IsEqual(WaitingLine.Dequeue().Magic, 0xDEADBEEF, "Queue<TClass>.Dequeue should be 0xDEADBEEF");
             Test.IsEqual(WaitingLine.Dequeue().Magic, 0xDEADCAFE, "Queue<TClass>.Dequeue should be 0xDEADCAFE");
-            Test.IsEqual(WaitingLine.GetSize, 0, "Queue<TClass>.GetSize should be 0");
+            Test.IsEqual(WaitingLine.Count, 0, "Queue<TClass>.Count should be 0");
 
             // Exception: Data not found
             try

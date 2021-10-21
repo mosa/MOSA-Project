@@ -879,7 +879,7 @@ namespace Mosa.Collections.Generic
 
             CloneFrom(BTree.TraverseMinToMax());
 
-            BTree.DeleteAll();
+            BTree.Clear();
             BTree = null;
         }
     }
