@@ -165,7 +165,12 @@ namespace Mosa.Collections.Generic
             }
         }
 
-        public QueueNode<AnyType> FindFirst(AnyType Data)
+		public QueueNode<AnyType> Find(AnyType Data)
+		{
+			return FindFirst(Data);
+		}
+
+		public QueueNode<AnyType> FindFirst(AnyType Data)
         {
             QueueNode<AnyType> NodePointer = FirstNode;
 
@@ -212,6 +217,11 @@ namespace Mosa.Collections.Generic
         {
             return (FindFirst(Data) == null);
         }
+
+		public QueueNode<AnyType> Find(QueueNode<AnyType> Node)
+		{
+			return FindFirst(Node);
+		}
 
         public QueueNode<AnyType> FindFirst(QueueNode<AnyType> Node)
         {
@@ -280,6 +290,11 @@ namespace Mosa.Collections.Generic
                 NodePointer = BackupNode;
             }
         }
+
+		public bool Remove(AnyType Data)
+		{
+			return RemoveFirst(Data);
+		}
 
 		public bool RemoveFirst(AnyType Data)
 		{
@@ -628,6 +643,39 @@ namespace Mosa.Collections.Generic
             }
         }
 
+		public Queue<AnyType> Reverse()
+		{
+			Queue<AnyType> Reversed = new Queue<AnyType>();
+			QueueNode<AnyType> NodePointer = LastNode;
+
+			while (NodePointer != null)
+			{
+				Reversed.Enqueue(NodePointer.Data);
+
+				NodePointer = NodePointer.Prev;
+			}
+
+			return Reversed;
+		}
+
+		public AnyType[] ToArray()
+		{
+			AnyType[] ConvertedArray = new AnyType[Count];
+			QueueNode<AnyType> NodePointer = FirstNode;
+			int Counter = -1;
+
+			while (NodePointer != null)
+			{
+				Counter++;
+
+				ConvertedArray[Counter] = NodePointer.Data;
+
+				NodePointer = NodePointer.Next;
+			}
+
+			return ConvertedArray;
+		}
+
 		public void SortWithBinarySearchTree()
 		{
 			BinarySearchTree<AnyType> BSTree = new BinarySearchTree<AnyType>();
@@ -649,39 +697,6 @@ namespace Mosa.Collections.Generic
 
 			BSTree.Clear();
 			BSTree = null;
-		}
-
-		public AnyType[] ToArray()
-		{
-			AnyType[] ConvertedArray = new AnyType[Count];
-			QueueNode<AnyType> NodePointer = FirstNode;
-			int Counter = -1;
-
-			while (NodePointer != null)
-			{
-				Counter++;
-
-				ConvertedArray[Counter] = NodePointer.Data;
-
-				NodePointer = NodePointer.Next;
-			}
-
-			return ConvertedArray;
-		}
-
-		public Queue<AnyType> Reverse()
-		{
-			Queue<AnyType> Reversed = new Queue<AnyType>();
-			QueueNode<AnyType> NodePointer = LastNode;
-
-			while (NodePointer != null)
-			{
-				Reversed.Enqueue(NodePointer.Data);
-
-				NodePointer = NodePointer.Prev;
-			}
-
-			return Reversed;
 		}
 	}
     #endregion

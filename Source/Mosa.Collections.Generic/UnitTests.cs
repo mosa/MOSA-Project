@@ -93,7 +93,7 @@ namespace Mosa.Collections.Generic
 
         public override int GetHashCode()
         {
-            return (int)this.ID ^ (int)this.Magic;
+            return (int)this.Magic;
         }
 
         public override string ToString()
@@ -463,7 +463,7 @@ namespace Mosa.Collections.Generic
             Calculator.Push(31);
             Calculator.Push(37);
 
-            Test.IsEqual(Calculator.GetSize, 13, "Stack<uint>.GetSize should be 13");
+            Test.IsEqual(Calculator.Count, 13, "Stack<uint>.Count should be 13");
             Test.IsEqual(Calculator.Pop(), 37, "Stack<uint>.Pop should be 37");
             Test.IsEqual(Calculator.Pop(), 31, "Stack<uint>.Pop should be 31");
             Test.IsEqual(Calculator.Pop(), 29, "Stack<uint>.Pop should be 29");
@@ -485,11 +485,11 @@ namespace Mosa.Collections.Generic
             Calculator.Push(Class2);
             Calculator.Push(Class1);
 
-            Test.IsEqual(Calculator.GetSize, 3, "Stack<TClass>.GetSize should be 3");
+            Test.IsEqual(Calculator.Count, 3, "Stack<TClass>.Count should be 3");
             Test.IsEqual(Calculator.Pop().Magic, 0xCAFEBABE, "Stack<TClass>.Pop().Magic should be 0xCAFEBABE");
             Test.IsEqual(Calculator.Pop().Magic, 0xDEADBEEF, "Stack<TClass>.Pop().Magic should be 0xDEADBEEF");
             Test.IsEqual(Calculator.Pop().Magic, 0xDEADCAFE, "Stack<TClass>.Pop().Magic should be 0xDEADCAFE");
-            Test.IsEqual(Calculator.GetSize, 0, "Stack<TClass>.GetSize should be 0");
+            Test.IsEqual(Calculator.Count, 0, "Stack<TClass>.Count should be 0");
 
             // Exception: Data not found
             try
