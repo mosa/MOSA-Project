@@ -17,9 +17,9 @@
 // https://sourceforge.net/p/vmware-svga/git/ci/master/tree/lib/refdriver/svga.c
 // https://github.com/prepare/vmware-svga
 
+using Mosa.DeviceSystem;
 using System;
 using System.Drawing;
-using Mosa.DeviceSystem;
 
 namespace Mosa.DeviceDriver.PCI.VMware
 {

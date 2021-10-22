@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceSystem.PCI;
 using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem

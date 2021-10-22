@@ -27,7 +27,7 @@ namespace Mosa.DeviceSystem
 			this.doubleBuffering = doubleBuffering;
 
 			if (doubleBuffering)
-				secondBuffer = new ConstrainedPointer(GC.AllocateObject(buffer.Size), buffer.Size);
+				secondBuffer = new ConstrainedPointer(GC.AllocateObject(buffer.Size), buffer.Size);  // HACK - FIX ME! This is not an object.
 		}
 
 		/// <summary>Gets the offset.s</summary>
@@ -75,11 +75,11 @@ namespace Mosa.DeviceSystem
 		public override void FillRectangle(uint color, uint x, uint y, uint w, uint h)
 		{
 			w = Math.Clamp(w, 0, width - x);
-            h = Math.Clamp(h, 0, height - y);
+			h = Math.Clamp(h, 0, height - y);
 
-            if (x < 0 || y < 0 || x >= width || y >= height)
-                return;
-			
+			if (x < 0 || y < 0 || x >= width || y >= height)
+				return;
+
 			uint startAddress = GetOffset(x, y);
 
 			if (doubleBuffering)

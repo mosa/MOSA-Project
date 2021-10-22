@@ -66,16 +66,12 @@ namespace Mosa.DeviceSystem
 		/// <param name="alpha">Draw the image with alpha (from the background color).</param>
 		public void DrawImage(Image image, uint x, uint y, bool alpha);
 
-		/* Functions from Cosmos (not all of them are currently there, TODO) */
-
 		/// <summary>Fills a circle with color.</summary>
 		/// <param name="color">The color.</param>
 		/// <param name="x">X of the top left of the circle.</param>
 		/// <param name="y">Y of the top left of the circle.</param>
 		/// <param name="r">Radius of the circle.</param>
 		public void FillCircle(uint color, uint x, uint y, uint r);
-
-        /* End functions from Cosmos */
 
 		/// <summary>If using double buffering, copies the second buffer to first buffer (screen).</summary>
 		public void SwapBuffers();

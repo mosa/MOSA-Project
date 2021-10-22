@@ -4,11 +4,9 @@ using Mosa.Demo.VBEWorld.x86.HAL;
 using Mosa.DeviceDriver;
 using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.PCI;
+using Mosa.FileSystem.FAT;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
-using Mosa.Runtime.x86;
-using Mosa.FileSystem.FAT;
 using System.Drawing;
 
 namespace Mosa.Demo.VBEWorld.x86
@@ -48,7 +46,7 @@ namespace Mosa.Demo.VBEWorld.x86
 
 			Serial.SetupPort(Serial.COM1);
 			IDT.SetInterruptHandler(ProcessInterrupt);
-			
+
 			hal = new Hardware();
 
 			// Create Service manager and basic services
@@ -111,7 +109,8 @@ namespace Mosa.Demo.VBEWorld.x86
 			{
 				Log("VBE setup OK!");
 				DoGraphics();
-			} else Log("VBE setup ERROR!");
+			}
+			else Log("VBE setup ERROR!");
 		}
 
 		private static void DoGraphics()

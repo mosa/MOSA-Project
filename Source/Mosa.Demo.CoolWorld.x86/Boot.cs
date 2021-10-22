@@ -8,10 +8,9 @@ using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
 using Mosa.FileSystem.FAT;
 using Mosa.Kernel.x86;
+using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
-using Mosa.Runtime;
-using System;
 
 namespace Mosa.Demo.CoolWorld.x86
 {
