@@ -32,16 +32,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.ConstantFolding
 			{
 				context.SetInstruction(IRInstruction.Jmp, target);
 
-				// rest of instructions in block are never used
-				context.GotoNext();
-				while (!context.IsBlockEndInstruction)
-				{
-					if (!context.IsEmptyOrNop)
-					{
-						context.SetNop();
-					}
-					context.GotoNext();
-				}
+				RemoveRestOfInstructions(context);
 			}
 
 			TransformContext.RemoveBlockFromPHIInstructions(block, target);

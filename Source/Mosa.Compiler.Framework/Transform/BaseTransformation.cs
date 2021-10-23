@@ -805,6 +805,23 @@ namespace Mosa.Compiler.Framework.Transform
 
 		#endregion Status Helpers
 
+		protected static void RemoveRestOfInstructions(Context context)
+		{
+			var block = context.Block;
+
+			context.GotoNext();
+
+			while (!context.IsBlockEndInstruction)
+			{
+				if (!context.IsEmptyOrNop)
+				{
+					context.SetNop();
+				}
+				context.GotoNext();
+			}
+
+		}
+
 		protected static InstructionNode GetPreviousNode(Context context)
 		{
 			var previous = context.Node.Previous;

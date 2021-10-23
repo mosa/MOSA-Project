@@ -215,6 +215,8 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			new Memory.DoubleLoadParamObject(),
 
 			//new Special.Phi32Conditional(),
+
+			new Rewrite.Branch32GreaterThanZero(),
 		};
 	}
 }
