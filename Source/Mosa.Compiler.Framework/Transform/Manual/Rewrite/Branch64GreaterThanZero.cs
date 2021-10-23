@@ -2,9 +2,9 @@
 
 namespace Mosa.Compiler.Framework.Transform.Manual.Rewrite
 {
-	public sealed class Branch32GreaterThanZero : BaseTransformation
+	public sealed class Branch64GreaterThanZero : BaseTransformation
 	{
-		public Branch32GreaterThanZero() : base(IRInstruction.Branch32)
+		public Branch64GreaterThanZero() : base(IRInstruction.Branch64)
 		{
 		}
 

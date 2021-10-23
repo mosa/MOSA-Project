@@ -2,15 +2,15 @@
 
 namespace Mosa.Compiler.Framework.Transform.Manual.Rewrite
 {
-	public sealed class Branch32GreaterThanZero : BaseTransformation
+	public sealed class Branch64LessThanZero : BaseTransformation
 	{
-		public Branch32GreaterThanZero() : base(IRInstruction.Branch32)
+		public Branch64LessThanZero() : base(IRInstruction.Branch64)
 		{
 		}
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{
-			if (context.ConditionCode != ConditionCode.UnsignedGreater)
+			if (context.ConditionCode != ConditionCode.UnsignedLess)
 				return false;
 
 			if (!IsZero(context.Operand2))
