@@ -52,6 +52,9 @@ namespace Mosa.Compiler.Framework
 		public static readonly BitValue I32_32 = new BitValue(32, true);
 		public static readonly BitValue I32_64 = new BitValue(32, false);
 
+		public static readonly BitValue I50_32 = new BitValue(50, true);
+		public static readonly BitValue I50_64 = new BitValue(50, false);
+
 		public static readonly BitValue I64_32 = new BitValue(64, true);
 		public static readonly BitValue I64_64 = new BitValue(64, false);
 
@@ -144,6 +147,13 @@ namespace Mosa.Compiler.Framework
 				bitsClear |= Upper32BitsSet;
 			}
 
+			var bitsUnknown = ~(bitsSet | bitsClear);
+			var minPossible = bitsSet | bitsUnknown;
+			var maxPossible = bitsSet & bitsUnknown;
+
+			//minValue = Math.Max(minValue, minPossible);
+			//maxValue = Math.Min(maxValue, maxPossible);
+
 			// if first n bits set, then min must be at least 2^n-1
 			var low = BitTwiddling.CountConsecutiveLowestSetBits(bitsSet);
 			var lowValue = (ulong)((1 << low) - 1);
@@ -191,6 +201,7 @@ namespace Mosa.Compiler.Framework
 					case 10: return I10_32;
 					case 16: return I16_32;
 					case 32: return I32_32;
+					case 50: return I50_32;
 					case 64: return I64_32;
 					case 256: return I256_32;
 					case 0xF: return xF32;
@@ -216,6 +227,7 @@ namespace Mosa.Compiler.Framework
 					case 10: return I10_64;
 					case 16: return I16_64;
 					case 32: return I32_64;
+					case 50: return I50_64;
 					case 64: return I64_64;
 					case 256: return I256_64;
 					case 0xF: return xF64;

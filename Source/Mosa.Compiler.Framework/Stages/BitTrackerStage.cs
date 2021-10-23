@@ -601,7 +601,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return true;
 					}
-					else if (value1.MaxPossible <= value2.MinPossible) 
+					else if (value1.MaxPossible <= value2.MinPossible)
 					{
 						return true;
 					}
@@ -837,7 +837,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!result.HasValue)
 				return BitValue.Any32;
 
-			return BitValue.CreateValue(result.Value ? 1u : 0u, false);
+			return BitValue.CreateValue(result.Value ? 1u : 0u, true);
 		}
 
 		private BitValue Compare64x32(InstructionNode node)
@@ -852,7 +852,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!result.HasValue)
 				return BitValue.Any64;
 
-			return BitValue.CreateValue(result.Value ? 1u : 0u, true);
+			return BitValue.CreateValue(result.Value ? 1u : 0u, false);
 		}
 
 		private BitValue GetHigh32(InstructionNode node)
