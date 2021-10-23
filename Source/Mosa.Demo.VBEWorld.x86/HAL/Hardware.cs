@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
 using Mosa.Kernel.x86;
 using Mosa.Runtime;
@@ -68,7 +67,6 @@ namespace Mosa.Demo.VBEWorld.x86.HAL
 		/// <param name="milliseconds">The milliseconds.</param>
 		public override void Sleep(uint milliseconds)
 		{
-			
 		}
 
 		/// <summary>

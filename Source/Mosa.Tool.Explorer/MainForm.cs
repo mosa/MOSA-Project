@@ -194,7 +194,11 @@ namespace Mosa.Tool.Explorer
 
 			if (sourcefiles != null && sourcefiles.Count >= 1)
 			{
-				UpdateSettings(Path.GetFullPath(sourcefiles[0]));
+				var filename = Path.GetFullPath(sourcefiles[0]);
+
+				openFileDialog.FileName = filename;
+
+				UpdateSettings(filename);
 
 				LoadAssembly();
 			}

@@ -3,8 +3,6 @@
 using Mosa.DeviceSystem;
 using Mosa.Runtime;
 using System.Runtime.InteropServices;
-using System;
-using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.DeviceDriver.ISA
 {
@@ -258,9 +256,10 @@ namespace Mosa.DeviceDriver.ISA
 			}
 			else
 			{*/
-				RSDT = (RSDT*)HAL.GetPhysicalMemory((Pointer)Descriptor->RsdtAddress, 0xFFFF).Address;
-				FADT = (FADT*)HAL.GetPhysicalMemory((Pointer)FindBySignature("FACP", false), 0xFFFF).Address;
-				MADT = (MADT*)HAL.GetPhysicalMemory((Pointer)FindBySignature("APIC", false), 0xFFFF).Address;
+			RSDT = (RSDT*)HAL.GetPhysicalMemory((Pointer)Descriptor->RsdtAddress, 0xFFFF).Address;
+			FADT = (FADT*)HAL.GetPhysicalMemory((Pointer)FindBySignature("FACP", false), 0xFFFF).Address;
+			MADT = (MADT*)HAL.GetPhysicalMemory((Pointer)FindBySignature("APIC", false), 0xFFFF).Address;
+
 			//}
 
 			if (FADT == null)
@@ -337,7 +336,7 @@ namespace Mosa.DeviceDriver.ISA
 						{
 							ResetAddress = HAL.GetWriteIOPort((ushort)FADT->ResetReg.Address);
 							ResetValue = FADT->ResetValue;
-							
+
 							if (Pointer.Size == 8) // 64-bit
 							{
 								has64BitPtr = true;

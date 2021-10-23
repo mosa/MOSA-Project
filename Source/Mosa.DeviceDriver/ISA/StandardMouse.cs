@@ -127,6 +127,7 @@ namespace Mosa.DeviceDriver.ISA
 				{
 					0x01 => 0,
 					0x02 => 1,
+
 					// TODO: Add scroll wheel
 					_ => byte.MaxValue,
 				};
@@ -202,6 +203,6 @@ namespace Mosa.DeviceDriver.ISA
 			return data.Read8();
 		}
 
-		#endregion
+		#endregion Private
 	}
 }
