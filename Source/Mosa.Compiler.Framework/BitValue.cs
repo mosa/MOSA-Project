@@ -231,8 +231,6 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			Debug.WriteLine($"Value: {value}");
-
 			return new BitValue(value, is32Bit);
 		}
 
