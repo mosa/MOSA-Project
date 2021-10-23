@@ -383,8 +383,6 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(!virtualRegister.IsFloatingPoint);
 			Debug.Assert(virtualRegister.Definitions.Count == 1);
 
-			var node = virtualRegister.Definitions[0];
-
 			ulong replaceValue;
 
 			if (value.AreAll64BitsKnown)
@@ -424,6 +422,7 @@ namespace Mosa.Compiler.Framework.Stages
 			foreach (var node2 in virtualRegister.Uses.ToArray())
 			{
 				trace?.Log($"BEFORE:\t{node2}");
+
 				for (int i = 0; i < node2.OperandCount; i++)
 				{
 					if (node2.GetOperand(i) == virtualRegister)
@@ -431,13 +430,16 @@ namespace Mosa.Compiler.Framework.Stages
 						node2.SetOperand(i, constantOperand);
 					}
 				}
+
 				trace?.Log($"AFTER: \t{node2}");
 				InstructionsUpdatedCount.Increment();
 			}
 
 			Debug.Assert(virtualRegister.Uses.Count == 0);
 
+			var node = virtualRegister.Definitions[0];
 			trace?.Log($"REMOVED:\t{node}");
+
 			node.SetNop();
 			trace?.Log();
 
@@ -542,6 +544,14 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return true;
 					}
+					else if (value1.MinPossible > value2.MaxPossible)
+					{
+						return true;
+					}
+					else if (value1.MaxPossible <= value2.MinPossible)
+					{
+						return false;
+					}
 					break;
 
 				case ConditionCode.UnsignedLess:
@@ -552,6 +562,14 @@ namespace Mosa.Compiler.Framework.Stages
 					else if (value1.AreAll64BitsKnown && value1.MaxValue == 0 && value2.BitsSet != 0)
 					{
 						return true;
+					}
+					else if (value1.MaxPossible < value2.MinPossible)
+					{
+						return true;
+					}
+					else if (value1.MinPossible >= value2.MaxPossible)
+					{
+						return false;
 					}
 					break;
 
@@ -564,6 +582,14 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return true;
 					}
+					else if (value1.MinPossible >= value2.MaxPossible)
+					{
+						return true;
+					}
+					else if (value1.MaxPossible < value2.MinPossible)
+					{
+						return false;
+					}
 					break;
 
 				case ConditionCode.UnsignedLessOrEqual:
@@ -575,6 +601,14 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return true;
 					}
+					else if (value1.MaxPossible <= value2.MinPossible) 
+					{
+						return true;
+					}
+					else if (value1.MinPossible > value2.MaxPossible)
+					{
+						return false;
+					}
 					break;
 
 				case ConditionCode.Greater:
@@ -582,6 +616,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return (long)value1.MaxValue > (long)value2.MaxValue;
 					}
+
 					break;
 
 				case ConditionCode.Less:

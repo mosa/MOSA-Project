@@ -95,15 +95,17 @@ namespace Mosa.Compiler.Framework
 		public bool AreLower8BitsKnown { get { return (BitsKnown & byte.MaxValue) == byte.MaxValue; } }
 		public bool AreUpper32BitsKnown { get { return (BitsKnown & Upper32BitsSet) == Upper32BitsSet; } }
 		public ulong BitsKnown { get { return BitsSet | BitsClear; } }
-
+		public ulong BitsUnknown { get { return ~BitsKnown; } }
 		public bool AreAnyBitsKnown { get { return BitsClear != 0 || BitsSet != 0; } }
-
 		public uint BitsClear32 { get { return (uint)BitsClear; } }
 		public uint BitsSet32 { get { return (uint)BitsSet; } }
 		public byte BitsClear8 { get { return (byte)BitsClear; } }
 		public byte BitsSet8 { get { return (byte)BitsSet; } }
 		public ushort BitsClear16 { get { return (ushort)BitsClear; } }
 		public ushort BitsSet16 { get { return (ushort)BitsSet; } }
+
+		public ulong MaxPossible { get { return BitsSet | BitsUnknown; } }
+		public ulong MinPossible { get { return BitsSet & BitsUnknown; } }
 
 		private BitValue(ulong value, bool is32Bit)
 		{
