@@ -148,26 +148,11 @@ namespace Mosa.Compiler.Framework
 			}
 
 			var bitsUnknown = ~(bitsSet | bitsClear);
-			var minPossible = bitsSet | bitsUnknown;
-			var maxPossible = bitsSet & bitsUnknown;
+			var maxPossible = bitsSet | bitsUnknown;
+			var minPossible = bitsSet & bitsUnknown;
 
-			//minValue = Math.Max(minValue, minPossible);
-			//maxValue = Math.Min(maxValue, maxPossible);
-
-			// if first n bits set, then min must be at least 2^n-1
-			var low = BitTwiddling.CountConsecutiveLowestSetBits(bitsSet);
-			var lowValue = (ulong)((1 << low) - 1);
-
-			if (lowValue > minValue)
-				minValue = Math.Max(minValue, lowValue);
-
-			var maxPossibility = (ulong.MaxValue & ~bitsClear) | bitsSet;
-
-			if (maxPossibility < maxValue)
-				maxValue = Math.Min(maxValue, maxPossibility);
-
-			// if last n bits set, the max must no greater than max = max & ( ~0 >> n )
-			//var high = BitTwiddling.CountConsecutiveHighestSetBits(bitsSet);
+			minValue = Math.Max(minValue, minPossible);
+			maxValue = Math.Min(maxValue, maxPossible);
 
 			if (maxValue == minValue)
 				return CreateValue(maxValue, is32Bit);
