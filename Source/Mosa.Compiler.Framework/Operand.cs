@@ -1072,7 +1072,7 @@ namespace Mosa.Compiler.Framework
 				}
 				else
 				{
-					sb.Append(" [{ShortenTypeName(Type.FullName)}]");
+					sb.Append($" [{ShortenTypeName(Type.FullName)}]");
 				}
 			}
 
