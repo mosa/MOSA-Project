@@ -201,7 +201,7 @@ namespace System.IO
 			catch (Exception e)
 			{
 				Position = initialPosition;
-				throw e;
+				throw new Exception(e.Message);
 			}
 		}
 

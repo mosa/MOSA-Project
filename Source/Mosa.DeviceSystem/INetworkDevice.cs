@@ -5,7 +5,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// Interface to a network device
 	/// </summary>
-	public unsafe interface INetworkDevice
+	public interface INetworkDevice
 	{
 		/// <summary>
 		/// Gets the MAC address.
@@ -18,6 +18,6 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="data">The data.</param>
 		/// <returns></returns>
-		void SendPacket(byte* data, ushort length);
+		void SendPacket(byte[] data);
 	}
 }
