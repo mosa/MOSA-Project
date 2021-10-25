@@ -210,16 +210,15 @@ namespace Mosa.DeviceDriver
 					Factory = delegate { return new PCIGenericHostBridgeController(); }
 				},
 
-				// TODO: Somehow add more DeviceIDs for this product family
 				/*new PCIDeviceDriverRegistryEntry()
 				{
-					Name = "Intel825XX",
+					Name = "Intel82540EM",
 					Platforms = PlatformArchitecture.X86AndX64,
 					BusType = DeviceBusType.PCI,
 					VendorID = 0x8086,
 					DeviceID = 0x100E,
 					PCIFields = PCIField.VendorID | PCIField.DeviceID,
-					Factory = delegate { return new Intel825XX(); }
+					Factory = delegate { return new Intel82540EM(); }
 				},*/
 
 				new PCIDeviceDriverRegistryEntry()
