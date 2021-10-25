@@ -44,7 +44,7 @@ namespace Mosa.Demo.CoolWorld.x86
 			Console.Color = ScreenColor.White;
 			Console.BackgroundColor = ScreenColor.Green;
 
-			Debug = ConsoleManager.Controller.Boot;
+			Debug = ConsoleManager.Controller.Debug;
 
 			Console.Write("                   MOSA OS Version 2.2 - Compiler Version 2.2");
 			FillLine();
@@ -244,8 +244,6 @@ namespace Mosa.Demo.CoolWorld.x86
 			}
 
 			var stdKeyboard = keyboards[0].DeviceDriver as IKeyboardDevice;
-
-			Debug = ConsoleManager.Controller.Debug;
 
 			// setup keymap
 			var keymap = new US();
