@@ -17,6 +17,7 @@
     <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
     <ProjectReference Include="..\Mosa.Runtime.x86\Mosa.Runtime.x86.csproj" />
     <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
+    <ProjectReference Include="..\Mosa.UnitTests.Mosa.Collections.Generic\Mosa.UnitTests.Mosa.Collections.Generic.csproj" />
     <ProjectReference Include="..\Mosa.UnitTests\Mosa.UnitTests.csproj" />
   </ItemGroup>
 </Project>

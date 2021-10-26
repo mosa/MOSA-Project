@@ -239,6 +239,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Collections.Generic", "Mosa.Collections.Generic\Mosa.Collections.Generic.csproj", "{479A1E0D-E2C4-4B27-8992-AA6CB546C778}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.UnitTests.Mosa.Collections.Generic", "Mosa.UnitTests.Mosa.Collections.Generic\Mosa.UnitTests.Mosa.Collections.Generic.csproj", "{99800620-9571-4F00-B0E1-2F141BD4485F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1297,6 +1299,24 @@ Global
 		{479A1E0D-E2C4-4B27-8992-AA6CB546C778}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{479A1E0D-E2C4-4B27-8992-AA6CB546C778}.Release|x86.ActiveCfg = Release|Any CPU
 		{479A1E0D-E2C4-4B27-8992-AA6CB546C778}.Release|x86.Build.0 = Release|Any CPU
+		{99800620-9571-4F00-B0E1-2F141BD4485F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99800620-9571-4F00-B0E1-2F141BD4485F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99800620-9571-4F00-B0E1-2F141BD4485F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{99800620-9571-4F00-B0E1-2F141BD4485F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{99800620-9571-4F00-B0E1-2F141BD4485F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{99800620-9571-4F00-B0E1-2F141BD4485F}.Debug|x86.Build.0 = Debug|Any CPU
+		{99800620-9571-4F00-B0E1-2F141BD4485F}.Description|Any CPU.ActiveCfg = Debug|Any CPU
+		{99800620-9571-4F00-B0E1-2F141BD4485F}.Description|Any CPU.Build.0 = Debug|Any CPU
+		{99800620-9571-4F00-B0E1-2F141BD4485F}.Description|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{99800620-9571-4F00-B0E1-2F141BD4485F}.Description|Mixed Platforms.Build.0 = Debug|Any CPU
+		{99800620-9571-4F00-B0E1-2F141BD4485F}.Description|x86.ActiveCfg = Debug|Any CPU
+		{99800620-9571-4F00-B0E1-2F141BD4485F}.Description|x86.Build.0 = Debug|Any CPU
+		{99800620-9571-4F00-B0E1-2F141BD4485F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99800620-9571-4F00-B0E1-2F141BD4485F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99800620-9571-4F00-B0E1-2F141BD4485F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{99800620-9571-4F00-B0E1-2F141BD4485F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{99800620-9571-4F00-B0E1-2F141BD4485F}.Release|x86.ActiveCfg = Release|Any CPU
+		{99800620-9571-4F00-B0E1-2F141BD4485F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1367,6 +1387,7 @@ Global
 		{455DE7A9-EEBF-4D04-A297-BC46A37E303C} = {D0A13A1A-5E3D-4D30-9A88-14C7A27ADDE1}
 		{5F4136A8-EB83-41BE-9D81-B16E723AAE29} = {3A538FDC-0226-4971-A3C0-31570CDA340D}
 		{479A1E0D-E2C4-4B27-8992-AA6CB546C778} = {3A1D736A-450F-47A4-B050-3CAF338AECFC}
+		{99800620-9571-4F00-B0E1-2F141BD4485F} = {88D3D1D0-85D2-4301-A9EA-3F964CB05415}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C22A5C94-6B05-4B1B-845A-A2EA7615E093}
