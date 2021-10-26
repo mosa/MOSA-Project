@@ -16,6 +16,9 @@ namespace Mosa.Compiler.Framework
 		public static readonly BitValue Any32 = new BitValue(0, Upper32BitsSet, uint.MaxValue, 0);
 		public static readonly BitValue Any64 = new BitValue(0, 0, ulong.MaxValue, 0);
 
+		public static readonly BitValue AnyExceptZero32 = new BitValue(0, Upper32BitsSet, uint.MaxValue, 1);
+		public static readonly BitValue AnyExceptZero64 = new BitValue(0, 0, ulong.MaxValue, 1);
+
 		public static readonly BitValue Zero32 = new BitValue(0, true);
 		public static readonly BitValue Zero64 = new BitValue(0, false);
 

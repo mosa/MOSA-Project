@@ -711,10 +711,17 @@ namespace Mosa.Tool.Explorer
 				NotifyEvent = NotifyEvent,
 				NotifyTraceLog = NotifyTraceLog,
 				NotifyMethodCompiled = NotifyMethodCompiled,
-				NotifyMethodInstructionTrace = NotifyMethodInstructionTrace
+				NotifyMethodInstructionTrace = NotifyMethodInstructionTrace,
+
+				GetMethodTraceLevel = GetMethodTraceLevel,
 			};
 
 			return compilerHooks;
+		}
+
+		public int? GetMethodTraceLevel(MosaMethod method)
+		{
+			return method == CurrentMethodSelected ? 10 : -1;
 		}
 
 		public NotifyTraceLogHandler NotifyMethodInstructionTrace(MosaMethod method)

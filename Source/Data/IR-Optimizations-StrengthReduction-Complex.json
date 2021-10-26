@@ -46,7 +46,6 @@
 			"Result": "(IR.And## a 1)",
 			"Variations": "Yes"
 		},
-
 		{
 			"FamilyName": "IR",
 			"Type": "StrengthReduction",

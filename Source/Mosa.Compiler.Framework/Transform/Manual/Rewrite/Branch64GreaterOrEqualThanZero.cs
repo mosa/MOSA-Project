@@ -22,12 +22,15 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Rewrite
 		public override void Transform(Context context, TransformContext transformContext)
 		{
 			var target = context.BranchTargets[0];
+			var block = context.Block;
+
+			var phiBlock = GetOtherBranchTarget(block, target);
 
 			context.SetInstruction(IRInstruction.Jmp, target);
 
 			RemoveRestOfInstructions(context);
 
-			TransformContext.RemoveBlockFromPHIInstructions(context.Block, target);
+			TransformContext.RemoveBlockFromPHIInstructions(block, phiBlock);
 		}
 	}
 }

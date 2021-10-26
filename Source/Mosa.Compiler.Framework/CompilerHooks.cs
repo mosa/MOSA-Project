@@ -28,6 +28,8 @@ namespace Mosa.Compiler.Framework
 
 		public delegate void ExtendMethodCompilerPipelineHandler(Pipeline<BaseMethodCompilerStage> pipeline);
 
+		public delegate int? GetMethodTraceLevelHandler(MosaMethod method);
+
 		#endregion Delegates definitions
 
 		public NotifyStatusHandler NotifyStatus;
@@ -47,5 +49,7 @@ namespace Mosa.Compiler.Framework
 		public ExtendCompilerPipelineHandler ExtendCompilerPipeline;
 
 		public ExtendMethodCompilerPipelineHandler ExtendMethodCompilerPipeline;
+
+		public GetMethodTraceLevelHandler GetMethodTraceLevel;
 	}
 }

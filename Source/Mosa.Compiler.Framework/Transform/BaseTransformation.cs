@@ -819,7 +819,6 @@ namespace Mosa.Compiler.Framework.Transform
 				}
 				context.GotoNext();
 			}
-
 		}
 
 		protected static InstructionNode GetPreviousNode(Context context)
@@ -1002,6 +1001,11 @@ namespace Mosa.Compiler.Framework.Transform
 				case ConditionCode.UnsignedLessOrEqual: return true;
 				default: return false;
 			}
+		}
+
+		protected static BasicBlock GetOtherBranchTarget(BasicBlock block, BasicBlock target)
+		{
+			return block.NextBlocks[0] == target ? block.NextBlocks[1] : block.NextBlocks[0];
 		}
 	}
 }

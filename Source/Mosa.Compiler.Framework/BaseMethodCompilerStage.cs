@@ -615,9 +615,9 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(block.PreviousBlocks.Count == 0);
 		}
 
-		public static void RemoveBlockFromPHIInstructions(BasicBlock removedBlock, BasicBlock next)
+		public static void RemoveBlockFromPHIInstructions(BasicBlock removedBlock, BasicBlock phiBlock)
 		{
-			for (var node = next.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+			for (var node = phiBlock.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
 				if (node.IsEmptyOrNop)
 					continue;
@@ -662,11 +662,11 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public static void UpdatePHIInstructionTarget(BasicBlock target, BasicBlock source, BasicBlock newSource)
+		public static void UpdatePHIInstructionTarget(BasicBlock phiBlock, BasicBlock source, BasicBlock newSource)
 		{
-			Debug.Assert(target.PreviousBlocks.Count > 0);
+			Debug.Assert(phiBlock.PreviousBlocks.Count > 0);
 
-			for (var node = target.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+			for (var node = phiBlock.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
 				if (node.IsEmptyOrNop)
 					continue;
@@ -777,7 +777,7 @@ namespace Mosa.Compiler.Framework
 
 		public TraceLog CreateTraceLog(string section, int traceLevel)
 		{
-			if (traceLevel >= 0 && !IsTraceable(traceLevel))
+			if (!IsTraceable(traceLevel))
 				return null;
 
 			var traceLog = new TraceLog(TraceType.MethodDebug, MethodCompiler.Method, FormattedStageName, section, MethodData.Version);
