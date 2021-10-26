@@ -34,9 +34,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private delegate (BitValue, BitValue) NodeVisitationDelegate2(InstructionNode node);
 
-		private readonly HashSet<BaseInstruction> IntegerLoads = new HashSet<BaseInstruction>();
-		private readonly HashSet<BaseInstruction> AnyValue = new HashSet<BaseInstruction>();
-
 		protected override void Finish()
 		{
 			trace = null;
@@ -157,37 +154,6 @@ namespace Mosa.Compiler.Framework.Stages
 			// SubCarryOut64
 			// SubCarryIn32
 			// SubCarryIn64
-
-			IntegerLoads.Add(IRInstruction.LoadParamSignExtend16x32);
-			IntegerLoads.Add(IRInstruction.LoadParamSignExtend16x64);
-			IntegerLoads.Add(IRInstruction.LoadParamSignExtend32x64);
-			IntegerLoads.Add(IRInstruction.LoadParamSignExtend8x32);
-			IntegerLoads.Add(IRInstruction.LoadParamSignExtend8x64);
-			IntegerLoads.Add(IRInstruction.LoadSignExtend16x32);
-			IntegerLoads.Add(IRInstruction.LoadSignExtend16x64);
-			IntegerLoads.Add(IRInstruction.LoadSignExtend32x64);
-			IntegerLoads.Add(IRInstruction.LoadSignExtend8x32);
-			IntegerLoads.Add(IRInstruction.LoadSignExtend8x64);
-			IntegerLoads.Add(IRInstruction.LoadZeroExtend8x32);
-			IntegerLoads.Add(IRInstruction.LoadZeroExtend16x32);
-			IntegerLoads.Add(IRInstruction.LoadZeroExtend8x64);
-			IntegerLoads.Add(IRInstruction.LoadZeroExtend16x64);
-			IntegerLoads.Add(IRInstruction.LoadZeroExtend32x64);
-			IntegerLoads.Add(IRInstruction.LoadParamZeroExtend8x32);
-			IntegerLoads.Add(IRInstruction.LoadParamZeroExtend16x32);
-			IntegerLoads.Add(IRInstruction.LoadParamZeroExtend8x64);
-			IntegerLoads.Add(IRInstruction.LoadParamZeroExtend16x64);
-			IntegerLoads.Add(IRInstruction.LoadParamZeroExtend32x64);
-			IntegerLoads.Add(IRInstruction.Load32);
-			IntegerLoads.Add(IRInstruction.Load64);
-			IntegerLoads.Add(IRInstruction.LoadParam32);
-			IntegerLoads.Add(IRInstruction.LoadParam64);
-
-			AnyValue.Add(IRInstruction.CallStatic);
-			AnyValue.Add(IRInstruction.CallDirect);
-			AnyValue.Add(IRInstruction.Call);
-			AnyValue.Add(IRInstruction.CallInterface);
-			AnyValue.Add(IRInstruction.CallVirtual);
 		}
 
 		private void Register(BaseInstruction instruction, NodeVisitationDelegate method)
@@ -247,7 +213,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (value == null)
 				{
-					valueTrace?.Log($"*** INDETERMINATE (NULL)");
+					valueTrace?.Log($"*** INDETERMINATE");
 					continue;
 				}
 
@@ -261,125 +227,91 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
+		private void EvaluateVirtualRegisters()
+		{
+			foreach (var register in MethodCompiler.VirtualRegisters)
+			{
+				register.BitValue = null;
+			}
+
+			bool change = true;
+
+			while (change)
+			{
+				change = false;
+
+				foreach (var register in MethodCompiler.VirtualRegisters)
+				{
+					change |= Evaluate(register);
+				}
+			}
+		}
+
 		private bool Evaluate(Operand virtualRegister)
 		{
 			// already evaluated
 			if (virtualRegister.BitValue != null)
 				return false;
 
-			if (virtualRegister.IsFloatingPoint || virtualRegister.Definitions.Count != 1)
-			{
-				if (virtualRegister.IsInteger)
-				{
-					virtualRegister.BitValue = virtualRegister.IsInteger64 ? BitValue.Any64 : BitValue.Any32;
-					return true;
-				}
+			if (virtualRegister.IsFloatingPoint || !virtualRegister.IsInteger)
+				return false;
 
-				virtualRegister.BitValue = BitValue.Any64;
+			if (virtualRegister.Definitions.Count != 1)
+			{
+				virtualRegister.BitValue = virtualRegister.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
 				return true;
 			}
 
 			var node = virtualRegister.Definitions[0];
 
+			if (node.ResultCount == 0)
+				return false;
+
 			if (!node.Result.IsInteger)
 			{
-				virtualRegister.BitValue = BitValue.Any64;
+				virtualRegister.BitValue = virtualRegister.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
 				return true;
 			}
 
-			var anyLoad = AnyValue.Contains(node.Instruction);
+			if (node.Instruction.FlowControl == FlowControl.Call)
+			{
+				virtualRegister.BitValue = virtualRegister.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
+				return true;
+			}
 
-			var integerLoad = !anyLoad && IntegerLoads.Contains(node.Instruction);
+			var method = visitation[node.Instruction.ID];
 
-			if (!integerLoad && !anyLoad)
+			if (method == null)
+			{
+				virtualRegister.BitValue = virtualRegister.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
+				return true;
+			}
+
+			if (!node.Instruction.IsMemoryRead)
 			{
 				// check dependencies
 				foreach (var operand in node.Operands)
 				{
-					if (operand.IsVirtualRegister)
-					{
-						if (operand.BitValue != null)
-							continue;
-
-						return false; // can not evaluate yet
-					}
-
-					if (operand.IsResolvedConstant && operand.IsInteger)
+					if (!operand.IsVirtualRegister)
 						continue;
 
-					// everything else we assume is indeterminate
-					virtualRegister.BitValue = BitValue.Any64;
+					if (!operand.IsInteger)
+						continue;
 
-					return true;
+					if (operand.BitValue == null)
+						return false; // can not evaluate yet
 				}
 			}
 
-			if (node.ResultCount == 1)
-			{
-				var method = visitation[node.Instruction.ID];
+			var value = method.Invoke(node);
+			virtualRegister.BitValue = value;
 
-				if (method != null)
-				{
-					var value = method.Invoke(node);
-					virtualRegister.BitValue = value;
-
-					UpdateInstruction(node.Result, value);
-
-					return true;
-				}
-			}
-			else if (node.ResultCount == 2)
-			{
-				// TODO: This is a little more complicated
-			}
-
-			virtualRegister.BitValue = virtualRegister.IsInteger64 ? BitValue.Any64 : BitValue.Any32;
-
+			UpdateInstruction(node.Result, value);
 			return true;
-		}
-
-		private void EvaluateVirtualRegisters()
-		{
-			int count = MethodCompiler.VirtualRegisters.Count;
-			int evaluated = 0;
-			var virtualRegisters = MethodCompiler.VirtualRegisters;
-
-			while (evaluated != count)
-			{
-				int startedAt = evaluated;
-
-				for (int i = 0; i < count; i++)
-				{
-					var virtualRegister = virtualRegisters[i];
-
-					if (Evaluate(virtualRegister))
-					{
-						evaluated++;
-
-						if (evaluated == count)
-							return;
-					}
-				}
-
-				// cycle detected - exit
-				if (startedAt == evaluated)
-				{
-					for (int index = 0; index < count; index++)
-					{
-						if (virtualRegisters[index].BitValue == null)
-						{
-							virtualRegisters[index].BitValue = MethodCompiler.VirtualRegisters[index].IsInteger64 ? BitValue.Any64 : BitValue.Any32;
-						}
-					}
-
-					return;
-				}
-			}
 		}
 
 		private void UpdateInstruction(Operand virtualRegister, BitValue value)
 		{
-			//Debug.Assert(!value.IsIndeterminate);
 			Debug.Assert(!virtualRegister.IsFloatingPoint);
 			Debug.Assert(virtualRegister.Definitions.Count == 1);
 
@@ -479,9 +411,7 @@ namespace Mosa.Compiler.Framework.Stages
 				BranchesRemovedCount.Increment();
 
 				if (!result.Value)
-				{
 					continue;
-				}
 
 				while (node.IsEmptyOrNop)
 				{
@@ -494,7 +424,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private bool? EvaluateCompare(InstructionNode node)
+		private static bool? EvaluateCompare(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -659,7 +589,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#region IR Instructions
 
-		private BitValue Add32(InstructionNode node)
+		private static BitValue Add32(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -689,7 +619,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue Add64(InstructionNode node)
+		private static BitValue Add64(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -719,7 +649,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue AddCarryIn32(InstructionNode node)
+		private static BitValue AddCarryIn32(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -750,7 +680,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue ArithShiftRight32(InstructionNode node)
+		private static BitValue ArithShiftRight32(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -790,7 +720,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.Any32;
 		}
 
-		private BitValue ArithShiftRight64(InstructionNode node)
+		private static BitValue ArithShiftRight64(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -830,7 +760,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.Any64;
 		}
 
-		private BitValue Compare32x32(InstructionNode node)
+		private static BitValue Compare32x32(InstructionNode node)
 		{
 			var result = EvaluateCompare(node);
 
@@ -840,12 +770,12 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.CreateValue(result.Value ? 1u : 0u, true);
 		}
 
-		private BitValue Compare64x32(InstructionNode node)
+		private static BitValue Compare64x32(InstructionNode node)
 		{
 			return Compare64x64(node);
 		}
 
-		private BitValue Compare64x64(InstructionNode node)
+		private static BitValue Compare64x64(InstructionNode node)
 		{
 			var result = EvaluateCompare(node);
 
@@ -855,7 +785,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.CreateValue(result.Value ? 1u : 0u, false);
 		}
 
-		private BitValue GetHigh32(InstructionNode node)
+		private static BitValue GetHigh32(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 
@@ -879,7 +809,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue GetLow32(InstructionNode node)
+		private static BitValue GetLow32(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 
@@ -898,7 +828,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue LoadParamZeroExtend16x32(InstructionNode node)
+		private static BitValue LoadParamZeroExtend16x32(InstructionNode node)
 		{
 			return BitValue.CreateValue(
 				bitsSet: 0,
@@ -910,7 +840,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue LoadParamZeroExtend16x64(InstructionNode node)
+		private static BitValue LoadParamZeroExtend16x64(InstructionNode node)
 		{
 			return BitValue.CreateValue(
 				bitsSet: 0,
@@ -922,7 +852,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue LoadParamZeroExtend8x32(InstructionNode node)
+		private static BitValue LoadParamZeroExtend8x32(InstructionNode node)
 		{
 			return BitValue.CreateValue(
 				bitsSet: 0,
@@ -934,7 +864,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue LoadParamZeroExtend8x64(InstructionNode node)
+		private static BitValue LoadParamZeroExtend8x64(InstructionNode node)
 		{
 			return BitValue.CreateValue(
 				bitsSet: 0,
@@ -946,7 +876,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue LoadParamZeroExtend32x64(InstructionNode node)
+		private static BitValue LoadParamZeroExtend32x64(InstructionNode node)
 		{
 			return BitValue.CreateValue(
 				bitsSet: 0,
@@ -958,7 +888,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue LoadZeroExtend16x32(InstructionNode node)
+		private static BitValue LoadZeroExtend16x32(InstructionNode node)
 		{
 			return BitValue.CreateValue(
 				bitsSet: 0,
@@ -970,7 +900,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue LoadZeroExtend16x64(InstructionNode node)
+		private static BitValue LoadZeroExtend16x64(InstructionNode node)
 		{
 			return BitValue.CreateValue(
 				bitsSet: 0,
@@ -982,7 +912,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue LoadZeroExtend8x32(InstructionNode node)
+		private static BitValue LoadZeroExtend8x32(InstructionNode node)
 		{
 			return BitValue.CreateValue(
 				bitsSet: 0,
@@ -994,7 +924,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue LoadZeroExtend8x64(InstructionNode node)
+		private static BitValue LoadZeroExtend8x64(InstructionNode node)
 		{
 			return BitValue.CreateValue(
 				bitsSet: 0,
@@ -1006,7 +936,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue LoadZeroExtend32x64(InstructionNode node)
+		private static BitValue LoadZeroExtend32x64(InstructionNode node)
 		{
 			return BitValue.CreateValue(
 				bitsSet: 0,
@@ -1018,7 +948,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue And32(InstructionNode node)
+		private static BitValue And32(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -1043,7 +973,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue And64(InstructionNode node)
+		private static BitValue And64(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -1068,7 +998,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue Not32(InstructionNode node)
+		private static BitValue Not32(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 
@@ -1088,7 +1018,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue Not64(InstructionNode node)
+		private static BitValue Not64(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 
@@ -1108,7 +1038,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue Or32(InstructionNode node)
+		private static BitValue Or32(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -1133,7 +1063,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue Or64(InstructionNode node)
+		private static BitValue Or64(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -1158,7 +1088,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue Xor32(InstructionNode node)
+		private static BitValue Xor32(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -1180,7 +1110,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue Xor64(InstructionNode node)
+		private static BitValue Xor64(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -1202,7 +1132,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue MoveInt32(InstructionNode node)
+		private static BitValue MoveInt32(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 
@@ -1214,14 +1144,14 @@ namespace Mosa.Compiler.Framework.Stages
 			return value1;
 		}
 
-		private BitValue MoveInt64(InstructionNode node)
+		private static BitValue MoveInt64(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 
 			return value1;
 		}
 
-		private BitValue MulSigned32(InstructionNode node)
+		private static BitValue MulSigned32(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -1276,7 +1206,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.Any32;
 		}
 
-		private BitValue MulSigned64(InstructionNode node)
+		private static BitValue MulSigned64(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -1331,7 +1261,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.Any64;
 		}
 
-		private BitValue MulUnsigned32(InstructionNode node)
+		private static BitValue MulUnsigned32(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -1373,7 +1303,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue MulUnsigned64(InstructionNode node)
+		private static BitValue MulUnsigned64(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -1415,7 +1345,7 @@ namespace Mosa.Compiler.Framework.Stages
 		);
 		}
 
-		private BitValue Phi32(InstructionNode node)
+		private static BitValue Phi32(InstructionNode node)
 		{
 			Debug.Assert(node.OperandCount != 0);
 
@@ -1447,7 +1377,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue Phi64(InstructionNode node)
+		private static BitValue Phi64(InstructionNode node)
 		{
 			Debug.Assert(node.OperandCount != 0);
 
@@ -1479,7 +1409,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue RemUnsigned32(InstructionNode node)
+		private static BitValue RemUnsigned32(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -1515,7 +1445,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.Any32;
 		}
 
-		private BitValue RemUnsigned64(InstructionNode node)
+		private static BitValue RemUnsigned64(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -1551,7 +1481,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.Any64;
 		}
 
-		private BitValue ShiftLeft32(InstructionNode node)
+		private static BitValue ShiftLeft32(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -1590,7 +1520,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.Any32;
 		}
 
-		private BitValue ShiftLeft64(InstructionNode node)
+		private static BitValue ShiftLeft64(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -1641,7 +1571,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.Any64;
 		}
 
-		private BitValue ShiftRight32(InstructionNode node)
+		private static BitValue ShiftRight32(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -1694,7 +1624,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.Any32;
 		}
 
-		private BitValue ShiftRight64(InstructionNode node)
+		private static BitValue ShiftRight64(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -1759,7 +1689,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.Any64;
 		}
 
-		private BitValue SignExtend16x32(InstructionNode node)
+		private static BitValue SignExtend16x32(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 
@@ -1794,7 +1724,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue SignExtend16x64(InstructionNode node)
+		private static BitValue SignExtend16x64(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 
@@ -1829,7 +1759,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue SignExtend32x64(InstructionNode node)
+		private static BitValue SignExtend32x64(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 
@@ -1864,7 +1794,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue SignExtend8x32(InstructionNode node)
+		private static BitValue SignExtend8x32(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 
@@ -1899,7 +1829,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue SignExtend8x64(InstructionNode node)
+		private static BitValue SignExtend8x64(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 
@@ -1934,7 +1864,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue To64(InstructionNode node)
+		private static BitValue To64(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
@@ -1954,7 +1884,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue Truncate64x32(InstructionNode node)
+		private static BitValue Truncate64x32(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 
@@ -1968,7 +1898,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue ZeroExtend16x32(InstructionNode node)
+		private static BitValue ZeroExtend16x32(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 
@@ -1987,12 +1917,12 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue ZeroExtend16x64(InstructionNode node)
+		private static BitValue ZeroExtend16x64(InstructionNode node)
 		{
 			return ZeroExtend16x32(node);
 		}
 
-		private BitValue ZeroExtend32x64(InstructionNode node)
+		private static BitValue ZeroExtend32x64(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 
@@ -2011,7 +1941,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue ZeroExtend8x32(InstructionNode node)
+		private static BitValue ZeroExtend8x32(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand1);
 
@@ -2030,12 +1960,12 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue ZeroExtend8x64(InstructionNode node)
+		private static BitValue ZeroExtend8x64(InstructionNode node)
 		{
 			return ZeroExtend8x32(node);
 		}
 
-		private BitValue IfThenElse32(InstructionNode node)
+		private static BitValue IfThenElse32(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand2);
 			var value2 = GetValue(node.Operand3);
@@ -2055,7 +1985,7 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.Any32;
 		}
 
-		private BitValue IfThenElse64(InstructionNode node)
+		private static BitValue IfThenElse64(InstructionNode node)
 		{
 			var value1 = GetValue(node.Operand2);
 			var value2 = GetValue(node.Operand3);

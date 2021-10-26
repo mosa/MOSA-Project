@@ -28,15 +28,18 @@ namespace Mosa.Compiler.Framework.Transform.Manual.ConstantFolding
 			{
 				context.SetNop();
 
+				TransformContext.RemoveBlockFromPHIInstructions(block, target);
 			}
 			else
 			{
+				var phiBlock = GetOtherBranchTarget(block, target);
+
 				context.SetInstruction(IRInstruction.Jmp, target);
 
 				RemoveRestOfInstructions(context);
-			}
 
-			TransformContext.RemoveBlockFromPHIInstructions(block, target);
+				TransformContext.RemoveBlockFromPHIInstructions(block, phiBlock);
+			}
 		}
 	}
 }
