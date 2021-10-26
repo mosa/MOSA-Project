@@ -295,7 +295,8 @@ namespace Mosa.Compiler.Framework
 			EvaluateParameterOperands();
 
 			MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.Ticks", (int)Stopwatch.ElapsedTicks);
-			MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.MicroSeconds", (int)Stopwatch.ElapsedMicroSeconds());		}
+			MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.MicroSeconds", (int)Stopwatch.ElapsedMicroSeconds());
+		}
 
 		#endregion Construction
 
@@ -422,6 +423,7 @@ namespace Mosa.Compiler.Framework
 			var executionTimes = new long[Pipeline.Count];
 
 			var startTick = Stopwatch.ElapsedTicks;
+			var startMS = Stopwatch.ElapsedMilliseconds;
 
 			for (int i = 0; i < Pipeline.Count; i++)
 			{
@@ -441,11 +443,14 @@ namespace Mosa.Compiler.Framework
 			if (Statistics)
 			{
 				var lastTick = Stopwatch.ElapsedTicks;
+				var lastMS = Stopwatch.ElapsedMilliseconds;
 
 				MethodData.ElapsedTicks = lastTick;
 
 				MethodData.Counters.NewCountSkipLock("ExecutionTime.StageStart.Ticks", (int)startTick);
+				MethodData.Counters.NewCountSkipLock("ExecutionTime.StageStart.Milliseconds", (int)startMS);
 				MethodData.Counters.NewCountSkipLock("ExecutionTime.Total.Ticks", (int)lastTick);
+				MethodData.Counters.NewCountSkipLock("ExecutionTime.Total.Milliseconds", (int)lastMS);
 
 				var executionTimeLog = new TraceLog(TraceType.MethodDebug, Method, "Execution Time/Ticks", MethodData.Version);
 
@@ -468,7 +473,8 @@ namespace Mosa.Compiler.Framework
 					MethodData.Counters.NewCountSkipLock($"ExecutionTime.{i:00}.{Pipeline[i].Name}.Ticks", (int)ticks);
 				}
 
-				executionTimeLog.Log($"{"****Total Time".PadRight(57)}({lastTick})");
+				executionTimeLog.Log($"{"****Total Time".PadRight(57)}({lastTick} Ticks)");
+				executionTimeLog.Log($"{"****Total Time".PadRight(57)}({lastMS} Milliseconds)");
 
 				PostTraceLog(executionTimeLog);
 			}
