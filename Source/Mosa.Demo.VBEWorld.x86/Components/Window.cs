@@ -70,13 +70,13 @@ namespace Mosa.Demo.VBEWorld.x86.Components
 				CloseBtn.Draw();
 				CloseBtn.Update();
 
-				if (WindowManager.IsWindowMoving && WindowManager.ActiveWindow != null && WindowManager.ActiveWindow != this)
+				if (WindowManager.IsWindowMoving && WindowManager.ActiveWindow != this)
 					return;
 
-				if (!Held && !WindowManager.IsWindowMoving && Mouse.State == 0 && IsInBounds())
+				if (!Held && Mouse.State == 0 && IsInBounds())
 				{
 					// Prevent inactive window from getting active if active window is overlapping that window
-					if (WindowManager.ActiveWindow != null && WindowManager.ActiveWindow != this && IsTitlebarColliding())
+					if (WindowManager.ActiveWindow != this && IsTitlebarColliding())
 						return;
 
 					Held = true;
@@ -87,13 +87,6 @@ namespace Mosa.Demo.VBEWorld.x86.Components
 
 					WindowManager.ActiveWindow = this;
 				}
-
-				// Performance optimization
-				/*Opened = WindowManager.ActiveWindow != null &&
-					WindowManager.ActiveWindow != this &&
-					WindowManager.ActiveWindow.X == X && WindowManager.ActiveWindow.Y == Y &&
-					WindowManager.ActiveWindow.Width >= Width && WindowManager.ActiveWindow.Height >= Height &&
-					WindowManager.ActiveWindow.TitlebarHeight >= TitlebarHeight;*/
 
 				if (Held)
 				{

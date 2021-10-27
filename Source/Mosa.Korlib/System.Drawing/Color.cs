@@ -264,7 +264,7 @@ namespace System.Drawing
         /// <summary>
 		/// Converts the Color class to an ARGB color code
 		/// </summary>
-		/// <param name="r">The A color.</param>
+		/// <param name="a">The A color.</param>
 		/// <param name="r">The R color.</param>
 		/// <param name="g">The G color.</param>
 		/// <param name="b">The B color.</param>

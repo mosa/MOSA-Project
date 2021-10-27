@@ -76,13 +76,11 @@ namespace Mosa.Demo.VBEWorld.x86
 		{
 			// Logic to make the active window draw on top of all the other windows
 			foreach (Window w in Windows)
-			{
 				if (ActiveWindow != null && w != ActiveWindow)
 				{
 					w.Draw();
 					w.Update();
 				}
-			}
 
 			if (ActiveWindow != null)
 			{
