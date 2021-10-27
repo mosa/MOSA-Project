@@ -68,7 +68,7 @@ namespace Mosa.Demo.VBEWorld.x86
 				}
 			}
 
-			if (Windows.Count > 1)
+			if (Windows.Count >= 1)
 				ActiveWindow = Windows[Windows.Count - 1];
 		}
 
