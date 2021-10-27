@@ -64,14 +64,6 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public abstract uint GetPixel(uint x, uint y);
 
-		/// <summary>Fills a rectangle with color.</summary>
-		/// <param name="color">The color.</param>
-		/// <param name="x">X of the top left of the rectangle.</param>
-		/// <param name="y">Y of the top left of the rectangle.</param>
-		/// <param name="w">Width of the rectangle.</param>
-		/// <param name="h">Width of the rectangle.</param>
-		public abstract void FillRectangle(uint color, uint x, uint y, uint w, uint h);
-
 		/// <summary>Draws a rectangle with color.</summary>
 		/// <param name="color">The color.</param>
 		/// <param name="x">X of the top left of the rectangle.</param>
@@ -123,8 +115,12 @@ namespace Mosa.DeviceSystem
 
 			for (uint h = 0; h < he; h++)
 				for (uint w = 0; w < wi; w++)
-					if (image.RawData.Load32((uint)(wi * h + w)) != transparentColor)
-						SetPixel(image.RawData.Load32((uint)(wi * h + w)), x + w, y + h);
+				{
+					uint col = image.RawData.Load32((uint)(wi * h + w));
+
+					if (col != transparentColor)
+						SetPixel(col, x + w, y + h);
+				}
 		}
 
 		/// <summary>Draws an image with alpha or not.</summary>
@@ -134,29 +130,50 @@ namespace Mosa.DeviceSystem
 		/// <param name="alpha">Draw the image with alpha (from the background color).</param>
 		public void DrawImage(Image image, uint x, uint y, bool alpha)
 		{
-			long wi = Math.Clamp(image.Width, 0, width - x);
-			long he = Math.Clamp(image.Height, 0, height - y);
+			int wb = image.Width * image.Bpp;
+			uint count = (uint)Math.Clamp(wb, 0, (width - x) * image.Bpp);
 
-			if (x < 0 || y < 0 || x >= width || y >= height)
+			for (int h = 0; h < Math.Clamp(image.Height, 0, height - y); h++)
+				Internal.MemoryCopy(
+					(doubleBuffering ? secondBuffer : firstBuffer).Address + ((width * (y + h) + x) * bytesPerPixel),
+					image.RawData + (wb * h),
+					count);
+		}
+
+		/// <summary>Fills a rectangle with color.</summary>
+		/// <param name="color">The color.</param>
+		/// <param name="x">X of the top left of the rectangle.</param>
+		/// <param name="y">Y of the top left of the rectangle.</param>
+		/// <param name="w">Width of the rectangle.</param>
+		/// <param name="h">Width of the rectangle.</param>
+		public void FillRectangle(uint color, uint x, uint y, uint w, uint h)
+		{
+			w = Math.Clamp(w, 0, width - x);
+			h = Math.Clamp(h, 0, height - y);
+
+			// TODO: Also clamp X and Y
+
+			if (x >= width || y >= height)
 				return;
 
-			for (uint h = 0; h < he; h++)
-				for (uint w = 0; w < wi; w++)
-					if (alpha)
-					{
-						Color foreground = Color.FromArgb((int)image.RawData.Load32((uint)(wi * h + w)));
-						Color background = Color.FromArgb((int)GetPixel(x + w, y + h));
+			if (x < 0)
+			{
+				w += x;
+				x = 0;
+			}
 
-						int alphaColor = foreground.A;
-						int inv_alpha = 255 - alphaColor;
+			if (y < 0)
+			{
+				h += y;
+				y = 0;
+			}
 
-						byte newR = (byte)(((foreground.R * alphaColor + inv_alpha * background.R) >> 8) & 0xFF);
-						byte newG = (byte)(((foreground.G * alphaColor + inv_alpha * background.G) >> 8) & 0xFF);
-						byte newB = (byte)(((foreground.B * alphaColor + inv_alpha * background.B) >> 8) & 0xFF);
+			uint wb = w * bytesPerPixel;
 
-						SetPixel((uint)Color.ToArgb(newR, newG, newB), x + w, y + h);
-					}
-					else SetPixel((uint)image.RawData.Load32(((uint)(wi * h + w)) * 4), x + w, y + h);
+			for (int he = 0; he < h; he++)
+				Internal.MemoryClear(
+					(doubleBuffering ? secondBuffer : firstBuffer).Address + ((width * (y + he) + x) * bytesPerPixel),
+					wb, color);
 		}
 
 		/* Functions from Cosmos (not all of them are currently there, TODO) */

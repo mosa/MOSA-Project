@@ -12,7 +12,7 @@ namespace Mosa.Demo.VBEWorld.x86.Apps
 		public Paint(int x, int y, int width, int height, Color inactiveTitlebarColor, Color activeTitlebarColor, Color bodyColor)
 			: base("Paint", x, y, width, height, inactiveTitlebarColor, activeTitlebarColor, bodyColor)
 		{
-			PaintArea = new PaintArea(x + 2, y + 2 + TitlebarHeight, width - 2, height - 2, bodyColor);
+			PaintArea = new PaintArea(x, y + TitlebarHeight, width, height, bodyColor);
 		}
 
 		public override void Draw()

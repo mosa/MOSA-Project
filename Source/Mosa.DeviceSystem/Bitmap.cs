@@ -45,19 +45,18 @@ namespace Mosa.DeviceSystem
 
 			Width = (int)bitmapHeader.Width;
 			Height = (int)bitmapHeader.Height;
-			Bpp = (int)bitmapHeader.Bpp;
+			Bpp = (int)bitmapHeader.Bpp / 8;
 			RawData = GC.AllocateObject((uint)(Width * Height * Bpp));
 
 			int[] temp = new int[Width];
 			uint w = 0, h = (uint)Height - 1;
-			uint depth = (uint)(Bpp / 8);
 
-			for (uint i = 0; i < Width * Height * depth; i += depth)
+			for (uint i = 0; i < (uint)(Width * Height * Bpp); i += (uint)Bpp)
 			{
 				if (w == Width)
 				{
 					for (uint k = 0; k < temp.Length; k++)
-						RawData.Store32(((uint)Width * h + k) * 4, temp[k]);
+						RawData.Store32(((uint)Width * h + k) * (uint)Bpp, temp[k]);
 
 					w = 0;
 					h--;
@@ -65,11 +64,11 @@ namespace Mosa.DeviceSystem
 
 				switch (Bpp)
 				{
-					case 24:
+					case 3: // 24-bit
 						temp[w] = (int)(0xFF000000 | (int)ptr.Load24(bitmapHeader.DataSectionOffset + i));
 						break;
 
-					case 32:
+					case 4: // 32-bit
 						temp[w] = (int)ptr.Load32(bitmapHeader.DataSectionOffset + i);
 						break;
 				}

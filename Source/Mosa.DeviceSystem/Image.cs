@@ -26,7 +26,7 @@ namespace Mosa.DeviceSystem
 		// TODO: Fix
 		public Image ScaleImage(int NewWidth, int NewHeight)
 		{
-			Pointer temp = GC.AllocateObject((uint)(NewWidth * NewHeight * 4));   // HACK - FIX ME! This is not an object. Use new byte[] instead
+			Pointer temp = GC.AllocateObject((uint)(NewWidth * NewHeight * Bpp));   // HACK - FIX ME! This is not an object. Use new byte[] instead
 
 			int w1 = Width, h1 = Height;
 			int x_ratio = ((w1 << 16) / NewWidth) + 1, y_ratio = ((h1 << 16) / NewHeight) + 1;
@@ -37,7 +37,7 @@ namespace Mosa.DeviceSystem
 				{
 					x2 = ((j * x_ratio) >> 16);
 					y2 = ((i * y_ratio) >> 16);
-					temp.Store32(((uint)((i * NewWidth) + j)) * 4, RawData.Load32(((uint)((y2 * w1) + x2)) * 4));
+					temp.Store32(((uint)((i * NewWidth) + j)) * (uint)Bpp, RawData.Load32(((uint)((y2 * w1) + x2)) * (uint)Bpp));
 				}
 
 			return new Image()

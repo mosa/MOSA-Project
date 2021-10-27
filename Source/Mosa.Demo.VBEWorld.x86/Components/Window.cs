@@ -53,10 +53,11 @@ namespace Mosa.Demo.VBEWorld.x86.Components
 				Label.Draw();
 
 				// Body
-				Display.DrawRectangle(X, Y + TitlebarHeight, Width, Height, BodyColor, true);
+				Display.DrawRectangle(X, Y + TitlebarHeight - 1, Width, Height, BodyColor, true);
 
 				// Borders
-				Display.DrawRectangle(X, Y, Width, Height + TitlebarHeight, WindowManager.ActiveWindow == this ? InactiveTitlebarColor : ActiveTitlebarColor, false);
+				// + 2 on width and height to compensate the 1 on X and Y
+				Display.DrawRectangle(X - 1, Y - 1, Width + 2, Height + 2 + TitlebarHeight, WindowManager.ActiveWindow == this ? InactiveTitlebarColor : ActiveTitlebarColor, false);
 			}
 		}
 
