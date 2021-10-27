@@ -4,6 +4,7 @@ using Mosa.DeviceSystem;
 using Mosa.Kernel.x86;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
+using System;
 
 namespace Mosa.Demo.VBEWorld.x86.HAL
 {
@@ -128,7 +129,7 @@ namespace Mosa.Demo.VBEWorld.x86.HAL
 		/// <param name="message">The message.</param>
 		public override void DebugWrite(string message)
 		{
-			Boot.Console.Write(message);
+			Console.Write(message);
 		}
 
 		/// <summary>
@@ -137,7 +138,7 @@ namespace Mosa.Demo.VBEWorld.x86.HAL
 		/// <param name="message">The message.</param>
 		public override void DebugWriteLine(string message)
 		{
-			Boot.Console.WriteLine(message);
+			Console.WriteLine(message);
 		}
 
 		/// <summary>

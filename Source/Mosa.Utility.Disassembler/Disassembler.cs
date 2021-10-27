@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Text;
+using System.Linq;
 
 namespace Mosa.Utility.Disassembler
 {
@@ -47,8 +48,10 @@ namespace Mosa.Utility.Disassembler
 			{
 				var dasm = arch.CreateDisassembler(memoryArea.CreateLeReader((uint)Offset));
 
-				foreach (var instr in dasm)
+				for (int i = 0; i < dasm.Count(); i++)
 				{
+					var instr = dasm.ElementAt(i);
+
 					var len = instr.Length;
 					var address = instr.Address.Offset;
 					var instruction = instr.ToString().Replace('\t', ' ');
@@ -57,13 +60,17 @@ namespace Mosa.Utility.Disassembler
 					instruction = instruction.Replace(",", ", ");
 
 					// fix up
-					instruction = ChangeHex(instruction);
+					var hex = ChangeHex(instruction);
+					instruction = hex.ToString();
+					hex = null;
 
 					var sb = new StringBuilder();
 
 					sb.AppendFormat("{0:x8}", address);
 					sb.Append(' ');
-					sb.Append(BytesToHex(memory, (uint)Offset, len));
+					var bytes = BytesToHex(memory, (uint)Offset, len);
+					sb.Append(bytes == null ? string.Empty : bytes.ToString());
+					bytes = null;
 					sb.Append(string.Empty.PadRight(41 - sb.Length, ' '));
 					sb.Append(instruction);
 
@@ -74,6 +81,10 @@ namespace Mosa.Utility.Disassembler
 						Instruction = instruction,
 						Full = sb.ToString()
 					});
+
+					sb = null;
+
+					GC.Collect();
 
 					count--;
 
@@ -91,10 +102,10 @@ namespace Mosa.Utility.Disassembler
 			}
 		}
 
-		private string BytesToHex(byte[] memory, uint offset, int length)
+		private StringBuilder BytesToHex(byte[] memory, uint offset, int length)
 		{
 			if (length == 0)
-				return string.Empty;
+				return null;
 
 			var sb = new StringBuilder();
 
@@ -107,7 +118,7 @@ namespace Mosa.Utility.Disassembler
 
 			sb.Length--;
 
-			return sb.ToString();
+			return sb;
 		}
 
 		private bool IsHex(char c)
@@ -143,7 +154,7 @@ namespace Mosa.Utility.Disassembler
 			return !IsHex(s[start + 8]);
 		}
 
-		private string ChangeHex(string s)
+		private StringBuilder ChangeHex(string s)
 		{
 			var sb = new StringBuilder();
 
@@ -169,7 +180,7 @@ namespace Mosa.Utility.Disassembler
 				}
 			}
 
-			return sb.ToString();
+			return sb;
 		}
 	}
 }

@@ -76,6 +76,8 @@ namespace Mosa.DeviceSystem
 			w = Math.Clamp(w, 0, width - x);
 			h = Math.Clamp(h, 0, height - y);
 
+			// TODO: Also clamp X and Y
+
 			if (x < 0 || y < 0 || x >= width || y >= height)
 				return;
 

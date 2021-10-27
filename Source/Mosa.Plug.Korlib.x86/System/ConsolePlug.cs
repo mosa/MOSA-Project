@@ -44,5 +44,30 @@ namespace Mosa.Plug.Korlib.System.x86
 		{
 			ConsoleManager.Controller.Boot.Goto((uint)left, (uint)top);
 		}
+
+		[Plug("System.Console::GetForegroundColor")]
+		internal static ConsoleColor GetForegroundColor()
+		{
+			return (ConsoleColor)ConsoleManager.Controller.Boot.Color;
+		}
+
+		[Plug("System.Console::GetBackgroundColor")]
+		internal static ConsoleColor GetBackgroundColor()
+		{
+			return (ConsoleColor)ConsoleManager.Controller.Boot.BackgroundColor;
+		}
+
+		[Plug("System.Console::SetForegroundColor")]
+		internal static void SetForegroundColor(ConsoleColor color)
+		{
+			ConsoleManager.Controller.Boot.Color = (byte)color;
+		}
+
+		[Plug("System.Console::SetBackgroundColor")]
+		internal static void SetBackgroundColor(ConsoleColor color)
+		{
+			ConsoleManager.Controller.Boot.BackgroundColor = (byte)color;
+		}
+
 	}
 }

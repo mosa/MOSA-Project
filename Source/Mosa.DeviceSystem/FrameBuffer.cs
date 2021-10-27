@@ -147,7 +147,7 @@ namespace Mosa.DeviceSystem
 						Color foreground = Color.FromArgb((int)image.RawData.Load32((uint)(wi * h + w)));
 						Color background = Color.FromArgb((int)GetPixel(x + w, y + h));
 
-						int alphaColor = foreground.Alpha;
+						int alphaColor = foreground.A;
 						int inv_alpha = 255 - alphaColor;
 
 						byte newR = (byte)(((foreground.R * alphaColor + inv_alpha * background.R) >> 8) & 0xFF);
@@ -156,7 +156,7 @@ namespace Mosa.DeviceSystem
 
 						SetPixel((uint)Color.ToArgb(newR, newG, newB), x + w, y + h);
 					}
-					else SetPixel((uint)image.RawData.Load32((uint)(wi * h + w)), x + w, y + h);
+					else SetPixel((uint)image.RawData.Load32(((uint)(wi * h + w)) * 4), x + w, y + h);
 		}
 
 		/* Functions from Cosmos (not all of them are currently there, TODO) */

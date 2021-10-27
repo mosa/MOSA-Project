@@ -634,6 +634,16 @@ namespace System
 			return true;
 		}
 
+		public char[] ToCharArray()
+		{
+			char[] array = new char[Length];
+
+			for (int i = 0; i < Length; i++)
+				array[i] = this[i];
+
+			return array;
+		}
+
 		public static bool IsNullOrEmpty(string value)
 		{
 			return (value == null) || (value.Length == 0);
