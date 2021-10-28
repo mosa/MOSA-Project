@@ -23,9 +23,9 @@ namespace System.Drawing
 		public byte B;
 
 		/// <summary>
-		/// Alpha
+		/// A
 		/// </summary>
-		public byte Alpha;
+		public byte A;
 
 		/// <summary>
 		/// Transparent Color
@@ -184,7 +184,7 @@ namespace System.Drawing
 			R = red;
 			G = green;
 			B = blue;
-			Alpha = 0xff;
+			A = 0xff;
 		}
 
 		/// <summary>
@@ -199,7 +199,7 @@ namespace System.Drawing
 			R = red;
 			G = green;
 			B = blue;
-			Alpha = alpha;
+			A = alpha;
 		}
 
 		/// <summary>
@@ -211,7 +211,7 @@ namespace System.Drawing
 		/// </returns>
 		public bool IsEqual(Color color)
 		{
-			return (color.R == R) && (color.G == G) && (color.B == B) && (color.Alpha == Alpha);
+			return (color.R == R) && (color.G == G) && (color.B == B) && (color.A == A);
 		}
 
 		/// <summary>
@@ -222,7 +222,7 @@ namespace System.Drawing
 		/// </returns>
 		public int ToArgb()
         {
-            return ToArgb(Alpha, R, G, B);
+            return ToArgb(A, R, G, B);
         }
 
 		/// <summary>
@@ -242,6 +242,11 @@ namespace System.Drawing
         	return new Color(red, green, blue);
         }
 
+        public static Color FromArgb(byte alpha, byte red, byte green, byte blue)
+        {
+            return new Color(red, green, blue, alpha);
+        }
+
         /// <summary>
 		/// Converts the Color class to an ARGB color code
 		/// </summary>
@@ -259,7 +264,7 @@ namespace System.Drawing
         /// <summary>
 		/// Converts the Color class to an ARGB color code
 		/// </summary>
-		/// <param name="r">The Alpha color.</param>
+		/// <param name="a">The A color.</param>
 		/// <param name="r">The R color.</param>
 		/// <param name="g">The G color.</param>
 		/// <param name="b">The B color.</param>

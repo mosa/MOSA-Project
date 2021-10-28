@@ -64,47 +64,5 @@ namespace Mosa.DeviceSystem
 
 			return doubleBuffering ? secondBuffer.Read32(GetOffset(x, y)) : firstBuffer.Read32(GetOffset(x, y));
 		}
-
-		/// <summary>Fills a rectangle with color.</summary>
-		/// <param name="color">The color.</param>
-		/// <param name="x">X of the top left of the rectangle.</param>
-		/// <param name="y">Y of the top left of the rectangle.</param>
-		/// <param name="w">Width of the rectangle.</param>
-		/// <param name="h">Width of the rectangle.</param>
-		public override void FillRectangle(uint color, uint x, uint y, uint w, uint h)
-		{
-			w = Math.Clamp(w, 0, width - x);
-			h = Math.Clamp(h, 0, height - y);
-
-			if (x < 0 || y < 0 || x >= width || y >= height)
-				return;
-
-			uint startAddress = GetOffset(x, y);
-
-			if (doubleBuffering)
-			{
-				for (uint offsetY = 0; offsetY < h; offsetY++)
-				{
-					for (uint offsetX = 0; offsetX < w; offsetX++)
-					{
-						secondBuffer.Write32(startAddress + (offsetX * 4), color);
-					}
-
-					startAddress = GetOffset(x, y + offsetY);
-				}
-			}
-			else
-			{
-				for (uint offsetY = 0; offsetY < h; offsetY++)
-				{
-					for (uint offsetX = 0; offsetX < w; offsetX++)
-					{
-						firstBuffer.Write32(startAddress + (offsetX * 4), color);
-					}
-
-					startAddress = GetOffset(x, y + offsetY);
-				}
-			}
-		}
 	}
 }
