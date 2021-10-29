@@ -398,7 +398,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 				Debug.Assert(node.Instruction == IRInstruction.Branch32 || node.Instruction == IRInstruction.Branch64 || node.Instruction == IRInstruction.BranchObject);
 
-				var result = EvaluateCompare(node);
+				var is32Bit = node.Instruction == IRInstruction.Branch32 || (node.Instruction == IRInstruction.BranchObject && Is32BitPlatform);
+
+				var result = EvaluateCompare(node, is32Bit);
 
 				if (!result.HasValue)
 					continue;
@@ -424,17 +426,35 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private static bool? EvaluateCompare(InstructionNode node)
+		private static bool? EvaluateCompare(InstructionNode node, bool is32Bit)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
+
+			//Debug.Assert(value1.Is32Bit == value2.Is32Bit);
+
+			//var bitsSet1 = value1.BitsSet;
+			//var bitsClear1 = value1.BitsClear;
+			//var maxValue1 = value1.MaxValue;
+			//var minValue1 = value1.MinValue;
+
+			//var bitsSet2 = value2.BitsSet;
+			//var bitsClear2 = value2.BitsClear;
+			//var maxValue2 = value2.MaxValue;
+			//var minValue2 = value2.MinValue;
+
+			//var areAll64BitsKnown1 = value1.AreAll64BitsKnown;
+			//var areAll64BitsKnown2 = value2.AreAll64BitsKnown;
+
+			//var areAnyBitsKnown1 = value1.AreAnyBitsKnown;
+			//var areAnyBitsKnown2 = value2.AreAnyBitsKnown;
 
 			switch (node.ConditionCode)
 			{
 				case ConditionCode.Equal:
 					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 					{
-						return value1.MaxValue == value2.MaxValue;
+						return value1.BitsSet == value2.BitsSet;
 					}
 					else if (value1.MaxValue == value1.MinValue && value1.MaxValue == value2.MaxValue && value1.MinValue == value2.MinValue)
 					{
@@ -449,7 +469,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case ConditionCode.NotEqual:
 					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 					{
-						return value1.MaxValue != value2.MaxValue;
+						return value1.BitsSet != value2.BitsSet;
 					}
 					else if (value1.MaxValue == value1.MinValue && value1.MaxValue == value2.MaxValue && value1.MinValue == value2.MinValue)
 					{
@@ -468,20 +488,21 @@ namespace Mosa.Compiler.Framework.Stages
 				case ConditionCode.UnsignedGreater:
 					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 					{
-						return value1.MaxValue > value2.MaxValue;
+						return value1.BitsSet > value2.BitsSet;
 					}
 					else if (value2.AreAll64BitsKnown && value2.MaxValue == 0 && value1.BitsSet != 0)
 					{
 						return true;
 					}
-					else if (value1.MinPossible > value2.MaxPossible)
-					{
-						return true;
-					}
-					else if (value1.MaxPossible <= value2.MinPossible)
-					{
-						return false;
-					}
+
+					//else if (value1.MinBitValue > value2.MaxBitValue)
+					//{
+					//	return true;
+					//}
+					//else if (value1.MaxBitValue <= value2.MinBitValue)
+					//{
+					//	return false;
+					//}
 					break;
 
 				case ConditionCode.UnsignedLess:
@@ -493,80 +514,99 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return true;
 					}
-					else if (value1.MaxPossible < value2.MinPossible)
-					{
-						return true;
-					}
-					else if (value1.MinPossible >= value2.MaxPossible)
-					{
-						return false;
-					}
+
+					//else if (value1.MaxBitValue < value2.MinBitValue)
+					//{
+					//	return true;
+					//}
+					//else if (value1.MinBitValue >= value2.MaxBitValue)
+					//{
+					//	return false;
+					//}
 					break;
 
 				case ConditionCode.UnsignedGreaterOrEqual:
 					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 					{
-						return value1.MaxValue <= value2.MaxValue;
+						return value1.BitsSet <= value2.BitsSet;
 					}
 					else if (value1.AreAll64BitsKnown && value1.MaxValue == 0 && value2.BitsSet != 0)
 					{
 						return true;
 					}
-					else if (value1.MinPossible >= value2.MaxPossible)
-					{
-						return true;
-					}
-					else if (value1.MaxPossible < value2.MinPossible)
-					{
-						return false;
-					}
+
+					//else if (value1.MinBitValue >= value2.MaxBitValue)
+					//{
+					//	return true;
+					//}
+					//else if (value1.MaxBitValue < value2.MinBitValue)
+					//{
+					//	return false;
+					//}
 					break;
 
 				case ConditionCode.UnsignedLessOrEqual:
 					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 					{
-						return value1.MaxValue <= value2.MaxValue;
+						return value1.BitsSet <= value2.BitsSet;
 					}
 					else if (value1.AreAll64BitsKnown && value1.MaxValue == 0 && value2.BitsSet != 0)
 					{
 						return true;
 					}
-					else if (value1.MaxPossible <= value2.MinPossible)
-					{
-						return true;
-					}
-					else if (value1.MinPossible > value2.MaxPossible)
-					{
-						return false;
-					}
+
+					//else if (value1.MaxBitValue <= value2.MinBitValue)
+					//{
+					//	return true;
+					//}
+					//else if (value1.MinBitValue > value2.MaxBitValue)
+					//{
+					//	return false;
+					//}
 					break;
 
 				case ConditionCode.Greater:
-					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && !value1.Is32Bit)
 					{
-						return (long)value1.MaxValue > (long)value2.MaxValue;
+						return (long)value1.BitsSet > (long)value2.BitsSet;
+					}
+					else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is32Bit)
+					{
+						return (int)value1.BitsSet > (int)value2.BitsSet;
 					}
 
 					break;
 
 				case ConditionCode.Less:
-					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && !value1.Is32Bit)
 					{
-						return (long)value1.MaxValue < (long)value2.MaxValue;
+						return (long)value1.BitsSet < (long)value2.BitsSet;
+					}
+					else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is32Bit)
+					{
+						return (int)value1.BitsSet < (int)value2.BitsSet;
 					}
 					break;
 
 				case ConditionCode.GreaterOrEqual:
-					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && !value1.Is32Bit)
 					{
-						return (long)value1.MaxValue >= (long)value2.MaxValue;
+						return (long)value1.BitsSet >= (long)value2.BitsSet;
+					}
+					else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is32Bit)
+					{
+						return (int)value1.BitsSet >= (int)value2.BitsSet;
 					}
 					break;
 
 				case ConditionCode.LessOrEqual:
-					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && !value1.Is32Bit)
 					{
-						return (long)value1.MaxValue <= (long)value2.MaxValue;
+						return (long)value1.BitsSet <= (long)value2.BitsSet;
+					}
+					else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is32Bit)
+					{
+						return (int)value1.BitsSet <= (int)value2.BitsSet;
 					}
 					break;
 
@@ -762,27 +802,32 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private static BitValue Compare32x32(InstructionNode node)
 		{
-			var result = EvaluateCompare(node);
+			var result = EvaluateCompare(node, true);
 
 			if (!result.HasValue)
 				return BitValue.Any32;
 
-			return BitValue.CreateValue(result.Value ? 1u : 0u, true);
+			return BitValue.CreateValue(result.Value, true);
 		}
 
 		private static BitValue Compare64x32(InstructionNode node)
 		{
-			return Compare64x64(node);
+			var result = EvaluateCompare(node, false);
+
+			if (!result.HasValue)
+				return BitValue.Any32;
+
+			return BitValue.CreateValue(result.Value, true);
 		}
 
 		private static BitValue Compare64x64(InstructionNode node)
 		{
-			var result = EvaluateCompare(node);
+			var result = EvaluateCompare(node, false);
 
 			if (!result.HasValue)
 				return BitValue.Any64;
 
-			return BitValue.CreateValue(result.Value ? 1u : 0u, false);
+			return BitValue.CreateValue(result.Value, false);
 		}
 
 		private static BitValue GetHigh32(InstructionNode node)

@@ -31,7 +31,7 @@ Below are the command line arguments available:
     -sccp-off,Optimizations.SCCP,false
     -basic-optimizations,Optimizations.Basic,true
     -basic-optimizations-off,Optimizations.Basic,false
-	-basic-optimization-window,{value}
+	-basic-optimization-window,Optimizations.Basic.Window,{value}
     -inline-explicit,Optimizations.Inline.ExplicitOnly,true
     -inline-explicit-off,Optimizations.Inline.ExplicitOnly,false
     -long-expansion,Optimizations.LongExpansion,true

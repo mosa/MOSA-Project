@@ -232,7 +232,9 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private readonly KeyedList<BasicBlock, InstructionNode> phiStatements;
 
-		public SparseConditionalConstantPropagation(BasicBlocks basicBlocks, CreateTraceHandler createTrace)
+		private bool Is32BitPlatform;
+
+		public SparseConditionalConstantPropagation(BasicBlocks basicBlocks, CreateTraceHandler createTrace, bool is32BitPlatform)
 		{
 			// Method is empty - must be a plugged method
 			if (basicBlocks.HeadBlocks.Count == 0)
@@ -240,6 +242,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			CreateTrace = createTrace;
 			BasicBlocks = basicBlocks;
+			Is32BitPlatform = is32BitPlatform;
 
 			variableStates = new Dictionary<Operand, VariableState>();
 			instructionWorkList = new Stack<InstructionNode>();
@@ -931,11 +934,9 @@ namespace Mosa.Compiler.Framework.Analysis
 				result = operand1 << (int)operand2;
 				return true;
 			}
-			else if (instruction == IRInstruction.Compare32x32
-				|| instruction == IRInstruction.Compare64x32
-				|| instruction == IRInstruction.Compare64x64)
+			else if (instruction == IRInstruction.Compare32x32)
 			{
-				bool? compare = Compare(operand1, operand2, conditionCode);
+				bool? compare = Compare32((uint)operand1, (uint)operand2, conditionCode);
 
 				if (compare.HasValue)
 				{
@@ -943,7 +944,17 @@ namespace Mosa.Compiler.Framework.Analysis
 					return true;
 				}
 			}
+			else if (instruction == IRInstruction.Compare64x32
+				|| instruction == IRInstruction.Compare64x64)
+			{
+				bool? compare = Compare64(operand1, operand2, conditionCode);
 
+				if (compare.HasValue)
+				{
+					result = compare.Value ? 1u : 0u;
+					return true;
+				}
+			}
 			result = 0;
 			return false;
 		}
@@ -1010,6 +1021,8 @@ namespace Mosa.Compiler.Framework.Analysis
 				return !compareNull.Value;
 			}
 
+			bool is32Bit = node.Instruction == IRInstruction.Branch32 || (node.Instruction == IRInstruction.BranchObject && Is32BitPlatform);
+
 			if (operand1.IsOverDefined || operand2.IsOverDefined)
 			{
 				Branch(node);
@@ -1017,7 +1030,9 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 			else if (operand1.IsSingleConstant && operand2.IsSingleConstant)
 			{
-				bool? compare = Compare(operand1.ConstantUnsignedLongInteger, operand2.ConstantUnsignedLongInteger, node.ConditionCode);
+				bool? compare = is32Bit
+					? Compare32((uint)operand1.ConstantUnsignedLongInteger, (uint)operand2.ConstantUnsignedLongInteger, node.ConditionCode)
+					: Compare64(operand1.ConstantUnsignedLongInteger, operand2.ConstantUnsignedLongInteger, node.ConditionCode);
 
 				if (!compare.HasValue)
 				{
@@ -1041,7 +1056,11 @@ namespace Mosa.Compiler.Framework.Analysis
 				{
 					foreach (var c2 in operand2.Constants)
 					{
-						bool? compare = Compare(c1, c2, node.ConditionCode);
+						//bool? compare = Compare(c1, c2, node.ConditionCode);
+
+						bool? compare = is32Bit
+							? Compare32((uint)c1, (uint)c2, node.ConditionCode)
+							: Compare64(c1, c2, node.ConditionCode);
 
 						if (!compare.HasValue)
 						{
@@ -1078,22 +1097,42 @@ namespace Mosa.Compiler.Framework.Analysis
 			return true;
 		}
 
-		private static bool? Compare(ulong operand1, ulong operand2, ConditionCode conditionCode)
+		private static bool? Compare32(uint operand1, uint operand2, ConditionCode conditionCode)
 		{
 			switch (conditionCode)
 			{
 				case ConditionCode.Equal: return operand1 == operand2;
 				case ConditionCode.NotEqual: return operand1 != operand2;
-				case ConditionCode.GreaterOrEqual: return operand1 >= operand2;
-				case ConditionCode.Greater: return operand1 > operand2;
-				case ConditionCode.LessOrEqual: return operand1 <= operand2;
-				case ConditionCode.Less: return operand1 < operand2;
-
+				case ConditionCode.GreaterOrEqual: return (int)operand1 >= (int)operand2;
+				case ConditionCode.Greater: return (int)operand1 > (int)operand2;
+				case ConditionCode.LessOrEqual: return (int)operand1 <= (int)operand2;
+				case ConditionCode.Less: return (int)operand1 < (int)operand2;
 				case ConditionCode.UnsignedGreaterOrEqual: return operand1 >= operand2;
 				case ConditionCode.UnsignedGreater: return operand1 > operand2;
 				case ConditionCode.UnsignedLessOrEqual: return operand1 <= operand2;
 				case ConditionCode.UnsignedLess: return operand1 < operand2;
+				case ConditionCode.Always: return true;
+				case ConditionCode.Never: return false;
 
+				// unknown integer comparison
+				default: return null;
+			}
+		}
+
+		private static bool? Compare64(ulong operand1, ulong operand2, ConditionCode conditionCode)
+		{
+			switch (conditionCode)
+			{
+				case ConditionCode.Equal: return operand1 == operand2;
+				case ConditionCode.NotEqual: return operand1 != operand2;
+				case ConditionCode.GreaterOrEqual: return (long)operand1 >= (long)operand2;
+				case ConditionCode.Greater: return (long)operand1 > (long)operand2;
+				case ConditionCode.LessOrEqual: return (long)operand1 <= (long)operand2;
+				case ConditionCode.Less: return (long)operand1 < (long)operand2;
+				case ConditionCode.UnsignedGreaterOrEqual: return operand1 >= operand2;
+				case ConditionCode.UnsignedGreater: return operand1 > operand2;
+				case ConditionCode.UnsignedLessOrEqual: return operand1 <= operand2;
+				case ConditionCode.UnsignedLess: return operand1 < operand2;
 				case ConditionCode.Always: return true;
 				case ConditionCode.Never: return false;
 

@@ -37,6 +37,9 @@ namespace Mosa.Platform.x86.Transform.Manual.Stack
 			if (next.Instruction != X86.Sub32)
 				return false;
 
+			if (context.Operand1.Register != GeneralPurposeRegister.ESP)
+				return false;
+
 			if (!next.Operand2.IsConstant)
 				return false;
 

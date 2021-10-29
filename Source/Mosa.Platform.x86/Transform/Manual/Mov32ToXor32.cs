@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Transform.Manual
 			if (!context.Operand1.IsConstantZero)
 				return false;
 
-			if (IsStatusFlagUsed(context))
+			if (AreStatusFlagUsed(context))
 				return false;
 
 			return true;
