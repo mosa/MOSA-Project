@@ -32,7 +32,7 @@ namespace Mosa.Platform.x86.Transform.Manual
 			if (context.Operand2.IsResolvedConstant && context.Operand2.ConstantUnsigned64 == 1 && context.Operand1 == context.Result)
 				return false;
 
-			if (IsStatusFlagUsed(context))
+			if (AreStatusFlagUsed(context))
 				return false;
 
 			return true;

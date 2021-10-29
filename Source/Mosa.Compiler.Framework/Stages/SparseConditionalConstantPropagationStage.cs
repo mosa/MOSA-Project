@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (HasProtectedRegions)
 				return;
 
-			var analysis = new SparseConditionalConstantPropagation(BasicBlocks, CreateTraceLog);
+			var analysis = new SparseConditionalConstantPropagation(BasicBlocks, CreateTraceLog, Is32BitPlatform);
 
 			var deadBlocks = analysis.GetDeadBlocked();
 			var constants = analysis.GetIntegerConstants();

@@ -84,8 +84,6 @@ namespace Mosa.Utility.Disassembler
 
 					sb = null;
 
-					GC.Collect();
-
 					count--;
 
 					if (count == 0)
