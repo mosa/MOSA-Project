@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Text;
-using System.Linq;
 
 namespace Mosa.Utility.Disassembler
 {
@@ -44,14 +43,14 @@ namespace Mosa.Utility.Disassembler
 		{
 			var decoded = new List<DecodedInstruction>();
 
+			var sb = new StringBuilder(100);
+
 			try
 			{
 				var dasm = arch.CreateDisassembler(memoryArea.CreateLeReader((uint)Offset));
 
-				for (int i = 0; i < dasm.Count(); i++)
+				foreach (var instr in dasm)
 				{
-					var instr = dasm.ElementAt(i);
-
 					var len = instr.Length;
 					var address = instr.Address.Offset;
 					var instruction = instr.ToString().Replace('\t', ' ');
@@ -60,17 +59,12 @@ namespace Mosa.Utility.Disassembler
 					instruction = instruction.Replace(",", ", ");
 
 					// fix up
-					var hex = ChangeHex(instruction);
-					instruction = hex.ToString();
-					hex = null;
-
-					var sb = new StringBuilder();
+					instruction = ChangeHex(instruction);
 
 					sb.AppendFormat("{0:x8}", address);
 					sb.Append(' ');
 					var bytes = BytesToHex(memory, (uint)Offset, len);
 					sb.Append(bytes == null ? string.Empty : bytes.ToString());
-					bytes = null;
 					sb.Append(string.Empty.PadRight(41 - sb.Length, ' '));
 					sb.Append(instruction);
 
@@ -82,7 +76,7 @@ namespace Mosa.Utility.Disassembler
 						Full = sb.ToString()
 					});
 
-					sb = null;
+					sb.Clear();
 
 					count--;
 
@@ -152,7 +146,7 @@ namespace Mosa.Utility.Disassembler
 			return !IsHex(s[start + 8]);
 		}
 
-		private StringBuilder ChangeHex(string s)
+		private string ChangeHex(string s)
 		{
 			var sb = new StringBuilder();
 
@@ -178,7 +172,7 @@ namespace Mosa.Utility.Disassembler
 				}
 			}
 
-			return sb;
+			return sb.ToString();
 		}
 	}
 }
