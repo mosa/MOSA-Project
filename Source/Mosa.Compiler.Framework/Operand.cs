@@ -289,7 +289,7 @@ namespace Mosa.Compiler.Framework
 			}
 			set
 			{
-				Debug.Assert(value == null || (IsInteger && IsVirtualRegister && !IsConstant));
+				Debug.Assert(value == null || (IsInteger && IsVirtualRegister) || (IsReferenceType && IsVirtualRegister));
 				_value = value;
 			}
 		}
