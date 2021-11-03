@@ -3,7 +3,33 @@
 namespace Mosa.UnitTests.Other
 {
 	public static class SpecificTests
+
 	{
+		[MosaUnitTest(Series = "I8")]
+		public static long SwitchI8_v2(long a)
+		{
+			switch (a)
+			{
+				case 0:
+					return 0;
+
+				case -1:
+					return -1;
+
+				case 2:
+					return 2;
+
+				case long.MinValue:
+					return long.MinValue;
+
+				case long.MaxValue:
+					return long.MaxValue;
+
+				default:
+					return 42;
+			}
+		}
+
 		[MosaUnitTest(Series = "I4")]
 		public static int IncBy1(int a)
 		{

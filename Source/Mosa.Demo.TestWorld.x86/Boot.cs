@@ -304,7 +304,7 @@ namespace Mosa.Demo.TestWorld.x86
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static long Test3()
 		{
-			return SwitchTests.SwitchI8_v2(9223372036854775807);
+			return SpecificTests.SwitchI8_v2(9223372036854775807);
 		}
 	}
 }
