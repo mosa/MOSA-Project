@@ -272,7 +272,7 @@ Below are the command line arguments available:
     -o7,Optimizations.Devirtualization,true
     -o7,Optimizations.LongExpansion,true
     -o7,Optimizations.Platform,true
-    -o7,Optimizations.Inline,false
+    -o7,Optimizations.Inline,true
     -o7,Optimizations.LoopInvariantCodeMotion,true
     -o7,Optimizations.BitTracker,false
     -o7,Optimizations.TwoPass,false

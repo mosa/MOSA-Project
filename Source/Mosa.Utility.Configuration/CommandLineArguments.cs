@@ -274,7 +274,7 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-o7", Setting = "Optimizations.Devirtualization", Value = "true"},
 				new Argument() { Name = "-o7", Setting = "Optimizations.LongExpansion", Value = "true"},
 				new Argument() { Name = "-o7", Setting = "Optimizations.Platform", Value = "true"},
-				new Argument() { Name = "-o7", Setting = "Optimizations.Inline", Value = "false"},
+				new Argument() { Name = "-o7", Setting = "Optimizations.Inline", Value = "true"},
 				new Argument() { Name = "-o7", Setting = "Optimizations.LoopInvariantCodeMotion", Value = "true"},
 				new Argument() { Name = "-o7", Setting = "Optimizations.BitTracker", Value = "false"},
 				new Argument() { Name = "-o7", Setting = "Optimizations.TwoPass", Value = "false"},
