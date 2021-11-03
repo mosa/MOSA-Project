@@ -8,38 +8,41 @@ namespace Mosa.Collections.Generic
 	// QueueNode<AnyType>
 
 	#region QueueNode<AnyType>
+
 	public class QueueNode<AnyType>
-    {
-        public AnyType Data;
-        public QueueNode<AnyType> Next = null;
-        public QueueNode<AnyType> Prev = null;
+	{
+		public AnyType Data;
+		public QueueNode<AnyType> Next = null;
+		public QueueNode<AnyType> Prev = null;
 
-        public QueueNode()
-        {
-            // Nothing to do here...
-        }
+		public QueueNode()
+		{
+			// Nothing to do here...
+		}
 
-        public QueueNode(AnyType Data)
-        {
-            this.Data = Data;
-        }
+		public QueueNode(AnyType Data)
+		{
+			this.Data = Data;
+		}
 
-        ~QueueNode()
-        {
-            Next = null;
-            Prev = null;
-        }
-    }
-	#endregion
+		~QueueNode()
+		{
+			Next = null;
+			Prev = null;
+		}
+	}
+
+	#endregion QueueNode<AnyType>
 
 	// Queue<AnyType>
 
 	#region Queue<AnyType>
-	public class Queue<AnyType>: IEnumerable, IEnumerator where AnyType: IComparable
-    {
-        protected QueueNode<AnyType> FirstNode = null;
-        protected QueueNode<AnyType> LastNode = null;
-        protected QueueNode<AnyType> CurrentNode = null;
+
+	public class Queue<AnyType> : IEnumerable, IEnumerator where AnyType : IComparable
+	{
+		protected QueueNode<AnyType> FirstNode = null;
+		protected QueueNode<AnyType> LastNode = null;
+		protected QueueNode<AnyType> CurrentNode = null;
 		protected QueueNode<AnyType> EnumNode = null;
 		public int Count { get; protected set; } = 0;
 
@@ -50,32 +53,32 @@ namespace Mosa.Collections.Generic
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-            return (IEnumerator)this;
-        }
+			return (IEnumerator)this;
+		}
 
-        object IEnumerator.Current
-        {
-            get { return EnumNode.Data; }
-        }
+		object IEnumerator.Current
+		{
+			get { return EnumNode.Data; }
+		}
 
-        bool IEnumerator.MoveNext()
-        {
-            if (EnumNode != null)
-            {
-                EnumNode = EnumNode.Next;
-            }
-            else
-            {
-                EnumNode = FirstNode;
-            }
+		bool IEnumerator.MoveNext()
+		{
+			if (EnumNode != null)
+			{
+				EnumNode = EnumNode.Next;
+			}
+			else
+			{
+				EnumNode = FirstNode;
+			}
 
-            return (EnumNode != null);
-        }
+			return (EnumNode != null);
+		}
 
-        void IEnumerator.Reset()
-        {
-            EnumNode = null;
-        }
+		void IEnumerator.Reset()
+		{
+			EnumNode = null;
+		}
 
 		public Queue()
 		{
@@ -110,60 +113,60 @@ namespace Mosa.Collections.Generic
 		}
 
 		public bool IsEmpty
-        {
-            get { return (FirstNode == null && LastNode == null && Count == 0); }
-        }
+		{
+			get { return (FirstNode == null && LastNode == null && Count == 0); }
+		}
 
-        public bool IsNotEmpty
-        {
-            get { return (FirstNode != null && LastNode != null && Count > 0); }
-        }
+		public bool IsNotEmpty
+		{
+			get { return (FirstNode != null && LastNode != null && Count > 0); }
+		}
 
-        public QueueNode<AnyType> GetFirstNode
-        {
-            get
-            {
-                CurrentNode = FirstNode;
+		public QueueNode<AnyType> GetFirstNode
+		{
+			get
+			{
+				CurrentNode = FirstNode;
 
-                return CurrentNode;
-            }
-        }
+				return CurrentNode;
+			}
+		}
 
-        public QueueNode<AnyType> GetPrevNode
-        {
-            get
-            {
-                if (CurrentNode != null)
-                {
-                    CurrentNode = CurrentNode.Prev;
-                }
+		public QueueNode<AnyType> GetPrevNode
+		{
+			get
+			{
+				if (CurrentNode != null)
+				{
+					CurrentNode = CurrentNode.Prev;
+				}
 
-                return CurrentNode;
-            }
-        }
+				return CurrentNode;
+			}
+		}
 
-        public QueueNode<AnyType> GetNextNode
-        {
-            get
-            {
-                if (CurrentNode != null)
-                {
-                    CurrentNode = CurrentNode.Next;
-                }
+		public QueueNode<AnyType> GetNextNode
+		{
+			get
+			{
+				if (CurrentNode != null)
+				{
+					CurrentNode = CurrentNode.Next;
+				}
 
-                return CurrentNode;
-            }
-        }
+				return CurrentNode;
+			}
+		}
 
-        public QueueNode<AnyType> GetLastNode
-        {
-            get
-            {
-                CurrentNode = LastNode;
+		public QueueNode<AnyType> GetLastNode
+		{
+			get
+			{
+				CurrentNode = LastNode;
 
-                return CurrentNode;
-            }
-        }
+				return CurrentNode;
+			}
+		}
 
 		public QueueNode<AnyType> Find(AnyType Data)
 		{
@@ -171,125 +174,125 @@ namespace Mosa.Collections.Generic
 		}
 
 		public QueueNode<AnyType> FindFirst(AnyType Data)
-        {
-            QueueNode<AnyType> NodePointer = FirstNode;
+		{
+			QueueNode<AnyType> NodePointer = FirstNode;
 
-            while (NodePointer != null)
-            {
-                if (NodePointer.Data.CompareTo(Data) == 0)
-                {
-                    return NodePointer;
-                }
-                else
-                {
-                    NodePointer = NodePointer.Next;
-                }
-            }
+			while (NodePointer != null)
+			{
+				if (NodePointer.Data.CompareTo(Data) == 0)
+				{
+					return NodePointer;
+				}
+				else
+				{
+					NodePointer = NodePointer.Next;
+				}
+			}
 
-            return NodePointer;
-        }
+			return NodePointer;
+		}
 
-        public QueueNode<AnyType> FindLast(AnyType Data)
-        {
-            QueueNode<AnyType> NodePointer = LastNode;
+		public QueueNode<AnyType> FindLast(AnyType Data)
+		{
+			QueueNode<AnyType> NodePointer = LastNode;
 
-            while (NodePointer != null)
-            {
-                if (NodePointer.Data.CompareTo(Data) == 0)
-                {
-                    return NodePointer;
-                }
-                else
-                {
-                    NodePointer = NodePointer.Prev;
-                }
-            }
+			while (NodePointer != null)
+			{
+				if (NodePointer.Data.CompareTo(Data) == 0)
+				{
+					return NodePointer;
+				}
+				else
+				{
+					NodePointer = NodePointer.Prev;
+				}
+			}
 
-            return NodePointer;
-        }
+			return NodePointer;
+		}
 
-        public bool Contains(AnyType Data)
-        {
-            return (FindFirst(Data) != null);
-        }
+		public bool Contains(AnyType Data)
+		{
+			return (FindFirst(Data) != null);
+		}
 
-        public bool NotContains(AnyType Data)
-        {
-            return (FindFirst(Data) == null);
-        }
+		public bool NotContains(AnyType Data)
+		{
+			return (FindFirst(Data) == null);
+		}
 
 		public QueueNode<AnyType> Find(QueueNode<AnyType> Node)
 		{
 			return FindFirst(Node);
 		}
 
-        public QueueNode<AnyType> FindFirst(QueueNode<AnyType> Node)
-        {
-            QueueNode<AnyType> NodePointer = FirstNode;
+		public QueueNode<AnyType> FindFirst(QueueNode<AnyType> Node)
+		{
+			QueueNode<AnyType> NodePointer = FirstNode;
 
-            while (NodePointer != null)
-            {
-                if (NodePointer == Node)
-                {
-                    return NodePointer;
-                }
-                else
-                {
-                    NodePointer = NodePointer.Next;
-                }
-            }
+			while (NodePointer != null)
+			{
+				if (NodePointer == Node)
+				{
+					return NodePointer;
+				}
+				else
+				{
+					NodePointer = NodePointer.Next;
+				}
+			}
 
-            return NodePointer;
-        }
+			return NodePointer;
+		}
 
-        public QueueNode<AnyType> FindLast(QueueNode<AnyType> Node)
-        {
-            QueueNode<AnyType> NodePointer = LastNode;
+		public QueueNode<AnyType> FindLast(QueueNode<AnyType> Node)
+		{
+			QueueNode<AnyType> NodePointer = LastNode;
 
-            while (NodePointer != null)
-            {
-                if (NodePointer == Node)
-                {
-                    return NodePointer;
-                }
-                else
-                {
-                    NodePointer = NodePointer.Prev;
-                }
-            }
+			while (NodePointer != null)
+			{
+				if (NodePointer == Node)
+				{
+					return NodePointer;
+				}
+				else
+				{
+					NodePointer = NodePointer.Prev;
+				}
+			}
 
-            return NodePointer;
-        }
+			return NodePointer;
+		}
 
-        public bool Contains(QueueNode<AnyType> Node)
-        {
-            return (FindFirst(Node) != null);
-        }
+		public bool Contains(QueueNode<AnyType> Node)
+		{
+			return (FindFirst(Node) != null);
+		}
 
-        public bool NotContains(QueueNode<AnyType> Node)
-        {
-            return (FindFirst(Node) == null);
-        }
+		public bool NotContains(QueueNode<AnyType> Node)
+		{
+			return (FindFirst(Node) == null);
+		}
 
-        public void RemoveAll(AnyType Data)
-        {
-            QueueNode<AnyType> NodePointer = FirstNode;
-            QueueNode<AnyType> BackupNode = null;
+		public void RemoveAll(AnyType Data)
+		{
+			QueueNode<AnyType> NodePointer = FirstNode;
+			QueueNode<AnyType> BackupNode = null;
 
-            while (NodePointer != null)
-            {
-                BackupNode = NodePointer.Next;
+			while (NodePointer != null)
+			{
+				BackupNode = NodePointer.Next;
 
-                if (NodePointer.Data.CompareTo(Data) == 0)
-                {
-                    Remove(NodePointer);
+				if (NodePointer.Data.CompareTo(Data) == 0)
+				{
+					Remove(NodePointer);
 
 					Count--;
-                }
+				}
 
-                NodePointer = BackupNode;
-            }
-        }
+				NodePointer = BackupNode;
+			}
+		}
 
 		public bool Remove(AnyType Data)
 		{
@@ -339,150 +342,150 @@ namespace Mosa.Collections.Generic
 		}
 
 		public bool Remove(QueueNode<AnyType> Node)
-        {
-            if (Node == null)
-            {
-                throw new CollectionsDataNullException("Queue.cs", "Queue<AnyType>", "Delete", "Node", "Node cannot be NULL!");
-            }
+		{
+			if (Node == null)
+			{
+				throw new CollectionsDataNullException("Queue.cs", "Queue<AnyType>", "Delete", "Node", "Node cannot be NULL!");
+			}
 
-            if (NotContains(Node))
-            {
-                throw new CollectionsDataNotFoundException("Queue.cs", "Queue<AnyType>", "Delete", "Node", "Node cannot be found in this Queue!");
-            }
+			if (NotContains(Node))
+			{
+				throw new CollectionsDataNotFoundException("Queue.cs", "Queue<AnyType>", "Delete", "Node", "Node cannot be found in this Queue!");
+			}
 
-            if (Node.Prev == null && Node.Next == null && Count == 1)
-            {
-                FirstNode = null;
-                LastNode = null;
+			if (Node.Prev == null && Node.Next == null && Count == 1)
+			{
+				FirstNode = null;
+				LastNode = null;
 
-                Node = null;
+				Node = null;
 
-                Count--;
+				Count--;
 
-                return true;
-            }
+				return true;
+			}
 
-            if (Node.Prev == null && Node.Next != null && Count > 1)
-            {
-                FirstNode = Node.Next;
-                FirstNode.Prev = null;
+			if (Node.Prev == null && Node.Next != null && Count > 1)
+			{
+				FirstNode = Node.Next;
+				FirstNode.Prev = null;
 
-                Node = null;
+				Node = null;
 
-                Count--;
+				Count--;
 
-                return true;
-            }
+				return true;
+			}
 
-            if (Node.Prev != null && Node.Next == null && Count > 1)
-            {
-                LastNode = Node.Prev;
-                LastNode.Next = null;
+			if (Node.Prev != null && Node.Next == null && Count > 1)
+			{
+				LastNode = Node.Prev;
+				LastNode.Next = null;
 
-                Node = null;
+				Node = null;
 
-                Count--;
+				Count--;
 
-                return true;
-            }
+				return true;
+			}
 
-            if (Node.Prev != null && Node.Next != null && Count > 2)
-            {
-                Node.Prev.Next = Node.Next;
-                Node.Next.Prev = Node.Prev;
+			if (Node.Prev != null && Node.Next != null && Count > 2)
+			{
+				Node.Prev.Next = Node.Next;
+				Node.Next.Prev = Node.Prev;
 
-                Node = null;
+				Node = null;
 
-                Count--;
+				Count--;
 
-                return true;
-            }
+				return true;
+			}
 
-            return false;
-        }
-		
-        public QueueNode<AnyType> Enqueue(AnyType Data)
-        {
-            QueueNode<AnyType> NewNode = new QueueNode<AnyType>(Data);
+			return false;
+		}
 
-            if (FirstNode == null && LastNode == null && Count == 0)
-            {
-                NewNode.Prev = null;
-                NewNode.Next = null;
+		public QueueNode<AnyType> Enqueue(AnyType Data)
+		{
+			QueueNode<AnyType> NewNode = new QueueNode<AnyType>(Data);
 
-                FirstNode = NewNode;
-                LastNode = NewNode;
+			if (FirstNode == null && LastNode == null && Count == 0)
+			{
+				NewNode.Prev = null;
+				NewNode.Next = null;
 
-                Count++;
+				FirstNode = NewNode;
+				LastNode = NewNode;
 
-                return NewNode;
-            }
+				Count++;
 
-            if (FirstNode != null && LastNode != null && FirstNode == LastNode && Count == 1)
-            {
-                NewNode.Prev = LastNode;
-                NewNode.Next = null;
+				return NewNode;
+			}
 
-                LastNode.Next = NewNode;
-                LastNode = NewNode;
+			if (FirstNode != null && LastNode != null && FirstNode == LastNode && Count == 1)
+			{
+				NewNode.Prev = LastNode;
+				NewNode.Next = null;
 
-                Count++;
+				LastNode.Next = NewNode;
+				LastNode = NewNode;
 
-                return NewNode;
-            }
+				Count++;
 
-            if (FirstNode != null && LastNode != null && FirstNode != LastNode && Count > 1)
-            {
-                NewNode.Prev = LastNode;
-                NewNode.Next = null;
+				return NewNode;
+			}
 
-                LastNode.Next = NewNode;
-                LastNode = NewNode;
+			if (FirstNode != null && LastNode != null && FirstNode != LastNode && Count > 1)
+			{
+				NewNode.Prev = LastNode;
+				NewNode.Next = null;
 
-                Count++;
+				LastNode.Next = NewNode;
+				LastNode = NewNode;
 
-                return NewNode;
-            }
+				Count++;
 
-            return null;
-        }
+				return NewNode;
+			}
 
-        public AnyType Dequeue()
-        {
-            if (FirstNode == null && LastNode == null && Count == 0)
-            {
-                throw new CollectionsDataNotFoundException("Queue.cs", "Queue<AnyType>", "Dequeue", "", "Queue is empty! No data exists in Queue!");
-            }
-            
-            if (FirstNode != null && LastNode != null && FirstNode == LastNode && Count == 1)
-            {
-                AnyType Result = FirstNode.Data;
+			return null;
+		}
 
-                FirstNode = null;
-                LastNode = null;
+		public AnyType Dequeue()
+		{
+			if (FirstNode == null && LastNode == null && Count == 0)
+			{
+				throw new CollectionsDataNotFoundException("Queue.cs", "Queue<AnyType>", "Dequeue", "", "Queue is empty! No data exists in Queue!");
+			}
 
-                Count--;
+			if (FirstNode != null && LastNode != null && FirstNode == LastNode && Count == 1)
+			{
+				AnyType Result = FirstNode.Data;
 
-                return Result;
-            }
+				FirstNode = null;
+				LastNode = null;
 
-            if (FirstNode != null && LastNode != null && FirstNode != LastNode && Count > 1)
-            {
-                QueueNode<AnyType> BackupNode = FirstNode;
-                AnyType Result = FirstNode.Data;
+				Count--;
 
-                FirstNode = FirstNode.Next;
-                FirstNode.Prev = null;
+				return Result;
+			}
 
-                BackupNode = null;
+			if (FirstNode != null && LastNode != null && FirstNode != LastNode && Count > 1)
+			{
+				QueueNode<AnyType> BackupNode = FirstNode;
+				AnyType Result = FirstNode.Data;
 
-                Count--;
+				FirstNode = FirstNode.Next;
+				FirstNode.Prev = null;
 
-                return Result;
-            }
+				BackupNode = null;
 
-            throw new CollectionsUnknownErrorException("Queue.cs", "Queue<AnyType>", "Dequeue", "", "A Queue has either the size of 0, 1 or more than 1. This unknown exception should not execute!");
-        }
+				Count--;
+
+				return Result;
+			}
+
+			throw new CollectionsUnknownErrorException("Queue.cs", "Queue<AnyType>", "Dequeue", "", "A Queue has either the size of 0, 1 or more than 1. This unknown exception should not execute!");
+		}
 
 		public bool TryDequeue(out AnyType Item)
 		{
@@ -524,19 +527,19 @@ namespace Mosa.Collections.Generic
 		}
 
 		public AnyType Peek()
-        {
-            if (FirstNode == null && LastNode == null && Count == 0)
-            {
-                throw new CollectionsDataNotFoundException("Queue.cs", "Queue<AnyType>", "Peek", "", "Queue is empty! No data exists in Queue!");
-            }
+		{
+			if (FirstNode == null && LastNode == null && Count == 0)
+			{
+				throw new CollectionsDataNotFoundException("Queue.cs", "Queue<AnyType>", "Peek", "", "Queue is empty! No data exists in Queue!");
+			}
 
-            if (FirstNode != null && LastNode != null && Count > 0)
-            {
-                return FirstNode.Data;
-            }
+			if (FirstNode != null && LastNode != null && Count > 0)
+			{
+				return FirstNode.Data;
+			}
 
-            throw new CollectionsUnknownErrorException("Queue.cs", "Queue<AnyType>", "Peek", "", "A Queue has either the size of 0 or more than 0. This unknown exception should not execute!");
-        }
+			throw new CollectionsUnknownErrorException("Queue.cs", "Queue<AnyType>", "Peek", "", "A Queue has either the size of 0 or more than 0. This unknown exception should not execute!");
+		}
 
 		public bool TryPeek(out AnyType Item)
 		{
@@ -571,77 +574,77 @@ namespace Mosa.Collections.Generic
 			return Cloned;
 		}
 
-        public void CloneFrom(Queue<AnyType> Source)
-        {
-            if (Source == null)
-            {
-                throw new CollectionsDataNullException("Queue.cs", "Queue<AnyType>", "CloneFrom", "Source", "Source cannot be NULL!");
-            }
+		public void CloneFrom(Queue<AnyType> Source)
+		{
+			if (Source == null)
+			{
+				throw new CollectionsDataNullException("Queue.cs", "Queue<AnyType>", "CloneFrom", "Source", "Source cannot be NULL!");
+			}
 
-            Clear();
+			Clear();
 
-            QueueNode<AnyType> NodePointer = Source.FirstNode;
+			QueueNode<AnyType> NodePointer = Source.FirstNode;
 
-            while (NodePointer != null)
-            {
-                Enqueue(NodePointer.Data);
+			while (NodePointer != null)
+			{
+				Enqueue(NodePointer.Data);
 
-                NodePointer = NodePointer.Next;
-            }
-        }
+				NodePointer = NodePointer.Next;
+			}
+		}
 
-        public void CloneTo(Queue<AnyType> Destination)
-        {
-            if (Destination == null)
-            {
-                throw new CollectionsDataNullException("Queue.cs", "Queue<AnyType>", "CloneTo", "Destination", "Destination cannot be NULL!");
-            }
+		public void CloneTo(Queue<AnyType> Destination)
+		{
+			if (Destination == null)
+			{
+				throw new CollectionsDataNullException("Queue.cs", "Queue<AnyType>", "CloneTo", "Destination", "Destination cannot be NULL!");
+			}
 
-            Destination.Clear();
+			Destination.Clear();
 
-            QueueNode<AnyType> NodePointer = FirstNode;
+			QueueNode<AnyType> NodePointer = FirstNode;
 
-            while (NodePointer != null)
-            {
-                Destination.Enqueue(NodePointer.Data);
+			while (NodePointer != null)
+			{
+				Destination.Enqueue(NodePointer.Data);
 
-                NodePointer = NodePointer.Next;
-            }
-        }
+				NodePointer = NodePointer.Next;
+			}
+		}
 
-        public void AppendFrom(Queue<AnyType> Source)
-        {
-            if (Source == null)
-            {
-                throw new CollectionsDataNullException("Queue.cs", "Queue<AnyType>", "AppendFrom", "Source", "Source cannot be NULL!");
-            }
+		public void AppendFrom(Queue<AnyType> Source)
+		{
+			if (Source == null)
+			{
+				throw new CollectionsDataNullException("Queue.cs", "Queue<AnyType>", "AppendFrom", "Source", "Source cannot be NULL!");
+			}
 
-            QueueNode<AnyType> NodePointer = Source.FirstNode;
+			QueueNode<AnyType> NodePointer = Source.FirstNode;
 
-            while (NodePointer != null)
-            {
-                Enqueue(NodePointer.Data);
+			while (NodePointer != null)
+			{
+				Enqueue(NodePointer.Data);
 
-                NodePointer = NodePointer.Next;
-            }
-        }
+				NodePointer = NodePointer.Next;
+			}
+		}
 
-        public void AppendTo(Queue<AnyType> Destination)
-        {
-            if (Destination == null)
-            {
-                throw new CollectionsDataNullException("Queue.cs", "Queue<AnyType>", "AppendTo", "Destination", "Destination cannot be NULL!");
-            }
+		public void AppendTo(Queue<AnyType> Destination)
+		{
+			if (Destination == null)
+			{
+				throw new CollectionsDataNullException("Queue.cs", "Queue<AnyType>", "AppendTo", "Destination", "Destination cannot be NULL!");
+			}
 
-            QueueNode<AnyType> NodePointer = FirstNode;
+			QueueNode<AnyType> NodePointer = FirstNode;
 
-            while (NodePointer != null)
-            {
-                Destination.Enqueue(NodePointer.Data);
+			while (NodePointer != null)
+			{
+				Destination.Enqueue(NodePointer.Data);
 
-                NodePointer = NodePointer.Next;
-            }
-        }
+				NodePointer = NodePointer.Next;
+			}
+		}
 
 		public Queue<AnyType> Reverse()
 		{
@@ -690,7 +693,7 @@ namespace Mosa.Collections.Generic
 
 			Clear();
 
-			foreach(AnyType ListItem in BSTree.TraverseMinToMax())
+			foreach (AnyType ListItem in BSTree.TraverseMinToMax())
 			{
 				Enqueue(ListItem);
 			}
@@ -699,5 +702,6 @@ namespace Mosa.Collections.Generic
 			BSTree = null;
 		}
 	}
-    #endregion
+
+	#endregion Queue<AnyType>
 }

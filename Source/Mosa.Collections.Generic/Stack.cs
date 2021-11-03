@@ -5,42 +5,45 @@ using System.Collections;
 
 namespace Mosa.Collections.Generic
 {
-    // StackNode<AnyType>
+	// StackNode<AnyType>
 
-    #region StackNode<AnyType>
-    public class StackNode<AnyType>
-    {
-        public AnyType Data;
-        public StackNode<AnyType> Next = null;
-        public StackNode<AnyType> Prev = null;
+	#region StackNode<AnyType>
 
-        public StackNode()
-        {
-            // Nothing to do here...
-        }
+	public class StackNode<AnyType>
+	{
+		public AnyType Data;
+		public StackNode<AnyType> Next = null;
+		public StackNode<AnyType> Prev = null;
 
-        public StackNode(AnyType Data)
-        {
-            this.Data = Data;
-        }
+		public StackNode()
+		{
+			// Nothing to do here...
+		}
 
-        ~StackNode()
-        {
-            Next = null;
-            Prev = null;
-        }
-    }
-    #endregion
+		public StackNode(AnyType Data)
+		{
+			this.Data = Data;
+		}
 
-    // Stack<AnyType>
+		~StackNode()
+		{
+			Next = null;
+			Prev = null;
+		}
+	}
 
-    #region Stack<AnyType>
-    public class Stack<AnyType> : IEnumerable, IEnumerator where AnyType : IComparable
-    {
-        protected StackNode<AnyType> FirstNode = null;
-        protected StackNode<AnyType> LastNode = null;
-        protected StackNode<AnyType> CurrentNode = null;
-        protected StackNode<AnyType> EnumNode = null;
+	#endregion StackNode<AnyType>
+
+	// Stack<AnyType>
+
+	#region Stack<AnyType>
+
+	public class Stack<AnyType> : IEnumerable, IEnumerator where AnyType : IComparable
+	{
+		protected StackNode<AnyType> FirstNode = null;
+		protected StackNode<AnyType> LastNode = null;
+		protected StackNode<AnyType> CurrentNode = null;
+		protected StackNode<AnyType> EnumNode = null;
 		public uint Count { get; protected set; } = 0;
 
 		public bool IsFixedSize => false;
@@ -50,32 +53,32 @@ namespace Mosa.Collections.Generic
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-            return (IEnumerator)this;
-        }
+			return (IEnumerator)this;
+		}
 
-        object IEnumerator.Current
-        {
-            get { return EnumNode.Data; }
-        }
+		object IEnumerator.Current
+		{
+			get { return EnumNode.Data; }
+		}
 
-        bool IEnumerator.MoveNext()
-        {
-            if (EnumNode != null)
-            {
-                EnumNode = EnumNode.Prev;
-            }
-            else
-            {
-                EnumNode = LastNode;
-            }
+		bool IEnumerator.MoveNext()
+		{
+			if (EnumNode != null)
+			{
+				EnumNode = EnumNode.Prev;
+			}
+			else
+			{
+				EnumNode = LastNode;
+			}
 
-            return (EnumNode != null);
-        }
+			return (EnumNode != null);
+		}
 
-        void IEnumerator.Reset()
-        {
-            EnumNode = null;
-        }
+		void IEnumerator.Reset()
+		{
+			EnumNode = null;
+		}
 
 		public Stack()
 		{
@@ -110,186 +113,187 @@ namespace Mosa.Collections.Generic
 		}
 
 		public bool IsEmpty
-        {
-            get { return (FirstNode == null && LastNode == null && Count == 0); }
-        }
+		{
+			get { return (FirstNode == null && LastNode == null && Count == 0); }
+		}
 
-        public bool IsNotEmpty
-        {
-            get { return (FirstNode != null && LastNode != null && Count > 0); }
-        }
+		public bool IsNotEmpty
+		{
+			get { return (FirstNode != null && LastNode != null && Count > 0); }
+		}
 
-        public StackNode<AnyType> GetFirstNode
-        {
-            get
-            {
-                CurrentNode = FirstNode;
+		public StackNode<AnyType> GetFirstNode
+		{
+			get
+			{
+				CurrentNode = FirstNode;
 
-                return CurrentNode;
-            }
-        }
+				return CurrentNode;
+			}
+		}
 
-        public StackNode<AnyType> GetPrevNode
-        {
-            get
-            {
-                if (CurrentNode != null)
-                {
-                    CurrentNode = CurrentNode.Prev;
-                }
+		public StackNode<AnyType> GetPrevNode
+		{
+			get
+			{
+				if (CurrentNode != null)
+				{
+					CurrentNode = CurrentNode.Prev;
+				}
 
-                return CurrentNode;
-            }
-        }
+				return CurrentNode;
+			}
+		}
 
-        public StackNode<AnyType> GetNextNode
-        {
-            get
-            {
-                if (CurrentNode != null)
-                {
-                    CurrentNode = CurrentNode.Next;
-                }
+		public StackNode<AnyType> GetNextNode
+		{
+			get
+			{
+				if (CurrentNode != null)
+				{
+					CurrentNode = CurrentNode.Next;
+				}
 
-                return CurrentNode;
-            }
-        }
+				return CurrentNode;
+			}
+		}
 
-        public StackNode<AnyType> GetLastNode
-        {
-            get
-            {
-                CurrentNode = LastNode;
+		public StackNode<AnyType> GetLastNode
+		{
+			get
+			{
+				CurrentNode = LastNode;
 
-                return CurrentNode;
-            }
-        }
+				return CurrentNode;
+			}
+		}
 
 		public StackNode<AnyType> Find(AnyType Data)
 		{
 			return FindLast(Data);
 		}
 
-        public StackNode<AnyType> FindFirst(AnyType Data)
-        {
-            StackNode<AnyType> NodePointer = FirstNode;
+		public StackNode<AnyType> FindFirst(AnyType Data)
+		{
+			StackNode<AnyType> NodePointer = FirstNode;
 
-            while (NodePointer != null)
-            {
-                if (NodePointer.Data.CompareTo(Data) == 0)
-                {
-                    return NodePointer;
-                }
-                else
-                {
-                    NodePointer = NodePointer.Next;
-                }
-            }
+			while (NodePointer != null)
+			{
+				if (NodePointer.Data.CompareTo(Data) == 0)
+				{
+					return NodePointer;
+				}
+				else
+				{
+					NodePointer = NodePointer.Next;
+				}
+			}
 
-            return NodePointer;
-        }
+			return NodePointer;
+		}
 
-        public StackNode<AnyType> FindLast(AnyType Data)
-        {
-            StackNode<AnyType> NodePointer = LastNode;
+		public StackNode<AnyType> FindLast(AnyType Data)
+		{
+			StackNode<AnyType> NodePointer = LastNode;
 
-            while (NodePointer != null)
-            {
-                if (NodePointer.Data.CompareTo(Data) == 0)
-                {
-                    return NodePointer;
-                }
-                else
-                {
-                    NodePointer = NodePointer.Prev;
-                }
-            }
+			while (NodePointer != null)
+			{
+				if (NodePointer.Data.CompareTo(Data) == 0)
+				{
+					return NodePointer;
+				}
+				else
+				{
+					NodePointer = NodePointer.Prev;
+				}
+			}
 
-            return NodePointer;
-        }
+			return NodePointer;
+		}
 
-        public bool Contains(AnyType Data)
-        {
-            return (FindFirst(Data) != null);
-        }
+		public bool Contains(AnyType Data)
+		{
+			return (FindFirst(Data) != null);
+		}
 
-        public bool NotContains(AnyType Data)
-        {
-            return (FindFirst(Data) == null);
-        }
+		public bool NotContains(AnyType Data)
+		{
+			return (FindFirst(Data) == null);
+		}
 
 		public StackNode<AnyType> Find(StackNode<AnyType> Node)
 		{
 			return FindLast(Node);
 		}
 
-        public StackNode<AnyType> FindFirst(StackNode<AnyType> Node)
-        {
-            StackNode<AnyType> NodePointer = FirstNode;
+		public StackNode<AnyType> FindFirst(StackNode<AnyType> Node)
+		{
+			StackNode<AnyType> NodePointer = FirstNode;
 
-            while (NodePointer != null)
-            {
-                if (NodePointer == Node)
-                {
-                    return NodePointer;
-                }
-                else
-                {
-                    NodePointer = NodePointer.Next;
-                }
-            }
+			while (NodePointer != null)
+			{
+				if (NodePointer == Node)
+				{
+					return NodePointer;
+				}
+				else
+				{
+					NodePointer = NodePointer.Next;
+				}
+			}
 
-            return NodePointer;
-        }
+			return NodePointer;
+		}
 
-        public StackNode<AnyType> FindLast(StackNode<AnyType> Node)
-        {
-            StackNode<AnyType> NodePointer = LastNode;
+		public StackNode<AnyType> FindLast(StackNode<AnyType> Node)
+		{
+			StackNode<AnyType> NodePointer = LastNode;
 
-            while (NodePointer != null)
-            {
-                if (NodePointer == Node)
-                {
-                    return NodePointer;
-                }
-                else
-                {
-                    NodePointer = NodePointer.Prev;
-                }
-            }
+			while (NodePointer != null)
+			{
+				if (NodePointer == Node)
+				{
+					return NodePointer;
+				}
+				else
+				{
+					NodePointer = NodePointer.Prev;
+				}
+			}
 
-            return NodePointer;
-        }
+			return NodePointer;
+		}
 
-        public bool Contains(StackNode<AnyType> Node)
-        {
-            return (FindFirst(Node) != null);
-        }
+		public bool Contains(StackNode<AnyType> Node)
+		{
+			return (FindFirst(Node) != null);
+		}
 
-        public bool NotContains(StackNode<AnyType> Node)
-        {
-            return (FindFirst(Node) == null);
-        }
+		public bool NotContains(StackNode<AnyType> Node)
+		{
+			return (FindFirst(Node) == null);
+		}
 
-        public void RemoveAll(AnyType Data)
-        {
-            StackNode<AnyType> NodePointer = FirstNode;
-            StackNode<AnyType> BackupNode = null;
+		public void RemoveAll(AnyType Data)
+		{
+			StackNode<AnyType> NodePointer = FirstNode;
+			StackNode<AnyType> BackupNode = null;
 
-            while (NodePointer != null)
-            {
-                BackupNode = NodePointer.Next;
+			while (NodePointer != null)
+			{
+				BackupNode = NodePointer.Next;
 
-                if (NodePointer.Data.CompareTo(Data) == 0)
-                {
-                    RemoveNode(NodePointer);
+				if (NodePointer.Data.CompareTo(Data) == 0)
+				{
+					RemoveNode(NodePointer);
 
 					Count--;
 				}
 
 				NodePointer = BackupNode;
-            }
-        }
+			}
+		}
+
 		public bool Remove(AnyType Data)
 		{
 			return RemoveLast(Data);
@@ -338,153 +342,153 @@ namespace Mosa.Collections.Generic
 		}
 
 		public bool RemoveNode(StackNode<AnyType> Node)
-        {
-            if (Node == null)
-            {
-                throw new CollectionsDataNullException("Stack.cs", "Stack<AnyType>", "Delete", "Node", "Node cannot be NULL!");
-            }
+		{
+			if (Node == null)
+			{
+				throw new CollectionsDataNullException("Stack.cs", "Stack<AnyType>", "Delete", "Node", "Node cannot be NULL!");
+			}
 
-            if (NotContains(Node))
-            {
-                throw new CollectionsDataNotFoundException("Stack.cs", "Stack<AnyType>", "Delete", "Node", "Node cannot be found in this Stack!");
-            }
+			if (NotContains(Node))
+			{
+				throw new CollectionsDataNotFoundException("Stack.cs", "Stack<AnyType>", "Delete", "Node", "Node cannot be found in this Stack!");
+			}
 
-            if (Node.Prev == null && Node.Next == null && Count == 1)
-            {
-                FirstNode = null;
-                LastNode = null;
+			if (Node.Prev == null && Node.Next == null && Count == 1)
+			{
+				FirstNode = null;
+				LastNode = null;
 
-                Node = null;
+				Node = null;
 
-                Count--;
+				Count--;
 
-                return true;
-            }
+				return true;
+			}
 
-            if (Node.Prev == null && Node.Next != null && Count > 1)
-            {
-                FirstNode = Node.Next;
-                FirstNode.Prev = null;
+			if (Node.Prev == null && Node.Next != null && Count > 1)
+			{
+				FirstNode = Node.Next;
+				FirstNode.Prev = null;
 
-                Node = null;
+				Node = null;
 
-                Count--;
+				Count--;
 
-                return true;
-            }
+				return true;
+			}
 
-            if (Node.Prev != null && Node.Next == null && Count > 1)
-            {
-                LastNode = Node.Prev;
-                LastNode.Next = null;
+			if (Node.Prev != null && Node.Next == null && Count > 1)
+			{
+				LastNode = Node.Prev;
+				LastNode.Next = null;
 
-                Node = null;
+				Node = null;
 
-                Count--;
+				Count--;
 
-                return true;
-            }
+				return true;
+			}
 
-            if (Node.Prev != null && Node.Next != null && Count > 2)
-            {
-                Node.Prev.Next = Node.Next;
-                Node.Next.Prev = Node.Prev;
+			if (Node.Prev != null && Node.Next != null && Count > 2)
+			{
+				Node.Prev.Next = Node.Next;
+				Node.Next.Prev = Node.Prev;
 
-                Node = null;
+				Node = null;
 
-                Count--;
+				Count--;
 
-                return true;
-            }
+				return true;
+			}
 
-            return false;
-        }
+			return false;
+		}
 
-        public StackNode<AnyType> Push(AnyType Data)
-        {
-            StackNode<AnyType> NewNode = new StackNode<AnyType>(Data);
+		public StackNode<AnyType> Push(AnyType Data)
+		{
+			StackNode<AnyType> NewNode = new StackNode<AnyType>(Data);
 
-            if (FirstNode == null && LastNode == null && Count == 0)
-            {
-                NewNode.Prev = null;
-                NewNode.Next = null;
+			if (FirstNode == null && LastNode == null && Count == 0)
+			{
+				NewNode.Prev = null;
+				NewNode.Next = null;
 
-                FirstNode = NewNode;
-                LastNode = NewNode;
+				FirstNode = NewNode;
+				LastNode = NewNode;
 
-                Count++;
+				Count++;
 
-                return NewNode;
-            }
+				return NewNode;
+			}
 
-            if (FirstNode != null && LastNode != null && FirstNode == LastNode && Count == 1)
-            {
-                NewNode.Prev = LastNode;
-                NewNode.Next = null;
+			if (FirstNode != null && LastNode != null && FirstNode == LastNode && Count == 1)
+			{
+				NewNode.Prev = LastNode;
+				NewNode.Next = null;
 
-                LastNode.Next = NewNode;
-                LastNode = NewNode;
+				LastNode.Next = NewNode;
+				LastNode = NewNode;
 
-                Count++;
+				Count++;
 
-                return NewNode;
-            }
+				return NewNode;
+			}
 
-            if (FirstNode != null && LastNode != null && FirstNode != LastNode && Count > 1)
-            {
-                NewNode.Prev = LastNode;
-                NewNode.Next = null;
+			if (FirstNode != null && LastNode != null && FirstNode != LastNode && Count > 1)
+			{
+				NewNode.Prev = LastNode;
+				NewNode.Next = null;
 
-                LastNode.Next = NewNode;
-                LastNode = NewNode;
+				LastNode.Next = NewNode;
+				LastNode = NewNode;
 
-                Count++;
+				Count++;
 
-                return NewNode;
-            }
+				return NewNode;
+			}
 
-            return null;
-        }
+			return null;
+		}
 
-        public AnyType Pop()
-        {
-            if (FirstNode == null && LastNode == null && Count == 0)
-            {
-                throw new CollectionsDataNotFoundException("Stack.cs", "Stack<AnyType>", "Pop", "", "Stack is empty! No data exists in Stack!");
-            }
+		public AnyType Pop()
+		{
+			if (FirstNode == null && LastNode == null && Count == 0)
+			{
+				throw new CollectionsDataNotFoundException("Stack.cs", "Stack<AnyType>", "Pop", "", "Stack is empty! No data exists in Stack!");
+			}
 
-            if (FirstNode != null && LastNode != null && FirstNode == LastNode && Count == 1)
-            {
-                AnyType Result = FirstNode.Data;
+			if (FirstNode != null && LastNode != null && FirstNode == LastNode && Count == 1)
+			{
+				AnyType Result = FirstNode.Data;
 
-                FirstNode = null;
-                LastNode = null;
+				FirstNode = null;
+				LastNode = null;
 
-                Count--;
+				Count--;
 
-                return Result;
-            }
+				return Result;
+			}
 
-            if (FirstNode != null && LastNode != null && FirstNode != LastNode && Count > 1)
-            {
-                AnyType Result = LastNode.Data;
+			if (FirstNode != null && LastNode != null && FirstNode != LastNode && Count > 1)
+			{
+				AnyType Result = LastNode.Data;
 
-                StackNode<AnyType> BackupNode = LastNode;
+				StackNode<AnyType> BackupNode = LastNode;
 
-                LastNode = BackupNode.Prev;
-                LastNode.Next = null;
+				LastNode = BackupNode.Prev;
+				LastNode.Next = null;
 
-                BackupNode = null;
+				BackupNode = null;
 
-                Count--;
+				Count--;
 
-                return Result;
-            }
+				return Result;
+			}
 
-            throw new CollectionsUnknownErrorException("Stack.cs", "Stack<AnyType>", "Pop", "", "A Stack has either the size of 0, 1 or more than 1. This unknown exception should not execute!");
-        }
+			throw new CollectionsUnknownErrorException("Stack.cs", "Stack<AnyType>", "Pop", "", "A Stack has either the size of 0, 1 or more than 1. This unknown exception should not execute!");
+		}
 
-		public bool TryPop (out AnyType Item)
+		public bool TryPop(out AnyType Item)
 		{
 			Item = default(AnyType);
 
@@ -525,24 +529,24 @@ namespace Mosa.Collections.Generic
 		}
 
 		public AnyType Peek()
-        {
-            if (FirstNode == null && LastNode == null && Count == 0)
-            {
-                throw new CollectionsDataNotFoundException("Stack.cs", "Stack<AnyType>", "Pop", "", "Stack is empty! No data exists in Stack!");
-            }
+		{
+			if (FirstNode == null && LastNode == null && Count == 0)
+			{
+				throw new CollectionsDataNotFoundException("Stack.cs", "Stack<AnyType>", "Pop", "", "Stack is empty! No data exists in Stack!");
+			}
 
-            if (FirstNode != null && LastNode != null && FirstNode == LastNode && Count == 1)
-            {
-                return LastNode.Data;
-            }
+			if (FirstNode != null && LastNode != null && FirstNode == LastNode && Count == 1)
+			{
+				return LastNode.Data;
+			}
 
-            if (FirstNode != null && LastNode != null && FirstNode != LastNode && Count > 1)
-            {
-                return LastNode.Data;
-            }
+			if (FirstNode != null && LastNode != null && FirstNode != LastNode && Count > 1)
+			{
+				return LastNode.Data;
+			}
 
-            throw new CollectionsUnknownErrorException("Stack.cs", "Stack<AnyType>", "Peek", "", "A Stack has either the size of 0, 1 or more than 1. This unknown exception should not execute!");
-        }
+			throw new CollectionsUnknownErrorException("Stack.cs", "Stack<AnyType>", "Peek", "", "A Stack has either the size of 0, 1 or more than 1. This unknown exception should not execute!");
+		}
 
 		public bool TryPeek(out AnyType Item)
 		{
@@ -586,76 +590,76 @@ namespace Mosa.Collections.Generic
 		}
 
 		public void CloneFrom(Stack<AnyType> Source)
-        {
-            if (Source == null)
-            {
-                throw new CollectionsDataNullException("Stack.cs", "Stack<AnyType>", "CloneFrom", "Source", "Source cannot be NULL!");
-            }
+		{
+			if (Source == null)
+			{
+				throw new CollectionsDataNullException("Stack.cs", "Stack<AnyType>", "CloneFrom", "Source", "Source cannot be NULL!");
+			}
 
-            Clear();
+			Clear();
 
-            StackNode<AnyType> NodePointer = Source.FirstNode;
+			StackNode<AnyType> NodePointer = Source.FirstNode;
 
-            while (NodePointer != null)
-            {
-                Push(NodePointer.Data);
+			while (NodePointer != null)
+			{
+				Push(NodePointer.Data);
 
-                NodePointer = NodePointer.Next;
-            }
-        }
+				NodePointer = NodePointer.Next;
+			}
+		}
 
-        public void CloneTo(Stack<AnyType> Destination)
-        {
-            if (Destination == null)
-            {
-                throw new CollectionsDataNullException("Stack.cs", "Stack<AnyType>", "CloneTo", "Destination", "Destination cannot be NULL!");
-            }
+		public void CloneTo(Stack<AnyType> Destination)
+		{
+			if (Destination == null)
+			{
+				throw new CollectionsDataNullException("Stack.cs", "Stack<AnyType>", "CloneTo", "Destination", "Destination cannot be NULL!");
+			}
 
-            Destination.Clear();
+			Destination.Clear();
 
-            StackNode<AnyType> NodePointer = FirstNode;
+			StackNode<AnyType> NodePointer = FirstNode;
 
-            while (NodePointer != null)
-            {
-                Destination.Push(NodePointer.Data);
+			while (NodePointer != null)
+			{
+				Destination.Push(NodePointer.Data);
 
-                NodePointer = NodePointer.Next;
-            }
-        }
+				NodePointer = NodePointer.Next;
+			}
+		}
 
-        public void AppendFrom(Stack<AnyType> Source)
-        {
-            if (Source == null)
-            {
-                throw new CollectionsDataNullException("Stack.cs", "Stack<AnyType>", "AppendFrom", "Source", "Source cannot be NULL!");
-            }
+		public void AppendFrom(Stack<AnyType> Source)
+		{
+			if (Source == null)
+			{
+				throw new CollectionsDataNullException("Stack.cs", "Stack<AnyType>", "AppendFrom", "Source", "Source cannot be NULL!");
+			}
 
-            StackNode<AnyType> NodePointer = Source.FirstNode;
+			StackNode<AnyType> NodePointer = Source.FirstNode;
 
-            while (NodePointer != null)
-            {
-                Push(NodePointer.Data);
+			while (NodePointer != null)
+			{
+				Push(NodePointer.Data);
 
-                NodePointer = NodePointer.Next;
-            }
-        }
+				NodePointer = NodePointer.Next;
+			}
+		}
 
-        public void AppendTo(Stack<AnyType> Destination)
-        {
-            if (Destination == null)
-            {
-                throw new CollectionsDataNullException("Stack.cs", "Stack<AnyType>", "AppendTo", "Destination", "Destination cannot be NULL!");
-            }
+		public void AppendTo(Stack<AnyType> Destination)
+		{
+			if (Destination == null)
+			{
+				throw new CollectionsDataNullException("Stack.cs", "Stack<AnyType>", "AppendTo", "Destination", "Destination cannot be NULL!");
+			}
 
-            StackNode<AnyType> NodePointer = FirstNode;
+			StackNode<AnyType> NodePointer = FirstNode;
 
-            while (NodePointer != null)
-            {
-                Destination.Push(NodePointer.Data);
+			while (NodePointer != null)
+			{
+				Destination.Push(NodePointer.Data);
 
-                NodePointer = NodePointer.Next;
-            }
-        }
+				NodePointer = NodePointer.Next;
+			}
+		}
 
 		public Stack<AnyType> Reverse()
 		{
@@ -713,5 +717,6 @@ namespace Mosa.Collections.Generic
 			BSTree = null;
 		}
 	}
-	#endregion
+
+	#endregion Stack<AnyType>
 }
