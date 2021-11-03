@@ -2,6 +2,7 @@
 
 using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
+using Mosa.UnitTests.Optimization;
 
 namespace Mosa.UnitTests.x86
 {
@@ -61,7 +62,7 @@ namespace Mosa.UnitTests.x86
 		private static void ForceTestCollection()
 		{
 			// required to force assembly to be referenced and loaded
-			OptimizationTests.OptimizationTest1();
+			CommonTests.OptimizationTest1();
 		}
 	}
 }
