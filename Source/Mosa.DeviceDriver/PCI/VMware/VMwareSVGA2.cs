@@ -683,7 +683,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		{
 			return (uint)
 			(
-				((color.Alpha << alphaMaskShift) & alphaMask) |
+				((color.A << alphaMaskShift) & alphaMask) |
 				((color.R << redMaskShift) & redMask) |
 				((color.G << greenMaskShift) & greenMask) |
 				((color.B << blueMaskShift) & blueMask)

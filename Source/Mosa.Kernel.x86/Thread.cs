@@ -1,11 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
+using System.Threading;
 
 namespace Mosa.Kernel.x86
 {
-	public enum ThreadStatus { Empty = 0, Running, Terminating, Terminated, Waiting };
-
 	internal class Thread
 	{
 		public ThreadStatus Status = ThreadStatus.Empty;

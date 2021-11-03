@@ -34,9 +34,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private delegate (BitValue, BitValue) NodeVisitationDelegate2(InstructionNode node);
 
-		private readonly HashSet<BaseInstruction> IntegerLoads = new HashSet<BaseInstruction>();
-		private readonly HashSet<BaseInstruction> AnyValue = new HashSet<BaseInstruction>();
-
 		protected override void Finish()
 		{
 			trace = null;
@@ -125,6 +122,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Register(IRInstruction.IfThenElse32, IfThenElse32);
 			Register(IRInstruction.IfThenElse64, IfThenElse64);
+			Register(IRInstruction.NewString, NewString);
+			Register(IRInstruction.NewObject, NewObject);
+			Register(IRInstruction.NewArray, NewArray);
 
 			// TODO:
 
@@ -157,37 +157,6 @@ namespace Mosa.Compiler.Framework.Stages
 			// SubCarryOut64
 			// SubCarryIn32
 			// SubCarryIn64
-
-			IntegerLoads.Add(IRInstruction.LoadParamSignExtend16x32);
-			IntegerLoads.Add(IRInstruction.LoadParamSignExtend16x64);
-			IntegerLoads.Add(IRInstruction.LoadParamSignExtend32x64);
-			IntegerLoads.Add(IRInstruction.LoadParamSignExtend8x32);
-			IntegerLoads.Add(IRInstruction.LoadParamSignExtend8x64);
-			IntegerLoads.Add(IRInstruction.LoadSignExtend16x32);
-			IntegerLoads.Add(IRInstruction.LoadSignExtend16x64);
-			IntegerLoads.Add(IRInstruction.LoadSignExtend32x64);
-			IntegerLoads.Add(IRInstruction.LoadSignExtend8x32);
-			IntegerLoads.Add(IRInstruction.LoadSignExtend8x64);
-			IntegerLoads.Add(IRInstruction.LoadZeroExtend8x32);
-			IntegerLoads.Add(IRInstruction.LoadZeroExtend16x32);
-			IntegerLoads.Add(IRInstruction.LoadZeroExtend8x64);
-			IntegerLoads.Add(IRInstruction.LoadZeroExtend16x64);
-			IntegerLoads.Add(IRInstruction.LoadZeroExtend32x64);
-			IntegerLoads.Add(IRInstruction.LoadParamZeroExtend8x32);
-			IntegerLoads.Add(IRInstruction.LoadParamZeroExtend16x32);
-			IntegerLoads.Add(IRInstruction.LoadParamZeroExtend8x64);
-			IntegerLoads.Add(IRInstruction.LoadParamZeroExtend16x64);
-			IntegerLoads.Add(IRInstruction.LoadParamZeroExtend32x64);
-			IntegerLoads.Add(IRInstruction.Load32);
-			IntegerLoads.Add(IRInstruction.Load64);
-			IntegerLoads.Add(IRInstruction.LoadParam32);
-			IntegerLoads.Add(IRInstruction.LoadParam64);
-
-			AnyValue.Add(IRInstruction.CallStatic);
-			AnyValue.Add(IRInstruction.CallDirect);
-			AnyValue.Add(IRInstruction.Call);
-			AnyValue.Add(IRInstruction.CallInterface);
-			AnyValue.Add(IRInstruction.CallVirtual);
 		}
 
 		private void Register(BaseInstruction instruction, NodeVisitationDelegate method)
@@ -247,7 +216,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (value == null)
 				{
-					valueTrace?.Log($"*** INDETERMINATE (NULL)");
+					valueTrace?.Log($"*** INDETERMINATE");
 					continue;
 				}
 
@@ -261,125 +230,105 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
+		private void EvaluateVirtualRegisters()
+		{
+			foreach (var register in MethodCompiler.VirtualRegisters)
+			{
+				register.BitValue = null;
+			}
+
+			bool change = true;
+
+			while (change)
+			{
+				change = false;
+
+				foreach (var register in MethodCompiler.VirtualRegisters)
+				{
+					change |= Evaluate(register);
+				}
+			}
+		}
+
 		private bool Evaluate(Operand virtualRegister)
 		{
 			// already evaluated
 			if (virtualRegister.BitValue != null)
 				return false;
 
-			if (virtualRegister.IsFloatingPoint || virtualRegister.Definitions.Count != 1)
-			{
-				if (virtualRegister.IsInteger)
-				{
-					virtualRegister.BitValue = virtualRegister.IsInteger64 ? BitValue.Any64 : BitValue.Any32;
-					return true;
-				}
+			if (virtualRegister.IsFloatingPoint || !(virtualRegister.IsInteger || virtualRegister.IsReferenceType))
+				return false;
 
-				virtualRegister.BitValue = BitValue.Any64;
+			if (virtualRegister.Definitions.Count != 1)
+			{
+				virtualRegister.BitValue = Any(virtualRegister);
 				return true;
 			}
 
 			var node = virtualRegister.Definitions[0];
 
-			if (!node.Result.IsInteger)
+			if (node.ResultCount == 0)
+				return false;
+
+			if (!(node.Result.IsInteger || node.Result.IsReferenceType))
 			{
-				virtualRegister.BitValue = BitValue.Any64;
+				virtualRegister.BitValue = Any(virtualRegister);
 				return true;
 			}
 
-			var anyLoad = AnyValue.Contains(node.Instruction);
+			if (node.Instruction.FlowControl == FlowControl.Call)
+			{
+				virtualRegister.BitValue = Any(virtualRegister);
+				return true;
+			}
 
-			var integerLoad = !anyLoad && IntegerLoads.Contains(node.Instruction);
+			var method = visitation[node.Instruction.ID];
 
-			if (!integerLoad && !anyLoad)
+			if (method == null)
+			{
+				virtualRegister.BitValue = Any(virtualRegister);
+				return true;
+			}
+
+			if (!node.Instruction.IsMemoryRead)
 			{
 				// check dependencies
 				foreach (var operand in node.Operands)
 				{
-					if (operand.IsVirtualRegister)
-					{
-						if (operand.BitValue != null)
-							continue;
-
-						return false; // can not evaluate yet
-					}
-
-					if (operand.IsResolvedConstant && operand.IsInteger)
+					if (!operand.IsVirtualRegister)
 						continue;
 
-					// everything else we assume is indeterminate
-					virtualRegister.BitValue = BitValue.Any64;
+					if (!(operand.IsInteger || operand.IsReferenceType))
+						continue;
 
-					return true;
+					if (operand.BitValue == null)
+						return false; // can not evaluate yet
 				}
 			}
 
-			if (node.ResultCount == 1)
-			{
-				var method = visitation[node.Instruction.ID];
+			var value = method.Invoke(node);
+			virtualRegister.BitValue = value;
 
-				if (method != null)
-				{
-					var value = method.Invoke(node);
-					virtualRegister.BitValue = value;
-
-					UpdateInstruction(node.Result, value);
-
-					return true;
-				}
-			}
-			else if (node.ResultCount == 2)
-			{
-				// TODO: This is a little more complicated
-			}
-
-			virtualRegister.BitValue = virtualRegister.IsInteger64 ? BitValue.Any64 : BitValue.Any32;
-
+			UpdateInstruction(node.Result, value);
 			return true;
 		}
 
-		private void EvaluateVirtualRegisters()
+		private BitValue Any(Operand virtualRegister)
 		{
-			int count = MethodCompiler.VirtualRegisters.Count;
-			int evaluated = 0;
-			var virtualRegisters = MethodCompiler.VirtualRegisters;
+			if (virtualRegister.IsInteger)
+				return virtualRegister.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
+			else if (virtualRegister.IsReferenceType)
+				return Is32BitPlatform ? BitValue.Any32 : BitValue.Any64;
+			else if (virtualRegister.IsR4)
+				return BitValue.Any32;
+			else if (virtualRegister.IsR8)
+				return BitValue.Any64;
 
-			while (evaluated != count)
-			{
-				int startedAt = evaluated;
-
-				for (int i = 0; i < count; i++)
-				{
-					var virtualRegister = virtualRegisters[i];
-
-					if (Evaluate(virtualRegister))
-					{
-						evaluated++;
-
-						if (evaluated == count)
-							return;
-					}
-				}
-
-				// cycle detected - exit
-				if (startedAt == evaluated)
-				{
-					for (int index = 0; index < count; index++)
-					{
-						if (virtualRegisters[index].BitValue == null)
-						{
-							virtualRegisters[index].BitValue = MethodCompiler.VirtualRegisters[index].IsInteger64 ? BitValue.Any64 : BitValue.Any32;
-						}
-					}
-
-					return;
-				}
-			}
+			throw new InvalidProgramException();
 		}
 
 		private void UpdateInstruction(Operand virtualRegister, BitValue value)
 		{
-			//Debug.Assert(!value.IsIndeterminate);
 			Debug.Assert(!virtualRegister.IsFloatingPoint);
 			Debug.Assert(virtualRegister.Definitions.Count == 1);
 
@@ -466,7 +415,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 				Debug.Assert(node.Instruction == IRInstruction.Branch32 || node.Instruction == IRInstruction.Branch64 || node.Instruction == IRInstruction.BranchObject);
 
-				var result = EvaluateCompare(node);
+				var is32Bit = node.Instruction == IRInstruction.Branch32 || (node.Instruction == IRInstruction.BranchObject && Is32BitPlatform);
+
+				var result = EvaluateCompare(node, is32Bit);
 
 				if (!result.HasValue)
 					continue;
@@ -479,9 +430,7 @@ namespace Mosa.Compiler.Framework.Stages
 				BranchesRemovedCount.Increment();
 
 				if (!result.Value)
-				{
 					continue;
-				}
 
 				while (node.IsEmptyOrNop)
 				{
@@ -494,17 +443,35 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private bool? EvaluateCompare(InstructionNode node)
+		private bool? EvaluateCompare(InstructionNode node, bool is32Bit)
 		{
 			var value1 = GetValue(node.Operand1);
 			var value2 = GetValue(node.Operand2);
+
+			//Debug.Assert(value1.Is32Bit == value2.Is32Bit);
+
+			//var bitsSet1 = value1.BitsSet;
+			//var bitsClear1 = value1.BitsClear;
+			//var maxValue1 = value1.MaxValue;
+			//var minValue1 = value1.MinValue;
+
+			//var bitsSet2 = value2.BitsSet;
+			//var bitsClear2 = value2.BitsClear;
+			//var maxValue2 = value2.MaxValue;
+			//var minValue2 = value2.MinValue;
+
+			//var areAll64BitsKnown1 = value1.AreAll64BitsKnown;
+			//var areAll64BitsKnown2 = value2.AreAll64BitsKnown;
+
+			//var areAnyBitsKnown1 = value1.AreAnyBitsKnown;
+			//var areAnyBitsKnown2 = value2.AreAnyBitsKnown;
 
 			switch (node.ConditionCode)
 			{
 				case ConditionCode.Equal:
 					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 					{
-						return value1.MaxValue == value2.MaxValue;
+						return value1.BitsSet == value2.BitsSet;
 					}
 					else if (value1.MaxValue == value1.MinValue && value1.MaxValue == value2.MaxValue && value1.MinValue == value2.MinValue)
 					{
@@ -519,7 +486,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case ConditionCode.NotEqual:
 					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 					{
-						return value1.MaxValue != value2.MaxValue;
+						return value1.BitsSet != value2.BitsSet;
 					}
 					else if (value1.MaxValue == value1.MinValue && value1.MaxValue == value2.MaxValue && value1.MinValue == value2.MinValue)
 					{
@@ -533,25 +500,34 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return true;
 					}
+					else if (value1.MaxValue < value2.MinValue)
+					{
+						return true;
+					}
+					else if (value1.MinValue > value2.MaxValue)
+					{
+						return true;
+					}
 					break;
 
 				case ConditionCode.UnsignedGreater:
 					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 					{
-						return value1.MaxValue > value2.MaxValue;
+						return value1.BitsSet > value2.BitsSet;
 					}
 					else if (value2.AreAll64BitsKnown && value2.MaxValue == 0 && value1.BitsSet != 0)
 					{
 						return true;
 					}
-					else if (value1.MinPossible > value2.MaxPossible)
-					{
-						return true;
-					}
-					else if (value1.MaxPossible <= value2.MinPossible)
-					{
-						return false;
-					}
+
+					//else if (value1.MinBitValue > value2.MaxBitValue)
+					//{
+					//	return true;
+					//}
+					//else if (value1.MaxBitValue <= value2.MinBitValue)
+					//{
+					//	return false;
+					//}
 					break;
 
 				case ConditionCode.UnsignedLess:
@@ -563,80 +539,99 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return true;
 					}
-					else if (value1.MaxPossible < value2.MinPossible)
-					{
-						return true;
-					}
-					else if (value1.MinPossible >= value2.MaxPossible)
-					{
-						return false;
-					}
+
+					//else if (value1.MaxBitValue < value2.MinBitValue)
+					//{
+					//	return true;
+					//}
+					//else if (value1.MinBitValue >= value2.MaxBitValue)
+					//{
+					//	return false;
+					//}
 					break;
 
 				case ConditionCode.UnsignedGreaterOrEqual:
 					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 					{
-						return value1.MaxValue <= value2.MaxValue;
+						return value1.BitsSet <= value2.BitsSet;
 					}
 					else if (value1.AreAll64BitsKnown && value1.MaxValue == 0 && value2.BitsSet != 0)
 					{
 						return true;
 					}
-					else if (value1.MinPossible >= value2.MaxPossible)
-					{
-						return true;
-					}
-					else if (value1.MaxPossible < value2.MinPossible)
-					{
-						return false;
-					}
+
+					//else if (value1.MinBitValue >= value2.MaxBitValue)
+					//{
+					//	return true;
+					//}
+					//else if (value1.MaxBitValue < value2.MinBitValue)
+					//{
+					//	return false;
+					//}
 					break;
 
 				case ConditionCode.UnsignedLessOrEqual:
 					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 					{
-						return value1.MaxValue <= value2.MaxValue;
+						return value1.BitsSet <= value2.BitsSet;
 					}
 					else if (value1.AreAll64BitsKnown && value1.MaxValue == 0 && value2.BitsSet != 0)
 					{
 						return true;
 					}
-					else if (value1.MaxPossible <= value2.MinPossible)
-					{
-						return true;
-					}
-					else if (value1.MinPossible > value2.MaxPossible)
-					{
-						return false;
-					}
+
+					//else if (value1.MaxBitValue <= value2.MinBitValue)
+					//{
+					//	return true;
+					//}
+					//else if (value1.MinBitValue > value2.MaxBitValue)
+					//{
+					//	return false;
+					//}
 					break;
 
 				case ConditionCode.Greater:
-					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && !value1.Is32Bit)
 					{
-						return (long)value1.MaxValue > (long)value2.MaxValue;
+						return (long)value1.BitsSet > (long)value2.BitsSet;
+					}
+					else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is32Bit)
+					{
+						return (int)value1.BitsSet > (int)value2.BitsSet;
 					}
 
 					break;
 
 				case ConditionCode.Less:
-					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && !value1.Is32Bit)
 					{
-						return (long)value1.MaxValue < (long)value2.MaxValue;
+						return (long)value1.BitsSet < (long)value2.BitsSet;
+					}
+					else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is32Bit)
+					{
+						return (int)value1.BitsSet < (int)value2.BitsSet;
 					}
 					break;
 
 				case ConditionCode.GreaterOrEqual:
-					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && !value1.Is32Bit)
 					{
-						return (long)value1.MaxValue >= (long)value2.MaxValue;
+						return (long)value1.BitsSet >= (long)value2.BitsSet;
+					}
+					else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is32Bit)
+					{
+						return (int)value1.BitsSet >= (int)value2.BitsSet;
 					}
 					break;
 
 				case ConditionCode.LessOrEqual:
-					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && !value1.Is32Bit)
 					{
-						return (long)value1.MaxValue <= (long)value2.MaxValue;
+						return (long)value1.BitsSet <= (long)value2.BitsSet;
+					}
+					else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is32Bit)
+					{
+						return (int)value1.BitsSet <= (int)value2.BitsSet;
 					}
 					break;
 
@@ -647,12 +642,18 @@ namespace Mosa.Compiler.Framework.Stages
 			return null;
 		}
 
-		private static BitValue GetValue(Operand operand)
+		private BitValue GetValue(Operand operand)
 		{
 			var value = operand.BitValue;
 
 			if (value == null)
-				return operand.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
+				if (operand.IsReferenceType)
+					if (operand.IsNull)
+						return Is32BitPlatform ? BitValue.Zero32 : BitValue.Zero64;
+					else
+						return Is32BitPlatform ? BitValue.Any32 : BitValue.Any64;
+				else
+					return operand.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
 			else
 				return value;
 		}
@@ -832,27 +833,32 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private BitValue Compare32x32(InstructionNode node)
 		{
-			var result = EvaluateCompare(node);
+			var result = EvaluateCompare(node, true);
 
 			if (!result.HasValue)
 				return BitValue.Any32;
 
-			return BitValue.CreateValue(result.Value ? 1u : 0u, true);
+			return BitValue.CreateValue(result.Value, true);
 		}
 
 		private BitValue Compare64x32(InstructionNode node)
 		{
-			return Compare64x64(node);
+			var result = EvaluateCompare(node, false);
+
+			if (!result.HasValue)
+				return BitValue.Any32;
+
+			return BitValue.CreateValue(result.Value, true);
 		}
 
 		private BitValue Compare64x64(InstructionNode node)
 		{
-			var result = EvaluateCompare(node);
+			var result = EvaluateCompare(node, false);
 
 			if (!result.HasValue)
 				return BitValue.Any64;
 
-			return BitValue.CreateValue(result.Value ? 1u : 0u, false);
+			return BitValue.CreateValue(result.Value, false);
 		}
 
 		private BitValue GetHigh32(InstructionNode node)
@@ -2073,6 +2079,21 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			return BitValue.Any64;
+		}
+
+		private BitValue NewString(InstructionNode node)
+		{
+			return Is32BitPlatform ? BitValue.AnyExceptZero32 : BitValue.AnyExceptZero64;
+		}
+
+		private BitValue NewObject(InstructionNode node)
+		{
+			return Is32BitPlatform ? BitValue.AnyExceptZero32 : BitValue.AnyExceptZero64;
+		}
+
+		private BitValue NewArray(InstructionNode node)
+		{
+			return Is32BitPlatform ? BitValue.AnyExceptZero32 : BitValue.AnyExceptZero64;
 		}
 
 		#endregion IR Instructions

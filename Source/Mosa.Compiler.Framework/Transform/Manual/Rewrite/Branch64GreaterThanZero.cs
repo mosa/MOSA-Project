@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Rewrite
 			if (context.ConditionCode != ConditionCode.UnsignedGreater)
 				return false;
 
-			if (!IsZero(context.Operand2))
+			if (!IsZero(context.Operand1))
 				return false;
 
 			return true;

@@ -20,7 +20,7 @@
 			"Name": "Add32",
 			"SubName": "ByZero",
 			"Expression": "X86.Add32 a 0",
-			"Filter": "!IsStatusFlagUsed(@)",
+			"Filter": "!AreStatusFlagUsed(@)",
 			"Result": "(X86.Mov32 a)",
 			"Variations": "Yes",
 			"Log": "Yes"
@@ -31,7 +31,7 @@
 			"Name": "Sub32",
 			"SubName": "ByZero",
 			"Expression": "X86.Sub32 a 0",
-			"Filter": "!IsStatusFlagUsed(@)",
+			"Filter": "!AreStatusFlagUsed(@)",
 			"Result": "(X86.Mov32 a)",
 			"Variations": "Yes",
 			"Log": "Yes"

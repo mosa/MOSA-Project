@@ -281,14 +281,14 @@ namespace Mosa.Compiler.Framework.Transform
 			BaseMethodCompilerStage.UpdatePHIInstructionTargets(targets, source, newSource);
 		}
 
-		public static void RemoveBlocksFromPHIInstructions(BasicBlock removedBlock, BasicBlock[] nextBlocks)
+		public static void RemoveBlocksFromPHIInstructions(BasicBlock removedBlock, BasicBlock[] phiBlocks)
 		{
-			BaseMethodCompilerStage.RemoveBlocksFromPHIInstructions(removedBlock, nextBlocks);
+			BaseMethodCompilerStage.RemoveBlocksFromPHIInstructions(removedBlock, phiBlocks);
 		}
 
-		public static void RemoveBlockFromPHIInstructions(BasicBlock removedBlock, BasicBlock nextBlock)
+		public static void RemoveBlockFromPHIInstructions(BasicBlock removedBlock, BasicBlock phiBlock)
 		{
-			BaseMethodCompilerStage.RemoveBlockFromPHIInstructions(removedBlock, nextBlock);
+			BaseMethodCompilerStage.RemoveBlockFromPHIInstructions(removedBlock, phiBlock);
 		}
 
 		public void UpdatePHI(Context context)

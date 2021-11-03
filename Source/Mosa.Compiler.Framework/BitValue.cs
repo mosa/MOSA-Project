@@ -13,8 +13,11 @@ namespace Mosa.Compiler.Framework
 
 		#region Static Values
 
-		public static readonly BitValue Any32 = new BitValue(0, Upper32BitsSet, uint.MaxValue, 0);
-		public static readonly BitValue Any64 = new BitValue(0, 0, ulong.MaxValue, 0);
+		public static readonly BitValue Any32 = new BitValue(0, Upper32BitsSet, uint.MaxValue, 0, true);
+		public static readonly BitValue Any64 = new BitValue(0, 0, ulong.MaxValue, 0, false);
+
+		public static readonly BitValue AnyExceptZero32 = new BitValue(0, Upper32BitsSet, uint.MaxValue, 1, true);
+		public static readonly BitValue AnyExceptZero64 = new BitValue(0, 0, ulong.MaxValue, 1, false);
 
 		public static readonly BitValue Zero32 = new BitValue(0, true);
 		public static readonly BitValue Zero64 = new BitValue(0, false);
@@ -90,6 +93,10 @@ namespace Mosa.Compiler.Framework
 		public ulong MaxValue { get; private set; }
 		public ulong MinValue { get; private set; }
 
+		public bool Is32Bit { get; private set; }
+
+		public bool Is64Bit { get { return !Is32Bit; } }
+
 		public bool AreAll64BitsKnown { get { return (BitsKnown & ulong.MaxValue) == ulong.MaxValue; } }
 		public bool AreLower16BitsKnown { get { return (BitsKnown & ushort.MaxValue) == ushort.MaxValue; } }
 		public bool AreLower32BitsKnown { get { return (BitsKnown & uint.MaxValue) == uint.MaxValue; } }
@@ -107,8 +114,8 @@ namespace Mosa.Compiler.Framework
 		public ushort BitsClear16 { get { return (ushort)BitsClear; } }
 		public ushort BitsSet16 { get { return (ushort)BitsSet; } }
 
-		public ulong MaxPossible { get { return BitsSet | BitsUnknown; } }
-		public ulong MinPossible { get { return BitsSet & BitsUnknown; } }
+		public ulong MaxBitValue { get { return BitsSet | BitsUnknown; } }
+		public ulong MinBitValue { get { return BitsSet & BitsUnknown; } }
 
 		private BitValue(ulong value, bool is32Bit)
 		{
@@ -116,6 +123,7 @@ namespace Mosa.Compiler.Framework
 			BitsClear = ~value;
 			MaxValue = value;
 			MinValue = value;
+			Is32Bit = is32Bit;
 
 			if (is32Bit)
 			{
@@ -126,12 +134,13 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		private BitValue(ulong bitsSet, ulong bitsClear, ulong maxValue, ulong minValue)
+		private BitValue(ulong bitsSet, ulong bitsClear, ulong maxValue, ulong minValue, bool is32Bit)
 		{
 			BitsSet = bitsSet;
 			BitsClear = bitsClear;
 			MaxValue = maxValue;
 			MinValue = minValue;
+			Is32Bit = is32Bit;
 		}
 
 		public static BitValue CreateValue(ulong bitsSet, ulong bitsClear, ulong maxValue, ulong minValue, bool rangeDeterminate, bool is32Bit)
@@ -166,7 +175,12 @@ namespace Mosa.Compiler.Framework
 			if (bitsSet == 0 && bitsClear == 0 && maxValue == ulong.MaxValue && minValue == 0)
 				return Any64;
 
-			return new BitValue(bitsSet, bitsClear, maxValue, minValue);
+			return new BitValue(bitsSet, bitsClear, maxValue, minValue, is32Bit);
+		}
+
+		public static BitValue CreateValue(bool value, bool is32Bit)
+		{
+			return CreateValue(value ? 1u : 0, is32Bit);
 		}
 
 		public static BitValue CreateValue(ulong value, bool is32Bit)

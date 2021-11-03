@@ -31,7 +31,7 @@ Below are the command line arguments available:
     -sccp-off,Optimizations.SCCP,false
     -basic-optimizations,Optimizations.Basic,true
     -basic-optimizations-off,Optimizations.Basic,false
-	-basic-optimization-window,{value}
+	-basic-optimization-window,Optimizations.Basic.Window,{value}
     -inline-explicit,Optimizations.Inline.ExplicitOnly,true
     -inline-explicit-off,Optimizations.Inline.ExplicitOnly,false
     -long-expansion,Optimizations.LongExpansion,true
@@ -272,7 +272,7 @@ Below are the command line arguments available:
     -o7,Optimizations.Devirtualization,true
     -o7,Optimizations.LongExpansion,true
     -o7,Optimizations.Platform,true
-    -o7,Optimizations.Inline,false
+    -o7,Optimizations.Inline,true
     -o7,Optimizations.LoopInvariantCodeMotion,true
     -o7,Optimizations.BitTracker,false
     -o7,Optimizations.TwoPass,false

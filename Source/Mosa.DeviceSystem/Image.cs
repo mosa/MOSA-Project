@@ -12,38 +12,33 @@ namespace Mosa.DeviceSystem
 		public int Width;
 		public int Height;
 
-		public uint Size;
-
-		public Image(int width, int height, int depth)
+		public Image(int width, int height)
 		{
 			Width = width;
 			Height = height;
-			Bpp = depth / 8;
+			Bpp = 4;
 
-			Size = (uint)(width * height * Bpp);
-			RawData = GC.AllocateObject(Size);  // HACK - FIX ME! This is not an object. Use new byte[] instead
+			RawData = GC.AllocateObject((uint)(width * height * Bpp));  // HACK - FIX ME! This is not an object. Use new byte[] instead
 		}
 
-		public Image()
-		{
-		}
+		public Image() { }
 
+		// TODO: Fix
 		public Image ScaleImage(int NewWidth, int NewHeight)
 		{
 			Pointer temp = GC.AllocateObject((uint)(NewWidth * NewHeight * Bpp));   // HACK - FIX ME! This is not an object. Use new byte[] instead
 
 			int w1 = Width, h1 = Height;
-			int x_ratio = ((w1 << 16) / NewWidth) + 1, y_ratio = ((h1 << 16) / NewHeight) + 1, x2, y2;
+			int x_ratio = ((w1 << 16) / NewWidth) + 1, y_ratio = ((h1 << 16) / NewHeight) + 1;
+			int x2, y2;
 
 			for (int i = 0; i < NewHeight; i++)
 				for (int j = 0; j < NewWidth; j++)
 				{
 					x2 = ((j * x_ratio) >> 16);
 					y2 = ((i * y_ratio) >> 16);
-					temp.Store32((uint)((i * NewWidth) + j), RawData.Load32((uint)((y2 * w1) + x2)));
+					temp.Store32(((uint)((i * NewWidth) + j)) * (uint)Bpp, RawData.Load32(((uint)((y2 * w1) + x2)) * (uint)Bpp));
 				}
-
-			Internal.MemoryClear(RawData, Size);    // HACK - FIX ME! MemoryClear is for low level internal use only.
 
 			return new Image()
 			{

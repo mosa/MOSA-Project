@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the constant long integer.
 		/// </summary>
-		public ulong ConstantUnsigned64 { get; set; }
+		public ulong ConstantUnsigned64 { get; private set; }
 
 		/// <summary>
 		/// Holds a list of instructions, which define this operand.
@@ -184,7 +184,7 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsReferenceType { get; private set; }
 
-		public bool IsResolved { get; set; }
+		public bool IsResolved { get; set; }    // FUTURE: make set private
 
 		/// <summary>
 		/// Gets a value indicating whether this instance is resolved constant.
@@ -266,7 +266,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Returns the type of the operand.
 		/// </summary>
-		public MosaType Type { get; }
+		public MosaType Type { get; private set; }
 
 		/// <summary>
 		/// Holds a list of instructions, which use this operand.
@@ -289,7 +289,7 @@ namespace Mosa.Compiler.Framework
 			}
 			set
 			{
-				Debug.Assert(_value == null || (IsInteger && IsVirtualRegister && !IsConstant));
+				Debug.Assert(value == null || (IsInteger && IsVirtualRegister) || (IsReferenceType && IsVirtualRegister));
 				_value = value;
 			}
 		}

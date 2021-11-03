@@ -25,7 +25,7 @@ namespace Mosa.Platform.x86.Transform.Auto.StrengthReduction
 			if (context.Operand2.ConstantUnsigned64 != 0)
 				return false;
 
-			if (IsStatusFlagUsed(context))
+			if (AreStatusFlagUsed(context))
 				return false;
 
 			return true;

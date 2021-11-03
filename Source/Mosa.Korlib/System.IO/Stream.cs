@@ -104,6 +104,18 @@ namespace System.IO
 
 		//		delegate void WriteDelegate (byte[] buffer, int offset, int count);
 
+		public virtual void CopyTo(Stream destination)
+		{
+			if (!CanRead && !destination.CanWrite)
+				return;
+
+			byte[] buffer = new byte[32768];
+			
+			int read;
+			while ((read = Read(buffer, 0, buffer.Length)) > 0)
+				destination.Write(buffer, 0, read);
+		}
+
 		/// <summary>
 		///
 		/// </summary>

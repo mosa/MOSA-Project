@@ -91,13 +91,23 @@ namespace Mosa.Platform.x86.Stages
 				context.Operand2 = v1;
 				return;
 			}
+			else if (operand1.IsConstant && operand2.IsConstant)
+			{
+				var v1 = AllocateVirtualRegister(operand1);
+				var v2 = AllocateVirtualRegister(operand2);
+
+				context.InsertBefore().AppendInstruction(X86.Mov32, v1, operand1);
+				context.InsertBefore().AppendInstruction(X86.Mov32, v2, operand2);
+				context.Operand1 = v1;
+				context.Operand2 = v2;
+				return;
+			}
 			else if (operand1.IsConstant)
 			{
 				var v1 = AllocateVirtualRegister(operand1);
 
 				context.InsertBefore().AppendInstruction(X86.Mov32, v1, operand1);
 				context.Operand1 = v1;
-				return;
 			}
 			else if (operand2.IsConstant)
 			{
@@ -105,7 +115,6 @@ namespace Mosa.Platform.x86.Stages
 
 				context.InsertBefore().AppendInstruction(X86.Mov32, v1, operand2);
 				context.Operand2 = v1;
-				return;
 			}
 		}
 

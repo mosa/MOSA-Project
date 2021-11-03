@@ -241,9 +241,7 @@ namespace Mosa.Runtime
 		public static void MemoryClear(Pointer dest, uint count, uint value = 0)
 		{
 			for (uint i = 0; i < count; i++)
-			{
 				dest.Store8(i, (byte)value);
-			}
 		}
 
 		#endregion Memory Manipulation
