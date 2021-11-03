@@ -16,127 +16,142 @@
 		<DebugSymbols>True</DebugSymbols>
 	</PropertyGroup>
 	<ItemGroup>
+	  <Compile Remove="Mosa.Collections.Generic\BinarySearchTreeTests.cs" />
+	  <Compile Remove="Mosa.Collections.Generic\DictionaryTests.cs" />
+	  <Compile Remove="Mosa.Collections.Generic\ListTests.cs" />
+	  <Compile Remove="Mosa.Collections.Generic\QueueTests.cs" />
+	  <Compile Remove="Mosa.Collections.Generic\StackTests.cs" />
+	  <Compile Remove="Mosa.Collections.Generic\TClass.cs" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Mosa.Collections.Generic\Mosa.Collections.Generic.csproj" />
 		<ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
 	</ItemGroup>
 	<ItemGroup>
-		<Compile Update="CallTests.cs">
-			<DependentUpon>CallTests.tt</DependentUpon>
-			<DesignTime>True</DesignTime>
-			<AutoGen>True</AutoGen>
+		<Compile Update="Basic\CallTests.cs">
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>CallTests.tt</DependentUpon>
 		</Compile>
-		<Compile Update="BoxingTests.cs">
-			<DependentUpon>BoxingTests.tt</DependentUpon>
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
+		<Compile Update="Basic\ConvTests.cs">
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>ConvTests.tt</DependentUpon>
 		</Compile>
-		<Compile Update="ComparisonTests.cs">
-			<DependentUpon>ComparisonTests.tt</DependentUpon>
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
+		<Compile Update="Basic\ForeachTests.cs">
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>ForeachTests.tt</DependentUpon>
 		</Compile>
-		<Compile Update="ConvTests.cs">
-			<DependentUpon>ConvTests.tt</DependentUpon>
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
+		<Compile Update="Basic\LdargaTests.cs">
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>LdargaTests.tt</DependentUpon>
 		</Compile>
-		<None Include="BoxingTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>BoxingTests.cs</LastGenOutput>
-		</None>
-		<None Include="CallTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>CallTests.cs</LastGenOutput>
-		</None>
-		<None Include="EnumTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>EnumTests.cs</LastGenOutput>
-		</None>
-		<None Include="ForeachTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>ForeachTests.cs</LastGenOutput>
-		</None>
-		<None Include="LdargaTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>LdargaTests.cs</LastGenOutput>
-		</None>
-		<None Include="StaticFieldTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>StaticFieldTests.cs</LastGenOutput>
-		</None>
-		<None Include="GenericCallTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>GenericCallTests.cs</LastGenOutput>
-		</None>
-		<None Include="StructTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>StructTests.cs</LastGenOutput>
-		</None>
-		<Compile Update="EnumTests.cs">
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
-			<DependentUpon>EnumTests.tt</DependentUpon>
+		<Compile Update="Basic\LdlocaTests.cs">
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>LdlocaTests.tt</DependentUpon>
 		</Compile>
-		<Compile Update="LdargaTests.cs">
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
-			<DependentUpon>LdargaTests.tt</DependentUpon>
+		<Compile Update="Basic\StaticFieldTests.cs">
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>StaticFieldTests.tt</DependentUpon>
 		</Compile>
-		<Compile Update="ForeachTests.cs">
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
-			<DependentUpon>ForeachTests.tt</DependentUpon>
+		<Compile Update="Generics\GenericCallTests.cs">
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>GenericCallTests.tt</DependentUpon>
 		</Compile>
-		<Compile Update="GenericCallTests.cs">
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
-			<DependentUpon>GenericCallTests.tt</DependentUpon>
+		<Compile Update="Primitive\BoxingTests.cs">
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>BoxingTests.tt</DependentUpon>
 		</Compile>
-		<None Include="InitStructTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>InitStructTests.cs</LastGenOutput>
-		</None>
-		<Compile Update="InitStructTests.cs">
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
-			<DependentUpon>InitStructTests.tt</DependentUpon>
+		<Compile Update="Primitive\ComparisonTests.cs">
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>ComparisonTests.tt</DependentUpon>
 		</Compile>
-		<Compile Update="StructTests.cs">
-			<DependentUpon>StructTests.tt</DependentUpon>
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
+		<Compile Update="Primitive\EnumTests.cs">
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>EnumTests.tt</DependentUpon>
 		</Compile>
-		<Compile Update="StaticFieldTests.cs">
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
-			<DependentUpon>StaticFieldTests.tt</DependentUpon>
+		<Compile Update="ValueType\InitStructTests.cs">
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>InitStructTests.tt</DependentUpon>
 		</Compile>
-		<Compile Update="SwitchTests.cs">
+		<Compile Update="FlowControl\SwitchTests.cs">
 			<DependentUpon>SwitchTests.tt</DependentUpon>
 			<AutoGen>True</AutoGen>
 			<DesignTime>True</DesignTime>
 		</Compile>
-		<Compile Update="LdlocaTests.cs">
-			<DependentUpon>LdlocaTests.tt</DependentUpon>
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
+		<Compile Update="ValueType\StructTests.cs">
+		  <DesignTime>True</DesignTime>
+		  <AutoGen>True</AutoGen>
+		  <DependentUpon>StructTests.tt</DependentUpon>
 		</Compile>
 	</ItemGroup>
 	<ItemGroup>
-		<None Include="ComparisonTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>ComparisonTests.cs</LastGenOutput>
-		</None>
-		<None Include="ConvTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>ConvTests.cs</LastGenOutput>
-		</None>
-		<None Include="SwitchTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>SwitchTests.cs</LastGenOutput>
-		</None>
-		<None Include="LdlocaTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>LdlocaTests.cs</LastGenOutput>
-		</None>
+	  <None Update="Basic\CallTests.tt">
+	    <Generator>TextTemplatingFileGenerator</Generator>
+	    <LastGenOutput>CallTests.cs</LastGenOutput>
+	  </None>
+	  <None Update="Basic\ConvTests.tt">
+	    <Generator>TextTemplatingFileGenerator</Generator>
+	    <LastGenOutput>ConvTests.cs</LastGenOutput>
+	  </None>
+	  <None Update="Basic\ForeachTests.tt">
+	    <Generator>TextTemplatingFileGenerator</Generator>
+	    <LastGenOutput>ForeachTests.cs</LastGenOutput>
+	  </None>
+	  <None Update="Basic\LdargaTests.tt">
+	    <Generator>TextTemplatingFileGenerator</Generator>
+	    <LastGenOutput>LdargaTests.cs</LastGenOutput>
+	  </None>
+	  <None Update="Basic\LdlocaTests.tt">
+	    <Generator>TextTemplatingFileGenerator</Generator>
+	    <LastGenOutput>LdlocaTests.cs</LastGenOutput>
+	  </None>
+	  <None Update="Basic\StaticFieldTests.tt">
+	    <Generator>TextTemplatingFileGenerator</Generator>
+	    <LastGenOutput>StaticFieldTests.cs</LastGenOutput>
+	  </None>
+	  <None Update="FlowControl\SwitchTests.tt">
+	    <Generator>TextTemplatingFileGenerator</Generator>
+	    <LastGenOutput>SwitchTests.cs</LastGenOutput>
+	  </None>
+	  <None Update="Generics\GenericCallTests.tt">
+	    <Generator>TextTemplatingFileGenerator</Generator>
+	    <LastGenOutput>GenericCallTests.cs</LastGenOutput>
+	  </None>
+	  <None Update="Primitive\BoxingTests.tt">
+	    <Generator>TextTemplatingFileGenerator</Generator>
+	    <LastGenOutput>BoxingTests.cs</LastGenOutput>
+	  </None>
+	  <None Update="Primitive\ComparisonTests.tt">
+	    <Generator>TextTemplatingFileGenerator</Generator>
+	    <LastGenOutput>ComparisonTests.cs</LastGenOutput>
+	  </None>
+	  <None Update="Primitive\EnumTests.tt">
+	    <Generator>TextTemplatingFileGenerator</Generator>
+	    <LastGenOutput>EnumTests.cs</LastGenOutput>
+	  </None>
+	  <None Update="ValueType\InitStructTests.tt">
+	    <Generator>TextTemplatingFileGenerator</Generator>
+	    <LastGenOutput>InitStructTests.cs</LastGenOutput>
+	  </None>
+	  <None Update="ValueType\StructTests.tt">
+	    <Generator>TextTemplatingFileGenerator</Generator>
+	    <LastGenOutput>StructTests.cs</LastGenOutput>
+	  </None>
+	</ItemGroup>
+	<ItemGroup>
+	  <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+	</ItemGroup>
+	<ItemGroup>
+	  <Folder Include="Mosa.Collections.Generic\" />
 	</ItemGroup>
 </Project>

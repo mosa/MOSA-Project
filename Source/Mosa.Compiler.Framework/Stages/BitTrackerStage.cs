@@ -481,6 +481,14 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return false;
 					}
+					else if (value1.MaxValue < value2.MinValue)
+					{
+						return false;
+					}
+					else if (value1.MinValue > value2.MaxValue)
+					{
+						return false;
+					}
 					break;
 
 				case ConditionCode.NotEqual:
@@ -519,12 +527,12 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return true;
 					}
+					else if (value1.MinValue > value2.MaxValue)     // correct
+					{
+						return true;
+					}
 
-					//else if (value1.MinBitValue > value2.MaxBitValue)
-					//{
-					//	return true;
-					//}
-					//else if (value1.MaxBitValue <= value2.MinBitValue)
+					//else if (value1.MaxValue <= value2.MinValue)
 					//{
 					//	return false;
 					//}
@@ -539,15 +547,16 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return true;
 					}
+					else if (value1.MaxValue < value2.MinValue)   // correct
+					{
+						return true;
+					}
 
-					//else if (value1.MaxBitValue < value2.MinBitValue)
-					//{
-					//	return true;
-					//}
-					//else if (value1.MinBitValue >= value2.MaxBitValue)
+					//else if (value1.MinValue > value2.MaxValue)
 					//{
 					//	return false;
 					//}
+
 					break;
 
 				case ConditionCode.UnsignedGreaterOrEqual:
@@ -559,15 +568,16 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return true;
 					}
+					else if (value1.MinValue >= value2.MaxValue)
+					{
+						return true;
+					}
 
-					//else if (value1.MinBitValue >= value2.MaxBitValue)
+					//else if (value1.MinValue >= value2.MaxValue)
 					//{
 					//	return true;
 					//}
-					//else if (value1.MaxBitValue < value2.MinBitValue)
-					//{
-					//	return false;
-					//}
+
 					break;
 
 				case ConditionCode.UnsignedLessOrEqual:
@@ -579,15 +589,16 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return true;
 					}
+					else if (value1.MaxValue <= value2.MinValue)
+					{
+						return true;
+					}
 
-					//else if (value1.MaxBitValue <= value2.MinBitValue)
-					//{
-					//	return true;
-					//}
-					//else if (value1.MinBitValue > value2.MaxBitValue)
+					//else if (value1.MinValue > value2.MaxValue)
 					//{
 					//	return false;
 					//}
+
 					break;
 
 				case ConditionCode.Greater:

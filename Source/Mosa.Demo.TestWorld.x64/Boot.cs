@@ -4,6 +4,7 @@ using Mosa.Kernel.x64;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x64;
 using Mosa.UnitTests;
+using Mosa.UnitTests.Optimization;
 
 namespace Mosa.Demo.TestWorld.x64
 {
@@ -40,7 +41,7 @@ namespace Mosa.Demo.TestWorld.x64
 
 		public static bool IncludeUnitTestAssembly()
 		{
-			return OptimizationTests.OptimizationTest1();
+			return CommonTests.OptimizationTest1();
 		}
 	}
 }
