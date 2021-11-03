@@ -58,7 +58,7 @@ namespace Mosa.UnitTests.Primitive
 		[MosaUnitTest]
 		public static byte PositiveMul2()
 		{
-			return (byte)EnumU1Type.Positive50 * 2;
+			return  (byte)EnumU1Type.Positive50 * 2;
 		}
 
 		[MosaUnitTest]
@@ -139,8 +139,7 @@ namespace Mosa.UnitTests.Primitive
 			return (byte)EnumU1Type.Positive50 ^ 1;
 		}
 
-		private static bool InternalPositiveEqual(EnumU1Type e, byte v)
-		{
+		private static bool InternalPositiveEqual(EnumU1Type e, byte v) {
 			return (byte)e == v;
 		}
 
@@ -162,8 +161,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveEqual(EnumU1Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveNotEqual(EnumU1Type e, byte v)
-		{
+		private static bool InternalPositiveNotEqual(EnumU1Type e, byte v) {
 			return (byte)e != v;
 		}
 
@@ -185,8 +183,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveNotEqual(EnumU1Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveGreaterThan(EnumU1Type e, byte v)
-		{
+		private static bool InternalPositiveGreaterThan(EnumU1Type e, byte v) {
 			return (byte)e > v;
 		}
 
@@ -208,8 +205,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveGreaterThan(EnumU1Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveLessThan(EnumU1Type e, byte v)
-		{
+		private static bool InternalPositiveLessThan(EnumU1Type e, byte v) {
 			return (byte)e < v;
 		}
 
@@ -231,8 +227,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveLessThan(EnumU1Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveGreaterThanOrEqual(EnumU1Type e, byte v)
-		{
+		private static bool InternalPositiveGreaterThanOrEqual(EnumU1Type e, byte v) {
 			return (byte)e >= v;
 		}
 
@@ -254,8 +249,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveGreaterThanOrEqual(EnumU1Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveLessThanOrEqual(EnumU1Type e, byte v)
-		{
+		private static bool InternalPositiveLessThanOrEqual(EnumU1Type e, byte v) {
 			return (byte)e <= v;
 		}
 
@@ -333,7 +327,7 @@ namespace Mosa.UnitTests.Primitive
 		[MosaUnitTest]
 		public static ushort PositiveMul2()
 		{
-			return (ushort)EnumU2Type.Positive50 * 2;
+			return  (ushort)EnumU2Type.Positive50 * 2;
 		}
 
 		[MosaUnitTest]
@@ -414,8 +408,7 @@ namespace Mosa.UnitTests.Primitive
 			return (ushort)EnumU2Type.Positive50 ^ 1;
 		}
 
-		private static bool InternalPositiveEqual(EnumU2Type e, ushort v)
-		{
+		private static bool InternalPositiveEqual(EnumU2Type e, ushort v) {
 			return (ushort)e == v;
 		}
 
@@ -437,8 +430,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveEqual(EnumU2Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveNotEqual(EnumU2Type e, ushort v)
-		{
+		private static bool InternalPositiveNotEqual(EnumU2Type e, ushort v) {
 			return (ushort)e != v;
 		}
 
@@ -460,8 +452,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveNotEqual(EnumU2Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveGreaterThan(EnumU2Type e, ushort v)
-		{
+		private static bool InternalPositiveGreaterThan(EnumU2Type e, ushort v) {
 			return (ushort)e > v;
 		}
 
@@ -483,8 +474,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveGreaterThan(EnumU2Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveLessThan(EnumU2Type e, ushort v)
-		{
+		private static bool InternalPositiveLessThan(EnumU2Type e, ushort v) {
 			return (ushort)e < v;
 		}
 
@@ -506,8 +496,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveLessThan(EnumU2Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveGreaterThanOrEqual(EnumU2Type e, ushort v)
-		{
+		private static bool InternalPositiveGreaterThanOrEqual(EnumU2Type e, ushort v) {
 			return (ushort)e >= v;
 		}
 
@@ -529,8 +518,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveGreaterThanOrEqual(EnumU2Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveLessThanOrEqual(EnumU2Type e, ushort v)
-		{
+		private static bool InternalPositiveLessThanOrEqual(EnumU2Type e, ushort v) {
 			return (ushort)e <= v;
 		}
 
@@ -608,7 +596,7 @@ namespace Mosa.UnitTests.Primitive
 		[MosaUnitTest]
 		public static uint PositiveMul2()
 		{
-			return (uint)EnumU4Type.Positive50 * 2;
+			return  (uint)EnumU4Type.Positive50 * 2;
 		}
 
 		[MosaUnitTest]
@@ -689,8 +677,7 @@ namespace Mosa.UnitTests.Primitive
 			return (uint)EnumU4Type.Positive50 ^ 1;
 		}
 
-		private static bool InternalPositiveEqual(EnumU4Type e, uint v)
-		{
+		private static bool InternalPositiveEqual(EnumU4Type e, uint v) {
 			return (uint)e == v;
 		}
 
@@ -712,8 +699,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveEqual(EnumU4Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveNotEqual(EnumU4Type e, uint v)
-		{
+		private static bool InternalPositiveNotEqual(EnumU4Type e, uint v) {
 			return (uint)e != v;
 		}
 
@@ -735,8 +721,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveNotEqual(EnumU4Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveGreaterThan(EnumU4Type e, uint v)
-		{
+		private static bool InternalPositiveGreaterThan(EnumU4Type e, uint v) {
 			return (uint)e > v;
 		}
 
@@ -758,8 +743,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveGreaterThan(EnumU4Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveLessThan(EnumU4Type e, uint v)
-		{
+		private static bool InternalPositiveLessThan(EnumU4Type e, uint v) {
 			return (uint)e < v;
 		}
 
@@ -781,8 +765,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveLessThan(EnumU4Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveGreaterThanOrEqual(EnumU4Type e, uint v)
-		{
+		private static bool InternalPositiveGreaterThanOrEqual(EnumU4Type e, uint v) {
 			return (uint)e >= v;
 		}
 
@@ -804,8 +787,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveGreaterThanOrEqual(EnumU4Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveLessThanOrEqual(EnumU4Type e, uint v)
-		{
+		private static bool InternalPositiveLessThanOrEqual(EnumU4Type e, uint v) {
 			return (uint)e <= v;
 		}
 
@@ -883,7 +865,7 @@ namespace Mosa.UnitTests.Primitive
 		[MosaUnitTest]
 		public static ulong PositiveMul2()
 		{
-			return (ulong)EnumU8Type.Positive50 * 2;
+			return  (ulong)EnumU8Type.Positive50 * 2;
 		}
 
 		[MosaUnitTest]
@@ -964,8 +946,7 @@ namespace Mosa.UnitTests.Primitive
 			return (ulong)EnumU8Type.Positive50 ^ 1;
 		}
 
-		private static bool InternalPositiveEqual(EnumU8Type e, ulong v)
-		{
+		private static bool InternalPositiveEqual(EnumU8Type e, ulong v) {
 			return (ulong)e == v;
 		}
 
@@ -987,8 +968,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveEqual(EnumU8Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveNotEqual(EnumU8Type e, ulong v)
-		{
+		private static bool InternalPositiveNotEqual(EnumU8Type e, ulong v) {
 			return (ulong)e != v;
 		}
 
@@ -1010,8 +990,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveNotEqual(EnumU8Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveGreaterThan(EnumU8Type e, ulong v)
-		{
+		private static bool InternalPositiveGreaterThan(EnumU8Type e, ulong v) {
 			return (ulong)e > v;
 		}
 
@@ -1033,8 +1012,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveGreaterThan(EnumU8Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveLessThan(EnumU8Type e, ulong v)
-		{
+		private static bool InternalPositiveLessThan(EnumU8Type e, ulong v) {
 			return (ulong)e < v;
 		}
 
@@ -1056,8 +1034,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveLessThan(EnumU8Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveGreaterThanOrEqual(EnumU8Type e, ulong v)
-		{
+		private static bool InternalPositiveGreaterThanOrEqual(EnumU8Type e, ulong v) {
 			return (ulong)e >= v;
 		}
 
@@ -1079,8 +1056,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveGreaterThanOrEqual(EnumU8Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveLessThanOrEqual(EnumU8Type e, ulong v)
-		{
+		private static bool InternalPositiveLessThanOrEqual(EnumU8Type e, ulong v) {
 			return (ulong)e <= v;
 		}
 
@@ -1161,7 +1137,7 @@ namespace Mosa.UnitTests.Primitive
 		[MosaUnitTest]
 		public static sbyte PositiveMul2()
 		{
-			return (sbyte)EnumI1Type.Positive50 * 2;
+			return  (sbyte)EnumI1Type.Positive50 * 2;
 		}
 
 		[MosaUnitTest]
@@ -1242,8 +1218,7 @@ namespace Mosa.UnitTests.Primitive
 			return (sbyte)EnumI1Type.Positive50 ^ 1;
 		}
 
-		private static bool InternalPositiveEqual(EnumI1Type e, sbyte v)
-		{
+		private static bool InternalPositiveEqual(EnumI1Type e, sbyte v) {
 			return (sbyte)e == v;
 		}
 
@@ -1265,8 +1240,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveEqual(EnumI1Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveNotEqual(EnumI1Type e, sbyte v)
-		{
+		private static bool InternalPositiveNotEqual(EnumI1Type e, sbyte v) {
 			return (sbyte)e != v;
 		}
 
@@ -1288,8 +1262,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveNotEqual(EnumI1Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveGreaterThan(EnumI1Type e, sbyte v)
-		{
+		private static bool InternalPositiveGreaterThan(EnumI1Type e, sbyte v) {
 			return (sbyte)e > v;
 		}
 
@@ -1311,8 +1284,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveGreaterThan(EnumI1Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveLessThan(EnumI1Type e, sbyte v)
-		{
+		private static bool InternalPositiveLessThan(EnumI1Type e, sbyte v) {
 			return (sbyte)e < v;
 		}
 
@@ -1334,8 +1306,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveLessThan(EnumI1Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveGreaterThanOrEqual(EnumI1Type e, sbyte v)
-		{
+		private static bool InternalPositiveGreaterThanOrEqual(EnumI1Type e, sbyte v) {
 			return (sbyte)e >= v;
 		}
 
@@ -1357,8 +1328,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveGreaterThanOrEqual(EnumI1Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveLessThanOrEqual(EnumI1Type e, sbyte v)
-		{
+		private static bool InternalPositiveLessThanOrEqual(EnumI1Type e, sbyte v) {
 			return (sbyte)e <= v;
 		}
 
@@ -1425,7 +1395,7 @@ namespace Mosa.UnitTests.Primitive
 		[MosaUnitTest]
 		public static sbyte NegativeMul2()
 		{
-			return (sbyte)EnumI1Type.Negative50 * 2;
+			return  (sbyte)EnumI1Type.Negative50 * 2;
 		}
 
 		[MosaUnitTest]
@@ -1506,8 +1476,7 @@ namespace Mosa.UnitTests.Primitive
 			return (sbyte)EnumI1Type.Negative50 ^ 1;
 		}
 
-		private static bool InternalNegativeEqual(EnumI1Type e, sbyte v)
-		{
+		private static bool InternalNegativeEqual(EnumI1Type e, sbyte v) {
 			return (sbyte)e == v;
 		}
 
@@ -1529,8 +1498,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalNegativeEqual(EnumI1Type.Negative50, -51);
 		}
 
-		private static bool InternalNegativeNotEqual(EnumI1Type e, sbyte v)
-		{
+		private static bool InternalNegativeNotEqual(EnumI1Type e, sbyte v) {
 			return (sbyte)e != v;
 		}
 
@@ -1552,8 +1520,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalNegativeNotEqual(EnumI1Type.Negative50, -51);
 		}
 
-		private static bool InternalNegativeGreaterThan(EnumI1Type e, sbyte v)
-		{
+		private static bool InternalNegativeGreaterThan(EnumI1Type e, sbyte v) {
 			return (sbyte)e > v;
 		}
 
@@ -1575,8 +1542,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalNegativeGreaterThan(EnumI1Type.Negative50, -51);
 		}
 
-		private static bool InternalNegativeLessThan(EnumI1Type e, sbyte v)
-		{
+		private static bool InternalNegativeLessThan(EnumI1Type e, sbyte v) {
 			return (sbyte)e < v;
 		}
 
@@ -1598,8 +1564,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalNegativeLessThan(EnumI1Type.Negative50, -51);
 		}
 
-		private static bool InternalNegativeGreaterThanOrEqual(EnumI1Type e, sbyte v)
-		{
+		private static bool InternalNegativeGreaterThanOrEqual(EnumI1Type e, sbyte v) {
 			return (sbyte)e >= v;
 		}
 
@@ -1621,8 +1586,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalNegativeGreaterThanOrEqual(EnumI1Type.Negative50, -51);
 		}
 
-		private static bool InternalNegativeLessThanOrEqual(EnumI1Type e, sbyte v)
-		{
+		private static bool InternalNegativeLessThanOrEqual(EnumI1Type e, sbyte v) {
 			return (sbyte)e <= v;
 		}
 
@@ -1703,7 +1667,7 @@ namespace Mosa.UnitTests.Primitive
 		[MosaUnitTest]
 		public static short PositiveMul2()
 		{
-			return (short)EnumI2Type.Positive50 * 2;
+			return  (short)EnumI2Type.Positive50 * 2;
 		}
 
 		[MosaUnitTest]
@@ -1784,8 +1748,7 @@ namespace Mosa.UnitTests.Primitive
 			return (short)EnumI2Type.Positive50 ^ 1;
 		}
 
-		private static bool InternalPositiveEqual(EnumI2Type e, short v)
-		{
+		private static bool InternalPositiveEqual(EnumI2Type e, short v) {
 			return (short)e == v;
 		}
 
@@ -1807,8 +1770,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveEqual(EnumI2Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveNotEqual(EnumI2Type e, short v)
-		{
+		private static bool InternalPositiveNotEqual(EnumI2Type e, short v) {
 			return (short)e != v;
 		}
 
@@ -1830,8 +1792,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveNotEqual(EnumI2Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveGreaterThan(EnumI2Type e, short v)
-		{
+		private static bool InternalPositiveGreaterThan(EnumI2Type e, short v) {
 			return (short)e > v;
 		}
 
@@ -1853,8 +1814,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveGreaterThan(EnumI2Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveLessThan(EnumI2Type e, short v)
-		{
+		private static bool InternalPositiveLessThan(EnumI2Type e, short v) {
 			return (short)e < v;
 		}
 
@@ -1876,8 +1836,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveLessThan(EnumI2Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveGreaterThanOrEqual(EnumI2Type e, short v)
-		{
+		private static bool InternalPositiveGreaterThanOrEqual(EnumI2Type e, short v) {
 			return (short)e >= v;
 		}
 
@@ -1899,8 +1858,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveGreaterThanOrEqual(EnumI2Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveLessThanOrEqual(EnumI2Type e, short v)
-		{
+		private static bool InternalPositiveLessThanOrEqual(EnumI2Type e, short v) {
 			return (short)e <= v;
 		}
 
@@ -1967,7 +1925,7 @@ namespace Mosa.UnitTests.Primitive
 		[MosaUnitTest]
 		public static short NegativeMul2()
 		{
-			return (short)EnumI2Type.Negative50 * 2;
+			return  (short)EnumI2Type.Negative50 * 2;
 		}
 
 		[MosaUnitTest]
@@ -2048,8 +2006,7 @@ namespace Mosa.UnitTests.Primitive
 			return (short)EnumI2Type.Negative50 ^ 1;
 		}
 
-		private static bool InternalNegativeEqual(EnumI2Type e, short v)
-		{
+		private static bool InternalNegativeEqual(EnumI2Type e, short v) {
 			return (short)e == v;
 		}
 
@@ -2071,8 +2028,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalNegativeEqual(EnumI2Type.Negative50, -51);
 		}
 
-		private static bool InternalNegativeNotEqual(EnumI2Type e, short v)
-		{
+		private static bool InternalNegativeNotEqual(EnumI2Type e, short v) {
 			return (short)e != v;
 		}
 
@@ -2094,8 +2050,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalNegativeNotEqual(EnumI2Type.Negative50, -51);
 		}
 
-		private static bool InternalNegativeGreaterThan(EnumI2Type e, short v)
-		{
+		private static bool InternalNegativeGreaterThan(EnumI2Type e, short v) {
 			return (short)e > v;
 		}
 
@@ -2117,8 +2072,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalNegativeGreaterThan(EnumI2Type.Negative50, -51);
 		}
 
-		private static bool InternalNegativeLessThan(EnumI2Type e, short v)
-		{
+		private static bool InternalNegativeLessThan(EnumI2Type e, short v) {
 			return (short)e < v;
 		}
 
@@ -2140,8 +2094,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalNegativeLessThan(EnumI2Type.Negative50, -51);
 		}
 
-		private static bool InternalNegativeGreaterThanOrEqual(EnumI2Type e, short v)
-		{
+		private static bool InternalNegativeGreaterThanOrEqual(EnumI2Type e, short v) {
 			return (short)e >= v;
 		}
 
@@ -2163,8 +2116,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalNegativeGreaterThanOrEqual(EnumI2Type.Negative50, -51);
 		}
 
-		private static bool InternalNegativeLessThanOrEqual(EnumI2Type e, short v)
-		{
+		private static bool InternalNegativeLessThanOrEqual(EnumI2Type e, short v) {
 			return (short)e <= v;
 		}
 
@@ -2245,7 +2197,7 @@ namespace Mosa.UnitTests.Primitive
 		[MosaUnitTest]
 		public static int PositiveMul2()
 		{
-			return (int)EnumI4Type.Positive50 * 2;
+			return  (int)EnumI4Type.Positive50 * 2;
 		}
 
 		[MosaUnitTest]
@@ -2326,8 +2278,7 @@ namespace Mosa.UnitTests.Primitive
 			return (int)EnumI4Type.Positive50 ^ 1;
 		}
 
-		private static bool InternalPositiveEqual(EnumI4Type e, int v)
-		{
+		private static bool InternalPositiveEqual(EnumI4Type e, int v) {
 			return (int)e == v;
 		}
 
@@ -2349,8 +2300,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveEqual(EnumI4Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveNotEqual(EnumI4Type e, int v)
-		{
+		private static bool InternalPositiveNotEqual(EnumI4Type e, int v) {
 			return (int)e != v;
 		}
 
@@ -2372,8 +2322,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveNotEqual(EnumI4Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveGreaterThan(EnumI4Type e, int v)
-		{
+		private static bool InternalPositiveGreaterThan(EnumI4Type e, int v) {
 			return (int)e > v;
 		}
 
@@ -2395,8 +2344,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveGreaterThan(EnumI4Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveLessThan(EnumI4Type e, int v)
-		{
+		private static bool InternalPositiveLessThan(EnumI4Type e, int v) {
 			return (int)e < v;
 		}
 
@@ -2418,8 +2366,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveLessThan(EnumI4Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveGreaterThanOrEqual(EnumI4Type e, int v)
-		{
+		private static bool InternalPositiveGreaterThanOrEqual(EnumI4Type e, int v) {
 			return (int)e >= v;
 		}
 
@@ -2441,8 +2388,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveGreaterThanOrEqual(EnumI4Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveLessThanOrEqual(EnumI4Type e, int v)
-		{
+		private static bool InternalPositiveLessThanOrEqual(EnumI4Type e, int v) {
 			return (int)e <= v;
 		}
 
@@ -2509,7 +2455,7 @@ namespace Mosa.UnitTests.Primitive
 		[MosaUnitTest]
 		public static int NegativeMul2()
 		{
-			return (int)EnumI4Type.Negative50 * 2;
+			return  (int)EnumI4Type.Negative50 * 2;
 		}
 
 		[MosaUnitTest]
@@ -2590,8 +2536,7 @@ namespace Mosa.UnitTests.Primitive
 			return (int)EnumI4Type.Negative50 ^ 1;
 		}
 
-		private static bool InternalNegativeEqual(EnumI4Type e, int v)
-		{
+		private static bool InternalNegativeEqual(EnumI4Type e, int v) {
 			return (int)e == v;
 		}
 
@@ -2613,8 +2558,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalNegativeEqual(EnumI4Type.Negative50, -51);
 		}
 
-		private static bool InternalNegativeNotEqual(EnumI4Type e, int v)
-		{
+		private static bool InternalNegativeNotEqual(EnumI4Type e, int v) {
 			return (int)e != v;
 		}
 
@@ -2636,8 +2580,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalNegativeNotEqual(EnumI4Type.Negative50, -51);
 		}
 
-		private static bool InternalNegativeGreaterThan(EnumI4Type e, int v)
-		{
+		private static bool InternalNegativeGreaterThan(EnumI4Type e, int v) {
 			return (int)e > v;
 		}
 
@@ -2659,8 +2602,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalNegativeGreaterThan(EnumI4Type.Negative50, -51);
 		}
 
-		private static bool InternalNegativeLessThan(EnumI4Type e, int v)
-		{
+		private static bool InternalNegativeLessThan(EnumI4Type e, int v) {
 			return (int)e < v;
 		}
 
@@ -2682,8 +2624,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalNegativeLessThan(EnumI4Type.Negative50, -51);
 		}
 
-		private static bool InternalNegativeGreaterThanOrEqual(EnumI4Type e, int v)
-		{
+		private static bool InternalNegativeGreaterThanOrEqual(EnumI4Type e, int v) {
 			return (int)e >= v;
 		}
 
@@ -2705,8 +2646,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalNegativeGreaterThanOrEqual(EnumI4Type.Negative50, -51);
 		}
 
-		private static bool InternalNegativeLessThanOrEqual(EnumI4Type e, int v)
-		{
+		private static bool InternalNegativeLessThanOrEqual(EnumI4Type e, int v) {
 			return (int)e <= v;
 		}
 
@@ -2787,7 +2727,7 @@ namespace Mosa.UnitTests.Primitive
 		[MosaUnitTest]
 		public static long PositiveMul2()
 		{
-			return (long)EnumI8Type.Positive50 * 2;
+			return  (long)EnumI8Type.Positive50 * 2;
 		}
 
 		[MosaUnitTest]
@@ -2868,8 +2808,7 @@ namespace Mosa.UnitTests.Primitive
 			return (long)EnumI8Type.Positive50 ^ 1;
 		}
 
-		private static bool InternalPositiveEqual(EnumI8Type e, long v)
-		{
+		private static bool InternalPositiveEqual(EnumI8Type e, long v) {
 			return (long)e == v;
 		}
 
@@ -2891,8 +2830,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveEqual(EnumI8Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveNotEqual(EnumI8Type e, long v)
-		{
+		private static bool InternalPositiveNotEqual(EnumI8Type e, long v) {
 			return (long)e != v;
 		}
 
@@ -2914,8 +2852,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveNotEqual(EnumI8Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveGreaterThan(EnumI8Type e, long v)
-		{
+		private static bool InternalPositiveGreaterThan(EnumI8Type e, long v) {
 			return (long)e > v;
 		}
 
@@ -2937,8 +2874,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveGreaterThan(EnumI8Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveLessThan(EnumI8Type e, long v)
-		{
+		private static bool InternalPositiveLessThan(EnumI8Type e, long v) {
 			return (long)e < v;
 		}
 
@@ -2960,8 +2896,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveLessThan(EnumI8Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveGreaterThanOrEqual(EnumI8Type e, long v)
-		{
+		private static bool InternalPositiveGreaterThanOrEqual(EnumI8Type e, long v) {
 			return (long)e >= v;
 		}
 
@@ -2983,8 +2918,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalPositiveGreaterThanOrEqual(EnumI8Type.Positive50, 49);
 		}
 
-		private static bool InternalPositiveLessThanOrEqual(EnumI8Type e, long v)
-		{
+		private static bool InternalPositiveLessThanOrEqual(EnumI8Type e, long v) {
 			return (long)e <= v;
 		}
 
@@ -3051,7 +2985,7 @@ namespace Mosa.UnitTests.Primitive
 		[MosaUnitTest]
 		public static long NegativeMul2()
 		{
-			return (long)EnumI8Type.Negative50 * 2;
+			return  (long)EnumI8Type.Negative50 * 2;
 		}
 
 		[MosaUnitTest]
@@ -3132,8 +3066,7 @@ namespace Mosa.UnitTests.Primitive
 			return (long)EnumI8Type.Negative50 ^ 1;
 		}
 
-		private static bool InternalNegativeEqual(EnumI8Type e, long v)
-		{
+		private static bool InternalNegativeEqual(EnumI8Type e, long v) {
 			return (long)e == v;
 		}
 
@@ -3155,8 +3088,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalNegativeEqual(EnumI8Type.Negative50, -51);
 		}
 
-		private static bool InternalNegativeNotEqual(EnumI8Type e, long v)
-		{
+		private static bool InternalNegativeNotEqual(EnumI8Type e, long v) {
 			return (long)e != v;
 		}
 
@@ -3178,8 +3110,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalNegativeNotEqual(EnumI8Type.Negative50, -51);
 		}
 
-		private static bool InternalNegativeGreaterThan(EnumI8Type e, long v)
-		{
+		private static bool InternalNegativeGreaterThan(EnumI8Type e, long v) {
 			return (long)e > v;
 		}
 
@@ -3201,8 +3132,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalNegativeGreaterThan(EnumI8Type.Negative50, -51);
 		}
 
-		private static bool InternalNegativeLessThan(EnumI8Type e, long v)
-		{
+		private static bool InternalNegativeLessThan(EnumI8Type e, long v) {
 			return (long)e < v;
 		}
 
@@ -3224,8 +3154,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalNegativeLessThan(EnumI8Type.Negative50, -51);
 		}
 
-		private static bool InternalNegativeGreaterThanOrEqual(EnumI8Type e, long v)
-		{
+		private static bool InternalNegativeGreaterThanOrEqual(EnumI8Type e, long v) {
 			return (long)e >= v;
 		}
 
@@ -3247,8 +3176,7 @@ namespace Mosa.UnitTests.Primitive
 			return InternalNegativeGreaterThanOrEqual(EnumI8Type.Negative50, -51);
 		}
 
-		private static bool InternalNegativeLessThanOrEqual(EnumI8Type e, long v)
-		{
+		private static bool InternalNegativeLessThanOrEqual(EnumI8Type e, long v) {
 			return (long)e <= v;
 		}
 
