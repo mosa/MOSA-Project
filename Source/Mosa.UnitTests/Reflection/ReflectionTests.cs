@@ -3,7 +3,7 @@
 using System;
 using System.Runtime.CompilerServices;
 
-namespace Mosa.UnitTests
+namespace Mosa.UnitTests.Reflection
 {
 	public static class ReflectionTests
 	{
