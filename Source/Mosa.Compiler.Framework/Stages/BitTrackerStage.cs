@@ -527,11 +527,10 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return true;
 					}
-
-					//else if (value1.MinValue > value2.MaxValue)     // correct
-					//{
-					//	return true;
-					//}
+					else if (value1.MinValue > value2.MaxValue)     // correct
+					{
+						return true;
+					}
 
 					//else if (value1.MaxValue <= value2.MinValue)
 					//{
@@ -548,11 +547,10 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return true;
 					}
-
-					//else if (value1.MaxValue < value2.MinValue)   // correct
-					//{
-					//	return true;
-					//}
+					else if (value1.MaxValue < value2.MinValue)   // correct
+					{
+						return true;
+					}
 
 					//else if (value1.MinValue > value2.MaxValue)
 					//{
