@@ -607,6 +607,8 @@ namespace Mosa.Compiler.Framework.Stages
 						return (int)value1.BitsSet > (int)value2.BitsSet;
 					}
 
+					// FUTURE: If IsSignBitClear[32|64] && Is[32|64]Bit, then treat as unsigned comparision
+
 					break;
 
 				case ConditionCode.Less:
@@ -618,6 +620,9 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return (int)value1.BitsSet < (int)value2.BitsSet;
 					}
+
+					// FUTURE: If IsSignBitClear[32|64] && Is[32|64]Bit, then treat as unsigned comparision
+
 					break;
 
 				case ConditionCode.GreaterOrEqual:
@@ -629,6 +634,9 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return (int)value1.BitsSet >= (int)value2.BitsSet;
 					}
+
+					// FUTURE: If IsSignBitClear[32|64] && Is[32|64]Bit, then treat as unsigned comparision
+
 					break;
 
 				case ConditionCode.LessOrEqual:
@@ -640,6 +648,9 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return (int)value1.BitsSet <= (int)value2.BitsSet;
 					}
+
+					// FUTURE: If IsSignBitClear[32|64] && Is[32|64]Bit, then treat as unsigned comparision
+
 					break;
 
 				default:

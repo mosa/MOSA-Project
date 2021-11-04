@@ -113,12 +113,12 @@ namespace Mosa.Compiler.Framework
 		public byte BitsSet8 => (byte)BitsSet;
 		public ushort BitsClear16 => (ushort)BitsClear;
 		public ushort BitsSet16 => (ushort)BitsSet;
-
 		public bool IsSignBitKnown32 => ((BitsKnown >> 31) & 1) != 0;
 		public bool IsSignBitKnown64 => ((BitsKnown >> 63) & 1) != 0;
-
 		public bool IsSignBitSet32 => ((BitsSet >> 31) & 1) != 0;
 		public bool IsSignBitSet64 => ((BitsSet >> 63) & 1) != 0;
+		public bool IsSignBitClear32 => ((BitsClear >> 31) & 1) == 1;
+		public bool IsSignBitClear64 => ((BitsClear >> 63) & 1) == 1;
 
 		private BitValue(ulong value, bool is32Bit)
 		{
