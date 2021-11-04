@@ -95,27 +95,30 @@ namespace Mosa.Compiler.Framework
 
 		public bool Is32Bit { get; private set; }
 
-		public bool Is64Bit { get { return !Is32Bit; } }
+		public bool Is64Bit => !Is32Bit;
 
-		public bool AreAll64BitsKnown { get { return (BitsKnown & ulong.MaxValue) == ulong.MaxValue; } }
-		public bool AreLower16BitsKnown { get { return (BitsKnown & ushort.MaxValue) == ushort.MaxValue; } }
-		public bool AreLower32BitsKnown { get { return (BitsKnown & uint.MaxValue) == uint.MaxValue; } }
-		public bool AreLower5BitsKnown { get { return (BitsKnown & 0b11111) == 0b11111; } }
-		public bool AreLower6BitsKnown { get { return (BitsKnown & 0b111111) == 0b111111; } }
-		public bool AreLower8BitsKnown { get { return (BitsKnown & byte.MaxValue) == byte.MaxValue; } }
-		public bool AreUpper32BitsKnown { get { return (BitsKnown & Upper32BitsSet) == Upper32BitsSet; } }
-		public ulong BitsKnown { get { return BitsSet | BitsClear; } }
-		public ulong BitsUnknown { get { return ~BitsKnown; } }
-		public bool AreAnyBitsKnown { get { return BitsClear != 0 || BitsSet != 0; } }
-		public uint BitsClear32 { get { return (uint)BitsClear; } }
-		public uint BitsSet32 { get { return (uint)BitsSet; } }
-		public byte BitsClear8 { get { return (byte)BitsClear; } }
-		public byte BitsSet8 { get { return (byte)BitsSet; } }
-		public ushort BitsClear16 { get { return (ushort)BitsClear; } }
-		public ushort BitsSet16 { get { return (ushort)BitsSet; } }
+		public bool AreAll64BitsKnown => (BitsKnown & ulong.MaxValue) == ulong.MaxValue;
+		public bool AreLower16BitsKnown => (BitsKnown & ushort.MaxValue) == ushort.MaxValue;
+		public bool AreLower32BitsKnown => (BitsKnown & uint.MaxValue) == uint.MaxValue;
+		public bool AreLower5BitsKnown => (BitsKnown & 0b11111) == 0b11111;
+		public bool AreLower6BitsKnown => (BitsKnown & 0b111111) == 0b111111;
+		public bool AreLower8BitsKnown => (BitsKnown & byte.MaxValue) == byte.MaxValue;
+		public bool AreUpper32BitsKnown => (BitsKnown & Upper32BitsSet) == Upper32BitsSet;
+		public ulong BitsKnown => BitsSet | BitsClear;
+		public ulong BitsUnknown => ~BitsKnown;
+		public bool AreAnyBitsKnown => BitsClear != 0 || BitsSet != 0;
+		public uint BitsClear32 => (uint)BitsClear;
+		public uint BitsSet32 => (uint)BitsSet;
+		public byte BitsClear8 => (byte)BitsClear;
+		public byte BitsSet8 => (byte)BitsSet;
+		public ushort BitsClear16 => (ushort)BitsClear;
+		public ushort BitsSet16 => (ushort)BitsSet;
 
-		public ulong MaxBitValue { get { return BitsSet | BitsUnknown; } }
-		public ulong MinBitValue { get { return BitsSet & BitsUnknown; } }
+		public bool IsSignBitKnown32 => ((BitsKnown >> 31) & 1) != 0;
+		public bool IsSignBitKnown64 => ((BitsKnown >> 63) & 1) != 0;
+
+		public bool IsSignBitSet32 => ((BitsSet >> 31) & 1) != 0;
+		public bool IsSignBitSet64 => ((BitsSet >> 63) & 1) != 0;
 
 		private BitValue(ulong value, bool is32Bit)
 		{

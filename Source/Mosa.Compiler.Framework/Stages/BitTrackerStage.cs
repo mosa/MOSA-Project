@@ -586,7 +586,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return true;
 					}
-					else if (value1.MaxValue <= value2.MinValue)   // correct
+					else if (value1.MaxValue <= value2.MinValue)
 					{
 						return true;
 					}
