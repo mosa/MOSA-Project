@@ -606,8 +606,22 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return (int)value1.BitsSet > (int)value2.BitsSet;
 					}
-
-					// FUTURE: If IsSignBitClear[32|64] && Is[32|64]Bit, then treat as unsigned comparision
+					else if (Is32BitPlatform && value1.IsSignBitClear32 && value1.MinValue > value2.MaxValue)
+					{
+						return true;
+					}
+					else if (Is32BitPlatform && value1.IsSignBitClear32 && value1.MaxValue < value2.MinValue)
+					{
+						return false;
+					}
+					else if (Is64BitPlatform && value1.IsSignBitClear64 && value1.MinValue > value2.MaxValue)
+					{
+						return true;
+					}
+					else if (Is64BitPlatform && value1.IsSignBitClear64 && value1.MaxValue < value2.MinValue)
+					{
+						return false;
+					}
 
 					break;
 
@@ -620,8 +634,22 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return (int)value1.BitsSet < (int)value2.BitsSet;
 					}
-
-					// FUTURE: If IsSignBitClear[32|64] && Is[32|64]Bit, then treat as unsigned comparision
+					else if (Is32BitPlatform && value1.IsSignBitClear32 && value1.MaxValue < value2.MinValue)
+					{
+						return true;
+					}
+					else if (Is32BitPlatform && value1.IsSignBitClear32 && value1.MinValue > value2.MaxValue)
+					{
+						return false;
+					}
+					else if (Is64BitPlatform && value1.IsSignBitClear64 && value1.MaxValue < value2.MinValue)
+					{
+						return true;
+					}
+					else if (Is64BitPlatform && value1.IsSignBitClear64 && value1.MinValue > value2.MaxValue)
+					{
+						return false;
+					}
 
 					break;
 
@@ -634,8 +662,22 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return (int)value1.BitsSet >= (int)value2.BitsSet;
 					}
-
-					// FUTURE: If IsSignBitClear[32|64] && Is[32|64]Bit, then treat as unsigned comparision
+					else if (Is32BitPlatform && value1.IsSignBitClear32 && value1.MinValue >= value2.MaxValue)
+					{
+						return true;
+					}
+					else if (Is32BitPlatform && value1.IsSignBitClear32 && value1.MaxValue <= value2.MinValue)
+					{
+						return false;
+					}
+					else if (Is64BitPlatform && value1.IsSignBitClear64 && value1.MinValue >= value2.MaxValue)
+					{
+						return true;
+					}
+					else if (Is64BitPlatform && value1.IsSignBitClear64 && value1.MaxValue <= value2.MinValue)
+					{
+						return false;
+					}
 
 					break;
 
@@ -648,8 +690,22 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return (int)value1.BitsSet <= (int)value2.BitsSet;
 					}
-
-					// FUTURE: If IsSignBitClear[32|64] && Is[32|64]Bit, then treat as unsigned comparision
+					else if (Is32BitPlatform && value1.IsSignBitClear32 && value1.MaxValue <= value2.MinValue)
+					{
+						return true;
+					}
+					else if (Is32BitPlatform && value1.IsSignBitClear32 && value1.MinValue >= value2.MaxValue)
+					{
+						return false;
+					}
+					else if (Is64BitPlatform && value1.IsSignBitClear64 && value1.MaxValue <= value2.MinValue)
+					{
+						return true;
+					}
+					else if (Is64BitPlatform && value1.IsSignBitClear64 && value1.MinValue >= value2.MaxValue)
+					{
+						return false;
+					}
 
 					break;
 
