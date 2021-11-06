@@ -100,7 +100,7 @@ namespace Mosa.DeviceSystem
 			for (uint h = 0; h < he; h++)
 				for (uint w = 0; w < wi; w++)
 				{
-					uint col = image.RawData.Load32((uint)(wi * h + w));
+					uint col = image.RawData.Read32((uint)(wi * h + w));
 
 					if (col != transparentColor)
 						SetPixel(col, x + w, y + h);
@@ -121,7 +121,7 @@ namespace Mosa.DeviceSystem
 			{
 				Internal.MemoryCopy(
 					Buffer.Address + ((Width * (y + h) + x) * bytesPerPixel),
-					image.RawData + (wb * h),
+					image.RawData.Address + (wb * h),
 					count);
 			}
 		}
