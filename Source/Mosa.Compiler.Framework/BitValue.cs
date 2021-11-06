@@ -172,10 +172,10 @@ namespace Mosa.Compiler.Framework
 			if ((bitsSet | bitsClear) == ulong.MaxValue)
 				return CreateValue(bitsSet, is32Bit);
 
-			if (bitsSet == 0 && bitsClear == Upper32BitsSet && maxValue == uint.MaxValue && minValue == 0)
+			if (bitsSet == 0 && bitsClear == Upper32BitsSet && maxValue == uint.MaxValue && minValue == 0 && is32Bit)
 				return Any32;
 
-			if (bitsSet == 0 && bitsClear == 0 && maxValue == ulong.MaxValue && minValue == 0)
+			if (bitsSet == 0 && bitsClear == 0 && maxValue == ulong.MaxValue && minValue == 0 && !is32Bit)
 				return Any64;
 
 			return new BitValue(bitsSet, bitsClear, maxValue, minValue, is32Bit);

@@ -273,6 +273,18 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public List<InstructionNode> Uses { get; }
 
+		//public bool FitsRegister { get; private set; }
+
+		//public bool FitsIntegerRegister { get; private set; }
+
+		//public bool Fits32BitRegister { get; set; }
+
+		//public bool FitsFloatingPointRegister { get; private set; }
+
+		//public bool FitsNativeSizeRegister { get; set; }
+
+		//public bool Fits64BitRegister { get { return Fits32BitRegister; } }
+
 		public int Size { get; private set; }
 
 		public BitValue BitValue
@@ -289,7 +301,7 @@ namespace Mosa.Compiler.Framework
 			}
 			set
 			{
-				Debug.Assert(value == null || (IsInteger && IsVirtualRegister) || (IsReferenceType && IsVirtualRegister));
+				Debug.Assert(value == null || (IsInteger && IsVirtualRegister) || (IsReferenceType && IsVirtualRegister) || (IsPointer && IsVirtualRegister) /*|| FitsIntegerRegister*/);
 				_value = value;
 			}
 		}
@@ -319,6 +331,11 @@ namespace Mosa.Compiler.Framework
 			IsParameter = false;
 			IsResolved = false;
 			IsString = false;
+
+			//FitsRegister = false;
+			//FitsIntegerRegister = false;
+			//FitsFloatingPointRegister = false;
+			//FitsNativeSizeRegister = false;
 		}
 
 		/// <summary>
@@ -350,6 +367,25 @@ namespace Mosa.Compiler.Framework
 
 			IsInteger64 = type.IsUI8 || Type.GetEnumUnderlyingType().IsUI8;
 			IsInteger32 = type.IsUI4 || Type.GetEnumUnderlyingType().IsUI4;
+
+			//if (IsValueType)
+			//{
+			//	var registryType = MosaTypeLayout.GetRegisterType(type);
+			//
+			//	FitsIntegerRegister = registryType.FitsIntegerRegister;
+			//	FitsFloatingPointRegister = registryType.FitsFloatRegister;
+			//	FitsRegister = FitsIntegerRegister || FitsFloatingPointRegister;
+			//	FitsNativeSizeRegister = registryType.IsNative;
+			//  Fits32BitRegister = !registryType.Is64Bit;
+			//	IsInteger64 = registryType.Is64Bit;
+			//}
+			//else
+			//{
+			//	FitsFloatingPointRegister = IsR4 || IsR8;
+			//	FitsIntegerRegister = !FitsFloatingPointRegister;
+			//	FitsRegister = true;
+			//	FitsNativeSizeRegister = false;
+			//}
 		}
 
 		#endregion Construction
@@ -497,11 +533,6 @@ namespace Mosa.Compiler.Framework
 		/// <exception cref="CompilerException"></exception>
 		public static Operand CreateConstant(MosaType type, ulong value)
 		{
-			if (type.IsReferenceType && value != 0)
-			{
-				throw new CompilerException();
-			}
-
 			return new Operand(type)
 			{
 				IsConstant = true,
