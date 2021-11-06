@@ -5,7 +5,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// ASCII 16 (static font)
 	/// </summary>
-	public class ASC16Font : IFont
+	public class ASC16Font : ISimpleFont
 	{
 		/// <summary>Gets the charset.</summary>
 		/// <value>The charset.</value>

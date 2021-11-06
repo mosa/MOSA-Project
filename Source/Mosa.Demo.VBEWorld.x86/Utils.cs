@@ -10,6 +10,6 @@ namespace Mosa.Demo.VBEWorld.x86
 	{
 		public static StandardMouse Mouse;
 
-		public static List<BitFont> Fonts;
+		public static List<SimpleBitFont> Fonts;
 	}
 }
