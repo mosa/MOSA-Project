@@ -21,6 +21,11 @@ namespace Mosa.DeviceSystem
 			return data[offset] | data[offset + 1] << 8;
 		}
 
+		public int Read24(int offset)
+		{
+			return data[offset] | data[offset + 1] << 8 | data[offset + 2] << 16;
+		}
+
 		public int Read32(int offset)
 		{
 			return data[offset] | data[offset + 1] << 8 | data[offset + 2] << 16 | data[offset + 3] << 24;

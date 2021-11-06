@@ -5,7 +5,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	/// BitFont (dynamic fonts)
 	/// </summary>
-	public class BitFont : IFont
+	public class SimpleBitFont : ISimpleFont
 	{
 		/// <summary>
 		/// Gets the name.
@@ -24,7 +24,7 @@ namespace Mosa.DeviceSystem
 		private string charset;
 		private byte[] buffer;
 
-		public BitFont(string name, int size, string charset, byte[] data)
+		public SimpleBitFont(string name, int size, string charset, byte[] data)
 		{
 			Name = name;
 			Size = size;

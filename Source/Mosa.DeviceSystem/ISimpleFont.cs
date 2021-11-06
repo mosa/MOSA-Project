@@ -5,7 +5,7 @@ namespace Mosa.DeviceSystem
 	/// <summary>
 	///
 	/// </summary>
-	public interface IFont
+	public interface ISimpleFont
 	{
 		/// <summary>
 		/// Gets the name.

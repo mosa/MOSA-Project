@@ -1,7 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime;
-
 namespace Mosa.DeviceSystem
 {
 	public class Bitmap
@@ -35,7 +33,7 @@ namespace Mosa.DeviceSystem
 
 				switch (bpp)
 				{
-					case 3: temp[w] = (int)(0xFF000000 | stream.Read32(dataSectionOffset + i)); break; // 24-bit
+					case 3: temp[w] = (int)(0xFF000000 | stream.Read24(dataSectionOffset + i)); break; // 24-bit
 					case 4: temp[w] = stream.Read32(dataSectionOffset + i); break; // 32-bit
 				}
 
