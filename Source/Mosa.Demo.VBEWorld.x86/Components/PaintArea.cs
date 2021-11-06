@@ -25,13 +25,13 @@ namespace Mosa.Demo.VBEWorld.x86.Components
 
 		public void Clear(Color color)
 		{
-			Internal.MemoryClear(Bitmap.RawData.Address, (uint)(Width * Height * Bpp), (uint)color.ToArgb());
+			Internal.MemoryClear(Bitmap.Data.Address, (uint)(Width * Height * Bpp), (uint)color.ToArgb());
 		}
 
 		public void DrawPoint(int x, int y, Color color)
 		{
 			if (x < Width)
-				Bitmap.RawData.Write32((uint)((Width * y + x) * Bpp), (uint)color.ToArgb());
+				Bitmap.Data.Write32((uint)((Width * y + x) * Bpp), (uint)color.ToArgb());
 		}
 	}
 

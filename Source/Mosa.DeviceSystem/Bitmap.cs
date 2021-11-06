@@ -1,21 +1,9 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
-using System;
-using System.Text;
 
 namespace Mosa.DeviceSystem
 {
-	public struct BitmapHeader
-	{
-		public string Type;
-		public uint Size;
-		public uint DataSectionOffset;
-		public uint Width;
-		public uint Height;
-		public uint Bpp;
-	}
-
 	public class Bitmap : Image
 	{
 		public Bitmap(byte[] data)
@@ -28,26 +16,13 @@ namespace Mosa.DeviceSystem
 					ptr = (Pointer)p;
 			}
 
-			BitmapHeader bitmapHeader = new BitmapHeader();
+			Width = (int)ptr.Load32(0x12);
+			Height = (int)ptr.Load32(0x16);
+			Bpp = ptr.Load8(0x1C) / 8;
 
-			bitmapHeader.Type = string.Empty + Encoding.ASCII.GetChar(ptr.Load8(0)) + Encoding.ASCII.GetChar(ptr.Load8(1));
-			bitmapHeader.Size = ptr.Load32(2);
-			bitmapHeader.DataSectionOffset = ptr.Load32(0xA);
-			bitmapHeader.Width = ptr.Load32(0x12);
-			bitmapHeader.Height = ptr.Load32(0x16);
-			bitmapHeader.Bpp = ptr.Load8(0x1C);
+			var dataSectionOffset = ptr.Load32(0xA);
 
-			if (bitmapHeader.Type != "BM")
-				throw new Exception("This is not a bitmap");
-
-			if (bitmapHeader.Bpp != 24 && bitmapHeader.Bpp != 32)
-				throw new Exception(bitmapHeader.Bpp + " bits bitmap is not supported");
-
-			Width = (int)bitmapHeader.Width;
-			Height = (int)bitmapHeader.Height;
-			Bpp = (int)bitmapHeader.Bpp / 8;
-
-			RawData = HAL.AllocateMemory((uint)(Width * Height * Bpp), 0);
+			Data = HAL.AllocateMemory((uint)(Width * Height * Bpp), 0);
 
 			int[] temp = new int[Width];
 			uint w = 0, h = (uint)Height - 1;
@@ -57,7 +32,7 @@ namespace Mosa.DeviceSystem
 				if (w == Width)
 				{
 					for (uint k = 0; k < temp.Length; k++)
-						RawData.Write32(((uint)Width * h + k) * (uint)Bpp, (uint)temp[k]);
+						Data.Write32(((uint)Width * h + k) * (uint)Bpp, (uint)temp[k]);
 
 					w = 0;
 					h--;
@@ -65,13 +40,8 @@ namespace Mosa.DeviceSystem
 
 				switch (Bpp)
 				{
-					case 3: // 24-bit
-						temp[w] = (int)(0xFF000000 | (int)ptr.Load24(bitmapHeader.DataSectionOffset + i));
-						break;
-
-					case 4: // 32-bit
-						temp[w] = (int)ptr.Load32(bitmapHeader.DataSectionOffset + i);
-						break;
+					case 3: temp[w] = (int)(0xFF000000 | (int)ptr.Load24(dataSectionOffset + i)); break; // 24-bit
+					case 4: temp[w] = (int)ptr.Load32(dataSectionOffset + i); break; // 32-bit
 				}
 
 				w++;

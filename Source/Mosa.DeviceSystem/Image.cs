@@ -4,11 +4,11 @@ namespace Mosa.DeviceSystem
 {
 	public class Image
 	{
-		public ConstrainedPointer RawData;
+		public ConstrainedPointer Data { get; protected set; }
 
-		public int Bpp;
-		public int Width;
-		public int Height;
+		public int Bpp { get; protected set; }
+		public int Width { get; protected set; }
+		public int Height { get; protected set; }
 
 		public Image(int width, int height)
 		{
@@ -16,7 +16,7 @@ namespace Mosa.DeviceSystem
 			Height = height;
 			Bpp = 4;
 
-			RawData = HAL.AllocateMemory((uint)(width * height * Bpp), 0);
+			Data = HAL.AllocateMemory((uint)(width * height * Bpp), 0);
 		}
 
 		public Image()
@@ -37,7 +37,7 @@ namespace Mosa.DeviceSystem
 				{
 					x2 = ((j * x_ratio) >> 16);
 					y2 = ((i * y_ratio) >> 16);
-					temp.Write32(((uint)((i * NewWidth) + j)) * (uint)Bpp, RawData.Read32(((uint)((y2 * w1) + x2)) * (uint)Bpp));
+					temp.Write32(((uint)((i * NewWidth) + j)) * (uint)Bpp, Data.Read32(((uint)((y2 * w1) + x2)) * (uint)Bpp));
 				}
 
 			return new Image()
@@ -45,7 +45,7 @@ namespace Mosa.DeviceSystem
 				Width = NewWidth,
 				Height = NewHeight,
 				Bpp = Bpp,
-				RawData = temp
+				Data = temp
 			};
 		}
 	}
