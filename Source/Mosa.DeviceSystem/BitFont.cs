@@ -7,31 +7,38 @@ namespace Mosa.DeviceSystem
 	/// </summary>
 	public class BitFont : IFont
 	{
-		private string charset;
-		private byte[] data;
-		private int size;
+		/// <summary>
+		/// Gets the name.
+		/// </summary>
+		/// <value>
+		/// The name.
+		/// </value>
+		public string Name { get; private set; }
 
-		public BitFont(string name, string charset, byte[] data, int size)
+		/// <summary>
+		/// Gets the size.
+		/// </summary>
+		/// <value>The size.</value>
+		public int Size { get; private set; }
+
+		private string charset;
+		private byte[] buffer;
+
+		public BitFont(string name, int size, string charset, byte[] data)
 		{
 			Name = name;
 			Size = size;
 			this.charset = charset;
-			this.data = data;
+			this.buffer = data;
 		}
 
-		/// <summary>Gets the name.</summary>
-		/// <value>The name.</value>
-		public string Name { get; private set; }
-
-		/// <summary>Gets the size.</summary>
-		/// <value>The size.</value>
-		public int Size { get; private set; }
-
-		/// <summary>Draws the string.</summary>
+		/// <summary>
+		/// Draws the string.
+		/// </summary>
 		public void DrawString(IFrameBuffer frameBuffer, uint color, uint x, uint y, string text)
 		{
-			int size8 = size / 8;
-			var lines = text.Split('\n');           // FUTURE: Avoid splitting the string
+			int size8 = Size / 8;
+			var lines = text.Split('\n');
 
 			for (int l = 0; l < lines.Length; l++)
 			{
@@ -43,16 +50,16 @@ namespace Mosa.DeviceSystem
 
 					if (index < 0)
 					{
-						usedX += size / 2;
+						usedX += Size / 2;
 						continue;
 					}
 
-					int maxX = 0, sizePerFont = size * size8 * index, X = usedX + (int)x, Y = (int)y + size * l;
+					int maxX = 0, sizePerFont = Size * size8 * index, X = usedX + (int)x, Y = (int)y + Size * l;
 
-					for (int h = 0; h < size; h++)
+					for (int h = 0; h < Size; h++)
 						for (int aw = 0; aw < size8; aw++)
 							for (int ww = 0; ww < 8; ww++)
-								if ((data[sizePerFont + (h * size8) + aw] & (0x80 >> ww)) != 0)
+								if ((buffer[sizePerFont + (h * size8) + aw] & (0x80 >> ww)) != 0)
 								{
 									int max = (aw * 8) + ww;
 
