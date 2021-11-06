@@ -98,6 +98,7 @@ namespace Mosa.DeviceSystem
 				return;
 
 			for (uint h = 0; h < he; h++)
+			{
 				for (uint w = 0; w < wi; w++)
 				{
 					uint col = image.Data.Read32((uint)(wi * h + w));
@@ -105,6 +106,7 @@ namespace Mosa.DeviceSystem
 					if (col != transparentColor)
 						SetPixel(col, x + w, y + h);
 				}
+			}
 		}
 
 		/// <summary>Draws an image with alpha or not.</summary>

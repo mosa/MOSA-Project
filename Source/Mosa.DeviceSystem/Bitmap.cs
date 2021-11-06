@@ -32,8 +32,9 @@ namespace Mosa.DeviceSystem
 				if (w == Width)
 				{
 					for (uint k = 0; k < temp.Length; k++)
+					{
 						Data.Write32(((uint)Width * h + k) * (uint)Bpp, (uint)temp[k]);
-
+					}
 					w = 0;
 					h--;
 				}
