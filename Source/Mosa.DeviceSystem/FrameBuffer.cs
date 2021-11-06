@@ -10,19 +10,13 @@ namespace Mosa.DeviceSystem
 	/// <seealso cref="Mosa.DeviceSystem.IFrameBuffer" />
 	public abstract class FrameBuffer : IFrameBuffer
 	{
-		/// <summary>The width</summary>
-		protected uint width;
-
 		/// <summary>Gets the width in pixels</summary>
 		/// <value>The width.</value>
-		public uint Width { get { return width; } }
-
-		/// <summary>The height</summary>
-		protected uint height;
+		public uint Width { get; protected set; }
 
 		/// <summary>Gets the height in pixels</summary>
 		/// <value>The height.</value>
-		public uint Height { get { return height; } }
+		public uint Height { get; protected set; }
 
 		/// <summary>The offset</summary>
 		protected uint offset;
@@ -34,17 +28,7 @@ namespace Mosa.DeviceSystem
 		protected uint bytesPerLine;
 
 		/// <summary>The memory</summary>
-		protected ConstrainedPointer firstBuffer;
-
-		/// <summary>Second buffer for double buffering</summary>
-		protected ConstrainedPointer secondBuffer;
-
-		/// <summary>Is double buffering</summary>
-		protected bool doubleBuffering;
-
-		/// <summary>Checks if the frame buffer is double buffered.</summary>
-		/// <value>The height.</value>
-		public bool DoubleBuffering { get { return doubleBuffering; } }
+		public ConstrainedPointer Buffer { get; protected set; }
 
 		/// <summary>Gets the offset.</summary>
 		/// <param name="x">The x.</param>
@@ -107,10 +91,10 @@ namespace Mosa.DeviceSystem
 		/// <param name="transparentColor">Transparent color, to not draw.</param>
 		public void DrawImage(Image image, uint x, uint y, int transparentColor)
 		{
-			long wi = Math.Clamp(image.Width, 0, width - x);
-			long he = Math.Clamp(image.Height, 0, height - y);
+			long wi = Math.Clamp(image.Width, 0, Width - x);
+			long he = Math.Clamp(image.Height, 0, Height - y);
 
-			if (x < 0 || y < 0 || x >= width || y >= height)
+			if (x < 0 || y < 0 || x >= Width || y >= Height)
 				return;
 
 			for (uint h = 0; h < he; h++)
@@ -131,13 +115,15 @@ namespace Mosa.DeviceSystem
 		public void DrawImage(Image image, uint x, uint y, bool alpha)
 		{
 			int wb = image.Width * image.Bpp;
-			uint count = (uint)Math.Clamp(wb, 0, (width - x) * image.Bpp);
+			uint count = (uint)Math.Clamp(wb, 0, (Width - x) * image.Bpp);
 
-			for (int h = 0; h < Math.Clamp(image.Height, 0, height - y); h++)
+			for (int h = 0; h < Math.Clamp(image.Height, 0, Height - y); h++)
+			{
 				Internal.MemoryCopy(
-					(doubleBuffering ? secondBuffer : firstBuffer).Address + ((width * (y + h) + x) * bytesPerPixel),
+					Buffer.Address + ((Width * (y + h) + x) * bytesPerPixel),
 					image.RawData + (wb * h),
 					count);
+			}
 		}
 
 		/// <summary>Fills a rectangle with color.</summary>
@@ -148,12 +134,12 @@ namespace Mosa.DeviceSystem
 		/// <param name="h">Width of the rectangle.</param>
 		public void FillRectangle(uint color, uint x, uint y, uint w, uint h)
 		{
-			w = Math.Clamp(w, 0, width - x);
-			h = Math.Clamp(h, 0, height - y);
+			w = Math.Clamp(w, 0, Width - x);
+			h = Math.Clamp(h, 0, Height - y);
 
 			// TODO: Also clamp X and Y
 
-			if (x >= width || y >= height)
+			if (x >= Width || y >= Height)
 				return;
 
 			if (x < 0)
@@ -171,9 +157,11 @@ namespace Mosa.DeviceSystem
 			uint wb = w * bytesPerPixel;
 
 			for (int he = 0; he < h; he++)
+			{
 				Internal.MemoryClear(
-					(doubleBuffering ? secondBuffer : firstBuffer).Address + ((width * (y + he) + x) * bytesPerPixel),
+					Buffer.Address + ((Width * (y + he) + x) * bytesPerPixel),
 					wb, color);
+			}
 		}
 
 		/* Functions from Cosmos (not all of them are currently there, TODO) */
@@ -185,7 +173,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="r">Radius of the circle.</param>
 		public void FillCircle(uint color, uint x, uint y, uint r)
 		{
-			if (x < 0 || y < 0 || x >= width || y >= height)
+			if (x < 0 || y < 0 || x >= Width || y >= Height)
 				return;
 
 			uint x1 = r, y1 = 0, xChange = 1 - (r << 1), yChange = 0, radiusError = 0;
@@ -217,22 +205,15 @@ namespace Mosa.DeviceSystem
 			}
 		}
 
-		/* End functions from Cosmos */
-
-		/// <summary>If using double buffering, copies the second buffer to the screen.</summary>
-		public void SwapBuffers()
+		public void CopyFrame(IFrameBuffer source)
 		{
-			if (doubleBuffering)
-				Internal.MemoryCopy(firstBuffer.Address, secondBuffer.Address, firstBuffer.Size);
+			Internal.MemoryCopy(Buffer.Address, source.Buffer.Address, Buffer.Size);
 		}
 
 		/// <summary>Clears the screen with a specified color.</summary>
 		public void ClearScreen(uint color)
 		{
-			if (doubleBuffering)
-				Internal.MemoryClear(secondBuffer.Address, secondBuffer.Size, color);
-			else
-				Internal.MemoryClear(firstBuffer.Address, firstBuffer.Size, color);
+			Internal.MemoryClear(Buffer.Address, Buffer.Size, color);
 		}
 	}
 }

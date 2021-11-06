@@ -21,7 +21,9 @@ namespace Mosa.DeviceSystem
 			RawData = GC.AllocateObject((uint)(width * height * Bpp));  // HACK - FIX ME! This is not an object. Use new byte[] instead
 		}
 
-		public Image() { }
+		public Image()
+		{
+		}
 
 		// TODO: Fix
 		public Image ScaleImage(int NewWidth, int NewHeight)

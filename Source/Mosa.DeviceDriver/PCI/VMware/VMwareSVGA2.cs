@@ -555,10 +555,10 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 			switch (this.bitsPerPixel)
 			{
-				case 8: frameBuffer = new FrameBuffer8bpp(memory, width, height, offset, bytesPerLine, false); break;
-				case 16: frameBuffer = new FrameBuffer16bpp(memory, width, height, offset, bytesPerLine, false); break;
-				case 24: frameBuffer = new FrameBuffer24bpp(memory, width, height, offset, bytesPerLine, false); break;
-				case 32: frameBuffer = new FrameBuffer32bpp(memory, width, height, offset, bytesPerLine, false); break;
+				case 8: frameBuffer = new FrameBuffer8bpp(memory, width, height, offset, bytesPerLine); break;
+				case 16: frameBuffer = new FrameBuffer16bpp(memory, width, height, offset, bytesPerLine); break;
+				case 24: frameBuffer = new FrameBuffer24bpp(memory, width, height, offset, bytesPerLine); break;
+				case 32: frameBuffer = new FrameBuffer32bpp(memory, width, height, offset, bytesPerLine); break;
 				default: return false;
 			}
 

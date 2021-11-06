@@ -18,16 +18,12 @@ namespace Mosa.DeviceSystem
 		/// <param name="depth">The depth.</param>
 		public FrameBuffer24bpp(ConstrainedPointer buffer, uint width, uint height, uint offset, uint bytesPerLine, bool doubleBuffering = true)
 		{
-			this.firstBuffer = buffer;
-			this.width = width;
-			this.height = height;
+			this.Buffer = buffer;
+			this.Width = width;
+			this.Height = height;
 			this.offset = offset;
 			this.bytesPerPixel = 3;     // = 24 bits per pixel
 			this.bytesPerLine = bytesPerLine;
-			this.doubleBuffering = doubleBuffering;
-
-			if (doubleBuffering)
-				secondBuffer = new ConstrainedPointer(GC.AllocateObject(buffer.Size), buffer.Size);  // HACK - FIX ME! This is not an object.
 		}
 
 		/// <summary>Gets the offset.s</summary>
@@ -45,13 +41,10 @@ namespace Mosa.DeviceSystem
 		/// <param name="y">The y.</param>
 		public override void SetPixel(uint color, uint x, uint y)
 		{
-			if (x < 0 || y < 0 || x >= width || y >= height)
+			if (x < 0 || y < 0 || x >= Width || y >= Height)
 				return;
 
-			if (doubleBuffering)
-				secondBuffer.Write24(GetOffset(x, y), color);
-			else
-				firstBuffer.Write24(GetOffset(x, y), color);
+			Buffer.Write24(GetOffset(x, y), color);
 		}
 
 		/// <summary>Gets the pixel.</summary>
@@ -60,10 +53,10 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public override uint GetPixel(uint x, uint y)
 		{
-			if (x < 0 || y < 0 || x >= width || y >= height)
+			if (x < 0 || y < 0 || x >= Width || y >= Height)
 				return 0;
 
-			return doubleBuffering ? secondBuffer.Read24(GetOffset(x, y)) : firstBuffer.Read24(GetOffset(x, y));
+			return Buffer.Read24(GetOffset(x, y));
 		}
 	}
 }

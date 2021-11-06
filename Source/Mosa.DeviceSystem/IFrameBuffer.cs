@@ -7,6 +7,10 @@ namespace Mosa.DeviceSystem
 	/// </summary>
 	public interface IFrameBuffer
 	{
+		/// <summary>Gets the underlying frame buffer.</summary>
+		/// <value>The buffer.</value>
+		public ConstrainedPointer Buffer { get; }
+
 		/// <summary>Gets the width.</summary>
 		/// <value>The width.</value>
 		public uint Width { get; }
@@ -74,7 +78,8 @@ namespace Mosa.DeviceSystem
 		public void FillCircle(uint color, uint x, uint y, uint r);
 
 		/// <summary>If using double buffering, copies the second buffer to first buffer (screen).</summary>
-		public void SwapBuffers();
+		/// <param name="source">The FrameBuffer.</param>
+		public void CopyFrame(IFrameBuffer source);
 
 		/// <summary>Clears the screen with a specified color.</summary>
 		public void ClearScreen(uint color);

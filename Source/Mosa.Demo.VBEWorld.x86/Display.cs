@@ -5,14 +5,15 @@ using Mosa.Kernel.x86;
 using System.Drawing;
 using System.Collections.Generic;
 using System;
+using Mosa.Runtime;
 
 namespace Mosa.Demo.VBEWorld.x86
 {
 	public static class Display
 	{
-		public static ConstrainedPointer lfb;
+		private static IFrameBuffer DisplayFrame { get; set; }
 
-		private static IFrameBuffer Framebuffer { get; set; }
+		private static IFrameBuffer BackFrame { get; set; }
 
 		public static int Width { get; private set; }
 
@@ -40,35 +41,43 @@ namespace Mosa.Demo.VBEWorld.x86
 			Utils.Fonts.Add(DefaultFont);
 
 			uint memorySize = (uint)(Width * Height * (VBE.BitsPerPixel / 8));
-			lfb = Mosa.DeviceSystem.HAL.GetPhysicalMemory(VBE.MemoryPhysicalLocation, memorySize);
 
-			switch (VBE.BitsPerPixel)
-			{
-				case 8: Framebuffer = new FrameBuffer8bpp(lfb, (uint)Width, (uint)Height, 0, VBE.Pitch); break;
-				case 16: Framebuffer = new FrameBuffer16bpp(lfb, (uint)Width, (uint)Height, 0, VBE.Pitch); break;
-				case 24: Framebuffer = new FrameBuffer24bpp(lfb, (uint)Width, (uint)Height, 0, VBE.Pitch); break;
-				case 32: Framebuffer = new FrameBuffer32bpp(lfb, (uint)Width, (uint)Height, 0, VBE.Pitch); break;
+			var lfb = DeviceSystem.HAL.GetPhysicalMemory(VBE.MemoryPhysicalLocation, memorySize);
 
-				default:
-					return false;
-			}
+			DisplayFrame = CreateBuffer(lfb, (uint)Width, (uint)Height, VBE.Pitch, VBE.BitsPerPixel);
+
+			var sfb = new ConstrainedPointer(GC.AllocateObject(memorySize), memorySize); // hack for now
+
+			BackFrame = CreateBuffer(sfb, (uint)Width, (uint)Height, VBE.Pitch, VBE.BitsPerPixel);
 
 			return true;
 		}
 
+		private static IFrameBuffer CreateBuffer(ConstrainedPointer buffer, uint width, uint height, uint pitch, uint bitsPerPixel)
+		{
+			switch (bitsPerPixel)
+			{
+				case 8: return new FrameBuffer8bpp(buffer, width, height, 0, pitch);
+				case 16: return new FrameBuffer16bpp(buffer, width, height, 0, pitch);
+				case 24: return new FrameBuffer24bpp(buffer, width, height, 0, pitch);
+				case 32: return new FrameBuffer32bpp(buffer, width, height, 0, pitch);
+				default: return null;
+			}
+		}
+
 		public static void DrawMosaLogo(int v)
 		{
-			MosaLogo.Draw(Framebuffer, (uint)v);
+			MosaLogo.Draw(BackFrame, (uint)v);
 		}
 
 		public static void DrawPoint(int x, int y, Color color)
 		{
-			Framebuffer.SetPixel((uint)color.ToArgb(), (uint)x, (uint)y);
+			BackFrame.SetPixel((uint)color.ToArgb(), (uint)x, (uint)y);
 		}
 
 		public static void DrawImage(int x, int y, Image image, bool drawWithAlpha)
 		{
-			Framebuffer.DrawImage(image, (uint)x, (uint)y, drawWithAlpha);
+			BackFrame.DrawImage(image, (uint)x, (uint)y, drawWithAlpha);
 		}
 
 		public static void DrawString(int x, int y, string text, string bitFont, Color color)
@@ -86,15 +95,15 @@ namespace Mosa.Demo.VBEWorld.x86
 				}
 			}
 
-			desc.DrawString(Framebuffer, (uint)color.ToArgb(), (uint)x, (uint)y, text);
+			desc.DrawString(BackFrame, (uint)color.ToArgb(), (uint)x, (uint)y, text);
 		}
 
 		public static void DrawRectangle(int x, int y, int width, int height, Color color, bool fill)
 		{
 			if (fill)
-				Framebuffer.FillRectangle((uint)color.ToArgb(), (uint)x, (uint)y, (uint)width, (uint)height);
+				BackFrame.FillRectangle((uint)color.ToArgb(), (uint)x, (uint)y, (uint)width, (uint)height);
 			else
-				Framebuffer.DrawRectangle((uint)color.ToArgb(), (uint)x, (uint)y, (uint)width, (uint)height, 1);
+				BackFrame.DrawRectangle((uint)color.ToArgb(), (uint)x, (uint)y, (uint)width, (uint)height, 1);
 		}
 
 		public static bool IsInBounds(int x1, int x2, int y1, int y2, int width, int height)
@@ -104,12 +113,12 @@ namespace Mosa.Demo.VBEWorld.x86
 
 		public static void Clear(Color color)
 		{
-			Framebuffer.ClearScreen((uint)color.ToArgb());
+			BackFrame.ClearScreen((uint)color.ToArgb());
 		}
 
 		public static void Update()
 		{
-			Framebuffer.SwapBuffers();
+			DisplayFrame.CopyFrame(BackFrame);
 		}
 	}
 }
