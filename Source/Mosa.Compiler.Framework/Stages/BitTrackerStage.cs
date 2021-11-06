@@ -250,13 +250,27 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
+		private static bool IsBitTrackable(Operand virtualRegister)
+		{
+			if (virtualRegister.IsFloatingPoint)
+				return false;
+
+			if (virtualRegister.IsInteger || virtualRegister.IsReferenceType || virtualRegister.IsPointer)
+				return true;
+
+			//if (virtualRegister.IsValueType && virtualRegister.FitsIntegerRegister)
+			//	return true;
+
+			return false;
+		}
+
 		private bool Evaluate(Operand virtualRegister)
 		{
 			// already evaluated
 			if (virtualRegister.BitValue != null)
 				return false;
 
-			if (virtualRegister.IsFloatingPoint || !(virtualRegister.IsInteger || virtualRegister.IsReferenceType))
+			if (!IsBitTrackable(virtualRegister))
 				return false;
 
 			if (virtualRegister.Definitions.Count != 1)
@@ -270,7 +284,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (node.ResultCount == 0)
 				return false;
 
-			if (!(node.Result.IsInteger || node.Result.IsReferenceType))
+			if (!IsBitTrackable(node.Result))
 			{
 				virtualRegister.BitValue = Any(virtualRegister);
 				return true;
@@ -298,7 +312,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (!operand.IsVirtualRegister)
 						continue;
 
-					if (!(operand.IsInteger || operand.IsReferenceType))
+					if (!IsBitTrackable(operand))
 						continue;
 
 					if (operand.BitValue == null)
@@ -317,13 +331,20 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (virtualRegister.IsInteger)
 				return virtualRegister.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
-			else if (virtualRegister.IsReferenceType)
+			else if (virtualRegister.IsReferenceType || virtualRegister.IsPointer)
 				return Is32BitPlatform ? BitValue.Any32 : BitValue.Any64;
 			else if (virtualRegister.IsR4)
 				return BitValue.Any32;
 			else if (virtualRegister.IsR8)
 				return BitValue.Any64;
 
+			//else if (virtualRegister.IsValueType)
+			//{
+			//	if (virtualRegister.FitsNativeSizeRegister)
+			//		return Is32BitPlatform ? BitValue.Any32 : BitValue.Any64;
+			//	else
+			//		return virtualRegister.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
+			//}
 			throw new InvalidProgramException();
 		}
 
@@ -598,58 +619,114 @@ namespace Mosa.Compiler.Framework.Stages
 					break;
 
 				case ConditionCode.Greater:
-					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && !value1.Is32Bit)
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is64Bit && value2.Is64Bit)
 					{
 						return (long)value1.BitsSet > (long)value2.BitsSet;
 					}
-					else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is32Bit)
+					else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is32Bit && value2.Is32Bit)
 					{
 						return (int)value1.BitsSet > (int)value2.BitsSet;
 					}
-
-					// FUTURE: If IsSignBitClear[32|64] && Is[32|64]Bit, then treat as unsigned comparision
+					else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MinValue > value2.MaxValue)
+					{
+						return true;
+					}
+					else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MaxValue < value2.MinValue)
+					{
+						return false;
+					}
+					else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MinValue > value2.MaxValue)
+					{
+						return true;
+					}
+					else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MaxValue < value2.MinValue)
+					{
+						return false;
+					}
 
 					break;
 
 				case ConditionCode.Less:
-					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && !value1.Is32Bit)
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is64Bit && value2.Is64Bit)
 					{
 						return (long)value1.BitsSet < (long)value2.BitsSet;
 					}
-					else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is32Bit)
+					else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is32Bit && value2.Is32Bit)
 					{
 						return (int)value1.BitsSet < (int)value2.BitsSet;
 					}
-
-					// FUTURE: If IsSignBitClear[32|64] && Is[32|64]Bit, then treat as unsigned comparision
+					else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MaxValue < value2.MinValue)
+					{
+						return true;
+					}
+					else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MinValue > value2.MaxValue)
+					{
+						return false;
+					}
+					else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MaxValue < value2.MinValue)
+					{
+						return true;
+					}
+					else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MinValue > value2.MaxValue)
+					{
+						return false;
+					}
 
 					break;
 
 				case ConditionCode.GreaterOrEqual:
-					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && !value1.Is32Bit)
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is64Bit && value2.Is64Bit)
 					{
 						return (long)value1.BitsSet >= (long)value2.BitsSet;
 					}
-					else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is32Bit)
+					else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is32Bit && value2.Is32Bit)
 					{
 						return (int)value1.BitsSet >= (int)value2.BitsSet;
 					}
-
-					// FUTURE: If IsSignBitClear[32|64] && Is[32|64]Bit, then treat as unsigned comparision
+					else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MinValue >= value2.MaxValue)
+					{
+						return true;
+					}
+					else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MaxValue <= value2.MinValue)
+					{
+						return false;
+					}
+					else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MinValue >= value2.MaxValue)
+					{
+						return true;
+					}
+					else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MaxValue <= value2.MinValue)
+					{
+						return false;
+					}
 
 					break;
 
 				case ConditionCode.LessOrEqual:
-					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && !value1.Is32Bit)
+					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is64Bit && value2.Is64Bit)
 					{
 						return (long)value1.BitsSet <= (long)value2.BitsSet;
 					}
-					else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is32Bit)
+					else if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value1.Is32Bit && value2.Is32Bit)
 					{
 						return (int)value1.BitsSet <= (int)value2.BitsSet;
 					}
-
-					// FUTURE: If IsSignBitClear[32|64] && Is[32|64]Bit, then treat as unsigned comparision
+					else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MaxValue <= value2.MinValue)
+					{
+						return true;
+					}
+					else if (value1.Is32Bit && value2.Is32Bit && value1.IsSignBitClear32 && value2.IsSignBitClear32 && value1.MinValue >= value2.MaxValue)
+					{
+						return false;
+					}
+					else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MaxValue <= value2.MinValue)
+					{
+						return true;
+					}
+					else if (value1.Is64Bit && value2.Is64Bit && value1.IsSignBitClear64 && value2.IsSignBitClear64 && value1.MinValue >= value2.MaxValue)
+					{
+						return false;
+					}
 
 					break;
 

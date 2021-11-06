@@ -402,6 +402,13 @@ namespace Mosa.Compiler.Framework
 			return fits;
 		}
 
+		public static (bool FitsIntegerRegister, bool FitsFloatRegister, bool Is64Bit, bool IsNative) GetRegisterType(MosaType type)
+		{
+			var basetype = GetUnderlyingType(type);
+
+			return GetRegisterTypeInfo(basetype);
+		}
+
 		public static bool IsPrimitive(MosaType underlyingType)
 		{
 			if (underlyingType == null)
@@ -1006,6 +1013,44 @@ namespace Mosa.Compiler.Framework
 				case MosaTypeCode.SZArray: return true;
 				case MosaTypeCode.Var: return false;
 				default: return false;
+			}
+		}
+
+		private static (bool FitsIntegerRegister, bool FitsFloatRegister, bool Is64Bit, bool IsNative) GetRegisterTypeInfo(MosaType type)
+		{
+			if (type == null)
+				return (false, false, false, false);
+
+			switch (type.TypeCode)
+			{
+				case MosaTypeCode.ValueType: return (true, false, false, true);
+				case MosaTypeCode.Void: return (true, false, false, true);
+				case MosaTypeCode.MVar: return (false, false, false, false);
+				case MosaTypeCode.Boolean: return (true, false, false, false);
+				case MosaTypeCode.Char: return (true, false, false, false);
+				case MosaTypeCode.I1: return (true, false, false, false);
+				case MosaTypeCode.U1: return (true, false, false, false);
+				case MosaTypeCode.I2: return (true, false, false, false);
+				case MosaTypeCode.U2: return (true, false, false, false);
+				case MosaTypeCode.I4: return (true, false, false, false);
+				case MosaTypeCode.U4: return (true, false, false, false);
+				case MosaTypeCode.I8: return (true, false, false, false);
+				case MosaTypeCode.U8: return (true, false, true, false);
+				case MosaTypeCode.R4: return (true, true, false, false);
+				case MosaTypeCode.R8: return (true, true, true, false);
+				case MosaTypeCode.String: return (true, false, false, true);
+				case MosaTypeCode.UnmanagedPointer: return (true, false, false, true);
+				case MosaTypeCode.ManagedPointer: return (true, false, false, true);
+				case MosaTypeCode.ReferenceType: return (true, false, false, true);
+				case MosaTypeCode.Array: return (true, false, false, true);
+				case MosaTypeCode.TypedRef: return (true, false, false, true);
+				case MosaTypeCode.I: return (true, false, true, true);
+				case MosaTypeCode.U: return (true, false, true, true);
+				case MosaTypeCode.FunctionPointer: return (true, false, true, false);
+				case MosaTypeCode.Object: return (true, false, true, false);
+				case MosaTypeCode.SZArray: return (true, false, true, false);
+				case MosaTypeCode.Var: return (false, false, false, false);
+				default: return (false, false, false, false);
 			}
 		}
 
