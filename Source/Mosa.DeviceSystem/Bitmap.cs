@@ -46,7 +46,8 @@ namespace Mosa.DeviceSystem
 			Width = (int)bitmapHeader.Width;
 			Height = (int)bitmapHeader.Height;
 			Bpp = (int)bitmapHeader.Bpp / 8;
-			RawData = HAL.AllocateMemory((uint)(Width * Height * Bpp), 0); //GC.AllocateObject((uint)(Width * Height * Bpp));
+
+			RawData = HAL.AllocateMemory((uint)(Width * Height * Bpp), 0);
 
 			int[] temp = new int[Width];
 			uint w = 0, h = (uint)Height - 1;

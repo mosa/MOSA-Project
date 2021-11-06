@@ -5,7 +5,6 @@ using Mosa.Kernel.x86;
 using System.Drawing;
 using System.Collections.Generic;
 using System;
-using Mosa.Runtime;
 
 namespace Mosa.Demo.VBEWorld.x86
 {
@@ -46,7 +45,7 @@ namespace Mosa.Demo.VBEWorld.x86
 
 			DisplayFrame = CreateBuffer(lfb, (uint)Width, (uint)Height, VBE.Pitch, VBE.BitsPerPixel);
 
-			var sfb = new ConstrainedPointer(GC.AllocateObject(memorySize), memorySize); // hack for now
+			var sfb = DeviceSystem.HAL.AllocateMemory(memorySize, 0);
 
 			BackFrame = CreateBuffer(sfb, (uint)Width, (uint)Height, VBE.Pitch, VBE.BitsPerPixel);
 
