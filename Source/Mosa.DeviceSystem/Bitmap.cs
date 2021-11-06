@@ -8,32 +8,26 @@ namespace Mosa.DeviceSystem
 	{
 		public Bitmap(byte[] data)
 		{
-			Pointer ptr;
+			var stream = new ByteStream(data);
 
-			unsafe
-			{
-				fixed (byte* p = data)
-					ptr = (Pointer)p;
-			}
+			Width = stream.Read32(0x12);
+			Height = stream.Read32(0x16);
+			Bpp = stream.Read8(0x1C) / 8;
 
-			Width = (int)ptr.Load32(0x12);
-			Height = (int)ptr.Load32(0x16);
-			Bpp = ptr.Load8(0x1C) / 8;
+			var dataSectionOffset = stream.Read32(0xA);
 
-			var dataSectionOffset = ptr.Load32(0xA);
-
-			Data = HAL.AllocateMemory((uint)(Width * Height * Bpp), 0);
+			Data = HAL.AllocateMemory((uint)(Width * Height * Bpp), 0); // TEMP
 
 			int[] temp = new int[Width];
-			uint w = 0, h = (uint)Height - 1;
+			int w = 0, h = Height - 1;
 
-			for (uint i = 0; i < (uint)(Width * Height * Bpp); i += (uint)Bpp)
+			for (int i = 0; i < (uint)(Width * Height * Bpp); i += Bpp)
 			{
 				if (w == Width)
 				{
 					for (uint k = 0; k < temp.Length; k++)
 					{
-						Data.Write32(((uint)Width * h + k) * (uint)Bpp, (uint)temp[k]);
+						Data.Write32((uint)((Width * h + k) * Bpp), (uint)temp[k]);
 					}
 					w = 0;
 					h--;
@@ -41,8 +35,8 @@ namespace Mosa.DeviceSystem
 
 				switch (Bpp)
 				{
-					case 3: temp[w] = (int)(0xFF000000 | (int)ptr.Load24(dataSectionOffset + i)); break; // 24-bit
-					case 4: temp[w] = (int)ptr.Load32(dataSectionOffset + i); break; // 32-bit
+					case 3: temp[w] = (int)(0xFF000000 | stream.Read32(dataSectionOffset + i)); break; // 24-bit
+					case 4: temp[w] = stream.Read32(dataSectionOffset + i); break; // 32-bit
 				}
 
 				w++;
