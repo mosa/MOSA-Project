@@ -7,21 +7,13 @@ namespace Mosa.DeviceSystem
 	/// </summary>
 	public interface IFont
 	{
-		/// <summary>Gets the charset.</summary>
-		/// <value>The charset.</value>
-		string Charset { get; set; }
-
 		/// <summary>Gets the name.</summary>
 		/// <value>The name.</value>
-		string Name { get; set; }
+		string Name { get; }
 
 		/// <summary>Gets the size.</summary>
 		/// <value>The size.</value>
-		int Size { get; set; }
-
-		/// <summary>Gets the buffer.</summary>
-		/// <value>The buffer.</value>
-		byte[] Buffer { get; set; }
+		int Size { get; }
 
 		/// <summary>Draws the string.</summary>
 		void DrawString(IFrameBuffer frameBuffer, uint color, uint x, uint y, string text);
