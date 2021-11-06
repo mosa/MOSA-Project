@@ -2,9 +2,9 @@
 
 using Mosa.DeviceSystem;
 using Mosa.Kernel.x86;
-using System.Drawing;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace Mosa.Demo.VBEWorld.x86
 {

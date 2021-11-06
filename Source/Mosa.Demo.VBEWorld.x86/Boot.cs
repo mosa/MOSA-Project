@@ -1,17 +1,17 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Demo.VBEWorld.x86.HAL;
-using Mosa.Demo.VBEWorld.x86.Components;
 using Mosa.Demo.VBEWorld.x86.Apps;
+using Mosa.Demo.VBEWorld.x86.Components;
+using Mosa.Demo.VBEWorld.x86.HAL;
 using Mosa.DeviceDriver;
 using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
 using Mosa.FileSystem.FAT;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
-using System.Drawing;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace Mosa.Demo.VBEWorld.x86
 {

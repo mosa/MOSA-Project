@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime;
 using Mosa.DeviceSystem;
 using System.Drawing;
 

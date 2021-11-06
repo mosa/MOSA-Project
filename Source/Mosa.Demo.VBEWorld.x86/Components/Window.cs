@@ -1,4 +1,6 @@
-﻿using System.Drawing;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using System.Drawing;
 
 namespace Mosa.Demo.VBEWorld.x86.Components
 {
