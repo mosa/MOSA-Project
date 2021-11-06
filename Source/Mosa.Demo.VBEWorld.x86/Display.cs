@@ -76,7 +76,7 @@ namespace Mosa.Demo.VBEWorld.x86
 
 		public static void DrawImage(int x, int y, Image image, bool drawWithAlpha)
 		{
-			BackFrame.DrawImage(image, (uint)x, (uint)y, drawWithAlpha);
+			BackFrame.DrawImage(image, (uint)x, (uint)y);
 		}
 
 		public static void DrawString(int x, int y, string text, string bitFont, Color color)

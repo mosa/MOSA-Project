@@ -4,11 +4,8 @@ namespace Mosa.DeviceSystem
 {
 	public class Image
 	{
-		public ConstrainedPointer Data { get; protected set; }
+		private int[] pixels;
 
-		//public byte[] Pixel { get; protected set; }
-
-		public int Bpp { get; protected set; }
 		public int Width { get; protected set; }
 		public int Height { get; protected set; }
 
@@ -16,15 +13,28 @@ namespace Mosa.DeviceSystem
 		{
 			Width = width;
 			Height = height;
-			Bpp = 4;
 
-			//Pixel = new byte[width * Height * Bpp];
-
-			Data = HAL.AllocateMemory((uint)(width * height * Bpp), 0);
+			pixels = new int[width * height];
 		}
 
-		public Image()
+		public int GetColor(int x, int y)
 		{
+			return pixels[x * Width + y];
+		}
+
+		public void SetColor(int x, int y, int color)
+		{
+			pixels[x * Width + y] = color;
+		}
+
+		public void Clear(int color = 0)
+		{
+			var length = pixels.Length;
+
+			for (int i = 0; i < length; i++)
+			{
+				pixels[i] = color;
+			}
 		}
 	}
 }

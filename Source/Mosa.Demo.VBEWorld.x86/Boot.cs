@@ -95,7 +95,7 @@ namespace Mosa.Demo.VBEWorld.x86
 						for (int k = 0; k < _wall.Length; k++)
 							_wall[k] = (byte)(char)fatFileStream.ReadByte();
 
-						wallpaper = new Bitmap(_wall);
+						wallpaper = Bitmap.CreateImage(_wall);
 					}
 				}
 			}
@@ -112,7 +112,8 @@ namespace Mosa.Demo.VBEWorld.x86
 			{
 				Log("VBE setup OK!");
 				DoGraphics();
-			} else Log("VBE setup ERROR!");
+			}
+			else Log("VBE setup ERROR!");
 		}
 
 		private static void DoGraphics()

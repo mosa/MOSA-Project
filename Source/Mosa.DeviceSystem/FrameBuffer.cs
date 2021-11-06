@@ -91,40 +91,44 @@ namespace Mosa.DeviceSystem
 		/// <param name="transparentColor">Transparent color, to not draw.</param>
 		public void DrawImage(Image image, uint x, uint y, int transparentColor)
 		{
-			long wi = Math.Clamp(image.Width, 0, Width - x);
-			long he = Math.Clamp(image.Height, 0, Height - y);
+			var wi = Math.Clamp(image.Width, 0, Width - x);
+			var he = Math.Clamp(image.Height, 0, Height - y);
 
 			if (x < 0 || y < 0 || x >= Width || y >= Height)
 				return;
 
-			for (uint h = 0; h < he; h++)
+			for (int h = 0; h < he; h++)
 			{
-				for (uint w = 0; w < wi; w++)
+				for (int w = 0; w < wi; w++)
 				{
-					uint col = image.Data.Read32((uint)(wi * h + w));
+					var color = image.GetColor(w, h);
 
-					if (col != transparentColor)
-						SetPixel(col, x + w, y + h);
+					if (color != transparentColor)
+						SetPixel((uint)color, (uint)(x + w), (uint)(y + h));
 				}
 			}
 		}
 
-		/// <summary>Draws an image with alpha or not.</summary>
+		/// <summary>Draws an image with a transparent color.</summary>
 		/// <param name="image">The image.</param>
 		/// <param name="x">X of the top left of the image.</param>
 		/// <param name="y">Y of the top left of the image.</param>
-		/// <param name="alpha">Draw the image with alpha (from the background color).</param>
-		public void DrawImage(Image image, uint x, uint y, bool alpha)
+		public void DrawImage(Image image, uint x, uint y)
 		{
-			int wb = image.Width * image.Bpp;
-			uint count = (uint)Math.Clamp(wb, 0, (Width - x) * image.Bpp);
+			var wi = Math.Clamp(image.Width, 0, Width - x);
+			var he = Math.Clamp(image.Height, 0, Height - y);
 
-			for (int h = 0; h < Math.Clamp(image.Height, 0, Height - y); h++)
+			if (x < 0 || y < 0 || x >= Width || y >= Height)
+				return;
+
+			for (int h = 0; h < he; h++)
 			{
-				Internal.MemoryCopy(
-					Buffer.Address + ((Width * (y + h) + x) * bytesPerPixel),
-					image.Data.Address + (wb * h),
-					count);
+				for (int w = 0; w < wi; w++)
+				{
+					var color = image.GetColor(w, h);
+
+					SetPixel((uint)color, (uint)(x + w), (uint)(y + h));
+				}
 			}
 		}
 
@@ -160,9 +164,7 @@ namespace Mosa.DeviceSystem
 
 			for (int he = 0; he < h; he++)
 			{
-				Internal.MemoryClear(
-					Buffer.Address + ((Width * (y + he) + x) * bytesPerPixel),
-					wb, color);
+				Internal.MemoryClear(Buffer.Address + ((Width * (y + he) + x) * bytesPerPixel), wb, color);
 			}
 		}
 
