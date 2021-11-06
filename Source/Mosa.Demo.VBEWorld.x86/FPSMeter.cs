@@ -1,4 +1,6 @@
-﻿namespace Mosa.Demo.VBEWorld.x86
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+namespace Mosa.Demo.VBEWorld.x86
 {
 	public static class FPSMeter
 	{

@@ -1,52 +1,40 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime;
-
 namespace Mosa.DeviceSystem
 {
 	public class Image
 	{
-		public Pointer RawData;
+		private int[] pixels;
 
-		public int Bpp;
-		public int Width;
-		public int Height;
+		public int Width { get; protected set; }
+		public int Height { get; protected set; }
 
 		public Image(int width, int height)
 		{
 			Width = width;
 			Height = height;
-			Bpp = 4;
 
-			RawData = GC.AllocateObject((uint)(width * height * Bpp));  // HACK - FIX ME! This is not an object. Use new byte[] instead
+			pixels = new int[width * height];
 		}
 
-		public Image() { }
-
-		// TODO: Fix
-		public Image ScaleImage(int NewWidth, int NewHeight)
+		public int GetColor(int x, int y)
 		{
-			Pointer temp = GC.AllocateObject((uint)(NewWidth * NewHeight * Bpp));   // HACK - FIX ME! This is not an object. Use new byte[] instead
+			return pixels[x * Width + y];
+		}
 
-			int w1 = Width, h1 = Height;
-			int x_ratio = ((w1 << 16) / NewWidth) + 1, y_ratio = ((h1 << 16) / NewHeight) + 1;
-			int x2, y2;
+		public void SetColor(int x, int y, int color)
+		{
+			pixels[x * Width + y] = color;
+		}
 
-			for (int i = 0; i < NewHeight; i++)
-				for (int j = 0; j < NewWidth; j++)
-				{
-					x2 = ((j * x_ratio) >> 16);
-					y2 = ((i * y_ratio) >> 16);
-					temp.Store32(((uint)((i * NewWidth) + j)) * (uint)Bpp, RawData.Load32(((uint)((y2 * w1) + x2)) * (uint)Bpp));
-				}
+		public void Clear(int color = 0)
+		{
+			var length = pixels.Length;
 
-			return new Image()
+			for (int i = 0; i < length; i++)
 			{
-				Width = NewWidth,
-				Height = NewHeight,
-				Bpp = Bpp,
-				RawData = temp
-			};
+				pixels[i] = color;
+			}
 		}
 	}
 }

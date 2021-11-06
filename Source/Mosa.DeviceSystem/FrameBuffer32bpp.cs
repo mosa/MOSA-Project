@@ -17,18 +17,14 @@ namespace Mosa.DeviceSystem
 		/// <param name="offset">The offset.</param>
 		/// <param name="bytesPerLine">The bytes per line.</param>
 		/// <param name="doubleBuffering">Use double buffering. Default: True</param>
-		public FrameBuffer32bpp(ConstrainedPointer buffer, uint width, uint height, uint offset, uint bytesPerLine, bool doubleBuffering = true)
+		public FrameBuffer32bpp(ConstrainedPointer buffer, uint width, uint height, uint offset, uint bytesPerLine)
 		{
-			this.firstBuffer = buffer;
-			this.width = width;
-			this.height = height;
+			this.Buffer = buffer;
+			this.Width = width;
+			this.Height = height;
 			this.offset = offset;
 			this.bytesPerPixel = 4;     // = 32 bits per pixel
 			this.bytesPerLine = bytesPerLine;
-			this.doubleBuffering = doubleBuffering;
-
-			if (doubleBuffering)
-				secondBuffer = new ConstrainedPointer(GC.AllocateObject(buffer.Size), buffer.Size);  // HACK - FIX ME! This is not an object.
 		}
 
 		/// <summary>Gets the offset.</summary>
@@ -45,13 +41,10 @@ namespace Mosa.DeviceSystem
 		/// <param name="y">The y.</param>
 		public override void SetPixel(uint color, uint x, uint y)
 		{
-			if (x < 0 || y < 0 || x >= width || y >= height)
+			if (x < 0 || y < 0 || x >= Width || y >= Height)
 				return;
 
-			if (doubleBuffering)
-				secondBuffer.Write32(GetOffset(x, y), color);
-			else
-				firstBuffer.Write32(GetOffset(x, y), color);
+			Buffer.Write32(GetOffset(x, y), color);
 		}
 
 		/// <summary>Gets the pixel.</summary>
@@ -59,10 +52,10 @@ namespace Mosa.DeviceSystem
 		/// <param name="y">The y.</param>
 		public override uint GetPixel(uint x, uint y)
 		{
-			if (x < 0 || y < 0 || x >= width || y >= height)
+			if (x < 0 || y < 0 || x >= Width || y >= Height)
 				return 0;
 
-			return doubleBuffering ? secondBuffer.Read32(GetOffset(x, y)) : firstBuffer.Read32(GetOffset(x, y));
+			return Buffer.Read32(GetOffset(x, y));
 		}
 	}
 }

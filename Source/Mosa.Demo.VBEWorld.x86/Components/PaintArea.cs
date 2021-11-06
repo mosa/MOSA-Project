@@ -1,6 +1,6 @@
-using Mosa.Runtime;
+// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
 using Mosa.DeviceSystem;
-using System.Collections.Generic;
 using System.Drawing;
 
 namespace Mosa.Demo.VBEWorld.x86.Components
@@ -23,13 +23,15 @@ namespace Mosa.Demo.VBEWorld.x86.Components
 
 		public void Clear(Color color)
 		{
-			Internal.MemoryClear(Bitmap.RawData, (uint)(Width * Height * Bpp), (uint)color.ToArgb());
+			Bitmap.Clear(color.ToArgb());
 		}
 
 		public void DrawPoint(int x, int y, Color color)
 		{
 			if (x < Width)
-				Bitmap.RawData.Store32((uint)((Width * y + x) * Bpp), (uint)color.ToArgb());
+			{
+				Bitmap.SetColor(x, y, color.ToArgb());
+			}
 		}
 	}
 
@@ -69,7 +71,8 @@ namespace Mosa.Demo.VBEWorld.x86.Components
 
 				if (Mouse.State == 0)
 					Bitmap.DrawPoint(Mouse.X, Mouse.Y, Mouse.Color);
-			} else Mouse.IsOnPaintingArea = false;
+			}
+			else Mouse.IsOnPaintingArea = false;
 		}
 
 		public bool IsInBounds()

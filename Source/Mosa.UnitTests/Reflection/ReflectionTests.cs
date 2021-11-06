@@ -62,8 +62,8 @@ namespace Mosa.UnitTests.Reflection
 		[MosaUnitTest]
 		public static bool DeclaringTypeTest2()
 		{
-			Type foundType = Type.GetType("Mosa.UnitTests.ReflectionTests+TestClass123");
-			Type declaringType = Type.GetType("Mosa.UnitTests.ReflectionTests");
+			Type foundType = Type.GetType("Mosa.UnitTests.Reflection.ReflectionTests+TestClass123");
+			Type declaringType = Type.GetType("Mosa.UnitTests.Reflection.ReflectionTests");
 			return foundType.DeclaringType.Equals(declaringType);
 		}
 
@@ -78,7 +78,7 @@ namespace Mosa.UnitTests.Reflection
 		[MosaUnitTest]
 		public static bool TypeActivator()
 		{
-			Type foundType = Type.GetType("Mosa.UnitTests.ReflectionTests+TestClass123");
+			Type foundType = Type.GetType("Mosa.UnitTests.Reflection.ReflectionTests+TestClass123");
 			var obj = (TestClass123)Activator.CreateInstance(foundType);
 
 			if (obj == null)

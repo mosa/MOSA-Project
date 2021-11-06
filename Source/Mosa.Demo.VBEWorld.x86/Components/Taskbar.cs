@@ -1,6 +1,8 @@
-﻿using System.Drawing;
-using System.Collections.Generic;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace Mosa.Demo.VBEWorld.x86.Components
 {

@@ -1,82 +1,48 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
-using System;
-using System.Text;
 
 namespace Mosa.DeviceSystem
 {
-	public struct BitmapHeader
+	public class Bitmap
 	{
-		public string Type;
-		public uint Size;
-		public uint DataSectionOffset;
-		public uint Width;
-		public uint Height;
-		public uint Bpp;
-	}
-
-	public class Bitmap : Image
-	{
-		public Bitmap(byte[] data)
+		public static Image CreateImage(byte[] data)
 		{
-			Pointer ptr;
+			var stream = new ByteStream(data);
 
-			unsafe
+			var width = stream.Read32(0x12);
+			var height = stream.Read32(0x16);
+			var bpp = stream.Read8(0x1C) / 8;
+
+			var image = new Image(width, height);
+
+			var dataSectionOffset = stream.Read32(0xA);
+
+			int[] temp = new int[width];
+			int w = 0, h = height - 1;
+
+			for (int i = 0; i < (uint)(width * height * bpp); i += bpp)
 			{
-				fixed (byte* p = data)
-					ptr = (Pointer)p;
-			}
-
-			BitmapHeader bitmapHeader = new BitmapHeader();
-
-			bitmapHeader.Type = string.Empty + Encoding.ASCII.GetChar(ptr.Load8(0)) + Encoding.ASCII.GetChar(ptr.Load8(1));
-			bitmapHeader.Size = ptr.Load32(2);
-			bitmapHeader.DataSectionOffset = ptr.Load32(0xA);
-			bitmapHeader.Width = ptr.Load32(0x12);
-			bitmapHeader.Height = ptr.Load32(0x16);
-			bitmapHeader.Bpp = ptr.Load8(0x1C);
-
-			if (bitmapHeader.Type != "BM")
-				throw new Exception("This is not a bitmap");
-
-			if (bitmapHeader.Bpp != 24 && bitmapHeader.Bpp != 32)
-				throw new Exception(bitmapHeader.Bpp + " bits bitmap is not supported");
-
-			Width = (int)bitmapHeader.Width;
-			Height = (int)bitmapHeader.Height;
-			Bpp = (int)bitmapHeader.Bpp / 8;
-			RawData = GC.AllocateObject((uint)(Width * Height * Bpp));
-
-			int[] temp = new int[Width];
-			uint w = 0, h = (uint)Height - 1;
-
-			for (uint i = 0; i < (uint)(Width * Height * Bpp); i += (uint)Bpp)
-			{
-				if (w == Width)
+				if (w == width)
 				{
-					for (uint k = 0; k < temp.Length; k++)
-						RawData.Store32(((uint)Width * h + k) * (uint)Bpp, temp[k]);
-
+					for (int k = 0; k < temp.Length; k++)
+					{
+						image.SetColor(k, h, temp[k]);
+					}
 					w = 0;
 					h--;
 				}
 
-				switch (Bpp)
+				switch (bpp)
 				{
-					case 3: // 24-bit
-						temp[w] = (int)(0xFF000000 | (int)ptr.Load24(bitmapHeader.DataSectionOffset + i));
-						break;
-
-					case 4: // 32-bit
-						temp[w] = (int)ptr.Load32(bitmapHeader.DataSectionOffset + i);
-						break;
+					case 3: temp[w] = (int)(0xFF000000 | stream.Read32(dataSectionOffset + i)); break; // 24-bit
+					case 4: temp[w] = stream.Read32(dataSectionOffset + i); break; // 32-bit
 				}
 
 				w++;
 			}
 
-			return;
+			return image;
 		}
 	}
 }

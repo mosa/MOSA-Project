@@ -1,6 +1,8 @@
-﻿using Mosa.DeviceSystem;
-using System.Drawing;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.DeviceSystem;
 using System.Collections.Generic;
+using System.Drawing;
 
 namespace Mosa.Demo.VBEWorld.x86
 {

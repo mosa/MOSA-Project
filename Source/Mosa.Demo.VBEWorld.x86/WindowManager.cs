@@ -1,4 +1,6 @@
-﻿using Mosa.Demo.VBEWorld.x86.Components;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.Demo.VBEWorld.x86.Components;
 using System.Collections.Generic;
 
 namespace Mosa.Demo.VBEWorld.x86

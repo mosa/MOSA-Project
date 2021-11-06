@@ -1,17 +1,17 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Demo.VBEWorld.x86.HAL;
-using Mosa.Demo.VBEWorld.x86.Components;
 using Mosa.Demo.VBEWorld.x86.Apps;
+using Mosa.Demo.VBEWorld.x86.Components;
+using Mosa.Demo.VBEWorld.x86.HAL;
 using Mosa.DeviceDriver;
 using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
 using Mosa.FileSystem.FAT;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
-using System.Drawing;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace Mosa.Demo.VBEWorld.x86
 {
@@ -95,7 +95,7 @@ namespace Mosa.Demo.VBEWorld.x86
 						for (int k = 0; k < _wall.Length; k++)
 							_wall[k] = (byte)(char)fatFileStream.ReadByte();
 
-						wallpaper = new Bitmap(_wall);
+						wallpaper = Bitmap.CreateImage(_wall);
 					}
 				}
 			}
@@ -112,7 +112,8 @@ namespace Mosa.Demo.VBEWorld.x86
 			{
 				Log("VBE setup OK!");
 				DoGraphics();
-			} else Log("VBE setup ERROR!");
+			}
+			else Log("VBE setup ERROR!");
 		}
 
 		private static void DoGraphics()
