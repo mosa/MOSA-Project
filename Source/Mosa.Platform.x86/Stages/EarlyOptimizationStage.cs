@@ -30,6 +30,8 @@ namespace Mosa.Platform.x86.Stages
 
 			AddTranformation(new Transform.Manual.Stack.Add32());
 
+			//AddTranformation(new Transform.Manual.Special.Mov32ReuseConstant()); /// this can wait
+
 			//AddTranformation(new Transform.Manual.Special.Mov32Propagate());
 		}
 	}
