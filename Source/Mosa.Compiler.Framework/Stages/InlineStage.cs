@@ -16,10 +16,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Dictionary<MosaMethod, KeyValuePair<MethodData, InlineMethodData>> cache;
 
+		private bool InlineExplicit;
+		private bool InlineMethods;
+
 		protected override void Initialize()
 		{
 			Register(InlineCount);
 			Register(InlinedCallSitesCount);
+
+			InlineMethods = CompilerSettings.InlineMethods;
+			InlineExplicit = CompilerSettings.InlineExplicit;
 		}
 
 		protected override void Finish()
@@ -32,6 +38,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Run()
 		{
+			if (!InlineMethods && !Method.IsAggressiveInlining)
+				return;
+
 			var trace = CreateTraceLog("Inlined");
 
 			if (cache == null || cache.Count != 0)
