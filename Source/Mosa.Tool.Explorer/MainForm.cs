@@ -996,6 +996,7 @@ namespace Mosa.Tool.Explorer
 			cbEnableSparseConditionalConstantPropagation.Checked = state;
 			cbEnableBinaryCodeGeneration.Checked = state;
 			cbEnableInline.Checked = state;
+			cbInlineExplicit.Checked = state;
 			cbEnableLongExpansion.Checked = state;
 			cbEnableTwoPassOptimizations.Checked = state;
 			cbEnableBitTracker.Checked = state;
@@ -1032,7 +1033,7 @@ namespace Mosa.Tool.Explorer
 			Settings.SetValue("Optimizations.BitTracker", true);
 			Settings.SetValue("Optimizations.Inline", true);
 			Settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
-			Settings.SetValue("Optimizations.Inline.ExplicitOnly", false);
+			Settings.SetValue("Optimizations.Inline.Explicit", false);
 			Settings.SetValue("Optimizations.Inline.Maximum", 12);
 			Settings.SetValue("Optimizations.Basic.Window", 5);
 			Settings.SetValue("Optimizations.LongExpansion", true);
@@ -1083,7 +1084,7 @@ namespace Mosa.Tool.Explorer
 			Settings.SetValue("Optimizations.TwoPass", cbEnableTwoPassOptimizations.Checked);
 			Settings.SetValue("Optimizations.Platform", cbPlatformOptimizations.Checked);
 			Settings.SetValue("Optimizations.Inline", cbEnableInline.Checked);
-			Settings.SetValue("Optimizations.Inline.ExplicitOnly", cbInlineExplicitOnly.Checked);
+			Settings.SetValue("Optimizations.Inline.Explicit", cbInlineExplicit.Checked);
 
 			//Settings.SetValue("Optimizations.Inline.Maximum", 12);
 			//Settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
@@ -1116,7 +1117,7 @@ namespace Mosa.Tool.Explorer
 			cbEnableBasicOptimizations.Checked = Settings.GetValue("Optimizations.Basic", cbEnableBasicOptimizations.Checked);
 			cbEnableSparseConditionalConstantPropagation.Checked = Settings.GetValue("Optimizations.SCCP", cbEnableSparseConditionalConstantPropagation.Checked);
 			cbEnableDevirtualization.Checked = Settings.GetValue("Optimizations.Devirtualization", cbEnableDevirtualization.Checked);
-			cbInlineExplicitOnly.Checked = Settings.GetValue("Optimizations.Inline.ExplicitOnly", cbInlineExplicitOnly.Checked);
+			cbInlineExplicit.Checked = Settings.GetValue("Optimizations.Inline.Explicit", cbInlineExplicit.Checked);
 			cbPlatformOptimizations.Checked = Settings.GetValue("Optimizations.Platform", cbPlatformOptimizations.Checked);
 			cbEnableLongExpansion.Checked = Settings.GetValue("Optimizations.LongExpansion", cbEnableLongExpansion.Checked);
 			cbEnableTwoPassOptimizations.Checked = Settings.GetValue("Optimizations.TwoPass", cbEnableTwoPassOptimizations.Checked);

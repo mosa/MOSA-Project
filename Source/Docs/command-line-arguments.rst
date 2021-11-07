@@ -32,8 +32,8 @@ Below are the command line arguments available:
     -basic-optimizations,Optimizations.Basic,true
     -basic-optimizations-off,Optimizations.Basic,false
 	-basic-optimization-window,Optimizations.Basic.Window,{value}
-    -inline-explicit,Optimizations.Inline.ExplicitOnly,true
-    -inline-explicit-off,Optimizations.Inline.ExplicitOnly,false
+    -inline-explicit,Optimizations.Inline.Explicit,true
+    -inline-explicit-off,Optimizations.Inline.Explicit,false
     -long-expansion,Optimizations.LongExpansion,true
     -long-expansion-off,Optimizations.LongExpansion,false
     -two-pass,Optimizations.TwoPass,true

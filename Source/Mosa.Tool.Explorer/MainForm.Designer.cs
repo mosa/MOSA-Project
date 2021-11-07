@@ -55,7 +55,7 @@
 			this.cbEnableSparseConditionalConstantPropagation = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbEnableDevirtualization = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbEnableInline = new System.Windows.Forms.ToolStripMenuItem();
-			this.cbInlineExplicitOnly = new System.Windows.Forms.ToolStripMenuItem();
+			this.cbInlineExplicit = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbEnableLongExpansion = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbLoopInvariantCodeMotion = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbEnableBitTracker = new System.Windows.Forms.ToolStripMenuItem();
@@ -250,7 +250,7 @@
             this.cbEnableSparseConditionalConstantPropagation,
             this.cbEnableDevirtualization,
             this.cbEnableInline,
-            this.cbInlineExplicitOnly,
+            this.cbInlineExplicit,
             this.cbEnableLongExpansion,
             this.cbLoopInvariantCodeMotion,
             this.cbEnableBitTracker,
@@ -334,12 +334,14 @@
 			this.cbEnableInline.Size = new System.Drawing.Size(293, 22);
 			this.cbEnableInline.Text = "Enable Inlined Methods";
 			// 
-			// cbInlineExplicitOnly
+			// cbInlineExplicit
 			// 
-			this.cbInlineExplicitOnly.CheckOnClick = true;
-			this.cbInlineExplicitOnly.Name = "cbInlineExplicitOnly";
-			this.cbInlineExplicitOnly.Size = new System.Drawing.Size(293, 22);
-			this.cbInlineExplicitOnly.Text = "Inline Only Explicit";
+			this.cbInlineExplicit.Checked = true;
+			this.cbInlineExplicit.CheckOnClick = true;
+			this.cbInlineExplicit.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbInlineExplicit.Name = "cbInlineExplicit";
+			this.cbInlineExplicit.Size = new System.Drawing.Size(293, 22);
+			this.cbInlineExplicit.Text = "Enable Inline Explicit Methods";
 			// 
 			// cbEnableLongExpansion
 			// 
@@ -549,7 +551,7 @@
 			this.tabControl.Name = "tabControl";
 			this.tabControl.Padding = new System.Drawing.Point(0, 0);
 			this.tabControl.SelectedIndex = 0;
-			this.tabControl.Size = new System.Drawing.Size(716, 490);
+			this.tabControl.Size = new System.Drawing.Size(718, 490);
 			this.tabControl.TabIndex = 38;
 			this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
 			// 
@@ -564,7 +566,7 @@
 			this.tabStages.Location = new System.Drawing.Point(4, 25);
 			this.tabStages.Margin = new System.Windows.Forms.Padding(0);
 			this.tabStages.Name = "tabStages";
-			this.tabStages.Size = new System.Drawing.Size(708, 461);
+			this.tabStages.Size = new System.Drawing.Size(710, 461);
 			this.tabStages.TabIndex = 0;
 			this.tabStages.Text = "Instructions";
 			// 
@@ -618,7 +620,7 @@
 			this.tabStageDebug.Location = new System.Drawing.Point(4, 25);
 			this.tabStageDebug.Margin = new System.Windows.Forms.Padding(0);
 			this.tabStageDebug.Name = "tabStageDebug";
-			this.tabStageDebug.Size = new System.Drawing.Size(708, 461);
+			this.tabStageDebug.Size = new System.Drawing.Size(710, 461);
 			this.tabStageDebug.TabIndex = 1;
 			this.tabStageDebug.Text = "Debug";
 			// 
@@ -656,7 +658,7 @@
 			this.tabMethodCounters.Location = new System.Drawing.Point(4, 25);
 			this.tabMethodCounters.Margin = new System.Windows.Forms.Padding(0);
 			this.tabMethodCounters.Name = "tabMethodCounters";
-			this.tabMethodCounters.Size = new System.Drawing.Size(708, 461);
+			this.tabMethodCounters.Size = new System.Drawing.Size(710, 461);
 			this.tabMethodCounters.TabIndex = 6;
 			this.tabMethodCounters.Text = "Counters";
 			// 
@@ -683,7 +685,7 @@
 			this.tabLogs.Location = new System.Drawing.Point(4, 25);
 			this.tabLogs.Margin = new System.Windows.Forms.Padding(0);
 			this.tabLogs.Name = "tabLogs";
-			this.tabLogs.Size = new System.Drawing.Size(708, 461);
+			this.tabLogs.Size = new System.Drawing.Size(710, 461);
 			this.tabLogs.TabIndex = 7;
 			this.tabLogs.Text = "Logs";
 			// 
@@ -880,7 +882,7 @@
 		private System.Windows.Forms.ToolStripMenuItem CBEnableMultithreading;
 		private System.Windows.Forms.ToolStripMenuItem cbLoopInvariantCodeMotion;
 		private System.Windows.Forms.ToolStripMenuItem cbPlatformOptimizations;
-		private System.Windows.Forms.ToolStripMenuItem cbInlineExplicitOnly;
+		private System.Windows.Forms.ToolStripMenuItem cbInlineExplicit;
 		private System.Windows.Forms.ToolStripMenuItem cbEnableAllOptimizations;
 		private System.Windows.Forms.ToolStripMenuItem cbDisableAllOptimizations;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;

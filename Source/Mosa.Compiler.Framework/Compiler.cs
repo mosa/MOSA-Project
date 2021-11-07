@@ -185,7 +185,7 @@ namespace Mosa.Compiler.Framework
 				compilerSettings.Devirtualization ? new DevirtualizeCallStage() : null,
 				new PlugStage(),
 				new RuntimeCallStage(),
-				(compilerSettings.InlineMethods) ? new InlineStage() : null,
+				(compilerSettings.InlineMethods || compilerSettings.InlineExplicit) ? new InlineStage() : null,
 				new PromoteTemporaryVariables(),
 				new StaticLoadOptimizationStage(),
 
@@ -208,7 +208,7 @@ namespace Mosa.Compiler.Framework
 				(compilerSettings.SSA) ? new ExitSSAStage() : null,
 				new IRCleanupStage(),
 				new NewObjectStage(),
-				(compilerSettings.InlineMethods) ? new InlineEvaluationStage() : null,
+				(compilerSettings.InlineMethods || compilerSettings.InlineExplicit) ? new InlineEvaluationStage() : null,
 
 				//new StopStage(),
 
