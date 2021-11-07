@@ -77,6 +77,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.MoveR8, MoveR8);
 			AddVisitation(IRInstruction.Move32, Move32);
 			AddVisitation(IRInstruction.MoveObject, MoveObject);
+			AddVisitation(IRInstruction.MulCarryOut32, MulCarryOut32);
+			AddVisitation(IRInstruction.MulOverflowOut32, MulOverflowOut32);
 			AddVisitation(IRInstruction.MulR4, MulR4);
 			AddVisitation(IRInstruction.MulR8, MulR8);
 			AddVisitation(IRInstruction.MulSigned32, MulSigned32);
@@ -147,6 +149,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.Or64, Or64);
 			AddVisitation(IRInstruction.Xor64, Xor64);
 			AddVisitation(IRInstruction.Move64, Move64);
+			AddVisitation(IRInstruction.MulCarryOut64, MulCarryOut64);
+			AddVisitation(IRInstruction.MulOverflowOut64, MulOverflowOut64);
 			AddVisitation(IRInstruction.MulSigned64, MulSigned64);
 			AddVisitation(IRInstruction.MulUnsigned64, MulUnsigned64);
 			AddVisitation(IRInstruction.ShiftLeft64, ShiftLeft64);
@@ -470,27 +474,27 @@ namespace Mosa.Platform.x86.Stages
 				var v1 = AllocateVirtualRegister(result.Type);
 
 				context.SetInstruction(X86.Cmp32, null, operand1, ConstantZero32);
-				context.AppendInstruction(X86.Mov32, result, operand2);										// true
-				context.AppendInstruction(X86.Mov32, v1, operand3);											// true
-				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, result, v1);				// false
+				context.AppendInstruction(X86.Mov32, result, operand2);                                     // true
+				context.AppendInstruction(X86.Mov32, v1, operand3);                                         // true
+				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, result, v1);             // false
 			}
 			else if (operand2.IsConstant && !operand3.IsConstant)
 			{
 				context.SetInstruction(X86.Cmp32, null, operand1, ConstantZero32);
-				context.AppendInstruction(X86.Mov32,  result,  operand2);									// true
-				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, result, operand3);		// false
+				context.AppendInstruction(X86.Mov32, result, operand2);                                 // true
+				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, result, operand3);       // false
 			}
 			else if (!operand2.IsConstant && operand3.IsConstant)
 			{
 				context.SetInstruction(X86.Cmp32, null, operand1, ConstantZero32);
-				context.AppendInstruction(X86.Mov32, result, operand3);										// true
-				context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, result, result, operand2);	// false
+				context.AppendInstruction(X86.Mov32, result, operand3);                                     // true
+				context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, result, result, operand2);    // false
 			}
 			else if (!operand2.IsConstant && !operand3.IsConstant)
 			{
 				context.SetInstruction(X86.Cmp32, null, operand1, ConstantZero32);
-				context.AppendInstruction(X86.Mov32, result, operand2);										// true
-				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, result, operand3);		// false
+				context.AppendInstruction(X86.Mov32, result, operand2);                                     // true
+				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, result, operand3);       // false
 			}
 		}
 
@@ -633,6 +637,36 @@ namespace Mosa.Platform.x86.Stages
 			operand1 = MoveConstantToFloatRegister(context, operand1);
 
 			context.SetInstruction(X86.Movsd, result, operand1);
+		}
+
+		private void MulCarryOut32(Context context)
+		{
+			var result = context.Result;
+			var result2 = context.Result2;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var v1 = AllocateVirtualRegisterI32();
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			context.SetInstruction2(X86.Mul32, v1, result, operand1, operand2);
+			context.AppendInstruction(X86.Setcc, ConditionCode.Carry, v2);
+			context.AppendInstruction(X86.Movzx8To32, result2, v2);
+		}
+
+		private void MulOverflowOut32(Context context)
+		{
+			var result = context.Result;
+			var result2 = context.Result2;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var v1 = AllocateVirtualRegisterI32();
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			context.SetInstruction2(X86.Mul32, v1, result, operand1, operand2);
+			context.AppendInstruction(X86.Setcc, ConditionCode.Overflow, v2);
+			context.AppendInstruction(X86.Movzx8To32, result2, v2);
 		}
 
 		private void MulR4(Context context)
@@ -1312,6 +1346,30 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov32, resultLow, op1L);
 			context.AppendInstruction(X86.Mov32, resultHigh, op1H);
+		}
+
+		private void MulCarryOut64(Context context)
+		{
+			var result2 = context.Result2;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			ExpandMul(context);
+
+			context.AppendInstruction(X86.Setcc, ConditionCode.Carry, v1);
+			context.AppendInstruction(X86.Movzx8To32, result2, v1);
+		}
+
+		private void MulOverflowOut64(Context context)
+		{
+			var result2 = context.Result2;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			ExpandMul(context);
+
+			context.AppendInstruction(X86.Setcc, ConditionCode.Overflow, v1);
+			context.AppendInstruction(X86.Movzx8To32, result2, v1);
 		}
 
 		private void MulSigned64(Context context)

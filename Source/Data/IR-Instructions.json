@@ -871,6 +871,34 @@
 			"OperandCount": 1
 		},
 		{
+			"Name": "MulCarryOut32",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "MulCarryOut64",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "MulOverflowOut32",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
+			"Name": "MulOverflowOut64",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 2,
+			"Commutative": "true"
+		},
+		{
 			"Name": "MulR4",
 			"FamilyName": "IR",
 			"ResultCount": 1,

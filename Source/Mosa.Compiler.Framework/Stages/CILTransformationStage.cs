@@ -177,6 +177,8 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(CILInstruction.Leave, Leave);
 			AddVisitation(CILInstruction.Leave_s, Leave);
 			AddVisitation(CILInstruction.Mul, Mul);
+			AddVisitation(CILInstruction.Mul_ovf, MulOverflow);
+			AddVisitation(CILInstruction.Mul_ovf_un, MulOverflowUnsigned);
 			AddVisitation(CILInstruction.Neg, Neg);
 			AddVisitation(CILInstruction.Newarr, Newarr);
 			AddVisitation(CILInstruction.Newobj, Newobj);
@@ -237,8 +239,6 @@ namespace Mosa.Compiler.Framework.Stages
 			//AddVisitation(CILInstruction.Jmp,Jmp);
 			//AddVisitation(CILInstruction.Localalloc,Localalloc);
 			//AddVisitation(CILInstruction.Mkrefany,Mkrefany);
-			//AddVisitation(CILInstruction.Mul_ovf,Mul_ovf);
-			//AddVisitation(CILInstruction.Mul_ovf_un,Mul_ovf_un);
 			//AddVisitation(CILInstruction.PreConstrained,PreConstrained);
 			//AddVisitation(CILInstruction.PreNo,PreNo);
 			//AddVisitation(CILInstruction.PreReadOnly,PreReadOnly);
@@ -1155,6 +1155,32 @@ namespace Mosa.Compiler.Framework.Stages
 		private void Mul(InstructionNode node)
 		{
 			Replace(node, IRInstruction.MulSigned32, IRInstruction.MulSigned64, IRInstruction.MulR8, IRInstruction.MulR4);
+		}
+
+		/// <summary>
+		/// Visitation function for Mul Overflow instruction
+		/// </summary>
+		/// <param name="node">The node.</param>
+		private void MulOverflow(InstructionNode node)
+		{
+			var overflowResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			node.SetInstruction2(Select(node.Result, IRInstruction.MulOverflowOut32, IRInstruction.MulOverflowOut64), node.Result, overflowResult, node.Operand1, node.Operand2);
+
+			AddOverflowCheck(node, overflowResult);
+		}
+
+		/// <summary>
+		/// Visitation function for Mul Overflow Unsigned instruction
+		/// </summary>
+		/// <param name="node">The node.</param>
+		private void MulOverflowUnsigned(InstructionNode node)
+		{
+			var carryResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			node.SetInstruction2(Select(node.Result, IRInstruction.MulCarryOut32, IRInstruction.MulCarryOut64), node.Result, carryResult, node.Operand1, node.Operand2);
+
+			AddOverflowCheck(node, carryResult);
 		}
 
 		/// <summary>

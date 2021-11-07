@@ -139,6 +139,10 @@ namespace Mosa.Compiler.Framework
 		public static readonly Move32 Move32 = new Move32();
 		public static readonly Move64 Move64 = new Move64();
 		public static readonly MoveObject MoveObject = new MoveObject();
+		public static readonly MulCarryOut32 MulCarryOut32 = new MulCarryOut32();
+		public static readonly MulCarryOut64 MulCarryOut64 = new MulCarryOut64();
+		public static readonly MulOverflowOut32 MulOverflowOut32 = new MulOverflowOut32();
+		public static readonly MulOverflowOut64 MulOverflowOut64 = new MulOverflowOut64();
 		public static readonly MulR4 MulR4 = new MulR4();
 		public static readonly MulR8 MulR8 = new MulR8();
 		public static readonly MulSigned32 MulSigned32 = new MulSigned32();
