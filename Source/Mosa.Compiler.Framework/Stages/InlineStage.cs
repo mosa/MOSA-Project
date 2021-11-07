@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected override void Finish()
 		{
-			if (cache.Count != 0)
+			if (cache != null && cache.Count != 0)
 			{
 				cache = null;
 			}
