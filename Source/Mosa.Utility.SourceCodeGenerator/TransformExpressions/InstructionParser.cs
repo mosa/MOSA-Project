@@ -159,7 +159,7 @@ namespace Mosa.Utility.SourceCodeGenerator.TransformExpressions
 				}
 				else if (t == TokenType.Word)
 				{
-					var text = tokens[index].Value.ToLower();
+					var text = tokens[index].Value.ToLowerInvariant();
 
 					if (text == "u")
 					{

@@ -29,10 +29,10 @@ namespace Mosa.Utility.BootImage
 
 			if (blockCount == 0)
 			{
-				blockCount = 8400 + 1;
+				blockCount = (2048 * 4) + 1;
 				foreach (var file in options.IncludeFiles)
 				{
-					blockCount += ((uint)file.Content.Length / SectorSize) + 1;
+					blockCount += ((uint)file.Content.Length / SectorSize) + 10;
 				}
 			}
 
@@ -91,7 +91,7 @@ namespace Mosa.Utility.BootImage
 				};
 
 				mbr.Partitions[0].Bootable = true;
-				mbr.Partitions[0].StartLBA = diskGeometry.SectorsPerTrack;
+				mbr.Partitions[0].StartLBA = 2048;    // minimum for grub legacy = 64, grub2 = 2048 (1Mb)
 				mbr.Partitions[0].TotalBlocks = blockCount - mbr.Partitions[0].StartLBA;
 
 				switch (options.FileSystem)
@@ -165,7 +165,7 @@ namespace Mosa.Utility.BootImage
 				if (includeFile.Hidden) fileAttributes |= FatFileAttributes.Hidden;
 				if (includeFile.System) fileAttributes |= FatFileAttributes.System;
 
-				string newname = (Path.GetFileNameWithoutExtension(includeFile.Filename).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Filename).PadRight(4).Substring(1, 3)).ToUpper();
+				string newname = (Path.GetFileNameWithoutExtension(includeFile.Filename).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Filename).PadRight(4).Substring(1, 3)).ToUpperInvariant();
 				var location = fat.CreateFile(newname, fileAttributes);
 
 				if (!location.IsValid)

@@ -8,28 +8,52 @@ namespace System
 	/// <summary>
 	/// Char
 	/// </summary>
-	public struct Char
+	[Serializable]
+	public struct Char: IComparable, IComparable<char>, IEquatable<char>
 	{
+		internal char m_value;
+
 		public const char MaxValue = (char)0xffff;
 		public const char MinValue = (char)0;
 
-		internal char _value;
-
-		public int CompareTo(char value)
+		public override bool Equals(object obj)
 		{
-			if (_value < value) return -1;
-			else if (_value > value) return 1;
-			return 0;
+			if (obj is Char)
+			{
+				return (this.m_value == ((Char)obj).m_value);
+			}
+			else
+			{
+				return false;
+			}
+
 		}
 
 		public bool Equals(char obj)
 		{
-			return Equals((object)obj);
+			return m_value == obj;
 		}
 
-		public override bool Equals(object obj)
+		public int CompareTo(object value)
 		{
-			return ((char)obj) == _value;
+			if (value == null) return 1;
+
+			if (!(value is char)) throw new ArgumentException("Argument Type Must Be Char", "value");
+
+			if (m_value < ((char)value).m_value) return -1;
+
+			if (m_value > ((char)value).m_value) return 1;
+
+			return 0;
+		}
+
+		public int CompareTo(char value)
+		{
+			if (m_value < value) return -1;
+
+			if (m_value > value) return 1;
+
+			return 0;
 		}
 
 		public static bool IsUpper(char c)
@@ -62,12 +86,12 @@ namespace System
 
 		public override string ToString()
 		{
-			return new String(_value, 1);
+			return new String(m_value, 1);
 		}
 
 		public override int GetHashCode()
 		{
-			return _value;
+			return (int)m_value | ((int)m_value << 16);
 		}
 
 		private static bool IsWhiteSpaceLatin1(char c)

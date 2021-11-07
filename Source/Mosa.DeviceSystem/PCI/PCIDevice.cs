@@ -113,55 +113,55 @@ namespace Mosa.DeviceSystem.PCI
 		/// Gets the vendor ID.
 		/// </summary>
 		/// <value>The vendor ID.</value>
-		public ushort VendorID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIConfigurationHeader.VendorID); } }
+		public ushort VendorID { get { return pciController.ReadConfig16(this, PCIConfigurationHeader.VendorID); } }
 
 		/// <summary>
 		/// Gets the device ID.
 		/// </summary>
 		/// <value>The device ID.</value>
-		public ushort DeviceID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIConfigurationHeader.DeviceID); } }
+		public ushort DeviceID { get { return pciController.ReadConfig16(this, PCIConfigurationHeader.DeviceID); } }
 
 		/// <summary>
 		/// Gets the revision ID.
 		/// </summary>
 		/// <value>The revision ID.</value>
-		public byte RevisionID { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIConfigurationHeader.RevisionID); } }
+		public byte RevisionID { get { return pciController.ReadConfig8(this, PCIConfigurationHeader.RevisionID); } }
 
 		/// <summary>
 		/// Gets the class code.
 		/// </summary>
 		/// <value>The class code.</value>
-		public byte ClassCode { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIConfigurationHeader.ClassCode); } }
+		public byte ClassCode { get { return pciController.ReadConfig8(this, PCIConfigurationHeader.ClassCode); } }
 
 		/// <summary>
 		/// Gets the prog IF.
 		/// </summary>
 		/// <value>The prog IF.</value>
-		public byte ProgIF { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIConfigurationHeader.ProgrammingInterface); } }
+		public byte ProgIF { get { return pciController.ReadConfig8(this, PCIConfigurationHeader.ProgrammingInterface); } }
 
 		/// <summary>
 		/// Gets the sub class code.
 		/// </summary>
 		/// <value>The sub class code.</value>
-		public byte SubClassCode { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIConfigurationHeader.SubClassCode); } }
+		public byte SubClassCode { get { return pciController.ReadConfig8(this, PCIConfigurationHeader.SubClassCode); } }
 
 		/// <summary>
 		/// Gets the sub vendor ID.
 		/// </summary>
 		/// <value>The sub vendor ID.</value>
-		public ushort SubSystemVendorID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIConfigurationHeader.SubSystemVendorID); } }
+		public ushort SubSystemVendorID { get { return pciController.ReadConfig16(this, PCIConfigurationHeader.SubSystemVendorID); } }
 
 		/// <summary>
 		/// Gets the sub device ID.
 		/// </summary>
 		/// <value>The sub device ID.</value>
-		public ushort SubSystemID { get { return pciController.ReadConfig16(Bus, Slot, Function, PCIConfigurationHeader.SubSystemID); } }
+		public ushort SubSystemID { get { return pciController.ReadConfig16(this, PCIConfigurationHeader.SubSystemID); } }
 
 		/// <summary>
 		/// Gets the IRQ.
 		/// </summary>
 		/// <value>The IRQ.</value>
-		public byte IRQ { get { return pciController.ReadConfig8(Bus, Slot, Function, PCIConfigurationHeader.InterruptLineRegister); } }
+		public byte IRQ { get { return pciController.ReadConfig8(this, PCIConfigurationHeader.InterruptLineRegister); } }
 
 		/// <summary>
 		/// Gets or sets the status register.
@@ -169,8 +169,8 @@ namespace Mosa.DeviceSystem.PCI
 		/// <value>The status.</value>
 		public ushort StatusRegister
 		{
-			get { return pciController.ReadConfig16(Bus, Slot, Function, PCIConfigurationHeader.StatusRegister); }
-			set { pciController.WriteConfig16(Bus, Slot, Function, PCIConfigurationHeader.StatusRegister, value); }
+			get { return pciController.ReadConfig16(this, PCIConfigurationHeader.StatusRegister); }
+			set { pciController.WriteConfig16(this, PCIConfigurationHeader.StatusRegister, value); }
 		}
 
 		/// <summary>
@@ -179,8 +179,8 @@ namespace Mosa.DeviceSystem.PCI
 		/// <value>The status.</value>
 		public ushort CommandRegister
 		{
-			get { return pciController.ReadConfig16(Bus, Slot, Function, PCIConfigurationHeader.CommandRegister); }
-			set { pciController.WriteConfig16(Bus, Slot, Function, PCIConfigurationHeader.CommandRegister, value); }
+			get { return pciController.ReadConfig16(this, PCIConfigurationHeader.CommandRegister); }
+			set { pciController.WriteConfig16(this, PCIConfigurationHeader.CommandRegister, value); }
 		}
 
 		/// <summary>
@@ -193,15 +193,15 @@ namespace Mosa.DeviceSystem.PCI
 
 		public override void Initialize()
 		{
-			pciController = Device.Parent.DeviceDriver as IPCIController;
+			pciController = base.Device.Parent.DeviceDriver as IPCIController;
 
-			var configuration = Device.Configuration as PCIDeviceConfiguration;
+			var configuration = base.Device.Configuration as PCIDeviceConfiguration;
 
 			Bus = configuration.Bus;
 			Slot = configuration.Slot;
 			Function = configuration.Function;
 
-			Device.Name = Device.Parent.Name + '/' + Bus.ToString() + '.' + Slot.ToString() + '.' + Function.ToString();
+			base.Device.Name = base.Device.Parent.Name + '/' + Bus.ToString() + '.' + Slot.ToString() + '.' + Function.ToString();
 
 			ioPortRegionCount = memoryRegionCount = 0;
 			BaseAddresses = new BaseAddress[8];
@@ -210,16 +210,16 @@ namespace Mosa.DeviceSystem.PCI
 			{
 				byte barr = (byte)(PCIConfigurationHeader.BaseAddressRegisterBase + (i * 4));
 
-				uint address = pciController.ReadConfig32(Bus, Slot, Function, barr);
+				uint address = pciController.ReadConfig32(this, barr);
 
 				if (address == 0)
 					continue;
 
 				HAL.DisableAllInterrupts();
 
-				pciController.WriteConfig32(Bus, Slot, Function, barr, 0xFFFFFFFF);
-				uint mask = pciController.ReadConfig32(Bus, Slot, Function, barr);
-				pciController.WriteConfig32(Bus, Slot, Function, barr, address);
+				pciController.WriteConfig32(this, barr, 0xFFFFFFFF);
+				uint mask = pciController.ReadConfig32(this, barr);
+				pciController.WriteConfig32(this, barr, address);
 
 				HAL.EnableAllInterrupts();
 
@@ -252,11 +252,11 @@ namespace Mosa.DeviceSystem.PCI
 			}
 		}
 
-		public override void Probe() => Device.Status = DeviceStatus.Available;
+		public override void Probe() => base.Device.Status = DeviceStatus.Available;
 
 		public override void Start()
 		{
-			Device.Status = DeviceStatus.Online;
+			base.Device.Status = DeviceStatus.Online;
 		}
 
 		/// <summary>
@@ -290,7 +290,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// </summary>
 		public void SetNoDriverFound()
 		{
-			Device.Status = DeviceStatus.NotFound;
+			base.Device.Status = DeviceStatus.NotFound;
 		}
 
 		/// <summary>
@@ -298,7 +298,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// </summary>
 		public void SetDeviceOnline()
 		{
-			Device.Status = DeviceStatus.Online;
+			base.Device.Status = DeviceStatus.Online;
 		}
 	}
 }

@@ -45,12 +45,9 @@ namespace Mosa.Compiler.Framework.Transform
 		{
 			string name = GetType().FullName;
 
-			int offset1 = name.IndexOf('.');
-			int offset2 = name.IndexOf('.', offset1 + 1);
-			int offset3 = name.IndexOf('.', offset2 + 1);
-			int offset4 = name.IndexOf('.', offset3 + 1);
+			var transform = name.Replace("Mosa.Platform.", string.Empty).Replace("Mosa.Compiler.Framework.", string.Empty).Replace("Transform.", string.Empty);
 
-			return name.Substring(offset4 + 1);
+			return transform;
 		}
 
 		#endregion Internals
@@ -227,9 +224,54 @@ namespace Mosa.Compiler.Framework.Transform
 			return value == 0;
 		}
 
-		public static bool IsStatusFlagUsed(Context context)
+		public static bool AreStatusFlagUsed(Context context)
 		{
 			return AreAnyStatusFlagsUsed(context.Node) != TriState.No;
+		}
+
+		protected static bool HasBitValue(Operand operand)
+		{
+			return operand.BitValue != null;
+		}
+
+		protected static uint GetBitValueSetBits32(Operand operand)
+		{
+			return (uint)operand.BitValue.BitsSet;
+		}
+
+		protected static ulong GetBitValueSetBits64(Operand operand)
+		{
+			return operand.BitValue.BitsSet;
+		}
+
+		protected static ulong GetBitValueSetBits(Operand operand)
+		{
+			return operand.BitValue.BitsSet;
+		}
+
+		protected static uint GetBitValueClearBits32(Operand operand)
+		{
+			return (uint)operand.BitValue.BitsClear;
+		}
+
+		protected static ulong GetBitValueClearBits64(Operand operand)
+		{
+			return operand.BitValue.BitsClear;
+		}
+
+		protected static ulong GetBitValueClearBits(Operand operand)
+		{
+			return operand.BitValue.BitsClear;
+		}
+
+		protected static ulong GetBitValueMax(Operand operand)
+		{
+			return operand.BitValue.MaxValue;
+		}
+
+		protected static ulong GetBitValueMin(Operand operand)
+		{
+			return operand.BitValue.MinValue;
 		}
 
 		#endregion Filter Methods
@@ -808,6 +850,22 @@ namespace Mosa.Compiler.Framework.Transform
 
 		#endregion Status Helpers
 
+		protected static void RemoveRestOfInstructions(Context context)
+		{
+			var block = context.Block;
+
+			context.GotoNext();
+
+			while (!context.IsBlockEndInstruction)
+			{
+				if (!context.IsEmptyOrNop)
+				{
+					context.SetNop();
+				}
+				context.GotoNext();
+			}
+		}
+
 		protected static InstructionNode GetPreviousNode(Context context)
 		{
 			var previous = context.Node.Previous;
@@ -830,6 +888,110 @@ namespace Mosa.Compiler.Framework.Transform
 			}
 
 			return next.IsBlockEndInstruction ? null : next;
+		}
+
+		protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, int window, Operand operand1 = null, Operand operand2 = null)
+		{
+			return GetPreviousNodeUntil(context, untilInstruction, window, out _, operand1, operand2);
+		}
+
+		protected static InstructionNode GetPreviousNodeUntil(Context context, BaseInstruction untilInstruction, int window, out bool immediate, Operand operand1 = null, Operand operand2 = null)
+		{
+			var previous = context.Node.Previous;
+			int count = 0;
+			immediate = false;
+
+			while (count < window)
+			{
+				if (previous.IsEmptyOrNop)
+				{
+					previous = previous.Previous;
+					continue;
+				}
+
+				if (previous.Instruction == untilInstruction)
+				{
+					immediate = count == 0;
+					return previous;
+				}
+
+				if (previous.IsBlockStartInstruction
+					|| previous.Instruction.IsMemoryRead
+					|| previous.Instruction.IsMemoryWrite
+					|| previous.Instruction.IsIOOperation
+					|| previous.Instruction.HasUnspecifiedSideEffect
+					|| previous.Instruction.FlowControl != FlowControl.Next)
+					return null;
+
+				if (operand1 != null)
+				{
+					if ((previous.ResultCount >= 1 && previous.Result == operand1)
+					|| (previous.ResultCount >= 2 && previous.Result2 == operand1))
+
+						return null;
+				}
+
+				if (operand2 != null)
+				{
+					if ((previous.ResultCount >= 1 && previous.Result == operand2)
+					|| (previous.ResultCount >= 2 && previous.Result2 == operand2))
+
+						return null;
+				}
+
+				previous = previous.Previous;
+				count++;
+			}
+
+			return null;
+		}
+
+		protected static InstructionNode GetNextNodeUntil(Context context, BaseInstruction untilInstruction, int window, Operand operand = null)
+		{
+			return GetNextNodeUntil(context, untilInstruction, window, out _, operand);
+		}
+
+		protected static InstructionNode GetNextNodeUntil(Context context, BaseInstruction untilInstruction, int window, out bool immediate, Operand operand = null)
+		{
+			var next = context.Node.Next;
+			int count = 0;
+			immediate = false;
+
+			while (count < window)
+			{
+				if (next.IsEmptyOrNop)
+				{
+					next = next.Next;
+					continue;
+				}
+
+				if (next.Instruction == untilInstruction)
+				{
+					immediate = count == 0;
+					return next;
+				}
+
+				if (next.IsBlockEndInstruction
+					|| next.Instruction.IsMemoryRead
+					|| next.Instruction.IsMemoryWrite
+					|| next.Instruction.IsIOOperation
+					|| next.Instruction.HasUnspecifiedSideEffect
+					|| next.Instruction.FlowControl != FlowControl.Next)
+					return null;
+
+				if (operand != null)
+				{
+					if ((next.ResultCount >= 1 && next.Result == operand)
+					|| (next.ResultCount >= 2 && next.Result2 == operand))
+
+						return null;
+				}
+
+				next = next.Next;
+				count++;
+			}
+
+			return null;
 		}
 
 		protected static bool Compare64(Context context)
@@ -884,6 +1046,11 @@ namespace Mosa.Compiler.Framework.Transform
 				case ConditionCode.UnsignedLessOrEqual: return true;
 				default: return false;
 			}
+		}
+
+		protected static BasicBlock GetOtherBranchTarget(BasicBlock block, BasicBlock target)
+		{
+			return block.NextBlocks[0] == target ? block.NextBlocks[1] : block.NextBlocks[0];
 		}
 	}
 }

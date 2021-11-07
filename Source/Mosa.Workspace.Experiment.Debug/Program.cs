@@ -38,6 +38,7 @@ namespace Mosa.Workspace.Experiment.Debug
 			settings.SetValue("Optimizations.Inline", false);
 			settings.SetValue("Optimizations.Inline.ExplicitOnly", false);
 			settings.SetValue("Optimizations.Inline.Maximum", 12);
+			settings.SetValue("Optimizations.Basic.Window", 5);
 			settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
 			settings.SetValue("Multiboot.Version", "v1");
 			settings.SetValue("Compiler.Platform", "x86");

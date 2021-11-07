@@ -7,6 +7,8 @@ namespace System.Text
 	/// </summary>
 	public class ASCIIEncoding : Encoding
 	{
+		public string CharacterSet { get; } = " !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+		
 		// Decode a buffer of bytes into a string.
 		public unsafe override string GetString(byte[] bytes, int byteIndex, int count)
 		{
@@ -22,6 +24,15 @@ namespace System.Text
 			}
 
 			return result;
+		}
+
+		// Decode a byte into a character.
+		public char GetChar(byte b)
+		{
+			if (b - 0x20 > CharacterSet.Length || b < 0x20)
+				return CharacterSet[0x3F - 0x20];
+
+			return CharacterSet[b - 0x20];
 		}
 	}
 }

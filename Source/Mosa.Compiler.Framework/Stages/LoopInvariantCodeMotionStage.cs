@@ -70,7 +70,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (CodeMotionCount.Count != 0)
 			{
-				Methods++;
+				Methods.Increment();
 			}
 
 			if (CompilerSettings.FullCheckMode)
@@ -344,7 +344,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			landingpad.AppendInstruction(IRInstruction.Jmp, header);
 
-			LandingPadsCount++;
+			LandingPadsCount.Increment();
 
 			return landingpadBlock;
 		}
@@ -374,7 +374,7 @@ namespace Mosa.Compiler.Framework.Stages
 				at = node;
 			}
 
-			CodeMotionCount += nodes.Count;
+			CodeMotionCount.Increment(nodes.Count);
 		}
 
 		private HashSet<Operand> CollectParamStores()

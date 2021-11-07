@@ -11,19 +11,13 @@ namespace Mosa.DeviceSystem
 		/// Gets the MAC address.
 		/// </summary>
 		/// <value>The MAC address.</value>
-		MACAddress MACAddress { get; }
+		MACAddress MACAddress { get; set; }
 
 		/// <summary>
 		/// Sends the packet to the device
 		/// </summary>
 		/// <param name="data">The data.</param>
 		/// <returns></returns>
-		bool SendPacket(byte[] data);
-
-		/// <summary>
-		/// Assigns the packet buffer to the device
-		/// </summary>
-		/// <param name="packetBuffer">The packet buffer.</param>
-		void AssignPacketBuffer(NetworkDevicePacketBuffer packetBuffer);
+		void SendPacket(byte[] data);
 	}
 }

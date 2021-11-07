@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
+using System.Linq;
 
 namespace Mosa.Utility.Launcher
 {
@@ -182,6 +183,8 @@ namespace Mosa.Utility.Launcher
 			{
 				CreateDiskImage(LauncherSettings.ImageFile);
 			}
+
+			//Output($"Image Generated");
 		}
 
 		private void AddCounters(string data)
@@ -221,6 +224,18 @@ namespace Mosa.Utility.Launcher
 			bootImageOptions.IncludeFiles.Add(new IncludeFile(LauncherSettings.OutputFile, "main.exe"));
 
 			bootImageOptions.IncludeFiles.Add(new IncludeFile("TEST.TXT", Encoding.ASCII.GetBytes("This is a test file.")));
+
+			if (LauncherSettings.FileSystemRootInclude != null)
+			{
+				var dir = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), LauncherSettings.FileSystemRootInclude);
+				foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories))
+				{
+					var name = Path.GetFileName(file).ToUpper();
+
+					Console.WriteLine("Adding file: " + name);
+					bootImageOptions.IncludeFiles.Add(new IncludeFile(name, File.ReadAllBytes(file)));
+				}
+			}
 
 			bootImageOptions.VolumeLabel = "MOSA";
 			bootImageOptions.DiskImageFileName = imagefile;
@@ -371,6 +386,18 @@ namespace Mosa.Utility.Launcher
 				File.WriteAllBytes(Path.Combine(isoDirectory, "mboot.c32"), GetResource(@"syslinux\3.72", "mboot.c32"));
 			}
 
+			if (LauncherSettings.FileSystemRootInclude != null)
+			{
+				var dir = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), LauncherSettings.FileSystemRootInclude);
+				foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories))
+				{
+					var name = Path.GetFileName(file).ToUpper();
+
+					Console.WriteLine("Adding file: " + name);
+					File.Copy(file, Path.Combine(isoDirectory, name));
+				}
+			}
+
 			File.WriteAllBytes(Path.Combine(isoDirectory, "isolinux.cfg"), GetSyslinuxCFG());
 
 			File.Copy(LauncherSettings.OutputFile, Path.Combine(isoDirectory, "main.exe"));
@@ -422,6 +449,18 @@ namespace Mosa.Utility.Launcher
 				archive.ExtractToDirectory(Path.Combine(isoDirectory, "boot", "grub"));
 			}
 
+			if (LauncherSettings.FileSystemRootInclude != null)
+			{
+				var dir = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), LauncherSettings.FileSystemRootInclude);
+				foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories))
+				{
+					var name = Path.GetFileName(file).ToUpper();
+
+					Console.WriteLine("Adding file: " + name);
+					File.Copy(file, Path.Combine(isoDirectory, name));
+				}
+			}
+
 			File.Copy(LauncherSettings.OutputFile, Path.Combine(isoDirectory, "boot", "main.exe"));
 
 			var arg = $"-relaxed-filenames -J -R -o {Quote(LauncherSettings.ImageFile)} -b {Quote(loader)} -no-emul-boot -boot-load-size 4 -boot-info-table {Quote(isoDirectory)}";
@@ -455,6 +494,8 @@ namespace Mosa.Utility.Launcher
 
 		private void GenerateASMFile()
 		{
+			//Output($"Creating ASM File");
+
 			var map = new Dictionary<ulong, List<string>>();
 
 			foreach (var symbol in Linker.Symbols)
@@ -501,6 +542,8 @@ namespace Mosa.Utility.Launcher
 						break;
 				}
 			}
+
+			//Output($"ASM File Created");
 		}
 
 		private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)

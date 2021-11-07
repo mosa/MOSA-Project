@@ -6,6 +6,24 @@ using System.Runtime.CompilerServices;
 
 namespace System
 {
+	// This is only for classes like ArraySegment that need to be API compatible and have a Array property
+	public static class ArrayAccess
+	{
+		/// <summary>
+		/// Copies a range of elements from an Array starting at the specified source index and pastes them to another Array starting at the specified destination index.
+		/// The length and the indexes are specified as 32-bit integers.
+		/// </summary>
+		public static void Copy(Array sourceArray, int sourceIndex, Array destinationArray, int destinationIndex, int length)
+		{
+			Array.Copy(sourceArray, sourceIndex, destinationArray, destinationIndex, length);
+		}
+
+		public static int IndexOf(Array array, object value, int startIndex, int count)
+		{
+			return Array.IndexOf(array, value, startIndex, count);
+		}
+	}
+
 	/// <summary>
 	/// Array
 	/// </summary>
@@ -20,6 +38,9 @@ namespace System
 				return length;
 			}
 		}
+
+		// TODO: Detect if it's a byte array, if yes then use MaxByteArrayLength, else just use MaxArrayLength
+		public static int MaxLength => MaxArrayLength;
 
 		internal const int MaxArrayLength = 0X7FEFFFFF;
 		internal const int MaxByteArrayLength = 0x7FFFFFC7;
@@ -63,6 +84,9 @@ namespace System
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		private static extern void Copy(Array sourceArray, int sourceIndex, Array destinationArray, int destinationIndex, int length, bool reliable);
 
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Clear(Array array, int index, int length);
+
 		/// <summary>
 		/// Copies a range of elements from an Array starting at the specified source index and pastes them to another Array starting at the specified destination index.
 		/// The length and the indexes are specified as 32-bit integers.
@@ -77,6 +101,20 @@ namespace System
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern int GetLowerBound(int dimension);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern int IndexOf(Array array, object value, int startIndex, int count);
+
+		// I think this could be done a bit better, NOT the official implementation
+		public static void Resize<T>(ref T[] array, int newSize)
+		{
+			T[] temp = new T[newSize];
+
+			for (int i = 0; i < array.Length; i++)
+				temp[i] = array[i];
+
+			array = temp;
+		}
 
 		public int GetUpperBound(int dimension)
 		{

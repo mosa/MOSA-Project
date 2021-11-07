@@ -93,14 +93,14 @@ namespace Mosa.DeviceSystem
 
 		#region Initialize Devices Drivers
 
-		public Device Initialize(DeviceDriverRegistryEntry deviceDriverRegistryEntry, Device parent, BaseDeviceConfiguration configuration = null, HardwareResources resources = null)
+		public Device Initialize(DeviceDriverRegistryEntry deviceDriverRegistryEntry, Device parent, bool autoStart = true, BaseDeviceConfiguration configuration = null, HardwareResources resources = null)
 		{
 			var deviceDriver = deviceDriverRegistryEntry.Factory();
 
-			return Initialize(deviceDriver, parent, configuration, resources, deviceDriverRegistryEntry);
+			return Initialize(deviceDriver, parent, autoStart, configuration, resources, deviceDriverRegistryEntry);
 		}
 
-		public Device Initialize(BaseDeviceDriver deviceDriver, Device parent, BaseDeviceConfiguration configuration = null, HardwareResources resources = null, DeviceDriverRegistryEntry deviceDriverRegistryEntry = null)
+		public Device Initialize(BaseDeviceDriver deviceDriver, Device parent, bool autoStart = true, BaseDeviceConfiguration configuration = null, HardwareResources resources = null, DeviceDriverRegistryEntry deviceDriverRegistryEntry = null)
 		{
 			var device = new Device()
 			{
@@ -115,7 +115,10 @@ namespace Mosa.DeviceSystem
 				//Name = string.Empty,
 			};
 
-			StartDevice(device);
+			if (autoStart)
+			{
+				StartDevice(device);
+			}
 
 			return device;
 		}

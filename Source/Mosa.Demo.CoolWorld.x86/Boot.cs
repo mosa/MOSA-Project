@@ -8,9 +8,9 @@ using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
 using Mosa.FileSystem.FAT;
 using Mosa.Kernel.x86;
+using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
-using System;
 
 namespace Mosa.Demo.CoolWorld.x86
 {
@@ -19,9 +19,9 @@ namespace Mosa.Demo.CoolWorld.x86
 	/// </summary>
 	public static class Boot
 	{
-		public static ConsoleSession Console;
+		public static ConsoleSession Console, Debug;
 
-		public static ConsoleSession Debug;
+		public static DeviceService DeviceService;
 
 		[Plug("Mosa.Runtime.StartUp::SetInitialMemory")]
 		public static void SetInitialMemory()
@@ -44,9 +44,9 @@ namespace Mosa.Demo.CoolWorld.x86
 			Console.Color = ScreenColor.White;
 			Console.BackgroundColor = ScreenColor.Green;
 
-			Debug = ConsoleManager.Controller.Boot;
+			Debug = ConsoleManager.Controller.Debug;
 
-			Console.Write("                   MOSA OS Version 1.5 - Compiler Version 1.5");
+			Console.Write("                   MOSA OS Version 2.2 - Compiler Version 2.2");
 			FillLine();
 			Console.Color = ScreenColor.White;
 			Console.BackgroundColor = ScreenColor.Black;
@@ -56,35 +56,45 @@ namespace Mosa.Demo.CoolWorld.x86
 			// Create Service manager and basic services
 			var serviceManager = new ServiceManager();
 
-			var deviceService = new DeviceService();
+			DeviceService = new DeviceService();
 
 			var diskDeviceService = new DiskDeviceService();
 			var partitionService = new PartitionService();
 			var pciControllerService = new PCIControllerService();
 			var pciDeviceService = new PCIDeviceService();
+			var pcService = new PCService();
 
-			serviceManager.AddService(deviceService);
+			serviceManager.AddService(DeviceService);
 			serviceManager.AddService(diskDeviceService);
 			serviceManager.AddService(partitionService);
 			serviceManager.AddService(pciControllerService);
 			serviceManager.AddService(pciDeviceService);
+			serviceManager.AddService(pcService);
 
 			Console.WriteLine("> Initializing hardware abstraction layer...");
 
 			// Set device driver system with the hardware HAL
 			var hardware = new HAL.Hardware();
 
-			DeviceSystem.Setup.Initialize(hardware, deviceService.ProcessInterrupt);
+			DeviceSystem.Setup.Initialize(hardware, DeviceService.ProcessInterrupt);
 
 			Console.WriteLine("> Registering device drivers...");
-			deviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
+			DeviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
 
 			Console.WriteLine("> Starting devices...");
 
-			deviceService.Initialize(new X86System(), null);
+			DeviceService.Initialize(new X86System(), null);
+
+			var acpi = DeviceService.GetFirstDevice<IACPI>().DeviceDriver as IACPI;
+
+			// Setup APIC
+			var localApic = Mosa.DeviceSystem.HAL.GetPhysicalMemory((Pointer)acpi.LocalApicAddress, 0xFFFF).Address;
+			var ioApic = Mosa.DeviceSystem.HAL.GetPhysicalMemory((Pointer)acpi.IOApicAddress, 0xFFFF).Address;
+
+			APIC.Setup(localApic, ioApic);
 
 			Console.Write("> Probing for ISA devices...");
-			var isaDevices = deviceService.GetChildrenOf(deviceService.GetFirstDevice<ISABus>());
+			var isaDevices = DeviceService.GetChildrenOf(DeviceService.GetFirstDevice<ISABus>());
 			Console.WriteLine("[Completed: " + isaDevices.Count.ToString() + " found]");
 
 			foreach (var device in isaDevices)
@@ -97,7 +107,7 @@ namespace Mosa.Demo.CoolWorld.x86
 			}
 
 			Console.Write("> Probing for PCI devices...");
-			var devices = deviceService.GetDevices<PCIDevice>();
+			var devices = DeviceService.GetDevices<PCIDevice>();
 			Console.WriteLine("[Completed: " + devices.Count.ToString() + " found]");
 
 			foreach (var device in devices)
@@ -107,9 +117,9 @@ namespace Mosa.Demo.CoolWorld.x86
 				Console.Write(" ");
 
 				var pciDevice = device.DeviceDriver as PCIDevice;
-				InBrackets(device.Name + ": " + pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x") + " " + pciDevice.SubSystemID.ToString("x") + ":" + pciDevice.SubSystemVendorID.ToString("x") + " (" + pciDevice.Function.ToString("x") + ":" + pciDevice.ClassCode.ToString("x") + ":" + pciDevice.SubClassCode.ToString("x") + ":" + pciDevice.ProgIF.ToString("x") + ":" + pciDevice.RevisionID.ToString("x") + ")", ScreenColor.White, ScreenColor.Green);
+				InBrackets(device.Name + ": " + pciDevice.VendorID.ToString("x") + ":" + pciDevice.DeviceID.ToString("x") + " " + pciDevice.SubSystemID.ToString("x") + ":" + pciDevice.SubSystemVendorID.ToString("x") + " (" + pciDevice.ClassCode.ToString("x") + ":" + pciDevice.SubClassCode.ToString("x") + ":" + pciDevice.ProgIF.ToString("x") + ":" + pciDevice.RevisionID.ToString("x") + ")", ScreenColor.White, ScreenColor.Green);
 
-				var children = deviceService.GetChildrenOf(device);
+				var children = DeviceService.GetChildrenOf(device);
 
 				if (children.Count != 0)
 				{
@@ -126,7 +136,7 @@ namespace Mosa.Demo.CoolWorld.x86
 			}
 
 			Console.Write("> Probing for disk controllers...");
-			var diskcontrollers = deviceService.GetDevices<IDiskControllerDevice>();
+			var diskcontrollers = DeviceService.GetDevices<IDiskControllerDevice>();
 			Console.WriteLine("[Completed: " + diskcontrollers.Count.ToString() + " found]");
 
 			foreach (var device in diskcontrollers)
@@ -139,7 +149,7 @@ namespace Mosa.Demo.CoolWorld.x86
 			}
 
 			Console.Write("> Probing for disks...");
-			var disks = deviceService.GetDevices<IDiskDevice>();
+			var disks = DeviceService.GetDevices<IDiskDevice>();
 			Console.WriteLine("[Completed: " + disks.Count.ToString() + " found]");
 
 			foreach (var disk in disks)
@@ -155,7 +165,7 @@ namespace Mosa.Demo.CoolWorld.x86
 			partitionService.CreatePartitionDevices();
 
 			Console.Write("> Finding partitions...");
-			var partitions = deviceService.GetDevices<IPartitionDevice>();
+			var partitions = DeviceService.GetDevices<IPartitionDevice>();
 			Console.WriteLine("[Completed: " + partitions.Count.ToString() + " found]");
 
 			//foreach (var partition in partitions)
@@ -190,7 +200,7 @@ namespace Mosa.Demo.CoolWorld.x86
 
 						uint len = (uint)fatFileStream.Length;
 
-						Console.WriteLine(" - Length: " + len.ToString());
+						Console.WriteLine(" - Length: " + len.ToString() + " bytes");
 
 						Console.Write("Reading File: ");
 
@@ -206,27 +216,40 @@ namespace Mosa.Demo.CoolWorld.x86
 
 						Console.WriteLine();
 					}
+
+					const string bmpname = "WALLP.BMP";
+
+					var bmploc = fat.FindEntry(bmpname);
+
+					if (bmploc.IsValid)
+					{
+						Console.Write("Found: " + bmpname);
+
+						var fatFileStream = new FatFileStream(fat, bmploc);
+
+						uint len = (uint)fatFileStream.Length;
+
+						Console.WriteLine(" - Length: " + len.ToString() + " bytes");
+						Console.WriteLine();
+					}
 				}
 			}
 
 			// Get StandardKeyboard
-			var standardKeyboards = deviceService.GetDevices("StandardKeyboard");
-
-			if (standardKeyboards.Count == 0)
+			var keyboards = DeviceService.GetDevices("StandardKeyboard");
+			if (keyboards.Count == 0)
 			{
 				Console.WriteLine("No Keyboard!");
 				ForeverLoop();
 			}
 
-			var standardKeyboard = standardKeyboards[0].DeviceDriver as IKeyboardDevice;
-
-			Debug = ConsoleManager.Controller.Debug;
+			var stdKeyboard = keyboards[0].DeviceDriver as IKeyboardDevice;
 
 			// setup keymap
 			var keymap = new US();
 
 			// setup keyboard (state machine)
-			var keyboard = new DeviceSystem.Keyboard(standardKeyboard, keymap);
+			var keyboard = new DeviceSystem.Keyboard(stdKeyboard, keymap);
 
 			// setup app manager
 			var manager = new AppManager(Console, keyboard, serviceManager);
@@ -305,57 +328,6 @@ namespace Mosa.Demo.CoolWorld.x86
 			Console.Row = r;
 			Console.Color = col;
 			Console.BackgroundColor = back;
-		}
-
-		public static void Mandelbrot()
-		{
-			double xmin = -2.1;
-			double ymin = -1.3;
-			double xmax = 1;
-			double ymax = 1.3;
-
-			int Width = 200;
-			int Height = 200;
-
-			double x, y, x1, y1, xx;
-
-			int looper, s, z = 0;
-			double intigralX, intigralY = 0.0;
-
-			intigralX = (xmax - xmin) / Width; // Make it fill the whole window
-			intigralY = (ymax - ymin) / Height;
-			x = xmin;
-
-			for (s = 1; s < Width; s++)
-			{
-				y = ymin;
-				for (z = 1; z < Height; z++)
-				{
-					x1 = 0;
-					y1 = 0;
-					looper = 0;
-					while (looper < 100 && Math.Sqrt((x1 * x1) + (y1 * y1)) < 2)
-					{
-						looper++;
-						xx = (x1 * x1) - (y1 * y1) + x;
-						y1 = 2 * x1 * y1 + y;
-						x1 = xx;
-					}
-
-					// Get the percent of where the looper stopped
-					double perc = looper / (100.0);
-
-					// Get that part of a 255 scale
-					int val = ((int)(perc * 255));
-
-					// Use that number to set the color
-
-					//map[s, z]= value;
-
-					y += intigralY;
-				}
-				x += intigralX;
-			}
 		}
 	}
 }

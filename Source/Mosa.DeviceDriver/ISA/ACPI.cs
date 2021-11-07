@@ -1,11 +1,15 @@
-﻿using Mosa.DeviceSystem;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.DeviceSystem;
 using Mosa.Runtime;
 using System.Runtime.InteropServices;
 
 namespace Mosa.DeviceDriver.ISA
 {
 	// Portions of this code are from Cosmos
-	// This code only really works on x86, we need to access other addresses to make it work on x86-64
+
+	//https://wiki.osdev.org/ACPI
+	//https://wiki.osdev.org/MADT
 
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public unsafe struct RSDPDescriptor
@@ -15,6 +19,17 @@ namespace Mosa.DeviceDriver.ISA
 		public fixed sbyte OEMID[6];
 		public byte Revision;
 		public uint RsdtAddress;
+	}
+
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	public unsafe struct RSDPDescriptor20
+	{
+		public RSDPDescriptor FirstPart;
+
+		public uint Length;
+		public ulong XsdtAddress;
+		public byte ExtendedChecksum;
+		public fixed byte Reserved[3];
 	}
 
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -88,6 +103,7 @@ namespace Mosa.DeviceDriver.ISA
 
 		// 64bit pointers - Available on ACPI 2.0+
 		public ulong X_FirmwareControl;
+
 		public ulong X_Dsdt;
 
 		public GenericAddressStructure X_PM1aEventBlock;
@@ -123,19 +139,95 @@ namespace Mosa.DeviceDriver.ISA
 		}*/
 	}
 
-	public unsafe class ACPI : BaseDeviceDriver
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	public unsafe struct XSDT
+	{
+		public ACPISDTHeader h;
+		public fixed ulong PointerToOtherSDT[16]; // This is problematic, we need a way to statically initialize this array's size with h.Length and stuff
+
+		/*public void Init()
+		{
+			fixed (ulong* ptr = new ulong[(int)((h.Length - sizeof(ACPISDTHeader)) / 8)])
+				PointerToOtherSDT = ptr;
+		}*/
+	}
+
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	public unsafe struct MADT
+	{
+		public ACPISDTHeader h;
+
+		public uint LocalApicAddress;
+		public uint Flags;
+	}
+
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	public unsafe struct MADTEntry
+	{
+		public byte Type;
+		public byte Length;
+	}
+
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	public unsafe struct ProcessorLocalAPICEntry
+	{
+		public MADTEntry Entry;
+
+		public byte AcpiProcessorID;
+		public byte ApicID;
+
+		public uint Flags;
+	}
+
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	public unsafe struct IOAPICEntry
+	{
+		public MADTEntry Entry;
+
+		public byte ApicID;
+		public byte Reserved;
+
+		public uint ApicAddress;
+		public uint GlobalSystemInterruptBase;
+	}
+
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	public unsafe struct LongLocalAPICEntry
+	{
+		public MADTEntry Entry;
+
+		public sbyte Reserved;
+
+		public ulong ApicAddress;
+	}
+
+	public unsafe class ACPI : BaseDeviceDriver, IACPI
 	{
 		private RSDPDescriptor* Descriptor;
+		private RSDPDescriptor20* Descriptor20;
+
 		private FADT* FADT;
 		private RSDT* RSDT;
-
-		private short SLP_TYPa;
-		private short SLP_TYPb;
-		private short SLP_EN;
+		private XSDT* XSDT;
+		private MADT* MADT;
 
 		private BaseIOPortWrite SMI_CommandPort;
-		private BaseIOPortWrite PM1aControlBlock;
-		private BaseIOPortWrite PM1bControlBlock;
+
+		public short SLP_TYPa { get; set; }
+		public short SLP_TYPb { get; set; }
+		public short SLP_EN { get; set; }
+
+		public BaseIOPortWrite ResetAddress { get; set; }
+		public BaseIOPortWrite PM1aControlBlock { get; set; }
+		public BaseIOPortWrite PM1bControlBlock { get; set; }
+
+		public byte ResetValue { get; set; }
+
+		public byte[] ProcessorIDs { get; set; }
+		public int ProcessorCount { get; set; }
+
+		public uint IOApicAddress { get; set; }
+		public uint LocalApicAddress { get; set; }
 
 		public override void Initialize()
 		{
@@ -154,14 +246,59 @@ namespace Mosa.DeviceDriver.ISA
 			if (Descriptor == null)
 				return;
 
+			/*if (Descriptor->Revision == 2) // ACPI v2.0+
+			{
+				Descriptor20 = (RSDPDescriptor20*)rsdpPtr;
+
+				XSDT = (XSDT*)HAL.GetPhysicalMemory((Pointer)Descriptor20->XsdtAddress, 0xFFFF).Address;
+				FADT = (FADT*)HAL.GetPhysicalMemory((Pointer)FindBySignature("FACP", true), 0xFFFF).Address;
+				MADT = (MADT*)HAL.GetPhysicalMemory((Pointer)FindBySignature("APIC", true), 0xFFFF).Address;
+			}
+			else
+			{*/
 			RSDT = (RSDT*)HAL.GetPhysicalMemory((Pointer)Descriptor->RsdtAddress, 0xFFFF).Address;
+			FADT = (FADT*)HAL.GetPhysicalMemory((Pointer)FindBySignature("FACP", false), 0xFFFF).Address;
+			MADT = (MADT*)HAL.GetPhysicalMemory((Pointer)FindBySignature("APIC", false), 0xFFFF).Address;
 
-			// Won't work, we need to initialize array the same time we cast to RSDT*
-			//RSDT->Init();
+			//}
 
-			FADT = (FADT*)HAL.GetPhysicalMemory((Pointer)FindBySignature(RSDT, "FACP"), 0xFFFF).Address;
 			if (FADT == null)
 				return;
+
+			if (MADT != null)
+			{
+				ProcessorIDs = new byte[256];
+				LocalApicAddress = MADT->LocalApicAddress;
+
+				Pointer ptr = (Pointer)MADT;
+				Pointer ptr2 = ptr + MADT->h.Length;
+
+				for (ptr += 0x2C; ptr < ptr2;)
+				{
+					MADTEntry* entry = (MADTEntry*)ptr;
+
+					switch (entry->Type)
+					{
+						case 0: // Processor Local APIC
+							ProcessorLocalAPICEntry* plan = (ProcessorLocalAPICEntry*)ptr;
+							if ((plan->Flags & 1) != 0)
+								ProcessorIDs[ProcessorCount++] = plan->ApicID;
+							break;
+
+						case 1: // I/O APIC
+							IOAPICEntry* ipe = (IOAPICEntry*)ptr;
+							IOApicAddress = ipe->ApicAddress;
+							break;
+
+						case 5: // 64-bit LAPIC
+							LongLocalAPICEntry* llpe = (LongLocalAPICEntry*)ptr;
+							LocalApicAddress = (uint)(llpe->ApicAddress);
+							break;
+					}
+
+					ptr += entry->Length;
+				}
+			}
 
 			Pointer dsdt = (Pointer)FADT->Dsdt;
 
@@ -192,8 +329,30 @@ namespace Mosa.DeviceDriver.ISA
 						SLP_EN = 1 << 13;
 
 						SMI_CommandPort = HAL.GetWriteIOPort((ushort)FADT->SMI_CommandPort);
-						PM1aControlBlock = HAL.GetWriteIOPort((ushort)FADT->PM1aControlBlock);
-						PM1bControlBlock = HAL.GetWriteIOPort((ushort)FADT->PM1bControlBlock);
+
+						bool has64BitPtr = false;
+
+						if (Descriptor->Revision == 2)
+						{
+							ResetAddress = HAL.GetWriteIOPort((ushort)FADT->ResetReg.Address);
+							ResetValue = FADT->ResetValue;
+
+							if (Pointer.Size == 8) // 64-bit
+							{
+								has64BitPtr = true;
+
+								PM1aControlBlock = HAL.GetWriteIOPort((ushort)FADT->X_PM1aControlBlock.Address);
+								if (FADT->X_PM1bControlBlock.Address != 0)
+									PM1bControlBlock = HAL.GetWriteIOPort((ushort)FADT->X_PM1bControlBlock.Address);
+							}
+						}
+
+						if (!has64BitPtr)
+						{
+							PM1aControlBlock = HAL.GetWriteIOPort((ushort)FADT->PM1aControlBlock);
+							if (FADT->PM1bControlBlock != 0)
+								PM1bControlBlock = HAL.GetWriteIOPort((ushort)FADT->PM1bControlBlock);
+						}
 					}
 			}
 		}
@@ -226,26 +385,19 @@ namespace Mosa.DeviceDriver.ISA
 			Device.Status = DeviceStatus.Offline;
 		}
 
-		public void Shutdown()
+		private void* FindBySignature(string signature, bool xsdt)
 		{
-			PM1aControlBlock.Write16((ushort)(SLP_TYPa | SLP_EN));
-			if (FADT->PM1bControlBlock != 0)
-				PM1bControlBlock.Write16((ushort)(SLP_TYPb | SLP_EN));
-
-			HAL.Pause();
-			HAL.Abort("ACPI shutdown failed!");
-		}
-
-		private void* FindBySignature(void* RootSDT, string signature)
-		{
-			RSDT* rsdt = (RSDT*)RootSDT;
-
-			//int entries = (int)((rsdt->h.Length - sizeof(ACPISDTHeader)) / 4);
+			//int entries = (int)((rsdt->h.Length - sizeof(ACPISDTHeader)) / Pointer.Size);
 			int entries = 8;
 			for (int i = 0; i < entries; i++)
 			{
-				ACPISDTHeader* h = (ACPISDTHeader*)rsdt->PointerToOtherSDT[i];
+				ACPISDTHeader* h;
+				if (xsdt)
+					h = (ACPISDTHeader*)(XSDT->PointerToOtherSDT[i]);
+				else
+					h = (ACPISDTHeader*)(RSDT->PointerToOtherSDT[i]);
 
+				// TODO: Don't use ToStringFromCharPointer(), don't allocate for nothing!
 				if (h != null && ToStringFromCharPointer(4, h->Signature) == signature)
 					return h;
 			}
@@ -256,12 +408,7 @@ namespace Mosa.DeviceDriver.ISA
 
 		private string ToStringFromCharPointer(int length, sbyte* pointer)
 		{
-			string str = string.Empty;
-
-			for (int i = 0; i < length; i++)
-				str += (char)pointer[i];
-
-			return str;
+			return new string(pointer, 0, length);
 		}
 	}
 }

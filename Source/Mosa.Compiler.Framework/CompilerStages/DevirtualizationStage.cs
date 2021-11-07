@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 					var methodData = Compiler.GetMethodData(method);
 
 					methodData.IsDevirtualized = true;
-					DevirtualizedMethodsCount++;
+					DevirtualizedMethodsCount.Increment();
 				}
 			}
 		}

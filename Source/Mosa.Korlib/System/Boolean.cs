@@ -5,7 +5,8 @@ namespace System
 	/// <summary>
 	///
 	/// </summary>
-	public struct Boolean
+	[Serializable]
+	public struct Boolean: IComparable, IComparable<bool>, IEquatable<bool>
 	{
 		//
 		// Member Variables
@@ -52,6 +53,47 @@ namespace System
 		public override string ToString()
 		{
 			return m_value ? "True" : "False";
+		}
+
+		// IComparable interface
+		//
+		public override bool Equals(object obj)
+		{
+			if (obj is Boolean)
+			{
+				return (this.m_value == ((Boolean)obj).m_value);
+			}
+			else
+			{
+				return false;
+			}
+		}
+
+		public bool Equals(bool obj)
+		{
+			return (this.m_value == obj.m_value);
+		}
+
+		public int CompareTo(object obj)
+		{
+			if (obj == null) { return 1; }
+
+			if (!(obj is bool)) { throw new ArgumentException("Argument Type Must Be Boolean", "obj"); }
+
+			if (this.m_value == ((bool)obj).m_value) { return 0; }
+
+			if (this.m_value == false) { return -1; }
+
+			return 1;	// this.m_value == true;
+		}
+
+		public int CompareTo(bool value)
+		{
+			if (this.m_value == value)	{ return 0;	}
+
+			if (this.m_value == false) { return -1; }
+
+			return 1;
 		}
 	}
 }

@@ -76,6 +76,12 @@ namespace Mosa.Utility.Launcher
 			set { Settings.SetValue("Emulator.Serial", value); }
 		}
 
+		public string EmulatorSVGA
+		{
+			get { return Settings.GetValue("Emulator.SVGA", "std"); }
+			set { Settings.SetValue("Emulator.SVGA", value); }
+		}
+
 		public string EmulatorSerialHost
 		{
 			get { return Settings.GetValue("Emulator.Serial.Host", null); }
@@ -287,10 +293,22 @@ namespace Mosa.Utility.Launcher
 
 		public List<string> SourceFiles { get { return Settings.GetValueList("Compiler.SourceFiles"); } }
 
+		public string FileSystemRootInclude
+		{
+			get { return Settings.GetValue("Image.FileSystem.RootInclude", null); }
+			set { Settings.SetValue("Image.FileSystem.RootInclude", value); }
+		}
+
 		public string VmwarePlayer
 		{
 			get { return Settings.GetValue("AppLocation.VmwarePlayer", null); }
 			set { Settings.SetValue("AppLocation.VmwarePlayer", value); }
+		}
+
+		public string VmwareWorkstation
+		{
+			get { return Settings.GetValue("AppLocation.VmwareWorkstation", null); }
+			set { Settings.SetValue("AppLocation.VmwareWorkstation", value); }
 		}
 
 		public string OSName

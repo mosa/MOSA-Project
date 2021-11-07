@@ -1,0 +1,23 @@
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.Demo.AppSystem;
+using Mosa.DeviceSystem;
+
+namespace Mosa.Demo.Application
+{
+	/// <summary>
+	/// Reboot
+	/// </summary>
+	public class Reboot : BaseApplication, IConsoleApp
+	{
+		public override int Start(string parameters)
+		{
+			Console.WriteLine("Rebooting...");
+
+			var pc = AppManager.ServiceManager.GetFirstService<PCService>() as PCService;
+			pc.Reset();
+
+			return 0;
+		}
+	}
+}

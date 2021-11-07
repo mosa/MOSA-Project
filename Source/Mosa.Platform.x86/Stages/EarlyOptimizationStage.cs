@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Framework.Stages;
+using Mosa.Compiler.Framework.Transform.Auto;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -15,7 +16,7 @@ namespace Mosa.Platform.x86.Stages
 		public EarlyOptimizationStage()
 			: base(true, false)
 		{
-			//AddTranformations(AutoTransforms.List);
+			AddTranformations(AutoTransforms.List);
 
 			AddTranformation(new Transform.Manual.Special.Deadcode());
 
@@ -27,9 +28,9 @@ namespace Mosa.Platform.x86.Stages
 			AddTranformation(new Transform.Manual.Lea32ToInc32());
 			AddTranformation(new Transform.Manual.Lea32ToDec32());
 
-			//AddTranformation(new Transform.Manual.Special.Mov32Propagate());
-
 			AddTranformation(new Transform.Manual.Stack.Add32());
+
+			//AddTranformation(new Transform.Manual.Special.Mov32Propagate());
 		}
 	}
 }

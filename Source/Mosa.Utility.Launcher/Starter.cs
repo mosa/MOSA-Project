@@ -137,7 +137,7 @@ namespace Mosa.Utility.Launcher
 			{
 				case "qemu": return LaunchQemu(false);
 				case "bochs": return LaunchBochs(false);
-				case "vmware": return LaunchVMwarePlayer(false);
+				case "vmware": return LaunchVMware(false);
 				default: throw new InvalidOperationException();
 			}
 		}
@@ -153,7 +153,14 @@ namespace Mosa.Utility.Launcher
 				arg.Append(" -cpu qemu32,+sse4.1");
 			}
 
-			//arg = arg + " -vga vmware";
+			if (!string.IsNullOrWhiteSpace(LauncherSettings.EmulatorSVGA))
+			{
+				switch (LauncherSettings.EmulatorSerial.ToLowerInvariant())
+				{
+					case "vmware": arg.Append(" -vga vmware"); break;
+					default: break;
+				}
+			}
 
 			if (!LauncherSettings.EmulatorDisplay || LauncherSettings.LauncherTest)
 			{
@@ -254,7 +261,7 @@ namespace Mosa.Utility.Launcher
 			return LaunchApplication(LauncherSettings.Bochs, arg, getOutput);
 		}
 
-		private Process LaunchVMwarePlayer(bool getOutput)
+		private Process LaunchVMware(bool getOutput)
 		{
 			var logfile = Path.Combine(LauncherSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile) + "-vmx.log");
 			var configfile = Path.Combine(LauncherSettings.TemporaryFolder, Path.GetFileNameWithoutExtension(LauncherSettings.ImageFile) + ".vmx");
@@ -301,7 +308,19 @@ namespace Mosa.Utility.Launcher
 
 			string arg = Quote(configfile);
 
-			return LaunchApplication(LauncherSettings.VmwarePlayer, arg, getOutput);
+			// If "VMwareWorkstation" is found, first launch it.
+			if (!String.IsNullOrWhiteSpace(LauncherSettings.VmwareWorkstation))
+			{
+				return LaunchApplication(LauncherSettings.VmwareWorkstation, arg, getOutput);
+			}
+
+			// If "VMwarePlayer" is found, but not "VMwareWorkstation", then launch "VMwarePlayer"
+			if (!String.IsNullOrWhiteSpace(LauncherSettings.VmwarePlayer))
+			{
+				return LaunchApplication(LauncherSettings.VmwarePlayer, arg, getOutput);
+			}
+
+			return null;
 		}
 
 		private void LaunchDebugger()

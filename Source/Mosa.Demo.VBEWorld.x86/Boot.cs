@@ -1,13 +1,17 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Demo.VBEWorld.x86.Apps;
+using Mosa.Demo.VBEWorld.x86.Components;
 using Mosa.Demo.VBEWorld.x86.HAL;
 using Mosa.DeviceDriver;
 using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.PCI;
+using Mosa.FileSystem.FAT;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
-using Mosa.Runtime.x86;
+using System;
+using System.Collections.Generic;
+using System.Drawing;
 
 namespace Mosa.Demo.VBEWorld.x86
 {
@@ -16,11 +20,19 @@ namespace Mosa.Demo.VBEWorld.x86
 	/// </summary>
 	public static class Boot
 	{
-		public static ConsoleSession Console;
 		public static DeviceService DeviceService;
+		public static ServiceManager ServiceManager;
 
-		private static Hardware _hal;
-		private static StandardMouse _mouse;
+		public static StandardKeyboard Keyboard;
+
+		public static Taskbar Taskbar;
+		public static Random Random;
+
+		private static Hardware hal;
+
+		private static bool hasFS;
+
+		private static Image wallpaper;
 
 		[Plug("Mosa.Runtime.StartUp::SetInitialMemory")]
 		public static void SetInitialMemory()
@@ -35,18 +47,16 @@ namespace Mosa.Demo.VBEWorld.x86
 		{
 			Kernel.x86.Kernel.Setup();
 
-			Console = ConsoleManager.Controller.Boot;
 			Console.Clear();
 
+			Serial.SetupPort(Serial.COM1);
 			IDT.SetInterruptHandler(ProcessInterrupt);
 
-			Serial.SetupPort(Serial.COM1);
-
-			_hal = new Hardware();
+			hal = new Hardware();
+			Random = new Random();
 
 			// Create Service manager and basic services
-			var serviceManager = new ServiceManager();
-
+			ServiceManager = new ServiceManager();
 			DeviceService = new DeviceService();
 
 			var diskDeviceService = new DiskDeviceService();
@@ -54,54 +64,108 @@ namespace Mosa.Demo.VBEWorld.x86
 			var pciControllerService = new PCIControllerService();
 			var pciDeviceService = new PCIDeviceService();
 
-			serviceManager.AddService(DeviceService);
-			serviceManager.AddService(diskDeviceService);
-			serviceManager.AddService(partitionService);
-			serviceManager.AddService(pciControllerService);
-			serviceManager.AddService(pciDeviceService);
+			ServiceManager.AddService(DeviceService);
+			ServiceManager.AddService(diskDeviceService);
+			ServiceManager.AddService(partitionService);
+			ServiceManager.AddService(pciControllerService);
+			ServiceManager.AddService(pciDeviceService);
 
-			DeviceSystem.Setup.Initialize(_hal, DeviceService.ProcessInterrupt);
+			DeviceSystem.Setup.Initialize(hal, DeviceService.ProcessInterrupt);
 
 			DeviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
 			DeviceService.Initialize(new X86System(), null);
 
-			var standardMice = DeviceService.GetDevices("StandardMouse");
-			if (standardMice.Count == 0)
+			partitionService.CreatePartitionDevices();
+			var partitions = DeviceService.GetDevices<IPartitionDevice>();
+
+			foreach (var partition in partitions)
 			{
-				_hal.Pause();
-				_hal.Abort("Catastrophic failure, mouse and/or PIT not found.");
+				var fat = new FatFileSystem(partition.DeviceDriver as IPartitionDevice);
+				hasFS = fat.IsValid;
+
+				if (hasFS)
+				{
+					var location = fat.FindEntry("WALLP.BMP");
+
+					if (location.IsValid)
+					{
+						var fatFileStream = new FatFileStream(fat, location);
+						var _wall = new byte[(uint)fatFileStream.Length];
+
+						for (int k = 0; k < _wall.Length; k++)
+							_wall[k] = (byte)(char)fatFileStream.ReadByte();
+
+						wallpaper = Bitmap.CreateImage(_wall);
+					}
+				}
 			}
 
-			_mouse = standardMice[0].DeviceDriver as StandardMouse;
-			_mouse.SetScreenResolution(VBE.ScreenWidth, VBE.ScreenHeight);
+			Keyboard = DeviceService.GetFirstDevice<StandardKeyboard>().DeviceDriver as StandardKeyboard;
+			if (Keyboard == null)
+				hal.Abort("Catastrophic failure, keyboard not found.");
 
-			if (VBEDisplay.InitVBE(_hal))
+			Utils.Mouse = DeviceService.GetFirstDevice<StandardMouse>().DeviceDriver as StandardMouse;
+			if (Utils.Mouse == null)
+				hal.Abort("Catastrophic failure, mouse not found.");
+
+			if (Display.Initialize())
 			{
 				Log("VBE setup OK!");
 				DoGraphics();
-			} else Log("VBE setup ERROR!");
+			}
+			else Log("VBE setup ERROR!");
 		}
 
 		private static void DoGraphics()
 		{
+			Utils.Mouse.SetScreenResolution(Display.Width, Display.Height);
+
+			Mouse.Initialize();
+			WindowManager.Initialize();
+
+			Taskbar = new Taskbar();
+			Taskbar.Buttons.Add(new TaskbarButton(Taskbar, "Shutdown", Color.Blue, Color.White, Color.Navy,
+				() => { (ServiceManager.GetFirstService<PCService>() as PCService).Shutdown(); return null; }));
+			Taskbar.Buttons.Add(new TaskbarButton(Taskbar, "Paint", Color.Blue, Color.White, Color.Navy,
+				() => { WindowManager.Open(new Paint(70, 90, 400, 200, Color.MediumPurple, Color.Purple, Color.White)); return null; }));
+
+			List<Label> labels;
+
 			for (; ; )
 			{
-				VBEDisplay.Framebuffer.Clear(0x00555555);
-				VBEDisplay.Framebuffer.FillRectangle(0x0, 50, 50, 130, 80);
+				if (hasFS)
+					Display.DrawImage(0, 0, wallpaper, false);
+				else
+					Display.Clear(Color.Gray);
 
-				MosaLogo.Draw(VBEDisplay.Framebuffer, 10);
-				DrawMouse();
+				// Draw MOSA logo
+				Display.DrawMosaLogo(10);
 
-				VBEDisplay.Framebuffer.Update();
+				// Initialize background labels
+				labels = new List<Label>
+					{
+						new Label("Current resolution is " + Display.Width + "x" + Display.Height, Display.DefaultFont.Name, 10, 10, Color.OrangeRed),
+						new Label("FPS is " + FPSMeter.FPS, Display.DefaultFont.Name, 10, 26, Color.Lime)
+					};
+
+				// Draw all labels
+				foreach (Label label in labels)
+					label.Draw();
+
+				// Draw and update all windows
+				WindowManager.Update();
+
+				// Draw taskbar on top of everything else (except cursor) and update it
+				Taskbar.Draw();
+				Taskbar.Update();
+
+				// Draw cursor
+				Mouse.Draw();
+
+				// Update graphics (necessary if double buffering) and FPS meter
+				Display.Update();
+				FPSMeter.Update();
 			}
-		}
-
-		private static void DrawMouse()
-		{
-			VBEDisplay.Framebuffer.SetPixel(0x0, (uint)_mouse.X, (uint)_mouse.Y);
-			VBEDisplay.Framebuffer.SetPixel(0x0, (uint)_mouse.X + 1, (uint)_mouse.Y);
-			VBEDisplay.Framebuffer.SetPixel(0x0, (uint)_mouse.X, (uint)_mouse.Y + 1);
-			VBEDisplay.Framebuffer.SetPixel(0x0, (uint)_mouse.X + 1, (uint)_mouse.Y + 1);
 		}
 
 		public static void Log(string line)
@@ -113,7 +177,17 @@ namespace Mosa.Demo.VBEWorld.x86
 		public static void ProcessInterrupt(uint interrupt, uint errorCode)
 		{
 			if (interrupt >= 0x20 && interrupt < 0x30)
-				_hal.ProcessInterrupt((byte)(interrupt - 0x20));
+				Mosa.DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
+		}
+
+		public static Func<object> BuildMethod<T>(Func<T> func)
+		{
+			return () => func();
+		}
+
+		public static Color Invert(Color color)
+		{
+			return Color.FromArgb(color.A, (byte)(255 - color.R), (byte)(255 - color.G), (byte)(255 - color.B));
 		}
 	}
 }

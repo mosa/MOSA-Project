@@ -69,7 +69,6 @@ namespace Mosa.Tool.Launcher.Console
 			Settings.SetValue("Compiler.Multithreading", true);
 			Settings.SetValue("Compiler.Platform", "x86");
 			Settings.SetValue("Compiler.TraceLevel", 0);
-			Settings.SetValue("Compiler.Multithreading", true);
 			Settings.SetValue("CompilerDebug.DebugFile", string.Empty);
 			Settings.SetValue("CompilerDebug.AsmFile", string.Empty);
 			Settings.SetValue("CompilerDebug.MapFile", string.Empty);
@@ -81,6 +80,7 @@ namespace Mosa.Tool.Launcher.Console
 			Settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
 			Settings.SetValue("Optimizations.Inline.ExplicitOnly", false);
 			Settings.SetValue("Optimizations.Inline.Maximum", 12);
+			Settings.SetValue("Optimizations.Basic.Window", 5);
 			Settings.SetValue("Optimizations.LongExpansion", true);
 			Settings.SetValue("Optimizations.LoopInvariantCodeMotion", true);
 			Settings.SetValue("Optimizations.Platform", true);

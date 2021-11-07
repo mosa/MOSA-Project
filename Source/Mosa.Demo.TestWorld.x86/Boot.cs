@@ -6,6 +6,8 @@ using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
 using Mosa.UnitTests;
+using Mosa.UnitTests.FlowControl;
+using Mosa.UnitTests.Other;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
@@ -82,7 +84,7 @@ namespace Mosa.Demo.TestWorld.x86
 
 			//Screen.Write("FindTypeOfTest: ");
 
-			//bool value3 = Test3();
+			Test3();
 
 			//if (value3)
 			//	Screen.WriteLine("Ok");
@@ -300,9 +302,9 @@ namespace Mosa.Demo.TestWorld.x86
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		public static bool Test3()
+		public static long Test3()
 		{
-			return ReflectionTests.FindTypeOfTest();
+			return SpecificTests.SwitchI8_v2(9223372036854775807);
 		}
 	}
 }

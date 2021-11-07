@@ -147,18 +147,84 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			new Memory.StoreLoadParam64(),
 			new Memory.StoreLoadParamR4(),
 			new Memory.StoreLoadParamR8(),
+			new Memory.StoreLoadParamObject(),
 
 			new Memory.LoadStoreParam32(),
 			new Memory.LoadStoreParam64(),
 			new Memory.LoadStoreParamR4(),
 			new Memory.LoadStoreParamR8(),
+			new Memory.LoadStoreParamObject(),
 
 			new Memory.DoubleStoreParam32(),
 			new Memory.DoubleStoreParam64(),
 			new Memory.DoubleStoreParamR4(),
 			new Memory.DoubleStoreParamR8(),
+			new Memory.DoubleStoreParamObject(),
+
+			new Memory.LoadStore32(),
+			new Memory.LoadStore64(),
+			new Memory.LoadStoreR4(),
+			new Memory.LoadStoreR8(),
+			new Memory.LoadStoreObject(),
+
+			new Memory.StoreLoad32(),
+			new Memory.StoreLoad64(),
+			new Memory.StoreLoadR4(),
+			new Memory.StoreLoadR8(),
+			new Memory.StoreLoadObject(),
+
+			new Memory.DoubleStore32(),
+			new Memory.DoubleStore64(),
+			new Memory.DoubleStoreR4(),
+			new Memory.DoubleStoreR8(),
+			new Memory.DoubleStoreObject(),
+
+			new Memory.LoadZeroExtend16x32Store16(),
+			new Memory.LoadZeroExtend16x64Store16(),
+			new Memory.LoadZeroExtend8x32Store8(),
+			new Memory.LoadZeroExtend8x64Store8(),
+			new Memory.LoadZeroExtend32x64Store32(),
+
+			new Memory.LoadSignExtend32x64Store32(),
+			new Memory.LoadSignExtend16x32Store16(),
+			new Memory.LoadSignExtend16x64Store16(),
+			new Memory.LoadSignExtend8x32Store8(),
+			new Memory.LoadSignExtend8x64Store8(),
+
+			new Memory.LoadParamSignExtend16x32Store16(),
+			new Memory.LoadParamSignExtend16x64Store16(),
+			new Memory.LoadParamSignExtend8x32Store8(),
+			new Memory.LoadParamSignExtend8x64Store8(),
+			new Memory.LoadParamSignExtend32x64Store32(),
+			new Memory.LoadParamZeroExtend16x32Store16(),
+			new Memory.LoadParamZeroExtend16x64Store16(),
+			new Memory.LoadParamZeroExtend8x32Store8(),
+			new Memory.LoadParamZeroExtend8x64Store8(),
+			new Memory.LoadParamZeroExtend32x64Store32(),
+
+			new Memory.DoubleLoad32(),
+			new Memory.DoubleLoad64(),
+			new Memory.DoubleLoadR4(),
+			new Memory.DoubleLoadR8(),
+			new Memory.DoubleLoadParamObject(),
+
+			new Memory.DoubleLoadParam32(),
+			new Memory.DoubleLoadParam64(),
+			new Memory.DoubleLoadParamR4(),
+			new Memory.DoubleLoadParamR8(),
+			new Memory.DoubleLoadParamObject(),
 
 			//new Special.Phi32Conditional(),
+
+			new Rewrite.Branch32GreaterOrEqualThanZero(),
+			new Rewrite.Branch32LessThanZero(),
+			new Rewrite.Branch32GreaterThanZero(),
+			new Rewrite.Branch32LessOrEqualThanZero(),
+
+			new Rewrite.Branch64GreaterOrEqualThanZero(),
+			new Rewrite.Branch64LessThanZero(),
+			new Rewrite.Branch64GreaterThanZero(),
+			new Rewrite.Branch64LessOrEqualThanZero(),
 		};
 	}
 }

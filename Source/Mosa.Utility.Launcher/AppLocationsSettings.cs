@@ -26,6 +26,7 @@ namespace Mosa.Utility.Launcher
 			Set(settings, "AppLocation.QemuImg", FindQemuImg());
 			Set(settings, "AppLocation.Bochs", FindBochs());
 			Set(settings, "AppLocation.VmwarePlayer", FindVmwarePlayer());
+			Set(settings, "AppLocation.VmwareWorkstation", FindVmwareWorkstation());
 			Set(settings, "AppLocation.Ndisasm", FindNdisasm());
 			Set(settings, "AppLocation.Mkisofs", FindMkisofs());
 			Set(settings, "AppLocation.GDB", FindGDB());
@@ -108,7 +109,6 @@ namespace Mosa.Utility.Launcher
 					@"%APPDIR%\Tools\ndisasm",
 					@"%APPDIR%\..\Tools\ndisasm",
 					@"%MOSATOOLS%\ndisasm",
-
 					"/bin"
 				}
 			);
@@ -120,8 +120,18 @@ namespace Mosa.Utility.Launcher
 				new string[] { "vmplayer.exe", "vmplayer" },
 				new string[] {
 					@"%ProgramFiles%\VMware\VMware Player",
-					@"%ProgramFiles%\VMware\VMware Workstation",
 					@"%ProgramFiles(x86)%\VMware\VMware Player",
+					"/bin"
+				}
+			);
+		}
+
+		private static string FindVmwareWorkstation()
+		{
+			return TryFind(
+				new string[] { "vmware.exe", "vmworkstation" },
+				new string[] {
+					@"%ProgramFiles%\VMware\VMware Workstation",
 					@"%ProgramFiles(x86)%\VMware\VMware Workstation",
 					"/bin"
 				}

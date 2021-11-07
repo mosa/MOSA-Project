@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
+using System.Drawing;
 
 /*
  * Portions of this device driver was adapted from:
@@ -319,9 +320,9 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		{
 			dacPaletteMask.Write8(0xFF);
 			dacIndexWrite.Write8(colorIndex);
-			dacData.Write8(color.Red);
-			dacData.Write8(color.Green);
-			dacData.Write8(color.Blue);
+			dacData.Write8(color.R);
+			dacData.Write8(color.G);
+			dacData.Write8(color.B);
 		}
 
 		/// <summary>
@@ -335,9 +336,9 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 
 			dacPaletteMask.Write8(0xFF);
 			dacIndexRead.Write8(colorIndex);
-			color.Red = dacData.Read8();
-			color.Green = dacData.Read8();
-			color.Blue = dacData.Read8();
+			color.R = dacData.Read8();
+			color.G = dacData.Read8();
+			color.B = dacData.Read8();
 
 			return color;
 		}

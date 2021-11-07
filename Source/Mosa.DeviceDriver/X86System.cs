@@ -15,20 +15,23 @@ namespace Mosa.DeviceDriver
 			Device.Name = "X86System";
 		}
 
-		public override void Probe() => Device.Status = DeviceStatus.Available;
+		public override void Probe()
+		{
+			Device.Status = DeviceStatus.Available;
+		}
 
 		public override void Start()
 		{
-			Device.Status = DeviceStatus.Online;
-
 			CreateISABusDevices();
+
+			Device.Status = DeviceStatus.Online;
 		}
 
 		public override bool OnInterrupt() => true;
 
 		protected void CreateISABusDevices()
 		{
-			DeviceService.Initialize(new ISABus(), Device, null, null, null);
+			DeviceService.Initialize(new ISABus(), Device, true, null, null, null);
 		}
 	}
 }

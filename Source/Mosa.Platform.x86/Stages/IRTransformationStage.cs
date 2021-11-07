@@ -1479,7 +1479,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Shr32, resultHigh, op1H, ECX);
 
 			context.AppendInstruction(X86.Test32, null, ECX, Constant_32);
-			context.AppendInstruction(X86.Branch, ConditionCode.Zero, nextBlock.Block);
+			context.AppendInstruction(X86.Branch, ConditionCode.Equal, nextBlock.Block);
 			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
 
 			newBlocks[0].AppendInstruction(X86.Mov32, resultLow, resultHigh);

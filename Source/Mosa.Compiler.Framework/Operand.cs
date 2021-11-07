@@ -5,6 +5,7 @@ using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using static Mosa.Compiler.Framework.Stages.BitTrackerStage;
 
 namespace Mosa.Compiler.Framework
 {
@@ -43,7 +44,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the constant long integer.
 		/// </summary>
-		public ulong ConstantUnsigned64 { get; set; }
+		public ulong ConstantUnsigned64 { get; private set; }
 
 		/// <summary>
 		/// Holds a list of instructions, which define this operand.
@@ -183,7 +184,7 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsReferenceType { get; private set; }
 
-		public bool IsResolved { get; set; }
+		public bool IsResolved { get; set; }    // FUTURE: make set private
 
 		/// <summary>
 		/// Gets a value indicating whether this instance is resolved constant.
@@ -265,16 +266,53 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Returns the type of the operand.
 		/// </summary>
-		public MosaType Type { get; }
+		public MosaType Type { get; private set; }
 
 		/// <summary>
 		/// Holds a list of instructions, which use this operand.
 		/// </summary>
 		public List<InstructionNode> Uses { get; }
 
+		//public bool FitsRegister { get; private set; }
+
+		//public bool FitsIntegerRegister { get; private set; }
+
+		//public bool Fits32BitRegister { get; set; }
+
+		//public bool FitsFloatingPointRegister { get; private set; }
+
+		//public bool FitsNativeSizeRegister { get; set; }
+
+		//public bool Fits64BitRegister { get { return Fits32BitRegister; } }
+
 		public int Size { get; private set; }
 
+		public BitValue BitValue
+		{
+			get
+			{
+				if (_value == null && IsResolvedConstant && IsInteger)
+				{
+					// lazy evaluated
+					_value = BitValue.CreateValue(ConstantUnsigned64, IsInteger32);
+				}
+
+				return _value;
+			}
+			set
+			{
+				Debug.Assert(value == null || (IsInteger && IsVirtualRegister) || (IsReferenceType && IsVirtualRegister) || (IsPointer && IsVirtualRegister) /*|| FitsIntegerRegister*/);
+				_value = value;
+			}
+		}
+
 		#endregion Properties
+
+		#region Data Fields
+
+		private BitValue _value;
+
+		#endregion Data Fields
 
 		#region Construction
 
@@ -293,6 +331,11 @@ namespace Mosa.Compiler.Framework
 			IsParameter = false;
 			IsResolved = false;
 			IsString = false;
+
+			//FitsRegister = false;
+			//FitsIntegerRegister = false;
+			//FitsFloatingPointRegister = false;
+			//FitsNativeSizeRegister = false;
 		}
 
 		/// <summary>
@@ -324,6 +367,25 @@ namespace Mosa.Compiler.Framework
 
 			IsInteger64 = type.IsUI8 || Type.GetEnumUnderlyingType().IsUI8;
 			IsInteger32 = type.IsUI4 || Type.GetEnumUnderlyingType().IsUI4;
+
+			//if (IsValueType)
+			//{
+			//	var registryType = MosaTypeLayout.GetRegisterType(type);
+			//
+			//	FitsIntegerRegister = registryType.FitsIntegerRegister;
+			//	FitsFloatingPointRegister = registryType.FitsFloatRegister;
+			//	FitsRegister = FitsIntegerRegister || FitsFloatingPointRegister;
+			//	FitsNativeSizeRegister = registryType.IsNative;
+			//  Fits32BitRegister = !registryType.Is64Bit;
+			//	IsInteger64 = registryType.Is64Bit;
+			//}
+			//else
+			//{
+			//	FitsFloatingPointRegister = IsR4 || IsR8;
+			//	FitsIntegerRegister = !FitsFloatingPointRegister;
+			//	FitsRegister = true;
+			//	FitsNativeSizeRegister = false;
+			//}
 		}
 
 		#endregion Construction
@@ -471,11 +533,6 @@ namespace Mosa.Compiler.Framework
 		/// <exception cref="CompilerException"></exception>
 		public static Operand CreateConstant(MosaType type, ulong value)
 		{
-			if (type.IsReferenceType && value != 0)
-			{
-				throw new CompilerException();
-			}
-
 			return new Operand(type)
 			{
 				IsConstant = true,
@@ -962,7 +1019,7 @@ namespace Mosa.Compiler.Framework
 
 					if (ConstantSigned64 != 0)
 
-						sb.AppendFormat(" offset={0}", ConstantSigned64);
+						sb.Append($" offset={ConstantSigned64}");
 				}
 				else if (IsNull)
 				{
@@ -970,87 +1027,83 @@ namespace Mosa.Compiler.Framework
 				}
 				else if (IsOnStack)
 				{
-					sb.AppendFormat("{0}", ConstantSigned64);
+					sb.Append($"{ConstantSigned64}");
 				}
 				else if (IsR8)
 				{
-					sb.AppendFormat("{0}", ConstantDouble);
+					sb.Append($"{ConstantDouble}");
 				}
 				else if (IsR4)
 				{
-					sb.AppendFormat("{0}", ConstantFloat);
+					sb.Append($"{ConstantFloat}");
 				}
 				else
 				{
-					sb.AppendFormat("{0}", ConstantSigned64);
+					sb.Append($"{ConstantSigned64}");
 				}
 
 				sb.Append(' ');
 			}
 			else if (IsCPURegister)
 			{
-				sb.AppendFormat(" {0}", Register);
+				sb.Append($" {Register}");
 			}
 
 			if (IsVirtualRegister)
 			{
 				if (!HasLongParent)
 				{
-					sb.AppendFormat("v{0}", Index);
+					sb.Append($"v{Index}");
 				}
 				else
 				{
-					sb.AppendFormat("v{0}<v{1}{2}>", Index, LongParent.Index, IsHigh ? "H" : "L");
+					sb.Append($"(v{Index}<t{LongParent.Index}{(IsHigh ? "H" : "L")}>)");
 				}
 			}
 			else if (IsParameter)
 			{
 				if (!HasLongParent)
 				{
-					sb.AppendFormat("(p{0})", Index);
+					sb.Append($"(p{Index})");
 				}
 				else
 				{
-					sb.AppendFormat("(p{0}<p{1}{2}>)", Index, LongParent.Index, IsHigh ? "H" : "L");
+					sb.Append($"(p{Index}<t{LongParent.Index}{(IsHigh ? "H" : "L")}>)");
 				}
 			}
 			else if (IsStackLocal && Name == null)
 			{
 				if (!HasLongParent)
 				{
-					sb.AppendFormat("(t{0})", Index);
+					sb.Append($"(t{Index})");
 				}
 				else
 				{
-					sb.AppendFormat("(t{0}<t{1}{2}>)", Index, LongParent.Index, IsHigh ? "H" : "L");
+					sb.Append($"(t{Index}<t{LongParent.Index}{(IsHigh ? "H" : "L")}>)");
 				}
 			}
 			else if (IsStaticField)
 			{
-				sb.Append(" (");
-				sb.Append(Field.FullName);
-				sb.Append(") ");
+				sb.Append($" ({Field.FullName}) ");
 			}
 			else if (Name != null)
 			{
-				sb.Append(" (");
-				sb.Append(Name);
-				sb.Append(") ");
+				sb.Append($" ({Name}) ");
 			}
 
 			if (full)
 			{
-				sb.AppendFormat(" [{0}]", Type.FullName);
+				sb.Append($" [{Type.FullName}]");
 			}
 			else
 			{
 				if (IsReferenceType)
 				{
-					sb.AppendFormat(" [O]");
+					sb.Append(" [O]");
 				}
 				else
 				{
-					sb.AppendFormat(" [{0}]", ShortenTypeName(Type.FullName));
+					sb.Append($" [{ShortenTypeName(Type.FullName)}]");
 				}
 			}
 

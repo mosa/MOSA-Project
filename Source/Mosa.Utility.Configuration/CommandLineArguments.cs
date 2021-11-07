@@ -51,6 +51,7 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-devirtualization", Setting = "Optimizations.Devirtualization", Value = "true"},
 				new Argument() { Name = "-devirtualization-off", Setting = "Optimizations.Devirtualization", Value = "false"},
 				new Argument() { Name = "-inline-level", Setting = "Optimizations.Inline.Maximum"},
+				new Argument() { Name = "-basic-optimization-window", Setting = "Optimizations.Basic.Window"},
 
 				new Argument() { Name = "-output-nasm", Setting = "CompilerDebug.NasmFile", Value = "%DEFAULT%"},
 				new Argument() { Name = "-output-asm", Setting = "CompilerDebug.AsmFile", Value = "%DEFAULT%"},
@@ -180,6 +181,7 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-o0", Setting = "Optimizations.BitTracker", Value = "false"},
 				new Argument() { Name = "-o0", Setting = "Optimizations.TwoPass", Value = "false"},
 				new Argument() { Name = "-o0", Setting = "Optimizations.Inline.Maximum", Value = "0"},
+				new Argument() { Name = "-o0", Setting = "Optimizations.Basic.Window", Value = "1"},
 
 				new Argument() { Name = "-o1", Setting = "Optimizations.Basic", Value = "true"},
 				new Argument() { Name = "-o1", Setting = "Optimizations.SSA", Value = "false"},
@@ -193,6 +195,7 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-o1", Setting = "Optimizations.BitTracker", Value = "false"},
 				new Argument() { Name = "-o1", Setting = "Optimizations.TwoPass", Value = "false"},
 				new Argument() { Name = "-o1", Setting = "Optimizations.Inline.Maximum", Value = "0"},
+				new Argument() { Name = "-o1", Setting = "Optimizations.Basic.Window", Value = "1"},
 
 				new Argument() { Name = "-o2", Setting = "Optimizations.Basic", Value = "true"},
 				new Argument() { Name = "-o2", Setting = "Optimizations.SSA", Value = "true"},
@@ -206,6 +209,7 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-o2", Setting = "Optimizations.BitTracker", Value = "false"},
 				new Argument() { Name = "-o2", Setting = "Optimizations.TwoPass", Value = "false"},
 				new Argument() { Name = "-o2", Setting = "Optimizations.Inline.Maximum", Value = "0"},
+				new Argument() { Name = "-o2", Setting = "Optimizations.Basic.Window", Value = "1"},
 
 				new Argument() { Name = "-o3", Setting = "Optimizations.Basic", Value = "true"},
 				new Argument() { Name = "-o3", Setting = "Optimizations.SSA", Value = "true"},
@@ -219,6 +223,7 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-o3", Setting = "Optimizations.BitTracker", Value = "false"},
 				new Argument() { Name = "-o3", Setting = "Optimizations.TwoPass", Value = "false"},
 				new Argument() { Name = "-o3", Setting = "Optimizations.Inline.Maximum", Value = "0"},
+				new Argument() { Name = "-o3", Setting = "Optimizations.Basic.Window", Value = "5"},
 
 				new Argument() { Name = "-o4", Setting = "Optimizations.Basic", Value = "true"},
 				new Argument() { Name = "-o4", Setting = "Optimizations.SSA", Value = "true"},
@@ -232,6 +237,7 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-o4", Setting = "Optimizations.BitTracker", Value = "false"},
 				new Argument() { Name = "-o4", Setting = "Optimizations.TwoPass", Value = "false"},
 				new Argument() { Name = "-o4", Setting = "Optimizations.Inline.Maximum", Value = "0"},
+				new Argument() { Name = "-o4", Setting = "Optimizations.Basic.Window", Value = "5"},
 
 				new Argument() { Name = "-o5", Setting = "Optimizations.Basic", Value = "true"},
 				new Argument() { Name = "-o5", Setting = "Optimizations.SSA", Value = "true"},
@@ -245,6 +251,7 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-o5", Setting = "Optimizations.BitTracker", Value = "false"},
 				new Argument() { Name = "-o5", Setting = "Optimizations.TwoPass", Value = "false"},
 				new Argument() { Name = "-o5", Setting = "Optimizations.Inline.Maximum", Value = "0"},
+				new Argument() { Name = "-o5", Setting = "Optimizations.Basic.Window", Value = "5"},
 
 				new Argument() { Name = "-o6", Setting = "Optimizations.Basic", Value = "true"},
 				new Argument() { Name = "-o6", Setting = "Optimizations.SSA", Value = "true"},
@@ -258,6 +265,7 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-o6", Setting = "Optimizations.BitTracker", Value = "false"},
 				new Argument() { Name = "-o6", Setting = "Optimizations.TwoPass", Value = "false"},
 				new Argument() { Name = "-o6", Setting = "Optimizations.Inline.Maximum", Value = "5"},
+				new Argument() { Name = "-o6", Setting = "Optimizations.Basic.Window", Value = "5"},
 
 				new Argument() { Name = "-o7", Setting = "Optimizations.Basic", Value = "true"},
 				new Argument() { Name = "-o7", Setting = "Optimizations.SSA", Value = "true"},
@@ -266,11 +274,12 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-o7", Setting = "Optimizations.Devirtualization", Value = "true"},
 				new Argument() { Name = "-o7", Setting = "Optimizations.LongExpansion", Value = "true"},
 				new Argument() { Name = "-o7", Setting = "Optimizations.Platform", Value = "true"},
-				new Argument() { Name = "-o7", Setting = "Optimizations.Inline", Value = "false"},
+				new Argument() { Name = "-o7", Setting = "Optimizations.Inline", Value = "true"},
 				new Argument() { Name = "-o7", Setting = "Optimizations.LoopInvariantCodeMotion", Value = "true"},
 				new Argument() { Name = "-o7", Setting = "Optimizations.BitTracker", Value = "false"},
 				new Argument() { Name = "-o7", Setting = "Optimizations.TwoPass", Value = "false"},
 				new Argument() { Name = "-o7", Setting = "Optimizations.Inline.Maximum", Value = "10"},
+				new Argument() { Name = "-o7", Setting = "Optimizations.Basic.Window", Value = "5"},
 
 				new Argument() { Name = "-o8", Setting = "Optimizations.Basic", Value = "true"},
 				new Argument() { Name = "-o8", Setting = "Optimizations.SSA", Value = "true"},
@@ -284,6 +293,7 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-o8", Setting = "Optimizations.BitTracker", Value = "true"},
 				new Argument() { Name = "-o8", Setting = "Optimizations.TwoPass", Value = "true"},
 				new Argument() { Name = "-o8", Setting = "Optimizations.Inline.Maximum", Value = "10"},
+				new Argument() { Name = "-o8", Setting = "Optimizations.Basic.Window", Value = "5"},
 
 				new Argument() { Name = "-o9", Setting = "Optimizations.Basic", Value = "true"},
 				new Argument() { Name = "-o9", Setting = "Optimizations.SSA", Value = "true"},
@@ -297,6 +307,7 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-o9", Setting = "Optimizations.BitTracker", Value = "true"},
 				new Argument() { Name = "-o9", Setting = "Optimizations.TwoPass", Value = "true"},
 				new Argument() { Name = "-o9", Setting = "Optimizations.Inline.Maximum", Value = "12"},
+				new Argument() { Name = "-o9", Setting = "Optimizations.Basic.Window", Value = "10"},
 
 				new Argument() { Name = "-oNone", Setting = "Optimizations.Basic", Value = "false"},
 				new Argument() { Name = "-oNone", Setting = "Optimizations.SSA", Value = "false"},
@@ -310,6 +321,7 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-oNone", Setting = "Optimizations.BitTracker", Value = "false"},
 				new Argument() { Name = "-oNone", Setting = "Optimizations.TwoPass", Value = "false"},
 				new Argument() { Name = "-oNone", Setting = "Optimizations.Inline.Maximum", Value = "0"},
+				new Argument() { Name = "-oNone", Setting = "Optimizations.Basic.Window", Value = "1"},
 
 				new Argument() { Name = "-oMax", Setting = "Optimizations.Basic", Value = "true"},
 				new Argument() { Name = "-oMax", Setting = "Optimizations.SSA", Value = "true"},
@@ -323,6 +335,7 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-oMax", Setting = "Optimizations.BitTracker", Value = "true"},
 				new Argument() { Name = "-oMax", Setting = "Optimizations.TwoPass", Value = "true"},
 				new Argument() { Name = "-oMax", Setting = "Optimizations.Inline.Maximum", Value = "12"},
+				new Argument() { Name = "-oMax", Setting = "Optimizations.Basic.Window", Value = "20"},
 
 				new Argument() { Name = "-oSize", Setting = "Optimizations.Basic", Value = "true"},
 				new Argument() { Name = "-oSize", Setting = "Optimizations.SSA", Value = "true"},
@@ -336,6 +349,7 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-oSize", Setting = "Optimizations.BitTracker", Value = "true"},
 				new Argument() { Name = "-oSize", Setting = "Optimizations.TwoPass", Value = "true"},
 				new Argument() { Name = "-oSize", Setting = "Optimizations.Inline.Maximum", Value = "3"},
+				new Argument() { Name = "-oSize", Setting = "Optimizations.Basic.Window", Value = "10"},
 
 				new Argument() { Name = "-oFast", Setting = "Optimizations.Basic", Value = "true"},
 				new Argument() { Name = "-oFast", Setting = "Optimizations.SSA", Value = "true"},
@@ -349,6 +363,7 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-oFast", Setting = "Optimizations.BitTracker", Value = "false"},
 				new Argument() { Name = "-oFast", Setting = "Optimizations.TwoPass", Value = "false"},
 				new Argument() { Name = "-oFast", Setting = "Optimizations.Inline.Maximum", Value = "0"},
+				new Argument() { Name = "-oFast", Setting = "Optimizations.Basic.Window", Value = "1"},
 			};
 
 			return map;

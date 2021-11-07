@@ -8,9 +8,9 @@ namespace Mosa.Utility.Launcher
 	{
 		public static string Verify(Settings settings)
 		{
-			var emulator = settings.GetValue("Emulator", string.Empty).ToLower();
-			var imageformat = settings.GetValue("Image.Format", string.Empty).ToUpper();
-			var bootloader = settings.GetValue("Image.BootLoader", string.Empty).ToLower();
+			var emulator = settings.GetValue("Emulator", string.Empty).ToLowerInvariant();
+			var imageformat = settings.GetValue("Image.Format", string.Empty).ToUpperInvariant();
+			var bootloader = settings.GetValue("Image.BootLoader", string.Empty).ToLowerInvariant();
 			var platform = settings.GetValue("Compiler.Platform", string.Empty);
 
 			if (emulator == "qemu" && imageformat == "VDI")

@@ -3,6 +3,7 @@
 using Mosa.DeviceDriver.PCI.Intel;
 using Mosa.DeviceDriver.PCI.Intel.QuarkSoC;
 using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.PCI;
 using System.Collections.Generic;
 
 namespace Mosa.DeviceDriver
@@ -43,6 +44,19 @@ namespace Mosa.DeviceDriver
 					IRQ = 1,
 					Factory = delegate { return new ISA.StandardKeyboard(); }
 				},
+
+				// TODO
+				/*new ISADeviceDriverRegistryEntry()
+				{
+					Name = "PIT",
+					Platforms = PlatformArchitecture.X86AndX64,
+					AutoLoad = true,
+					BasePort = 0x40,
+					PortRange = 1,
+					AltBasePort = 0x43,
+					AltPortRange = 1,
+					Factory = delegate { return new ISA.PIT(); }
+				},*/
 
 				new ISADeviceDriverRegistryEntry()
 				{
@@ -106,13 +120,15 @@ namespace Mosa.DeviceDriver
 
 				new PCIDeviceDriverRegistryEntry()
 				{
-					Name = "VMwareSGAII",
+					Name = "VMwareSVGA2",
 					Platforms = PlatformArchitecture.X86AndX64,
 					BusType = DeviceBusType.PCI,
 					VendorID = 0x15AD,
 					DeviceID = 0x0405,
 					PCIFields = PCIField.VendorID | PCIField.DeviceID,
-					Factory = delegate { return new PCI.VMware.VMwareSVGAII(); }
+
+					AutoStart = false,
+					Factory = delegate { return new PCI.VMware.VMwareSVGA2(); }
 				},
 
 				new PCIDeviceDriverRegistryEntry()
@@ -177,11 +193,24 @@ namespace Mosa.DeviceDriver
 					BusType = DeviceBusType.PCI,
 					VendorID = 0x8086,
 					DeviceID = 0x1237,
-					PCIFields = PCIField.VendorID | PCIField.DeviceID,
+					ClassCode = 0x06,
+					SubClassCode = 0x00,
+					PCIFields = PCIField.VendorID | PCIField.DeviceID | PCIField.ClassCode | PCIField.SubClassCode,
 					Factory = delegate { return new Intel440FX(); }
 				},
 
 				new PCIDeviceDriverRegistryEntry()
+				{
+					Name = "PCIGenericHostBridge",
+					Platforms = PlatformArchitecture.X86AndX64,
+					BusType = DeviceBusType.PCI,
+					ClassCode = 0x06,
+					SubClassCode = 0x00,
+					PCIFields =  PCIField.ClassCode | PCIField.SubClassCode,
+					Factory = delegate { return new PCIGenericHostBridgeController(); }
+				},
+
+				/*new PCIDeviceDriverRegistryEntry()
 				{
 					Name = "Intel82540EM",
 					Platforms = PlatformArchitecture.X86AndX64,
@@ -190,18 +219,7 @@ namespace Mosa.DeviceDriver
 					DeviceID = 0x100E,
 					PCIFields = PCIField.VendorID | PCIField.DeviceID,
 					Factory = delegate { return new Intel82540EM(); }
-				},
-
-				new PCIDeviceDriverRegistryEntry()
-				{
-					Name = "Intel82541EI",
-					Platforms = PlatformArchitecture.X86AndX64,
-					BusType = DeviceBusType.PCI,
-					VendorID = 0x8086,
-					DeviceID = 0x1013,
-					PCIFields = PCIField.VendorID | PCIField.DeviceID,
-					Factory = delegate { return new Intel82541EI(); }
-				},
+				},*/
 
 				new PCIDeviceDriverRegistryEntry()
 				{

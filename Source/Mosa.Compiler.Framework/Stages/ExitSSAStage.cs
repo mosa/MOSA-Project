@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (node.IsEmptyOrNop)
 						continue;
 
-					InstructionCount++;
+					InstructionCount.Increment();
 
 					if (!IsPhiInstruction(node.Instruction))
 						break;

@@ -194,7 +194,11 @@ namespace Mosa.Tool.Explorer
 
 			if (sourcefiles != null && sourcefiles.Count >= 1)
 			{
-				UpdateSettings(Path.GetFullPath(sourcefiles[0]));
+				var filename = Path.GetFullPath(sourcefiles[0]);
+
+				openFileDialog.FileName = filename;
+
+				UpdateSettings(filename);
 
 				LoadAssembly();
 			}
@@ -364,36 +368,39 @@ namespace Mosa.Tool.Explorer
 
 		private readonly object compilerStageLock = new object();
 
-		private string CreateTimeStampedLog(CompilerEvent compilerEvent, string message, int threadID = 0)
-		{
-			message = string.IsNullOrWhiteSpace(message) ? string.Empty : message;
-
-			return $"{(DateTime.Now - compileStartTime).TotalSeconds:0.00} [{threadID}] {compilerEvent.ToText()}{message}";
-		}
-
 		private void SubmitTraceEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
-			var log = CreateTimeStampedLog(compilerEvent, message, threadID);
+			var part = string.IsNullOrWhiteSpace(message) ? string.Empty : ": " + message;
+			var msg = $"{compilerEvent.ToText()}{part}";
+
+			var timelog = $"{(DateTime.Now - compileStartTime).TotalSeconds:0.00} [{threadID}] {msg}";
 
 			lock (compilerStageLock)
 			{
 				if (compilerEvent == CompilerEvent.Error)
 				{
-					UpdateLog("Error", message);
-					UpdateLog("Compiler", log);
+					UpdateLog("Error", msg);
+					UpdateLog("Compiler", timelog);
 				}
 				if (compilerEvent == CompilerEvent.Exception)
 				{
-					UpdateLog("Exception", message);
-					UpdateLog("Compiler", log);
+					UpdateLog("Exception", msg);
+					UpdateLog("Compiler", timelog);
 				}
 				else if (compilerEvent == CompilerEvent.Counter)
 				{
-					UpdateLog("Counters", message);
+					if (message.StartsWith("Transform-"))
+					{
+						UpdateLog("Transforms", message.Substring(10));
+					}
+					else
+					{
+						UpdateLog("Counters", message);
+					}
 				}
 				else
 				{
-					UpdateLog("Compiler", log);
+					UpdateLog("Compiler", timelog);
 				}
 			}
 		}
@@ -430,7 +437,23 @@ namespace Mosa.Tool.Explorer
 
 			SetStatus("Compiled!");
 
+			SortLog("Transforms");
+			SortLog("Counters");
+
 			UpdateTree();
+		}
+
+		private void SortLog(string section)
+		{
+			lock (Logs)
+			{
+				if (Logs.ContainsKey(section))
+				{
+					var lines = Logs[section];
+					lines.Sort();
+					Logs[section] = lines;
+				}
+			}
 		}
 
 		private void NowToolStripMenuItem_Click(object sender, EventArgs e)
@@ -688,10 +711,17 @@ namespace Mosa.Tool.Explorer
 				NotifyEvent = NotifyEvent,
 				NotifyTraceLog = NotifyTraceLog,
 				NotifyMethodCompiled = NotifyMethodCompiled,
-				NotifyMethodInstructionTrace = NotifyMethodInstructionTrace
+				NotifyMethodInstructionTrace = NotifyMethodInstructionTrace,
+
+				GetMethodTraceLevel = GetMethodTraceLevel,
 			};
 
 			return compilerHooks;
+		}
+
+		public int? GetMethodTraceLevel(MosaMethod method)
+		{
+			return method == CurrentMethodSelected ? 10 : -1;
 		}
 
 		public NotifyTraceLogHandler NotifyMethodInstructionTrace(MosaMethod method)
@@ -752,13 +782,14 @@ namespace Mosa.Tool.Explorer
 
 		private void NotifyEvent(CompilerEvent compilerEvent, string message, int threadID)
 		{
-			message = string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}";
-
-			var status = $"{compilerEvent.ToText()}{message}";
-
-			lock (_statusLock)
+			if (compilerEvent != CompilerEvent.Counter)
 			{
-				Status = status;
+				var status = compilerEvent.ToText() + (string.IsNullOrWhiteSpace(message) ? string.Empty : $": {message}");
+
+				lock (_statusLock)
+				{
+					Status = status;
+				}
 			}
 
 			SubmitTraceEvent(compilerEvent, message, threadID);
@@ -1003,6 +1034,7 @@ namespace Mosa.Tool.Explorer
 			Settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
 			Settings.SetValue("Optimizations.Inline.ExplicitOnly", false);
 			Settings.SetValue("Optimizations.Inline.Maximum", 12);
+			Settings.SetValue("Optimizations.Basic.Window", 5);
 			Settings.SetValue("Optimizations.LongExpansion", true);
 			Settings.SetValue("Optimizations.LoopInvariantCodeMotion", true);
 			Settings.SetValue("Optimizations.Platform", true);
@@ -1100,11 +1132,11 @@ namespace Mosa.Tool.Explorer
 
 			if (platform != null)
 			{
-				if (platform.ToLower() == "x86")
+				if (platform.ToLowerInvariant() == "x86")
 					cbPlatform.SelectedIndex = 0;
-				else if (platform.ToLower() == "x64")
+				else if (platform.ToLowerInvariant() == "x64")
 					cbPlatform.SelectedIndex = 1;
-				else if (platform.ToLower() == "armv8a32")
+				else if (platform.ToLowerInvariant() == "armv8a32")
 					cbPlatform.SelectedIndex = 2;
 			}
 		}

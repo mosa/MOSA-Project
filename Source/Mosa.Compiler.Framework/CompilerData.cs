@@ -51,12 +51,15 @@ namespace Mosa.Compiler.Framework
 			{
 				if (!methods.TryGetValue(method, out MethodData methodData))
 				{
+					var code = method.Code;
+
 					methodData = new MethodData(method)
 					{
 						HasProtectedRegions = method.ExceptionHandlers.Count != 0,
 						IsCompilerGenerated = method.IsCompilerGenerated,
 						HasDoNotInlineAttribute = method.IsNoInlining,
-						HasAggressiveInliningAttribute = method.IsAggressiveInlining
+						HasAggressiveInliningAttribute = method.IsAggressiveInlining,
+						VirtualCodeSize = code == null ? 0 : code.Count
 					};
 
 					methods.Add(method, methodData);

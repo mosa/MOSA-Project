@@ -14,7 +14,7 @@ namespace Mosa.Compiler.Framework
 
 		public void Increment(int value = 1)
 		{
-			Count = Count + value;
+			Count += value;
 		}
 
 		public void Reset()
@@ -30,18 +30,6 @@ namespace Mosa.Compiler.Framework
 		public void Set(bool condition, int truevalue = 1, int falsevalue = 0)
 		{
 			Count = condition ? truevalue : falsevalue;
-		}
-
-		public static Counter operator ++(Counter counter)
-		{
-			counter.Count++;
-			return counter;
-		}
-
-		public static Counter operator +(Counter counter, int increment)
-		{
-			counter.Count += increment;
-			return counter;
 		}
 	}
 }

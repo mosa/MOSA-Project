@@ -198,7 +198,7 @@ namespace Mosa.Compiler.Framework
 				(compilerSettings.SparseConditionalConstantPropagation && compilerSettings.SSA) ? new SparseConditionalConstantPropagationStage() : null,
 				(compilerSettings.BasicOptimizations && compilerSettings.SSA) ? new OptimizationStage(false) : null,
 				(compilerSettings.BitTracker) ? new BitTrackerStage() : null,
-				(compilerSettings.BasicOptimizations && compilerSettings.SSA && (compilerSettings.ValueNumbering || compilerSettings.LoopInvariantCodeMotion || compilerSettings.SparseConditionalConstantPropagation) || compilerSettings.BitTracker) ? new OptimizationStage(compilerSettings.LongExpansion) : null,
+				(compilerSettings.BasicOptimizations && compilerSettings.SSA && compilerSettings.BitTracker && (compilerSettings.ValueNumbering || compilerSettings.LoopInvariantCodeMotion || compilerSettings.SparseConditionalConstantPropagation || compilerSettings.BitTracker)) ? new OptimizationStage(compilerSettings.LongExpansion) : null,
 				(compilerSettings.TwoPass && compilerSettings.ValueNumbering && compilerSettings.SSA) ? new ValueNumberingStage() : null,
 				(compilerSettings.TwoPass && compilerSettings.LoopInvariantCodeMotion && compilerSettings.SSA) ? new LoopInvariantCodeMotionStage() : null,
 				(compilerSettings.TwoPass && compilerSettings.SparseConditionalConstantPropagation && compilerSettings.SSA) ? new SparseConditionalConstantPropagationStage() : null,
@@ -418,13 +418,14 @@ namespace Mosa.Compiler.Framework
 		{
 			try
 			{
-				var method = MethodScheduler.GetMethodToCompile();
+				var methodData = MethodScheduler.GetMethodToCompile();
 
-				if (method == null)
+				if (methodData == null)
 					return null;
 
-				CompileMethod(method, threadID);
-				return method;
+				CompileMethod(methodData.Method, threadID);
+
+				return methodData.Method;
 			}
 			catch (Exception e)
 			{

@@ -25,7 +25,7 @@ namespace Mosa.Utility.Disassembler
 			var services = new ServiceContainer();
 			var options = new Dictionary<string, object>();
 
-			switch (platform.ToLower())
+			switch (platform.ToLowerInvariant())
 			{
 				case "armv8a32": arch = new Arm32Architecture(services, "arm32", options); break;
 				case "x86": arch = new X86ArchitectureFlat32(services, "x86-protected-32", options); break;
@@ -43,6 +43,8 @@ namespace Mosa.Utility.Disassembler
 		{
 			var decoded = new List<DecodedInstruction>();
 
+			var sb = new StringBuilder(100);
+
 			try
 			{
 				var dasm = arch.CreateDisassembler(memoryArea.CreateLeReader((uint)Offset));
@@ -59,11 +61,10 @@ namespace Mosa.Utility.Disassembler
 					// fix up
 					instruction = ChangeHex(instruction);
 
-					var sb = new StringBuilder();
-
 					sb.AppendFormat("{0:x8}", address);
 					sb.Append(' ');
-					sb.Append(BytesToHex(memory, (uint)Offset, len));
+					var bytes = BytesToHex(memory, (uint)Offset, len);
+					sb.Append(bytes == null ? string.Empty : bytes.ToString());
 					sb.Append(string.Empty.PadRight(41 - sb.Length, ' '));
 					sb.Append(instruction);
 
@@ -74,6 +75,8 @@ namespace Mosa.Utility.Disassembler
 						Instruction = instruction,
 						Full = sb.ToString()
 					});
+
+					sb.Clear();
 
 					count--;
 
@@ -91,10 +94,10 @@ namespace Mosa.Utility.Disassembler
 			}
 		}
 
-		private string BytesToHex(byte[] memory, uint offset, int length)
+		private StringBuilder BytesToHex(byte[] memory, uint offset, int length)
 		{
 			if (length == 0)
-				return string.Empty;
+				return null;
 
 			var sb = new StringBuilder();
 
@@ -107,7 +110,7 @@ namespace Mosa.Utility.Disassembler
 
 			sb.Length--;
 
-			return sb.ToString();
+			return sb;
 		}
 
 		private bool IsHex(char c)

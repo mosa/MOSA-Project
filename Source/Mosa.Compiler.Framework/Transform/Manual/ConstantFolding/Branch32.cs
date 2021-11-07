@@ -27,24 +27,19 @@ namespace Mosa.Compiler.Framework.Transform.Manual.ConstantFolding
 			if (!Compare32(context))
 			{
 				context.SetNop();
+
+				TransformContext.RemoveBlockFromPHIInstructions(block, target);
 			}
 			else
 			{
+				var phiBlock = GetOtherBranchTarget(block, target);
+
 				context.SetInstruction(IRInstruction.Jmp, target);
 
-				// rest of instructions in block are never used
-				context.GotoNext();
-				while (!context.IsBlockEndInstruction)
-				{
-					if (!context.IsEmptyOrNop)
-					{
-						context.SetNop();
-					}
-					context.GotoNext();
-				}
-			}
+				RemoveRestOfInstructions(context);
 
-			TransformContext.RemoveBlockFromPHIInstructions(block, target);
+				TransformContext.RemoveBlockFromPHIInstructions(block, phiBlock);
+			}
 		}
 	}
 }

@@ -317,19 +317,22 @@
 <tr class="row-even"><td><p>Optimizations.Inline.Maximum</p></td>
 <td><p>Maximun number of instructions that can be inlined within a method</p></td>
 </tr>
-<tr class="row-odd"><td><p>Optimizations.Inline.AggressiveMaximum</p></td>
+<tr class="row-odd"><td><p>Optimizations.Basic.Window</p></td>
+<td><p>Maximun instruction window for the optimizer to review</p></td>
+</tr>
+<tr class="row-even"><td><p>Optimizations.Inline.AggressiveMaximum</p></td>
 <td><p>Maximun number of instructions that can be inlined when a method is explicited marked to be inlined</p></td>
 </tr>
-<tr class="row-even"><td><p>Optimizations.Inline.ExplicitOnly</p></td>
+<tr class="row-odd"><td><p>Optimizations.Inline.ExplicitOnly</p></td>
 <td><p>If true, only explicitly marked methods are inlined</p></td>
 </tr>
-<tr class="row-odd"><td><p>Optimizations.TwoPass</p></td>
+<tr class="row-even"><td><p>Optimizations.TwoPass</p></td>
 <td><p>If true, some optimization stages are executed twice</p></td>
 </tr>
-<tr class="row-even"><td><p>Optimizations.Inline.Aggressive</p></td>
+<tr class="row-odd"><td><p>Optimizations.Inline.Aggressive</p></td>
 <td><p>Methods to be aggressively inline</p></td>
 </tr>
-<tr class="row-odd"><td><p>Optimizations.Inline.Exclude</p></td>
+<tr class="row-even"><td><p>Optimizations.Inline.Exclude</p></td>
 <td><p>Methods that may not be inlined</p></td>
 </tr>
 </tbody>
@@ -541,7 +544,7 @@
 <td><p>Format of the vritual image file BIN, IMG, VHD, VDI, ISO, VMDK</p></td>
 </tr>
 <tr class="row-odd"><td><p>Image.FileSystem</p></td>
-<td><p>File system of the primary partition in the image file FAT12, FAT16, FAT32, ISO????</p></td>
+<td><p>File system of the primary partition in the image file FAT12, FAT16, FAT32, ISO</p></td>
 </tr>
 <tr class="row-even"><td><p>Image.BootLoader</p></td>
 <td><p>Type of bootloader grub0.97, grub2.00, syslinux6.03, syslinux3.72</p></td>
@@ -577,19 +580,22 @@
 <tr class="row-even"><td><p>Emulator.Display</p></td>
 <td><p>If true, show the video display</p></td>
 </tr>
-<tr class="row-odd"><td><p>Emulator.GDB</p></td>
+<tr class="row-odd"><td><p>Emulator.SVGA</p></td>
+<td><p>SVGA mode: std or vmware</p></td>
+</tr>
+<tr class="row-even"><td><p>Emulator.GDB</p></td>
 <td><p>If true, enables GDB within emulator</p></td>
 </tr>
-<tr class="row-even"><td><p>Emulator.Serial</p></td>
+<tr class="row-odd"><td><p>Emulator.Serial</p></td>
 <td><p>Serial Emulation type None, Pipe, TCPServer, TCPClient</p></td>
 </tr>
-<tr class="row-odd"><td><p>Emulator.Serial.Host</p></td>
+<tr class="row-even"><td><p>Emulator.Serial.Host</p></td>
 <td><p>Serial Host Name or IP address</p></td>
 </tr>
-<tr class="row-even"><td><p>Emulator.Serial.Port</p></td>
+<tr class="row-odd"><td><p>Emulator.Serial.Port</p></td>
 <td><p>Serial Port</p></td>
 </tr>
-<tr class="row-odd"><td><p>Emulator.Serial.Pipe</p></td>
+<tr class="row-even"><td><p>Emulator.Serial.Pipe</p></td>
 <td><p>Serial Pipename</p></td>
 </tr>
 </tbody>
@@ -698,16 +704,19 @@
 <tr class="row-odd"><td><p>AppLocation.QemuImg</p></td>
 <td><p>Location of the QEMUImg application</p></td>
 </tr>
-<tr class="row-even"><td><p>AppLocation.VmwarePlayer</p></td>
+<tr class="row-even"><td><p>AppLocation.VmwareWorkstation</p></td>
+<td><p>Location of the VMWorkstation application</p></td>
+</tr>
+<tr class="row-odd"><td><p>AppLocation.VmwarePlayer</p></td>
 <td><p>Location of the VMPlayer application</p></td>
 </tr>
-<tr class="row-odd"><td><p>AppLocation.Ndisasm</p></td>
+<tr class="row-even"><td><p>AppLocation.Ndisasm</p></td>
 <td><p>Location of the Ndisasm application</p></td>
 </tr>
-<tr class="row-even"><td><p>AppLocation.Mkisofs</p></td>
+<tr class="row-odd"><td><p>AppLocation.Mkisofs</p></td>
 <td><p>Location of the Mkisofs application</p></td>
 </tr>
-<tr class="row-odd"><td><p>AppLocation.GDB</p></td>
+<tr class="row-even"><td><p>AppLocation.GDB</p></td>
 <td><p>Location of the QEMU application</p></td>
 </tr>
 </tbody>

@@ -42,9 +42,11 @@ namespace Mosa.Utility.BootImage
 
 		public static void PatchSyslinux_6_03(PartitionDeviceDriver partitionDevice, FatFileSystem fat)
 		{
+			// INCOMPLETE!!!
+
 			// Locate ldlinux.sys file for patching
 			string filename = "ldlinux.sys";
-			string name = (Path.GetFileNameWithoutExtension(filename) + Path.GetExtension(filename).PadRight(4).Substring(0, 4)).ToUpper();
+			string name = (Path.GetFileNameWithoutExtension(filename) + Path.GetExtension(filename).PadRight(4).Substring(0, 4)).ToUpperInvariant();
 
 			var location = fat.FindEntry(name);
 
@@ -167,7 +169,7 @@ namespace Mosa.Utility.BootImage
 		{
 			// Locate ldlinux.sys file for patching
 			string filename = "ldlinux.sys";
-			string name = (Path.GetFileNameWithoutExtension(filename) + Path.GetExtension(filename).PadRight(4).Substring(0, 4)).ToUpper();
+			string name = (Path.GetFileNameWithoutExtension(filename) + Path.GetExtension(filename).PadRight(4).Substring(0, 4)).ToUpperInvariant();
 
 			var location = fat.FindEntry(name);
 

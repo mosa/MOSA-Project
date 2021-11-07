@@ -40,6 +40,7 @@ Compiler Optimizations Settings
     Optimizations.Platform,"If true, enable platform specific optimizations"
     Optimizations.Inline,"If true, small methods can be inlined"
     Optimizations.Inline.Maximum,Maximun number of instructions that can be inlined within a method
+	Optimizations.Basic.Window,Maximun instruction window for the optimizer to review
     Optimizations.Inline.AggressiveMaximum,Maximun number of instructions that can be inlined when a method is explicited marked to be inlined
     Optimizations.Inline.ExplicitOnly,"If true, only explicitly marked methods are inlined"
     Optimizations.TwoPass,"If true, some optimization stages are executed twice"
@@ -133,7 +134,7 @@ Image Settings
    :widths: 50, 200
 
     Image.Format,"Format of the vritual image file BIN, IMG, VHD, VDI, ISO, VMDK"
-    Image.FileSystem,"File system of the primary partition in the image file FAT12, FAT16, FAT32, ISO????"
+    Image.FileSystem,"File system of the primary partition in the image file FAT12, FAT16, FAT32, ISO"
     Image.BootLoader,"Type of bootloader grub0.97, grub2.00, syslinux6.03, syslinux3.72"
     Image.Destination,Destination directory of the image file
     Image.ImageFile,Filename of the image file
@@ -149,6 +150,7 @@ Emulator Settings
     Emulator,"Type of Emulator Qemu, VMware, Bochs"
     Emulator.Memory,Amount of memory for the virtual machine in MB
     Emulator.Display,"If true, show the video display"
+	Emulator.SVGA,"SVGA mode: std or vmware"
     Emulator.GDB,"If true, enables GDB within emulator"
     Emulator.Serial,"Serial Emulation type None, Pipe, TCPServer, TCPClient"
     Emulator.Serial.Host,Serial Host Name or IP address
@@ -200,6 +202,7 @@ Application Location Settings
     AppLocation.Qemu,Location of the QEMU application
     AppLocation.QemuBIOS,Location of the QEMU BIOS
     AppLocation.QemuImg,Location of the QEMUImg application
+	AppLocation.VmwareWorkstation, Location of the VMWorkstation application
     AppLocation.VmwarePlayer,Location of the VMPlayer application
     AppLocation.Ndisasm,Location of the Ndisasm application
     AppLocation.Mkisofs,Location of the Mkisofs application

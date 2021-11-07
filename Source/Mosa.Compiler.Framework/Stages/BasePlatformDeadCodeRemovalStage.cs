@@ -116,7 +116,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			node.Empty();
 			changed = true;
-			IRInstructionRemovedCount++;
+			IRInstructionRemovedCount.Increment();
 		}
 
 		/// <summary>
@@ -174,7 +174,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			trace?.Log($"REMOVED:\t{node}");
 			node.Empty();
-			IRInstructionRemovedCount++;
+			IRInstructionRemovedCount.Increment();
 		}
 	}
 }

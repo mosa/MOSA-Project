@@ -41,7 +41,7 @@ namespace Mosa.Platform.x64.Stages
 					return;
 
 				context.SetInstruction(X64.Lea64, context.Result, context.Operand1, context.Operand2);
-				LeaSubstitutionCount++;
+				LeaSubstitutionCount.Increment();
 				return;
 			}
 		}
@@ -56,7 +56,7 @@ namespace Mosa.Platform.x64.Stages
 				var constant = CreateConstant32(-context.Operand2.ConstantSigned32);
 
 				context.SetInstruction(X64.Lea64, context.Result, context.Operand1, constant);
-				LeaSubstitutionCount++;
+				LeaSubstitutionCount.Increment();
 				return;
 			}
 		}

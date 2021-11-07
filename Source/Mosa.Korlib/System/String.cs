@@ -6,13 +6,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+
 
 namespace System
 {
 	/// <summary>
 	/// Implementation of the "System.String" class
 	/// </summary>
-	public sealed class String : IEnumerable, IEnumerable<char>
+	public sealed class String : IEnumerable, IEnumerable<char>, IEquatable<String>, IComparable, IComparable<String>
 	{
 		/// <summary>
 		/// Length
@@ -36,6 +38,9 @@ namespace System
 			}
 		}
 
+
+		internal unsafe ref char GetRawStringData() => ref *(first_char);
+
 		[IndexerName("Chars")]
 		public unsafe char this[int index]
 		{
@@ -50,6 +55,9 @@ namespace System
 				}
 			}
 		}
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
+		public extern String(ReadOnlySpan<char> value);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		public extern String(char c, int count);
@@ -77,6 +85,29 @@ namespace System
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
 		internal static extern string InternalAllocateString(int length);
+
+		private static unsafe string Ctor(ReadOnlySpan<char> value)
+		{
+			int len = value.Length;
+
+			if (len == 0)
+				return Empty;
+ 
+			// TODO: Actually move memory instead of copying it
+			string result = InternalAllocateString(len);
+			char* chars = result.first_char;
+
+			var pointer = MemoryMarshal.GetReference(value);
+			byte* ptr = (byte*)Unsafe.As<char, byte>(ref pointer);
+
+			for (int i = 0; i < len; i++)
+			{
+				*chars = (char)ptr[i];
+				chars++;
+			}
+
+			return result;
+		}
 
 		private static unsafe string Ctor(char c, int count)
 		{
@@ -225,18 +256,34 @@ namespace System
 			return result;
 		}
 
-		public bool Equals(string i)
+		public string[] Split(char c)
 		{
-			return Equals(this, i);
+			string str = this;
+			List<string> ls = new List<string>();
+			int indx;
+
+			while ((indx = str.IndexOf(c)) != -1)
+			{
+				ls.Add(str.Substring(0, indx));
+				str = str.Substring(indx + 1);
+			}
+
+			if (str.Length > 0)
+				ls.Add(str);
+
+			return ls.ToArray();
+		}
+
+		public bool Equals(string s)
+		{
+			return Equals(this, s);
 		}
 
 		public override bool Equals(object obj)
 		{
-			if (!(obj is string))
-				return false;
+			if (!(obj is string)) { return false; }
 
-			string other = (string)obj;
-			return other == this;
+			return Equals(this, (string)obj);
 		}
 
 		public static bool operator ==(string a, string b)
@@ -251,20 +298,53 @@ namespace System
 
 		public static unsafe bool Equals(string a, string b)
 		{
-			if (a == null || b == null)
-				return false;
+			if (a == null || b == null) { return false; }
 
-			if (a.length != b.length)
-				return false;
+			if (a.length != b.length) { return false; }
 
 			char* pa = a.first_char;
 			char* pb = b.first_char;
 
 			for (int i = 0; i < a.Length; ++i)
-				if (pa[i] != pb[i])
-					return false;
+				if (pa[i] != pb[i]) { return false; }
 
 			return true;
+		}
+
+		// Favor Invariant Culture & Ignore Case
+		public int CompareTo(object obj)
+		{
+			if (object.ReferenceEquals(this, obj)) { return 0; }
+			if (obj == null) { return 1; }
+			if (!(obj is String)) { throw new ArgumentException("Argument Type Must Be String", "value"); }
+
+			return CompareTo((string)obj);
+		}
+
+		// Favor Invariant Culture & Ignore Case
+		public int CompareTo (string obj)
+		{
+			return Compare(this, obj);
+		}
+
+		// Favor Invariant Culture & Ignore Case
+		public int Compare (string left, string right)
+		{
+			left = left.ToLower();
+			right = right.ToLower();
+
+			if (Equals(left, right)) { return 0; }
+
+			for (int counter = 0; counter < Math.Min(left.Length, right.Length); counter++)
+			{
+				if (left[counter] < right[counter]) { return -1; }
+				if (left[counter] > right[counter]) { return 1; }
+			}
+
+			if (left.Length < right.Length) { return -1; }
+			if (left.Length > right.Length) { return 1; }
+
+			return 0;
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -552,6 +632,16 @@ namespace System
 				cmpChar++;
 			}
 			return true;
+		}
+
+		public char[] ToCharArray()
+		{
+			char[] array = new char[Length];
+
+			for (int i = 0; i < Length; i++)
+				array[i] = this[i];
+
+			return array;
 		}
 
 		public static bool IsNullOrEmpty(string value)

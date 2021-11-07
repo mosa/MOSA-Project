@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Common.Configuration
 				if (string.IsNullOrEmpty(Value))
 					return false;
 
-				return Value.ToLower().StartsWith("true") || Value.ToLower().StartsWith("y") || Value.ToLower().StartsWith("on");
+				return Value.ToLowerInvariant().StartsWith("true") || Value.ToLowerInvariant().StartsWith("y") || Value.ToLowerInvariant().StartsWith("on");
 			}
 		}
 
@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Common.Configuration
 				if (string.IsNullOrEmpty(Value))
 					return false;
 
-				return Value.ToLower().StartsWith("false") || Value.ToLower().StartsWith("n") || Value.ToLower().StartsWith("off");
+				return Value.ToLowerInvariant().StartsWith("false") || Value.ToLowerInvariant().StartsWith("n") || Value.ToLowerInvariant().StartsWith("off");
 			}
 		}
 

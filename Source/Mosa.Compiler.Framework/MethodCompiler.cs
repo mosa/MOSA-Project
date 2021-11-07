@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework
 
 		private readonly Stopwatch Stopwatch;
 
-		private readonly NotifyTraceLogHandler NotifyTraceLogHandler;
+		private readonly NotifyTraceLogHandler NotifyInstructionTraceHandler;
 
 		private readonly bool Statistics;
 
@@ -207,6 +207,8 @@ namespace Mosa.Compiler.Framework
 		public bool Is32BitPlatform { get; }
 		public bool Is64BitPlatform { get; }
 
+		public int? MethodTraceLevel { get; }
+
 		#endregion Properties
 
 		#region Construction
@@ -234,7 +236,9 @@ namespace Mosa.Compiler.Framework
 			Is32BitPlatform = Architecture.Is32BitPlatform;
 			Is64BitPlatform = Architecture.Is64BitPlatform;
 
-			NotifyTraceLogHandler = GetMethodInstructionTraceHandler();
+			NotifyInstructionTraceHandler = CompilerHooks.NotifyMethodInstructionTrace != null ? CompilerHooks.NotifyMethodInstructionTrace.Invoke(Method) : null;
+			MethodTraceLevel = compiler.CompilerHooks.GetMethodTraceLevel != null ? compiler.CompilerHooks.GetMethodTraceLevel(method) : null;
+
 			Statistics = compiler.Statistics;
 			IsInSSAForm = false;
 
@@ -291,6 +295,7 @@ namespace Mosa.Compiler.Framework
 			EvaluateParameterOperands();
 
 			MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.Ticks", (int)Stopwatch.ElapsedTicks);
+			MethodData.Counters.NewCountSkipLock("ExecutionTime.Setup.MicroSeconds", (int)Stopwatch.ElapsedMicroSeconds());
 		}
 
 		#endregion Construction
@@ -418,6 +423,7 @@ namespace Mosa.Compiler.Framework
 			var executionTimes = new long[Pipeline.Count];
 
 			var startTick = Stopwatch.ElapsedTicks;
+			var startMS = Stopwatch.ElapsedMilliseconds;
 
 			for (int i = 0; i < Pipeline.Count; i++)
 			{
@@ -437,11 +443,14 @@ namespace Mosa.Compiler.Framework
 			if (Statistics)
 			{
 				var lastTick = Stopwatch.ElapsedTicks;
+				var lastMS = Stopwatch.ElapsedMilliseconds;
 
 				MethodData.ElapsedTicks = lastTick;
 
 				MethodData.Counters.NewCountSkipLock("ExecutionTime.StageStart.Ticks", (int)startTick);
+				MethodData.Counters.NewCountSkipLock("ExecutionTime.StageStart.Milliseconds", (int)startMS);
 				MethodData.Counters.NewCountSkipLock("ExecutionTime.Total.Ticks", (int)lastTick);
+				MethodData.Counters.NewCountSkipLock("ExecutionTime.Total.Milliseconds", (int)lastMS);
 
 				var executionTimeLog = new TraceLog(TraceType.MethodDebug, Method, "Execution Time/Ticks", MethodData.Version);
 
@@ -464,7 +473,8 @@ namespace Mosa.Compiler.Framework
 					MethodData.Counters.NewCountSkipLock($"ExecutionTime.{i:00}.{Pipeline[i].Name}.Ticks", (int)ticks);
 				}
 
-				executionTimeLog.Log($"{"****Total Time".PadRight(57)}({lastTick})");
+				executionTimeLog.Log($"{"****Total Time".PadRight(57)}({lastTick} Ticks)");
+				executionTimeLog.Log($"{"****Total Time".PadRight(57)}({lastMS} Milliseconds)");
 
 				PostTraceLog(executionTimeLog);
 			}
@@ -472,18 +482,10 @@ namespace Mosa.Compiler.Framework
 
 		private void CreateInstructionTrace(BaseMethodCompilerStage stage)
 		{
-			if (NotifyTraceLogHandler == null)
+			if (NotifyInstructionTraceHandler == null)
 				return;
 
-			InstructionTrace.Run(this, stage, NotifyTraceLogHandler);
-		}
-
-		private NotifyTraceLogHandler GetMethodInstructionTraceHandler()
-		{
-			if (CompilerHooks.NotifyMethodInstructionTrace == null)
-				return null;
-
-			return CompilerHooks.NotifyMethodInstructionTrace.Invoke(Method);
+			InstructionTrace.Run(this, stage, NotifyInstructionTraceHandler);
 		}
 
 		private void PlugMethod()
@@ -502,18 +504,21 @@ namespace Mosa.Compiler.Framework
 			IsExecutePipeline = false;
 			IsStackFrameRequired = false;
 
-			if (NotifyTraceLogHandler != null)
+			if (NotifyInstructionTraceHandler != null)
 			{
 				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-Plugged Method", MethodData.Version);
 				traceLog?.Log($"Plugged by {plugMethod.FullName}");
 
-				NotifyTraceLogHandler.Invoke(traceLog);
+				NotifyInstructionTraceHandler.Invoke(traceLog);
 			}
 		}
 
 		public bool IsTraceable(int tracelevel)
 		{
-			return Compiler.IsTraceable(tracelevel);
+			if (MethodTraceLevel.HasValue)
+				return MethodTraceLevel.Value >= tracelevel;
+			else
+				return Compiler.IsTraceable(tracelevel);
 		}
 
 		private void PostTraceLog(TraceLog traceLog)
@@ -573,11 +578,11 @@ namespace Mosa.Compiler.Framework
 				Symbol.SetData(bytes);
 			}
 
-			if (NotifyTraceLogHandler != null)
+			if (NotifyInstructionTraceHandler != null)
 			{
 				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-External Method", MethodData.Version);
 				traceLog?.Log($"This method is external linked: {Method.ExternMethodName}");
-				NotifyTraceLogHandler.Invoke(traceLog);
+				NotifyInstructionTraceHandler.Invoke(traceLog);
 			}
 		}
 
@@ -590,11 +595,11 @@ namespace Mosa.Compiler.Framework
 			IsExecutePipeline = false;
 			IsStackFrameRequired = false;
 
-			if (NotifyTraceLogHandler != null)
+			if (NotifyInstructionTraceHandler != null)
 			{
 				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-Internal Method", MethodData.Version);
 				traceLog?.Log($"This method is an internal method");
-				NotifyTraceLogHandler.Invoke(traceLog);
+				NotifyInstructionTraceHandler.Invoke(traceLog);
 			}
 		}
 
@@ -628,11 +633,11 @@ namespace Mosa.Compiler.Framework
 
 			stub(new Context(start), this);
 
-			if (NotifyTraceLogHandler != null)
+			if (NotifyInstructionTraceHandler != null)
 			{
 				var traceLog = new TraceLog(TraceType.MethodInstructions, Method, "XX-Stubbed Method", MethodData.Version);
 				traceLog?.Log($"This method is a stubbed method");
-				NotifyTraceLogHandler.Invoke(traceLog);
+				NotifyInstructionTraceHandler.Invoke(traceLog);
 			}
 		}
 
