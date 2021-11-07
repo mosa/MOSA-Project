@@ -197,7 +197,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private bool StaticCanNotInline(MethodData methodData)
 		{
 			if (!InlineMethods && !methodData.HasAggressiveInliningAttribute)
-				return false;
+				return true;
 
 			if (methodData.HasDoNotInlineAttribute)
 				return true;
