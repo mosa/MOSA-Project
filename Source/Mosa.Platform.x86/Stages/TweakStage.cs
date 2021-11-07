@@ -62,12 +62,12 @@ namespace Mosa.Platform.x86.Stages
 
 		public void Shr32(Context context)
 		{
-			RegisterForOperand1And2(context);
+			RegisterForOperand1(context);
 		}
 
 		public void Shl32(Context context)
 		{
-			RegisterForOperand1And2(context);
+			RegisterForOperand1(context);
 		}
 
 		public void CMov32(Context context)
