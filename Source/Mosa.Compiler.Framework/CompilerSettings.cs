@@ -88,6 +88,8 @@ namespace Mosa.Compiler.Framework
 
 		public bool FullCheckMode { get { return Settings.GetValue("CompilerDebug.FullCheckMode", false); } }
 
+		public bool CILDecodingStageV2 { get { return Settings.GetValue("CompilerDebug.CILDecodingStageV2", false); } }
+
 		#endregion Properties
 
 		public CompilerSettings(Settings settings)

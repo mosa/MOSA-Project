@@ -598,7 +598,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Sub: return Sub(context, stack);
 				case OpCode.Sub_ovf: return Sub(context, stack);                // TODO: implement overflow check
 				case OpCode.Sub_ovf_un: return Sub(context, stack);             // TODO: implement overflow check
-				case OpCode.Switch: return false;                               // TODO
+				case OpCode.Switch: return Switch(context, stack, instruction);
 				case OpCode.Throw: return Throw(context, stack);
 				case OpCode.Unbox: return Unbox(context, stack, instruction);
 				case OpCode.Unbox_any: return UnboxAny(context, stack, instruction);
@@ -3693,6 +3693,25 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			return false;
+		}
+
+		private bool Switch(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var entry = stack.Pop();
+
+			context.AppendInstruction(IRInstruction.Switch, null, entry.Operand);
+
+			foreach (var target in (int[])instruction.Operand)
+			{
+				var block = BasicBlocks.GetByLabel(target);
+
+				context.AddBranchTarget(block);
+			}
+
+			// REFERENCE: The last value is the fall thru - this is not implemented correctly in later stages (fixme)
+			context.AddBranchTarget(BasicBlocks.GetByLabel(instruction.Next.Value));
+
+			return true;
 		}
 
 		private bool Unbox(Context context, Stack<StackEntry> stack, MosaInstruction instruction)

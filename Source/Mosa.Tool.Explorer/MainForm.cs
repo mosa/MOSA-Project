@@ -1064,6 +1064,8 @@ namespace Mosa.Tool.Explorer
 			Settings.SetValue("Launcher.Exit", false);
 			Settings.SetValue("Launcher.HuntForCorLib", true);
 			Settings.SetValue("OS.Name", "MOSA");
+
+			Settings.SetValue("CompilerDebug.CILDecodingStageV2", false);
 		}
 
 		private void UpdateSettings()
@@ -1085,6 +1087,8 @@ namespace Mosa.Tool.Explorer
 			Settings.SetValue("Optimizations.Platform", cbPlatformOptimizations.Checked);
 			Settings.SetValue("Optimizations.Inline", cbEnableInline.Checked);
 			Settings.SetValue("Optimizations.Inline.Explicit", cbInlineExplicit.Checked);
+
+			Settings.SetValue("CompilerDebug.CILDecodingStageV2", cbCILDecoderStageV2Testing.Checked);
 
 			//Settings.SetValue("Optimizations.Inline.Maximum", 12);
 			//Settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
@@ -1140,6 +1144,8 @@ namespace Mosa.Tool.Explorer
 				else if (platform.ToLowerInvariant() == "armv8a32")
 					cbPlatform.SelectedIndex = 2;
 			}
+
+			cbCILDecoderStageV2Testing.Checked = Settings.GetValue("CompilerDebug.CILDecodingStageV2", cbEnableInline.Checked);
 		}
 
 		private void cbPlatform_SelectedIndexChanged(object sender, EventArgs e)
