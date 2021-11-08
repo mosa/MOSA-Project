@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Mosa.UnitTests.Basic.Basic
+namespace Mosa.UnitTests.Basic
 {
 
 	public static class LdargaTests 
