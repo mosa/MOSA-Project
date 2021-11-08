@@ -242,8 +242,8 @@ namespace Mosa.Compiler.MosaTypeSystem
 			using (var ptrType = typeSystem.Controller.MutateType(result))
 			{
 				ptrType.Module = typeSystem.LinkerModule;
-				ptrType.Namespace = "";
-				ptrType.Name = "";
+				ptrType.Namespace = string.Empty;
+				ptrType.Name = string.Empty;
 
 				ptrType.TypeCode = MosaTypeCode.FunctionPointer;
 				ptrType.FunctionPtrSig = signature;

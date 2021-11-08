@@ -6,7 +6,7 @@ namespace Mosa.DeviceSystem
 	{
 		public static Image CreateImage(byte[] data)
 		{
-			var bpp = data[0x1C];
+			var bpp = data[0x1C] / 8;
 
 			if (!(bpp == 3 || bpp == 4))
 				return null;

@@ -513,7 +513,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Ldelema: return false;                                  // TODO
 				case OpCode.Ldfld: return Ldfld(context, stack, instruction);
 				case OpCode.Ldflda: return false;                                   // TODO
-				case OpCode.Ldftn: return false;                                    // TODO
+				case OpCode.Ldftn: return Ldftn(context, stack, instruction);
 				case OpCode.Ldind_i: return Ldind(context, stack, ElementType.I);
 				case OpCode.Ldind_i1: return Ldind(context, stack, ElementType.I1);
 				case OpCode.Ldind_i2: return Ldind(context, stack, ElementType.I2);
@@ -2640,6 +2640,28 @@ namespace Mosa.Compiler.Framework.Stages
 
 				default: return false;
 			}
+		}
+
+		private bool Ldftn(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var method = (MosaMethod)instruction.Operand;
+
+			var functionPointer = TypeSystem.ToFnPtr(method.Signature);
+
+			var move = GetMoveInstruction(ElementType.I);
+
+			var stacktype = GetStackType(functionPointer);
+			var result = AllocatedOperand(stacktype);
+
+			context.SetInstruction(move, result, Operand.CreateSymbolFromMethod(method, TypeSystem));
+
+			MethodScanner.MethodInvoked(method, Method);
+
+			var methodData = MethodCompiler.Compiler.GetMethodData(method);
+
+			methodData.HasMethodPointerReferenced = true;
+
+			return false;
 		}
 
 		private bool Ldind(Context context, Stack<StackEntry> stack, ElementType elementType)
