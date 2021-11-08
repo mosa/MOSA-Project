@@ -539,7 +539,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Ldsfld: return false;                                   // TODO
 				case OpCode.Ldsflda: return false;                                  // TODO
 				case OpCode.Ldstr: return Ldstr(context, stack, instruction);
-				case OpCode.Ldtoken: return false;                                  // TODO
+				case OpCode.Ldtoken: return Ldtoken(context, stack, instruction);
 				case OpCode.Ldvirtftn: return false;                                // TODO
 				case OpCode.Leave: return false;                                    // TODO
 				case OpCode.Leave_s: return false;                                  // TODO
@@ -2642,16 +2642,48 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
+		private bool Ldtoken(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var move = GetMoveInstruction(ElementType.I);
+
+			Operand result = null;
+			Operand source = null;
+
+			if (instruction.Operand is MosaType)
+			{
+				var type = (MosaType)instruction.Operand;
+				source = Operand.CreateUnmanagedSymbolPointer(Metadata.TypeDefinition + type.FullName, TypeSystem);
+				result = MethodCompiler.CreateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
+			}
+			else if (instruction.Operand is MosaMethod)
+			{
+				var method = (MosaMethod)instruction.Operand;
+				source = Operand.CreateUnmanagedSymbolPointer(Metadata.MethodDefinition + method.FullName, TypeSystem);
+				result = MethodCompiler.CreateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeMethodHandle"));
+			}
+			else if (instruction.Operand is MosaField)
+			{
+				var field = (MosaField)instruction.Operand;
+				source = Operand.CreateUnmanagedSymbolPointer(Metadata.FieldDefinition + field.FullName, TypeSystem);
+				result = MethodCompiler.CreateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"));
+				MethodScanner.AccessedField(context.MosaField);
+			}
+
+			context.SetInstruction(move, result, source);
+
+			return true;
+		}
+
 		private bool Ldftn(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
 		{
 			var method = (MosaMethod)instruction.Operand;
 
 			var functionPointer = TypeSystem.ToFnPtr(method.Signature);
 
-			var move = GetMoveInstruction(ElementType.I);
-
 			var stacktype = GetStackType(functionPointer);
 			var result = AllocatedOperand(stacktype);
+
+			var move = GetMoveInstruction(ElementType.I);
 
 			context.SetInstruction(move, result, Operand.CreateSymbolFromMethod(method, TypeSystem));
 
