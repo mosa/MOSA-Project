@@ -290,7 +290,7 @@ namespace Mosa.Tool.Launcher
 			Settings.SetValue("Optimizations.BitTracker", true);
 			Settings.SetValue("Optimizations.Inline", true);
 			Settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
-			Settings.SetValue("Optimizations.Inline.ExplicitOnly", false);
+			Settings.SetValue("Optimizations.Inline.Explicit", false);
 			Settings.SetValue("Optimizations.Inline.Maximum", 12);
 			Settings.SetValue("Optimizations.Basic.Window", 5);
 			Settings.SetValue("Optimizations.LongExpansion", true);
@@ -365,7 +365,7 @@ namespace Mosa.Tool.Launcher
 			Settings.SetValue("Emulator.Memory", Settings.GetValue("Emulator.Memory", 128));
 			Settings.SetValue("Emulator.Cores", Settings.GetValue("Emulator.Cores", 1));
 			Settings.SetValue("Optimizations.Inline", chkInline.Checked);
-			Settings.SetValue("Optimizations.Inline.ExplicitOnly", chkInlineExplicitOnly.Checked);
+			Settings.SetValue("Optimizations.Inline.Explicit", chkInlineExplicitOnly.Checked);
 			Settings.SetValue("Multiboot.Video", chkVbe.Checked);
 			Settings.SetValue("Optimizations.LongExpansion", chkLongExpansion.Checked);
 			Settings.SetValue("Optimizations.TwoPass", chkTwoPass.Checked);
@@ -465,7 +465,7 @@ namespace Mosa.Tool.Launcher
 			chkGdb.Checked = Settings.GetValue("Launcher.LaunchGDB", false);
 			chkMosa.Checked = Settings.GetValue("Launcher.LaunchDebugger", false);
 			chkInline.Checked = Settings.GetValue("Optimizations.Inline", true);
-			chkInlineExplicitOnly.Checked = Settings.GetValue("Optimizations.Inline.ExplicitOnly", false);
+			chkInlineExplicitOnly.Checked = Settings.GetValue("Optimizations.Inline.Explicit", false);
 			chkThreads.Checked = Settings.GetValue("Compiler.Multithreading", false);
 			numMemory.Value = Settings.GetValue("Emulator.Memory", 128);
 			numCores.Value = Settings.GetValue("Emulator.Cores", 1);

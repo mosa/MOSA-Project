@@ -138,6 +138,19 @@ namespace Mosa.Tool.Launcher
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
+			this.groupBox15 = new System.Windows.Forms.GroupBox();
+			this.checkBox1 = new System.Windows.Forms.CheckBox();
+			this.checkBox2 = new System.Windows.Forms.CheckBox();
+			this.checkBox3 = new System.Windows.Forms.CheckBox();
+			this.checkBox4 = new System.Windows.Forms.CheckBox();
+			this.checkBox5 = new System.Windows.Forms.CheckBox();
+			this.checkBox7 = new System.Windows.Forms.CheckBox();
+			this.checkBox8 = new System.Windows.Forms.CheckBox();
+			this.checkBox9 = new System.Windows.Forms.CheckBox();
+			this.checkBox10 = new System.Windows.Forms.CheckBox();
+			this.checkBox11 = new System.Windows.Forms.CheckBox();
+			this.checkBox12 = new System.Windows.Forms.CheckBox();
+			this.checkBox13 = new System.Windows.Forms.CheckBox();
 			this.tabControl1.SuspendLayout();
 			this.tabPage1.SuspendLayout();
 			this.groupBox4.SuspendLayout();
@@ -165,6 +178,7 @@ namespace Mosa.Tool.Launcher
 			this.tabPage5.SuspendLayout();
 			this.panel1.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
+			this.groupBox15.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// tabControl1
@@ -190,6 +204,7 @@ namespace Mosa.Tool.Launcher
 			this.tabPage1.Controls.Add(this.groupBox4);
 			this.tabPage1.Controls.Add(this.groupBox3);
 			this.tabPage1.Controls.Add(this.groupBox2);
+			this.tabPage1.Controls.Add(this.groupBox15);
 			this.tabPage1.Controls.Add(this.groupBox1);
 			this.tabPage1.Controls.Add(this.lblDest);
 			this.tabPage1.Controls.Add(this.btnDest);
@@ -552,11 +567,11 @@ namespace Mosa.Tool.Launcher
 			// chkInlineExplicitOnly
 			// 
 			this.chkInlineExplicitOnly.AutoSize = true;
-			this.chkInlineExplicitOnly.Location = new System.Drawing.Point(6, 220);
+			this.chkInlineExplicitOnly.Location = new System.Drawing.Point(6, 198);
 			this.chkInlineExplicitOnly.Name = "chkInlineExplicitOnly";
-			this.chkInlineExplicitOnly.Size = new System.Drawing.Size(124, 19);
+			this.chkInlineExplicitOnly.Size = new System.Drawing.Size(96, 19);
 			this.chkInlineExplicitOnly.TabIndex = 14;
-			this.chkInlineExplicitOnly.Text = "Inline Explicit Only";
+			this.chkInlineExplicitOnly.Text = "Inline Explicit";
 			this.chkInlineExplicitOnly.UseVisualStyleBackColor = true;
 			// 
 			// chkInline
@@ -564,7 +579,7 @@ namespace Mosa.Tool.Launcher
 			this.chkInline.AutoSize = true;
 			this.chkInline.Checked = true;
 			this.chkInline.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.chkInline.Location = new System.Drawing.Point(6, 198);
+			this.chkInline.Location = new System.Drawing.Point(6, 219);
 			this.chkInline.Name = "chkInline";
 			this.chkInline.Size = new System.Drawing.Size(55, 19);
 			this.chkInline.TabIndex = 13;
@@ -1435,6 +1450,171 @@ namespace Mosa.Tool.Launcher
 			this.toolStripStatusLabel1.Size = new System.Drawing.Size(42, 17);
 			this.toolStripStatusLabel1.Text = "Ready!";
 			// 
+			// groupBox15
+			// 
+			this.groupBox15.Controls.Add(this.checkBox1);
+			this.groupBox15.Controls.Add(this.checkBox2);
+			this.groupBox15.Controls.Add(this.checkBox3);
+			this.groupBox15.Controls.Add(this.checkBox4);
+			this.groupBox15.Controls.Add(this.checkBox5);
+			this.groupBox15.Controls.Add(this.checkBox7);
+			this.groupBox15.Controls.Add(this.checkBox8);
+			this.groupBox15.Controls.Add(this.checkBox9);
+			this.groupBox15.Controls.Add(this.checkBox10);
+			this.groupBox15.Controls.Add(this.checkBox11);
+			this.groupBox15.Controls.Add(this.checkBox12);
+			this.groupBox15.Controls.Add(this.checkBox13);
+			this.groupBox15.Location = new System.Drawing.Point(8, 66);
+			this.groupBox15.Name = "groupBox15";
+			this.groupBox15.Size = new System.Drawing.Size(261, 299);
+			this.groupBox15.TabIndex = 4;
+			this.groupBox15.TabStop = false;
+			this.groupBox15.Text = "Optimizations";
+			// 
+			// checkBox1
+			// 
+			this.checkBox1.AutoSize = true;
+			this.checkBox1.Checked = true;
+			this.checkBox1.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox1.Location = new System.Drawing.Point(6, 264);
+			this.checkBox1.Name = "checkBox1";
+			this.checkBox1.Size = new System.Drawing.Size(149, 19);
+			this.checkBox1.TabIndex = 16;
+			this.checkBox1.Text = "Platform Optimizations";
+			this.checkBox1.UseVisualStyleBackColor = true;
+			// 
+			// checkBox2
+			// 
+			this.checkBox2.AutoSize = true;
+			this.checkBox2.Checked = true;
+			this.checkBox2.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox2.Location = new System.Drawing.Point(6, 242);
+			this.checkBox2.Name = "checkBox2";
+			this.checkBox2.Size = new System.Drawing.Size(156, 19);
+			this.checkBox2.TabIndex = 15;
+			this.checkBox2.Text = "Two Optimization Passes";
+			this.checkBox2.UseVisualStyleBackColor = true;
+			// 
+			// checkBox3
+			// 
+			this.checkBox3.AutoSize = true;
+			this.checkBox3.Checked = true;
+			this.checkBox3.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox3.Location = new System.Drawing.Point(6, 198);
+			this.checkBox3.Name = "checkBox3";
+			this.checkBox3.Size = new System.Drawing.Size(96, 19);
+			this.checkBox3.TabIndex = 14;
+			this.checkBox3.Text = "Inline Explicit";
+			this.checkBox3.UseVisualStyleBackColor = true;
+			// 
+			// checkBox4
+			// 
+			this.checkBox4.AutoSize = true;
+			this.checkBox4.Checked = true;
+			this.checkBox4.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox4.Location = new System.Drawing.Point(6, 220);
+			this.checkBox4.Name = "checkBox4";
+			this.checkBox4.Size = new System.Drawing.Size(55, 19);
+			this.checkBox4.TabIndex = 13;
+			this.checkBox4.Text = "Inline";
+			this.checkBox4.UseVisualStyleBackColor = true;
+			// 
+			// checkBox5
+			// 
+			this.checkBox5.AutoSize = true;
+			this.checkBox5.Checked = true;
+			this.checkBox5.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox5.Location = new System.Drawing.Point(6, 176);
+			this.checkBox5.Name = "checkBox5";
+			this.checkBox5.Size = new System.Drawing.Size(110, 19);
+			this.checkBox5.TabIndex = 12;
+			this.checkBox5.Text = "Long Expansion";
+			this.checkBox5.UseVisualStyleBackColor = true;
+			// 
+			// checkBox7
+			// 
+			this.checkBox7.AutoSize = true;
+			this.checkBox7.Checked = true;
+			this.checkBox7.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox7.Location = new System.Drawing.Point(6, 154);
+			this.checkBox7.Name = "checkBox7";
+			this.checkBox7.Size = new System.Drawing.Size(80, 19);
+			this.checkBox7.TabIndex = 11;
+			this.checkBox7.Text = "Bit Tracker";
+			this.checkBox7.UseVisualStyleBackColor = true;
+			// 
+			// checkBox8
+			// 
+			this.checkBox8.AutoSize = true;
+			this.checkBox8.Checked = true;
+			this.checkBox8.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox8.Location = new System.Drawing.Point(6, 132);
+			this.checkBox8.Name = "checkBox8";
+			this.checkBox8.Size = new System.Drawing.Size(175, 19);
+			this.checkBox8.TabIndex = 10;
+			this.checkBox8.Text = "Loop Invariant Code Motion";
+			this.checkBox8.UseVisualStyleBackColor = true;
+			// 
+			// checkBox9
+			// 
+			this.checkBox9.AutoSize = true;
+			this.checkBox9.Checked = true;
+			this.checkBox9.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox9.Location = new System.Drawing.Point(6, 110);
+			this.checkBox9.Name = "checkBox9";
+			this.checkBox9.Size = new System.Drawing.Size(244, 19);
+			this.checkBox9.TabIndex = 9;
+			this.checkBox9.Text = "Sparse Conditional Constant Propagation";
+			this.checkBox9.UseVisualStyleBackColor = true;
+			// 
+			// checkBox10
+			// 
+			this.checkBox10.AutoSize = true;
+			this.checkBox10.Checked = true;
+			this.checkBox10.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox10.Location = new System.Drawing.Point(6, 88);
+			this.checkBox10.Name = "checkBox10";
+			this.checkBox10.Size = new System.Drawing.Size(118, 19);
+			this.checkBox10.TabIndex = 8;
+			this.checkBox10.Text = "Value Numbering";
+			this.checkBox10.UseVisualStyleBackColor = true;
+			// 
+			// checkBox11
+			// 
+			this.checkBox11.AutoSize = true;
+			this.checkBox11.Checked = true;
+			this.checkBox11.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox11.Location = new System.Drawing.Point(6, 66);
+			this.checkBox11.Name = "checkBox11";
+			this.checkBox11.Size = new System.Drawing.Size(187, 19);
+			this.checkBox11.TabIndex = 7;
+			this.checkBox11.Text = "Static Single Assignment (SSA)";
+			this.checkBox11.UseVisualStyleBackColor = true;
+			// 
+			// checkBox12
+			// 
+			this.checkBox12.AutoSize = true;
+			this.checkBox12.Checked = true;
+			this.checkBox12.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox12.Location = new System.Drawing.Point(6, 44);
+			this.checkBox12.Name = "checkBox12";
+			this.checkBox12.Size = new System.Drawing.Size(108, 19);
+			this.checkBox12.TabIndex = 6;
+			this.checkBox12.Text = "Devirtualization";
+			this.checkBox12.UseVisualStyleBackColor = true;
+			// 
+			// checkBox13
+			// 
+			this.checkBox13.AutoSize = true;
+			this.checkBox13.Checked = true;
+			this.checkBox13.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.checkBox13.Location = new System.Drawing.Point(6, 22);
+			this.checkBox13.Name = "checkBox13";
+			this.checkBox13.Size = new System.Drawing.Size(130, 19);
+			this.checkBox13.TabIndex = 5;
+			this.checkBox13.Text = "Basic Optimizations";
+			this.checkBox13.UseVisualStyleBackColor = true;
+			// 
 			// Launcher
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -1497,6 +1677,8 @@ namespace Mosa.Tool.Launcher
 			this.panel1.PerformLayout();
 			this.statusStrip1.ResumeLayout(false);
 			this.statusStrip1.PerformLayout();
+			this.groupBox15.ResumeLayout(false);
+			this.groupBox15.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -1612,5 +1794,18 @@ namespace Mosa.Tool.Launcher
 		private System.Windows.Forms.Panel panel1;
 		private System.Windows.Forms.StatusStrip statusStrip1;
 		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
+		private System.Windows.Forms.GroupBox groupBox15;
+		private System.Windows.Forms.CheckBox checkBox1;
+		private System.Windows.Forms.CheckBox checkBox2;
+		private System.Windows.Forms.CheckBox checkBox3;
+		private System.Windows.Forms.CheckBox checkBox4;
+		private System.Windows.Forms.CheckBox checkBox5;
+		private System.Windows.Forms.CheckBox checkBox7;
+		private System.Windows.Forms.CheckBox checkBox8;
+		private System.Windows.Forms.CheckBox checkBox9;
+		private System.Windows.Forms.CheckBox checkBox10;
+		private System.Windows.Forms.CheckBox checkBox11;
+		private System.Windows.Forms.CheckBox checkBox12;
+		private System.Windows.Forms.CheckBox checkBox13;
 	}
 }

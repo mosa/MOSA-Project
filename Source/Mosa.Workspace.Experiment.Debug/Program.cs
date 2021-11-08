@@ -36,7 +36,7 @@ namespace Mosa.Workspace.Experiment.Debug
 			settings.SetValue("Optimizations.TwoPass", false);
 			settings.SetValue("Optimizations.Platform", false);
 			settings.SetValue("Optimizations.Inline", false);
-			settings.SetValue("Optimizations.Inline.ExplicitOnly", false);
+			settings.SetValue("Optimizations.Inline.Explicit", false);
 			settings.SetValue("Optimizations.Inline.Maximum", 12);
 			settings.SetValue("Optimizations.Basic.Window", 5);
 			settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
