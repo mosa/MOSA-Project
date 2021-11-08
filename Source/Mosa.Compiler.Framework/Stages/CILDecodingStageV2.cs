@@ -2661,7 +2661,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			methodData.HasMethodPointerReferenced = true;
 
-			return false;
+			return true;
 		}
 
 		private bool Ldind(Context context, Stack<StackEntry> stack, ElementType elementType)
