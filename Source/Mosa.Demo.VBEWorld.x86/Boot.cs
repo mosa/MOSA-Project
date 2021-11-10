@@ -112,8 +112,7 @@ namespace Mosa.Demo.VBEWorld.x86
 			{
 				Log("VBE setup OK!");
 				DoGraphics();
-			}
-			else Log("VBE setup ERROR!");
+			} else Log("VBE setup ERROR!");
 		}
 
 		private static void DoGraphics()

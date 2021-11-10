@@ -113,22 +113,56 @@ namespace Mosa.DeviceSystem
 		/// <param name="image">The image.</param>
 		/// <param name="x">X of the top left of the image.</param>
 		/// <param name="y">Y of the top left of the image.</param>
-		public void DrawImage(Image image, uint x, uint y)
+		public unsafe void DrawImage(Image image, uint x, uint y, bool alpha = false)
 		{
-			var wi = Math.Clamp(image.Width, 0, Width - x);
-			var he = Math.Clamp(image.Height, 0, Height - y);
-
-			if (x < 0 || y < 0 || x >= Width || y >= Height)
-				return;
-
-			for (int h = 0; h < he; h++)
+			if (alpha)
 			{
-				for (int w = 0; w < wi; w++)
-				{
-					var color = image.GetColor(w, h);
+				// Slow, find faster method (maybe?)
 
-					SetPixel((uint)color, (uint)(x + w), (uint)(y + h));
+				var wi = Math.Clamp(image.Width, 0, Width - x);
+				var he = Math.Clamp(image.Height, 0, Height - y);
+
+				if (x < 0 || y < 0 || x >= Width || y >= Height)
+					return;
+
+				for (int h = 0; h < he; h++)
+				{
+					for (int w = 0; w < wi; w++)
+					{
+						uint xx = (uint)(x + w);
+						uint yy = (uint)(y + h);
+
+						var color = image.GetColor(w, h);
+
+						Color foreground = Color.FromArgb(color);
+						Color background = Color.FromArgb((int)GetPixel(xx, yy));
+
+						int alphac = foreground.A;
+						int inv_alpha = 255 - alphac;
+
+						byte newR = (byte)(((foreground.R * alphac + inv_alpha * background.R) >> 8) & 0xFF);
+						byte newG = (byte)(((foreground.G * alphac + inv_alpha * background.G) >> 8) & 0xFF);
+						byte newB = (byte)(((foreground.B * alphac + inv_alpha * background.B) >> 8) & 0xFF);
+
+						SetPixel((uint)Color.ToArgb(newR, newG, newB), xx, yy);
+					}
 				}
+			}
+			else
+			{
+				int wb = image.Width * 4;
+				uint count = (uint)Math.Clamp(wb, 0, (Width - x) * 4);
+
+				Pointer imagePtr;
+
+				fixed (int* p = image.Pixels)
+					imagePtr = (Pointer)p;
+
+				for (int h = 0; h < Math.Clamp(image.Height, 0, Height - y); h++)
+					Internal.MemoryCopy(
+						Buffer.Address + ((Width * (y + h) + x) * bytesPerPixel),
+						imagePtr + (wb * h),
+						count);
 			}
 		}
 
@@ -161,11 +195,22 @@ namespace Mosa.DeviceSystem
 			}
 
 			uint wb = w * bytesPerPixel;
+			var col = color;
+
+			switch (bytesPerPixel)
+			{
+				case 3: col = (uint)(0xFF000000 | color); break;
+				case 2: col = (ushort)color; break;
+				case 1: col = (byte)color; break;
+
+				default:
+					break;
+			}
 
 			for (int he = 0; he < h; he++)
-			{
-				Internal.MemoryClear(Buffer.Address + ((Width * (y + he) + x) * bytesPerPixel), wb, color);
-			}
+				Internal.MemorySet(
+					Buffer.Address + ((Width * (y + he) + x) * bytesPerPixel),
+					col, wb);
 		}
 
 		/* Functions from Cosmos (not all of them are currently there, TODO) */

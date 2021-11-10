@@ -351,7 +351,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 		protected ConstrainedPointer fifo;
 
-		protected IFrameBuffer frameBuffer;
+		public IFrameBuffer frameBuffer;
 
 		/// <summary>The width</summary>
 		protected ushort width;
@@ -363,7 +363,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		protected uint version;
 
 		/// <summary>The offset</summary>
-		protected uint offset;
+		public uint offset;
 
 		/// <summary>The video ram size</summary>
 		protected uint videoRamSize;
@@ -375,10 +375,10 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		protected uint maxHeight;
 
 		/// <summary>The bits per pixel</summary>
-		protected uint bitsPerPixel;
+		public uint bitsPerPixel;
 
 		/// <summary>The bytes per line</summary>
-		protected uint bytesPerLine;
+		public uint bytesPerLine;
 
 		/// <summary>The red mask</summary>
 		protected uint redMask;
@@ -448,8 +448,8 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 		public override void Start()
 		{
-			const ushort ScreenWidth = 1366;
-			const ushort ScreenHeight = 768;
+			const ushort ScreenWidth = 640;
+			const ushort ScreenHeight = 480;
 			const byte BitsPerPixel = 0;        // Use the hosts bitsperpixel
 
 			if (Device.Status != DeviceStatus.Available) { return; }
@@ -489,9 +489,6 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			offset = SVGAGetRegister(SVGA_REGISTERS.FrameBufferOffset);
 
 			Device.Status = DeviceStatus.Online;
-
-			//Mandelbrot();
-			//MosaLogoDraw(frameBuffer, 10);
 		}
 
 		public override bool OnInterrupt()
@@ -702,7 +699,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		}
 
 		/// <summary>Updates the whole screen.</summary>
-		protected void UpdateScreen()
+		public void UpdateScreen()
 		{
 			FIFOCmdUpdate(0, 0, this.width, this.height);
 		}

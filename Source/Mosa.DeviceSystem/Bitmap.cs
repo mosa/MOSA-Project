@@ -1,5 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Text;
+
 namespace Mosa.DeviceSystem
 {
 	public class Bitmap
@@ -13,12 +15,14 @@ namespace Mosa.DeviceSystem
 
 			var stream = new ByteStream(data);
 
-			//var bpp = stream.Read8(0x1C) / 8;
+			var sig = string.Empty + Encoding.ASCII.GetChar(stream.Read8(0)) + Encoding.ASCII.GetChar(stream.Read8(1));
 			var width = stream.Read32(0x12);
 			var height = stream.Read32(0x16);
 
-			var image = new Image(width, height);
+			if (sig != "BM")
+				return null;
 
+			var image = new Image(width, height);
 			var dataSectionOffset = stream.Read32(0xA);
 
 			int x = 0;
