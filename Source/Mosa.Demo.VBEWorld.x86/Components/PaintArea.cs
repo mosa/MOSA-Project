@@ -69,7 +69,8 @@ namespace Mosa.Demo.VBEWorld.x86.Components
 
 				if (Mouse.State == 0)
 					Bitmap.DrawPoint(Mouse.X, Mouse.Y, Mouse.Color);
-			} else Mouse.IsOnPaintingArea = false;
+			}
+			else Mouse.IsOnPaintingArea = false;
 		}
 
 		public bool IsInBounds()

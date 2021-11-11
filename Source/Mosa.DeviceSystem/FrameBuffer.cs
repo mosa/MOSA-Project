@@ -113,7 +113,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="image">The image.</param>
 		/// <param name="x">X of the top left of the image.</param>
 		/// <param name="y">Y of the top left of the image.</param>
-		public unsafe void DrawImage(Image image, uint x, uint y, bool alpha = false)
+		public void DrawImage(Image image, uint x, uint y, bool alpha = false)
 		{
 			if (alpha)
 			{
@@ -155,8 +155,11 @@ namespace Mosa.DeviceSystem
 
 				Pointer imagePtr;
 
-				fixed (int* p = image.Pixels)
-					imagePtr = (Pointer)p;
+				unsafe
+				{
+					fixed (int* p = image.Pixels)
+						imagePtr = (Pointer)p;
+				}
 
 				for (int h = 0; h < Math.Clamp(image.Height, 0, Height - y); h++)
 					Internal.MemoryCopy(

@@ -1,13 +1,14 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using System.Text;
-
 namespace Mosa.DeviceSystem
 {
 	public class Bitmap
 	{
 		public static Image CreateImage(byte[] data)
 		{
+			if (!(data[0] == (byte)'B' || data[1] == (byte)'M'))
+				return null;
+
 			var bpp = data[0x1C] / 8;
 
 			if (!(bpp == 3 || bpp == 4))
@@ -15,15 +16,11 @@ namespace Mosa.DeviceSystem
 
 			var stream = new ByteStream(data);
 
-			var sig = string.Empty + Encoding.ASCII.GetChar(stream.Read8(0)) + Encoding.ASCII.GetChar(stream.Read8(1));
 			var width = stream.Read32(0x12);
 			var height = stream.Read32(0x16);
-
-			if (sig != "BM")
-				return null;
+			var dataSectionOffset = stream.Read32(0xA);
 
 			var image = new Image(width, height);
-			var dataSectionOffset = stream.Read32(0xA);
 
 			int x = 0;
 			int y = height - 1;

@@ -16,7 +16,7 @@ namespace Mosa.DeviceSystem
 			Width = width;
 			Height = height;
 
-			pixels = new int[Width * Height];
+			pixels = new int[width * height];
 		}
 
 		public int GetColor(int x, int y)
