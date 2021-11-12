@@ -351,7 +351,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 		protected ConstrainedPointer fifo;
 
-		public IFrameBuffer frameBuffer;
+		protected IFrameBuffer frameBuffer;
 
 		/// <summary>The width</summary>
 		protected ushort width;
@@ -363,7 +363,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		protected uint version;
 
 		/// <summary>The offset</summary>
-		public uint offset;
+		protected uint offset;
 
 		/// <summary>The video ram size</summary>
 		protected uint videoRamSize;
@@ -375,10 +375,10 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		protected uint maxHeight;
 
 		/// <summary>The bits per pixel</summary>
-		public uint bitsPerPixel;
+		protected uint bitsPerPixel;
 
 		/// <summary>The bytes per line</summary>
-		public uint bytesPerLine;
+		protected uint bytesPerLine;
 
 		/// <summary>The red mask</summary>
 		protected uint redMask;
@@ -521,7 +521,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		/// If bitsPerPixel=0, then HostBitsPerPixel is used automatically.
 		/// If bitsPerPixel!=0, then the requested bitsPerPixel is used.
 		/// </param>
-		public bool SVGASetMode(ushort width, ushort height, byte bitsPerPixel = 0)
+		protected bool SVGASetMode(ushort width, ushort height, byte bitsPerPixel = 0)
 		{
 			this.width = width;
 			this.height = height;
@@ -699,7 +699,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		}
 
 		/// <summary>Updates the whole screen.</summary>
-		public void UpdateScreen()
+		protected void UpdateScreen()
 		{
 			FIFOCmdUpdate(0, 0, this.width, this.height);
 		}

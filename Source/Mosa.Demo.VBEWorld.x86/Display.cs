@@ -53,14 +53,14 @@ namespace Mosa.Demo.VBEWorld.x86
 			return true;
 		}
 
-		private static IFrameBuffer CreateBuffer(ConstrainedPointer buffer, uint width, uint height, uint pitch, uint bitsPerPixel)
+		private static IFrameBuffer CreateBuffer(ConstrainedPointer buffer, uint width, uint height, uint bytePerLine, uint bitsPerPixel)
 		{
 			switch (bitsPerPixel)
 			{
-				case 8: return new FrameBuffer8bpp(buffer, width, height, 0, pitch);
-				case 16: return new FrameBuffer16bpp(buffer, width, height, 0, pitch);
-				case 24: return new FrameBuffer24bpp(buffer, width, height, 0, pitch);
-				case 32: return new FrameBuffer32bpp(buffer, width, height, 0, pitch);
+				case 8: return new FrameBuffer8bpp(buffer, width, height, 0, bytePerLine);
+				case 16: return new FrameBuffer16bpp(buffer, width, height, 0, bytePerLine);
+				case 24: return new FrameBuffer24bpp(buffer, width, height, 0, bytePerLine);
+				case 32: return new FrameBuffer32bpp(buffer, width, height, 0, bytePerLine);
 				default: return null;
 			}
 		}
