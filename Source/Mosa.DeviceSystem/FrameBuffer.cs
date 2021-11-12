@@ -2,7 +2,6 @@
 
 using Mosa.Runtime;
 using System;
-using System.Drawing;
 
 namespace Mosa.DeviceSystem
 {

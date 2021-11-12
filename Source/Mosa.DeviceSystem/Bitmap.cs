@@ -6,6 +6,9 @@ namespace Mosa.DeviceSystem
 	{
 		public static Image CreateImage(byte[] data)
 		{
+			if (data[0] != (byte)'B' || data[1] != (byte)'M')
+				return null;
+
 			var bpp = data[0x1C] / 8;
 
 			if (!(bpp == 3 || bpp == 4))
@@ -13,7 +16,6 @@ namespace Mosa.DeviceSystem
 
 			var stream = new ByteStream(data);
 
-			//var bpp = stream.Read8(0x1C) / 8;
 			var width = stream.Read32(0x12);
 			var height = stream.Read32(0x16);
 

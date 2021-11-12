@@ -19,12 +19,12 @@ namespace Mosa.DeviceSystem
 
 		public int GetColor(int x, int y)
 		{
-			return pixels[x * Width + y];
+			return pixels[y * Width + x];
 		}
 
 		public void SetColor(int x, int y, int color)
 		{
-			pixels[x * Width + y] = color;
+			pixels[y * Width + x] = color;
 		}
 
 		public void Clear(int color = 0)

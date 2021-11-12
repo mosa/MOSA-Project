@@ -175,10 +175,10 @@ namespace Mosa.Compiler.Framework
 			return new List<BaseMethodCompilerStage>() {
 				(!compilerSettings.CILDecodingStageV2) ? new CILDecodingStage() : null,
 				(compilerSettings.CILDecodingStageV2) ? new CILDecodingStageV2() : null,
+				(!compilerSettings.CILDecodingStageV2) ? new CILOperandAssignmentStage(): null,
+				(!compilerSettings.CILDecodingStageV2) ? new CILProtectedRegionStage(): null,
+				(!compilerSettings.CILDecodingStageV2) ? new CILTransformationStage(): null,
 
-				new CILOperandAssignmentStage(),
-				new CILProtectedRegionStage(),
-				new CILTransformationStage(),
 				new ExceptionStage(),
 				new StackSetupStage(),
 				compilerSettings.Devirtualization ? new DevirtualizeCallStage() : null,
