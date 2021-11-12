@@ -48,6 +48,26 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion Stack classes
 
+		private class PrefixValues
+		{
+			public bool Unaligned { get; set; } = false; // ldind, stind, ldfld, stfld, ldobj, stobj, initblk, or cpblk
+			public bool Volatile { get; set; } = false; // Ldsfld and Stsfld
+			public bool Tailcall { get; set; } = false; // Call, Calli, or Callvirt
+			public bool Constrained { get; set; } = false; // callvirt
+			public bool Readonly { get; set; } = false; // ldelema
+
+			public bool Reset = false;
+
+			public void ResetAll()
+			{
+				Unaligned = false;
+				Volatile = false;
+				Tailcall = false;
+				Constrained = false;
+				Readonly = false;
+			}
+		}
+
 		private readonly Dictionary<BasicBlock, Stack<StackEntry>> stacks = new Dictionary<BasicBlock, Stack<StackEntry>>();
 
 		private Operand[] LocalStack;
@@ -280,6 +300,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var code = Method.Code;
 
+			var prefixValues = new PrefixValues();
+
 			for (int index = 0; index < code.Count; index++)
 			{
 				var instruction = code[index];
@@ -294,11 +316,16 @@ namespace Mosa.Compiler.Framework.Stages
 					endNode = block.First;
 				}
 
-				bool processed = Translate(stack, context, instruction, opcode);
+				bool processed = Translate(stack, context, instruction, opcode, prefixValues);
 
 				if (!processed)
 				{
 					throw new CompilerException($"Error: Unknown or unprocessable opcode: {opcode}");
+				}
+
+				if (prefixValues.Reset)
+				{
+					prefixValues.ResetAll();
 				}
 
 				UpdateLabel(context.Node, label, endNode);
@@ -414,8 +441,10 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private bool Translate(Stack<StackEntry> stack, Context context, MosaInstruction instruction, OpCode opcode)
+		private bool Translate(Stack<StackEntry> stack, Context context, MosaInstruction instruction, OpCode opcode, PrefixValues prefixValues)
 		{
+			prefixValues.Reset = true;
+
 			switch (opcode)
 			{
 				case OpCode.Add: return Add(context, stack);
@@ -591,7 +620,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.PreReadOnly: return false;                              // TODO: Not implemented in v1 either
 				case OpCode.PreTail: return false;                                  // TODO: Not implemented in v1 either
 				case OpCode.PreUnaligned: return false;                             // TODO: Not implemented in v1 either
-				case OpCode.PreVolatile: return false;                              // TODO: Not implemented in v1 either
+				case OpCode.PreVolatile: prefixValues.Volatile = true; prefixValues.Reset = false; return true;
 				case OpCode.Refanytype: return false;                               // TODO: Not implemented in v1 either
 				case OpCode.Refanyval: return false;                                // TODO: Not implemented in v1 either
 				case OpCode.Rem: return RemOperand(context, stack);
