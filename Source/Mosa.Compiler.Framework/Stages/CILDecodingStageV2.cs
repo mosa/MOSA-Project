@@ -2600,14 +2600,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var type = (MosaType)instruction.Operand;
 
-			var fieldPtr = type.ToManagedPointer();
+			var underlyingType = GetUnderlyingType(type.ElementType);
 
-			var result = AllocatedOperand(StackType.ManagedPointer, fieldPtr);
+			var result = AllocatedOperand(StackType.ManagedPointer);
 
 			// Array bounds check
 			AddArrayBoundsCheck(context, array, index);
 
-			var elementOffset = CalculateArrayElementOffset(context, type, index);
+			var elementOffset = CalculateArrayElementOffset(context, underlyingType, index);
 			var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
 
 			if (Is32BitPlatform)
