@@ -16,7 +16,6 @@ namespace Mosa.DeviceSystem
 
 			var stream = new ByteStream(data);
 
-			//var bpp = stream.Read8(0x1C) / 8;
 			var width = stream.Read32(0x12);
 			var height = stream.Read32(0x16);
 
