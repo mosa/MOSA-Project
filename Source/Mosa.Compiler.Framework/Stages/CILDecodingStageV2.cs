@@ -468,7 +468,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Div: return Div(context, stack);
 				case OpCode.Div_un: return DivUnsigned(context, stack);
 				case OpCode.Dup: return Dup(context, stack);
-				case OpCode.Endfilter: return false;                                // TODO
+				case OpCode.Endfilter: return false;                                // TODO: Not implemented in v1 either
 				case OpCode.Endfinally: return false;                               // TODO
 				case OpCode.Extop: return false;                                    // TODO: Not implemented in v1 either
 				case OpCode.Initblk: return Initblk(context, stack);
@@ -510,9 +510,9 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Ldelem_u1: return Ldelem(context, stack, ElementType.U1);
 				case OpCode.Ldelem_u2: return Ldelem(context, stack, ElementType.U2);
 				case OpCode.Ldelem_u4: return Ldelem(context, stack, ElementType.U4);
-				case OpCode.Ldelema: return false;                                  // TODO
+				case OpCode.Ldelema: return Ldelema(context, stack, instruction);
 				case OpCode.Ldfld: return Ldfld(context, stack, instruction);
-				case OpCode.Ldflda: return false;                                   // TODO
+				case OpCode.Ldflda: return Ldflda(context, stack, instruction);
 				case OpCode.Ldftn: return Ldftn(context, stack, instruction);
 				case OpCode.Ldind_i: return Ldind(context, stack, ElementType.I);
 				case OpCode.Ldind_i1: return Ldind(context, stack, ElementType.I1);
@@ -2590,6 +2590,40 @@ namespace Mosa.Compiler.Framework.Stages
 			return true;
 		}
 
+		private bool Ldelema(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var entry1 = stack.Pop();
+			var entry2 = stack.Pop();
+
+			var index = entry1.Operand;
+			var array = entry2.Operand;
+
+			var type = (MosaType)instruction.Operand;
+
+			var fieldPtr = type.ToManagedPointer();
+
+			var result = AllocatedOperand(StackType.ManagedPointer, fieldPtr);
+
+			// Array bounds check
+			AddArrayBoundsCheck(context, array, index);
+
+			var elementOffset = CalculateArrayElementOffset(context, type, index);
+			var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
+
+			if (Is32BitPlatform)
+			{
+				context.SetInstruction(IRInstruction.Add32, result, array, totalElementOffset);
+			}
+			else
+			{
+				context.SetInstruction(IRInstruction.Add64, result, array, totalElementOffset);
+			}
+
+			stack.Push(new StackEntry(StackType.ManagedPointer, result));
+
+			return true;
+		}
+
 		private bool Ldfld(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
 		{
 			var entry = stack.Pop();
@@ -2670,6 +2704,39 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			context.SetInstruction(move, result, source);
+
+			return true;
+		}
+
+		private bool Ldflda(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var entry = stack.Pop();
+
+			var field = (MosaField)instruction.Operand;
+
+			MethodScanner.AccessedField(field);
+
+			uint offset = TypeLayout.GetFieldOffset(field);
+
+			var fieldPtr = field.FieldType.ToManagedPointer();
+
+			var result = AllocatedOperand(StackType.ManagedPointer, fieldPtr);
+
+			if (offset == 0)
+			{
+				var move = GetMoveInstruction(ElementType.I);
+
+				context.SetInstruction(move, result, entry.Operand);
+			}
+			else
+			{
+				if (Is32BitPlatform)
+					context.SetInstruction(IRInstruction.Add32, result, entry.Operand, CreateConstant32(offset));
+				else
+					context.SetInstruction(IRInstruction.Add64, result, entry.Operand, CreateConstant64(offset));
+			}
+
+			stack.Push(new StackEntry(StackType.ManagedPointer, result));
 
 			return true;
 		}
