@@ -55,7 +55,9 @@ namespace Mosa.Compiler.Framework.Stages
 			public bool Tailcall { get; set; } = false; // Call, Calli, or Callvirt
 			public bool Constrained { get; set; } = false; // callvirt
 			public bool Readonly { get; set; } = false; // ldelema
-			public bool NoChecks { get; set; } = false;
+			public bool NoTypeCheck { get; set; } = false;
+			public bool NoRangeCheck { get; set; } = false;
+			public bool NoNullCheck { get; set; } = false;
 
 			public bool Reset = false;
 
@@ -66,7 +68,9 @@ namespace Mosa.Compiler.Framework.Stages
 				Tailcall = false;
 				Constrained = false;
 				Readonly = false;
-				NoChecks = false;
+				NoTypeCheck = false;
+				NoRangeCheck = false;
+				NoNullCheck = false;
 			}
 		}
 
@@ -618,7 +622,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Or: return Or(context, stack);
 				case OpCode.Pop: return Pop(context, stack);
 				case OpCode.Constrained: prefixValues.Constrained = true; prefixValues.Reset = false; return true;
-				case OpCode.No: prefixValues.NoChecks = true; prefixValues.Reset = false; return true;
+				case OpCode.No: /* TODO */ prefixValues.Reset = false; return true;
 				case OpCode.ReadOnly: prefixValues.Readonly = true; prefixValues.Reset = false; return true;
 				case OpCode.Tailcall: prefixValues.Tailcall = true; prefixValues.Reset = false; return true;
 				case OpCode.Unaligned: prefixValues.Unaligned = true; prefixValues.Reset = false; return true;
