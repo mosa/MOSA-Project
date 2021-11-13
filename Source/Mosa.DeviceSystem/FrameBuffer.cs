@@ -115,9 +115,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="y">Y of the top left of the image.</param>
 		public void DrawImage(Image image, uint x, uint y, bool alpha = false)
 		{
-			if (alpha)
-			{
-				// Slow, find faster method (maybe?)
+			// Slow, find faster method (maybe?)
 
 				var wi = Math.Clamp(image.Width, 0, Width - x);
 				var he = Math.Clamp(image.Height, 0, Height - y);
@@ -132,41 +130,28 @@ namespace Mosa.DeviceSystem
 						uint xx = (uint)(x + w);
 						uint yy = (uint)(y + h);
 
-						var color = image.GetColor(w, h);
+						int color = image.GetColor(w, h);
+						if (alpha)
+							color = AlphaBlend(xx, yy, color);
 
-						Color foreground = Color.FromArgb(color);
-						Color background = Color.FromArgb((int)GetPixel(xx, yy));
-
-						int alphac = foreground.A;
-						int inv_alpha = 255 - alphac;
-
-						byte newR = (byte)(((foreground.R * alphac + inv_alpha * background.R) >> 8) & 0xFF);
-						byte newG = (byte)(((foreground.G * alphac + inv_alpha * background.G) >> 8) & 0xFF);
-						byte newB = (byte)(((foreground.B * alphac + inv_alpha * background.B) >> 8) & 0xFF);
-
-						SetPixel((uint)Color.ToArgb(newR, newG, newB), xx, yy);
+						SetPixel((uint)color, xx, yy);
 					}
 				}
-			}
-			else
-			{
-				int wb = image.Width * 4;
-				uint count = (uint)Math.Clamp(wb, 0, (Width - x) * 4);
+		}
 
-				Pointer imagePtr;
+		private int AlphaBlend(uint x, uint y, int color)
+		{
+			Color foreground = Color.FromArgb(color);
+			Color background = Color.FromArgb((int)GetPixel(x, y));
 
-				unsafe
-				{
-					fixed (int* p = image.Pixels)
-						imagePtr = (Pointer)p;
-				}
+			int alphac = foreground.A;
+			int inv_alpha = 255 - alphac;
 
-				for (int h = 0; h < Math.Clamp(image.Height, 0, Height - y); h++)
-					Internal.MemoryCopy(
-						Buffer.Address + ((Width * (y + h) + x) * bytesPerPixel),
-						imagePtr + (wb * h),
-						count);
-			}
+			byte newR = (byte)(((foreground.R * alphac + inv_alpha * background.R) >> 8) & 0xFF);
+			byte newG = (byte)(((foreground.G * alphac + inv_alpha * background.G) >> 8) & 0xFF);
+			byte newB = (byte)(((foreground.B * alphac + inv_alpha * background.B) >> 8) & 0xFF);
+		
+			return Color.ToArgb(newR, newG, newB);
 		}
 
 		/// <summary>Fills a rectangle with color.</summary>
