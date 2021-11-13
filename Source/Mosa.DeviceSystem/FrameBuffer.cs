@@ -2,6 +2,7 @@
 
 using Mosa.Runtime;
 using System;
+using System.Drawing;
 
 namespace Mosa.DeviceSystem
 {
@@ -112,23 +113,45 @@ namespace Mosa.DeviceSystem
 		/// <param name="image">The image.</param>
 		/// <param name="x">X of the top left of the image.</param>
 		/// <param name="y">Y of the top left of the image.</param>
-		public void DrawImage(Image image, uint x, uint y)
+		public void DrawImage(Image image, uint x, uint y, bool alpha = false)
 		{
-			var wi = Math.Clamp(image.Width, 0, Width - x);
-			var he = Math.Clamp(image.Height, 0, Height - y);
+			// Slow, find faster method (maybe?)
 
-			if (x < 0 || y < 0 || x >= Width || y >= Height)
-				return;
+				var wi = Math.Clamp(image.Width, 0, Width - x);
+				var he = Math.Clamp(image.Height, 0, Height - y);
 
-			for (int h = 0; h < he; h++)
-			{
-				for (int w = 0; w < wi; w++)
+				if (x < 0 || y < 0 || x >= Width || y >= Height)
+					return;
+
+				for (int h = 0; h < he; h++)
 				{
-					var color = image.GetColor(w, h);
+					for (int w = 0; w < wi; w++)
+					{
+						uint xx = (uint)(x + w);
+						uint yy = (uint)(y + h);
 
-					SetPixel((uint)color, (uint)(x + w), (uint)(y + h));
+						int color = image.GetColor(w, h);
+						if (alpha)
+							color = AlphaBlend(xx, yy, color);
+
+						SetPixel((uint)color, xx, yy);
+					}
 				}
-			}
+		}
+
+		private int AlphaBlend(uint x, uint y, int color)
+		{
+			Color foreground = Color.FromArgb(color);
+			Color background = Color.FromArgb((int)GetPixel(x, y));
+
+			int alphac = foreground.A;
+			int inv_alpha = 255 - alphac;
+
+			byte newR = (byte)(((foreground.R * alphac + inv_alpha * background.R) >> 8) & 0xFF);
+			byte newG = (byte)(((foreground.G * alphac + inv_alpha * background.G) >> 8) & 0xFF);
+			byte newB = (byte)(((foreground.B * alphac + inv_alpha * background.B) >> 8) & 0xFF);
+		
+			return Color.ToArgb(newR, newG, newB);
 		}
 
 		/// <summary>Fills a rectangle with color.</summary>
@@ -160,11 +183,22 @@ namespace Mosa.DeviceSystem
 			}
 
 			uint wb = w * bytesPerPixel;
+			var col = color;
+
+			switch (bytesPerPixel)
+			{
+				case 3: col = (uint)(0xFF000000 | color); break;
+				case 2: col = (ushort)color; break;
+				case 1: col = (byte)color; break;
+
+				default:
+					break;
+			}
 
 			for (int he = 0; he < h; he++)
-			{
-				Internal.MemoryClear(Buffer.Address + ((Width * (y + he) + x) * bytesPerPixel), wb, color);
-			}
+				Internal.MemorySet(
+					Buffer.Address + ((Width * (y + he) + x) * bytesPerPixel),
+					col, wb);
 		}
 
 		/* Functions from Cosmos (not all of them are currently there, TODO) */

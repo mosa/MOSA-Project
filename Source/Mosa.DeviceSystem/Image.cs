@@ -6,6 +6,8 @@ namespace Mosa.DeviceSystem
 	{
 		private int[] pixels;
 
+		public int[] Pixels => pixels;
+
 		public int Width { get; protected set; }
 		public int Height { get; protected set; }
 
@@ -29,12 +31,8 @@ namespace Mosa.DeviceSystem
 
 		public void Clear(int color = 0)
 		{
-			var length = pixels.Length;
-
-			for (int i = 0; i < length; i++)
-			{
+			for (int i = 0; i < pixels.Length; i++)
 				pixels[i] = color;
-			}
 		}
 	}
 }

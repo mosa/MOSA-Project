@@ -28,10 +28,8 @@ namespace Mosa.Demo.VBEWorld.x86.Components
 
 		public void DrawPoint(int x, int y, Color color)
 		{
-			if (x < Width)
-			{
+			if (x < Width && y < Height)
 				Bitmap.SetColor(x, y, color.ToArgb());
-			}
 		}
 	}
 

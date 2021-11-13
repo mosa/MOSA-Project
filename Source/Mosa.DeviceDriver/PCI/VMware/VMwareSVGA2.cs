@@ -448,8 +448,8 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 		public override void Start()
 		{
-			const ushort ScreenWidth = 1366;
-			const ushort ScreenHeight = 768;
+			const ushort ScreenWidth = 640;
+			const ushort ScreenHeight = 480;
 			const byte BitsPerPixel = 0;        // Use the hosts bitsperpixel
 
 			if (Device.Status != DeviceStatus.Available) { return; }
@@ -489,9 +489,6 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			offset = SVGAGetRegister(SVGA_REGISTERS.FrameBufferOffset);
 
 			Device.Status = DeviceStatus.Online;
-
-			//Mandelbrot();
-			//MosaLogoDraw(frameBuffer, 10);
 		}
 
 		public override bool OnInterrupt()
@@ -524,7 +521,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		/// If bitsPerPixel=0, then HostBitsPerPixel is used automatically.
 		/// If bitsPerPixel!=0, then the requested bitsPerPixel is used.
 		/// </param>
-		public bool SVGASetMode(ushort width, ushort height, byte bitsPerPixel = 0)
+		protected bool SVGASetMode(ushort width, ushort height, byte bitsPerPixel = 0)
 		{
 			this.width = width;
 			this.height = height;
