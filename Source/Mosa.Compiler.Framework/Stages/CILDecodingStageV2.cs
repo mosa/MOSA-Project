@@ -55,6 +55,7 @@ namespace Mosa.Compiler.Framework.Stages
 			public bool Tailcall { get; set; } = false; // Call, Calli, or Callvirt
 			public bool Constrained { get; set; } = false; // callvirt
 			public bool Readonly { get; set; } = false; // ldelema
+			public bool NoChecks { get; set; } = false;
 
 			public bool Reset = false;
 
@@ -65,6 +66,7 @@ namespace Mosa.Compiler.Framework.Stages
 				Tailcall = false;
 				Constrained = false;
 				Readonly = false;
+				NoChecks = false;
 			}
 		}
 
@@ -615,12 +617,12 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Not: return Not(context, stack);
 				case OpCode.Or: return Or(context, stack);
 				case OpCode.Pop: return Pop(context, stack);
-				case OpCode.PreConstrained: return false;                           // TODO: Not implemented in v1 either
-				case OpCode.PreNo: return false;                                    // TODO: Not implemented in v1 either
-				case OpCode.PreReadOnly: return false;                              // TODO: Not implemented in v1 either
-				case OpCode.PreTail: return false;                                  // TODO: Not implemented in v1 either
-				case OpCode.PreUnaligned: return false;                             // TODO: Not implemented in v1 either
-				case OpCode.PreVolatile: prefixValues.Volatile = true; prefixValues.Reset = false; return true;
+				case OpCode.Constrained: prefixValues.Constrained = true; prefixValues.Reset = false; return true;
+				case OpCode.No: prefixValues.NoChecks = true; prefixValues.Reset = false; return true;
+				case OpCode.ReadOnly: prefixValues.Readonly = true; prefixValues.Reset = false; return true;
+				case OpCode.Tailcall: prefixValues.Tailcall = true; prefixValues.Reset = false; return true;
+				case OpCode.Unaligned: prefixValues.Unaligned = true; prefixValues.Reset = false; return true;
+				case OpCode.Volatile: prefixValues.Volatile = true; prefixValues.Reset = false; return true;
 				case OpCode.Refanytype: return false;                               // TODO: Not implemented in v1 either
 				case OpCode.Refanyval: return false;                                // TODO: Not implemented in v1 either
 				case OpCode.Rem: return RemOperand(context, stack);
