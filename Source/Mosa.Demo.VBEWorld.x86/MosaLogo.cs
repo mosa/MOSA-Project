@@ -11,7 +11,7 @@ namespace Mosa.Demo.VBEWorld.x86
 
 		private const uint _height = 7;
 
-		public static void Draw(IFrameBuffer frameBuffer, uint tileSize)
+		public static void Draw(FrameBuffer32 frameBuffer, uint tileSize)
 		{
 			uint positionX = (frameBuffer.Width / 2) - ((_width * tileSize) / 2);
 			uint positionY = (frameBuffer.Height / 2) - ((_height * tileSize) / 2);

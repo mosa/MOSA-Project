@@ -344,10 +344,10 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 		private ConstrainedPointer fifo;
 
-		private IFrameBuffer frameBuffer;
+		private FrameBuffer32 frameBuffer;
 
 		/// <summary>The frame buffer.</summary>
-		public IFrameBuffer FrameBuffer { get => frameBuffer; }
+		public FrameBuffer32 FrameBuffer { get => frameBuffer; }
 
 		public override void Initialize()
 		{
@@ -367,25 +367,9 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			if (Device.Status != DeviceStatus.Available)
 				return;
 
-			uint version = SVGA_VERSION_ID.Invalid;
-
-			WriteRegister(SVGA_REGISTERS.ID, SVGA_VERSION_ID.V2);
-			if (ReadRegister(SVGA_REGISTERS.ID) == SVGA_VERSION_ID.V2)
-			{
-				version = SVGA_VERSION_ID.V2;
+			uint version = GetVersion();
+			if (version == SVGA_VERSION_ID.V1 || version == SVGA_VERSION_ID.V2)
 				WriteRegister(SVGA_REGISTERS.GuestID, GUEST_OS.Other); // 0x05010 == GUEST_OS_OTHER (vs GUEST_OS_WIN2000)
-			}
-
-			WriteRegister(SVGA_REGISTERS.ID, SVGA_VERSION_ID.V1);
-			if (ReadRegister(SVGA_REGISTERS.ID) == SVGA_VERSION_ID.V1)
-			{
-				version = SVGA_VERSION_ID.V1;
-				WriteRegister(SVGA_REGISTERS.GuestID, GUEST_OS.Other); // 0x05010 == GUEST_OS_OTHER (vs GUEST_OS_WIN2000)
-			}
-
-			WriteRegister(SVGA_REGISTERS.ID, SVGA_VERSION_ID.V0);
-			if (ReadRegister(SVGA_REGISTERS.ID) == SVGA_VERSION_ID.V0)
-				version = SVGA_VERSION_ID.V0;
 
 			Device.Status = DeviceStatus.Online;
 		}
@@ -471,6 +455,23 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		{
 			indexPort.Write32(command);
 			return valuePort.Read32();
+		}
+
+		private uint GetVersion()
+		{
+			WriteRegister(SVGA_REGISTERS.ID, SVGA_VERSION_ID.V2);
+			if (ReadRegister(SVGA_REGISTERS.ID) == SVGA_VERSION_ID.V2)
+				return SVGA_VERSION_ID.V2;
+
+			WriteRegister(SVGA_REGISTERS.ID, SVGA_VERSION_ID.V1);
+			if (ReadRegister(SVGA_REGISTERS.ID) == SVGA_VERSION_ID.V1)
+				return SVGA_VERSION_ID.V1;
+
+			WriteRegister(SVGA_REGISTERS.ID, SVGA_VERSION_ID.V0);
+			if (ReadRegister(SVGA_REGISTERS.ID) == SVGA_VERSION_ID.V0)
+				return SVGA_VERSION_ID.V0;
+
+			return SVGA_VERSION_ID.Invalid;
 		}
 
 		#endregion Registers

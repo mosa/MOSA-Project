@@ -8,7 +8,7 @@ namespace Mosa.DeviceSystem
 	public interface IGraphicsDevice
 	{
 		/// <summary>The frame buffer.</summary>
-		public IFrameBuffer FrameBuffer { get; }
+		public FrameBuffer32 FrameBuffer { get; }
 
 		/// <summary>Sets the mode.</summary>
 		/// <param name="width">The width.</param>

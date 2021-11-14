@@ -7,8 +7,8 @@ using System.Drawing;
 namespace Mosa.DeviceSystem
 {
 	/// <summary>Frame Buffer</summary>
-	/// <seealso cref="Mosa.DeviceSystem.IFrameBuffer" />
-	public sealed class FrameBuffer32 : IFrameBuffer
+	/// <seealso cref="Mosa.DeviceSystem.FrameBuffer32" />
+	public sealed class FrameBuffer32
 	{
 		/// <summary>The bytes per pixel</summary>
 		private const uint BytesPerPixel = 4;
@@ -47,7 +47,7 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>Creates a new frame buffer with identical properties.</summary>
-		public IFrameBuffer Clone()
+		public FrameBuffer32 Clone()
 		{
 			return new FrameBuffer32(HAL.AllocateMemory(Buffer.Size, 0), Width, Height, Offset, BytesPerLine);
 		}
@@ -134,7 +134,6 @@ namespace Mosa.DeviceSystem
 				return;
 
 			for (int h = 0; h < he; h++)
-			{
 				for (int w = 0; w < wi; w++)
 				{
 					var color = image.GetColor(w, h);
@@ -142,7 +141,6 @@ namespace Mosa.DeviceSystem
 					if (color != transparentColor)
 						SetPixel((uint)color, (uint)(x + w), (uint)(y + h));
 				}
-			}
 		}
 
 		/// <summary>Draws an image with a transparent color.</summary>
@@ -160,7 +158,6 @@ namespace Mosa.DeviceSystem
 				return;
 
 			for (int h = 0; h < he; h++)
-			{
 				for (int w = 0; w < wi; w++)
 				{
 					uint xx = (uint)(x + w);
@@ -173,7 +170,6 @@ namespace Mosa.DeviceSystem
 
 					SetPixel((uint)color, xx, yy);
 				}
-			}
 		}
 
 		private int AlphaBlend(uint x, uint y, int color)
@@ -256,7 +252,7 @@ namespace Mosa.DeviceSystem
 			}
 		}
 
-		public void CopyFrame(IFrameBuffer source)
+		public void CopyFrame(FrameBuffer32 source)
 		{
 			Internal.MemoryCopy(Buffer.Address, source.Buffer.Address, Buffer.Size);
 		}

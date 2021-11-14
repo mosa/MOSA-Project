@@ -10,8 +10,8 @@ namespace Mosa.Demo.VBEWorld.x86
 {
 	public static class Display
 	{
-		private static IFrameBuffer DisplayFrame { get; set; }
-		private static IFrameBuffer BackFrame { get; set; }
+		private static FrameBuffer32 DisplayFrame { get; set; }
+		private static FrameBuffer32 BackFrame { get; set; }
 
 		private static IGraphicsDevice Driver { get; set; }
 
