@@ -199,15 +199,11 @@ namespace Mosa.Runtime
 
 			uint count32 = count >> 2;
 			for (uint i = 0; i < count32; i++)
-			{
 				dest.Store32(i << 2, value32);
-			}
 
 			uint count8 = count & 0x03;
 			for (uint i = 0; i < count8; i++)
-			{
 				dest.Store8(count32 + i, value);
-			}
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
@@ -217,24 +213,18 @@ namespace Mosa.Runtime
 
 			uint count32 = count >> 1;
 			for (uint i = 0; i < count32; i++)
-			{
 				dest.Store32(i << 1, value32);
-			}
 
 			uint count16 = count & 0x01;
 			for (uint i = 0; i < count16; i++)
-			{
 				dest.Store16(count32 + i, value);
-			}
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemorySet(Pointer dest, uint value, uint count)
 		{
 			for (uint i = 0; i < count; i += 4)
-			{
 				dest.Store32(i, value);
-			}
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]

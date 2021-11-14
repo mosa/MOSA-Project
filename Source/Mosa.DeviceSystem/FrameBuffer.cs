@@ -30,11 +30,26 @@ namespace Mosa.DeviceSystem
 		/// <summary>The memory</summary>
 		public ConstrainedPointer Buffer { get; protected set; }
 
+		/// <summary>Creates a new frame buffer with identical properties.</summary>
+		public IFrameBuffer Clone()
+		{
+			switch (bytesPerPixel)
+			{
+				case 1: return new FrameBuffer8bpp(HAL.AllocateMemory(Buffer.Size, 0), Width, Height, offset, bytesPerLine);
+				case 2: return new FrameBuffer16bpp(HAL.AllocateMemory(Buffer.Size, 0), Width, Height, offset, bytesPerLine);
+				case 3: return new FrameBuffer24bpp(HAL.AllocateMemory(Buffer.Size, 0), Width, Height, offset, bytesPerLine);
+				case 4: return new FrameBuffer32bpp(HAL.AllocateMemory(Buffer.Size, 0), Width, Height, offset, bytesPerLine);
+				default: return null;
+			}
+		}
+
 		/// <summary>Gets the offset.</summary>
 		/// <param name="x">The x.</param>
 		/// <param name="y">The y.</param>
-		/// <returns></returns>
-		protected abstract uint GetOffset(uint x, uint y);
+		protected uint GetOffset(uint x, uint y)
+		{
+			return offset + y * bytesPerLine + x * bytesPerPixel;
+		}
 
 		/// <summary>Sets the pixel.</summary>
 		/// <param name="color"></param>
@@ -117,25 +132,23 @@ namespace Mosa.DeviceSystem
 		{
 			// Slow, find faster method (maybe?)
 
-				var wi = Math.Clamp(image.Width, 0, Width - x);
-				var he = Math.Clamp(image.Height, 0, Height - y);
+			var wi = Math.Clamp(image.Width, 0, Width - x);
+			var he = Math.Clamp(image.Height, 0, Height - y);
 
-				if (x < 0 || y < 0 || x >= Width || y >= Height)
-					return;
+			if (x < 0 || y < 0 || x >= Width || y >= Height)
+				return;
 
-				for (int h = 0; h < he; h++)
+			for (int h = 0; h < he; h++)
+				for (int w = 0; w < wi; w++)
 				{
-					for (int w = 0; w < wi; w++)
-					{
-						uint xx = (uint)(x + w);
-						uint yy = (uint)(y + h);
+					uint xx = (uint)(x + w);
+					uint yy = (uint)(y + h);
 
-						int color = image.GetColor(w, h);
-						if (alpha)
-							color = AlphaBlend(xx, yy, color);
+					int color = image.GetColor(w, h);
+					if (alpha)
+						color = AlphaBlend(xx, yy, color);
 
-						SetPixel((uint)color, xx, yy);
-					}
+					SetPixel((uint)color, xx, yy);
 				}
 		}
 
@@ -167,7 +180,7 @@ namespace Mosa.DeviceSystem
 
 			// TODO: Also clamp X and Y
 
-			if (x >= Width || y >= Height)
+			if (x < 0 || y < 0 || x >= Width || y >= Height)
 				return;
 
 			if (x < 0)
@@ -250,7 +263,8 @@ namespace Mosa.DeviceSystem
 		/// <summary>Clears the screen with a specified color.</summary>
 		public void ClearScreen(uint color)
 		{
-			Internal.MemoryClear(Buffer.Address, Buffer.Size, color);
+			//Internal.MemoryClear(Buffer.Address, Buffer.Size, color);
+			Internal.MemorySet(Buffer.Address, color, Buffer.Size);
 		}
 	}
 }

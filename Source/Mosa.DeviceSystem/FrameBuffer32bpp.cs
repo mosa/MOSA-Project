@@ -27,14 +27,6 @@ namespace Mosa.DeviceSystem
 			this.bytesPerLine = bytesPerLine;
 		}
 
-		/// <summary>Gets the offset.</summary>
-		/// <param name="x">The x.</param>
-		/// <param name="y">The y.</param>
-		protected override uint GetOffset(uint x, uint y)
-		{
-			return offset + y * bytesPerLine + x * 4;
-		}
-
 		/// <summary>Sets the pixel.</summary>
 		/// <param name="color">The color.</param>
 		/// <param name="x">The x.</param>

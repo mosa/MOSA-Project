@@ -110,10 +110,12 @@ namespace Mosa.Demo.VBEWorld.x86
 
 			if (Display.Initialize())
 			{
-				Log("VBE setup OK!");
+				Log("Graphics setup OK!");
+				Log("<SELFTEST:PASSED>");
+
 				DoGraphics();
 			}
-			else Log("VBE setup ERROR!");
+			else Log("Graphics setup ERROR!");
 		}
 
 		private static void DoGraphics()

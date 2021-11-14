@@ -19,6 +19,9 @@ namespace Mosa.DeviceSystem
 		/// <value>The height.</value>
 		public uint Height { get; }
 
+		/// <summary>Creates a new frame buffer with identical properties.</summary>
+		public IFrameBuffer Clone();
+
 		/// <summary>Gets the pixel.</summary>
 		/// <param name="x">The x.</param>
 		/// <param name="y">The y.</param>

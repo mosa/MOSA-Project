@@ -155,7 +155,7 @@ namespace Mosa.Utility.Launcher
 
 			if (!string.IsNullOrWhiteSpace(LauncherSettings.EmulatorSVGA))
 			{
-				switch (LauncherSettings.EmulatorSerial.ToLowerInvariant())
+				switch (LauncherSettings.EmulatorSVGA.ToLowerInvariant())
 				{
 					case "vmware": arg.Append(" -vga vmware"); break;
 					default: break;

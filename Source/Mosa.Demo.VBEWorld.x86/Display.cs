@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
+using Mosa.DeviceDriver.PCI.VMware;
 using Mosa.Kernel.x86;
 using System;
 using System.Collections.Generic;
@@ -14,22 +15,18 @@ namespace Mosa.Demo.VBEWorld.x86
 
 		private static IFrameBuffer BackFrame { get; set; }
 
+		private static VMwareSVGA2 Driver { get; set; }
+
 		public static int Width { get; private set; }
 
 		public static int Height { get; private set; }
 
 		public static SimpleBitFont DefaultFont;
 
-		public static string CurrentDriver = "VBE";
+		public static string CurrentDriver = "VMWare SVGA II";
 
 		public static bool Initialize()
 		{
-			if (!VBE.IsVBEAvailable)
-				return false;
-
-			Width = VBE.ScreenWidth;
-			Height = VBE.ScreenHeight;
-
 			DefaultFont = new SimpleBitFont(
 				"ArialCustomCharset16",
 				16,
@@ -40,29 +37,16 @@ namespace Mosa.Demo.VBEWorld.x86
 			Utils.Fonts = new List<SimpleBitFont>();
 			Utils.Fonts.Add(DefaultFont);
 
-			uint memorySize = (uint)(Width * Height * (VBE.BitsPerPixel / 8));
+			Width = 640;
+			Height = 480;
 
-			var lfb = DeviceSystem.HAL.GetPhysicalMemory(VBE.MemoryPhysicalLocation, memorySize);
+			Driver = Boot.DeviceService.GetFirstDevice<VMwareSVGA2>().DeviceDriver as VMwareSVGA2;
+			Driver.SetMode((ushort)Width, (ushort)Height);
 
-			DisplayFrame = CreateBuffer(lfb, (uint)Width, (uint)Height, VBE.Pitch, VBE.BitsPerPixel);
-
-			var sfb = DeviceSystem.HAL.AllocateMemory(memorySize, 0);
-
-			BackFrame = CreateBuffer(sfb, (uint)Width, (uint)Height, VBE.Pitch, VBE.BitsPerPixel);
+			DisplayFrame = Driver.FrameBuffer;
+			BackFrame = DisplayFrame.Clone();
 
 			return true;
-		}
-
-		private static IFrameBuffer CreateBuffer(ConstrainedPointer buffer, uint width, uint height, uint bytePerLine, uint bitsPerPixel)
-		{
-			switch (bitsPerPixel)
-			{
-				case 8: return new FrameBuffer8bpp(buffer, width, height, 0, bytePerLine);
-				case 16: return new FrameBuffer16bpp(buffer, width, height, 0, bytePerLine);
-				case 24: return new FrameBuffer24bpp(buffer, width, height, 0, bytePerLine);
-				case 32: return new FrameBuffer32bpp(buffer, width, height, 0, bytePerLine);
-				default: return null;
-			}
 		}
 
 		public static void DrawMosaLogo(int v)
@@ -119,6 +103,7 @@ namespace Mosa.Demo.VBEWorld.x86
 		public static void Update()
 		{
 			DisplayFrame.CopyFrame(BackFrame);
+			Driver.Update();
 		}
 	}
 }
