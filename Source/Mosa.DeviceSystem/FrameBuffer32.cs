@@ -8,7 +8,7 @@ namespace Mosa.DeviceSystem
 {
 	/// <summary>Frame Buffer</summary>
 	/// <seealso cref="Mosa.DeviceSystem.IFrameBuffer" />
-	public sealed class FrameBuffer32 : IFrameBuffer
+	public sealed class FrameBuffer32
 	{
 		/// <summary>The bytes per pixel</summary>
 		private const uint BytesPerPixel = 4;
