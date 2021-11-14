@@ -19,8 +19,19 @@ namespace Mosa.DeviceSystem
 		/// <value>The height.</value>
 		public uint Height { get; }
 
+		/// <summary>The offset</summary>
+		public uint Offset { get; }
+
+		/// <summary>The bytes per line</summary>
+		public uint BytesPerLine { get; }
+
 		/// <summary>Creates a new frame buffer with identical properties.</summary>
 		public IFrameBuffer Clone();
+
+		/// <summary>Gets the offset.</summary>
+		/// <param name="x">The x.</param>
+		/// <param name="y">The y.</param>
+		public uint GetOffset(uint x, uint y);
 
 		/// <summary>Gets the pixel.</summary>
 		/// <param name="x">The x.</param>

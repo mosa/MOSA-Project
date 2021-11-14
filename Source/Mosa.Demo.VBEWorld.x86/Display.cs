@@ -1,7 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
-using Mosa.DeviceDriver.PCI.VMware;
 using Mosa.Kernel.x86;
 using System;
 using System.Collections.Generic;
@@ -12,13 +11,11 @@ namespace Mosa.Demo.VBEWorld.x86
 	public static class Display
 	{
 		private static IFrameBuffer DisplayFrame { get; set; }
-
 		private static IFrameBuffer BackFrame { get; set; }
 
-		private static VMwareSVGA2 Driver { get; set; }
+		private static IGraphicsDevice Driver { get; set; }
 
 		public static int Width { get; private set; }
-
 		public static int Height { get; private set; }
 
 		public static SimpleBitFont DefaultFont;
@@ -40,7 +37,7 @@ namespace Mosa.Demo.VBEWorld.x86
 			Width = 640;
 			Height = 480;
 
-			Driver = Boot.DeviceService.GetFirstDevice<VMwareSVGA2>().DeviceDriver as VMwareSVGA2;
+			Driver = Boot.DeviceService.GetFirstDevice<IGraphicsDevice>().DeviceDriver as IGraphicsDevice;
 			Driver.SetMode((ushort)Width, (ushort)Height);
 
 			DisplayFrame = Driver.FrameBuffer;

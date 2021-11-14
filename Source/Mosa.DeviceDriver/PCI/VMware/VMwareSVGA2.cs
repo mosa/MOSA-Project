@@ -28,7 +28,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 	/// VMware SVGA II Device Driver
 	/// </summary>
 	//[PCIDeviceDriver(VendorID = 0x15AD, DeviceID = 0x0405, Platforms = PlatformArchitecture.X86AndX64)]
-	public class VMwareSVGA2 : BaseDeviceDriver, IPixelGraphicsDevice
+	public class VMwareSVGA2 : BaseDeviceDriver, IGraphicsDevice
 	{
 		#region Definitions
 
@@ -340,84 +340,14 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 		#endregion Definitions
 
-		#region Ports
+		private BaseIOPortReadWrite indexPort, valuePort;
 
-		protected BaseIOPortReadWrite indexPort;
+		private ConstrainedPointer fifo;
 
-		protected BaseIOPortReadWrite valuePort;
+		private IFrameBuffer frameBuffer;
 
-		#endregion Ports
-
-		protected ConstrainedPointer memory;
-
-		protected ConstrainedPointer fifo;
-
-		protected IFrameBuffer frameBuffer;
-
-		public IFrameBuffer FrameBuffer => frameBuffer;
-
-		/// <summary>The width</summary>
-		protected ushort width;
-
-		/// <summary>The height</summary>
-		protected ushort height;
-
-		/// <summary>The version</summary>
-		protected uint version;
-
-		/// <summary>The offset</summary>
-		protected uint offset;
-
-		/// <summary>The video ram size</summary>
-		protected uint videoRamSize;
-
-		/// <summary>The maximum width</summary>
-		protected uint maxWidth;
-
-		/// <summary>The maximum height</summary>
-		protected uint maxHeight;
-
-		/// <summary>The bits per pixel</summary>
-		protected uint bitsPerPixel;
-
-		/// <summary>The bytes per line</summary>
-		protected uint bytesPerLine;
-
-		/// <summary>The red mask</summary>
-		protected uint redMask;
-
-		/// <summary>The green mask</summary>
-		protected uint greenMask;
-
-		/// <summary>The blue mask</summary>
-		protected uint blueMask;
-
-		/// <summary>The alpha mask</summary>
-		protected uint alphaMask;
-
-		/// <summary>The red mask shift</summary>
-		protected byte redMaskShift;
-
-		/// <summary>The green mask shift</summary>
-		protected byte greenMaskShift;
-
-		/// <summary>The blue mask shift</summary>
-		protected byte blueMaskShift;
-
-		/// <summary>The alpha mask shift</summary>
-		protected byte alphaMaskShift;
-
-		/// <summary>The svga capabilities</summary>
-		protected uint svgaCapabilities;
-
-		/// <summary>The frame buffer size</summary>
-		protected uint frameBufferSize;
-
-		/// <summary>The fifo size</summary>
-		protected uint fifoSize;
-
-		/// <summary>The fifo number regs</summary>
-		protected const uint FifoNumRegs = FIFO_REGISTERS.NumRegs;
+		/// <summary>The frame buffer.</summary>
+		public IFrameBuffer FrameBuffer { get => frameBuffer; }
 
 		public override void Initialize()
 		{
@@ -432,33 +362,30 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			Device.Status = DeviceStatus.Available;
 		}
 
-		/// <summary>Gets the version.</summary>
-		protected uint SVGAGetVersion()
-		{
-			WriteRegister(SVGA_REGISTERS.ID, SVGA_VERSION_ID.V2);
-			if (ReadRegister(SVGA_REGISTERS.ID) == SVGA_VERSION_ID.V2) { return SVGA_VERSION_ID.V2; }
-
-			WriteRegister(SVGA_REGISTERS.ID, SVGA_VERSION_ID.V1);
-			if (ReadRegister(SVGA_REGISTERS.ID) == SVGA_VERSION_ID.V1) { return SVGA_VERSION_ID.V1; }
-
-			WriteRegister(SVGA_REGISTERS.ID, SVGA_VERSION_ID.V0);
-			if (ReadRegister(SVGA_REGISTERS.ID) == SVGA_VERSION_ID.V0) { return SVGA_VERSION_ID.V0; }
-
-			return SVGA_VERSION_ID.Invalid;
-		}
-
 		public override void Start()
 		{
-			if (Device.Status != DeviceStatus.Available) { return; }
+			if (Device.Status != DeviceStatus.Available)
+				return;
 
-			version = SVGAGetVersion();
+			uint version = SVGA_VERSION_ID.Invalid;
 
-			if (version == SVGA_VERSION_ID.V1 || version == SVGA_VERSION_ID.V2)
+			WriteRegister(SVGA_REGISTERS.ID, SVGA_VERSION_ID.V2);
+			if (ReadRegister(SVGA_REGISTERS.ID) == SVGA_VERSION_ID.V2)
 			{
+				version = SVGA_VERSION_ID.V2;
 				WriteRegister(SVGA_REGISTERS.GuestID, GUEST_OS.Other); // 0x05010 == GUEST_OS_OTHER (vs GUEST_OS_WIN2000)
-
-				svgaCapabilities = ReadRegister(SVGA_REGISTERS.Capabilities);
 			}
+
+			WriteRegister(SVGA_REGISTERS.ID, SVGA_VERSION_ID.V1);
+			if (ReadRegister(SVGA_REGISTERS.ID) == SVGA_VERSION_ID.V1)
+			{
+				version = SVGA_VERSION_ID.V1;
+				WriteRegister(SVGA_REGISTERS.GuestID, GUEST_OS.Other); // 0x05010 == GUEST_OS_OTHER (vs GUEST_OS_WIN2000)
+			}
+
+			WriteRegister(SVGA_REGISTERS.ID, SVGA_VERSION_ID.V0);
+			if (ReadRegister(SVGA_REGISTERS.ID) == SVGA_VERSION_ID.V0)
+				version = SVGA_VERSION_ID.V0;
 
 			Device.Status = DeviceStatus.Online;
 		}
@@ -468,130 +395,99 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			return false;
 		}
 
-		/// <summary>Sends the command.</summary>
-		/// <param name="command">The command.</param>
-		/// <param name="value">The value.</param>
-		protected void WriteRegister(uint command, uint value)
+		/// <summary>Sets the mode.</summary>
+		/// <param name="width">The width.</param>
+		/// <param name="height">The height.</param>
+		/// <param name="bitsPerPixel">The amount of bits per pixel.</param>
+		public void SetMode(ushort width, ushort height, byte bitsPerPixel = 32)
+		{
+			Disable();
+
+			bitsPerPixel = bitsPerPixel == 0 ? (byte)ReadRegister(SVGA_REGISTERS.HostBitsPerPixel) : bitsPerPixel;
+
+			// Set width, height and bpp
+			WriteRegister(SVGA_REGISTERS.Width, width);
+			WriteRegister(SVGA_REGISTERS.Height, height);
+			WriteRegister(SVGA_REGISTERS.BitsPerPixel, bitsPerPixel);
+
+			Enable();
+
+			// Initialize FIFO
+			uint fifoSize = ReadRegister(SVGA_REGISTERS.MemSize);
+			uint fifoNumRegs = FIFO_REGISTERS.NumRegs * 4;
+
+			fifo = HAL.GetPhysicalMemory(
+				new Pointer(ReadRegister(SVGA_REGISTERS.MemStart)),
+				fifoSize
+			);
+
+			WriteFifoRegister(FIFO_REGISTERS.Min, fifoNumRegs);
+			WriteFifoRegister(FIFO_REGISTERS.Max, fifoSize);
+			WriteFifoRegister(FIFO_REGISTERS.NextCmd, fifoNumRegs);
+			WriteFifoRegister(FIFO_REGISTERS.Stop, fifoNumRegs);
+
+			WriteRegister(SVGA_REGISTERS.ConfigDone, 1);
+
+			// Create frame buffer
+			frameBuffer = new FrameBuffer32(
+				HAL.GetPhysicalMemory(
+					new Pointer(ReadRegister(SVGA_REGISTERS.FrameBufferStart)),
+					ReadRegister(SVGA_REGISTERS.FrameBufferSize)),
+
+				width, height,
+
+				ReadRegister(SVGA_REGISTERS.FrameBufferOffset),
+				ReadRegister(SVGA_REGISTERS.BytesPerLine)
+			);
+		}
+
+		/// <summary>Disables the graphics device.</summary>
+		public void Disable()
+		{
+			WriteRegister(SVGA_REGISTERS.Enable, 0);
+		}
+
+		/// <summary>Enables the graphics device.</summary>
+		public void Enable()
+		{
+			WriteRegister(SVGA_REGISTERS.Enable, 1);
+		}
+
+		/// <summary>Updates the whole screen.</summary>
+		public void Update()
+		{
+			Update(0, 0, FrameBuffer.Width, FrameBuffer.Height);
+		}
+
+		#region Registers
+
+		private void WriteRegister(uint command, uint value)
 		{
 			indexPort.Write32(command);
 			valuePort.Write32(value);
 		}
 
-		/// <summary>Gets the value.</summary>
-		/// <param name="command">The command.</param>
-		/// <returns></returns>
-		protected uint ReadRegister(uint command)
+		private uint ReadRegister(uint command)
 		{
 			indexPort.Write32(command);
 			return valuePort.Read32();
 		}
 
-		/// <summary>Sets the mode.</summary>
-		/// <param name="width">The width.</param>
-		/// <param name="height">The height.</param>
-		/// <param name="bitsPerPixel">
-		/// If bitsPerPixel=0, then HostBitsPerPixel is used automatically.
-		/// If bitsPerPixel!=0, then the requested bitsPerPixel is used.
-		/// </param>
-		public bool SetMode(ushort width, ushort height, byte bitsPerPixel = 0)
-		{
-			Disable();
+		#endregion Registers
 
-			this.width = width;
-			this.height = height;
+		#region FIFO
 
-			if (bitsPerPixel == 0)
-			{
-				// use the host's bits per pixel
-				this.bitsPerPixel = ReadRegister(SVGA_REGISTERS.HostBitsPerPixel);
-			}
-			else
-			{
-				// use the requested bits per pixel
-				this.bitsPerPixel = bitsPerPixel;
-			}
-
-			// set height and width
-			WriteRegister(SVGA_REGISTERS.Width, this.width);
-			WriteRegister(SVGA_REGISTERS.Height, this.height);
-			WriteRegister(SVGA_REGISTERS.BitsPerPixel, this.bitsPerPixel);
-
-			Enable();
-			InitializeFifo();
-
-			frameBufferSize = ReadRegister(SVGA_REGISTERS.FrameBufferSize);
-			memory = HAL.GetPhysicalMemory(new Pointer(ReadRegister(SVGA_REGISTERS.FrameBufferStart)), frameBufferSize);
-
-			videoRamSize = ReadRegister(SVGA_REGISTERS.VRamSize);
-
-			maxWidth = ReadRegister(SVGA_REGISTERS.MaxWidth);
-			maxHeight = ReadRegister(SVGA_REGISTERS.MaxHeight);
-			bytesPerLine = ReadRegister(SVGA_REGISTERS.BytesPerLine);
-
-			redMask = ReadRegister(SVGA_REGISTERS.RedMask);
-			greenMask = ReadRegister(SVGA_REGISTERS.GreenMask);
-			blueMask = ReadRegister(SVGA_REGISTERS.BlueMask);
-
-			redMaskShift = GetColorMaskShift(redMask);
-			greenMaskShift = GetColorMaskShift(greenMask);
-			blueMaskShift = GetColorMaskShift(blueMask);
-			alphaMaskShift = GetColorMaskShift(alphaMask);
-
-			offset = ReadRegister(SVGA_REGISTERS.FrameBufferOffset);
-
-			switch (this.bitsPerPixel)
-			{
-				case 8: frameBuffer = new FrameBuffer8bpp(memory, width, height, offset, bytesPerLine); break;
-				case 16: frameBuffer = new FrameBuffer16bpp(memory, width, height, offset, bytesPerLine); break;
-				case 24: frameBuffer = new FrameBuffer24bpp(memory, width, height, offset, bytesPerLine); break;
-				case 32: frameBuffer = new FrameBuffer32bpp(memory, width, height, offset, bytesPerLine); break;
-				default: return false;
-			}
-
-			return true;
-		}
-
-		protected void Disable()
-		{
-			WriteRegister(SVGA_REGISTERS.Enable, 0);
-		}
-
-		protected void Enable()
-		{
-			WriteRegister(SVGA_REGISTERS.Enable, 1);
-		}
-
-		/// <summary>Initializes the fifo.</summary>
-		protected void InitializeFifo()
-		{
-			fifoSize = ReadRegister(SVGA_REGISTERS.MemSize);
-			fifo = HAL.GetPhysicalMemory(new Pointer(ReadRegister(SVGA_REGISTERS.MemStart)), fifoSize);
-
-			WriteFifoRegister(FIFO_REGISTERS.Min, FifoNumRegs * 4);
-			WriteFifoRegister(FIFO_REGISTERS.Max, fifoSize);
-			WriteFifoRegister(FIFO_REGISTERS.NextCmd, FifoNumRegs * 4);
-			WriteFifoRegister(FIFO_REGISTERS.Stop, FifoNumRegs * 4);
-
-			WriteRegister(SVGA_REGISTERS.ConfigDone, 1);
-		}
-
-		/// <summary>Sets the fifo.</summary>
-		/// <param name="index">The index.</param>
-		/// <param name="value">The value.</param>
-		protected void WriteFifoRegister(uint index, uint value)
+		private void WriteFifoRegister(uint index, uint value)
 		{
 			fifo.Write32(index * 4, value);
 		}
 
-		/// <summary>Gets the fifo.</summary>
-		/// <param name="index">The index.</param>
-		protected uint ReadFifoRegister(uint index)
+		private uint ReadFifoRegister(uint index)
 		{
 			return fifo.Read32(index * 4);
 		}
 
-		/// <summary>Waits for fifo.</summary>
-		protected void WaitForFifo()
+		private void WaitForFifo()
 		{
 			WriteRegister(SVGA_REGISTERS.Sync, 1);
 
@@ -599,9 +495,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 				HAL.Sleep(5);
 		}
 
-		/// <summary>Writes to fifo.</summary>
-		/// <param name="value">The value.</param>
-		protected void WriteToFifo(uint value)
+		private void WriteToFifo(uint value)
 		{
 			if (((ReadFifoRegister(FIFO_REGISTERS.NextCmd) == ReadFifoRegister(FIFO_REGISTERS.Max) - 4) && ReadFifoRegister(FIFO_REGISTERS.Stop) == ReadFifoRegister(FIFO_REGISTERS.Min)) ||
 				(ReadFifoRegister(FIFO_REGISTERS.NextCmd) + 4 == ReadFifoRegister(FIFO_REGISTERS.Stop)))
@@ -614,12 +508,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 				WriteFifoRegister(FIFO_REGISTERS.NextCmd, ReadFifoRegister(FIFO_REGISTERS.Min));
 		}
 
-		protected bool HasFifoCapability(uint Capability)
-		{
-			return (ReadFifoRegister(FIFO_REGISTERS.Capabilities) & Capability) != 0;
-		}
-
-		protected void Update(uint X, uint Y, uint Width, uint Height)
+		private void Update(uint X, uint Y, uint Width, uint Height)
 		{
 			WriteToFifo(FIFO_COMMANDS.Update);
 
@@ -627,17 +516,9 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			WriteToFifo(Y);
 			WriteToFifo(Width);
 			WriteToFifo(Height);
-
-			WaitForFifo();
 		}
 
-		/// <summary>Updates the whole screen.</summary>
-		public void Update()
-		{
-			Update(0, 0, width, height);
-		}
-
-		protected void RectCopy(uint SrcX, uint SrcY, uint DstX, uint DstY, uint Width, uint Height)
+		private void RectCopy(uint SrcX, uint SrcY, uint DstX, uint DstY, uint Width, uint Height)
 		{
 			WriteToFifo(FIFO_COMMANDS.RectCopy);
 
@@ -647,62 +528,8 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			WriteToFifo(DstY);
 			WriteToFifo(Width);
 			WriteToFifo(Height);
-
-			WaitForFifo();
 		}
 
-		/// <summary>Gets the mask shift.</summary>
-		/// <param name="colorMask">The mask.</param>
-		protected byte GetColorMaskShift(uint colorMask)
-		{
-			if (colorMask == 0) { return 0; }
-
-			byte count = 0;
-
-			while ((colorMask & 1) == 0)
-			{
-				count++;
-				colorMask >>= 1;
-			}
-
-			return count;
-		}
-
-		/// <summary>
-		/// Gets the width.
-		/// </summary>
-		/// <returns></returns>
-		public ushort Width { get { return width; } }
-
-		/// <summary>
-		/// Gets the height.
-		/// </summary>
-		/// <returns></returns>
-		public ushort Height { get { return height; } }
-
-		/// <summary>Writes a single pixel.</summary>
-		/// <param name="color">The color.</param>
-		/// <param name="x">The x.</param>
-		/// <param name="y">The y.</param>
-		public void WritePixel(Color color, ushort x, ushort y)
-		{
-			frameBuffer.SetPixel((uint)color.ToArgb(), x, y);
-		}
-
-		/// <summary>Reads a single pixel.</summary>
-		/// <param name="x">The x.</param>
-		/// <param name="y">The y.</param>
-		public Color ReadPixel(ushort x, ushort y)
-		{
-			return Color.FromArgb((int)frameBuffer.GetPixel(x, y));
-		}
-
-		/// <summary>Clears the screen with specified color.</summary>
-		/// <param name="color">The color.</param>
-		public void Clear(Color color)
-		{
-			frameBuffer.FillRectangle((uint)color.ToArgb(), 0, 0, width, height);
-			Update();
-		}
+		#endregion FIFO
 	}
 }
