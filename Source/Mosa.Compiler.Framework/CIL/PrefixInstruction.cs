@@ -22,12 +22,12 @@ namespace Mosa.Compiler.Framework.CIL
 			{
 				switch (OpCode)
 				{
-					case OpCode.PreConstrained: return Prefix.Constrained;
-					case OpCode.PreNo: return Prefix.No;
-					case OpCode.PreReadOnly: return Prefix.ReadOnly;
-					case OpCode.PreTail: return Prefix.Tail;
-					case OpCode.PreUnaligned: return Prefix.Unaligned;
-					case OpCode.PreVolatile: return Prefix.Volatile;
+					case OpCode.Constrained: return Prefix.Constrained;
+					case OpCode.No: return Prefix.No;
+					case OpCode.ReadOnly: return Prefix.ReadOnly;
+					case OpCode.Tailcall : return Prefix.Tail;
+					case OpCode.Unaligned: return Prefix.Unaligned;
+					case OpCode.Volatile: return Prefix.Volatile;
 					default:
 						throw new InvalidOperationException("Unknown prefix instruction codeReader.");
 				}

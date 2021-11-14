@@ -2,7 +2,7 @@
 
 using System.Runtime.CompilerServices;
 
-namespace Mosa.DeviceSystem
+namespace Mosa.DeviceSystem.Service
 {
 	public class DiskDeviceService : BaseService
 	{

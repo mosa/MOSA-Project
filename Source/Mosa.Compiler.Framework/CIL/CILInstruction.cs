@@ -178,12 +178,12 @@ namespace Mosa.Compiler.Framework.CIL
 		public static BaseCILInstruction Not = new NotInstruction(OpCode.Not);
 		public static BaseCILInstruction Or = new BinaryLogicInstruction(OpCode.Or);
 		public static BaseCILInstruction Pop = new PopInstruction(OpCode.Pop);
-		public static BaseCILInstruction PreConstrained = new ConstrainedPrefixInstruction(OpCode.PreConstrained);
-		public static BaseCILInstruction PreNo = new NoPrefixInstruction(OpCode.PreNo);
-		public static BaseCILInstruction PreReadOnly = new ReadOnlyPrefixInstruction(OpCode.PreReadOnly);
-		public static BaseCILInstruction PreTail = new TailPrefixInstruction(OpCode.PreTail);
-		public static BaseCILInstruction PreUnaligned = new UnalignedPrefixInstruction(OpCode.PreUnaligned);
-		public static BaseCILInstruction PreVolatile = new VolatilePrefixInstruction(OpCode.PreVolatile);
+		public static BaseCILInstruction PreConstrained = new ConstrainedPrefixInstruction(OpCode.Constrained);
+		public static BaseCILInstruction PreNo = new NoPrefixInstruction(OpCode.No);
+		public static BaseCILInstruction PreReadOnly = new ReadOnlyPrefixInstruction(OpCode.ReadOnly);
+		public static BaseCILInstruction PreTail = new TailPrefixInstruction(OpCode.Tailcall);
+		public static BaseCILInstruction PreUnaligned = new UnalignedPrefixInstruction(OpCode.Unaligned);
+		public static BaseCILInstruction PreVolatile = new VolatilePrefixInstruction(OpCode.Volatile);
 		public static BaseCILInstruction Refanytype = new RefanytypeInstruction(OpCode.Refanytype);
 		public static BaseCILInstruction Refanyval = new RefanyvalInstruction(OpCode.Refanyval);
 		public static BaseCILInstruction Rem = new RemInstruction(OpCode.Rem);
@@ -679,21 +679,21 @@ namespace Mosa.Compiler.Framework.CIL
 			/* 0x111 */
 			opcodeMap[(int)OpCode.Endfilter] = Endfilter;
 			/* 0x112 */
-			opcodeMap[(int)OpCode.PreUnaligned] = PreUnaligned;
+			opcodeMap[(int)OpCode.Unaligned] = PreUnaligned;
 			/* 0x113 */
-			opcodeMap[(int)OpCode.PreVolatile] = PreVolatile;
+			opcodeMap[(int)OpCode.Volatile] = PreVolatile;
 			/* 0x114 */
-			opcodeMap[(int)OpCode.PreTail] = PreTail;
+			opcodeMap[(int)OpCode.Tailcall] = PreTail;
 			/* 0x115 */
 			opcodeMap[(int)OpCode.InitObj] = InitObj;
 			/* 0x116 */
-			opcodeMap[(int)OpCode.PreConstrained] = PreConstrained;
+			opcodeMap[(int)OpCode.Constrained] = PreConstrained;
 			/* 0x117 */
 			opcodeMap[(int)OpCode.Cpblk] = Cpblk;
 			/* 0x118 */
 			opcodeMap[(int)OpCode.Initblk] = Initblk;
 			/* 0x119 */
-			opcodeMap[(int)OpCode.PreNo] = PreNo;
+			opcodeMap[(int)OpCode.No] = PreNo;
 			/* 0x11A */
 			opcodeMap[(int)OpCode.Rethrow] = Rethrow;
 			/* Opcode 0x11B is undefined */
@@ -702,7 +702,7 @@ namespace Mosa.Compiler.Framework.CIL
 			/* 0x11D */
 			opcodeMap[(int)OpCode.Refanytype] = Refanytype;
 			/* 0x11E */
-			opcodeMap[(int)OpCode.PreReadOnly] = PreReadOnly;
+			opcodeMap[(int)OpCode.ReadOnly] = PreReadOnly;
 
 			return opcodeMap;
 		}
