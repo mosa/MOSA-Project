@@ -15,17 +15,17 @@ namespace Mosa.DeviceSystem
 
 		/// <summary>Gets the width in pixels</summary>
 		/// <value>The width.</value>
-		public uint Width { get; protected set; }
+		public uint Width { get; }
 
 		/// <summary>Gets the height in pixels</summary>
 		/// <value>The height.</value>
-		public uint Height { get; protected set; }
+		public uint Height { get; }
 
 		/// <summary>The offset</summary>
-		protected uint Offset { get; set; }
+		private uint Offset { get; }
 
 		/// <summary>The bytes per line</summary>
-		protected uint BytesPerLine { get; set; }
+		private uint BytesPerLine { get; }
 
 		/// <summary>The memory</summary>
 		public ConstrainedPointer Buffer { get; protected set; }
