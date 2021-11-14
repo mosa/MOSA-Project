@@ -215,17 +215,17 @@ namespace Mosa.Compiler.Framework.CIL
 		Stloc = 0x10E,
 		Localalloc = 0x10F,
 		Endfilter = 0x111,
-		PreUnaligned = 0x112,
-		PreVolatile = 0x113,
-		PreTail = 0x114,
+		Unaligned = 0x112,
+		Volatile = 0x113,
+		Tailcall = 0x114,
 		InitObj = 0x115,
-		PreConstrained = 0x116,
+		Constrained = 0x116,
 		Cpblk = 0x117,
 		Initblk = 0x118,
-		PreNo = 0x119,
+		No = 0x119,
 		Rethrow = 0x11A,
 		Sizeof = 0x11C,
 		Refanytype = 0x11D,
-		PreReadOnly = 0x11E
+		ReadOnly = 0x11E
 	}
 }

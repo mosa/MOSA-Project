@@ -228,11 +228,12 @@ namespace Mosa.Compiler.Framework.Stages
 			var returnType = methodData.Method.Signature.ReturnType;
 
 			// FIXME: Add rational
+			// FUTURE: Relax a bit to allow small value types
 			if (!MosaTypeLayout.CanFitInRegister(returnType) && !returnType.IsUI8 && !returnType.IsR8)
 				return true;
 
 			// FUTURE: Don't hardcode namepsace
-			if (((method.MethodAttributes & MosaMethodAttributes.Public) == MosaMethodAttributes.Public) && method.DeclaringType.BaseType != null && method.DeclaringType.BaseType.Namespace == "Mosa.UnitTests")
+			if (((method.MethodAttributes & MosaMethodAttributes.Public) == MosaMethodAttributes.Public) && method.DeclaringType.BaseType != null && method.DeclaringType.BaseType.Namespace.StartsWith("Mosa.UnitTests"))
 				return true;
 
 			return false;

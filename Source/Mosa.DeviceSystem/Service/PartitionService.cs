@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-namespace Mosa.DeviceSystem
+namespace Mosa.DeviceSystem.Service
 {
 	/// <summary>
 	/// Partition Manager

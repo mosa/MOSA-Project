@@ -1,0 +1,289 @@
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.Runtime;
+using System;
+using System.Drawing;
+
+namespace Mosa.DeviceSystem
+{
+	/// <summary>Frame Buffer</summary>
+	/// <seealso cref="Mosa.DeviceSystem.IFrameBuffer" />
+	public sealed class FrameBuffer32
+	{
+		/// <summary>The bytes per pixel</summary>
+		private const uint BytesPerPixel = 4;
+
+		/// <summary>Gets the width in pixels</summary>
+		/// <value>The width.</value>
+		public uint Width { get; }
+
+		/// <summary>Gets the height in pixels</summary>
+		/// <value>The height.</value>
+		public uint Height { get; }
+
+		/// <summary>The offset</summary>
+		private uint Offset { get; }
+
+		/// <summary>The bytes per line</summary>
+		private uint BytesPerLine { get; }
+
+		/// <summary>The memory</summary>
+		public ConstrainedPointer Buffer { get; protected set; }
+
+		/// <summary>Initializes a new instance of the <see cref="FrameBuffer32bpp"/> class.</summary>
+		/// <param name="buffer">The memory.</param>
+		/// <param name="width">The width.</param>
+		/// <param name="height">The height.</param>
+		/// <param name="offset">The offset.</param>
+		/// <param name="bytesPerLine">The bytes per line.</param>
+		/// <param name="doubleBuffering">Use double buffering. Default: True</param>
+		public FrameBuffer32(ConstrainedPointer buffer, uint width, uint height, uint offset, uint bytesPerLine)
+		{
+			this.Buffer = buffer;
+			this.Width = width;
+			this.Height = height;
+			this.Offset = offset;
+			this.BytesPerLine = bytesPerLine;
+		}
+
+		/// <summary>Gets the offset.</summary>
+		/// <param name="x">The x.</param>
+		/// <param name="y">The y.</param>
+		protected uint GetOffset(uint x, uint y)
+		{
+			return Offset + y * BytesPerLine + x * 4;
+		}
+
+		/// <summary>Sets the pixel.</summary>
+		/// <param name="color"></param>
+		/// <param name="x">The x.</param>
+		/// <param name="y">The y.</param>
+		public void SetPixel(uint color, uint x, uint y)
+		{
+			if (x < 0 || y < 0 || x >= Width || y >= Height)
+				return;
+
+			Buffer.Write32(GetOffset(x, y), color);
+		}
+
+		/// <summary>Gets the pixel.</summary>
+		/// <param name="x">The x.</param>
+		/// <param name="y">The y.</param>
+		/// <returns></returns>
+		public uint GetPixel(uint x, uint y)
+		{
+			if (x < 0 || y < 0 || x >= Width || y >= Height)
+				return 0;
+
+			return Buffer.Read32(GetOffset(x, y));
+		}
+
+		/// <summary>Draws a rectangle with color.</summary>
+		/// <param name="color">The color.</param>
+		/// <param name="x">X of the top left of the rectangle.</param>
+		/// <param name="y">Y of the top left of the rectangle.</param>
+		/// <param name="wi">Width of the rectangle.</param>
+		/// <param name="h">Width of the rectangle.</param>
+		/// <param name="we">Weight of the rectangle.</param>
+		public void DrawRectangle(uint color, uint x, uint y, uint wi, uint h, uint we)
+		{
+			FillRectangle(color, x, y, wi, we);
+
+			FillRectangle(color, x, y, we, h);
+			FillRectangle(color, x + (wi - we), y, we, h);
+
+			FillRectangle(color, x, y + (h - we), wi, we);
+		}
+
+		/// <summary>Fills a rectangle with rounded corners and color.</summary>
+		/// <param name="color">The color.</param>
+		/// <param name="x">X of the top left of the rectangle.</param>
+		/// <param name="y">Y of the top left of the rectangle.</param>
+		/// <param name="w">Width of the rectangle.</param>
+		/// <param name="h">Width of the rectangle.</param>
+		/// <param name="r">Radius of the corners.</param>
+		public void DrawFilledRoundedRectangle(uint color, uint x, uint y, uint w, uint h, uint r)
+		{
+			FillRectangle(color, x + r, y, w - r * 2, h);
+			FillRectangle(color, x, y + r, w, h - r * 2);
+
+			FillCircle(color, x + r, y + r, r);
+			FillCircle(color, x + w - r - 1, y + r, r);
+
+			FillCircle(color, x + r, y + h - r - 1, r);
+			FillCircle(color, x + w - r - 1, y + h - r - 1, r);
+		}
+
+		/// <summary>Draws an image with a transparent color.</summary>
+		/// <param name="image">The image.</param>
+		/// <param name="x">X of the top left of the image.</param>
+		/// <param name="y">Y of the top left of the image.</param>
+		/// <param name="transparentColor">Transparent color, to not draw.</param>
+		public void DrawImage(Image image, uint x, uint y, int transparentColor)
+		{
+			var wi = Math.Clamp(image.Width, 0, Width - x);
+			var he = Math.Clamp(image.Height, 0, Height - y);
+
+			if (x < 0 || y < 0 || x >= Width || y >= Height)
+				return;
+
+			for (int h = 0; h < he; h++)
+			{
+				for (int w = 0; w < wi; w++)
+				{
+					var color = image.GetColor(w, h);
+
+					if (color != transparentColor)
+						SetPixel((uint)color, (uint)(x + w), (uint)(y + h));
+				}
+			}
+		}
+
+		/// <summary>Draws an image with a transparent color.</summary>
+		/// <param name="image">The image.</param>
+		/// <param name="x">X of the top left of the image.</param>
+		/// <param name="y">Y of the top left of the image.</param>
+		public void DrawImage(Image image, uint x, uint y, bool alpha = false)
+		{
+			// Slow, find faster method (maybe?)
+
+			var wi = Math.Clamp(image.Width, 0, Width - x);
+			var he = Math.Clamp(image.Height, 0, Height - y);
+
+			if (x < 0 || y < 0 || x >= Width || y >= Height)
+				return;
+
+			for (int h = 0; h < he; h++)
+			{
+				for (int w = 0; w < wi; w++)
+				{
+					uint xx = (uint)(x + w);
+					uint yy = (uint)(y + h);
+
+					int color = image.GetColor(w, h);
+
+					if (alpha)
+						color = AlphaBlend(xx, yy, color);
+
+					SetPixel((uint)color, xx, yy);
+				}
+			}
+		}
+
+		private int AlphaBlend(uint x, uint y, int color)
+		{
+			// TODO - replace without using the Color class
+
+			var foreground = Color.FromArgb(color);
+			var background = Color.FromArgb((int)GetPixel(x, y));
+
+			int alphac = foreground.A;
+			int inv_alpha = 255 - alphac;
+
+			var newR = (byte)(((foreground.R * alphac + inv_alpha * background.R) >> 8) & 0xFF);
+			var newG = (byte)(((foreground.G * alphac + inv_alpha * background.G) >> 8) & 0xFF);
+			var newB = (byte)(((foreground.B * alphac + inv_alpha * background.B) >> 8) & 0xFF);
+
+			return Color.ToArgb(newR, newG, newB);
+		}
+
+		/// <summary>Fills a rectangle with color.</summary>
+		/// <param name="color">The color.</param>
+		/// <param name="x">X of the top left of the rectangle.</param>
+		/// <param name="y">Y of the top left of the rectangle.</param>
+		/// <param name="w">Width of the rectangle.</param>
+		/// <param name="h">Width of the rectangle.</param>
+		public void FillRectangle(uint color, uint x, uint y, uint w, uint h)
+		{
+			w = Math.Clamp(w, 0, Width - x);
+			h = Math.Clamp(h, 0, Height - y);
+
+			// TODO: Also clamp X and Y
+
+			if (x >= Width || y >= Height)
+				return;
+
+			if (x < 0)
+			{
+				w += x;
+				x = 0;
+			}
+
+			if (y < 0)
+			{
+				h += y;
+				y = 0;
+			}
+
+			uint wb = w * BytesPerPixel;
+			var col = color;
+
+			switch (BytesPerPixel)
+			{
+				case 3: col = (uint)(0xFF000000 | color); break;
+				case 2: col = (ushort)color; break;
+				case 1: col = (byte)color; break;
+
+				default:
+					break;
+			}
+
+			for (int he = 0; he < h; he++)
+				Internal.MemorySet(
+					Buffer.Address + ((Width * (y + he) + x) * BytesPerPixel),
+					col, wb);
+		}
+
+		/* Functions from Cosmos (not all of them are currently there, TODO) */
+
+		/// <summary>Fills a circle with color.</summary>
+		/// <param name="color">The color.</param>
+		/// <param name="x">X of the top left of the circle.</param>
+		/// <param name="y">Y of the top left of the circle.</param>
+		/// <param name="r">Radius of the circle.</param>
+		public void FillCircle(uint color, uint x, uint y, uint r)
+		{
+			if (x < 0 || y < 0 || x >= Width || y >= Height)
+				return;
+
+			uint x1 = r, y1 = 0, xChange = 1 - (r << 1), yChange = 0, radiusError = 0;
+
+			while (x1 >= y1)
+			{
+				for (uint i = x - x1; i <= x + x1; i++)
+				{
+					SetPixel(color, i, y + y1);
+					SetPixel(color, i, y - y1);
+				}
+
+				for (uint i = x - y1; i <= x + y1; i++)
+				{
+					SetPixel(color, i, y + x1);
+					SetPixel(color, i, y - x1);
+				}
+
+				y1++;
+				radiusError += yChange;
+				yChange += 2;
+
+				if (((radiusError << 1) + xChange) > 0)
+				{
+					x1--;
+					radiusError += xChange;
+					xChange += 2;
+				}
+			}
+		}
+
+		public void CopyFrame(IFrameBuffer source)
+		{
+			Internal.MemoryCopy(Buffer.Address, source.Buffer.Address, Buffer.Size);
+		}
+
+		/// <summary>Clears the screen with a specified color.</summary>
+		public void ClearScreen(uint color)
+		{
+			Internal.MemoryClear(Buffer.Address, Buffer.Size, color);
+		}
+	}
+}
