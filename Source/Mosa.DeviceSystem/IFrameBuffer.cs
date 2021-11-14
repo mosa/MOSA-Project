@@ -67,7 +67,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="image">The image.</param>
 		/// <param name="x">X of the top left of the image.</param>
 		/// <param name="y">Y of the top left of the image.</param>
-		public void DrawImage(Image image, uint x, uint y);
+		public void DrawImage(Image image, uint x, uint y, bool alpha = false);
 
 		/// <summary>Fills a circle with color.</summary>
 		/// <param name="color">The color.</param>
