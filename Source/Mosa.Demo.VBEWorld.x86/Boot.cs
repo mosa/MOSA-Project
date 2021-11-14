@@ -6,6 +6,7 @@ using Mosa.Demo.VBEWorld.x86.HAL;
 using Mosa.DeviceDriver;
 using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Service;
 using Mosa.FileSystem.FAT;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;

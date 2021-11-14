@@ -3,7 +3,7 @@
 using Mosa.DeviceSystem.PCI;
 using System.Runtime.CompilerServices;
 
-namespace Mosa.DeviceSystem
+namespace Mosa.DeviceSystem.Service
 {
 	/// <summary>
 	/// PCI Controller Service

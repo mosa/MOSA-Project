@@ -6,6 +6,7 @@ using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceDriver.ScanCodeMap;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
+using Mosa.DeviceSystem.Service;
 using Mosa.FileSystem.FAT;
 using Mosa.Kernel.x86;
 using Mosa.Runtime;

@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.DeviceSystem.Service;
+
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
@@ -9,7 +11,8 @@ namespace Mosa.DeviceSystem
 	{
 		protected Device Device;
 
-		protected DeviceService DeviceService { get { return Device.DeviceService; } }
+		protected DeviceService DeviceService
+		{ get { return Device.DeviceService; } }
 
 		protected object _lock = new object();
 
