@@ -228,7 +228,6 @@ namespace Mosa.Compiler.Framework.Stages
 			var returnType = methodData.Method.Signature.ReturnType;
 
 			// FIXME: Add rational
-			// FUTURE: Relax a bit to allow small value types
 			if (!(returnType.IsVoid || returnType.IsUI8 || returnType.IsR8 || MosaTypeLayout.CanFitInRegister(returnType) || TypeLayout.GetTypeSize(returnType) <= 8))
 				return true;
 
