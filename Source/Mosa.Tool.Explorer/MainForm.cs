@@ -1033,7 +1033,7 @@ namespace Mosa.Tool.Explorer
 			Settings.SetValue("Optimizations.BitTracker", true);
 			Settings.SetValue("Optimizations.Inline", true);
 			Settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);
-			Settings.SetValue("Optimizations.Inline.Explicit", false);
+			Settings.SetValue("Optimizations.Inline.Explicit", true);
 			Settings.SetValue("Optimizations.Inline.Maximum", 12);
 			Settings.SetValue("Optimizations.Basic.Window", 5);
 			Settings.SetValue("Optimizations.LongExpansion", true);
