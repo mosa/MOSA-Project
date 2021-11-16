@@ -20,6 +20,6 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// Draws the string.
 		/// </summary>
-		void DrawString(IFrameBuffer frameBuffer, uint color, uint x, uint y, string text);
+		void DrawString(FrameBuffer32 frameBuffer, uint color, uint x, uint y, string text);
 	}
 }

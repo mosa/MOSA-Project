@@ -7,11 +7,14 @@ using System.Drawing;
 namespace Mosa.DeviceSystem
 {
 	/// <summary>Frame Buffer</summary>
-	/// <seealso cref="Mosa.DeviceSystem.IFrameBuffer" />
+	/// <seealso cref="Mosa.DeviceSystem.FrameBuffer32" />
 	public sealed class FrameBuffer32
 	{
 		/// <summary>The bytes per pixel</summary>
 		private const uint BytesPerPixel = 4;
+
+		/// <summary>The memory</summary>
+		public ConstrainedPointer Buffer { get; }
 
 		/// <summary>Gets the width in pixels</summary>
 		/// <value>The width.</value>
@@ -22,13 +25,10 @@ namespace Mosa.DeviceSystem
 		public uint Height { get; }
 
 		/// <summary>The offset</summary>
-		private uint Offset { get; }
+		public uint Offset { get; }
 
 		/// <summary>The bytes per line</summary>
-		private uint BytesPerLine { get; }
-
-		/// <summary>The memory</summary>
-		public ConstrainedPointer Buffer { get; protected set; }
+		public uint BytesPerLine { get; }
 
 		/// <summary>Initializes a new instance of the <see cref="FrameBuffer32bpp"/> class.</summary>
 		/// <param name="buffer">The memory.</param>
@@ -39,19 +39,25 @@ namespace Mosa.DeviceSystem
 		/// <param name="doubleBuffering">Use double buffering. Default: True</param>
 		public FrameBuffer32(ConstrainedPointer buffer, uint width, uint height, uint offset, uint bytesPerLine)
 		{
-			this.Buffer = buffer;
-			this.Width = width;
-			this.Height = height;
-			this.Offset = offset;
-			this.BytesPerLine = bytesPerLine;
+			Buffer = buffer;
+			Width = width;
+			Height = height;
+			Offset = offset;
+			BytesPerLine = bytesPerLine;
+		}
+
+		/// <summary>Creates a new frame buffer with identical properties.</summary>
+		public FrameBuffer32 Clone()
+		{
+			return new FrameBuffer32(HAL.AllocateMemory(Buffer.Size, 0), Width, Height, Offset, BytesPerLine);
 		}
 
 		/// <summary>Gets the offset.</summary>
 		/// <param name="x">The x.</param>
 		/// <param name="y">The y.</param>
-		protected uint GetOffset(uint x, uint y)
+		public uint GetOffset(uint x, uint y)
 		{
-			return Offset + y * BytesPerLine + x * 4;
+			return Offset + y * BytesPerLine + x * BytesPerPixel;
 		}
 
 		/// <summary>Sets the pixel.</summary>
@@ -128,7 +134,6 @@ namespace Mosa.DeviceSystem
 				return;
 
 			for (int h = 0; h < he; h++)
-			{
 				for (int w = 0; w < wi; w++)
 				{
 					var color = image.GetColor(w, h);
@@ -136,7 +141,6 @@ namespace Mosa.DeviceSystem
 					if (color != transparentColor)
 						SetPixel((uint)color, (uint)(x + w), (uint)(y + h));
 				}
-			}
 		}
 
 		/// <summary>Draws an image with a transparent color.</summary>
@@ -154,7 +158,6 @@ namespace Mosa.DeviceSystem
 				return;
 
 			for (int h = 0; h < he; h++)
-			{
 				for (int w = 0; w < wi; w++)
 				{
 					uint xx = (uint)(x + w);
@@ -167,7 +170,6 @@ namespace Mosa.DeviceSystem
 
 					SetPixel((uint)color, xx, yy);
 				}
-			}
 		}
 
 		private int AlphaBlend(uint x, uint y, int color)
@@ -198,40 +200,15 @@ namespace Mosa.DeviceSystem
 			w = Math.Clamp(w, 0, Width - x);
 			h = Math.Clamp(h, 0, Height - y);
 
-			// TODO: Also clamp X and Y
-
-			if (x >= Width || y >= Height)
+			if (x < 0 || y < 0 || x >= Width || y >= Height)
 				return;
 
-			if (x < 0)
-			{
-				w += x;
-				x = 0;
-			}
-
-			if (y < 0)
-			{
-				h += y;
-				y = 0;
-			}
-
 			uint wb = w * BytesPerPixel;
-			var col = color;
-
-			switch (BytesPerPixel)
-			{
-				case 3: col = (uint)(0xFF000000 | color); break;
-				case 2: col = (ushort)color; break;
-				case 1: col = (byte)color; break;
-
-				default:
-					break;
-			}
 
 			for (int he = 0; he < h; he++)
 				Internal.MemorySet(
 					Buffer.Address + ((Width * (y + he) + x) * BytesPerPixel),
-					col, wb);
+					color, wb);
 		}
 
 		/* Functions from Cosmos (not all of them are currently there, TODO) */
@@ -275,7 +252,7 @@ namespace Mosa.DeviceSystem
 			}
 		}
 
-		public void CopyFrame(IFrameBuffer source)
+		public void CopyFrame(FrameBuffer32 source)
 		{
 			Internal.MemoryCopy(Buffer.Address, source.Buffer.Address, Buffer.Size);
 		}
@@ -283,7 +260,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>Clears the screen with a specified color.</summary>
 		public void ClearScreen(uint color)
 		{
-			Internal.MemoryClear(Buffer.Address, Buffer.Size, color);
+			Internal.MemorySet(Buffer.Address, color, Buffer.Size);
 		}
 	}
 }

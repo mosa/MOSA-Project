@@ -143,6 +143,8 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-video-height", Setting = "Multiboot.Video.Height"},
 				new Argument() { Name = "-video-depth", Setting = "Multiboot.Video.Depth"},
 
+				new Argument() { Name = "-vmware-svga", Setting = "Emulator.SVGA", Value="vmware"},
+
 				new Argument() { Name = "-gdb", Setting = "Launcher.LaunchDebugger", Value="true"},
 				new Argument() { Name = "-gdb-port", Setting = "GDB.Port"},
 				new Argument() { Name = "-gdb-host", Setting = "GDB.Host"},

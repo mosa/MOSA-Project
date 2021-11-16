@@ -35,7 +35,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// Draws the string.
 		/// </summary>
-		public void DrawString(IFrameBuffer frameBuffer, uint color, uint x, uint y, string text)
+		public void DrawString(FrameBuffer32 frameBuffer, uint color, uint x, uint y, string text)
 		{
 			int size8 = Size / 8;
 			var lines = text.Split('\n');
