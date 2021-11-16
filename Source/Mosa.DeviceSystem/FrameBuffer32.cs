@@ -134,6 +134,7 @@ namespace Mosa.DeviceSystem
 				return;
 
 			for (int h = 0; h < he; h++)
+			{
 				for (int w = 0; w < wi; w++)
 				{
 					var color = image.GetColor(w, h);
@@ -141,6 +142,7 @@ namespace Mosa.DeviceSystem
 					if (color != transparentColor)
 						SetPixel((uint)color, (uint)(x + w), (uint)(y + h));
 				}
+			}
 		}
 
 		/// <summary>Draws an image with a transparent color.</summary>
@@ -158,6 +160,7 @@ namespace Mosa.DeviceSystem
 				return;
 
 			for (int h = 0; h < he; h++)
+			{
 				for (int w = 0; w < wi; w++)
 				{
 					uint xx = (uint)(x + w);
@@ -170,6 +173,7 @@ namespace Mosa.DeviceSystem
 
 					SetPixel((uint)color, xx, yy);
 				}
+			}
 		}
 
 		private int AlphaBlend(uint x, uint y, int color)
@@ -206,9 +210,11 @@ namespace Mosa.DeviceSystem
 			uint wb = w * BytesPerPixel;
 
 			for (int he = 0; he < h; he++)
+			{
 				Internal.MemorySet(
 					Buffer.Address + ((Width * (y + he) + x) * BytesPerPixel),
 					color, wb);
+			}
 		}
 
 		/* Functions from Cosmos (not all of them are currently there, TODO) */

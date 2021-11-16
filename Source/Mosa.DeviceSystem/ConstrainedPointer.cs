@@ -2,6 +2,7 @@
 
 using Mosa.Runtime;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace Mosa.DeviceSystem
 {
@@ -31,6 +32,7 @@ namespace Mosa.DeviceSystem
 			this.size = size;
 		}
 
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		private void CheckOffset(uint offset)
 		{
 			if (offset >= size)
@@ -50,6 +52,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <returns></returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public byte Read8(uint offset)
 		{
 			CheckOffset(offset);
@@ -61,6 +64,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <param name="value">The value.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Write8(uint offset, byte value)
 		{
 			CheckOffset(offset);
@@ -72,6 +76,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <returns></returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public ushort Read16(uint offset)
 		{
 			CheckOffset(offset);
@@ -83,6 +88,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <param name="value">The value.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Write16(uint offset, ushort value)
 		{
 			CheckOffset(offset);
@@ -94,6 +100,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <returns></returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public uint Read24(uint offset)
 		{
 			CheckOffset(offset);
@@ -105,6 +112,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <param name="value">The value.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Write24(uint offset, uint value)
 		{
 			CheckOffset(offset);
@@ -117,6 +125,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <returns></returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public uint Read32(uint offset)
 		{
 			CheckOffset(offset);
@@ -128,6 +137,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <param name="value">The value.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public void Write32(uint offset, uint value)
 		{
 			CheckOffset(offset);

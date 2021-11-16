@@ -177,17 +177,17 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemoryCopy(Pointer dest, Pointer src, uint count)
 		{
-			uint count32 = count >> 2;
-			for (uint i = 0; i < count32; i++)
+			var count32 = count >> 2;
+			for (var i = 0; i < count32; i++)
 			{
-				uint value = src.Load32(i << 2);
+				var value = src.Load32(i << 2);
 				dest.Store32(i << 2, value);
 			}
 
-			uint count8 = count & 0x03;
+			var count8 = count & 0x03;
 			for (uint i = 0; i < count8; i++)
 			{
-				byte value = src.Load8(count32 + i);
+				var value = src.Load8(count32 + i);
 				dest.Store8(count32 + i, value);
 			}
 		}
@@ -195,43 +195,55 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemorySet(Pointer dest, byte value, uint count)
 		{
-			uint value32 = (uint)(value << 24 | value << 16 | value << 8 | value << 0);
+			var value32 = (uint)(value << 24 | value << 16 | value << 8 | value << 0);
 
-			uint count32 = count >> 2;
-			for (uint i = 0; i < count32; i++)
+			var count32 = count >> 2;
+			for (var i = 0; i < count32; i++)
+			{
 				dest.Store32(i << 2, value32);
+			}
 
-			uint count8 = count & 0x03;
+			var count8 = count & 0x03;
 			for (uint i = 0; i < count8; i++)
+			{
 				dest.Store8(count32 + i, value);
+			}
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemorySet(Pointer dest, ushort value, uint count)
 		{
-			uint value32 = (uint)(value << 16 | value << 0);
+			var value32 = (uint)(value << 16 | value << 0);
 
-			uint count32 = count >> 1;
-			for (uint i = 0; i < count32; i++)
+			var count32 = count >> 1;
+			for (var i = 0; i < count32; i++)
+			{
 				dest.Store32(i << 1, value32);
+			}
 
-			uint count16 = count & 0x01;
+			var count16 = count & 0x01;
 			for (uint i = 0; i < count16; i++)
+			{
 				dest.Store16(count32 + i, value);
+			}
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemorySet(Pointer dest, uint value, uint count)
 		{
-			for (uint i = 0; i < count; i += 4)
+			for (var i = 0; i < count; i += 4)
+			{
 				dest.Store32(i, value);
+			}
 		}
 
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static void MemoryClear(Pointer dest, uint count, uint value = 0)
 		{
-			for (uint i = 0; i < count; i++)
+			for (var i = 0; i < count; i++)
+			{
 				dest.Store8(i, (byte)value);
+			}
 		}
 
 		#endregion Memory Manipulation
