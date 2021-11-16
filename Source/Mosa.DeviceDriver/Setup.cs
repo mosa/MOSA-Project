@@ -126,8 +126,6 @@ namespace Mosa.DeviceDriver
 					VendorID = 0x15AD,
 					DeviceID = 0x0405,
 					PCIFields = PCIField.VendorID | PCIField.DeviceID,
-
-					AutoStart = false,
 					Factory = delegate { return new PCI.VMware.VMwareSVGA2(); }
 				},
 
