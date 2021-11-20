@@ -19,13 +19,13 @@ namespace Mosa.UnitTests.Optimization
 		[MosaUnitTest(Series = "I4")]
 		public static bool IsOdd2(int a)
 		{
-			return (a % 2) != 1;
+			return (a % 2) == 1;
 		}
 
 		[MosaUnitTest(Series = "U4")]
 		public static bool IsOdd2(uint a)
 		{
-			return (a % 2) != 1;
+			return (a % 2) == 1;
 		}
 
 		[MosaUnitTest(Series = "I4")]
@@ -38,6 +38,19 @@ namespace Mosa.UnitTests.Optimization
 		public static bool IsEven(uint a)
 		{
 			return (a % 2) == 0;
+		}
+
+
+		[MosaUnitTest(Series = "I4")]
+		public static bool IsEven2(int a)
+		{
+			return (a % 2) != 1;
+		}
+
+		[MosaUnitTest(Series = "U4")]
+		public static bool IsEven2(uint a)
+		{
+			return (a % 2) != 1;
 		}
 	}
 }
