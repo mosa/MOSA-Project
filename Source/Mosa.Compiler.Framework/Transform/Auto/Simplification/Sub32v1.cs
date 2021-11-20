@@ -4,14 +4,14 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transform.Auto.Reassociation
+namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 {
 	/// <summary>
-	/// Add64v1
+	/// Sub32v1
 	/// </summary>
-	public sealed class Add64v1 : BaseTransformation
+	public sealed class Sub32v1 : BaseTransformation
 	{
-		public Add64v1() : base(IRInstruction.Add64)
+		public Sub32v1() : base(IRInstruction.Sub32)
 		{
 		}
 
@@ -23,7 +23,43 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Reassociation
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Sub64)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add32)
+				return false;
+
+			if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand2))
+				return false;
+
+			return true;
+		}
+
+		public override void Transform(Context context, TransformContext transformContext)
+		{
+			var result = context.Result;
+
+			var t1 = context.Operand1.Definitions[0].Operand2;
+
+			context.SetInstruction(IRInstruction.Move32, result, t1);
+		}
+	}
+
+	/// <summary>
+	/// Sub32v1_v1
+	/// </summary>
+	public sealed class Sub32v1_v1 : BaseTransformation
+	{
+		public Sub32v1_v1() : base(IRInstruction.Sub32)
+		{
+		}
+
+		public override bool Match(Context context, TransformContext transformContext)
+		{
+			if (!context.Operand1.IsVirtualRegister)
+				return false;
+
+			if (context.Operand1.Definitions.Count != 1)
+				return false;
+
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add32)
 				return false;
 
 			if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2))
@@ -36,45 +72,9 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Reassociation
 		{
 			var result = context.Result;
 
-			var t1 = context.Operand1.Definitions[0].Operand2;
+			var t1 = context.Operand1.Definitions[0].Operand1;
 
-			context.SetInstruction(IRInstruction.Move64, result, t1);
-		}
-	}
-
-	/// <summary>
-	/// Add64v1_v1
-	/// </summary>
-	public sealed class Add64v1_v1 : BaseTransformation
-	{
-		public Add64v1_v1() : base(IRInstruction.Add64)
-		{
-		}
-
-		public override bool Match(Context context, TransformContext transformContext)
-		{
-			if (!context.Operand2.IsVirtualRegister)
-				return false;
-
-			if (context.Operand2.Definitions.Count != 1)
-				return false;
-
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.Sub64)
-				return false;
-
-			if (!AreSame(context.Operand1, context.Operand2.Definitions[0].Operand2))
-				return false;
-
-			return true;
-		}
-
-		public override void Transform(Context context, TransformContext transformContext)
-		{
-			var result = context.Result;
-
-			var t1 = context.Operand1;
-
-			context.SetInstruction(IRInstruction.Move64, result, t1);
+			context.SetInstruction(IRInstruction.Move32, result, t1);
 		}
 	}
 }

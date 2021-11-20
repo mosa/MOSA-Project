@@ -4,14 +4,14 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework.Transform.Auto.Reassociation
+namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 {
 	/// <summary>
-	/// Sub64v1
+	/// Add64v1
 	/// </summary>
-	public sealed class Sub64v1 : BaseTransformation
+	public sealed class Add64v1 : BaseTransformation
 	{
-		public Sub64v1() : base(IRInstruction.Sub64)
+		public Add64v1() : base(IRInstruction.Add64)
 		{
 		}
 
@@ -23,10 +23,10 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Reassociation
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Sub64)
 				return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand1, context.Operand2))
+			if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2))
 				return false;
 
 			return true;
@@ -43,26 +43,26 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Reassociation
 	}
 
 	/// <summary>
-	/// Sub64v1_v1
+	/// Add64v1_v1
 	/// </summary>
-	public sealed class Sub64v1_v1 : BaseTransformation
+	public sealed class Add64v1_v1 : BaseTransformation
 	{
-		public Sub64v1_v1() : base(IRInstruction.Sub64)
+		public Add64v1_v1() : base(IRInstruction.Add64)
 		{
 		}
 
 		public override bool Match(Context context, TransformContext transformContext)
 		{
-			if (!context.Operand1.IsVirtualRegister)
+			if (!context.Operand2.IsVirtualRegister)
 				return false;
 
-			if (context.Operand1.Definitions.Count != 1)
+			if (context.Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.Add64)
+			if (context.Operand2.Definitions[0].Instruction != IRInstruction.Sub64)
 				return false;
 
-			if (!AreSame(context.Operand1.Definitions[0].Operand2, context.Operand2))
+			if (!AreSame(context.Operand1, context.Operand2.Definitions[0].Operand2))
 				return false;
 
 			return true;
@@ -72,7 +72,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Reassociation
 		{
 			var result = context.Result;
 
-			var t1 = context.Operand1.Definitions[0].Operand1;
+			var t1 = context.Operand1;
 
 			context.SetInstruction(IRInstruction.Move64, result, t1);
 		}
