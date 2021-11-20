@@ -360,6 +360,26 @@
 			"Filter": "",
 			"Result": "(IR.Move## b)",
 			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Compare32x##",
+			"SubName": "SwapToZero",
+			"Expression": "IR.Compare32x## {!=} (IR.And## a 1) 1)",
+			"Filter": "",
+			"Result": "(IR.Compare32x## {==} (IR.And## a 1) 0)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Compare64x##",
+			"SubName": "SwapToZero",
+			"Expression": "IR.Compare64x## {!=} (IR.And## a 1) 1)",
+			"Filter": "",
+			"Result": "(IR.Compare64x## {==} (IR.And## a 1) 0)",
+			"Variations": "Yes"
 		}
 	]
 }
