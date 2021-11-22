@@ -10,26 +10,26 @@ namespace Mosa.Demo.VBEWorld.x86.Components
 	{
 		public Image Bitmap;
 
-		public int Width, Height, Bpp;
+		public uint Width, Height, Bpp;
 
-		public VirtualBitmap(int width, int height)
+		public VirtualBitmap(uint width, uint height)
 		{
 			Width = width;
 			Height = height;
 			Bpp = 4;
 
-			Bitmap = new Image(Width, Height);
+			Bitmap = new Image(Width, Height, Bpp);
 		}
 
 		public void Clear(Color color)
 		{
-			Bitmap.Clear(color.ToArgb());
+			Bitmap.Clear((uint)color.ToArgb());
 		}
 
-		public void DrawPoint(int x, int y, Color color)
+		public void DrawPoint(uint x, uint y, Color color)
 		{
 			if (x < Width && y < Height)
-				Bitmap.SetColor(x, y, color.ToArgb());
+				Bitmap.SetColor(x, y, (uint)color.ToArgb());
 		}
 	}
 
@@ -51,7 +51,7 @@ namespace Mosa.Demo.VBEWorld.x86.Components
 
 			Color = color;
 
-			Bitmap = new VirtualBitmap(width, height);
+			Bitmap = new VirtualBitmap((uint)width, (uint)height);
 			Bitmap.Clear(color);
 		}
 
@@ -68,7 +68,7 @@ namespace Mosa.Demo.VBEWorld.x86.Components
 				Mouse.Color = Boot.Invert(Color);
 
 				if (Mouse.State == 0)
-					Bitmap.DrawPoint(Mouse.X, Mouse.Y, Mouse.Color);
+					Bitmap.DrawPoint((uint)Mouse.X, (uint)Mouse.Y, Mouse.Color);
 			}
 			else Mouse.IsOnPaintingArea = false;
 		}

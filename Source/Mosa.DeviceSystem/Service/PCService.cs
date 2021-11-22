@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Runtime;
+using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.DeviceSystem.Service
 {
@@ -14,23 +15,24 @@ namespace Mosa.DeviceSystem.Service
 		/// </summary>
 		protected DeviceService DeviceService;
 
+		private IACPI ACPI;
+
 		/// <summary>
 		/// Initializes this instance.
 		/// </summary>
 		public override void Initialize()
 		{
 			DeviceService = ServiceManager.GetFirstService<DeviceService>();
+			ACPI = DeviceService.GetFirstDevice<IACPI>(DeviceStatus.Online).DeviceDriver as IACPI;
 		}
 
 		public bool Reset()
 		{
-			var acpi = DeviceService.GetFirstDevice<IACPI>(DeviceStatus.Online).DeviceDriver as IACPI;
-
-			if (acpi == null)
+			if (ACPI == null)
 				return false;
 
-			BaseIOPortWrite address = acpi.ResetAddress;
-			byte value = acpi.ResetValue;
+			BaseIOPortWrite address = ACPI.ResetAddress;
+			byte value = ACPI.ResetValue;
 
 			if (address != null)
 			{
@@ -44,10 +46,10 @@ namespace Mosa.DeviceSystem.Service
 
 				// Write to PCI Configuration Space (we're actually writing on the host bridge controller)
 				// TODO: Fix
-				/*var controller = DeviceService.GetFirstDevice<IHostBridgeController>(DeviceStatus.Online).DeviceDriver as IHostBridgeController;
+				var controller = DeviceService.GetFirstDevice<IHostBridgeController>(DeviceStatus.Online).DeviceDriver as IHostBridgeController;
 
 				controller.SetCPUResetInformation((byte)address.Address, value);
-				controller.CPUReset();*/
+				controller.CPUReset();
 
 				return true;
 			}
@@ -57,14 +59,12 @@ namespace Mosa.DeviceSystem.Service
 
 		public bool Shutdown()
 		{
-			var acpi = DeviceService.GetFirstDevice<IACPI>(DeviceStatus.Online).DeviceDriver as IACPI;
-
-			if (acpi == null)
+			if (ACPI == null)
 				return false;
 
-			acpi.PM1aControlBlock.Write16((ushort)(acpi.SLP_TYPa | acpi.SLP_EN));
-			if (acpi.PM1bControlBlock != null)
-				acpi.PM1bControlBlock.Write16((ushort)(acpi.SLP_TYPb | acpi.SLP_EN));
+			ACPI.PM1aControlBlock.Write16((ushort)(ACPI.SLP_TYPa | ACPI.SLP_EN));
+			if (ACPI.PM1bControlBlock != null)
+				ACPI.PM1bControlBlock.Write16((ushort)(ACPI.SLP_TYPb | ACPI.SLP_EN));
 
 			return true;
 		}

@@ -9,9 +9,9 @@ namespace Mosa.DeviceSystem
 			if (data[0] != (byte)'B' || data[1] != (byte)'M')
 				return null;
 
-			var bpp = data[0x1C] / 8;
+			var bpp = (uint)(data[0x1C] / 8);
 
-			if (!(bpp == 3 || bpp == 4))
+			if (bpp != 3 || bpp != 4)
 				return null;
 
 			var stream = new ByteStream(data);
@@ -20,16 +20,14 @@ namespace Mosa.DeviceSystem
 			var height = stream.Read32(0x16);
 			var dataSectionOffset = stream.Read32(0xA);
 
-			var image = new Image(width, height);
+			var image = new Image(width, height, bpp);
 
-			int x = 0;
-			int y = height - 1;
+			uint x = 0;
+			uint y = height - 1;
 
-			for (var i = dataSectionOffset; i < dataSectionOffset + (width * height * bpp); i += bpp)
+			for (var i = dataSectionOffset; i < dataSectionOffset + image.Pixels.Size; i += bpp)
 			{
-				var color = (bpp == 4) ? stream.Read32(i) : (int)(stream.Read24(i) | 0xFF000000); // 32 & 24 bit
-
-				image.SetColor(x, y, color);
+				image.SetColor(x, y, stream.Read32((int)i));
 
 				x++;
 

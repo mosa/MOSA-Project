@@ -24,6 +24,25 @@ using System.Drawing;
 
 namespace Mosa.DeviceDriver.PCI.VMware
 {
+	public struct SVGAFifoCmdDefineCursor
+	{
+		public uint ID; // Reserved, must be zero.
+
+		public uint HotspotX;
+		public uint HotspotY;
+
+		public uint Width;
+		public uint Height;
+
+		public uint AndMaskDepth; // Value must be 1 or equal to BITS_PER_PIXEL
+		public uint XorMaskDepth; // Value must be 1 or equal to BITS_PER_PIXEL
+
+		/*
+		Followed by scanline data for AND mask, then XOR mask.
+		Each scanline is padded to a 32-bit boundary.
+		*/
+	}
+
 	/// <summary>
 	/// VMware SVGA II Device Driver
 	/// </summary>
@@ -75,7 +94,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		 *
 		 * Interrupts are only supported when the
 		 * SVGA_CAP_IRQMASK capability is present.
-         */
+		 */
 
 		internal struct IRQ_FLAGS
 		{
@@ -141,7 +160,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			/* Next 768 (== 256*3) registers exist for colormap */
 			internal const ushort ScratchBase = PaletteBase + NumPaletteRegs; /* Base of scratch registers */
 			/* Next reg[SVGA_REG_SCRATCH_SIZE] registers exist for scratch usage:
-		       First 4 are reserved for VESA BIOS Extension; any remaining are for
+			   First 4 are reserved for VESA BIOS Extension; any remaining are for
 			   the use of the current SVGA driver. */
 
 			internal const byte NumOVerlayUnits = 32;
@@ -382,17 +401,14 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		/// <summary>Sets the mode.</summary>
 		/// <param name="width">The width.</param>
 		/// <param name="height">The height.</param>
-		/// <param name="bitsPerPixel">The amount of bits per pixel.</param>
-		public void SetMode(ushort width, ushort height, byte bitsPerPixel = 32)
+		public void SetMode(ushort width, ushort height)
 		{
 			Disable();
-
-			bitsPerPixel = bitsPerPixel == 0 ? (byte)ReadRegister(SVGA_REGISTERS.HostBitsPerPixel) : bitsPerPixel;
 
 			// Set width, height and bpp
 			WriteRegister(SVGA_REGISTERS.Width, width);
 			WriteRegister(SVGA_REGISTERS.Height, height);
-			WriteRegister(SVGA_REGISTERS.BitsPerPixel, bitsPerPixel);
+			WriteRegister(SVGA_REGISTERS.BitsPerPixel, 32);
 
 			Enable();
 
@@ -443,7 +459,28 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			Update(0, 0, FrameBuffer.Width, FrameBuffer.Height);
 		}
 
-		#region Registers
+		/*public unsafe void DefineCursor(SVGAFifoCmdDefineCursor* info)
+		{
+			uint andPitch = ((info->AndMaskDepth * info->Width + 31) >> 5) << 2;
+			uint andSize = andPitch * info->Height;
+			uint xorPitch = ((info->XorMaskDepth * info->Width + 31) >> 5) << 2;
+			uint xorSize = xorPitch * info->Height;
+
+			SVGAFifoCmdDefineCursor* cmd = 0; // TODO
+			*cmd = *info;
+
+			void** andMask, xorMask;
+			*andMask = (void*)(cmd + 1);
+			*xorMask = (void*)(andSize + (byte*)*andMask);
+
+			// Black
+			*andMask = 0xFFFFFF;
+			*xorMask = (uint)Color.Gray.ToArgb();
+
+			// TODO: Write the pointer to FIFO
+		}*/
+
+		#region Private
 
 		private void WriteRegister(uint command, uint value)
 		{
@@ -474,7 +511,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			return SVGA_VERSION_ID.Invalid;
 		}
 
-		#endregion Registers
+		#endregion Private
 
 		#region FIFO
 

@@ -1,38 +1,46 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
+
 namespace Mosa.DeviceSystem
 {
+	// TODO: Add support for other color depths (8-bit, 16-bit and 24-bit)
 	public class Image
 	{
-		private int[] pixels;
+		public ConstrainedPointer Pixels { get; protected set; }
 
-		public int[] Pixels => pixels;
+		public uint Width { get; protected set; }
+		public uint Height { get; protected set; }
+		public uint BytesPerPixel { get; protected set; }
 
-		public int Width { get; protected set; }
-		public int Height { get; protected set; }
-
-		public Image(int width, int height)
+		public Image(uint width, uint height, uint bytesPerPixel)
 		{
 			Width = width;
 			Height = height;
+			BytesPerPixel = bytesPerPixel;
 
-			pixels = new int[width * height];
+			// Allocates virtual memory
+			Pixels = HAL.AllocateMemory(Width * Height * BytesPerPixel, 0);
 		}
 
-		public int GetColor(int x, int y)
+		private uint GetOffset(uint x, uint y)
 		{
-			return pixels[y * Width + x];
+			return (y * Width + x) * BytesPerPixel;
 		}
 
-		public void SetColor(int x, int y, int color)
+		public uint GetColor(uint x, uint y)
 		{
-			pixels[y * Width + x] = color;
+			return Pixels.Read32(GetOffset(x, y));
 		}
 
-		public void Clear(int color = 0)
+		public void SetColor(uint x, uint y, uint color)
 		{
-			for (int i = 0; i < pixels.Length; i++)
-				pixels[i] = color;
+			Pixels.Write32(GetOffset(x, y), color);
+		}
+
+		public void Clear(uint color = 0)
+		{
+			Internal.MemorySet(Pixels.Address, color, Pixels.Size);
 		}
 	}
 }

@@ -16,19 +16,19 @@ namespace Mosa.DeviceSystem
 			return data[offset];
 		}
 
-		public int Read16(int offset)
+		public ushort Read16(int offset)
 		{
-			return data[offset] | data[offset + 1] << 8;
+			return (ushort)(data[offset] | data[offset + 1] << 8);
 		}
 
-		public int Read24(int offset)
+		public uint Read24(int offset)
 		{
-			return data[offset] | data[offset + 1] << 8 | data[offset + 2] << 16;
+			return (uint)(data[offset] | data[offset + 1] << 8 | data[offset + 2] << 16);
 		}
 
-		public int Read32(int offset)
+		public uint Read32(int offset)
 		{
-			return data[offset] | data[offset + 1] << 8 | data[offset + 2] << 16 | data[offset + 3] << 24;
+			return (uint)(data[offset] | data[offset + 1] << 8 | data[offset + 2] << 16 | data[offset + 3] << 24);
 		}
 	}
 }
