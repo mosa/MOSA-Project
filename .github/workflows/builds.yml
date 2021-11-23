@@ -11,10 +11,10 @@ jobs:
     env:
       BUILD_VERSION: 2.0.0
     steps:
-      - name: Set net6.0
+      - name: Set net5.0
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: '5.0.x'
       - name: Set Build Version
         uses: travisj/build-number-action@v1
         id: mosa-project-build-number
@@ -95,10 +95,10 @@ jobs:
     name: Linux Build
     runs-on: ubuntu-latest
     steps:
-      - name: Set net6.0
+      - name: Set net5.0
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0.x'
+          dotnet-version: '5.0.x'
       - name: Checkout
         uses: actions/checkout@v1
         with:
