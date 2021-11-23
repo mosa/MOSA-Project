@@ -459,6 +459,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			Update(0, 0, FrameBuffer.Width, FrameBuffer.Height);
 		}
 
+		// WIP
 		/*public unsafe void DefineCursor(SVGAFifoCmdDefineCursor* info)
 		{
 			uint andPitch = ((info->AndMaskDepth * info->Width + 31) >> 5) << 2;
