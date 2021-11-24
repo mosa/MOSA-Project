@@ -257,8 +257,7 @@ namespace Mosa.Utility.DebugEngine
 					return;
 
 				if (stream is DebugNetworkStream s)
-					if (!s.DataAvailable)
-						return;
+					while (!s.DataAvailable);
 
 				var bytes = stream.EndRead(ar);
 
