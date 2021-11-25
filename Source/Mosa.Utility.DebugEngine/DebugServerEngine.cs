@@ -37,7 +37,7 @@ namespace Mosa.Utility.DebugEngine
 				if (IsConnected)
 				{
 					if (stream is DebugNetworkStream s)
-						while (!s.DataAvailable);
+						while (IsConnected && !s.DataAvailable);
 
 					stream.BeginRead(receivedData, 0, receivedData.Length, ReadAsyncCallback, null);
 				}
