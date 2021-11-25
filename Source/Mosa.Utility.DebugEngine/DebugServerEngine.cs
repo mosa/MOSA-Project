@@ -45,8 +45,16 @@ namespace Mosa.Utility.DebugEngine
 		{
 			if (stream != null && IsConnected)
 			{
-				if (stream is DebugNetworkStream s && !s.DataAvailable)
-					return;
+				int i = 0, retries = 150;
+
+				if (stream is DebugNetworkStream s)
+					while (!s.DataAvailable)
+					{
+						i++;
+
+						if (i == retries)
+							return;
+					}
 
 				stream.BeginRead(receivedData, 0, receivedData.Length, ReadAsyncCallback, null);
 			}
