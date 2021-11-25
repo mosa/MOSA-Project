@@ -80,6 +80,7 @@ namespace Mosa.Demo.CoolWorld.x86
 			DeviceSystem.Setup.Initialize(hardware, DeviceService.ProcessInterrupt);
 
 			Console.WriteLine("> Registering device drivers...");
+
 			DeviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
 
 			Console.WriteLine("> Starting devices...");

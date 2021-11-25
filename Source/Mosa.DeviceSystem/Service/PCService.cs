@@ -23,11 +23,12 @@ namespace Mosa.DeviceSystem.Service
 		public override void Initialize()
 		{
 			DeviceService = ServiceManager.GetFirstService<DeviceService>();
-			ACPI = DeviceService.GetFirstDevice<IACPI>(DeviceStatus.Online).DeviceDriver as IACPI;
 		}
 
 		public bool Reset()
 		{
+			ACPI = DeviceService.GetFirstDevice<IACPI>(DeviceStatus.Online).DeviceDriver as IACPI;
+
 			if (ACPI == null)
 				return false;
 
@@ -59,6 +60,8 @@ namespace Mosa.DeviceSystem.Service
 
 		public bool Shutdown()
 		{
+			ACPI = DeviceService.GetFirstDevice<IACPI>(DeviceStatus.Online).DeviceDriver as IACPI;
+			
 			if (ACPI == null)
 				return false;
 
