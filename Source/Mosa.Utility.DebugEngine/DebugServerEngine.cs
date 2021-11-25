@@ -258,6 +258,12 @@ namespace Mosa.Utility.DebugEngine
 
 				var bytes = stream.EndRead(ar);
 
+				if (bytes == 0)
+				{
+					stream = null;
+					return;
+				}
+
 				for (int i = 0; i < bytes; i++)
 				{
 					Push(receivedData[i]);
