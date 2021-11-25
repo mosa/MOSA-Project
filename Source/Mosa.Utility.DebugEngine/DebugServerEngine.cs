@@ -33,20 +33,26 @@ namespace Mosa.Utility.DebugEngine
 			set
 			{
 				stream = value;
-
-				if (IsConnected)
-				{
-					if (stream is DebugNetworkStream s)
-						while (IsConnected && !s.DataAvailable);
-
-					stream.BeginRead(receivedData, 0, receivedData.Length, ReadAsyncCallback, null);
-				}
 			}
 		}
 
 		public DebugServerEngine()
 		{
 			stream = null;
+		}
+
+		public void Read()
+		{
+			if (stream != null && IsConnected)
+			{
+				/*if (stream is DebugNetworkStream s)
+					while (IsConnected && !s.DataAvailable);*/
+
+				try
+				{
+					stream.BeginRead(receivedData, 0, receivedData.Length, ReadAsyncCallback, null);
+				} catch {}
+			}
 		}
 
 		public void SetGlobalDispatch(CallBack dispatch)

@@ -412,6 +412,8 @@ namespace Mosa.Utility.UnitTests
 						DebugServerEngine.Stream = pipeStream;
 						break;
 					}
+
+				DebugServerEngine.Read();
 			}
 		}
 
