@@ -33,31 +33,28 @@ namespace Mosa.Utility.DebugEngine
 			set
 			{
 				stream = value;
+
+				if (IsConnected)
+				{
+					int i = 0, retries = 150;
+
+					if (stream is DebugNetworkStream s)
+						while (!s.DataAvailable)
+						{
+							i++;
+
+							if (i == retries)
+								return;
+						}
+
+					stream.BeginRead(receivedData, 0, receivedData.Length, ReadAsyncCallback, null);
+				}
 			}
 		}
 
 		public DebugServerEngine()
 		{
 			stream = null;
-		}
-
-		public void Read()
-		{
-			if (stream != null && IsConnected)
-			{
-				int i = 0, retries = 150;
-
-				if (stream is DebugNetworkStream s)
-					while (!s.DataAvailable)
-					{
-						i++;
-
-						if (i == retries)
-							return;
-					}
-
-				stream.BeginRead(receivedData, 0, receivedData.Length, ReadAsyncCallback, null);
-			}
 		}
 
 		public void SetGlobalDispatch(CallBack dispatch)
