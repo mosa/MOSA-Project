@@ -45,13 +45,10 @@ namespace Mosa.Utility.DebugEngine
 		{
 			if (stream != null && IsConnected)
 			{
-				/*if (stream is DebugNetworkStream s)
-					while (IsConnected && !s.DataAvailable);*/
+				if (stream is DebugNetworkStream s && !s.DataAvailable)
+					return;
 
-				try
-				{
-					stream.BeginRead(receivedData, 0, receivedData.Length, ReadAsyncCallback, null);
-				} catch {}
+				stream.BeginRead(receivedData, 0, receivedData.Length, ReadAsyncCallback, null);
 			}
 		}
 
