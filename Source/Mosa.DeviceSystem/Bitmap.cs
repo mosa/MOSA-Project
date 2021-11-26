@@ -17,7 +17,7 @@ namespace Mosa.DeviceSystem
 			var stream = new ByteStream(data);
 
 			var width = stream.Read32(0x12);
-			vardataSectionOffset height = stream.Read32(0x16);
+			var height = stream.Read32(0x16);
 			var dataSectionOffset = stream.Read32(0xA);
 
 			var image = new Image(width, height, bpp);
