@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 {
 	/// <summary>
-	/// Compare32x64RemUnsigned64Sign
+	/// Compare64x32RemUnsigned
 	/// </summary>
-	public sealed class Compare32x64RemUnsigned64Sign : BaseTransformation
+	public sealed class Compare64x32RemUnsigned : BaseTransformation
 	{
-		public Compare32x64RemUnsigned64Sign() : base(IRInstruction.Compare32x64)
+		public Compare64x32RemUnsigned() : base(IRInstruction.Compare64x32)
 		{
 		}
 
@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.RemUnsigned64)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.RemUnsigned32)
 				return false;
 
 			if (!context.Operand1.Definitions[0].Operand2.IsResolvedConstant)
@@ -52,16 +52,16 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 
 			var c1 = transformContext.CreateConstant(1);
 
-			context.SetInstruction(IRInstruction.And64, result, t1, c1);
+			context.SetInstruction(IRInstruction.And32, result, t1, c1);
 		}
 	}
 
 	/// <summary>
-	/// Compare32x64RemUnsigned64Sign_v1
+	/// Compare64x32RemUnsigned_v1
 	/// </summary>
-	public sealed class Compare32x64RemUnsigned64Sign_v1 : BaseTransformation
+	public sealed class Compare64x32RemUnsigned_v1 : BaseTransformation
 	{
-		public Compare32x64RemUnsigned64Sign_v1() : base(IRInstruction.Compare32x64)
+		public Compare64x32RemUnsigned_v1() : base(IRInstruction.Compare64x32)
 		{
 		}
 
@@ -82,7 +82,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 			if (context.Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.RemUnsigned64)
+			if (context.Operand2.Definitions[0].Instruction != IRInstruction.RemUnsigned32)
 				return false;
 
 			if (!context.Operand2.Definitions[0].Operand2.IsResolvedConstant)
@@ -102,7 +102,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 
 			var c1 = transformContext.CreateConstant(1);
 
-			context.SetInstruction(IRInstruction.And64, result, t1, c1);
+			context.SetInstruction(IRInstruction.And32, result, t1, c1);
 		}
 	}
 }

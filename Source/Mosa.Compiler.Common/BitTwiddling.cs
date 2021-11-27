@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Numerics;
+
 namespace Mosa.Compiler.Common
 {
 	public static class BitTwiddling
@@ -22,66 +24,49 @@ namespace Mosa.Compiler.Common
 			return bits - 1;
 		}
 
-		public static int GetHighestSetBit(ulong value)
+		public static int CountTrailingZeros(ulong value)
 		{
-			int r = 0;
-
-			while (value != 0)
-			{
-				value >>= 1;
-				r++;
-			}
-
-			return r;
+			return BitOperations.TrailingZeroCount(value);
 		}
 
-		public static int GetLowestSetBit(ulong value)
+		public static int CountLeadingZeros(ulong value)
 		{
-			int r = 0;
-
-			while (value != 0)
-			{
-				value <<= 1;
-				r++;
-			}
-
-			return r;
+			return BitOperations.LeadingZeroCount(value);
+		}
+		public static int CountLeadingZeros(uint value)
+		{
+			return BitOperations.LeadingZeroCount(value);
 		}
 
-		public static ulong GetClearBitsOver(ulong value)
+		public static int GetHighestSetBitPosition(ulong value)
 		{
-			var highest = GetHighestSetBit(value);
+			return 64 - BitOperations.LeadingZeroCount(value);
+		}
 
-			if (highest == 32)
+		public static int GetHighestSetBitPosition(uint value)
+		{
+			return 32 - BitOperations.LeadingZeroCount(value);
+		}
+
+		public static ulong GetBitsOver(ulong value)
+		{
+			var count = BitOperations.LeadingZeroCount(value);
+
+			if (count == 0)
 				return 0;
 
-			return ~((1uL << (highest + 1)) - 1uL);
+			return ~((1uL << ((64 - count) + 1)) - 1uL);
 		}
 
-		public static int CountConsecutiveLowestSetBits(ulong value)
+		public static int CountBits(ulong value)
 		{
-			int r = 0;
-
-			while ((value & 1) != 0)
-			{
-				value >>= 1;
-				r++;
-			}
-
-			return r;
+			return BitOperations.PopCount(value);
 		}
 
-		public static int CountConsecutiveHighestSetBits(ulong value)
+		public static int CountBits(uint value)
 		{
-			int r = 0;
-
-			while ((value & (1u << 63)) != 0)
-			{
-				value <<= 1;
-				r++;
-			}
-
-			return r;
+			return BitOperations.PopCount(value);
 		}
+
 	}
 }

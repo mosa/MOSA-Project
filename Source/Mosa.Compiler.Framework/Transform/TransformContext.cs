@@ -110,17 +110,12 @@ namespace Mosa.Compiler.Framework.Transform
 			return VirtualRegisters.Allocate(O);
 		}
 
-		public bool ApplyTransform(Context context, BaseTransformation transformation, List<Operand> virtualRegisters = null)
+		public bool ApplyTransform(Context context, BaseTransformation transformation)
 		{
 			if (!transformation.Match(context, this))
 				return false;
 
 			TraceBefore(context, transformation);
-
-			if (virtualRegisters != null)
-			{
-				CollectVirtualRegisters(context, virtualRegisters);
-			}
 
 			transformation.Transform(context, this);
 
@@ -128,26 +123,6 @@ namespace Mosa.Compiler.Framework.Transform
 
 			return true;
 		}
-
-		#region WorkList
-
-		private static void CollectVirtualRegisters(Context context, List<Operand> virtualRegisters)
-		{
-			if (context.Result != null)
-			{
-				virtualRegisters.AddIfNew(context.Result);
-			}
-			if (context.Result2 != null)
-			{
-				virtualRegisters.AddIfNew(context.Result2);
-			}
-			foreach (var operand in context.Operands)
-			{
-				virtualRegisters.AddIfNew(operand);
-			}
-		}
-
-		#endregion WorkList
 
 		#region Trace
 
@@ -327,6 +302,25 @@ namespace Mosa.Compiler.Framework.Transform
 		public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 		{
 			MethodCompiler.SplitLongOperand(operand, out operandLow, out operandHigh);
+		}
+
+		public BitValue GetBitValue(Operand operand)
+		{
+			var value = operand.BitValue;
+
+			if (value != null)
+				return value;
+
+			if (operand.IsVirtualRegister)
+				return null;
+
+			if (operand.IsReferenceType)
+				if (operand.IsNull)
+					return Is32BitPlatform ? BitValue.Zero32 : BitValue.Zero64;
+				else
+					return Is32BitPlatform ? BitValue.Any32 : BitValue.Any64;
+			else
+				return operand.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
 		}
 	}
 }

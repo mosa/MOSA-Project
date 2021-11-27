@@ -363,14 +363,14 @@ namespace Mosa.Compiler.Framework.Transform
 			return (uint)(a >> 32);
 		}
 
-		protected static ulong GetHighestSetBit(ulong value)
+		protected static uint GetHighestSetBitPosition(ulong value)
 		{
-			return (ulong)BitTwiddling.GetHighestSetBit(value);
+			return (uint)BitTwiddling.GetHighestSetBitPosition(value);
 		}
 
-		protected static ulong GetLowestSetBit(ulong value)
+		protected static uint CountTrailingZeros(ulong value)
 		{
-			return (ulong)BitTwiddling.GetLowestSetBit(value);
+			return (uint)BitTwiddling.CountTrailingZeros(value);
 		}
 
 		protected static uint GetPowerOfTwo(ulong value)

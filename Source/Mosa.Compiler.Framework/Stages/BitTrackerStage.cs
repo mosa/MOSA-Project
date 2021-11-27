@@ -2,6 +2,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Trace;
+using Mosa.Compiler.Framework.Transform;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -28,21 +29,22 @@ namespace Mosa.Compiler.Framework.Stages
 		private TraceLog trace;
 
 		private NodeVisitationDelegate[] visitation = new NodeVisitationDelegate[MaxInstructions];
-		private NodeVisitationDelegate2[] visitation2 = new NodeVisitationDelegate2[MaxInstructions];
 
-		private delegate BitValue NodeVisitationDelegate(InstructionNode node);
+		private delegate BitValue NodeVisitationDelegate(InstructionNode node, TransformContext transformContext);
 
-		private delegate (BitValue, BitValue) NodeVisitationDelegate2(InstructionNode node);
+		private delegate (BitValue, BitValue) NodeVisitationDelegate2(InstructionNode node, TransformContext transformContext);
+
+		private TransformContext TransformContext;
 
 		protected override void Finish()
 		{
 			trace = null;
+			TransformContext = null;
 		}
 
 		protected override void Initialize()
 		{
 			visitation = new NodeVisitationDelegate[MaxInstructions];
-			visitation2 = new NodeVisitationDelegate2[MaxInstructions];
 
 			Register(InstructionsUpdatedCount);
 			Register(InstructionsRemovedCount);
@@ -51,8 +53,8 @@ namespace Mosa.Compiler.Framework.Stages
 			Register(IRInstruction.Phi32, Phi32);
 			Register(IRInstruction.Phi64, Phi64);
 
-			Register(IRInstruction.Move32, MoveInt32);
-			Register(IRInstruction.Move64, MoveInt64);
+			Register(IRInstruction.Move32, Move32);
+			Register(IRInstruction.Move64, Move64);
 
 			Register(IRInstruction.Truncate64x32, Truncate64x32);
 
@@ -126,30 +128,34 @@ namespace Mosa.Compiler.Framework.Stages
 			Register(IRInstruction.NewObject, NewObject);
 			Register(IRInstruction.NewArray, NewArray);
 
+			Register(IRInstruction.DivUnsigned32, DivUnsigned32);
+			Register(IRInstruction.DivUnsigned64, DivUnsigned64);
+
+			// Any result
+
+			Register(IRInstruction.LoadParamSignExtend16x32, Any32);
+			Register(IRInstruction.LoadParamSignExtend16x64, Any64);
+			Register(IRInstruction.LoadParamSignExtend32x64, Any64);
+			Register(IRInstruction.LoadParamSignExtend8x32, Any32);
+			Register(IRInstruction.LoadParamSignExtend8x64, Any64);
+
+			Register(IRInstruction.LoadSignExtend16x32, Any32);
+			Register(IRInstruction.LoadSignExtend16x64, Any64);
+			Register(IRInstruction.LoadSignExtend32x64, Any64);
+			Register(IRInstruction.LoadSignExtend8x32, Any32);
+			Register(IRInstruction.LoadSignExtend8x64, Any64);
+
 			// TODO:
+
+			// DivSigned32	-- if known to be unsigned, then treat like DivUnsigned
+			// DivSigned64	-- if known to be unsigned, then treat like DivUnsigned
+			// RemSigned32	-- if known to be unsigned, then treat like RemUnsigned
+			// RemSigned64	-- if known to be unsigned, then treat like RemUnsigned
 
 			// AddCarryOut32
 			// AddCarryOut64
 			// AddCarryIn32
 			// AddCarryIn64
-
-			// DivUnsigned32
-			// DivUnsigned64
-
-			// LoadParamSignExtend16x32
-			// LoadParamSignExtend16x64
-			// LoadParamSignExtend32x64
-			// LoadParamSignExtend8x32
-			// LoadParamSignExtend8x64
-
-			// LoadSignExtend16x32
-			// LoadSignExtend16x64
-			// LoadSignExtend32x64
-			// LoadSignExtend8x32
-			// LoadSignExtend8x64
-
-			// RemSigned32
-			// RemSigned64
 
 			// Sub32
 			// Sub64
@@ -162,11 +168,6 @@ namespace Mosa.Compiler.Framework.Stages
 		private void Register(BaseInstruction instruction, NodeVisitationDelegate method)
 		{
 			visitation[instruction.ID] = method;
-		}
-
-		private void Register2(BaseInstruction instruction, NodeVisitationDelegate2 method)
-		{
-			visitation2[instruction.ID] = method;
 		}
 
 		protected override void Run()
@@ -182,6 +183,9 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			trace = CreateTraceLog(5);
+
+			TransformContext = new TransformContext(MethodCompiler);
+			TransformContext.SetLogs(trace);
 
 			EvaluateVirtualRegisters();
 
@@ -245,9 +249,56 @@ namespace Mosa.Compiler.Framework.Stages
 
 				foreach (var register in MethodCompiler.VirtualRegisters)
 				{
-					change |= Evaluate(register);
+					change |= Evaluate(register, TransformContext);
 				}
 			}
+		}
+
+		private bool Evaluate(Operand virtualRegister, TransformContext transformContext)
+		{
+			if (virtualRegister.BitValue != null)
+				return false;
+
+			var value = EvaluateBitValue(virtualRegister, transformContext);
+
+			if (value == null)
+				return false;
+
+			virtualRegister.BitValue = value;
+
+			UpdateInstruction(virtualRegister);
+
+			return true;
+		}
+
+		private BitValue EvaluateBitValue(Operand virtualRegister, TransformContext transformContext)
+		{
+			var value = virtualRegister.BitValue;
+
+			if (!IsBitTrackable(virtualRegister))
+				return null;
+
+			if (virtualRegister.Definitions.Count != 1)
+				return Any(virtualRegister, transformContext);
+
+			var node = virtualRegister.Definitions[0];
+
+			Debug.Assert(node.ResultCount != 0);
+
+			if (!IsBitTrackable(node.Result))
+				return Any(virtualRegister, transformContext);
+
+			if (node.Instruction.FlowControl == FlowControl.Call)
+				return Any(virtualRegister, transformContext);
+
+			var method = visitation[node.Instruction.ID];
+
+			if (method == null)
+				return Any(virtualRegister, transformContext);
+
+			value = method.Invoke(node, transformContext);
+
+			return value;
 		}
 
 		private static bool IsBitTrackable(Operand virtualRegister)
@@ -262,69 +313,6 @@ namespace Mosa.Compiler.Framework.Stages
 			//	return true;
 
 			return false;
-		}
-
-		private bool Evaluate(Operand virtualRegister)
-		{
-			// already evaluated
-			if (virtualRegister.BitValue != null)
-				return false;
-
-			if (!IsBitTrackable(virtualRegister))
-				return false;
-
-			if (virtualRegister.Definitions.Count != 1)
-			{
-				virtualRegister.BitValue = Any(virtualRegister);
-				return true;
-			}
-
-			var node = virtualRegister.Definitions[0];
-
-			if (node.ResultCount == 0)
-				return false;
-
-			if (!IsBitTrackable(node.Result))
-			{
-				virtualRegister.BitValue = Any(virtualRegister);
-				return true;
-			}
-
-			if (node.Instruction.FlowControl == FlowControl.Call)
-			{
-				virtualRegister.BitValue = Any(virtualRegister);
-				return true;
-			}
-
-			var method = visitation[node.Instruction.ID];
-
-			if (method == null)
-			{
-				virtualRegister.BitValue = Any(virtualRegister);
-				return true;
-			}
-
-			if (!node.Instruction.IsMemoryRead)
-			{
-				// check dependencies
-				foreach (var operand in node.Operands)
-				{
-					if (!operand.IsVirtualRegister)
-						continue;
-
-					if (!IsBitTrackable(operand))
-						continue;
-
-					if (operand.BitValue == null)
-						return false; // can not evaluate yet
-				}
-			}
-
-			var value = method.Invoke(node);
-			virtualRegister.BitValue = value;
-
-			UpdateInstruction(node.Result, value);
-			return true;
 		}
 
 		private BitValue Any(Operand virtualRegister)
@@ -348,10 +336,37 @@ namespace Mosa.Compiler.Framework.Stages
 			throw new InvalidProgramException();
 		}
 
-		private void UpdateInstruction(Operand virtualRegister, BitValue value)
+		private static BitValue Any(Operand virtualRegister, TransformContext transformContext)
+		{
+			if (virtualRegister.IsInteger)
+				return virtualRegister.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
+			else if (virtualRegister.IsReferenceType || virtualRegister.IsPointer)
+				return transformContext.Is32BitPlatform ? BitValue.Any32 : BitValue.Any64;
+			else if (virtualRegister.IsR4)
+				return BitValue.Any32;
+			else if (virtualRegister.IsR8)
+				return BitValue.Any64;
+
+			//else if (virtualRegister.IsValueType)
+			//{
+			//	if (virtualRegister.FitsNativeSizeRegister)
+			//		return Is32BitPlatform ? BitValue.Any32 : BitValue.Any64;
+			//	else
+			//		return virtualRegister.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
+			//}
+			throw new InvalidProgramException();
+		}
+
+		private void UpdateInstruction(Operand virtualRegister)
 		{
 			Debug.Assert(!virtualRegister.IsFloatingPoint);
-			Debug.Assert(virtualRegister.Definitions.Count == 1);
+
+			//Debug.Assert(virtualRegister.Definitions.Count == 1);
+
+			if (virtualRegister.Definitions.Count != 1)
+				return;
+
+			var value = virtualRegister.BitValue;
 
 			ulong replaceValue;
 
@@ -436,9 +451,13 @@ namespace Mosa.Compiler.Framework.Stages
 
 				Debug.Assert(node.Instruction == IRInstruction.Branch32 || node.Instruction == IRInstruction.Branch64 || node.Instruction == IRInstruction.BranchObject);
 
-				var is32Bit = node.Instruction == IRInstruction.Branch32 || (node.Instruction == IRInstruction.BranchObject && Is32BitPlatform);
+				var value1 = TransformContext.GetBitValue(node.Operand1);
+				var value2 = TransformContext.GetBitValue(node.Operand2);
 
-				var result = EvaluateCompare(node, is32Bit);
+				if (value1 == null || value2 == null)
+					continue;
+
+				var result = EvaluateCompare(value1, value2, node.ConditionCode, TransformContext);
 
 				if (!result.HasValue)
 					continue;
@@ -464,10 +483,10 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private bool? EvaluateCompare(InstructionNode node, bool is32Bit)
+		private static bool? EvaluateCompare(BitValue value1, BitValue value2, ConditionCode condition, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			if (value1 == null || value2 == null)
+				return null;
 
 			//Debug.Assert(value1.Is32Bit == value2.Is32Bit);
 
@@ -487,7 +506,7 @@ namespace Mosa.Compiler.Framework.Stages
 			//var areAnyBitsKnown1 = value1.AreAnyBitsKnown;
 			//var areAnyBitsKnown2 = value2.AreAnyBitsKnown;
 
-			switch (node.ConditionCode)
+			switch (condition)
 			{
 				case ConditionCode.Equal:
 					if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
@@ -499,6 +518,10 @@ namespace Mosa.Compiler.Framework.Stages
 						return true;
 					}
 					else if (((value1.BitsSet & value2.BitsSet) != value1.BitsSet || (value1.BitsClear & value2.BitsClear) != value1.BitsClear) && !value1.AreAnyBitsKnown && !value2.AreAnyBitsKnown)
+					{
+						return false;
+					}
+					else if (((value1.BitsSet & value2.BitsClear) != 0) || ((value2.BitsSet & value1.BitsClear) != 0))
 					{
 						return false;
 					}
@@ -529,6 +552,10 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return true;
 					}
+					else if (((value1.BitsSet & value2.BitsClear) != 0) || ((value2.BitsSet & value1.BitsClear) != 0))
+					{
+						return true;
+					}
 					else if (value1.MaxValue < value2.MinValue)
 					{
 						return true;
@@ -552,7 +579,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return true;
 					}
-					else if (value1.MaxValue < value2.MinValue)
+					else if (value1.MaxValue <= value2.MinValue)
 					{
 						return false;
 					}
@@ -567,11 +594,11 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return true;
 					}
-					else if (value1.MaxValue < value2.MinValue)
+					else if (value2.MinValue > value1.MaxValue)
 					{
 						return true;
 					}
-					else if (value1.MinValue > value2.MaxValue)
+					else if (value2.MaxValue <= value1.MinValue)
 					{
 						return false;
 					}
@@ -591,7 +618,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return true;
 					}
-					else if (value1.MaxValue <= value2.MinValue)
+					else if (value1.MaxValue < value2.MinValue)
 					{
 						return false;
 					}
@@ -607,11 +634,11 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						return true;
 					}
-					else if (value1.MaxValue <= value2.MinValue)
+					else if (value2.MinValue >= value1.MaxValue)
 					{
 						return true;
 					}
-					else if (value1.MinValue >= value2.MaxValue)
+					else if (value2.MaxValue < value1.MinValue)
 					{
 						return false;
 					}
@@ -737,28 +764,15 @@ namespace Mosa.Compiler.Framework.Stages
 			return null;
 		}
 
-		private BitValue GetValue(Operand operand)
-		{
-			var value = operand.BitValue;
-
-			if (value == null)
-				if (operand.IsReferenceType)
-					if (operand.IsNull)
-						return Is32BitPlatform ? BitValue.Zero32 : BitValue.Zero64;
-					else
-						return Is32BitPlatform ? BitValue.Any32 : BitValue.Any64;
-				else
-					return operand.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
-			else
-				return value;
-		}
-
 		#region IR Instructions
 
-		private BitValue Add32(InstructionNode node)
+		private static BitValue Add32(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 == null || value2 == null)
+				return null;
 
 			if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
 			{
@@ -787,7 +801,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return BitValue.CreateValue(
 				bitsSet: 0,
-				bitsClear: Upper32BitsSet | BitTwiddling.GetClearBitsOver(value1.MaxValue + value2.MaxValue),
+				bitsClear: Upper32BitsSet | BitTwiddling.GetBitsOver(value1.MaxValue + value2.MaxValue),
 				maxValue: value1.MaxValue + value2.MaxValue,
 				minValue: value1.MinValue + value2.MinValue,
 				rangeDeterminate: true,
@@ -795,10 +809,13 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue Add64(InstructionNode node)
+		private static BitValue Add64(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 == null || value2 == null)
+				return null;
 
 			if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 			{
@@ -827,7 +844,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return BitValue.CreateValue(
 				bitsSet: 0,
-				bitsClear: BitTwiddling.GetClearBitsOver(value1.MaxValue + value2.MaxValue),
+				bitsClear: BitTwiddling.GetBitsOver(value1.MaxValue + value2.MaxValue),
 				maxValue: value1.MaxValue + value2.MaxValue,
 				minValue: value1.MinValue + value2.MinValue,
 				rangeDeterminate: true,
@@ -835,11 +852,14 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue AddCarryIn32(InstructionNode node)
+		private static BitValue AddCarryIn32(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
-			var value3 = GetValue(node.Operand3);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+			var value3 = transformContext.GetBitValue(node.Operand3);
+
+			if (value1 == null || value2 == null || value3 == null)
+				return null;
 
 			if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown && value3.AreLower32BitsKnown)
 			{
@@ -861,10 +881,13 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.Any32;
 		}
 
-		private BitValue ArithShiftRight32(InstructionNode node)
+		private static BitValue ArithShiftRight32(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 == null || value2 == null)
+				return null;
 
 			var shift = (int)(value2.BitsSet & 0b11111);
 			bool knownSignedBit = ((value1.BitsKnown >> 31) & 1) == 1;
@@ -890,21 +913,24 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				return BitValue.CreateValue(
 					bitsSet: value1.BitsSet >> shift | highbits,
-					bitsClear: (value1.BitsClear >> shift) | ~(uint.MaxValue >> shift) | highbits | Upper32BitsSet,
+					bitsClear: Upper32BitsSet | (value1.BitsClear >> shift) | ~(uint.MaxValue >> shift) | highbits,
 					maxValue: (value1.MaxValue >> shift) | highbits,
 					minValue: (value1.MinValue >> shift) | highbits,
 					rangeDeterminate: true,
 					is32Bit: true
-			);
+				);
 			}
 
 			return BitValue.Any32;
 		}
 
-		private BitValue ArithShiftRight64(InstructionNode node)
+		private static BitValue ArithShiftRight64(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 == null || value2 == null)
+				return null;
 
 			var shift = (int)(value2.BitsSet & 0b111111);
 			bool knownSignedBit = ((value1.BitsKnown >> 63) & 1) == 1;
@@ -935,15 +961,21 @@ namespace Mosa.Compiler.Framework.Stages
 					minValue: (value1.MinValue >> shift) | highbits,
 					rangeDeterminate: true,
 					is32Bit: false
-			);
+				);
 			}
 
 			return BitValue.Any64;
 		}
 
-		private BitValue Compare32x32(InstructionNode node)
+		private static BitValue Compare32x32(InstructionNode node, TransformContext transformContext)
 		{
-			var result = EvaluateCompare(node, true);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 == null || value2 == null)
+				return null;
+
+			var result = EvaluateCompare(value1, value2, node.ConditionCode, transformContext);
 
 			if (!result.HasValue)
 				return BitValue.Any32;
@@ -951,9 +983,15 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.CreateValue(result.Value, true);
 		}
 
-		private BitValue Compare64x32(InstructionNode node)
+		private static BitValue Compare64x32(InstructionNode node, TransformContext transformContext)
 		{
-			var result = EvaluateCompare(node, false);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 == null || value2 == null)
+				return null;
+
+			var result = EvaluateCompare(value1, value2, node.ConditionCode, transformContext);
 
 			if (!result.HasValue)
 				return BitValue.Any32;
@@ -961,9 +999,15 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.CreateValue(result.Value, true);
 		}
 
-		private BitValue Compare64x64(InstructionNode node)
+		private static BitValue Compare64x64(InstructionNode node, TransformContext transformContext)
 		{
-			var result = EvaluateCompare(node, false);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 == null || value2 == null)
+				return null;
+
+			var result = EvaluateCompare(value1, value2, node.ConditionCode, transformContext);
 
 			if (!result.HasValue)
 				return BitValue.Any64;
@@ -971,9 +1015,12 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.CreateValue(result.Value, false);
 		}
 
-		private BitValue GetHigh32(InstructionNode node)
+		private static BitValue GetHigh32(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+
+			if (value1 == null)
+				return null;
 
 			if (value1.AreUpper32BitsKnown)
 			{
@@ -987,7 +1034,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return BitValue.CreateValue(
 				bitsSet: value1.BitsSet >> 32,
-				bitsClear: (value1.BitsClear >> 32) | Upper32BitsSet,
+				bitsClear: Upper32BitsSet | (value1.BitsClear >> 32),
 				maxValue: value1.MaxValue >> 32,
 				minValue: value1.MinValue >> 32,
 				rangeDeterminate: true,
@@ -995,9 +1042,12 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue GetLow32(InstructionNode node)
+		private static BitValue GetLow32(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+
+			if (value1 == null)
+				return null;
 
 			if (value1.AreLower32BitsKnown)
 			{
@@ -1014,7 +1064,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue LoadParamZeroExtend16x32(InstructionNode node)
+		private static BitValue LoadParamZeroExtend16x32(InstructionNode node, TransformContext transformContext)
 		{
 			return BitValue.CreateValue(
 				bitsSet: 0,
@@ -1026,7 +1076,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue LoadParamZeroExtend16x64(InstructionNode node)
+		private static BitValue LoadParamZeroExtend16x64(InstructionNode node, TransformContext transformContext)
 		{
 			return BitValue.CreateValue(
 				bitsSet: 0,
@@ -1038,7 +1088,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue LoadParamZeroExtend8x32(InstructionNode node)
+		private static BitValue LoadParamZeroExtend8x32(InstructionNode node, TransformContext transformContext)
 		{
 			return BitValue.CreateValue(
 				bitsSet: 0,
@@ -1050,7 +1100,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue LoadParamZeroExtend8x64(InstructionNode node)
+		private static BitValue LoadParamZeroExtend8x64(InstructionNode node, TransformContext transformContext)
 		{
 			return BitValue.CreateValue(
 				bitsSet: 0,
@@ -1062,7 +1112,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue LoadParamZeroExtend32x64(InstructionNode node)
+		private static BitValue LoadParamZeroExtend32x64(InstructionNode node, TransformContext transformContext)
 		{
 			return BitValue.CreateValue(
 				bitsSet: 0,
@@ -1074,7 +1124,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue LoadZeroExtend16x32(InstructionNode node)
+		private static BitValue LoadZeroExtend16x32(InstructionNode node, TransformContext transformContext)
 		{
 			return BitValue.CreateValue(
 				bitsSet: 0,
@@ -1086,7 +1136,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue LoadZeroExtend16x64(InstructionNode node)
+		private static BitValue LoadZeroExtend16x64(InstructionNode node, TransformContext transformContext)
 		{
 			return BitValue.CreateValue(
 				bitsSet: 0,
@@ -1098,7 +1148,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue LoadZeroExtend8x32(InstructionNode node)
+		private static BitValue LoadZeroExtend8x32(InstructionNode node, TransformContext transformContext)
 		{
 			return BitValue.CreateValue(
 				bitsSet: 0,
@@ -1110,7 +1160,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue LoadZeroExtend8x64(InstructionNode node)
+		private static BitValue LoadZeroExtend8x64(InstructionNode node, TransformContext transformContext)
 		{
 			return BitValue.CreateValue(
 				bitsSet: 0,
@@ -1122,7 +1172,7 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue LoadZeroExtend32x64(InstructionNode node)
+		private static BitValue LoadZeroExtend32x64(InstructionNode node, TransformContext transformContext)
 		{
 			return BitValue.CreateValue(
 				bitsSet: 0,
@@ -1134,10 +1184,13 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue And32(InstructionNode node)
+		private static BitValue And32(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 == null || value2 == null)
+				return null;
 
 			if (value1.AreLower32BitsKnown && (value1.BitsSet & ulong.MaxValue) == 0)
 			{
@@ -1159,10 +1212,13 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue And64(InstructionNode node)
+		private static BitValue And64(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 == null || value2 == null)
+				return null;
 
 			if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
 			{
@@ -1184,9 +1240,12 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue Not32(InstructionNode node)
+		private static BitValue Not32(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+
+			if (value1 == null)
+				return null;
 
 			if (value1.AreLower32BitsKnown)
 			{
@@ -1204,9 +1263,12 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue Not64(InstructionNode node)
+		private static BitValue Not64(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+
+			if (value1 == null)
+				return null;
 
 			if (value1.AreAll64BitsKnown)
 			{
@@ -1224,20 +1286,33 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue Or32(InstructionNode node)
+		private static BitValue Or32(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
 
-			if (value1.AreLower32BitsKnown && value1.BitsSet32 == uint.MaxValue)
+			if (value1 != null && value1.AreLower32BitsKnown && value1.BitsSet32 == uint.MaxValue)
+			{
+				return value1;
+			}
+
+			if (value2 != null && value2.AreLower32BitsKnown && value2.BitsSet32 == uint.MaxValue)
 			{
 				return value2;
 			}
 
-			if (value2.AreLower32BitsKnown && value1.BitsSet32 == uint.MaxValue)
-			{
-				return value1;
-			}
+			if (value1 == null || value2 == null)
+				return null;
+
+			//if (value1.AreLower32BitsKnown && value1.BitsSet32 == uint.MaxValue)
+			//{
+			//	return value2;
+			//}
+
+			//if (value2.AreLower32BitsKnown && value1.BitsSet32 == uint.MaxValue)
+			//{
+			//	return value1;
+			//}
 
 			return BitValue.CreateValue(
 				bitsSet: value1.BitsSet | value2.BitsSet,
@@ -1249,20 +1324,33 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue Or64(InstructionNode node)
+		private static BitValue Or64(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
 
-			if (value1.AreLower32BitsKnown && (value1.BitsSet & ulong.MaxValue) == ulong.MaxValue)
+			if (value1 != null && value1.AreAll64BitsKnown && value1.BitsSet == ulong.MaxValue)
+			{
+				return value1;
+			}
+
+			if (value2 != null && value2.AreAll64BitsKnown && value2.BitsSet == ulong.MaxValue)
 			{
 				return value2;
 			}
 
-			if (value2.AreLower32BitsKnown && (value1.BitsSet & ulong.MaxValue) == ulong.MaxValue)
-			{
-				return value1;
-			}
+			if (value1 == null || value2 == null)
+				return null;
+
+			//if (value1.AreLower32BitsKnown && (value1.BitsSet & ulong.MaxValue) == ulong.MaxValue)
+			//{
+			//	return value2;
+			//}
+
+			//if (value2.AreLower32BitsKnown && (value1.BitsSet & ulong.MaxValue) == ulong.MaxValue)
+			//{
+			//	return value1;
+			//}
 
 			return BitValue.CreateValue(
 				bitsSet: value1.BitsSet | value2.BitsSet,
@@ -1274,10 +1362,13 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue Xor32(InstructionNode node)
+		private static BitValue Xor32(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 == null || value2 == null)
+				return null;
 
 			if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
 			{
@@ -1296,10 +1387,13 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue Xor64(InstructionNode node)
+		private static BitValue Xor64(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 == null || value2 == null)
+				return null;
 
 			if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 			{
@@ -1318,9 +1412,12 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue MoveInt32(InstructionNode node)
+		private static BitValue Move32(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+
+			if (value1 == null)
+				return null;
 
 			if (value1.AreLower32BitsKnown)
 			{
@@ -1330,32 +1427,48 @@ namespace Mosa.Compiler.Framework.Stages
 			return value1;
 		}
 
-		private BitValue MoveInt64(InstructionNode node)
+		private static BitValue Move64(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+
+			if (value1 == null)
+				return null;
 
 			return value1;
 		}
 
-		private BitValue MulSigned32(InstructionNode node)
+		private static BitValue MulSigned32(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 != null && value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+			{
+				return BitValue.Zero32;
+			}
+
+			if (value2 != null && value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+			{
+				return BitValue.Zero32;
+			}
+
+			if (value1 == null || value2 == null)
+				return null;
 
 			if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
 			{
 				return BitValue.CreateValue((ulong)((int)value1.BitsSet32 * (int)value2.BitsSet32), true);
 			}
 
-			if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
-			{
-				return BitValue.Zero32;
-			}
+			//if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+			//{
+			//	return BitValue.Zero32;
+			//}
 
-			if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
-			{
-				return BitValue.Zero32;
-			}
+			//if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+			//{
+			//	return BitValue.Zero32;
+			//}
 
 			if (value1.AreLower32BitsKnown && value1.BitsSet32 == 1)
 			{
@@ -1381,36 +1494,49 @@ namespace Mosa.Compiler.Framework.Stages
 
 				return BitValue.CreateValue(
 					bitsSet: 0,
-					bitsClear: Upper32BitsSet | BitTwiddling.GetClearBitsOver((uint)(uppermax)),
+					bitsClear: Upper32BitsSet | BitTwiddling.GetBitsOver((uint)(uppermax)),
 					maxValue: (uint)(max * max),
 					minValue: (uint)(min * min),
 					rangeDeterminate: true,
 					is32Bit: true
-			);
+				);
 			}
 
 			return BitValue.Any32;
 		}
 
-		private BitValue MulSigned64(InstructionNode node)
+		private static BitValue MulSigned64(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 != null && value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+			{
+				return BitValue.Zero32;
+			}
+
+			if (value2 != null && value2.AreAll64BitsKnown && value2.BitsSet32 == 0)
+			{
+				return BitValue.Zero32;
+			}
+
+			if (value1 == null || value2 == null)
+				return null;
 
 			if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 			{
 				return BitValue.CreateValue((ulong)((long)value1.BitsSet * (long)value2.BitsSet), false);
 			}
 
-			if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
-			{
-				return BitValue.Zero64;
-			}
+			//if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
+			//{
+			//	return BitValue.Zero64;
+			//}
 
-			if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
-			{
-				return BitValue.Zero64;
-			}
+			//if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
+			//{
+			//	return BitValue.Zero64;
+			//}
 
 			if (value1.AreAll64BitsKnown && value1.BitsSet == 1)
 			{
@@ -1436,7 +1562,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				return BitValue.CreateValue(
 					bitsSet: 0,
-					bitsClear: BitTwiddling.GetClearBitsOver(uppermax),
+					bitsClear: BitTwiddling.GetBitsOver(uppermax),
 					maxValue: max * max,
 					minValue: min * min,
 					rangeDeterminate: false,
@@ -1447,25 +1573,38 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.Any64;
 		}
 
-		private BitValue MulUnsigned32(InstructionNode node)
+		private static BitValue MulUnsigned32(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 != null && value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+			{
+				return BitValue.Zero32;
+			}
+
+			if (value2 != null && value2.AreAll64BitsKnown && value2.BitsSet32 == 0)
+			{
+				return BitValue.Zero32;
+			}
+
+			if (value1 == null || value2 == null)
+				return null;
 
 			if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
 			{
 				return BitValue.CreateValue(value1.BitsSet32 * value2.BitsSet32, true);
 			}
 
-			if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
-			{
-				return BitValue.Zero32;
-			}
+			//if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+			//{
+			//	return BitValue.Zero32;
+			//}
 
-			if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
-			{
-				return BitValue.Zero32;
-			}
+			//if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+			//{
+			//	return BitValue.Zero32;
+			//}
 
 			if (value1.AreLower32BitsKnown && value1.BitsSet32 == 1)
 			{
@@ -1481,7 +1620,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return BitValue.CreateValue(
 				bitsSet: 0,
-				bitsClear: Upper32BitsSet | BitTwiddling.GetClearBitsOver(value1.MaxValue * value2.MaxValue),
+				bitsClear: Upper32BitsSet | BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue),
 				maxValue: (uint)(value1.MaxValue * value2.MaxValue),
 				minValue: (uint)(value1.MinValue * value2.MinValue),
 				rangeDeterminate: !IntegerTwiddling.IsMultiplyOverflow((uint)value1.MaxValue, (uint)value2.MaxValue),
@@ -1489,25 +1628,38 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue MulUnsigned64(InstructionNode node)
+		private static BitValue MulUnsigned64(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 != null && value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+			{
+				return BitValue.Zero32;
+			}
+
+			if (value2 != null && value2.AreAll64BitsKnown && value2.BitsSet32 == 0)
+			{
+				return BitValue.Zero32;
+			}
+
+			if (value1 == null || value2 == null)
+				return null;
 
 			if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 			{
 				return BitValue.CreateValue(value1.BitsSet * value2.BitsSet, false);
 			}
 
-			if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
-			{
-				return BitValue.Zero64;
-			}
+			//if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
+			//{
+			//	return BitValue.Zero64;
+			//}
 
-			if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
-			{
-				return BitValue.Zero64;
-			}
+			//if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
+			//{
+			//	return BitValue.Zero64;
+			//}
 
 			if (value1.AreAll64BitsKnown && value1.BitsSet == 1)
 			{
@@ -1523,7 +1675,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return BitValue.CreateValue(
 				bitsSet: 0,
-				bitsClear: BitTwiddling.GetClearBitsOver(value1.MaxValue * value2.MaxValue),
+				bitsClear: BitTwiddling.GetBitsOver(value1.MaxValue * value2.MaxValue),
 				maxValue: value1.MaxValue * value2.MaxValue,
 				minValue: value1.MinValue * value2.MinValue,
 				rangeDeterminate: !IntegerTwiddling.IsMultiplyOverflow(value1.MaxValue, value2.MaxValue),
@@ -1531,11 +1683,14 @@ namespace Mosa.Compiler.Framework.Stages
 		);
 		}
 
-		private BitValue Phi32(InstructionNode node)
+		private static BitValue Phi32(InstructionNode node, TransformContext transformContext)
 		{
 			Debug.Assert(node.OperandCount != 0);
 
-			var value1 = GetValue(node.Operand1);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+
+			if (value1 == null)
+				return null;
 
 			ulong max = value1.MaxValue;
 			ulong min = value1.MinValue;
@@ -1545,7 +1700,10 @@ namespace Mosa.Compiler.Framework.Stages
 			for (int i = 1; i < node.OperandCount; i++)
 			{
 				var operand = node.GetOperand(i);
-				var value = GetValue(operand);
+				var value = transformContext.GetBitValue(operand);
+
+				if (value == null)
+					return null;
 
 				max = Math.Max(max, value.MaxValue);
 				min = Math.Min(min, value.MinValue);
@@ -1563,11 +1721,14 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue Phi64(InstructionNode node)
+		private static BitValue Phi64(InstructionNode node, TransformContext transformContext)
 		{
 			Debug.Assert(node.OperandCount != 0);
 
-			var value1 = GetValue(node.Operand1);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+
+			if (value1 == null)
+				return null;
 
 			ulong max = value1.MaxValue;
 			ulong min = value1.MinValue;
@@ -1577,7 +1738,10 @@ namespace Mosa.Compiler.Framework.Stages
 			for (int i = 1; i < node.OperandCount; i++)
 			{
 				var operand = node.GetOperand(i);
-				var value = GetValue(operand);
+				var value = transformContext.GetBitValue(operand);
+
+				if (value == null)
+					return null;
 
 				max = Math.Max(max, value.MaxValue);
 				min = Math.Min(min, value.MinValue);
@@ -1595,32 +1759,46 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue RemUnsigned32(InstructionNode node)
+		private static BitValue RemUnsigned32(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
 
-			if (value2.AreLower32BitsKnown && value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+			if (value1 != null && value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+			{
+				return BitValue.Zero32;
+			}
+
+			if (value2 != null && value2.AreLower32BitsKnown && value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
 			{
 				// divide by zero!
-				return BitValue.Any32;
+				return null;
 			}
+
+			if (value1 == null || value2 == null)
+				return null;
+
+			//if (value2.AreLower32BitsKnown && value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+			//{
+			//	// divide by zero!
+			//	return null; // BitValue.Any32;
+			//}
 
 			if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
 			{
 				return BitValue.CreateValue(value1.BitsSet32 % value2.BitsSet32, true);
 			}
 
-			if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
-			{
-				return BitValue.Zero32;
-			}
+			//if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+			//{
+			//	return BitValue.Zero32;
+			//}
 
 			if (value2.AreLower32BitsKnown && value2.BitsSet32 != 0)
 			{
 				return BitValue.CreateValue(
 					bitsSet: 0,
-					bitsClear: BitTwiddling.GetClearBitsOver(value2.BitsSet - 1),
+					bitsClear: BitTwiddling.GetBitsOver(value2.BitsSet - 1),
 					maxValue: value2.BitsSet - 1,
 					minValue: 0,
 					rangeDeterminate: true,
@@ -1631,32 +1809,46 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.Any32;
 		}
 
-		private BitValue RemUnsigned64(InstructionNode node)
+		private static BitValue RemUnsigned64(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
 
-			if (value2.AreAll64BitsKnown && value2.AreAll64BitsKnown && value2.BitsSet32 == 0)
+			if (value1 != null && value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+			{
+				return BitValue.Zero32;
+			}
+
+			if (value2 != null && value2.AreAll64BitsKnown && value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
 			{
 				// divide by zero!
-				return BitValue.Any64;
+				return null;
 			}
+
+			if (value1 == null || value2 == null)
+				return null;
+
+			//if (value2.AreAll64BitsKnown && value2.AreAll64BitsKnown && value2.BitsSet32 == 0)
+			//{
+			//	// divide by zero!
+			//	return null; // BitValue.Any64;
+			//}
 
 			if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 			{
 				return BitValue.CreateValue(value1.BitsSet % value2.BitsSet, true);
 			}
 
-			if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
-			{
-				return BitValue.Zero64;
-			}
+			//if (value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+			//{
+			//	return BitValue.Zero64;
+			//}
 
 			if (value2.AreAll64BitsKnown && value2.BitsSet32 != 0)
 			{
 				return BitValue.CreateValue(
 					bitsSet: 0,
-					bitsClear: BitTwiddling.GetClearBitsOver(value2.BitsSet - 1),
+					bitsClear: BitTwiddling.GetBitsOver(value2.BitsSet - 1),
 					maxValue: value2.BitsSet - 1,
 					minValue: 0,
 					rangeDeterminate: true,
@@ -1667,10 +1859,18 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.Any64;
 		}
 
-		private BitValue ShiftLeft32(InstructionNode node)
+		private static BitValue ShiftLeft32(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 != null && value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+			{
+				return BitValue.Zero32;
+			}
+
+			if (value1 == null || value2 == null)
+				return null;
 
 			var shift = (int)(value2.BitsSet & 0b11111);
 
@@ -1679,10 +1879,10 @@ namespace Mosa.Compiler.Framework.Stages
 				return BitValue.CreateValue(value1.BitsSet32 << shift, true);
 			}
 
-			if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
-			{
-				return BitValue.Zero32;
-			}
+			//if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+			//{
+			//	return BitValue.Zero32;
+			//}
 
 			if (value2.AreLower5BitsKnown && shift == 0)
 			{
@@ -1693,7 +1893,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				return BitValue.CreateValue(
 					bitsSet: value1.BitsSet << shift,
-					bitsClear: value1.BitsClear << shift | ~(ulong.MaxValue << shift) | Upper32BitsSet,
+					bitsClear: Upper32BitsSet | (value1.BitsClear << shift) | ~(ulong.MaxValue << shift),
 					maxValue: value1.MaxValue << shift,
 					minValue: value1.MinValue << shift,
 					rangeDeterminate: true,
@@ -1703,13 +1903,42 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// FUTURE: Using the known highest and lowers bit sequences, the bit sets and ranges can be set and narrower respectively
 
+			if (value1.AreAnyBitsKnown)
+			{
+				var lowest = BitTwiddling.CountTrailingZeros(value1.BitsSet | value1.BitsUnknown);
+
+				// FUTURE: if the value2 has any set bits, the lower bound could be raised
+
+				if (lowest >= 1)
+				{
+					var low = (ulong)(1 << (int)lowest);
+
+					return BitValue.CreateValue(
+						bitsSet: 0,
+						bitsClear: low - 1,
+						maxValue: ulong.MaxValue,
+						minValue: low,
+						rangeDeterminate: true,
+						is32Bit: true
+					);
+				}
+			}
+
 			return BitValue.Any32;
 		}
 
-		private BitValue ShiftLeft64(InstructionNode node)
+		private static BitValue ShiftLeft64(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 != null && value1.AreLower6BitsKnown && value1.BitsSet32 == 0)
+			{
+				return BitValue.Zero32;
+			}
+
+			if (value1 == null || value2 == null)
+				return null;
 
 			var shift = (int)(value2.BitsSet & 0b111111);
 
@@ -1718,10 +1947,10 @@ namespace Mosa.Compiler.Framework.Stages
 				return BitValue.CreateValue(value1.BitsSet32 << shift, false);
 			}
 
-			if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
-			{
-				return BitValue.Zero64;
-			}
+			//if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
+			//{
+			//	return BitValue.Zero64;
+			//}
 
 			if (value2.AreLower6BitsKnown && shift == 0)
 			{
@@ -1757,10 +1986,18 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.Any64;
 		}
 
-		private BitValue ShiftRight32(InstructionNode node)
+		private static BitValue ShiftRight32(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 != null && value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+			{
+				return BitValue.Zero32;
+			}
+
+			if (value1 == null || value2 == null)
+				return null;
 
 			var shift = (int)(value2.BitsSet & 0b11111);
 
@@ -1769,10 +2006,10 @@ namespace Mosa.Compiler.Framework.Stages
 				return BitValue.CreateValue(value1.BitsSet32 >> shift, true);
 			}
 
-			if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
-			{
-				return BitValue.Zero32;
-			}
+			//if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+			//{
+			//	return BitValue.Zero32;
+			//}
 
 			if (value2.AreLower5BitsKnown && shift == 0)
 			{
@@ -1783,7 +2020,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				return BitValue.CreateValue(
 					bitsSet: value1.BitsSet >> shift,
-					bitsClear: (value1.BitsClear >> shift) | ~(uint.MaxValue >> shift) | Upper32BitsSet,
+					bitsClear: Upper32BitsSet | (value1.BitsClear >> shift) | ~(uint.MaxValue >> shift),
 					maxValue: value1.MaxValue >> shift,
 					minValue: value1.MinValue >> shift,
 					rangeDeterminate: true,
@@ -1810,10 +2047,18 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.Any32;
 		}
 
-		private BitValue ShiftRight64(InstructionNode node)
+		private static BitValue ShiftRight64(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 != null && value1.AreLower6BitsKnown && value1.BitsSet32 == 0)
+			{
+				return BitValue.Zero32;
+			}
+
+			if (value1 == null || value2 == null)
+				return null;
 
 			var shift = (int)(value2.BitsSet & 0b111111);
 
@@ -1822,10 +2067,10 @@ namespace Mosa.Compiler.Framework.Stages
 				return BitValue.CreateValue(value1.BitsSet >> shift, false);
 			}
 
-			if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
-			{
-				return BitValue.Zero64;
-			}
+			//if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
+			//{
+			//	return BitValue.Zero64;
+			//}
 
 			if (value2.AreLower6BitsKnown && shift == 0)
 			{
@@ -1875,9 +2120,12 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.Any64;
 		}
 
-		private BitValue SignExtend16x32(InstructionNode node)
+		private static BitValue SignExtend16x32(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+
+			if (value1 == null)
+				return null;
 
 			if (value1.AreLower16BitsKnown)
 			{
@@ -1910,9 +2158,12 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue SignExtend16x64(InstructionNode node)
+		private static BitValue SignExtend16x64(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+
+			if (value1 == null)
+				return null;
 
 			if (value1.AreLower16BitsKnown)
 			{
@@ -1945,9 +2196,12 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue SignExtend32x64(InstructionNode node)
+		private static BitValue SignExtend32x64(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+
+			if (value1 == null)
+				return null;
 
 			if (value1.AreLower32BitsKnown)
 			{
@@ -1980,9 +2234,12 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue SignExtend8x32(InstructionNode node)
+		private static BitValue SignExtend8x32(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+
+			if (value1 == null)
+				return null;
 
 			if (value1.AreLower8BitsKnown)
 			{
@@ -2015,9 +2272,12 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue SignExtend8x64(InstructionNode node)
+		private static BitValue SignExtend8x64(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+
+			if (value1 == null)
+				return null;
 
 			if (value1.AreLower8BitsKnown)
 			{
@@ -2050,10 +2310,13 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue To64(InstructionNode node)
+		private static BitValue To64(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
-			var value2 = GetValue(node.Operand2);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 == null || value2 == null)
+				return null;
 
 			if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
 			{
@@ -2070,13 +2333,16 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue Truncate64x32(InstructionNode node)
+		private static BitValue Truncate64x32(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+
+			if (value1 == null)
+				return null;
 
 			return BitValue.CreateValue(
 				bitsSet: value1.BitsSet,
-				bitsClear: value1.BitsClear | Upper32BitsSet,
+				bitsClear: Upper32BitsSet | value1.BitsClear,
 				maxValue: value1.MaxValue & uint.MaxValue,
 				minValue: value1.MinValue & uint.MaxValue,
 				rangeDeterminate: true,
@@ -2084,9 +2350,12 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue ZeroExtend16x32(InstructionNode node)
+		private static BitValue ZeroExtend16x32(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+
+			if (value1 == null)
+				return null;
 
 			if (value1.AreLower16BitsKnown)
 			{
@@ -2103,14 +2372,17 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue ZeroExtend16x64(InstructionNode node)
+		private static BitValue ZeroExtend16x64(InstructionNode node, TransformContext transformContext)
 		{
-			return ZeroExtend16x32(node);
+			return ZeroExtend16x32(node, transformContext);
 		}
 
-		private BitValue ZeroExtend32x64(InstructionNode node)
+		private static BitValue ZeroExtend32x64(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+
+			if (value1 == null)
+				return null;
 
 			if (value1.AreLower32BitsKnown)
 			{
@@ -2119,7 +2391,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return BitValue.CreateValue(
 				bitsSet: value1.BitsSet32,
-				bitsClear: value1.BitsClear | Upper32BitsSet,
+				bitsClear: Upper32BitsSet | value1.BitsClear,
 				maxValue: value1.MaxValue & uint.MaxValue,
 				minValue: value1.MinValue & uint.MaxValue,
 				rangeDeterminate: true,
@@ -2127,9 +2399,12 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue ZeroExtend8x32(InstructionNode node)
+		private static BitValue ZeroExtend8x32(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand1);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+
+			if (value1 == null)
+				return null;
 
 			if (value1.AreLower8BitsKnown)
 			{
@@ -2146,15 +2421,18 @@ namespace Mosa.Compiler.Framework.Stages
 			);
 		}
 
-		private BitValue ZeroExtend8x64(InstructionNode node)
+		private static BitValue ZeroExtend8x64(InstructionNode node, TransformContext transformContext)
 		{
-			return ZeroExtend8x32(node);
+			return ZeroExtend8x32(node, transformContext);
 		}
 
-		private BitValue IfThenElse32(InstructionNode node)
+		private static BitValue IfThenElse32(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand2);
-			var value2 = GetValue(node.Operand3);
+			var value1 = transformContext.GetBitValue(node.Operand2);
+			var value2 = transformContext.GetBitValue(node.Operand3);
+
+			if (value1 == null || value2 == null)
+				return null;
 
 			if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown)
 			{
@@ -2171,10 +2449,13 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.Any32;
 		}
 
-		private BitValue IfThenElse64(InstructionNode node)
+		private static BitValue IfThenElse64(InstructionNode node, TransformContext transformContext)
 		{
-			var value1 = GetValue(node.Operand2);
-			var value2 = GetValue(node.Operand3);
+			var value1 = transformContext.GetBitValue(node.Operand2);
+			var value2 = transformContext.GetBitValue(node.Operand3);
+
+			if (value1 == null || value2 == null)
+				return null;
 
 			if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown)
 			{
@@ -2191,19 +2472,113 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.Any64;
 		}
 
-		private BitValue NewString(InstructionNode node)
+		private static BitValue NewString(InstructionNode node, TransformContext transformContext)
 		{
-			return Is32BitPlatform ? BitValue.AnyExceptZero32 : BitValue.AnyExceptZero64;
+			return transformContext.Is32BitPlatform ? BitValue.AnyExceptZero32 : BitValue.AnyExceptZero64;
 		}
 
-		private BitValue NewObject(InstructionNode node)
+		private static BitValue NewObject(InstructionNode node, TransformContext transformContext)
 		{
-			return Is32BitPlatform ? BitValue.AnyExceptZero32 : BitValue.AnyExceptZero64;
+			return transformContext.Is32BitPlatform ? BitValue.AnyExceptZero32 : BitValue.AnyExceptZero64;
 		}
 
-		private BitValue NewArray(InstructionNode node)
+		private static BitValue NewArray(InstructionNode node, TransformContext transformContext)
 		{
-			return Is32BitPlatform ? BitValue.AnyExceptZero32 : BitValue.AnyExceptZero64;
+			return transformContext.Is32BitPlatform ? BitValue.AnyExceptZero32 : BitValue.AnyExceptZero64;
+		}
+
+		private static BitValue DivUnsigned32(InstructionNode node, TransformContext transformContext)
+		{
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 != null && value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+			{
+				return BitValue.Zero32;
+			}
+
+			if (value1 == null || value2 == null)
+				return null;
+
+			if (value1.AreLower32BitsKnown && value2.AreLower32BitsKnown && value2.BitsSet32 != 0)
+			{
+				return BitValue.CreateValue(value1.BitsSet32 / value2.BitsSet32, true);
+			}
+
+			if (value2.AreLower32BitsKnown && value2.BitsSet32 == 0)
+			{
+				// divide by zero!
+				return null; // BitValue.Any64;
+			}
+
+			//if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
+			//{
+			//	return BitValue.Zero32;
+			//}
+
+			return BitValue.CreateValue(
+				bitsSet: 0,
+				bitsClear: Upper32BitsSet | BitTwiddling.GetBitsOver(value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue),
+				maxValue: value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue,
+				minValue: value2.MaxValue == 0 ? 0 : value1.MinValue / value2.MaxValue,
+				rangeDeterminate: true,
+				is32Bit: true
+			);
+		}
+
+		private static BitValue DivUnsigned64(InstructionNode node, TransformContext transformContext)
+		{
+			var value1 = transformContext.GetBitValue(node.Operand1);
+			var value2 = transformContext.GetBitValue(node.Operand2);
+
+			if (value1 != null && value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
+			{
+				return BitValue.Zero32;
+			}
+
+			if (value2 != null && value2.AreAll64BitsKnown && value2.BitsSet == 0)
+			{
+				// divide by zero!
+				return null; // BitValue.Any64;
+			}
+
+			if (value1 == null || value2 == null)
+				return null;
+
+			if (value1.AreAll64BitsKnown && value2.AreAll64BitsKnown && value2.BitsSet32 != 0)
+			{
+				return BitValue.CreateValue(value1.BitsSet / value2.BitsSet, true);
+			}
+
+			//if (value2.AreAll64BitsKnown && value2.BitsSet == 0)
+			//{
+			//	// divide by zero!
+			//	return null; // BitValue.Any64;
+			//}
+
+			//if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
+			//{
+			//	return BitValue.Zero64;
+			//}
+
+			return BitValue.CreateValue(
+				bitsSet: 0,
+				bitsClear: BitTwiddling.GetBitsOver(value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue),
+				maxValue: value2.MinValue == 0 ? value1.MaxValue : value1.MaxValue / value2.MinValue,
+				minValue: value2.MaxValue == 0 ? 0 : value1.MinValue / value2.MaxValue,
+				rangeDeterminate: true,
+				is32Bit: false
+			);
+		}
+
+		private static BitValue Any32(InstructionNode node, TransformContext transformContext)
+		{
+			return BitValue.Any64;
+		}
+
+		private static BitValue Any64(InstructionNode node, TransformContext transformContext)
+		{
+			return BitValue.Any64;
 		}
 
 		#endregion IR Instructions

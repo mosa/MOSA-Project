@@ -170,7 +170,7 @@
 		<Content Include="bug.ico" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="dnlib" Version="3.3.4" />
+		<PackageReference Include="dnlib" Version="3.3.5" />
 	</ItemGroup>
 	<ItemGroup>
 		<Compile Remove="DebugVMImageWindow.cs" />
