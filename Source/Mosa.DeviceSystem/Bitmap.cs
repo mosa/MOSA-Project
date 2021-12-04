@@ -23,7 +23,8 @@ namespace Mosa.DeviceSystem
 			var image = new Image(width, height, bytesPerPixel);
 
 			// TODO: Support for other color depths
-			for (var y = height - 1; y > 0; y--)
+			var y = height - 1;
+			do
 			{
 				for (uint x = 0; x < width - 1; x++)
 				{
@@ -35,7 +36,9 @@ namespace Mosa.DeviceSystem
 
 				if (bytesPerPixel == 3 && width * bytesPerPixel % 4 > 0)
 					dataSectionOffset += 4;
-			}
+
+				y--;
+			} while (y > 0);
 
 			return image;
 		}
