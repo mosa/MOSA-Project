@@ -23,7 +23,7 @@
 [github-issues-link]: https://github.com/mosa/MOSA-Project/issues
 [github-license-link]: https://raw.githubusercontent.com/mosa/MOSA-Project/master/LICENSE.txt
 [discord-image]: https://img.shields.io/badge/Chat-On%20Discord%20-blue.svg
-[discord-chat]: https://discord.com/channels/881374816052068362/881374816052068365
+[discord-chat]: https://discord.gg/tRNMn3npsv
 [source-image]: https://img.shields.io/badge/Source%20Code-GitHub%20Repository-yellow.svg
 [source-target]: https://github.com/mosa/MOSA-Project
 
