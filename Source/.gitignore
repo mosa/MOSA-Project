@@ -6,3 +6,4 @@
 *.CodeAnalysisLog.xml
 *.lastcodeanalysissucceeded
 /TestResults
+/.idea
