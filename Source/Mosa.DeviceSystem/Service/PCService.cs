@@ -2,7 +2,7 @@
 
 using Mosa.Runtime;
 
-namespace Mosa.DeviceSystem
+namespace Mosa.DeviceSystem.Service
 {
 	/// <summary>
 	/// PC Service

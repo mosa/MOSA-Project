@@ -23,7 +23,8 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		#region Stack classes
 
-		private enum StackType { Int32, Int64, R4, R8, ManagedPointer, Object, ValueType };
+		private enum StackType
+		{ Int32, Int64, R4, R8, ManagedPointer, Object, ValueType };
 
 		private class StackEntry
 		{
@@ -47,6 +48,32 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion Stack classes
 
+		private class PrefixValues
+		{
+			public bool Unaligned { get; set; } = false; // ldind, stind, ldfld, stfld, ldobj, stobj, initblk, or cpblk
+			public bool Volatile { get; set; } = false; // Ldsfld and Stsfld
+			public bool Tailcall { get; set; } = false; // Call, Calli, or Callvirt
+			public bool Constrained { get; set; } = false; // callvirt
+			public bool Readonly { get; set; } = false; // ldelema
+			public bool NoTypeCheck { get; set; } = false;
+			public bool NoRangeCheck { get; set; } = false;
+			public bool NoNullCheck { get; set; } = false;
+
+			public bool Reset = false;
+
+			public void ResetAll()
+			{
+				Unaligned = false;
+				Volatile = false;
+				Tailcall = false;
+				Constrained = false;
+				Readonly = false;
+				NoTypeCheck = false;
+				NoRangeCheck = false;
+				NoNullCheck = false;
+			}
+		}
+
 		private readonly Dictionary<BasicBlock, Stack<StackEntry>> stacks = new Dictionary<BasicBlock, Stack<StackEntry>>();
 
 		private Operand[] LocalStack;
@@ -54,7 +81,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private SortedList<int, int> Targets;
 
-		private enum ElementType { I1, I2, I4, I8, U1, U2, U4, U8, R4, R8, I, Ref };
+		private enum ElementType
+		{ I1, I2, I4, I8, U1, U2, U4, U8, R4, R8, I, Ref };
 
 		protected override void Finish()
 		{
@@ -93,6 +121,8 @@ namespace Mosa.Compiler.Framework.Stages
 			InitializeLocalVariables();
 
 			CreateInstructions();
+
+			InsertBlockProtectInstructions();
 		}
 
 		protected override void Setup()
@@ -237,15 +267,46 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
+		private void InsertBlockProtectInstructions()
+		{
+			foreach (var handler in Method.ExceptionHandlers)
+			{
+				var tryBlock = BasicBlocks.GetByLabel(handler.TryStart);
+
+				var tryHandler = BasicBlocks.GetByLabel(handler.HandlerStart);
+
+				var context = new Context(tryBlock);
+
+				while (context.IsEmpty || context.Instruction == IRInstruction.TryStart)
+				{
+					context.GotoNext();
+				}
+
+				context.AppendInstruction(IRInstruction.TryStart, tryHandler);
+
+				context = new Context(tryHandler);
+
+				if (handler.ExceptionHandlerType == ExceptionHandlerType.Finally)
+				{
+					var exceptionObject = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
+					var finallyOperand = Is32BitPlatform ? AllocateVirtualRegisterI32() : AllocateVirtualRegisterI64();
+
+					context.AppendInstruction2(IRInstruction.FinallyStart, exceptionObject, finallyOperand);
+				}
+			}
+		}
+
 		private void CreateInstructions()
 		{
-			BasicBlock block = BasicBlocks.GetByLabel(0);
-			Stack<StackEntry> stack = new Stack<StackEntry>();
-			Context context = new Context(block.AfterFirst);
+			var block = BasicBlocks.GetByLabel(0);
+			var stack = new Stack<StackEntry>();
+			var context = new Context(block.AfterFirst);
 
-			InstructionNode endNode = block.First;
+			var endNode = block.First;
 
 			var code = Method.Code;
+
+			var prefixValues = new PrefixValues();
 
 			for (int index = 0; index < code.Count; index++)
 			{
@@ -261,10 +322,17 @@ namespace Mosa.Compiler.Framework.Stages
 					endNode = block.First;
 				}
 
-				bool processed = Translate(stack, context, instruction, opcode);
+				bool processed = Translate(stack, context, instruction, opcode, prefixValues);
 
 				if (!processed)
+				{
 					throw new CompilerException($"Error: Unknown or unprocessable opcode: {opcode}");
+				}
+
+				if (prefixValues.Reset)
+				{
+					prefixValues.ResetAll();
+				}
 
 				UpdateLabel(context.Node, label, endNode);
 				endNode = context.Node;
@@ -379,15 +447,17 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private bool Translate(Stack<StackEntry> stack, Context context, MosaInstruction instruction, OpCode opcode)
+		private bool Translate(Stack<StackEntry> stack, Context context, MosaInstruction instruction, OpCode opcode, PrefixValues prefixValues)
 		{
+			prefixValues.Reset = true;
+
 			switch (opcode)
 			{
 				case OpCode.Add: return Add(context, stack);
 				case OpCode.Add_ovf: return Add(context, stack);                    // TODO: implement overflow check
 				case OpCode.Add_ovf_un: return Add(context, stack);                 // TODO: implement overflow check
 				case OpCode.And: return And(context, stack);
-				case OpCode.Arglist: return false;                                  // TODO
+				case OpCode.Arglist: return false;                                  // TODO: Not implemented in v1 either
 				case OpCode.Beq: return Branch(context, stack, ConditionCode.Equal, instruction);
 				case OpCode.Beq_s: return Branch(context, stack, ConditionCode.Equal, instruction);
 				case OpCode.Bge: return Branch(context, stack, ConditionCode.GreaterOrEqual, instruction);
@@ -411,19 +481,19 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Box: return Box(context, stack, instruction);
 				case OpCode.Br: return Branch(context, stack, instruction);
 				case OpCode.Br_s: return Branch(context, stack, instruction);
-				case OpCode.Break: return true;                                     // TODO
+				case OpCode.Break: return Break(context, stack);
 				case OpCode.Brfalse: return Branch1(context, stack, ConditionCode.Equal, instruction);
 				case OpCode.Brfalse_s: return Branch1(context, stack, ConditionCode.Equal, instruction);
 				case OpCode.Brtrue: return Branch1(context, stack, ConditionCode.NotEqual, instruction);
 				case OpCode.Brtrue_s: return Branch1(context, stack, ConditionCode.NotEqual, instruction);
 				case OpCode.Call: return Call(context, stack, instruction);
-				case OpCode.Calli: return false;                                    // TODO
+				case OpCode.Calli: return false;                                    // TODO: Not implemented in v1 either
 				case OpCode.Callvirt: return Callvirt(context, stack, instruction);
 				case OpCode.Castclass: return Castclass(context, stack);
 				case OpCode.Ceq: return Compare(context, stack, ConditionCode.Equal);
 				case OpCode.Cgt: return Compare(context, stack, ConditionCode.Greater);
 				case OpCode.Cgt_un: return Compare(context, stack, ConditionCode.UnsignedGreater);
-				case OpCode.Ckfinite: return false;                                 // TODO
+				case OpCode.Ckfinite: return false;                                 // TODO: Not implemented in v1 either
 				case OpCode.Clt: return Compare(context, stack, ConditionCode.Less);
 				case OpCode.Clt_un: return Compare(context, stack, ConditionCode.UnsignedLess);
 				case OpCode.Conv_i: return ConvertI(context, stack);
@@ -464,13 +534,13 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Div: return Div(context, stack);
 				case OpCode.Div_un: return DivUnsigned(context, stack);
 				case OpCode.Dup: return Dup(context, stack);
-				case OpCode.Endfilter: return false;                            // TODO
-				case OpCode.Endfinally: return false;                           // TODO
-				case OpCode.Extop: return false;                                // TODO
-				case OpCode.Initblk: return false;                              // TODO
-				case OpCode.InitObj: return false;                              // TODO
+				case OpCode.Endfilter: return false;                                // TODO: Not implemented in v1 either
+				case OpCode.Endfinally: return Endfinally(context);
+				case OpCode.Extop: return false;                                    // TODO: Not implemented in v1 either
+				case OpCode.Initblk: return Initblk(context, stack);
+				case OpCode.InitObj: return InitObj(context, stack, instruction);
 				case OpCode.Isinst: return Isinst(context, stack, instruction);
-				case OpCode.Jmp: return false;                                  // TODO
+				case OpCode.Jmp: return false;                                      // TODO: Not implemented in v1 either
 				case OpCode.Ldarg: return Ldarg(context, stack, (int)instruction.Operand);
 				case OpCode.Ldarg_0: return Ldarg(context, stack, 0);
 				case OpCode.Ldarg_1: return Ldarg(context, stack, 1);
@@ -506,10 +576,10 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Ldelem_u1: return Ldelem(context, stack, ElementType.U1);
 				case OpCode.Ldelem_u2: return Ldelem(context, stack, ElementType.U2);
 				case OpCode.Ldelem_u4: return Ldelem(context, stack, ElementType.U4);
-				case OpCode.Ldelema: return false;                                  // TODO
+				case OpCode.Ldelema: return Ldelema(context, stack, instruction);
 				case OpCode.Ldfld: return Ldfld(context, stack, instruction);
-				case OpCode.Ldflda: return false;                                   // TODO
-				case OpCode.Ldftn: return false;                                    // TODO
+				case OpCode.Ldflda: return Ldflda(context, stack, instruction);
+				case OpCode.Ldftn: return Ldftn(context, stack, instruction);
 				case OpCode.Ldind_i: return Ldind(context, stack, ElementType.I);
 				case OpCode.Ldind_i1: return Ldind(context, stack, ElementType.I1);
 				case OpCode.Ldind_i2: return Ldind(context, stack, ElementType.I2);
@@ -528,22 +598,22 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Ldloc_2: return Ldloc(context, stack, 2);
 				case OpCode.Ldloc_3: return Ldloc(context, stack, 3);
 				case OpCode.Ldloc_s: return Ldloc(context, stack, (int)instruction.Operand);
-				case OpCode.Ldloca: return false;                                   // TODO
-				case OpCode.Ldloca_s: return false;                                 // TODO
+				case OpCode.Ldloca: return Ldloca(context, stack, instruction);
+				case OpCode.Ldloca_s: return Ldloca(context, stack, instruction);
 				case OpCode.Ldnull: return Ldnull(context, stack);
 				case OpCode.Ldobj: return Ldobj(context, stack, instruction);
 				case OpCode.Ldsfld: return false;                                   // TODO
 				case OpCode.Ldsflda: return false;                                  // TODO
 				case OpCode.Ldstr: return Ldstr(context, stack, instruction);
-				case OpCode.Ldtoken: return false;                                  // TODO
-				case OpCode.Ldvirtftn: return false;                                // TODO
-				case OpCode.Leave: return false;                                    // TODO
-				case OpCode.Leave_s: return false;                                  // TODO
-				case OpCode.Localalloc: return false;                               // TODO
-				case OpCode.Mkrefany: return false;                                 // TODO
+				case OpCode.Ldtoken: return Ldtoken(context, stack, instruction);
+				case OpCode.Ldvirtftn: return false;                                // TODO: Not implemented in v1 either
+				case OpCode.Leave: return Leave(context, stack, instruction);
+				case OpCode.Leave_s: return Leave(context, stack, instruction);
+				case OpCode.Localalloc: return false;                               // TODO: Not implemented in v1 either
+				case OpCode.Mkrefany: return false;                                 // TODO: Not implemented in v1 either
 				case OpCode.Mul: return Mul(context, stack);
-				case OpCode.Mul_ovf: return Mul(context, stack);        // TODO: implement overflow check
-				case OpCode.Mul_ovf_un: return Mul(context, stack);     // TODO: implement overflow check
+				case OpCode.Mul_ovf: return Mul(context, stack);                    // TODO: implement overflow check
+				case OpCode.Mul_ovf_un: return Mul(context, stack);                 // TODO: implement overflow check
 				case OpCode.Neg: return Neg(context, stack);
 				case OpCode.Newarr: return Newarr(context, stack, instruction);
 				case OpCode.Newobj: return Newobj(context, stack, instruction);
@@ -551,18 +621,18 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Not: return Not(context, stack);
 				case OpCode.Or: return Or(context, stack);
 				case OpCode.Pop: return Pop(context, stack);
-				case OpCode.PreConstrained: return false;                           // TODO
-				case OpCode.PreNo: return false;                                    // TODO
-				case OpCode.PreReadOnly: return false;                              // TODO
-				case OpCode.PreTail: return false;                                  // TODO
-				case OpCode.PreUnaligned: return false;                             // TODO
-				case OpCode.PreVolatile: return false;                              // TODO
-				case OpCode.Refanytype: return false;                               // TODO
-				case OpCode.Refanyval: return false;                                // TODO
+				case OpCode.Constrained: prefixValues.Constrained = true; prefixValues.Reset = false; return true;
+				case OpCode.No: /* TODO */ prefixValues.Reset = false; return true;
+				case OpCode.ReadOnly: prefixValues.Readonly = true; prefixValues.Reset = false; return true;
+				case OpCode.Tailcall: prefixValues.Tailcall = true; prefixValues.Reset = false; return true;
+				case OpCode.Unaligned: prefixValues.Unaligned = true; prefixValues.Reset = false; return true;
+				case OpCode.Volatile: prefixValues.Volatile = true; prefixValues.Reset = false; return true;
+				case OpCode.Refanytype: return false;                               // TODO: Not implemented in v1 either
+				case OpCode.Refanyval: return false;                                // TODO: Not implemented in v1 either
 				case OpCode.Rem: return RemOperand(context, stack);
 				case OpCode.Rem_un: return RemUnsigned(context, stack);
 				case OpCode.Ret: return Ret(context, stack);
-				case OpCode.Rethrow: return false;                                  // TODO
+				case OpCode.Rethrow: return Rethrow(context, stack);
 				case OpCode.Shl: return Shl(context, stack, instruction);
 				case OpCode.Shr: return Shr(context, stack, instruction);
 				case OpCode.Shr_un: return ShrU(context, stack, instruction);
@@ -594,11 +664,11 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Stloc_3: return Stloc(context, stack, 3);
 				case OpCode.Stloc_s: return Stloc(context, stack, (int)instruction.Operand);
 				case OpCode.Stobj: return Stobj(context, stack, instruction);
-				case OpCode.Stsfld: return false;                               // TODO
+				case OpCode.Stsfld: return false;                                   // TODO
 				case OpCode.Sub: return Sub(context, stack);
-				case OpCode.Sub_ovf: return Sub(context, stack);                // TODO: implement overflow check
-				case OpCode.Sub_ovf_un: return Sub(context, stack);             // TODO: implement overflow check
-				case OpCode.Switch: return false;                               // TODO
+				case OpCode.Sub_ovf: return Sub(context, stack);                    // TODO: implement overflow check
+				case OpCode.Sub_ovf_un: return Sub(context, stack);                 // TODO: implement overflow check
+				case OpCode.Switch: return Switch(context, stack, instruction);
 				case OpCode.Throw: return Throw(context, stack);
 				case OpCode.Unbox: return Unbox(context, stack, instruction);
 				case OpCode.Unbox_any: return UnboxAny(context, stack, instruction);
@@ -1285,6 +1355,11 @@ namespace Mosa.Compiler.Framework.Stages
 				context.AppendInstruction(IRInstruction.Box, result, methodTable, address, CreateConstant32(typeSize));
 				return true;
 			}
+		}
+
+		private bool Break(Context context, Stack<StackEntry> stack)
+		{
+			return true;
 		}
 
 		private bool Branch(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
@@ -2410,6 +2485,48 @@ namespace Mosa.Compiler.Framework.Stages
 			return true;
 		}
 
+		private bool Endfinally(Context context)
+		{
+			context.AppendInstruction(IRInstruction.FinallyEnd);
+
+			return true;
+		}
+
+		private bool Initblk(Context context, Stack<StackEntry> stack)
+		{
+			var entry1 = stack.Peek();
+			var entry2 = stack.Peek();
+			var entry3 = stack.Peek();
+
+			context.AppendInstruction(IRInstruction.MemorySet, null, entry1.Operand, entry2.Operand, entry3.Operand);
+
+			return true;
+		}
+
+		private bool InitObj(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var entry = stack.Peek();
+
+			// Retrieve the type reference
+			var type = (MosaType)instruction.Operand;
+
+			// According to ECMA Spec, if the pointer element type is a reference type then
+			// this instruction is the equivalent of ldnull followed by stind.ref
+
+			if (type.IsReferenceType)
+			{
+				context.AppendInstruction(IRInstruction.StoreObject, null, entry.Operand, ConstantZero, Operand.GetNullObject(TypeSystem));
+				context.MosaType = type;
+			}
+			else
+			{
+				var size = CreateConstant32(TypeLayout.GetTypeSize(type));
+				context.AppendInstruction(IRInstruction.MemorySet, null, entry.Operand, ConstantZero, size);
+			}
+
+			return true;
+		}
+
 		private bool Isinst(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
 		{
 			var entry = stack.Pop();
@@ -2546,6 +2663,40 @@ namespace Mosa.Compiler.Framework.Stages
 			return true;
 		}
 
+		private bool Ldelema(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var entry1 = stack.Pop();
+			var entry2 = stack.Pop();
+
+			var index = entry1.Operand;
+			var array = entry2.Operand;
+
+			var type = (MosaType)instruction.Operand;
+
+			var underlyingType = GetUnderlyingType(type.ElementType);
+
+			var result = AllocatedOperand(StackType.ManagedPointer);
+
+			// Array bounds check
+			AddArrayBoundsCheck(context, array, index);
+
+			var elementOffset = CalculateArrayElementOffset(context, underlyingType, index);
+			var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
+
+			if (Is32BitPlatform)
+			{
+				context.SetInstruction(IRInstruction.Add32, result, array, totalElementOffset);
+			}
+			else
+			{
+				context.SetInstruction(IRInstruction.Add64, result, array, totalElementOffset);
+			}
+
+			stack.Push(new StackEntry(StackType.ManagedPointer, result));
+
+			return true;
+		}
+
 		private bool Ldfld(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
 		{
 			var entry = stack.Pop();
@@ -2596,6 +2747,111 @@ namespace Mosa.Compiler.Framework.Stages
 
 				default: return false;
 			}
+		}
+
+		private bool Ldtoken(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var move = GetMoveInstruction(ElementType.I);
+
+			Operand result = null;
+			Operand source = null;
+
+			if (instruction.Operand is MosaType)
+			{
+				var type = (MosaType)instruction.Operand;
+				source = Operand.CreateUnmanagedSymbolPointer(Metadata.TypeDefinition + type.FullName, TypeSystem);
+				result = MethodCompiler.CreateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
+			}
+			else if (instruction.Operand is MosaMethod)
+			{
+				var method = (MosaMethod)instruction.Operand;
+				source = Operand.CreateUnmanagedSymbolPointer(Metadata.MethodDefinition + method.FullName, TypeSystem);
+				result = MethodCompiler.CreateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeMethodHandle"));
+			}
+			else if (instruction.Operand is MosaField)
+			{
+				var field = (MosaField)instruction.Operand;
+				source = Operand.CreateUnmanagedSymbolPointer(Metadata.FieldDefinition + field.FullName, TypeSystem);
+				result = MethodCompiler.CreateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"));
+				MethodScanner.AccessedField(context.MosaField);
+			}
+
+			context.SetInstruction(move, result, source);
+
+			return true;
+		}
+
+		private bool Leave(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var leaveBlock = BasicBlocks.GetByLabel((int)instruction.Operand);
+
+			// Traverse to the header block
+			var headerBlock = TraverseBackToNativeBlock(context.Block);
+
+			// Find enclosing try or finally handler
+			var exceptionHandler = FindImmediateExceptionHandler(headerBlock.Label);
+			bool inTry = exceptionHandler.IsLabelWithinTry(headerBlock.Label);
+
+			var endInstruction = inTry ? (BaseInstruction)IRInstruction.TryEnd : IRInstruction.ExceptionEnd;
+
+			context.AppendInstruction(endInstruction, leaveBlock);  // added header block
+
+			return true;
+		}
+
+		private bool Ldflda(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var entry = stack.Pop();
+
+			var field = (MosaField)instruction.Operand;
+
+			MethodScanner.AccessedField(field);
+
+			uint offset = TypeLayout.GetFieldOffset(field);
+
+			var fieldPtr = field.FieldType.ToManagedPointer();
+
+			var result = AllocatedOperand(StackType.ManagedPointer, fieldPtr);
+
+			if (offset == 0)
+			{
+				var move = GetMoveInstruction(ElementType.I);
+
+				context.SetInstruction(move, result, entry.Operand);
+			}
+			else
+			{
+				if (Is32BitPlatform)
+					context.SetInstruction(IRInstruction.Add32, result, entry.Operand, CreateConstant32(offset));
+				else
+					context.SetInstruction(IRInstruction.Add64, result, entry.Operand, CreateConstant64(offset));
+			}
+
+			stack.Push(new StackEntry(StackType.ManagedPointer, result));
+
+			return true;
+		}
+
+		private bool Ldftn(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var method = (MosaMethod)instruction.Operand;
+
+			var functionPointer = TypeSystem.ToFnPtr(method.Signature);
+
+			var stacktype = GetStackType(functionPointer);
+			var result = AllocatedOperand(stacktype);
+
+			var move = GetMoveInstruction(ElementType.I);
+
+			context.SetInstruction(move, result, Operand.CreateSymbolFromMethod(method, TypeSystem));
+
+			MethodScanner.MethodInvoked(method, Method);
+
+			var methodData = MethodCompiler.Compiler.GetMethodData(method);
+
+			methodData.HasMethodPointerReferenced = true;
+
+			return true;
 		}
 
 		private bool Ldind(Context context, Stack<StackEntry> stack, ElementType elementType)
@@ -2675,6 +2931,21 @@ namespace Mosa.Compiler.Framework.Stages
 				context.AppendInstruction(loadInstruction, result, local);
 				return true;
 			}
+		}
+
+		private bool Ldloca(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var index = (int)instruction.Operand;
+
+			var local = LocalStack[index];
+
+			var result = AllocateVirtualRegisterManagedPointer();
+
+			stack.Push(new StackEntry(StackType.ManagedPointer, result));
+
+			context.AppendInstruction(IRInstruction.AddressOf, result, local);
+
+			return true;
 		}
 
 		private bool Ldobj(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
@@ -3197,6 +3468,15 @@ namespace Mosa.Compiler.Framework.Stages
 			return true;
 		}
 
+		private bool Rethrow(Context context, Stack<StackEntry> stack)
+		{
+			var entry = stack.Pop();
+
+			context.AppendInstruction(IRInstruction.Rethrow, entry.Operand);
+
+			return true;
+		}
+
 		private bool Shl(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
 		{
 			var entry1 = stack.Pop();
@@ -3693,6 +3973,25 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			return false;
+		}
+
+		private bool Switch(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var entry = stack.Pop();
+
+			context.AppendInstruction(IRInstruction.Switch, null, entry.Operand);
+
+			foreach (var target in (int[])instruction.Operand)
+			{
+				var block = BasicBlocks.GetByLabel(target);
+
+				context.AddBranchTarget(block);
+			}
+
+			// REFERENCE: The last value is the fall thru - this is not implemented correctly in later stages (fixme)
+			context.AddBranchTarget(BasicBlocks.GetByLabel(instruction.Next.Value));
+
+			return true;
 		}
 
 		private bool Unbox(Context context, Stack<StackEntry> stack, MosaInstruction instruction)

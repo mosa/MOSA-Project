@@ -34,8 +34,8 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-sccp-off", Setting = "Optimizations.SCCP", Value = "false"},
 				new Argument() { Name = "-basic-optimizations", Setting = "Optimizations.Basic", Value = "true"},
 				new Argument() { Name = "-basic-optimizations-off", Setting = "Optimizations.Basic", Value = "false"},
-				new Argument() { Name = "-inline-explicit", Setting = "Optimizations.Inline.ExplicitOnly", Value = "true"},
-				new Argument() { Name = "-inline-explicit-off", Setting = "Optimizations.Inline.ExplicitOnly", Value = "false"},
+				new Argument() { Name = "-inline-explicit", Setting = "Optimizations.Inline.Explicit", Value = "true"},
+				new Argument() { Name = "-inline-explicit-off", Setting = "Optimizations.Inline.Explicit", Value = "false"},
 				new Argument() { Name = "-long-expansion", Setting = "Optimizations.LongExpansion", Value = "true"},
 				new Argument() { Name = "-long-expansion-off", Setting = "Optimizations.LongExpansion", Value = "false"},
 				new Argument() { Name = "-two-pass", Setting = "Optimizations.TwoPass", Value = "true"},
@@ -142,6 +142,8 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-video-width", Setting = "Multiboot.Video.Width"},
 				new Argument() { Name = "-video-height", Setting = "Multiboot.Video.Height"},
 				new Argument() { Name = "-video-depth", Setting = "Multiboot.Video.Depth"},
+
+				new Argument() { Name = "-vmware-svga", Setting = "Emulator.SVGA", Value="vmware"},
 
 				new Argument() { Name = "-gdb", Setting = "Launcher.LaunchDebugger", Value="true"},
 				new Argument() { Name = "-gdb-port", Setting = "GDB.Port"},

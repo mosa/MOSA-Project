@@ -11,7 +11,8 @@ namespace Mosa.Platform.x86.Stages
 	/// <seealso cref="Mosa.Compiler.Framework.Stages.BaseTransformationStage" />
 	public sealed class PostOptimizationStage : BaseOptimizationStage
 	{
-		public override string Name { get { return "x86." + GetType().Name; } }
+		public override string Name
+		{ get { return "x86." + GetType().Name; } }
 
 		public PostOptimizationStage()
 			: base(true, false)
@@ -26,6 +27,12 @@ namespace Mosa.Platform.x86.Stages
 			AddTranformation(new Transform.Manual.Sub32ToDec32());
 			AddTranformation(new Transform.Manual.Lea32ToInc32());
 			AddTranformation(new Transform.Manual.Lea32ToDec32());
+
+			AddTranformation(new Transform.Manual.Cmp32ToZero());
+			AddTranformation(new Transform.Manual.Test32ToZero());
+			AddTranformation(new Transform.Manual.Cmp32ToTest32());
+
+			AddTranformation(new Transform.Manual.Special.Mov32ConstantReuse());
 		}
 	}
 }

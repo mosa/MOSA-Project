@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework
 
 		public bool InlineMethods { get { return Settings.GetValue("Optimizations.Inline", true); } }
 
-		public bool InlineExplicitOnly { get { return Settings.GetValue("Optimizations.Inline.ExplicitOnly", false); } }
+		public bool InlineExplicit { get { return Settings.GetValue("Optimizations.Inline.Explicit", true); } }
 
 		public bool LongExpansion { get { return Settings.GetValue("Optimizations.LongExpansion", true); } }
 
@@ -88,6 +88,8 @@ namespace Mosa.Compiler.Framework
 
 		public bool FullCheckMode { get { return Settings.GetValue("CompilerDebug.FullCheckMode", false); } }
 
+		public bool CILDecodingStageV2 { get { return Settings.GetValue("CompilerDebug.CILDecodingStageV2", false); } }
+
 		#endregion Properties
 
 		public CompilerSettings(Settings settings)
@@ -109,7 +111,7 @@ namespace Mosa.Compiler.Framework
 			Settings.SetValue("Optimizations.TwoPass", true);
 			Settings.SetValue("Optimizations.Platform", true);
 			Settings.SetValue("Optimizations.Inline", true);
-			Settings.SetValue("Optimizations.Inline.ExplicitOnly", false);
+			Settings.SetValue("Optimizations.Inline.Explicit", true);
 			Settings.SetValue("Optimizations.Inline.Maximum", 12);
 			Settings.SetValue("Optimizations.Basic.Window", 5);
 			Settings.SetValue("Optimizations.Inline.AggressiveMaximum", 24);

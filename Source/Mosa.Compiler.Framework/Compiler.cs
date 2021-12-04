@@ -173,19 +173,18 @@ namespace Mosa.Compiler.Framework
 		private static List<BaseMethodCompilerStage> GetDefaultMethodPipeline(CompilerSettings compilerSettings, bool is64BitPlatform)
 		{
 			return new List<BaseMethodCompilerStage>() {
+				(!compilerSettings.CILDecodingStageV2) ? new CILDecodingStage() : null,
+				(compilerSettings.CILDecodingStageV2) ? new CILDecodingStageV2() : null,
+				(!compilerSettings.CILDecodingStageV2) ? new CILOperandAssignmentStage(): null,
+				(!compilerSettings.CILDecodingStageV2) ? new CILProtectedRegionStage(): null,
+				(!compilerSettings.CILDecodingStageV2) ? new CILTransformationStage(): null,
 
-				//new CILDecodingStageV2(),
-
-				new CILDecodingStage(),
-				new CILOperandAssignmentStage(),
-				new CILProtectedRegionStage(),
-				new CILTransformationStage(),
 				new ExceptionStage(),
 				new StackSetupStage(),
 				compilerSettings.Devirtualization ? new DevirtualizeCallStage() : null,
 				new PlugStage(),
 				new RuntimeCallStage(),
-				(compilerSettings.InlineMethods) ? new InlineStage() : null,
+				(compilerSettings.InlineMethods || compilerSettings.InlineExplicit) ? new InlineStage() : null,
 				new PromoteTemporaryVariables(),
 				new StaticLoadOptimizationStage(),
 
@@ -208,7 +207,7 @@ namespace Mosa.Compiler.Framework
 				(compilerSettings.SSA) ? new ExitSSAStage() : null,
 				new IRCleanupStage(),
 				new NewObjectStage(),
-				(compilerSettings.InlineMethods) ? new InlineEvaluationStage() : null,
+				(compilerSettings.InlineMethods || compilerSettings.InlineExplicit) ? new InlineEvaluationStage() : null,
 
 				//new StopStage(),
 

@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.DeviceSystem
+namespace Mosa.DeviceSystem.Service
 {
 	/// <summary>
 	/// Device Manager

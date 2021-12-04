@@ -55,7 +55,7 @@
 			this.cbEnableSparseConditionalConstantPropagation = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbEnableDevirtualization = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbEnableInline = new System.Windows.Forms.ToolStripMenuItem();
-			this.cbInlineExplicitOnly = new System.Windows.Forms.ToolStripMenuItem();
+			this.cbInlineExplicit = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbEnableLongExpansion = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbLoopInvariantCodeMotion = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbEnableBitTracker = new System.Windows.Forms.ToolStripMenuItem();
@@ -70,6 +70,7 @@
 			this.CBEnableMultithreading = new System.Windows.Forms.ToolStripMenuItem();
 			this.cbEnableMethodScanner = new System.Windows.Forms.ToolStripMenuItem();
 			this.dumpAllMethodStagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.cbCILDecoderStageV2Testing = new System.Windows.Forms.ToolStripMenuItem();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.treeView = new System.Windows.Forms.TreeView();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -250,7 +251,7 @@
             this.cbEnableSparseConditionalConstantPropagation,
             this.cbEnableDevirtualization,
             this.cbEnableInline,
-            this.cbInlineExplicitOnly,
+            this.cbInlineExplicit,
             this.cbEnableLongExpansion,
             this.cbLoopInvariantCodeMotion,
             this.cbEnableBitTracker,
@@ -334,12 +335,14 @@
 			this.cbEnableInline.Size = new System.Drawing.Size(293, 22);
 			this.cbEnableInline.Text = "Enable Inlined Methods";
 			// 
-			// cbInlineExplicitOnly
+			// cbInlineExplicit
 			// 
-			this.cbInlineExplicitOnly.CheckOnClick = true;
-			this.cbInlineExplicitOnly.Name = "cbInlineExplicitOnly";
-			this.cbInlineExplicitOnly.Size = new System.Drawing.Size(293, 22);
-			this.cbInlineExplicitOnly.Text = "Inline Only Explicit";
+			this.cbInlineExplicit.Checked = true;
+			this.cbInlineExplicit.CheckOnClick = true;
+			this.cbInlineExplicit.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbInlineExplicit.Name = "cbInlineExplicit";
+			this.cbInlineExplicit.Size = new System.Drawing.Size(293, 22);
+			this.cbInlineExplicit.Text = "Enable Inlined Explicit Methods";
 			// 
 			// cbEnableLongExpansion
 			// 
@@ -439,7 +442,8 @@
 			this.advanceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.CBEnableMultithreading,
             this.cbEnableMethodScanner,
-            this.dumpAllMethodStagesToolStripMenuItem});
+            this.dumpAllMethodStagesToolStripMenuItem,
+            this.cbCILDecoderStageV2Testing});
 			this.advanceToolStripMenuItem.Name = "advanceToolStripMenuItem";
 			this.advanceToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
 			this.advanceToolStripMenuItem.Text = "Advance";
@@ -450,22 +454,29 @@
 			this.CBEnableMultithreading.CheckOnClick = true;
 			this.CBEnableMultithreading.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.CBEnableMultithreading.Name = "CBEnableMultithreading";
-			this.CBEnableMultithreading.Size = new System.Drawing.Size(206, 22);
+			this.CBEnableMultithreading.Size = new System.Drawing.Size(234, 22);
 			this.CBEnableMultithreading.Text = "Enable Multithreading";
 			// 
 			// cbEnableMethodScanner
 			// 
 			this.cbEnableMethodScanner.CheckOnClick = true;
 			this.cbEnableMethodScanner.Name = "cbEnableMethodScanner";
-			this.cbEnableMethodScanner.Size = new System.Drawing.Size(206, 22);
+			this.cbEnableMethodScanner.Size = new System.Drawing.Size(234, 22);
 			this.cbEnableMethodScanner.Text = "Enable Method Scanner";
 			// 
 			// dumpAllMethodStagesToolStripMenuItem
 			// 
 			this.dumpAllMethodStagesToolStripMenuItem.Name = "dumpAllMethodStagesToolStripMenuItem";
-			this.dumpAllMethodStagesToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
+			this.dumpAllMethodStagesToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
 			this.dumpAllMethodStagesToolStripMenuItem.Text = "Dump All Method Stages";
 			this.dumpAllMethodStagesToolStripMenuItem.Click += new System.EventHandler(this.DumpAllMethodStagesToolStripMenuItem_Click);
+			// 
+			// cbCILDecoderStageV2Testing
+			// 
+			this.cbCILDecoderStageV2Testing.CheckOnClick = true;
+			this.cbCILDecoderStageV2Testing.Name = "cbCILDecoderStageV2Testing";
+			this.cbCILDecoderStageV2Testing.Size = new System.Drawing.Size(234, 22);
+			this.cbCILDecoderStageV2Testing.Text = "CIL Decoder Stage V2 (Testing)";
 			// 
 			// openFileDialog
 			// 
@@ -549,7 +560,7 @@
 			this.tabControl.Name = "tabControl";
 			this.tabControl.Padding = new System.Drawing.Point(0, 0);
 			this.tabControl.SelectedIndex = 0;
-			this.tabControl.Size = new System.Drawing.Size(716, 490);
+			this.tabControl.Size = new System.Drawing.Size(724, 490);
 			this.tabControl.TabIndex = 38;
 			this.tabControl.SelectedIndexChanged += new System.EventHandler(this.tabControl_SelectedIndexChanged);
 			// 
@@ -564,7 +575,7 @@
 			this.tabStages.Location = new System.Drawing.Point(4, 25);
 			this.tabStages.Margin = new System.Windows.Forms.Padding(0);
 			this.tabStages.Name = "tabStages";
-			this.tabStages.Size = new System.Drawing.Size(708, 461);
+			this.tabStages.Size = new System.Drawing.Size(716, 461);
 			this.tabStages.TabIndex = 0;
 			this.tabStages.Text = "Instructions";
 			// 
@@ -618,7 +629,7 @@
 			this.tabStageDebug.Location = new System.Drawing.Point(4, 25);
 			this.tabStageDebug.Margin = new System.Windows.Forms.Padding(0);
 			this.tabStageDebug.Name = "tabStageDebug";
-			this.tabStageDebug.Size = new System.Drawing.Size(708, 461);
+			this.tabStageDebug.Size = new System.Drawing.Size(716, 461);
 			this.tabStageDebug.TabIndex = 1;
 			this.tabStageDebug.Text = "Debug";
 			// 
@@ -656,7 +667,7 @@
 			this.tabMethodCounters.Location = new System.Drawing.Point(4, 25);
 			this.tabMethodCounters.Margin = new System.Windows.Forms.Padding(0);
 			this.tabMethodCounters.Name = "tabMethodCounters";
-			this.tabMethodCounters.Size = new System.Drawing.Size(708, 461);
+			this.tabMethodCounters.Size = new System.Drawing.Size(716, 461);
 			this.tabMethodCounters.TabIndex = 6;
 			this.tabMethodCounters.Text = "Counters";
 			// 
@@ -683,7 +694,7 @@
 			this.tabLogs.Location = new System.Drawing.Point(4, 25);
 			this.tabLogs.Margin = new System.Windows.Forms.Padding(0);
 			this.tabLogs.Name = "tabLogs";
-			this.tabLogs.Size = new System.Drawing.Size(708, 461);
+			this.tabLogs.Size = new System.Drawing.Size(716, 461);
 			this.tabLogs.TabIndex = 7;
 			this.tabLogs.Text = "Logs";
 			// 
@@ -880,7 +891,7 @@
 		private System.Windows.Forms.ToolStripMenuItem CBEnableMultithreading;
 		private System.Windows.Forms.ToolStripMenuItem cbLoopInvariantCodeMotion;
 		private System.Windows.Forms.ToolStripMenuItem cbPlatformOptimizations;
-		private System.Windows.Forms.ToolStripMenuItem cbInlineExplicitOnly;
+		private System.Windows.Forms.ToolStripMenuItem cbInlineExplicit;
 		private System.Windows.Forms.ToolStripMenuItem cbEnableAllOptimizations;
 		private System.Windows.Forms.ToolStripMenuItem cbDisableAllOptimizations;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
@@ -889,5 +900,6 @@
 		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label stageLabel;
 		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.ToolStripMenuItem cbCILDecoderStageV2Testing;
 	}
 }

@@ -343,7 +343,7 @@
 		},
 		{
 			"FamilyName": "IR",
-			"Type": "Reassociation",
+			"Type": "Simplification",
 			"Name": "Add##",
 			"SubName": "v1",
 			"Expression": "IR.Add## (IR.Sub## a b) b)",
@@ -353,12 +353,92 @@
 		},
 		{
 			"FamilyName": "IR",
-			"Type": "Reassociation",
+			"Type": "Simplification",
 			"Name": "Sub##",
 			"SubName": "v1",
 			"Expression": "IR.Sub## (IR.Add## a b) a)",
 			"Filter": "",
 			"Result": "(IR.Move## b)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Compare32x##",
+			"SubName": "SwapToZero",
+			"Expression": "IR.Compare32x## {!=} (IR.And## a 1) 1)",
+			"Filter": "",
+			"Result": "(IR.Compare32x## {==} (IR.And## a 1) 0)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Compare64x##",
+			"SubName": "SwapToZero",
+			"Expression": "IR.Compare64x## {!=} (IR.And## a 1) 1)",
+			"Filter": "",
+			"Result": "(IR.Compare64x## {==} (IR.And## a 1) 0)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Compare32x##",
+			"SubName": "PassThru",
+			"Expression": "IR.Compare32x## {!=} (IR.And## a 1) 0)",
+			"Filter": "",
+			"Result": "(IR.And## a 1)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Compare64x##",
+			"SubName": "PassThru",
+			"Expression": "IR.Compare64x## {!=} (IR.And## a 1) 0)",
+			"Filter": "",
+			"Result": "(IR.And## a 1)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Compare32x##",
+			"SubName": "NotPassThru",
+			"Expression": "IR.Compare32x## {==} (IR.And## a 1) 0)",
+			"Filter": "",
+			"Result": "(IR.And## (IR.Not## a) 1)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Compare64x##",
+			"SubName": "NotPassThru",
+			"Expression": "IR.Compare64x## {==} (IR.And## a 1) 0)",
+			"Filter": "",
+			"Result": "(IR.And## (IR.Not## a) 1)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Compare32x##",
+			"SubName": "PassThru2",
+			"Expression": "IR.Compare32x## {==} (IR.And## a 1) 1)",
+			"Filter": "",
+			"Result": "(IR.And## a 1)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Compare64x##",
+			"SubName": "PassThru2",
+			"Expression": "IR.Compare64x## {==} (IR.And## a 1) 1)",
+			"Filter": "",
+			"Result": "(IR.And## a 1)",
 			"Variations": "Yes"
 		}
 	]

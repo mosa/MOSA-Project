@@ -19,7 +19,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		public const int MaximumCompileCount = 10;
 
-		private bool InlineExplicitOnly;
+		private bool InlineExplicit;
+		private bool InlineMethods;
 		private int InlineAggressiveMaximum;
 		private int InlineMaximum;
 
@@ -29,7 +30,8 @@ namespace Mosa.Compiler.Framework.Stages
 			Register(ReversedInlineCount);
 
 			// cache for performance
-			InlineExplicitOnly = CompilerSettings.InlineExplicitOnly;
+			InlineMethods = CompilerSettings.InlineMethods;
+			InlineExplicit = CompilerSettings.InlineExplicit;
 			InlineAggressiveMaximum = CompilerSettings.InlineAggressiveMaximum;
 			InlineMaximum = CompilerSettings.InlineMaximum;
 		}
@@ -151,7 +153,7 @@ namespace Mosa.Compiler.Framework.Stages
 			trace?.Log($"IRStackParameterInstructionCount: {MethodData.IRStackParameterInstructionCount}");
 			trace?.Log($"InlineAggressiveMaximum: {InlineAggressiveMaximum}");
 			trace?.Log($"InlineMaximum: {InlineMaximum}");
-			trace?.Log($"InlineExplicitOnly: {InlineExplicitOnly}");
+			trace?.Log($"InlineExplicitOnly: {InlineExplicit}");
 			trace?.Log($"NonIRInstructionCount: {MethodData.NonIRInstructionCount}");
 			trace?.Log($"HasAddressOfInstruction: {MethodData.HasAddressOfInstruction}");
 			trace?.Log($"HasLoops: {MethodData.HasLoops}");
@@ -194,7 +196,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool StaticCanNotInline(MethodData methodData)
 		{
-			if (InlineExplicitOnly && !methodData.HasAggressiveInliningAttribute)
+			if (!InlineMethods && !methodData.HasAggressiveInliningAttribute)
 				return true;
 
 			if (methodData.HasDoNotInlineAttribute)
@@ -226,7 +228,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var returnType = methodData.Method.Signature.ReturnType;
 
 			// FIXME: Add rational
-			if (!MosaTypeLayout.CanFitInRegister(returnType) && !returnType.IsUI8 && !returnType.IsR8)
+			if (!(returnType.IsVoid || returnType.IsUI8 || returnType.IsR8 || MosaTypeLayout.CanFitInRegister(returnType) || TypeLayout.GetTypeSize(returnType) <= 8))
 				return true;
 
 			// FUTURE: Don't hardcode namepsace

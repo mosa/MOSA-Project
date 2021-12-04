@@ -3246,7 +3246,7 @@
 			"OpcodeEncoding": [
 				{
 					"Condition": "[#register][register]",
-					"Encoding": "[x86],opcode=0x85,mod=11,reg=reg3:r,rm=reg3:o2"
+					"Encoding": "[x86],opcode=0x85,mod=11,reg=reg3:o1,rm=reg3:o2"
 				},
 				{
 					"Condition": "[#register][constant]",

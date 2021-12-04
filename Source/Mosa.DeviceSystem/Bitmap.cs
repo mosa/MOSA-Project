@@ -6,38 +6,38 @@ namespace Mosa.DeviceSystem
 	{
 		public static Image CreateImage(byte[] data)
 		{
+			if (data[0] != (byte)'B' || data[1] != (byte)'M')
+				return null;
+
+			var bpp = data[0x1C] / 8;
+
+			if (!(bpp == 3 || bpp == 4))
+				return null;
+
 			var stream = new ByteStream(data);
 
 			var width = stream.Read32(0x12);
 			var height = stream.Read32(0x16);
-			var bpp = stream.Read8(0x1C) / 8;
+			var dataSectionOffset = stream.Read32(0xA);
 
 			var image = new Image(width, height);
 
-			var dataSectionOffset = stream.Read32(0xA);
+			int x = 0;
+			int y = height - 1;
 
-			int[] temp = new int[width];
-			int w = 0, h = height - 1;
-
-			for (int i = 0; i < (uint)(width * height * bpp); i += bpp)
+			for (var i = dataSectionOffset; i < dataSectionOffset + (width * height * bpp); i += bpp)
 			{
-				if (w == width)
-				{
-					for (int k = 0; k < temp.Length; k++)
-					{
-						image.SetColor(k, h, temp[k]);
-					}
-					w = 0;
-					h--;
-				}
+				var color = (bpp == 4) ? stream.Read32(i) : (int)(stream.Read24(i) | 0xFF000000); // 32 & 24 bit
 
-				switch (bpp)
-				{
-					case 3: temp[w] = (int)(0xFF000000 | stream.Read24(dataSectionOffset + i)); break; // 24-bit
-					case 4: temp[w] = stream.Read32(dataSectionOffset + i); break; // 32-bit
-				}
+				image.SetColor(x, y, color);
 
-				w++;
+				x++;
+
+				if (x == width)
+				{
+					x = 0;
+					y--;
+				}
 			}
 
 			return image;

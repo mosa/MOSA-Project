@@ -6,6 +6,7 @@ using Mosa.Demo.VBEWorld.x86.HAL;
 using Mosa.DeviceDriver;
 using Mosa.DeviceDriver.ISA;
 using Mosa.DeviceSystem;
+using Mosa.DeviceSystem.Service;
 using Mosa.FileSystem.FAT;
 using Mosa.Kernel.x86;
 using Mosa.Runtime.Plug;
@@ -46,8 +47,6 @@ namespace Mosa.Demo.VBEWorld.x86
 		public static void Main()
 		{
 			Kernel.x86.Kernel.Setup();
-
-			Console.Clear();
 
 			Serial.SetupPort(Serial.COM1);
 			IDT.SetInterruptHandler(ProcessInterrupt);
@@ -110,10 +109,12 @@ namespace Mosa.Demo.VBEWorld.x86
 
 			if (Display.Initialize())
 			{
-				Log("VBE setup OK!");
+				Log("Graphics setup OK!");
+				Log("<SELFTEST:PASSED>");
+
 				DoGraphics();
 			}
-			else Log("VBE setup ERROR!");
+			else Log("Graphics setup ERROR!");
 		}
 
 		private static void DoGraphics()
@@ -143,10 +144,11 @@ namespace Mosa.Demo.VBEWorld.x86
 
 				// Initialize background labels
 				labels = new List<Label>
-					{
-						new Label("Current resolution is " + Display.Width + "x" + Display.Height, Display.DefaultFont.Name, 10, 10, Color.OrangeRed),
-						new Label("FPS is " + FPSMeter.FPS, Display.DefaultFont.Name, 10, 26, Color.Lime)
-					};
+				{
+					new Label("Current resolution is " + Display.Width + "x" + Display.Height, Display.DefaultFont.Name, 10, 10, Color.OrangeRed),
+					new Label("FPS is " + FPSMeter.FPS, Display.DefaultFont.Name, 10, 26, Color.Lime),
+					new Label("Current driver is " + Display.CurrentDriver, Display.DefaultFont.Name, 10, 42, Color.Blue)
+				};
 
 				// Draw all labels
 				foreach (Label label in labels)

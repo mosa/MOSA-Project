@@ -15,10 +15,10 @@ jobs:
          level: [-o0, -o1, -o2, -o3, -o4, -o5, -o6, -o7, -o8, -o9, -oFast, -oSize, -oMax, -oNone]
 
     steps:
-      - name: Set net5.0
+      - name: Set net6.0
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '5.0.x'
+          dotnet-version: '6.0.x'
       - name: Checkout
         uses: actions/checkout@v1
         with:
@@ -45,10 +45,10 @@ jobs:
          level: [-o0, -o1, -o2, -o3, -o4, -o5, -o6, -o7, -o8, -o9, -oFast, -oSize, -oMax, -oNone]
 
     steps:
-      - name: Set net5.0
+      - name: Set net6.0
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '5.0.x'
+          dotnet-version: '6.0.x'
       - name: Checkout
         uses: actions/checkout@v1
         with:

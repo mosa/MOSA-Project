@@ -1,8 +1,8 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Demo.AppSystem;
-using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
+using Mosa.DeviceSystem.Service;
 
 namespace Mosa.Demo.Application
 {
