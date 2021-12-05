@@ -764,17 +764,6 @@ namespace Mosa.Compiler.Framework.Stages
 			return null;
 		}
 
-		public static ulong LimitIncreasingBound(ulong newvalue, ulong previousvalue, ulong maxvalue)
-		{
-			if (newvalue > maxvalue)
-				return maxvalue;
-
-			if (newvalue < previousvalue)
-				return 0;
-
-			return newvalue;
-		}
-
 		#region IR Instructions
 
 		private static BitValue Add32(InstructionNode node, TransformContext transformContext)
@@ -1900,7 +1889,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return BitValue.CreateValue(
 					bitsSet: value1.BitsSet << shift,
 					bitsClear: Upper32BitsSet | (value1.BitsClear << shift) | ~(ulong.MaxValue << shift),
-					maxValue: LimitIncreasingBound(value1.MaxValue << shift, value1.MaxValue, uint.MaxValue),
+					maxValue: (value1.MaxValue << shift) < uint.MaxValue ? value1.MaxValue << shift : ulong.MaxValue,
 					minValue: (value1.MinValue << shift) > value1.MinValue ? value1.MinValue << shift : 0,
 					rangeDeterminate: true,
 					is32Bit: true
@@ -1966,8 +1955,8 @@ namespace Mosa.Compiler.Framework.Stages
 				return BitValue.CreateValue(
 					bitsSet: value1.BitsSet << shift,
 					bitsClear: (value1.BitsClear << shift) | ~(ulong.MaxValue << shift),
-					maxValue: value1.MaxValue << shift,
-					minValue: value1.MinValue << shift,
+					maxValue: (value1.MaxValue << shift) > value1.MaxValue ? value1.MaxValue << shift : ulong.MaxValue,
+					minValue: (value1.MinValue << shift) > value1.MinValue ? value1.MinValue << shift : 0,
 					rangeDeterminate: true,
 					is32Bit: false
 				);
