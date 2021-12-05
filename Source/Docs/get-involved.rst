@@ -8,8 +8,7 @@ We need your help!
 Contribution process
 ********************
 
-If you are interested in supporting this project, join the project itself. Start downloading the code, look at the documentation provided and join us on `Gitter chat <https://gitter.im/mosa/MOSA-Project>`__. This is the most interactive way to connect to MOSA's development team.
-
+If you are interested in supporting this project, join the project itself. Start downloading the code, look at the documentation provided and join us on `Discord <https://discord.gg/tRNMn3npsv>`__. This is the most interactive way to connect to MOSA's development team.
 
 ****
 Jobs

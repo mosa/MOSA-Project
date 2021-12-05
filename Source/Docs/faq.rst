@@ -30,4 +30,4 @@ Another important difference is Cosmos compiles to Assembly ASM and uses Netwide
 Are Cosmos and MOSA working together?
 -------------------------------------
 
-No; Cosmos and MOSA are seperate and independent projects. 
+No, Cosmos and MOSA are seperate and independent projects. 

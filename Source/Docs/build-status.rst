@@ -27,7 +27,7 @@
 	:target: https://github.com/mosa/MOSA-Project/stargazers
 
 .. |discord| image:: https://img.shields.io/badge/Chat-On%20Discord%20-blue.svg
-	:target: https://discord.com/channels/881374816052068362/881374816052068365
+	:target: https://discord.gg/tRNMn3npsv
 
 .. |source| image:: https://img.shields.io/badge/Source%20Code-GitHub%20Repository-yellow.svg
 	:target: https://github.com/mosa/MOSA-Project
