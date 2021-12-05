@@ -55,7 +55,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>Gets the offset.</summary>
 		/// <param name="x">The x.</param>
 		/// <param name="y">The y.</param>
-		public uint GetOffset(uint x, uint y)
+		private uint GetOffset(uint x, uint y)
 		{
 			return Offset + y * BytesPerLine + x * BytesPerPixel;
 		}
@@ -125,7 +125,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="x">X of the top left of the image.</param>
 		/// <param name="y">Y of the top left of the image.</param>
 		/// <param name="transparentColor">Transparent color, to not draw.</param>
-		public void DrawImage(Image image, uint x, uint y, int transparentColor)
+		public void DrawImage(Image image, uint x, uint y, uint transparentColor)
 		{
 			var wi = Math.Clamp(image.Width, 0, Width - x);
 			var he = Math.Clamp(image.Height, 0, Height - y);
@@ -133,16 +133,14 @@ namespace Mosa.DeviceSystem
 			if (x < 0 || y < 0 || x >= Width || y >= Height)
 				return;
 
-			for (int h = 0; h < he; h++)
-			{
-				for (int w = 0; w < wi; w++)
+			for (uint h = 0; h < he; h++)
+				for (uint w = 0; w < wi; w++)
 				{
 					var color = image.GetColor(w, h);
 
 					if (color != transparentColor)
 						SetPixel((uint)color, (uint)(x + w), (uint)(y + h));
 				}
-			}
 		}
 
 		/// <summary>Draws an image with a transparent color.</summary>
@@ -151,36 +149,43 @@ namespace Mosa.DeviceSystem
 		/// <param name="y">Y of the top left of the image.</param>
 		public void DrawImage(Image image, uint x, uint y, bool alpha = false)
 		{
-			// Slow, find faster method (maybe?)
-
-			var wi = Math.Clamp(image.Width, 0, Width - x);
-			var he = Math.Clamp(image.Height, 0, Height - y);
-
-			if (x < 0 || y < 0 || x >= Width || y >= Height)
-				return;
-
-			for (int h = 0; h < he; h++)
+			if (alpha)
 			{
-				for (int w = 0; w < wi; w++)
-				{
-					uint xx = (uint)(x + w);
-					uint yy = (uint)(y + h);
+				// Slow, find faster method (maybe?)
 
-					int color = image.GetColor(w, h);
+				var wi = Math.Clamp(image.Width, 0, Width - x);
+				var he = Math.Clamp(image.Height, 0, Height - y);
 
-					if (alpha)
-						color = AlphaBlend(xx, yy, color);
+				if (x < 0 || y < 0 || x >= Width || y >= Height)
+					return;
 
-					SetPixel((uint)color, xx, yy);
-				}
+				for (uint h = 0; h < he; h++)
+					for (uint w = 0; w < wi; w++)
+					{
+						uint xx = (uint)(x + w);
+						uint yy = (uint)(y + h);
+
+						SetPixel((uint)AlphaBlend(xx, yy, image.GetColor(w, h)), xx, yy);
+					}
+			}
+			else
+			{
+				uint wb = image.Width * image.BytesPerPixel;
+				uint count = (uint)Math.Clamp(wb, 0, (Width - x) * image.BytesPerPixel);
+
+				for (int h = 0; h < Math.Clamp(image.Height, 0, Height - y); h++)
+					Internal.MemoryCopy(
+						Buffer.Address + ((Width * (y + h) + x) * BytesPerPixel),
+						image.Pixels.Address + (wb * h),
+						count);
 			}
 		}
 
-		private int AlphaBlend(uint x, uint y, int color)
+		private int AlphaBlend(uint x, uint y, uint color)
 		{
 			// TODO - replace without using the Color class
 
-			var foreground = Color.FromArgb(color);
+			var foreground = Color.FromArgb((int)color);
 			var background = Color.FromArgb((int)GetPixel(x, y));
 
 			int alphac = foreground.A;
@@ -210,11 +215,9 @@ namespace Mosa.DeviceSystem
 			uint wb = w * BytesPerPixel;
 
 			for (int he = 0; he < h; he++)
-			{
 				Internal.MemorySet(
 					Buffer.Address + ((Width * (y + he) + x) * BytesPerPixel),
 					color, wb);
-			}
 		}
 
 		/* Functions from Cosmos (not all of them are currently there, TODO) */

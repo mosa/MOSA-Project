@@ -13,8 +13,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>Sets the mode.</summary>
 		/// <param name="width">The width.</param>
 		/// <param name="height">The height.</param>
-		/// <param name="bitsPerPixel">The amount of bits per pixel.</param>
-		public void SetMode(ushort width, ushort height, byte bitsPerPixel = 32);
+		public void SetMode(ushort width, ushort height);
 
 		/// <summary>Disables the graphics device.</summary>
 		public void Disable();
