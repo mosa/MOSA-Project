@@ -1966,8 +1966,8 @@ namespace Mosa.Compiler.Framework.Stages
 				return BitValue.CreateValue(
 					bitsSet: value1.BitsSet << shift,
 					bitsClear: (value1.BitsClear << shift) | ~(ulong.MaxValue << shift),
-					maxValue: LimitIncreasingBound(value1.MaxValue << shift, value1.MaxValue, ulong.MaxValue),
-					minValue: (value1.MinValue << shift) > value1.MinValue ? value1.MinValue << shift : 0,
+					maxValue: value1.MaxValue << shift,
+					minValue: value1.MinValue << shift,
 					rangeDeterminate: true,
 					is32Bit: false
 				);
