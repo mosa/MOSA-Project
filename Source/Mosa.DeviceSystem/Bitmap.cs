@@ -23,22 +23,21 @@ namespace Mosa.DeviceSystem
 			var image = new Image(width, height, bytesPerPixel);
 
 			// TODO: Support for other color depths
-			var y = height - 1;
 			do
 			{
+				height--;
+
 				for (uint x = 0; x < width - 1; x++)
 				{
 					dataSectionOffset += bytesPerPixel;
 
 					var color = bytesPerPixel == 4 ? stream.Read32(dataSectionOffset) : stream.Read24(dataSectionOffset) | 0xFF000000;
-					image.SetColor(x, y, color);
+					image.SetColor(x, height, color);
 				}
 
 				if (bytesPerPixel == 3 && width * bytesPerPixel % 4 > 0)
 					dataSectionOffset += 4;
-
-				y--;
-			} while (y > 0);
+			} while (height > 0);
 
 			return image;
 		}
