@@ -95,6 +95,9 @@ namespace Mosa.Compiler.Framework
 
 		public bool Is32Bit { get; private set; }
 
+		public ulong RangeStart => MinValue;
+		public ulong RangeLength => (MaxValue - MinValue) + 1;
+
 		public bool Is64Bit => !Is32Bit;
 
 		public bool AreAll64BitsKnown => (BitsKnown & ulong.MaxValue) == ulong.MaxValue;
@@ -148,13 +151,13 @@ namespace Mosa.Compiler.Framework
 
 		public static BitValue CreateValue(ulong bitsSet, ulong bitsClear, ulong maxValue, ulong minValue, bool rangeDeterminate, bool is32Bit)
 		{
-			maxValue = rangeDeterminate ? maxValue : ulong.MaxValue;
-			minValue = rangeDeterminate ? minValue : 0;
+			ulong _maxValue = rangeDeterminate ? maxValue : ulong.MaxValue;
+			ulong _minValue = rangeDeterminate ? minValue : 0;
 
 			if (is32Bit)
 			{
-				maxValue &= uint.MaxValue;
-				minValue &= uint.MaxValue;
+				_maxValue &= uint.MaxValue;
+				_minValue &= uint.MaxValue;
 				bitsSet &= uint.MaxValue;
 				bitsClear |= Upper32BitsSet;
 			}
@@ -163,22 +166,22 @@ namespace Mosa.Compiler.Framework
 			var maxPossible = bitsSet | bitsUnknown;
 			var minPossible = bitsSet & bitsUnknown;
 
-			minValue = Math.Max(minValue, minPossible);
-			maxValue = Math.Min(maxValue, maxPossible);
+			_minValue = Math.Max(_minValue, minPossible);
+			_maxValue = Math.Min(_maxValue, maxPossible);
 
-			if (maxValue == minValue)
-				return CreateValue(maxValue, is32Bit);
+			if (_maxValue == _minValue)
+				return CreateValue(_maxValue, is32Bit);
 
 			if ((bitsSet | bitsClear) == ulong.MaxValue)
 				return CreateValue(bitsSet, is32Bit);
 
-			if (bitsSet == 0 && bitsClear == Upper32BitsSet && maxValue == uint.MaxValue && minValue == 0 && is32Bit)
+			if (bitsSet == 0 && bitsClear == Upper32BitsSet && _maxValue == uint.MaxValue && _minValue == 0 && is32Bit)
 				return Any32;
 
-			if (bitsSet == 0 && bitsClear == 0 && maxValue == ulong.MaxValue && minValue == 0 && !is32Bit)
+			if (bitsSet == 0 && bitsClear == 0 && _maxValue == ulong.MaxValue && _minValue == 0 && !is32Bit)
 				return Any64;
 
-			return new BitValue(bitsSet, bitsClear, maxValue, minValue, is32Bit);
+			return new BitValue(bitsSet, bitsClear, _maxValue, _minValue, is32Bit);
 		}
 
 		public static BitValue CreateValue(bool value, bool is32Bit)

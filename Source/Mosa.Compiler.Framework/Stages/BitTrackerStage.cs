@@ -764,6 +764,17 @@ namespace Mosa.Compiler.Framework.Stages
 			return null;
 		}
 
+		public static ulong LimitIncreasingBound(ulong newvalue, ulong previousvalue, ulong maxvalue)
+		{
+			if (newvalue > maxvalue)
+				return maxvalue;
+
+			if (newvalue < previousvalue)
+				return 0;
+
+			return newvalue;
+		}
+
 		#region IR Instructions
 
 		private static BitValue Add32(InstructionNode node, TransformContext transformContext)
@@ -1055,13 +1066,13 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			return BitValue.CreateValue(
-				bitsSet: value1.BitsSet,
-				bitsClear: value1.BitsClear,
-				maxValue: value1.MaxValue,
-				minValue: value1.MinValue,
+				bitsSet: value1.BitsSet & uint.MaxValue,
+				bitsClear: value1.BitsClear & uint.MaxValue,
+				maxValue: uint.MaxValue,
+				minValue: 0,
 				rangeDeterminate: true,
 				is32Bit: true
-			);
+			); ;
 		}
 
 		private static BitValue LoadParamZeroExtend16x32(InstructionNode node, TransformContext transformContext)
@@ -1205,8 +1216,8 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.CreateValue(
 				bitsSet: value1.BitsSet & value2.BitsSet,
 				bitsClear: value2.BitsClear | value1.BitsClear,
-				maxValue: value1.MaxValue & value2.MaxValue,
-				minValue: value1.MinValue & value2.MinValue,
+				maxValue: Math.Max(value1.MaxValue, value2.MaxValue),
+				minValue: Math.Min(value1.MinValue, value2.MinValue),
 				rangeDeterminate: true,
 				is32Bit: true
 			);
@@ -1233,8 +1244,8 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.CreateValue(
 				bitsSet: value1.BitsSet & value2.BitsSet,
 				bitsClear: value2.BitsClear | value1.BitsClear,
-				maxValue: value1.MaxValue & value2.MaxValue,
-				minValue: value1.MinValue & value2.MinValue,
+				maxValue: Math.Max(value1.MaxValue, value2.MaxValue),
+				minValue: Math.Min(value1.MinValue, value2.MinValue),
 				rangeDeterminate: true,
 				is32Bit: false
 			);
@@ -1317,8 +1328,8 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.CreateValue(
 				bitsSet: value1.BitsSet | value2.BitsSet,
 				bitsClear: value2.BitsClear & value1.BitsClear,
-				maxValue: value1.MaxValue | value2.MaxValue,
-				minValue: value1.MinValue | value2.MinValue,
+				maxValue: Math.Max(value1.MaxValue, value2.MaxValue),
+				minValue: Math.Min(value1.MinValue, value2.MinValue),
 				rangeDeterminate: true,
 				is32Bit: true
 			);
@@ -1355,8 +1366,8 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.CreateValue(
 				bitsSet: value1.BitsSet | value2.BitsSet,
 				bitsClear: value2.BitsClear & value1.BitsClear,
-				maxValue: value1.MaxValue | value2.MaxValue,
-				minValue: value1.MinValue | value2.MinValue,
+				maxValue: Math.Max(value1.MaxValue, value2.MaxValue),
+				minValue: Math.Min(value1.MinValue, value2.MinValue),
 				rangeDeterminate: true,
 				is32Bit: false
 			);
@@ -1879,11 +1890,6 @@ namespace Mosa.Compiler.Framework.Stages
 				return BitValue.CreateValue(value1.BitsSet32 << shift, true);
 			}
 
-			//if (value1.AreLower32BitsKnown && value1.BitsSet32 == 0)
-			//{
-			//	return BitValue.Zero32;
-			//}
-
 			if (value2.AreLower5BitsKnown && shift == 0)
 			{
 				return value1;
@@ -1894,14 +1900,12 @@ namespace Mosa.Compiler.Framework.Stages
 				return BitValue.CreateValue(
 					bitsSet: value1.BitsSet << shift,
 					bitsClear: Upper32BitsSet | (value1.BitsClear << shift) | ~(ulong.MaxValue << shift),
-					maxValue: value1.MaxValue << shift,
-					minValue: value1.MinValue << shift,
+					maxValue: LimitIncreasingBound(value1.MaxValue << shift, value1.MaxValue, uint.MaxValue),
+					minValue: (value1.MinValue << shift) > value1.MinValue ? value1.MinValue << shift : 0,
 					rangeDeterminate: true,
 					is32Bit: true
 				);
 			}
-
-			// FUTURE: Using the known highest and lowers bit sequences, the bit sets and ranges can be set and narrower respectively
 
 			if (value1.AreAnyBitsKnown)
 			{
@@ -1962,8 +1966,8 @@ namespace Mosa.Compiler.Framework.Stages
 				return BitValue.CreateValue(
 					bitsSet: value1.BitsSet << shift,
 					bitsClear: (value1.BitsClear << shift) | ~(ulong.MaxValue << shift),
-					maxValue: value1.MaxValue << shift,
-					minValue: value1.MinValue << shift,
+					maxValue: LimitIncreasingBound(value1.MaxValue << shift, value1.MaxValue, ulong.MaxValue),
+					minValue: (value1.MinValue << shift) > value1.MinValue ? value1.MinValue << shift : 0,
 					rangeDeterminate: true,
 					is32Bit: false
 				);
@@ -2343,8 +2347,8 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.CreateValue(
 				bitsSet: value1.BitsSet,
 				bitsClear: Upper32BitsSet | value1.BitsClear,
-				maxValue: value1.MaxValue & uint.MaxValue,
-				minValue: value1.MinValue & uint.MaxValue,
+				maxValue: Math.Min(uint.MaxValue, value1.MaxValue),
+				minValue: value1.MinValue > uint.MaxValue ? 0 : value1.MinValue,
 				rangeDeterminate: true,
 				is32Bit: true
 			);
@@ -2365,8 +2369,8 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.CreateValue(
 				bitsSet: value1.BitsSet16,
 				bitsClear: value1.BitsClear | Upper48BitsSet,
-				maxValue: value1.MaxValue & ushort.MaxValue,
-				minValue: value1.MinValue & ushort.MaxValue,
+				maxValue: Math.Min(byte.MaxValue, value1.MaxValue),
+				minValue: value1.MinValue > byte.MaxValue ? 0 : value1.MinValue,
 				rangeDeterminate: true,
 				is32Bit: true
 			);
@@ -2392,8 +2396,8 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.CreateValue(
 				bitsSet: value1.BitsSet32,
 				bitsClear: Upper32BitsSet | value1.BitsClear,
-				maxValue: value1.MaxValue & uint.MaxValue,
-				minValue: value1.MinValue & uint.MaxValue,
+				maxValue: Math.Min(uint.MaxValue, value1.MaxValue),
+				minValue: value1.MinValue > uint.MaxValue ? 0 : value1.MinValue,
 				rangeDeterminate: true,
 				is32Bit: false
 			);
@@ -2414,8 +2418,8 @@ namespace Mosa.Compiler.Framework.Stages
 			return BitValue.CreateValue(
 				bitsSet: value1.BitsSet8,
 				bitsClear: value1.BitsClear | Upper56BitsSet,
-				maxValue: value1.MaxValue & byte.MaxValue,
-				minValue: value1.MinValue & byte.MaxValue,
+				maxValue: Math.Min(byte.MaxValue, value1.MaxValue),
+				minValue: value1.MinValue > byte.MaxValue ? 0 : value1.MinValue,
 				rangeDeterminate: true,
 				is32Bit: true
 			);
@@ -2423,7 +2427,24 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private static BitValue ZeroExtend8x64(InstructionNode node, TransformContext transformContext)
 		{
-			return ZeroExtend8x32(node, transformContext);
+			var value1 = transformContext.GetBitValue(node.Operand1);
+
+			if (value1 == null)
+				return null;
+
+			if (value1.AreLower8BitsKnown)
+			{
+				return BitValue.CreateValue(value1.BitsSet8, true);
+			}
+
+			return BitValue.CreateValue(
+				bitsSet: value1.BitsSet8,
+				bitsClear: value1.BitsClear | Upper56BitsSet,
+				maxValue: Math.Min(byte.MaxValue, value1.MaxValue),
+				minValue: value1.MinValue > byte.MaxValue ? 0 : value1.MinValue,
+				rangeDeterminate: true,
+				is32Bit: false
+			);
 		}
 
 		private static BitValue IfThenElse32(InstructionNode node, TransformContext transformContext)
