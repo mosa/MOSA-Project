@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 {
 	/// <summary>
-	/// Compare32x32Add32UnsignedRange
+	/// Compare32x32DivUnsignedRange
 	/// </summary>
-	public sealed class Compare32x32Add32UnsignedRange : BaseTransformation
+	public sealed class Compare32x32DivUnsignedRange : BaseTransformation
 	{
-		public Compare32x32Add32UnsignedRange() : base(IRInstruction.Compare32x32)
+		public Compare32x32DivUnsignedRange() : base(IRInstruction.Compare32x32)
 		{
 		}
 
@@ -59,11 +59,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 	}
 
 	/// <summary>
-	/// Compare32x32Add32UnsignedRange_v1
+	/// Compare32x32DivUnsignedRange_v1
 	/// </summary>
-	public sealed class Compare32x32Add32UnsignedRange_v1 : BaseTransformation
+	public sealed class Compare32x32DivUnsignedRange_v1 : BaseTransformation
 	{
-		public Compare32x32Add32UnsignedRange_v1() : base(IRInstruction.Compare32x32)
+		public Compare32x32DivUnsignedRange_v1() : base(IRInstruction.Compare32x32)
 		{
 		}
 

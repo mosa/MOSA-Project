@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 			if (IsZero(context.Operand2))
 				return false;
 
-			if (!IsLessOrEqual(GetHighestSetBit(To32(context.Operand1.Definitions[0].Operand2)), To32(context.Operand2)))
+			if (!IsLessOrEqual(GetHighestSetBitPosition(To32(context.Operand1.Definitions[0].Operand2)), To32(context.Operand2)))
 				return false;
 
 			return true;
@@ -81,7 +81,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 			if (IsZero(context.Operand2))
 				return false;
 
-			if (!IsLessOrEqual(GetHighestSetBit(To32(context.Operand1.Definitions[0].Operand1)), To32(context.Operand2)))
+			if (!IsLessOrEqual(GetHighestSetBitPosition(To32(context.Operand1.Definitions[0].Operand1)), To32(context.Operand2)))
 				return false;
 
 			return true;

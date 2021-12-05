@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 {
 	/// <summary>
-	/// Compare64x32Add32UnsignedRange
+	/// Compare32x64DivUnsignedRange
 	/// </summary>
-	public sealed class Compare64x32Add32UnsignedRange : BaseTransformation
+	public sealed class Compare32x64DivUnsignedRange : BaseTransformation
 	{
-		public Compare64x32Add32UnsignedRange() : base(IRInstruction.Compare64x32)
+		public Compare32x64DivUnsignedRange() : base(IRInstruction.Compare32x64)
 		{
 		}
 
@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 			if (context.Operand1.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand1.Definitions[0].Instruction != IRInstruction.DivUnsigned32)
+			if (context.Operand1.Definitions[0].Instruction != IRInstruction.DivUnsigned64)
 				return false;
 
 			if (!IsResolvedConstant(context.Operand2))
@@ -49,21 +49,21 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 			var t2 = context.Operand1.Definitions[0].Operand2;
 			var t3 = context.Operand2;
 
-			var v1 = transformContext.AllocateVirtualRegister(transformContext.I4);
+			var v1 = transformContext.AllocateVirtualRegister(transformContext.I8);
 
-			var e1 = transformContext.CreateConstant(MulUnsigned32(To32(t2), To32(t3)));
+			var e1 = transformContext.CreateConstant(MulUnsigned64(To64(t2), To64(t3)));
 
-			context.SetInstruction(IRInstruction.Sub32, v1, t1, e1);
-			context.AppendInstruction(IRInstruction.Compare64x32, ConditionCode.UnsignedLess, result, v1, t2);
+			context.SetInstruction(IRInstruction.Sub64, v1, t1, e1);
+			context.AppendInstruction(IRInstruction.Compare32x64, ConditionCode.UnsignedLess, result, v1, t2);
 		}
 	}
 
 	/// <summary>
-	/// Compare64x32Add32UnsignedRange_v1
+	/// Compare32x64DivUnsignedRange_v1
 	/// </summary>
-	public sealed class Compare64x32Add32UnsignedRange_v1 : BaseTransformation
+	public sealed class Compare32x64DivUnsignedRange_v1 : BaseTransformation
 	{
-		public Compare64x32Add32UnsignedRange_v1() : base(IRInstruction.Compare64x32)
+		public Compare32x64DivUnsignedRange_v1() : base(IRInstruction.Compare32x64)
 		{
 		}
 
@@ -78,7 +78,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 			if (context.Operand2.Definitions.Count != 1)
 				return false;
 
-			if (context.Operand2.Definitions[0].Instruction != IRInstruction.DivUnsigned32)
+			if (context.Operand2.Definitions[0].Instruction != IRInstruction.DivUnsigned64)
 				return false;
 
 			if (!IsResolvedConstant(context.Operand1))
@@ -101,12 +101,12 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 			var t2 = context.Operand2.Definitions[0].Operand1;
 			var t3 = context.Operand2.Definitions[0].Operand2;
 
-			var v1 = transformContext.AllocateVirtualRegister(transformContext.I4);
+			var v1 = transformContext.AllocateVirtualRegister(transformContext.I8);
 
-			var e1 = transformContext.CreateConstant(MulUnsigned32(To32(t3), To32(t1)));
+			var e1 = transformContext.CreateConstant(MulUnsigned64(To64(t3), To64(t1)));
 
-			context.SetInstruction(IRInstruction.Sub32, v1, t2, e1);
-			context.AppendInstruction(IRInstruction.Compare64x32, ConditionCode.UnsignedLess, result, v1, t3);
+			context.SetInstruction(IRInstruction.Sub64, v1, t2, e1);
+			context.AppendInstruction(IRInstruction.Compare32x64, ConditionCode.UnsignedLess, result, v1, t3);
 		}
 	}
 }

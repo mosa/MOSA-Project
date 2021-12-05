@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 {
 	/// <summary>
-	/// Compare32x32RemUnsigned32Sign
+	/// Compare32x32RemUnsigned
 	/// </summary>
-	public sealed class Compare32x32RemUnsigned32Sign : BaseTransformation
+	public sealed class Compare32x32RemUnsigned : BaseTransformation
 	{
-		public Compare32x32RemUnsigned32Sign() : base(IRInstruction.Compare32x32)
+		public Compare32x32RemUnsigned() : base(IRInstruction.Compare32x32)
 		{
 		}
 
@@ -57,11 +57,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 	}
 
 	/// <summary>
-	/// Compare32x32RemUnsigned32Sign_v1
+	/// Compare32x32RemUnsigned_v1
 	/// </summary>
-	public sealed class Compare32x32RemUnsigned32Sign_v1 : BaseTransformation
+	public sealed class Compare32x32RemUnsigned_v1 : BaseTransformation
 	{
-		public Compare32x32RemUnsigned32Sign_v1() : base(IRInstruction.Compare32x32)
+		public Compare32x32RemUnsigned_v1() : base(IRInstruction.Compare32x32)
 		{
 		}
 

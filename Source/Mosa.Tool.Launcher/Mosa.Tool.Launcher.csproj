@@ -39,7 +39,7 @@
 		<Content Include="rocket.ico" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="System.ComponentModel.Composition" Version="5.0.0" />
+		<PackageReference Include="System.ComponentModel.Composition" Version="6.0.0" />
 		<PackageReference Include="System.Runtime" Version="4.3.1" />
 	</ItemGroup>
 </Project>

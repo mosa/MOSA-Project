@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 {
 	/// <summary>
-	/// Compare64x64RemUnsigned64Sign
+	/// Compare32x64RemUnsigned
 	/// </summary>
-	public sealed class Compare64x64RemUnsigned64Sign : BaseTransformation
+	public sealed class Compare32x64RemUnsigned : BaseTransformation
 	{
-		public Compare64x64RemUnsigned64Sign() : base(IRInstruction.Compare64x64)
+		public Compare32x64RemUnsigned() : base(IRInstruction.Compare32x64)
 		{
 		}
 
@@ -57,11 +57,11 @@ namespace Mosa.Compiler.Framework.Transform.Auto.StrengthReduction
 	}
 
 	/// <summary>
-	/// Compare64x64RemUnsigned64Sign_v1
+	/// Compare32x64RemUnsigned_v1
 	/// </summary>
-	public sealed class Compare64x64RemUnsigned64Sign_v1 : BaseTransformation
+	public sealed class Compare32x64RemUnsigned_v1 : BaseTransformation
 	{
-		public Compare64x64RemUnsigned64Sign_v1() : base(IRInstruction.Compare64x64)
+		public Compare32x64RemUnsigned_v1() : base(IRInstruction.Compare32x64)
 		{
 		}
 

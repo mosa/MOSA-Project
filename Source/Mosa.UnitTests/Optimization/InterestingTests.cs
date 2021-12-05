@@ -40,7 +40,6 @@ namespace Mosa.UnitTests.Optimization
 			return (a % 2) == 0;
 		}
 
-
 		[MosaUnitTest(Series = "I4")]
 		public static bool IsEven2(int a)
 		{
@@ -48,9 +47,15 @@ namespace Mosa.UnitTests.Optimization
 		}
 
 		[MosaUnitTest(Series = "U4")]
-		public static bool IsEven2(uint a)
+		public static bool ImproveDivide(uint a)
 		{
-			return (a % 2) != 1;
+			return a / 12 == 15;
+		}
+
+		[MosaUnitTest(Series = "U4")]
+		public static bool TooHigh(uint a)
+		{
+			return a % 12 == 15;
 		}
 	}
 }

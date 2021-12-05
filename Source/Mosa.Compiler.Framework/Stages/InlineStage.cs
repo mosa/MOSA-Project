@@ -16,9 +16,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Dictionary<MosaMethod, KeyValuePair<MethodData, InlineMethodData>> cache;
 
-		private bool InlineExplicit;
-		private bool InlineMethods;
-
 		protected override void Initialize()
 		{
 			Register(InlineCount);
