@@ -149,8 +149,6 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.Or64, Or64);
 			AddVisitation(IRInstruction.Xor64, Xor64);
 			AddVisitation(IRInstruction.Move64, Move64);
-			AddVisitation(IRInstruction.MulCarryOut64, MulCarryOut64);
-			AddVisitation(IRInstruction.MulOverflowOut64, MulOverflowOut64);
 			AddVisitation(IRInstruction.MulSigned64, MulSigned64);
 			AddVisitation(IRInstruction.MulUnsigned64, MulUnsigned64);
 			AddVisitation(IRInstruction.ShiftLeft64, ShiftLeft64);
@@ -647,8 +645,9 @@ namespace Mosa.Platform.x86.Stages
 			var operand2 = context.Operand2;
 
 			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
 
-			context.SetInstruction(X86.IMul32, result, operand1, operand2);
+			context.SetInstruction2(X86.Mul32, v2, result, operand1, operand2);
 			context.AppendInstruction(X86.Setcc, ConditionCode.Carry, v1);
 			context.AppendInstruction(X86.Movzx8To32, result2, v1);
 		}
@@ -1344,77 +1343,6 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov32, resultLow, op1L);
 			context.AppendInstruction(X86.Mov32, resultHigh, op1H);
-		}
-
-		private void MulCarryOut64(Context context)
-		{
-			var result2 = context.Result2;
-			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
-			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
-			SplitLongOperand(context.Operand2, out var op2L, out var op2H);
-
-			var v1 = AllocateVirtualRegisterI32();
-			var v2 = AllocateVirtualRegisterI32();
-			var v3 = AllocateVirtualRegisterI32();
-			var v4 = AllocateVirtualRegisterI32();
-			var v5 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
-
-			context.SetInstruction(X86.Mov32, v1, op2L);
-			context.AppendInstruction2(X86.Mul32, v1, resultLow, op2L, op1L);
-
-			if (!resultHigh.IsConstantZero)
-			{
-				context.AppendInstruction(X86.Mov32, v2, op1L);
-				context.AppendInstruction(X86.IMul32, v3, v2, op2H);
-				context.AppendInstruction(X86.Add32, v4, v1, v3);
-				context.AppendInstruction(X86.Mov32, v3, op2L);
-				context.AppendInstruction(X86.IMul32, v3, v3, op1H);
-				context.AppendInstruction(X86.Setcc, ConditionCode.Carry, v5);
-				context.AppendInstruction(X86.Add32, resultHigh, v4, v3);
-				context.AppendInstruction(X86.Movzx8To32, result2, v5);
-			}
-			else
-			{
-				context.AppendInstruction(X86.Setcc, ConditionCode.Carry, v5);
-				context.AppendInstruction(X86.Movzx8To32, result2, v5);
-			}
-		}
-
-		private void MulOverflowOut64(Context context)
-		{
-			var result2 = context.Result2;
-			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
-			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
-			SplitLongOperand(context.Operand2, out var op2L, out var op2H);
-
-			var v1 = AllocateVirtualRegisterI32();
-			var v2 = AllocateVirtualRegisterI32();
-			var v3 = AllocateVirtualRegisterI32();
-			var v4 = AllocateVirtualRegisterI32();
-			var v5 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
-
-			context.SetInstruction(X86.Mov32, v1, op2L);
-			context.AppendInstruction2(X86.Mul32, v1, resultLow, op2L, op1L);
-
-			if (!resultHigh.IsConstantZero)
-			{
-				context.AppendInstruction(X86.Mov32, v2, op1L);
-				context.AppendInstruction(X86.IMul32, v2, v2, op2H);
-				context.AppendInstruction(X86.Add32, v3, v1, v2);
-				context.AppendInstruction(X86.Mov32, v4, op2L);
-				context.AppendInstruction(X86.IMul32, v4, v4, op1H);
-				context.AppendInstruction(X86.Add32, resultHigh, v3, v4);
-				context.AppendInstruction(X86.Setcc, ConditionCode.Overflow, v5);
-
-				// context.AppendInstruction(X86.Cmp32, null, resultHigh, v2);
-				// context.AppendInstruction(X86.Setcc, ConditionCode.UnsignedLess, v5);
-				context.AppendInstruction(X86.Movzx8To32, result2, v5);
-			}
-			else
-			{
-				context.AppendInstruction(X86.Setcc, ConditionCode.Overflow, v5);
-				context.AppendInstruction(X86.Movzx8To32, result2, v5);
-			}
 		}
 
 		private void MulSigned64(Context context)
