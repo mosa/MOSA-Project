@@ -19,11 +19,12 @@ namespace Mosa.Platform.x86.Stages
 		protected override void PopulateVisitationDictionary()
 		{
 			AddVisitation(IRInstruction.Add32, Add32);
+			AddVisitation(IRInstruction.AddCarryIn32, AddCarryIn32);
 			AddVisitation(IRInstruction.AddCarryOut32, AddCarryOut32);
+			AddVisitation(IRInstruction.AddOverflowOut32, AddOverflowOut32);
 			AddVisitation(IRInstruction.AddR4, AddR4);
 			AddVisitation(IRInstruction.AddR8, AddR8);
 			AddVisitation(IRInstruction.AddressOf, AddressOf);
-			AddVisitation(IRInstruction.AddCarryIn32, AddCarryIn32);
 			AddVisitation(IRInstruction.ArithShiftRight32, ArithShiftRight32);
 			AddVisitation(IRInstruction.BitCopyR4To32, BitCopyR4To32);
 			AddVisitation(IRInstruction.BitCopy32ToR4, BitCopy32ToR4);
@@ -41,8 +42,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.ConvertI32ToR4, ConvertI32ToR4);
 			AddVisitation(IRInstruction.ConvertI32ToR8, ConvertI32ToR8);
 
-			//AddVisitation(IRInstruction.ConvertR4ToI32, ConvertR4ToI32);	// TODO
-			//AddVisitation(IRInstruction.ConvertR8ToI32, ConvertR8ToI32);	// TODO
+			//AddVisitation(IRInstruction.ConvertR4ToU32, ConvertR4ToU32);	// TODO
+			//AddVisitation(IRInstruction.ConvertR8ToU32, ConvertR8ToU32);	// TODO
 			//AddVisitation(IRInstruction.ConvertU32ToR4, ConvertU32ToR4);	// TODO
 			//AddVisitation(IRInstruction.ConvertU32ToR8, ConvertU32ToR8);	// TODO
 
@@ -76,6 +77,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.MoveR8, MoveR8);
 			AddVisitation(IRInstruction.Move32, Move32);
 			AddVisitation(IRInstruction.MoveObject, MoveObject);
+			AddVisitation(IRInstruction.MulCarryOut32, MulCarryOut32);
+			AddVisitation(IRInstruction.MulOverflowOut32, MulOverflowOut32);
 			AddVisitation(IRInstruction.MulR4, MulR4);
 			AddVisitation(IRInstruction.MulR8, MulR8);
 			AddVisitation(IRInstruction.MulSigned32, MulSigned32);
@@ -100,10 +103,11 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.StoreParam8, StoreParamInt8);
 			AddVisitation(IRInstruction.StoreParamObject, StoreParamObject);
 			AddVisitation(IRInstruction.Sub32, Sub32);
+			AddVisitation(IRInstruction.SubCarryIn32, SubCarryIn32);
 			AddVisitation(IRInstruction.SubCarryOut32, SubCarryOut32);
+			AddVisitation(IRInstruction.SubOverflowOut32, SubOverflowOut32);
 			AddVisitation(IRInstruction.SubR4, SubR4);
 			AddVisitation(IRInstruction.SubR8, SubR8);
-			AddVisitation(IRInstruction.SubCarryIn32, SubCarryIn32);
 			AddVisitation(IRInstruction.Switch, Switch);
 			AddVisitation(IRInstruction.ZeroExtend16x32, ZeroExtend16x32);
 			AddVisitation(IRInstruction.ZeroExtend8x32, ZeroExtend8x32);
@@ -111,6 +115,8 @@ namespace Mosa.Platform.x86.Stages
 			// 64-bit Transforms
 
 			AddVisitation(IRInstruction.Add64, Add64);
+			AddVisitation(IRInstruction.AddCarryOut64, AddCarryOut64);
+			AddVisitation(IRInstruction.AddOverflowOut64, AddOverflowOut64);
 			AddVisitation(IRInstruction.BitCopyR8To64, BitCopyFloatR8To64);
 			AddVisitation(IRInstruction.BitCopy64ToR8, BitCopy64ToFloatR8);
 			AddVisitation(IRInstruction.ArithShiftRight64, ArithShiftRight64);
@@ -124,8 +130,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.ConvertI64ToR4, Convert64ToFloatR4);
 			AddVisitation(IRInstruction.ConvertI64ToR8, Convert64ToFloatR8);
 
-			//AddVisitation(IRInstruction.ConvertR4ToI64, ConvertR4ToI64);
-			//AddVisitation(IRInstruction.ConvertR8ToI64, ConvertR8ToI64);
+			//AddVisitation(IRInstruction.ConvertR4ToU64, ConvertR4ToU64);
+			//AddVisitation(IRInstruction.ConvertR8ToU64, ConvertR8ToU64);
 			//AddVisitation(IRInstruction.ConvertU64ToR4, ConvertU64ToR4);
 			//AddVisitation(IRInstruction.ConvertU64ToR8, ConvertU64ToR8);
 
@@ -155,6 +161,8 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.Store64, Store64);
 			AddVisitation(IRInstruction.StoreParam64, StoreParam64);
 			AddVisitation(IRInstruction.Sub64, Sub64);
+			AddVisitation(IRInstruction.SubCarryOut64, SubCarryOut64);
+			AddVisitation(IRInstruction.SubOverflowOut64, SubOverflowOut64);
 			AddVisitation(IRInstruction.To64, To64);
 			AddVisitation(IRInstruction.Truncate64x32, Truncate64x32);
 			AddVisitation(IRInstruction.ZeroExtend16x64, ZeroExtended16x64);
@@ -191,6 +199,20 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Add32, result, operand1, operand2);
 			context.AppendInstruction(X86.Setcc, ConditionCode.Carry, v1);
+			context.AppendInstruction(X86.Movzx8To32, result2, v1);
+		}
+
+		private void AddOverflowOut32(Context context)
+		{
+			var result = context.Result;
+			var result2 = context.Result2;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			context.SetInstruction(X86.Add32, result, operand1, operand2);
+			context.AppendInstruction(X86.Setcc, ConditionCode.Overflow, v1);
 			context.AppendInstruction(X86.Movzx8To32, result2, v1);
 		}
 
@@ -450,27 +472,27 @@ namespace Mosa.Platform.x86.Stages
 				var v1 = AllocateVirtualRegister(result.Type);
 
 				context.SetInstruction(X86.Cmp32, null, operand1, ConstantZero32);
-				context.AppendInstruction(X86.Mov32, result, operand2);										// true
-				context.AppendInstruction(X86.Mov32, v1, operand3);											// true
-				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, result, v1);				// false
+				context.AppendInstruction(X86.Mov32, result, operand2);                                     // true
+				context.AppendInstruction(X86.Mov32, v1, operand3);                                         // true
+				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, result, v1);             // false
 			}
 			else if (operand2.IsConstant && !operand3.IsConstant)
 			{
 				context.SetInstruction(X86.Cmp32, null, operand1, ConstantZero32);
-				context.AppendInstruction(X86.Mov32,  result,  operand2);									// true
-				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, result, operand3);		// false
+				context.AppendInstruction(X86.Mov32, result, operand2);                                 // true
+				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, result, operand3);       // false
 			}
 			else if (!operand2.IsConstant && operand3.IsConstant)
 			{
 				context.SetInstruction(X86.Cmp32, null, operand1, ConstantZero32);
-				context.AppendInstruction(X86.Mov32, result, operand3);										// true
-				context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, result, result, operand2);	// false
+				context.AppendInstruction(X86.Mov32, result, operand3);                                     // true
+				context.AppendInstruction(X86.CMov32, ConditionCode.NotEqual, result, result, operand2);    // false
 			}
 			else if (!operand2.IsConstant && !operand3.IsConstant)
 			{
 				context.SetInstruction(X86.Cmp32, null, operand1, ConstantZero32);
-				context.AppendInstruction(X86.Mov32, result, operand2);										// true
-				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, result, operand3);		// false
+				context.AppendInstruction(X86.Mov32, result, operand2);                                     // true
+				context.AppendInstruction(X86.CMov32, ConditionCode.Equal, result, result, operand3);       // false
 			}
 		}
 
@@ -613,6 +635,35 @@ namespace Mosa.Platform.x86.Stages
 			operand1 = MoveConstantToFloatRegister(context, operand1);
 
 			context.SetInstruction(X86.Movsd, result, operand1);
+		}
+
+		private void MulCarryOut32(Context context)
+		{
+			var result = context.Result;
+			var result2 = context.Result2;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+			var v2 = AllocateVirtualRegister(TypeSystem.BuiltIn.U4);
+
+			context.SetInstruction2(X86.Mul32, v2, result, operand1, operand2);
+			context.AppendInstruction(X86.Setcc, ConditionCode.Carry, v1);
+			context.AppendInstruction(X86.Movzx8To32, result2, v1);
+		}
+
+		private void MulOverflowOut32(Context context)
+		{
+			var result = context.Result;
+			var result2 = context.Result2;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			context.SetInstruction(X86.IMul32, result, operand1, operand2);
+			context.AppendInstruction(X86.Setcc, ConditionCode.Overflow, v1);
+			context.AppendInstruction(X86.Movzx8To32, result2, v1);
 		}
 
 		private void MulR4(Context context)
@@ -837,6 +888,20 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Movzx8To32, result2, v1);
 		}
 
+		private void SubOverflowOut32(Context context)
+		{
+			var result = context.Result;
+			var result2 = context.Result2;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			context.SetInstruction(X86.Sub32, result, operand1, operand2);
+			context.AppendInstruction(X86.Setcc, ConditionCode.Overflow, v1);
+			context.AppendInstruction(X86.Movzx8To32, result2, v1);
+		}
+
 		private void SubR4(Context context)
 		{
 			var result = context.Result;
@@ -902,6 +967,36 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Add32, resultLow, op1L, op2L);
 			context.AppendInstruction(X86.Adc32, resultHigh, op1H, op2H);
+		}
+
+		private void AddCarryOut64(Context context)
+		{
+			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
+			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
+			SplitLongOperand(context.Operand2, out var op2L, out var op2H);
+			var result2 = context.Result2;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			context.SetInstruction(X86.Add32, resultLow, op1L, op2L);
+			context.AppendInstruction(X86.Adc32, resultHigh, op1H, op2H);
+			context.AppendInstruction(X86.Setcc, ConditionCode.Carry, v1);
+			context.AppendInstruction(X86.Movzx8To32, result2, v1);
+		}
+
+		private void AddOverflowOut64(Context context)
+		{
+			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
+			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
+			SplitLongOperand(context.Operand2, out var op2L, out var op2H);
+			var result2 = context.Result2;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			context.SetInstruction(X86.Add32, resultLow, op1L, op2L);
+			context.AppendInstruction(X86.Adc32, resultHigh, op1H, op2H);
+			context.AppendInstruction(X86.Setcc, ConditionCode.Overflow, v1);
+			context.AppendInstruction(X86.Movzx8To32, result2, v1);
 		}
 
 		private void And64(Context context)
@@ -1435,6 +1530,36 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Sub32, resultLow, op1L, op2L);
 			context.AppendInstruction(X86.Sbb32, resultHigh, op1H, op2H);
+		}
+
+		private void SubCarryOut64(Context context)
+		{
+			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
+			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
+			SplitLongOperand(context.Operand2, out var op2L, out var op2H);
+			var result2 = context.Result2;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			context.SetInstruction(X86.Sub32, resultLow, op1L, op2L);
+			context.AppendInstruction(X86.Sbb32, resultHigh, op1H, op2H);
+			context.AppendInstruction(X86.Setcc, ConditionCode.Carry, v1);
+			context.AppendInstruction(X86.Movzx8To32, result2, v1);
+		}
+
+		private void SubOverflowOut64(Context context)
+		{
+			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
+			SplitLongOperand(context.Operand1, out var op1L, out var op1H);
+			SplitLongOperand(context.Operand2, out var op2L, out var op2H);
+			var result2 = context.Result2;
+
+			var v1 = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			context.SetInstruction(X86.Sub32, resultLow, op1L, op2L);
+			context.AppendInstruction(X86.Sbb32, resultHigh, op1H, op2H);
+			context.AppendInstruction(X86.Setcc, ConditionCode.Overflow, v1);
+			context.AppendInstruction(X86.Movzx8To32, result2, v1);
 		}
 
 		private void To64(Context context)

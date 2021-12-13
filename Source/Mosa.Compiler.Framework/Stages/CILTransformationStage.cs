@@ -26,6 +26,8 @@ namespace Mosa.Compiler.Framework.Stages
 		protected override void PopulateVisitationDictionary()
 		{
 			AddVisitation(CILInstruction.Add, Add);
+			AddVisitation(CILInstruction.Add_ovf, AddOverflow);
+			AddVisitation(CILInstruction.Add_ovf_un, AddOverflowUnsigned);
 			AddVisitation(CILInstruction.And, BinaryLogic);
 			AddVisitation(CILInstruction.Beq, BinaryBranch);
 			AddVisitation(CILInstruction.Beq_s, BinaryBranch);
@@ -175,6 +177,8 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(CILInstruction.Leave, Leave);
 			AddVisitation(CILInstruction.Leave_s, Leave);
 			AddVisitation(CILInstruction.Mul, Mul);
+			AddVisitation(CILInstruction.Mul_ovf, MulOverflow);
+			AddVisitation(CILInstruction.Mul_ovf_un, MulOverflowUnsigned);
 			AddVisitation(CILInstruction.Neg, Neg);
 			AddVisitation(CILInstruction.Newarr, Newarr);
 			AddVisitation(CILInstruction.Newobj, Newobj);
@@ -219,6 +223,8 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(CILInstruction.Stobj, Stobj);
 			AddVisitation(CILInstruction.Stsfld, Stsfld);
 			AddVisitation(CILInstruction.Sub, Sub);
+			AddVisitation(CILInstruction.Sub_ovf, SubOverflow);
+			AddVisitation(CILInstruction.Sub_ovf_un, SubOverflowUnsigned);
 			AddVisitation(CILInstruction.Switch, Switch);
 			AddVisitation(CILInstruction.Throw, Throw);
 			AddVisitation(CILInstruction.Unbox, Unbox);
@@ -227,16 +233,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			AddVisitation(CILInstruction.PreReadOnly, PreReadOnly);
 
-			//AddVisitation(CILInstruction.Add_ovf,Add_ovf);
-			//AddVisitation(CILInstruction.Add_ovf_un,Add_ovf_un);
 			//AddVisitation(CILInstruction.Arglist,Arglist);
 			//AddVisitation(CILInstruction.Ckfinite,Ckfinite);
 			//AddVisitation(CILInstruction.Cpobj,Cpobj);
 			//AddVisitation(CILInstruction.Jmp,Jmp);
 			//AddVisitation(CILInstruction.Localalloc,Localalloc);
 			//AddVisitation(CILInstruction.Mkrefany,Mkrefany);
-			//AddVisitation(CILInstruction.Mul_ovf,Mul_ovf);
-			//AddVisitation(CILInstruction.Mul_ovf_un,Mul_ovf_un);
 			//AddVisitation(CILInstruction.PreConstrained,PreConstrained);
 			//AddVisitation(CILInstruction.PreNo,PreNo);
 			//AddVisitation(CILInstruction.PreReadOnly,PreReadOnly);
@@ -245,8 +247,6 @@ namespace Mosa.Compiler.Framework.Stages
 			//AddVisitation(CILInstruction.PreVolatile,PreVolatile);
 			//AddVisitation(CILInstruction.Refanytype,Refanytype);
 			//AddVisitation(CILInstruction.Refanyval,Refanyval);
-			//AddVisitation(CILInstruction.Sub_ovf,Sub_ovf);
-			//AddVisitation(CILInstruction.Sub_ovf_un,Sub_ovf_un);
 		}
 
 		protected override void Run()
@@ -266,6 +266,32 @@ namespace Mosa.Compiler.Framework.Stages
 		private void Add(InstructionNode node)
 		{
 			Replace(node, IRInstruction.Add32, IRInstruction.Add64, IRInstruction.AddR8, IRInstruction.AddR4);
+		}
+
+		/// <summary>
+		/// Visitation function for Add Overflow instruction
+		/// </summary>
+		/// <param name="node">The node.</param>
+		private void AddOverflow(InstructionNode node)
+		{
+			var overflowResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			node.SetInstruction2(Select(node.Result, IRInstruction.AddOverflowOut32, IRInstruction.AddOverflowOut64), node.Result, overflowResult, node.Operand1, node.Operand2);
+
+			AddOverflowCheck(node, overflowResult);
+		}
+
+		/// <summary>
+		/// Visitation function for Add Overflow Unsigned instruction
+		/// </summary>
+		/// <param name="node">The node.</param>
+		private void AddOverflowUnsigned(InstructionNode node)
+		{
+			var carryResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			node.SetInstruction2(Select(node.Result, IRInstruction.AddCarryOut32, IRInstruction.AddCarryOut64), node.Result, carryResult, node.Operand1, node.Operand2);
+
+			AddOverflowCheck(node, carryResult);
 		}
 
 		/// <summary>
@@ -1132,6 +1158,32 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
+		/// Visitation function for Mul Overflow instruction
+		/// </summary>
+		/// <param name="node">The node.</param>
+		private void MulOverflow(InstructionNode node)
+		{
+			var overflowResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			node.SetInstruction2(Select(node.Result, IRInstruction.MulOverflowOut32, IRInstruction.MulOverflowOut64), node.Result, overflowResult, node.Operand1, node.Operand2);
+
+			AddOverflowCheck(node, overflowResult);
+		}
+
+		/// <summary>
+		/// Visitation function for Mul Overflow Unsigned instruction
+		/// </summary>
+		/// <param name="node">The node.</param>
+		private void MulOverflowUnsigned(InstructionNode node)
+		{
+			var carryResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			node.SetInstruction2(Select(node.Result, IRInstruction.MulCarryOut32, IRInstruction.MulCarryOut64), node.Result, carryResult, node.Operand1, node.Operand2);
+
+			AddOverflowCheck(node, carryResult);
+		}
+
+		/// <summary>
 		/// Visitation function for Neg instruction.
 		/// </summary>
 		/// <param name="node">The context.</param>
@@ -1575,6 +1627,32 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
+		/// Visitation function for Sub Overflow instruction
+		/// </summary>
+		/// <param name="node">The node.</param>
+		private void SubOverflow(InstructionNode node)
+		{
+			var overflowResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			node.SetInstruction2(Select(node.Result, IRInstruction.SubOverflowOut32, IRInstruction.SubOverflowOut64), node.Result, overflowResult, node.Operand1, node.Operand2);
+
+			AddOverflowCheck(node, overflowResult);
+		}
+
+		/// <summary>
+		/// Visitation function for Sub Overflow Unsigned instruction
+		/// </summary>
+		/// <param name="node">The node.</param>
+		private void SubOverflowUnsigned(InstructionNode node)
+		{
+			var carryResult = AllocateVirtualRegister(TypeSystem.BuiltIn.Boolean);
+
+			node.SetInstruction2(Select(node.Result, IRInstruction.SubCarryOut32, IRInstruction.SubCarryOut64), node.Result, carryResult, node.Operand1, node.Operand2);
+
+			AddOverflowCheck(node, carryResult);
+		}
+
+		/// <summary>
 		/// Visitation function for Switch instruction.
 		/// </summary>
 		/// <param name="node">The node.</param>
@@ -1973,6 +2051,30 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Build exception block which is just a call to throw exception
 			var method = InternalRuntimeType.FindMethodByName("ThrowIndexOutOfRangeException");
+			var symbolOperand = Operand.CreateSymbolFromMethod(method, TypeSystem);
+
+			exceptionContext.AppendInstruction(IRInstruction.CallStatic, null, symbolOperand);
+		}
+
+		/// <summary>
+		/// Adds overflow check using boolean result operand.
+		/// </summary>
+		/// <param name="node">The node.</param>
+		/// <param name="resultOperand">The overflow or carry result operand.</param>
+		private void AddOverflowCheck(InstructionNode node, Operand resultOperand)
+		{
+			var after = new Context(node).InsertAfter();
+
+			// First create new block and split current block
+			var exceptionContext = CreateNewBlockContexts(1, node.Label)[0];
+			var nextContext = Split(after);
+
+			// If result is equal to true then jump to exception block, otherwise jump to next block
+			after.SetInstruction(BranchInstruction, ConditionCode.NotEqual, null, resultOperand, ConstantZero, exceptionContext.Block);
+			after.AppendInstruction(IRInstruction.Jmp, nextContext.Block);
+
+			// Build exception block which is just a call to throw exception
+			var method = InternalRuntimeType.FindMethodByName("ThrowOverflowException");
 			var symbolOperand = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
 			exceptionContext.AppendInstruction(IRInstruction.CallStatic, null, symbolOperand);

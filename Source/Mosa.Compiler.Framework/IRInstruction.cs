@@ -20,6 +20,8 @@ namespace Mosa.Compiler.Framework
 		public static readonly AddCarryOut64 AddCarryOut64 = new AddCarryOut64();
 		public static readonly AddCarryIn32 AddCarryIn32 = new AddCarryIn32();
 		public static readonly AddCarryIn64 AddCarryIn64 = new AddCarryIn64();
+		public static readonly AddOverflowOut32 AddOverflowOut32 = new AddOverflowOut32();
+		public static readonly AddOverflowOut64 AddOverflowOut64 = new AddOverflowOut64();
 		public static readonly ArithShiftRight32 ArithShiftRight32 = new ArithShiftRight32();
 		public static readonly ArithShiftRight64 ArithShiftRight64 = new ArithShiftRight64();
 		public static readonly BlockEnd BlockEnd = new BlockEnd();
@@ -137,6 +139,10 @@ namespace Mosa.Compiler.Framework
 		public static readonly Move32 Move32 = new Move32();
 		public static readonly Move64 Move64 = new Move64();
 		public static readonly MoveObject MoveObject = new MoveObject();
+		public static readonly MulCarryOut32 MulCarryOut32 = new MulCarryOut32();
+		public static readonly MulCarryOut64 MulCarryOut64 = new MulCarryOut64();
+		public static readonly MulOverflowOut32 MulOverflowOut32 = new MulOverflowOut32();
+		public static readonly MulOverflowOut64 MulOverflowOut64 = new MulOverflowOut64();
 		public static readonly MulR4 MulR4 = new MulR4();
 		public static readonly MulR8 MulR8 = new MulR8();
 		public static readonly MulSigned32 MulSigned32 = new MulSigned32();
@@ -194,6 +200,8 @@ namespace Mosa.Compiler.Framework
 		public static readonly SubCarryOut64 SubCarryOut64 = new SubCarryOut64();
 		public static readonly SubCarryIn32 SubCarryIn32 = new SubCarryIn32();
 		public static readonly SubCarryIn64 SubCarryIn64 = new SubCarryIn64();
+		public static readonly SubOverflowOut32 SubOverflowOut32 = new SubOverflowOut32();
+		public static readonly SubOverflowOut64 SubOverflowOut64 = new SubOverflowOut64();
 		public static readonly Switch Switch = new Switch();
 		public static readonly Throw Throw = new Throw();
 		public static readonly Truncate64x32 Truncate64x32 = new Truncate64x32();

@@ -71,10 +71,7 @@ namespace Mosa.Compiler.Common
 			if (a == 0 | b == 0)
 				return false;
 
-			var r = a * b;
-			var r2 = r / b;
-
-			return r2 == a;
+			return ulong.MaxValue / a < b;
 		}
 
 		public static bool IsMultiplyOverflow(long a, long b)

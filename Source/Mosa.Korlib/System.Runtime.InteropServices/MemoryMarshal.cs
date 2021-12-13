@@ -26,10 +26,10 @@ namespace System.Runtime.InteropServices
 			where T : struct
 		{
 			if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
-				throw new Exception("Type is reference or contains references."); //ThrowHelper.ThrowInvalidTypeWithPointersNotSupported(typeof(T));
+				throw new ArgumentException("Type is reference or contains references.");
 
 			if (Unsafe.SizeOf<T>() > source.Length)
-				throw new Exception("Type length is above source length."); //ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument.length);
+				throw new ArgumentException("Type length is above source length.");
 
 			return Unsafe.ReadUnaligned<T>(ref GetReference(source));
 		}
@@ -42,10 +42,10 @@ namespace System.Runtime.InteropServices
 			where T : struct
 		{
 			if (RuntimeHelpers.IsReferenceOrContainsReferences<T>())
-				throw new Exception("Type is reference or contains references."); //ThrowHelper.ThrowInvalidTypeWithPointersNotSupported(typeof(T));
+				throw new ArgumentException("Type is reference or contains references.");
 
 			if (Unsafe.SizeOf<T>() > source.Length)
-				throw new Exception("Type length is above source length."); //ThrowHelper.ThrowArgumentOutOfRangeException(ExceptionArgument.length);
+				throw new ArgumentException("Type length is above source length.");
 
 			return Unsafe.ReadUnaligned<T>(ref GetReference(source));
 		}
@@ -70,7 +70,7 @@ namespace System.Runtime.InteropServices
                 throw new Exception("Type is reference or contains references.");
             if (RuntimeHelpers.IsReferenceOrContainsReferences<TTo>())
                 throw new Exception("Type is reference or contains references.");
- 
+
             // Use unsigned integers - unsigned division by constant (especially by power of 2)
             // and checked casts are faster and smaller.
             uint fromSize = (uint)Unsafe.SizeOf<TFrom>();
@@ -100,12 +100,12 @@ namespace System.Runtime.InteropServices
                 // TODO: checked keyword
                 toLength = (int)toLengthUInt64;
             }
- 
+
             return new Span<TTo>(
                 ref Unsafe.As<TFrom, TTo>(ref span._pointer.Value),
                 toLength);
         }
- 
+
         /// <summary>
         /// Casts a ReadOnlySpan of one primitive type <typeparamref name="TFrom"/> to another primitive type <typeparamref name="TTo"/>.
         /// These types may not contain pointers or references. This is checked at runtime in order to preserve type safety.
@@ -126,7 +126,7 @@ namespace System.Runtime.InteropServices
                 throw new Exception("Type is reference or contains references.");
             if (RuntimeHelpers.IsReferenceOrContainsReferences<TTo>())
                 throw new Exception("Type is reference or contains references.");
- 
+
             // Use unsigned integers - unsigned division by constant (especially by power of 2)
             // and checked casts are faster and smaller.
             uint fromSize = (uint)Unsafe.SizeOf<TFrom>();
@@ -156,7 +156,7 @@ namespace System.Runtime.InteropServices
                 // TODO: checked keyword
                 toLength = (int)toLengthUInt64;
             }
- 
+
             return new ReadOnlySpan<TTo>(
                 ref Unsafe.As<TFrom, TTo>(ref MemoryMarshal.GetReference(span)),
                 toLength);
