@@ -24,7 +24,7 @@ The target platforms are:
 - Intel X64 (in development)
 - ARM v6 (in early development)
 
-The MOSA compiler supports nearly all and object oriented non-object oriented code, including:
+The MOSA compiler supports most object and non-object oriented code, including:
 
 - Generic Code (example: List<T>)
 - Delegates (static and non-static) and with optional parameters

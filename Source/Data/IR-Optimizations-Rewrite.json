@@ -96,6 +96,16 @@
 			"Filter": "",
 			"Result": "(IR.IfThenElse## a x y)",
 			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Xor##",
+			"SubName": "One",
+			"Expression": "IR.Xor## x 1",
+			"Filter": "",
+			"Result": "(IR.Not## x)",
+			"Variations": "Yes"
 		}
 	]
 }

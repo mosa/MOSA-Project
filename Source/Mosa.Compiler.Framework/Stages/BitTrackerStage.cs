@@ -1482,10 +1482,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// TODO: Special power of two handling for bits, handle similar to shift left
 
-			if (!IntegerTwiddling.HasSignBitSet32((int)value1.MaxValue)
-				&& !IntegerTwiddling.HasSignBitSet32((int)value2.MaxValue)
-				&& !IntegerTwiddling.HasSignBitSet32((int)value1.MinValue)
-				&& !IntegerTwiddling.HasSignBitSet32((int)value2.MinValue)
+			if (!IntegerTwiddling.HasSignBitSet((int)value1.MaxValue)
+				&& !IntegerTwiddling.HasSignBitSet((int)value2.MaxValue)
+				&& !IntegerTwiddling.HasSignBitSet((int)value1.MinValue)
+				&& !IntegerTwiddling.HasSignBitSet((int)value2.MinValue)
 				&& !IntegerTwiddling.IsMultiplyOverflow((int)value1.MaxValue, (int)value2.MaxValue))
 			{
 				var max = Math.Max(value1.MaxValue, value2.MaxValue);
@@ -1550,10 +1550,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// TODO: Special power of two handling for bits, handle similar to shift left
 
-			if (!IntegerTwiddling.HasSignBitSet64((long)value1.MaxValue)
-				&& !IntegerTwiddling.HasSignBitSet64((long)value2.MaxValue)
-				&& !IntegerTwiddling.HasSignBitSet64((long)value1.MinValue)
-				&& !IntegerTwiddling.HasSignBitSet64((long)value2.MinValue)
+			if (!IntegerTwiddling.HasSignBitSet((long)value1.MaxValue)
+				&& !IntegerTwiddling.HasSignBitSet((long)value2.MaxValue)
+				&& !IntegerTwiddling.HasSignBitSet((long)value1.MinValue)
+				&& !IntegerTwiddling.HasSignBitSet((long)value2.MinValue)
 				&& !IntegerTwiddling.IsMultiplyOverflow((long)value1.MaxValue, (long)value2.MaxValue))
 			{
 				var max = Math.Max(value1.MaxValue, value2.MaxValue);

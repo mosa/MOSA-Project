@@ -253,7 +253,7 @@ namespace Mosa.UnitTests.Optimization
 			return p >= 16 && q == 0;
 		}
 
-		//[MosaUnitTest(1)] // inifinit loop --- so can not uncomment the test
+		//[MosaUnitTest(1)] // infinite loop --- so can not uncomment the test
 		public static bool will_it_bend(int x)
 		{
 			while (true)
