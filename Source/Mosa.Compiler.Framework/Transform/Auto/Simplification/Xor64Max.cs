@@ -7,11 +7,11 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 {
 	/// <summary>
-	/// Xor32One
+	/// Xor64Max
 	/// </summary>
-	public sealed class Xor32One : BaseTransformation
+	public sealed class Xor64Max : BaseTransformation
 	{
-		public Xor32One() : base(IRInstruction.Xor32)
+		public Xor64Max() : base(IRInstruction.Xor64)
 		{
 		}
 
@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 			if (!context.Operand2.IsResolvedConstant)
 				return false;
 
-			if (context.Operand2.ConstantUnsigned64 != 1)
+			if (context.Operand2.ConstantUnsigned64 != 0xFFFFFFFFFFFFFFFF)
 				return false;
 
 			return true;
@@ -32,16 +32,16 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 
 			var t1 = context.Operand1;
 
-			context.SetInstruction(IRInstruction.Not32, result, t1);
+			context.SetInstruction(IRInstruction.Not64, result, t1);
 		}
 	}
 
 	/// <summary>
-	/// Xor32One_v1
+	/// Xor64Max_v1
 	/// </summary>
-	public sealed class Xor32One_v1 : BaseTransformation
+	public sealed class Xor64Max_v1 : BaseTransformation
 	{
-		public Xor32One_v1() : base(IRInstruction.Xor32)
+		public Xor64Max_v1() : base(IRInstruction.Xor64)
 		{
 		}
 
@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 			if (!context.Operand1.IsResolvedConstant)
 				return false;
 
-			if (context.Operand1.ConstantUnsigned64 != 1)
+			if (context.Operand1.ConstantUnsigned64 != 0xFFFFFFFFFFFFFFFF)
 				return false;
 
 			return true;
@@ -62,7 +62,7 @@ namespace Mosa.Compiler.Framework.Transform.Auto.Simplification
 
 			var t1 = context.Operand2;
 
-			context.SetInstruction(IRInstruction.Not32, result, t1);
+			context.SetInstruction(IRInstruction.Not64, result, t1);
 		}
 	}
 }

@@ -100,11 +100,21 @@
 		{
 			"FamilyName": "IR",
 			"Type": "Simplification",
-			"Name": "Xor##",
-			"SubName": "One",
-			"Expression": "IR.Xor## x 1",
+			"Name": "Xor32",
+			"SubName": "Max",
+			"Expression": "IR.Xor32 x 0xFFFFFFFF",
 			"Filter": "",
-			"Result": "(IR.Not## x)",
+			"Result": "(IR.Not32 x)",
+			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "Simplification",
+			"Name": "Xor64",
+			"SubName": "Max",
+			"Expression": "IR.Xor64 x 0xFFFFFFFFFFFFFFFF",
+			"Filter": "",
+			"Result": "(IR.Not64 x)",
 			"Variations": "Yes"
 		}
 	]
