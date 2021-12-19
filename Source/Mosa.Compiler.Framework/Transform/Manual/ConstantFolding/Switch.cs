@@ -2,7 +2,7 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.Framework.Transform.Manual.Special
+namespace Mosa.Compiler.Framework.Transform.Manual.ConstantFolding
 {
 	public sealed class Switch : BaseTransformation
 	{
@@ -23,14 +23,14 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Special
 			var index = context.Operand1.ConstantSigned32;
 			var max = context.OperandCount;
 
-			var targets = new List<BasicBlock>(max - 1);
+			var targets = new List<BasicBlock>(context.BranchTargets.Count);
 
 			foreach (var target in context.BranchTargets)
 			{
 				targets.Add(target);
 			}
 
-			if (index >= max)
+			if (index > max)
 			{
 				// fall thru
 				context.SetNop();

@@ -191,7 +191,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			EmptyBlockOfAllInstructions(block, true);
 
-			UpdatePhiBlocks(nextBlocks);
+			//UpdatePhiBlocks(nextBlocks);
 
 			foreach (var next in nextBlocks)
 			{
