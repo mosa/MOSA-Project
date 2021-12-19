@@ -19,11 +19,10 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Simplification
 		public override void Transform(Context context, TransformContext transformContext)
 		{
 			var target = context.BranchTargets[0];
-			var block = context.Block;
 
 			context.SetNop();
 
-			TransformContext.RemoveBlockFromPHIInstructions(block, target);
+			transformContext.UpdatePHIBlock(target);
 		}
 	}
 }

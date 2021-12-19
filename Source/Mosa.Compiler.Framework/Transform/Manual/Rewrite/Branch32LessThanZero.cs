@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Rewrite
 
 			context.SetNop();
 
-			TransformContext.RemoveBlockFromPHIInstructions(context.Block, target);
+			transformContext.UpdatePHIBlock(target);
 		}
 	}
 }

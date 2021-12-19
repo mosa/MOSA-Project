@@ -22,23 +22,22 @@ namespace Mosa.Compiler.Framework.Transform.Manual.ConstantFolding
 		public override void Transform(Context context, TransformContext transformContext)
 		{
 			var target = context.BranchTargets[0];
-			var block = context.Block;
 
 			if (!Compare64(context))
 			{
 				context.SetNop();
 
-				TransformContext.RemoveBlockFromPHIInstructions(block, target);
+				transformContext.UpdatePHIBlock(target);
 			}
 			else
 			{
-				var phiBlock = GetOtherBranchTarget(block, target);
+				var phiBlock = GetOtherBranchTarget(context.Block, target);
 
 				context.SetInstruction(IRInstruction.Jmp, target);
 
 				RemoveRestOfInstructions(context);
 
-				TransformContext.RemoveBlockFromPHIInstructions(block, phiBlock);
+				transformContext.UpdatePHIBlock(phiBlock);
 			}
 		}
 	}

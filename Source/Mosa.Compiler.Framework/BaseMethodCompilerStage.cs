@@ -29,7 +29,8 @@ namespace Mosa.Compiler.Framework
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public virtual string Name { get { return GetType().Name; } }
+		public virtual string Name
+		{ get { return GetType().Name; } }
 
 		/// <summary>
 		/// Gets or sets the name of the formatted stage.
@@ -138,82 +139,98 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the method data.
 		/// </summary>
-		protected MethodData MethodData { get { return MethodCompiler.MethodData; } }
+		protected MethodData MethodData
+		{ get { return MethodCompiler.MethodData; } }
 
 		/// <summary>
 		/// Gets the linker.
 		/// </summary>
-		protected MosaLinker Linker { get { return MethodCompiler.Linker; } }
+		protected MosaLinker Linker
+		{ get { return MethodCompiler.Linker; } }
 
 		/// <summary>
 		/// Gets the type of the platform internal runtime.
 		/// </summary>
-		public MosaType PlatformInternalRuntimeType { get { return MethodCompiler.Compiler.PlatformInternalRuntimeType; } }
+		public MosaType PlatformInternalRuntimeType
+		{ get { return MethodCompiler.Compiler.PlatformInternalRuntimeType; } }
 
 		/// <summary>
 		/// Gets the type of the internal runtime.
 		/// </summary>
-		public MosaType InternalRuntimeType { get { return MethodCompiler.Compiler.InternalRuntimeType; } }
+		public MosaType InternalRuntimeType
+		{ get { return MethodCompiler.Compiler.InternalRuntimeType; } }
 
 		/// <summary>
 		/// Gets the method.
 		/// </summary>
-		protected MosaMethod Method { get { return MethodCompiler.Method; } }
+		protected MosaMethod Method
+		{ get { return MethodCompiler.Method; } }
 
 		/// <summary>
 		/// Gets the constant zero.
 		/// </summary>
-		protected Operand ConstantZero { get { return MethodCompiler.ConstantZero; } }
+		protected Operand ConstantZero
+		{ get { return MethodCompiler.ConstantZero; } }
 
 		/// <summary>
 		/// Gets the 32-bit constant zero.
 		/// </summary>
-		protected Operand ConstantZero32 { get { return MethodCompiler.ConstantZero; } }
+		protected Operand ConstantZero32
+		{ get { return MethodCompiler.ConstantZero; } }
 
 		/// <summary>
 		/// Gets the 64-bit constant zero.
 		/// </summary>
-		protected Operand ConstantZero64 { get { return MethodCompiler.ConstantZero; } }
+		protected Operand ConstantZero64
+		{ get { return MethodCompiler.ConstantZero; } }
 
 		/// <summary>
 		/// Gets the stack frame.
 		/// </summary>
-		protected Operand StackFrame { get { return MethodCompiler.Compiler.StackFrame; } }
+		protected Operand StackFrame
+		{ get { return MethodCompiler.Compiler.StackFrame; } }
 
 		/// <summary>
 		/// Gets the stack pointer.
 		/// </summary>
-		protected Operand StackPointer { get { return MethodCompiler.Compiler.StackPointer; } }
+		protected Operand StackPointer
+		{ get { return MethodCompiler.Compiler.StackPointer; } }
 
 		/// <summary>
 		/// Gets the link register.
 		/// </summary>
-		protected Operand LinkRegister { get { return MethodCompiler.Compiler.LinkRegister; } }
+		protected Operand LinkRegister
+		{ get { return MethodCompiler.Compiler.LinkRegister; } }
 
 		/// <summary>
 		/// Gets the program counter
 		/// </summary>
-		protected Operand ProgramCounter { get { return MethodCompiler.Compiler.ProgramCounter; } }
+		protected Operand ProgramCounter
+		{ get { return MethodCompiler.Compiler.ProgramCounter; } }
 
 		/// <summary>
 		/// Gets the exception register.
 		/// </summary>
-		protected Operand ExceptionRegister { get { return MethodCompiler.Compiler.ExceptionRegister; } }
+		protected Operand ExceptionRegister
+		{ get { return MethodCompiler.Compiler.ExceptionRegister; } }
 
 		/// <summary>
 		/// Gets the leave target register.
 		/// </summary>
-		protected Operand LeaveTargetRegister { get { return MethodCompiler.Compiler.LeaveTargetRegister; } }
+		protected Operand LeaveTargetRegister
+		{ get { return MethodCompiler.Compiler.LeaveTargetRegister; } }
 
 		/// <summary>
 		/// Gets a value indicating whether this instance has protected regions.
 		/// </summary>
-		protected bool HasProtectedRegions { get { return MethodCompiler.HasProtectedRegions; } }
+		protected bool HasProtectedRegions
+		{ get { return MethodCompiler.HasProtectedRegions; } }
 
 		/// <summary>
 		/// Gets a value indicating whether this instance has code.
 		/// </summary>
-		protected bool HasCode { get { return BasicBlocks.HeadBlocks.Count != 0; } }
+		protected bool HasCode
+		{ get { return BasicBlocks.HeadBlocks.Count != 0; } }
 
 		/// <summary>
 		/// The counters
@@ -615,6 +632,8 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(block.PreviousBlocks.Count == 0);
 		}
 
+		#region Phi Helpers
+
 		public static void RemoveBlockFromPHIInstructions(BasicBlock removedBlock, BasicBlock phiBlock)
 		{
 			for (var node = phiBlock.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
@@ -697,6 +716,8 @@ namespace Mosa.Compiler.Framework
 
 			return false;
 		}
+
+		#endregion Phi Helpers
 
 		#endregion Block Operations
 
