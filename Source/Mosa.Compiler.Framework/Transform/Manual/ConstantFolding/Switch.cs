@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Special
 				RemoveRestOfInstructions(context);
 			}
 
-			transformContext.UpdatePHIBlocks(targets);
+			transformContext.UpdatePhiBlocks(targets);
 		}
 	}
 }

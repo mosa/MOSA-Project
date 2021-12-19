@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.LowerTo32
 			var nextBlock = transformContext.Split(context);
 			var newBlocks = transformContext.CreateNewBlockContexts(5, context.Label);
 
-			TransformContext.UpdatePHIInstructionTargets(nextBlock.Block.NextBlocks, context.Block, nextBlock.Block);
+			TransformContext.UpdatePhiTargets(nextBlock.Block.NextBlocks, context.Block, nextBlock.Block);
 
 			var op0Low = transformContext.AllocateVirtualRegister32();
 			var op0High = transformContext.AllocateVirtualRegister32();

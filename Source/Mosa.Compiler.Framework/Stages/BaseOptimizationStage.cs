@@ -303,7 +303,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				EmptyBlockOfAllInstructions(block, true);
 
-				RemoveBlocksFromPHIInstructions(block, nextBlocks);
+				UpdatePhiBlocks(nextBlocks);
 
 				EmptyBlocks.Set(block.Sequence, true);
 
@@ -354,7 +354,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (IsInSSAForm)
 				{
-					UpdatePHIInstructionTargets(block.NextBlocks, block, block.PreviousBlocks[0]);
+					UpdatePhiTargets(block.NextBlocks, block, block.PreviousBlocks[0]);
 				}
 
 				RemoveEmptyBlockWithSingleJump(block, true);
@@ -412,7 +412,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (IsInSSAForm)
 					{
-						UpdatePHIInstructionTargets(next.NextBlocks, next, block);
+						UpdatePhiTargets(next.NextBlocks, next, block);
 					}
 
 					var insertPoint = block.BeforeLast.GoBackwardsToNonEmpty();

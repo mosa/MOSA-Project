@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Rewrite
 
 			RemoveRestOfInstructions(context);
 
-			transformContext.UpdatePHIBlock(phiBlock);
+			transformContext.UpdatePhiBlock(phiBlock);
 		}
 	}
 }

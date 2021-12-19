@@ -634,7 +634,74 @@ namespace Mosa.Compiler.Framework
 
 		#region Phi Helpers
 
-		public static void RemoveBlockFromPHIInstructions(BasicBlock removedBlock, BasicBlock phiBlock)
+		public static void UpdatePhiBlocks(BasicBlock[] phiBlocks)
+		{
+			foreach (var phiBlock in phiBlocks)
+			{
+				UpdatePhiBlock(phiBlock);
+			}
+		}
+
+		public static void UpdatePhiBlocks(List<BasicBlock> phiBlocks)
+		{
+			foreach (var phiBlock in phiBlocks)
+			{
+				UpdatePhiBlock(phiBlock);
+			}
+		}
+
+		public static void UpdatePhiBlock(BasicBlock phiBlock)
+		{
+			for (var node = phiBlock.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
+			{
+				if (node.IsEmptyOrNop)
+					continue;
+
+				if (!BaseMethodCompilerStage.IsPhiInstruction(node.Instruction))
+					break;
+
+				UpdatePhi(node);
+			}
+		}
+
+		public static void UpdatePhi(InstructionNode node)
+		{
+			Debug.Assert(node.OperandCount != node.Block.PreviousBlocks.Count);
+
+			// One or more of the previous blocks was removed, fix up the operand blocks
+
+			var previousBlocks = node.Block.PreviousBlocks;
+			var phiBlocks = node.PhiBlocks;
+
+			for (int index = 0; index < node.OperandCount; index++)
+			{
+				var phiBlock = phiBlocks[index];
+
+				if (previousBlocks.Contains(phiBlock))
+					continue;
+
+				phiBlocks.RemoveAt(index);
+
+				for (int i = index; index < node.OperandCount - 1; index++)
+				{
+					node.SetOperand(i, node.GetOperand(i + 1));
+				}
+
+				node.SetOperand(node.OperandCount - 1, null);
+				node.OperandCount--;
+
+				index--;
+			}
+
+			Debug.Assert(node.OperandCount == node.Block.PreviousBlocks.Count);
+		}
+
+		public static void UpdatePhi(Context context)
+		{
+			UpdatePhi(context.Node);
+		}
+
+		public static void RemoveBlockFromPhi(BasicBlock removedBlock, BasicBlock phiBlock)
 		{
 			for (var node = phiBlock.AfterFirst; !node.IsBlockEndInstruction; node = node.Next)
 			{
@@ -663,25 +730,15 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public static void RemoveBlocksFromPHIInstructions(BasicBlock removedBlock, BasicBlock[] nextBlocks)
-		{
-			foreach (var next in nextBlocks)
-			{
-				RemoveBlockFromPHIInstructions(removedBlock, next);
-			}
-
-			//Debug.Assert(removedBlock.NextBlocks.Count == 0);
-		}
-
-		public static void UpdatePHIInstructionTargets(List<BasicBlock> targets, BasicBlock source, BasicBlock newSource)
+		public static void UpdatePhiTargets(List<BasicBlock> targets, BasicBlock source, BasicBlock newSource)
 		{
 			foreach (var target in targets)
 			{
-				UpdatePHIInstructionTarget(target, source, newSource);
+				UpdatePhiTarget(target, source, newSource);
 			}
 		}
 
-		public static void UpdatePHIInstructionTarget(BasicBlock phiBlock, BasicBlock source, BasicBlock newSource)
+		public static void UpdatePhiTarget(BasicBlock phiBlock, BasicBlock source, BasicBlock newSource)
 		{
 			Debug.Assert(phiBlock.PreviousBlocks.Count > 0);
 
