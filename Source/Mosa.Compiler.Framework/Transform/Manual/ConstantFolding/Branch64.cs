@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.ConstantFolding
 			{
 				context.SetNop();
 
-				TransformContext.RemoveBlockFromPHIInstructions(block, target);
+				transformContext.UpdatePHIBlock(target);
 			}
 			else
 			{
@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.ConstantFolding
 
 				RemoveRestOfInstructions(context);
 
-				TransformContext.RemoveBlockFromPHIInstructions(block, phiBlock);
+				transformContext.UpdatePHIBlock(phiBlock);
 			}
 		}
 	}

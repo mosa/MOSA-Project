@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.Transform.Manual
 
 		public override void Transform(Context context, TransformContext transformContext)
 		{
-			context.SetInstruction(X86.Test32, context.Result, context.Operand1, context.Operand1);
+			context.SetInstruction(X86.Test32, null, context.Operand1, context.Operand1);
 		}
 	}
 }
