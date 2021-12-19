@@ -80,24 +80,24 @@ namespace Mosa.Compiler.Common
 			return (b < 0 && a == long.MinValue) | (b != 0 && z / b != a);
 		}
 
-		public static bool HasSignBitSet32(int a)
+		public static bool HasSignBitSet(int a)
 		{
-			return a <= 0;
+			return a < 0;
 		}
 
-		public static bool HasSignBitSet32(uint a)
+		public static bool HasSignBitSet(uint a)
 		{
-			return HasSignBitSet32((int)a);
+			return HasSignBitSet((int)a);
 		}
 
-		public static bool HasSignBitSet64(long a)
+		public static bool HasSignBitSet(long a)
 		{
-			return a <= 0;
+			return a < 0;
 		}
 
-		public static bool HasSignBitSet64(ulong a)
+		public static bool HasSignBitSet(ulong a)
 		{
-			return HasSignBitSet64((long)a);
+			return HasSignBitSet((long)a);
 		}
 	}
 }

@@ -20,7 +20,7 @@ namespace Mosa.Utility.RSP
 		private readonly object sync = new object();
 		private GDBNetworkStream stream = null;
 
-		private readonly byte[] receivedByte = new byte[1];
+		private readonly byte[] receiveBuffer = new byte[1024];
 		private readonly List<byte> receivedData = new List<byte>();
 
 		private readonly Queue<GDBCommand> commandQueue = new Queue<GDBCommand>();
@@ -43,10 +43,7 @@ namespace Mosa.Utility.RSP
 			{
 				stream = value;
 
-				if (IsConnected)
-				{
-					SetReadCallBack();
-				}
+				SetReadCallBack();
 			}
 		}
 
@@ -68,10 +65,10 @@ namespace Mosa.Utility.RSP
 
 		private void SetReadCallBack()
 		{
-			if (stream.IsConnected)
-			{
-				stream.BeginRead(receivedByte, 0, 1, ReadAsyncCallback, null);
-			}
+			if (!IsConnected)
+				return;
+
+			stream.BeginRead(receiveBuffer, 0, receiveBuffer.Length, ReadAsyncCallback, null);
 		}
 
 		private void ReadAsyncCallback(IAsyncResult ar)
@@ -80,26 +77,21 @@ namespace Mosa.Utility.RSP
 			{
 				try
 				{
-					stream.EndRead(ar);
+					int bytes = stream.EndRead(ar);
 
-					var data = receivedByte[0];
-
-					receivedData.Add(data);
-
-					//Debug.Write((char)data);
-
-					IncomingPatcket();
+					for (int i = 0; i < bytes; i++)
+					{
+						receivedData.Add(receiveBuffer[i]);
+						IncomingPatcket();
+					}
 				}
 				catch (Exception e)
 				{
-					//Debug.WriteLine(e.ToString());
 					LogEvent?.Invoke($"Exception: {e}");
 				}
 				finally
 				{
 					SetReadCallBack();
-
-					// try to send more packets
 				}
 			}
 
@@ -123,7 +115,6 @@ namespace Mosa.Utility.RSP
 			{
 				commandQueue.Clear();
 
-				//Debug.WriteLine("SENT: BREAK");
 				LogEvent?.Invoke("SENT: BREAK");
 
 				currentCommand = new GetReasonHalted();
@@ -144,7 +135,6 @@ namespace Mosa.Utility.RSP
 
 				currentCommand = commandQueue.Dequeue();
 
-				//Debug.WriteLine($"SENT: [{currentCommand.ID}] {currentCommand.Pack}");
 				LogEvent?.Invoke($"SENT: [{currentCommand.ID}] {currentCommand.Pack}");
 
 				var data = ToBinary(currentCommand);
@@ -174,7 +164,6 @@ namespace Mosa.Utility.RSP
 
 			if (len >= 4 && receivedData[0] == '$' && receivedData[len - 3] == '#')
 			{
-				//Debug.WriteLine($"RECEIVED: {Encoding.UTF8.GetString(receivedData.ToArray())}");
 				LogEvent?.Invoke($"RECEIVED: {Encoding.UTF8.GetString(receivedData.ToArray())}");
 
 				if (currentCommand == null)
