@@ -21,7 +21,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.ConstantFolding
 		public override void Transform(Context context, TransformContext transformContext)
 		{
 			var index = context.Operand1.ConstantSigned32;
-			var max = context.OperandCount;
+			var max = context.BranchTargets.Count - 1;
 
 			var targets = new List<BasicBlock>(context.BranchTargets.Count);
 
@@ -30,18 +30,18 @@ namespace Mosa.Compiler.Framework.Transform.Manual.ConstantFolding
 				targets.Add(target);
 			}
 
-			if (index > max)
-			{
-				// fall thru
-				context.SetNop();
-			}
-			else
+			if (index < max)
 			{
 				var newtarget = context.BranchTargets[index];
 
 				context.SetInstruction(IRInstruction.Jmp, newtarget);
 
 				RemoveRestOfInstructions(context);
+			}
+			else
+			{
+				// fall thru
+				context.SetNop();
 			}
 
 			transformContext.UpdatePhiBlocks(targets);
