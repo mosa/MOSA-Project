@@ -24,5 +24,22 @@ namespace Mosa.UnitTests.Optimization
 		{
 			return SimpleSwitch(1);
 		}
+
+		[MosaUnitTest]
+		public static int SwitchTests2()
+		{
+			return SimpleSwitch(3);
+		}
+
+		[MosaUnitTest]
+		public static int SwitchTests3()
+		{
+			return SimpleSwitch(4);
+		}
+
+		public static int SwitchTests4()
+		{
+			return SimpleSwitch(5);
+		}
 	}
 }
