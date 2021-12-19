@@ -794,7 +794,7 @@ namespace Mosa.Platform.x64.Stages
 
 			context.Empty();
 
-			for (int i = 0; i < targets.Count - 2; ++i)
+			for (int i = 0; i < targets.Count - 1; ++i)
 			{
 				context.AppendInstruction(X64.Cmp32, null, operand, CreateConstant32(i));
 				context.AppendInstruction(X64.Branch, ConditionCode.Equal, targets[i]);

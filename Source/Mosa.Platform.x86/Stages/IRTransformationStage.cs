@@ -933,7 +933,7 @@ namespace Mosa.Platform.x86.Stages
 
 			context.Empty();
 
-			for (int i = 0; i < targets.Count - 2; ++i)
+			for (int i = 0; i < targets.Count - 1; ++i)
 			{
 				context.AppendInstruction(X86.Cmp32, null, operand, CreateConstant32(i));
 				context.AppendInstruction(X86.Branch, ConditionCode.Equal, targets[i]);
