@@ -43,10 +43,7 @@ namespace Mosa.Utility.RSP
 			{
 				stream = value;
 
-				if (IsConnected)
-				{
-					SetReadCallBack();
-				}
+				SetReadCallBack();
 			}
 		}
 
@@ -68,7 +65,7 @@ namespace Mosa.Utility.RSP
 
 		private void SetReadCallBack()
 		{
-			if (!stream.IsConnected)
+			if (!IsConnected)
 				return;
 
 			stream.BeginRead(receiveBuffer, 0, receiveBuffer.Length, ReadAsyncCallback, null);
