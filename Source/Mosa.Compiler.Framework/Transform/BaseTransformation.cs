@@ -853,15 +853,15 @@ namespace Mosa.Compiler.Framework.Transform
 
 		protected static void RemoveRestOfInstructions(Context context)
 		{
-			context.GotoNext();
+			var node = context.Node.Next;
 
-			while (!context.IsBlockEndInstruction)
+			while (!node.IsBlockEndInstruction)
 			{
-				if (!context.IsEmptyOrNop)
+				if (!node.IsEmptyOrNop)
 				{
-					context.SetNop();
+					node.SetNop();
 				}
-				context.GotoNext();
+				node = node.Next;
 			}
 		}
 
