@@ -246,58 +246,39 @@ namespace Mosa.Compiler.Framework.Transform
 
 		#endregion Basic Block Helpers
 
-		public static void UpdatePHIInstructionTarget(BasicBlock target, BasicBlock source, BasicBlock newSource)
+		#region Phi Helpers
+
+		public static void UpdatePhiTarget(BasicBlock target, BasicBlock source, BasicBlock newSource)
 		{
-			BaseMethodCompilerStage.UpdatePHIInstructionTarget(target, source, newSource);
+			BaseMethodCompilerStage.UpdatePhiTarget(target, source, newSource);
 		}
 
-		public static void UpdatePHIInstructionTargets(List<BasicBlock> targets, BasicBlock source, BasicBlock newSource)
+		public static void UpdatePhiTargets(List<BasicBlock> targets, BasicBlock source, BasicBlock newSource)
 		{
-			BaseMethodCompilerStage.UpdatePHIInstructionTargets(targets, source, newSource);
+			BaseMethodCompilerStage.UpdatePhiTargets(targets, source, newSource);
 		}
 
-		public static void RemoveBlocksFromPHIInstructions(BasicBlock removedBlock, BasicBlock[] phiBlocks)
+		public void UpdatePhiBlocks(List<BasicBlock> phiBlocks)
 		{
-			BaseMethodCompilerStage.RemoveBlocksFromPHIInstructions(removedBlock, phiBlocks);
+			BaseMethodCompilerStage.UpdatePhiBlocks(phiBlocks);
 		}
 
-		public static void RemoveBlockFromPHIInstructions(BasicBlock removedBlock, BasicBlock phiBlock)
+		public void UpdatePhiBlock(BasicBlock phiBlock)
 		{
-			BaseMethodCompilerStage.RemoveBlockFromPHIInstructions(removedBlock, phiBlock);
+			BaseMethodCompilerStage.UpdatePhiBlock(phiBlock);
 		}
 
-		public void UpdatePHI(Context context)
+		public void UpdatePhi(InstructionNode node)
 		{
-			Debug.Assert(context.OperandCount != context.Block.PreviousBlocks.Count);
-
-			// One or more of the previous blocks was removed, fix up the operand blocks
-
-			var node = context.Node;
-			var previousBlocks = node.Block.PreviousBlocks;
-			var phiBlocks = node.PhiBlocks;
-
-			for (int index = 0; index < node.OperandCount; index++)
-			{
-				var phiBlock = phiBlocks[index];
-
-				if (previousBlocks.Contains(phiBlock))
-					continue;
-
-				phiBlocks.RemoveAt(index);
-
-				for (int i = index; index < node.OperandCount - 1; index++)
-				{
-					context.SetOperand(i, node.GetOperand(i + 1));
-				}
-
-				context.SetOperand(node.OperandCount - 1, null);
-				node.OperandCount--;
-
-				index--;
-			}
-
-			Debug.Assert(context.OperandCount == context.Block.PreviousBlocks.Count);
+			BaseMethodCompilerStage.UpdatePhi(node);
 		}
+
+		public void UpdatePhi(Context context)
+		{
+			BaseMethodCompilerStage.UpdatePhi(context);
+		}
+
+		#endregion Phi Helpers
 
 		public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 		{

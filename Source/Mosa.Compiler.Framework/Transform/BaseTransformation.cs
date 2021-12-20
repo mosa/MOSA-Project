@@ -767,7 +767,8 @@ namespace Mosa.Compiler.Framework.Transform
 
 		#region Status Helpers
 
-		public enum TriState { Yes, No, Unknown };
+		public enum TriState
+		{ Yes, No, Unknown };
 
 		public static TriState AreAnyStatusFlagsUsed(Context context)
 		{
@@ -852,17 +853,15 @@ namespace Mosa.Compiler.Framework.Transform
 
 		protected static void RemoveRestOfInstructions(Context context)
 		{
-			var block = context.Block;
+			var node = context.Node.Next;
 
-			context.GotoNext();
-
-			while (!context.IsBlockEndInstruction)
+			while (!node.IsBlockEndInstruction)
 			{
-				if (!context.IsEmptyOrNop)
+				if (!node.IsEmptyOrNop)
 				{
-					context.SetNop();
+					node.SetNop();
 				}
-				context.GotoNext();
+				node = node.Next;
 			}
 		}
 

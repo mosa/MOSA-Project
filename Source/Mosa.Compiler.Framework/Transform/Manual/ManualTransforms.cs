@@ -32,6 +32,8 @@ namespace Mosa.Compiler.Framework.Transform.Manual
 			new ConstantFolding.Branch32(),
 			new ConstantFolding.Branch64(),
 
+			new ConstantFolding.Switch(),
+
 			new Special.Deadcode(),
 			new Special.GetLow32From64(),
 

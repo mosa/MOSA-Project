@@ -5,55 +5,55 @@ namespace Mosa.UnitTests.Optimization
 	public static class InterestingTests
 	{
 		[MosaUnitTest(Series = "I4")]
-		public static bool IsOdd(int a)
+		public static bool IsOddI4(int a)
 		{
 			return (a % 2) != 0;
 		}
 
 		[MosaUnitTest(Series = "U4")]
-		public static bool IsOdd(uint a)
+		public static bool IsOddU4(uint a)
 		{
 			return (a % 2) != 0;
 		}
 
 		[MosaUnitTest(Series = "I4")]
-		public static bool IsOdd2(int a)
+		public static bool IsOdd2I4(int a)
 		{
 			return (a % 2) == 1;
 		}
 
 		[MosaUnitTest(Series = "U4")]
-		public static bool IsOdd2(uint a)
+		public static bool IsOdd2U4(uint a)
 		{
 			return (a % 2) == 1;
 		}
 
 		[MosaUnitTest(Series = "I4")]
-		public static bool IsEven(int a)
+		public static bool IsEvenI4(int a)
 		{
 			return (a % 2) == 0;
 		}
 
 		[MosaUnitTest(Series = "U4")]
-		public static bool IsEven(uint a)
+		public static bool IsEvenU4(uint a)
 		{
 			return (a % 2) == 0;
 		}
 
 		[MosaUnitTest(Series = "I4")]
-		public static bool IsEven2(int a)
+		public static bool IsEven2I4(int a)
 		{
 			return (a % 2) != 1;
 		}
 
 		[MosaUnitTest(Series = "U4")]
-		public static bool ImproveDivide(uint a)
+		public static bool ImproveDivideU4(uint a)
 		{
 			return a / 12 == 15;
 		}
 
 		[MosaUnitTest(Series = "U4")]
-		public static bool TooHigh(uint a)
+		public static bool TooHighU4(uint a)
 		{
 			return a % 12 == 15;
 		}
