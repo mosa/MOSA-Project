@@ -23,5 +23,12 @@ namespace Mosa.DeviceSystem
 
 		/// <summary>Updates the whole screen.</summary>
 		public void Update();
+
+		/// <summary>Fills a rectangle on the screen.</summary>
+		public void FillRectangle(uint x, uint y, uint width, uint height, uint color);
+
+		public void DefineCursor();
+
+		public void SetCursor(bool visible, uint x, uint y);
 	}
 }

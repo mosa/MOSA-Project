@@ -41,7 +41,7 @@ namespace Mosa.DeviceDriver.ScanCodeMap
 					return key;
 				}
 
-				key.KeyPress = ((scancode & 0x80) != 0) ? KeyEvent.KeyPressType.Break : key.KeyPress = KeyEvent.KeyPressType.Make;
+				key.KeyPress = (scancode & 0x80) != 0 ? KeyEvent.KeyPressType.Break : key.KeyPress = KeyEvent.KeyPressType.Make;
 
 				key.KeyType = KeyType.RegularKey;
 
@@ -218,7 +218,6 @@ namespace Mosa.DeviceDriver.ScanCodeMap
 					case 214: key.Character = '|'; break;
 					case 215: key.KeyType = KeyType.F11; break;
 					case 216: key.KeyType = KeyType.F12; break;
-					default: break;
 				}
 
 				keyState = KeyState.Normal;

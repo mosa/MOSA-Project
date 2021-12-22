@@ -10,22 +10,24 @@ namespace System.Drawing
 		/// <summary>
 		/// R
 		/// </summary>
-		public byte R;
+		public byte R { get; }
 
 		/// <summary>
 		/// G
 		/// </summary>
-		public byte G;
+		public byte G { get; }
 
 		/// <summary>
 		/// B
 		/// </summary>
-		public byte B;
+		public byte B { get; }
 
 		/// <summary>
 		/// A
 		/// </summary>
-		public byte A;
+		public byte A { get; }
+
+		private int argb;
 
 		/// <summary>
 		/// Transparent Color
@@ -86,7 +88,7 @@ namespace System.Drawing
         public static Color Navy { get { return FromArgb(0, 0, 128); } }
         public static Color DarkKhaki { get { return FromArgb(189, 183, 107); } }
         public static Color OldLace { get { return FromArgb(253, 245, 230); } }
-        public static Color DarkMagena { get { return FromArgb(139, 0, 139); } }
+        public static Color DarkMagenta { get { return FromArgb(139, 0, 139); } }
         public static Color Olive { get { return FromArgb(128, 128, 0); } }
         public static Color DarkOliveGreen { get { return FromArgb(85, 107, 47); } }
         public static Color OliveDrab { get { return FromArgb(107, 142, 45); } }
@@ -179,27 +181,25 @@ namespace System.Drawing
 		/// <param name="red">The red.</param>
 		/// <param name="green">The green.</param>
 		/// <param name="blue">The blue.</param>
-		public Color(byte red, byte green, byte blue)
-		{
-			R = red;
-			G = green;
-			B = blue;
-			A = 0xff;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Color"/> struct.
-		/// </summary>
-		/// <param name="red">The red.</param>
-		/// <param name="green">The green.</param>
-		/// <param name="blue">The blue.</param>
-		/// <param name="alpha">The alpha.</param>
-		public Color(byte red, byte green, byte blue, byte alpha)
+		/// /// <param name="alpha">The alpha.</param>
+		public Color(byte red, byte green, byte blue, byte alpha = 0xff)
 		{
 			R = red;
 			G = green;
 			B = blue;
 			A = alpha;
+
+			argb = ToArgb(A, R, G, B);
+		}
+
+		private Color(int argb)
+		{
+			A = (byte)((argb >> 24) & 0xFF);
+			R = (byte)((argb >> 16) & 0xFF);
+			G = (byte)((argb >> 8) & 0xFF);
+			B = (byte)(argb & 0xFF);
+
+			this.argb = argb;
 		}
 
 		/// <summary>
@@ -211,7 +211,7 @@ namespace System.Drawing
 		/// </returns>
 		public bool IsEqual(Color color)
 		{
-			return (color.R == R) && (color.G == G) && (color.B == B) && (color.A == A);
+			return color.R == R && color.G == G && color.B == B && color.A == A;
 		}
 
 		/// <summary>
@@ -222,7 +222,7 @@ namespace System.Drawing
 		/// </returns>
 		public int ToArgb()
         {
-            return ToArgb(A, R, G, B);
+            return argb;
         }
 
 		/// <summary>
@@ -233,9 +233,9 @@ namespace System.Drawing
 		/// The converted Color.
 		/// </returns>
 		public static Color FromArgb(int argb)
-        {
-        	return new Color((byte)((argb >> 16) & 0xFF), (byte)((argb >> 8) & 0xFF), (byte)((argb) & 0xFF), (byte)((argb >> 24) & 0xFF));
-        }
+		{
+			return new Color(argb);
+		}
 
         public static Color FromArgb(byte red, byte green, byte blue)
         {
@@ -258,7 +258,7 @@ namespace System.Drawing
 		/// </returns>
         public static int ToArgb(byte r, byte g, byte b)
         {
-            return (int)(255 << 24 | r << 16 | g << 8 | b);
+            return 255 << 24 | r << 16 | g << 8 | b;
         }
 
         /// <summary>
@@ -273,7 +273,7 @@ namespace System.Drawing
 		/// </returns>
         public static int ToArgb(byte a, byte r, byte g, byte b)
         {
-            return (int)(a << 24 | r << 16 | g << 8 | b);
+            return a << 24 | r << 16 | g << 8 | b;
         }
 	}
 }

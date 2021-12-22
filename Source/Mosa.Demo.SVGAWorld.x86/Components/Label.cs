@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Drawing;
+using Mosa.DeviceSystem;
 
 namespace Mosa.Demo.VBEWorld.x86.Components
 {
@@ -8,14 +9,16 @@ namespace Mosa.Demo.VBEWorld.x86.Components
 	{
 		public int X, Y;
 
-		public string Text, FontName;
+		public string Text;
+
+		public ISimpleFont Font;
 
 		public Color ForeColor;
 
-		public Label(string text, string fontName, int x, int y, Color foreColor)
+		public Label(string text, ISimpleFont font, int x, int y, Color foreColor)
 		{
 			Text = text;
-			FontName = fontName;
+			Font = font;
 
 			X = x;
 			Y = y;
@@ -25,8 +28,8 @@ namespace Mosa.Demo.VBEWorld.x86.Components
 
 		public void Draw()
 		{
-			if (Text != null && Text != string.Empty)
-				Display.DrawString(X, Y, Text, FontName, ForeColor);
+			if (!string.IsNullOrEmpty(Text))
+				Display.DrawString(X, Y, Text, Font, ForeColor);
 		}
 	}
 }

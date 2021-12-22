@@ -386,7 +386,7 @@ namespace Mosa.Utility.Launcher
 				File.WriteAllBytes(Path.Combine(isoDirectory, "mboot.c32"), GetResource(@"syslinux\3.72", "mboot.c32"));
 			}
 
-			if (LauncherSettings.FileSystemRootInclude != null)
+			if (!string.IsNullOrEmpty(LauncherSettings.FileSystemRootInclude))
 			{
 				var dir = Path.Combine(Path.GetDirectoryName(Environment.CurrentDirectory), LauncherSettings.FileSystemRootInclude);
 				foreach (var file in Directory.GetFiles(dir, "*.*", SearchOption.AllDirectories))

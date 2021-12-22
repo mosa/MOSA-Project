@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using System.Drawing;
+using Mosa.DeviceSystem;
 
 namespace Mosa.Demo.VBEWorld.x86.Components
 {
@@ -12,7 +13,7 @@ namespace Mosa.Demo.VBEWorld.x86.Components
 
 		public Color InactiveTitlebarColor, ActiveTitlebarColor, BodyColor;
 
-		public bool Held = false, Opened = false;
+		public bool Held, Opened = false;
 
 		public Button CloseBtn;
 
@@ -37,7 +38,7 @@ namespace Mosa.Demo.VBEWorld.x86.Components
 				() => { WindowManager.Close(this); return null; });
 			X -= CloseBtn.Width;
 
-			Label = new Label(title, Display.DefaultFont.Name, x + 5, y, bodyColor);
+			Label = new Label(title, Display.DefaultFont, x, y, bodyColor);
 		}
 
 		public virtual void Draw()
@@ -76,7 +77,7 @@ namespace Mosa.Demo.VBEWorld.x86.Components
 				if (WindowManager.IsWindowMoving && WindowManager.ActiveWindow != this)
 					return;
 
-				if (!Held && Mouse.State == 0 && IsInBounds())
+				if (!Held && Mouse.State == (int)MouseState.Left && IsInBounds())
 				{
 					// Prevent inactive window from getting active if active window is overlapping that window
 					if (WindowManager.ActiveWindow != this && IsTitlebarColliding())
@@ -91,14 +92,14 @@ namespace Mosa.Demo.VBEWorld.x86.Components
 					WindowManager.ActiveWindow = this;
 				}
 
-				if (Held)
-				{
-					X = Mouse.X - OffsetX;
-					Y = Mouse.Y - OffsetY;
+				if (!Held)
+					return;
 
-					Held = Mouse.State == 0;
-					WindowManager.IsWindowMoving = Held;
-				}
+				X = Mouse.X - OffsetX;
+				Y = Mouse.Y - OffsetY;
+
+				Held = Mouse.State == (int)MouseState.Left;
+				WindowManager.IsWindowMoving = Held;
 			}
 		}
 

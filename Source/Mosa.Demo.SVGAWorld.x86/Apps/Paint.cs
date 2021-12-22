@@ -27,12 +27,12 @@ namespace Mosa.Demo.VBEWorld.x86.Apps
 		{
 			base.Update();
 
-			if (Opened)
-			{
-				PaintArea.X = X;
-				PaintArea.Y = Y + TitlebarHeight;
-				PaintArea.Update();
-			}
+			if (!Opened || WindowManager.ActiveWindow != this)
+				return;
+
+			PaintArea.X = X;
+			PaintArea.Y = Y + TitlebarHeight;
+			PaintArea.Update();
 		}
 	}
 }

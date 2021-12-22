@@ -16,8 +16,8 @@ namespace Mosa.DeviceSystem.PCI
 			Device.Name = "PCIGenericHostBridgeController";
 		}
 
-		// TODO: We have to test
-		bool IHostBridgeController.CPUReset()
+		// TODO: Fix
+		public bool CPUReset()
 		{
 			var pciDevice = Device.Parent.DeviceDriver as PCIDevice;
 
@@ -34,7 +34,7 @@ namespace Mosa.DeviceSystem.PCI
 			return false;
 		}
 
-		void IHostBridgeController.SetCPUResetInformation(byte address, byte value)
+		public void SetCPUResetInformation(byte address, byte value)
 		{
 			ResetAddress = address;
 			ResetValue = value;
