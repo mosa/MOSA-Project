@@ -139,7 +139,7 @@ namespace Mosa.DeviceDriver
 					Factory = delegate { return new PCI.VMware.VMwareSVGA2(); }
 				},
 
-				new PCIDeviceDriverRegistryEntry()
+				/*new PCIDeviceDriverRegistryEntry()
 				{
 					Name = "AC97",
 					Platforms = PlatformArchitecture.X86AndX64,
@@ -148,7 +148,7 @@ namespace Mosa.DeviceDriver
 					DeviceID = 0x2415,
 					PCIFields = PCIField.VendorID | PCIField.DeviceID,
 					Factory = delegate { return new AC97(); }
-				},
+				},*/
 
 				new PCIDeviceDriverRegistryEntry()
 				{
