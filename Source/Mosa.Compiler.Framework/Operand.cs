@@ -29,17 +29,17 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets or sets the constant signed integer.
 		/// </summary>
-		public int ConstantSigned32 { get { return (int)ConstantUnsigned64; } private set { ConstantUnsigned64 = (ulong)value; } }
+		public int ConstantSigned32 { get => (int)ConstantUnsigned64; private set => ConstantUnsigned64 = (ulong)value; }
 
 		/// <summary>
 		/// Gets or sets the constant signed long integer.
 		/// </summary>
-		public long ConstantSigned64 { get { return (long)ConstantUnsigned64; } private set { ConstantUnsigned64 = (ulong)value; } }
+		public long ConstantSigned64 { get => (long)ConstantUnsigned64; private set => ConstantUnsigned64 = (ulong)value; }
 
 		/// <summary>
 		/// Gets the constant integer.
 		/// </summary>
-		public uint ConstantUnsigned32 { get { return (uint)ConstantUnsigned64; } private set { ConstantUnsigned64 = value; } }
+		public uint ConstantUnsigned32 { get => (uint)ConstantUnsigned64; private set => ConstantUnsigned64 = value; }
 
 		/// <summary>
 		/// Gets the constant long integer.
@@ -59,7 +59,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets a value indicating whether this instance has long parent.
 		/// </summary>
-		public bool HasLongParent { get { return LongParent != null; } }
+		public bool HasLongParent => LongParent != null;
 
 		/// <summary>
 		/// Gets or sets the high operand.
@@ -146,7 +146,7 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsFunctionPointer { get; private set; }
 
-		public bool IsHigh { get { return LongParent.High == this; } }
+		public bool IsHigh => LongParent.High == this;
 
 		public bool IsInteger { get; private set; }
 
@@ -155,7 +155,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public bool IsLabel { get; private set; }
 
-		public bool IsLow { get { return LongParent.Low == this; } }
+		public bool IsLow => LongParent.Low == this;
 
 		public bool IsManagedPointer { get; private set; }
 
@@ -167,7 +167,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets a value indicating whether this instance is on stack.
 		/// </summary>
-		public bool IsOnStack { get { return IsStackLocal || IsParameter; } }
+		public bool IsOnStack => IsStackLocal || IsParameter;
 
 		/// <summary>
 		/// Determines if the operand is a local variable operand.
@@ -176,7 +176,7 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsPinned { get; private set; }
 
-		public bool IsPointer { get { return IsManagedPointer || IsUnmanagedPointer || IsFunctionPointer; } }
+		public bool IsPointer => IsManagedPointer || IsUnmanagedPointer || IsFunctionPointer;
 
 		public bool IsR4 { get; private set; }
 
@@ -189,7 +189,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets a value indicating whether this instance is resolved constant.
 		/// </summary>
-		public bool IsResolvedConstant { get { return IsConstant && IsResolved; } }
+		public bool IsResolvedConstant => IsConstant && IsResolved;
 
 		/// <summary>
 		/// Determines if the operand is a local stack operand.
@@ -219,7 +219,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets a value indicating whether this instance is unresolved constant.
 		/// </summary>
-		public bool IsUnresolvedConstant { get { return IsConstant && !IsResolved; } }
+		public bool IsUnresolvedConstant => IsConstant && !IsResolved;
 
 		public bool IsValueType { get; private set; }
 
@@ -251,7 +251,8 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets or sets the offset.
 		/// </summary>
-		public long Offset { get { Debug.Assert(IsResolved); return ConstantSigned64; } set { Debug.Assert(!IsResolved); ConstantSigned64 = value; } }
+		public long Offset
+		{ get { Debug.Assert(IsResolved); return ConstantSigned64; } set { Debug.Assert(!IsResolved); ConstantSigned64 = value; } }
 
 		/// <summary>
 		/// Retrieves the register, where the operand is located.
@@ -442,17 +443,6 @@ namespace Mosa.Compiler.Framework
 			};
 		}
 
-		public static Operand CreateVirtualObject(int index)
-		{
-			return new Operand()
-			{
-				IsVirtualRegister = true,
-				IsReferenceType = true,
-				Size = 0,
-				Index = index,
-			};
-		}
-
 		public static Operand CreateConstant32(uint value)
 		{
 			return new Operand()
@@ -502,6 +492,17 @@ namespace Mosa.Compiler.Framework
 				IsFloatingPoint = true,
 				IsR8 = false,
 				Size = 8,
+			};
+		}
+
+		public static Operand CreateVirtualObject(int index)
+		{
+			return new Operand()
+			{
+				IsVirtualRegister = true,
+				IsReferenceType = true,
+				Size = 0, // depends on platform
+				Index = index,
 			};
 		}
 
@@ -930,9 +931,13 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateSymbolFromMethod(MosaMethod method, TypeSystem typeSystem)
 		{
-			var operand = CreateUnmanagedSymbolPointer(method.FullName, typeSystem);
-			operand.Method = method;
-			return operand;
+			return new Operand(typeSystem.BuiltIn.Pointer)
+			{
+				IsSymbol = true,
+				Method = method,
+				Name = method.FullName,
+				IsConstant = true
+			};
 		}
 
 		/// <summary>
@@ -998,6 +1003,8 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Static Factory Constructors
 
+		#region Name Output
+
 		/// <summary>
 		/// Returns a string representation of <see cref="Operand" />.
 		/// </summary>
@@ -1027,19 +1034,19 @@ namespace Mosa.Compiler.Framework
 				}
 				else if (IsOnStack)
 				{
-					sb.Append($"{ConstantSigned64}");
+					sb.Append(ConstantSigned64);
 				}
 				else if (IsR8)
 				{
-					sb.Append($"{ConstantDouble}");
+					sb.Append(ConstantDouble);
 				}
 				else if (IsR4)
 				{
-					sb.Append($"{ConstantFloat}");
+					sb.Append(ConstantFloat);
 				}
 				else
 				{
-					sb.Append($"{ConstantSigned64}");
+					sb.Append(ConstantSigned64);
 				}
 
 				sb.Append(' ');
@@ -1110,14 +1117,6 @@ namespace Mosa.Compiler.Framework
 			return sb.ToString().Replace("  ", " ").Trim();
 		}
 
-		internal void RenameIndex(int index)
-		{
-			Debug.Assert(IsVirtualRegister);
-			Debug.Assert(!IsStackLocal);
-
-			Index = index;
-		}
-
 		private static string ShortenTypeName(string value)
 		{
 			if (value.Length < 2)
@@ -1128,17 +1127,17 @@ namespace Mosa.Compiler.Framework
 
 			if (value.EndsWith("*"))
 			{
-				type = value.Substring(0, value.Length - 1);
+				type = value[0..^1];
 				end = "*";
 			}
 			if (value.EndsWith("&"))
 			{
-				type = value.Substring(0, value.Length - 1);
+				type = value[0..^1];
 				end = "&";
 			}
 			if (value.EndsWith("[]"))
 			{
-				type = value.Substring(0, value.Length - 2);
+				type = value[0..^2];
 				end = "[]";
 			}
 
@@ -1169,6 +1168,16 @@ namespace Mosa.Compiler.Framework
 			}
 
 			return value;
+		}
+
+		#endregion Name Output
+
+		internal void RenameIndex(int index)
+		{
+			Debug.Assert(IsVirtualRegister);
+			Debug.Assert(!IsStackLocal);
+
+			Index = index;
 		}
 
 		#region Object Overrides

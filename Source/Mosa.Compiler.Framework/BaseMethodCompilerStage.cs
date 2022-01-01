@@ -540,7 +540,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns>
 		///   <c>true</c> if [is empty block with single jump] [the specified block]; otherwise, <c>false</c>.
 		/// </returns>
-		protected bool IsEmptyBlockWithSingleJump(BasicBlock block)
+		protected static bool IsEmptyBlockWithSingleJump(BasicBlock block)
 		{
 			if (block.NextBlocks.Count != 1)
 				return false;
@@ -592,7 +592,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="target">The current from block.</param>
 		/// <param name="oldTarget">The current destination block.</param>
 		/// <param name="newTarget">The new target block.</param>
-		protected void ReplaceBranchTargets(BasicBlock target, BasicBlock oldTarget, BasicBlock newTarget)
+		protected static void ReplaceBranchTargets(BasicBlock target, BasicBlock oldTarget, BasicBlock newTarget)
 		{
 			for (var node = target.BeforeLast; !node.IsBlockStartInstruction; node = node.Previous)
 			{
@@ -616,7 +616,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		protected void RemoveEmptyBlockWithSingleJump(BasicBlock block, bool useNop = false)
+		protected static void RemoveEmptyBlockWithSingleJump(BasicBlock block, bool useNop = false)
 		{
 			Debug.Assert(block.NextBlocks.Count == 1);
 
@@ -812,7 +812,7 @@ namespace Mosa.Compiler.Framework
 			return null;
 		}
 
-		protected BasicBlock TraverseBackToNativeBlock(BasicBlock block)
+		protected static BasicBlock TraverseBackToNativeBlock(BasicBlock block)
 		{
 			var start = block;
 

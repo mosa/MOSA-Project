@@ -3,7 +3,7 @@
 		<TargetFramework>net6.0</TargetFramework>
 		<LangVersion>8.0</LangVersion>
 		<DebugType>full</DebugType>
-		<NoWarn>168,162,649,CS0649</NoWarn>
+		<NoWarn>168,162,649,0649</NoWarn>
 		<OutputPath>..\..\bin\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
