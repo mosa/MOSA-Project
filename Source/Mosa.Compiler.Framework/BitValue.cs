@@ -1,8 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Compiler.Common;
 using System;
-using System.Diagnostics;
 using System.Text;
 
 namespace Mosa.Compiler.Framework
@@ -34,8 +32,8 @@ namespace Mosa.Compiler.Framework
 		public static readonly BitValue I4_32 = new BitValue(4, true);
 		public static readonly BitValue I4_64 = new BitValue(4, false);
 
-		public static readonly BitValue I5_32 = new BitValue(4, true);
-		public static readonly BitValue I5_64 = new BitValue(4, false);
+		public static readonly BitValue I5_32 = new BitValue(5, true);
+		public static readonly BitValue I5_64 = new BitValue(5, false);
 
 		public static readonly BitValue I7_32 = new BitValue(7, true);
 		public static readonly BitValue I7_64 = new BitValue(7, false);
@@ -89,38 +87,79 @@ namespace Mosa.Compiler.Framework
 		#endregion Static Values
 
 		public ulong BitsClear { get; private set; }
+
 		public ulong BitsSet { get; private set; }
+
 		public ulong MaxValue { get; private set; }
+
 		public ulong MinValue { get; private set; }
 
-		public bool Is32Bit { get; private set; }
+		#region Future
 
-		public ulong RangeStart => MinValue;
-		public ulong RangeLength => (MaxValue - MinValue) + 1;
+		//public ulong A { get; private set; }
+
+		//public ulong B { get; private set; }
+
+		//public bool IsSetValid => A != B || IsSetEmptySet || IsFullSet);
+
+		//public bool IsSetEmptySet => A == 0 && B == 0;
+
+		//public bool IsSetWrapped => A > B;
+
+		//public bool IsFullSet => IsSetFull64BitSet || (IsSetFull32BitSet && Is32Bit);
+
+		//public bool IsFullSet32 => (A == uint.MaxValue && B == uint.MaxValue) || (A == 0 && B > uint.MaxValue);
+
+		//public bool IsFullSet64 => A == ulong.MaxValue && B == ulong.MaxValue;
+
+		#endregion Future
+
+		public bool Is32Bit { get; private set; }
 
 		public bool Is64Bit => !Is32Bit;
 
 		public bool AreAll64BitsKnown => (BitsKnown & ulong.MaxValue) == ulong.MaxValue;
+
 		public bool AreLower16BitsKnown => (BitsKnown & ushort.MaxValue) == ushort.MaxValue;
+
 		public bool AreLower32BitsKnown => (BitsKnown & uint.MaxValue) == uint.MaxValue;
+
 		public bool AreLower5BitsKnown => (BitsKnown & 0b11111) == 0b11111;
+
 		public bool AreLower6BitsKnown => (BitsKnown & 0b111111) == 0b111111;
+
 		public bool AreLower8BitsKnown => (BitsKnown & byte.MaxValue) == byte.MaxValue;
+
 		public bool AreUpper32BitsKnown => (BitsKnown & Upper32BitsSet) == Upper32BitsSet;
+
 		public ulong BitsKnown => BitsSet | BitsClear;
+
 		public ulong BitsUnknown => ~BitsKnown;
+
 		public bool AreAnyBitsKnown => BitsClear != 0 || BitsSet != 0;
+
 		public uint BitsClear32 => (uint)BitsClear;
+
 		public uint BitsSet32 => (uint)BitsSet;
+
 		public byte BitsClear8 => (byte)BitsClear;
+
 		public byte BitsSet8 => (byte)BitsSet;
+
 		public ushort BitsClear16 => (ushort)BitsClear;
+
 		public ushort BitsSet16 => (ushort)BitsSet;
+
 		public bool IsSignBitKnown32 => ((BitsKnown >> 31) & 1) != 0;
+
 		public bool IsSignBitKnown64 => ((BitsKnown >> 63) & 1) != 0;
+
 		public bool IsSignBitSet32 => ((BitsSet >> 31) & 1) != 0;
+
 		public bool IsSignBitSet64 => ((BitsSet >> 63) & 1) != 0;
+
 		public bool IsSignBitClear32 => ((BitsClear >> 31) & 1) == 1;
+
 		public bool IsSignBitClear64 => ((BitsClear >> 63) & 1) == 1;
 
 		private BitValue(ulong value, bool is32Bit)

@@ -37,7 +37,7 @@ namespace Mosa.DeviceSystem
 
 		//[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		[MethodImpl(MethodImplOptions.NoInlining)]
-		protected Device MatchEvent<SERVICE>(ServiceEvent serviceEvent, ServiceEventType eventType) where SERVICE : class
+		protected static Device MatchEvent<SERVICE>(ServiceEvent serviceEvent, ServiceEventType eventType) where SERVICE : class
 		{
 			if (serviceEvent.ServiceEventType != eventType)
 				return null;

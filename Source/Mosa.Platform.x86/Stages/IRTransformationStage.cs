@@ -1102,7 +1102,7 @@ namespace Mosa.Platform.x86.Stages
 			{
 				if (operand.IsInteger64)
 				{
-					SplitLongOperand(operand, out var op0L, out var op0H);
+					SplitLongOperand(operand, out _, out _);
 				}
 			}
 		}
@@ -1165,14 +1165,14 @@ namespace Mosa.Platform.x86.Stages
 
 		private void Convert64ToFloatR4(Context context)
 		{
-			SplitLongOperand(context.Result, out var op1Low, out var op1High);
+			SplitLongOperand(context.Result, out var op1Low, out _);
 
 			context.SetInstruction(X86.Cvtsi2ss32, context.Result, op1Low);
 		}
 
 		private void Convert64ToFloatR8(Context context)
 		{
-			SplitLongOperand(context.Result, out var op1Low, out var op1High);
+			SplitLongOperand(context.Result, out var op1Low, out _);
 
 			context.SetInstruction(X86.Cvtsi2sd32, context.Result, op1Low);
 		}
@@ -1303,7 +1303,7 @@ namespace Mosa.Platform.x86.Stages
 		private void LoadParamSignExtend8x64(Context context)
 		{
 			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
-			SplitLongOperand(context.Operand1, out var lowOffset, out var highOffset);
+			SplitLongOperand(context.Operand1, out var lowOffset, out _);
 
 			context.SetInstruction(X86.MovsxLoad8, resultLow, StackFrame, lowOffset);
 			context.AppendInstruction2(X86.Cdq32, resultHigh, resultLow, resultLow);

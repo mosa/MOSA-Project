@@ -23,9 +23,9 @@ namespace Mosa.Compiler.Framework.Stages
 		private const ulong Upper48BitsSet = ~(ulong)ushort.MaxValue;
 		private const ulong Upper56BitsSet = ~(ulong)byte.MaxValue;
 
-		private Counter BranchesRemovedCount = new Counter("BitTrackerStage.BranchesRemoved");
-		private Counter InstructionsRemovedCount = new Counter("BitTrackerStage.InstructionsRemoved");
-		private Counter InstructionsUpdatedCount = new Counter("BitTrackerStage.InstructionsUpdated");
+		private readonly Counter BranchesRemovedCount = new Counter("BitTrackerStage.BranchesRemoved");
+		private readonly Counter InstructionsRemovedCount = new Counter("BitTrackerStage.InstructionsRemoved");
+		private readonly Counter InstructionsUpdatedCount = new Counter("BitTrackerStage.InstructionsUpdated");
 		private TraceLog trace;
 
 		private NodeVisitationDelegate[] visitation = new NodeVisitationDelegate[MaxInstructions];
@@ -1419,12 +1419,17 @@ namespace Mosa.Compiler.Framework.Stages
 			if (value1 == null)
 				return null;
 
-			if (value1.AreLower32BitsKnown)
-			{
-				return BitValue.CreateValue(value1.BitsSet32, true);
-			}
+			if (value1.Is32Bit)
+				return value1;
 
-			return value1;
+			return BitValue.CreateValue(
+				bitsSet: value1.BitsSet & uint.MaxValue,
+				bitsClear: value1.BitsClear | Upper32BitsSet,
+				maxValue: Math.Min(uint.MaxValue, value1.MaxValue),
+				minValue: value1.MinValue > uint.MaxValue ? 0 : value1.MinValue,
+				rangeDeterminate: false,
+				is32Bit: true
+			);
 		}
 
 		private static BitValue Move64(InstructionNode node, TransformContext transformContext)
@@ -2334,7 +2339,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return null;
 
 			return BitValue.CreateValue(
-				bitsSet: value1.BitsSet,
+				bitsSet: value1.BitsSet & uint.MaxValue,
 				bitsClear: Upper32BitsSet | value1.BitsClear,
 				maxValue: Math.Min(uint.MaxValue, value1.MaxValue),
 				minValue: value1.MinValue > uint.MaxValue ? 0 : value1.MinValue,
@@ -2583,7 +2588,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private static BitValue Any32(InstructionNode node, TransformContext transformContext)
 		{
-			return BitValue.Any64;
+			return BitValue.Any32;
 		}
 
 		private static BitValue Any64(InstructionNode node, TransformContext transformContext)

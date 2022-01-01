@@ -19,9 +19,11 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private sealed class VariableState
 		{
-			private enum VariableStatusType { Unknown, OverDefined, SingleConstant, MultipleConstants }
+			private enum VariableStatusType
+			{ Unknown, OverDefined, SingleConstant, MultipleConstants }
 
-			private enum ReferenceStatusType { Unknown, DefinedNotNull, OverDefined }
+			private enum ReferenceStatusType
+			{ Unknown, DefinedNotNull, OverDefined }
 
 			private VariableStatusType Status;
 
@@ -29,13 +31,17 @@ namespace Mosa.Compiler.Framework.Analysis
 
 			private List<ulong> constants;
 
-			public int ConstantCount { get { return constants?.Count ?? 0; } }
+			public int ConstantCount
+			{ get { return constants?.Count ?? 0; } }
 
-			public List<ulong> Constants { get { return constants; } }
+			public List<ulong> Constants
+			{ get { return constants; } }
 
-			public ulong ConstantUnsignedLongInteger { get { return constants[0]; } }
+			public ulong ConstantUnsignedLongInteger
+			{ get { return constants[0]; } }
 
-			public long ConstantSignedLongInteger { get { return (long)constants[0]; } }
+			public long ConstantSignedLongInteger
+			{ get { return (long)constants[0]; } }
 
 			public bool ConstantsContainZero { get; set; }
 
@@ -47,7 +53,8 @@ namespace Mosa.Compiler.Framework.Analysis
 				set { Status = VariableStatusType.OverDefined; constants = null; Debug.Assert(value); }
 			}
 
-			public bool IsUnknown { get { return Status == VariableStatusType.Unknown; } }
+			public bool IsUnknown
+			{ get { return Status == VariableStatusType.Unknown; } }
 
 			public bool IsSingleConstant
 			{
@@ -55,15 +62,18 @@ namespace Mosa.Compiler.Framework.Analysis
 				set { Status = VariableStatusType.SingleConstant; Debug.Assert(value); }
 			}
 
-			public bool HasMultipleConstants { get { return Status == VariableStatusType.MultipleConstants; } }
+			public bool HasMultipleConstants
+			{ get { return Status == VariableStatusType.MultipleConstants; } }
 
-			public bool HasOnlyConstants { get { return Status == VariableStatusType.SingleConstant || Status == VariableStatusType.MultipleConstants; } }
+			public bool HasOnlyConstants
+			{ get { return Status == VariableStatusType.SingleConstant || Status == VariableStatusType.MultipleConstants; } }
 
 			public bool IsVirtualRegister { get; set; }
 
 			public bool IsReferenceType { get; set; }
 
-			public bool IsReferenceDefinedUnknown { get { return ReferenceStatus == ReferenceStatusType.Unknown; } }
+			public bool IsReferenceDefinedUnknown
+			{ get { return ReferenceStatus == ReferenceStatusType.Unknown; } }
 
 			public bool IsReferenceDefinedNotNull
 			{
@@ -232,7 +242,7 @@ namespace Mosa.Compiler.Framework.Analysis
 
 		private readonly KeyedList<BasicBlock, InstructionNode> phiStatements;
 
-		private bool Is32BitPlatform;
+		private readonly bool Is32BitPlatform;
 
 		public SparseConditionalConstantPropagation(BasicBlocks basicBlocks, CreateTraceHandler createTrace, bool is32BitPlatform)
 		{
@@ -600,7 +610,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			return true;
 		}
 
-		private bool? NullComparisionCheck(ConditionCode condition, VariableState operand1, VariableState operand2)
+		private static bool? NullComparisionCheck(ConditionCode condition, VariableState operand1, VariableState operand2)
 		{
 			// not null check
 			if (condition == ConditionCode.Equal)
@@ -877,7 +887,7 @@ namespace Mosa.Compiler.Framework.Analysis
 			}
 		}
 
-		private bool IntegerOperation(BaseInstruction instruction, ulong operand1, ulong operand2, ConditionCode conditionCode, out ulong result)
+		private static bool IntegerOperation(BaseInstruction instruction, ulong operand1, ulong operand2, ConditionCode conditionCode, out ulong result)
 		{
 			if (instruction == IRInstruction.Add32
 				|| instruction == IRInstruction.Add64)

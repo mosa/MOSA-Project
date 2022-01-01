@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.ConstantFolding
 				context.SetNop();
 			}
 
-			transformContext.UpdatePhiBlocks(targets);
+			TransformContext.UpdatePhiBlocks(targets);
 		}
 	}
 }
