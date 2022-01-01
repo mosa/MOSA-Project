@@ -204,11 +204,6 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsString { get; private set; }
 
-		/// <summary>
-		/// Determines if the operand is a symbol operand.
-		/// </summary>
-		public bool IsSymbol { get; private set; }
-
 		public bool IsUnmanagedPointer { get; private set; }
 
 		/// <summary>
@@ -310,7 +305,6 @@ namespace Mosa.Compiler.Framework
 			IsVirtualRegister = false;
 			IsLabel = false;
 			IsCPURegister = false;
-			IsSymbol = false;
 			IsStaticField = false;
 			IsParameter = false;
 			IsResolved = false;
@@ -856,22 +850,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates the symbol.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="name">The name.</param>
-		/// <returns></returns>
-		public static Operand CreateSymbol(MosaType type, string name)
-		{
-			return new Operand(type)
-			{
-				IsSymbol = true,
-				Name = name,
-				IsConstant = true,
-			};
-		}
-
-		/// <summary>
 		/// Creates the string symbol.
 		/// </summary>
 		/// <param name="type">The type.</param>
@@ -883,7 +861,7 @@ namespace Mosa.Compiler.Framework
 		{
 			return new Operand(type)
 			{
-				IsSymbol = true,
+				IsLabel = true,
 				Name = name,
 				IsConstant = true,
 				Offset = offset,
@@ -902,7 +880,7 @@ namespace Mosa.Compiler.Framework
 		{
 			return new Operand(typeSystem.BuiltIn.Pointer)
 			{
-				IsSymbol = true,
+				IsLabel = true,
 				Method = method,
 				Name = method.FullName,
 				IsConstant = true
@@ -919,7 +897,7 @@ namespace Mosa.Compiler.Framework
 		{
 			return new Operand(typeSystem.BuiltIn.Pointer)
 			{
-				IsSymbol = true,
+				IsLabel = true,
 				Name = name,
 				IsConstant = true
 			};

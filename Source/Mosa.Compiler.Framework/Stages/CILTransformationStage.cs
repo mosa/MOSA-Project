@@ -1559,7 +1559,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (fieldType.IsReferenceType)
 				{
 					var symbol = GetStaticSymbol(field);
-					var staticReference = Operand.CreateSymbol(TypeSystem.BuiltIn.Object, symbol.Name);
+					var staticReference = Operand.CreateLabel(TypeSystem.BuiltIn.Object, symbol.Name);
 
 					node.SetInstruction(IRInstruction.LoadObject, result, staticReference, ConstantZero);
 				}
@@ -1598,7 +1598,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (fieldType.IsReferenceType)
 				{
 					var symbol = GetStaticSymbol(field);
-					var staticReference = Operand.CreateSymbol(TypeSystem.BuiltIn.Object, symbol.Name);
+					var staticReference = Operand.CreateLabel(TypeSystem.BuiltIn.Object, symbol.Name);
 
 					node.SetInstruction(IRInstruction.StoreObject, null, staticReference, ConstantZero, operand1);
 				}
@@ -2177,12 +2177,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Operand GetMethodTablePointer(MosaType runtimeType)
 		{
-			return Operand.CreateSymbol(TypeSystem.BuiltIn.Pointer, Metadata.TypeDefinition + runtimeType.FullName);
+			return Operand.CreateLabel(TypeSystem.BuiltIn.Pointer, Metadata.TypeDefinition + runtimeType.FullName);
 		}
 
 		private Operand GetRuntimeTypeHandle(MosaType runtimeType)
 		{
-			return Operand.CreateSymbol(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), Metadata.TypeDefinition + runtimeType.FullName);
+			return Operand.CreateLabel(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), Metadata.TypeDefinition + runtimeType.FullName);
 		}
 
 		/// <summary>

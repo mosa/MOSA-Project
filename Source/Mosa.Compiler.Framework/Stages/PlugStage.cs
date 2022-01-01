@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework.Stages
 				node.InvokeMethod = newTarget;
 			}
 
-			if (node.Operand1 != null && node.Operand1.IsSymbol && node.Operand1.Method != null)
+			if (node.Operand1 != null && node.Operand1.IsLabel && node.Operand1.Method != null)
 			{
 				node.Operand1 = Operand.CreateSymbolFromMethod(newTarget, TypeSystem);
 			}

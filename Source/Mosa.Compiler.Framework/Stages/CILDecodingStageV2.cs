@@ -879,12 +879,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Operand GetMethodTablePointer(MosaType runtimeType)
 		{
-			return Operand.CreateSymbol(TypeSystem.BuiltIn.Pointer, Metadata.TypeDefinition + runtimeType.FullName);
+			return Operand.CreateLabel(TypeSystem.BuiltIn.Pointer, Metadata.TypeDefinition + runtimeType.FullName);
 		}
 
 		private Operand GetRuntimeTypeHandle(MosaType runtimeType)
 		{
-			return Operand.CreateSymbol(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), Metadata.TypeDefinition + runtimeType.FullName);
+			return Operand.CreateLabel(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), Metadata.TypeDefinition + runtimeType.FullName);
 		}
 
 		private uint GetSize(ElementType elementType)
@@ -3010,7 +3010,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (type.IsReferenceType)
 				{
 					var symbol = GetStaticSymbol(field);
-					var staticReference = Operand.CreateSymbol(TypeSystem.BuiltIn.Object, symbol.Name);
+					var staticReference = Operand.CreateLabel(TypeSystem.BuiltIn.Object, symbol.Name);
 
 					context.SetInstruction(IRInstruction.LoadObject, result, staticReference, ConstantZero);
 				}
@@ -3034,7 +3034,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var stringdata = TypeSystem.LookupUserString(Method.Module, token);
 			var symbolName = EmitString(stringdata, token);
 
-			var symbol = Operand.CreateSymbol(TypeSystem.BuiltIn.String, symbolName);
+			var symbol = Operand.CreateLabel(TypeSystem.BuiltIn.String, symbolName);
 
 			context.AppendInstruction(IRInstruction.MoveObject, result, symbol);
 
@@ -3781,6 +3781,7 @@ namespace Mosa.Compiler.Framework.Stages
 							var storeInstruction = GetStoreInstruction(elementType);
 
 							context.AppendInstruction(storeInstruction, null, entry2.Operand, CreateConstant32(offset), entry1.Operand);
+
 							//context.MosaType = type;
 
 							return true;
@@ -3934,9 +3935,10 @@ namespace Mosa.Compiler.Framework.Stages
 				if (type.IsReferenceType)
 				{
 					var symbol = GetStaticSymbol(field);
-					var staticReference = Operand.CreateSymbol(TypeSystem.BuiltIn.Object, symbol.Name);
+					var staticReference = Operand.CreateLabel(TypeSystem.BuiltIn.Object, symbol.Name);
 
 					context.SetInstruction(IRInstruction.StoreObject, null, staticReference, ConstantZero);
+
 					//context.MosaType = type;
 				}
 				else

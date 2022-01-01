@@ -384,7 +384,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return mappedOperand;
 			}
 
-			if (operand.IsSymbol)
+			if (operand.IsLabel)
 			{
 				if (operand.IsString)
 				{
@@ -399,7 +399,7 @@ namespace Mosa.Compiler.Framework.Stages
 				else if (operand.Name != null)
 				{
 					// FUTURE: explore operand re-use
-					mappedOperand = Operand.CreateSymbol(operand.Type, operand.Name);
+					mappedOperand = Operand.CreateLabel(operand.Type, operand.Name);
 				}
 			}
 			else if (operand.IsParameter)
