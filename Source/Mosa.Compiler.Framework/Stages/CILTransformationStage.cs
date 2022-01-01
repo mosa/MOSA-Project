@@ -359,14 +359,14 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void BinaryLogic(InstructionNode node)
 		{
-			if (node.Operand1.IsEnum)
+			if (node.Operand1.Type.IsEnum)
 			{
 				var type = node.Operand1.Type;
 				var operand = Operand.CreateStaticField(type.Fields[0], TypeSystem);
 				node.SetOperand(0, operand);
 			}
 
-			if (node.Operand2.IsEnum)
+			if (node.Operand2.Type.IsEnum)
 			{
 				var type = node.Operand2.Type;
 				var operand = Operand.CreateStaticField(type.Fields[0], TypeSystem);

@@ -778,7 +778,7 @@ namespace Mosa.Compiler.Framework.Analysis
 					{
 						SetReferenceNotNull(result);
 					}
-					else if (operand.Operand.IsParameter && operand.Operand.IsThis)
+					else if (operand.Operand.IsParameter)
 					{
 						// the this pointer can not be null
 						AssignedNewObject(result);
