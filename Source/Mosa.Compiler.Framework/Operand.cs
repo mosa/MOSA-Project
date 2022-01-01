@@ -16,10 +16,10 @@ namespace Mosa.Compiler.Framework
 	{
 		#region Future
 
-		// Primitive Type: Integer, Float
+		// Primitive Type: Integer, Float, ValueType
 		// Size: 32, 64
-		// xxxx: Local Stack, Paramater, Static Field, Symbol, Label
-		// Attribute: ReferenceType
+		// Operand Type: Local Stack, Paramater, Static Field, Label, Virtual Register, Physical Register
+		// Attribute: Reference Type, Managed Pointer, Constant, Unresolved Constant
 
 		#endregion Future
 
@@ -242,7 +242,10 @@ namespace Mosa.Compiler.Framework
 		/// Gets or sets the offset.
 		/// </summary>
 		public long Offset
-		{ get { Debug.Assert(IsResolved); return ConstantSigned64; } set { Debug.Assert(!IsResolved); ConstantSigned64 = value; } }
+		{
+			get { Debug.Assert(IsResolved); return ConstantSigned64; }
+			set { Debug.Assert(!IsResolved); ConstantSigned64 = value; }
+		}
 
 		/// <summary>
 		/// Retrieves the register, where the operand is located.
@@ -280,7 +283,6 @@ namespace Mosa.Compiler.Framework
 			}
 			set
 			{
-				Debug.Assert(value == null || (IsInteger && IsVirtualRegister) || (IsReferenceType && IsVirtualRegister) || (IsPointer && IsVirtualRegister) /*|| FitsIntegerRegister*/);
 				_value = value;
 			}
 		}
@@ -325,10 +327,11 @@ namespace Mosa.Compiler.Framework
 			IsR4 = type.IsR4;
 			IsR8 = type.IsR8;
 
-			IsManagedPointer = type.IsManagedPointer;
-			IsUnmanagedPointer = type.IsUnmanagedPointer;
 			IsReferenceType = type.IsReferenceType;
 			IsValueType = type.IsValueType;
+
+			IsManagedPointer = type.IsManagedPointer;
+			IsUnmanagedPointer = type.IsUnmanagedPointer;
 			IsFunctionPointer = type.IsFunctionPointer;
 
 			IsInteger = type.IsI1 || type.IsI2 || type.IsI4 || type.IsI8 || type.IsU1 || type.IsU2 || type.IsU4 || type.IsU8;
@@ -537,112 +540,6 @@ namespace Mosa.Compiler.Framework
 		public static Operand CreateConstant(MosaType type, int value)
 		{
 			return CreateConstant(type, (long)value);
-		}
-
-		/// <summary>
-		/// Creates a new constant <see cref="Operand" /> for the given integral value.
-		/// </summary>
-		/// <param name="value">The value to create the constant operand for.</param>
-		/// <param name="typeSystem">The type system.</param>
-		/// <returns>
-		/// A new operand representing the value <paramref name="value" />.
-		/// </returns>
-		public static Operand CreateConstant(int value, TypeSystem typeSystem)
-		{
-			return new Operand(typeSystem.BuiltIn.I4)
-			{
-				IsConstant = true,
-				ConstantSigned64 = value,
-				IsResolved = true
-			};
-		}
-
-		/// <summary>
-		/// Creates the constant.
-		/// </summary>
-		/// <param name="value">The value.</param>
-		/// <param name="typeSystem">The type system.</param>
-		/// <returns></returns>
-		public static Operand CreateConstant(uint value, TypeSystem typeSystem)
-		{
-			return new Operand(typeSystem.BuiltIn.U4)
-			{
-				IsConstant = true,
-				ConstantSigned64 = value,
-				IsResolved = true
-			};
-		}
-
-		/// <summary>
-		/// Creates a new constant <see cref="Operand" /> for the given integral value.
-		/// </summary>
-		/// <param name="value">The value to create the constant operand for.</param>
-		/// <param name="typeSystem">The type system.</param>
-		/// <returns>
-		/// A new operand representing the value <paramref name="value" />.
-		/// </returns>
-		public static Operand CreateConstant(ulong value, TypeSystem typeSystem)
-		{
-			return new Operand(typeSystem.BuiltIn.I8)
-			{
-				IsConstant = true,
-				ConstantUnsigned64 = value,
-				IsResolved = true
-			};
-		}
-
-		/// <summary>
-		/// Creates a new constant <see cref="Operand" /> for the given integral value.
-		/// </summary>
-		/// <param name="value">The value to create the constant operand for.</param>
-		/// <param name="typeSystem">The type system.</param>
-		/// <returns>
-		/// A new operand representing the value <paramref name="value" />.
-		/// </returns>
-		public static Operand CreateConstant(long value, TypeSystem typeSystem)
-		{
-			return new Operand(typeSystem.BuiltIn.I8)
-			{
-				IsConstant = true,
-				ConstantSigned64 = value,
-				IsResolved = true
-			};
-		}
-
-		/// <summary>
-		/// Creates a new constant <see cref="Operand"/> for the given integral value.
-		/// </summary>
-		/// <param name="value">The value to create the constant operand for.</param>
-		/// <param name="typeSystem">The type system.</param>
-		/// <returns>
-		/// A new operand representing the value <paramref name="value"/>.
-		/// </returns>
-		public static Operand CreateConstant(float value, TypeSystem typeSystem)
-		{
-			return new Operand(typeSystem.BuiltIn.R4)
-			{
-				IsConstant = true,
-				ConstantFloat = value,
-				IsResolved = true
-			};
-		}
-
-		/// <summary>
-		/// Creates a new constant <see cref="Operand"/> for the given integral value.
-		/// </summary>
-		/// <param name="value">The value to create the constant operand for.</param>
-		/// <param name="typeSystem">The type system.</param>
-		/// <returns>
-		/// A new operand representing the value <paramref name="value"/>.
-		/// </returns>
-		public static Operand CreateConstant(double value, TypeSystem typeSystem)
-		{
-			return new Operand(typeSystem.BuiltIn.R8)
-			{
-				IsConstant = true,
-				ConstantDouble = value,
-				IsResolved = true
-			};
 		}
 
 		/// <summary>

@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	/// <remarks>
 	/// The CIL decoding stage takes a stream of bytes and decodes the instructions represented into an MSIL based intermediate
-	/// representation. The instructions are grouped into basic Blocks for easier local optimizations in later compiler stages.
+	/// representation. The instructions are grouped into basic blocks.
 	/// </remarks>
 	public sealed class CILDecodingStageV2 : BaseMethodCompilerStage
 	{

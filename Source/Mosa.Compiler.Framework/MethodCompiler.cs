@@ -807,12 +807,12 @@ namespace Mosa.Compiler.Framework
 
 		public Operand CreateConstant(float value)
 		{
-			return Operand.CreateConstant(value, TypeSystem);
+			return Operand.CreateConstant(TypeSystem.BuiltIn.R4, value);
 		}
 
 		public Operand CreateConstant(double value)
 		{
-			return Operand.CreateConstant(value, TypeSystem);
+			return Operand.CreateConstant(TypeSystem.BuiltIn.R8, value);
 		}
 
 		#endregion Constant Helper Methods
