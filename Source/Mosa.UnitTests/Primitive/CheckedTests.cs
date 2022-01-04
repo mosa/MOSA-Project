@@ -159,5 +159,18 @@ namespace Mosa.UnitTests.Primitive
 				return 0x05ADBEEF;
 			}
 		}
+
+		[MosaUnitTest(Series = "U8")]
+		public static int ConvI4(ulong first)
+		{
+			try
+			{
+				return checked((int)first);
+			}
+			catch
+			{
+				return 0x05ADBEEF;
+			}
+		}
 	}
 }
