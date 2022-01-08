@@ -229,51 +229,6 @@ namespace Mosa.Compiler.Framework.Transform
 			return AreAnyStatusFlagsUsed(context.Node) != TriState.No;
 		}
 
-		protected static bool HasBitValue(Operand operand)
-		{
-			return operand.BitValue != null;
-		}
-
-		protected static uint GetBitValueSetBits32(Operand operand)
-		{
-			return (uint)operand.BitValue.BitsSet;
-		}
-
-		protected static ulong GetBitValueSetBits64(Operand operand)
-		{
-			return operand.BitValue.BitsSet;
-		}
-
-		protected static ulong GetBitValueSetBits(Operand operand)
-		{
-			return operand.BitValue.BitsSet;
-		}
-
-		protected static uint GetBitValueClearBits32(Operand operand)
-		{
-			return (uint)operand.BitValue.BitsClear;
-		}
-
-		protected static ulong GetBitValueClearBits64(Operand operand)
-		{
-			return operand.BitValue.BitsClear;
-		}
-
-		protected static ulong GetBitValueClearBits(Operand operand)
-		{
-			return operand.BitValue.BitsClear;
-		}
-
-		protected static ulong GetBitValueMax(Operand operand)
-		{
-			return operand.BitValue.MaxValue;
-		}
-
-		protected static ulong GetBitValueMin(Operand operand)
-		{
-			return operand.BitValue.MinValue;
-		}
-
 		#endregion Filter Methods
 
 		#region Expression Methods

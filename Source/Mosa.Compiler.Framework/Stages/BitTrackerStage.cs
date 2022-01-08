@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.Framework.Transform;
 using System;
@@ -36,16 +37,17 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private TransformContext TransformContext;
 
+		private BitValueManager BitValueManager;
+
 		protected override void Finish()
 		{
 			trace = null;
 			TransformContext = null;
+			BitValueManager = null;
 		}
 
 		protected override void Initialize()
 		{
-			visitation = new NodeVisitationDelegate[MaxInstructions];
-
 			Register(InstructionsUpdatedCount);
 			Register(InstructionsRemovedCount);
 			Register(BranchesRemovedCount);
@@ -184,8 +186,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 			trace = CreateTraceLog(5);
 
-			TransformContext = new TransformContext(MethodCompiler);
-			TransformContext.SetLogs(trace);
+			BitValueManager = new BitValueManager(Is32BitPlatform);
+
+			TransformContext = new TransformContext(MethodCompiler, BitValueManager);
+
+			TransformContext.SetLog(trace);
 
 			EvaluateVirtualRegisters();
 
@@ -209,7 +214,7 @@ namespace Mosa.Compiler.Framework.Stages
 			for (int i = 0; i < count; i++)
 			{
 				var virtualRegister = MethodCompiler.VirtualRegisters[i];
-				var value = virtualRegister.BitValue;
+				var value = BitValueManager.GetBitValue(virtualRegister);
 
 				valueTrace?.Log($"Virtual Register: {virtualRegister}");
 
@@ -236,11 +241,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void EvaluateVirtualRegisters()
 		{
-			foreach (var register in MethodCompiler.VirtualRegisters)
-			{
-				register.BitValue = null;
-			}
-
 			bool change = true;
 
 			while (change)
@@ -256,47 +256,49 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool Evaluate(Operand virtualRegister, TransformContext transformContext)
 		{
-			if (virtualRegister.BitValue != null)
+			var value = BitValueManager.GetBitValue(virtualRegister);
+
+			if (value != null)
 				return false;
 
-			var value = EvaluateBitValue(virtualRegister, transformContext);
+			value = EvaluateBitValue(virtualRegister);
 
 			if (value == null)
 				return false;
 
-			virtualRegister.BitValue = value;
+			BitValueManager.UpdateBitValue(virtualRegister, value);
 
-			UpdateInstruction(virtualRegister);
+			UpdateInstruction(virtualRegister, value);
 
 			return true;
 		}
 
-		private BitValue EvaluateBitValue(Operand virtualRegister, TransformContext transformContext)
+		private BitValue EvaluateBitValue(Operand virtualRegister)
 		{
-			var value = virtualRegister.BitValue;
+			var value = BitValueManager.GetBitValue(virtualRegister);
 
 			if (!IsBitTrackable(virtualRegister))
 				return null;
 
 			if (virtualRegister.Definitions.Count != 1)
-				return Any(virtualRegister, transformContext);
+				return Any(virtualRegister);
 
 			var node = virtualRegister.Definitions[0];
 
 			Debug.Assert(node.ResultCount != 0);
 
 			if (!IsBitTrackable(node.Result))
-				return Any(virtualRegister, transformContext);
+				return Any(virtualRegister);
 
 			if (node.Instruction.FlowControl == FlowControl.Call)
-				return Any(virtualRegister, transformContext);
+				return Any(virtualRegister);
 
 			var method = visitation[node.Instruction.ID];
 
 			if (method == null)
-				return Any(virtualRegister, transformContext);
+				return Any(virtualRegister);
 
-			value = method.Invoke(node, transformContext);
+			value = method.Invoke(node, TransformContext);
 
 			return value;
 		}
@@ -357,7 +359,7 @@ namespace Mosa.Compiler.Framework.Stages
 			throw new InvalidProgramException();
 		}
 
-		private void UpdateInstruction(Operand virtualRegister)
+		private void UpdateInstruction(Operand virtualRegister, BitValue value)
 		{
 			Debug.Assert(!virtualRegister.IsFloatingPoint);
 
@@ -365,8 +367,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (virtualRegister.Definitions.Count != 1)
 				return;
-
-			var value = virtualRegister.BitValue;
 
 			ulong replaceValue;
 

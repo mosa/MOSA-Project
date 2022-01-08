@@ -269,31 +269,9 @@ namespace Mosa.Compiler.Framework
 
 		public int Size { get; private set; }
 
-		public BitValue BitValue
-		{
-			get
-			{
-				if (_value == null && IsResolvedConstant && IsInteger)
-				{
-					// lazy evaluated
-					_value = BitValue.CreateValue(ConstantUnsigned64, IsInteger32);
-				}
-
-				return _value;
-			}
-			set
-			{
-				_value = value;
-			}
-		}
-
 		#endregion Properties
 
-		#region Data Fields
 
-		private BitValue _value;
-
-		#endregion Data Fields
 
 		#region Construction
 
