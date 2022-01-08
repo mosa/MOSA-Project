@@ -297,6 +297,11 @@ namespace Mosa.Compiler.Framework.Transform
 
 		public BitValue GetBitValue(Operand operand)
 		{
+			return BitValueManager.GetBitValue(operand);
+		}
+
+		public BitValue GetBitValueWithDefault(Operand operand)
+		{
 			return BitValueManager.GetBitValueWithDefault(operand);
 		}
 	}
