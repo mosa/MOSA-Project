@@ -916,7 +916,7 @@ namespace Mosa.Compiler.Framework.Stages
 			else if (type.IsI8 || type.IsU8)
 				return StackType.Int64;
 			else if (type.IsR8)
-				return StackType.Int64;
+				return StackType.R8;
 			else if (type.IsR4)
 				return StackType.R4;
 
@@ -1269,8 +1269,7 @@ namespace Mosa.Compiler.Framework.Stages
 						return true;
 					}
 
-				default:
-					return false;
+				default: return false;
 			}
 		}
 
@@ -1471,18 +1470,12 @@ namespace Mosa.Compiler.Framework.Stages
 				stack.Push(resultStackType);
 			}
 
+			//if (ProcessExternalCall(context, method, operands))
+			//	return true;
+
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
-			if (method.IsVirtual)
-			{
-				// TODO
-				return false;
-			}
-			else
-			{
-				context.AppendInstruction(IRInstruction.CallStatic, result, symbol, operands);
-			}
-
+			context.AppendInstruction(IRInstruction.CallStatic, result, symbol, operands);
 			context.InvokeMethod = method;
 
 			return true;
@@ -2556,7 +2549,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var parameter = MethodCompiler.Parameters[index];
 			var type = parameter.Type;
 			var underlyingType = GetUnderlyingType(type);
-			var isCompound = !IsPrimitive(underlyingType);
+			var isCompound = IsCompoundType(underlyingType);
 
 			if (isCompound)
 			{
@@ -2604,7 +2597,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var type = (MosaType)instruction.Operand;
 			var underlyingType = GetUnderlyingType(type.ElementType);
-			var isCompound = !IsPrimitive(underlyingType);
+			var isCompound = IsCompoundType(underlyingType);
 
 			AddArrayBoundsCheck(context, array, index);
 
@@ -2709,11 +2702,13 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				case StackType.Int32:
 				case StackType.Int64:
+				case StackType.R4:
+				case StackType.R8:
 				case StackType.ManagedPointer:
 				case StackType.Object:
 					{
 						var underlyingType = GetUnderlyingType(type);
-						var isCompound = !IsPrimitive(underlyingType);
+						var isCompound = IsCompoundType(underlyingType);
 
 						if (isCompound)
 						{
@@ -2742,7 +2737,35 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 				case StackType.ValueType:
 					{
-						return false;
+						var underlyingType = GetUnderlyingType(type);
+						var isCompound = IsCompoundType(underlyingType);
+
+						if (isCompound)
+						{
+							var result = AllocatedOperand(StackType.ValueType, type);
+
+							context.AppendInstruction(IRInstruction.LoadCompound, result, entry.Operand, CreateConstant32(offset));
+							context.MosaType = type;
+
+							stack.Push(new StackEntry(StackType.ValueType, result, type));
+
+							return true;
+						}
+						else
+						{
+							var stacktype = underlyingType != null ? GetStackType(underlyingType) : StackType.ValueType;
+							var result = AllocatedOperand(stacktype);
+							var elementType = GetElementType(stacktype);
+							var loadInstruction = GetLoadInstruction(elementType);
+
+							var address = AllocateVirtualRegisterManagedPointer();
+							var fixedOffset = CreateConstant32(offset);
+
+							context.AppendInstruction(IRInstruction.AddressOf, address, entry.Operand);
+							context.AppendInstruction(loadInstruction, result, address, fixedOffset);
+
+							return true;
+						}
 					}
 
 				default: return false;
@@ -2955,7 +2978,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var type = (MosaType)instruction.Operand;
 
 			var underlyingType = GetUnderlyingType(type);
-			var isCompound = !IsPrimitive(underlyingType);
+			var isCompound = IsCompoundType(underlyingType);
 
 			if (isCompound)
 			{
@@ -2986,7 +3009,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var type = field.FieldType;
 
 			var underlyingType = GetUnderlyingType(type);
-			var isCompound = !IsPrimitive(underlyingType);
+			var isCompound = IsCompoundType(underlyingType);
 
 			var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
 
@@ -3176,7 +3199,7 @@ namespace Mosa.Compiler.Framework.Stages
 			int paramCount = method.Signature.Parameters.Count;
 
 			var underlyingType = GetUnderlyingType(classType);
-			var isCompound = !IsPrimitive(underlyingType);
+			var isCompound = IsCompoundType(underlyingType);
 			var stackType = underlyingType != null ? GetStackType(underlyingType) : StackType.ValueType;
 
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
@@ -3188,6 +3211,9 @@ namespace Mosa.Compiler.Framework.Stages
 				var param = stack.Pop();
 				operands.Add(param.Operand);
 			}
+
+			//if (ReplaceWithInternalCall(context))
+			//	return true;
 
 			if (stackType == StackType.Object)
 			{
@@ -3220,17 +3246,15 @@ namespace Mosa.Compiler.Framework.Stages
 				context.InvokeMethod = method;
 
 				stack.Push(new StackEntry(StackType.ManagedPointer, newThis));   // ManagedPointer??
+
+				return true;
 			}
 			else if (stackType == StackType.Int32)
 			{
-				// INCOMPLETE
-
 				var newThisLocal = MethodCompiler.AddStackLocal(classType);
 				var newThis = MethodCompiler.CreateVirtualRegister(classType.ToManagedPointer());
 
 				context.AppendInstruction(IRInstruction.AddressOf, newThis, newThisLocal);
-
-				//context.AppendInstruction(IRInstruction.Load32,  )
 
 				operands.Insert(0, newThis);
 
@@ -3238,6 +3262,8 @@ namespace Mosa.Compiler.Framework.Stages
 				context.InvokeMethod = method;
 
 				stack.Push(new StackEntry(StackType.ManagedPointer, newThis));   // ManagedPointer??
+
+				return true;
 			}
 			else if (stackType != StackType.ValueType)
 			{
@@ -3700,7 +3726,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var type = (MosaType)instruction.Operand;
 			var underlyingType = GetUnderlyingType(type.ElementType);
-			var isCompound = !IsPrimitive(underlyingType);
+			var isCompound = IsCompoundType(underlyingType);
 
 			AddArrayBoundsCheck(context, array, index);
 
@@ -3761,11 +3787,13 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				case StackType.Int32:
 				case StackType.Int64:
+				case StackType.R4:
+				case StackType.R8:
 				case StackType.ManagedPointer:
 				case StackType.Object:
 					{
 						var underlyingType = GetUnderlyingType(type);
-						var isCompound = !IsPrimitive(underlyingType);
+						var isCompound = IsCompoundType(underlyingType);
 
 						if (isCompound)
 						{
@@ -3789,7 +3817,13 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 				case StackType.ValueType:
 					{
-						return false;
+						//var underlyingType = GetUnderlyingType(type);
+						//var isCompound = IsCompoundType(underlyingType);
+
+						context.AppendInstruction(IRInstruction.StoreCompound, null, entry2.Operand, CreateConstant32(offset), entry1.Operand);
+						context.MosaType = type;
+
+						return true;
 					}
 
 				default: return false;
@@ -3890,7 +3924,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var type = (MosaType)instruction.Operand;
 			var underlyingType = GetUnderlyingType(type);
-			bool isCompound = !IsPrimitive(underlyingType);
+			bool isCompound = IsCompoundType(underlyingType);
 
 			if (isCompound)
 			{
@@ -3917,7 +3951,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var type = field.FieldType;
 
 			var underlyingType = GetUnderlyingType(type);
-			var isCompound = !IsPrimitive(underlyingType);
+			var isCompound = IsCompoundType(underlyingType);
 
 			var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
 
@@ -3960,7 +3994,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var parameter = MethodCompiler.Parameters[index];
 			var type = parameter.Type;
 			var underlyingType = GetUnderlyingType(type);
-			var isCompound = !IsPrimitive(underlyingType);
+			var isCompound = IsCompoundType(underlyingType);
 
 			if (isCompound)
 			{

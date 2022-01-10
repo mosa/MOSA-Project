@@ -466,31 +466,8 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			var method = context.InvokeMethod;
-
-			// If the method being called is a virtual method then we need to box the value type
-			if (method.IsVirtual
-				&& context.Operand1.Type.ElementType != null
-				&& context.Operand1.Type.ElementType.IsValueType
-				&& method.DeclaringType == context.Operand1.Type.ElementType)
-			{
-				if (!OverridesMethod(method))
-				{
-					// Get the value type, size and native alignment
-					var type = context.Operand1.Type.ElementType;
-					var typeSize = Alignment.AlignUp((uint)TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
-
-					// Create a virtual register to hold our boxed value
-					var boxedValue = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
-
-					var before = context.InsertBefore();
-					before.SetInstruction(IRInstruction.Box, boxedValue, GetRuntimeTypeHandle(type), context.Operand1, CreateConstant32(typeSize));
-
-					// Now replace the value type pointer with the boxed value virtual register
-					context.Operand1 = boxedValue;
-				}
-			}
-
 			var result = context.Result;
+
 			var operands = new List<Operand>(context.Operands);
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
@@ -1247,8 +1224,6 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (result.IsValueType)
 				{
-					//Debug.Assert(result.Uses.Count <= 1, "Usages too high");
-
 					var newThisLocal = MethodCompiler.AddStackLocal(result.Type);
 					var newThis = MethodCompiler.CreateVirtualRegister(result.Type.ToManagedPointer());
 					before.SetInstruction(IRInstruction.AddressOf, newThis, newThisLocal);
@@ -1273,8 +1248,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				Debug.Assert(result.Uses.Count <= 1, "Usages too high");
-
 				var newThis = MethodCompiler.CreateVirtualRegister(result.Type.ToManagedPointer());
 				before.SetInstruction(IRInstruction.AddressOf, newThis, result);
 				before.AppendInstruction(IRInstruction.Nop);

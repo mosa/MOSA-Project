@@ -5,7 +5,6 @@ using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using static Mosa.Compiler.Framework.Stages.BitTrackerStage;
 
 namespace Mosa.Compiler.Framework
 {
@@ -143,7 +142,8 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public bool IsCPURegister { get; private set; }
 
-		public bool IsFloatingPoint { get; private set; }
+		public bool IsFloatingPoint
+		{ get { return IsR4 | IsR8; } }
 
 		public bool IsFunctionPointer { get; private set; }
 
@@ -271,8 +271,6 @@ namespace Mosa.Compiler.Framework
 
 		#endregion Properties
 
-
-
 		#region Construction
 
 		private Operand()
@@ -298,10 +296,8 @@ namespace Mosa.Compiler.Framework
 		private Operand(MosaType type)
 				: this()
 		{
-			//Debug.Assert(type != null);
 			Type = type;
 
-			IsFloatingPoint = type.IsR;
 			IsR4 = type.IsR4;
 			IsR8 = type.IsR8;
 
@@ -353,7 +349,6 @@ namespace Mosa.Compiler.Framework
 			return new Operand()
 			{
 				IsVirtualRegister = true,
-				IsFloatingPoint = true,
 				IsR4 = true,
 				Size = 4,
 				Index = index,
@@ -365,7 +360,6 @@ namespace Mosa.Compiler.Framework
 			return new Operand()
 			{
 				IsVirtualRegister = true,
-				IsFloatingPoint = true,
 				IsR8 = true,
 				Size = 8,
 				Index = index,
@@ -405,7 +399,6 @@ namespace Mosa.Compiler.Framework
 				IsConstant = true,
 				ConstantFloat = value,
 				IsResolved = true,
-				IsFloatingPoint = true,
 				IsR8 = false,
 				Size = 4,
 			};
@@ -418,7 +411,6 @@ namespace Mosa.Compiler.Framework
 				IsConstant = true,
 				ConstantDouble = value,
 				IsResolved = true,
-				IsFloatingPoint = true,
 				IsR8 = false,
 				Size = 8,
 			};
