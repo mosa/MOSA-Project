@@ -1224,7 +1224,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (result.IsValueType)
 				{
-					var newThisLocal = MethodCompiler.AddStackLocal(result.Type);
+					var newThisLocal = AddStackLocal(result.Type);
 					var newThis = MethodCompiler.CreateVirtualRegister(result.Type.ToManagedPointer());
 					before.SetInstruction(IRInstruction.AddressOf, newThis, newThisLocal);
 
@@ -1699,7 +1699,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var adr = AllocateVirtualRegister(type.ToManagedPointer());
 
-				context.SetInstruction(IRInstruction.AddressOf, adr, MethodCompiler.AddStackLocal(type));
+				context.SetInstruction(IRInstruction.AddressOf, adr, AddStackLocal(type));
 				context.AppendInstruction(IRInstruction.UnboxAny, tmp, value, adr, CreateConstant32(typeSize));
 			}
 

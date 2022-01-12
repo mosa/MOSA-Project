@@ -603,7 +603,7 @@ namespace Mosa.Compiler.Framework.Stages
 				case OpCode.Ldnull: return Ldnull(context, stack);
 				case OpCode.Ldobj: return Ldobj(context, stack, instruction);
 				case OpCode.Ldsfld: return Ldsfld(context, stack, instruction);
-				case OpCode.Ldsflda: return false;                                  // TODO
+				case OpCode.Ldsflda: return Ldsflda(context, stack, instruction);
 				case OpCode.Ldstr: return Ldstr(context, stack, instruction);
 				case OpCode.Ldtoken: return Ldtoken(context, stack, instruction);
 				case OpCode.Ldvirtftn: return false;                                // TODO: Not implemented in v1 either
@@ -1347,8 +1347,8 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
+				var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
 				var address = AllocateVirtualRegisterManagedPointer();
-				var typeSize = Alignment.AlignUp((uint)TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
 
 				context.AppendInstruction(IRInstruction.AddressOf, address, entry.Operand);
 				context.AppendInstruction(IRInstruction.Box, result, methodTable, address, CreateConstant32(typeSize));
@@ -1890,6 +1890,10 @@ namespace Mosa.Compiler.Framework.Stages
 					case StackType.R8:
 						context.AppendInstruction(IRInstruction.ConvertR8ToU32, result, entry1.Operand);
 						return true;
+
+					case StackType.ManagedPointer:
+						context.AppendInstruction(IRInstruction.Move32, result, entry1.Operand);
+						return true;
 				}
 
 				// TODO: Float
@@ -1915,6 +1919,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 					case StackType.R8:
 						context.AppendInstruction(IRInstruction.ConvertR8ToU64, result, entry1.Operand);
+						return true;
+
+					case StackType.ManagedPointer:
+						context.AppendInstruction(IRInstruction.Move64, result, entry1.Operand);
 						return true;
 				}
 
@@ -2553,7 +2561,10 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (isCompound)
 			{
-				var result = AllocateVirtualRegister(type);
+				//var elementType = GetElementType(underlyingType);
+				var stacktype = GetStackType(type);
+				var result = AllocatedOperand(stacktype, type);
+
 				context.AppendInstruction(IRInstruction.LoadParamCompound, result, parameter);
 				context.MosaType = type;
 				stack.Push(new StackEntry(StackType.ValueType, result, type));
@@ -2764,6 +2775,8 @@ namespace Mosa.Compiler.Framework.Stages
 							context.AppendInstruction(IRInstruction.AddressOf, address, entry.Operand);
 							context.AppendInstruction(loadInstruction, result, address, fixedOffset);
 
+							stack.Push(new StackEntry(stacktype, result));
+
 							return true;
 						}
 					}
@@ -2783,19 +2796,19 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var type = (MosaType)instruction.Operand;
 				source = Operand.CreateUnmanagedSymbolPointer(Metadata.TypeDefinition + type.FullName, TypeSystem);
-				result = MethodCompiler.CreateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
+				result = AllocateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
 			}
 			else if (instruction.Operand is MosaMethod)
 			{
 				var method = (MosaMethod)instruction.Operand;
 				source = Operand.CreateUnmanagedSymbolPointer(Metadata.MethodDefinition + method.FullName, TypeSystem);
-				result = MethodCompiler.CreateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeMethodHandle"));
+				result = AllocateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeMethodHandle"));
 			}
 			else if (instruction.Operand is MosaField)
 			{
 				var field = (MosaField)instruction.Operand;
 				source = Operand.CreateUnmanagedSymbolPointer(Metadata.FieldDefinition + field.FullName, TypeSystem);
-				result = MethodCompiler.CreateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"));
+				result = AllocateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"));
 				MethodScanner.AccessedField(context.MosaField);
 			}
 
@@ -2924,8 +2937,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (stacktype == StackType.ValueType)
 			{
-				var result2 = AllocateVirtualRegister(local.Type);
-				context.AppendInstruction(IRInstruction.LoadParamCompound, result2, local);
+				//var result2 = AllocateVirtualRegister(local.Type);
+				var result2 = AddStackLocal(local.Type);
+				context.AppendInstruction(IRInstruction.MoveCompound, result2, local);
 				context.MosaType = local.Type;
 
 				stack.Push(new StackEntry(stacktype, result2, local.Type));
@@ -3043,6 +3057,22 @@ namespace Mosa.Compiler.Framework.Stages
 					context.MosaType = type;
 				}
 			}
+
+			return true;
+		}
+
+		private bool Ldsflda(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
+		{
+			var field = (MosaField)instruction.Operand;
+
+			var result = AllocateVirtualRegisterManagedPointer();
+			var fieldOperand = Operand.CreateStaticField(field, TypeSystem);
+
+			context.AppendInstruction(IRInstruction.AddressOf, result, fieldOperand);
+
+			stack.Push(new StackEntry(StackType.ManagedPointer, result));   // FIXME: transient pointer or unmanaged pointer
+
+			MethodScanner.AccessedField(field);
 
 			return true;
 		}
@@ -3235,8 +3265,8 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else if (stackType == StackType.ValueType)  // iscompound?
 			{
-				var newThisLocal = MethodCompiler.AddStackLocal(classType);
-				var newThis = MethodCompiler.CreateVirtualRegister(classType.ToManagedPointer());
+				var newThisLocal = AddStackLocal(classType);
+				var newThis = AllocateVirtualRegisterManagedPointer();
 
 				context.AppendInstruction(IRInstruction.AddressOf, newThis, newThisLocal);
 
@@ -3245,14 +3275,14 @@ namespace Mosa.Compiler.Framework.Stages
 				context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
 				context.InvokeMethod = method;
 
-				stack.Push(new StackEntry(StackType.ManagedPointer, newThis));   // ManagedPointer??
+				stack.Push(new StackEntry(StackType.ValueType, newThisLocal));
 
 				return true;
 			}
 			else if (stackType == StackType.Int32)
 			{
-				var newThisLocal = MethodCompiler.AddStackLocal(classType);
-				var newThis = MethodCompiler.CreateVirtualRegister(classType.ToManagedPointer());
+				var newThisLocal = AddStackLocal(classType);
+				var newThis = AllocateVirtualRegisterManagedPointer();
 
 				context.AppendInstruction(IRInstruction.AddressOf, newThis, newThisLocal);
 
@@ -3269,8 +3299,8 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				// INCOMPLETE
 
-				var newThisLocal = MethodCompiler.AddStackLocal(classType);
-				var newThis = MethodCompiler.CreateVirtualRegister(classType.ToManagedPointer());
+				var newThisLocal = AddStackLocal(classType);
+				var newThis = AllocateVirtualRegisterManagedPointer();
 
 				context.AppendInstruction(IRInstruction.AddressOf, newThis, newThisLocal);
 
@@ -3854,7 +3884,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (stacktype == StackType.ValueType)
 			{
-				context.AppendInstruction(IRInstruction.StoreCompound, null, local, source);
+				context.AppendInstruction(IRInstruction.MoveCompound, local, source);
 				context.MosaType = local.Type;
 
 				return true;
