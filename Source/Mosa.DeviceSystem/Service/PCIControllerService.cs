@@ -74,7 +74,7 @@ namespace Mosa.DeviceSystem.Service
 		/// <param name="slot">The slot.</param>
 		/// <param name="fun">The fun.</param>
 		/// <returns></returns>
-		protected bool ProbeDevice(IPCIControllerLegacy pciController, byte bus, byte slot, byte fun)
+		protected static bool ProbeDevice(IPCIControllerLegacy pciController, byte bus, byte slot, byte fun)
 		{
 			uint value = pciController.ReadConfig32(bus, slot, fun, 0);
 

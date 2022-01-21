@@ -48,6 +48,8 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-platform-optimizations-off", Setting = "Optimizations.Platform", Value = "false"},
 				new Argument() { Name = "-bit-tracker", Setting = "Optimizations.BitTracker", Value = "true"},
 				new Argument() { Name = "-bit-tracker-off", Setting = "Optimizations.BitTracker", Value = "false"},
+				new Argument() { Name = "-bittracker", Setting = "Optimizations.BitTracker", Value = "true"},
+				new Argument() { Name = "-bittracker-off", Setting = "Optimizations.BitTracker", Value = "false"},
 				new Argument() { Name = "-devirtualization", Setting = "Optimizations.Devirtualization", Value = "true"},
 				new Argument() { Name = "-devirtualization-off", Setting = "Optimizations.Devirtualization", Value = "false"},
 				new Argument() { Name = "-inline-level", Setting = "Optimizations.Inline.Maximum"},

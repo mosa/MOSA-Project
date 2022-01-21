@@ -27,9 +27,9 @@ namespace Mosa.Tool.Launcher
 			[Browsable(false)]
 			public IncludeFile IncludeFile { get; }
 
-			public int Size { get { return IncludeFile.Length; } }
-			public string Destination { get { return IncludeFile.Filename; } }
-			public string Source { get { return IncludeFile.SourceFileName; } }
+			public int Size => IncludeFile.Length;
+			public string Destination => IncludeFile.Filename;
+			public string Source => IncludeFile.SourceFileName;
 
 			public IncludedEntry(IncludeFile file)
 			{
@@ -124,14 +124,14 @@ namespace Mosa.Tool.Launcher
 
 				Settings.ClearProperty("SearchPaths");
 				Settings.AddPropertyListValue("SearchPaths", Path.GetDirectoryName(filename));
-
-				UpdateDisplay();
 			}
 		}
 
 		private void Launcher_Load(object sender, EventArgs e)
 		{
 			Text = "MOSA Launcher GUI v" + CompilerVersion.VersionString;
+
+			UpdateDisplay();
 		}
 
 		private void btnDest_Click(object sender, EventArgs e)
@@ -248,8 +248,6 @@ namespace Mosa.Tool.Launcher
 			var arguments = SettingsLoader.RecursiveReader(args);
 
 			Settings.Merge(arguments);
-
-			UpdateDisplay();
 
 			var sourcefiles = Settings.GetValueList("Compiler.SourceFiles");
 

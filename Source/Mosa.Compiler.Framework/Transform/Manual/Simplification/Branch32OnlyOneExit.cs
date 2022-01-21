@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework.Transform.Manual.Simplification
 
 			context.SetNop();
 
-			transformContext.UpdatePhiBlock(target);
+			TransformContext.UpdatePhiBlock(target);
 		}
 	}
 }

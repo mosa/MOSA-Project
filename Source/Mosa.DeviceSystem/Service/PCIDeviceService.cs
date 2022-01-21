@@ -102,12 +102,12 @@ namespace Mosa.DeviceSystem.Service
 			DeviceService.Initialize(driver, device, driver.AutoStart, null, hardwareResources);
 		}
 
-		private bool HasFlag(PCIField list, PCIField match)
+		private static bool HasFlag(PCIField list, PCIField match)
 		{
 			return (int)(list & match) != 0;
 		}
 
-		protected bool IsMatch(PCIDeviceDriverRegistryEntry driver, PCIDevice pciDevice)
+		protected static bool IsMatch(PCIDeviceDriverRegistryEntry driver, PCIDevice pciDevice)
 		{
 			if (HasFlag(driver.PCIFields, PCIField.VendorID) && driver.VendorID != pciDevice.VendorID)
 				return false;
@@ -136,7 +136,7 @@ namespace Mosa.DeviceSystem.Service
 			return true;
 		}
 
-		protected int GetMatchedPriority(PCIDeviceDriverRegistryEntry driver, PCIDevice pciDevice)
+		protected static int GetMatchedPriority(PCIDeviceDriverRegistryEntry driver, PCIDevice pciDevice)
 		{
 			bool VendorID = HasFlag(driver.PCIFields, PCIField.VendorID);
 			bool DeviceID = HasFlag(driver.PCIFields, PCIField.DeviceID);

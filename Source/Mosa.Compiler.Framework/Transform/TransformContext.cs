@@ -258,22 +258,22 @@ namespace Mosa.Compiler.Framework.Transform
 			BaseMethodCompilerStage.UpdatePhiTargets(targets, source, newSource);
 		}
 
-		public void UpdatePhiBlocks(List<BasicBlock> phiBlocks)
+		public static void UpdatePhiBlocks(List<BasicBlock> phiBlocks)
 		{
 			BaseMethodCompilerStage.UpdatePhiBlocks(phiBlocks);
 		}
 
-		public void UpdatePhiBlock(BasicBlock phiBlock)
+		public static void UpdatePhiBlock(BasicBlock phiBlock)
 		{
 			BaseMethodCompilerStage.UpdatePhiBlock(phiBlock);
 		}
 
-		public void UpdatePhi(InstructionNode node)
+		public static void UpdatePhi(InstructionNode node)
 		{
 			BaseMethodCompilerStage.UpdatePhi(node);
 		}
 
-		public void UpdatePhi(Context context)
+		public static void UpdatePhi(Context context)
 		{
 			BaseMethodCompilerStage.UpdatePhi(context);
 		}
