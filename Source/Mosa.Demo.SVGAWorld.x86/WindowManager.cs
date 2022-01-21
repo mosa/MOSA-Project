@@ -1,9 +1,9 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Demo.VBEWorld.x86.Components;
+using Mosa.Demo.SVGAWorld.x86.Components;
 using System.Collections.Generic;
 
-namespace Mosa.Demo.VBEWorld.x86
+namespace Mosa.Demo.SVGAWorld.x86
 {
 	public class WindowManager
 	{

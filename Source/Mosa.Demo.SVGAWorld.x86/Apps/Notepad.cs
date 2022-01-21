@@ -1,10 +1,10 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Demo.VBEWorld.x86.Components;
+using Mosa.Demo.SVGAWorld.x86.Components;
 using System.Drawing;
 using Mosa.DeviceSystem;
 
-namespace Mosa.Demo.VBEWorld.x86.Apps
+namespace Mosa.Demo.SVGAWorld.x86.Apps
 {
 	public class Notepad : Window
 	{

@@ -3,7 +3,7 @@
 using System.Drawing;
 using Mosa.DeviceSystem;
 
-namespace Mosa.Demo.VBEWorld.x86.Components
+namespace Mosa.Demo.SVGAWorld.x86.Components
 {
 	public class Label
 	{

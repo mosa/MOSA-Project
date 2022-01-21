@@ -2,7 +2,7 @@
 
 using Mosa.Kernel.x86;
 
-namespace Mosa.Demo.VBEWorld.x86.HAL
+namespace Mosa.Demo.SVGAWorld.x86.HAL
 {
 	/// <summary>
 	/// X86IOPortReadWrite

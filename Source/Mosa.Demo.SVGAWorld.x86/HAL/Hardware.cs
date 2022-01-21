@@ -6,7 +6,7 @@ using Mosa.Runtime;
 using Mosa.Runtime.x86;
 using System;
 
-namespace Mosa.Demo.VBEWorld.x86.HAL
+namespace Mosa.Demo.SVGAWorld.x86.HAL
 {
 	/// <summary>
 	/// Hardware

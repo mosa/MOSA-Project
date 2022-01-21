@@ -3,7 +3,7 @@
 using System.Drawing;
 using Mosa.DeviceSystem;
 
-namespace Mosa.Demo.VBEWorld.x86
+namespace Mosa.Demo.SVGAWorld.x86
 {
 	internal static class MosaLogo
 	{

@@ -2,7 +2,7 @@
 
 using System.Drawing;
 
-namespace Mosa.Demo.VBEWorld.x86.Components
+namespace Mosa.Demo.SVGAWorld.x86.Components
 {
 	public class TaskbarWindowMenu
 	{

@@ -5,7 +5,7 @@ using Mosa.DeviceSystem;
 using System.Collections.Generic;
 using System.Drawing;
 
-namespace Mosa.Demo.VBEWorld.x86
+namespace Mosa.Demo.SVGAWorld.x86
 {
 	public static class Utils
 	{
