@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.InteropServices;
 using Mosa.DeviceSystem;
 using Mosa.Runtime;
 
@@ -9,18 +8,12 @@ namespace Mosa.DeviceDriver.PCI.Intel
 	//https://github.com/nifanfa/MOSA-Core/blob/master/Mosa/Mosa.External.x86/Driver/Audio/AC97.cs
 	public class AC97 : BaseDeviceDriver
 	{
-		[StructLayout(LayoutKind.Sequential, Pack = 1)]
-		private struct BufferDescriptor
-		{
-			public uint Addr;
-			public ushort Size;
-			public ushort Attr;
-		}
-
 		private ConstrainedPointer NAM, NABM, BufferListAddr, Buffer;
 
 		private const ushort ListLength = 32;
 		private const ushort BufferLength = 0xFFFE;
+
+		private const uint BufferDescLength = sizeof(uint) + sizeof(ushort) * 2;
 
 		private int Status;
 
@@ -34,7 +27,7 @@ namespace Mosa.DeviceDriver.PCI.Intel
 			NABM.Write32(0x2C, 0x00000002);
 			NAM.Write16(0, 54188);
 
-			unsafe { BufferListAddr = HAL.AllocateMemory((uint)(ListLength * sizeof(BufferDescriptor)), 0); }
+			BufferListAddr = HAL.AllocateMemory(ListLength * BufferDescLength, 0);
 			Buffer = HAL.AllocateMemory(1024 * 1024, 0);
 
 			NAM.Write16(0x02, 0x0F0F);
@@ -69,13 +62,11 @@ namespace Mosa.DeviceDriver.PCI.Intel
 			var size = Math.Clamp(data.Size, 0, Buffer.Size);
 			for (uint i = 0; i < size - size % BufferLength; i += BufferLength * 2)
 			{
-				unsafe
-				{
-					var desc = (BufferDescriptor*)(BufferListAddr.Address + sizeof(BufferDescriptor) * k);
-					desc->Addr = (uint)(Buffer.Address + i);
-					desc->Size = BufferLength;
-					desc->Attr = 0b0000_0000_0000_0011;
-				}
+				var ptr = BufferListAddr.Address + BufferDescLength * k;
+				ptr.Store32(0, (uint)(Buffer.Address + i)); // Address
+				ptr.Store16(sizeof(uint), BufferLength); // Size
+				ptr.Store16(sizeof(ushort), 0b0000_0000_0000_0011); // Attributes
+
 				k++;
 			}
 

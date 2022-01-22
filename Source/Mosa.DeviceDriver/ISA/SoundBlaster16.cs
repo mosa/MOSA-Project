@@ -37,16 +37,16 @@ namespace Mosa.DeviceDriver.ISA
 
             // Turn the speaker on
             Write.Write8((byte)Options.TurnOn);
-            SetVolume(0xF); // Max volume
+            (this as IAudioDevice).SetVolume(0xF); // Max volume
         }
 
-        public void SetVolume(byte v)
+		void IAudioDevice.SetVolume(byte v)
         {
 	        MixerPort.Write8((byte)Options.MasterVolume);
 	        MixerDataPort.Write8(v);
         }
 
-        public void Play(ConstrainedPointer data)
+        void IAudioDevice.Play(ConstrainedPointer data)
         {
             var a = (uint)data.Address;
 
