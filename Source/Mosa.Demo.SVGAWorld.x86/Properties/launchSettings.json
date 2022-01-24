@@ -2,9 +2,9 @@
 	"profiles": {
 		"Mosa.Demo.SVGAWorld.x86": {
 			"commandName": "Executable",
-			"executablePath": "Mosa.Tool.Launcher.exe",
-			"commandLineArgs": "-autostart -include Tools/include -vmware -output-map -output-asm -output-debug -vmdk -oMax Mosa.Demo.SVGAWorld.x86.dll",
-			"workingDirectory": "."
+			"executablePath": "..\\bin\\Mosa.Tool.Launcher.exe",
+			"commandLineArgs": "-autostart -include Source/Include -vmware -output-map -output-asm -output-debug -vmdk -oMax Mosa.Demo.SVGAWorld.x86.dll",
+			"workingDirectory": "..\\..\\bin"
 		}
 	}
 }
