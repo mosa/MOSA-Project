@@ -3,7 +3,7 @@
 		"Mosa.Demo.SVGAWorld.x86": {
 			"commandName": "Executable",
 			"executablePath": "..\\bin\\Mosa.Tool.Launcher.exe",
-			"commandLineArgs": "-autostart -include Source/Include -vmware -output-map -output-asm -output-debug -vmdk -oMax Mosa.Demo.SVGAWorld.x86.dll",
+			"commandLineArgs": "-autostart -include Source/Mosa.Demo.SVGAWorld.x86/Include -vmware -output-map -output-asm -output-debug -vmdk -oMax Mosa.Demo.SVGAWorld.x86.dll",
 			"workingDirectory": "..\\..\\bin"
 		}
 	}
