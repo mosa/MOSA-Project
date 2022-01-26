@@ -130,7 +130,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DeviceSystem", "DeviceSyste
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Korlib", "Korlib", "{079CE6E3-8038-44F5-B18A-2D586A827D95}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Demo.VBEWorld.x86", "Mosa.Demo.VBEWorld.x86\Mosa.Demo.VBEWorld.x86.csproj", "{E039B97A-FEA6-4655-94D6-32381A9F9931}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Demo.SVGAWorld.x86", "Mosa.Demo.SVGAWorld.x86\Mosa.Demo.SVGAWorld.x86.csproj", "{E039B97A-FEA6-4655-94D6-32381A9F9931}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kernel.BareMetal", "Kernel.BareMetal", "{75BB6B40-C122-422F-8B40-F50A70A08E0D}"
 EndProject

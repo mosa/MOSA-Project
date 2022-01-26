@@ -332,15 +332,10 @@ namespace Mosa.DeviceDriver.PCI.VideoCard
 		/// <returns></returns>
 		public Color GetPalette(byte colorIndex)
 		{
-			Color color = new Color();
-
 			dacPaletteMask.Write8(0xFF);
 			dacIndexRead.Write8(colorIndex);
-			color.R = dacData.Read8();
-			color.G = dacData.Read8();
-			color.B = dacData.Read8();
 
-			return color;
+			return Color.FromArgb(dacData.Read8(), dacData.Read8(), dacData.Read8());
 		}
 
 		/// <summary>
