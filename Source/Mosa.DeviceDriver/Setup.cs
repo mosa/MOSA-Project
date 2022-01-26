@@ -34,6 +34,16 @@ namespace Mosa.DeviceDriver
 
 				new ISADeviceDriverRegistryEntry()
 				{
+					Name = "SoundBlaster16",
+					Platforms = PlatformArchitecture.X86AndX64,
+					AutoLoad = true,
+					BasePort = 0x224,
+					PortRange = 8,
+					Factory = delegate { return new ISA.SoundBlaster16(); }
+				},
+
+				new ISADeviceDriverRegistryEntry()
+				{
 					Name = "StandardKeyboard",
 					Platforms = PlatformArchitecture.X86AndX64,
 					AutoLoad = true,
@@ -128,6 +138,17 @@ namespace Mosa.DeviceDriver
 					PCIFields = PCIField.VendorID | PCIField.DeviceID,
 					Factory = delegate { return new PCI.VMware.VMwareSVGA2(); }
 				},
+
+				/*new PCIDeviceDriverRegistryEntry()
+				{
+					Name = "AC97",
+					Platforms = PlatformArchitecture.X86AndX64,
+					BusType = DeviceBusType.PCI,
+					VendorID = 0x8086,
+					DeviceID = 0x2415,
+					PCIFields = PCIField.VendorID | PCIField.DeviceID,
+					Factory = delegate { return new AC97(); }
+				},*/
 
 				new PCIDeviceDriverRegistryEntry()
 				{

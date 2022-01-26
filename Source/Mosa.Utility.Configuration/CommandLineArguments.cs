@@ -155,6 +155,9 @@ namespace Mosa.Utility.Configuration
 
 				new Argument() { Name = "-launch-gdb-debugger", Setting = "Launcher.LaunchDebugger", Value="true"},
 
+				// Base directory is the root MOSA directory
+				new Argument() { Name = "-include", Setting = "Image.FileSystem.RootInclude" },
+
 				new Argument() { Name = "-bootloader", Setting = "Image.BootLoader"},
 				new Argument() { Name = "-grub", Setting = "Image.BootLoader", Value = "grub0.97"},
 				new Argument() { Name = "-grub0.97", Setting = "Image.BootLoader", Value = "grub0.97"},

@@ -24,25 +24,6 @@ using System.Drawing;
 
 namespace Mosa.DeviceDriver.PCI.VMware
 {
-	public struct SVGAFifoCmdDefineCursor
-	{
-		public uint ID; // Reserved, must be zero.
-
-		public uint HotspotX;
-		public uint HotspotY;
-
-		public uint Width;
-		public uint Height;
-
-		public uint AndMaskDepth; // Value must be 1 or equal to BITS_PER_PIXEL
-		public uint XorMaskDepth; // Value must be 1 or equal to BITS_PER_PIXEL
-
-		/*
-		Followed by scanline data for AND mask, then XOR mask.
-		Each scanline is padded to a 32-bit boundary.
-		*/
-	}
-
 	/// <summary>
 	/// VMware SVGA II Device Driver
 	/// </summary>
@@ -363,10 +344,8 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 		private ConstrainedPointer fifo;
 
-		private FrameBuffer32 frameBuffer;
-
 		/// <summary>The frame buffer.</summary>
-		public FrameBuffer32 FrameBuffer { get => frameBuffer; }
+		public FrameBuffer32 FrameBuffer { get; private set; }
 
 		public override void Initialize()
 		{
@@ -386,7 +365,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			if (Device.Status != DeviceStatus.Available)
 				return;
 
-			uint version = GetVersion();
+			var version = GetVersion();
 			if (version == SVGA_VERSION_ID.V1 || version == SVGA_VERSION_ID.V2)
 				WriteRegister(SVGA_REGISTERS.GuestID, GUEST_OS.Other); // 0x05010 == GUEST_OS_OTHER (vs GUEST_OS_WIN2000)
 
@@ -413,7 +392,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			Enable();
 
 			// Initialize FIFO
-			uint fifoSize = ReadRegister(SVGA_REGISTERS.MemSize);
+			var fifoSize = ReadRegister(SVGA_REGISTERS.MemSize);
 			uint fifoNumRegs = FIFO_REGISTERS.NumRegs * 4;
 
 			fifo = HAL.GetPhysicalMemory(
@@ -429,7 +408,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			WriteRegister(SVGA_REGISTERS.ConfigDone, 1);
 
 			// Create frame buffer
-			frameBuffer = new FrameBuffer32(
+			FrameBuffer = new FrameBuffer32(
 				HAL.GetPhysicalMemory(
 					new Pointer(ReadRegister(SVGA_REGISTERS.FrameBufferStart)),
 					ReadRegister(SVGA_REGISTERS.FrameBufferSize)),
@@ -456,30 +435,55 @@ namespace Mosa.DeviceDriver.PCI.VMware
 		/// <summary>Updates the whole screen.</summary>
 		public void Update()
 		{
-			Update(0, 0, FrameBuffer.Width, FrameBuffer.Height);
+			WriteToFifo(FIFO_COMMANDS.Update);
+
+			WriteToFifo(0);
+			WriteToFifo(0);
+			WriteToFifo(FrameBuffer.Width);
+			WriteToFifo(FrameBuffer.Height);
 		}
 
-		// WIP
-		/*public unsafe void DefineCursor(SVGAFifoCmdDefineCursor* info)
+		/// <summary>Fills a rectangle on the screen.</summary>
+		public void FillRectangle(uint x, uint y, uint width, uint height, uint color)
 		{
-			uint andPitch = ((info->AndMaskDepth * info->Width + 31) >> 5) << 2;
-			uint andSize = andPitch * info->Height;
-			uint xorPitch = ((info->XorMaskDepth * info->Width + 31) >> 5) << 2;
-			uint xorSize = xorPitch * info->Height;
+			WriteToFifo(FIFO_COMMANDS.RectFill);
 
-			SVGAFifoCmdDefineCursor* cmd = 0; // TODO
-			*cmd = *info;
+			WriteToFifo(color);
+			WriteToFifo(x);
+			WriteToFifo(y);
+			WriteToFifo(width);
+			WriteToFifo(height);
+		}
 
-			void** andMask, xorMask;
-			*andMask = (void*)(cmd + 1);
-			*xorMask = (void*)(andSize + (byte*)*andMask);
+		public void DefineCursor()
+		{
+			WriteToFifo(FIFO_COMMANDS.DefineCursor);
 
-			// Black
-			*andMask = 0xFFFFFF;
-			*xorMask = (uint)Color.Gray.ToArgb();
+			WriteToFifo(1);
+			WriteToFifo(0);
+			WriteToFifo(0);
+			WriteToFifo(2);
+			WriteToFifo(2);
+			WriteToFifo(1);
+			WriteToFifo(1);
+			for (var i = 0; i < 4; i++)
+				WriteToFifo(0);
+			for (var i = 0; i < 4; i++)
+				WriteToFifo(0xFFFFFF);
+		}
 
-			// TODO: Write the pointer to FIFO
-		}*/
+		public void SetCursor(bool visible, uint x, uint y)
+		{
+			WriteRegister(SVGA_REGISTERS.CursorID, 1);
+			if (visible)
+			{
+				WriteToFifo(FIFO_COMMANDS.MoveCursor);
+
+				WriteToFifo(x);
+				WriteToFifo(y);
+			}
+			WriteRegister(SVGA_REGISTERS.CursorOn, (uint)(visible ? 1 : 0));
+		}
 
 		#region Private
 
@@ -536,8 +540,8 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 		private void WriteToFifo(uint value)
 		{
-			if (((ReadFifoRegister(FIFO_REGISTERS.NextCmd) == ReadFifoRegister(FIFO_REGISTERS.Max) - 4) && ReadFifoRegister(FIFO_REGISTERS.Stop) == ReadFifoRegister(FIFO_REGISTERS.Min)) ||
-				(ReadFifoRegister(FIFO_REGISTERS.NextCmd) + 4 == ReadFifoRegister(FIFO_REGISTERS.Stop)))
+			if (ReadFifoRegister(FIFO_REGISTERS.NextCmd) == ReadFifoRegister(FIFO_REGISTERS.Max) - 4 && ReadFifoRegister(FIFO_REGISTERS.Stop) == ReadFifoRegister(FIFO_REGISTERS.Min) ||
+				ReadFifoRegister(FIFO_REGISTERS.NextCmd) + 4 == ReadFifoRegister(FIFO_REGISTERS.Stop))
 				WaitForFifo();
 
 			WriteFifoRegister(ReadFifoRegister(FIFO_REGISTERS.NextCmd) / 4, value);
@@ -545,28 +549,6 @@ namespace Mosa.DeviceDriver.PCI.VMware
 
 			if (ReadFifoRegister(FIFO_REGISTERS.NextCmd) == ReadFifoRegister(FIFO_REGISTERS.Max))
 				WriteFifoRegister(FIFO_REGISTERS.NextCmd, ReadFifoRegister(FIFO_REGISTERS.Min));
-		}
-
-		private void Update(uint X, uint Y, uint Width, uint Height)
-		{
-			WriteToFifo(FIFO_COMMANDS.Update);
-
-			WriteToFifo(X);
-			WriteToFifo(Y);
-			WriteToFifo(Width);
-			WriteToFifo(Height);
-		}
-
-		private void RectCopy(uint SrcX, uint SrcY, uint DstX, uint DstY, uint Width, uint Height)
-		{
-			WriteToFifo(FIFO_COMMANDS.RectCopy);
-
-			WriteToFifo(SrcX);
-			WriteToFifo(SrcY);
-			WriteToFifo(DstX);
-			WriteToFifo(DstY);
-			WriteToFifo(Width);
-			WriteToFifo(Height);
 		}
 
 		#endregion FIFO

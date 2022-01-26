@@ -153,7 +153,7 @@ namespace System.IO
 			} while (lcount > 0);
 
 			return read;
-			   
+
 		}
 
 		public override long Seek(long offset, SeekOrigin origin)
@@ -245,7 +245,7 @@ namespace System.IO
 		#region Public Additional Helper Methods
 
 		/// <summary>
-		/// Returns the entire content of the stream as a byte array. This is not safe because the call to new byte[] may 
+		/// Returns the entire content of the stream as a byte array. This is not safe because the call to new byte[] may
 		/// fail if the stream is large enough. Where possible use methods which operate on streams directly instead.
 		/// </summary>
 		/// <returns>A byte[] containing the current data in the stream</returns>

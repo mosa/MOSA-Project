@@ -7,11 +7,13 @@ namespace Mosa.DeviceSystem
 	// TODO: Add support for other color depths (8-bit, 16-bit and 24-bit)
 	public class Image
 	{
-		public ConstrainedPointer Pixels { get; protected set; }
+		public ConstrainedPointer Pixels { get; }
 
-		public uint Width { get; protected set; }
-		public uint Height { get; protected set; }
-		public uint BytesPerPixel { get; protected set; }
+		public uint Width { get; }
+
+		public uint Height { get; }
+
+		public uint BytesPerPixel { get; }
 
 		public Image(uint width, uint height, uint bytesPerPixel)
 		{

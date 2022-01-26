@@ -11,6 +11,7 @@ namespace Mosa.Plug.Korlib.System
 	// TODO: Implement properly for SZ arrays and multi dimensional arrays
 	public static class ArrayPlug
 	{
+		// TODO: Fix!!!
 		[Plug("System.Array::Copy")]
 		internal static void Copy(Array sourceArray, int sourceIndex, Array destinationArray, int destinationIndex, int length, bool reliable)
 		{
