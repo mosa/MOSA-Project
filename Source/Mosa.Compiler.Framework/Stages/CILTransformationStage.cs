@@ -359,14 +359,14 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="node">The node.</param>
 		private void BinaryLogic(InstructionNode node)
 		{
-			if (node.Operand1.IsEnum)
+			if (node.Operand1.Type.IsEnum)
 			{
 				var type = node.Operand1.Type;
 				var operand = Operand.CreateStaticField(type.Fields[0], TypeSystem);
 				node.SetOperand(0, operand);
 			}
 
-			if (node.Operand2.IsEnum)
+			if (node.Operand2.Type.IsEnum)
 			{
 				var type = node.Operand2.Type;
 				var operand = Operand.CreateStaticField(type.Fields[0], TypeSystem);
@@ -466,31 +466,8 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			var method = context.InvokeMethod;
-
-			// If the method being called is a virtual method then we need to box the value type
-			if (method.IsVirtual
-				&& context.Operand1.Type.ElementType != null
-				&& context.Operand1.Type.ElementType.IsValueType
-				&& method.DeclaringType == context.Operand1.Type.ElementType)
-			{
-				if (!OverridesMethod(method))
-				{
-					// Get the value type, size and native alignment
-					var type = context.Operand1.Type.ElementType;
-					var typeSize = Alignment.AlignUp((uint)TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
-
-					// Create a virtual register to hold our boxed value
-					var boxedValue = AllocateVirtualRegister(TypeSystem.BuiltIn.Object);
-
-					var before = context.InsertBefore();
-					before.SetInstruction(IRInstruction.Box, boxedValue, GetRuntimeTypeHandle(type), context.Operand1, CreateConstant32(typeSize));
-
-					// Now replace the value type pointer with the boxed value virtual register
-					context.Operand1 = boxedValue;
-				}
-			}
-
 			var result = context.Result;
+
 			var operands = new List<Operand>(context.Operands);
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
@@ -1247,9 +1224,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (result.IsValueType)
 				{
-					//Debug.Assert(result.Uses.Count <= 1, "Usages too high");
-
-					var newThisLocal = MethodCompiler.AddStackLocal(result.Type);
+					var newThisLocal = AddStackLocal(result.Type);
 					var newThis = MethodCompiler.CreateVirtualRegister(result.Type.ToManagedPointer());
 					before.SetInstruction(IRInstruction.AddressOf, newThis, newThisLocal);
 
@@ -1273,8 +1248,6 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				Debug.Assert(result.Uses.Count <= 1, "Usages too high");
-
 				var newThis = MethodCompiler.CreateVirtualRegister(result.Type.ToManagedPointer());
 				before.SetInstruction(IRInstruction.AddressOf, newThis, result);
 				before.AppendInstruction(IRInstruction.Nop);
@@ -1559,7 +1532,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (fieldType.IsReferenceType)
 				{
 					var symbol = GetStaticSymbol(field);
-					var staticReference = Operand.CreateSymbol(TypeSystem.BuiltIn.Object, symbol.Name);
+					var staticReference = Operand.CreateLabel(TypeSystem.BuiltIn.Object, symbol.Name);
 
 					node.SetInstruction(IRInstruction.LoadObject, result, staticReference, ConstantZero);
 				}
@@ -1598,7 +1571,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (fieldType.IsReferenceType)
 				{
 					var symbol = GetStaticSymbol(field);
-					var staticReference = Operand.CreateSymbol(TypeSystem.BuiltIn.Object, symbol.Name);
+					var staticReference = Operand.CreateLabel(TypeSystem.BuiltIn.Object, symbol.Name);
 
 					node.SetInstruction(IRInstruction.StoreObject, null, staticReference, ConstantZero, operand1);
 				}
@@ -1726,7 +1699,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var adr = AllocateVirtualRegister(type.ToManagedPointer());
 
-				context.SetInstruction(IRInstruction.AddressOf, adr, MethodCompiler.AddStackLocal(type));
+				context.SetInstruction(IRInstruction.AddressOf, adr, AddStackLocal(type));
 				context.AppendInstruction(IRInstruction.UnboxAny, tmp, value, adr, CreateConstant32(typeSize));
 			}
 
@@ -2177,12 +2150,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private Operand GetMethodTablePointer(MosaType runtimeType)
 		{
-			return Operand.CreateSymbol(TypeSystem.BuiltIn.Pointer, Metadata.TypeDefinition + runtimeType.FullName);
+			return Operand.CreateLabel(TypeSystem.BuiltIn.Pointer, Metadata.TypeDefinition + runtimeType.FullName);
 		}
 
 		private Operand GetRuntimeTypeHandle(MosaType runtimeType)
 		{
-			return Operand.CreateSymbol(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), Metadata.TypeDefinition + runtimeType.FullName);
+			return Operand.CreateLabel(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"), Metadata.TypeDefinition + runtimeType.FullName);
 		}
 
 		/// <summary>

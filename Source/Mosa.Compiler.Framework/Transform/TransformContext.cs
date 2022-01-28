@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.Analysis;
 using Mosa.Compiler.Framework.Trace;
 using Mosa.Compiler.MosaTypeSystem;
 using System;
@@ -12,7 +13,10 @@ namespace Mosa.Compiler.Framework.Transform
 	public sealed class TransformContext
 	{
 		public MethodCompiler MethodCompiler { get; private set; }
+
 		public Compiler Compiler { get; private set; }
+
+		public BitValueManager BitValueManager { get; private set; }
 
 		public TypeSystem TypeSystem { get; private set; }
 
@@ -41,10 +45,11 @@ namespace Mosa.Compiler.Framework.Transform
 
 		public int Window { get; private set; }
 
-		public TransformContext(MethodCompiler methodCompiler)
+		public TransformContext(MethodCompiler methodCompiler, BitValueManager bitValueManager = null)
 		{
 			MethodCompiler = methodCompiler;
 			Compiler = methodCompiler.Compiler;
+			BitValueManager = bitValueManager;
 
 			TypeSystem = Compiler.TypeSystem;
 
@@ -66,6 +71,11 @@ namespace Mosa.Compiler.Framework.Transform
 			LowerTo32 = Compiler.CompilerSettings.LongExpansion;
 
 			Window = Math.Max(Compiler.CompilerSettings.OptimizationWindow, 1);
+		}
+
+		public void SetLog(TraceLog traceLog)
+		{
+			TraceLog = traceLog;
 		}
 
 		public void SetLogs(TraceLog traceLog = null, TraceLog specialTraceLog = null)
@@ -287,21 +297,12 @@ namespace Mosa.Compiler.Framework.Transform
 
 		public BitValue GetBitValue(Operand operand)
 		{
-			var value = operand.BitValue;
+			return BitValueManager.GetBitValue(operand);
+		}
 
-			if (value != null)
-				return value;
-
-			if (operand.IsVirtualRegister)
-				return null;
-
-			if (operand.IsReferenceType)
-				if (operand.IsNull)
-					return Is32BitPlatform ? BitValue.Zero32 : BitValue.Zero64;
-				else
-					return Is32BitPlatform ? BitValue.Any32 : BitValue.Any64;
-			else
-				return operand.IsInteger32 ? BitValue.Any32 : BitValue.Any64;
+		public BitValue GetBitValueWithDefault(Operand operand)
+		{
+			return BitValueManager.GetBitValueWithDefault(operand);
 		}
 	}
 }

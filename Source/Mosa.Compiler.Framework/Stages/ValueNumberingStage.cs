@@ -289,8 +289,7 @@ namespace Mosa.Compiler.Framework.Stages
 						continue;
 					}
 
-					// FUTURE: The check for IsSymbol (unresolved constant) should not be necessary
-					if (node.Operand1.IsStackLocal || node.Operand1.IsOnStack || node.Operand1.IsSymbol)
+					if (node.Operand1.IsStackLocal || node.Operand1.IsOnStack || node.Operand1.IsLabel)
 					{
 						SetValueNumber(node.Result, node.Result);
 						continue;
