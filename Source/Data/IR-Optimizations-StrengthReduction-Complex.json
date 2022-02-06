@@ -125,6 +125,16 @@
 			"Filter": "IsConstant(X) & IsConstant(N) & !IsZero(N) & IsGreaterOrEqual(CountTrailingZeros(To##(X)),To##(N))",
 			"Result": "(IR.ShiftLeft## a N)",
 			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "IsolateAndFlipLeastSignificantBit32",
+			"SubName": "",
+			"Expression": "IR.Add32 (IR.ShiftRight32 (IR.ShiftLeft32 x 31) 31) 1",
+			"Filter": "",
+			"Result": "(IR.And32 (IR.Not32 x) [To32(1)])",
+			"Variations": "Yes"
 		}
 	]
 }

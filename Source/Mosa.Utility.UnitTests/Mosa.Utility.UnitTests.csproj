@@ -59,6 +59,7 @@
 		<Compile Include="..\Mosa.UnitTests\Optimization\InterestingTests.cs" Link="Tests\Optimization\InterestingTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Optimization\RemAndModTests.cs" Link="Tests\Optimization\RemAndModTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Optimization\SwitchTests.cs" Link="Tests\Optimization\SwitchTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\Optimization\SpecificTests.cs" Link="Tests\Optimization\SpecificTests.cs" />
 		
 		<Compile Include="..\Mosa.UnitTests\Other\CompilerBugTests.cs" Link="Tests\Other\CompilerBugTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Other\SpecificTests.cs" Link="Tests\Other\SpecificTests.cs" />

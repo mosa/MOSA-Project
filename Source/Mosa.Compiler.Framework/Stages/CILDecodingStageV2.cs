@@ -678,7 +678,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private void UpdateLabel(InstructionNode node, int label, InstructionNode endNode)
+		private static void UpdateLabel(InstructionNode node, int label, InstructionNode endNode)
 		{
 			while (node != endNode)
 			{
