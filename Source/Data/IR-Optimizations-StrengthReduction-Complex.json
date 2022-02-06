@@ -135,6 +135,16 @@
 			"Filter": "",
 			"Result": "(IR.And32 (IR.Not32 x) [To32(1)])",
 			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Or##Xor##",
+			"SubName": "",
+			"Expression": "IR.Or## (IR.Xor## a b) a",
+			"Filter": "",
+			"Result": "(IR.Or## a b)",
+			"Variations": "Yes"
 		}
 	]
 }

@@ -27,5 +27,17 @@ namespace Mosa.UnitTests.Optimization
 		{
 			return ((x << 63) >> 63) + 1;
 		}
+
+		[MosaUnitTest(Series = "I4I4")]
+		public static uint Or32Xor32(uint x, uint y)
+		{
+			return (x ^ y) | x;
+		}
+
+		[MosaUnitTest(Series = "I8I8")]
+		public static ulong Or64Xor64(ulong x, ulong y)
+		{
+			return (x ^ y) | x;
+		}
 	}
 }
