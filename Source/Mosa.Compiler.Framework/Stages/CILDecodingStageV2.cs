@@ -26,6 +26,9 @@ namespace Mosa.Compiler.Framework.Stages
 		private enum StackType
 		{ Int32, Int64, R4, R8, ManagedPointer, Object, ValueType };
 
+		private enum ElementType
+		{ I1, I2, I4, I8, U1, U2, U4, U8, R4, R8, I, Ref };
+
 		private class StackEntry
 		{
 			public Operand Operand;
@@ -80,9 +83,6 @@ namespace Mosa.Compiler.Framework.Stages
 		private StackType[] LocalStackType;
 
 		private SortedList<int, int> Targets;
-
-		private enum ElementType
-		{ I1, I2, I4, I8, U1, U2, U4, U8, R4, R8, I, Ref };
 
 		protected override void Finish()
 		{
@@ -2653,7 +2653,7 @@ namespace Mosa.Compiler.Framework.Stages
 			//var underlyingType = GetUnderlyingType(type.ElementType);
 			var isCompound = IsCompoundType(type);
 
-			AddArrayBoundsCheck(context, array, index);
+			context.AppendInstruction(IRInstruction.CheckArrayBounds, null, array, index);
 
 			var elementOffset = CalculateArrayElementOffset(context, type, index);
 			var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
@@ -2694,7 +2694,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			//var underlyingType = GetUnderlyingType(type.ElementType);
 
-			AddArrayBoundsCheck(context, array, index);
+			context.AppendInstruction(IRInstruction.CheckArrayBounds, null, array, index);
 
 			var elementOffset = CalculateArrayElementOffset(context, GetSize(elementType), index);
 			var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
@@ -2720,24 +2720,17 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var type = (MosaType)instruction.Operand;
 
-			var underlyingType = GetUnderlyingType(type);
+			//var underlyingType = GetUnderlyingType(type);
 
 			var result = AllocatedOperand(StackType.ManagedPointer);
 
 			// Array bounds check
-			AddArrayBoundsCheck(context, array, index);
+			context.AppendInstruction(IRInstruction.CheckArrayBounds, null, array, index);
 
-			var elementOffset = CalculateArrayElementOffset(context, underlyingType, index);
+			var elementOffset = CalculateArrayElementOffset(context, type, index);
 			var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
 
-			if (Is32BitPlatform)
-			{
-				context.SetInstruction(IRInstruction.Add32, result, array, totalElementOffset);
-			}
-			else
-			{
-				context.SetInstruction(IRInstruction.Add64, result, array, totalElementOffset);
-			}
+			context.AppendInstruction(Is32BitPlatform ? (BaseIRInstruction)IRInstruction.Add32 : IRInstruction.Add64, result, array, totalElementOffset);
 
 			stack.Push(new StackEntry(StackType.ManagedPointer, result));
 
@@ -2832,30 +2825,32 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			var move = GetMoveInstruction(ElementType.I);
 
-			Operand result = null;
 			Operand source = null;
 
 			if (instruction.Operand is MosaType)
 			{
 				var type = (MosaType)instruction.Operand;
 				source = Operand.CreateUnmanagedSymbolPointer(Metadata.TypeDefinition + type.FullName, TypeSystem);
-				result = AllocateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeTypeHandle"));
 			}
 			else if (instruction.Operand is MosaMethod)
 			{
 				var method = (MosaMethod)instruction.Operand;
 				source = Operand.CreateUnmanagedSymbolPointer(Metadata.MethodDefinition + method.FullName, TypeSystem);
-				result = AllocateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeMethodHandle"));
 			}
 			else if (instruction.Operand is MosaField)
 			{
 				var field = (MosaField)instruction.Operand;
 				source = Operand.CreateUnmanagedSymbolPointer(Metadata.FieldDefinition + field.FullName, TypeSystem);
-				result = AllocateVirtualRegister(TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"));
 				MethodScanner.AccessedField(context.MosaField);
 			}
 
-			context.SetInstruction(move, result, source);
+			var runtimeFieldHandle = TypeSystem.GetTypeByName("System", "RuntimeFieldHandle"); // FUTURE: cache this
+
+			var result = AllocateVirtualRegister(runtimeFieldHandle);
+			context.AppendInstruction(move, result, source);
+
+			//stack.Push(new StackEntry(Is32BitPlatform ? StackType.Int32 : StackType.Int64, result));
+			stack.Push(new StackEntry(StackType.ValueType, result));
 
 			return true;
 		}
@@ -3807,7 +3802,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var underlyingType = GetUnderlyingType(type);
 			var isCompound = IsCompoundType(underlyingType);
 
-			AddArrayBoundsCheck(context, array, index);
+			context.AppendInstruction(IRInstruction.CheckArrayBounds, null, array, index);
 
 			var elementOffset = CalculateArrayElementOffset(context, type, index);
 			var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
@@ -3841,7 +3836,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var array = entry2.Operand;
 			var value = entry1.Operand;
 
-			AddArrayBoundsCheck(context, array, index);
+			context.AppendInstruction(IRInstruction.CheckArrayBounds, null, array, index);
 
 			var elementOffset = CalculateArrayElementOffset(context, GetSize(elementType), index);
 			var totalElementOffset = CalculateTotalArrayOffset(context, elementOffset);
@@ -4381,13 +4376,11 @@ namespace Mosa.Compiler.Framework.Stages
 			if (Is32BitPlatform)
 			{
 				lengthOperand = AllocateVirtualRegisterI32();
-
 				context.AppendInstruction(IRInstruction.Load32, lengthOperand, arrayOperand, ConstantZero32);
 			}
 			else
 			{
 				lengthOperand = AllocateVirtualRegisterI64();
-
 				context.AppendInstruction(IRInstruction.Load64, lengthOperand, arrayOperand, ConstantZero64);
 			}
 
