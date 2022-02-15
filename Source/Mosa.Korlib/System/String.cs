@@ -7,7 +7,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-
+using System.Text;
 
 namespace System
 {
@@ -39,7 +39,7 @@ namespace System
 		}
 
 
-		internal unsafe ref char GetRawStringData() => ref *(first_char);
+		internal unsafe ref char GetRawStringData() => ref *first_char;
 
 		[IndexerName("Chars")]
 		public unsafe char this[int index]
@@ -49,10 +49,7 @@ namespace System
 				if (index < 0 || index >= length)
 					throw new IndexOutOfRangeException();
 
-				fixed (char* c = &start_char)
-				{
-					return c[index];
-				}
+				return first_char[index];
 			}
 		}
 
@@ -258,8 +255,9 @@ namespace System
 
 		public string[] Split(char c)
 		{
-			string str = this;
-			List<string> ls = new List<string>();
+			var str = this;
+			var ls = new List<string>();
+
 			int indx;
 
 			while ((indx = str.IndexOf(c)) != -1)
@@ -274,6 +272,51 @@ namespace System
 			return ls.ToArray();
 		}
 
+		public string[] Split(string s)
+		{
+			var str = this;
+			var ls = new List<string>();
+
+			int indx;
+
+			while ((indx = str.IndexOf(s)) != -1)
+			{
+				ls.Add(str.Substring(0, indx));
+				str = str.Substring(indx + s.length);
+			}
+
+			if (str.Length > 0)
+				ls.Add(str);
+
+			return ls.ToArray();
+		}
+
+		public string Replace(string s1, string s2)
+		{
+			if (IsNullOrEmpty(s1) || !Contains(s1))
+				return this;
+
+			var str = this;
+
+			string start;
+
+			while (str.IndexOf(s1) > -1)
+			{
+				var index = str.IndexOf(s1);
+
+				// Get start
+				start = str.Substring(0, index);
+
+				// Get end
+				str = str.Substring(index + s1.Length);
+
+				// Replace occurence
+				str = $"{start}{s2}{str}";
+			}
+
+			return str;
+		}
+
 		public bool Equals(string s)
 		{
 			return Equals(this, s);
@@ -281,7 +324,8 @@ namespace System
 
 		public override bool Equals(object obj)
 		{
-			if (!(obj is string)) { return false; }
+			if (!(obj is string))
+				return false;
 
 			return Equals(this, (string)obj);
 		}
@@ -314,9 +358,9 @@ namespace System
 		// Favor Invariant Culture & Ignore Case
 		public int CompareTo(object obj)
 		{
-			if (object.ReferenceEquals(this, obj)) { return 0; }
+			if (ReferenceEquals(this, obj)) { return 0; }
 			if (obj == null) { return 1; }
-			if (!(obj is String)) { throw new ArgumentException("Argument Type Must Be String", "value"); }
+			if (!(obj is string)) { throw new ArgumentException("Argument Type Must Be String", "value"); }
 
 			return CompareTo((string)obj);
 		}
@@ -647,6 +691,16 @@ namespace System
 		public static bool IsNullOrEmpty(string value)
 		{
 			return (value == null) || (value.Length == 0);
+		}
+
+		public bool Contains(string value)
+		{
+			return IndexOf(value) > -1;
+		}
+
+		public bool Contains(char value)
+		{
+			return IndexOf(value) > -1;
 		}
 
 		public int IndexOf(string value)

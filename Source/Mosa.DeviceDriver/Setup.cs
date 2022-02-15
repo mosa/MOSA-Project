@@ -55,8 +55,7 @@ namespace Mosa.DeviceDriver
 					Factory = delegate { return new ISA.StandardKeyboard(); }
 				},
 
-				// TODO
-				/*new ISADeviceDriverRegistryEntry()
+				new ISADeviceDriverRegistryEntry()
 				{
 					Name = "PIT",
 					Platforms = PlatformArchitecture.X86AndX64,
@@ -66,7 +65,7 @@ namespace Mosa.DeviceDriver
 					AltBasePort = 0x43,
 					AltPortRange = 1,
 					Factory = delegate { return new ISA.PIT(); }
-				},*/
+				},
 
 				new ISADeviceDriverRegistryEntry()
 				{
@@ -149,7 +148,7 @@ namespace Mosa.DeviceDriver
 					PCIFields = PCIField.VendorID | PCIField.DeviceID,
 					Factory = delegate { return new AC97(); }
 				},*/
-
+				
 				new PCIDeviceDriverRegistryEntry()
 				{
 					Name = "Intel4SeriesChipsetDRAMController",

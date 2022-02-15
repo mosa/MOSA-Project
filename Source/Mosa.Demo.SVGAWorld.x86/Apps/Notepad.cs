@@ -9,6 +9,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Apps
 	public class Notepad : Window
 	{
 		private GraphicalConsole Console;
+
 		private string Line;
 
 		public Notepad(int x, int y, int width, int height, Color inactiveTitlebarColor, Color activeTitlebarColor, Color bodyColor)
@@ -16,7 +17,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Apps
 		{
 			Line = string.Empty;
 
-			Console = new GraphicalConsole(x, y + TitlebarHeight, width, height, Display.DefaultFont, Boot.Keyboard, Display.BackFrame, bodyColor, Color.Black);
+			Console = new GraphicalConsole(x, y + TitlebarHeight, width, height, Display.DefaultFont, Boot.Keyboard, Display.BackFrame, Color.Black);
 			Console.Clear();
 		}
 
@@ -45,7 +46,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Apps
 			if (code == null)
 				return;
 
-			if (code.Character == (char)0x1C) // Enter
+			if (code.KeyType == KeyType.Home)
 			{
 				Console.NewLine();
 				return;

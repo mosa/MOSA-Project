@@ -119,5 +119,44 @@ namespace System
 		{
 			return *((float*)&value);
 		}
+
+		/// <summary>
+		/// Returns a 32-bit signed integer converted from four bytes at a specified position in a byte array.
+		/// </summary>
+		/// <param name="value">An array of bytes.</param>
+		/// <param name="startIndex">The starting position within <paramref name="value"/>.</param>
+		/// <returns>A 32-bit signed integer formed by four bytes beginning at <paramref name="startIndex"/>.</returns>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="startIndex"/> is greater than or equal to the length of <paramref name="value"/> minus 3,
+		/// and is less than or equal to the length of <paramref name="value"/> minus 1.
+		/// </exception>
+		/// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
+		/// <exception cref="ArgumentOutOfRangeException"><paramref name="startIndex"/> is less than zero or greater than the length of <paramref name="value"/> minus 1.</exception>
+		public static int ToInt32(byte[] value, int startIndex)
+		{
+			if (value == null)
+				throw new ArgumentNullException(nameof(value));
+			if (unchecked((uint)startIndex) >= unchecked((uint)value.Length))
+				throw new ArgumentOutOfRangeException(nameof(startIndex), "Start index out of range");
+			if (startIndex > value.Length - sizeof(int))
+				throw new ArgumentException("Array + offset too small", nameof(value));
+
+			return Unsafe.ReadUnaligned<int>(ref value[startIndex]);
+		}
+
+		/// <summary>
+		/// Returns a 32-bit unsigned integer converted from four bytes at a specified position in a byte array.
+		/// </summary>
+		/// <param name="value">An array of bytes.</param>
+		/// <param name="startIndex">The starting position within <paramref name="value"/>.</param>
+		/// <returns>A 32-bit unsigned integer formed by four bytes beginning at <paramref name="startIndex"/>.</returns>
+		/// <exception cref="ArgumentException">
+		/// <paramref name="startIndex"/> is greater than or equal to the length of <paramref name="value"/> minus 3,
+		/// and is less than or equal to the length of <paramref name="value"/> minus 1.
+		/// </exception>
+		/// <exception cref="ArgumentNullException"><paramref name="value"/> is null.</exception>
+		/// <exception cref="ArgumentOutOfRangeException"><paramref name="startIndex"/> is less than zero or greater than the length of <paramref name="value"/> minus 1.</exception>
+		[CLSCompliant(false)]
+		public static uint ToUInt32(byte[] value, int startIndex) => unchecked((uint)ToInt32(value, startIndex));
 	}
 }

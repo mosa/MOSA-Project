@@ -11,7 +11,8 @@ namespace Mosa.DeviceDriver.ISA
 	/// Programmable Interval Timer (PIT) Device Driver
 	/// </summary>
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x40, PortRange = 4, IRQ = 0, Platforms = PlatformArchitecture.X86AndX64)]
-	public class PIT : BaseDeviceDriver
+	// TODO: Fix interrupt not being received
+	public class PIT : BaseDeviceDriver, ITimer
 	{
 		#region Definitions
 
@@ -110,18 +111,9 @@ namespace Mosa.DeviceDriver.ISA
 		}
 
 		/// <summary>
-		/// Gets the tick count.
-		/// </summary>
-		/// <returns></returns>
-		public uint GetTickCount()
-		{
-			return tickCount;
-		}
-
-		/// <summary>
 		/// Waits for a specific time, in milliseconds.
 		/// </summary>
-		public void Wait(uint ms)
+		void ITimer.Wait(uint ms)
 		{
 			Ticks = 0;
 			IsWaiting = true;

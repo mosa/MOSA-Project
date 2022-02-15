@@ -68,10 +68,10 @@ namespace Mosa.DeviceDriver.ISA
             Write.Write8((byte)Options.SetTimeConstant);
             Write.Write8(64);
 
-            Write.Write8(0xC0);
-            Write.Write8(0);
+			Write.Write8(Play16BitSongs ? (byte)0xB0 : (byte)0xC0);
+			Write.Write8(1); // Stereo signed sound, 0 for mono unsigned sound
 
-            Write.Write8((byte)((data.Size - 1) & 0xFF));
+			Write.Write8((byte)((data.Size - 1) & 0xFF));
             Write.Write8((byte)((data.Size - 1) >> 8 & 0xFF));
         }
 	}

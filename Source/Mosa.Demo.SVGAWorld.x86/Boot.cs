@@ -31,6 +31,8 @@ namespace Mosa.Demo.SVGAWorld.x86
 
 		private static Hardware HAL;
 
+		private static PCService PCService;
+
 		[Plug("Mosa.Runtime.StartUp::SetInitialMemory")]
 		public static void SetInitialMemory()
 		{
@@ -53,12 +55,12 @@ namespace Mosa.Demo.SVGAWorld.x86
 
 			// Create service manager and basic services
 			var serviceManager = new ServiceManager();
-			var diskDeviceService = new DiskDeviceService();
             var partitionService = new PartitionService();
 
 			serviceManager.AddService(DeviceService);
-			serviceManager.AddService(diskDeviceService);
+			serviceManager.AddService(new DiskDeviceService());
 			serviceManager.AddService(partitionService);
+			serviceManager.AddService(new PCService());
 			serviceManager.AddService(new PCIControllerService());
 			serviceManager.AddService(new PCIDeviceService());
 
@@ -67,42 +69,25 @@ namespace Mosa.Demo.SVGAWorld.x86
 			DeviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
 			DeviceService.Initialize(new X86System(), null);
 
-			PowerService.Initialize();
+			PCService = serviceManager.GetFirstService<PCService>();
 
 			partitionService.CreatePartitionDevices();
 
 			foreach (var partition in DeviceService.GetDevices<IPartitionDevice>())
+				FileManager.Register(new FatFileSystem(partition.DeviceDriver as IPartitionDevice));
+
+			Display.DefaultFont = GeneralUtils.Load(FileManager.ReadAllBytes("font.bin"));
+
+			GeneralUtils.Fonts = new List<ISimpleFont>
 			{
-				var fat = new FatFileSystem(partition.DeviceDriver as IPartitionDevice);
-
-				if (!fat.IsValid)
-					break;
-
-				var serif = fat.FindEntry("FONT.BIN");
-				var script = fat.FindEntry("FONT2.BIN");
-
-				if (!serif.IsValid || !script.IsValid)
-					HAL.Abort("Could not find required fonts.");
-
-				var stream = new FatFileStream(fat, serif);
-				var font = new byte[stream.Length];
-
-				stream.Read(font, 0, font.Length);
-
-				Display.DefaultFont = Utils.Load(font);
-
-				var stream2 = new FatFileStream(fat, script);
-				var font2 = new byte[stream2.Length];
-
-				stream2.Read(font2, 0, font2.Length);
-
-				Utils.Fonts = new List<ISimpleFont> { Display.DefaultFont, Utils.Load(font2) };
-			}
+				Display.DefaultFont,
+				GeneralUtils.Load(FileManager.ReadAllBytes("font2.bin"))
+			};
 
 			if (!Display.Initialize())
 			{
 				Log("An error occured when initializing the graphics driver.");
-				for (;;) ;
+				for (; ; ) ;
 			}
 
 			var keyboard = DeviceService.GetFirstDevice<StandardKeyboard>().DeviceDriver as StandardKeyboard;
@@ -112,8 +97,8 @@ namespace Mosa.Demo.SVGAWorld.x86
 			// Setup keyboard (state machine)
 			Keyboard = new DeviceSystem.Keyboard(keyboard, new US());
 
-			Utils.Mouse = DeviceService.GetFirstDevice<StandardMouse>().DeviceDriver as StandardMouse;
-			if (Utils.Mouse == null)
+			GeneralUtils.Mouse = DeviceService.GetFirstDevice<StandardMouse>().DeviceDriver as StandardMouse;
+			if (GeneralUtils.Mouse == null)
 				HAL.Abort("Catastrophic failure, mouse not found.");
 
 			Log("<SELFTEST:PASSED>");
@@ -122,17 +107,17 @@ namespace Mosa.Demo.SVGAWorld.x86
 
 		private static void DoGraphics()
 		{
-			Utils.BackColor = Color.Indigo;
-			Utils.Mouse.SetScreenResolution(Display.Width, Display.Height);
+			GeneralUtils.BackColor = Color.Indigo;
+			GeneralUtils.Mouse.SetScreenResolution(Display.Width, Display.Height);
 
 			Mouse.Initialize();
 			WindowManager.Initialize();
 
 			Taskbar = new Taskbar();
 			Taskbar.Buttons.Add(new TaskbarButton(Taskbar, "Shutdown", Color.Blue, Color.White, Color.Navy,
-				() => { PowerService.Shutdown(); return null; }));
+				() => { PCService.Shutdown(); return null; }));
 			Taskbar.Buttons.Add(new TaskbarButton(Taskbar, "Reset", Color.Blue, Color.White, Color.Navy,
-				() => { PowerService.Reset(); return null; }));
+				() => { PCService.Reset(); return null; }));
 			Taskbar.Buttons.Add(new TaskbarButton(Taskbar, "Paint", Color.Coral, Color.White, Color.Red,
 				() => { WindowManager.Open(new Paint(70, 90, 400, 200, Color.MediumPurple, Color.Purple, Color.White)); return null; }));
 			Taskbar.Buttons.Add(new TaskbarButton(Taskbar, "Notepad", Color.Coral, Color.White, Color.Red,
@@ -142,10 +127,10 @@ namespace Mosa.Demo.SVGAWorld.x86
 
 			List<Label> labels;
 
-			for (;;)
+			for (; ; )
 			{
 				// Clear screen
-				Display.Clear(Utils.BackColor);
+				Display.Clear(GeneralUtils.BackColor);
 
 				// Draw MOSA logo
 				Display.DrawMosaLogo(10);
@@ -188,7 +173,7 @@ namespace Mosa.Demo.SVGAWorld.x86
 		public static void ProcessInterrupt(uint interrupt, uint errorCode)
 		{
 			if (interrupt >= 0x20 && interrupt < 0x30)
-				Mosa.DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
+				DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20));
 		}
 	}
 }
