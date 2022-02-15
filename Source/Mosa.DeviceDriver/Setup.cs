@@ -24,16 +24,6 @@ namespace Mosa.DeviceDriver
 
 				new ISADeviceDriverRegistryEntry()
 				{
-					Name = "CMOS",
-					Platforms = PlatformArchitecture.X86,
-					AutoLoad = true,
-					BasePort = 0x0070,
-					PortRange = 2,
-					Factory = delegate { return new ISA.CMOS(); }
-				},
-
-				new ISADeviceDriverRegistryEntry()
-				{
 					Name = "SoundBlaster16",
 					Platforms = PlatformArchitecture.X86AndX64,
 					AutoLoad = true,

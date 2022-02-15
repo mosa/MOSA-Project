@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using Mosa.DeviceDriver.ScanCodeMap;
 using Mosa.FileSystem.FAT;
+using RTC = Mosa.Kernel.x86.RTC;
 
 namespace Mosa.Demo.SVGAWorld.x86
 {
@@ -92,14 +93,14 @@ namespace Mosa.Demo.SVGAWorld.x86
 
 			var keyboard = DeviceService.GetFirstDevice<StandardKeyboard>().DeviceDriver as StandardKeyboard;
 			if (keyboard == null)
-				HAL.Abort("Catastrophic failure, keyboard not found.");
+				HAL.Abort("Keyboard not found.");
 
 			// Setup keyboard (state machine)
 			Keyboard = new DeviceSystem.Keyboard(keyboard, new US());
 
 			GeneralUtils.Mouse = DeviceService.GetFirstDevice<StandardMouse>().DeviceDriver as StandardMouse;
 			if (GeneralUtils.Mouse == null)
-				HAL.Abort("Catastrophic failure, mouse not found.");
+				HAL.Abort("Mmouse not found.");
 
 			Log("<SELFTEST:PASSED>");
 			DoGraphics();
@@ -141,7 +142,8 @@ namespace Mosa.Demo.SVGAWorld.x86
 					new Label("Current resolution is " + Display.Width + "x" + Display.Height, Display.DefaultFont, 10, 10, Color.OrangeRed),
 					new Label("FPS is " + FPSMeter.FPS, Display.DefaultFont, 10, 26, Color.Lime),
 					new Label("Current driver is " + Display.CurrentDriver, Display.DefaultFont, 10, 42, Color.MidnightBlue),
-					new Label("Current font is " + Display.DefaultFont.Name, Display.DefaultFont, 10, 58, Color.LightSeaGreen)
+					new Label("Current font is " + Display.DefaultFont.Name, Display.DefaultFont, 10, 58, Color.LightSeaGreen),
+					new Label((RTC.Hour < 10 ? "0" : string.Empty) + RTC.Hour + ":" + (RTC.Minute < 10 ? "0" : string.Empty) + RTC.Minute, Display.DefaultFont, 10, 74, Color.DeepPink)
 				};
 
 				// Draw all labels
