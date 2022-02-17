@@ -1,4 +1,6 @@
-﻿using Mosa.Runtime.x86;
+﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+
+using Mosa.Runtime.x86;
 
 //https://github.com/nifanfa/Solution1/blob/multiboot/Kernel/Driver/RTC.cs
 namespace Mosa.Kernel.x86

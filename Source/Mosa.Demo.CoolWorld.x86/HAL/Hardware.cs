@@ -150,7 +150,8 @@ namespace Mosa.Demo.CoolWorld.x86.HAL
 		/// </summary>
 		public override void Pause()
 		{
-			for (var i = Scheduler.ClockTicks + 5; i > Scheduler.ClockTicks;) ;
+			for (var i = Scheduler.ClockTicks + 5; i > Scheduler.ClockTicks;)
+				Native.Hlt();
 		}
 	}
 }
