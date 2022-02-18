@@ -17,4 +17,8 @@
     <RuntimeMetadataVersion>v4.0.30319</RuntimeMetadataVersion>
     <AssemblyVersion>5.0.0.0</AssemblyVersion>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="System\DateTime.cs" />
+    <Compile Remove="System\TimeSpan.cs" />
+  </ItemGroup>
 </Project>

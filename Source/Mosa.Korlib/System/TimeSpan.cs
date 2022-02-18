@@ -29,22 +29,6 @@ namespace System
 	//
 	[Serializable]
 	public readonly struct TimeSpan : IComparable, IComparable<TimeSpan>, IEquatable<TimeSpan>/*, ISpanFormattable*/
-#if FEATURE_GENERIC_MATH
-#pragma warning disable SA1001, CA2252 // SA1001: Comma positioning; CA2252: Preview Features
-        , IAdditionOperators<TimeSpan, TimeSpan, TimeSpan>,
-          IAdditiveIdentity<TimeSpan, TimeSpan>,
-          IComparisonOperators<TimeSpan, TimeSpan>,
-          IDivisionOperators<TimeSpan, double, TimeSpan>,
-          IDivisionOperators<TimeSpan, TimeSpan, double>,
-          IMinMaxValue<TimeSpan>,
-          IMultiplyOperators<TimeSpan, double, TimeSpan>,
-          IMultiplicativeIdentity<TimeSpan, double>,
-          ISpanParseable<TimeSpan>,
-          ISubtractionOperators<TimeSpan, TimeSpan, TimeSpan>,
-          IUnaryNegationOperators<TimeSpan, TimeSpan>,
-          IUnaryPlusOperators<TimeSpan, TimeSpan>
-#pragma warning restore SA1001, CA2252
-#endif // FEATURE_GENERIC_MATH
 	{
 		public const long TicksPerMillisecond = 10000;
 

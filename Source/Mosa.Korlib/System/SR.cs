@@ -36,10 +36,10 @@ namespace System
 
 		#endregion TODO
 
-		internal static string Format(string argument_ResultCalendarRange, DateTime minValue, DateTime maxValue)
-		{
-			throw new NotImplementedException();
-		}
+		//internal static string Format(string argument_ResultCalendarRange, DateTime minValue, DateTime maxValue)
+		//{
+		//	throw new NotImplementedException();
+		//}
 
 		internal static string Format(string argumentOutOfRange_Range, int v1, int v2)
 		{
