@@ -161,9 +161,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Instructions", "Instruction
 		Data\X64-Instructions.json = Data\X64-Instructions.json
 		Data\X86-Instructions.json = Data\X86-Instructions.json
 	EndProjectSection
-	ProjectSection(FolderGlobals) = preProject
-		X_5_4MOSA-Project-tgiphil_4Source_4Data_4IR-Instructions_1json__JsonSchema = https://gitlab.com/meltano/meltano/-/raw/master/schema/meltano.schema.json
-	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Transforms", "Transforms", "{F84EFA2E-4B38-410F-A7DE-385DB71BB37F}"
 	ProjectSection(SolutionItems) = preProject
