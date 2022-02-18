@@ -70,12 +70,12 @@ namespace Mosa.Utility.BootImage
 			}
 
 			// Get the ldlinux.sys file stream
-			var ldlinux = new FatFileStream(fat, location);
+			var ldlinux = new FatFileStream(fat, (FatFileLocation)location);
 
 			var ldlinuxReader = new BinaryReader(ldlinux);
 
 			// Search for 0x3EB202FE (magic)
-			while ((ldlinuxReader.ReadUInt32() != Syslinux.LDLINUX_MAGIC) && (ldlinux.Position < ldlinux.Length)) ;
+			while ((ldlinuxReader.ReadUInt32() != LDLINUX_MAGIC) && (ldlinux.Position < ldlinux.Length)) ;
 
 			if (ldlinux.Position >= ldlinux.Length || ldlinux.Position <= 0)
 				throw new InvalidProgramException("Unable to find patch location for syslinux");
@@ -83,22 +83,22 @@ namespace Mosa.Utility.BootImage
 			uint patchArea = (uint)ldlinux.Position - 4;
 
 			// Get Extended Patch Area offset
-			ldlinux.Position = patchArea + Syslinux.PatchAreaOffset.EPAOffset;
+			ldlinux.Position = patchArea + PatchAreaOffset.EPAOffset;
 			ushort epa = ldlinuxReader.ReadUInt16();
 
-			ldlinux.Position = epa + Syslinux.ExtendedPatchAreaOffset.Sect1Ptr0;
+			ldlinux.Position = epa + ExtendedPatchAreaOffset.Sect1Ptr0;
 			uint sect1Ptr0 = ldlinuxReader.ReadUInt16();
 
-			ldlinux.Position = epa + Syslinux.ExtendedPatchAreaOffset.Sect1Ptr1;
+			ldlinux.Position = epa + ExtendedPatchAreaOffset.Sect1Ptr1;
 			uint sect1Ptr1 = ldlinuxReader.ReadUInt16();
 
-			ldlinux.Position = epa + Syslinux.ExtendedPatchAreaOffset.SecPtrOffset;
+			ldlinux.Position = epa + ExtendedPatchAreaOffset.SecPtrOffset;
 			uint ex = ldlinuxReader.ReadUInt16();
 
-			ldlinux.Position = epa + Syslinux.ExtendedPatchAreaOffset.SecPtrCnt;
+			ldlinux.Position = epa + ExtendedPatchAreaOffset.SecPtrCnt;
 			uint nptrs = ldlinuxReader.ReadUInt16();
 
-			ldlinux.Position = epa + Syslinux.ExtendedPatchAreaOffset.AdvPtrOffset;
+			ldlinux.Position = epa + ExtendedPatchAreaOffset.AdvPtrOffset;
 			uint advptrs = ldlinuxReader.ReadUInt16();
 
 			if (sectors.Count > nptrs)
@@ -107,13 +107,13 @@ namespace Mosa.Utility.BootImage
 			var ldlinuxWriter = new BinaryWriter(ldlinux);
 
 			// Set up the totals
-			ldlinux.Position = patchArea + Syslinux.PatchAreaOffset.DataSectors;
+			ldlinux.Position = patchArea + PatchAreaOffset.DataSectors;
 			ldlinuxWriter.Write((ushort)sectors.Count);
 
-			ldlinux.Position = patchArea + Syslinux.PatchAreaOffset.DataSectors;
+			ldlinux.Position = patchArea + PatchAreaOffset.DataSectors;
 			ldlinuxWriter.Write((ushort)2);
 
-			ldlinux.Position = patchArea + Syslinux.PatchAreaOffset.DataSectors;
+			ldlinux.Position = patchArea + PatchAreaOffset.DataSectors;
 			ldlinuxWriter.Write(fileSize >> 2);
 
 			// Generate Extents
@@ -134,7 +134,7 @@ namespace Mosa.Utility.BootImage
 			ldlinuxWriter.Write((ulong)sectors[sectors.Count - 1]);
 
 			// Clear out checksum
-			ldlinux.Position = patchArea + Syslinux.PatchAreaOffset.Checksum;
+			ldlinux.Position = patchArea + PatchAreaOffset.Checksum;
 			ldlinuxWriter.Write((uint)0);
 
 			// Write back the updated cluster
@@ -142,14 +142,14 @@ namespace Mosa.Utility.BootImage
 
 			// Re-Calculate checksum
 			ldlinux.Position = 0;
-			uint csum = Syslinux.LDLINUX_MAGIC;
+			uint csum = LDLINUX_MAGIC;
 			for (uint index = 0; index < (ldlinux.Length >> 2); index++)
 			{
 				csum = csum + ldlinuxReader.ReadUInt32();
 			}
 
 			// Set the checksum
-			ldlinux.Position = patchArea + Syslinux.PatchAreaOffset.Checksum;
+			ldlinux.Position = patchArea + PatchAreaOffset.Checksum;
 			ldlinuxWriter.Write(csum);
 
 			// Write patched cluster back to disk
@@ -233,7 +233,7 @@ namespace Mosa.Utility.BootImage
 					fat.WriteCluster(location.FirstCluster, firstCluster.Data);
 
 					// Re-Calculate checksum by opening the file
-					var file = new FatFileStream(fat, location);
+					var file = new FatFileStream(fat, (FatFileLocation)location);
 
 					uint csum = 0x3EB202FE;
 					for (uint index = 0; index < (file.Length >> 2); index++)

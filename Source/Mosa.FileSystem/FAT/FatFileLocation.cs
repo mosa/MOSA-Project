@@ -5,31 +5,16 @@ namespace Mosa.FileSystem.FAT
 	/// <summary>
 	///
 	/// </summary>
-	public class FatFileLocation
+	public class FatFileLocation : IFileLocation
 	{
-		/// <summary>
-		///
-		/// </summary>
-		public bool IsValid;
+		public uint FirstCluster { get; set; }
 
-		/// <summary>
-		///
-		/// </summary>
-		public uint FirstCluster;
+		public uint DirectorySector { get; set; }
 
-		/// <summary>
-		///
-		/// </summary>
-		public uint DirectorySector;
+		public uint DirectorySectorIndex { get; set; }
 
-		/// <summary>
-		///
-		/// </summary>
-		public uint DirectorySectorIndex;
+		public bool IsValid { get; private set; }
 
-		/// <summary>
-		///
-		/// </summary>
 		public bool IsDirectory { get; private set; }
 
 		/// <summary>

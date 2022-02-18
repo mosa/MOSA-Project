@@ -255,6 +255,8 @@ namespace Mosa.FileSystem.FAT
 		/// <value>The type of the settings.</value>
 		public GenericFileSystemSettings SettingsType { get { return new FatSettings(); } }
 
+		public new bool IsReadOnly => true;
+
 		/// <summary>
 		/// Creates the VFS mount.
 		/// </summary>
@@ -263,14 +265,6 @@ namespace Mosa.FileSystem.FAT
 		{
 			return new VfsFileSystem(this);
 		}
-
-		/// <summary>
-		/// Gets a value indicating whether this instance is read only.
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if this instance is read only; otherwise, <c>false</c>.
-		/// </value>
-		public bool IsReadOnly { get { return true; } }
 
 		/// <summary>
 		/// Gets the cluster size in bytes.
@@ -995,9 +989,14 @@ namespace Mosa.FileSystem.FAT
 			return cluster;
 		}
 
-		public FatFileLocation FindEntry(string name)
+		/// <summary>
+		/// Finds the entry.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		public override IFileLocation FindEntry(string name)
 		{
-			return FindEntry(new Mosa.FileSystem.FAT.Find.WithName(name), 0);
+			return FindEntry(new Find.WithName(name), 0);
 		}
 
 		/// <summary>
@@ -1006,7 +1005,7 @@ namespace Mosa.FileSystem.FAT
 		/// <param name="compare">The compare.</param>
 		/// <param name="startCluster">The start cluster.</param>
 		/// <returns></returns>
-		internal FatFileLocation FindEntry(FatFileSystem.ICompare compare, uint startCluster)
+		internal IFileLocation FindEntry(ICompare compare, uint startCluster)
 		{
 			uint activeSector = startCluster * sectorsPerCluster;
 
@@ -1023,7 +1022,7 @@ namespace Mosa.FileSystem.FAT
 				{
 					if (compare.Compare(directory.Data, index * 32, fatType))
 					{
-						var attribute = (FatFileAttributes)directory.GetByte((index * Entry.EntrySize) + Entry.FileAttributes);
+						var attribute = directory.GetByte((index * Entry.EntrySize) + Entry.FileAttributes);
 						return new FatFileLocation(GetClusterEntry(directory.Data, index, fatType), activeSector, index, (attribute & FatFileAttributes.SubDirectory) != 0);
 					}
 
@@ -1116,7 +1115,7 @@ namespace Mosa.FileSystem.FAT
 		/// <param name="filename">The filename.</param>
 		/// <param name="fileAttributes">The file attributes.</param>
 		/// <returns></returns>
-		public FatFileLocation CreateFile(string filename, FatFileAttributes fileAttributes)
+		public override IFileLocation CreateFile(string filename, byte fileAttributes)
 		{
 			return CreateFile(filename, fileAttributes, 0);
 		}
@@ -1128,7 +1127,7 @@ namespace Mosa.FileSystem.FAT
 		/// <param name="fileAttributes">The file attributes.</param>
 		/// <param name="directoryCluster">The directory cluster.</param>
 		/// <returns></returns>
-		public FatFileLocation CreateFile(string filename, FatFileAttributes fileAttributes, uint directoryCluster)
+		public IFileLocation CreateFile(string filename, byte fileAttributes, uint directoryCluster)
 		{
 			var location = FindEntry(new Find.WithName(filename), directoryCluster);
 
@@ -1170,7 +1169,7 @@ namespace Mosa.FileSystem.FAT
 			// Create Entry
 			directory.SetString(Entry.DOSName + (location.DirectorySectorIndex * Entry.EntrySize), "            ", 11);
 			directory.SetString(Entry.DOSName + (location.DirectorySectorIndex * Entry.EntrySize), filename);
-			directory.SetByte(Entry.FileAttributes + (location.DirectorySectorIndex * Entry.EntrySize), (byte)fileAttributes);
+			directory.SetByte(Entry.FileAttributes + (location.DirectorySectorIndex * Entry.EntrySize), fileAttributes);
 			directory.SetByte(Entry.Reserved + (location.DirectorySectorIndex * Entry.EntrySize), 0);
 			directory.SetByte(Entry.CreationTimeFine + (location.DirectorySectorIndex * Entry.EntrySize), 0);
 			directory.SetUShort(Entry.CreationTime + (location.DirectorySectorIndex * Entry.EntrySize), 0);
@@ -1230,7 +1229,7 @@ namespace Mosa.FileSystem.FAT
 			// Create Entry
 			directory.SetString(Entry.DOSName + (location.DirectorySectorIndex * Entry.EntrySize), "            ", 11);
 			directory.SetString(Entry.DOSName + (location.DirectorySectorIndex * Entry.EntrySize), volumeName);
-			directory.SetByte(Entry.FileAttributes + (location.DirectorySectorIndex * Entry.EntrySize), (byte)FatFileAttributes.VolumeLabel);
+			directory.SetByte(Entry.FileAttributes + (location.DirectorySectorIndex * Entry.EntrySize), FatFileAttributes.VolumeLabel);
 			directory.SetByte(Entry.Reserved + (location.DirectorySectorIndex * Entry.EntrySize), 0);
 			directory.SetByte(Entry.CreationTimeFine + (location.DirectorySectorIndex * Entry.EntrySize), 0);
 			directory.SetUShort(Entry.CreationTime + (location.DirectorySectorIndex * Entry.EntrySize), 0);

@@ -108,7 +108,7 @@ namespace Mosa.Workspace.FileSystem.Debug
 			{
 				Console.WriteLine("Writing File: " + includeFile.Filename);
 
-				var fileAttributes = new FatFileAttributes();
+				byte fileAttributes = 0;
 				if (includeFile.Archive) fileAttributes |= FatFileAttributes.Archive;
 				if (includeFile.ReadOnly) fileAttributes |= FatFileAttributes.ReadOnly;
 				if (includeFile.Hidden) fileAttributes |= FatFileAttributes.Hidden;
@@ -120,7 +120,7 @@ namespace Mosa.Workspace.FileSystem.Debug
 				if (!location.IsValid)
 					throw new Exception("Unable to write file");
 
-				var fatFileStream = new FatFileStream(fat, location);
+				var fatFileStream = new FatFileStream(fat, (FatFileLocation)location);
 				fatFileStream.Write(includeFile.Content, 0, includeFile.Content.Length);
 				fatFileStream.Flush();
 
@@ -138,7 +138,7 @@ namespace Mosa.Workspace.FileSystem.Debug
 				{
 					Console.WriteLine("  Found: " + includeFile.Filename);
 
-					var fatFileStream = new FatFileStream(fat, location);
+					var fatFileStream = new FatFileStream(fat, (FatFileLocation)location);
 					Console.WriteLine("  Length: " + fatFileStream.Length.ToString());
 
 					for (; ; )

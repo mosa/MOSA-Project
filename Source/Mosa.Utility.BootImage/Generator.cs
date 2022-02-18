@@ -159,7 +159,7 @@ namespace Mosa.Utility.BootImage
 
 			foreach (var includeFile in options.IncludeFiles)
 			{
-				var fileAttributes = new FatFileAttributes();
+				byte fileAttributes = 0;
 				if (includeFile.Archive) fileAttributes |= FatFileAttributes.Archive;
 				if (includeFile.ReadOnly) fileAttributes |= FatFileAttributes.ReadOnly;
 				if (includeFile.Hidden) fileAttributes |= FatFileAttributes.Hidden;
@@ -171,7 +171,7 @@ namespace Mosa.Utility.BootImage
 				if (!location.IsValid)
 					throw new Exception("Unable to write file");
 
-				var fatFileStream = new FatFileStream(fat, location);
+				var fatFileStream = new FatFileStream(fat, (FatFileLocation)location);
 				fatFileStream.Write(includeFile.Content, 0, includeFile.Content.Length);
 				fatFileStream.Flush();
 			}

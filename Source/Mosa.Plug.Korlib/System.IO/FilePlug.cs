@@ -18,7 +18,7 @@ namespace Mosa.Plug.Korlib.System.IO
 			if (!entry.IsValid)
 				return null;
 
-			var stream = new FatFileStream(fat, entry);
+			var stream = new FatFileStream((FatFileSystem)fat, (FatFileLocation)entry);
 			var bytes = new byte[stream.Length];
 
 			stream.Read(bytes, 0, bytes.Length);
@@ -38,7 +38,7 @@ namespace Mosa.Plug.Korlib.System.IO
 			var existing = fat.FindEntry(upper);
 
 			var entry = existing.IsValid ? existing : fat.CreateFile(upper, FatFileAttributes.Unused);
-			var stream = new FatFileStream(fat, entry);
+			var stream = new FatFileStream((FatFileSystem)fat, (FatFileLocation)entry);
 
 			stream.Write(bytes, 0, bytes.Length);
 		}
@@ -55,7 +55,7 @@ namespace Mosa.Plug.Korlib.System.IO
 			var existing = fat.FindEntry(upper);
 
 			var entry = existing.IsValid ? existing : fat.CreateFile(upper, FatFileAttributes.Unused);
-			var stream = new FatFileStream(fat, entry);
+			var stream = new FatFileStream((FatFileSystem)fat, (FatFileLocation)entry);
 
 			var list = new List<byte>();
 			foreach (var c in text)
@@ -78,7 +78,7 @@ namespace Mosa.Plug.Korlib.System.IO
 			var existing = fat.FindEntry(upper);
 
 			var entry = existing.IsValid ? existing : fat.CreateFile(upper, FatFileAttributes.Unused);
-			var stream = new FatFileStream(fat, entry);
+			var stream = new FatFileStream((FatFileSystem)fat, (FatFileLocation)entry);
 
 			var list = new List<byte>();
 			foreach (var str in lines)

@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.FileSystem.VFS;
+using System;
 
 namespace Mosa.FileSystem
 {
@@ -43,6 +44,14 @@ namespace Mosa.FileSystem
 		public byte[] SerialNumber { get; protected set; }
 
 		/// <summary>
+		/// Gets a value indicating whether this instance is read only.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance is read only; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsReadOnly { get; protected set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="GenericFileSystem"/> class.
 		/// </summary>
 		/// <param name="partition">The partition.</param>
@@ -52,7 +61,7 @@ namespace Mosa.FileSystem
 			BlockSize = partition.BlockSize;
 			IsValid = false;
 			VolumeLabel = string.Empty;
-			SerialNumber = new byte[0];
+			SerialNumber = Array.Empty<byte>();
 		}
 
 		/// <summary>
@@ -60,5 +69,20 @@ namespace Mosa.FileSystem
 		/// </summary>
 		/// <returns></returns>
 		public abstract IFileSystem CreateVFSMount();
+
+		/// <summary>
+		/// Finds the entry.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		public abstract IFileLocation FindEntry(string name);
+
+		/// <summary>
+		/// Creates the file.
+		/// </summary>
+		/// <param name="filename">The filename.</param>
+		/// <param name="fileAttributes">The file attributes.</param>
+		/// <returns></returns>
+		public abstract IFileLocation CreateFile(string filename, byte fileAttributes);
 	}
 }

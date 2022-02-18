@@ -29,7 +29,7 @@ namespace Mosa.FileSystem.FAT.Find
 			if (first == FileNameAttribute.Escape)
 				return false;
 
-			FatFileAttributes attribute = (FatFileAttributes)entry.GetByte(Entry.FileAttributes + offset);
+			var attribute = entry.GetByte(Entry.FileAttributes + offset);
 
 			if ((attribute & FatFileAttributes.VolumeLabel) == FatFileAttributes.VolumeLabel)
 				return true;
