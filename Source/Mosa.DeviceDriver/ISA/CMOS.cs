@@ -9,7 +9,7 @@ namespace Mosa.DeviceDriver.ISA
 	/// CMOS Device Driver
 	/// </summary>
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x0070, PortRange = 2, Platforms = PlatformArchitecture.X86)]
-	public class CMOS : BaseDeviceDriver
+	public class CMOS : BaseDeviceDriver, IDateTime
 	{
 		/// <summary>
 		/// The command port
@@ -41,6 +41,28 @@ namespace Mosa.DeviceDriver.ISA
 		/// </summary>
 		/// <returns></returns>
 		public override bool OnInterrupt() => true;
+
+		public DateTime GetDateTime()
+		{
+			var bcd = (Read(0x0B) & 0x04) == 0x00;
+
+			var century = BCDToBinary(bcd, Read(0x32));
+			var second = BCDToBinary(bcd, Read(0));
+			var minute = BCDToBinary(bcd, Read(2));
+			var hour = BCDToBinary(bcd, Read(4));
+			var year = BCDToBinary(bcd, Read(9));
+			var month = BCDToBinary(bcd, Read(8));
+			var day = BCDToBinary(bcd, Read(7));
+
+			if (century == 19 || century == 21)
+			{
+				return new DateTime(century * 100 + year, month, day, hour, minute, second);
+			}
+			else
+			{
+				return new DateTime(2000 + year, month, day, hour, minute, second);
+			}
+		}
 
 		/// <summary>
 		/// Reads the specified address.

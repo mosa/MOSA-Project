@@ -7,6 +7,6 @@ namespace Mosa.DeviceSystem
 {
 	public interface IDateTime
 	{
-		//DateTime GetDateTime();
+		DateTime GetDateTime();
 	}
 }
