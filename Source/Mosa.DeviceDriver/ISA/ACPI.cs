@@ -130,26 +130,14 @@ namespace Mosa.DeviceDriver.ISA
 	public unsafe struct RSDT
 	{
 		public ACPISDTHeader h;
-		public fixed uint PointerToOtherSDT[8]; // This is problematic, we need a way to statically initialize this array's size with h.Length and stuff
-
-		/*public void Init()
-		{
-			fixed (uint* ptr = new uint[(int)((h.Length - sizeof(ACPISDTHeader)) / 4)])
-				PointerToOtherSDT = ptr;
-		}*/
+		public fixed uint PointerToOtherSDT[8];
 	}
 
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public unsafe struct XSDT
 	{
 		public ACPISDTHeader h;
-		public fixed ulong PointerToOtherSDT[16]; // This is problematic, we need a way to statically initialize this array's size with h.Length and stuff
-
-		/*public void Init()
-		{
-			fixed (ulong* ptr = new ulong[(int)((h.Length - sizeof(ACPISDTHeader)) / 8)])
-				PointerToOtherSDT = ptr;
-		}*/
+		public fixed ulong PointerToOtherSDT[16];
 	}
 
 	[StructLayout(LayoutKind.Sequential, Pack = 1)]
@@ -249,18 +237,11 @@ namespace Mosa.DeviceDriver.ISA
 			/*if (Descriptor->Revision == 2) // ACPI v2.0+
 			{
 				Descriptor20 = (RSDPDescriptor20*)rsdpPtr;
-
 				XSDT = (XSDT*)HAL.GetPhysicalMemory((Pointer)Descriptor20->XsdtAddress, 0xFFFF).Address;
-				FADT = (FADT*)HAL.GetPhysicalMemory((Pointer)FindBySignature("FACP", true), 0xFFFF).Address;
-				MADT = (MADT*)HAL.GetPhysicalMemory((Pointer)FindBySignature("APIC", true), 0xFFFF).Address;
-			}
-			else
-			{*/
-			RSDT = (RSDT*)HAL.GetPhysicalMemory((Pointer)Descriptor->RsdtAddress, 0xFFFF).Address;
-			FADT = (FADT*)HAL.GetPhysicalMemory((Pointer)FindBySignature("FACP", false), 0xFFFF).Address;
-			MADT = (MADT*)HAL.GetPhysicalMemory((Pointer)FindBySignature("APIC", false), 0xFFFF).Address;
+			} else */RSDT = (RSDT*)HAL.GetPhysicalMemory((Pointer)Descriptor->RsdtAddress, 0xFFFF).Address;
 
-			//}
+			FADT = (FADT*)HAL.GetPhysicalMemory(FindBySignature("FACP"), 0xFFFF).Address;
+			MADT = (MADT*)HAL.GetPhysicalMemory(FindBySignature("APIC"), 0xFFFF).Address;
 
 			if (FADT == null)
 				return;
@@ -270,29 +251,29 @@ namespace Mosa.DeviceDriver.ISA
 				ProcessorIDs = new byte[256];
 				LocalApicAddress = MADT->LocalApicAddress;
 
-				Pointer ptr = (Pointer)MADT;
-				Pointer ptr2 = ptr + MADT->h.Length;
+				var ptr = (Pointer)MADT;
+				var ptr2 = ptr + MADT->h.Length;
 
 				for (ptr += 0x2C; ptr < ptr2;)
 				{
-					MADTEntry* entry = (MADTEntry*)ptr;
+					var entry = (MADTEntry*)ptr;
 
 					switch (entry->Type)
 					{
 						case 0: // Processor Local APIC
-							ProcessorLocalAPICEntry* plan = (ProcessorLocalAPICEntry*)ptr;
+							var plan = (ProcessorLocalAPICEntry*)ptr;
 							if ((plan->Flags & 1) != 0)
 								ProcessorIDs[ProcessorCount++] = plan->ApicID;
 							break;
 
 						case 1: // I/O APIC
-							IOAPICEntry* ipe = (IOAPICEntry*)ptr;
+							var ipe = (IOAPICEntry*)ptr;
 							IOApicAddress = ipe->ApicAddress;
 							break;
 
 						case 5: // 64-bit LAPIC
-							LongLocalAPICEntry* llpe = (LongLocalAPICEntry*)ptr;
-							LocalApicAddress = (uint)(llpe->ApicAddress);
+							var llpe = (LongLocalAPICEntry*)ptr;
+							LocalApicAddress = (uint)llpe->ApicAddress;
 							break;
 					}
 
@@ -300,14 +281,14 @@ namespace Mosa.DeviceDriver.ISA
 				}
 			}
 
-			Pointer dsdt = (Pointer)FADT->Dsdt;
+			var dsdt = (Pointer)FADT->Dsdt;
 
 			if (dsdt.Load32() == 0x54445344) //DSDT
 			{
-				Pointer S5Addr = dsdt + sizeof(ACPISDTHeader);
-				int dsdtLength = (int)dsdt.Load32() + 1 - sizeof(ACPISDTHeader);
+				var S5Addr = dsdt + sizeof(ACPISDTHeader);
+				var dsdtLength = (int)dsdt.Load32() + 1 - sizeof(ACPISDTHeader);
 
-				for (int k = 0; k < dsdtLength; k++)
+				for (var k = 0; k < dsdtLength; k++)
 				{
 					if (S5Addr.Load32() == 0x5f35535f) //_S5_
 						break;
@@ -330,7 +311,7 @@ namespace Mosa.DeviceDriver.ISA
 
 						SMI_CommandPort = HAL.GetWriteIOPort((ushort)FADT->SMI_CommandPort);
 
-						bool has64BitPtr = false;
+						var has64BitPtr = false;
 
 						if (Descriptor->Revision == 2)
 						{
@@ -385,30 +366,24 @@ namespace Mosa.DeviceDriver.ISA
 			Device.Status = DeviceStatus.Offline;
 		}
 
-		private void* FindBySignature(string signature, bool xsdt)
+		private Pointer FindBySignature(string signature)
 		{
-			//int entries = (int)((rsdt->h.Length - sizeof(ACPISDTHeader)) / Pointer.Size);
-			int entries = 8;
-			for (int i = 0; i < entries; i++)
-			{
-				ACPISDTHeader* h;
-				if (xsdt)
-					h = (ACPISDTHeader*)(XSDT->PointerToOtherSDT[i]);
-				else
-					h = (ACPISDTHeader*)(RSDT->PointerToOtherSDT[i]);
+			var xsdt = XSDT != null;
 
-				// TODO: Don't use ToStringFromCharPointer(), don't allocate for nothing!
-				if (h != null && ToStringFromCharPointer(4, h->Signature) == signature)
-					return h;
+			for (var i = 0; i < (xsdt ? 16 : 8); i++)
+			{
+				var h = (ACPISDTHeader*)(xsdt ? XSDT->PointerToOtherSDT[i] : RSDT->PointerToOtherSDT[i]);
+
+				if (h != null &&
+					h->Signature[0] == signature[0] &&
+					h->Signature[1] == signature[1] &&
+					h->Signature[2] == signature[2] &&
+					h->Signature[3] == signature[3])
+					return (Pointer)h;
 			}
 
 			// No SDT found (by signature)
-			return null;
-		}
-
-		private string ToStringFromCharPointer(int length, sbyte* pointer)
-		{
-			return new string(pointer, 0, length);
+			return Pointer.Zero;
 		}
 	}
 }

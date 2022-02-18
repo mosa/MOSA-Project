@@ -1,87 +1,86 @@
-﻿using System;
-using Mosa.DeviceSystem;
-using Mosa.Runtime;
+﻿using Mosa.DeviceSystem;
+using System.Runtime.InteropServices;
 
+//https://github.com/nifanfa/Solution1/blob/multiboot/Kernel/Driver/AC97.cs
 namespace Mosa.DeviceDriver.PCI.Intel
 {
-	// Only works on VirtualBox for now!
-	//https://github.com/nifanfa/MOSA-Core/blob/master/Mosa/Mosa.External.x86/Driver/Audio/AC97.cs
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
+	internal struct BufferDescriptor
+	{
+		public uint Address;
+		public ushort SampleRate;
+		public ushort Attribute;
+	}
+
 	public class AC97 : BaseDeviceDriver
 	{
-		private ConstrainedPointer NAM, NABM, BufferListAddr, Buffer;
+		private ConstrainedPointer NAM, NABM;
+		private BufferDescriptor[] BufferDescriptors;
 
-		private const ushort ListLength = 32;
-		private const ushort BufferLength = 0xFFFE;
+		private const int NumDescriptors = 31;
 
-		private const uint BufferDescLength = sizeof(uint) + sizeof(ushort) * 2;
-
-		private int Status;
-
-		private bool Ready;
+		private byte Index = 0;
 
 		public override void Initialize()
 		{
+			Device.Name = "AC97";
+
 			NAM = Device.Resources.GetMemory(0);
 			NABM = Device.Resources.GetMemory(1);
 
-			NABM.Write32(0x2C, 0x00000002);
-			NAM.Write16(0, 54188);
+			NABM.Write8(0x2C, 0x2);
 
-			BufferListAddr = HAL.AllocateMemory(ListLength * BufferDescLength, 0);
-			Buffer = HAL.AllocateMemory(1024 * 1024, 0);
+			NAM.Write32(0, 0x6166696E);
 
 			NAM.Write16(0x02, 0x0F0F);
-			NAM.Write16(0x18, 0x0F0F);
-			NAM.Write16(0x2C, 48000);
+			NAM.Write16(0x018, 0x0F0F);
 
-			Ready = true;
+			BufferDescriptors = new BufferDescriptor[NumDescriptors + 1];
 		}
 
 		public override bool OnInterrupt()
 		{
-			if (!Ready)
-				return false;
+			var status = NABM.Read16(0x16);
+			if ((status & (1 << 3)) != 0)
+			{
+				NABM.Write8(0x15, Index++);
 
-			Status = NABM.Read16(0x16);
-			if (Status != 0)
-				NABM.Write16(0x16, (ushort)(Status & 0x1E));
+				if (Index > NumDescriptors)
+					Index = 0;
+			}
 
 			return true;
 		}
 
-		// 48 KHz stereo PCM (dual channel)
-		public void Play(ConstrainedPointer data)
+		public unsafe void Play(byte[] data, ushort sampleRate = 48000, bool stereo = true)
 		{
-			if (!Ready)
-				return;
+			var index = 0;
 
-			var k = 0;
-
-			Internal.MemoryCopy(Buffer.Address, data.Address, data.Size);
-
-			var size = Math.Clamp(data.Size, 0, Buffer.Size);
-			for (uint i = 0; i < size - size % BufferLength; i += BufferLength * 2)
+			fixed (byte* buffer = data)
 			{
-				var ptr = BufferListAddr.Address + BufferDescLength * k;
-				ptr.Store32(0, (uint)(Buffer.Address + i)); // Address
-				ptr.Store16(sizeof(uint), BufferLength); // Size
-				ptr.Store16(sizeof(ushort), 0b0000_0000_0000_0011); // Attributes
+				for (var i = 0; i < data.Length; i += sampleRate * (stereo ? 2 : 1))
+				{
+					BufferDescriptors[index].Address = (uint)(buffer + i);
+					BufferDescriptors[index].SampleRate = sampleRate;
+					BufferDescriptors[index].Attribute = 1 << 15;
 
-				k++;
+					if (i + sampleRate > data.Length || index > NumDescriptors)
+					{
+						BufferDescriptors[index].Attribute |= 1 << 14;
+						break;
+					}
+
+					index++;
+				}
 			}
 
-			if (k > 0)
-				k--;
+			NABM.Write8(0x1B, 0x02);
 
-			NABM.Write8(0x1B, 0x2);
+			fixed (BufferDescriptor* ptr = BufferDescriptors)
+				NABM.Write32(0x10, (uint)ptr);
 
-			NABM.Write32(0x10, (uint)BufferListAddr.Address);
-
-			// Set index
-			NABM.Write8(0x15, (byte)(k & 0xFF));
-
-			// Play sound
-			NABM.Write8(0x1B, 0x11);
+			NABM.Write8(0x15, 0);
+			NABM.Write8(0x1B, 0x01);
 		}
 	}
 }

@@ -42,8 +42,6 @@ namespace Mosa.DeviceSystem
 
 		public FrameBuffer32 FrameBuffer { get; }
 
-		public Color BackColor { get; }
-
 		public Color ForeColor { get; }
 
 		public List<Character> Characters { get; }
@@ -52,7 +50,7 @@ namespace Mosa.DeviceSystem
 
 		#endregion
 
-		public GraphicalConsole(int baseX, int baseY, int width, int height, ISimpleFont font, Keyboard keyboard, FrameBuffer32 frameBuffer, Color backColor, Color foreColor)
+		public GraphicalConsole(int baseX, int baseY, int width, int height, ISimpleFont font, Keyboard keyboard, FrameBuffer32 frameBuffer, Color foreColor)
 		{
 			BaseX = baseX;
 			BaseY = baseY;
@@ -67,7 +65,6 @@ namespace Mosa.DeviceSystem
 			Keyboard = keyboard;
 			FrameBuffer = frameBuffer;
 
-			BackColor = backColor;
 			ForeColor = foreColor;
 
 			Characters = new List<Character>();
@@ -146,7 +143,7 @@ namespace Mosa.DeviceSystem
 			{
 				code = ReadKey();
 
-				if (code.Character == (char)0x1C) // Enter
+				if (code.KeyType == KeyType.Home)
 					break;
 
 				if (code.KeyType == KeyType.Delete && line.Length > 0)

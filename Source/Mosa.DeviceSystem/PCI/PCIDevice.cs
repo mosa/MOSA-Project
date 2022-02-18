@@ -250,6 +250,8 @@ namespace Mosa.DeviceSystem.PCI
 					case AddressType.Memory: memoryRegionCount++; break;
 				}
 			}
+
+			EnableDevice();
 		}
 
 		public override void Probe() => base.Device.Status = DeviceStatus.Available;

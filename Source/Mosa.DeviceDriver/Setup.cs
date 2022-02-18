@@ -24,16 +24,6 @@ namespace Mosa.DeviceDriver
 
 				new ISADeviceDriverRegistryEntry()
 				{
-					Name = "CMOS",
-					Platforms = PlatformArchitecture.X86,
-					AutoLoad = true,
-					BasePort = 0x0070,
-					PortRange = 2,
-					Factory = delegate { return new ISA.CMOS(); }
-				},
-
-				new ISADeviceDriverRegistryEntry()
-				{
 					Name = "SoundBlaster16",
 					Platforms = PlatformArchitecture.X86AndX64,
 					AutoLoad = true,
@@ -55,8 +45,7 @@ namespace Mosa.DeviceDriver
 					Factory = delegate { return new ISA.StandardKeyboard(); }
 				},
 
-				// TODO
-				/*new ISADeviceDriverRegistryEntry()
+				new ISADeviceDriverRegistryEntry()
 				{
 					Name = "PIT",
 					Platforms = PlatformArchitecture.X86AndX64,
@@ -66,7 +55,7 @@ namespace Mosa.DeviceDriver
 					AltBasePort = 0x43,
 					AltPortRange = 1,
 					Factory = delegate { return new ISA.PIT(); }
-				},*/
+				},
 
 				new ISADeviceDriverRegistryEntry()
 				{
@@ -149,7 +138,7 @@ namespace Mosa.DeviceDriver
 					PCIFields = PCIField.VendorID | PCIField.DeviceID,
 					Factory = delegate { return new AC97(); }
 				},*/
-
+				
 				new PCIDeviceDriverRegistryEntry()
 				{
 					Name = "Intel4SeriesChipsetDRAMController",

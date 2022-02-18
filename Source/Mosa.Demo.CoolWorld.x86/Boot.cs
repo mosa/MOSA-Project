@@ -90,8 +90,8 @@ namespace Mosa.Demo.CoolWorld.x86
 			var acpi = DeviceService.GetFirstDevice<IACPI>().DeviceDriver as IACPI;
 
 			// Setup APIC
-			var localApic = Mosa.DeviceSystem.HAL.GetPhysicalMemory((Pointer)acpi.LocalApicAddress, 0xFFFF).Address;
-			var ioApic = Mosa.DeviceSystem.HAL.GetPhysicalMemory((Pointer)acpi.IOApicAddress, 0xFFFF).Address;
+			var localApic = DeviceSystem.HAL.GetPhysicalMemory((Pointer)acpi.LocalApicAddress, 0xFFFF).Address;
+			var ioApic = DeviceSystem.HAL.GetPhysicalMemory((Pointer)acpi.IOApicAddress, 0xFFFF).Address;
 
 			APIC.Setup(localApic, ioApic);
 

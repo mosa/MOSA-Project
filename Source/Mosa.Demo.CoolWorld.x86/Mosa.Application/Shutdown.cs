@@ -14,7 +14,7 @@ namespace Mosa.Demo.Application
 		{
 			Console.WriteLine("Shutting down...");
 
-			var pc = AppManager.ServiceManager.GetFirstService<PCService>() as PCService;
+			var pc = AppManager.ServiceManager.GetFirstService<PCService>();
 			pc.Shutdown();
 
 			return 0;

@@ -254,7 +254,7 @@ namespace Mosa.Demo.HelloWorld.x86
 				Console.Column = 65;
 				for (byte y = 0; y < 4; y++)
 				{
-					Console.Write(CMOS.Get(i), 16, 2);
+					Console.Write(RTC.Get(i), 16, 2);
 					Console.Write(' ');
 					i++;
 				}
@@ -273,34 +273,34 @@ namespace Mosa.Demo.HelloWorld.x86
 
 			byte bcd = 10;
 
-			if (CMOS.BCD)
+			if (RTC.BCD)
 				bcd = 16;
 
 			Console.Color = ScreenColor.White;
-			Console.Write(CMOS.Hour, bcd, 2);
+			Console.Write(RTC.Hour, bcd, 2);
 			Console.Color = ScreenColor.Gray;
 			Console.Write(':');
 			Console.Color = ScreenColor.White;
-			Console.Write(CMOS.Minute, bcd, 2);
+			Console.Write(RTC.Minute, bcd, 2);
 			Console.Color = ScreenColor.Gray;
 			Console.Write(':');
 			Console.Color = ScreenColor.White;
-			Console.Write(CMOS.Second, bcd, 2);
+			Console.Write(RTC.Second, bcd, 2);
 			Console.Write(' ');
 			Console.Color = ScreenColor.Gray;
 			Console.Write('(');
 			Console.Color = ScreenColor.White;
-			Console.Write(CMOS.Month, bcd, 2);
+			Console.Write(RTC.Month, bcd, 2);
 			Console.Color = ScreenColor.Gray;
 			Console.Write('/');
 			Console.Color = ScreenColor.White;
-			Console.Write(CMOS.Day, bcd, 2);
+			Console.Write(RTC.Day, bcd, 2);
 			Console.Color = ScreenColor.Gray;
 			Console.Write('/');
 			Console.Color = ScreenColor.White;
 			Console.Write('2');
 			Console.Write('0');
-			Console.Write(CMOS.Year, bcd, 2);
+			Console.Write(RTC.Year, bcd, 2);
 			Console.Color = ScreenColor.Gray;
 			Console.Write(')');
 		}

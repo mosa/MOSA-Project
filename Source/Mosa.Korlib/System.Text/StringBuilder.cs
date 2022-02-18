@@ -8,12 +8,19 @@ namespace System.Text
 
 		private int Length = 0;
 
+		public StringBuilder Clear()
+		{
+			Length = 0;
+			return this;
+		}
+
 		public StringBuilder Append(char c)
 		{
 			if (Length >= Characters.Length)
 			{
-				char[] chars = new char[Length + 100];
-				Characters.CopyTo(chars, 0);
+				var chars = new char[Length + 100];
+				for (var i = 0; i < Length; i++)
+					chars[i] = Characters[i];
 				Characters = chars;
 			}
 
@@ -25,7 +32,7 @@ namespace System.Text
 
 		public StringBuilder AppendLine(string s)
 		{
-			for (int i = 0; i < s.length; i++)
+			for (var i = 0; i < s.length; i++)
 				Append(s[i]);
 
 			return this;

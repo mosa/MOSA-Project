@@ -29,9 +29,7 @@ namespace Mosa.Demo.CoolWorld.x86.HAL
 
 			// Map physical memory space to virtual memory space
 			for (var at = start; at < start + size; at += PageSize)
-			{
 				PageTable.MapVirtualAddressToPhysical(at, at);
-			}
 
 			return new ConstrainedPointer(address, size);
 		}
@@ -65,9 +63,7 @@ namespace Mosa.Demo.CoolWorld.x86.HAL
 		/// Sleeps the specified milliseconds.
 		/// </summary>
 		/// <param name="milliseconds">The milliseconds.</param>
-		public override void Sleep(uint milliseconds)
-		{
-		}
+		public override void Sleep(uint milliseconds) { }
 
 		/// <summary>
 		/// Allocates the virtual memory.
@@ -154,7 +150,8 @@ namespace Mosa.Demo.CoolWorld.x86.HAL
 		/// </summary>
 		public override void Pause()
 		{
-			for (var i = Scheduler.ClockTicks + 5; i > Scheduler.ClockTicks;) { }
+			for (var i = Scheduler.ClockTicks + 5; i > Scheduler.ClockTicks;)
+				Native.Hlt();
 		}
 	}
 }

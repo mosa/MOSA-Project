@@ -58,6 +58,9 @@ namespace System
 		public static extern void Write(string value);
 
 		[MethodImpl(MethodImplOptions.InternalCall)]
+		public static extern void Write(char value);
+
+		[MethodImpl(MethodImplOptions.InternalCall)]
 		public static extern void SetCursorPosition(int left, int top);
 	}
 }

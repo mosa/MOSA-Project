@@ -147,7 +147,7 @@ namespace Mosa.Utility.Launcher
 			var arg = new StringBuilder();
 
 			arg.Append(" -L " + Quote(LauncherSettings.QEMUBios));
-			arg.Append(" -soundhw ac97");
+			arg.Append(" -soundhw sb16");
 
 			if (LauncherSettings.Platform == "x86")
 			{
@@ -280,6 +280,7 @@ namespace Mosa.Utility.Launcher
 			sb.AppendLine("ide0:0.present = \"TRUE\"");
 			sb.AppendLine($"ide0:0.fileName = {Quote(LauncherSettings.ImageFile)}");
 			sb.AppendLine("sound.present = \"TRUE\"");
+			sb.AppendLine("sound.opl3.enabled = \"TRUE\"");
 			sb.AppendLine("sound.virtualDev = \"sb16\"");
 
 			if (LauncherSettings.ImageFormat == "iso")
