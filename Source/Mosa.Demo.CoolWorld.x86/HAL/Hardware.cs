@@ -1,7 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
-using Mosa.FileSystem.FAT;
+using Mosa.FileSystem;
 using Mosa.Kernel.x86;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
@@ -156,9 +156,9 @@ namespace Mosa.Demo.CoolWorld.x86.HAL
 		}
 
 		/// <summary>
-		/// Get the current FAT file system
+		/// Get the current file system
 		/// </summary>
-		public override FatFileSystem GetCurrentFileSystem()
+		public override GenericFileSystem GetCurrentFileSystem()
 		{
 			return Boot.FAT[Boot.CurrentDrive];
 		}

@@ -1,6 +1,6 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.FileSystem.FAT;
+using Mosa.FileSystem;
 using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem
@@ -105,8 +105,8 @@ namespace Mosa.DeviceSystem
 		public abstract void Pause();
 
 		/// <summary>
-		/// Get the current FAT file system
+		/// Get the current file system
 		/// </summary>
-		public abstract FatFileSystem GetCurrentFileSystem();
+		public abstract GenericFileSystem GetCurrentFileSystem();
 	}
 }

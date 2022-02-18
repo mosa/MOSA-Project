@@ -135,7 +135,7 @@ namespace Mosa.Utility.Launcher
 		{
 			switch (LauncherSettings.Emulator)
 			{
-				case "qemu": return LaunchQemu(true);
+				case "qemu": return LaunchQemu(false);
 				case "bochs": return LaunchBochs(false);
 				case "vmware": return LaunchVMware(false);
 				default: throw new InvalidOperationException();
@@ -147,7 +147,10 @@ namespace Mosa.Utility.Launcher
 			var arg = new StringBuilder();
 
 			arg.Append(" -L " + Quote(LauncherSettings.QEMUBios));
-			arg.Append(" -soundhw sb16 -net nic,model=rtl8139 -net tap,ifname=tap");
+			arg.Append(" -soundhw sb16");
+
+			// Networking
+			//arg.Append(" -net nic,model=rtl8139 -net tap,ifname=tap");
 
 			if (LauncherSettings.Platform == "x86")
 			{
