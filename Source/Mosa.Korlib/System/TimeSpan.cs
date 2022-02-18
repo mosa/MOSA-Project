@@ -21,14 +21,8 @@ namespace System
 	// depending on when you map the TimeSpan into the calendar.  This is why
 	// we do not provide Years() or Months().
 	//
-	// Note: System.TimeSpan needs to interop with the WinRT structure
-	// type Windows::Foundation:TimeSpan. These types are currently binary-compatible in
-	// memory so no custom marshalling is required. If at any point the implementation
-	// details of this type should change, or new fields added, we need to remember to add
-	// an appropriate custom ILMarshaler to keep WInRT interop scenarios enabled.
-	//
 	[Serializable]
-	public readonly struct TimeSpan : IComparable, IComparable<TimeSpan>, IEquatable<TimeSpan>/*, ISpanFormattable*/
+	public readonly struct TimeSpan /*: IComparable, IComparable<TimeSpan>, IEquatable<TimeSpan>*//*, ISpanFormattable*/
 	{
 		public const long TicksPerMillisecond = 10000;
 
@@ -138,7 +132,7 @@ namespace System
 		}
 
 		// Returns a value less than zero if this  object
-		public int CompareTo(object? value)
+		public int CompareTo(object value)
 		{
 			if (value == null) return 1;
 			if (!(value is TimeSpan))
@@ -169,7 +163,7 @@ namespace System
 			return new TimeSpan(_ticks >= 0 ? _ticks : -_ticks);
 		}
 
-		public override bool Equals([NotNullWhen(true)] object? value)
+		public override bool Equals([NotNullWhen(true)] object value)
 		{
 			if (value is TimeSpan)
 			{

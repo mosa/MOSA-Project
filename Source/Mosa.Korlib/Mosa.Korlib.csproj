@@ -19,6 +19,5 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="System\DateTime.cs" />
-    <Compile Remove="System\TimeSpan.cs" />
   </ItemGroup>
 </Project>

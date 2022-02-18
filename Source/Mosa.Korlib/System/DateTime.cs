@@ -444,7 +444,7 @@ namespace System
 		// occurs.  Null is considered less than any instance.
 		//
 		// Returns a value less than zero if this  object
-		public int CompareTo(object? value)
+		public int CompareTo(object value)
 		{
 			if (value == null) return 1;
 			if (!(value is DateTime))
@@ -556,7 +556,7 @@ namespace System
 		// is equal to the value of this DateTime. Returns false
 		// otherwise.
 		//
-		public override bool Equals([NotNullWhen(true)] object? value)
+		public override bool Equals([NotNullWhen(true)] object value)
 		{
 			if (value is DateTime)
 			{
