@@ -12,9 +12,6 @@
     <Compile Include="..\Mosa.DeviceSystem\CHS.cs">
       <Link>DeviceSystem\CHS.cs</Link>
     </Compile>
-    <Compile Include="..\Mosa.DeviceSystem\DataBlock.cs">
-      <Link>DeviceSystem\DataBlock.cs</Link>
-    </Compile>
     <Compile Include="..\Mosa.DeviceSystem\DeviceStatus.cs">
       <Link>DeviceSystem\DeviceStatus.cs</Link>
     </Compile>
@@ -29,9 +26,6 @@
     </Compile>
     <Compile Include="..\Mosa.DeviceSystem\IDiskDevice.cs">
       <Link>DeviceSystem\IDiskDevice.cs</Link>
-    </Compile>
-    <Compile Include="..\Mosa.DeviceSystem\IPartitionDevice.cs">
-      <Link>DeviceSystem\IPartitionDevice.cs</Link>
     </Compile>
     <Compile Include="..\Mosa.DeviceSystem\MasterBootBlock.cs">
       <Link>DeviceSystem\MasterBootBlock.cs</Link>

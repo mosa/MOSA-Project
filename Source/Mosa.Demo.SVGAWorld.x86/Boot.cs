@@ -15,6 +15,8 @@ using System.Drawing;
 using Mosa.DeviceDriver.ScanCodeMap;
 using Mosa.FileSystem.FAT;
 using RTC = Mosa.Kernel.x86.RTC;
+using Mosa.FileSystem;
+using System.IO;
 
 namespace Mosa.Demo.SVGAWorld.x86
 {
@@ -29,6 +31,10 @@ namespace Mosa.Demo.SVGAWorld.x86
 
 		public static Taskbar Taskbar;
 		public static Random Random;
+
+		public static List<FatFileSystem> FAT;
+
+		public static int CurrentDrive = 0;
 
 		private static Hardware HAL;
 
@@ -53,6 +59,7 @@ namespace Mosa.Demo.SVGAWorld.x86
 			HAL = new Hardware();
 			Random = new Random();
 			DeviceService = new DeviceService();
+			FAT = new List<FatFileSystem>();
 
 			// Create service manager and basic services
 			var serviceManager = new ServiceManager();
@@ -75,14 +82,21 @@ namespace Mosa.Demo.SVGAWorld.x86
 			partitionService.CreatePartitionDevices();
 
 			foreach (var partition in DeviceService.GetDevices<IPartitionDevice>())
-				FileManager.Register(new FatFileSystem(partition.DeviceDriver as IPartitionDevice));
+			{
+				var fs = new FatFileSystem(partition.DeviceDriver as IPartitionDevice);
 
-			Display.DefaultFont = GeneralUtils.Load(FileManager.ReadAllBytes("font.bin"));
+				if (!fs.IsValid)
+					continue;
+
+				FAT.Add(fs);
+			}
+
+			Display.DefaultFont = GeneralUtils.Load(File.ReadAllBytes("font.bin"));
 
 			GeneralUtils.Fonts = new List<ISimpleFont>
 			{
 				Display.DefaultFont,
-				GeneralUtils.Load(FileManager.ReadAllBytes("font2.bin"))
+				GeneralUtils.Load(File.ReadAllBytes("font2.bin"))
 			};
 
 			if (!Display.Initialize())
@@ -100,7 +114,7 @@ namespace Mosa.Demo.SVGAWorld.x86
 
 			GeneralUtils.Mouse = DeviceService.GetFirstDevice<StandardMouse>().DeviceDriver as StandardMouse;
 			if (GeneralUtils.Mouse == null)
-				HAL.Abort("Mmouse not found.");
+				HAL.Abort("Mouse not found.");
 
 			Log("<SELFTEST:PASSED>");
 			DoGraphics();

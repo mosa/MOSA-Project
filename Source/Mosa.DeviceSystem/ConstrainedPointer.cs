@@ -143,5 +143,29 @@ namespace Mosa.DeviceSystem
 			CheckOffset(offset);
 			address.Store32(offset, value);
 		}
+
+		/// <summary>
+		/// Reads the specified offset.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <returns></returns>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public ulong Read64(uint offset)
+		{
+			CheckOffset(offset);
+			return address.Load64(offset);
+		}
+
+		/// <summary>
+		/// Writes the specified offset.
+		/// </summary>
+		/// <param name="offset">The offset.</param>
+		/// <param name="value">The value.</param>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
+		public void Write64(uint offset, ulong value)
+		{
+			CheckOffset(offset);
+			address.Store64(offset, value);
+		}
 	}
 }

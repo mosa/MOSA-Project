@@ -16,20 +16,23 @@ namespace Mosa.DeviceDriver
 			{
 				new ISADeviceDriverRegistryEntry()
 				{
-					Name = "ACPI",
-					Platforms = PlatformArchitecture.X86,
+					Name = "PIT",
+					Platforms = PlatformArchitecture.X86AndX64,
 					AutoLoad = true,
-					Factory = delegate { return new ISA.ACPI(); }
+					BasePort = 0x40,
+					PortRange = 1,
+					AltBasePort = 0x43,
+					AltPortRange = 1,
+					IRQ = 0x20,
+					Factory = delegate { return new ISA.PIT(); }
 				},
 
 				new ISADeviceDriverRegistryEntry()
 				{
-					Name = "SoundBlaster16",
-					Platforms = PlatformArchitecture.X86AndX64,
+					Name = "ACPI",
+					Platforms = PlatformArchitecture.X86,
 					AutoLoad = true,
-					BasePort = 0x224,
-					PortRange = 8,
-					Factory = delegate { return new ISA.SoundBlaster16(); }
+					Factory = delegate { return new ISA.ACPI(); }
 				},
 
 				new ISADeviceDriverRegistryEntry()
@@ -43,18 +46,6 @@ namespace Mosa.DeviceDriver
 					AltPortRange = 1,
 					IRQ = 1,
 					Factory = delegate { return new ISA.StandardKeyboard(); }
-				},
-
-				new ISADeviceDriverRegistryEntry()
-				{
-					Name = "PIT",
-					Platforms = PlatformArchitecture.X86AndX64,
-					AutoLoad = true,
-					BasePort = 0x40,
-					PortRange = 1,
-					AltBasePort = 0x43,
-					AltPortRange = 1,
-					Factory = delegate { return new ISA.PIT(); }
 				},
 
 				new ISADeviceDriverRegistryEntry()
@@ -119,6 +110,17 @@ namespace Mosa.DeviceDriver
 
 				new PCIDeviceDriverRegistryEntry()
 				{
+					Name = "NVMe",
+					Platforms = PlatformArchitecture.X86AndX64,
+					BusType = DeviceBusType.PCI,
+					ClassCode = 0x01,
+					SubClassCode = 0x08,
+					PCIFields = PCIField.ClassCode | PCIField.SubClassCode,
+					Factory = delegate { return new PCI.NVMe(); }
+				},
+
+				new PCIDeviceDriverRegistryEntry()
+				{
 					Name = "VMwareSVGA2",
 					Platforms = PlatformArchitecture.X86AndX64,
 					BusType = DeviceBusType.PCI,
@@ -128,17 +130,17 @@ namespace Mosa.DeviceDriver
 					Factory = delegate { return new PCI.VMware.VMwareSVGA2(); }
 				},
 
-				/*new PCIDeviceDriverRegistryEntry()
+				new PCIDeviceDriverRegistryEntry()
 				{
-					Name = "AC97",
+					Name = "RTL8139",
 					Platforms = PlatformArchitecture.X86AndX64,
 					BusType = DeviceBusType.PCI,
-					VendorID = 0x8086,
-					DeviceID = 0x2415,
+					VendorID = 0x10EC,
+					DeviceID = 0x8139,
 					PCIFields = PCIField.VendorID | PCIField.DeviceID,
-					Factory = delegate { return new AC97(); }
-				},*/
-				
+					Factory = delegate { return new PCI.Realtek.RTL8139(); }
+				},
+
 				new PCIDeviceDriverRegistryEntry()
 				{
 					Name = "Intel4SeriesChipsetDRAMController",

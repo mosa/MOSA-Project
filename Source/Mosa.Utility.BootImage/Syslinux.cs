@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
+using Mosa.FileSystem;
 using Mosa.FileSystem.FAT;
 using System;
 using System.Collections.Generic;

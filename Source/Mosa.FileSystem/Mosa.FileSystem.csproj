@@ -19,6 +19,6 @@
     <WarningLevel>2</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj" />
+    <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
   </ItemGroup>
 </Project>

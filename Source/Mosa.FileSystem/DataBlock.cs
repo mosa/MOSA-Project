@@ -2,7 +2,7 @@
 
 using System.Text;
 
-namespace Mosa.DeviceSystem
+namespace Mosa.FileSystem
 {
 	/// <summary>
 	/// Data Block (Little Endian)

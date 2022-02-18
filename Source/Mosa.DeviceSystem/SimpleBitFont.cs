@@ -56,39 +56,45 @@ namespace Mosa.DeviceSystem
 		public void DrawString(FrameBuffer32 frameBuffer, uint color, uint x, uint y, string text)
 		{
 			var size8 = Size / 8;
-			var lines = text.Split('\n');
+			var usedX = 0;
 
-			for (var l = 0; l < lines.Length; l++)
+			for (var i = 0; i < text.Length; i++)
 			{
-				var usedX = 0;
-				for (var i = 0; i < lines[l].Length; i++)
+				var maxX = 0;
+				var xx = usedX + x;
+				var c = text[i];
+				var index = Charset.IndexOf(c);
+				var sizePerFont = Size * size8 * index;
+
+				if (index < 0)
 				{
-					var c = lines[l][i];
-					var index = Charset.IndexOf(c);
-
-					if (index < 0)
+					if (c == '\n')
 					{
-						usedX += Width;
-						continue;
+						usedX = 0;
+						y += (uint)Size;
 					}
+					else if (c == '\r')
+					{
+						usedX = 0;
+					} else usedX += Width;
 
-					int maxX = 0, sizePerFont = Size * size8 * index, xx = usedX + (int)x, yy = (int)y + Size * l;
-
-					for (var h = 0; h < Size; h++)
-						for (var aw = 0; aw < size8; aw++)
-							for (var ww = 0; ww < 8; ww++)
-								if ((Buffer[sizePerFont + h * size8 + aw] & (0x80 >> ww)) != 0)
-								{
-									var max = aw * 8 + ww;
-
-									frameBuffer.SetPixel(color, (uint)(xx + max), (uint)(yy + h));
-
-									if (max > maxX)
-										maxX = max;
-								}
-
-					usedX += maxX + 2;
+					continue;
 				}
+
+				for (var h = 0; h < Size; h++)
+					for (var aw = 0; aw < size8; aw++)
+						for (var ww = 0; ww < 8; ww++)
+							if ((Buffer[sizePerFont + h * size8 + aw] & (0x80 >> ww)) != 0)
+							{
+								var max = aw * 8 + ww;
+
+								frameBuffer.SetPixel(color, (uint)(xx + max), (uint)(y + h));
+
+								if (max > maxX)
+									maxX = max;
+							}
+
+				usedX += maxX + 2;
 			}
 		}
 

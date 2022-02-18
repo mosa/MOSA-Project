@@ -1,5 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.Runtime;
+
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
@@ -8,16 +10,10 @@ namespace Mosa.DeviceSystem
 	public interface INetworkDevice
 	{
 		/// <summary>
-		/// Gets the MAC address.
-		/// </summary>
-		/// <value>The MAC address.</value>
-		MACAddress MACAddress { get; set; }
-
-		/// <summary>
 		/// Sends the packet to the device
 		/// </summary>
 		/// <param name="data">The data.</param>
 		/// <returns></returns>
-		void SendPacket(byte[] data);
+		void SendPacket(Pointer data, uint length);
 	}
 }

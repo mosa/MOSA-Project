@@ -7,6 +7,10 @@ namespace Mosa.DeviceSystem
 	/// </summary>
 	public interface IMouseDevice
 	{
+		int X { get; set; }
+
+		int Y { get; set; }
+
 		/// <summary>
 		/// Get the current state of the mouse
 		///

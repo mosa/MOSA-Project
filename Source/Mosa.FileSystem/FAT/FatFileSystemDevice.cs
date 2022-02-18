@@ -1,4 +1,4 @@
-﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
+﻿/*// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
 
@@ -26,3 +26,4 @@ namespace Mosa.FileSystem.FAT
 		public override bool OnInterrupt() => true;
 	}
 }
+*/

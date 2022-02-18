@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
+using Mosa.FileSystem;
 
 namespace Mosa.Utility.BootImage
 {

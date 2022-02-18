@@ -5,23 +5,47 @@
 		<OutputType>Exe</OutputType>
 		<StartupObject>$safeprojectname$.Boot</StartupObject>
 		<DebugType>full</DebugType>
-		<LangVersion>8.0</LangVersion>
+		<LangVersion>9.0</LangVersion>
 		<OutputPath>bin\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
 		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+		<UseAppHost>false</UseAppHost>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Mosa.Korlib" Version="*" />
-		<PackageReference Include="Mosa.Kernel.x86" Version="*" />
-		<PackageReference Include="Mosa.Platform.x86" Version="*" />
-		<PackageReference Include="Mosa.Runtime" Version="*" />
-		<PackageReference Include="Mosa.Tools.Package" Version="*" />
+	  <Reference Include="Mosa.DeviceDriver">
+	    <HintPath>C:\Program Files (x86)\MOSA-Project\bin\Mosa.DeviceDriver.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Mosa.DeviceSystem">
+	    <HintPath>C:\Program Files (x86)\MOSA-Project\bin\Mosa.DeviceSystem.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Mosa.FileSystem">
+	    <HintPath>C:\Program Files (x86)\MOSA-Project\bin\Mosa.FileSystem.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Mosa.Kernel.x86">
+	    <HintPath>C:\Program Files (x86)\MOSA-Project\bin\Mosa.Kernel.x86.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Mosa.Platform.Intel">
+	    <HintPath>C:\Program Files (x86)\MOSA-Project\bin\Mosa.Platform.Intel.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Mosa.Platform.x86">
+	    <HintPath>C:\Program Files (x86)\MOSA-Project\bin\Mosa.Platform.x86.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Mosa.Plug.Korlib">
+	    <HintPath>C:\Program Files (x86)\MOSA-Project\bin\Mosa.Plug.Korlib.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Mosa.Plug.Korlib.x86">
+	    <HintPath>C:\Program Files (x86)\MOSA-Project\bin\Mosa.Plug.Korlib.x86.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Mosa.Runtime">
+	    <HintPath>C:\Program Files (x86)\MOSA-Project\bin\Mosa.Runtime.dll</HintPath>
+	  </Reference>
+	  <Reference Include="Mosa.Runtime.x86">
+	    <HintPath>C:\Program Files (x86)\MOSA-Project\bin\Mosa.Runtime.x86.dll</HintPath>
+	  </Reference>
+	  <Reference Include="System.Runtime">
+	    <HintPath>C:\Program Files (x86)\MOSA-Project\bin\System.Runtime.dll</HintPath>
+	  </Reference>
 	</ItemGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<StartAction>Program</StartAction>
-		<StartProgram>C:\Program Files (x86)\MOSA-Project\bin\Mosa.Tool.Bootstrap.exe</StartProgram>
-		<StartArguments>$safeprojectname$.exe</StartArguments>
-	</PropertyGroup>
 </Project>

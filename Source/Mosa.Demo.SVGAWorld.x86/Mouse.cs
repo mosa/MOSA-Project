@@ -12,7 +12,7 @@ namespace Mosa.Demo.SVGAWorld.x86
 
 		public static int Y => GeneralUtils.Mouse.Y;
 
-		public static int State => GeneralUtils.Mouse.MouseState;
+		public static int State => GeneralUtils.Mouse.GetMouseState();
 
 		public static Color Color { get; set; }
 

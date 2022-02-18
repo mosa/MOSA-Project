@@ -1,29 +1,18 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.DeviceSystem;
 using Mosa.FileSystem.FAT;
+using Mosa.Runtime.Plug;
 using System.Collections.Generic;
 
-namespace Mosa.Demo.SVGAWorld.x86
+namespace Mosa.Plug.Korlib.System.IO
 {
-	public static class FileManager
+	public static class FilePlug
 	{
-		private static List<FatFileSystem> FAT;
-
-		public static int CurrentDrive = 0;
-
-		public static void Register(FatFileSystem fat)
+		[Plug("System.IO.File::ReadAllBytes")]
+		internal static byte[] ReadAllBytes(string path)
 		{
-			if (FAT == null)
-				FAT = new List<FatFileSystem>();
-
-			if (fat.IsValid)
-				FAT.Add(fat);
-		}
-
-		public static byte[] ReadAllBytes(string path)
-		{
-			var fat = FAT[CurrentDrive];
-
+			var fat = HAL.GetCurrentFileSystem();
 			var entry = fat.FindEntry(path.ToUpper());
 
 			if (!entry.IsValid)
@@ -37,9 +26,10 @@ namespace Mosa.Demo.SVGAWorld.x86
 			return bytes;
 		}
 
-		public static void WriteAllBytes(string path, byte[] bytes)
+		[Plug("System.IO.File::WriteAllBytes")]
+		internal static void WriteAllBytes(string path, byte[] bytes)
 		{
-			var fat = FAT[CurrentDrive];
+			var fat = HAL.GetCurrentFileSystem();
 
 			if (fat.IsReadOnly)
 				return;
@@ -53,9 +43,10 @@ namespace Mosa.Demo.SVGAWorld.x86
 			stream.Write(bytes, 0, bytes.Length);
 		}
 
-		public static void WriteAllText(string path, string text)
+		[Plug("System.IO.File::WriteAllText")]
+		internal static void WriteAllText(string path, string text)
 		{
-			var fat = FAT[CurrentDrive];
+			var fat = HAL.GetCurrentFileSystem();
 
 			if (fat.IsReadOnly)
 				return;
@@ -75,9 +66,10 @@ namespace Mosa.Demo.SVGAWorld.x86
 			stream.Write(bytes, 0, bytes.Length);
 		}
 
-		public static void WriteAllLines(string path, string[] lines)
+		[Plug("System.IO.File::WriteAllLines")]
+		internal static void WriteAllLines(string path, string[] lines)
 		{
-			var fat = FAT[CurrentDrive];
+			var fat = HAL.GetCurrentFileSystem();
 
 			if (fat.IsReadOnly)
 				return;
@@ -101,9 +93,10 @@ namespace Mosa.Demo.SVGAWorld.x86
 			stream.Write(bytes, 0, bytes.Length);
 		}
 
-		public static void CreateFile(string path)
+		[Plug("System.IO.File::Create")]
+		internal static void Create(string path)
 		{
-			var fat = FAT[CurrentDrive];
+			var fat = HAL.GetCurrentFileSystem();
 
 			if (fat.IsReadOnly)
 				return;
@@ -116,9 +109,10 @@ namespace Mosa.Demo.SVGAWorld.x86
 			_ = fat.CreateFile(upper, FatFileAttributes.Unused);
 		}
 
-		public static bool Exists(string path)
+		[Plug("System.IO.File::Exists")]
+		internal static bool Exists(string path)
 		{
-			return FAT[CurrentDrive].FindEntry(path.ToUpper()).IsValid;
+			return HAL.GetCurrentFileSystem().FindEntry(path.ToUpper()).IsValid;
 		}
 	}
 }

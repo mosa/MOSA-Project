@@ -1,6 +1,7 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
+using Mosa.FileSystem.FAT;
 using Mosa.Kernel.x86;
 using Mosa.Runtime;
 using Mosa.Runtime.x86;
@@ -157,6 +158,14 @@ namespace Mosa.Demo.SVGAWorld.x86.HAL
 		{
 			for (var i = Scheduler.ClockTicks + 5; i > Scheduler.ClockTicks;)
 				Native.Hlt();
+		}
+
+		/// <summary>
+		/// Get the current FAT file system
+		/// </summary>
+		public override FatFileSystem GetCurrentFileSystem()
+		{
+			return Boot.FAT[Boot.CurrentDrive];
 		}
 	}
 }

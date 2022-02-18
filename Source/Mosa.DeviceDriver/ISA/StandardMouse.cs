@@ -16,11 +16,13 @@ namespace Mosa.DeviceDriver.ISA
 
 		private const byte SetDefaults = 0xF6, EnableDataReporting = 0xF4;
 
-		private int screenWidth, screenHeight, phase = 0, aX, aY;
+		private int screenWidth, screenHeight, phase = 0, aX, aY, MouseState;
 
 		private byte[] mData = new byte[3];
 
-		public int X, Y, MouseState;
+		public int X { get; set; }
+
+		public int Y { get; set; }
 
 		public override void Initialize()
 		{

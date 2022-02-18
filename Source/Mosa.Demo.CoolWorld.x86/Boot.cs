@@ -7,11 +7,13 @@ using Mosa.DeviceDriver.ScanCodeMap;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
 using Mosa.DeviceSystem.Service;
+using Mosa.FileSystem;
 using Mosa.FileSystem.FAT;
 using Mosa.Kernel.x86;
 using Mosa.Runtime;
 using Mosa.Runtime.Plug;
 using Mosa.Runtime.x86;
+using System.Collections.Generic;
 
 namespace Mosa.Demo.CoolWorld.x86
 {
@@ -23,6 +25,10 @@ namespace Mosa.Demo.CoolWorld.x86
 		public static ConsoleSession Console, Debug;
 
 		public static DeviceService DeviceService;
+
+		public static List<FatFileSystem> FAT;
+
+		public static int CurrentDrive = 0;
 
 		[Plug("Mosa.Runtime.StartUp::SetInitialMemory")]
 		public static void SetInitialMemory()
@@ -58,6 +64,7 @@ namespace Mosa.Demo.CoolWorld.x86
 			var serviceManager = new ServiceManager();
 
 			DeviceService = new DeviceService();
+			FAT = new List<FatFileSystem>();
 
 			var diskDeviceService = new DiskDeviceService();
 			var partitionService = new PartitionService();
@@ -184,57 +191,12 @@ namespace Mosa.Demo.CoolWorld.x86
 
 			foreach (var partition in partitions)
 			{
-				var fat = new FatFileSystem(partition.DeviceDriver as IPartitionDevice);
+				var fs = new FatFileSystem(partition.DeviceDriver as IPartitionDevice);
 
-				if (fat.IsValid)
-				{
-					Console.WriteLine("Found a FAT file system!");
+				if (!fs.IsValid)
+					continue;
 
-					const string filename = "TEST.TXT";
-
-					var location = fat.FindEntry(filename);
-
-					if (location.IsValid)
-					{
-						Console.Write("Found: " + filename);
-
-						var fatFileStream = new FatFileStream(fat, location);
-
-						uint len = (uint)fatFileStream.Length;
-
-						Console.WriteLine(" - Length: " + len.ToString() + " bytes");
-
-						Console.Write("Reading File: ");
-
-						for (; ; )
-						{
-							int i = fatFileStream.ReadByte();
-
-							if (i < 0)
-								break;
-
-							Console.Write((char)i);
-						}
-
-						Console.WriteLine();
-					}
-
-					const string bmpname = "WALLP.BMP";
-
-					var bmploc = fat.FindEntry(bmpname);
-
-					if (bmploc.IsValid)
-					{
-						Console.Write("Found: " + bmpname);
-
-						var fatFileStream = new FatFileStream(fat, bmploc);
-
-						uint len = (uint)fatFileStream.Length;
-
-						Console.WriteLine(" - Length: " + len.ToString() + " bytes");
-						Console.WriteLine();
-					}
-				}
+				FAT.Add(fs);
 			}
 
 			// Get StandardKeyboard
