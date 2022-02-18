@@ -3,19 +3,12 @@
 // Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
-//using System.Runtime.Serialization;
-//using System.Runtime.Versioning;
-
 namespace System
 {
-	//
 	[StructLayout(LayoutKind.Auto)]
 	[Serializable]
 	public readonly partial struct DateTime : IComparable, IComparable<DateTime>, IEquatable<DateTime>
@@ -162,7 +155,7 @@ namespace System
 
 		private static void ThrowMillisecondOutOfRange() => throw new ArgumentOutOfRangeException("millisecond", SR.Format(SR.ArgumentOutOfRange_Range, 0, MillisPerSecond - 1));
 
-		private static void ThrowDateArithmetic(int param) => throw new ArgumentOutOfRangeException(param switch { 0 => "value", 1 => "t", _ => "months" }, SR.ArgumentOutOfRange_DateArithmetic);
+		private static void ThrowDateArithmetic(int param) => throw new ArgumentOutOfRangeException(SR.ArgumentOutOfRange_DateArithmetic);
 
 		// Constructs a DateTime from a given year, month, and day. The
 		// time-of-day of the resulting DateTime is always midnight.
@@ -556,7 +549,7 @@ namespace System
 		// is equal to the value of this DateTime. Returns false
 		// otherwise.
 		//
-		public override bool Equals([NotNullWhen(true)] object value)
+		public override bool Equals(object value)
 		{
 			if (value is DateTime)
 			{

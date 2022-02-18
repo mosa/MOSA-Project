@@ -22,7 +22,7 @@ namespace System
 	// we do not provide Years() or Months().
 	//
 	[Serializable]
-	public readonly struct TimeSpan /*: IComparable, IComparable<TimeSpan>, IEquatable<TimeSpan>*//*, ISpanFormattable*/
+	public readonly struct TimeSpan : IComparable, IComparable<TimeSpan>, IEquatable<TimeSpan> /*, ISpanFormattable*/
 	{
 		public const long TicksPerMillisecond = 10000;
 
