@@ -12,6 +12,8 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		protected byte[] address;
 
+		public byte[] Address => address;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MACAddress"/> class.
 		/// </summary>

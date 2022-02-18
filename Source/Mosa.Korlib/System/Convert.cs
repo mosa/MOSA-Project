@@ -1,5 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace System
 {
 	internal class Base64Decoder
@@ -176,5 +178,74 @@ namespace System
 		{
 			return value;
 		}
+
+		// Conversions to Byte
+
+		public static byte ToByte(object value)
+		{
+			return value == null ? (byte)0 : ((IConvertible)value).ToByte(null);
+		}
+
+		public static byte ToByte(object value, IFormatProvider provider)
+		{
+			return value == null ? (byte)0 : ((IConvertible)value).ToByte(provider);
+		}
+
+		public static byte ToByte(bool value)
+		{
+			return value ? (byte)bool.True : (byte)bool.False;
+		}
+
+		public static byte ToByte(byte value)
+		{
+			return value;
+		}
+
+		public static byte ToByte(char value)
+		{
+			if (value > byte.MaxValue) ThrowByteOverflowException();
+			return (byte)value;
+		}
+
+		[CLSCompliant(false)]
+		public static byte ToByte(sbyte value)
+		{
+			if (value < 0) ThrowByteOverflowException();
+			return (byte)value;
+		}
+
+		public static byte ToByte(short value)
+		{
+			if ((uint)value > byte.MaxValue) ThrowByteOverflowException();
+			return (byte)value;
+		}
+
+		[CLSCompliant(false)]
+		public static byte ToByte(ushort value)
+		{
+			if (value > byte.MaxValue) ThrowByteOverflowException();
+			return (byte)value;
+		}
+
+		public static byte ToByte(int value) => ToByte((uint)value);
+
+		[CLSCompliant(false)]
+		public static byte ToByte(uint value)
+		{
+			if (value > byte.MaxValue) ThrowByteOverflowException();
+			return (byte)value;
+		}
+
+		public static byte ToByte(long value) => ToByte((ulong)value);
+
+		[CLSCompliant(false)]
+		public static byte ToByte(ulong value)
+		{
+			if (value > byte.MaxValue) ThrowByteOverflowException();
+			return (byte)value;
+		}
+
+		[DoesNotReturn]
+		private static void ThrowByteOverflowException() { throw new OverflowException("Byte overflow"); }
 	}
 }

@@ -215,11 +215,11 @@ namespace Mosa.Kernel.x86
 				ProcessTestUnitQueue();
 			}
 
-			byte second = CMOS.Second;
+			byte second = RTC.Second;
 
 			if (second % 10 != 5 & last != second)
 			{
-				last = CMOS.Second;
+				last = RTC.Second;
 				SendAlive();
 			}
 

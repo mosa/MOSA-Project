@@ -8,11 +8,11 @@ namespace Mosa.Demo.SVGAWorld.x86
 {
 	public static class Mouse
 	{
-		public static int X => Utils.Mouse.X;
+		public static int X => GeneralUtils.Mouse.X;
 
-		public static int Y => Utils.Mouse.Y;
+		public static int Y => GeneralUtils.Mouse.Y;
 
-		public static int State => Utils.Mouse.MouseState;
+		public static int State => GeneralUtils.Mouse.MouseState;
 
 		public static Color Color { get; set; }
 
