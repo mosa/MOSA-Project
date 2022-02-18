@@ -63,6 +63,11 @@
 		
 		<Compile Include="..\Mosa.UnitTests\Other\CompilerBugTests.cs" Link="Tests\Other\CompilerBugTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Other\SpecificTests.cs" Link="Tests\Other\SpecificTests.cs" />
+
+		<Compile Include="..\Mosa.UnitTests\Other\AnalysisTests.cs" Link="Tests\Other\AnalysisTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\Other\InterestingTests.cs" Link="Tests\Other\InterestingTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\Other\LockTests.cs" Link="Tests\Other\LockTests.cs" />
+
 		<Compile Include="..\Mosa.UnitTests\Primitive\BooleanTests.cs" Link="Tests\Primitive\BooleanTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Primitive\BoxingTests.cs" Link="Tests\Primitive\BoxingTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Primitive\CharTests.cs" Link="Tests\Primitive\CharTests.cs" />
