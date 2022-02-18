@@ -726,9 +726,11 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Debug.Assert(node.Operand1.IsParameter);
 
-			if (MosaTypeLayout.CanFitInRegister(node.Operand1.Type))
+			var type = MosaTypeLayout.GetUnderlyingType(node.Operand1.Type);
+
+			if (type != null && MosaTypeLayout.CanFitInRegister(type))
 			{
-				var loadInstruction = GetLoadParameterInstruction(node.Operand1.Type);
+				var loadInstruction = GetLoadParameterInstruction(type);
 
 				node.SetInstruction(loadInstruction, node.Result, node.Operand1);
 			}
