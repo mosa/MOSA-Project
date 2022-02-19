@@ -536,7 +536,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateHighSplitForLong(Operand longOperand, int index, TypeSystem typeSystem)
 		{
-			Debug.Assert(longOperand.IsInteger64);
+			//Debug.Assert(longOperand.IsInteger64);
 			Debug.Assert(longOperand.LongParent == null || longOperand.LongParent == longOperand);
 			Debug.Assert(longOperand.High == null);
 
@@ -594,7 +594,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateLowSplitForLong(Operand longOperand, int index, TypeSystem typeSystem)
 		{
-			Debug.Assert(longOperand.IsInteger64);
+			//Debug.Assert(longOperand.IsInteger64);
 			Debug.Assert(longOperand.LongParent == null);
 			Debug.Assert(longOperand.Low == null);
 

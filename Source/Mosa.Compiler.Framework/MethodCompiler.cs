@@ -680,7 +680,28 @@ namespace Mosa.Compiler.Framework
 		/// <param name="operandHigh">The operand high.</param>
 		public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 		{
-			if (operand.IsInteger64)
+			bool is64Bit = operand.IsInteger64;
+
+			if (!operand.IsInteger64 && !operand.IsInteger32)
+			{
+				// figure it out
+				var underlyingType = MosaTypeLayout.GetUnderlyingType(operand.Type);
+
+				if (underlyingType.IsUI8)
+					is64Bit = true;
+
+				if (Is64BitPlatform)
+				{
+					if (underlyingType.IsPointer
+						|| underlyingType.IsFunctionPointer
+						|| underlyingType.IsN
+						|| underlyingType.IsManagedPointer
+						|| underlyingType.IsReferenceType)
+						is64Bit = true;
+				}
+			}
+
+			if (is64Bit)
 			{
 				SplitLongOperand(operand);
 				operandLow = operand.Low;

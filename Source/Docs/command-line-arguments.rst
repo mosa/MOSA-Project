@@ -101,6 +101,9 @@ Below are the command line arguments available:
     -display-off,Emulator.Display,off
     -memory,Emulator.Memory,
     -qemu-gdb,Emulator.GDB,false
+	
+	Launcher - Emulator - VMWare:
+	-vmware-svga,Emulator.SVGA,vmware
 
     Launcher - Image:
     -image,Image.ImageFile,{value}
