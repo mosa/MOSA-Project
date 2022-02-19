@@ -111,7 +111,6 @@ namespace Mosa.DeviceSystem
 		public void Write(char c)
 		{
 			Characters.Add(new Character(c, X, Y));
-
 			LastCharWidth = Font.CalculateWidth(c);
 			Next(LastCharWidth);
 		}
@@ -119,7 +118,20 @@ namespace Mosa.DeviceSystem
 		public void Write(string s)
 		{
 			for (var i = 0; i < s.Length; i++)
-				Write(s[i]);
+				switch (s[i])
+				{
+					case '\n':
+						NewLine();
+						break;
+
+					case '\r':
+						X = 0;
+						break;
+
+					default:
+						Write(s[i]);
+						break;
+				}
 		}
 
 		public void WriteLine(char c)
@@ -134,33 +146,50 @@ namespace Mosa.DeviceSystem
 			NewLine();
 		}
 
+		private string Line;
+
+		// TODO: Use actual KeyTypes
 		public string ReadLine()
 		{
-			var line = string.Empty;
-			Key code;
+			if (Line == null)
+				Line = string.Empty;
 
-			for (;;)
-			{
-				code = ReadKey();
+			var code = ReadKey(false);
 
-				if (code.KeyType == KeyType.Home)
-					break;
-
-				if (code.KeyType == KeyType.Delete && line.Length > 0)
+			if (code != null)
+				switch (code.KeyType)
 				{
-					Previous();
-					Characters.RemoveAt(Characters.Count - 1);
-					line = line.Substring(0, line.Length - 1);
+					case KeyType.RegularKey:
+						if ((byte)code.Character == 10) // Enter key
+						{
+							NewLine();
 
-					continue;
+							var l = Line;
+							Line = null;
+							return l;
+						}
+						else if ((byte)code.Character == 8) // Backspace key
+						{
+							if (Line.Length > 0)
+							{
+								Previous();
+								Characters.RemoveAt(Characters.Count - 1);
+								Line = Line.Substring(0, Line.Length - 1);
+							}
+						}
+						else
+						{
+							Line += code.Character;
+							Write(code.Character);
+						}
+
+						break;
+
+					default:
+						break;
 				}
 
-				line += code;
-				Write(code.Character);
-			}
-
-			NewLine();
-			return line;
+			return string.Empty;
 		}
 
 		public Key ReadKey(bool waitForKey = true)
