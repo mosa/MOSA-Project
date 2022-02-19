@@ -48,6 +48,8 @@ namespace Mosa.DeviceSystem
 
 		private int LastCharWidth;
 
+		private string Line;
+
 		#endregion
 
 		public GraphicalConsole(int baseX, int baseY, int width, int height, ISimpleFont font, Keyboard keyboard, FrameBuffer32 frameBuffer, Color foreColor)
@@ -68,6 +70,8 @@ namespace Mosa.DeviceSystem
 			ForeColor = foreColor;
 
 			Characters = new List<Character>();
+
+			Line = string.Empty;
 		}
 
 		public void SetPosition(int x, int y)
@@ -146,14 +150,9 @@ namespace Mosa.DeviceSystem
 			NewLine();
 		}
 
-		private string Line;
-
 		// TODO: Use actual KeyTypes
 		public string ReadLine()
 		{
-			if (Line == null)
-				Line = string.Empty;
-
 			var code = ReadKey(false);
 
 			if (code != null)
@@ -165,7 +164,7 @@ namespace Mosa.DeviceSystem
 							NewLine();
 
 							var l = Line;
-							Line = null;
+							Line = string.Empty;
 							return l;
 						}
 						else if ((byte)code.Character == 8) // Backspace key
