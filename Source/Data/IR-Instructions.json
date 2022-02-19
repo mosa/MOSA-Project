@@ -1492,6 +1492,12 @@
 			"FamilyName": "IR",
 			"ResultCount": 1,
 			"OperandCount": 1
+		},
+		{
+			"Name": "CheckArrayBounds",
+			"FamilyName": "IR",
+			"ResultCount": 2,
+			"OperandCount": 0
 		}
 	]
 }

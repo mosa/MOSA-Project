@@ -231,6 +231,7 @@ namespace Mosa.Compiler.Framework.IR
 			IRInstruction.BitCopyR8To64,
 			IRInstruction.BitCopy32ToR4,
 			IRInstruction.BitCopy64ToR8,
+			IRInstruction.CheckArrayBounds,
 		};
 	}
 }
