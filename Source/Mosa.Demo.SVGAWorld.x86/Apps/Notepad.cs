@@ -10,13 +10,9 @@ namespace Mosa.Demo.SVGAWorld.x86.Apps
 	{
 		private GraphicalConsole Console;
 
-		private string Line;
-
 		public Notepad(int x, int y, int width, int height, Color inactiveTitlebarColor, Color activeTitlebarColor, Color bodyColor)
 			: base("Notepad", x, y, width, height, inactiveTitlebarColor, activeTitlebarColor, bodyColor)
 		{
-			Line = string.Empty;
-
 			Console = new GraphicalConsole(x, y + TitlebarHeight, width, height, Display.DefaultFont, Boot.Keyboard, Display.BackFrame, Color.Black);
 			Console.Clear();
 		}
@@ -42,27 +38,7 @@ namespace Mosa.Demo.SVGAWorld.x86.Apps
 			Console.BaseX = X;
 			Console.BaseY = Y + TitlebarHeight;
 
-			var code = Console.ReadKey(false);
-			if (code == null)
-				return;
-
-			if (code.KeyType == KeyType.Home)
-			{
-				Console.NewLine();
-				return;
-			}
-
-			if (code.KeyType == KeyType.Delete && Line.Length > 0)
-			{
-				Console.Previous();
-				Console.Characters.RemoveAt(Console.Characters.Count - 1);
-				Line = Line.Substring(0, Line.Length - 1);
-
-				return;
-			}
-
-			Line += code;
-			Console.Write(code.Character);
+			_ = Console.ReadLine();
 		}
 	}
 }
