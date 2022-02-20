@@ -228,5 +228,6 @@ namespace Mosa.Compiler.Framework
 		public static readonly BitCopyR8To64 BitCopyR8To64 = new BitCopyR8To64();
 		public static readonly BitCopy32ToR4 BitCopy32ToR4 = new BitCopy32ToR4();
 		public static readonly BitCopy64ToR8 BitCopy64ToR8 = new BitCopy64ToR8();
+		public static readonly CheckArrayBounds CheckArrayBounds = new CheckArrayBounds();
 	}
 }

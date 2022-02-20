@@ -7,6 +7,9 @@ namespace System
 	/// </summary>
 	public class ArgumentOutOfRangeException : ArgumentException
 	{
+		private int millisecond;
+		private string v;
+
 		//private object _actualValue;
 
 		/// <summary>
@@ -33,10 +36,14 @@ namespace System
 			: base(message, paramName)
 		{ }
 
-		//public ArgumentOutOfRangeException(string paramName, object actualValue, string message)
-		//: base(message, paramName)
-		//{
-		//	_actualValue = actualValue;
-		//}
+		public ArgumentOutOfRangeException(string paramName, int millisecond, string v) : this(paramName)
+		{
+			this.millisecond = millisecond;
+			this.v = v;
+		}
+
+		public ArgumentOutOfRangeException(string paramName, double value, string argumentOutOfRange_AddValue) : this(paramName)
+		{
+		}
 	}
 }
