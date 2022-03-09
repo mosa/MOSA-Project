@@ -5,7 +5,6 @@
 // http://mirrors.josefsipek.net/www.nondot.org/sabre/os/files/Disk/IDE-tech.html
 
 using Mosa.DeviceSystem;
-using Mosa.FileSystem;
 
 namespace Mosa.DeviceDriver.ISA
 {

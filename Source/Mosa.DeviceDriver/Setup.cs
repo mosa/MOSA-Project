@@ -132,17 +132,6 @@ namespace Mosa.DeviceDriver
 
 				new PCIDeviceDriverRegistryEntry()
 				{
-					Name = "RTL8139",
-					Platforms = PlatformArchitecture.X86AndX64,
-					BusType = DeviceBusType.PCI,
-					VendorID = 0x10EC,
-					DeviceID = 0x8139,
-					PCIFields = PCIField.VendorID | PCIField.DeviceID,
-					Factory = delegate { return new PCI.Realtek.RTL8139(); }
-				},
-
-				new PCIDeviceDriverRegistryEntry()
-				{
 					Name = "Intel4SeriesChipsetDRAMController",
 					Platforms = PlatformArchitecture.X86AndX64,
 					BusType = DeviceBusType.PCI,

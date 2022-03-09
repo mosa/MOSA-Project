@@ -6,6 +6,12 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <ItemGroup>
+	<Compile Include="..\Mosa.DeviceSystem\DataBlock.cs">
+	  <Link>DeviceSystem\DataBlock.cs</Link>
+	</Compile>
+	<Compile Include="..\Mosa.DeviceSystem\IPartitionDevice.cs">
+	  <Link>DeviceSystem\IPartitionDevice.cs</Link>
+	</Compile>
     <Compile Include="..\Mosa.DeviceSystem\BaseDeviceConfiguration.cs">
       <Link>DeviceSystem\BaseDeviceConfiguration.cs</Link>
     </Compile>

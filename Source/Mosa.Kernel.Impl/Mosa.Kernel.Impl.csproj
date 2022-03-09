@@ -10,15 +10,14 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DocumentationFile />
     <NoWarn>0219,0414</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>True</DebugSymbols>
-    <DocumentationFile>..\..\bin\Mosa.FileSystem.xml</DocumentationFile>
     <WarningLevel>2</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj" />
+    <ProjectReference Include="..\Mosa.FileSystem\Mosa.FileSystem.csproj" />
   </ItemGroup>
 </Project>

@@ -1,6 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.FileSystem;
 using Mosa.Runtime;
 
 namespace Mosa.DeviceSystem
@@ -170,14 +169,6 @@ namespace Mosa.DeviceSystem
 		public static void Pause()
 		{
 			hardwareAbstraction.Pause();
-		}
-
-		/// <summary>
-		/// Get the current file system
-		/// </summary>
-		public static GenericFileSystem GetCurrentFileSystem()
-		{
-			return hardwareAbstraction.GetCurrentFileSystem();
 		}
 	}
 }

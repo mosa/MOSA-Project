@@ -2,6 +2,7 @@
 
 using Mosa.DeviceSystem;
 using Mosa.FileSystem.FAT;
+using Mosa.Kernel.Impl;
 using Mosa.Runtime.Plug;
 using System.Collections.Generic;
 
@@ -12,7 +13,7 @@ namespace Mosa.Plug.Korlib.System.IO
 		[Plug("System.IO.File::ReadAllBytes")]
 		internal static byte[] ReadAllBytes(string path)
 		{
-			var fat = HAL.GetCurrentFileSystem();
+			var fat = KernelImpl.GetCurrentFileSystem();
 			var entry = fat.FindEntry(path.ToUpper());
 
 			if (!entry.IsValid)
@@ -29,7 +30,7 @@ namespace Mosa.Plug.Korlib.System.IO
 		[Plug("System.IO.File::WriteAllBytes")]
 		internal static void WriteAllBytes(string path, byte[] bytes)
 		{
-			var fat = HAL.GetCurrentFileSystem();
+			var fat = KernelImpl.GetCurrentFileSystem();
 
 			if (fat.IsReadOnly)
 				return;
@@ -46,7 +47,7 @@ namespace Mosa.Plug.Korlib.System.IO
 		[Plug("System.IO.File::WriteAllText")]
 		internal static void WriteAllText(string path, string text)
 		{
-			var fat = HAL.GetCurrentFileSystem();
+			var fat = KernelImpl.GetCurrentFileSystem();
 
 			if (fat.IsReadOnly)
 				return;
@@ -69,7 +70,7 @@ namespace Mosa.Plug.Korlib.System.IO
 		[Plug("System.IO.File::WriteAllLines")]
 		internal static void WriteAllLines(string path, string[] lines)
 		{
-			var fat = HAL.GetCurrentFileSystem();
+			var fat = KernelImpl.GetCurrentFileSystem();
 
 			if (fat.IsReadOnly)
 				return;
@@ -96,7 +97,7 @@ namespace Mosa.Plug.Korlib.System.IO
 		[Plug("System.IO.File::Create")]
 		internal static void Create(string path)
 		{
-			var fat = HAL.GetCurrentFileSystem();
+			var fat = KernelImpl.GetCurrentFileSystem();
 
 			if (fat.IsReadOnly)
 				return;
@@ -112,7 +113,7 @@ namespace Mosa.Plug.Korlib.System.IO
 		[Plug("System.IO.File::Exists")]
 		internal static bool Exists(string path)
 		{
-			return HAL.GetCurrentFileSystem().FindEntry(path.ToUpper()).IsValid;
+			return KernelImpl.GetCurrentFileSystem().FindEntry(path.ToUpper()).IsValid;
 		}
 	}
 }

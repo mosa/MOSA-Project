@@ -154,13 +154,5 @@ namespace Mosa.Demo.CoolWorld.x86.HAL
 			for (var i = Scheduler.ClockTicks + 5; i > Scheduler.ClockTicks;)
 				Native.Hlt();
 		}
-
-		/// <summary>
-		/// Get the current file system
-		/// </summary>
-		public override GenericFileSystem GetCurrentFileSystem()
-		{
-			return Boot.FAT[Boot.CurrentDrive];
-		}
 	}
 }

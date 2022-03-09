@@ -17,6 +17,8 @@ using Mosa.FileSystem.FAT;
 using RTC = Mosa.Kernel.x86.RTC;
 using Mosa.FileSystem;
 using System.IO;
+using Mosa.Kernel.Impl;
+using Mosa.Demo.SVGAWorld.x86.Impl;
 
 namespace Mosa.Demo.SVGAWorld.x86
 {
@@ -73,6 +75,8 @@ namespace Mosa.Demo.SVGAWorld.x86
 			serviceManager.AddService(new PCIDeviceService());
 
 			DeviceSystem.Setup.Initialize(HAL, DeviceService.ProcessInterrupt);
+
+			KernelImpl.Setup(new KernelAbstraction());
 
 			DeviceService.RegisterDeviceDriver(DeviceDriver.Setup.GetDeviceDriverRegistryEntries());
 			DeviceService.Initialize(new X86System(), null);

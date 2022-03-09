@@ -21,7 +21,6 @@
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
     <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
-	<ProjectReference Include="..\Mosa.FileSystem\Mosa.FileSystem.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="RegionalPointer.cs" />

@@ -26,6 +26,7 @@
 		<ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj" />
 		<ProjectReference Include="..\Mosa.FileSystem\Mosa.FileSystem.csproj" />
 		<ProjectReference Include="..\Mosa.Kernel.x86\Mosa.Kernel.x86.csproj" />
+		<ProjectReference Include="..\Mosa.Kernel.Impl\Mosa.Kernel.Impl.csproj" />
 		<ProjectReference Include="..\Mosa.Korlib\Mosa.Korlib.csproj" />
 		<ProjectReference Include="..\Mosa.Runtime.x86\Mosa.Runtime.x86.csproj" />
 		<ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj" />
