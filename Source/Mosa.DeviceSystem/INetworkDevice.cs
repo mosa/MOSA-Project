@@ -1,7 +1,5 @@
 // Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Runtime;
-
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
@@ -14,6 +12,6 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="data">The data.</param>
 		/// <returns></returns>
-		void SendPacket(Pointer data, uint length);
+		void SendPacket(ConstrainedPointer data);
 	}
 }
