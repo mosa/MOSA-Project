@@ -4,16 +4,16 @@
 	{
 		public byte[] Address;
 
-		public static IPAddress Parse(params byte[] ip)
+		public static IPAddress Parse(byte one, byte two, byte three, byte four)
 		{
 			return new IPAddress()
 			{
 				Address = new byte[]
 				{
-					ip[0],
-					ip[1],
-					ip[2],
-					ip[3]
+					one,
+					two,
+					three,
+					four
 				}
 			};
 		}
