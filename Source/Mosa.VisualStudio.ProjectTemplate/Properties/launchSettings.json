@@ -3,7 +3,7 @@
 		"$safeprojectname$": {
 			"commandName": "Executable",
 			"executablePath": "C:\\Program Files (x86)\\MOSA-Project\\bin\\Mosa.Tool.Launcher.exe",
-			"commandLineArgs": "$safeprojectname$.dll",
+			"commandLineArgs": "-autostart $safeprojectname$.dll",
 			"workingDirectory": "bin"
 		}
 	}

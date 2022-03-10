@@ -26,6 +26,9 @@
 	  <Reference Include="Mosa.Kernel.x86">
 	    <HintPath>C:\Program Files (x86)\MOSA-Project\bin\Mosa.Kernel.x86.dll</HintPath>
 	  </Reference>
+	  <Reference Include="Mosa.Kernel.Impl">
+	    <HintPath>C:\Program Files (x86)\MOSA-Project\bin\Mosa.Kernel.Impl.dll</HintPath>
+	  </Reference>
 	  <Reference Include="Mosa.Platform.Intel">
 	    <HintPath>C:\Program Files (x86)\MOSA-Project\bin\Mosa.Platform.Intel.dll</HintPath>
 	  </Reference>

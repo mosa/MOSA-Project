@@ -16,19 +16,6 @@ namespace Mosa.DeviceDriver
 			{
 				new ISADeviceDriverRegistryEntry()
 				{
-					Name = "PIT",
-					Platforms = PlatformArchitecture.X86AndX64,
-					AutoLoad = true,
-					BasePort = 0x40,
-					PortRange = 1,
-					AltBasePort = 0x43,
-					AltPortRange = 1,
-					IRQ = 0x20,
-					Factory = delegate { return new ISA.PIT(); }
-				},
-
-				new ISADeviceDriverRegistryEntry()
-				{
 					Name = "ACPI",
 					Platforms = PlatformArchitecture.X86,
 					AutoLoad = true,
