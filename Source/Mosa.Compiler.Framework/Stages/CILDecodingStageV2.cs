@@ -735,7 +735,7 @@ namespace Mosa.Compiler.Framework.Stages
 				operands.Insert(0, thisOperand);
 			}
 
-			operands.Reverse();
+			//operands.Reverse();
 			return operands;
 		}
 
@@ -1518,7 +1518,8 @@ namespace Mosa.Compiler.Framework.Stages
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
 			context.AppendInstruction(IRInstruction.CallStatic, result, symbol, operands);
-			context.InvokeMethod = method;
+
+			//context.InvokeMethod = method; // Optional?
 
 			return true;
 		}
@@ -1560,7 +1561,7 @@ namespace Mosa.Compiler.Framework.Stages
 				context.AppendInstruction(IRInstruction.CallStatic, result, symbol, operands);
 			}
 
-			context.InvokeMethod = method;
+			//context.InvokeMethod = method; // Optional
 
 			return true;
 		}
@@ -2891,14 +2892,14 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				var move = GetMoveInstruction(ElementType.I);
 
-				context.SetInstruction(move, result, entry.Operand);
+				context.AppendInstruction(move, result, entry.Operand);
 			}
 			else
 			{
 				if (Is32BitPlatform)
-					context.SetInstruction(IRInstruction.Add32, result, entry.Operand, CreateConstant32(offset));
+					context.AppendInstruction(IRInstruction.Add32, result, entry.Operand, CreateConstant32(offset));
 				else
-					context.SetInstruction(IRInstruction.Add64, result, entry.Operand, CreateConstant64(offset));
+					context.AppendInstruction(IRInstruction.Add64, result, entry.Operand, CreateConstant64(offset));
 			}
 
 			stack.Push(new StackEntry(StackType.ManagedPointer, result));
@@ -2917,7 +2918,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var move = GetMoveInstruction(ElementType.I);
 
-			context.SetInstruction(move, result, Operand.CreateSymbolFromMethod(method, TypeSystem));
+			context.AppendInstruction(move, result, Operand.CreateSymbolFromMethod(method, TypeSystem));
+
+			stack.Push(new StackEntry(stacktype, result));
 
 			MethodScanner.MethodInvoked(method, Method);
 
@@ -3118,16 +3121,17 @@ namespace Mosa.Compiler.Framework.Stages
 		private bool Ldstr(Context context, Stack<StackEntry> stack, MosaInstruction instruction)
 		{
 			var result = AllocateVirtualRegister(TypeSystem.BuiltIn.String);
-			stack.Push(new StackEntry(StackType.Object, result));
 
 			var token = (uint)instruction.Operand;
 
 			var stringdata = TypeSystem.LookupUserString(Method.Module, token);
 			var symbolName = EmitString(stringdata, token);
 
-			var symbol = Operand.CreateLabel(TypeSystem.BuiltIn.String, symbolName);
+			var symbol = Operand.CreateStringSymbol(TypeSystem.BuiltIn.String, symbolName, MethodCompiler.Compiler.ObjectHeaderSize, stringdata);
 
 			context.AppendInstruction(IRInstruction.MoveObject, result, symbol);
+
+			stack.Push(new StackEntry(StackType.Object, result));
 
 			return true;
 		}
@@ -3280,6 +3284,8 @@ namespace Mosa.Compiler.Framework.Stages
 				operands.Add(param.Operand);
 			}
 
+			MethodScanner.TypeAllocated(classType, Method);
+
 			//if (ReplaceWithInternalCall(context))
 			//	return true;
 
@@ -3295,7 +3301,9 @@ namespace Mosa.Compiler.Framework.Stages
 				operands.Insert(0, result);
 
 				context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
-				context.InvokeMethod = method;
+
+				//context.InvokeMethod = method;  // optional??
+				context.MosaType = classType;   // optional??
 
 				stack.Push(new StackEntry(StackType.Object, result));
 
@@ -3311,13 +3319,14 @@ namespace Mosa.Compiler.Framework.Stages
 				operands.Insert(0, newThis);
 
 				context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
-				context.InvokeMethod = method;
+
+				//context.InvokeMethod = method; // optional??
 
 				stack.Push(new StackEntry(StackType.ValueType, newThisLocal));
 
 				return true;
 			}
-			else if (stackType == StackType.Int32)
+			else if (stackType == StackType.Int32 || stackType == StackType.Int64)
 			{
 				var newThisLocal = AddStackLocal(classType);
 				var newThis = AllocateVirtualRegisterManagedPointer();
@@ -3327,7 +3336,8 @@ namespace Mosa.Compiler.Framework.Stages
 				operands.Insert(0, newThis);
 
 				context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
-				context.InvokeMethod = method;
+
+				//context.InvokeMethod = method;  // optional??
 
 				stack.Push(new StackEntry(StackType.ManagedPointer, newThis));   // ManagedPointer??
 
@@ -3347,7 +3357,8 @@ namespace Mosa.Compiler.Framework.Stages
 				operands.Insert(0, newThis);
 
 				context.AppendInstruction(IRInstruction.CallStatic, null, symbol, operands);
-				context.InvokeMethod = method;
+
+				//context.InvokeMethod = method;  // optional??
 
 				stack.Push(new StackEntry(StackType.ManagedPointer, newThis));   // ManagedPointer??
 			}
@@ -4045,13 +4056,13 @@ namespace Mosa.Compiler.Framework.Stages
 					var symbol = GetStaticSymbol(field);
 					var staticReference = Operand.CreateLabel(TypeSystem.BuiltIn.Object, symbol.Name);
 
-					context.SetInstruction(IRInstruction.StoreObject, null, staticReference, ConstantZero);
+					context.AppendInstruction(IRInstruction.StoreObject, null, staticReference, ConstantZero);
 
 					//context.MosaType = type;
 				}
 				else
 				{
-					context.SetInstruction(storeInstruction, null, fieldOperand, ConstantZero, source);
+					context.AppendInstruction(storeInstruction, null, fieldOperand, ConstantZero, source);
 					context.MosaType = type;
 				}
 			}

@@ -371,6 +371,8 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-oFast", Setting = "Optimizations.TwoPass", Value = "false"},
 				new Argument() { Name = "-oFast", Setting = "Optimizations.Inline.Maximum", Value = "0"},
 				new Argument() { Name = "-oFast", Setting = "Optimizations.Basic.Window", Value = "1"},
+
+				new Argument() { Name = "-cilv2", Setting = "CompilerDebug.CILDecodingStageV2", Value = "true"},
 			};
 
 			return map;

@@ -61,6 +61,8 @@
 		<Compile Include="..\Mosa.UnitTests\Optimization\SwitchTests.cs" Link="Tests\Optimization\SwitchTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Optimization\SpecificTests.cs" Link="Tests\Optimization\SpecificTests.cs" />
 		
+		<Compile Include="..\Mosa.UnitTests\Optimization\LoopUnrollingTests.cs" Link="Tests\Optimization\LoopUnrollingTests.cs" />
+
 		<Compile Include="..\Mosa.UnitTests\Other\CompilerBugTests.cs" Link="Tests\Other\CompilerBugTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Other\SpecificTests.cs" Link="Tests\Other\SpecificTests.cs" />
 
