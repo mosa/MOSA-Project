@@ -87,7 +87,8 @@ namespace Mosa.Compiler.Framework.Stages
 		protected override void Finish()
 		{
 			Targets = null;
-			MethodCompiler.Stop();
+
+			//MethodCompiler.Stop();
 		}
 
 		protected override void Run()
@@ -364,7 +365,12 @@ namespace Mosa.Compiler.Framework.Stages
 						&& opcode != OpCode.Br
 						&& opcode != OpCode.Br_s
 						&& opcode != OpCode.Ret
-						&& opcode != OpCode.Throw)
+						&& opcode != OpCode.Throw
+						&& opcode != OpCode.Brfalse
+						&& opcode != OpCode.Brfalse_s
+						&& opcode != OpCode.Brtrue
+						&& opcode != OpCode.Brtrue_s
+						)
 					{
 						context.AppendInstruction(IRInstruction.Jmp, peekNextblock);
 					}
@@ -400,7 +406,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				var opcode = (OpCode)instruction.OpCode;
 
-				if (opcode == OpCode.Ldloca)
+				if (opcode == OpCode.Ldloca || opcode == OpCode.Ldloca_s)
 				{
 					var index = (int)instruction.Operand;
 
@@ -1415,8 +1421,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool Branch(Context context, Stack<StackEntry> stack, ConditionCode conditionCode, MosaInstruction instruction)
 		{
-			var entry1 = stack.Pop();
 			var entry2 = stack.Pop();
+			var entry1 = stack.Pop();
 
 			var target = (int)instruction.Operand;
 			var block = BasicBlocks.GetByLabel(target);
@@ -1585,8 +1591,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private bool Compare(Context context, Stack<StackEntry> stack, ConditionCode conditionCode)
 		{
-			var entry1 = stack.Pop();
 			var entry2 = stack.Pop();
+			var entry1 = stack.Pop();
 
 			var result = AllocateVirtualRegisterI32();
 			stack.Push(new StackEntry(StackType.Int32, result));
@@ -3827,7 +3833,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 			else
 			{
-				var stacktype = GetStackType(type);
+				var stacktype = GetStackType(underlyingType);
 				var elementType = GetElementType(stacktype);
 				var storeInstruction = GetStoreInstruction(elementType);
 
@@ -4464,7 +4470,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </returns>
 		private Operand CalculateTotalArrayOffset(Context context, Operand elementOffset)
 		{
-			var fixedOffset = CreateConstant32(NativePointerSize * 3);
+			var fixedOffset = CreateConstant32(NativePointerSize);
 			var arrayElement = Is32BitPlatform ? AllocateVirtualRegisterI32() : AllocateVirtualRegisterI64();
 
 			if (Is32BitPlatform)
