@@ -4309,10 +4309,20 @@ namespace Mosa.Compiler.Framework.Stages
 			else
 			{
 				var result = AllocatedOperand(StackType.ValueType, type);
-				var source = AllocateVirtualRegisterManagedPointer();
 
-				context.AppendInstruction(IRInstruction.AddressOf, source, entry.Operand);
-				context.AppendInstruction(IRInstruction.LoadCompound, result, source, ConstantZero);
+				//var tmpLocal = AddStackLocal(type);
+				//var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
+
+				//var adr = AllocateVirtualRegisterManagedPointer();
+				//context.AppendInstruction(IRInstruction.AddressOf, adr, tmpLocal);
+				//context.AppendInstruction(IRInstruction.UnboxAny, tmpLocal, entry.Operand, adr, CreateConstant32(typeSize));
+				//context.AppendInstruction(IRInstruction.LoadCompound, result, tmpLocal, ConstantZero);
+
+				//context.AppendInstruction(IRInstruction.LoadCompound, result, tmpLocal, ConstantZero);
+
+				var adr = AllocateVirtualRegisterManagedPointer();
+				context.AppendInstruction(IRInstruction.Unbox, adr, entry.Operand);
+				context.AppendInstruction(IRInstruction.LoadCompound, result, adr, ConstantZero);
 
 				stack.Push(new StackEntry(StackType.ValueType, result, type));
 				return true;
