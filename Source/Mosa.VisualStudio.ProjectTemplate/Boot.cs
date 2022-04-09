@@ -1,32 +1,38 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
+using Mosa.DeviceSystem;
 using Mosa.Kernel.x86;
+using Mosa.Runtime.Plug;
 
 namespace $safeprojectname$
 {
     public static class Boot
     {
+        [Plug("Mosa.Runtime.StartUp::SetInitialMemory")]
+        public static void SetInitialMemory()
+        {
+            KernelMemory.SetInitialMemory(Address.GCInitialMemory, 0x01000000);
+        }
+
         public static void Main()
         {
-            Mosa.Kernel.x86.Kernel.Setup();
+            #region Initialization
 
+            Kernel.Setup();
             IDT.SetInterruptHandler(ProcessInterrupt);
 
-            Screen.Clear();
-            Screen.Goto(0, 0);
-            Screen.Color = ScreenColor.White;
+            #endregion
 
             Program.Setup();
 
-            while (true)
-            {
+            for (; ; )
                 Program.Loop();
-            }
         }
 
         public static void ProcessInterrupt(uint interrupt, uint errorCode)
         {
-            Program.OnInterrupt();
+            if (interrupt >= 0x20 && interrupt < 0x30)
+                HAL.ProcessInterrupt((byte)(interrupt - 0x20));
         }
     }
 }

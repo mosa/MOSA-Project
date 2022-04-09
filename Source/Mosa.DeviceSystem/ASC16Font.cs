@@ -32,18 +32,14 @@ namespace Mosa.DeviceSystem
 		/// <summary>Draws the string.</summary>
 		public void DrawString(FrameBuffer32 frameBuffer, uint color, uint x, uint y, string text)
 		{
-			for (uint c = 0; c < text.Length; c++)
+			for (var c = 0; c < text.Length; c++)
 			{
-				var offset = ((byte)text[(int)c] & 0xFF) * 16;
-				var buf = new byte[16];
+				var offset = ((byte)text[c] & 0xFF) * Height;
 
-				for (var k = 0; k < buf.Length; k++)
-					buf[k] = Buffer[offset + k];
-
-				for (uint i = 0; i < 16; i++)
-					for (uint j = 0; j < 8; j++)
-						if ((buf[i] & (0x80 >> (int)j)) != 0)
-							frameBuffer.SetPixel(color, x + j + c * 8, y + i);
+				for (var i = 0; i < Height; i++)
+					for (var j = 0; j < Width; j++)
+						if ((Buffer[offset + i] & (0x80 >> j)) != 0)
+							frameBuffer.SetPixel(color, (uint)(x + j + c * Width), (uint)(y + i));
 			}
 		}
 
@@ -60,7 +56,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		public int CalculateWidth(string s)
 		{
-			return Width;
+			return Width * s.Length;
 		}
 	}
 }

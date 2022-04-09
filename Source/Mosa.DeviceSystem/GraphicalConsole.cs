@@ -48,6 +48,8 @@ namespace Mosa.DeviceSystem
 
 		private int LastCharWidth;
 
+		private string Line;
+
 		#endregion
 
 		public GraphicalConsole(int baseX, int baseY, int width, int height, ISimpleFont font, Keyboard keyboard, FrameBuffer32 frameBuffer, Color foreColor)
@@ -68,6 +70,8 @@ namespace Mosa.DeviceSystem
 			ForeColor = foreColor;
 
 			Characters = new List<Character>();
+
+			Line = string.Empty;
 		}
 
 		public void SetPosition(int x, int y)
@@ -110,10 +114,22 @@ namespace Mosa.DeviceSystem
 
 		public void Write(char c)
 		{
-			Characters.Add(new Character(c, X, Y));
+			switch (c)
+			{
+				case '\n':
+					NewLine();
+					break;
 
-			LastCharWidth = Font.CalculateWidth(c);
-			Next(LastCharWidth);
+				case '\r':
+					X = 0;
+					break;
+
+				default:
+					Characters.Add(new Character(c, X, Y));
+					LastCharWidth = Font.CalculateWidth(c);
+					Next(LastCharWidth);
+					break;
+			}
 		}
 
 		public void Write(string s)
@@ -134,33 +150,45 @@ namespace Mosa.DeviceSystem
 			NewLine();
 		}
 
+		// TODO: Use actual KeyTypes
 		public string ReadLine()
 		{
-			var line = string.Empty;
-			Key code;
+			var code = ReadKey(false);
 
-			for (;;)
-			{
-				code = ReadKey();
-
-				if (code.KeyType == KeyType.Home)
-					break;
-
-				if (code.KeyType == KeyType.Delete && line.Length > 0)
+			if (code != null)
+				switch (code.KeyType)
 				{
-					Previous();
-					Characters.RemoveAt(Characters.Count - 1);
-					line = line.Substring(0, line.Length - 1);
+					case KeyType.RegularKey:
+						if ((byte)code.Character == 10) // Enter key
+						{
+							NewLine();
 
-					continue;
+							var l = Line;
+							Line = string.Empty;
+							return l;
+						}
+						else if ((byte)code.Character == 8) // Backspace key
+						{
+							if (Line.Length > 0)
+							{
+								Previous();
+								Characters.RemoveAt(Characters.Count - 1);
+								Line = Line.Substring(0, Line.Length - 1);
+							}
+						}
+						else
+						{
+							Line += code.Character;
+							Write(code.Character);
+						}
+
+						break;
+
+					default:
+						break;
 				}
 
-				line += code;
-				Write(code.Character);
-			}
-
-			NewLine();
-			return line;
+			return string.Empty;
 		}
 
 		public Key ReadKey(bool waitForKey = true)
