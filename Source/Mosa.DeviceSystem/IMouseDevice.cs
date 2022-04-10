@@ -8,6 +8,16 @@ namespace Mosa.DeviceSystem
 	public interface IMouseDevice
 	{
 		/// <summary>
+		/// The X coordinate.
+		/// </summary>
+		int X { get; set; }
+
+		/// <summary>
+		/// The Y coordinate.
+		/// </summary>
+		int Y { get; set; }
+
+		/// <summary>
 		/// Get the current state of the mouse
 		///
 		/// 0 = Left

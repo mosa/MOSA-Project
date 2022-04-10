@@ -16,11 +16,13 @@ namespace Mosa.DeviceDriver.ISA
 
 		private const byte SetDefaults = 0xF6, EnableDataReporting = 0xF4;
 
-		private int screenWidth, screenHeight, phase = 0, aX, aY;
+		private int screenWidth, screenHeight, phase = 0, aX, aY, mouseState;
 
 		private byte[] mData = new byte[3];
 
-		public int X, Y, MouseState;
+		public int X { get; set; }
+
+		public int Y { get; set; }
 
 		public override void Initialize()
 		{
@@ -73,7 +75,7 @@ namespace Mosa.DeviceDriver.ISA
 				// The scroll wheel is available
 			}
 
-			MouseState = byte.MaxValue;
+			mouseState = byte.MaxValue;
 		}
 
 		/// <summary>
@@ -123,7 +125,7 @@ namespace Mosa.DeviceDriver.ISA
 				phase = 1;
 
 				mData[0] &= 0x07;
-				MouseState = mData[0] switch
+				mouseState = mData[0] switch
 				{
 					0x01 => 0,
 					0x02 => 1,
@@ -151,7 +153,7 @@ namespace Mosa.DeviceDriver.ISA
 
 		public int GetMouseState()
 		{
-			return MouseState;
+			return mouseState;
 		}
 
 		public void SetScreenResolution(int width, int height)

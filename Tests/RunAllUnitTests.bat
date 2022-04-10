@@ -1,1 +1,1 @@
-..\bin\Mosa.Utility.UnitTests.exe -display-off -o5 -output-hash
+..\bin\Mosa.Utility.UnitTests.exe -display-off -oMax -output-hash

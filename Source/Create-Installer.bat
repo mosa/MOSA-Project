@@ -1,3 +1,5 @@
-CD Inno-Setup-Script
-CALL create-installer.bat
-CD ..
+@echo off
+call compile-debug.bat
+cd Inno-Setup-Script
+call create-installer.bat
+cd ..
