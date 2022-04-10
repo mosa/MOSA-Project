@@ -24,16 +24,6 @@ namespace Mosa.DeviceDriver
 
 				new ISADeviceDriverRegistryEntry()
 				{
-					Name = "SoundBlaster16",
-					Platforms = PlatformArchitecture.X86AndX64,
-					AutoLoad = true,
-					BasePort = 0x224,
-					PortRange = 8,
-					Factory = delegate { return new ISA.SoundBlaster16(); }
-				},
-
-				new ISADeviceDriverRegistryEntry()
-				{
 					Name = "StandardKeyboard",
 					Platforms = PlatformArchitecture.X86AndX64,
 					AutoLoad = true,
@@ -43,18 +33,6 @@ namespace Mosa.DeviceDriver
 					AltPortRange = 1,
 					IRQ = 1,
 					Factory = delegate { return new ISA.StandardKeyboard(); }
-				},
-
-				new ISADeviceDriverRegistryEntry()
-				{
-					Name = "PIT",
-					Platforms = PlatformArchitecture.X86AndX64,
-					AutoLoad = true,
-					BasePort = 0x40,
-					PortRange = 1,
-					AltBasePort = 0x43,
-					AltPortRange = 1,
-					Factory = delegate { return new ISA.PIT(); }
 				},
 
 				new ISADeviceDriverRegistryEntry()
@@ -117,6 +95,17 @@ namespace Mosa.DeviceDriver
 				//	Factory = delegate { return new VGAText(); }
 				//},
 
+				/*new PCIDeviceDriverRegistryEntry()
+				{
+					Name = "NVMe",
+					Platforms = PlatformArchitecture.X86AndX64,
+					BusType = DeviceBusType.PCI,
+					ClassCode = 0x01,
+					SubClassCode = 0x08,
+					PCIFields = PCIField.ClassCode | PCIField.SubClassCode,
+					Factory = delegate { return new PCI.NVMe(); }
+				},*/
+
 				new PCIDeviceDriverRegistryEntry()
 				{
 					Name = "VMwareSVGA2",
@@ -128,17 +117,6 @@ namespace Mosa.DeviceDriver
 					Factory = delegate { return new PCI.VMware.VMwareSVGA2(); }
 				},
 
-				/*new PCIDeviceDriverRegistryEntry()
-				{
-					Name = "AC97",
-					Platforms = PlatformArchitecture.X86AndX64,
-					BusType = DeviceBusType.PCI,
-					VendorID = 0x8086,
-					DeviceID = 0x2415,
-					PCIFields = PCIField.VendorID | PCIField.DeviceID,
-					Factory = delegate { return new AC97(); }
-				},*/
-				
 				new PCIDeviceDriverRegistryEntry()
 				{
 					Name = "Intel4SeriesChipsetDRAMController",

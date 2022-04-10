@@ -5,11 +5,12 @@
 		<OutputType>Exe</OutputType>
 		<StartupObject>$safeprojectname$.Boot</StartupObject>
 		<DebugType>full</DebugType>
-		<LangVersion>8.0</LangVersion>
+		<LangVersion>9.0</LangVersion>
 		<OutputPath>bin\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
 		<DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
+		<UseAppHost>false</UseAppHost>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 	</PropertyGroup>
 	<ItemGroup>
@@ -19,9 +20,4 @@
 		<PackageReference Include="Mosa.Runtime" Version="*" />
 		<PackageReference Include="Mosa.Tools.Package" Version="*" />
 	</ItemGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<StartAction>Program</StartAction>
-		<StartProgram>C:\Program Files (x86)\MOSA-Project\bin\Mosa.Tool.Bootstrap.exe</StartProgram>
-		<StartArguments>$safeprojectname$.exe</StartArguments>
-	</PropertyGroup>
 </Project>
