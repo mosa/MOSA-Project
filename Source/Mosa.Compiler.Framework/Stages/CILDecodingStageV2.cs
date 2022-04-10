@@ -431,14 +431,16 @@ namespace Mosa.Compiler.Framework.Stages
 				var stackType = underlyingType != null ? GetStackType(underlyingType) : StackType.ValueType;
 				LocalStackType[index] = stackType;
 
-				if (stackType == StackType.ValueType || arg[index] || type.IsPinned)
-				{
-					LocalStack[index] = MethodCompiler.AddStackLocal(type.Type, type.IsPinned);
-				}
-				else
-				{
-					LocalStack[index] = AllocatedOperand(stackType, type.Type);
-				}
+				LocalStack[index] = MethodCompiler.AddStackLocal(type.Type, type.IsPinned);
+
+				//if (stackType == StackType.ValueType || arg[index] || type.IsPinned)
+				//{
+				//	LocalStack[index] = MethodCompiler.AddStackLocal(type.Type, type.IsPinned);
+				//}
+				//else
+				//{
+				//	LocalStack[index] = AllocatedOperand(stackType, type.Type);
+				//}
 			}
 		}
 
@@ -2625,10 +2627,10 @@ namespace Mosa.Compiler.Framework.Stages
 				var stacktype = GetStackType(elementType);
 				var result = AllocatedOperand(stacktype);
 
-				stack.Push(new StackEntry(stacktype, result));
-
 				var loadInstruction = GetLoadParamInstruction(elementType);
 				context.AppendInstruction(loadInstruction, result, parameter);
+
+				stack.Push(new StackEntry(stacktype, result));
 
 				return true;
 			}
