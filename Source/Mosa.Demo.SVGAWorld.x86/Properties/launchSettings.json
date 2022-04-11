@@ -2,8 +2,8 @@
 	"profiles": {
 		"Mosa.Demo.SVGAWorld.x86": {
 			"commandName": "Executable",
-			"executablePath": "..\\bin\\Mosa.Tool.Launcher.exe",
-			"commandLineArgs": "-autostart -include Source/Mosa.Demo.SVGAWorld.x86/Include -vmware -output-map -output-asm -output-debug -vmdk -oMax Mosa.Demo.SVGAWorld.x86.dll",
+			"executablePath": "dotnet",
+			"commandLineArgs": "..\\bin\\Mosa.Tool.Launcher.dll -autostart -include Source/Mosa.Demo.SVGAWorld.x86/Include -vmware -output-map -output-asm -output-debug -vmdk -oMax Mosa.Demo.SVGAWorld.x86.dll",
 			"workingDirectory": "..\\..\\bin"
 		}
 	}

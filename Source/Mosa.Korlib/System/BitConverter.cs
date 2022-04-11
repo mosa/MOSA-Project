@@ -158,21 +158,5 @@ namespace System
 		/// <exception cref="ArgumentOutOfRangeException"><paramref name="startIndex"/> is less than zero or greater than the length of <paramref name="value"/> minus 1.</exception>
 		[CLSCompliant(false)]
 		public static uint ToUInt32(byte[] value, int startIndex) => unchecked((uint)ToInt32(value, startIndex));
-
-		/// <summary>
-		/// Converts the specified single-precision floating point number to a 32-bit unsigned integer.
-		/// </summary>
-		/// <param name="value">The number to convert.</param>
-		/// <returns>A 32-bit unsigned integer whose bits are identical to <paramref name="value"/>.</returns>
-		[CLSCompliant(false)]
-		public static unsafe uint SingleToUInt32Bits(float value) => (uint)SingleToInt32Bits(value);
-
-		/// <summary>
-		/// Converts the specified double-precision floating point number to a 64-bit unsigned integer.
-		/// </summary>
-		/// <param name="value">The number to convert.</param>
-		/// <returns>A 64-bit unsigned integer whose bits are identical to <paramref name="value"/>.</returns>
-		[CLSCompliant(false)]
-		public static unsafe ulong DoubleToUInt64Bits(double value) => (ulong)DoubleToInt64Bits(value);
 	}
 }

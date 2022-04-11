@@ -27,9 +27,9 @@
 		<file src="..\..\bin\Mosa.Platform.Intel.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Platform.x86.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Platform.x64.dll" target="tools" />
-		<file src="..\..\bin\Mosa.Tool.Explorer.exe" target="tools" />
-		<file src="..\..\bin\Mosa.Tool.Debugger.exe" target="tools" />
-		<file src="..\..\bin\Mosa.Tool.Launcher.exe" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Explorer.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Debugger.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Launcher.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Tool.Compiler.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Tool.Launcher.Console.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.BootImage.dll" target="tools" />

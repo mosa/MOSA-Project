@@ -234,33 +234,6 @@ namespace System.Runtime.CompilerServices
             // ret
         }
 
-		/// <summary>
-		/// Bypasses definite assignment rules by taking advantage of <c>out</c> semantics.
-		/// </summary>
-		[Intrinsic]
-		[NonVersionable]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static void SkipInit<T>(out T value)
-		{
-			throw new PlatformNotSupportedException();
-
-			// ret
-		}
-
-		/// <summary>
-		/// Reinterprets the given location as a reference to a value of type <typeparamref name="T"/>.
-		/// </summary>
-		[Intrinsic]
-		[NonVersionable]
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static ref T AsRef<T>(in T source)
-		{
-			throw new PlatformNotSupportedException();
-
-			//ldarg .0
-			//ret
-		}
-
 		//[Intrinsic]
 		//[NonVersionable]
 		//[MethodImpl(MethodImplOptions.AggressiveInlining)]

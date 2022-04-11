@@ -2,8 +2,8 @@
 	"profiles": {
 		"$safeprojectname$": {
 			"commandName": "Executable",
-			"executablePath": "C:\\Program Files (x86)\\MOSA-Project\\bin\\Mosa.Tool.Launcher.exe",
-			"commandLineArgs": "$safeprojectname$.dll",
+			"executablePath": "dotnet",
+			"commandLineArgs": "C:\\Program Files (x86)\\MOSA-Project\\bin\\Mosa.Tool.Launcher.dll $safeprojectname$.dll",
 			"workingDirectory": "bin"
 		}
 	}

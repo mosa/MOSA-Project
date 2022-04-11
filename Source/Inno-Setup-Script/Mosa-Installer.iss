@@ -55,7 +55,7 @@ Source: "..\Mosa.VisualStudio.ProjectTemplate\Program.cs"; DestDir: "{userdocs}\
 Source: "..\Mosa.VisualStudio.ProjectTemplate\__TemplateIcon.ico"; DestDir: "{userdocs}\Visual Studio 2022\Templates\ProjectTemplates\Mosa Project"; Flags: ignoreversion
 Source: "..\Mosa.VisualStudio.ProjectTemplate\Properties\launchSettings.json"; DestDir: "{userdocs}\Visual Studio 2022\Templates\ProjectTemplates\Mosa Project\Properties"; Flags: ignoreversion
 
-Source: "..\..\bin\Mosa.Tool.Bootstrap.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Tool.Bootstrap.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Compiler.Common.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Compiler.Framework.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Compiler.MosaTypeSystem.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
@@ -63,9 +63,9 @@ Source: "..\..\bin\Mosa.Platform.ARMv8A32.dll"; DestDir: "{app}\bin"; Flags: ign
 Source: "..\..\bin\Mosa.Platform.Intel.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Platform.x86.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Platform.x64.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Tool.Explorer.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Tool.Debugger.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "..\..\bin\Mosa.Tool.Launcher.exe"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Tool.Explorer.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Tool.Debugger.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "..\..\bin\Mosa.Tool.Launcher.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Tool.Compiler.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Tool.Launcher.Console.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
 Source: "..\..\bin\Mosa.Utility.BootImage.dll"; DestDir: "{app}\bin"; Flags: ignoreversion
