@@ -4,6 +4,36 @@ namespace System
 {
 	internal class ThrowHelper
 	{
+		internal static void ThrowStartIndexArgumentOutOfRange_ArgumentOutOfRange_Index()
+		{
+			throw new NotImplementedException();
+		}
+
+		internal static void ThrowArgumentException_DestinationTooShort()
+		{
+			throw new NotImplementedException();
+		}
+
+		internal static void ThrowArgumentOutOfRangeException(string name)
+		{
+			throw new NotImplementedException();
+		}
+
+		internal static void ThrowArgumentOutOfRange_IndexException()
+		{
+			throw new NotImplementedException();
+		}
+
+		internal static void ThrowNullReferenceException()
+		{
+			throw new NotImplementedException();
+		}
+
+		internal static void ThrowForUnsupportedNumericsVectorBaseType<T>() where T : struct
+		{
+			throw new NotImplementedException();
+		}
+
 		internal static void ThrowArgumentOutOfRange_BadHourMinuteSecond()
 		{
 			throw new NotImplementedException();
