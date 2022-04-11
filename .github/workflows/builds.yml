@@ -77,6 +77,9 @@ jobs:
       - name: Publish Package - Mosa.Korlib
         run: dotnet nuget push bin\nupkg\Mosa.Korlib.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
         if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
+      - name: Publish Package - Mosa.DeviceSystem
+        run: dotnet nuget push bin\nupkg\Mosa.DeviceSystem.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+        if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
       - name: Publish Package - Mosa.Runtime
         run: dotnet nuget push bin\nupkg\Mosa.Runtime.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
         if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
