@@ -41,6 +41,8 @@ jobs:
         run: nuget pack Source\Mosa.Packages\Mosa.Tools.Package.nuspec -Tool -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}
       - name: Create Package - Mosa.Korlib
         run: nuget pack Source\Mosa.Packages\Mosa.Korlib.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}
+      - name: Create Package - Mosa.DeviceSystem
+        run: nuget pack Source\Mosa.Packages\Mosa.DeviceSystem.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}
       - name: Create Package - Mosa.Runtime
         run: nuget pack Source\Mosa.Packages\Mosa.Runtime.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}
       - name: Create Package - Mosa.Platform.x86

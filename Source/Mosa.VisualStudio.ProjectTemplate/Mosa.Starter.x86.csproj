@@ -15,6 +15,7 @@
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Mosa.Korlib" Version="*" />
+		<PackageReference Include="Mosa.DeviceSystem" Version="*" />
 		<PackageReference Include="Mosa.Kernel.x86" Version="*" />
 		<PackageReference Include="Mosa.Platform.x86" Version="*" />
 		<PackageReference Include="Mosa.Runtime" Version="*" />
