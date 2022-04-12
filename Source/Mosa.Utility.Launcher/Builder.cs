@@ -162,14 +162,15 @@ namespace Mosa.Utility.Launcher
 
 			if (LauncherSettings.ImageFormat == "iso")
 			{
-				if (LauncherSettings.ImageBootLoader == "grub0.97" || LauncherSettings.ImageBootLoader == "grub2.00")
+				if (LauncherSettings.ImageBootLoader.StartsWith("grub"))
 				{
 					CreateISOImageWithGrub();
 				}
-				else // assuming syslinux
+				else if (LauncherSettings.ImageBootLoader.StartsWith("syslinux"))
 				{
 					CreateISOImageWithSyslinux();
 				}
+				// TODO: Limine ISO
 			}
 			else if (LauncherSettings.ImageFormat == "vmdk")
 			{
@@ -199,30 +200,38 @@ namespace Mosa.Utility.Launcher
 		{
 			var bootImageOptions = new BootImageOptions();
 
-			if (LauncherSettings.ImageBootLoader == "syslinux3.72")
+			if (LauncherSettings.ImageBootLoader.StartsWith("syslinux"))
 			{
-				bootImageOptions.MBRCode = GetResource(@"syslinux\3.72", "mbr.bin");
-				bootImageOptions.FatBootCode = GetResource(@"syslinux\3.72", "ldlinux.bin");
+				if (LauncherSettings.ImageBootLoader == "syslinux3.72")
+				{
+					bootImageOptions.MBRCode = GetResource(@"syslinux\3.72", "mbr.bin");
+					bootImageOptions.FatBootCode = GetResource(@"syslinux\3.72", "ldlinux.bin");
 
-				bootImageOptions.IncludeFiles.Add(new IncludeFile("ldlinux.sys", GetResource(@"syslinux\3.72", "ldlinux.sys")));
-				bootImageOptions.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource(@"syslinux\3.72", "mboot.c32")));
-				bootImageOptions.PatchSyslinuxOption = true;
+					bootImageOptions.IncludeFiles.Add(new IncludeFile("ldlinux.sys", GetResource(@"syslinux\3.72", "ldlinux.sys")));
+					bootImageOptions.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource(@"syslinux\3.72", "mboot.c32")));
+					bootImageOptions.PatchSyslinuxOption = true;
+				}
+				else if (LauncherSettings.ImageBootLoader == "syslinux6.03")
+				{
+					// NOT FULLY IMPLEMENTED YET!
+					bootImageOptions.MBRCode = GetResource(@"syslinux\6.03", "mbr.bin");
+					bootImageOptions.FatBootCode = GetResource(@"syslinux\6.03", "ldlinux.bin");
+
+					bootImageOptions.IncludeFiles.Add(new IncludeFile("ldlinux.sys", GetResource(@"syslinux\6.03", "ldlinux.sys")));
+					bootImageOptions.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource(@"syslinux\6.03", "mboot.c32")));
+					bootImageOptions.PatchSyslinuxOption = false;
+				}
+
+				bootImageOptions.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetSyslinuxCFG()));
 			}
-			else if (LauncherSettings.ImageBootLoader == "syslinux6.03")
+			else if (LauncherSettings.ImageBootLoader == "limine")
 			{
-				// NOT FULLY IMPLEMENTED YET!
-				bootImageOptions.MBRCode = GetResource(@"syslinux\6.03", "mbr.bin");
-				bootImageOptions.FatBootCode = GetResource(@"syslinux\6.03", "ldlinux.bin");
-
-				bootImageOptions.IncludeFiles.Add(new IncludeFile("ldlinux.sys", GetResource(@"syslinux\6.03", "ldlinux.sys")));
-				bootImageOptions.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource(@"syslinux\6.03", "mboot.c32")));
-				bootImageOptions.PatchSyslinuxOption = false;
+				bootImageOptions.IncludeFiles.Add(new IncludeFile("limine.cfg", GetResource("limine", "limine.cfg")));
+				bootImageOptions.IncludeFiles.Add(new IncludeFile("limine.sys", GetResource("limine", "limine.sys")));
+				bootImageOptions.IncludeFiles.Add(new IncludeFile("limine-cd.bin", GetResource("limine", "limine-cd.bin")));
 			}
-
-			bootImageOptions.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetSyslinuxCFG()));
 
 			bootImageOptions.IncludeFiles.Add(new IncludeFile(LauncherSettings.OutputFile, "main.exe"));
-
 			bootImageOptions.IncludeFiles.Add(new IncludeFile("TEST.TXT", Encoding.ASCII.GetBytes("This is a test file.")));
 
 			if (LauncherSettings.FileSystemRootInclude != null)
@@ -246,6 +255,7 @@ namespace Mosa.Utility.Launcher
 				case "syslinux6.03": bootImageOptions.BootLoader = BootLoader.Syslinux_6_03; break;
 				case "grub0.97": bootImageOptions.BootLoader = BootLoader.Grub_0_97; break;
 				case "grub2.00": bootImageOptions.BootLoader = BootLoader.Grub_2_00; break;
+				case "limine": bootImageOptions.BootLoader = BootLoader.Limine; break;
 				default: break;
 			}
 

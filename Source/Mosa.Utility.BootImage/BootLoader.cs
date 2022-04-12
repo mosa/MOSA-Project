@@ -7,6 +7,7 @@ namespace Mosa.Utility.BootImage
 		Syslinux_6_03,
 		Syslinux_3_72,
 		Grub_0_97,
-		Grub_2_00
+		Grub_2_00,
+		Limine
 	};
 }

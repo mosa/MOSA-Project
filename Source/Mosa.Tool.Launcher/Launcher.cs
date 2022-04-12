@@ -441,6 +441,7 @@ namespace Mosa.Tool.Launcher
 				case 1: Settings.SetValue("Image.BootLoader", "grub0.97"); break;
 				case 2: Settings.SetValue("Image.BootLoader", "syslinux6.03"); break;
 				case 3: Settings.SetValue("Image.BootLoader", "syslinux3.72"); break;
+				case 4: Settings.SetValue("Image.BootLoader", "limine"); break;
 				default: Settings.ClearProperty("Image.BootLoader"); break;
 			}
 		}
@@ -517,6 +518,7 @@ namespace Mosa.Tool.Launcher
 				case "grub0.97": cmbLoader.SelectedIndex = 1; break;
 				case "syslinux6.03": cmbLoader.SelectedIndex = 2; break;
 				case "syslinux3.72": cmbLoader.SelectedIndex = 3; break;
+				case "limine": cmbLoader.SelectedIndex = 4; break;
 				default: break;
 			}
 
