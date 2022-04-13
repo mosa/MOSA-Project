@@ -162,15 +162,19 @@ namespace Mosa.Utility.Launcher
 
 			if (LauncherSettings.ImageFormat == "iso")
 			{
-				if (LauncherSettings.ImageBootLoader.StartsWith("grub"))
-				{
-					CreateISOImageWithGrub();
-				}
-				else if (LauncherSettings.ImageBootLoader.StartsWith("syslinux"))
-				{
-					CreateISOImageWithSyslinux();
-				}
 				// TODO: Limine ISO
+				switch (LauncherSettings.ImageBootLoader)
+				{
+					case "grub0.97":
+					case "grub2.00":
+						CreateISOImageWithGrub();
+						break;
+
+					case "syslinux3.72":
+					case "syslinux6.03":
+						CreateISOImageWithSyslinux();
+						break;
+				}
 			}
 			else if (LauncherSettings.ImageFormat == "vmdk")
 			{
@@ -226,7 +230,7 @@ namespace Mosa.Utility.Launcher
 			}
 			else if (LauncherSettings.ImageBootLoader == "limine")
 			{
-				bootImageOptions.IncludeFiles.Add(new IncludeFile("limine.cfg", GetResource("limine", "limine.cfg")));
+				bootImageOptions.IncludeFiles.Add(new IncludeFile("limine.cfg", GetLimineCFG()));
 				bootImageOptions.IncludeFiles.Add(new IncludeFile("limine.sys", GetResource("limine", "limine.sys")));
 				bootImageOptions.IncludeFiles.Add(new IncludeFile("limine-cd.bin", GetResource("limine", "limine-cd.bin")));
 			}
@@ -278,6 +282,11 @@ namespace Mosa.Utility.Launcher
 			}
 
 			Generator.Create(bootImageOptions);
+		}
+
+		private byte[] GetLimineCFG()
+		{
+			return Encoding.ASCII.GetBytes($"TIMEOUT=5\nINTERFACE_RESOLUTION=800x600\nINTERFACE_BRANDING=Managed Operating System Alliance\n:{LauncherSettings.OSName}\nPROTOCOL=multiboot1\nKERNEL_PATH=boot:///main.exe");
 		}
 
 		private byte[] GetSyslinuxCFG()

@@ -77,9 +77,6 @@
     <EmbeddedResource Include="..\..\Tools\raspberrypi-firmware\start.elf">
       <Link>Resources\raspberrypi-firmware\start.elf</Link>
     </EmbeddedResource>
-	  <EmbeddedResource Include="..\..\Tools\limine\limine.cfg">
-		  <Link>Resources\limine\limine.cfg</Link>
-	  </EmbeddedResource>
 	  <EmbeddedResource Include="..\..\Tools\limine\limine.sys">
 		  <Link>Resources\limine\limine.sys</Link>
 	  </EmbeddedResource>
