@@ -204,35 +204,32 @@ namespace Mosa.Utility.Launcher
 		{
 			var bootImageOptions = new BootImageOptions();
 
-			if (LauncherSettings.ImageBootLoader.StartsWith("syslinux"))
+			switch (LauncherSettings.ImageBootLoader)
 			{
-				if (LauncherSettings.ImageBootLoader == "syslinux3.72")
-				{
+				case "syslinux3.72":
 					bootImageOptions.MBRCode = GetResource(@"syslinux\3.72", "mbr.bin");
 					bootImageOptions.FatBootCode = GetResource(@"syslinux\3.72", "ldlinux.bin");
-
 					bootImageOptions.IncludeFiles.Add(new IncludeFile("ldlinux.sys", GetResource(@"syslinux\3.72", "ldlinux.sys")));
 					bootImageOptions.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource(@"syslinux\3.72", "mboot.c32")));
+					bootImageOptions.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetSyslinuxCFG()));
 					bootImageOptions.PatchSyslinuxOption = true;
-				}
-				else if (LauncherSettings.ImageBootLoader == "syslinux6.03")
-				{
-					// NOT FULLY IMPLEMENTED YET!
+					break;
+
+				// NOT FULLY IMPLEMENTED YET!
+				case "syslinux6.03":
 					bootImageOptions.MBRCode = GetResource(@"syslinux\6.03", "mbr.bin");
 					bootImageOptions.FatBootCode = GetResource(@"syslinux\6.03", "ldlinux.bin");
-
 					bootImageOptions.IncludeFiles.Add(new IncludeFile("ldlinux.sys", GetResource(@"syslinux\6.03", "ldlinux.sys")));
 					bootImageOptions.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource(@"syslinux\6.03", "mboot.c32")));
+					bootImageOptions.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetSyslinuxCFG()));
 					bootImageOptions.PatchSyslinuxOption = false;
-				}
+					break;
 
-				bootImageOptions.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetSyslinuxCFG()));
-			}
-			else if (LauncherSettings.ImageBootLoader == "limine")
-			{
-				bootImageOptions.IncludeFiles.Add(new IncludeFile("limine.cfg", GetLimineCFG()));
-				bootImageOptions.IncludeFiles.Add(new IncludeFile("limine.sys", GetResource("limine", "limine.sys")));
-				bootImageOptions.IncludeFiles.Add(new IncludeFile("limine-cd.bin", GetResource("limine", "limine-cd.bin")));
+				case "limine":
+					bootImageOptions.IncludeFiles.Add(new IncludeFile("limine.cfg", GetLimineCFG()));
+					bootImageOptions.IncludeFiles.Add(new IncludeFile("limine.sys", GetResource("limine", "limine.sys")));
+					bootImageOptions.IncludeFiles.Add(new IncludeFile("limine-cd.bin", GetResource("limine", "limine-cd.bin")));
+					break;
 			}
 
 			bootImageOptions.IncludeFiles.Add(new IncludeFile(LauncherSettings.OutputFile, "main.exe"));
