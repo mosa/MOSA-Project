@@ -162,13 +162,18 @@ namespace Mosa.Utility.Launcher
 
 			if (LauncherSettings.ImageFormat == "iso")
 			{
-				if (LauncherSettings.ImageBootLoader == "grub0.97" || LauncherSettings.ImageBootLoader == "grub2.00")
+				// TODO: Limine ISO
+				switch (LauncherSettings.ImageBootLoader)
 				{
-					CreateISOImageWithGrub();
-				}
-				else // assuming syslinux
-				{
-					CreateISOImageWithSyslinux();
+					case "grub0.97":
+					case "grub2.00":
+						CreateISOImageWithGrub();
+						break;
+
+					case "syslinux3.72":
+					case "syslinux6.03":
+						CreateISOImageWithSyslinux();
+						break;
 				}
 			}
 			else if (LauncherSettings.ImageFormat == "vmdk")
@@ -199,30 +204,35 @@ namespace Mosa.Utility.Launcher
 		{
 			var bootImageOptions = new BootImageOptions();
 
-			if (LauncherSettings.ImageBootLoader == "syslinux3.72")
+			switch (LauncherSettings.ImageBootLoader)
 			{
-				bootImageOptions.MBRCode = GetResource(@"syslinux\3.72", "mbr.bin");
-				bootImageOptions.FatBootCode = GetResource(@"syslinux\3.72", "ldlinux.bin");
+				case "syslinux3.72":
+					bootImageOptions.MBRCode = GetResource(@"syslinux\3.72", "mbr.bin");
+					bootImageOptions.FatBootCode = GetResource(@"syslinux\3.72", "ldlinux.bin");
+					bootImageOptions.IncludeFiles.Add(new IncludeFile("ldlinux.sys", GetResource(@"syslinux\3.72", "ldlinux.sys")));
+					bootImageOptions.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource(@"syslinux\3.72", "mboot.c32")));
+					bootImageOptions.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetSyslinuxCFG()));
+					bootImageOptions.PatchSyslinuxOption = true;
+					break;
 
-				bootImageOptions.IncludeFiles.Add(new IncludeFile("ldlinux.sys", GetResource(@"syslinux\3.72", "ldlinux.sys")));
-				bootImageOptions.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource(@"syslinux\3.72", "mboot.c32")));
-				bootImageOptions.PatchSyslinuxOption = true;
-			}
-			else if (LauncherSettings.ImageBootLoader == "syslinux6.03")
-			{
 				// NOT FULLY IMPLEMENTED YET!
-				bootImageOptions.MBRCode = GetResource(@"syslinux\6.03", "mbr.bin");
-				bootImageOptions.FatBootCode = GetResource(@"syslinux\6.03", "ldlinux.bin");
+				case "syslinux6.03":
+					bootImageOptions.MBRCode = GetResource(@"syslinux\6.03", "mbr.bin");
+					bootImageOptions.FatBootCode = GetResource(@"syslinux\6.03", "ldlinux.bin");
+					bootImageOptions.IncludeFiles.Add(new IncludeFile("ldlinux.sys", GetResource(@"syslinux\6.03", "ldlinux.sys")));
+					bootImageOptions.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource(@"syslinux\6.03", "mboot.c32")));
+					bootImageOptions.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetSyslinuxCFG()));
+					bootImageOptions.PatchSyslinuxOption = false;
+					break;
 
-				bootImageOptions.IncludeFiles.Add(new IncludeFile("ldlinux.sys", GetResource(@"syslinux\6.03", "ldlinux.sys")));
-				bootImageOptions.IncludeFiles.Add(new IncludeFile("mboot.c32", GetResource(@"syslinux\6.03", "mboot.c32")));
-				bootImageOptions.PatchSyslinuxOption = false;
+				case "limine":
+					bootImageOptions.IncludeFiles.Add(new IncludeFile("limine.cfg", GetLimineCFG()));
+					bootImageOptions.IncludeFiles.Add(new IncludeFile("limine.sys", GetResource("limine", "limine.sys")));
+					bootImageOptions.IncludeFiles.Add(new IncludeFile("limine-cd.bin", GetResource("limine", "limine-cd.bin")));
+					break;
 			}
-
-			bootImageOptions.IncludeFiles.Add(new IncludeFile("syslinux.cfg", GetSyslinuxCFG()));
 
 			bootImageOptions.IncludeFiles.Add(new IncludeFile(LauncherSettings.OutputFile, "main.exe"));
-
 			bootImageOptions.IncludeFiles.Add(new IncludeFile("TEST.TXT", Encoding.ASCII.GetBytes("This is a test file.")));
 
 			if (LauncherSettings.FileSystemRootInclude != null)
@@ -246,6 +256,7 @@ namespace Mosa.Utility.Launcher
 				case "syslinux6.03": bootImageOptions.BootLoader = BootLoader.Syslinux_6_03; break;
 				case "grub0.97": bootImageOptions.BootLoader = BootLoader.Grub_0_97; break;
 				case "grub2.00": bootImageOptions.BootLoader = BootLoader.Grub_2_00; break;
+				case "limine": bootImageOptions.BootLoader = BootLoader.Limine; break;
 				default: break;
 			}
 
@@ -268,6 +279,11 @@ namespace Mosa.Utility.Launcher
 			}
 
 			Generator.Create(bootImageOptions);
+		}
+
+		private byte[] GetLimineCFG()
+		{
+			return Encoding.ASCII.GetBytes($"TIMEOUT=5\nINTERFACE_RESOLUTION=800x600\nINTERFACE_BRANDING=Managed Operating System Alliance\n:{LauncherSettings.OSName}\nPROTOCOL=multiboot1\nKERNEL_PATH=boot:///main.exe");
 		}
 
 		private byte[] GetSyslinuxCFG()
