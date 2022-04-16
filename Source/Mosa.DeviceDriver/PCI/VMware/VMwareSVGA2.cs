@@ -19,8 +19,6 @@
 
 using Mosa.DeviceSystem;
 using Mosa.Runtime;
-using System;
-using System.Drawing;
 
 namespace Mosa.DeviceDriver.PCI.VMware
 {
@@ -355,10 +353,7 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			valuePort = Device.Resources.GetIOPortReadWrite(0, 1);
 		}
 
-		public override void Probe()
-		{
-			Device.Status = DeviceStatus.Available;
-		}
+		public override void Probe() => Device.Status = DeviceStatus.Available;
 
 		public override void Start()
 		{
@@ -411,7 +406,8 @@ namespace Mosa.DeviceDriver.PCI.VMware
 			FrameBuffer = new FrameBuffer32(
 				HAL.GetPhysicalMemory(
 					new Pointer(ReadRegister(SVGA_REGISTERS.FrameBufferStart)),
-					ReadRegister(SVGA_REGISTERS.FrameBufferSize)),
+					ReadRegister(SVGA_REGISTERS.FrameBufferSize)
+				),
 
 				width, height,
 

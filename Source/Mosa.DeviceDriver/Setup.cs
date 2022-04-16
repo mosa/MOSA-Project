@@ -106,6 +106,18 @@ namespace Mosa.DeviceDriver
 					Factory = delegate { return new PCI.NVMe(); }
 				},*/
 
+				// Tested on Intel HD Graphics 520
+				new PCIDeviceDriverRegistryEntry()
+				{
+					Name = "IntelHDGraphics",
+					Platforms = PlatformArchitecture.X86AndX64,
+					BusType = DeviceBusType.PCI,
+					VendorID = 0x8086,
+					DeviceID = 0x1916,
+					PCIFields = PCIField.VendorID | PCIField.DeviceID,
+					Factory = delegate { return new IntelHDGraphics(); }
+				},
+
 				new PCIDeviceDriverRegistryEntry()
 				{
 					Name = "VMwareSVGA2",
