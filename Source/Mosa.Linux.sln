@@ -80,6 +80,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Packages", "Packages", "{52
 		Mosa.Packages\Mosa.Kernel.x64.nuspec = Mosa.Packages\Mosa.Kernel.x64.nuspec
 		Mosa.Packages\Mosa.Kernel.x86.nuspec = Mosa.Packages\Mosa.Kernel.x86.nuspec
 		Mosa.Packages\Mosa.Korlib.nuspec = Mosa.Packages\Mosa.Korlib.nuspec
+		Mosa.Packages\Mosa.DeviceSystem.nuspec = Mosa.Packages\Mosa.DeviceSystem.nuspec
 		Mosa.Packages\Mosa.Platform.x64.nuspec = Mosa.Packages\Mosa.Platform.x64.nuspec
 		Mosa.Packages\Mosa.Platform.x86.nuspec = Mosa.Packages\Mosa.Platform.x86.nuspec
 		Mosa.Packages\Mosa.Runtime.nuspec = Mosa.Packages\Mosa.Runtime.nuspec

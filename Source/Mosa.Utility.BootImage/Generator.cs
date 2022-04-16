@@ -202,6 +202,9 @@ namespace Mosa.Utility.BootImage
 			}
 
 			diskDeviceDriver.Dispose();
+
+			if (options.BootLoader == BootLoader.Limine)
+				Limine.Deploy(options.DiskImageFileName);
 		}
 	}
 }

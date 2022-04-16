@@ -2,12 +2,13 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <DebugType>full</DebugType>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <OutputPath>..\..\bin\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>
     <DisableImplicitFrameworkReferences>true</DisableImplicitFrameworkReferences>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NuspecFile>Mosa.DeviceSystem.nuspec</NuspecFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DocumentationFile />
