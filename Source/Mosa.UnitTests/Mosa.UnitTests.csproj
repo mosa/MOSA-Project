@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<TargetFramework>net6.0</TargetFramework>
-		<LangVersion>8.0</LangVersion>
+		<LangVersion>9.0</LangVersion>
 		<DebugType>full</DebugType>
 		<NoWarn>168,162,649,0649</NoWarn>
 		<OutputPath>..\..\bin\</OutputPath>

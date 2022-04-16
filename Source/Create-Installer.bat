@@ -1,5 +1,5 @@
 @echo off
-call compile-debug.bat
+call compile.bat
 cd Inno-Setup-Script
 call create-installer.bat
 cd ..

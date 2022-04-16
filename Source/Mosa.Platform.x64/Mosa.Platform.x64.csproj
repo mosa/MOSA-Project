@@ -10,7 +10,7 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <DebugType>full</DebugType>
     <RegisterForComInterop>False</RegisterForComInterop>
-    <LangVersion>8.0</LangVersion>
+    <LangVersion>9.0</LangVersion>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <OutputPath>..\..\bin\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
