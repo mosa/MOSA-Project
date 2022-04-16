@@ -41,6 +41,8 @@ jobs:
         run: nuget pack Source\Mosa.Packages\Mosa.Tools.Package.nuspec -Tool -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}
       - name: Create Package - Mosa.Korlib
         run: nuget pack Source\Mosa.Packages\Mosa.Korlib.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}
+      - name: Create Package - Mosa.DeviceSystem
+        run: nuget pack Source\Mosa.Packages\Mosa.DeviceSystem.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}
       - name: Create Package - Mosa.Runtime
         run: nuget pack Source\Mosa.Packages\Mosa.Runtime.nuspec -OutputDirectory bin\nupkg -Version ${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}
       - name: Create Package - Mosa.Platform.x86
@@ -74,6 +76,9 @@ jobs:
         if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
       - name: Publish Package - Mosa.Korlib
         run: dotnet nuget push bin\nupkg\Mosa.Korlib.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
+        if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
+      - name: Publish Package - Mosa.DeviceSystem
+        run: dotnet nuget push bin\nupkg\Mosa.DeviceSystem.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json
         if: github.event_name == 'push' && github.repository == 'mosa/MOSA-Project' && github.ref == 'refs/heads/master'
       - name: Publish Package - Mosa.Runtime
         run: dotnet nuget push bin\nupkg\Mosa.Runtime.${{ env.BUILD_VERSION }}.${{ steps.mosa-project-build-number.outputs.build-number }}.nupkg -k ${{ secrets.NUGET_KEY }} -s https://api.nuget.org/v3/index.json

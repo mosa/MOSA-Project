@@ -10,7 +10,7 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<DebugType>full</DebugType>
 		<RemoveIntegerChecks>False</RemoveIntegerChecks>
-		<LangVersion>8.0</LangVersion>
+		<LangVersion>9.0</LangVersion>
 		<FileAlignment>4096</FileAlignment>
 		<OutputPath>..\..\bin\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
