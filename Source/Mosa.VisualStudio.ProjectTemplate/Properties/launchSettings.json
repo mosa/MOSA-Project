@@ -3,7 +3,7 @@
 		"$safeprojectname$": {
 			"commandName": "Executable",
 			"executablePath": "dotnet",
-			"commandLineArgs": "C:\\Program Files (x86)\\MOSA-Project\\bin\\Mosa.Tool.Launcher.dll $safeprojectname$.dll",
+			"commandLineArgs": "\"C:\\Program Files (x86)\\MOSA-Project\\bin\\Mosa.Tool.Launcher.dll\" $safeprojectname$.dll",
 			"workingDirectory": "bin"
 		}
 	}
