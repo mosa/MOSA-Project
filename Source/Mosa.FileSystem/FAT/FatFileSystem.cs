@@ -984,7 +984,7 @@ namespace Mosa.FileSystem.FAT
 		/// <param name="index">The index.</param>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		static internal uint GetClusterEntry(byte[] data, uint index, FatType type)
+		internal static uint GetClusterEntry(byte[] data, uint index, FatType type)
 		{
 			var entry = new DataBlock(data);
 
@@ -998,7 +998,7 @@ namespace Mosa.FileSystem.FAT
 
 		public FatFileLocation FindEntry(string name)
 		{
-			return FindEntry(new Mosa.FileSystem.FAT.Find.WithName(name), 0);
+			return FindEntry(new Find.WithName(name), 0);
 		}
 
 		/// <summary>

@@ -147,6 +147,7 @@ namespace Mosa.Utility.Launcher
 			var arg = new StringBuilder();
 
 			arg.Append(" -L " + Quote(LauncherSettings.QEMUBios));
+			arg.Append(" -soundhw sb16");
 
 			if (LauncherSettings.Platform == "x86")
 			{
@@ -158,7 +159,6 @@ namespace Mosa.Utility.Launcher
 				switch (LauncherSettings.EmulatorSVGA.ToLowerInvariant())
 				{
 					case "vmware": arg.Append(" -vga vmware"); break;
-					default: break;
 				}
 			}
 
@@ -270,15 +270,35 @@ namespace Mosa.Utility.Launcher
 
 			sb.AppendLine(".encoding = \"windows-1252\"");
 			sb.AppendLine("config.version = \"8\"");
-			sb.AppendLine("virtualHW.version = \"4\"");
+			sb.AppendLine("virtualHW.version = \"14\"");
 			sb.AppendLine($"memsize = {Quote(LauncherSettings.EmulatorMemory.ToString())}");
 			sb.AppendLine($"displayName = \"MOSA - {Path.GetFileNameWithoutExtension(LauncherSettings.SourceFiles[0])}\"");
 			sb.AppendLine("guestOS = \"other\"");
 			sb.AppendLine("priority.grabbed = \"normal\"");
 			sb.AppendLine("priority.ungrabbed = \"normal\"");
 			sb.AppendLine("virtualHW.productCompatibility = \"hosted\"");
+
+			/*sb.AppendLine("nvme0.present = \"TRUE\"");
+			sb.AppendLine("nvme0:0.present = \"TRUE\"");
+			sb.AppendLine($"nvme0:0.fileName = {Quote(LauncherSettings.ImageFile)}");
+			sb.AppendLine("pciBridge0.present = \"TRUE\"");
+			sb.AppendLine("pciBridge4.present = \"TRUE\"");
+			sb.AppendLine("pciBridge4.virtualDev = \"pcieRootPort\"");
+			sb.AppendLine("pciBridge4.functions = \"8\"");
+			sb.AppendLine("pciBridge5.present = \"TRUE\"");
+			sb.AppendLine("pciBridge5.virtualDev = \"pcieRootPort\"");
+			sb.AppendLine("pciBridge5.functions = \"8\"");
+			sb.AppendLine("pciBridge6.present = \"TRUE\"");
+			sb.AppendLine("pciBridge6.virtualDev = \"pcieRootPort\"");
+			sb.AppendLine("pciBridge6.functions = \"8\"");
+			sb.AppendLine("pciBridge7.present = \"TRUE\"");
+			sb.AppendLine("pciBridge7.virtualDev = \"pcieRootPort\"");
+			sb.AppendLine("pciBridge7.functions = \"8\"");*/
 			sb.AppendLine("ide0:0.present = \"TRUE\"");
 			sb.AppendLine($"ide0:0.fileName = {Quote(LauncherSettings.ImageFile)}");
+			sb.AppendLine("sound.present = \"TRUE\"");
+			sb.AppendLine("sound.opl3.enabled = \"TRUE\"");
+			sb.AppendLine("sound.virtualDev = \"sb16\"");
 
 			if (LauncherSettings.ImageFormat == "iso")
 			{

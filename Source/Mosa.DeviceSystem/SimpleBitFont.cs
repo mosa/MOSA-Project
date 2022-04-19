@@ -13,23 +13,41 @@ namespace Mosa.DeviceSystem
 		/// <value>
 		/// The name.
 		/// </value>
-		public string Name { get; private set; }
+		public string Name { get; }
+
+		/// <summary>
+		/// Gets the width.
+		/// </summary>
+		/// <value>The width.</value>
+		public int Width { get; }
+
+		/// <summary>
+		/// Gets the height.
+		/// </summary>
+		/// <value>The height.</value>
+		public int Height { get; }
 
 		/// <summary>
 		/// Gets the size.
 		/// </summary>
 		/// <value>The size.</value>
-		public int Size { get; private set; }
+		public int Size { get; }
 
-		private string charset;
-		private byte[] buffer;
+		private readonly string Charset;
 
-		public SimpleBitFont(string name, int size, string charset, byte[] data)
+		private readonly byte[] Buffer;
+
+		public SimpleBitFont(string name, int width, int height, int size, string charset, byte[] data)
 		{
 			Name = name;
+
+			Width = width;
+			Height = height;
 			Size = size;
-			this.charset = charset;
-			this.buffer = data;
+
+			Charset = charset;
+
+			Buffer = data;
 		}
 
 		/// <summary>
@@ -37,44 +55,84 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		public void DrawString(FrameBuffer32 frameBuffer, uint color, uint x, uint y, string text)
 		{
-			int size8 = Size / 8;
-			var lines = text.Split('\n');
+			var size8 = Size / 8;
+			var usedX = 0;
 
-			for (int l = 0; l < lines.Length; l++)
+			for (var i = 0; i < text.Length; i++)
 			{
-				int usedX = 0;
-				for (int i = 0; i < lines[l].Length; i++)
+				var maxX = 0;
+				var xx = usedX + x;
+				var c = text[i];
+				var index = Charset.IndexOf(c);
+				var sizePerFont = Size * size8 * index;
+
+				if (index < 0)
 				{
-					char c = lines[l][i];
-					int index = charset.IndexOf(c);
-
-					if (index < 0)
+					if (c == '\n')
 					{
-						usedX += Size / 2;
-						continue;
+						usedX = 0;
+						y += (uint)Size;
 					}
+					else if (c == '\r') usedX = 0;
+					else usedX += Width;
 
-					int maxX = 0, sizePerFont = Size * size8 * index, X = usedX + (int)x, Y = (int)y + Size * l;
-
-					for (int h = 0; h < Size; h++)
-						for (int aw = 0; aw < size8; aw++)
-							for (int ww = 0; ww < 8; ww++)
-								if ((buffer[sizePerFont + (h * size8) + aw] & (0x80 >> ww)) != 0)
-								{
-									int max = (aw * 8) + ww;
-
-									int xx = X + max;
-									int yy = Y + h;
-
-									frameBuffer.SetPixel(color, (uint)xx, (uint)yy);
-
-									if (max > maxX)
-										maxX = max;
-								}
-
-					usedX += maxX + 2;
+					continue;
 				}
+
+				for (var h = 0; h < Size; h++)
+					for (var aw = 0; aw < size8; aw++)
+						for (var ww = 0; ww < 8; ww++)
+							if ((Buffer[sizePerFont + h * size8 + aw] & (0x80 >> ww)) != 0)
+							{
+								var max = aw * 8 + ww;
+
+								frameBuffer.SetPixel(color, (uint)(xx + max), (uint)(y + h));
+
+								if (max > maxX)
+									maxX = max;
+							}
+
+				usedX += maxX + 2;
 			}
+		}
+
+		/// <summary>
+		/// Calculates the width of a character.
+		/// </summary>
+		public int CalculateWidth(char c)
+		{
+			var size8 = Size / 8;
+			var index = Charset.IndexOf(c);
+
+			if (index < 0)
+				return Width;
+
+			int maxX = 0, sizePerFont = Size * size8 * index;
+
+			for (var h = 0; h < Size; h++)
+				for (var aw = 0; aw < size8; aw++)
+					for (var ww = 0; ww < 8; ww++)
+						if ((Buffer[sizePerFont + h * size8 + aw] & (0x80 >> ww)) != 0)
+						{
+							var max = aw * 8 + ww;
+
+							if (max > maxX)
+								maxX = max;
+						}
+
+			return maxX;
+		}
+
+		/// <summary>
+		/// Calculates the width of a string.
+		/// </summary>
+		public int CalculateWidth(string s)
+		{
+			var r = 0;
+			for (var i = 0; i < s.Length; i++)
+				r += CalculateWidth(s[i]) + 2;
+
+			return r;
 		}
 	}
 }

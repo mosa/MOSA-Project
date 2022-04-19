@@ -102,7 +102,7 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Pointer Box8(Pointer methodTable, byte value)
 		{
-			var memory = AllocateObject(methodTable, Pointer.Size);
+			var memory = AllocateObject(methodTable, 8);
 
 			memory.Store8(value);
 
@@ -112,7 +112,7 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Pointer Box16(Pointer methodTable, ushort value)
 		{
-			var memory = AllocateObject(methodTable, Pointer.Size);
+			var memory = AllocateObject(methodTable, 4);
 
 			memory.Store16(value);
 
@@ -122,7 +122,7 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Pointer Box32(Pointer methodTable, uint value)
 		{
-			var memory = AllocateObject(methodTable, Pointer.Size);
+			var memory = AllocateObject(methodTable, 4);
 
 			memory.Store32(value);
 
@@ -132,7 +132,7 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.NoInlining)]
 		public static Pointer Box64(Pointer methodTable, ulong value)
 		{
-			var memory = AllocateObject(methodTable, Pointer.Size == 4 ? (Pointer.Size * 2) : Pointer.Size);
+			var memory = AllocateObject(methodTable, 8);
 
 			memory.Store64(0, value);
 
@@ -142,7 +142,7 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Pointer BoxR4(Pointer methodTable, float value)
 		{
-			var memory = AllocateObject(methodTable, Pointer.Size);
+			var memory = AllocateObject(methodTable, 4);
 
 			memory.StoreR4(value);
 
@@ -152,7 +152,7 @@ namespace Mosa.Runtime
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static Pointer BoxR8(Pointer methodTable, double value)
 		{
-			var memory = AllocateObject(methodTable, Pointer.Size == 4 ? (Pointer.Size * 2) : Pointer.Size);
+			var memory = AllocateObject(methodTable, 8);
 
 			memory.StoreR8(value);
 

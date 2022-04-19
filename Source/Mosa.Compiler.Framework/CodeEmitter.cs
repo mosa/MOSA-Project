@@ -93,7 +93,8 @@ namespace Mosa.Compiler.Framework
 		/// Gets the current position.
 		/// </summary>
 		/// <value>The current position.</value>
-		public int CurrentPosition { get { return (int)CodeStream.Position; } }
+		public int CurrentPosition
+		{ get { return (int)CodeStream.Position; } }
 
 		/// <summary>
 		/// List of labels that were emitted.
@@ -229,10 +230,6 @@ namespace Mosa.Compiler.Framework
 			else if (symbolOperand.IsStaticField)
 			{
 				Linker.Link(LinkType.AbsoluteAddress, patchType, MethodName, position, symbolOperand.Field.FullName, referenceOffset);
-			}
-			else if (symbolOperand.IsSymbol)
-			{
-				Linker.Link(LinkType.AbsoluteAddress, patchType, MethodName, position, symbolOperand.Name, referenceOffset);
 			}
 		}
 

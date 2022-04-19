@@ -1,0 +1,29 @@
+﻿<?xml version="1.0"?>
+<package>
+	<metadata>
+		<id>Mosa.DeviceSystem</id>
+		<version>$version$</version>
+		<title>Mosa.DeviceSystem</title>
+		<authors>MOSA Project</authors>
+		<owners>MOSA Project</owners>
+		<license type="expression">BSD-3-Clause-Clear</license>
+		<projectUrl>http://www.mosa-project.org</projectUrl>
+		<icon>images\Mosa Icon.png</icon>
+		<requireLicenseAcceptance>false</requireLicenseAcceptance>
+		<summary>MOSA Device And File System</summary>
+		<description>MOSA Device And File System</description>
+		<releaseNotes></releaseNotes>
+		<copyright>Copyright © 2022</copyright>
+		<tags>MOSA Compiler</tags>
+		<dependencies>
+			<dependency id="Mosa.Korlib" version="$version$" />
+			<dependency id="Mosa.Runtime" version="$version$" />
+		</dependencies>
+	</metadata>
+	<files>
+		<file src="..\Art\Mosa Icon.png" target="images\" />
+		<file src="..\..\bin\Mosa.DeviceSystem.dll" target="lib\net5.0" />
+		<file src="..\..\bin\Mosa.DeviceDriver.dll" target="lib\net5.0" />
+		<file src="..\..\bin\Mosa.FileSystem.dll" target="lib\net5.0" />
+	</files>
+</package>

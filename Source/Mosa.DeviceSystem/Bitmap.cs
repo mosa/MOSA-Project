@@ -27,17 +27,35 @@ namespace Mosa.DeviceSystem
 			{
 				height--;
 
-				for (uint x = 0; x < width - 1; x++)
+				for (uint x = 0; x < width; x++)
 				{
-					dataSectionOffset += bytesPerPixel;
-
 					var color = bytesPerPixel == 4 ? stream.Read32(dataSectionOffset) : stream.Read24(dataSectionOffset) | 0xFF000000;
 					image.SetColor(x, height, color);
+
+					dataSectionOffset += bytesPerPixel;
 				}
 
 				if (bytesPerPixel == 3 && width * bytesPerPixel % 4 > 0)
-					dataSectionOffset += 4;
+					dataSectionOffset += 4 - width * bytesPerPixel % 4;
 			} while (height > 0);
+
+			/*uint x = 0;
+			var y = height - 1;
+
+			for (var i = dataSectionOffset; i < dataSectionOffset + image.Pixels.Size; i += bytesPerPixel)
+			{
+				var color = bytesPerPixel == 4 ? stream.Read32(i) : stream.Read24(i) | 0xFF000000; // 32 & 24 bit
+
+				image.SetColor(x, y, color);
+
+				x++;
+
+				if (x == width)
+				{
+					x = 0;
+					y--;
+				}
+			}*/
 
 			return image;
 		}

@@ -1076,10 +1076,18 @@ namespace Mosa.Platform.x86.Stages
 			var nextBlock = Split(context);
 			var newBlocks = CreateNewBlockContexts(2, context.Label);
 
-			// Compare high dwords
-			context.SetInstruction(X86.Cmp32, null, op1H, op2H);
-			context.AppendInstruction(X86.Branch, ConditionCode.Equal, newBlocks[1].Block);
-			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
+			if (op1H.IsResolvedConstant && op2H.IsResolvedConstant)
+			{
+				// high dwords are constants
+				context.SetInstruction(X86.Jmp, op1H.ConstantUnsigned32 == op2H.ConstantUnsigned32 ? newBlocks[1].Block : newBlocks[0].Block);
+			}
+			else
+			{
+				// Compare high dwords
+				context.SetInstruction(X86.Cmp32, null, op1H, op2H);
+				context.AppendInstruction(X86.Branch, ConditionCode.Equal, newBlocks[1].Block);
+				context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
+			}
 
 			// Branch if check already gave results
 			newBlocks[0].AppendInstruction(X86.Branch, condition, target);
@@ -1132,10 +1140,18 @@ namespace Mosa.Platform.x86.Stages
 			var nextBlock = Split(context);
 			var newBlocks = CreateNewBlockContexts(4, context.Label);
 
-			// Compare high dwords
-			context.SetInstruction(X86.Cmp32, null, op1H, op2H);
-			context.AppendInstruction(X86.Branch, ConditionCode.Equal, newBlocks[1].Block);
-			context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
+			if (op1H.IsResolvedConstant && op2H.IsResolvedConstant)
+			{
+				// high dwords are constants
+				context.SetInstruction(X86.Jmp, op1H.ConstantUnsigned32 == op2H.ConstantUnsigned32 ? newBlocks[1].Block : newBlocks[0].Block);
+			}
+			else
+			{
+				// Compare high dwords
+				context.SetInstruction(X86.Cmp32, null, op1H, op2H);
+				context.AppendInstruction(X86.Branch, ConditionCode.Equal, newBlocks[1].Block);
+				context.AppendInstruction(X86.Jmp, newBlocks[0].Block);
+			}
 
 			// Branch if check already gave results
 			if (condition == ConditionCode.Equal)

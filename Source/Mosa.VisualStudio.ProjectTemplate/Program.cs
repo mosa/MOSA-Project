@@ -1,6 +1,6 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
-using Mosa.Kernel.x86;
+using System;
 
 namespace $safeprojectname$
 {
@@ -8,13 +8,12 @@ namespace $safeprojectname$
     {
         public static void Setup()
         {
-            Screen.Write("Hello World!");
+            Console.ResetColor();
+            Console.Clear();
+            Console.WriteLine("Hello World!");
         }
 
         public static void Loop()
-        { }
-
-        public static void OnInterrupt()
         { }
     }
 }

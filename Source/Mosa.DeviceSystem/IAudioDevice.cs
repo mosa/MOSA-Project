@@ -4,11 +4,14 @@ namespace Mosa.DeviceSystem
 {
 	public interface IAudioDevice
 	{
+		// Format is WAV (unsigned PCM)
+		byte[] TestSound { get; }
+
 		/// <summary>
 		/// Plays a sound from a constrained pointer.
 		/// </summary>
 		/// <param name="Data"></param>
-		void Play(ConstrainedPointer Data);
+		void Play(ConstrainedPointer data);
 
 		/// <summary>
 		/// Sets the output sound volume.

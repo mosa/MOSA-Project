@@ -155,6 +155,9 @@ namespace Mosa.Utility.Configuration
 
 				new Argument() { Name = "-launch-gdb-debugger", Setting = "Launcher.LaunchDebugger", Value="true"},
 
+				// Base directory is the root MOSA directory
+				new Argument() { Name = "-include", Setting = "Image.FileSystem.RootInclude" },
+
 				new Argument() { Name = "-bootloader", Setting = "Image.BootLoader"},
 				new Argument() { Name = "-grub", Setting = "Image.BootLoader", Value = "grub0.97"},
 				new Argument() { Name = "-grub0.97", Setting = "Image.BootLoader", Value = "grub0.97"},
@@ -368,6 +371,8 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-oFast", Setting = "Optimizations.TwoPass", Value = "false"},
 				new Argument() { Name = "-oFast", Setting = "Optimizations.Inline.Maximum", Value = "0"},
 				new Argument() { Name = "-oFast", Setting = "Optimizations.Basic.Window", Value = "1"},
+
+				new Argument() { Name = "-cilv2", Setting = "CompilerDebug.CILDecodingStageV2", Value = "true"},
 			};
 
 			return map;

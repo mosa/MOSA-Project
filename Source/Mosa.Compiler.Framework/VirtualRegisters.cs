@@ -20,9 +20,11 @@ namespace Mosa.Compiler.Framework
 
 		#region Properties
 
-		public int Count { get { return virtualRegisters.Count; } }
+		public int Count
+		{ get { return virtualRegisters.Count; } }
 
-		public Operand this[int index] { get { return virtualRegisters[index]; } }
+		public Operand this[int index]
+		{ get { return virtualRegisters[index]; } }
 
 		#endregion Properties
 
@@ -51,7 +53,7 @@ namespace Mosa.Compiler.Framework
 
 		public void SplitLongOperand(TypeSystem typeSystem, Operand longOperand)
 		{
-			Debug.Assert(longOperand.IsInteger64 || longOperand.IsParameter);
+			//Debug.Assert(longOperand.IsInteger64 || longOperand.IsParameter);
 
 			if (longOperand.Low == null && longOperand.High == null)
 			{

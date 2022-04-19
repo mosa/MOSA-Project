@@ -193,7 +193,8 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the linker symbol.
 		/// </summary>
-		public LinkerSymbol Symbol { get { return MethodData.Symbol; } set { MethodData.Symbol = value; } }
+		public LinkerSymbol Symbol
+		{ get { return MethodData.Symbol; } set { MethodData.Symbol = value; } }
 
 		/// <summary>
 		/// Gets the method scanner.
@@ -334,9 +335,9 @@ namespace Mosa.Compiler.Framework
 		/// <param name="isThis">if set to <c>true</c> [is this].</param>
 		/// <param name="offset">The offset.</param>
 		/// <returns></returns>
-		private Operand SetStackParameter(int index, MosaType type, string name, bool isThis, int offset)
+		private Operand SetStackParameter(int index, MosaType type, string name, int offset)
 		{
-			var param = Operand.CreateStackParameter(type, index, name, isThis, offset);
+			var param = Operand.CreateStackParameter(type, index, name, offset);
 			Parameters[index] = param;
 			return param;
 		}
@@ -364,14 +365,14 @@ namespace Mosa.Compiler.Framework
 				if (Method.DeclaringType.IsValueType)
 				{
 					var ptr = Method.DeclaringType.ToManagedPointer();
-					SetStackParameter(index++, ptr, "this", true, offset);
+					SetStackParameter(index++, ptr, "this", offset);
 
 					var size = GetReferenceOrTypeSize(ptr, true);
 					offset += (int)size;
 				}
 				else
 				{
-					SetStackParameter(index++, Method.DeclaringType, "this", true, offset);
+					SetStackParameter(index++, Method.DeclaringType, "this", offset);
 
 					var size = GetReferenceOrTypeSize(Method.DeclaringType, true);
 					offset += (int)size;
@@ -380,7 +381,7 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var parameter in Method.Signature.Parameters)
 			{
-				SetStackParameter(index++, parameter.ParameterType, parameter.Name, false, offset);
+				SetStackParameter(index++, parameter.ParameterType, parameter.Name, offset);
 
 				var size = GetReferenceOrTypeSize(parameter.ParameterType, true);
 				offset += (int)size;
@@ -679,7 +680,28 @@ namespace Mosa.Compiler.Framework
 		/// <param name="operandHigh">The operand high.</param>
 		public void SplitLongOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 		{
-			if (operand.IsInteger64)
+			bool is64Bit = operand.IsInteger64;
+
+			if (!operand.IsInteger64 && !operand.IsInteger32)
+			{
+				// figure it out
+				var underlyingType = MosaTypeLayout.GetUnderlyingType(operand.Type);
+
+				if (underlyingType.IsUI8)
+					is64Bit = true;
+
+				if (Is64BitPlatform)
+				{
+					if (underlyingType.IsPointer
+						|| underlyingType.IsFunctionPointer
+						|| underlyingType.IsN
+						|| underlyingType.IsManagedPointer
+						|| underlyingType.IsReferenceType)
+						is64Bit = true;
+				}
+			}
+
+			if (is64Bit)
 			{
 				SplitLongOperand(operand);
 				operandLow = operand.Low;
@@ -806,12 +828,12 @@ namespace Mosa.Compiler.Framework
 
 		public Operand CreateConstant(float value)
 		{
-			return Operand.CreateConstant(value, TypeSystem);
+			return Operand.CreateConstant(TypeSystem.BuiltIn.R4, value);
 		}
 
 		public Operand CreateConstant(double value)
 		{
-			return Operand.CreateConstant(value, TypeSystem);
+			return Operand.CreateConstant(TypeSystem.BuiltIn.R8, value);
 		}
 
 		#endregion Constant Helper Methods

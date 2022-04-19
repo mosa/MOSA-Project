@@ -303,6 +303,16 @@
 			"Filter": "IsResolvedConstant(c2) & IsResolvedConstant(c1) & IsZero(Not##(Or##(To##(c1),To##(c2))))",
 			"Result": "(IR.Or## x c2)",
 			"Variations": "Yes"
+		},
+		{
+			"FamilyName": "IR",
+			"Type": "StrengthReduction",
+			"Name": "Xor##Xor##",
+			"SubName": "",
+			"Expression": "IR.Xor## x (IR.Xor## x y)",
+			"Filter": "",
+			"Result": "(IR.Move## y)",
+			"Variations": "Yes"
 		}
 	]
 }

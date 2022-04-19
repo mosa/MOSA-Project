@@ -5,7 +5,6 @@ using Mosa.Compiler.MosaTypeSystem;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
-using static Mosa.Compiler.Framework.Stages.BitTrackerStage;
 
 namespace Mosa.Compiler.Framework
 {
@@ -14,6 +13,15 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public sealed class Operand
 	{
+		#region Future
+
+		// Primitive Type: Integer, Float, ValueType
+		// Size: 32, 64
+		// Operand Type: Local Stack, Paramater, Static Field, Label, Virtual Register, Physical Register
+		// Attribute: Reference Type, Managed Pointer, Constant, Unresolved Constant
+
+		#endregion Future
+
 		#region Properties
 
 		/// <summary>
@@ -78,12 +86,6 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsInteger32 { get; private set; }
 
-		public bool IsArray { get; private set; }
-
-		public bool IsBoolean { get; private set; }
-
-		public bool IsChar { get; private set; }
-
 		/// <summary>
 		/// Determines if the operand is a constant variable.
 		/// </summary>
@@ -140,9 +142,8 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public bool IsCPURegister { get; private set; }
 
-		public bool IsEnum { get; private set; }
-
-		public bool IsFloatingPoint { get; private set; }
+		public bool IsFloatingPoint
+		{ get { return IsR4 | IsR8; } }
 
 		public bool IsFunctionPointer { get; private set; }
 
@@ -203,17 +204,6 @@ namespace Mosa.Compiler.Framework
 
 		public bool IsString { get; private set; }
 
-		/// <summary>
-		/// Determines if the operand is a symbol operand.
-		/// </summary>
-		public bool IsSymbol { get; private set; }
-
-		/// <summary>
-		/// Gets a value indicating whether this instance is this.
-		/// </summary>
-		/// </value>
-		public bool IsThis { get; private set; }
-
 		public bool IsUnmanagedPointer { get; private set; }
 
 		/// <summary>
@@ -252,7 +242,10 @@ namespace Mosa.Compiler.Framework
 		/// Gets or sets the offset.
 		/// </summary>
 		public long Offset
-		{ get { Debug.Assert(IsResolved); return ConstantSigned64; } set { Debug.Assert(!IsResolved); ConstantSigned64 = value; } }
+		{
+			get { Debug.Assert(IsResolved); return ConstantSigned64; }
+			set { Debug.Assert(!IsResolved); ConstantSigned64 = value; }
+		}
 
 		/// <summary>
 		/// Retrieves the register, where the operand is located.
@@ -274,46 +267,9 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public List<InstructionNode> Uses { get; }
 
-		//public bool FitsRegister { get; private set; }
-
-		//public bool FitsIntegerRegister { get; private set; }
-
-		//public bool Fits32BitRegister { get; set; }
-
-		//public bool FitsFloatingPointRegister { get; private set; }
-
-		//public bool FitsNativeSizeRegister { get; set; }
-
-		//public bool Fits64BitRegister { get { return Fits32BitRegister; } }
-
 		public int Size { get; private set; }
 
-		public BitValue BitValue
-		{
-			get
-			{
-				if (_value == null && IsResolvedConstant && IsInteger)
-				{
-					// lazy evaluated
-					_value = BitValue.CreateValue(ConstantUnsigned64, IsInteger32);
-				}
-
-				return _value;
-			}
-			set
-			{
-				Debug.Assert(value == null || (IsInteger && IsVirtualRegister) || (IsReferenceType && IsVirtualRegister) || (IsPointer && IsVirtualRegister) /*|| FitsIntegerRegister*/);
-				_value = value;
-			}
-		}
-
 		#endregion Properties
-
-		#region Data Fields
-
-		private BitValue _value;
-
-		#endregion Data Fields
 
 		#region Construction
 
@@ -327,16 +283,10 @@ namespace Mosa.Compiler.Framework
 			IsVirtualRegister = false;
 			IsLabel = false;
 			IsCPURegister = false;
-			IsSymbol = false;
 			IsStaticField = false;
 			IsParameter = false;
 			IsResolved = false;
 			IsString = false;
-
-			//FitsRegister = false;
-			//FitsIntegerRegister = false;
-			//FitsFloatingPointRegister = false;
-			//FitsNativeSizeRegister = false;
 		}
 
 		/// <summary>
@@ -346,47 +296,22 @@ namespace Mosa.Compiler.Framework
 		private Operand(MosaType type)
 				: this()
 		{
-			//Debug.Assert(type != null);
 			Type = type;
 
-			IsFloatingPoint = type.IsR;
 			IsR4 = type.IsR4;
 			IsR8 = type.IsR8;
 
-			IsArray = type.IsArray;
-			IsBoolean = type.IsBoolean;
-			IsChar = type.IsChar;
-
-			IsEnum = type.IsEnum;
-			IsManagedPointer = type.IsManagedPointer;
-			IsUnmanagedPointer = type.IsUnmanagedPointer;
 			IsReferenceType = type.IsReferenceType;
 			IsValueType = type.IsValueType;
+
+			IsManagedPointer = type.IsManagedPointer;
+			IsUnmanagedPointer = type.IsUnmanagedPointer;
 			IsFunctionPointer = type.IsFunctionPointer;
 
 			IsInteger = type.IsI1 || type.IsI2 || type.IsI4 || type.IsI8 || type.IsU1 || type.IsU2 || type.IsU4 || type.IsU8;
 
 			IsInteger64 = type.IsUI8 || Type.GetEnumUnderlyingType().IsUI8;
 			IsInteger32 = type.IsUI4 || Type.GetEnumUnderlyingType().IsUI4;
-
-			//if (IsValueType)
-			//{
-			//	var registryType = MosaTypeLayout.GetRegisterType(type);
-			//
-			//	FitsIntegerRegister = registryType.FitsIntegerRegister;
-			//	FitsFloatingPointRegister = registryType.FitsFloatRegister;
-			//	FitsRegister = FitsIntegerRegister || FitsFloatingPointRegister;
-			//	FitsNativeSizeRegister = registryType.IsNative;
-			//  Fits32BitRegister = !registryType.Is64Bit;
-			//	IsInteger64 = registryType.Is64Bit;
-			//}
-			//else
-			//{
-			//	FitsFloatingPointRegister = IsR4 || IsR8;
-			//	FitsIntegerRegister = !FitsFloatingPointRegister;
-			//	FitsRegister = true;
-			//	FitsNativeSizeRegister = false;
-			//}
 		}
 
 		#endregion Construction
@@ -424,7 +349,6 @@ namespace Mosa.Compiler.Framework
 			return new Operand()
 			{
 				IsVirtualRegister = true,
-				IsFloatingPoint = true,
 				IsR4 = true,
 				Size = 4,
 				Index = index,
@@ -436,7 +360,6 @@ namespace Mosa.Compiler.Framework
 			return new Operand()
 			{
 				IsVirtualRegister = true,
-				IsFloatingPoint = true,
 				IsR8 = true,
 				Size = 8,
 				Index = index,
@@ -476,7 +399,6 @@ namespace Mosa.Compiler.Framework
 				IsConstant = true,
 				ConstantFloat = value,
 				IsResolved = true,
-				IsFloatingPoint = true,
 				IsR8 = false,
 				Size = 4,
 			};
@@ -489,7 +411,6 @@ namespace Mosa.Compiler.Framework
 				IsConstant = true,
 				ConstantDouble = value,
 				IsResolved = true,
-				IsFloatingPoint = true,
 				IsR8 = false,
 				Size = 8,
 			};
@@ -592,112 +513,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates a new constant <see cref="Operand" /> for the given integral value.
-		/// </summary>
-		/// <param name="value">The value to create the constant operand for.</param>
-		/// <param name="typeSystem">The type system.</param>
-		/// <returns>
-		/// A new operand representing the value <paramref name="value" />.
-		/// </returns>
-		public static Operand CreateConstant(int value, TypeSystem typeSystem)
-		{
-			return new Operand(typeSystem.BuiltIn.I4)
-			{
-				IsConstant = true,
-				ConstantSigned64 = value,
-				IsResolved = true
-			};
-		}
-
-		/// <summary>
-		/// Creates the constant.
-		/// </summary>
-		/// <param name="value">The value.</param>
-		/// <param name="typeSystem">The type system.</param>
-		/// <returns></returns>
-		public static Operand CreateConstant(uint value, TypeSystem typeSystem)
-		{
-			return new Operand(typeSystem.BuiltIn.U4)
-			{
-				IsConstant = true,
-				ConstantSigned64 = value,
-				IsResolved = true
-			};
-		}
-
-		/// <summary>
-		/// Creates a new constant <see cref="Operand" /> for the given integral value.
-		/// </summary>
-		/// <param name="value">The value to create the constant operand for.</param>
-		/// <param name="typeSystem">The type system.</param>
-		/// <returns>
-		/// A new operand representing the value <paramref name="value" />.
-		/// </returns>
-		public static Operand CreateConstant(ulong value, TypeSystem typeSystem)
-		{
-			return new Operand(typeSystem.BuiltIn.I8)
-			{
-				IsConstant = true,
-				ConstantUnsigned64 = value,
-				IsResolved = true
-			};
-		}
-
-		/// <summary>
-		/// Creates a new constant <see cref="Operand" /> for the given integral value.
-		/// </summary>
-		/// <param name="value">The value to create the constant operand for.</param>
-		/// <param name="typeSystem">The type system.</param>
-		/// <returns>
-		/// A new operand representing the value <paramref name="value" />.
-		/// </returns>
-		public static Operand CreateConstant(long value, TypeSystem typeSystem)
-		{
-			return new Operand(typeSystem.BuiltIn.I8)
-			{
-				IsConstant = true,
-				ConstantSigned64 = value,
-				IsResolved = true
-			};
-		}
-
-		/// <summary>
-		/// Creates a new constant <see cref="Operand"/> for the given integral value.
-		/// </summary>
-		/// <param name="value">The value to create the constant operand for.</param>
-		/// <param name="typeSystem">The type system.</param>
-		/// <returns>
-		/// A new operand representing the value <paramref name="value"/>.
-		/// </returns>
-		public static Operand CreateConstant(float value, TypeSystem typeSystem)
-		{
-			return new Operand(typeSystem.BuiltIn.R4)
-			{
-				IsConstant = true,
-				ConstantFloat = value,
-				IsResolved = true
-			};
-		}
-
-		/// <summary>
-		/// Creates a new constant <see cref="Operand"/> for the given integral value.
-		/// </summary>
-		/// <param name="value">The value to create the constant operand for.</param>
-		/// <param name="typeSystem">The type system.</param>
-		/// <returns>
-		/// A new operand representing the value <paramref name="value"/>.
-		/// </returns>
-		public static Operand CreateConstant(double value, TypeSystem typeSystem)
-		{
-			return new Operand(typeSystem.BuiltIn.R8)
-			{
-				IsConstant = true,
-				ConstantDouble = value,
-				IsResolved = true
-			};
-		}
-
-		/// <summary>
 		/// Creates a new physical register <see cref="Operand" />.
 		/// </summary>
 		/// <param name="type">The type.</param>
@@ -721,7 +536,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateHighSplitForLong(Operand longOperand, int index, TypeSystem typeSystem)
 		{
-			Debug.Assert(longOperand.IsInteger64);
+			//Debug.Assert(longOperand.IsInteger64);
 			Debug.Assert(longOperand.LongParent == null || longOperand.LongParent == longOperand);
 			Debug.Assert(longOperand.High == null);
 
@@ -729,7 +544,7 @@ namespace Mosa.Compiler.Framework
 
 			if (longOperand.IsParameter)
 			{
-				operand = CreateStackParameter(typeSystem.BuiltIn.U4, longOperand.Index, longOperand.Name + " (High)", false, (int)longOperand.Offset + 4);
+				operand = CreateStackParameter(typeSystem.BuiltIn.U4, longOperand.Index, longOperand.Name + " (High)", (int)longOperand.Offset + 4);
 			}
 			else if (longOperand.IsResolvedConstant)
 			{
@@ -771,23 +586,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates a new symbol <see cref="Operand" /> for the given symbol name.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="label">The label.</param>
-		/// <returns></returns>
-		public static Operand CreateLabel(MosaType type, string label)
-		{
-			return new Operand(type)
-			{
-				IsLabel = true,
-				Name = label,
-				Offset = 0,
-				IsConstant = true
-			};
-		}
-
-		/// <summary>
 		/// Creates the low 32 bit portion of a 64-bit <see cref="Operand" />.
 		/// </summary>
 		/// <param name="longOperand">The long operand.</param>
@@ -796,7 +594,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateLowSplitForLong(Operand longOperand, int index, TypeSystem typeSystem)
 		{
-			Debug.Assert(longOperand.IsInteger64);
+			//Debug.Assert(longOperand.IsInteger64);
 			Debug.Assert(longOperand.LongParent == null);
 			Debug.Assert(longOperand.Low == null);
 
@@ -804,7 +602,7 @@ namespace Mosa.Compiler.Framework
 
 			if (longOperand.IsParameter)
 			{
-				operand = CreateStackParameter(typeSystem.BuiltIn.U4, longOperand.Index, longOperand.Name + " (Low)", false, (int)longOperand.Offset);
+				operand = CreateStackParameter(typeSystem.BuiltIn.U4, longOperand.Index, longOperand.Name + " (Low)", (int)longOperand.Offset);
 			}
 			else if (longOperand.IsResolvedConstant)
 			{
@@ -867,10 +665,8 @@ namespace Mosa.Compiler.Framework
 		/// <param name="isThis">if set to <c>true</c> [is this].</param>
 		/// <param name="offset">The offset.</param>
 		/// <returns></returns>
-		public static Operand CreateStackParameter(MosaType type, int index, string name, bool isThis, int offset)
+		public static Operand CreateStackParameter(MosaType type, int index, string name, int offset)
 		{
-			Debug.Assert(!isThis || (isThis && index == 0));
-
 			return new Operand(type)
 			{
 				IsParameter = true,
@@ -878,7 +674,6 @@ namespace Mosa.Compiler.Framework
 				IsConstant = true,
 				IsResolved = true,
 				Name = name,
-				IsThis = isThis,
 				ConstantSigned64 = offset
 			};
 		}
@@ -905,21 +700,40 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates the symbol.
+		/// Creates a new symbol <see cref="Operand" /> for the given symbol name.
 		/// </summary>
 		/// <param name="type">The type.</param>
-		/// <param name="name">The name.</param>
+		/// <param name="label">The label.</param>
 		/// <returns></returns>
-		public static Operand CreateSymbol(MosaType type, string name, uint offset = 0, string data = null)
+		public static Operand CreateLabel(MosaType type, string label)
 		{
 			return new Operand(type)
 			{
-				IsSymbol = true,
+				IsLabel = true,
+				Name = label,
+				Offset = 0,
+				IsConstant = true
+			};
+		}
+
+		/// <summary>
+		/// Creates the string symbol.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="name">The name.</param>
+		/// <param name="offset">The offset.</param>
+		/// <param name="data">The data.</param>
+		/// <returns></returns>
+		public static Operand CreateStringSymbol(MosaType type, string name, uint offset, string data)
+		{
+			return new Operand(type)
+			{
+				IsLabel = true,
 				Name = name,
 				IsConstant = true,
 				Offset = offset,
 				StringData = data,
-				IsString = data != null,
+				IsString = true,
 			};
 		}
 
@@ -933,7 +747,7 @@ namespace Mosa.Compiler.Framework
 		{
 			return new Operand(typeSystem.BuiltIn.Pointer)
 			{
-				IsSymbol = true,
+				IsLabel = true,
 				Method = method,
 				Name = method.FullName,
 				IsConstant = true
@@ -950,7 +764,7 @@ namespace Mosa.Compiler.Framework
 		{
 			return new Operand(typeSystem.BuiltIn.Pointer)
 			{
-				IsSymbol = true,
+				IsLabel = true,
 				Name = name,
 				IsConstant = true
 			};

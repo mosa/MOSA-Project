@@ -16,7 +16,13 @@ namespace Mosa.DeviceSystem.PCI
 			Device.Name = "PCIGenericHostBridgeController";
 		}
 
-		// TODO: We have to test
+		public override void Probe() => Device.Status = DeviceStatus.Available;
+
+		public override void Start() => Device.Status = DeviceStatus.Online;
+
+		public override void Stop() => Device.Status = DeviceStatus.Offline;
+
+		// TODO: Fix
 		bool IHostBridgeController.CPUReset()
 		{
 			var pciDevice = Device.Parent.DeviceDriver as PCIDevice;
@@ -29,7 +35,11 @@ namespace Mosa.DeviceSystem.PCI
 			if (pciController == null)
 				return false;
 
-			pciController.WriteConfig8(pciDevice.Bus, (byte)((ResetAddress >> 32) & 0xFFFF), (byte)((ResetAddress >> 16) & 0xFFFF), (byte)(ResetAddress & 0xFFFF), ResetValue);
+			pciController.WriteConfig8(pciDevice.Bus,
+				(byte)((ResetAddress >> 32) & 0xFFFF),
+				(byte)((ResetAddress >> 16) & 0xFFFF),
+				(byte)(ResetAddress & 0xFFFF),
+				ResetValue);
 
 			return false;
 		}

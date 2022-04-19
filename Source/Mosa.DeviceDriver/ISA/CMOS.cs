@@ -1,6 +1,7 @@
 ﻿// Copyright (c) MOSA Project. Licensed under the New BSD License.
 
 using Mosa.DeviceSystem;
+using System;
 
 namespace Mosa.DeviceDriver.ISA
 {
@@ -8,7 +9,7 @@ namespace Mosa.DeviceDriver.ISA
 	/// CMOS Device Driver
 	/// </summary>
 	//[ISADeviceDriver(AutoLoad = true, BasePort = 0x0070, PortRange = 2, Platforms = PlatformArchitecture.X86)]
-	public class CMOS : BaseDeviceDriver
+	public class CMOS : BaseDeviceDriver, IDateTime
 	{
 		/// <summary>
 		/// The command port
@@ -41,12 +42,34 @@ namespace Mosa.DeviceDriver.ISA
 		/// <returns></returns>
 		public override bool OnInterrupt() => true;
 
+		public DateTime GetDateTime()
+		{
+			var bcd = (Read(0x0B) & 0x04) == 0x00;
+
+			var century = BCDToBinary(bcd, Read(0x32));
+			var second = BCDToBinary(bcd, Read(0));
+			var minute = BCDToBinary(bcd, Read(2));
+			var hour = BCDToBinary(bcd, Read(4));
+			var year = BCDToBinary(bcd, Read(9));
+			var month = BCDToBinary(bcd, Read(8));
+			var day = BCDToBinary(bcd, Read(7));
+
+			if (century == 19 || century == 21)
+			{
+				return new DateTime(century * 100 + year, month, day, hour, minute, second);
+			}
+			else
+			{
+				return new DateTime(2000 + year, month, day, hour, minute, second);
+			}
+		}
+
 		/// <summary>
 		/// Reads the specified address.
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <returns></returns>
-		public byte Read(byte address)
+		protected byte Read(byte address)
 		{
 			lock (_lock)
 			{
@@ -55,40 +78,17 @@ namespace Mosa.DeviceDriver.ISA
 			}
 		}
 
-		/// <summary>
-		/// Gets the second.
-		/// </summary>
-		/// <value>The second.</value>
-		public byte Second => Read(0);
+		private static byte BCDToBinary(bool bcd, byte value)
+		{
+			if (bcd)
+				return BCDToBinary(value);
+			else
+				return value;
+		}
 
-		/// <summary>
-		/// Gets the minute.
-		/// </summary>
-		/// <value>The minute.</value>
-		public byte Minute => Read(2);
-
-		/// <summary>
-		/// Gets the hour.
-		/// </summary>
-		/// <value>The hour.</value>
-		public byte Hour => Read(4);
-
-		/// <summary>
-		/// Gets the year.
-		/// </summary>
-		/// <value>The year.</value>
-		public byte Year => Read(9);
-
-		/// <summary>
-		/// Gets the month.
-		/// </summary>
-		/// <value>The month.</value>
-		public byte Month => Read(8);
-
-		/// <summary>
-		/// Gets the day.
-		/// </summary>
-		/// <value>The day.</value>
-		public byte Day => Read(7);
+		private static byte BCDToBinary(byte bcd)
+		{
+			return (byte)(((bcd / 16) * 10) + (bcd & 0xF));
+		}
 	}
 }

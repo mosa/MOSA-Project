@@ -25,11 +25,6 @@ SharpDisasm
 -- Simplified BSD License
 -- Used in MOSA for debugging & diagnostics
 
-MetroFramework
--- https://github.com/dennismagno/metroframework-modern-ui
--- The MIT License
--- Used in MOSA Launcher
-
 LZF
 -- https://csharplzfcompression.codeplex.com
 -- Simplified BSD License

@@ -136,6 +136,8 @@ namespace Mosa.Compiler.Framework
 
 		public ulong BitsUnknown => ~BitsKnown;
 
+		public ulong BitsUnknown32 => (~BitsKnown) & uint.MaxValue;
+
 		public bool AreAnyBitsKnown => BitsClear != 0 || BitsSet != 0;
 
 		public uint BitsClear32 => (uint)BitsClear;

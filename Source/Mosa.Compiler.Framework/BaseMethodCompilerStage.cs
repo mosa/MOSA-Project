@@ -339,6 +339,11 @@ namespace Mosa.Compiler.Framework
 			traceLogs = null;
 		}
 
+		public Operand AddStackLocal(MosaType type, bool pinned = false)
+		{
+			return MethodCompiler.AddStackLocal(type, pinned);
+		}
+
 		protected Operand AllocateVirtualRegister(MosaType type)
 		{
 			return MethodCompiler.VirtualRegisters.Allocate(type);
