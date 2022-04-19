@@ -72,25 +72,25 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(CILInstruction.Conv_i4, Conversion);
 			AddVisitation(CILInstruction.Conv_i8, Conversion);
 			AddVisitation(CILInstruction.Conv_ovf_i, CheckedConversion);
-			AddVisitation(CILInstruction.Conv_ovf_i_un, CheckedConversion);
 			AddVisitation(CILInstruction.Conv_ovf_i1, CheckedConversion);
-			AddVisitation(CILInstruction.Conv_ovf_i1_un, CheckedConversion);
 			AddVisitation(CILInstruction.Conv_ovf_i2, CheckedConversion);
-			AddVisitation(CILInstruction.Conv_ovf_i2_un, CheckedConversion);
 			AddVisitation(CILInstruction.Conv_ovf_i4, CheckedConversion);
-			AddVisitation(CILInstruction.Conv_ovf_i4_un, CheckedConversion);
 			AddVisitation(CILInstruction.Conv_ovf_i8, CheckedConversion);
-			AddVisitation(CILInstruction.Conv_ovf_i8_un, CheckedConversion);
 			AddVisitation(CILInstruction.Conv_ovf_u, CheckedConversion);
-			AddVisitation(CILInstruction.Conv_ovf_u_un, CheckedConversion);
 			AddVisitation(CILInstruction.Conv_ovf_u1, CheckedConversion);
-			AddVisitation(CILInstruction.Conv_ovf_u1_un, CheckedConversion);
 			AddVisitation(CILInstruction.Conv_ovf_u2, CheckedConversion);
-			AddVisitation(CILInstruction.Conv_ovf_u2_un, CheckedConversion);
 			AddVisitation(CILInstruction.Conv_ovf_u4, CheckedConversion);
-			AddVisitation(CILInstruction.Conv_ovf_u4_un, CheckedConversion);
 			AddVisitation(CILInstruction.Conv_ovf_u8, CheckedConversion);
-			AddVisitation(CILInstruction.Conv_ovf_u8_un, CheckedConversion);
+			AddVisitation(CILInstruction.Conv_ovf_i_un, CheckedConversionUnsigned);
+			AddVisitation(CILInstruction.Conv_ovf_i1_un, CheckedConversionUnsigned);
+			AddVisitation(CILInstruction.Conv_ovf_i2_un, CheckedConversionUnsigned);
+			AddVisitation(CILInstruction.Conv_ovf_i4_un, CheckedConversionUnsigned);
+			AddVisitation(CILInstruction.Conv_ovf_i8_un, CheckedConversionUnsigned);
+			AddVisitation(CILInstruction.Conv_ovf_u_un, CheckedConversionUnsigned);
+			AddVisitation(CILInstruction.Conv_ovf_u1_un, CheckedConversionUnsigned);
+			AddVisitation(CILInstruction.Conv_ovf_u2_un, CheckedConversionUnsigned);
+			AddVisitation(CILInstruction.Conv_ovf_u4_un, CheckedConversionUnsigned);
+			AddVisitation(CILInstruction.Conv_ovf_u8_un, CheckedConversionUnsigned);
 			AddVisitation(CILInstruction.Conv_r_un, Conversion);
 			AddVisitation(CILInstruction.Conv_r4, Conversion);
 			AddVisitation(CILInstruction.Conv_r8, Conversion);
@@ -605,7 +605,7 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for Conversion instruction.
+		/// Visitation function for Conversion instruction from signed source.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		private void CheckedConversion(Context context)
@@ -616,51 +616,138 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// First check to see if we have a matching checked conversion function
 
-			var methodName = $"{GetEvaluationTypeString(source.Type)}To{(type ?? result.Type).TypeCode}";
+			var sourceTypeString = (source.Type.IsI4) ? "I4" :
+				(source.Type.IsI8) ? "I8" :
+				(source.Type.IsR4) ? "R4" :
+				(source.Type.IsR8) ? "R8" :
+				(source.Type.IsI) ? Is32BitPlatform ? "I4" : "I8" :
+				(source.Type.IsPointer) ? Is32BitPlatform ? "I4" : "I8" :
+				(!source.Type.IsValueType) ? Is32BitPlatform ? "I4" : "I8" :
+				throw new CompilerException();
+
+			var resultTypeString = type.IsU || type.IsI || type.IsPointer ? Is32BitPlatform ? "I4" : "I8" : type.TypeCode.ToString();
+
+			var methodName = $"{sourceTypeString}To{resultTypeString}";
 			var method = GetMethod("Mosa.Runtime.Math", "CheckedConversion", methodName);
 
-			if (method != null)
-			{
-				var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+			Debug.Assert(method != null);
 
-				context.SetInstruction(IRInstruction.CallStatic, result, symbol, source);
+			//if (method != null)
+			//{
+			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
-				MethodScanner.MethodInvoked(method, Method);
+			context.SetInstruction(IRInstruction.CallStatic, result, symbol, source);
 
-				return;
-			}
+			MethodScanner.MethodInvoked(method, Method);
+
+			return;
+
+			//}
 
 			// If no matching function, then fallback to basic conversion
 
-			int destIndex = GetIndex(type ?? result.Type);
-			int srcIndex = GetIndex(source.Type);
+			//int destIndex = GetIndex(type ?? result.Type);
+			//int srcIndex = GetIndex(source.Type);
 
-			var conversion = Is32BitPlatform ? ConversionTable32[destIndex][srcIndex] : ConversionTable64[destIndex][srcIndex];
+			//var conversion = Is32BitPlatform ? ConversionTable32[destIndex][srcIndex] : ConversionTable64[destIndex][srcIndex];
 
-			ulong mask = GetBitMask(conversion.BitsToMask);
+			//ulong mask = GetBitMask(conversion.BitsToMask);
 
-			if (mask == 0 && conversion.PostInstruction != null)
-			{
-				var temp = AllocateVirtualRegister(result);
+			//if (mask == 0 && conversion.PostInstruction != null)
+			//{
+			//	var temp = AllocateVirtualRegister(result);
 
-				context.SetInstruction(conversion.Instruction, temp, source);
-				context.AppendInstruction(conversion.PostInstruction, result, temp);
-			}
-			else if (mask == 0)
-			{
-				context.SetInstruction(conversion.Instruction, result, source);
-			}
-			else if (conversion.PostInstruction == null)
-			{
-				context.SetInstruction(conversion.Instruction, result, source, CreateConstant64(mask));
-			}
-			else
-			{
-				var temp = AllocateVirtualRegister(result);
+			//	context.SetInstruction(conversion.Instruction, temp, source);
+			//	context.AppendInstruction(conversion.PostInstruction, result, temp);
+			//}
+			//else if (mask == 0)
+			//{
+			//	context.SetInstruction(conversion.Instruction, result, source);
+			//}
+			//else if (conversion.PostInstruction == null)
+			//{
+			//	context.SetInstruction(conversion.Instruction, result, source, CreateConstant64(mask));
+			//}
+			//else
+			//{
+			//	var temp = AllocateVirtualRegister(result);
 
-				context.SetInstruction(conversion.Instruction, temp, source);
-				context.AppendInstruction(conversion.PostInstruction, result, temp, CreateConstant64(mask));
-			}
+			//	context.SetInstruction(conversion.Instruction, temp, source);
+			//	context.AppendInstruction(conversion.PostInstruction, result, temp, CreateConstant64(mask));
+			//}
+		}
+
+		/// <summary>
+		/// Visitation function for Conversion instruction from unsigned source.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void CheckedConversionUnsigned(Context context)
+		{
+			var result = context.Result;
+			var source = context.Operand1;
+			var type = context.MosaType;
+
+			// First check to see if we have a matching checked conversion function
+
+			var sourceTypeString = (source.Type.IsI4) ? "U4" :
+				(source.Type.IsI8) ? "U8" :
+				(source.Type.IsR4) ? "R4" :
+				(source.Type.IsR8) ? "R8" :
+				(source.Type.IsI) ? Is32BitPlatform ? "U4" : "U8" :
+				(source.Type.IsPointer) ? Is32BitPlatform ? "U4" : "U8" :
+				(!source.Type.IsValueType) ? Is32BitPlatform ? "U4" : "U8" :
+				throw new CompilerException();
+
+			var resultTypeString = type.IsU || type.IsI || type.IsPointer ? Is32BitPlatform ? "I4" : "I8" : type.TypeCode.ToString();
+
+			var methodName = $"{sourceTypeString}To{resultTypeString}";
+			var method = GetMethod("Mosa.Runtime.Math", "CheckedConversion", methodName);
+
+			Debug.Assert(method != null);
+
+			//if (method != null)
+			//{
+			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+
+			context.SetInstruction(IRInstruction.CallStatic, result, symbol, source);
+
+			MethodScanner.MethodInvoked(method, Method);
+
+			return;
+
+			//}
+
+			// If no matching function, then fallback to basic conversion
+
+			//int destIndex = GetIndex(type ?? result.Type);
+			//int srcIndex = GetIndex(source.Type);
+
+			//var conversion = Is32BitPlatform ? ConversionTable32[destIndex][srcIndex] : ConversionTable64[destIndex][srcIndex];
+
+			//ulong mask = GetBitMask(conversion.BitsToMask);
+
+			//if (mask == 0 && conversion.PostInstruction != null)
+			//{
+			//	var temp = AllocateVirtualRegister(result);
+
+			//	context.SetInstruction(conversion.Instruction, temp, source);
+			//	context.AppendInstruction(conversion.PostInstruction, result, temp);
+			//}
+			//else if (mask == 0)
+			//{
+			//	context.SetInstruction(conversion.Instruction, result, source);
+			//}
+			//else if (conversion.PostInstruction == null)
+			//{
+			//	context.SetInstruction(conversion.Instruction, result, source, CreateConstant64(mask));
+			//}
+			//else
+			//{
+			//	var temp = AllocateVirtualRegister(result);
+
+			//	context.SetInstruction(conversion.Instruction, temp, source);
+			//	context.AppendInstruction(conversion.PostInstruction, result, temp, CreateConstant64(mask));
+			//}
 		}
 
 		/// <summary>
@@ -2195,33 +2282,6 @@ namespace Mosa.Compiler.Framework.Stages
 			else if (type.IsU) return 11;
 			else if (type.IsPointer) return 12;
 			else if (!type.IsValueType) return 12;
-
-			throw new CompilerException();
-		}
-
-		/// <summary>
-		/// Gets the index.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
-		/// <exception cref="CompilerException"></exception>
-		private string GetEvaluationTypeString(MosaType type)
-		{
-			if (type.IsChar) return "I4";
-			else if (type.IsI1) return "I4";
-			else if (type.IsI2) return "I4";
-			else if (type.IsI4) return "I4";
-			else if (type.IsI8) return "I8";
-			else if (type.IsU1) return "I4";
-			else if (type.IsU2) return "I4";
-			else if (type.IsU4) return "U4";
-			else if (type.IsU8) return "U8";
-			else if (type.IsR4) return "R4";
-			else if (type.IsR8) return "R8";
-			else if (type.IsI) return Is32BitPlatform ? "I4" : "I8";
-			else if (type.IsU) return Is32BitPlatform ? "U4" : "U8";
-			else if (type.IsPointer) return Is32BitPlatform ? "I4" : "I8";
-			else if (!type.IsValueType) return Is32BitPlatform ? "I4" : "I8";
 
 			throw new CompilerException();
 		}
