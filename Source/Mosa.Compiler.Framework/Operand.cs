@@ -570,6 +570,7 @@ namespace Mosa.Compiler.Framework
 					IsConstant = true,
 					IsResolved = false,
 					IsStackLocal = true,
+					ConstantSigned64 = 4
 				};
 			}
 			else if (longOperand.IsStaticField)

@@ -631,6 +631,44 @@
 			]
 		},
 		{
+			"Name": "Fld64",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 0,
+			"ThreeTwoAddressConversion": "false",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[x86],opcode=0xDD,mod=01,reg=000,rm=reg3:o1,immediate=imm8:o2"
+				}
+			]
+		},
+		{
+			"Name": "Fisttp64",
+			"FamilyName": "X86",
+			"FlagsCleared": "",
+			"FlagsModified": "",
+			"FlagsSet": "",
+			"FlagsUnchanged": "ZCSOP",
+			"FlagsUndefined": "",
+			"FlagsUsed": "",
+			"OperandCount": 2,
+			"ResultCount": 1,
+			"ThreeTwoAddressConversion": "true",
+			"OpcodeEncoding": [
+				{
+					"Condition": "[register][constant]",
+					"Encoding": "[x86],opcode=0xDD,mod=01,reg=001,rm=reg3:r,immediate=imm8:o2"
+				}
+			]
+		},
+		{
 			"Name": "JmpFar",
 			"FamilyName": "X86",
 			"FlagsCleared": "",
