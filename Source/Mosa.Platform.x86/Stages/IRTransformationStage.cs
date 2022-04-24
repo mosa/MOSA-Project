@@ -1452,7 +1452,7 @@ namespace Mosa.Platform.x86.Stages
 				{
 					// shift is greater than 32 bits
 					var newshift = CreateConstant32(shift - 32);
-					context.SetInstruction(X86.Shr32, resultHigh, op1H, newshift);
+					context.SetInstruction(X86.Shr32, resultLow, op1H, newshift);
 					context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero32);
 					return;
 				}
