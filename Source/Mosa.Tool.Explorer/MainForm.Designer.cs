@@ -297,7 +297,7 @@
 			this.cbEnableBasicOptimizations.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.cbEnableBasicOptimizations.Name = "cbEnableBasicOptimizations";
 			this.cbEnableBasicOptimizations.Size = new System.Drawing.Size(293, 22);
-			this.cbEnableBasicOptimizations.Text = "Enable Optimizations";
+			this.cbEnableBasicOptimizations.Text = "Enable Basic Optimizations";
 			// 
 			// cbEnableValueNumbering
 			// 

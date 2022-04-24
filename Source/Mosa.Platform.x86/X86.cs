@@ -38,8 +38,6 @@ namespace Mosa.Platform.x86
 		public static readonly Div32 Div32 = new Div32();
 		public static readonly Divsd Divsd = new Divsd();
 		public static readonly Divss Divss = new Divss();
-		public static readonly Fld64 Fld64 = new Fld64();
-		public static readonly Fisttp64 Fisttp64 = new Fisttp64();
 		public static readonly JmpFar JmpFar = new JmpFar();
 		public static readonly Hlt Hlt = new Hlt();
 		public static readonly IDiv32 IDiv32 = new IDiv32();

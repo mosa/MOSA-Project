@@ -26,7 +26,7 @@
 		<Compile Include="..\Mosa.UnitTests\Basic\CallTests.cs" Link="Tests\Basic\CallTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Basic\CallVirtualTests.cs" Link="Tests\Basic\CallVirtualTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Basic\ConvTests.cs" Link="Tests\Basic\ConvTests.cs" />
-		<Compile Include="..\Mosa.UnitTests\Basic\ConvEdgeTests.cs" Link="Tests\Basic\ConvEdgeTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\Basic\ConvFloatTests.cs" Link="Tests\Basic\ConvFloatTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Basic\DelegateTests.cs" Link="Tests\Basic\DelegateTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Basic\DerivedNewObjectTests.cs" Link="Tests\Basic\DerivedNewObjectTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Basic\ForeachTests.cs" Link="Tests\Basic\ForeachTests.cs" />

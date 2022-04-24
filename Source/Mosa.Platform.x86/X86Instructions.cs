@@ -40,8 +40,6 @@ namespace Mosa.Platform.x86
 			X86.Div32,
 			X86.Divsd,
 			X86.Divss,
-			X86.Fld64,
-			X86.Fisttp64,
 			X86.JmpFar,
 			X86.Hlt,
 			X86.IDiv32,

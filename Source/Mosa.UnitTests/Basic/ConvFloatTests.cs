@@ -4,8 +4,26 @@ using System;
 
 namespace Mosa.UnitTests.Basic
 {
-	public static class ConvEdgeTests
+	public static class ConvFloatTests
 	{
+		[MosaUnitTest(Series = "R4")]
+		public static double ConvR4R8(float a)
+		{
+			return a;
+		}
+
+		[MosaUnitTest(Series = "R8")]
+		public static float ConvR8R4(double a)
+		{
+			return (float)a;
+		}
+
+		[MosaUnitTest(Series = "R8")]
+		public static long ConvR8Bits(double a)
+		{
+			return System.BitConverter.DoubleToInt64Bits(a);
+		}
+
 		[MosaUnitTest(Series = "R4")]
 		public static long ConvR4I8(float a)
 		{

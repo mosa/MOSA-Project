@@ -125,13 +125,9 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.Compare64x32, Compare64x32);
 			AddVisitation(IRInstruction.Compare64x64, Compare64x64);
 			AddVisitation(IRInstruction.Branch64, Branch64);
-			AddVisitation(IRInstruction.ConvertR4ToI64, ConvertFloatR4ToInteger64);
-			AddVisitation(IRInstruction.ConvertR8ToI64, ConvertFloatR8ToInteger64);
 			AddVisitation(IRInstruction.ConvertI64ToR4, ConvertInteger64ToFloatR4);
 			AddVisitation(IRInstruction.ConvertI64ToR8, ConvertInteger64ToFloatR8);
 
-			//AddVisitation(IRInstruction.ConvertR4ToU64, ConvertR4ToU64);
-			//AddVisitation(IRInstruction.ConvertR8ToU64, ConvertR8ToU64);
 			//AddVisitation(IRInstruction.ConvertU64ToR4, ConvertU64ToR4);
 			//AddVisitation(IRInstruction.ConvertU64ToR8, ConvertU64ToR8);
 
@@ -1193,42 +1189,6 @@ namespace Mosa.Platform.x86.Stages
 			context.SetInstruction(X86.Cvtsi2sd32, context.Result, op1Low);
 		}
 
-		private void ConvertFloatR4ToInteger64(Context context)
-		{
-			var result = context.Result;
-			var number = context.Operand1;
-			var numberAsDouble = AllocateVirtualRegister(TypeSystem.BuiltIn.R8);
-			var v1 = MethodCompiler.AddStackLocal(TypeSystem.BuiltIn.R8);
-			var v2 = MethodCompiler.AddStackLocal(result.Type);
-
-			SplitLongOperand(v2, out var v2Low, out var v2High);
-			SplitLongOperand(result, out var resultLow, out var resultHigh);
-
-			context.SetInstruction(X86.Cvtss2sd, numberAsDouble, number);
-			context.AppendInstruction(X86.MovsdStore, null, StackFrame, v1, numberAsDouble);
-			context.AppendInstruction(X86.Fld64, null, StackFrame, v1);
-			context.AppendInstruction(X86.Fisttp64, StackFrame, StackFrame, v2);
-			context.AppendInstruction(X86.MovLoad32, resultLow, StackFrame, v2Low);
-			context.AppendInstruction(X86.MovLoad32, resultHigh, StackFrame, v2High);
-		}
-
-		private void ConvertFloatR8ToInteger64(Context context)
-		{
-			var result = context.Result;
-			var number = context.Operand1;
-			var v1 = MethodCompiler.AddStackLocal(TypeSystem.BuiltIn.R8);
-			var v2 = MethodCompiler.AddStackLocal(result.Type);
-
-			SplitLongOperand(v2, out var v2Low, out var v2High);
-			SplitLongOperand(result, out var resultLow, out var resultHigh);
-
-			context.SetInstruction(X86.MovsdStore, null, StackFrame, v1, number);
-			context.AppendInstruction(X86.Fld64, null, StackFrame, v1);
-			context.AppendInstruction(X86.Fisttp64, StackFrame, StackFrame, v2);
-			context.AppendInstruction(X86.MovLoad32, resultLow, StackFrame, v2Low);
-			context.AppendInstruction(X86.MovLoad32, resultHigh, StackFrame, v2High);
-		}
-
 		private void ExpandMul(Context context)
 		{
 			SplitLongOperand(context.Result, out var resultLow, out var resultHigh);
@@ -1472,7 +1432,7 @@ namespace Mosa.Platform.x86.Stages
 				{
 					// shift is greater than 32 bits
 					var newshift = CreateConstant32(shift - 32);
-					context.SetInstruction(X86.Shr32, resultHigh, op1H, newshift);
+					context.SetInstruction(X86.Shr32, resultLow, op1H, newshift);
 					context.AppendInstruction(X86.Mov32, resultHigh, ConstantZero32);
 					return;
 				}
