@@ -431,16 +431,16 @@ namespace Mosa.Compiler.Framework.Stages
 				var stackType = underlyingType != null ? GetStackType(underlyingType) : StackType.ValueType;
 				LocalStackType[index] = stackType;
 
-				LocalStack[index] = MethodCompiler.AddStackLocal(type.Type, type.IsPinned);
+				//LocalStack[index] = MethodCompiler.AddStackLocal(type.Type, type.IsPinned);
 
-				//if (stackType == StackType.ValueType || arg[index] || type.IsPinned)
-				//{
-				//	LocalStack[index] = MethodCompiler.AddStackLocal(type.Type, type.IsPinned);
-				//}
-				//else
-				//{
-				//	LocalStack[index] = AllocatedOperand(stackType, type.Type);
-				//}
+				if (stackType == StackType.ValueType || arg[index] || type.IsPinned)
+				{
+					LocalStack[index] = MethodCompiler.AddStackLocal(type.Type, type.IsPinned);
+				}
+				else
+				{
+					LocalStack[index] = AllocatedOperand(stackType, type.Type);
+				}
 			}
 		}
 
@@ -1398,10 +1398,11 @@ namespace Mosa.Compiler.Framework.Stages
 			else
 			{
 				var typeSize = Alignment.AlignUp(TypeLayout.GetTypeSize(type), TypeLayout.NativePointerAlignment);
-				var address = AllocateVirtualRegisterManagedPointer();
 
-				context.AppendInstruction(IRInstruction.AddressOf, address, entry.Operand);
-				context.AppendInstruction(IRInstruction.Box, result, methodTable, address, CreateConstant32(typeSize));
+				//var address = AllocateVirtualRegisterManagedPointer();
+				//context.AppendInstruction(IRInstruction.AddressOf, address, entry.Operand);
+
+				context.AppendInstruction(IRInstruction.Box, result, methodTable, entry.Operand, CreateConstant32(typeSize));
 				return true;
 			}
 		}
@@ -3045,7 +3046,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (isCompound)
 			{
-				var result = AllocateVirtualRegister(type);
+				//var result = AllocateVirtualRegister(type);
+				var result = MethodCompiler.AddStackLocal(type);
 				context.AppendInstruction(IRInstruction.LoadCompound, result, address, ConstantZero);
 				context.MosaType = type;
 				stack.Push(new StackEntry(StackType.ValueType, result, type));
