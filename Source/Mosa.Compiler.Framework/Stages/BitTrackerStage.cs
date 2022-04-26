@@ -1930,7 +1930,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var value1 = transformContext.GetBitValue(node.Operand1);
 			var value2 = transformContext.GetBitValue(node.Operand2);
 
-			if (value1 != null && value1.AreLower6BitsKnown && value1.BitsSet32 == 0)
+			if (value1 != null && value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
 			{
 				return BitValue.Zero32;
 			}
@@ -1944,11 +1944,6 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				return BitValue.CreateValue(value1.BitsSet32 << shift, false);
 			}
-
-			//if (value1.AreAll64BitsKnown && value1.BitsSet == 0)
-			//{
-			//	return BitValue.Zero64;
-			//}
 
 			if (value2.AreLower6BitsKnown && shift == 0)
 			{
@@ -2050,7 +2045,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var value1 = transformContext.GetBitValue(node.Operand1);
 			var value2 = transformContext.GetBitValue(node.Operand2);
 
-			if (value1 != null && value1.AreLower6BitsKnown && value1.BitsSet32 == 0)
+			if (value1 != null && value1.AreAll64BitsKnown && value1.BitsSet32 == 0)
 			{
 				return BitValue.Zero32;
 			}

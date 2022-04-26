@@ -119,7 +119,7 @@ namespace Mosa.Compiler.Framework.Linker
 
 		public LinkerSymbol DefineSymbol(string name, SectionKind kind, uint alignment, uint size)
 		{
-			uint aligned = alignment != 0 ? (uint)alignment : 1;
+			uint aligned = alignment != 0 ? alignment : 1;
 
 			lock (_lock)
 			{
@@ -285,16 +285,9 @@ namespace Mosa.Compiler.Framework.Linker
 			return GetConstantSymbol(BitConverter.DoubleToInt64Bits(value));
 		}
 
-		private static uint SingleToInt32Bits(float value)
-		{
-			var data = BitConverter.GetBytes(value);
-
-			return (uint)(data[0] | (data[1] << 8) | (data[2] << 16) | (data[3] << 24));
-		}
-
 		public LinkerSymbol GetConstantSymbol(float value)
 		{
-			return GetConstantSymbol(/*BitConverter.*/SingleToInt32Bits(value));
+			return GetConstantSymbol(BitConverter.SingleToInt32Bits(value));
 		}
 
 		public LinkerSymbol GetConstantSymbol(uint value)

@@ -879,7 +879,7 @@ namespace Mosa.Compiler.Framework
 				}
 				else
 				{
-					sb.Append($"(v{Index}<t{LongParent.Index}{(IsHigh ? "H" : "L")}>)");
+					sb.Append($"(v{Index}<v{LongParent.Index}{(IsHigh ? "H" : "L")}>)");
 				}
 			}
 			else if (IsParameter)

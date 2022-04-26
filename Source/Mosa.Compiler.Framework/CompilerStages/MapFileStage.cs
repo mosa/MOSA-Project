@@ -50,6 +50,7 @@ namespace Mosa.Compiler.Framework.CompilerStages
 		private void EmitSections(TextWriter writer)
 		{
 			writer.WriteLine("Virtual          Length           Name");
+
 			foreach (var linkerSection in Linker.Sections)
 			{
 				writer.WriteLine("{0:x16} {1:x16} {2}", linkerSection.VirtualAddress, linkerSection.Size, linkerSection.Name);
