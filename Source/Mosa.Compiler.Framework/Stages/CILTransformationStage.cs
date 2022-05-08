@@ -698,7 +698,7 @@ namespace Mosa.Compiler.Framework.Stages
 				(!source.Type.IsValueType) ? Is32BitPlatform ? "U4" : "U8" :
 				throw new CompilerException();
 
-			var resultTypeString = type.IsU || type.IsI || type.IsPointer ? Is32BitPlatform ? "I4" : "I8" : type.TypeCode.ToString();
+			var resultTypeString = type.IsU || type.IsI || type.IsPointer ? Is32BitPlatform ? "U4" : "U8" : type.TypeCode.ToString();
 
 			var methodName = $"{sourceTypeString}To{resultTypeString}";
 			var method = GetMethod("Mosa.Runtime.Math", "CheckedConversion", methodName);
@@ -1940,8 +1940,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ new ConversionEntry(IRInstruction.And32, 8),
 				/* U4 */ new ConversionEntry(IRInstruction.And32, 8),
 				/* U8 */ new ConversionEntry(IRInstruction.Truncate64x32, IRInstruction.And32, 8),
-				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToI32, IRInstruction.And32, 8),
-				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToI32, IRInstruction.And32, 8),
+				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToU32, IRInstruction.And32, 8),
+				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToU32, IRInstruction.And32, 8),
 				/* I  */ new ConversionEntry(IRInstruction.And32, 8),
 				/* U  */ new ConversionEntry(IRInstruction.And32, 8),
 				/* Ptr*/ new ConversionEntry(IRInstruction.And32, 8)
@@ -1955,8 +1955,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ new ConversionEntry(IRInstruction.Move32),
 				/* U4 */ new ConversionEntry(IRInstruction.And32, 16),
 				/* U8 */ new ConversionEntry(IRInstruction.Truncate64x32, IRInstruction.And32, 16),
-				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToI32, IRInstruction.And32, 16),
-				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToI32, IRInstruction.And32, 16),
+				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToU32, IRInstruction.And32, 16),
+				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToU32, IRInstruction.And32, 16),
 				/* I  */ new ConversionEntry(IRInstruction.And32, 16),
 				/* U  */ new ConversionEntry(IRInstruction.And32, 16),
 				/* Ptr*/ new ConversionEntry(IRInstruction.And32, 16)
@@ -1970,8 +1970,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ new ConversionEntry(IRInstruction.Move32),
 				/* U4 */ new ConversionEntry(IRInstruction.Move32),
 				/* U8 */ new ConversionEntry(IRInstruction.Truncate64x32),
-				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToI32),
-				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToI32),
+				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToU32),
+				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToU32),
 				/* I  */ new ConversionEntry(IRInstruction.Move32),
 				/* U  */ new ConversionEntry(IRInstruction.Move32),
 				/* Ptr*/ new ConversionEntry(IRInstruction.Move32)
@@ -1985,8 +1985,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ new ConversionEntry(IRInstruction.ZeroExtend16x64),
 				/* U4 */ new ConversionEntry(IRInstruction.ZeroExtend32x64),
 				/* U8 */ new ConversionEntry(IRInstruction.Move64),
-				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToI64),
-				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToI64),
+				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToU64),
+				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToU64),
 				/* I  */ new ConversionEntry(IRInstruction.ZeroExtend32x64),
 				/* U  */ new ConversionEntry(IRInstruction.ZeroExtend32x64),
 				/* Ptr*/ new ConversionEntry(IRInstruction.ZeroExtend32x64)
@@ -1996,14 +1996,14 @@ namespace Mosa.Compiler.Framework.Stages
 				/* I2 */ new ConversionEntry(IRInstruction.ConvertI32ToR4),
 				/* I4 */ new ConversionEntry(IRInstruction.ConvertI32ToR4),
 				/* I8 */ new ConversionEntry(IRInstruction.ConvertI64ToR4),
-				/* U1 */ new ConversionEntry(IRInstruction.ConvertI32ToR4),
-				/* U2 */ new ConversionEntry(IRInstruction.ConvertI32ToR4),
-				/* U4 */ new ConversionEntry(IRInstruction.ConvertI32ToR4),
-				/* U8 */ new ConversionEntry(IRInstruction.ConvertI64ToR4),
+				/* U1 */ new ConversionEntry(IRInstruction.ConvertU32ToR4),
+				/* U2 */ new ConversionEntry(IRInstruction.ConvertU32ToR4),
+				/* U4 */ new ConversionEntry(IRInstruction.ConvertU32ToR4),
+				/* U8 */ new ConversionEntry(IRInstruction.ConvertU64ToR4),
 				/* R4 */ new ConversionEntry(IRInstruction.MoveR4),
 				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToR4),
 				/* I  */ new ConversionEntry(IRInstruction.ConvertI32ToR4),
-				/* U  */ new ConversionEntry(IRInstruction.ConvertI32ToR4),
+				/* U  */ new ConversionEntry(IRInstruction.ConvertU32ToR4),
 				/* Ptr*/ new ConversionEntry(IRInstruction.ConvertI32ToR4)
 				},
 		/* R8 */ new ConversionEntry[] {
@@ -2011,14 +2011,14 @@ namespace Mosa.Compiler.Framework.Stages
 				/* I2 */ new ConversionEntry(IRInstruction.ConvertI32ToR8),
 				/* I4 */ new ConversionEntry(IRInstruction.ConvertI32ToR8),
 				/* I8 */ new ConversionEntry(IRInstruction.ConvertI64ToR8),
-				/* U1 */ new ConversionEntry(IRInstruction.ConvertI32ToR8),
-				/* U2 */ new ConversionEntry(IRInstruction.ConvertI32ToR8),
-				/* U4 */ new ConversionEntry(IRInstruction.ConvertI32ToR8),
-				/* U8 */ new ConversionEntry(IRInstruction.ConvertI64ToR8),
+				/* U1 */ new ConversionEntry(IRInstruction.ConvertU32ToR8),
+				/* U2 */ new ConversionEntry(IRInstruction.ConvertU32ToR8),
+				/* U4 */ new ConversionEntry(IRInstruction.ConvertU32ToR8),
+				/* U8 */ new ConversionEntry(IRInstruction.ConvertU64ToR8),
 				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToR8),
 				/* R8 */ new ConversionEntry(IRInstruction.MoveR8),
 				/* I  */ new ConversionEntry(IRInstruction.ConvertI32ToR8),
-				/* U  */ new ConversionEntry(IRInstruction.ConvertI32ToR8),
+				/* U  */ new ConversionEntry(IRInstruction.ConvertU32ToR8),
 				/* Ptr*/ new ConversionEntry(IRInstruction.ConvertI32ToR8)
 				},
 		/* I */ new ConversionEntry[] {
@@ -2045,8 +2045,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ new ConversionEntry(IRInstruction.Move32),
 				/* U4 */ new ConversionEntry(IRInstruction.Move32),
 				/* U8 */ new ConversionEntry(IRInstruction.Truncate64x32),
-				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToI32),
-				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToI32),
+				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToU32),
+				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToU32),
 				/* I  */ new ConversionEntry(IRInstruction.Move32),
 				/* U  */ new ConversionEntry(IRInstruction.Move32),
 				/* Ptr*/ new ConversionEntry(IRInstruction.Move32)

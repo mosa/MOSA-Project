@@ -44,26 +44,5 @@ namespace Mosa.UnitTests.Optimization
 
 			return 33 <= b;      // == 0
 		}
-
-		[MosaUnitTest(Series = "I8")]
-		public static long BitTrackerTest6(long x)
-		{
-			var shift = 7;
-			return x >> shift;
-		}
-
-		[MosaUnitTest(Series = "I8")]
-		public static long BitTrackerTest7(long x)
-		{
-			var shift = 19;
-			return x >> shift;
-		}
-
-		[MosaUnitTest(Series = "I8")]
-		public static long BitTrackerTest8(long x)
-		{
-			var shift = 52;
-			return x >> shift;
-		}
 	}
 }
