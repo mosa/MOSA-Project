@@ -11,8 +11,8 @@ namespace Mosa.Runtime.Math
 		{
 			var rawValue = (ulong)System.BitConverter.DoubleToInt64Bits(value);
 
-			const int MantissaBits = 52;
-			const int ExponentBias = 1075;
+			const byte MantissaBits = 52;
+			const short ExponentBias = 1075;
 			const ulong ExponentMask = 0x7FF0_0000_0000_0000;
 			const ulong RawNaN = 0xFFF8_0000_0000_0000; // Same as double.NaN
 			const ulong RawPositiveInfinity = 0x7FF0_0000_0000_0000;
@@ -45,8 +45,8 @@ namespace Mosa.Runtime.Math
 		{
 			var rawValue = (ulong)System.BitConverter.DoubleToInt64Bits(value);
 
-			const int MantissaBits = 52;
-			const int ExponentBias = 1075;
+			const byte MantissaBits = 52;
+			const short ExponentBias = 1075;
 			const ulong ExponentMask = 0x7FF0_0000_0000_0000;
 			const ulong RawNaN = 0xFFF8_0000_0000_0000; // Same as double.NaN
 			const ulong RawPositiveInfinity = 0x7FF0_0000_0000_0000;
@@ -79,8 +79,8 @@ namespace Mosa.Runtime.Math
 		{
 			var rawValue = (ulong)System.BitConverter.DoubleToInt64Bits(value);
 
-			const int MantissaBits = 52;
-			const int ExponentBias = 1075;
+			const byte MantissaBits = 52;
+			const short ExponentBias = 1075;
 			const ulong ExponentMask = 0x7FF0_0000_0000_0000;
 			const ulong RawNaN = 0xFFF8_0000_0000_0000; // Same as double.NaN
 			const ulong RawPositiveInfinity = 0x7FF0_0000_0000_0000;
@@ -88,15 +88,21 @@ namespace Mosa.Runtime.Math
 
 			short RawExponent = (short)((rawValue & ExponentMask) >> MantissaBits);
 			short Exponent = (short)(ExponentBias - RawExponent);
+			ulong Sign = rawValue >> 63;
 
 			if (rawValue == RawNegativeInfinity)
 			{
 				return unchecked((ulong)long.MinValue);
 			}
 
-			if (rawValue == RawPositiveInfinity || rawValue == RawNaN || Exponent < -11)
+			if (rawValue == RawPositiveInfinity || rawValue == RawNaN)
 			{
 				return ulong.MinValue;
+			}
+
+			if (Exponent < -11)
+			{
+				return Sign << 63;
 			}
 
 			if (Exponent > 52)
@@ -108,7 +114,8 @@ namespace Mosa.Runtime.Math
 
 			int shift = Exponent;
 			var mantissa = (RawMantissa | (1uL << MantissaBits));
-			return shift <= 0 ? mantissa << -shift : mantissa >> shift;
+			long result = unchecked((long)(shift <= 0 ? mantissa << -shift : mantissa >> shift));
+			return unchecked((ulong)(Sign == 0uL ? result : -result));
 		}
 
 		[MethodImpl(MethodImplOptions.AggressiveInlining)]
@@ -116,8 +123,8 @@ namespace Mosa.Runtime.Math
 		{
 			var rawValue = (ulong)System.BitConverter.DoubleToInt64Bits(value);
 
-			const int MantissaBits = 52;
-			const int ExponentBias = 1075;
+			const byte MantissaBits = 52;
+			const short ExponentBias = 1075;
 			const ulong ExponentMask = 0x7FF0_0000_0000_0000;
 			const ulong RawNaN = 0xFFF8_0000_0000_0000; // Same as double.NaN
 			const ulong RawPositiveInfinity = 0x7FF0_0000_0000_0000;
@@ -125,25 +132,21 @@ namespace Mosa.Runtime.Math
 
 			short RawExponent = (short)((rawValue & ExponentMask) >> MantissaBits);
 			short Exponent = (short)(ExponentBias - RawExponent);
+			ulong Sign = rawValue >> 63;
 
 			if (rawValue == RawNegativeInfinity)
 			{
 				return unchecked((ulong)long.MinValue);
 			}
 
-			if (rawValue == RawPositiveInfinity)
-			{
-				return ulong.MinValue;
-			}
-
-			if (rawValue == RawNaN)
+			if (rawValue == RawPositiveInfinity || rawValue == RawNaN)
 			{
 				return ulong.MinValue;
 			}
 
 			if (Exponent < -11)
 			{
-				return ulong.MinValue;
+				return Sign << 63;
 			}
 
 			if (Exponent > 52)
@@ -155,7 +158,8 @@ namespace Mosa.Runtime.Math
 
 			int shift = Exponent;
 			var mantissa = (RawMantissa | (1uL << MantissaBits));
-			return shift <= 0 ? mantissa << -shift : mantissa >> shift;
+			long result = unchecked((long)(shift <= 0 ? mantissa << -shift : mantissa >> shift));
+			return unchecked((ulong)(Sign == 0uL ? result : -result));
 		}
 	}
 }
