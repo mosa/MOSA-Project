@@ -632,49 +632,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(method != null);
 
-			//if (method != null)
-			//{
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
 			context.SetInstruction(IRInstruction.CallStatic, result, symbol, source);
 
 			MethodScanner.MethodInvoked(method, Method);
-
-			return;
-
-			//}
-
-			// If no matching function, then fallback to basic conversion
-
-			//int destIndex = GetIndex(type ?? result.Type);
-			//int srcIndex = GetIndex(source.Type);
-
-			//var conversion = Is32BitPlatform ? ConversionTable32[destIndex][srcIndex] : ConversionTable64[destIndex][srcIndex];
-
-			//ulong mask = GetBitMask(conversion.BitsToMask);
-
-			//if (mask == 0 && conversion.PostInstruction != null)
-			//{
-			//	var temp = AllocateVirtualRegister(result);
-
-			//	context.SetInstruction(conversion.Instruction, temp, source);
-			//	context.AppendInstruction(conversion.PostInstruction, result, temp);
-			//}
-			//else if (mask == 0)
-			//{
-			//	context.SetInstruction(conversion.Instruction, result, source);
-			//}
-			//else if (conversion.PostInstruction == null)
-			//{
-			//	context.SetInstruction(conversion.Instruction, result, source, CreateConstant64(mask));
-			//}
-			//else
-			//{
-			//	var temp = AllocateVirtualRegister(result);
-
-			//	context.SetInstruction(conversion.Instruction, temp, source);
-			//	context.AppendInstruction(conversion.PostInstruction, result, temp, CreateConstant64(mask));
-			//}
 		}
 
 		/// <summary>
@@ -705,49 +667,11 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(method != null);
 
-			//if (method != null)
-			//{
 			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
 
 			context.SetInstruction(IRInstruction.CallStatic, result, symbol, source);
 
 			MethodScanner.MethodInvoked(method, Method);
-
-			return;
-
-			//}
-
-			// If no matching function, then fallback to basic conversion
-
-			//int destIndex = GetIndex(type ?? result.Type);
-			//int srcIndex = GetIndex(source.Type);
-
-			//var conversion = Is32BitPlatform ? ConversionTable32[destIndex][srcIndex] : ConversionTable64[destIndex][srcIndex];
-
-			//ulong mask = GetBitMask(conversion.BitsToMask);
-
-			//if (mask == 0 && conversion.PostInstruction != null)
-			//{
-			//	var temp = AllocateVirtualRegister(result);
-
-			//	context.SetInstruction(conversion.Instruction, temp, source);
-			//	context.AppendInstruction(conversion.PostInstruction, result, temp);
-			//}
-			//else if (mask == 0)
-			//{
-			//	context.SetInstruction(conversion.Instruction, result, source);
-			//}
-			//else if (conversion.PostInstruction == null)
-			//{
-			//	context.SetInstruction(conversion.Instruction, result, source, CreateConstant64(mask));
-			//}
-			//else
-			//{
-			//	var temp = AllocateVirtualRegister(result);
-
-			//	context.SetInstruction(conversion.Instruction, temp, source);
-			//	context.AppendInstruction(conversion.PostInstruction, result, temp, CreateConstant64(mask));
-			//}
 		}
 
 		/// <summary>
