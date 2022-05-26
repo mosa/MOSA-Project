@@ -13,13 +13,13 @@ namespace Mosa.DeviceSystem
 		public Character(char c, int x, int y)
 		{
 			Char = c;
-
 			X = x;
 			Y = y;
 		}
 	}
 
-	//https://github.com/nifanfa/MOSA-Core/blob/master/Mosa/Mosa.External.x86/VBEConsole.cs
+	//https://github.com/nifanfa/MOSA-Core/blob/master/src/Mosa/Mosa.External.x86/VBEConsole.cs
+	// TODO: Scrolling support
 	public class GraphicalConsole
 	{
 		#region Definitions
@@ -56,21 +56,15 @@ namespace Mosa.DeviceSystem
 		{
 			BaseX = baseX;
 			BaseY = baseY;
-
 			X = BaseX;
 			Y = BaseY;
-
 			Width = width;
 			Height = height;
-
 			Font = font;
 			Keyboard = keyboard;
 			FrameBuffer = frameBuffer;
-
 			ForeColor = foreColor;
-
-			Characters = new List<Character>();
-
+			Characters = new List<Character>(Font.Width * Width * Font.Height * Height);
 			Line = string.Empty;
 		}
 
@@ -150,72 +144,50 @@ namespace Mosa.DeviceSystem
 			NewLine();
 		}
 
-		// TODO: Use actual KeyTypes
 		public string ReadLine()
 		{
-			var code = ReadKey(false);
+			var code = ReadKey();
 
 			if (code != null)
-				switch (code.KeyType)
+				switch ((byte)code.Character)
 				{
-					case KeyType.RegularKey:
-						if ((byte)code.Character == 10) // Enter key
-						{
-							NewLine();
+					// Enter key
+					case 10:
+						NewLine();
+						var l = Line;
+						Line = string.Empty;
+						return l;
 
-							var l = Line;
-							Line = string.Empty;
-							return l;
-						}
-						else if ((byte)code.Character == 8) // Backspace key
+					// Backspace key
+					case 8:
+						if (Line.Length > 0)
 						{
-							if (Line.Length > 0)
-							{
-								Previous();
-								Characters.RemoveAt(Characters.Count - 1);
-								Line = Line.Substring(0, Line.Length - 1);
-							}
+							Previous();
+							Characters.RemoveAt(Characters.Count - 1);
+							Line = Line[0..^1];
 						}
-						else
-						{
-							Line += code.Character;
-							Write(code.Character);
-						}
-
 						break;
 
+					// Any other key
 					default:
+						Line += code.Character;
+						Write(code.Character);
 						break;
 				}
 
 			return string.Empty;
 		}
 
-		public Key ReadKey(bool waitForKey = true)
+		public Key ReadKey()
 		{
-			if (!waitForKey)
-				return Keyboard.GetKeyPressed();
-
-			Key key;
-
-			for (;;)
-			{
-				HAL.Pause();
-
-				var code = Keyboard.GetKeyPressed();
-				if (code == null)
-					continue;
-
-				key = code;
-				break;
-			}
-
-			return key;
+			return Keyboard.GetKeyPressed();
 		}
 
 		public void ToTop()
 		{
-			SetPosition(0, 0);
+			// Avoids unnecessary operations from SetPosition()
+			X = 0;
+			Y = 0;
 		}
 
 		public void Clear()
