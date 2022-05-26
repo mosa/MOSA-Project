@@ -11,6 +11,7 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<WarningLevel>2</WarningLevel>
 		<DebugSymbols>True</DebugSymbols>
+		<UseAppHost>False</UseAppHost>
 	</PropertyGroup>
 	<PropertyGroup>
 		<StartupObject>Mosa.Tool.Compiler.Program</StartupObject>

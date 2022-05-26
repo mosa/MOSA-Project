@@ -2,8 +2,8 @@
 	"profiles": {
 		"Mosa.Demo.MyWorld.x86": {
 			"commandName": "Executable",
-			"executablePath": "..\\bin\\Mosa.Tool.Launcher.exe",
-			"commandLineArgs": "Mosa.Demo.MyWorld.x86.dll",
+			"executablePath": "dotnet",
+			"commandLineArgs": "..\\bin\\Mosa.Tool.Launcher.dll Mosa.Demo.MyWorld.x86.dll",
 			"workingDirectory": "..\\..\\bin"
 		}
 	}

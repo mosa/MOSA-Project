@@ -33,7 +33,7 @@ jobs:
       - name: Build
         run: dotnet build Source/Mosa.sln
       - name: Unit Tests
-        run: bin\Mosa.Utility.UnitTests.exe ${{ matrix.level }} -s Emulator.Display=false
+        run: dotnet bin\Mosa.Utility.UnitTests.dll ${{ matrix.level }} -s Emulator.Display=false
 
   build-unix:
     name: Linux - Unit Tests

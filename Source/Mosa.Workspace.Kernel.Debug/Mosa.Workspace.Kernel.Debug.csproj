@@ -13,6 +13,7 @@
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<NoWarn>1591</NoWarn>
 		<DebugSymbols>True</DebugSymbols>
+		<UseAppHost>False</UseAppHost>
 	</PropertyGroup>
 	<PropertyGroup>
 		<StartupObject>Mosa.Workspace.Kernel.Program</StartupObject>

@@ -12,6 +12,7 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<NoWarn>1591</NoWarn>
 		<DebugSymbols>True</DebugSymbols>
+		<UseAppHost>False</UseAppHost>
 	</PropertyGroup>
 	<PropertyGroup>
 		<StartupObject>Mosa.Workspace.FileSystem.Debug.Program</StartupObject>

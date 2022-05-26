@@ -27,11 +27,21 @@
 		<file src="..\..\bin\Mosa.Platform.Intel.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Platform.x86.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Platform.x64.dll" target="tools" />
-		<file src="..\..\bin\Mosa.Tool.Explorer.exe" target="tools" />
-		<file src="..\..\bin\Mosa.Tool.Debugger.exe" target="tools" />
-		<file src="..\..\bin\Mosa.Tool.Launcher.exe" target="tools" />
-		<file src="..\..\bin\Mosa.Tool.Compiler.exe" target="tools" />
-		<file src="..\..\bin\Mosa.Tool.Launcher.Console.exe" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Explorer.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Explorer.deps.json" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Explorer.runtimeconfig.json" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Debugger.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Debugger.deps.json" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Debugger.runtimeconfig.json" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Launcher.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Launcher.deps.json" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Launcher.runtimeconfig.json" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Compiler.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Compiler.deps.json" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Compiler.runtimeconfig.json" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Launcher.Console.dll" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Launcher.Console.deps.json" target="tools" />
+		<file src="..\..\bin\Mosa.Tool.Launcher.Console.runtimeconfig.json" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.BootImage.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.Configuration.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Utility.DebugEngine.dll" target="tools" />

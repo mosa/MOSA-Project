@@ -12,6 +12,7 @@
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<NoWarn>NU1702</NoWarn>
 		<DebugSymbols>True</DebugSymbols>
+		<UseAppHost>False</UseAppHost>
 	</PropertyGroup>
 	<PropertyGroup>
 		<StartupObject>Mosa.Utility.UnitTests.Program</StartupObject>
