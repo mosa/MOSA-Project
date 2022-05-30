@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.28809.33
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31912.275
 MinimumVisualStudioVersion = 12.0.31101.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Platforms", "Platforms", "{AB88960E-B233-475B-96E4-8C10EEF8622C}"
 EndProject
@@ -172,8 +172,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Demo.MyWorld.x86", "Mosa.Demo.MyWorld.x86\Mosa.Demo.MyWorld.x86.csproj", "{CAA3A6F4-FC91-4736-A9E4-CFEF76C29D28}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BareMetal", "BareMetal", "{BFA70B7C-ADB5-444D-AA88-D8B8E82B635D}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tool.PatchDotNet", "Mosa.Tool.PatchDotNet\Mosa.Tool.PatchDotNet.csproj", "{C0315CCD-767C-4ACC-89DA-EA5059A9E344}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
