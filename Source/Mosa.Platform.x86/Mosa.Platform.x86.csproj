@@ -10,7 +10,7 @@
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <BaseAddress>285212672</BaseAddress>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>10.0</LangVersion>
     <RegisterForComInterop>False</RegisterForComInterop>
     <OutputPath>..\..\bin\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

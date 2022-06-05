@@ -1,26 +1,21 @@
-// Copyright (c) MOSA Project. Licensed under the New BSD License.
-
+﻿using Avalonia;
 using System;
-using System.Windows.Forms;
 
 namespace Mosa.Tool.Launcher
 {
-	internal static class Program
+	class Program
 	{
-		/// <summary>
-		/// The main entry point for the application.
-		/// </summary>
-		/// <param name="args">The arguments.</param>
+		// Initialization code. Don't use any Avalonia, third-party APIs or any
+		// SynchronizationContext-reliant code before AppMain is called: things aren't initialized
+		// yet and stuff might break.
 		[STAThread]
-		private static void Main(string[] args)
-		{
-			Application.EnableVisualStyles();
-			Application.SetCompatibleTextRenderingDefault(false);
+		public static void Main(string[] args) => BuildAvaloniaApp()
+			.StartWithClassicDesktopLifetime(args);
 
-			var main = new Launcher();
-			main.LoadArguments(args);
-
-			Application.Run(main);
-		}
+		// Avalonia configuration, don't remove; also used by visual designer.
+		public static AppBuilder BuildAvaloniaApp()
+			=> AppBuilder.Configure<App>()
+				.UsePlatformDetect()
+				.LogToTrace();
 	}
 }

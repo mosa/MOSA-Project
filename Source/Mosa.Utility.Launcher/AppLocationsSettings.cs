@@ -27,6 +27,7 @@ namespace Mosa.Utility.Launcher
 			Set(settings, "AppLocation.Bochs", FindBochs());
 			Set(settings, "AppLocation.VmwarePlayer", FindVmwarePlayer());
 			Set(settings, "AppLocation.VmwareWorkstation", FindVmwareWorkstation());
+			Set(settings, "AppLocation.VirtualBox", FindVirtualBox());
 			Set(settings, "AppLocation.Ndisasm", FindNdisasm());
 			Set(settings, "AppLocation.Mkisofs", FindMkisofs());
 			Set(settings, "AppLocation.GDB", FindGDB());
@@ -133,6 +134,18 @@ namespace Mosa.Utility.Launcher
 				new string[] {
 					@"%ProgramFiles%\VMware\VMware Workstation",
 					@"%ProgramFiles(x86)%\VMware\VMware Workstation",
+					"/bin"
+				}
+			);
+		}
+
+		private static string FindVirtualBox()
+		{
+			return TryFind(
+				new string[] { "VBoxManage.exe", "vboxmanage" },
+				new string[] {
+					@"%ProgramFiles%\Oracle",
+					@"%ProgramFiles(x86)%\Oracle",
 					"/bin"
 				}
 			);

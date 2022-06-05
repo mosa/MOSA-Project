@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>10.0</LangVersion>
     <DebugType>full</DebugType>
     <FileAlignment>4096</FileAlignment>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>

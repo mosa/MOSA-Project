@@ -9,6 +9,8 @@ namespace Mosa.Utility.BootImage
 	/// </summary>
 	public static class VDI
 	{
+		// TODO: FIXME!!
+
 		#region Constants
 
 		internal struct VHIHeaderOffset
@@ -37,7 +39,7 @@ namespace Mosa.Utility.BootImage
 			internal const uint UUIDParent = 0x1B8; // 16
 		}
 
-		internal const string HeaderText = "<<< Sun xVM VirtualBox Disk Image >>>";
+		internal const string HeaderText = "<<< Oracle VM VirtualBox Disk Image >>>";
 
 		#endregion Constants
 
@@ -52,14 +54,18 @@ namespace Mosa.Utility.BootImage
 		static public byte[] CreateHeader(uint blocks, byte[] guid, byte[] lastSnapGuid, DiskGeometry diskGeometry)
 		{
 			var binaryHeader = new DataBlock(512);
+			var textLength = (uint)HeaderText.Length;
 
-			binaryHeader.SetString(VHIHeaderOffset.HeaderText, HeaderText, (uint)HeaderText.Length);
-			binaryHeader.SetByte(VHIHeaderOffset.HeaderText + 0x25, 0x0A);
+			//https://forums.virtualbox.org/viewtopic.php?t=8046
+			// Also some RE :)
+			binaryHeader.SetString(VHIHeaderOffset.HeaderText, HeaderText, textLength);
+			binaryHeader.SetByte(VHIHeaderOffset.HeaderText + textLength, 0x0A);
 			binaryHeader.SetUInt(VHIHeaderOffset.ImageSignature, 0xBEda107F);
-			binaryHeader.SetUInt(VHIHeaderOffset.Version, 0x00010001);
-			binaryHeader.SetUInt(VHIHeaderOffset.HeaderSize, 0x180);
-			binaryHeader.SetUInt(VHIHeaderOffset.ImageType, 0x02);
+			binaryHeader.SetUInt(VHIHeaderOffset.Version, 0x00010001); // 1.1
+			binaryHeader.SetUInt(VHIHeaderOffset.HeaderSize, 0x190);
+			binaryHeader.SetUInt(VHIHeaderOffset.ImageType, 0x02); // Fixed VDI?
 			binaryHeader.SetUInt(VHIHeaderOffset.ImageFlags, 0x00);
+			// Checkpoint
 			binaryHeader.SetUInt(VHIHeaderOffset.OffsetBlocks, 0x200);
 			binaryHeader.SetUInt(VHIHeaderOffset.OffsetData, 0x400);
 			binaryHeader.SetUInt(VHIHeaderOffset.DiskGeometryCylinders, 0); // diskGeometry.Cylinders);
