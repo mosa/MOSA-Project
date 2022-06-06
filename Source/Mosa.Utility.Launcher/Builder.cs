@@ -283,7 +283,7 @@ namespace Mosa.Utility.Launcher
 
 		private byte[] GetLimineCFG()
 		{
-			return Encoding.ASCII.GetBytes($"TIMEOUT=3\nINTERFACE_RESOLUTION=800x600\nINTERFACE_BRANDING=Managed Operating System Alliance\n:{LauncherSettings.OSName}\nPROTOCOL=multiboot1\nKERNEL_PATH=boot:///main.exe");
+			return Encoding.ASCII.GetBytes($"TIMEOUT=0\nINTERFACE_RESOLUTION=800x600\nINTERFACE_BRANDING=Managed Operating System Alliance\n:{LauncherSettings.OSName}\nPROTOCOL=multiboot1\nKERNEL_PATH=boot:///main.exe");
 		}
 
 		private byte[] GetSyslinuxCFG()
