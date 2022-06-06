@@ -20,6 +20,8 @@
 	</metadata>
 	<files>
 		<file src="..\Art\Mosa Icon.png" target="images\" />
+		<file src="..\..\bin\runtimes\**\*.*" target="tools/runtimes" /> 
+		<file src="..\..\bin\Avalonia*.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Compiler.Common.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Compiler.Framework.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Compiler.MosaTypeSystem.dll" target="tools" />
