@@ -372,7 +372,8 @@ namespace Mosa.DeviceDriver.ISA
 
 			for (var i = 0; i < (xsdt ? 16 : 8); i++)
 			{
-				//https://github.com/msareedjr/MOSA-MikeOS/commit/6867064fedae707280083ba4d9ff12d468a6dce0
+				// On some systems or VM software (e.g. VirtualBox), we have to map the pointer, or else it will crash.
+				// See: https://github.com/msareedjr/MOSA-MikeOS/commit/6867064fedae707280083ba4d9ff12d468a6dce0
 				var h = (ACPISDTHeader*)HAL.GetPhysicalMemory((Pointer)(xsdt ? XSDT->PointerToOtherSDT[i] : RSDT->PointerToOtherSDT[i]), 0xfff).Address;
 
 				if (h != null &&

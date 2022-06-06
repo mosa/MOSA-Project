@@ -60,8 +60,6 @@ namespace Mosa.Utility.BootImage
 					diskGeometry
 				);
 
-				File.WriteAllBytes("/home/anerruption/Desktop/testheader.vdi", header);
-
 				diskDeviceDriver.WriteBlock(0, 1, header);
 
 				var map = VDI.CreateImageMap(blockCount);

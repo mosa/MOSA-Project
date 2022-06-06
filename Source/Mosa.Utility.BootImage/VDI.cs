@@ -9,7 +9,7 @@ namespace Mosa.Utility.BootImage
 	/// </summary>
 	public static class VDI
 	{
-		// TODO: FIXME!!
+		// FIXME: Header creation (offsets and values)
 
 		#region Constants
 
