@@ -184,7 +184,7 @@ namespace Mosa.Utility.Launcher
 
 				CreateVMDK(tmpimagefile);
 			}
-			else if (LauncherSettings.ImageFormat == "img")
+			else
 			{
 				CreateDiskImage(LauncherSettings.ImageFile);
 			}
@@ -247,7 +247,7 @@ namespace Mosa.Utility.Launcher
 				}
 			}
 
-			bootImageOptions.VolumeLabel = "MOSA";
+			bootImageOptions.VolumeLabel = LauncherSettings.OSName;
 			bootImageOptions.DiskImageFileName = imagefile;
 
 			switch (LauncherSettings.ImageBootLoader)
@@ -283,7 +283,7 @@ namespace Mosa.Utility.Launcher
 
 		private byte[] GetLimineCFG()
 		{
-			return Encoding.ASCII.GetBytes($"TIMEOUT=5\nINTERFACE_RESOLUTION=800x600\nINTERFACE_BRANDING=Managed Operating System Alliance\n:{LauncherSettings.OSName}\nPROTOCOL=multiboot1\nKERNEL_PATH=boot:///main.exe");
+			return Encoding.ASCII.GetBytes($"TIMEOUT=0\nINTERFACE_RESOLUTION=800x600\nINTERFACE_BRANDING=Managed Operating System Alliance\n:{LauncherSettings.OSName}\nPROTOCOL=multiboot1\nKERNEL_PATH=boot:///main.exe");
 		}
 
 		private byte[] GetSyslinuxCFG()

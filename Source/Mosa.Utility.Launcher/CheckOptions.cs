@@ -38,6 +38,11 @@ namespace Mosa.Utility.Launcher
 				return "VMware does not support the VHD image format";
 			}
 
+			if (emulator == "virtualbox" && imageformat == "IMG")
+			{
+				return "VirtualBox dose not support the IMG file format";
+			}
+
 			if (bootloader == "grub0.97" && imageformat != "ISO")
 			{
 				return "Grub boot loader does not support virtual disk formats";

@@ -89,7 +89,7 @@ namespace Mosa.Tool.Launcher.Console
 			Settings.SetValue("Optimizations.SSA", true);
 			Settings.SetValue("Optimizations.TwoPass", true);
 			Settings.SetValue("Optimizations.ValueNumbering", true);
-			Settings.SetValue("Image.BootLoader", "syslinux3.72");
+			Settings.SetValue("Image.BootLoader", "limine");
 			Settings.SetValue("Image.Folder", Path.Combine(Path.GetTempPath(), "MOSA"));
 			Settings.SetValue("Image.Format", "IMG");
 			Settings.SetValue("Image.FileSystem", "FAT16");
@@ -101,6 +101,7 @@ namespace Mosa.Tool.Launcher.Console
 			Settings.SetValue("Multiboot.Video.Depth", 32);
 			Settings.SetValue("Emulator", "Qemu");
 			Settings.SetValue("Emulator.Memory", 128);
+			Settings.SetValue("Emulator.Cores", 1);
 			Settings.SetValue("Emulator.Serial", "none");
 			Settings.SetValue("Emulator.Serial.Host", "127.0.0.1");
 			Settings.SetValue("Emulator.Serial.Port", new Random().Next(11111, 22222));
