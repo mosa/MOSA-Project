@@ -37,6 +37,7 @@ namespace Mosa.Utility.Launcher
 		{
 			settings.SetValue("Emulator", "Qemu");
 			settings.SetValue("Emulator.Memory", 128);
+			settings.SetValue("Emulator.Cores", 1);
 
 			//settings.SetValue("Emulator.Serial", "none");
 			settings.SetValue("Emulator.Serial.Host", "127.0.0.1");

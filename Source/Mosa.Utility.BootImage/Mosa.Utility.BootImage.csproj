@@ -4,8 +4,8 @@
     <AssemblyTitle>Mosa.Utility.BootImage</AssemblyTitle>
     <Company>MOSA Project</Company>
     <Product>Mosa.Utility.BootImage</Product>
-    <copyright>Copyright © 2022</copyright>
-    <LangVersion>9.0</LangVersion>
+    <copyright>Copyright © MOSA Project 2022</copyright>
+    <LangVersion>10.0</LangVersion>
     <DebugType>full</DebugType>
     <OutputPath>..\..\bin\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

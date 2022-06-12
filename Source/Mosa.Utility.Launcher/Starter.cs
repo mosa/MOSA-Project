@@ -31,7 +31,7 @@ namespace Mosa.Utility.Launcher
 			Linker = linker;
 		}
 
-		public bool Launch()
+		public bool Launch(bool waitForExit = false)
 		{
 			IsSucccessful = false;
 			Process = null;
@@ -68,8 +68,12 @@ namespace Mosa.Utility.Launcher
 			{
 				IsSucccessful = false;
 				Process = null;
-				Output($"Exception: {e.ToString()}");
+				Output($"Exception: {e}");
 			}
+
+			// Fix for Linux
+			if (waitForExit && Process != null)
+				Process.WaitForExit();
 
 			return IsSucccessful;
 		}
@@ -138,6 +142,7 @@ namespace Mosa.Utility.Launcher
 				case "qemu": return LaunchQemu(false);
 				case "bochs": return LaunchBochs(false);
 				case "vmware": return LaunchVMware(false);
+				case "virtualbox": return LaunchVirtualBox(false);
 				default: throw new InvalidOperationException();
 			}
 		}
@@ -148,6 +153,8 @@ namespace Mosa.Utility.Launcher
 
 			arg.Append(" -L " + Quote(LauncherSettings.QEMUBios));
 			arg.Append(" -soundhw sb16");
+			arg.Append($" -m {LauncherSettings.EmulatorMemory.ToString()}M");
+			arg.Append($" -smp cores={LauncherSettings.EmulatorCores.ToString()}");
 
 			if (LauncherSettings.Platform == "x86")
 			{
@@ -230,9 +237,10 @@ namespace Mosa.Utility.Launcher
 			var sb = new StringBuilder();
 
 			sb.AppendLine($"megs: {LauncherSettings.EmulatorMemory}");
-			sb.AppendLine($"ata0: enabled=1,ioaddr1=0x1f0,ioaddr2=0x3f0,irq=14");
+			sb.AppendLine("ata0: enabled=1,ioaddr1=0x1f0,ioaddr2=0x3f0,irq=14");
+			sb.AppendLine($"cpu: count={LauncherSettings.EmulatorCores}");
 			sb.AppendLine($"cpuid: mmx=1,sep=1,{simd}=sse4_2,apic=xapic,aes=1,movbe=1,xsave=1");
-			sb.AppendLine($"boot: cdrom,disk");
+			sb.AppendLine("boot: cdrom,disk");
 			sb.AppendLine($"log: {Quote(logfile)}");
 			sb.AppendLine($"romimage: file={Quote(Path.Combine(bochsdirectory, "BIOS-bochs-latest"))}");
 			sb.AppendLine($"vgaromimage: file={Quote(Path.Combine(bochsdirectory, "VGABIOS-lgpl-latest"))}");
@@ -277,6 +285,8 @@ namespace Mosa.Utility.Launcher
 			sb.AppendLine("priority.grabbed = \"normal\"");
 			sb.AppendLine("priority.ungrabbed = \"normal\"");
 			sb.AppendLine("virtualHW.productCompatibility = \"hosted\"");
+			sb.AppendLine("numvcpus = \"1\"");
+			sb.AppendLine($"cpuid.coresPerSocket = {Quote(LauncherSettings.EmulatorCores.ToString())}");
 
 			/*sb.AppendLine("nvme0.present = \"TRUE\"");
 			sb.AppendLine("nvme0:0.present = \"TRUE\"");
@@ -341,6 +351,30 @@ namespace Mosa.Utility.Launcher
 			}
 
 			return null;
+		}
+
+		private Process LaunchVirtualBox(bool getOutput)
+		{
+			if (GetOutput(LaunchApplication(LauncherSettings.VirtualBox, "list vms")).Contains(LauncherSettings.OSName))
+			{
+				var newFile = Path.ChangeExtension(LauncherSettings.ImageFile, "bak");
+
+				// Janky method to keep the image file
+				File.Move(LauncherSettings.ImageFile, newFile);
+
+				// Delete the VM first
+				LaunchApplication(LauncherSettings.VirtualBox, $"unregistervm {LauncherSettings.OSName} --delete", getOutput).WaitForExit();
+
+				// Restore the image file
+				File.Move(newFile, LauncherSettings.ImageFile);
+			}
+
+			LaunchApplication(LauncherSettings.VirtualBox, $"createvm --name {LauncherSettings.OSName} --ostype Other --register", getOutput).WaitForExit();
+			LaunchApplication(LauncherSettings.VirtualBox, $"modifyvm {LauncherSettings.OSName} --memory {LauncherSettings.EmulatorMemory.ToString()} --cpus {LauncherSettings.EmulatorCores.ToString()}", getOutput).WaitForExit();
+			LaunchApplication(LauncherSettings.VirtualBox, $"storagectl {LauncherSettings.OSName} --name Controller --add ide --controller PIIX4", getOutput).WaitForExit();
+			LaunchApplication(LauncherSettings.VirtualBox, $"storageattach {LauncherSettings.OSName} --storagectl Controller --port 0 --device 0 --type {(LauncherSettings.ImageFormat == "iso" ? "dvddrive" : "hdd")} --medium {Quote(LauncherSettings.ImageFile)}", getOutput).WaitForExit();
+
+			return LaunchApplication(LauncherSettings.VirtualBox, $"startvm {LauncherSettings.OSName}");
 		}
 
 		private void LaunchDebugger()

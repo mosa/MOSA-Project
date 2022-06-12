@@ -173,7 +173,7 @@ Example: Mosa.Tool.Compiler.exe -o Mosa.HelloWorld.x86.bin -platform x86 Mosa.He
 			Settings.SetValue("Optimizations.SSA", true);
 			Settings.SetValue("Optimizations.TwoPass", true);
 			Settings.SetValue("Optimizations.ValueNumbering", true);
-			Settings.SetValue("Image.BootLoader", "syslinux3.72");
+			Settings.SetValue("Image.BootLoader", "limine");
 			Settings.SetValue("Image.Folder", Path.Combine(Path.GetTempPath(), "MOSA"));
 			Settings.SetValue("Image.Format", "IMG");
 			Settings.SetValue("Image.FileSystem", "FAT16");

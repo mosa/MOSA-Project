@@ -4,8 +4,8 @@
 		<OutputType>Exe</OutputType>
 		<Title>Mosa.Tool.CreateBootImage</Title>
 		<Company>MOSA Project</Company>
-		<copyright>Copyright © 2022</copyright>
-		<LangVersion>9.0</LangVersion>
+		<copyright>Copyright © MOSA Project 2022</copyright>
+		<LangVersion>10.0</LangVersion>
 		<DebugType>full</DebugType>
 		<OutputPath>..\..\bin\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

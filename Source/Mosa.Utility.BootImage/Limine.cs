@@ -18,7 +18,8 @@ namespace Mosa.Utility.BootImage
 
 		private const int BlockSize = 512;
 
-		public static void Deploy(string path)
+		// TODO: Fix for VDI
+		public static void Deploy(string path, bool vdi)
 		{
 			Stream = File.Open(path, FileMode.Open);
 			DataCache = new DataBlock(new byte[BlockSize]);
@@ -26,6 +27,9 @@ namespace Mosa.Utility.BootImage
 			State = CacheState.Clean;
 
 			Stream.Read(DataCache.Data);
+
+			// To not interfere with VDI header
+			var mbrLoc = vdi ? 512 : 0;
 
 			// Skip detecting if the device has a valid partition table, because we know it does
 

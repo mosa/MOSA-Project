@@ -4,8 +4,8 @@
     <AssemblyTitle>Mosa.Utility.Compiler</AssemblyTitle>
     <Company>MOSA Project</Company>
     <Product>Mosa.Utility.Compiler</Product>
-    <copyright>Copyright © 2022</copyright>
-    <LangVersion>9.0</LangVersion>
+    <copyright>Copyright © MOSA Project 2022</copyright>
+    <LangVersion>10.0</LangVersion>
     <BaseAddress>285212672</BaseAddress>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
