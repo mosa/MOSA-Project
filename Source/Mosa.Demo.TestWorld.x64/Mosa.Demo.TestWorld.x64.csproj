@@ -4,7 +4,7 @@
 		<OutputType>Exe</OutputType>
 		<StartupObject>Mosa.Demo.TestWorld.x64.Boot</StartupObject>
 		<DebugType>full</DebugType>
-		<LangVersion>9.0</LangVersion>
+		<LangVersion>10.0</LangVersion>
 		<OutputPath>..\..\bin\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<DisableStandardFrameworkResolution>true</DisableStandardFrameworkResolution>

@@ -70,6 +70,12 @@ namespace Mosa.Utility.Launcher
 			set { Settings.SetValue("Emulator.Memory", value); }
 		}
 
+		public int EmulatorCores
+		{
+			get { return Settings.GetValue("Emulator.Cores", 1); }
+			set { Settings.SetValue("Emulator.Cores", value); }
+		}
+
 		public string EmulatorSerial
 		{
 			get { return Settings.GetValue("Emulator.Serial", null); }
@@ -309,6 +315,12 @@ namespace Mosa.Utility.Launcher
 		{
 			get { return Settings.GetValue("AppLocation.VmwareWorkstation", null); }
 			set { Settings.SetValue("AppLocation.VmwareWorkstation", value); }
+		}
+
+		public string VirtualBox
+		{
+			get { return Settings.GetValue("AppLocation.VirtualBox", null); }
+			set { Settings.SetValue("AppLocation.VirtualBox", value); }
 		}
 
 		public string OSName

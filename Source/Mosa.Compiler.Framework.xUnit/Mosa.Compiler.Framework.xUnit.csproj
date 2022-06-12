@@ -5,13 +5,13 @@
 		<AssemblyTitle>Mosa.Compiler.Framework.xUnit</AssemblyTitle>
 		<Company>MOSA Project</Company>
 		<Product>Mosa.Compiler.Framework.xUnit</Product>
-		<Copyright>Copyright © MOSA Project 2021</Copyright>
+		<Copyright>Copyright © MOSA Project 2022</Copyright>
 		<BaseAddress>285212672</BaseAddress>
 		<RegisterForComInterop>False</RegisterForComInterop>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
 		<DebugType>full</DebugType>
 		<RemoveIntegerChecks>False</RemoveIntegerChecks>
-		<LangVersion>9.0</LangVersion>
+		<LangVersion>10.0</LangVersion>
 		<FileAlignment>4096</FileAlignment>
 		<OutputPath>..\..\bin\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>

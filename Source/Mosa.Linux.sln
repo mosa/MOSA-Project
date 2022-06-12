@@ -173,6 +173,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Mosa.Demo.MyWorld.x86", "Mo
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BareMetal", "BareMetal", "{BFA70B7C-ADB5-444D-AA88-D8B8E82B635D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tool.Launcher", "Mosa.Tool.Launcher\Mosa.Tool.Launcher.csproj", "{2FE29BA5-15B0-4C45-A955-F22F7EA1073E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1069,6 +1071,24 @@ Global
 		{479A1E0D-E2C4-4B27-8992-AA6CB546C778}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{479A1E0D-E2C4-4B27-8992-AA6CB546C778}.Release|x86.ActiveCfg = Release|Any CPU
 		{479A1E0D-E2C4-4B27-8992-AA6CB546C778}.Release|x86.Build.0 = Release|Any CPU
+		{2FE29BA5-15B0-4C45-A955-F22F7EA1073E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FE29BA5-15B0-4C45-A955-F22F7EA1073E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2FE29BA5-15B0-4C45-A955-F22F7EA1073E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2FE29BA5-15B0-4C45-A955-F22F7EA1073E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2FE29BA5-15B0-4C45-A955-F22F7EA1073E}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{2FE29BA5-15B0-4C45-A955-F22F7EA1073E}.Debug|x86.Build.0 = Debug|Any CPU
+		{2FE29BA5-15B0-4C45-A955-F22F7EA1073E}.Description|Any CPU.ActiveCfg = Debug|Any CPU
+		{2FE29BA5-15B0-4C45-A955-F22F7EA1073E}.Description|Any CPU.Build.0 = Debug|Any CPU
+		{2FE29BA5-15B0-4C45-A955-F22F7EA1073E}.Description|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2FE29BA5-15B0-4C45-A955-F22F7EA1073E}.Description|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2FE29BA5-15B0-4C45-A955-F22F7EA1073E}.Description|x86.ActiveCfg = Debug|Any CPU
+		{2FE29BA5-15B0-4C45-A955-F22F7EA1073E}.Description|x86.Build.0 = Debug|Any CPU
+		{2FE29BA5-15B0-4C45-A955-F22F7EA1073E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2FE29BA5-15B0-4C45-A955-F22F7EA1073E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2FE29BA5-15B0-4C45-A955-F22F7EA1073E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2FE29BA5-15B0-4C45-A955-F22F7EA1073E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2FE29BA5-15B0-4C45-A955-F22F7EA1073E}.Release|x86.ActiveCfg = Release|Any CPU
+		{2FE29BA5-15B0-4C45-A955-F22F7EA1073E}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1127,6 +1147,7 @@ Global
 		{1E16FC87-77BD-4065-A231-9E533D68C7D4} = {D032B24A-CE3A-4881-BACE-CC4FE0AFD69D}
 		{CAA3A6F4-FC91-4736-A9E4-CFEF76C29D28} = {1AB7FA6A-829C-4DCF-BCA6-A27156D8DA26}
 		{479A1E0D-E2C4-4B27-8992-AA6CB546C778} = {3A1D736A-450F-47A4-B050-3CAF338AECFC}
+		{2FE29BA5-15B0-4C45-A955-F22F7EA1073E} = {D032B24A-CE3A-4881-BACE-CC4FE0AFD69D}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C22A5C94-6B05-4B1B-845A-A2EA7615E093}

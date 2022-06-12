@@ -105,9 +105,11 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-qemu", Setting = "Emulator", Value="qemu"},
 				new Argument() { Name = "-vmware", Setting = "Emulator", Value="vmware"},
 				new Argument() { Name = "-bochs", Setting = "Emulator", Value="bochs"},
+				new Argument() { Name = "-virtualbox", Setting = "Emulator", Value="virtualbox"},
 				new Argument() { Name = "-display", Setting = "Emulator.Display", Value = "on"},
 				new Argument() { Name = "-display-off", Setting = "Emulator.Display", Value = "off"},
 				new Argument() { Name = "-memory", Setting = "Emulator.Memory"},
+				new Argument() { Name = "-cores", Setting = "Emulator.Cores"},
 				new Argument() { Name = "-qemu-gdb", Setting = "Emulator.GDB", Value="false"},
 
 				// Launcher - Image:
@@ -165,10 +167,11 @@ namespace Mosa.Utility.Configuration
 				new Argument() { Name = "-syslinux", Setting = "Image.BootLoader", Value = "syslinux3.72"},
 				new Argument() { Name = "-syslinux3.72", Setting = "Image.BootLoader", Value = "syslinux3.72"},
 				new Argument() { Name = "-syslinux6.0", Setting = "Image.BootLoader", Value = "syslinux6.03"},
+				new Argument() { Name = "-limine", Setting = "Image.BootLoader", Value = "limine"},
 
 				// Advance:
 				new Argument() { Name = "-hunt-corlib", Setting = "Launcher.HuntForCorLib", Value = "true"},
-				new Argument() { Name = "-plug-korlib", Setting = "Advanced.PlugKorlib", Value = "true"},
+				new Argument() { Name = "-plug-korlib", Setting = "Launcher.PlugKorlib", Value = "true"},
 				new Argument() { Name = "-test", Setting = "Launcher.Test", Value = "true"},
 
 				// Debugger:

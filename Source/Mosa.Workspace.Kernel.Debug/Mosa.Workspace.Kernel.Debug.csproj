@@ -5,9 +5,9 @@
 		<AssemblyTitle>Mosa.Workspace.Kernel.Debug</AssemblyTitle>
 		<Company>MOSA Project</Company>
 		<Product>Mosa.Workspace.Kernel.Debug</Product>
-		<copyright>Copyright © 2022</copyright>
+		<copyright>Copyright © MOSA Project 2022</copyright>
 		<DebugType>full</DebugType>
-		<LangVersion>9.0</LangVersion>
+		<LangVersion>10.0</LangVersion>
 		<OutputPath>..\..\bin\</OutputPath>
 		<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>

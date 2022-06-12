@@ -13,13 +13,15 @@
 		<summary>MOSA Tools Package</summary>
 		<description>MOSA Tools Package</description>
 		<releaseNotes></releaseNotes>
-		<copyright>Copyright © 2022</copyright>
+		<copyright>Copyright © MOSA Project 2022</copyright>
 		<tags>MOSA Compiler</tags>
 		<dependencies>
 		</dependencies>
 	</metadata>
 	<files>
 		<file src="..\Art\Mosa Icon.png" target="images\" />
+		<file src="..\..\bin\runtimes\**\*.*" target="tools/runtimes" /> 
+		<file src="..\..\bin\Avalonia*.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Compiler.Common.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Compiler.Framework.dll" target="tools" />
 		<file src="..\..\bin\Mosa.Compiler.MosaTypeSystem.dll" target="tools" />
