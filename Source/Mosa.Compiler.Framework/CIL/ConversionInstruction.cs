@@ -72,12 +72,8 @@ namespace Mosa.Compiler.Framework.CIL
 				case OpCode.Conv_ovf_u2_un: resultType = methodCompiler.TypeSystem.BuiltIn.U2; break;
 				case OpCode.Conv_ovf_u4_un: resultType = methodCompiler.TypeSystem.BuiltIn.U4; break;
 				case OpCode.Conv_ovf_u8_un: resultType = methodCompiler.TypeSystem.BuiltIn.U8; break;
-				//case OpCode.Conv_ovf_i: goto case OpCode.Conv_i;
-				//case OpCode.Conv_ovf_u: goto case OpCode.Conv_u;
-				//case OpCode.Conv_ovf_i_un: goto case OpCode.Conv_i;
-				//case OpCode.Conv_ovf_u_un: goto case OpCode.Conv_u;
 				case OpCode.Conv_r_un: resultType = methodCompiler.TypeSystem.BuiltIn.R8; break;
-				default: throw new CompilerException("Overflow checking conversions not supported");
+				default: throw new CompilerException("Unknown conversion");
 			}
 
 			var result = methodCompiler.Compiler.GetStackType(resultType);
