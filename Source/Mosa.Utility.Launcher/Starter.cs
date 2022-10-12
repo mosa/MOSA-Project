@@ -155,10 +155,11 @@ namespace Mosa.Utility.Launcher
 			arg.Append(" -L " + Quote(LauncherSettings.QEMUBios));
 			arg.Append(" -soundhw sb16");
 
-			if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+			// TODO: Issue with unit tests on Linux
+			/*if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
 			{
 				arg.Append(" -enable-kvm");
-			}
+			}*/
 
 			arg.Append($" -m {LauncherSettings.EmulatorMemory.ToString()}M");
 			arg.Append($" -smp cores={LauncherSettings.EmulatorCores.ToString()}");
