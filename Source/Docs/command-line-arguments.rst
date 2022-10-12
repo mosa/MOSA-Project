@@ -31,7 +31,7 @@ Below are the command line arguments available:
     -sccp-off,Optimizations.SCCP,false
     -basic-optimizations,Optimizations.Basic,true
     -basic-optimizations-off,Optimizations.Basic,false
-	-basic-optimization-window,Optimizations.Basic.Window,{value}
+    -basic-optimization-window,Optimizations.Basic.Window,{value}
     -inline-explicit,Optimizations.Inline.Explicit,true
     -inline-explicit-off,Optimizations.Inline.Explicit,false
     -long-expansion,Optimizations.LongExpansion,true
@@ -64,7 +64,7 @@ Below are the command line arguments available:
     -output-inlined,CompilerDebug.InlinedFile,%DEFAULT%
     -output-hash,CompilerDebug.PreLinkHashFile,%DEFAULT%
     -output-hash,CompilerDebug.PostLinkHashFile,%DEFAULT%
-	-check,CompilerDebug.FullCheckMode,true
+    -check,CompilerDebug.FullCheckMode,true
 
     Compiler - X86:
     -interrupt-method,X86.InterruptMethodName,{value}
@@ -101,9 +101,9 @@ Below are the command line arguments available:
     -display-off,Emulator.Display,off
     -memory,Emulator.Memory,
     -qemu-gdb,Emulator.GDB,false
-	
-	Launcher - Emulator - VMWare:
-	-vmware-svga,Emulator.SVGA,vmware
+    
+    Launcher - Emulator - VMWare:
+    -vmware-svga,Emulator.SVGA,vmware
 
     Launcher - Image:
     -image,Image.ImageFile,{value}
@@ -162,8 +162,8 @@ Below are the command line arguments available:
     -gdb-port,GDB.Port,{value}
     -gdb-host,GDB.Host,{value}
 
-	Operating System:
-	-osname,OS.Name,{value}
+    Operating System:
+    -osname,OS.Name,{value}
 
     Debugger:
     -breakpoints,Debugger.BreakpointFile,{value}
@@ -182,7 +182,7 @@ Below are the command line arguments available:
     -o0,Optimizations.BitTracker,false
     -o0,Optimizations.TwoPass,false
     -o0,Optimizations.Inline.Maximum,0
-	-o0,Optimizations.Basic.Window,1
+    -o0,Optimizations.Basic.Window,1
 
     -o1,Optimizations.Basic,true
     -o1,Optimizations.SSA,false
@@ -196,7 +196,7 @@ Below are the command line arguments available:
     -o1,Optimizations.BitTracker,false
     -o1,Optimizations.TwoPass,false
     -o1,Optimizations.Inline.Maximum,0
-	-o1,Optimizations.Basic.Window,1
+    -o1,Optimizations.Basic.Window,1
 
     -o2,Optimizations.Basic,true
     -o2,Optimizations.SSA,true
@@ -210,7 +210,7 @@ Below are the command line arguments available:
     -o2,Optimizations.BitTracker,false
     -o2,Optimizations.TwoPass,false
     -o2,Optimizations.Inline.Maximum,0
-	-o2,Optimizations.Basic.Window,1
+    -o2,Optimizations.Basic.Window,1
 
     -o3,Optimizations.Basic,true
     -o3,Optimizations.SSA,true
@@ -224,7 +224,7 @@ Below are the command line arguments available:
     -o3,Optimizations.BitTracker,false
     -o3,Optimizations.TwoPass,false
     -o3,Optimizations.Inline.Maximum,0
-	-o3,Optimizations.Basic.Window,5
+    -o3,Optimizations.Basic.Window,5
 
     -o4,Optimizations.Basic,true
     -o4,Optimizations.SSA,true
@@ -238,7 +238,7 @@ Below are the command line arguments available:
     -o4,Optimizations.BitTracker,false
     -o4,Optimizations.TwoPass,false
     -o4,Optimizations.Inline.Maximum,0
-	-o4,Optimizations.Basic.Window,5
+    -o4,Optimizations.Basic.Window,5
 
     -o5,Optimizations.Basic,true
     -o5,Optimizations.SSA,true
@@ -252,7 +252,7 @@ Below are the command line arguments available:
     -o5,Optimizations.BitTracker,false
     -o5,Optimizations.TwoPass,false
     -o5,Optimizations.Inline.Maximum,0
-	-o5,Optimizations.Basic.Window,5
+    -o5,Optimizations.Basic.Window,5
 
     -o6,Optimizations.Basic,true
     -o6,Optimizations.SSA,true
@@ -266,7 +266,7 @@ Below are the command line arguments available:
     -o6,Optimizations.BitTracker,false
     -o6,Optimizations.TwoPass,false
     -o6,Optimizations.Inline.Maximum,5
-	-o6,Optimizations.Basic.Window,5
+    -o6,Optimizations.Basic.Window,5
 
     -o7,Optimizations.Basic,true
     -o7,Optimizations.SSA,true
@@ -280,7 +280,7 @@ Below are the command line arguments available:
     -o7,Optimizations.BitTracker,false
     -o7,Optimizations.TwoPass,false
     -o7,Optimizations.Inline.Maximum,10
-	-o7,Optimizations.Basic.Window,5
+    -o7,Optimizations.Basic.Window,5
 
     -o8,Optimizations.Basic,true
     -o8,Optimizations.SSA,true
@@ -294,7 +294,7 @@ Below are the command line arguments available:
     -o8,Optimizations.BitTracker,true
     -o8,Optimizations.TwoPass,true
     -o8,Optimizations.Inline.Maximum,10
-	-o8,Optimizations.Basic.Window,5
+    -o8,Optimizations.Basic.Window,5
 
     -o9,Optimizations.Basic,true
     -o9,Optimizations.SSA,true
@@ -308,7 +308,7 @@ Below are the command line arguments available:
     -o9,Optimizations.BitTracker,true
     -o9,Optimizations.TwoPass,true
     -o9,Optimizations.Inline.Maximum,15
-	-o9,Optimizations.Basic.Window,10
+    -o9,Optimizations.Basic.Window,10
 
     -oNone,Optimizations.Basic,false
     -oNone,Optimizations.SSA,false
@@ -322,7 +322,7 @@ Below are the command line arguments available:
     -oNone,Optimizations.BitTracker,false
     -oNone,Optimizations.TwoPass,false
     -oNone,Optimizations.Inline.Maximum,0
-	-oNone,Optimizations.Basic.Window,1
+    -oNone,Optimizations.Basic.Window,1
 
     -oMax,Optimizations.Basic,true
     -oMax,Optimizations.SSA,true
@@ -336,7 +336,7 @@ Below are the command line arguments available:
     -oMax,Optimizations.BitTracker,true
     -oMax,Optimizations.TwoPass,true
     -oMax,Optimizations.Inline.Maximum,15
-	-oMax,Optimizations.Basic.Window,20
+    -oMax,Optimizations.Basic.Window,20
 
     -oSize,Optimizations.Basic,true
     -oSize,Optimizations.SSA,true
@@ -350,7 +350,7 @@ Below are the command line arguments available:
     -oSize,Optimizations.BitTracker,true
     -oSize,Optimizations.TwoPass,true
     -oSize,Optimizations.Inline.Maximum,3
-	-oSize,Optimizations.Basic.Window,10
+    -oSize,Optimizations.Basic.Window,10
 
     -oFast,Optimizations.Basic,true
     -oFast,Optimizations.SSA,true
@@ -364,6 +364,6 @@ Below are the command line arguments available:
     -oFast,Optimizations.BitTracker,false
     -oFast,Optimizations.TwoPass,false
     -oFast,Optimizations.Inline.Maximum,0
-	-oFast,Optimizations.Basic.Window,1
+    -oFast,Optimizations.Basic.Window,1
 
 .. note:: ``{value}`` is the next argument

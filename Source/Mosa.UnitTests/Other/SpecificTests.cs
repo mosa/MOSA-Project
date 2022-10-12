@@ -193,39 +193,56 @@ namespace Mosa.UnitTests.Other
 			return x >> 31;
 		}
 
-		[MethodImpl(MethodImplOptions.AggressiveInlining)]
-		public static long R8ToI8(double value)
+		[MosaUnitTest(9, 9)]
+		[MosaUnitTest(int.MaxValue, 9)]
+		[MosaUnitTest(int.MaxValue, int.MaxValue)]
+		public static bool BranchingEqI4(int x, int y)
 		{
-			var rawValue = (ulong)System.BitConverter.DoubleToInt64Bits(value);
-
-			const int MantissaBits = 52;
-			const int ExponentBits = 11;
-			const int ExponentBias = 1023;
-			const ulong ExponentMask = 0x7FF0_0000_0000_0000;
-			const ulong SignMask = 0x8000_0000_0000_0000;
-			const ulong RawNaN = 0xFFF8_0000_0000_0000; // Same as double.NaN
-			const ulong RawPositiveInfinity = 0x7FF0_0000_0000_0000;
-			const ulong RawNegativeInfinity = RawPositiveInfinity ^ SignMask;
-
-			ushort RawExponent = (ushort)((rawValue & ExponentMask) >> MantissaBits);
-			short Exponent = (short)(RawExponent - ExponentBias);
-
-			if (rawValue == RawPositiveInfinity || rawValue == RawNegativeInfinity || rawValue == RawNaN)
+			var result = false;
+			if (x == y)
 			{
-				return long.MinValue;
+				result = true;
 			}
+			return result;
+		}
 
-			if (Exponent < 0)
+		[MosaUnitTest(9u, 9u)]
+		[MosaUnitTest(uint.MaxValue, 9u)]
+		[MosaUnitTest(uint.MaxValue, uint.MaxValue)]
+		public static bool BranchingEqU4(uint x, uint y)
+		{
+			var result = false;
+			if (x == y)
 			{
-				return 0;
+				result = true;
 			}
+			return result;
+		}
 
-			ulong RawMantissa = rawValue & 0x000F_FFFF_FFFF_FFFF;
+		[MosaUnitTest(9L, 9L)]
+		[MosaUnitTest(long.MaxValue, 9L)]
+		[MosaUnitTest(long.MaxValue, long.MaxValue)]
+		public static bool BranchingEqI8(long x, long y)
+		{
+			var result = false;
+			if (x == y)
+			{
+				result = true;
+			}
+			return result;
+		}
 
-			int shift = MantissaBits - Exponent;
-			var mantissa = (long)(RawMantissa | (1uL << MantissaBits));
-			long result = shift < 0 ? mantissa << -shift : mantissa >> shift;
-			return (rawValue & SignMask) == 0 ? result : -result;
+		[MosaUnitTest(9uL, 9uL)]
+		[MosaUnitTest(ulong.MaxValue, 9uL)]
+		[MosaUnitTest(ulong.MaxValue, ulong.MaxValue)]
+		public static bool BranchingEqU8(ulong x, ulong y)
+		{
+			var result = false;
+			if (x == y)
+			{
+				result = true;
+			}
+			return result;
 		}
 	}
 

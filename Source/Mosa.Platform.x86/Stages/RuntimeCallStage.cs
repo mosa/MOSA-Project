@@ -21,6 +21,10 @@ namespace Mosa.Platform.x86.Stages
 			AddVisitation(IRInstruction.RemR8, RemFloatR8);
 			AddVisitation(IRInstruction.RemSigned64, RemSigned64);     // smod64
 			AddVisitation(IRInstruction.RemUnsigned64, RemUnsigned64); // umod64
+			AddVisitation(IRInstruction.ConvertR4ToI64, R4ToI8);
+			AddVisitation(IRInstruction.ConvertR8ToI64, R8ToI8);
+			AddVisitation(IRInstruction.ConvertR4ToU64, R4ToU8);
+			AddVisitation(IRInstruction.ConvertR8ToU64, R8ToU8);
 		}
 
 		#region Visitation Methods
@@ -105,6 +109,26 @@ namespace Mosa.Platform.x86.Stages
 		private void RemUnsigned64(Context context)
 		{
 			ReplaceWithCall(context, "Mosa.Runtime.Math", "Division", "umod64");
+		}
+
+		private void R4ToI8(Context context)
+		{
+			ReplaceWithCall(context, "Mosa.Runtime.Math", "Conversion", "R4ToI8");
+		}
+
+		private void R8ToI8(Context context)
+		{
+			ReplaceWithCall(context, "Mosa.Runtime.Math", "Conversion", "R8ToI8");
+		}
+
+		private void R4ToU8(Context context)
+		{
+			ReplaceWithCall(context, "Mosa.Runtime.Math", "Conversion", "R4ToU8");
+		}
+
+		private void R8ToU8(Context context)
+		{
+			ReplaceWithCall(context, "Mosa.Runtime.Math", "Conversion", "R8ToU8");
 		}
 
 		#endregion Visitation Methods

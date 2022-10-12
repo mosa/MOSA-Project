@@ -27,6 +27,7 @@
 		<Compile Include="..\Mosa.UnitTests\Basic\CallTests.cs" Link="Tests\Basic\CallTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Basic\CallVirtualTests.cs" Link="Tests\Basic\CallVirtualTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Basic\ConvTests.cs" Link="Tests\Basic\ConvTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\Basic\ConvFloatTests.cs" Link="Tests\Basic\ConvFloatTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Basic\DelegateTests.cs" Link="Tests\Basic\DelegateTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Basic\DerivedNewObjectTests.cs" Link="Tests\Basic\DerivedNewObjectTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Basic\ForeachTests.cs" Link="Tests\Basic\ForeachTests.cs" />
@@ -76,7 +77,7 @@
 		<Compile Include="..\Mosa.UnitTests\Primitive\CharTests.cs" Link="Tests\Primitive\CharTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Primitive\CheckedTests.cs" Link="Tests\Primitive\CheckedTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Primitive\ComparisonTests.cs" Link="Tests\Primitive\ComparisonTests.cs" />
-		<Compile Include="..\Mosa.UnitTests\Primitive\DoubleTests.cs" Link="Tests\Basic\Primitive\DoubleTests.cs" />
+		<Compile Include="..\Mosa.UnitTests\Primitive\DoubleTests.cs" Link="Tests\Primitive\DoubleTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Primitive\EnumTests.cs" Link="Tests\Primitive\EnumTests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Primitive\Int16Tests.cs" Link="Tests\Primitive\Int16Tests.cs" />
 		<Compile Include="..\Mosa.UnitTests\Primitive\Int32Tests.cs" Link="Tests\Primitive\Int32Tests.cs" />

@@ -11,6 +11,7 @@ namespace System.Runtime.CompilerServices
 		NoOptimization = 64,
 		PreserveSig = 128,
 		AggressiveInlining = 256,
+		AggressiveOptimization = 512,
 		InternalCall = 4096,
 	}
 }

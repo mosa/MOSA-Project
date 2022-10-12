@@ -71,26 +71,26 @@ namespace Mosa.Compiler.Framework.Stages
 			AddVisitation(CILInstruction.Conv_i2, Conversion);
 			AddVisitation(CILInstruction.Conv_i4, Conversion);
 			AddVisitation(CILInstruction.Conv_i8, Conversion);
-			AddVisitation(CILInstruction.Conv_ovf_i, Conversion);
-			AddVisitation(CILInstruction.Conv_ovf_i_un, Conversion);
-			AddVisitation(CILInstruction.Conv_ovf_i1, Conversion);
-			AddVisitation(CILInstruction.Conv_ovf_i1_un, Conversion);
-			AddVisitation(CILInstruction.Conv_ovf_i2, Conversion);
-			AddVisitation(CILInstruction.Conv_ovf_i2_un, Conversion);
-			AddVisitation(CILInstruction.Conv_ovf_i4, Conversion);
-			AddVisitation(CILInstruction.Conv_ovf_i4_un, Conversion);
-			AddVisitation(CILInstruction.Conv_ovf_i8, Conversion);
-			AddVisitation(CILInstruction.Conv_ovf_i8_un, Conversion);
-			AddVisitation(CILInstruction.Conv_ovf_u, Conversion);
-			AddVisitation(CILInstruction.Conv_ovf_u_un, Conversion);
-			AddVisitation(CILInstruction.Conv_ovf_u1, Conversion);
-			AddVisitation(CILInstruction.Conv_ovf_u1_un, Conversion);
-			AddVisitation(CILInstruction.Conv_ovf_u2, Conversion);
-			AddVisitation(CILInstruction.Conv_ovf_u2_un, Conversion);
-			AddVisitation(CILInstruction.Conv_ovf_u4, Conversion);
-			AddVisitation(CILInstruction.Conv_ovf_u4_un, Conversion);
-			AddVisitation(CILInstruction.Conv_ovf_u8, Conversion);
-			AddVisitation(CILInstruction.Conv_ovf_u8_un, Conversion);
+			AddVisitation(CILInstruction.Conv_ovf_i, CheckedConversion);
+			AddVisitation(CILInstruction.Conv_ovf_i1, CheckedConversion);
+			AddVisitation(CILInstruction.Conv_ovf_i2, CheckedConversion);
+			AddVisitation(CILInstruction.Conv_ovf_i4, CheckedConversion);
+			AddVisitation(CILInstruction.Conv_ovf_i8, CheckedConversion);
+			AddVisitation(CILInstruction.Conv_ovf_u, CheckedConversion);
+			AddVisitation(CILInstruction.Conv_ovf_u1, CheckedConversion);
+			AddVisitation(CILInstruction.Conv_ovf_u2, CheckedConversion);
+			AddVisitation(CILInstruction.Conv_ovf_u4, CheckedConversion);
+			AddVisitation(CILInstruction.Conv_ovf_u8, CheckedConversion);
+			AddVisitation(CILInstruction.Conv_ovf_i_un, CheckedConversionUnsigned);
+			AddVisitation(CILInstruction.Conv_ovf_i1_un, CheckedConversionUnsigned);
+			AddVisitation(CILInstruction.Conv_ovf_i2_un, CheckedConversionUnsigned);
+			AddVisitation(CILInstruction.Conv_ovf_i4_un, CheckedConversionUnsigned);
+			AddVisitation(CILInstruction.Conv_ovf_i8_un, CheckedConversionUnsigned);
+			AddVisitation(CILInstruction.Conv_ovf_u_un, CheckedConversionUnsigned);
+			AddVisitation(CILInstruction.Conv_ovf_u1_un, CheckedConversionUnsigned);
+			AddVisitation(CILInstruction.Conv_ovf_u2_un, CheckedConversionUnsigned);
+			AddVisitation(CILInstruction.Conv_ovf_u4_un, CheckedConversionUnsigned);
+			AddVisitation(CILInstruction.Conv_ovf_u8_un, CheckedConversionUnsigned);
 			AddVisitation(CILInstruction.Conv_r_un, Conversion);
 			AddVisitation(CILInstruction.Conv_r4, Conversion);
 			AddVisitation(CILInstruction.Conv_r8, Conversion);
@@ -576,7 +576,7 @@ namespace Mosa.Compiler.Framework.Stages
 			int destIndex = GetIndex(type ?? result.Type);
 			int srcIndex = GetIndex(source.Type);
 
-			var conversion = Is32BitPlatform ? ConversionTable32[destIndex][srcIndex] : ConversionTable32[destIndex][srcIndex];
+			var conversion = Is32BitPlatform ? ConversionTable32[destIndex][srcIndex] : ConversionTable64[destIndex][srcIndex];
 
 			ulong mask = GetBitMask(conversion.BitsToMask);
 
@@ -602,6 +602,76 @@ namespace Mosa.Compiler.Framework.Stages
 				context.SetInstruction(conversion.Instruction, temp, source);
 				context.AppendInstruction(conversion.PostInstruction, result, temp, CreateConstant64(mask));
 			}
+		}
+
+		/// <summary>
+		/// Visitation function for Conversion instruction from signed source.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void CheckedConversion(Context context)
+		{
+			var result = context.Result;
+			var source = context.Operand1;
+			var type = context.MosaType;
+
+			// First check to see if we have a matching checked conversion function
+
+			var sourceTypeString = (source.Type.IsI4) ? "I4" :
+				(source.Type.IsI8) ? "I8" :
+				(source.Type.IsR4) ? "R4" :
+				(source.Type.IsR8) ? "R8" :
+				(source.Type.IsI) ? Is32BitPlatform ? "I4" : "I8" :
+				(source.Type.IsPointer) ? Is32BitPlatform ? "I4" : "I8" :
+				(!source.Type.IsValueType) ? Is32BitPlatform ? "I4" : "I8" :
+				throw new CompilerException();
+
+			var resultTypeString = type.IsU || type.IsI || type.IsPointer ? Is32BitPlatform ? "I4" : "I8" : type.TypeCode.ToString();
+
+			var methodName = $"{sourceTypeString}To{resultTypeString}";
+			var method = GetMethod("Mosa.Runtime.Math", "CheckedConversion", methodName);
+
+			Debug.Assert(method != null);
+
+			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+
+			context.SetInstruction(IRInstruction.CallStatic, result, symbol, source);
+
+			MethodScanner.MethodInvoked(method, Method);
+		}
+
+		/// <summary>
+		/// Visitation function for Conversion instruction from unsigned source.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void CheckedConversionUnsigned(Context context)
+		{
+			var result = context.Result;
+			var source = context.Operand1;
+			var type = context.MosaType;
+
+			// First check to see if we have a matching checked conversion function
+
+			var sourceTypeString = (source.Type.IsI4) ? "U4" :
+				(source.Type.IsI8) ? "U8" :
+				(source.Type.IsR4) ? "R4" :
+				(source.Type.IsR8) ? "R8" :
+				(source.Type.IsI) ? Is32BitPlatform ? "U4" : "U8" :
+				(source.Type.IsPointer) ? Is32BitPlatform ? "U4" : "U8" :
+				(!source.Type.IsValueType) ? Is32BitPlatform ? "U4" : "U8" :
+				throw new CompilerException();
+
+			var resultTypeString = type.IsU || type.IsI || type.IsPointer ? Is32BitPlatform ? "U4" : "U8" : type.TypeCode.ToString();
+
+			var methodName = $"{sourceTypeString}To{resultTypeString}";
+			var method = GetMethod("Mosa.Runtime.Math", "CheckedConversion", methodName);
+
+			Debug.Assert(method != null);
+
+			var symbol = Operand.CreateSymbolFromMethod(method, TypeSystem);
+
+			context.SetInstruction(IRInstruction.CallStatic, result, symbol, source);
+
+			MethodScanner.MethodInvoked(method, Method);
 		}
 
 		/// <summary>
@@ -1794,8 +1864,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ new ConversionEntry(IRInstruction.And32, 8),
 				/* U4 */ new ConversionEntry(IRInstruction.And32, 8),
 				/* U8 */ new ConversionEntry(IRInstruction.Truncate64x32, IRInstruction.And32, 8),
-				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToI32, IRInstruction.And32, 8),
-				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToI32, IRInstruction.And32, 8),
+				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToU32, IRInstruction.And32, 8),
+				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToU32, IRInstruction.And32, 8),
 				/* I  */ new ConversionEntry(IRInstruction.And32, 8),
 				/* U  */ new ConversionEntry(IRInstruction.And32, 8),
 				/* Ptr*/ new ConversionEntry(IRInstruction.And32, 8)
@@ -1809,8 +1879,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ new ConversionEntry(IRInstruction.Move32),
 				/* U4 */ new ConversionEntry(IRInstruction.And32, 16),
 				/* U8 */ new ConversionEntry(IRInstruction.Truncate64x32, IRInstruction.And32, 16),
-				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToI32, IRInstruction.And32, 16),
-				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToI32, IRInstruction.And32, 16),
+				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToU32, IRInstruction.And32, 16),
+				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToU32, IRInstruction.And32, 16),
 				/* I  */ new ConversionEntry(IRInstruction.And32, 16),
 				/* U  */ new ConversionEntry(IRInstruction.And32, 16),
 				/* Ptr*/ new ConversionEntry(IRInstruction.And32, 16)
@@ -1824,8 +1894,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ new ConversionEntry(IRInstruction.Move32),
 				/* U4 */ new ConversionEntry(IRInstruction.Move32),
 				/* U8 */ new ConversionEntry(IRInstruction.Truncate64x32),
-				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToI32),
-				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToI32),
+				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToU32),
+				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToU32),
 				/* I  */ new ConversionEntry(IRInstruction.Move32),
 				/* U  */ new ConversionEntry(IRInstruction.Move32),
 				/* Ptr*/ new ConversionEntry(IRInstruction.Move32)
@@ -1839,8 +1909,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ new ConversionEntry(IRInstruction.ZeroExtend16x64),
 				/* U4 */ new ConversionEntry(IRInstruction.ZeroExtend32x64),
 				/* U8 */ new ConversionEntry(IRInstruction.Move64),
-				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToI64),
-				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToI64),
+				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToU64),
+				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToU64),
 				/* I  */ new ConversionEntry(IRInstruction.ZeroExtend32x64),
 				/* U  */ new ConversionEntry(IRInstruction.ZeroExtend32x64),
 				/* Ptr*/ new ConversionEntry(IRInstruction.ZeroExtend32x64)
@@ -1850,14 +1920,14 @@ namespace Mosa.Compiler.Framework.Stages
 				/* I2 */ new ConversionEntry(IRInstruction.ConvertI32ToR4),
 				/* I4 */ new ConversionEntry(IRInstruction.ConvertI32ToR4),
 				/* I8 */ new ConversionEntry(IRInstruction.ConvertI64ToR4),
-				/* U1 */ new ConversionEntry(IRInstruction.ConvertI32ToR4),
-				/* U2 */ new ConversionEntry(IRInstruction.ConvertI32ToR4),
-				/* U4 */ new ConversionEntry(IRInstruction.ConvertI32ToR4),
-				/* U8 */ new ConversionEntry(IRInstruction.ConvertI64ToR4),
+				/* U1 */ new ConversionEntry(IRInstruction.ConvertU32ToR4),
+				/* U2 */ new ConversionEntry(IRInstruction.ConvertU32ToR4),
+				/* U4 */ new ConversionEntry(IRInstruction.ConvertU32ToR4),
+				/* U8 */ new ConversionEntry(IRInstruction.ConvertU64ToR4),
 				/* R4 */ new ConversionEntry(IRInstruction.MoveR4),
 				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToR4),
 				/* I  */ new ConversionEntry(IRInstruction.ConvertI32ToR4),
-				/* U  */ new ConversionEntry(IRInstruction.ConvertI32ToR4),
+				/* U  */ new ConversionEntry(IRInstruction.ConvertU32ToR4),
 				/* Ptr*/ new ConversionEntry(IRInstruction.ConvertI32ToR4)
 				},
 		/* R8 */ new ConversionEntry[] {
@@ -1865,14 +1935,14 @@ namespace Mosa.Compiler.Framework.Stages
 				/* I2 */ new ConversionEntry(IRInstruction.ConvertI32ToR8),
 				/* I4 */ new ConversionEntry(IRInstruction.ConvertI32ToR8),
 				/* I8 */ new ConversionEntry(IRInstruction.ConvertI64ToR8),
-				/* U1 */ new ConversionEntry(IRInstruction.ConvertI32ToR8),
-				/* U2 */ new ConversionEntry(IRInstruction.ConvertI32ToR8),
-				/* U4 */ new ConversionEntry(IRInstruction.ConvertI32ToR8),
-				/* U8 */ new ConversionEntry(IRInstruction.ConvertI64ToR8),
+				/* U1 */ new ConversionEntry(IRInstruction.ConvertU32ToR8),
+				/* U2 */ new ConversionEntry(IRInstruction.ConvertU32ToR8),
+				/* U4 */ new ConversionEntry(IRInstruction.ConvertU32ToR8),
+				/* U8 */ new ConversionEntry(IRInstruction.ConvertU64ToR8),
 				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToR8),
 				/* R8 */ new ConversionEntry(IRInstruction.MoveR8),
 				/* I  */ new ConversionEntry(IRInstruction.ConvertI32ToR8),
-				/* U  */ new ConversionEntry(IRInstruction.ConvertI32ToR8),
+				/* U  */ new ConversionEntry(IRInstruction.ConvertU32ToR8),
 				/* Ptr*/ new ConversionEntry(IRInstruction.ConvertI32ToR8)
 				},
 		/* I */ new ConversionEntry[] {
@@ -1899,8 +1969,8 @@ namespace Mosa.Compiler.Framework.Stages
 				/* U2 */ new ConversionEntry(IRInstruction.Move32),
 				/* U4 */ new ConversionEntry(IRInstruction.Move32),
 				/* U8 */ new ConversionEntry(IRInstruction.Truncate64x32),
-				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToI32),
-				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToI32),
+				/* R4 */ new ConversionEntry(IRInstruction.ConvertR4ToU32),
+				/* R8 */ new ConversionEntry(IRInstruction.ConvertR8ToU32),
 				/* I  */ new ConversionEntry(IRInstruction.Move32),
 				/* U  */ new ConversionEntry(IRInstruction.Move32),
 				/* Ptr*/ new ConversionEntry(IRInstruction.Move32)
