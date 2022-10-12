@@ -118,6 +118,10 @@ namespace Mosa.DeviceSystem
 					X = 0;
 					break;
 
+				case '\t':
+					X += 4;
+					break;
+
 				default:
 					Characters.Add(new Character(c, X, Y));
 					LastCharWidth = Font.CalculateWidth(c);

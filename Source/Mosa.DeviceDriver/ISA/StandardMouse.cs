@@ -14,7 +14,7 @@ namespace Mosa.DeviceDriver.ISA
 		private BaseIOPortReadWrite command;
 		private BaseIOPortReadWrite data;
 
-		private const byte SetDefaults = 0xF6, EnableDataReporting = 0xF4;
+		private const byte SetDefaults = 0xF6, EnableDataReporting = 0xF4, SetSampleRate = 0xF3;
 
 		private int screenWidth, screenHeight, phase = 0, aX, aY, mouseState;
 
@@ -39,7 +39,7 @@ namespace Mosa.DeviceDriver.ISA
 			Wait(1);
 			command.Write8(0x20);
 			Wait(0);
-			byte status = ((byte)(data.Read8() | 3));
+			var status = (byte)(data.Read8() | 3);
 			Wait(1);
 			command.Write8(0x60);
 			Wait(1);
@@ -47,33 +47,7 @@ namespace Mosa.DeviceDriver.ISA
 
 			WriteRegister(SetDefaults);
 			WriteRegister(EnableDataReporting);
-
-			// Get "MouseID", but somehow do nothing with it (?)
-			WriteRegister(0xF2);
-
-			// Set sample rate to 200 Hz (maximum)
-			// We're gradually going down to 80 Hz, see below
-			WriteRegister(0xF3);
-			WriteRegister(200);
-
-			// Set sample rate to 100 Hz
-			// See below for final register write of sample rate
-			WriteRegister(0xF3);
-			WriteRegister(100);
-
-			// Set sample rate to 80 Hz
-			// We're done!
-			WriteRegister(0xF3);
-			WriteRegister(80);
-
-			// Get "MouseID"
-			WriteRegister(0xF2);
-			byte result = ReadRegister();
-
-			if (result == 3)
-			{
-				// The scroll wheel is available
-			}
+			WriteRegister(SetSampleRate, 200);
 
 			mouseState = byte.MaxValue;
 		}
@@ -195,6 +169,17 @@ namespace Mosa.DeviceDriver.ISA
 			command.Write8(0xD4);
 			Wait(1);
 			data.Write8(value);
+
+			ReadRegister();
+		}
+
+		private void WriteRegister(byte cmd, byte value)
+		{
+			Wait(1);
+			command.Write8(cmd);
+			Wait(1);
+			data.Write8(value);
+			Wait(1);
 
 			ReadRegister();
 		}

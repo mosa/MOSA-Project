@@ -9,7 +9,7 @@ jobs:
     name: Windows Build
     runs-on: windows-latest
     env:
-      BUILD_VERSION: 2.0.0
+      BUILD_VERSION: 2.2.0
     steps:
       - name: Set net6.0
         uses: actions/setup-dotnet@v1
