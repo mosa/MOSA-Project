@@ -197,10 +197,10 @@ namespace Mosa.Runtime
 			}
 
 			var count8 = count & 0x03;
-			for (uint i = 0; i < count8; i += 4)
+			for (uint i = 0; i < count8; i++)
 			{
-				var value = src.Load32(count32 + i);
-				dest.Store32(count32 + i, value);
+				var value = src.Load8(count32 + i);
+				dest.Store8(count32 + i, value);
 			}
 		}
 
