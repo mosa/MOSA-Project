@@ -153,8 +153,6 @@ namespace Mosa.Utility.Launcher
 			var arg = new StringBuilder();
 
 			arg.Append(" -L " + Quote(LauncherSettings.QEMUBios));
-
-			//arg.Append(" -soundhw sb16");
 			arg.Append($" -m {LauncherSettings.EmulatorMemory.ToString()}M");
 			arg.Append($" -smp cores={LauncherSettings.EmulatorCores.ToString()}");
 
