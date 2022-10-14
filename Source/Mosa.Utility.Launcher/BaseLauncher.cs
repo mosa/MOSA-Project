@@ -14,7 +14,8 @@ namespace Mosa.Utility.Launcher
 
 		public LauncherSettings LauncherSettings { get; }
 
-		public Settings Settings { get { return LauncherSettings.Settings; } }
+		public Settings Settings
+		{ get { return LauncherSettings.Settings; } }
 
 		public BaseLauncher(Settings settings, CompilerHooks compilerHook)
 		{
@@ -49,12 +50,12 @@ namespace Mosa.Utility.Launcher
 		protected void NormalizeSettings()
 		{
 			// Normalize inputs
-			LauncherSettings.ImageBootLoader = LauncherSettings.ImageBootLoader == null ? string.Empty : LauncherSettings.ImageBootLoader.ToLowerInvariant();
-			LauncherSettings.ImageFormat = LauncherSettings.ImageFormat == null ? string.Empty : LauncherSettings.ImageFormat.ToLowerInvariant();
-			LauncherSettings.FileSystem = LauncherSettings.FileSystem == null ? string.Empty : LauncherSettings.FileSystem.ToLowerInvariant();
-			LauncherSettings.EmulatorSerial = LauncherSettings.EmulatorSerial == null ? string.Empty : LauncherSettings.EmulatorSerial.ToLowerInvariant();
-			LauncherSettings.Emulator = LauncherSettings.Emulator == null ? string.Empty : LauncherSettings.Emulator.ToLowerInvariant();
-			LauncherSettings.Platform = LauncherSettings.Platform.ToLowerInvariant();
+			LauncherSettings.ImageBootLoader = LauncherSettings.ImageBootLoader == null ? string.Empty : LauncherSettings.ImageBootLoader.ToLowerInvariant().Trim();
+			LauncherSettings.ImageFormat = LauncherSettings.ImageFormat == null ? string.Empty : LauncherSettings.ImageFormat.ToLowerInvariant().Trim();
+			LauncherSettings.FileSystem = LauncherSettings.FileSystem == null ? string.Empty : LauncherSettings.FileSystem.ToLowerInvariant().Trim();
+			LauncherSettings.EmulatorSerial = LauncherSettings.EmulatorSerial == null ? string.Empty : LauncherSettings.EmulatorSerial.ToLowerInvariant().Trim();
+			LauncherSettings.Emulator = LauncherSettings.Emulator == null ? string.Empty : LauncherSettings.Emulator.ToLowerInvariant().Trim();
+			LauncherSettings.Platform = LauncherSettings.Platform.ToLowerInvariant().Trim();
 		}
 
 		private void SetDefaults()
@@ -166,13 +167,13 @@ namespace Mosa.Utility.Launcher
 			CompilerHooks.NotifyStatus?.Invoke(status);
 		}
 
-		static protected byte[] GetResource(string path, string name)
+		protected static byte[] GetResource(string path, string name)
 		{
 			var newname = path.Replace(".", "._").Replace(@"\", "._").Replace("/", "._").Replace("-", "_") + "." + name;
 			return GetResource(newname);
 		}
 
-		static protected byte[] GetResource(string name)
+		protected static byte[] GetResource(string name)
 		{
 			var assembly = Assembly.GetExecutingAssembly();
 			var stream = assembly.GetManifestResourceStream("Mosa.Utility.Launcher.Resources." + name);
@@ -180,7 +181,7 @@ namespace Mosa.Utility.Launcher
 			return binary.ReadBytes((int)stream.Length);
 		}
 
-		static protected string Quote(string location)
+		protected static string Quote(string location)
 		{
 			return '"' + location + '"';
 		}
@@ -243,6 +244,14 @@ namespace Mosa.Utility.Launcher
 			}
 
 			return process;
+		}
+
+		protected string NullToEmpty(string value)
+		{
+			if (string.IsNullOrWhiteSpace(value))
+				return string.Empty;
+
+			return value;
 		}
 	}
 }
